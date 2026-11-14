@@ -33,7 +33,7 @@ Azure Advisor gives recommendations per category. You open it in the Azure porta
 2. Select **Advisor** from the top search bar or the left pane.
 3. The **Overview** page opens with one tile per category. Each tile shows your score and the number of recommendations.
 
-Learn says Advisor runs in the background to find newly created resources, and recommendations for them can take up to 24 hours. The related-articles section of the page names Reliability, Cost, Performance, Security and Operational excellence as areas.
+Learn says Advisor runs in the background to find newly created resources, and recommendations for them can take up to 24 hours.
 
 ## Filter, open and download
 
@@ -96,7 +96,7 @@ Learn says to use exemptions rather than disabling rules, and that disable rules
 
 1. Filter to one subscription and the Active status.
 2. Start with cost items that Learn defines clearly, such as shutdown candidates, and confirm the VM is not for disaster recovery or planned traffic.
-3. Check owners before resizing. Resize recommendations assume metrics reflect normal load.
+3. Check owners before resizing. My advice: confirm the metrics reflect normal load, because the rules only see CPU, memory and network.
 4. Hand security items to the team that owns Defender for Cloud.
 5. Download a CSV before and after, so you can show what changed.
 
@@ -109,6 +109,6 @@ Learn says to use exemptions rather than disabling rules, and that disable rules
 
 ## Sources
 
-- [Introduction to Azure Advisor (Microsoft Learn)](https://learn.microsoft.com/azure/advisor/advisor-get-started)
-- [Cost recommendations in Azure Advisor (Microsoft Learn)](https://learn.microsoft.com/azure/advisor/advisor-cost-recommendations)
-- [Security recommendations (Microsoft Learn)](https://learn.microsoft.com/azure/advisor/advisor-security-recommendations)
+- [Azure Advisor portal basics (Microsoft Learn)](https://learn.microsoft.com/azure/advisor/advisor-get-started)
+- [Optimize virtual machine (VM) or virtual machine scale set (VMSS) spend by resizing or shutting down underutilized instances (Microsoft Learn)](https://learn.microsoft.com/azure/advisor/advisor-cost-recommendations)
+- [Review Security Recommendations in Microsoft Defender for Cloud (Microsoft Learn)](https://learn.microsoft.com/azure/defender-for-cloud/review-security-recommendations)
