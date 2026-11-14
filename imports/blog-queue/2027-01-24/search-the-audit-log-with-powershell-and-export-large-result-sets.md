@@ -107,7 +107,7 @@ This is my suggestion, not guidance from the page:
 - Test with a short range and one record type first, so you see the CSV shape and the run time.
 - Use a new output file name for each run. The script appends to the file, so reusing a name mixes results.
 - Record the start and end values and the record type next to the file, so the search can be repeated and explained later.
-- If you need all record types, expect more records per interval. Start with a smaller interval, as the page's tip on `$null` combined with the limits suggests.
+- If you need all record types, expect more records per interval. Start with a smaller interval. The page only says that `$null` returns all record types. The link to the interval size is my reasoning.
 - Keep the CSV in a protected location, since audit data can contain sensitive details.
 
 ## Related
