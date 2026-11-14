@@ -22,7 +22,7 @@ faq:
   - q: "How do I read WebView2 exit codes?"
     a: "Learn lists general process exit codes (for example 1 for a process that was killed, 2 for hung, 4 for a GPU process that failed at startup), POSIX signal errors (131 to 140), sandbox, crashpad and time-out errors (258, 7006 to 7013 and negative crashpad codes), and C++ and Windows runtime errors such as access violation and out of memory. Use the table on the page to look up the exact code."
   - q: "Does any code mean malware?"
-    a: "The page lists STATUS_VIRUS_INFECTED, code -1073739514, as meaning the process was terminated because a virus or malware was detected. It gives no further steps for it, so treat it as a reason to check your security tools and logs."
+    a: "The page lists STATUS_VIRUS_INFECTED, code -1073739514, as meaning the process was terminated because a virus or malware was detected. It gives no further steps for it. My reading: treat it as a reason to check your security tools and logs."
 ---
 
 A Teams client that crashes is hard to fix by guessing. The Microsoft Learn page on Teams client crash issues gives admins a structured way: start in the Teams client health dashboard, read the insight, exclude the usual suspects, and decode the WebView2 code if there is one. This article follows that order. The page is written for administrators, so I do not describe user-side repair steps that it does not give.
@@ -80,7 +80,7 @@ This is my suggestion, not an order from the page:
 2. For many devices, check the antivirus and DLP exclusions first, as the page says. Compare an affected machine with a healthy one on the same security product and policy.
 3. For a single device, look at the WebView2 code and the group it belongs to. GPU codes call for a driver check. Memory codes call for a look at free memory and other heavy apps.
 4. Note the Windows build, the Teams version, the drivers and the security tools in your ticket before you ask Microsoft Support for help. The page tells you to contact support if the issue persists, but gives no list of what to collect.
-5. Make one change at a time and watch the dashboard for a few days, since the insight list is based on reported crashes.
+5. Make one change at a time and watch the dashboard for a few days.
 
 ## What the page does not cover
 
