@@ -78,7 +78,8 @@ Learn says a user is nudged under Microsoft managed only if they are in at least
 ## Limitations
 
 - One method at a time, and not both in one tenant simultaneously.
-- Authenticator campaigns are not supported on mobile devices.
+- Authenticator campaigns are not supported on mobile devices. Passkey campaigns are supported on mobile, in browsers and in native iOS apps, but native Android app support is not currently available.
+- Linux users are not nudged by passkey campaigns.
 - Snooze duration is tenant-wide.
 - The nudge works only for users doing MFA with Microsoft Entra MFA.
 - Guests are nudged for Authenticator but not passkeys.
@@ -88,7 +89,7 @@ Learn says a user is nudged under Microsoft managed only if they are in at least
 
 ## Suggestion for a pilot
 
-This is a suggestion, not Microsoft guidance. Start with a pilot group, test with Conditional Access, then widen the scope.
+This is my advice, not Microsoft guidance. Start with a pilot group, test with Conditional Access, then widen the scope.
 
 ## Not covered
 
@@ -101,4 +102,4 @@ The page does not describe other registration enforcement options.
 
 ## Sources
 
-- [Registration campaign for passkey or Microsoft Authenticator](https://learn.microsoft.com/entra/identity/authentication/how-to-mfa-registration-campaign)
+- [Run a Registration Campaign to Set Up a Passkey or Microsoft Authenticator (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/how-to-mfa-registration-campaign)
