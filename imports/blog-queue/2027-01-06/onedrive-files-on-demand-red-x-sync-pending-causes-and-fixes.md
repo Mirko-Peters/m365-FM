@@ -30,7 +30,7 @@ The Microsoft Learn pages read for this guide do not explain what the red X or t
 ## What could not be confirmed
 
 - The meaning of the red X, sync pending, cloud and green check icons. Learn's Files On-Demand command-line page does not mention icons. The icon reference is on a Microsoft support article that could not be read here.
-- Causes and fixes for a red X or sync pending. A search of Learn returned mostly Microsoft Q&A threads, which are community answers and not Microsoft statements, so they were not used.
+- Causes and fixes for a red X or sync pending. The pages read do not cover them, and community Q&A threads were deliberately not used because they are not Microsoft statements.
 - Path length limits, invalid characters and file size limits. The Learn pages read do not state them.
 - Reset steps for the sync app.
 
@@ -59,7 +59,7 @@ The page links the sync app requirements and does not list them. If the Files On
 [HKLM\SYSTEM\CurrentControlSet\Services\CldFlt]"Start"="dword:00000002"
 ```
 
-Change registry values only as your organization's standard allows, and test on one device first.
+My advice: change registry values only as your organization's standard allows, and test on one device first.
 
 ## A legacy issue that does not apply to most cases
 
@@ -72,16 +72,16 @@ If you need to find which devices have sync errors, the OneDrive sync reports da
 - **Where:** the Microsoft 365 Apps admin center at `config.office.com`. Setup is under **Setup**, where the Tenant Association Key is shown or generated.
 - **Roles:** Office Apps Administrator or Microsoft 365 Administrator to set up. Global Reader, Security Administrator, Office Apps Administrator or Reports Reader to view.
 - **Requirements:** OneDrive sync app 22.232 or later on Windows and macOS, on the Insiders, Production or Deferred update ring. Devices must reach `https://clients.config.office.net`. Not available for Office 365 operated by 21Vianet.
-- **Policy:** in Intune, a Settings catalog policy with **Enable sync health reporting for OneDrive** and **Sync Admin Reports**, plus the key. GCC, GCC High and DoD do not need the key.
+- **Policy:** in Intune, a Settings catalog policy with **Enable sync health reporting for OneDrive** and **Sync Admin Reports**, plus the key. On Windows without Intune, enable the `EnableSyncAdminReports` setting (REG_DWORD 1 under `HKLM\SOFTWARE\Policies\Microsoft\OneDrive`, or Group Policy). The older `SyncAdminReports` policy is no longer supported. On macOS, set the `EnableSyncAdminReports` key in the OneDrive plist. Reports can take up to three days to appear. GCC, GCC High and DoD do not need the key.
 - **Sections:** Overview with cards for sync errors, known folders and sync app version, Devices with one row per user and device, and Issues with error messages and affected device counts.
 - **Timing:** last status reported updates about every 36 hours or about one hour after the client starts. Devices stay in inventory for 30 days by default. Devices must be on for at least 5 hours to be eligible.
 - **Not defined:** the Errors column shows an icon and status, but the page does not say what each means. The full error message list is in a linked article.
 
 If reports do not appear after three days, confirm the setting is applied, wait 36 hours with the device on and signed in, and then open a support ticket.
 
-## A cautious approach
+## A cautious approach (my advice)
 
-The steps are practical advice, within what Learn documents.
+The steps are my own advice, within what Learn documents.
 
 1. Check the state of an affected file with `attrib`.
 2. If it is meant to be online-only, check whether the app opening it expects a local copy.
@@ -89,7 +89,7 @@ The steps are practical advice, within what Learn documents.
 4. Read the support icon reference and the error message list for the exact meaning before you change settings.
 5. Open a support ticket with the device ID if the device does not appear in the reports.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Treating Q&A forum answers as Microsoft guidance.
 - Changing the registry value without confirming the requirements first.
@@ -103,6 +103,6 @@ The steps are practical advice, within what Learn documents.
 
 ## Sources
 
-- [Use OneDrive Files On-Demand with the command line (Microsoft Learn)](https://learn.microsoft.com/sharepoint/files-on-demand-windows)
+- [Set Files On-Demand states in Windows (Microsoft Learn)](https://learn.microsoft.com/sharepoint/files-on-demand-windows)
 - [OneDrive sync reports in the Apps Admin Center (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sync-health)
-- [You can't sync files or folders (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/sharepoint/lists-and-libraries/cannot-sync-files-folders)
+- [You can't sync files or folders, or you receive errors when you open files (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/sharepoint/lists-and-libraries/cannot-sync-files-folders)
