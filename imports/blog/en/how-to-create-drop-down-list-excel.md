@@ -22,7 +22,7 @@ faq:
 ---
 To create a drop down list in [Excel](https://www.m365.fm/entity/excel/), enter your choices in a column, select the cell that should offer them, open **Data** > **Data Validation**, choose **List** under **Allow** and select your choices as the **Source**. That's all the basic version takes. This article is for Excel users who build trackers, forms, order sheets or templates and want people to pick from fixed values instead of typing. You'll get the step-by-step method, the options that matter in the dialog, three ways to keep the list current, and the places where drop-downs quietly stop working.
 
-The feature behind the list is called data validation. Microsoft's guide to [creating a drop-down list](https://support.microsoft.com/en-us/excel/get-started/create-a-drop-down-list) covers Excel for Microsoft 365, Excel 2024, 2021, 2019 and 2016. The limits and fixes below come from that page, from Microsoft's page on adding or removing items, and from its notes on [data validation in more detail](https://support.microsoft.com/en-us/office/more-on-data-validation-f38dee73-9900-4ca6-9301-8a5f6e1f0c4c).
+The feature behind the list is called data validation. Microsoft's guide to [creating a drop-down list](https://support.microsoft.com/excel/get-started/create-a-drop-down-list) covers Excel for Microsoft 365, Excel 2024, 2021, 2019 and 2016. The limits and fixes below come from that page, from Microsoft's page on adding or removing items, and from its notes on [data validation in more detail](https://support.microsoft.com/office/more-on-data-validation-f38dee73-9900-4ca6-9301-8a5f6e1f0c4c).
 
 ## Create a drop-down list from a range of cells
 
@@ -39,7 +39,7 @@ A list that reads its values from cells is the version you'll want most of the t
 
 Click the cell. An arrow appears, and the choices open under it. That's the whole method.
 
-If the Data Validation command is greyed out, Microsoft's explanation is that the worksheet may be protected or shared. Unprotect the sheet or stop sharing the workbook and try again. The command is also unavailable while you're typing in a cell, so press **Enter** or **Esc** first.
+If the Data Validation command is greyed out, Microsoft's explanation is that the worksheet may be protected or shared. Unprotect the sheet or stop sharing the workbook and try again. In practice the command is also unavailable while you're typing in a cell, so press **Enter** or **Esc** first. That tip is not from Microsoft's page.
 
 ### Put the list on another sheet
 
@@ -102,7 +102,7 @@ Select a cell that has the drop-down, go to **Data** > **Data Validation**, and 
 
 Most problems come from a short list of causes. Microsoft's pages document them.
 
-**Validation doesn't stop pasted data.** Microsoft explains that data validation shows messages and prevents invalid entries only when people type directly in a cell. If someone copies a value from somewhere else and pastes it in, or drags the fill handle, the rule is not applied to what arrives. If the list must be strict, turn off **Enable fill handle and cell drag-and-drop** under **File** > **Options** > **Advanced** > **Editing options**, then protect the worksheet. You will also lose some convenience, so only do that on sheets where accuracy matters most.
+**Validation doesn't stop pasted data.** Microsoft explains that data validation shows messages and prevents invalid entries only when people type directly in a cell. Messages don't appear when data is copied or filled, so a value pasted in from somewhere else, or dragged in with the fill handle, can get past the rule. If the list must be strict, turn off **Enable fill handle and cell drag-and-drop** under **File** > **Options** > **Advanced** > **Editing options**, then protect the worksheet. You will also lose some convenience, so only do that on sheets where accuracy matters most.
 
 **Existing values aren't checked.** If you add a list to cells that already hold data, Excel doesn't flag the old values. To find the ones that don't fit, select the cells and use **Data** > **Data Validation** > **Circle Invalid Data**. The circles disappear when you correct the entries.
 
@@ -141,3 +141,9 @@ Most problems come from a short list of causes. Microsoft's pages document them.
 ## Next step
 
 To create a drop down list in Excel that holds up, build it on a table, set the Error Alert to Stop and test it by typing and by pasting. Then protect the sheet if the choices must stay strict, and write down where the list lives so the next person can update it.
+
+## Sources
+
+- [Create a drop-down list (Microsoft Support)](https://support.microsoft.com/excel/get-started/create-a-drop-down-list)
+- [Add or remove items from a drop-down list (Microsoft Support)](https://support.microsoft.com/excel/add-or-remove-items-from-a-drop-down-list)
+- [More on data validation (Microsoft Support)](https://support.microsoft.com/office/more-on-data-validation-f38dee73-9900-4ca6-9301-8a5f6e1f0c4c)
