@@ -29,7 +29,7 @@ Most export problems with Dynamics 365 finance and operations data come from fou
 
 ## Know which service you use
 
-Microsoft Learn's transition FAQ says Link to Fabric and Azure Synapse Link for Dataverse both remain supported. It also says the older Export to Data Lake service was retired on November 1, 2024 and would stop permanently on November 30, 2026, with no extensions after that date. If a pipeline still depends on Export to Data Lake, it no longer exports new and changed data. Files already exported stay in place. The FAQ recommends Link to Fabric for Power BI and Fabric users.
+Microsoft Learn's transition FAQ says Link to Fabric and Azure Synapse Link for Dataverse both remain supported. It also says the older Export to Data Lake service was retired on November 1, 2024 and would stop permanently on November 30, 2026, with no extensions after that date. Once the service has stopped, a pipeline that still depends on Export to Data Lake no longer exports new and changed data, while files already exported stay in place. The FAQ says Fabric link provides the most benefit if you use Power BI or Microsoft Fabric, and that Synapse Link remains an option if you want to keep exporting data.
 
 ## Step 1: Missing finance and operations tables
 
@@ -43,7 +43,7 @@ For Azure Synapse Link, Learn lists extra prerequisites. You need a finance and 
 
 ## Step 2: Change tracking and unsupported tables
 
-Learn states that custom tables need change tracking enabled. Enabling it can fail, or the **Track changes** checkbox can be disabled, for some tables. The page points to the **Data entity row version change tracking validation report** in finance and operations apps.
+Learn's Synapse Link page says custom finance and operations tables need change tracking enabled. For finance and operations entities (virtual tables), enabling change tracking can fail, or the **Track changes** checkbox can be disabled. For those entities the page points to the **Data entity row version change tracking validation report** in finance and operations apps. The same page also says you do not have to enable change tracking for each standard finance and operations table.
 
 Some content is not exported at all: special fields such as `TimeZoneID` and binary fields, and staging, temporary and deprecated tables whose names begin with `del_`. Memo fields of type `nVarchar(Max)` are truncated to 2,000 characters. Derived tables do not include fields from the base table, so select the base table too.
 
@@ -51,9 +51,9 @@ Some content is not exported at all: special fields such as `TimeZoneID` and bin
 
 - **Kernel tables.** `InitialSyncInProgress` is expected, because a daily job refreshes them.
 - **Unidentified tables.** In the lakehouse, tables show as unidentified until the initial sync finishes. If it persists for several hours, select the OneLake or Synapse Link profile and choose **Refresh Fabric Links**.
-- **Error state.** For Synapse Link, check the Dataverse table **Synapse Link Profile Entity State** and its `InitialSyncState` field. An **Error** status means the sync paused. To reinitialize a table, delete it from the profile and add it again.
-- **After a restore.** Learn says tables in a Synapse Link profile need reinitializing when a finance and operations database is restored, and Dataverse restore removes the enabled entities.
-- **Schema changes.** Changing the data type or precision of a synced column is not supported and causes permanent delta sync failures. Remove and re-add the table.
+- **Error state.** For Synapse Link, Learn says the Dataverse table **Synapse Link Profile Entity State** holds the status of each table, and its `InitialSyncState` field reports whether the initial sync completed. The page describes an error event as the sync having paused. It also says there is no deactivate or activate option and that you can delete a table from the profile and add it again, which starts a new initialization.
+- **After a restore.** Learn says tables in a Synapse Link profile need reinitializing when a finance and operations database is restored, and that tables or entities in the profile might be removed when Dataverse is restored.
+- **Schema changes (Fabric link).** The Fabric link FAQ says changing the data type or precision of a synced column is not supported and causes permanent delta sync failures. Remove and re-add the table.
 
 ## Step 4: Authorization and connection errors
 
