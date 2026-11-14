@@ -9,7 +9,7 @@ topics: [dynamics-365-customer-insights, dynamics-365-customer-insights-data, un
 keypoints:
   - "Unification runs in three stages: deduplication within each table, matching across tables, then merging fields into the Customer table."
   - "Rule order matters. The matching algorithm only tries the next rule when the previous rule found no match for a record."
-  - "Conditions inside one rule use AND. Add exceptions to stop false matches, such as twins with the same last name and address."
+  - "Conditions inside one rule use AND. Add exceptions to stop false matches, such as twins with the same last name, city and birth date."
   - "Merge preferences decide field values. Importance takes the first non-null value by rank, and grouping fields keeps values from one source together."
   - "Download Deduplication_*, ConflationMatchPairs and Customer output tables to see at which stage a result went wrong."
 faq:
@@ -18,7 +18,7 @@ faq:
   - q: "How do I stop two different customers from matching?"
     a: "Microsoft Learn describes exceptions, added through Edit rule > Add > Add exception, which are applied after the match rules. Custom match conditions also offer Never match, which keeps two primary-key rows apart. Learn also advises not to match on name alone."
   - q: "What does the Match failed message mean?"
-    a: "The Learn troubleshooting page lists causes such as a failed data refresh, source table changes that were not ingested, missing data files or partition paths, a match job canceled after running for hours, and transient issues. In most cases you refresh the data sources and rerun unification."
+    a: "The Learn troubleshooting page lists causes such as a failed data refresh, source table changes that were not ingested, missing data files or partition paths, a match job canceled after running for hours, and transient issues. Most of the listed remedies end with a rerun of unification, and the page says to contact support when a match job was canceled after hours."
   - q: "Which record wins when duplicates are found in one table?"
     a: "Microsoft Learn says the winner is chosen by merge preferences. Most filled is the default, with Most recent and Least recent as alternatives. If candidates tie, the row with the larger primary key value wins. Non-winner rows stay available as alternate rows for matching."
   - q: "Can I see where a wrong merge came from?"
@@ -81,13 +81,13 @@ Use normalization to standardize values before comparing. It affects matching on
 Two tools exist for false matches:
 
 - **Exceptions.** On the **Edit rule** pane, select **Add** > **Add exception**. Exceptions are applied after the rules. Learn's example is twins with the same last name, city and birth date, separated by an exception on first name.
-- **Custom match conditions.** Select **Custom** and choose **Always match**, **Never match**, **Bypass** or **Alias mapping**. Download the template, fill it with table names, which are case sensitive, and keys, ingest it from **Data** > **Data sources** and apply it. Changes take effect on the next unification run.
+- **Custom match conditions.** Select **Custom** and choose **Always match**, **Never match**, **Bypass** or **Alias mapping**. Download the template, fill it with table names, which are case sensitive, and keys, ingest it from **Data** > **Data sources** and apply it. Changes take effect on the next unification run. For **Bypass** and **Alias mapping**, Learn adds that you then edit a match rule and pick **Custom bypass** or **Alias mapping** under normalization.
 
 For duplicates inside one table, deduplication rules need a field that is likely unique, such as email, and Learn says not to rely on name alone.
 
 ## Step 5: Fix merge conflicts
 
-On the column review step, open a field with **Edit** to see the **Combine columns** pane. Learn lists the merge policies:
+On the **Customer columns** tab, select a merged column and choose **Edit** to see the **Combine columns** pane. Learn lists the merge policies:
 
 | Policy | Winning value |
 |---|---|
@@ -97,20 +97,20 @@ On the column review step, open a field with **Edit** to see the **Combine colum
 
 For deduplication winners, the table-level options are **Most filled** (default), **Most recent** and **Least recent**. Under **Edit merge preferences** > **Advanced**, you can set a preference per column, for example the most recent email and the most complete address.
 
-Mixed records happen when fields come from different sources. Learn's example shows an address line from one table combined with other address fields from another. Use **Combine** > **Group of fields**, set **Rank groups by**, and group the address fields so the values of one source stay together. A group allows up to 10 fields and up to 15 data sources. Use **Exclude** to remove columns that should not be in the profile, after removing them from segments or other processes.
+Mixed records happen when fields come from different sources. Learn's example shows an empty Addr2 in the first-ranked table being filled from another table, which produces a mixed address. Use **Combine** > **Group of fields**, set **Rank groups by**, and group the address fields so the values of one source stay together. A group allows up to 10 fields and up to 15 data sources. Use **Exclude** to remove columns that should not be in the profile, after removing them from segments or other processes.
 
-If `CustomerId` changes between runs, check custom ID generation on the **Keys** tab. Learn says the ID changes when the source table or input field values change, and it recommends stable fields such as a government ID instead of phone, email or address.
+Learn describes custom ID generation (up to five fields, **Keys** tab) as an option for rare circumstances and says to use the default logic otherwise. If `CustomerId` changes between runs, my suggestion is to check whether custom ID generation is configured on the **Keys** tab. Learn says the ID changes when the source table or input field values change, and it recommends stable fields such as a government ID instead of phone, email or address.
 
 ## Step 6: Measure the effect of a rule
 
-On the **Deduplication rules** and **Matching rules** pages, watch the **Unique records** count. If a new rule does not change it, an earlier rule already found those matches. To see run time, go to **Settings** > **System** > **Status** and select **Match**.
+On the **Deduplication rules** and **Matching rules** pages, watch the **Unique records** count. If a new rule matches some records and the count does not change, an earlier rule already found those matches. To see run time, go to **Settings** > **System** > **Status** and select **Match**.
 
 ## Typical mistakes
 
 - Matching on name alone.
 - Fuzzy rules without an exact condition.
 - Placing the least reliable table first in the match order.
-- Expecting an exception to change the deduplication stage.
+- Looking for the fix in the wrong stage. Exceptions can be added to deduplication rules and to match rules (my own checklist item).
 - Ranking a table first even though its fields are often empty.
 
 ## What the sources do not say
@@ -128,7 +128,7 @@ The pages read for this article do not describe a maximum number of rules or a r
 
 - [Matching rules for data unification](https://learn.microsoft.com/en-us/dynamics365/customer-insights/data/data-unification-match-tables)
 - [Remove duplicates before unifying data](https://learn.microsoft.com/en-us/dynamics365/customer-insights/data/data-unification-duplicates)
-- [Unify customer columns](https://learn.microsoft.com/en-us/dynamics365/customer-insights/data/data-unification-merge-tables)
+- [Unify customer columns for data unification](https://learn.microsoft.com/en-us/dynamics365/customer-insights/data/data-unification-merge-tables)
 - [Data unification best practices](https://learn.microsoft.com/en-us/dynamics365/customer-insights/data/data-unification-best-practices)
 - [Resolve data unification match failures](https://learn.microsoft.com/en-us/troubleshoot/dynamics-365/customer-insights/data/profile-unification/match-failed)
 - [Troubleshoot unification output tables](https://learn.microsoft.com/en-us/troubleshoot/dynamics-365/customer-insights/data/profile-unification/troubleshoot-unification-output-tables)
