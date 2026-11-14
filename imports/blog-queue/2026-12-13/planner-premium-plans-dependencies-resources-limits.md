@@ -27,7 +27,7 @@ A plan slips for two reasons: tasks wait on other tasks, or the same people are 
 
 ## What a premium plan adds
 
-Microsoft Support lists these premium features: Goals, People view, Sprints, task chat and task history, advanced dependencies, the Timeline view (a Gantt chart) with critical path, milestones, custom calendars, Assignments view, custom fields (up to ten new fields), conditional coloring, and summary and subtasks. A Project Manager agent chat is listed as preview.
+Microsoft Support lists these premium features: Goals, People view, Sprints, task history, advanced dependencies, the Timeline view (a Gantt chart) with critical path, milestones, custom calendars, Assignments view, custom fields (up to ten new fields), conditional coloring, and summary and subtasks. The page lists Project Manager agent chat, which includes task chat, as a preview feature.
 
 A premium license is required. Without one, you can start an upgrade from **My Plans** by selecting **Create a plan** and choosing a premium option. Users are offered a free 30-day trial, or they can request a license from the administrator. With a license, premium views open from **Timeline** or the **...** menu.
 
@@ -37,24 +37,24 @@ Basic plans have a Schedule view, recurring tasks, Outlook calendar integration 
 
 Dependencies link tasks. The supported types are finish to start, start to start, start to finish and finish to finish. The scheduling engine updates execution dates automatically based on the links, so moving one task can move many.
 
-The **Timeline** view shows all tasks and dependencies and highlights the **critical path**. Microsoft describes the critical path as the tasks that define the timeline. A delay in a critical task delays the plan, while a delay in a task off the path may not.
+The **Timeline** view shows all tasks and dependencies, and the page says you can also see the critical path there. Microsoft describes the critical path as showing which tasks define the project timeline. My own reading: a delay in a critical task delays the plan, while a delay in a task off the path may not.
 
-To use it:
+My own suggested steps, not from Microsoft:
 
 1. Open the plan and select **Timeline**.
-2. Turn on the critical path highlight if it is not on.
+2. Look at the critical path in the Timeline view. The page describes no toggle for it.
 3. Look for long chains of finish to start links through the same few tasks. Those are the bottleneck candidates.
 4. Check whether a link is necessary. A start to start link can let two tasks overlap where a finish to start link forced a queue.
 5. Add milestones for the dates that matter and watch whether the critical path still reaches them.
 
-Custom calendars set the days that count as work days. If dates look longer than expected, a calendar with fewer work days may be the cause.
+Custom calendars let you choose which days count as work days for each plan, and the scheduling engine then schedules work only on those days. My own inference: if dates look longer than expected, a calendar with fewer work days may be the cause.
 
 ## Find resource bottlenecks: People and Assignments
 
 - **People view** shows workload distribution and over- or under-allocation. Use it to spot someone with several overlapping tasks.
 - **Assignments view** shows effort per resource by day, week or month. Use it to see when the overload happens.
 
-Typical fixes are to reassign tasks, shift a non-critical task so it no longer overlaps, or split a large task into subtasks assigned to different people. Support does not list a feature that levels resources automatically, so these remain manual decisions.
+My own suggested fixes are to reassign tasks, shift a non-critical task so it no longer overlaps, or split a large task into subtasks assigned to different people. The Support article does not mention automatic resource leveling, so I treat these as manual decisions.
 
 ## Limits that can stop you
 
@@ -73,7 +73,7 @@ Planner's comparison page lists 3,000 tasks per plan for premium and 9,000 for b
 | Duration of a leaf task | 1,250 days |
 | Duration of a summary task | 3,650 days |
 
-That page does not mention Planner premium plans. It says Project for the web will soon become Microsoft Planner. Because the Planner comparison page links to these limits for premium, they are a reasonable reference, but confirm in your tenant before relying on them for a large plan. A Microsoft Q&A thread repeats similar figures, but it is community content and not an official statement, so I did not use it as a source for numbers.
+That page does not mention Planner premium plans, and its metadata dates it January 2020. It says Project for the web will soon become Microsoft Planner. Because the Planner comparison page links to these limits for premium, they are a reasonable reference, but confirm in your tenant before relying on them for a large plan. A Microsoft Q&A thread repeats similar figures, but it is community content and not an official statement, so I did not use it as a source for numbers.
 
 If a plan hits a limit, the options are to split it into several plans by phase, reduce links by grouping tasks under summary tasks, or keep milestones instead of linking every task.
 
@@ -85,9 +85,9 @@ From the comparison page:
 - Task conversations in premium plans require the plan to be added to a Teams channel.
 - Apps and workflows built for basic plans need modification to work with premium plans.
 
-If an automation stopped working after you upgraded a plan, the last point is the first thing to check.
+My own tip: if an automation stopped working after you upgraded a plan, check the last point first.
 
-## A weekly review routine
+## A weekly review routine (my own suggestion)
 
 1. Open Timeline and check that the critical path still ends at the expected milestone.
 2. Open People view and look for over-allocated people in the next two weeks.
@@ -107,6 +107,6 @@ Microsoft Support's article does not give steps to resolve scheduling conflicts 
 
 ## Sources
 
-- [Microsoft Support: Advanced capabilities with premium plans in Planner](https://support.microsoft.com/Planner/teams/advanced-capabilities-with-premium-plans-in-planner)
-- [Microsoft Support: Compare Microsoft Planner basic vs premium plans](https://support.microsoft.com/hr-HR/Planner/compare-microsoft-planner-basic-vs-premium-plans)
+- [Microsoft Support: Advanced capabilities with premium plans in Planner](https://support.microsoft.com/en-us/planner/teams/advanced-capabilities-with-premium-plans-in-planner)
+- [Microsoft Support: Compare Microsoft Planner basic vs premium plans](https://support.microsoft.com/en-us/planner/compare-microsoft-planner-basic-vs-premium-plans)
 - [Microsoft Learn: Project for the web limits and boundaries](https://learn.microsoft.com/en-us/project-for-the-web/project-for-the-web-limits-and-boundaries)
