@@ -14,7 +14,7 @@ keypoints:
   - "CLS works on both sides of a delegated shortcut. RLS can be set only on the producer side."
 faq:
   - q: "Which permissions do I need to create a shortcut to another workspace?"
-    a: "According to Microsoft Learn, for items that do not support OneLake security yet you need item Write permission or OneLake security ReadWrite on the shortcut path, and OneLake security Read on the target path. For items without OneLake security support, the target permission is item ReadAll."
+    a: "According to Microsoft Learn, you need item Write permission or OneLake security ReadWrite on the shortcut path, and OneLake security Read on the target path. For target items that do not support OneLake security yet, the target permission is item ReadAll. Users in the Viewer role also need Fabric Read on the shortcut path."
   - q: "What is the difference between passthrough and delegated shortcuts?"
     a: "Passthrough passes the caller's identity to the target, so users see only what they can access there. Delegated uses an intermediate credential such as another user, a service principal or an account key. Learn says the caller then gets the intersection of their own security and the delegated identity's security."
   - q: "Can I put row-level security on the consumer side of a shortcut?"
@@ -48,7 +48,7 @@ Choose **Delegated identity** when you create the shortcut. Switching later mean
 
 ## Step 2: Grant the permissions each side needs
 
-For legacy item permissions, Learn lists:
+Learn lists these permissions for shortcut operations:
 
 | Action | On the shortcut path | On the target path |
 |---|---|---|
@@ -59,9 +59,11 @@ For legacy item permissions, Learn lists:
 
 A user with write access in the lakehouse but only read on the target cannot write to the target, and the reverse is also true.
 
+For users in the Viewer role or with item Read permission, Learn lists a combined requirement. Create and update need Fabric Read plus OneLake security ReadWrite on the shortcut path and OneLake security Read on the new target. Delete needs Fabric Read plus OneLake security ReadWrite on the shortcut path. Listing or getting shortcuts needs Fabric Read plus OneLake security Read.
+
 ## Step 3: Understand who the roles affect
 
-OneLake security is role-based access control for data in OneLake, enforced across Fabric engines. Each role has permissions (Read or ReadWrite), a type (only Grant roles exist), data in the role and members. Admin or Member workspace roles can create roles.
+OneLake enforces security on two planes. The control plane, set with workspace roles and item permissions, governs what you can do to an item. The data plane, which is OneLake security, governs which data you can see or change, down to rows and columns. OneLake security is role-based access control for data in OneLake, enforced across Fabric engines. Each role has permissions (Read or ReadWrite), a type (only Grant roles exist), data in the role and members. Admin or Member workspace roles can create roles.
 
 - **Admin, Member and Contributor** users are not restricted by OneLake security roles. They need access to both paths, and Read on the target to create or update a shortcut.
 - **Viewer** users and users with item Read permission are governed by their OneLake security roles. For shortcut operations they need the matching OneLake security permission plus Fabric Read.
