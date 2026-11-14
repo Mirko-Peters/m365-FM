@@ -1,6 +1,6 @@
 ---
 title: "Azure Virtual Desktop Client Connection Errors: No Feed, Sign-In and Client Fixes"
-summary: "Troubleshoot Azure Virtual Desktop client problems using Microsoft Learn: no feed, lost feed after a subscription move, Conditional Access blocks, AD FS sign-in failures, client resets and log collection, with the age of the client page flagged."
+summary: "Troubleshoot Azure Virtual Desktop client problems using Microsoft Learn: no feed, lost feed after a subscription move, Conditional Access blocks, client resets and log collection, with the age of the client page flagged."
 status: review
 publish: false
 author: mirko-p
@@ -9,7 +9,7 @@ topics: [azure-virtual-desktop]
 keypoints:
   - "For no feed, confirm the user's application group assignment, the credentials and that any Entra group is a security group, because distribution groups are not supported."
   - "After a subscription moves tenants or a CSP transfer, reassign users or re-register the Microsoft.DesktopVirtualization resource provider."
-  - "For AD FS sign-in failures, the page says to set PromptLoginBehavior to nativeSupport for the federated domain."
+  - "A Conditional Access error can come from missing access to the Azure Virtual Desktop and Windows 365 apps or to the Windows Cloud Login app."
   - "The Remote Desktop client for Windows page is marked archived with a last update in 2022, so treat its fixes as older guidance."
   - "The pages list no numeric error codes. They give message text and fixes in a fixed order."
 faq:
@@ -17,8 +17,8 @@ faq:
     a: "According to Microsoft Learn, confirm the user is assigned to application groups, check the credentials and, for the web client, check for cached credential issues. If the user is in a Microsoft Entra group, it must be a security group because Azure Virtual Desktop does not support distribution groups."
   - q: "Why did a user lose their feed after a subscription change?"
     a: "Learn lists two causes: the subscription moved to another Microsoft Entra tenant, so assignments point to the old tenant and users must be reassigned, or a CSP created the subscription and transferred it, in which case you re-register Microsoft.DesktopVirtualization."
-  - q: "How do I fix AD FS sign-in failures with the Windows App?"
-    a: "Learn says the Windows App sends prompt=login and that, if PromptLoginBehavior is unset on the federated domain, sign-in can fail with MSIS7102. Set PromptLoginBehavior to nativeSupport in the domain federation configuration."
+  - q: "Why does a user see a Conditional Access error when signing in?"
+    a: "Learn lists two causes. The user signs in to the Windows App in a browser without access to both the Azure Virtual Desktop and Windows 365 apps, or uses Microsoft Entra single sign-on without access to the Windows Cloud Login app. Check the sign-in logs first."
   - q: "How do I reset the Windows client?"
     a: "From the app select the three dots, About, then Reset under Reset user data. From the command line run msrdcw.exe /reset in the install directory, with /f to skip confirmation. This restores default settings and unsubscribes you from all workspaces."
   - q: "Is the client troubleshooting page current?"
@@ -29,7 +29,11 @@ Most Azure Virtual Desktop client problems fall into a few groups: no feed, bloc
 
 ## Start with the overview
 
-The overview is a routing page. It lists problem areas such as networking, host pool creation, management, FSLogix and client issues, and it suggests checking the Azure status page and Azure Service Health first. It recommends Azure Virtual Desktop Insights and Log Analytics for diagnostics. It lists no error codes. The only symptom it names explicitly is Connected but no feed.
+The overview is a routing page. It lists problem areas such as networking, host pool creation, management, FSLogix and client issues, and it suggests checking the Azure status page and Azure Service Health first. It recommends Azure Virtual Desktop Insights and Log Analytics for diagnostics. It lists no error codes. Its table has symptom rows such as Remote desktop clients malfunction on start, Connected but no feed and Feed discovery problems due to the network, and points to other pages for each.
+
+## Where else the overview points
+
+The overview also covers help routes. It names the Azure Virtual Desktop Tech Community for reporting issues or suggesting features, and App Assure, a Microsoft service for application problems in Azure Virtual Desktop at no extra cost. For feed discovery problems caused by the network, it says users need to contact their network administrator. For virtual network and ExpressRoute settings of a session host pool, it says to open an Azure support request under the Networking category.
 
 ## No feed
 
@@ -48,10 +52,6 @@ Symptom: the user starts the client and signs in, but no icons appear. Fixes in 
 ## Conditional Access blocks
 
 The page lists two causes. The user signs in to the Windows App in a browser without access to both the Azure Virtual Desktop and Windows 365 apps through Conditional Access, because the Windows App tries to authenticate to both even without a Cloud PC. Or the user signs in with Microsoft Entra single sign-on but lacks access to the Windows Cloud Login app. Check the user's Microsoft Entra sign-in logs, then follow the guide on enforcing multifactor authentication with Conditional Access for Azure Virtual Desktop.
-
-## AD FS sign-in fails
-
-Symptom: sign-in fails after the redirect to AD FS, and AD FS event logs may show `MSIS7102: Requested Authentication Method is not supported on the STS`. The Windows App sends `prompt=login`, and if the federated domain's `PromptLoginBehavior` is unset, Microsoft Entra ID may translate it into a password authentication request the AD FS environment does not support. Set `PromptLoginBehavior` to `nativeSupport` in the domain federation configuration. The page gives no command and no list of supported AD FS versions.
 
 ## Windows client problems (archived page)
 
@@ -75,6 +75,6 @@ The pages do not include numeric error codes, uninstall and reinstall steps, pro
 
 ## Sources
 
-- [Troubleshoot Azure Virtual Desktop](https://learn.microsoft.com/azure/virtual-desktop/troubleshoot-set-up-overview)
-- [Troubleshoot Azure Virtual Desktop service connections](https://learn.microsoft.com/troubleshoot/azure/virtual-desktop/troubleshoot-service-connection)
-- [Troubleshoot the Remote Desktop client for Windows](https://learn.microsoft.com/azure/virtual-desktop/troubleshoot-client-windows)
+- [Azure Virtual Desktop troubleshooting overview (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/virtual-desktop/troubleshoot-set-up-overview)
+- [Troubleshoot Azure Virtual Desktop service connection (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/virtual-desktop/troubleshoot-service-connection)
+- [Troubleshoot the Remote Desktop client for Windows (Microsoft Learn)](https://learn.microsoft.com/previous-versions/remote-desktop-client/troubleshoot-client-windows)
