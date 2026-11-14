@@ -63,7 +63,7 @@ The logs may show `MigrationConnectionTestedTooRecentlyException` with a message
 
 ## HCW8019, HCW8021, HCW8022, HCW8023: upgrade errors
 
-The messages say the HybridConfiguration Active Directory object must be upgraded (HCW8019), or that parts of the hybrid configuration weren't properly created or removed during the upgrade (HCW8021 to HCW8023). The Learn page applies to Exchange Online and Exchange Server 2013.
+The messages say the HybridConfiguration Active Directory object must be upgraded (HCW8019), or that parts of the hybrid configuration weren't properly created or removed during the upgrade (HCW8021 to HCW8023).
 
 **Cause.** The hybrid configuration object contains an incorrect setting.
 
@@ -93,7 +93,7 @@ Two messages appear: one that execution of the `Set-WebServicesVirtualDirectory`
 
 ## Limits of this article
 
-The pages I read apply to specific Exchange versions, such as 2010, 2013 and 2016, and I did not verify their wording against Exchange Server Subscription Edition. Check the Applies to line on each Learn page for your version. I also did not read the generic Hybrid Configuration Wizard documentation page, because its address from my notes returned no content, so general prerequisites are not covered here.
+The pages I read are short troubleshooting articles. They do not state which Exchange Server versions they cover, and one of them quotes a log path from a V14 (Exchange 2010) installation, so I did not verify their wording against Exchange Server Subscription Edition. Confirm the steps against your own Exchange version. I also did not read the generic Hybrid Configuration Wizard documentation page, because its address from my notes returned no content, so general prerequisites are not covered here.
 
 ## Related
 
@@ -102,8 +102,8 @@ The pages I read apply to specific Exchange versions, such as 2010, 2013 and 201
 
 ## Sources
 
-- [HCW8091 error when running the Hybrid Configuration Wizard](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/hcw8091-error-when-running-hybrid-configuratio-wizard)
-- [HCW8100, HCW8084, or HCW8083 error](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/hcw8100-hcw8084-or-hcw8083-error)
-- [HCW8078 error: Migration Endpoint could not be created](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/migration-endpoint-could-not-be-created)
-- [HCW8019, HCW8021, HCW8022, or HCW8023 error](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/hcw-errors-about-hybrid-configuration)
-- [Can't run the Hybrid Configuration wizard with an exception error](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/run-hcw-exception-error)
+- [HCW8091 error when running Hybrid Configuration Wizard (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/hcw8091-error-when-running-hybrid-configuratio-wizard)
+- [HCW8100, HCW8084, or HCW8083 error (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/hcw8100-hcw8084-or-hcw8083-error)
+- [HCW8078 error - Migration Endpoint could not be created (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/migration-endpoint-could-not-be-created)
+- [HCW8019, HCW8021, HCW8022, or HCW8023 error (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/hcw-errors-about-hybrid-configuration)
+- [Can't run Hybrid Configuration wizard with an exception error (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/hybrid-configuration-wizard-errors/run-hcw-exception-error)
