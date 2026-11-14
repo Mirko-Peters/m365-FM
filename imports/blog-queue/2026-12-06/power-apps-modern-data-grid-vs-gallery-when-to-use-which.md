@@ -39,9 +39,9 @@ The page does not compare the Data grid with the **Gallery** control, and it doe
 | Purpose | Tabular display of records | Container that shows a set of data, one template per record |
 | Layout | Columns, one shared row height | Any layout you build in the template |
 | Columns or fields | Text, Number, Phone, Email, URL, Button; Image column supported | Any controls in the template |
-| Search and sort | Built-in properties `Searchable` and `Sortable` (both false by default) | Build with `Filter` and your own controls |
+| Search and sort | Built-in properties `Searchable` (false by default) and `Sortable` (true by default) | Build with `Filter` and your own controls |
 | Selection | `Selected`, `SelectedItems`, `SelectMultiple`, `ShowSelector` | `Selected`, `Default` |
-| Large data | Row virtualization above about 2,000 records | `DelayItemLoading` and `LoadingSpinner` help performance |
+| Large data | Row virtualization for datasets with more than 2,000 records; `Pagination` and `PageSize` properties | `DelayItemLoading` and `LoadingSpinner` are listed as properties; Microsoft links them from a performance tip |
 | Known limits | No zebra rows, no per-row height, no per-column font | Nesting depth of 2, some unsupported child controls |
 
 ## Data grid details to know
@@ -50,6 +50,8 @@ The page does not compare the Data grid with the **Gallery** control, and it doe
 - Columns are locked by default. Select a column and choose **Unlock** to customize it. Column text is a Power Fx formula evaluated per row with `ThisItem`.
 - Row virtualization turns on automatically for large datasets. Wrapping text on any column disables it, and the app checker flags this.
 - `Reset(DataGrid1)` clears the grid and its selection.
+- **Pagination** accepts `Pagination.None` (the default, one fetch limited by the app's data row limit), `Pagination.Auto` and `Pagination.Number`. **PageSize** sets the records per fetch or numbered page, and an invalid value falls back to 100. Pagination does not bypass delegation limits.
+- **Searchable** is false by default. With **DelegateSearch** set to true, the grid exposes `SearchText` and you filter in the **Items** formula instead. Built-in search checks only the loaded records, so a search with no match does not prove the remote table has none.
 - AI row summaries need a Dataverse table with a configured row summary and an admin setting for **Summary in canvas data grid**. Microsoft says summaries can be incomplete or incorrect, so users should verify them.
 
 ## Gallery details to know
@@ -69,12 +71,12 @@ Neither control removes the data row limit. The default is 500 records and the m
 1. **Many columns, scanning and selecting rows:** Data grid.
 2. **Cards, images, buttons or mixed content per record:** Gallery.
 3. **Replacing an old Table control:** Data grid, as Microsoft recommends.
-4. **Need zebra rows, variable row heights or per-column fonts:** Gallery, because the Data grid does not offer them.
+4. **Need zebra rows, variable row heights or per-column fonts:** the Data grid page lists these as limitations. The Gallery page does not describe equivalent built-in options, so you would build them yourself in the template. Check this in your own app.
 5. **Large Dataverse tables:** either control needs delegable filters. The Data grid adds virtualization after the data arrives.
 
 ## What the pages do not say
 
-The Data grid page does not describe paging, in-grid editing, row or column limits beyond the virtualization threshold, or how to add the control. The modern controls overview does not list individual controls, so I could not confirm the Data grid's status from it. Test inline editing needs in your own app before you commit.
+The Data grid page does not describe in-grid editing, row or column count limits beyond the virtualization threshold, or a preview or general availability label. The modern controls overview explains how to turn on modern controls but does not name individual controls in text. Test inline editing needs in your own app before you commit.
 
 ## Related
 
