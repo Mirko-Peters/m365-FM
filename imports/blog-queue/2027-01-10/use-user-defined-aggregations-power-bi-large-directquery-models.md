@@ -10,7 +10,7 @@ keypoints:
   - "Aggregations cache data at an aggregated level so queries they can answer come from memory instead of the DirectQuery source. The detail table must use DirectQuery."
   - "In Power BI Desktop right-click the aggregation table in the Data pane, select Manage aggregations and set Summarization, Detail Table, Detail Column, GroupBy and Precedence."
   - "Relationship-based aggregations suit star and snowflake models. GroupBy-based aggregations suit denormalized big data models and need GroupBy entries."
-  - "Once the aggregation table storage mode is set to Import, it cannot be changed again. Aggregations on SSO-enabled sources are ignored since August 2022."
+  - "Once the aggregation table storage mode is set to Import, it cannot be changed again. Since August 2022 Power BI ignores Import-mode aggregation tables on SSO-enabled sources."
   - "The page covers SQL Profiler and an extended event to check hits. It does not mention Performance analyzer or say whether manual aggregations need Premium."
 faq:
   - q: "What do aggregations do?"
@@ -54,7 +54,7 @@ You cache data at an aggregated level. A query that the aggregation can answer i
 
 ## Summarizations mentioned
 
-Sum, Min, Max, Count, Count table rows and DISTINCTCOUNT are named. Average is folded internally into SUM divided by COUNT, so it needs both. The page does not list every option in the dialog.
+The page names Sum, Min, Max, Count and Count table rows. It says a complex calculation is broken into subqueries for each SUM, MIN, MAX and COUNT. AVERAGE is folded internally into SUM divided by COUNT, so it needs both. DISTINCTCOUNT can hit an aggregation in some cases when there is a GroupBy entry for the column. The page does not list every option in the dialog.
 
 ## Storage modes
 
@@ -102,6 +102,8 @@ This outline is practical advice built on the page.
 
 ## Typical mistakes
 
+This list is my own advice, not from the page.
+
 - Using an Import detail table.
 - Forgetting GroupBy entries on a GroupBy-based aggregation.
 - Setting Import storage mode and expecting to undo it.
@@ -115,4 +117,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [User-defined aggregations (Microsoft Learn)](https://learn.microsoft.com/power-bi/transform-model/aggregations-advanced)
+- [User-defined aggregations - Power BI (Microsoft Learn)](https://learn.microsoft.com/power-bi/transform-model/aggregations-advanced)
