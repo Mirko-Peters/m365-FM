@@ -39,7 +39,7 @@ According to Microsoft Learn:
 - Shared channels are enabled by default. A channel policy controls creation, external sharing and participation in external shared channels.
 - Each shared channel has its own SharePoint site, created in the same geographic region as the parent team's site. The site has a document library and the template ID `TEAMCHANNEL#1`.
 - Access to that site is limited to channel owners and members. Membership stays synced with the channel, and permissions cannot be managed independently in SharePoint.
-- The site inherits the parent team's sensitivity label, even when the channel is shared with another team.
+- Shared channels inherit the parent team's sensitivity label.
 - Messages are stored in a dedicated system mailbox, not the group mailbox.
 
 ## Standard, private or shared
@@ -81,7 +81,7 @@ From Microsoft Support, on the desktop app:
 4. Add people in your organization by name, or outside people by email address, and select **Share**.
 5. To make a member an owner, open the arrow next to **Member**, choose **Owner** and select **Done**.
 
-The default setting is to share the channel with everyone on the team. The creator becomes the channel owner. The channel inherits labels such as its description from the host team, and you cannot change the host team afterward. External people can only be members, not owners.
+The default setting is to share the channel with everyone on the team. The creator becomes the channel owner. The Support page also says a shared channel cannot be changed into a standard or private channel, and the Learn page says it cannot be moved to another team. External people can only be members, not owners.
 
 Only team owners can create shared channels, according to Support. The Learn page says creation is controlled by policy, and its text and table disagree on whether team members can create them. Check your tenant's channel policy.
 
