@@ -54,7 +54,7 @@ The Learn page does not list the monthly minutes per plan. It points to the coun
 
 ## Licensing and country rules
 
-1. Buy the Teams Phone add-on license first. In the Microsoft 365 admin center: **Billing** > **Your products** > **Add more products** > **Add-ons**, select the Teams Phone add-on, then **Buy**. Depending on your plan you may need other add-ons first.
+1. Buy the Teams Phone add-on license first. In the Microsoft 365 admin center: **Billing** > **Your products** > **Add more products** > **Add-ons**, select the Teams Phone add-on, then **Buy**.
 2. Buy a Calling Plan the same way, or buy a Teams Phone and Calling Plan bundle.
 3. Assign the plans to users. Different users can have different plans.
 
