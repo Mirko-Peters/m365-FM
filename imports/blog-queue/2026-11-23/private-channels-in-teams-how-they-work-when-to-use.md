@@ -53,7 +53,7 @@ These steps follow the Microsoft Support article on creating channels.
 
 You can also use **More options** > **Manage channel** and the **Members** tab. Each person must already be in the team. A private channel can have more than one owner.
 
-If you do not see the private option, your admin may have limited who can create private channels. Learn says this is controlled through Teams policies at team and organization level, and team owners can then switch it on or off for members under **Settings** > **Member Permissions**.
+If you do not see the private option, your admin may have limited who can create private channels. Learn says this is controlled through Teams policies at team and organization level, and team owners can then switch it on or off for members in the team's **Settings** tab.
 
 ## Who can do what
 
@@ -62,7 +62,7 @@ Learn publishes a permissions table. The main points:
 - Only a team owner or the channel owner can delete the channel. Deleted channels can be restored within 30 days, and the same people can restore them.
 - Only the channel owner adds members, edits channel settings and manages tabs and apps. Apps must be installed for the team.
 - Members can leave. Guests can leave but cannot add members, edit settings or delete the channel.
-- Each channel has settings independent of the team. A new channel inherits them from the team at creation and can then be changed.
+
 
 ## Files and the SharePoint site
 
@@ -108,7 +108,7 @@ Because of these conflicts, test the features you rely on, such as meetings and 
 - Adding someone to a private channel before adding them to the team. The team membership comes first.
 - Expecting the team owner to be able to read the files. They cannot unless they are in the channel.
 - Planning to convert a private channel to a standard one later.
-- Making one person the only channel owner and then losing access when they leave.
+- Relying on a single channel owner. Learn says a member is promoted automatically if the owner leaves, but only an owner can add or remove people, so name a second owner.
 
 ## Related
 
