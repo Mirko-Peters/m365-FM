@@ -10,7 +10,7 @@ keypoints:
   - "Learn names two codes: NotFound and ResourceNotFound, both meaning Resource Manager cannot find the resource in your subscription."
   - "For management tasks, check the resource name, the resource group name and the subscription, and make sure your shell runs in the right subscription."
   - "In deployments, a missing dependency can make a resource deploy in parallel with the resource it needs; Bicep uses implicit dependencies through symbolic names."
-  - "Resources in another resource group or subscription need the existing keyword with scope in Bicep, or a full resourceId in JSON."
+  - "A resource in another resource group needs the existing keyword with scope in Bicep; in JSON use resourceId with the resource group and subscription."
   - "A deleted resource can briefly still show in the portal; refresh, and contact support if it stays for more than a few minutes."
 faq:
   - q: "What do NotFound and ResourceNotFound mean?"
