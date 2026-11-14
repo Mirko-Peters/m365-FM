@@ -1,6 +1,6 @@
 ---
 title: "Replicate Azure VMs to Another Region With Azure Site Recovery"
-summary: "Enable Azure-to-Azure replication with Site Recovery: prerequisites, permissions, outbound URLs, the portal steps, what gets created, and why you should run a disaster recovery drill afterwards."
+summary: "Enable Azure-to-Azure replication with Site Recovery: prerequisites, permissions, outbound URLs, the portal steps, and what replication sets up. A drill afterwards is my advice."
 status: review
 publish: false
 author: mirko-p
@@ -11,14 +11,14 @@ keypoints:
   - "You need Site Recovery Contributor for vault operations and Virtual Machine Contributor, or equivalent rights, to create target VMs."
   - "Replication installs the Site Recovery Mobility service extension on each VM and uses a cache storage account in the source region. Target VMs are created only at failover."
   - "Outbound access is needed to blob storage, login.microsoftonline.com, hypervrecoverymanager.windowsazure.com and servicebus.windows.net. Authentication proxies are not supported."
-  - "You can select up to 10 VMs in one go. Run a disaster recovery drill to verify failover."
+  - "You can select up to 10 VMs in one go. A disaster recovery drill afterwards is my advice, not a step of the tutorial."
 faq:
   - q: "Which roles are needed for Azure Site Recovery?"
     a: "Microsoft Learn says creating a vault needs Admin or Owner on the subscription, managing vault operations needs the Site Recovery Contributor built-in role, and creating target VMs needs Virtual Machine Contributor or permissions to create VMs in the virtual network and write to storage accounts and managed disks."
   - q: "Where should the vault be?"
     a: "Learn's tutorial says to choose a region other than the source region for the Recovery Services vault."
   - q: "Are target VMs created during replication?"
-    a: "No. Learn says target VMs are not created until failover, when they are restored from a recovery point. Replication creates the vault, the Mobility service extension on each VM, a cache storage account in the source region, recovery points and default replication settings."
+    a: "No. Learn says target VMs are not created until failover, when they are restored from a recovery point. Enabling replication installs the Mobility service extension on each VM, sends disk writes to a cache storage account in the source region, generates recovery points from the data, and creates default settings and a policy for the target region."
   - q: "What network access is required?"
     a: "Outbound connectivity to *.blob.core.windows.net, login.microsoftonline.com, *.hypervrecoverymanager.windowsazure.com and *.servicebus.windows.net, or the matching service tags Storage, Microsoft Entra ID, EventsHub and AzureSiteRecovery on port 443. Authentication proxies are not supported."
   - q: "How many VMs can I enable at once in the tutorial?"
@@ -32,8 +32,8 @@ Azure Site Recovery (ASR) replicates Azure VMs to another region so you can fail
 From the tutorial:
 
 - An Azure subscription.
-- A supported region. Vaults in South Central India and North East US 5 aren't supported for Azure-to-Azure disaster recovery.
-- Windows or Linux VMs that aren't encrypted. For encrypted VMs the tutorial points to the Azure Disk Encryption article. Windows Client licensing isn't preserved after failover, so validate licensing on the recovered VM.
+- A supported region. Recovery Services vaults created in South Central India and North East US 5 aren't supported for Azure-to-Azure disaster recovery. These regions can still be a source or target when you use a vault in a supported Site Recovery region.
+- Windows or Linux VMs that aren't encrypted. For encrypted VMs the tutorial points to the Azure Disk Encryption article.
 - Permissions: Admin or Owner on the subscription to create a vault, the **Site Recovery Contributor** role for vault operations, and **Virtual Machine Contributor**, or rights to create VMs in the virtual network and write to storage accounts and managed disks, for target VMs.
 - Quota in the target region for VM sizes matching the source.
 - Latest Windows updates, or Linux root certificates and CRLs.
@@ -54,9 +54,9 @@ For network security groups, use the service tags Storage, Microsoft Entra ID, E
 ### Create the vault
 
 1. Sign in to the Azure portal, search for recovery and select **Recovery Services vaults**.
-2. Select **+ Create**. On **Basics**, set **Subscription**, **Resource group**, **Vault name** and **Region**. Choose a region other than the source region.
+2. Select **Add**, as the tutorial words it. On **Basics**, set **Subscription**, **Resource group**, **Vault name** and **Region**. Choose a region other than the source region.
 3. Select **Review + create**, **Create**, then **Go to resource**.
-4. On the vault overview, select **Enable Site Recovery**.
+4. In the vault settings, select **Enable Site Recovery**.
 
 ### Enable replication
 
@@ -69,9 +69,8 @@ For network security groups, use the service tags Storage, Microsoft Entra ID, E
 
 The VMs then appear on the vault's **Replicated items** page.
 
-## What gets created
+## What replication sets up
 
-- A Recovery Services vault.
 - A **Site Recovery Mobility service extension** on each VM that registers it with Site Recovery.
 - A **cache storage account** in the source region that receives disk writes before they go to the target region.
 - Recovery points generated from replicated data.
@@ -81,17 +80,18 @@ Target VMs are not created until failover.
 
 ## Notes from the page
 
-- Premium SSD v2 and Ultra Disk use Premium SSD v1 replica disks but keep their source disk type at failover.
-- For shared cluster disks, follow the shared-disk guidance and disable and re-enable protection for the whole cluster. Don't use **Add disks**.
+- By default Site Recovery creates a new replication policy with 24 hours of recovery point retention.
+- Multi-VM consistency through a replication group can affect workload performance. Use it only if the machines run the same workload and need consistency across machines.
+- **Normal Churn** is the default. High Churn can use a Premium Block Blob storage account for VMs with a high data change rate.
 - The tutorial uses default settings. For customized configurations, see the enable replication how-to article.
 
-## Next step: a drill
+## After setup: a drill (my advice)
 
-The tutorial's next step is a disaster recovery drill, to verify failover works before you need it. Treat the drill as part of the setup, not an optional extra. The page I read does not cover failover or failback steps, so use the Azure to Azure drill and failover articles for those.
+I recommend running a disaster recovery drill to verify that failover works before you need it. The tutorial text I read ends at the **Replicated items** page and does not cover drills, failover or failback, so use Microsoft's Azure to Azure drill and failover articles for those.
 
-## Where first attempts usually go wrong
+## Where first attempts usually go wrong (my advice)
 
-The tutorial does not have a troubleshooting section, but its prerequisites point to the likely blockers:
+The tutorial has no troubleshooting section, but its prerequisites point to the likely blockers:
 
 - The vault was created in an unsupported region, or in the same region as the source VMs.
 - The VM uses disk encryption, which needs the separate encryption article.
@@ -109,7 +109,7 @@ Checking these before you start saves a failed enablement. This list is derived 
 4. Create the vault in a different region from the VMs.
 5. Enable replication for up to 10 VMs at a time.
 6. Wait for the VMs to appear under **Replicated items**.
-7. Run a drill.
+7. Run a drill (my advice).
 
 ## Related
 
@@ -117,4 +117,4 @@ Checking these before you start saves a failed enablement. This list is derived 
 
 ## Sources
 
-- [Tutorial: Set up disaster recovery for Azure VMs](https://learn.microsoft.com/azure/site-recovery/azure-to-azure-tutorial-enable-replication)
+- [Tutorial to set up Azure VM disaster recovery with Azure Site Recovery (Microsoft Learn)](https://learn.microsoft.com/azure/site-recovery/azure-to-azure-tutorial-enable-replication)
