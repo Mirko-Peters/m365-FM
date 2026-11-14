@@ -7,10 +7,10 @@ author: mirko-p
 date: 2027-01-05
 topics: [exchange-online]
 keypoints:
-  - "Learn names three causes of 550 5.1.10: the address does not exist or cannot be found, backscatter, and a broken forwarding rule or setting."
+  - "Learn names two reasons for 550 5.1.10: the address does not exist or cannot be found, and backscatter. Broken forwarding rules and settings appear as a fix step."
   - "The sender can resend after removing a bad Auto-Complete entry. The recipient's admin checks the user, license, hybrid sync, accepted domain and MX record."
   - "Change an accepted domain to Internal Relay only in a hybrid setup, and only with a matching connector, or mail flow to on-premises recipients breaks."
-  - "Exchange Online supports only one MX record per domain. Changes can take a few hours and up to 72 hours to propagate."
+  - "Exchange Online supports only one MX record per domain. DNS updates usually propagate in a few hours but can take up to 72 hours."
   - "The page covers the basic code 550 5.1.10 and does not mention the enhanced status code RESOLVER.ADR.RecipientNotFound."
 faq:
   - q: "What does 550 5.1.10 mean?"
@@ -71,18 +71,18 @@ After the sync completes, repeat the check above.
 2. Confirm there is only one MX record. Microsoft does not support multiple MX records for an Exchange Online domain.
 3. Fix issues in the admin center or at your DNS host.
 
-The MX record should point to `<your domain>.mail.protection.outlook.com` or `<your domain>.subdomain.mx.microsoft`. Changes can take a few hours and up to 72 hours to propagate.
+Typically, the MX record points to `<your domain>.mail.protection.outlook.com` or `<your domain>.subdomain.mx.microsoft`. DNS record updates usually propagate in a few hours, but they can take up to 72 hours.
 
 ## Cause 2: backscatter
 
-Spammers forge the **From** address, so the bounce lands with you although you did not send the original message. Nobody needs to act on the bounce. Delete it. Learn adds that a lot of backscatter may mean your device is infected with spam-sending malware, so run an anti-malware scan. Admins who want to reduce impersonation can set up SPF, which Learn links.
+Spammers forge the **From** address, so the bounce lands with you although you did not send the original message. Nobody needs to act on the bounce. Delete it. Learn adds that a lot of backscatter may mean your device is infected with spam-sending malware, so consider running an anti-malware scan. Admins who want to reduce impersonation can set up SPF, which Learn links.
 
-## Cause 3: broken forwarding rules or settings
+## Fix step: broken forwarding rules or settings
 
 | Mechanism | Who can change it | Where |
 | --- | --- | --- |
 | Inbox rules | User or delegate | Settings > Your app settings > Mail > Mail > Automatic processing > Inbox and sweep rules |
-| Account forwarding | User or email admin | Microsoft 365 admin center > Users > Active users > the user > Mail Settings > Email forwarding > Edit |
+| Account forwarding | User or email admin | Admin: Microsoft 365 admin center > Users > Active users > the user > Mail Settings > Email forwarding > Edit. User: Settings > Your app settings > Mail > Accounts > Forwarding |
 | Mail flow (transport) rules | Email admin only | Exchange admin center > Mail flow > Rules. Look for redirect rules |
 
 Inbox rules belong to the user's mailbox. Mail flow rules are organization-wide.
@@ -91,9 +91,9 @@ Inbox rules belong to the user's mailbox. Mail flow rules are organization-wide.
 
 The enhanced code RESOLVER.ADR.RecipientNotFound, Exchange Online PowerShell commands for checking recipients, forwarding or mail flow rules (only the sync command appears), message trace or NDR header analysis, steps to create a mailbox or contact, and the behavior of 5.1.10 with non-Microsoft recipients.
 
-## A quick triage
+## A quick triage (my advice)
 
-The order is practical advice.
+The order is my own suggestion, not taken from the page.
 
 1. Sender: resend with a retyped address.
 2. Admin: check that the user exists and is licensed.
@@ -102,7 +102,7 @@ The order is practical advice.
 5. Still failing: check forwarding rules and mail flow rules.
 6. Bounce for a message nobody sent: treat it as backscatter.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Resending from the same stale Auto-Complete entry.
 - Switching an accepted domain to Internal Relay without a connector.
@@ -117,4 +117,4 @@ The order is practical advice.
 
 ## Sources
 
-- [Fix email delivery issues for error code 550 5.1.10 in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/exchange/troubleshoot/email-delivery/ndr/fix-error-code-550-5-1-10-in-exchange-online)
+- [Fix NDR error 550 5.1.10 in Exchange Online (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/email-delivery/ndr/fix-error-code-550-5-1-10-in-exchange-online)
