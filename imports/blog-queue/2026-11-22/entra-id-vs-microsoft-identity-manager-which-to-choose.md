@@ -41,7 +41,7 @@ Entra ID and Microsoft Identity Manager are not two answers to the same question
 |---|---|---|
 | Where it runs | Cloud service | On-premises servers you operate |
 | Main job | Authentication, policy enforcement, protection | Provisioning and synchronization across directories and systems of record |
-| Source of identity | Tenant directory | HR systems, directories, databases through connectors |
+
 | Support status | Current product | Extended end of support January 9, 2029 |
 
 The table only contrasts what Learn states. It does not claim feature parity, because Learn does not map MIM features to Entra features one to one.
@@ -65,7 +65,7 @@ Learn also encourages customers to stay on a fully supported service pack.
 The Learn page on deprecated features states that deprecated features are not recommended for new deployments and may be removed in a later hotfix or service pack. Examples:
 
 - **BHOLD Suite:** Microsoft does not recommend new deployments. Some modules depend on Silverlight, which reached end of support on October 12, 2021. Learn names Entra access reviews as the replacement for BHOLD attestation and entitlement management for access assignment.
-- **Azure MFA Server:** since September 30, 2024 it no longer services MFA requests. MIM self-service password reset and PAM approvals need custom MFA providers, Windows Hello or smartcard authentication.
+- **Azure MFA Server:** since September 30, 2024, Azure MFA Server deployments no longer service MFA requests for MIM self-service password reset or PAM approvals. Learn points to a custom MFA provider, Windows Hello or smartcard-based authentication in Active Directory.
 - **Hybrid reporting:** its cloud endpoints stopped being available as of November 2025. Learn points to Azure Monitor through the Azure Arc agent.
 - **Older platforms:** deploying the MIM Service, Portal or Sync on Windows Server 2008 R2 or SQL Server 2008 R2 is deprecated.
 
@@ -81,7 +81,7 @@ The Learn page on deprecated features states that deprecated features are not re
 
 - **Treating the two as interchangeable.** They sit at different layers.
 - **Planning around mainstream support.** The Learn page read here gives only the extended date.
-- **Leaving Azure MFA Server in a MIM design.** It stopped servicing MFA requests on September 30, 2024.
+- **Leaving Azure MFA Server in a MIM design.** Since September 30, 2024 it no longer services MFA requests for MIM SSPR or PAM approvals.
 
 ## Limits of the sources
 
