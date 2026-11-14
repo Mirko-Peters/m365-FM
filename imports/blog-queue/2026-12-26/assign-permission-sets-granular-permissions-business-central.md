@@ -33,9 +33,9 @@ Access has two layers: the license-based entitlement, which gives default permis
 
 ### Permission set types
 
-- **System:** provided by Microsoft. If you copy one, you can turn on **Notify on Changed Permission Set**, which requires the *Original System permission set changed* notification on the **My Notifications** page.
-- **User-Defined:** created by admins. Only these can be edited from the Effective Permissions page.
-- **Extension:** can be added to other sets. The page does not describe them in detail.
+- **System:** the page says Microsoft or your solution provider add predefined permission sets. If you copy one, you can turn on **Notify on Changed Permission Set**, which requires the *Original System permission set changed* notification on the **My Notifications** page.
+- **User-Defined:** the type you create yourself. Only these can be edited from the Effective Permissions page.
+- **Extension:** can be added to other permission sets, like System sets. The page does not describe them in detail.
 
 ### Permission levels
 
@@ -59,7 +59,7 @@ For included permissions or added sets, the exclude options are **Blank** (use t
 ## Other procedures
 
 - **Copy:** choose **Copy Permission Set**, name it and select a copy operation: **Copy by reference**, **Flat permission copy** or **Clone**.
-- **Record permissions:** choose **Record Permissions**, then **Start**, perform the tasks, then **Stop** and confirm with **Yes**. Then set insert, modify or delete rights for each recorded table. Use the pop-out window or the same tab, or recording may not capture your actions.
+- **Record permissions:** choose **Record Permissions**, then **Start**, perform the tasks, then **Stop** and confirm with **Yes**. Then set insert, modify or delete rights for each recorded table. Recording must be done in the pop-out window side by side or within the same tab.
 - **Export and import:** use **Export Permission Sets** in the source tenant and **Import Permission Sets** in the target tenant. Select **Update existing permissions** to merge matching names. Otherwise matching sets are skipped.
 - **Assign to a user:** use the **User Permission Sets** FastTab on the **User Card**, or the **Permission Set by User** action on the **Users** page.
 - **Company scope:** leave **Company** blank to apply a set to all companies. To limit it, assign the set separately per company.
@@ -72,7 +72,7 @@ For included permissions or added sets, the exclude options are **Blank** (use t
 
 - Changing a permission set affects every user assigned to it.
 - Changes Microsoft makes to system permissions automatically update user-defined sets that include them.
-- Entitlement values overrule lower-ranked values in other sets.
+- Entitlement values overrule higher-ranked values in other permission sets. Such a higher value is shown in brackets on Effective Permissions because it is not effective.
 - **SUPER** removes detailed restrictions and grants access to everything the license allows.
 - Use caution with Insert or Modify on tables 9001 (User Group Member) and 9003 (User Group Permission Set).
 - Delegated admins appear in the Users list with pseudonymous names such as `User123456@partnerdomain.com`.
@@ -94,4 +94,4 @@ The page does not cover security filter syntax, how to create security groups in
 
 ## Sources
 
-- [Assign permissions to users and groups](https://learn.microsoft.com/dynamics365/business-central/ui-define-granular-permissions)
+- [Define granular permissions - Business Central (Microsoft Learn)](https://learn.microsoft.com/dynamics365/business-central/ui-define-granular-permissions)
