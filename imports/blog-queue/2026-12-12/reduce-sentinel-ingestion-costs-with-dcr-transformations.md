@@ -41,11 +41,11 @@ Before you start, check the data connector reference to confirm that your connec
 
 A workspace transformation DCR is a special DCR attached to the workspace. Microsoft says there can be only one per workspace, and it can hold transformations for any number of supported tables. It applies to data sent to those tables unless that data came from another DCR.
 
-The page gives an example. A workspace transformation on the `Event` table applies to events from machines using the Log Analytics agent. It is ignored for data from Azure Monitor Agent, because that agent uses a DCR. For Azure Monitor Agent, put the transformation into the DCR associated with the agent.
+The Azure Monitor transformations page gives an example. A workspace transformation on the `Event` table applies to events from machines using the Log Analytics agent, which Learn notes is deprecated although some environments still use it. It is ignored for data from Azure Monitor Agent, because that agent uses a DCR. For Azure Monitor Agent, put the transformation into the DCR associated with the agent.
 
 ## What the KQL can do
 
-Transformations see one record at a time. Microsoft states that operators acting on several records, such as `summarize`, are not supported, and only the operators listed in the article work. The supported tabular operators are `extend`, `project`, `print`, `where`, `parse`, `project-away`, `project-rename`, `datatable` and `columnifexists`. The incoming data is referenced with the `source` keyword.
+Transformations see one record at a time. Microsoft states that operators acting on several records, such as `summarize`, are not supported, and only the operators listed in the article work. The supported tabular operators are `extend`, `project`, `print`, `where`, `parse`, `project-away`, `project-rename`, `datatable` and `columnifexists`. The incoming data is referenced with the `source` keyword. The Azure Monitor page also describes multi-stage transformations (preview) with processors such as `aggregate.Basic`, which can run client-side on Azure Monitor Agent. That is a separate model from the KQL limits above and is not covered here.
 
 Useful details from the same page:
 
@@ -62,11 +62,11 @@ source
 | project-away RequestContext
 ```
 
-This is the pattern from Microsoft's portal tutorial. The query removes rows that query the table itself and drops a large column to save space.
+This is a shortened version of the query in Microsoft's portal tutorial, which also adds a `Workspace_CF` column. The query removes rows that query the table itself and stops writing data into the `RequestContext` column to save space. The tutorial notes that columns missing from the output are not removed from the table, they just receive no data.
 
 ## Add a workspace transformation in the portal
 
-The tutorial uses the `LAQueryLogs` table, but the steps are the same for any supported table that already holds data. You need contributor rights on the workspace and permission to create DCR objects.
+The tutorial uses the `LAQueryLogs` table, but the steps are the same for any supported table that already holds data. You need at least contributor rights on the workspace and permission to create DCR objects.
 
 1. Open the Log Analytics workspace and select **Tables**.
 2. Find the table and select **Create transformation**.
@@ -84,20 +84,20 @@ Allow time for the change. The Azure Monitor tutorial says about 30 minutes, the
 The Azure Monitor page separates the cases:
 
 - **Microsoft Sentinel enabled on the workspace:** no cost for a transformation to Analytics tables, regardless of how much data it filters.
-- **Analytics or Basic tables without Sentinel:** transformations normally cost nothing. If a transformation adds data, such as a calculated column, the extra data is charged at the standard ingestion rate. If it removes more than 50 percent of the incoming data, the amount above 50 percent is charged. The formula is data dropped minus half of the incoming size.
+- **Analytics or Basic tables:** Learn says transformations don't usually incur costs. The Sentinel exemption above is worded for Analytics tables only. If a transformation adds data, such as a calculated column, the extra data is charged at the standard ingestion rate. If it removes more than 50 percent of the incoming data, the amount above 50 percent is charged. The formula is data dropped minus half of the incoming size.
 - **Auxiliary tables:** the processing charge applies to all incoming data, and the ingestion charge applies only to the data left after the transformation.
 
 Microsoft advises filtering by other means first where possible, so that less data reaches the transformation.
 
 ## Filter at the source for Windows Security Events
 
-The Windows Security Events connector uses Azure Monitor Agent and DCRs. Microsoft Learn lists predefined sets named **All events**, **Minimal** and **Common**, and lets you pick specific events. The agent filters at the source and ingests only the selected events. The page says this can help optimize costs but gives no figures.
+The Windows Security Events connector uses Azure Monitor Agent and DCRs. Microsoft Learn names predefined sets such as **All events**, **Minimal** and **Common**, and says data collection rules can also build custom filters and select specific events. The agent filters at the source and ingests only the selected events. The page says this can help optimize costs but gives no figures.
 
 ## Other cost levers on the same page
 
 Microsoft's cost page lists several options beyond transformations:
 
-- **Commitment tiers.** Raising the tier is allowed at any time and restarts the 31-day commitment period. Moving to pay-as-you-go or a lower tier waits until the period ends. The setting is under Sentinel **Settings** > **Pricing**.
+- **Commitment tiers.** Raising the tier is allowed at any time and restarts the 31-day commitment period. Moving to pay-as-you-go or a lower tier waits until the period ends. The setting is under Sentinel **Settings** > **Pricing** in the Azure portal. The page also says that after March 31, 2027 Sentinel will be supported only in the Microsoft Defender portal, so this path will move.
 - **Separate workspace for non-security data.** Sentinel analyzes all data in a Sentinel-enabled workspace, so operational data kept elsewhere does not incur Sentinel costs.
 - **Sentinel data lake.** Microsoft positions it for secondary security data that is not needed for real-time detection, at significantly reduced ingestion and storage cost.
 - **Total retention.** Analytics data is kept 90 days by default, and older data can be retained at lower cost under **Data management** > **Tables**.
@@ -114,7 +114,7 @@ A record dropped by a transformation is not stored, so it cannot be queried late
 
 ## Sources
 
-- [Microsoft Learn: Data transformation in Microsoft Sentinel](https://learn.microsoft.com/en-us/azure/sentinel/configure-data-transformation)
+- [Microsoft Learn: Transform or customize data at ingestion time in Microsoft Sentinel (preview)](https://learn.microsoft.com/en-us/azure/sentinel/configure-data-transformation)
 - [Microsoft Learn: Transformations in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations)
 - [Microsoft Learn: Supported KQL features in transformations](https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-transformations-kql)
 - [Microsoft Learn: Add a workspace transformation in the Azure portal](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/tutorial-workspace-transformations-portal)
