@@ -95,5 +95,5 @@ These are practical points, not Microsoft statements:
 
 ## Sources
 
-- [Financial dimensions](https://learn.microsoft.com/dynamics365/finance/general-ledger/financial-dimensions)
-- [Define financial dimensions](https://learn.microsoft.com/dynamics365/finance/general-ledger/tasks/define-financial-dimensions)
+- [Financial dimensions and tags (Microsoft Learn)](https://learn.microsoft.com/dynamics365/finance/general-ledger/financial-dimensions)
+- [Define financial dimensions (Microsoft Learn)](https://learn.microsoft.com/dynamics365/finance/general-ledger/tasks/define-financial-dimensions)
