@@ -30,7 +30,7 @@ When Intune policies conflict or fail to sync on Windows 365 Cloud PCs, work thr
 In the Microsoft Intune admin center, open **Troubleshooting + support** > **Troubleshoot**, select the user, and confirm the Intune license shows a green check. Under **Devices**, check:
 
 - **Managed** must show MDM or EAS/MDM for the device to receive compliance or configuration policies.
-- **Microsoft Entra join Type** should be Workplace or AzureAD. If it shows Not Registered, Microsoft says unenrolling and re-enrolling resolves it.
+- **Microsoft Entra join Type** should be Workplace or AzureAD. If it shows Not Registered, Microsoft says unenrolling and re-enrolling the device typically resolves it.
 - **Intune compliant** and **Microsoft Entra compliant** should be Yes.
 - **Last check in** older than 24 hours may indicate a device problem.
 
@@ -49,11 +49,11 @@ For a Windows setting showing Not Applicable, Microsoft says it may be newer tha
 
 ## Step 2: Force a sync and mind the timing
 
-By default, Intune devices check in every 8 hours. Recently enrolled Windows devices check in every 3 minutes for the first 15 minutes, every 15 minutes for the next 2 hours, then about every 8 hours. Intune also sends a notification when a policy is assigned, changed or removed, and the delay ranges from immediate to a few hours. If a device does not check in after the first notification, Intune retries three times.
+By default, Intune devices check in every 8 hours. Recently enrolled Windows devices check in every 3 minutes for the first 15 minutes, every 15 minutes for the next 2 hours, then about every 8 hours. Intune also notifies online devices when a policy is assigned, changed or removed, and the delay ranges from immediate to up to a few hours. An offline device gets the policy at its next sync.
 
 To sync manually on the Cloud PC, open **Settings** > **Accounts** > **Access Work or School**, select the account, then **Info** > **Sync**.
 
-Two timing points matter during provisioning. Dynamic device group membership is not instant and can take minutes to hours, so policies assigned to such a group may not apply until the next check-in. Microsoft recommends assigning policies to user groups for fast delivery during enrollment, because user groups are populated before device setup. When a user leaves a group, removal can take up to 7 hours or more.
+Two timing points matter during provisioning. Dynamic device group membership needs extra processing after enrollment, and policies assigned to such a group are not delivered until the device is in the group, so they may not apply until the next check-in. For fast delivery during enrollment Microsoft suggests user groups (populated before device setup), assignment filters or enrollment time grouping. When a user leaves a group, removal can take up to 7 hours or more.
 
 ## Step 3: Resolve conflicts
 
@@ -65,14 +65,14 @@ Other rules from the same page:
 - If two compliance policies evaluate the same setting, the most restrictive value applies.
 - On Windows, removing a profile behavior depends on the CSP. Some settings are removed and others stay (tattooing).
 
-Hybrid scenarios add risk. A GPO and an Intune policy can both set a value. Decide which one owns each setting and remove the other.
+My own note, not from the pages read: hybrid scenarios add risk, because a GPO and an Intune policy can both set a value. Decide which one owns each setting and remove the other.
 
 ## Step 4: Check known Cloud PC issues
 
 Microsoft's known issues page lists items that look like policy problems:
 
-- **Provisioning fails with a Custom Script Extension error.** A GPO that sets the execution policy to `AllSigned` at the `MachinePolicy` scope overrides the default and blocks unsigned scripts. Windows 365 normally sets `RemoteSigned` at `LocalMachine`. Remove the GPO or change it to `RemoteSigned`, retry the network connection health check, then retry provisioning.
-- **Administrator protection turned on by a baseline.** It is not supported on Cloud PCs. If they are Microsoft Entra hybrid joined and receive the Windows security baselines through Group Policy, Administrator protection is turned on starting with the October 2026 Windows security update even if you did not enable it. Symptoms are unexpected authentication prompts and elevation failures. Set **User Account Control: Configure type of Admin Approval Mode** to **Legacy Admin Approval Mode** in the assigned policy or a GPO that takes precedence, then restart the Cloud PCs.
+- **Provisioning fails with a Custom Script Extension error.** The page says provisioning might fail when the Desired State Configuration extension is used and a GPO sets the execution policy to `AllSigned` at the `MachinePolicy` scope, which overrides the default and blocks unsigned scripts. Windows 365 normally sets `RemoteSigned` at `LocalMachine`. Remove the GPO or change it to `RemoteSigned`, retry the Azure network connection (ANC) health check, then retry provisioning.
+- **Administrator protection turned on by a baseline.** It is not supported on Cloud PCs. If they are Microsoft Entra hybrid joined and receive the Windows security baselines from the Microsoft Security Compliance Toolkit through Group Policy, Administrator protection is turned on starting with the October 2026 Windows security update even if you did not enable it. Symptoms are unexpected authentication prompts and elevation failures. Set **User Account Control: Configure type of Admin Approval Mode** to **Legacy Admin Approval Mode** in the assigned policy or a GPO that takes precedence, then restart the Cloud PCs. To keep Intune from applying it, the page suggests a filter for all Cloud PCs that excludes them from any policy that enables Administrator protection.
 - **Memory Integrity reported as off.** Nested virtualization inhibits DMA protections. Turn off nested virtualization, or do not require DMA for VBS.
 - **Restart loop after restore or resize.** It affects Cloud PCs provisioned before July 2022 that use Attack Surface Reduction rules or third-party tools that block the install language script. Remove the policies or set them to Audit mode.
 - **Screen capture protection in Teams.** In Intune, set **Enable screen capture protection** to Enable and **Screen Capture Protection Options** to **Block screen capture on client and server**, under the Azure Virtual Desktop settings.
@@ -83,7 +83,7 @@ Microsoft says these settings report **Not applicable** on Cloud PCs: Trusted Pl
 
 ## Step 6: Scope tags and groups
 
-Windows 365 role assignments support only user groups in scope groups, not device groups. A scope tag applied to the top of a nested group is not applied to Cloud PCs in inner groups, so tag each group individually. If a policy seems to target the wrong Cloud PCs, check these first.
+Windows 365 role assignments support only user groups in scope groups, not device groups. The page says Windows 365 does not support nested security groups. A scope tag applied to the top of a nested group is not applied to Cloud PCs in inner groups, so tag each group individually. If a policy seems to target the wrong Cloud PCs, check these first.
 
 ## Quick order of work
 
@@ -102,6 +102,6 @@ Windows 365 role assignments support only user groups in scope groups, not devic
 
 ## Sources
 
-- [Microsoft Learn: Troubleshoot policies in Microsoft Intune](https://learn.microsoft.com/en-us/troubleshoot/mem/intune/device-configuration/troubleshoot-policies-in-microsoft-intune)
-- [Microsoft Learn: Common questions and scenarios with policies and profiles in Intune](https://learn.microsoft.com/en-us/intune/device-profile-troubleshoot)
-- [Microsoft Learn: Known issues for Windows 365 Enterprise and Frontline](https://learn.microsoft.com/en-us/windows-365/enterprise/known-issues-enterprise)
+- [Microsoft Learn: Troubleshoot policies and configuration profiles in Microsoft Intune](https://learn.microsoft.com/en-us/troubleshoot/mem/intune/device-configuration/troubleshoot-policies-in-microsoft-intune)
+- [Microsoft Learn: Questions with policies and profiles in Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-configuration/troubleshoot-device-profiles)
+- [Microsoft Learn: Windows 365 Enterprise and Windows 365 Flex known issues](https://learn.microsoft.com/en-us/troubleshoot/windows-365/known-issues-enterprise)
