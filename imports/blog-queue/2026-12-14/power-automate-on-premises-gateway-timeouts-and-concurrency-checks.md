@@ -61,7 +61,7 @@ From the gateway troubleshooting page:
 - Microsoft releases an update monthly and actively supports only the last six releases.
 - Keep gateway versions in a cluster in sync. A member with a lower version might be unable to run a query that is routed to it, which causes failures.
 - If the gateway shows as offline or unreachable, confirm the required FQDNs and ports are allowed, check proxy settings and logs, and if only ports 80 and 443 are open, enable HTTPS mode.
-- Credentials are cached on the gateway for hours. Learn gives an example where edited credentials were not used for roughly five hours.
+- From the considerations page, not the troubleshooting page: credentials are cached on the gateway for hours. Learn gives a DirectQuery example where edited credentials were not used for roughly five hours.
 
 The cluster page adds:
 
@@ -102,13 +102,13 @@ Performance logging is on by default for standard mode gateways, and it is a pub
 - `QueryType`, which can show Power Automate
 - `Success` and `ErrorMessage`
 
-The System Counter Aggregation Report adds `SystemCPUPercent`, `SystemMEMUsedPercent`, `GatewayCPUPercent` and `GatewayMEMKb`. Learn's page does not prescribe a method. A reasonable reading follows the field meanings: a long execution with short processing points outside the data pipeline, high spooling times point to disk, and high reading and serialization time points to the source. Microsoft publishes a Power BI template to visualize the logs. Antivirus should exclude the log and Spooler directories.
+The System Counter Aggregation Report adds `SystemCPUPercent`, `SystemMEMUsedPercent`, `GatewayCPUPercent` and `GatewayMEMKb`. Learn's page does not prescribe a method. A reasonable reading follows the field meanings: a long execution with short processing points outside the data pipeline, high spooling times point to disk, and high reading and serialization time points to the source. Microsoft publishes a Power BI template to visualize the logs. Learn says the log and Spooler folders might have to be excluded from file-level antivirus scanning to avoid performance impact. The page also notes that queries from Premium capacity are sometimes missed in this logging.
 
 Performance monitoring does not capture network bandwidth or latency, so use other tools for those. Microsoft also says it does not investigate poor performance caused by an overloaded gateway.
 
 ## Check 7: Test the source directly
 
-Learn says that if a refresh from Power BI Desktop on the gateway computer fails, a refresh through the gateway is highly unlikely to succeed. Apply the same idea to flows: run the same query from the gateway machine with the same account first. To collect logs, open the gateway app, select **Diagnostics**, then **Export logs**.
+Learn says that if a refresh from Power BI Desktop on the gateway computer fails, a refresh through the gateway is highly unlikely to succeed. Learn words this for Power BI Desktop and refreshes. Extending it to flows is my own suggestion: run the same query from the gateway machine with the same account first. To collect logs, open the gateway app, select **Diagnostics**, then **Export logs**.
 
 ## Order of work
 
@@ -127,9 +127,9 @@ Learn says that if a refresh from Power BI Desktop on the gateway computer fails
 
 ## Sources
 
-- [Microsoft Learn: On-premises data gateway considerations and limitations](https://learn.microsoft.com/en-us/data-integration/gateway/service-gateway-onprem)
+- [Microsoft Learn: What is an on-premises data gateway?](https://learn.microsoft.com/en-us/data-integration/gateway/service-gateway-onprem)
 - [Microsoft Learn: Troubleshoot the on-premises data gateway](https://learn.microsoft.com/en-us/data-integration/gateway/service-gateway-tshoot)
-- [Microsoft Learn: Plan, scale and maintain a business-critical gateway solution](https://learn.microsoft.com/en-us/data-integration/gateway/plan-scale-maintain)
-- [Microsoft Learn: Gateway high-availability clusters and load balancing](https://learn.microsoft.com/en-us/data-integration/gateway/service-gateway-high-availability-clusters)
-- [Microsoft Learn: Gateway performance monitoring](https://learn.microsoft.com/en-us/data-integration/gateway/service-gateway-performance)
-- [Microsoft Learn: Power Automate limits and configuration](https://learn.microsoft.com/en-us/power-automate/limits-and-config)
+- [Microsoft Learn: Plan, scale, and maintain a business-critical gateway solution](https://learn.microsoft.com/en-us/data-integration/gateway/plan-scale-maintain)
+- [Microsoft Learn: Manage on-premises data gateway high-availability clusters and load balancing](https://learn.microsoft.com/en-us/data-integration/gateway/service-gateway-high-availability-clusters)
+- [Microsoft Learn: Monitor and optimize on-premises data gateway performance](https://learn.microsoft.com/en-us/data-integration/gateway/service-gateway-performance)
+- [Microsoft Learn: Limits of automated, scheduled, and instant flows](https://learn.microsoft.com/en-us/power-automate/limits-and-config)
