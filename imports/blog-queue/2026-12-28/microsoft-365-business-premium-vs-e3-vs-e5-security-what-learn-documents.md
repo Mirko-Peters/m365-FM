@@ -11,10 +11,10 @@ keypoints:
   - "Business Premium includes Microsoft Defender for Business, Defender for Office 365 Plan 1, Entra ID P1 and full Intune capabilities, according to the Learn FAQ pages."
   - "Entra ID P1 is included in Microsoft 365 E3 and E5. Entra ID P2 is included in Microsoft 365 E5, E7 and the Defender Suite."
   - "Microsoft Defender Suite is an add-on for Business Premium and includes Defender for Endpoint Plan 2. Defender for Business does not support mixed licensing."
-  - "The security licensing guidance page only lists services and points to two plan comparison tables. It has no per-feature rows for these plans."
+  - "The security and compliance licensing guidance page only lists services and points to two plan comparison tables, with no per-feature rows."
 faq:
   - q: "Is there a Learn page that compares Business Premium, E3 and E5 security features?"
-    a: "The pages I read do not contain one. The Microsoft 365 security licensing guidance page lists services and points to two downloadable comparison tables, one for Enterprise and Frontline Workers plans and one for Small and Medium Business plans."
+    a: "The pages I read do not contain one. The Microsoft 365 guidance for security & compliance page lists services and points to two downloadable comparison tables, one for Enterprise and Frontline Workers plans and one for Small and Medium Business plans."
   - q: "What is the user limit for Business Premium?"
     a: "According to Microsoft Learn, Microsoft 365 Business plans are designed for organizations with up to 300 users, and larger organizations should consider the enterprise plans."
   - q: "Which plans include Entra ID P1 and P2?"
@@ -29,11 +29,11 @@ Searches for Business Premium versus E3 versus E5 expect a feature table. The Mi
 
 ## Where the comparison lives
 
-The Microsoft 365 security licensing guidance page lists services under Microsoft Defender, Microsoft Entra, Microsoft Intune, Microsoft Priva and Microsoft Purview. It does not mention Business Premium and has no per-plan rows. It points to two downloadable tables: the Microsoft 365 Comparison table for Enterprise and Frontline Workers Plans, and the Microsoft 365 Comparison table for Small and Medium Business Plans. It also says some tenant services cannot limit benefits to specific users, and that licensing terms are governed by the Product Terms.
+The Microsoft 365 guidance for security & compliance page lists services under Microsoft Defender, Microsoft Entra, Microsoft Intune, Microsoft Priva and Microsoft Purview. It does not mention Business Premium and has no per-plan rows. It points to two downloadable tables: the Microsoft 365 Comparison table for Enterprise and Frontline Workers Plans, and the Microsoft 365 Comparison table for Small and Medium Business Plans. It also says some tenant services cannot limit benefits to specific users, and that licensing terms are governed by the Product Terms.
 
 ## What Learn says about Business Premium
 
-- Plans for up to 300 users. Organizations with more than 300 users should consider enterprise plans.
+- Plans for up to 300 users. Organizations with more than 300 users should consider enterprise plans. The FAQ adds that an organization may provision up to 300 seats in total across Business Basic, Business Standard and Business Premium, and that Microsoft reserves the right to enforce this tenant limit.
 - It includes everything in Business Standard, plus Microsoft Defender for Business and Microsoft Defender for Office 365 Plan 1.
 - Defender for Business is built on Defender for Endpoint capabilities and designed for businesses with up to 300 users.
 - Microsoft Entra ID P1 is included.
@@ -75,7 +75,7 @@ This approach is a suggestion, not Microsoft guidance.
 
 ## Not covered
 
-No prices, no Purview feature rows, and no E3 or E5 Defender detail. The licensing guidance page shows conflicting dates in its metadata, so check the current version.
+No prices, no Purview feature rows, and no E3 or E5 Defender detail. The Business Premium security FAQ also covers personal devices and Windows Autopilot, which this article only touches on.
 
 ## Related
 
@@ -85,7 +85,7 @@ No prices, no Purview feature rows, and no E3 or E5 Defender detail. The licensi
 
 ## Sources
 
-- [Microsoft 365 security licensing guidance](https://learn.microsoft.com/office365/servicedescriptions/microsoft-365-service-descriptions/microsoft-365-tenantlevel-services-licensing-guidance/microsoft-365-security-compliance-licensing-guidance)
-- [Microsoft 365 Business Premium security FAQ](https://learn.microsoft.com/microsoft-365/admin/security-and-compliance/m365bp-security-faq)
-- [Microsoft 365 Business Premium FAQ](https://learn.microsoft.com/microsoft-365/business-premium/microsoft-365-business-faqs)
-- [Microsoft Entra licensing](https://learn.microsoft.com/entra/fundamentals/licensing)
+- [Microsoft 365 guidance for security & compliance (Microsoft Learn)](https://learn.microsoft.com/office365/servicedescriptions/microsoft-365-service-descriptions/microsoft-365-tenantlevel-services-licensing-guidance/microsoft-365-security-compliance-licensing-guidance)
+- [Microsoft 365 Business Premium security - frequently asked questions (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/security-and-compliance/m365bp-security-faq)
+- [Microsoft 365 Business Premium frequently asked questions (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/business-premium/microsoft-365-business-faqs)
+- [Microsoft Entra licensing (Microsoft Learn)](https://learn.microsoft.com/entra/fundamentals/licensing)
