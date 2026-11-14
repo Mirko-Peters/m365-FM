@@ -25,7 +25,7 @@ faq:
     a: "Corporate-owned work profile, fully managed and dedicated. Personally owned work profile and device administrator do not, according to the page's table."
 ---
 
-Android enrollment in Intune starts with device ownership and purpose: personal or corporate, shared or single-user, with or without Google Mobile Services. This article compares the options using two Microsoft Learn pages and states plainly where those pages stop. The Android enrollment page does not include a side-by-side comparison table, so the tables below summarize its descriptions.
+Android enrollment in Intune starts with device ownership and purpose: personal or corporate, shared or single-user, with or without Google Mobile Services. This article compares the options using two Microsoft Learn pages and states plainly where those pages stop. The enrollment page describes the Android options in a list, apart from its factory reset table, so the tables below summarize those descriptions.
 
 ## Corporate and personal options
 
@@ -72,7 +72,7 @@ Learn says device administrator management is deprecated and no longer available
 
 ## A selection guide
 
-This guide is a suggestion built from the descriptions, not a Microsoft decision tree.
+This guide is my advice, built from the descriptions, not a Microsoft decision tree.
 
 1. Personal device, user brings their own: personally owned work profile.
 2. Company device that staff may also use personally: corporate-owned work profile.
@@ -83,7 +83,7 @@ This guide is a suggestion built from the descriptions, not a Microsoft decision
 
 ## Not covered
 
-The pages do not describe QR code, token or NFC enrollment steps for each option, Google Account enrollment, supported Android versions, step-by-step procedures or the Managed Google Play connection steps. The work profile page does not cover fully managed and dedicated scenarios, and the enrollment page does not describe the personally owned work profile enrollment method.
+The pages do not describe QR code, token or NFC enrollment steps for each option, Google Account enrollment, supported Android versions, step-by-step procedures or the Managed Google Play connection steps. The work profile page does not cover fully managed and dedicated scenarios, and the enrollment page describes personally owned work profile enrollment only briefly, as enrollment through the Intune Company Portal app.
 
 ## Related
 
@@ -91,5 +91,5 @@ The pages do not describe QR code, token or NFC enrollment steps for each option
 
 ## Sources
 
-- [Set up enrollment of Android devices in Intune](https://learn.microsoft.com/intune/intune-service/enrollment/android-enroll)
-- [Set up enrollment of Android Enterprise work profile devices](https://learn.microsoft.com/intune/intune-service/enrollment/android-enterprise-overview)
+- [Step 5 – Enroll devices in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-enrollment/enroll-devices)
+- [Overview of Android work profile management in Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-enrollment/android/enterprise-work-profile)
