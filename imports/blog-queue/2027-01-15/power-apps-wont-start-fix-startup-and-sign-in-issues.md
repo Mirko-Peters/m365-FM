@@ -1,6 +1,6 @@
 ---
 title: "Power Apps Will Not Start or Load: Fix Startup and Sign-In Issues"
-summary: "When Power Apps halts at sign-in, shows thirdPartyCookiesBlocked, Sign in required with AADSTS50058, or WebAuthoring abnormal termination, the cause is usually blocked cookies or storage. Follow Learn's six steps for Edge, Chrome, Safari, iOS and Firefox."
+summary: "When Power Apps halts at sign-in, shows thirdPartyCookiesBlocked, Sign in required with AADSTS50058, or WebAuthoring abnormal termination, the first cause Learn points to is blocked cookies or storage. Follow Learn's six steps for Edge, Chrome, Safari, iOS and Firefox."
 status: review
 publish: false
 author: mirko-p
@@ -109,7 +109,7 @@ This is my own mapping, not a Microsoft statement.
 | AadError or other Entra messages | Step 5, with IT |
 | WebAuthoring abnormal termination | Steps 2 and 3, cache and another browser |
 
-Work through the steps in the order Learn gives, and retest after each one, so you know which step helped. If one user only has the problem, a managed browser policy that blocks cookies is a likely reason, which is another point to raise with IT.
+My advice, not Learn's: work through the steps in the order Learn lists them and retest after each one, so you know which step helped. If only one user has the problem, a managed browser policy that blocks cookies is a possible reason, which is another point to raise with IT.
 
 ## Related
 
