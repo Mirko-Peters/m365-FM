@@ -10,7 +10,7 @@ keypoints:
   - "Go to Deleted sites in the SharePoint admin center, select one site and select Restore. The button does not show if several sites are selected."
   - "Deleted sites are kept for 93 days. After that the site and all its content and settings are permanently deleted."
   - "Restoring a site that belongs to a Microsoft 365 group restores the group and all its resources. Other group resources are kept for only 30 days."
-  - "If the other group resources are gone, Learn recommends permanently deleting the site instead of restoring it."
+  - "If the other group resources are gone, Learn says you can permanently delete the site with Remove-SPODeletedSite."
   - "To recover items inside a site rather than the site itself, use the site recycle bin."
 faq:
   - q: "How long can I restore a deleted SharePoint site?"
@@ -43,7 +43,7 @@ To keep content longer for regulatory or policy reasons, Learn says to create a 
 
 ## Sites connected to a Microsoft 365 group
 
-Restoring a site that belongs to a Microsoft 365 group restores the group and all its resources. There is a catch: other group resources are retained for only 30 days, while the site is retained for 93. If the other resources have already been deleted, Learn recommends permanently deleting the site instead of restoring it.
+Restoring a site that belongs to a Microsoft 365 group restores the group and all its resources. There is a catch: other group resources are retained for only 30 days, while the site is retained for 93. If the other group resources have already been deleted, Learn says you can use `Remove-SPODeletedSite` to permanently delete the site. It does not recommend this over restoring.
 
 So the decision depends on how long ago the site was deleted:
 
@@ -55,7 +55,7 @@ So the decision depends on how long ago the site was deleted:
 
 The table applies the page's numbers. Confirm what actually came back after a restore.
 
-## After the restore
+## After the restore (my advice)
 
 The page has no post-restore checklist. At minimum, check that the group and its resources returned as expected. The page does not cover Microsoft Teams, so do not assume the state of a connected team from this article. Check it directly.
 
@@ -80,7 +80,7 @@ Learn's article on deleting a site says a SharePoint Administrator or higher can
 
 ## Permanent deletion
 
-You can permanently delete a site from the **Deleted sites** page: select it, then **Delete** and confirm. Permanent deletion is required before a site URL can be reused, and the URL can take up to 24 hours to become available. Learn says all sites except Microsoft 365 group-connected sites can be permanently deleted from the admin center. For group-connected team sites, use `Remove-SPODeletedSite` as a Global Administrator or SharePoint Administrator. Choose this when the group resources are already gone and you do not want a half-restored site, or when the content must be gone for good.
+You can permanently delete a site from the **Deleted sites** page: select it, then **Delete** and confirm. Permanent deletion is required before a site URL can be reused, and the URL can take up to 24 hours to become available. Learn says all sites except Microsoft 365 group-connected sites can be permanently deleted from the admin center. For group-connected team sites, use `Remove-SPODeletedSite` as a Global Administrator or SharePoint Administrator. My advice: choose this when the group resources are already gone and you do not want a half-restored site, or when the content must be gone for good.
 
 ## Limits
 
@@ -89,7 +89,7 @@ You can permanently delete a site from the **Deleted sites** page: select it, th
 - Group resources can be recovered only for 30 days.
 - To restore items inside a site rather than the site, use the site's recycle bin.
 
-## Checklist
+## Checklist (my advice)
 
 1. Note when the site was deleted and whether it was group-connected.
 2. Select the single site under **Deleted sites** and restore it.
@@ -103,5 +103,5 @@ You can permanently delete a site from the **Deleted sites** page: select it, th
 
 ## Sources
 
-- [Restore a deleted site](https://learn.microsoft.com/sharepoint/restore-deleted-site-collection)
-- [Delete a site](https://learn.microsoft.com/sharepoint/delete-site-collection)
+- [Restore deleted sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/restore-deleted-site-collection)
+- [Delete a site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/delete-site-collection)
