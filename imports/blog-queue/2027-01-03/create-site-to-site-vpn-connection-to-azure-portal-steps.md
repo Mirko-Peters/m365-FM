@@ -8,15 +8,15 @@ date: 2027-01-03
 topics: [azure-virtual-network]
 keypoints:
   - "You need a compatible VPN device with a public IPv4 address, plus on-premises address ranges that do not overlap with the virtual network."
-  - "The gateway subnet must be named GatewaySubnet and be /27 or larger. NSGs on the gateway subnet are not supported."
-  - "Gateway creation takes 45 minutes or more. The Basic SKU is not available in the portal."
+  - "The gateway subnet must be named GatewaySubnet, and Learn says it is best to use /27 or larger. NSGs on the gateway subnet are not supported."
+  - "Gateway creation can take 45 minutes or more. The Basic SKU is not available in the portal."
   - "In active-active mode, create tunnels to each gateway instance. A tunnel to only one drops the connection during maintenance."
-  - "Use a complex shared key of at least 32 characters, identical on the connection and the VPN device."
+  - "Learn recommends a complex shared key of at least 32 characters, identical on the connection and the VPN device."
 faq:
   - q: "How long does it take to create a VPN gateway?"
-    a: "According to Microsoft Learn, deployment takes 45 minutes or more. You can track the status on the gateway's Overview page."
+    a: "According to Microsoft Learn, deployment can take 45 minutes or more. You can track the status on the gateway's Overview page."
   - q: "What size must the gateway subnet be?"
-    a: "Learn says to use a /27 or larger range, with the subnet named GatewaySubnet. Network security groups on the gateway subnet are not supported."
+    a: "Learn says it is best to specify /27 or larger, with the subnet named GatewaySubnet. Network security groups on the gateway subnet are not supported."
   - q: "Can the on-premises network overlap with the Azure virtual network?"
     a: "No. Learn says no on-premises subnet can overlap with the virtual network subnets you connect to. Address spaces also cannot overlap across multiple connections."
   - q: "Do I have to use active-active mode?"
@@ -25,7 +25,7 @@ faq:
     a: "Per Learn, open the virtual network gateway, select Connections and open the connection. The connection should show a status of Succeeded and Connected."
 ---
 
-To create a site-to-site VPN to Azure in the portal: create a virtual network, add a gateway subnet, create the VPN gateway, create a local network gateway that describes your on-premises side, configure your VPN device, and create the connection with a shared key. The gateway takes the longest, at 45 minutes or more. This guide follows the Microsoft Learn tutorial. Names and ranges below are the tutorial's examples.
+To create a site-to-site VPN to Azure in the portal: create a virtual network, add a gateway subnet, create the VPN gateway, create a local network gateway that describes your on-premises side, configure your VPN device, and create the connection with a shared key. The gateway takes the longest, often 45 minutes or more. This guide follows the Microsoft Learn tutorial. Names and ranges below are the tutorial's examples.
 
 ## Prerequisites
 
@@ -41,7 +41,7 @@ Search for **virtual network**, select **Create**, and fill in **Basics**, **Sec
 
 ## Step 2: Add the gateway subnet
 
-Add a subnet with the purpose **Virtual Network Gateway**. The name becomes **GatewaySubnet** automatically. The example range is 10.1.255.0/27, and Learn says to use /27 or larger. Network security groups on the gateway subnet are not supported.
+Add a subnet with the purpose **Virtual Network Gateway**. The name becomes **GatewaySubnet** automatically. The example range is 10.1.255.0/27, and Learn says it is best to specify /27 or larger. Network security groups on the gateway subnet are not supported.
 
 ## Step 3: Create the VPN gateway
 
@@ -58,7 +58,7 @@ Example values from Learn:
 | Enable active-active mode | Enabled, with a second public IP |
 | Configure BGP | Disabled |
 
-Select **Review + create**, then **Create**. Learn says deployment takes 45 minutes or more. The gateway region must match the virtual network region. The Basic SKU is not available in the portal, so use PowerShell or CLI for it. To see the gateway IP addresses, open the gateway's **Properties** page. Active-active shows two public IPs, one per gateway instance.
+Select **Review + create**, then **Create**. Learn says deployment can take 45 minutes or more. The gateway region must match the virtual network region. The Basic SKU is not available in the portal, so use PowerShell or CLI for it. To see the gateway IP addresses, open the gateway's **Properties** page. Active-active shows two public IPs, one per gateway instance.
 
 ## Step 4: Create the local network gateway
 
@@ -72,7 +72,7 @@ For FQDN endpoints, Learn lists constraints: one IPv4 address per FQDN, no IPv6,
 
 ## Step 5: Configure the VPN device
 
-You need the shared key and the public IP addresses of the gateway instances. The key must match the connection's shared key. Learn says to use a complex key of at least 32 characters.
+You need the shared key and the public IP addresses of the gateway instances. The key must match the connection's shared key. Learn recommends a complex key of at least 32 characters, including a mix of uppercase and lowercase letters, numbers and special characters.
 
 For active-active gateways, create tunnels to **each** gateway instance. A tunnel to only one instance drops the connection during maintenance. If your device cannot do that, use active-standby mode.
 
@@ -101,7 +101,7 @@ Open **All resources**, select the virtual network gateway, select **Connections
 
 If this was a test, delete the resource group. Search for it, select **Delete resource group**, type the name and select **Delete**.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Overlapping address ranges between Azure and on-premises.
 - Putting an NSG on the gateway subnet.
@@ -117,4 +117,4 @@ If this was a test, delete the resource group. Search for it, select **Delete re
 
 ## Sources
 
-- [Tutorial: Create a site-to-site VPN connection in the Azure portal (Microsoft Learn)](https://learn.microsoft.com/azure/vpn-gateway/tutorial-site-to-site-portal)
+- [Tutorial - Create S2S VPN connection between on-premises network and Azure virtual network: Azure portal (Microsoft Learn)](https://learn.microsoft.com/azure/vpn-gateway/tutorial-site-to-site-portal)
