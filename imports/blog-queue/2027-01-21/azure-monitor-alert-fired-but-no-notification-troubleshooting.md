@@ -25,11 +25,11 @@ faq:
     a: "Yes. A rule can suppress action groups, and the History tab of the fired alert shows the suppressed ones. Learn adds that service health alerts are not affected by alert processing rules, and that a disabled rule has no effect. If the suppression was unintentional, you can modify, disable or delete the rule."
 ---
 
-If an Azure Monitor alert shows as fired in the portal but no email, SMS, voice call or webhook followed, the cause usually sits between the alert and the receiver. The Microsoft Learn troubleshooting page for alerts and notifications gives a numbered list of checks per notification type. This article reorders them into one path and keeps Learn's wording where it matters.
+If an Azure Monitor alert shows as fired in the portal but no email, SMS, voice call or webhook followed, the cause usually sits between the alert and the receiver. The Microsoft Learn troubleshooting page for alerts and notifications gives a numbered list of checks per notification type. This article follows that order and keeps Learn's wording where it matters.
 
 ## Step 0: Test the action group
 
-Learn says that if the alert fires as intended but the notifications do not behave as expected, test your action group first to make sure it is configured correctly. If the test notification arrives, the action group works, and the problem is in how the alert reaches it.
+Learn says that if the alert fires as intended but the notifications do not behave as expected, test your action group first to make sure it is configured correctly. Learn gives no further reading of the test result. My reading: if the test notification arrives, the action group itself is probably fine and the problem lies in how the alert reaches it.
 
 ## Step 1: Was the action suppressed?
 
