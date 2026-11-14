@@ -25,7 +25,7 @@ faq:
     a: "A table with one or several Import partitions and one DirectQuery partition. It serves most data quickly from memory and includes the latest changes after the last import. Learn says hybrid tables are supported only when the semantic model is in a workspace on Premium capacity."
 ---
 
-Every semantic model in Power BI has a mode, and the mode decides where the data lives, how fresh it can be, and what load it puts on the Power BI service and on the source. This article follows the Microsoft Learn page on semantic model modes in the Power BI service. The page names three modes: Import, DirectQuery and Composite. It also says the content applies to models developed in Power BI Desktop and to models that represent a live connection to an externally hosted Analysis Services model. The original request for this topic mentioned Live Connection as a fourth item. This page does not treat it as a separate mode, so I compare the three modes that it names.
+Every semantic model in Power BI has a mode, and the mode decides where the data lives, how fresh it can be, and what load it puts on the Power BI service and on the source. This article follows the Microsoft Learn page on semantic model modes in the Power BI service. The page names three modes: Import, DirectQuery and Composite. It also says the content applies to models developed in Power BI Desktop and to models that represent a live connection to an externally hosted Analysis Services model. The page does not treat a live connection as a separate mode, so I compare the three modes that it names.
 
 ## Import mode
 
@@ -83,7 +83,9 @@ Learn says modelers of Composite models are likely to put dimension tables in Im
 
 A hybrid table has one or more Import partitions and one DirectQuery partition, so it combines fast in-memory queries with changes made after the last import. The easiest way to create one is to configure an incremental refresh policy in Power BI Desktop and enable **Get the latest data in real time with DirectQuery (Premium only)**. For good performance the page advises setting dimension tables to Dual mode. Hybrid tables are supported only when the model is hosted in a Premium capacity workspace. You can also add a DirectQuery partition to an Import table with TMSL, TOM or a third-party tool. A hybrid table can have several Import partitions but only one DirectQuery partition.
 
-## Side by side
+## Side by side (my summary)
+
+This table is my own condensed summary of the page. The Composite column in particular is partly my reading.
 
 | Aspect | Import | DirectQuery | Composite |
 | --- | --- | --- | --- |
