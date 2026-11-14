@@ -37,7 +37,7 @@ Office blocks VBA macros in files that come from the internet. The block is base
 
 ## How Office decides
 
-The page gives a flowchart. In order: a file with MOTW is checked against Trusted Locations (macros enabled if it is in one), then against a valid digital signature with the publisher's certificate trusted, then against policy. If policies are Not Configured, an earlier Trusted Document decision applies. Otherwise macros are blocked and the Security Risk banner appears.
+The page gives a flowchart. In order: a file with MOTW is checked against Trusted Locations (macros enabled if it is in one), then against a valid digital signature with the publisher's certificate trusted, then against policy. A policy that blocks or enables macros decides the outcome. If policies are Not Configured, a file the user opened before the change and trusted with Enable content stays trusted (for perpetual versions such as Office LTSC 2021 or Office 2019 this check comes before the policy step). Otherwise macros are blocked and the Security Risk banner appears.
 
 ## Policies
 
@@ -67,7 +67,7 @@ Tools: Cloud Policy at config.office.com, the Intune admin center (Devices, Conf
 
 ## Cautions from the page
 
-- Adding a Trusted site gives the whole site elevated permissions beyond Office. Adding SharePoint or OneDrive domains does not change permissions, but anyone who can add files could add macros.
+- Adding a Trusted site gives the whole site elevated permissions beyond Office. Adding SharePoint or OneDrive domains does not change SharePoint permissions or OneDrive sharing, but anyone who can add files there could add files with macros.
 - All macros validly signed with one certificate run once that publisher is trusted, and a trusted publisher is a Windows-wide setting.
 - Network locations can be Trusted Locations, but Learn does not recommend it.
 - To add http:// URLs as trusted sites, clear Require server verification (https:) for all sites in this zone.
@@ -78,7 +78,7 @@ Run notepad with the file name followed by :Zone.Identifier. A ZoneId of 3 is In
 
 ## Not covered
 
-The page does not give a rollout plan for large organizations or a way to inventory which macros your business depends on.
+The page advises working with business units and software vendors to identify the macros you depend on, but it gives no rollout plan for large organizations and no tool to inventory those macros.
 
 ## Related
 
@@ -88,4 +88,4 @@ The page does not give a rollout plan for large organizations or a way to invent
 
 ## Sources
 
-- [Macros from the internet are blocked by default in Office](https://learn.microsoft.com/microsoft-365-apps/security/internet-macros-blocked)
+- [Macros from the internet are blocked by default in Office (Microsoft Learn)](https://learn.microsoft.com/microsoft-365-apps/security/internet-macros-blocked)
