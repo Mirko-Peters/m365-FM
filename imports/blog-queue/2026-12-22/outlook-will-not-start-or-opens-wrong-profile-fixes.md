@@ -16,13 +16,13 @@ faq:
   - q: "How do I start Outlook in safe mode?"
     a: "Microsoft Support says to press the Windows key + R, type Outlook /safe in the Open box and choose OK. In the Choose Profile dialog accept the default profile and choose OK. If Outlook starts, an add-in is the likely cause."
   - q: "How do I get Outlook to ask which profile to open?"
-    a: "Hold Shift while starting Outlook, or run Outlook.exe /profiles, to open the profile picker. Select Options and select the check box Prompt for a profile to be used. Microsoft Support describes this for being prompted at each startup."
+    a: "Hold Shift while starting Outlook, or run Outlook.exe /profiles, to open the profile picker. Select Options and select the check box Prompt for a profile to be used. Microsoft Support's page is titled Turn Outlook profile prompt on or off, so clear the same check box to turn the prompt off."
   - q: "How do I set the default profile?"
     a: "In the Choose Profile dialog select the profile in the Profile Name list, select Options, then select the Set as default profile check box. Microsoft says the default profile runs automatically whenever Outlook starts."
   - q: "Will deleting a profile delete my email?"
     a: "Microsoft says profile deletion is permanent and that Remove deletes all offline cached content. If the mail is in a PST file or not available elsewhere, back it up first. Mailbox data on the server is not described on these pages."
   - q: "Can I switch profiles while Outlook is running?"
-    a: "Microsoft's profile overview says you cannot switch from one profile to another while Outlook is running. File > Account Settings > Change Profile restarts Outlook so you can pick another."
+    a: "Microsoft's profile overview says you cannot switch from one profile to another while Outlook is running. The profile prompt page says File > Account Settings > Change Profile restarts Outlook so you can pick another."
 ---
 
 When classic Outlook will not open, or opens with a profile nobody expected, the cause is usually an add-in, a damaged profile or a profile setting. Microsoft Support lists a fixed order of fixes. This guide follows it and adds the profile picker steps for the wrong-profile case. It covers classic Outlook for Windows, not the new Outlook.
@@ -73,7 +73,7 @@ An email profile is made up of email accounts, data files and information about 
 Use one of these:
 
 - Hold **Shift** while starting Outlook.
-- Right-click the Start button, select **Run** and enter `Outlook.exe /profiles`.
+- Open the **Run** dialog and enter `Outlook.exe /profiles`.
 - In a running Outlook, go to **File** > **Account Settings** > **Change Profile**. Outlook restarts.
 
 ### Set the default profile
@@ -84,7 +84,7 @@ Use one of these:
 
 ### Be asked every time
 
-In the profile picker, select **Options** and select **Prompt for a profile to be used**. The Support page describes turning the prompt on this way. It does not state the steps for turning it off, though clearing the check box is the likely way, so confirm on a test machine.
+In the profile picker, select **Options** and select **Prompt for a profile to be used**. The Support page is titled Turn Outlook profile prompt on or off and says to check or uncheck this box to turn the prompt on or off.
 
 ### Create or delete a profile
 
@@ -92,7 +92,7 @@ In the picker, select **Options** and then **New**, enter a name and select **OK
 
 The Mail applet in Control Panel only appears if Outlook is installed and has been run at least once, and Microsoft says it cannot add accounts or profiles for Microsoft 365 that require Modern Authentication.
 
-## Admin checklist
+## Admin checklist (my advice)
 
 1. Check whether the problem appears for one user or many. Many users points to an update or add-in deployed centrally.
 2. Run safe mode on an affected machine.
@@ -101,7 +101,7 @@ The Mail applet in Control Panel only appears if Outlook is installed and has be
 5. Create a test profile before touching the original.
 6. Keep PST and OST backups before any removal.
 
-Steps 1, 3 and 5 are practical suggestions rather than Microsoft's instructions.
+This whole checklist is my own suggestion, not Microsoft's instructions.
 
 ## What the pages do not cover
 
@@ -113,6 +113,6 @@ The Support pages I read do not describe registry or Group Policy settings that 
 
 ## Sources
 
-- [I can't start Microsoft Outlook (Microsoft Support)](https://support.microsoft.com/office/d1f69da6-b333-4650-97bf-4d77bd7abb85)
+- [I can't start Microsoft Outlook or receive the error "Cannot start Microsoft Outlook. Cannot open the Outlook Window" (Microsoft Support)](https://support.microsoft.com/office/i-can-t-start-microsoft-outlook-d1f69da6-b333-4650-97bf-4d77bd7abb85)
 - [Turn Outlook profile prompt on or off (Microsoft Support)](https://support.microsoft.com/office/turn-outlook-profile-prompt-on-or-off-b6f08321-51ec-4c1d-8c25-3e26ea475d25)
-- [Overview of Outlook email profiles (Microsoft Support)](https://support.microsoft.com/office/overview-of-outlook-e-mail-profiles-9073a8ac-c3d6-421d-b5b9-fcedff7642fc)
+- [Overview of email profiles in classic Outlook (Microsoft Support)](https://support.microsoft.com/office/overview-of-outlook-e-mail-profiles-9073a8ac-c3d6-421d-b5b9-fcedff7642fc)
