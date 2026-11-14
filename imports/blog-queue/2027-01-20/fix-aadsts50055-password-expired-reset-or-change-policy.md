@@ -25,7 +25,7 @@ faq:
     a: "Learn says you can only reset the password if password writeback is turned on and the user's domain is managed. Changing a password for federated domains is not supported, so you change it in the on-premises Active Directory. A separate code, AADSTS50144, covers an expired on-premises password."
 ---
 
-AADSTS50055 means the user's password has expired, so Microsoft Entra ID ended the sign-in. The user can reset the password, or an admin can reset it. If many users hit this error, the cause is the expiration policy, which you can check with Microsoft Graph PowerShell. This article follows the error code reference and the Learn pages on resetting passwords and on SSPR policies.
+AADSTS50055 means the user's password has expired, so Microsoft Entra ID ended the sign-in. The user can reset the password, or an admin can reset it. If many users hit this error, the expiration policy is one place to look, and you can check it with Microsoft Graph PowerShell. This article follows the error code reference and the Learn pages on resetting passwords and on SSPR policies.
 
 ## What the error reference says
 
@@ -33,7 +33,7 @@ The Microsoft Entra error code reference lists AADSTS50055 as `InvalidPasswordEx
 
 ## Option 1: The user resets the password
 
-The reference says the user is offered a reset. Whether the user can do it alone depends on your self-service password reset setup. Learn's admin article for resets sends users who are not administrators to the Support page for resetting a work or school password. The pages I read do not list SSPR registration steps for this error, so check your SSPR configuration before you rely on this path.
+The reference says the user is offered a reset. Whether the user can do it alone depends on your self-service password reset setup. Learn's admin article for resets sends users who are not administrators to the Support page for resetting a work or school password. The sources do not list SSPR registration steps for this error. My advice is to check your SSPR configuration before you rely on this path.
 
 ## Option 2: An admin resets the password
 
@@ -84,9 +84,9 @@ The reference lists neighbors that look similar:
 
 - **AADSTS50144:** the user's Active Directory password has expired. The reference says to generate a new password for the user or have the user use the self-service reset tool.
 - **AADSTS50133 and AADSTS50132:** the session is not valid because of password expiration or a recent password change.
-- **AADSTS50053:** the account is locked after too many attempts, which is a different cause.
+- **AADSTS50053:** the reference gives two reasons, an account locked after too many sign-in attempts with a wrong user ID or password, or a sign-in blocked because it came from an IP address with malicious activity. That is a different cause.
 
-Pick the code from the sign-in log, not from the text the user saw.
+My advice: pick the code from the sign-in log, not from the text the user saw.
 
 ## Find the event in the sign-in logs
 
