@@ -18,7 +18,7 @@ faq:
   - q: "Which wins for Defender Antivirus settings, Group Policy or Intune?"
     a: "Microsoft Learn lists an order of precedence from highest to lowest: Defender for Endpoint security settings management, Group Policy, Configuration Manager co-management, Configuration Manager standalone, Intune (MDM), Configuration Manager with tenant attach, then PowerShell, MpCmdRun or WMI."
   - q: "How can I see where a Defender setting comes from?"
-    a: "Microsoft Learn says to use the Effective settings tab on the device page in the Microsoft Defender portal, which shows the actual value and the source that configured it. It also names GpResult.exe, the Configuration Manager logs and mdmdiagnosticstool.exe for finding the source."
+    a: "Microsoft Learn says to use the Effective settings tab on the device page, which shows the actual value and the source that configured it. It also names GpResult.exe, the Configuration Manager logs and mdmdiagnosticstool.exe for finding the source."
   - q: "Why is a device non-compliant after onboarding through Intune?"
     a: "Microsoft Learn lists three known cases: Windows setup (OOBE) was not completed, the SENSE service uses delayed start and Intune reports it during a session at startup, or onboarding and offboarding policies are deployed to the same device at the same time."
   - q: "What does the SenseCM EnrollmentStatus registry value show?"
@@ -41,7 +41,7 @@ Baselines can set non-default values, while endpoint security and device configu
 
 ## 2. Duplicated policies without assignments
 
-Microsoft Learn notes that a duplicated policy keeps all settings and scope tags but does not inherit assignments. A copied policy that was never assigned will not reach devices.
+Microsoft Learn notes that a duplicated policy keeps all settings and scope tags but does not inherit assignments. You have to configure new assignments for the copy yourself.
 
 **Check:** After you duplicate a policy, configure new assignments and review the settings.
 
@@ -59,7 +59,7 @@ The Learn article on troubleshooting Defender Antivirus settings lists an order 
 
 So a Group Policy value can override an Intune value. The article adds that `MDMWinsOverGP` does not apply to all settings, for example attack surface reduction rules on Windows 10. Its tip is to use one management method for Defender Antivirus for the best results.
 
-**Check:** On a problem device, open the device page in the Microsoft Defender portal and use the **Effective settings** tab, which shows each value and its source. Then identify the source:
+**Check:** On a problem device, open the device page and use the **Effective settings** tab, which shows each value and its source. Then identify the source:
 
 - Group Policy: run `GpResult.exe /h C:\temp\GpResult_output.html` in an elevated Command Prompt.
 - Configuration Manager: check `C:\Windows\CCM\Logs`.
@@ -84,7 +84,7 @@ It also lists error code 0x87D1FDE8 (Remediation failed) with causes such as a w
 
 ## 5. Security management for Defender for Endpoint
 
-Security management lets devices that Intune does not manage receive security configurations. Microsoft Learn lists prerequisites: the Intune tenant is configured and the feature turned on, the Microsoft Entra ID and Intune endpoints are open in the firewall, and the Entra tenant ID in your Defender for Endpoint tenant matches the tenant ID in the SCP entry for your domain.
+The troubleshooting page does not list the prerequisites itself. It links to the Intune documentation for security management for the device requirements, tenant setup and connectivity. The error table on the page does show what typically goes wrong: the Intune tenant is not configured or the feature is not turned on, the Microsoft Entra ID and Intune endpoints are blocked by the firewall, or the Entra tenant ID in Defender does not match the tenant ID in the SCP entry of the domain.
 
 Troubleshooting order from the page:
 
@@ -99,7 +99,7 @@ Examples from Microsoft's table: codes 8 and 44 point to Intune tenant configura
 - One owner per setting, documented.
 - No duplicated policies left unassigned.
 - One management method for Defender Antivirus.
-- Effective settings reviewed in the Defender portal for problem devices.
+- Effective settings reviewed on the device page for problem devices.
 - Onboarding and offboarding never deployed to the same device together.
 - Tenant ID, SCP and firewall endpoints verified for security management.
 
