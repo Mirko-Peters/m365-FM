@@ -84,18 +84,18 @@ Conditional Access device checks need the device identity. From the conditions a
 
 ## Step 5: Test in report-only mode
 
-Check sign-in logs for the report-only result of the policy. Test with a compliant Mac, a noncompliant Mac and a Mac in each browser. Add exclusions for service accounts only through the options Learn lists. Note that user-scoped policies do not block service principals, which need Conditional Access for workload identities.
+Check sign-in logs for the report-only result of the policy. My own test plan: a compliant Mac, a noncompliant Mac and a Mac in each browser. Learn recommends excluding emergency access accounts and service accounts from such policies, and notes that calls made by service principals are not blocked by policies scoped to users, so they need Conditional Access for workload identities.
 
-## Typical failures
+## Typical failures (my own list)
 
 - The Mac is compliant in Intune but the browser sign-in is blocked: check the SSO plug-in, the Chrome extension and the certificate prompt.
-- Everything is blocked at once: no compliance policy is assigned, or the validity period elapsed because the device stopped reporting.
+- Everything is blocked at once: no compliance policy is assigned while the no-policy setting is **Not compliant**, or the validity period elapsed because the device stopped reporting.
 - Everything is allowed: the setting for devices with no compliance policy is still **Compliant**.
 - Users in private browsing windows fail the device check.
 
 ## What the pages do not say
 
-The Intune pages I read do not describe the Company Portal flow for macOS and give no evaluation timing. The Conditional Access page does not mention the SSO plug-in. Verify enrollment and plug-in deployment with your Intune administrator.
+The Intune pages I read do not describe a macOS-specific Company Portal flow and give no concrete evaluation timing. The overview only says evaluation depends on device check-in and policy refresh cycles. The page on requiring a compliant device does not mention the SSO plug-in, while the conditions page does. Verify enrollment and plug-in deployment with your Intune administrator.
 
 ## Related
 
