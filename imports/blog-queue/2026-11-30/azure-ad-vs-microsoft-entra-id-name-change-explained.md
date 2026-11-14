@@ -10,7 +10,7 @@ keypoints:
   - "Azure Active Directory, Azure AD and AAD are now called Microsoft Entra ID. It is a rename, not a new product."
   - "Microsoft announced the Entra brand on July 11, 2023, started renaming on August 15, 2023 and changed license display names on October 1, 2023."
   - "Licensing, pricing, SLAs, login URLs and APIs did not change, and existing deployments keep working without action."
-  - "Active Directory, AD FS and AD DS were not renamed, because they are Windows Server products and not part of Azure AD."
+  - "Windows Server Active Directory, AD FS and AD DS were not renamed. Learn lists them as not branded with Microsoft Entra."
   - "Azure AD Graph and the Azure AD PowerShell for Graph module are deprecated, so use Microsoft Graph and Microsoft Graph PowerShell instead."
 faq:
   - q: "Is Azure AD the same as Microsoft Entra ID?"
