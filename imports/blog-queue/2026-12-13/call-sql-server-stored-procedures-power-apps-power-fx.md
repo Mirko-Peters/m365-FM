@@ -9,21 +9,21 @@ topics: [power-apps, sql-server, transact-sql, on-premises-data-gateway]
 keypoints:
   - "Since the July 2024 general availability announcement, canvas apps can call SQL Server stored procedures in Power Fx without a Power Automate flow."
   - "Syntax is DataSource.ProcedureName({param: value}), and the schema name is prepended, so dbo.newlibrarybook becomes dbonewlibrarybook."
-  - "Read results with .ResultSets.Table1. Mark a procedure safe for galleries only if it has no side effects and returns fewer than 10,000 records."
+  - "Read results with .ResultSets.Table1. Mark a procedure safe for galleries only if it has no side effects and returns fewer than 2,000 records."
   - "Refresh does not work with stored procedures, so reassign a variable after each write."
   - "Through a gateway, OUTPUT values and return values are not available, and only the first result set is returned. Calls time out at 110 seconds."
 faq:
   - q: "Do I still need Power Automate to run a stored procedure from Power Apps?"
     a: "No. Microsoft's July 2024 announcement says calling SQL Server stored procedures in Power Fx is generally available in all regions and that makers no longer need a Power Automate flow. Only stored procedures can run. Arbitrary SQL is not allowed, which Microsoft presents as a security measure."
   - q: "How do I read the rows a procedure returns?"
-    a: "According to Microsoft Learn, read from the ResultSets property of the call, for example DataSource.dbospshowalllibrarybooks().ResultSets.Table1. Multiple result sets are named Table1, Table2 and so on. The procedure must first be marked Safe to use for galleries and tables for use in this way."
+    a: "According to Microsoft Learn, read from the ResultSets property of the call, for example DataSource.dbospshowalllibrarybooks().ResultSets.Table1. Multiple result sets are named Table1, Table2 and so on. To bind a procedure directly to the Items property of a gallery or table, Learn says to mark it Safe to use for galleries and tables first."
   - q: "Why does Refresh not update my gallery after I call a procedure?"
     a: "Learn says Refresh does not work with stored procedures because they are action behaviors, not tabular sources. Store the result in a variable with Set, bind the gallery to it, and set the variable again after each create, update or delete."
   - q: "What are the limits through an on-premises gateway?"
     a: "The SQL Server connector reference says OUTPUT parameter values are not returned, the ResultSets value is untyped, the return value is not available, only the first result set is returned and dynamic schemas are not supported. Actions time out after 110 seconds."
 ---
 
-Canvas apps used to need a Power Automate flow to run a SQL Server stored procedure. Microsoft announced general availability of direct calls from Power Fx on July 31, 2024, in all regions. The result is a shorter path and fewer moving parts. It also brings rules about side effects, refresh and limits that are easy to trip over. This article follows the Learn documentation.
+Canvas apps used to need a Power Automate flow to run a SQL Server stored procedure. Microsoft announced general availability of direct calls from Power Fx on July 31, 2024, in all regions. My own summary: this is a shorter path with fewer moving parts. It also brings rules about side effects, refresh and limits that are easy to trip over. This article follows the Learn documentation.
 
 ## What you can and cannot do
 
@@ -60,7 +60,7 @@ Power Apps passes text, so convert values where the parameter needs another type
 
 ## Step 3: Read results
 
-For a procedure marked safe:
+For binding to the Items property of a gallery, after the procedure is marked safe:
 
 ```
 Paruntimedb.dbospshowalllibrarybooks().ResultSets.Table1
@@ -73,9 +73,9 @@ If the procedure returns several result sets, use Table1, Table2 and so on. The 
 **Safe to use for galleries and tables** lets you bind a procedure to the Items property of a gallery or table. Learn gives two conditions:
 
 1. **No side effects.** Power Apps may call the procedure many times, whenever it decides a refresh is needed, and you cannot control when. Do not mark a procedure safe if it, for example, sends emails.
-2. **Modest data volume.** Action calls have no row limit and are not paged in 100-record increments. Learn recommends fewer than 10,000 records, since larger results can slow or crash the app.
+2. **Modest data volume.** Action calls have no row limit and are not paged in 100-record increments. Learn says that many thousands of records can slow or crash the app, and for performance reasons it recommends bringing in fewer than 2,000 records.
 
-A read-only procedure that returns a limited set with a WHERE clause is the typical safe case. Procedures that insert, update or delete should stay unmarked and be called from button handlers.
+My own examples, not from Learn: a read-only procedure that returns a limited set with a WHERE clause is a typical safe case, and procedures that insert, update or delete should stay unmarked. Learn's own example calls the write procedure from an OnSelect property.
 
 ## Step 4: Refresh after writes
 
@@ -101,21 +101,21 @@ Learn lists these cases:
 
 - A table has a trigger. You cannot use Submit for create, update or delete on it, so call a procedure instead. The connector reference adds that inserts and updates fail if a server-side trigger is defined on the table.
 - Views only support queries. Use procedures for writes.
-- Business logic that should stay in the database.
+- A data access pattern where views handle reads and stored procedures handle create, update and delete instead of direct table access, which Learn calls a common professional pattern.
 
 ## Limits and behaviors from the connector reference
 
 - **Timeout:** actions time out if a query or procedure runs longer than 110 seconds. For long-running work, the page points to Logic Apps guidance.
 - **Result sets:** only result sets up to the first empty one are returned. Column names in the result schema must be unique and non-empty, including in any inner SELECT.
 - **Through an on-premises data gateway:** OUTPUT parameter values are not returned, though input values can be passed. ResultSets is untyped, the return value is not available, only the first result set is returned and dynamic schemas are not supported.
-- **Gateway size limits:** request size 2 MB, response size 8 MB.
+- **On-premises SQL Server size limits:** request size 2 MB, response size 8 MB. The page lists these under limitations for an on-premises SQL Server and does not tie them to the gateway explicitly.
 - **Throttling in Power Apps:** 300 API calls per user per 30 seconds, and 125 concurrent calls per connection. Calls above the concurrency limit return 429.
 
 ## Authentication and sharing
 
-The connector lists these authentication types: Microsoft Entra ID Integrated, service principal, SQL Server authentication, Windows authentication and Windows authentication (non shared). Shareable connections, such as SQL Server authentication, Windows authentication and service principal, are shared along with the app. Non-shareable connections, such as Entra ID Integrated, need each new user to create their own connection.
+The connector reference lists a default OAuth connection (not shareable), Client Certificate Auth, Managed Identity, service principal, SQL Server authentication, Windows authentication and Windows authentication (non shared). Microsoft Entra ID Integrated is listed only for Azure Government, DoD, Mooncake and GCC-High regions. The page marks Client Certificate Auth, Managed Identity, service principal, SQL Server authentication and Windows authentication as shareable, and notes that currently only Azure Logic Apps supports managed identity authentication for this connector. For the default OAuth connection, it says another user of a shared app is prompted to create a new connection. The page also says Microsoft Entra ID guest users are not supported for Entra ID connections to SQL Server.
 
-The pages I read do not document the database permissions the connection user needs. Apply least privilege: grant execute only on the procedures the app calls, which is general SQL practice rather than a statement from these pages. With a shared connection, every app user runs the procedures under the same account, so the procedure must enforce its own checks.
+The pages I read do not document the database permissions the connection user needs. Apply least privilege: grant execute only on the procedures the app calls, which is general SQL practice rather than a statement from these pages. My own inference: with a shareable connection, app users share one set of credentials, so the procedure should enforce its own checks.
 
 ## Common mistakes
 
@@ -135,7 +135,7 @@ The pages I read do not document the database permissions the connection user ne
 
 ## Sources
 
-- [Microsoft Learn: Access data in SQL Server from canvas apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/connections/sql-connection-access-data)
-- [Microsoft Learn: SQL Server connector reference](https://learn.microsoft.com/en-us/connectors/sql/)
-- [Microsoft Power Platform blog: Call SQL Server procedures directly in Power Fx, now generally available](https://www.microsoft.com/en-us/power-platform/blog/power-apps/call-sql-server-procedures-directly-in-power-fx-ga/)
-- [Microsoft Learn: Connect to SQL Server from Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/connections/connection-azure-sqldatabase)
+- [Microsoft Learn: Access data in SQL Server - Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/connections/sql-connection-access-data)
+- [Microsoft Learn: SQL Server - Connectors](https://learn.microsoft.com/en-us/connectors/sql/)
+- [Microsoft Power Platform blog: Call SQL Server procedures directly in Power Fx (GA)](https://www.microsoft.com/en-us/power-platform/blog/2024/07/31/call-sql-server-procedures-directly-in-power-fx-ga/)
+- [Microsoft Learn: Connect to SQL Server from Power Apps overview](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/connections/sql-connection-overview)
