@@ -10,7 +10,7 @@ faq:
   - q: "How often should a SharePoint health check run?"
     a: "Microsoft's data access governance guidance recommends snapshot reports quarterly and activity reports monthly. A monthly check fits the activity reports, and a deeper permissions review can follow the quarterly snapshot. Adjust the rhythm to your risk level and team capacity, and check Microsoft Learn for current guidance."
   - q: "Which reports can I use for a SharePoint health check?"
-    a: "Microsoft Learn describes data access governance reports in the SharePoint admin center, which need SharePoint Advanced Management and the SharePoint administrator role. A site admin can also create a CSV report on file and folder sharing for a single site or OneDrive."
+    a: "Microsoft Learn describes data access governance reports in the SharePoint admin center. They require the SharePoint administrator role and the licensing described in the SharePoint Advanced Management prerequisites. A site admin can also create a CSV report on file and folder sharing for a single site or OneDrive."
   - q: "What does oversharing mean in Microsoft 365?"
     a: "Oversharing means content is shared more broadly than intended, for example through organization-wide or anonymous links. It matters more with AI assistants like Copilot, which can surface content that users can already access, so a regular review of sharing helps."
 ---
@@ -45,11 +45,11 @@ For each one, decide: assign a new owner, archive, or ask the business whether t
 
 SharePoint offers two kinds of built-in [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/) for permissions and sharing, described on Microsoft Learn.
 
-**Data access governance reports.** You find them in the SharePoint admin center under Reports, Data access governance. They need SharePoint Advanced Management and the SharePoint administrator role. According to [Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports), snapshot reports show data as of the day they were created, for example site permissions across the organization and sensitivity labels applied to files. Activity reports cover the last 28 days, for example sharing links and content shared with "Everyone except external users".
+**Data access governance reports.** You find them in the SharePoint admin center under Reports, Data access governance. You need the SharePoint administrator role and the licensing listed in the prerequisites for SharePoint Advanced Management (for example, at least one Microsoft Copilot licence in the organization or the SharePoint Advanced Management Plan 1 add-on). Microsoft Learn adds that IT administrators with Microsoft 365 E5 can use the reports without the other SharePoint Advanced Management features, but then there are no snapshot reports or remedial actions, and activity reports return at most 10,000 sites. According to [Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports), snapshot reports show data as of the day they were created, for example site permissions across the organization and sensitivity labels applied to files. Activity reports cover the last 28 days, for example sharing links and content shared with "Everyone except external users".
 
 Microsoft recommends running snapshot reports quarterly and activity reports monthly. That maps neatly onto a monthly routine: activity reports every month, a snapshot every third month.
 
-One detail matters for planning: data collection pauses if no report is generated for three months. If you skip the routine for a quarter, data collection pauses, so the data may have a gap. Check Microsoft Learn for the current behaviour before you rely on this.
+One detail matters for planning, and it applies to organizations without SharePoint Advanced Management: for them, activity reports only work after you enable data collection, the data is stored for 28 days, and if no report is generated for three months, data collection pauses and must be re-enabled. If that describes your tenant, do not let the monthly routine lapse. Check Microsoft Learn for the current behaviour before you rely on this.
 
 **The site-level CSV report.** A site admin can create a CSV file of every unique file, user, permission and link on a SharePoint site or OneDrive, as described on the [sharing reports page](https://learn.microsoft.com/en-us/sharepoint/sharing-reports). The file is saved on the site. Know its limits: it does not include Anyone links or links that were e-mailed but not clicked, and it shows SharePoint groups but not the individual people inside them. Microsoft suggests saving the file in a folder that only site owners can access. For wider analysis, the page points to Microsoft Graph Data Connect.
 
@@ -87,10 +87,18 @@ Microsoft also notes that a review cycle can be automated, for example with Powe
 
 - Run a short check every month and keep it to about an hour, so it actually happens.
 - Check ownership first: every site should have a primary and a secondary contact.
-- Use data access governance reports: activity reports monthly, snapshot reports quarterly, as Microsoft recommends. They require SharePoint Advanced Management and the SharePoint administrator role.
-- Do not let the routine lapse: data collection pauses if no report is generated for three months.
+- Use data access governance reports: activity reports monthly, snapshot reports quarterly, as Microsoft recommends. They require the SharePoint administrator role and the licensing from the SharePoint Advanced Management prerequisites.
+- Do not let the routine lapse: without SharePoint Advanced Management, data collection pauses if no report is generated for three months and must be re-enabled.
 - Use the site-level CSV report for single sites, and remember it does not show Anyone links, unclicked e-mailed links or the people inside SharePoint groups. Store it where only site owners can reach it.
 - Treat content shared with "Everyone except external users" as a monthly review item, especially with Copilot in mind.
 - Test every access change on a pilot site or test tenant first, and keep a way back.
 - Log your decisions, and turn repeated fixes into policies, templates or automated reviews.
 - Verify the details against Microsoft Learn, because features and licensing can change.
+
+## Sources
+
+- [Data access governance reports for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)
+- [Report on file and folder sharing in a SharePoint site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharing-reports)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)
+- [Prerequisites for SharePoint Advanced Management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharepoint-advanced-management-prerequisites)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
