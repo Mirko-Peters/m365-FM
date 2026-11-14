@@ -25,7 +25,7 @@ faq:
     a: "Only if you share sound. The support page says to turn on Include sound in the Share dialog before you start sharing, or use Share audio on the presenter toolbar. Sound from your computer, including notifications, is then audible to participants."
 ---
 
-A video that plays smoothly on your screen can look choppy to everyone else in a Teams meeting. This is not a fault in most cases. It is the default way Teams shares a screen. The Microsoft Learn page on screen sharing video lag is short, so this article adds the relevant guidance from the Microsoft Support page on sharing content in Teams meetings, and marks my own advice separately.
+A video that plays smoothly on your screen can look choppy to everyone else in a Teams meeting. According to the Learn page, this comes from the default way Teams shares a screen. The Microsoft Learn page on screen sharing video lag is short, so this article adds the relevant guidance from the Microsoft Support page on sharing content in Teams meetings, and marks my own advice separately.
 
 ## Symptoms
 
@@ -56,7 +56,7 @@ Learn says there is no visual indication that high-motion viewing is on. The sho
 
 ## What you give up
 
-The resolution of the shared content might drop to allow the higher frame rate. Learn says this depends on several factors, such as device capability and available bandwidth. So use the optimized mode for the time that you play video, and not for a slide deck.
+The resolution of the shared content might drop to allow the higher frame rate. Learn says this depends on several factors, such as device capability and available bandwidth. My advice: use the optimized mode only while you play video, and not for a slide deck.
 
 ## Check the frame rate
 
@@ -98,4 +98,4 @@ This is my suggestion, not guidance from the page:
 ## Sources
 
 - [Fix screen sharing video display lag issue in Teams (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/microsoftteams/meetings/fix-choppy-video)
-- [Share content in Microsoft Teams meetings (Microsoft Support)](https://support.microsoft.com/office/share-content-in-microsoft-teams-meetings-fcc2bf59-aecd-4481-8f99-ce55dd836ce8)
+- [Present content in Microsoft Teams meetings (Microsoft Support)](https://support.microsoft.com/office/share-content-in-microsoft-teams-meetings-fcc2bf59-aecd-4481-8f99-ce55dd836ce8)
