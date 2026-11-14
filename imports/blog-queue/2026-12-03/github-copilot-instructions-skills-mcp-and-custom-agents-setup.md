@@ -16,7 +16,7 @@ faq:
   - q: "What is the difference between instructions, skills and custom agents?"
     a: "According to the Visual Studio blog and Microsoft Learn, custom instructions are always active and suit coding style and general preferences. Skills are activated per task when the model judges them relevant and suit workflows and multi-step procedures. Custom agents define a persona and a tool set that you select in the agent picker."
   - q: "Where do I put the instruction file for a repository?"
-    a: "Microsoft Learn says to create .github/copilot-instructions.md in the repository for repository-wide instructions. Path-specific files go in .github/instructions/ and end in .instructions.md. In Visual Studio you must also enable custom instructions under Tools, Options, GitHub, Copilot."
+    a: "Microsoft Learn says to create .github/copilot-instructions.md in the repository for repository-wide instructions. Path-specific files go in .github/instructions/ and end in .instructions.md. In Visual Studio you must also enable custom instructions under Tools, Options, All Settings, GitHub, Copilot, Copilot Chat."
   - q: "Where are agent skills stored?"
     a: "Microsoft Learn lists .github/skills/, .claude/skills/ and .agents/skills/ for workspace skills, and ~/.copilot/skills/, ~/.claude/skills/ and ~/.agents/skills/ for personal skills. Each skill is a subdirectory with a required SKILL.md file."
   - q: "Are MCP tools allowed to run automatically?"
@@ -41,7 +41,7 @@ A path-specific file starts with YAML front matter. `applyTo` holds a glob such 
 
 ### Enable and verify
 
-1. In Visual Studio, select **Tools** > **Options** > **GitHub** > **Copilot** and select **Enable custom instructions to be loaded from .github/copilot-instructions.md files and added to requests**.
+1. In Visual Studio, select **Tools** > **Options**, expand **All Settings** > **GitHub** > **Copilot** > **Copilot Chat**, and select **Enable custom instructions to be loaded from .github/copilot-instructions.md files and added to requests**.
 2. Create the file in the repository's `.github` folder.
 3. In Visual Studio Code, Learn mentions the `/init` command in Copilot Chat to generate a starter file.
 4. Ask a question and open the **References** list of the response. Learn says Copilot lists the instruction file there when it uses it.
@@ -92,7 +92,7 @@ Behavior to expect:
 
 ## Layer 5: Custom agents
 
-A custom agent is a Markdown file ending in `.agent.md`. Repository agents live in `.github/agents/`. In Visual Studio, user-level agents default to `%USERPROFILE%\.github\agents`, and organization-level agents appear automatically for repositories in the organization. Visual Studio needs version 18.4 or later.
+A custom agent is a Markdown file ending in `.agent.md`. Repository agents live in `.github/agents/`. In Visual Studio, user-level agents default to `%USERPROFILE%\.github\agents`, and organization-level agents appear automatically for repositories in a GitHub organization, which needs Visual Studio 18.9 or later. Custom agents in general need version 18.4 or later.
 
 The front matter supports `description` (required in Visual Studio), `name`, `model` and `tools`. The Visual Studio Code module adds `agents`, `handoffs` and `mcp-servers`. A Learn example keeps a security reviewer read-only with `tools: ['search', 'read']`.
 
