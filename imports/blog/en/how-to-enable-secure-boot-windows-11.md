@@ -24,7 +24,7 @@ To enable Secure Boot in Windows 11, restart into the UEFI firmware settings (**
 
 ## What Secure Boot does and why Windows 11 asks for it
 
-Microsoft describes Secure Boot as a security feature that helps prevent unauthorized software from loading when your PC starts. With it enabled, the firmware checks that the bootloader is signed by a trusted certificate before it starts, and Windows then continues the trust chain. The details are on Microsoft Learn in [Secure the Windows boot process](https://learn.microsoft.com/en-us/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process).
+Microsoft describes Secure Boot as a security feature that helps prevent unauthorized software from loading when your PC starts. With it enabled, the firmware checks that the bootloader is signed by a trusted certificate before it starts, and Windows then continues the trust chain. The details are on Microsoft Learn in [Secure the Windows boot process](https://learn.microsoft.com/windows/security/operating-system-security/system-security/secure-the-windows-10-boot-process).
 
 For Windows 11 the relevant lines are in the hardware requirements: the system firmware must be UEFI and Secure Boot capable, and the PC needs TPM 2.0. "Capable" is the word that trips people up. A PC can support Secure Boot and still have it switched off, or run in a legacy mode where it can't be used at all. Microsoft's Secure Boot page for Windows 11 adds that to enable it you switch the boot mode from Legacy (also called CSM mode) to UEFI, and that if the firmware offers both, UEFI should be the first or only option.
 
@@ -45,7 +45,7 @@ If `Confirm-SecureBootUEFI` says the platform isn't supported, you have the situ
 
 ## Enable Secure Boot in the UEFI settings
 
-The setting lives in the firmware, so you need to open it. The steps below come from Microsoft's [Secure Boot enablement guide](https://support.microsoft.com/en-us/windows/security/secure-boot-enablement-guide).
+The setting lives in the firmware, so you need to open it. The steps below come from Microsoft's [Secure Boot enablement guide](https://support.microsoft.com/windows/security/secure-boot-enablement-guide).
 
 1. Save your work. Open **Settings**, then **System**, then **Recovery**.
 2. Next to **Advanced startup**, select **Restart now**.
@@ -60,7 +60,7 @@ Microsoft's warning applies to every vendor: changing firmware settings incorrec
 
 ## When the PC runs in legacy mode on an MBR disk
 
-This is the stubborn case. The firmware can offer UEFI mode, but Windows was installed in legacy mode on an MBR disk, so switching to UEFI makes the PC fail to boot. The fix is to convert the disk to GPT. Microsoft's [MBR2GPT](https://learn.microsoft.com/en-us/windows/deployment/mbr-to-gpt) tool does this without modifying or deleting data on the disk.
+This is the stubborn case. The firmware can offer UEFI mode, but Windows was installed in legacy mode on an MBR disk, so switching to UEFI makes the PC fail to boot. The fix is to convert the disk to GPT. Microsoft's [MBR2GPT](https://learn.microsoft.com/windows/deployment/mbr-to-gpt) tool does this without modifying or deleting data on the disk.
 
 First check the partition style. In PowerShell run `Get-Disk | ft -Auto` and read the **Partition Style** column, which shows MBR or GPT. In Disk Management (`diskmgmt.msc`) you can open the disk's **Properties** and look at **Partition style** on the **Volumes** tab.
 
