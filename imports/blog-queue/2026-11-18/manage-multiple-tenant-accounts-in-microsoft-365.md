@@ -50,7 +50,7 @@ Switching refreshes Teams, so expect a few seconds of delay. Microsoft's article
 
 To remove access to a tenant you no longer use, the article points to `myaccount.microsoft.com/organizations`.
 
-Reader comments on that article mention a warning icon beside a tenant that may mean you are not signed in to it, and an icon for activity in other accounts. Those comments are not from Microsoft's article text, so verify them in your own client.
+A reader comment on that article says a warning triangle beside an organization name usually means you are not signed in to that tenant, so you will not receive its notifications. That comment is not part of the article text, so verify it in your own client.
 
 ## For admins: the Tenants page and tenant switcher
 
