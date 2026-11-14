@@ -25,7 +25,7 @@ faq:
     a: "Microsoft's guidance on emergency access accounts says to exclude those accounts from any Conditional Access policy that blocks or restricts sign-in, for example through a dedicated security group. Report-only policies do not block access and do not need an exclusion."
 ---
 
-AADSTS53003 means a Conditional Access policy decided not to issue a token. The sign-in itself may have worked, but the policy blocked access to the app. To fix it, find the policy that applied in the Microsoft Entra sign-in logs, then change the policy, the user, the device or the way the user signs in. This guide shows the order of checks and explains the other Conditional Access error codes that look similar.
+AADSTS53003 means a Conditional Access policy decided not to issue a token. To fix it, find the policy that applied in the Microsoft Entra sign-in logs, then change the policy, the user, the device or the way the user signs in. This guide shows the order of checks and explains the other Conditional Access error codes that look similar.
 
 ## What the error says
 
@@ -46,7 +46,7 @@ Codes such as 50076 and 50079 point to MFA requirements created by a Conditional
 
 ## Step 1: Read the error page
 
-For browser sign-ins, Microsoft says the error page usually has detailed information and often suggests a solution. Select **More Details** to get the troubleshooting information that you need when searching the sign-in logs or opening a support case.
+For browser sign-ins, Microsoft says to select **More Details** on the error page to get the troubleshooting information, including the request ID, time and date, that you need when searching the sign-in logs or opening a support case.
 
 ## Step 2: Find the failed sign-in in the logs
 
