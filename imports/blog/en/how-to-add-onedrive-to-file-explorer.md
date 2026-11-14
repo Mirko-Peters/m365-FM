@@ -33,7 +33,7 @@ The OneDrive entry in File Explorer comes from the sync app. If the app isn't ru
 
 If this is a new setup, the app walks you through it. Sign in with your personal Microsoft account or your work or school account. On the **This is your OneDrive folder** screen, accept the default location or select **Change location**. Microsoft recommends making that change at this step. After the first sync, your files appear in File Explorer in the OneDrive folder. With more than one account, personal files are under **OneDrive - Personal** and work or school files under **OneDrive - [CompanyName]**.
 
-Microsoft's setup page also says that on Windows 11 the OneDrive app is already installed. On a clean Windows 11 PC, starting it is all you have to do.
+Microsoft's reinstall page says OneDrive comes preinstalled with some versions of Windows 10 and 11. If your PC is one of them, starting the app may be all you have to do.
 
 ## Show the navigation pane
 
@@ -53,7 +53,7 @@ A pinned entry is a shortcut. It doesn't move your files. If you pin a subfolder
 
 ### Unhide a hidden OneDrive folder
 
-If you followed Microsoft's steps to hide OneDrive when you tried to get rid of it, the folder is still hidden. In File Explorer, enable **Show hidden items** on the **View** menu, right-click the **OneDrive** folder, select **Properties** and clear **Hidden** on the **General** tab. Microsoft documents the check box for hiding the folder; clearing it is the logical reverse. Hiding also required unlinking and quitting OneDrive, so after you unhide it, start the app and sign in again.
+If you followed Microsoft's steps to hide OneDrive when you tried to get rid of it, the folder is still hidden. In File Explorer, enable **Show hidden items** on the **View** menu, right-click the **OneDrive** folder, select **Properties** and clear **Hidden** on the **General** tab. Clearing the **Hidden** check box is the logical reverse of the step that hides the folder. Hiding also required unlinking and quitting OneDrive, so after you unhide it, start the app and sign in again.
 
 ## Reinstall OneDrive if it's gone
 
@@ -64,7 +64,7 @@ If you uninstalled OneDrive, or Start can't find it, reinstall it. Microsoft's p
 3. Download OneDrive from the Microsoft OneDrive download page.
 4. Run the downloaded file and follow the prompts to sign in.
 
-Uninstalling doesn't delete your data, and your files stay at OneDrive.com. Microsoft notes that some versions of Windows 10 and 11 include the OneDrive app already. It also warns that you may see two OneDrive apps: the Microsoft Store version lets you view files but doesn't back up or sync them. If you previously synced only selected folders, you need to choose them again after the sync finishes. Work or school OneDrive folders must be set up again.
+Uninstalling doesn't delete your data, and your files stay at OneDrive.com. Microsoft notes that some versions of Windows 10 and 11 include the OneDrive app already. The Microsoft Store version of OneDrive doesn't back up or sync your files. If you previously synced only selected folders, you need to choose them again after the sync finishes. Work or school OneDrive folders must be set up again.
 
 ## Why files look empty or "cloud only"
 
@@ -80,8 +80,8 @@ Right-click a file or folder and choose **Always keep on this device** to downlo
 
 "Add OneDrive to File Explorer" sometimes means "add my work files". Two cases:
 
-- **A second account.** In OneDrive **Settings**, you can add another account after the first sync. Microsoft says you can have multiple work or school accounts but only one personal OneDrive account. Each shows up under its own name in File Explorer.
-- **A SharePoint library.** Open the SharePoint site in your browser, go to the library, select the ellipsis (...) and choose **Sync**. Approve the browser prompt to use OneDrive and sign in. The library then appears in File Explorer under your organization's name, each library in its own subfolder. Microsoft's page "Sync SharePoint files and folders" recommends a OneDrive shortcut when it's available, because a shortcut gives access on all your devices and performs better than the Sync button.
+- **A second account.** In OneDrive **Settings**, you can add another account after the first sync. Each account shows up under its own name in File Explorer.
+- **A SharePoint library.** Open the SharePoint site in your browser, go to the library, select the ellipsis (...) and choose **Sync**. Approve the browser prompt to use OneDrive and sign in. The library then appears in File Explorer under a folder named for your organization, each synced location in its own subfolder. Microsoft's page "Sync SharePoint files and folders" recommends OneDrive shortcuts as the more versatile option when they're available, because a shortcut makes content reachable from every device, while sync is tied to one device, and it says shortcuts perform better.
 
 If the library you need is huge, don't sync it all. Choose only the folders you work in, or open the rest in the browser.
 
@@ -93,14 +93,14 @@ On a managed PC, OneDrive may be missing on purpose. The Windows policy **Preven
 
 - **Reinstalling first.** Check the hidden icons arrow and Start before you uninstall anything.
 - **Confusing the Store app with the sync app.** The Store version shows files but doesn't sync.
-- **Searching only This PC.** Starting with Windows 11, version 22H2, Microsoft calls Quick access Home and recommends it as your landing page. The OneDrive entry is in the left pane.
-- **Moving files out of the OneDrive folder to "pin" them.** Moving an online-only file out of the folder downloads it and removes it from OneDrive. Pin the folder instead.
+- **Searching only This PC.** Starting with Windows 11, version 22H2, Quick access is called Home in File Explorer. The OneDrive entry is in the left pane.
+- **Moving files out of the OneDrive folder to "pin" them.** Moving a file out of the OneDrive folder takes it out of the sync. Pin the folder instead.
 - **Forgetting the second account.** A work account and a personal account have separate entries.
 - **Ignoring a policy.** On a company PC, the setting can be managed by your admin.
 
 ## Related topics to explore
 
-- **Seeing only some folders.** [Selective sync](https://www.m365.fm/entity/onedrive-selective-sync/) decides which folders are on this PC. Microsoft's page on choosing folders lists the limits.
+- **Seeing only some folders.** [Selective sync](https://www.m365.fm/entity/onedrive-selective-sync/) decides which folders are on this PC. Microsoft's page on choosing which folders to sync explains the options.
 - **Resetting OneDrive.** If the app runs but nothing appears, a reset restarts the sync from scratch. It doesn't delete your files.
 - **Adding a SharePoint library.** You can sync a library from the browser with the **Sync** button or add a shortcut to your OneDrive, which Microsoft recommends when available.
 - **Moving the OneDrive folder.** Microsoft says you unlink OneDrive, move the folder and link again.
@@ -109,3 +109,12 @@ On a managed PC, OneDrive may be missing on purpose. The Windows policy **Preven
 ## Next step
 
 Start OneDrive from the Start menu, sign in and open File Explorer. If the left pane is missing, turn it on under **View**, **Show**, **Navigation Pane**. To add OneDrive to File Explorer in a way you will actually use, right-click the folder you open most and choose **Pin to Quick access**.
+
+## Sources
+
+- [I can't see any OneDrive icons (Microsoft Support)](https://support.microsoft.com/office/i-can-t-see-any-onedrive-icons-a377ac56-f885-4854-9763-d6bcdceafcf1)
+- [Reinstall OneDrive (Microsoft Support)](https://support.microsoft.com/onedrive/reinstall-onedrive)
+- [File Explorer in Windows (Microsoft Support)](https://support.microsoft.com/windows/experience/fileexplorer/file-explorer-in-windows)
+- [Save disk space with OneDrive Files On-Demand for Windows (Microsoft Support)](https://support.microsoft.com/office/sync-files-with-onedrive-files-on-demand-62e8d748-7877-420f-b600-24b56562aa70)
+- [Sync SharePoint files and folders (Microsoft Support)](https://support.microsoft.com/office/sync-sharepoint-files-and-folders-87a96948-4dd7-43e4-aca1-53f3e18bea9b)
+- [Policy CSP - System (Microsoft Learn)](https://learn.microsoft.com/windows/client-management/mdm/policy-csp-system)
