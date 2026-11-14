@@ -35,7 +35,7 @@ Three things follow from that wording.
 
 1. The decision was made by policy, not by a fault in the app.
 2. The policy lives at tenant level, so a change needs an admin.
-3. The row gives no list of causes and no steps. The pages I read do not tie this code to a specific policy type, so I do not guess one here.
+3. The row gives no list of causes, no steps and no specific policy type, so this guide does not guess one.
 
 ## Step 1: capture the failed sign-in
 
@@ -54,11 +54,11 @@ Learn adds that the event's other tabs hold the user, location, device and authe
 
 ## Step 3: understand why that policy applied
 
-Learn says Conditional Access policies apply only when all conditions are satisfied or not configured. They are also enforced after first-factor authentication is completed, which means the user has already passed the password or equivalent step when this error appears.
+Learn says Conditional Access policies apply only when all conditions are satisfied or not configured. The overview adds that they are enforced after first-factor authentication is completed.
 
-The overview lists the signals a policy can use: user, group or agent, IP location, device, application, real-time and calculated risk from Microsoft Entra ID Protection, and Microsoft Defender for Cloud Apps. It lists Block access as the most restrictive decision. So the block you see may be an explicit Block access policy, or a grant control that the sign-in could not meet. The sign-in log tells you which.
+The overview lists the signals a policy can use: user, group or agent, IP location, device, application, real-time and calculated risk from Microsoft Entra ID Protection, and Microsoft Defender for Cloud Apps. It lists Block access as the most restrictive decision. My reading: the block you see may be an explicit Block access policy, or a grant control that the sign-in could not meet. The sign-in log shows which policy and decision applied.
 
-The **What If** tool, under **Entra ID** > **Conditional Access** > **Policies** > **What If**, simulates a sign-in and shows the policies that apply. Learn says it does not test service dependencies, so a result for one app ignores policies on the services it depends on.
+The **What If** tool, under **Entra ID** > **Conditional Access** > **Policies** > **What If**, simulates a sign-in and shows the policies that apply. Separately, Learn's troubleshooting page notes that users can be blocked because a cloud app depends on a resource that a policy blocks. To check this, look at the application and the resource called in the sign-in log.
 
 ## Step 4: decide what to change
 
@@ -71,7 +71,7 @@ The right change depends on the finding. These options are my advice, not a Micr
 | A risk based policy | Review the risk event with the identity protection team before changing the policy |
 | A policy that is correct for this user | Explain the rule, and use the proper access route |
 
-Test any policy change in report-only mode first, then enforce it. Keep emergency access accounts excluded from policies that could lock everyone out.
+My advice: test any policy change in report-only mode first, then enforce it. Keep emergency access accounts excluded from policies that could lock everyone out.
 
 ## When tenant-level policy blocks everyone
 
