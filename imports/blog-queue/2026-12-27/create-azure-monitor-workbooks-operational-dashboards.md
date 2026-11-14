@@ -55,7 +55,7 @@ Choose a link style (Bullet List, List, Paragraph, Navigation, Tabs or Toolbar) 
 
 ### Groups
 
-Select **Add group**, choose a type (**Editable** or **From a template**) and a load type (**Lazy loading** is the default, plus **Explicit loading** and **Always**). A group is a scope, so parameters created inside it are visible only inside it. Group contents from a template cannot be modified in edit mode. To change them, edit the source template.
+Select **Add group**, choose a type (**Editable** or **From a template**) and a load type (**Lazy loading** is the default, plus **Explicit loading** and **Always**). A group is a scope, so parameters created inside it are visible only inside it. Group contents from a template cannot be modified in edit mode. Because they load from the template again, changes belong in the source template (my reading).
 
 ### Images and video
 
@@ -63,11 +63,11 @@ Enter a URL, then set the title, size and alternative text.
 
 ## Query performance guidance
 
-The article suggests using the smallest possible time ranges. For dynamic scopes it gives a heuristic: individual resources if five or fewer are selected, resource groups if more than five resources span three or fewer resource groups, and subscriptions otherwise. These are query design guidelines, not platform limits.
+The article suggests using the smallest possible time ranges. For dynamic scopes it gives a heuristic: individual resources if five or fewer are selected, resource groups if more than five resources span three or fewer resource groups, and subscriptions otherwise. These are query design guidelines, not platform limits. The same section also suggests predefining summary rules, using an All item in dropdown parameters and protecting queries against missing columns or tables.
 
 ## A dashboard recipe
 
-This outline is a suggestion built from the elements above, not a Microsoft procedure.
+This outline is my advice, built from the elements above, not a Microsoft procedure.
 
 1. Add parameters first for time range and resource scope, so every query uses them.
 2. Add a text element at the top that explains the dashboard.
@@ -77,11 +77,11 @@ This outline is a suggestion built from the elements above, not a Microsoft proc
 
 ## Editing an existing workbook
 
-To change a workbook, select **Edit** in the toolbar, make the changes and select **Done editing**. The article capitalizes this button inconsistently. Only group contents that come from a template are locked in edit mode, so for those you must edit the source template instead.
+To change a workbook, make sure you are in **Edit** mode by selecting **Edit** in the toolbar, make the changes and select **Done editing**. The page capitalizes this button inconsistently and has no separate section for editing saved workbooks. It says that group contents loaded from a template cannot be modified in edit mode.
 
 ## Parameter and text interplay
 
-Text elements can reference parameter values, and the displayed text updates as parameters change. This lets one explanation block reflect the selected scope or time range. Because parameter names cannot contain spaces or special characters while display names can, choose a short parameter name for use in queries and a readable display name for users.
+Text elements can reference parameter values, and the displayed text updates as parameters change. This lets one explanation block reflect the selected scope or time range. Because parameter names cannot contain spaces or special characters while display names can, choose a short parameter name for use in queries and a readable display name for users (my advice).
 
 ## Not covered
 
@@ -94,4 +94,4 @@ The article does not describe the save workflow, including subscription, resourc
 
 ## Sources
 
-- [Create an Azure Monitor workbook](https://learn.microsoft.com/azure/azure-monitor/visualize/workbooks-create-workbook)
+- [Create or edit an Azure Workbook (Microsoft Learn)](https://learn.microsoft.com/azure/azure-monitor/visualize/workbooks-create-workbook)
