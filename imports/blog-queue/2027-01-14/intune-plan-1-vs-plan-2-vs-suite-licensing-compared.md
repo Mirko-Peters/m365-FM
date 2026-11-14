@@ -66,7 +66,7 @@ Learn lists three functions that are not supported when a device is enrolled wit
 - Conditional Access
 - User-based management features, such as email and calendaring
 
-If you need Conditional Access or app protection for a user, that user needs a user license, not only a device license.
+My reading of those limitations: if you need Conditional Access or app protection for a user, plan a user license for that user, not only a device license.
 
 ## Unlicensed admin access
 
