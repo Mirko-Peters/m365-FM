@@ -9,7 +9,7 @@ topics: [teams, teams-admin-center, microsoft-365-admin-center]
 keypoints:
   - "On Windows, press Ctrl + Alt + Shift + 1 or use the Teams tray icon and Collect support files. On Mac, press Option + Command + Shift + 1."
   - "Logs are saved to the Downloads folder by default. Wait until the Downloading web logs banner disappears before you pick them up."
-  - "Debug logs are plain text and are the ones support engineers ask for. Media logs are encrypted and readable only by Microsoft."
+  - "Debug logs are the ones support engineers require and are read from the bottom up. Media logs can only be inspected by Microsoft."
   - "Log times are in UTC, so tell the support agent the difference to your local time. Collect logs as soon as the issue happens."
   - "Check Health > Service health in the Microsoft 365 admin center first, then use Call Analytics in the Teams admin center before you open a case."
 faq:
@@ -63,9 +63,9 @@ Microsoft's troubleshooting module names three client log types:
 
 | Log | Use | Readable by |
 |---|---|---|
-| Debug | Troubleshooting login, connections and calls. The one support asks for first. | Any text editor, read from the bottom up |
+| Debug | Troubleshooting login, connections and calls. The one support requires. | Teams administrators, read from the bottom up |
 | Media | Audio, video and screen sharing diagnostics. Needed only when requested. | Microsoft only |
-| Desktop (bootstrapper) | Events between the desktop client and the browser. Needed only when requested. | Any text editor, read top-down |
+| Desktop (bootstrapper) | Events between the desktop client and the browser. Needed only when requested. | Read top-down |
 
 Debug logs come from the Windows, Mac and Linux clients and from the browser. Media and desktop logs come from Windows, Mac and Linux. The module lists no debug, media or desktop logs for iOS and Android. The generated debug files use the words diagnostic logs in their names.
 
@@ -107,7 +107,7 @@ The pages I read do not give mobile log steps, and they do not separate new Team
 
 ## Sources
 
-- [Microsoft Learn: Teams log files](https://learn.microsoft.com/en-za/microsoftteams/log-files)
+- [Microsoft Learn: Teams log files](https://learn.microsoft.com/en-us/microsoftteams/log-files)
 - [Microsoft Learn: Collect and identify logs](https://learn.microsoft.com/en-us/training/modules/troubleshoot-audio-video-client-issues/03-collect-identify-logs)
 - [Microsoft Learn: How to check Microsoft 365 service health](https://learn.microsoft.com/en-us/microsoft-365/enterprise/view-service-health)
 - [Microsoft Learn: Use Call Analytics to troubleshoot poor call quality](https://learn.microsoft.com/en-us/microsoftteams/use-call-analytics-to-troubleshoot-poor-call-quality)
