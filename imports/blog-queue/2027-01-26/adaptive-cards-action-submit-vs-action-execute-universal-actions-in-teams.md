@@ -44,8 +44,8 @@ Universal Actions make the bot the common backend for action handling and add `A
 | Communication | Left to the underlying channel | Through the bot as common backend |
 | Replaces | Not applicable | `Action.Submit` and `Action.Http` for these scenarios, with limits below |
 | New card in response | A bot cannot return a new card when it processes an Action.Submit | The bot can return an Adaptive Card in response |
-| Refresh and user-specific views | Not available | Available through the `refresh` property |
-| Minimum schema | Not stated in the pages I read | 1.4 |
+| Refresh and user-specific views | Not described for Submit in the pages | Available through the `refresh` property |
+| Minimum schema | Not stated in the pages | 1.4 |
 
 ## Where Action.Submit stays
 
@@ -54,7 +54,7 @@ The Teams overview is explicit that `Action.Execute` is not a replacement of `Ac
 - For link unfurling cards, such as hero and thumbnail cards, you must call `Action.Submit`.
 - If an external system must do an action and the result must be sent back to the conversation using a messaging extension, `Action.Execute` is not supported.
 
-So the migration is not a global search and replace. The Universal Action Model page says that to update an existing Teams scenario you replace the instances of `Action.Submit` with `Action.Execute`, but read that together with the two exceptions above.
+In my reading, the migration is therefore not a global search and replace. The Universal Action Model page says that to update an existing Teams scenario you replace the instances of `Action.Submit` with `Action.Execute`, but read that together with the two exceptions above.
 
 ## What you gain
 
@@ -92,7 +92,7 @@ To make a card refresh automatically, define `refresh` with an `action` of type 
 
 ## Dated points on the pages
 
-- The Universal Action Model page was last changed in 2023. It says support in Outlook clients for the model was under active development, and that migration of existing Actionable Message scenarios was in progress. I did not check the current state, so confirm it before you plan an Outlook scenario.
+- The Universal Action Model page was last changed in 2023. It says support in Outlook clients for the model was under active development, and that migration of existing Actionable Message scenarios was in progress. The current state is not covered here, so confirm it before you plan an Outlook scenario.
 - The same page says an Actionable Message scenario can use `Action.Http` or `Action.Execute`, but not both, and that `Action.Execute` scenarios are implemented as bots subscribed to the Outlook Actionable Messages channel.
 
 ## Choosing between them (my advice)
