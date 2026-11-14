@@ -25,7 +25,7 @@ faq:
     a: "Learn lists System information showing Virtualization-based security as Running, the Configured update policies entry Enable hotpatching when available in Windows Update settings, and Event Viewer entries for AllowRebootlessUpdates."
 ---
 
-Hotpatch lets eligible Windows 11 devices install security updates in most months without a restart. You turn it on with a Windows quality update policy in Intune, make sure virtualization-based security runs, and plan for the quarterly baseline update that still needs a restart. This guide follows the Microsoft Learn page on hotpatch updates in Windows Autopatch. It covers Windows 11. Learn describes Windows Server and Windows 365 steps in separate articles.
+Hotpatch lets eligible Windows 11 devices install security updates in most months without a restart. You turn it on with a Windows quality update policy in Intune, make sure virtualization-based security runs, and plan for the quarterly baseline update that still needs a restart. This guide follows the Microsoft Learn page on hotpatch updates in Windows Autopatch. It covers Windows 11. The page says hotpatch is also available on Windows Server and Windows 365 and links one separate article for Windows Server Azure Edition.
 
 ## What it is
 
@@ -66,20 +66,20 @@ You can also edit an existing Windows quality update policy and set the same opt
 
 - **Ineligible devices** receive the standard latest cumulative update, which needs a restart, and keep their existing ring settings.
 - **Autopatch reporting:** the Hotpatch quality update report shows per-policy update status. Autopatch alerts include Hotpatch with VBS not running.
-- **On the device:** System information should show Virtualization-based security as Running. Under Settings > Windows Update > Advanced options > Configured update policies, Enable hotpatching when available indicates enrollment. In Event Viewer, searching for `AllowRebootlessUpdates` with a value of 1, `isEnrolled: 1` and `vbsState: 2` indicates enrollment.
+- **On the device:** System information should show Virtualization-based security as Running. Under Settings > Windows Update > Advanced options > Configured update policies, Enable hotpatching when available indicates enrollment. In Event Viewer, searching for `AllowRebootlessUpdates` with a value of 1 indicates enrollment. The sample entry on the page also shows `isEnrolled: 1` and `vbsState: 2`.
 - **Errors:** search Event Viewer Windows Logs > Application for `hotpatch`. The inbox monitor service logs errors, and a critical error makes the device install the cumulative update.
 
 ## Rollback
 
-There is no automatic rollback. To roll back manually, uninstall the hotpatch, install the latest cumulative update and restart. Uninstalling is quick but needs a restart.
+Learn says automatic rollback of a hotpatch update is not supported, but you can uninstall it. For an unexpected issue, you can investigate by uninstalling the hotpatch update, installing the latest cumulative update and restarting. Uninstalling is quick but needs a restart.
 
 ## What the page does not say
 
 Hardware requirements beyond VBS and the Arm64 CHPE step, such as TPM, Secure Boot or memory. Whether a separate Autopatch license is needed beyond the eligible licenses. The exact day hotpatches are released in a month. The rollback time beyond quick. Windows 10 support, since the page body covers only Windows 11 24H2 and later.
 
-## A pilot
+## A pilot (my advice)
 
-The steps are practical advice.
+The steps are my own suggestion, not taken from the page.
 
 1. Pick a pilot group on Windows 11 24H2 or later with an eligible license.
 2. Check VBS on a sample device before you deploy.
@@ -88,7 +88,7 @@ The steps are practical advice.
 5. Watch the Hotpatch quality update report and the VBS alert.
 6. Plan a restart window for each baseline month.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting no restarts at all. Baseline months still restart devices.
 - Deploying to devices where VBS is not running.
@@ -103,4 +103,4 @@ The steps are practical advice.
 
 ## Sources
 
-- [Hotpatch updates in Windows Autopatch (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/windows-autopatch/manage/windows-autopatch-hotpatch-updates)
+- [Hotpatch updates (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/windows-autopatch/manage/windows-autopatch-hotpatch-updates)
