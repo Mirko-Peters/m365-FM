@@ -112,3 +112,9 @@ Paper maps are fast and good for learning, but they are hard to update when prod
 ## Next step
 
 Choose one product family, walk its flow and draw a first current state value stream map in pencil this week. Then take the map to the operators and ask them what is missing.
+
+## Sources
+
+- [Learning to See (book page) - Lean Enterprise Institute](https://www.lean.org/store/book/learning-to-see/)
+- [Let's Create a Current State Value Stream Map! - Gemba Academy](https://blog.gembaacademy.com/2008/02/24/lets-create-a-current-state-value-stream-map/)
+- [Value Stream Mapping Tutorial - What is VSM? - ASQ](https://asq.org/quality-resources/value-stream-mapping)
