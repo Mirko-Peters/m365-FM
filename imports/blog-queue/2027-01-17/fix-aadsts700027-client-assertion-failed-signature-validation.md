@@ -59,7 +59,7 @@ Learn adds that Microsoft Entra ID does not currently place restrictions on the 
 
 ## Checklist: the signature
 
-Learn says the signature is computed by applying the certificate as described in the JWT specification, and to use PSS padding. If your code signs with PKCS1 v1.5 padding, or signs with a different key than the registered certificate, signature validation fails. Learn notes that MSAL supports building the assertion with `.WithCertificate()`, which avoids manual construction.
+Learn says the signature is computed by applying the certificate as described in the JWT specification, and to use PSS padding. My reading: if your code signs with PKCS1 v1.5 padding, or with a different key than the registered certificate, signature validation would be expected to fail; the page does not say so. Learn notes that MSAL supports building the assertion with `.WithCertificate()`, which avoids manual construction.
 
 ## Checklist: the registration
 
@@ -86,7 +86,7 @@ This section is my advice, not a Microsoft statement, and it is a list of places
 
 ## What the sources do not say
 
-The error reference row has one sentence. The certificate credentials page describes a valid assertion but does not mention AADSTS700027. Neither page lists the causes of this error or the checks the service performs, so no documented ranking of causes exists in the pages I read.
+The error reference row has one sentence. The certificate credentials page describes a valid assertion but does not mention AADSTS700027. Neither page lists the causes of this error or the checks the service performs, so there is no documented ranking of causes.
 
 ## Related
 
