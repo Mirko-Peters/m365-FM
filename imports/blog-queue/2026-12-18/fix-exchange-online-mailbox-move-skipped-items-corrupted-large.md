@@ -73,7 +73,7 @@ The user details pane also offers **Download the report for this user**, which c
 
 ## Step 3: Fix what you can in the source
 
-- **Corrupted items:** the Set-MoveRequest reference suggests `New-MailboxRepairRequest` to attempt to fix corrupted items in the source mailbox, and then trying the request again.
+- **Corrupted items:** the `BadItemLimit` description in the Set-MoveRequest reference (a parameter marked on-premises only and deprecated from the cloud service) suggests `New-MailboxRepairRequest` to attempt to fix corrupted items in the source mailbox, and then trying the request again. Learn gives no equivalent Exchange Online workflow, so treat this as a starting point.
 - **Large items:** compare the item size with the maximum message size configured for the tenant and target mailbox. The pages read do not describe a workflow for resizing or removing such items, so decide per item whether to reduce it, move it out or accept the loss.
 
 ## Step 4: Approve skipped items when the loss is acceptable
@@ -102,7 +102,7 @@ Instead of `SuspendWhenReadyToComplete` or `PreventCompletion`, Learn recommends
 
 ## About the older bad item advice
 
-A Learn troubleshooting page for `TooManyBadItemsPermanentException` applies to Exchange Online. It says the cause is a bad item count above the set limit and shows a way to read the move report with `Get-MailboxStatistics -IncludeMoveReport` and raise `baditemlimit` before `Resume-MoveRequest`. The same page notes that missing items count toward the bad item limit. It does not say it is deprecated, while the cmdlet reference does. When you see this error, use the report to count the items and then follow the score and approval flow described above. If a command fails, confirm with the cmdlet reference.
+A Learn troubleshooting page for `TooManyBadItemsPermanentException` describes the error during a migration in Microsoft 365. It says the cause is a bad item count above the set limit and shows a way to read the move report with `Get-MailboxStatistics -IncludeMoveReport` and raise `baditemlimit` before `Resume-MoveRequest`. The same page notes that missing items count toward the bad item limit. It does not say it is deprecated, while the cmdlet reference does. When you see this error, use the report to count the items and then follow the score and approval flow described above. If a command fails, confirm with the cmdlet reference.
 
 ## Typical mistakes
 
@@ -114,7 +114,7 @@ A Learn troubleshooting page for `TooManyBadItemsPermanentException` applies to 
 
 ## What the sources do not say
 
-The pages read do not list the exact error kinds shown in the Kind column, do not publish score thresholds, and do not describe the move report entries in detail. An Exchange Team blog on reading move reports returned only its summary.
+The pages read do not list the exact error kinds shown in the Kind column, do not publish score thresholds, and do not describe the move report entries in detail.
 
 ## Related
 
@@ -126,7 +126,7 @@ The pages read do not list the exact error kinds shown in the Kind column, do no
 ## Sources
 
 - [Track and prevent migration data loss in Exchange Online](https://learn.microsoft.com/en-us/exchange/mailbox-migration/track-prevent-data-loss-dcs)
-- [Set-MoveRequest](https://learn.microsoft.com/powershell/module/exchange/Set-MoveRequest)
-- [New-MoveRequest](https://learn.microsoft.com/powershell/module/exchange/New-MoveRequest)
+- [Set-MoveRequest](https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/set-moverequest)
+- [New-MoveRequest](https://learn.microsoft.com/en-us/powershell/module/exchangepowershell/new-moverequest)
 - [Migration users status report in Exchange Online](https://learn.microsoft.com/en-us/exchange/mailbox-migration/migration-users-status-report)
-- [TooManyBadItemsPermanentException during migration](https://learn.microsoft.com/en-us/exchange/troubleshoot/administration/toomanybaditemspermanentexception-during-migration)
+- [TooManyBadItemsPermanentException during migration](https://learn.microsoft.com/en-us/troubleshoot/exchange/administration/toomanybaditemspermanentexception-during-migration)
