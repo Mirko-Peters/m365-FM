@@ -43,7 +43,7 @@ GET https://graph.microsoft.com/v1.0/reports/getSharePointSiteUsageDetail(period
 
 Learn lists `D7`, `D30`, `D90` and `D180` as period values. The response is a 302 redirect to a preauthenticated CSV download link that is valid for a few minutes and needs no Authorization header. Columns include Site Id, Site URL, Owner Principal Name, Is Deleted, Last Activity Date, File Count, Storage Used (Byte) and Root Web Template. The least privileged permission is `Reports.Read.All`, for delegated and application access.
 
-A script can download the CSV, filter on an empty or old Last Activity Date, skip deleted rows and write the result to a review file. The page does not explain how this activity date relates to the inactivity definition of the built-in policy, so treat it as a candidate list and not as proof.
+A script can download the CSV, filter on an empty or old Last Activity Date, skip deleted rows and write the result to a review file. This workflow is my suggestion, not a Microsoft procedure. The page does not explain how this activity date relates to the inactivity definition of the built-in policy, so treat it as a candidate list and not as proof.
 
 ## Step 2: Review before acting
 
@@ -105,6 +105,8 @@ One scripting detail is useful here. The policy article says SharePoint Online P
 
 ## Typical mistakes
 
+These points are my own reading of the documented limits, not a list from Microsoft.
+
 - Archiving without a `-WhatIf` pass.
 - Archiving a Teams-connected site and assuming the private channel sites were archived too.
 - Forgetting that reactivation after seven days costs money.
@@ -121,8 +123,8 @@ One scripting detail is useful here. The policy article says SharePoint Online P
 
 - [Manage Microsoft 365 Archive (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/archive/archive-manage)
 - [Overview of Microsoft 365 Archive (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-365/archive/archive-overview)
-- [Set-SPOSiteArchiveState (Microsoft Learn)](https://learn.microsoft.com/en-us/powershell/module/sharepoint-online/set-spositearchivestate)
-- [site: archive, Microsoft Graph beta (Microsoft Learn)](https://learn.microsoft.com/en-us/graph/api/site-archive)
-- [reportRoot: getSharePointSiteUsageDetail (Microsoft Learn)](https://learn.microsoft.com/en-us/graph/api/reportroot-getsharepointsiteusagedetail)
+- [Set-SPOSiteArchiveState (Microsoft Learn)](https://learn.microsoft.com/en-us/powershell/module/microsoft.online.sharepoint.powershell/set-spositearchivestate?view=sharepoint-ps)
+- [site: archive, Microsoft Graph beta (Microsoft Learn)](https://learn.microsoft.com/en-us/graph/api/site-archive?view=graph-rest-beta)
+- [reportRoot: getSharePointSiteUsageDetail (Microsoft Learn)](https://learn.microsoft.com/en-us/graph/api/reportroot-getsharepointsiteusagedetail?view=graph-rest-1.0)
 - [Manage inactive sites by using inactive site policies (Microsoft Learn)](https://learn.microsoft.com/en-us/sharepoint/inactive-site-policy)
 - [Site lifecycle management (Microsoft Learn)](https://learn.microsoft.com/en-us/sharepoint/site-lifecycle-management)
