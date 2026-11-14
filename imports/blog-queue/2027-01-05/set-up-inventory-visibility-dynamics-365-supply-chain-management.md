@@ -72,11 +72,11 @@ Learn lists the supported Azure regions in a table, such as West Europe and Nort
 1. In **Feature management**, turn on **Inventory Visibility integration**. As of version **10.0.45** this feature is mandatory and cannot be turned off.
 2. Go to **Inventory Management** > **Set up** > **Inventory Visibility Integration parameters** > **General** tab and set:
    - **Inventory Visibility endpoint:** the URL of the Inventory Visibility environment. Learn links to an article on finding it.
-   - **Maximum number of records in a single request:** a positive integer up to 1,000. The default is 512, which Learn says to keep unless Microsoft Support advises otherwise.
+   - **Maximum number of records in a single request:** a positive integer up to 1,000. The default is 512. Learn says to keep it unless Microsoft Support advises a change or you are otherwise certain that you need to change it.
 3. Optionally set up soft reservations and offsets, WMS item support, inventory summary, preloaded on-hand queries and time-series tracking for ATP. Each has its own article.
 4. Go to **Inventory Management** > **Periodic tasks** > **Inventory Visibility Integration** and enable the job.
 
-If the job reports it cannot sync more than 500000 records in the same warehouse, Learn gives a partition schema fix that uses API calls and Power Apps. Follow that article's steps rather than improvising.
+If the job reports it cannot sync more than 500000 records in the same warehouse, Learn gives a partition schema procedure on the same page that uses API calls and Power Apps. My advice: follow its steps as written.
 
 ## Update and uninstall
 
@@ -89,18 +89,18 @@ To uninstall: disable the periodic job in Supply Chain Management, then select *
 - Learn states there is no throttling on how often you can call the APIs.
 - Adjustments, soft reservations and ATP queries trigger Dataverse calls and fall under Dataverse service protection limits. Most on-hand queries come from an in-memory cache.
 - Each full-access user license typically adds 250 MB of database storage and 2 GB of file storage per user, and usage may vary.
-- The page does not define on-hand directly. Total available is on-hand plus purchased minus on order minus sold.
+- The overview gives the *Total available* calculated measure as an example: On-hand + Purchased - On order - Sold.
 
 ## What the pages do not cover
 
 A minimum add-in version or compatibility matrix, Entra API permissions, the endpoint URL format, optional feature setup, install timing beyond one hour, and rollback to an earlier version.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Reusing one Entra application for several environments.
 - Installing without Dataverse solution permissions and waiting past an hour.
 - Forgetting to enable the periodic job.
-- Changing the maximum records value without a reason from support.
+- Changing the maximum records value without a good reason.
 
 ## Related
 
@@ -111,4 +111,4 @@ A minimum add-in version or compatibility matrix, Entra API permissions, the end
 ## Sources
 
 - [Inventory Visibility add-in overview (Microsoft Learn)](https://learn.microsoft.com/dynamics365/supply-chain/inventory/inventory-visibility)
-- [Install and set up Inventory Visibility (Microsoft Learn)](https://learn.microsoft.com/dynamics365/supply-chain/inventory/inventory-visibility-setup)
+- [Install the Inventory Visibility Add-in (Microsoft Learn)](https://learn.microsoft.com/dynamics365/supply-chain/inventory/inventory-visibility-setup)
