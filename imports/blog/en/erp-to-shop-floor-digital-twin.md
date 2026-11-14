@@ -127,3 +127,9 @@ Planning software can sit between ERP and the shop floor. [iFAKT's Polaris](http
 ## Next step
 
 Take one line and compare the ERP cycle time with the measured one for four weeks. That gap, in units per shift, is your business case for closing the distance from ERP to shop floor. It is also the first input for a production plan that the floor can follow.
+
+## Sources
+
+- [ISA-95 Standard: Enterprise-Control System Integration - ISA](https://www.isa.org/standards-and-publications/isa-standards/isa-95-standard)
+- [ERP vs MES: Planning the Business vs Executing on the Floor - Fabrico](https://www.fabrico.io/blog/erp-vs-mes/)
+- [MES ERP Integration 2026: The Data Gap and the Two Architectures to Close It - TeepTrak](https://teeptrak.com/en/mes-erp-integration/)
