@@ -22,7 +22,7 @@ faq:
   - q: "Can I ping the gateway?"
     a: "No. Learn says VPN gateways do not respond to ICMP on their local address."
   - q: "Does this page cover IKE parameters, NAT or BGP?"
-    a: "No. Beyond the IPsec/IKE policy reference in the PFS step, the page does not address IKE parameter matching, NAT, traffic selectors, firewall ports, BGP or diagnostic logs."
+    a: "No. The page does not address IKE parameter matching, NAT, traffic selectors, firewall ports, BGP or diagnostic logs."
 ---
 
 This checklist is for a site-to-site VPN connection that worked, then stopped and cannot reconnect. It follows the Microsoft Learn troubleshooting article and keeps its order.
@@ -72,7 +72,7 @@ Browse to `https://<YourVirtualNetworkGatewayIP>:8081/healthprobe`. For Active/A
 
 ## Step 8: Perfect forward secrecy
 
-PFS can cause disconnections. If it is enabled on the on-premises device, disable it, then update the VPN gateway IPsec policy. The page links an article on configuring an IPsec/IKE policy.
+PFS can cause disconnections. If it is enabled on the on-premises device, disable it, then update the VPN gateway IPsec policy. The page gives no steps for updating that policy.
 
 ## Matching a symptom to a step
 
@@ -90,7 +90,7 @@ This is a suggestion, not Microsoft guidance. Note the gateway SKU and type from
 
 ## Not covered
 
-The page does not address IKE and IPsec parameter matching beyond the policy link, NAT or NAT-T, traffic selectors beyond subnet matching, firewall rules and ports on the on-premises side, BGP, or gateway and connection logs. It points to separate articles on diagnostic logs and the IPsec/IKE policy.
+The page does not address IKE and IPsec parameter matching, NAT or NAT-T, traffic selectors beyond subnet matching, firewall rules and ports on the on-premises side, BGP, or gateway and connection logs. It gives no steps for updating the IPsec policy and links only the gateway reset, validated devices, device configuration samples and gateway SKU pages.
 
 ## Related
 
@@ -98,4 +98,4 @@ The page does not address IKE and IPsec parameter matching beyond the policy lin
 
 ## Sources
 
-- [Troubleshoot a site-to-site VPN that cannot connect](https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-troubleshoot-site-to-site-cannot-connect)
+- [Troubleshoot an Azure S2S VPN connection that can't connect (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/vpn-gateway/vpn-gateway-troubleshoot-site-to-site-cannot-connect)
