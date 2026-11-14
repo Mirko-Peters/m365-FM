@@ -25,7 +25,7 @@ faq:
     a: "Sign in to the Apple Push Certificates Portal with the new Apple ID, download the certificate file again and upload it to Intune with the new Apple ID, using steps 4 and 5 of the creation procedure."
 ---
 
-Apple devices in Intune depend on the Apple MDM push certificate. If it expires, management of enrolled iOS, iPadOS and macOS devices is at risk. This guide follows the Microsoft Learn page on getting an Apple MDM push certificate. The page covers creation and renewal. It does not describe what exactly fails after expiry.
+Apple devices in Intune depend on the Apple MDM push certificate. If it expires, management of enrolled iOS, iPadOS and macOS devices is at risk. This guide follows the Microsoft Learn page Get an Apple MDM Push Certificate for Intune. Learn says the certificate enables devices to enroll with the Intune Company Portal app or Apple bulk enrollment methods such as Apple Business, Apple School Manager and Apple Configurator. The page covers creation and renewal. It does not describe what exactly fails after expiry.
 
 ## Validity and the Apple ID rule
 
@@ -74,11 +74,11 @@ If you plan to federate Microsoft Entra accounts with Apple to use Managed Apple
 - How to recover if the wrong Apple ID was used for renewal.
 - What to do if the .pem file is lost or the grace period has passed.
 - Apple ID roles and Intune permissions.
-- The numbered tip about matching certificates is formatted badly on the page.
+- A troubleshooting section. The page contains only creation and renewal steps.
 
 ## A renewal routine
 
-This routine is practical advice built on the page.
+This routine is my advice, built on the page.
 
 1. Record which Apple ID created the certificate and who can sign in to it.
 2. Set a reminder well before the 365 days end.
@@ -86,7 +86,7 @@ This routine is practical advice built on the page.
 4. Check the status in both portals.
 5. If the certificate has already expired, act within the 30-day grace period.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Renewing with a different Apple ID.
 - Using a personal Apple ID that only one person can reach.
@@ -104,9 +104,9 @@ This routine is practical advice built on the page.
 | Renewal rule | Same Apple ID as the one that created it |
 | Completion check | Status active in both portals |
 
-## Why the Apple ID matters
+## Why the Apple ID matters (my reading)
 
-The certificate is tied to the Apple ID that created it. The admin center asks for the Apple ID so it can remind you when to renew. If the person who owns a personal Apple ID leaves, nobody else can renew the certificate. That is why the page recommends a company address with a mailbox that more than one person monitors, such as a distribution list.
+The page says the certificate is associated with the Apple ID used to create it, and that the admin center asks for the Apple ID to remind you when to renew. My reading, not stated on the page: if the person who owns a personal Apple ID leaves, nobody else may be able to renew the certificate. The page itself only recommends a company address with a mailbox that more than one person monitors, such as a distribution list, and says to avoid a personal Apple ID.
 
 ## Related
 
@@ -116,4 +116,4 @@ The certificate is tied to the Apple ID that created it. The admin center asks f
 
 ## Sources
 
-- [Set up an Apple MDM push certificate for Intune (Microsoft Learn)](https://learn.microsoft.com/intune/intune-service/enrollment/apple-mdm-push-certificate-get)
+- [Get an Apple MDM Push Certificate for Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-enrollment/apple/create-mdm-push-certificate)
