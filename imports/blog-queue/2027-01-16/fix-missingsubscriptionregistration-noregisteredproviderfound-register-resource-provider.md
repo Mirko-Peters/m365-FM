@@ -25,7 +25,7 @@ faq:
     a: "Learn lists an AuthorizationFailed message for Microsoft.Compute/virtualMachines/read when VM auto-shutdown is disabled, and says the Microsoft.DevTestLab resource provider must be registered."
 ---
 
-NoRegisteredProviderFound and MissingSubscriptionRegistration mean Azure Resource Manager could not use a resource provider for your subscription. The usual fix is to register the provider named in the error message, using the portal, Azure CLI or Azure PowerShell. Learn lists three other causes to rule out: an unsupported API version, an unsupported location, and Microsoft.DevTestLab not being registered for VM auto-shutdown. This guide follows the Microsoft Learn page on resource provider registration errors.
+NoRegisteredProviderFound and MissingSubscriptionRegistration mean Azure Resource Manager could not use a resource provider for your subscription. The first cause on Learn's list is a provider that is not registered, which you fix by registering the provider named in the error message, using the portal, Azure CLI or Azure PowerShell. Learn lists three other causes to rule out: an unsupported API version, an unsupported location, and Microsoft.DevTestLab not being registered for VM auto-shutdown. This guide follows the Microsoft Learn page on resource provider registration errors.
 
 ## What the errors look like
 
@@ -125,7 +125,7 @@ Use `.ApiVersions` instead of `.Locations` for API versions. Then change the loc
 
 ## What the page does not cover
 
-The page does not say which Azure role or permission you need to register a provider, how long registration takes, or whether to register providers ahead of time. I read the whole page and found none of those. Check with your Azure administrator or the Azure RBAC documentation before you assume you have the right to register.
+The page does not say which Azure role or permission you need to register a provider, how long registration takes, or whether to register providers ahead of time. The page gives none of those details. Check with your Azure administrator or the Azure RBAC documentation before you assume you have the right to register.
 
 ## A practical routine
 
@@ -134,13 +134,13 @@ This section is my advice, not a Microsoft statement.
 1. Copy the namespace from the error, and check its state with the list commands above.
 2. After registering, re-run the failed deployment, and recheck the state if the same error returns.
 3. If the namespace is unfamiliar, look at the resource you deploy for supporting resources such as monitoring or security components. Learn describes this case.
-4. For new subscriptions in a landing zone, I would list the providers your templates use and register them as part of subscription setup, so deployments do not fail later. That is my practice, not a Learn recommendation.
+4. For new subscriptions in a landing zone, I would list the providers your templates use and register them as part of subscription setup, so deployments do not fail later. That is my suggestion, not a Learn recommendation.
 5. In pipelines, add a pre-deployment step that checks registration state for the namespaces your Bicep modules use.
 6. Keep API versions in templates current, and test against the supported versions list when you change region.
 
 ## Reading the error text
 
-This section is my advice, not a Microsoft statement. The error message has three parts worth copying into your ticket or runbook: the code, the namespace or resource type, and the location with API version. The code tells you whether registration (MissingSubscriptionRegistration) or a supported combination of location and API version (NoRegisteredProviderFound) is the likely issue. The namespace tells you which provider to check. The location and API version tell you what to compare against the provider's supported values. Recording all three makes a repeat of the problem in another subscription quick to fix, because you can run the same checks with the same commands. If the same code appears for a different namespace on the next deployment, repeat the check rather than assuming the first registration covered it, since each namespace is registered on its own.
+This section is my advice, not a Microsoft statement. The error message has three parts worth copying into your ticket or runbook: the code, the namespace or resource type, and the location with API version. The code gives a first guess: registration for MissingSubscriptionRegistration, or a supported combination of location and API version for NoRegisteredProviderFound. Learn lists the same four causes for both codes, so treat that as a starting point only. The namespace tells you which provider to check. The location and API version tell you what to compare against the provider's supported values. Recording all three makes a repeat of the problem in another subscription quick to fix, because you can run the same checks with the same commands. If the same code appears for a different namespace on the next deployment, repeat the check rather than assuming the first registration covered it, since each namespace is registered on its own.
 
 ## Related
 
