@@ -24,7 +24,7 @@ To sync OneDrive on Windows, open the OneDrive app, sign in with your Microsoft 
 
 ## Set up OneDrive sync on a Windows PC
 
-Microsoft's page [Sync your computer's files and folders with OneDrive](https://support.microsoft.com/en-us/onedrive/sync-your-computer-s-files-and-folders-with-onedrive) lists the first-time setup. On Windows 11, [OneDrive](https://www.m365.fm/entity/onedrive/) is already installed. On other versions you download it first.
+Microsoft's page [Sync your computer's files and folders with OneDrive](https://support.microsoft.com/onedrive/sync-your-computer-s-files-and-folders-with-onedrive) lists the first-time setup. On Windows 11, [OneDrive](https://www.m365.fm/entity/onedrive/) is already installed. On other versions you download it first.
 
 1. Open OneDrive. Press the Windows key, type OneDrive and open the app.
 2. Sign in with your personal Microsoft account or your work or school account.
@@ -52,7 +52,7 @@ By default OneDrive can bring every folder to your PC. If your OneDrive is large
 4. Select **Choose folders**.
 5. In the dialog, clear the checkbox for each folder you want to keep online only, then select **OK**.
 
-Microsoft's page [Choose which OneDrive folders you want to sync](https://support.microsoft.com/en-us/onedrive/choose-which-onedrive-folders-you-want-to-sync-on-windows-or-macos) says what happens next: the folder is removed from your computer, and the folder and its contents stay in OneDrive online. A few limits matter:
+Microsoft's page [Choose which OneDrive folders you want to sync](https://support.microsoft.com/onedrive/choose-which-onedrive-folders-you-want-to-sync-on-windows-or-macos) says what happens next: the folder is removed from your computer, and the folder and its contents stay in OneDrive online. A few limits matter:
 
 - You can only select folders that are already in your OneDrive. Folders on an external drive, such as a USB drive, can't be synced this way.
 - On Windows, you can't clear Documents, Desktop, Pictures or the Personal Vault folder.
@@ -76,7 +76,7 @@ Folder backup is a sensible default for a laptop that might get lost, because th
 
 ## Use Files On-Demand to save disk space
 
-Files On-Demand lets you see all your files in File Explorer without keeping them all on the disk. Microsoft's page [Save disk space with OneDrive Files On-Demand for Windows](https://support.microsoft.com/en-us/office/sync-files-with-onedrive-files-on-demand-62e8d748-7877-420f-b600-24b56562aa70) lists the requirements: Windows 10 version 1709 or later, or Windows Server 2019. From OneDrive build 23.066 on, it's on by default. To check or turn it on, open **Settings**, go to **Sync and back up**, expand **Advanced settings** and use the **Files On-Demand** toggle.
+Files On-Demand lets you see all your files in File Explorer without keeping them all on the disk. Microsoft's page [Save disk space with OneDrive Files On-Demand for Windows](https://support.microsoft.com/office/sync-files-with-onedrive-files-on-demand-62e8d748-7877-420f-b600-24b56562aa70) lists the requirements: Windows 10 version 1709 or later, or Windows Server 2019. From OneDrive build 23.066 on, it's on by default. To check or turn it on, open **Settings**, go to **Sync and back up**, expand **Advanced settings** and use the **Files On-Demand** toggle.
 
 Right-click a file or folder to choose:
 
@@ -97,7 +97,7 @@ Before a flight or a train ride, mark the folders you need as **Always keep on t
 
 ## Sync a SharePoint library
 
-For work files in a SharePoint site, there are two ways. Microsoft's page [Sync SharePoint files and folders](https://support.microsoft.com/en-us/office/sync-sharepoint-files-and-folders-87a96948-4dd7-43e4-aca1-53f3e18bea9b) describes the Sync button:
+For work files in a SharePoint site, there are two ways. Microsoft's page [Sync SharePoint files and folders](https://support.microsoft.com/office/sync-sharepoint-files-and-folders-87a96948-4dd7-43e4-aca1-53f3e18bea9b) describes the Sync button:
 
 1. In your browser, open the SharePoint site and go to the library.
 2. Select the ellipsis (...) and choose **Sync**.
