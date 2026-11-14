@@ -52,7 +52,7 @@ az vm list-skus --location centralus --size Standard_D --all --output table
 - `--size` searches by partial size name.
 - `--all` includes sizes not available to the current subscription. Without it, only unrestricted SKUs are shown.
 
-The **Restrictions** column shows why a SKU is blocked, for example `NotAvailableForSubscription`.
+The **Restrictions** column shows why a SKU is blocked, for example `NotAvailableForSubscription`. Learn also shows `Get-AzComputeResourceSku` for PowerShell, the VM size picker in the portal and the Resource Skus List REST operation as other ways to check availability.
 
 **2. Check availability zones.**
 
@@ -66,7 +66,7 @@ az vm list-skus --location centralus --zone --all --output table
 
 ### Caveat
 
-Without `--all`, restricted SKUs are hidden, so a size can look missing when it is blocked for your subscription. For Spot VMs, the cause may be temporary capacity rather than a restriction.
+Without `--all`, restricted SKUs are hidden, so a size can look missing when it is blocked for your subscription. For Spot VMs, Learn names missing Spot capacity in the location as the cause.
 
 ## Quota errors
 
@@ -81,7 +81,8 @@ Maximum allowed: 4, Current in use: 4, Additional requested: 2.
 ```
 Code=ResourceQuotaExceeded
 Message=Creating the resource of type <resource-type> would exceed the quota of <number>
-resources of type <resource-type> per resource group.
+resources of type <resource-type> per resource group. The current resource count is <number>,
+please delete some resources of this type before creating a new one.
 ```
 
 ### Where the quota applies
@@ -98,7 +99,7 @@ resources of type <resource-type> per resource group.
 az vm list-usage --location "West US" --output table
 ```
 
-The output shows `CurrentValue` and `Limit` per quota, for example Total Regional vCPUs. The Learn page also has a PowerShell tab, whose content was not available for this guide.
+The output shows `CurrentValue` and `Limit` per quota, for example Total Regional vCPUs. In PowerShell, Learn gives `Get-AzVMUsage -Location "West US"` for the same information.
 
 ### Request an increase in the portal
 
@@ -115,16 +116,16 @@ The output shows `CurrentValue` and `Limit` per quota, for example Total Regiona
 
 ## What the pages do not cover
 
-The quota page does not describe alternatives such as another region or a smaller size. It gives no approval times and no PowerShell commands in the text read. The SKU page gives no way to predict when a restricted SKU becomes available and no turnaround time for a SKU request. For the full list of limits, Learn links to its page on Azure subscription and service limits.
+The quota page does not describe alternatives such as another region or a smaller size. It gives no approval times. The SKU page gives no way to predict when a restricted SKU becomes available and no turnaround time for a SKU request. For the full list of limits, Learn links to its page on Azure subscription and service limits.
 
-## Which error am I looking at
+## Which error am I looking at (my advice)
 
 1. Does the message say a size is not available in a location or zone? Treat it as SkuNotAvailable.
 2. Does it mention exceeding quota or maximum allowed? Treat it as a quota error.
 3. Is it a Spot deployment? Check Spot capacity first.
 4. Is the deployment an ARM or Bicep template? Look in the activity log, because there may be no deployment history.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Listing SKUs without `--all` and concluding the size does not exist.
 - Requesting a quota increase for the wrong region.
@@ -139,5 +140,5 @@ The quota page does not describe alternatives such as another region or a smalle
 
 ## Sources
 
-- [Resolve errors for SKU not available (Microsoft Learn)](https://learn.microsoft.com/azure/azure-resource-manager/troubleshooting/error-sku-not-available)
-- [Resolve errors for resource quotas (Microsoft Learn)](https://learn.microsoft.com/azure/azure-resource-manager/troubleshooting/error-resource-quota)
+- [SKU not available errors (Microsoft Learn)](https://learn.microsoft.com/azure/azure-resource-manager/troubleshooting/error-sku-not-available)
+- [Resource quota errors (Microsoft Learn)](https://learn.microsoft.com/azure/azure-resource-manager/troubleshooting/error-resource-quota)
