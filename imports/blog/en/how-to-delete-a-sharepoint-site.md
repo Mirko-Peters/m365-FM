@@ -24,15 +24,15 @@ To delete a SharePoint site as a site owner, open the site, select the **Setting
 
 ## Check this before you delete
 
-Deleting a site is bigger than it looks. Microsoft's page [Delete a SharePoint site or subsite](https://support.microsoft.com/en-us/sharepoint/sites-pages/delete-a-sharepoint-site-or-subsite) says deleting a team or communication site also deletes its subsites, pages, content and user information, including documents, document libraries, lists and list data. Go through this short list first:
+Deleting a site is bigger than it looks. Microsoft's page [Delete a SharePoint site or subsite](https://support.microsoft.com/sharepoint/sites-pages/delete-a-sharepoint-site-or-subsite) says deleting a team or communication site also deletes its subsites, pages, content and user information, including documents, document libraries, lists and list data. Go through this short list first:
 
 1. **Is it the right site?** Open the address, look at the owners and the last edited files.
 2. **Is it connected to a Microsoft 365 group or a Teams team?** Microsoft says deleting a group-connected site deletes the group and all its resources, including the Outlook mailbox and calendar and any Teams channels. That's a team-wide loss, not a file cleanup.
 3. **Does anyone still use it?** Tell site admins and subsite owners beforehand so they can move their data, and tell users when the site will be deleted.
 4. **Is it a hub site?** You must unregister it as a hub site first.
-5. **Do you need a copy?** Download or move what you need. If content has to be kept for regulatory reasons, ask your compliance team about a retention policy. Microsoft says a retention policy can keep a copy in the Preservation Hold library.
+5. **Do you need a copy?** Download or move what you need. If content has to be kept for regulatory reasons, ask your compliance team about a retention policy.
 
-The root site (the one at the top address of your tenant) is a special case. Microsoft doesn't recommend deleting it. If you do, all SharePoint sites become inaccessible until you restore it or create a new root site. Replace it instead.
+The root site (the one at the top address of your tenant) is a special case. Microsoft doesn't recommend deleting it. If you do, all SharePoint sites become inaccessible until you restore it or create a new root site. Don't delete it to start over.
 
 ## Delete a site as the site owner
 
@@ -49,13 +49,13 @@ Deleting a group-connected team site can take some time before the site is remov
 
 ## Delete a site as a SharePoint admin
 
-Admins use the SharePoint admin center. Microsoft's page [Delete a site](https://learn.microsoft.com/en-us/sharepoint/delete-site-collection) lists the steps. You need at least the SharePoint Administrator role.
+Admins use the SharePoint admin center. Microsoft's page [Delete a site](https://learn.microsoft.com/sharepoint/delete-site-collection) lists the steps. You need at least the SharePoint Administrator role.
 
 1. Go to **Active sites** in the SharePoint admin center.
 2. Select the site in the list.
 3. Select **Delete**, then select **Delete** again to confirm.
 
-This works for classic and modern sites. For group-connected team sites, you can also delete through the Microsoft 365 admin center, the Active sites page or PowerShell. In PowerShell, `Remove-SPOSite` deletes a site without removing it permanently.
+This works for classic and modern sites. For group-connected team sites, you can also delete through the Microsoft 365 admin center, the Active sites page or PowerShell. In PowerShell, Microsoft's page points to `Remove-SPOSite` for deleting a site. Permanent deletion is a separate step with `Remove-SPODeletedSite`, described below.
 
 Storage figures change after a deletion: deleted sites in the recycle bin don't count toward total storage usage, and the number can take up to 48 hours to update.
 
@@ -67,7 +67,7 @@ You find deleted sites on the **Deleted sites** page of the SharePoint admin cen
 
 ### Restore a deleted site
 
-You need a SharePoint Administrator or a higher Microsoft 365 admin role. Microsoft's page [Restore deleted sites](https://learn.microsoft.com/en-us/sharepoint/restore-deleted-site-collection) describes the steps:
+You need a SharePoint Administrator or a higher Microsoft 365 admin role. Microsoft's page [Restore deleted sites](https://learn.microsoft.com/sharepoint/restore-deleted-site-collection) describes the steps:
 
 1. Go to **Deleted sites** in the SharePoint admin center.
 2. Select the site you want to restore. You can sort and filter by **Time deleted**.
@@ -107,9 +107,15 @@ If the question is not "delete" but "clean up", consider the alternatives. Remov
 - **Restoring single files.** Use the Recycle Bin of the site for items that were deleted by mistake.
 - **Creating the replacement site.** If you delete a site to start over, read how to create a site and choose the type and the language carefully, because the language can't be changed later.
 - **Group and Teams deletion.** Deleting a group has its own 30-day window and its own admin pages.
-- **Retention.** Microsoft says a retention policy can keep a copy of content in the Preservation Hold library.
+- **Retention.** If content has to be kept, ask your compliance team about retention policies before you delete the site.
 - **Hub sites.** Associated sites can be deleted like any other site, but the hub itself must be unregistered first.
 
 ## Next step
 
 Write down the site address, the owners and the connected group or team, notify the members and take a copy of what you need. Then delete the site with the steps above. If you're still unsure, wait: with the 93-day Deleted sites window, how to delete a SharePoint site safely means being able to restore it.
+
+## Sources
+
+- [Delete a SharePoint site or subsite (Microsoft Support)](https://support.microsoft.com/sharepoint/sites-pages/delete-a-sharepoint-site-or-subsite)
+- [Delete a site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/delete-site-collection)
+- [Restore deleted sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/restore-deleted-site-collection)
