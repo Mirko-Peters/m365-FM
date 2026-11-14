@@ -14,11 +14,11 @@ keypoints:
   - "Plan around documented limits, such as 1,000 resource associations per dynamic scope and 250 dynamic scopes per resource group or subscription per region."
 faq:
   - q: "What is the longest maintenance window?"
-    a: "Microsoft Learn says the upper maintenance window is 3 hours 55 minutes. If updates need longer, increase the window within that limit or split the machines across several schedules at different times."
+    a: "Microsoft Learn says the upper maintenance window is 3 hours 55 minutes. Learn recommends re-evaluating the duration of the window so that all updates are installed. Its advice to split machines across several schedules at different times is given for machines in the same availability set."
   - q: "What happens when the window is exceeded?"
     a: "Learn says Azure Update Manager does not stop installing new updates as the window ends, and it does not terminate updates that are in progress. Only the remaining updates are not attempted. On Windows, a slow service pack is often the reason."
   - q: "Are new machines picked up automatically?"
-    a: "A dynamic scope evaluates its criteria at the scheduled run time, so a machine that matches the filters at that moment is included. The pages I read do not say how quickly a new machine is associated outside the run. With the Azure Policy method, remediation covers existing machines and the assignment covers machines added later."
+    a: "A dynamic scope evaluates its criteria at the scheduled run time, so a machine that matches the filters at that moment is included. The pages I read do not say how quickly a new machine is associated outside the run. With the Azure Policy method, Learn says that if you select Remediation the policy is in effect on all existing machines in the scope, and otherwise it is assigned to any new machine added to the scope."
   - q: "Do dynamic scopes work for Azure Arc-enabled servers?"
     a: "Yes. Learn lists Azure Arc-enabled servers under the applies-to section. The pages I read give no Arc-specific rules beyond that, and the Customer Managed Schedules requirement is not needed for Arc machines."
   - q: "Can I change the subscription of a dynamic scope later?"
@@ -49,10 +49,10 @@ For new VMs, the **Management** tab has **Patch orchestration options**. **Azure
 1. In the Azure portal, open **Azure Update Manager** and select **Schedule updates**.
 2. On **Basics**, choose subscription, resource group and instance details, and set **Maintenance scope** to Guest.
 3. Select **Add a schedule**. Set **Start on**, **Maintenance window** in hours, and **Repeats**.
-4. On **Updates**, include or exclude classifications such as Critical, Security and Feature updates, or specific KB IDs and packages.
+4. Learn's flow also has a **Machines** tab before **Updates**, where you can attach machines statically. On **Updates**, include or exclude classifications such as Critical, Security and Feature updates, or specific KB IDs and packages.
 5. Add tags and create the configuration.
 
-Recurrence can be daily, weekly or monthly. The hourly option exists only in the API. Monthly can use a calendar date, or the nth weekday with an offset of up to plus or minus 6 days. Microsoft's example: to patch on the first Saturday after Patch Tuesday, set the second Tuesday with a +4 day offset. Driver updates are not supported. A maintenance configuration and its VMs must currently be in the same subscription.
+Recurrence can be daily, weekly or monthly. The hourly option exists only in the API. Monthly can use a calendar date, or the nth weekday with an offset of up to plus or minus 6 days. Microsoft's example: to patch on the first Saturday after Patch Tuesday, set the second Tuesday with a +4 day offset. Driver updates are not supported. Learn says that currently VMs and the maintenance configuration in the same subscription are supported. That sits uneasily with the dynamic scope limits, which allow up to 200 subscriptions per schedule, and with the cross-subscription patching feature named on the overview page. Learn does not reconcile this, so test a cross-subscription setup before you rely on it.
 
 ## Step 3: Add a dynamic scope
 
@@ -65,13 +65,13 @@ Recurrence can be daily, weekly or monthly. The hourly option exists only in the
 Rules from the page:
 
 - Subscription or resource group cannot be changed after creation.
-- A resource group scope covers only that group. A resource moved to another group is unassigned, even in the same subscription.
+- Learn's wording on resource group scopes is unclear: it says resources from other groups "will be unassigned" and then "will be reassigned even if they're under the same subscription". My own reading: a scope created under one resource group covers only that group.
 - Create subscription-level scopes with an empty location.
 - The preview may differ at run time, because criteria are evaluated when the schedule runs.
 
 A benefit: removing a tag from a machine drops its association without any edit to the schedule.
 
-For permissions, the overview says write permission at subscription level is needed to create or change a schedule, and read permission to assign or read one.
+For permissions, the dynamic scoping overview says write permission at subscription level is needed to create or modify a schedule, and read permission at subscription level to assign or read one.
 
 ## Step 4: Or scope through Azure Policy
 
@@ -90,24 +90,25 @@ Learn also describes a policy route. Assign the built-in definition **Schedule r
 | Tag filters per dynamic scope | 50 |
 | Resource group filters per dynamic scope | 50 |
 
-The first six values come from the scheduled patching page and the last two from the dynamic scope overview. Smaller values apply to some sovereign clouds.
+The first six values come from the scheduled patching page and the last two from the dynamic scope overview, which calls its values recommended limits for each dynamic scope in the guest scope only. The scheduled patching page lists smaller values (100 instead of 200 for dynamic scopes per schedule and for subscriptions per schedule) for Mooncake and Fairfax.
 
 ## Window behavior
 
-Use a window that fits the work. Learn gives a 3-hour example starting at 3:00 PM:
+Use a window that fits the work. Learn gives a 3-hour example starting at 3:00 PM (Windows tab):
 
 - A service pack needs 20 minutes left, or it is skipped. It must finish by 5:40 PM.
 - Other updates need 15 minutes left. Deadline 5:45 PM.
 - A reboot needs 10 minutes left. Start it by 5:50 PM.
 - After a reboot, Update Manager waits at most 15 minutes for Azure VMs and 25 minutes for Arc servers before it marks the reboot failed.
+- On Linux, a reboot needs 15 minutes left (Azure VMs only, not Arc servers), and updates installed in batches need a minimum time that depends on the batch size.
 
-Also note that registry keys for automatic updates and restarts can cause a reboot even when the schedule says Never Reboot. VMs in one availability set are not updated at the same time, so a large set can miss the window. Learn suggests a longer window or splitting such machines across schedules.
+Also note that registry keys for automatic updates and restarts can cause a reboot even when the schedule says Never Reboot. VMs in one availability set are not updated concurrently. Learn warns that machines from the same availability set in different schedules patched at the same time might not get patched or might fail if the window is exceeded, and suggests a longer window or splitting them across schedules at different times. Learn's note also says Update Manager does not stop installing new updates as the window approaches its end, which sits uneasily with the skip rules in the table (20 minutes for a service pack, 15 for other updates). Learn does not reconcile the two.
 
 ## Check the result
 
 Open **History** in Azure Update Manager to see runs, or open the deployment history by maintenance run ID. The scheduled patching page also includes an Azure Resource Graph based script that lists the machines assigned to a configuration.
 
-## Typical mistakes
+## Typical mistakes (my own list)
 
 - Leaving Azure VMs on a patch mode that does not follow your schedule.
 - One huge schedule where one slow service pack ends the window.
@@ -123,6 +124,6 @@ Open **History** in Azure Update Manager to see runs, or open the deployment his
 ## Sources
 
 - [Azure Update Manager overview (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/update-manager/overview)
-- [Schedule recurring updates in Azure Update Manager (Microsoft Learn)](https://learn.microsoft.com/azure/update-manager/scheduled-patching)
-- [About dynamic scoping (Microsoft Learn)](https://learn.microsoft.com/azure/update-manager/dynamic-scope-overview)
+- [Schedule recurring updates in Azure Update Manager (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/update-manager/scheduled-patching)
+- [About dynamic scoping (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/update-manager/dynamic-scope-overview)
 - [Manage a dynamic scope (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/update-manager/manage-dynamic-scoping)
