@@ -16,16 +16,16 @@ faq:
   - q: "What must a detection script return?"
     a: "Microsoft Learn says the app is detected when the script returns exit code 0 and writes a string value to STDOUT. A nonzero exit code means failure and the app is not detected. Exit code 0 with STDOUT data counts as detected, and Intune does not look for a particular string."
   - q: "Why does my script say installed but Intune reports not installed?"
-    a: "Learn states that exit code 0 with data in STDOUT plus any data in STDERR is evaluated as not installed. Check that non-terminating errors, warnings routed to the error stream or noisy cmdlets are not writing to STDERR."
+    a: "Learn states that exit code 0 with data in STDOUT plus any data in STDERR is evaluated as not installed. My own checklist, not from Learn: check that non-terminating errors, warnings routed to the error stream or noisy cmdlets are not writing to STDERR."
   - q: "Should I run the script as a 32-bit process?"
-    a: "The default is No, which runs a 64-bit process on 64-bit clients. Set Yes only when the script must see the 32-bit view, for example 32-bit registry or file system redirection. Learn notes that 32-bit clients always run 32-bit."
+    a: "The default is No, which runs a 64-bit process on 64-bit clients. Learn says 32-bit clients run the script in a 32-bit process. My own guidance: set Yes only when the script must see the 32-bit view, for example 32-bit registry or file system redirection."
   - q: "Do I need to sign the script?"
     a: "Only if you enable Enforce script signature check. With Yes, Intune verifies that a trusted publisher signed the script so it runs without warnings or prompts. The default is No. Learn also recommends UTF-8 BOM encoding."
   - q: "How often does Intune re-check detection?"
     a: "Learn says that if Intune detects the app is not present, it offers the app again within approximately 24 hours. This applies only to apps targeted with the required intent. The IME checks in for new assignments every 8 hours, according to its reference page."
 ---
 
-A good detection script is small, silent and strict about one thing: it proves the exact version you want exists. It prints one line and exits 0 when the app is present, and exits 1 with no output when it is not. Most unreliable detection comes from scripts that do more than that.
+A good detection script is small, silent and strict about one thing: it proves the exact version you want exists. My recommended pattern, which follows Learn's example, is to print one line and exit 0 when the app is present, and to exit 1 with no output when it is not. In my experience, unreliable detection often comes from scripts that do more than that.
 
 ## How Intune reads the result
 
@@ -62,6 +62,8 @@ It writes the version to STDOUT on success and exits nonzero otherwise. For comp
 
 ## Practical rules for complex installs
 
+These rules are my own advice. Only the facts they cite, such as the default of the 32-bit setting and the System and User contexts, come from Learn.
+
 1. **Test the final state, not the installer.** Check the file version of the main binary, or a registry value written at the end of the install. A folder that exists before configuration finishes is a weak signal.
 2. **Keep the script silent on failure.** Use `-ErrorAction SilentlyContinue` where a missing path is a normal result, and avoid writing to the error stream. Remember the STDERR rule above.
 3. **Use exit codes, not output text, for decisions.** Output only needs to be non-empty on success.
@@ -81,7 +83,7 @@ A script earns its place when you need logic across several of these, for exampl
 
 ## Why the app installs again or reports failed
 
-If Intune finds the app missing, it re-offers a required app within about 24 hours. Learn's retry text for return codes says the agent tries three times with five minutes between attempts. Apps installed correctly but reported as failed point to a detection problem. The existing m365.fm article on error 0x87d1041c covers that symptom.
+If Intune finds the app missing, it re-offers a required app within about 24 hours. Learn's description of the **Retry** return code type, which is separate from detection, says the agent tries to install the app three times and waits five minutes between attempts. My own inference: an app that installed correctly but is reported as failed or missing points to a detection problem, so check the detection rule and the logs below. Learn does not state this.
 
 ## Find the evidence in the logs
 
@@ -92,21 +94,21 @@ All IME logs are in `C:\ProgramData\Microsoft\IntuneManagementExtension\Logs`, r
 - **IntuneManagementExtension.log:** overall check-in and reporting.
 - **AgentExecutor.log:** PowerShell script execution.
 
-In the Intune admin center, **Collect logs** in the app's **Installation details** pane gathers them remotely. The pages I read do not explain how to interpret individual log messages.
+In the Intune admin center, Learn points to the **Collect logs** option in the app's **Installation details** pane when an installation issue occurs. The pages I read do not explain how to interpret individual log messages.
 
 To test faster, trigger a sync from the Company Portal (**Settings** > **Sync**), which starts both an MDM and an IME check-in. After the Enrollment Status Page or Autopilot device preparation ends, IME checks immediately for new Win32 assignments.
 
 ## Other causes to rule out
 
-Learn's Win32 troubleshooting page also lists: a Windows S mode device, a user-targeted app that needs admin rights, mixing Win32 and line-of-business apps during Autopilot enrollment (supported in device preparation), and antimalware scanning of `C:\Windows\IMECache` and the IME content folder, which Microsoft says to exclude.
+Learn's Win32 troubleshooting page and the IME page also cover: a Windows S mode device (the IME does not support S mode), a user-targeted app that needs admin rights (it fails to install), mixing Win32 and line-of-business apps during Autopilot enrollment (the page says this might fail, and that mixing is supported in Autopilot device preparation), and antimalware scanning of `C:\Windows\IMECache` and the IME `Content` folder, which the page says to exclude from scanning.
 
 ## Do not confuse detection with requirements
 
-A requirement rule decides whether the app applies to a device at all. A detection rule decides whether it is already installed. Learn lets you use a script for either. A requirement script has extra settings: **Run this script using the logged on credentials** and **Select output data type**. If the exit code is 0, Intune compares STDOUT with the selected data type. A detection script has no output data type, and any STDOUT data counts.
+A requirement rule decides whether the app applies to a device at all. A detection rule decides whether it is already installed. Learn lets you use a script for either. A requirement script has extra settings: **Run this script using the logged on credentials** and **Select output data type**. For a requirement script, Learn says that if the exit code is 0, Intune evaluates STDOUT in more detail, for example as an integer with a value of 1, based on the selected output data type. A detection script has no output data type, and any STDOUT data counts.
 
 Built-in requirement fields cover operating system architecture, minimum operating system, disk space, physical memory, logical processors and CPU speed. Use those before writing a script. Scripts are the right tool when file and registry checks cannot express the rule.
 
-Also confirm the install behavior. **System** installs for all users, and Learn says it is required when the device is enrolled by being Microsoft Entra registered. **User** installs for a specific user, and an app that needs device admin rights fails when targeted to users without them.
+Also confirm the install behavior. **System** installs for all users, and Learn says to select System when the device is enrolled by being Microsoft Entra registered. **User** installs for a specific user, and an app that needs device admin rights fails when targeted to users without them.
 
 ## Related
 
@@ -115,7 +117,6 @@ Also confirm the install behavior. **System** installs for all users, and Learn 
 
 ## Sources
 
-- [Add and assign a Win32 app in Intune](https://learn.microsoft.com/en-us/intune/app-management/deployment/add-win32)
-- [Win32 app detection rules, requirements and install behavior](https://learn.microsoft.com/en-us/intune/intune-service/apps/apps-win32-add)
+- [Add and Assign Win32 Apps to Microsoft Intune](https://learn.microsoft.com/en-us/intune/app-management/deployment/add-win32)
 - [Intune Management Extension reference](https://learn.microsoft.com/en-us/intune/device-management/tools/management-extension-windows)
-- [Troubleshoot Win32 app issues](https://learn.microsoft.com/en-us/intune/intune-service/apps/apps-win32-troubleshoot)
+- [Troubleshoot Win32 Apps in Microsoft Intune](https://learn.microsoft.com/en-us/intune/app-management/deployment/troubleshoot-win32)
