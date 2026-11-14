@@ -16,11 +16,11 @@ faq:
   - q: "What is eDiscovery in Microsoft Purview?"
     a: "According to Microsoft Learn, eDiscovery is the process of identifying and delivering electronically stored information that can be used as evidence in investigations and legal cases. Purview eDiscovery identifies, reviews and manages content in Exchange Online, Teams, Microsoft 365 Groups, OneDrive, SharePoint and Viva Engage, and lets you export results."
   - q: "What is the difference between a search, a hold and a review set?"
-    a: "Microsoft Learn describes a search as the way to find content and view statistics, a hold as a way to preserve content in locations so it cannot be deleted, and a review set as a secure Microsoft-provided Azure Storage location where you filter, tag and analyze content. Holds are optional but recommended."
+    a: "Microsoft Learn describes a search as the way to find content and view statistics, a hold as a way to preserve content in locations so it cannot be deleted, and a review set as a secure Microsoft-provided Azure Storage location where you filter, tag and analyze content. Placing a hold is optional."
   - q: "Which roles do I need for eDiscovery?"
     a: "Microsoft Learn names the eDiscovery Manager role group with an eDiscovery Manager subgroup and an eDiscovery Administrator subgroup, plus Reviewer. Managers can only access cases they created. Administrators can access all cases, must add themselves as a member before managing a case and are the only role that can remove case members."
   - q: "Do I need an E5 license for eDiscovery?"
-    a: "Microsoft Learn says people working with eDiscovery cases need a Microsoft 365 Enterprise E3 or E5 license, and that premium eDiscovery features require an Office 365 E5 or Microsoft 365 E5 subscription or a related E5 add-on. Query-based, time-bound and custodian-scoped holds require higher tiers such as E5."
+    a: "Microsoft Learn says the eDiscovery user who exports search results needs a Microsoft 365 E3 or E5 license. Premium eDiscovery features need an Office 365 E5 or Microsoft 365 E5 license, or an E3 license plus a Microsoft Purview Suite or Microsoft 365 eDiscovery and Audit add-on. Query-based, time-bound and custodian-scoped holds require higher tiers such as E5."
   - q: "How long are export packages available?"
     a: "Microsoft Learn says search export packages expire 14 days after you create the export, after which the export and its data are deleted and cannot be recovered. This applies to search exports, not review set exports. An export that runs for more than seven days without finishing is cancelled."
 ---
@@ -31,7 +31,7 @@ eDiscovery in Microsoft Purview is the set of tools for finding, preserving, rev
 
 Microsoft Learn says Purview eDiscovery searches content in Exchange Online, OneDrive, SharePoint, Microsoft Teams, Microsoft 365 Groups and Viva Engage, and exports the results. Searches can cover mailboxes and sites together.
 
-Microsoft retired the classic eDiscovery experiences, including classic Content search, eDiscovery (Standard) and eDiscovery (Premium), on August 31, 2025. The current experience runs in the Microsoft Purview portal at purview.microsoft.com. In it, Microsoft's comparison page lists some capabilities for both eDiscovery and premium eDiscovery, such as searching, keyword queries, case management, holds and exporting, and others as premium-only, such as review sets, tagging and analytics. Premium features need an E5 subscription or related E5 add-on.
+Microsoft retired the classic eDiscovery experiences, including classic Content search, eDiscovery (Standard) and eDiscovery (Premium), on August 31, 2025. The current experience runs in the Microsoft Purview portal at purview.microsoft.com. The comparison table on the Learn eDiscovery overview page, which is written around the classic tiers, lists searching, keyword queries and exporting for all tiers, case management and holds for Standard and Premium, and review sets, tagging and analytics for Premium only. Premium features need an E5 subscription or related E5 add-on.
 
 ## The workflow
 
@@ -40,8 +40,8 @@ Microsoft's workflow page describes these steps.
 1. **Trigger.** An internal or external request, or an integrated alert such as an Insider Risk Management case, starts the work.
 2. **Case.** A case contains all searches, holds and review sets for one investigation. Members control who can access the case.
 3. **Search.** Search content locations, view statistics, preview results and refine the query.
-4. **Holds.** Optional but recommended. A hold preserves content in the locations tied to a case.
-5. **Review.** Add results to a review set, then filter, tag, analyze and run queries.
+4. **Holds.** Optional. The workflow page shows holds as a branch next to the actions you take from search results, not strictly between search and review. A hold preserves content in the locations tied to a case.
+5. **Review.** Add results to a review set, then filter, tag, analyze and run queries. Items can also be exported from a review set.
 6. **Export.** Export search results or review set items out of the organization.
 
 ## Create a case
@@ -67,7 +67,7 @@ The creator is added as a member automatically. The case dashboard also has **Ca
 Facts to know before you rely on a hold:
 
 - A hold can take up to 24 hours to take effect.
-- Teams channel content is held through the team mailbox and SharePoint site. One-to-one and group chats are held through each participant's mailbox and OneDrive, so add participants separately.
+- Teams channel content is held through the team mailbox and SharePoint site. One-to-one and group chats are stored in the participants' mailboxes, and shared files are in the sharer's OneDrive, so hold the individual mailboxes and OneDrive accounts.
 - A Microsoft 365 group hold covers the group mailbox and site, not the members' mailboxes or OneDrive accounts unless you add them.
 - Distribution list expansion is limited to 100 members.
 - A query-based hold first holds everything in the locations, then clears non-matching content every seven to 14 days. It does not clear content if more than five holds of any type apply to a location.
@@ -96,7 +96,7 @@ The primary role group is **eDiscovery Manager**. Its **eDiscovery Manager** sub
 
 To assign roles, go to **Settings** > **Role groups** in the Purview portal, select **eDiscovery Manager**, then **Edit**. You need Organization Management or the Role Management role to do this.
 
-For licensing, Learn says people working with eDiscovery cases need a Microsoft 365 Enterprise E3 or E5 license. SharePoint export also needs a SharePoint E3 license. Holds need an eligible license for every user whose content is preserved, and Frontline plans such as F1 and F3 cannot be the target of a hold.
+For licensing, the export article says the eDiscovery user needs a Microsoft 365 E3 or E5 license, and SharePoint exports also need a SharePoint E3 license. The permissions article says premium eDiscovery features need an Office 365 E5 or Microsoft 365 E5 license, or E1 or E3 with a Microsoft Purview Suite or Microsoft 365 eDiscovery and Audit add-on. Case members who work with premium features do not need an E5 license themselves if the subscription requirements are met. Holds need an eligible license for every user whose content is preserved, and Frontline plans such as F1 and F3 cannot be the target of a hold.
 
 ## Common mistakes
 
