@@ -9,7 +9,7 @@ topics: [teams]
 keypoints:
   - "Save a message: hover over it, select More options, then Save this message. A Saved section then appears at the top of your chat and channel list."
   - "Mute keeps you in a chat but stops notifications, except @mentions. Muted chats move to a Muted section at the bottom of the list."
-  - "Mark as unread is the documented way to flag a chat for later. The chat shows as unread until you open it again."
+  - "Microsoft Support names mark as unread as one way to remind yourself to read a chat later. The chat appears unread the next time you open it."
   - "Hide removes a chat until someone posts again. Type /hide in the compose box as a shortcut."
   - "Format with Show Formatting options or with Markdown such as **bold**, _italic_, backticks for code and > for quotes."
 faq:
@@ -41,7 +41,7 @@ Things that surprise people:
 - If the author edits a saved message, your saved copy shows the edit.
 - If the author deletes it, the title stays in **Saved** with a note that the author deleted it. You can still open the conversation.
 
-The Microsoft Support article does not cover keyboard shortcuts or the mobile steps for saving. It links to a general mobile guide instead.
+The Microsoft Support article does not cover keyboard shortcuts and does not mention mobile.
 
 ## Mute a chat
 
@@ -70,9 +70,9 @@ To bring it back, type the person's name in the Teams **Search** box and select 
 
 ## Follow up: mark as unread and use Favorites
 
-Microsoft Support describes no dedicated follow-up or reminder feature for chats. Two documented options do the same job in practice.
+Microsoft Support says one way to remind yourself to read a message later is to mark it as unread. Favorites is a second option that I suggest here; the page describes it only as a way to order chats, not as a reminder.
 
-**Mark as unread.** Open the chat, reveal **More options** and select **Mark as unread**. The chat appears unread the next time you open it, which keeps it visible in your list.
+**Mark as unread.** Open the chat, reveal **More options** and select **Mark as unread**. The chat appears unread the next time you open it.
 
 **Favorites.** Drag a chat into the **Favorites** list, or hover over it and select **More options** > **Move to** > **Favorites**. You choose the order. To remove it, select **More options** > **Remove from section**.
 
@@ -97,7 +97,7 @@ You can also type Markdown-style syntax:
 | Headings | `#`, `##`, `###` |
 | Quote | `>` at the start of the line |
 
-Teams shows a live preview while you type, and Ctrl+Z undoes the formatting. Microsoft notes that some formatting may behave differently from standard Markdown. Tables are not in the list.
+Check the bold marker in your own compose box: the page text I retrieved showed it with one asterisk in one column and two in another, so I cannot confirm the exact form. Teams shows a live preview while you type, and Ctrl+Z undoes the formatting. Microsoft notes that some formatting may behave differently from standard Markdown. Tables are not in the list.
 
 ## Common mistakes
 
