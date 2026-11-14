@@ -1,6 +1,6 @@
 ---
 title: "AI-300 MLOps Engineer: What It Replaces and Skills Measured"
-summary: "The AI-300 Machine Learning Operations Engineer Associate exam: audience profile, the five skill sections, expected experience, exam logistics and an open note that the Microsoft exam page names no replaced exam, no weights and no price."
+summary: "The AI-300 Machine Learning Operations Engineer Associate exam: audience profile, the five skill sections with the study guide weights, expected experience, exam logistics and an open note that the Microsoft pages name no replaced exam."
 status: review
 publish: false
 author: mirko-p
@@ -9,23 +9,23 @@ topics: [ai-300]
 keypoints:
   - "AI-300 is the exam for Microsoft Certified: Machine Learning Operations Engineer Associate. It covers MLOps and GenAIOps infrastructure on Azure, together called AIOps."
   - "Five skill sections are listed: MLOps infrastructure, model lifecycle and operations, GenAIOps infrastructure, generative AI quality assurance and observability, and optimization."
-  - "The exam page gives no percentage weights for the sections, no predecessor or retirement information, no beta status, no question count and no passing score."
+  - "The exam page lists no weights, passing score, predecessor, retirement or beta status. The linked study guide gives weights (10-30%) and a passing score of 700 or greater."
   - "The exam lasts 120 minutes, is proctored, is offered in English only and is scheduled through Pearson VUE. A retake is possible after 24 hours."
   - "Expected experience: a data science background with Python, entry-level DevOps with GitHub Actions and CLIs, and infrastructure as code with Bicep and Azure CLI."
 faq:
   - q: "What does AI-300 replace?"
-    a: "The Microsoft exam page does not say. It mentions no predecessor exam and no retirement, so this guide makes no claim about a replacement."
+    a: "Neither the Microsoft exam page nor the linked study guide says. Neither mentions a predecessor exam or a retirement, so this guide makes no claim about a replacement."
   - q: "What are the skill sections?"
     a: "Design and implement an MLOps infrastructure, implement machine learning model lifecycle and operations, design and implement a GenAIOps infrastructure, implement generative AI quality assurance and observability, and optimize generative AI systems and model performance."
   - q: "Are the section weights published?"
-    a: "Not on the exam page. It lists the five sections without percentages. A study guide is linked, which was not read for this guide."
+    a: "Yes, in the study guide linked from the exam page: MLOps infrastructure 15-20%, model lifecycle and operations 25-30%, GenAIOps infrastructure 20-25%, quality assurance and observability 10-15%, optimization 10-15%. The exam page itself lists the sections without percentages."
   - q: "How long is the exam?"
     a: "120 minutes. The exam is proctored, may include interactive components and is offered in English only."
   - q: "What products does it cover?"
     a: "The page lists Azure Machine Learning and Microsoft Foundry, with the role AI Engineer."
 ---
 
-AI-300 is the exam behind the Microsoft Certified: Machine Learning Operations Engineer Associate certification. The queue title also asks what it replaces. The Microsoft exam page does not say, so this guide states that gap openly. It uses only the published exam page and contains no exam questions.
+AI-300 is the exam behind the Microsoft Certified: Machine Learning Operations Engineer Associate certification. The Microsoft Learn certification page for the exam (called the exam page below) and the linked study guide do not say what, if anything, it replaces, so this guide states that gap openly. It uses those two pages and contains no exam questions.
 
 ## What the exam covers
 
@@ -55,7 +55,7 @@ The page lists no formal prerequisite certifications. It says you should have a 
 4. Implement generative AI quality assurance and observability.
 5. Optimize generative AI systems and model performance.
 
-The page gives no percentage weights and no sub-skills for these sections. A study guide is linked at aka.ms/AI300-StudyGuide. It was not read for this guide.
+The exam page gives no percentage weights and no sub-skills for these sections. The study guide linked at aka.ms/AI300-StudyGuide (Study guide for Exam AI-300: Operationalizing Machine Learning and Generative AI Solutions) gives the weights 15-20%, 25-30%, 20-25%, 10-15% and 10-15% in the order above and lists sub-skills for each section.
 
 ## Exam logistics
 
@@ -67,10 +67,11 @@ The page gives no percentage weights and no sub-skills for these sections. A stu
 - Accommodations are available through a Microsoft Learn page.
 - Microsoft strongly recommends registering with a personal Microsoft account.
 - Price depends on the country or region in which the exam is proctored. No figure is given.
+- Passing score: 700 or greater, according to the linked study guide. The exam page does not state it.
 
 ## Preparation resources on the page
 
-A study guide, an exam sandbox that shows the look and feel of the exam, a practice assessment on AI Skills Navigator that requires sign-in, a course under Prepare for the exam, and Exam Replay through a deals page.
+A study guide, an exam sandbox that shows the look and feel of the exam, a practice assessment on AI Skills Navigator that requires sign-in, a Prepare for the exam section that has no visible content in the text version of the page, and Exam Replay through a deals page.
 
 ## Renewal
 
@@ -81,13 +82,13 @@ Microsoft role-based and specialty certifications expire unless renewed. You ren
 - Whether the exam replaces another one, or whether any exam retires.
 - Beta status.
 - The release or effective date. The Last Updated date has an ambiguous format.
-- Section weights.
-- The number of questions and the passing score.
-- The title of the course behind the Start course button.
+- Section weights and the passing score (both are in the linked study guide).
+- The number of questions.
+- Any course title: the Prepare for the exam section has no visible content in the text version of the page.
 
 ## A study plan
 
-This plan is practical advice built on the section list. Since weights are not published, it treats all sections as equally important until you read the study guide.
+This plan is my advice, built on the section list and the study guide weights. The largest section is model lifecycle and operations at 25-30%.
 
 1. Read the linked study guide for sub-skills and weights.
 2. Practice MLOps in Azure Machine Learning: training, deployment and monitoring.
@@ -95,10 +96,10 @@ This plan is practical advice built on the section list. Since weights are not p
 4. Build CI/CD pipelines with GitHub Actions and define infrastructure with Bicep and Azure CLI.
 5. Use the sandbox and the practice assessment before booking.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assuming the exam replaces an older one without a source.
-- Planning by guessed weights.
+- Planning by guessed weights instead of the study guide weights.
 - Skipping infrastructure as code because the title sounds like data science.
 - Forgetting that the exam is available in English only.
 
@@ -112,7 +113,8 @@ This plan is practical advice built on the section list. Since weights are not p
 | Role | AI Engineer |
 | Duration | 120 minutes |
 | Language | English |
-| Weights, passing score, question count | Not stated |
+| Weights and passing score | Not on the exam page. The linked study guide gives weights and a score of 700 or greater |
+| Question count | Not stated |
 
 ## How the two halves fit together
 
@@ -126,4 +128,5 @@ The five sections split into two groups. The first two cover traditional machine
 
 ## Sources
 
-- [Exam AI-300: Machine Learning Operations Engineer Associate (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/exams/ai-300/)
+- [Microsoft Certified: Machine Learning Operations Engineer Associate (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/operationalizing-machine-learning-and-generative-ai-solutions/)
+- [Study guide for Exam AI-300: Operationalizing Machine Learning and Generative AI Solutions (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/ai-300)
