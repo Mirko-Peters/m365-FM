@@ -14,7 +14,7 @@ keypoints:
   - "Delete the Azure resources when you finish exploring, to avoid ongoing charges."
 faq:
   - q: "What do I need before I open the Foundry portal?"
-    a: "The Microsoft Learn lab lists an Azure subscription with permission to create a Foundry project and resources, quota for a chat model in the project's region, and a region from the AI Foundry recommended list. It estimates roughly 40 minutes for the full exercise, with the portal steps coming first."
+    a: "The Microsoft Learn lab has no formal prerequisites list. It uses an Azure subscription and ai.azure.com. Its steps mention a recommended region and alternatives such as another chat model or another region if you lack quota. The full lab takes about 40 minutes and also builds a client app in Visual Studio Code, which this article does not cover."
   - q: "Which role creates a project?"
     a: "Microsoft Learn says creating a project for yourself needs a role that can create a Foundry resource, such as Foundry Account Owner or Foundry Owner on the subscription or resource group. For a team, you need a role that can make role assignments, such as Owner. Azure AI User, Owner, Account Owner and Project Manager were renamed to the Foundry equivalents."
   - q: "What types of agents can Foundry Agent Service run?"
@@ -53,11 +53,11 @@ The Microsoft Learn lab "Develop your first AI agent in Microsoft Foundry" uses 
 
 1. **Open the portal.** Go to `https://ai.azure.com` and sign in with your Azure credentials. Close tip panes.
 2. **Turn on the new portal.** In the top toolbar, turn on **New Foundry** if it isn't on.
-3. **Pick or create a project.** Use the default project if one exists. Otherwise create one with a unique name, expand **Advanced options** and set the Foundry resource name, subscription, resource group and an AI Foundry recommended region.
+3. **Pick or create a project.** If prompted, create a project, and expand **Advanced options** and set the Foundry resource name, subscription, resource group and an AI Foundry recommended region.
 4. **Deploy a model.** On **Home**, select **Explore models**, search for `gpt-5-mini`, open it and select **Deploy** with default settings. If you lack quota, the lab suggests a custom deployment, another chat model such as `gpt-5-nano` or `gpt-5.4-mini`, or a project in another region.
-5. **Test in the playground.** After deployment the playground opens. Ask a question and a follow-up to confirm context is kept. **New chat** clears the history.
-6. **Add instructions.** In the **Instructions** box on the left, tell the model what it is for and what to refuse. Test with an on-topic and an off-topic question.
-7. **Add a tool.** Expand **Tools**, and in the **Add** drop-down select **Web search**. Test with a question that needs live results.
+5. **Test in the playground.** After deployment the playground opens. Test a few chat prompts. **New chat** resets the conversation.
+6. **Add instructions.** In the **Instructions** text area, enter a system prompt. In the lab it limits the model to computing history.
+7. **Add a tool.** Expand **Tools**, and in the **Add** drop-down select **Web search**. Test it with a local search prompt, as the lab does.
 8. **Save as agent.** Select **Save as agent** at the top right and name it. The agent opens in its own playground, with a **YAML** tab showing the model, instructions and tools.
 9. **Preview it.** In the **Publish** drop-down select **Preview web app**, which opens in a new tab.
 
@@ -80,7 +80,7 @@ The overview lists built-in tools (web search, file search, code interpreter, me
 
 ## After the first agent
 
-Learn's overview describes a development lifecycle of Create, Test, Trace, Evaluate, Optimize, Publish and Monitor. The portal lab covers the first two stages and a preview. Before sharing an agent, plan the rest: how you will trace runs, which evaluations you will run, and who can use the published endpoint. Learn says published agents are versioned with stable endpoints and can be shared through Microsoft Teams, Microsoft Copilot and the Entra Agent Registry. Each agent also gets an Entra identity, with role-based access control, content filters and guardrails.
+Learn's overview describes a development lifecycle of Create, Test, Trace, Evaluate, Optimize, Publish and Monitor. The portal lab covers the first two stages and a preview. Before sharing an agent, plan the rest: how you will trace runs, which evaluations you will run, and who can use the published endpoint. Learn says published agents are versioned with stable endpoints and can be shared through Microsoft Teams, Microsoft Copilot and the Entra Agent Registry. Each agent can have a dedicated Entra identity, and the overview also names role-based access control and integrated content filters.
 
 ## Common mistakes
 
