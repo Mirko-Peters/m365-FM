@@ -50,7 +50,7 @@ If your phone camera can't read the code, click **I can't scan the bar code** on
 
 ## Set up Microsoft Authenticator for a work or school account
 
-For work or school accounts, Microsoft's article on [setting up security info from a sign-in page](https://support.microsoft.com/en-us/accounts-billing/work-school/set-up-security-info-from-a-sign-in-page) describes a wizard. You see it when you sign in and your organization requires security info that you haven't set up yet. If your screen doesn't match the steps below, your admin may not have enabled this experience, so ask them.
+For work or school accounts, Microsoft's article on [setting up security info from a sign-in page](https://support.microsoft.com/accounts-billing/work-school/set-up-security-info-from-a-sign-in-page) describes a wizard. You see it when you sign in and your organization requires security info that you haven't set up yet. If your screen doesn't match the steps below, your admin may not have enabled this experience, so ask them.
 
 1. Select **Next** at the prompt. The **Keep your account secure** wizard shows the first required method.
 2. Select **Download now**, install Microsoft Authenticator on your phone, then select **Next**.
@@ -104,10 +104,10 @@ Two rules apply to both systems. A backup restores only onto the same device typ
 
 ## Related topics to explore
 
-- Add Authenticator as a verification method: [How to add your accounts to Microsoft Authenticator](https://support.microsoft.com/en-us/authenticator/how-to-add-your-accounts-to-microsoft-authenticator) covers the personal account methods.
+- Add Authenticator as a verification method: [How to add your accounts to Microsoft Authenticator](https://support.microsoft.com/authenticator/how-to-add-your-accounts-to-microsoft-authenticator) covers the personal account methods.
 - Multifactor authentication for organizations: admins decide which methods users must register, and the choice shapes the wizard that users see.
-- Move Authenticator to a new phone: the [restore article](https://support.microsoft.com/en-us/authenticator/restore-account-credentials-from-microsoft-authenticator) lists the iOS prerequisites and the account types that come back.
-- Back up your accounts: the [backup article](https://support.microsoft.com/en-us/authenticator/back-up-your-accounts-in-microsoft-authenticator) explains Cloud Backup on Android.
+- Move Authenticator to a new phone: the [restore article](https://support.microsoft.com/authenticator/restore-account-credentials-from-microsoft-authenticator) lists the iOS prerequisites and the account types that come back.
+- Back up your accounts: the [backup article](https://support.microsoft.com/authenticator/back-up-your-accounts-in-microsoft-authenticator) explains Cloud Backup on Android.
 - What to do after losing a phone: plan a second method for every important account.
 
 ## Next step
