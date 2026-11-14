@@ -103,4 +103,4 @@ The page I read does not describe the following:
 
 ## Sources
 
-- [Compare Azure messaging services](https://learn.microsoft.com/azure/event-grid/compare-messaging-services)
+- [Compare Messaging Services (Microsoft Learn)](https://learn.microsoft.com/azure/service-bus-messaging/compare-messaging-services)
