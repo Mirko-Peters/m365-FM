@@ -83,8 +83,7 @@ Select a template in the list and choose **Duplicate**, or use **Add** > **Start
 ### Known issues in the docs
 
 - It can take up to 24 hours for users to see a custom template in the gallery.
-- Teams created from a custom template with extra custom tabs may show blank tabs. Default tabs such as Posts, Files and Wiki are fine. The workaround is to remove the blank tab and add a new tab with the same app.
-- The Website tab option in templates is described as early preview. Some websites cannot render inside a Teams tab.
+- The Website tab option in templates is described as early preview on the create page.
 - Sensitivity labels are not supported in GCC environments in the create-from-template flow.
 
 ## Control which templates users see
