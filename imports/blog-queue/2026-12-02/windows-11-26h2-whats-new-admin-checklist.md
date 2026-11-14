@@ -85,7 +85,7 @@ Installing 26H2 resets the support lifecycle, per the IT Pro Blog, the Support p
 
 ## Admin checklist
 
-MC1482225 says no immediate action is required. Microsoft's recommended steps are:
+MC1482225 says no immediate action is required. Microsoft's recommended steps for when you are ready to deploy are:
 
 1. Validate 26H2 on a pilot or targeted set of devices.
 2. Test business-critical apps, representative hardware and workflows.
@@ -93,7 +93,8 @@ MC1482225 says no immediate action is required. Microsoft's recommended steps ar
 4. Expand deployment through existing update rings and processes.
 5. Monitor deployment health and safeguard holds on Windows release health.
 6. Review security and compliance requirements, and prepare support staff for the changes.
-7. Review the refreshed 26H2 security baseline, ADMX templates and Group Policy Settings Reference.
+
+MC1482225 also says Microsoft published an updated 26H2 security baseline, and that refreshed ADMX templates and the Group Policy Settings Reference are available. These are listed as resources, not as numbered steps.
 
 To get the update early on a single device, Microsoft Support says to open **Settings > Windows Update** and turn on **Get the latest updates as soon as they're available**.
 
@@ -102,7 +103,7 @@ To get the update early on a single device, Microsoft Support says to open **Set
 The Microsoft Support update history for 26H2, last updated around November 10, 2026, lists these items:
 
 - **File History (September 2026 update):** some users cannot create or update backups and may see a "Reconnect your drive" message. Fixed in updates released on or after September 22, 2026, such as KB5124010.
-- **Domain trust (KB5124008 and later):** Credential Guard protected machine accounts can lose their secure channel with on-premises Active Directory. The cause given is that Windows now honors existing Machine Identity Isolation settings, which should only be enabled with Windows Server 2025 domain controllers. KB5124010 disables Machine Identity Isolation enforcement.
+- **Domain trust (KB5124008 and later):** Credential Guard protected machine accounts can lose their secure channel with on-premises Active Directory. The cause given is that KB5124008 and later updates enable the Machine Identity Isolation feature, which is only supported in environments connected to domain controllers running at a Windows Server 2025 domain functional level. KB5124010 disables Machine Identity Isolation enforcement.
 - **USB Audio Class 1.0 devices:** some fail to start (Code 10) or produce no sound. Fixed in KB5132061.
 - **Black screen after sign-in:** mainly on Azure Virtual Desktop hosts that use FSLogix. Fixed in KB5127648.
 
@@ -110,7 +111,7 @@ The latest listed update on that page is KB5132061 from November 10, 2026, cover
 
 ## What the sources do not cover
 
-The IT Pro Blog does not cover consumer-specific changes, Intune or Autopatch availability details or Defender reporting. Those appear only in reader comments, which are not documentation. Check Windows release health and your own update ring configuration for tenant-specific status.
+The IT Pro Blog does not cover consumer-specific changes, Intune or Autopatch availability details or Defender reporting. Intune and Autopatch availability for 26H2 and the Defender device version filter come up only in reader comments, which are not documentation. Check Windows release health and your own update ring configuration for tenant-specific status.
 
 ## Related
 
