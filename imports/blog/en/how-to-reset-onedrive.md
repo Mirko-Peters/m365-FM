@@ -68,7 +68,7 @@ Some PCs have OneDrive as a Store app. Microsoft's steps for that case are short
 
 ### Mac and mobile
 
-Microsoft's page has tabs for macOS, Android and iOS. I couldn't read the steps for those platforms in the text available to me, so I'm not guessing them here. On a Mac, the documented milder alternative is to unlink the Mac from the account and sign in again (see below).
+Microsoft's page also has tabs for macOS, Android and iOS, and this article only covers the Windows steps. On a Mac, a milder alternative is to unlink the Mac from the account and sign in again (see below).
 
 ## After the reset: set up the sync again
 
@@ -85,9 +85,9 @@ If you see a lot of "sync pending" files right after a reset, that's normal whil
 
 A reset rebuilds the local state. It doesn't change the rules that the files themselves have to follow, so some problems come back right after the full sync. Check these if they do:
 
-- **Names and characters.** Microsoft doesn't allow `" * : < > ? / \ |` in file and folder names, and a name can't start or end with a space. Names such as `CON`, `PRN`, `AUX`, `NUL` and `desktop.ini` are reserved.
-- **Path length.** OneDrive and SharePoint in the cloud allow 400 characters including the file name. Windows Office desktop apps open files only up to 256 characters, and File Explorer works with 260. A file can sync and still fail to open from a deep folder.
-- **File size.** The sync limit for a single file is 250 GB.
+- **Names and characters.** Microsoft's restrictions page doesn't allow `" * : < > ? / \ |` in file and folder names, and a name can't use leading or trailing spaces. Names such as `CON`, `PRN`, `AUX`, `NUL` and `desktop.ini` are reserved.
+- **Path length.** Microsoft's path length page says the full path in OneDrive and SharePoint, including the file name, can't exceed 400 characters. Office desktop apps on Windows open files only up to 256 characters, and File Explorer works with 260. The sync client allows 520 characters combined, with up to 400 for the local path and up to 120 for the OneDrive root folder. A file can sync and still fail to open from a deep folder.
+- **File size.** Microsoft's restrictions page lists a 250 GB maximum for syncing an individual file.
 - **Files that other apps keep open.** Outlook data files (PST and OST) are the usual suspects. Move them out of OneDrive.
 - **Blocked accounts.** A cloud icon with a red "no entry" circle means the account is blocked. That isn't a client problem, and Microsoft points to guidance for a frozen OneDrive account.
 
@@ -140,3 +140,10 @@ When to prefer unlinking: one account is stuck or shows "You're syncing a differ
 ## Next step
 
 Do the quick checks first: pause, sign-in, open files and file names. If they don't help, run the reset once and write down which folders you synced before, so you can select them again. That is all you need to reset OneDrive safely.
+
+## Sources
+
+- [Reset OneDrive (Microsoft Support)](https://support.microsoft.com/onedrive/reset-onedrive)
+- [How to remove an account in OneDrive (Microsoft Support)](https://support.microsoft.com/onedrive/how-to-remove-an-account-in-onedrive)
+- [Restrictions and limitations in OneDrive and SharePoint (Microsoft Support)](https://support.microsoft.com/office/restrictions-and-limitations-in-onedrive-and-sharepoint-64883a5d-228e-48f5-b3d2-eb39e07630fa)
+- [What are the file path length limits? (Microsoft Support)](https://support.microsoft.com/onedrive/what-are-file-path-length-limits)
