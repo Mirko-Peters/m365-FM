@@ -14,25 +14,25 @@ keypoints:
   - "Classic SharePoint alerts were announced for retirement in July 2026. Use rules or Power Automate for change notifications."
 faq:
   - q: "Should I use a team site or a communication site for collaboration?"
-    a: "Use a team site. According to Microsoft Support, a team site is for storing and co-authoring files, posting announcements, tracking tasks and keeping lists, and it is open only to people who are invited. A communication site is meant for sharing news, reports and status, usually with a few contributors and many readers."
+    a: "Use a team site. Microsoft Support describes a team site as a place to store and co-author files, post announcements and track tasks, and it points you to a communication site if you need to broadcast information to others."
   - q: "Who can edit files in a SharePoint document library?"
     a: "Files inherit the permissions of their library. Microsoft Support explains that if everyone has read and write access to a team site library, anyone can co-author there. You can give specific people more access than the library default, but you cannot restrict them below it."
   - q: "Are SharePoint alerts still available?"
-    a: "Microsoft Support shows a banner that SharePoint alerts in Microsoft 365 are fully retired and stop working starting July 2026. The page points to rules and Power Automate instead. A Microsoft Q&A answer from a moderator says rules work at list or library level and cannot target one file, while Power Automate can."
+    a: "A note on the Microsoft Support alert page says that starting July 2026 SharePoint alerts for SharePoint in Microsoft 365 will be fully retired and stop working. The page points to rules and Power Automate instead. A Microsoft Q&A answer from a moderator says rules work at list or library level and cannot target one file, while Power Automate can."
   - q: "Is it safe to share files with the Anyone link?"
-    a: "Microsoft Support describes the Anyone link as giving access to whoever receives it, including people outside your organization, and recommends avoiding it unless absolutely necessary. Links for people in your organization or for specific people keep access narrower. Admins can also remove the Anyone option."
+    a: "Microsoft Support describes the Anyone link as giving access to anyone who receives it, whether you send it directly or someone forwards it, and recommends avoiding it unless absolutely necessary. Links for people in your organization or for specific people keep access narrower. If a sharing option is greyed out, your organization's admins may have restricted it."
 ---
 The best way to use SharePoint for team collaboration is to create a team site, connect it to a Microsoft 365 group and Teams, keep working files in its document library and control access through groups. Everything else in this guide builds on those four decisions. Together they are the best practice for secure collaboration in Microsoft SharePoint: one SharePoint site for the team, document management in a library, and access that team members get through groups. The guide describes what Microsoft documents, so menu names can differ slightly in your tenant if an admin has changed settings.
 
 ## Start with the right type of site
 
-Microsoft Support separates two site types. A **team site** connects a team to shared content and resources. People use it to store and co-author files, keep a SharePoint list, track project status for project management and post announcements. A **communication site** is for sharing news, reports and status, typically with a small number of contributors and many readers.
+Microsoft Support separates two site types. A **team site** connects a team to shared content and resources. People use it to store and co-author files, keep a SharePoint list, track project status for project management and post announcements. A **communication site** is the choice when you need to broadcast information out to others.
 
-For day-to-day collaboration, pick the team site. Use a communication site only when the goal is to inform people rather than work together. If you need a single home for several sites, Microsoft's planning page describes a hub site as a frame that connects and organizes team and communication sites. It recommends one site collection per workload, each associated with a hub.
+For day-to-day collaboration, pick the team site. Use a communication site only when the goal is to inform people rather than work together. If you need a single home for several sites, Microsoft's planning page describes a hub site as a frame that connects and organizes team and communication sites. It also recommends creating site collections for each workload in your organization.
 
 ## Connect the site to a Microsoft 365 group and Teams
 
-When an admin has enabled Microsoft 365 groups, creating a team site also creates a group. Microsoft Support says members added to either the site or the group are added to the other. The group brings Outlook conversations and calendar, SharePoint files, Planner tasks and a shared OneNote notebook into one space, so the collaboration tools your team already uses sit around the site.
+When an admin has enabled Microsoft 365 groups, creating a team site also creates a group. Microsoft Support says members added to either the site or the group are added to the other. Microsoft's project example says a connected group gives the team access to shared resources such as a group calendar, OneNote and Planner.
 
 The project collaboration page adds that a connected group gives the team a group calendar, OneNote, Planner and an email address, and that you can create a connected Microsoft Team. A typical use case: weekly status posts written as news appear in the Teams channel too. If your tenant does not offer group-connected sites, ask your SharePoint admin whether Microsoft 365 groups are turned on.
 
@@ -46,13 +46,13 @@ Add team members at the group level so you can manage permissions and access in 
 
 Microsoft's default SharePoint groups map to permission levels as follows.
 
-| Group | Permission level | Typical use |
-|---|---|---|
-| Owners | Full Control | People who manage the site |
-| Members | Contribute | The working team |
-| Visitors | Read | Stakeholders who only need to view |
+| Group | Permission level |
+|---|---|
+| Owners | Full control |
+| Members | Contribute |
+| Visitors | Read |
 
-Microsoft's advice is to avoid assigning permission levels directly to individuals. Assign permissions to groups, then place people in the right group. The same page notes that by default the "Everyone except external users" group has Member access in some setups, so anyone in the directory could edit content. Check what applies to your site before you store anything sensitive there.
+Microsoft's advice is to avoid assigning permission levels directly to individuals. Assign permissions to groups, then place people in the right group. The same page notes that the "Everyone except external users" security group is automatically granted access as a Member in SharePoint. Check which groups have access to your site before you store anything sensitive there.
 
 ## Keep files in the library and co-author
 
@@ -70,21 +70,21 @@ Files inherit the permissions of their library. That is why a library everyone c
 To share one file or folder, select it, then **Share**. For SharePoint security, the link type matters most. Under the link settings, Microsoft Support lists these options:
 
 - **Anyone:** whoever has the link, including people outside your organization. Microsoft recommends avoiding it unless necessary.
-- **People in your organization with the link:** anyone inside the organization, even if the link was forwarded.
-- **People with existing access:** sends a link without changing permissions.
+- **People in your organization with the link:** gives anyone in your organization who has the link access to the file.
+- **People with existing access:** does not change any permissions.
 - **Specific people:** limits access to the people you name.
 
-You can also choose **Can edit**, **Can review** (Word documents only) or **Can view**, and block download. Expiration dates and passwords are available only for Anyone links. You cannot share several items at once, so put them in a folder and share the folder. If an option is greyed out, an admin has restricted it.
+You can also choose **Can edit**, **Can review** (Word documents only) or **Can view**, and prevent downloads. Microsoft Support says that setting an expiration date or a password is only available for Anyone links. You cannot share several items at once, so put them in a folder and share the folder. If an option is greyed out, an admin has restricted it.
 
 ## Make the work visible
 
-A team site home page can show news, Quick Links, an activity feed and a document library web part. The project collaboration page suggests a Planner web part for progress, a News web part for milestones, a group calendar web part for availability and Quick Links for frequently used items. Editors enter edit mode with **Edit** in the top right and use **Republish** or **Publish** to make changes visible.
+A team site home page can show news, Quick Links, an activity feed and a document library web part. The project collaboration page suggests a Planner web part for progress, a News web part for milestones, a group calendar web part for availability and Quick Links for frequently used items. In its example, the team site is reviewed semi-monthly to keep project deadlines and news up to date.
 
-These web parts are SharePoint features that improve collaboration because the team sees status without asking for it. For ongoing care, Microsoft Support suggests a regular review schedule, regular news posts, checking links and web parts, using the built-in usage report and reviewing site permissions periodically.
+These web parts are SharePoint features that improve collaboration because the team sees status without asking for it. For ongoing care, Microsoft Support suggests establishing a schedule to review site content so it stays accurate and relevant.
 
 ## Notifications: alerts versus rules and Power Automate
 
-Many teams relied on "Alert me" for files. Microsoft Support's alert page shows a banner that SharePoint alerts in Microsoft 365 are fully retired and stop working starting July 2026, and recommends rules or Power Automate. A Microsoft Q&A answer from a moderator explains the difference. Rules are created at list or library level and work on column conditions, so they cannot select one specific file. Use Power Automate when only one specific file matters: it can notify only when that file changes, for example with the trigger "When a file is created or modified (properties only)" plus a condition on the file.
+Many teams relied on "Alert me" for files. A note on Microsoft Support's alert page says that starting July 2026 SharePoint alerts for SharePoint in Microsoft 365 will be fully retired and stop working. The page points to rules and Power Automate. A Microsoft Q&A answer from a moderator explains the difference. Rules are created at list or library level and work on column conditions, so they cannot select one specific file. Use Power Automate when only one specific file matters: it can notify only when that file changes, for example with the trigger "When a file is created or modified (properties only)" plus a condition on the file.
 
 ## Common mistakes
 
