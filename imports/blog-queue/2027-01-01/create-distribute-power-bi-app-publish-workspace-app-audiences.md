@@ -100,4 +100,4 @@ The page I read does not describe the following:
 
 ## Sources
 
-- [Publish a workspace app in Power BI](https://learn.microsoft.com/power-bi/collaborate-share/service-create-distribute-apps)
+- [Publish a workspace app in Power BI (Microsoft Learn)](https://learn.microsoft.com/power-bi/collaborate-share/service-create-distribute-apps)
