@@ -22,7 +22,7 @@ faq:
 ---
 To upgrade to Windows 11, check that your PC meets the requirements, back up your files, then go to **Start** > **Settings** > **Update & Security** > **Windows Update** on Windows 10 and select **Check for updates**. When the Windows 11 upgrade shows up, select **Download and install** and follow the prompts. The upgrade is free. This article is for Windows users who want to move one PC, and for admins who need a plan for many. You'll see the requirements, three ways to upgrade, what stays on the PC, how to roll back, and how admins handle it at scale.
 
-One date matters more than any other: Microsoft's FAQ says support for Windows 10 ended on October 14, 2025. After that, there are no free updates through Windows Update, no technical assistance and no security fixes. The PC still runs, but Microsoft recommends moving to Windows 11. If your PC can't make the move, the next article in this series covers the reasons.
+One date matters more than any other: Microsoft's FAQ says support for Windows 10 ended on October 14, 2025. After that, there are no free updates through Windows Update, no technical assistance and no security fixes. The PC still runs, but Microsoft recommends moving to Windows 11. If your PC can't make the move, the article on why you can't upgrade to Windows 11 covers the usual reasons.
 
 ## Check whether your PC can upgrade
 
@@ -37,12 +37,12 @@ Microsoft says the device must meet the Windows 11 minimum requirements. Accordi
 - **Display:** high definition (720p), 9 inches or larger, 8 bits per color channel.
 - **Internet:** needed for updates and some features. Windows 11 Home needs an internet connection and a Microsoft account for first-time setup.
 
-For a direct upgrade from Windows 10, the same page asks for Windows 10 version 2004 or later with the September 14, 2021 security update or later installed. S mode is supported only on Windows 11 Home. Other editions in S mode must leave S mode first, and you can't switch back afterwards.
+For a direct upgrade from Windows 10, the same page asks for Windows 10 version 2004 or later with the September 14, 2021 security update or later installed. Microsoft adds that S mode is only supported on the Home edition of Windows 11.
 
 There are two ways to check:
 
-1. **Windows Update.** In Windows 10, Windows Update checks whether the device meets the requirements. When the check finishes, it shows that the upgrade is ready to install.
-2. **PC Health Check.** Microsoft's recommended tool for Windows 10 devices. Download it from Microsoft's Windows 11 page and run the check.
+1. **Windows Update.** In Windows 10, open Windows Update and see whether the Windows 11 upgrade is offered. Microsoft says that if it doesn't show up, the device may not meet the hardware requirements, a compatibility issue may exist, or the upgrade may not be ready yet.
+2. **PC Health Check.** Microsoft's Installation Assistant points you to this app when it needs more information. Download it from Microsoft's Windows 11 page and run the check.
 
 If you see a message called "What needs your attention" during an upgrade attempt, the device may not meet the requirements. Microsoft's installation page says plainly that it isn't recommended to install Windows 11 on a device that doesn't meet them.
 
@@ -109,7 +109,7 @@ People mix the words, and Microsoft's FAQ separates them. An **upgrade** moves a
 
 After you upgrade, you have 10 days to return to Windows 10 and keep the files and data that were migrated. After 10 days, back up your files manually, for example to OneDrive, and then do a clean install of Windows 10. Microsoft's FAQ doesn't describe the steps for going back, and I didn't find them on the pages I opened, so look at the recovery options in Windows 11 Settings or ask your IT team before the 10 days run out.
 
-Practical advice for the 10 days: test your key workflows in the first two days. Print, scan, VPN, the apps that you use every day, and anything tied to a hardware dongle. If something fails, you still have a way back. Be careful with disk cleanup tools in that period. Microsoft doesn't say what they remove, and the return depends on files from the old installation staying in place.
+Practical advice for the 10 days: test your key workflows in the first two days. Print, scan, VPN, the apps that you use every day, and anything tied to a hardware dongle. If something fails, you still have a way back. Be careful with disk cleanup tools in that period. Microsoft doesn't say what they remove, so don't assume the return still works after a cleanup.
 
 ## For admins: upgrading many PCs
 
@@ -121,7 +121,7 @@ Devices don't upgrade automatically unless an administrator sets it up. The guid
 - **Microsoft Intune** feature update deployments. Per Microsoft's page on [upgrading devices to Windows 11 with Intune](https://learn.microsoft.com/en-us/intune/device-updates/windows/upgrade-to-windows-11), you pick the Windows 11 version in the Feature update to deploy list. A checkbox, "When a device isn't capable of running Windows 11, install the latest Windows 10 feature update", lets one policy upgrade eligible devices and keep ineligible ones current on Windows 10. You can't add that checkbox to an existing policy. You delete the policy and create a new one.
 - **WSUS and Configuration Manager.** Sync the Windows 11 product category, accept the license terms on behalf of your users, and note that there is no x86 option because Windows 11 doesn't support 32-bit.
 
-For readiness, Intune's Endpoint analytics shows which managed devices meet the hardware requirements and which requirement they miss. Start with a pilot group, then widen in rings: a small preview ring, a limited ring of early adopters, then broad deployment. Write a short note for users that says what will change and when, and update the help desk guides with new screenshots.
+For readiness, Microsoft points to Endpoint analytics, which provides a hardware readiness assessment that identifies the managed devices eligible for Windows 11. Start with a pilot group, then widen in rings: a small preview ring, a limited ring of early adopters, then broad deployment. Write a short note for users that says what will change and when, and update the help desk guides with new screenshots.
 
 ## Common mistakes
 
@@ -144,3 +144,12 @@ For readiness, Intune's Endpoint analytics shows which managed devices meet the 
 ## Next step
 
 Run PC Health Check on one PC today and write down the result. If it passes, back up your files and start with Windows Update, because that's the route Microsoft recommends. If you plan to upgrade to Windows 11 across a team, try the same steps on one pilot PC first and keep the 10-day return window in mind.
+
+## Sources
+
+- [Windows 11 system requirements (Microsoft Learn)](https://learn.microsoft.com/windows/whats-new/windows-11-requirements)
+- [Upgrade to Windows 11: FAQ (Microsoft Support)](https://support.microsoft.com/windows/deployment/install-upgrade/upgrade-to-windows-11-faq)
+- [Ways to install Windows 11 (Microsoft Support)](https://support.microsoft.com/windows/ways-to-install-windows-11-e0edbbfb-cfc5-4011-868b-2ce77ac7c70e)
+- [Create installation media for Windows (Microsoft Support)](https://support.microsoft.com/windows/create-installation-media-for-windows-99a58364-8c02-206f-aa6f-40c3b507420d)
+- [Prepare for Windows 11 (Microsoft Learn)](https://learn.microsoft.com/windows/whats-new/windows-11-prepare)
+- [Upgrade Windows 10 devices to Windows 11 with Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-updates/windows/upgrade-to-windows-11)
