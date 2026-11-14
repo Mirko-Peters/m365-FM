@@ -22,7 +22,7 @@ faq:
   - q: "How many messages can I act on at once?"
     a: "Bulk actions are available for up to 100 messages."
   - q: "Who can manage quarantine?"
-    a: "Quarantine Administrator, Security Administrator, Organization Management, or the Microsoft Entra Security Administrator or Global Administrator role, which Learn says to limit to emergencies. Unified RBAC permission Email & collaboration quarantine (manage) also works. PIM roles are not supported."
+    a: "Quarantine Administrator, Security Administrator, Organization Management, or the Microsoft Entra Security Administrator or Global Administrator role. Learn says to limit Global Administrator to emergencies. The unified RBAC permission Email & collaboration quarantine (manage) also works when Defender for Office 365 permissions are Active, in the portal only. PIM roles are not supported."
 ---
 
 Quarantine holds messages that protection policies caught, such as spam, phishing and malware. Admins decide what to release, delete or report. This guide follows the Microsoft Learn page on managing quarantined messages and files as an admin. The release guidance on the page is scattered, so it is collected here.
@@ -37,23 +37,23 @@ Go to the Microsoft Defender portal, then **Email & collaboration** > **Review**
 
 ## Filters and search
 
-Email filters include Time received (default Last 7 days), Expires, Quarantine reason, Policy type, Release status, Recipient (All users or Only me), Blocked sender, Message ID, Sender, Recipient, Subject and Recipient tag.
+Email filters include Time received (default Last 7 days), Expires, Quarantine reason, Policy type, Release status, Recipient (All users or Only me), Blocked sender, Message ID, Sender address, Recipient address, Subject and Recipient tag. Filters are cached, so the filters from the last session are selected the next time you open the page.
 
-Search is case-insensitive and does not support wildcards. It searches only the current view of up to 100 items, so narrow the filters first.
+Search takes a sender email address or the entire subject, and wildcards are not supported. The subject search is not case-sensitive. It searches only the current view of up to 100 items, so narrow the filters first.
 
 ## Actions
 
-- **Release.** Delivers the message again. Options let you send a copy to other recipients and submit the message to Microsoft as a false positive. The false-positive option reveals Allow this message, Remove entry after (default 45 days after the last used date) and an Allow entry note.
-- **Approve or Deny release.** Handles release requests from users.
+- **Release.** Delivers the message again. It is not available for messages already released, and you cannot release a message to the same recipient more than once. Options let you send a copy to other recipients and submit the message to Microsoft as a false positive. The false-positive option reveals Allow this message, Remove entry after (default 45 days after the last used date) and an Allow entry note. The page says that only members of the Security Administrators role group see and use the submit and Allow email with similar attributes options.
+- **Approve or Deny release.** Handles release requests from users. Deny applies to all recipients, not to specific ones.
 - **Delete from quarantine.** Permanent.
 - **Preview message** and **View message headers.**
 - **Submit for review.**
-- **Allow sender** and **Block sender.** They need the Only me filter and apply to your own lists. To block mail when it arrives, use mail flow rules.
+- **Allow sender** and **Block sender.** They need the Only me filter and add the sender to the Safe Senders or Blocked Senders list of the mailbox of whoever is signed in. The organization can still receive mail from a blocked sender. To delete mail from a blocked sender on arrival, use a mail flow rule with Block the message.
 - **Remove sender from user block list.**
 - **Share email.**
 - **Download messages.** Requires a reason and a password. The result is saved as .eml files in Quarantined Messages.zip.
 
-Bulk actions work on up to 100 messages.
+Bulk actions work on up to 100 messages. For bulk release the only options are sending a copy to other recipients and submitting the message as a false positive.
 
 ## Before you release
 
@@ -63,23 +63,23 @@ The page has no dedicated checklist. These points come from its guidance:
 - Inbox rules can move or delete a released message. Use message trace to confirm that it reached the inbox.
 - A release re-delivers the message. The original send date stays in the headers.
 - Password-protected attachments that Safe Attachments could not scan can be released without the password.
-- A false-positive submission can add entries to the Tenant Allow/Block List.
+- Selecting Allow this message in a false-positive submission adds allow entries for the sender and related URLs or attachments to the Tenant Allow/Block List.
 
 ## Permissions
 
-- Managing quarantine: Quarantine Administrator, Security Administrator, Organization Management, or the Microsoft Entra Security Administrator or Global Administrator role (limit these to emergencies), or the unified RBAC permission Email & collaboration quarantine (manage).
-- Read-only: Global Reader, Security Reader and Security Operator.
+- Managing quarantine: Quarantine Administrator, Security Administrator, Organization Management, or the Microsoft Entra Security Administrator or Global Administrator role (the page says to limit Global Administrator to emergencies or cases where you cannot use another role), or the unified RBAC permission Email & collaboration quarantine (manage), which applies when Email & collaboration > Defender for Office 365 permissions is Active and affects the portal only, not PowerShell.
+- Read-only, including preview and download: Global Reader, Security Reader and Security Operator. Submitting messages to Microsoft from quarantine needs Security Administrator.
 - Privileged Identity Management roles are not supported in quarantine.
 - Exchange Online permissions for quarantine management ended in February 2023 (message center post MC447339).
 - Guest admins from other organizations cannot manage quarantine.
 
 ## Retention and audit
 
-- Retention depends on the reason. Teams messages are kept 30 days. Quarantined files are removed from quarantine after 30 days but stay blocked.
+- Messages and files are kept for a default period that depends on why they were quarantined. Expired items are deleted automatically and cannot be recovered. The page links a Quarantine retention article for the periods. Teams messages are kept 30 days. Files quarantined in SharePoint or OneDrive are removed from quarantine after 30 days, and the blocked files stay in the blocked state.
 - The page does not state the email retention numbers in this section.
-- The quarantine policy for Teams messages is currently AdminOnlyAccess.
+- The quarantine policy for Teams messages is currently AdminOnlyAccess, so users cannot access quarantined Teams messages.
 - Deleting is logged as the audit activity Deleted Quarantine message.
-- PowerShell cmdlets are listed: Delete-QuarantineMessage, Export-QuarantineMessage, Get-QuarantineMessage, Preview-QuarantineMessage and Release-QuarantineMessage. The page gives no examples.
+- PowerShell cmdlets are listed: Delete-QuarantineMessage, Export-QuarantineMessage, Get-QuarantineMessage, Preview-QuarantineMessage and Release-QuarantineMessage. Preview-QuarantineMessage is for messages only. The PermissionTo* properties from Get-QuarantineMessage reflect the permissions of the user who runs the cmdlet, not those of the recipients. The page gives no examples.
 
 ## What the page does not say
 
@@ -89,7 +89,7 @@ The page has no dedicated checklist. These points come from its guidance:
 
 ## A release outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Filter to the message and preview it before you decide.
 2. Check the quarantine reason and the policy type.
@@ -97,7 +97,7 @@ This outline is practical advice built on the page.
 4. Confirm delivery with message trace.
 5. If the message returns to quarantine, review connectors and other filtering services.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Deleting messages that a user may still need, since delete is permanent.
 - Expecting Allow sender to block or allow mail for the whole tenant.
