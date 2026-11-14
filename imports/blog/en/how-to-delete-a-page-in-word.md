@@ -18,7 +18,7 @@ faq:
   - q: "Why won't the blank page at the end of my Word document delete?"
     a: "Word always keeps one final paragraph mark, and if a table, page break or full page of text pushes that mark onto a new page, the page stays. Show formatting marks, delete extra breaks, then shrink the last mark to 1 pt or hide it."
   - q: "Can I delete a page in Word for the web?"
-    a: "You can delete content and empty paragraphs, but Microsoft Community answerers say a Section Break (Next Page) cannot be removed in Word for the web. Open the document in Word on Windows or Mac for that step, save it, then return to the web version."
+    a: "You can delete content and empty paragraphs, but a community answer on Microsoft Q&A says a Section Break (Next Page) cannot be removed in Word for the web. Open the document in Word on Windows or Mac for that step, save it, then return to the web version."
 ---
 
 To delete a page in Word, click anywhere on that page, press **Ctrl+G**, type `\page`, press **Enter**, select **Close**, and then press **Delete**. That works for a page with text, pictures or empty lines. A blank page needs a slightly different fix, because something invisible is creating it: an empty paragraph, a page break, a section break or the paragraph mark after a table. This article is for anyone who has a stray page in a [Word](https://www.m365.fm/entity/word/) document and wants it gone without wrecking the layout.
@@ -27,7 +27,7 @@ To delete a page in Word, click anywhere on that page, press **Ctrl+G**, type `\
 
 There are two reliable ways. Use the first when you want a quick, exact selection, and the second when you only need part of the page.
 
-**With Go To (any page, any length).** Microsoft's page [Delete a page or remove a blank page in Word](https://support.microsoft.com/en-us/word/delete-a-blank-page) gives these steps, listed for Word in Microsoft 365, 2024, 2021, 2019 and 2016:
+**With Go To (any page, any length).** Microsoft's page [Delete a page or remove a blank page in Word](https://support.microsoft.com/word/delete-a-blank-page) gives these steps for Word for Microsoft 365 and Word 2024, including Mac. The Mac shortcut in step 2 isn't listed on the pages cited here, so check it in your Word:
 
 1. Click or tap anywhere on the page you want to delete.
 2. Press **Ctrl+G**. On a Mac, press **Option+Command+G**.
@@ -43,7 +43,7 @@ One thing to check before you press Delete: if the page contains a table, a pict
 
 ## How do you delete a blank page in Word?
 
-A blank page isn't empty. Word thinks something is on it. To see what, show the formatting marks: select the **¶** button on the **Home** tab, or press **Ctrl+Shift+8**. On a Mac, Microsoft's page on [adding or deleting a page in Word for Mac](https://support.microsoft.com/en-us/office/add-or-delete-a-page-in-word-for-mac-5513dfc4-02c8-4e24-afc4-804d9690dae4) says to press **Command+8** to show paragraph marks.
+A blank page isn't empty. Word thinks something is on it. To see what, show the formatting marks: select the **¶** button on the **Home** tab, or press **Ctrl+Shift+8**. Both come from the community answers cited below, not from Microsoft's own page. On a Mac, Microsoft's page on [adding or deleting a page in Word for Mac](https://support.microsoft.com/office/add-or-delete-a-page-in-word-for-mac-5513dfc4-02c8-4e24-afc4-804d9690dae4) says to press **Command+8** to show paragraph marks.
 
 Now look at the blank page. You'll usually find one of these:
 
@@ -51,25 +51,21 @@ Now look at the blank page. You'll usually find one of these:
 - **A manual page break.** It appears as a dotted line labeled "Page Break". Select it and press **Delete**.
 - **A section break.** It appears as "Section Break (Next Page)" or similar. Place the cursor directly before it and press **Delete**.
 
-A section break needs one more thought. If it sits at the very end of the document, deleting it is fine. If it sits in the middle, a Microsoft Community advisor suggests changing it instead: go to **Layout**, open the **Page Setup** dialog from the small arrow at the corner of the group, and on the **Layout** tab set **Section start** to **Continuous**. That keeps the section but removes the forced new page. Afterwards, check your headers, footers and page numbers, because they're often tied to sections.
+A section break needs one more thought. If it sits at the very end of the document, deleting it is fine. If it sits in the middle, you can change it instead: go to **Layout**, open the **Page Setup** dialog from the small arrow at the corner of the group, and on the **Layout** tab set **Section start** to **Continuous**. That keeps the section but removes the forced new page. Afterwards, check your headers, footers and page numbers, because they're often tied to sections.
 
 If the blank page is in the middle and you see nothing on it, check the paragraph settings of the last line on the page before it. In the **Paragraph** dialog, on the **Lines and Breaks** tab, make sure **Page break before** isn't ticked on the paragraph that sits on the blank page.
-
-### Can you delete a page from the Navigation Pane?
-
-Sometimes. Open the **View** tab, tick **Navigation Pane**, switch to **Pages**, click the thumbnail of the blank page and press **Delete**. A Microsoft Community advisor lists this among the fixes. It's a good way to see which page you're dealing with in a long document, but if nothing happens, go back to the formatting marks, because the cause is still there.
 
 ## How do you fix the blank last page that won't delete?
 
 This is the case that causes most of the frustration. Backspace does nothing, and the page stays.
 
-The reason is a rule of the program: Word needs a paragraph mark after a table, and that final paragraph mark can't be deleted. Answers in a [Microsoft Community thread about a blank page after a table](https://learn.microsoft.com/en-us/answers/questions/4785676/unable-to-delete-blank-page-at-end-of-table-docume?forum=msoffice-all) say it plainly, and a second thread says the same about the paragraph after a table. If your table fills the last page to the bottom, that mark gets pushed onto a new page, and you see a blank page you can't remove.
+The reason is a rule of the program: Word needs a paragraph mark after a table, and that final paragraph mark can't be deleted. Answers in a [Microsoft Community thread about a blank page after a table](https://learn.microsoft.com/answers/questions/4785676/unable-to-delete-blank-page-at-end-of-table-docume?forum=msoffice-all) say it plainly, and a second thread says the same about the paragraph after a table. If your table fills the last page to the bottom, that mark gets pushed onto a new page, and you see a blank page you can't remove.
 
 You don't have to delete the mark. You have to make it small enough to fit on the previous page. Try these in order:
 
 1. **Show formatting marks** (Ctrl+Shift+8) and click in the last paragraph mark.
-2. **Shrink it.** Set its font size to 1 pt. Then open the **Paragraph** dialog and set **Line spacing** to **Exactly** 1 pt, and **Before** and **After** spacing to 0 pt. One community answer uses the line spacing and spacing settings, another uses the font size, and both aim at the same result.
-3. **Hide it.** Select the mark, open the **Font** dialog and tick **Hidden**. If the mark still shows, go to **File** > **Options** > **Display** and clear the **Hidden text** option.
+2. **Shrink it.** Set its font size to 1 pt. The accepted answer in that thread also gives it a line spacing of 1 pt. In the **Paragraph** dialog you can set **Line spacing** to **Exactly** 1 pt and **Before** and **After** spacing to 0 pt, which follows the same idea.
+3. **Hide it.** Select the mark, open the **Font** dialog and tick **Hidden**. If the mark still shows, go to **File** > **Options** > **Display** and clear the **Hidden text** option. That setting is a practical tip, not from the thread.
 4. **Change the margin a little.** Reduce the top or bottom margin by a small amount, for example from 1" to 0.95", so the mark moves back onto the page before. If that doesn't work, try a smaller change.
 5. **Move the table up.** In one thread, the table sat too low against the footer. Raising its bottom edge removed the blank page.
 
@@ -79,7 +75,7 @@ If the extra page comes after text and not after a table, remove surplus Enter p
 
 **Mac.** The steps are the same ideas with different keys: **Option+Command+G** for Go To and **Command+8** for formatting marks, per Microsoft's pages above.
 
-**Word for the web.** Two limits appear in a [Microsoft Community thread on Word for the web](https://learn.microsoft.com/en-us/answers/questions/5724170/how-do-i-delete-a-blank-page-in-word-at-end-of-doc). First, the **¶** button may be hidden if the ribbon is in the single-line layout. Click the arrow at the far right of the ribbon and choose **Classic Ribbon** to bring it back. Second, an answerer states that a **Section Break (Next Page)** can't be deleted in Word for the web. Open the document in Word on Windows or Mac, delete the break, save, and continue on the web if you like. On the web, you can still delete extra page breaks and empty paragraph marks.
+**Word for the web.** Two limits appear in a [Microsoft Community thread on Word for the web](https://learn.microsoft.com/answers/questions/5724170/how-do-i-delete-a-blank-page-in-word-at-end-of-doc). First, the **¶** button may be hidden if the ribbon is in the single-line layout. Click the arrow at the far right of the ribbon and choose **Classic Ribbon** to bring it back. Second, a volunteer moderator states that a **Section Break (Next Page)** can't be deleted in Word for the web. Open the document in Word on Windows or Mac, delete the break, save, and continue on the web if you like. On the web, you can still delete extra page breaks and empty paragraph marks.
 
 **Phone or tablet.** Microsoft's page-deletion articles cover Windows and Mac and don't list steps for the mobile apps, so don't count on the same buttons being there. If the formatting marks are hard to reach, finish the job in desktop Word.
 
@@ -113,3 +109,10 @@ Most stray pages come from the way the page was started, not from the one you ju
 ## Next step
 
 To delete a page in Word without surprises, turn on the formatting marks first and look at what is on the page. Open your document now, press Ctrl+Shift+8 and scroll through once, deleting the breaks you don't need and shrinking the last paragraph mark if a table ends the document.
+
+## Sources
+
+- [Delete a blank page in Word (Microsoft Support)](https://support.microsoft.com/word/delete-a-blank-page)
+- [Add or delete a page in Word for Mac (Microsoft Support)](https://support.microsoft.com/office/add-or-delete-a-page-in-word-for-mac-5513dfc4-02c8-4e24-afc4-804d9690dae4)
+- [Unable to delete blank page at end of table document (Microsoft Q&A, community answers)](https://learn.microsoft.com/answers/questions/4785676/unable-to-delete-blank-page-at-end-of-table-docume)
+- [How do I delete a blank page in Word at end of document in Word for web (Microsoft Q&A, community answers)](https://learn.microsoft.com/answers/questions/5724170/how-do-i-delete-a-blank-page-in-word-at-end-of-doc)
