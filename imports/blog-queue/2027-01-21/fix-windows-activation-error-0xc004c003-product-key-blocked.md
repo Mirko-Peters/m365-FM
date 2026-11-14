@@ -96,7 +96,7 @@ If activation fails with the same error, contact Microsoft Support.
 
 ## Which cause fits which fix
 
-| Cause | Direction in Learn |
+| Cause | Fix (my reading) |
 | --- | --- |
 | MAK blocked as stolen or misused | New MAK from the Licensing Activation Centers |
 | Evaluation key expired | New MAK, if your licensing needs a MAK |
