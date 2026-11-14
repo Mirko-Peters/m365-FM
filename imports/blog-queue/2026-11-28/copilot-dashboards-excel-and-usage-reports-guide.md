@@ -9,9 +9,9 @@ topics: [copilot, copilot-analytics, excel]
 keypoints:
   - "Copilot in Excel can create charts and PivotTables from prompts. Microsoft's page does not describe building a complete dashboard, so assemble the final layout yourself and review every result."
   - "The Microsoft 365 admin center usage report is at Reports > Usage > Microsoft Copilot. It offers 7, 28, 90 and 180 day views and exports to .csv."
-  - "The Copilot Dashboard in Viva Insights shows readiness, adoption, impact and sentiment. It needs at least 1 Copilot license to process data, and some features need 50 licenses."
+  - "The Copilot Dashboard in Viva Insights shows readiness, adoption, impact and sentiment. Data processing needs 1 Copilot or 50 Viva Insights licenses, and some features need 50."
   - "Adoption metrics use defined levels: power users average 15 or more actions per week, habitual users 1 to 14, and active means use in the previous 28 days."
-  - "Copilot assisted hours and value are estimates. The default hourly rate is $72 and can be changed in settings."
+  - "Copilot assisted hours and value are estimates. The default hourly rate is $72 and can be changed."
 faq:
   - q: "Can Copilot create a dashboard in Excel?"
     a: "Microsoft Support documents Copilot in Excel creating charts and PivotTables from a prompt, plus highlighting, sorting and filtering. The page states nothing about dashboard requirements, so treat Copilot as a builder of individual visuals that you arrange on a sheet and verify yourself."
@@ -48,9 +48,8 @@ Ask Copilot to highlight, sort or filter. Copilot describes the change in the pa
 
 ### Tips that match the documentation
 
-- Name the columns or ranges you want Copilot to use, as Microsoft advises.
-- Copilot makes direct changes to the workbook. You can undo or view earlier versions, and you can turn autosave off to test.
-- Review, edit and verify everything Copilot creates. Microsoft's FAQ says it can make mistakes and advises against relying on it for finance, legal or medical decisions.
+- Add more detail to your prompt and ask again if a suggestion does not fit, as Microsoft's page suggests.
+- Review, edit and verify everything Copilot creates, as Microsoft's page says. The Excel FAQ also describes undoing changes and viewing earlier versions.
 - Editing needs calculation options set to Automatic. Files from a SharePoint site that requires check-out do not work in Excel on Windows or Mac, though Excel for the web works.
 
 Then put the charts and PivotTables on one sheet, set a consistent layout and add slicers or filters yourself. The pages I read give no steps for that part.
@@ -91,14 +90,14 @@ Pages and metrics:
 
 | Page | What it shows |
 |---|---|
-| Readiness | Activation progress and recommendation cards |
+| Readiness | Activation progress and recommendations |
 | Adoption | Licensed and active users, usage levels, returning users, app breakdowns |
 | Impact | Actions taken, assisted hours, assisted value, satisfaction rate |
 | Sentiment | Survey results from Viva Pulse, Viva Glint or an uploaded CSV |
 
 Definitions to quote correctly: an active user used Copilot in the previous 28 days. Power users average 15 or more actions per week and used Copilot in at least 9 of the past 12 weeks. Habitual users average 1 to 14 actions per week with the same 9-of-12 condition. Novice users average at least one action but do not meet that condition.
 
-Copilot assisted hours are an estimate based on action counts and assistance factors, for example 6 minutes per search or summary action. Assisted value is hours multiplied by an hourly rate, with a default of $72 that you can change. The satisfaction rate appears only with at least 30 feedback responses from at least five unique users in 28 days.
+Copilot assisted hours are an estimate based on action counts and assistance factors, for example 6 minutes per search or summary action. Assisted value is hours multiplied by an hourly rate, with a default of $72 that you can change. Learn says the change is not saved between sessions. The satisfaction rate appears only with at least 30 feedback responses from at least five unique users in 28 days.
 
 The dashboard refreshes daily, shows the previous 28 days and can lag by up to six days. Metrics are hidden for groups below the minimum group size.
 
