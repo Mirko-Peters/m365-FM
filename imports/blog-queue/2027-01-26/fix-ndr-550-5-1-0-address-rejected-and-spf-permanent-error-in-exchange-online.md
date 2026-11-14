@@ -10,7 +10,7 @@ keypoints:
   - "The destination server that generated 5.1.0 will not accept messages from you or for the recipient. It can block your address, your organization or all of Exchange Online."
   - "If other recipients in the same domain work, suspect the recipient's personal block list and contact the recipient by another channel."
   - "An invalid Auto-Complete (nickname cache) entry can cause it, for example after a recipient moved between on-premises Exchange and Exchange Online."
-  - "For admins the page points to an incomplete SPF record. The NDR may show Address Rejected and Recipient address rejected: SPF Permanent Error."
+  - "For admins the page says the SPF record might be incomplete. The NDR may show Address Rejected and Recipient address rejected: SPF Permanent Error."
   - "The SPF page adds the rules: one record per domain, fewer than 10 DNS lookups, correct syntax, and no SPF changes in Microsoft 365 itself, only at your DNS host."
 faq:
   - q: "What does 550 5.1.0 mean?"
@@ -63,13 +63,13 @@ You might have an invalid entry in your Auto-Complete list, also called the nick
 3. Select **Use the light version of Outlook on the web** and **Save**.
 4. Sign out, close the browser and open the mailbox again.
 
-Then in the light version: choose **Options**, check that **Messaging** is selected, and in the **E-Mail Name Resolution** section select **Clear Most Recent Recipients list**, then confirm with **OK**. Afterward clear the **Use the light version** check box under **Outlook version**, save, sign out and close the browser to return to the full version. The page names Internet Explorer 9 as an example of an older browser. In my experience, using the setting is the more practical way today.
+Then in the light version: choose **Options**, check that **Messaging** is selected, and in the **E-Mail Name Resolution** section select **Clear Most Recent Recipients list**, then confirm with **OK**. Afterward clear the **Use the light version** check box under **Outlook version**, save, sign out and close the browser to return to the full version. The page names Internet Explorer 9 as an example of an older browser. My advice: use the setting, since Internet Explorer 9 is rarely available today.
 
 If these steps do not help, the page says to contact your email admin and refer them to the article.
 
 ## For email admins: check SPF
 
-The page says the Sender Policy Framework record for your Exchange Online domain might be incomplete and might not include all sources of mail for your domain. It links the SPF setup article. That article was not the start page, but I read it and use it for the rules below.
+The page says the Sender Policy Framework record for your Exchange Online domain might be incomplete and might not include all sources of mail for your domain. It links the SPF setup article. The rules below come from the current Learn SPF page listed in the sources.
 
 ### What SPF is for
 
