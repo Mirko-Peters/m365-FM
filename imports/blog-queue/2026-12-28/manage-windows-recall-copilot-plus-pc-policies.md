@@ -89,4 +89,4 @@ The page gives CSP and Group Policy paths and no Intune menu path. It says no bu
 
 ## Sources
 
-- [Manage Recall](https://learn.microsoft.com/windows/client-management/manage-recall)
+- [Manage Recall for Windows clients (Microsoft Learn)](https://learn.microsoft.com/windows/client-management/manage-recall)
