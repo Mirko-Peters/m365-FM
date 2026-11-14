@@ -8,7 +8,7 @@ date: 2027-01-04
 topics: [entra-id]
 keypoints:
   - "Check first that the Microsoft Entra private network connector service is running, then read the connector Admin log in Event Viewer."
-  - "An app that renders badly often has content outside the published path. Publish at the highest-level path and look for HTTP 404 in Fiddler or F12 tools."
+  - "An app that renders badly can be requesting content outside the published path. Publish at the highest-level path and look for HTTP 404 in Fiddler or F12 tools."
   - "Kerberos error codes 12008, 13016, 13019, 13020 and 13022 point to SPN, UPN claim, trust or time synchronization problems."
   - "Users with a Microsoft account or guest access cannot use integrated Windows authentication apps. They need a matching corporate account."
   - "Inline TLS inspection between connectors and the cloud service can cause ConnectorError Unauthorized. Learn says to disable it."
@@ -22,7 +22,7 @@ faq:
   - q: "Why does the user see This corporate app can not be accessed with a license message?"
     a: "Learn says the user needs a license for Microsoft Entra ID P1 or P2. Assign a Premium license to the user or group on the Licenses tab."
   - q: "What causes ConnectorError Unauthorized?"
-    a: "Learn says the connector client certificate fails to reach the endpoint, often because a network device does TLS inspection or termination. It advises disabling inline inspection and termination of outbound TLS between the connectors and the Application Proxy cloud services."
+    a: "Learn says the error occurs when the connector client certificate fails to reach the endpoint, for example when a network device performs TLS inspection or breaks the TLS connection. It advises disabling inline inspection and termination of outbound TLS between the connectors and the Application Proxy cloud services."
 ---
 
 Troubleshoot Application Proxy in three layers: the connector, the published app configuration and the user-facing error. Start with the connector service and its event log. If they look healthy, move to the app settings and then to the error text. This guide follows the Microsoft Learn troubleshooting article for Application Proxy.
@@ -70,9 +70,9 @@ The page lists no network requirements or ports inline. It refers to a separate 
 | Not authorized. Make sure the user has a license for Microsoft Entra ID P1 or P2 | Assign a Premium license to the user or group on the Licenses tab |
 | A server with the specified host name could not be found | Custom domain misconfigured. Check the certificate and the DNS record |
 | Forbidden: This corporate app can not be accessed, or the user could not be authorized | Add the connector machine account to the Windows Authorization Access Group built-in domain group (KB 331951) |
-| InternalServerError: ConnectorError Unauthorized | The connector client certificate fails to reach the endpoint, often due to TLS inspection or termination. Disable inline inspection and termination of outbound TLS between connectors and the cloud services |
+| InternalServerError: ConnectorError Unauthorized | The connector client certificate fails to reach the endpoint, for example when a network device performs TLS inspection or breaks the TLS connection. Disable inline inspection and termination of outbound TLS between connectors and the cloud services |
 
-## A troubleshooting order
+## A troubleshooting order (my advice)
 
 The order below is a suggestion based on the article's structure.
 
@@ -83,7 +83,7 @@ The order below is a suggestion based on the article's structure.
 5. Does a Kerberos code appear? Check SPN, UPN claim, trust and clock sync.
 6. Is TLS inspection active on the outbound path from the connector?
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Testing with a Microsoft account or a guest account against an IWA app.
 - Forgetting to assign the user or group to the app.
@@ -98,4 +98,4 @@ The order below is a suggestion based on the article's structure.
 
 ## Sources
 
-- [Troubleshoot Application Proxy problems and error messages (Microsoft Learn)](https://learn.microsoft.com/entra/identity/app-proxy/application-proxy-troubleshoot)
+- [Troubleshoot Application Proxy (Microsoft Learn)](https://learn.microsoft.com/entra/identity/app-proxy/application-proxy-troubleshoot)
