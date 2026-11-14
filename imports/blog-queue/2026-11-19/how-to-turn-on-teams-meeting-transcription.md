@@ -78,7 +78,7 @@ To delete a transcript, the organizer or a co-organizer selects **Chat**, opens 
 | Another tenant | No | Yes | No | No |
 | Anonymous | No | No | No | No |
 
-This table follows Microsoft Support. The same page says that only the organizer, co-organizers and presenters can stop and restart transcription during a meeting, so assume the presenter role is needed to stop it. Dial-in callers can't view the transcript. With Teams Premium or Copilot, organizers can set who may record and transcribe when they schedule: organizers and co-organizers, organizers, co-organizers and presenters, or no one.
+This table follows Microsoft Support. The same page says that only the organizer, co-organizers and presenters can stop and restart transcription during a meeting, while its table lists start or stop as allowed for people in the same organization, so check how it behaves in your tenant. Dial-in callers can't view the transcript. With Teams Premium or Copilot, organizers can set who may record and transcribe when they schedule: organizers and co-organizers, organizers, co-organizers and presenters, or no one.
 
 ## Where the transcript is stored
 
