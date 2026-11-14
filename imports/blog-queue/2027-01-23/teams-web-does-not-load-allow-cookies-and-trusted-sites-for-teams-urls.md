@@ -18,7 +18,7 @@ faq:
   - q: "Which URLs must I allow?"
     a: "The page lists seven: microsoft.com, cloud.microsoft, microsoftonline.com, teams.skype.com, teams.microsoft.com, sfbassets.com and skypeforbusiness.com. In Edge and Chrome they are written with a leading [*.] wildcard. In Firefox they are entered as https addresses."
   - q: "Do I have to allow all third-party cookies?"
-    a: "No. In Edge the page offers an alternative: if you must keep third-party cookies blocked, add the seven sites under Allow. In Chrome you add them under Sites that can always use cookies with the including third-party cookies option. Learn also says Microsoft recommends blocking third-party cookies and explicitly allowing specific cookies from domains you trust."
+    a: "Not necessarily. In Edge the page offers an alternative: if you must keep third-party cookies blocked, add the seven sites under Allow. In Chrome you add them under Sites that can always use cookies with the including third-party cookies option. Learn also says Microsoft recommends blocking third-party cookies and explicitly allowing specific cookies from domains you trust."
   - q: "Who can change these settings?"
     a: "The page says you need administrative rights to make the updates. If you are the administrator, you can use a Group Policy Object to update all users at once."
   - q: "What about Safari?"
@@ -31,7 +31,7 @@ When the Teams web client does not load, or the page loads and stops, the Micros
 
 The issue occurs if you use the **Trusted Sites** feature in your browser and you did not add the URLs for Microsoft Teams to the list of sites your browser should trust. Teams then cannot load. The fix is to update the browser settings, and you need administrative rights to do it. An administrator can use a Group Policy Object (GPO) to update all users at once.
 
-Learn also says Microsoft recommends blocking third-party cookies, because they can put privacy and security at risk, and explicitly allowing specific cookies from domains you trust. That is why the steps below favor an allow list.
+Learn also says Microsoft recommends blocking third-party cookies, because they can put privacy and security at risk, and explicitly allowing specific cookies from domains you trust. The page's main Edge step is to allow cookies; the allow list is its alternative for people who must keep third-party cookies blocked.
 
 ## The seven sites
 
