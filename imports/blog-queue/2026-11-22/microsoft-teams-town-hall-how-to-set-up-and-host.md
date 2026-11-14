@@ -43,7 +43,7 @@ Microsoft recommends Teams Events Services above 20,000 attendees. Since April 1
 ## Route 1: create it in the Events app
 
 1. In Teams, select **Events** > **Create event**.
-2. Start from scratch or use the **town hall** template.
+2. Start from scratch or pick a template.
 3. Under **Add event details**, enter the name, start and end times, optional location and description.
 4. Under **Who's planning this event**, choose the mailbox that sends invites and add co-organizers and presenters.
 5. Under **Who can attend**, set access, invite people and groups and turn on registration if needed.
@@ -54,7 +54,6 @@ Learn's rules for the large-audience setting:
 
 - Up to 1,000 attendees it is off by default and you can turn it on.
 - Above 1,000 attendees it is on and can't be turned off.
-- The town hall template uses town hall settings unless the setting is off.
 - After saving, you can't change it.
 
 Turn on **Enable Green room** here if presenters should check audio, video and screen sharing before the start.
@@ -68,16 +67,17 @@ Microsoft Support describes a separate path for a town hall scheduled in the cal
 3. Under **Details**, enter title, dates and description. The maximum duration is 30 hours.
 4. Under **Event group**, add co-organizers and presenters, including up to 20 external presenters.
 5. Select **Save and send invites**.
-6. Under **Event access**, choose your organization, public, or people and groups. People and groups allow up to 500 individuals and 20 groups. Dynamic and federated groups aren't supported.
-7. Select **Meeting options** for more settings, then **Publish**.
+6. Under **Event access**, choose your organization, public, or people and groups. People and groups allow up to 500 individuals and 20 groups. Groups must be in your domain, and dynamic and federated groups aren't supported.
+7. Under **Invite attendees**, add attendees and select **Save**.
+8. Select **Meeting options** for more settings, then **Publish**. Your IT admin may lock some options.
 
-That article does not mention Optimize for large audience. An event scheduled in the calendar can only be edited in the calendar, not in the Events app.
+That article does not mention Optimize for large audience. Events created in the calendar may show different menus from the Events app hosting steps, so check which route your event used.
 
 ## Roles
 
 - **Organizer:** creates and configures the event within admin policy.
-- **Co-organizer:** has most organizer capabilities but can't change details such as date and time. Can export Q&A to CSV and see real-time insights. In the Events app, full editing parity needs an event mailbox.
-- **Presenter:** speaks and shares content. External presenters get a unique join link that skips the lobby, and it works on up to three devices.
+- **Co-organizer:** added in the event group or in **Who's planning this event**. The pages read do not list what a co-organizer can and cannot change.
+- **Presenter:** speaks and shares content. External presenters get a unique join link that bypasses the lobby.
 - **Attendee:** on a large-audience event can't turn on microphone or camera on demand.
 
 The pages read do not describe a separate producer role.
