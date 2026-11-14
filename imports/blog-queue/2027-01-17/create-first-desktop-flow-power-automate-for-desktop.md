@@ -25,7 +25,7 @@ faq:
     a: "Add the Run a flow built with Power Automate for desktop action, create or reuse a desktop flow connection, choose attended or unattended, and select or create the desktop flow. You need a registered machine or machine group and a work or school account."
 ---
 
-To create your first desktop flow, open Power Automate for desktop, select **New flow** in the console, name it and build the steps in the flow designer. Microsoft Learn describes three ways to start: copy an example, create one in the console, or create one through a cloud flow. This guide follows Learn's page on creating desktop flows and its getting started walkthrough for a work or school account.
+To create your first desktop flow, open Power Automate for desktop, select **New flow** in the console, name it and build the steps in the flow designer. Microsoft Learn describes three ways to start: copy an example, create one in the console, or create one through a cloud flow. This guide follows Learn's page on creating desktop flows, its getting started walkthrough for a work or school account and its page on triggering desktop flows from cloud flows.
 
 ## What you need
 
@@ -83,10 +83,6 @@ This section is my advice, not a Microsoft statement.
 4. **Test the destination first.** If the secondary drive is missing, the example fails in a way that looks like a flow problem.
 5. **Check licensing before planning unattended runs.** The page ties unattended runs to an add-on, so settle that with your administrator before you build.
 6. **Move to cloud triggers only when the desktop flow is stable.** Debugging is easier on the machine.
-
-## What I did not read
-
-I did not read the pages on the built-in recorder, the actions reference, machine management or desktop flow connections that Learn links from these pages, so details of those are not covered here.
 
 ## Related
 
