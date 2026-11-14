@@ -18,7 +18,7 @@ faq:
   - q: "Do I need a Copilot license to use HTML pages?"
     a: "Only for some tasks. Microsoft Support says opening the HTML creation screen and using the Copilot chat pane need a Copilot license. Uploading or moving HTML into Site Pages, editing content directly, publishing, sharing and viewing do not."
   - q: "How big can an uploaded HTML file be?"
-    a: "Microsoft Support gives a limit of 10 MB per HTML file. Images and videos don't count toward it, because SharePoint copies them to the Site assets folder. To shrink a file, link to hosted assets, reduce inline CSS and JavaScript or remove unused markup."
+    a: "Microsoft Support gives a limit of 10 MB per HTML file. Images and videos don't count toward it, because SharePoint copies them to the Site assets folder."
   - q: "Can an admin turn HTML pages off for the tenant?"
     a: "According to Microsoft Support, HTML pages are enabled by default and you can't disallow or restrict them tenant-wide. Site owners control the setting per site, using Site Pages, then File types, then Allow HTML files."
   - q: "Are HTML list views a documented feature?"
@@ -51,7 +51,7 @@ Steps:
 3. Submit. Copilot creates a draft in edit mode.
 4. Confirm the page is in **Site Pages**. If not, ask Copilot to move it or move it yourself.
 
-Put content, layout and color requirements into the prompt. Copilot-created pages follow accessibility requirements and use site branding automatically. Uploaded HTML gets neither, but you can ask Copilot to update it.
+The Support article does not give prompt wording. As my own suggestion, state content, layout and color requirements in the prompt. Copilot-created pages follow accessibility requirements and use site branding automatically. Uploaded HTML gets neither, but you can ask Copilot to update it.
 
 ## Upload an HTML file
 
@@ -63,10 +63,9 @@ To move an existing file into Site Pages, either use **...** > **Edit** > **Edit
 
 ## Edit, publish and share
 
-- Select **Edit** and click text to change it directly. No HTML coding is needed.
-- With a Copilot license, open the Copilot chat pane and describe the change. Name the section or element and the result you expect.
+- Select **Edit** and change the text on the page directly. For larger content or design changes, Support points to the Copilot chat pane, which needs a Copilot license.
 - Select **Publish** to make the current version visible to people who already have permission. Select **Save and close** to keep it unpublished.
-- Select **Share** to add people or groups, copy a link, or send a summary and link by email.
+- Select **Share**. **Share page** adds specific people or groups or copies a link, and **Send to email** sends a summary and link to site members.
 
 The September 2026 SharePoint blog adds that you can comment on AI-generated HTML as in a Word document, and Copilot then applies edits to the HTML, CSS and layout.
 
@@ -92,11 +91,11 @@ Pages render in a sandboxed iframe, isolated from the SharePoint header, footer 
 - JavaScript must be in the same HTML file, and browser localStorage is not accessible.
 - Links to other domains can fail with a message that your organization doesn't allow access. A site admin can add the domain under **Settings** > **Site information** > **View all site settings** > **HTML Field Security**.
 
-The September post says each tenant has an `_html` guidance page that helps AI assistants write HTML that works inside this sandbox. Standard web HTML from other AI tools may not work without it.
+The September post says each tenant has an `_html` guidance page that helps AI assistants write HTML that works inside this sandbox.
 
 ## Not supported yet
 
-Per Microsoft Support, these are not supported: stock or AI-generated images, inline video and audio, inline Office files and PDFs, third-party live data, promote to news post, save as template, private drafts, co-authoring, and reactions and comments. Mobile editing and viewing in some apps are listed as not supported or rolling out later.
+Per Microsoft Support, these are not supported: stock or AI-generated images, inline video and audio, inline Office files and PDFs, third-party live data, promote to news post, save as template, private drafts, co-authoring, and reactions and comments. Support also says you cannot edit HTML pages on mobile, and that viewing in the SharePoint app in Teams on mobile, the iOS app and the Android app is not supported yet and is rolling out as a fast follow.
 
 Supported items include scheduling and approvals, analytics, anchor links, and live data sharing from lists and Excel without arbitrary fetch.
 
@@ -109,7 +108,7 @@ The Microsoft pages I read, including the Support article, the Message Center po
 - Embedding large assets inline and hitting the 10 MB limit.
 - Calling an external API from the page and wondering why it fails.
 - Assuming publish shares the page. It only makes it visible to people who already have permission.
-- Pasting HTML from another AI tool and expecting it to work as-is.
+- Pasting HTML from another tool without testing it in the sandbox first (my own caution, not a Microsoft statement).
 
 ## Related
 
