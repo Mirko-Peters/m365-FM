@@ -9,20 +9,20 @@ topics: [power-automate, power-automate-run-history]
 keypoints:
   - "Open My flows, select the flow, then the date in the 28-day run history with a Failed status. The failed step has a red exclamation icon."
   - "Inputs show what the action sent. Outputs show the downstream service's real error message and status code."
-  - "401 and 403 are usually fixed by reconnecting under Edit > Connections > Manage connections. A 403 that appears only in embedded flows can be a Conditional Access difference."
-  - "400 and 404 mean a bad action setting, schema change or missing resource. 500 and 502 are temporary, so use Resubmit."
+  - "Learn says 401 and 403 authentication errors can usually be fixed with View Connections > Fix connection, then Resubmit. A 403 can also come from DLP, permissions or licensing."
+  - "400 and 404 point to an action setting that does not work as expected, such as malformed input or a missing resource. 500 and 502 are temporary, so use Resubmit."
   - "Flow owners get repair tips emails with a Fix my flow link on failure, which can be turned off in the flow properties."
 faq:
   - q: "Where do I find why a flow failed?"
     a: "According to Microsoft Learn, go to My flows, select the flow, and in the 28-day run history select the date of the run with a Failed status. Find the step with the red exclamation icon, open it and read the error in the right pane."
   - q: "What do Inputs and Outputs tell me?"
-    a: "Learn says Inputs show exactly what the action sent, such as the request URL or row ID, and Outputs show the downstream service's actual error message and status code."
+    a: "Learn's error reference says the Inputs section shows exactly what was sent, and that expanding Outputs shows the actual error message and status code from the API."
   - q: "How do I fix a 401 or 403 error?"
-    a: "Learn says to go to Edit > Connections > Manage connections, select Reconnect and resubmit. For 403, if the flow fails only when embedded in SharePoint, Teams or Excel, review Conditional Access, because policies can differ between the host app and Power Automate."
+    a: "Learn says 401 or 403 authentication errors can usually be fixed by updating the connection: in the right pane under How to fix select View Connections, select Fix connection next to the unauthenticated connection, verify your credentials and select Resubmit. The error reference adds that a 403 can come from a DLP policy, missing permissions on the target or a missing premium license. If the flow fails only when embedded in SharePoint, Teams or Excel, review Conditional Access, because policies can differ between the host app and Power Automate."
   - q: "Which Conditional Access settings does Learn mention?"
     a: "Target the Office 365 app or All cloud apps. If you target individual apps, include Microsoft Flow Service with application ID 7df0a125-d3be-4c96-aa54-591f83ff541c, exclude service accounts and flow connection owners from Terms of Use grant controls, and have affected users sign out and in again."
   - q: "Does the page cover 429 or 504 errors?"
-    a: "No. The troubleshooting page I read does not mention 408, 429 or 504 errors, the flow checker or retry policy defaults. Learn links to a cloud flow error code reference for more."
+    a: "No. The troubleshooting page does not mention 408, 429 or 504 errors, the flow checker or retry policy defaults, and neither does the error code reference, which covers named errors such as ActionTimedOut and FlowCheckerError."
 ---
 
 When a cloud flow fails, the answer is almost always in the run history. This guide follows Microsoft Learn's troubleshooting page for failed cloud flows. It covers how to find the failing step, how to read the error and what Learn says to do for each status code it lists.
@@ -37,19 +37,19 @@ To make runs easier to spot, select **Edit columns** on the flow details page an
 
 ## Read the error
 
-- **Inputs** shows what the action sent, such as the request URL or a row ID.
+- **Inputs** shows exactly what was sent to the action's service.
 - **Outputs** shows the downstream service's actual error message and status code.
 
-Compare the two. A wrong ID in Inputs points to a flow design issue. A service message in Outputs tells you what the other side rejected.
+The Learn pages do not describe Inputs and Outputs together as a rule. My advice: compare the two, because a wrong value in Inputs points to the flow design, while a message in Outputs shows what the other side rejected.
 
 ## Fix by status code
 
-| Code | Meaning on the page | Fix |
+| Code | Meaning per Learn | Fix |
 | --- | --- | --- |
-| 401 Unauthorized | Authentication failure | **Edit** > **Connections** > **Manage connections**, **Reconnect**, resubmit |
-| 403 Forbidden | Authorization failure, can also be Conditional Access | Reconnect. If it fails only when embedded, review Conditional Access |
-| 400 Bad request | Invalid action setting, or the target schema changed | Inspect Inputs, correct the action, save and **Resubmit** |
-| 404 Not found | Action refers to a resource that does not exist | Inspect Inputs for a wrong URL or ID, correct and resubmit |
+| 401 Unauthorized | Authentication error, token invalid or expired | **View Connections** in the right pane, **Fix connection**, then **Resubmit** |
+| 403 Forbidden | Listed with 401 as an authentication error. The error reference says the user or app lacks permission | Fix the connection. Also check DLP policies, target permissions and premium licensing. If it fails only when embedded, review Conditional Access |
+| 400 Bad request | An action setting does not work as expected, for example malformed input | Inspect Inputs, **Edit** the flow to correct the action, save and **Resubmit** |
+| 404 Not found | The resource the action tries to access does not exist | Check that the resource exists, correct the action, save and **Resubmit** |
 | 500 Internal server error | Temporary service failure | **Resubmit** |
 | 502 Bad gateway | Temporary service failure | **Resubmit** |
 
@@ -66,10 +66,10 @@ If a flow works at make.powerautomate.com but fails with an authentication error
 
 - **Repair tips emails** are sent to flow owners on failure and include a **Fix my flow** link. You can turn them off in the flow's properties menu.
 - **Troubleshoot in Copilot** in the new designer gives a plain-language error summary and, when possible, a suggested fix.
-- **Desktop flow version errors:** update Power Automate for desktop on the machine that runs the flow.
-- **Error handling:** Learn points to scopes for handling errors in the flow itself.
+- **Desktop flows:** the error reference says desktop flow errors are covered on a separate troubleshooting page.
+- **Error handling:** the troubleshooting page links a training module on error handling best practices. The error reference suggests **Configure run after** settings.
 
-## A short triage routine
+## A short triage routine (my advice)
 
 1. Open the failed run and the failed step.
 2. Read Outputs for the status code and message.
@@ -97,7 +97,7 @@ For the loop limit the reference gives defaults of 100,000 for premium and 5,000
 
 ## What the page leaves out
 
-Neither page covers the flow checker, the codes 408, 429 and 504, or retry policy defaults. Learn links to its troubleshooting and limits pages for those. For throttling, use them rather than assuming a fix from the number alone.
+Neither page covers the codes 408, 429 and 504 or retry policy defaults. The error reference has a FlowCheckerError entry but no guide to the flow checker. It links to a limits and configuration page for daily action limits. For throttling, use those pages rather than assuming a fix from the number alone.
 
 ## Related
 
@@ -106,5 +106,5 @@ Neither page covers the flow checker, the codes 408, 429 and 504, or retry polic
 
 ## Sources
 
-- [Troubleshoot failed cloud flows](https://learn.microsoft.com/power-automate/fix-flow-failures)
-- [Cloud flow error reference](https://learn.microsoft.com/power-automate/error-reference)
+- [Troubleshoot a cloud flow (Microsoft Learn)](https://learn.microsoft.com/power-automate/fix-flow-failures)
+- [Cloud flow error code reference (Microsoft Learn)](https://learn.microsoft.com/power-automate/error-reference)
