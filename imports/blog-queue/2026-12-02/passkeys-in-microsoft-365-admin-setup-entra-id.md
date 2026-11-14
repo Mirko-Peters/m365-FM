@@ -41,7 +41,7 @@ Microsoft's guidance is to treat synced passkeys as phishing-resistant, with the
 ## Prerequisites
 
 - **Roles:** Authentication Policy Administrator to enable profiles, create profiles and enable synced passkeys. Conditional Access Administrator to create a custom authentication strength.
-- **Windows:** Entra joined devices on Windows 10 version 1903 or later. Hybrid joined devices need version 2004 or later.
+- **Windows:** For the best experience, Entra joined devices should run Windows 10 version 1903 or later. For hybrid joined devices Microsoft Learn names Windows 10 version 2004 or later.
 - **Authenticator in a combined profile:** iOS 6.8.37 or later, or Android 6.2507.4749 or later.
 - **User step:** Users must complete MFA within the past five minutes before registering a passkey.
 
@@ -65,7 +65,7 @@ Select **+ Add passkey profile**, set the options and save. Up to three profiles
 
 - **Enforce attestation:** With Yes, Entra ID verifies make and model at registration. With No, Entra ID cannot guarantee any attribute of the passkey, including whether it is synced or device-bound. Attestation applies only at registration. Users who registered earlier are not blocked if you later enable it.
 - **Passkey types:** Device-bound, synced, or both.
-- **Key restrictions:** Allow or block specific models or providers by AAGUID, a 128-bit identifier for the key type.
+- **Key restrictions:** Allow or block specific models or providers by AAGUID.
 
 Key restrictions govern both registration and sign-in. If you remove a previously allowed AAGUID, users who registered it can no longer sign in with it. When attestation is off, treat AAGUID lists as a policy guide, not a strict control.
 
@@ -83,18 +83,18 @@ Select **Enable and Target**, then **Add target**. Choose **All users** or **Sel
 
 The separate Learn article for Authenticator adds these admin steps: under **Passkey (FIDO2) > Configure**, add a profile, set **Passkey types** to **Device-bound**, choose **Target specific AAGUIDs**, set **Behavior** to **Allow**, and add **Microsoft Authenticator**. Then enable and target the profile.
 
-It lists Android 14 or later and iOS 17 or later as requirements. It also documents Conditional Access traps. A policy on **All resources** that requires an authentication strength with a passkey in Authenticator can block users from adding that passkey, because they must already have one to reach Authenticator. Suggested workarounds include scoping the policy to specific apps, splitting policies by device platform and using a Temporary Access Pass for registration. Microsoft also describes excluding the Microsoft Authenticator Credential Registration resource, available in November 2026, which must be provisioned first.
+It lists Android 14 or later and iOS 17 or later as requirements. It also documents Conditional Access traps. A policy on **All resources** that requires an authentication strength with a passkey in Authenticator can block users from adding that passkey, because users must use a passkey to add a passkey in Authenticator, which they cannot do yet. Suggested workarounds include scoping the policy to specific apps, splitting policies by device platform and using a Temporary Access Pass for registration. Microsoft also describes excluding the Microsoft Authenticator Credential Registration resource, available in November 2026, which must be provisioned first.
 
 ## Enforce passkeys with Conditional Access
 
-You can use a built-in phishing-resistant authentication strength or create a custom one. As a Conditional Access Administrator, go to **Entra ID > Authentication methods > Authentication strengths**, select **New authentication strength**, name it and select **Passkeys (FIDO2)**. Under **Advanced options**, **Add AAGUID** restricts it to specific authenticators. Apply the strength in a Conditional Access policy for the resources you want to protect.
+To create a custom authentication strength, Microsoft Learn names the Conditional Access Administrator role and the path **Entra ID > Authentication methods > Authentication strengths > New authentication strength**. Apply the strength in a Conditional Access policy for the resources you want to protect. The pages read for this guide do not describe the strength options in more detail.
 
 ## Known limits and caveats
 
 - Guest users, internal or external, cannot register passkeys.
 - After a UPN change, a passkey cannot be updated. The user must delete the old one and add a new one in Security info.
 - Disabling synced passkeys in a profile blocks targeted users from signing in with synced passkeys they already registered.
-- The Passkey (FIDO2) policy size is limited to 20 KB. Learn lists 0.23 KB per profile target as a reference size.
+- The Passkey (FIDO2) policy size is limited to 20 KB. Learn gives 0.23 KB for one applied profile as a reference size, and you cannot save more profiles after the limit is reached.
 - Provisioning FIDO2 credentials on a user's behalf through Microsoft Graph is in preview.
 
 ## Related
