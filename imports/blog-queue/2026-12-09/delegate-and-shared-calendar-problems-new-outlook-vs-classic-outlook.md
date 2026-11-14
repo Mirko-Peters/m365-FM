@@ -10,17 +10,17 @@ keypoints:
   - "Shared calendars are moving from the legacy MAPI model to REST. New Outlook uses REST, while classic Outlook follows the Turn on shared calendar improvements setting."
   - "In classic Outlook, open the calendar's Properties. Type should read Folder containing Calendar items (REST) for an upgraded calendar."
   - "If a calendar is not upgraded, delete it and re-add it with Add Calendar > Open Shared Calendar. Do not use Add from address list, which creates a MAPI calendar."
-  - "Delegate permission is set on the primary calendar only. Full mailbox access does not count as sharing a calendar with a delegate."
+  - "Delegate permission can be assigned only on the primary calendar. Delegate access needs a work or school account with Exchange Online."
   - "In new Outlook, shared calendars are hidden by default. Use Show all and look under People's calendars."
 faq:
   - q: "Why do shared calendars behave differently in classic and new Outlook?"
     a: "Microsoft's message center post MC1287370 says shared calendars are being upgraded from the MAPI model to REST. New Outlook, Outlook on the web, mobile and Mac use REST. Classic Outlook follows the Turn on shared calendar improvements setting, and keeps using MAPI when it is off."
   - q: "How can I check whether a shared calendar uses the new model?"
     a: "In classic Outlook for Windows, open the calendar's Properties. An upgraded calendar shows Type: Folder containing Calendar items (REST). You need Editor or Delegate permission to see the label. Admins can also run Get-MailboxCalendarFolder and check ExtendedFolderFlags."
-  - q: "Does full mailbox access make someone a calendar delegate?"
-    a: "No. Microsoft Support says granting full mailbox access does not count as sharing a calendar with a delegate. The owner must share the calendar with the Delegate permission, and delegates can only be assigned on the primary calendar."
+  - q: "On which calendar can I give someone the Delegate permission?"
+    a: "Microsoft Support says delegates can be assigned only on the primary calendar. The owner shares the calendar and selects Delegate as the permission. Delegate access needs a work or school account with Exchange Online and cannot be given to people outside the organization."
   - q: "Is delegate access fully supported in new Outlook?"
-    a: "Microsoft's feature comparison lists calendar delegate access as available in both. It lists shared mailbox delegate access as available in classic Outlook and partially available in new Outlook. Check the live comparison page for the current status."
+    a: "Microsoft's feature comparison lists Delegate access as available in both. It lists Shared mailbox - Delegate access as available in classic Outlook and partially available in new Outlook. Check the live comparison page for the current status."
 ---
 
 When a delegate sees a different calendar in new Outlook than in classic Outlook, or changes do not sync, the first thing to check is which sharing model the calendar uses. Microsoft is moving shared calendars in Exchange Online from the legacy MAPI model to REST. New Outlook always uses REST, while classic Outlook only does when the shared calendar improvements setting is on. The checks below follow Microsoft's documentation, starting with that setting.
@@ -75,19 +75,17 @@ Microsoft Support describes the permission levels as:
 
 In new Outlook, the owner selects **Calendar** > **Home** > **Share Calendar**, enters the person, selects **Delegate** from the drop-down and optionally allows private events or category management. Under **Delegates**, the owner also chooses where invitations and responses go: delegate only, delegate and a copy to the owner, or both. Delegate access needs a work or school account with Exchange Online and cannot be given to people outside the organization.
 
-Granting full mailbox access does not count as sharing a calendar with a delegate.
-
 ## Step 6: Know the new Outlook differences
 
 - Shared calendars are not visible by default in new Outlook. Select **Show all** in the calendar list and look under **People's calendars**.
 - To add a calendar, select **Add calendar** > **Add from directory**.
-- Microsoft's feature comparison lists calendar delegate access as available in both versions. **Shared mailbox - Delegate access** is listed as available in classic Outlook and partially available in new Outlook, as of the page's April 2026 entry. Check the live page for current status.
+- Microsoft's feature comparison lists **Delegate access** as available in both versions. **Shared mailbox - Delegate access** is listed as available in classic Outlook and partially available in new Outlook, as of the page's April 2026 entry. Check the live page for current status.
 
 ## Step 7: Compare against known issues
 
 Microsoft's known issues article for classic Outlook shared calendar improvements includes items relevant to delegates:
 
-- A delegate without permission to view private items cannot send meetings with a sensitivity label other than Normal. The meeting disappears and is not sent. Options are granting view-private permission, setting the label to Normal, or turning the feature off, which Microsoft does not recommend.
+- A delegate without permission to view private items cannot send meetings with a sensitivity label other than Normal. The meeting disappears and is not sent. Options are granting view-private permission, setting the label to Normal, or turning the feature off, which the page marks as "not recommended".
 - Attendees may not receive attachment changes made by a delegate, and delegates may see sync errors in the Sync Issues folder. Microsoft lists no workaround and suggests sharing attachments by SharePoint or OneDrive links.
 - The same shared calendar cannot be added more than once.
 - Duplicate calendar entries were fixed. If duplicates persist, remove and re-add the manager's calendar.
