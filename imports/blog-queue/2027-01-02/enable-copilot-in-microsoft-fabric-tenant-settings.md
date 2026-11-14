@@ -65,7 +65,7 @@ You do not need to enable Fabric to use Copilot in Power BI. Learn says you can 
 
 Learn adds that you cannot enable only specific Copilot experiences, such as Copilot in the DAX query view of Power BI semantic models. Control is at the workload level.
 
-The two data-processing settings matter for compliance. They allow data to be processed outside the capacity's geographic region, compliance boundary or national cloud. Check them against your data residency requirements before enabling. Learn points to separate pages for the Copilot tenant settings and for OpenAI as a subprocessor in Fabric.
+The two data-processing settings matter for compliance. They allow data to be processed outside the capacity's geographic region, compliance boundary or national cloud. My advice: check them against your data residency requirements before enabling. Learn points to separate pages for the Copilot tenant settings and for OpenAI as a subprocessor in Fabric.
 
 ## Step 2: Delegated capacity settings
 
@@ -75,11 +75,11 @@ If the Copilot tenant settings are delegated to capacity administrators, each ca
 2. In the delegated tenant settings, enable the same four settings as above.
 3. Optionally apply each setting to specific security groups.
 
-Skipping this step is a common reason Copilot stays unavailable on a delegated capacity.
+Learn says each capacity administrator must also enable Copilot for their capacity when the settings are delegated, so this step matters on delegated capacities.
 
 ## Step 3: Assign workspaces and grant access
 
-Fabric items that use Copilot must be in a workspace assigned to a supported capacity. Assign the workspace to a capacity that has Copilot enabled, then grant workspace roles to the users who need Copilot. Learn says items using Copilot must be in this workspace, but they can consume or refer to items in other workspaces or capacities.
+Fabric items that use Copilot must be in a workspace assigned to a supported capacity. Assign the workspace to a capacity that has Copilot enabled, then grant workspace roles to the users who need Copilot. Learn says items using Copilot must be in this workspace, but they might consume or refer to items in other workspaces or capacities.
 
 ## Step 4: Power BI Desktop
 
@@ -88,7 +88,7 @@ Fabric items that use Copilot must be in a workspace assigned to a supported cap
 
 Copilot usage in Power BI Desktop counts against the Fabric capacity assigned to the selected workspace.
 
-## Checks when Copilot does not appear
+## Checks when Copilot does not appear (my advice)
 
 Work through the list in the order of the steps:
 
@@ -98,9 +98,9 @@ Work through the list in the order of the steps:
 4. Is the workspace assigned to that capacity, and does the user hold a role in it?
 5. In Power BI Desktop, is a Copilot-enabled workspace the active workspace?
 
-The pages I read do not list error messages or a fixed delay for settings to take effect, so this list only follows the documented setup order.
+The Learn page does not list error messages or a fixed delay for settings to take effect, so this list only follows the documented setup order.
 
-## Plan the rollout
+## Plan the rollout (my advice)
 
 Because Copilot usage consumes capacity, use security groups to start with a pilot. Learn names training as one example of a prerequisite you might require before adding people to the group. Widen the group once you have seen the effect on capacity utilization.
 
