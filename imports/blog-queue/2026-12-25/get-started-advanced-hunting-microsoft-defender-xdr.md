@@ -25,7 +25,7 @@ faq:
     a: "Learn says advanced hunting uses UTC for all data, so write queries in UTC. Microsoft Defender converts results to the time zone you set."
 ---
 
-Advanced hunting in Microsoft Defender XDR is a query-based threat hunting tool. It lets you explore up to 30 days of raw Defender data to find threat indicators and entities. This guide follows the Microsoft Learn overview and the page on service limits.
+Advanced hunting in Microsoft Defender XDR is a query-based threat hunting tool. It lets you explore up to 30 days of raw Defender data to find threat indicators and entities. This guide follows the Microsoft Learn overview, which also holds the quota table, and the page on the query resources report.
 
 ## What you get
 
@@ -71,7 +71,7 @@ The portal warns when a query pushes the tenant over 10% of allocated resources.
 
 ## Find and fix heavy queries
 
-The separate limits page describes a query resources report covering the last 30 days across all hunting interfaces. Review queries marked **High** resource usage, check the **State** column for **Completed**, **Failed** or **Throttled**, and use the usage graph to find spikes. To edit a query built in guided mode, switch to advanced mode first. That page carries a prerelease notice, so the report may change.
+The separate query resources report page describes a report covering the last 30 days across all hunting interfaces. Review queries marked **High** resource usage, check the **State** column for **Completed**, **Failed** or **Throttled**, and use the usage graph to find spikes. To edit a query built in guided mode, switch to advanced mode first. That page carries a prerelease notice, so the report may change.
 
 ## Time zones
 
@@ -104,5 +104,5 @@ The pages I read do not give the portal menu path, licensing, KQL syntax or the 
 
 ## Sources
 
-- [Proactively hunt for threats with advanced hunting in Microsoft Defender XDR](https://learn.microsoft.com/defender-xdr/advanced-hunting-overview)
-- [Advanced hunting service limits](https://learn.microsoft.com/defender-xdr/advanced-hunting-limits)
+- [Advanced hunting overview in Microsoft Defender XDR (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/advanced-hunting-overview)
+- [Use the advanced hunting query resource report (Microsoft Learn)](https://learn.microsoft.com/defender-xdr/advanced-hunting-limits)
