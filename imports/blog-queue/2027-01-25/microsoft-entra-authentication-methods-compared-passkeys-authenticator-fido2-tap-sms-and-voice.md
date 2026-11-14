@@ -16,7 +16,7 @@ faq:
   - q: "Which methods can be used for primary sign-in?"
     a: "According to the Microsoft Learn table: certificate-based authentication, Microsoft Authenticator passwordless, passkey (FIDO2), passkey in Microsoft Authenticator, password, Platform Credential for macOS, QR code, SMS sign-in, synced passkey, Temporary Access Pass and Windows Hello for Business."
   - q: "Which methods are phishing-resistant?"
-    a: "Learn lists Windows Hello for Business, Platform Credential for macOS, synced passkeys (FIDO2), FIDO2 security keys, passkeys in Microsoft Authenticator and certificate-based authentication. It says Microsoft recommends these because they provide the most secure sign-in experience, and that SMS, email OTP and authenticator app codes are prone to remote phishing."
+    a: "Learn lists Windows Hello for Business, Platform Credential for macOS, synced passkeys (FIDO2), FIDO2 security keys, passkeys in Microsoft Authenticator and certificate-based authentication. It says Microsoft recommends phishing-resistant methods such as Windows Hello for Business, passkeys (FIDO2) and FIDO2 security keys, or certificate-based authentication because they provide the most secure sign-in experience, and that traditional MFA with SMS, email OTP or authenticator apps is prone to remote phishing."
   - q: "Can I use SMS or voice for password reset?"
     a: "The table shows SMS sign-in and voice call as available for SSPR. It also shows email OTP for SSPR, Authenticator push notifications, software OATH tokens and hardware OATH tokens (preview). Passkeys, Temporary Access Pass and Windows Hello for Business are not listed for SSPR."
   - q: "What is a Temporary Access Pass for?"
@@ -25,7 +25,7 @@ faq:
     a: "No. Learn says it is an identity verification capability and not a traditional authentication method. It provides cryptographic proof of identity for account recovery when all authentication methods are lost, and it cannot satisfy sign-in, MFA or SSPR requirements."
 ---
 
-Microsoft Entra ID supports many authentication methods, and they differ in what they can do. Some can replace the password, some only add a second factor, and some are only for password reset. This article puts the Microsoft Learn authentication overview into a comparison you can use when you plan a rollout. The page I read is the Learn overview of Microsoft Entra authentication, which holds the method table, and it does not give setup steps. I point to where setup details live and keep my own advice marked.
+Microsoft Entra ID supports many authentication methods, and they differ in what they can do. Some can replace the password, some only add a second factor, and some are only for password reset. This article puts the Microsoft Learn authentication overview into a comparison you can use when you plan a rollout. The source is the Learn overview of Microsoft Entra authentication, which holds the method table and gives no setup steps. I point to where setup details live and keep my own advice marked.
 
 ## The method table
 
@@ -73,7 +73,7 @@ Notes from the page:
 
 Learn says traditional MFA with SMS, email OTP or authenticator apps improves security over passwords alone, but adds friction, such as entering codes or approving notifications, and is prone to remote phishing attacks. In such an attack the attacker uses social engineering and AI-driven tools to steal credentials, such as passwords or one-time codes, without physical access to the device.
 
-Microsoft recommends phishing-resistant methods because they provide the most secure sign-in experience. The list on the page:
+Microsoft recommends phishing-resistant methods such as Windows Hello for Business, passkeys (FIDO2) and FIDO2 security keys, or certificate-based authentication, because they provide the most secure sign-in experience. The page lists these phishing-resistant methods as available in Microsoft Entra ID:
 
 - Windows Hello for Business
 - Platform Credential for macOS
