@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-12-07
 topics: [power-automate, throttling, sharepoint]
 keypoints:
-  - "SharePoint Get items returns 100 items by default. Top Count can raise this up to the 5,000 list view threshold; going beyond fails without pagination."
+  - "SharePoint Get items returns 100 items by default. Top Count can raise this up to the 5,000 list view threshold. Learn says going beyond 5,000 makes Power Automate fail with an error."
   - "Learn lists a paginated items limit of 5,000 for the Low profile and 100,000 for all others. To process more, trigger multiple flow runs."
   - "Every action, retry and extra pagination request counts toward the daily request limit. Failed actions count, skipped ones do not."
   - "A 429 error is connector throttling, not a daily-limit problem. Spread, batch or filter the calls instead of buying capacity."
@@ -38,7 +38,7 @@ Two settings change this:
 - **Top Count** under **Advanced options** raises the limit up to the list view threshold of 5,000. Beyond 5,000, Learn says Power Automate fails and shows an error.
 - **Pagination** in the action settings menu is the fix Learn names for lists with more than 5,000 items when a filter query is used. Without it, a filter on a large list can return no records if nothing in the first 5,000 items matches.
 
-The SharePoint guidance page is dated June 2022. It does not give the exact menu location of the pagination threshold or any threshold value. Check the current action settings in the designer for that.
+The SharePoint guidance page is dated June 2022. It names the action settings menu for Pagination but gives no threshold value. Check the current action settings in the designer for that.
 
 ## Step 2: Filter at the source
 
@@ -75,7 +75,7 @@ Daily limits depend on the license plan and apply across all runs of all flows i
 - An action inside **Apply to each** counts once per item.
 - Retries and extra pagination requests count.
 
-A loop over 20,000 items with three actions therefore produces roughly 60,000 requests plus the trigger. To see the numbers, open the flow details page, select **Analytics** and then the **Actions** tab.
+By the same rules, a loop over 20,000 items with three actions would produce roughly 60,000 requests plus the trigger (own calculation, not a Learn example). To see the numbers, open the flow details page, select **Analytics** and then the **Actions** tab.
 
 A Process license entitles a flow to 250,000 actions per 24 hours. Learn adds that up to 10 Process licenses can be stacked on one flow, and that solution-aware flows in a flow group share one entitlement. The flow must be in a solution.
 
@@ -99,9 +99,9 @@ Power Automate can retry an action, configured per action. The Power Platform we
 
 The pages read do not state Power Automate's default retry count or interval. Check the action's **Settings** pane before relying on a number from a blog post.
 
-## Typical mistakes
+## Typical mistakes (own reading of the pages above)
 
-- Raising Top Count above 5,000 instead of enabling pagination.
+- Setting Top Count above 5,000, which Learn says fails, or not enabling Pagination when a filter query runs on a list with more than 5,000 items.
 - Looping over a full list and filtering inside the loop.
 - Setting high concurrency on a connector that is already returning 429.
 - Treating a 429 as a license problem.
