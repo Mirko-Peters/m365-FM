@@ -82,16 +82,16 @@ Learn also says Windows personal-device blocks apply to enrollment through the C
 ## Limits you should know
 
 - Restrictions apply to user-driven enrollments. These scenarios use the default policy: Windows Autopilot self-deploying and pre-provisioned modes, bulk enrollment with Windows Configuration Designer, co-managed enrollments, userless Apple Automated Device Enrollment, Azure Virtual Desktop, Windows 365 and Android Enterprise corporate-owned dedicated devices.
-- Device limit restrictions cannot apply to some Windows scenarios that use shared device mode, such as co-management, GPO, Microsoft Entra join and Autopilot. Learn says to configure a hard limit in Microsoft Entra ID for these.
+- Device limit restrictions cannot apply to some Windows scenarios that use shared device mode, such as co-management, GPO, Microsoft Entra join and Autopilot. Learn says you can configure a hard limit in Microsoft Entra ID for these instead.
 - Filters cannot be used with Android enrollment restrictions.
-- Assignments can take around 15 minutes to process. Wait several minutes after adding users to a group before enrolling.
+- The update between Microsoft Entra and Intune that processes user, group and filter assignments typically happens within 15 minutes and is not instant. Learn says to wait several minutes after adding users to a group before enrolling devices.
 - The OS version range does not apply to devices enrolled through Apple ADE, Apple School Manager or Apple Configurator.
 
 ## Edit an existing restriction
 
 Go to **Devices** > **Enrollment** > **Device platform restrictions**, select the platform and policy, then **Properties** > **Edit**. Make the changes, select **Review + save** and then **Save**. Changes apply to new enrollments only.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Creating a policy and forgetting the assignment.
 - Expecting restrictions to stop Autopilot self-deploying or Windows 365 enrollments.
