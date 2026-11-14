@@ -10,7 +10,7 @@ keypoints:
   - "Hub permissions sync grants visitor access only, for individuals, Microsoft 365 groups or security groups. Microsoft documents a limit of 10 visitors and recommends groups over individuals."
   - "Changes can take up to 4 hours to appear on associated sites after they are visited. Existing site permissions are not changed."
   - "Sync is opt-in per associated site. The hub owner enables hub permissions first, then the associated site chooses to sync."
-  - "A site leaving the hub loses the hub-granted permissions. Do not remove the local visitors group from associated sites."
+  - "A site leaving the hub loses the hub-granted permissions (Support). A community reply also advises keeping the local Visitors group members in place."
   - "Separate from sync, Microsoft says hub association itself does not change permissions and hub content rollup is security trimmed."
 faq:
   - q: "What does the hub permissions sync actually do?"
@@ -44,13 +44,13 @@ Separately, Learn's hub planning page says association does not change a site's 
 
 ## Check 1: Is hub permissions enabled on the hub?
 
-On the hub site, select **Settings** > **Site Permissions**, open the **Hub** tab, and confirm the toggle is on and the people or groups are listed. You need edit access on the hub site to change it. If the **Hub** tab is missing on the hub, the feature is not enabled there.
+On the hub site, select **Settings** > **Site Permissions**, open the **Hub** tab, and confirm the toggle is on and the people or groups are listed. You need edit access on the hub site to change it. The pages I read do not say what a missing **Hub** tab means. In one community thread, the poster saw the Hub tab disappear from the Site Permissions page of one associated site that had stopped syncing.
 
 ## Check 2: Did the associated site opt in?
 
-Syncing is the choice of the associated site. The Support page says the hub owner must enable hub permissions first, then the associated site's admin can sync. When associating through **Settings** > **Site information** > **Hub site association**, a checkbox appears if the hub enabled hub permissions, and you can change it later under site permissions. To confirm, open **Settings** > **Site permissions** on the associated site and look for the hub tab and its toggle.
+Syncing is the choice of the associated site. The Support page says the hub owner must enable hub permissions first, then the associated site's admin can sync. When associating through **Settings** > **Site information** > **Hub site association**, a checkbox appears if the hub enabled hub permissions, and you can change it later under site permissions. Support says to use **Site permissions** on the associated site to turn the sync toggle on or off, so open **Settings** > **Site permissions** there and check the toggle.
 
-You must be a site owner or higher to associate a site. Only site collections can be associated, and subsites inherit the association of their parent. If **Hub site association** is greyed out, Support says you may lack permission or your organization may not use hubs.
+You must be a site owner or higher to associate a site. Learn's create-hub-site page adds that the SharePoint admin can restrict who may associate sites with the hub, and that any user can do so if that list is left empty. Only site collections can be associated, and subsites inherit the association of their parent. If **Hub site association** is greyed out, Support says you may lack permission or your organization may not use hubs.
 
 ## Check 3: Is the hub list within the limits?
 
@@ -64,7 +64,7 @@ Support says changes can take up to 4 hours after the associated site is visited
 
 ## Check 5: Look at what is already on the site
 
-Sync adds access and does not override existing site permissions. Learn's planning page notes that association does not change permissions, so hub visitors can be missing from a site for other reasons, such as unique permissions on a library inside it. A user who can open the site but not a library is a library permission problem, not a hub problem.
+Sync adds access and does not override existing site permissions, according to Support. My own reasoning, not from the pages: a hub visitor can therefore still lack access to content with unique permissions, such as a library that does not inherit from the site. A user who can open the site but not a library points to library permissions rather than hub sync.
 
 ## What only the community reports
 
@@ -78,7 +78,7 @@ The full rebuild is disruptive for a hub with many sites, so treat it as a last 
 
 ## A safer design
 
-If you share read access across many sites, a single Microsoft 365 or security group added to each site's Visitors group avoids depending on sync timing. The same MVP suggested a directory group for this purpose. Check the nesting limits for groups first, since Microsoft documents that Microsoft 365 groups cannot be nested.
+If you share read access across many sites, a single Microsoft 365 or security group added to each site's Visitors group avoids depending on sync timing. The same MVP suggested a directory group for this purpose. Check the nesting rules for your group type first. The pages I read do not cover them.
 
 ## What the documentation does not say
 
