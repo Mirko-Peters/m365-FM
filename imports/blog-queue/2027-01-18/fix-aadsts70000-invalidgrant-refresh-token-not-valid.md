@@ -20,7 +20,7 @@ faq:
   - q: "What is AADSTS700082?"
     a: "ExpiredOrRevokedGrantInactiveToken. The reference says the refresh token expired due to inactivity and that this is an expected part of the token lifecycle, because the user went an extended period without using the application."
   - q: "Is token binding the same as token protection?"
-    a: "Learn does not say so on the pages I read. Its token protection page describes sign-in session tokens such as the Primary Refresh Token being bound to a device. Connecting that page to the 70000 row is my reading."
+    a: "Learn does not say so. Its token protection page describes sign-in session tokens such as the Primary Refresh Token being bound to a device. Connecting that page to the 70000 row is my reading."
   - q: "Does the reference give a fix?"
     a: "No. The row lists the two reasons only. The first step in practice is to find out which client and device sent the request and whether it can bind its tokens."
 ---
@@ -31,7 +31,7 @@ AADSTS70000 is named InvalidGrant in the Microsoft Entra error reference: authen
 
 The reference reads: InvalidGrant - Authentication failed. The refresh token isn't valid. Error might be due to the following reasons: Token binding header is empty; Token binding hash does not match.
 
-Both reasons concern binding. Binding means that a token is tied to something about the client, so the service can check that the token is presented by the same client that received it. The reference does not explain the mechanism, so I use the token protection page below to describe the idea.
+Both reasons concern binding. Binding means that a token is tied to something about the client, so the service can check that the token is presented by the same client that received it. The reference does not explain the mechanism. The token protection page below describes bound tokens in Conditional Access, which is related, but it does not use the term token binding header.
 
 ## Two neighbours that look similar
 
@@ -50,7 +50,7 @@ The page lists:
 
 - **Native applications** on Windows, iOS/iPadOS and macOS as generally available, with browser-based support in preview for supported web apps that access Azure Resource Manager on Windows and macOS.
 - **Resources** that can be protected: Exchange Online, SharePoint Online and Microsoft Teams, plus Azure Virtual Desktop and Windows 365 on Windows.
-- **Supported devices**, such as Windows 10 or newer devices that are Microsoft Entra joined, hybrid joined or registered, and Apple devices with the Microsoft Enterprise SSO plug-in and MDM management.
+- **Supported devices**, such as Windows 10 or newer devices that are Microsoft Entra joined, hybrid joined or registered, and, in preview, Apple devices (macOS 14.0 or later, iOS/iPadOS 16.0 or later) with the Microsoft Enterprise SSO plug-in and MDM management.
 
 That page does not mention AADSTS70000 or the token binding header. So linking a 70000 error to token protection is my reading of the word binding, not something Learn states. Treat it as a lead to check, not as a confirmed cause.
 
@@ -69,7 +69,7 @@ This section is my advice, not a Microsoft statement.
 
 This section is my advice, not a Microsoft statement.
 
-Do not retry a refresh with the same token after an InvalidGrant response. Treat 70000, 70008 and 700082 as signals to start an interactive sign-in. Separate the handling of inactivity codes from the handling of binding codes in your logs, so support can tell an unused app from a suspicious or misconfigured client. If you rely on brokered sign-in, such as the Microsoft Authentication Library with a broker on the device, keep the broker components current, because bound tokens depend on the device side of the exchange. Learn's pages that I read do not describe broker versions, so check your library documentation.
+Do not retry a refresh with the same token after an InvalidGrant response. Treat 70000, 70008 and 700082 as signals to start an interactive sign-in. Separate the handling of inactivity codes from the handling of binding codes in your logs, so support can tell an unused app from a suspicious or misconfigured client. If you rely on brokered sign-in, such as the Microsoft Authentication Library with a broker on the device, keep the broker components current, because bound tokens depend on the device side of the exchange. The Learn pages used here do not describe broker versions, so check your library documentation.
 
 ## When many users are affected at once
 
@@ -77,7 +77,7 @@ This section is my advice, not a Microsoft statement. A sudden rise in 70000 acr
 
 ## What the sources do not say
 
-The reference page is long and I read the rows for this code and its neighbours, not the whole page. The token protection page is a concept page and does not cover error codes. Nothing I read states the exact cause of a given 70000 event. If the checks above do not explain it, open a support case with the correlation ID and timestamp from the sign-in log.
+The reference row lists two reasons and no fix. The token protection page is a concept page and does not cover error codes. Neither source states the exact cause of a given 70000 event. If the checks above do not explain it, open a support case with the correlation ID and timestamp from the sign-in log.
 
 ## Related
 
