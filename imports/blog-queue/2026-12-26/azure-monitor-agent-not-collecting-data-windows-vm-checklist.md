@@ -70,8 +70,6 @@ Check for the latest DCR in `...\mcs\configchunks`. If the directory is empty or
 - **Custom Metrics destination:** confirm `azureMonitorMetrics` is in the DCR destinations. The `MetricsExtension.Native.exe` command line should contain `-TokenSource MSI`, and specific token and configuration files should exist under the `mcs` folder. The page also describes using `table2csv.exe` on `MaMetricsExtensionEtw.tsf` and looking for Level 2 errors.
 - **Windows event logs:** confirm `windowsEventLogs` is in the DCR JSON and that `mcsconfig.lkg.xml` contains `Subscription` nodes. Event logs must be on a local disk, and network shares and UNC paths are not supported.
 
-The page links to an Azure Monitor Agent Troubleshooter for Windows under next steps without describing its features.
-
 ## Where the key files live
 
 All agent data for a VM sits under `C:\WindowsAzure\Resources\AMADataStore.<virtual-machine-name>`. The page points to these locations: `Configuration` for core agent logs, `mcs` for the downloaded configuration such as `mcsconfig.latest.xml` and `mcsconfig.lkg.xml`, `mcs\configchunks` for the latest data collection rule files, and `Tables\MAEventTable.tsf` for agent events, including IMDS errors. Extension logs are separate, under `C:\WindowsAzure\Logs\Plugins`. Knowing which folder answers which question speeds up the checklist, which is a suggestion based on the page layout and not a Microsoft statement.
@@ -97,4 +95,4 @@ The page gives no Windows service names, no list of endpoints, ports or proxy se
 
 ## Sources
 
-- [Troubleshoot the Azure Monitor Agent on Windows virtual machines](https://learn.microsoft.com/azure/azure-monitor/agents/azure-monitor-agent-troubleshoot-windows-vm)
+- [Troubleshoot the Azure Monitor agent on Windows virtual machines and scale sets (Microsoft Learn)](https://learn.microsoft.com/azure/azure-monitor/agents/azure-monitor-agent-troubleshoot-windows-vm)
