@@ -16,7 +16,7 @@ faq:
   - q: "What do I need before onboarding a customer?"
     a: "According to Microsoft Learn, the customer tenant needs an active Azure subscription, the service provider tenant holds the users, groups or service principals to be granted access, and groups used in authorizations must be of type Security. Learn also recommends least privilege."
   - q: "Which roles cannot be delegated?"
-    a: "Microsoft Learn says Owner, any role with DataActions, any role with restricted actions and deprecated built-in roles are not supported in authorizations. Reader is required to see the delegation in My customers."
+    a: "Microsoft Learn says Owner, any role with DataActions, any role with restricted actions and deprecated built-in roles are not supported in authorizations. Reader, or another built-in role that includes Reader access, is required to see the delegation in My customers."
   - q: "How many deployments do I need?"
     a: "Learn says you need one deployment per subscription, even within the same customer tenant. Multiple resource groups in one subscription can share a deployment. Management groups cannot be onboarded in one deployment."
   - q: "Who can deploy on the customer side?"
@@ -29,7 +29,7 @@ To onboard a customer to Azure Lighthouse, collect the tenant, subscription and 
 
 ## Prerequisites
 
-Learn lists these:
+Learn describes these requirements across the article:
 
 - The customer tenant has an **active Azure subscription**.
 - The service provider tenant contains the users, groups or service principals to be granted access.
@@ -51,7 +51,7 @@ Learn lists these:
 
 ## Pick the supported roles
 
-Azure built-in roles are supported. Learn says Reader is required for the delegation to show in **My customers**. Not supported:
+Azure built-in roles are supported. Learn says users must have Reader, or another built-in role that includes Reader access, for the delegation to show in **My customers**. Not supported:
 
 - **Owner**
 - Any role with **DataActions**
@@ -101,7 +101,7 @@ Learn says updates can take up to 15 minutes. Refreshing the browser, signing ou
 - Group members are added in Microsoft Entra ID, which needs no redeployment. Group owners are not automatically members.
 - Nested groups may take additional time to gain access.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using a Microsoft 365 group in an authorization.
 - Asking for Owner and having the deployment rejected.
