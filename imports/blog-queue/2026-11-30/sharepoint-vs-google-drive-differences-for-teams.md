@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-30
 topics: [sharepoint, onedrive, sharepoint-migration]
 keypoints:
-  - "Google's personal My Drive maps to OneDrive, and Google shared drives map to SharePoint team sites, according to Microsoft's Google Workspace switch guide."
+  - "Microsoft's switch guide moves personal drives to OneDrive and shared drives to SharePoint team sites. It does not name Google's My Drive."
   - "SharePoint is organization-owned storage tied to a site, so content survives staff turnover. OneDrive files sit in one user's account."
   - "Microsoft documents a 250 GB maximum file size, 25 TB per site collection and 30 million items per library or list for SharePoint."
   - "OneDrive defaults to 1 TB per user for most plans and can be raised up to 5 TB depending on plan and licensed users."
@@ -37,7 +37,7 @@ SharePoint and Google Drive solve the same problem, but the vocabulary differs. 
 | Team or company-owned files | Shared drive | SharePoint team site with document libraries |
 | Where people find shared content | Drive | SharePoint, also reachable through OneDrive and Teams |
 
-The first two rows come from Microsoft's own guidance. In its switch guide, Step 8 says to use Migration Manager "to move everyone's data from personal drives to OneDrive and from shared drives to SharePoint team sites."
+The first two rows rest on Microsoft's own guidance, with one caveat: the guide says "personal drives" and "shared drives" and does not use the Google product name My Drive, so that match is an inference. In its switch guide, Step 8 says to use Migration Manager "to move everyone's data from personal drives to OneDrive and from shared drives to SharePoint team sites."
 
 A Microsoft Q&A thread from someone asking for a Google-style company drive reaches the same view. The community answer says OneDrive is the wrong tool because files sit in individual accounts, and SharePoint gives organization-wide access that stays when an employee leaves. That reply was a community answer, not an accepted solution, but it matches how Microsoft's documentation describes the two.
 
@@ -80,9 +80,9 @@ The Migration Manager documentation for Google Workspace describes the workflow:
 - **Versions:** only the most recent version is copied by default. Set File versions in project settings to keep older ones.
 - **External sharing:** Migration Manager does not recreate external sharing links or share content with external collaborators. Recreate them manually.
 - **Not migrated:** Google does not allow export of sites and maps from Drive. Google Forms are migrated, but a Forms destination (a user's email address) is required.
-- **Limits:** Migration Manager lists 250 GB as the maximum file size for Google sources.
+- **File size:** the overview only links to a separate file size limitations article, so check it for Google source limits.
 - **Duplicate names:** two Google Drives with the same name cannot both be migrated. Only the first discovered Drive is migrated. Files with the same name in a folder get suffixes such as (1) and (2).
-- **Small tenants:** Migration Manager Lite is enabled by default for tenants with fewer than 300 Microsoft 365 licenses and skips the scan and mapping steps.
+- **Small tenants:** Migration Manager Lite is enabled by default for tenants with fewer than 300 Microsoft 365 licenses. It presents only the connect and the migrate and monitor steps, but the guided setup still covers task selection, destinations, identity mapping and migration settings.
 
 The migration documentation does not cover how Google-native Docs, Sheets and Slides are converted, so test a sample before moving everything. Migration Manager's scan reports also show a scanned size of 1 byte for Google proprietary files created or modified before May 2, 2022, because Google did not return size information for them.
 
