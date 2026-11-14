@@ -9,7 +9,7 @@ topics: [ms-700, teams]
 keypoints:
   - "The study guide lists skills measured as of October 27, 2026 in four areas, with weights of 40-45%, 20-25%, 15-20% and 15-20%."
   - "The biggest area is Configure and manage a Teams environment at 40-45%, which includes network, security, governance, external collaboration and devices."
-  - "Changes from the previous version are minor: network planning, creating teams, apps and troubleshooting. External collaboration was also updated."
+  - "Changes from the previous version are minor: network planning, creating teams, apps and troubleshooting. The external collaboration row has no change label."
   - "The audience profile is the Teams administrator who plans, implements, manages and maintains collaboration and communication with Teams."
   - "This article covers the outline only. It contains no exam questions, and a score of 700 or greater is required to pass."
 faq:
@@ -70,7 +70,7 @@ This area has five groups of skills:
 
 ## What changed on October 27, 2026
 
-The change log lists minor changes to Plan network settings for Teams, Create and manage teams, Manage apps for Teams and Troubleshoot audio, video, and client issues. The external collaboration row has no change label in the table. The audience profile and the top-level areas are marked no change. If you studied from an older outline, re-read these four groups first.
+The change log lists minor changes to Plan network settings for Teams, Create and manage teams, Manage apps for Teams and Troubleshoot audio, video, and client issues. The external collaboration row has no change label in the table. The audience profile and the top-level areas are marked no change. My suggestion: if you studied from an older outline, re-read these four groups first.
 
 ## A study plan built on the weights
 
@@ -80,7 +80,7 @@ The change log lists minor changes to Plan network settings for Teams, Create an
 4. **Week 6: monitoring and troubleshooting (15-20%).** Open the Call Quality dashboard, collect client logs, and use self-help diagnostics.
 5. **Final days:** take the free practice assessment and try the exam sandbox.
 
-These week counts are a suggestion, not a Microsoft recommendation.
+This plan is my advice, built on the weights, and the Call Quality dashboard is my addition. The week counts are a suggestion, not a Microsoft recommendation.
 
 ## Study resources named by Microsoft
 
