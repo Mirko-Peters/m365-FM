@@ -76,7 +76,7 @@ In the Entra admin center, as at least Global Reader, go to **Entra ID** > **Ove
 - **Azure RMS and Office Message Encryption.** Learn says these features are not compatible, because they sign users in to other tenants to get decryption keys. Encrypted mail and documents from untrusted tenants are not accessible.
 - **Legacy protocols.** Outlook and Skype for Business clients that support modern authentication might still use legacy protocols against tenants where modern authentication is not enabled, which can bypass the restriction. Applications using legacy protocols may be blocked if they contact the Entra sign-in hosts.
 - **Platforms that cannot inspect TLS.** Android 7.0 and later treat user certificates differently, and Microsoft client apps ignore user certificates by default, so the proxy certificate is not trusted and the feature does not work. Learn lists other Entra controls for such environments.
-- **Consumer accounts.** A separate header, `sec-Restrict-Tenant-Access-Policy: restrict-msa`, goes to `login.live.com` to block consumer apps. It does not block B2B authentication of consumer accounts or user-less device traffic, which the allow list controls instead. Learn says consumer authentication does not appear in the admin logs.
+- **Consumer accounts.** A separate header, `sec-Restrict-Tenant-Access-Policy: restrict-msa`, goes to `login.live.com` to block consumer apps. It does not block user-less device traffic such as Autopilot and Windows Update, and it does not block B2B authentication of consumer accounts, which the `Restrict-Access-To-Tenants` allow list controls instead. Learn says consumer authentication does not appear in the admin logs.
 
 ## Test before widening or tightening
 
