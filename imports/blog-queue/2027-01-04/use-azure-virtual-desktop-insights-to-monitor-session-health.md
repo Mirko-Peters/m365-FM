@@ -11,7 +11,7 @@ keypoints:
   - "Minimum roles are Desktop Virtualization Reader on the resource group or subscription and Log Analytics Reader on the workspace."
   - "Enable diagnostics, recommended performance counters and recommended Windows Event Logs. Learn advises a designated Log Analytics workspace for session hosts."
   - "Session host data uses the Azure Monitor Agent and a data collection rule. Automated deployment is limited to 1,000 session hosts or fewer."
-  - "The page read names only two configuration tabs and does not describe the monitoring tabs, so this guide covers setup, not interpretation."
+  - "The page names only two configuration tabs and does not describe the monitoring tabs, so this guide covers setup, not interpretation."
 faq:
   - q: "What do I need before I use Insights?"
     a: "Learn requires environments based on the latest Azure Resource Manager compatible release of Azure Virtual Desktop, and data collection for diagnostics, recommended performance counters and recommended Windows Event Logs. A designated Log Analytics workspace for session hosts is recommended."
@@ -25,7 +25,7 @@ faq:
     a: "Standard Log Analytics data storage charges apply. Learn recommends starting with pay-as-you-go pricing and adjusting as you scale, and says you can disable other items sending data to the workspace to save costs."
 ---
 
-To use Azure Virtual Desktop Insights, you first turn on data collection. Open the configuration workbook at aka.ms/avdi, point host pool and workspace diagnostics at a Log Analytics workspace, and connect session hosts with the Azure Monitor Agent and a data collection rule. This guide follows the Microsoft Learn article on Insights. It covers setup. The page read does not describe the individual monitoring tabs.
+To use Azure Virtual Desktop Insights, you first turn on data collection. Open the configuration workbook at aka.ms/avdi, point host pool and workspace diagnostics at a Log Analytics workspace, and connect session hosts with the Azure Monitor Agent and a data collection rule. This guide follows the Microsoft Learn article on Insights. It covers setup. The page does not describe the individual monitoring tabs.
 
 ## Prerequisites
 
@@ -90,9 +90,9 @@ Automated deployment is limited to 1,000 session hosts or fewer. For larger pool
 
 ## What the page does not cover
 
-The page names only two configuration workbook tabs, Resource diagnostic settings and Session host data settings. It does not describe monitoring tabs such as connection diagnostics, connection performance, host diagnostics, utilization or client versions, so this guide does not explain how to read them. It also lists no known issues and points to a separate troubleshooting guide for Insights.
+The page names only two configuration workbook tabs, Resource diagnostic settings and Session host data settings. It does not describe monitoring tabs such as connection diagnostics, connection performance, host diagnostics, utilization or client versions, so this guide does not explain how to read them. It also lists no known issues.
 
-## A setup checklist
+## A setup checklist (my advice)
 
 The checklist applies the steps above. The order is practical advice.
 
@@ -104,7 +104,7 @@ The checklist applies the steps above. The order is practical advice.
 6. Close the gaps in performance counters and event logs until Missing lists are empty.
 7. Review cost after a few days of data.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Mixing unrelated data into the same Log Analytics workspace.
 - Giving only the Desktop Virtualization Reader role and forgetting Log Analytics Reader.
@@ -121,4 +121,4 @@ The checklist applies the steps above. The order is practical advice.
 
 ## Sources
 
-- [Use Azure Virtual Desktop Insights to monitor your deployment (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-desktop/insights)
+- [Enable Insights to monitor Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-desktop/insights)
