@@ -9,7 +9,7 @@ topics: [power-bi, copilot-in-power-bi, dax, semantic-model]
 keypoints:
   - "Microsoft's documentation describes AI as help for authoring, DAX, summaries and chat. It makes no forecast about jobs or replacement."
   - "Copilot works better when model owners prepare the semantic model with AI instructions, verified answers and data schemas, which is human modeling work."
-  - "The Power BI Authoring MCP server can create and change model objects and write and validate DAX, and Microsoft advises backups and Git review because changes may be irreversible."
+  - "The Power BI Authoring MCP server (preview) can create and change model objects and write and validate DAX, and Microsoft advises backups and Git review because changes may be irreversible."
   - "Learn says AI behavior is nondeterministic and gives no accuracy rate for Copilot."
   - "The shift is toward modeling, preparation, review and governance, with less manual typing of routine measures and formatting."
 faq:
@@ -51,7 +51,7 @@ Microsoft Learn describes Copilot in Power BI as generative AI for chat-based an
 
 ## What an agent can change directly
 
-The Power BI Authoring MCP server goes further. Microsoft Learn says an AI agent can create, update and delete tables, columns, measures, relationships, hierarchies, calculation groups, perspectives, partitions and security roles. It supports bulk changes such as renames, refactoring, translations and security rules across hundreds of objects. It can also evaluate a model against best practices and fix issues, write and validate DAX by running queries, and add descriptions.
+The Power BI Authoring MCP server, which Learn marks as preview, goes further. Microsoft Learn says an AI agent can create, update and delete tables, columns, measures, relationships, hierarchies, calculation groups, perspectives, partitions and security roles. It supports bulk changes such as renames, refactoring, translations and security rules across hundreds of objects. It can also evaluate a model against best practices and fix issues, write and validate DAX by running queries, and add descriptions.
 
 The same page sets limits: modeling operations only, no changes to report pages or diagram layouts, and DAX query tools capped at 100,000 rows. It says model choice strongly affects results and asks for a deep-reasoning model.
 
@@ -59,9 +59,9 @@ The same page sets limits: modeling operations only, no changes to report pages 
 
 **Model preparation.** Learn says that when data is ambiguous, AI can produce generic, inaccurate or misleading outputs. Prepare your data for AI, a preview feature, lets authors add AI data schemas, verified answers and AI instructions, saved to the semantic model. Verified answers pair trigger phrases with a chosen visual so Copilot returns that answer. Someone with authoring permission has to do this, and the page says AI behavior is nondeterministic, so these tools cannot guarantee the same output every time.
 
-**Review and rollback.** For the Authoring server, Learn warns that the model can produce unexpected results and that changes might be irreversible. It recommends backing up the model first and using PBIP files under Git, so every change can be reviewed as a diff before committing and reverted if needed. The page does not use the phrase human review, but the safeguards assume it.
+**Review and rollback.** For the Authoring server, Learn warns that the model can produce unexpected results and that changes might be irreversible. It recommends backing up the model first and using PBIP files under Git, so every change can be reviewed as a diff before committing and reverted if needed. The page recommends reviewing the diff before you commit.
 
-**Permissions.** The Authoring server needs Write or Build permission on the semantic model, and Build alone allows only DAX queries. Row-level security is a modeling decision that people define.
+**Permissions.** The Authoring server needs Write or Build permission on the semantic model, and Build alone allows only DAX queries.
 
 **Data handling.** Learn says model metadata and query results go to the LLM provider the client uses. Deciding which provider may see which models is a governance task.
 
