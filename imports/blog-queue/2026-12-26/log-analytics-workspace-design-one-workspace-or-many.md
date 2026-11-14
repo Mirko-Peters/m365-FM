@@ -69,7 +69,7 @@ For region-failure protection, ingest critical data into workspaces in different
 
 ## A decision path
 
-This path is a suggestion built from the criteria, not a Microsoft flowchart.
+This path is my advice, built from the criteria, not a Microsoft flowchart.
 
 1. Default to one workspace.
 2. Split for tenants, data residency, true data ownership separation or different retention on the same table.
@@ -86,4 +86,4 @@ The page does not give commitment tier prices, the full Sentinel pricing model, 
 
 ## Sources
 
-- [Design a Log Analytics workspace architecture](https://learn.microsoft.com/azure/azure-monitor/logs/workspace-design)
+- [Design a Log Analytics Workspace Architecture (Microsoft Learn)](https://learn.microsoft.com/azure/azure-monitor/logs/workspace-design)
