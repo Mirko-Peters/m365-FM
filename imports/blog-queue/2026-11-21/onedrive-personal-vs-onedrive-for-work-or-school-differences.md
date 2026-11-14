@@ -10,7 +10,7 @@ keypoints:
   - "Personal OneDrive uses a Microsoft account and is self-managed. OneDrive for work or school uses an account from your employer or school and is managed by the organization."
   - "OneDrive for Business is the former name of OneDrive for work or school. Both account types use the same sync app."
   - "Deleted items can be restored for 30 days on personal accounts and for 93 days on work or school accounts, unless an administrator changed the setting."
-  - "Storage differs: personal accounts list 5 GB free, 100 GB or 1 TB by plan. Work or school accounts get at least 1 TB with Microsoft 365, depending on the plan."
+  - "Storage differs: personal accounts list 5 GB free, 100 GB or 1 TB by plan. Work or school storage depends on the plan and the administrator."
   - "The two accounts cannot be linked. To move files, sync both to a computer and copy between the folders."
 faq:
   - q: "What is the difference between OneDrive personal and OneDrive for Business?"
@@ -39,7 +39,7 @@ Microsoft Support calls the work version OneDrive for work or school and notes t
 | Typical use | Personal files, photos, sharing with friends | Work documents, collaboration with colleagues or classmates |
 | Who manages it | You | Your organization |
 | Free storage | 5 GB with no subscription | Not applicable, set by plan or administrator |
-| Paid storage | 100 GB with Microsoft 365 Basic, 1 TB with Microsoft 365 Personal | At least 1 TB with Microsoft 365, depending on the plan |
+| Paid storage | 100 GB with Microsoft 365 Basic, 1 TB with Microsoft 365 Personal | Not stated on the storage quota page, which covers personal and home plans |
 | Recycle bin retention | 30 days | 93 days unless the administrator changed it |
 | Admin controls | None, you set your own options | Sharing, sync, storage, retention, access control and compliance settings |
 | Personal Vault | Described for Basic, Personal and Family subscriptions | Not mentioned on Microsoft's Personal Vault page |
@@ -66,9 +66,7 @@ For a personal account, none of this applies. You decide who you share with, and
 - **The sync app.** Both account types use the OneDrive sync app on Windows and Mac. Microsoft Learn also lists iOS and Android apps.
 - **Files On-Demand.** The same markers show online-only and downloaded files in File Explorer.
 - **Privacy by default.** Files are private until you share them.
-- **Web access.** You sign in at onedrive.com with either account.
-
-When both accounts are signed in on one PC, File Explorer shows **OneDrive - Personal** and **OneDrive - [Company name]** as separate folders.
+- **Web access.** Browser access is also available, according to Microsoft Learn.
 
 ## Moving files between the two
 
@@ -82,7 +80,7 @@ With a personal account you are the only administrator. You decide who gets a li
 
 ## How to tell which account you are in
 
-Look at two things. First, the sign-in: a Microsoft account is personal, and an address from your employer or school is a work or school account. Second, the folder name in File Explorer: **OneDrive - Personal** or **OneDrive - [Company name]**.
+Look at two things. First, the sign-in: a Microsoft account is personal, and an address from your employer or school is a work or school account. The pages I read do not describe how the two accounts are labelled in File Explorer, so rely on the sign-in.
 
 ## Which one should you use?
 
@@ -94,7 +92,7 @@ Microsoft does not rank the two, so this is a practical reading of what it docum
 
 ## Common mistakes
 
-- Saving work files to the personal account because it appeared first in File Explorer.
+- Saving work files to the personal account because it was the one you signed in with first.
 - Expecting a 93-day recovery window on a personal account. It is 30 days.
 - Assuming Personal Vault exists in the work account. Microsoft's page describes it for personal subscriptions.
 - Forgetting that a work OneDrive depends on the work account staying active.
