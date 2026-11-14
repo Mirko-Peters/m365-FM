@@ -31,7 +31,7 @@ Remote Help is Intune's built-in tool for helpdesk staff to view or control a us
 
 - **License.** Learn lists a Remote Help license for everyone targeted to use the service, both helpers and sharers. The feature requires a subscription in addition to Intune Plan 1 or Plan 2. New or trial licenses can take between 30 minutes and 8 hours to become active.
 - **Identity.** Helper and sharer both sign in with a Microsoft Entra account from your organization. Remote Help can't assist people outside it.
-- **Platforms.** For attended control, Learn lists Windows x86, x64 and ARM64, Windows 365 and Azure Virtual Desktop (desktop and RemoteApp sessions). Unattended control needs a physical, Intune-managed, corporate-owned Windows x64 device that is Entra joined or hybrid joined. Android unattended control is also supported, without a version stated in the page I read.
+- **Platforms.** For attended control, Learn lists Windows x86, x64 and ARM64, Windows 365 and Azure Virtual Desktop (desktop and RemoteApp sessions). Unattended control needs a physical, Intune-managed, corporate-owned Windows x64 device that is Entra joined or hybrid joined. Android unattended control is also supported on Android Enterprise dedicated devices; for Zebra devices Learn lists MX version 9.3 or later for unattended control.
 - **Network.** Both sides must reach Remote Help endpoints over port 443. Learn says Remote Help connects to `https://remotehelp.microsoft.com` using the Remote Desktop Protocol, encrypted with TLS 1.2.
 
 ## Task 1: Enable Remote Help
@@ -92,7 +92,7 @@ The user gets a notification with **Open Remote Help**, can review the helper's 
 
 ## Sources
 
-- [Remote Help overview](https://learn.microsoft.com/intune/intune-service/fundamentals/remote-help)
-- [Plan Remote Help](https://learn.microsoft.com/intune/remote-help/plan)
-- [Deploy Remote Help](https://learn.microsoft.com/intune/remote-help/deploy)
-- [Start a Remote Help session](https://learn.microsoft.com/intune/remote-help/start-session)
+- [Use Remote Help to Assist Users Authenticated by your Organization (Microsoft Learn)](https://learn.microsoft.com/intune/remote-help/)
+- [Plan for Remote Help with Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/remote-help/plan)
+- [Deploy Remote Help with Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/remote-help/deploy)
+- [Using Remote Help on Windows to Assist Authenticated Users (Microsoft Learn)](https://learn.microsoft.com/intune/remote-help/start-session)
