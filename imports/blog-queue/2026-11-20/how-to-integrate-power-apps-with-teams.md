@@ -9,16 +9,16 @@ topics: [power-apps, teams, power-platform]
 keypoints:
   - "Microsoft documents three routes: embed a canvas app, embed a model-driven app, or build an app inside Teams on Dataverse for Teams."
   - "To add a canvas app, open make.powerapps.com > Apps, select More actions on the app, choose Add to Teams and then select Add to Teams again."
-  - "Apps can only be added to Teams in the same tenant. Otherwise Teams shows the error App was not found in tenant."
-  - "Creation of new Dataverse for Teams environments ended on November 15, 2026. Environments not upgraded are suspended on September 15, 2027."
-  - "Admins need custom app uploads allowed, Allow interaction with custom apps turned on and Shared Power Apps allowed."
+  - "With the web player method you can only add apps from the same tenant as your Teams account. Otherwise you see the error App was not found in tenant."
+  - "New Dataverse for Teams environments can no longer be created from November 15, 2026. Environments not upgraded are suspended on September 15, 2027."
+  - "Team custom app policies must allow uploading custom apps. The web player method also needs Allow interaction with custom apps turned on and Shared Power Apps allowed."
 faq:
   - q: "How do I add a Power Apps canvas app to Teams?"
     a: "Per Microsoft Learn, sign in to make.powerapps.com, select Apps, select More actions on the app and choose Add to Teams. Optionally add details under Advanced settings, select Add to Teams, open Teams and select Add, or use Add to team or Add to chat. You can also select Download app and upload the package manually."
   - q: "Why do I get the error 'App was not found in tenant'?"
-    a: "Microsoft Learn says you can only add apps to Teams that belong to the same tenant as your Teams account. Otherwise you see this error."
+    a: "In the web player method, Microsoft Learn says you can only add apps that belong to the same tenant as your Teams account. Otherwise you see this error."
   - q: "What do admins need to allow?"
-    a: "Microsoft Learn lists three things. Custom app policies must allow uploading custom apps, Allow interaction with custom apps must be on, and Shared Power Apps must be allowed. Admins can also publish the app to the Teams catalog for organization-wide distribution."
+    a: "Microsoft Learn says team custom app policies must allow uploading custom apps. For the web player method, Allow interaction with custom apps must also be on and Shared Power Apps must be allowed. Admins can also publish the app to the Teams catalog for organization-wide distribution."
   - q: "What is happening to Dataverse for Teams?"
     a: "Microsoft Learn says Dataverse for Teams environments are deprecated. New environments cannot be created from November 15, 2026. Environments that are not upgraded to Dataverse are suspended on September 15, 2027 and decommissioned on October 30, 2027, and their apps, flows, agents and data are no longer available."
   - q: "Do I need a license to embed an app in Teams?"
@@ -32,7 +32,7 @@ The standard way to integrate Power Apps with Teams is to build a canvas app in 
 The Microsoft Learn overview describes these routes:
 
 1. **Embed a canvas app** as a tab app or a personal app. The canvas app can use business data from many Microsoft and third-party sources, including Dataverse.
-2. **Embed a model-driven app** as a tab app or a personal app, using the Power Apps tab.
+2. **Embed a model-driven app** as a tab app, using the Power Apps tab, or as a personal app.
 3. **Create apps inside Teams** with the Power Apps app in Teams, backed by Dataverse for Teams.
 
 Route 3 is deprecated, as covered below. Routes 1 and 2 are the current choice.
@@ -41,14 +41,13 @@ Route 3 is deprecated, as covered below. Routes 1 and 2 are the current choice.
 
 - You already have a canvas app in Power Apps: embed it as a tab for a team or chat, or as a personal app.
 - You have a model-driven app: use the Power Apps tab to embed it.
-- You want to build something new: Microsoft Learn says to build in a Dataverse environment and then add the app to Teams. Do not start new work on Dataverse for Teams.
+- You want to build something new: Microsoft Learn says makers should build new apps in a Dataverse environment and then embed them in Teams. New Dataverse for Teams environments cannot be created from November 15, 2026.
 
 ## Prerequisites
 
 - A valid **Power Apps license** and an existing app built in Power Apps.
-- An app in the **same tenant** as your Teams account. Otherwise you get the error "App was not found in tenant".
 - Team custom app policies that allow uploading custom apps.
-- For the web player route, **Allow interaction with custom apps** turned on and **Shared Power Apps** allowed.
+- For the web player route, **Allow interaction with custom apps** turned on and **Shared Power Apps** allowed, and an app in the **same tenant** as your Teams account. Otherwise you get the error "App was not found in tenant".
 - Your own apps must be shared before you add them to Teams. Sample app templates are shared by default.
 
 ## Add a canvas app from Power Apps
@@ -76,19 +75,15 @@ To remove it, select the tab and choose **Remove**.
 
 ## Known limits
 
-From the Learn pages:
+From the Learn pages (the pages I read do not list limits on media, sensors or mobile attachments, so check the current Learn article before you promise a feature):
 
-- Apps in the Teams desktop app must load content such as images and PDF files over HTTPS.
-- Not all sensors are supported. Acceleration, Compass and Location are named as unsupported.
-- Only AAC, H264, OGG Vorbis and WAV audio formats are supported.
-- In the Teams mobile app, users cannot download attachments from canvas apps. The workaround is the desktop app.
 - Teams context variables such as `theme`, `teamId`, `channelId` and `userTeamRole` can be read in an app. `groupId` is not supported with private channels.
 - Apps embedded before March 2020 may need to be re-added for the `Param()` context feature.
 
 ## Admin checklist
 
-1. Confirm custom app policies allow uploads and **Allow interaction with custom apps** is on.
-2. Allow **Shared Power Apps** in the Teams admin center.
+1. Confirm custom app policies allow uploads.
+2. For the web player method, turn on **Allow interaction with custom apps** and allow **Shared Power Apps**.
 3. For organization-wide distribution, publish the app to the Teams catalog.
 
 ## Dataverse for Teams is being retired
@@ -105,8 +100,8 @@ Suspended and decommissioned environments lose their apps, flows, agents and dat
 
 ## Common problems
 
-- **"App was not found in tenant."** The app belongs to a different tenant than your Teams account.
-- **Add to Teams is unavailable or fails.** Check the custom app policy, Allow interaction with custom apps and Shared Power Apps settings with your admin.
+- **"App was not found in tenant."** In the web player method, the app belongs to a different tenant than your Teams account.
+- **Add to Teams is unavailable or fails.** Ask your admin to check the custom app policy and, for the web player method, the Allow interaction with custom apps and Shared Power Apps settings.
 - **Colleagues cannot open the tab.** Share the app first.
 - **Old embedded apps behave oddly.** Re-add apps embedded before March 2020.
 
