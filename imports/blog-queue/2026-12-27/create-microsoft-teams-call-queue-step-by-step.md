@@ -25,7 +25,7 @@ faq:
     a: "Yes. Step 5 covers callback and step 7 covers templates for automatic recording, compliance recording and shared call history."
 ---
 
-A call queue holds callers and distributes them to a group of representatives. This guide follows the Microsoft Learn article on creating a Teams Phone call queue. Go to the **Teams admin center**, then **Voice**, then **Call queues**, then **Add**, and choose **Advanced setup**. Each of the eight steps ends with **Next**, except step 8, which ends with **Submit**.
+A call queue holds callers and distributes them to a group of representatives. This guide follows the Microsoft Learn article on creating a Teams Phone call queue. Go to the **Teams admin center**, then **Voice**, then **Call queues**, then **Add**, and choose **Advanced setup**. Each of the eight steps ends with **Next**, except step 8, which ends with **Submit**. The page also offers **Quick setup** for simpler routing needs, which covers only general info and who answers the calls. This guide covers Advanced setup.
 
 ## Step 1: General info
 
@@ -74,7 +74,7 @@ Each exception can disconnect the call or redirect it.
 
 ## Step 7: Templates (optional)
 
-Choose one Automatic Recording template, up to two Compliance Recording templates and one Shared call history template.
+Choose one Automatic Recording template, up to two Compliance Recording templates and one Shared call history template. The page lists known issues for automatic recording: explicit recording consent must be Off, and the Teams administrator who assigns the template must also be a SharePoint site administrator for the site the template uses.
 
 ## Step 8: Authorized users
 
@@ -95,4 +95,4 @@ The page links separate articles for audio file limits. It does not give a phone
 
 ## Sources
 
-- [Create a Teams Phone call queue](https://learn.microsoft.com/microsoftteams/create-a-phone-system-call-queue)
+- [Setup - Call Queue (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/aa-cq-setup-call-queue)
