@@ -77,7 +77,12 @@ By default, Power BI keeps a matrix's expanded hierarchy level when the selectio
 - You cannot create parameters on live connection sources without a local model. With DirectQuery for Power BI semantic models and Analysis Services, you can add a local model.
 - Implicit measures are not supported. Create an explicit DAX measure for an aggregated column.
 - Field parameters cannot be linked fields for drill-through or tooltip pages. Link the individual fields inside the parameter instead.
-- With Copilot, responses reflect the current state of the visuals.
+## Considerations
+
+The page lists two further points separately from the limitations:
+
+- When you use field parameters with Copilot, Copilot responds based on the current state of the visuals in the report.
+- The order in which fields appear in a visual depends on the selection order. With a hierarchy slicer, the hierarchy slicer determines the order instead.
 
 ## What the page does not say
 
@@ -85,7 +90,7 @@ Whether the feature is in preview or generally available, maximum field counts, 
 
 ## A build routine
 
-This routine is practical advice built on the page.
+This routine is my advice, built on the page.
 
 1. Create explicit measures for every aggregated field you want readers to switch between.
 2. Create the parameter and set the order.
@@ -93,7 +98,7 @@ This routine is practical advice built on the page.
 4. Test with a single measure, several measures and no selection.
 5. Check pages that use drill-through or tooltips, because the parameter cannot be a linked field there.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using implicit measures in a parameter.
 - Adding extra columns to the generated table.
@@ -108,4 +113,4 @@ This routine is practical advice built on the page.
 
 ## Sources
 
-- [Use field parameters in Power BI (Microsoft Learn)](https://learn.microsoft.com/power-bi/create-reports/power-bi-field-parameters)
+- [Use Field Parameters in Power BI Reports (Microsoft Learn)](https://learn.microsoft.com/power-bi/create-reports/power-bi-field-parameters)
