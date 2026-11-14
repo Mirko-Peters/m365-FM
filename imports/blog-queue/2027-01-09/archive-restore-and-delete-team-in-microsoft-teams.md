@@ -14,7 +14,7 @@ keypoints:
   - "The Microsoft Graph PowerShell restore can take up to 24 hours to complete."
 faq:
   - q: "Who can archive or restore a team?"
-    a: "Microsoft Learn says you must be a Teams service admin to make these changes in the admin center. It notes that team owners can also archive a team and links to a separate article for that."
+    a: "Microsoft Learn says you must be a Teams service admin to make the archive changes in the admin center. It notes that team owners can also archive a team and links to a separate article for that. The page names no role for the restore step of an archived team."
   - q: "What happens when I archive a team?"
     a: "All activity for the team ceases, and private channels and their site collections are archived. You can still add or remove members, update roles and view activity in channels, files and chats. The team moves to Hidden teams and later shows as Archived in Manage teams."
   - q: "Can I restore an archived team?"
@@ -25,11 +25,11 @@ faq:
     a: "Learn says the PowerShell restore process can take up to 24 hours before the team and its content appear in Teams."
 ---
 
-Archiving is the safe way to retire a team. Deleting is final from the Teams side, although a group restore can bring a team back within a retention window. This guide follows the Microsoft Learn page on archiving and deleting a team in the Teams admin center.
+Learn suggests archiving a team first and postponing deletion. Deleting is final from the Teams side, although a group restore can bring a team back within a retention window. This guide follows the Microsoft Learn page on archiving and deleting a team in the Teams admin center.
 
 ## Roles
 
-- Archive and restore: you must be a Teams service admin. Team owners can also archive a team, and the page links to a separate support article for their steps.
+- Archive: the page says you must be a Teams service admin to make these changes (stated in the archive section). The restore steps for an archived team do not repeat a role. Team owners can also archive a team, and the page links to a separate support article for their steps.
 - Delete: the page states no role.
 - Restore a deleted team through PowerShell: the page names the Graph scopes GroupMember.Read.All and Group.ReadWrite.All and no Entra role.
 
@@ -71,7 +71,7 @@ Restore-MgDirectoryDeletedItem -DirectoryObjectId [Id]
 Get-MgGroup -GroupId [Id]
 ```
 
-It can take up to 24 hours for the restore to complete before the team and its content show up in Teams. The page says to list soft-deleted groups with the first command. That cmdlet normally takes a specific object ID, so check the current Graph PowerShell documentation before relying on it for listing. The page also mentions restoration in the Teams admin center and links to a separate article without describing it.
+It can take up to 24 hours for the restore to complete before the team and its content show up in Teams. The page says to list soft-deleted groups with the first command. My note, not from the page: that cmdlet as shown takes a specific object ID, so check the current Graph PowerShell documentation before relying on it for listing. The page also mentions restoration in the Teams admin center and links to a separate article without describing it.
 
 ## What the page does not say
 
@@ -85,14 +85,14 @@ It can take up to 24 hours for the restore to complete before the team and its c
 
 ## A retirement outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Archive the team first and tick the read-only SharePoint option if the content should not change.
 2. Wait until you are sure nobody needs the team.
 3. Delete from the admin center.
 4. If someone asks for it back, act within the 30-day group retention window.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Deleting a team when archiving would have been enough.
 - Expecting a restored team to reappear under Your teams at once.
