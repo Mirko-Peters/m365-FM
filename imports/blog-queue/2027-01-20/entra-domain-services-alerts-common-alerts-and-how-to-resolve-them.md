@@ -8,7 +8,7 @@ date: 2027-01-20
 topics: [entra-domain-services, entra-id, network-security-group]
 keypoints:
   - "Alerts appear under Domain Services > Health in the Microsoft Entra admin center. After a fix, health usually updates itself within two hours."
-  - "Several alerts are unrecoverable and Learn's fix is to delete the managed domain and recreate it: AADDS100, AADDS110 and AADDS114, among others."
+  - "Learn calls AADDS100, AADDS110 and AADDS114 unrecoverable. Its fix for them is to delete the managed domain and recreate it."
   - "AADDS109 alerts younger than 4 hours may be resolved automatically by the platform, because deleted resources can be recreated."
   - "AADDS115 means a resource lock and AADDS116 a restrictive policy on the managed domain's network resources. Remove the lock or loosen the policy."
   - "Suspended domains (AADDS503, AADDS504, AADDS600) risk deletion if left unresolved, so resolve the cause as quickly as possible."
@@ -32,7 +32,7 @@ Microsoft Entra Domain Services reports problems as numbered health alerts. Open
 1. In the Microsoft Entra admin center, search for and select **Domain Services**.
 2. Choose your managed domain, for example `aaddscontoso.com`.
 3. Select **Health** in the left navigation.
-4. Select the alert to read its message and the time it was first found.
+4. Select the alert to read its message. For AADDS109, Learn's example, the alert shows a timestamp for when it was first found.
 
 You can open an Azure support request at any time for more help.
 
@@ -88,7 +88,7 @@ Learn warns for all three that a domain suspended for an extended period can be 
 
 ## The RC4 alert, AADDS123
 
-AADDS123 says Kerberos RC4 usage was detected for service ticket issuance that can block security enforcement related to CVE-2026-20833. Learn's steps are: turn off RC4 in the domain's security settings, turn on security audit events and use the page's sample query to find dependencies, monitor Kerberos ticket event IDs 4768 and 4769, set the `msDS-SupportedEncryptionTypes` value for service accounts that still need RC4 in on-premises Active Directory, keep Kerberos hardened, and keep monitoring until the alert clears.
+AADDS123 says Kerberos RC4 usage was detected for service ticket issuance that can block security enforcement related to CVE-2026-20833. Learn's steps are: turn off RC4 in the domain's security settings (Learn says that unless you have workloads, devices or services explicitly dependent on RC4, you need not go to the next steps), turn on security audit events and use the page's sample query to find dependencies, monitor Kerberos ticket event IDs 4768 and 4769, set the `msDS-SupportedEncryptionTypes` value for service accounts that still need RC4 in on-premises Active Directory, keep Kerberos hardened, and keep monitoring until the alert clears.
 
 Members of the **AAD DC Administrators** group can also use a self-service configuration through the hidden SMB share `\\<domain-controller-name>\CustomerExecutionScripts$`. Learn warns that the configuration applies per domain controller and that a KDC restart happens automatically when registry values change, so space the rollout. The page lists a schedule of January 13, 2026 for initial deployment, April 2026 for enforcement with manual rollback, and July 2026 for final enforcement without rollback. Those dates have passed, so treat this alert as urgent. That last point is my reading.
 
