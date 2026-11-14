@@ -113,3 +113,8 @@ Collecting these views by hand is slow, and a tool can streamline the work and s
 ## Next step
 
 Take last week's data, pick the line with the biggest gap between plan and actual, and write one question for it. Then test the numbers on the floor and compare your own count with the dashboard, because gemba walk data is a starting point and not the answer.
+
+## Sources
+
+- [Gemba - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/gemba/)
+- [OEE - LeanProduction.com](https://leanproduction.com/oee)
