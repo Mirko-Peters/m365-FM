@@ -11,7 +11,7 @@ keypoints:
   - "Select reshapes objects but cannot change the number of items. Filter array reduces items but cannot reshape them and its text matching is case-sensitive."
   - "json() converts a string or XML into a JSON value. Without an XML schema the structure from json(xml(...)) can differ greatly from what you expect."
   - "The pages I read do not describe Parse JSON schema validation errors or nullable property handling, so test with a bad sample payload yourself."
-  - "In run history, open the failed action and check its Inputs and Outputs to see the exact payload and error."
+  - "In the 28-day run history, open the failed run and the failed step, then read the error details in the right pane. The page does not list Parse JSON error texts."
 faq:
   - q: "How do I get a schema for Parse JSON?"
     a: "Microsoft Learn says you can enter a JSON schema in the Schema box or select Use sample payload to generate schema, paste a sample JSON object and select Done. The schema then drives the dynamic content tokens for later actions."
@@ -22,7 +22,7 @@ faq:
   - q: "What does json() do?"
     a: "The workflow expression reference says json() returns the JSON native type, object or array of objects for a string or XML. For example, json('{\"fullName\": \"Sophia Owen\"}') returns an object with a fullName property."
   - q: "Where do I see why an expression failed?"
-    a: "Learn says to open the failed run, select the failed action and expand Inputs to see what was sent, then Outputs for the error message and status code. The cloud flow troubleshooting page I read does not list expression or Parse JSON error texts."
+    a: "Learn's troubleshooting page says to select the date of the failed run in the 28-day run history, open the failed step (marked with a red exclamation icon) and review the error message, with details and a how-to-fix hint in the right pane. The page does not list expression or Parse JSON error texts."
 ---
 
 For nested arrays in Power Automate, parse the payload with **Parse JSON**, reshape objects with **Select**, narrow items with **Filter array**, and use expressions for the cases the designer cannot express. Microsoft's pages describe these tools well, but they say little about corrupted or inconsistent payloads. This article covers what is documented and flags the rest as something to test.
@@ -72,9 +72,9 @@ The `string()` entry mentions that a non-existent property can be accessed with 
 
 ## Step 4: Find the failing step
 
-Open the failed run in **28-day run history**, select the failed action, and expand **Inputs** and **Outputs**. Learn says outputs show the downstream error and status code. The page I read does not list error texts for expression or Parse JSON failures. For those, Learn points to the cloud flow error code reference, which I did not read for this article.
+In the **28-day run history** section of the failed flow, select the date of the failed run. At least one step shows a red exclamation icon. Open that step and review the error message. Learn says the right pane shows the details of the error and how to fix it. The page I read does not list error texts for expression or Parse JSON failures, and it does not describe the Inputs and Outputs panes, so use them as you know them from the designer and treat that as my own note.
 
-When a flow that used to work now fails with a 400 error, Learn suggests checking whether a schema changed, such as a renamed column.
+For error codes **400** (Bad request) or **404** (Not found), Learn says the cause is a setting in an action that does not work as expected and that the error details should say how to correct it. The page does not name schema changes as a cause.
 
 ## What the documentation does not cover
 
@@ -97,5 +97,5 @@ For corrupted payloads specifically, the pages I read give no recipe. They do no
 
 - [Perform operations on data in workflows: Parse JSON, Select, Filter array](https://learn.microsoft.com/en-us/azure/logic-apps/logic-apps-perform-data-operations)
 - [Use data operations in Power Automate](https://learn.microsoft.com/en-us/power-automate/data-operations)
-- [Reference guide to workflow expression functions](https://learn.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-functions-reference)
+- [Reference guide to workflow expression functions](https://learn.microsoft.com/en-us/azure/logic-apps/expression-functions-reference)
 - [Troubleshoot cloud flow failures](https://learn.microsoft.com/en-us/power-automate/fix-flow-failures)
