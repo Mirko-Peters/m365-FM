@@ -14,7 +14,7 @@ keypoints:
   - "Custom instructions in a generative answers node are limited to 8,000 characters, and Learn gives no confirmation that table formatting works. Test it."
 faq:
   - q: "Does Copilot Studio extract tables from PDFs in knowledge sources?"
-    a: "The Learn pages on knowledge sources and unstructured data do not describe table extraction. They say the SharePoint file upload option supports text within images for certain document types such as PDF files, but not how tables are read. Test with your own PDFs."
+    a: "The Learn pages on unstructured data and quotas do not describe table extraction. They say the SharePoint file upload option supports text within images for certain document types such as PDF files, but not how tables are read. Test with your own PDFs."
   - q: "What are the PDF file limits for uploaded knowledge?"
     a: "Learn's quotas page lists 512 MB per file for OneDrive and Upload SharePoint sources, with supported types doc, docx, xls, xlsx, ppt, pptx and pdf. It does not state a page limit and does not describe how tables or images in documents are processed."
   - q: "Which files cannot be answered from?"
@@ -25,7 +25,7 @@ faq:
     a: "Learn states up to 2,000 pages for PDFs and TIFFs, and 500 MB on the paid S0 tier or 4 MB on the free F0 tier. With the free tier only the first two pages are processed."
 ---
 
-Copilot Studio can answer from PDFs, but Microsoft Learn does not document how it reads tables inside them. The knowledge pages describe chunking, semantic indexing and limits, and say nothing about merged cells, multi-page tables or table fidelity. When a table must be read exactly, the documented options are to pre-process the PDF with Document Intelligence or to move the data into a spreadsheet and use code interpreter.
+Copilot Studio can answer from PDFs, but Microsoft Learn does not document how it reads tables inside them. The unstructured data and quotas pages describe chunking, semantic indexing and limits, and say nothing about merged cells, multi-page tables or table fidelity. When a table must be read exactly, the documented options are to pre-process the PDF with Document Intelligence or to move the data into a spreadsheet and use code interpreter.
 
 ## What Learn documents for PDFs
 
@@ -118,10 +118,9 @@ Learn's format example is a bolded step list. It does not confirm table output, 
 
 ## Sources
 
-- [Knowledge sources summary (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-copilot-studio)
 - [Unstructured data as a knowledge source (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-unstructured-data)
 - [Quotas and limits for Copilot Studio (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/requirements-quotas)
 - [Code interpreter for structured data (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-code-interpreter-structured-data)
-- [Generative answers node (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/nlu-boost-node)
-- [Prompt modification (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/nlu-generative-answers-prompt-modification)
-- [Document Intelligence layout model (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/layout?view=doc-intel-4.0.0)
+- [Add a generative answers node (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/nlu-boost-node)
+- [Use prompt modification to provide custom instructions (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/nlu-generative-answers-prompt-modification)
+- [Document layout analysis (Microsoft Learn)](https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/prebuilt/layout?view=doc-intel-4.0.0)
