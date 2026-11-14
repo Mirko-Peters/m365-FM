@@ -88,7 +88,7 @@ In the admin center, select **Copilot** > **Overview** > **Security** to see Cop
 
 ## Step 6: Welcome users and review usage
 
-Microsoft suggests sending a welcome email after license assignment, adding a link to your AI usage policy, using built-in notifications, monitoring completion through Viva Learning reporting and allowing feedback. Afterward, review the usage report under **Reports** > **Usage** > **Microsoft Copilot** and the Copilot Dashboard in Viva Insights.
+Microsoft suggests sending a welcome email after license assignment, adding a link to your AI usage policy, using built-in notifications, monitoring completion through Viva Learning reporting and allowing feedback. The pages read for this article do not describe how to review Copilot usage after rollout, so check the Learn pages on Copilot usage reports and the Copilot Dashboard separately.
 
 ## What the documentation does not say
 
@@ -102,10 +102,10 @@ The setup and settings pages give no recommended values, such as which setting "
 
 ## Sources
 
-- [Microsoft Learn: Set up Microsoft Copilot](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-setup)
-- [Microsoft Learn: Manage Copilot settings in the Microsoft 365 admin center](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-page)
-- [Microsoft Learn: Manage public web access for Copilot](https://learn.microsoft.com/en-us/copilot/microsoft-365/manage-public-web-access)
-- [Microsoft Learn: Microsoft Copilot requirements](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-requirements)
-- [Microsoft Learn: Copilot licensing](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-licensing)
-- [Microsoft Learn: Secure and govern Microsoft Copilot](https://learn.microsoft.com/en-us/microsoft-365/copilot/secure-govern-copilot-foundational-deployment-guidance)
-- [Microsoft Learn: Security for Microsoft Copilot](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-ai-security)
+- [Microsoft Learn: Microsoft Copilot adoption and onboarding guide for IT admins](https://learn.microsoft.com/en-us/copilot/adopt/enablement-resources)
+- [Microsoft Learn: Configure Microsoft Copilot settings in the Microsoft 365 admin center](https://learn.microsoft.com/en-us/microsoft-365/copilot/configure-copilot-admin-center)
+- [Microsoft Learn: Data, privacy, and security for web search in Microsoft Copilot and Microsoft Copilot Chat](https://learn.microsoft.com/en-us/microsoft-365/copilot/manage-public-web-access)
+- [Microsoft Learn: Microsoft Copilot requirements](https://learn.microsoft.com/en-us/copilot/plan/microsoft-copilot-requirements)
+- [Microsoft Learn: License Options for Microsoft Copilot](https://learn.microsoft.com/en-us/microsoft-365/copilot/copilot-license-options)
+- [Microsoft Learn: Secure & Governed Data Foundation for Microsoft Copilot](https://learn.microsoft.com/en-us/microsoft-365/copilot/secure-govern-copilot-foundational-deployment-guidance)
+- [Microsoft Learn: Security for Microsoft Copilot](https://learn.microsoft.com/en-us/copilot/plan/security-microsoft-copilot)
