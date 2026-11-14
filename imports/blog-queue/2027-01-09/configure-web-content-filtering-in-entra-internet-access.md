@@ -11,7 +11,7 @@ keypoints:
   - "Create a web content filtering policy with rules for web categories, URLs or FQDNs, link it to a security profile and apply the profile through Conditional Access."
   - "Rules are evaluated in priority order and stop at the first match. URL rules are a preview feature with a maximum of 1,000 URLs per tenant."
   - "DNS over HTTPS and the browser's built-in DNS client must be disabled. QUIC is not supported, so Learn suggests a firewall rule to block it."
-  - "Policy changes can take under 5 minutes, while Conditional Access and new profiles can take about an hour or more. The page names no license."
+  - "Policy changes typically take under 5 minutes, Conditional Access about an hour and a new security profile up to 60-90 minutes. The page names no license."
 faq:
   - q: "Which roles do I need?"
     a: "Global Secure Access Administrator and Conditional Access Administrator, according to Microsoft Learn."
@@ -22,10 +22,10 @@ faq:
   - q: "What are the URL limits?"
     a: "URL filtering is a preview feature with a maximum of 1,000 URLs per tenant. FQDN entries must not include https:// or ports, and a wildcard such as *.domain.com does not match the root domain."
   - q: "How long do changes take?"
-    a: "Learn says Global Secure Access changes take less than 5 minutes, Conditional Access changes about an hour, and a new security profile 60 to 90 minutes."
+    a: "Learn says Global Secure Access web content filtering changes typically take effect in less than 5 minutes, Conditional Access changes in approximately one hour, and applying a new security profile can take up to 60-90 minutes."
 ---
 
-Web content filtering in Microsoft Entra Internet Access lets you allow or block web destinations by category, URL or FQDN. You build a policy, link it to a security profile and apply the profile through Conditional Access. This guide follows the Microsoft Learn how-to page. The page does not name a license.
+Web content filtering in Microsoft Entra Internet Access lets you allow or block web destinations by category, URL or FQDN. You build a policy, link it to a security profile and apply the profile through Conditional Access. This guide follows the Microsoft Learn page How to configure Global Secure Access web content filtering. The page does not name a license.
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ Web content filtering in Microsoft Entra Internet Access lets you allow or block
 - The Global Secure Access client is installed on devices.
 - The Internet Access forwarding profile is turned on.
 - DNS over HTTPS is disabled, and the browser's built-in DNS client is disabled.
-- IPv4 is preferred over IPv6.
+- IPv6 traffic is not acquired by the client and goes directly to the network, so Learn says to set the network adapter properties to IPv4 preferred.
 - QUIC over UDP is not supported. Learn suggests a firewall rule that blocks QUIC so traffic falls back to TCP.
 - TLS inspection is needed for rules that use the source type or HTTP method on HTTPS traffic. Without it, filtering is based on the SNI only.
 
@@ -52,7 +52,7 @@ Rule details:
 - `*.domain.com` does not match the root domain `domain.com`.
 - Enter a list as comma-separated values without spaces.
 
-The page's creation steps do not describe choosing allow or block, and it gives no steps for setting rule priority.
+The page's creation steps do not show where to choose allow or block. Its examples say to set the policy action to Block, and its Graph API example sets `"action": "block"` on the policy and a priority of 100 when linking the policy to the baseline profile. It gives no portal steps for setting priority between policies.
 
 ## Link the policy to a security profile
 
@@ -63,11 +63,14 @@ The page's creation steps do not describe choosing allow or block, and it gives 
 ## Apply it with Conditional Access
 
 1. Go to **Microsoft Entra ID** > **Conditional Access** > **Policies** and select **New policy**.
-2. Assign it to **All users** or the group you need.
+2. Under **Assignments** > **Users or workload identities** > **Include**, the page selects **All users**.
 3. Under target resources choose **All internet resources with Global Secure Access**.
-4. Under **Session**, select **Use Global Secure Access security profile** and set it to **On**.
+4. Select **Session** > **Use Global Secure Access security profile**, choose your security profile and select **Select**.
+5. Make sure **Enable policy** is **On** and select **Create**.
 
-The baseline profile has the lowest priority and applies to remote networks that are not covered by Conditional Access. The page's screenshot shows priority 65000 for it.
+Learn also lists assigning users or groups to the traffic forwarding profile as a high-level step. The Explicit Forward Proxy preview is not included in the All internet resources group and has its own Conditional Access article.
+
+For remote networks, the baseline security profile enforces policies at the lowest priority, applies to all Internet Access traffic routed through the service (client-based and remote network traffic) and needs no Conditional Access policy for remote network traffic. The page's screenshot shows priority 65000 for it. Source traffic type rules are not supported for remote networks.
 
 ## How rules are evaluated
 
@@ -78,9 +81,10 @@ The baseline profile has the lowest priority and applies to remote networks that
 
 ## Timing
 
-- Global Secure Access changes take less than 5 minutes.
-- Conditional Access changes take about an hour.
-- A new security profile takes 60 to 90 minutes.
+- Global Secure Access web content filtering changes typically take effect in less than 5 minutes.
+- Conditional Access changes take effect in approximately one hour.
+- Applying a new security profile can take up to 60-90 minutes, because the user needs a new access token with the new profile ID. Changes to existing profiles are enforced much more quickly.
+- To speed up Conditional Access changes for testing, the page suggests revoking user sessions.
 
 ## Verify
 
@@ -89,13 +93,13 @@ Use **Advanced Diagnostics** > **Forwarding profile** to check that traffic is a
 ## What the page does not say
 
 - A license requirement.
-- How to choose allow or block when you add a rule.
-- Steps for setting priorities between policies.
+- Portal steps for choosing allow or block when you add a rule (only the examples and the Graph API sample mention the action).
+- Portal steps for setting priorities between policies.
 - Behavior for unsupported protocols beyond QUIC.
 
 ## A rollout outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Check prerequisites on a pilot device: client, forwarding profile, DNS settings.
 2. Create a policy with one category rule and test with a pilot group.
@@ -103,7 +107,7 @@ This outline is practical advice built on the page.
 4. Check the traffic logs.
 5. Widen the Conditional Access scope.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Leaving DNS over HTTPS on in the browser.
 - Expecting a wildcard FQDN to match the root domain.
@@ -129,4 +133,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Configure web content filtering (Microsoft Learn)](https://learn.microsoft.com/entra/global-secure-access/how-to-configure-web-content-filtering)
+- [How to configure Global Secure Access web content filtering (Microsoft Learn)](https://learn.microsoft.com/entra/global-secure-access/how-to-configure-web-content-filtering)
