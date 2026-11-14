@@ -108,4 +108,4 @@ The page does not give the diagnostic category name, click path, retention perio
 
 ## Sources
 
-- [Microsoft Graph activity logs overview](https://learn.microsoft.com/graph/microsoft-graph-activity-logs-overview)
+- [Access Microsoft Graph activity logs for tenant monitoring (Microsoft Learn)](https://learn.microsoft.com/graph/microsoft-graph-activity-logs-overview)
