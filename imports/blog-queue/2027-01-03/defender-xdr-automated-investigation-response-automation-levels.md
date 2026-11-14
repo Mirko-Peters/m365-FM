@@ -20,7 +20,7 @@ faq:
   - q: "Where do I approve pending remediation actions?"
     a: "Learn says all actions, pending or completed, are listed in the Action center. The Automated investigation and response card on the Defender portal homepage has a View pending actions link that opens it."
   - q: "What are the automation levels?"
-    a: "The Learn overview page I read does not name specific automation levels. It says only that, depending on configuration, remediation actions are either taken automatically or taken only upon approval. The configuration article it links to is the place to check the levels."
+    a: "The Learn overview page I read does not name specific automation levels. It says only that, depending on configuration, remediation actions are either taken automatically or taken only upon approval. The page points to a separate configuration article for configuring AIR, which this article did not read."
   - q: "Does every alert start an investigation?"
     a: "No. Learn notes that not every alert triggers an automated investigation, and not every investigation results in automated remediation. Both depend on how AIR is configured for your organization."
 ---
@@ -58,9 +58,9 @@ Not every alert triggers an automated investigation, and not every investigation
 
 ## Automatic or approval-based remediation
 
-The overview says that depending on configuration, remediation actions are either taken automatically or taken only upon approval by the security operations team. It does not name individual automation levels and does not say which actions require approval. The page links to the article *Configure automated investigation and response capabilities in Microsoft Defender XDR* as the place to configure AIR, and to its prerequisites section for requirements and permissions. I did not read that article, so this guide does not describe level names or how to change them.
+The overview says that depending on configuration, remediation actions are either taken automatically or taken only upon approval by the security operations team. It does not name individual automation levels and does not say which actions require approval. The page links to the article *Configure automated investigation and response capabilities in Microsoft Defender XDR* as the place to configure AIR. I did not read that article, so this guide does not describe level names or how to change them.
 
-What you can do now is check the current state in your own tenant. Open the Action center and look at whether actions arrive as pending or already completed. That tells you how your organization is configured in practice.
+My advice: check the current state in your own tenant. Open the Action center and look at whether actions arrive as pending or already completed. That is a practical hint about how your organization is configured, not something the page states.
 
 ## Find pending actions
 
@@ -75,7 +75,7 @@ All actions, pending or completed, appear in the Action center.
 
 Go to **Incidents**, select an incident, then open the **Investigations** tab. Learn points to a separate article for details and results of an automated investigation.
 
-## How to run your approval process
+## How to run your approval process (my advice)
 
 The documentation leaves the operating model to you, so decide it explicitly:
 
@@ -86,7 +86,7 @@ The documentation leaves the operating model to you, so decide it explicitly:
 
 These are practical suggestions, not Microsoft recommendations.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Assuming AIR remediates everything automatically. The page says it depends on configuration.
 - Not checking the Action center, so pending actions wait.
