@@ -11,7 +11,7 @@ keypoints:
   - "The tab can hold reports, paginated reports, scorecards and organizational apps. Dashboards cannot be embedded in the Power BI tab."
   - "Embedding a report does not grant access. Viewers need permission in Power BI, and without it they see 'Content isn't available'."
   - "Adding the tab creates a tab conversation, so everyone in the channel can discuss the report next to it."
-  - "Known limits include no URL filters, no cross-tenant links and no Power BI tab in national or regional clouds."
+  - "Known limits include no URL filters, no cross-tenant links and no new Power BI tab in national or regional clouds."
 faq:
   - q: "What is Power BI in Teams?"
     a: "According to Microsoft Learn, it is a set of integrations: the Power BI app in Teams, a Power BI tab that embeds interactive reports in channels and chats, link previews for pasted links, chatting from the Power BI service, an In Teams view of all your Power BI tabs, activity feed notifications and mobile support."
@@ -103,7 +103,11 @@ From the two Microsoft Learn pages:
 
 - URL filters aren't supported in the Power BI tab.
 - Exported visual data is saved to your Downloads folder as data (n).xlsx.
-- In national or regional clouds, the new Power BI tab isn't available. In US Government Community Cloud, link previews, activity feed notifications and chat from Power BI are not available.
+- In national or regional clouds, the new Power BI tab isn't available. Learn adds that an older version might be available, which doesn't support workspaces or reports in Power BI apps.
+- In US Government Community Cloud, the Power BI app and the new tab are available, but the messaging extension (link previews, search and link unfurling), activity feed notifications and chat in Teams are not.
+- The messaging extension might process request and response data in a region that differs from your Power BI tenant home region.
+- When an organizational app is embedded in a tab, items that can't be embedded in Teams open in a new browser window.
+- Links created with **Share** give the best experience, and links don't support query string parameters, personal bookmarks or cross-tenant use.
 - Link previews don't work in meeting chat or private channels.
 - Power BI doesn't support all the languages that Teams supports, so localization of the embedded report can be incomplete.
 - On Teams mobile, use **More options (...)** > **Open in browser** to open the report in the Power BI mobile app if it is installed.
@@ -123,5 +127,5 @@ From the two Microsoft Learn pages:
 
 ## Sources
 
-- [Embed Power BI content in Microsoft Teams, Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-embed-report-microsoft-teams)
-- [Collaborate in Microsoft Teams with Power BI, Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-collaborate-microsoft-teams)
+- [Embed Power BI content in Microsoft Teams, Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/collaborate-share/office-integration/service-embed-report-microsoft-teams)
+- [Collaborate in Microsoft Teams with Power BI, Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/collaborate-share/office-integration/service-collaborate-microsoft-teams)
