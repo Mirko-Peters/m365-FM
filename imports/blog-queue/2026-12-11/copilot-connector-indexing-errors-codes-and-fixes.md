@@ -9,7 +9,7 @@ topics: [copilot-connectors, copilot, graph]
 keypoints:
   - "Start in Microsoft 365 admin center > Copilot > Connectors > Your Connections. Read Connection state and Last sync time before anything else."
   - "A Failed state needs manual intervention. Data indexed before the error stays searchable."
-  - "Error codes 1000 to 1026 cover connection, authentication, quota and agent problems. Codes 2001 to 2010 cover item and indexing problems."
+  - "Listed error codes between 1000 and 1026 cover connection, authentication, quota and agent problems. Codes 2001 to 2010 cover item and indexing problems."
   - "The admin center shows a limited error view. The full list comes from the DownloadErrorScript PowerShell script, batch size up to 5,000."
   - "This article covers items that fail to ingest. If items are indexed but Copilot does not use them, that is a different problem."
 faq:
@@ -25,7 +25,7 @@ faq:
     a: "The manage connection page says that if connection failures prevent delete detection, items not rediscovered during crawls for 28 days are removed from the Microsoft 365 index."
 ---
 
-Start with the connection itself. In the Microsoft 365 admin center go to **Copilot** > **Connectors** > **Your Connections**, read the **Connection state** and **Last sync time**, then open the error list and match the code against Microsoft's table. Most failures fall into four groups: credentials, quota, the connector agent, or items the index cannot accept. You need the **AI administrator** role to manage Copilot connectors.
+Start with the connection itself. In the Microsoft 365 admin center go to **Copilot** > **Connectors** > **Your Connections**, read the **Connection state** and **Last sync time**, then open the error list and match the code against Microsoft's table. My own grouping of the listed codes: most failures concern credentials, quota, the connector agent, or items the index cannot accept. You need the **AI administrator** role to manage Copilot connectors.
 
 This article is about items that fail to ingest. If items are indexed but Copilot does not use them, the cause is elsewhere.
 
@@ -49,7 +49,7 @@ In the admin center, select the connection and open the **Error** tab. You see e
 Install-Script -Name DownloadErrorScript
 ```
 
-Run `DownloadErrorScript.ps1`, then enter the connection ID, an output file name (default `.csv`) and a batch size (maximum 5,000). It authenticates with MSAL.PS.
+Run `DownloadErrorScript.ps1`, then enter the connection ID, an output file name without extension (the default extension is .csv) and a batch size (maximum 5,000). The script generates an MSAL token with the tenant credentials of the connection, and installing it includes the MSAL.PS module.
 
 ## Step 3: Match the code
 
@@ -62,14 +62,14 @@ Run `DownloadErrorScript.ps1`, then enter the connection ID, an output file name
 | 1002 | Cannot authenticate | Select Edit and update credentials |
 | 1003 | Account lacks permission to the item | Make sure the right account has access |
 | 1005 | Credentials expired | Select Edit and update credentials |
-| 1008 | Tenant quota reached | Delete a connection or reduce ingestion filters, then contact support |
-| 1009 | Connection quota reached | Reduce ingestion filters, then contact support |
+| 1008 | Tenant quota reached | Delete a connection or reduce ingestion filters. Contact support if that does not help |
+| 1009 | Connection quota reached | Reduce ingestion filters. Contact support if that does not help |
 | 1010 | Quota for non-Entra groups reached (100 K) | Delete a connection or reduce ingestion filters |
 | 1015 | Missing ExternalItem.ReadWrite.OwnedBy | Grant it to the Entra app used for agent registration |
 | 1016 | Missing Directory.Read.All | Grant it to the Entra app used for registration |
 | 1025, 1026 | Connector agent deprecated or critically broken | Upgrade the agent |
 
-Other codes in the range cover an offline agent (1011), unsupported authentication mode (1012), network loss during indexing (1017), missing interactive sign-in rights on the agent computer (1018) and invalid app credentials (1019).
+Other codes in the range cover an offline agent (1011), unsupported authentication mode (1012), network loss during indexing (1017), missing interactive sign-in rights on the agent computer (1018) invalid or expired app credentials (1019) and a failed GRPC connection to a custom connector (1020).
 
 ### Indexing and item errors (2001 to 2010)
 
@@ -87,7 +87,7 @@ Code 5000 is a generic error. Contact support if it continues.
 
 ## Step 4: Understand crawl behavior
 
-Scheduled crawls are full or incremental. On-demand crawls need Microsoft Graph connector agent version 2.1.0.0 or later. Only one crawl category runs at a time. If a crawl runs past the next scheduled one, the ongoing crawl stops and the scheduled crawl is skipped and queued. Editing a published connection might trigger a full crawl.
+Scheduled crawls are full or incremental. Learn notes that Microsoft Graph connector agent versions 2.1.0.0 and later support on-demand crawl. Only one crawl category runs at a time. If a crawl runs past the next scheduled one, the ongoing crawl stops and the scheduled crawl is skipped and queued. Editing a published connection might trigger a full crawl.
 
 To change which items are indexed, delete the connection and create a new one with a data source exclusion filter.
 
@@ -107,6 +107,6 @@ The manage-connection page does not describe an item count metric or refresh int
 
 ## Sources
 
-- [Troubleshoot connector error responses](https://learn.microsoft.com/en-us/microsoftsearch/connector-error-responses)
-- [Manage your Microsoft 365 Copilot connector](https://learn.microsoft.com/en-us/microsoftsearch/manage-connector)
+- [Monitor connector errors](https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/error-responses)
+- [Manage connectors](https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/manage-connector)
 - [Manage connections for external content in Microsoft Graph](https://learn.microsoft.com/en-us/graph/connecting-external-content-manage-connections)
