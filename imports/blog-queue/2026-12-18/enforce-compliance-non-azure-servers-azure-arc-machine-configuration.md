@@ -8,7 +8,7 @@ date: 2026-12-18
 topics: [azure-arc, azure-policy, azure-connected-machine-agent, azure-policy-initiative]
 keypoints:
   - "Machine configuration audits or configures operating system settings as code for Azure machines and hybrid Arc-enabled machines, orchestrated at scale with Azure Policy."
-  - "Arc servers already have a system-assigned managed identity through the Connected Machine agent, so only the machine configuration extension needs deployment."
+  - "Arc servers get the machine configuration component and a system-assigned identity through the Connected Machine agent. Learn says not to install the Azure VM extension on them."
   - "Three modes exist: Audit, Apply and Monitor, and Apply and Autocorrect. Learn advises assigning in audit mode first."
   - "Applying configuration packages needs Arc agent 1.10.0 or later. Up to 50 guest assignments are supported per machine."
   - "With Apply and Autocorrect there is no way to report when a drift was automatically corrected."
@@ -16,7 +16,7 @@ faq:
   - q: "What does machine configuration do on Arc-enabled servers?"
     a: "According to Microsoft Learn, Azure Policy's machine configuration feature audits or configures operating system settings as code for machines running in Azure and hybrid Arc-enabled machines. You can use it per machine or orchestrate it at scale with Azure Policy."
   - q: "What do I need to deploy on an Arc server?"
-    a: "Microsoft Learn training content says the machine configuration extension and a system-assigned managed identity are prerequisites. Because Arc servers already run the Connected Machine agent, they gain the managed identity, and only the extension needs deployment. Applying packages needs Arc agent 1.10.0 or later."
+    a: "Microsoft Learn training content says Azure VMs need the machine configuration VM extension and a system-assigned managed identity. Arc-enabled servers receive both the machine configuration component and the identity through the Connected Machine agent, and Learn says not to install the Azure VM extension separately on them. Instead, verify onboarding, agent health, supported versions and connectivity. Applying packages needs Arc agent 1.10.0 or later."
   - q: "What is the difference between the three modes?"
     a: "Microsoft Learn says Audit only reports. Apply and Monitor applies the configuration once and then monitors it, with no automatic correction of drift unless remediation is triggered. Apply and Autocorrect applies it and corrects drift at the next evaluation."
   - q: "How do I trigger remediation for existing non-compliant servers?"
@@ -35,10 +35,10 @@ Two scenarios are named. Configuration management describes a whole server as co
 
 ## Step 1: Check the prerequisites
 
-- **Arc enrollment.** Learn says the machine configuration extension evaluates settings against a built-in baseline or a custom configuration, and that a system-assigned managed identity authenticates it to Azure. Arc servers already have the Connected Machine agent, so they gain the identity and only the extension needs deployment.
+- **Arc enrollment.** The Learn training unit says the machine configuration agent evaluates settings against a built-in baseline or a custom configuration, and that the machine's system-assigned managed identity authenticates it to the service. Arc-enabled servers get the component and the identity through the Connected Machine agent, and Learn says not to install the Azure VM extension separately on them.
 - **Agent version.** Applying configuration packages requires Arc agent 1.10.0 or later, or guest configuration extension 1.26.24 or later on Azure VMs.
 - **Operating system.** Learn lists Windows Server 2012 to 2025 and Windows 10 and 11, plus several Linux distributions. For Arc, it points to the supported server editions on Azure Arc. Starting in November 2026, Linux versions older than the listed ones must be upgraded to use PowerShell-based configurations with new agent versions.
-- **Deploy the prerequisites at scale.** For Azure VMs, assign the initiative **Deploy prerequisites to enable guest configuration policies on virtual machines**. The page read does not name an equivalent initiative for Arc servers.
+- **Deploy the prerequisites at scale.** For Azure VMs, assign the initiative **Deploy prerequisites to enable guest configuration policies on virtual machines**. For Arc servers, the training unit says to verify onboarding, agent health, supported versions and connectivity instead.
 - **Limit.** Up to 50 guest assignments per machine.
 
 The pages read do not list outbound endpoints or proxy requirements for the extension.
@@ -47,7 +47,7 @@ The pages read do not list outbound endpoints or proxy requirements for the exte
 
 In the Azure portal, search for **Policy**, expand **Authoring**, select **Assignments** and then **Assign policy**. Pick a scope, a management group or subscription, and choose a policy definition in the Guest Configuration category. When a policy is assigned to an existing machine, Learn says a guest assignment is created first in Audit mode, and the results show which machines need remediation.
 
-Existing resources that do not comply appear as Non-compliant on the **Compliance** page. The Arc tutorial does not say how long reporting takes.
+Existing resources that do not comply appear as Non-compliant on the **Compliance** page. The Arc tutorial does not say how long reporting takes. The training unit adds that the OS-specific audit baseline policies default the `IncludeArcMachines` parameter to `false`, and that including Arc servers means reviewing and acknowledging the applicable charges.
 
 ## Step 3: Choose the enforcement behavior
 
@@ -64,13 +64,14 @@ Details worth knowing:
 - With Apply and Monitor, status is Compliant unless an error occurs or the machine is not in the desired state at the next evaluation.
 - With Apply and Autocorrect the machine always reports Compliant unless an error occurs. Learn says there is no way to report when a drift was automatically corrected.
 - Custom definitions use `AuditIfNotExists` for audit and `DeployIfNotExists` for settings that change machines.
-- Enforce mode can disrupt applications that depend on the current state, so review the audit results before promoting a policy.
+- The training unit advises starting with audit findings and reviewing application impact before piloting any configuration that changes settings.
+- The training unit also says the built-in Windows and Linux security baseline definitions support only `AuditIfNotExists` and `Disabled`, so you cannot turn them into enforcement policies by changing an assignment setting. Applying settings needs a custom package and a policy that deploys its guest assignment.
 
 ## Step 4: Understand enforcement mode and remediation
 
-Each assignment also has an **Enforcement Mode**. When Enabled, the default, the configuration is applied when a machine is deployed or updated in Azure Resource Manager, for example a tag change. Changes inside the machine do not trigger remediation unless they also change the machine resource. When Disabled, the assignment audits until a remediation task changes the behavior.
+Each assignment also has an **Enforcement Mode**. When Enabled, the default, the configuration is applied when a machine is deployed or updated in Azure Resource Manager, for example a tag change. Changes inside the machine do not trigger remediation unless they also change the machine resource. When Disabled, the assignment audits until a remediation task changes the behavior. The training unit names the property values `Default` and `DoNotEnforce` instead and says they control policy-effect enforcement, not the guest assignment type. Learn does not reconcile the naming.
 
-For existing machines, use the **Remediation** tab of the assignment and select **Create a remediation task**. Tasks correct resources that evaluate to NonCompliant after the assignment is created. Learn says the machine configuration service requests the assignment list every 5 minutes when you trigger remediation by updating a guest assignment resource.
+For existing machines, use the **Remediation** tab of the assignment and select **Create a remediation task**. Tasks correct resources that evaluate to NonCompliant after the assignment is created. You can also trigger remediation outside Azure Policy by updating a guest assignment resource. Learn says the machine configuration service requests the list of assignments every 5 minutes and applies a configuration whose complianceStatus is Pending when its mode is an apply mode.
 
 To disable remediation for custom content packages only, add the machine tag `CustomGuestConfigurationSetPolicy` with the value `disable`.
 
@@ -93,7 +94,7 @@ Two behaviors to expect:
 
 ## What the sources do not say
 
-The pages read do not describe the evaluation interval, outbound network requirements, Arc-specific licensing for these features, or the possible values of `complianceStatus`. The Arc tutorial uses a Defender for servers policy as its example and not a machine configuration baseline.
+The pages read do not describe the evaluation interval, outbound network requirements, the amount of the charges for Arc servers (the training unit only mentions that charges apply), or the possible values of `complianceStatus`. The Arc tutorial uses a Defender for servers policy as its example and not a machine configuration baseline.
 
 ## Related
 
@@ -104,8 +105,8 @@ The pages read do not describe the evaluation interval, outbound network require
 
 ## Sources
 
-- [Azure machine configuration overview](https://learn.microsoft.com/azure/governance/machine-configuration/overview)
-- [Remediation options for machine configuration](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/remediation-options)
+- [What is Azure Machine Configuration?](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/overview/01-overview-concepts)
+- [Remediation options for machine configuration](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/concepts/remediation-options)
 - [Understand machine configuration assignment resources](https://learn.microsoft.com/en-us/azure/governance/machine-configuration/concepts/assignments)
 - [Explore Azure Machine Configuration extension capabilities and modes](https://learn.microsoft.com/en-us/training/modules/enforce-vm-security-machine-configuration/2-explore-machine-configuration-capabilities)
-- [Tutorial: Create a policy assignment for Arc-enabled servers](https://learn.microsoft.com/en-us/azure/azure-arc/servers/learn/tutorial-assign-policy-portal)
+- [Tutorial - New policy assignment with Azure portal](https://learn.microsoft.com/en-us/azure/azure-arc/servers/tutorial-assign-policy-portal)
