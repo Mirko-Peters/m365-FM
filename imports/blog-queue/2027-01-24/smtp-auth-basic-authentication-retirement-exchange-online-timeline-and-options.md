@@ -14,7 +14,7 @@ keypoints:
   - "Options named: OAuth for SMTP AUTH, Microsoft Graph sendMail, Microsoft 365 High Volume Email in public preview for internal recipients, hybrid with on-premises Exchange, or a third-party solution."
 faq:
   - q: "Is Basic authentication for SMTP AUTH already gone?"
-    a: "Not completely, according to the sources read. Learn says Basic authentication is disabled in all tenants for the protocols it lists and that SMTP AUTH was disabled in tenants where it was not being used. For SMTP AUTH client submission, the Message Center post MC786329, as updated on January 27, 2026, says the behavior stays unchanged until December 2026, then Basic is disabled by default for existing tenants at the end of December 2026 and admins can still enable it. Check your tenant, since the dates may have moved again."
+    a: "Not completely, according to the sources used here. Learn says Basic authentication is disabled in all tenants for the protocols it lists and that SMTP AUTH was disabled in tenants where it was not being used. For SMTP AUTH client submission, the Message Center post MC786329, as updated on January 27, 2026, says the behavior stays unchanged until December 2026, then Basic is disabled by default for existing tenants at the end of December 2026 and admins can still enable it. Check your tenant, since the dates may have moved again."
   - q: "What is the final removal date?"
     a: "The January 27, 2026 update says Microsoft will announce the final removal date in the second half of 2027, with a follow-up Message Center post. The earlier schedule of March 1 to April 30, 2026 is on hold. Learn points to the Exchange team blog for the latest milestones, so use the current official announcement."
   - q: "What are the alternatives to SMTP AUTH with a password?"
@@ -25,7 +25,7 @@ faq:
     a: "Learn says OAuth 2.0 support for POP, IMAP and SMTP AUTH was released in 2020, that updated client apps such as Thunderbird support it, and that there is no plan for Outlook clients to support OAuth for POP and IMAP. Outlook can connect using MAPI over HTTP on Windows and EWS on Outlook for Mac."
 ---
 
-Basic authentication for SMTP AUTH client submission is the last part of the Exchange Online Basic authentication story that is still moving. The Microsoft Learn page on the deprecation says Basic authentication is now disabled in all tenants for the listed protocols, and points to the Exchange team announcement for the SMTP AUTH timeline. This article combines the Learn page with the Message Center post MC786329, in its version updated on January 27, 2026, which I read through a public mirror of the Message Center text. Dates can change again, so check your own Message Center and the official announcement before you plan.
+Basic authentication for SMTP AUTH client submission is the part of the Exchange Online Basic authentication retirement that Learn still describes as pending. The Microsoft Learn page on the deprecation says Basic authentication is now disabled in all tenants for the listed protocols, and points to the Exchange team announcement for the SMTP AUTH timeline. This article combines the Learn page with the Message Center post MC786329, in its version updated on January 27, 2026, which this article takes from a public mirror of the Message Center text. Dates can change again, so check your own Message Center and the official announcement before you plan.
 
 ## What Learn says about the earlier retirement
 
@@ -34,11 +34,11 @@ Basic authentication for SMTP AUTH client submission is the last part of the Exc
 - SMTP AUTH was disabled in all tenants where it was not being used.
 - Cloud environments differed: Office 365 operated by 21Vianet began on March 31, 2023, and the others were subject to October 1, 2022.
 
-The reason given is that Basic authentication sends a username and password with every request, makes stolen credentials easier to reuse, and makes MFA hard or impossible to enforce. OAuth 2.0 access tokens have a limited lifetime and are specific to an app and resource.
+The reason given is that Basic authentication sends a username and password with every request, makes it easier for attackers to capture credentials, which raises the risk of reuse against other services, and makes MFA enforcement hard or in some cases impossible. OAuth 2.0 access tokens have a limited lifetime and are specific to an app and resource.
 
 ## SMTP AUTH: the timeline from Message Center
 
-The Message Center post (MC786329, last updated January 27, 2026, as shown on the mirror I read) lists:
+The Message Center post (MC786329, last updated January 27, 2026, as shown on the public mirror) lists:
 
 | When | What |
 | --- | --- |
@@ -47,13 +47,13 @@ The Message Center post (MC786329, last updated January 27, 2026, as shown on th
 | Tenants created after December 2026 | Basic authentication unavailable by default, OAuth is the supported method |
 | Second half of 2027 | Microsoft announces the final removal date, in a follow-up Message Center post |
 
-The earlier schedule, removal starting March 1, 2026 and finishing April 30, 2026, is on hold. Learn confirms the situation in another way. It says SMTP AUTH is currently available, that Microsoft has announced plans to retire Basic authentication for it, and that, since the timeline has been updated, you should use the latest official announcement. I could not open that blog post itself, so I rely on the Message Center text.
+The earlier schedule, removal starting March 1, 2026 and finishing April 30, 2026, is on hold. Learn confirms the situation in another way. It says SMTP AUTH is currently available, that Microsoft has announced plans to retire Basic authentication for it, and that, since the timeline has been updated, you should use the latest official announcement. This article does not use that blog post, so the dates come from the Message Center text.
 
-Because this article is dated after the end of December 2026, check whether your tenant default has already changed. Learn and the post do not name the setting for it, and I will not guess the name.
+Because this article is dated after the end of December 2026, check whether your tenant default has already changed. Learn and the post do not name the setting for it, so this article does not name one.
 
 ## Find what still uses Basic
 
-The Message Center post says that on October 18, 2024 the **SMTP AUTH Clients Submission Report** in the Exchange admin center gained an **Authentication Protocol** column that shows Basic or OAuth. Use it first. Typical senders are printers and scanners, monitoring tools, scripts and line-of-business apps. The post does not list them, and that list is my experience.
+The Message Center post says that on October 18, 2024 the **SMTP AUTH Clients Submission Report** in the Exchange admin center gained an **Authentication Protocol** column that shows Basic or OAuth. Use it first. Typical senders are printers and scanners, monitoring tools, scripts and line-of-business apps. The post does not list them, so that list is my own addition.
 
 ## Your options
 
