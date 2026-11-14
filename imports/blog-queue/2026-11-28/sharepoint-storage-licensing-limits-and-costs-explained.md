@@ -33,7 +33,8 @@ The SharePoint limits page on Microsoft Learn lists the total storage per organi
 
 | Plan family | Total storage per organization |
 |---|---|
-| Microsoft 365 Business, Teams Essentials | 1 TB + 10 GB per license purchased |
+| Microsoft 365 Business | 1 TB + 10 GB per license purchased |
+| Teams Essentials | 10 GB per user (footnote 6 on the limits page) |
 | Microsoft 365 Enterprise (E3, E5, A3, A5, G3, G5) | 1 TB + 10 GB per license purchased |
 | Office 365 (E1, E3, E5, A1, A3, A5, G1, G3, G5) | 1 TB + 10 GB per license purchased |
 | SharePoint Plan 1 or 2 | 1 TB + 10 GB per license purchased |
