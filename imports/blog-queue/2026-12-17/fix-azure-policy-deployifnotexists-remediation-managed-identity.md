@@ -11,7 +11,7 @@ keypoints:
   - "Built-in definitions prepopulate roleDefinitionIds. Custom definitions need the full role ID, not the role name."
   - "Changing roleDefinitionIds later does not update the assignment, so the new role must be granted by hand."
   - "A remediation task handles one policy per task, 500 resources by default, 10 parallel deployments and a 100 percent failure threshold."
-  - "Evaluation alone never deploys anything. New or updated resources trigger a deployment after the evaluation delay, and existing resources need a remediation task."
+  - "During an evaluation cycle matching resources are only marked non-compliant. New or updated resources deploy after the evaluation delay, and existing resources need a remediation task."
 faq:
   - q: "Which identity does a remediation task use?"
     a: "According to Microsoft Learn, Azure Policy uses the managed identity of the policy assignment to deploy or modify resources. Policy evaluation, including the existence condition, uses the identity of the caller that started the API request, not the assignment identity."
@@ -20,7 +20,7 @@ faq:
   - q: "How many resources can one remediation task handle?"
     a: "Per the Microsoft Learn remediation task structure page, resourceCount defaults to 500 with a maximum of 50,000, parallelDeployments defaults to 10 with a range of 1 to 30, and failureThreshold defaults to 100 percent. Learn says these settings cannot be changed after the task begins."
   - q: "How long does it take before a new assignment shows compliance results?"
-    a: "Microsoft Learn says a new or updated assignment takes about five minutes to apply to the scope before evaluation starts. A resource that is deployed or updated is evaluated in about 15 minutes, and all assignments are reevaluated once every 24 hours."
+    a: "Microsoft Learn says a new or updated assignment takes about five minutes to apply to the scope before evaluation starts. For a resource that is deployed or updated, the effect event and compliance status become available around 15 minutes later, and all assignments are reevaluated once every 24 hours. Learn gives no predefined time for when a full evaluation cycle completes."
   - q: "Can a deployIfNotExists template use linked templates?"
     a: "No. The Learn page on the deployIfNotExists effect says nested templates are supported but linked templates are currently not supported."
 ---
@@ -29,13 +29,13 @@ Most failed deployIfNotExists remediations come down to one of four causes: the 
 
 ## Know which identity does what
 
-Learn separates two identities. Azure Policy uses the managed identity of the assignment to deploy or modify resources. Policy evaluation, including the existence condition, uses the identity of the caller that initiated the API request. A missing role on the assignment identity therefore breaks the deployment but not the compliance result.
+Learn separates two identities. Azure Policy uses the managed identity of the assignment to deploy or modify resources. Policy evaluation, including the existence condition, uses the identity of the caller that initiated the API request. A missing role on the assignment identity therefore breaks the deployment but, in my own reading of that split, not the compliance result.
 
 Each assignment has only one managed identity, which can hold several roles. The identity location does not affect how it works with Azure Policy.
 
 ## Step 1: Check the managed identity and its roles
 
-Open **Policy** > **Assignments** and select the assignment. On the **Remediation** tab, check **Types of Managed Identity**:
+Open **Policy** > **Assignments**. On the **Remediation** tab of the create or edit assignment view, check **Types of Managed Identity**:
 
 - **System assigned managed identity**: you set only the location. The scope is inherited from the assignment.
 - **User assigned managed identity**: you choose the scope that hosts the identity and then an existing identity. Learn says it does not need to match the assignment scope but must be in the same tenant.
@@ -46,7 +46,7 @@ In the portal, roles are granted automatically when the identity is created. Lea
 - A resource modified by the policy is outside the assignment scope.
 - The template accesses properties on resources outside the assignment scope.
 
-To grant a role by hand:
+To grant a role by hand (Learn also lists editing the assignment and selecting **Save** as a second portal route, and says a new identity must finish replication through Microsoft Entra ID before PowerShell or CLI can grant it roles):
 
 1. Open **Policy** > **Assignments**, select the assignment and copy the last segment of the **Assignment ID**. That is the identity name.
 2. Go to the target resource or its parent, such as the resource group, subscription or management group.
@@ -54,13 +54,13 @@ To grant a role by hand:
 4. Choose a role that matches an entry in `roleDefinitionIds`.
 5. Leave **Assign access to** at the default, search for the copied name, select the object and select **Save**.
 
-Learn asks you to keep the permissions to the smallest possible set. Do not assign Owner just to make a task pass.
+Learn asks you to keep the permissions to the smallest possible set. Do not assign Owner just to make a task pass (my own example of what to avoid).
 
 ## Step 2: Check roleDefinitionIds in the definition
 
 For built-in definitions, the required roles are prepopulated. For custom definitions, add a `roleDefinitionIds` array under `details`. The property requires the full resource identifier, not the short role name. To find an ID, run `az role definition list --name "Contributor"`.
 
-The array is required for deployIfNotExists. If you edit it later, grant the new role to the existing identity by hand. This is the usual reason for a remediation that worked once and then failed.
+The array is required for deployIfNotExists. If you edit it later, grant the new role to the existing identity by hand. Learn does not say how common this is, but it fits a remediation that worked once and then failed (my inference).
 
 ## Step 3: Read the evaluation and deployment settings
 
@@ -74,20 +74,20 @@ Properties worth checking when nothing deploys:
 
 | Property | Default | Note |
 |---|---|---|
-| `evaluationDelay` | `PT10M` | Allows `AfterProvisioning`, `AfterProvisioningSuccess`, `AfterProvisioningFailure` or an ISO 8601 duration of 0 to 360 minutes |
-| `existenceScope` | `ResourceGroup` | `Subscription` needs the assignment at subscription scope or higher |
+| `evaluationDelay` | `PT10M` | Allows `AfterProvisioning`, `AfterProvisioningSuccess`, `AfterProvisioningFailure` or an ISO 8601 duration of 0 to 360 minutes. Used only for evaluations triggered by a create or update request |
+| `existenceScope` | `ResourceGroup` | `Subscription`: assignment scope should be subscription or higher for proper evaluation |
 | `deploymentScope` | `ResourceGroup` | A subscription-level deployment needs a `location` in the deployment |
 | `existenceCondition` | none | If omitted, any related resource of the type satisfies the effect |
 
 Learn warns that a long evaluation delay can leave the recorded compliance state outdated until the next evaluation trigger. In the `deployment` property, nested deployments should use unique names to avoid contention between evaluations, and linked templates are not supported.
 
-Template functions can also cause trouble. Learn says functions such as `parameter()` or `resourceGroup()` can be processed by Resource Manager as part of the deployment instead of the policy. Escape the string with an extra bracket, for example `[[resourceGroup().tags.myTag]`.
+Template functions can also cause trouble. Learn says functions such as `parameter()` or `resourceGroup()` can be processed by Resource Manager as part of the deployment instead of the policy. Escape the string with an extra bracket, for example `[[resourceGroup().tags.myTag]`. The effect page adds that functions inside the `deployment` property are evaluated as part of the template, not the policy, except for `parameters`, which pass values from the policy to the template.
 
 ## Step 4: Create the remediation task and read its result
 
 In the portal, select **Policy** > **Remediation**. The **Policies to remediate** tab lists the deployIfNotExists and modify assignments. You can also select **Compliance**, pick a non-compliant assignment and select **Create Remediation Task**.
 
-If the source is an initiative, pick one policy. Only one deployIfNotExists or modify policy can be remediated per task. Use **Scope** and **Locations** to narrow the target, then select **Remediate**.
+Learn lists a third route, creating the task during assignment on the **Remediation** tab, which it describes as supported for policies assigned on a subscription. If the source is an initiative, pick one policy. Only one deployIfNotExists or modify policy can be remediated per task. Use **Scope** and **Locations** to narrow the target, then select **Remediate**.
 
 To find the cause of a failure:
 
@@ -105,11 +105,11 @@ The Learn remediation structure page lists these task settings:
 | `failureThreshold` | 100% | 0 to 100 |
 | Discovery mode | `ExistingNonCompliant` | or `ReEvaluateCompliance` |
 
-At the default threshold the task keeps going even when resources fail, so read the deployment summary counts and do not rely on the task state alone. Learn also says up to 100 remediation tasks can run in parallel for one policy definition, and that remediation task resources are deleted 60 days after their last modification.
+At the default threshold the task keeps going even when resources fail. My advice is to read the deployment summary counts and not rely on the task state alone. Learn also says up to 100 remediation tasks can run in parallel for one policy definition or policy reference within an initiative, and that remediation task resources are deleted 60 days after their last modification.
 
 ## Step 5: Refresh the compliance data
 
-If a result looks stale, wait for the documented timing: about five minutes for a new or updated assignment, about 15 minutes for a deployed or updated resource, and a full cycle every 24 hours. For a manual scan, Learn lists `az policy state trigger-scan --resource-group "resourceGroupName"` and `Start-AzPolicyComplianceScan -ResourceGroupName 'resourceGroupName'`. Not all resource providers support on-demand scans.
+If a result looks stale, wait for the documented timing: about five minutes for a new or updated assignment, around 15 minutes until compliance information for a deployed or updated resource is available, and a full cycle every 24 hours. For a manual scan, Learn lists `az policy state trigger-scan --resource-group "resourceGroupName"` and `Start-AzPolicyComplianceScan -ResourceGroupName 'resourceGroupName'`. Not all resource providers support on-demand scans.
 
 ## Typical mistakes
 
@@ -132,8 +132,8 @@ The pages read for this article do not list a key vault specific permission set.
 
 ## Sources
 
-- [Remediate non-compliant resources with Azure Policy](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources)
+- [Remediate non-compliant resources - Azure Policy](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/remediate-resources)
 - [Azure Policy definitions deployIfNotExists effect](https://learn.microsoft.com/en-us/azure/governance/policy/concepts/effect-deploy-if-not-exists)
-- [Azure Policy remediation task structure](https://learn.microsoft.com/en-us/azure/governance/policy/concepts/remediation-structure)
-- [Get compliance data of Azure resources](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data)
-- [Troubleshoot errors with using Azure Policy](https://learn.microsoft.com/en-us/azure/governance/policy/troubleshoot/general)
+- [Details of the policy remediation task structure](https://learn.microsoft.com/en-us/azure/governance/policy/concepts/remediation-structure)
+- [Get policy compliance data](https://learn.microsoft.com/en-us/azure/governance/policy/how-to/get-compliance-data)
+- [Troubleshoot common errors](https://learn.microsoft.com/en-us/azure/governance/policy/troubleshoot/general)
