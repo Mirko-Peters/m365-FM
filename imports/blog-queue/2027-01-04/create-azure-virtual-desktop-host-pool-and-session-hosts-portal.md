@@ -11,7 +11,7 @@ keypoints:
   - "Deployment scope (Regional or Geographical) cannot be changed after the host pool is created."
   - "Check that the subnet reaches the required FQDNs. Learn calls skipping this the most common cause of registration failures such as EXPIRED_MACHINE_TOKEN."
   - "Learn recommends Premium SSD for production OS disks, no public inbound ports and an NSG on the subnet instead of on the VMs."
-  - "The page content read ended before the standard-path Workspace tab and the application group assignment steps, so those are not covered here."
+  - "On the optional Workspace tab, register the default desktop application group to a workspace. Then assign users or groups to the application group."
 faq:
   - q: "Which roles do I need to create a host pool with session hosts?"
     a: "Learn lists Desktop Virtualization Contributor for the host pool, workspace and application group, and Virtual Machine Contributor for session hosts, each on the resource group or subscription. Assigning users needs role assignment write permission, granted by User Access Administrator or Owner."
@@ -25,7 +25,7 @@ faq:
     a: "Learn says not to disable Windows Remote Management, because PowerShell DSC requires it."
 ---
 
-To create a host pool in the Azure portal, search for Azure Virtual Desktop, select Host pools and then Create. Fill in the Basics tab, optionally add virtual machines, then review and create. This guide follows the Microsoft Learn article on the standard management path. The part of the article read for this guide ended before the standard-path Workspace tab and the user assignment steps, so those are marked as gaps.
+To create a host pool in the Azure portal, search for Azure Virtual Desktop, select Host pools and then Create. Fill in the Basics tab, optionally add virtual machines, then review and create. This guide follows the Microsoft Learn article Deploy Azure Virtual Desktop, using the standard management path in the Azure portal.
 
 ## Prerequisites from Learn
 
@@ -44,7 +44,7 @@ Roles can be granted on the resource group or the subscription.
 
 **Azure Local, if you use it.** The instance must be registered with Azure and run version 23H2 or later, with a stable Azure connection, at least one Windows OS image and a logical network.
 
-**Active Directory join.** The account that joins machines needs these permissions on the OU for session hosts: Reset password, Validated write to DNS host name, Validated write to service principal name, Read account restrictions and Write account restrictions. Learn also points to KB5020276 for computer account reuse rules.
+**Active Directory join (session host configuration path only).** The standard-path prerequisites on the page do not list OU permissions. For host pools with a session host configuration, Learn says the account that joins machines needs these permissions on the OU for session hosts, because the new OS image reuses the existing computer object: Reset password, Validated write to DNS host name, Validated write to service principal name, Read account restrictions and Write account restrictions. Learn also points to KB5020276 for computer account reuse rules.
 
 **Other.** Do not disable Windows Remote Management, because PowerShell DSC requires it. For scripted work, use Azure Cloud Shell or install the Az.DesktopVirtualization module.
 
@@ -60,7 +60,7 @@ Roles can be granted on the resource group or the subscription.
 | Subscription, Resource group | Select or create |
 | Host pool name | For example `hp01` |
 | Location | Region for host pool metadata |
-| Deployment scope | Regional or Geographical (default). Cannot be changed after creation |
+| Deployment scope | Regional or Geographical (default). Appears only when the selected region supports regional host pools. Cannot be changed after creation |
 | Validation environment | No (default) or Yes |
 | Preferred app group type | Desktop or RemoteApp |
 | Host pool type | Pooled or Personal |
@@ -93,7 +93,7 @@ Set **Add virtual machines** to **Yes** to create session hosts now.
 
 ### Finish
 
-Learn lists a **Management** tab (optional) for a managed identity and diagnostic settings, an optional **Tags** tab, and then **Review + create**. Confirm that validation passes, select **Create**, then **Go to resource** and **Properties**.
+Learn lists an optional **Workspace** tab (see below), an optional **Management** tab for a managed identity and diagnostic settings, an optional **Tags** tab, and then **Review + create**. Confirm that validation passes, select **Create**, then **Go to resource** and **Properties**.
 
 ## Notes from the article
 
@@ -103,11 +103,15 @@ Learn lists a **Management** tab (optional) for a managed identity and diagnosti
 - For Azure Local session hosts, license and activate the VMs before use.
 - Session host configuration is a separate path. There the admin credentials come from a Key Vault, the name prefix is limited to 10 characters, and the service creates the session hosts.
 
-## What this guide does not cover
+## Workspace and user assignment
 
-The article content read ended before the standard-path **Workspace** tab and the steps for application group and user assignment. In the session host configuration path, Learn says you select **Register desktop app group: Yes** and then choose or create a workspace. For user assignment, follow the linked steps in the article.
+On the optional **Workspace** tab, set **Register desktop app group** to **Yes** to register the host pool's default desktop application group to a workspace. Under **To this workspace**, select an existing workspace or **Create new** and enter a name such as ws01. Then select **Next: Management**.
 
-## Typical mistakes
+To let users connect, assign users or groups to the application group. Learn recommends assigning user groups because it simplifies ongoing management. In the portal, select **Application groups**, open the group, select **Assignments** > **+ Add**, search for the user or group and choose **Select**. The account needs `Microsoft.Authorization/roleAssignments/write` on the application group.
+
+If you did not register the application group to a workspace during creation, Learn describes creating the workspace separately and then adding the application group under **Workspaces** > the workspace > **Application groups** > **+ Add**.
+
+## Typical mistakes (my advice)
 
 - Choosing the wrong deployment scope, which cannot be changed later.
 - Placing the VMs in a region that differs from the virtual network.
@@ -124,4 +128,4 @@ The article content read ended before the standard-path **Workspace** tab and th
 
 ## Sources
 
-- [Deploy Azure Virtual Desktop: create a host pool and session hosts (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-desktop/create-host-pools-azure-marketplace)
+- [Deploy Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-desktop/deploy-azure-virtual-desktop)
