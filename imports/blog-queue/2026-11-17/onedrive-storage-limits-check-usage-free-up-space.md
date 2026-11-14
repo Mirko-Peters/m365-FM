@@ -18,7 +18,7 @@ faq:
   - q: "What happens when OneDrive is full?"
     a: "According to Microsoft Support, for personal accounts you cannot upload, edit or sync new files, including camera roll files, and existing files become read-only. After 3 months over the limit the account is frozen, and after 6 months Microsoft may delete the OneDrive and its files, which cannot be recovered."
   - q: "Does the recycle bin count toward my storage?"
-    a: "For personal accounts, yes. Microsoft's storage FAQ lists items in the OneDrive Recycle Bin as part of the Microsoft storage quota. Microsoft Support also states recycle bin retention of 30 days for personal accounts and 93 days for work or school accounts."
+    a: "For personal accounts, yes. Microsoft's storage FAQ lists items in the OneDrive Recycle Bin as part of the Microsoft storage quota."
   - q: "Does 'Free up space' give me more OneDrive storage?"
     a: "No. According to Microsoft Support, Free up space makes a file online-only so it takes no space on your computer. The file stays in OneDrive and still counts toward your cloud quota."
   - q: "How does an admin check or change a user's OneDrive limit?"
@@ -46,7 +46,7 @@ The quota covers more than OneDrive files. For a personal account it includes On
 
 ## Storage limits for work or school accounts
 
-For work or school accounts, Microsoft Learn says each user's OneDrive default is 1 TB for most subscription plans. Depending on the plan and the number of licensed users, an admin can increase it up to 5 TB. The page refers to the OneDrive service description for the per-plan eligibility and does not list thresholds itself.
+For work or school accounts, Microsoft Learn says each user's OneDrive default is 1 TB for most subscription plans. Depending on the plan and the number of licensed users, an admin can increase it up to 5 TB. The page does not list per-plan thresholds.
 
 If an admin changes a user's license, Microsoft says the available storage updates automatically within 24 hours after the user accesses OneDrive.
 
@@ -75,9 +75,9 @@ The pages read for this article do not describe the equivalent timeline for work
 ## How to free up cloud storage
 
 1. **Find the large files.** Microsoft Support points to a view of your largest OneDrive files in the storage management page.
-2. **Delete what you do not need.** Deleting an online-only file removes it from OneDrive on all devices.
+2. **Delete what you do not need.** Deleted files stay in the Recycle Bin and keep counting until they are removed there.
 3. **Empty the Recycle Bin.** For personal accounts, Microsoft lists Recycle Bin items as part of your quota, so deleted files still count until they are permanently removed.
-4. **Clean other services that share the quota.** In Loop, delete unneeded pages and page version history. In Designer, open a project, hover over an image, select the three-dot icon and choose **Delete**.
+4. **Clean other services that share the quota.** In Loop, delete unneeded pages and page version history. In Designer, delete unneeded project images.
 5. **Add storage if needed.** Subscribers can add OneDrive storage, and only the account holder can add it.
 
 ## How to free up space on your PC
