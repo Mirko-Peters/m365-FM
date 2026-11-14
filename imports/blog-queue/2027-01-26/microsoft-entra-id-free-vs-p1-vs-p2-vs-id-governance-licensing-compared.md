@@ -55,7 +55,7 @@ The page compares the Free tier with security defaults, the Free tier for Global
 
 One caveat from the page: although Free provides security defaults with MFA, only Microsoft Authenticator can be used for the prompt there, including text and voice calls. That can be a limit if you cannot be sure that Authenticator is installed on a user's personal device. Microsoft 365 E7 includes the Entra Suite, which gives all P2 authentication features in the table.
 
-The Learn tutorial for enabling SSPR says a tenant needs at least a Microsoft Entra ID P1 license for password reset, while this table marks SSPR in every column. I did not read the dedicated SSPR licensing article, so check it for the exact cases before you plan.
+The Learn tutorial for enabling SSPR says a tenant needs at least a Microsoft Entra ID P1 license for password reset, while this table marks SSPR in every column. The two statements differ. The tutorial links a separate article on licensing requirements for SSPR, so check that article for the exact cases before you plan (my advice).
 
 ## Conditional Access
 
@@ -85,8 +85,8 @@ If a P2, Governance or trial license expires, PIM features are no longer availab
 The page has a long matrix. In short:
 
 - **Provisioning:** automated user provisioning to SaaS apps is marked for all editions including Free. HR-driven and API-driven provisioning, group provisioning and on-premises app provisioning are P1 and up. Account Discovery and cross-tenant sync for groups need Governance.
-- **Access reviews:** the capabilities that were generally available in P2 are in P2, Governance and the Suite. Items such as machine learning assisted reviews, catalog access reviews and reviews for inactive users are marked for Governance and the Suite.
-- **Entitlement management:** core capabilities that were in P2 stay in P2. Auto assignment policies, custom extensions with Logic Apps, Verified ID integration, ID Protection integration and sponsors as approvers are Governance.
+- **Access reviews:** the capabilities that were generally available in P2 are in P2, Governance and the Suite. Items such as machine learning assisted reviews, catalog access reviews and reviews scoped to inactive users without active users are marked for Governance and the Suite. Reviews of active and inactive users with decision helpers for inactive users are also marked for P2.
+- **Entitlement management:** core capabilities that were in P2 stay in P2. Auto assignment policies, custom extensions with Logic Apps, Verified ID integration, ID Protection integration and sponsors from the assignee's user profile as approvers are Governance. Internal and external sponsors from connected organizations as approvers are also marked for P2.
 - **Lifecycle Workflows:** Governance and the Suite. The page says you can create up to 50 workflows and up to 100 custom task extensions.
 - **My Access portal:** P2, Governance and the Suite.
 
