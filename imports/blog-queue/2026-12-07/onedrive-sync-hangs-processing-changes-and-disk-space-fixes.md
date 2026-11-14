@@ -1,6 +1,6 @@
 ---
 title: "OneDrive Sync Hangs, Processing Changes and Disk Space: What to Check"
-summary: "A practical checklist for OneDrive sync that hangs on Processing changes, files that stay locked or open, and desktops running low on disk space, using Microsoft Support and Learn guidance."
+summary: "A practical checklist for OneDrive sync that hangs on Processing changes, files that stay locked or open, and desktops running low on disk space, using Microsoft Support guidance."
 status: review
 publish: false
 author: mirko-p
@@ -8,7 +8,7 @@ date: 2026-12-07
 topics: [onedrive, onedrive-sync-engine, onedrive-files-on-demand]
 keypoints:
   - "Microsoft lists open files, many files, very large files, signed-out state and a recent update as causes of a long Processing changes status."
-  - "Learn's guidance recommends no more than 300,000 items for optimum sync performance and names 250 GB as the file size limit."
+  - "Microsoft Support recommends syncing no more than 300,000 items across cloud storage and names 250 GB as the limit for an individual file."
   - "Files On-Demand keeps files online-only. It is on by default from OneDrive build 23.066 and needs Windows 10 1709 or later."
   - "Move PST files out of OneDrive. Outlook data files cannot be removed from sync while Files On-Demand is on."
   - "Reset OneDrive is the last step. It disconnects sync connections, resets settings and triggers a full sync, but does not delete files."
@@ -31,7 +31,7 @@ One honest limit first: the Microsoft pages read for this article do not describ
 
 ## Step 1: Read the status
 
-Select the OneDrive cloud icon in the taskbar to see open, syncing and recently synced files. The Microsoft Support index of sync problems names these states: Processing changes, Paused, account nearly full, account full or locked, not signed in and file locked. Each has its own article.
+Start with the status that OneDrive shows. The Microsoft Support index of sync problems names these states: Processing changes, Paused, account nearly full, account full or locked, not signed in and file locked. Each has its own article.
 
 ## Step 2: Identify why Processing changes does not finish
 
@@ -41,16 +41,16 @@ Microsoft Support lists these causes and fixes:
 |---|---|
 | A file is open | Close the file once editing is finished |
 | Many files added | No action needed. OneDrive uploads everything, which can be slow on a slow connection |
-| A very large file | Move large email data files out of OneDrive or stop syncing folders with large files such as videos |
+| A very large file | Move large files, such as email data files, out of your OneDrive storage folders |
 | Not signed in | Sign in again, for example after a password change |
 | Recent sign-in or computer update | OneDrive re-syncs all files on its own and this can take a while |
-| Hidden or temporary files | These may block sync. Check the cloud icon for open or syncing items |
+| Hidden or temporary files | Temporary or hidden files may also be blocking sync |
 
 Support adds that log files titled "aria-debug" can be safely deleted. It also recommends running an internet speed test when uploads look slow. If the status stays stuck, the article's last step is to unlink and re-link OneDrive.
 
 ## Step 3: Check limits that stall a sync
 
-The Support article on invalid file names and file types lists:
+The Support article on invalid file names and file types says:
 
 - 250 GB as the limit for syncing, uploading and downloading an individual file.
 - A recommendation of no more than 300,000 items across your cloud storage for optimum performance. A public preview allows up to 1,000,000 items per sync instance on certain hardware, and it does not support VDI environments.
@@ -103,7 +103,7 @@ The reset disconnects all sync connections, resets all OneDrive settings and sta
 - Resetting before checking for an open file or a very large file.
 - Syncing PST files.
 - Counting on a fixed duration for Processing changes. Microsoft gives none.
-- Following older guidance that quotes a 2 GB file limit or a 250-character path limit. Those figures came from a page about the older work or school sync app and conflict with the current 250 GB limit.
+- Quoting old file size or path limits from memory. The Support article gives 250 GB for a file and says path limits differ by app and Office version.
 
 ## Related
 
