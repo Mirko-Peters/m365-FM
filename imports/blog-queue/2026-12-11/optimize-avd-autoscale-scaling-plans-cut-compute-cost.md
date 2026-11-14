@@ -16,7 +16,7 @@ faq:
   - q: "What do the capacity threshold and minimum percentage of hosts do?"
     a: "Microsoft Learn describes the capacity threshold as the ceiling for used host pool capacity and the minimum percentage of hosts as a floor on running hosts. Fractions of the minimum are rounded up, so 30 percent of 6 hosts means 2 hosts. A high threshold in ramp-down reduces the need to start hosts late in the day."
   - q: "Why did autoscale not shut down an idle host during peak hours?"
-    a: "Learn explains that autoscale only turns off a host if remaining capacity keeps usage at or below the threshold, and during phases without consolidation it only turns off hosts with zero sessions. Ramp-up never scales down, to avoid a poor user experience."
+    a: "Learn explains that autoscale only turns off a host if remaining capacity keeps usage at or below the threshold, and it only turns off hosts with no sessions, except in ramp-down with force logoff enabled. Ramp-up never scales down, to avoid a poor user experience."
   - q: "Which role does autoscale need?"
     a: "For power management autoscale, Learn names Desktop Virtualization Power On Off Contributor, assigned to the Azure Virtual Desktop service principal or a managed identity at subscription scope. Assigning at resource group, host pool or VM scope prevents autoscale from working properly."
   - q: "Can I use autoscale together with Azure Automation or Logic Apps scaling?"
@@ -36,7 +36,7 @@ A scaling plan defines schedules for one or more host pools of the same type. Ea
 - **Ramp-down**: usage tapers off and hosts are typically shut down to save cost.
 - **Off-peak**: lowest usage.
 
-Autoscale overrides drain mode and the load balancing algorithm of a pooled host pool, so do not manage those by hand.
+For pooled host pools, Learn says autoscale overwrites drain mode, so use exclusion tags when updating VMs. It also ignores the load balancing algorithm in the host pool settings and applies the one from your schedule.
 
 ## The two levers
 
@@ -47,7 +47,7 @@ Available capacity is available session hosts times the maximum session limit. U
 
 Microsoft's example: ramp-up with a 30 percent threshold, a 30 percent minimum, 6 hosts and 5 sessions per host starts two hosts. Three sessions on 10 capacity is exactly 30 percent, so nothing starts. A fourth session makes it 40 percent, so a third host starts and capacity rises to 15.
 
-For ramp-down, Learn gives the consolidation formula: required hosts equal total sessions (active plus disconnected) divided by max session limit times the capacity threshold. With 4 sessions, 5 sessions per host and a 75 percent threshold, that is about 1.07, rounded up to 2 hosts.
+For ramp-down, Learn gives the consolidation formula: Required Hosts = Total Sessions (active plus disconnected) / (Max Session Limit x Capacity Threshold). My own calculation with 4 sessions, 5 sessions per host and a 75 percent threshold gives about 1.07, which I round up to 2 hosts. Learn does not show this calculation. Its Scenario 3 with the same settings and four sessions also ends with two running hosts.
 
 ## Steps to set up a plan
 
@@ -62,7 +62,7 @@ Prerequisites from Learn: the scaling plan must be in the same region as the hos
 
 ## Phase settings that protect capacity
 
-| Phase | Settings Learn lists | Practical note |
+| Phase | Settings Learn lists | Practical note (partly my own) |
 |---|---|---|
 | Ramp-up | Start time, load balancing, minimum percentage, capacity threshold | Breadth-first is recommended. Start early enough that hosts are ready. |
 | Peak | Start time, load balancing | Threshold carries over from ramp-up. |
@@ -73,17 +73,17 @@ Unselected days inherit the last off-peak settings until the next ramp-up. A Mon
 
 ## Force sign-out in ramp-down
 
-With **Force logoff of users** on, autoscale puts the host with the fewest sessions into drain mode, notifies users, signs them out after the wait time and deallocates the VM. Learn lists forced sign-outs as a shortage risk, because displaced users reconnect and push usage up. Without it, autoscale waits for users to sign out and then deallocates empty hosts.
+With **Force logoff of users** on, autoscale puts the host with the fewest sessions into drain mode, notifies users, signs them out after the wait time and deallocates the VM. Learn's Scenario 3 shows signed-out users reconnecting, after which autoscale cannot turn off further hosts because the capacity threshold would be exceeded. That a forced sign-out can therefore cause a capacity shortage is my own conclusion from that example, not a Learn warning. Without force logoff you choose **VMs have no active or disconnected sessions** or **VMs have no active sessions**, and autoscale waits for users to sign out before it deallocates hosts.
 
 To reduce used capacity from stale sessions, the **Time limit policy** signs out disconnected users after a set time. In Intune, use a **Session Time Limits** profile and enable **Set time limit for disconnected sessions**, then restart the session hosts.
 
 ## Exclusion tags and the minimum
 
-Tagged hosts are never started, stopped or changed in drain mode, but they still count toward the minimum percentage. Learn's example has five of six hosts tagged. One untagged host reached 80 percent usage and autoscale could not start another. If the last untagged host is turned off, new users get a "No resources available" error. Keep tagging short and temporary, for example during VM updates.
+Tagged hosts are never started, stopped or changed in drain mode, but they still count toward the minimum percentage. Learn's example has five of six hosts tagged. One untagged host reached 80 percent usage and autoscale could not start another. If the last untagged host is turned off, new users get a "No resources available" error. Learn gives drain mode during maintenance as the tag use case. Keeping tagging short and temporary is my own advice.
 
 ## Permissions
 
-Assign **Desktop Virtualization Power On Off Contributor** to the Azure Virtual Desktop service principal at subscription scope. Lower scopes prevent autoscale from working properly. You need permission to write role assignments, included in User Access Administrator and Owner.
+Assign **Desktop Virtualization Power On Off Contributor** to the Azure Virtual Desktop service principal or a managed identity assigned to your host pool, with your subscription as the assignable scope. Learn says that assigning it at a lower level, such as the resource group, host pool or VM, prevents autoscale from working properly. You need permission to write role assignments, included in User Access Administrator and Owner.
 
 ## Diagnose problems
 
@@ -91,7 +91,7 @@ Open the scaling plan, select **Diagnostic Settings** > **Add diagnostic setting
 
 ## What the pages do not say
 
-Learn gives no savings figure and no default values per phase. Size the minimum percentage and threshold from your own session data, change one at a time and compare user complaints with host hours.
+Learn gives no savings figure and no default values per phase. My own advice: size the minimum percentage and threshold from your own session data, change one at a time and compare user complaints with host hours.
 
 ## Related
 
@@ -103,5 +103,5 @@ Learn gives no savings figure and no default values per phase. Size the minimum 
 ## Sources
 
 - [Autoscale scaling plans and example scenarios](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios)
-- [Create an autoscale scaling plan](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scaling-plan)
-- [Enable diagnostics for scaling plans](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics)
+- [Create and assign an autoscale scaling plan for Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-create-assign-scaling-plan)
+- [Set up diagnostics for Autoscale in Azure Virtual Desktop](https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-diagnostics)
