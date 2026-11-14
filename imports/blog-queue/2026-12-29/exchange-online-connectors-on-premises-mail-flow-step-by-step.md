@@ -52,7 +52,7 @@ Check for existing connectors first, because the Hybrid Configuration wizard may
 1. In the Exchange admin center select **Mail flow**, **Connectors**, **Add a connector**.
 2. Under **Connection from** choose **Office 365** and under **Connection to** choose **Your organization's email server**.
 3. Enter a connector name.
-4. On **Use of connector** choose when it applies. The page I read refers to another section for these options, so check it there.
+4. On **Use of connector** choose when it applies. The page points to a section called Options determining use of connector, but the current page has no such section. Its multiple-connector example shows two choices, all accepted domains or only specific domains.
 5. On **Routing** enter the domain name or IP address of the host that receives the mail, then select the plus sign. Next stays unavailable until you do.
 6. On **Security restrictions** you can require TLS, which Learn recommends. If you set certificate criteria, choose one option, for example a certificate issued by a trusted CA, and optionally match a subject name or SAN to a domain.
 7. On **Validation email** enter an address in your domain, select the plus sign, then **Validate**.
@@ -91,4 +91,4 @@ The pages do not describe the three Use of connector options in detail, message 
 
 ## Sources
 
-- [Configure mail flow using connectors in Exchange Online](https://learn.microsoft.com/exchange/mail-flow-best-practices/use-connectors-to-configure-mail-flow/set-up-connectors-to-route-mail)
+- [Set up connectors to route mail between Microsoft 365 or Office 365 and your own email servers (Microsoft Learn)](https://learn.microsoft.com/exchange/mail-flow-best-practices/use-connectors-to-configure-mail-flow/set-up-connectors-to-route-mail)
