@@ -58,7 +58,7 @@ Use this to share with many people, including people you do not know.
 |---|---|---|
 | Anyone | Anyone who has the link, inside or outside the organization | No sign-in, access cannot be audited, transferable. Microsoft Support says to avoid it unless absolutely necessary. |
 | People in your organization | Members of your directory only | Guests cannot use it. Transferable and revocable. |
-| People with existing access | Only people who already have access | Does not change permissions or share anything new. |
+| People with existing access | Only people who already have access | Listed on the Microsoft Support share page. The Learn link-types article does not cover it. |
 | Specific people | Only the people you name, internal or external | Nontransferable and revocable. Recipients must authenticate as the named user. |
 
 Two details from Microsoft Learn help in practice. Creating an Anyone or People in your organization link does not make the content searchable or available to Copilot for everyone, because the link must be redeemed first. A Specific people link does make the item searchable for those people. Also, sending a People in your organization link from SharePoint, Outlook or Teams chat redeems it automatically for individual recipients, up to 100, but not for group recipients or Teams channel posts.
@@ -67,7 +67,7 @@ Two details from Microsoft Learn help in practice. Creating an Anyone or People 
 
 - **Can edit** is on by default.
 - **Can review** appears for Word documents only.
-- **Can view** means recipients cannot change the SharePoint version, but with an Anyone link they can view, copy or download without signing in and can forward the link.
+- **Can view** lets recipients open the item without changing it. With an Anyone link, no sign-in is required and access cannot be audited.
 - **Can't download** blocks downloads. Microsoft Support does not call it Block download.
 - **Set expiration date** and **Set password** are available only for Anyone links. After the expiration date, the link stops working and you must create a new one.
 
@@ -92,7 +92,7 @@ At the organization level, Microsoft Learn lists four external sharing options i
 - **Existing guests**
 - **Only people in your organization**, which turns external sharing off
 
-To allow external sharing on any site, it must be allowed at the organization level. Each site can then be restricted. If the site and organization settings differ, the most restrictive value applies. OneDrive settings can match or be stricter than SharePoint's. External sharing is on by default for the entire SharePoint and OneDrive environment, and Microsoft suggests considering turning it off globally until you know how you want to use it.
+To allow external sharing on any site, it must be allowed at the organization level. Each site can then be restricted. If the site and organization settings differ, the most restrictive value applies. OneDrive settings can match or be stricter than SharePoint's. External sharing is on by default for the entire SharePoint and OneDrive environment, and Microsoft says you might want to turn it off globally before people start using sites or until you know exactly how you want to use the feature.
 
 To change the default link type for one site, go to **Active sites** in the SharePoint admin center, select the site, choose **Sharing**, clear **Same as organization-level setting** under **Default sharing link type**, pick the option and select **Save**. Teams private and shared channel sites need the Set-SPOSite PowerShell cmdlet.
 
@@ -101,7 +101,7 @@ To change the default link type for one site, go to **Active sites** in the Shar
 - Using Anyone links for convenience when Specific people would do.
 - Sharing one file at a time from a busy library instead of sharing a folder.
 - Forgetting that guests added to a shared folder can see each other's names in the Manage Access panel.
-- Removing a guest from a group-connected site's Microsoft 365 group without checking, because Microsoft warns this can break tasks such as sharing files in Teams chats.
+- Removing the group's permission to a group-connected site. Microsoft says all group members need access to the site, and without it many collaboration tasks such as sharing files in Teams chats will not work.
 - Relying on old invitations. Microsoft says that since June 2024 legacy SharePoint Invitation Manager invitations no longer grant access, so users must reshare.
 
 ## Related
