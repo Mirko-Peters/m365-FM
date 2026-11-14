@@ -25,7 +25,7 @@ faq:
     a: "It links to separate articles for errors such as no Remote Desktop License Servers available, and the Local Security Authority cannot be contacted. It does not explain their fixes."
 ---
 
-When you cannot connect over Remote Desktop to an Azure Windows VM, work through Microsoft's steps in order and try to connect again after each one. This guide follows the Microsoft Learn troubleshooting page and starts with the least disruptive fixes.
+When you cannot connect over Remote Desktop to an Azure Windows VM, work through Microsoft's steps in order and try to connect again after each one. This guide follows the Microsoft Learn troubleshooting page and keeps its order of steps.
 
 ## Steps in the order the page lists them
 
@@ -42,7 +42,7 @@ When you cannot connect over Remote Desktop to an Azure Windows VM, work through
 
 ## What each group of steps targets
 
-The page ties steps to causes only in a few places. Resetting the configuration targets disabled Remote Connections and blocking Windows Firewall rules. IP flow verify and effective security rules target a network security group that blocks RDP. Next hop and effective routes target routing, and the final step covers on-premises or local firewalls. After each step, the page says to try the connection again, so you know which step fixed the problem. Keep a note of what you changed, especially before a redeploy.
+The page ties steps to causes only in a few places. Resetting the configuration targets disabled Remote Connections and blocking Windows Firewall rules. IP flow verify and effective security rules target a network security group that blocks RDP. Next hop and effective routes target routing, and the final step covers on-premises or local firewalls. After each step, the page says to try the connection again. My advice: keep a note of what you changed, especially before a redeploy, so you can tell which step fixed the problem.
 
 ## Placeholder names in the examples
 
@@ -94,4 +94,4 @@ This is a suggestion, not from the page. Start with steps that do not change the
 
 ## Sources
 
-- [Troubleshoot Remote Desktop connections to an Azure virtual machine](https://learn.microsoft.com/troubleshoot/azure/virtual-machines/windows/troubleshoot-rdp-connection)
+- [Cannot connect with RDP to a Windows VM in Azure (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/azure/virtual-machines/windows/troubleshoot-rdp-connection)
