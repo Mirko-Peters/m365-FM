@@ -64,7 +64,7 @@ Learn states this list is not exhaustive.
 
 | Code | Meaning on the page | Action on the page |
 | --- | --- | --- |
-| 50058 | The user authenticated but is not yet signed in | The entry often shows an object ID instead of a username. User ID may show all zeros |
+| 50058 | The user authenticated but is not yet signed in | The User field might show an object ID or GUID instead of a username. In some cases the User ID looks like all zeros |
 | 90025 | An internal Microsoft Entra service hit its retry limit | It usually resolves itself. If it persists, the user signs in again |
 | 500121 | The user did not complete the MFA prompt | The user finishes MFA setup and signs in |
 | 70046 | The session expired or the reauthentication check failed | A Conditional Access policy that requires reauthentication for sign-in risk levels can cause it |
@@ -81,11 +81,11 @@ Users can view their own sign-in activity at `https://mysignins.microsoft.com`. 
 
 ## What the article does not cover
 
-The page says to explore the details on each tab, but it does not name or describe the tabs. It also gives no log retention periods. If you need to know which tab shows Conditional Access results or how long entries are kept, check the sign-in logs documentation for your license. The article was last updated in April 2025, so confirm that labels in the admin center still match.
+The page says to explore the details on each tab, but it does not name or describe the tabs. It also gives no log retention periods. If you need to know which tab shows Conditional Access results or how long entries are kept, check the sign-in logs documentation for your license. The article's metadata date is November 2024, so confirm that labels in the admin center still match.
 
-## A triage routine
+## A triage routine (my advice)
 
-The routine below combines the Learn steps with common practice. The last two steps are not from the article.
+The routine below combines the Learn steps with common practice. Steps 1, 6 and 7 are my additions and are not from the article.
 
 1. Ask the user for the time of the failure and the app they used.
 2. Filter by username and Status > Failure. Narrow by application if the list is long.
@@ -95,7 +95,7 @@ The routine below combines the Learn steps with common practice. The last two st
 6. Compare the code with recent policy or configuration changes in your tenant.
 7. If you open a support request, attach the correlation ID, the error code and the timestamp.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Skipping the Status filter and reading successful sign-ins by accident.
 - Treating the list of common codes as complete.
@@ -110,4 +110,4 @@ The routine below combines the Learn steps with common practice. The last two st
 
 ## Sources
 
-- [Troubleshoot sign-in problems with Microsoft Entra sign-in logs (Microsoft Learn)](https://learn.microsoft.com/entra/identity/monitoring-health/howto-troubleshoot-sign-in-errors)
+- [How to troubleshoot sign-in errors (Microsoft Learn)](https://learn.microsoft.com/entra/identity/monitoring-health/howto-troubleshoot-sign-in-errors)
