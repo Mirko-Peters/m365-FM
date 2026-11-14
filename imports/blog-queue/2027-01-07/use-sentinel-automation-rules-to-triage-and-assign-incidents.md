@@ -14,7 +14,7 @@ keypoints:
   - "Learn says that after March 31, 2027 Microsoft Sentinel will be available only in the Defender portal."
 faq:
   - q: "What triggers an automation rule?"
-    a: "Per Microsoft Learn: when an incident is created, when an incident is updated, or when an alert is created by a Scheduled or NRT analytics rule. Simple Flows has its own case triggers in preview."
+    a: "Per Microsoft Learn: when an incident is created, when an incident is updated, or when an alert is created. The trigger table lists alerts from Scheduled or NRT analytics rules, and a note on the page adds Microsoft security analytics rules. Simple Flows has its own case triggers in preview."
   - q: "How do I triage and assign with a rule?"
     a: "Learn's examples are to change new incidents from New to Active and assign an owner, add a task checklist for analysts, and assign incidents about a specific platform to the analyst who specializes in it."
   - q: "In what order do rules run?"
@@ -25,7 +25,7 @@ faq:
     a: "Learn says Microsoft Sentinel will be available only in the Defender portal after that date, and Azure portal customers will be redirected."
 ---
 
-Automation rules take over the repetitive start of incident handling. A rule can move a new incident from New to Active, assign an owner, add a checklist and start a playbook, so analysts see work that is already sorted. This guide follows the Microsoft Learn page on automating incident handling with automation rules in Microsoft Sentinel.
+Automation rules take over the repetitive start of incident handling. A rule can move a new incident from New to Active, assign an owner, add a checklist and start a playbook, so analysts see work that is already sorted. This guide follows the Microsoft Learn page Automate threat response in Microsoft Sentinel with automation rules.
 
 ## Portal note
 
@@ -35,7 +35,7 @@ Automation rules apply in both the Defender portal and the Azure portal. Learn s
 
 - **When incident is created.** In Defender portal workspaces, this is a new incident in the Defender portal. In workspaces not onboarded there, it is an incident created by an analytics rule, ingested from Microsoft Defender XDR or created manually.
 - **When incident is updated.** For example a status change, a new owner, a severity change, added alerts, or added comments, tags or tactics.
-- **When alert is created.** For alerts from Scheduled or NRT analytics rules.
+- **When alert is created.** The trigger table names alerts from Scheduled or NRT analytics rules. A note on the page says alert-triggered automation is available only for alerts from Scheduled, NRT and Microsoft security analytics rules.
 - **Simple Flows (preview, Defender-onboarded workspaces).** Case created and case updated triggers.
 
 Learn prefers incident triggers for most cases. Alert triggers are mainly for alerts from analytics rules that have incident creation disabled. Alert-triggered automation for Defender XDR alerts is not available in the Defender portal, and the page points to the Enhanced Alert Trigger.
@@ -43,7 +43,7 @@ Learn prefers incident triggers for most cases. Alert triggers are mainly for al
 ## Conditions
 
 - Create-trigger operators compare current state: equals, contains, starts with, ends with, and their negations.
-- Update triggers add an Updated by condition (application, user, AIR, alert grouping, playbook, automation rule or other) and state-change options such as changed to a value.
+- Update triggers add an Updated by condition and state-change options such as changed, changed from or changed to a value. The Updated by values depend on onboarding. Onboarded workspaces: application, user, AIR, alert grouping, playbook, automation rule or other. Workspaces not onboarded: application, Microsoft Sentinel user, alert grouping done by analytics rules, playbook, automation rule or Microsoft Defender XDR.
 - For tags, any-individual-tag operators are true if at least one tag matches. Collection-of-all-tags operators are true only if the whole collection matches. Learn's example: with tags 2024 and 2023, Tag does not contain 2024 is true under any-individual and false under the collection.
 - For alert triggers, the only condition is the set of analytics rules.
 - Actions run only if all conditions are met, and conditions use the state at the moment the rule runs, so earlier rules' changes count.
@@ -51,7 +51,7 @@ Learn prefers incident triggers for most cases. Alert triggers are mainly for al
 ## Actions
 
 - Add task, which gives analysts a checklist for triage, investigation and remediation.
-- Change status. Closing requires a closing reason and a comment.
+- Change status. When you change to closed, you specify the closing reason and add a comment.
 - Change severity.
 - Assign owner.
 - Add tag.
@@ -79,7 +79,7 @@ Playbook waits: if a playbook finishes in under a second, the rule continues rig
 
 ## Permissions
 
-Playbooks run under a special Microsoft Sentinel service account, not the user's. That account needs explicit permissions on the playbook's resource group. Once granted, any automation rule can run any playbook in that group. Granting permissions through the **Manage playbook permissions** link needs **Owner** on those resource groups. Multitenant setups have additional rules, including an Azure Lighthouse delegation to the Azure Security Insights app with the Microsoft Sentinel Automation Contributor role.
+Playbooks run under a special Microsoft Sentinel service account, not the user's. That account needs explicit permissions on the playbook's resource group. Once granted, any automation rule can run any playbook in that group. Granting permissions through the **Manage playbook permissions** link needs **Owner** on those resource groups. Multitenant setups have additional rules: permissions for Sentinel to run a playbook must be defined in the tenant where the playbook resides. In one managed service provider scenario (a rule created in the customer workspace while signed in to the service provider tenant, running a playbook in the customer tenant), permissions are needed in both tenants, and the service provider tenant needs an extra Azure Lighthouse delegation to the Azure Security Insights app with the Microsoft Sentinel Automation Contributor role.
 
 ## Where to create rules
 
@@ -94,7 +94,7 @@ A maximum number of rules, conditions, actions or tasks, rate limits, what happe
 
 ## A triage design
 
-This design is practical advice built on the examples.
+This design is my advice, built on the examples.
 
 1. Create rule: set status to Active, add the triage task checklist.
 2. Create rule: assign incidents about a specialized platform to the matching analyst.
@@ -102,7 +102,7 @@ This design is practical advice built on the examples.
 4. Use expiring suppression rules for planned testing.
 5. Check order numbers so that severity changes do not skip later rules.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Choosing an alert trigger when an incident trigger fits.
 - Duplicate order numbers that make behavior unpredictable.
@@ -117,4 +117,4 @@ This design is practical advice built on the examples.
 
 ## Sources
 
-- [Automate threat response with automation rules in Microsoft Sentinel (Microsoft Learn)](https://learn.microsoft.com/azure/sentinel/automate-incident-handling-with-automation-rules)
+- [Automate threat response in Microsoft Sentinel with automation rules (Microsoft Learn)](https://learn.microsoft.com/azure/sentinel/automate-incident-handling-with-automation-rules)
