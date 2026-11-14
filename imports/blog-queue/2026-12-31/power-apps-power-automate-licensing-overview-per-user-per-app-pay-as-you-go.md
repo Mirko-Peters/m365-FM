@@ -111,4 +111,4 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Licensing overview for Microsoft Power Platform](https://learn.microsoft.com/power-platform/admin/pricing-billing-skus)
+- [Licensing overview for Microsoft Power Platform (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/pricing-billing-skus)
