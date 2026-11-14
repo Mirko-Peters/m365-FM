@@ -70,11 +70,11 @@ The lineage canvas supports keyboard navigation and screen readers. Learn notes 
 
 ## Reading the results
 
-In impact analysis, the counts on each tab tell you how many items and workspaces sit downstream. A high number of workspaces is a sign to notify contacts before you change anything. Items shown as Limited access still count toward the totals, so a change can affect content you cannot open. This reading is a suggestion based on the page, not a Microsoft rule.
+In impact analysis, the counts on each tab tell you how many items and workspaces sit downstream. A high number of workspaces is a sign to notify contacts before you change anything. Items with limited access are affected items you cannot open, so a change can reach content you cannot see. This reading is my advice, based on the page, not a Microsoft rule.
 
 ## A routine before a change
 
-This routine is a suggestion built from the pages, not a Microsoft procedure.
+This routine is my advice, built from the pages, not a Microsoft procedure.
 
 1. Open lineage view for the workspace and find the item.
 2. Run impact analysis with **All downstream items** and note the affected workspaces.
@@ -83,7 +83,7 @@ This routine is a suggestion built from the pages, not a Microsoft procedure.
 
 ## Not covered
 
-The impact analysis page does not describe item or workspace owners beyond contact lists, refresh impact, supported item types or numeric limits. It was last updated in May 2023, so check the current page for changes. The lineage page does not list supported item types or volume limits.
+The impact analysis page does not describe item or workspace owners beyond contact lists, refresh impact, supported item types or numeric limits. The lineage page does not list supported item types or volume limits.
 
 ## Related
 
@@ -91,5 +91,5 @@ The impact analysis page does not describe item or workspace owners beyond conta
 
 ## Sources
 
-- [Lineage in Fabric](https://learn.microsoft.com/fabric/governance/lineage)
-- [Impact analysis](https://learn.microsoft.com/fabric/governance/impact-analysis)
+- [Lineage in Fabric (Microsoft Learn)](https://learn.microsoft.com/fabric/governance/lineage)
+- [Impact analysis (Microsoft Learn)](https://learn.microsoft.com/fabric/governance/impact-analysis)
