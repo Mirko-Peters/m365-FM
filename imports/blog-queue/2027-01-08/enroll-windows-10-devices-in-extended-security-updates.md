@@ -38,7 +38,7 @@ The ESU program lets organizations receive critical and important security updat
 - The ESU Licensing Preparation Package, KB5072653, installed after KB5066791.
 - Administrator rights on the device.
 - Internet access and reachability of the listed activation and licensing endpoints, such as `activation.sls.microsoft.com`. The page lists 13 endpoints.
-- The ESU MAK. To see it in the Microsoft 365 admin center you need the Product Key Reader or VL Administrator role in Microsoft Entra ID. The page gives the path Billing > Your Products > Volume licensing > Contracts > View product keys.
+- The ESU MAK. To see it in the Microsoft 365 admin center you need the Product Key Reader or VL Administrator role in Microsoft Entra ID. The page gives these steps: in the admin center go to Billing > Your Products and select the Volume licensing tab, select View contracts in the Contracts section, find the License ID that the ESU licenses are under, select the three dots (More actions) and then View product keys. If you cannot find your MAK, the page says to contact volume licensing.
 
 ## Activate online
 
@@ -72,9 +72,9 @@ Reimaging may need extra activations. The page says to request an increase to th
 - Other checks of enrollment status in a management console.
 - What happens to devices after ESU ends.
 - Windows Server, and Windows 10 versions other than 22H2.
-- Cloud and virtual machine enrollment. The page refers to a separate article.
+- Cloud and virtual machine enrollment.
 
-If you expected a Windows Update for Business or Intune route, read the other Learn pages on ESU before you plan a rollout.
+My advice: if you expected a Windows Update for Business or Intune route, read other Learn pages on ESU before you plan a rollout. This page does not point to one.
 
 ## Notes on the tools and the key
 
@@ -85,7 +85,7 @@ If you expected a Windows Update for Business or Intune route, read the other Le
 
 ## A rollout outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Inventory devices. Confirm each is on Windows 10 22H2 and not LTSC.
 2. Install KB5066791 or later, then KB5072653.
@@ -94,7 +94,7 @@ This outline is practical advice built on the page.
 5. Decide per device whether online, phone or VAMT activation fits.
 6. Plan which program year each device needs.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Installing KB5072653 before KB5066791.
 - Assuming LTSC devices can enroll.
@@ -109,4 +109,4 @@ This outline is practical advice built on the page.
 
 ## Sources
 
-- [Enable Windows 10 Extended Security Updates (Microsoft Learn)](https://learn.microsoft.com/windows/whats-new/enable-extended-security-updates)
+- [Enable Windows 10 Extended Security Updates (ESU) (Microsoft Learn)](https://learn.microsoft.com/windows/whats-new/enable-extended-security-updates)
