@@ -7,20 +7,20 @@ author: mirko-p
 date: 2026-12-23
 topics: [power-bi-service]
 keypoints:
-  - "Memory failures show as Query memory limit exceeded or there wasn't enough memory to finish, error code 0xC13E0003. Resource governance cancels the refresh at the capacity limit."
+  - "Memory failures show as Query memory limit exceeded or there wasn't enough memory to finish, error code 0xC13E0003. Resource governance cancels the refresh when memory hits the enforced limit."
   - "Learn lists incremental or partition-level refresh, fewer parallel partitions, smaller models, scale-out and a larger Fabric SKU as fixes."
-  - "Scheduled refresh of an imported model is limited to 2 hours on shared capacity and 5 hours in a Premium workspace."
+  - "Scheduled refresh of an imported semantic model times out after 2 hours, or after 5 hours in a Premium workspace."
   - "Power BI disables a scheduled refresh after four consecutive failures. Fix the cause, then re-enable the schedule."
   - "Source query timeouts can be raised with CommandTimeout in M. Entra ID OAuth tokens expire in about an hour, so long loads can fail on credentials."
 faq:
   - q: "What does error 0xC13E0003 mean?"
     a: "Microsoft Learn lists it with the messages Query memory limit exceeded and This operation was canceled because there wasn't enough memory to finish running it. Refresh needs memory for the existing model, the new copy and temporary structures, and resource governance cancels the operation when peak use hits the capacity limit."
   - q: "How long can a scheduled refresh run?"
-    a: "Learn gives 2 hours for scheduled refresh of an imported semantic model on shared capacity and 5 hours in a Premium workspace. The same table lists a 10 GB limit for uncompressed data processed during refresh on shared capacity and a 1 GB maximum imported semantic model size."
+    a: "Learn says scheduled refreshes of imported semantic models time out after two hours, increased to five hours in Premium workspaces. A separate section gives a 1 GB maximum size for semantic models imported into the Power BI service and a 10 GB limit on uncompressed data processed during refresh in shared capacity. Premium semantic models are not subject to those two limits."
   - q: "Why was my scheduled refresh turned off?"
     a: "Learn says that if a scheduled refresh fails four times in a row, Power BI disables it. Fix the underlying problem, then re-enable the schedule."
   - q: "How do I fix a source query timeout?"
-    a: "Learn says to increase CommandTimeout in the M code. It also suggests reducing model size or complexity or splitting the model into smaller semantic models when the overall refresh limit is the problem."
+    a: "Learn lists increasing the CommandTimeout value in the M code when long-running source queries contribute to refresh failures. For the overall scheduled refresh time-out it suggests reducing model size or complexity or refactoring the model into several smaller semantic models."
   - q: "What do the capacity limit messages mean?"
     a: "For Premium, messages such as You've exceeded the capacity limit for semantic model refreshes, Capacity level limit exceeded and Node level limit exceeded point to throttling. Learn says to reschedule refreshes to off-peak times, space them out or retry."
 ---
@@ -60,10 +60,10 @@ If errors persist, open a support ticket.
 
 | Scenario | Limit |
 | --- | --- |
-| Scheduled refresh, imported model, shared capacity | 2 hours |
+| Scheduled refresh, imported semantic model | 2 hours |
 | Scheduled refresh, imported model, Premium workspace | 5 hours |
-| Uncompressed data processed during refresh, shared capacity | 10 GB |
-| Maximum imported semantic model size (as listed on the page) | 1 GB |
+| Uncompressed data processed during refresh, shared capacity (Premium is not subject to this limit) | 10 GB |
+| Maximum imported semantic model size in the Power BI service | 1 GB |
 
 To stay inside the limits, reduce model size or complexity or split the model into smaller semantic models. For source query timeouts, increase `CommandTimeout` in the M code.
 
@@ -94,7 +94,7 @@ For Access to the resource is forbidden, or failures after a password change, Le
 - `Processing Error: The following system error occurred: Type Mismatch`: check the M script or update Power BI Desktop.
 - A circular dependency with `SummarizeColumns` in calculated tables: add the referenced tables as filter arguments. Tabular Editor can change several tables in one transaction.
 
-## Triage order
+## Triage order (my advice)
 
 1. Read the exact message and code.
 2. Check gateway version and gateway selection.
@@ -113,4 +113,4 @@ The Learn page does not mention a daily refresh count limit, so none is stated h
 
 ## Sources
 
-- [Troubleshoot refresh scenarios](https://learn.microsoft.com/power-bi/connect-data/refresh-troubleshooting-refresh-scenarios)
+- [Troubleshoot refresh scenarios (Microsoft Learn)](https://learn.microsoft.com/power-bi/connect-data/refresh-troubleshooting-refresh-scenarios)
