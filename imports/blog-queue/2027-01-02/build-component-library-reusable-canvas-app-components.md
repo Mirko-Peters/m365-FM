@@ -61,7 +61,7 @@ Each component has a setting for whether consuming apps can customize it. It is 
 | On | Makers can select **Edit component**. This creates a local copy and removes the link to the library |
 | Off | The edit option is hidden. Changes must be made in the library |
 
-Turn it off for components that must stay identical, such as a branded header.
+My advice: turn it off for components that must stay identical, such as a branded header.
 
 ## Import components into an app
 
@@ -83,7 +83,7 @@ If a maker selects **Create a copy**, the component is copied into the app under
 
 ## Share the library
 
-Sharing works like sharing a canvas app. Shared users can use, edit and share the library. Co-owners can use, edit and share but cannot delete the library or change the owner. Learn adds two special cases:
+Sharing works like sharing a canvas app. Once a library is shared, others can edit it and import its components. A co-owner can use, edit and share the library but cannot delete it or change the owner. Learn adds two considerations for sharing with security groups:
 
 - **Solution-based libraries:** the sharing UI cannot be used. Use the `Set-PowerAppRoleAssignment` cmdlet with the **CanEdit** permission level to share with a security group.
 - **Environments without Dataverse:** sharing as Co-owner automatically grants CanEdit to the selected security group.
@@ -96,7 +96,7 @@ Sharing works like sharing a canvas app. Shared users can use, edit and share th
 - When you import an app and a library into an environment for the first time, make sure the app uses the latest component version. Otherwise it will not receive updates. Later imports into the same environment prompt for updates.
 - A library referenced by an app cannot be deleted. Remove the component from the app first.
 
-## Practical advice
+## Practical advice (my advice)
 
 - Write version notes every time. Consuming makers see them during review.
 - Keep a test screen in the library that shows every component, and preview it before publishing.
@@ -112,4 +112,4 @@ Sharing works like sharing a canvas app. Shared users can use, edit and share th
 
 ## Sources
 
-- [Component libraries (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/canvas-apps/component-library)
+- [Component library (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/canvas-apps/component-library)
