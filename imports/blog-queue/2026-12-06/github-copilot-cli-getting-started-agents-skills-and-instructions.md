@@ -11,7 +11,7 @@ keypoints:
   - "Install with npm (Node.js 22 or later), WinGet, Homebrew, an install script or a direct download, then sign in with /login."
   - "Custom instructions come from files such as .github/copilot-instructions.md, AGENTS.md and path-specific .instructions.md files."
   - "A custom agent is an .agent.md file in .github/agents or ~/.copilot/agents. It runs as a subagent with its own context window."
-  - "A skill is a folder with a SKILL.md file. GitHub warns against pre-approving shell or bash in allowed-tools unless you trust the skill."
+  - "A skill is a folder with a SKILL.md file. GitHub notes that pre-approving shell or bash in allowed-tools removes the confirmation step for terminal commands and advises omitting them when in doubt."
 faq:
   - q: "How do I install GitHub Copilot CLI?"
     a: "GitHub Docs lists npm install -g @github/copilot (Node.js 22 or later), winget install GitHub.Copilot on Windows, brew install --cask copilot-cli on macOS and Linux, an install script for macOS and Linux, and a direct download. You need an active Copilot subscription, and on Windows PowerShell v6 or higher."
@@ -56,11 +56,11 @@ Rules to remember: applicable files are combined and identical duplicates are re
 
 ## Layer 2: Custom agents
 
-A custom agent defines expertise and behavior for a type of task. It runs as a subagent with its own context window, so it does not clutter the main agent's context. You can limit its toolset. GitHub's example is a reviewer agent that cannot modify code.
+A custom agent defines expertise and behavior for a type of task. It runs as a subagent with its own context window, so it does not clutter the main agent's context. By default a custom agent can use every tool. If you restrict its access, a `tools` specification is added to the agent file. GitHub's example profile is a security reviewer.
 
 - **File:** a Markdown file with the `.agent.md` extension.
 - **Project agents:** `.github/agents/`. **User agents:** `~/.copilot/agents/`. If names clash, the home directory version is used.
-- **Create:** enter `/agent`, select **Create new agent**, choose Project or User, then let Copilot generate the profile or write it yourself. By default custom agents can use all tools. Restart the CLI to load the new agent.
+- **Create:** enter `/agent`, select **Create new agent**, choose Project or User, then let Copilot generate the profile or write it yourself. You also choose the tools the agent can access. Restart the CLI to load the new agent.
 - **Run:** `/agent`, an explicit request such as "Use the security-auditor agent on /src/app", inference from the agent's description, or `copilot --agent <name> --prompt "..."`.
 
 ## Layer 3: Skills
@@ -69,12 +69,12 @@ Skills are folders of instructions, scripts and resources that Copilot loads for
 
 - **Locations:** project skills in `.github/skills`, `.claude/skills` or `.agents/skills`. Personal skills in `~/.copilot/skills` or `~/.agents/skills`.
 - **Structure:** a subdirectory per skill with a file named exactly `SKILL.md`. Frontmatter needs `name` and `description`. `license` and `allowed-tools` are optional.
-- **Safety:** GitHub warns against pre-approving `shell` or `bash` in `allowed-tools` unless you have reviewed the skill and its scripts and trust the source.
+- **Safety:** GitHub says that pre-approving `shell` or `bash` in `allowed-tools` removes the confirmation step for running terminal commands, and advises: when in doubt, omit `shell` and `bash` from `allowed-tools`.
 - **Manage:** `/skills list`, `/skills info`, `/skills reload` and `copilot skill list`. Request a skill by name with a slash, such as `/frontend-design`.
 
 ## Other options
 
-GitHub's overview also lists **MCP servers** for external tools and data, **hooks** that run shell commands at points such as session start or after the agent completes a task, and **plugins** that bundle several customizations. The overview page gives no file formats for these. Follow the linked pages for each.
+GitHub's overview also lists **MCP servers** for external tools and data, **hooks** that run your own shell commands at key points during a session, and **plugins**, described as distributable packages that extend the CLI. The overview page gives no file formats for these. Follow the linked pages for each.
 
 ## Which layer for which job
 
@@ -85,7 +85,7 @@ GitHub's overview also lists **MCP servers** for external tools and data, **hook
 
 GitHub's overview does not include a decision guide, so this mapping is a reading of its descriptions.
 
-## Common mistakes
+## Common mistakes (own checklist)
 
 - Writing conflicting instruction files and expecting one to win.
 - Forgetting to restart the CLI after creating an agent.
