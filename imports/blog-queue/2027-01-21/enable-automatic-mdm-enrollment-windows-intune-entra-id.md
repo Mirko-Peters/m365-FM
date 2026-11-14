@@ -74,7 +74,7 @@ Learn spells out the precedence:
 - On a corporate-owned device, the MDM user scope wins. The device enrolls in Intune when the user sets it up for work.
 - On a bring-your-own device, the WIP user scope wins. The device does not enroll for device management, and Microsoft Purview Information Protection policies are applied if configured.
 
-That difference is why the page says to use None for the WIP scope unless you have a reason not to.
+The page tells you to select None for the WIP user scope, or, if you use another value, to make sure those users are not part of the MDM user scope.
 
 ## The work or school account setting
 
