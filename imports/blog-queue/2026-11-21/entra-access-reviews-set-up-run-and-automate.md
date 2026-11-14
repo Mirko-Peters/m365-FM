@@ -22,7 +22,7 @@ faq:
   - q: "What happens if reviewers do not respond?"
     a: "The If reviewers don't respond setting offers No change, Remove access, Approve access and Take recommendations. Microsoft warns that Remove access or Take recommendations combined with Auto apply results to resource can revoke all access to the resource if reviewers do not respond."
   - q: "Can access reviews be automated?"
-    a: "Yes. Microsoft Learn says you can create a review with the Microsoft Graph call POST /identityGovernance/accessReviews/definitions, which needs the AccessReview.ReadWrite.All permission, or with the PowerShell cmdlet New-MgIdentityGovernanceAccessReviewDefinition. Inside the portal, Auto apply results applies decisions automatically at the end of the review."
+    a: "Yes. Microsoft Learn says you can create a review with the Microsoft Graph accessReviewSet definitions endpoint, which needs the AccessReview.ReadWrite.All permission, or with the PowerShell cmdlet New-MgIdentityGovernanceAccessReviewDefinition. Inside the portal, Auto apply results applies decisions automatically at the end of the review."
 ---
 
 A Microsoft Entra access review asks the right people, on a schedule, whether users should keep access to a group, an application or a role. It is a governance control: it finds access that nobody needs any more and removes it. This guide covers where reviews are created, what they need, how to build one, and how to automate and monitor it. Details come from Microsoft Learn.
@@ -67,7 +67,7 @@ Sign in to the Microsoft Entra admin center and go to **ID Governance** > **Acce
 - **Auto apply results to resource:** removes denied access automatically when the review ends. If it is off, someone must apply the results manually.
 - **If reviewers don't respond:** No change, Remove access, Approve access or Take recommendations.
 - **Action to apply on denied guest users:** remove membership, or block sign-in for 30 days and then remove the user from the tenant. This applies only to reviews scoped to guests.
-- **Decision helpers:** **No sign-in within 30 days** recommends approval for users who signed in during the past 30 days and denial for the others. **User-to-Group Affiliation** is based on distance in the reporting structure.
+- **Decision helpers:** **No sign-in within 30 days** recommends approval for users who signed in during the past 30 days and denial for the others. **User-to-Group Affiliation** recommends denial for users with low affiliation to the group.
 - **Advanced settings:** require justification, email notifications, reminders (sent halfway through the review period) and extra text for the reviewer email.
 
 **4. Review + Create**
@@ -84,8 +84,8 @@ Microsoft's deployment guide says group owners are usually the best reviewers. G
 
 ## Automate and monitor
 
-- **Auto apply and recommendations.** Recommendations are based on last sign-in or last app access, and the system can apply them at the end for users who did not respond.
-- **Graph and PowerShell.** Create reviews with `POST /identityGovernance/accessReviews/definitions` (permission `AccessReview.ReadWrite.All`) or `New-MgIdentityGovernanceAccessReviewDefinition`.
+- **Auto apply and recommendations.** With **Take recommendations** for non-responders, the decision helper's recommendation is applied. **Auto apply results to resource** then enforces the outcome when the review ends.
+- **Graph and PowerShell.** Create reviews with the Microsoft Graph accessReviewSet definitions endpoint (permission `AccessReview.ReadWrite.All`) or `New-MgIdentityGovernanceAccessReviewDefinition`. The deployment guide recommends building queries in Graph Explorer before you put them in scripts.
 - **Audit logs.** Filter by category **Policy** for activities such as Create access review, Access review ended, Approve decision and Apply decision. Export logs to Azure Monitor Log Analytics or Event Hubs for trend dashboards.
 - **Group owners as creators.** Under **ID Governance** > **Access Reviews** > **Settings**, set **Group owners can create and manage access reviews for groups they own** to **Yes**. The default is **No**.
 
@@ -98,8 +98,8 @@ Microsoft's pilot advice is practical: start with a small group and noncritical 
 - Each selected group or app creates a **separate** review.
 - Each recurrence is a snapshot. Changes made during a review apply to the next cycle.
 - Nested groups are flattened, and users are removed only from direct membership.
-- Access reviews cannot change membership of groups synced from on-premises Active Directory. Admins must act on results in AD.
-- Guest reviewers who have not accepted their invitation receive no review email.
+- Groups and users in restricted management administrative units cannot be managed with access reviews.
+- Groups synced from on-premises Active Directory have no owner in Entra ID, so pick reviewers individually.
 
 ## Related
 
