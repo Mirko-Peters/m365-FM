@@ -75,9 +75,9 @@ Rules are merged on the client. Device-assigned rules apply to every user on the
 - Use stricter rules for high-risk apps such as browsers and PowerShell.
 - Start with an audit policy and build rules from reports.
 
-## Rollout phases
+## Planning checklist
 
-Learn lists five phases: auditing with reporting enabled, identifying personas, building rules from EPM reports, monitoring and refining, and reviewing user privileges. It says to repeat phases two to five continuously.
+The planning page gives a checklist. Review the technical and licensing prerequisites. Define target user personas so that you can build rules with logical grouping. Understand the elevation settings and elevation rules policies, including default settings, file identification by hash, metadata or certificates, rule arguments, child process behavior, elevation types and how rule conflicts are handled. Find the right balance between security and flexibility. Plan a rollout with stakeholder management, user communication and training, and monitoring. The page also warns that a certificate rule can allow any app signed by that certificate to elevate, so be careful with vendors that sign all their apps with the same certificate.
 
 ## Not covered
 
@@ -89,6 +89,6 @@ The pages I read do not give the full elevation settings configuration (reportin
 
 ## Sources
 
-- [Endpoint Privilege Management overview](https://learn.microsoft.com/intune/intune-service/protect/epm-overview)
-- [EPM deployment planning](https://learn.microsoft.com/intune/epm/deployment-planning)
-- [Create elevation rules](https://learn.microsoft.com/intune/epm/create-elevation-rules)
+- [Learn about using Endpoint Privilege Management with Microsoft Intune (Microsoft Learn)](https://learn.microsoft.com/intune/epm/overview)
+- [Plan and Prepare for Endpoint Privilege Management Deployment (Microsoft Learn)](https://learn.microsoft.com/intune/epm/deployment-planning)
+- [Creating elevation rules with Endpoint Privilege Management (Microsoft Learn)](https://learn.microsoft.com/intune/epm/create-elevation-rules)
