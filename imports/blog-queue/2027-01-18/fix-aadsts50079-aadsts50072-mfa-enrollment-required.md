@@ -41,7 +41,7 @@ The word interrupt in 50072 suggests that the sign-in is paused so that the user
 The 50079 row separates two cases, and the fix depends on which one applies:
 
 1. **Managed user.** The user authenticates with Microsoft Entra ID and must register security info to complete multifactor authentication.
-2. **Federated user.** The user authenticates through a federated identity provider and needs to obtain the multifactor claim from that provider. Registering methods in Entra ID does not replace this step according to the row, which says the claim has to come from the federated identity provider.
+2. **Federated user.** The user authenticates through a federated identity provider and needs to obtain the multifactor claim from that provider. The row says the claim has to come from the federated identity provider; my reading is that registering methods in Entra ID is therefore not the fix for this group.
 
 Check how the account signs in before you advise the user.
 
@@ -54,7 +54,7 @@ Learn's page on combined registration describes a single place to register for m
 
 The page gives sample scenarios in which users are asked to register during sign-in: registration enforced through Microsoft Entra ID Protection, through per-user multifactor authentication, or through Conditional Access or other policies. In the Conditional Access case, users are asked when they use a resource that requires multifactor authentication.
 
-This lines up with the 50079 row: a policy or per-user setting now requires MFA, the user has no registered method, and sign-in is interrupted to enroll.
+My reading: this lines up with the 50079 row, where a policy or per-user setting now requires MFA, the user has no registered method, and sign-in is interrupted to enroll. Learn does not link the combined registration page to the error code.
 
 ### What users see
 
@@ -81,11 +81,11 @@ This section is my advice, not a Microsoft statement.
 3. **Provide a safe place to enroll.** Learn describes trusted locations for registration through Conditional Access. If your policy requires MFA everywhere, make sure users have a path to register that is not blocked by the same policy.
 4. **Handle federated users separately.** Their fix lies with the federated identity provider, so involve whoever runs it.
 5. **Test with a pilot account.** Remove all methods from a test user, sign in, and walk through the interrupt wizard yourself.
-6. **Tell users to use a modern browser.** Learn says to use a modern browser such as Microsoft Edge for registration and that Internet Explorer 11 is not supported.
+6. **Tell users to use a modern browser.** Learn says to use a modern browser such as Microsoft Edge for registration and notes that IE11 isn't officially supported.
 
 ## What the sources do not say
 
-The reference rows give no step-by-step instructions, and Learn's combined registration page does not mention AADSTS50072 or AADSTS50079. I link the two based on the row text, which names registering security info. The pages I used do not explain how federation claims are configured, so I cannot describe that part.
+The reference rows give no step-by-step instructions, and Learn's combined registration page does not mention AADSTS50072 or AADSTS50079. The link between the two in this article rests on the row text, which names registering security info. Neither source explains how federation claims are configured, so that part is not covered here.
 
 ## Related
 
