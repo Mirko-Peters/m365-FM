@@ -23,7 +23,7 @@ faq:
     a: "Microsoft Learn says that after March 31, 2027 Microsoft Sentinel will no longer be supported in the Azure portal and will be available only in the Microsoft Defender portal."
 ---
 
-To create an analytics rule from a template, open **Analytics** in Microsoft Sentinel, go to the **Rule templates** tab, select a template and choose **Create rule**. The wizard opens with the template values filled in, and you can adjust them before the rule is created. This guide follows the Microsoft Learn article on creating a rule from a template, the article on the scheduled rule wizard, and the article on template versions.
+To create an analytics rule from a template, open **Analytics** in Microsoft Sentinel, go to the **Rule templates** tab, select a template and choose **Create rule**. The wizard opens with the template values filled in, and you can adjust them before the rule is created. This guide follows the Microsoft Learn article on creating a rule from a template, the article Create scheduled analytics rules in Microsoft Sentinel, which covers the wizard, and the article on managing template versions.
 
 ## A date to know
 
@@ -55,7 +55,7 @@ The wizard article describes these stages: general information, **Set rule logic
 - **Suppression:** stop running the query after an alert, for up to 24 hours.
 - **Results simulation:** **Test with current data** simulates the rule 50 times against current data.
 - **Incident settings:** creating incidents is enabled by default. If Sentinel is onboarded to the Defender portal, Learn says to leave it enabled. Up to 150 alerts can be grouped into one incident.
-- **Automated response:** pick or create automation rules. Classic alert automation playbooks cannot be added. Learn gives March 2026 as the effective date of the deprecation and says to migrate existing ones to automation rules, so check any classic playbooks you still have.
+- **Automated response:** pick or create automation rules. Classic alert automation playbooks cannot be added since June 2023. The page says playbooks already listed there continue to run until the method is deprecated, effective March 2026. That date has already passed, and the page does not say what happens afterwards. It tells you to create an automation rule based on the alert created trigger, call the playbook from it and then remove the playbook from the classic list, so check any classic playbooks you still have.
 - **Review and create:** select **Create** when validation passes.
 
 ## Rule updates after a template changes
@@ -66,7 +66,8 @@ Learn explains that creating a rule copies the template, so the active rule is n
 - Select the rule. **Review and update** appears for rules with the badge, and **Compare with template** for rules without it.
 - **Review and update** opens a side-by-side YAML comparison. You can accept the changes, customize first through **Next : Custom changes**, or cancel.
 - Updating overwrites your rule with the latest template, so customizations to the query, scheduling or grouping might be lost. Check automation that refers to the rule.
-- A major version change, in the format 1.0.0, means something essential changed. A minor change is an improvement you can take or leave.
+- A major version change, in the format 1.0.0, means something essential changed. A minor change is an improvement you can take or leave. Rules created before October 2021 have no current template version.
+- To revert a rule to its original template, select **Compare with template**. On the **Compare to latest version** tab the left side shows the active rule and the right side the original, unchanged template. Select **Review and update** to revert completely, **Next : Custom changes** to customize first, or the X to exit without changes.
 
 Template version management is marked as preview on the Learn page.
 
@@ -89,7 +90,6 @@ The pages I read do not describe the following:
 
 - Prerequisites on the template page itself.
 - The Azure portal procedure for the template steps.
-- The steps for reverting a rule to its template.
 - The exact milestone labels of the Defender portal wizard.
 - A limit on the number of rules or on query length.
 
@@ -99,6 +99,6 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Create scheduled analytics rules from templates](https://learn.microsoft.com/azure/sentinel/create-analytics-rule-from-template)
-- [Create scheduled analytics rules from scratch](https://learn.microsoft.com/azure/sentinel/create-analytics-rules)
-- [Manage template versions for scheduled analytics rules](https://learn.microsoft.com/azure/sentinel/manage-analytics-rule-templates)
+- [Create scheduled analytics rules from templates in Microsoft Sentinel (Microsoft Learn)](https://learn.microsoft.com/azure/sentinel/create-analytics-rule-from-template)
+- [Create scheduled analytics rules in Microsoft Sentinel (Microsoft Learn)](https://learn.microsoft.com/azure/sentinel/create-analytics-rules)
+- [Manage Template Versions for your Scheduled Analytics Rules in Microsoft Sentinel (Microsoft Learn)](https://learn.microsoft.com/azure/sentinel/manage-analytics-rule-templates)
