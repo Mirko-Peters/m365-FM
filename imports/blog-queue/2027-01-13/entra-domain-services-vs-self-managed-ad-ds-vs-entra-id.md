@@ -10,7 +10,7 @@ keypoints:
   - "Learn describes three directory options: AD DS, Microsoft Entra ID and Microsoft Entra Domain Services, which share a name and technology but serve different needs."
   - "Entra Domain Services is a managed domain: Microsoft deploys and maintains the domain controllers, and you get Kerberos, NTLM, LDAP, domain join and Group Policy."
   - "Self-managed AD DS allows schema extensions and Domain or Enterprise admin rights, but you run the VMs, patching and security yourself."
-  - "Microsoft Entra ID authenticates with OAuth and OpenID Connect and manages devices with MDM such as Intune, not Group Policy."
+  - "Entra joined devices use OAuth and OpenID Connect and MDM such as Intune; Domain Services-joined devices use Kerberos, NTLM and Group Policy."
   - "With AD FS federation there is no current password hash in Domain Services, so it cannot validate those users' credentials."
 faq:
   - q: "What is the difference between Microsoft Entra Domain Services and Microsoft Entra ID?"
@@ -25,7 +25,7 @@ faq:
     a: "Microsoft Learn explains that if on-premises AD DS and Microsoft Entra ID use federated authentication with AD FS, no current or valid password hash is available in Domain Services. Accounts created before federation may hold an old hash that likely does not match the on-premises password, so Domain Services cannot validate the credentials."
 ---
 
-If your workload needs Kerberos, NTLM, LDAP or Group Policy and you do not want to run domain controllers, Microsoft Entra Domain Services is the managed option. If you need full control, schema changes or Domain Admin rights, you run self-managed AD DS. If your users and devices live in the cloud and sign in over the internet, Microsoft Entra ID alone is usually the fit. This article follows the Microsoft Learn comparison page for these three services.
+My short reading of the Learn comparison, not a Microsoft recommendation: if your workload needs Kerberos, NTLM, LDAP or Group Policy and you do not want to run domain controllers, Microsoft Entra Domain Services is the managed option. If you need full control, schema changes or Domain Admin rights, you run self-managed AD DS. If your users and devices live in the cloud and sign in over the internet, Microsoft Entra ID alone may be enough. This article follows the Microsoft Learn comparison page for these three services.
 
 ## The three options in one view
 
@@ -97,7 +97,7 @@ This is my reading of the Learn comparison, not a Microsoft rule.
 
 Learn ends the page with a warning about federation. If on-premises AD DS and Microsoft Entra ID are configured for federated authentication with AD FS, there is no current or valid password hash in Domain Services. Entra accounts created before federation might have an old hash that likely does not match the on-premises password. As a result, Domain Services cannot validate those users' credentials.
 
-The page text I read stops at that sentence. For the supported synchronization setups, use the Learn page on how objects and credentials are synchronized in a managed domain, which the comparison links to.
+The comparison page ends with that sentence and gives no further detail on this case. The page links to a separate Learn article on how objects and credentials are synchronized in a managed domain. My advice, not a Microsoft statement: read it before you plan a federated setup.
 
 ## Related
 
