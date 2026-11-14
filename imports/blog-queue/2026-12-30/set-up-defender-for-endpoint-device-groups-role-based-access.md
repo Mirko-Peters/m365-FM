@@ -29,7 +29,7 @@ Defender for Endpoint lets you split access by task and by device. This guide fo
 
 ## Important notice: unified RBAC
 
-Learn states that starting February 16, 2025, new Defender for Endpoint customers only have access to unified role-based access control (URBAC), and existing customers keep their current roles and permissions. It points to the URBAC documentation for details. If you are a new customer, the model below is therefore mainly relevant for understanding existing tenants.
+Learn states that starting February 16, 2025, new Defender for Endpoint customers only have access to unified role-based access control (URBAC), and existing customers keep their current roles and permissions. It points to the URBAC documentation for details. My reading, not Microsoft's: if you are a new customer, the model below is mainly relevant for understanding existing tenants.
 
 ## The model
 
@@ -43,7 +43,7 @@ Tier model from the page:
 | Tier 2 | Regional security operations team, sees all devices for its region and performs remediation actions |
 | Tier 3 | Global security operations team, authorized to see and do everything in the portal |
 
-Tier 0 assets should use Privileged Identity Management for finer control.
+For Tier 0 assets, the page refers to Privileged Identity Management for more granular control.
 
 ## Two controls
 
@@ -61,7 +61,7 @@ The implementation steps on the page are to define admin roles, assign permissio
 - Users with administrator permissions are automatically assigned the built-in Defender for Endpoint Global Administrator role. You can add non-admin users later.
 - After opting in you cannot revert to the first-login access model.
 
-The page applies to Defender for Endpoint Plan 1 and Plan 2.
+Learn notes that device group creation is supported in Defender for Endpoint Plan 1 and Plan 2.
 
 ## Planning suggestion
 
@@ -97,5 +97,5 @@ The overview does not give permission names, limits on roles, or the opt-in step
 
 ## Sources
 
-- [Manage portal access using role-based access control](https://learn.microsoft.com/defender-endpoint/rbac)
-- [Create and manage device groups](https://learn.microsoft.com/defender-endpoint/machine-groups)
+- [Use role-based access control to grant fine-grained access to Microsoft Defender portal (Microsoft Learn)](https://learn.microsoft.com/defender-endpoint/rbac)
+- [Create and manage device groups in Microsoft Defender for Endpoint (Microsoft Learn)](https://learn.microsoft.com/defender-endpoint/machine-groups)
