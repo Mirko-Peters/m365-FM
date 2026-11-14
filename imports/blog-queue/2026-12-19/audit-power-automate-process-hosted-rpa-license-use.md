@@ -19,8 +19,8 @@ faq:
     a: "Per Learn, Process licenses are environment-specific. Importing a flow into another environment creates a separate flow, and flow groups and capacity assignments are environment-specific too. User licenses such as Power Automate Premium are assigned at tenant level."
   - q: "Where do I see the current usage?"
     a: "Learn names the Process capacity utilization page and the Hosted Process capacity utilization page per environment, the Licensing, Power Automate, Usage view in the Power Platform admin center, and action usage reports labeled Power Platform Requests, which are in public preview."
-  - q: "How do I find flows at risk of suspension?"
-    a: "The licensing FAQ points to the Get-AdminFlowAtRiskOfSuspension PowerShell script for tenants with fewer than 500 environments. It says a flow that stays above limits for 14 consecutive days is suspended and the owner is notified."
+  - q: "How do I find flows that need a license?"
+    a: "The licensing FAQ names the Get-AdminFlowAtRiskOfSuspension PowerShell script for listing flows that need licenses across the tenant, for tenants with fewer than 500 environments. Larger tenants raise a support ticket. Separately, it says a flow that stays above the transition-period limits for 14 consecutive days is suspended and the owner is notified."
   - q: "Is the Hosted RPA add-on still sold?"
     a: "Learn marks the Hosted RPA add-on as legacy and says it is automatically converted into Power Automate Hosted Process licenses with no action needed. The Unattended RPA add-on has been replaced by the Process license, and existing add-ons should not be renewed."
 ---
@@ -50,7 +50,7 @@ The daily actions appear as Power Platform Requests in admin center reports. Eac
 
 ## Step 1: List environment-level allocation
 
-Process capacity must first be assigned to an environment. In the Power Platform admin center, select **Licensing** > **Capacity add-ons**, open the **Add-ons** tab and check the usage gauge for each capacity. The **Summary** tab offers **Download reports**. The **Manage add-ons** panel shows allocation per environment. If you want to limit who can allocate, Learn describes the tenant setting **Add-on capacity assignments** with **Only specific admins**.
+Process capacity must first be assigned to an environment. In the Power Platform admin center, select **Licensing** > **Capacity add-ons**, open the **Add-ons** tab and check the usage gauge for each capacity. The **Summary** tab offers **Download reports**. The **Manage add-ons** panel is where you select an environment and allocate capacity to it. If you want to limit who can allocate, Learn describes the tenant setting **Add-on capacity assignments** with **Only specific admins**.
 
 Record per environment: capacity assigned, capacity used, and who can change it.
 
@@ -74,21 +74,21 @@ Only solution flows can have Process capacity assigned, so flows outside solutio
 
 Learn lists these sources:
 
-- **Licensing** > **Power Automate** > **Usage** in the Power Platform admin center for current totals.
+- **Licensing** > **Power Automate** > **Usage** in the Power Platform admin center. The Power Platform requests page says this area has superseded the downloadable request reports and describes it as the place to find flows and users that exceed their official limits. That page does not describe the columns or views, so open it and check what your tenant shows.
 - Action usage reports, in public preview: a user report, a per flow licensed flows report that covers flows with a Per-flow or Process license, and a nonlicensed user report.
 - **Analytics** on a flow's details page, with the **Actions** chart.
 
-Estimate the need as actions per run times runs per day. If the result is above 250,000, stack more licenses.
+My own rule of thumb, not a Learn formula: estimate the need as actions per run times runs per day. If the result is above 250,000, stack more licenses on the flow, which Learn allows up to 10 per flow.
 
 ## Step 4: Flag risk
 
-The licensing FAQ describes what happens at the limit: delayed runs of later actions, a banner on the throttled flow, and suspension after 14 consecutive days above the limits, with a notification to the owner. For tenants with fewer than 500 environments, it points to `Get-AdminFlowAtRiskOfSuspension`. Larger tenants should raise a support ticket.
+The licensing FAQ describes what happens at the limit: delayed runs of later actions, a banner on the throttled flow, and suspension after 14 consecutive days above the transition-period limits, with a notification to the owner. Separately, the FAQ names the `Get-AdminFlowAtRiskOfSuspension` script as the way to find flows that need licenses across the tenant. It applies to tenants with fewer than 500 environments, and larger tenants should raise a support ticket. These are two different items in the FAQ, so treat the script as a license-enforcement list and not as a countdown to suspension.
 
 Other items worth checking in the audit:
 
 - Flows owned by users who left, since the FAQ says a flow is downgraded and turned off after 14 days if the owner loses the Premium license.
 - Flows that run under an application user, process large data or are invoked by many users. Learn lists these as criteria that call for a Process license.
-- Licenses that stay unallocated while flows run throttled.
+- My own addition, not from Learn: licenses that stay unallocated while flows run throttled.
 
 ## Where the documentation stops
 
@@ -100,7 +100,7 @@ The pages read for this article do not describe:
 
 If you need a tenant-wide table, build it yourself from the per-environment pages and the downloadable capacity reports, and add the review date. Also note that assignment changes can take time to show: the FAQ says a license can take up to seven days to appear in the portal banners, and editing and saving the flow refreshes the status.
 
-## A repeatable checklist
+## A repeatable checklist (my suggestion)
 
 1. Export the capacity report from the **Summary** tab.
 2. For each environment with Process capacity, open the Process capacity utilization page.
@@ -117,10 +117,11 @@ If you need a tenant-wide table, build it yourself from the per-environment page
 
 ## Sources
 
-- [Power Automate license types (Microsoft Learn)](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/types)
-- [Power Automate licensing FAQ (Microsoft Learn)](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/faqs)
-- [Deep dive on Process and Hosted Process licenses (Microsoft Learn)](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/deep-dive-on-specific-license)
-- [Power Automate add-ons (Microsoft Learn)](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/add-ons)
-- [Process capacity (Microsoft Learn)](https://learn.microsoft.com/en-us/power-automate/desktop-flows/capacity-process)
-- [Capacity add-ons in the Power Platform admin center (Microsoft Learn)](https://learn.microsoft.com/en-us/power-platform/admin/capacity-add-on)
-- [Hosted RPA overview (Microsoft Learn)](https://learn.microsoft.com/en-us/power-automate/desktop-flows/hosted-rpa-overview)
+- [Types of Power Automate licenses](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/types)
+- [Power Automate licensing FAQ](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/faqs)
+- [Deep dive on specific licenses](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/deep-dive-on-specific-license)
+- [Types of Power Automate add-ons](https://learn.microsoft.com/en-us/power-platform/admin/power-automate-licensing/add-ons)
+- [Process capacity](https://learn.microsoft.com/en-us/power-automate/desktop-flows/capacity-process)
+- [Capacity add-ons for Power Apps and Power Automate](https://learn.microsoft.com/en-us/power-platform/admin/capacity-add-on)
+- [Introduction to the Power Automate Hosted RPA](https://learn.microsoft.com/en-us/power-automate/desktop-flows/hosted-rpa-overview)
+- [Requests limits and allocations - Power Platform](https://learn.microsoft.com/en-us/power-platform/admin/api-request-limits-allocations)
