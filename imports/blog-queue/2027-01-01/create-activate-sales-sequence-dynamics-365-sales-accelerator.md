@@ -1,6 +1,6 @@
 ---
 title: "Create and Activate a Sales Sequence in Dynamics 365 Sales: Steps and Limits"
-summary: "How to create and activate a sequence in Dynamics 365 Sales, based on Microsoft Learn: roles, the Sales Insights settings path, step types, assignment options, the 250 active sequences limit, and the rule that a wait step cannot be last."
+summary: "How to create and activate a sequence in Dynamics 365 Sales, based on Microsoft Learn: roles, the Sales Insights settings path, step types, assignment options, the 250 active sequences limit, and the activation error that can occur when a wait step is last."
 status: review
 publish: false
 author: mirko-p
@@ -10,20 +10,20 @@ keypoints:
   - "Go to Change area, Sales Insights settings, then under Sales accelerator select Sequences and New sequence. You can start from a template or a blank sequence."
   - "The entity defaults to Lead. Sequence start here is added automatically as step 1, and you add activities with the plus icon."
   - "Steps, Conditions, Commands and LinkedIn are the four categories of activities listed on the page."
-  - "You can have up to 250 active sequences at a time in your organization. Activation fails if Set wait time is the last activity."
+  - "You can have up to 250 active sequences at a time in your organization. An error might occur if Set wait time is the last activity."
   - "Deactivate a sequence before assigning it. Assignment options are Record owner, a team member in a record field, Owner team or Access team."
 faq:
   - q: "Where do I create a sequence?"
     a: "According to Microsoft Learn, in your sales app go to Change area, then Sales Insights settings, and under Sales accelerator select Sequences, then New sequence."
   - q: "Why does activation fail?"
-    a: "According to Microsoft Learn, activation fails if Set wait time is the last activity. Delete that last step, save and activate again."
+    a: "According to Microsoft Learn, an error might occur if Set wait time is the last activity. Delete that last Set wait time activity, then save and activate the sequence again."
   - q: "How many sequences can be active?"
     a: "The Learn page states a limit of up to 250 active sequences at a time in your organization."
   - q: "Which roles do I need?"
     a: "According to Microsoft Learn, the Administration and customization roles to configure the feature, and the Primary sales roles to use sales-related features. Some tasks need Functional roles."
 ---
 
-To create a sequence in Dynamics 365 Sales, open **Sales Insights settings**, select **Sequences** under **Sales accelerator**, choose **New sequence**, define its properties, add steps in the designer, and save. Then activate it and connect it to records. This guide follows the Microsoft Learn article on creating and activating a sequence, which was last updated on 2025-07-11.
+To create a sequence in Dynamics 365 Sales, open **Sales Insights settings**, select **Sequences** under **Sales accelerator**, choose **New sequence**, define its properties, add steps in the designer, and save. Then activate it and connect it to records. This guide follows the Microsoft Learn article Sequence creation and activation in the sales accelerator, which carries the page date 2025-07-11.
 
 ## Before you start
 
@@ -74,7 +74,7 @@ For team options you can add conditions that target individuals, using **Conditi
 1. Open the sequence and select **Activate**. Learn states a limit of up to 250 active sequences at a time in your organization.
 2. Select **Activate** in the confirmation message.
 
-If **Set wait time** is the last activity, activation fails. Delete that last step, save and activate again. The page lists no other activation checks. After success, the sequence shows its status next to its name on the designer home page.
+The page notes that an error might occur if you added **Set wait time** as the last activity. Delete that last **Set wait time** activity, then save and activate the sequence again. The page lists no other activation checks. After success, the sequence shows its status next to its name on the designer home page.
 
 ## Connect to records
 
@@ -111,4 +111,4 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Create and activate a sequence](https://learn.microsoft.com/dynamics365/sales/create-and-activate-a-sequence)
+- [Sequence creation and activation in the sales accelerator (Microsoft Learn)](https://learn.microsoft.com/dynamics365/sales/create-and-activate-a-sequence)
