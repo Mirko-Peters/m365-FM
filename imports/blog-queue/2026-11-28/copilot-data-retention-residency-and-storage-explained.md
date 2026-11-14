@@ -45,7 +45,7 @@ The Copilot data protection architecture page lists these locations:
 | User's OneDrive | A folder with files uploaded to Copilot Chat |
 | SharePoint Embedded container | Copilot Pages and Copilot Notebooks, in a user-owned container that Loop My workspace also uses |
 
-For Teams chats with Copilot, admins can use the Teams Export APIs. Admins can also use Content search or Purview to view and manage stored data.
+The privacy page adds that admins can use Content search and Microsoft Purview to view the stored data, and the Teams Export APIs for Teams chats with Copilot.
 
 ## What the audit log does and does not show
 
@@ -78,7 +78,7 @@ Learn also warns that what users see in an AI app is not an accurate reflection 
 
 ## Deleting history as a user
 
-Microsoft's privacy page says users can delete their Copilot activity history, including prompts and responses, in the My Account portal at myaccount.microsoft.com. The page does not say whether this removes copies kept for admin tools such as Content search or Purview, so do not promise users that it does. Learn adds that messages leave the app only when users delete the chat (where available) or submit a request to delete their history of all Copilot interactions.
+Microsoft's privacy page says users can delete their Copilot activity history, including prompts and responses, in the My Account portal at myaccount.microsoft.com. The page does not say whether this removes copies kept for admin tools such as Content search or Purview, so do not promise users that it does. Learn adds that messages are removed from the app when a user deletes the chat (where that option exists) or when an administrator submits a request to delete a user's Copilot interaction history.
 
 ## Data residency and the EU Data Boundary
 
@@ -95,7 +95,7 @@ The page does not name specific storage regions. It says interaction data is pro
 
 ## Encryption and labeled content
 
-Learn says Microsoft 365 uses service-side technologies including BitLocker, per-file encryption, TLS and IPsec to encrypt customer content at rest and in transit. For labeled or encrypted content, a user must have both VIEW and EXTRACT usage rights for Copilot to summarize or return it. Copilot does not use content protected by Double Key Encryption. The architecture page does not describe encryption of Copilot interaction data inside each storage location.
+Learn says Microsoft 365 uses service-side technologies including BitLocker, per-file encryption, TLS and IPsec to encrypt customer content at rest and in transit. For content encrypted by sensitivity labels or Information Rights Management, the privacy page says Copilot honors the usage rights granted to the user. The pages I read do not describe encryption of Copilot interaction data inside each storage location, and they do not list the individual usage rights.
 
 ## What to check in your tenant
 
