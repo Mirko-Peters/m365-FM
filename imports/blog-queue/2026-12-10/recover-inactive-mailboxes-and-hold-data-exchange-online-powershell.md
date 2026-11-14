@@ -86,7 +86,7 @@ Set-Mailbox <target mailbox> -EmailAddresses @{Add="X500:<LegacyExchangeDN of in
 New-MailboxRestoreRequest -SourceMailbox $InactiveMailbox.DistinguishedName -TargetMailbox <target mailbox> -TargetRootFolder "Inactive Mailbox"
 ```
 
-Without `-TargetRootFolder`, items merge into the matching folders. With it, everything lands under the named folder. For archives, add `-SourceIsArchive` and `-TargetIsArchive`. Wait for the request to finish before removing the X500 address. Learn warns that retention policies could delete restored items from an old mailbox, so put the target on retention hold or apply a retention policy or Litigation Hold first.
+Without `-TargetRootFolder`, items merge into the matching folders. With it, everything lands under the named folder. For archives, add `-SourceIsArchive` and `-TargetIsArchive`. Wait for the request to finish before removing the X500 address. Learn suggests enabling retention hold on the target mailbox first, because its retention policy could otherwise delete or move old restored items. To keep the restored items from being permanently deleted later, it also suggests applying a retention policy or Litigation Hold to the target before the restore.
 
 The restore page does not cover required roles, `Get-MailboxRestoreRequest` for monitoring, or size limits. Check the cmdlet reference for those.
 
