@@ -93,7 +93,7 @@ Learn's examples of suitable questions are ones that translate directly to a que
 
 Learn describes a precedence model for guidance, from highest to lowest: organizational intent, role-based intent, developer intent and user intent. Higher layers always override lower ones. In practice, the instructions you write as the developer sit below organizational policy, so a Purview rule or workspace policy wins over a routing hint.
 
-The concept page also notes that data agents can be published across Microsoft 365, Foundry, Copilot Studio and custom apps, and that Purview policies still apply regardless of the entry point. If an agent gives an incomplete answer in one of those places, check DLP and access restriction policies before changing the instructions.
+The concept page also notes that data agents can integrate with Microsoft 365 Copilot, Microsoft Copilot Studio, Azure AI Foundry, Microsoft Teams and other tools outside Fabric, and that when an agent is surfaced through Microsoft 365 Copilot, Purview policies still apply to the underlying data sources. If an agent gives an incomplete answer in one of those places, check DLP and access restriction policies before changing the instructions.
 
 ## Before you publish
 
