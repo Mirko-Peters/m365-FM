@@ -22,7 +22,7 @@ faq:
   - q: "How do I consolidate a partially owned company?"
     a: "On the business unit card, enter the percentage in Consolidation %. Learn gives the example that at 70 percent, $70 of a $100 invoice is included."
   - q: "Is there a limit on the four-column trial balance?"
-    a: "Yes. Learn says the Consolidated Trial Balance (4) report, ID 18, is available only for four business units or fewer."
+    a: "Learn says that if you have four business units or fewer, you can also use the Consolidated Trial Balance (4) report, ID 18. The page does not state an error or hard block for more units, so treat the four-unit limit as a layout limit and test it."
 ---
 
 Business Central can automate much of the intercompany work that creates eliminations, and it can automate how business unit data reaches the consolidated company. The elimination itself is described by Microsoft Learn as a manual process. This article separates the two so you know where automation helps and where a person still posts a journal.
@@ -95,7 +95,7 @@ The pages I read do not describe how to configure automatic eliminations, a dedi
 
 - Putting transactions into the consolidated company. Learn says the simple Company Consolidation guide is for a consolidated company that should not contain transactions.
 - Skipping the test step and finding unmapped accounts after the run.
-- Using the four-column trial balance with more than four business units.
+- Using the four-column trial balance with more than four business units, which Learn does not describe as supported.
 - Forgetting the average-rate setup for income statement accounts when currencies differ.
 
 ## Related
@@ -108,5 +108,5 @@ The pages I read do not describe how to configure automatic eliminations, a dedi
 
 - [Consolidating financial data from multiple companies](https://learn.microsoft.com/en-us/dynamics365/business-central/finance-consolidated-company-reporting)
 - [Set up company consolidation](https://learn.microsoft.com/en-us/dynamics365/business-central/finance-consolidated-company-reporting-setup)
-- [Managing intercompany transactions](https://learn.microsoft.com/dynamics365/business-central/intercompany-manage)
+- [Managing intercompany transactions](https://learn.microsoft.com/en-us/dynamics365/business-central/intercompany-manage)
 - [Work with intercompany documents and journals](https://learn.microsoft.com/en-us/dynamics365/business-central/intercompany-how-work-documents-journals)
