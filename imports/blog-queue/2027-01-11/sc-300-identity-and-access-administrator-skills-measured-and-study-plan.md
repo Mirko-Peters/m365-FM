@@ -7,7 +7,7 @@ author: mirko-p
 date: 2027-01-11
 topics: [sc-300]
 keypoints:
-  - "The study guide lists skills as of October 28, 2026. The page footer shows Last updated on 2026-08-30, and no retirement notice appears on the page."
+  - "The study guide lists skills as of October 28, 2026. The page metadata lists the date 2026-08-30 and an update on 2026-11-05, and no retirement notice appears."
   - "Four areas: user identities 20-25%, authentication and access management 25-30%, workload identities 20-25%, identity governance 20-25%."
   - "The authentication area includes Global Secure Access, Conditional Access, ID Protection and Windows Hello for Business. Governance covers entitlement management, access reviews and PIM."
   - "A score of 700 or greater is required to pass. Learn recommends the new Practice Assessment on AI Skills Navigator."
@@ -16,9 +16,9 @@ faq:
   - q: "What are the SC-300 skill areas and weights?"
     a: "Implement and manage user identities 20-25%, implement authentication and access management 25-30%, plan and implement workload identities 20-25%, plan and automate identity governance 20-25%."
   - q: "Which version of the skills does the guide show?"
-    a: "Skills measured as of October 28, 2026. The page footer shows Last updated on 2026-08-30."
+    a: "Skills measured as of October 28, 2026. The page metadata lists the date 2026-08-30 and an update on 2026-11-05."
   - q: "What changed in the latest version?"
-    a: "The change log marks three areas as Minor: Microsoft Entra user authentication, Global Secure Access and privileged access. Other areas are marked No change."
+    a: "The change log marks three areas as Minor: Microsoft Entra user authentication, Global Secure Access and privileged access. The audience profile and the groups for authentication and access management and for identity governance are marked No change. The table lists no other rows."
   - q: "What score do I need?"
     a: "A score of 700 or greater is required to pass."
   - q: "How do I renew the certification?"
@@ -30,7 +30,7 @@ SC-300 covers identity and access administration with Microsoft Entra. This guid
 ## About the guide
 
 - Skills measured as of October 28, 2026.
-- The page footer shows Last updated on 2026-08-30.
+- The page metadata lists the date 2026-08-30 and an update on 2026-11-05.
 - No retirement notice appears on the page.
 - The audience profile is an identity and access administrator who designs, implements and operates identity and access management with Microsoft Entra and applies Zero Trust principles. Candidates should know Azure, Microsoft 365, AD DS, PowerShell and KQL.
 
@@ -42,6 +42,8 @@ SC-300 covers identity and access administration with Microsoft Entra. This guid
 | Implement authentication and access management | 25-30% |
 | Plan and implement workload identities | 20-25% |
 | Plan and automate identity governance | 20-25% |
+
+The skills-at-a-glance list gives 25-30% for authentication and access management, but the heading of that section on the same page says 20-25%. This guide uses the skills-at-a-glance figure. The percentages in the other three headings match the list.
 
 ## User identities (20-25%)
 
@@ -73,15 +75,15 @@ SC-300 covers identity and access administration with Microsoft Entra. This guid
 
 ## Change notes
 
-Compared with the version before October 28, 2026, the change log marks user authentication, Global Secure Access and privileged access as Minor. The audience profile and the other groups are marked No change.
+Compared with the version before October 28, 2026, the change log marks user authentication, Global Secure Access and privileged access as Minor. The audience profile and the groups for authentication and access management and for identity governance are marked No change. The table lists no rows for the other two areas.
 
 ## Scoring and resources
 
-A score of 700 or greater is required to pass. Most questions cover generally available features, and Preview features may appear. English is updated first and localized versions follow about eight weeks later. The new Practice Assessment is on AI Skills Navigator. The legacy assessment is no longer updated. Certifications renew annually through a free online assessment.
+A score of 700 or greater is required to pass. Most questions cover generally available features, and Preview features may appear. English is updated first and localized versions follow about eight weeks later. The new Practice Assessment is on AI Skills Navigator. The legacy assessment is no longer updated. Associate, expert and specialty certifications expire annually and can be renewed through a free online assessment.
 
 ## A study plan
 
-This plan is practical advice built on the weights.
+This plan is my advice, built on the weights.
 
 1. Start with authentication and access management, the largest area at 25-30%.
 2. Build a test tenant and practice Conditional Access, authentication methods and ID Protection.
@@ -89,7 +91,7 @@ This plan is practical advice built on the weights.
 4. Work through governance, especially PIM and access reviews.
 5. Take the practice assessment and revisit weak areas.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Studying with material for the skills before October 28, 2026.
 - Skipping Global Secure Access, which the outline lists in the authentication area.
@@ -105,4 +107,4 @@ This plan is practical advice built on the weights.
 
 ## Sources
 
-- [Study guide for Exam SC-300 (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/sc-300)
+- [Study guide for Exam SC-300: Microsoft Identity and Access Administrator (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/sc-300)
