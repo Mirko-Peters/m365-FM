@@ -38,10 +38,10 @@ The Conditional Access troubleshooting page lists the same code, 53001 DeviceNot
 In a Conditional Access policy, the grant control **Require Microsoft Entra hybrid joined device** lets an organization use device identity as part of the policy. The documented properties:
 
 - It only supports domain-joined Windows down-level devices, which are versions before Windows 10, and Windows current devices, which are Windows 10 and later.
-- It does not consider Microsoft Edge in InPrivate mode a Microsoft Entra hybrid joined device. A user who opens a private window can therefore trigger this error on an otherwise correct device.
+- It does not consider Microsoft Edge in InPrivate mode a Microsoft Entra hybrid joined device. In my reading, a user who opens a private window can therefore trigger this error on an otherwise correct device.
 - When you use the device code OAuth flow, the managed device grant control or a device state condition is not supported. The device doing the authentication cannot provide its device state to the device that provides the code, and the device state in the token is locked to the device performing authentication. Learn says to use **Require multifactor authentication** instead.
 
-Learn also explains how grant controls combine. By default Conditional Access requires all selected controls. An admin can instead choose **Require one of the selected controls**, which can let a user satisfy a policy with multifactor authentication when the device is not hybrid joined. That choice is a policy design decision, so involve whoever owns the policy.
+Learn also explains how grant controls combine. By default Conditional Access requires all selected controls. An admin can instead choose **Require one of the selected controls**, which, in my reading, can let a user satisfy a policy with multifactor authentication when the device is not hybrid joined. The page does not say this. That choice is a policy design decision, so involve whoever owns the policy.
 
 ## Step 1: Identify the policy in the sign-in logs
 
@@ -63,7 +63,7 @@ If the event does not explain the result, Learn names the sign-in diagnostic und
 | The sign-in used the device code flow | The grant control is not supported for that flow, so a different control is needed |
 | The device is personal or non-Windows | Learn says the hybrid control supports only Windows devices, so the policy may need a platform condition or another control |
 
-The last row is my inference from the supported-device list, not a statement on the page. Check the policy's conditions in your tenant.
+The direction column is my reading, and the last row is my inference from the supported-device list, not a statement on the page. Check the policy's conditions in your tenant.
 
 ## Step 3: Check the policy scope
 
@@ -89,7 +89,7 @@ This list is my suggestion, not a Microsoft procedure:
 
 ## What the pages leave open
 
-The error reference gives one line for this code. The pages I read do not describe how to join a device to Microsoft Entra hybrid, so this article does not either. See the Microsoft Entra hybrid join documentation for that.
+The error reference gives one line for this code. The sources used here do not describe how to join a device to Microsoft Entra hybrid, so this article does not either. See the Microsoft Entra hybrid join documentation for that.
 
 ## Related
 
