@@ -1,6 +1,6 @@
 ---
 title: "How to Set Up Fabric Activator Alerts That Trigger Actions on Data Changes"
-summary: "What Fabric Activator is and how a rule works: events, objects, properties, stateless and stateful rules, lookback, data sources, supported actions and the high-level creation flow, with the setup steps that the Learn introduction leaves to tutorials."
+summary: "What Fabric Activator is and how a rule works: events, objects, properties, stateless and stateful rules, lookback, data sources, supported actions and the high-level creation flow, and the setup steps that the Learn introduction does not give."
 status: review
 publish: false
 author: mirko-p
@@ -25,7 +25,7 @@ faq:
     a: "The page says Activator is scoped to Fabric capacities and deployed per workspace. Billing is pay-as-you-go and applies only when rules are actively running. It gives no figures."
 ---
 
-Fabric Activator watches data and does something when a condition is met: it sends a message, starts a flow or runs a Fabric item. This guide follows the Microsoft Learn introduction to Activator. The page explains concepts and sources. It does not give step-by-step setup. Those steps are in tutorials that were not read for this guide.
+Fabric Activator watches data and does something when a condition is met: it sends a message, starts a flow or runs a Fabric item. This guide follows the Microsoft Learn page What is Fabric Activator? The page explains concepts and sources. It does not give step-by-step setup and links no setup tutorial.
 
 ## What it is
 
@@ -69,11 +69,11 @@ The page does not give steps. From its concepts, a rule involves these parts, wh
 4. Review the preview, which estimates how often the rule would have fired on past data.
 5. Choose actions and activate the rule.
 
-Rules can also be created from an eventstream, from Fabric Maps and from Power BI report visuals. The page points to a tutorial on creating and activating a rule.
+Rules can also be created from an eventstream, from Fabric Maps and from Power BI report visuals. The page links Activator limitations, Latency in Activator and an article on alert rules for Data Warehouse SQL queries, but no tutorial on creating and activating a rule.
 
 ## Capacity and billing
 
-Activator instances are scoped to Fabric capacities and deployed per workspace. Billing is pay-as-you-go and applies only when rules are actively running. Capacity-related constraints are on a separate limitations page.
+Activator instances are scoped to Fabric capacities and deployed per workspace. Billing is pay-as-you-go and applies only when rules are actively running. Known constraints are on a separate Activator limitations page.
 
 ## What the page does not say
 
@@ -85,15 +85,15 @@ Activator instances are scoped to Fabric capacities and deployed per workspace. 
 
 ## A starting outline
 
-This outline is practical advice built on the page.
+This outline is my advice, built on the page.
 
 1. Pick one stream and one clear condition, such as a threshold.
 2. Choose the object identifier carefully, because rules are evaluated per object.
 3. Check the preview of how often the rule would fire before you activate it.
 4. Start with an email or Teams action, then move to flows and Fabric items.
-5. Read the linked tutorial and limitations pages before you rely on it.
+5. Read the linked limitations and latency pages before you rely on it, and look elsewhere for a setup tutorial.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Choosing a lookback shorter than the window the condition needs.
 - Forgetting that rules run per object instance.
@@ -113,7 +113,13 @@ This outline is practical advice built on the page.
 
 ## Stateless and stateful rules
 
-A stateless rule checks a single value against a condition, for example a value below 50. The page says these rules can react with subsecond latency on streaming data. A stateful rule looks at how values change over time, with conditions such as DECREASES, BECOMES and EXIT RANGE, or detects that a heartbeat is missing. Stateful rules use the lookback period, the window of past data that Activator needs to evaluate the rule.
+A stateless rule checks a single value against a condition, for example a value below 50. The page says these rules can react with subsecond latency on streaming data. A stateful rule looks at how values change over time, with conditions such as DECREASES, BECOMES and EXIT RANGE, or detects that a heartbeat is missing. Rules that analyze trends or aggregations use the lookback period, the window of past data that Activator needs to evaluate the rule. Stateful rules only fire on entry into a new state, which prevents repeated firings while a condition is unchanged.
+
+## More from the page
+
+- **Distinct, active object IDs.** Activator tracks active object IDs, meaning objects with events inside the lookback period. The number of distinct object IDs you track within the lookback window also sets limits. The page does not give the limits.
+- **Use cases.** The page lists examples such as notifying managers about malfunctioning freezers, rerunning failed jobs, and alerting account teams when customers fall into arrears.
+- **Orchestration.** The page describes patterns such as ingestion, detection and transformation with a pipeline, or detection and notification through Power Automate.
 
 ## Related
 
@@ -123,4 +129,4 @@ A stateless rule checks a single value against a condition, for example a value 
 
 ## Sources
 
-- [What is Fabric Activator (Microsoft Learn)](https://learn.microsoft.com/fabric/real-time-intelligence/data-activator/activator-introduction)
+- [What is Fabric Activator? (Microsoft Learn)](https://learn.microsoft.com/fabric/real-time-intelligence/data-activator/activator-introduction)
