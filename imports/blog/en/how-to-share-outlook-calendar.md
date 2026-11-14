@@ -14,9 +14,9 @@ keypoints:
   - "To stop sharing, open the sharing settings and select Remove next to the person, or use Unpublish for a published calendar."
 faq:
   - q: "What permission should I give when I share my Outlook calendar?"
-    a: "Give the least that does the job. Can view when I'm busy shows only free and busy times. Titles and locations adds what the meeting is called and where. All details shows everything except private items. Edit lets someone change your calendar, and Delegate adds the right to schedule and respond to meetings for you."
+    a: "Give the least that does the job. Can view when I'm busy shows only free and busy times. Titles and locations adds what the meeting is called and where. All details lets the person see the whole calendar but not change it. Edit lets someone change your calendar, and Delegate adds the right to schedule and respond to meetings for you."
   - q: "Can I share my Outlook calendar with someone outside my company?"
-    a: "Yes, with limits. Your admin has to allow external sharing in the Microsoft 365 admin center. Outside people can get only the view-only options, not Edit or Delegate. Someone without a Microsoft 365 or Outlook.com account can get an HTML or ICS link if you publish the calendar, and those links are read-only."
+    a: "Yes, with limits. Your admin has to allow external sharing in the Microsoft 365 admin center. Plan on view-only options for outside people, because the Microsoft pages cited here don't describe Edit or Delegate for them. Someone without a Microsoft 365 or Outlook.com account can get an HTML or ICS link if you publish the calendar, and those links are read-only."
   - q: "How do I stop sharing my Outlook calendar?"
     a: "In new Outlook, select Calendar, then Share calendar on the Home tab, and select Remove next to the person. Inside your organization, the calendar disappears from their list. Outside it, their copy stays but stops updating. For a published calendar, go to the shared calendars settings and select Unpublish."
 ---
@@ -24,7 +24,7 @@ To share your Outlook calendar, select Calendar, choose Share calendar on the Ho
 
 ## The five permission levels
 
-Before you click Share, decide how much the other person should see. Microsoft's article on [calendar sharing in Microsoft 365](https://support.microsoft.com/en-us/outlook/calendar-sharing-in-microsoft-365) lists the simplified levels in current Outlook clients.
+Before you click Share, decide how much the other person should see. Microsoft's article on [calendar sharing in Microsoft 365](https://support.microsoft.com/outlook/calendar-sharing-in-microsoft-365) lists the simplified levels in current Outlook clients.
 
 - **Can view when I'm busy.** Free and busy times only. No titles, no locations.
 - **Can view titles and locations.** Busy times plus the title and location of each item.
@@ -34,13 +34,13 @@ Before you click Share, decide how much the other person should see. Microsoft's
 
 There's also a **Custom** level for intermediate roles such as Author, Contributor or Publishing Editor. Per Microsoft, only an admin can set those, using the `Add-MailboxFolderPermission` or `Set-MailboxFolderPermission` cmdlets in Exchange Online PowerShell.
 
-Items you mark **Private** show only their time to most people. The exception is a delegate you allow to see private events.
+Items you mark **Private** are meant to hide their details. A delegate sees them only if you check **Let delegate view private events**. Test with a second account before you rely on it.
 
 My rule of thumb: start with Can view titles and locations for colleagues and with Can view when I'm busy for anyone outside your team. Move up only when someone asks and has a reason.
 
 ## How to share your calendar in new Outlook for Windows
 
-These steps are from Microsoft's page on [sharing a calendar as view-only](https://support.microsoft.com/en-us/outlook/sharing/share-an-outlook-calendar-as-view-only-with-others).
+These steps are from Microsoft's page on [sharing a calendar as view-only](https://support.microsoft.com/outlook/sharing/share-an-outlook-calendar-as-view-only-with-others).
 
 1. In the navigation pane, select **Calendar**.
 2. On the **Home** tab, select **Share calendar**. If you have more than one calendar, choose which one.
@@ -56,7 +56,7 @@ Microsoft also notes that adding someone else's calendar directly (Calendar, Add
 
 ## Outlook on the web
 
-Microsoft's page on [sharing your calendar in Outlook on the web](https://support.microsoft.com/en-us/outlook/share-your-calendar-in-outlook-on-the-web) gives these steps.
+Microsoft's page on [sharing your calendar in Outlook on the web](https://support.microsoft.com/outlook/share-your-calendar-in-outlook-on-the-web) gives these steps.
 
 1. Select the **Calendar** icon.
 2. On the toolbar, select **Share** and choose the calendar. You can only share calendars you own.
@@ -85,7 +85,7 @@ To open a calendar someone shared with you, tap the same gear, then **Add a shar
 
 ## Classic Outlook for Windows
 
-Classic Outlook has a **Share Calendar** command on the **Home** tab of the Calendar view. Microsoft's pages that I opened show the classic steps on a separate tab that I couldn't load, so check the Classic Outlook tab on the pages linked above if your ribbon looks different. The permission names are the same as in the list above, and the older labels map as Free/Busy, Free/Busy with subject and location, Reviewer and Editor.
+Classic Outlook has a **Share Calendar** command on the **Home** tab of the Calendar view. Microsoft's pages cited here keep the classic steps on a separate Classic Outlook tab, so check that tab on the pages linked above if your ribbon looks different.
 
 ## What the other person has to do
 
@@ -108,7 +108,7 @@ This is where people give too much.
 
 **Edit** means the person can view and change your calendar. Editors can be assigned to your main calendar or to calendars you created. **Delegate** means the same as edit plus the right to schedule and respond to meetings on your behalf, and delegates can only be assigned to your main calendar.
 
-Microsoft's page on [edit and delegate permissions](https://support.microsoft.com/en-us/outlook/sharing/share-and-access-a-calendar-with-edit-or-delegate-permissions-in-outlook) describes the steps in new Outlook:
+Microsoft's page on [edit and delegate permissions](https://support.microsoft.com/outlook/sharing/share-and-access-a-calendar-with-edit-or-delegate-permissions-in-outlook) describes the steps in new Outlook:
 
 1. In the navigation pane, select **Calendar**. On the **Home** tab, select **Share Calendar**.
 2. On the **Sharing and permissions** page, enter the person's name or email. You can add only one person at a time.
@@ -117,7 +117,7 @@ Microsoft's page on [edit and delegate permissions](https://support.microsoft.co
 5. Select **Share**.
 6. Under **Delegates**, next to **Send invitations and responses to**, choose one option: **Delegate only**, **Delegate and send me a copy**, or **Both my delegate and me**. Repeat this for each delegate.
 
-Requirements: delegate access needs a work or school account in Microsoft 365 or Exchange Online. And Microsoft recommends one delegate per calendar, because multiple delegates on one calendar aren't a goal of the design.
+Requirements: delegate access needs a work or school account in Microsoft 365 or Exchange Online. With several delegates, you set the invitation option under **Delegates** for each one.
 
 An executive's assistant is the textbook delegate case. A colleague who only needs your free and busy times doesn't need Edit, never mind Delegate.
 
@@ -125,10 +125,10 @@ An executive's assistant is the textbook delegate case. A colleague who only nee
 
 You can share with people outside your company, but with fewer options.
 
-- **Permission limits.** Microsoft says you can't give editor or delegate access to people outside your organization. Outside access is limited to the view-only options.
-- **Admin switch.** In the Microsoft 365 admin center, under Settings, Org Settings, Services, Calendar, an admin controls whether users can share with people outside the organization who have Office 365 or Exchange, and whether anyone can access calendars with an email invitation. For anonymous access, the admin picks how much shows: free/busy with time only, time with subject and location, or all appointment information. The details are in Microsoft's admin article on [sharing calendars with external users](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/share-calendars-with-external-users?view=o365-worldwide).
+- **Permission limits.** Plan on the view-only options for people outside your organization. The Microsoft pages cited here don't say whether editor or delegate access is possible for them, so test before you promise it.
+- **Admin switch.** In the Microsoft 365 admin center, under Settings, Org Settings, Services, Calendar, an admin controls whether users can share with people outside the organization who have Office 365 or Exchange, and whether anyone can access calendars with an email invitation. For anonymous access, the admin picks how much shows: free/busy with time only, time with subject and location, or all appointment information. The details are in Microsoft's admin article on [sharing calendars with external users](https://learn.microsoft.com/microsoft-365/admin/manage/share-calendars-with-external-users?view=o365-worldwide).
 - **Gmail and other providers.** On the web, people outside Outlook, such as Gmail users, can accept invitations only with a Microsoft 365 or Outlook.com account. Otherwise you can publish the calendar and send them an HTML link (view in a browser) or an ICS link (subscribe). Both are read-only.
-- **Publishing.** In the web app go to Settings, Shared calendars, and under Publish a calendar choose the calendar and the level of detail, then select Publish. To undo it, select Unpublish in the same place. In new Outlook for Windows the path is View, Calendar settings, Calendar, Shared calendars.
+- **Publishing.** In the web app go to Settings, Calendar, Shared calendars, and under Publish a calendar choose the calendar and the level of detail, then select Publish. To undo it, select Unpublish in the same place. Microsoft says HTML and ICS calendars are read-only. In new Outlook for Windows, look for the same Shared calendars section in the calendar settings.
 
 Treat a published link like a key that might get forwarded. You can't know who has it, so publish a separate calendar with only the details you want out in the open.
 
@@ -138,12 +138,12 @@ According to Microsoft's sharing article, sharing between Microsoft 365 users in
 
 ## Stopping a share
 
-In new Outlook, select **Calendar**, then **Share Calendar** on the Home tab. Pick the right calendar, and select **Remove** next to the person. You can't remove permissions from calendars owned by others. Inside your organization, the calendar is removed from their list, unless your default "My Organization" group still has access, in which case they keep it at that default level. Outside your organization, their copy stays but stops syncing and receiving updates. A published calendar goes away when you select Unpublish.
+In new Outlook, select **Calendar**, then **Share Calendar** on the Home tab. Pick the right calendar, and select **Remove** next to the person. Inside your organization, the calendar is removed from their list, unless your default "My Organization" group still has access, in which case they keep it at that default level. Outside your organization, their copy stays but stops syncing and receiving updates. A published calendar goes away when you select Unpublish.
 
 ## Fixing sharing problems
 
 1. **The invitation never arrived.** Ask the person to check junk and other folders, then remove them and share again.
-2. **Wrong detail level.** Open Sharing and permissions and change the level. Remember that private items show only their time.
+2. **Wrong detail level.** Open Sharing and permissions and change the level.
 3. **Missing events or slow updates.** Check the sync table above. Cross-tenant and Gmail updates are delayed by design.
 4. **Mac Calendar app.** Instant sync isn't supported for EWS-based clients, including the Mac OS X Calendar app, according to Microsoft.
 5. **External sharing is blocked.** Ask your admin. Sharing may be restricted by your organization's settings.
@@ -153,18 +153,29 @@ In new Outlook, select **Calendar**, then **Share Calendar** on the Home tab. Pi
 
 - **Giving Edit when View is enough.** Anyone with Edit can move or delete your meetings.
 - **Sharing your main calendar with clients.** Use a separate calendar for outside parties.
-- **Forgetting private items.** Mark sensitive entries Private before you share. Most people then only see the time.
+- **Forgetting private items.** Mark sensitive entries Private before you share, and test what a viewer sees.
 - **Expecting instant updates everywhere.** Cross-tenant and ICS links update on a delay.
-- **Adding several delegates.** Microsoft recommends one.
+- **Adding several delegates without care.** Each delegate needs the invitation option set under Delegates.
 - **Not reviewing shares.** People change jobs. Look at the list every few months and remove anyone who no longer needs it.
 
 ## Related topics to explore
 
 - **Delegate setup for assistants.** The delegate options, including who gets meeting responses, deserve their own walkthrough.
 - **External sharing controls.** Admins in [Exchange Online](https://www.m365.fm/entity/exchange-online/) decide what outsiders can see.
-- **Shared mailbox and resource calendars.** Microsoft says any shareable calendar is eligible, including shared mailbox and resource mailbox calendars.
+- **Shared mailbox and resource calendars.** Ask your admin how these calendars are shared in your organization.
 - **Using the calendar on the web.** The [Outlook on the web](https://www.m365.fm/entity/outlook-web/) menus are the ones Microsoft's admin article points users to.
 
 ## Next step
 
 Open your calendar's sharing settings today and read the list of people who can see it. Remove anyone who doesn't need access and lower any permission that is higher than the job requires. Then you know how to share your Outlook calendar with confidence, and what each person can actually do with it.
+
+## Sources
+
+- [Calendar sharing in Microsoft 365 (Microsoft Support)](https://support.microsoft.com/outlook/calendar-sharing-in-microsoft-365)
+- [Share an Outlook calendar as view-only with others (Microsoft Support)](https://support.microsoft.com/outlook/sharing/share-an-outlook-calendar-as-view-only-with-others)
+- [Share your calendar in Outlook on the web (Microsoft Support)](https://support.microsoft.com/outlook/share-your-calendar-in-outlook-on-the-web)
+- [Share your calendar in Outlook.com (Microsoft Support)](https://support.microsoft.com/outlook/share-your-calendar-in-outlook-com)
+- [Share and access a calendar with edit or delegate permissions in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/sharing/share-and-access-a-calendar-with-edit-or-delegate-permissions-in-outlook)
+- [Delegation and shared calendars in Outlook for Mac (Microsoft Support)](https://support.microsoft.com/outlook/delegation-and-shared-calendars-in-outlook-for-mac)
+- [Calendar sharing in Outlook mobile (Microsoft Support)](https://support.microsoft.com/office/calendar-sharing-in-outlook-mobile-e6c3563d-8dfb-4de3-bff8-c630d4a265ec)
+- [Share calendars with external users (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/manage/share-calendars-with-external-users)
