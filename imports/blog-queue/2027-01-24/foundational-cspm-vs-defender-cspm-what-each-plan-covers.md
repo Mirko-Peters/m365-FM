@@ -68,7 +68,7 @@ CSPM provides continuous visibility into the security state of cloud assets and 
 | Risk prioritization | No | Yes |
 | Serverless protection | No | Yes |
 
-The AWS and GCP tables are close to this list. Differences noted on the page: AWS adds AWS CloudTrail ingestion (preview) and has no API security posture or AKS dashboard row, and GCP lists sensitive data discovery with the footnote that it only supports Cloud Storage.
+The AWS and GCP tables are close to this list. Differences in the page's tables: AWS adds AWS CloudTrail ingestion (preview) and has no API security posture or AKS dashboard row. The GCP table has no rows for API security posture, the AKS dashboard, serverless container posture or serverless protection, and lists sensitive data discovery with the footnote that it only supports Cloud Storage.
 
 ## Where the plans apply
 
