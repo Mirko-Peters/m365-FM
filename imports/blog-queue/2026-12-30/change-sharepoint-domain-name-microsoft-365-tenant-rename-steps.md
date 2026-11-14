@@ -25,7 +25,7 @@ faq:
     a: "Microsoft creates a redirect from the old address that expires one year after the rename."
 ---
 
-Changing the SharePoint domain name changes the domain in SharePoint and OneDrive URLs. A tenant's first onmicrosoft.com domain is permanent unless renamed this way. This guide follows the Microsoft Learn article on changing your SharePoint domain name. Email addresses are not affected.
+Changing the SharePoint domain name changes the domain in SharePoint and OneDrive URLs. Even if you add a custom domain, SharePoint and OneDrive URLs keep the original onmicrosoft.com name until you rename them this way. This guide follows the Microsoft Learn article on changing your SharePoint domain name. Email addresses are not affected.
 
 ## Eligibility
 
@@ -74,11 +74,11 @@ This section is a suggestion, not Microsoft guidance. Announce the window to use
 
 ## Details worth knowing
 
-Status times in the monitoring output are shown in UTC, formatted to the local convention. Sites that cannot be renamed appear under Attention Required, and the state of each site can be Success, Failed or Suspended. Processing 4,000 prioritized sites can take about 4 to 6 hours, so Learn suggests batching. Prioritization does not guarantee a site finishes first. The page also notes that its Get-SPOSiteRenameState code block is malformed in the source, so use the working command from its example.
+Status times in the monitoring output are shown in UTC, formatted to the local convention. Sites that cannot be renamed appear under Attention Required, and the state of each site can be Success, Failed or Suspended. Running the prioritization cmdlet from a CSV with all 4,000 sites can take about 4 to 6 hours, so Learn suggests splitting the list into batches. Prioritization does not guarantee a site finishes first. To list failed sites the page shows `Get-SPOSiteRenameState -ParentOperationID <RenameJobID> -State Failed | Export-Csv -Path <Path>`.
 
 ## Not covered
 
-The page gives no exact duration formula, no rollback once the rename has begun, no Advanced Tenant Rename license counts and no detail on shared or external sharing links that use the old domain.
+The page gives no exact duration formula, no rollback once the rename has begun, no detail on shared or external sharing links that use the old domain.
 
 ## Related
 
@@ -86,4 +86,4 @@ The page gives no exact duration formula, no rollback once the rename has begun,
 
 ## Sources
 
-- [Change your SharePoint domain name](https://learn.microsoft.com/sharepoint/change-your-sharepoint-domain-name)
+- [Change your SharePoint domain name (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-your-sharepoint-domain-name)
