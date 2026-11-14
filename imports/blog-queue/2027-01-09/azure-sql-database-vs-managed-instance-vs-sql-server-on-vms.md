@@ -10,22 +10,22 @@ keypoints:
   - "Azure SQL Database and Managed Instance are PaaS. SQL Server on Azure VMs is IaaS with full OS access and 100 percent SQL Server compatibility."
   - "Managed Instance offers almost 100 percent feature parity with the latest SQL Server and is described as the best fit for most migrations."
   - "Learn lists maximum sizes of up to 128 TB for SQL Database, 16 TB for Managed Instance and 256 TB for SQL Server on Azure VMs."
-  - "CLR is not supported in SQL Database. It is supported in Managed Instance and on VMs."
+  - "CLR is not supported in SQL Database but is supported in Managed Instance. The page does not name CLR for VMs, which give full engine control."
   - "PaaS options handle backups, patching and recovery. On VMs you implement high availability yourself. The page gives no prices except a Basic tier from 5 dollars per month."
 faq:
   - q: "What is the difference between PaaS and IaaS here?"
     a: "Azure SQL Database and Managed Instance are PaaS with built-in backups, patching and recovery. SQL Server on Azure VMs is IaaS, where you manage the operating system and SQL Server."
   - q: "Which option fits most migrations?"
-    a: "Microsoft Learn describes Managed Instance as the best for most migrations to the cloud, because it has almost 100 percent compatibility with the latest SQL Server."
+    a: "Microsoft Learn describes Managed Instance as best for most migrations to the cloud, and says it has almost 100 percent feature parity with the SQL Server database engine."
   - q: "Which option supports CLR?"
-    a: "Managed Instance and SQL Server on Azure VMs support CLR. Azure SQL Database does not."
+    a: "Learn says CLR is not supported with Azure SQL Database but is supported in Managed Instance. The page does not name CLR for SQL Server on Azure VMs, although it describes full control over the database engine there."
   - q: "What are the maximum database sizes?"
     a: "The page lists up to 128 TB for Azure SQL Database, up to 16 TB for Managed Instance and up to 256 TB for SQL Server on Azure VMs."
   - q: "Does the page give prices?"
     a: "Only that the Basic tier of Azure SQL Database starts from 5 dollars per month. It gives no prices for Managed Instance or VMs and no numeric SLA values."
 ---
 
-Azure offers three ways to run SQL Server workloads: Azure SQL Database, Azure SQL Managed Instance and SQL Server on Azure Virtual Machines. The choice depends on how much compatibility and control you need and how much administration you want to hand to Microsoft. This guide follows the Microsoft Learn comparison page for these options.
+Azure offers three ways to run SQL Server workloads: Azure SQL Database, Azure SQL Managed Instance and SQL Server on Azure Virtual Machines. The choice depends on how much compatibility and control you need and how much administration you want to hand to Microsoft. This guide follows the Microsoft Learn page What Is Azure SQL?, which includes a comparison of these options.
 
 ## The three options
 
@@ -40,7 +40,7 @@ Azure offers three ways to run SQL Server workloads: Azure SQL Database, Azure S
 | Model | PaaS | PaaS | IaaS |
 | Compatibility | Latest stable features | Almost 100 percent | 100 percent |
 | Maximum size | Up to 128 TB | Up to 16 TB | Up to 256 TB |
-| CLR | Not supported | Supported | Supported |
+| CLR | Not supported | Supported | Not named on the page |
 | Private IP | Through Private Link | In the virtual network | In the virtual network |
 | OS access | No | No | Yes |
 
@@ -61,7 +61,7 @@ The page says the Basic tier of Azure SQL Database starts from 5 dollars per mon
 - Hyperscale. It is missing from the size table.
 - Numeric SLA values.
 - Prices for Managed Instance and VMs.
-- A clear version-control row. The wording in that row is hard to read.
+- Version details beyond the note that SQL Database and Managed Instance reach SQL Server version compatibility only through database compatibility levels.
 - A migration guide. Use the migration pages for that.
 
 ## A decision outline
@@ -76,7 +76,7 @@ This outline is practical advice built on the page.
 
 ## Typical mistakes
 
-- Choosing SQL Database for an application that needs CLR.
+- Choosing SQL Database for an application that needs CLR, which the page says it does not support.
 - Choosing VMs for the PaaS savings in administration, which you do not get.
 - Assuming a size limit from memory instead of from the page.
 - Comparing cost without prices for all three options.
@@ -96,9 +96,9 @@ The page frames the choice around a few questions. The answers below restate its
 | Backups, patching, recovery | Built in | You manage them |
 | Maintenance windows | Configurable | Not described on the page |
 | High availability | Built in, with zone redundancy | You implement it |
-| Resizing | Not described as downtime | Downtime when resizing |
+| Changing CPU and storage | Listed as an online change | The page notes downtime while changing resources |
 
-The last row is cautious on purpose. The page names downtime only for VM resizing.
+The last row follows the comparison table, which lists online change of resources for SQL Database and Managed Instance and downtime for VMs.
 
 ## Related
 
@@ -109,4 +109,4 @@ The last row is cautious on purpose. The page names downtime only for VM resizin
 
 ## Sources
 
-- [Compare Azure SQL options: IaaS and PaaS (Microsoft Learn)](https://learn.microsoft.com/azure/azure-sql/azure-sql-iaas-vs-paas-what-is-overview)
+- [What Is Azure SQL? (Microsoft Learn)](https://learn.microsoft.com/azure/azure-sql/azure-sql-iaas-vs-paas-what-is-overview)
