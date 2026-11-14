@@ -25,7 +25,7 @@ faq:
     a: "Handle the error by starting an interactive sign-in, and for single-page apps be ready to rerun the authorization code flow every 24 hours. Learn also says the platform does not revoke old refresh tokens when they fetch new access tokens, so securely delete the old one after getting a new one."
 ---
 
-AADSTS700082 is one of the few Microsoft Entra errors that the reference calls normal. The text says the refresh token has expired due to inactivity, and the page describes it as an expected part of the token lifecycle. That does not make it painless, since a flow, a mobile app or a script stops until someone signs in again. This article explains what the error says, what lifetimes Learn gives, and what each role can do.
+AADSTS700082 is an error that the reference describes as normal. The text says the refresh token has expired due to inactivity, and the page describes it as an expected part of the token lifecycle. That does not make it painless, since a flow or app that depends on the token needs a new interactive sign-in. This article explains what the error says, what lifetimes Learn gives, and what each role can do.
 
 ## What the reference says
 
@@ -33,7 +33,7 @@ The row for AADSTS700082 (ExpiredOrRevokedGrantInactiveToken) reads: the refresh
 
 A similar message appears in a Power Automate context on Learn:
 
-> The refresh token has expired due to inactivity. The token was issued on a date and was inactive for 90.00:00:00.
+> The refresh token has expired due to inactivity. The token was issued on `<DateTime>` and was inactive for 90.00:00:00.
 
 The same page says the SharePoint connector needs to be used at least once every 90 days to stay active, and for this case the fix is to create a new connection or reauthorize the existing one.
 
@@ -59,7 +59,7 @@ For single-page apps, a refresh token sent to a redirect URI registered as `spa`
 
 ## Expiration and revocation
 
-Refresh tokens expire when the lifetime elapses. The sign-in service can also revoke them at any time before that. The page says your app should handle this gracefully by redirecting the user to an interactive sign-in to reauthenticate and get a new token. The page does not state a general inactivity period beyond the lifetimes above, so use the message text, which gives the period for your case.
+Refresh tokens expire when the lifetime elapses. The sign-in service can also revoke them at any time before that. The page says your app should handle this gracefully by redirecting the user to an interactive sign-in to reauthenticate and get a new token. The page does not state a general inactivity period beyond the lifetimes above, so my suggestion is to use the message text, which gives the period for your case.
 
 Learn's revocation table (for public clients, with confidential client tokens in the last column) shows, among others:
 
@@ -70,17 +70,17 @@ Learn's revocation table (for public clients, with confidential client tokens in
 | User does SSPR | Password-based cookie and token revoked |
 | User revokes their refresh tokens | All revoked |
 | Admin revokes all refresh tokens for a user | All revoked |
-| Single sign-out | Cookie tokens revoked, password-based and non-password-based tokens stay alive for those columns shown as such |
+| Single sign-out | Both cookie types revoked. Password-based and non-password-based tokens and the confidential client token stay alive |
 
-The page also notes that refresh tokens are not revoked for B2B users in their resource tenant, and need to be revoked in the home tenant. I summarized the table, so open the page for each client type.
+The page also notes that refresh tokens are not revoked for B2B users in their resource tenant, and need to be revoked in the home tenant. The table above is a summary; the page shows every row and column.
 
 ## What to do, by role
 
 **End user or flow owner.** Sign in again. For a Power Automate connection, create a new connection or reauthorize the existing one.
 
-**Administrator.**
+**Administrator** (my suggestions, not from the pages).
 
-- Confirm from the message that the token was inactive for the stated period. If so, nothing is broken in the tenant. It is the lifecycle at work.
+- Confirm from the message that the token was inactive for the stated period. If so, that matches the reference's description of an expected part of the token lifecycle.
 - If the same flow or app fails often, check how often it runs relative to the lifetime above.
 - If users report the error right after a change, compare with the revocation table (password change, SSPR or revocation).
 
@@ -107,6 +107,6 @@ This is my suggestion, not guidance from the page:
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Refresh tokens in the Microsoft identity platform (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/refresh-tokens)
 - [Resolve Power Automate Broken Connections (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/power-platform/power-automate/connections/troubleshoot-broken-connections)
