@@ -76,9 +76,9 @@ Roles do not replace licensing. Learn states:
 
 Viewers need Build permission on a semantic model to use Analyze in Excel or export underlying data. Learn also recommends the Viewer role when you want row-level security to apply to people who browse workspace content. RLS can also be enforced without workspace access, by publishing an app or by sharing.
 
-## How to choose a role
+## How to choose a role (my advice)
 
-Use this as a decision aid based on the documented capabilities:
+This is my own decision aid, based on the documented capabilities, not a Microsoft recommendation:
 
 1. **Report consumers:** Viewer. Add Build permission only if they must analyze in Excel.
 2. **Report authors:** Contributor. They can edit content but cannot manage the app or its audience.
@@ -94,7 +94,7 @@ Prefer groups over individual assignments so that access changes happen in one p
 - **Disabling a user in Microsoft Entra ID does not remove workspace access records.** The user cannot reach items while disabled, but the records remain until the user is permanently deleted.
 - **A Pro user can be a member of at most 1,000 workspaces.**
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Giving Contributor to people who need to publish the app. They need Member.
 - Expecting Viewers to export data. Without Build permission they cannot.
