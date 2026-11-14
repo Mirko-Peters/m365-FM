@@ -67,7 +67,7 @@ A connector is a wrapper around an API. A connection is a stored credential for 
 
 1. In Power Apps or Power Automate select **Solutions** and open a solution.
 2. Select **New** > **More** > **Connection Reference**.
-3. Enter a **Display name**, an optional description, the **Connector** and the **Connection**.
+3. Enter a **Display name**, a description, the **Connector** and the **Connection**.
 4. Select **Create**.
 
 References are also created by importing a solution, or implicitly when you build solution-aware flows or apps. Learn recommends renaming the default name to explain its purpose.
@@ -76,7 +76,7 @@ References are also created by importing a solution, or implicitly when you buil
 
 **On import:** a connection is provided for all connection references so that referencing flows can turn on automatically after import. The page does not describe the exact prompt.
 
-**Update or upgrade:** to change a connection, edit the reference in the solution. To upgrade an existing flow, export as unmanaged and import, then use the flow checker action that removes connections so references can be added. For a canvas app, remove the connection and add one with a connection reference.
+**Update or upgrade:** to change a connection, edit the reference in the solution. To upgrade an existing flow, Learn gives two ways: export it in an unmanaged solution and import it, which replaces the connections with connection references, or use the flow checker action that removes connections so references can be added. For a canvas app, remove the connection and add one with a connection reference.
 
 ## Permissions and known issues
 
@@ -96,16 +96,16 @@ Learn advises against environment variables for shared connections such as SQL b
 
 Formula or expression syntax for reading a variable, Key Vault setup steps, a definition of connection reference columns, programmatic creation, and step-by-step recovery after a copy environment.
 
-## A solution checklist
+## A solution checklist (my advice)
 
-This list is practical advice.
+This list is my own advice.
 
 1. Put every environment-specific value into a variable with a sensible default.
 2. Give connection references descriptive names.
 3. Supply values and connections during import through the import experience or a deployment settings file.
 4. Test that flows turn on in the target environment.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting a value change to reach apps instantly.
 - Putting a shared SQL connection in an environment variable.
@@ -122,4 +122,4 @@ This list is practical advice.
 ## Sources
 
 - [Use environment variables in Power Platform solutions (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/environmentvariables)
-- [Use a connection reference in a solution (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/create-connection-reference)
+- [Use a connection reference in a solution with Microsoft Dataverse (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/data-platform/create-connection-reference)
