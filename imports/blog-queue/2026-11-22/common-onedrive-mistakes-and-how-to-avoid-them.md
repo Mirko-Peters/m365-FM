@@ -39,13 +39,13 @@ Microsoft Support lists these limits:
 
 The full path counts every character, including the sync folder name such as `OneDrive - Organization Name`. A file can be fine in the browser and fail on the PC. Office also creates temporary lock files by adding characters, so a path near 260 can fail on save.
 
-**Avoid it:** shorten names, reduce nesting, rename on the OneDrive website and let it sync, or move files closer to the root. For long-path files, use Files On-Demand and open them in the browser. The article says the Windows long path policy does not help File Explorer or Office desktop apps. The error "The action can't be completed" can indicate a too-long path.
+**Avoid it:** shorten names, reduce nesting, rename on the OneDrive website and let it sync, or move files closer to the root. If a path is too long to handle in File Explorer, Microsoft says to rename or move the item on the OneDrive or SharePoint website, and it syncs normally once the path is short enough. The article says the Windows long path policy does not help File Explorer or Office desktop apps. The error "The action can't be completed" can indicate a too-long path.
 
 ## Mistake 2: Names and file types that don't sync
 
 Microsoft Support says names can't contain `" * : < > ? / \ |` and can't start or end with a space. Reserved names include `.lock`, `CON`, `PRN`, `AUX`, `NUL`, `COM0` to `COM9`, `LPT0` to `LPT9`, `_vti_` and `desktop.ini`. Names starting with `~$` are blocked. Temporary TMP files don't sync, and admins can block file types. Outlook PST files are supported but sync less often.
 
-**Avoid it:** rename before you move files in. Check the sync icon in the system tray to see which files fail.
+**Avoid it:** rename before you move files in.
 
 ## Mistake 3: Syncing too much
 
@@ -74,7 +74,7 @@ Known Folder Move redirects Desktop, Documents and Pictures to OneDrive. Learn a
 
 Microsoft Support says personal accounts can restore items deleted within the last 30 days. Work or school accounts can restore items deleted within 93 days unless the administrator changed it. Permanently deleted items can't be restored. Microsoft 365 subscribers can also restore the entire OneDrive to any point in the last 30 days.
 
-**Avoid it:** restore from **Recycle bin** on the OneDrive website: select the items and choose **Restore**. Do not wait.
+**Avoid it:** use the **Recycle bin** on the OneDrive website and do not wait, because the retention windows above are fixed unless your admin changed them.
 
 ## Mistake 7 (admins): Leaving the sync app half configured
 
