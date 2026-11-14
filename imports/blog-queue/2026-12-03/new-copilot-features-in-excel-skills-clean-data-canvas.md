@@ -20,7 +20,7 @@ faq:
   - q: "Is Copilot in Excel available on the web, Mac and mobile?"
     a: "Microsoft Support says all three modes work on Windows, Mac and the web. On iPad, chat and plan work and edit mode is rolling out. On iPhone, chat only works with edit mode rolling out. On Android, only chat is available."
   - q: "Do these features cost extra?"
-    a: "The Excel blog post does not mention licensing or pricing. Microsoft Support says Copilot must be included in your Microsoft 365 subscription and enabled by your organization, and that it might not be included in every subscription."
+    a: "The Excel blog post does not mention licensing or pricing. Microsoft Support says that if you do not see Copilot, it may not be included in your Microsoft 365 subscription or may be restricted by your organization's settings."
   - q: "How is this different from the how-to guide for Copilot in Excel?"
     a: "A how-to guide covers opening Copilot, the modes and basic prompts. This article covers the newer skill-based features that Microsoft listed in autumn 2026, and the stage each is in, which can change from month to month."
 ---
@@ -34,9 +34,9 @@ Microsoft Support describes the starting point. Select the Copilot icon in the l
 - **Plan**: Copilot proposes an approach for you to review and confirm before it acts.
 - **Chat only**: Copilot analyzes data and gives insights without changing the workbook.
 
-All three modes work on Windows, Mac and the web. iPad supports chat and plan, with edit mode rolling out. iPhone supports chat only, with edit mode rolling out. Android supports chat only. Copilot has to be part of your Microsoft 365 subscription and enabled by your organization.
+All three modes work on Windows, Mac and the web. iPad supports chat and plan, with edit mode rolling out. iPhone supports chat only, with edit mode rolling out. Android supports chat only. Microsoft Support says that if you do not see Copilot, it may not be included in your Microsoft 365 subscription or may be restricted by your organization's settings.
 
-[Copilot](https://www.m365.fm/entity/copilot/) uses Excel's built-in features, so the content stays editable, and you can stop it at any time with the Stop button. Support also lists importing data from other workbooks, web search with citations, and custom skills, which you can also record by demonstrating a task.
+With [Copilot](https://www.m365.fm/entity/copilot/) you can halt it at any time with the Stop button on the right side of the chat input field. Support also lists importing data from other workbooks, web search with citations, and custom skills, which you can also record by demonstrating a task.
 
 ## New features in October 2026
 
@@ -60,7 +60,7 @@ Skills are reusable procedures. The skill builder creates one from your instruct
 
 ## Get data skill
 
-The get data skill connects to data based on your description and loads the result with [Power Query](https://www.m365.fm/entity/power-query/). The resulting query can be inspected, edited and refreshed, which keeps the import auditable. The Excel blog lists it for Excel for the web only and says authentication may be required, depending on the data source.
+The get data skill connects to data based on your description and loads the result with [Power Query](https://www.m365.fm/entity/power-query/). The resulting query can be inspected, edited and refreshed. The Excel blog lists it for Excel for the web only and says authentication may be required, depending on the data source.
 
 ## Interactive canvas
 
@@ -68,7 +68,7 @@ The canvas transforms workbook data into dynamic content such as executive revie
 
 ## Accounting skills
 
-The Copilot update post lists accounting skills for reconciliations, journal entries and financial analysis, with reversible changes. It lists Frontier in October and worldwide in November. Frontier is an early-access program that an admin enables per tenant, and Microsoft Learn says Frontier features are preview and can change.
+The Copilot update post lists accounting skills for reconciliations, journal entries and financial analysis, with reversible changes. It lists Frontier in October and worldwide in November. Microsoft Learn describes Frontier as preview access that IT admins manage at the tenant level, with No access as the default, and says Frontier features are preview and subject to change.
 
 ## How to check what you have
 
@@ -87,7 +87,7 @@ The Copilot update post lists accounting skills for reconciliations, journal ent
 
 ## What the Microsoft pages do not say
 
-The Excel blog post gives no licensing or pricing for any Copilot item. It also does not say whether the new models mentioned in the post are available in Excel. I could not read the full text of the Excel blog posts on Agent Mode in Excel and on App Skills, so this article does not describe them.
+The Excel blog post gives no licensing or pricing for any Copilot item. I could not read the full text of the Excel blog posts on Agent Mode in Excel and on App Skills, so this article does not describe them.
 
 ## Related
 
