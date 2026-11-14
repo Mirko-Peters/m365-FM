@@ -11,7 +11,7 @@ keypoints:
   - "Definitions, versions and assignments not exported before January 31, 2027 are automatically and permanently deleted. Resources created through blueprints remain."
   - "Learn recommends Deployment Stacks for deployment, lifecycle management and deny-assignment locking, and Template Specs for storing and versioning templates."
   - "Blueprint locks stop functioning at retirement. Deny settings on a deployment stack are described as similar to blueprint locks, not identical."
-  - "The pages do not describe the export commands or cutover and rollback guidance, and the retirement page is inconsistent about CLI and PowerShell timing."
+  - "The pages read here do not give the export commands themselves, and they offer no cutover or rollback guidance beyond the migration steps."
 faq:
   - q: "When is Azure Blueprints retired?"
     a: "According to Microsoft Learn, January 31, 2027, with a phased retirement that began July 31, 2026. It was originally announced on September 14, 2023 with a retirement date of July 11, 2026, which was extended."
@@ -38,7 +38,7 @@ The retirement was announced on September 14, 2023 for July 11, 2026. The date w
 | December 31, 2026 | Existing assignments can no longer be modified |
 | January 31, 2027 | Azure Blueprints is retired. The API stops responding, CLI and PowerShell commands stop working and Blueprints is removed from the portal. |
 
-The retirement page also uses relative phase labels it does not define against dates, and one row mentions CLI and PowerShell commands being postponed to April or May 2027. That conflicts with the January 31, 2027 row, so confirm the current wording before you plan around it.
+The retirement page also has a table of what stays available in each of four phases. At the time of this check, the first two phases (July 31 and October 31, 2026) have already taken effect. In the final phase the portal entry is removed, the API no longer responds, and Azure CLI and Azure PowerShell commands stop functioning.
 
 ## Impact
 
@@ -49,8 +49,8 @@ The retirement page also uses relative phase labels it does not define against d
 
 ## What to do
 
-1. **Find usage.** Azure Advisor flags subscriptions and management groups that use Blueprints, or check the Azure Blueprints blade in the portal.
-2. **Export what you want to keep** before January 31, 2027. The retirement page stresses this and points to the migration guides for the procedure.
+1. **Find usage.** The retirement page names three ways. The View Impacted Blueprints Resources page lists impact by subscription, so definitions saved at a management group that are not assigned to a subscription do not appear there. The Azure Blueprints portal also lists definitions saved at a management group. Azure Advisor also shows impacted resources.
+2. **Export what you want to keep** before January 31, 2027. The retirement page stresses this and sends you to the Azure Blueprints portal to find and export. The deployment stacks page links to its export instructions.
 3. **Migrate.** Use Deployment Stacks for deployment, lifecycle management and deny-assignment locking. Use Template Specs, or a Git repository, for storing and versioning templates. In most migrations you store the template as a template spec, then deploy and govern it with a deployment stack.
 
 ## Migration steps
@@ -75,7 +75,7 @@ Template specs are not required to use deployment stacks. The page includes a su
 
 ## What blueprints were
 
-Learn describes blueprints as a declarative way to orchestrate deployments of resource templates and other artifacts, including role assignments, policy assignments, ARM templates and resource groups. A blueprint packages these artifacts, can be versioned and is assigned to a subscription in a single auditable operation. That packaging role is why the page maps storage and versioning to template specs and deployment to deployment stacks.
+Learn describes blueprints as a declarative way to orchestrate deployments of resource templates and other artifacts, including role assignments, policy assignments, ARM templates and resource groups. A blueprint packages these artifacts, can be versioned and is assigned to a subscription in a single auditable operation. That combined role is why the retirement page assigns storage and versioning to template specs and deployment, lifecycle and locking to deployment stacks.
 
 ## A caution about generated migrations
 
@@ -93,6 +93,6 @@ The pages do not give export commands, step-by-step conversion for each artifact
 
 ## Sources
 
-- [Overview of Azure Blueprints](https://learn.microsoft.com/azure/governance/blueprints/overview)
-- [Azure Blueprints retirement](https://learn.microsoft.com/azure/governance/blueprints/blueprint-retirement)
-- [Migrate Azure Blueprints to deployment stacks](https://learn.microsoft.com/azure/azure-resource-manager/bicep/migrate-blueprint)
+- [Overview of Azure Blueprints (Microsoft Learn)](https://learn.microsoft.com/azure/governance/blueprints/overview)
+- [Azure Blueprints retirement (Microsoft Learn)](https://learn.microsoft.com/azure/governance/blueprints/blueprint-retirement)
+- [Migrate blueprints to deployment stacks (Microsoft Learn)](https://learn.microsoft.com/azure/azure-resource-manager/bicep/migrate-blueprint)
