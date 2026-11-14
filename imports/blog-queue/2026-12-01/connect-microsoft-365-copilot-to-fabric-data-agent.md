@@ -32,7 +32,7 @@ To get Power BI and Fabric data into Microsoft 365 Copilot, you can use one of t
 | | Power BI data answering in Copilot Chat | Fabric data agent published to the Agent Store |
 |---|---|---|
 | What it uses | Power BI reports and their semantic models | Up to five sources you pick, such as lakehouses, warehouses, semantic models, KQL databases |
-| Who sets it up | Admins turn on tenant settings | A Fabric user creates, tests and publishes the agent |
+| Who sets it up | Admins check tenant settings, which the Fabric IQ page says are enabled by default | A Fabric user creates, tests and publishes the agent |
 | License named by Learn | Microsoft 365 Copilot Premium for every user | A paid F2 or higher capacity, plus a Copilot or Office 365 commercial license and a user license for each person |
 | Status stated by Learn | Generally available | Described on a separate Learn page with a data-handling warning |
 
@@ -40,7 +40,7 @@ Learn states that data answering from Power BI content in Copilot Chat is genera
 
 ## Route 1: Power BI data answering (admin setup)
 
-Learn gives these admin steps:
+The "Use Power BI data in Microsoft Copilot" page gives these admin steps. The license, general availability and unsupported-content statements in this article come from the Fabric IQ page instead, because the Power BI page has no license section.
 
 1. In the Microsoft 365 admin center, select **Copilot** > **Settings**, then **View all**.
 2. Select **Fabric data in Microsoft Copilot**.
@@ -103,8 +103,8 @@ From the Copilot page: responses might be sent outside Fabric's compliance bound
 
 ## Sources
 
-- [Microsoft Learn: Consume a Fabric data agent in Microsoft 365 Copilot](https://learn.microsoft.com/fabric/data-science/data-agent-microsoft-365-copilot)
-- [Microsoft Learn: Fabric data agent concept](https://learn.microsoft.com/fabric/data-science/concept-data-agent)
+- [Microsoft Learn: Consume a Fabric data agent in Microsoft 365 Copilot](https://learn.microsoft.com/en-us/fabric/data-science/data-agent-microsoft-365-copilot)
+- [Microsoft Learn: Fabric data agent concept](https://learn.microsoft.com/en-us/fabric/data-science/concept-data-agent)
 - [Microsoft Learn: Create a Fabric data agent](https://learn.microsoft.com/en-us/fabric/data-science/how-to-create-data-agent)
 - [Microsoft Learn: Use Power BI data in Microsoft Copilot](https://learn.microsoft.com/en-us/microsoft-365/copilot/copilot-powerbi-copilot-chat)
 - [Microsoft Learn: Fabric IQ in Microsoft 365 Copilot Chat](https://learn.microsoft.com/en-us/fabric/iq/connectors/microsoft-365-copilot-overview)
