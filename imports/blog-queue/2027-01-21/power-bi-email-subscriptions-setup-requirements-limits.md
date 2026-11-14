@@ -70,7 +70,7 @@ Learn adds that the Microsoft 365 distribution group for Teams does not work for
 
 ## External recipients
 
-This is where many subscriptions fail silently. Learn states that external recipients are supported only for workspaces backed by a paid, non-PPU capacity:
+This is a point where delivery can be suppressed. Learn states that external recipients are supported only for workspaces backed by a paid, non-PPU capacity:
 
 - Trial capacity workspaces cannot send to external addresses.
 - PPU workspaces do not support external recipients.
