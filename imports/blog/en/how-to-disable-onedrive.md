@@ -32,7 +32,7 @@ To disable OneDrive on a Windows PC, click the OneDrive cloud icon in the notifi
 - **I want it gone from File Explorer.** Unlink, then hide the folder, or uninstall the app.
 - **I manage many PCs and want it off for everyone.** Use the policy described at the end.
 
-Microsoft's own page [Turn off, disable, or uninstall OneDrive](https://support.microsoft.com/en-us/onedrive/turn-off-disable-or-uninstall-onedrive) says the same thing about the easiest way: unlink the computer. You don't lose files or data, and you can still reach them at OneDrive.com.
+Microsoft's own page [Turn off, disable, or uninstall OneDrive](https://support.microsoft.com/onedrive/turn-off-disable-or-uninstall-onedrive) says the same thing about the easiest way: unlink the computer. You don't lose files or data, and you can still reach them at OneDrive.com.
 
 ## Pause syncing for a few hours
 
@@ -62,7 +62,7 @@ Microsoft lists three situations in which stopping can fail:
 - **OneNote notebooks.** Stopping backup fails because notebooks live in the cloud and can't be moved to your computer.
 - **Open files.** Save and close them, then try again.
 
-If you want everything back on the PC, choose **only on my PC**, make sure the files finish moving, and only then unlink. Microsoft's page [Back up your folders with OneDrive](https://support.microsoft.com/en-us/office/back-up-your-folders-with-onedrive-d61a7930-a6fb-4b95-b28a-6552e77c3057) has the full list of limits.
+If you want everything back on the PC, choose **only on my PC**, make sure the files finish moving, and only then unlink. Microsoft's page [Back up your folders with OneDrive](https://support.microsoft.com/office/back-up-your-folders-with-onedrive-d61a7930-a6fb-4b95-b28a-6552e77c3057) has the full list of limits.
 
 ## Unlink this PC
 
@@ -88,7 +88,7 @@ Sometimes "disable OneDrive" really means "stop copying my 80 GB photo folder on
 3. Select **Choose folders**.
 4. Clear the checkbox for each folder you want to keep online only, then select **OK**.
 
-The folder is removed from your computer and stays in OneDrive online. Microsoft's page [Choose which OneDrive folders you want to sync](https://support.microsoft.com/en-us/onedrive/choose-which-onedrive-folders-you-want-to-sync-on-windows-or-macos) adds two limits: you can only pick folders that are already in your OneDrive, and on Windows you can't clear Documents, Desktop, Pictures or the Personal Vault. The web and mobile apps always show all your folders.
+The folder is removed from your computer and stays in OneDrive online. Microsoft's page [Choose which OneDrive folders you want to sync](https://support.microsoft.com/onedrive/choose-which-onedrive-folders-you-want-to-sync-on-windows-or-macos) adds two limits: you can only pick folders that are already in your OneDrive, and on Windows you can't clear Documents, Desktop, Pictures or the Personal Vault. The web and mobile apps always show all your folders.
 
 ## Hide or uninstall OneDrive
 
