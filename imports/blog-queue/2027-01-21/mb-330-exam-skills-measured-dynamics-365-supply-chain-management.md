@@ -1,22 +1,22 @@
 ---
 title: "MB-330 Exam Skills Measured: Dynamics 365 Supply Chain Management Functional Consultant"
-summary: "The MB-330 skills-measured outline from the Microsoft Learn study guide: the five areas with their percentage ranges, what each covers, exam format facts, renewal and a study order, plus a reminder to check the retirement status before scheduling."
+summary: "The MB-330 skills-measured outline from the Microsoft Learn study guide: the five areas with their percentage ranges, what each covers, exam format facts, renewal and a study order, plus the retirement date shown on the Learn pages."
 status: review
 publish: false
 author: mirko-p
 date: 2027-01-21
 topics: [dynamics-365]
 keypoints:
-  - "MB-330 leads to the Dynamics 365 Supply Chain Management Functional Consultant Associate certification. The skills outline is dated June 20, 2025."
+  - "MB-330 leads to the Dynamics 365 Supply Chain Management Functional Consultant Associate certification. The skills outline is dated October 21, 2026."
   - "Five areas: product information management 25-30%, inventory and asset management 20-25%, supply chain processes 15-20%, warehouse and transportation 20-25%, master planning 10-15%."
   - "The exam page gives 100 minutes, proctored delivery through Pearson Vue, and English and Japanese as the languages. A score of 700 or greater passes."
   - "The certification renews every 12 months through a free online assessment on Microsoft Learn."
-  - "Check the exam page for the current retirement status before you schedule. Plan a start date that leaves time to sit the exam."
+  - "Learn warns that the exam retires on February 1, 2027, at 11:59 PM Central Standard Time. Plan a date that leaves time to sit it before then."
 faq:
   - q: "What does MB-330 certify?"
     a: "According to the Microsoft Learn certification page, you design solutions and configure Dynamics 365 Supply Chain Management to meet business requirements. The credential is Microsoft Certified: Dynamics 365 Supply Chain Management Functional Consultant Associate, listed at intermediate level."
   - q: "How is the exam weighted?"
-    a: "The study guide lists five areas as of June 20, 2025: Implement product information management 25-30%, Implement inventory and asset management 20-25%, Implement and manage supply chain processes 15-20%, Implement warehouse management and transportation management 20-25%, and Implement master planning 10-15%."
+    a: "The study guide lists five areas as of October 21, 2026: Implement product information management 25-30%, Implement inventory and asset management 20-25%, Implement and manage supply chain processes 15-20%, Implement warehouse management and transportation management 20-25%, and Implement master planning 10-15%."
   - q: "How long is the exam and in which languages is it offered?"
     a: "The exam page says you have 100 minutes. It is proctored and may include interactive components. It is offered in English and Japanese and scheduled through Pearson Vue. The study guide says that if the exam is not available in your language, you can request an additional 30 minutes."
   - q: "What score do I need?"
@@ -29,7 +29,7 @@ MB-330 is the exam for the Dynamics 365 Supply Chain Management Functional Consu
 
 ## Check the exam status first
 
-Exams are retired on a schedule. I have seen MB-330 listed with a retirement in early 2027, namely February 1, 2027. The exam page and study guide I read do not show a retirement date, so confirm the current status on the exam page before you book. If you plan to sit the exam, schedule it early enough that a retake window still fits.
+Both the certification page and the study guide carry a warning: this exam will retire on February 1, 2027, at 11:59 PM Central Standard Time. The warning links to a Microsoft Skills Hub blog post. My advice: if you plan to sit the exam, schedule it early enough that a retake window still fits before the retirement date.
 
 ## Format facts from Learn
 
@@ -48,7 +48,7 @@ The study guide also says the bullets under each skill illustrate how the skill 
 
 ## The five areas
 
-The current outline is dated June 20, 2025.
+The current outline is dated October 21, 2026.
 
 | Area | Share |
 | --- | --- |
@@ -92,9 +92,9 @@ This is the largest area and has four groups:
 - **Configure master planning:** coverage groups and item coverage, parameters and plans, positive and negative days, action messages, delay and time fences, and period templates.
 - **Manage master plans:** run planning and analyze results, process planned purchase and transfer orders, the Supply Schedule form, safety margins and safety stock journals.
 
-## What changed in the June 2025 outline
+## What changed in the October 2026 outline
 
-The study guide's change log marks these shifts: the product information management share increased, inventory and asset management decreased, and warehouse and transportation management increased. The configure inventory management group was removed and the Warehouse Management mobile app group is new. Manage and process inventory activities and Configure warehouse management carry a major change. If your study material predates June 2025, compare it to the current outline.
+The study guide's change log compares the version before October 21, 2026 with the current one. It lists the five area headings as no change and marks the audience profile as a minor change, together with these groups: manage and process inventory activities, implement landed cost, implement common sales and marketing features, perform warehouse management processes and manage master plans. The other groups are listed as no change. If your study material predates October 2026, compare it to the current outline.
 
 ## A study order (my advice)
 
@@ -102,7 +102,7 @@ This is my suggestion, not a Microsoft plan:
 
 1. Start with product information management. It has the biggest share, and inventory dimensions and item model groups feed nearly everything else.
 2. Practice warehouse configuration in a test environment. The setup chain of locations, directives and templates is easier to learn by building it.
-3. Spend time on the new mobile app group, since it is new in the outline.
+3. Spend time on the Warehouse Management mobile app group, which is a group of its own in the outline.
 4. Use the practice assessment on AI Skills Navigator near the end to find weak areas.
 
 ## Related
