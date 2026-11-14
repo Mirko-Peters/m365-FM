@@ -7,14 +7,14 @@ author: mirko-p
 date: 2026-12-01
 topics: [powerpoint, copilot]
 keypoints:
-  - "Interactive slides are created with the Create interactive slide skill in Copilot, or with the Interactive Slide button on the Home and Insert tabs."
+  - "Interactive slides are created with the Create interactive slide skill in Copilot, or with the Interactive Slide button on the PowerPoint ribbon."
   - "Microsoft names four use types: dashboards, interactive timelines and process flows, visual explanations, and comparisons."
   - "A Copilot license is required. Rollout was announced for Frontier first, then worldwide from mid-October 2026."
   - "Slides are interactive on Windows, Mac, web and iPad. On iPhone and Android they appear as non-interactive images."
   - "In PowerPoint Live in Teams each attendee interacts on their own, and presenter and attendee views are not synchronized."
 faq:
   - q: "How do I create an interactive slide in PowerPoint with Copilot?"
-    a: "According to Microsoft's Windows blog, select Interactive Slide on the ribbon and describe the slide, or open the Create interactive slide skill in the Copilot skill picker. You can reference the current presentation or other files such as Excel workbooks and Word documents."
+    a: "According to Microsoft's Windows blog, select Interactive Slide on the ribbon, or open the Create interactive slide skill in the Copilot skill picker, where it appears next to the other PowerPoint skills. You can reference the current presentation or other files such as Excel workbooks and Word documents."
   - q: "What kinds of interactive slides can Copilot make?"
     a: "The blog lists dashboards based on a data snapshot, interactive timelines and process flows, visual explanations of complex concepts, and comparisons of products, scenarios or strategies."
   - q: "Do interactive slides work on phones?"
@@ -42,14 +42,14 @@ When presenting, the presenter can reveal information step by step and direct at
 
 Microsoft documents two entry points:
 
-1. **Ribbon.** Select **Interactive Slide** on the Home or Insert tab, then describe the slide you want.
-2. **Copilot chat.** Open Copilot Chat from the Copilot icon in the lower-right corner, select the **Skills** menu and choose **Create interactive slide**.
+1. **Ribbon.** Select **Interactive Slide** on the PowerPoint ribbon. The Windows blog does not name a tab, so look for the button in your own ribbon.
+2. **Skill picker.** Open the Copilot skill picker, where **Create interactive slide** appears alongside the other PowerPoint skills. The blog does not describe where the picker sits in the interface.
 
 You can reference content in the current presentation or in other files such as Excel workbooks and Word documents. Microsoft's support page on editing with Copilot lists interactive slides, for example dashboards, timelines and summaries, among Copilot's capabilities and gives no separate steps.
 
 ### Making a request that works
 
-Microsoft does not publish prompt wording, so this is guidance based on what the sources say the feature uses. State which of the four types you want, point Copilot at the source file or the existing slide that holds the data, and name the audience. Then review the result, because Microsoft advises reviewing AI-generated content and notes that large or complex presentations may exceed system limits.
+Microsoft does not publish prompt wording, so the following is my own suggestion and not documented guidance. State which of the four types you want, point Copilot at the source file or the existing slide that holds the data, and name the audience. Then review the result. Microsoft Support notes that large or complex presentations may exceed system limits.
 
 ## Where it works
 
@@ -76,20 +76,19 @@ The Message Center post states there are no admin settings for this capability. 
 
 ## Other Copilot options in PowerPoint
 
-For plain slide creation, Microsoft Support describes creating a presentation from a prompt or from a Word document, using a template, trying a new design, adding a slide or image and summarizing a presentation. The Skills menu also lists Review this presentation, Visualize this slide and Prepare for Questions. Creating from a document needs a Microsoft Copilot work license.
+For plain slide creation, the Microsoft Support welcome page describes starting a presentation from a prompt or suggested prompt, building a deck from a Word document, adding a slide or image to an existing presentation and applying a new design. It states that creating from a document is available to customers with a Microsoft Copilot (work) license. The page does not mention interactive slides.
 
 ## Editing and responsible use
 
-Microsoft Support says Copilot works in PowerPoint for Windows, Mac and the web, and that you can choose an AI model for edits, including Claude from Anthropic or ChatGPT from OpenAI. Example edit prompts on that page include adding a sales-projection chart from a spreadsheet and summarizing its top takeaways, or replacing a bullet list with a SmartArt timeline. Brand Kit is available to enterprise users and requires a Microsoft Copilot license, so branded decks can follow your organization's assets.
+Microsoft Support says Copilot works in PowerPoint for Windows, Mac and the web, and that you can choose an AI model for edits, including Claude from Anthropic or ChatGPT from OpenAI. Example edit prompts on that page include adding a sales-projection chart from a spreadsheet and summarizing its top takeaways, or replacing a bullet list with a SmartArt timeline. Brand Kit is described as available to enterprise users and requires a Microsoft Copilot license.
 
 Microsoft's guidance on limits is general rather than specific to interactive slides:
 
 - Large or complex presentations may exceed system limits.
-- Outputs may be inaccurate, so review and edit AI content before sharing.
 - Use the thumbs-down button in Copilot Chat to report problematic output.
 - You are responsible for having rights and consent for any images you upload.
 
-## Practical checks before a presentation
+## Practical checks before a presentation (own checklist)
 
 1. Test the slide in the same mode you will present, because phones show images only.
 2. If you present in a Teams meeting, remember that audience members explore on their own.
