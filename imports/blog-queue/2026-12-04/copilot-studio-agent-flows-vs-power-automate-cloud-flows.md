@@ -20,7 +20,7 @@ faq:
   - q: "Why don't I see my Power Automate flows in Copilot Studio?"
     a: "Learn explains that the Copilot Studio Flows page only shows agent flows created in Copilot Studio. Flows created in Power Automate must be managed in Power Automate unless you convert them to agent flows."
   - q: "Can I convert a cloud flow into an agent flow and back?"
-    a: "You can convert a cloud flow to an agent flow, but not back. Learn calls it a one-way operation because the flow's billing changes. The flow must be in a solution and the environment needs available Copilot Studio capacity, prepaid or pay-as-you-go."
+    a: "You can convert a cloud flow to an agent flow, but not back. Learn calls it a one-way operation because the flow's billing changes. The flow must be in a solution and the environment needs available Copilot Studio capacity."
   - q: "Can agent flows call desktop flows?"
     a: "The Copilot Studio FAQ says you can't call desktop flows from agent flows at this time. The FAQ was last updated on 2026-05-27, so check the current page before you rely on that."
 ---
