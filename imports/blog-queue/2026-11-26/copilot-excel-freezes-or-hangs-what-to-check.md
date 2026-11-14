@@ -9,20 +9,20 @@ topics: [copilot, excel]
 keypoints:
   - "The Microsoft pages I read do not describe a Copilot-caused Excel freeze or give a size limit. The steps here combine Microsoft's general Excel hang guide with Copilot file-state checks."
   - "First tell a busy Excel from a stuck one. Microsoft says to check the status bar and let a running task finish. The Copilot pane has a Stop button beside the chat input."
-  - "Start Excel in safe mode with Excel /safe. If the problem disappears, disable COM add-ins and startup-folder files one at a time."
+  - "Microsoft's hang guide has you start Excel in safe mode with Excel /safe, then disable COM add-ins and check startup folders one at a time."
   - "Copilot editing works only when Calculation Options is Automatic. Manual calculation is a hang remedy in Microsoft's guide, so the two advice items conflict."
   - "Copilot can fail on files checked out in SharePoint or saved in an unsupported format. Excel for the web still works for those files."
 faq:
   - q: "Is there a known bug where Copilot freezes Excel?"
     a: "The Microsoft pages I read do not describe one. The Copilot in Excel FAQ lists no freeze or performance guidance, and Microsoft's Excel hang article does not mention Copilot. Forum threads report related problems, such as an error with no change to the workbook and one case of a workbook that later opened as corrupt, but Microsoft staff did not confirm a cause in those threads."
   - q: "How do I stop a Copilot task in Excel?"
-    a: "Microsoft Support says to use the Stop button beside the chat input in the Copilot pane to halt or pause a task. Copilot builds a step-by-step plan and shows changes live in the workbook, so you can see whether it is still working before you force-close Excel."
+    a: "Microsoft Support says to use the Stop button beside the chat input in the Copilot pane to halt or pause a task. Check whether cells or sheets are still changing before you force-close Excel."
   - q: "Should I switch Excel to manual calculation to stop the hanging?"
     a: "Microsoft's Excel hang guide lists Manual calculation under advanced checks. But the Copilot in Excel FAQ says Copilot editing works only when Calculation Options is set to Automatic. If you rely on Copilot edits, use manual calculation only to test whether calculation is the cause, then switch back."
   - q: "Can Copilot damage my workbook?"
     a: "Copilot in Excel makes direct changes in Edit mode, and Microsoft says you can undo changes or view previous versions. One community thread reports a workbook that Excel called corrupt after Copilot summarized it. The thread has no confirmed cause. Work on a copy of important files and keep version history on."
   - q: "Why does Copilot say a task is done but my workbook did not change?"
-    a: "A Tech Community thread reports this with the error 'Failed to fetch document context due to an internal error'. The only reply, from an MVP, suggested a modern format stored in OneDrive or SharePoint with AutoSave on. Microsoft's FAQ says Copilot works with AutoSave on or off, so test the file state items from the FAQ first."
+    a: "A Tech Community thread reports this with the error 'Failed to fetch document context due to an internal error'. The only reply, from an MVP, suggested a modern format stored in OneDrive or SharePoint with AutoSave on. Microsoft's FAQ does not mention AutoSave, so test the file state items from the FAQ first."
 ---
 
 If Excel stops responding while Copilot is working, the cause is often not Copilot itself. Check three things in this order: whether Excel is busy or truly stuck, whether the file or its settings block Copilot, and whether an add-in or the workbook's own contents cause the hang.
@@ -31,7 +31,7 @@ A limit on this article: the Microsoft pages I read do not describe a Copilot-ca
 
 ## Step 1: Busy or stuck?
 
-Copilot in Excel works in steps. Microsoft Support says it builds a step-by-step plan after each prompt, shows its reasoning in the pane and makes changes appear live. A long multi-step task can look like a freeze while it runs.
+Microsoft Support describes Copilot in Excel as handling multi-step tasks such as reshaping data or merging sheets. A long multi-step task can look like a freeze while it runs.
 
 - Look at the status bar at the bottom of the Excel window. Microsoft's hang guide says that if a task is running, let it finish.
 - Watch the workbook. If cells or sheets keep changing, Copilot is working.
@@ -46,21 +46,21 @@ The Copilot in Excel FAQ describes an "unsupported file state" error. These caus
 - **File checked out in SharePoint.** Check it in, close and reopen it in Excel. If you cannot check it in, open it in Excel for the web.
 - **Check-out required by the site.** Copilot in Excel on Windows or Mac will not work for files from that site. Excel for the web does.
 - **Unsupported format**, such as Strict Open XML Spreadsheet. Save as Excel Workbook (.xlsx).
-- **Calculation not Automatic.** The FAQ says Copilot editing works only when Calculation Options is set to Automatic. Check it under the **Formulas** tab.
+- **Calculation not Automatic.** The FAQ says Copilot editing works only when Calculation Options is set to Automatic. Microsoft's hang guide places **Calculation Options** under the **Formulas** tab. The FAQ itself does not name the tab.
 
 ## Step 3: Follow Microsoft's Excel hang guide
 
 Microsoft's article "Excel not responding, hangs, freezes or stops working" gives an ordered list. The first steps are:
 
-1. **Safe mode.** Select **Start** > **All apps** > **Windows System** > **Run**, type `Excel /safe` and select OK. If Excel opens in safe mode, continue. If not, skip to updates. Microsoft also offers an automated crash troubleshooter that needs Windows 10 or later.
+1. **Safe mode.** Select **Start** > **All apps** > **Windows System** > **Run**, type `Excel /safe` and select OK. Microsoft also offers an automated crash troubleshooter that needs Windows 10 or later.
 2. **COM add-ins.** Go to **File** > **Options** > **Add-ins**, choose **COM Add-ins** > **Go**, clear all boxes and restart Excel. Re-enable them one at a time.
 3. **Excel add-ins and startup folders.** Check the XLStart folder under **File** > **Options** > **Trust Center** > **Trust Center Settings** > **Trusted Locations**, and the alternate startup folder under **File** > **Options** > **Advanced**. Move their files out and test.
-4. **Updates.** Install the latest Office and Windows updates. The article says newer Current Channel builds, from 2503 onward, include relevant fixes.
+4. **Updates.** Install the latest Office and Windows updates. The article says versions 2503 and later include fixes for PivotTable refresh, freeze panes and shape loading.
 
 Further steps in the same article:
 
 - Inspect the workbook for whole-column formula references, array formulas with mismatched argument sizes, many hidden or zero-size objects, excess styles, invalid defined names and a very large number of shapes.
-- Test the same task in a new file created in Excel. If it works there, the original file is the problem.
+- Test the features in a new file created in Excel. The article frames this as a check for files generated by a third-party app: if it works in a new file, report the issue to the vendor.
 - Save the file locally instead of on a network, web server, SharePoint or a remote session, to test whether the location matters.
 - Repair Microsoft 365 and confirm the PC has enough RAM.
 - Make sure antivirus is up to date. The article says disabling antivirus integration can expose the PC and does not recommend it.
@@ -69,13 +69,13 @@ Remember the conflict: the guide lists Manual calculation as an advanced check, 
 
 ## Step 4: Check the license and network if the pane hangs
 
-If Excel itself stays responsive but the Copilot pane never answers, the cause may be connectivity or licensing, though the pages I read do not say so for this exact case. Microsoft's Copilot requirements page names blocked WebSocket Secure traffic, TLS inspection and aggressive proxy timeouts as causes of failing Copilot integrations. A June 2026 Q&A thread describes Copilot in Excel working on a corporate network while Word and Copilot Chat failed, so Excel can behave differently from other apps. The moderator there could not confirm a root cause.
+If Excel itself stays responsive but the Copilot pane never answers, the cause may be connectivity or licensing, though the pages I read do not say so for this exact case. Microsoft's Copilot requirements page names blocked WebSocket Secure traffic, TLS inspection and aggressive proxy timeouts as causes of failing Copilot integrations. A June 2026 Q&A thread describes Copilot in Excel working on a corporate network while Word and Copilot Chat failed, so Excel can behave differently from other apps. The moderator there pointed to network configuration for WebSocket connections but said a moderator cannot officially confirm backend endpoint requirements, and the root cause was not confirmed.
 
 ## What community threads report
 
 These are not Microsoft statements.
 
-- **No change to the workbook.** A user on Windows saw "Failed to fetch document context due to an internal error" while Copilot reported tasks as complete. Restarting, signing out and waiting did not help. The only reply was from an MVP and suggested a modern file format in OneDrive or SharePoint with AutoSave on. No Microsoft staff answered.
+- **No change to the workbook.** A user on Windows saw "Failed to fetch document context due to an internal error" while Copilot reported tasks as complete. Restarting, signing out and waiting did not help. The only reply was from an MVP and suggested a modern file format in OneDrive or SharePoint with AutoSave on. No Microsoft staff answered. Microsoft's FAQ does not mention AutoSave.
 - **Workbook later unopenable.** A user said Excel reported a workbook as corrupt after Copilot summarized it, twice, for some files. The single reply advised preserving both files, restoring a previous version from SharePoint or OneDrive, updating Office, using Open and Repair on a copy, and collecting the build, time and file location for a support case. The replier's profile shows a Microsoft Certified Trainer badge, not a Microsoft staff role.
 
 The practical lesson is the reply's last point: work on a copy of important workbooks before asking Copilot to analyze them.
