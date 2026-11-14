@@ -69,7 +69,7 @@ For the reader on iOS and Android, Learn lists QR_CODE, DATA_MATRIX, AZTEC, CODA
 
 ## Legacy scanner barcode types
 
-For the legacy scanner, Learn gives a per-device table. QR_CODE, UPC_A, UPC_E, EAN_8, EAN_13, CODE_39 and CODE_128 are listed for Android, iOS and Windows. DATA_MATRIX, CODE_93, ITF, PDF_417 and AZTEC are listed for Android and iOS only. CODABAR is listed for Android and Windows, and RSS14 and RSS_EXPANDED for Android only. MSI is not supported anywhere. PDF_417 and AZTEC need BarcodeType set explicitly.
+For the legacy scanner, Learn gives a per-device table. QR_CODE, UPC_A, UPC_E, EAN_8, EAN_13, CODE_39 and CODE_128 are listed for Android, iOS and Windows. DATA_MATRIX, CODE_93, ITF, PDF_417 and AZTEC are listed for Android and iOS only. CODABAR is listed for Android and Windows, and RSS14 and RSS_EXPANDED for Android only. MSI is not supported anywhere. Databar Omnidirectional, Databar Stacked, GS1-DWCode and Interleaved 2 of 5 are listed for Windows only. PDF_417 and AZTEC need BarcodeType set explicitly.
 
 ## Other properties
 
@@ -78,7 +78,7 @@ Both controls have the usual button properties: Text for the button label, Borde
 ## Limitations
 
 - The reader does not support Select(). The workaround on the page is to set its fill color to transparent and place it in front of the control you want to trigger it.
-- Select to scan mode is not supported in a web browser.
+- The reader page says the control does not support scanning in a web browser. The sentence appears under the Select to scan mode, so check your own case.
 - Only Android, iOS and Windows are supported.
 
 ## Accessibility
@@ -87,7 +87,7 @@ Because the control is a button, the Button guidelines apply. Show the result in
 
 ## Not covered
 
-The pages do not describe licensing or saving scans to Dataverse or SharePoint.
+The how-to lists a Power Apps license and the Environment Maker security role as prerequisites but gives no licensing details. The pages do not describe saving scans to Dataverse or SharePoint, because the how-to keeps scans in a collection inside the app.
 
 ## Related
 
@@ -96,6 +96,6 @@ The pages do not describe licensing or saving scans to Dataverse or SharePoint.
 
 ## Sources
 
-- [Barcode scanner control (retired) in Power Apps](https://learn.microsoft.com/power-apps/maker/canvas-apps/controls/control-new-barcode-scanner)
-- [Barcode reader control in Power Apps](https://learn.microsoft.com/power-apps/maker/canvas-apps/controls/control-barcodereader)
-- [Create a canvas app with the barcode reader control](https://learn.microsoft.com/power-apps/maker/canvas-apps/how-to/create-app-barcode-scanner)
+- [Barcode scanner control (retired) in Power Apps (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/canvas-apps/controls/control-new-barcode-scanner)
+- [Barcode reader control in Power Apps (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/canvas-apps/controls/control-barcodereader)
+- [Create a canvas app with the barcode reader control (Microsoft Learn)](https://learn.microsoft.com/power-apps/maker/canvas-apps/how-to/create-app-barcode-scanner)
