@@ -26,7 +26,7 @@ You don't add [Copilot](https://www.m365.fm/entity/copilot/) to [Outlook](https:
 
 Three things have to be true at the same time.
 
-**A license.** Microsoft's requirements page says users need a Microsoft Copilot license and a qualifying prerequisite license. The qualifying plans are listed on the license options page. Microsoft describes the Copilot license as available with Microsoft 365 E7 or as an add-on for eligible commercial, government and education plans. Microsoft also notes that the license isn't available with device-based licensing for Microsoft 365 Apps for enterprise.
+**A license.** Microsoft's requirements page says users need a Microsoft Copilot license and a qualifying prerequisite license. The qualifying plans are listed on the license options page. Microsoft's license options page says the Copilot license is included with Microsoft 365 E7 or available as an add-on for eligible commercial, US Government and education subscriptions, and that licensing availability and terms can change, so confirm eligibility before you buy. Microsoft also notes that the license isn't available with device-based licensing for Microsoft 365 Apps for enterprise.
 
 **A supported Outlook app.** Microsoft's requirements page says Copilot works with supported versions of classic Outlook and new Outlook for Windows and Mac. The FAQ for Copilot in Outlook lists Outlook for Microsoft 365, Outlook for Microsoft 365 for Mac, new Outlook for Windows, Outlook for Android and Outlook for iOS in its applies-to list, and it mentions Outlook on the web. It doesn't list classic Outlook for Windows there. The two pages don't agree word for word, so check your build on Microsoft's pages if you run classic Outlook.
 
@@ -40,7 +40,7 @@ This is the admin path. Without a license, the user can't do anything to make th
 
 1. **Check the base license.** Confirm that the user has one of the qualifying licenses from Microsoft's license options page.
 2. **Buy or find the Copilot license.** Microsoft describes it as an add-on for eligible plans, or part of E7.
-3. **Assign it.** Microsoft's page says to assign licenses to users in the Microsoft 365 admin center. For a check on a specific account, Microsoft points to its Microsoft Copilot service plan diagnostic tool.
+3. **Assign it.** Microsoft's license options page says to assign licenses in the Microsoft 365 admin center. To check a specific account, that page points to the Microsoft Copilot service plan diagnostic tool, and the requirements page mentions the Copilot License Details diagnostic.
 4. **Confirm the mailbox.** The user's primary mailbox must be hosted in Exchange Online.
 5. **Ask the user to restart Outlook.** Sign out and in again if the buttons still don't show.
 6. **Test one feature.** Open a long email thread and look for the **Summarize** button, which is the easiest feature to find.
@@ -60,7 +60,7 @@ Microsoft's FAQ lists the entry points, and they differ by feature.
 - **Themes by Copilot.** In **Appearance Settings**.
 - **Prepare for your meeting.** From the calendar item of a meeting.
 
-Use the thread summary first. It shows quickly whether Copilot can read your mailbox, and the result is easy to check against the thread you just read. Microsoft advises reviewing and verifying all AI-generated content, and that goes for drafts, too.
+Use the thread summary first. It shows quickly whether Copilot can read your mailbox, and the result is easy to check against the thread you just read. Review anything the AI writes before you send it, and that goes for drafts, too.
 
 ## Language and settings worth knowing
 
@@ -113,3 +113,10 @@ So when a user says "I don't have Copilot in Outlook", ask which one they mean. 
 ## Next step
 
 To add Copilot to Outlook, make sure the user has a Microsoft Copilot license and a qualifying license, a supported Outlook app and an Exchange Online mailbox, then restart Outlook and look for the **Summarize** button. If nothing appears, work through the license, the app version and the mailbox type in that order before you open a support case.
+
+## Sources
+
+- [Microsoft 365 Copilot requirements (Microsoft Learn)](https://learn.microsoft.com/copilot/microsoft-365/microsoft-365-copilot-requirements)
+- [License options for Microsoft Copilot (Microsoft Learn)](https://learn.microsoft.com/copilot/plan/copilot-license-options)
+- [Frequently asked questions about Copilot in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/frequently-asked-questions-about-copilot-in-outlook)
+- [Pin Microsoft 365 Copilot Chat to the navigation bar (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/pin-copilot-chat-navbar)
