@@ -25,7 +25,7 @@ faq:
     a: "Yes. Set Traffic % for the slot on the Deployment slots page. Routed clients are pinned for one hour or until they delete cookies. You can also use the x-ms-routing-name query parameter."
 ---
 
-A deployment slot is a live copy of your app with its own host name. You deploy to the slot, let it warm up and then swap it into production, so users never hit a cold app. This guide follows the Microsoft Learn page on setting up staging environments in Azure App Service.
+A deployment slot is a live copy of your app with its own host name. You deploy to the slot, let it warm up and then swap it into production, so users never hit a cold app. This guide follows the Microsoft Learn page Set Up Staging Environments for Azure App Service. The page also has Azure CLI and Azure PowerShell tabs for adding, swapping and deleting slots, which this guide does not reproduce.
 
 ## Requirements and basics
 
@@ -88,11 +88,11 @@ Swap the same two slots again immediately to restore the state before the swap.
 
 ## What the page does not say
 
-Premium and Isolated slot counts, CLI or PowerShell commands in the text read, and a detailed explanation of the `applicationInitialization` element.
+The slot counts for Premium and Isolated tiers (the page refers to the App Service limits page) and the permissions needed beyond a pointer to the resource provider operations list (search for slot). The page shows Azure CLI and Azure PowerShell commands, a sample `Web.config` fragment for `applicationInitialization` and an Azure Resource Manager template for swapping with `buildVersion` and `targetBuildVersion`, but this guide does not repeat them. For more detail on customizing `applicationInitialization`, the page points to a blog post.
 
 ## A release routine
 
-This routine is practical advice built on the page.
+This routine is my advice, built on the page.
 
 1. Deploy to the staging slot.
 2. Mark settings that differ between slots as slot settings.
@@ -100,7 +100,7 @@ This routine is practical advice built on the page.
 4. Swap, then watch the app.
 5. Keep the previous version in the staging slot so you can swap back.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting custom domains or scale settings to follow a swap.
 - Forgetting that a new slot is empty.
@@ -115,4 +115,4 @@ This routine is practical advice built on the page.
 
 ## Sources
 
-- [Set up staging environments in Azure App Service (Microsoft Learn)](https://learn.microsoft.com/azure/app-service/deploy-staging-slots)
+- [Set Up Staging Environments (Microsoft Learn)](https://learn.microsoft.com/azure/app-service/deploy-staging-slots)
