@@ -71,7 +71,7 @@ Learn suggests building a fully configured date table in a Power BI Desktop temp
 
 ## Why the details matter
 
-A date table with gaps or blanks breaks time intelligence, which is why the page lists unique values, no blanks and no missing dates as hard requirements. Because a year need not be a calendar year, a fiscal year works as long as the table covers full years. With auto date/time, Power BI does the work for you, but the page says it does not support a single date table design that propagates filters to multiple tables, so a shared, explicit date table is the better base for larger models.
+The page lists unique values, no blanks and no missing dates as requirements for a date table. My reading, which the page does not state, is that gaps or blanks would undermine time intelligence. Because a year need not be a calendar year, a fiscal year works as long as the table covers full years. With auto date/time, Power BI does the work for you, but the page says it does not support a single date table design that propagates filters to multiple tables, so my advice is to use a shared, explicit date table as the base for larger models.
 
 For DirectQuery models whose source has no date table, the page says to add one to the source and then connect to it with Power Query. For models where several teams need the same definition of time, publishing a dataflow keeps every modeler on the same table.
 
@@ -96,4 +96,4 @@ The page does not give step-by-step instructions or menu names for marking a dat
 
 ## Sources
 
-- [Set and use date tables in Power BI Desktop (guidance)](https://learn.microsoft.com/power-bi/guidance/model-date-tables)
+- [Design guidance for date tables in Power BI Desktop (Microsoft Learn)](https://learn.microsoft.com/power-bi/guidance/model-date-tables)
