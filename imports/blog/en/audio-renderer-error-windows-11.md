@@ -45,7 +45,7 @@ Before you change anything, spend two minutes on a short test. Play a system sou
 
 ## Check the output device and the volume mixer
 
-An app can send sound to a device other than the one you're listening on. Microsoft's guide on [app audio not working while system sounds work](https://support.microsoft.com/en-US/Windows/Hardware/Audio/fix-app-audio-not-working-while-system-sounds-work-in-windows) covers the volume mixer and the per-app output device.
+An app can send sound to a device other than the one you're listening on. Microsoft's guide on [app audio not working while system sounds work](https://support.microsoft.com/Windows/Hardware/Audio/fix-app-audio-not-working-while-system-sounds-work-in-windows) covers the volume mixer and the per-app output device.
 
 1. Go to **Start**, **Settings**, **System**, **Sound**, then open **Volume mixer**.
 2. Under **Apps**, make sure the browser isn't muted and its slider is up.
@@ -70,7 +70,7 @@ For a faster path to the same thing, the Q&A user suggests opening Task Manager,
 
 ## Update, reinstall or roll back the audio driver
 
-Drivers are the most common suspect, especially when the error began after an upgrade or an update. Microsoft's page on [audio that stops working after a Windows update](https://support.microsoft.com/en-us/windows/fix-audio-stops-working-after-a-windows-update-in-windows-b0dadfe1-051e-4e3f-a971-486ab4f7e6d6) gives this order:
+Drivers are the most common suspect, especially when the error began after an upgrade or an update. Microsoft's page on [audio that stops working after a Windows update](https://support.microsoft.com/windows/fix-audio-stops-working-after-a-windows-update-in-windows-b0dadfe1-051e-4e3f-a971-486ab4f7e6d6) gives this order:
 
 1. Install pending updates. Go to **Settings**, **Windows Update**, select **Check for updates**, install everything and restart.
 2. Update the audio driver. Open Device Manager, expand **Sound, video and game controllers**, right-click your audio device, select **Update driver** and follow the prompts. Restart afterward.
