@@ -22,10 +22,10 @@ faq:
   - q: "Which services does Shared Key cover?"
     a: "Blobs, files, queues and tables."
   - q: "How does Azure Files authorize over SMB?"
-    a: "Learn describes identity-based authentication through Microsoft Entra Domain Services or on-premises Active Directory Domain Services, with Azure RBAC for share-level access and NTFS permissions for files and directories."
+    a: "Learn describes identity-based authentication through Microsoft Entra Domain Services, Microsoft Entra Kerberos for hybrid identities or on-premises Active Directory Domain Services. With AD DS, Azure RBAC controls share-level access and NTFS DACLs enforce directory and file permissions."
 ---
 
-Every request to Azure Storage must be authorized, and the right option depends on the service and the client. This guide follows the Microsoft Learn overview of authorization. The page was last updated in January 2025 according to its footer, and only its Blobs table could be read, so it is the most complete for blob data.
+Every request to Azure Storage must be authorized, and the right option depends on the service and the client. This guide follows the Microsoft Learn overview of authorization, which has separate tables for Blobs, Files (SMB), Files (REST), Queues and Tables.
 
 ## What Microsoft recommends
 
@@ -42,6 +42,13 @@ Learn says to use Microsoft Entra ID with managed identities for blob, queue and
 | Storage Local Users | Supported for SFTP |
 | Microsoft Purview protection policies | Preview, for Blob Storage and Data Lake Storage |
 
+## Files, queues and tables
+
+- **Files (SMB):** Entra ID is supported with Microsoft Entra Domain Services for cloud-only identities or Microsoft Entra Kerberos for hybrid identities. Shared Key is listed with the advice to disallow it. On-premises AD DS is supported, and its credentials must be synced to Entra ID.
+- **Files (REST):** Entra ID with managed identities is recommended and Shared Key should be disallowed. User delegation SAS is not supported for Azure Files, and Learn does not recommend SAS tokens secured by the account key.
+- **Queues:** Entra ID with managed identities is recommended and Shared Key should be disallowed. User delegation SAS is not supported for Queue Storage, and SAS tokens secured by the account key are not recommended.
+- **Tables:** the same pattern as queues, with Entra ID with managed identities recommended and no user delegation SAS for Table Storage.
+
 ## How the options work
 
 - **Shared Key:** applies to blobs, files, queues and tables. Each request carries a header signed with the account access key. Anyone holding the key effectively has access to all data.
@@ -50,7 +57,7 @@ Learn says to use Microsoft Entra ID with managed identities for blob, queue and
 - **Anonymous read:** applies to blobs and is not recommended.
 - **Storage Local Users:** SFTP for blobs and SMB for files, with container-level permissions.
 - **Purview:** protection policies built on sensitivity labels can allow or deny access for Blob Storage and Data Lake Storage.
-- **Azure Files over SMB:** Entra Domain Services or on-premises AD DS authentication, with Azure RBAC for share-level access and NTFS for directories and files. SAS tokens apply to Azure Files over REST.
+- **Azure Files over SMB:** Entra Domain Services or on-premises AD DS authentication. Azure RBAC controls access to Azure Files resources with Domain Services. With AD DS it covers share-level access and NTFS DACLs enforce directory and file permissions. SAS tokens can be used for Azure Files over REST.
 
 ## Protect account keys
 
@@ -66,20 +73,20 @@ This section is a suggestion. For new workloads, start with managed identity and
 
 ## Why disallow Shared Key
 
-Learn's warning is that disallowing Shared Key prevents inadvertent use, and it recommends least-privilege access and disabling shared key access when it is not required. When Shared Key is disallowed, clients must use Entra ID or a user delegation SAS. Anyone holding an account key effectively has access to all data in the account, which is why the key is treated as the weakest option.
+Learn's warning is that disallowing Shared Key prevents inadvertent use, and it recommends least-privilege access and disabling shared key access when it is not required. When Shared Key is disallowed, clients must use Entra ID or a user delegation SAS. Anyone holding an account key effectively has access to all data in the account.
 
 ## Per-service summary
 
 - **Blobs:** Shared Key, SAS, Entra ID with RBAC and ABAC, anonymous read, Storage Local Users and Purview protection policies.
-- **Files over SMB:** Entra Domain Services, on-premises AD DS, and Storage Local Users.
-- **Files over REST:** Shared Key and SAS.
+- **Files over SMB:** Entra ID (Domain Services or Entra Kerberos), on-premises AD DS, Shared Key and Storage Local Users.
+- **Files over REST:** Entra ID, Shared Key and SAS, without user delegation SAS.
 - **Queues and tables:** Shared Key, SAS and Entra ID with RBAC.
 
 Learn also gives guidance by method: Entra ID with managed identities for OAuth-capable scenarios, Kerberos for Azure Files over SMB, and SAS for Azure Files over REST.
 
 ## Not covered
 
-The Learn page I read does not include the Files, Queues and Tables tables, role names, SAS token construction or Conditional Access steps.
+The page does not give role names, SAS token construction or Conditional Access steps. It links separate articles for those and for each Entra ID integration.
 
 ## Related
 
@@ -89,4 +96,4 @@ The Learn page I read does not include the Files, Queues and Tables tables, role
 
 ## Sources
 
-- [Authorize access to data in Azure Storage](https://learn.microsoft.com/azure/storage/common/authorize-data-access)
+- [Authorize operations for data access (Microsoft Learn)](https://learn.microsoft.com/azure/storage/common/authorize-data-access)
