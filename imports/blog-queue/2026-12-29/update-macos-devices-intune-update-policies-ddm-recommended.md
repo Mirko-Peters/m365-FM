@@ -25,7 +25,7 @@ faq:
     a: "Use settings catalog Restrictions settings such as Enforced Software Update Delay. Learn cautions that update policies still install on their schedule, so review them so they do not install before the delay ends."
 ---
 
-Intune can control macOS software updates with an update policy. This guide follows the Microsoft Learn article on managing macOS software updates with MDM-based policies. Learn opens that article with a warning: Apple has deprecated these workloads, Intune will soon end support for them, and Microsoft recommends declarative device management (DDM) instead. The article applies to supervised devices running macOS 12 through macOS 15. It does not give an end date and it only links out for DDM setup.
+Intune can control macOS software updates with an update policy. This guide follows the Microsoft Learn article on managing macOS software updates with MDM-based policies. Learn opens that article with a warning: Apple has deprecated these workloads, Intune will soon end support for them, and Microsoft recommends declarative device management (DDM) instead. The article applies to supervised devices running macOS 12 through macOS 15. It does not give an end date, and for DDM it links only to a blog post about the move.
 
 ## Create the policy
 
@@ -95,4 +95,4 @@ The page does not state default values for deferrals and priority, the meaning o
 
 ## Sources
 
-- [Manage macOS software updates using MDM-based policies in Intune](https://learn.microsoft.com/intune/intune-service/protect/software-updates-macos)
+- [Use Microsoft Intune policies to manage macOS software updates (Microsoft Learn)](https://learn.microsoft.com/intune/device-updates/apple/deprecated-mdm-policies-macos)
