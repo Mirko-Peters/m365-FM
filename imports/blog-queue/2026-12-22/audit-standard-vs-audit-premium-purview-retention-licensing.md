@@ -10,7 +10,7 @@ keypoints:
   - "Audit Standard keeps records for 180 days. Audit Premium adds up to one year of retention, a 10-year option, audit log retention policies and intelligent insights."
   - "Premium keeps Entra ID, Exchange, OneDrive and SharePoint records for one year by default. Other records stay at 180 days unless a policy extends them."
   - "Ten-year retention needs Audit Premium licensing plus an additional per-user 10-Year Audit Log Retention add-on license, and is not retroactive."
-  - "Premium adds events such as MailItemsAccessed and 15 Teams activities, and about twice the Management Activity API bandwidth of Standard."
+  - "Premium gives access to extra activity properties, such as MailItemsAccessed SensitivityLabel and 14 Teams activities, plus about twice the API bandwidth."
   - "The Learn page links to subscription requirements instead of naming SKUs, so verify licensing there before you buy."
 faq:
   - q: "How long does Audit Standard keep records?"
@@ -19,8 +19,8 @@ faq:
     a: "Learn lists up to one-year retention, 10-year retention, and audit log retention policies. Premium keeps Microsoft Entra ID, Exchange, OneDrive and SharePoint records for one year by default."
   - q: "What do I need for 10-year retention?"
     a: "Learn says retaining logs for 10 years requires Audit Premium licensing and an additional per-user 10-Year Audit Log Retention add-on license. The policy is not retroactive, and records from non-user entities are kept for a fixed one year."
-  - q: "Which events are Premium only?"
-    a: "Learn names MailItemsAccessed for Exchange Online, with a SensitivityLabel property, and 15 Microsoft Teams activities with properties such as AppAccessContext, ParticipantInfo, IsJoinedFromLobby and ArtifactShared. Premium also provides intelligent insights such as what a user searched for."
+  - q: "What extra detail does Premium provide?"
+    a: "Learn says Premium provides access to extra activity properties: the SensitivityLabel property on the Exchange Online MailItemsAccessed activity, and properties such as AppAccessContext, ParticipantInfo, IsJoinedFromLobby and ArtifactShared on 14 Microsoft Teams activities. Premium also provides intelligent insights such as when and what a user searched for."
   - q: "Does Premium include everything in Standard?"
     a: "Yes. Learn states that Audit (Premium) includes all Audit (Standard) functionality, including search in the Microsoft Purview portal, CSV export, the Audit Search Graph API, Search-UnifiedAuditLog and the Office 365 Management Activity API."
 ---
@@ -60,23 +60,23 @@ Premium includes all Standard functionality.
 
 ## Extra events and insights
 
-Premium adds detail that Standard does not capture. Learn names:
+Learn says Premium provides access to the following activity properties and insights (these activities need users to hold the appropriate Audit (Premium) license):
 
-- **Exchange Online:** the MailItemsAccessed event, with a SensitivityLabel property.
-- **Microsoft Teams:** 15 activities, such as ChatCreated, MessageSent and MeetingParticipantDetail, with properties like AppAccessContext, ParticipantInfo, IsJoinedFromLobby and ArtifactShared.
+- **Exchange Online:** the SensitivityLabel property on the MailItemsAccessed activity.
+- **Microsoft Teams:** 14 listed activities, such as ChatCreated, MessageSent and MeetingParticipantDetail, with properties like AppAccessContext, ParticipantInfo, IsJoinedFromLobby and ArtifactShared.
 - **Intelligent insights:** records such as the sensitivity label of accessed mail items and when and what a user searched for in Exchange Online and SharePoint Online.
 
-The overview does not name Send or SearchQueries as Premium-only events. Use only what it states, and check the audit activities reference for a specific event before you plan an investigation around it.
+The overview describes these as activity properties and insights. It does not name Send or SearchQueries as Premium-only events. Use only what it states, and check the audit activities reference for a specific event before you plan an investigation around it (my advice).
 
 ## API bandwidth
 
-Both editions start at a baseline of 2,000 requests per minute for the Office 365 Management Activity API. Learn says Premium gets roughly twice the bandwidth of Standard, and the limit is applied per tenant rather than per publisher. E5, A5 and G5 organizations get about twice the bandwidth of organizations without those licenses.
+Both editions start at a baseline of 2,000 requests per minute for the Office 365 Management Activity API. Learn says the baseline rises with seat count and licensing, so Premium gets about twice the bandwidth of Standard, and the limit is applied per tenant rather than per publisher. E5, A5 and G5 organizations get about twice the bandwidth of organizations without those licenses.
 
 ## Licensing
 
 The overview gives the licensing detail only by link to its subscription requirements page. It names the 10-Year Audit Log Retention add-on as a separate per-user license for 10-year retention. The page I read does not list which plans include Audit (Premium). Verify the current plan list on the linked requirements page before you change licenses.
 
-## Which one fits
+## Which one fits (my summary)
 
 | Need | Edition |
 | --- | --- |
@@ -90,7 +90,7 @@ The overview gives the licensing detail only by link to its subscription require
 
 Learn notes that Classic Search was retired on November 30, 2023, and New Search is the current experience.
 
-## Practical steps
+## Practical steps (my advice)
 
 1. Decide your retention requirement in writing, including whether any records must last beyond a year.
 2. Check which users need Premium licensing under the subscription requirements page.
@@ -104,4 +104,4 @@ Learn notes that Classic Search was retired on November 30, 2023, and New Search
 
 ## Sources
 
-- [Auditing solutions in Microsoft Purview](https://learn.microsoft.com/purview/audit-solutions-overview)
+- [Learn about auditing solutions in Microsoft Purview (Microsoft Learn)](https://learn.microsoft.com/purview/audit-solutions-overview)
