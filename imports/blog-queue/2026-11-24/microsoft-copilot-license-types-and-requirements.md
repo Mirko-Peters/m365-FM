@@ -30,7 +30,7 @@ Microsoft Learn lists these options:
 
 | Option | Who it is for | Notes from Microsoft |
 |---|---|---|
-| Microsoft 365 E7 | Enterprise customers | The page says Copilot is available with E7, and E7 includes Microsoft Copilot. |
+| Microsoft 365 E7 | Not specified beyond the plan name | The page says Copilot is available with E7, and E7 includes Microsoft Copilot. |
 | Microsoft Copilot Business (add-on) | Organizations with up to 300 users on eligible Microsoft 365 Business licenses | Same Copilot capabilities, with SMB purchasing options. Annual commitment, up to 300 licensed users per tenant. Larger organizations use the enterprise options. |
 | Microsoft Copilot (add-on) | Eligible commercial, US Government and education plans | Requires an eligible base plan, listed below. |
 
@@ -43,9 +43,9 @@ The commercial list on the licensing page is long. The main entries:
 - **Microsoft 365:** E7, E5, E3, F1, F3, Business Premium, Business Standard, Business Basic, Apps for enterprise and Apps for business.
 - **Office 365:** E5, E3, E1, F3.
 - **Copilot Business:** Business Premium, Business Standard, Business Basic, Apps for business and Microsoft Teams Essentials.
-- **Other qualifying plans:** Teams (Enterprise, EEA and Essentials), Exchange Online (Plan 1, Plan 2, Kiosk), SharePoint (Plan 1, Plan 2, Kiosk), OneDrive for work or school (Plan 1, Plan 2), Planner and Project plans, Visio (Plan 1, Plan 2) and Microsoft Clipchamp.
+- **Other qualifying plans:** Teams (Enterprise, EEA and Essentials), and Exchange, SharePoint, OneDrive, Planner and Project, Visio and Clipchamp plans, which the page lists in its commercial table. Check that table for the exact plan names.
 
-**US Government (GCC, GCC High and DoD):** the add-on applies to Microsoft 365 G5, G3 and F1, Office 365 G5, G3, G1 and F3, and certain Exchange, SharePoint, OneDrive and Visio plans.
+**US Government (GCC, GCC High and DoD):** the add-on applies to Microsoft 365 G5, G3 and F1, Office 365 G5, G3, G1 and F3, and Exchange, SharePoint, OneDrive for Business and Visio plans listed on the page.
 
 **Education:** the offer is for faculty, staff and students aged 13 and older through Enrollment for Education Solutions or a Cloud Solution Provider. Eligible plans are Microsoft 365 A5, A3, A2 and A1, and Office 365 A5, A3 and A1.
 
@@ -54,7 +54,7 @@ Because licensing terms change, the page itself tells readers to confirm eligibi
 ## What the pages don't say
 
 - **Prices.** The licensing page states no prices and points to Microsoft's pricing page. Only the Copilot Business annual commitment is mentioned.
-- **Copilot Chat inclusion.** The page doesn't state what Copilot Chat is included with for commercial or government customers. For students aged 13 and older, it says Copilot Chat is available.
+- **Copilot Chat inclusion.** The licensing page doesn't state what Copilot Chat is included with for commercial or government customers. For students aged 13 and older, it says Copilot Chat is available. The requirements page says Copilot Chat is available to users with an eligible Microsoft 365 subscription, without naming plans.
 - **Pay-as-you-go agents.** The licensing page doesn't mention them. Microsoft's architecture page notes that users with Basic licenses don't have access to Microsoft Graph and can use a pay-as-you-go agent with organizational access to reach organizational content.
 
 ## Technical requirements
