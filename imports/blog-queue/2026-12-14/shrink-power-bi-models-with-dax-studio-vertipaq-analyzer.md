@@ -18,9 +18,9 @@ faq:
   - q: "What permissions does View Metrics need?"
     a: "The DAX Studio documentation lists none needed for Power BI Desktop, Contributor for Power BI Premium over the XMLA endpoint, and Database Admin for Azure Analysis Services and SSAS."
   - q: "What is the most effective way to reduce an Import model's size?"
-    a: "Microsoft Learn calls group by and summarize perhaps the most effective technique, because it raises the grain of fact tables. It also warns of a distinct trade-off, loss of detail, and says the reduction could reach 99 percent if day level or order line reporting is no longer needed."
+    a: "Microsoft Learn calls group by and summarize perhaps the most effective technique, because it raises the grain of fact tables. It also warns of a distinct trade-off, loss of detail. In its example, grouping an order-line fact table by date at month level could achieve a possible 99 percent reduction, but day level and order line reporting are then no longer possible."
   - q: "Does auto date/time make a model bigger?"
-    a: "Microsoft Learn's data reduction guide says that with auto date/time enabled, Power BI creates hidden tables for each date column, and that these hidden calculated tables increase the size of the model. You can turn it off in File, Options and settings, Options, under Time intelligence."
+    a: "Microsoft Learn's data reduction guide says that with auto date/time enabled, Power BI creates hidden tables for each date column, and that these hidden calculated tables increase the size of the model. The separate auto date/time page gives the path to turn it off: File, Options and settings, Options, then Global or Current File, under Time intelligence."
 ---
 
 A Power BI model that refreshes slowly, hits memory limits or exceeds a size cap usually has a few columns doing most of the damage. You do not have to guess which. DAX Studio's View Metrics shows the storage footprint of every table and column in the model, and Microsoft's data reduction guide lists what to change. This guide connects the two.
@@ -56,7 +56,7 @@ The DAX Studio page does not define each column. SQLBI's article on the VertiPaq
 - **Columns Hierarchies Size** is for automatically generated column hierarchies.
 - **Columns Total Size** adds those three together for a column.
 - **Table Size** adds Columns Total Size, user hierarchies and relationship size.
-- **Table Size %** and **Database Size %** give the share of the table and of the whole database.
+- **Table Size %** is the ratio of Columns Total Size to Table Size, and **Database Size %** is the ratio of Table Size to the size of the whole database.
 - **Encoding** shows HASH or VALUE.
 
 SQLBI says the Columns view makes it easy to find the most expensive columns regardless of table. It does not discuss high cardinality or give reduction advice, so for the reduction side use Microsoft's guide below. Note also the accuracy remark in the DAX Studio documentation: all metrics reflect memory used when the model is loaded. Saving to disk applies extra compression, so the saved file may be smaller than the number you see.
@@ -67,7 +67,7 @@ Learn's guide for Import models lists these techniques. Work through the biggest
 
 1. **Remove unnecessary columns.** Learn calls this vertical filtering. You can probably remove any column that is not used for reporting, grouping, filtering or sorting, or for a relationship. Removing columns can break reports.
 2. **Remove unnecessary rows.** Load as few rows as possible. Learn recommends not loading all available history unless it is a known reporting requirement, and filtering by entity, such as one sales region.
-3. **Group by and summarize.** Perhaps the most effective technique, since it raises the grain of fact tables. The trade-off is loss of detail, and Learn says a reduction of up to 99 percent is possible when day level or order line reporting is no longer needed.
+3. **Group by and summarize.** Perhaps the most effective technique, since it raises the grain of fact tables. The trade-off is loss of detail. Learn's example, which groups an order-line fact table by date at month level, mentions a possible 99 percent reduction, and notes that reporting at day level or individual order line level is then no longer possible. Treat 99 percent as that example, not as a typical result.
 4. **Optimize column data types.** Learn says the data structures achieve their highest optimization for numeric data, which uses value encoding, while text and other non-numeric data uses hash encoding. Its example: a sales order number with a text prefix such as `SO123456` can have the prefix removed and be converted to a whole number. For large tables with unique or high-cardinality values, this can give significant reduction. Set the default summarization of such columns to `Do Not Summarize`.
 5. **Prefer Power Query columns.** Learn says it is less efficient to add table columns as calculated columns than as Power Query computed columns, so create custom columns in Power Query when possible. Model calculated columns can be better when the formula evaluates measures or needs DAX-only functionality.
 6. **Disable Power Query query load** for intermediate queries that only support other queries.
@@ -89,7 +89,7 @@ If you need to share metrics without exposing names, the `.ovpax` format randomi
 
 ## Capacity limits to keep in mind
 
-Learn's large semantic model page states a default size limit of 1 GB, and that with the large storage format the limit equals the capacity size or the maximum set by the administrator. The Power BI Desktop upload limit remains 10 GB. For refresh, models close to half the capacity size may exceed available memory during refresh. A smaller model gives you more headroom, which is the practical reason to do this work.
+Learn's large semantic model page states a default size limit of 1 GB, and that with the large storage format the limit equals the capacity size or the maximum set by the administrator. The Power BI Desktop upload limit remains 10 GB. For refresh, Learn says models close to half the capacity size may exceed available memory during refresh. A smaller model gives you more headroom. That is my own reading of why this work pays off.
 
 ## Mistakes to avoid
 
@@ -107,8 +107,8 @@ Learn's large semantic model page states a default size limit of 1 GB, and that 
 
 ## Sources
 
-- [DAX Studio documentation: View Metrics](https://daxstudio.org/docs/features/model-metrics)
-- [SQLBI: Data model size with VertiPaq Analyzer](https://www.sqlbi.com/articles/data-model-size-with-vertipaq-analyzer/)
+- [DAX Studio documentation: Model Metrics](https://daxstudio.org/docs/features/model-metrics/)
+- [SQLBI: Data Model Size with VertiPaq Analyzer](https://www.sqlbi.com/articles/data-model-size-with-vertipaq-analyzer/)
 - [Microsoft Learn: Data reduction techniques for Import modeling](https://learn.microsoft.com/en-us/power-bi/guidance/import-modeling-data-reduction)
-- [Microsoft Learn: Auto date/time guidance in Power BI Desktop](https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-auto-date-time)
-- [Microsoft Learn: Large semantic models in Power BI Premium](https://learn.microsoft.com/en-us/power-bi/enterprise/service-premium-large-models)
+- [Microsoft Learn: Auto date/time in Power BI Desktop](https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-auto-date-time)
+- [Microsoft Learn: Large semantic models in Power BI Premium](https://learn.microsoft.com/en-us/fabric/enterprise/powerbi/service-premium-large-models)
