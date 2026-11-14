@@ -29,7 +29,7 @@ Microsoft Entra built-in roles define what an administrator can do. Privileged I
 
 ## Built-in roles in plain terms
 
-Microsoft says Microsoft Entra ID has about 60 built-in roles, each with a fixed set of permissions. Custom roles let you select specific permissions, for example to manage particular applications or service principals.
+Microsoft's concepts page says Microsoft Entra ID has about 60 built-in roles, each with a fixed set of permissions. The best-practices page says over 65, so treat the count as approximate. Custom roles let you select specific permissions, for example to manage particular applications or service principals.
 
 Microsoft groups the built-in roles in three informal categories. The names are arbitrary and imply nothing beyond the documented permissions.
 
@@ -69,7 +69,7 @@ PIM requires licenses. Microsoft points to its ID Governance licensing article, 
 | Permanent | No end date |
 | Time-bound | Valid only between a start date and an end date |
 
-For Microsoft Entra roles, only a user in Privileged Role Administrator or Global Administrator can manage assignments for other administrators. Approvers do not need any roles in order to approve.
+For Microsoft Entra roles, only a user in Privileged Role Administrator or Global Administrator can manage assignments for other administrators.
 
 ## How activation works
 
