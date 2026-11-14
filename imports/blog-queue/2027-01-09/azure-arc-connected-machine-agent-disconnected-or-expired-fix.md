@@ -18,14 +18,14 @@ faq:
   - q: "What does Expired mean?"
     a: "If a machine remains disconnected for 45 days, its status might change to Expired. An expired machine cannot be managed through Azure Arc until a server administrator disconnects and then reconnects it. The credential is valid for up to 90 days and renews every 45 days."
   - q: "How do I fix an expired agent?"
-    a: "Learn says automatic reconnection is not possible and you must disconnect and reconnect the agent using an onboarding credential. The agent troubleshooting page shows azcmagent disconnect and azcmagent connect in its error fixes."
+    a: "Learn says an expired machine cannot be managed until a server administrator disconnects and then reconnects it, and that the agent cannot restore its connection automatically. The agent troubleshooting page shows azcmagent disconnect and azcmagent connect in its error fixes and examples. The identity page points to a separate re-onboarding page that was not read for this article."
   - q: "Where are the agent logs?"
     a: "On Windows, %ProgramData%\\AzureConnectedMachineAgent\\Log\\azcmagent.log. On Linux, /var/opt/azcmagent/log/azcmagent.log. Root access is required on Linux to run azcmagent."
   - q: "How do I test connectivity?"
     a: "Run azcmagent check to see whether a firewall is blocking access to Microsoft Entra ID or Azure Resource Manager."
 ---
 
-A machine that shows Disconnected is usually offline or cut off from the service. One that shows Expired has been disconnected long enough that it cannot return on its own. This guide combines three Microsoft Learn pages: the Arc-enabled servers overview for the status rules, the managed identity page for the certificate, and the agent onboarding troubleshooting page for error codes. The troubleshooting page itself does not define the two statuses.
+A machine that shows Disconnected has stopped sending heartbeats to the service. One that shows Expired has been disconnected long enough that it cannot return on its own. This guide combines three Microsoft Learn pages: the Arc-enabled servers overview for the status rules, the managed identity page for the certificate, and the agent onboarding troubleshooting page for error codes. The troubleshooting page itself does not define the two statuses.
 
 ## Status rules
 
@@ -36,13 +36,13 @@ A machine that shows Disconnected is usually offline or cut off from the service
 
 ## Why the certificate matters
 
-The certificate behind the managed identity is valid for 90 days. The agent tries to renew it when 45 or fewer days remain, and as long as the agent stays connected it rotates the credential automatically. If the agent is offline long enough for the credential to expire, the agent becomes expired too and does not connect. Automatic reconnection is not possible then, and you must disconnect and reconnect it using an onboarding credential.
+The certificate behind the managed identity is valid for 90 days. The agent tries to renew it when 45 or fewer days remain, and as long as the agent stays connected it rotates the credential automatically. If the agent is offline long enough for the credential to expire, the agent becomes expired too and does not connect. The agent cannot automatically restore its connection then, and the machine must be disconnected and reconnected.
 
 The agent stores the certificate in `C:\ProgramData\AzureConnectedMachineAgent\Certs\` on Windows and `/var/opt/azcmagent/certs` on Linux. Learn says not to change access to the certificate files or modify them yourself. Disconnecting removes the resource in Azure, including its managed identity.
 
 ## Fix a Disconnected machine
 
-The pages give no dedicated procedure for this. The steps below combine what they state.
+The pages give no dedicated procedure for this, and the error tables cover connection and onboarding problems rather than the Disconnected status as such. The steps below are my advice, built on what the pages state.
 
 1. Check that the machine is on and can reach Azure. Run `azcmagent check`, which tests whether a firewall blocks Microsoft Entra ID (`login.windows.net`) or Azure Resource Manager (`management.azure.com`).
 2. Make sure the agent service, HIMDS, is running. The error table says to start or restart it as needed.
@@ -50,7 +50,7 @@ The pages give no dedicated procedure for this. The steps below combine what the
 
 ## Fix an Expired machine
 
-Disconnect and reconnect, using an onboarding credential. The error table shows these commands:
+Disconnect and reconnect the agent. The troubleshooting page shows these commands in its error fixes and verbose-log examples:
 
 - `azcmagent disconnect` removes the current connection.
 - `azcmagent disconnect --force-local-only` is for cases where the Azure resource was deleted first.
@@ -74,30 +74,30 @@ The page does not give a full reconnect walkthrough.
 | AZCM0026 | Network error or service unavailable | Check that the required endpoints are reachable |
 | AZCM0041 | Invalid credentials | Check device-login access or the service principal's client ID, secret and expiry |
 | AZCM0044 | Resource name already exists | Use another resource name or delete the existing server in Azure |
-| AZCM0063 | Disconnect failed | Delete the resource in Azure, then run `azcmagent disconnect --force-local-only` |
+| AZCM0063 | Disconnect failed | If the error persists, delete the resource in Azure, then run `azcmagent disconnect --force-local-only` |
 | AZCM0067 | Already connected | Run `azcmagent disconnect`, then connect again |
-| AZCM0081 | Managed identity certificate download failed | Delete the resource in Azure and connect again |
+| AZCM0081 | Managed identity certificate download failed | If this happens while connecting, delete the resource in Azure and connect again |
 
-The connection table also says that the person or service principal needs the **Azure Connected Machine Onboarding** role, and that the Microsoft.HybridCompute resource provider must be registered.
+For connection errors, the connection table also says to verify that you or the service principal are members of the **Azure Connected Machine Onboarding** role (for a 403 authorization error) and to register the resource providers (when the subscription is not registered for the Microsoft.HybridCompute namespace).
 
 ## What the pages do not say
 
 - A page that documents `azcmagent show`.
 - How the Expired status looks in agent output.
 - How to find the credential expiry date.
-- What an onboarding credential is, or how to obtain one.
+- The recovery steps for an expired machine. The identity page links to a separate re-onboarding section that was not read for this article.
 - Proxy guidance in one place. It is spread across the error tables.
 
-## A recovery outline
+## A recovery outline (my advice)
 
-This outline is practical advice built on the pages.
+This outline is my own advice, built on the pages.
 
 1. Check the status and how long the machine has been offline.
 2. If it is under 45 days, restore connectivity and wait for heartbeats.
 3. If it is expired, plan a disconnect and reconnect with onboarding credentials.
 4. Review extensions and configuration afterward, because disconnecting removes the Azure resource.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Waiting for an expired machine to come back by itself.
 - Editing certificate files.
@@ -113,5 +113,5 @@ This outline is practical advice built on the pages.
 ## Sources
 
 - [Troubleshoot Azure Connected Machine agent connection issues (Microsoft Learn)](https://learn.microsoft.com/azure/azure-arc/servers/troubleshoot-agent-onboard)
-- [Azure Arc-enabled servers overview (Microsoft Learn)](https://learn.microsoft.com/azure/azure-arc/servers/overview)
-- [Managed identity and access control for Azure Arc-enabled servers (Microsoft Learn)](https://learn.microsoft.com/azure/azure-arc/servers/security-identity-authorization)
+- [Azure Arc-enabled servers Overview (Microsoft Learn)](https://learn.microsoft.com/azure/azure-arc/servers/overview)
+- [Managed identity and access control (Microsoft Learn)](https://learn.microsoft.com/azure/azure-arc/servers/security-identity-authorization)
