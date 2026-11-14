@@ -11,7 +11,7 @@ keypoints:
   - "The setting lives under Microsoft Purview portal > Settings > Solution settings > Information Protection > Co-authoring for files with sensitivity labels. Allow 24 hours."
   - "Minimum Microsoft 365 Apps builds include 2107 on Windows (Current Channel) and 16.51 on macOS. One old client can break coauthoring for everyone."
   - "Labels with a user-access expiry other than Never, or with Double Key Encryption, do not support coauthoring and AutoSave."
-  - "Files labeled before SharePoint and OneDrive support was turned on must be downloaded and uploaded again to be recognized."
+  - "Files labeled before SharePoint and OneDrive support was turned on are not recognized. Learn says to download and upload them again to the original location."
 faq:
   - q: "Why does a labeled file open in exclusive mode and ask for a check-out?"
     a: "Microsoft Learn says that without the co-authoring setting, users must check out an encrypted document in SharePoint or OneDrive when using Office desktop apps and cannot collaborate in real time. Office for the web is the alternative."
@@ -88,13 +88,13 @@ The SharePoint and OneDrive article lists files that cannot be processed:
 - A labeled and encrypted Office file larger than 12 MB that is copied or moved to a different site.
 - Files uploaded by users without at least View usage rights, where the label is not recognized.
 
-For a file that was labeled and encrypted before SharePoint and OneDrive support was enabled, Learn says the label is not recognized and the contents are not processed. Download the file and upload it again to its original location.
+For a file that was labeled and encrypted before SharePoint and OneDrive support was enabled, Learn says the label is not recognized and the contents are not processed. Download the file and upload it again to its original location. Another passage of the same page says existing files labeled with a single Azure-based key must be either downloaded and uploaded again, or edited, to benefit from the new capabilities.
 
 A checked-out file also behaves differently. The Sensitivity column does not show the label name until the file is checked in and opened again.
 
 ## Step 7: Check for stripped labels
 
-The Office known-issues page lists one related case. When co-authoring of encrypted labeled files is off, Document Inspection can remove labels that do not apply encryption. Microsoft gives no workaround there, other than enabling the feature as described above.
+The Office known-issues page lists one related case. Labels that do not apply encryption can be removed through Document Inspection when co-authoring is off. The page gives the workaround as "None at this time".
 
 ## Quick triage
 
@@ -112,6 +112,6 @@ The Office known-issues page lists one related case. When co-authoring of encryp
 
 ## Sources
 
-- [Enable co-authoring for files encrypted with sensitivity labels (Microsoft Learn)](https://learn.microsoft.com/en-us/purview/sensitivity-labels-coauthoring)
-- [Enable sensitivity labels for Office files in SharePoint and OneDrive (Microsoft Learn)](https://learn.microsoft.com/en-us/purview/sensitivity-labels-sharepoint-onedrive-files)
+- [Enable co-authoring for encrypted documents (Microsoft Learn)](https://learn.microsoft.com/en-us/purview/sensitivity-labels-coauthoring)
+- [Enable sensitivity labels for files in SharePoint and OneDrive (Microsoft Learn)](https://learn.microsoft.com/en-us/purview/sensitivity-labels-sharepoint-onedrive-files)
 - [Known issues with sensitivity labels in Office (Microsoft Support)](https://support.microsoft.com/en-us/office/known-issues-with-sensitivity-labels-in-office-b169d687-2bbd-4e21-a440-7da1b2743edc)
