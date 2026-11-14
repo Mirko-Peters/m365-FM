@@ -38,7 +38,7 @@ A few points matter for guests:
 - **Scope.** Reviews can target groups, applications, access packages and privileged roles. For guests in Teams and Microsoft 365 groups, the group is the relevant scope; check Microsoft Learn for details.
 - **Optional automation.** Results can be applied automatically, or left for an administrator to apply.
 
-Check Microsoft Learn for the current licensing requirements and the exact options available, as these can change and depend on your tenant.
+Microsoft Learn states that access reviews require Microsoft Entra ID Governance or Microsoft Entra Suite subscriptions, and that some capabilities may work with a Microsoft Entra ID P2 subscription. Check Microsoft Learn for the current licensing requirements and the exact options available, as these can change and depend on your tenant.
 
 ## Choosing who reviews
 
@@ -87,3 +87,8 @@ For the technical details of access reviews, including prerequisites and configu
 - **Have a way back.** Know how to re-invite a guest and restore group or team access before you let a review remove anyone.
 - **Make it recurring.** A review that runs on a schedule is more useful than a clean-up that happens once.
 - **Check Microsoft Learn.** Licensing, options and behaviour can change, so confirm the current details before you build your process.
+
+## Sources
+
+- [What are access reviews? (Microsoft Learn)](https://learn.microsoft.com/entra/id-governance/access-reviews-overview)
+- [Use Microsoft Entra ID Governance to review and remove external users who no longer have resource access (Microsoft Learn)](https://learn.microsoft.com/entra/id-governance/access-reviews-external-users)
