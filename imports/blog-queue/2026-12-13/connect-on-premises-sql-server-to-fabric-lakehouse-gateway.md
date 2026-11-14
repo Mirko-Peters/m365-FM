@@ -16,9 +16,9 @@ faq:
   - q: "Which gateway version do Fabric pipelines need?"
     a: "According to Microsoft Learn, you need an on-premises data gateway version 3000.214.2 or later to support Fabric pipelines. The gateway machine must also allow outbound connections to *.frontend.clouddatahub.net."
   - q: "Which authentication works for on-premises SQL Server?"
-    a: "The SQL Server connector overview lists Basic, Organizational account and Windows authentication for pipelines. Windows authentication is available only through an on-premises gateway. Service principal authentication applies only to SQL Server on Azure VMs."
+    a: "The SQL Server connector overview lists Basic, Organizational account, Service principal and Windows authentication for pipelines. Windows authentication is only for the on-premises gateway, and the page says Service principal authentication only applies to SQL Server on Azure VMs."
   - q: "Should I use a pipeline or a copy job?"
-    a: "Learn describes both. A pipeline copy activity supports SQL Server as a source only. A copy job supports SQL Server as source and destination, and its load modes include full load, incremental load, append, override, upsert and CDC. The pages I read do not recommend one over the other, so choose by the load mode you need."
+    a: "Learn describes both. A pipeline copy activity supports SQL Server as a source only. A copy job supports SQL Server as source and destination, and its load modes include full load, incremental load, append, override, upsert and CDC. The copy job page calls Copy job the go-to solution for simplified data movement with no pipelines required and links a data movement strategy guide for comparison. The pages I read give no rule specific to SQL Server, so choose by the load mode you need."
   - q: "What does Overwrite do to a lakehouse table?"
     a: "Learn says Overwrite replaces the table's data and schema. Previous versions remain in the Delta log and can be read with Delta Lake time travel. Append adds rows, and Upsert inserts new rows and updates existing ones using key columns."
 ---
@@ -42,9 +42,9 @@ The article does not describe the database permissions the SQL Server login need
 2. Choose **Manage connections and gateways**.
 3. In **New connection**, select **On-premises**.
 4. Enter the gateway cluster, the resource type and the remaining details.
-5. Choose the authentication method.
+5. Choose the authentication method. The page leaves the supported methods to the connector article.
 
-The SQL Server connector overview lists these for pipelines: Basic, Organizational account, service principal and Windows. Windows authentication is only available through an on-premises gateway, so it is the relevant option here. Service principal authentication applies only to SQL Server on Azure VMs.
+The SQL Server connector overview lists these for pipelines: Basic, Organizational account, service principal and Windows. Windows authentication is only available through an on-premises gateway, so it is the relevant option here. Service principal authentication applies only to SQL Server on Azure VMs. The same table lists None, On-premises and Virtual network as gateway options for pipelines and copy jobs.
 
 ## Step 2: Copy the data with a pipeline
 
@@ -72,22 +72,22 @@ For **Tables**:
 
 - **Table:** pick an existing table or type a new name. In a schema-enabled lakehouse, use schema.table. Without a schema the service uses dbo.
 - **Table action:** **Append** adds rows. **Overwrite** replaces data and schema, and earlier versions stay in the Delta log for time travel. **Upsert** inserts and updates, and needs one or more key columns.
-- **Partitioning (advanced):** writes a folder structure such as year=2000/month=01. Supported partition column types are string, integer, boolean and datetime. Partition columns cannot overlap with key columns.
+- **Partitioning (advanced):** writes a folder structure such as year=2000/month=01. Supported partition column types are string, integer, boolean and datetime. Partition columns cannot overlap with key columns (the page notes this under Upsert).
 - **Apply V-Order (advanced):** on by default.
 
 For **Files**, you choose a path and a format such as Parquet, Delimited text, JSON or others. Copy behavior options apply when the source is file-based, which does not describe a SQL Server source.
 
-Table name rules from the same page: at least one character, no slash or backslash, no trailing dot and no leading or trailing spaces. If source columns have special characters or spaces, use Delta column mapping with delta.columnMapping.mode set to name. The service can create such tables automatically for Append or Overwrite.
+Table name rules from the same page: at least one character, no slash or backslash, no trailing dot and no leading or trailing spaces. If source columns have special characters or spaces, use Delta column mapping with delta.columnMapping.mode set to name. The page says the service can auto-create such a table with column mapping mode name when the destination table does not exist, or when the table action is Overwrite.
 
 ## Limits and gotchas
 
 - **Gateway machine access:** local access to the machine with the gateway installed is not allowed in pipelines.
-- **Firewall:** pipelines need outbound access to \*.frontend.clouddatahub.net. A missing rule is an obvious first check when the run cannot start.
+- **Firewall:** pipelines need outbound access to \*.frontend.clouddatahub.net. My own tip: a missing rule is an obvious first check when the run cannot start.
 - **Private link:** for a workspace with a private link and an on-premises data gateway version 3000.286.12 or later, add \*.dfs.fabric.microsoft.com to the gateway's allow list so the connector can reach OneLake.
 - **Decimal source columns:** editing the destination column type is not supported.
 - **Binary format:** mapping is not supported.
 
-## A short test plan
+## A short test plan (my own suggestion, not from Learn)
 
 1. Create the connection and use the connection test in the dialog if available.
 2. Copy one small table to a new lakehouse table with Overwrite.
@@ -95,7 +95,7 @@ Table name rules from the same page: at least one character, no slash or backsla
 4. Change to Append or Upsert for the production table, with key columns if needed.
 5. Schedule the pipeline only after a full run succeeds.
 
-## Common mistakes
+## Common mistakes (my own list, derived from the pages above)
 
 - Using an old gateway version that does not support pipelines.
 - Choosing Service principal for an on-premises SQL Server.
@@ -105,7 +105,7 @@ Table name rules from the same page: at least one character, no slash or backsla
 
 ## What the pages I read do not cover
 
-The articles do not cover virtual network gateway support for this scenario, the permissions of the SQL Server login or throughput tuning. Treat those as questions for the connector reference pages and your own tests.
+The pages do not walk through a virtual network data gateway setup for this scenario, although the connector overview and the copy job page list it as an option. They also do not cover the permissions of the SQL Server login or throughput tuning. Treat those as questions for the connector reference pages and your own tests.
 
 ## Related
 
@@ -116,6 +116,7 @@ The articles do not cover virtual network gateway support for this scenario, the
 
 ## Sources
 
-- [Microsoft Learn: How to access on-premises data in Data Factory for Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/how-to-access-on-premises-data)
+- [Microsoft Learn: How to access on-premises data sources in Data Factory - Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/how-to-access-on-premises-data)
 - [Microsoft Learn: SQL Server database connector overview](https://learn.microsoft.com/en-us/fabric/data-factory/connector-sql-server-database-overview)
-- [Microsoft Learn: Configure Lakehouse in a copy activity](https://learn.microsoft.com/en-us/fabric/data-factory/connector-lakehouse-copy-activity)
+- [Microsoft Learn: Configure lakehouse in a copy activity](https://learn.microsoft.com/en-us/fabric/data-factory/connector-lakehouse-copy-activity)
+- [Microsoft Learn: What is Copy job in Data Factory](https://learn.microsoft.com/en-us/fabric/data-factory/what-is-copy-job)
