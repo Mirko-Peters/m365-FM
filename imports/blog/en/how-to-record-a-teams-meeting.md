@@ -24,7 +24,7 @@ To record a Teams meeting, join the meeting, select **More actions** in the meet
 
 ## Start a recording
 
-The steps below are the ones Microsoft documents on its page [Start, stop, and find meeting recordings in Microsoft Teams](https://support.microsoft.com/en-us/teams/meetings/start-stop-and-find-meeting-recordings-in-microsoft-teams) for the Teams desktop app.
+The steps below are the ones Microsoft documents on its page [Start, stop, and find meeting recordings in Microsoft Teams](https://support.microsoft.com/teams/meetings/start-stop-and-find-meeting-recordings-in-microsoft-teams) for the Teams desktop app.
 
 1. Start or join the meeting.
 2. In the meeting controls, select **More actions**, then **Record**.
@@ -118,7 +118,7 @@ For a channel meeting, the admin setting `ChannelRecordingDownload` decides whet
 
 ## When Record is missing or grayed out
 
-Microsoft's page [I can't record a meeting in Microsoft Teams](https://support.microsoft.com/en-US/teams/meetings/i-can-t-record-a-meeting-in-microsoft-teams) lists the tooltips Teams shows and their causes. Match your message to the cause:
+Microsoft's page [I can't record a meeting in Microsoft Teams](https://support.microsoft.com/teams/meetings/i-can-t-record-a-meeting-in-microsoft-teams) lists the tooltips Teams shows and their causes. Match your message to the cause:
 
 - **"Only people in this org can start recording."** You're anonymous or you belong to another organization. Sign in with an account from the organizer's organization, or ask someone from that organization to record and share the file.
 - **"Unavailable in this meeting."** The organizer's meeting policy doesn't allow recording, or the meeting was created through the Graph API with recording turned off. Ask your admin, or have the organizer end the meeting, enable recording and start a new one.
@@ -134,7 +134,7 @@ In the Teams admin center, go to **Meetings** > **Meeting policies**, select or 
 
 ## How long a recording is kept
 
-Recordings don't live forever. Admin settings decide when a file expires. Microsoft documents a default of 120 days for new meeting recordings and transcripts in [Manage Teams recording expiration policy](https://learn.microsoft.com/en-us/microsoftteams/manage-teams-recording-expiration-policy). The value can range from 1 to 99999 days, and -1 (PowerShell only) means never. For A1 licenses the maximum default is 30 days. A policy change affects only new recordings.
+Recordings don't live forever. Admin settings decide when a file expires. Microsoft documents a default of 120 days for new meeting recordings and transcripts in [Manage Teams recording expiration policy](https://learn.microsoft.com/microsoftteams/manage-teams-recording-expiration-policy). The value can range from 1 to 99999 days, and -1 (PowerShell only) means never. For A1 licenses the maximum default is 30 days. A policy change affects only new recordings.
 
 The organizer or a co-organizer with edit permission can change the date for a single recording:
 
