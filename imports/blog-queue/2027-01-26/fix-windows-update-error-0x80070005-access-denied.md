@@ -58,7 +58,7 @@ The page says the error occurs if the update process cannot access required file
 
 ## Before you start
 
-The page says to back up the operating system disk first. For VMs it links the Azure VM restore documentation. In my experience, a permission reset on system folders is the kind of change you want a way back from, so do not skip this.
+The page says to back up the operating system disk first. For VMs it links the Azure VM restore documentation. My advice: a permission reset on system folders is the kind of change you want a way back from, so do not skip this.
 
 ## Step 1: Reset the permissions on the component store
 
