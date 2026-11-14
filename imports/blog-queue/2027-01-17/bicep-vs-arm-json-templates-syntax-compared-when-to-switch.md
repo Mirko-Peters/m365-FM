@@ -42,7 +42,7 @@ The comparison page says the Bicep Playground shows Bicep and equivalent JSON si
 | Use a parameter | `name: orgName` | `"[parameters('orgName')]"` |
 | Variable | `var description = 'example value'` | A `variables` entry |
 | String join | `'${namePrefix}-vm'` | `"[concat(parameters('namePrefix'), '-vm')]"` |
-| Logical AND | `isMonday && isNovember` | `[and(parameter('isMonday'), parameter('isNovember'))]` |
+| Logical AND | `isMonday && isNovember` | `[and(parameters('isMonday'), parameters('isNovember'))]` |
 | Conditional value | `isMonday ? 'valueIfTrue' : 'valueIfFalse'` | `[if(parameters('isMonday'), 'valueIfTrue', 'valueIfFalse')]` |
 | Target scope | `targetScope = 'subscription'` | A `$schema` for the subscription deployment template |
 | Conditional resource | `= if(deployVM) {` | A `condition` property |
@@ -89,9 +89,9 @@ Learn notes that decompiling helps you get started and that you might revise the
 This section is my advice, not a Microsoft statement. Learn's comparison page does not tell you when to switch, so these points are my own reading.
 
 1. **Start new work in Bicep** if your team can install the Bicep tooling, since the syntax is shorter and dependencies are implicit.
-2. **Leave stable JSON alone** until you have a reason to touch it. Decompile it when you next change it, and review the result line by line, as Learn advises.
+2. **Leave stable JSON alone** until you have a reason to touch it. Decompile it when you next change it, and review the result line by line. Learn says you might need to fix warnings and errors and may want to revise the file to follow best practices.
 3. **Convert in small steps.** Decompile one template, run what-if against a test resource group, and compare the preview with the JSON deployment.
-4. **Watch conditional outputs and parameter names** after conversion, because these are the two differences Learn calls out.
+4. **Watch conditional outputs and parameter names** after conversion, because these are two pitfalls the pages spell out: the ternary versus the `condition` property, and periods in parameter names.
 5. **Retire explicit dependsOn** during the move, and check that the deployment order still works.
 6. **Use the Playground** to explain the two forms to colleagues who know only JSON.
 
