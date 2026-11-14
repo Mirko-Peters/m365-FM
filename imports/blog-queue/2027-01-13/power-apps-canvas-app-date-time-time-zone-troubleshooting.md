@@ -25,7 +25,7 @@ faq:
     a: "Learn says a form shows a time picker for Time-Zone Independent and User Local columns because they always have a time component. You can remove the time picker, or for User Local columns that need no adjustment change the behavior to Date Only. Learn warns this is permanent and might break other apps, plugins or workflows."
 ---
 
-If a canvas app shows a date that is a day or a few hours off, the cause is usually a time zone or daylight saving adjustment applied in the wrong place. Microsoft Learn's troubleshooting steps start with one question: is the stored value wrong, or is the app adjusting it incorrectly? Answer that first. Then compare the data source's time zone behavior with the Date Picker's **DateTimeZone** setting, and test with a different time zone.
+If a canvas app shows a date that is a day or a few hours off, Microsoft Learn says the cause might be a time zone or daylight saving adjustment. Microsoft Learn's troubleshooting steps start with one question: is the stored value wrong, or is the app adjusting it incorrectly? Answer that first. Then compare the data source's time zone behavior with the Date Picker's **DateTimeZone** setting, and test with a different time zone.
 
 ## Symptoms the Learn article covers
 
@@ -60,7 +60,7 @@ Learn adds that this conflict does not occur in model-driven apps, because time 
 
 To see whether time zone or daylight saving adjustment causes the issue, change the user's time zone. Learn says canvas apps use the **system time zone**. It refers you to the Windows, Android, iOS or macOS documentation to change it.
 
-For model-driven apps, Learn names a second setting in personal options and suggests combinations such as matching both settings, using UTC, or using a time zone with the same offset that does not observe daylight saving. That advice is about model-driven apps. For canvas apps only the system time zone matters, according to the page I read.
+For model-driven apps, Learn names a second setting in personal options and suggests combinations such as matching both settings, using UTC, or using a time zone with the same offset that does not observe daylight saving. That advice is about model-driven apps. The canvas article names only the system time zone for canvas apps.
 
 ## Three aids that make problems visible
 
@@ -98,7 +98,7 @@ This is my advice, built on the Learn steps.
 
 ## What the page does not give
 
-The canvas article describes causes and checks. It does not list formulas that convert between time zones for every case, so test any conversion formula with users in at least two time zones, including one on the other side of a daylight saving change.
+The canvas article describes causes and checks. It does not list formulas that convert between time zones for every case, so my advice, not a Microsoft statement: test any conversion formula with users in at least two time zones, including one on the other side of a daylight saving change.
 
 ## Related
 
