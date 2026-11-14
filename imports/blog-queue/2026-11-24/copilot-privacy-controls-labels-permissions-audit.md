@@ -93,9 +93,9 @@ To search: open the Microsoft Purview portal, select **Audit**, and filter the *
 
 - **Retention.** Retention policies can retain or delete user prompts and responses. If several policies or eDiscovery holds apply, data is kept for the longest duration.
 - **eDiscovery.** Prompts and responses are stored in the user's mailbox. Search it with the condition Type > Contains any of > Copilot activity.
-- **Communication compliance.** It can detect conduct violations in AI prompts and responses, with usernames pseudonymized by default.
+- **Communication compliance.** It can detect conduct violations in AI prompts and responses, with usernames pseudonymized.
 - **Insider Risk Management.** The Risky AI usage template detects risky usage including prompt injection attacks and access to protected material.
-- **Users.** People can delete their own Copilot activity history in the My Account portal.
+
 
 ## Where to start
 
