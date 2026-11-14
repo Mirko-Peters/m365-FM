@@ -25,13 +25,13 @@ faq:
     a: "The guidance on instructions says it applies to agents built with Agent Builder in Microsoft 365 Copilot or with the Agents Toolkit. The tutorial page I read for this article does not cover Agent Builder or Copilot Studio steps."
 ---
 
-To build a declarative agent with Microsoft's tutorial, install Visual Studio Code and the Microsoft 365 Agents Toolkit, create a new agent with the Declarative Agent template, provision it and test it in Microsoft 365 Copilot Chat. This article follows the Learn tutorial and adds the guidance Learn gives on writing instructions.
+To build a declarative agent with Microsoft's tutorial, install Visual Studio Code and the Microsoft 365 Agents Toolkit, create a new agent with the Declarative Agent template, provision it and test it in the Copilot app at m365.cloud.microsoft/chat. This article follows the Learn tutorial and adds the guidance Learn gives on writing instructions.
 
 ## What a declarative agent is
 
 Microsoft Learn describes a declarative agent as a goal-directed conversational experience powered by Microsoft 365 Copilot. You define its purpose, instructions, knowledge and supported actions for a business scenario. Learn groups the definition into identity and behavior, knowledge, capabilities, and host and distribution metadata.
 
-The overview page also says to check first whether an existing, approved agent can already do the job. It advises recording dependencies such as identity, permissions, consent, data boundaries, language, licensing, owner and support contact. It says a declarative agent is the wrong choice if you need full control over orchestration, model, hosting or UI.
+The overview page also says to check first whether an existing, approved agent can already do the job. It advises recording dependencies such as identity, permissions, consent, data boundaries, language, licensing, owner and support contact. It says an agent might not be the right component when the solution requires complete control of the orchestration, model, hosting or user interface, and points to custom engine agents for that case.
 
 ## Prerequisites
 
@@ -53,7 +53,7 @@ The tutorial's screenshots use a release version of the toolkit and say prerelea
 
 ## Provision
 
-In the new Visual Studio Code window, select **Microsoft 365 Agents Toolkit**, then select **Provision** in the **Lifecycle** pane. If this fails, check custom app upload first.
+In the new Visual Studio Code window, select **Microsoft 365 Agents Toolkit**, then select **Provision** in the **Lifecycle** pane. The prerequisites say Provision fails if custom app upload is not enabled.
 
 ## Test
 
@@ -64,7 +64,7 @@ In the new Visual Studio Code window, select **Microsoft 365 Agents Toolkit**, t
 
 ## Write better instructions
 
-Learn has a separate page on instructions. It applies to agents built with Agent Builder or the Agents Toolkit, and not to Copilot Studio agents.
+Learn has a separate page on instructions. It applies to developers and makers who use Agent Builder or the Agents Toolkit. For Copilot Studio agents, the page points to separate guidance on generative orchestration.
 
 - **Limit:** the page states an 8,000-character instruction limit. It warns against storing instructions in SharePoint or other knowledge sources, because those are not treated as trusted instruction content and can be blocked, truncated or sanitized.
 - **Structure:** purpose, general guidelines (directions, tone, restrictions) and skills, plus optional parts such as step-by-step instructions, error handling, interaction examples and nonstandard terms.
@@ -94,6 +94,6 @@ The overview page lists national cloud support. GCC has full declarative agent s
 
 ## Sources
 
-- [Build a declarative agent for Microsoft 365 Copilot](https://learn.microsoft.com/microsoft-365-copilot/extensibility/build-declarative-agents)
-- [Write effective instructions for declarative agents](https://learn.microsoft.com/microsoft-365-copilot/extensibility/declarative-agent-instructions)
-- [Declarative agents for Microsoft 365 Copilot overview](https://learn.microsoft.com/microsoft-365-copilot/extensibility/overview-declarative-agent)
+- [Create declarative agents by using Microsoft 365 Agents Toolkit and JSON (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/extensibility/build-declarative-agents)
+- [Write effective instructions for declarative agents (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/extensibility/declarative-agent-instructions)
+- [Declarative agents for Microsoft 365 Copilot (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/extensibility/overview-declarative-agent)
