@@ -9,7 +9,7 @@ topics: [intune]
 keypoints:
   - "ADE needs new or wiped devices from Apple Business or Apple School Manager, an active Apple token and an Apple MDM push certificate in Intune."
   - "Create the policy under Devices, Device onboarding, Enrollment, Apple mobile, Enrollment program tokens, Enrollment policies, Create policy. One token supports up to 1,000 enrollment policies."
-  - "From the October 2026 (2610) service release, Intune ends support for Setup Assistant (legacy) authentication and updates existing ADE profiles to Setup Assistant with modern authentication."
+  - "With the October 2026 (2610) service release, Intune ended support for Setup Assistant (legacy) authentication and updated existing ADE profiles to Setup Assistant with modern authentication."
   - "Changes to an existing policy do not reach assigned devices until they are reset and reactivated. Only the device name template applies at the next check-in."
   - "Assign a policy or set a default before devices are turned on, otherwise enrollment of a synced device without a policy fails."
 faq:
@@ -18,14 +18,14 @@ faq:
   - q: "Where do I create the policy?"
     a: "In the Intune admin center go to Devices, expand Device onboarding, select Enrollment, open the Apple mobile tab, choose Enrollment program tokens, pick a token, select Enrollment policies and Create policy, then iOS/iPadOS."
   - q: "Which authentication method is recommended?"
-    a: "Learn recommends Setup Assistant with modern authentication with just-in-time registration. Setup Assistant (legacy) support ends with the October 2026 (2610) service release."
+    a: "Learn recommends Setup Assistant with modern authentication with just-in-time registration. Intune ended Setup Assistant (legacy) support with the October 2026 (2610) service release."
   - q: "What does Await final configuration do?"
     a: "When set to Yes, it locks the end of Setup Assistant until device configuration policies install. Learn says most test devices reached the home screen within 15 minutes, and that apps are not included during this screen."
   - q: "Why is the Passcode screen a problem?"
     a: "Learn says the Passcode and Touch ID and Face ID screens do not work correctly on iOS and iPadOS 14.5 and later, so hide both and require a passcode through a configuration or compliance policy."
 ---
 
-Automated Device Enrollment (ADE) enrolls corporate iOS and iPadOS devices without user interaction beyond Setup Assistant. In Intune the behavior is defined by an enrollment policy. This guide follows the Microsoft Learn article on setting up ADE for iOS and iPadOS.
+Automated Device Enrollment (ADE) enrolls corporate iOS and iPadOS devices without user interaction beyond Setup Assistant. In Intune the behavior is defined by an enrollment policy. This guide follows the Microsoft Learn article on setting up ADE for iOS and iPadOS and the related article on authentication methods.
 
 ## Prerequisites
 
@@ -58,7 +58,7 @@ Limit: 1,000 enrollment policies per enrollment token. The older Profiles experi
 
 ## Authentication change in October 2026
 
-Starting with the 2610 service release, Intune ends support for Setup Assistant (legacy) authentication for ADE with user affinity. Existing profiles are updated automatically to Setup Assistant with modern authentication. Enrolled devices are not affected. Review profiles and test modern authentication before then.
+With the 2610 service release, Intune ended support for Setup Assistant (legacy) authentication for iOS/iPadOS and macOS ADE with user affinity. This comes from Learn's authentication methods article, not from the setup article. Existing profiles are updated automatically to Setup Assistant with modern authentication, and the legacy option is no longer available when creating or editing profiles. Enrolled devices are not affected. Review your profiles and test the modern authentication enrollment experience.
 
 ## Assign policies
 
@@ -92,4 +92,5 @@ The page does not state a token validity period. Intune alerts you before a toke
 
 ## Sources
 
-- [Set up automated device enrollment for iOS/iPadOS](https://learn.microsoft.com/intune/intune-service/enrollment/device-enrollment-program-enroll-ios)
+- [Set up automated device enrollment (ADE) for iOS/iPadOS (Microsoft Learn)](https://learn.microsoft.com/intune/device-enrollment/apple/setup-automated-ios)
+- [Authentication methods for Apple automated device enrollment (Microsoft Learn)](https://learn.microsoft.com/intune/device-enrollment/apple/ref-automated-authentication-methods)
