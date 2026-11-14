@@ -72,7 +72,7 @@ The page gives only domain-level weights. It gives no weights for individual sub
 
 ## Renewal and practice assessment
 
-Associate, expert and specialty certifications expire annually, and you can renew by passing a free online assessment on Microsoft Learn. A new practice assessment experience on AI Skills Navigator replaces the legacy version. Learn says legacy practice assessments on Learn are no longer updated.
+Associate, expert and specialty certifications expire annually, and you can renew by passing a free online assessment on Microsoft Learn. The page also links to a free practice assessment.
 
 ## Suggestion: a study plan
 
@@ -102,4 +102,4 @@ The page I read does not describe the following:
 
 ## Sources
 
-- [Study guide for Exam AZ-305](https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-305)
+- [Study guide for Exam AZ-305: Designing Microsoft Azure Infrastructure Solutions (Microsoft Learn)](https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-305)
