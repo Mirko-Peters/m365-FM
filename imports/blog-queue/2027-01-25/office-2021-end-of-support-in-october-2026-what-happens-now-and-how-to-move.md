@@ -7,18 +7,18 @@ author: mirko-p
 date: 2027-01-25
 topics: [microsoft-365-apps, configuration-manager]
 keypoints:
-  - "Support for Office 2021 has ended, with no extension and no extended security updates. Microsoft pages show October 13 or 14, 2026, because one uses a Pacific Time retirement time."
+  - "Support for Office 2021 has ended, with no extension and no extended security updates. Microsoft pages show October 13 or 14, 2026. The lifecycle page lists a Pacific Time retirement timestamp."
   - "After the end of support Microsoft no longer provides technical support, bug fixes or security fixes for newly found vulnerabilities."
   - "The apps may continue to work, but Microsoft warns of serious security risks, and the page says online help for them will be mostly retired."
   - "Learn names two targets: Microsoft 365 Apps (subscription, continuously updated) and Office LTSC 2024 (one-time volume purchase for special scenarios)."
   - "For planning, Learn lists system requirements, application compatibility with VBA and add-ins, infrastructure assessment, update channels, and removal of older versions."
 faq:
   - q: "When did Office 2021 support end?"
-    a: "The Microsoft Learn announcement and the Office Support page give October 13, 2026 for Office LTSC 2021 and Office 2021. The lifecycle page for Office 2021 lists a retirement date of October 14, 2026 at 6:59:59 AM Pacific Time, which is the same cutoff expressed in a different time zone and form. In either case the date has passed. The Support page says there is no extension and there are no extended security updates."
+    a: "The Microsoft Learn announcement and the Office Support page give October 13, 2026 for Office LTSC 2021 and Office 2021. The lifecycle page for Office 2021 lists a retirement date of October 14, 2026 at 6:59:59 AM Pacific Time, The pages do not say why the dates differ by a day. In either case the date has passed. The Support page says there is no extension and there are no extended security updates."
   - q: "Do my Office 2021 apps still work?"
     a: "The Support page says all of your Office 2021 apps may continue to function, but you could be exposed to serious security risks. Microsoft no longer provides technical support, bug fixes or security fixes for newly discovered vulnerabilities, and you no longer receive Office 2021 software updates."
   - q: "What should a company move to?"
-    a: "Learn recommends Microsoft 365 Apps as the primary choice, the subscription version that comes with many Microsoft 365 enterprise and business plans. For organizations not ready for the cloud, it names Office LTSC 2024, sold as a one-time purchase through a volume license agreement, one device per license, for specific scenarios such as regulated devices, process control devices and systems that cannot connect to the internet."
+    a: "The Learn announcement says to begin upgrading to Microsoft 365 Apps, the subscription version that comes with many Microsoft 365 enterprise and business plans. For organizations not ready for the cloud, it names Office LTSC 2024, sold as a one-time purchase through a volume license agreement, one device per license, for specific scenarios such as regulated devices, process control devices and systems that cannot connect to the internet."
   - q: "What should home users do?"
     a: "For Office Home and Student 2021 or Home and Business 2021, the Support page says you may keep using your current version, but Microsoft recommends upgrading to a newer version. It links the pages for buying or trying Microsoft 365 and for upgrading Office."
   - q: "How do I plan an upgrade to Microsoft 365 Apps?"
@@ -33,7 +33,7 @@ Office 2021 has passed its end of support. If you still have it on devices, the 
 - The Office Support page says support for Office 2021 ended on **October 13, 2026**, with no extension and no extended security updates.
 - The Learn lifecycle page for Office 2021 shows a retirement date of **October 14, 2026, 6:59:59 AM PT**, in Pacific Time, and lists the editions Home and Business, Home and Business for Mac, Home and Student, Home and Student for Mac, and Professional. It gives the Modern Lifecycle Policy and shows no Mainstream or Extended phase.
 
-The pages differ by a day because of how the cutoff is written. For planning, treat the end as mid-October 2026. It has passed.
+The pages differ by a day and do not say why. For planning, treat the end as mid-October 2026. It has passed.
 
 ## What changed
 
@@ -55,7 +55,7 @@ The Support page says all of your Office 2021 apps may continue to function, but
 
 ### Microsoft 365 Apps
 
-Learn calls this the primary option. It is the subscription version of Office for desktop, web and mobile that comes with many Microsoft 365 enterprise and business plans. It is continuously updated, with new features as often as monthly. It uses user-based licensing, so users can install Office on several devices, for example Windows, Mac and mobile. Learn also names device-based licensing, shared computer activation and extended offline access for special cases.
+The announcement says to begin upgrading to Microsoft 365 Apps now. It is the subscription version of Office for desktop, web and mobile that comes with many Microsoft 365 enterprise and business plans. It is continuously updated, with new features as often as monthly. It uses user-based licensing, so users can install Office on several devices, for example Windows, Mac and mobile. Learn also names device-based licensing, shared computer activation and extended offline access for special cases.
 
 ### Office LTSC 2024
 
@@ -63,7 +63,7 @@ For organizations not ready to move to the cloud. It is sold as a one-time purch
 
 ### Home users
 
-For Home and Student 2021 or Home and Business 2021, the Support page says you may keep using your version, but Microsoft recommends a newer version. Work or school users depend on whether IT manages Office. The page I read does not mention Office 2024 for these users.
+For Home and Student 2021 or Home and Business 2021, the Support page says you may keep using your version, but Microsoft recommends a newer version.
 
 ## Planning an upgrade to Microsoft 365 Apps
 
@@ -79,11 +79,11 @@ The Learn upgrade page lists these steps for IT teams:
 8. **Group Policy.** Download the ADMX and ADML files. Cloud Policy can apply most user-based settings for Microsoft 365 Apps for enterprise.
 9. **Remove older versions.** Uninstall earlier Office versions before installing Microsoft 365 Apps. MSI versions must be removed. For automation, use the Support and Recovery Assistant, or the `RemoveMSI` element in the Office Deployment Tool configuration.
 
-Learn also points larger customers to Microsoft FastTrack. For the announcement it says organizations with over 150 licenses can use it.
+Learn also points larger customers to Microsoft FastTrack. The announcement says companies with over 150 licenses should consider engaging it.
 
-One detail that matters here: the Learn page's detailed upgrade methods, such as the Group Policy setting that upgrades Office 2019 in place and the upgrade package, are written for Office 2016 and Office 2019. For Office LTSC 2021 the page gives the general plan, so check the current deployment guide for your exact scenario before you rely on the in-place method.
+One detail that matters here: the Learn page's detailed upgrade methods, such as the Group Policy setting that upgrades Office 2019 in place and the upgrade package, are written for Office 2016 and Office 2019. For Office LTSC 2021 the page gives the general plan, so my advice is to check the current deployment guide for your exact scenario before you rely on the in-place method.
 
-Project and Visio follow their own cycle. Learn says to upgrade them too, with subscription plans or with Project 2024 and Visio LTSC 2024 under volume licensing.
+The Learn upgrade page says the desktop versions of Project and Visio share the same end of support dates as the Office suites for their versions, and says to upgrade them too, with subscription plans or with Project 2024 and Visio LTSC 2024 under volume licensing.
 
 ## Work order for an IT team (my advice)
 
@@ -103,7 +103,7 @@ This is my suggestion, not guidance from the page:
 
 ## Sources
 
-- [Office 2021 lifecycle (Microsoft Learn)](https://learn.microsoft.com/lifecycle/products/office-2021)
-- [Office LTSC 2021 end of support (Microsoft Learn)](https://learn.microsoft.com/lifecycle/announcements/office-ltsc-2021-end-of-support)
+- [Office 2021 (Microsoft Learn)](https://learn.microsoft.com/lifecycle/products/office-2021)
+- [Office LTSC 2021 reaching end of support on October 13, 2026 (Microsoft Learn)](https://learn.microsoft.com/lifecycle/announcements/office-ltsc-2021-end-of-support)
 - [End of support for Office 2021 (Microsoft Support)](https://support.microsoft.com/office/system-requirements/end-of-support-for-office-2021)
 - [Plan an upgrade from older versions of Office to Microsoft 365 Apps (Microsoft Learn)](https://learn.microsoft.com/microsoft-365-apps/end-of-support/plan-upgrade-older-versions-office)
