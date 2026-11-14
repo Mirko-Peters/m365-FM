@@ -16,7 +16,7 @@ faq:
   - q: "What is Shared Calling in Teams Phone?"
     a: "According to Microsoft Learn, Shared Calling lets users without an assigned phone number place and receive calls through a resource account phone number. A Shared Calling policy configures the users."
   - q: "What do users need for Shared Calling?"
-    a: "Microsoft Learn says each user needs a Teams Phone license and must be voice enabled. You must not assign a phone number to a Shared Calling user. The users also need no voice routing policy with valid PSTN usages."
+    a: "Microsoft Learn says each user needs a Teams Phone license and must be voice enabled. You must not assign a phone number to a Shared Calling user. The users must also not have an assigned voice routing policy with valid PSTN usages."
   - q: "How do users call each other inside the organization?"
     a: "Learn says internal calls between users are made by dialing by name. Optionally, users can also be dialed by extension if you configure extension dialing."
   - q: "Which number types can the resource account use?"
@@ -58,7 +58,7 @@ Set-CsPhoneNumberAssignment -Identity <user> -EnterpriseVoiceEnabled $true
 
 ## Step 3: Create a voice routing policy with empty PSTN usages
 
-Create a voice routing policy with empty PSTN usages and assign it to the Shared Calling users.
+If your tenant uses global voice routing policies with valid PSTN usages, Learn says you must create a new voice routing policy with empty PSTN usages and assign it to the Shared Calling users.
 
 ## Step 4: Create the Shared Calling policy
 
@@ -100,7 +100,7 @@ Extension dialing works only if the user's voice routing policy has no PSTN usag
 ## Emergency calling
 
 - Create and assign an **emergency call routing policy** for every Shared Calling user, regardless of number type.
-- For a Calling Plan or Operator Connect resource account, the policy must not have online PSTN usages. For Direct Routing, it must have them.
+- For a Calling Plan or Operator Connect resource account, the policy should not have online PSTN usages configured. For Direct Routing, it must have them.
 - The callback number comes from the policy's emergency numbers. If the list is empty, the resource account number is used, which is not supported for Calling Plan toll-free numbers.
 - Location order: the user's actual location from the Teams client, then the location assigned to the resource account's number.
 - Outside North America, upload emergency addresses for the resource account numbers to the carrier's emergency database. Contact each carrier.
@@ -116,7 +116,7 @@ Extension dialing works only if the user's voice routing policy has no PSTN usag
 - If Calling Plan or Operator Connect and Direct Routing Shared Calling coexist in one tenant, site-assigned emergency call routing policies cannot be used.
 - If the resource account's number is removed, reassigned or ported, the policy remains but outbound calls fail for users still using it.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Giving a user a phone number as well as Shared Calling.
 - Leaving PSTN usages in the voice routing policy.
@@ -131,4 +131,4 @@ Extension dialing works only if the user's voice routing policy has no PSTN usag
 
 ## Sources
 
-- [Set up Shared Calling in Teams Phone (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/shared-calling-setup)
+- [Configure Shared Calling (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/shared-calling-setup)
