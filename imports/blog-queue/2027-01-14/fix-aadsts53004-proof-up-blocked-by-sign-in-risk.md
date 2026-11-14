@@ -41,7 +41,7 @@ Put the pieces together and the error follows:
 
 ## If you are the user
 
-The pages I read give no user-side workaround for the blocked session itself. What they state is that users must register for MFA before a situation arises that needs remediation, and that unregistered users are blocked and require administrator intervention. So the practical steps are:
+The Learn pages cited here give no user-side workaround for the blocked session itself. What they state is that users must register for MFA before a situation arises that needs remediation, and that unregistered users are blocked and require administrator intervention. So the practical steps are these (my advice, derived from that):
 
 1. Do not retry in a loop. Each risky attempt can give the same result.
 2. Contact your administrator and give the time of the sign-in, the error code AADSTS53004 and the app you tried to open.
@@ -51,9 +51,9 @@ The pages I read give no user-side workaround for the blocked session itself. Wh
 
 ### Find out why the user is unregistered
 
-The most common situation is a new or never-registered user. Learn's page on controlling security information registration with Conditional Access describes a related setup: a policy that targets the **Register security information** user action, and Temporary Access Pass credentials issued by administrators so that new users can satisfy the MFA requirement and register. It says Temporary Access Pass credentials satisfy Conditional Access requirements for multifactor authentication, and let users register from any device or location. It also says Temporary Access Pass does not work for guest users.
+A likely situation is a new or never-registered user (my reading). Learn's page on controlling security information registration with Conditional Access describes a related setup: a policy that targets the **Register security information** user action, and Temporary Access Pass credentials issued by administrators so that new users can satisfy the MFA requirement and register. It says Temporary Access Pass credentials satisfy Conditional Access requirements for multifactor authentication, and let users register from any device or location. It also says Temporary Access Pass does not work for guest users.
 
-The pages I read do not say whether a Temporary Access Pass clears an active risky sign-in. Treat that as untested in your tenant and check it with one test user.
+None of the cited pages says whether a Temporary Access Pass clears an active risky sign-in. My advice: treat that as untested in your tenant and check it with one test user.
 
 ### Review the risk and the policy
 
