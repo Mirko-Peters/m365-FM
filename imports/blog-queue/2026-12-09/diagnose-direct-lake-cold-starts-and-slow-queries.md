@@ -34,7 +34,7 @@ Learn describes the main tasks when a DAX query reaches a cold model:
 - **Join indexes.** For queries across related tables, Direct Lake loads the key-column dictionaries and the primary-key column segments on the one side of the relationship.
 - **Deletion vectors.** If the source table uses them, they are loaded so deleted rows are excluded.
 
-The overview page adds that columns are loaded only when a query requests them for the first time, and that loaded columns stay resident. A column can be evicted after a refresh that follows a Delta table update, after a period without use, or under memory pressure from other capacity operations.
+The "How Direct Lake works" page adds that columns are loaded only when a query requests them for the first time, and that loaded columns stay resident. A column can be evicted when the model or table was refreshed after a Delta table update, when no query used it for some time, or for other memory management reasons, including memory pressure in the capacity from concurrent operations.
 
 ## The four memory states
 
@@ -49,7 +49,7 @@ Learn states that Direct Lake performs best warm or hot, and that it reaches per
 
 ## Step 1: Reproduce the pattern
 
-Run the same report or DAX query twice after a refresh. If only the first run is slow, you are probably seeing cold loading. If both are slow, the cause may be something else. The Direct Lake pages describe DirectQuery fallback as another reason for slow queries, so rule that out separately.
+Run the same report or DAX query twice after a refresh. This comparison is my own diagnostic habit, not a documented procedure: if only the first run is slow, you are probably seeing cold loading. If both are slow, the cause may be something else. The Direct Lake pages describe DirectQuery fallback as another reason for slow queries, so rule that out separately. For Direct Lake on SQL analytics endpoints, the "How Direct Lake works" page says the DAX query `EVALUATE TABLETRAITS()` shows the fallback reason per table in the `[DirectLakeFallbackInfo]` column, where `None` means the table uses Direct Lake mode.
 
 ## Step 2: Check how the Delta table is loaded
 
@@ -86,7 +86,7 @@ Learn says Direct Lake must load all column data required by a query, which can 
 
 The pages read here do not give a numeric eviction threshold or a prewarming feature. If you need either, check the current Fabric capacity documentation and release notes.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Judging performance only on the first run after a refresh.
 - Loading with Overwrite and then wondering why every refresh is slow.
@@ -102,6 +102,6 @@ The pages read here do not give a numeric eviction threshold or a prewarming fea
 
 ## Sources
 
-- [Microsoft Learn: Direct Lake loading, residency and performance](https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-understand-storage)
+- [Microsoft Learn: Understand Direct Lake query performance](https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-understand-storage)
 - [Microsoft Learn: How Direct Lake works](https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-how-it-works)
 - [Microsoft Learn: Direct Lake overview](https://learn.microsoft.com/en-us/fabric/fundamentals/direct-lake-overview)
