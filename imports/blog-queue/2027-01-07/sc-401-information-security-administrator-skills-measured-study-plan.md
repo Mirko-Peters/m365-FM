@@ -29,7 +29,7 @@ SC-401 tests whether you can plan and implement information protection, data los
 
 ## Audience
 
-The page describes an information security administrator who plans and implements information security for sensitive data using Microsoft Purview and related services. The role mitigates internal and external risks to data in Microsoft 365 collaboration, protects data used by AI services, and implements information protection, DLP, retention and insider risk management. It also manages alerts and activities and takes part in incident response. A passing score is 700 or greater. The page shows no retirement date.
+The page describes an information security administrator who plans and implements information security for sensitive data using Microsoft Purview and related services. The role mitigates internal and external risks to data in Microsoft 365 collaboration, protects data used by AI services, and implements information protection, DLP, retention and insider risk management. It also manages alerts and activities and takes part in incident response. It also describes working with governance, data and security roles and with workload administrators and business application owners, and it expects familiarity with all Microsoft 365 services, PowerShell, Microsoft Entra, the Microsoft Defender portal and Microsoft Defender for Cloud Apps. A passing score is 700 or greater. The page shows no retirement date.
 
 ## Domain 1: implement information protection (30-35%)
 
@@ -99,9 +99,9 @@ The page describes an information security administrator who plans and implement
 - Self-paced learning paths and modules, and instructor-led courses.
 - Documentation: Microsoft security, Microsoft Purview, DLP, Defender for Cloud, the Zero Trust Guidance Center and governance, risk and compliance in Azure.
 - The exam sandbox, Microsoft Q&A, the community hubs, the Exam Readiness Zone and accommodations requests.
-- Renewal through a free online assessment on Microsoft Learn.
+- Renewal through a free online assessment on Microsoft Learn. The page says associate, expert and specialty certifications expire annually.
 
-The page notes a minor change to the sensitivity labels section in the latest update.
+The change log lists one minor change, to the sensitivity labels section. The audience profile and the top-level group Implement information protection are marked no change, and the table lists no other rows.
 
 ## What the page does not say
 
@@ -109,14 +109,14 @@ Exam length, question count, price, prerequisites, and the weight of individual 
 
 ## A study plan
 
-This plan is practical advice built on the weights.
+This plan is my advice, built on the weights.
 
 1. **Weeks 1-2, domain 1.** Build sensitive info types, then labels and auto-labeling in a test tenant.
 2. **Weeks 3-4, domain 2.** Create DLP policies, then Endpoint DLP and retention labels. Study precedence rules.
 3. **Weeks 5-6, domain 3.** Set up Insider Risk Management, audit retention and DSPM for AI.
 4. **Week 7.** Take the free practice assessment and revisit weak areas against the outline.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Studying only labels and neglecting retention and Insider Risk Management.
 - Reading about DLP precedence without testing overlapping policies.
