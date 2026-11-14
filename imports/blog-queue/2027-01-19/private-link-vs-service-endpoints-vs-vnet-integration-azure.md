@@ -22,7 +22,7 @@ faq:
   - q: "Does Learn recommend one of the options?"
     a: "On the service endpoints page, a note says Microsoft recommends Azure Private Link and private endpoints for secure and private access to services hosted on the Azure platform."
   - q: "Do service endpoints cost extra?"
-    a: "Learn says there is no extra charge for service endpoints. For Private Link it points to a pricing page, which I did not read, so check it for current prices."
+    a: "Learn says there is no extra charge for service endpoints. For Private Link it points to a separate pricing page, so check that page for current prices."
 ---
 
 These three features answer different questions. Service endpoints let a subnet reach an Azure service by identity, with the service keeping its public address. Private Link puts a private IP for a specific resource into your virtual network. App Service virtual network integration lets an app make outbound calls into your network and says nothing about inbound access. Microsoft Learn's service endpoint page carries a note that Microsoft recommends Private Link and private endpoints for secure and private access to Azure platform services. This article compares the three using Learn's pages on each.
@@ -57,9 +57,9 @@ Learn also notes that Azure Private Link integrates with Azure Monitor for loggi
 
 Learn's App Service page says virtual network integration gives your app access to resources in or through a virtual network but does not grant inbound private access. It is used only for outbound calls. For inbound private access, the page points to private endpoints. Facts from the page:
 
-- It needs a Basic, Standard, Premium (v2 to v4) or Elastic Premium plan, and works with apps, function apps and Logic apps.
+- It needs a Basic, Standard, Premium, Premium v2, Premium v3, Premium v4 or Elastic Premium plan, and works with App Service apps, function apps and Logic apps. Apps in an App Service Environment are already integrated with a virtual network.
 - It supports connecting to a virtual network in the same region.
-- It needs a dedicated, unused subnet that is an IPv4 /28 block or larger.
+- It depends on a dedicated subnet, and the limitations list asks for an unused IPv4 /28 block or larger. Learn adds that creating the subnet in the Azure portal during integration needs at least /27, and recommends allocating double the IPs of your planned maximum scale.
 - It can reach resources in the integrated and peered networks, across ExpressRoute, service endpoint-secured services and private endpoint-enabled services.
 - NSGs and route tables on the integration subnet apply to outbound traffic only. Inbound NSG rules do not apply.
 - To call a private endpoint from the app, DNS must resolve to the private endpoint, for example with Azure DNS private zones.
@@ -80,14 +80,14 @@ This section is my advice, not a Microsoft statement.
 
 1. **Start from the direction.** If the question is how my web app calls a database privately, you need integration plus a private path to the database. If the question is how people reach my app privately, integration does not answer it.
 2. **Use Private Link when on-premises access or per-resource scoping matters.** Learn lists both as benefits.
-3. **Use service endpoints for simple subnet-to-service restriction.** Learn describes them as simple to set up with little management overhead, and with no extra charge.
+3. **Use service endpoints for simple subnet-to-service restriction.** Learn describes them as simple to set up with little management overhead, and with no extra charge. Keep in mind that the same page recommends Private Link and private endpoints for secure and private access to Azure platform services.
 4. **Check the source IP change before enabling endpoints.** Learn warns that firewall rules built on public IPs stop working and open connections close, so schedule the change.
 5. **Combine them where needed.** An app with virtual network integration can reach both service endpoint-secured and private endpoint-enabled services, according to Learn.
 6. **Plan DNS early for private endpoints.** Learn's App Service page says DNS must resolve to the private endpoint, so decide how private zones are linked.
 
 ## What the pages do not say
 
-This is a comparison I built from separate pages. The storage firewall page, which I also read, describes virtual network rules for storage and the two storage service endpoint types, Microsoft.Storage for the same region and Microsoft.Storage.Global for any region. I did not read a single Microsoft page that ranks all three options, so the table above is my summary.
+This is a comparison built from separate pages, and none of them compares all three options, so the table above is my summary. The storage firewall page describes virtual network rules for storage and the two storage service endpoint types, Microsoft.Storage for the same region and Microsoft.Storage.Global for any region. It says only one of the two endpoint types can be associated with a subnet.
 
 ## Related
 
