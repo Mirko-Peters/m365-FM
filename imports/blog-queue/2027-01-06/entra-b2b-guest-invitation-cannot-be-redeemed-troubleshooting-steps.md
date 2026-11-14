@@ -25,7 +25,7 @@ faq:
     a: "The invitee should check the ISP or spam filter and allow Invites@microsoft.com. Azure China uses Invites@oe.21vianet.com and Microsoft Entra Government uses invites@azuread.us."
 ---
 
-When a B2B invitation cannot be sent or redeemed, sort the symptom first: is the invitation blocked, does redemption fail, is the email missing, or is there an address conflict? This guide follows the Microsoft Learn B2B troubleshooting page, last updated in February 2025. It lists symptoms, causes and fixes, and says what the page leaves out.
+When a B2B invitation cannot be sent or redeemed, sort the symptom first: is the invitation blocked, does redemption fail, is the email missing, or is there an address conflict? This guide follows the Microsoft Learn B2B troubleshooting page, whose metadata date is February 2025. It lists symptoms, causes and fixes, and says what the page leaves out.
 
 ## Invitation is blocked or not allowed
 
@@ -33,8 +33,8 @@ When a B2B invitation cannot be sent or redeemed, sort the symptom first: is the
 | --- | --- | --- |
 | No permission to invite users | Your account is not authorized to invite external users, or a recent change has not applied | Check Microsoft Entra ID > Users > User settings > External users > Manage external collaboration settings. After changes or a Guest Inviter assignment, wait 15 to 60 minutes |
 | Blocked by cross-tenant access settings | B2B collaboration is supported but blocked | Admins in both organizations must allow it. For a tenant in a separate Azure cloud, use Microsoft cloud settings |
-| Blocked because cross-tenant settings are missing in your organization | Settings in your organization block it | Ask your administrator to check cross-tenant access settings |
-| Microsoft B2B Cross Cloud Worker app disabled | An admin in the invitee's home tenant disabled the app, which is rare | The home tenant admin re-enables it. Search for the app name in the admin center, or use PowerShell |
+| Blocked because cross-tenant settings are missing in your organization | The message says the invitation is blocked by cross-tenant access settings in your organization | Ask your administrator to check cross-tenant access settings |
+| Microsoft B2B Cross Cloud Worker app disabled | The app is typically enabled, but an admin in the invitee's home tenant might have disabled it. Learn calls this rare | The home tenant admin re-enables it. Search for the app name in the admin center, or use PowerShell |
 | Cannot invite in Azure US Government | The other tenant does not support B2B collaboration | B2B works only between Azure US Government tenants that both support it. Use Microsoft cloud settings for tenants outside the cloud |
 
 ## Redemption fails
@@ -73,16 +73,16 @@ If a guest in a viral tenant cannot reset a password, the identity tenant is unm
 
 A dedicated entry for email one-time passcode. A standalone resend-invitation procedure, since resend guidance appears only in the viral tenant section. Invitation expiration, status checking, and delivery timing.
 
-## A triage order
+## A triage order (my advice)
 
-The order is practical advice.
+The order is my own suggestion, not taken from the page.
 
 1. Did the invitation send? If not, check the invite permissions and the settings above.
 2. Did it send but not arrive? Check spam and the sender address.
 3. Did the user click but fail? Check the home tenant policy, federation and proxyAddress conflicts.
 4. Run the contact check from the page when a contact may match.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Retrying immediately after a settings change instead of waiting 15 to 60 minutes.
 - Fixing only the user object and forgetting the matching contact or group.
@@ -97,4 +97,4 @@ The order is practical advice.
 
 ## Sources
 
-- [Troubleshooting Microsoft Entra B2B collaboration (Microsoft Learn)](https://learn.microsoft.com/entra/external-id/troubleshoot)
+- [Troubleshoot B2B issues (Microsoft Learn)](https://learn.microsoft.com/entra/external-id/troubleshoot)
