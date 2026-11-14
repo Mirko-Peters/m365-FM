@@ -29,7 +29,7 @@ Copilot Studio is Microsoft's low-code studio for building AI agents and workflo
 
 ## What Copilot Studio is
 
-Microsoft Learn describes Copilot Studio as a graphical, low-code studio for building and managing agents and workflows. You connect them to organizational data and systems and publish them to channels such as Microsoft Teams, Microsoft Copilot, websites and mobile apps. Agents can follow instructions, use connected knowledge sources, call tools and work in multiple languages.
+Microsoft Learn describes Copilot Studio as a graphical, low-code studio for building and managing agents and workflows. You connect them to organizational data and systems and publish them to channels such as Microsoft Teams, Microsoft Copilot, websites and mobile apps.
 
 The overview also names three harnesses, the engines that run an agent. They affect reasoning, features and billing:
 
@@ -37,18 +37,18 @@ The overview also names three harnesses, the engines that run an agent. They aff
 - **Customer Conversation harness:** customer-facing agents over voice and chat, with escalation to a human.
 - **Standard harness:** rule-based agents built around topics.
 
-The step-by-step articles cited below apply to the standard harness.
+The "Create your first agent" article cited below covers agents powered by the standard harness.
 
 ## Getting started in six steps
 
 Based on Microsoft's "Create your first agent" article:
 
-1. **Check access.** You need a Microsoft account with access to Copilot Studio and permission to at least one environment. If you see "You don't have permissions to any environments", create a new environment or ask an administrator.
-2. **Sign in** at copilotstudio.microsoft.com. Supported browsers are Microsoft Edge 122+, Chrome 122+, Firefox 127+ or Safari 17+.
+1. **Check access.** If you see "You don't have permissions to any environments, Get access from an administrator", the article's fix is to create a new environment and create the agent there. It lists no specific roles or licenses beyond this.
+2. **Sign in** at copilotstudio.microsoft.com and switch to the environment you want. The article does not list supported browser versions.
 3. **Choose how to create.** Describe the agent on the **Home** or **Agents** page (up to 1,024 characters), or create a blank agent. You cannot change the primary language after creation.
 4. **Review the Overview page.** If you used a description, the AI generates a name, description and instructions and suggests triggers, knowledge and tools. Select **Add** or **Dismiss** for each. The suggestions do not persist beyond the current session.
 5. **Set the basics.** The name can have up to 42 characters. The description can have up to 1,024 characters. Instructions can have up to 8,000 characters. Test after editing instructions, because they change behavior.
-6. **Test, then publish.** The first-agent article links to a separate testing article and does not cover publishing. For deployment, it points to the quickstart for creating and deploying an agent.
+6. **Test, then publish.** The first-agent article links to a separate testing article and does not cover publishing details.
 
 Copilot Studio configures Microsoft Entra ID authentication automatically. You can also set up single sign-on with Entra ID.
 
@@ -65,7 +65,7 @@ Microsoft's What's new page was last updated on 2026-11-12 in the version read f
 | August 2026 | Preview: Fabric IQ connection for Microsoft Fabric business data |
 | June 2026 | Preview: Foundry IQ connection for a knowledge base built in Azure AI Foundry |
 
-Other October 2026 entries include the Customer Conversation harness (preview), Work IQ (general availability), Copilot Studio MCP and MCP and Agent2Agent channels (preview).
+Other October 2026 entries include the Customer Conversation harness (preview), Work IQ (general availability) and MCP and Agent2Agent channels (preview).
 
 A Microsoft 365 message center post dated August 7, 2026 announced Azure SQL as a knowledge source, with preview planned for August and general availability for September 2026. That post described the status as in development at the time, so verify the current state in your tenant.
 
@@ -92,7 +92,7 @@ The documented connector list includes Salesforce, ServiceNow, AzureSQL, Azure A
 
 ### Option 3: Azure SQL tables as knowledge
 
-The What's new page lists this feature. The dedicated Learn article could not be loaded for this page, so no setup steps are given here. Community threads on Microsoft Q&A describe users seeing "There was a problem connecting to Azure SQL" with no accepted answer, so test early with a small table.
+The What's new page lists this feature. The dedicated Learn article could not be loaded for this page, so no setup steps are given here. A Microsoft Q&A thread from December 2025 reports the error "There was a problem connecting to Azure SQL" and has no accepted answer, so test early with a small table.
 
 ## A discrepancy to be aware of
 
