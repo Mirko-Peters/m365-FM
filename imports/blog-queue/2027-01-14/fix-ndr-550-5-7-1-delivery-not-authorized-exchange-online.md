@@ -1,5 +1,5 @@
 ---
-title: "Fix NDR 550 5.7.1 Delivery Not Authorized or Unable to Relay in Exchange Online"
+title: "Fix NDR 550 5.7.1 Delivery Not Authorized in Exchange Online"
 summary: "NDR 5.7.1 (and 5.7.0 to 5.7.999) means a security setting blocks the message: no permission to send, a restricted group, a blocklisted IP, MX, SPF or hybrid connector problems. Steps for senders, group owners and admins."
 status: review
 publish: false
@@ -18,14 +18,14 @@ faq:
   - q: "What can the sender do?"
     a: "Learn says you typically cannot fix it yourself. For an external recipient, contact them and ask them to tell their admin. For an internal group, the NDR names the restricted groups, and you ask the group owner for permission. For a group with more than 5,000 members, join the group or ask the owner or moderator to approve the message."
   - q: "How does a group owner fix it?"
-    a: "Learn lists three options: remove the sender restriction, for example by adding the sender to the allowed senders list through a mail contact or mail user for an external sender, or configure the group to accept external senders; adjust a mail flow rule that restricts senders; or approve the moderated message or add the sender to the group."
+    a: "Learn gives two main options. Remove the sender restriction: add the sender to the allowed senders list (an external sender needs a mail contact or mail user first), configure the group to accept external senders, or change a mail flow rule that restricts senders. For groups with more than 5,000 members, approve the sender's message or add the sender to the group. It also links articles on moderated recipients and on managing distribution groups."
   - q: "What if my IP is on Microsoft's blocklist?"
     a: "The NDR diagnostics will say the client host is blocked using a blocklist and will give a removal address. Learn says to forward the NDR to that address, and also points to the delist portal for removing yourself from the blocked senders list."
   - q: "What is the RESOLVER.RST.AuthRequired error for a public folder?"
     a: "Learn says an external sender gets a 5.7.1 NDR with RESOLVER.RST.AuthRequired when sending to a mail-enabled public folder that requires authentication. The fix in the Exchange admin center is to edit the folder's mail flow settings, clear Require that all senders are authenticated and select All senders."
 ---
 
-NDR 5.7.1 means a security setting stopped the message. It applies to codes 5.7.0 through 5.7.999 as well. Microsoft Learn says it typically cannot be fixed by the sender alone. Check who you were sending to, read the NDR text for a group name or a blocklist notice, then involve the recipient's admin or your own. This guide follows the Learn article for NDR 5.7.1 in Exchange Online.
+NDR 5.7.1 means a security setting stopped the message. It applies to codes 5.7.0 through 5.7.999 as well. Microsoft Learn says it typically cannot be fixed by the sender alone. My advice for a first pass: check who you were sending to, read the NDR text for a group name or a blocklist notice, then involve the recipient's admin or your own. This guide follows the Learn article for NDR 5.7.1 in Exchange Online.
 
 ## What the error means
 
