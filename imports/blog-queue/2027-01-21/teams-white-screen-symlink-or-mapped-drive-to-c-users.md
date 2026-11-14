@@ -38,7 +38,7 @@ The resolution has two parts:
 1. Make sure the application is installed in the default location, `user\Appdata`.
 2. If the mapping must exist, use the web version of Microsoft Teams instead.
 
-The page has no log locations, error codes or version numbers. I have not seen a documented explanation of why the stale client shows a white screen, so I do not offer one.
+The page has no log locations, error codes or version numbers. The page gives no explanation of why the stale client shows a white screen, so this article offers none.
 
 ## A triage order
 
@@ -73,7 +73,7 @@ I am not claiming that the bootstrapper path fixes the symlink case. The white s
 
 Clearing the cache is a common reflex for Teams problems. The Learn page on the Teams client cache is clear that it is a targeted step for a small number of local client problems, not a general first step. It also says that clearing the cache does not fix problems such as missing messages, chat history not loading or a missing channel, and that it deletes the diagnostic logs needed to find the cause.
 
-Keep that in mind for the white screen. The white screen article does not list cache clearing as a resolution, so I would only try it as a deliberate test and after you have kept the logs you may need. The cache page lists these Windows paths for new Teams if you do decide to test it:
+Keep that in mind for the white screen. The white screen article does not list cache clearing as a resolution, so my advice is to try it only as a deliberate test, after you have kept the logs you may need. The cache page lists these Windows paths for new Teams if you do decide to test it:
 
 - Reset the app: **Settings** > **Apps** > **Installed apps** > Microsoft Teams > **Advanced options** > **Reset**. Learn warns that app data, including personalization, is deleted.
 - Or delete the files in `%userprofile%\appdata\local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams` after quitting Teams.
@@ -82,7 +82,7 @@ For classic Teams the page lists `%appdata%\Microsoft\Teams`. Restarting after a
 
 ## Notes for admins (my advice)
 
-This section is my experience, not Microsoft guidance:
+This section is my suggestion, not Microsoft guidance:
 
 - Ask why the mapping exists. Folder redirection for profile data is often an older design, and the cleanest fix is to remove the need for it.
 - Treat installation scripts that move apps to Program Files as technical debt. Compare them with the supported installer from the bulk deployment page.
