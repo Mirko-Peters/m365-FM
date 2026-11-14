@@ -113,9 +113,9 @@ To add yours:
 1. Open the custom unifying parser for the schema.
 2. Insert a line that calls your **filtering** parser, passing the schema's parameters by name.
 3. Deploy both a filtering parser and a parameter-less parser.
-4. If other parsers are already listed, add a comma and use `union isfuzzy=true`, which tolerates a missing source when another resolves.
+4. If other parsers are already listed, add a comma at the end of the previous line. Learn's example combines the existing and the new parser with `union isfuzzy=true`, which it describes as tolerating minor schema differences between them.
 
-Before you add the line, check that the custom unifying function declares the parameters you reference, and forward `pack=pack` only if your parser supports it. Set the `disabled` argument to `true` to turn a parser off.
+The line to add differs per schema. For DNS, for example, the parser reference takes `starttime, endtime, srcipaddr, domain_has_any, responsecodename, response_has_ipv4, response_has_any_prefix, eventtype`. The pages read do not describe a way to disable a single custom parser inside the custom unifying parser other than removing its line.
 
 ## Replace or pin a built-in parser
 
@@ -132,7 +132,7 @@ To pin a version, add it explicitly to the custom unifying parser, for example `
 - Filtering on time inside the parser.
 - Using `project` and losing fields.
 - Missing the parameter-less parser.
-- Referencing parameters the custom unifying parser does not declare.
+- Calling your parser with a different parameter list than the one Learn gives for the schema.
 - Not recording warnings. For a parser you contribute, Learn asks you to document remaining warnings in the YAML `Exceptions` section.
 
 ## Related
@@ -143,5 +143,5 @@ To pin a version, add it explicitly to the custom unifying parser, for example `
 
 ## Sources
 
-- [Microsoft Learn: Develop ASIM parsers](https://learn.microsoft.com/en-us/azure/sentinel/normalization-develop-parsers)
+- [Microsoft Learn: Develop ASIM parsers](https://learn.microsoft.com/en-us/azure/sentinel/isv/normalization-develop-parsers)
 - [Microsoft Learn: Manage ASIM parsers](https://learn.microsoft.com/en-us/azure/sentinel/normalization-manage-parsers)
