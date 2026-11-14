@@ -14,7 +14,7 @@ keypoints:
   - "Review the WAF logs before disabling a managed rule that seems to block valid traffic."
 faq:
   - q: "Does Power Pages have a deny list for IP addresses?"
-    a: "According to Microsoft Learn, the IP Restrictions feature works as an allow list. If a request comes from an address that is not on the list, the site returns a static HTTP 403 page. For deny rules, Learn points to WAF custom rules, which can block by IP address, geo location or request URI."
+    a: "According to Microsoft Learn, the IP Restrictions feature works as an allow list. If a request comes from an address that is not on the list, the site returns a static HTTP 403 page. Learn describes no deny list for the platform feature. WAF custom rules can allow or block by IP address, geo location or request URI."
   - q: "Can I use IP Restrictions and WAF at the same time?"
     a: "No. Microsoft Learn states that the IP Restrictions feature under Site Details and Security is not supported when WAF is enabled. To filter by IP while WAF is active, use WAF custom rules."
   - q: "Who can configure these settings?"
@@ -25,7 +25,7 @@ faq:
     a: "Microsoft Learn says that once WAF is enabled, all requests are logged. The logs contain client IPs, socket IPs and request URIs, and can be used to build IP or rate limit rules."
 ---
 
-Power Pages offers two ways to restrict who can reach a site. The IP Restrictions feature is a simple allow list. The Web Application Firewall (WAF) adds managed rules plus custom rules for IP address, geo location, request URI and rate limits. The two cannot run together. Microsoft Learn says IP Restrictions are not supported while WAF is enabled, so choose one approach per site.
+Power Pages has two network-level ways to restrict who can reach a site (site visibility is a separate control). The IP Restrictions feature is a simple allow list. The Web Application Firewall (WAF) adds managed rules plus custom rules for IP address, geo location, request URI and rate limits. The two cannot run together. Microsoft Learn says IP Restrictions are not supported while WAF is enabled, so for IP filtering use WAF custom rules once WAF is on. My reading: pick one approach per site.
 
 ## Option 1: IP Restrictions (allow list)
 
@@ -63,7 +63,7 @@ The Learn page does not state a limit on the number of entries, how long a chang
 
 ### Enable WAF
 
-In the Power Platform admin center, open the site and turn on **Enable Web Application Firewall** on the **Performance & protection** card. WAF is enabled by default when a trial site is converted to production, unless an administrator opts out before the conversion. The policy runs in Prevention mode, so requests that match the managed rule set are blocked.
+In the Power Platform admin center, turn on **Enable Web Application Firewall** on the **Performance & protection** card. Learn's steps do not spell out how you reach that card, presumably through the site. Learn also documents turning it off in the same place. WAF is enabled by default when a trial site is converted to production, unless an administrator opts out before the conversion. The policy runs in Prevention mode, so requests that match the managed rule set are blocked.
 
 ### Create a custom rule
 
@@ -94,7 +94,7 @@ If a rule blocks valid requests:
 
 Disabling rules can reduce protection. To restore one, select **Add new rule**, choose **Managed** and pick the rule. Bot protection rules for good bots, bad bots and unknown bots can be added the same way. Rule set upgrades for the Microsoft Default Rule Set and the Bot Manager Rule Set keep custom rules but cannot be rolled back.
 
-## Which option fits
+## Which option fits (my summary)
 
 | Need | Fits |
 |---|---|
@@ -103,7 +103,7 @@ Disabling rules can reduce protection. To restore one, select **Add new rule**, 
 | Protection against common web attacks | WAF managed rules |
 | IP filtering while WAF is on | WAF custom rules, because IP Restrictions are not supported |
 
-## Typical mistakes
+## Typical mistakes (my summary)
 
 - Expecting IP Restrictions to keep working after enabling WAF.
 - Adding a private address range, which the site cannot use.
@@ -113,7 +113,7 @@ Disabling rules can reduce protection. To restore one, select **Add new rule**, 
 
 ## What the sources do not say
 
-The pages read do not state a maximum number of IP entries or custom rules, do not describe log retention, and do not list rule actions beyond allow, deny and rate limit.
+The pages read do not state a maximum number of IP entries or custom rules, do not say what happens to existing IP Restrictions entries when WAF is enabled (only that the feature is not supported then), do not describe log retention, and do not list rule actions beyond allow, deny and rate limit.
 
 ## Related
 
@@ -125,8 +125,8 @@ The pages read do not state a maximum number of IP entries or custom rules, do n
 ## Sources
 
 - [Restrict website access by IP address](https://learn.microsoft.com/en-us/power-pages/admin/ip-address-restrict)
-- [Web Application Firewall for Power Pages](https://learn.microsoft.com/power-pages/security/web-application-firewall)
+- [Web Application Firewall overview](https://learn.microsoft.com/en-us/power-pages/security/web-application-firewall)
 - [Configure Web Application Firewall for Power Pages](https://learn.microsoft.com/en-us/power-pages/security/configure-web-application-firewall)
-- [Configure WAF custom rules](https://learn.microsoft.com/en-us/power-pages/security/web-application-firewall-custom-rule-sets)
-- [Configure managed rules](https://learn.microsoft.com/en-us/power-pages/security/configure-managed-rules)
-- [Power Pages WAF FAQ](https://learn.microsoft.com/power-pages/security/waf-faq)
+- [Configure Web Application Firewall custom rules](https://learn.microsoft.com/en-us/power-pages/security/web-application-firewall-custom-rule-sets)
+- [Configure managed rules in Power Pages WAF](https://learn.microsoft.com/en-us/power-pages/security/configure-managed-rules)
+- [FAQ for configuring Web Application Firewall in Power Pages](https://learn.microsoft.com/en-us/power-pages/security/waf-faq)
