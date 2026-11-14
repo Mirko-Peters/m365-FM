@@ -67,7 +67,7 @@ Learn says to always add redirect URIs to the application object only. Values ad
 
 Add the URI under the platform that matches the app type: **Web**, **Single-page application (SPA)**, or **Mobile and desktop applications**. In the Azure portal the **Redirect URIs** text box rejects `http` loopback URIs. Learn names the `replyUrlsWithType` attribute in the application manifest for those restricted cases, and I could not confirm exact manifest steps from the pages I read, so check the manifest reference before editing.
 
-## Quick checklist
+## Quick checklist (my advice)
 
 1. Copy the exact reply URL from the error message.
 2. Compare it character by character with the registered value: scheme, host, path, case, trailing slash.
@@ -77,7 +77,7 @@ Add the URI under the platform that matches the app type: **Web**, **Single-page
 
 ## What the pages do not cover
 
-The Learn pages I read do not give a portal navigation path for the SAML reply URL, and they do not describe how Entra normalizes every possible mismatch. If a URL still fails after it matches exactly, read the error text again for a different application ID. Sending a request to the wrong app registration is a separate problem from a mistyped URL.
+The Learn pages I read do not give a portal navigation path for the SAML reply URL, and they do not describe how Entra normalizes every possible mismatch. If a URL still fails after it matches exactly, my advice is to read the error text again for a different application ID, because sending a request to the wrong app registration is a separate problem from a mistyped URL.
 
 ## Related
 
@@ -85,6 +85,6 @@ The Learn pages I read do not give a portal navigation path for the SAML reply U
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
-- [Error AADSTS50011 reply URL mismatch](https://learn.microsoft.com/troubleshoot/azure/active-directory/error-code-aadsts50011-reply-url-mismatch)
-- [Redirect URI (reply URL) restrictions and limitations](https://learn.microsoft.com/entra/identity-platform/reply-url)
+- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Error AADSTS50011 - The reply URL specified in the request does not match the reply URLs configured for the application (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/entra/entra-id/app-integration/error-code-aadsts50011-reply-url-mismatch)
+- [Redirect URI (reply URL) best practices and limitations (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reply-url)
