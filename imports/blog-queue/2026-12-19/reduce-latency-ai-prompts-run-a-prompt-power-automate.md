@@ -20,7 +20,7 @@ faq:
   - q: "How long can a flow take to respond to a Power Apps call?"
     a: "Learn lists 120 seconds, or 2 minutes, for inbound requests. Flows with a response action such as Respond to a PowerApp or flow return a response within this limit, and actions after the response action can keep running."
   - q: "Can I run prompt calls in parallel inside a loop?"
-    a: "Learn says the Apply to each concurrency default is 1 and can be set between 1 and 50. It also warns that high concurrency can cause performance issues when connected services have request limits, and that enabling trigger concurrency control cannot be undone."
+    a: "Learn's limits page says the Apply to each concurrency default is 1 and can be set to a value between 1 and 50. Separately, Learn's trigger guidance warns that a high number of concurrent runs under trigger concurrency control can cause performance issues, and the limits page says turning that control on cannot be undone without deleting and re-adding the trigger."
   - q: "How do I get structured output from a prompt?"
     a: "Select JSON as the prompt output in prompt builder. Learn says this makes it easier to process responses with multiple elements. JSON formats must use field keys, and the error 'A JSON could not be generated' can be addressed by adding the instruction not to include JSON markdown."
 ---
@@ -42,7 +42,7 @@ Learn recommends a mini model when you need a cost-effective solution for modera
 Two cautions from the same page:
 
 - Experimental and preview models might show variability in latency, response quality or message consumption, and might time out or be unavailable. Anthropic Claude models are at the experimental stage even without a tag.
-- The temperature setting does not change speed according to Learn. It guides creativity versus determinism, with 0 as the default.
+- Learn does not say that the temperature setting affects speed. It describes temperature as guiding creativity (1) versus deterministic answers (0), with 0 as the default. The setting is not available for the GPT-5 reasoning model.
 
 For a flow that classifies, extracts or summarizes, start with the Mini category and measure. Move up only when quality requires it.
 
@@ -50,7 +50,7 @@ For a flow that classifies, extracts or summarizes, start with the Mini category
 
 Learn's prompt guidance asks for clear, concise and specific prompts, and says to adjust the prompt if generated text is too long or contains irrelevant information. Learn does not state that shorter output is faster, so treat this as a sensible practice and test it.
 
-When you need several values, set the output to **JSON** in the top-right corner of the prompt. Learn says this makes it easier to process responses with multiple elements in cloud flows. Details:
+When you need several values, set the output to **JSON** in the top-right corner of the prompt. Learn says JSON output makes it easier to process responses with multiple elements in agents, cloud flows or apps. Details:
 
 - The format mode is **Auto detected** by default. Select **Save custom** after editing the example, or your changes are lost.
 - The saved format is applied at runtime, so responses stay consistent even when dynamic inputs change.
@@ -75,14 +75,14 @@ If a prompt call could take long, do not hold a Power Apps user on the response.
 The most common slow design is one prompt call per item inside **Apply to each**. Learn documents:
 
 - Apply to each concurrency defaults to 1 and can be set between 1 and 50.
-- A high number of concurrent runs can cause performance issues when connected services have request limits.
-- Trigger concurrency control is off by default and cannot be undone without deleting and re-adding the trigger. Learn's guidance is to leave it at the default, or to place the actions that need it in a dedicated child flow.
+- That limit applies to Apply to each loops. Learn's separate guidance on trigger concurrency control warns that a high number of concurrent runs can lead to performance issues, especially if the connected services have limits on concurrent requests. The Learn page does not make this statement for Apply to each specifically, so treat it as a reasonable caution there.
+- Trigger concurrency control is off by default and cannot be undone without deleting and re-adding the trigger. Learn's best practice is to leave it at the default, or to place the actions that need it in a dedicated child flow.
 
 For prompts, Learn adds that the capability might be subject to usage limits or capacity throttling, and that it consumes credits: AI Builder credits are consumed first in Power Apps and Power Automate, if you have them. Learn does not give numbers for the throttling.
 
-A practical approach: raise loop concurrency in small steps, watch the run history for slow or failed prompt actions, and stop when it stops helping. If a flow is throttled, Learn says the usual result is delayed runs of later actions, and that a consistently throttled flow is turned off after 14 days.
+A practical approach: raise loop concurrency in small steps, watch the run history for slow or failed prompt actions, and stop when it stops helping. For throughput limits, Learn says that when a flow exceeds a limit its activity slows and resumes automatically when the sliding window is below the limit, and that a consistently throttled flow is turned off after 14 days.
 
-The default retry policy for actions retries at exponentially increasing intervals, up to 12 retries over about an hour for the medium and high profiles. A flow that hits a throttling error can therefore look slow rather than failed. Learn's page describes this policy for actions in general and does not say how it applies to Run a prompt in particular.
+Learn's default retry policy for failed flows sends up to 12 retries at exponentially increasing intervals for the Medium and High performance profiles, scaling by 7 seconds up to an interval of approximately 1 hour for the last retry. The Low profile sends up to two retries. Learn's page describes this policy generally and does not say how it applies to Run a prompt in particular, so check the run history of your own flow to see whether retries add to the duration.
 
 ## Lever 5: Filter before you call the model
 
@@ -100,10 +100,9 @@ The pages read for this article do not describe typical response times, token th
 
 ## Sources
 
-- [Use a prompt in a flow (Microsoft Learn)](https://learn.microsoft.com/en-us/ai-builder/use-a-custom-prompt-in-flow)
-- [Model selection and temperature settings (Microsoft Learn)](https://learn.microsoft.com/en-us/ai-builder/prompt-modelsettings)
-- [Change the output of your prompt (Microsoft Learn)](https://learn.microsoft.com/en-us/ai-builder/change-prompt-output)
-- [Prompts overview (Microsoft Learn)](https://learn.microsoft.com/en-us/ai-builder/prompts-overview)
-- [Create a custom prompt (Microsoft Learn)](https://learn.microsoft.com/en-us/ai-builder/create-a-custom-prompt)
+- [Use your prompt in Power Automate (Microsoft Learn)](https://learn.microsoft.com/en-us/ai-builder/use-a-custom-prompt-in-flow)
+- [Change the model version and settings (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/prompt-model-settings)
+- [JSON output (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/process-responses-json-output)
+- [Create a prompt (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/create-custom-prompt)
 - [Limits and configuration in Power Automate (Microsoft Learn)](https://learn.microsoft.com/en-us/power-automate/limits-and-config)
 - [Optimize Power Automate triggers (Microsoft Learn)](https://learn.microsoft.com/en-us/power-automate/guidance/coding-guidelines/optimize-power-automate-triggers)
