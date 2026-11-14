@@ -25,7 +25,7 @@ faq:
     a: "The Learn page says the Azure AI Search tool can only target one index. Your search resource and your Foundry agent must also be in the same tenant."
 ---
 
-A Foundry agent reaches enterprise data in Azure AI Search through the Azure AI Search tool. You prepare a vector-enabled index, create a project connection, attach the tool with a query type, and check the networking rules. The tool defaults to hybrid retrieval with semantic ranking, which suits most enterprise content, but the limits below decide whether it fits your setup.
+A Foundry agent reaches enterprise data in Azure AI Search through the Azure AI Search tool. You prepare a vector-enabled index, create a project connection, attach the tool with a query type, and check the networking rules. The tool defaults to the query type vector_semantic_hybrid, and the limits below decide whether it fits your setup.
 
 ## Step 1: Check the index
 
@@ -47,7 +47,7 @@ In the Foundry portal:
 3. Select **Azure AI Search**, browse for your search service, and choose the type of authentication.
 4. Select **Add connection**.
 
-For keyless authentication, Learn says to use the system-assigned managed identity of the Foundry account that contains your project, and assign **Search Index Data Contributor** and **Search Service Contributor** on the search service. For the older classic page, key-based authentication needed the key from **Settings** > **Keys**. Prefer keyless where you can.
+For keyless authentication, Learn says to use the system-assigned managed identity of the Foundry account that contains your project, and assign **Search Index Data Contributor** and **Search Service Contributor** on the search service. On the search service, the setup steps also select **Settings** > **Keys** and choose **Both**, which enables key-based and keyless authentication and is described as recommended for most scenarios. The key-based option uses an admin key from the same page. Learn states that key-based authentication is not supported with a private virtual network.
 
 ## Step 3: Attach the tool
 
@@ -69,7 +69,7 @@ Because `filter` applies to every query, use it for stable scoping, such as a bu
 
 Learn's hybrid search overview describes hybrid as one request with both `search` and `vectorQueries`. Full-text and vector queries run in parallel and the results are merged with Reciprocal Rank Fusion into one ranked set. Semantic ranking is an optional add-on invoked with `queryType=semantic`.
 
-| Query type | Use when |
+| Query type | Use when (my own reading, not a Learn statement) |
 |---|---|
 | `simple` | Exact keyword matching is enough |
 | `vector` | Meaning matters more than wording |
@@ -91,11 +91,11 @@ From the Foundry tool page:
 
 The classic tool page also carries a notice that Agents (classic) are deprecated and will be retired on March 31, 2027, so use the current Foundry Agents Service pages for new work.
 
-## A short test plan
+## A short test plan (own suggestion)
 
 Before sharing the agent, ask questions in three groups: ones answered by exact terms such as product codes, ones answered by meaning with different wording, and ones the index cannot answer. Check that citations point to the right source URL, that the agent says it has no answer for the third group, and that results change sensibly if you switch `query_type`. Learn does not publish accuracy figures for this tool, so your own question set is the only evidence you will have.
 
-## Typical mistakes
+## Typical mistakes (own checklist)
 
 - Indexing text without a vector field, then choosing a vector query type.
 - Forgetting the source URL field and getting citations without links.
@@ -113,5 +113,5 @@ Before sharing the agent, ask questions in three groups: ones answered by exact 
 ## Sources
 
 - [Connect an Azure AI Search index to Foundry agents](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/ai-search)
-- [Azure AI Search tool (classic, deprecated)](https://learn.microsoft.com/en-us/azure/ai-foundry/agents/how-to/tools/azure-ai-search)
+- [Azure AI Search tool (classic, deprecated)](https://learn.microsoft.com/en-us/azure/foundry-classic/agents/how-to/tools-classic/azure-ai-search)
 - [Hybrid search overview in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/hybrid-search-overview)
