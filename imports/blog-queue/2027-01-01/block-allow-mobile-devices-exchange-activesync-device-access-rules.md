@@ -36,7 +36,7 @@ The support article lists these locations in the Exchange admin center:
 - **Access settings with Allow, Block or Quarantine:** mobile, mobile device access, **Exchange ActiveSync Access Settings**, edit.
 - **Mailbox policies for password and security settings:** mobile, mobile device mailbox policies.
 
-The article is older and uses menu names from an earlier version of the admin center, so the labels in your tenant may differ. It does not describe the default access level, how quarantine works, personal exemptions, or the order in which rules and lists are evaluated. Its mention of device rules covers device families and models only.
+The paths follow the classic Exchange admin center layout (my observation, not a statement on the page), so the labels in your tenant may differ. It does not describe the default access level, how quarantine works, personal exemptions, or the order in which rules and lists are evaluated. Its mention of device rules covers device families and models only.
 
 ## Create a rule with PowerShell
 
@@ -75,7 +75,7 @@ Set-ActiveSyncOrganizationSettings -DefaultAccessLevel Quarantine -AdminMailReci
 
 ## A quarantine caveat after removing a device
 
-A Learn troubleshooting article describes this case. The organization setting is **Quarantine - Let me decide to block or allow later**, and a quarantined device was allowed. The admin removes the device in the Exchange admin center or with `Remove-MobileDevice`. When the user adds the device again it is not quarantined and shows Access granted. The cause is that removing the device does not clear the `ActiveSyncAllowedDeviceIDs` and `ActiveSyncBlockedDeviceIDs` parameters on the mailbox. The workaround is to set them to null after removal. The page's example clears only the allowed list:
+The Learn troubleshooting article Mobile devices not quarantined as expected describes this case. The organization setting is **Quarantine - Let me decide to block or allow later**, and a quarantined device was allowed. The admin removes the device in the Exchange admin center or with `Remove-MobileDevice`. When the user adds the device again it is not quarantined and shows Access granted. The cause is that removing the device does not clear the `ActiveSyncAllowedDeviceIDs` and `ActiveSyncBlockedDeviceIDs` parameters on the mailbox. The workaround is to set them to null after removal. The page's example clears only the allowed list:
 
 ```powershell
 Set-CASMailbox joe@contoso.com -ActiveSyncAllowedDeviceIDs $null
@@ -109,7 +109,7 @@ The pages I read do not describe the following:
 
 ## Sources
 
-- [Exchange ActiveSync policies for managing devices](https://support.microsoft.com/topic/exchange-activesync-policies-for-managing-devices-in-office-365-b6b17f00-6997-450d-9992-22f84a18c9e5)
-- [New-ActiveSyncDeviceAccessRule](https://learn.microsoft.com/powershell/module/exchange/new-activesyncdeviceaccessrule)
-- [Set-ActiveSyncOrganizationSettings](https://learn.microsoft.com/powershell/module/exchange/set-activesyncorganizationsettings)
-- [Mobile devices are not quarantined as expected after they are removed in Exchange Online](https://learn.microsoft.com/exchange/troubleshoot/mobile-devices/mobile-devices-not-quarantined-as-expected)
+- [Exchange ActiveSync policies for managing devices in Office 365 (Microsoft Support)](https://support.microsoft.com/topic/exchange-activesync-policies-for-managing-devices-in-office-365-b6b17f00-6997-450d-9992-22f84a18c9e5)
+- [New-ActiveSyncDeviceAccessRule (Microsoft Learn)](https://learn.microsoft.com/powershell/module/exchangepowershell/new-activesyncdeviceaccessrule)
+- [Set-ActiveSyncOrganizationSettings (Microsoft Learn)](https://learn.microsoft.com/powershell/module/exchangepowershell/set-activesyncorganizationsettings)
+- [Mobile devices not quarantined as expected (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/mobile-devices/mobile-devices-not-quarantined-as-expected)
