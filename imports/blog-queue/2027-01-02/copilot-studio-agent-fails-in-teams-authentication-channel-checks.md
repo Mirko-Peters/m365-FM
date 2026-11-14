@@ -25,7 +25,7 @@ faq:
     a: "Learn says new content in a freshly published agent does not appear in ongoing conversations. Entering start over begins a new conversation."
 ---
 
-When a Copilot Studio agent fails in Teams, check four things in order: the agent was published and the Teams channel is added, the user has access through sharing and admin approval, the authentication mode fits where the agent is used, and Teams is not holding on to an old version. Microsoft Learn documents each of these. This guide follows the Learn pages on connecting an agent to Teams and on end-user authentication. It does not rely on community posts.
+When a Copilot Studio agent fails in Teams, check four things (my suggested order): the agent was published and the Teams channel is added, the user has access through sharing and admin approval, the authentication mode fits where the agent is used, and Teams is not holding on to an old version. Microsoft Learn documents each of these. This guide follows the Learn pages on connecting an agent to Teams and on end-user authentication. It does not rely on community posts.
 
 ## Step 1: Publish and add the channel
 
@@ -95,6 +95,6 @@ The Copilot Studio troubleshooting landing page I read does not list an article 
 
 ## Sources
 
-- [Connect and configure an agent for Teams and Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/microsoft-copilot-studio/publication-add-bot-to-microsoft-teams)
+- [Connect and configure an agent for Teams and Microsoft Copilot (Microsoft Learn)](https://learn.microsoft.com/microsoft-copilot-studio/publication-add-bot-to-microsoft-teams)
 - [Configure user authentication in Copilot Studio (Microsoft Learn)](https://learn.microsoft.com/microsoft-copilot-studio/configuration-end-user-authentication)
-- [Troubleshoot Microsoft Copilot Studio (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/power-platform/copilot-studio/welcome-copilot-studio)
+- [Microsoft Copilot Studio troubleshooting (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/power-platform/copilot-studio/welcome-copilot-studio)
