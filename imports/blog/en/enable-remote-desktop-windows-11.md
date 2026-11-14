@@ -24,7 +24,7 @@ To enable Remote Desktop in Windows 11, open **Settings**, go to **System**, the
 
 ## Check the edition first
 
-This is the step that saves the most time. Microsoft's Learn article on [enabling Remote Desktop](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-access) says the PC that receives the connection can run Windows Professional, Enterprise or Education, and that Windows Home can't host incoming connections. A Home PC can still be the client that connects to other systems. Microsoft's support page on [how to use Remote Desktop](https://support.microsoft.com/en-us/windows/how-to-use-remote-desktop-5fe128d5-8fb1-7a23-3b8a-41e636865e8c) says the same about the client side: it can run any edition of Windows or another operating system.
+This is the step that saves the most time. Microsoft's Learn article on [enabling Remote Desktop](https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-access) says the PC that receives the connection can run Windows Professional, Enterprise or Education, and that Windows Home can't host incoming connections. A Home PC can still be the client that connects to other systems. Microsoft's support page on [how to use Remote Desktop](https://support.microsoft.com/windows/how-to-use-remote-desktop-5fe128d5-8fb1-7a23-3b8a-41e636865e8c) says the same about the client side: it can run any edition of Windows or another operating system.
 
 To check the edition, go to **Start**, **Settings**, **System**, **About** and read the **Edition** line. If it says Home, the **Remote Desktop** switch won't do what you want. Your options are to upgrade the edition on that PC, or use another way to reach it. This article only covers the built-in feature.
 
@@ -72,7 +72,7 @@ The Learn overview of [Windows App](https://www.m365.fm/entity/windows-app/) des
 
 ## Connect from outside your network
 
-Remote Desktop connections are peer-to-peer, so your client needs direct network access to the PC. At home or in an office that's fine. From outside, Microsoft's article on [accessing your PC from outside your network](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-outside-access) names two methods.
+Remote Desktop connections are peer-to-peer, so your client needs direct network access to the PC. At home or in an office that's fine. From outside, Microsoft's article on [accessing your PC from outside your network](https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-outside-access) names two methods.
 
 **A VPN** is the one Microsoft prefers. When you're connected, the Remote Desktop client behaves as if it were on the same network, and your PC is never exposed to the public internet. The article doesn't recommend a specific VPN service.
 
