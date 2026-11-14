@@ -8,7 +8,7 @@ date: 2026-12-22
 topics: [microsoft-graph-powershell, powershell]
 keypoints:
   - "Learn says the Azure AD, Azure AD Preview and MSOnline PowerShell modules are deprecated and Microsoft Graph PowerShell is the module to use."
-  - "Per Microsoft's March 2025 update post, MSOnline retirement started in April 2025 and AzureAD support ended on March 30, 2025."
+  - "Per Microsoft's March 2025 update post, MSOnline retirement was set to start in early April 2025 and AzureAD support ended on March 30, 2025."
   - "Find usage with the Entra recommendation about retiring MSOnline and AzureAD usage, and by filtering sign-in logs for Azure Active Directory PowerShell."
   - "Migrate in order: document scripts, start with simple ones, map cmdlets, parameters and filters, then request least-privilege scopes."
   - "Output objects changed. Check them with Get-Member, and use -ConsistencyLevel eventual for Count, Filter and Search."
@@ -87,19 +87,19 @@ The `-ConsistencyLevel` parameter enables `Count`, `Filter` and `Search` as adva
 
 - The equivalent of `-SearchString` is `-Search` together with `-ConsistencyLevel eventual`. You can also use `-Filter`, for example `Get-MgUser -Filter "DisplayName eq 'Lee Gu'"`.
 - Pass nested parameters as hash tables.
-- Request only the scopes the script needs. The first run asks for consent for those scopes.
+- Request only the scopes the script needs. Learn describes a one-time request for permissions depending on your needs.
 
-## Step 4: remove the old modules
+## Step 4: remove the old modules (my advice)
 
-Learn's next-steps list links to uninstalling AzureAD PowerShell before installing the new module, and to installing the Microsoft Graph PowerShell SDK. Do this after the scripts are tested, not before.
+The Learn migration page I read does not cover uninstalling the old modules. My advice: remove them only after the converted scripts are tested, not before.
 
 ## Microsoft Entra Connect Sync note
 
-The blog post says that if you use Microsoft Entra Connect Sync, you should upgrade to the latest version before April 7, 2025, because installation wizard versions older than 2.4.18.0 are affected until the client is updated. If that date has passed in your environment, confirm your version is current.
+The blog post says that if you use Microsoft Entra Connect Sync, you should upgrade to the latest version before April 7, 2025, because, as MSOnline PowerShell is retired, use of the installation wizard in versions older than 2.4.18.0 is impacted until the Microsoft Entra Connect Sync client is updated. That date has passed, so confirm your version is current.
 
 ## What the pages do not say
 
-The Learn migration page gives no retirement dates, and the blog post is the only source for the timeline here. The page also does not map every cmdlet. Use the official cmdlet map rather than guessing equivalents, and test each converted script against a non-production tenant first.
+The Learn migration page gives no retirement dates, and the blog post is the only source for the timeline here. The page also does not map every cmdlet. Use the official cmdlet map rather than guessing equivalents. My advice: test each converted script against a non-production tenant first.
 
 ## Related
 
@@ -108,5 +108,5 @@ The Learn migration page gives no retirement dates, and the blog post is the onl
 
 ## Sources
 
-- [Migrate from Azure AD and MSOnline PowerShell to Microsoft Graph PowerShell](https://learn.microsoft.com/powershell/microsoftgraph/migration-steps)
-- [Action required: MSOnline and AzureAD PowerShell retirement, 2025 info and resources (Microsoft Entra Blog)](https://techcommunity.microsoft.com/blog/identity/-/4364991)
+- [Migrate from Azure AD PowerShell to Microsoft Graph PowerShell (Microsoft Learn)](https://learn.microsoft.com/powershell/microsoftgraph/migration-steps?view=graph-powershell-1.0)
+- [Action required: MSOnline and AzureAD PowerShell retirement - 2025 info and resources (Microsoft Entra Blog)](https://techcommunity.microsoft.com/blog/microsoft-entra-blog/action-required-msonline-and-azuread-powershell-retirement---2025-info-and-resou/4364991)
