@@ -24,7 +24,7 @@ To clear the Teams cache on Windows, quit Teams, then reset the app under **Sett
 
 ## Should you clear the cache at all?
 
-This is where most guides go wrong. Microsoft's Learn article [Clear the Teams client cache](https://learn.microsoft.com/en-us/troubleshoot/microsoftteams/teams-administration/clear-teams-cache) lists problems for which it does not recommend clearing the cache:
+This is where most guides go wrong. Microsoft's Learn article [Clear the Teams client cache](https://learn.microsoft.com/troubleshoot/microsoftteams/teams-administration/clear-teams-cache) lists problems for which it does not recommend clearing the cache:
 
 - Missing messages
 - Chat history that isn't loading
@@ -37,7 +37,7 @@ Microsoft's page calls the cache clear a targeted step for a small number of loc
 
 ## Try these steps first
 
-Microsoft's support page [I can't reconnect to Microsoft Teams](https://support.microsoft.com/en-us/teams/troubleshooting/i-can-t-reconnect-to-microsoft-teams) lists a sequence, and the cache is only the third item:
+Microsoft's support page [I can't reconnect to Microsoft Teams](https://support.microsoft.com/teams/troubleshooting/i-can-t-reconnect-to-microsoft-teams) lists a sequence, and the cache is only the third item:
 
 1. Check your internet connection by opening any website in a browser.
 2. Sign out and sign back in. Select your profile picture at the top right, choose **Sign out**, reopen Teams and sign in again.
