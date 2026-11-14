@@ -11,7 +11,7 @@ keypoints:
   - "Configure it on session hosts with Intune or Group Policy. Once enabled, only clients that support watermarking can connect, with a non-specific error for others."
   - "It applies to remote desktops only. RemoteApp and direct mstsc.exe connections to a session host are not watermarked and are allowed."
   - "In Intune, use a settings catalog profile and choose Enable watermarking, not the deprecated entry which lacks the QR code content option."
-  - "Screen capture protection is configured separately under the same Intune path. It is not DRM-level protection, and its Group Policy steps were not in the content I could read."
+  - "Screen capture protection is configured separately under the same Intune path. It is not DRM-level protection."
 faq:
   - q: "What is in the QR code?"
     a: "According to Microsoft Learn, the Connection ID or Device ID of the remote session. Device ID is only for personal host pool session hosts joined to Microsoft Entra ID or Entra hybrid joined."
@@ -68,6 +68,10 @@ Watermarking is configured on session hosts with Microsoft Intune or Group Polic
 
 Learn recommends testing opacity values to balance readability of the session with scannability of the code, and keeping the other defaults. Its description of opacity says 100 is fully transparent.
 
+## Enable it with Group Policy
+
+Make the Administrative template for Azure Virtual Desktop available in Group Policy, then in the Group Policy Management console create or edit a policy that targets the session hosts. Go to **Computer Configuration**, **Policies**, **Administrative Templates**, **Windows Components**, **Remote Desktop Services**, **Remote Desktop Session Host**, **Azure Virtual Desktop**, open **Enable watermarking** and set it to **Enabled**. The options and defaults are the same as in Intune, and the Group Policy table describes opacity as 100 fully transparent and 9999 fully opaque. Refresh Group Policy on the session hosts or restart them, then connect with a supported client. Existing sessions must sign out and back in.
+
 ## Find the session behind a QR code
 
 In Azure Virtual Desktop Insights open the **Connection Diagnostics** tab and look for the connection ID in the list under the connection success chart. Alternatively, in the Log Analytics workspace connected to your environment run:
@@ -81,23 +85,25 @@ The connection ID appears as CorrelationId, and a partial value works.
 
 ## Pitfalls
 
-- A mixed estate of clients will break for those that do not support the feature, so check client versions first.
+This section is my advice, not Microsoft guidance.
+
+- A mixed estate of clients will break for those that do not support the feature, so check client versions first. Learn says unsupported clients fail with a non-specific error.
 - Because RemoteApp is not watermarked, do not rely on the feature to protect published apps.
-- The page has some unclear wording, for example on the grid box values and the order of Intune steps, so verify in a pilot.
+- Test opacity and the other values in a pilot. Learn also suggests trying different opacity values.
 
 ## Add screen capture protection
 
-Learn presents screen capture protection (SCP) as the companion to watermarking. When enabled, remote content is blocked in screenshots and screen sharing, for Azure Virtual Desktop VMs and Windows 365 Cloud PCs. Learn warns that it does not provide DRM-level protection and is not a substitute for DRM solutions. Users can still share their desktop in tools such as Microsoft Teams, and unsupported configurations may show protected content as a black screen.
+Learn presents screen capture protection (SCP) as the companion to watermarking. When enabled, remote content is blocked in screenshots and screen sharing, for Azure Virtual Desktop VMs and Windows 365 Cloud PCs. Learn warns that it does not provide DRM-level protection and is not a substitute for DRM solutions. Users can still share their desktop in supported collaboration tools such as Microsoft Teams, and unsupported configurations may show protected content as a black screen.
 
 There are two modes. **Block screen capture on client** prevents capture from the local device of applications running in the session. **Block screen capture on client and server** also prevents tools inside the VM or Cloud PC from capturing the screen.
 
-Prerequisites include VMs on Windows 11 22H2 or later, or Windows 10 22H2 or later. In Intune the setting sits in the same settings catalog folder as watermarking, under **Azure Virtual Desktop**, as **Enable screen capture protection**. Learn describes the mode toggle in **Screen Capture Protection Options (Device)** in ambiguous wording, so verify the toggle state in the portal. Restart the session hosts after the policy applies, and note that changes apply only to new sessions.
+Prerequisites include VMs on Windows 11 22H2 or later, or Windows 10 22H2 or later. In Intune the setting sits in the same settings catalog folder as watermarking, under **Azure Virtual Desktop**, as **Enable screen capture protection**. The mode is set with the **Screen Capture Protection Options (Device)** toggle: off for Block screen capture on client, on for Block screen capture on client and server. In Group Policy the same setting sits under Azure Virtual Desktop in Computer Configuration, Policies, Administrative Templates, with a drop-down for the two modes. Restart the session hosts after the policy applies, and note that changes apply only to new sessions.
 
-For iOS, iPadOS, Android and web clients, Learn uses Intune app protection policies and a Conditional Access policy that requires an app protection policy. It advises against adding Require device to be marked as compliant to that policy. Learn also recommends disabling clipboard, drive and printer redirection alongside both features.
+For iOS, iPadOS, Android and web clients, Learn uses Intune app protection policies and a Conditional Access policy that requires an app protection policy. It advises against adding Require device to be marked as compliant to that policy. Learn's screen capture protection page also recommends disabling clipboard, drive and printer redirection.
 
 ## Not covered
 
-The watermarking page gives no Group Policy steps, no registry values and no session host OS requirements, and the screen capture protection page's Group Policy steps were not in the content I could read. Neither page covers licensing.
+The watermarking page gives no registry values and no session host OS requirements, and neither page covers licensing.
 
 ## Related
 
@@ -105,5 +111,5 @@ The watermarking page gives no Group Policy steps, no registry values and no ses
 
 ## Sources
 
-- [Watermarking in Azure Virtual Desktop](https://learn.microsoft.com/azure/virtual-desktop/watermarking)
-- [Screen capture protection in Azure Virtual Desktop and Windows 365](https://learn.microsoft.com/azure/virtual-desktop/screen-capture-protection)
+- [Watermarking in Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-desktop/watermarking)
+- [Screen capture protection in Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/azure/virtual-desktop/screen-capture-protection)
