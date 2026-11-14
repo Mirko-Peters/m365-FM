@@ -57,9 +57,9 @@ Most plants end up with a mix. Add production capacity early where lead times ar
 
 The capacity of a person is not 37.5 hours a week. Subtract absence, training, meetings and the time that is not productive, then check the qualification.
 
-McKinsey's 2023 article on scaling aerospace manufacturing says that cross-training operators and standardizing work can create redundancy and reduce overstaffing. It describes an OEM whose utilization-based approach, with better batching and schedule optimization, cut excess staffing by 20 percent. That is one OEM's reported result, and not a benchmark for your plant. See the [McKinsey article on scaling complex manufacturing](https://www.mckinsey.com/industries/aerospace-and-defense/our-insights/taking-off-scaling-complex-manufacturing-in-the-aerospace-industry).
+McKinsey's 2023 article on scaling aerospace manufacturing says that cross-training operators and standardizing work can create redundancy and reduce overstaffing. It describes an OEM that cut excess staffing by 20 percent, which the article credits to dynamic shifts, improved performance management and standardized work. That is one OEM's reported result, and not a benchmark for your plant. See the [McKinsey article on scaling complex manufacturing](https://www.mckinsey.com/industries/aerospace-and-defense/our-insights/taking-off-scaling-complex-manufacturing-in-the-aerospace-industry).
 
-The age structure also matters. The July 2024 article says that about one-third of employees in aerospace and defense are 55 or older. A vendor article by the CEO of a manufacturing execution software company adds that much process knowledge is undocumented, and that rigid job roles and fixed staffing structures create bottlenecks when people are unavailable. It quotes average turnover of around 13 percent among member companies of the Aerospace Industries Association, against a national average of 3.8 percent. See the [iBase-t article on the workforce gap](https://www.ibaset.com/ceo-playbook-three-ways-solve-ad-workforce-gap/). It is written by a software vendor, so read the figures with care.
+The age structure also matters. The July 2024 article says that about one-third of employees in aerospace and defense are 55 or older. In my experience, much process knowledge in such plants is undocumented, and rigid job roles and fixed staffing structures create bottlenecks when people are unavailable. Treat this as a planning risk to check in your own plant, not as a measured figure.
 
 What follows for your staffing plan:
 
@@ -125,3 +125,8 @@ Scenarios for capacity, staffing and shifts are hard to test in a spreadsheet. [
 ## Next step
 
 Take your most critical work center, list the qualified people per shift and compare their productive hours with next quarter's forecast. That comparison is the starting point for capacity planning aerospace plants can rely on, and it shows within an afternoon whether machines or people limit your output.
+
+## Sources
+
+- [Improving productivity in low-volume, high-complexity manufacturing - McKinsey](https://www.mckinsey.com/industries/aerospace-and-defense/our-insights/improving-productivity-in-low-volume-high-complexity-manufacturing)
+- [Taking off: Scaling complex manufacturing in the aerospace industry - McKinsey](https://www.mckinsey.com/industries/aerospace-and-defense/our-insights/taking-off-scaling-complex-manufacturing-in-the-aerospace-industry)
