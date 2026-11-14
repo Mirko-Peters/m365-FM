@@ -31,7 +31,7 @@ DeploymentQuotaExceeded means the resource group already holds the maximum numbe
 
 During deployment you receive an error that states the current deployment will exceed the quota of 800 deployments. Learn describes this as the symptom and gives one solution: delete deployments from the resource group history.
 
-The limit counts deployment records, not resources. A group with a handful of resources can still reach 800 records if it receives many deployments over time, for example from a pipeline that runs often.
+Learn's limit is stated per resource group deployment history. My reading, not Learn's: it counts deployment records, not resources, so a group with a handful of resources can still reach 800 records if it receives many deployments over time, for example from a pipeline that runs often.
 
 ## Why it can happen when Azure cleans up for you
 
@@ -41,7 +41,7 @@ Learn says Azure Resource Manager automatically deletes deployments from your hi
 2. You opted out of automatic deletions.
 3. A large number of deployments run concurrently, and the automatic deletions are not processed fast enough to reduce the total.
 
-Learn sends you to its page on automatic deletions from deployment history to remove a lock or opt in again. I did not read that page for this article, so check it before you change a lock or the opt-out setting.
+Learn sends you to its page on automatic deletions from deployment history to remove a lock or opt in again. This article does not cover that page, so check it before you change a lock or the opt-out setting.
 
 ## Count what is in the history
 
@@ -57,7 +57,7 @@ With PowerShell:
 (Get-AzResourceGroupDeployment -ResourceGroupName exampleGroup).Count
 ```
 
-Replace `exampleGroup` with your resource group name. A count near 800 confirms the diagnosis.
+Replace `exampleGroup` with your resource group name. My advice: a count near 800 supports the diagnosis.
 
 ## Delete one deployment
 
@@ -103,11 +103,11 @@ The five-day cutoff is Learn's example value. Choose your own to suit your histo
 
 ## What the page does not cover
 
-I read the whole page. It does not give the exact wording of the error message beyond the symptom above, an error code name, a permission list for deleting deployments, or a recommended retention period. It also does not say how long the deletion loop takes. Check your Azure role assignments with your administrator if a delete command is denied.
+The page does not give the exact wording of the error message beyond the symptom above, an error code name, a permission list for deleting deployments, or a recommended retention period. It also does not say how long the deletion loop takes. Check your Azure role assignments with your administrator if a delete command is denied.
 
 ## Why the limit matters for pipelines
 
-This section is my advice, not a Microsoft statement. Learn explains the limit and the cleanup, but not how teams usually hit it. In my experience the cause is a pipeline that deploys to the same resource group on every commit. Each run adds a record, and the group reaches the cap although the resources barely change. Two habits help: deploy only when something changed, and keep one resource group for one lifecycle, so unrelated pipelines do not share one history. If an automatic cleanup is blocked on purpose, a scheduled cleanup run with the commands above is the fallback, and the cutoff in the script should be a deliberate choice, not the five days in Learn's example.
+This section is my advice, not a Microsoft statement. Learn explains the limit and the cleanup, but not how teams usually hit it. One plausible cause, which is my hypothesis, is a pipeline that deploys to the same resource group on every commit. Each run adds a record, and the group could reach the cap although the resources barely change. Two habits help: deploy only when something changed, and keep one resource group for one lifecycle, so unrelated pipelines do not share one history. If an automatic cleanup is blocked on purpose, a scheduled cleanup run with the commands above is the fallback, and the cutoff in the script should be a deliberate choice, not the five days in Learn's example.
 
 ## A practical routine
 
