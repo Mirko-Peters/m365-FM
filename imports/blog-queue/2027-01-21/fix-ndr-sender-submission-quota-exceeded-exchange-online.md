@@ -14,7 +14,7 @@ keypoints:
   - "Legitimate bulk email such as newsletters belongs with a specialized third-party provider, per the Exchange Online limits page."
 faq:
   - q: "What does the submission quota exceeded NDR mean?"
-    a: "According to Microsoft Learn, the message text is: The message can't be submitted because the sender's submission quota was exceeded. You received it because you exceeded the recipient rate limit of 10,000 recipients per day. The Learn page I read does not quote a status code such as 5.2.2 in its text."
+    a: "According to Microsoft Learn, the message text is: The message can't be submitted because the sender's submission quota was exceeded. You received it because you exceeded the recipient rate limit of 10,000 recipients per day. The Learn page does not quote a status code such as 5.2.2 in its text."
   - q: "How long do I have to wait?"
     a: "Learn says that if you sent 10,000 messages in the last 24 hours, you need to wait one day before you can send email from your mailbox. The Exchange Online limits page gives an example: a user who reaches the limit by sending to 5,000, 2,500 and 2,500 recipients between 09:00 and 11:00 cannot send again until 09:00 the next day."
   - q: "How are recipients counted?"
@@ -31,7 +31,7 @@ The NDR "The message can't be submitted because the sender's submission quota wa
 
 Microsoft Learn gives the message as: *The message can't be submitted because the sender's submission quota was exceeded.* The cause it names is that you exceeded the recipient rate limit, 10,000 recipients per day.
 
-The Learn page I read does not quote a status code such as 5.2.2 in its text. Use the message text to identify the case.
+The Learn page does not quote a status code such as 5.2.2 in its text. Use the message text to identify the case.
 
 ## If you are the sender
 
@@ -72,7 +72,7 @@ The limits page says Exchange Online customers who need to send legitimate bulk 
 
 ## Telling a compromise from a real campaign (my advice)
 
-This section is my experience, not Microsoft text:
+This section is my suggestion, not Microsoft text:
 
 - A mailbox that normally sends a few dozen messages a day and suddenly hits 10,000 recipients is suspicious.
 - Marketing or an application that sends from a normal user mailbox is a design problem. Move it to a mail service meant for bulk.
@@ -81,13 +81,13 @@ This section is my experience, not Microsoft text:
 ## A short order of work (my advice)
 
 1. Ask the user whether they sent the volume.
-2. If not, reset the password, sign out sessions, scan devices and review rules and delegates as in the Learn guide.
+2. If not, reset the password, scan devices and review rules and delegates, as the Learn page says.
 3. If yes, plan the send so each mailbox stays below 10,000 recipients per 24 hours, or use a bulk provider.
 4. Document what happened so you can tell a repeat from a one-off.
 
 ## What the Learn pages leave open
 
-The NDR article is short and gives no admin center path for reviewing sent volume. The limits page mentions a Tenant Outbound External Recipients report under EAC Reports > Mail flow, for the tenant limit. I do not describe a per-mailbox report here.
+The NDR article is short and gives no admin center path for reviewing sent volume. The limits page mentions a Tenant Outbound External Recipients report under EAC Reports > Mail flow, for the tenant limit. This article does not describe a per-mailbox report.
 
 ## Related
 
