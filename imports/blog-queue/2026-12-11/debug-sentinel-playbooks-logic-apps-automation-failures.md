@@ -9,23 +9,23 @@ topics: [microsoft-sentinel, azure-logic-apps]
 keypoints:
   - "Two places hold the evidence: the SentinelHealth table (did the rule or trigger work) and Logic Apps diagnostics in AzureDiagnostics (what happened inside the run)."
   - "A Playbook was triggered status of Success does not say the playbook finished or what its actions returned. Query Logic Apps diagnostics for that."
-  - "The most common trigger failures are permissions: Sentinel needs the Microsoft Sentinel Automation Contributor role on the playbook's resource group."
+  - "Many listed trigger failures are permission problems. Sentinel needs the Microsoft Sentinel Automation Contributor role on the playbook's resource group."
   - "Write actions such as updating an incident need Microsoft Sentinel Responder or Contributor on the connection identity. Reader only covers triggers and read actions."
   - "After March 31, 2027, Microsoft Sentinel will be available only in the Microsoft Defender portal. Plan the move."
 faq:
   - q: "How do I see whether an automation rule ran a playbook?"
-    a: "Turn on Microsoft Sentinel health monitoring, then query the SentinelHealth table for OperationName Automation rule run or Playbook was triggered. Microsoft Learn says the table is created at the first success or failure event for your automation rules and playbooks."
+    a: "Turn on Microsoft Sentinel health monitoring, then query the SentinelHealth table for OperationName Automation rule run. Learn says these events include the playbooks the rule called, while Playbook was triggered is logged when a playbook is triggered on an incident manually from the portal or through the API. Learn also says the table is created at the first success or failure event for your automation rules and playbooks."
   - q: "SentinelHealth says Success but the playbook did nothing. Why?"
     a: "Learn states that Success for Playbook was triggered only means it was triggered. It does not indicate when the playbook started or ended, the results of its actions or its final result. Enable Logic Apps diagnostics to the Sentinel workspace and query AzureDiagnostics."
   - q: "What does Could not trigger playbook with missing permissions mean?"
-    a: "Learn lists several variants. Edit the automation rule, reselect the playbook and save, and grant Sentinel permission to run playbooks. The service account needs the Microsoft Sentinel Automation Contributor role on the resource group that contains the playbook, and you need Owner or User Access Administrator to grant it."
+    a: "The health page lists several variants. Edit the automation rule, reselect the playbook and save, and grant Sentinel permission to run playbooks. The playbooks page adds that the service account needs the Microsoft Sentinel Automation Contributor role on the resource group that contains the playbook, and you need Owner or User Access Administrator to grant it."
   - q: "Which roles does the playbook connection need?"
     a: "Learn's table says Microsoft Sentinel Reader allows triggers and read actions, while Microsoft Sentinel Responder or Contributor also allows write actions such as updating incidents or adding comments. Assign them to a managed identity, service principal or user."
   - q: "What if the failure is Invalid credentials in connection?"
     a: "Learn says to check the connection's credentials under API connections in the Azure portal. You can open the connection resource and select Edit API connection to change the authorization."
 ---
 
-Debugging a Sentinel playbook means answering two separate questions. Did Sentinel start it? That is in the **SentinelHealth** table. What happened inside it? That is in Logic Apps diagnostics in **AzureDiagnostics**. Most "playbook did not run" cases are permissions, a disabled or moved playbook, or a trigger type Sentinel does not support.
+Debugging a Sentinel playbook means answering two separate questions. Did Sentinel start it? That is in the **SentinelHealth** table. What happened inside it? That is in Logic Apps diagnostics in **AzureDiagnostics**. The error table on the health page lists permissions, a disabled or moved playbook and an unsupported trigger type among the causes. Learn does not rank them by frequency.
 
 One planning note from the Learn playbooks page: after March 31, 2027, Microsoft Sentinel will be available only in the Microsoft Defender portal, so teams still in the Azure portal should plan the transition and recheck where they manage automation.
 
@@ -48,7 +48,7 @@ SentinelHealth
 | where OperationName == "Playbook was triggered"
 ```
 
-Statuses per Learn:
+Learn says Automation rule run events include the playbooks the rule called. Playbook was triggered events are logged when a playbook is triggered on an incident manually from the portal or through the API. Statuses per Learn:
 
 - **Automation rule run**: Success (all actions triggered), Partial success (at least one failed), Failure (no action ran).
 - **Playbook was triggered**: Success means it was triggered, nothing more. Failure means it could not be triggered.
@@ -87,9 +87,9 @@ For the playbook's own Sentinel connection, Learn lists three identity types: ma
 
 ## Step 5: Look inside the run
 
-Correlate rule runs with playbook runs using the query from Learn, which expands `ExtendedProperties.TriggeredPlaybooks`, takes the `RunId` and joins to AzureDiagnostics rows where `OperationName == "Microsoft.Logic/workflows/workflowRunCompleted"` on `resource_runId_s`. The playbook status is in `status_s` and its name in `resource_workflowName_s`. Then open the run in Logic Apps run history to see the failing action. The pages I read do not list Logic Apps action-level errors, so use the Logic Apps documentation for those.
+Correlate rule runs with playbook runs using the query from Learn, which expands `ExtendedProperties.TriggeredPlaybooks`, takes the `RunId` and joins to AzureDiagnostics rows where `OperationName == "Microsoft.Logic/workflows/workflowRunCompleted"` on `resource_runId_s`. The playbook status is in `status_s` and its name in `resource_workflowName_s`. Then, as my own next step, open the run in Logic Apps run history to see the failing action. The pages I read do not list Logic Apps action-level errors, so use the Logic Apps documentation for those.
 
-## Typical mistakes
+## Typical mistakes (my own list, derived from the pages above)
 
 - Reading Success in SentinelHealth as a successful playbook.
 - Enabling diagnostics on the workspace but not on each playbook.
@@ -109,5 +109,5 @@ The authentication page documents no common authentication errors. Some errors i
 ## Sources
 
 - [Monitor the health of automation rules and playbooks](https://learn.microsoft.com/en-us/azure/sentinel/monitor-automation-health)
-- [Automate threat response with playbooks in Microsoft Sentinel](https://learn.microsoft.com/en-us/azure/sentinel/automate-responses-with-playbooks)
+- [Automate threat response with playbooks in Microsoft Sentinel](https://learn.microsoft.com/en-us/azure/sentinel/automation/automate-responses-with-playbooks)
 - [Authenticate playbooks to Microsoft Sentinel](https://learn.microsoft.com/en-us/azure/sentinel/automation/authenticate-playbooks-to-sentinel)
