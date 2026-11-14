@@ -71,11 +71,11 @@ Tenants that do not qualify get only a limited set of experiences: GDAP setup an
 2. If a message says you need to sign up in the Microsoft 365 admin center, an admin in the partner tenant signs in, selects **Marketplace**, **All products**, searches for **Microsoft 365 Lighthouse**, selects **Details**, then **Buy**.
 3. If a message says Lighthouse was removed for your organization, an admin goes to **Settings**, **Org settings**, opens the **Services** tab, selects **Microsoft 365 Lighthouse**, allows the customer management experiences and selects **Save**.
 
-After sign-up, customer data can take up to 48 hours to appear. The page does not name a specific admin role. It says to contact an admin in the partner tenant.
+To verify that Lighthouse was added to your tenant, look for Microsoft 365 Lighthouse under **Billing** > **Your products** in the Microsoft 365 admin center. After sign-up, customer data can take up to 48 hours to appear. The page does not name a specific admin role. It says to contact an admin in the partner tenant.
 
-## Notes on Defender Antivirus and next steps
+## Notes on Defender Antivirus
 
-The requirements page says Microsoft Defender Antivirus is part of Windows and enabled by default on Windows 10 devices. If a non-Microsoft antivirus solution is in use, Defender Antivirus is disabled automatically, and it activates again when that solution is uninstalled. After sign-up, the sign-up page points to two further articles: one on configuring Lighthouse portal security, covering required and optional security capabilities, and one on understanding opportunities and data, which covers the machine learning generated recommendations. Read both before you give technicians access, because they decide who can see which data.
+The requirements page says Microsoft Defender Antivirus is part of Windows and enabled by default on Windows 10 devices. If a non-Microsoft antivirus solution is in use, Defender Antivirus is disabled automatically, and it activates again when that solution is uninstalled. For opportunities, the requirements page also links to an overview of Lighthouse permissions, and says that viewing opportunities needs no additional delegated access permissions from the customer.
 
 ## Cost
 
@@ -83,7 +83,7 @@ The overview says no additional costs are associated with using Lighthouse. The 
 
 ## Not covered
 
-The pages give no feature limits beyond those above and no explanation of how recommendations are generated. The overview's visible last-updated date is 2024-11-11.
+The pages give no feature limits beyond those above and no explanation of how recommendations are generated.
 
 ## Related
 
@@ -91,6 +91,6 @@ The pages give no feature limits beyond those above and no explanation of how re
 
 ## Sources
 
-- [Overview of Microsoft 365 Lighthouse](https://learn.microsoft.com/microsoft-365/lighthouse/m365-lighthouse-overview)
-- [Requirements for Microsoft 365 Lighthouse](https://learn.microsoft.com/microsoft-365/lighthouse/m365-lighthouse-requirements)
-- [Sign up for Microsoft 365 Lighthouse](https://learn.microsoft.com/microsoft-365/lighthouse/m365-lighthouse-sign-up)
+- [Overview of Microsoft 365 Lighthouse (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/lighthouse/m365-lighthouse-overview)
+- [Requirements for Microsoft 365 Lighthouse (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/lighthouse/m365-lighthouse-requirements)
+- [Sign up for Microsoft 365 Lighthouse (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/lighthouse/m365-lighthouse-sign-up)
