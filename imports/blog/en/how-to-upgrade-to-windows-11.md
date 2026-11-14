@@ -26,7 +26,7 @@ One date matters more than any other: Microsoft's FAQ says support for Windows 1
 
 ## Check whether your PC can upgrade
 
-Microsoft says the device must meet the Windows 11 minimum requirements. According to its page on [Windows 11 requirements](https://learn.microsoft.com/en-us/windows/whats-new/windows-11-requirements), these are:
+Microsoft says the device must meet the Windows 11 minimum requirements. According to its page on [Windows 11 requirements](https://learn.microsoft.com/windows/whats-new/windows-11-requirements), these are:
 
 - **Processor:** 1 GHz or faster with two or more cores, on a compatible 64-bit processor or system on a chip.
 - **Memory:** 4 GB or more.
@@ -48,7 +48,7 @@ If you see a message called "What needs your attention" during an upgrade attemp
 
 ## Prepare before you start
 
-Microsoft's [Upgrade to Windows 11 FAQ](https://support.microsoft.com/en-us/windows/deployment/install-upgrade/upgrade-to-windows-11-faq) lists what to do first:
+Microsoft's [Upgrade to Windows 11 FAQ](https://support.microsoft.com/windows/deployment/install-upgrade/upgrade-to-windows-11-faq) lists what to do first:
 
 1. Decide which device will run Windows 11.
 2. Sign in to Windows 10 with a Microsoft account.
@@ -63,7 +63,7 @@ By default, files and data move to the new Windows 11 installation.
 
 ## How to upgrade to Windows 11: the three routes
 
-Microsoft's page [Ways to install Windows 11](https://support.microsoft.com/en-us/windows/ways-to-install-windows-11-e0edbbfb-cfc5-4011-868b-2ce77ac7c70e) lists three methods. Use them in this order.
+Microsoft's page [Ways to install Windows 11](https://support.microsoft.com/windows/ways-to-install-windows-11-e0edbbfb-cfc5-4011-868b-2ce77ac7c70e) lists three methods. Use them in this order.
 
 ### 1. Windows Update (recommended)
 
@@ -118,7 +118,7 @@ Windows 10 and Windows 11 can be managed side by side. Microsoft's guide to prep
 Devices don't upgrade automatically unless an administrator sets it up. The guide names several tools:
 
 - **[Windows Update for Business](https://www.m365.fm/entity/windows-update-for-business/)** with the Target Version capability, set through policy or Windows Autopatch. Microsoft says feature update deferrals alone don't move devices between products.
-- **Microsoft Intune** feature update deployments. Per Microsoft's page on [upgrading devices to Windows 11 with Intune](https://learn.microsoft.com/en-us/intune/device-updates/windows/upgrade-to-windows-11), you pick the Windows 11 version in the Feature update to deploy list. A checkbox, "When a device isn't capable of running Windows 11, install the latest Windows 10 feature update", lets one policy upgrade eligible devices and keep ineligible ones current on Windows 10. You can't add that checkbox to an existing policy. You delete the policy and create a new one.
+- **Microsoft Intune** feature update deployments. Per Microsoft's page on [upgrading devices to Windows 11 with Intune](https://learn.microsoft.com/intune/device-updates/windows/upgrade-to-windows-11), you pick the Windows 11 version in the Feature update to deploy list. A checkbox, "When a device isn't capable of running Windows 11, install the latest Windows 10 feature update", lets one policy upgrade eligible devices and keep ineligible ones current on Windows 10. You can't add that checkbox to an existing policy. You delete the policy and create a new one.
 - **WSUS and Configuration Manager.** Sync the Windows 11 product category, accept the license terms on behalf of your users, and note that there is no x86 option because Windows 11 doesn't support 32-bit.
 
 For readiness, Microsoft points to Endpoint analytics, which provides a hardware readiness assessment that identifies the managed devices eligible for Windows 11. Start with a pilot group, then widen in rings: a small preview ring, a limited ring of early adopters, then broad deployment. Write a short note for users that says what will change and when, and update the help desk guides with new screenshots.
