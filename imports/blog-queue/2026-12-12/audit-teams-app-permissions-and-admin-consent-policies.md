@@ -27,7 +27,7 @@ Auditing third-party Teams apps means checking three things: which apps users ca
 
 ## Step 1: Check which apps are available in Teams
 
-Microsoft has moved Teams to app centric management. The permission policies page now warns that if your organization has moved to this model, permission policies no longer apply. Under app centric management, each app has its own access definition, with three choices:
+Learn says that starting from April 2025 tenants are automatically migrated to app centric management, but also that not every organization has the feature available. The permission policies page warns that if your organization has moved to this model, permission policies no longer apply. Under app centric management, each app has its own access definition, with three choices:
 
 | Availability | Who gets the app |
 |---|---|
@@ -42,7 +42,7 @@ Microsoft says tenants were migrated automatically from April 2025 where only th
 3. Open an app and use the **Users and groups** tab to see who has access.
 4. For a user view, open **Users** > **Manage users**, select the user and open the **Apps** tab. It shows whether access comes from everyone, a direct assignment or a group.
 
-Note two caveats from Microsoft. Blocked apps appear as unblocked but assigned to No one after migration. And an app allowed in the global policy but blocked in a custom policy becomes available to all users after migration. Check any app with that history. Changes can take up to 24 hours, and in rare cases the client up to six days.
+Note two caveats from Microsoft. Blocked apps appear as unblocked but assigned to No one after migration. And Learn's known limitations say an app allowed in the global policy but blocked in a custom policy becomes available to all users after migration, except for EDU customers, where it becomes available to none. The auto-migration section words this differently (allowed for the affected user), so check any app with that history. Changes can take up to 24 hours, and in rare cases the client up to six days.
 
 If your tenant still uses permission policies, the page describes options per category (Microsoft apps, third-party apps, custom apps): allow all, allow specific and block others, block specific and allow others, or block all. Policies apply only when assigned to a user, and Teams does not support group assignment for them.
 
@@ -52,10 +52,10 @@ On **Manage apps**, the **Actions** menu opens **Org-wide app settings**. It con
 
 ## Step 3: Review Graph permissions per app
 
-Microsoft's article on Teams app permissions describes two kinds:
+Microsoft's page on granting consent to Teams app permissions describes two kinds:
 
-- **Microsoft Graph permissions, delegated and application.** These need admin consent. Application permissions cannot be classified as low risk, so only an admin can consent to them.
-- **Resource-specific consent (RSC).** These are defined in the app manifest. Team owners can grant them when they add an app to a team or chat.
+- **Microsoft Graph permissions, delegated and application.** Learn says only Global Administrators can grant org-wide consent to them in the Teams admin center. Admins can classify some delegated permissions as low risk so that users can consent to them. Application permissions cannot be classified as low risk, so only an admin can consent to them.
+- **Resource-specific consent (RSC).** These are defined in the app manifest. Team owners can grant them when they add an app to a team or chat. They are listed on the app's **Permissions** tab as well.
 
 To review them, open the app in **Manage apps** and select the **Permissions** tab. Only Global Administrators can accept org-wide consent there. If a new app version adds permissions that need admin consent, users cannot use it until you grant consent to the updated app.
 
@@ -69,7 +69,7 @@ The authoritative list of what is granted is in Entra:
 4. Switch between **Admin consent**, for the whole organization, and **User consent**, for specific users or groups.
 5. Select a permission to open the **Permission Details** pane.
 
-To review at scale, Microsoft shows Graph PowerShell. This lists delegated grants for one service principal:
+To review at scale, Learn shows Graph PowerShell. The lines below are the first part of its script that revokes all permissions of an app, and I left out the removal steps. Learn connects with four scopes for the whole script (`Application.ReadWrite.All`, `Directory.ReadWrite.All`, `DelegatedPermissionGrant.ReadWrite.All`, `AppRoleAssignment.ReadWrite.All`). The shorter scope list in my code is my own reduction and I did not test it, so adjust it in a test tenant:
 
 ```powershell
 Connect-MgGraph -Scopes "Application.ReadWrite.All", "DelegatedPermissionGrant.ReadWrite.All"
@@ -77,11 +77,11 @@ $sp = Get-MgServicePrincipal -ServicePrincipalId "<object ID>"
 Get-MgOauth2PermissionGrant -All | Where-Object { $_.ClientId -eq $sp.Id }
 ```
 
-Application permissions are the app role assignments on the service principal, read with `Get-MgServicePrincipalAppRoleAssignment`. The Microsoft page notes inconsistent cmdlet names between its sections, so verify cmdlet names before running any removal script.
+Application permissions are the app role assignments on the service principal, read with `Get-MgServicePrincipalAppRoleAssignment`. In Learn's script the listing and removal cmdlets differ between its sections (for example `Remove-MgServicePrincipalAppRoleAssignedTo` in one and `Remove-MgServicePrincipalAppRoleAssignment` in another). The page does not comment on this, so verify cmdlet names before running any removal script.
 
 ## Step 5: Review who can consent
 
-In the Entra admin center, go to **Identity** > **Applications** > **Enterprise apps** > **Consent and permissions** > **User consent settings**. Microsoft recommends **Allow user consent for apps from verified publishers, for selected permissions**, which relies on permissions you classify as low impact. The alternative **Allow user consent for apps** allows consent to any permission that does not require admin consent. Changes affect only future consent. Existing grants stay until you remove them.
+In the Entra admin center, go to **Identity** > **Applications** > **Enterprise apps** > **Consent and permissions** > **User consent settings**. Microsoft recommends **Allow user consent for apps from verified publishers, for selected permissions**, which relies on permissions you classify as low impact. The alternative **Allow user consent for apps** allows consent to any permission that does not require admin consent. Changes affect only future consent. Existing grants stay until you remove them. On roles, the two pages disagree: the Entra page lists Privileged Role Administrator (Global Administrator only when you use the admin center), while the Teams consent page names Global Administrator, Application Administrator or Cloud Application Administrator. Check what your tenant accepts.
 
 Turn on the admin consent workflow so users can request review of apps they cannot consent to. Microsoft links a separate article for it.
 
@@ -93,7 +93,7 @@ Turn on the admin consent workflow so users can request review of apps they cann
 
 Microsoft also tells admins to review other authorization systems, such as Entra built-in roles, Exchange RBAC and Teams resource-specific consent.
 
-## A simple audit checklist
+## A simple audit checklist (my own)
 
 1. Export the Manage apps list and note apps assigned to Everyone.
 2. For each third-party app, check the Permissions tab and the certification data.
@@ -101,7 +101,7 @@ Microsoft also tells admins to review other authorization systems, such as Entra
 4. Remove grants for apps you no longer use.
 5. Confirm user consent settings and the admin consent workflow.
 
-The pages read do not describe a bulk export of app permissions from the Teams admin center. Use the Graph scripts above for that.
+Learn documents a CSV export of the app catalog on the Manage apps page. Its screenshot text names columns such as app name, status, availability, publisher and certification, not permissions. The pages read do not describe a bulk export of app permissions from the Teams admin center, so use the Graph scripts above for that.
 
 ## Related
 
@@ -115,6 +115,6 @@ The pages read do not describe a bulk export of app permissions from the Teams a
 - [Microsoft Learn: App centric management in Teams admin center](https://learn.microsoft.com/en-us/microsoftteams/app-centric-management)
 - [Microsoft Learn: App permission policies in Teams](https://learn.microsoft.com/en-us/microsoftteams/teams-app-permission-policies)
 - [Microsoft Learn: Manage apps in the Teams admin center](https://learn.microsoft.com/en-us/microsoftteams/manage-apps)
-- [Microsoft Learn: Grant and manage consent to Teams app permissions](https://learn.microsoft.com/en-us/microsoftteams/app-permissions-admin-center)
+- [Microsoft Learn: Grant and manage consent to Teams app permissions](https://learn.microsoft.com/en-us/microsoftteams/manage-consent-app-permissions)
 - [Microsoft Learn: Review permissions granted to enterprise applications](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/manage-application-permissions)
 - [Microsoft Learn: Configure how users consent to applications](https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/configure-user-consent)
