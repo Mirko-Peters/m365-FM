@@ -10,7 +10,7 @@ keypoints:
   - "The definition must be OpenAPI 2.0 (formerly Swagger) and under 1 MB. The article says OpenAPI 3.0 definitions are not supported."
   - "In Power Automate or Power Apps, use Solutions, then New > Automation > Custom connector, then Import an OpenAPI file."
   - "Client credentials in OAuth security definitions are not supported. If there are several security definitions, the top one is used."
-  - "Use only ASCII characters in header names and values, because non-ASCII characters might cause validation failures."
+  - "The tutorial example uses an API key in a header. The parameter name and location must match what the API expects."
   - "Testing is available only in Power Automate and Power Apps, not in Logic Apps. Check the Validation area before you save."
 faq:
   - q: "Which OpenAPI version can I import?"
@@ -32,7 +32,6 @@ To create a custom connector from an OpenAPI definition, import an OpenAPI 2.0 f
 - **Format:** OpenAPI 2.0, formerly Swagger. OpenAPI 3.0 definitions are not supported.
 - **Size:** the definition must be less than 1 MB.
 - **Security definitions:** if there are several, the connector uses the top one. Client credentials in OAuth security definitions are not supported.
-- **Characters:** use only ASCII in header names and values. Non-ASCII characters might cause validation failures.
 - **Subscription:** Azure for Logic Apps, or Power Automate or Power Apps.
 
 ## Import the definition
@@ -66,7 +65,7 @@ The tutorial uses a Cognitive Services Text Analytics API with an API key. The i
 
 ## After the import
 
-Once the connector exists, the tutorial's steps for a new connection are the same as for any connector: create a connection with the key, then use the operation in a flow or app. The article stops at testing the operation, and it links to other pages for sharing and certification. Plan time to review the Validation list again whenever you update the definition, because a changed definition is checked again.
+Once the connector exists, the tutorial creates a connection with the API key on the Test page and tests the operation. After that, the article only links to other pages for using the connector in Power Automate, Power Apps, Logic Apps and Copilot Studio, and for sharing and certifying it. My advice: read the Validation list again after every change to the definition.
 
 ## Download the definition
 
@@ -77,14 +76,13 @@ You can download the OpenAPI definition the service uses internally, from the cu
 This list is a suggestion built from the requirements above, not a Microsoft procedure.
 
 1. Confirm the file is OpenAPI 2.0 and under 1 MB.
-2. Look for non-ASCII characters in header names and values.
-3. Check the security definition. Only the top one is used.
-4. Read the **Validation** list on the Definition tab.
-5. Wait a few minutes after creating an API-key connector, then test again.
+2. Check the security definition. Only the top one is used, and OAuth client credentials are not supported.
+3. Read the **Validation** list on the Definition tab.
+4. Wait a few minutes after creating an API-key connector, then test again.
 
 ## Not covered by the tutorial
 
-The article does not describe licensing, permissions or who can create and share connectors. It also leaves out authentication types other than API key, triggers, references, webhooks, the `x-ms-*` extensions, SOAP APIs, on-premises connectivity and the exact time before a new connector is ready. It links to other pages for some of these.
+The article does not describe licensing, permissions or who can create and share connectors. It also does not explain authentication types other than API key, triggers, webhooks, the `x-ms-*` extensions, SOAP APIs, on-premises connectivity or the exact time before a new connector is ready. It mentions several of these only briefly and links to other pages.
 
 ## Related
 
@@ -94,4 +92,4 @@ The article does not describe licensing, permissions or who can create and share
 
 ## Sources
 
-- [Create a custom connector from an OpenAPI definition](https://learn.microsoft.com/connectors/custom-connectors/define-openapi-definition)
+- [Create a custom connector from an OpenAPI definition (Microsoft Learn)](https://learn.microsoft.com/connectors/custom-connectors/define-openapi-definition)
