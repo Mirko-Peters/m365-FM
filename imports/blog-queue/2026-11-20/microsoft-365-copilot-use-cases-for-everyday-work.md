@@ -35,11 +35,11 @@ The Microsoft Learn overview describes a baseline Copilot Chat experience includ
 
 ## Writing and editing in Word
 
-Microsoft Support says Copilot in Word can create a first draft from a simple request, a detailed prompt, an outline, notes or reference files. It can also add a section, paragraph, checklist or table, rewrite selected text, change tone, make text more concise and add citations.
+Microsoft Support says Copilot in Word can create a first draft from a simple request, a detailed prompt, an outline, notes or reference files. It can also add a section, paragraph, checklist or table to an existing document, and generate content with citations to referenced sources.
 
 1. Open a blank document or put the cursor where new content should go.
 2. Open Copilot in the bottom-right corner and describe topic, audience, tone, format and length.
-3. To use a specific source, type **/** and choose the file.
+3. To use a specific source, type **/** and choose the file, if it is available.
 4. Select **Generate**.
 5. Review the draft, then keep, discard, regenerate or refine it with a follow-up prompt.
 
@@ -47,7 +47,7 @@ Microsoft also states that output may contain errors. Check facts, numbers, cita
 
 ## Email overload in Outlook
 
-For a long thread, open the conversation and select **Summary by Copilot** at the top. The button might say **Summarize** instead. Copilot scans the thread for key points and actions and shows the summary at the top of the email. Numbered citations take you to the matching email, which is the quickest way to verify a point. In new Outlook, if the email has a PDF, PowerPoint or Word attachment, **Summarize a file** is also available. Summaries default to the language of the email.
+For a long thread, open the conversation and select **Summary by Copilot** at the top. The button might say **Summarize** instead. Copilot scans the thread for key points and actions and shows the summary at the top of the email. Numbered citations take you to the matching email, which is the quickest way to verify a point. In new Outlook, if the email has a PDF, PowerPoint or Word attachment, **Summarize a file** is also available. On Mac, iOS and Android the summary defaults to the language of the email. You can switch it to match Outlook's menus, but the change does not persist after a restart.
 
 ## Presentations in PowerPoint
 
@@ -67,11 +67,11 @@ The Excel support page lists these actions: generate data from prompts, apply fo
 
 ## Meetings in Teams
 
-Select **Copilot** in the meeting controls to open a private chat. Microsoft says Copilot summarizes key discussion points, suggests action items and answers questions during or after the meeting. Select **View prompts** for suggestions. Samples from Microsoft include "Where do we disagree on this topic?" and "Create a table with the ideas discussed and their pros and cons." Asking about spoken content needs a transcript. The meeting setup is covered in the separate Copilot in Teams meetings article on this site.
+Select **Copilot** in the meeting controls to open a private chat. Microsoft says Copilot summarizes key discussion points, suggests action items and answers questions during or after the meeting. Select **View prompts** for suggestions. Samples from Microsoft include "Where do we disagree on this topic?" and "Create a table with the ideas discussed and their pros and cons." Copilot can be turned on without transcription, but you need live transcription on to prompt Copilot about the meeting or to see its conversation history after the meeting ends. The meeting setup is covered in the separate Copilot in Teams meetings article on this site.
 
 ## How to choose scenarios for a team
 
-Microsoft's Inside Track team described its own rollout. It identified priority roles, then built three hero scenarios per role. Each scenario has six steps, and each step has a Copilot prompt. The criteria for choosing roles were enthusiasm for adoption, readiness, the number of people in the role and the fit for repetitive, context-rich or communication-intensive tasks. The process ran with focus groups of 10 to 20 active Copilot users over three weeks. The article reports no quantified results, so treat any productivity figure you read elsewhere with care.
+Microsoft's Inside Track team described its own rollout. It identified priority roles, then built three hero scenarios per role. Each scenario has six steps, and each step has a Copilot prompt. The criteria for choosing roles were enthusiasm for adoption, readiness, the number of people in the role and the fit for repetitive, context-rich or communication-intensive tasks. Focus groups had 10 to 20 participants who were already using Copilot, and the playbook process is designed for implementation across three weeks. The article says adoption and usage increased but reports no metrics, so treat any productivity figure you read elsewhere with care.
 
 A practical way to apply this: pick one role, list the tasks that repeat weekly, and test each task with a short prompt before you write guidance for others.
 
