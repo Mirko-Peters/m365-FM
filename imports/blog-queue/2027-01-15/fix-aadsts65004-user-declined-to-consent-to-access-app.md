@@ -16,7 +16,7 @@ faq:
   - q: "What does AADSTS65004 mean?"
     a: "The Microsoft Entra error reference lists it as UserDeclinedConsent: the user declined to consent to access the app. The suggested action is to have the user retry the sign-in and consent to the app."
   - q: "Is this the same as AADSTS65001?"
-    a: "No. AADSTS65004 is about a user who declined the consent prompt. AADSTS65001, where consent has not been granted by the user or an admin, is a separate error code. Both belong to the consent process described on the user and admin consent overview."
+    a: "No. AADSTS65004 is about a user who declined the consent prompt. AADSTS65001, where the user or administrator has not consented to use the application, is a separate error code. The error reference lists 65001 as DelegationDoesNotExist."
   - q: "Why was I never asked for consent?"
     a: "Learn says non-administrators can consent only where user consent is allowed for the application and the set of permissions it requires. If user consent is disabled or not allowed for the requested permissions, users are not prompted. An administrator then decides, or the admin consent workflow offers an approval request."
   - q: "What are the built-in user consent options?"
@@ -39,7 +39,7 @@ User consent covers delegated permissions, where the app acts as the signed-in u
 2. Read the permissions on the consent prompt. They say what the app can do on your behalf.
 3. If you recognize the app and trust it, accept. If you do not recognize it or the permissions look too wide for its purpose, do not accept, and ask your IT team or the app's owner.
 
-The error is not a sign that something is broken. It records a choice. If you declined by mistake, the retry in step 1 is the fix the reference gives.
+Steps 2 and 3 are my advice, not from Learn. The error is not a sign that something is broken. It records a choice. If you declined by mistake, the retry in step 1 is the fix the reference gives.
 
 ## If you are the admin
 
@@ -53,7 +53,7 @@ Learn says user consent by non-administrators is possible only where user consen
 
 Learn also mentions custom app consent policies for organizations that need finer control.
 
-If users in your tenant decline often, look at which setting applies. A prompt for a permission set that users find unfamiliar is a reason to review the policy, to classify more low impact permissions, or to move the decision to an admin workflow.
+My advice: if users in your tenant decline often, look at which setting applies. A prompt for a permission set that users find unfamiliar is a reason to review the policy, to classify more low impact permissions, or to move the decision to an admin workflow.
 
 ### Offer the admin consent workflow
 
