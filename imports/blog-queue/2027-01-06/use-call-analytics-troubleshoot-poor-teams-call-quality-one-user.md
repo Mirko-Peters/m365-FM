@@ -69,7 +69,7 @@ For audio sessions with QoE data, a session is rated **poor** for these issues:
 | Audio network classified poor | Session | Packet loss, jitter, NMOS degradation, round-trip time or concealed ratio |
 | Device not functioning | Device | DeviceRenderNotFunctioningEventRatio or DeviceCaptureNotFunctioningEventRatio of 0.005 or higher |
 
-Learn warns that the Advanced Other and Debug data is diagnostic telemetry meant for Microsoft support. Do not draw conclusions from it without support.
+Learn warns that the Advanced Other and Debug data is diagnostic telemetry meant for Microsoft support. Learn does not recommend making judgments based on this data without Microsoft support.
 
 ## Limits and gaps in the data
 
@@ -85,9 +85,9 @@ Learn warns that the Advanced Other and Debug data is diagnostic telemetry meant
 
 It states no license requirements. It does not describe named Overview, Devices, Network or Connectivity tabs, so do not expect those names from this page. It gives no retention beyond the 30-day list.
 
-## A routine for one user
+## A routine for one user (my advice)
 
-The routine is practical advice that builds on the page.
+The routine is my own suggestion that builds on the page.
 
 1. Get the date, time and kind of session from the user.
 2. Find the session in Meetings & Calls within 30 days.
@@ -97,7 +97,7 @@ The routine is practical advice that builds on the page.
 6. If the cause points to the network, check building and site data and ask the network team. If it points to a device, check the headset or microphone.
 7. Escalate to Tier 2 or Microsoft support when you need Debug data.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Looking for a session older than 30 days.
 - Treating every yellow item as the cause.
