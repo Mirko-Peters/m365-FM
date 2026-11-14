@@ -41,13 +41,13 @@ Learn's security scan page says Copilot Studio automatically runs a security sca
 | Credentials to use | End user credentials | Maker-provided credentials |
 | Sharing | Shared with no one | Everyone in the organization |
 
-End user credentials matter for data leakage. Learn's FAQ says the system tailors responses based on who is speaking and the permissions they have. If a tool runs with the maker's credentials, a user can reach data through the agent that they cannot reach directly.
+End user credentials matter for data leakage. Learn's FAQ says the system tailors responses based on who is speaking and the permissions they have. The security scan page warns when a maker switches connectors and flows to maker-provided credentials. My reading is that a tool running with the maker's credentials can let users reach data through the agent that they could not reach directly. Learn does not spell this out in the pages I read.
 
 ## Layer 2: Restrict data with data policies
 
-The security and governance page lists data policy controls in the Power Platform admin center. They cover actions, connectors, Azure Bot Service skills, HTTP requests, triggers, channel publication and Application Insights. Admins can also restrict knowledge sources, and the FAQ says policies can control SharePoint, public websites or documents as knowledge sources at environment or tenant level.
+The security and governance page lists data policy controls in the Power Platform admin center. The page lists maker and user authentication, knowledge sources, actions, connectors and skills, HTTP requests, publication to channels, Azure Monitor Application Insights and triggers. The FAQ says policies can control SharePoint, public websites or documents as knowledge sources at environment or tenant level.
 
-Practical steps:
+Practical steps (my suggestions, based on the controls above):
 
 1. Review which connectors your agents depend on. Learn mentions connector dependency insights for this.
 2. Block connectors that move data to services you do not trust.
@@ -81,7 +81,7 @@ You need the Power Platform Administrator role. The setting is per environment, 
 
 Learn lists maker audit logs in Microsoft Purview and agent activity alerts in Microsoft Sentinel. Agent 365 adds inventory and ownership context. Customer-managed keys encrypt Copilot Studio data when enabled.
 
-## Common mistakes
+## Common mistakes (own reading of the pages above)
 
 - Sharing an agent with the whole organization before reviewing its knowledge sources.
 - Using maker credentials for tools that read sensitive data.
@@ -93,7 +93,7 @@ Learn lists maker audit logs in Microsoft Purview and agent activity alerts in M
 
 The pages I read do not name jailbreak settings, content moderation levels for tenants, or sharing controls beyond the scan warning. Verify those in the current Copilot Studio documentation before you promise them to stakeholders.
 
-## A review checklist before publishing
+## A review checklist before publishing (own suggestion)
 
 1. Open the agent and confirm authentication is still **Authenticate with Microsoft**.
 2. Check that tools and flows use end user credentials, not maker credentials.
