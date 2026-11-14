@@ -11,7 +11,7 @@ keypoints:
   - "Size is chosen on the Basics tab. F SKUs are measured in capacity units, from F2 with 2 CUs up to F8192, and F64 is the first size that matches P1 compute."
   - "Below F64, every user viewing Power BI content needs a Pro, PPU or trial license. At F64 or larger, free-license viewers can view."
   - "Pause and resume need Azure RBAC actions. Pausing can make Fabric content unavailable, and remaining overages and smoothed operations are added to your Azure bill."
-  - "Resuming also resumes billing. Azure runbooks and REST APIs can schedule pause and resume."
+  - "Resuming also resumes billing. An Azure runbook can schedule pause and resume, and REST APIs can pause and resume a capacity."
 faq:
   - q: "What do I need before buying a Fabric capacity?"
     a: "Microsoft Learn lists an Azure subscription in the same Entra tenant, permission to create a capacity, the Microsoft.Fabric resource provider registered, a supported region and enough capacity unit quota. An F64 capacity, for example, needs 64 available CUs."
@@ -20,7 +20,7 @@ faq:
   - q: "Does pausing a capacity stop all charges?"
     a: "Not entirely. Learn says that when you pause, the remaining cumulative overages and smoothed operations are summed and added to your Azure bill. It also says resuming the capacity resumes billing."
   - q: "Can I pause a capacity that is being throttled?"
-    a: "Yes. Learn says pausing a throttled capacity stops the throttling and returns it to a healthy state immediately, so it can be used as a self-service way to end throttling. Content on it is unavailable while it is paused."
+    a: "Yes. Learn says pausing a throttled capacity stops the throttling and returns it to a healthy state immediately, so it can be used as a self-service way to end throttling. Learn also warns that pausing can make Fabric content unavailable."
   - q: "Who can be the Fabric capacity administrator?"
     a: "Learn says the capacity administrator must belong to the tenant where you provision the capacity, and business-to-business guest users cannot be capacity administrators."
 ---
@@ -69,7 +69,7 @@ Larger sizes continue up to F8192. The Trial SKU provides 64 CUs, and Learn says
 
 One licensing rule affects sizing: for F2 through F32, each user who views Power BI content needs a Pro, Premium Per User or individual trial license. At F64 or larger, users with only a free license and a viewer role can view Power BI content. Azure bills F capacities per second with no commitment, and a yearly reservation is available to save cost.
 
-The Learn pages I read give no sizing formula and no workload-by-workload guidance. They point to monitoring and scaling articles. Start with a small SKU, watch usage, and scale as the data shows.
+The Learn pages I read give no sizing formula and no workload-by-workload guidance. My advice: start with a small SKU, watch usage, and scale as the data shows.
 
 ## Pause and resume
 
@@ -95,9 +95,9 @@ The page does not say what happens to operations that are running at the moment 
 
 ## Schedule pause and resume
 
-Learn says you can use an Azure runbook to schedule pause and resume. Import a module from the module gallery, search the runbook gallery for Fabric, choose the notebook you want and read its description for the scheduling parameters. REST APIs for suspend and resume are also linked from the page, without request details.
+Learn says you can use an Azure runbook to schedule pause and resume. Import a module from the module gallery, search the runbook gallery for Fabric, choose the notebook you want and read its description for the scheduling parameters. The page also links Fabric REST APIs to pause (suspend) and resume a capacity, without request details.
 
-## A cost routine that follows the sources
+## A cost routine (my advice)
 
 1. Buy the smallest SKU that meets the viewer license rule you can live with.
 2. Use a custom role with only the four capacity actions for the people who pause and resume.
@@ -110,6 +110,6 @@ Learn says you can use an Azure runbook to schedule pause and resume. Import a m
 
 ## Sources
 
-- [Buy a Microsoft Fabric subscription](https://learn.microsoft.com/fabric/enterprise/buy-subscription)
-- [Pause and resume your capacity](https://learn.microsoft.com/fabric/enterprise/pause-resume)
-- [Microsoft Fabric concepts and licenses](https://learn.microsoft.com/fabric/enterprise/licenses)
+- [Buy Fabric capacity Azure SKUs (Microsoft Learn)](https://learn.microsoft.com/fabric/enterprise/buy-capacity)
+- [Pause and resume your Fabric capacity (Microsoft Learn)](https://learn.microsoft.com/fabric/enterprise/pause-resume)
+- [Understand Microsoft Fabric licenses and capacity (Microsoft Learn)](https://learn.microsoft.com/fabric/enterprise/licenses)
