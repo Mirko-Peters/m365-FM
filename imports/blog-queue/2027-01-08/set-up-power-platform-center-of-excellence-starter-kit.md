@@ -29,7 +29,7 @@ The Center of Excellence (CoE) Starter Kit is a set of Power Platform components
 
 ## Status of the kit
 
-The page says the kit is no longer actively maintained. Potential security issues should be reported to the Microsoft Security Response Center. If you are starting fresh, check what the admin center already offers before you deploy the kit.
+The page says the kit is no longer actively maintained. Potential security issues should be reported to the Microsoft Security Response Center. My advice, not stated on the page: if you are starting fresh, check what the admin center already offers before you deploy the kit.
 
 ## Identity and roles
 
@@ -57,7 +57,7 @@ Create two production environments, one for testing and one for production:
 
 ## DLP policy
 
-The data policy must allow these connectors together in the business group: Approvals, Azure Resource Manager, HTTP, HTTP with Microsoft Entra ID (preauthorized), Microsoft Dataverse and Dataverse (legacy), Microsoft Teams, Office 365 Groups, Office 365 Outlook, Office 365 Users, Power Apps for Admins and for Makers, Power Automate for Admins and Management, Power Platform for Admins and V2, Power Query Dataflows, and RSS. Endpoint filtering cannot be applied to these connectors, and no other policy may conflict.
+The data policy must allow these connectors together in the business group: Approvals, Azure Resource Manager, HTTP, HTTP with Microsoft Entra ID (preauthorized), Microsoft Dataverse and Dataverse (legacy), Microsoft Teams, Office 365 Groups, Office 365 Outlook, Office 365 Users, Power Apps for Admins and for Makers, Power Automate for Admins and Management, Power Platform for Admins and V2, Power Query Dataflows, and RSS. Endpoint filtering cannot be set up for the HTTP and HTTP with Microsoft Entra ID (preauthorized) connectors, because data policies do not support dynamic endpoint evaluation. Check that no other data policies apply to this environment.
 
 ## Communication personas
 
@@ -91,7 +91,7 @@ Step-by-step import, wizard use, connection reference setup and turning on flows
 
 ## A planning checklist
 
-This list is practical advice built on the page.
+This list is my advice, built on the page.
 
 1. Decide whether the kit still fits, given its maintenance status.
 2. Confirm roles, licenses and DLP before you create environments.
@@ -99,7 +99,7 @@ This list is practical advice built on the page.
 4. Build the test environment first and set ProductionEnvironment to no.
 5. Plan quarterly upgrades.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Using a Dynamics 365 service admin account.
 - Assigning roles through eligibility instead of directly and permanently.
@@ -114,4 +114,4 @@ This list is practical advice built on the page.
 
 ## Sources
 
-- [Set up the CoE Starter Kit (Microsoft Learn)](https://learn.microsoft.com/power-platform/guidance/coe/setup)
+- [Set up the CoE Starter Kit: Prerequisites and instructions (Microsoft Learn)](https://learn.microsoft.com/power-platform/guidance/coe/setup)
