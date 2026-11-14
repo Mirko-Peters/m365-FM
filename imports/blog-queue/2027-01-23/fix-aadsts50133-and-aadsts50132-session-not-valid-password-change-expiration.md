@@ -16,16 +16,16 @@ faq:
   - q: "What do AADSTS50133 and AADSTS50132 mean?"
     a: "The Microsoft Entra authentication and authorization error code reference lists both with the description that the session is not valid due to password expiration or recent password change. AADSTS50133 has the short name SsoArtifactRevoked, and AADSTS50132 has SsoArtifactInvalidOrExpired."
   - q: "Does the error code reference tell me how to fix them?"
-    a: "The reference lists only the short name and the description for these two codes, as far as the entries in the table go. So the fix has to start from the cause named in the description: check whether the password recently changed or expired, then have the user sign in again."
+    a: "The reference lists only the short name and the description for these two codes, as far as the entries in the table go. So my suggestion is to start from the cause named in the description: check whether the password recently changed or expired, then have the user sign in again."
   - q: "How can I check whether a password expires?"
     a: "Learn says the Entra default for password expiry is no expiration, and a tenant created before 2021 has a 90 day expiration value by default. You can check the policy with Get-MgDomain and a single user's setting with Get-MgUser and the PasswordPolicies property. DisablePasswordExpiration in PasswordPolicies means the password never expires."
   - q: "Why would a session stop working right after a password change?"
     a: "The error description names a recent password change as a cause. Learn explains that apps use access tokens, which last one hour by default, refresh tokens to silently renew them, or their own session tokens. Entra ID reevaluates its policies when the app sends the user back, so a user with an old session might need to sign in again."
   - q: "What is different for synchronized hybrid users?"
-    a: "By default only passwords of accounts that are not synchronized through Microsoft Entra Connect can be configured not to expire. Learn also notes that a password change that passes on-premises requirements may fail the cloud requirements, for example with a Unicode character, and that the user then sees no error."
+    a: "By default only passwords of accounts that are not synchronized through Microsoft Entra Connect can be configured not to expire. In its section on risk-based password reset, Learn also notes that a password change that passes on-premises requirements may fail the cloud requirements, for example with a Unicode character, and that the user then sees no error."
 ---
 
-AADSTS50133 and AADSTS50132 are twins. In the Microsoft Entra error code reference, both have the same description: the session is not valid due to password expiration or recent password change. They differ in the short name only. This article is honest about how much the reference says, then fills in the checks with the Entra password policy and token pages.
+AADSTS50133 and AADSTS50132 are twins. In the Microsoft Entra error code reference, both have the same description: the session is not valid due to password expiration or recent password change. They differ in the short name only. This article states how little the reference says, then fills in the checks with the Entra password policy and token pages.
 
 ## What the reference lists
 
@@ -44,7 +44,7 @@ Start with the cause named in the description. Ask the user and read the sign-in
 
 1. In the Microsoft Entra admin center, open the sign-in log entry for the failed sign-in and note the error code and the application.
 2. Check when the password last changed or was reset.
-3. Ask which device and app the user was in. An app that held an old session is the typical place where the message appears. That is my experience, not a statement of the reference.
+3. Ask which device and app the user was in. My assumption, not a statement of the reference: an app that held an old session is where the message is most likely to appear.
 
 If the change was recent, the user needs a new sign-in. The token pages explain why.
 
@@ -57,7 +57,7 @@ The Learn page on revoking user access describes the token patterns:
 - Browser apps often use session tokens. The user gets one from Entra ID and one from the app. Entra ID policies are reevaluated whenever the app sends the user back, and the frequency depends on how the app is configured. Entra ID cannot directly revoke a session token that an app issued.
 - Continuous access evaluation allows admins to revoke session and access tokens for CAE-capable apps.
 
-So a password change does not take effect at the same moment in every app. Some apps notice at the next token renewal, and others when their own session ends. The page does not give a per-code explanation for 50133 or 50132, and I do not claim one.
+My inference from these patterns, not a statement of the page: a password change might not take effect at the same moment in every app, with some apps noticing at the next token renewal and others when their own session ends. The page does not give a per-code explanation for 50133 or 50132, and I do not claim one.
 
 ## Check 3: Did the password expire?
 
@@ -84,13 +84,13 @@ For accounts synchronized with Microsoft Entra Connect, the page says:
 
 - By default only passwords of accounts not synchronized through Entra Connect can be configured not to expire.
 - If `EnforceCloudPasswordPolicyForPasswordSyncedUsers` is enabled, the Entra password policy applies to synchronized accounts.
-- A password change can succeed on-premises but not in the cloud, for example when it contains a Unicode character. With password hash synchronization, the user can still get an access token, may be asked to change the password again, and sees no error or notice that the chosen password failed the cloud requirements.
+- In the page's section on risk-based password reset, a password change can succeed on-premises but not in the cloud, for example when it contains a Unicode character. With password hash synchronization, the user still gets an access token, is prompted to change the password again the next time they access cloud resources, and sees no error or notice that the chosen password failed the cloud requirements.
 
-In a hybrid case, compare the password change time on-premises with what the cloud shows, before you reset anything.
+My suggestion: in a hybrid case, compare the password change time on-premises with what the cloud shows, before you reset anything.
 
 ## What to tell the user
 
-The fix with the strongest support is a fresh sign-in after the password change: sign out of the app, close the browser session if needed, and sign in with the current password. The error description names the password change or expiry as the cause, and the token pages explain that apps hold sessions and tokens that Entra ID reevaluates later. If the error comes back right after a fresh sign-in, the user's password state or the account is the next thing to check.
+My advice is a fresh sign-in after the password change: sign out of the app, close the browser session if needed, and sign in with the current password. The pages do not prescribe this fix. The error description names the password change or expiry as the cause, and the token page explains that apps hold sessions and tokens that Entra ID reevaluates later. If the error comes back right after a fresh sign-in, the user's password state or the account is the next thing to check.
 
 ## A short order of work (my advice)
 
@@ -111,6 +111,6 @@ This is my suggestion, not a Microsoft procedure:
 
 ## Sources
 
-- [Microsoft Entra authentication and authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
+- [Microsoft Entra authentication & authorization error codes (Microsoft Learn)](https://learn.microsoft.com/entra/identity-platform/reference-error-codes)
 - [Self-service password reset policies (Microsoft Learn)](https://learn.microsoft.com/entra/identity/authentication/concept-sspr-policy)
 - [Revoke user access in an emergency in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity/users/users-revoke-access)
