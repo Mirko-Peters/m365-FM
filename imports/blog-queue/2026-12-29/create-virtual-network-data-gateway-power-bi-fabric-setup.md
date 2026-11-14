@@ -90,5 +90,5 @@ The page does not say where to set the number of members or clusters in the form
 
 ## Sources
 
-- [Create virtual network data gateways](https://learn.microsoft.com/data-integration/vnet/create-data-gateways)
-- [What is a virtual network data gateway?](https://learn.microsoft.com/data-integration/vnet/overview)
+- [Create virtual network (VNet) data gateways (Microsoft Learn)](https://learn.microsoft.com/data-integration/vnet/create-data-gateways)
+- [What is a virtual network (VNet) data gateway (Microsoft Learn)](https://learn.microsoft.com/data-integration/vnet/overview)
