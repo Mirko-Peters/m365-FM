@@ -20,7 +20,7 @@ faq:
   - q: "What does staging mode do in Entra Connect Sync?"
     a: "According to Microsoft Learn, a server in staging mode imports and synchronizes but doesn't run exports. It also doesn't run password sync or password writeback. Disabling staging mode starts exporting and enables those features."
   - q: "What is the difference between soft match and hard match?"
-    a: "Microsoft Learn says a match on userPrincipalName or the primary SMTP address in proxyAddresses is a soft match. A match on sourceAnchor, which is stored as the ImmutableId in Entra ID, is a hard match. Entra Connect tries the hard match first."
+    a: "Microsoft Learn says a match on userPrincipalName or the primary SMTP address in proxyAddresses is a soft match. A match on sourceAnchor, which is stored as the ImmutableId in Entra ID, is a hard match. Microsoft Learn describes both as ways an incoming on-premises object can be matched to an existing cloud object."
 ---
 Cloud Sync and Connect Sync both synchronize Active Directory identities to Microsoft Entra ID. The core difference is where the work happens. Cloud Sync orchestrates provisioning in the cloud and uses a lightweight agent on premises. Connect Sync runs the sync engine on a server the organization operates. The right choice depends on features, scale and topology. This article compares them using Microsoft Learn, then covers staging mode and soft and hard match.
 
@@ -63,7 +63,7 @@ Microsoft's readiness criteria for Cloud Sync are:
 
 - Fewer than 150,000 objects per AD domain.
 - Groups with fewer than 50,000 members.
-- Single forest or connected forests (the guide's readiness list names no disconnected-forest requirement, although it separately lists disconnected forests as a Cloud Sync strength).
+- Single or connected forests (the guide words this as "no disconnected forest requirements", while its capability table separately lists disconnected forests as a Cloud Sync capability).
 - OU-based filtering instead of complex attribute rules.
 - Password hash sync, or PTA and ADFS managed separately.
 - A plan for device sync if Microsoft Entra hybrid join is in use.
@@ -75,7 +75,7 @@ Characteristics that point to staying on Connect Sync, as listed under "Evaluate
 - Complex cross-forest dependencies.
 - A critical need for reconciliation.
 
-If a required capability or documented migration path isn't available, the guide's outcome is to continue using Connect Sync. It also mentions a way to request more time when a confirmed blocker prevents meeting a notified migration deadline. Cloud Sync fits cases such as mergers and acquisitions with disconnected forests, removing single points of failure, and less on-premises infrastructure. For the procedure, Microsoft points to its migration article and a pilot migration tutorial.
+If a required capability or documented migration path isn't available, the guide's outcome is to continue using Connect Sync. It also mentions a way to request more time when a confirmed blocker prevents meeting a notified migration deadline. Cloud Sync's own page points to cases such as mergers and acquisitions with disconnected forests and to automatic failover with multiple active agents. For the procedure, Microsoft points to its migration article and a pilot migration tutorial.
 
 ## Staging mode in Connect Sync
 
@@ -91,7 +91,7 @@ To enable it on an existing server, open the Microsoft Entra Connect wizard, sel
 
 Before going live, run full import and synchronization, export the pending changes with `csexport`, and analyze them with `CSExportAnalyzer`.
 
-To switch servers, put the active server into staging mode first, then clear staging mode on the standby. Microsoft states that only one server may be active. Active-active isn't supported. After a long time in staging mode, password sync resumes from the last watermark. The catch-up can take many hours in large environments, and newly changed passwords may not work in Entra ID immediately.
+To switch servers, put the active server into staging mode first, then clear staging mode on the standby. Microsoft states that only one server may be active. Active-active isn't supported. After a long time in staging mode, password sync resumes from the last watermark. A long time in staging mode means a long catch-up, and during catch-up new passwords don't work in Entra ID until the backlog is processed.
 
 The pages read for this article don't describe a staging mode for Cloud Sync. Cloud Sync's answer to availability is multiple active agents.
 
@@ -100,7 +100,7 @@ The pages read for this article don't describe a staging mode for Cloud Sync. Cl
 When Connect Sync provisions an on-premises user that may already exist in Entra ID, Microsoft documents three attributes: userPrincipalName, proxyAddresses and sourceAnchor (immutableId).
 
 - **Hard match.** The sourceAnchor value matches an existing object's ImmutableId. Entra Connect takes over the source of authority for that object.
-- **Soft match.** If no hard match is found, Entra ID tries the incoming userPrincipalName or the primary SMTP address (the value with SMTP:). The sourceAnchor is then added so a hard match can be used later.
+- **Soft match.** The incoming userPrincipalName or the primary SMTP address (the value with SMTP:) matches an existing object. The sourceAnchor is then stamped on the cloud object so later syncs can hard match.
 - **No match.** A new object is provisioned.
 
 Rules and risks from the same page:
@@ -110,7 +110,7 @@ Rules and risks from the same page:
 - A soft match on SMTP address with a different sourceAnchor usually causes an `AttributeValueMustBeUnique` export error.
 - Entra ID won't match on-premises users to cloud users with an admin role by default, and Microsoft recommends against syncing onto preexisting admin accounts.
 - From July 1, 2026, a hard match can be blocked when the target cloud account has `onPremisesObjectIdentifier` set or holds or is eligible for a privileged Entra role. Soft match behavior is unchanged.
-- Tenant settings `BlockCloudObjectTakeoverThroughHardMatchEnabled` and `BlockSoftMatchEnabled` block matching for all objects. Microsoft suggests disabling them only while a matching procedure is needed.
+- Tenant settings `BlockCloudObjectTakeoverThroughHardMatchEnabled` and `BlockSoftMatchEnabled` block hard match and soft match respectively. Microsoft encourages allowing matching only during the period when a matching procedure is required and setting the flag to True again afterwards.
 
 ## Related
 
