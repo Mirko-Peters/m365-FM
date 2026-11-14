@@ -9,8 +9,8 @@ topics: [sc-100, zero-trust]
 keypoints:
   - "The study guide lists four skill areas with weights of 20-25%, 25-30%, 25-30% and 20-25%, valid as of October 21, 2026."
   - "The heaviest areas are security operations, identity and compliance, and security solutions for infrastructure, at 25-30% each."
-  - "Only two objectives changed in the October 21, 2026 update, both marked minor: security operations and securing Microsoft 365."
-  - "The outline now names Microsoft Entra Agent ID, Microsoft Security Exposure Management and Microsoft Entra Internet Access and Private Access."
+  - "The change log lists only two objectives for October 21, 2026, both minor: security operations and securing Microsoft 365."
+  - "The outline names Microsoft Entra Agent ID, Microsoft Security Exposure Management and Microsoft Entra Internet Access and Private Access."
   - "The study guide carries no retirement notice. Check the exam page for the current status before you book."
 faq:
   - q: "What are the skill areas and weights?"
@@ -18,7 +18,7 @@ faq:
   - q: "Who is the exam for?"
     a: "The audience profile describes a candidate who translates cybersecurity strategy into capabilities that protect an organization, and designs and guides implementation of Zero Trust solutions across identity, devices, data, AI, applications, network, infrastructure and DevOps. Candidates should have expert skills in at least one area."
   - q: "What changed in the latest update?"
-    a: "The change log lists two minor changes, in Design solutions for security operations and in Evaluate solutions for securing Microsoft 365. The page does not say which wording changed."
+    a: "The change log lists two minor changes, in Design solutions for security operations and in Evaluate solutions for securing Microsoft 365. The page does not say which wording changed, and the table lists no other areas."
   - q: "Does the page say the exam is retiring?"
     a: "No. The study guide contains no exam retirement notice. It says legacy Practice Assessments on Microsoft Learn are no longer updated and recommends the new Practice Assessment on AI Skills Navigator."
   - q: "Does this article include exam questions?"
@@ -70,7 +70,7 @@ Candidates have experience with identity and access, platform protection, securi
 
 ## What changed on 21 October 2026
 
-The change log lists two minor changes: Design solutions for security operations, and Evaluate solutions for securing Microsoft 365. The audience profile and the other groups are unchanged. The page does not say which wording changed.
+The change log lists two minor changes: Design solutions for security operations, and Evaluate solutions for securing Microsoft 365. The audience profile and the two top-level groups shown in the table are marked no change, and the table lists no other areas. The page does not say which wording changed.
 
 ## A study plan based on the weights
 
@@ -84,9 +84,16 @@ The plan is advice derived from the weights, not an official plan. Adjust it to 
 6. Use the new Practice Assessment on AI Skills Navigator that the study guide recommends.
 7. Revisit the study guide shortly before your exam date, because the skills measured can change.
 
+## Notes from the study guide
+
+- The bullets under each skill illustrate how it is assessed, and related topics may be covered.
+- Most questions cover generally available features. The exam may contain questions on preview features if they are commonly used.
+- Localized exams are updated about eight weeks after English. If the exam is not available in your language, you can request an additional 30 minutes.
+- Associate, expert and specialty certifications expire annually and can be renewed through a free online assessment.
+
 ## Before you book
 
-The study guide has no retirement notice. The exam page and the certification page show current status and exam details. Check them yourself, because this guide does not cover cost, duration or passing score.
+The study guide has no retirement notice. The exam page and the certification page show current status and exam details. Check them yourself, because this guide does not cover cost or duration. The study guide states that a score of 700 or greater is required to pass.
 
 ## Related
 
