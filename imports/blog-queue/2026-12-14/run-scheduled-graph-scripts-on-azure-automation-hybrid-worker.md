@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-12-14
 topics: [azure-automation, hybrid-runbook-worker, microsoft-graph-powershell, graph]
 keypoints:
-  - "Use extension-based (V2) Hybrid Runbook Workers. Agent-based workers retired on 31 August 2024, and jobs on them were stopped from 1 April 2025."
+  - "Use extension-based (V2) Hybrid Runbook Workers. Agent-based workers retired on 31 August 2024, and Learn says jobs on them stop from 1 April 2025."
   - "A worker needs two cores, 4 GB RAM, Windows PowerShell 5.1 on Windows and the Azure Connected Machine agent for non-Azure machines."
   - "Choose the group in Run on when you start or link the runbook. Jobs run as the local System account unless you configure custom credentials."
   - "Azure Automation schedules cannot run more often than hourly."
@@ -18,7 +18,7 @@ faq:
   - q: "Can I schedule a runbook to run every 15 minutes?"
     a: "Not with a plain schedule. Learn says the most frequent interval for an Azure Automation schedule is one hour. Its two workarounds are a webhook called from Azure Logic Apps, or four schedules that start within 15 minutes of each other and each run hourly."
   - q: "Which operating systems and PowerShell versions does the worker support?"
-    a: "Learn lists Windows Server 2016 and later plus Windows 10 and 11, and several Linux distributions. On Windows the worker needs Windows PowerShell 5.1 and .NET Framework 4.6.2 or later, and PowerShell Core is not supported for the extension itself. PowerShell 7.x runbooks need extension version 1.1.11 or later, with the runtime installed and an environment variable set."
+    a: "Learn's install page lists Windows Server 2022, 2019 and 2016, plus 2012 and 2012 R2 with a note that these reached end of support, Windows 10 and 11 Enterprise and Pro, and several Linux distributions. On Windows the worker needs Windows PowerShell 5.1 and .NET Framework 4.6.2 or later. For PowerShell 7 runbooks, 7.2 needs extension version 1.1.11 or later and 7.4 and 7.6 need 1.3.63 or later, with the runtime installed and an environment variable set."
   - q: "What identity does a job run under?"
     a: "Learn says Hybrid Runbook Worker jobs run under the local System account on Windows. You can change that for a group by setting Hybrid Worker credentials to Custom, which requires folder permissions so jobs are not suspended. Linux workers do not support Hybrid Worker credentials."
 ---
@@ -33,7 +33,7 @@ If the script only calls Microsoft Graph over the internet, skip the worker.
 
 ## Step 1: Use the extension-based worker
 
-Learn says the extension-based (V2) platform is the supported one. Agent-based (V1) user workers retired on 31 August 2024, and the page states that from 1 April 2025 all jobs on agent-based workers were stopped. A machine can run both during migration, so you can add V2, validate, and then remove V1.
+Learn says the extension-based (V2) platform is the supported one. Agent-based (V1) user workers retired on 31 August 2024, and the page's note says that starting 1 April 2025 all jobs on agent-based workers will be stopped. The note still uses the future tense. A machine can run both during migration, so you can add V2, validate, and then remove V1.
 
 Prerequisites from the install page:
 
@@ -41,7 +41,7 @@ Prerequisites from the install page:
 - For non-Azure machines, the Azure Connected Machine agent, which means the server is Azure Arc-enabled.
 - A system-assigned managed identity on the machine. If it is off, it is enabled during the add process.
 - Windows PowerShell 5.1 and .NET Framework 4.6.2 or later on Windows.
-- Outbound TCP 443 to `*.azure-automation.net`. Requests time out after 30 seconds and fail after three attempts.
+- Outbound TCP 443 to `*.azure-automation.net`. If you use a proxy server, Learn says requests between the worker and the Automation service time out after 30 seconds and fail after three attempts.
 
 Not supported: virtual machine scale sets. Learn strongly recommends never installing the extension on a domain controller. A machine can belong to one worker group only, and a worker cannot report to several Automation accounts.
 
@@ -67,6 +67,8 @@ For PowerShell 7 runbooks, Learn requires the matching extension version and an 
 - PowerShell 7.6 and 7.4: extension version 1.3.63 or later.
 - PowerShell 7.2: extension version 1.1.11 or later.
 - Install the runtime, set the environment variable such as `powershell_7_4_path`, and restart the worker.
+
+Learn is not consistent here. The install page's requirements table says PowerShell Core isn't supported on Windows, while the runbook page describes installing PowerShell 7.x on the worker for 7.x runbooks. Check the current pages and test a 7.x runbook before you rely on it.
 
 The module pages I read do not say how the Microsoft Graph modules reach a hybrid worker, and they do not state whether modules imported to the Automation account are available there. Install `Microsoft.Graph.Authentication` and the modules your script needs on the worker machine, and test with a short runbook. Learn also says that when you author a runbook for a worker, you should edit and test it on the machine that hosts the worker.
 
@@ -115,9 +117,9 @@ On Windows, the extension logs are under `C:\WindowsAzure\Logs\Plugins\Microsoft
 
 ## Sources
 
-- [Microsoft Learn: Azure Automation Hybrid Runbook Worker overview](https://learn.microsoft.com/en-us/azure/automation/automation-hybrid-runbook-worker)
-- [Microsoft Learn: Deploy an extension-based Hybrid Runbook Worker](https://learn.microsoft.com/en-us/azure/automation/extension-based-hybrid-runbook-worker-install)
-- [Microsoft Learn: Run runbooks on a Hybrid Runbook Worker](https://learn.microsoft.com/en-us/azure/automation/automation-hrw-run-runbooks)
+- [Microsoft Learn: Azure Automation Hybrid Runbook Worker Overview](https://learn.microsoft.com/en-us/azure/automation/automation-hybrid-runbook-worker)
+- [Microsoft Learn: Deploy an extension-based Windows or Linux User Hybrid Runbook Worker in Azure Automation](https://learn.microsoft.com/en-us/azure/automation/extension-based-hybrid-runbook-worker-install)
+- [Microsoft Learn: Run Azure Automation Runbooks on a Hybrid Runbook Worker](https://learn.microsoft.com/en-us/azure/automation/automation-hrw-run-runbooks)
 - [Microsoft Learn: Manage schedules in Azure Automation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/schedules)
 - [Microsoft Learn: Manage modules in Azure Automation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/modules)
-- [Microsoft Learn: Connect-MgGraph](https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.authentication/connect-mggraph)
+- [Microsoft Learn: Connect-MgGraph](https://learn.microsoft.com/en-us/powershell/module/microsoft.graph.authentication/connect-mggraph?view=graph-powershell-1.0)
