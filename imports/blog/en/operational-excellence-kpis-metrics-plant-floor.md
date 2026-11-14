@@ -133,3 +133,10 @@ A paper board is a good start. It falls behind when plans change during the day,
 ## Next step
 
 Pick one area, choose three to five operational excellence KPIs with a clear definition and a target, and show them at the line. Then hold the first daily review and decide who answers when a measure turns red.
+
+## Sources
+
+- [Manufacturing KPIs: An Essential Guide to Metrics and Dashboards - MachineMetrics](https://machinemetrics.com/blog/manufacturing-kpis)
+- [Data Analysis in Manufacturing (key manufacturing metrics) - FourJaw](https://fourjaw.com/key-manufacturing-metrics)
+- [Shingo Model - Shingo Institute](https://shingo.org/shingo-model/)
+- [Measuring What Matters in Operational Excellence (The Shingo Model) - Interfacing](https://www.interfacing.com/the-shingo-model)
