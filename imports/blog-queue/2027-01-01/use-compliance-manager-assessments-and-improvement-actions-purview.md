@@ -9,8 +9,8 @@ topics: [compliance-manager, purview, compliance-manager-assessment]
 keypoints:
   - "Creating an assessment needs the Compliance Manager Administration or Assessor role, or Global Administrator. Start with Add assessment on the Assessments page."
   - "The wizard asks for a regulation, a unique assessment name and group, and the services. It ends with Create assessment, or Try again if it fails."
-  - "Assessment status is Complete, Incomplete, None or In progress, based on the control test results."
-  - "Groups cannot be changed after an assessment is added, and a group cannot hold two assessments for the same product and certification pair."
+  - "Assessment status is Complete, Incomplete, None or In progress, based on control and improvement action test statuses."
+  - "An assessment's group cannot be changed once it is added, and a group cannot hold two assessments for the same product and certification pair."
   - "Accepting an assessment template update is permanent, and updates apply per group. Deleting an assessment is permanent and not recoverable."
 faq:
   - q: "Which roles can create an assessment?"
@@ -107,4 +107,4 @@ The page I read does not describe the following:
 
 ## Sources
 
-- [Compliance Manager assessments](https://learn.microsoft.com/purview/compliance-manager-assessments)
+- [Build and manage assessments in Microsoft Purview Compliance Manager (Microsoft Learn)](https://learn.microsoft.com/purview/compliance-manager-assessments)
