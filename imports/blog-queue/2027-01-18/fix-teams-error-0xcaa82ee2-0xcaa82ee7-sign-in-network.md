@@ -74,17 +74,17 @@ This section is my advice, not a Microsoft statement.
 1. **Test from the affected location.** The Network assessment tool is meant to check the path between the user's location and Microsoft, so run it where the user is, not from your office.
 2. **Compare with a second location.** If the same account signs in from home or a mobile hotspot, the problem is likely on the first network. That tells you to look at proxies, firewalls and DNS there.
 3. **Ask the network team about the endpoint list.** Learn points to the Microsoft 365 URLs and IP address ranges article. Check whether your firewall rules and proxy bypass lists match the current version of that list.
-4. **Look for TLS inspection or proxy authentication.** Learn does not mention them in this entry. In my experience they are common causes of sign-in problems on managed networks, so it is worth asking.
+4. **Look for TLS inspection or proxy authentication.** Learn does not mention them in this entry. My hypothesis, not a documented cause: they could interfere on managed networks, so it is worth asking.
 5. **Document what you changed.** If you change a firewall rule, write down which endpoint it was for, so the change can be reviewed later.
 6. **Escalate with the code.** If a support request is needed, include the exact code and the debug logs, as Learn asks.
 
 ## Which user problems are not network problems
 
-This section is my advice, not a Microsoft statement. Because the page lists other codes, check the code before you start the network work. A user with 0xCAA20004 needs a look at Conditional Access, not at the firewall. A user whose problem appears in other Office applications may fit the Office 2016 article. Saving ten minutes on the code check avoids hours of misdirected testing.
+This section is my advice, not a Microsoft statement. Because the page lists other codes, check the code before you start the network work. A user with 0xCAA20004 needs a look at Conditional Access, not at the firewall. A user whose problem appears in other Office applications may fit the Office 2016 article. Checking the code first avoids testing in the wrong place.
 
 ## What the page does not cover
 
-I read the whole page. It does not explain why the network affects sign-in specifically, does not list the ports and addresses itself, and does not describe how to read the output of the Network assessment tool. It also does not give a different procedure for the new Teams client. For endpoint details, use the Microsoft 365 URLs and IP address ranges article that it links.
+The page does not explain why the network affects sign-in specifically, does not list the ports and addresses itself, and does not describe how to read the output of the Network assessment tool. It also does not give a different procedure for the new Teams client. For endpoint details, use the Microsoft 365 URLs and IP address ranges article that it links.
 
 ## Related
 
