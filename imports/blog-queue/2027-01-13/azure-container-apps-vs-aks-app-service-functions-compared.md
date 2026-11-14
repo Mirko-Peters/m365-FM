@@ -25,7 +25,9 @@ faq:
     a: "Learn calls Container Instances a lower-level building block that provides a single pod of Hyper-V isolated containers on demand. Concepts like scale, load balancing and certificates are not provided, so it fits when you need a less opinionated building block."
 ---
 
-For most teams the short answer is this. Use **App Service** for web apps, **Azure Functions** for event-driven functions, **Container Apps** for container microservices and jobs without cluster management, and **AKS** when you need direct Kubernetes API access. Microsoft Learn frames its comparison as general guidance and states that there is no perfect solution for every use case and every team. Treat this as a starting point.
+My short reading of the Learn text, not a Microsoft recommendation: use **App Service** for web apps, **Azure Functions** for event-driven functions, **Container Apps** for container microservices and jobs without cluster management, and **AKS** when you need direct Kubernetes API access. Microsoft Learn frames its comparison as general guidance and states that there is no perfect solution for every use case and every team. Treat this as a starting point.
+
+The first two columns of the table below follow Learn. The **Pick it when** column is my condensed reading.
 
 ## Quick comparison
 
@@ -90,7 +92,7 @@ The path below is my reading of the Learn text, not a Microsoft flowchart.
 
 ## What the comparison page does not decide
 
-The Learn page gives positioning, not prices, limits or performance numbers. Quotas, regional availability and pricing are on each service's own pages, which I did not read for this article. Check them before committing, especially for scale limits and networking requirements.
+The Learn page gives positioning, not prices, limits or performance numbers. Quotas, regional availability and pricing are on each service's own pages and are not covered here. My advice, not a Microsoft statement: check them before committing, especially scale limits and networking requirements.
 
 ## Related
 
