@@ -84,6 +84,8 @@ This outline is practical advice built on the page.
 
 ## Typical mistakes
 
+This list is my own advice, not from the page.
+
 - Expecting rules for every table. Defaults cover accounts and contacts only.
 - Editing a rule without unpublishing it first.
 - Adding many criteria and running out of matchcode length.
@@ -102,7 +104,7 @@ This outline is practical advice built on the page.
 
 ## Different base and matching types
 
-The matching record type does not have to equal the base type. The page gives the example of comparing the email of Contacts with the email of Leads. In that case you pick a Base Record Field and a Matching Record Field instead of one Field. This helps when the same person can exist as a contact and as a lead.
+The matching record type does not have to equal the base type. The page gives the example of comparing the email of Contacts with the email of Leads. In that case you pick a Base Record Field and a Matching Record Field instead of one Field. The page calls it useful to be able to compare different record types.
 
 ## Blank values
 
@@ -116,4 +118,4 @@ With the option Ignore Blank Values, records with empty values in the criteria f
 
 ## Sources
 
-- [Set up duplicate detection rules to keep your data clean (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/set-up-duplicate-detection-rules-keep-data-clean)
+- [Set up duplicate detection rules to keep your data clean - Power Platform (Microsoft Learn)](https://learn.microsoft.com/power-platform/admin/set-up-duplicate-detection-rules-keep-data-clean)
