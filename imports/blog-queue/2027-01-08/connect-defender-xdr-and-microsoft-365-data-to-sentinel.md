@@ -25,7 +25,7 @@ faq:
     a: "Learn says Sentinel in the Azure portal is no longer supported after that date and customers are redirected to the Defender portal."
 ---
 
-The Microsoft Defender XDR connector brings incidents, alerts and advanced hunting events into Microsoft Sentinel and keeps incidents in sync between Sentinel and the Defender portal. This guide follows the Microsoft Learn page on connecting Defender XDR data in the Azure portal. If your Sentinel workspace is already onboarded to the Defender portal, the connector is enabled automatically and these manual steps are not needed.
+The Microsoft Defender XDR connector brings incidents, alerts and advanced hunting events into Microsoft Sentinel and keeps incidents in sync between Sentinel and the Defender portal. This guide follows the Microsoft Learn page Stream data from Microsoft Defender XDR to Microsoft Sentinel in the Azure portal. If your Sentinel workspace is already onboarded to the Defender portal, the connector is enabled automatically and these manual steps are not needed.
 
 ## Prerequisites
 
@@ -64,7 +64,15 @@ This part needs User and Entity Behavior Analytics (UEBA).
 
 ## Connect events
 
-Mark the tables you want under the tabs **Defender for Endpoint**, **Defender for Office 365**, **Defender for Identity**, **Defender for Cloud Apps** and **Defender alerts**, then select **Apply Changes**. The page lists these Defender for Endpoint tables: DeviceInfo, DeviceNetworkInfo, DeviceProcessEvents, DeviceNetworkEvents, DeviceFileEvents, DeviceRegistryEvents, DeviceLogonEvents, DeviceImageLoadEvents, DeviceEvents and DeviceFileCertificateInfo. It does not list the tables for the other tabs.
+Mark the tables you want under the tabs **Defender for Endpoint**, **Defender for Office 365**, **Defender for Identity**, **Defender for Cloud Apps** and **Defender alerts**, then select **Apply Changes**. The page lists these tables per tab.
+
+- **Defender for Endpoint:** DeviceInfo, DeviceNetworkInfo, DeviceProcessEvents, DeviceNetworkEvents, DeviceFileEvents, DeviceRegistryEvents, DeviceLogonEvents, DeviceImageLoadEvents, DeviceEvents and DeviceFileCertificateInfo.
+- **Defender for Office 365:** EmailAttachmentInfo, EmailEvents, EmailPostDeliveryEvents, EmailUrlInfo and UrlClickEvents.
+- **Defender for Identity:** IdentityDirectoryEvents, IdentityLogonEvents and IdentityQueryEvents.
+- **Defender for Cloud Apps:** CloudAppEvents.
+- **Defender alerts:** AlertInfo and AlertEvidence.
+
+To query an advanced hunting table in Log Analytics, you enter its table name in the query window.
 
 ## What is not ingested
 
@@ -85,14 +93,13 @@ Learn says that after March 31, 2027, Microsoft Sentinel in the Azure portal is 
 ## What the page does not say
 
 - Costs or billing for ingested data.
-- The event tables for the Office 365, Identity, Cloud Apps and alerts tabs.
 - The entity types and fields synced by the Active Directory option.
 - The direction and conflict behavior of synchronization.
 - Architecture and schema mapping. Those are in a separate integration article.
 
 ## A connection checklist
 
-This list is practical advice built on the page.
+This list is my advice, built on the page.
 
 1. Check license, role and workspace permissions.
 2. Install the Defender XDR solution from Content Hub.
@@ -101,7 +108,7 @@ This list is practical advice built on the page.
 5. Verify with the SecurityIncident query.
 6. Review analytics rules and queries that used the standalone connectors.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Leaving Microsoft incident creation rules on and creating duplicate incidents.
 - Expecting Vulnerability Management tables in Sentinel.
@@ -117,4 +124,4 @@ This list is practical advice built on the page.
 
 ## Sources
 
-- [Connect Microsoft Defender XDR data to Microsoft Sentinel (Microsoft Learn)](https://learn.microsoft.com/azure/sentinel/connect-microsoft-365-defender)
+- [Stream data from Microsoft Defender XDR to Microsoft Sentinel in the Azure portal (Microsoft Learn)](https://learn.microsoft.com/azure/sentinel/connect-microsoft-365-defender)
