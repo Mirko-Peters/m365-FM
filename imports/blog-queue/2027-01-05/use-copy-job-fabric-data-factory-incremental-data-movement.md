@@ -14,7 +14,7 @@ keypoints:
   - "The pages read give no limits or quotas and no full connector list. Learn links to the supported connectors page."
 faq:
   - q: "What is a Copy job?"
-    a: "Per Microsoft Learn, it is the recommended way to move data from many sources to many destinations in Fabric Data Factory without pipelines. It supports bulk copy, incremental copy and change data capture replication."
+    a: "Per Microsoft Learn, it is the go-to solution in Fabric Data Factory for moving data from many sources to many destinations without pipelines. It supports bulk copy, incremental copy and change data capture replication."
   - q: "What is the difference between watermark and CDC?"
     a: "Watermark-based copy uses a column such as ROWVERSION, datetime, date or integer and tracks inserts and updates only. CDC-based copy needs CDC enabled on the source, replicates inserts, updates and deletes, and supports SCD Type 2."
   - q: "What happens on the first incremental run?"
@@ -49,7 +49,7 @@ A Copy job copies data between stores without a pipeline. You pick a source, a d
 | Deletes | No | Yes |
 | SCD Type 2 | Not stated | Supported |
 
-Learn says to use CDC when the source supports it and you need deletes, SCD Type 2 or lower scan load. Use watermark when CDC is unavailable and the table has a reliable incremental column.
+Learn says to use CDC when it is enabled on the source and supported by the Copy job connector, and you need inserts, updates and deletes, a destination that stays in sync, SCD Type 2 history, or less scan load on high-change-volume tables. Use watermark when CDC is not available on the source, the table has a reliable incremental column and you only need to track inserts and updates.
 
 ## Create a Copy job: database source
 
@@ -79,7 +79,7 @@ Learn says to use CDC when the source supports it and you need deletes, SCD Type
 - **Deletes:** only CDC-based incremental copy replicates deletes. Row deletions cannot otherwise be captured.
 - **Resets:** changing settings such as the incremental column resets incremental copy to an initial full load on the next run.
 - **Manual runs:** **Run** copies only data changed since the last run, even on a schedule.
-- **Truncate:** enabling it truncates the destination on the first incremental run. If you later reset to full copy, enabling it again clears the destination before loading. No data is deleted from the destination unless you enable truncation or use Merge or Overwrite.
+- **Truncate:** enabling it truncates the destination on the first incremental run. If you later reset to full copy, enabling it again clears the destination before loading. By default, Copy job does not delete any data in the destination.
 - **Type conversion:** supported only for tabular data.
 - **Empty files:** when copying files to storage and no data loads from the source, empty files are created at the destination.
 - **Preview features:** auto-partitioning (Preview) and SQL database in Fabric (Preview).
@@ -87,11 +87,11 @@ Learn says to use CDC when the source supports it and you need deletes, SCD Type
 
 ## What the pages do not say
 
-No limits, quotas or throughput figures. No full list of sources and destinations, only a link to the supported connectors page. No detailed comparison with copy activity in pipelines, only a pointer to a data movement strategy guide. No licensing, capacity or role details. No schedule configuration details.
+No limits, quotas or throughput figures. No full list of sources and destinations, only a link to the supported connectors page. No detailed comparison with copy activity in pipelines, only a pointer to a data movement strategy guide. No licensing, capacity or role details. Pricing is only a link to the pricing page, and region availability is stated as the same as Fabric. No schedule configuration details.
 
-## A setup checklist
+## A setup checklist (my advice)
 
-The checklist is practical advice.
+The checklist is my own advice.
 
 1. Check the supported connectors page for your source and destination.
 2. Decide whether you need deletes. If yes, check that CDC is available.
@@ -100,7 +100,7 @@ The checklist is practical advice.
 5. Leave truncation off unless you intend to clear the destination.
 6. Remember that edits to the incremental column trigger a full reload.
 
-## Typical mistakes
+## Typical mistakes (my advice)
 
 - Expecting watermark copy to remove deleted rows from the destination.
 - Choosing a column that is not reliably updated.
@@ -115,5 +115,5 @@ The checklist is practical advice.
 
 ## Sources
 
-- [What is Copy job in Data Factory for Microsoft Fabric (Microsoft Learn)](https://learn.microsoft.com/fabric/data-factory/what-is-copy-job)
-- [Create a Copy job in Data Factory (Microsoft Learn)](https://learn.microsoft.com/fabric/data-factory/create-copy-job)
+- [What is Copy job in Data Factory (Microsoft Learn)](https://learn.microsoft.com/fabric/data-factory/what-is-copy-job)
+- [How to Create a Copy Job in Data Factory (Microsoft Learn)](https://learn.microsoft.com/fabric/data-factory/create-copy-job)
