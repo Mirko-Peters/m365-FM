@@ -57,7 +57,7 @@ Additional settings include Backend Application Timeout (default 85 seconds, Lon
 
 ## Grant admin consent
 
-Learn says starting June 30, 2026, application proxy no longer automatically grants admin consent for User.Read on newly created apps. A Cloud Application Administrator opens **Identity**, **Applications**, **Enterprise applications**, selects the app, **Permissions**, **Grant admin consent for** the tenant, reviews and accepts. Verify that User.Read shows as Delegated and granted through Admin consent. Note that the prerequisites name Application Administrator while this step names Cloud Application Administrator.
+Learn says starting June 30, 2026, application proxy no longer automatically grants admin consent for User.Read on newly created apps. A Cloud Application Administrator opens **Identity**, **Applications**, **Enterprise applications**, selects the app, **Permissions**, **Grant admin consent for** the tenant, reviews and accepts. Learn also gives a Microsoft Graph PowerShell script as an alternative, which creates the delegated grant with New-MgOauth2PermissionGrant for the scope User.Read. Verify that User.Read shows as Delegated and granted through Admin consent. Note that the prerequisites name Application Administrator while this step names Cloud Application Administrator.
 
 ## Assign and test
 
@@ -82,7 +82,7 @@ You can publish a specific path instead of the root. If you do, include everythi
 
 ## Not covered
 
-The tutorial does not give connector OS or hardware requirements, outbound ports, TLS 1.2 requirements, custom domain steps, limits per tenant or the full PowerShell consent command. Its cleanup section is empty.
+The tutorial does not give connector OS or hardware requirements, outbound ports, TLS 1.2 requirements, custom domain steps or limits per tenant. Its cleanup section is only a generic one-line instruction.
 
 ## Related
 
@@ -90,4 +90,4 @@ The tutorial does not give connector OS or hardware requirements, outbound ports
 
 ## Sources
 
-- [Tutorial: Add an on-premises application for remote access through application proxy](https://learn.microsoft.com/entra/identity/app-proxy/application-proxy-add-on-premises-application)
+- [Add an on-premises application for remote access through application proxy in Microsoft Entra ID (Microsoft Learn)](https://learn.microsoft.com/entra/identity/app-proxy/application-proxy-add-on-premises-application)
