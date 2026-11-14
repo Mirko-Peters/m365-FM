@@ -34,7 +34,7 @@ In the agent, go to **Settings** > **Security** > **Authentication**, choose an 
 | Option | What it means |
 |---|---|
 | No authentication | Users do not sign in. Anyone with the link can chat with the agent. Not available when a data policy requires authentication |
-| Authenticate with Microsoft | Sets up Microsoft Entra ID authentication for Teams, SharePoint, Power Apps and Microsoft Copilot. Needed for the built-in Teams and Microsoft 365 channel |
+| Authenticate with Microsoft | Sets up Microsoft Entra ID authentication for Teams, SharePoint, Power Apps and Microsoft Copilot. Learn says to use it for the built-in Teams + Microsoft 365 channel. Not available for agents that integrate with Dynamics 365 Customer Service. `User.AccessToken` is not available |
 | Authenticate manually | You configure the identity provider, for other channels. Provides `User.AccessToken` |
 
 Learn says the agent user authentication means that the agent surfaces only content that the specific user can access. For SharePoint, Dataverse and Copilot connector sources, you need to incorporate authentication.
@@ -82,17 +82,17 @@ Sources defined in the node override agent-level sources. Use specific sources p
 
 ## Step 6: Set content moderation
 
-Moderation applies at agent level (Generative AI settings), topic level (the generative answers node, via **Properties**) and prompt level. The node setting takes precedence at runtime. Levels range from Lowest to Highest, default High. Lower levels give more answers that might contain harmful content, and a strict level might return no answer.
+Moderation applies at agent level (Generative AI settings), topic level (the generative answers node, via **Properties**) and prompt level. The node setting takes precedence at runtime. Levels range from Lowest to Highest, default High. Lower levels give more answers that might contain harmful content, and the highest level generates fewer answers. Learn also notes that a node set to moderate content might not return answers.
 
 ## Step 7: Know the limits
 
 - Knowledge sources in generative answers nodes do not support Bing Custom Search, Azure OpenAI or Custom Data. Use the Classic data option.
 - Citations from a knowledge source cannot be used as inputs to other tools or actions.
-- Tenant graph grounding with semantic search needs Authenticate with Microsoft, can add cost and requires a Microsoft 365 Copilot license in the tenant.
+- Tenant graph grounding with semantic search needs Authenticate with Microsoft. Learn says it comes at an extra cost and requires the agent to share a tenant with a Microsoft 365 Copilot license that is assigned to at least one user. Users who have Microsoft 365 Copilot licenses use it by default, so the setting matters when not all end users are licensed.
 - Agents using Microsoft authentication cannot be embedded in Power BI reports with iframe-based visuals.
 - Turning off authentication turns topics that use authentication variables into Unknown variables. Fix them before you publish.
 
-## Quick checklist
+## Quick checklist (my own summary)
 
 1. Authentication on, with Require users to sign in for sensitive agents.
 2. Only the Graph scopes the knowledge sources need.
@@ -112,5 +112,5 @@ Moderation applies at agent level (Generative AI settings), topic level (the gen
 ## Sources
 
 - [Knowledge sources summary (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-copilot-studio)
-- [Use generative answers in a topic (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/nlu-boost-node)
+- [Add a generative answers node (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/nlu-boost-node)
 - [Configure user authentication in Copilot Studio (Microsoft Learn)](https://learn.microsoft.com/en-us/microsoft-copilot-studio/configuration-end-user-authentication)
