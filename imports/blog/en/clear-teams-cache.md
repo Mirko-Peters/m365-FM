@@ -20,7 +20,7 @@ faq:
   - q: "When should I not clear the Teams cache?"
     a: "Microsoft does not recommend it for missing messages, chat history that doesn't load, a team or channel that doesn't appear, or wrong notifications and unread counts. It doesn't fix those problems and it deletes the diagnostic logs that help find the cause. Use it as a targeted step for a small number of local client problems."
 ---
-To clear the Teams cache on Windows, quit Teams, then reset the app under **Settings**, **Apps**, **Installed apps** (for new Teams), or delete the contents of the Teams cache folder, and restart. On a Mac you delete the Teams folders in your Library with a short Terminal command. Before you do either, read the next section: Microsoft says clearing the cache is a targeted step for a few local client problems, and not a fix for missing chats. This article is for IT admins and help desk staff who get the "Teams is acting up" call, and it covers new and classic Teams on Windows and macOS.
+To clear the Teams cache on Windows, quit Teams, then reset the app under **Settings**, **Apps**, **Installed apps** (for new Teams), or delete the contents of the Teams cache folder, and restart. On a Mac you delete the Teams folders in your Library with a short Terminal command. Before you do either, read the next section: Microsoft says clearing the cache is a targeted step for a few local client problems, and not a fix for missing chats. This article is for IT admins and help desk staff who get the "Teams is acting up" call, and it covers new Teams on Windows and macOS. Microsoft's article still lists the classic Teams paths, but classic Teams reached end of availability on July 1, 2025, so they only matter for leftover installs.
 
 ## Should you clear the cache at all?
 
@@ -80,7 +80,7 @@ Use the reset if you want the supported button. Use the file delete if you scrip
 
 ## Clear the cache in classic Teams on Windows
 
-Classic Teams uses a different folder. Microsoft's steps:
+Microsoft's end-of-availability page says classic Teams stopped working after July 1, 2025 (end of support was July 1, 2024), so this section is only for leftover installs. Classic Teams uses a different folder. Microsoft's steps:
 
 1. If Teams is running, right-click the taskbar icon and select **Quit**.
 2. Press the Windows logo key + R.
@@ -101,7 +101,7 @@ For new Teams, Microsoft lists two commands, run one at a time with Return after
 1. `rm -rf ~/Library/Group Containers/UBF8T346G9.com.microsoft.teams`
 2. `rm -rf ~/Library/Containers/com.microsoft.teams2`
 
-Copy the commands exactly as published. Microsoft warns that the `rm` commands are irreversible and delete folders without confirmation. The Group Containers path contains a space. If your shell stops at it, put the path in quotes, and compare against the current Learn page. Then restart Teams.
+Copy the commands exactly as published. Note that `rm -r` and `rm -rf` delete folders recursively and without confirmation, and there's no undo, so a typo in the path is costly. Microsoft's Group Containers path contains a space. If your shell stops at it, put the path in quotes, and compare against the current Learn page. Then restart Teams.
 
 Microsoft's page does not cover Linux or virtual desktop environments, so check the documentation for your setup before you script a clean-up there.
 
@@ -128,7 +128,7 @@ If you deploy [Teams](https://www.m365.fm/entity/teams/) through Intune or a scr
 - Clearing the cache for missing chats or a missing team. Microsoft says it doesn't help.
 - Deleting the folder while Teams is still running in the tray.
 - Using the classic path for new Teams, or the other way round, and wondering why nothing changed.
-- Running the Mac `rm` commands from the wrong folder or with a typo.
+- Running the Mac `rm` commands with a typo in the path.
 - Skipping the quick checks: connection, sign-out and sign-in, and the web app.
 - Forgetting to tell the user that the first start will be slow.
 
@@ -142,3 +142,9 @@ If you deploy [Teams](https://www.m365.fm/entity/teams/) through Intune or a scr
 ## Next step
 
 Before you delete anything, test the problem in the Teams web app and write down what you see. If it points to the local client, quit Teams and clear the cache with the reset or the folder method for your version. That is the sensible way to clear the Teams cache without throwing away the evidence you need.
+
+## Sources
+
+- [Clear the Teams client cache (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/microsoftteams/teams-administration/clear-teams-cache)
+- [I can't reconnect to Microsoft Teams (Microsoft Support)](https://support.microsoft.com/teams/troubleshooting/i-can-t-reconnect-to-microsoft-teams)
+- [Classic Teams client end of availability (Microsoft Learn)](https://learn.microsoft.com/microsoftteams/teams-classic-client-end-of-availability)
