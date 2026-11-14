@@ -14,18 +14,18 @@ keypoints:
   - "If you installed through work or school, use the Office for business tab of the offline installer article instead."
 faq:
   - q: "What do 30015-4 (1392) and 30015-1011 (1392) mean?"
-    a: "The Microsoft Support page only says that installing Microsoft 365 or Office fails with these codes. It lists no specific causes. It suggests that the offline installer may bypass potential proxy, firewall, antivirus or internet connection issues, which hints at where the problem may be, but the page does not state the cause."
+    a: "The Microsoft Support page only says that installing Microsoft 365 or Office fails with these codes. It lists no specific causes. It suggests that the offline installer may bypass potential proxy, firewall, antivirus or internet connection issues, My reading is that this hints at where the problem may be, but the page does not state the cause."
   - q: "What is the first thing to try?"
     a: "Option 1 on the page: save your work, close open programs and restart the computer. After the restart, open a web browser, sign in with the account associated with Microsoft 365 and select Install. The page says to try the solutions in order."
   - q: "How do I use the offline installer?"
     a: "For the home version, follow the Office offline installer article: select Download, in the Install window choose Offline installer from the Choose a version list, pick your language and select Install, and save the file. Mount the downloaded image, open the Office folder on the virtual drive and run Setup32.exe or Setup64.exe, then wait for the You are all set message."
   - q: "I installed Microsoft 365 through work or school. Is the process the same?"
-    a: "The offline installer article says to use its Office for business tab if you installed Microsoft 365 through work or school and signed in with that account. I could not read that tab, so check the article for those steps."
+    a: "The offline installer article says to use its Office for business tab if you installed Microsoft 365 through work or school and signed in with that account. This article does not cover those steps, so check the article for them."
   - q: "What should I do after the installation works?"
     a: "The offline installer article says to connect to the internet, open an Office app such as Word and select Accept to agree to the license terms. Then open any Microsoft 365 app, go to File, Account, and select Update Now from the Update Options list."
 ---
 
-Errors 30015-4 (1392) and 30015-1011 (1392) stop the installation of Microsoft 365 or Office before it finishes. The Microsoft Support page on these codes is short. It gives two options and does not list causes. I say that clearly, because the article should not make up reasons that the page does not give. This article walks through the two options, adds the offline installer steps from the linked Support article, and ends with a checking order that is marked as my advice.
+Errors 30015-4 (1392) and 30015-1011 (1392) stop the installation of Microsoft 365 or Office before it finishes. The Microsoft Support page on these codes is short. It gives two options and does not list causes. The page gives no causes, and this article adds none. This article walks through the two options, adds the offline installer steps from the linked Support article, and ends with a checking order that is marked as my advice.
 
 ## What the page says
 
@@ -43,7 +43,7 @@ To reinstall, the page links version-specific articles for Microsoft 365, Office
 
 ## Option 2: Use the Office offline installer
 
-The page tells you to follow the Use the Office offline installer article and select the tab for your version of Office. Here are the steps for the **Office for home** tab as I read them.
+The page tells you to follow the Use the Office offline installer article and select the tab for your version of Office. Here are the steps from the **Office for home** tab.
 
 ### Download
 
@@ -52,12 +52,12 @@ The page tells you to follow the Use the Office offline installer article and se
 3. Select your language and choose **Install**.
 4. When prompted, save or open the file. The button depends on the browser: **Save** (Edge), **Open** (Internet Explorer), **Open when done** (Chrome), **Save File** (Firefox).
 
-If you installed Microsoft 365 through work or school and already signed in with that account, the article says to use the **Office for business** tab instead. I did not read that tab.
+If you installed Microsoft 365 through work or school and already signed in with that account, the article says to use the **Office for business** tab instead. This article does not cover the steps on that tab.
 
 ### Mount the image
 
 1. Open the **Download** folder and double-click the downloaded image file. The article names **O365HomePremRetail.img** for the home version. Select **Open** if prompted.
-2. A virtual drive window should appear. If not, open **File Explorer** and find the new drive, for example (D:). If (D:) exists, the next free letter is used.
+2. A virtual drive window should appear. If not, open **File Explorer** and find the new drive, for example (D:). If you already have a (D:) drive, the new drive usually gets the next letter.
 3. Optionally save a copy of the virtual drive to a thumb drive or disc.
 
 ### Install
