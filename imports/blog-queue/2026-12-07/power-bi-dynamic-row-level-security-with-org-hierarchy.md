@@ -50,7 +50,7 @@ Each row now holds the chain of managers from the top down to the employee.
 
 ## Step 2: Relate the employee table to the facts
 
-Learn recommends filters on dimension tables rather than fact tables, relying on relationships for propagation. It also warns that RLS filters propagate only through active relationships and advises avoiding `LOOKUPVALUE` when relationships can do the same job. Relate Employee to the fact table, for example sales by salesperson, with a single-direction filter from Employee to the facts.
+Learn says it is often more efficient to enforce RLS filters on dimension tables rather than fact tables and to rely on relationships for propagation. It also notes that RLS filters propagate only through active relationships and advises avoiding `LOOKUPVALUE` when relationships can do the same job. Relate Employee to the fact table, for example sales by salesperson. The single-direction filter from Employee to the facts is this article's own design suggestion, not a Learn requirement.
 
 ## Step 3: Define the role
 
@@ -66,13 +66,13 @@ PATHCONTAINS(
 )
 ```
 
-Read it from the inside. The lookup finds the key of the signed-in person. PATHCONTAINS then returns TRUE for every employee whose manager chain includes that key. The person's own row is included because PATH ends with the current ID. This is the one place where `LOOKUPVALUE` is hard to avoid, because the mapping happens inside the rule. Learn's advice to measure the impact with and without RLS applies here, so compare query times with View as.
+Read it from the inside. The lookup finds the key of the signed-in person. PATHCONTAINS then returns TRUE for every employee whose manager chain includes that key. The person's own row is included because PATH ends with the current ID. In this article's own reading, `LOOKUPVALUE` is hard to avoid here because the mapping happens inside the rule. Learn's advice to avoid it where relationships can do the same job and to measure the impact with and without RLS applies, so compare query times with View as.
 
-Two cautions. The Learn pages say PATH and PATHCONTAINS are not supported in DirectQuery mode in calculated columns or RLS rules, so this pattern needs Import mode. And a user with no matching UPN gets no rows, which Learn lists as a common cause of empty reports (missing, misspelled or changed UPNs).
+Two cautions. The Learn pages say PATH and PATHCONTAINS are not supported in DirectQuery mode in calculated columns or RLS rules, so this pattern needs Import mode. And Learn names a UPN that is not stored, is entered incorrectly or has changed after a name change as a possible reason why a user sees no data.
 
 ## Step 4: Handle people in several hierarchies
 
-Learn says users mapped to several roles get additive filters. There is no "once denied, always denied". If an executive group needs full access, a second role with `TRUE()` gives it, but anyone in both roles sees everything. Prefer one role per user's full set of permissions.
+Learn says users mapped to several roles get additive filters. There is no "once denied, always denied". Learn's own example is a **Workers** role with `FALSE()` and a **Managers** role with `TRUE()`: a user mapped to both sees all rows. Learn advises creating one role that grants all permissions of a single report user instead of mapping the user to several roles.
 
 The same page warns against unsafe dynamic rules. An `IF(USERNAME() = "Worker", filter, TRUE())` rule returns all rows for a misspelled value, so end the logic with an explicit `FALSE()`.
 
@@ -92,7 +92,7 @@ Only semantic model owners or workspace admins can add members to roles accordin
 ## Step 6: Test
 
 1. In the service, select **More options** (...) next to the role and choose **Test as role**.
-2. Use **Now viewing as** to test a specific person or a combination of roles.
+2. Use **Now viewing as** to test other roles, a combination of roles or a specific person. For dynamic RLS, Learn adds that Test as role evaluates `USERPRINCIPALNAME()` with your own identity, so it cannot show what a specific B2B guest or service principal would see. Sign in as the real user for that.
 3. Add a `Who Am I = USERNAME()` measure to a card to see the identity the model uses.
 
 Test as role does not work for DirectQuery models with SSO enabled or for paginated reports, and dashboards are not available for testing.
@@ -108,7 +108,7 @@ RLS only restricts Viewers. Admin, Member and Contributor roles have edit permis
 - RLS filters rows, not columns or measures. For columns, Learn points to object-level security.
 - For simple static audiences, separate semantic models can be faster, at the price of duplicated content.
 
-## Typical mistakes
+## Typical mistakes (own reading of the pages above)
 
 - Using the pattern on a DirectQuery model.
 - Testing only as the model owner, who is not filtered.
