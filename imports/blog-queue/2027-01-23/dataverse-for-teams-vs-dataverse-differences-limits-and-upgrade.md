@@ -29,7 +29,7 @@ Dataverse for Teams was the built-in data platform behind apps made inside a tea
 
 ## The timeline first
 
-According to the Power Platform "important changes coming" page, the deprecation has three phases:
+According to the Power Platform page on important changes (deprecations) coming, the deprecation has three phases:
 
 | Phase | Date | What happens |
 | --- | --- | --- |
@@ -66,7 +66,7 @@ Most of the standard tables provided with a Power Platform environment are not p
 | --- | --- | --- |
 | Environments | 1 per team (for up to 10,000 teams) | Unlimited |
 | Maximum size | 1 million rows or 2 GB | Unlimited, per the page |
-| Lifecycle | Tied to the team. Deleting the team deletes the environment | Independent |
+| Lifecycle | Tied to the team. Deleting the team deletes the environment | Not tied to a team. An upgraded environment stays if the team is deleted |
 | Upgrade to Dataverse | Yes | Not applicable |
 
 Both support backups, point-in-time restore and disaster recovery. Capacity in Dataverse for Teams is measured with relational, image and file data. The page notes that Dataverse also supports copy and reset operations for multiple environments.
@@ -113,7 +113,7 @@ After the upgrade, the app can run inside and outside Teams, and the environment
 
 This is my suggestion, not Microsoft guidance:
 
-1. Treat the inventory as the first task, since many Teams environments exist because a user created a first app.
+1. Treat the inventory as the first task, since a Teams environment can be created when a user builds a first app in a team, as the deprecation notice describes.
 2. Upgrade what has activity and a clear owner. Let the rest expire, after you ask the owners.
 3. If an app needs auditing, API access or a model-driven interface, plan the move to a managed Dataverse environment with solutions rather than only upgrading in place.
 4. Budget for capacity and licenses early, because they decide whether the upgrade can start.
@@ -127,4 +127,4 @@ This is my suggestion, not Microsoft guidance:
 ## Sources
 
 - [Dataverse for Teams vs. Dataverse (Microsoft Learn)](https://learn.microsoft.com/power-apps/teams/data-platform-compare)
-- [Important changes coming in Power Platform (Microsoft Learn)](https://learn.microsoft.com/power-platform/important-changes-coming)
+- [Important changes (deprecations) coming in Power Platform (Microsoft Learn)](https://learn.microsoft.com/power-platform/important-changes-coming)
