@@ -10,7 +10,7 @@ keypoints:
   - "Microsoft's comparison has three columns: Meetings, Events up to 1,000 attendees (webinar settings), and Events optimized for large audiences (town hall settings)."
   - "Meetings allow 1,000 interactive participants on Enterprise and 300 on Business, plus up to 10,000 view-only on Enterprise. Meetings do not offer registration."
   - "Events up to 1,000 attendees support registration and attendee mic and camera. Above 1,000 attendees, the large-audience (town hall) setting is on and cannot be turned off."
-  - "Large-audience events replace chat with a comment stream, remove attendee mic and camera, and add eCDN, Ultra-Low Latency and 1080p."
+  - "Large-audience events replace chat with a comment stream, remove attendee mic and camera, and add eCDN and Ultra-Low Latency. 1080p is not in events up to 1,000."
   - "Since April 1, 2026, some features once limited to Teams Premium are included with Teams Enterprise. Microsoft says Premium still covers protection, branding and intelligence features."
 faq:
   - q: "What is the difference between a Teams webinar and a town hall?"
@@ -29,7 +29,7 @@ Use a meeting for collaboration, a webinar for an interactive presentation with 
 
 ## How Microsoft frames the three options
 
-Microsoft Learn's feature comparison has three columns: **Meetings**, **Events up to 1,000 attendees** and **Events optimized for large audiences**. The words "webinar" and "town hall" map to the second and third columns through the policy settings. Microsoft Learn's town hall planning page says:
+Microsoft Learn's feature comparison has three columns: **Meetings**, **Events up to 1,000 attendees** and **Events optimized for large audiences**. The words "webinar" and "town hall" map to the second and third columns through the policy settings. Microsoft Learn's events planning page says:
 
 - Interactive events of up to 1,000 attendees use **webinar policy settings**.
 - Events that use **Optimize for large audience** use **town hall policy settings**.
@@ -42,19 +42,20 @@ Microsoft Learn's feature comparison has three columns: **Meetings**, **Events u
 | Topic | Meeting | Event up to 1,000 (webinar settings) | Event for large audiences (town hall settings) |
 |---|---|---|---|
 | Interactive participants | 1,000 Enterprise, 300 Business | Up to 1,000 | Up to 100,000 with an Attendee Capacity Pack |
-| View-only | 10,000 (Enterprise only) | 10,000 | 10,000 |
+| View-only attendees | 10,000 (Enterprise only) | Not available | 10,000 |
 | Registration | Not available | Available | Available, with the 1,000-attendee scale limit |
 | Attendee mic and camera | Yes | Yes, up to 1,000 | Not available |
 | Chat | Meeting chat | Meeting chat | Comment stream, up to 20,000 attendees |
 | Q&A, polls, reactions | See the comparison page | Q&A, polls, reactions | Q&A up to 100,000, others up to 20,000 |
 | Lobby | Yes | Yes | Not available |
 | Breakout rooms | Yes, with limits | Up to 1,000 attendees | Not available |
-| eCDN, Ultra-Low Latency, 1080p | No | No | Yes |
+| eCDN, Ultra-Low Latency | No | No | Yes |
+| 1080p video resolution | Yes | No | Yes |
 | Co-organizers, presenters | 10 co-organizers | 10 co-organizers, 100 presenters | 10 co-organizers, 100 presenters |
 
 All three share a maximum duration of 30 hours. Recording is capped at four hours or 1.5 GB, after which the recording ends and restarts automatically.
 
-Microsoft also lists feature thresholds inside large events: registration and attendee mic and camera only up to 1,000 attendees, chat, reactions, raise hand and polls up to 20,000, and Q&A up to 100,000. Above a threshold, the feature is turned off in the scheduling form and cannot be turned on for a subset of attendees.
+Microsoft also lists feature thresholds inside large events: registration and attendee mic and camera only up to 1,000 attendees, chat, reactions, raise hand, polls, Ultra-Low Latency and 1080p up to 20,000, and Q&A up to 100,000. Above a threshold, the feature is turned off in the scheduling form and cannot be turned on for a subset of attendees.
 
 ## When to use a meeting
 
@@ -97,5 +98,5 @@ The Events app, formerly the Meet app, is preinstalled for all Teams users. Crea
 
 ## Sources
 
-- [Microsoft Learn: Meeting, webinar and town hall feature comparison](https://learn.microsoft.com/en-gb/microsoftteams/meeting-webinar-town-hall-feature-comparison)
-- [Microsoft Learn: Plan for Teams town halls](https://learn.microsoft.com/microsoftteams/plan-town-halls)
+- [Microsoft Learn: Meetings and events feature and capacity comparison](https://learn.microsoft.com/en-us/microsoftteams/meetings-events-feature-comparison)
+- [Microsoft Learn: Plan for Teams events](https://learn.microsoft.com/en-us/microsoftteams/plan-events)
