@@ -29,7 +29,7 @@ A custom sensitive information type (SIT) lets Microsoft Purview detect content 
 
 ## Before you start
 
-The Learn page does not name required roles or permissions. It tells you to understand sensitive information types, review the SIT limits and check the licensing pages. Plan your pattern on paper first, including sample values that should and should not match.
+The Learn page does not name required roles or permissions. It tells you to understand sensitive information types, review the SIT limits and check the licensing pages. My advice: plan your pattern on paper first, including sample values that should and should not match.
 
 ## Create a SIT from scratch
 
@@ -70,7 +70,7 @@ The page names Boost.RegEx 5.1.3 as the regex engine.
 3. Enter a new name and description.
 4. Create, edit or delete patterns, then save.
 
-Some SITs cannot be copied, including the U.S. driver's license number and several EU identifiers. A SIT with 10 text processors or restricted text processors cannot be copied in the UI, and Learn says to use PowerShell for those.
+Some SITs cannot be copied, including the U.S. and Canada driver's license numbers, several EU identifiers and the ICD-9-CM and ICD-10-CM classifications. A SIT with 10 text processors or restricted text processors cannot be copied in the UI, and Learn says to use PowerShell for those.
 
 ## Documented limits
 
@@ -109,5 +109,5 @@ The page has no testing procedure and no details on character proximity, validat
 
 ## Sources
 
-- [Create a custom sensitive information type](https://learn.microsoft.com/purview/create-a-custom-sensitive-information-type)
-- [Sensitive information type limits](https://learn.microsoft.com/purview/sit-limits)
+- [Create custom sensitive information types (Microsoft Learn)](https://learn.microsoft.com/purview/sit-create-a-custom-sensitive-information-type)
+- [Sensitive information type limits (Microsoft Learn)](https://learn.microsoft.com/purview/sit-limits)
