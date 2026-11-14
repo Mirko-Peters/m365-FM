@@ -8,7 +8,7 @@ date: 2026-11-26
 topics: [service-principal, entra-id, app-registration, managed-identity]
 keypoints:
   - "The application object is the global blueprint in the home tenant. The service principal is the local instance in each tenant that defines what the app can do there."
-  - "Microsoft ranks credentials: managed identity first, federated credentials second, certificates third. Secrets (passwords) are the option it tells you not to use."
+  - "Microsoft orders credentials from most to least preferred: managed identity, federated credentials, certificates. It says not to use secrets (passwords)."
   - "Request only the least permissive permission, prefer delegated over app-only access, and remove permissions the app no longer needs."
   - "Keep owners to a minimal set, review the owner list every few months, and keep at least two owners per service principal."
   - "Deleted apps and service principals can be restored for up to 30 days. Non-admin users can create at most 250 app and service principal objects, deleted ones included."
@@ -16,7 +16,7 @@ faq:
   - q: "What is the difference between an app registration and a service principal?"
     a: "According to Microsoft Learn, the application object (the app registration) is the global representation of an app and lives in its home tenant. The service principal is the local representation in a specific tenant and defines the access policy and permissions there. Registering an app in the portal creates both in the home tenant."
   - q: "Should I use a client secret or a certificate for a service principal?"
-    a: "Microsoft's security guidance says to use a managed identity whenever possible, then federated credentials for non-Azure platforms, and a certificate if neither works. It says not to use password credentials, also called secrets, because they are often mismanaged and easily compromised. If a trusted CA is not possible, it still prefers a self-signed certificate over a password."
+    a: "Microsoft's security guidance lists a managed identity as strongly recommended, then federated credentials only from platforms you trust, then certificate credentials if neither is possible. It says not to use password credentials, also called secrets."
   - q: "When should I use a managed identity instead of a service principal?"
     a: "Microsoft Learn lists four conditions: the service runs in Azure, it does not sign in users, it does not act as a web API resource, and it does not need to run in multiple tenants. If all four are true, consider a managed identity. A managed identity is itself a type of service principal that you cannot edit directly."
   - q: "Can I recover a deleted service principal?"
@@ -48,7 +48,7 @@ Changes to the application object are reflected in its service principal only in
 | Managed identity | No | Can be granted access, but not modified directly |
 | Legacy | No | Has editable properties such as credentials and reply URLs |
 
-Legacy service principals are used only in the tenant where they were created. In Microsoft Graph the type appears as the `servicePrincipalType` property. Microsoft Graph documents that an Application service principal whose app registration is missing does not get tokens issued.
+Legacy service principals are used only in the tenant where they were created. In Microsoft Graph the type appears as the `servicePrincipalType` property, where the reference lists more values than these three, including ServiceIdentity (an agent identity) and SocialIdp (for internal use). Microsoft Graph documents that an Application service principal whose app registration is missing does not get tokens issued.
 
 ## Create one the documented way
 
@@ -57,20 +57,20 @@ Legacy service principals are used only in the tenant where they were created. I
 3. Enter a name and choose **Accounts in this organizational directory only** if the app is single tenant.
 4. Select **Register**. The service principal is created automatically.
 
-To manage permissions, consent and sign-in information afterwards, use **Enterprise applications**. For Azure access, assign a role at the lowest scope that works.
+To manage permissions, consent and sign-in information afterwards, use **Enterprise applications**. For Azure access, the same page describes assigning a role at the subscription, resource group or resource scope, with permissions inherited by lower scopes. Choosing the narrowest scope that works is general least-privilege practice, not a requirement stated there.
 
 ## Best practices from Microsoft
 
 ### Pick the right identity type
 
-Consider a managed identity instead of an app registration when the service runs in Azure, does not sign in users, is not a web API, and does not need multiple tenants. Managed identities can also reach resources outside Azure, including Microsoft Graph.
+Consider a managed identity instead of an app registration when the service runs in Azure, does not sign in users, is not a web API, and does not need multiple tenants.
 
 ### Rank your credentials
 
-Microsoft's order, from best to worst:
+Microsoft lists the options from most to least preferred. The page does not call this a formal ranking:
 
 1. A managed identity as the credential. Microsoft calls this strongly recommended because it needs no credential management.
-2. Federated credentials from a platform you trust, such as GitHub Actions. Microsoft warns that an app is only as secure as the identity platform configured as its credential.
+2. Federated credentials from a platform you trust. Microsoft advises caution and says to configure federated credentials only from platforms you trust.
 3. A certificate. Store it in a key vault such as Azure Key Vault and prefer one from a trusted certificate authority.
 4. A secret. The page says: "Don't use password credentials."
 
