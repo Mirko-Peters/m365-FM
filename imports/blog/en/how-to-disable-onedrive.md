@@ -75,7 +75,7 @@ Unlinking removes the connection between this computer and your account. It's th
 
 On a Mac, the equivalent is the menu bar icon, **Preferences**, the **Account** tab and **Unlink this Mac**. Microsoft's page treats Microsoft accounts and work or school accounts alike here and doesn't describe separate steps for each.
 
-What happens to your files? Microsoft says you won't lose files or data by unlinking, and you can still reach them at OneDrive.com. The sync stops, so changes you make on the PC no longer reach the cloud. If you later delete a file from the local OneDrive folder, it goes to the Recycle Bin (Mac: Trash), and deleting on OneDrive.com sends it to the OneDrive recycle bin. Because the two copies no longer talk to each other, you'd have two diverging sets of files if you keep editing both. Pick one place to work.
+What happens to your files? Microsoft says you won't lose files or data by unlinking, and you can still reach them at OneDrive.com. The sync stops, so changes you make on the PC no longer reach the cloud. Microsoft's page doesn't describe what happens to files you change or delete afterwards, but because the two copies no longer talk to each other, you'd have two diverging sets of files if you keep editing both. Pick one place to work.
 
 Before you unlink a work or school account, ask your IT team. They might rely on the sync client for backup or for shared libraries.
 
@@ -113,7 +113,7 @@ Microsoft notes that OneDrive is built into some Windows versions and can't be u
 3. On the **General** tab, next to **Attributes**, check **Hidden**.
 4. Click the OneDrive gear icon again and choose **Quit OneDrive**. That removes the notification-area icon.
 
-The folder is hidden, not deleted. I couldn't find a Microsoft page that says whether OneDrive stays hidden or uninstalled after every Windows feature update, so check again after the next one. On a managed PC, use the policy below.
+The folder is hidden, not deleted. Microsoft's page doesn't say whether OneDrive stays hidden after a Windows feature update, so check again after the next one. On a managed PC, use the policy below.
 
 ## For admins: block OneDrive with a policy
 
@@ -127,12 +127,12 @@ When you enable it, Microsoft says:
 - OneDrive files aren't kept in sync with the cloud.
 - Users can't automatically upload photos and videos from the camera roll folder.
 
-The policy applies to the device (not per user) and to Windows 10 version 1703 and later in the Pro, Enterprise, Education and IoT Enterprise editions. Note the effect: it blocks sync and access, it doesn't move data. Plan the files of users first. If you back up Desktop and Documents with OneDrive, stop that backup and let the files return to local folders before you enable the policy, and tell people what's going on. Our overview of [OneDrive](https://www.m365.fm/entity/onedrive/) explains what lives where in a tenant.
+Microsoft's Policy CSP page lists it as a device-scope setting for Windows 10 version 1703 and later in the Pro, Enterprise, Education and IoT Enterprise editions. Note the effect: it blocks sync and access, it doesn't move data. Plan the files of users first. If you back up Desktop and Documents with OneDrive, stop that backup and let the files return to local folders before you enable the policy, and tell people what's going on. Our overview of [OneDrive](https://www.m365.fm/entity/onedrive/) explains what lives where in a tenant.
 
 ## Common mistakes
 
 - **Unlinking before stopping folder backup.** Your Desktop and Documents might be in OneDrive. Stop backup first and choose where the files stay.
-- **Dragging the OneDrive folder to the Recycle Bin.** Deleting files from the local folder deletes them in the cloud as long as sync is on. Unlink first.
+- **Deleting files from the OneDrive folder while sync is on.** With sync running, the deletion reaches the cloud copy too. Unlink first if you only want to clean up the PC.
 - **Thinking quitting is disabling.** Quit OneDrive ends the session. It starts again later.
 - **Hiding and forgetting.** A hidden folder that is still synced keeps uploading. Unlink first.
 - **Switching it off on a work PC without asking.** Your admin might depend on it for backup or compliance.
@@ -149,3 +149,11 @@ The policy applies to the device (not per user) and to Windows 10 version 1703 a
 ## Next step
 
 Decide whether you want a break, a clean unlink or a managed block. For most people at home, the answer to how to disable OneDrive is to stop folder backup, unlink the PC and, if you like, uninstall the app. Do a test with one folder before you touch the rest.
+
+## Sources
+
+- [Turn off, disable, or uninstall OneDrive (Microsoft Support)](https://support.microsoft.com/onedrive/turn-off-disable-or-uninstall-onedrive)
+- [How to pause and resume sync in OneDrive (Microsoft Support)](https://support.microsoft.com/office/how-to-pause-and-resume-sync-in-onedrive-2152bfa4-a2a5-4d3a-ace8-92912fb4421e)
+- [Back up your folders with OneDrive (Microsoft Support)](https://support.microsoft.com/office/back-up-your-folders-with-onedrive-d61a7930-a6fb-4b95-b28a-6552e77c3057)
+- [Choose which OneDrive folders you want to sync (Microsoft Support)](https://support.microsoft.com/onedrive/choose-which-onedrive-folders-you-want-to-sync-on-windows-or-macos)
+- [Policy CSP - System (Microsoft Learn)](https://learn.microsoft.com/windows/client-management/mdm/policy-csp-system)
