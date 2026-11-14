@@ -25,7 +25,7 @@ faq:
     a: "It forces the user to enter credentials on that request, negating single sign-on."
 ---
 
-AADSTS50058 means a silent sign-in request found no usable session. The Microsoft Entra error reference calls it UserInformationNotProvided: session information is not sufficient for single sign-on, so a user is not signed in. It says this is a common error that is expected when a user is unauthenticated, and that it may be returned when prompt=none is specified. For developers, the documented answer is to fall back to an interactive request. This article covers the app side with MSAL.js and the OAuth parameters involved. A separate case is the Power Apps sign-in message that carries the same code.
+AADSTS50058 means a silent sign-in request found no usable session. The Microsoft Entra error reference calls it UserInformationNotProvided: session information is not sufficient for single sign-on, so a user is not signed in. It says this is a common error that is expected when a user is unauthenticated, and that it may be returned when prompt=none is specified. For developers, the documented answer is to fall back to an interactive request. This article covers the app side with MSAL.js and the OAuth parameters involved.
 
 ## What the reference says
 
@@ -94,7 +94,6 @@ This section is my advice, not a Microsoft statement.
 3. **Check what the app does after the error.** The bug is usually the missing fallback, not the error itself.
 4. **Pass a hint when you have one,** so an account picker does not appear unexpectedly.
 5. **Check redirect URI setup** and tab sharing if only some tabs fail.
-6. **For end users in a Microsoft product** that shows this code, such as Power Apps, the steps are about browser cookie settings, not app code.
 
 ## How to tell the cases apart
 
