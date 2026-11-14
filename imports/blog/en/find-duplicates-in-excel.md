@@ -26,7 +26,7 @@ Finding comes before removing. If you already know which rows you want to delete
 
 ## Highlight duplicates with conditional formatting
 
-This is the fastest check, and Microsoft recommends it as a review step before you remove anything. It follows Microsoft's article on [filtering for unique values or removing duplicate values](https://support.microsoft.com/en-us/office/filter-for-unique-values-or-remove-duplicate-values-ccf664b0-81d6-449b-bbe1-8daaec1e83c2).
+This is the fastest check, and Microsoft recommends it as a review step before you remove anything. It follows Microsoft's article on [filtering for unique values or removing duplicate values](https://support.microsoft.com/office/filter-for-unique-values-or-remove-duplicate-values-ccf664b0-81d6-449b-bbe1-8daaec1e83c2).
 
 1. Select the cells, column or range you want to check. Usually one column is enough.
 2. On the **Home** tab, open **Conditional Formatting**.
@@ -69,7 +69,7 @@ A result above 1 means the combination appears more than once. Add more pairs fo
 
 ### What COUNTIF does that surprises people
 
-Microsoft's [COUNTIF page](https://support.microsoft.com/en-us/office/countif-function-e0de10c6-f885-4e71-abb4-1f464816df34) lists some behaviors that matter when you hunt for duplicates:
+Microsoft's [COUNTIF page](https://support.microsoft.com/office/countif-function-e0de10c6-f885-4e71-abb4-1f464816df34) lists some behaviors that matter when you hunt for duplicates:
 
 - Text matching ignores letter case. "apples" and "APPLES" count as the same value. Excel treats them as duplicates here.
 - The characters `?` and `*` act as wildcards. If your data contains them, for example in product codes, COUNTIF may match more than you expect. Put a tilde before the character to search for it literally.
@@ -98,15 +98,15 @@ This keeps the rows where the count is above 1 and shows each of them once. It n
 
 ## Use Power Query to keep only the duplicates
 
-If your data is large or arrives every week, let [Power Query](https://www.m365.fm/entity/power-query/) find the duplicates. Microsoft's Power Query documentation describes a **Keep duplicates** command, the opposite of Remove duplicates. It filters the table to the rows whose values in the selected columns appear more than once, and unlike Remove duplicates it returns all matching rows, not one per value.
+If your data is large or arrives every week, let [Power Query](https://www.m365.fm/entity/power-query/) find the duplicates. Microsoft's Power Query documentation describes a **Keep duplicates** command, the counterpart of Remove duplicates. It filters the table to the rows whose values in the selected columns appear more than once, and it returns all matching rows, not one per value.
 
-Microsoft's article on [keeping or removing duplicate rows](https://support.microsoft.com/en-us/excel/keep-or-remove-duplicate-rows-power-query) gives the steps for the removing side. The start is the same for both:
+Microsoft's article on [keeping or removing duplicate rows](https://support.microsoft.com/excel/keep-or-remove-duplicate-rows-power-query) gives the steps for the removing side. The start is the same for both:
 
 1. Select a cell in your data and choose **Query** > **Edit**, or load it with **Data** > **From Table/Range**.
 2. Click a column header to select it. Hold Shift or Ctrl to select more columns.
-3. Apply the command. Microsoft's steps for removing use **Home** > **Remove Rows** > **Remove Duplicates**. Look for the matching Keep Duplicates command with the other row commands on the Home tab, and check the preview.
+3. Apply the command. Microsoft's steps for removing use **Home** > **Remove Rows** > **Remove Duplicates**. The matching command for keeping is **Home** > **Keep Rows** > **Keep Duplicates**. Check the preview.
 
-Microsoft also notes that Power Query is case-sensitive, so "Apple" and "apple" are different values there, unlike in COUNTIF. That's a real difference between the two methods. If your goal is a repeatable weekly check, you'll want to decide on one behavior and stick with it, for example by transforming the column to upper case first.
+Microsoft's [Power Query page on duplicates](https://learn.microsoft.com/power-query/working-with-duplicates) states that Power Query is case-sensitive, so "Apple" and "apple" are different values there, unlike in COUNTIF. The same page suggests an uppercase or lowercase transform before you remove duplicates. That's a real difference between the two methods. If your goal is a repeatable weekly check, you'll want to decide on one behavior and stick with it, for example by transforming the column to upper case first.
 
 ## Find duplicates between two sheets or lists
 
@@ -127,7 +127,7 @@ Everything above finds exact matches only, aside from case. Real lists also cont
 
 **Step one: remove the false differences.** Use `TRIM` to strip extra spaces and `CLEAN` to remove nonprinting characters, and build the check on the cleaned values. In a helper column, `=TRIM(A2)` shows the cleaned text. Count duplicates on that column, not on the original. Because COUNTIF ignores case, you don't need to change case there. In Power Query, where case matters, transform the column to upper or lower case.
 
-**Step two: look at what's left.** Sort the cleaned list alphabetically and read through neighbors. Near matches such as "Jon Smith" and "John Smith" end up next to each other, so a human can see them. For larger lists, Microsoft Research published the [Fuzzy Lookup add-in for Excel](https://www.microsoft.com/en-ca/download/details.aspx?id=15011). It can find fuzzy duplicate rows within one table or match similar rows across two tables, and it gives each match a similarity score. Check the requirements before you plan around it: the download page lists Windows, with Excel 2007, 2010, 2013 and 2016, and a release from 2020. It may not install on a current Microsoft 365 setup, and it's not available on Mac.
+**Step two: look at what's left.** Sort the cleaned list alphabetically and read through neighbors. Near matches such as "Jon Smith" and "John Smith" end up next to each other, so a human can see them. For larger lists, Microsoft Research published the [Fuzzy Lookup add-in for Excel](https://www.microsoft.com/en-ca/download/details.aspx?id=15011). It can find fuzzy duplicate rows within one table or match similar rows across two tables, and it gives each match a similarity score. Check the requirements before you plan around it: the download page lists Windows desktop versions from Vista through Windows 10 and Excel 2007, 2010, 2013 or 2016 as the prerequisite, with version 1.3.0.0 published in July 2024. It may not work with a current Microsoft 365 setup, and the page lists no Mac support.
 
 Whatever you use, review fuzzy results by hand. Two people with similar names are not necessarily the same person.
 
@@ -151,3 +151,11 @@ Whatever you use, review fuzzy results by hand. Two people with similar names ar
 ## Next step
 
 Pick one column in your current file, highlight its duplicates with conditional formatting and count how many cells light up. Then add a COUNTIF helper column and compare the numbers. If they differ, you've just found hidden spaces or case differences, and you now know how to find duplicates in Excel before you delete anything.
+
+## Sources
+
+- [Filter for unique values or remove duplicate values (Microsoft Support)](https://support.microsoft.com/office/filter-for-unique-values-or-remove-duplicate-values-ccf664b0-81d6-449b-bbe1-8daaec1e83c2)
+- [COUNTIF function (Microsoft Support)](https://support.microsoft.com/office/countif-function-e0de10c6-f885-4e71-abb4-1f464816df34)
+- [Keep or remove duplicate rows (Power Query) (Microsoft Support)](https://support.microsoft.com/excel/keep-or-remove-duplicate-rows-power-query)
+- [Working with duplicate values (Microsoft Learn)](https://learn.microsoft.com/power-query/working-with-duplicates)
+- [Fuzzy Lookup Add-In for Excel (Microsoft Download Center)](https://www.microsoft.com/download/details.aspx?id=15011)
