@@ -1,0 +1,1066 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.700
+Topik hari ini mungkin pernah Anda dengar, tetapi mungkin sepenuhnya dipahami.
+
+00:00:03.220 --> 00:00:10.640
+Model konteks protokol untuk Dynamics 36 ERP, Anda mungkin pernah melihat singkatan MCP dalam pengumuman Microsoft, webinar mitra, dan postingan komunitas.
+
+00:00:10.880 --> 00:00:13.720
+Tetapi apa artinya bagi seseorang yang bekerja dengan Dynamics 365 setiap hari?
+
+00:00:14.320 --> 00:00:14.820
+Begini intinya.
+
+00:00:15.300 --> 00:00:17.260
+ERP Anda menyimpan data terpenting perusahaan.
+
+00:00:17.760 --> 00:00:22.320
+Catan keuangan, transaksi rantai pasok, tingkat inventaris, info vendor, riwayat pelanggan.
+
+00:00:22.800 --> 00:00:23.900
+Itulah cara perusahaan Anda beroperasi.
+
+00:00:24.240 --> 00:00:26.800
+Namun, masukkan data tersebut ke dalam alat AI selalu menjadi masalah.
+
+00:00:26.800 --> 00:00:29.940
+Anda memerlukan API khusus, konektor khusus, dan solusi keamanan tambah.
+
+00:00:30.360 --> 00:00:34.020
+Setiap kali Anda ingin menghubungkan asisten AI ke ERP, Anda harus mulai dari awal.
+
+00:00:34.580 --> 00:00:38.220
+Di akhir episode ini, Anda akan mengerti apa itu server MCP, mengapa Microsoft membangunnya,
+
+00:00:38.460 --> 00:00:42.460
+dan bagaimana hal itu mengubah ERP Anda menjadi sistem yang bisa diajak bicara langsung oleh agen AI.
+
+00:00:43.160 --> 00:00:43.940
+Tidak perlu kode khusus.
+
+00:00:44.560 --> 00:00:46.060
+Jadi, ambil kopi Anda dan mari kita mulai.
+
+00:00:46.640 --> 00:00:47.920
+Apa itu model konteks protokol?
+
+00:00:48.720 --> 00:00:49.800
+Berikut definisi paling sederhananya.
+
+00:00:50.180 --> 00:00:55.360
+MCP adalah standar terbuka yang memungkinkan aplikasi AI menemukan dan memanggil alat serta sumber data ngecarian terstruktur.
+
+00:00:55.560 --> 00:00:57.240
+Bayangkan ini seperti remote universal.
+
+00:00:57.240 --> 00:01:01.460
+Tanpa MCP, setiap agen AI memerlukan kabel khusus ke setiap sistem.
+
+00:01:02.080 --> 00:01:05.760
+Satu kabel untuk CRM, satu lagi untuk ERP, dan satu lagi untuk gudang data Anda.
+
+00:01:06.340 --> 00:01:08.620
+Setiap kali Anda melambat sistem, Anda harus memasang kabel baru lagi.
+
+00:01:09.020 --> 00:01:11.400
+Dengan MCP, Anda cukup menyambungkan sekali dan mendapatkan akses ke semua.
+
+00:01:11.400 --> 00:01:13.700
+Satu koneksi, satu protokol, satu cara kerja.
+
+00:01:14.320 --> 00:01:17.900
+Sebelum ada MCP, menghubungkan asisten AI ke ERP adalah proyek besar.
+
+00:01:18.500 --> 00:01:23.540
+Anda harus membuat API khusus, memelihara konektor, menangani masalah keamanan, dan memperbarui semuanya setiap kali ERP berubah.
+
+00:01:23.980 --> 00:01:25.520
+Proses itu mahal, lambat, dan rentan.
+
+00:01:25.960 --> 00:01:26.880
+MCP mengubah semua itu.
+
+00:01:27.540 --> 00:01:32.880
+Alih-alih membangun jembatan khusus setiap saat, Anda mendapatkan antarmuka standar yang bisa digunakan alat apapun yang kompatibel dengan MCP.
+
+00:01:33.080 --> 00:01:34.600
+Bagian model konteks juga sangat penting.
+
+00:01:34.600 --> 00:01:41.400
+Agen AI tidak hanya mendapatkan data mentah, ia mendapatkan info mendetail tentang alat apa yang tersedia, fungsinya, cara menggunakannya, dan data apa yang tersedia.
+
+00:01:41.680 --> 00:01:47.020
+Jadi, saat agen perlu melakukan sesuatu, ia bisa melihat alat tersebut, memahami mana yang sesuai dengan tugasnya, dan memanggilnya yang benar.
+
+00:01:47.360 --> 00:01:49.900
+Itulah cara AI membuat keputusan cerdas karena ia memahami sistem.
+
+00:01:50.320 --> 00:01:52.160
+Jadi, mengapa ini penting bagi Dynamics 3 spesifik?
+
+00:01:52.940 --> 00:01:56.220
+Microsoft membangun server MCP untuk aplikasi Finance and Operations,
+
+00:01:56.540 --> 00:02:02.200
+yang berarti ratusan ribu fungsi ERP kini menjadi alat yang bisa ditemukan dan digunakan oleh agen AI.
+
+00:02:02.200 --> 00:02:06.800
+Mulai dari membuat pesanan pembelian, memposting entry jurnal, hingga menjalankan laporan keuangan,
+
+00:02:07.060 --> 00:02:09.340
+setiap fungsi dihadirkan melalui satu antarmuka yang terkelola.
+
+00:02:09.740 --> 00:02:10.360
+Itulah ide besarnya.
+
+00:02:10.760 --> 00:02:13.980
+Namun, seperti apa sebenarnya server MCP itu di dalam Dynamics 365?
+
+00:02:14.740 --> 00:02:15.320
+Mari kita bedah.
+
+00:02:16.080 --> 00:02:17.280
+Dua jenis ERP MCP
+
+00:02:17.280 --> 00:02:21.660
+Saat Microsoft pertama kali merilis server ERP MCP, mereka belum memiliki visi penuhnya.
+
+00:02:22.480 --> 00:02:24.820
+Versi awal hadir dengan set alat tetap sebanyak 13 buah.
+
+00:02:25.160 --> 00:02:30.500
+Anda bisa melakukan hal-hal spesifik seperti mencari vendor yang disetujui atau merilis permintaan perguna, tetapi juga terbatas.
+
+00:02:30.720 --> 00:02:31.940
+Agak begitu seperti mesin penjual.
+
+00:02:32.460 --> 00:02:33.640
+Anda bisa memilih dari apa yang tersedia.
+
+00:02:34.040 --> 00:02:36.240
+Jika Anda menginginkan sesuatu yang tidak ada dalam menu, Anda tidak bisa mendapatkan.
+
+00:02:36.620 --> 00:02:37.680
+Kemudian Microsoft mengembangkannya.
+
+00:02:38.160 --> 00:02:42.100
+Server MCP Dynamics yang baru, kini dalam perhatian co-publik adalah sesuatu yang benar-benar berbeda.
+
+00:02:42.700 --> 00:02:47.520
+Alih-alih daftar alat yang tetap, server ini memungkinkan agen menafigasi formulir ERP, layaknya pengguna manusia.
+
+00:02:48.200 --> 00:02:51.400
+Agen dapat membuka formulir, menetapkan nilai bidang, mengaklit tombol, dan menjelaskan.
+
+00:02:51.400 --> 00:02:55.620
+Dan server ini bekerja melalui logika bisnis dan aturan validasi yang sama dengan yang berlaku saat Anda melakukan set.
+
+00:02:55.800 --> 00:02:56.240
+Perbedaannya.
+
+00:02:56.620 --> 00:02:57.300
+Bagaikan bumi dan lain.
+
+00:02:57.300 --> 00:02:58.840
+Server statis adalah mesin penjual otomatis.
+
+00:02:59.320 --> 00:03:00.820
+Server dinamis adalah supermarket lengkap.
+
+00:03:01.100 --> 00:03:03.980
+Anda dapat menelusuri setiap lorong dan memilih apapun yang diizinkan oleh kamer.
+
+00:03:04.260 --> 00:03:05.120
+Dan yang saya masuk adalah apa?
+
+00:03:05.340 --> 00:03:09.260
+Kita berbicara tentang ratusan ribu fungsi ERP di puluhan ribu formulir.
+
+00:03:10.060 --> 00:03:12.580
+Keuangan dan lantai pasokan sumber daya manusia operasional proyek.
+
+00:03:13.440 --> 00:03:17.380
+Setiap formulir, setiap tindakan, setiap tombol yang dapat diakses pengguna tersedia bagi agen.
+
+00:03:17.380 --> 00:03:21.200
+Dan inilah bagian yang sangat penting bagi organisasi yang telah menyesuaikan ERP mereka.
+
+00:03:21.920 --> 00:03:25.280
+Customisasi dan ekstensi ISV menjadi terlihat secara otomatis oleh agen.
+
+00:03:25.980 --> 00:03:29.600
+Anda tidak perlu menulis kode khusus untuk menampilkan bidang atau proses custom Anda.
+
+00:03:30.300 --> 00:03:34.080
+Jika ada dalam ERP dan pengguna dapat berinteraksi dengannya, server MCP akan membuatnya tersedia.
+
+00:03:34.620 --> 00:03:35.380
+Tidak perlu pemodian tambah.
+
+00:03:35.760 --> 00:03:37.280
+Namun MCP bukan hanya tentang mengambil tindak.
+
+00:03:37.640 --> 00:03:38.820
+Ini juga tentang memahami dataan.
+
+00:03:39.720 --> 00:03:40.940
+Server MCP Analytic.
+
+00:03:41.500 --> 00:03:44.320
+Jadi kita memiliki server dinamis ini yang dapat melakukan tindakan di dalam ERP Anda.
+
+00:03:44.820 --> 00:03:46.180
+Tetapi tindakan tanpa data adalah buta.
+
+00:03:46.180 --> 00:03:49.080
+Anda perlu tahu apa yang sedang terjadi sebelum memputuskan apa yang harus dilakukan.
+
+00:03:49.380 --> 00:03:50.520
+Disitulah bagian kedua berperan.
+
+00:03:51.000 --> 00:03:53.480
+Microsoft juga mengumumkan server MCP Analytic terpisah.
+
+00:03:54.240 --> 00:03:56.640
+Server ini memasuki perhatian publik pada Desember 2015.
+
+00:03:57.060 --> 00:04:00.040
+Server ini terhubung ke sesuatu yang disebut Analytic Kinderja Bisnis atau BPA.
+
+00:04:01.020 --> 00:04:03.520
+Anggap BPA sebagai penyimpanan data analitik untuk ERP Anda.
+
+00:04:03.860 --> 00:04:09.420
+BPA menyatukan data dari semua instans ERP Anda dalam satu skema terpadu dengan laporan bawaan dan modal dimensional.
+
+00:04:10.140 --> 00:04:12.800
+Daripada harus menarik data dari lima lingkungan berbeda dan mencari tahu.
+
+00:04:12.800 --> 00:04:15.640
+Cara menggabungkannya sendiri, BPA melakukan pekerjaan itu untuk Anda.
+
+00:04:16.180 --> 00:04:20.400
+Sekarang lapisan MCP di atasnya memberikan cara bagi agen AI untuk membuat query data tersebut.
+
+00:04:20.660 --> 00:04:21.620
+Dan inilah bagian yang elegan.
+
+00:04:22.000 --> 00:04:22.760
+Ia hanya membutuhkan doa.
+
+00:04:23.260 --> 00:04:25.000
+Dapatkan skema set data dan eksekusi query DAX?
+
+00:04:25.380 --> 00:04:25.900
+Hanya itu saja.
+
+00:04:26.220 --> 00:04:30.720
+Agen pertama-tama meminta skema untuk memahami data apa yang tersedia, tabel apa yang ada, dan ukuran apa yang ditentukan.
+
+00:04:31.140 --> 00:04:33.780
+Kemudian ia menulis query DAX untuk mendapatkan data yang tepat yang dibutuhkan.
+
+00:04:34.000 --> 00:04:34.520
+Mengapa ini petik?
+
+00:04:34.520 --> 00:04:41.720
+Karena alih-alih membuat dashboard power BI yang rumit dan menunggu seseorang menyikirkannya, Anda bisa mengajukan pertanyaan dalam bahasa alami dan mendapatkan jawaban secara instan.
+
+00:04:42.100 --> 00:04:43.500
+Siapa 10 vendor saya yang berisiko tinggi?
+
+00:04:43.920 --> 00:04:45.920
+Tunjukkan menajakan harga pokok penjualan berdasarkan kuartal.
+
+00:04:46.220 --> 00:04:48.240
+Pelanggan mana yang memiliki saldo terhutang ke tinggi?
+
+00:04:48.860 --> 00:04:52.040
+Agen tersebut mencari tahu skemanya, menulis query-nya, dan membawa kembali jawabannya.
+
+00:04:52.600 --> 00:04:53.680
+Tidak perlu membuat dashboard.
+
+00:04:54.100 --> 00:04:56.840
+Namun keajaiban yang sesungguhnya terjadi saat Anda menggabungkan kedua server tersebut.
+
+00:04:56.840 --> 00:05:01.880
+Bayangkan agen yang menggunakan MCP analitik untuk mengidentifikasi vendor dengan lebih dari 5 faktur yang jatuh tempo.
+
+00:05:02.460 --> 00:05:03.960
+Ia menandai vendor tersebut sebagai berisiko tinggi.
+
+00:05:04.300 --> 00:05:07.780
+Kemudian ia menggunakan MCP tindakan untuk secara otomatis menahan vendor tersebut di ERP Anda.
+
+00:05:08.180 --> 00:05:08.980
+Tidak perlu manusia.
+
+00:05:09.420 --> 00:05:11.800
+Wawasan mengarah pada tindakan semuanya dalam satu aliran yang berkelan.
+
+00:05:12.100 --> 00:05:13.620
+Itulah visi yang sedang dibangun oleh Microsoft.
+
+00:05:14.120 --> 00:05:15.500
+Jadi seperti apa ini dalam prakteknya?
+
+00:05:15.920 --> 00:05:16.920
+Mari kita lihat beberapa contoh nyata.
+
+00:05:17.460 --> 00:05:18.520
+Kasus penggunaannya nyata.
+
+00:05:19.080 --> 00:05:21.920
+Mari kita mulai dengan demo nyata yang ditunjukkan Microsoft selama bincang teknologi mereka.
+
+00:05:22.420 --> 00:05:23.740
+Agen Manajemen Risiko Vendor.
+
+00:05:24.220 --> 00:05:26.180
+Hal ini memantau faktur terbuka di sistem Anda.
+
+00:05:26.180 --> 00:05:29.360
+Dan saat mendeteksi vendor dengan lebih dari 5 faktur yang jatuh tempo,
+
+00:05:29.700 --> 00:05:31.860
+ia menahan vendor tersebut di ERP secara otomatis.
+
+00:05:32.460 --> 00:05:33.460
+Tidak ada yang perlu melakukan apa-apa.
+
+00:05:33.880 --> 00:05:35.800
+Agen memeriksa data, membuat keputusan,
+
+00:05:35.940 --> 00:05:38.060
+memblokir pesanan pembelian baru dengan vendor tersebut,
+
+00:05:38.320 --> 00:05:41.580
+lalu mengirim email ke tim utang usaha untuk menjelaskan apa yang terjadi dan mengapa.
+
+00:05:42.240 --> 00:05:43.980
+Semua itu berjalan tanpa campur tangan manusia.
+
+00:05:44.820 --> 00:05:47.020
+Selanjutnya adalah otomatisasi faktur pembayaran di muka,
+
+00:05:47.180 --> 00:05:49.080
+dan yang satu ini datang dari Ted Olsen di Capgemin.
+
+00:05:49.760 --> 00:05:52.680
+Seorang pengguna meminta agen untuk membuat proposal pembayaran di muka
+
+00:05:52.680 --> 00:05:53.940
+untuk pesanan penjualan tertentu,
+
+00:05:53.940 --> 00:05:56.340
+dan agen tersebut menafigasi formulir ERP sendiri.
+
+00:05:56.980 --> 00:05:58.020
+Ia mengatur jenis pembayar.
+
+00:05:58.260 --> 00:06:00.500
+Di muka kepersentase, menetapkan nilai ke 50%,
+
+00:06:00.500 --> 00:06:01.920
+mengonfirmasi pesanan penjualan,
+
+00:06:02.060 --> 00:06:03.800
+membuat faktur pembayaran di muka, dan mempostingnya.
+
+00:06:04.320 --> 00:06:06.140
+Itu adalah beberapa langkah di berbagai formulir
+
+00:06:06.140 --> 00:06:07.560
+yang semuanya ditangani oleh agen
+
+00:06:07.560 --> 00:06:09.540
+dengan menelusuri antarmuka seperti yang dilakukan orang.
+
+00:06:10.040 --> 00:06:11.820
+Pengguna hanya menjelaskan apa yang mereka butuhkan
+
+00:06:11.820 --> 00:06:13.720
+dalam bahasa sederhana dan agen menangani sisanya.
+
+00:06:14.120 --> 00:06:14.920
+Sekarang untuk yang luar biasa.
+
+00:06:15.480 --> 00:06:16.780
+Scott Gaines, seorang arsitek,
+
+00:06:16.880 --> 00:06:19.180
+solusi membangun tim agen AI di dalam via Scott
+
+00:06:19.180 --> 00:06:21.080
+yang mengonfigurasi seluruh lingkungan ERP.
+
+00:06:21.500 --> 00:06:22.980
+Dia menyiapkan agen manajer proyek
+
+00:06:22.980 --> 00:06:24.100
+untuk mengatur pekerjaan,
+
+00:06:24.200 --> 00:06:25.940
+agen arsitek, solusi untuk meninjau kebutuhan,
+
+00:06:26.540 --> 00:06:28.620
+dan agen konsultan untuk menjalankan peraturan aktual,
+
+00:06:28.840 --> 00:06:30.580
+membuat entitas hukum, bagian akun,
+
+00:06:30.860 --> 00:06:31.740
+dan kalender fiskal,
+
+00:06:32.600 --> 00:06:34.660
+dan agen migrasi data yang mengunggah data master.
+
+00:06:35.500 --> 00:06:37.040
+Agen-agen ini saling menguapkan pekerjaan satu seman.
+
+00:06:37.400 --> 00:06:39.240
+Manager proyek menyerahkan tugas kepada konsultan.
+
+00:06:39.660 --> 00:06:40.920
+Konsultan mengonfigurasi ERP
+
+00:06:40.920 --> 00:06:43.120
+dan agen migrasi data membuat akun-akun tersebut.
+
+00:06:43.120 --> 00:06:45.880
+Implementasi ERP lengkap yang diotomatisasi
+
+00:06:45.880 --> 00:06:48.100
+sebagian oleh tim agen AI yang bekerja bersama.
+
+00:06:48.880 --> 00:06:50.020
+Ini bukan sekadar konsep PowerPoint.
+
+00:06:50.640 --> 00:06:52.340
+Ini adalah demo nyata dari mitra nyata,
+
+00:06:52.660 --> 00:06:54.080
+Capgemini, Scott Gaines, Avantiko,
+
+00:06:54.360 --> 00:06:55.220
+dan Microsoft sendiri.
+
+00:06:55.940 --> 00:06:56.860
+MCP bukan sekadar tewek.
+
+00:06:57.540 --> 00:06:59.200
+Ini sudah berjalan hari ini di lingkungan peratinjo.
+
+00:06:59.660 --> 00:07:00.720
+Poin utamanya sederhana.
+
+00:07:01.360 --> 00:07:03.620
+MCP mengubah bahasa alami menjadi tindakan ERP.
+
+00:07:04.440 --> 00:07:06.360
+Anda tidak perlu menghafal jalur menu atau menulis kode.
+
+00:07:06.720 --> 00:07:08.080
+Anda menjelaskan apa yang Anda butuhkan
+
+00:07:08.080 --> 00:07:09.440
+dan agen mencari tahu cara melakukan.
+
+00:07:09.800 --> 00:07:11.060
+Namun bagaimana cara Anda benar-benar mengatur?
+
+00:07:11.060 --> 00:07:12.180
+Mari kita bahas dasarnya.
+
+00:07:12.180 --> 00:07:13.660
+Cara untuk memulai
+
+00:07:13.660 --> 00:07:15.240
+Jadi Anda tertarik untuk mencobanya.
+
+00:07:15.740 --> 00:07:17.140
+Apa yang sebenarnya Anda butuhkan untuk memulai?
+
+00:07:17.640 --> 00:07:18.680
+Pertama, prasyaratnya.
+
+00:07:19.180 --> 00:07:21.920
+Anda memerlukan lingkungan Dynamics 365 Finance and Operations
+
+00:07:21.920 --> 00:07:23.900
+versi 1038 atau lebih tinggi.
+
+00:07:24.420 --> 00:07:25.860
+Jika Anda menggunakan MCP Analytic,
+
+00:07:25.940 --> 00:07:27.880
+Anda juga perlu menginstall Business Performance Analytics
+
+00:07:27.880 --> 00:07:29.280
+versi 2.5 atau yang lebih baru.
+
+00:07:29.780 --> 00:07:31.340
+Dan Anda memerlukan klien yang membuat diberikan
+
+00:07:31.340 --> 00:07:32.380
+siapnya untuk berkomunikasi itu.
+
+00:07:32.620 --> 00:07:32.860
+Itu saja.
+
+00:07:33.300 --> 00:07:33.700
+Tiga hal.
+
+00:07:34.300 --> 00:07:36.000
+Sekarang Anda memiliki dua opsi utama untuk caramu.
+
+00:07:36.340 --> 00:07:37.820
+Jalur termudah adalah Copilot Studio.
+
+00:07:37.820 --> 00:07:40.460
+Anda pergi ke sana buat agen baru dan tambahkan alat.
+
+00:07:40.460 --> 00:07:42.820
+Cari Dynamics 365 RPMCP,
+
+00:07:43.080 --> 00:07:44.100
+hubungkan ke lingkungan Anda,
+
+00:07:44.280 --> 00:07:46.120
+dan Anda siap untuk mulai memberikan perintah.
+
+00:07:46.600 --> 00:07:47.400
+Ini adalah pengalaman dan aku.
+
+00:07:47.820 --> 00:07:48.740
+Tidak perlu penguadian.
+
+00:07:49.240 --> 00:07:51.240
+Cukup konfigurasikan dan mulailah berbicara dengan RPM.
+
+00:07:51.800 --> 00:07:53.300
+Opsi kedua adalah Visual Studio Code.
+
+00:07:53.880 --> 00:07:55.940
+Jika Anda lebih teknis atau ingin menguji suatu secara langsung,
+
+00:07:56.060 --> 00:07:57.000
+ini memberi Anda kontrol lebih besar.
+
+00:07:57.560 --> 00:07:59.160
+Anda menggunakan klien MCP VS Code,
+
+00:07:59.160 --> 00:08:00.920
+tempel URL endpoint ERPMCP,
+
+00:08:01.060 --> 00:08:02.500
+masukkan kredensial Anda,
+
+00:08:02.700 --> 00:08:03.380
+dan Anda terhubung.
+
+00:08:03.780 --> 00:08:05.940
+Ini sedikit lebih banyak langkah daripada Copilot Studio,
+
+00:08:06.060 --> 00:08:06.660
+tetapi tetap mudah.
+
+00:08:07.200 --> 00:08:10.640
+Dan Microsoft memiliki dokumentasi yang memandu Anda melalui format URL yang tepat.
+
+00:08:11.040 --> 00:08:13.340
+Berikut adalah sesuatu yang penting untuk dipahami mengenai keamanan.
+
+00:08:13.700 --> 00:08:16.460
+Agen menggunakan izin keamanan dari identitas pengguna yang terhubung.
+
+00:08:16.940 --> 00:08:18.160
+Ini kontrol akses berbasis peran.
+
+00:08:18.280 --> 00:08:21.160
+Apapun yang telah Anda atur di Dynamics 365 akan berlaku secara otomatis.
+
+00:08:21.400 --> 00:08:23.640
+Jika pengguna hanya dapat melihat entitas hukum mereka sendiri,
+
+00:08:23.800 --> 00:08:25.460
+agen hanya dapat melihat entitas hukum tersebut.
+
+00:08:25.460 --> 00:08:27.260
+Jika pengguna tidak dapat memposting jurnal,
+
+00:08:27.380 --> 00:08:28.300
+agen juga tidak dapat memposting.
+
+00:08:28.540 --> 00:08:31.180
+Model keamanan Anda yang ada saat ini menjadi model keamanan agen tersebut.
+
+00:08:31.580 --> 00:08:33.080
+Tidak perlu konfigurasi terpisah.
+
+00:08:34.480 --> 00:08:35.680
+Beberapa tips untuk menulis pengetahuan.
+
+00:08:36.080 --> 00:08:37.940
+Setelah tentukan entitas hukum tempat Anda bekerja,
+
+00:08:38.420 --> 00:08:39.340
+agen tidak membuat asumsi.
+
+00:08:39.940 --> 00:08:40.820
+Jika Anda tidak memberitahunya,
+
+00:08:40.940 --> 00:08:41.660
+ya mungkin memilih proses.
+
+00:08:42.220 --> 00:08:43.240
+Menggunakan bahasa alam yang jelas,
+
+00:08:43.820 --> 00:08:45.020
+Anda tidak perlu bicara tentang misilah teknis.
+
+00:08:45.620 --> 00:08:47.700
+Dan percala tugas yang rumit menjadi langkah-langkah yang lebih kecil.
+
+00:08:48.220 --> 00:08:50.120
+Daripada meminta proses 10 langkah dalam satu perintah,
+
+00:08:50.120 --> 00:08:51.520
+mintalah satu langkah demi satu langkah.
+
+00:08:51.520 --> 00:08:54.760
+Akin ini pintar, tetapi lebih dapat diandalkan saat Anda tetap fokus.
+
+00:08:55.120 --> 00:08:56.660
+Satu catatan jujur tentang keterbatasan.
+
+00:08:57.000 --> 00:08:57.980
+Ini masih dalam perhatian jawab publik.
+
+00:08:58.420 --> 00:09:00.180
+Terdapat batas waktu eksekusi serat 20 detik,
+
+00:09:00.280 --> 00:09:01.640
+jadi operasi yang berjalan lama mungkin gagal.
+
+00:09:02.340 --> 00:09:04.360
+Setiap query dapat mengembalikan sekitar 10 MB data
+
+00:09:04.360 --> 00:09:05.920
+yang cukup untuk sebagian besar pertanyaan,
+
+00:09:06.020 --> 00:09:07.740
+tetapi tidak untuk pembuangan data dalam jumlah besar.
+
+00:09:08.240 --> 00:09:10.080
+Dan AI belum sepenuhnya konsisten.
+
+00:09:10.460 --> 00:09:12.600
+Ia mungkin menangani suatu tugas dengan sempurna pada satu hari,
+
+00:09:12.720 --> 00:09:14.300
+dan kesulitan dengan tugas yang sama pada hari berikut.
+
+00:09:14.520 --> 00:09:17.140
+Ujilah secara menyeluruh sebelum Anda mempercayainya untuk hal yang penting.
+
+00:09:17.400 --> 00:09:18.220
+Apa yang akan datang selanjutnya?
+
+00:09:18.220 --> 00:09:20.500
+Microsoft memiliki peta jalan yang jelas untuk MCP.
+
+00:09:21.180 --> 00:09:22.380
+Peta jalan dan arah masa depan.
+
+00:09:22.780 --> 00:09:24.080
+Jadi kemana arah Microsoft dengan hal ini?
+
+00:09:24.420 --> 00:09:25.560
+Mereka berkomitmen penuh per MCP.
+
+00:09:26.000 --> 00:09:27.960
+Semua agen ERP baru akan dibangun di atasnya,
+
+00:09:28.200 --> 00:09:30.720
+dan agen yang ada akan bermigrasi paling lambat Desember 2025.
+
+00:09:31.440 --> 00:09:32.460
+Ini bukan eksperimen sampingan.
+
+00:09:33.060 --> 00:09:34.800
+Ini adalah arah strategis untuk seluruh platform.
+
+00:09:36.020 --> 00:09:38.520
+Khusus untuk MCP analitik, beberapa fitur akan segera hadir.
+
+00:09:38.900 --> 00:09:40.460
+Pengambilan skema granular sedang dalam proses
+
+00:09:40.460 --> 00:09:42.940
+agar agen dapat meminta bagian yang lebih kecil dari model data
+
+00:09:42.940 --> 00:09:44.220
+daripada menarik semuanya sekaligus.
+
+00:09:44.540 --> 00:09:47.400
+Itu lebih baik untuk kinerja dan untuk mengelola jendela konteks model AI.
+
+00:09:47.400 --> 00:09:50.200
+Akin juga akan dapat membuat dan memperbarui dashboard
+
+00:09:50.200 --> 00:09:52.760
+serta ukuran secara langsung, bukan hanya mengeluarkan yang sudah ada.
+
+00:09:53.160 --> 00:09:55.520
+Integrasi asli ke dalam Copilot dan Teams ada dalam peta jalan
+
+00:09:55.520 --> 00:09:57.920
+sehingga Anda dapat mengajukan pertanyaan tentang data ERP Anda
+
+00:09:57.920 --> 00:10:00.020
+tanpa meninggalkan alat kerja sehari-hari.
+
+00:10:00.320 --> 00:10:01.540
+Inilah tujuan Microsoft ke depan.
+
+00:10:01.940 --> 00:10:04.500
+Bayangkan seorang CFO membuka dashboard dalam analitik kinerja bisnis
+
+00:10:04.500 --> 00:10:05.700
+dan mengeklik tombol analisis.
+
+00:10:06.720 --> 00:10:09.840
+Akin segera memindai data, menemukan lonjakan dalam harga pakok penjualan,
+
+00:10:10.000 --> 00:10:10.600
+dan menandainya.
+
+00:10:11.640 --> 00:10:13.000
+Ia menelusuri pengeluaran vendor,
+
+00:10:13.220 --> 00:10:15.440
+mengidentifikasi pemasok yang menyebabkan peningkatan,
+
+00:10:15.440 --> 00:10:18.060
+menarik data eksternal seperti perubahan tarif dan berita,
+
+00:10:18.240 --> 00:10:20.220
+menyusun deck slide yang menjelaskan akar penyebabnya,
+
+00:10:20.360 --> 00:10:22.180
+dan menandai item tindakan untuk tim.
+
+00:10:23.660 --> 00:10:25.880
+Semua ini terjadi dalam hitungan detik dari klik dashboard
+
+00:10:25.880 --> 00:10:27.520
+hingga analisis lengkap dengan rekomendasi
+
+00:10:27.520 --> 00:10:29.420
+tanpa ada orang yang menulis satu query pun.
+
+00:10:29.940 --> 00:10:32.060
+MCP juga berkembang melampaui keuangan dan operasional
+
+00:10:32.060 --> 00:10:34.020
+keperdagangan bisnis sentral dan layanan pelanggan.
+
+00:10:34.020 --> 00:10:36.860
+Itu menciptakan lapisan agen AI terpadu
+
+00:10:36.860 --> 00:10:38.680
+di seluruh ekosistem Dynamics 365.
+
+00:10:39.740 --> 00:10:41.220
+Agen yang bekerja dengan ERP Anda
+
+00:10:41.220 --> 00:10:43.000
+juga dapat berkomunikasi dengan sistem niaga
+
+00:10:43.000 --> 00:10:44.320
+dan platform layanan pelanggan Anda
+
+00:10:44.320 --> 00:10:45.460
+melalui protokol yang sama.
+
+00:10:45.840 --> 00:10:47.500
+Ekosistem mitra berkembang pesat dengan
+
+00:10:47.500 --> 00:10:49.860
+RSM, HSO, Fellow Mind, KPMG, Crow,
+
+00:10:50.000 --> 00:10:51.940
+dan lainnya yang telah membangun agen di MCP
+
+00:10:51.940 --> 00:10:53.400
+untuk kebutuhan industri tertentu.
+
+00:10:53.640 --> 00:10:54.920
+Untuk kebutuhan industri tertentu.
+
+00:10:55.180 --> 00:10:57.420
+Bayangkan otomatisasi lantai produksi untuk manufaktur,
+
+00:10:57.620 --> 00:10:59.200
+agen pembayaran faktur untuk utang usaha,
+
+00:10:59.360 --> 00:11:01.120
+pemrosesan muatan masuk untuk logistik,
+
+00:11:01.240 --> 00:11:01.780
+agen penarikan,
+
+00:11:01.780 --> 00:11:03.620
+tampak kualitas untuk keamanan produk.
+
+00:11:04.560 --> 00:11:06.100
+Mesti manfaatkan fondasi MCP yang sama.
+
+00:11:06.760 --> 00:11:07.500
+Dalam jangka panjang,
+
+00:11:07.600 --> 00:11:09.940
+MCP menjadi cara standar untuk mengintegrasikan sistem ERP.
+
+00:11:10.360 --> 00:11:12.080
+Anda akan mendengar istilah ERP Headless
+
+00:11:12.080 --> 00:11:13.380
+ditambah alur kerja agen,
+
+00:11:13.620 --> 00:11:15.360
+yang berarti ERP berjalan di latar belakang
+
+00:11:15.360 --> 00:11:17.000
+sebagai sistem catatan dan agen AI
+
+00:11:17.000 --> 00:11:18.340
+menangani interaksi front-end.
+
+00:11:19.100 --> 00:11:20.360
+Jadi alih-alih mengeklik formulir,
+
+00:11:20.520 --> 00:11:21.840
+Anda cukup menjelaskan apa yang Anda butuhkan
+
+00:11:21.840 --> 00:11:22.580
+dan akan mewujudkannya.
+
+00:11:23.060 --> 00:11:24.480
+Mari kita simpulkan apartinya ini bagi Anda.
+
+00:11:25.120 --> 00:11:26.180
+Artinya ini bagi Anda.
+
+00:11:26.600 --> 00:11:27.880
+Jika Anda pengguna Dynamics 365,
+
+00:11:28.540 --> 00:11:29.120
+inilah yang berubah.
+
+00:11:29.600 --> 00:11:31.420
+Anda akan segera mendelegasikan tugas rutin
+
+00:11:31.420 --> 00:11:32.500
+seperti memposting jurnal,
+
+00:11:32.600 --> 00:11:33.560
+membuat pesaran pembelian,
+
+00:11:33.660 --> 00:11:34.640
+menjalankan rekonsiliasi,
+
+00:11:34.720 --> 00:11:35.620
+dan memeriksa saldo vendor
+
+00:11:35.620 --> 00:11:37.200
+hanya dengan menjelaskan apa yang Anda butuhkan.
+
+00:11:37.640 --> 00:11:38.660
+Alih-alih menafigasi menu,
+
+00:11:38.780 --> 00:11:39.820
+Anda cukup memberitahu agen
+
+00:11:39.820 --> 00:11:41.200
+dan ia akan menangani langkah-langkah.
+
+00:11:41.480 --> 00:11:42.440
+Pekerjaan Anda bergeser
+
+00:11:42.440 --> 00:11:43.840
+dari melakukan pekerjaan menjadi mengaku.
+
+00:11:44.540 --> 00:11:45.540
+Jika Anda seorang profesional,
+
+00:11:45.680 --> 00:11:47.080
+TIE MCP menyederhanakan hidup Anda.
+
+00:11:47.580 --> 00:11:49.520
+Tidak perlu api kustom untuk setiap integrasi AI,
+
+00:11:49.660 --> 00:11:51.200
+tidak perlu konektor terpisah untuk setiap alat.
+
+00:11:51.620 --> 00:11:53.980
+Model keamanan Anda yang ada berlaku secara otomatis,
+
+00:11:54.180 --> 00:11:56.280
+sehingga agen mewarisi izin yang telah Anda tetapkan.
+
+00:11:56.280 --> 00:11:57.960
+Itu berarti lebih sedikit kode kustom,
+
+00:11:58.080 --> 00:11:59.380
+lebih sedikit masalah pemeliharaan,
+
+00:11:59.540 --> 00:12:01.200
+dan pengiriman kapabilitas baru yang lebih cepat.
+
+00:12:01.820 --> 00:12:04.800
+Jika Anda seorang mitra atau ISV MCP membuka peluang baru,
+
+00:12:05.340 --> 00:12:07.080
+Anda dapat membangun agen yang dapat digunakan kembali
+
+00:12:07.080 --> 00:12:08.100
+yang bekerja di berbagai penyewa.
+
+00:12:08.800 --> 00:12:10.840
+Kustomisasi Anda menjadi siap agen secara default
+
+00:12:10.840 --> 00:12:12.840
+tanpa memerlukan lapisan paparan khusus.
+
+00:12:13.480 --> 00:12:14.920
+Jika itu berfungsi diantar muka ERP,
+
+00:12:15.020 --> 00:12:16.300
+maka itu berfungsi melalui MCP.
+
+00:12:16.580 --> 00:12:17.240
+Inilah gambaran besarnya.
+
+00:12:17.580 --> 00:12:18.640
+Ini bukan sekadar fitur baru,
+
+00:12:18.800 --> 00:12:19.740
+ini adalah pergeseran struktural.
+
+00:12:20.200 --> 00:12:22.220
+Kita beralih dari sistem catatan ke sistem tindakan.
+
+00:12:22.940 --> 00:12:24.400
+Alih-alih menyimpan informasi
+
+00:12:24.400 --> 00:12:25.820
+dan menunggu manusia bertindak,
+
+00:12:26.160 --> 00:12:28.140
+ERP menjadi platform yang digunakan agen AI
+
+00:12:28.140 --> 00:12:30.100
+untuk menjalankan proses bisnis secara langsung.
+
+00:12:30.960 --> 00:12:31.600
+Datanya tetap ada,
+
+00:12:31.720 --> 00:12:32.840
+tetapi sekarang terhubung dengan tindakan.
+
+00:12:33.620 --> 00:12:34.480
+Satu catatan peringatan,
+
+00:12:34.760 --> 00:12:35.900
+tetap kelola tetap penting.
+
+00:12:36.700 --> 00:12:37.780
+Rencanakan pelibatan manusia
+
+00:12:37.780 --> 00:12:38.960
+untuk tindakan berisiko tinggi
+
+00:12:38.960 --> 00:12:40.660
+seperti memposting transaksi keuangan besar
+
+00:12:40.660 --> 00:12:42.120
+atau mengubah ketentuan pemasok.
+
+00:12:43.160 --> 00:12:44.840
+Pantah perilaku agen dan simpan cika audit,
+
+00:12:45.240 --> 00:12:46.320
+teknologinya sangat canggih,
+
+00:12:46.440 --> 00:12:47.880
+tetapi memerlukan pengawasan yang bertanggung.
+
+00:12:48.240 --> 00:12:49.760
+Mulailah dengan tugas berisiko rendah,
+
+00:12:49.960 --> 00:12:50.700
+bangun kepercayaan,
+
+00:12:51.020 --> 00:12:51.820
+dan kembangkan dari sana.
+
+00:12:51.820 --> 00:12:54.680
+Jadi itulah server MCB dalam bahasa yang sederhana.
+
+00:12:55.100 --> 00:12:55.960
+Ini memberi agen AI
+
+00:12:55.960 --> 00:12:57.920
+carang teratur untuk berkomunikasi dengan ERP Anda.
+
+00:12:58.780 --> 00:13:00.240
+Mirip seperti mengubah Dynamics 365
+
+00:13:00.240 --> 00:13:02.580
+menjadi gunakan oleh asisten pinter manapun.
+
+00:13:03.440 --> 00:13:03.820
+Itu ganda,
+
+00:13:04.320 --> 00:13:05.500
+jika Anda menggunakan versi yang didukung,
+
+00:13:05.620 --> 00:13:06.080
+coba lah pokoknya.
+
+00:13:06.940 --> 00:13:08.320
+Buat agen sederhana di Copilot Studio
+
+00:13:08.320 --> 00:13:10.200
+membaca 5 faktur terbuka teratas Anda.
+
+00:13:10.820 --> 00:13:11.640
+Lihat betapa mudahnya itu.
+
+00:13:12.340 --> 00:13:13.040
+Saya Mirko Peters,
+
+00:13:13.160 --> 00:13:14.640
+dan ini adalah sajian pengetahuan Microsoft.
+
+00:13:15.380 --> 00:13:17.080
+Berlanggananlah di platform podcast favorit Anda
+
+00:13:17.080 --> 00:13:18.400
+untuk penjelasan yang lebih sederhana.
+
+00:13:19.340 --> 00:13:20.140
+Lain kali kita akan melihat
+
+00:13:20.140 --> 00:13:22.000
+bagaimana MCB bekerja dengan AIGEN Power Platform.
+
+00:13:22.420 --> 00:13:23.800
+Bagikan episode ini kepada seseorang
+
+00:13:23.800 --> 00:13:24.820
+yang sedang mengeksplorasi AIP.

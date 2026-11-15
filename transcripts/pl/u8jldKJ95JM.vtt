@@ -1,0 +1,1276 @@
+WEBVTT
+
+00:00:00.110 --> 00:00:07.510
+Gotowi na 10 dni Microsoft 365, Kopilota, AI, Azure oraz ludzi kształtujących przyszłość pracy?
+
+00:00:08.130 --> 00:00:12.130
+W styczniu M365 CON powraca i będzie jeszcze większy.
+
+00:00:12.750 --> 00:00:18.290
+Dołącz do nas podczas sesji na żywo pokazów i praktycznej wiedzy od MVP i ekspertów z całego świata.
+
+00:00:18.570 --> 00:00:21.830
+Żadnych ogólnikowych slajdów, żadnego żargonu bez końca.
+
+00:00:22.290 --> 00:00:28.930
+Zajmujemy się prawdziwymi wyzwaniami Kopilot Studio agentami AI Fabrik, bezpieczeństwem, ładem i automatyzacją.
+
+00:00:28.930 --> 00:00:35.030
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, mamy sesję dla Ciebie.
+
+00:00:35.290 --> 00:00:40.550
+Podczas 10 pełnych dni odkryjesz wiele technologii i nawiążesz kontakty z globalną społecznością.
+
+00:00:40.770 --> 00:00:44.650
+Oglądaj na żywo i wykorzystaj praktyczne wskazówki w swojej organizacji.
+
+00:00:44.650 --> 00:00:51.150
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.810 --> 00:00:56.030
+Wejdź na m365con.net i zarezerwuj miejsce już dziś.
+
+00:00:56.710 --> 00:00:58.870
+To m365con.net.
+
+00:00:58.930 --> 00:01:04.790
+Dołącz na m365con.net i widzimy się na żywo w styczniu.
+
+00:01:04.990 --> 00:01:11.810
+Jeśli kiedykolwiek awaria serwera plików przydarzyła Ci się w piątkowe popołudnie, znasz tę panikę, gorączkowe telefony, pytanie, czy backup działa?
+
+00:01:11.810 --> 00:01:16.670
+Pytanie, na które nikt nie chce odpowiadać i jazdę do biura tylko po to, by sprawdzić migające pudełko.
+
+00:01:16.870 --> 00:01:20.190
+Nazywam się Mirko Peters i dziś przyjrzymy się lepszej drodze Azure Files.
+
+00:01:20.390 --> 00:01:22.770
+Oto jak to wygląda z tradycyjnymi serwerami plików.
+
+00:01:22.770 --> 00:01:28.010
+Są fizyczne, co oznacza konserwację, poprawki zabezpieczeń, zarządzanie backupem i kogoś, kto wymieni dysk, gdy padnie.
+
+00:01:28.230 --> 00:01:29.990
+Dla małych zespołów to ogromne obciążenie.
+
+00:01:30.230 --> 00:01:31.430
+Nie prowadzisz centrum danych.
+
+00:01:31.650 --> 00:01:33.410
+Próbujesz po prostu wykonać swoją pracę.
+
+00:01:33.590 --> 00:01:40.350
+Pod koniec tego odcinka zrozumiesz, czym naprawdę jest Azure Files, dlaczego nowe udziały plików upraszczają konfigurację i kiedy to dobry wybór dla Twojego zespołu.
+
+00:01:40.350 --> 00:01:41.830
+Chwyć kawę i zaczynajmy.
+
+00:01:41.990 --> 00:01:43.190
+Czym jest Azure Files?
+
+00:01:43.410 --> 00:01:45.270
+Więc czym dokładnie jest Azure Files?
+
+00:01:45.470 --> 00:01:46.870
+Oto najprostsza definicja.
+
+00:01:47.070 --> 00:01:56.010
+Azure Files to chmurowy udział plików, który montujesz jak dysk sieciowy bez serwera do zarządzania, bez sprzętu, aktualizacji systemu czy martwienia się o harmonogramy kopii zapasowych.
+
+00:01:56.190 --> 00:01:58.790
+W tradycyjnym serwerze plików to Ty jesteś administratorem.
+
+00:01:58.990 --> 00:02:01.130
+W Azure Files administratorem jest Microsoft.
+
+00:02:01.390 --> 00:02:05.870
+Pomyśl o tym jak o szafce na dokumenty, która znajduje się w centrum danych Microsoftu, a nie pod Twoim biurkiem.
+
+00:02:05.870 --> 00:02:11.590
+Nadal otwierasz szufladę i bierzesz plik, ale szafka, zamki, zabezpieczenia i konserwacja tym wszystkim zajmują się inni.
+
+00:02:11.770 --> 00:02:14.810
+Różnica polega na tym, że nigdy nie musisz się martwić, że szafka się zepsuje.
+
+00:02:15.050 --> 00:02:17.630
+Azure Files działa z systemami Windows, Linux i Mac.
+
+00:02:17.790 --> 00:02:24.530
+Każde urządzenie obsługujące SMB, czyli standardowy język udostępniania plików Windows lub NFS, standard dla Linuxa, może się połączyć.
+
+00:02:24.770 --> 00:02:29.290
+Masz do niego dostęp przez internet lub sieć prywatną, jeśli chcesz uniknąć ruchu w sieci publicznej.
+
+00:02:29.450 --> 00:02:30.730
+I jest w pełni zarządzane.
+
+00:02:30.730 --> 00:02:35.450
+Microsoft zajmuje się sprzętem aktualizacjami oprogramowania, kopiami zapasowymi i wysoką dostępnością.
+
+00:02:35.450 --> 00:02:38.890
+Jeśli dysk w ich centrum danych ulegnie awarii, wymieniają go, a Ty nawet tego nie zauważasz.
+
+00:02:39.070 --> 00:02:41.890
+Większość użytkowników nawet nie wie, że istnieje, ale to kluczowa usługa.
+
+00:02:42.090 --> 00:02:44.410
+Koniec z nocnymi wyjazdami do biura w sytuacjach awaryjnych.
+
+00:02:44.610 --> 00:02:47.670
+Aby zrozumieć, dlaczego warto to mieć, przyjrzyjmy się najpierw staremu rozwiązaniu.
+
+00:02:47.850 --> 00:02:49.770
+Problemy z tradycyjnymi serwerami plików.
+
+00:02:49.950 --> 00:02:52.950
+Wyobraź sobie, że prowadzisz małą firmę z 15 pracownikami.
+
+00:02:53.210 --> 00:02:55.350
+Gdzieś w biurowej szafie stoi fizyczny serwer.
+
+00:02:55.350 --> 00:03:00.630
+Może to stary komputer, który został zaadaptowany, albo prawdziwy serwer, który kilka lat temu kosztował kilka tysięcy dolarów.
+
+00:03:00.630 --> 00:03:04.150
+Tak czy inaczej, działa na nim Windows serwer i udostępnia pliki każdemu w firmie.
+
+00:03:04.350 --> 00:03:06.310
+Rzecz w tym, że dyski twarde ulegają awariom.
+
+00:03:06.530 --> 00:03:07.250
+Zawsze tak jest.
+
+00:03:07.410 --> 00:03:09.670
+A kiedy dysk pada, udziały sieciowe przestają działać.
+
+00:03:09.830 --> 00:03:11.330
+Może masz kopię zapasową, a może nie.
+
+00:03:11.550 --> 00:03:13.650
+Może kopia zapasowa nie działała poprawnie od 6 miesięcy.
+
+00:03:13.810 --> 00:03:15.590
+To rozmowa, której nikt nie chce przeprowadzać.
+
+00:03:15.790 --> 00:03:16.930
+Jest jeszcze kwestia miejsca.
+
+00:03:17.170 --> 00:03:18.710
+Serwery plików szybko się zapełniają.
+
+00:03:18.890 --> 00:03:21.790
+Ktoś wrzuca 15 GB zdjęć z wakacji na dysk współdzielony.
+
+00:03:22.010 --> 00:03:24.630
+Inny dział gromadzi stare pliki projektów sprzed 3 lat.
+
+00:03:24.630 --> 00:03:28.790
+Aby zwiększyć pamięć, musisz kupić nowy sprzęt lub poświęcić godziny na rekonfigurację tego, co masz.
+
+00:03:28.950 --> 00:03:30.450
+Żadna z tych opcji nie jest przyjemna.
+
+00:03:30.610 --> 00:03:31.670
+A do tego aktualizację.
+
+00:03:31.850 --> 00:03:35.070
+Windows serwer wymaga regularnych poprawek bezpieczeństwa, co oznacza przestoje.
+
+00:03:35.230 --> 00:03:39.730
+Ktoś musi zalogować się w weekend, zainstalować aktualizację, trzymać kciuki i mieć nadzieję, że serwer wstanie.
+
+00:03:39.970 --> 00:03:42.790
+Jeśli nie, spędzasz niedzielne popołudnie na rozwiązywaniu problemów.
+
+00:03:42.850 --> 00:03:44.390
+Kolejnym zmartwieniem jest ransomware.
+
+00:03:44.590 --> 00:03:47.790
+Jedno kliknięcie w niewłaściwy załącznik w e-mailu i serwer plików zostaje zaszyfrowany.
+
+00:03:47.970 --> 00:03:49.250
+Każdy plik jest zablokowany.
+
+00:03:49.250 --> 00:03:52.710
+Proces odzyskiwania danych jest bolesny i zakłada, że kopie zapasowe faktycznie działają.
+
+00:03:52.870 --> 00:03:55.750
+Jeśli Twoje biuro ma wiele lokalizacji, sytuacja staje się jeszcze gorsza.
+
+00:03:55.910 --> 00:03:59.250
+Udostępnianie plików między oddziałami wymaga konfiguracji sieci VPN lub powolnej replikacji.
+
+00:03:59.430 --> 00:04:01.910
+Oddział zdalny uzyskuje ułamek prędkości, którą ma główne biuro.
+
+00:04:02.110 --> 00:04:04.610
+Ludzie narzekają, a Ty spędzasz czas na optymalizacji połączeń.
+
+00:04:04.710 --> 00:04:05.670
+Oto przykład z życia.
+
+00:04:05.930 --> 00:04:11.010
+Znana mi mała firma budowlana zatrudniała 15 osób i miała starzejący się serwer w koncie pokoju socjalnego.
+
+00:04:11.270 --> 00:04:14.110
+Za każdym razem, gdy ktoś mówił, serwer plików działa wolno.
+
+00:04:14.110 --> 00:04:16.010
+Właściciel czuł ucisk w żołądku.
+
+00:04:16.190 --> 00:04:17.170
+Czy to był jego koniec?
+
+00:04:17.330 --> 00:04:19.710
+Czy czas wydać kolejne 5 tysięcy dolarów na sprzęt?
+
+00:04:19.770 --> 00:04:22.450
+Czy powinien zatrudnić informatyka tylko do zarządzania jedną skrzynką?
+
+00:04:22.610 --> 00:04:25.270
+Ten stres to ciągłe niepokojenie się o jeden element sprzętu?
+
+00:04:25.350 --> 00:04:27.330
+To właśnie to, co eliminuje Azure Files.
+
+00:04:27.550 --> 00:04:28.570
+Nie chodzi tylko o funkcje.
+
+00:04:28.730 --> 00:04:30.650
+Chodzi o to, żeby w ogóle nie musieć o tym myśleć.
+
+00:04:30.790 --> 00:04:32.850
+Azure Files eliminuje cały ten narzut.
+
+00:04:33.070 --> 00:04:34.750
+Przyjrzyjmy się, jak to właściwie działa.
+
+00:04:34.750 --> 00:04:37.890
+Jak działa Azure Files, SMB, NFS i montowanie?
+
+00:04:38.110 --> 00:04:40.450
+Azure Files korzysta ze standardowych protokołów.
+
+00:04:40.550 --> 00:04:41.970
+Co to oznacza w prostych słowach?
+
+00:04:41.970 --> 00:04:45.310
+Oznacza to, że nie potrzebujesz specjalnego oprogramowania ani dodatkowych narzędzi, aby się połączyć.
+
+00:04:45.470 --> 00:04:48.930
+Jeśli twój komputer potrafi połączyć się z dyskiem sieciowym, połączy się też z Azure Files.
+
+00:04:49.150 --> 00:04:52.350
+W przypadku maszyn z systemem Windows jest to SMB, czyli serwer message block.
+
+00:04:52.470 --> 00:04:54.990
+To ten sam protokół, którego używa twój obecny serwer plików.
+
+00:04:55.170 --> 00:04:57.870
+W przypadku systemów Linux jest to NFS, czyli network file system.
+
+00:04:58.070 --> 00:05:00.590
+Oba są standardami branżowymi, które istnieją od dziesięcioleci.
+
+00:05:00.590 --> 00:05:03.230
+Azure Files płynnie posługuje się oboma tymi językami.
+
+00:05:03.450 --> 00:05:04.670
+Jak więc z tego korzystać?
+
+00:05:04.850 --> 00:05:05.550
+Montujesz to.
+
+00:05:05.770 --> 00:05:09.570
+W systemie Windows mapujesz to jako literę dysku z S lub dowolną inną.
+
+00:05:09.570 --> 00:05:12.050
+W systemie Linux montujesz to do ścieżki folderu.
+
+00:05:12.170 --> 00:05:14.570
+W obu przypadkach wygląda to i działa jak lokalna pamięć masowa.
+
+00:05:14.750 --> 00:05:16.330
+Otwierasz eksplorator plików i gotowe.
+
+00:05:16.490 --> 00:05:19.550
+Przeciągasz i upuszczasz pliki tak samo jak w folderze na własnym dysku twardym.
+
+00:05:19.730 --> 00:05:21.430
+Oto część, która zaskakuje ludzi.
+
+00:05:21.690 --> 00:05:24.850
+Dane są domyślnie szyfrowane podczas korzystania z SMB 3.0 lub nowszego,
+
+00:05:24.970 --> 00:05:27.030
+co obsługują nowoczesne systemy Windows i macOS.
+
+00:05:27.250 --> 00:05:30.450
+Połączenie między komputerem a Azure Files jest szyfrowane w trakcie przesyłania.
+
+00:05:30.670 --> 00:05:33.390
+Nikt w sieci nie może przechwycić Twoich plików podczas ich przesyłania.
+
+00:05:33.530 --> 00:05:36.150
+To bardzo ważne dla bezpieczeństwa i jest włączone domyślnie.
+
+00:05:36.150 --> 00:05:39.150
+Udziały plików Azure można montować praktycznie z każdego miejsca.
+
+00:05:39.370 --> 00:05:41.710
+Oczywiście z maszyny wirtualnej działającej w Azure.
+
+00:05:41.970 --> 00:05:44.870
+Z serwera lokalnego połączonego przez VPN lub ExpressRoute.
+
+00:05:45.050 --> 00:05:47.750
+Nawet z laptopa przez internet, jeśli odpowiednio to skonfigurujesz.
+
+00:05:47.930 --> 00:05:50.190
+Udział plików znajduje się w chmurze, ale działa jak lokalny.
+
+00:05:50.330 --> 00:05:51.490
+Podam Ci konkretny przykład.
+
+00:05:51.730 --> 00:05:55.050
+Załóżmy, że Twój zespół księgowy potrzebuje dostępu do tego samego zestawu arkuszy kalkulacyjnych.
+
+00:05:55.250 --> 00:05:57.330
+W starym świecie musiałbyś skonfigurować serwer plików,
+
+00:05:57.450 --> 00:05:59.550
+ustawić uprawnienia i mieć nadzieję, że sieć nie padnie.
+
+00:05:59.790 --> 00:06:02.110
+Dzięki Azure Files tworzysz jeden udział plików,
+
+00:06:02.110 --> 00:06:05.130
+mapujesz go jako dysk z na każdym komputerze księgowym i gotowe.
+
+00:06:05.310 --> 00:06:08.430
+Nawet nie wiedzą, że jest w chmurze, po prostu widzą działający dysk.
+
+00:06:08.730 --> 00:06:10.570
+Uwierzytelnianie odbywa się poprzez tożsamość.
+
+00:06:10.770 --> 00:06:12.270
+Zamiast zarządzać kluczami konta magazynu,
+
+00:06:12.330 --> 00:06:14.890
+tymi długimi ciągami znaków, które wyglądają jak hasła na sterydach,
+
+00:06:14.990 --> 00:06:17.490
+używasz Azure Active Directory lub lokalnego Active Directory.
+
+00:06:17.710 --> 00:06:19.470
+Użytkownicy logują się swoimi standardowymi danymi,
+
+00:06:19.530 --> 00:06:22.130
+tą samą nazwą użytkownika i hasłem, których używają do poczty e-mail.
+
+00:06:22.330 --> 00:06:23.790
+Żadnych dodatkowych kluczy do przechowywania,
+
+00:06:23.910 --> 00:06:25.190
+żadnych wspólnych haseł do rotacji.
+
+00:06:25.190 --> 00:06:27.850
+Pierwotna konfiguracja Azure Files miała pewien haczyk
+
+00:06:27.850 --> 00:06:29.390
+i właśnie tutaj pojawia się nowa zmiana.
+
+00:06:29.650 --> 00:06:30.530
+Stare podejście.
+
+00:06:30.750 --> 00:06:31.690
+Konta magazynu.
+
+00:06:31.810 --> 00:06:33.230
+Tutaj robi się trochę technicznie,
+
+00:06:33.370 --> 00:06:35.150
+ale uwierz mi, warto zostać ze mną.
+
+00:06:35.370 --> 00:06:37.950
+Początkowo udziały plików nie były w Azure osobnym bytem.
+
+00:06:38.190 --> 00:06:40.730
+Znajdowały się one wewnątrz czegoś, co nazywamy kontem magazynu.
+
+00:06:40.910 --> 00:06:42.990
+Wyobraź sobie konto magazynu jako wielki kontener.
+
+00:06:43.230 --> 00:06:45.390
+Wewnątrz tego kontenera mogłeś umieszczać obiekty blob
+
+00:06:45.390 --> 00:06:46.190
+dla danych nieustrukturyzowanych,
+
+00:06:46.830 --> 00:06:47.710
+kolejki dla wiadomości,
+
+00:06:47.830 --> 00:06:49.290
+tabele dla danych ustrukturyzowanych
+
+00:06:49.290 --> 00:06:50.770
+i oczywiście tworzyć udziały plików.
+
+00:06:50.770 --> 00:06:54.490
+Problem polegał na tym, że konto magazynu miało swoje limity IOPs,
+
+00:06:54.590 --> 00:06:56.250
+przepustowości i pojemności,
+
+00:06:56.430 --> 00:06:58.930
+a każdy udział plików wewnątrz musiał je dzielić.
+
+00:06:59.130 --> 00:07:01.370
+Jeśli miałeś pięć udziałów plików na jednym koncie,
+
+00:07:01.510 --> 00:07:03.710
+wszystkie rywalizowały o tę samą pulę wydajności.
+
+00:07:04.010 --> 00:07:06.830
+Jeden mocno obciążony udział mógł spowolnić wszystkie pozostałe.
+
+00:07:06.990 --> 00:07:08.990
+Ustawienia sieci działają w ten sam sposób.
+
+00:07:09.290 --> 00:07:12.910
+Reguły zapory i prywatne punkty końcowe dotyczą całego konta magazynu.
+
+00:07:13.090 --> 00:07:15.530
+Nie mogłeś powiedzieć, że ten udział jest dostępny
+
+00:07:15.530 --> 00:07:18.390
+tylko z sieci działu finansowego, a tamten dla wszystkich.
+
+00:07:18.390 --> 00:07:21.210
+Reguły sieciowe działały na zasadzie wszystko albo nic.
+
+00:07:21.430 --> 00:07:23.430
+Do tego dochodziły klucze konta magazynu.
+
+00:07:23.610 --> 00:07:25.590
+Każde konto miało dwa klucze dostępu,
+
+00:07:25.730 --> 00:07:29.010
+które dawały pełny wgląd do wszystkiego wewnątrz każdego bloba,
+
+00:07:29.190 --> 00:07:31.090
+kolejki, tabeli i udziału plików.
+
+00:07:31.270 --> 00:07:33.530
+Jeśli potrzebowałeś dostępu tylko do jednego udziału,
+
+00:07:33.590 --> 00:07:35.070
+miałeś pecha klucz otwierał wszystko.
+
+00:07:35.350 --> 00:07:36.610
+Rozliczenia to kolejny ból głowy,
+
+00:07:36.710 --> 00:07:39.210
+ponieważ wszystkie koszty pojawiały się na poziomie konta magazynu.
+
+00:07:39.390 --> 00:07:41.150
+Jeśli chciałeś obciążyć różne działy,
+
+00:07:41.330 --> 00:07:43.070
+musiałeś wykonywać ręczne obliczenia.
+
+00:07:43.070 --> 00:07:46.350
+Na przykład zespół marketingu zużył 30% pamięci,
+
+00:07:46.490 --> 00:07:48.250
+więc płaci 30% rachunku.
+
+00:07:48.450 --> 00:07:49.930
+To szybko staje się męczące.
+
+00:07:50.130 --> 00:07:50.850
+Oto analogia.
+
+00:07:50.990 --> 00:07:52.890
+Wyobraź sobie, że wynajmujesz magazyn.
+
+00:07:53.070 --> 00:07:54.610
+W środku masz kilka pomieszczeń,
+
+00:07:54.730 --> 00:07:56.470
+ale cały budynek ma jedno wejście,
+
+00:07:56.650 --> 00:07:58.790
+jednego ochroniarza i jeden licznik prądu.
+
+00:07:59.010 --> 00:08:00.730
+Każde pomieszczenie dzieli tę samą energię,
+
+00:08:00.870 --> 00:08:02.770
+te same zasady dostępu i ten sam rachunek.
+
+00:08:02.950 --> 00:08:05.210
+Jeśli w jednym pokoju włączysz klimatyzację na maksimum,
+
+00:08:05.290 --> 00:08:06.450
+w pozostałych zrobi się cieplej.
+
+00:08:06.630 --> 00:08:08.810
+Jeśli chcesz zabezpieczyć jedno pomieszczenie osobno,
+
+00:08:08.890 --> 00:08:10.370
+nie możesz, bo są tylko jedne drzwi.
+
+00:08:10.370 --> 00:08:12.790
+Tak właśnie wyglądał stary model konta magazynu.
+
+00:08:12.930 --> 00:08:14.510
+Jeden wielki kontener ze wspólnymi limitami,
+
+00:08:14.510 --> 00:08:16.330
+wspólnym bezpieczeństwem i wspólnym rozliczeniem.
+
+00:08:16.550 --> 00:08:17.910
+Działało to, ale nie było eleganckie,
+
+00:08:18.010 --> 00:08:20.090
+zwłaszcza gdy potrzebowałeś tylko prostego udziału plików.
+
+00:08:20.290 --> 00:08:22.190
+Microsoft wysłuchał jednak opinii użytkowników
+
+00:08:22.190 --> 00:08:23.070
+i stworzył coś lepszego.
+
+00:08:23.290 --> 00:08:24.750
+Nowy zasób udziałów plików.
+
+00:08:24.930 --> 00:08:26.410
+Nowy zasób udziałów plików.
+
+00:08:26.530 --> 00:08:27.450
+Oto co się zmieniło.
+
+00:08:27.650 --> 00:08:29.310
+Firma Microsoft stworzyła zupełnie nowy zasób
+
+00:08:29.310 --> 00:08:30.070
+najwyższego poziomu.
+
+00:08:30.230 --> 00:08:31.250
+Możesz teraz utworzyć udział plików
+
+00:08:31.250 --> 00:08:32.710
+bezpośrednio bez nadrzędnego konta magazynu.
+
+00:08:32.790 --> 00:08:33.690
+To samodzielny byt.
+
+00:08:33.690 --> 00:08:35.390
+Pomyśl o tym jak o dyskach zarządzanych.
+
+00:08:35.530 --> 00:08:37.650
+Pamiętasz jak to kiedyś działało w maszynach wirtualnych?
+
+00:08:37.790 --> 00:08:38.950
+Trzeba było utworzyć konto magazynu,
+
+00:08:39.030 --> 00:08:40.290
+potem obiekt blob strony wewnątrz niego,
+
+00:08:40.390 --> 00:08:42.270
+a następnie podłączyć ten obiekt do maszyny wirtualnej.
+
+00:08:42.390 --> 00:08:43.250
+To był cały proces.
+
+00:08:43.510 --> 00:08:45.430
+Potem Microsoft wprowadził dyski zarządzane.
+
+00:08:45.610 --> 00:08:46.750
+Po prostu tworzysz dysk.
+
+00:08:46.870 --> 00:08:47.270
+Gotowe.
+
+00:08:47.490 --> 00:08:48.370
+Żadnego konta magazynu,
+
+00:08:48.450 --> 00:08:49.210
+żadnych obiektów blob,
+
+00:08:49.310 --> 00:08:50.050
+żadnych komplikacji.
+
+00:08:50.290 --> 00:08:52.350
+Nowy zasób udziałów plików działa w ten sam sposób.
+
+00:08:52.550 --> 00:08:54.210
+W tle działa nowy dostawca zasobów
+
+00:08:54.210 --> 00:08:55.010
+o nazwie Microsoft.
+
+00:08:55.170 --> 00:08:57.670
+Udziały plików jest niezależny i samodzielny.
+
+00:08:57.810 --> 00:08:59.150
+Kiedy teraz tworzysz udział plików,
+
+00:08:59.150 --> 00:09:01.110
+nie tworzysz elementu podrzędnego czegoś innego.
+
+00:09:01.290 --> 00:09:02.310
+Tworzysz sam zasób.
+
+00:09:02.530 --> 00:09:04.270
+Więc co tak naprawdę dzięki temu zyskujesz?
+
+00:09:04.450 --> 00:09:05.790
+Pozwól, że omówię korzyści.
+
+00:09:05.950 --> 00:09:07.450
+Po pierwsze, każdy udział ma własne limity,
+
+00:09:07.570 --> 00:09:08.990
+IOPS, przepustowość i pojemność.
+
+00:09:09.190 --> 00:09:11.110
+Wszystko jest teraz przypisane do każdego udziału z osobna.
+
+00:09:11.250 --> 00:09:13.470
+Koniec ze współdzieleniem puli z innymi udziałami plików.
+
+00:09:13.650 --> 00:09:15.450
+Jeden obciążony udział nie spowolni innego.
+
+00:09:15.690 --> 00:09:18.710
+Jeśli zespół inżynierów obciąża swój udział artefaktami kompilacji,
+
+00:09:18.710 --> 00:09:20.550
+udziału HR działa bez zakłóceń.
+
+00:09:20.650 --> 00:09:23.490
+Po drugie, konfiguracja sieci jest przypisana do każdego udziału.
+
+00:09:23.490 --> 00:09:27.170
+Prywatne punkty końcowe i reguły zapory ustawiasz dla pojedynczego udziału plików.
+
+00:09:27.350 --> 00:09:30.550
+Chcesz, aby jeden udział był dostępny tylko z sieci wirtualnej działu finansowego,
+
+00:09:30.670 --> 00:09:32.190
+a inny był otwarty dla całej firmy?
+
+00:09:32.370 --> 00:09:33.050
+Żaden problem.
+
+00:09:33.350 --> 00:09:34.170
+Są niezależne.
+
+00:09:34.330 --> 00:09:36.330
+Po trzecie, nie ma klucza konta magazynu.
+
+00:09:36.490 --> 00:09:39.310
+Pamiętasz ten wszechpotężny klucz, który dawał dostęp do wszystkiego?
+
+00:09:39.550 --> 00:09:40.070
+Zniknął.
+
+00:09:40.350 --> 00:09:42.830
+Uwierzytelnianie opiera się na tożsamości lub regułach sieciowych.
+
+00:09:42.990 --> 00:09:45.570
+Użytkownicy logują się za pomocą swoich standardowych poświadczeń.
+
+00:09:45.730 --> 00:09:47.110
+Żadnych wspólnych haseł do zarządzania,
+
+00:09:47.230 --> 00:09:48.150
+żadnych kluczy do rotacji,
+
+00:09:48.150 --> 00:09:50.930
+żadnego ryzyka, że wyciek klucza ujawni wszystkie udziały plików.
+
+00:09:51.030 --> 00:09:53.230
+Po czwarte, rozliczanie odbywa się dla każdego udziału.
+
+00:09:53.350 --> 00:09:56.370
+W zarządzaniu kosztami Azure widzisz dokładnie, ile kosztuje każdy udział plików.
+
+00:09:56.530 --> 00:09:59.170
+Jeśli musisz obciążyć kosztami poszczególne działy, masz to pod ręką.
+
+00:09:59.390 --> 00:10:01.890
+Bezręcznych obliczeń, arkuszy kalkulacyjnych i zgadywania.
+
+00:10:02.050 --> 00:10:04.230
+Po piąte, płaszczyzna sterowania ma własne limity.
+
+00:10:04.430 --> 00:10:07.170
+Płaszczyzna sterowania to warstwa obsługująca operacje takie jak
+
+00:10:07.170 --> 00:10:09.910
+tworzenie, modyfikowanie, usuwanie czy tworzenie migawek udziałów.
+
+00:10:10.090 --> 00:10:13.010
+W starym modelu wielu administratorów pracujących na wielu udziałach plików
+
+00:10:13.010 --> 00:10:15.690
+w ramach jednego konta magazynu mogło osiągnąć limity zarządzania.
+
+00:10:15.870 --> 00:10:18.130
+Teraz każdy udział ma własny limit dla tych operacji,
+
+00:10:18.290 --> 00:10:19.650
+więc znacznie trudniej go przekroczyć.
+
+00:10:19.850 --> 00:10:21.150
+Jest jednak pewien haczyk.
+
+00:10:21.270 --> 00:10:24.510
+W momencie ogólnej dostępności ten nowy zasób jest ograniczony do warstwy SSD
+
+00:10:24.510 --> 00:10:25.590
+i protokołu NFS.
+
+00:10:25.710 --> 00:10:28.410
+To specyficzne zastosowanie, czyli wydajne udziały plików dla systemu Linux,
+
+00:10:28.570 --> 00:10:30.770
+ale obsługa SMB i warstwa HDD nadejdą wkrótce.
+
+00:10:30.950 --> 00:10:33.190
+Firma Microsoft jasno przedstawiła ten plan działania.
+
+00:10:33.390 --> 00:10:35.910
+Zamiast zarządzać jednym wielkim zasobem z wieloma udziałami,
+
+00:10:36.050 --> 00:10:38.870
+które mają te same limity, reguły sieciowe, klucze i rozliczenia.
+
+00:10:38.870 --> 00:10:42.290
+Teraz każdy udział to osobny, mały zasób z własnym zabezpieczeniem.
+
+00:10:42.450 --> 00:10:45.390
+Proste. Kiedy więc faktycznie warto korzystać z Azure Files?
+
+00:10:45.590 --> 00:10:46.870
+Kiedy używać Azure Files?
+
+00:10:47.050 --> 00:10:48.510
+Kiedy więc Azure Files ma sens?
+
+00:10:48.670 --> 00:10:50.490
+Pozwólcie, że przedstawię Wam odpowiednie scenariusze.
+
+00:10:50.650 --> 00:10:52.310
+Pierwszym z nich jest migracja typu Lift & Shift.
+
+00:10:52.530 --> 00:10:54.790
+Masz starszą aplikację, która opiera się na udziałach plików.
+
+00:10:54.990 --> 00:10:56.730
+Może to być przestarzała aplikacja biznesowa
+
+00:10:56.730 --> 00:10:58.850
+albo własne narzędzie stworzone przez zespół lata temu.
+
+00:10:59.130 --> 00:11:01.830
+Zazwyczaj przeniesienie tego do chmury oznacza przepisywanie kodu,
+
+00:11:01.970 --> 00:11:04.370
+zmiany konfiguracji i przemyślenie dostępu do danych.
+
+00:11:04.370 --> 00:11:07.510
+Dzięki Azure Files nie musisz zmieniać ani jednej linii kodu.
+
+00:11:07.730 --> 00:11:09.470
+Aplikacja widzi po prostu dysk sieciowy.
+
+00:11:09.690 --> 00:11:11.830
+Nie obchodzi jej, czy ten dysk znajduje się w Twoim biurze,
+
+00:11:11.910 --> 00:11:13.190
+czy w centrum danych Microsoftu.
+
+00:11:13.330 --> 00:11:15.010
+Ten sam protokół to samo działanie.
+
+00:11:15.190 --> 00:11:15.970
+O to właśnie chodzi.
+
+00:11:16.190 --> 00:11:18.710
+Kolejnym ważnym zastosowaniem jest współdzielenie plików konfiguracyjnych,
+
+00:11:18.790 --> 00:11:20.670
+logów czy danych między wieloma maszynami wirtualnymi.
+
+00:11:20.910 --> 00:11:22.610
+Załóżmy, że masz klaster serwerów www.
+
+00:11:22.870 --> 00:11:24.630
+Wszystkie potrzebują tej samej konfiguracji.
+
+00:11:24.890 --> 00:11:27.270
+Zamiast kopiować pliki na każdą maszynę i liczyć na synchronizację,
+
+00:11:27.370 --> 00:11:29.430
+montujesz jeden udział Azure Files na każdym serwerze.
+
+00:11:29.430 --> 00:11:31.770
+Zmieniasz jeden plik i każdy serwer widzi to natychmiast.
+
+00:11:31.910 --> 00:11:33.830
+Koniec z szukaniem niedopasowanych wersji plików.
+
+00:11:34.010 --> 00:11:36.170
+Zespoły programistyczne i testowe również to uwielbiają.
+
+00:11:36.390 --> 00:11:38.050
+Możesz uruchomić udział plików w kilka minut,
+
+00:11:38.150 --> 00:11:39.830
+używać go przez tydzień, a potem usunąć.
+
+00:11:40.010 --> 00:11:42.570
+Bez kupowania sprzętu i wycofywania serwerów z eksploatacji.
+
+00:11:42.810 --> 00:11:44.950
+Dla każdego, kto potrzebuje tymczasowej pamięci współdzielonej,
+
+00:11:44.990 --> 00:11:46.090
+to ogromna oszczędność czasu.
+
+00:11:46.330 --> 00:11:48.270
+Następnie mamy scenariusz chmury hybrydowej.
+
+00:11:48.470 --> 00:11:50.950
+Azure File Sync pozwala buforować pliki na lokalnym serwerze,
+
+00:11:51.050 --> 00:11:53.070
+zachowując Azure Files jako główne źródło prawdy.
+
+00:11:53.070 --> 00:11:55.710
+Użytkownicy lokalni zyskują wydajność dysku lokalnego dla plików,
+
+00:11:55.790 --> 00:11:56.950
+z których korzystają najczęściej.
+
+00:11:57.050 --> 00:11:59.510
+Tymczasem kopia w chmurze jest aktualizowana automatycznie.
+
+00:11:59.690 --> 00:12:02.010
+Oddziały firmy to uwielbiają podobnie jak zespoły zdalne.
+
+00:12:02.130 --> 00:12:04.270
+To najlepsze z obu światów bez zbędnych problemów.
+
+00:12:04.430 --> 00:12:06.590
+Azure Files nie jest jednak rozwiązaniem na wszystko.
+
+00:12:06.830 --> 00:12:08.590
+Nie używaj go do wysokowydajnych baz danych.
+
+00:12:08.810 --> 00:12:10.310
+Jeśli potrzebujesz szybkości poziomu bazy danych,
+
+00:12:10.430 --> 00:12:12.010
+wybierz Azure SQL lub dyski zarządzane.
+
+00:12:12.150 --> 00:12:14.670
+Azure Files to udział plików, a nie silnik bazy danych.
+
+00:12:14.890 --> 00:12:17.130
+Jest zoptymalizowany pod kątem wzorców dostępu do plików,
+
+00:12:17.130 --> 00:12:18.270
+a nie obciążeń transakcyjnych.
+
+00:12:18.390 --> 00:12:19.970
+To różne narzędzia do różnych zadań.
+
+00:12:20.150 --> 00:12:22.370
+Nie używaj go tam, gdzie SharePoint lub Microsoft Teams
+
+00:12:22.370 --> 00:12:23.450
+już spełniają te potrzeby.
+
+00:12:23.670 --> 00:12:25.870
+Jeśli udostępniasz dokumenty, które ludzie edytują wspólnie
+
+00:12:25.870 --> 00:12:27.850
+w czasie rzeczywistym, SharePoint będzie lepszym wyborem.
+
+00:12:28.110 --> 00:12:30.810
+Zyskujesz historię wersji, współtworzenie i głęboką integrację
+
+00:12:30.810 --> 00:12:32.430
+z resztą Microsoft 365.
+
+00:12:32.990 --> 00:12:34.950
+Azure Files jest przeznaczone do scenariuszy,
+
+00:12:35.030 --> 00:12:36.690
+w których SharePoint nie do końca się sprawdza.
+
+00:12:36.870 --> 00:12:38.450
+Nie używaj go w aplikacjach wymagających
+
+00:12:38.450 --> 00:12:39.930
+niestandardowych funkcji systemu plików,
+
+00:12:40.050 --> 00:12:41.890
+takich jak linki symboliczne, twarde do wiązania
+
+00:12:41.890 --> 00:12:42.910
+czy rozszerzone atrybuty.
+
+00:12:42.910 --> 00:12:45.730
+Azure Files dobrze radzi sobie ze standardową obsługą plików,
+
+00:12:45.850 --> 00:12:47.550
+ale nie wspiera każdego nietypowego przypadku.
+
+00:12:47.810 --> 00:12:49.950
+Poznaj swoje wymagania, zanim podejmiesz decyzję.
+
+00:12:50.090 --> 00:12:51.550
+Podam przykład z życia wzięty.
+
+00:12:51.750 --> 00:12:54.230
+Firma budowlana posiada oddziały w trzech miastach.
+
+00:12:54.390 --> 00:12:56.970
+Każde biuro potrzebuje dostępu do tych samych projektów,
+
+00:12:57.090 --> 00:12:58.630
+umów i raportów z inspekcji.
+
+00:12:58.890 --> 00:13:00.770
+W starym modelu mieli serwer w centrali,
+
+00:13:00.870 --> 00:13:03.390
+a pracownicy zdalni łączyli się przez wolny VPN.
+
+00:13:03.770 --> 00:13:05.770
+Otwarcie projektu mogło trwać długie minuty.
+
+00:13:06.030 --> 00:13:08.250
+Dzięki Azure Files stworzą jeden udział w chmurze.
+
+00:13:08.430 --> 00:13:09.370
+Każde biuro go montuje.
+
+00:13:09.590 --> 00:13:11.110
+Projekty otwierają się w kilka sekund.
+
+00:13:11.110 --> 00:13:12.650
+Umowy są zawsze w najnowszej wersji.
+
+00:13:12.870 --> 00:13:14.230
+Brak konieczności używania VPN.
+
+00:13:14.510 --> 00:13:15.670
+Brak serwerów do utrzymania.
+
+00:13:15.850 --> 00:13:16.750
+To po prostu działa.
+
+00:13:17.050 --> 00:13:19.230
+Wydajność i bezpieczeństwo są równie ważne,
+
+00:13:19.410 --> 00:13:20.130
+więc omówmy je.
+
+00:13:20.690 --> 00:13:23.010
+Wydajność, bezpieczeństwo i koszty w skrócie.
+
+00:13:23.290 --> 00:13:24.550
+Zacznijmy od wydajności.
+
+00:13:24.870 --> 00:13:25.950
+Jeśli potrzebujesz szybkości,
+
+00:13:26.070 --> 00:13:27.570
+warstwa premium działa na dyskach SSD
+
+00:13:27.570 --> 00:13:29.530
+i zapewnia opóźnienia na poziomie 1 ms.
+
+00:13:29.930 --> 00:13:32.550
+Mówimy tu o nawet 102 400 operacjach IOPS
+
+00:13:32.550 --> 00:13:33.990
+na udział w modelu ProVision V2.
+
+00:13:34.170 --> 00:13:36.530
+To poważna przepustowość dla wymagających obciążeń.
+
+00:13:36.530 --> 00:13:38.770
+Warstwa standardowa wykorzystuje zwykłe dyski twarde.
+
+00:13:38.770 --> 00:13:40.690
+Jest wolniejsza, ale znacznie tańsza.
+
+00:13:40.870 --> 00:13:42.130
+Idealna do przechowywania archiwów
+
+00:13:42.130 --> 00:13:43.430
+lub ogólnego udostępniania plików,
+
+00:13:43.550 --> 00:13:44.690
+gdzie szybkość nie jest kluczowa.
+
+00:13:44.890 --> 00:13:46.970
+Microsoft niedawno dodał buforowanie metadanych
+
+00:13:46.970 --> 00:13:47.870
+dla udziałów SSD.
+
+00:13:48.190 --> 00:13:50.390
+Zmniejsza to opóźnienia nawet o 55%
+
+00:13:50.390 --> 00:13:51.750
+podczas wyświetlania katalogów
+
+00:13:51.750 --> 00:13:52.930
+lub przeglądania folderów.
+
+00:13:53.090 --> 00:13:55.310
+Jeśli Twoja praca obejmuje wiele małych plików
+
+00:13:55.310 --> 00:13:56.930
+i częste nawigowanie po folderach,
+
+00:13:57.050 --> 00:13:58.230
+poczujesz wyraźną różnicę.
+
+00:13:58.390 --> 00:13:59.470
+Teraz bezpieczeństwo.
+
+00:13:59.650 --> 00:14:02.350
+Azure Files ma domyślnie włączone szyfrowanie danych w spoczynku.
+
+00:14:02.570 --> 00:14:03.990
+Każdy zapisany bajt jest szyfrowany,
+
+00:14:03.990 --> 00:14:04.990
+zanim trafi na dysk.
+
+00:14:05.090 --> 00:14:06.430
+Nie musisz niczego konfigurować.
+
+00:14:06.650 --> 00:14:07.670
+Jest po prostu włączone.
+
+00:14:07.870 --> 00:14:08.850
+Szyfrowanie podczas przesyłania
+
+00:14:08.850 --> 00:14:11.110
+jest również domyślnie włączone dla SMB 3.0 i nowszych.
+
+00:14:11.310 --> 00:14:12.610
+Twoje dane pozostają zaszyfrowane
+
+00:14:12.610 --> 00:14:14.330
+podczas podróży między komputerem a chmurą.
+
+00:14:14.530 --> 00:14:15.970
+Nikt w sieci nie może ich odczytać.
+
+00:14:16.170 --> 00:14:17.690
+Microsoft zaleca używanie dostępu
+
+00:14:17.690 --> 00:14:18.610
+opartego na tożsamości
+
+00:14:18.610 --> 00:14:19.870
+zamiast kluczy konta magazynu.
+
+00:14:20.030 --> 00:14:21.150
+Oznacza to, że użytkownicy
+
+00:14:21.150 --> 00:14:22.990
+logują się swoimi zwykłymi danymi służbowymi,
+
+00:14:23.070 --> 00:14:24.270
+tymi samymi co do poczty i Teams.
+
+00:14:24.490 --> 00:14:26.090
+Brak kluczy współdzielonych do zarządzania
+
+00:14:26.090 --> 00:14:27.030
+i ryzyka ich wycieku.
+
+00:14:33.990 --> 00:14:35.050
+Ulicowe usługi utrzymują ruch
+
+00:14:35.050 --> 00:14:36.470
+wewnątrz szkieletu sieci Microsoft.
+
+00:14:36.650 --> 00:14:38.010
+Reguły zapory sieciowej pozwalają
+
+00:14:38.010 --> 00:14:39.870
+ograniczyć dostęp do konkretnych zakresów IP.
+
+00:14:40.150 --> 00:14:41.230
+Możesz je łączyć warstwowo,
+
+00:14:41.330 --> 00:14:42.110
+a do tego jest usługa
+
+00:14:42.110 --> 00:14:43.470
+Microsoft Defender for Storage.
+
+00:14:43.670 --> 00:14:45.050
+Monitoruje ona Twoje udziały plików
+
+00:14:45.050 --> 00:14:46.370
+pod kątem podejrzanej aktywności.
+
+00:14:46.610 --> 00:14:48.250
+Jeśli ktoś prześle złośliwe oprogramowanie
+
+00:14:48.250 --> 00:14:48.910
+przez API REST,
+
+00:14:49.030 --> 00:14:50.050
+Defender może to wykryć.
+
+00:14:50.170 --> 00:14:51.550
+To dodatkowa warstwa ochrony
+
+00:14:51.550 --> 00:14:52.770
+dla wrażliwych środowisk.
+
+00:14:52.990 --> 00:14:53.870
+Jeśli chodzi o koszty,
+
+00:14:53.970 --> 00:14:55.830
+warstwa premium korzysta z cen rezerwacji.
+
+00:14:56.070 --> 00:14:57.510
+Rezerwujesz określoną ilość pojemności
+
+00:14:57.510 --> 00:14:58.890
+operacji IOPS i przepustowości
+
+00:14:58.890 --> 00:15:00.230
+i płacisz za to, co zarezerwujesz.
+
+00:15:00.410 --> 00:15:01.770
+Warstwa standardowa to model płatności
+
+00:15:01.770 --> 00:15:02.510
+zgodnie z użyciem.
+
+00:15:02.630 --> 00:15:03.590
+Płacisz tylko za pamięć,
+
+00:15:03.690 --> 00:15:04.830
+którą faktycznie wykorzystujesz.
+
+00:15:05.030 --> 00:15:06.530
+Jeśli Twoje obciążenia są przewidywalne,
+
+00:15:06.650 --> 00:15:07.490
+rezerwacje Azure Files
+
+00:15:07.490 --> 00:15:09.510
+mogą przynieść do 36% oszczędności.
+
+00:15:09.750 --> 00:15:11.130
+Zobowiąż się na 1 lub 3 lata,
+
+00:15:11.230 --> 00:15:12.690
+a Microsoft przyzna Ci rabat.
+
+00:15:12.770 --> 00:15:13.810
+Bez wpływu na wydajność,
+
+00:15:13.930 --> 00:15:14.970
+po prostu niższe rachunki.
+
+00:15:15.170 --> 00:15:15.970
+Praktyczna wskazówka
+
+00:15:15.970 --> 00:15:17.130
+przechowuj dane obliczeniowe
+
+00:15:17.130 --> 00:15:18.690
+i magazyn w tym samym regionie Azure.
+
+00:15:18.890 --> 00:15:19.710
+Koszty przesyłu danych
+
+00:15:19.710 --> 00:15:21.030
+między regionami szybko rosną.
+
+00:15:21.030 --> 00:15:22.150
+Umieść maszyny wirtualne
+
+00:15:22.150 --> 00:15:23.350
+i udziały plików w jednym miejscu,
+
+00:15:23.410 --> 00:15:24.790
+a całkowicie unikniesz opłat za transfer.
+
+00:15:24.950 --> 00:15:25.970
+To sporo informacji.
+
+00:15:26.190 --> 00:15:27.350
+Pozwól, że to podsumuje.
+
+00:15:27.610 --> 00:15:28.450
+Szersza perspektywa,
+
+00:15:28.590 --> 00:15:29.510
+dlaczego to jest ważne.
+
+00:15:29.750 --> 00:15:30.670
+Oto główna idea.
+
+00:15:30.990 --> 00:15:32.230
+Stary model konta magazynu
+
+00:15:32.230 --> 00:15:33.830
+wymuszał zarządzanie tą złożonością,
+
+00:15:34.010 --> 00:15:34.950
+nawet gdy potrzebny był
+
+00:15:34.950 --> 00:15:36.230
+tylko prosty udział plików.
+
+00:15:36.410 --> 00:15:37.810
+Trzeba było znać konta magazynu,
+
+00:15:37.910 --> 00:15:38.530
+limity udziałów,
+
+00:15:38.650 --> 00:15:39.770
+reguły sieciowe dla całości
+
+00:15:39.770 --> 00:15:41.510
+i rozliczenia łączące wszystko w jedno.
+
+00:15:41.670 --> 00:15:43.130
+To było jak wynajmowanie całego budynku,
+
+00:15:43.210 --> 00:15:44.290
+by korzystać z jednego pokoju.
+
+00:15:44.290 --> 00:15:45.390
+Nowy zasób udziału w plików
+
+00:15:45.390 --> 00:15:46.130
+rozwiązuje ten problem.
+
+00:15:46.310 --> 00:15:47.110
+Teraz wynajmujesz tylko to,
+
+00:15:47.210 --> 00:15:47.710
+czego potrzebujesz.

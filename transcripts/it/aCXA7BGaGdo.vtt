@@ -1,0 +1,613 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:03.620
+Benvenuti ad un altro episodio. L'argomento di oggi è uno di quelli di cui avrete probabilmente
+
+00:00:03.620 --> 00:00:07.260
+sentito parlare in riunioni articoli tecnici, Microsoft Fabric. Ma se siete come la maggior
+
+00:00:07.260 --> 00:00:10.500
+parte delle persone e non siete del tutto sicuri di cosa sia me, è solo un altro prodotto
+
+00:00:10.500 --> 00:00:14.600
+Microsoft, un rebranding di qualcosa di vecchio o è qualcosa di completamente diverso? Lasciate
+
+00:00:14.600 --> 00:00:18.540
+che vi dia una risposta breve. Microsoft Fabric non è solo un altro prodotto, è una piattaforma
+
+00:00:18.540 --> 00:00:22.740
+dati completa, un unico luogo dove potete svolgere tutto il vostro lavoro sui dati, archiviazione,
+
+00:00:23.000 --> 00:00:27.520
+trasformazione, analisi e reporting. Alla fine di questo episodio capirete cos'è Fabric
+
+00:00:27.520 --> 00:00:31.920
+perché Microsoft l'ha creato e come si integrano i suoi elementi principali. Prendete il vostro
+
+00:00:31.920 --> 00:00:37.160
+caffè e iniziamo. Vecchio metodo perché i dati erano frammentati. Per capire perché
+
+00:00:37.160 --> 00:00:42.180
+esiste Fabric dovete comprendere il problema che risolve. 20 anni fa se gestivate un'azienda
+
+00:00:42.180 --> 00:00:46.720
+acquistavate un server per archiviare i dati, uno strumento separato per i report e un altro
+
+00:00:46.720 --> 00:00:50.580
+prodotto ancora per l'analisi in tempo reale. Prima che ve ne rendiate conto vi ritrovate
+
+00:00:50.580 --> 00:00:54.060
+con 5 sistemi diversi, ognuno con il proprio accesso, il proprio metodo di lavoro e il proprio
+
+00:00:54.060 --> 00:00:58.020
+team di gestione. Per molto tempo i dati sono rimasti isolati in silo. I dati di vendita
+
+00:00:58.020 --> 00:01:02.900
+in un sistema, quelli dei clienti in un altro e i dati finanziari da tutt'altra parte. Se
+
+00:01:02.900 --> 00:01:06.440
+volevate rispondere a una domanda che incrociasse quei sistemi come quali i clienti acquistano
+
+00:01:06.440 --> 00:01:10.780
+i prodotti più redditizi dovevate spostare i dati, esportarli da un sistema, trasformarli,
+
+00:01:10.860 --> 00:01:14.780
+caricarli in un altro e poi rifare tutto quando i dati cambiavano. Si passava più tempo a spostare
+
+00:01:14.780 --> 00:01:18.840
+i dati tra i sistemi che ad analizzarli realmente? L'integrazione dei dati è diventata un lavoro
+
+00:01:18.840 --> 00:01:23.060
+a tempo pieno per interi team. La parte peggiore era che ogni volta che spostavate i dati creavate
+
+00:01:23.060 --> 00:01:27.340
+un'altra copia, un'altra versione della verità e presto nessuno sapeva più quale fosse quella
+
+00:01:27.340 --> 00:01:32.480
+corretta. Microsoft ha osservato questa frammentazione e posto una domanda semplice. Se tutti questi
+
+00:01:32.480 --> 00:01:36.020
+servizi lavorassero insieme? Se invece di collegare prodotti separati avessero l'unica piattaforma
+
+00:01:36.020 --> 00:01:41.360
+che facesse tutto? Quella domanda è ciò che ha portato a Microsoft Fabric. Cosa sia effettivamente
+
+00:01:41.360 --> 00:01:46.540
+Microsoft Fabric? Cos'è Fabric? Ecco la definizione più semplice. Microsoft Fabric è una piattaforma
+
+00:01:46.540 --> 00:01:51.060
+unificata per dati e analisi. Un unico luogo per tutto il vostro ai dati. Pensatelo come un moderno
+
+00:01:51.060 --> 00:01:54.900
+edificio per ufficio. Ogni strumento come Power BI o Azure Synapse è una stanza all'interno
+
+00:01:54.900 --> 00:01:58.060
+di quell'edificio. Hanno il proprio scopo, arrivamento e strumenti, ma fanno tutti parte
+
+00:01:58.060 --> 00:02:01.280
+della stessa struttura. Non avete bisogno di uscire all'aperto per passare da una stanza
+
+00:02:01.280 --> 00:02:05.540
+all'altra. Sono collegati. Ecco cosa fa Fabric. Unisce data engineering, integrazione dati,
+
+00:02:05.620 --> 00:02:09.880
+data warehousing, analisi in tempo reale e business intelligence in un'unica piattaforma.
+
+00:02:10.040 --> 00:02:13.960
+Tutto gira su una singola piattaforma SaaS, il che significa nessuna infrastruttura da gestire,
+
+00:02:14.420 --> 00:02:18.060
+nessun server da configurare o reti da impostare. Microsoft gestisce questo per te.
+
+00:02:18.060 --> 00:02:22.060
+Dal suo lancio nel 2023 Fabric è diventato il prodotto dati a più rapida crescita nella
+
+00:02:22.060 --> 00:02:27.840
+storia di Microsoft. Oggi oltre 25.000 clienti lo utilizzano, tra cui l'80% e il 500%. È
+
+00:02:27.840 --> 00:02:31.400
+un'adozione enorme in pochissimo tempo. La differenza chiave è questa. Nel vecchio mondo
+
+00:02:31.400 --> 00:02:35.780
+compravi prodotti separati e cercavi di farli comunicare tra loro. Con Fabric non devi più
+
+00:02:35.780 --> 00:02:39.840
+collegare servizi diversi. È un'unica esperienza, un unico accesso, un unico modo di lavorare.
+
+00:02:39.920 --> 00:02:44.720
+Questo cambia tutto. One Lake, le fondamenta. Ora parliamo delle fondamenta che rendono
+
+00:02:44.720 --> 00:02:49.160
+possibile tutto questo. Al centro di Fabric c'è qualcosa chiamato One Lake. Il modo più
+
+00:02:49.160 --> 00:02:53.340
+semplice per pensare a One Lake è come a OneDrive per i tuoi dati. Sai come OneDrive ti offre
+
+00:02:53.340 --> 00:02:56.920
+un unico posto per archiviare tutti i tuoi file personali, a cui ogni app sul tuo computer
+
+00:02:56.920 --> 00:03:01.540
+può accedere. One Lake fa la stessa cosa, ma per i dati della tua organizzazione. Ecco
+
+00:03:01.540 --> 00:03:05.420
+cosa lo rende potente. Ogni carico di lavoro di Fabric, che sia un Lake House o un Warehouse
+
+00:03:05.420 --> 00:03:09.940
+o un'analisi in tempo reale, archivia automaticamente i suoi dati in One Lake. Non devi copiare nulla
+
+00:03:09.940 --> 00:03:14.300
+manualmente né configurare connessioni. Succede e basta. E c'è solo un One Lake per
+
+00:03:14.300 --> 00:03:19.500
+tenant. Un'unica fonte di verità per l'intera organizzazione. Ora potresti pensare se volessi
+
+00:03:19.500 --> 00:03:24.300
+cambiare piattaforma in futuro. Sono vincolato. La risposta è no. One Lake memorizza i dati
+
+00:03:24.300 --> 00:03:28.860
+in formati aperti come Delta Parquet, uno standard di settore usato da Databricks e Apache Spark.
+
+00:03:29.440 --> 00:03:33.820
+Non sei mai vincolato a Microsoft. Se vuoi spostare i tuoi dati altrove puoi farlo. Sono i tuoi
+
+00:03:33.820 --> 00:03:38.860
+dati. È qui che One Lake diventa davvero interessante, i collegamenti short. Un collegamento è un puntatore
+
+00:03:38.860 --> 00:03:43.180
+virtuale a dati che li siano altrove. Puoi creare un collegamento a dati archiviati su AWS S3,
+
+00:03:43.320 --> 00:03:48.340
+Google Cloud o persino su Storage on-premises e apparirà in One Lake come se fosse lì. Nessuno
+
+00:03:48.340 --> 00:03:54.620
+spostamento di dati richiesto, nessuna obbligazione. Punti al file appare. One Lake è costruito su
+
+00:03:54.620 --> 00:03:58.720
+Azure Data Lake Storage, l'archiviazione cloud di Microsoft, ma non gestisci l'infrastruttura
+
+00:03:58.720 --> 00:04:03.880
+poiché è tutto gestito come servizio SAS. Non devi configurare server o reti, lo usi e basta.
+
+00:04:04.420 --> 00:04:08.600
+Cosa significa questo per te? Significa che puoi avere dati da molteplici fonti, cloud storage,
+
+00:04:08.600 --> 00:04:14.140
+database locali o piattaforme terze, tutti, in un unico posto senza duplicazioni. Il vero
+
+00:04:14.140 --> 00:04:17.760
+vantaggio. Qualsiasi dato scritto su One Lake può essere usato immediatamente da qualsiasi
+
+00:04:17.760 --> 00:04:21.780
+carico di lavoro di Fabric. Lo scrivi una volta e ogni strumento in Fabric può vederlo. Questa
+
+00:04:21.780 --> 00:04:26.140
+è la magia di One Lake. Lake House è il fulcro dell'ingegneria dei dati, quindi hai i tuoi
+
+00:04:26.140 --> 00:04:30.460
+dati in One Lake. Ora devi lavorarci. È qui che entra in gioco il Lake House. Ecco la definizione
+
+00:04:30.460 --> 00:04:34.280
+più semplice. Un Lake House è un archivio dati che unisce la flessibilità di un Data Lake alla
+
+00:04:34.280 --> 00:04:39.000
+struttura di un database. In un Data Lake tradizionale puoi salvare tutto, file CSV,
+
+00:04:39.140 --> 00:04:43.320
+grezzi, documenti JSON, immagini o video, ma è disordinato, senza struttura o schema,
+
+00:04:43.440 --> 00:04:47.660
+quindi non è facile da interrogare. In un database tradizionale tutto è strutturato,
+
+00:04:47.720 --> 00:04:51.380
+è interrogabile, ma puoi salvare solo certi tipi di dati. Un Lake House si offre entrambi.
+
+00:04:51.780 --> 00:04:57.080
+Puoi conservare file grezzi come CSV, JSON o persino immagini in un Lake House e puoi anche salvare
+
+00:04:57.080 --> 00:05:01.560
+tabelle strutturate che puoi interrogare con SQL. Entrambi vivono nello stesso posto. Queste tabelle
+
+00:05:01.560 --> 00:05:05.600
+usano il formato Delta Parquet, lo stesso formato aperto e veloce usato da Databricks e altre
+
+00:05:05.600 --> 00:05:09.140
+grandi piattaforme, progettato per gestire enormi moli di dati. I Lake House supportano
+
+00:05:09.140 --> 00:05:13.020
+molteplici strumenti. Puoi usare Spark per l'elaborazione di dati su larga scala. Puoi
+
+00:05:13.020 --> 00:05:17.140
+usare Python per il machine learning. Puoi usare SQL per quelli semplici. Qualunque strumento
+
+00:05:17.140 --> 00:05:21.100
+tu preferisca, il Lake House può gestirlo. Pensa al Lake House come il tuo spazio di lavoro
+
+00:05:21.100 --> 00:05:24.880
+per costruire pipeline di dati. Importi i dati grezzi, li trasformi, li pulisci, li prepari
+
+00:05:24.880 --> 00:05:29.800
+per l'analisi. Puoi eseguirci sopra modelli di machine learning. Puoi creare set di addestramento,
+
+00:05:29.800 --> 00:05:33.060
+tutto in un unico posto. Per gli ingegneri dei dati che preferiscono un ambiente orientato
+
+00:05:33.060 --> 00:05:36.920
+al codice, i Lake House supportano i notici. Si tratta di documenti interattivi dove scrivi
+
+00:05:36.920 --> 00:05:39.720
+i codici e vedi i risultati dei documenti del tuo lavoro, come un diario di laboratorio
+
+00:05:39.720 --> 00:05:43.620
+per i dati. Puoi scrivere il codice Spark in una cella, vederne l'output in quella successiva
+
+00:05:43.620 --> 00:05:46.840
+e spiegare cosa hai fatto nella cella seguente. Il Lake House è il punto d'ingresso per la
+
+00:05:46.840 --> 00:05:50.540
+maggior parte dei ingegneri dei dati che lavorano in fabbrica. È dove avviene il lavoro pesante
+
+00:05:50.540 --> 00:05:54.560
+e poiché archivia tutto in un unico lake, qualsiasi dato inserito in un Lake House è immediatamente
+
+00:05:54.560 --> 00:05:58.100
+disponibile per ogni altro carico di lavoro Fabric nei Warehouse. Il motore di analisi,
+
+00:05:58.280 --> 00:06:03.040
+SQL. Ora, se Lake House è il fulcro dell'ingegneria dei dati, pensa al Warehouse come al motore
+
+00:06:03.040 --> 00:06:07.380
+di analisi SQL creato per un diverso tipo di utente. Un Warehouse in Fabric è un database
+
+00:06:07.380 --> 00:06:11.780
+in analisi SQL completamente gestito. Se sei un amministratore di database o uno sviluppatore
+
+00:06:11.780 --> 00:06:17.240
+SQL, qui ti sentirai a casa? Puoi scrivere queriti SQL, creare viste, stored procedure e policy
+
+00:06:17.240 --> 00:06:22.420
+di sicurezza. Sembrano tradizionali data warehouse, ma ecco, cosa lo rende diverso? A differenza
+
+00:06:22.420 --> 00:06:25.560
+di un data warehouse tradizionale, il warehouse di fabbrica archivia dati direttamente in un
+
+00:06:25.560 --> 00:06:29.020
+unico lake. Non c'è un livello di archiviazione separato né infrastrutture extra da gestire.
+
+00:06:29.480 --> 00:06:33.100
+I dati risiedono nel Lake e il warehouse è solo l'interfaccia che usi per interrogarli.
+
+00:06:33.800 --> 00:06:37.380
+Questo è importante perché Warehouse e Lake House condividono gli stessi dati, quindi non
+
+00:06:37.380 --> 00:06:41.700
+duplichi nulla. Se un data engineer carica dati in un Lake House, uno sviluppatore SQL può
+
+00:06:41.700 --> 00:06:45.860
+interrogarli immediatamente dal warehouse e su una copia e su un trasferimento. Sono gli stessi
+
+00:06:45.860 --> 00:06:49.640
+dati a cui si accede tramite strumenti diversi. Il warehouse è progettato per l'analisi
+
+00:06:49.640 --> 00:06:53.720
+su larga scala. Sotto il cofano utilizza l'elaborazione parallela massiva per gestire
+
+00:06:53.720 --> 00:06:57.820
+sette di dati enormi. E Microsoft ha investito pesantemente nelle prestazioni. Solo negli
+
+00:06:57.820 --> 00:07:02.620
+ultimi sei mesi le prestazioni sono migliorate del 36%. È un notevole miglioramento in poco
+
+00:07:02.620 --> 00:07:06.460
+tempo. Se stai migrando da un'altra piattaforma, fabbrica un assistente alla migrazione che ti
+
+00:07:06.460 --> 00:07:10.940
+aiuta a passare da Snowflake o Synapse, analizza la tua configurazione esistente e ti guida attraverso
+
+00:07:10.940 --> 00:07:14.640
+il processo. L'obiettivo è rendere la migrazione il più indolore possibile. Quindi qual è la
+
+00:07:14.640 --> 00:07:18.780
+differenza tra un Lake House e un warehouse? Tu si riduci l'interfaccia. Ai warehouse sono orientati
+
+00:07:18.780 --> 00:07:22.820
+alla SQL. Sono pensati per chi ragiona in termini di tabelle, query e store procedure.
+
+00:07:23.540 --> 00:07:27.300
+I Lake House sono orientati allo sviluppo. Sono pensati per chi vuole usare Spark, Python
+
+00:07:27.300 --> 00:07:31.840
+e Notebook. Ma la base è entrambi archiviano i dati in un unico Lake. Sono due modi di lavorare
+
+00:07:31.840 --> 00:07:36.740
+con gli stessi dati. Importazione dati, Data Factory, Mirroring e Scorciatoie. Quindi hai
+
+00:07:36.740 --> 00:07:40.360
+un unico Lake per l'archiviazione, Lake House per la trasformazione, Warehouse per l'interrogazione,
+
+00:07:40.460 --> 00:07:44.980
+ma come entrano effettivamente i dati? Che entra in gioco Data Factory? Data Factory è il
+
+00:07:44.980 --> 00:07:48.660
+servizio di integrazione dati integrato di Fabric e ti offre oltre 200 connettori
+
+00:07:48.660 --> 00:07:53.180
+per estrarre dati da database, cloud storage, app SaaS e altro. È lo strumento di integrazione
+
+00:07:53.180 --> 00:07:57.260
+ai dati più usati al mondo e a buona ragione. All'interno di Data Factory trovi Data Flu
+
+00:07:57.260 --> 00:08:01.740
+Gen 2 che ti offrono un modo no code per trasformare i dati usando Power Query. Se hai mai usato
+
+00:08:01.740 --> 00:08:06.140
+Power Query in Excel o Power BI conosci già la procedura. Clicchi su un'interfaccia visuale
+
+00:08:06.140 --> 00:08:09.480
+per pulire, rimodellare e combinare i dati. Nessuna codifica richiesta ed è di livello
+
+00:08:09.480 --> 00:08:14.100
+enterprise scalabile per gestire dataset massivi. Oltre 22 miliardi di orchestrazioni vengono
+
+00:08:14.100 --> 00:08:17.820
+eseguite su Data Factory ogni mese, il che significa che miliardi di spostamenti di dati avvengono
+
+00:08:17.820 --> 00:08:21.560
+automaticamente rendendo un'infrastruttura di grande rilievo. Ma esiste un modo ancora
+
+00:08:21.560 --> 00:08:26.000
+più semplice per trasferire dati in OneLake, il mirroring. Il mirroring, copie dati da database
+
+00:08:26.000 --> 00:08:30.900
+esterni come Azure SQL, Oracle o Google BigQuery in OneLake quasi in tempo reale ed ecco la parte
+
+00:08:30.900 --> 00:08:35.860
+migliore, è gratuito, incluso nel servizio senza costi aggiuntivi. Ti basta indicare
+
+00:08:35.860 --> 00:08:39.520
+il database di origine e Fabric gestisce tutto il resto. Poi ci sono gli scorciatoie, i shortcuts
+
+00:08:39.520 --> 00:08:43.240
+che abbiamo menzionato prima, ma meritano maggiore attenzione. Le scorciatoie sono puntatori
+
+00:08:43.240 --> 00:08:47.260
+virtuali e dati archiviati altrove che non richiedono alcuno spostamento di dati. Crea una scorciatoia
+
+00:08:47.260 --> 00:08:51.580
+per un bucket AWS S3 e questa appare in OneLake come se fosse archiviata lì mentre i dati
+
+00:08:51.580 --> 00:08:55.540
+rimangono dove si trovano. Stai solo puntando ad essi. E ora le scorciatoie possono fare molto
+
+00:08:55.540 --> 00:08:59.540
+più che puntarli. Le trasformazioni tramite scorciatoie ti permettono di applicare trasformazioni
+
+00:08:59.540 --> 00:09:03.940
+basate sugli A. Puoi eseguire l'analisi del sentiment sui dati testuali, tradurre contenuti
+
+00:09:03.940 --> 00:09:07.640
+o rilevare informazioni di identificazione personale, il tutto senza spostare i dati o creare
+
+00:09:07.640 --> 00:09:12.440
+una pipeline. La trasformazione avviene nel momento in cui accedi ai dati. L'obiettivo di tutti
+
+00:09:12.440 --> 00:09:16.300
+questi strumenti è semplice, portare tutti i tuoi dati in OneLake senza costruire pipeline complesse.
+
+00:09:16.300 --> 00:09:21.160
+Che tu utilizzi Data Factory per l'ETL tradizionale, il mirroring per la replica quasi in tempo
+
+00:09:21.160 --> 00:09:25.620
+reale o le scorciatoie per l'accesso virtuale, il risultato è lo stesso. I tuoi dati finiscono
+
+00:09:25.620 --> 00:09:27.780
+in OneLake, pronti per qualsiasi carico di lavoro di Fab.
+
+00:09:29.280 --> 00:09:33.120
+Intelligenza in tempo reale, database e IA. Finora abbiamo parlato di spostare e archiviare
+
+00:09:33.120 --> 00:09:35.260
+i dati, ma che dire di dati che non smettono mai di muoversi.
+
+00:09:35.920 --> 00:09:40.480
+Dati in streaming da sensori AT, clickstream di siti web, telemetria da dispositivi, qui che
+
+00:09:40.480 --> 00:09:44.180
+entra in gioco l'intelligenza in tempo reale. Fabric gestisce i dati in streaming attraverso
+
+00:09:44.180 --> 00:09:48.360
+qualcosa chiamato Event House, che archivia e interroga serie temporali ad alto volume
+
+00:09:48.360 --> 00:09:52.740
+utilizzando KQL, il custo query language. È lo stesso motore che alimenta Azure Data Explorer
+
+00:09:52.740 --> 00:09:56.220
+costruito per la velocità, così puoi ingerire milioni di eventi al secondo e interrogarli
+
+00:09:56.220 --> 00:10:00.780
+in pochi millisecondi. Questo è importante ed ecco perché. 46% dei clienti di fabbrica
+
+00:10:00.780 --> 00:10:04.580
+utilizza già l'intelligenza in tempo reale. È quasi la metà. I casi d'uso sono ovunque.
+
+00:10:05.300 --> 00:10:08.780
+Un'azienda di logistica che traccia i camion delle consegne, un rivenditore che monitora
+
+00:10:08.780 --> 00:10:12.020
+il traffico pedonale in negozio, un produttore che osserva i dati dei sensori e delle attrezzature
+
+00:10:12.020 --> 00:10:16.280
+di fabbrica. Tutto avviene in tempo reale. Ma Fabric non riguarda solo l'analisi. Include
+
+00:10:16.280 --> 00:10:20.400
+anche database operativi come un database SQL per dati relazionali e Cosmos DB per carichi
+
+00:10:20.400 --> 00:10:24.120
+di lavoro non SQL. Sono gli stessi database che useresti per far girare le tue applicazioni
+
+00:10:24.120 --> 00:10:29.020
+e poiché sono integrati in Fabric archiviano automaticamente i loro dati in One Lake. Nessuna
+
+00:10:29.020 --> 00:10:32.920
+pipeline extra, nessuna copia manuale. I tuoi dati transazionali, i dati analitici risiedono
+
+00:10:32.920 --> 00:10:36.640
+nello stesso posto. Ora parliamo di AI perché è qui che Fabric diventa davvero
+
+00:10:36.640 --> 00:10:41.340
+interessante. L'integrazione dell'AI è profonda in tutta la piattaforma e offre modelli predefiniti
+
+00:10:41.340 --> 00:10:44.920
+per analisi del testo, traduzione e analisi del sentiment. Puoi usarli direttamente nei
+
+00:10:44.920 --> 00:10:48.580
+tuoi flussi di dati senza scrivere codice. Basta puntare ai tuoi dati, seleziona il modello
+
+00:10:48.580 --> 00:10:53.060
+e questo viene eseguito. E poi c'è Copilot che è integrato in tutto Fabric. Ti aiuta a scrivere
+
+00:10:53.060 --> 00:10:56.840
+query, creare report e generare pipeline. Ti basta descrivere ciò che vuoi in linguaggio
+
+00:10:56.840 --> 00:11:01.540
+semplice. Copilot genera il codice. È come avere un data engineer junior seduto accanto a te, pronto
+
+00:11:01.540 --> 00:11:06.120
+ad aiutarti in ogni momento. La visione qui è semplice. L'AI lavora sui tuoi dati senza spostarli
+
+00:11:06.120 --> 00:11:09.200
+da nessuna parte. I tuoi dati rimangono in One Lake e i modelli di AI vanno verso i dati.
+
+00:11:09.720 --> 00:11:13.620
+Nessuna copia, nessuna esportazione, nessun rischio per la sicurezza. I dati non lasciano
+
+00:11:13.620 --> 00:11:19.660
+mai il tuo ambiente governato. Power BI governance e valore aziendale. Ora arriviamo alla parte
+
+00:11:19.660 --> 00:11:23.220
+che la maggior parte delle persone vede, la porta d'accesso all'insight, Power BI. È
+
+00:11:23.220 --> 00:11:28.960
+utilizzato da 550 mila organizzazioni e 34 milioni di utenti ogni mese, rendendolo lo strumento
+
+00:11:28.960 --> 00:11:33.300
+di business intelligence più diffuso al mondo. E in Fabric diventa qualcosa di ancora più
+
+00:11:33.300 --> 00:11:37.420
+potente. Ecco il punto chiave. In Fabric, Power BI si collega direttamente a One Lake
+
+00:11:37.420 --> 00:11:41.860
+usando una modalità chiamata Direct Lake. È diversa dalla tradizionale modalità import
+
+00:11:41.860 --> 00:11:46.100
+in cui copi i dati nell'archiviazione interna di Power BI. Invece, Direct Lake interroga i
+
+00:11:46.100 --> 00:11:49.580
+dati dove risiedono in One Lake senza bisogno di aggiornamenti o duplicazioni, i dati sono
+
+00:11:49.580 --> 00:11:53.980
+sempre aggiornati e velocissimi. Sotto ogni report di Power BI c'è un modello semantico,
+
+00:11:54.040 --> 00:12:00.000
+il cervello del report, dove definisci logica aziendale, misure e relazioni. E ora puoi creare
+
+00:12:00.000 --> 00:12:04.140
+questi modelli interamente in un browser web. La modellazione web è disponibile a tutti,
+
+00:12:04.220 --> 00:12:08.120
+quindi puoi creare un modello semantico, costruire relazioni e scrivere misure DAX dal browser
+
+00:12:08.120 --> 00:12:12.380
+anche su Mac. Non è richiesto alcun updesk. Ma tutta questa potenza dei dati non significa
+
+00:12:12.380 --> 00:12:16.460
+nulla senza governance. E fabbrica la governance integrata fin dall'inizio. Microsoft Purview
+
+00:12:16.460 --> 00:12:20.240
+fornisce etichette di riservatezza che seguono i tuoi dati ovunque. Se un report contiene
+
+00:12:20.240 --> 00:12:24.480
+informazioni sensibili, quell'etichetta rimane associata anche dopo l'esportazione. Le polisi
+
+00:12:24.480 --> 00:12:28.400
+di prevenzione della perdita di dati rilevano automaticamente le informazioni sensibili e bloccano
+
+00:12:28.400 --> 00:12:32.080
+la condivisione notorizzata. E i controlli di accesso assicurano che solo le persone giuste
+
+00:12:32.080 --> 00:12:36.380
+vedano i dati giusti. Domini ti aiutano a organizzare i dati per area aziendale con regole
+
+00:12:36.380 --> 00:12:39.960
+di governance separate così i tuoi dati finanziari possono avere controlli più severi rispetto a quelli
+
+00:12:39.960 --> 00:12:44.260
+di marketing. Ogni dominio può essere gestito dal proprio team, creando una governance che cresce
+
+00:12:44.260 --> 00:12:49.680
+con la tua organizzazione. Ora parliamo di risultati concreti. Non è solo teoria. Eastman Chemical ha
+
+00:12:49.680 --> 00:12:54.720
+usato Fabric per ridurre i tempi di preparazione delle vendite dell'83%. Ciò che richiedeva 4 ore e ora ne
+
+00:12:54.720 --> 00:12:59.440
+richiede circa 40 minuti. Eton Solutions ha ridotto l'impegno manuale del 75% con processi
+
+00:12:59.440 --> 00:13:03.860
+che richiedevano da 10 a 15 passaggi e ora ne richiedono 2. E Sonata Software ha risparmiato
+
+00:13:03.860 --> 00:13:07.560
+30.000 ore di riconciliazione manuale ogni anno, reindirizzando quel lavoro umano verso
+
+00:13:07.560 --> 00:13:12.620
+attività a maggior valore. Il modello di costo è semplice. Paghi per la capacità, ovvero la potenza
+
+00:13:12.620 --> 00:13:15.940
+di calcolo che esegue i tuoi carichi di lavoro. Microsoft offre funzionalità integrate di smoothing
+
+00:13:15.940 --> 00:13:19.420
+e protezione dai picchi per gestire. Lo smoothing distribuisce il costo delle operazioni
+
+00:13:19.420 --> 00:13:23.420
+in background su 24 ore per evitare picchi improvvisi, mentre la protezione dai picchi limita i processi
+
+00:13:23.420 --> 00:13:27.980
+in background nei momenti intensi per mantenere stabile la performance interattiva. Paghi per
+
+00:13:27.980 --> 00:13:33.660
+ciò che usi e non avrai sorprese. Mettiamo tutto insieme. Fabric non è solo un altro prodotto
+
+00:13:33.660 --> 00:13:37.740
+Microsoft. È un ripensamento completo di come dovrebbero funzionare le piattaforme dati. Una
+
+00:13:37.740 --> 00:13:41.640
+piattaforma, un lake, una sola copia dei dati e infinite possibilità. E con l'intelligenza
+
+00:13:41.640 --> 00:13:45.000
+artificiale co-pilot integrati è accessibile a tutti. Non solo ai professionisti dei dati,
+
+00:13:45.060 --> 00:13:48.500
+ma ad analisti aziendali, team di vendita, responsabili operativi, chiunque abbia bisogno di risposta
+
+00:13:48.500 --> 00:13:53.300
+dai dati. Ecco il tuo com. Vai su fabric.microsoft.com, avvia una prova gratuita e crea il tuo
+
+00:13:53.300 --> 00:13:58.140
+primo workspace. Provaci. Vedrai come i pezzi si incastrano in un modo che nessuna lettura può
+
+00:13:58.140 --> 00:14:02.060
+sostituire. Se questo episodio ti ha aiutato a capire meglio fabbriche, iscriviti sulla tua
+
+00:14:02.060 --> 00:14:04.920
+piattaforma di podcast preferite e condividilo con chi sta iniziando il proprio corso nel mondo
+
+00:14:04.920 --> 00:14:09.160
+dei dati. Ti ringrazierà. La prossima volta spiegheremo le scorciatoie di One Lake in modo
+
+00:14:09.160 --> 00:14:15.260
+semplice. Come funzionano, perché sono importanti e come usarle senza spostare i dati. È un episodio
+
+00:14:15.260 --> 00:14:17.160
+da un perdere. Fino ad allora continuo a imparare.
+
+00:14:17.160 --> 00:14:18.160
+Grazie.

@@ -1,0 +1,940 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.480
+Jadi mengapa akhir bulan masih melibatkan 5 versi spreadsheet yang berbeda?
+
+00:00:03.800 --> 00:00:08.120
+Seseorang mencari file yang tepat, dan manajer menunggu jawaban yang seharusnya sudah jelas.
+
+00:00:08.820 --> 00:00:12.080
+Anda mungkin memiliki satu buku besar, beberapa departemen, dan ribuan transaksi,
+
+00:00:12.260 --> 00:00:14.920
+tetapi Anda tetap tidak bisa menceritakan satu kisah keuangan dengan jelas.
+
+00:00:15.300 --> 00:00:16.860
+Disitulah Dynamics 3Rance berperan.
+
+00:00:17.600 --> 00:00:21.120
+Saya Mirko Peters dari M365FM, dan cuplikan pengetahuan ini menjelaskan
+
+00:00:21.120 --> 00:00:24.840
+bagaimana data keuangan yang diposting berubah menjadi laporan yang benar-benar bisa dibaca orang.
+
+00:00:25.340 --> 00:00:28.520
+Anggaplah setiap transaksi sebagai dokumen yang disimpan sekali di lemari pusat,
+
+00:00:28.520 --> 00:00:31.400
+lalu dibaca dengan cara berbeda tanpa harus menyusun ulang angka setiap saat.
+
+00:00:31.640 --> 00:00:33.400
+Mari kita mulai dengan catatan di dalam lemari itu.
+
+00:00:34.380 --> 00:00:37.220
+Fondasinya, Buku Besar Umum, Akun Utama, dan Kategori
+
+00:00:37.220 --> 00:00:40.460
+Buku Besar Umum adalah catatan keuangan utama perusahaan
+
+00:00:40.460 --> 00:00:43.160
+dan setiap transaksi yang diposting berakhir di sana dalam bentuk tertentu.
+
+00:00:44.120 --> 00:00:48.480
+Faktur pelanggan, tagian pemasok, entry penggajian, pembayaran bank, atau penyesuaian stok semuanya.
+
+00:00:48.840 --> 00:00:49.960
+Meninggalkan catatan akutansi.
+
+00:00:50.720 --> 00:00:53.780
+Bayangkan buku besar umum sebagai lemari arsip besar dengan aturan ketat.
+
+00:00:53.780 --> 00:00:57.180
+Oh, Anda tidak memasukkan tagian sewa kelajian sama dengan penjualan produk
+
+00:00:57.180 --> 00:00:59.320
+dan Anda tidak mencampur saldo bank dengan gaji karyawan.
+
+00:00:59.920 --> 00:01:01.200
+Setiap jumlah membutuhkan tempat keuangan.
+
+00:01:01.580 --> 00:01:04.340
+Tempat itu dimulai dengan akun utama dan menjawab satu pertanyaan sederhana.
+
+00:01:04.540 --> 00:01:05.420
+Apa kaitan uang ini?
+
+00:01:05.940 --> 00:01:08.880
+Kas berada di satu akun utama pendapatan penjualan di akun lain
+
+00:01:08.880 --> 00:01:13.360
+dan beban sewa, gaji, piutang, hutang, pinjaman, dan pajak masing-masing memiliki akunnya sendiri.
+
+00:01:14.620 --> 00:01:16.860
+Jadi, saat perusahaan Anda membayar tagihan sewa bulanan,
+
+00:01:17.000 --> 00:01:18.920
+Dynamics tiga-an tersebut pada akun beban sewa.
+
+00:01:19.760 --> 00:01:23.420
+Dan saat pelanggan membayar faktur, pendapatan masuk ke akun penjualan,
+
+00:01:23.660 --> 00:01:25.840
+sedangkan jumlah yang belum dibayar masuk ke piutang.
+
+00:01:25.840 --> 00:01:28.840
+Akun tersebut memberitahu finance apa yang terjadi secara finansial.
+
+00:01:29.220 --> 00:01:32.320
+Struktur ini penting, karena laporan keuangan tidak mengandadakan angka
+
+00:01:32.320 --> 00:01:35.780
+oh, laporan tersebut membaca dan mengelompokkan angka yang sudah diposting di buku besar umum.
+
+00:01:36.520 --> 00:01:38.360
+Jika catatan akuntansi berakhir di tempat yang salah,
+
+00:01:38.540 --> 00:01:41.180
+tidak ada desain laporan yang dapat memperbaiki maknanya nanti tanpa kerja manual.
+
+00:01:41.560 --> 00:01:43.200
+Sekarang, akun utama juga memiliki tipe,
+
+00:01:43.360 --> 00:01:46.960
+dan tipe akun memberikan klasifikasi luas bagi Dynamics 365 Finance.
+
+00:01:48.320 --> 00:01:51.120
+Akun laba rugi mencatat pendapatan dan beban untuk suatu periode,
+
+00:01:51.120 --> 00:01:53.960
+dan saldo gabungannya berkontribusi pada hasil akhir tahun.
+
+00:01:53.960 --> 00:01:56.500
+Neraca mencatat apa yang dimiliki perusahaan,
+
+00:01:56.620 --> 00:01:59.760
+apa yang terhutang, dan kepentingan pemilik oh, aset, kewajiban, dan ekuitas.
+
+00:02:00.620 --> 00:02:03.520
+Kas biasanya merupakan aset, pinjaman bank biasanya merupakan kewajiban,
+
+00:02:03.640 --> 00:02:06.360
+pendapatan penjualan termasuk dalam laba rugi, dan sewa termasuk dalam beban.
+
+00:02:06.780 --> 00:02:08.600
+Itu mungkin terdengar seperti akutansi dasar.
+
+00:02:09.000 --> 00:02:11.780
+Memang benar, tetapi itu juga merupakan titik kendali pertama untuk pelaporan,
+
+00:02:11.880 --> 00:02:15.240
+karena sistem perlu mengetahui apakah suatu akun termasuk dalam laporan laba rugi atau neraca.
+
+00:02:15.740 --> 00:02:19.500
+Ada juga jenis akun total khusus yang dapat menjumlahkan serangkaian saldo akun.
+
+00:02:19.500 --> 00:02:22.760
+Oh, Anda mungkin menggunakan ini saat menginginkan total di seluruh interval yang ditentukan.
+
+00:02:23.380 --> 00:02:26.980
+Sekipun demikian, banyak tim keuangan membuat total laporan mereka secara langsung dalam pelaporan keuangan.
+
+00:02:27.680 --> 00:02:30.400
+Jenis akun tetap luas, dan disitulah kategori akun utama berperang.
+
+00:02:30.820 --> 00:02:34.400
+Oh, kategori tersebut membuat grup laporan yang lebih berguna di dalam klasifikasi yang luas itu.
+
+00:02:35.160 --> 00:02:40.880
+Sebagai contoh, akun aset dapat berada dalam kategori seperti kas, aset tetap, piutang, atau investasi jangka pendek.
+
+00:02:41.560 --> 00:02:45.220
+Sementara akun kewajiban mungkin berada dalam utang usaha, utang pajak, atau utang jangka panjang.
+
+00:02:46.180 --> 00:02:47.060
+Perbedaannya sederhana.
+
+00:02:47.380 --> 00:02:53.440
+Jenis akun memberitahu Anda kelas akuntansi umum, dan kategori akun utama memberitahu Anda grup laporan yang ingin dilihat orang lain.
+
+00:02:53.980 --> 00:02:57.460
+Bayangkan Anda memiliki beberapa rekening bank, akun kas kecil, dan akun clearing kas.
+
+00:02:57.840 --> 00:03:01.820
+Oh, masing-masing bisa memiliki akun utama sendiri karena keuangan membutuhkan tingkat detail tersebut.
+
+00:03:02.440 --> 00:03:04.200
+Namun, semua yang bisa termasuk dalam kategori kas.
+
+00:03:04.580 --> 00:03:07.860
+Jadi, sebuah laporan dapat menampilkan satu baris kas yang bersisai itu saja yang dibutuhkan pembaca.
+
+00:03:08.380 --> 00:03:11.200
+Itulah mengapa laporan keuangan default menggunakan kategori akun utama.
+
+00:03:11.200 --> 00:03:17.680
+Oh, mereka memerlukan struktur yang familiar sebelum dapat menampilkan saldo di bagian seperti aset, kewajiban, pendapatan, atau beban.
+
+00:03:19.060 --> 00:03:23.660
+Pengaturan yang rapi akan terbayar nanti karena saat akun utama mengikuti aturan yang jelas, jenis akun benar,
+
+00:03:23.980 --> 00:03:28.840
+dan kategori sesuai dengan cara perusahaan Anda membaca laporan keuangan, pelaporan menjadi jauh lebih mudah.
+
+00:03:29.560 --> 00:03:31.040
+Anda memulai dengan data yang sudah memiliki tempat.
+
+00:03:31.740 --> 00:03:35.040
+Akun menjelaskan apa yang terjadi secara finansial, tetapi para pemimpin biasanya meminta lebih dari.
+
+00:03:35.040 --> 00:03:41.360
+Oh, mereka juga ingin tahu di mana hal itu terjadi, siapa yang membelanjakan uangnya, dan bagian bisnis mana yang menghasilkan hasil tersebut.
+
+00:03:42.640 --> 00:03:46.320
+Dimensi finansial menambahkan pertanyaan yang sebenarnya ditanyakan oleh para pemimpin.
+
+00:03:46.920 --> 00:03:49.580
+Akun utama memberitahu Anda pekaitan uang tersebut, bahwa cukup sederhana.
+
+00:03:50.900 --> 00:03:53.800
+Namun, dimensi finansial menambahkan konteks bisnis di sekitar jumlah tersebut.
+
+00:03:54.120 --> 00:03:56.460
+Dimensi tersebut menjawab pertanyaan yang diajukan para pemimpin saat mereka.
+
+00:03:56.700 --> 00:04:01.080
+Departemen yang menerima belanja, lokasi penolahnya, unit bisnis mana, apakah itu terikat pada proyek?
+
+00:04:01.080 --> 00:04:06.600
+Mari kita lihat beban sewa. Perusahaan Anda mungkin membayar sewa untuk kantor pusat, gudang, dan beberapa lokasi retail.
+
+00:04:07.100 --> 00:04:09.440
+Jika setiap pembayaran dibukukan ke beban sewa, Anda melihat tegian total.
+
+00:04:09.720 --> 00:04:12.900
+Itu berguna, tetapi tidak memberitahu manajer regional berapa biaya lokasi mereka.
+
+00:04:13.380 --> 00:04:14.680
+Dimensi finansial mengisi celah tersebut.
+
+00:04:15.120 --> 00:04:20.580
+Anda dapat menambahkan Departemen Keuangan Penjualan atau Operasional atau Pusat Biaya Unit Bisnis Wilayah atau Proyek.
+
+00:04:21.060 --> 00:04:23.220
+Nilainya tersebut disertakan pada entry akutansi saat diposting.
+
+00:04:23.480 --> 00:04:26.460
+Jadi akunnya tetap beban sewa, tetapi entry tersebut memberikan informasi yang lebih long.
+
+00:04:26.840 --> 00:04:28.820
+Satu pembayaran mungkin terbaca beban sewa, kantor pusat.
+
+00:04:28.820 --> 00:04:32.420
+Lainnya beban sewa, gudang. Ketiga, beban sewa, retail utara.
+
+00:04:32.900 --> 00:04:34.340
+Akun yang sama, mana bisnis yang berbeda.
+
+00:04:34.860 --> 00:04:40.000
+Hal ini memberi bagian keuangan satu struktur akun yang konsisten sambil membiarkan para pemimpin melihat hasil melalui bagian perusahaan mereka.
+
+00:04:40.480 --> 00:04:41.900
+Direktur penjualan melihat penjualan.
+
+00:04:42.340 --> 00:04:43.640
+Manager gudang melihat gudang.
+
+00:04:44.280 --> 00:04:45.880
+Uangan melihat total keseluruhan dari semua orang.
+
+00:04:46.420 --> 00:04:48.000
+Ini menghilangkan kebiasaan spreadsheet yang umum.
+
+00:04:48.480 --> 00:04:52.620
+Tanpa dimensi, seseorang mengekspor saldo buku besar dan mulai menambahkan kolom secara manual.
+
+00:04:53.240 --> 00:04:55.400
+Mengurutkan, memfilter, menyalin angka ke buku kerja baru,
+
+00:04:55.400 --> 00:04:58.580
+lalu mencoba menjelaskan mengapa total departemen tidak cocok dengan total perusahaan.
+
+00:04:59.020 --> 00:05:02.520
+Dengan dimensi yang dimasukkan saat transaksi diposting, pekerjaan itu dimulai dari titik yang lebih baik.
+
+00:05:03.020 --> 00:05:07.220
+Detail tersebut sudah menjadi bagian dari catatan akutansi, tetapi yang berfungsi jika nilai tetap konsisten.
+
+00:05:07.940 --> 00:05:11.420
+Jika satu orang memilih utara, yang lain memilih utara, dan yang ketiga.
+
+00:05:11.880 --> 00:05:16.560
+Menggunakan utara 01, laporan akan membagi apa yang seharusnya menjadi satu saldo menjadi paris terpisah.
+
+00:05:17.320 --> 00:05:21.260
+Keuangan memerlukan nama yang jelas, kemilihan yang jelas, dan aturan tentang nilai mana yang dapat digunakan orang.
+
+00:05:21.860 --> 00:05:24.580
+Dynamik setigiran ampung hal tersebut melalui aturan akun.
+
+00:05:24.580 --> 00:05:29.260
+Tergantung pada akunnya, sistem dapat mewajibkan dimensi atau membatasi nilai yang dapat dipilih pengguna.
+
+00:05:29.920 --> 00:05:34.540
+Sebagai contoh, akun beban mungkin memerlukan pusat biaya, sementara akun bank mungkin hanya memerlukan unit bisnis.
+
+00:05:35.060 --> 00:05:36.780
+Anda tidak memerlukan detail yang sama untuk setiap akun.
+
+00:05:37.340 --> 00:05:38.140
+Berikut adalah sederhananya.
+
+00:05:38.440 --> 00:05:42.960
+Gunakan dimensi finansial jika Anda berharap untuk menggunakan kembali nilai tersebut dan melaporkan saldo berdasarkan detail dari waktuku.
+
+00:05:43.140 --> 00:05:43.900
+Dapat digunakan kembali.
+
+00:05:44.320 --> 00:05:45.340
+Pusat biaya dapat digunakan kembali.
+
+00:05:45.700 --> 00:05:46.720
+Wilayah dapat digunakan kembali.
+
+00:05:47.060 --> 00:05:47.580
+Proyek juga.
+
+00:05:47.580 --> 00:05:52.580
+Jika tim keuangan Anda melacak saldo dan biaya berdasarkan proyek, nomor faktur berbeda, nomor pesan pembelian berbeda.
+
+00:05:53.460 --> 00:05:57.140
+Nilai-nilai tersebut seringkali hanya untuk satu transaksi atau satu pekerjaan yang berumur pendek.
+
+00:05:57.900 --> 00:06:03.740
+Membuat dimensi finansial untuk setiap nomor faktur akan meninggalkan ribuan nilai unik yang tidak diinginkan siapapun dalam laporan.
+
+00:06:04.200 --> 00:06:05.440
+Disitulah tech finansial lebih cocok.
+
+00:06:06.000 --> 00:06:13.040
+Tech finansial menyimpan referensi yang fleksibel, misalnya nomor faktur pesanan pembelian, referensi pembayaran, atau ID sistem eksternal, atau ID sistem eksternal.
+
+00:06:13.040 --> 00:06:18.620
+Tech ini ada pada entry akutansi untuk detail dan analisis, tetapi tidak memiliki peran terstruktur yang sama seperti dimensi finansial.
+
+00:06:19.240 --> 00:06:21.760
+Dimensi finansial merupakan bagian dari struktur akut.
+
+00:06:22.140 --> 00:06:25.720
+Sistem memeriksa apakah nilainya valid dan bagian keuangan dapat menggunakannya untuk melingkak saldo.
+
+00:06:26.520 --> 00:06:27.500
+Tech finansial lebih ringan.
+
+00:06:27.980 --> 00:06:31.560
+Tech ini melabeli transaksi tanpa mengubah label tersebut menjadi segmen pelaporan permanen.
+
+00:06:32.020 --> 00:06:35.140
+Jadi jangan buat dimensi bernama nomor faktur hanya untuk mencari faktur nantinya.
+
+00:06:35.860 --> 00:06:37.980
+Gunakan detail transaksi atau tech finansial untuk itu.
+
+00:06:38.300 --> 00:06:39.640
+Satu poin pengaturan lagi yang perlu dikterkan.
+
+00:06:39.640 --> 00:06:43.740
+Pelaporan keuangan dapat menggunakan dimensi yang sudah ada di sistem Anda tanpa alat pelaporan tambahan.
+
+00:06:44.340 --> 00:06:50.020
+Pada halaman pengaturan pelaporan keuangan, tim keuangan memilih dimensi mana yang muncul untuk desain dan tampilan laporan serta urutannya.
+
+00:06:50.640 --> 00:06:52.040
+Urutan tersebut lebih penting daripada kedengarannya.
+
+00:06:52.480 --> 00:06:57.340
+Jika laporan Anda biasanya terbaca akun utama, departemen, pusat biaya, proyek, orang akan terbiasa mencarinya di sana.
+
+00:06:57.860 --> 00:07:02.440
+Jika urutannya berubah dari satu laporan ke laporan lain, membaca detail menjadi lebih lambat dan kesalahan lebih mudah terjadi.
+
+00:07:02.440 --> 00:07:07.880
+Setelah setiap entry memiliki label yang dapat digunakan kembali dengan benar, buku besar dapat menjawab lebih dari sekadar apa yang kita belanjakan.
+
+00:07:07.880 --> 00:07:10.720
+Hal ini menjawab di mana, siapa, dan bagian bisnis mana yang terlibat.
+
+00:07:11.080 --> 00:07:16.880
+Dan dengan detail tersebut, Dynamics 365 Finance dapat mengubah entry yang diposting tersebut menjadi laporan keuangan.
+
+00:07:17.940 --> 00:07:19.240
+Apa sebenarnya pelaporan keuangan itu?
+
+00:07:19.760 --> 00:07:24.100
+Jadi, setelah entry buku besar Anda menyertakan akun dan dimensi yang tepat, apa yang sebenarnya dilakukan pelaporan keuangan?
+
+00:07:24.620 --> 00:07:29.880
+Pelaporan keuangan adalah add-in dalam Dynamics 365 Finance untuk membuat, memelihara, dan melihat laporan keuangan.
+
+00:07:30.360 --> 00:07:32.200
+Itu terdengar teknis, jadi mari kita gunakan bahasa yang sederhana.
+
+00:07:32.200 --> 00:07:36.920
+Ini adalah bagian dari Dynamics 365 Finance yang mengubah saldo buku besar Anda menjadi laporan,
+
+00:07:37.160 --> 00:07:43.180
+seperti laporan laba rugi, neraca arus kas, neraca saldo, atau laporan anggaran versus aktual, atau laporan anggaran versus aktual.
+
+00:07:43.300 --> 00:07:44.100
+Ini bukan buku besar baru.
+
+00:07:44.520 --> 00:07:47.620
+Tidak ada yang memposting faktur ke dalam pelaporan keuangan atau membayar pemasok darinya.
+
+00:07:48.320 --> 00:07:52.700
+Posting terjadi di Dynamics 365 Finance, dan pelaporan keuangan membaca hasilnya setelahnya.
+
+00:07:53.380 --> 00:07:54.980
+Ini juga bukan sekadar dashboard dengan berapa grafik.
+
+00:07:55.720 --> 00:07:57.340
+Dashboard memungkinkan Anda memindai tren dengan cepat.
+
+00:07:57.340 --> 00:08:05.820
+Laporan keuangan memberikan tampilan terstruktur dengan grup akun total, periode pelaporan, perbandingan, dan kemampuan untuk memeriksa detail di balik sebuah angka.
+
+00:08:06.540 --> 00:08:09.100
+Anggap saja ini sebagai ruang laporan yang terhubung ke buku besar umum.
+
+00:08:09.360 --> 00:08:10.500
+Buku besar mencatat transaksi.
+
+00:08:10.880 --> 00:08:16.020
+Pelaporan keuangan menyusunnya ke dalam format yang perlu dibaca oleh tim keuangan, manajer, auditor, atau anggota dewan Anda.
+
+00:08:16.660 --> 00:08:20.760
+Di balik layar, pelaporan keuangan menggunakan matdata keuangan yang diperbarui dari buku besar umum.
+
+00:08:20.760 --> 00:08:28.140
+Matdata adalah salinan pelaporan data keuangan yang diatur agar laporan dapat berjalan tanpa memperlambat orang yang memasukkan faktur atau memposting jurnal.
+
+00:08:29.000 --> 00:08:32.960
+Pemisahan tersebut membantu tim keuangan meninjau laporan sementara pengguna lain terus bekerja.
+
+00:08:33.680 --> 00:08:37.760
+Anda tidak perlu mengekspor setiap saldo ke lembar kerja hanya untuk membuat laporan bulanan yang rapi.
+
+00:08:38.200 --> 00:08:42.200
+Microsoft menyertakan 22 laporan keuangan standar dengan Dynamics 365 Finance.
+
+00:08:42.200 --> 00:08:51.540
+Anda mendapatkan laporan laba rugi, neraca, laporan arus kas, neraca saldo terperinci, neraca saldo ringkasan, laporan pengeluaran bergulir, dan laporan anggaran versus aktual.
+
+00:08:52.440 --> 00:08:57.100
+Ditambah laporan untuk penjualan dan diskon mingguan, detail audit, rasio, atau neraca di samping laporan laba rugi.
+
+00:08:57.400 --> 00:08:59.880
+Namun bukan berarti semuanya langsung cocok dengan perusahaan Anda sejak hari pertama.
+
+00:08:59.880 --> 00:09:05.100
+Tata letak laporan mungkin terlihat benar, tetapi akun utama dan kategori Anda tetap perlu dipetakan ke baris dengan tepat.
+
+00:09:05.100 --> 00:09:13.160
+Jika perusahaan Anda menyebut grup akun sebagai biaya langsung, sementara laporan default mengharapkan harga pokok penjualan, seseorang perlu meninjau pengaturan tersebut, mengalah dengan laporan default.
+
+00:09:13.840 --> 00:09:19.640
+Laporan ini memberikan contoh yang berfungsi, struktur yang familiar, dan titik awal yang jauh lebih cepat daripada membangun setiap laporan dari halaman kosong.
+
+00:09:19.840 --> 00:09:25.380
+Buka laporan tersebut, bandingkan saldo dengan buku besar Anda, periksa pengelompokan akun, dan sesuaikan hanya dengan kebutuhan bisnis Anda.
+
+00:09:25.580 --> 00:09:29.860
+Ini Dynamics 365 Finance memiliki beberapa alat pelaporan, dan disinilah orang sering bingung.
+
+00:09:30.200 --> 00:09:33.200
+Pelaporan keuangan, menangani laporan keuangan berbasis buku besar.
+
+00:09:33.200 --> 00:09:44.620
+SSRS, SKL Server Reporting Services, biasanya menangani dokumen bisnis terformat, dan laporan terperinci seperti faktur, pesanan pembelian, laporan pelanggan, atau daftar transaksi panjang.
+
+00:09:45.560 --> 00:09:47.680
+Alat ini dibuat untuk halaman yang merlukan tata letak tetap.
+
+00:09:48.500 --> 00:09:55.580
+Pelaporan elektronik menangani file yang perlu dikirim ke tempat lain seperti file bank, pengajuan pajak, file XML, file CSV, atau format lain yang diatur.
+
+00:09:56.260 --> 00:09:58.960
+Alat tersebut berfokus pada pengiriman atau penerimaan data struktur.
+
+00:09:59.380 --> 00:10:00.920
+Power BI menangani analisis interak.
+
+00:10:00.920 --> 00:10:06.800
+Anda menggunakan Power BI jika menginginkan bagian, filter, trend, dan tampilan manajemen yang membantu orang mengeksplorasi pertanyaan.
+
+00:10:07.220 --> 00:10:08.820
+Nilaih mana yang memiliki pertumbuhan biaya tercepat?
+
+00:10:09.340 --> 00:10:11.880
+Bagaimana perbandingan pengeluaran aktual dengan anggaran selama beberapa bulan?
+
+00:10:12.880 --> 00:10:14.680
+Pelaporan keuangan menangani laporan formal.
+
+00:10:15.480 --> 00:10:17.900
+Power BI membantu orang menyendidiki pola di sekitarnya.
+
+00:10:18.380 --> 00:10:22.520
+Excel memberikan tempat yang familiar bagi bagian keuangan untuk memeriksa angka atau melakukan analisis tambahan,
+
+00:10:22.680 --> 00:10:25.600
+tetapi tidak perlu menjadi tempat di mana setiap laporan keuangan di malajari awal.
+
+00:10:26.000 --> 00:10:27.000
+Setiap alat memiliki fungsinya masih.
+
+00:10:27.000 --> 00:10:31.560
+Pilih alat yang tepat, maka pelaporan tidak lagi tentang membangun kembali angka, melainkan membacanya.
+
+00:10:32.620 --> 00:10:35.660
+Membangun laporan, baris, kolom, dan definisi laporan.
+
+00:10:36.780 --> 00:10:38.680
+Setiap laporan keuangan dimulai dengan
+
+00:10:38.680 --> 00:10:43.940
+Anda harus memutuskan apa yang ada di sisi kiri, apa yang ada di bagian atas, dan bagaimana laporan menggabungkan keduanya.
+
+00:10:44.760 --> 00:10:49.860
+Di Dynamics 365 Finance, kami menyebut bagian tersebut sebagai definisi baris, definisi kolom, dan definisi laporan.
+
+00:10:50.420 --> 00:10:51.440
+Mari kita mulai dengan barisnya.
+
+00:10:51.440 --> 00:10:53.940
+Definisi baris mengontrol sisi kiri laporan Anda.
+
+00:10:54.360 --> 00:10:57.960
+Ini memberi tahu sistem akun, kategori akun, atau kombinasi dimensi mana yang harus ditarik.
+
+00:10:58.380 --> 00:11:01.060
+Ini juga menentukan nama setiap baris dan di mana total harus muncul.
+
+00:11:01.520 --> 00:11:03.040
+Pikirkan laporan nabar rugi yang normal.
+
+00:11:03.460 --> 00:11:06.240
+Pendapatan di bagian atas, harga pokok penjualan berikutnya, lalu margin kotor.
+
+00:11:06.400 --> 00:11:09.400
+Di bawahnya terdapat beban operasional, dan di bagian paling bawah, hasil bersih.
+
+00:11:09.960 --> 00:11:11.680
+Setiap baris tersebut memerlukan instruksinya sendiri.
+
+00:11:12.040 --> 00:11:15.560
+Pendapatan mungkin mengacu pada sekelompok akun penjualan, sementara harga pokok penjualan mengacu pada akun.
+
+00:11:15.560 --> 00:11:19.240
+Margin kotor tidak mengacu pada akun apapun sama sekali.
+
+00:11:20.020 --> 00:11:23.000
+Margin ini menghitung total dengan mengurangi harga pokok penjualan dari pendapatan.
+
+00:11:23.480 --> 00:11:24.760
+Itulah tugas dari definisi baris.
+
+00:11:25.260 --> 00:11:28.320
+Definisi ini memberi tahu pelaporan keuangan saldo mana yang diposting di setiap baris,
+
+00:11:28.520 --> 00:11:32.260
+dan memberi tahu laporan cara menambah atau mengurangi baris tersebut saat Anda perlu menghitung total.
+
+00:11:33.100 --> 00:11:37.280
+Anda dapat menyusun baris berdasarkan akun utama individu, rentang akun, atau kategori akun utama.
+
+00:11:37.740 --> 00:11:39.360
+Kategori menghemat banyak pekerjaan penyiapan.
+
+00:11:39.740 --> 00:11:43.140
+Sebagai contoh, neraca biasanya memisahkan aset, diabilitas, dan ekuitas.
+
+00:11:43.140 --> 00:11:47.140
+Di dalam aset, Anda mungkin menampilkan kas, biutang, aset tetap, dan inventaris.
+
+00:11:48.040 --> 00:11:50.740
+Jika akun-akun tersebut sudah berada dalam kategori akun utama yang tepat,
+
+00:11:50.880 --> 00:11:55.420
+baris neraca default dapat menggunakan grup tersebut tanpa menggunakan grup tersebut tanpa harus mencantumkan setiap akun satu persen.
+
+00:11:55.560 --> 00:11:56.620
+Itu memberikan desain yang lebih rapat.
+
+00:11:57.000 --> 00:11:59.440
+Keuangan tetap menyimpan akun terpisah untuk saldo terpisah,
+
+00:11:59.720 --> 00:12:02.980
+namun pembaca hanya melihat tingkat detail yang masuk akal untuk pernyataan resmi.
+
+00:12:03.740 --> 00:12:05.880
+Jika mereka memerlukan detail lebih lanjut, mereka dapat melihat lebih lanjut.
+
+00:12:06.140 --> 00:12:08.720
+Pernyataan itu sendiri tidak perlu menjadi buku telepon nomor akun.
+
+00:12:09.360 --> 00:12:11.360
+Baris menjawab satu pertanyaan, apa yang kita laporkan.
+
+00:12:11.360 --> 00:12:14.080
+Kalau menjawab pertanyaan lain, bagaimana kita ingin melihat?
+
+00:12:14.780 --> 00:12:17.080
+Definisi kolom mengontrol informasi yang melintasi halaman.
+
+00:12:18.100 --> 00:12:22.060
+Anda mungkin menampilkan bulan berjalan, hasil tahun berjalan, hasil tahun lalu,
+
+00:12:22.260 --> 00:12:25.660
+anggaran aktual, atau selisih antara aktual dan anggaran.
+
+00:12:26.480 --> 00:12:28.900
+Laporan laba rugi sederhana dapat dimulai dengan kolom deskripsi.
+
+00:12:29.600 --> 00:12:34.320
+Selanjutnya, Anda mungkin menampilkan aktual untuk periode berjalan, lalu tahun berjalan, lalu anggaran, kemudian varian.
+
+00:12:35.360 --> 00:12:37.940
+Kolom varian tersebut menghitung selisih secara otomatis,
+
+00:12:37.940 --> 00:12:41.940
+sehingga manajer tidak perlu membuka Excel dan membuat rumus lain setelah laporan dijalankan.
+
+00:12:42.740 --> 00:12:46.100
+Anda juga dapat menampilkan periode berdampingan, mungkin Januari hingga Desember,
+
+00:12:46.420 --> 00:12:49.940
+mungkin kuartal ini di samping kuartal yang sama tahun lalu, mungkin hasil aktual di samping perakiraan.
+
+00:12:50.720 --> 00:12:52.880
+Baris menentukan subjek dan kolom menentukan tampilan.
+
+00:12:53.440 --> 00:12:56.440
+Satukan kedua bagian tersebut dan Anda mendapatkan sebagian besar laporan keuangan,
+
+00:12:56.600 --> 00:12:59.760
+namun sistem tetap memerlukan tempat di mana Anda menamai laporan dan memberitahu Dynamics 3,
+
+00:12:59.880 --> 00:13:02.780
+memberitahu Dynamics 365 Finance definisi baris dan kolom mana yang digabungkan.
+
+00:13:02.780 --> 00:13:03.900
+Itulah definisi laporan.
+
+00:13:04.800 --> 00:13:08.280
+Definisi laporan menggabungkan baris dan kolom menjadi sesuatu yang dapat dihasilkan oleh pengguna.
+
+00:13:08.700 --> 00:13:11.580
+Definisi ini juga mengontrol pengaturan seperti pembulatan dan bagaimana jumlah negatif.
+
+00:13:12.060 --> 00:13:13.860
+Berikut adalah contoh konkretnya.
+
+00:13:14.600 --> 00:13:17.260
+Anda mungkin membuat definisi baris bernama baris laporan laba rugi,
+
+00:13:17.500 --> 00:13:20.160
+lalu definisi kolom bernama aktual bulanan anggaran dan varians.
+
+00:13:21.020 --> 00:13:25.840
+Definisi laporan menghubungkan semuanya dan memberi nama pada laporan akhir mungkin laporan laba rugi manajemen.
+
+00:13:26.600 --> 00:13:29.080
+Pemisahan itu berguna karena Anda dapat menggunakan kembali bagian-bagian.
+
+00:13:30.340 --> 00:13:34.180
+Satu definisi baris untuk laporan laba rugi bisa digunakan dengan tata letak kolom bulanan,
+
+00:13:34.320 --> 00:13:37.320
+tata letak kolom berjalan, dan tata letak perbandingan tahun sebelumnya.
+
+00:13:38.060 --> 00:13:42.580
+Anda tidak perlu membangun ulang struktur pendapatan dan pengeluaran yang sama setiap kali seseorang mengajukan pertanyaan baru.
+
+00:13:42.900 --> 00:13:44.760
+Beberapa perusahaan memerlukan satu laporan untuk satu.
+
+00:13:45.280 --> 00:13:47.900
+Perusahaan lain memerlukan laporan yang mengikuti struktur perusahaan.
+
+00:13:48.660 --> 00:13:50.100
+Di situ laporan hirarki pelaporan reporting.
+
+00:13:50.420 --> 00:13:53.740
+Hirarki pelaporan memungkinkan Anda mengatur hasil keuangan ke dalam unit-unit laporan.
+
+00:13:53.740 --> 00:13:59.300
+Unit-unit tersebut dapat mewakili entitas hukum, wilayah, departemen, unit bisnis, atau bagian lain dari setelah perusahaan.
+
+00:13:59.620 --> 00:14:01.180
+Bayangkan sebuah grup dengan tiga anak perusahaan.
+
+00:14:01.500 --> 00:14:05.160
+Perusahaan induk ingin melihat setiap anak perusahaan secara terpisah lalu satu total gabungan untuk grup.
+
+00:14:05.400 --> 00:14:10.980
+Hirarki pelaporan dapat menggambarkan struktur tersebut dengan setiap anak perusahaan sebagai unit pelaporan dan total grup diatasnya.
+
+00:14:11.320 --> 00:14:12.660
+Pendekatan yang sama berlaku untuk wilayah.
+
+00:14:12.960 --> 00:14:17.680
+Anda mungkin menampilkan wilayah utara, selatan, dan barat sebagai unit terpisah lalu menyatakan total untuk seluruh perusahaan.
+
+00:14:17.680 --> 00:14:20.720
+Atau seorang pimpinan departemen mungkin hanya perlu melihat unit mereka sendiri,
+
+00:14:20.720 --> 00:14:23.260
+sementara tim keuangan memerlukan tampilan penuh.
+
+00:14:23.360 --> 00:14:26.220
+Satu definisi laporan dapat terhubung ke satu hirarki pelaporan dalam satu waktu,
+
+00:14:26.360 --> 00:14:29.220
+jadi pilih struktur yang sesuai dengan pertanyaan yang perlu dijawab oleh laporan tersebut.
+
+00:14:29.880 --> 00:14:35.320
+Bagi pengguna baru, report designer menyertakan panduan yang membantu Anda mulai membangun bagian-bagian ini tanpa harus menghadapi semua opsi sekaligus.
+
+00:14:35.940 --> 00:14:39.860
+Anda memilih jenis laporan, menyelesaikan pilihan dasar, dan membuat desain awal.
+
+00:14:40.580 --> 00:14:42.360
+Seiring tim keuangan Anda semakin terbiasa,
+
+00:14:42.360 --> 00:14:46.820
+mereka dapat mengedit definisi baris, definisi kolom, definisi laporan, dan hirarki pelaporan secara langsung.
+
+00:14:47.540 --> 00:14:51.600
+Hal itu memberi mereka kendali lebih besar atas perhitungan, tata letak, pengelompokan, dan cara tantilan dibuat.
+
+00:14:52.020 --> 00:14:54.740
+Tujuannya bukan untuk mencoba membangun laporan yang serumit mungkin.
+
+00:14:55.700 --> 00:14:59.020
+Tujuannya adalah membangun laporan di mana setiap baris menjawab pertanyaan bisnis yang nyata,
+
+00:14:59.220 --> 00:15:02.000
+setiap kolom memperjelas perbandingan, dan angkanya sesuai dengan buku besar.
+
+00:15:02.000 --> 00:15:10.000
+Sebuah laporan baru menjadi berguna jika orang dapat membacanya, mempertanyakannya, dan percaya apa yang mereka lihat.
+
+00:15:10.940 --> 00:15:14.920
+Setelah membuat laporan keuangan, Anda tidak serta-merta terkunci pada satu halaman statis.
+
+00:15:15.640 --> 00:15:19.300
+Anda dapat mengubah tanggal laporan, memilih mata uang, beralih antara ringkasan dan detail,
+
+00:15:19.440 --> 00:15:21.680
+serta menerapkan filter untuk dimensi atau atribut keuangan.
+
+00:15:22.200 --> 00:15:26.460
+Artinya, laporan yang sama dapat menjawab pertanyaan yang berbeda tanpa perlu menyalinnya ke dalam buku kerjaban.
+
+00:15:26.900 --> 00:15:30.380
+Seorang manajer keuangan mungkin memulai dengan laporan laba rugi perusahaan secara penuh untuk bulan bekerja.
+
+00:15:30.380 --> 00:15:34.220
+Kemudian, mereka dapat memfilternya ke satu unit bisnis, melihatnya dalam mata uang berbeda,
+
+00:15:34.320 --> 00:15:35.880
+atau mengubah tanggal untuk membandingkan perwilai.
+
+00:15:36.300 --> 00:15:37.380
+Desain laporan tetap sama.
+
+00:15:37.840 --> 00:15:39.240
+Tampilannya berubah sesuai dengan pertanyaan Anda.
+
+00:15:39.760 --> 00:15:40.600
+Dua tampilan penting di sini.
+
+00:15:41.120 --> 00:15:45.940
+Tampilan ringkasan memberikan gambaran keuangan tingkat tinggi, total pendapatan, total biaya, dan hasil bersih kita.
+
+00:15:46.440 --> 00:15:49.820
+Tampilan detail memberi Anda lebih banyak baris untuk diperiksa jika totalnya tidak terlihat benar.
+
+00:15:50.080 --> 00:15:51.100
+Dan itu membawa kita ke fitur.
+
+00:15:51.340 --> 00:15:53.960
+Bayangkan jika baris biaya operasional terlihat jauh lebih tinggi daripada Anda.
+
+00:15:53.960 --> 00:15:58.400
+Alih-alih mengirim email, mengeksplor daftar buku besar, dan mencoba mencocokkan nomor akun secara manual.
+
+00:15:58.680 --> 00:16:00.400
+Anda dapat menelusuri jumlah tersebut dari laporan.
+
+00:16:00.680 --> 00:16:03.300
+Anda dapat mengikuti saldo tersebut hingga ke transaksi di baliknya.
+
+00:16:04.140 --> 00:16:08.160
+Itu memungkinkan Anda melihat entry jurnal, tanggal, voucher, dan detail lain yang membentuk angka tersebut.
+
+00:16:08.660 --> 00:16:12.100
+Laporan menjadi titik awal untuk diskusi bukan jauhan akhir yang dicetak di atas kertas.
+
+00:16:12.720 --> 00:16:14.200
+Ini sangat membantu selama akhir bulan.
+
+00:16:14.700 --> 00:16:16.740
+Seseorang bertanya, oh mengapa biaya gudang naik?
+
+00:16:16.740 --> 00:16:25.360
+Anda mulai dengan tampilan gudang, temukan baris pengeluaran, telusuri transaksinya, dan lihat apakah kenaikan tersebut berasal dari sewa, perbaikan, staff, atau biaya sekali bayar.
+
+00:16:26.020 --> 00:16:29.880
+Tim keuangan menghabiskan lebih sedikit waktu untuk mencari sumber dan lebih banyak waktu untuk menjelaskan hasilnya.
+
+00:16:30.400 --> 00:16:31.880
+Laporan juga dapat dijalankan setelah jadwal.
+
+00:16:32.400 --> 00:16:36.120
+Sebuah tim mungkin membuat laporan harian, mingguan, bulanan, atau tahunan datang gantung pada pekerjaan.
+
+00:16:36.480 --> 00:16:43.520
+Paket manajemen bulanan adalah contoh yang jelas, tetapi jadwal juga dapat membantu tim menyiapkan tinjauan anggaran rutin atau laporan grup berkala atau laporan grup berkala.
+
+00:16:43.520 --> 00:16:50.820
+Untuk perusahaan dengan beberapa entitas hukum, laporan keuangan dapat mendukung laporan litas entitas dan dapat mengonversi mata uang untuk kebutuhan pelaporan.
+
+00:16:51.800 --> 00:16:58.020
+Tim keuangan grup mungkin memerlukan laporan setiap perusahaan dalam mata uang lokalnya, tetapi pimpinan mungkin memerlukan satu tampilan dalam mata uang pelaporan.
+
+00:16:58.640 --> 00:17:03.600
+Strukturnya perlu pengaturan yang cermat, namun pembaca tidak perlu menyusun ulang laporan dari file terpisah setiap bulan.
+
+00:17:04.180 --> 00:17:06.360
+Berikut adalah satu detail pemeliharaan yang patut diingat.
+
+00:17:07.260 --> 00:17:10.640
+Laporan yang baru dibuat menerima tanggal keduluar se-90 hari secara default.
+
+00:17:10.640 --> 00:17:16.080
+Pengguna dengan izin keamanan yang tepat dapat mengubah periode tersebut termasuk mengatur agar laporan tidak pernah kedaluar se.
+
+00:17:16.340 --> 00:17:19.100
+Orang yang membuat laporan dapat menghapus laporannya sendiri.
+
+00:17:19.720 --> 00:17:25.700
+Pengguna dengan tugas keamanan pelaporan keuangan dapat menghapus laporan yang dibuat oleh pengguna lain dan mengelola pengaturan kedaluar se-laporan.
+
+00:17:25.920 --> 00:17:30.380
+Itu melindungi daftar laporan agar tidak menjadi arsi panjang dari laporan lama yang tidak dikenali siapapun.
+
+00:17:30.900 --> 00:17:32.260
+Namun berhatilah juga dengan laporan lama.
+
+00:17:32.260 --> 00:17:38.820
+Mulai dari risk laporan keuangan 10.45 saat Anda menjalankan ulang laporan yang disimpan atau menusuri detailnya.
+
+00:17:39.040 --> 00:17:41.700
+Dynamics tiga transaksi terkini, dynamics terkini, taking.
+
+00:17:42.420 --> 00:17:48.240
+Jika seseorang mengedit transaksi dasar setelah laporan dijalankan, detail drill down bisa berbeda dari apa yang Anda lihat sebelumnya.
+
+00:17:49.080 --> 00:17:52.800
+Saldo tingkat atas yang tersimpan cenderung tidak berubah, namun detail pendukungnya bisa saja berubah.
+
+00:17:52.800 --> 00:18:01.280
+Jadi jika bagian keuangan membutuhkan saringan audit yang tidak dapat diubah untuk periode tutup buku ekspor laporan final ke Excel atau PDF dan simpan file tersebut sesuai proses pencatatan normal Anda.
+
+00:18:01.820 --> 00:18:03.740
+Satu peringatan terakhir mengenai add-in itu sendiri.
+
+00:18:04.460 --> 00:18:12.420
+Jika seseorang menghapus add-in pelaporan keuangan, Dynamics 365 Finance akan menghapus secara permanen laporan, desain laporan, dan konfigurasi yang dibuat sebelumnya.
+
+00:18:13.080 --> 00:18:15.400
+Microsoft tidak menyediakan dukungan pemulihan untuk tindakan tersebut.
+
+00:18:15.740 --> 00:18:19.900
+Anggap ini seperti menghapus ruang kerja keuangan bersama, bukan seperti menghapus aplikasi dari ponsel Anda.
+
+00:18:19.900 --> 00:18:23.840
+Laporan resmi membantu bagian keuangan menjelaskan angka-angka dalam format yang terkontrol.
+
+00:18:24.200 --> 00:18:27.660
+Untuk pemindahan visual yang lebih cepat dan pertanyaan tren, alat lain dapat digunakan bersama.
+
+00:18:28.580 --> 00:18:30.120
+Di mana Power BI dan Excel berperan?
+
+00:18:30.660 --> 00:18:32.220
+Jadi di mana sebenarnya posisi Power BI dan Excel?
+
+00:18:32.920 --> 00:18:35.940
+Pelaporan keuangan menangani laporan resmi Anda, yaitu yang dibutuhkan oleh auditor.
+
+00:18:36.460 --> 00:18:39.380
+Power BI menangani grafik, tren, dan tampilan manajemen yang interaktif.
+
+00:18:40.020 --> 00:18:42.200
+Pendapatan berdasarkan wilayah anggaran dibandingkan dengan waktu.
+
+00:18:42.580 --> 00:18:43.740
+Excel juga masih memiliki perhentik.
+
+00:18:44.040 --> 00:18:48.940
+Tim Anda menggunakannya untuk pemeriksaan, perhitungan, dan berbagi angka dalam format yang sudah dikenal semua orang.
+
+00:18:48.940 --> 00:18:52.680
+Ruang kerja analisis keuangan menyertakan konten Power BI untuk tampilan umum,
+
+00:18:52.820 --> 00:18:55.200
+namun buatlah setiap dashboard fokus pada satu pertanyaan saja.
+
+00:18:55.800 --> 00:18:57.280
+Jangan menumpuk semuanya di layar yang sama.
+
+00:18:57.740 --> 00:19:00.400
+Bagian terbaiknya, semua alat ini membaca dari catatan keuangan yang sama.
+
+00:19:00.940 --> 00:19:01.880
+Semuanya bekerja bersama.
+
+00:19:02.940 --> 00:19:03.420
+Penutup
+
+00:19:03.420 --> 00:19:05.300
+Bangun buku besar terlebih dahulu
+
+00:19:05.300 --> 00:19:08.420
+Laporan yang jelas tidak dimulai dari tatatan.
+
+00:19:08.780 --> 00:19:09.620
+Laporan dibelih jauh sebelum.
+
+00:19:10.060 --> 00:19:12.160
+Akun utama yang rapi, dimensi yang dapat digunakan kembali.
+
+00:19:12.440 --> 00:19:14.140
+Tanpa fondasi tersebut hal-halnya tidak akan berat.
+
+00:19:14.700 --> 00:19:15.820
+Mulailah dengan laporan default.
+
+00:19:16.280 --> 00:19:19.440
+Uji dengan saldo nyata Anda, lalu ubah hanya apa yang dibutuhkan perusahaan Anda.
+
+00:19:20.540 --> 00:19:24.600
+Berlanggananlah untuk mendapatkan lebih banyak pengetahuan Microsoft dari Mircopeters di M365FM.
+
+00:19:24.800 --> 00:19:27.360
+Dan bagikan ini kepada seseorang yang masih berpikir pelaporan keuangan dinamik,
+
+00:19:27.360 --> 00:19:28.920
+M365FM hanya berawal dan berakhir.

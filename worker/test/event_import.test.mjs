@@ -30,7 +30,10 @@ async function setup() {
   const puts = [], env = { DB: db, SITE: "https://site.test", IMPORT_OPTS: { fetch, sleep: async () => {} }, PAGES: { put: async (k) => { puts.push(k); } } };
   return { raw, env, pages, calls, n, puts, opts: env.IMPORT_OPTS };
 }
-const user = (raw, id, name, handle, role) => { raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES(?,'github',?,?,1)").run(id, "s" + id, name); if (handle) raw.prepare("INSERT INTO profiles(user_id,public,handle,updated) VALUES(?,1,?,1)").run(id, handle); return { id, name }; };
+const user = (raw, id, name, handle, role) => { raw.prepare("INSERT INTO users(id,provider,sub,name,created) VALUES(?,'github',?,?,1)").run(id, "s" + id, name); if (handle) raw.prepare("INSERT INTO profiles(user_id,public,handle,updated) VALUES(?,1,?,1)").run(id, handle); return { id, name, pro: true }; };   // pro = bestaetigtes Mitglied (Programm verifiziert, wie util.js loadUser): deren Events brauchen keine Freigabe (Pruefliste, 0047)
+// Entscheidung "Uebernehmen" fuer alle neuen Events (wie die Route /api/admin/events/review, nur ohne Umweg): die Tests ab hier pruefen Import und Zusammenfuehren, nicht die Pruefliste
+const accept = (raw) => raw.prepare("UPDATE events SET review='approved',review_at=1,public=CASE WHEN start<>'' THEN 1 ELSE 0 END WHERE review='pending'").run();
+const newMember = (...a) => { const u = user(...a); delete u.pro; return u; };   // Mitglied ohne Programm und ohne Punkte: noch nicht bestaetigt
 const SZ = "https://sessionize.com/api/v2/abc123/view/All";
 
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,39}$/;   // wie events.js und die Routen /api/event/<handle>
@@ -518,7 +521,7 @@ test("Speaker-Import (317-07): gleicher Name reicht nie fuer ein fremdes Event o
 test("Eigentum (317-08): was Veranstalter oder Admin bearbeitet haben, ueberschreibt kein Import; importiertes Ende bleibt im Formular speicherbar", async () => {
   const { raw, env, pages, opts } = await setup(), ev = via(handleEvents, env), imp = via(handleEventImport, env);
   const orga = user(raw, 1, "Orga", "orga-p"), admin = { ...user(raw, 3, "Admin", "admin-p"), admin: true };
-  cdPages(pages, fx("communitydays_list.html")); await runCommunityDays(env, { ...opts, today: "2026-05-01" });
+  cdPages(pages, fx("communitydays_list.html")); await runCommunityDays(env, { ...opts, today: "2026-05-01" }); accept(raw);
   const row = () => raw.prepare("SELECT * FROM events WHERE title LIKE 'Hamburg%' AND merged_into=0").get(), first = row();
   assert.equal(first.start, "2026-05-16T09:00"); assert.equal(first.end, "");   // "2026-05-16" als Ende eines Events mit Uhrzeit sagt nichts aus und wuerde im Formular als "Ende vor Beginn" scheitern
   assert.equal(normEnd("2026-05-16T09:00", "2026-05-17"), "2026-05-17"); assert.equal(normEnd("2026-05-16T09:00", "2026-05-16T17:00"), "2026-05-16T17:00"); assert.equal(normEnd("2026-05-16", "2026-05-15"), "");
@@ -616,7 +619,7 @@ test("Adressen (317-13): erzeugte Handles bestehen nur aus a-z, 0-9 und Bindestr
   const { raw, env } = await setup(), db = env.DB, imp = via(handleEventImport, env), u = user(raw, 1, "Orga", "orga-p");
   const titles = ["Community Day Gießen 2027", "Azure Day Łódź", "Global Azure 東京", "Power Platform Tag Москва", "東京 サミット", "Azure Dag København", "Ein sehr langer Titel für eine Veranstaltung der Microsoft Community in Süddeutschland 2027"];
   for (const [i, title] of titles.entries()) { const r = await upsertEvent(db, { title, start: `2027-04-${10 + i}`, city: "Ort", sources: [] }); assert.equal(r.action, "created"); assert.match(r.handle, HANDLE, title); }
-  assert.equal(new Set(raw.prepare("SELECT handle FROM events").all().map((r) => r.handle)).size, titles.length);
+  accept(raw); assert.equal(new Set(raw.prepare("SELECT handle FROM events").all().map((r) => r.handle)).size, titles.length);
   assert.match(raw.prepare("SELECT handle FROM events WHERE title='東京 サミット'").get().handle, /^event-[0-9a-f]{8}$/);
   const h = raw.prepare("SELECT handle FROM events WHERE title LIKE '%Gießen%'").get().handle;
   assert.equal((await imp(u, `/api/event/${h}/claim`, "POST", {}))[0], 200);   // die Route findet das Event
@@ -651,7 +654,7 @@ test("Unbekanntes bleibt unbekannt (317-16): Import-Events sind weder 'kostenlos
   const { raw, env, pages, opts } = await setup(), ev = via(handleEvents, env), admin = { ...user(raw, 3, "Admin", "admin-p"), admin: true };
   cdPages(pages, ldList([{ name: "Azure Summit Seattle", startDate: "2026-11-05T09:00", url: "https://communitydays.org/events/seattle", description: "Azure", location: { "@type": "Place", address: { addressLocality: "Seattle" } } },
     { name: "Power Platform Free Day", startDate: "2026-11-06", url: "https://communitydays.org/events/free", isAccessibleForFree: true, description: "Power Platform", location: { "@type": "Place", address: { addressLocality: "Bonn" } } }]));
-  await runCommunityDays(env, { ...opts, today: "2026-10-01" });
+  await runCommunityDays(env, { ...opts, today: "2026-10-01" }); accept(raw);
   const sea = raw.prepare("SELECT * FROM events WHERE title LIKE '%Seattle'").get();
   assert.deepEqual([sea.free, sea.tz, sea.unclaimed, sea.public], [-1, "", 1, 1]); assert.equal(raw.prepare("SELECT free FROM events WHERE title LIKE '%Free Day'").get().free, 1);   // nur was die Quelle sagt
   const exp = JSON.parse(await (await handleEvents(env, new Request("https://x/api/events/export"), new URL("https://x/api/events/export"), "/api/events/export", null, J)).text()).events;
@@ -673,6 +676,7 @@ test("Abhaengige Tabellen (317-17): jede Tabelle mit event_id steht in EVENT_TAB
   const withEventId = raw.prepare("SELECT name FROM sqlite_master WHERE type='table'").all().map((t) => t.name).filter((t) => raw.prepare(`PRAGMA table_info(${t})`).all().some((c) => c.name === "event_id"));
   assert.deepEqual(withEventId.filter((t) => t !== "event_source").sort(), EVENT_TABLES.map((x) => x.table).sort());   // event_source wird gesondert gefuehrt (Quellen werden kopiert, nicht verschoben)
   const a = await upsertEvent(db, { title: "Alpha Con", start: "2026-01-10", city: "Berlin", sources: [{ kind: "sessionize_event", ref: "alpha" }] }), b = await upsertEvent(db, { title: "Alpha Conference", start: "2026-01-10", city: "Berlin", sources: [{ kind: "sessionize_event", ref: "alpha-conf" }] });
+  accept(raw);
   raw.exec(`INSERT INTO event_attendees(event_id,user_id,status,created) VALUES(${b.id},7,'going',1),(${a.id},7,'going',1),(${b.id},8,'going',1);
     INSERT INTO event_roles(event_id,user_id,role,added_by,created) VALUES(${b.id},8,'helfer',1,1); INSERT INTO event_settings(event_id) VALUES(${b.id});`);
   const m = await mergeEvents(db, b.id, a.id, 1); assert.equal(m.ok, true);
@@ -694,7 +698,7 @@ test("Derselbe Datensatz wird an seiner Geschichte wiedererkannt: vom Veranstalt
   // (1) Veranstalter uebernimmt das Import-Event und benennt es so um, dass weniger als die Haelfte der Woerter bleibt
   const a = await setup(), ev = via(handleEvents, a.env), imp = via(handleEventImport, a.env), orga = user(a.raw, 1, "Olga Org", "olga"), admin = { ...user(a.raw, 9, "Admin", "admin-p"), admin: true };
   const hh = cdEvent({ name: "Hamburg Copilot Day 2026", startDate: "2026-05-16T09:00", url: "https://communitydays.org/events/hamburg-copilot-day", location: { address: { addressLocality: "Hamburg" } } });
-  await cdRun(a, [hh], "2026-01-01");
+  await cdRun(a, [hh], "2026-01-01"); accept(a.raw);
   await imp(orga, "/api/event/hamburg-copilot-day-2026/claim", "POST", {}); await imp(admin, "/api/admin/events/claim", "POST", { event_id: 1, user_id: 1, ok: true });
   assert.equal((await ev(orga, "/api/event", "POST", { handle: "hamburg-copilot-day-2026", title: "Hamburger Copilot-Tag 2026", start: "2026-05-16T09:00", mode: "onsite", location: "Hamburg" }))[0], 200);
   for (const day of ["2026-01-02", "2026-01-03", "2026-01-04"]) { const r = await cdRun(a, [hh], day); assert.deepEqual([r.created, r.queued, r.merged], [0, 0, 1], day); }
@@ -828,7 +832,7 @@ test("Geloescht bleibt geloescht, auch wenn die Quelle das Event danach verlegt"
 test("Import-Events ohne Veranstalter: keine Anmeldung und kein Session-Vorschlag ueber M365.FM (Route und MCP); nach dem Uebernehmen geht beides", async () => {
   const s = await setup(), ev = via(handleEvents, s.env), imp = via(handleEventImport, s.env);
   const orga = user(s.raw, 1, "Olga Org", "olga"), guest = user(s.raw, 2, "Gast Member", "gast"), admin = { ...user(s.raw, 9, "Admin", "admin-p"), admin: true };
-  await cdRun(s, [cdEvent()], "2026-01-01");
+  await cdRun(s, [cdEvent()], "2026-01-01"); accept(s.raw);
   assert.deepEqual(await ev(guest, "/api/event/azure-day-bonn/register", "POST", { visible: false }), [409, { error: "unclaimed" }]);
   assert.deepEqual(await ev(guest, "/api/event/azure-day-bonn/session", "POST", { title: "Mein Vorschlag", abstract: "x", speakers: [] }), [409, { error: "unclaimed" }]);
   const mcp = rpcFor(s.env, s.raw, 2); assert.equal((await mcp("register_for_event", { event: "azure-day-bonn" })).error, "unclaimed");
@@ -1035,4 +1039,79 @@ test("F13 (#319) Admin-Routen der Events und manage_event_duplicates laufen uebe
   assert.equal((await call(admin, "/api/admin/events/unmerge", "POST", { log: m[1].log }))[0], 200);
   assert.equal((await call(admin, "/api/admin/events/unmerge", "POST", { log: m[1].log }))[0], 404, "zweimal geht nicht und wird nicht protokolliert");
   assert.deepEqual(log().map((r) => [r.action, r.kind, r.item_id, r.after.status || r.after.undone]), [["dupes.merge", "dedupe", String(q.lastInsertRowid), "merged"], ["dupes.merge", "merge_log", String(m[1].log), 1]]);
+});
+
+// communitydays.org (Next.js): Datensaetze im eingebetteten JSON, Form wie am 10.11.2026 gelesen (tools/url_peek.py struct:)
+const nextPage = (pageProps) => `<html><body><div id="__next">x</div><script id="__NEXT_DATA__" type="application/json">${JSON.stringify({ props: { pageProps, __N_SSG: true }, page: "/events", query: {}, buildId: "b1" })}</script></body></html>`;
+const cdRec = (o = {}) => ({ RowKey: "bea9912b", title: "Update Conference Prague 2026", slug: "2027-11-12/update-conference-prague-2026", start_date: "2027-11-12T08:00", end_date: "2027-11-13T18:00", preview_image: "https://cdostorageprod.blob.core.windows.net/x.png", city: "Prague", state_province: "Prague", country: "cz", event_type: "Hybrid", timezone: "Europe/Prague", cost_tiers: ["Paid"], status: "published", website: "https://prague.updateconference.net/", latitude: 50.1, longitude: 14.5, ...o });
+const CD_ROBOTS = "# *\nUser-agent: *\nDisallow: /app/*\nDisallow: /diagnostics/*\nDisallow: /sign-in\nDisallow: /blocked\nDisallow: /forbidden\nDisallow: /event/*/*/*\n\nHost: https://www.communitydays.org\nSitemap: https://www.communitydays.org/sitemap.xml\n";
+const cdNext = (pages, { list, home, detail = {} } = {}) => {
+  pages["https://communitydays.org/robots.txt"] = CD_ROBOTS;
+  if (list) pages["https://communitydays.org/events"] = nextPage({ initialEvents: list });
+  if (home) pages["https://communitydays.org/"] = nextPage({ upcomingEvents: home });
+  for (const [slug, ev] of Object.entries(detail)) pages["https://communitydays.org/event/" + slug] = nextPage({ event: ev, sponsors: [], runEventsSponsors: [] });
+};
+test("Community Days (Next.js): Liste, Startseite und Event-Seite ergeben vollstaendige Kandidaten; robots erlaubt /event/<Datum>/<slug>", async () => {
+  assert.equal(robotsAllowed(CD_ROBOTS, "/event/2026-11-23/collabdays-oslo-2026"), true);
+  assert.equal(robotsAllowed(CD_ROBOTS, "/event/2026-11-23/collabdays-oslo-2026/sessions"), false);
+  assert.equal(robotsAllowed(CD_ROBOTS, "/events"), true);
+  const oslo = cdRec({ RowKey: "184a1a95", title: "CollabDays Oslo 2027", slug: "2027-11-23/collabdays-oslo-2027", start_date: "2027-11-23T09:00", end_date: "2027-11-23T21:00", city: "Oslo", country: "no", event_type: "In Person", cost_tiers: ["Free", "Paid"], website: "https://collabdaysoslo.com/" });
+  const virt = cdRec({ RowKey: "v1", title: "AI Virtual Days 2027", slug: "2027-11-13/ai-virtual-days-2027", start_date: "2027-11-13T08:00", end_date: "2027-11-14T18:00", city: "", country: "es", event_type: "Virtual", cost_tiers: ["Free"], website: "" });
+  const past = cdRec({ RowKey: "p1", title: "Fabric Day", slug: "2026-10-14/fabric-day", start_date: "2026-10-14T08:00", end_date: "2026-10-14T17:00", city: "Oslo", country: "no" });
+  const draft = cdRec({ RowKey: "d1", title: "Draft Day", slug: "2027-12-01/draft-day", start_date: "2027-12-01T08:00", end_date: "", status: "draft" });
+  const s = await setup();
+  cdNext(s.pages, { list: [cdRec(), oslo, virt, draft], home: [{ ...cdRec(), registration_url: "https://prague.updateconference.net/register?utm_source=communitydays&utm_medium=referral&x=1", tagline: ".NET, Cloud, Security, AI", hashtag: "UCP27" }, past],
+    detail: { [oslo.slug]: { ...oslo, start_date: "2027-11-23T09:00:00.000+01:00", end_date: "2027-11-23T21:00:00.000+01:00", contact_email: "orga@example.org", address1: "Dronning Eufemias gate 71", home_content: "<p><strong>Welcome to CollabDays Oslo!</strong></p><p>Microsoft 365, SharePoint, Teams and Power Platform.</p>", registration_url: "https://event.checkin.no/230688/collabdays-oslo-2027?utm_source=communitydays" } } });
+  const rep = await runCommunityDays(s.env, { ...s.opts, dry: true, today: "2026-11-10" });
+  assert.equal(rep.found, 3, JSON.stringify(rep)); assert.equal(rep.microsoft, 3); assert.equal(rep.created, 3);   // vorbei und Entwurf fehlen
+  assert.ok(rep.notes.includes("list:/events:3") && rep.notes.includes("list:/:1") && rep.notes.some((n) => n.startsWith("detail:")), rep.notes.join(" "));
+  // eingespielt (kein Probelauf)
+  const s2 = await setup(); cdNext(s2.pages, { list: [cdRec(), oslo, virt], home: [{ ...cdRec(), registration_url: "https://prague.updateconference.net/register?utm_source=communitydays&x=1" }], detail: { [oslo.slug]: { ...oslo, contact_email: "orga@example.org", home_content: "<p>Welcome to CollabDays Oslo!</p>", registration_url: "https://event.checkin.no/230688/collabdays-oslo-2027?utm_source=communitydays" } } });
+  const r2 = await runCommunityDays(s2.env, { ...s2.opts, today: "2026-11-10" });
+  assert.equal(r2.created, 3, JSON.stringify(r2));
+  const ev = (t) => s2.raw.prepare("SELECT * FROM events WHERE title=?").get(t);
+  const pr = ev("Update Conference Prague 2026"), os = ev("CollabDays Oslo 2027"), vi = ev("AI Virtual Days 2027");
+  assert.deepEqual([pr.mode, pr.location, pr.country, pr.url, pr.tickets_url, pr.free, pr.source, pr.unclaimed], ["hybrid", "Prague", "Czechia", "https://prague.updateconference.net/", "https://prague.updateconference.net/register?x=1", 0, "communitydays", 1]);
+  assert.equal(pr.source_url, "https://communitydays.org/event/2027-11-12/update-conference-prague-2026");
+  assert.deepEqual([os.mode, os.location, os.country, os.free, os.tickets_url], ["onsite", "Oslo", "Norway", -1, "https://event.checkin.no/230688/collabdays-oslo-2027"]);
+  assert.match(os.about, /Welcome to CollabDays Oslo/);
+  assert.deepEqual([vi.mode, vi.location, vi.free], ["online", "", 1]);
+  assert.deepEqual(s2.raw.prepare("SELECT ref FROM event_source WHERE kind='communitydays' ORDER BY ref").all().map((x) => x.ref).sort(), ["communitydays.org/event/2027-11-12/update-conference-prague-2026", "communitydays.org/event/2027-11-13/ai-virtual-days-2027", "communitydays.org/event/2027-11-23/collabdays-oslo-2027"].sort());
+  // Datenschutz: aus Event-Seiten werden nur die gelesenen Felder zwischengespeichert (keine Kontakt-Adresse, keine Anschrift)
+  const cache = s2.raw.prepare("SELECT body FROM import_cache").all().map((x) => x.body).join("\n");
+  assert.ok(!/orga@example\.org|Dronning|latitude|preview_image/.test(cache));
+  assert.ok(/"cdv":1/.test(cache));
+});
+test("Community Days (Next.js): Kontingent - eingespielt wird nur, wessen Event-Seite gelesen wurde; alle bekommen ihre Beschreibung, der Durchgang steht nie", async () => {
+  const many = Array.from({ length: 20 }, (_, i) => cdRec({ RowKey: "r" + i, title: `Azure Community Day ${String(i).padStart(2, "0")}`, slug: `2027-0${1 + (i % 9)}-1${i % 10}/acd-${i}`, start_date: `2027-0${1 + (i % 9)}-1${i % 10}T09:00`, end_date: "", city: "City" + i, country: "de", website: "" }));
+  const s = await setup(); cdNext(s.pages, { list: many, detail: Object.fromEntries(many.map((r) => [r.slug, { ...r, home_content: `<p>About ${r.title}</p>` }])) });
+  const runs = [];
+  for (let k = 0; k < 15; k++) { const r = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10", maxRequests: 6 }); if (r.skipped_run) break; runs.push(r); assert.equal(r.fetching, undefined, JSON.stringify(r)); assert.ok(r.created + r.merged + r.queued <= 12); }
+  assert.ok(runs.length >= 3, JSON.stringify(runs.map((r) => r.notes)));   // 6 Abrufe je Lauf: mehrere Laeufe, keiner spielt ungelesene Events ein
+  const rows = s.raw.prepare("SELECT title,about FROM events WHERE source='communitydays'").all();
+  assert.equal(rows.length, 20); assert.deepEqual(rows.filter((x) => !/About Azure/.test(x.about)).map((x) => x.title), []);
+  // Kontingent schon verbraucht (z. B. vom Sessionize-Teil desselben Laufs): die Listendaten werden trotzdem eingespielt, der Durchgang kommt voran
+  const s2 = await setup(); cdNext(s2.pages, { list: many });
+  await runCommunityDays(s2.env, { ...s2.opts, today: "2026-11-10", dry: true, maxRequests: 3 });   // fuellt nur den Cache von robots.txt und der Listen
+  const r2 = await runCommunityDays(s2.env, { ...s2.opts, today: "2026-11-10", state: { last: {}, count: 99 } });
+  assert.equal(r2.created + r2.merged + r2.queued, 12, JSON.stringify(r2)); assert.ok(r2.notes.some((n) => /^detail:0\/\d+:budget$/.test(n)), r2.notes.join(" "));
+});
+test("Community Days (Next.js): fallen alle gelesenen Seiten weg (abgesagt), spielt der Lauf keine ungelesenen Events ein", async () => {
+  const many = Array.from({ length: 24 }, (_, i) => cdRec({ RowKey: "q" + i, title: `Azure Day ${String(i).padStart(2, "0")}`, slug: `2027-03-${String(1 + i).padStart(2, "0")}/azure-day-${String(i).padStart(2, "0")}`, start_date: `2027-03-${String(1 + i).padStart(2, "0")}T09:00`, end_date: "", city: "C" + i, country: "de", website: "" }));
+  const s = await setup(); cdNext(s.pages, { list: many, detail: Object.fromEntries(many.map((r, i) => [r.slug, i < 9 ? { ...r, status: "cancelled" } : { ...r, home_content: `<p>About ${r.title}</p>` }])) });
+  for (let k = 0; k < 15; k++) { const r = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10", maxRequests: 12 }); if (r.skipped_run) break; }
+  const rows = s.raw.prepare("SELECT title,about FROM events WHERE source='communitydays'").all();
+  assert.equal(rows.length, 15); assert.deepEqual(rows.filter((x) => !/About Azure/.test(x.about)).map((x) => x.title), []);
+});
+test("Community Days (Next.js): Praesenz ohne Ort bleibt vor Ort, Seite meldet abgesagt, Website ohne Schema", async () => {
+  const inp = cdRec({ RowKey: "b1", title: "Bergen Power Platform Day", slug: "2027-05-02/bergen-pp-day", start_date: "2027-05-02T09:00", end_date: "", city: "", country: "no", event_type: "In Person", website: "www.bergenppday.no", registration_url: "event.checkin.no/1/bergen?utm_source=x" });
+  const can = cdRec({ RowKey: "c1", title: "Oslo Copilot Day", slug: "2027-05-03/oslo-copilot-day", start_date: "2027-05-03T09:00", end_date: "", city: "Oslo", country: "no", event_type: "In Person" });
+  const rel = cdRec({ RowKey: "x1", title: "Relative Day Azure", slug: "2027-05-04/relative-day", start_date: "2027-05-04T09:00", end_date: "", city: "Bonn", country: "de", website: "/foo/bar", registration_url: "javascript:alert(1)" });
+  const s = await setup(); cdNext(s.pages, { list: [inp, can, rel], detail: { [inp.slug]: inp, [can.slug]: { ...can, status: "cancelled" }, [rel.slug]: rel } });
+  const r = await runCommunityDays(s.env, { ...s.opts, today: "2026-11-10" });
+  assert.equal(r.created, 2, JSON.stringify(r));
+  const ev = (t) => s.raw.prepare("SELECT * FROM events WHERE title=?").get(t);
+  assert.equal(ev("Oslo Copilot Day"), undefined);   // die Event-Seite sagt abgesagt
+  const b = ev("Bergen Power Platform Day"); assert.deepEqual([b.mode, b.location, b.country, b.url, b.tickets_url], ["onsite", "", "Norway", "https://www.bergenppday.no/", "https://event.checkin.no/1/bergen"]);
+  const x = ev("Relative Day Azure"); assert.deepEqual([x.url, x.tickets_url], ["https://communitydays.org/event/2027-05-04/relative-day", ""]);   // nie relativ zur Event-Seite, nie javascript:
 });

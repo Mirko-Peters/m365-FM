@@ -1,0 +1,895 @@
+WEBVTT
+
+00:00:00.530 --> 00:00:06.870
+Listo para 10 días de Microsoft 365, Copilot IA, Azure y las personas que están dando forma al futuro del trabajo.
+
+00:00:07.830 --> 00:00:12.330
+Este enero, M365 con regresa y venimos con más fuerza. Y venimos fuerza.
+
+00:00:12.970 --> 00:00:18.090
+Una hacia nosotros para sesiones en vivo, demostraciones reales y conocimientos prácticos de MVP y expertos de la industria de todo el mundo.
+
+00:00:18.930 --> 00:00:21.290
+Nada de diapositivas genéricas ni tecnicismos interminables.
+
+00:00:22.010 --> 00:00:28.830
+Abordaremos los desafíos reales, Copilot Studio, agentes de IA, fábric, seguridad, gobernanza y automatización.
+
+00:00:28.830 --> 00:00:34.410
+Ya sea usted un profesional de TI, desarrollador o líder empresarial, hay sesiones diseñadas para usted.
+
+00:00:35.610 --> 00:00:39.990
+Con 10 días completos, puede explorar diversas tecnologías y conectar con una comunidad global.
+
+00:00:40.930 --> 00:00:44.330
+Véalo en vivo y lleve perspectivas prácticas de vuelta a su organización.
+
+00:00:45.230 --> 00:00:48.870
+Enero de 2027. 10 días. Una comunidad Microsoft.
+
+00:00:49.490 --> 00:00:52.910
+Las inscripciones ya están abiertas. Reserve su lugar hoy mismo.
+
+00:00:53.910 --> 00:00:58.170
+Eso es m365.net.
+
+00:01:00.240 --> 00:01:04.540
+Únese ahora en m365.net y nos veremos en vivo en enero.
+
+00:01:05.020 --> 00:01:09.960
+La mayoría de los administradores no se dan cuenta de que Copilot no es solo una función nueva y brillante, es un objetivo inconstante movimiento.
+
+00:01:10.520 --> 00:01:13.960
+Microsoft actualiza frecuentemente cómo interactúan los permisos, complementos y licencias.
+
+00:01:14.100 --> 00:01:17.980
+Y si no presta atención, puede terminar con brechas de control o incluso una exposición involuntaria de datos.
+
+00:01:17.980 --> 00:01:25.060
+En esta sesión repasaremos la configuración que Microsoft cada vez destaca, pero que determina cómo experimentan realmente Copilot sus usuarios su usuario.
+
+00:01:25.520 --> 00:01:31.460
+Cubriremos controles de acceso web, riesgos de licencias, limitaciones de edge, brechas en loop y DLP y cómo prepararse para los agentes de Copilot.
+
+00:01:32.020 --> 00:01:37.440
+En el camino, le mostraré la única configuración que cambia cómo Copilot maneja el contenido web externo y exactamente dónde encontrarla.
+
+00:01:37.440 --> 00:01:39.740
+Y con ese primer control oculto es con lo que comenzaremos.
+
+00:01:40.480 --> 00:01:41.740
+El interruptor oculto de acceso web.
+
+00:01:42.120 --> 00:01:53.020
+Uno de los controles menos obvios reside en lo que Microsoft llama configuración de acceso web, o dependiendo de su inquilino, un interruptor de complemento relacionado con Bing, que decide si Copilot puede hacer referencia a contenido público.
+
+00:01:54.140 --> 00:02:00.180
+De forma predeterminada, esto suele estar habilitado, lo que significa que Copilot no solo hace referencia a documentos, correos electrónicos o bibliotecas de SharePoint de su empresa.
+
+00:02:00.920 --> 00:02:03.120
+También puede mostrar información de sitios web externos.
+
+00:02:03.960 --> 00:02:05.620
+En teoría, esto parece una victoria para la productividad.
+
+00:02:05.620 --> 00:02:09.700
+Los usuarios ven respuestas más completas, un contexto más rico, menos que hay una cincera.
+
+00:02:09.940 --> 00:02:17.660
+Pero la realidad es que una vez que el contenido externo comienza a aparecer junto a los datos internos, el límite entre el conocimiento controlado y las fuentes no controladas y las fuentes no controladas se vuelve a resumen rápidamente.
+
+00:02:17.800 --> 00:02:19.040
+Aquí hay una forma sencilla de visualizar.
+
+00:02:19.440 --> 00:02:22.200
+Un usuario escribe una pregunta en Copilot dentro de Outlook o World.
+
+00:02:22.900 --> 00:02:26.820
+Si el interruptor externo está habilitado, Copilot puede extraer información de sitios públicos para que una respuesta.
+
+00:02:27.280 --> 00:02:30.140
+A veces eso significa definiciones útiles o contenido de Microsoft Learning.
+
+00:02:30.880 --> 00:02:34.220
+Otras veces puede devolver material de la competencia o blogs técnicos no verificados.
+
+00:02:34.220 --> 00:02:41.300
+La información en sí puede estar disponible libremente, pero al estar envuelta dentro de su inquilino de Microsoft 365, los usuarios podrían van a interpretarla como verificada por la empresa.
+
+00:02:41.440 --> 00:02:42.400
+Ahí es donde surge el riesgo.
+
+00:02:42.860 --> 00:02:46.080
+Cuando algo que parece oficial es en realidad contenido público reempaquetado.
+
+00:02:46.320 --> 00:02:50.440
+El problema no es que Microsoft oculte la configuración a propósito, sino que no se anuncia con claridad.
+
+00:02:51.540 --> 00:02:54.380
+Hay ningún aviso que indique que los resultados web están bajo revisión antes de su implementación.
+
+00:02:55.060 --> 00:02:59.800
+En su lugar suele encontrar un interruptor en su centro de búsqueda de inteligencia o dentro de las directivas de Copilot.
+
+00:02:59.800 --> 00:03:04.060
+La redacción exacta puede variar según el inquilino, así que no se base solo en la documentación.
+
+00:03:04.520 --> 00:03:07.000
+Acceda a su propio portal de administración y confirme la etiqueta de usted mismo.
+
+00:03:07.260 --> 00:03:10.400
+Este pequeño control tiene un impacto enorme en el comportamiento de Copilot y demasiados administradores.
+
+00:03:10.480 --> 00:03:13.520
+Lo pasan por alto al asumir que lo pasan por alto al asumir que los valores predeterminados son correctos.
+
+00:03:13.640 --> 00:03:15.240
+Entonces, ¿qué sucede si deja la configuración tal?
+
+00:03:15.600 --> 00:03:16.620
+Piense en una prueba controlada.
+
+00:03:17.380 --> 00:03:21.500
+En su entorno piloto, intente pedirle a Copilot que resuma el sitio web de un competidor o que destaque.
+
+00:03:21.840 --> 00:03:23.220
+Noticias recientes de un socio.
+
+00:03:23.700 --> 00:03:25.220
+Observe con atención dónde aparece ese condición.
+
+00:03:25.220 --> 00:03:28.420
+Lo presenta a Copilot integrado como si fuera parte de su documento.
+
+00:03:28.860 --> 00:03:30.680
+Distingue entre fuentes externas e internas.
+
+00:03:31.260 --> 00:03:35.000
+Realizar esas pruebas usted mismo es la única forma de entender cómo lo ven sus usuarios finales.
+
+00:03:35.340 --> 00:03:41.120
+Sin validación, corre el riesgo de que el personal copie y pegue resúmenes externos en presentaciones o documentos estratégicos sin conocer la fuente.
+
+00:03:41.580 --> 00:03:42.280
+Sin conocer la fuente.
+
+00:03:42.720 --> 00:03:44.960
+Diferentes organizaciones toman distintas decisiones al respecto.
+
+00:03:45.620 --> 00:03:50.200
+Algunas mantienen deliberadamente activado el acceso web, valorando la mayor velocidad y el contexto de las respuestas combinadas.
+
+00:03:50.200 --> 00:03:57.560
+Otras, especialmente en sectores como las finanzas, el gobierno o la salud, lo bloquean para mantener una separación estricta del contenido no controlado.
+
+00:03:59.280 --> 00:04:03.900
+Para las empresas más pequeñas que buscan eficiencia, el beneficio de productividad puede superar la ambigüedad en el origen,
+
+00:04:04.000 --> 00:04:07.320
+pero al menos los administradores en esos entornos toman una decisión consciente sobre el compromiso.
+
+00:04:08.380 --> 00:04:11.260
+El verdadero peligro es dejarlo sin tocar y heredar riesgos por accidente.
+
+00:04:11.660 --> 00:04:15.920
+Una constante que verá independientemente del sector es el tira y afloja entre la productividad y la política.
+
+00:04:15.920 --> 00:04:20.500
+Los usuarios a menudo esperan que Copilot proporciona definiciones rápidas o muestra información de fondo.
+
+00:04:21.440 --> 00:04:27.680
+Si deshabilita los resultados externos, esos mismos usuarios pueden quejarse de que Copilot funcionaba bien ayer, pero que ahora está roto.
+
+00:04:28.280 --> 00:04:30.960
+El impacto en el servicio soporte es real. Por eso la comunicación es fundamental.
+
+00:04:31.500 --> 00:04:34.540
+Si desactiva el interruptor, debe decirles a las personas desde el principio lo que perderán.
+
+00:04:35.260 --> 00:04:38.760
+Un guión útil es Copilot. No incluirá resultados web públicos de forma predeterminada.
+
+00:04:39.200 --> 00:04:40.620
+Esto significa respuestas más lentas, señor.
+
+00:04:41.100 --> 00:04:44.480
+Si hay una necesidad comercial de datos externos, proporcionaremos otras formas de obtenerlos.
+
+00:04:44.480 --> 00:04:48.320
+Explicaciones breves y claras como esa le ahorrarán decenas de tickets más adelante.
+
+00:04:48.720 --> 00:04:50.220
+La conclusión clave aquí es la intencionaria.
+
+00:04:50.720 --> 00:04:53.580
+Ya sea que elija permitir, bloquear o habilitar selectivamente el acceso web,
+
+00:04:53.880 --> 00:04:56.720
+hágalo con una elección consciente en lugar de vivir con la configuración predeterminada.
+
+00:04:57.060 --> 00:04:58.700
+No se fíe solo de lo que cree que hace el interruptor.
+
+00:04:59.080 --> 00:05:01.700
+Ve y pruébalo con escenarios importantes para tu entorno.
+
+00:05:02.240 --> 00:05:05.940
+De hecho, tu paso a seguir ahora mismo debería ser hacer una pausa y revisar este control en tu tenente.
+
+00:05:06.740 --> 00:05:10.660
+Confirma dónde está valida qué resultados arroja y decide cómo se lo explicarás a tus usuarios.
+
+00:05:10.660 --> 00:05:14.520
+Una vez que hayas comprendido cómo los datos externos se integran en tu experiencia de Ecopilot,
+
+00:05:14.620 --> 00:05:17.140
+el siguiente desafío no tiene nada que ver con el riesgo.
+
+00:05:17.560 --> 00:05:18.340
+Le trata el desperdicio.
+
+00:05:19.200 --> 00:05:23.820
+Específicamente, la forma en que se asignan las licencias puede crear minas terrestres que permanecen ocultas hasta que la adopción se estanca.
+
+00:05:24.680 --> 00:05:25.580
+Minas terrestres de licencias.
+
+00:05:25.860 --> 00:05:28.440
+La concesión de licencias es donde muchos despliegues de Ecopilot empiezan a tamar.
+
+00:05:28.720 --> 00:05:30.000
+El verdadero desafío no está en la compra.
+
+00:05:30.480 --> 00:05:31.780
+Autorizar los puestos es sencillo.
+
+00:05:31.780 --> 00:05:40.300
+El problema surge cuando los administradores los asignan sin una estrategia de uso, alineación de roles o ajustes continuos a medida que Microsoft evoluciona su línea de productos.
+
+00:05:41.160 --> 00:05:45.460
+Con demasiada frecuencia, las licencias se reparten según la jerarquía en lugar del flujo de trabajo diario.
+
+00:05:46.500 --> 00:05:48.720
+Los ejecutivos o gerentes pueden recibir puestos primero,
+
+00:05:48.920 --> 00:05:53.460
+mientras que los empleados que viven en Excel, Word o Teams todo el día quienes más pueden ganar terminan esperando.
+
+00:05:54.240 --> 00:06:00.220
+La licencia de Microsoft 365 siempre ha requerido equilibrio en Ecopilot, añade una nueva capa de complejidad de complejidad.
+
+00:06:00.700 --> 00:06:07.080
+Quizás ya estés acostumbrado a combinar E3 y E5, añadir Power BI o planes de voz y luego alinear los modelos de costos y luego aline costo.
+
+00:06:07.360 --> 00:06:13.760
+Copilot se comporta de forma un poco diferente porque la distribución de puestos tiene mecanismos que permiten a los administradores priorizar el acceso, pero no siempre son claros en la práctica.
+
+00:06:14.280 --> 00:06:17.220
+Algunos administradores los consideran asignaciones rígidas o permanentes,
+
+00:06:17.540 --> 00:06:20.940
+cuando en realidad es mejor tratarlos como controles flexibles que se deben monitorear continuamente.
+
+00:06:21.300 --> 00:06:28.700
+Lo importante es verificar la configuración de tu propio tenant para ver cómo funciona la priorización y confirmar si los puestos llegan a los usuarios que realmente los necesitan,
+
+00:06:28.700 --> 00:06:31.160
+en lugar de asumir que el sistema lo hace automáticamente.
+
+00:06:32.040 --> 00:06:34.220
+Una trampa es asumir que el uso se filtrará hacia abajo.
+
+00:06:35.040 --> 00:06:39.180
+En realidad, muchos entornos grandes descubren que su utilización es mucho menor que las cifras de compra.
+
+00:06:39.900 --> 00:06:42.740
+Las licencias pueden permanecer inactivas durante meses si nadie revisa los informes.
+
+00:06:43.360 --> 00:06:48.780
+Por eso vale la pena revisar al administrador de Microsoft 365 o las herramientas de informes de tu tenant para obtener datos de licencias y uso.
+
+00:06:48.780 --> 00:06:52.980
+Si no estás seguro de dónde se encuentran esos informes en tu interfaz de administración,
+
+00:06:53.200 --> 00:06:55.780
+reserva una breve sesión para navegar por tu portal con ese objetivo específico.
+
+00:06:57.100 --> 00:07:00.440
+Estas cifras suelen revelar que una parte importante de los puestos comprados no se utiliza,
+
+00:07:00.580 --> 00:07:02.240
+mientras que los usuarios intensivos permanecen bloqueados.
+
+00:07:02.520 --> 00:07:05.580
+Una asignación desigual no solo desperdicia presupuestos, sino que fragmenta la adopción.
+
+00:07:05.860 --> 00:07:09.360
+Si solo una pequeña parte del personal tiene Copilot, los flujos de trabajo se sienten inconsistentes.
+
+00:07:09.600 --> 00:07:12.860
+Imagina un flujo de trabajo donde una persona redacta un esquema con Copilot,
+
+00:07:13.000 --> 00:07:15.740
+pero sus colegas no pueden ampliarlo o refinarlo con la misma herramienta.
+
+00:07:15.740 --> 00:07:21.620
+La cultura en torno a la adopción se vuelve desigual y la organización no tiene una base confiable para medir el impacto real.
+
+00:07:22.820 --> 00:07:25.200
+Esa fragmentación genera tanta tensión como el gasto excesivo,
+
+00:07:25.300 --> 00:07:27.720
+ya que la tecnología nunca se siente integrada en toda la empresa.
+
+00:07:28.460 --> 00:07:32.420
+La flexibilidad es lo más importante cuando Microsoft cambia sus términos o introduce nuevas estructuras de plano.
+
+00:07:33.000 --> 00:07:37.380
+Si sus licencias se asignan de forma estática, la reasignación puede convertirse en un caos.
+
+00:07:38.060 --> 00:07:42.640
+A veces los administradores se ven obligados a retirar el acceso a mitad de camino y redistribuirlo cuando cambian los niveles.
+
+00:07:43.200 --> 00:07:45.480
+Ese tipo de interrupción socava la confianza en la herramienta.
+
+00:07:46.560 --> 00:07:49.880
+Tratar los puestos como un grupo flexible resignado en función de datos y no de política
+
+00:07:49.880 --> 00:07:53.140
+le permite adaptarse a medida que Microsoft implementa estrategias y paquetes.
+
+00:07:54.620 --> 00:07:57.040
+Sus administradores que gestionan bien las licencias tienden a seguir un ritmo.
+
+00:07:57.600 --> 00:08:00.960
+Primero, proban los puestos en grupos más pequeños donde se pueda medir el impacto.
+
+00:08:01.820 --> 00:08:05.500
+Luego, establecen una frecuencia mensual o trimestral para revisar los informes de licencias.
+
+00:08:06.160 --> 00:08:11.340
+Durante esas revisiones, identifican los puestos inactivos, los recuperan y los asignan a usuarios que ya muestran una clara adopción.
+
+00:08:11.340 --> 00:08:17.340
+El principio rector es priorizar los puestos para los empleados cuyas tareas diarias producen beneficios visibles con Copilot,
+
+00:08:17.800 --> 00:08:23.160
+como los analistas que manejan documentación repetitiva o el personal de atención al cliente que redacta grandes volúmenes de correos electrónicos.
+
+00:08:23.160 --> 00:08:28.840
+Al rotar los puestos de esta manera, los inquilinos estabilizan los costos sin sofocar el crecimiento de la productividad.
+
+00:08:29.440 --> 00:08:32.560
+Es importante destacar que Microsoft no ha proporcionado instrucciones exhaustivas al respecto.
+
+00:08:33.180 --> 00:08:37.080
+La documentación explica los métodos básicos de asignación, pero no cubre los impactos organizacionales,
+
+00:08:37.120 --> 00:08:39.200
+por lo que la mayoría de los administradores crean sus propios manuales.
+
+00:08:39.600 --> 00:08:42.160
+Las mejores prácticas que están surgiendo en el campo son las siguientes.
+
+00:08:42.680 --> 00:08:44.760
+No considere las licencias como una propiedad permanente.
+
+00:08:44.880 --> 00:08:46.800
+Realice pruebas piloto antes de escalar a gran escala.
+
+00:08:47.200 --> 00:08:52.540
+Establezca un ciclo de revisión regular vinculado a métricas medibles y mantenga la asignación flexibles y mantenga la asignación flexible.
+
+00:08:52.540 --> 00:08:56.500
+Piénselo menos como una compra de software y más como una gestión de recursos en la nube.
+
+00:08:57.080 --> 00:08:59.580
+Te traslada los recursos a donde más importan en ese momento.
+
+00:09:00.300 --> 00:09:02.680
+Si se ignora la higiene de las licencias, los efectos aparecen rápidamente.
+
+00:09:03.040 --> 00:09:04.740
+Los costos aumentan mientras la adopción se retrasa.
+
+00:09:05.520 --> 00:09:08.120
+El personal que podría estar ahorrando horas de esfuerzo manual se queda esperando,
+
+00:09:08.280 --> 00:09:10.800
+mientras los puestos no utilizados agotan lentamente el presupuesto.
+
+00:09:11.540 --> 00:09:15.380
+La mentalidad inteligente es tratar las licencias de Copilot como un recurso flexible medido y resignado
+
+00:09:15.380 --> 00:09:17.260
+con el retorno de la inversión, de acuerdo a la inversión.
+
+00:09:17.760 --> 00:09:21.820
+Eso es lo que convierte la concesión de licencias de un dolor de cabeza en un facilitador a largo plazo para una adopción exitosa.
+
+00:09:21.820 --> 00:09:25.340
+Por supuesto, incluso si logra aceptar con las licencias, surge otra capa de complejidad
+
+00:09:25.340 --> 00:09:28.560
+cuando observa cómo los usuarios intentan trabajar con Copilot dentro del navegador.
+
+00:09:29.260 --> 00:09:33.140
+Las expectativas no siempre coinciden con la realidad, y esa brecha a menudo aparece primero en Edge,
+
+00:09:33.220 --> 00:09:36.920
+donde la experiencia parece familiar pero funciona de manera diferente a las aplicaciones que la gente ya conoce.
+
+00:09:38.320 --> 00:09:39.640
+Copilot en Edge no es lo que usted piensa.
+
+00:09:40.420 --> 00:09:43.240
+Copilot en Edge a menudo parece el mismo asistente que ve dentro de Word o Teams,
+
+00:09:43.360 --> 00:09:45.300
+pero en la práctica se comporta de manera diferente.
+
+00:09:45.300 --> 00:09:50.100
+La integración de la barra lateral da la impresión de una IA universal que lo sigue a todas partes,
+
+00:09:50.220 --> 00:09:54.880
+lista para redactar texto, resumir contenido o responder preguntas, sin importar en qué esté trabajando.
+
+00:09:55.660 --> 00:09:57.700
+Para los usuarios eso suena como una experiencia integrada.
+
+00:09:58.840 --> 00:10:02.000
+Sin embargo, al comparar las acciones lado a lado, las diferencias se vuelven evidentes.
+
+00:10:02.420 --> 00:10:03.980
+Tomemos SharePoint como un caso de pruebas en sí.
+
+00:10:04.640 --> 00:10:08.300
+Cuando un empleado abre un documento en Word, Copilot puede resumir secciones con sugerencias contextuales.
+
+00:10:08.300 --> 00:10:12.800
+Al abrir ese mismo documento en Edge, la barra lateral puede manejar lo distinto,
+
+00:10:13.140 --> 00:10:15.800
+a veces con menos opciones o integración a integración.
+
+00:10:15.940 --> 00:10:19.540
+El punto no es quien tiene la razón, sino que la experiencia no es idéntica.
+
+00:10:20.240 --> 00:10:24.040
+¿Debe esperar diferencias según la aplicación anfitriona y probar esos escenarios en su entorno?
+
+00:10:24.620 --> 00:10:29.100
+Intente la misma operación en Word, Teams y Edge y vea qué comportamientos o limitaciones surgen, surgen.
+
+00:10:29.680 --> 00:10:33.320
+Así sabrá de antemano qué encontrarán los usuarios en lugar de llevarse sorpresas después.
+
+00:10:33.320 --> 00:10:38.520
+El problema es que los despliegues suelen revelar estas brechas solo cuando los usuarios empiezan a experimentar.
+
+00:10:39.400 --> 00:10:43.660
+Los administradores pueden asumir al principio que Copilot en Edge es una extensión de lo que ya desplegaron,
+
+00:10:44.020 --> 00:10:46.620
+pero en semanas el servicio de soporte comienza a recibir tickets repetidos.
+
+00:10:47.360 --> 00:10:51.820
+Los usuarios preguntan por qué pudieron resumir un PowerPoint en Office pero no en la barra de Edge,
+
+00:10:52.100 --> 00:10:54.660
+o por qué un correo se veía mejor ayer, ayer.
+
+00:10:55.900 --> 00:11:01.240
+La frustración surge no de Copilot, sino de expectativa inconsistente de que funcione igual en todas partes.
+
+00:11:01.240 --> 00:11:05.560
+Sin orientación, los usuarios terminan cuestionando si la herramienta es realmente confiable.
+
+00:11:06.420 --> 00:11:08.560
+Las políticas de cumplimiento hacen que todo sea más complejo.
+
+00:11:09.580 --> 00:11:15.460
+Algunos administradores reportan que la prevención de pérdida de datos y las reglas de cumplimiento parecen aplicarse de forma desigual.
+
+00:11:16.860 --> 00:11:18.980
+Esto no significa que las protecciones fallen universalmente.
+
+00:11:19.260 --> 00:11:21.560
+Significa que debe validar el comportamiento en su propio entorno.
+
+00:11:22.180 --> 00:11:28.560
+Realice pruebas específicas para confirmar que sus reglas de DLP y cumplimiento se activen consistentemente y documente diferencias.
+
+00:11:28.560 --> 00:11:31.340
+Aquí tiene una lista de verificación rápida que vale la pena preparar.
+
+00:11:31.460 --> 00:11:34.440
+Primero, abra un archivo confidencial en Word y pida a Copilot un resumen.
+
+00:11:35.080 --> 00:11:38.140
+Segundo, abra el mismo archivo en Edge y repita la solicitud desde la barra lateral.
+
+00:11:38.880 --> 00:11:44.540
+Tercero, registre si el resultado es diferente y si sus reglas de DLP bloquean o permiten la solicitud en ambos casos.
+
+00:11:45.720 --> 00:11:49.720
+Aunque los resultados varíen entre entornos, tratar esto como una prueba estructurada lo deja mejor preparado.
+
+00:11:50.140 --> 00:11:51.240
+Otra dificultad es la visibilidad.
+
+00:11:51.740 --> 00:11:55.020
+Microsoft no siempre destaca estas peculiaridades de cada host en un lugar obvio.
+
+00:11:56.020 --> 00:12:00.620
+Existe documentación, pero los detalles pueden estar dispersos en notas técnicas, anuncios o blogs de actualizaciones.
+
+00:12:01.360 --> 00:12:03.780
+Esto significa que no puede asumir que el centro de administración le avisara de ello.
+
+00:12:04.140 --> 00:12:08.300
+Lo más seguro es seguir las notas de lanzamiento oficiales y combinarlas con sus propias pruebas de control.
+
+00:12:09.120 --> 00:12:13.620
+De ese modo, puede establecer expectativas precisas con sus usuarios antes de que las sorpresas se vuelvan tickets.
+
+00:12:14.160 --> 00:12:16.380
+La comunicación es donde muchos administradores recuperen el control.
+
+00:12:16.380 --> 00:12:25.420
+Si presenta a Copilot en Edge como un asistente más ligero para navegar por la web y redactar borradores rápidos, en lugar de un espejo completo de Office Copilot, ofrecerá a los usuarios una visión realista.
+
+00:12:26.020 --> 00:12:30.140
+Considere un guión sencillo de dos oraciones que puede incluir en su diapositiva de capacitación una sección de preguntas frecuentes.
+
+00:12:31.000 --> 00:12:37.380
+Copilot en Edge es útil para resúmenes web rápidos o tareas de redacción sencillas, pero puede comportarse de manera distinta a Copilot en las aplicaciones de Office.
+
+00:12:38.240 --> 00:12:43.040
+Valide siempre los resultados críticos dentro de la aplicación donde realmente usará el contenido antes de compartirlo.
+
+00:12:43.040 --> 00:12:49.840
+Guiones breves como este reducen la confusión y dan a los empleados una orientación práctica en lugar de dejar que descubran las inconsistencias por su cuenta.
+
+00:12:50.360 --> 00:12:53.260
+Es tentador evitar el problema desactivando a Copilot en Edge por completo.
+
+00:12:54.080 --> 00:12:59.600
+Esto ciertamente reduce las experiencias dispares, pero también elimina casos de uso legítimos que los empleados pueden encontrar eficientes.
+
+00:13:00.420 --> 00:13:04.660
+Una mejor medida a largo plazo es reconocer a Edge Copilot como parte del ecosistema y al mismo tiempo dejar claros sus límites.
+
+00:13:05.060 --> 00:13:10.760
+Los usuarios que entiendan cuándo recurrir a la barra lateral y cuándo quedarse con las aplicaciones de Office pueden integrar ambos sin frustraciones innecesarias.
+
+00:13:10.760 --> 00:13:15.860
+La conclusión es que Copilot no presenta una personalidad unificada en todos los entornos.
+
+00:13:16.400 --> 00:13:17.960
+Esta cambia según el tenedor en el que se encuentre.
+
+00:13:18.640 --> 00:13:25.460
+La postura más inteligente para los administradores es anticipar esas diferencias, verificar las políticas mediante pruebas estructuradas y comunicar la realidad a sus usuarios.
+
+00:13:26.320 --> 00:13:29.720
+Eso mantiene la adopción constante y evita una desconfianza innecesaria en la herramienta.
+
+00:13:30.060 --> 00:13:34.840
+Y una vez que haya resuelto la situación de la barra lateral, la atención se dirige naturalmente a un rompecabezas de permisos diferentes.
+
+00:13:34.840 --> 00:13:41.760
+¿Cómo maneja Copilot los espacios de colaboración modernos como Loop, donde la mecánica de SharePoint y las expectativas de DLP no siempre se alinean?
+
+00:13:42.620 --> 00:13:43.920
+El rompecabezas de sitio de Loop y DLP.
+
+00:13:44.480 --> 00:13:48.960
+Loop trae una nueva forma de trabajar, pero también introduce algunas preguntas difíciles cuando Copilot entra en escena.
+
+00:13:49.460 --> 00:13:56.020
+Lo que parece una superficie fluida para la colaboración puede exponer brechas cuando espera que sus reglas habituales de seguridad y cumplimiento se apliquen automáticamente.
+
+00:13:56.960 --> 00:14:00.480
+En teoría, Loop y Copilot deberían complementarse entre sí dentro de Microsoft 365.
+
+00:14:00.480 --> 00:14:06.920
+En la realidad, los administradores a menudo terminan verificando si los permisos y DLP realmente se aplican como ellos creen.
+
+00:14:07.440 --> 00:14:10.120
+Parte de la dificultad es comprender dónde reside realmente el contenido de Loop.
+
+00:14:10.540 --> 00:14:15.660
+Los componentes de Loop son presentados por la plataforma y pueden asignarse al almacenamiento de SharePoint o OneDrive según su inquilino.
+
+00:14:15.960 --> 00:14:17.520
+En otras palabras, no existen de forma aislada.
+
+00:14:18.380 --> 00:14:22.660
+Debido a eso, no puede asumir que las etiquetas de confidencialidad y DLP se aplican automáticamente sin una validación.
+
+00:14:23.240 --> 00:14:24.980
+El enfoque seguro es verificar directamente.
+
+00:14:24.980 --> 00:14:31.560
+Cree páginas de Loop, aplique sus etiquetas y vea cómo las interpreta Copilot al generar resúmenes o extraer actualizaciones de proyectos.
+
+00:14:32.560 --> 00:14:35.300
+Considera un equipo de proyecto que escribe notas de estrategia de producto en Loop.
+
+00:14:35.800 --> 00:14:39.940
+Las notas residen dentro de una página compartida solo con una pequeña audiencia, por lo que los permisos parecen correctos.
+
+00:14:40.300 --> 00:14:46.360
+Pero cuando alguien más tarde le pida a Copilot todas las actualizaciones del proyecto, el asistente podría resumir información de ese espacio de Loop.
+
+00:14:46.940 --> 00:14:52.760
+El documento en sí no ha cambiado de manos, pero la respuesta generada por IA se convierte efectivamente en una nueva superficie para contenido sensible.
+
+00:14:52.760 --> 00:14:56.780
+Por eso simplemente señalar el almacenamiento de SharePoint no es suficiente.
+
+00:14:57.120 --> 00:15:00.220
+¿Necesitas probar cómo Copilot maneja los datos etiquetados en estos escenarios?
+
+00:15:00.600 --> 00:15:03.360
+En lugar de depender de anécdotas, trátalo como un experimento controlado.
+
+00:15:03.960 --> 00:15:05.320
+Y hay un protocolo de prueba sencillo.
+
+00:15:06.100 --> 00:15:09.780
+Comienza con el archivo o página que tenga una etiqueta de sensibilidad o una condición de LP clara.
+
+00:15:10.660 --> 00:15:13.900
+Crea un componente de Loop que haga referencia a él y compártelo con un grupo limitado.
+
+00:15:15.180 --> 00:15:18.140
+Pídele a Copilot que resuma o extraiga información del proyecto.
+
+00:15:18.140 --> 00:15:23.900
+Observa si tu etiqueta se mantiene, si aparece un mensaje de bloqueo, si el contenido se filtra.
+
+00:15:24.660 --> 00:15:27.660
+Ejecuta esa secuencia varias veces, ajustando etiquetas, tiempos y acceso.
+
+00:15:28.640 --> 00:15:33.140
+El punto no es solo detectar fallos, sino documentar los escenarios exactos donde la aplicación parece inconsistente.
+
+00:15:34.360 --> 00:15:37.220
+Captura pantallas, anota marcas de tiempo y añade pasos para producir problema.
+
+00:15:37.860 --> 00:15:43.300
+De esa forma, si necesitas aclaraciones del proveedor o abrir un ticket de soporte después, tendrás pruebas concretas en lugar de quejas vagas.
+
+00:15:43.300 --> 00:15:49.160
+¿Por qué importa esto? ¿Que las reglas tradicionales de SharePoint fueron diseñadas para documentos relativamente estáticos con límites claros?
+
+00:15:49.620 --> 00:15:54.640
+Loop prospera con fragmentos vivos que se reensamblan en tiempo casi real, exactamente el contexto en el que Copilot sobresale.
+
+00:15:55.220 --> 00:15:58.700
+La discrepancia es que tus políticas podrían no seguir el ritmo de esas recombinaciones.
+
+00:15:59.380 --> 00:16:00.940
+Eso no significa que las protecciones nunca se apliquen.
+
+00:16:01.240 --> 00:16:03.580
+Significa que es tu trabajo saber cuándo se aplican y cuándo no.
+
+00:16:04.100 --> 00:16:05.180
+La mejor respuesta es la estratificación.
+
+00:16:05.680 --> 00:16:07.260
+No asumas que una sola medida de seguridad lo cubre.
+
+00:16:07.820 --> 00:16:13.680
+Usa DLP para marcar datos sensibles, acceso condicional para limitar quién puede verlos y haz que el uso compartido predeterminado sea más restrictivo.
+
+00:16:14.480 --> 00:16:19.300
+Luego ejecuta pilotos de loop con grupos más pequeños para que puedas verificar los controles antes de exponerlos a toda la organización.
+
+00:16:19.680 --> 00:16:21.580
+La estratificación reduce los puntos únicos de falla.
+
+00:16:21.900 --> 00:16:24.280
+Si un control falla, otro tiene la oportunidad de detectar la brecha.
+
+00:16:24.960 --> 00:16:26.840
+También debe gestionar las expectativas de tu base de usuarios.
+
+00:16:27.320 --> 00:16:34.620
+Si el personal cree que todo dentro de loop está protegido exactamente igual que los documentos en SharePoint, se comportará en consecuencia y podrían compartir demasiado sin querer.
+
+00:16:34.620 --> 00:16:38.980
+Una guía interna breve que explique que los pasos a seguir son diferentes puede evitar errores costosos.
+
+00:16:40.120 --> 00:16:45.680
+Señala que, aunque Copilot mejora la colaboración, también puede generar nuevos resultados que merecen el mismo cuidado que el contenido original.
+
+00:16:46.600 --> 00:16:48.920
+La gobernanza aquí no será un ejercicio de configurar una sola vez.
+
+00:16:49.600 --> 00:16:52.420
+Loop evoluciona rápidamente, mientras que los marcos de cumplimiento avanzan lento.
+
+00:16:52.780 --> 00:16:57.400
+Es posible que necesites revisiones trimestrales para volver a probar escenarios, especialmente después de actualizaciones importantes de Microsoft.
+
+00:16:57.900 --> 00:17:02.220
+Sigue ajustando la guía media que cambien los resultados y no subestimes el valor de la formación de los usuarios.
+
+00:17:02.220 --> 00:17:07.440
+2. Enseña a las personas a identificar cuánto el contenido generado podría no tener las mismas protecciones que el material original.
+
+00:17:08.140 --> 00:17:09.480
+La conclusión práctica es sencilla.
+
+00:17:09.960 --> 00:17:11.880
+Trata loop y Copilot como elementos de rápido humildo.
+
+00:17:12.260 --> 00:17:15.060
+Provea antes de escalar y espere ajustar la gobernanza cada trimestre.
+
+00:17:15.780 --> 00:17:17.220
+Documente los errores cuidadosamente.
+
+00:17:17.380 --> 00:17:20.060
+Aplique controles por capas y sea transparente con los usuarios sobre los límites.
+
+00:17:20.700 --> 00:17:25.840
+Una vez que ve cómo Copilot redefine los límites del cumplimiento del loop, resulta más fácil identificar el patrón general.
+
+00:17:26.220 --> 00:17:30.060
+Estas herramientas no son estáticas y la próxima ola pondrá a prueba los modelos de administración 1.
+
+00:17:30.820 --> 00:17:31.960
+Preparación para los agentes de Copilot.
+
+00:17:32.580 --> 00:17:37.960
+Prepararse para los agentes de Copilot significa prepararse para algo que se siente menos como una herramienta y más como un participante en su entorno.
+
+00:17:38.700 --> 00:17:45.660
+En lugar de permanecer en silencio dentro de World of Teams, estos nuevos asistentes de IA pueden empezar a operar en múltiples aplicaciones, realizando tareas en nombre de los usuarios.
+
+00:17:46.460 --> 00:17:51.620
+Para los administradores no se trata solo de añadir otra función, sino de gestionar capacidades que pueden cambiar rápidamente con las nuevas actualizaciones.
+
+00:17:51.620 --> 00:17:57.640
+Piense en los agentes de Copilot como trabajadores personalizados configurados por los empleados por los empleados para automatizar tareas repetitivas.
+
+00:17:57.820 --> 00:18:05.520
+Un representante de ventas podría querer un agente que redacte respuestas a consultas iniciales de clientes, mientras que un analista financiero podría configurar uno para detectar patrones en informes de gastos.
+
+00:18:06.300 --> 00:18:11.480
+Estos ejemplos destacan el atractivo, la eficiencia, la consistencia, la consistencia y el ahorro de tiempo en procesos repetitivos.
+
+00:18:12.160 --> 00:18:13.240
+Pero esto es lo que importa para los senadores.
+
+00:18:13.240 --> 00:18:16.600
+Cada nueva versión puede cambiar lo que estos agentes realmente pueden tocar.
+
+00:18:17.200 --> 00:18:21.660
+Una función que antes solo resumía podría en un lanzamiento posterior también responder o tomar medidas.
+
+00:18:22.340 --> 00:18:27.960
+La superficie de ataque crece constantemente, por lo que es fundamental verificar la nueva funcionalidad en pilotos controlados antes de permitir su uso en tono inquilino.
+
+00:18:28.660 --> 00:18:32.720
+Trate cada expansión como algo que debe probarse, en lugar de asumir que el comportamiento permanecerá estático.
+
+00:18:33.220 --> 00:18:35.180
+Aquí es donde la planificación de la gobernanza se vuelve práctica.
+
+00:18:35.540 --> 00:18:39.560
+En lugar de esperar a que algo salga mal, utilice experimentos piloto para definir reglas de antemano.
+
+00:18:39.560 --> 00:18:47.640
+Por ejemplo, si un equipo quiere que un agente redacte y envíe correos electrónicos a clientes y establezca requisitos claros de aprobación y supervisión humana antes del lanzamiento,
+
+00:18:48.720 --> 00:18:53.100
+decida quién revisa los resultados, quién da el visto bueno final y cómo se conservan los registros para auditoría.
+
+00:18:53.820 --> 00:18:55.840
+Eso evita confusiones sobre la responsabilidad más adelante.
+
+00:18:56.240 --> 00:19:00.900
+Piénselo menos como resolver una cuestión legal por adelantado y más como definir un flujo de trabajo tangible.
+
+00:19:01.860 --> 00:19:04.620
+Cuando un agente actúa, ¿quién es el responsable de verificar el resultado?
+
+00:19:05.560 --> 00:19:07.940
+Los agentes no están diseñados para una configuración de estado estable.
+
+00:19:07.940 --> 00:19:13.260
+Su propósito es la flexibilidad, lo que significa que los comportamientos se ajustan con el tiempo a medida que Microsoft lanza nuevas funciones.
+
+00:19:14.040 --> 00:19:18.380
+Si establece políticas una vez y se desentiende, corre el riesgo de que cambios sutiles de capacidad deludan sus controles.
+
+00:19:18.980 --> 00:19:21.360
+Para evitar desviaciones, adopte un ciclo de revisión y estructura.
+
+00:19:21.780 --> 00:19:27.180
+Una cadencia práctica son las revisiones mensuales durante los periodos de lanzamiento de nuevas funciones, con comprobaciones adicionales según sea necesario.
+
+00:19:27.640 --> 00:19:29.400
+En cada sesión, capture tres tipos de datos.
+
+00:19:30.200 --> 00:19:32.020
+Primero, ¿qué acciones realizó el agente?
+
+00:19:32.580 --> 00:19:34.120
+Segundo, ¿qué resultados generó?
+
+00:19:34.860 --> 00:19:37.140
+Y tercero, ¿qué identidad o rol activó la acción?
+
+00:19:38.080 --> 00:19:41.760
+Mantenga esto en un registro de cambios que asocie las nuevas versiones con implicaciones políticas concretas.
+
+00:19:42.520 --> 00:19:47.960
+Aunque Microsoft cambie las etiquetas del portal o los formatos de informe, su registro le brinda continuidad a través de las versiones.
+
+00:19:48.380 --> 00:19:50.940
+Este no es un trabajo para un solo administrador abrumado por los tickets de aire.
+
+00:19:51.780 --> 00:19:57.800
+Muchas organizaciones se benefician al designar un administrador de copilot o un responsable de gobernanza de IA dentro del equipo de TI o seguridad.
+
+00:19:58.520 --> 00:20:03.240
+Este rol coordina a pruebas piloto con las unidades de negocio, supervisa la frecuencia de monitoreo y mantiene el registro de cambios.
+
+00:20:04.240 --> 00:20:07.640
+Contar con una persona o equipo específico a cargo de esta función evita vacíos de responsabilidad.
+
+00:20:08.680 --> 00:20:15.340
+De lo contrario, la responsabilidad se dispersa entre administradores, gerentes de proyecto y personal de cumplimiento, sin que nadie niegue el comportamiento de la gente de forma constante.
+
+00:20:15.960 --> 00:20:19.040
+El valor de esta estructura no es solo reducir riesgos, también es la comunicación.
+
+00:20:20.040 --> 00:20:23.160
+A las partes interesadas del negocio les gusta saber que la gobernanza es proactiva, no reactiva.
+
+00:20:23.160 --> 00:20:31.720
+Si puede compartir un informe mensual con ejemplos de resultados de agentes, ajustes de políticas y decisiones documentadas, el liderazgo verá claridad ni incertidumbre.
+
+00:20:32.220 --> 00:20:36.500
+Eso genera confianza en que la automatización se está escalando bajo control en lugar de expandirse de formas ocultas.
+
+00:20:36.900 --> 00:20:39.660
+Si descuida la supervisión de los agentes, se expone a dos problemas conocidos.
+
+00:20:39.880 --> 00:20:42.460
+Primero, los marcos de cumplimiento pueden desalinearse sin previo aviso.
+
+00:20:42.880 --> 00:20:45.700
+La información confidencial podría fluir hacia los resultados sin ser detectada.
+
+00:20:46.160 --> 00:20:47.740
+Segundo, la confianza en la adopción se erosiona.
+
+00:20:47.740 --> 00:20:54.520
+Si un gerente ve que un agente genera una respuesta errónea y no hay un proceso para corregirlo, la percepción será que no se puede confiar en los agentes de Copilot.
+
+00:20:55.320 --> 00:20:58.680
+Ambos problemas socavan su implementación antes de que el valor real tenga oportunidad de surgir.
+
+00:20:59.280 --> 00:21:00.800
+La postura correcta equilibra la estructura.
+
+00:21:01.380 --> 00:21:06.620
+Manténgase flexible ejecutando pilotos para nuevas funciones, actualizando políticas activamente y asignando propiedad clara.
+
+00:21:07.200 --> 00:21:10.500
+Equilibre eso con ritmos de supervisión estructurados para que el monitoreo no sea improvisado.
+
+00:21:10.960 --> 00:21:16.220
+La gestión adaptativa es la diferencia entre perseguir problemas después de que ocurren y guiar cómo maduran los agentes en su entorno.
+
+00:21:16.220 --> 00:21:18.540
+Este cambio de reglas estáticas a un modelo adaptativo.

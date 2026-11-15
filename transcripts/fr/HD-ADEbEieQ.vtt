@@ -1,0 +1,1654 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:06.790
+Prêt pour 10 jours de Microsoft 365, copilote, l'IA, Azure et les personnes qui façonnent, l'avenir du travail.
+
+00:00:07.570 --> 00:00:11.950
+En janvier, la M365 conne est de retour et elle va plus loin.
+
+00:00:12.850 --> 00:00:18.070
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des connaissances pratiques de MVP et d'experts du secteur du monde entier.
+
+00:00:18.790 --> 00:00:21.130
+Pas de diapositives génériques, pas de mots à la mode sans fin.
+
+00:00:21.950 --> 00:00:23.170
+Nous nous attaquons aux vrais défis.
+
+00:00:23.790 --> 00:00:28.390
+Copilote Studio, agent d'IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.390 --> 00:00:34.390
+Que vous soyez un professionnel de l'informatique, un développeur ou un chef d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.490 --> 00:00:40.070
+Pendant 10 jours complets, vous pouvez explorer de multiples technologies et vous connecter à une communauté mondiale.
+
+00:00:40.890 --> 00:00:44.290
+Regardez en direct et rapportez des informations pratiques à votre organisation.
+
+00:00:45.110 --> 00:00:48.850
+Janvier 2027, 10 jours, une communauté Microsoft.
+
+00:00:49.430 --> 00:00:50.610
+Les inscriptions sont ouvertes dès maintenant.
+
+00:00:51.790 --> 00:00:52.950
+Rendez-vous chez vous dès aujourd'hui.
+
+00:00:52.950 --> 00:00:57.990
+C'est m365con.net.
+
+00:01:00.460 --> 00:01:04.560
+Rejoignez-nous dès maintenant sur m365con.net et nous vous retrouverons en direct en janvier.
+
+00:01:05.400 --> 00:01:07.520
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets.
+
+00:01:08.020 --> 00:01:11.400
+Je suis votre Edmire Copiters et aujourd'hui nous allons aborder un problème de données réelles.
+
+00:01:11.780 --> 00:01:12.700
+Alors laissez-moi vous poser cette question.
+
+00:01:13.240 --> 00:01:18.940
+Imaginez que vous êtes dans une usine avec un millier de capteurs, de températures, de pressions, de vibrations qui fonctionnent en permanence et nous envoient une lecture chaque seconde.
+
+00:01:19.540 --> 00:01:21.460
+Cela représente donc un millier de points de données chaque seconde.
+
+00:01:21.460 --> 00:01:24.260
+Il y a 20 ans, la solution était simple.
+
+00:01:25.100 --> 00:01:29.760
+Vous collectiez toutes ces données pendant la journée, les stockiez dans un fichier, puis exécutiez une tâche par l'eau à minuit pour les traiter.
+
+00:01:30.060 --> 00:01:32.720
+Et le lendemain matin, vous disposiez d'un rapport indiquant ce qui s'était passé la veille.
+
+00:01:33.920 --> 00:01:36.580
+Cela fonctionnait bien lorsque suffisamment rapide signifiait pour le lendemain matin.
+
+00:01:37.360 --> 00:01:38.220
+Mais le monde a changé.
+
+00:01:39.160 --> 00:01:43.080
+Les capteurs sont devenus moins chers, les applications sont devenues plus intelligentes et les utilisateurs attendent des réponses instantanées.
+
+00:01:43.500 --> 00:01:46.500
+Aujourd'hui, cette tâche par l'eau nocturne signifie que vos données datent toujours d'un jour.
+
+00:01:46.500 --> 00:01:50.960
+Et dans un monde où la surchauffe d'une machine peut provoquer un incendie en quelques minutes, une journée est inutile.
+
+00:01:51.760 --> 00:01:54.480
+Vous passez donc au temps réel en collectant les données dès qu'elles sont générées.
+
+00:01:55.060 --> 00:01:56.100
+Et c'est là que les problèmes commencent.
+
+00:01:56.880 --> 00:02:01.440
+Si vous essayez de placer toutes ces données en streaming dans une base de données traditionnelle, cela s'étouffe ?
+
+00:02:01.440 --> 00:02:05.540
+Les bases de données sont conçues pour les requêtes et les transactions, pas pour ingérer une avalanche d'événements.
+
+00:02:06.400 --> 00:02:09.500
+Si vous essayez une file d'attente de messages classiques, cela fonctionne pendant un certain temps.
+
+00:02:09.500 --> 00:02:12.700
+Mais les files d'attente sont conçues pour qu'un seul consommateur récupère un message et le traite.
+
+00:02:13.540 --> 00:02:19.640
+Elles ne sont donc pas conçues pour des millions d'événements par seconde, avec plusieurs systèmes en aval souhaitant tous lire le même flux.
+
+00:02:20.740 --> 00:02:21.840
+C'est là que réside le principal défi.
+
+00:02:22.240 --> 00:02:26.400
+Vous devez trouver un moyen d'ingérer d'énormes quantités de données, de les mettre en mémoire tampon pour ne rien perdre,
+
+00:02:26.700 --> 00:02:29.240
+et de les distribuer à plusieurs consommateurs en temps réel.
+
+00:02:29.640 --> 00:02:30.700
+Ce n'est pas un problème de base de données.
+
+00:02:30.980 --> 00:02:32.820
+Ce n'est pas un problème de file d'attente, c'est un problème de streaming.
+
+00:02:33.180 --> 00:02:34.220
+Quelle est donc la solution ?
+
+00:02:34.220 --> 00:02:35.400
+C'est là qu'intervient Azure Event Hub.
+
+00:02:35.840 --> 00:02:37.180
+Qu'est-ce qu'Azure Event Hub ?
+
+00:02:37.180 --> 00:02:39.060
+Voici la définition la plus simple.
+
+00:02:39.700 --> 00:02:42.800
+Azure Event Hub est une plateforme de streaming de données en temps réel entièrement gérée,
+
+00:02:43.040 --> 00:02:46.040
+spécialement conçue pour en gérer des millions d'événements par seconde avec une faible latence.
+
+00:02:46.720 --> 00:02:49.080
+Notez que je n'ai pas parlé de file d'attente de messages ou de bases de données.
+
+00:02:49.820 --> 00:02:52.020
+Event Hub n'est pas une file d'attente ni une base de données.
+
+00:02:52.420 --> 00:02:53.940
+C'est un flux, et la différence est importante.
+
+00:02:54.520 --> 00:02:57.280
+Une file d'attente conserve un message jusqu'à ce qu'un consommateur le récupère puis l'insparait.
+
+00:02:57.760 --> 00:03:00.600
+Une base de données stocke des données afin que vous puissiez les interroger ultérieurement,
+
+00:03:00.840 --> 00:03:01.520
+mais un flux est différent.
+
+00:03:02.040 --> 00:03:05.960
+Il s'agit d'un flux continu d'événements que plusieurs lecteurs peuvent lire indépendamment à leur propre rythme,
+
+00:03:05.960 --> 00:03:07.520
+sans rien supprimer du flux.
+
+00:03:09.080 --> 00:03:10.040
+Maintenant, dissipons quelques minutes.
+
+00:03:10.540 --> 00:03:12.600
+Event Hub peut gérer des millions d'événements par seconde.
+
+00:03:13.320 --> 00:03:16.860
+Nous parlons d'ingérer des centaines de milliers de messages chaque seconde provenant de milliers de producteurs,
+
+00:03:17.040 --> 00:03:22.220
+et cela avec une latence très faible, quelques millisecondes entre le moment où un événement est envoyé
+
+00:03:22.220 --> 00:03:23.980
+et le moment où un consommateur peut le lire.
+
+00:03:24.880 --> 00:03:26.220
+Voici quelque chose qui surprend beaucoup de gens.
+
+00:03:26.760 --> 00:03:28.040
+Event Hub est compatible avec Kafka.
+
+00:03:28.340 --> 00:03:30.200
+Donc si vous avez déjà travaillé avec Apache Kafka,
+
+00:03:30.440 --> 00:03:33.760
+vous pouvez utiliser vos outils et clients Kafka existants pour communiquer avec Event Hub
+
+00:03:33.760 --> 00:03:36.440
+sans avoir à apprendre un nouveau protocole ni à réécrire vos applications.
+
+00:03:36.940 --> 00:03:37.760
+Ils parlent le même langage.
+
+00:03:38.460 --> 00:03:42.300
+La façon la plus simple de voir les Event Hub est d'imaginer qu'ils sont une porte d'entrée de données à haut débit.
+
+00:03:43.060 --> 00:03:45.100
+Imaginez un immeuble de bureaux très fréquenté aux heures de point.
+
+00:03:46.060 --> 00:03:47.840
+Des centaines de personnes franchissent la porte d'entrée toutes les minutes
+
+00:03:47.840 --> 00:03:50.960
+et la porte ne les arrête pas, ne pose pas de questions et ne les dirige pas vers des salles spécifiques.
+
+00:03:52.160 --> 00:03:53.320
+Elle les laisse simplement entrer rapidement.
+
+00:03:53.320 --> 00:03:56.140
+C'est ça Event Hub, c'est la porte d'entrée de vos données.
+
+00:03:56.660 --> 00:03:59.200
+Elle ne les traite pas, ne les analyse pas et ne décide pas quoi en faire.
+
+00:03:59.760 --> 00:04:02.660
+Elle les fait simplement entrer dans votre environnement Azure aussi vite que possible
+
+00:04:02.660 --> 00:04:05.020
+afin que vos systèmes en aval puissent faire le vrai travail.
+
+00:04:05.580 --> 00:04:06.920
+Mais comment cela fonctionne-t-il concrètement ?
+
+00:04:06.920 --> 00:04:07.680
+Décomposons les éléments.
+
+00:04:08.300 --> 00:04:10.820
+Les blocs de construction, partitions, groupes de consommateurs, débit.
+
+00:04:11.260 --> 00:04:13.960
+A l'intérieur de chaque Event Hub, il y a une structure qui fait fonctionner l'ensemble.
+
+00:04:14.540 --> 00:04:15.980
+L'élément le plus important est la partition.
+
+00:04:16.280 --> 00:04:17.700
+Imaginez une partition comme une voie sur l'autoroute.
+
+00:04:18.240 --> 00:04:19.460
+Les données arrivent dans l'une de ces voies.
+
+00:04:20.160 --> 00:04:20.600
+Voici la clé.
+
+00:04:20.600 --> 00:04:23.860
+Dans chaque voie, l'ordre des événements reste exactement tel qu'il est arrivé.
+
+00:04:24.320 --> 00:04:25.700
+L'événement 1 précède l'événement 2.
+
+00:04:25.840 --> 00:04:27.240
+Et l'événement 2 précède l'événement 3.
+
+00:04:27.920 --> 00:04:29.600
+Cet ordre ne change jamais à l'intérieur de cette voie.
+
+00:04:30.160 --> 00:04:32.200
+Ainsi, si votre application a besoin d'événements dans l'ordre exact,
+
+00:04:32.280 --> 00:04:33.280
+vous les conservez dans la même partition.
+
+00:04:33.680 --> 00:04:36.060
+Vous pouvez rendre entre 2 et 32 partitions par Event Hub
+
+00:04:36.060 --> 00:04:38.700
+et vous définissez ce nombre lorsque vous créez le Hub.
+
+00:04:39.200 --> 00:04:40.140
+Vous ne pouvez pas le modifier ultérieure.
+
+00:04:40.480 --> 00:04:42.600
+Vous devez donc réfléchir à vos besoins en débit dès le départ.
+
+00:04:43.180 --> 00:04:44.940
+Plus de partition signifie plus de traitement parallèle.
+
+00:04:45.360 --> 00:04:47.000
+Si vous prévoyez un volume élevé d'événements,
+
+00:04:47.120 --> 00:04:49.200
+vous voulez plus de partitions afin que plusieurs consommateurs
+
+00:04:49.200 --> 00:04:51.120
+puissent lire à partir de différentes voies en même temps.
+
+00:04:51.820 --> 00:04:53.680
+Mais plus de partitions signifie également plus de complexité.
+
+00:04:54.100 --> 00:04:57.480
+La règle générale est de choisir en fonction de votre débit attendu et non hasard.
+
+00:04:58.000 --> 00:04:59.760
+Si vous n'êtes pas sûr, commencez par une taille plus petite, etc.
+
+00:05:00.260 --> 00:05:01.620
+Cependant, les partitions seules ne suffisent pas.
+
+00:05:01.920 --> 00:05:03.320
+Vous avez également besoin de groupes de consommateurs.
+
+00:05:03.540 --> 00:05:06.180
+Un groupe de consommateurs est simplement une application en aval distincte
+
+00:05:06.180 --> 00:05:06.940
+qui lit le même flux.
+
+00:05:07.480 --> 00:05:10.020
+Chaque groupe de consommateurs obtient sa propre copie indépendante.
+
+00:05:10.560 --> 00:05:12.480
+Ainsi, si vous avez un groupe pour l'analyse en temps réel
+
+00:05:12.480 --> 00:05:13.840
+et un autre pour l'archivage dans le stockage,
+
+00:05:13.840 --> 00:05:15.720
+ils lisent tous les deux les mêmes événements en même temps,
+
+00:05:15.840 --> 00:05:17.240
+sans interférence, sans interférence.
+
+00:05:17.240 --> 00:05:20.320
+Le groupe d'analyse lit les données de température pour détecter les anomalies.
+
+00:05:21.040 --> 00:05:22.320
+Le groupe d'archivage lit les mêmes données
+
+00:05:22.320 --> 00:05:24.200
+et les envoie à un lac de données pour un stockage à long terme.
+
+00:05:24.980 --> 00:05:25.980
+Les deux groupes voient chaque événement.
+
+00:05:26.500 --> 00:05:27.520
+Aucun des deux groupes ne bloque l'autre.
+
+00:05:27.900 --> 00:05:28.640
+Et c'est un point important.
+
+00:05:29.140 --> 00:05:30.300
+Dans une file d'attente traditionnelle,
+
+00:05:30.460 --> 00:05:32.220
+un message est consommé par un processeur puis disparaît.
+
+00:05:32.860 --> 00:05:35.080
+Ici, plusieurs consommateurs peuvent lire le même flux indépendamment.
+
+00:05:35.500 --> 00:05:36.780
+C'est là que réside la puissance des groupes de consommateurs.
+
+00:05:37.180 --> 00:05:39.840
+Mais comment mesurer la quantité de données que votre event hub peut gérer ?
+
+00:05:39.840 --> 00:05:41.100
+C'est là qu'interviennent les unités de débit.
+
+00:05:41.280 --> 00:05:44.100
+Une unité de débit, ou TU, est la manière dont nous mesurons la capacité.
+
+00:05:44.100 --> 00:05:47.420
+Une TU vous donne 1 Mbps de données entrantes
+
+00:05:47.420 --> 00:05:49.440
+et 2 Mbps de données sortantes.
+
+00:05:50.300 --> 00:05:53.180
+Donc si vous devez ingérer 10 Mbps, vous avez besoin d'au moins 10 TU.
+
+00:05:53.660 --> 00:05:56.200
+Vous pouvez augmenter manuellement ou activer l'augmentation automatique
+
+00:05:56.200 --> 00:05:58.660
+qui augmente automatiquement vos TU lorsque le trafic augmente.
+
+00:05:59.440 --> 00:06:01.880
+Vous payez pour le nombre maximal de TU utilisé en une heure.
+
+00:06:02.640 --> 00:06:04.900
+Donc si vous utilisez 20 TU pendant 10 minutes,
+
+00:06:05.140 --> 00:06:07.140
+vous construirez pour 20 TU pendant 7 heures entières.
+
+00:06:08.040 --> 00:06:09.180
+Autre élément, la rétention.
+
+00:06:09.700 --> 00:06:11.700
+Les événements ne disparaissent pas du hub après avoir été consommés.
+
+00:06:12.120 --> 00:06:13.600
+Ils y restent pendant une période configurable.
+
+00:06:14.100 --> 00:06:15.680
+Dans le niveau standard, cela va de 1 à 7 jours.
+
+00:06:16.000 --> 00:06:17.620
+Dans le niveau premium, cela peut aller jusqu'à 90 jours.
+
+00:06:17.920 --> 00:06:19.180
+Cela permet ce qu'on appelle la relecture.
+
+00:06:19.660 --> 00:06:21.300
+Si votre consommateur en aval tombe en panne,
+
+00:06:21.540 --> 00:06:23.420
+ou si vous devez retraiter les données pour une nouvelle analyse,
+
+00:06:23.540 --> 00:06:25.540
+vous pouvez revenir en arrière et relire les anciens événements.
+
+00:06:26.420 --> 00:06:28.500
+C'est différent d'une file d'attente où une fois qu'un message est consommé,
+
+00:06:28.680 --> 00:06:29.320
+il disparaît à jamais.
+
+00:06:29.820 --> 00:06:31.080
+Vous connaissez maintenant les différentes parties,
+
+00:06:31.180 --> 00:06:33.980
+mais comment fonctionne-t-elle ensemble dans un système réel ?
+
+00:06:33.980 --> 00:06:34.880
+Comment cela fonctionne ?
+
+00:06:34.880 --> 00:06:36.060
+Le modèle producteur et consommateur.
+
+00:06:37.060 --> 00:06:38.400
+Examinons le flux du début à la fin.
+
+00:06:38.920 --> 00:06:39.980
+D'un côté, vous avez les producteurs.
+
+00:06:40.420 --> 00:06:42.320
+Un producteur est une application ou un appareil
+
+00:06:42.320 --> 00:06:43.640
+qui envoie des événements au hub.
+
+00:06:44.280 --> 00:06:46.200
+Il peut s'agir d'un capteur de température dans une usine,
+
+00:06:46.420 --> 00:06:47.820
+d'un serveur web enregistrant les pages vues,
+
+00:06:47.900 --> 00:06:49.780
+ou d'une application bancaire envoyant des données de transaction.
+
+00:06:50.340 --> 00:06:52.100
+Les producteurs peuvent communiquer avec Event Hubs
+
+00:06:52.100 --> 00:06:53.420
+à l'aide de trois protocoles différents,
+
+00:06:53.660 --> 00:06:55.420
+AMQP, HTTPS ou Kafka.
+
+00:06:56.100 --> 00:06:57.880
+Ainsi, quel que soit le langage ou la plateforme que vous utilisez,
+
+00:06:57.940 --> 00:06:58.860
+il existe un moyen de se connecter.
+
+00:06:59.300 --> 00:07:00.640
+Lorsqu'un producteur envoie un événement,
+
+00:07:00.760 --> 00:07:02.380
+le hub décide de la partition dans laquelle il va.
+
+00:07:03.080 --> 00:07:05.300
+Par défaut, les événements sont distribués en mode tourniquet.
+
+00:07:05.940 --> 00:07:07.320
+Le premier événement va à la partition 1,
+
+00:07:07.320 --> 00:07:08.980
+le second à la partition 2, et ainsi de suite.
+
+00:07:08.980 --> 00:07:12.020
+Si vous souhaitez que tous les événements
+
+00:07:12.020 --> 00:07:13.740
+provenant du même appareil atterrissent dans la même partition,
+
+00:07:14.100 --> 00:07:15.840
+vous définissez l'aide de l'appareil comme clé de partition.
+
+00:07:16.320 --> 00:07:18.640
+De cette façon, l'ordre des événements provenant de cet appareil est préservé.
+
+00:07:19.040 --> 00:07:20.540
+Le hub lui-même n'effectue pas beaucoup de traitements.
+
+00:07:21.040 --> 00:07:22.320
+Il met les événements en mémoire tampon
+
+00:07:22.320 --> 00:07:24.260
+et les stocke dans les partitions pendant la période de conservation.
+
+00:07:24.800 --> 00:07:25.920
+Considérez-le comme une zone de stockage.
+
+00:07:26.480 --> 00:07:28.420
+Les événements restent là, attendant que quelqu'un les lise.
+
+00:07:29.360 --> 00:07:30.700
+De l'autre côté, vous avez les consommateurs.
+
+00:07:31.140 --> 00:07:32.560
+Les consommateurs sont des applications en aval
+
+00:07:32.560 --> 00:07:33.480
+qui lisent à partir du hub.
+
+00:07:34.000 --> 00:07:34.920
+Et voici la partie importante.
+
+00:07:35.400 --> 00:07:36.640
+Les consommateurs utilisent un modèle pull,
+
+00:07:36.640 --> 00:07:38.080
+contrôlent leur propre rythme.
+
+00:07:38.420 --> 00:07:39.600
+Ils ne reçoivent pas d'événements poussés,
+
+00:07:39.880 --> 00:07:41.400
+mais demandent des événements lorsqu'ils sont prêts.
+
+00:07:42.020 --> 00:07:43.120
+Cela diffère d'une file d'attente
+
+00:07:43.120 --> 00:07:44.940
+où le système envoie des messages à un consommateur.
+
+00:07:45.560 --> 00:07:47.740
+Ici, le consommateur décide du moment où il extrait le lot suivant.
+
+00:07:48.340 --> 00:07:50.800
+Chaque groupe de consommateurs suit sa propre position dans le flux.
+
+00:07:51.420 --> 00:07:52.620
+Cette position est appelée décalage.
+
+00:07:53.240 --> 00:07:55.760
+Le décalage indique au consommateur les événements qu'il a déjà traités.
+
+00:07:56.560 --> 00:07:58.660
+Et le consommateur stocke ce décalage dans un endroit durable,
+
+00:07:58.800 --> 00:08:00.300
+généralement dans le stockage Azure Blob.
+
+00:08:00.300 --> 00:08:02.560
+Ce processus est appelé point de contrôle.
+
+00:08:02.840 --> 00:08:03.960
+Voici pourquoi le point de contrôle est important.
+
+00:08:04.540 --> 00:08:07.760
+Imaginez que votre application grand public plante un mi-chemin du traitement d'un lot d'événements.
+
+00:08:08.440 --> 00:08:11.080
+Lorsqu'elle redémarre, elle lit le dernier point de contrôle dans le stockage Blob
+
+00:08:11.080 --> 00:08:12.540
+et reprend à partir de ce point précis.
+
+00:08:13.320 --> 00:08:14.680
+Elle ne retraite pas les anciens événements,
+
+00:08:14.940 --> 00:08:15.920
+elle n'ignore aucun événement.
+
+00:08:16.380 --> 00:08:17.440
+Elle reprend là où elle s'est arrêtée.
+
+00:08:18.060 --> 00:08:19.560
+Et c'est la fiabilité sans la complexité.
+
+00:08:20.100 --> 00:08:23.740
+Idées clés et qu'Event Hubs dissocient complètement les producteurs des consommateurs.
+
+00:08:24.360 --> 00:08:25.920
+Les producteurs ne savent pas qui lit leurs données.
+
+00:08:26.300 --> 00:08:27.740
+Les consommateurs ne savent pas qui envoient les données.
+
+00:08:28.080 --> 00:08:28.680
+Ils sont indépendants.
+
+00:08:28.680 --> 00:08:31.740
+Le Hub se trouve au milieu, mettant en mémoire tampon et distribuant les événements
+
+00:08:31.740 --> 00:08:33.400
+et chaque côté fonctionne à son propre rythme.
+
+00:08:33.680 --> 00:08:35.600
+Ce découplage est ce qui rend Event Hubs si puissant
+
+00:08:35.600 --> 00:08:37.660
+pour créer des systèmes résilients et évolutifs.
+
+00:08:38.540 --> 00:08:40.420
+Concrétisons cela avec des scénarios réels.
+
+00:08:41.240 --> 00:08:42.240
+Des cas d'utilisation réels.
+
+00:08:42.660 --> 00:08:44.960
+Commençons par le plus important, la télémétrie IoT.
+
+00:08:45.460 --> 00:08:47.520
+Imaginez une usine intelligente avec des milliers de capteurs.
+
+00:08:48.140 --> 00:08:50.200
+Chaque machine est équipée de capteurs mesurant la température,
+
+00:08:50.300 --> 00:08:51.940
+la pression, les vibrations et la consommation d'énergie
+
+00:08:51.940 --> 00:08:53.840
+et chacun envoie une lecture toutes les quelques secondes.
+
+00:08:54.340 --> 00:08:56.180
+Cela ne représente pas des centaines d'événements par seconde,
+
+00:08:56.180 --> 00:08:57.800
+mais des centaines de milliers, voire des millions,
+
+00:08:57.800 --> 00:08:58.960
+selon la taille de l'usine.
+
+00:08:59.400 --> 00:09:01.540
+Vous ne pouvez pas stocker ces données dans une base de données traditionnelle
+
+00:09:01.540 --> 00:09:03.040
+et vous ne pouvez pas les traiter avec une tâche par l'eau
+
+00:09:03.040 --> 00:09:04.020
+qui s'exécute une fois par jour.
+
+00:09:04.580 --> 00:09:05.680
+Au moment où vous recevez le rapport,
+
+00:09:06.140 --> 00:09:08.240
+une machine peut déjà avoir surchauffé et arrêté la production.
+
+00:09:08.840 --> 00:09:11.140
+Vous transférez donc toutes ces données de capteurs vers Event Hubs
+
+00:09:11.140 --> 00:09:12.820
+qui ingèrent le Firehose sans effort.
+
+00:09:13.540 --> 00:09:15.500
+Vous connectez ensuite Azure Stream Analytics au Hub
+
+00:09:15.500 --> 00:09:17.840
+et il exécute des requêtes en temps réel sur les données.
+
+00:09:18.620 --> 00:09:20.080
+Lorsqu'une température dépasse un seuil,
+
+00:09:20.240 --> 00:09:22.440
+une alerte se déclenche, une équipe de maintenance est avertie
+
+00:09:22.440 --> 00:09:24.560
+et une machine est arrêtée avant qu'elle ne tombe en panne.
+
+00:09:24.560 --> 00:09:26.280
+C'est la maintenance prédictive en action.
+
+00:09:26.940 --> 00:09:28.660
+Un autre cas d'utilisation courant est la journalisation
+
+00:09:28.660 --> 00:09:29.560
+et la surveillance des applications.
+
+00:09:30.000 --> 00:09:31.980
+Imaginons que vous exécutez une architecture de microservices
+
+00:09:31.980 --> 00:09:34.280
+avec 50 services différents qui font tous des choses différentes.
+
+00:09:35.100 --> 00:09:36.580
+Chacun génère des journaux avec des erreurs,
+
+00:09:36.660 --> 00:09:37.980
+des avertissements et des mesures de performance.
+
+00:09:38.500 --> 00:09:39.900
+Dans l'ancien monde, vous écriviez ces journaux
+
+00:09:39.900 --> 00:09:41.220
+dans des fichiers sur chaque serveur
+
+00:09:41.220 --> 00:09:42.420
+et lorsque quelque chose se produisait,
+
+00:09:42.500 --> 00:09:44.320
+vous vous connectiez à 5 machines différentes pour trouver l'erreur.
+
+00:09:44.700 --> 00:09:45.300
+C'est un cauchemar.
+
+00:09:46.180 --> 00:09:47.780
+Au lieu de cela, vous faites en sorte que chaque service
+
+00:09:47.780 --> 00:09:49.380
+envoie ces journaux à un seul Event Hub,
+
+00:09:49.640 --> 00:09:51.520
+un pipeline central, un pipeline central.
+
+00:09:52.220 --> 00:09:53.900
+Ensuite, vous créez plusieurs groupes de consommateurs.
+
+00:09:53.900 --> 00:09:56.200
+Un groupe lit le flux et envoie les erreurs critiques
+
+00:09:56.200 --> 00:09:57.560
+à un système d'alerte en temps réel.
+
+00:09:58.500 --> 00:09:59.880
+Un autre groupe lit le même flux
+
+00:09:59.880 --> 00:10:01.420
+et écrit tous les journaux dans Azure Data Lake
+
+00:10:01.420 --> 00:10:02.940
+pour le stockage et l'analyse à long terme.
+
+00:10:03.680 --> 00:10:05.420
+Un troisième groupe alimente un tableau de bord en direct
+
+00:10:05.420 --> 00:10:06.220
+montrant l'état du système.
+
+00:10:06.760 --> 00:10:08.240
+Chaque équipe voit les mêmes données en temps réel
+
+00:10:08.240 --> 00:10:09.940
+sans interférer les unes avec les autres.
+
+00:10:10.320 --> 00:10:11.840
+L'analyse des flux de clics est un autre élément important.
+
+00:10:12.260 --> 00:10:13.820
+Imaginez que vous dirigez un site de commerce électronique.
+
+00:10:14.080 --> 00:10:15.800
+Chaque clic, chaque page vue, chaque requête de recherche
+
+00:10:15.800 --> 00:10:17.760
+et chaque événement d'ajout au panier est envoyé à Event Hub.
+
+00:10:18.080 --> 00:10:19.380
+Cela représente un flux massif de données
+
+00:10:19.380 --> 00:10:20.300
+sur le comportement des utilisateurs.
+
+00:10:20.300 --> 00:10:22.760
+Les consommateurs en aval analysent le flux en temps réel.
+
+00:10:23.340 --> 00:10:24.960
+Un consommateur crée des profits d'utilisateurs
+
+00:10:24.960 --> 00:10:26.220
+indiquant les produits que les gens consultent
+
+00:10:26.220 --> 00:10:27.220
+et les catégories qu'ils parcourent.
+
+00:10:27.900 --> 00:10:29.280
+Un autre consommateur détecte les tendances
+
+00:10:29.280 --> 00:10:30.960
+et repère les produits qui sont soudainement populaires.
+
+00:10:31.780 --> 00:10:33.780
+Un troisième consommateur personnalise l'expérience d'achat
+
+00:10:33.780 --> 00:10:34.900
+en affichant des recommandations
+
+00:10:34.900 --> 00:10:36.600
+en fonction de ce sur quoi l'utilisateur vient de cliquer.
+
+00:10:37.180 --> 00:10:38.620
+Tout cela se produit en quelques millisecondes
+
+00:10:38.620 --> 00:10:39.340
+et non du jour au lendemain.
+
+00:10:39.580 --> 00:10:41.180
+Puis il y a la détection des fraudes dans le secteur financier.
+
+00:10:41.180 --> 00:10:43.560
+Les banques traitent des millions de transactions chaque jour.
+
+00:10:44.160 --> 00:10:46.760
+Passage de carte de crédit, virement bancaire, paiement en ligne.
+
+00:10:47.340 --> 00:10:48.560
+Chaque transaction est un événement
+
+00:10:48.560 --> 00:10:51.080
+et chacune doit être évaluée pour détecter la fraude en temps réel.
+
+00:10:51.780 --> 00:10:53.200
+Vous ne pouvez pas attendre un traitement par l'eau
+
+00:10:53.200 --> 00:10:55.620
+car si une transaction frauduleuse est effectuée, l'argent est perdu.
+
+00:10:56.280 --> 00:10:58.040
+La banque transmet donc chaque transaction à Event Hub.
+
+00:10:58.720 --> 00:11:00.720
+En aval, les modèles d'apprentissage automatique
+
+00:11:00.720 --> 00:11:02.400
+consomment le flux et évaluent chaque transaction
+
+00:11:02.400 --> 00:11:03.440
+en fonction du risque de fraude.
+
+00:11:03.820 --> 00:11:06.300
+Et les transactions suspectes sont signalées et bloquées en quelques secondes.
+
+00:11:07.100 --> 00:11:07.640
+Pendant ce temps,
+
+00:11:07.640 --> 00:11:09.900
+des groupes de consommateurs distincts alimentent le même flux
+
+00:11:09.900 --> 00:11:11.940
+vers les systèmes de conformité pour les rapports réglementaires
+
+00:11:11.940 --> 00:11:13.020
+et les tableaux de bord opérationnels
+
+00:11:13.020 --> 00:11:14.860
+pour surveiller les volumes de transactionnels pour surveiller.
+
+00:11:15.540 --> 00:11:17.320
+Trois consommateurs différents lisent tous le même flux
+
+00:11:17.320 --> 00:11:18.660
+mais font tous des choses différentes.
+
+00:11:19.320 --> 00:11:21.180
+Le point commun à tous ces scénarios est le même.
+
+00:11:21.940 --> 00:11:23.780
+À volume élevé, de nombreux consommateurs
+
+00:11:23.780 --> 00:11:25.440
+et le besoin d'informations en temps réel.
+
+00:11:25.880 --> 00:11:27.660
+Event Hub n'est pas la solution à tous les problèmes
+
+00:11:27.660 --> 00:11:29.440
+mais lorsque vous disposez de cette combinaison,
+
+00:11:29.960 --> 00:11:30.800
+c'est l'outil idéal.
+
+00:11:31.560 --> 00:11:33.500
+Event Hub n'est pas le seul service de messagerie d'Azure.
+
+00:11:34.020 --> 00:11:34.780
+Comparons-le aux autres.
+
+00:11:35.700 --> 00:11:37.540
+Event Hub, Event Grid et Service Bus.
+
+00:11:38.360 --> 00:11:40.560
+Azure propose trois services principaux pour déplacer des données.
+
+00:11:41.060 --> 00:11:42.760
+Event Grid, Event Hub et Service Bus.
+
+00:11:43.460 --> 00:11:44.440
+Les gens les confondent tout le temps
+
+00:11:44.440 --> 00:11:45.580
+alors dissipons la confusion.
+
+00:11:46.180 --> 00:11:47.320
+Event Grid est l'alarme incendie.
+
+00:11:47.740 --> 00:11:48.640
+Il est léger et réactif.
+
+00:11:49.240 --> 00:11:50.180
+Lorsqu'un événement se produit,
+
+00:11:50.680 --> 00:11:52.080
+un blob est chargé dans le stockage,
+
+00:11:52.960 --> 00:11:54.280
+une machine virtuelle change d'état,
+
+00:11:55.160 --> 00:11:56.080
+une ressource est créée.
+
+00:11:56.660 --> 00:11:57.720
+Event Grid déclenche un événement.
+
+00:11:58.260 --> 00:11:59.500
+Il ne transporte pas les données lui-même,
+
+00:11:59.600 --> 00:12:00.060
+il dit simplement
+
+00:12:00.060 --> 00:12:01.300
+« Hé, quelque chose s'est produit ».
+
+00:12:01.300 --> 00:12:03.120
+Puis achemine cette notification vers des gestionnaires
+
+00:12:03.120 --> 00:12:04.500
+tels qu'Azure Functions ou Logic Apps.
+
+00:12:04.900 --> 00:12:06.040
+Event Grid n'est pas un flux
+
+00:12:06.040 --> 00:12:07.640
+et n'est pas conçu pour un débit élevé.
+
+00:12:08.120 --> 00:12:09.200
+Il est destiné aux événements discrets
+
+00:12:09.200 --> 00:12:10.220
+qui nécessitent une réaction à l'aide.
+
+00:12:10.620 --> 00:12:11.760
+Il est idéal pour les déclencheurs
+
+00:12:11.760 --> 00:12:12.500
+de chargements de blobs,
+
+00:12:12.580 --> 00:12:13.640
+les changements d'état des ressources
+
+00:12:13.640 --> 00:12:14.640
+et les workflows en serveur.
+
+00:12:15.360 --> 00:12:16.480
+Service Bus est le service postal.
+
+00:12:16.900 --> 00:12:17.700
+Il est fiable, ordonné
+
+00:12:17.700 --> 00:12:18.640
+et garantit la livraison.
+
+00:12:18.640 --> 00:12:20.960
+Lorsque vous envoyez un message via Service Bus,
+
+00:12:21.060 --> 00:12:21.800
+vous savez qu'il arrivera.
+
+00:12:22.400 --> 00:12:23.240
+Il prend en charge le classement
+
+00:12:23.240 --> 00:12:23.700
+première entrée,
+
+00:12:23.780 --> 00:12:24.220
+première sortie,
+
+00:12:24.300 --> 00:12:25.040
+la détection des doublons
+
+00:12:25.040 --> 00:12:25.540
+et les transactions.
+
+00:12:26.200 --> 00:12:27.200
+Si un message n'est pas traité,
+
+00:12:27.280 --> 00:12:28.380
+il est placé dans une file d'attente
+
+00:12:28.380 --> 00:12:28.920
+de lettres mortes
+
+00:12:28.920 --> 00:12:30.020
+où vous pouvez l'inspecter ultérieurement.
+
+00:12:30.640 --> 00:12:31.460
+Service Bus est conçu
+
+00:12:31.460 --> 00:12:32.480
+pour les workflows stratégiques
+
+00:12:32.480 --> 00:12:33.560
+tels que le traitement des paiements,
+
+00:12:33.720 --> 00:12:34.600
+l'exécution des commandes
+
+00:12:34.600 --> 00:12:35.500
+et les chaînes d'approbation.
+
+00:12:36.440 --> 00:12:37.800
+Il gère des milliers de messages par seconde,
+
+00:12:37.860 --> 00:12:38.240
+pas des millions,
+
+00:12:38.380 --> 00:12:38.880
+et c'est très bien.
+
+00:12:39.020 --> 00:12:40.080
+Car lorsque vous traitez un paiement,
+
+00:12:40.160 --> 00:12:40.700
+vous n'avez pas besoin
+
+00:12:40.700 --> 00:12:42.220
+de millions d'événements par seconde.
+
+00:12:42.840 --> 00:12:43.720
+Vous avez besoin que chaque message
+
+00:12:43.720 --> 00:12:44.780
+arrive exactement une fois
+
+00:12:44.780 --> 00:12:45.400
+dans le bon ordre.
+
+00:12:45.940 --> 00:12:47.080
+Event Hub, c'est la caméra de sécurité.
+
+00:12:47.640 --> 00:12:48.260
+Il enregistre tout
+
+00:12:48.260 --> 00:12:49.240
+pour la lecture et l'analyse.
+
+00:12:50.400 --> 00:12:51.260
+Il est conçu pour le streaming
+
+00:12:51.260 --> 00:12:51.700
+à haut volume,
+
+00:12:52.020 --> 00:12:53.140
+des millions d'événements par seconde
+
+00:12:53.140 --> 00:12:54.160
+et plusieurs consommateurs
+
+00:12:54.160 --> 00:12:54.940
+peuvent lire le même flux
+
+00:12:54.940 --> 00:12:55.520
+indépendamment.
+
+00:12:56.420 --> 00:12:57.400
+Les événements restent dans le Hub
+
+00:12:57.400 --> 00:12:58.280
+pendant des jours ou des semaines,
+
+00:12:58.380 --> 00:12:58.980
+vous pouvez donc les relire
+
+00:12:58.980 --> 00:12:59.400
+si nécessaire.
+
+00:12:59.960 --> 00:13:00.800
+Event Hub n'est pas destiné
+
+00:13:00.800 --> 00:13:01.640
+à la messagerie transactionnée.
+
+00:13:01.980 --> 00:13:03.160
+Il est destiné à la télémétrie,
+
+00:13:03.320 --> 00:13:04.180
+au pipeline d'analyse
+
+00:13:04.180 --> 00:13:04.780
+et à tous scénarios
+
+00:13:04.780 --> 00:13:05.960
+dans lesquels vous devez ingérer
+
+00:13:05.960 --> 00:13:07.140
+d'énormes quantités de données
+
+00:13:07.140 --> 00:13:07.800
+et les distribuer
+
+00:13:07.800 --> 00:13:08.620
+à plusieurs consommateurs.
+
+00:13:12.220 --> 00:13:14.080
+Un blob a été téléchargé,
+
+00:13:14.240 --> 00:13:14.920
+une VM a été créée,
+
+00:13:14.980 --> 00:13:15.920
+une ressource a changé d'état.
+
+00:13:16.620 --> 00:13:17.160
+C'est Event Grid.
+
+00:13:17.640 --> 00:13:18.180
+Avez-vous besoin
+
+00:13:18.180 --> 00:13:19.020
+d'une livraison garantie
+
+00:13:19.020 --> 00:13:20.020
+et d'un ordre strict ?
+
+00:13:20.020 --> 00:13:20.640
+Traitement des paiements,
+
+00:13:20.780 --> 00:13:21.500
+exécution de workflow,
+
+00:13:21.900 --> 00:13:22.660
+coordination des transactions
+
+00:13:22.660 --> 00:13:23.260
+commerciales,
+
+00:13:23.360 --> 00:13:24.660
+c'est Service Bus ?
+
+00:13:24.660 --> 00:13:25.740
+Diffusez-vous d'énormes quantités
+
+00:13:25.740 --> 00:13:26.440
+de données pour l'analyse,
+
+00:13:26.500 --> 00:13:27.220
+la télémétrie IoT,
+
+00:13:27.380 --> 00:13:28.080
+les journaux d'application,
+
+00:13:28.180 --> 00:13:28.720
+les flux de clics,
+
+00:13:28.980 --> 00:13:29.740
+la détection des fraudes,
+
+00:13:30.120 --> 00:13:30.740
+la détection des vaux.
+
+00:13:30.980 --> 00:13:31.560
+C'est Event Hub.
+
+00:13:32.300 --> 00:13:33.320
+Voici le truc ?
+
+00:13:33.320 --> 00:13:33.880
+Vous n'êtes pas obligés
+
+00:13:33.880 --> 00:13:34.480
+d'en choisir un seul.
+
+00:13:34.960 --> 00:13:36.000
+Ces services fonctionnent ensemble.
+
+00:13:36.400 --> 00:13:37.020
+Event Hub ingère
+
+00:13:37.020 --> 00:13:38.020
+le flux de données bruts.
+
+00:13:38.620 --> 00:13:39.800
+Event Grid réagit aux événements
+
+00:13:39.800 --> 00:13:40.460
+au sein de ce flux
+
+00:13:40.460 --> 00:13:41.780
+et déclenche des actions en aval.
+
+00:13:42.500 --> 00:13:44.180
+Service Bus gère la messagerie fiable
+
+00:13:44.180 --> 00:13:45.400
+pour les flux de travail métier.
+
+00:13:45.900 --> 00:13:46.560
+Utilisez-les ensemble
+
+00:13:46.560 --> 00:13:47.400
+et vous obtenez le meilleur
+
+00:13:47.400 --> 00:13:47.940
+de tous les mondes.
+
+00:13:48.380 --> 00:13:49.240
+Parlons du coût d'exploitation
+
+00:13:49.240 --> 00:13:50.120
+de ce type de pipeline.
+
+00:13:51.100 --> 00:13:51.780
+Tarification et niveau.
+
+00:13:52.280 --> 00:13:52.780
+Parlons du coût,
+
+00:13:52.920 --> 00:13:53.980
+car savoir ce que fait Event Hub
+
+00:13:53.980 --> 00:13:54.540
+est une chose,
+
+00:13:54.640 --> 00:13:55.780
+mais savoir ce que cela coûte
+
+00:13:55.780 --> 00:13:56.820
+en est une autre.
+
+00:13:57.460 --> 00:13:58.600
+Event Hub propose 4 niveaux
+
+00:13:58.600 --> 00:13:59.640
+et Basic est le moins cher.
+
+00:14:00.240 --> 00:14:00.820
+Il vous offre un jour
+
+00:14:00.820 --> 00:14:01.360
+de rétention,
+
+00:14:01.480 --> 00:14:02.540
+des fonctionnalités limitées
+
+00:14:02.540 --> 00:14:03.760
+et le coût par unité de débit
+
+00:14:03.760 --> 00:14:04.320
+le plus bas.
+
+00:14:04.320 --> 00:14:06.080
+Cela fonctionne pour les scénarios
+
+00:14:06.080 --> 00:14:06.940
+simples où vous n'avez pas besoin
+
+00:14:06.940 --> 00:14:07.360
+de grand chose,
+
+00:14:07.420 --> 00:14:08.000
+mais la plupart des gens
+
+00:14:08.000 --> 00:14:08.560
+ignorent Basic
+
+00:14:08.560 --> 00:14:09.380
+et commencent avec Standard.
+
+00:14:10.020 --> 00:14:11.100
+Standard est le compromis idéal.
+
+00:14:11.660 --> 00:14:12.560
+Il offre jusqu'à 7 jours
+
+00:14:12.560 --> 00:14:13.040
+de rétention,
+
+00:14:13.180 --> 00:14:13.860
+Event Hub Capture
+
+00:14:13.860 --> 00:14:14.760
+pour l'archivage automatique
+
+00:14:14.760 --> 00:14:15.420
+sur le stockage,
+
+00:14:15.600 --> 00:14:16.660
+la compatibilité Kafka
+
+00:14:16.660 --> 00:14:17.640
+et jusqu'à 20 groupes
+
+00:14:17.640 --> 00:14:18.340
+de consommateurs.
+
+00:14:19.140 --> 00:14:19.720
+Cela couvre la plupart
+
+00:14:19.720 --> 00:14:20.220
+des charges de travail
+
+00:14:20.220 --> 00:14:20.560
+de production.
+
+00:14:20.980 --> 00:14:21.720
+Donc si vous construisez
+
+00:14:21.720 --> 00:14:22.320
+quelque chose de concret,
+
+00:14:22.400 --> 00:14:23.020
+c'est généralement par là
+
+00:14:23.020 --> 00:14:23.420
+que vous commencez.
+
+00:14:23.680 --> 00:14:24.520
+Premium est un cran au-dessus.
+
+00:14:24.960 --> 00:14:25.960
+Vous obtenez 90 jours
+
+00:14:25.960 --> 00:14:26.420
+de rétention,
+
+00:14:26.540 --> 00:14:27.120
+un thé de stockage
+
+00:14:27.120 --> 00:14:27.800
+par unité de traitement
+
+00:14:27.800 --> 00:14:28.700
+des performances prévisibles
+
+00:14:28.700 --> 00:14:29.260
+et la prise en charge
+
+00:14:29.260 --> 00:14:29.620
+de vénètre
+
+00:14:29.620 --> 00:14:30.500
+pour l'isolation du réseau.
+
+00:14:30.980 --> 00:14:31.720
+Les ressources réservées
+
+00:14:31.720 --> 00:14:32.540
+signifient que les voisins
+
+00:14:32.540 --> 00:14:33.580
+bruyants ne vous affecteront pas
+
+00:14:33.580 --> 00:14:34.380
+et ce niveau est conçu
+
+00:14:34.380 --> 00:14:35.080
+pour les charges de travail
+
+00:14:35.080 --> 00:14:35.440
+haute gamme
+
+00:14:35.440 --> 00:14:36.360
+où la latence et l'isolation
+
+00:14:36.360 --> 00:14:36.960
+sont importantes.
+
+00:14:37.560 --> 00:14:38.120
+Le niveau dédié
+
+00:14:38.120 --> 00:14:38.720
+est le niveau supérieur.
+
+00:14:39.020 --> 00:14:40.100
+Un cluster allocataire unique
+
+00:14:40.100 --> 00:14:40.620
+rien que pour vous
+
+00:14:40.620 --> 00:14:42.020
+existait ou par unité de capacité.
+
+00:14:42.460 --> 00:14:42.940
+Il est destiné
+
+00:14:42.940 --> 00:14:43.740
+aux très grandes charges de travail
+
+00:14:43.740 --> 00:14:44.360
+pour lesquelles vous avez besoin
+
+00:14:44.360 --> 00:14:44.960
+de l'environnement entier
+
+00:14:44.960 --> 00:14:45.380
+pour vous tout seul.
+
+00:14:45.720 --> 00:14:46.240
+Oui, c'est cher,
+
+00:14:46.320 --> 00:14:46.840
+mais si vous traitez
+
+00:14:46.840 --> 00:14:47.500
+des volumes massifs
+
+00:14:47.500 --> 00:14:48.200
+de manière régulière,
+
+00:14:48.320 --> 00:14:49.620
+cela peut être rentable
+
+00:14:49.620 --> 00:14:50.920
+que la mise à l'échelle premium.
+
+00:14:50.920 --> 00:14:51.840
+Alors, qu'est-ce
+
+00:14:51.840 --> 00:14:52.920
+qui détermine le lieu ?
+
+00:14:52.920 --> 00:14:53.420
+Quatre éléments.
+
+00:14:53.980 --> 00:14:54.760
+Les unités de débit,
+
+00:14:55.040 --> 00:14:55.840
+c'est-à-dire la quantité
+
+00:14:55.840 --> 00:14:56.780
+de données que vous déplacez,
+
+00:14:57.060 --> 00:14:57.840
+la durée de rétention,
+
+00:14:58.240 --> 00:14:58.900
+c'est-à-dire la durée
+
+00:14:58.900 --> 00:14:59.900
+pendant laquelle vous conservez,
+
+00:15:00.160 --> 00:15:00.620
+les événements,
+
+00:15:00.800 --> 00:15:01.820
+la capture si vous archivez
+
+00:15:01.820 --> 00:15:02.440
+sur le stockage
+
+00:15:02.440 --> 00:15:03.240
+et la géoréplication
+
+00:15:03.240 --> 00:15:04.160
+si vous copiez des données
+
+00:15:04.160 --> 00:15:04.840
+entre les régions
+
+00:15:04.840 --> 00:15:05.880
+pour la reprise après-sinistre.
+
+00:15:06.560 --> 00:15:07.240
+Voici quelques conseils
+
+00:15:07.240 --> 00:15:08.060
+d'optimisation des coûts.
+
+00:15:08.480 --> 00:15:09.420
+Commencez par le niveau standard
+
+00:15:09.420 --> 00:15:10.380
+et n'augmentez que
+
+00:15:10.380 --> 00:15:11.120
+lorsque vous en avez besoin.
+
+00:15:11.680 --> 00:15:12.700
+Utilisez une rétention courte
+
+00:15:12.700 --> 00:15:13.360
+pour les données importantes.
+
+00:15:13.840 --> 00:15:14.600
+Conservez-les dans le hub
+
+00:15:14.600 --> 00:15:15.320
+pendant un jour ou deux
+
+00:15:15.320 --> 00:15:16.000
+puis déchargez-les
+
+00:15:16.000 --> 00:15:16.820
+vers un stockage moins cher
+
+00:15:16.820 --> 00:15:17.280
+comme un blob
+
+00:15:17.280 --> 00:15:17.860
+ou un lac de données
+
+00:15:17.860 --> 00:15:18.740
+pour une analyse à long terme.
+
+00:15:19.380 --> 00:15:20.240
+Surveillez votre utilisation
+
+00:15:20.240 --> 00:15:20.640
+du débit,
+
+00:15:20.780 --> 00:15:21.520
+dimensionnez correctement
+
+00:15:21.520 --> 00:15:22.280
+vos unités de traitement
+
+00:15:22.280 --> 00:15:23.080
+et ne surprovisionnez pas.
+
+00:15:23.600 --> 00:15:24.560
+Utilisez également HTTP
+
+00:15:24.560 --> 00:15:25.500
+pour les expéditeurs
+
+00:15:25.500 --> 00:15:26.260
+plutôt qu'à MQP
+
+00:15:26.260 --> 00:15:27.140
+lorsque cela est possible
+
+00:15:27.140 --> 00:15:28.360
+car les connexions à MQP
+
+00:15:28.360 --> 00:15:28.860
+sont payantes,
+
+00:15:29.040 --> 00:15:30.020
+contrairement à HTTP.
+
+00:15:30.920 --> 00:15:31.440
+Passons maintenant
+
+00:15:31.440 --> 00:15:32.700
+en revue une architecture simple
+
+00:15:32.700 --> 00:15:33.640
+pour voir comment démarrer.
+
+00:15:34.260 --> 00:15:34.700
+Pour commencer,
+
+00:15:34.800 --> 00:15:35.600
+une architecture simple.
+
+00:15:36.440 --> 00:15:37.300
+Le modèle de base est simple.
+
+00:15:38.020 --> 00:15:38.720
+Les producteurs envoient
+
+00:15:38.720 --> 00:15:39.640
+des événements à Eventhubs
+
+00:15:39.640 --> 00:15:40.400
+et les consommateurs
+
+00:15:40.400 --> 00:15:41.480
+lisent à partir d'Eventhubs.
+
+00:15:42.080 --> 00:15:42.400
+C'est tout.
+
+00:15:42.400 --> 00:15:43.720
+Voici un exemple concret.
+
+00:15:44.260 --> 00:15:45.360
+Imaginez des appareils IoT
+
+00:15:45.360 --> 00:15:45.920
+envoyant des données
+
+00:15:45.920 --> 00:15:46.940
+de température à Eventhubs.
+
+00:15:47.600 --> 00:15:48.380
+Une fonction Azure
+
+00:15:48.380 --> 00:15:48.960
+est déclenchée
+
+00:15:48.960 --> 00:15:49.980
+par chaque nouveau lot d'événements
+
+00:15:49.980 --> 00:15:51.220
+et la fonction traite les données.
+
+00:15:52.080 --> 00:15:52.860
+Elle peut filtrer les relevés
+
+00:15:52.860 --> 00:15:53.880
+qui se trouvent dans la plage normale,
+
+00:15:54.000 --> 00:15:55.020
+ne conserver que les anomalies
+
+00:15:55.020 --> 00:15:55.880
+puis écrire ces anomalies
+
+00:15:55.880 --> 00:15:56.500
+dans Cosmos DB
+
+00:15:56.500 --> 00:15:57.520
+pour une interrogation rapide.
+
+00:15:58.120 --> 00:15:59.020
+Cela constitue un pipeline
+
+00:15:59.020 --> 00:15:59.880
+complet en trois services.
+
+00:16:00.440 --> 00:16:01.120
+L'avantage des fonctions
+
+00:16:01.120 --> 00:16:02.260
+est qu'elles évoluent automatiquement
+
+00:16:02.260 --> 00:16:03.000
+en fonction du nombre
+
+00:16:03.000 --> 00:16:03.640
+de vos partitions.
+
+00:16:04.320 --> 00:16:05.300
+Si vous avez 8 partitions,
+
+00:16:05.400 --> 00:16:06.280
+les fonctions peuvent faire tourner
+
+00:16:06.280 --> 00:16:07.080
+jusqu'à 8 instances
+
+00:16:07.080 --> 00:16:08.200
+chaque relevé étant lu
+
+00:16:08.200 --> 00:16:09.200
+d'autres vidéos.
+
+00:16:09.200 --> 00:16:10.060
+Merci d'avoir regardé cette vidéo !

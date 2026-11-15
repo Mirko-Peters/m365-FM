@@ -1,0 +1,853 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.280
+Entonces, ¿por qué el cierre de mes todavía implica cinco versiones diferentes de hojas
+
+00:00:03.280 --> 00:00:07.540
+de cálculo, alguien buscando el archivo correcto y un gerente esperando una respuesta que debería
+
+00:00:07.540 --> 00:00:12.020
+ser obvia? Podrías tener un libro mayor, varios departamentos y miles de transacciones,
+
+00:00:12.460 --> 00:00:15.700
+pero aún así no puedes contar una historia financiera única con claridad. Ahí es donde
+
+00:00:15.700 --> 00:00:21.500
+entra Dynamics 365 Finance. Soy Mirko Peters de M365FM y esta píldora de conocimiento explica
+
+00:00:21.500 --> 00:00:24.420
+cómo los datos financieros registrados se convierten en informes que la gente realmente
+
+00:00:24.420 --> 00:00:28.340
+puede leer. Piensa en cada transacción como un documento archivado una sola vez en un gabinete
+
+00:00:28.340 --> 00:00:31.340
+central, que luego se lee de diferentes maneras sin tener que agradecer las cifras cada vez.
+
+00:00:31.640 --> 00:00:36.640
+Comencemos con los registros dentro de ese gabinete. La base, el libro mayor, las cuentas principales y
+
+00:00:36.640 --> 00:00:41.300
+las categorías. El libro mayor es el registro financiero maestro de una empresa y cada transacción
+
+00:00:41.300 --> 00:00:46.000
+registrada termina allí de alguna forma. Una factura de cliente, una cuenta de proveedor,
+
+00:00:46.140 --> 00:00:50.000
+un asiento de nómina, un pago bancario o un ajuste de inventario. Dejan un registro contable.
+
+00:00:50.700 --> 00:00:54.440
+Piensa en el libro mayor como un gran archivador con una regla estricta. No pones una factura de
+
+00:00:54.440 --> 00:00:57.800
+alquiler en el mismo cajón que las ventas de productos, ni pones el saldo bancario con los
+
+00:00:57.800 --> 00:01:01.900
+salarios de los empleados, ni pleados. Cada cantidad necesita un hogar financiero. Ese hogar
+
+00:01:01.900 --> 00:01:05.160
+comienza con una cuenta principal y responde una pregunta sencilla. ¿Con qué se relaciona este
+
+00:01:05.160 --> 00:01:09.260
+dinero? El efectivo está en una cuenta principal, los ingresos por ventas en otra, los gastos de
+
+00:01:09.260 --> 00:01:13.040
+alquiler, salarios, cuentas por cobrar, cuentas por pagar, préstamo, impuestos, tienen la suya
+
+00:01:13.040 --> 00:01:17.620
+propia. Entonces, cuando tu empresa paga una factura de alquiler mensual, Dynamics 365 Finance
+
+00:01:17.620 --> 00:01:22.440
+registra ese monto en la cuenta de gastos de alquiler. Y cuando un cliente paga una factura, los ingresos
+
+00:01:22.440 --> 00:01:27.400
+llegan a una cuenta de ventas, mientras que el monto en pago va a cuentas por cobrar. La cuenta le dice a
+
+00:01:27.400 --> 00:01:32.240
+Finance qué sucedió financieramente. Esta estructura importa porque un estado financiero no inventa los
+
+00:01:32.240 --> 00:01:37.000
+números, sino que lee y agrupa los números ya registrados en el libro mayor. Si los registros
+
+00:01:37.000 --> 00:01:40.500
+contables terminan en el lugar equivocado, ningún diseño de informe podrá corregir el significado
+
+00:01:40.500 --> 00:01:43.860
+después sin trabajo manual. Ahora, las cuentas principales también tienen tipos y un tipo de
+
+00:01:43.860 --> 00:01:50.280
+cuenta le da a Dynamics 365 Finance una clasificación general. Las cuentas de pérdidas y ganancias registran
+
+00:01:50.280 --> 00:01:53.920
+los ingresos y gastos de un periodo, y su saldo combinado contribuye al resultado del fin de año.
+
+00:01:53.920 --> 00:01:58.160
+El balance general registra lo que la empresa posee, lo que debe y el interés del propietario,
+
+00:01:58.260 --> 00:02:02.220
+es decir, activos, pasivos y patrimonio. El efectivo es normalmente un activo, un préstamo
+
+00:02:02.220 --> 00:02:05.700
+bancario es normalmente un pasivo, los ingresos por ventas pertenecen a pérdidas y ganancias y al
+
+00:02:05.700 --> 00:02:10.020
+alquiler a gastos. Puede sonar a contabilidad básica, y lo es, pero también es el primer punto
+
+00:02:10.020 --> 00:02:13.560
+de control para los informes porque el sistema necesita saber si una cuenta pertenece a un estado
+
+00:02:13.560 --> 00:02:18.420
+de resultados o a un balance general. También existe un tipo de cuenta total especial que puede sumar
+
+00:02:18.420 --> 00:02:22.760
+un rango de saldos de cuenta, o podría usar esto cuando desea un total en un intervalo definido.
+
+00:02:22.760 --> 00:02:26.420
+Aunque muchos equipos financieros generan sus totales de estado directamente en los informes
+
+00:02:26.420 --> 00:02:30.040
+financieros. Los tipos de cuentas son amplios y ahí es donde entran las categorías de cuenta
+
+00:02:30.040 --> 00:02:35.460
+principal, o crean un grupo de informes más útil dentro de esa clasificación general. Por ejemplo,
+
+00:02:35.780 --> 00:02:38.920
+las cuentas de activos pueden incluirse en categorías como efectivo, activos fijos,
+
+00:02:39.040 --> 00:02:43.200
+cuentas por cobrar o inversiones a corto plazo, mientras que las cuentas de pasivo podrían incluirse
+
+00:02:43.200 --> 00:02:47.920
+en cuentas por pagar, impuestos por pagar o deuda largo plazo. La diferencia es simple. El tipo de
+
+00:02:47.920 --> 00:02:52.400
+cuenta indica la clase contable general, y la categoría de cuenta principal indica el grupo de informes
+
+00:02:52.400 --> 00:02:56.280
+que desea que la gente vea. Imagina que tiene varias cuentas bancarias, una cuenta de caja chica y
+
+00:02:56.280 --> 00:03:00.160
+una cuenta de compensación de efectivo. O cada una puede tener su propia cuenta principal porque
+
+00:03:00.160 --> 00:03:04.100
+finanzas necesita ese nivel de detalle. Sin embargo, todas pueden pertenecer al efectivo.
+
+00:03:04.640 --> 00:03:07.920
+Un informe puede mostrar una línea de efectivo clara cuando eso es todo lo que el lector necesita.
+
+00:03:08.340 --> 00:03:12.500
+Por eso que los informes financieros predeterminados usan categorías de cuenta principal. O necesitan
+
+00:03:12.500 --> 00:03:16.240
+una estructura familiar antes de poder mostrar saldos en secciones como activos, pasivos,
+
+00:03:16.560 --> 00:03:22.320
+ingresos o gastos. Una configuración limpia compensa más adelante porque cuando las cuentas principales
+
+00:03:22.320 --> 00:03:25.840
+siguen reglas claras, los tipos de cuentas son correctos y las categorías coinciden con la
+
+00:03:25.840 --> 00:03:28.780
+forma en que su empresa lee sus estados financieros, la generación de informes es mucho más fácil.
+
+00:03:29.540 --> 00:03:33.600
+Usted comienza con datos que ya tienen un lugar. Las cuentas explican qué sucedió financieramente,
+
+00:03:33.740 --> 00:03:39.000
+pero los líderes suelen pedir más que eso. También quieren saber dónde sucedió, quién gastó el dinero y qué
+
+00:03:39.000 --> 00:03:45.320
+parte del negocio produjo el resultado. Dimensiones financieras, añadiendo las preguntas que los líderes
+
+00:03:45.320 --> 00:03:49.720
+realmente hacen, una cuenta principal le indica que se refiere al dinero. O bastante simple.
+
+00:03:50.880 --> 00:03:53.900
+Pero las dimensiones financieras añaden el contexto empresarial en torno a esa cantidad.
+
+00:03:54.160 --> 00:03:57.420
+Se responden a las preguntas que los líderes hacen cuando ven un total. ¿Qué departamento lo gastó?
+
+00:03:57.780 --> 00:04:00.940
+¿Qué ubicación lo ganó? ¿Qué unidad de negocio? ¿Está vinculado a un proyecto?
+
+00:04:01.380 --> 00:04:05.240
+Veamos el gasto de alquiler. Su empresa podría pagar el alquiler de una oficina central,
+
+00:04:05.440 --> 00:04:08.780
+un almacén y varios puntos de venta. Si cada pago se registra en gastos de alquiler,
+
+00:04:08.900 --> 00:04:12.740
+usted ve la factura. Eso es útil, pero no le dice a un gerente regional cuánto cuesta su sitio.
+
+00:04:12.740 --> 00:04:16.780
+Una dimensión financiera llena ese vacío. Podría añadir departamento, finanzas,
+
+00:04:16.900 --> 00:04:21.680
+ventas u operaciones, o centro de costos, unidad de negocio, región o proyecto. Esos valores se
+
+00:04:21.680 --> 00:04:25.040
+quedan con el asiento contable al registrarse. Si la cuenta sigue siendo gasto de alquiler,
+
+00:04:25.180 --> 00:04:28.080
+pero el asiento cuenta registrará más completo. Un pago podría decir gasto de alquiler,
+
+00:04:28.200 --> 00:04:31.660
+oficina central. Otro gasto de alquiler, almacén. Un tercero gasto de alquiler,
+
+00:04:31.760 --> 00:04:35.880
+venta al pormenor norte. La misma cuenta, diferente significado a negocio. Esto da finanzas a una
+
+00:04:35.880 --> 00:04:39.000
+estructura de cuenta consistente mientras permite a los líderes ver resultados de su parte de la
+
+00:04:39.000 --> 00:04:44.740
+empresa. El director de ventas mira la venta. El gerente de almacén mira el almacén. Finanzas
+
+00:04:44.740 --> 00:04:49.280
+ve el total de todos. Esto elimina un hábito común de las hojas de cálculo. Sin dimensiones,
+
+00:04:49.360 --> 00:04:53.920
+alguien exporta saldos de libro mayor y empieza a añadir columnas a mano. Ordenar, filtrar,
+
+00:04:54.000 --> 00:04:57.140
+copiar números en un nuevo libro. Luego intentar explicar por qué el total del departamento no
+
+00:04:57.140 --> 00:05:00.620
+coincide con el total de la empresa. Con las dimensiones introducidas al registrar
+
+00:05:00.620 --> 00:05:04.220
+la transacción, ese trabajo empieza desde un mejor lugar. El detalle ya pertenece al registro
+
+00:05:04.220 --> 00:05:09.060
+contable, pero solo funciona cuando los valores se mantienen consistentes. Si una persona selecciona
+
+00:05:09.060 --> 00:05:14.880
+región norte, otra selecciona norte y una tercera usa norte 01, el informe divide, lo que debería ser
+
+00:05:14.880 --> 00:05:20.300
+un saldo en líneas separadas. Finanzas necesitan nombres claros, propiedad clara y reglas sobre qué
+
+00:05:20.300 --> 00:05:24.580
+valores puede usar la gente. Dynamics 365 Finance apoya esto a través de reglas de cuenta.
+
+00:05:25.200 --> 00:05:28.680
+Dependiendo de la cuenta, el sistema puede requerir una dimensión o limitar los valores que los usuarios
+
+00:05:28.680 --> 00:05:32.780
+pueden seleccionar. Por ejemplo, una cuenta de gastos puede necesitar un centro de costos, mientras que una
+
+00:05:32.780 --> 00:05:36.460
+cuenta bancaria solo puede necesitar una unidad de negocio. No necesita el mismo detalle para cada
+
+00:05:36.460 --> 00:05:42.360
+cuenta. Use una dimensión financiera cuando espere reutilizar el valor e informar saldos según él con
+
+00:05:42.360 --> 00:05:46.680
+el tiempo. Departamento es reutilizable. El centro de costos es reutilizable. La región es reutilizable.
+
+00:05:47.100 --> 00:05:50.700
+El proyecto también. Si su equipo de finanzas rastrea saldos y costos por proyecto, el número de factura
+
+00:05:50.700 --> 00:05:55.140
+es diferente, el número de orden de compra es diferente. Sus valores a menudo pertenecen a una
+
+00:05:55.140 --> 00:06:00.220
+transacción o a un trabajo de corta duración. Crear una dimensión financiera para cada número de factura
+
+00:06:00.220 --> 00:06:04.820
+le deja miles de valores únicos que nadie quiere en un estado de cuenta. Ahí es donde las etiquetas
+
+00:06:04.820 --> 00:06:09.380
+financieras encajan mejor. Una etiqueta financiera almacena una referencia flexible o un número de
+
+00:06:09.380 --> 00:06:14.120
+factura, orden de compra, referencia de pago o ID de sistema externo. Se asienta en el registro
+
+00:06:14.120 --> 00:06:18.920
+contable para detalle y análisis, pero no lleva el mismo rol estructurado que una dimensión financiera.
+
+00:06:19.340 --> 00:06:23.080
+Las dimensiones financieras forman parte de la estructura de la cuenta. El sistema verifica si el
+
+00:06:23.080 --> 00:06:27.680
+valor es válido y finanzas puede usarlo para resumir saldos. Las etiquetas financieras son más ligeras.
+
+00:06:27.680 --> 00:06:31.240
+Etiqueta en una transacción sin convertir esa etiqueta en un segmento de informe permanente.
+
+00:06:31.840 --> 00:06:35.140
+Así que no crea una dimensión llamada a nombre de facturas solo para encontrar facturas más tarde.
+
+00:06:35.720 --> 00:06:39.120
+Utilice detalles de transacción o una etiqueta financiera para eso. Un punto de configuración
+
+00:06:39.120 --> 00:06:42.840
+más que conocer. Los informes financieros pueden usar las dimensiones que ya están en su sistema
+
+00:06:42.840 --> 00:06:46.280
+sin herramientas adicionales. En la página de configuración de informes financieros,
+
+00:06:46.380 --> 00:06:50.060
+finanzas elige qué dimensiones aparecen para el diseño y visualización de informes y en qué orden.
+
+00:06:50.580 --> 00:06:54.460
+Ese orden importa más de lo que parece. Si sus informes normalmente le dan cuenta principal,
+
+00:06:54.460 --> 00:06:57.540
+departamento, centro de costos y proyecto, la gente aprende dónde mirar.
+
+00:06:58.020 --> 00:07:01.280
+Si el orden cambia de un informe a otro al leer los detalles, se vuelve más lento y es más fácil
+
+00:07:01.280 --> 00:07:05.280
+cometer errores. Una vez que cada entrada lleva las etiquetas reutilizables correctas,
+
+00:07:05.640 --> 00:07:09.960
+el libro mayor puede responder más que solo qué gastamos. Responde dónde, quién y qué parte del
+
+00:07:09.960 --> 00:07:15.820
+negocio. Y con ese detalle en su lugar, Dynamics 365 Finance puede convertir esas entradas registradas
+
+00:07:15.820 --> 00:07:19.360
+en un estado financiero. ¿Qué es realmente el informe financiero?
+
+00:07:19.760 --> 00:07:22.860
+Todas una vez que sus entradas del libro mayor incluyen las cuentas y dimensiones correctas que hace
+
+00:07:22.860 --> 00:07:27.540
+realmente el informe financiero con ellas. El informe financiero es el complemento en Dynamics 365 Finance
+
+00:07:27.540 --> 00:07:31.260
+para crear, mantener y visualizar estados financieros. Eso suena técnico, así que
+
+00:07:31.260 --> 00:07:35.680
+hablemos en términos sencillos. Es la parte de Dynamics 365 Finance que convierte los saldos
+
+00:07:35.680 --> 00:07:39.980
+de su libro mayor en informes, como en estado de resultados, balance general, flujo de efectivo,
+
+00:07:40.320 --> 00:07:42.480
+balance de comprobación o presupuesto contrarreal.
+
+00:07:43.260 --> 00:07:46.900
+En su libro mayor nuevo, nadie registra una factura en el informe financiero ni paga a un
+
+00:07:46.900 --> 00:07:52.060
+proveedor desde allí. El registro ocurre en Dynamics 365 Finance y el informe financiero lee los
+
+00:07:52.060 --> 00:07:56.520
+resultados después. Tampoco es solo un panel con algunos gráficos. Un panel le permite analizar
+
+00:07:56.520 --> 00:08:00.820
+una tendencia rápida. Un estado financiero ofrece una visión estructurada con grupos de cuentas,
+
+00:08:01.100 --> 00:08:04.880
+totales, periodos de informe, comparaciones y la capacidad de inspeccionar el detalle de
+
+00:08:04.880 --> 00:08:08.940
+TAS de un número. Piénselo como la sala de informes conecta al libro mayor general,
+
+00:08:09.300 --> 00:08:12.560
+el libro mayor registra las transacciones. El informe financiero los organiza en el formato
+
+00:08:12.560 --> 00:08:17.240
+que su equipo financiero, gerentes, auditores o miembros de la junta necesitan leer. Detrás de escena,
+
+00:08:17.320 --> 00:08:20.420
+el informe financiero utiliza un mercado de datos financieros que se actualiza desde el libro
+
+00:08:20.420 --> 00:08:24.780
+mayor general. Un mercado de datos es una copia para informes de datos financieros organizada para
+
+00:08:24.780 --> 00:08:28.100
+que los informes se ejecuten sin ralentizar a quienes ingresan facturas o registran diarios.
+
+00:08:28.980 --> 00:08:33.120
+Esa separación ayuda a que Finanzas pueda revisar un estado mientras otros usuarios siguen trabajando.
+
+00:08:33.720 --> 00:08:37.800
+No necesita exportar cada saldo a una hoja de cálculo solo para crear un informe mensual limpio.
+
+00:08:38.220 --> 00:08:42.120
+Microsoft incluye 22 informes financieros predeterminados con Dynamics 365 Finance.
+
+00:08:42.980 --> 00:08:46.440
+Obtiene un estado de resultados, balance general, informe de flujo de efectivo, balance de
+
+00:08:46.440 --> 00:08:50.780
+comprobación detallado, resumen de balance, informe de gastos móviles, informes de presupuesto
+
+00:08:50.780 --> 00:08:55.180
+contra real. Además de informes de ventas semanales y descuentos, detalles de auditoría,
+
+00:08:55.300 --> 00:08:58.340
+ratios o un balance general junto a un estado de resultados. Pero eso no significa que todos
+
+00:08:58.340 --> 00:09:01.860
+coincidan con su empresa desde el primer día. El diseño del informe puede parecer correcto,
+
+00:09:01.920 --> 00:09:05.080
+pero sus propias cuentas principales y categorías deben asignarse correctamente a las filas.
+
+00:09:05.280 --> 00:09:09.240
+Si su empresa llama a un grupo de cuentas costos directos, mientras que el informe predeterminado
+
+00:09:09.240 --> 00:09:12.820
+espera costo de ventas, alguien debe revisar esa configuración. Comence con el informe
+
+00:09:12.820 --> 00:09:16.140
+predeterminado de todos modos. Le ofrece un ejemplo funcional, una estructura familiar y
+
+00:09:16.140 --> 00:09:19.520
+un punto de partida mucho más rápido que crear cada informe desde una página en blanco.
+
+00:09:20.300 --> 00:09:23.900
+Ábralo, compara los saldos con su libro mayor, verifique las agrupaciones de cuentas y ajustes
+
+00:09:23.900 --> 00:09:28.420
+sobre lo que su negocio necesite. Ahora, Dynamics 365 Finance tiene varias herramientas de generación
+
+00:09:28.420 --> 00:09:31.560
+de informes y aquí es donde la gente suele confundirse. Los informes financieros manejan
+
+00:09:31.560 --> 00:09:37.140
+estados financieros basados en el libro mayor. SSRS SQL Server Reporting Services generalmente
+
+00:09:37.140 --> 00:09:41.820
+maneja documentos comerciales con formato e informes detallados como facturas, órdenes de compra,
+
+00:09:41.820 --> 00:09:46.540
+estados de cuenta de clientes o listas extensas de transacciones. Está diseñado para páginas
+
+00:09:46.540 --> 00:09:50.880
+que requieran un diseño fijo. Los informes electrónicos manejan archivos que deben enviarse
+
+00:09:50.880 --> 00:09:55.220
+a otro lugar, archivos bancarios, presentaciones de impuestos, archivos XML, archivos SSV u otros
+
+00:09:55.220 --> 00:09:59.780
+formatos regulados. Esa herramienta se enfoca en enviar o recibir datos estructurados. Power BI
+
+00:09:59.780 --> 00:10:04.180
+maneja el análisis interactivo. Usted usa Power BI cuando desea gráficos, filtros, tendencias y
+
+00:10:04.180 --> 00:10:08.100
+vistas de gestión que ayuden a las personas a explorar preguntas. ¿Qué región tiene los costos
+
+00:10:08.100 --> 00:10:11.460
+de crecimiento más rápidos? ¿Cómo se comparan los gastos reales con el presupuesto a lo largo
+
+00:10:11.460 --> 00:10:11.980
+de varios meses?
+
+00:10:12.820 --> 00:10:17.120
+Su informe financiero es maneja en el estado formal. Power BI ayuda a las personas a investigar
+
+00:10:17.120 --> 00:10:20.840
+los patrones en torno a él. Excel le da finanzas a su lugar familiar para verificar números
+
+00:10:20.840 --> 00:10:24.740
+o realizar análisis adicionales, pero no necesita convertirse en el lugar donde cada estado financiero
+
+00:10:24.740 --> 00:10:25.560
+comienza desde cero.
+
+00:10:26.100 --> 00:10:29.400
+Cada herramienta tiene una función. Elija la correcta y la generación de informes. Déjala
+
+00:10:29.400 --> 00:10:31.480
+de tratar sobre reconstruir números para centrarse en leerlos.
+
+00:10:31.480 --> 00:10:35.680
+Construcción de un informe. Filas, columnas y definiciones de informe.
+
+00:10:37.200 --> 00:10:40.980
+Tu estado financiero comienza con una forma. Usted debe decidir qué va en el lado izquierdo,
+
+00:10:41.040 --> 00:10:46.140
+qué va en la parte superior y cómo el informe une ambos elementos. En Dynamics 365 Finance
+
+00:10:46.140 --> 00:10:49.700
+llamamos a esas partes definiciones de fila, definiciones de columna y definiciones de
+
+00:10:49.700 --> 00:10:54.060
+informe. Comencemos con las filas. Una definición de fila controla el lado izquierdo de su estado.
+
+00:10:54.400 --> 00:10:57.880
+Le indica al sistema que cuentas, categorías de cuenta o combinaciones de dimensiones extraer.
+
+00:10:58.320 --> 00:11:01.460
+También define cómo llamar a cada línea y dónde deben aparecer los totales.
+
+00:11:01.480 --> 00:11:05.180
+Piense en un estado de resultados normal. Ingresos en la parte superior. Costo de ventas
+
+00:11:05.180 --> 00:11:08.780
+después. Luego margen bruto. Debajo de eso vienen los gastos operativos y al final el
+
+00:11:08.780 --> 00:11:12.720
+resultado neto. Cada una de esas líneas necesita sus propias instrucciones. Los ingresos pueden
+
+00:11:12.720 --> 00:11:15.620
+apuntar a un grupo de cuentas de ventas, mientras que el costo de ventas apunta a cuentas de costo.
+
+00:11:16.100 --> 00:11:21.780
+El margen bruto no apunta a ninguna cuenta en absoluto. Calcula un total restando el costo
+
+00:11:21.780 --> 00:11:26.260
+de ventas de los ingresos. Esa es la función en la definición de fila. Le indica a los informes
+
+00:11:26.260 --> 00:11:30.880
+financieros qué saldos registrados pertenecen a cada línea y le dice al informe cómo sumar o restar
+
+00:11:30.880 --> 00:11:35.400
+esas líneas al calcular totales. Puede crear una fila basada en cuentas principales e individuales,
+
+00:11:35.440 --> 00:11:39.040
+un rango de cuentas, una categoría de cuenta principal. Las categorías ahorran mucho trabajo
+
+00:11:39.040 --> 00:11:43.020
+de configuración. Por ejemplo, un balance general normalmente separa activos pasivos y patrimonio.
+
+00:11:43.980 --> 00:11:47.840
+Dentro de los activos podría mostrar efectivo, cuentas por cobrar, activos fijos e inventario.
+
+00:11:48.240 --> 00:11:51.740
+Si esas cuentas ya están en las categorías de cuenta principal correctas, las filas del balance
+
+00:11:51.740 --> 00:11:56.060
+general predeterminado pueden usar esos grupos sin listar cada cuenta una por una. Es solo un diseño
+
+00:11:56.060 --> 00:12:00.340
+más limpio. Financias siguen manteniendo cuentas separadas para saldos separados, pero el lector
+
+00:12:00.340 --> 00:12:04.900
+solo ve el nivel de detalle coherente para un estado formal. Si necesitan más detalle,
+
+00:12:05.000 --> 00:12:07.780
+pueden profundizar más. El estado financiero en sí no tiene por qué convertirse en un
+
+00:12:07.780 --> 00:12:11.320
+directorio telefónico de un nuevo. Las filas responden a preguntas que estamos reportando.
+
+00:12:12.020 --> 00:12:16.080
+Las columnas responden a otra. ¿Cómo queremos verlo? Una definición de columna controla la
+
+00:12:16.080 --> 00:12:20.840
+información que aparece a lo largo del año. Podría mostrar el mes actual, los resultados del año
+
+00:12:20.840 --> 00:12:24.500
+hasta la fecha, los resultados del año anterior hasta la fecha, el presupuesto, los reales o la diferencia
+
+00:12:24.500 --> 00:12:28.600
+entre el real y presupuesto. Un estado de resultados siempre podría comenzar con una columna de
+
+00:12:28.600 --> 00:12:32.640
+descripción. Después podría mostrar los datos reales del periodo actual, luego el acumulado
+
+00:12:32.640 --> 00:12:37.420
+anual, el presupuesto y por último la variación. Esa columna de variación calcula la diferencia
+
+00:12:37.420 --> 00:12:41.040
+automáticamente, por lo que los gerentes no necesitan abrir Excel y crear otra fórmula después
+
+00:12:41.040 --> 00:12:45.440
+de ejecutar el informe. También puede colocar periodos uno al lado del otro quizás de enero
+
+00:12:45.440 --> 00:12:49.300
+a diciembre, este trimestre junto al mismo trimestre del año pasado o resultados reales junto a una
+
+00:12:49.300 --> 00:12:54.480
+proyección. Las filas deciden los temas y las columnas deciden la vista. Al combinar esas dos
+
+00:12:54.480 --> 00:12:58.340
+piezas tiene la mayor parte de un estado financiero, pero el sistema aún necesita un lugar donde
+
+00:12:58.340 --> 00:13:02.320
+nombrar el informe y decirle a Dynamics 3C5 Finance qué definiciones de fila y columna van juntas.
+
+00:13:02.800 --> 00:13:07.200
+Esa es la definición del informe. Una definición de informe combina las filas y columnas en algo
+
+00:13:07.200 --> 00:13:10.820
+que las personas pueden generar. También controla configuraciones como el redondo y cómo aparecen
+
+00:13:10.820 --> 00:13:16.220
+los montos negativos. Aquí hay un ejemplo concreto. Podría crear una definición de fila llamada
+
+00:13:16.220 --> 00:13:19.680
+filas del estado de resultados y luego una definición de columna llamada presupuesto real mensual
+
+00:13:19.680 --> 00:13:23.900
+y variación. La definición del informe los conecta y le da un nombre al informe final,
+
+00:13:24.060 --> 00:13:28.640
+quizás estado de resultados, de la gerencia. Esa separación es útil porque permite reutilizar
+
+00:13:28.640 --> 00:13:33.860
+las partes. Una definición de fila para un estado de resultados podría funcionar con un diseño de
+
+00:13:33.860 --> 00:13:38.760
+columna mensual, uno de año a la fecha y otro de comparación con el año anterior. No necesitará
+
+00:13:38.760 --> 00:13:42.380
+reconstruir la misma estructura de ingresos y gastos cada vez que alguien haga una pregunta nueva.
+
+00:13:42.860 --> 00:13:46.800
+Ahora bien, algunas empresas necesitan un informe para la empresa. Otras necesitan un informe que siga una
+
+00:13:46.800 --> 00:13:51.000
+estructura corporativa más amplia. Ahí es donde entra en juego un árbol de informe. Un árbol de
+
+00:13:51.000 --> 00:13:54.560
+informes le permite organizar los resultados financieros en unidades de informe. Esas unidades
+
+00:13:54.560 --> 00:13:58.340
+pueden representar entidades legales, regiones, departamentos, unidades de negocio u otra parte
+
+00:13:58.340 --> 00:14:02.540
+de la estructura de la empresa. Imagina un grupo con tres subsidiarias. La empresa matriz desea ver
+
+00:14:02.540 --> 00:14:06.560
+cada subsidiaria por separado y luego un total combinado para el grupo. Un árbol de informes puede
+
+00:14:06.560 --> 00:14:10.240
+describir esa estructura cada subsidiaria como una unidad de informe y el total del grupo por encima de
+
+00:14:10.240 --> 00:14:15.780
+ellas. El mismo enfoque funciona para la región. Podría mostrar el norte, sur y oeste como unidades separadas y luego
+
+00:14:15.780 --> 00:14:20.160
+incluir un total para toda la empresa. O el líder de un departamento podría solo necesitar ver su
+
+00:14:20.160 --> 00:14:24.340
+propia unidad, mientras que el equipo de finanzas necesita la vista completa. Una definición de
+
+00:14:24.340 --> 00:14:27.620
+informe puede conectarse a un árbol de informes a la vez, así que elija la estructura que responda
+
+00:14:27.620 --> 00:14:32.460
+a la pregunta del informe. Para quienes son nuevos en esto, el diseñador de informes incluye un asistente
+
+00:14:32.460 --> 00:14:36.600
+que le ayude a empezar a crear estas partes sin enfrentar todas las opciones de golpe. Elija el tipo de
+
+00:14:36.600 --> 00:14:42.000
+informe, trabaja en las opciones básicas y crea un diseño inicial. A medida que su equipo financiero se
+
+00:14:42.000 --> 00:14:45.760
+sienta más cómodo, podrá editar directamente las definiciones de filas, columnas, informes,
+
+00:14:45.760 --> 00:14:49.580
+y árboles de informes y árboles de informes. Eso les da más control sobre los cálculos, el diseño,
+
+00:14:49.680 --> 00:14:53.440
+la agrupación y la forma en que aparecen las dimensiones. El objetivo no es intentar crear el
+
+00:14:53.440 --> 00:14:58.060
+informe más complicado posible. El objetivo es crear un informe donde cada línea responda a una
+
+00:14:58.060 --> 00:15:01.980
+pregunta comercial real. Cada columna aclara la comparación y lo coincidan con el libro mayor.
+
+00:15:03.520 --> 00:15:08.480
+Ejecutar, leer y mantener informes. Un informe solo es útil cuando las personas pueden leerlo,
+
+00:15:08.560 --> 00:15:13.240
+cuestionarlo, confiar en lo que ven. Después de generar un informe financiero, no está bloqueado
+
+00:15:13.240 --> 00:15:17.680
+automáticamente en una página estática. Puede cambiar la fecha del informe, elegir una moneda,
+
+00:15:17.780 --> 00:15:21.660
+alternar entre resumen y detalle, y aplicar filtros para dimensiones o atributos financieros.
+
+00:15:22.500 --> 00:15:25.400
+Eso significa que el mismo informe puede responder a diferentes preguntas sin que hay
+
+00:15:25.400 --> 00:15:28.720
+que copiarlo en un libro nuevo. Un gerente de finanzas podría comenzar con el estado de
+
+00:15:28.720 --> 00:15:32.260
+resultado del resultado de toda la empresa para el meso actual. Luego puede infiltrarlo por unidad
+
+00:15:32.260 --> 00:15:35.740
+de negocio, verlo en otra moneda o cambiar la fecha para comparar con otro periodo.
+
+00:15:36.200 --> 00:15:39.340
+Diseño del informe permanece intacto. La vista cambia según la pregunta en cuestión.
+
+00:15:39.340 --> 00:15:43.180
+Importan dos vistas. La vista resumida le da la historia financiera de alto nivel,
+
+00:15:43.280 --> 00:15:47.500
+nuestros ingresos totales, costos totales y resultado neto. La vista detallada le da
+
+00:15:47.500 --> 00:15:50.700
+más líneas para inspeccionar cuando un total no parece correcto. Eso nos lleva a la exploración
+
+00:15:50.700 --> 00:15:54.160
+detallada. Imagine que una línea de gastos operativos parece mucho más alta que el presupuesto.
+
+00:15:54.360 --> 00:15:57.660
+En lugar de enviar un correo, exportar una lista de libro mayor y tratar de hacer coincidir
+
+00:15:57.660 --> 00:16:01.560
+números de cuenta manualmente, puede explorar ese monto desde el informe. Puede seguir el saldo
+
+00:16:01.560 --> 00:16:05.600
+hasta las transacciones que lo respaldan. Se le permite ver los asientos de diario,
+
+00:16:05.600 --> 00:16:09.340
+fechas, comprobantes y otros detalles que crearon el número. El informe se convierte
+
+00:16:09.340 --> 00:16:12.260
+en un punto de partida para una conversación o una respuesta final impresa en una página.
+
+00:16:12.680 --> 00:16:15.200
+¿Esto es especialmente útil durante el cierre de mes? Alguien pregunta,
+
+00:16:15.400 --> 00:16:19.140
+¿o por qué aumentaron los costos de almacén? Ah, usted comienza con la vista de almacén,
+
+00:16:19.260 --> 00:16:22.280
+encuentra la línea de gasto, explora las transacciones y ve si el aumento proviene
+
+00:16:22.280 --> 00:16:27.580
+de alquiler, reparaciones, personal o un cargo único. Finanzas pasa menos tiempo buscando
+
+00:16:27.580 --> 00:16:31.540
+la fuente y más tiempo explicando el resultado. Los informes también pueden ejecutarse
+
+00:16:31.540 --> 00:16:35.460
+según uno. Un equipo puede generar informes diarios, semanal, mensual o anualmente según
+
+00:16:35.460 --> 00:16:39.220
+el trabajo. Los paquetes de gestión mensual son el ejemplo obvio, pero los horarios también
+
+00:16:39.220 --> 00:16:42.660
+pueden ayudar a los equipos a preparar revisiones presupuestarias regulares o informes de grupo
+
+00:16:42.660 --> 00:16:47.380
+recurrentes. Para empresas con varias entidades legales, los informes financieros pueden admitir
+
+00:16:47.380 --> 00:16:50.760
+informes entre esas entidades y pueden convertir monedas para fines de reporte.
+
+00:16:51.820 --> 00:16:55.840
+Un equipo financiero grupal puede necesitar cada empresa en su moneda local, pero el liderazgo
+
+00:16:55.840 --> 00:16:59.880
+puede necesitar una vista en una moneda de informe. La estructura requiere una configuración
+
+00:16:59.880 --> 00:17:03.440
+cuidadosa, pero el lector no necesita reconstruir el informe a partir de archivos separados cada
+
+00:17:03.440 --> 00:17:08.000
+mes, que hay un detalle de mantenimiento que vale la pena recordar. Los informes recién
+
+00:17:08.000 --> 00:17:12.200
+generados reciben una fecha de vencimiento de 90 días por defecto. Los usuarios con los
+
+00:17:12.200 --> 00:17:15.280
+permisos de seguridad adecuados pueden cambiar ese periodo, incluso configurando un informe
+
+00:17:15.280 --> 00:17:19.320
+para que nunca expire. La persona que genere un informe puede eliminar su propio informe.
+
+00:17:19.800 --> 00:17:22.960
+Los usuarios con la función de seguridad de informes financieros pueden eliminar informes
+
+00:17:22.960 --> 00:17:25.600
+creados por otros usuarios y gestionar la configuración de vencimiento de informes.
+
+00:17:25.960 --> 00:17:29.380
+Eso evita que la lista de informes se convierta en un archivo extenso de ejecuciones antiguas
+
+00:17:29.380 --> 00:17:33.320
+que nadie puede identificar. Pero tenga cuidado con los informes más antiguos. A partir de la
+
+00:17:33.320 --> 00:17:38.500
+versión 10.0.45 de informes financieros, cuando vuelve a ejecutar un informe guardado o explora
+
+00:17:38.500 --> 00:17:42.780
+sus detalles, Dynamics 365 Finance utiliza los datos de transacciones actuales. Si alguien
+
+00:17:42.780 --> 00:17:46.400
+editó una transacción subyacente después de ejecutar el informe, el detalle detallado
+
+00:17:46.400 --> 00:17:50.900
+puede diferir de lo que vio originalmente. Los saldos de nivel superior guardados no suelen
+
+00:17:50.900 --> 00:17:55.300
+cambiar, pero el detalle de respaldo sí. Por lo tanto, si Finanzas necesita una copia de
+
+00:17:55.300 --> 00:17:59.740
+auditoría inalterable, para un periodo cerrado exporte el informe finalizado a Excel o PDF y
+
+00:17:59.740 --> 00:18:03.800
+guárdelo bajo su proceso de registro normal. Una advertencia final sobre el complemento en sí.
+
+00:18:04.420 --> 00:18:08.960
+Si alguien desinstala el complemento de informes financieros, Dynamics 365 Finance elimina
+
+00:18:08.960 --> 00:18:12.700
+permanentemente los informes y configuraciones de informes y configuraciones creados previamente.
+
+00:18:13.100 --> 00:18:16.700
+Microsoft no ofrece soporte de recuperación para esa acción. Trátelo como si eliminara un
+
+00:18:16.700 --> 00:18:19.840
+espacio de trabajo compartido de finanzas, no como si borraron la aplicación de su teléfono.
+
+00:18:20.480 --> 00:18:23.280
+Sus estados financieros formales ayudan a Finanzas a aplicar las cifras en un
+
+00:18:23.280 --> 00:18:26.500
+formato controlado. Para un escaneo visual más rápido y preguntas sobre tendencias,
+
+00:18:26.640 --> 00:18:29.920
+otra herramienta encaja junto a ello. ¿Dónde encajan Power BI y Excel?
+
+00:18:30.420 --> 00:18:34.640
+¿Dónde encajan realmente Power BI y Excel? Los informes financieros manejan sus estados
+
+00:18:34.640 --> 00:18:37.900
+formales, los que necesitan los auditores. Power BI se encarga de los gráficos,
+
+00:18:37.960 --> 00:18:41.740
+las tendencias y las vistas interactivas de gestos. Ingresos por región, presupuesto frente
+
+00:18:41.740 --> 00:18:46.640
+a lo real. Excel también tiene su lugar. Su equipo lo usa para comprobaciones, cálculos y
+
+00:18:46.640 --> 00:18:50.640
+compartir cifras en un formato que todos ya conocen. El espacio de trabajo de análisis
+
+00:18:50.640 --> 00:18:54.300
+financiero incluye contenido de Power BI para vistas comunes, pero mantenga cada panel
+
+00:18:54.300 --> 00:18:58.300
+enfocado en una pregunta. No intente abarrotar todo en la misma pantalla. La mejor parte de
+
+00:18:58.300 --> 00:19:01.920
+todas esas herramientas leen de los mismos registros de finanzas. Todo funciona en conjunto.
+
+00:19:03.080 --> 00:19:05.320
+Cierre. Construye el libro mayor primero.
+
+00:19:06.700 --> 00:19:11.040
+Un informe claro no comienza con el diseño. Comienza mucho antes. Cuentas principales limpias,
+
+00:19:11.140 --> 00:19:16.240
+dimensiones reutilizables. Sin esa base nada más importa. Empiece con un informe predeterminado.
+
+00:19:16.240 --> 00:19:19.520
+Pruébelo con sus saldos reales y luego cambie solo lo que su empresa necesite.
+
+00:19:20.600 --> 00:19:25.360
+Suscríbase para más cápsulas de conocimiento de Microsoft de Mirko Peterson de M365FM y comparta
+
+00:19:25.360 --> 00:19:28.760
+esto con alguien que aún piense que los informes de Dynamics 3.5 Finance comienzan y terminan en Excel.

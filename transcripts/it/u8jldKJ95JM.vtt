@@ -1,0 +1,694 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:05.760
+Siete pronti per 10 giorni di Microsoft 365, Copilot, IA, Azure e le persone che stanno
+
+00:00:05.760 --> 00:00:11.400
+plasmando il futuro del lavoro? Questo gennaio M365 con ritorna e puntiamo ancora più in alto
+
+00:00:11.400 --> 00:00:15.520
+e puntiamo ancora più. Unitevi a noi per sessioni dal vivo, demo concrete conoscenze
+
+00:00:15.520 --> 00:00:20.340
+pratiche da MVP ed esperti del settore di tutto il mondo. Niente slide generic, niente
+
+00:00:20.340 --> 00:00:26.420
+gergo infinito. Affronteremo le sfide reali, Copilot Studio, agenti IA, Fabric, Sicurezza,
+
+00:00:26.420 --> 00:00:31.960
+Governance e Automazione e Automazione. Che siate professionisti IT, sviluppatori o
+
+00:00:31.960 --> 00:00:37.440
+leader aziendali ci sono sessioni pensate per voi. Con 10 giorni interi potrete esplorare
+
+00:00:37.440 --> 00:00:42.360
+molteplici tecnologie e connettervi con una community globale. Seguite le dirette e portate
+
+00:00:42.360 --> 00:00:48.540
+intuizioni pratiche nella vostra organizzazione. Gennaio 2027, 10 giorni, un'unica community
+
+00:00:48.540 --> 00:00:55.240
+Microsoft. Le registrazioni sono aperte. Andate su m365con.net e assicuratevi un posto oggi
+
+00:00:55.240 --> 00:01:04.200
+stesso. Il sito è m365con.net. Iscrivetevi ora su m365con.net e ci vedremo dal vivo a
+
+00:01:04.200 --> 00:01:08.640
+gennaio. Se vi è mai capitato un file server in crash il venerdì pomeriggio, conoscete
+
+00:01:08.640 --> 00:01:13.600
+il panico? Le chiamate frenetiche, il backup funziona? Domanda a cui nessuno vuole rispondere
+
+00:01:13.600 --> 00:01:17.720
+e il viaggio in ufficio solo per smanettare su una scatola lampeggiata. Sono Mirko Peters
+
+00:01:17.720 --> 00:01:22.320
+e oggi vedremo una soluzione migliore, Azure Files. Ecco il punto sui file server tradizionali.
+
+00:01:22.320 --> 00:01:26.540
+Sono fisici, il che significa manutenzione, patch di sicurezza, gestione dei backup e qualcuno
+
+00:01:26.540 --> 00:01:30.280
+che sostituisca un hard disk quando si rompe. Per i piccoli team è un carico enorme. Non
+
+00:01:30.280 --> 00:01:34.500
+gestire un data center. State solo cercando di lavorare? Alla fine di questo episodio capirete
+
+00:01:34.500 --> 00:01:38.200
+cos'è davvero Azure Files perché la nuova risorsa file share semplifica la configurazione
+
+00:01:38.200 --> 00:01:42.560
+e quando è la scelta giusta per il vostro team. Prendete il caffè e cominciamo. Cos'è
+
+00:01:42.560 --> 00:01:46.340
+Azure Files? Quindi cos'è esattamente Azure Files? Ecco la definizione più semplice.
+
+00:01:46.820 --> 00:01:50.560
+Azure Files è una condivisione a file basata sul cloud che potete montare come un'unità
+
+00:01:50.560 --> 00:01:53.720
+di rete, niente server da gestire, niente hardware, niente aggiornamento del sistema
+
+00:01:53.720 --> 00:01:57.840
+operativo, niente programmi di backup che vi tolgono il sonno. Con un file server tradizionale
+
+00:01:57.840 --> 00:02:01.840
+l'amministratore siete voi. Con Azure Files l'amministratore Microsoft. Pensatelo come
+
+00:02:01.840 --> 00:02:06.180
+un archivio che risiede nel data center di Microsoft invece che sotto la vostra scrivania. Continuate
+
+00:02:06.180 --> 00:02:09.580
+ad aprire il cassetto e a prendere un file, ma l'archivio stesso, le serrature, l'ignifugazione,
+
+00:02:09.680 --> 00:02:13.860
+la manutenzione è tutto gestito per voi. La differenza è che non dovete mai preoccuparvi che
+
+00:02:13.860 --> 00:02:18.500
+l'archivio si rompa. Azure Files funziona con Windows, Linux e Mac. Qualsiasi dispositivo
+
+00:02:18.500 --> 00:02:22.660
+che supporti SMB. Il linguaggio standard di condivisione file di Windows o NFS, lo standard
+
+00:02:22.660 --> 00:02:27.400
+per Linux, può connettersi. Puoi accedervi via internet o tramite una rete privata se
+
+00:02:27.400 --> 00:02:31.740
+vuoi evitare il traffico sul web pubblico. È completamente gestito. Microsoft si occupa
+
+00:02:31.740 --> 00:02:36.600
+di hardware, aggiornamenti software, backup e alta disponibilità. Se un disco si guasta
+
+00:02:36.600 --> 00:02:39.920
+nel loro data center lo sostituiscono senza che tutte ne... La maggior parte degli utenti
+
+00:02:39.920 --> 00:02:43.540
+non nota la sua presenza, ma è un servizio fondamentale. Niente più corse notturne di emergenza
+
+00:02:43.540 --> 00:02:47.120
+in ufficio. Ora, per capire perché dovresti volerlo, guardiamo prima il vecchio metodo.
+
+00:02:47.900 --> 00:02:52.420
+Il dolore server file tradizionale. Immagina di gestire una piccola impresa con 15 dipendenti.
+
+00:02:53.020 --> 00:02:56.340
+Da qualche parte nello sgabuzzino dell'ufficio c'è un server fisico. Forse è un vecchio
+
+00:02:56.340 --> 00:03:01.240
+pc riadattato, o forse un vero server costato qualche migliaio di dollari anni fa. In ogni
+
+00:03:01.240 --> 00:03:04.940
+caso, esegue Windows Server e fornisce condivisioni di file per tutti in azienda. Il fatto è che
+
+00:03:04.940 --> 00:03:08.920
+i dischi rigidi si guastano. Succede sempre. E quando quel disco muore, la condivisione
+
+00:03:08.920 --> 00:03:12.940
+file si interrompe. Forse è un backup, forse no. Forse il backup sta fallendo silenziosamente
+
+00:03:12.940 --> 00:03:16.320
+da sei mesi. Una conversazione che nessuno vuole affrontare. Poi c'è il problema dello
+
+00:03:16.320 --> 00:03:20.500
+spazio. I file server si riempiono velocemente. Qualcuno carica 15 giga di foto delle vacanze
+
+00:03:20.500 --> 00:03:25.340
+nell'unità con il. Un altro dipartimento accumula vecchi file di progetti di tre anni fa. Per
+
+00:03:25.340 --> 00:03:28.840
+aggiungere spazio devi comprare altro hardware o passare ora a riconfigurare quello esistente.
+
+00:03:29.420 --> 00:03:33.140
+Nessuno a divertire attento. E gli aggiornamenti. Windows Server necessita di regolare i patch di
+
+00:03:33.140 --> 00:03:36.540
+sicurezza, che significa tempi di inattività. Qualcuno deve accedere nel weekend, applicare
+
+00:03:36.540 --> 00:03:40.960
+aggiornamenti, incrociare le dita, sperando che il server riparta. Se non riparte, passerai
+
+00:03:40.960 --> 00:03:43.600
+la domenica pomeriggio a cercare di risolvere il problema. Però, insomma, era un'altra
+
+00:03:43.600 --> 00:03:47.640
+preoccupazione. Un clic sul file sbagliato in un email e il tuo file server viene crittografato.
+
+00:03:48.160 --> 00:03:51.920
+Ogni file è bloccato. Il processo di recupero è doloroso e presuppone che i tuoi backup funzionino
+
+00:03:51.920 --> 00:03:57.320
+davvero. Se il tuo ufficio ha più sedi, le cose peggiorano. Condividere file tra le filiali
+
+00:03:57.320 --> 00:04:00.960
+significa configurare VPN o repliche le. L'ufficio remoto tira una frazione dell'ufficio
+
+00:04:00.960 --> 00:04:04.900
+principale. La gente si lamenta e tu perdi tempo a ottimizzare le connessioni. Ecco un esempio
+
+00:04:04.900 --> 00:04:09.480
+reale. Una piccola impresa edile che conosco aveva 15 dipendenti e un server, datato nell'angolo
+
+00:04:09.480 --> 00:04:14.900
+della sala a pausa. Ogni volta che qualcuno diceva il file server è lento, il proprietario
+
+00:04:14.900 --> 00:04:18.960
+sentiva quel nodo allo stomaco. Stava morendo. Era arrivato il momento di spendere altri 5.000
+
+00:04:18.960 --> 00:04:22.440
+dollari in hardware? Doveva assumere un tecnico IT solo per gestire un unico apparecchio? Quello
+
+00:04:22.440 --> 00:04:25.560
+stress, quella costante preoccupazione di basso livello per un singolo pezzo di hardware,
+
+00:04:25.700 --> 00:04:29.320
+esattamente ciò che Azure File elimina? Non si tratta solo delle funzionalità, ma del non
+
+00:04:29.320 --> 00:04:33.700
+doversene preoccupare affatto. Azure File elimina tutto questo carico di lavoro. Vediamo come funziona
+
+00:04:33.700 --> 00:04:40.720
+come funziona Azure Files, SMB, NFS e montaggio. Azure Files utilizza protocolli standard. Cosa
+
+00:04:40.720 --> 00:04:43.780
+significa in parole semplici? Significa che non servono software speciali o strumenti
+
+00:04:43.780 --> 00:04:47.300
+personalizzati per connettere. Se il tuo computer può comunicare con un'unità di rete, può
+
+00:04:47.300 --> 00:04:52.980
+comunicare con Azure Files. Per i sistemi Windows si tratta di SMB, Server Message Block. È lo stesso
+
+00:04:52.980 --> 00:04:57.240
+protocollo utilizzato dal tuo attuale file server. Per i sistemi Linux si tratta di NFS, Network
+
+00:04:57.240 --> 00:05:02.060
+File System. Entrambi sono standard di settore esistenti da decenni. Azure Files parla fluentemente
+
+00:05:02.060 --> 00:05:06.520
+entrambe le lingue. Quindi come si utilizza concretamente? Si monta. Su Windows lo si mappa
+
+00:05:06.520 --> 00:05:11.260
+come una lettera di unità, ZS o qualsiasi altra lettera si desideri. Su Linux lo si monta
+
+00:05:11.260 --> 00:05:14.940
+su un percorso di cartello. In entrambi i casi ha l'aspetto e la sensazione locale. Apri
+
+00:05:14.940 --> 00:05:18.720
+esplora file e trascina i file esattamente come faresti con una cartella sul tuo disco
+
+00:05:18.720 --> 00:05:23.160
+rigido. Ecco la parte che sorprende le persone. I dati viaggiano criptografati per impostazione
+
+00:05:23.160 --> 00:05:27.960
+predefinita quando si usa SMB 3.0 o superiore supportato dai moderni sistemi Windows e Mac OS. La
+
+00:05:27.960 --> 00:05:31.180
+connessione tra il tuo computer Azure Files è criptografata durante il transito. Nessuno
+
+00:05:31.180 --> 00:05:34.340
+sulla rete può intercettare i tuoi file mentre si spostano. È un aspetto fondamentale
+
+00:05:34.340 --> 00:05:37.320
+per la sicurezza ed è attivo per impostazione predefinita. Puoi montare le condivisioni
+
+00:05:37.320 --> 00:05:41.320
+file di Azure praticamente da U1. Da una macchina virtuale in esecuzione su Azure ovviamente.
+
+00:05:41.980 --> 00:05:46.320
+Da un server locale connesso tramite VPN Express Route. Anche dal tuo portatile via
+
+00:05:46.320 --> 00:05:49.540
+internet se configurato correttamente. La condivisione file di sede nel cloud ma sembra
+
+00:05:49.540 --> 00:05:53.240
+locale. Ti faccio un esempio concreto. Immagina che il tuo team di contabilità debba accedere
+
+00:05:53.240 --> 00:05:57.380
+allo stesso set di fogli di cani. In passato avresti dovuto configurare un file server, impostare
+
+00:05:57.380 --> 00:06:01.040
+i permessi e sperare che la rete non cadesse. Con Azure Files crei una singola
+
+00:06:01.040 --> 00:06:04.220
+condivisione file, la mappa in comunità Z su ogni macchina contabile. E il gioco
+
+00:06:04.220 --> 00:06:07.640
+è fatto. Loro non sapranno mai che è nel cloud e vedranno semplicemente una lettera
+
+00:06:07.640 --> 00:06:11.200
+di unità funziona. L'autenticazione è gestita tramite l'identità. Invece di gestire
+
+00:06:11.200 --> 00:06:14.200
+le chiavi dell'account di archiviazione e quelle lunghe stringhe che sembrano password
+
+00:06:14.200 --> 00:06:18.220
+dopate, usi Azure Active Directory locale o il tuo Active Directory locale. Gli utenti
+
+00:06:18.220 --> 00:06:21.600
+accedono con le loro normali credenziali. Lo stesso nome utente e password che usano per
+
+00:06:21.600 --> 00:06:25.660
+l'email. Nessuna chiave extra da conservare, nessun segreto condiviso da loro. Ora il modo in cui
+
+00:06:25.660 --> 00:06:28.700
+Azure Files era configurato originariamente aveva una particolarità, aveva una particolarità.
+
+00:06:28.700 --> 00:06:33.340
+Vecchio metodo. Account di archiviazione. Qui le cose si fanno un po' tecniche ma
+
+00:06:33.340 --> 00:06:37.620
+credimi, vale la pena seguirmi. Dunque in origine le condivisioni file non erano entità
+
+00:06:37.620 --> 00:06:40.980
+se stanti, vivevano all'interno di qualcosa chiamato account di archiviazione. Immagina
+
+00:06:40.980 --> 00:06:44.060
+un account di archiviazione come un grande contenitore. Dentro quel contenitore potevi
+
+00:06:44.060 --> 00:06:47.740
+mettere blob per dati non strutturati, code per messaggi, tabelle per dati strutturati
+
+00:06:47.740 --> 00:06:52.620
+e sì, potevi anche creare condivisioni file. Ma ecco il problema, quell'account di archiviazione
+
+00:06:52.620 --> 00:06:57.160
+aveva dei limiti, limiti di IOPS, di throughput di capacità e ogni condivisione file al suo interno
+
+00:06:57.160 --> 00:07:01.160
+doveva spartirsi quei limiti. Limiti. Quindi se avevi cinque condivisioni file in un unico
+
+00:07:01.160 --> 00:07:04.860
+account di archiviazione, tutte gareggiavano per lo stesso bacino di prestazione. Una condivisione
+
+00:07:04.860 --> 00:07:08.000
+molto utilizzata poteva rallentare tutte le altre. Le impostazioni di rete funzionavano
+
+00:07:08.000 --> 00:07:11.540
+allo stesso modo. Le regole del firewall e gli endpoint privati si applicavano all'intero
+
+00:07:11.540 --> 00:07:15.120
+account di archiviazione. Non potevi dire che questa condivisione file fosse accessibile
+
+00:07:15.120 --> 00:07:17.740
+solo dalla rete del reparto finanziario e che quell'altra fosse aperta a tutti?
+
+00:07:19.320 --> 00:07:22.620
+Le regole di rete per tutto e per niente. Poi c'erano le chiavi dell'account di archiviazione.
+
+00:07:22.620 --> 00:07:27.420
+Ogni account aveva due chiavi di accesso che davano accesso completo a tutto ciò che
+
+00:07:27.420 --> 00:07:32.620
+conteneva ogni blog, ogni coda, ogni tabella, ogni condivisione file. Se ti serviva accesso
+
+00:07:32.620 --> 00:07:36.820
+solo una condivisione, peccato, la chiave apriva tutto. Anche la fatturazione era un grattacapo,
+
+00:07:36.900 --> 00:07:40.000
+tutti i costi apparevano a livello di account di archiviazione. Quindi se volevi riadebitare
+
+00:07:40.000 --> 00:07:44.540
+i costi a diversi reparti dovevi fare calcoli manuali. Beh, la condivisione del team marketing
+
+00:07:44.540 --> 00:07:48.900
+usava circa il 30% dello spazio, quindi devono pagare il 30% della bolletta. Diventa
+
+00:07:48.900 --> 00:07:53.560
+presto stancante. Ecco un'analogia. Immagina di affittare un magazzino. Dentro quel magazzino
+
+00:07:53.560 --> 00:07:58.040
+hai diverse stanze, ma il magazzino ha un unico ingresso, un unico guardiano e un unico
+
+00:07:58.040 --> 00:08:01.820
+contatore elettrico. Ogni stanza condivide la stessa energia, le stesse regole di accesso
+
+00:08:01.820 --> 00:08:05.360
+e la stessa bolletta. Se una stanza alza l'aria condizionata, tutte le altre stanze
+
+00:08:05.360 --> 00:08:09.360
+si riscaldano. Se vuoi mettere in sicurezza una stanza separatamente, non puoi perché c'è
+
+00:08:09.360 --> 00:08:13.800
+una sola porta. Ecco cosa si provava con il vecchio modello di account. Un grande contenitore
+
+00:08:13.800 --> 00:08:17.520
+con limiti condivisi, sicurezza condivisa, fatturazione condivisa. Funzionava, ma non era elegante,
+
+00:08:17.520 --> 00:08:21.460
+specialmente quando volevi solo una semplice condivisione file. Ma Microsoft ha ascoltato
+
+00:08:21.460 --> 00:08:25.280
+il feedback che ha costo di meglio. La nuova risorsa per le condivisioni file. La nuova
+
+00:08:25.280 --> 00:08:28.740
+risorsa per le condivisioni file. Quindi ecco cosa è cambiato. Microsoft ha creato una nuova
+
+00:08:28.740 --> 00:08:32.160
+risorsa di primo livello. Ora puoi creare una condivisione file direttamente senza un account
+
+00:08:32.160 --> 00:08:36.180
+di archiviazione principale. La cosa si sta. Pensala come i dischi gestiti. Ricordi come funzionava
+
+00:08:36.180 --> 00:08:40.220
+con le macchine virtuali? Dovevi creare un account di archiviazione e poi un page blob al suo
+
+00:08:40.220 --> 00:08:44.840
+interno e infine collegarlo alla tua VM. Era un intero processo. Poi Microsoft ha introdotto i dischi
+
+00:08:44.840 --> 00:08:48.980
+gestiti. Crei semplicemente un disco. Fatto. Nessun account di archiviazione, nessun page
+
+00:08:48.980 --> 00:08:52.060
+blob, nessuna complicazione. La nuova risorsa di condivisione file funziona allo stesso modo.
+
+00:08:52.360 --> 00:08:56.380
+Dietro le quinte c'è un nuovo provider di risorsi chiamato Microsoft FileShares. È
+
+00:08:56.380 --> 00:09:00.660
+indipendente e autonoma. Quando crei una condivisione file ora non stai creando un figlio di qualcos'altro.
+
+00:09:01.080 --> 00:09:04.960
+Stai creando la risorsa stessa. Quindi cosa ti offre concretamente? Lascia che ti illustri
+
+00:09:04.960 --> 00:09:09.160
+i vantaggi. Primo, ogni condivisione ha i propri limiti, IOPS, throughput e capacità.
+
+00:09:09.540 --> 00:09:12.980
+Ora sono tutti calcolati che siano. Niente più condivisioni di un pool con altre risorse file.
+
+00:09:12.980 --> 00:09:16.580
+Una condivisione carica non può rallentare un altro. Se il tuo team di ingegneri sta
+
+00:09:16.580 --> 00:09:19.840
+sovraccaricando la propria condivisione con build, quella delle risorse umane continua a funzionare
+
+00:09:19.840 --> 00:09:24.160
+perfettamente. Secondo, la configurazione di rete è per condivisione. Endpoint privati,
+
+00:09:24.240 --> 00:09:28.680
+regole firewall, imposti sulla singola condivisione file. Vuoi una condivisione accessibile solo
+
+00:09:28.680 --> 00:09:32.640
+dalla rete virtuale del dipartimento finanziario e un'altra aperta a tutta l'azienda? Nessun
+
+00:09:32.640 --> 00:09:36.060
+problema. Sono indipendenti. Terzo, non esiste una chiave dell'account di archiviazione.
+
+00:09:36.700 --> 00:09:41.200
+Ricordi quella chiave onnipotente che dava accesso a tutto? L'autenticazione si basa
+
+00:09:41.200 --> 00:09:45.000
+sull'identità o tramite regole di rete. Gli utenti accedono con le loro normali credenziali.
+
+00:09:45.320 --> 00:09:48.700
+Nessun segreto condiviso da gestire, nessuna chiave da ruotare, nessun rischio che una chiave
+
+00:09:48.700 --> 00:09:52.840
+trapelata esponda tutte le tue condivisioni. Quarto, la fatturazione per condivisione.
+
+00:09:53.320 --> 00:09:57.200
+In Agile Cost Management vedi esattamente quanto costa ogni condivisione file. Se devi adebitare
+
+00:09:57.200 --> 00:10:00.880
+i costi e i dipartimenti, è tutto lì. Nessun calcolo manuale, nessun foglio di calcolo,
+
+00:10:00.980 --> 00:10:05.440
+nessuna ipotesi. Quinto, il piano di controllo ha le sue quote. Il piano di controllo è il livello
+
+00:10:05.440 --> 00:10:10.220
+che gestisce operazioni come creare condivisioni, modificarle, eliminarle o creare snapshot. Nel vecchio
+
+00:10:10.220 --> 00:10:13.580
+modello, molti amministratori che lavoravano su molte condivisioni all'interno di un unico
+
+00:10:13.580 --> 00:10:17.620
+account potevano raggiungere i limiti di gestione. Ogni condivisione ha il proprio spazio per quelle
+
+00:10:17.620 --> 00:10:20.780
+operazioni, è molto più difficile raggiungere un limite. Davvia c'è una particolarità.
+
+00:10:21.040 --> 00:10:24.400
+Alla disponibilità generale, questa nuova risorsa è attualmente limitata a livello SSD
+
+00:10:24.400 --> 00:10:28.760
+e al protocollo NFS. È un caso d'uso specifico, condivisioni file Linux ad alte prestazioni,
+
+00:10:28.880 --> 00:10:32.360
+ma il supporto SMB e il livello HDD arriverà. Microsoft è stata chiara riguardo a questa
+
+00:10:32.360 --> 00:10:36.260
+logma. Quindi invece di gestire un grande bucket con molte condivisioni che hanno tutti gli stessi
+
+00:10:36.260 --> 00:10:40.180
+limiti, le stesse regole di rete, le stesse chiavi e la stessa fattura. Ora, ogni condivisione
+
+00:10:40.180 --> 00:10:44.200
+è un piccolo bucket a sé stante con il proprio look. Semplice. Quindi quando ha senso usare
+
+00:10:44.200 --> 00:10:49.320
+davvero Azure Files? Quando usare Azure Files? Quando Azure Files ha davvero senso? Lascia
+
+00:10:49.320 --> 00:10:53.080
+che ti illustri gli scenari. Primo è Lift & Shift. Hai una vecchia applicazione che dipende
+
+00:10:53.080 --> 00:10:57.520
+da condivisioni di file. Magari è un'app aziendale legacy o uno strumento personalizzato creato
+
+00:10:57.520 --> 00:11:02.220
+dal tuo team anni fa. Normalmente spostarla nel cloud significa riscrivere il codice, cambiare
+
+00:11:02.220 --> 00:11:06.480
+configurazioni, ripensare all'accesso ai dati. Con Azure Files invece non tocchi nemmeno
+
+00:11:06.480 --> 00:11:10.500
+una riga di codice. L'app vede semplicemente un'unità di rete. Non importa se quelle unità
+
+00:11:10.500 --> 00:11:14.080
+si trova nell'armadio del tuo ufficio o in un data center Microsoft. Sto suo protocollo,
+
+00:11:14.180 --> 00:11:17.700
+stesso comportamento. E poi questo è il punto. Un altro grande caso d'uso è la condivisione
+
+00:11:17.700 --> 00:11:21.960
+di file di configurazione, log o dati tra più macchine virtuali. Immagina di avere un cluster
+
+00:11:21.960 --> 00:11:26.360
+di server web. Tutti in eccessa configurazione. Invece di copiare i file su ogni VM sperando che
+
+00:11:26.360 --> 00:11:30.600
+restino sincronizzati, monti una condivisione file di Azure su ogni server. Modifichi un file
+
+00:11:30.600 --> 00:11:33.580
+ogni server lo vede all'istante. Niente più inseguimenti di versioni non corrispondono.
+
+00:11:33.860 --> 00:11:37.220
+Anche i team di sviluppo e test lo adorano. Puoi creare una condivisione file in pochi
+
+00:11:37.220 --> 00:11:41.240
+minuti, usarla per una settimana e poi eliminarla quando è finito. Nessun hardware da acquistare
+
+00:11:41.240 --> 00:11:44.860
+e nessun server da smantellare. Per chiunque abbia bisogno di storage condiviso temporaneo
+
+00:11:44.860 --> 00:11:48.900
+è un enorme risparmio di tempo. Poi c'è lo scenario cloud ibrido. Azure File Sync
+
+00:11:48.900 --> 00:11:52.140
+ti permette di memorizzare i file nella cache su un server vocale mantenendo Azure Files
+
+00:11:52.140 --> 00:11:56.420
+come fonte attendita. I tuoi utenti on-premises ottengono prestazioni locali per i file a cui accedono
+
+00:11:56.420 --> 00:12:00.400
+più su. Nel frattempo la copia nel cloud rimane aggiornata automaticamente. Le filiali
+
+00:12:00.400 --> 00:12:03.500
+lo adorano, i team remoti lo adorano. Ti offre il meglio di entrambi i mondi senza
+
+00:12:03.500 --> 00:12:08.400
+grattacappa. Ma Azure Files non è la risposta a tutto. Non usarlo per database ad alte prestazioni.
+
+00:12:08.760 --> 00:12:12.380
+Se hai bisogno della velocità di un database, scegli Azure SQL e i dischi gestiti. Azure Files
+
+00:12:12.380 --> 00:12:16.260
+è una condivisione file, non un motore di database. È ottimizzato per i pattern di accesso
+
+00:12:16.260 --> 00:12:19.880
+ai file, non per i carichi di lavoro transazionale. Sono strumenti diversi per compiti diversi.
+
+00:12:20.120 --> 00:12:24.480
+Non usarlo dove SharePoint o Microsoft Teams scoprono già l'esigenza. Se condividi i documenti
+
+00:12:24.480 --> 00:12:27.480
+che le persone modificano insieme in tempo reale, SharePoint è la soluzione migliore.
+
+00:12:27.800 --> 00:12:31.540
+Ottieni cronologia delle versioni, co-authoring e una profonda integrazione con il resto di
+
+00:12:31.540 --> 00:12:35.880
+Microsoft 365. Azure Files è pensato per gli scenari in cui SharePoint non è la soluzione
+
+00:12:35.880 --> 00:12:39.780
+ideale. Non utilizzarlo per applicazioni che richiedono funzionalità personalizzate del
+
+00:12:39.780 --> 00:12:44.540
+file system come link simbolici, hard link o attributi estesi. Azure Files gestisce correttamente
+
+00:12:44.540 --> 00:12:48.540
+il comportamento standard del file system, ma non supporta tutti i casi limite. Conosci i tuoi
+
+00:12:48.540 --> 00:12:52.340
+requisiti prima di impegnarti. Lascia che ti faccia un esempio reale. Un'impresa edile a uffici
+
+00:12:52.340 --> 00:12:56.560
+distaccati in tre città diverse. Ogni ufficio deve accedere allo stesso set di progetti,
+
+00:12:56.660 --> 00:13:00.980
+contratti e rapporti di ispezione. Nella vecchia configurazione avevano un server nella sede
+
+00:13:00.980 --> 00:13:05.220
+centrale e i lavoratori remoti si connettevano tramite una VPN lenta. Aprire un progetto poteva
+
+00:13:05.220 --> 00:13:08.920
+richiedere minuto. Con Azure Files creano una singola condivisione nel cloud. La monta
+
+00:13:08.920 --> 00:13:12.180
+comunità locale. I progetti si aprono in pochi secondi. I contratti sono sempre l'ultima
+
+00:13:12.180 --> 00:13:17.300
+versione. Nessuna VPN è necessaria. Nessun server davanti a me. Funzione basta. Tuttavia
+
+00:13:17.300 --> 00:13:22.140
+anche le prestazioni e la sicurezza sono importanti, quindi parliamo. Prestazioni, sicurezza e costi
+
+00:13:22.140 --> 00:13:27.020
+in sintesi. Iniziamo dalle prestazioni. Se cerchi velocità, il livello premium utilizza
+
+00:13:27.020 --> 00:13:32.140
+SSD e offre una latenza inferiore al millisecondo. Parliamo di un massimo di 100-2400 IOPS per
+
+00:13:32.140 --> 00:13:36.000
+condivisione con il modello Provisioned V2. Si tratta di un throughput notevole per carichi
+
+00:13:36.000 --> 00:13:39.740
+di lavoro in ping. Il livello standard utilizza normale hard disk. Più lento ma molto più
+
+00:13:39.740 --> 00:13:43.300
+economico. Perfetto per l'archiviazione e una condivisione di file generica dove la velocità
+
+00:13:43.300 --> 00:13:47.300
+non è critica. Microsoft ha recentemente aggiunto la memorizzazione nella cassa di metadati
+
+00:13:47.300 --> 00:13:51.800
+per le condivisioni. Questo riduce la latenza fino al 55% quando elenchi directory o esplori
+
+00:13:51.800 --> 00:13:56.120
+cartelle. Se il tuo flusso di lavoro prevede molti file piccoli e una frequente navigazione
+
+00:13:56.120 --> 00:14:00.640
+tra le cartelle, la differenza è notevole tra la sicurezza. Ha la crittografia dei dati
+
+00:14:00.640 --> 00:14:04.200
+inattivi abilitata per impostazione predefinita. Ogni byte che scrivi viene crittografato prima
+
+00:14:04.200 --> 00:14:08.480
+di essere memorizzato. Non devi configurare nulla. Eh già. Anche la crittografia in transito
+
+00:14:08.480 --> 00:14:12.660
+è attiva per impostazione predefinita versioni successive. I tuoi dati rimangono crittografati
+
+00:14:12.660 --> 00:14:16.320
+mentre viaggiano tra il tuo computer cloud. Nessuno sulla rete può leggerli. Microsoft
+
+00:14:16.320 --> 00:14:19.220
+consiglia di utilizzare l'accesso basato sull'identità invece delle chiavi dell'account
+
+00:14:19.220 --> 00:14:22.420
+archiviazione. Ciò significa che gli utenti accedono con le proprie credenziali di lavoro.
+
+00:14:22.680 --> 00:14:26.360
+Le stesse usate per email e Teams. Nessuna chiave condivisa da gestire. Nessun rischio
+
+00:14:26.360 --> 00:14:29.920
+che una chiave vendita. Per l'isolamento di rete hai diverse opzioni. Gli endpoint privati
+
+00:14:29.920 --> 00:14:33.280
+assegnano la condivisione file, un indirizzo IP privato all'interno della tua rete virtuale.
+
+00:14:33.660 --> 00:14:37.300
+Gli endpoint di servizio mantengono il traffico sulla dorsale Microsoft. Le regole del firewall
+
+00:14:37.300 --> 00:14:41.160
+ti consentono di limitare l'accesso a specifici intervalli IP. Puoi stratificare queste opzioni
+
+00:14:41.160 --> 00:14:45.000
+come preferisci. C'è Microsoft Defender for Storage. Monitora le tue condivisioni file
+
+00:14:45.000 --> 00:14:48.780
+della ricerca di attività sospetta. Se qualcuno carica malware tramite l'API REST, Defender
+
+00:14:48.780 --> 00:14:53.740
+può rilevarlo. È un ulteriore livello di protezione per gli ambienti sensibili. Dal punto di vista
+
+00:14:53.740 --> 00:14:57.180
+dei costi, il livello premium usa prezzi basati su Provision. Si riserva una certa quantità
+
+00:14:57.180 --> 00:15:01.420
+di capacità, i offset throughput, e si paga ciò che si è riservato. Il livello standard
+
+00:15:01.420 --> 00:15:05.060
+è basato sul consumo. Si paga solo per lo spazio di archiviazione effettualizzato. Se i carichi
+
+00:15:05.060 --> 00:15:09.340
+di lavoro sono prevedibili, le prenotazioni di Azure Files possono farti risparmiare fino al 36%.
+
+00:15:09.340 --> 00:15:13.700
+Impegnati per 1-3 anni, Microsoft ti offrirà uno sconto. Nessun impatto sulle prestazioni,
+
+00:15:13.700 --> 00:15:18.000
+solo fatture più basse. Un consiglio pratico. Tieni calcolo e archiviazione nella stessa
+
+00:15:18.000 --> 00:15:21.660
+area di Azure. I costi di trasferimento dati tra aree diverse aumentano rapidamente. Colloca
+
+00:15:21.660 --> 00:15:25.220
+VM e condivisioni file nello stesso posto per evitare del tutto i costi in uscita. Sono
+
+00:15:25.220 --> 00:15:28.480
+molte informazioni. Lascio che ti faccio un riassunto. Quadro generale, più che tutto
+
+00:15:28.480 --> 00:15:32.440
+questo è importante. Ecco il concetto fondamentale. Il vecchio modello di account di archiviazione
+
+00:15:32.440 --> 00:15:35.680
+obbligava a gestire tutta quella complessità anche solo per una semplice condivisione file.
+
+00:15:36.460 --> 00:15:41.180
+Dovevi comprendere account di archiviazione, limiti condivisi, regole di rete globali e una fatturazione
+
+00:15:41.180 --> 00:15:44.300
+che raggruppava tu. Era come affittare un intero edificio solo per usare una stanza.
+
+00:15:44.740 --> 00:15:47.420
+La nuova risorsa FileShares risolve questo problema. Però affitti solo.

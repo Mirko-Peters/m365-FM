@@ -1,0 +1,1198 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.760
+Ti siedi al computer, inserisci il tuo indirizzo email, digiti la password e premi invio.
+
+00:00:04.340 --> 00:00:06.780
+C'è quella breve pausa mentre il sistema decide se sei davvero tu.
+
+00:00:07.240 --> 00:00:09.980
+La maggior parte delle persone pensa che quella pausa sia solo un controllo della pausa.
+
+00:00:10.180 --> 00:00:11.720
+Se la password corrisponde, sei dentro, giusto?
+
+00:00:12.140 --> 00:00:12.660
+In realtà no.
+
+00:00:13.060 --> 00:00:15.240
+Dietro le quinte succede molto più di quanto probabilmente immagini.
+
+00:00:15.640 --> 00:00:18.740
+Mentre aspetti, Microsoft 365 esegue una serie di controlli in background.
+
+00:00:19.200 --> 00:00:22.920
+Verifica dove ti trovi, quale dispositivo stai usando e se l'accesso sembra normale o sospetto.
+
+00:00:23.280 --> 00:00:25.000
+E fa tutto questo prima di lasciarti entrare.
+
+00:00:25.460 --> 00:00:28.260
+Alla fine di questo episodio capirai cos'è l'accesso condizionale.
+
+00:00:28.260 --> 00:00:34.360
+Come funziona? Ogni volta che accedi è perché è uno dei controlli di sicurezza più importanti nel tuo tenant Microsoft 365.
+
+00:00:35.100 --> 00:00:36.720
+Quindi iniziamo con la definizione più semplice.
+
+00:00:37.320 --> 00:00:38.920
+Che cos'è effettivamente l'accesso condizionale?
+
+00:00:39.680 --> 00:00:41.080
+Ecco la definizione in parole semplici.
+
+00:00:41.480 --> 00:00:44.920
+L'accesso condizionale è un motore di policy che verifica il contesto prima di consentire l'accesso.
+
+00:00:45.620 --> 00:00:47.460
+Non guarda solo la tua password dicendo che basta.
+
+00:00:48.320 --> 00:00:51.940
+Invece pone domande extra su chi sei e cosa sta succedendo durante il tuo accesso.
+
+00:00:52.920 --> 00:00:54.240
+Pensalo come il buttafuori notturno.
+
+00:00:54.700 --> 00:00:57.080
+Mostri il tuo documento alla porta, quello è il tuo non utente password.
+
+00:00:57.080 --> 00:00:59.920
+Ma un buon buttafuori non si limita a dare un'occhiata e farti passare.
+
+00:01:00.300 --> 00:01:04.880
+Controlla il tuo nome sulla lista, guarda come sei vestito e potrebbe persino ricordare se hai causato problemi in passato.
+
+00:01:05.300 --> 00:01:06.580
+L'accesso condizionale fa la stessa cosa.
+
+00:01:07.020 --> 00:01:13.000
+Verifica la tua identità rispetto alle regole, vede da dove provieni, controlla il tuo dispositivo e decide se tutto sembra a posto prima di farti entrare.
+
+00:01:13.440 --> 00:01:14.400
+Ora ecco un punto fondamentale.
+
+00:01:14.640 --> 00:01:17.040
+L'accesso condizionale viene eseguito dopo che hai già digitato la password.
+
+00:01:17.380 --> 00:01:19.260
+Non è un sostituto di autenticazione a più fattori.
+
+00:01:19.900 --> 00:01:20.800
+È un ulteriore lo superiore.
+
+00:01:21.080 --> 00:01:24.140
+Pensalo come il secondo posto di blocco dopo aver mostrato il documento alla porta principale.
+
+00:01:24.380 --> 00:01:25.080
+La logica è semplice se allora...
+
+00:01:27.080 --> 00:01:35.500
+Ad esempio se qualcuno sta tentando di accedere a Outlook dall'esterno dell'ufficio allora richiedi l'autenticazione a più fattori.
+
+00:01:36.420 --> 00:01:39.200
+Questa è la struttura di base dietro ogni policy di accesso condizionale.
+
+00:01:39.900 --> 00:01:41.300
+Perché le password non sono più sufficienti?
+
+00:01:41.740 --> 00:01:43.280
+Allora perché abbiamo bisogno di questo passaggio extra?
+
+00:01:43.520 --> 00:01:45.240
+Perché le password vengono rubate ogni singolo giorno.
+
+00:01:45.620 --> 00:01:49.060
+Attacchi di phishing, violazioni dei dati, persone che riutilizzano la stessa password su più siti.
+
+00:01:49.460 --> 00:01:52.620
+La tua password potrebbe essere compromessa proprio ora e non lo sapresti nemmeno.
+
+00:01:52.940 --> 00:01:56.400
+Potresti pensare beh va bene, abbiamo l'autenticazione a più fattori, quella ci protegge.
+
+00:01:56.400 --> 00:01:59.580
+Hai ragione, l'MFA aiuta molto, ma non è una soluzione miracolosa.
+
+00:02:00.140 --> 00:02:02.580
+Immagina che un hacker ottenga la password di un tuo dipendente.
+
+00:02:03.440 --> 00:02:07.780
+Cerca di accedere da un paese con cui non hai mai lavorato usando un dispositivo mai visto prima.
+
+00:02:08.660 --> 00:02:10.580
+L'MFA potrebbe fermarlo se attiva una richiesta.
+
+00:02:11.040 --> 00:02:13.520
+Ma cosa succede se l'hacker cessa anche il telefono di quel dipendente?
+
+00:02:14.100 --> 00:02:16.880
+O se sta usando un attacco di phishing che cattura anche il codice MFA?
+
+00:02:17.420 --> 00:02:19.520
+All'improvviso l'MFA da solo non sembra più così inferiore.
+
+00:02:19.520 --> 00:02:20.980
+Ecco un esempio reale.
+
+00:02:21.480 --> 00:02:23.280
+Le credenziali di un venditore finiscono su dark web.
+
+00:02:24.020 --> 00:02:27.320
+Senza l'accesso condizionale un attaccante può entrare da qualsiasi parte del mondo.
+
+00:02:27.940 --> 00:02:30.540
+Può accedere a email, file, dati dei clienti, tutto.
+
+00:02:31.000 --> 00:02:32.500
+E tu non lo sapresti mai finché non è troppo tardi.
+
+00:02:32.860 --> 00:02:33.960
+Il vecchio metodo era tutto niente.
+
+00:02:34.400 --> 00:02:35.600
+Assegnavi una licenza a un utente.
+
+00:02:35.940 --> 00:02:38.400
+E lui poteva accedere da qualsiasi dispositivo, luogo, rete.
+
+00:02:38.840 --> 00:02:42.080
+Nessun contesto, nessuna intelligenza, solo un controllo della password e accesso completo.
+
+00:02:42.480 --> 00:02:44.160
+L'accesso condizionale cambia completamente le cose.
+
+00:02:44.160 --> 00:02:46.000
+Aggiunge contesto ogni accesso
+
+00:02:46.000 --> 00:02:47.440
+Controlla dove ti trovi
+
+00:02:47.440 --> 00:02:48.660
+Che dispositivo usi
+
+00:02:48.660 --> 00:02:49.740
+Quale app vuoi aprire
+
+00:02:49.740 --> 00:02:52.360
+E quanto è rischioso l'accesso secondo l'analisi di Microsoft
+
+00:02:52.360 --> 00:02:56.240
+Trasforma la decisione binaria, sì o no, in un giudizio intelligente e stratificato
+
+00:02:56.240 --> 00:02:57.460
+I segnali
+
+00:02:57.460 --> 00:02:59.400
+Ciò che l'accesso condizionale prende in esame
+
+00:02:59.400 --> 00:03:01.540
+Quindi cosa controlla esattamente l'accesso condizionale?
+
+00:03:01.920 --> 00:03:04.500
+Analizziamo i segnali che utilizza per prendere le sue decisioni
+
+00:03:04.500 --> 00:03:06.140
+Identità è il primo segnale
+
+00:03:06.140 --> 00:03:06.960
+Chi sei?
+
+00:03:07.600 --> 00:03:11.460
+Sei un dipendente normale, un amministratore con privilegi elevati o un ospite esterno all'azienda?
+
+00:03:11.460 --> 00:03:15.220
+L'accesso condizionale esamina il tuo account utente e i gruppi a cui appartieni
+
+00:03:15.220 --> 00:03:19.520
+Un amministratore che cerca di accedere potrebbe affrontare regole più rigide di un utente stand
+
+00:03:19.520 --> 00:03:22.180
+A un ospite potrebbe essere completamente impedito l'accesso ad alcune app
+
+00:03:22.180 --> 00:03:24.700
+La tua identità determina la base di ciò che è consentito
+
+00:03:24.700 --> 00:03:26.000
+La posizione è la successiva
+
+00:03:26.000 --> 00:03:27.300
+Da dove proviene l'accesso?
+
+00:03:27.680 --> 00:03:30.320
+Se ti connetti dalla rete dell'ufficio, quella è una posizione attendibile
+
+00:03:30.320 --> 00:03:33.840
+L'accesso condizionale conosce l'intervallo IP della sede centrale della tua azienda
+
+00:03:33.840 --> 00:03:37.740
+Accedere da un bar in un altro paese fa scattare un campanello d'allaro
+
+00:03:37.740 --> 00:03:41.000
+Se il sistema non riesce nemmeno a capire dove ti trovi, ti trovi un altro segnale di pericolo
+
+00:03:41.000 --> 00:03:43.440
+La posizione è un segnale potente perché è difficile da falsificare
+
+00:03:43.440 --> 00:03:44.720
+Anche il dispositivo è importante
+
+00:03:44.720 --> 00:03:46.100
+Cosa stai usando per accedere?
+
+00:03:46.400 --> 00:03:49.400
+Un portatile aziendale gestito da Intune e conforme alle tue polisi di sicurezza?
+
+00:03:50.040 --> 00:03:52.400
+O un telefono personale senza controlli di sicurezza?
+
+00:03:53.060 --> 00:03:58.080
+L'accesso condizionale può verificare se il dispositivo è gestito, ha la crittografia attiva ed è aggiornato
+
+00:03:58.080 --> 00:04:01.420
+Un dispositivo non gestito potrebbe essere bloccato o limitato
+
+00:04:01.420 --> 00:04:02.660
+Anche l'applicazione è importante
+
+00:04:02.660 --> 00:04:04.020
+Quale app stai cercando di raggiungere?
+
+00:04:04.560 --> 00:04:07.480
+Outlook, SharePoint, Teams, un'applicazione aziendale personalizzata?
+
+00:04:07.480 --> 00:04:10.140
+Non tutte le app hanno gli stessi requisiti di sicurezza
+
+00:04:10.140 --> 00:04:15.480
+Un sistema finanziario con dati sensibili può richiedere controlli più severi rispetto a uno spazio di collaborazione
+
+00:04:15.480 --> 00:04:19.100
+L'accesso condizionale consente di impostare regole diverse per app diverse
+
+00:04:19.100 --> 00:04:22.200
+Se alla licenza giusta c'è un altro livello, il rischio di accesso
+
+00:04:22.200 --> 00:04:25.920
+Microsoft usa l'apprendimento automatico per valutare ogni accesso in temporea
+
+00:04:25.920 --> 00:04:27.220
+Cerca schemi sospetti
+
+00:04:27.220 --> 00:04:28.700
+Viaggi impossibili
+
+00:04:28.700 --> 00:04:32.060
+Come un accesso da New York e 5 minuti dopo da Londra
+
+00:04:32.060 --> 00:04:33.700
+I più anonimi credenziali
+
+00:04:33.700 --> 00:04:34.480
+Trapelate da violazioni
+
+00:04:34.480 --> 00:04:37.860
+Il sistema assegna un livello di rischio, basso, medio o alto
+
+00:04:37.860 --> 00:04:39.800
+E l'accesso condizionale può agire di conseguenza
+
+00:04:39.800 --> 00:04:41.200
+Esiste anche il rischio utente
+
+00:04:41.200 --> 00:04:42.900
+È diverso dal rischio di accesso
+
+00:04:42.900 --> 00:04:44.560
+Il rischio utente analizza l'account stesso
+
+00:04:44.560 --> 00:04:46.480
+La password di quest'utente è apparsa in una violazione
+
+00:04:46.480 --> 00:04:48.460
+C'è stata un'attività insolita nel tempo?
+
+00:04:49.080 --> 00:04:51.320
+Se il sistema rileva che un account potrebbe essere compromesso
+
+00:04:51.320 --> 00:04:54.060
+Può bloccare l'accesso finché l'utente non reimposta la password
+
+00:04:54.060 --> 00:04:56.180
+Infine c'è il contesto di autenticazione
+
+00:04:56.180 --> 00:04:59.980
+Permette di aggiungere requisiti di sicurezza extra a contenuti specifici e sensibili
+
+00:04:59.980 --> 00:05:02.760
+Ad esempio, chiunque c'è dal sito SharePoint finanziario
+
+00:05:02.760 --> 00:05:06.220
+Deve usare un dispositivo conforme e un metodo MFA resistente al phishing
+
+00:05:06.220 --> 00:05:09.740
+Protegge i tuoi dati più preziosi senza rallentare tutto il resto
+
+00:05:09.740 --> 00:05:12.140
+Una volta raccolti questi segnali
+
+00:05:12.140 --> 00:05:13.760
+Il motore dei criteri decide cosa fare
+
+00:05:13.760 --> 00:05:15.100
+Vediamo come funziona
+
+00:05:15.100 --> 00:05:16.640
+Il motore è decisionale
+
+00:05:16.640 --> 00:05:17.560
+Come funzionano i criteri?
+
+00:05:18.200 --> 00:05:20.620
+Ogni criterio di accesso condizionale funziona come una regola se allora
+
+00:05:20.620 --> 00:05:22.620
+Scegli i segnali come condizioni
+
+00:05:22.620 --> 00:05:24.160
+Poi decidi quale azione intraprendere
+
+00:05:24.160 --> 00:05:25.040
+È tutto qui
+
+00:05:25.040 --> 00:05:27.360
+Quindi ci sono tre parti principali in un criterio
+
+00:05:27.360 --> 00:05:29.140
+La prima parte sono le assegnazioni
+
+00:05:29.140 --> 00:05:30.320
+A chi si applica il criterio
+
+00:05:30.320 --> 00:05:31.380
+Quali app stanno raggiungendo
+
+00:05:31.380 --> 00:05:32.740
+E quali condizioni attivano la regola
+
+00:05:32.740 --> 00:05:34.900
+La seconda parte sono i controlli di accesso
+
+00:05:34.900 --> 00:05:36.760
+Cosa succede quando quelle condizioni sono soddisfatte?
+
+00:05:37.220 --> 00:05:38.400
+Concedi l'accesso, lo blocchi
+
+00:05:38.400 --> 00:05:41.420
+O richiedi qualcosa come MFA o un dispositivo conforme?
+
+00:05:42.260 --> 00:05:43.900
+La terza parte sono i controlli di sessione
+
+00:05:43.900 --> 00:05:45.720
+Che gestiscono cosa succede dopo l'accesso
+
+00:05:45.720 --> 00:05:48.520
+Ad esempio quanto spesso devono rieseguire l'autenticazione
+
+00:05:48.520 --> 00:05:49.880
+Ti faccio un esempio concreto
+
+00:05:49.880 --> 00:05:51.780
+Se un utente è nel gruppo vendite
+
+00:05:51.780 --> 00:05:54.220
+E cerca di accedere a SharePoint da un dispositivo non gestito
+
+00:05:54.220 --> 00:05:55.520
+Allora blocca l'accesso
+
+00:05:55.520 --> 00:05:56.880
+Questo è un criterio completo
+
+00:05:56.880 --> 00:05:58.960
+Chi, quale app, quale condizione, quale azione
+
+00:05:58.960 --> 00:06:00.640
+I controlli di concessione sono flessibili
+
+00:06:00.640 --> 00:06:02.380
+Puoi richiedere più cose contemporaneamente
+
+00:06:02.380 --> 00:06:04.440
+Diciamo che vuoi che un utente completi l'MFA
+
+00:06:04.440 --> 00:06:05.900
+E usi anche un dispositivo conforme
+
+00:06:05.900 --> 00:06:07.600
+Entrambe le condizioni devono essere soddisfatti
+
+00:06:07.600 --> 00:06:09.560
+Oppure potresti dire che ne serve uno o l'altro
+
+00:06:09.560 --> 00:06:10.820
+Il sistema ti permette di scegliere
+
+00:06:10.820 --> 00:06:12.380
+Ora blocca il controllo più potente
+
+00:06:12.380 --> 00:06:13.920
+Se una qualsiasi policy dice blocca
+
+00:06:13.920 --> 00:06:14.440
+Lo covince
+
+00:06:14.440 --> 00:06:15.520
+Non ci sono eccezioni
+
+00:06:15.520 --> 00:06:17.280
+A meno di quelle impostate esplicitamente
+
+00:06:17.280 --> 00:06:18.800
+Ecco perché devi fare attenzione
+
+00:06:18.800 --> 00:06:21.380
+Un errore potresti bloccare l'intera organizzazione
+
+00:06:21.380 --> 00:06:22.980
+Prima di attivare una policy
+
+00:06:22.980 --> 00:06:24.660
+C'è una funzione critica da conoscere
+
+00:06:24.660 --> 00:06:26.880
+Modalità solo report
+
+00:06:26.880 --> 00:06:29.160
+Permette di vedere cosa farebbe una policy
+
+00:06:29.160 --> 00:06:30.300
+Prima di applicarla davvero
+
+00:06:30.300 --> 00:06:32.340
+Puoi eseguire una policy in modalità report
+
+00:06:32.340 --> 00:06:33.060
+Per una settimana
+
+00:06:33.060 --> 00:06:33.820
+Controllare i log
+
+00:06:33.820 --> 00:06:35.680
+Vedere quanti utenti sarebbero stati bloccati
+
+00:06:35.680 --> 00:06:36.820
+E avrebbero dovuto usare l'MFA
+
+00:06:36.820 --> 00:06:38.960
+È un modo sicuro per testare senza rompere nu
+
+00:06:38.960 --> 00:06:40.740
+Ora che conosci il motore
+
+00:06:40.740 --> 00:06:42.340
+Parliamo delle policy più comuni
+
+00:06:42.340 --> 00:06:43.560
+Che ogni azienda dovrebbe avere
+
+00:06:43.560 --> 00:06:46.620
+Le tre grandi policy di base per il primo giorno
+
+00:06:46.620 --> 00:06:48.640
+Quindi cosa dovresti configurare per primo
+
+00:06:48.640 --> 00:06:50.540
+Ti darò le tre policy di base
+
+00:06:50.540 --> 00:06:52.380
+Che ogni azienda dovrebbe avere dal primo giorno
+
+00:06:52.380 --> 00:06:54.780
+Non dal trentesimo e non dopo un audit
+
+00:06:54.780 --> 00:06:57.480
+La policy numero uno è fondamentale
+
+00:06:57.480 --> 00:06:59.740
+Richiedi MFA per tutti gli utenti
+
+00:06:59.740 --> 00:07:01.220
+Non solo agli amministratori a tu
+
+00:07:01.220 --> 00:07:03.280
+Ogni singola persona che accede al tuo tenant
+
+00:07:03.280 --> 00:07:05.240
+Deve dimostrare chi è con un secondo fattore
+
+00:07:05.240 --> 00:07:06.760
+Ma ecco la parte importante
+
+00:07:06.760 --> 00:07:08.780
+Non tutti i tipi di MFA sono uguali
+
+00:07:08.780 --> 00:07:10.880
+Non vuoi che la gente usi codice SMS o chiamate vocali
+
+00:07:10.880 --> 00:07:12.060
+Quei metodi sono deboli
+
+00:07:12.060 --> 00:07:13.400
+Possono essere intercettati
+
+00:07:13.400 --> 00:07:14.660
+Quello che ti serve è qualcosa di più
+
+00:07:14.660 --> 00:07:16.740
+Microsoft ha una funzione chiamata
+
+00:07:16.740 --> 00:07:18.020
+Intensità di autenticazione
+
+00:07:18.020 --> 00:07:20.380
+Che ti permette di scegliere quali metodi sono accettabili
+
+00:07:20.380 --> 00:07:22.580
+L'app Microsoft Authenticator
+
+00:07:22.580 --> 00:07:23.720
+Le chiavi di sicurezza Fido2
+
+00:07:23.720 --> 00:07:25.160
+Windows Hello for Business
+
+00:07:25.160 --> 00:07:26.480
+Questi sono quelli validi
+
+00:07:26.480 --> 00:07:28.700
+Quindi quando crei la tua policy MFA
+
+00:07:28.700 --> 00:07:30.200
+Non limitarti a spuntare la casella
+
+00:07:30.200 --> 00:07:31.180
+Richiedi MFA
+
+00:07:31.180 --> 00:07:32.480
+Si specifico
+
+00:07:32.480 --> 00:07:34.280
+Scegli solo i metodi forti
+
+00:07:34.280 --> 00:07:35.340
+Policy numero due
+
+00:07:35.340 --> 00:07:36.780
+Block l'autenticazione Legacy
+
+00:07:36.780 --> 00:07:38.600
+Sembra tecnico ma è semplice
+
+00:07:38.600 --> 00:07:42.300
+Esistono vecchi protocolli che Microsoft 365 supporta ancora
+
+00:07:42.300 --> 00:07:42.660
+Pop
+
+00:07:42.660 --> 00:07:43.760
+IMAP SMTP
+
+00:07:43.760 --> 00:07:45.640
+Vecchie versioni di Exchange ActiveSync
+
+00:07:45.640 --> 00:07:49.320
+Questi protocolli sono nati prima dell'autenticazione a più fattori
+
+00:07:49.320 --> 00:07:50.440
+E non la supportano
+
+00:07:50.440 --> 00:07:52.460
+Quindi se un attaccante attiene una password
+
+00:07:52.460 --> 00:07:53.880
+Può usare questi vecchi protocolli
+
+00:07:53.880 --> 00:07:55.880
+Per accedere e bypassare la MFA
+
+00:07:55.880 --> 00:07:57.160
+È una falla enorme
+
+00:07:57.160 --> 00:07:58.460
+La soluzione è semplice
+
+00:07:58.460 --> 00:08:00.460
+Crea una policy di accesso condizionale
+
+00:08:00.460 --> 00:08:02.780
+Che blocchi l'autenticazione Legacy per tutti gli utenti
+
+00:08:02.780 --> 00:08:05.080
+A meno che tu non abbia necessità specifica
+
+00:08:05.080 --> 00:08:06.460
+Per un vecchio scanner o stampante
+
+00:08:06.460 --> 00:08:07.520
+E usa SMTP
+
+00:08:07.520 --> 00:08:08.880
+Disabilitala
+
+00:08:08.880 --> 00:08:10.000
+E uno dei controlli di sicurezza
+
+00:08:10.000 --> 00:08:11.380
+Ha più alto impatto che puoi attivare
+
+00:08:11.380 --> 00:08:12.720
+Policy numero tre
+
+00:08:12.720 --> 00:08:14.740
+Richiede dispositivi conformi per gli amministratori
+
+00:08:14.740 --> 00:08:17.100
+Gli account admin sono i gioielli della corona del tuo tema
+
+00:08:17.100 --> 00:08:19.740
+Se qualcuno compromette un account di amministratore globale
+
+00:08:19.740 --> 00:08:20.360
+Ha il controllo di tu
+
+00:08:20.360 --> 00:08:23.020
+Quindi devi proteggere quegli account più di chiunque alt
+
+00:08:23.020 --> 00:08:26.340
+Questa policy stabilisce che chiunque abbia un ruolo di amministratore
+
+00:08:26.340 --> 00:08:28.120
+Deve utilizzare un dispositivo aziendale
+
+00:08:28.120 --> 00:08:29.840
+Che soddisfitua i requisiti di sicurezza
+
+00:08:29.840 --> 00:08:30.760
+Iscritto alla gestione
+
+00:08:30.760 --> 00:08:32.760
+Con critografia abilitata come BitLocker
+
+00:08:32.760 --> 00:08:34.440
+Defender attivo e patch aggiornate
+
+00:08:34.440 --> 00:08:37.580
+Se un amministratore tenta di accedere da un laptop personale
+
+00:08:37.580 --> 00:08:39.520
+O da una macchina obsoleta che non soddisfatta di standard
+
+00:08:39.520 --> 00:08:40.600
+L'accesso viene bloccato
+
+00:08:40.600 --> 00:08:42.480
+È un modo semplice per assicurarsi
+
+00:08:42.480 --> 00:08:43.580
+Che i tuoi account più potenti
+
+00:08:43.580 --> 00:08:44.580
+Siano anche i più protetti
+
+00:08:44.580 --> 00:08:46.020
+Prima di proseguire
+
+00:08:46.020 --> 00:08:47.640
+Devo parlare di qualcosa di fondamentale
+
+00:08:47.640 --> 00:08:48.780
+Di account Breaklass
+
+00:08:48.780 --> 00:08:50.820
+Si tratta di account di emergenza
+
+00:08:50.820 --> 00:08:53.160
+Che mantieni al di fuori delle tue policy di accesso condizionale
+
+00:08:53.160 --> 00:08:55.860
+Creane almeno due che utilizzano password lunghe e complesse
+
+00:08:55.860 --> 00:08:57.740
+E un'autenticazione MFA resistente al phishing
+
+00:08:57.740 --> 00:08:59.120
+Come una chiave di sicurezza Fido2
+
+00:08:59.120 --> 00:09:01.020
+Conserva le credenziali in modo sicuro
+
+00:09:01.020 --> 00:09:03.040
+Magari in una cassaforte o in un armadietto chiuso a chiave
+
+00:09:03.040 --> 00:09:04.140
+Lo scopo è semplice
+
+00:09:04.140 --> 00:09:07.340
+Se ti escludi accidentalmente dal tenant con una policy errata
+
+00:09:07.340 --> 00:09:09.320
+Puoi usare un account Breaklass per rientrare
+
+00:09:09.320 --> 00:09:12.120
+Sono esclusi da ogni policy di accesso condizionale
+
+00:09:12.120 --> 00:09:13.240
+È una scelta intenzionale
+
+00:09:13.240 --> 00:09:15.540
+Senza di essi rischi di rimanere bloccato fuori dal tuo sistema
+
+00:09:15.540 --> 00:09:16.440
+Senza possibilità di rimanere
+
+00:09:16.440 --> 00:09:18.000
+Perché solo tre policy per il primo giorno?
+
+00:09:18.240 --> 00:09:20.520
+Perché vuoi concentrarti innanzitutto sui controlli a maggior impatto
+
+00:09:20.520 --> 00:09:22.620
+Queste tre colmano le lacune di sicurezza più grande
+
+00:09:22.620 --> 00:09:24.700
+L'MFA ferma gran parte dei furti credenziali
+
+00:09:24.700 --> 00:09:25.760
+Blocco dell'autenticazione Legacy
+
+00:09:25.760 --> 00:09:26.360
+Chiude le porti su
+
+00:09:26.360 --> 00:09:28.360
+Dispositivi conformi per gli amministratori
+
+00:09:28.360 --> 00:09:29.640
+Proteggono i tuoi account più sensibili
+
+00:09:29.640 --> 00:09:32.340
+Potrai perfezionare tutto in seguito con policy più granulari
+
+00:09:32.340 --> 00:09:32.840
+Ma inizia da qui
+
+00:09:32.840 --> 00:09:34.320
+Policy avanzate
+
+00:09:34.320 --> 00:09:35.500
+Rischio e ruoli
+
+00:09:35.500 --> 00:09:37.080
+Una volta implementate le basi
+
+00:09:37.080 --> 00:09:38.520
+Puoi aggiungere controlli più avanzati
+
+00:09:38.520 --> 00:09:40.480
+È qui che entra in gioco le policy basate sul rischio
+
+00:09:40.480 --> 00:09:42.880
+Le policy su rischio di accesso
+
+00:09:42.880 --> 00:09:44.260
+Utilizzano il machine learning di Microsoft
+
+00:09:44.260 --> 00:09:46.820
+Per monitorare ogni tentativo di login in tempo reale
+
+00:09:46.820 --> 00:09:49.420
+Se qualcuno tenta di accedere da un indirizzo IP anonimo
+
+00:09:49.420 --> 00:09:51.420
+O il sistema rileva spostamenti impossibili
+
+00:09:51.420 --> 00:09:52.860
+Come un login da New York
+
+00:09:52.860 --> 00:09:53.480
+Poi da Tokyo
+
+00:09:53.480 --> 00:09:55.840
+Dieci minuti dopo valuta quell'accesso come ad alto rischio
+
+00:09:55.840 --> 00:09:58.620
+Da lì imposti una policy che, se il rischio è alto
+
+00:09:58.620 --> 00:10:00.820
+Blocca l'accesso, richiede immediatamente l'MFA
+
+00:10:00.820 --> 00:10:03.320
+Il limite è che serve una licenza entry di IP2
+
+00:10:03.320 --> 00:10:05.200
+Ma è uno dei controlli più potenti che puoi aggiungere
+
+00:10:05.200 --> 00:10:06.660
+Perché rileva attacchi che le rileva attacchi
+
+00:10:06.660 --> 00:10:07.720
+Che le regole statiche mancano
+
+00:10:07.720 --> 00:10:10.620
+Le policy sul rischio utente osservano l'account nel tempo
+
+00:10:10.620 --> 00:10:12.400
+Non solo un singolo evento di accesso
+
+00:10:12.400 --> 00:10:14.220
+Se Microsoft rileva che le garanziali di un utente
+
+00:10:14.220 --> 00:10:15.820
+Sono apparse in una nota violazione di dati
+
+00:10:15.820 --> 00:10:17.240
+Contrassegna quell'utente come ad alto rischio
+
+00:10:17.240 --> 00:10:19.220
+Puoi quindi impostare una policy che blocchi l'accesso
+
+00:10:19.220 --> 00:10:20.480
+Finché l'utente non premposta la password
+
+00:10:20.480 --> 00:10:21.920
+E se anche questo richiede una licenza
+
+00:10:21.920 --> 00:10:24.820
+Insieme le policy sul rischio di accesso e sul rischio utente
+
+00:10:24.820 --> 00:10:26.200
+Creano un livello di sicurezza dinamico
+
+00:10:26.200 --> 00:10:28.080
+Che si adatta alle minacce in tempo reale
+
+00:10:28.080 --> 00:10:30.700
+Ora le policy basate sulla persona affrontano un problema diverso
+
+00:10:30.700 --> 00:10:33.060
+Non tutti nella tua organizzazione hanno le stesse esigenze di sicurezza
+
+00:10:33.060 --> 00:10:35.080
+Gli amministratori necessitano delle regole più rigide
+
+00:10:35.080 --> 00:10:36.900
+Mentre i collaboratori esterni e persone temporaneo
+
+00:10:36.900 --> 00:10:38.160
+Potrebbero avere bisogno di accessibilità
+
+00:10:38.160 --> 00:10:40.920
+E gli ospiti esterni della tua azienda richiedono controlli del tutto differenti
+
+00:10:40.920 --> 00:10:43.040
+Le policy basate sulla persona
+
+00:10:43.040 --> 00:10:44.640
+Ti permettono di raggruppare gli utenti per ruolo
+
+00:10:44.640 --> 00:10:45.880
+E applicare il giusto livello di protezione
+
+00:10:45.880 --> 00:10:46.980
+Ecco un esempio concreto
+
+00:10:46.980 --> 00:10:49.640
+I collaboratori esterni usano spesso dispositivi propri
+
+00:10:49.640 --> 00:10:51.960
+Che non gestisci quindi non sai se abbiano un antivirus
+
+00:10:51.960 --> 00:10:53.040
+O se siano aggiornati con le pelle
+
+00:10:53.040 --> 00:10:55.080
+Invece di dare il loro accesso completo
+
+00:10:55.080 --> 00:10:57.200
+Crea una policy che limita l'accesso al solo browser
+
+00:10:57.200 --> 00:10:59.040
+Senza app desktop o mobili
+
+00:10:59.040 --> 00:11:01.260
+Anche all'interno del browser puoi limitare le azioni
+
+00:11:01.260 --> 00:11:03.160
+Possono visualizzare e modificare file
+
+00:11:03.160 --> 00:11:05.040
+Ma non scaricarli o sincronizzarli sul proprio dispositivo
+
+00:11:05.700 --> 00:11:06.380
+In questo modo
+
+00:11:06.380 --> 00:11:08.020
+I collaboratori restano produttivi
+
+00:11:08.020 --> 00:11:09.820
+Senza esporre i tuoi dati a rischi inutili
+
+00:11:09.820 --> 00:11:13.160
+Contesti di autenticazione portano questa idea oltre
+
+00:11:13.160 --> 00:11:15.280
+Proteggendo contenuti specifici all'interno di un'app
+
+00:11:15.280 --> 00:11:16.520
+Invece dell'intera applicazione
+
+00:11:16.520 --> 00:11:19.080
+Ad esempio il tuo team finanziario ha un sito SharePoint
+
+00:11:19.080 --> 00:11:20.220
+Con dati finanziari sensibili
+
+00:11:20.220 --> 00:11:22.940
+Puoi associare un contesto di autenticazione a quel sito
+
+00:11:22.940 --> 00:11:24.420
+Così chiunque provi ad accedervi
+
+00:11:24.420 --> 00:11:27.740
+Deve usare un dispositivo conforme e MFA resistente al phishing
+
+00:11:27.740 --> 00:11:30.100
+Anche se già connesso a Microsoft 365
+
+00:11:30.100 --> 00:11:33.120
+E ha un targeting di precisione per le tue informazioni più sensibili
+
+00:11:33.120 --> 00:11:34.940
+La valutazione dell'accesso continuo
+
+00:11:34.940 --> 00:11:37.220
+Revoca l'accesso quasi in tempo reale quando qualcosa cambia
+
+00:11:37.220 --> 00:11:40.020
+Se un amministratore disabilita un account o un dispositivo
+
+00:11:40.020 --> 00:11:41.160
+Viene segnalato come smarrito
+
+00:11:41.160 --> 00:11:44.220
+La sessione termina immediatamente senza attendere la scadenza del turno
+
+00:11:44.220 --> 00:11:46.080
+Questo è fondamentale per rispondere rapidamente agli incidenti
+
+00:11:46.080 --> 00:11:50.220
+Tutto ciò sembra potente ma come iniziare concretamente senza creare problemi
+
+00:11:50.220 --> 00:11:53.820
+Passare dalle impostazioni di sicurezza predefinite alle policy personalizzate
+
+00:11:53.820 --> 00:12:00.000
+Se hai un tenant nuovo non parti da zero perché Microsoft abilita le cosiddette impostazioni di sicurezza predefinite
+
+00:12:00.000 --> 00:12:05.940
+È un set base di protezioni che richiede MFA per gli amministratori e blocca l'autenticazione legacy
+
+00:12:05.940 --> 00:12:08.600
+È un buon punto di partenza ma è limitato
+
+00:12:08.600 --> 00:12:11.940
+Non puoi personalizzarlo o mirare ad app utenti specifici
+
+00:12:11.940 --> 00:12:13.900
+È una soluzione uguale per tutti
+
+00:12:13.900 --> 00:12:17.500
+Non appena crei la tua prima policy di accesso condizionale personalizzata
+
+00:12:17.500 --> 00:12:21.000
+Le impostazioni di sicurezza predefinite si disattivano lasciando a te il controllo
+
+00:12:21.580 --> 00:12:23.940
+È un bene ma significa anche che devi sapere cosa stai facendo
+
+00:12:23.940 --> 00:12:26.120
+Perché non puoi più fare affidamento sulle protezioni predefinite
+
+00:12:26.120 --> 00:12:28.000
+Ecco quindi come procedere in sicurezza
+
+00:12:28.000 --> 00:12:30.780
+Prima cosa inizia con la modalità solo report per ogni nuova policy
+
+00:12:30.780 --> 00:12:32.120
+Lascia l'attiva per almeno una settimana
+
+00:12:32.120 --> 00:12:34.780
+Poi controlla i log di accesso per vedere cosa sarebbe successo
+
+00:12:34.780 --> 00:12:37.480
+Ad esempio quanti utenti sarebbero stati bloccati e avrebbero ricevuto la richiesta
+
+00:12:37.480 --> 00:12:41.740
+Questi dati ti dicono se la tua policy è troppo rigida o troppo permissiva prima di applicarla
+
+00:12:41.740 --> 00:12:45.420
+Secondo usa lo strumento Whatif nell'interfaccia di amministrazione di Entra
+
+00:12:45.420 --> 00:12:48.880
+Per testare una policy su uno specifico utente, app e posizione prima di attivarla
+
+00:12:48.880 --> 00:12:54.520
+Puoi simulare esattamente cosa succederebbe se qualcuno provasse ad accedere da una caffetteria in un altro paese usando un dispositivo personale
+
+00:12:54.520 --> 00:12:57.520
+È un modo sicuro per individuare i problemi prima che diventino reali
+
+00:12:57.520 --> 00:12:59.640
+Terzo, questo è fondamentale
+
+00:12:59.640 --> 00:13:02.440
+Crea i tuoi account di emergenza a break glass prima di distribuire qualsiasi policy
+
+00:13:02.440 --> 00:13:03.880
+Non insisterò mai abbastanza su questo
+
+00:13:03.880 --> 00:13:07.140
+Se crei accidentalmente una policy che blocca tutti gli amministratori
+
+00:13:07.140 --> 00:13:09.740
+E non hai configurato un account di emergenza escluso da tutto
+
+00:13:09.740 --> 00:13:11.620
+Ti bloccherai fuori dal tuo tenant
+
+00:13:11.620 --> 00:13:14.540
+L'unico modo per rientrare è chiamare il supporto Microsoft
+
+00:13:14.540 --> 00:13:16.920
+E dimostrare di possedere il dominio che puoi richiedere i giorni
+
+00:13:16.920 --> 00:13:21.400
+Quindi configura due account di emergenza conservati in modo sicuro con MFA resistente al phishing
+
+00:13:21.400 --> 00:13:22.860
+Fallo prima di iniziare
+
+00:13:22.860 --> 00:13:24.900
+Quarto, distribuisci per fasi
+
+00:13:24.900 --> 00:13:27.760
+Non attivare una policy per tutti il primo giorno
+
+00:13:27.760 --> 00:13:30.380
+Inizia con un piccolo gruppo di test, magari il team IT
+
+00:13:30.380 --> 00:13:32.200
+E lascia l'attiva per qualche giorno
+
+00:13:32.200 --> 00:13:34.780
+Controlla i log per vedere se qualcuno è stato bloccato inaspettatamente
+
+00:13:34.780 --> 00:13:37.680
+Poi espandi a un gruppo più grande e infine a tutti gli utenti
+
+00:13:37.980 --> 00:13:41.320
+Ogni fase ti dà la possibilità di rilevare problemi prima che colpiscono l'intera azienda
+
+00:13:41.320 --> 00:13:43.760
+Monitola i log di accesso durante tutto il processo
+
+00:13:43.760 --> 00:13:47.000
+E se vedi i blocchi imprevisti modifica la policy prima di passare alla fase successiva
+
+00:13:47.000 --> 00:13:48.240
+Riepilo
+
+00:13:48.240 --> 00:13:49.800
+Perché questo è importante per la tua azienda
+
+00:13:49.800 --> 00:13:51.440
+Quindi perché tutto questo è importante?
+
+00:13:52.000 --> 00:13:55.180
+L'accesso condizionale butta fuori la porta che non si limita a controllare il tuo documento
+
+00:13:55.180 --> 00:13:55.880
+Esamina tutto
+
+00:13:55.880 --> 00:14:01.380
+Chi sei, da dove ti connetti, quale dispositivo stai usando e se il tuo account sembra essere stato compromesso
+
+00:14:02.140 --> 00:14:06.640
+Trasforma un semplice controllo simile a no della password in una decisione intelligente basata su quadro generale
+
+00:14:06.640 --> 00:14:10.920
+Senza di esso, chiunque abbia una password rubata può entrare nel tuo tenant da qualsiasi parte del mondo
+
+00:14:10.920 --> 00:14:12.200
+Tenza a fare domande
+
+00:14:12.200 --> 00:14:16.240
+E se pensi a quante password vengono rubate ogni singolo giorno e a un pensiero spaventoso
+
+00:14:16.240 --> 00:14:18.840
+Le tre policy di base da sole colmano le lacune più grandi
+
+00:14:18.840 --> 00:14:21.580
+L'MFA blocca su nasce la maggior parte dei furti crenziani
+
+00:14:21.580 --> 00:14:24.880
+Bloccare l'autenticazione legacy chiude una porta sorretro amata dagli attaccanti
+
+00:14:24.880 --> 00:14:28.720
+Richiedere dispositivi conformi per gli amministratori protegge i tuoi account più sensibili
+
+00:14:28.720 --> 00:14:32.120
+Solo queste tre policy innalzano notevolmente il tuo livello di sicurezza di base
+
+00:14:32.120 --> 00:14:37.220
+E quando sei pronto a fare un passo avanti, le policy avanzate ti offrono una protezione precisa senza uccidere la produttività
+
+00:14:37.220 --> 00:14:40.220
+I controlli basati sul rischio rilevano gli attacchi in tempo reale
+
+00:14:40.220 --> 00:14:42.920
+Le regole basate sulla persona trattano gli utenti in modo diverso
+
+00:14:42.920 --> 00:14:46.900
+Contesti di autenticazione proteggono i tuoi dati più sensibili con precisione chirurgica
+
+00:14:46.900 --> 00:14:49.020
+Puoi essere sia sicuro che flessibile
+
+00:14:49.020 --> 00:14:50.380
+Quindi ecco i tuoi compiti
+
+00:14:50.380 --> 00:14:52.040
+Accedi al tuo centro di amministrazione
+
+00:14:52.040 --> 00:14:53.500
+La recesso condizionale
+
+00:14:53.500 --> 00:14:56.200
+Verifica se hai almeno quelle tre policy di base attive
+
+00:14:56.200 --> 00:14:59.600
+In caso contrario inizia con la modalità solo report e procedi da lì
+
+00:14:59.600 --> 00:15:01.660
+Non aspettare un audit o una violazione per agire
+
+00:15:01.660 --> 00:15:04.640
+Se questo episodio ti ha aiutato a vedere il quadro generale
+
+00:15:04.640 --> 00:15:09.220
+Iscriviti a Microsoft Knowledge Nuggets per spiegazioni semplici su sicurezza e identità
+
+00:15:09.220 --> 00:15:12.860
+E condividilo con qualcuno che ha appena iniziato il suo percorso con Microsoft 365
+
+00:15:12.860 --> 00:15:14.000
+Ti ringrazierà per questo

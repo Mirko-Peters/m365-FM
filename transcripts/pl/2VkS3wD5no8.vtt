@@ -1,0 +1,1036 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.600
+Czym jest sieć wirtualna Azure?
+
+00:00:01.840 --> 00:00:08.640
+Większość ludzi słysząc ten termin myśli, że to tylko kolejne ustawienie, które włącza się przy wdrażaniu maszyny wirtualnej, coś, co się zaznacza i o czym się zapomina.
+
+00:00:08.840 --> 00:00:09.920
+Ale prawda jest inna.
+
+00:00:10.160 --> 00:00:14.640
+Sieć wirtualna Azure to nie tylko ustawienie, to fundament wszystkiego, co budujesz w Azure.
+
+00:00:14.880 --> 00:00:20.400
+Każda maszyna wirtualna, każda baza danych, każdy serwis aplikacji, każda funkcja, którą wdrażasz, wszystko to znajduje się wewnątrz sieci.
+
+00:00:20.600 --> 00:00:23.240
+Jeśli nie rozumiesz, jak działają, działasz po omacku.
+
+00:00:23.420 --> 00:00:29.660
+Pod koniec tego odcinka zrozumiesz, czym naprawdę jest sieć wnet, jak działa i dlaczego każdy wdrażany zasób jest od niej zależny.
+
+00:00:29.660 --> 00:00:35.380
+Omówimy, czym jest wnet, jak działają adresy IP, podsieci, bezpieczeństwo, routing i jak łączyć sieci wnet ze sobą.
+
+00:00:35.580 --> 00:00:36.880
+Chwyć kawę i zaczynajmy.
+
+00:00:37.120 --> 00:00:37.860
+Czym jest wnet?
+
+00:00:38.120 --> 00:00:39.360
+Prywatna sieć w chmurze.
+
+00:00:39.660 --> 00:00:41.520
+Zacznijmy od najprostszej definicji.
+
+00:00:41.760 --> 00:00:46.080
+Sieć wirtualna Azure, w skrócie wnet, to twoja własna prywatna sieć wewnątrz Azure.
+
+00:00:46.280 --> 00:00:48.320
+Pomyśl o niej jak o prywatnym budynku biurowym.
+
+00:00:48.520 --> 00:00:50.680
+Tylko osoby, na które pozwolisz, mogą wejść do środka.
+
+00:00:50.880 --> 00:00:54.700
+Kontrolujesz, kto przechodzi przez drzwi, kto wchodzi na jakie piętro i kto jest całkowicie zablokowany.
+
+00:00:54.940 --> 00:00:56.940
+Zanim powstały sieci wnet, było inaczej.
+
+00:00:56.940 --> 00:01:00.800
+Wdrażałeś maszynę wirtualną w chmurze i była ona domyślnie wystawiona na internet.
+
+00:01:01.040 --> 00:01:02.460
+Brak prywatnej sieci wokół niej.
+
+00:01:02.620 --> 00:01:04.720
+Każdy, kto znał adres IP, mógł próbować się połączyć.
+
+00:01:04.860 --> 00:01:06.560
+To był koszmar z punktu widzenia bezpieczeństwa.
+
+00:01:06.680 --> 00:01:07.420
+Co się zmieniło?
+
+00:01:07.600 --> 00:01:10.480
+Azure dał możliwość tworzenia odizolowanych prywatnych przestrzeni sieciowych.
+
+00:01:10.820 --> 00:01:11.700
+Definiujesz granicę.
+
+00:01:11.960 --> 00:01:13.400
+Decydujesz, co znajduje się w środku.
+
+00:01:13.600 --> 00:01:16.440
+Nic spoza tej granicy nie może wejść do środka, chyba że wyraźnie na to pozwolisz.
+
+00:01:16.600 --> 00:01:19.740
+Jedna rzecz, o której warto wiedzieć na wstępie, twoja sieć wnet znajduje się w konkretnym regionie Azure.
+
+00:01:19.740 --> 00:01:20.800
+Nie jest globalna.
+
+00:01:20.800 --> 00:01:23.320
+Stwórz wnet w regionie West Europę i tam właśnie pozostanie.
+
+00:01:23.520 --> 00:01:25.840
+Zasoby z innego regionu nie mogą tak po prostu do niej wskoczyć.
+
+00:01:26.100 --> 00:01:28.680
+Potrzebowałyby własnej sieci wnet lub musiałbyś je później połączyć.
+
+00:01:28.880 --> 00:01:31.400
+Kiedy tworzysz wnet, sam definiujesz przestrzeń adresową IP.
+
+00:01:31.660 --> 00:01:33.020
+Azure nie dobiera jej za ciebie.
+
+00:01:33.180 --> 00:01:35.940
+Ty decydujesz o zakresie adresów IP, w których będą używać twoje zasoby.
+
+00:01:36.100 --> 00:01:39.540
+To duża odpowiedzialność, o której powiemy, jak ją dobrze udźwignąć w następnej sekcji.
+
+00:01:39.720 --> 00:01:40.660
+Oto kluczowy punkt.
+
+00:01:40.920 --> 00:01:42.140
+Sieci wnet to fundament.
+
+00:01:42.140 --> 00:01:48.240
+Każda maszyna wirtualna, każda baza danych, każda funkcja Azure, którą wdrażasz, znajduje się wewnątrz takiej sieci.
+
+00:01:48.480 --> 00:01:51.520
+Bez sieci wnet twoje zasoby nie mają kontekstu sieci prywatnej.
+
+00:01:51.760 --> 00:01:55.520
+Są po prostu zawieszone w chmurze, bez granic, bez izolacji, bez bezpieczeństwa.
+
+00:01:55.700 --> 00:01:56.840
+Co to oznacza dla ciebie?
+
+00:01:57.080 --> 00:02:01.800
+Jeśli budujesz cokolwiek w Azure, zacznij od sieci wnet nie po wdrożeniu zasobów, ale przed.
+
+00:02:01.940 --> 00:02:04.180
+Twoja sieć wnet to grunt, na którym budujesz.
+
+00:02:04.180 --> 00:02:06.320
+Nie budowałbyś domu bez kupna działki, prawda?
+
+00:02:06.620 --> 00:02:07.420
+Zupełnie jak tu.
+
+00:02:07.640 --> 00:02:10.900
+Adresowanie IP i C i DR, czyli wybór przestrzeni adresowej.
+
+00:02:10.900 --> 00:02:11.740
+Zaczynajmy.
+
+00:02:11.880 --> 00:02:15.220
+Kiedy tworzysz wnet, pierwszą ważną decyzją jest wybór zakresu IP.
+
+00:02:15.560 --> 00:02:17.460
+Robisz to za pomocą notacji C i DR.
+
+00:02:17.660 --> 00:02:21.540
+C i DR to skrót od Classless Interdomain Routing, co oznacza po prostu,
+
+00:02:21.680 --> 00:02:23.620
+potrzebuje tylu a tylu adresów IP.
+
+00:02:23.980 --> 00:02:24.780
+Dlaczego to ważne?
+
+00:02:25.060 --> 00:02:29.540
+Ponieważ wybrany zakres określa, ile zasobów zmieścisz w swojej sieci wirtualnej.
+
+00:02:29.740 --> 00:02:30.560
+Oto jak to działa.
+
+00:02:30.560 --> 00:02:34.120
+C i DR używa ukośnika i liczby, na przykład 16 lub 24.
+
+00:02:34.480 --> 00:02:36.620
+Ta liczba określa rozmiar przestrzeni adresowej.
+
+00:02:36.880 --> 00:02:39.940
+Wartość 16 daje około 65 tysięcy adresów IP.
+
+00:02:39.940 --> 00:02:41.020
+To całkiem sporo.
+
+00:02:41.260 --> 00:02:46.280
+Wartość 24 daje około 250, co idealnie nadaje się dla małego zespołu lub jednej warstwy aplikacji.
+
+00:02:46.480 --> 00:02:51.120
+Projektując sieć wnet, musisz więc przemyśleć, ile będziesz mieć zasobów i jak chcesz je pogrupować.
+
+00:02:51.320 --> 00:02:53.480
+Nie możesz jednak wybrać dowolnego zakresu IP.
+
+00:02:53.740 --> 00:02:59.260
+Azure przestrzega standardu RFC 1918, który rezerwuje prywatne zakresy IP dla sieci wewnętrznych.
+
+00:02:59.260 --> 00:03:00.280
+Masz trzy opcje.
+
+00:03:00.540 --> 00:03:04.180
+Zakres 10XXX jest największy i daje mnóstwo miejsca na rozwój.
+
+00:03:04.400 --> 00:03:08.160
+Zakres 172-16XX jest nieco mniejszy, ale również użyteczny.
+
+00:03:08.280 --> 00:03:12.880
+A zakres 192-168XX to ten, który pewnie masz w domu na swoim routerze.
+
+00:03:13.080 --> 00:03:13.740
+Ważna uwaga!
+
+00:03:13.940 --> 00:03:18.000
+Przestrzeń adresowa sieci wnet nie może pokrywać się z żadną inną siecią, z którą planujesz połączenie.
+
+00:03:18.200 --> 00:03:19.120
+To częsty błąd.
+
+00:03:19.280 --> 00:03:23.660
+Wiele osób wybiera zakres, który wydaje się znajomy, a później okazuje się, że koliduje z siecią firmową.
+
+00:03:23.660 --> 00:03:29.440
+Jeśli więc sieć biurowa Twojej firmy używa 10.0.0.0.0 ukośnik 1.6, nie używaj tego samego zakresu w Azure.
+
+00:03:29.620 --> 00:03:33.640
+Jeśli spróbujesz je później połączyć, wystąpi konflikt i ruch nie będzie wiedział, dokąd trafić.
+
+00:03:33.780 --> 00:03:35.120
+Podam Ci konkretny przykład.
+
+00:03:35.360 --> 00:03:43.680
+Wyobraź sobie, że budujesz hybrydę, w której Azure łączy się z lokalnym centrum danych, a Twoje centrum używa 10.0.0.0 ukośnik 1.6.
+
+00:03:43.900 --> 00:03:48.380
+Jeśli utworzysz sieć wnet z tym samym zakresem, będziesz mieć dwie sieci walczące o te same adresy IP.
+
+00:03:48.620 --> 00:03:49.360
+Pomyśl o tym.
+
+00:03:49.580 --> 00:03:52.700
+Dwie sieci używające tego samego zakresu IP nie mogą się poprawnie komunikować.
+
+00:03:52.700 --> 00:03:54.620
+To tak, jakby dwa domy miały ten sam adres.
+
+00:03:54.780 --> 00:03:56.500
+Listonosz nie będzie wiedział, gdzie dostarczyć pocztę.
+
+00:03:56.600 --> 00:03:58.340
+To problem, którego nie chcesz rozwiązywać po fakcie.
+
+00:03:58.540 --> 00:04:00.540
+Zaplanuj więc wszystko z wyprzedzeniem i wybierz unikalny zakres.
+
+00:04:00.680 --> 00:04:01.740
+I jeszcze jedna wskazówka.
+
+00:04:01.940 --> 00:04:04.120
+Wybierz większy zakres niż wydaje Ci się, że będziesz potrzebować.
+
+00:04:04.320 --> 00:04:08.580
+Możesz myśleć, że teraz wystarczy Ci maska 24, ale w miarę rozwoju aplikacji pożałujesz, że nie masz 16.
+
+00:04:08.900 --> 00:04:10.340
+Później nie zmienisz tego łatwo.
+
+00:04:10.580 --> 00:04:14.500
+Gdy sieć wnet jest utworzona i wdrożono zasoby, zmiana przestrzeni adresowej jest kłopotliwa.
+
+00:04:14.500 --> 00:04:17.800
+Jest to możliwe, ale nie jest to coś, co chcesz robić na działającym systemie.
+
+00:04:18.000 --> 00:04:19.440
+Daj sobie więc przestrzeń na rozwój.
+
+00:04:19.580 --> 00:04:20.560
+Co to dla Ciebie oznacza?
+
+00:04:20.720 --> 00:04:22.820
+Pomyśl o przestrzeni adresowej swojej sieci wnet jak okupnie ziemi.
+
+00:04:23.000 --> 00:04:24.780
+Zapewnij sobie wystarczająco dużo miejsca na przyszły wzrost.
+
+00:04:24.960 --> 00:04:27.080
+Jeśli uważasz, że potrzebujesz małej działki, kup średnią.
+
+00:04:27.320 --> 00:04:28.340
+Podziękujesz sobie później.
+
+00:04:28.520 --> 00:04:29.760
+To najważniejszy wniosek.
+
+00:04:29.900 --> 00:04:32.560
+Planuj przestrzeń adresową z myślą o przyszłym rozwoju.
+
+00:04:32.820 --> 00:04:34.320
+Podsieci, czyli podział sieci.
+
+00:04:34.540 --> 00:04:37.080
+Masz już sieć wnet i wybrałeś swoją przestrzeń adresową.
+
+00:04:37.300 --> 00:04:37.800
+Co teraz?
+
+00:04:38.000 --> 00:04:39.940
+Nie wrzucasz wszystkiego do jednego wielkiego zbioru.
+
+00:04:44.500 --> 00:04:46.580
+Nie pozwalają one organizować i zabezpieczać zasoby.
+
+00:04:46.760 --> 00:04:49.840
+Podsieć to mniejsza sekcja przestrzeni adresowej Twojej sieci wnet.
+
+00:04:50.000 --> 00:04:53.020
+Jeśli wnet to budynek, podsieci są poszczególnymi pomieszczeniami.
+
+00:04:53.220 --> 00:04:57.120
+Nie umieściłbyś serwerownik recepcji i pokoju socjalnego w jednej otwartej przestrzeni, prawda?
+
+00:04:57.360 --> 00:04:58.800
+Tutaj zasada jest taka sama.
+
+00:04:58.980 --> 00:05:02.020
+To prosta koncepcja, ale robi ogromną różnicę w zarządzaniu siecią.
+
+00:05:02.260 --> 00:05:04.260
+Różne zasoby trafiają do różnych podsieci.
+
+00:05:04.520 --> 00:05:08.820
+Serwery www w jednej podsieci, bazy danych w innej, a logika aplikacji w trzeciej.
+
+00:05:08.940 --> 00:05:09.340
+Dlaczego?
+
+00:05:09.640 --> 00:05:10.500
+Z dwóch powodów.
+
+00:05:10.840 --> 00:05:11.500
+Bezpieczeństwo i organizacja.
+
+00:05:12.260 --> 00:05:15.100
+Porozmawiajmy najpierw o bezpieczeństwie, bo jest ono zazwyczaj najważniejsze.
+
+00:05:15.320 --> 00:05:16.400
+Najpierw bezpieczeństwo.
+
+00:05:16.600 --> 00:05:20.380
+Jeśli ktoś włamie się na Twój serwer www, nie chcesz, aby miał bezpośredni dostęp do bazy danych.
+
+00:05:20.580 --> 00:05:22.520
+Oddzielne podsieci tworzą naturalną barierę.
+
+00:05:22.680 --> 00:05:26.260
+Atakujący musiałby przekroczyć tę granicę, a Ty możesz dokładnie kontrolować, co przez nią przechodzi.
+
+00:05:26.500 --> 00:05:29.800
+Możesz także użyć sieciowych grup zabezpieczeń do kontrolowania ruchu między podsieciami.
+
+00:05:29.960 --> 00:05:33.500
+To temat na inny film, ale warto wiedzieć, że podsieci są fundamentem tego bezpieczeństwa.
+
+00:05:34.440 --> 00:05:35.980
+Na drugim miejscu organizacja.
+
+00:05:36.220 --> 00:05:38.920
+Kiedy wszystko ma swoje miejsce, zarządzanie jest łatwiejsze.
+
+00:05:38.920 --> 00:05:43.240
+Wiesz, która podsieć zawiera zasoby front-end, a która przechowuje dane back-end.
+
+00:05:43.440 --> 00:05:48.580
+Możesz stosować zasady i reguły do całej podsieci naraz, zamiast konfigurować każdy zasób z osobna.
+
+00:05:48.780 --> 00:05:50.860
+Oszczędza to czas i redukuje liczbę błędów.
+
+00:05:51.040 --> 00:05:53.520
+Oto szczegół, który często zaskakuje użytkowników.
+
+00:05:53.680 --> 00:05:58.320
+Azure rezerwuje 5 adresów IP w każdej podsieci na własne potrzeby wewnętrzne, takie jak routing i DNS.
+
+00:05:58.560 --> 00:06:04.420
+Więc jeśli utworzysz podsieć z zakresem 24, dającą 256 adresów, w rzeczywistości otrzymasz tylko 251 użytecznych.
+
+00:06:04.420 --> 00:06:08.180
+To częsta pułapka. Planujesz 256, a otrzymujesz tylko 251.
+
+00:06:08.360 --> 00:06:10.680
+Dlatego przy określaniu rozmiaru podsieci zawsze dodaj trochę zapasu.
+
+00:06:10.900 --> 00:06:13.720
+Dobrą wiadomością jest to, że podsieci można dodać po utworzeniu sieci w net.
+
+00:06:13.860 --> 00:06:16.520
+Nie jesteś ograniczony do tych, które skonfigurowałeś podczas tworzenia.
+
+00:06:16.780 --> 00:06:21.140
+Jeśli więc uznasz, że potrzebujesz oddzielnej podsieci dla narzędzi do zarządzania lub monitoringu, dodasz ją później.
+
+00:06:21.400 --> 00:06:22.040
+Żaden problem.
+
+00:06:22.320 --> 00:06:24.320
+Mimo to lepiej zaplanować je od samego początku.
+
+00:06:24.640 --> 00:06:28.680
+Dodawanie podsieci później jest możliwe, ale może wymagać przenoszenia zasobów, co bywa uciążliwe.
+
+00:06:28.840 --> 00:06:30.260
+Oto jednak najlepsza praktyka.
+
+00:06:30.260 --> 00:06:33.380
+Od początku używaj oddzielnych podsieci dla różnych warstw aplikacji.
+
+00:06:33.520 --> 00:06:35.580
+Pomyśl o architekturze swojej aplikacji.
+
+00:06:35.840 --> 00:06:42.140
+Zazwyczaj masz warstwę front-endu obsługującą żądania, warstwę back-endu z logiką biznesową i warstwę danych.
+
+00:06:42.380 --> 00:06:44.360
+Każda z nich powinna mieć własną podsieć.
+
+00:06:44.540 --> 00:06:47.420
+Nie czekaj z podziałem zasobów na moment, gdy aplikacja będzie już na produkcji.
+
+00:06:47.620 --> 00:06:50.100
+Wtedy jest to znacznie trudniejsze, gdy zasoby są już wdrożone.
+
+00:06:50.240 --> 00:06:51.220
+Co to dla Ciebie oznacza?
+
+00:06:51.380 --> 00:06:54.100
+Podsieci pomagają utrzymać sieć w porządku i zapewniają bezpieczeństwo.
+
+00:06:54.300 --> 00:06:55.480
+Są niczym pokoje w budynku.
+
+00:06:55.480 --> 00:06:58.520
+Zaplanuj je wcześniej i daj każdej warstwie aplikacji własną przestrzeń.
+
+00:06:58.640 --> 00:07:00.840
+W ten sposób utrzymasz sieć przejrzystą i bezpieczną.
+
+00:07:01.020 --> 00:07:02.800
+Publiczne kontra prywatne adresy IP.
+
+00:07:03.080 --> 00:07:03.720
+Kto co widzi?
+
+00:07:04.000 --> 00:07:07.260
+Porozmawiajmy o adresach IP, ponieważ nie każdy z nich jest taki sam.
+
+00:07:07.500 --> 00:07:11.380
+Gdy wdrażasz zasób wewnątrz sieci w net, domyślnie otrzymuje on prywatny adres IP.
+
+00:07:11.580 --> 00:07:14.920
+To adres, którego używa do komunikacji z innymi zasobami wewnątrz w net.
+
+00:07:15.060 --> 00:07:17.040
+Potraktuj to jak wewnętrzny numer telefonu.
+
+00:07:17.200 --> 00:07:19.300
+Tylko osoby wewnątrz budynku mogą się z nim połączyć.
+
+00:07:19.300 --> 00:07:23.420
+Prywatne adresy IP są dostępne tylko z wnętrza sieci w net lub z sieci z nią połączonych.
+
+00:07:23.580 --> 00:07:26.920
+Siedząc w domu przy laptopie nie połączysz się z prywatnym adresem IP w Azure.
+
+00:07:27.160 --> 00:07:28.140
+Nie ma go w internecie.
+
+00:07:28.400 --> 00:07:30.260
+Znajduje się wewnątrz twojej sieci prywatnej.
+
+00:07:30.480 --> 00:07:32.740
+Jak więc sprawić, by zasób był dostępny z internetu?
+
+00:07:32.900 --> 00:07:34.440
+Nadajesz mu publiczny adres IP.
+
+00:07:34.640 --> 00:07:39.000
+To adres widoczny dla świata zewnętrznego jak opublikowany numer telefonu zamiast wewnętrznego numeru.
+
+00:07:39.140 --> 00:07:40.140
+Oto kluczowa kwestia.
+
+00:07:40.340 --> 00:07:42.220
+Publiczne adresy IP są opcjonalne.
+
+00:07:42.380 --> 00:07:46.460
+Przypisujesz je jawnie, ponieważ Azure nigdy nie nada za sobą publicznego IP, jeśli o to nie poprosisz.
+
+00:07:46.460 --> 00:07:47.840
+Tak zostało to zaprojektowane.
+
+00:07:48.020 --> 00:07:50.640
+Domyślnie powinien być adres prywatny, a publiczny powinien być świadomym wyborem.
+
+00:07:50.800 --> 00:07:52.740
+I w tym miejscu wielu początkujących popełnia błąd.
+
+00:07:52.840 --> 00:07:54.680
+Przypisują publiczne adresy IP do wszystkiego.
+
+00:07:54.900 --> 00:07:57.640
+Serwer www, baza danych, backendowe API, wszystko dostaje własny adres.
+
+00:07:57.780 --> 00:07:59.080
+To ryzyko dla bezpieczeństwa.
+
+00:07:59.280 --> 00:08:02.900
+Twoja baza danych nie musi być dostępna z internetu, podobnie jak twoje backendowe API.
+
+00:08:03.100 --> 00:08:07.400
+Tylko zasoby frontendowe, z którymi faktycznie wchodzą w interakcje użytkownicy, powinny mieć publiczne adresy IP.
+
+00:08:07.600 --> 00:08:10.560
+Publiczne adresy IP występują w dwóch rodzajach, statyczne i dynamiczne.
+
+00:08:10.560 --> 00:08:14.240
+Statyczny publiczny adres IP pozostaje taki sam, nawet po zatrzymaniu i ponownym uruchomieniu zasobu.
+
+00:08:14.380 --> 00:08:16.380
+Dynamiczny publiczny adres IP może ulec zmianie.
+
+00:08:16.560 --> 00:08:20.640
+Jeśli uruchamiasz aplikację produkcyjną, prawdopodobnie potrzebujesz statycznych adresów IP, aby użytkownicy zawsze mogli cię znaleźć.
+
+00:08:20.800 --> 00:08:23.460
+Jeśli coś testujesz, adres dynamiczny może być w zupełności wystarczający.
+
+00:08:23.680 --> 00:08:28.480
+Możesz również skorzystać z tak zwanej prefiksu publicznego adresu IP, który pozwala zarezerwować blok adresów.
+
+00:08:28.680 --> 00:08:33.740
+Zamiast tworzyć je pojedynczo, rezerwujesz zakres, a następnie przypisujesz poszczególne adresy z tego zakresu.
+
+00:08:33.860 --> 00:08:37.520
+Przydatne, jeśli wiesz, że do projektu będziesz potrzebować wielu publicznych adresów IP.
+
+00:08:37.740 --> 00:08:38.780
+Co to oznacza dla ciebie?
+
+00:08:38.940 --> 00:08:41.020
+Prywatne adresy IP to bezpieczne ustawienie domyślne.
+
+00:08:41.220 --> 00:08:42.740
+Są one jak wewnętrzny numer telefonu.
+
+00:08:42.860 --> 00:08:46.820
+Publiczne adresy IP to świadomy wybór, którego dokonujesz tylko wtedy, gdy potrzebujesz, aby coś było dostępne z zewnątrz.
+
+00:08:46.960 --> 00:08:51.700
+A gdy już ich potrzebujesz, zastanów się, czy wymagany jest adres statyczny czy dynamiczny oraz czy prefiks ma sens.
+
+00:08:51.880 --> 00:08:54.040
+Sieciowe grupy zabezpieczeń kontrolujące ruch.
+
+00:08:54.240 --> 00:08:57.180
+Masz już skonfigurowaną sieć wnet, podsieci i adresy IP.
+
+00:08:57.460 --> 00:09:00.260
+Jak jednak faktycznie kontrolować ruch przychodzący i wychodzący?
+
+00:09:00.260 --> 00:09:03.040
+W tym miejscu pojawiają się sieciowe grupy zabezpieczeń NSG.
+
+00:09:03.220 --> 00:09:07.080
+NSG to strażnik, który kontroluje ruch wchodzący do twoich zasobów i z nich wychodzący.
+
+00:09:07.240 --> 00:09:13.060
+Pomyśl o nim jak o ochroniarzu w klubie, który sprawdza dowody, weryfikuje listę gości i odsyła każdego, kto nie powinien wejść.
+
+00:09:13.260 --> 00:09:17.600
+Każdy pakiet ruchu próbujący dotrzeć do twojego zasobu musi najpierw przejść przez tego ochroniarza.
+
+00:09:17.820 --> 00:09:19.940
+Grupy NSG działają w oparciu o reguły.
+
+00:09:20.160 --> 00:09:27.200
+Każda reguła zezwala lub zabrania ruchu w oparciu o cztery elementy, źródłowy adres IP, docelowy adres IP, numer portu i protokół.
+
+00:09:27.200 --> 00:09:34.560
+Możesz więc zezwolić na ruch z mojego biurowego adresu IP na porcie 443 lub zablokować cały ruch z internetu na porcie 22.
+
+00:09:34.840 --> 00:09:37.260
+Tego typu kontrola, a oto potężna funkcja.
+
+00:09:37.520 --> 00:09:41.820
+Możesz dołączyć grupę NSG do podsieci lub bezpośrednio do interfejsu sieciowego pojedynczej maszyny wirtualnej.
+
+00:09:42.000 --> 00:09:45.400
+Jeśli dołączysz ją do podsieci, NSG będzie obowiązywać dla wszystkiego, co się w niej znajduje.
+
+00:09:45.540 --> 00:09:47.820
+Każdej maszyny wirtualnej, każdej bazy danych, każdego zasobu.
+
+00:09:47.900 --> 00:09:49.340
+To ogólna polityka bezpieczeństwa.
+
+00:09:49.540 --> 00:09:53.500
+Jeśli dołączysz ją do interfejsu sieciowego konkretnej maszyny wirtualnej, będzie ona dotyczyć tylko tego jednego urządzenia.
+
+00:09:53.500 --> 00:09:59.960
+Możesz nawet zrobić obie te rzeczy. NSG na poziomie podsieci dla szerokich reguł i NSG na poziomie karty sieciowej nic dla wyjątków.
+
+00:10:00.160 --> 00:10:02.860
+Domyślne reguły tworzone przez Azure są całkiem rozsądne.
+
+00:10:03.020 --> 00:10:08.760
+Pozwalają one na cały ruch wewnątrz sieci wnet, więc twoje zasoby mogą się ze sobą komunikować, a jednocześnie blokują cały ruch z internetu,
+
+00:10:08.800 --> 00:10:12.140
+więc nikt z zewnątrz nie dotrze do twoich zasobów, chyba że wyraźnie na to pozwolisz.
+
+00:10:12.200 --> 00:10:13.320
+To dobry punkt wyjścia.
+
+00:10:13.500 --> 00:10:14.620
+Podam ci częsty przykład.
+
+00:10:14.860 --> 00:10:18.440
+Załóżmy, że zarządzasz maszyną wirtualną z systemem Linux i musisz się do niej połączyć przez SSH.
+
+00:10:18.440 --> 00:10:23.500
+Utworzysz regułę NSG, która zezwala na ruch przychodzący na porcie 22, ale nie chcesz zezwalać na SSH zewsząd.
+
+00:10:23.640 --> 00:10:29.760
+To proszenie się o kłopoty, więc ograniczasz to do własnego adresu IP, dzięki czemu tylko ty możesz się połączyć przez SSH, a wszyscy inni są blokowani.
+
+00:10:29.920 --> 00:10:33.460
+Podobnie jest z RDP na porcie 3389 dla maszyn z systemem Windows.
+
+00:10:33.660 --> 00:10:34.660
+Co to oznacza dla ciebie?
+
+00:10:34.840 --> 00:10:38.240
+Sieciowe grupy zabezpieczeń NSG to twoja pierwsza linia obrony, a co najlepsze są darmowe.
+
+00:10:38.240 --> 00:10:41.360
+Nie ma dodatkowych kosztów ich używania, więc nie ma wymówki, by ich nie skonfigurować.
+
+00:10:41.480 --> 00:10:44.260
+Każda podsieć i każdy zasób powinny mieć przypisaną grupę NSG.
+
+00:10:48.440 --> 00:10:54.940
+Teraz porozmawiajmy o routingu, bo kiedy już zdecydujesz, jaki ruch jest dozwolony, musisz ustalić, dokąd faktycznie trafia.
+
+00:10:55.180 --> 00:10:58.700
+Chodzi o to, że Azure automatycznie tworzy trasy systemowe dla każdej podsieci.
+
+00:10:58.900 --> 00:11:03.320
+Nie musisz nic robić. Pomyśl o tym jak o domyślnym GPS IE, który zna podstawowe drogi.
+
+00:11:03.560 --> 00:11:07.080
+Ruch wewnątrz sieci w net, ruch do połączonych sieci w net, ruch do internetu.
+
+00:11:07.080 --> 00:11:11.680
+Wszystko po prostu działa od razu po uruchomieniu, ale czasami domyślny GPS nie prowadzi cię tam, gdzie chcesz dotrzeć.
+
+00:11:11.820 --> 00:11:14.620
+Wtedy potrzebujesz tras zdefiniowanych przez użytkownika, czyli UDR.
+
+00:11:14.620 --> 00:11:18.440
+Pozwalają one zastąpić trasy systemowe Azure i przejąć kontrolę nad ścieżką ruchu.
+
+00:11:18.600 --> 00:11:19.180
+Jak to działa?
+
+00:11:19.380 --> 00:11:20.420
+Tworzysz tabelę tras.
+
+00:11:20.640 --> 00:11:22.160
+Dodajesz swoje niestandardowe trasy.
+
+00:11:22.400 --> 00:11:24.260
+Następnie kojarzysz te tabelę tras z podsiecią.
+
+00:11:24.460 --> 00:11:28.040
+Od tego momentu ruch opuszczający tę podsieć podąża według twoich reguł, a nie domyślnych.
+
+00:11:28.180 --> 00:11:29.400
+Podam ci konkretny przykład.
+
+00:11:29.620 --> 00:11:33.320
+Powiedzmy, że chcesz, aby cały ruch internetowy z twojej sieci w net przechodził najpierw przez zapory sieciową.
+
+00:11:33.320 --> 00:11:36.460
+Może musisz go sprawdzić, zarejestrować lub zablokować złośliwe witryny.
+
+00:11:36.600 --> 00:11:39.620
+Domyślna trasa systemowa wysyła ruch internetowy bezpośrednio na zewnątrz.
+
+00:11:39.620 --> 00:11:47.380
+To nie jest to, czego chcesz, więc tworzysz trasę, która mówi, że każdy ruch skierowany do 0.0.0.0, czyli dowolnego miejsca w internecie, powinien zamiast tego trafić do zapory.
+
+00:11:47.540 --> 00:11:49.400
+To właśnie jest trasa zdefiniowana przez użytkownika.
+
+00:11:49.600 --> 00:11:50.940
+Tabelę tras wykorzystują tak zwany.
+
+00:11:51.140 --> 00:11:54.720
+Następny przeskok, Next Hop, to miejsce docelowe, do którego ruch jest wysyłany w następnej kolejności.
+
+00:11:54.960 --> 00:11:55.720
+Masz kilka opcji.
+
+00:11:55.980 --> 00:11:58.640
+Możesz wysłać go do wirtualnego urządzenia, takiego jak zapora ogniowa.
+
+00:11:58.880 --> 00:12:02.820
+Możesz wysłać go do bramy sieci wirtualnej, dzięki której łączysz się z sieciami lokalnymi.
+
+00:12:02.820 --> 00:12:08.040
+Możesz wysłać go bezpośrednio do internetu albo donikąd, co w praktyce oznacza odrzucenie ruchu.
+
+00:12:08.180 --> 00:12:13.020
+Kluczem jest zrozumienie, że routing pozwala kontrolować ścieżkę, jaką ruch pokonuje w sieci.
+
+00:12:13.220 --> 00:12:17.240
+Trasy systemowe są dobrym ustawieniem domyślnym, ale nie zawsze sprawdzają się w każdej sytuacji.
+
+00:12:17.480 --> 00:12:23.400
+Jeśli chcesz, aby ruch przechodził przez punkt kontrolny konkretną bramę lub był całkowicie blokowany, potrzebujesz tras zdefiniowanych przez użytkownika.
+
+00:12:23.560 --> 00:12:24.640
+Co to dla Ciebie oznacza?
+
+00:12:24.820 --> 00:12:30.220
+Routing określa, dokąd ma trafiać ruch, a Ty masz możliwość nadpisania ustawień domyślnych azjur, gdy tylko zajdzie taka potrzeba.
+
+00:12:30.220 --> 00:12:35.720
+Zacznij od tras systemowych, zrozum ich działanie, a następnie dodawaj trasy niestandardowe, gdy wymaga tego architektura.
+
+00:12:35.980 --> 00:12:38.360
+Komunikacja między sieciami wirtualnymi w Netpeering.
+
+00:12:38.560 --> 00:12:42.140
+Do tej pory rozmawialiśmy o pojedynczej sieci w Net, jednym budynku, jednej prywatnej sieci.
+
+00:12:42.320 --> 00:12:44.180
+Co się jednak dzieje, gdy masz wiele sieci w Net?
+
+00:12:44.380 --> 00:12:49.560
+Może masz jedną sieć dla środowiska produkcyjnego, a inną do testów, albo uruchamiasz aplikacje w różnych regionach azjur.
+
+00:12:49.760 --> 00:12:51.960
+Domyślnie te sieci w Net są całkowicie odizolowane.
+
+00:12:52.160 --> 00:12:53.480
+Nie mogą się ze sobą komunikować.
+
+00:12:53.720 --> 00:12:55.700
+Są jak osobne budynki, między którymi nie ma żadnych dróg.
+
+00:12:55.700 --> 00:12:57.380
+W tym miejscu przydaje się w Netpeering.
+
+00:12:57.520 --> 00:13:00.520
+Pozwala on na prywatne połączenie dwóch sieci w Net i mam tu na myśli naprawdę prywatne połączenie.
+
+00:13:00.740 --> 00:13:03.600
+Ruch między połączonymi sieciami w Net pozostaje wewnątrz szkieletowej sieci Microsoft.
+
+00:13:03.880 --> 00:13:05.540
+Nigdy nie trafia do publicznego internetu.
+
+00:13:05.720 --> 00:13:09.060
+Oznacza to niskie opóźnienia, wysoką przepustowość i brak narażenia na zagrożenia z zewnątrz.
+
+00:13:09.200 --> 00:13:10.800
+Oto coś, co zaskakuje wielu ludzi.
+
+00:13:10.980 --> 00:13:12.720
+Peering działa również między regionami.
+
+00:13:12.960 --> 00:13:14.480
+Nazywamy to Peeringiem Globalnym.
+
+00:13:14.720 --> 00:13:18.020
+Możesz mieć sieć w Net w Europie Zachodniej połączoną z siecią w Net w Azji Południowo-Wschodniej,
+
+00:13:18.020 --> 00:13:20.180
+a ruch między nimi pozostaje w prywatnej sieci Microsoftu.
+
+00:13:20.300 --> 00:13:23.460
+Bez bramek VPN, bez publicznych adresów IP, tylko bezpośrednie prywatne połączenie.
+
+00:13:23.680 --> 00:13:25.920
+Jest jednak zasada, której absolutnie nie wolno łamać.
+
+00:13:26.040 --> 00:13:28.800
+Połączone sieci w Net muszą mieć niepokrywające się przestrzenie adresowe.
+
+00:13:29.000 --> 00:13:34.360
+Jeśli obie sieci w Net próbują użyć zakresu 1.0.0.0.0 ukośnik 1.6, nie można ich połączyć.
+
+00:13:34.540 --> 00:13:38.440
+Adresy IP by się pokrywały, a Azure nie wiedziałby, do której sieci należy pakiet.
+
+00:13:38.600 --> 00:13:42.300
+Pamiętasz wcześniejszą wskazówkę dotyczącą starannego planowania przestrzeni adresowej?
+
+00:13:42.440 --> 00:13:43.680
+Oto dlaczego jest to ważne.
+
+00:13:43.680 --> 00:13:48.040
+Jeśli przewidujesz, że w przyszłości połączysz sieci w Net, upewnij się od początku, że ich zakresy się nie pokrywają.
+
+00:13:48.220 --> 00:13:50.120
+A oto szczegół, który często sprawia kłopoty.
+
+00:13:50.300 --> 00:13:51.580
+Peering nie jest przechodni.
+
+00:13:51.740 --> 00:13:52.440
+Co to oznacza?
+
+00:13:52.620 --> 00:13:56.600
+Załóżmy, że sieć VNET-A jest połączona z siecią VNET-B, a VNET-B z siecią VNET-C.
+
+00:13:56.760 --> 00:13:58.940
+VNET-A nie łączy się automatycznie z VNET-C poprzez B.
+
+00:13:59.060 --> 00:13:59.940
+Nie są ze sobą połączone.
+
+00:14:00.100 --> 00:14:03.020
+Każdy peering to bezpośrednie połączenie między dokładnie dwiema sieciami VNET.
+
+00:14:03.020 --> 00:14:07.620
+Jeśli chcesz, aby akomunikowało się z C, musisz ustanowić oddzielne połączenie między A i C, jak więc zarządzać tym na dużą skalę.
+
+00:14:07.780 --> 00:14:09.440
+Stosuje się architekturę typu Hub & Spoke.
+
+00:14:09.600 --> 00:14:13.060
+Jedna centralna sieć VNET, zwana Hubem, jest połączona z wieloma innymi sieciami VNET, zwanymi Spoke.
+
+00:14:13.220 --> 00:14:17.100
+Hub może zawierać usługi współdzielone, takie jak zapora sieciowa, brama VPN czy narzędzia monitorujące.
+
+00:14:17.300 --> 00:14:19.400
+Sieci Spoke zawierają Twoje poszczególne obciążenia.
+
+00:14:19.620 --> 00:14:22.840
+Każda sieć Spoke łączy się bezpośrednio z Hubem, ale sieci Spoke nie łączą się ze sobą.
+
+00:14:23.040 --> 00:14:26.100
+Jeśli sieć Spoke musi połączyć się z inną siecią Spoke, ruch przechodzi przez Hub.
+
+00:14:26.100 --> 00:14:29.880
+Hub utrzymuje to porządek i zapewnia centralne miejsce do stosowania zasad bezpieczeństwa.
+
+00:14:30.020 --> 00:14:31.080
+Co to dla Ciebie oznacza?
+
+00:14:31.240 --> 00:14:34.620
+Peering to sposób budowania sieci obejmujących wiele sieci VNET i regionów.
+
+00:14:34.700 --> 00:14:36.280
+To most pomiędzy Twoimi budynkami.
+
+00:14:36.520 --> 00:14:38.780
+Zaplanuj przestrzenie adresowe tak, aby się nie nakładały.
+
+00:14:38.920 --> 00:14:44.060
+Pamiętaj, że Peering nie jest przechodni i rozważ architekturę typu Hub & Spoke, gdy zaczniesz wykraczać poza jedną sieć VNET.
+
+00:14:44.320 --> 00:14:46.200
+Jak to wszystko się łączy szersza perspektywa.
+
+00:14:46.380 --> 00:14:48.940
+Cofnijmy się więc i zobaczmy, jak te elementy faktycznie do siebie pasują.
+
+00:14:48.940 --> 00:14:50.240
+W tym tkwi prawdziwa siła.
+
+00:14:50.480 --> 00:14:51.580
+Zaczynasz od sieci VNET.
+
+00:14:51.580 --> 00:14:53.220
+To Twoja prywatna przestrzeń w Azjur.
+
+00:14:53.360 --> 00:14:54.660
+Pomyśl o tym, jak o swoim terenie.
+
+00:14:54.880 --> 00:14:56.360
+Wewnątrz tego terenu tworzysz podsieci.
+
+00:14:56.520 --> 00:14:57.460
+To Twoje pomieszczenia.
+
+00:14:57.720 --> 00:15:00.600
+Jedno dla serwerów www, jedno dla baz danych, jedno dla narzędzi zarządzania.
+
+00:15:00.780 --> 00:15:04.040
+Każda podsieć otrzymuje własny blok adresów wydzielony z przestrzeni adresowej sieci VNET.
+
+00:15:04.340 --> 00:15:05.700
+Następnie dodajesz zabezpieczenia.
+
+00:15:05.940 --> 00:15:08.260
+Sieciowe grupy zabezpieczeń są przypisywane do Twoich podsieci.
+
+00:15:08.440 --> 00:15:10.720
+Kontrolują one, jaki ruch jest dozwolony w obie strony.
+
+00:15:10.960 --> 00:15:14.020
+Twoja podsieć www zezwala na ruch z internetu na porcie 443.
+
+00:15:14.020 --> 00:15:17.920
+Twoja podsieć bazy danych zezwala tylko na ruch z podsieci www na porcie 1433.
+
+00:15:18.320 --> 00:15:20.740
+Ochroniasz przy każdych drzwiach, wie dokładnie, kto ma uprawnienia.
+
+00:15:20.960 --> 00:15:22.240
+Następnie konfigurujesz routing.
+
+00:15:22.560 --> 00:15:26.140
+Może chcesz, aby cały wychodzący ruch internetowy przechodził przez zaporę sieciową w celu inspekcji.
+
+00:15:26.340 --> 00:15:29.720
+Tworzysz tabelę tras, dodajesz trasę niestandardową i łączysz ją ze swoimi podsieciami.
+
+00:15:29.920 --> 00:15:33.320
+Teraz ruch podąża zaprojektowaną przez Ciebie ścieżką, a niedomyślną trasą Azjur.
+
+00:15:33.480 --> 00:15:35.300
+I na koniec łączysz wszystko w całość.
+
+00:15:35.520 --> 00:15:40.420
+Łączysz swoją sieć VNET z innymi sieciami VNET, być może z siecią Hub, która zawiera zaporę i usługi współdzielone.
+
+00:15:44.020 --> 00:15:48.520
+To jeden połączony system. Oto moment olśnienia. Żaden z tych elementów nie działa w izolacji.
+
+00:15:48.740 --> 00:15:50.660
+Sieć VNET bez podsieci to tylko pusta przestrzeń.
+
+00:15:50.760 --> 00:15:52.660
+Podsieci bez grup NSG są całkowicie otwarte.
+
+00:15:52.860 --> 00:15:55.340
+Routing bez przejrzystego projektu wysyła ruch w niewłaściwe miejsce.
+
+00:15:55.560 --> 00:15:57.680
+Peering bez planowania powoduje konflikty adresów.
+
+00:15:57.880 --> 00:16:00.540
+Stanowią one system. Każdy element zależy od pozostałych.
+
+00:16:00.700 --> 00:16:01.880
+Podam Ci konkretny przykład.
+
+00:16:02.140 --> 00:16:03.680
+Wyobraź sobie aplikację internetową.
+
+00:16:03.900 --> 00:16:08.240
+Twoje serwery www znajdują się w publicznej podsieci z grupą NSG zezwalającą na ruch HTTPS z internetu.
+
+00:16:08.240 --> 00:16:12.580
+Twoje serwery aplikacji znajdują się w prywatnej podsieci, która akceptuje ruch tylko z podsieci www.
+
+00:16:12.580 --> 00:16:17.280
+Twoja baza danych znajduje się w innej prywatnej podsieci, która akceptuje ruch tylko z podsieci aplikacji.
+
+00:16:17.460 --> 00:16:22.080
+Tablica TRAS wymusza kierowanie całego ruchu wychodzącego przez zaporę w sieci w net typu hub w celu rejestrowania i inspekcji.
+
+00:16:22.280 --> 00:16:26.120
+Całość jest połączona z Twoją siecią firmową, dzięki czemu zespół wewnętrzny może nią zarządzać.
+
+00:16:26.300 --> 00:16:28.520
+Na tym polega prawdziwa wartość, a nie na pojedynczej funkcji.
+
+00:16:28.740 --> 00:16:30.880
+Chodzi o to, jak wszystkie te elementy współpracują ze sobą.
+
+00:16:31.060 --> 00:16:36.000
+20 lat temu kupowałbyś osobne serwery, konfigurował fizyczne routery i zarządzał zaporami dla każdego urządzenia.
+
+00:16:36.000 --> 00:16:38.320
+Wszystko było ręczne, powolne i kosztowne.
+
+00:16:38.320 --> 00:16:43.820
+Azure zapewnia to wszystko jako usługę. Definiujesz to kilkoma kliknięciami lub skryptem i po prostu działa.
+
+00:16:44.020 --> 00:16:45.140
+Co to dla Ciebie oznacza?
+
+00:16:45.400 --> 00:16:49.240
+Gdy zrozumiesz, jak te elementy do siebie pasują, sieć w Azure stanie się przewidywalna.
+
+00:16:49.420 --> 00:16:55.240
+Nie musisz zgadywać, po prostu projektujesz, a gdy coś przestaje działać, wiesz dokładnie, gdzie szukać, bo rozumiesz system.
+
+00:16:55.500 --> 00:16:57.680
+Oto co chcę, żebyś zapamiętał z tego odcinka.
+
+00:16:57.880 --> 00:17:00.300
+Po pierwsze, najważniejszy krok, jaki możesz podjąć.
+
+00:17:00.440 --> 00:17:03.780
+Stwórz sieć w net z dobrze zaplanowaną przestrzenią adresową, zanim cokolwiek wdrożysz.
+
+00:17:03.780 --> 00:17:06.300
+Ta jedna decyzja wpływa na wszystko, co nastąpi później.
+
+00:17:06.460 --> 00:17:09.000
+Po drugie, używaj podsieci do oddzielenia warstw aplikacji.
+
+00:17:09.220 --> 00:17:12.160
+Serwery www, serwery aplikacji, bazy danych daj każdemu własną przestrzeń.
+
+00:17:12.220 --> 00:17:14.300
+I po trzecie, zacznij od sieciowych grup zabezpieczeń NSG.
+
+00:17:14.540 --> 00:17:18.300
+Są darmowe, są potężne i znacząco poprawiają bezpieczeństwo od pierwszego dnia.
+
+00:17:18.500 --> 00:17:21.160
+Twoja sieć w net to fundament wszystkiego, co budujesz w Azure.
+
+00:17:21.400 --> 00:17:23.580
+Jeśli zrobisz to dobrze, reszta stanie się prostsza.
+
+00:17:23.780 --> 00:17:26.420
+Jeśli źle, będziesz spędzać cały czas na walce z własną siecią.
+
+00:17:26.420 --> 00:17:30.640
+Zasubskrybuj na swojej ulubionej platformie podcastowej i udostępnij to komuś, kto zaczyna przygodę z Azure.
+
+00:17:30.860 --> 00:17:32.720
+Zostaw komentarz, jeśli coś stało się jasne.
+
+00:17:32.920 --> 00:17:34.360
+Do zobaczenia w kolejnym odcinku.

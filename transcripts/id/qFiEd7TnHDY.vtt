@@ -1,0 +1,1912 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.820
+Anda telah melakukan penjualan dan mengirimkan faktur, tetapi kapan uangnya benar-benar masuk ke keringan.
+
+00:00:03.960 --> 00:00:04.720
+Dan apa yang terdiamasuk?
+
+00:00:05.100 --> 00:00:08.520
+Selamat datang di episode lain, Microsoft Knowledge Nuggets di M365FM.
+
+00:00:08.780 --> 00:00:10.100
+M, saya Merkopiters.
+
+00:00:10.580 --> 00:00:13.880
+Hari ini kita akan membahas piutang usaha Dynamics 365 dengan bahasa yang sederhana.
+
+00:00:14.480 --> 00:00:17.940
+Di akhir episode ini, Anda akan mengikuti saldo satu pelanggan dari penjualan hingga pembayaran
+
+00:00:17.940 --> 00:00:21.120
+dan Anda akan melihat apa yang dilakukan bisnis saat pembayaran tersebut terlambat.
+
+00:00:21.720 --> 00:00:22.900
+Diikut adalah definisi paling sederhananya.
+
+00:00:23.560 --> 00:00:27.680
+Piutang usaha melacak uang yang menjadi hak Anda dari pelanggan beserta pembayaran yang masuk.
+
+00:00:27.680 --> 00:00:31.100
+O, anggap saja ini sebagai lemari arsip untuk uang di dalam bisnis Anda.
+
+00:00:31.560 --> 00:00:32.660
+Setiap pelanggan mendapatkan satu folder.
+
+00:00:33.140 --> 00:00:36.940
+Folder itu berisi faktur pembayaran, tanggal jatuh tempo, dan pekerjaan tindak lanjut mereka.
+
+00:00:37.400 --> 00:00:41.220
+Emang, lembar kerja bisa mencatat hal-hal tersebut, tetapi tidak bisa menghubungkan penjualan baru,
+
+00:00:41.620 --> 00:00:45.340
+tanggal jatuh tempo yang disepakati pembayaran bank, dan keputusan kredit secara andal di seluruh perusahaan.
+
+00:00:45.520 --> 00:00:46.980
+Dynamics di Mula UPA Finance bisa melakukan.
+
+00:00:47.260 --> 00:00:49.680
+Jadi, mari kita mulai dari awal dengan akun pelanggan.
+
+00:00:50.520 --> 00:00:51.920
+Satu, akun pelanggan.
+
+00:00:52.260 --> 00:00:53.800
+Titik awal untuk setiap faktur.
+
+00:00:53.800 --> 00:00:57.900
+Bayangkan Anda bekerja dengan pelanggan bernama Northwind Equipment.
+
+00:00:58.580 --> 00:01:03.040
+Sebelum mereka dapat memesan, Dynamics 365 membutuhkan lebih dari sekadar nama dan nomor telp.
+
+00:01:03.360 --> 00:01:05.700
+Sistem membutuhkan aturan keuangan untuk berbisnis dengan Northwind.
+
+00:01:06.220 --> 00:01:08.880
+Akun pelanggan adalah folder berlabel di lemari arsip kita.
+
+00:01:09.740 --> 00:01:13.640
+Folder ini menyimpan semua detail yang memberitahu Dynamics 365 siapa pelanggan tersebut,
+
+00:01:13.760 --> 00:01:16.480
+kemana faktur harus dikirim, bagaimana biasanya mereka membayar,
+
+00:01:16.600 --> 00:01:18.660
+dan berapa banyak kredit yang bersedia diberikan perusahaan.
+
+00:01:18.660 --> 00:01:22.280
+Itu mungkin terdengar seperti pengaturan dasar, tetapi mencegah banyak kebingungan di kemudian hari.
+
+00:01:22.620 --> 00:01:24.660
+Misalnya, akun tersebut menyimpan alamat faktur pelanggan.
+
+00:01:25.040 --> 00:01:26.860
+Alamat tersebut seringkali berbeda dengan alamat pengirim.
+
+00:01:27.220 --> 00:01:30.100
+Peralatan mungkin dikirim ke pabrik, sementara faktur dikirim ke kantor keuangan.
+
+00:01:30.460 --> 00:01:31.760
+Akun ini juga menyimpan ketentuan bayar.
+
+00:01:32.000 --> 00:01:33.620
+Ketentuan pembayaran menjawab pertanyaan sederhana.
+
+00:01:33.920 --> 00:01:35.320
+Berapa lama waktu yang dimiliki pelanggan ini untuk?
+
+00:01:35.840 --> 00:01:37.260
+Northwind mungkin membayar dalam 30 hati.
+
+00:01:37.600 --> 00:01:38.620
+Pelanggan lain membayar di muka.
+
+00:01:39.020 --> 00:01:41.000
+Pelanggan yang lebih besar bisa menegosiasikan 60 hati.
+
+00:01:41.000 --> 00:01:43.580
+Setelah ketentuan tersebut tersimpan di akun,
+
+00:01:43.720 --> 00:01:44.740
+dinamik secara otomatis.
+
+00:01:46.180 --> 00:01:47.420
+Tidak ada yang perlu mencari utas email
+
+00:01:47.420 --> 00:01:49.840
+atau menebak apakah net 30 berarti dari tanggal pesanan,
+
+00:01:49.960 --> 00:01:51.360
+tanggal pengiriman, atau tanggal faktur.
+
+00:01:51.900 --> 00:01:52.640
+Sistem sudah mengetahui.
+
+00:01:52.960 --> 00:01:53.360
+Begini intinya.
+
+00:01:53.800 --> 00:01:55.880
+Akun pelanggan juga menyimpan metode pembayaran yang biasa digunakan.
+
+00:01:56.400 --> 00:01:58.900
+Jika Northwind membayar dengan transfer bank dan pelanggan lain membayar
+
+00:01:58.900 --> 00:01:59.640
+dengan kartu kredit,
+
+00:01:59.640 --> 00:02:02.200
+tim keuangan mengikuti proses yang tepat saat waktu pembayaran tiba.
+
+00:02:02.440 --> 00:02:04.820
+Mereka tidak perlu memperlakukan setiap pelanggan sebagai kasus yang...
+
+00:02:04.820 --> 00:02:05.660
+Lalu ada batas kredit?
+
+00:02:05.660 --> 00:02:08.780
+Batas kredit adalah jumlah maksimum yang bersedia ditanggung oleh pelanggan
+
+00:02:08.780 --> 00:02:10.020
+pada satu waktu dalam sebuah bisnis.
+
+00:02:10.480 --> 00:02:12.460
+Bayangkan ini seperti meja resepsionis di gedung perkantoran.
+
+00:02:13.000 --> 00:02:15.440
+Resepsionis meriksa apakah seseorang diizinkan naik ke lantai lain.
+
+00:02:15.680 --> 00:02:16.820
+Bukan apakah pengunjung itu baik,
+
+00:02:16.960 --> 00:02:18.580
+hanya apakah aturan mengizinkan mereka lewat.
+
+00:02:19.000 --> 00:02:19.640
+Kegasannya sama-sama.
+
+00:02:19.820 --> 00:02:22.360
+Batas kredit memberikan batasan yang jelas antara bagian penjualan.
+
+00:02:22.920 --> 00:02:24.260
+Northwind mungkin adalah pelanggan yang kuat.
+
+00:02:24.260 --> 00:02:26.100
+Tetapi jika mereka sudah memiliki utang besar,
+
+00:02:26.280 --> 00:02:28.520
+bisnis harus berhenti sejenak sebelum menerima pesanan besar lainnya.
+
+00:02:28.960 --> 00:02:32.780
+Di balik layar, Dynamics 365 juga dapat menggunakan grup pelanggan dan profil pemostingan.
+
+00:02:32.780 --> 00:02:34.180
+Jangan biarkan istilah tersebut.
+
+00:02:34.540 --> 00:02:37.220
+Grup pelanggan hanyalah cara untuk mengelompokkan pelanggan yang serup.
+
+00:02:37.680 --> 00:02:39.420
+Retail dalam satu grup, grosir di grup lain.
+
+00:02:39.980 --> 00:02:42.740
+Dengan begitu, bisnis dapat menerapkan aturan bersama jika diperlukan.
+
+00:02:43.300 --> 00:02:46.420
+Profil pemostingan adalah aturan akutansi yang memberitahu Dynamics 365
+
+00:02:46.420 --> 00:02:49.080
+akun keuangan mana yang harus mencatat utang saat faktor masuk.
+
+00:02:49.800 --> 00:02:52.360
+Anda biasa tidak akan melihat proses itu sebagai tenaga penjual atau pelanggan.
+
+00:02:52.920 --> 00:02:54.680
+Namun, bagian keuangan bergantung padanya
+
+00:02:54.680 --> 00:02:56.680
+karena pembukuan memerlukan setiap jumlah di tempat yang lain.
+
+00:02:56.980 --> 00:02:58.040
+Dan inilah kekuatan yang sungguhnya.
+
+00:02:58.520 --> 00:03:01.060
+Akun pelanggan menghubungkan sisi penjualan dengan sisi keuangan.
+
+00:03:01.060 --> 00:03:03.780
+Seorang tenaga penjual dapat membuat pesanan untuk Norfin
+
+00:03:03.780 --> 00:03:06.180
+dan bagian keuangan tidak perlu memasukkan ulang informasi itu nanti.
+
+00:03:06.540 --> 00:03:09.140
+Mereka dapat melihat pelanggan ketentuan pembayaran, posisi kredit, dan jumlah.
+
+00:03:09.640 --> 00:03:10.660
+Semuanya terhumus otomatik.
+
+00:03:11.200 --> 00:03:13.480
+Itulah perbedaan antara daftar kontak dan akun pelanggan.
+
+00:03:13.860 --> 00:03:15.460
+Daftar kontak membantu Anda untuk menghubungi.
+
+00:03:15.720 --> 00:03:17.980
+Akun pelanggan mencatat hubungan keuangan termasuk aturan
+
+00:03:17.980 --> 00:03:21.040
+yang mengendalikan apa yang terjadi saat perusahaan melakukan penjualan kepada mereka.
+
+00:03:21.340 --> 00:03:22.960
+Jadi, begitu Norfin membeli sesuatu,
+
+00:03:23.060 --> 00:03:26.480
+Dynamics 365 perlu mengubah penjualan tersebut menjadi permintaan pembayaran yang tersebut.
+
+00:03:26.480 --> 00:03:31.020
+Membuat faktur mengubah penjualan menjadi utang.
+
+00:03:32.220 --> 00:03:34.180
+Jadi, apa perbedaan antara pesan dan faktur?
+
+00:03:34.920 --> 00:03:36.540
+Pesanan menyatakan apa yang diinginkan pelanggan.
+
+00:03:36.660 --> 00:03:37.880
+Faktur menyatakan apa yang harus mereka bayar.
+
+00:03:38.140 --> 00:03:38.700
+Begini masalahnya.
+
+00:03:39.040 --> 00:03:41.180
+Faktur membuat saldo berjalan pada akun pelanggan.
+
+00:03:42.160 --> 00:03:44.440
+Setelah diposting, Anda menagih mereka secara formal
+
+00:03:44.440 --> 00:03:46.340
+dan bagian pihutang dapat melacak apa yang harus dibayar.
+
+00:03:46.680 --> 00:03:47.880
+Mari kita tinjau kembali Norfin aku.
+
+00:03:48.420 --> 00:03:49.700
+Mereka mesan 10 peralatan.
+
+00:03:49.980 --> 00:03:52.260
+Tim penjualan Anda mencatat pesanan kudang menyiapkan barang
+
+00:03:52.260 --> 00:03:53.120
+dan Anda mengirimkannya.
+
+00:03:53.520 --> 00:03:54.720
+Norfin kini memiliki peralatan tersebut.
+
+00:03:54.720 --> 00:03:56.720
+Pada titik itu, Anda memerlukan catatan yang jelas
+
+00:03:56.720 --> 00:03:58.340
+tentang apa yang mereka beli, berapa biayanya,
+
+00:03:58.460 --> 00:03:59.420
+dan kapan pembayaran jatuh temp.
+
+00:03:59.620 --> 00:04:00.920
+Catatan tersebut adalah faktur pelanggan.
+
+00:04:01.440 --> 00:04:03.440
+Sebagian besar faktur di Dynamics 365 Finance
+
+00:04:03.440 --> 00:04:04.800
+berasal langsung dari pesanan penjualan.
+
+00:04:05.320 --> 00:04:07.360
+Ini menjaga faktur tetap terikat dengan penjualan asli.
+
+00:04:07.860 --> 00:04:09.160
+Barang pelanggan, harga, jumlah,
+
+00:04:09.300 --> 00:04:11.440
+dan semua aturan yang disepakati sudah ada di dalam arsip.
+
+00:04:12.100 --> 00:04:14.240
+Anda tidak perlu meminta seorang mengetik ulang detail tersebut
+
+00:04:14.240 --> 00:04:15.200
+ke dalam sistem perangian terpisah.
+
+00:04:15.780 --> 00:04:17.980
+Setelah barang dikirim atau layanan mencapai tahap
+
+00:04:17.980 --> 00:04:19.820
+yang harus ditagihkan, Anda membuat faktur
+
+00:04:19.820 --> 00:04:21.060
+dari pesanan penjualan tersebut.
+
+00:04:21.060 --> 00:04:23.320
+Waktu yang tepat bergantung pada cara kerja perusahaan Anda.
+
+00:04:23.800 --> 00:04:25.120
+Beberapa perusahaan menagih saat pengiriman.
+
+00:04:25.280 --> 00:04:26.540
+Yang lain setelah tahapan pekerjaan selesai,
+
+00:04:27.000 --> 00:04:28.380
+perusahaan konsultan mungkin membuat faktur
+
+00:04:28.380 --> 00:04:29.640
+setelah menyelesaikan suatu tahap penting.
+
+00:04:30.440 --> 00:04:33.480
+Dynamics 365 mengikuti proses yang sudah Anda tetapkan,
+
+00:04:34.100 --> 00:04:35.780
+Anda mungkin pernah mendengar istilah faktur slip pengepakan.
+
+00:04:36.800 --> 00:04:38.620
+Slip pengepakan mengonfirmasi apa yang secara fisik
+
+00:04:38.620 --> 00:04:40.320
+telah keluar dari gudang dan mencapai tahap pengiriman.
+
+00:04:40.740 --> 00:04:43.220
+Saat perusahaan Anda menagih berdasarkan apa yang benar-benar dikirim,
+
+00:04:43.440 --> 00:04:44.980
+faktur dapat menggunakan detail pengiriman
+
+00:04:44.980 --> 00:04:46.280
+yang telah dikonfirmasi tersebut.
+
+00:04:46.280 --> 00:04:47.660
+Hal ini menghindari masalah yang umum terjadi.
+
+00:04:47.920 --> 00:04:49.180
+Misalkan ada pesanan untuk 10 unit,
+
+00:04:49.260 --> 00:04:50.580
+tetapi hanya 8 yang dikirim hari ini
+
+00:04:50.580 --> 00:04:51.600
+karena 2 unit masih menungkus.
+
+00:04:51.820 --> 00:04:53.280
+Jika Anda menagih dari slip pengepakan,
+
+00:04:53.400 --> 00:04:54.980
+Anda hanya membuat faktur untuk 8 unit gengit.
+
+00:04:55.260 --> 00:04:56.940
+Anda tidak menagih Norwin untuk ke 10 unit
+
+00:04:56.940 --> 00:04:57.840
+sebelum mereka menerimanya.
+
+00:04:58.220 --> 00:04:58.980
+Pesanan tetap penting,
+
+00:04:59.180 --> 00:05:00.900
+tetapi pengiriman yang dikonfirmasi memberitahu
+
+00:05:00.900 --> 00:05:02.500
+bagian penagihan apa yang harus ada di faktur ini.
+
+00:05:02.800 --> 00:05:04.680
+Namun tidak semua faktur dimulai dengan pesanan penjualan.
+
+00:05:04.980 --> 00:05:06.660
+Terkadang Anda perlu menagih biaya sekali jalan
+
+00:05:06.660 --> 00:05:07.580
+yang tidak melibatkan pengiriman.
+
+00:05:08.320 --> 00:05:10.120
+Mungkin Norwin meminta sesi pelatihan khusus.
+
+00:05:10.680 --> 00:05:12.280
+Mungkin ada biaya layanan, biaya proyek,
+
+00:05:16.280 --> 00:05:18.160
+65 Finance mendukung faktur teks bebas.
+
+00:05:18.760 --> 00:05:20.420
+Teks bebas bukan berarti acak atau informal.
+
+00:05:20.960 --> 00:05:22.840
+Artinya faktur sebut tidak ditelitkan ke pesanan penjualan.
+
+00:05:23.200 --> 00:05:25.160
+Anda masukkan pelanggan, biaya, jumlah,
+
+00:05:25.320 --> 00:05:26.500
+detail pajak jika diperlukan,
+
+00:05:26.800 --> 00:05:27.660
+dan informasi pembayaran.
+
+00:05:28.060 --> 00:05:30.020
+Setelah diposting, itu menjadi jumlah tagian normal
+
+00:05:30.020 --> 00:05:30.620
+di akun pelanggan.
+
+00:05:30.940 --> 00:05:32.360
+Pelanggan tetap mendapatkan faktur yang sama.
+
+00:05:32.800 --> 00:05:34.560
+Bagian keuangan tetap melihat saldo yang belum dibuat.
+
+00:05:34.660 --> 00:05:35.680
+Bagaimana dengan pekerjaan yang berulang?
+
+00:05:35.980 --> 00:05:37.340
+Misalkan Norwin membayar biaya bulanan
+
+00:05:37.340 --> 00:05:38.360
+untuk pemeliharaan peralatan.
+
+00:05:38.900 --> 00:05:40.400
+Membuat faktur yang sama secara manual
+
+00:05:40.400 --> 00:05:41.420
+setiap bulan memuang waktu
+
+00:05:41.420 --> 00:05:42.500
+dan mengundang kesalahan kecil.
+
+00:05:42.500 --> 00:05:45.180
+Penagihan berlanggan yang menggunakan jadwal penagihan
+
+00:05:45.180 --> 00:05:46.180
+untuk menangani biaya berulang.
+
+00:05:46.820 --> 00:05:48.760
+Anda menyiapkan perjanjian dan waktu penagihan,
+
+00:05:49.100 --> 00:05:51.060
+lalu Dynamics 365 dapat membuat faktur
+
+00:05:51.060 --> 00:05:52.560
+saat setiap peyode penagihan tiba.
+
+00:05:53.280 --> 00:05:54.920
+Hal ini memberi Anda cara yang dapat diulang
+
+00:05:54.920 --> 00:05:56.100
+untuk menagih layanan rutin
+
+00:05:56.100 --> 00:05:57.140
+dan pelanggan menerima faktur
+
+00:05:57.140 --> 00:05:58.660
+berdasarkan jadwal yang mereka setujui.
+
+00:05:59.080 --> 00:05:59.940
+Posting adalah momen
+
+00:05:59.940 --> 00:06:01.420
+yang mengubah status penjualan.
+
+00:06:02.040 --> 00:06:03.180
+Hal ini mencatat jumlah tersebut
+
+00:06:03.180 --> 00:06:04.760
+pada akun pelanggan NotWin sebagai utang.
+
+00:06:05.280 --> 00:06:06.720
+Hal ini juga mengirimkan jumlah tersebut
+
+00:06:06.720 --> 00:06:08.040
+ke catatan keuangan perusahaan
+
+00:06:08.040 --> 00:06:09.140
+di mana Anda dapat melihat
+
+00:06:09.140 --> 00:06:10.200
+bahwa penjualan telah ditagi
+
+00:06:10.200 --> 00:06:11.240
+dan pembayaran masih tertunda.
+
+00:06:11.660 --> 00:06:12.840
+Faktur tersebut bukan lagi draft
+
+00:06:12.840 --> 00:06:14.100
+yang bisa diubah seseorang dengan santai.
+
+00:06:14.400 --> 00:06:15.800
+Faktur tersebut sekarang menjadi bagian dari catatan.
+
+00:06:16.040 --> 00:06:17.080
+Mari kita buat lebih konkret.
+
+00:06:17.480 --> 00:06:19.520
+NotWin memesan peralatan senilai 10 ribu dolar.
+
+00:06:20.000 --> 00:06:21.120
+8 unit kirim terlebih dahulu
+
+00:06:21.120 --> 00:06:22.660
+jadi Anda memposting faktur untuk 8 unit.
+
+00:06:23.160 --> 00:06:24.560
+Faktur tersebut menunjukkan jumlah,
+
+00:06:24.720 --> 00:06:26.120
+tanggal jatuh tempo, dan instruksi pembayaran.
+
+00:06:26.540 --> 00:06:27.900
+NotWin menerima tagihan tersebut
+
+00:06:27.900 --> 00:06:30.440
+dan Dynamics 365 mencatat jumlah yang sama
+
+00:06:30.440 --> 00:06:31.580
+sebagai terbuka di akun mereka.
+
+00:06:32.020 --> 00:06:33.260
+Catatan bersama tersebut menjaga
+
+00:06:33.260 --> 00:06:34.760
+staf penjualan, kudang, dan keuangan
+
+00:06:34.760 --> 00:06:35.860
+tetap fokus pada transaksi yang sama.
+
+00:06:35.860 --> 00:06:38.120
+Tidak ada lagi perdebatan mengenai versi yang berbeda
+
+00:06:38.120 --> 00:06:39.060
+dalam file yang berbeda,
+
+00:06:39.160 --> 00:06:40.360
+tetapi faktur hanya meminta uang.
+
+00:06:40.740 --> 00:06:41.560
+Tugas berikutnya adalah
+
+00:06:41.560 --> 00:06:42.620
+mengenali pembayaran saat tiba
+
+00:06:42.620 --> 00:06:44.300
+dan menautkannya ke saldo terbuka yang tepat.
+
+00:06:44.840 --> 00:06:46.560
+2-3 menerima dan mencocokkan pembayar.
+
+00:06:46.900 --> 00:06:47.800
+Menutup faktur yang tepat.
+
+00:06:48.260 --> 00:06:49.420
+Pembayarannya masuk terdengar sederhana.
+
+00:06:49.940 --> 00:06:51.660
+Saldo bank naik, jadi tugas selesai, bukan?
+
+00:06:52.500 --> 00:06:52.880
+Belum tentu.
+
+00:06:53.280 --> 00:06:54.940
+Keuangan masih perlu menjawab dua pertanyaan.
+
+00:06:55.640 --> 00:06:57.600
+Siapa yang mengirim uang dan faktur terbuka mana
+
+00:06:57.600 --> 00:06:58.980
+yang harus ditutup oleh uang tersebut?
+
+00:06:59.620 --> 00:07:01.460
+Pikirkan tentang NotWin yang membayar faktur peralatan.
+
+00:07:01.460 --> 00:07:03.100
+Bank mungkin menunjukkan pembayaran
+
+00:07:03.100 --> 00:07:04.920
+dengan referensi singkat, jumlah, dan tanggal.
+
+00:07:05.640 --> 00:07:06.920
+Tanpa mencocokkan pembayaran itu
+
+00:07:06.920 --> 00:07:08.100
+dengan saldo terbuka NotWin,
+
+00:07:08.220 --> 00:07:10.120
+sistem bisa menunjukkan uang tunai di bank sekaligus
+
+00:07:10.120 --> 00:07:11.620
+menunjukkan bahwa NotWin masih berhutang.
+
+00:07:12.040 --> 00:07:13.020
+Catatan-catatan itu harus dipertemu.
+
+00:07:13.520 --> 00:07:14.420
+Dynamics 365
+
+00:07:14.420 --> 00:07:17.940
+Finance menangani beberapa cara pelanggan membayar.
+
+00:07:18.460 --> 00:07:19.820
+Anda mungkin menerima uang tunai,
+
+00:07:19.960 --> 00:07:21.100
+cek, pembayaran kartu kredit,
+
+00:07:21.280 --> 00:07:22.920
+transfer bank, atau WSL yang merupakan dokumen
+
+00:07:22.920 --> 00:07:24.800
+pembayaran formal dalam beberapa proses bisnis.
+
+00:07:25.540 --> 00:07:26.980
+Setiap metode mengikuti rutinnya sendiri
+
+00:07:26.980 --> 00:07:27.920
+ke dalam catatan keuangan.
+
+00:07:28.420 --> 00:07:30.180
+Transfer bank mungkin muncul dalam laporan mutasiba.
+
+00:07:30.180 --> 00:07:32.580
+Cek mungkin perlu dicatat sebelum bank mengkeliringnya.
+
+00:07:33.200 --> 00:07:35.100
+Pembayaran kartu bisa datang melalui layanan pembayaran.
+
+00:07:35.640 --> 00:07:36.600
+Dynamics 365
+
+00:07:36.600 --> 00:07:38.860
+memberi keuangan tempat untuk mencatat detail pembayaran
+
+00:07:38.860 --> 00:07:40.080
+terhadap akun pelanggan yang tepat.
+
+00:07:40.460 --> 00:07:42.280
+Tempat itu seringkali adalah jurnal pembayaran pelanggan.
+
+00:07:42.680 --> 00:07:44.140
+Jurnal terdengar seperti buku besar kertas,
+
+00:07:44.260 --> 00:07:45.840
+tetapi di dalam Dynamics 365 itu
+
+00:07:45.840 --> 00:07:47.540
+hanyalah tempat terkontrol untuk memasukkan
+
+00:07:47.540 --> 00:07:48.800
+dan meninjau pembayaran sebelum diposting.
+
+00:07:49.600 --> 00:07:50.900
+Keuangan mencatat pelanggan, jumlah,
+
+00:07:51.060 --> 00:07:52.280
+metode pembayaran, akun bank,
+
+00:07:52.480 --> 00:07:54.620
+dan referensi apapun yang disertakan bersama pembayaran.
+
+00:07:55.480 --> 00:07:56.940
+Lalu ada satu kata yang sering terdengar lebih surat
+
+00:07:56.940 --> 00:07:58.420
+daripada sebenarnya, yaitu penyelesaian teman.
+
+00:07:58.860 --> 00:08:00.360
+Penyelesaian berarti mencocokkan pembayaran
+
+00:08:00.360 --> 00:08:01.400
+dengan faktur yang dibayarnya.
+
+00:08:02.080 --> 00:08:04.400
+Norgwin membayar jumlah yang tepat pada faktur peralatannya.
+
+00:08:04.920 --> 00:08:06.900
+Keuangan memilih pembayaran dan faktur terbuka tersebut
+
+00:08:06.900 --> 00:08:08.000
+lalu menyelesaikannya bersama-sama.
+
+00:08:08.400 --> 00:08:09.880
+Setelah diposting, faktur tidak lagi muncul
+
+00:08:09.880 --> 00:08:10.680
+sebagai belum dibayar.
+
+00:08:11.240 --> 00:08:12.120
+Pembayaran telah menutupnya.
+
+00:08:12.680 --> 00:08:14.180
+Saldo pelanggan turun sebesar jumlah yang sama.
+
+00:08:14.740 --> 00:08:16.580
+Ini penting karena pembayaran tanpa penyelesaian
+
+00:08:16.580 --> 00:08:18.660
+dapat menyebabkan faktur terbuka tetap ada di akun
+
+00:08:18.660 --> 00:08:20.380
+meskipun Anda sudah menerima uang tunai.
+
+00:08:20.860 --> 00:08:22.260
+Hal itu menciptakan laporan yang buruk,
+
+00:08:26.940 --> 00:08:29.800
+mungkin Norgwin membayar sebagian jumlahnya sekarang
+
+00:08:29.800 --> 00:08:31.240
+dan setuju untuk melunas sisanya nanti.
+
+00:08:31.600 --> 00:08:33.840
+Dynamics 3 dan 5 dapat menyelesaikan jumlah yang masuk
+
+00:08:33.840 --> 00:08:36.020
+terhadap faktur sambil membiarkan bagian yang belum dibayar tetap.
+
+00:08:36.360 --> 00:08:38.780
+Faktur tidak akan hilang hanya karena ada uang yang masuk.
+
+00:08:39.500 --> 00:08:40.740
+Bagian keuangan dapat melihat dengan tepat-tepat.
+
+00:08:41.020 --> 00:08:42.700
+Itu jauh lebih baik daripada menandai faktur
+
+00:08:42.700 --> 00:08:44.180
+sebagai sudah lunas karena kesalahan
+
+00:08:44.180 --> 00:08:45.600
+lalu mencoba mengingat jumlah yang kurang
+
+00:08:45.600 --> 00:08:47.060
+dalam catatan atau spreadsheet terpisah.
+
+00:08:47.680 --> 00:08:49.700
+Bagi banyak bisnis, pembayaran bank datang dalam jumlah besar.
+
+00:08:50.420 --> 00:08:52.280
+Memeriksa setiap transfer dan setiap faktur
+
+00:08:52.280 --> 00:08:53.880
+terbuka secara manual memakan waktu,
+
+00:08:53.880 --> 00:08:56.440
+terutama saat pelanggan membayar beberapa faktur sekaligus
+
+00:08:56.440 --> 00:08:58.140
+atau mengetik referensi yang kurang jelas.
+
+00:08:59.460 --> 00:09:02.580
+Dynamics 365 memiliki jurnal rekonsiliasi pembayaran untuk pekerjaan.
+
+00:09:03.080 --> 00:09:05.440
+Tim dapat mengimpor informasi rekening koran dan menggunakannya
+
+00:09:05.440 --> 00:09:08.480
+untuk mencocokkan pembayaran bank yang masuk dengan faktur pelanggan yang terbuka.
+
+00:09:09.360 --> 00:09:11.360
+Referensi pembayaran, jumlah, detail pelanggan,
+
+00:09:11.440 --> 00:09:13.120
+dan aturan pencocokan membantu sistem menyarankan
+
+00:09:13.120 --> 00:09:14.660
+kemana pembayaran tersebut dialokasikan.
+
+00:09:15.460 --> 00:09:17.480
+Anda tetap harus meninjau hasilnya, bagian itu penting.
+
+00:09:17.960 --> 00:09:19.440
+Otomatisasi mengurangi pencarian,
+
+00:09:19.440 --> 00:09:21.340
+namun bagian keuangan tetap bertanggung jawab
+
+00:09:21.340 --> 00:09:23.840
+memastikan pembayaran melunasi faktur yang benar.
+
+00:09:24.200 --> 00:09:26.500
+Jika pelanggan mengirim satu pembayaran untuk beberapa faktur,
+
+00:09:26.600 --> 00:09:28.740
+petugas yang memprosesnya dapat mencocokkan pembayaran tersebut
+
+00:09:28.740 --> 00:09:29.620
+di seluruh faktur terkait.
+
+00:09:29.800 --> 00:09:31.180
+Jika referensi mengarah ke dokumen yang salah,
+
+00:09:31.300 --> 00:09:32.680
+mereka dapat memperbaikinya sebelum dipostik.
+
+00:09:33.180 --> 00:09:35.380
+Tujuannya bukan untuk menghilangkan penilaian manusia,
+
+00:09:35.540 --> 00:09:37.280
+melainkan agar staff tidak menghabiskan hari mereka
+
+00:09:37.280 --> 00:09:38.920
+untuk mencari di file bank dan daftar faktur.
+
+00:09:39.620 --> 00:09:41.180
+Sekarang, bayangkan Northwind beroperasi
+
+00:09:41.180 --> 00:09:43.140
+di beberapa perusahaan dalam grup bisnis yang sama.
+
+00:09:43.880 --> 00:09:45.660
+Satu entitas hukum mungkin menjual peralatan
+
+00:09:45.660 --> 00:09:47.640
+sementara perusahaan keuangan pusat menerima pembayaran
+
+00:09:47.640 --> 00:09:48.360
+untuk seluruh grup.
+
+00:09:48.880 --> 00:09:51.120
+Dynamics 365 mendukung pembayaran terpusat
+
+00:09:51.120 --> 00:09:52.040
+untuk situasi tersebut.
+
+00:09:52.560 --> 00:09:54.580
+Pembayaran dapat dicatat dalam satu entitas hukum
+
+00:09:54.580 --> 00:09:55.560
+atas nama entitas lainnya.
+
+00:09:56.080 --> 00:09:58.000
+Bisnis tidak perlu berpura-pura bahwa uang tersebut
+
+00:09:58.000 --> 00:09:59.480
+masuk ke perusahaan penjual terlebih dahulu
+
+00:09:59.480 --> 00:10:00.940
+atau mengelola prosesnya di luar sistem.
+
+00:10:01.580 --> 00:10:03.500
+Catat dapat menunjukkan dari mana pembayaran berasal
+
+00:10:03.500 --> 00:10:05.000
+dan utang pelanggan mana yang dilunasinya.
+
+00:10:05.600 --> 00:10:07.260
+Hal ini menjaga pekerjaan keuangan bersama
+
+00:10:07.260 --> 00:10:09.300
+tetap lebih rapi terutama saat beberapa perusahaan
+
+00:10:09.300 --> 00:10:10.440
+menggunakan satu tim kas pusat.
+
+00:10:10.840 --> 00:10:12.680
+Jadi proses pembayaran lengkap lebih dari sekadar
+
+00:10:12.680 --> 00:10:13.440
+mencatat uang di bank.
+
+00:10:13.440 --> 00:10:16.080
+Dynamics 365 menghubungkan pelanggan,
+
+00:10:16.180 --> 00:10:18.220
+pembayaran, dan faktur hingga saldo terbuka ditutup
+
+00:10:18.220 --> 00:10:19.900
+atau hingga jumlah yang tersisa memberitahu
+
+00:10:19.900 --> 00:10:21.440
+bagian keuangan bahwa masih ada pembayaran
+
+00:10:21.440 --> 00:10:22.060
+yang harus diterima.
+
+00:10:22.320 --> 00:10:23.440
+Menyelesaikan pembayaran hari ini.
+
+00:10:23.940 --> 00:10:25.800
+Pertanyaan berikutnya muncul sebelum penjualan berikutnya.
+
+00:10:26.160 --> 00:10:27.240
+Haruskah bisnis mengizinkan pelanggan
+
+00:10:27.240 --> 00:10:28.120
+untuk berhutang lebih banyak lagi?
+
+00:10:30.600 --> 00:10:31.520
+Empat, manajemen kredit.
+
+00:10:33.200 --> 00:10:34.680
+Jadi Anda menerima pembayaran
+
+00:10:34.680 --> 00:10:35.800
+dan itu menonasi saldo.
+
+00:10:36.060 --> 00:10:36.900
+Cukup mudah bukan?
+
+00:10:37.720 --> 00:10:39.200
+Namun inilah yang ditanyakan manajemen kredit
+
+00:10:39.200 --> 00:10:40.340
+sebelum pesanan berikutnya diproses.
+
+00:10:40.860 --> 00:10:42.800
+Berapa banyak risiko lagi yang bersedia diambil oleh bisnisan?
+
+00:10:42.800 --> 00:10:44.300
+Bayangkan resepsionis hotel.
+
+00:10:44.780 --> 00:10:46.460
+Seorang tamu ingin menginap satu malam lagi,
+
+00:10:46.600 --> 00:10:47.780
+jadi staff memeriksa pemesanan,
+
+00:10:47.920 --> 00:10:48.980
+status pembayaran, dan aturan
+
+00:10:48.980 --> 00:10:50.300
+sebelum memberikan kartu kamar baru.
+
+00:10:50.760 --> 00:10:52.120
+Itulah tepatnya fungsi manajemen kredit
+
+00:10:52.120 --> 00:10:53.180
+untuk pesanan penjualan.
+
+00:10:53.920 --> 00:10:55.560
+Ini tidak menilai apakah Norwin Equipment
+
+00:10:55.560 --> 00:10:56.880
+adalah pelanggan yang baik secara keseluruh.
+
+00:10:57.300 --> 00:10:59.160
+Ini hanya meliksa posisi keuangan mereka saat ini
+
+00:10:59.160 --> 00:11:00.900
+berdasarkan aturan yang telah ditetapkan perusahaan.
+
+00:11:01.400 --> 00:11:02.820
+Salah satu aturan tersebut adalah batas kredit.
+
+00:11:03.100 --> 00:11:04.620
+Batas kredit adalah jumlah maksimum
+
+00:11:04.620 --> 00:11:06.100
+yang dapat terhutang oleh pelanggan pada satu waktu.
+
+00:11:06.620 --> 00:11:08.820
+Jadi jika Norwin memiliki batas 50 ribu dolar
+
+00:11:08.820 --> 00:11:10.220
+dan sudah berhutang 40 ribu dolar,
+
+00:11:10.620 --> 00:11:12.300
+pesanan baru senilai 20 diperhatikan.
+
+00:11:13.180 --> 00:11:14.500
+Pelanggan tetap dapat melakukan pemesanan,
+
+00:11:14.620 --> 00:11:16.180
+tetapi bisnis Anda tidak boleh membiarkan keputusan
+
+00:11:16.180 --> 00:11:16.940
+itu lupa dari perhatian.
+
+00:11:17.400 --> 00:11:19.640
+Dynamics 365 dapat meriksa lebih dari sekadar satu waktu.
+
+00:11:19.980 --> 00:11:21.840
+Sistem ini melihat faktur yang belum dibayar
+
+00:11:21.840 --> 00:11:22.860
+berapa lama keterlambatannya,
+
+00:11:22.960 --> 00:11:23.940
+nilai pesanan penjualan baru,
+
+00:11:24.140 --> 00:11:25.740
+dan kredit yang masih tersedia bagi pelanggan tersebut.
+
+00:11:26.240 --> 00:11:27.520
+Pelanggan yang membayar tepat waktu mungkin
+
+00:11:27.520 --> 00:11:28.660
+memiliki ruang untuk kredit tambahan,
+
+00:11:28.960 --> 00:11:30.660
+sementara pelanggan lain mungkin berada di bawah batas mereka
+
+00:11:30.660 --> 00:11:32.320
+tetapi memiliki faktur yang sangat terlambat.
+
+00:11:32.820 --> 00:11:34.040
+Itu adalah risiko yang berbeda.
+
+00:11:34.040 --> 00:11:35.260
+Saat sebuah aturan terpicu,
+
+00:11:35.360 --> 00:11:37.140
+Dynamics 365 dapat menahan pesanan penjualan
+
+00:11:37.140 --> 00:11:38.480
+karena masalah kredit menjadi pesanan
+
+00:11:38.480 --> 00:11:39.760
+sebelum Anda mengirim lebih banyak barang
+
+00:11:39.760 --> 00:11:40.760
+atau menerima lebih banyak barang
+
+00:11:40.760 --> 00:11:42.460
+atau menerima lebih banyak pekerjaan yang belum dibayar.
+
+00:11:42.580 --> 00:11:44.400
+Bagian penjualan dapat melihat penahanan tersebut,
+
+00:11:44.520 --> 00:11:46.060
+bagian keuangan dapat melihat alasannya,
+
+00:11:46.220 --> 00:11:47.720
+dan tidak ada yang baru menyadari masalahnya
+
+00:11:47.720 --> 00:11:49.000
+setelah gudang mengirimkan pengiriman lagi.
+
+00:11:49.180 --> 00:11:50.520
+Penahanan kredit bukan berarti pesanan
+
+00:11:50.520 --> 00:11:51.460
+telah ditolak selamanya.
+
+00:11:51.900 --> 00:11:53.000
+Itu berarti seseorang perumeninjonya.
+
+00:11:53.380 --> 00:11:54.580
+Mungkin Northwind mengirim bukti
+
+00:11:54.580 --> 00:11:56.200
+bahwa pembayaran sedang diproses
+
+00:11:56.200 --> 00:11:58.240
+atau manajer keuangan tahu faktur yang terlambat
+
+00:11:58.240 --> 00:12:00.020
+disebabkan oleh kesalahan, penagihan,
+
+00:12:00.160 --> 00:12:01.400
+atau pelanggan meminta peningkatan
+
+00:12:01.400 --> 00:12:03.200
+sementara karena proyek besar yang disetujui.
+
+00:12:03.980 --> 00:12:05.380
+Staff yang berwenang dapat merilis pesanan
+
+00:12:05.380 --> 00:12:06.580
+jika ada alasan yang masuk akal.
+
+00:12:06.980 --> 00:12:07.620
+Bagian itu penting,
+
+00:12:07.940 --> 00:12:09.640
+karena aturan bisnis membutuhkan ruang untuk kenyataan.
+
+00:12:10.060 --> 00:12:11.700
+Sistem dapat menghentikan keputusan otomatis,
+
+00:12:11.960 --> 00:12:12.940
+tetapi orang yang bertanggung jawab
+
+00:12:12.940 --> 00:12:14.600
+tetap memutuskan apa yang terjadi selanjutnya
+
+00:12:14.600 --> 00:12:15.720
+dan meninggalkan jejak keputusan.
+
+00:12:15.960 --> 00:12:17.220
+Disinilah bagian penjualan dan keuangan
+
+00:12:17.220 --> 00:12:18.380
+harus bekerja dengan pendangannya sah.
+
+00:12:18.760 --> 00:12:20.720
+Penjualan ingin agar pelanggan tetap bertransaksi,
+
+00:12:20.720 --> 00:12:21.920
+terutama jika pesanan itu penting,
+
+00:12:21.920 --> 00:12:23.500
+sementara keuangan perlu melindungi perusahaan
+
+00:12:23.500 --> 00:12:25.220
+dari penumpukan saldo yang mungkin tidak pernah kembali.
+
+00:12:25.880 --> 00:12:27.220
+Tidak ada pihak yang perlu memenangkan argumen.
+
+00:12:27.720 --> 00:12:28.980
+Mereka hanya perlu melihat pesanan
+
+00:12:28.980 --> 00:12:29.980
+jumlah yang belum dibayar
+
+00:12:29.980 --> 00:12:31.420
+dan aturan kredit di satu tempat.
+
+00:12:32.320 --> 00:12:33.720
+Banyak orang mendengar manajemen kredit
+
+00:12:33.720 --> 00:12:35.580
+dan berasumsi itu berarti menolak pelanggan.
+
+00:12:36.040 --> 00:12:36.420
+Bukan begitu.
+
+00:12:36.860 --> 00:12:38.380
+Itu berarti menyepakati batasan yang aman
+
+00:12:38.380 --> 00:12:39.380
+sebelum pembayaran yang terlambat
+
+00:12:39.380 --> 00:12:40.400
+menjadi masalah yang jauh di besar.
+
+00:12:40.580 --> 00:12:42.220
+Anda masih dapat mendukung pelanggan yang baik,
+
+00:12:42.420 --> 00:12:43.440
+menyetujui pengecualian,
+
+00:12:43.440 --> 00:12:44.660
+dan menjual dengan percaya di.
+
+00:12:44.900 --> 00:12:46.080
+Anda hanya berhenti menambah utang
+
+00:12:46.080 --> 00:12:47.420
+tanpa meriksa faktanya terlebih dahulu.
+
+00:12:47.420 --> 00:12:49.600
+Setelah faktur melewati tanggal jatuh temponya,
+
+00:12:49.700 --> 00:12:50.880
+upaya pencegahan beralih menjadi tindak.
+
+00:12:52.180 --> 00:12:53.480
+Kelima, penagihan dan seketah.
+
+00:12:54.000 --> 00:12:55.700
+Mengejar pembayaran tanpa kehilangan pelanggan.
+
+00:12:56.800 --> 00:12:58.580
+Begitu tanggal jatuh tempo terlewati, tugas menguruh.
+
+00:12:58.860 --> 00:12:59.940
+Bisnis tidak lagi memutuskan
+
+00:12:59.940 --> 00:13:01.160
+apakah akan memberikan kredit atau itu.
+
+00:13:01.380 --> 00:13:02.900
+Bisnis membutuhkan cara yang jelas dan sopan
+
+00:13:02.900 --> 00:13:04.260
+untuk meminta uang yang sudah jatuh tempo.
+
+00:13:05.000 --> 00:13:06.200
+Dynamics 365 Finance
+
+00:13:06.200 --> 00:13:07.760
+membawa pekerjaan itu ke halaman penagihan.
+
+00:13:08.140 --> 00:13:09.500
+Anggaplah ini sebagai meja kerja bersama
+
+00:13:09.500 --> 00:13:10.800
+untuk akun pelanggan yang terlambat membayar.
+
+00:13:11.380 --> 00:13:13.220
+Alih-alih, satu orang menyimpan catatan di surail
+
+00:13:13.220 --> 00:13:14.980
+yang lain melacak panggilan di lembar kerja
+
+00:13:14.980 --> 00:13:16.760
+dan orang lain meriksa faktur di keuangan,
+
+00:13:17.140 --> 00:13:18.720
+tim penagihan melihat saldo pelanggan
+
+00:13:18.720 --> 00:13:21.240
+dan semua aktivitas tindak lanjut di satu tempat.
+
+00:13:22.100 --> 00:13:23.040
+Hal itu mengubah percakapan.
+
+00:13:24.060 --> 00:13:25.180
+Agen penagihan bekerja
+
+00:13:25.180 --> 00:13:26.780
+dari daftar pelanggan yang dibuat
+
+00:13:26.780 --> 00:13:27.960
+melalui kriteria penagihan
+
+00:13:27.960 --> 00:13:29.220
+yang dapat menemukan pelanggan
+
+00:13:29.220 --> 00:13:30.220
+dengan faktur yang terlambat
+
+00:13:30.220 --> 00:13:31.300
+dalam jumlah hari tertentu,
+
+00:13:31.620 --> 00:13:33.020
+di atas jumlah tunggakan yang dipilih,
+
+00:13:33.120 --> 00:13:34.060
+atau memerlukan perhatian
+
+00:13:34.060 --> 00:13:35.660
+sesuai aturan penagihan perusahaan Anda.
+
+00:13:36.660 --> 00:13:37.560
+Jadi tim tidak perlu menebak
+
+00:13:37.560 --> 00:13:38.700
+siapa yang harus dihubungi terlebih dahulu.
+
+00:13:39.540 --> 00:13:40.380
+Untuk setiap pelanggan,
+
+00:13:40.380 --> 00:13:41.500
+agen dapat mengambil tindakan,
+
+00:13:41.680 --> 00:13:42.360
+mengirim pengingat,
+
+00:13:42.460 --> 00:13:43.260
+membuat surat penekian,
+
+00:13:43.400 --> 00:13:44.440
+mengirim surat kepada pelanggan,
+
+00:13:44.600 --> 00:13:45.400
+atau menambahkan tugas
+
+00:13:45.400 --> 00:13:46.240
+untuk panggilan telpon.
+
+00:13:47.320 --> 00:13:48.080
+Tujuannya bukan untuk
+
+00:13:48.080 --> 00:13:48.760
+mengirim pesan pada-pada.
+
+00:13:49.240 --> 00:13:50.440
+Kebanyakan keterlambatan pembayaran
+
+00:13:50.440 --> 00:13:51.280
+dimulai dari hal yang biasa.
+
+00:13:51.720 --> 00:13:52.060
+Misalnya,
+
+00:13:52.580 --> 00:13:54.260
+faktur yang sampai ke kotak masuk yang salah,
+
+00:13:54.420 --> 00:13:55.460
+pelanggan yang memerlukan salinan,
+
+00:13:55.580 --> 00:13:56.300
+atau tim pembayaran mereka
+
+00:13:56.300 --> 00:13:57.320
+melewatkan tanggal jatuh tempat.
+
+00:13:57.680 --> 00:13:58.200
+Pengingat yang tenang
+
+00:13:58.200 --> 00:13:58.980
+bisa menyelesaikan banyak.
+
+00:13:59.540 --> 00:14:00.600
+Terkadang pelanggan membalas
+
+00:14:00.600 --> 00:14:02.020
+dengan janji untuk membayar jumlah depan.
+
+00:14:02.700 --> 00:14:04.280
+Dynamics 365 dapat mencatatnya
+
+00:14:04.280 --> 00:14:05.200
+sebagai janji bayar
+
+00:14:05.200 --> 00:14:06.680
+sehingga tim tahu ada komitmen
+
+00:14:06.680 --> 00:14:07.420
+dan dapat memeriksa
+
+00:14:07.420 --> 00:14:08.820
+apakah pembayaran tiba sesuai janji.
+
+00:14:09.480 --> 00:14:10.540
+Tanpa catatan itu,
+
+00:14:10.780 --> 00:14:11.500
+akhir berikutnya mungkin
+
+00:14:11.500 --> 00:14:12.460
+menelpon pelanggan yang sama
+
+00:14:12.460 --> 00:14:13.120
+keesokan paginya
+
+00:14:13.120 --> 00:14:13.940
+tanpa menyadari bahwa
+
+00:14:13.940 --> 00:14:15.360
+seseorang telah menyetujui tanggal tertentu.
+
+00:14:15.700 --> 00:14:17.060
+Sengketa memerlukan perhatian yang sama.
+
+00:14:17.660 --> 00:14:18.720
+Sengketa berarti pelanggan
+
+00:14:18.720 --> 00:14:19.460
+menentang seluruh
+
+00:14:19.460 --> 00:14:20.380
+atau sebagian dari faktur.
+
+00:14:21.480 --> 00:14:22.940
+Mungkin karena harganya salah,
+
+00:14:23.180 --> 00:14:24.320
+beberapa barang tidak pernah sampai,
+
+00:14:24.740 --> 00:14:25.460
+atau faktur merujuk
+
+00:14:25.460 --> 00:14:26.820
+pada pekerjaan yang tidak mereka setujui.
+
+00:14:28.100 --> 00:14:28.900
+Tanggapan terburuk adalah
+
+00:14:28.900 --> 00:14:30.020
+membiarkan masalah itu hilang
+
+00:14:30.020 --> 00:14:30.700
+di dalam kotak masuk.
+
+00:14:31.180 --> 00:14:32.920
+Dynamics 365 dapat menandai faktur
+
+00:14:32.920 --> 00:14:33.520
+sebagai sengketa
+
+00:14:33.520 --> 00:14:34.420
+dan membuatnya tetap terlihat
+
+00:14:34.420 --> 00:14:35.300
+selama proses penagihan.
+
+00:14:35.780 --> 00:14:36.720
+Tim dapat melecek status
+
+00:14:36.720 --> 00:14:37.820
+dan pekerjaan yang diperlukan
+
+00:14:37.820 --> 00:14:38.680
+untuk menyelesaikannya
+
+00:14:38.680 --> 00:14:39.620
+alih-alih menganggap diam
+
+00:14:39.620 --> 00:14:40.220
+sebagai alasan
+
+00:14:40.220 --> 00:14:41.600
+untuk terus mengirim pengingat yang sama.
+
+00:14:42.360 --> 00:14:43.360
+Hal itu juga membantu bisnis
+
+00:14:43.360 --> 00:14:44.200
+menemukan masalah yang baru.
+
+00:14:45.120 --> 00:14:45.920
+Jika beberapa pelanggan
+
+00:14:45.920 --> 00:14:47.500
+mempermasalahkan jenis tagihan yang sama,
+
+00:14:47.800 --> 00:14:48.800
+bagian keuangan telah mempelajari
+
+00:14:48.800 --> 00:14:50.420
+sesuatu di luar satu ketelamatan pembayaran.
+
+00:14:50.860 --> 00:14:52.040
+Bagian penagihan, penjualan,
+
+00:14:52.100 --> 00:14:53.120
+pengirim, atau layan pelanggan
+
+00:14:53.120 --> 00:14:54.240
+mungkin perlu memperbaiki proses
+
+00:14:54.240 --> 00:14:55.400
+yang menyebabkan sengketa tersebut.
+
+00:14:55.940 --> 00:14:56.880
+Penagihan juga menggunakan
+
+00:14:56.880 --> 00:14:57.780
+laporan umur piutang
+
+00:14:57.780 --> 00:14:58.660
+yang mengurutkan jumlah
+
+00:14:58.660 --> 00:14:59.280
+yang belum dibayar
+
+00:14:59.280 --> 00:15:00.640
+berdasarkan berapa lama piutang tersebut.
+
+00:15:00.940 --> 00:15:01.840
+Anda mungkin melihat jumlah
+
+00:15:01.840 --> 00:15:02.620
+yang jatuh tempo sekarang
+
+00:15:02.620 --> 00:15:04.380
+lalu yang terlambat 30, 60, atau 90 bulan.
+
+00:15:04.760 --> 00:15:05.620
+Kelompok waktu tersebut
+
+00:15:05.620 --> 00:15:06.800
+membantu tim melihat piutang
+
+00:15:06.800 --> 00:15:07.780
+mana yang perlu diperhatikan
+
+00:15:07.780 --> 00:15:08.800
+sebelum menjadi pembicaraan
+
+00:15:08.800 --> 00:15:09.700
+yang jauh lebih sempurna.
+
+00:15:09.780 --> 00:15:10.800
+Faktur yang terlambat 2 hari
+
+00:15:10.800 --> 00:15:11.840
+tidak selalu memerlukan
+
+00:15:11.840 --> 00:15:12.660
+respons yang sama
+
+00:15:12.660 --> 00:15:13.820
+dengan faktur yang belum dibayar
+
+00:15:13.820 --> 00:15:14.560
+selama 3 bulan.
+
+00:15:15.380 --> 00:15:16.300
+Bagian keuangan juga dapat
+
+00:15:16.300 --> 00:15:17.560
+menggunakan prediksi pembayaran
+
+00:15:17.560 --> 00:15:18.340
+jika tersedia
+
+00:15:18.340 --> 00:15:20.120
+untuk memperkirakan apakah faktur terbuka
+
+00:15:20.120 --> 00:15:20.980
+akan tiba tepat waktu,
+
+00:15:20.980 --> 00:15:22.340
+terlambat, atau sangat terlambat
+
+00:15:22.340 --> 00:15:23.020
+atau sangat terlambat
+
+00:15:23.020 --> 00:15:23.980
+berdasarkan data pembayaran
+
+00:15:23.980 --> 00:15:25.180
+faktur dan pelanggan sebelumnya.
+
+00:15:26.320 --> 00:15:27.220
+Laporan penualan menunjukkan
+
+00:15:27.220 --> 00:15:28.040
+apa yang telah terjadi
+
+00:15:28.040 --> 00:15:29.600
+tetapi prediksi membantu tim
+
+00:15:29.600 --> 00:15:30.740
+memutuskan di mana harus fokus
+
+00:15:30.740 --> 00:15:31.820
+sebelum keterlambatan pembayaran
+
+00:15:31.820 --> 00:15:32.920
+berikutnya menimbulkan masalah.
+
+00:15:33.360 --> 00:15:34.560
+Hal itu tidak menggantikan penisian.
+
+00:15:36.060 --> 00:15:37.080
+Ini memberikan sinyal lain
+
+00:15:37.080 --> 00:15:37.860
+bagi tim penagihan
+
+00:15:37.860 --> 00:15:38.720
+saat mereka harus memilih
+
+00:15:38.720 --> 00:15:40.000
+di antara daftar akun yang panjang.
+
+00:15:40.520 --> 00:15:41.360
+Tujuannya sederhana
+
+00:15:41.360 --> 00:15:42.860
+menagi uang dengan cara yang stabil
+
+00:15:42.860 --> 00:15:43.600
+dan terlihat sembari
+
+00:15:43.600 --> 00:15:44.640
+memperlakukan pelanggan
+
+00:15:44.640 --> 00:15:45.360
+sebagai pelanggan
+
+00:15:45.360 --> 00:15:46.660
+bukan sebagai nomor kasus.
+
+00:15:47.260 --> 00:15:48.480
+Sekarang, mari kita masukkan
+
+00:15:48.480 --> 00:15:49.180
+seluruh perjalanan ini
+
+00:15:49.180 --> 00:15:50.100
+ke dalam satu contoh sederhana.
+
+00:15:51.080 --> 00:15:51.920
+Enam, satu faktur,
+
+00:15:52.100 --> 00:15:53.140
+satu proses yang terhubung
+
+00:15:53.140 --> 00:15:53.920
+gambaran besarnya.
+
+00:15:55.200 --> 00:15:56.340
+Jadi, mari kita lihat
+
+00:15:56.340 --> 00:15:56.940
+apa yang terjadi
+
+00:15:56.940 --> 00:15:58.260
+saat Northwind memesan di IU
+
+00:15:58.260 --> 00:15:59.320
+sistem andam prosesnya
+
+00:15:59.320 --> 00:16:01.000
+dan setelah mencapai titik penagihan
+
+00:16:01.000 --> 00:16:01.600
+yang disepakati,
+
+00:16:01.740 --> 00:16:02.720
+faktur pun dikirimkan.
+
+00:16:03.280 --> 00:16:04.000
+Akun pelanggan sudah
+
+00:16:04.000 --> 00:16:05.500
+menyimpan ketentuan pembayaran mereka
+
+00:16:05.500 --> 00:16:06.720
+jadi Dynamics 365
+
+00:16:06.720 --> 00:16:08.020
+menghitung tanggal jatuh tempo
+
+00:16:08.020 --> 00:16:08.660
+secara otomatis
+
+00:16:08.660 --> 00:16:09.820
+dari aturan yang Anda sepakati
+
+00:16:09.820 --> 00:16:10.340
+dengan Northwind.
+
+00:16:11.320 --> 00:16:12.180
+Bagian keuangan melihat
+
+00:16:12.180 --> 00:16:13.100
+jumlah tagihan terbuka
+
+00:16:13.100 --> 00:16:14.360
+dan pelanggan pembayaran yang jelas.
+
+00:16:14.980 --> 00:16:15.920
+Itulah awal dari prosesnya.
+
+00:16:15.920 --> 00:16:17.360
+Beberapa minggu kemudian,
+
+00:16:17.460 --> 00:16:18.680
+Northwind mengirimkan pembayaran bank
+
+00:16:18.680 --> 00:16:19.500
+dengan referensi faktur.
+
+00:16:20.040 --> 00:16:20.940
+Bagian keuangan mencocokkan
+
+00:16:20.940 --> 00:16:21.740
+pembayaran dengan faktur,
+
+00:16:21.860 --> 00:16:22.340
+lalu menasingkan.
+
+00:16:22.600 --> 00:16:23.600
+Salud terbuka tertutup
+
+00:16:23.600 --> 00:16:24.620
+dan akun pelanggan kini
+
+00:16:24.620 --> 00:16:25.260
+menunjukkan bahwa
+
+00:16:25.260 --> 00:16:26.220
+bagian hubungan tersebut
+
+00:16:26.220 --> 00:16:26.860
+telah selesai.
+
+00:16:27.460 --> 00:16:27.880
+Tidak perlu lagi
+
+00:16:27.880 --> 00:16:28.700
+pemeriksaan silang seraman.
+
+00:16:28.860 --> 00:16:29.760
+Namun, apa yang terjadi
+
+00:16:29.760 --> 00:16:30.440
+jika keadaan berbeda?
+
+00:16:30.700 --> 00:16:31.460
+Jika Northwind melewati
+
+00:16:31.460 --> 00:16:32.100
+tanggal jatuh tempo,
+
+00:16:32.220 --> 00:16:33.480
+faktur tersebut masuk ke bagian pening.
+
+00:16:33.960 --> 00:16:35.160
+Seorang agen mengirim pengingat,
+
+00:16:35.340 --> 00:16:36.240
+Northwind membalas bahwa
+
+00:16:36.240 --> 00:16:37.140
+sebagian tagihan salah
+
+00:16:37.140 --> 00:16:38.460
+dan tim mencapai perselisihan
+
+00:16:45.920 --> 00:16:47.200
+Inilah perbedaan.
+
+00:16:47.520 --> 00:16:49.040
+Dengan Dynamics 365 Finance
+
+00:16:49.040 --> 00:16:50.080
+tidak ada yang terpisah.
+
+00:16:50.840 --> 00:16:51.580
+Pesanan penjualan,
+
+00:16:51.680 --> 00:16:52.460
+faktur, pembayaran,
+
+00:16:52.560 --> 00:16:53.180
+pemeriksaan kredit,
+
+00:16:53.340 --> 00:16:54.200
+dan pekerjaan penagihan
+
+00:16:54.200 --> 00:16:55.280
+semuanya terhubung kembali
+
+00:16:55.280 --> 00:16:56.400
+ke hubungan pelanggan yang sama
+
+00:16:56.400 --> 00:16:57.340
+jadi Anda tidak perlu
+
+00:16:57.340 --> 00:16:58.100
+mencari informasi
+
+00:16:58.100 --> 00:16:58.880
+di berbagai sistem.
+
+00:16:59.420 --> 00:17:00.100
+Itu berarti pengambilan
+
+00:17:00.100 --> 00:17:00.840
+keputusan lebih cepat
+
+00:17:00.840 --> 00:17:01.520
+dan kesan lebih sedikit.
+
+00:17:02.120 --> 00:17:03.180
+Cara lama menyebarkan cerita
+
+00:17:03.180 --> 00:17:03.980
+di berbagai spreadsheet,
+
+00:17:04.340 --> 00:17:04.920
+folder email,
+
+00:17:05.040 --> 00:17:05.680
+catatan kertas,
+
+00:17:05.880 --> 00:17:06.800
+dan file bank
+
+00:17:06.800 --> 00:17:08.200
+sehingga orang membuang waktu
+
+00:17:08.200 --> 00:17:09.640
+untuk menanyakan versi mana yang benar.
+
+00:17:10.620 --> 00:17:11.480
+Dynamics 365
+
+00:17:11.480 --> 00:17:13.020
+menjaga cerita tetap terhubung
+
+00:17:13.020 --> 00:17:13.860
+satu tampilan pelanggan
+
+00:17:13.860 --> 00:17:14.640
+dari awal hingga akhir.
+
+00:17:15.000 --> 00:17:15.800
+Pihutang usaha berarti
+
+00:17:15.800 --> 00:17:16.860
+mengetahui siapa yang berhutang
+
+00:17:16.860 --> 00:17:17.320
+kepada Anda,
+
+00:17:17.460 --> 00:17:18.180
+kapan jatuh temponya,
+
+00:17:18.300 --> 00:17:19.220
+apa yang telah terjadi sejauh ini,
+
+00:17:19.300 --> 00:17:19.960
+dan apa yang perlu Anda
+
+00:17:19.960 --> 00:17:20.680
+lakukan selanjutnya.
+
+00:17:20.820 --> 00:17:21.720
+Jika ada bagian yang hilang,
+
+00:17:21.840 --> 00:17:22.840
+perusahaan bisa banyak menjual
+
+00:17:22.840 --> 00:17:23.740
+tetapi tetap kesulitan
+
+00:17:23.740 --> 00:17:24.620
+mengetahui di mana uang kas.
+
+00:17:24.800 --> 00:17:25.600
+Itulah mengapa proses
+
+00:17:25.600 --> 00:17:26.380
+yang terhubung ini penting.
+
+00:17:27.320 --> 00:17:27.760
+Kesimpulan
+
+00:17:27.760 --> 00:17:29.200
+Kendalikan uang
+
+00:17:29.200 --> 00:17:29.980
+di dalam perusahaan
+
+00:17:29.980 --> 00:17:31.780
+Faktur hanyalah awal
+
+00:17:31.780 --> 00:17:32.440
+dari prosesing.
+
+00:17:33.040 --> 00:17:33.940
+Apakah pihutang Anda
+
+00:17:33.940 --> 00:17:35.020
+mengikuti uang tersebut
+
+00:17:35.020 --> 00:17:35.880
+hingga saldo ditutup
+
+00:17:35.880 --> 00:17:36.500
+atau seseorang
+
+00:17:36.500 --> 00:17:37.220
+menindak lanjuti
+
+00:17:37.220 --> 00:17:38.160
+apa yang belum dibayar?
+
+00:17:39.480 --> 00:17:40.080
+Menjaga kendali
+
+00:17:40.080 --> 00:17:40.520
+atas uang
+
+00:17:40.520 --> 00:17:41.180
+di dalam perusahaan
+
+00:17:41.180 --> 00:17:41.580
+sangat penting
+
+00:17:41.580 --> 00:17:42.320
+bagi kesehatan bisnis.
+
+00:17:42.740 --> 00:17:43.320
+Tampil kompeters,
+
+00:17:43.760 --> 00:17:44.340
+berlangganlah ke
+
+00:17:44.340 --> 00:17:45.320
+Microsoft Knowledge Magnets
+
+00:17:45.320 --> 00:17:46.380
+di M365FM
+
+00:17:46.380 --> 00:17:47.260
+lalu tonton episode
+
+00:17:47.260 --> 00:17:48.540
+Dynamics 365 Finance
+
+00:17:48.540 --> 00:17:49.300
+terkait di layar Anda
+
+00:17:49.300 --> 00:17:50.060
+untuk terus membangun
+
+00:17:50.060 --> 00:17:50.880
+pemahaman dalam bahasa
+
+00:17:50.880 --> 00:17:51.320
+yang sederhana.
