@@ -8,7 +8,7 @@ date: 2026-12-29
 topics: [audit-logs, sharepoint-governance]
 faq:
   - q: "What do audit logs for SharePoint show?"
-    a: "Audit logs are records of who did what and when in a system. For SharePoint, they help answer questions such as who accessed, changed or shared content. The exact list of recorded events, search options and retention periods depends on your Microsoft 365 licensing and settings, so check Microsoft Learn."
+    a: "Audit logs are records of who did what and when in a system. For SharePoint, they help answer questions such as who accessed, changed or shared content. The exact list of recorded events, search options and retention periods depends on your Microsoft 365 licensing and settings, so check Microsoft Learn. For example, Microsoft documents 180-day retention for Audit (Standard) and longer retention with Audit (Premium)."
   - q: "Are audit logs only useful for security incidents?"
     a: "No. Security investigations and compliance are the classic uses, but audit records also support governance. They can help you check whether sharing rules are followed, whether sites have active owners and whether policies match real behaviour. They show activity, but they do not replace policies or reviews."
   - q: "Do audit logs replace SharePoint governance?"
@@ -71,7 +71,7 @@ Consider a few of the topics the guide names:
 - **Review cycles.** The guide mentions that a review cycle can be automated, for example with Power Automate. Audit records can be one input for such reviews, because activity data may help show which sites are actively used and which are not, depending on what is recorded in your tenant.
 - **Policies that owners do not have to think about.** The guide notes that policies work best when site owners do not have to think about them, for instance through site designs. If audit records show repeated deviations, that may be a sign that a policy depends too much on individual effort.
 
-Microsoft also offers SharePoint Advanced Management, with tools in three areas: content sprawl, the content lifecycle and oversharing. These address related concerns from a different angle. Read the [SharePoint Advanced Management documentation](https://learn.microsoft.com/en-us/sharepoint/advanced-management) to see how they relate to audit records and what requirements apply in your tenant. For a general introduction, see [what governance in SharePoint means](https://learn.microsoft.com/en-us/sharepoint/governance/what-is-governance-in-sharepoint).
+Microsoft also offers SharePoint Advanced Management, with tools in three areas: content sprawl, the content lifecycle and oversharing. These address related concerns from a different angle. Read the [SharePoint Advanced Management documentation](https://learn.microsoft.com/en-us/sharepoint/advanced-management) to see how they relate to audit records and what requirements apply in your tenant. For a general introduction, see the [SharePoint governance overview](https://learn.microsoft.com/en-us/sharepoint/governance-overview).
 
 The point is not that audit logs replace any of this. They are the feedback loop. Policies and roles set the direction; audit records tell you whether you are heading there.
 
@@ -98,3 +98,10 @@ A few cautions will save you from wrong conclusions.
 - **Define who may search and why.** Audit data is sensitive. Document access and purpose.
 - **Test before you act.** Any permission change, deletion, restore or bulk action that follows an audit finding should go through a pilot site or test tenant first, with a backup or way back in place.
 - **Review regularly.** Governance is not a one-off project. A recurring check of audit records, ideally with a defined owner, keeps it connected to what actually happens in SharePoint.
+
+## Sources
+
+- [Learn about auditing solutions in Microsoft Purview (Microsoft Learn)](https://learn.microsoft.com/purview/audit-solutions-overview)
+- [SharePoint governance overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/governance-overview)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)

@@ -122,3 +122,10 @@ If your smart factory work is about planning, simulation and keeping the plan co
 ## Next step
 
 The question "what is a smart factory" is best answered with your own plant. Pick one line, name the one decision on it that you'd like to make faster, and list the data that decision needs. That list is the start of your first smart factory project.
+
+## Sources
+
+- [Smart Manufacturing Operations Planning and Control Program - NIST](https://www.nist.gov/programs-projects/smart-manufacturing-operations-planning-and-control-program)
+- [ISA-95 Standard: Enterprise-Control System Integration - ISA](https://www.isa.org/standards-and-publications/isa-standards/isa-95-standard)
+- [What is Azure IoT Operations? - Microsoft Learn](https://learn.microsoft.com/en-us/azure/iot-operations/overview-iot-operations)
+- [NIST SP 800-82 Rev. 4 (initial public draft), Guide to Operational Technology (OT) Security - NIST CSRC](https://csrc.nist.gov/pubs/sp/800/82/r4/ipd)

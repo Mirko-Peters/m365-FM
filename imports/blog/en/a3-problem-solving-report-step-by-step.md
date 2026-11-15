@@ -35,7 +35,7 @@ IndustryWeek's [primer on A3 reports](https://www.industryweek.com/leadership/co
 
 LEI describes the layout in simple terms: the left side covers the problem or current condition, and the right side covers the countermeasures that were considered, tested and chosen. A common order of sections is below. Adapt the names to your company.
 
-1. **Header.** Title, owner (the byline), date and the person who will read it and approve it (the "to" line). Write for that reader.
+1. **Header.** Title, owner (the byline), date and the person who will read it and approve it (the "to" line, a common A3 convention that the LEI article doesn't describe). Write for that reader.
 2. **Background.** Why does this problem matter? Link it to safety, quality, delivery or cost, and to a business goal. Keep it to a few lines.
 3. **Current condition.** Describe the process as it is, with data from the gemba (the Japanese word for "the real place", the shop floor). Use a simple diagram or a chart. State the problem in one precise sentence with a number.
 4. **Goal.** A measurable target and a date. For example, "reduce leak-test rejects from 4.8% to 2.4% by the end of the quarter".
@@ -50,9 +50,9 @@ Treat the A3 as a working document. It is updated as you learn, and the owner ta
 
 Root cause analysis is the heart of the A3. Two tools help most.
 
-The ASQ glossary describes the [Five Whys](https://asq.org.in/glossary/quality/F/five-whys/) as a root cause analysis technique that involves repeatedly asking why. It is typically run about five times, though more or fewer is fine, and it credits Sakichi Toyoda with developing it. The rules: start with a precise problem statement backed by data, answer each why with an observed fact and not a hypothesis, stop at a cause you can act on, and verify the root cause before you act.
+The Five Whys is a root cause analysis technique that involves repeatedly asking why. It is typically run about five times, though more or fewer is fine, and it is usually credited to Sakichi Toyoda. These rules are common practice rather than a quote from one source: start with a precise problem statement backed by data, answer each why with an observed fact and not a hypothesis, stop at a cause you can act on, and verify the root cause before you act.
 
-The Five Whys works best for linear chains of cause and effect. For complex problems with several interacting causes, use a fishbone (Ishikawa) diagram, which lays out hypotheses on one picture, and then apply the 5 whys to the most likely branches. The iSixSigma article on [Ishikawa diagrams and the 5 whys](https://www.isixsigma.com/cause-effect/root-cause-analysis-ishikawa-diagrams-and-the-5-whys/) recommends exactly this combination, and it warns that stopping at the first plausible cause leads to actions that only treat symptoms.
+The Five Whys works best for linear chains of cause and effect. For complex problems with several interacting causes, use a fishbone (Ishikawa) diagram, which lays out hypotheses on one picture, and then apply the 5 whys to the most likely branches. Combining the two is a common recommendation among Six Sigma practitioners. The risk it addresses is real: stopping at the first plausible cause tends to lead to actions that only treat symptoms.
 
 ## A3 template: what goes where
 
@@ -106,3 +106,8 @@ A3s are often drawn by hand, and many teams prefer that. Software helps when you
 ## Next step
 
 Pick one real problem in your area, draw the two-column sheet and write the problem statement with a number. Take the draft to the gemba and review it with the people who do the work. That is how A3 problem solving starts to work in your plant.
+
+## Sources
+
+- Lean Enterprise Institute: Understanding the many facets of the A3 - https://www.lean.org/the-lean-post/articles/understanding-the-many-facets-of-the-a3/
+- IndustryWeek: A Primer on A3 Reports (Durward Sobek, Montana State University) - https://www.industryweek.com/leadership/companies-executives/article/21961709/a-primer-on-a3-reports

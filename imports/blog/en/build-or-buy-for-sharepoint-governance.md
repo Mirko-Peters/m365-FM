@@ -8,7 +8,7 @@ date: 2027-01-04
 topics: [sharepoint-governance, sharegate, sharepoint-essentials-toolkit]
 faq:
   - q: "Should SharePoint governance start with a tool or with a policy?"
-    a: "Start with policy and ownership. Microsoft's intranet governance guidance says to plan early, involve business and IT, and define who owns each site. Tools help enforce and report on those decisions, but without agreed rules they only show you the problems faster."
+    a: "Start with policy and ownership. Microsoft's intranet governance guidance says to plan early, involve business and IT, and gives site ownership (a primary and a secondary contact per site) as an example policy. Tools help enforce and report on those decisions, but without agreed rules they only show you the problems faster."
   - q: "When does building your own governance scripts make sense?"
     a: "It can make sense when the requirement is narrow, stable and well understood, and someone is clearly responsible for maintaining the script. Scripts that change permissions or delete content need a pilot site or test tenant first and a way back."
   - q: "What should we compare when evaluating a third-party SharePoint tool?"
@@ -21,7 +21,7 @@ This article does not pick a winner. It lays out a way to compare the options so
 
 ## Start with the policy, not the tool
 
-[SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) is not a product. Microsoft describes governance in general as the set of policies, roles, responsibilities and processes that control how an organization's business divisions and IT teams work together to achieve its goals. That definition comes from the SharePoint Server documentation, but the idea carries over.
+[SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) is not a product. The SharePoint governance overview on Microsoft Learn describes governance as the set of policies, roles, responsibilities and processes that control how an organization's business divisions and IT teams work together to achieve its goals.
 
 For SharePoint in Microsoft 365, the [Microsoft Learn guide on intranet governance](https://learn.microsoft.com/en-us/sharepoint/intranet-governance) makes several points that matter before any build-or-buy discussion:
 
@@ -29,7 +29,7 @@ For SharePoint in Microsoft 365, the [Microsoft Learn guide on intranet governan
 - Include business and IT in the governance team, and keep it in place after launch.
 - The business is responsible, not IT alone.
 - Policies are requirements; guidelines are recommendations.
-- Define site ownership, for example a primary and a secondary contact per site.
+- Define site ownership; the guide's example policy is a primary and a secondary contact per site.
 
 Imagine a tenant where nobody has agreed who owns a team site once its creator leaves. No tool can answer that for you. It can report orphaned sites, but someone still has to decide what happens to them.
 
@@ -97,3 +97,9 @@ You will probably end up with a mix: native features for the baseline, a few sma
 - Treat vendor feature, speed and price statements as claims to verify in your own test tenant.
 - Test every change action on a pilot site first, and keep a backup or a way back.
 - Review the setup regularly, as Microsoft's governance guidance recommends.
+
+## Sources
+
+- [SharePoint governance overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/governance-overview)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)

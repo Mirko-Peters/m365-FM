@@ -22,7 +22,7 @@ faq:
 ---
 INDEX MATCH in Excel is a lookup formula built from two functions: `=INDEX(return_range, MATCH(lookup_value, lookup_range, 0))`. MATCH finds where your value sits in a list, and INDEX returns the item from the same position in another list. This article is for Excel users who write VLOOKUP formulas and run into its limits, or who inherited a workbook full of INDEX MATCH and want to understand it. You'll see each function on its own, how they fit together, how to look left, how to do a two-way lookup, how to use two criteria, and what the errors mean.
 
-You'll find INDEX MATCH in many older workbooks, because it worked in every version of [Excel](https://www.m365.fm/entity/excel/) long before XLOOKUP existed. It still does, which is the main reason to learn it. The details below come from Microsoft's pages on [MATCH](https://support.microsoft.com/en-us/office/match-function-e8dffd45-c762-47d6-bf89-533f4a37673a), [INDEX](https://support.microsoft.com/en-us/excel/functions/index-function) and VLOOKUP.
+You'll find INDEX MATCH in many older workbooks, because it works in the older versions of [Excel](https://www.m365.fm/entity/excel/) that predate XLOOKUP. That is the main reason to learn it. The details below come from Microsoft's pages on [MATCH](https://support.microsoft.com/office/match-function-e8dffd45-c762-47d6-bf89-533f4a37673a), [INDEX](https://support.microsoft.com/excel/functions/index-function) and VLOOKUP.
 
 ## What INDEX does
 
@@ -73,14 +73,14 @@ Keep the ranges the same length and starting row. If MATCH searches A2:A100 and 
 
 ## Looking left, and what changes against VLOOKUP
 
-Microsoft's [VLOOKUP page](https://support.microsoft.com/en-us/office/vlookup-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1) gives the syntax as `VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])`. It says the lookup value must be in the first column of the range, and that leaving out range_lookup gives an approximate match, which assumes sorted data. The page also suggests trying XLOOKUP.
+Microsoft's [VLOOKUP page](https://support.microsoft.com/office/vlookup-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1) gives the syntax as `VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])`. It says the lookup value must be in the first column of the range, and that leaving out range_lookup gives an approximate match, which assumes sorted data. The page also suggests trying XLOOKUP.
 
 Here is the same job both ways, with IDs in column A and names in column B:
 
 - `=VLOOKUP(F2,A2:B100,2,FALSE)`
 - `=INDEX(B2:B100,MATCH(F2,A2:A100,0))`
 
-INDEX MATCH has two real advantages. First, it can look left. If the names are in column B and you want the ID back from column A, you simply swap the ranges: `=INDEX(A2:A100,MATCH(F2,B2:B100,0))`. VLOOKUP can't, because its lookup value has to be in the first column. Second, it points to the return column directly, rather than counting. In a VLOOKUP, the `2` in the formula means "second column of the range". Insert a column inside the range and the number points to a different column. With INDEX MATCH, the reference adjusts like any other reference.
+INDEX MATCH has two real advantages. First, it can look left. If the names are in column B and you want the ID back from column A, you simply swap the ranges: `=INDEX(A2:A100,MATCH(F2,B2:B100,0))`. VLOOKUP can't, because its lookup value has to be in the first column. Second, it points to the return column directly, rather than counting. In a VLOOKUP, the `2` in the formula means "second column of the range". Insert a column inside the range and the number points to a different column. With INDEX MATCH, the reference adjusts like any other reference. Microsoft's VLOOKUP page doesn't discuss inserted columns, so this is our own observation.
 
 You'll also read that INDEX MATCH is faster. Microsoft's pages make no such claim, and any difference only matters in very large workbooks, so don't choose it for speed. Choose it for flexibility.
 
@@ -121,15 +121,15 @@ For tiers such as tax brackets or commission bands, use the default match type 1
 - **A wrong answer without any error.** Usually a missing 0 in MATCH, or ranges that start on different rows.
 - **A wrong answer after copying down.** The ranges moved because they were not locked. Add `$` to the ranges.
 
-To replace an error with a message, Microsoft's IFNA function returns a value you choose when a formula gives #N/A, and it passes any other error through unchanged:
+To replace an error with a message, Microsoft's IFNA function returns a value you choose when a formula gives #N/A, and otherwise returns the formula's own result, so other errors still show. Microsoft's page doesn't spell out the second part, which follows from its definition:
 
 `=IFNA(INDEX(C2:C100,MATCH(F2,A2:A100,0)),"Not found")`
 
-Prefer IFNA over IFERROR for lookups. IFERROR hides every error, including a #REF! caused by a broken range, so a real fault looks like an ordinary "Not found". IFNA only covers the case you expect. Microsoft lists IFNA for Excel 2016 and later.
+Prefer IFNA over IFERROR for lookups. IFERROR hides every error, including a #REF! caused by a broken range, so a real fault looks like an ordinary "Not found". IFNA only covers the case you expect. Microsoft's page lists Excel 2016 as the oldest version it applies to.
 
 ## INDEX MATCH or XLOOKUP
 
-If everyone who opens your file has current Microsoft 365, XLOOKUP does the same job with one function and a built-in not-found message. We cover it in our guide to XLOOKUP in Excel. But Microsoft's own XLOOKUP page is not clear about Excel 2016 and 2019, and it doesn't list Excel for the web. INDEX MATCH works in all of them. So the choice is practical: use XLOOKUP in files for current versions, and INDEX MATCH when the file travels to people on older ones or when you're maintaining a workbook that already uses it.
+If everyone who opens your file has current Microsoft 365, XLOOKUP does the same job with one function and a built-in not-found message. We cover it in our guide to XLOOKUP in Excel. But Microsoft's own XLOOKUP page is contradictory about Excel 2016 and 2019: it lists them under "Applies to" but also says XLOOKUP is not available in them. The page doesn't list Excel for the web. INDEX MATCH works in all of them. So the choice is practical: use XLOOKUP in files for current versions, and INDEX MATCH when the file travels to people on older ones or when you're maintaining a workbook that already uses it.
 
 ## Common mistakes
 
@@ -151,3 +151,11 @@ If everyone who opens your file has current Microsoft 365, XLOOKUP does the same
 ## Next step
 
 Rewrite one of your VLOOKUP formulas as INDEX MATCH and compare the result on a few known values. Then try the same formula with a lookup to the left. Once you've done both, you'll know when INDEX MATCH in Excel is the better tool for the job.
+
+## Sources
+
+- [MATCH function (Microsoft Support)](https://support.microsoft.com/office/match-function-e8dffd45-c762-47d6-bf89-533f4a37673a)
+- [INDEX function (Microsoft Support)](https://support.microsoft.com/excel/functions/index-function)
+- [VLOOKUP function (Microsoft Support)](https://support.microsoft.com/office/vlookup-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1)
+- [IFNA function (Microsoft Support)](https://support.microsoft.com/office/ifna-function-6626c961-a569-42fc-a49d-79b4951fd461)
+- [XLOOKUP function (Microsoft Support)](https://support.microsoft.com/office/xlookup-function-b7fd680e-6d10-43e6-84f9-88eae8bf5929)

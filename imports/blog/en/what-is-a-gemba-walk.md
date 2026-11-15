@@ -106,3 +106,9 @@ Software cannot replace the walk, but data can help you choose where to walk. KP
 ## Next step
 
 Plan your first gemba walk for this week: pick one line and one question, and block 30 minutes in your calendar. Afterwards, tell the team what you saw and which small change you will try, so the next gemba walk starts with their trust.
+
+## Sources
+
+- [Gemba - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/gemba/)
+- [Gemba, workplace, genchi genbutsu, go-and-see: what is the difference? - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/gemba-workplace-genchi-genbutsu-go-and-see-whats-the-difference/)
+- [How to Go to the Gemba: Go See, Ask Why, Show Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/)

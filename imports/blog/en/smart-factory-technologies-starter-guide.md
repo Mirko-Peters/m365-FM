@@ -118,7 +118,7 @@ Technology changes who needs which skill. Operators need to enter and read data 
 
 ## Where Polaris fits
 
-If your gap sits in the model and planning layer, iFAKT Polaris is one option to look at. [iFAKT](https://www.m365.fm/entity/ifakt/) describes Polaris as AI plus a digital twin for production that works with ERP, Excel and shop floor data. The [Polaris Designer](https://www.m365.fm/entity/polaris-designer/) module turns ERP data, process times, resource structures and constraints into a product-process-resource knowledge graph, which serves as the base for simulation, optimization and planning. The [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/) module consolidates KPIs from all Polaris modules in dashboards and compares plans with actual performance. Try any such tool on one line and one question first.
+If your gap sits in the model and planning layer, iFAKT Polaris is one option to look at. [iFAKT](https://www.m365.fm/entity/ifakt/) describes Polaris as AI plus a digital twin for production that works with ERP data and shop floor feedback. The [Polaris Designer](https://www.m365.fm/entity/polaris-designer/) module turns ERP data, process times, resource structures and constraints into a product-process-resource knowledge graph, which serves as the base for simulation, optimization and planning. The [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/) module consolidates KPIs from all Polaris modules in dashboards and compares plans with actual performance. Try any such tool on one line and one question first.
 
 ## Related topics to explore
 
@@ -130,3 +130,10 @@ If your gap sits in the model and planning layer, iFAKT Polaris is one option to
 ## Next step
 
 Pick the one problem on your busiest line that costs you most, and write down which data would explain it. Use that list to decide which of the six layers you need first among your smart factory technologies, and ask your vendors only about that layer.
+
+## Sources
+
+- [Unified Architecture - OPC Foundation](https://opcfoundation.org/about/opc-technologies/opc-ua/)
+- [What is Azure IoT Operations? - Microsoft Learn](https://learn.microsoft.com/en-us/azure/iot-operations/overview-iot-operations)
+- [Jidoka - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/jidoka/)
+- [Guide to Operational Technology (OT) Security (SP 800-82 Rev. 3) - NIST](https://www.nist.gov/publications/guide-operational-technology-ot-security)

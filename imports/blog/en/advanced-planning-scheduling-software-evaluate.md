@@ -134,3 +134,10 @@ If your need is a feasible plan with constraints, iFAKT Polaris is one option to
 ## Next step
 
 Evaluating advanced planning and scheduling software gets easier once you have a written problem and a past week to replay. Pull the order, routing and calendar data for one recent week, and use it as the test case in your next vendor conversation.
+
+## Sources
+
+- [Supplying Thought: Advanced Planning and Scheduling - ASCM Phoenix Forum](https://www.phoenix.ascm.org/blog/4852930)
+- [Special zu Advanced Planning & Scheduling (German) - Fraunhofer IPA](https://www.ipa.fraunhofer.de/content/dam/ipa/de/documents/aktuelle-forschung/Auftragsmanagement-und-Wertschoepfungsnetze/special-zu-advanced-planning-und-scheduling.pdf)
+- [ISA-95 Standard: Enterprise-Control System Integration - ISA](https://www.isa.org/standards-and-publications/isa-standards/isa-95-standard)
+- [Finite capacity planning and scheduling - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/master-planning/planning-optimization/finite-capacity)

@@ -47,7 +47,7 @@ Review the list with site owners. They know which pages are legal, archived or t
 
 ## Step two: choose your method
 
-Microsoft documentation does not describe a single built-in tool for replacing text across many sites in one run (check Microsoft Learn for current capabilities), so the realistic options are these.
+I am not aware of a single built-in Microsoft tool for replacing text across many sites in one run (check Microsoft Learn for current capabilities), so the realistic options are these.
 
 **Manual edits.** For a small number of pages, editing by hand is often the safest approach. Each change is visible, and the editor reads the context. It does not scale, but it fits a short match list.
 
@@ -64,7 +64,7 @@ A bulk change should never run for the first time in production. Use a pilot sit
 Before the real run:
 
 1. **Back up or copy the content.** Know exactly how you would restore the previous state. Do not assume undo will be available.
-2. **Check version history.** SharePoint keeps versions for many pages and files, which can let you restore an earlier version. Whether this works for your content depends on your library settings and the type of item, so confirm it on your own test content rather than trusting it. See Microsoft Learn for how versioning works in your environment.
+2. **Check version history.** Microsoft Support documents that versioning is on by default for new libraries and lists in Microsoft 365, and that restoring makes the older version the new current version. Version limits can be set at organization, site and library level, and versions that exceed a limit are permanently deleted, so whether an earlier version is still there depends on your settings and the type of item. Confirm it on your own test content rather than trusting it.
 3. **Run on the pilot first.** Compare before and after on a sample of pages. Look at rendering, links, navigation and any views or flows that use the changed values.
 4. **Start small in production.** Run the change on a limited set of sites, review, then widen the scope.
 
@@ -86,3 +86,8 @@ Keep the match list and the record of what was changed. If a question comes up i
 - Test on a pilot site or in a test tenant first, and have a backup or a documented way back before any production run.
 - Confirm version history behaviour on your own content instead of assuming it will save you.
 - Roll out in small steps, verify against your list, and tell site owners what changed.
+
+## Sources
+
+- [Version history limits for document library and OneDrive overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/document-library-version-history-limits)
+- [How versioning works in lists and libraries (Microsoft Support)](https://support.microsoft.com/en-US/SharePoint/lists/documents-and-library/how-versioning-works-in-lists-and-libraries)

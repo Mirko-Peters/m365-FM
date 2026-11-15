@@ -1,4 +1,6 @@
 """Groessenpruefung des GitHub-Pages-Builds."""
+import json
+import time
 from pathlib import Path
 
 R2_EXT = (".html", ".json", ".jsonld", ".xml")   # T32: Bild-URLs auch in Exporten (entities*.json, Register, Sitemaps) auf img.m365.fm
@@ -33,6 +35,21 @@ def writers(out, r2out, rewrite, langs):
     return write, write_r2, n
 
 
+def report(out, tot, dirs, files):
+    """docs/build-size.json: Groesse von docs/ je Verzeichnis (eine und zwei Ebenen) - abrufbar unter /build-size.json, weil das Bauprotokoll
+    von aussen nicht immer lesbar ist. Nur Zahlen und Pfade, keine Inhalte."""
+    sub = {}
+    for n, rel in files:
+        parts = rel.split("/")
+        if len(parts) > 2: sub["/".join(parts[:2])] = sub.get("/".join(parts[:2]), 0) + n
+    top = lambda d, k: {name: round(size / 1e6, 1) for name, size in sorted(d.items(), key=lambda x: x[1], reverse=True)[:k]}
+    try:
+        (out / "build-size.json").write_text(json.dumps({"generated": time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime()), "total_mb": round(tot / 1e6, 1),
+                                                         "files": len(files), "dirs_mb": top(dirs, 25), "subdirs_mb": top(sub, 40)}, indent=1), encoding="utf-8")
+    except OSError:
+        pass
+
+
 def sizes(out=Path(__file__).parent / "docs", warning=900_000_000, limit=980_000_000):
     """Groesse von docs/ je Verzeichnis; vor dem Pages-Limit warnen und abbrechen."""
     dirs, files = {}, []
@@ -43,6 +60,7 @@ def sizes(out=Path(__file__).parent / "docs", warning=900_000_000, limit=980_000
         dirs[top] = dirs.get(top, 0) + n
         files.append((n, rel))
     tot = sum(dirs.values())
+    report(out, tot, dirs, files)
     print("docs/ gesamt: %.0f MB" % (tot / 1e6) + " - " + ", ".join(f"{name}: {size / 1e6:.0f} MB" for name, size in sorted(dirs.items(), key=lambda x: x[1], reverse=True)[:12]))
     if tot >= warning:
         marker = "::error::" if tot >= limit else "::warning::"

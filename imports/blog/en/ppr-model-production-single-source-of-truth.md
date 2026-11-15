@@ -25,7 +25,7 @@ A PPR model links the product you build, the process steps needed to build it an
 
 ## What is a PPR model?
 
-PPR stands for product, process and resource. A reference paper on capabilities and skills in manufacturing describes the PPR concept as representing the three major aspects of production systems engineering. Products are the inputs and outputs of production. Processes transform inputs into outputs. Resources execute those processes. See the [reference model paper on capabilities and skills](https://arxiv.org/pdf/2209.09632).
+PPR stands for product, process and resource. Products are the inputs and outputs of production. Processes transform inputs into outputs. Resources execute those processes.
 
 The [product-process-resource](https://www.m365.fm/entity/product-process-resource/) structure ties them together. In plain words, it answers three linked questions:
 
@@ -39,7 +39,7 @@ The value is in the links. A list of products, a list of steps and a list of mac
 
 Most plants already hold this information, but in many places: routings in the ERP system, times in a planning spreadsheet, machine lists in maintenance, parameters in a simulation model. Each copy drifts.
 
-A paper by Ferrer and colleagues on assembly automation describes the underlying problem. PPR modelling is seen as promising because it can compress development time and engineering cost and enable efficient design and reconfiguration of manufacturing resources. The obstacle is ineffective coupling of PPR data, which leaves system design dependent on the knowledge and experience of individual engineers. See the [abstract of the paper](https://wrap.warwick.ac.uk/id/eprint/78817). The paper looks at assembly automation, but the point carries over to any plant where product, process and resource data are kept apart.
+In my experience, the underlying problem is that product, process and resource data are kept apart, so the coupling between them lives in the heads of individual engineers.
 
 Signs that your plant has many versions of the truth:
 
@@ -67,7 +67,7 @@ A first useful version needs less than you may think. For each part, start with 
 2. Calendars, shifts and planned downtime
 3. Capacity, skills and qualifications
 
-Then add the links: each operation points to the products it belongs to, and to the resources that can run it. The reference paper explains why this helps. A capability or skill describes the function a process needs, and a resource provides it, so "the otherwise rigid link between processes and resources is decoupled". In practice you describe what a step requires and what each resource offers, and you do not hard-code one machine into the routing.
+Then add the links: each operation points to the products it belongs to, and to the resources that can run it. This helps because a capability or skill describes the function a process needs, and a resource provides it, so the link between process and resource is no longer rigid. In practice you describe what a step requires and what each resource offers, and you do not hard-code one machine into the routing.
 
 ## How is it different from a bill of materials and a routing?
 
@@ -126,3 +126,7 @@ A PPR model can be built with a graph database, a data platform or a dedicated t
 ## Next step
 
 Take one product family and write down the products, the steps and the resources in one sheet, with the links between them. Compare the times in your ERP system with those at the machine, and you have the first version of a PPR model and a list of the data to fix.
+
+## Sources
+
+This article describes general practice and the author's experience. It does not rely on a single external source.

@@ -37,9 +37,9 @@ Moves and deletions are other common causes. A link to a file or page that was d
 
 ## Redirects are a temporary safety net
 
-A redirect is not a repair. Microsoft Learn states that a redirect stays until someone deletes it. After deletion, requests to the old address are no longer forwarded. Bookmarks, links and "Shared With Me" references stop working.
+A redirect is not a repair. Microsoft Learn describes redirects as sites (template REDIRECTSITE#0) that SharePoint creates at the old address, and an admin can delete them, for example with Remove-SPOSite, to free up the old URL. After deletion, requests to the old address are no longer forwarded. Bookmarks, links and "Shared With Me" references stop working.
 
-This has a practical consequence. If a redirect hides broken links today, the problem is still there. It surfaces later, for example when someone cleans up old redirects. The Learn documentation also notes that a site cannot be renamed this way if it is a hub site, so hub scenarios need their own planning.
+This has a practical consequence. If a redirect hides broken links today, the problem is still there. It surfaces later, for example when someone cleans up old redirects. The Learn documentation also notes that you cannot change the address of hub sites, locked or on-hold sites, Project Web App sites or sites with BCS connections, so those scenarios need their own planning. To list all redirect sites, Learn gives the command Get-SPOSite -Template REDIRECTSITE.
 
 A useful mindset: treat a redirect as time bought, not as a fix. The time is best spent finding the links that depend on it and updating them to the current address.
 
@@ -47,7 +47,7 @@ For the exact behavior and current limits, read the Microsoft Learn pages on [ch
 
 ## Building an inventory before you fix anything
 
-Before you change a single link, you need to know what is broken and where. The Microsoft Learn pages checked for this article describe how addresses change and when links break. They do not describe a general tool for finding broken links in SharePoint Online. So admins usually combine several approaches:
+Before you change a single link, you need to know what is broken and where. The Microsoft Learn pages on site address changes and redirects describe how addresses change and when links break. They do not describe a general tool for finding broken links in SharePoint Online. So admins usually combine several approaches:
 
 - **Manual review of high-traffic places:** home pages, navigation, hub sites, and pages with Quick links or News web parts.
 - **Search and reports:** looking for the old address or old site name in pages and documents.
@@ -89,8 +89,13 @@ Some fixes are not text replacements at all. Per Microsoft Learn, Power Apps cus
 
 - A site address change creates a redirect, but embedded URLs in web parts such as News or List are not updated and may break. Plan a link check after every rename.
 - Redirects stay only until someone deletes them. Do not treat them as a permanent fix.
-- Microsoft Learn explains when links break but does not describe a general tool for finding broken links in SharePoint Online. Decide early how you will build your inventory: manual, scripted or with a third-party tool.
+- The Microsoft Learn pages on address changes and redirects explain when links break but do not describe a general tool for finding broken links in SharePoint Online. Decide early how you will build your inventory: manual, scripted or with a third-party tool.
 - Group broken links by cause. One cause usually means one fix pattern.
 - Before any bulk change, test on a pilot site or in a test tenant and make sure you have a backup or a way back.
 - Re-scan after every batch and document what you learned.
 - If you evaluate tools, compare them against your own needs and check current features and prices on the vendor's site. Vendor claims, including those summarized here, are the vendor's statements until you test them yourself.
+
+## Sources
+
+- [Change a site address (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-site-address)
+- [Manage site redirects (Microsoft Learn)](https://learn.microsoft.com/sharepoint/manage-site-redirects)

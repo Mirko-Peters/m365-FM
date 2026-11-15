@@ -29,7 +29,7 @@ A value stream map shows how material and information flow through a product fam
 
 A model that does move is a simulation. It represents the steps, the resources, the orders and the normal variation, and it plays the flow forward in time. The question "what happens if?" gets a quantified answer. The entity page on [factory simulation](https://www.m365.fm/entity/factory-simulation/) describes this as a controlled model of how work moves through part of a factory, so a proposed change can be tested before it is made.
 
-A digital twin goes one step further, and twins allow you to start every test from the real state. The International Organization for Standardization defines it in [ISO 23247-1](https://standards.iteh.ai/catalog/standards/iso/7df6fef2-6487-43da-9a48-eaba332a9ffc/iso-23247-1-2021) as a fit-for-purpose digital representation of an observable manufacturing element, with synchronization between the element and its digital representation. In plain words, a [digital twin](https://www.m365.fm/entity/digital-twin/) is a virtual replica that is updated from observations, and a digital twin of the value stream applies that idea to the flow of a product family. Observable manufacturing elements include personnel, equipment, material, process and facility. For a value stream, the element is the stream: its steps, machines, people, material and orders.
+A digital twin goes one step further, and twins allow you to start every test from the real state. The International Organization for Standardization defines it in [ISO 23247-1](https://cdn.standards.iteh.ai/samples/75066/ec0a1c59176e488887873acda6b7ecd9/iso-23247-1-2021.pdf) as a fit-for-purpose digital representation of an observable manufacturing element, with synchronization between the element and its digital representation. In plain words, a [digital twin](https://www.m365.fm/entity/digital-twin/) is a virtual replica that is updated from observations, and a digital twin of the value stream applies that idea to the flow of a product family. Typical observable manufacturing elements are personnel, equipment, material, process and facility. For a value stream, the element is the stream: its steps, machines, people, material and orders.
 
 The test is simple. If the model starts from today's real state, because data keeps it current, the digital twin behaves as a twin. If you fill it by hand once, it is a simulation.
 
@@ -112,3 +112,8 @@ Building a simulation model by hand takes weeks. Software that reads the routing
 ## Next step
 
 A digital twin of the value stream pays off when it answers one real question, such as which change shortens lead time most. This week, pick one product family and one decision, and list the routings, times and rules a model of that stream would need.
+
+## Sources
+
+- [ISO 23247-1:2021 preview (terms and definitions) - iTeh Standards](https://cdn.standards.iteh.ai/samples/75066/ec0a1c59176e488887873acda6b7ecd9/iso-23247-1-2021.pdf)
+- [Simulation guided value stream mapping and lean improvement: A case study of a tubular machining facility - Journal of Industrial Engineering and Management](https://jiem.org/index.php/jiem/article/view/532)

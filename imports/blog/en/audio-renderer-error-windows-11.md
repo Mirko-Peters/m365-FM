@@ -45,15 +45,15 @@ Before you change anything, spend two minutes on a short test. Play a system sou
 
 ## Check the output device and the volume mixer
 
-An app can send sound to a device other than the one you're listening on. Microsoft's guide on [app audio not working while system sounds work](https://support.microsoft.com/en-US/Windows/Hardware/Audio/fix-app-audio-not-working-while-system-sounds-work-in-windows) covers this.
+An app can send sound to a device other than the one you're listening on. Microsoft's guide on [app audio not working while system sounds work](https://support.microsoft.com/Windows/Hardware/Audio/fix-app-audio-not-working-while-system-sounds-work-in-windows) covers the volume mixer and the per-app output device.
 
 1. Go to **Start**, **Settings**, **System**, **Sound**, then open **Volume mixer**.
 2. Under **Apps**, make sure the browser isn't muted and its slider is up.
 3. On the same page, check the **Output device** for the browser and choose the right one.
 
-Then check the default device. In **Settings**, **System**, **Sound**, under **Output**, select the device you want to use. Microsoft notes that for devices connected by USB or HDMI this step is often required, and that you should make sure an external monitor without speakers isn't the default output.
+Then check the default device. In **Settings**, **System**, **Sound**, under **Output**, select the device you want to use. For USB or HDMI audio, and for a monitor without speakers, check that the right device is the default. That's general troubleshooting advice and not something the Microsoft page above spells out.
 
-If none of that helps, turn off audio enhancements. In the same Sound settings, select your output device, scroll to **Advanced settings** and set **Audio enhancements** to **Off**. Then test again. Microsoft's guide doesn't cover Exclusive mode, so I'm not giving steps for it here.
+If none of that helps, you can try turning off audio enhancements in the Sound settings for your output device. This is also a general tip from forum answers and Windows sound guides, and the Microsoft page above doesn't cover it, so treat it as an experiment and note whether it made a difference.
 
 ## Restart the Windows audio services
 
@@ -70,7 +70,7 @@ For a faster path to the same thing, the Q&A user suggests opening Task Manager,
 
 ## Update, reinstall or roll back the audio driver
 
-Drivers are the most common suspect, especially when the error began after an upgrade or an update. Microsoft's page on [audio that stops working after a Windows update](https://support.microsoft.com/en-us/windows/fix-audio-stops-working-after-a-windows-update-in-windows-b0dadfe1-051e-4e3f-a971-486ab4f7e6d6) gives this order:
+Drivers are the most common suspect, especially when the error began after an upgrade or an update. Microsoft's page on [audio that stops working after a Windows update](https://support.microsoft.com/windows/fix-audio-stops-working-after-a-windows-update-in-windows-b0dadfe1-051e-4e3f-a971-486ab4f7e6d6) gives this order:
 
 1. Install pending updates. Go to **Settings**, **Windows Update**, select **Check for updates**, install everything and restart.
 2. Update the audio driver. Open Device Manager, expand **Sound, video and game controllers**, right-click your audio device, select **Update driver** and follow the prompts. Restart afterward.
@@ -107,3 +107,10 @@ If several PCs lose audio after the same update, treat it as an update problem a
 ## Next step
 
 Unplug and replug the device, restart the two Windows audio services and check the browser's output device in the volume mixer. If the audio renderer error in Windows 11 still comes back, update or roll back the audio driver and note which change fixed it, so you can repeat it on the next PC.
+
+## Sources
+
+- [Fix app audio not working while system sounds work in Windows (Microsoft Support)](https://support.microsoft.com/windows/hardware/audio/fix-app-audio-not-working-while-system-sounds-work-in-windows)
+- [Fix audio stops working after a Windows update (Microsoft Support)](https://support.microsoft.com/windows/fix-audio-stops-working-after-a-windows-update-in-windows-b0dadfe1-051e-4e3f-a971-486ab4f7e6d6)
+- [Fix sound problems in Windows (Microsoft Support)](https://support.microsoft.com/windows/fix-sound-problems-in-windows-73025246-b61c-40fb-671a-2535c7cd56c8)
+- [Manage Windows Update client policies (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/update/waas-manage-updates-wufb)

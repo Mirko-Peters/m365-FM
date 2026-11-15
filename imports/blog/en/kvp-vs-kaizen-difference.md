@@ -25,9 +25,9 @@ KVP vs kaizen is mostly a question of language and structure, not of idea. Kaize
 
 ## What is the meaning of KVP?
 
-The abbreviation KVP comes from the German phrase kontinuierlicher Verbesserungsprozess. A German reference describes KVP as a quality management element for improving services, products and internal processes step by step. The term emerged in the late 1980s, modeled on Japanese kaizen, and the PDCA cycle from the 1950s is its basis. Read more in the [socialnet entry on the kontinuierlicher Verbesserungsprozess](https://www.socialnet.de/lexikon/Kontinuierlicher-Verbesserungsprozess).
+The abbreviation KVP comes from the German phrase kontinuierlicher Verbesserungsprozess. KVP is generally described as a quality management element for improving services, products and internal processes step by step. It is modeled on Japanese kaizen and builds on the PDCA cycle. We give no dates for the term, because we could not verify them.
 
-The Haufe Akademie glossary says the same in practical terms: KVP is a method for steadily improving processes, products and workflows through small, ongoing changes, with employees at all levels involved. See its [KVP glossary entry](https://www.haufe-akademie.de/blog/glossar/kvp/). In English, the same process is often called CIP, short for [continuous improvement process](https://www.m365.fm/entity/continuous-improvement/).
+The Haufe Akademie glossary describes it in practical terms: KVP is a method for steadily improving processes, products and workflows through small, ongoing changes, with employees at all levels involved. See its [KVP glossary entry](https://www.haufe-akademie.de/blog/glossar/kvp/). We could not re-open that page for this review, so the Haufe points in this article are as that glossary presents them. In English, the same process is often called CIP, short for [continuous improvement process](https://www.m365.fm/entity/continuous-improvement/).
 
 So the KVP meaning is simple. It is a repeatable company process that collects problems and ideas, tests changes, checks results and standardizes what works.
 
@@ -41,7 +41,7 @@ Toyota says on its [Toyota Production System page](https://global.toyota/en/comp
 
 The two overlap strongly, and Haufe presents them as essentially the same idea. The differences are about emphasis.
 
-- **Origin.** Kaizen is the Japanese original and is tied to Toyota's production system. KVP is the German-language term that appeared in the late 1980s, modeled on kaizen.
+- **Origin.** Kaizen is the Japanese original and is tied to Toyota's production system. KVP is the German-language term, modeled on kaizen.
 - **Form.** Kaizen is often described as a mindset and daily habit. KVP is usually the structured, company-level implementation, with defined steps, owners and tracking.
 - **Scope.** Kaizen covers daily small fixes and events. KVP often adds an idea process, so suggestions from staff are collected, assessed and tracked.
 - **Language in the plant.** In German-speaking plants it is the everyday word. In international or lean programs, kaizen is more common. Many use both for the same activity.
@@ -118,3 +118,9 @@ The number is invented, but the lesson holds: protect the process from small ite
 ## Next step
 
 Choose one word for your plant, KVP or kaizen, and write a one-page rule that says which problems teams fix themselves, which go into the KVP process and which need an event. Share it with every team before the next monthly review. That page ends the KVP vs kaizen debate in practice.
+
+## Sources
+
+- Lean Enterprise Institute: Kaizen (Lean Lexicon) - https://www.lean.org/lexicon-terms/kaizen/
+- Toyota Motor Corporation: Toyota Production System - https://global.toyota/en/company/vision-and-philosophy/production-system/index.html
+- Haufe Akademie: KVP glossary (could not be re-opened for this review) - https://www.haufe-akademie.de/blog/glossar/kvp/

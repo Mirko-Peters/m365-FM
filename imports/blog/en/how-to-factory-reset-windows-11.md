@@ -24,7 +24,7 @@ To factory reset Windows 11, open **Settings**, go to **System**, then **Recover
 
 ## Is a factory reset really what you need?
 
-A reset is the heavy tool. Microsoft's page on [recovery options in Windows](https://support.microsoft.com/en-us/windows/experience/backup-recovery/recovery-options-in-windows) lists the options for a PC that still starts, in order from least to most disruptive. Run through them before you wipe anything:
+A reset is the heavy tool. Microsoft's page on [recovery options in Windows](https://support.microsoft.com/windows/experience/backup-recovery/recovery-options-in-windows) lists the options for a PC that still starts, in order from least to most disruptive. Run through them before you wipe anything:
 
 1. Run a troubleshooter, under **Settings**, **System**, **Troubleshoot**, **Other troubleshooters**.
 2. Reinstall Windows through Windows Update. This keeps your files, apps and settings and is available on Windows 11, version 22H2 or later.
@@ -51,16 +51,16 @@ When you set up the PC again, sign in with the same Microsoft account. Setup det
 
 ## Reset this PC from Settings, step by step
 
-Microsoft documents the same four steps for Windows 11 on the [Reset your PC](https://support.microsoft.com/en-us/windows/experience/backup-recovery/reset-your-pc) page.
+Microsoft documents the same four steps for Windows 11 on the [Reset your PC](https://support.microsoft.com/windows/experience/backup-recovery/reset-your-pc) page.
 
 1. Open **Settings**, then select **System** and **Recovery**.
 2. Under **Recovery options**, select **Reset PC**.
 3. Choose your options, which are covered in the next section.
 4. Follow the on-screen instructions.
 
-Plug in a laptop before you start. The page warns that the screen may stay black for a long time, occasionally more than 15 minutes, and that the device may restart on its own. Don't restart it by hand during the reset, because that could cause it to fail. Microsoft says the recovery options typically take 30 minutes to 2 hours, and lighter options take less time.
+Plug in a laptop before you start. The page warns that the screen may stay black for a long time, occasionally more than 15 minutes, and that the device may restart on its own. Don't restart it by hand during the reset, because that could cause it to fail. Microsoft's recovery options page says recovery typically takes 30 minutes to 2 hours depending on the method, and lighter options such as troubleshooters take less time.
 
-If the drive is encrypted with BitLocker, have the recovery key ready. Microsoft's page [Find your BitLocker recovery key](https://support.microsoft.com/en-us/windows/security/encryption/find-your-bitlocker-recovery-key) lists the places to look: your Microsoft account at `aka.ms/myrecoverykey` for a personal device, `aka.ms/aadrecoverykey` for a work or school account, a printout, a USB drive, or your IT department. Note the first 8 digits of the key ID on the recovery screen so you can match the right key. Microsoft Support can't retrieve or recreate a lost key. If you manage [BitLocker](https://www.m365.fm/entity/bitlocker/) for a team, store those keys somewhere your help desk can reach before the day someone needs them.
+If the drive is encrypted with BitLocker, have the recovery key ready. Microsoft's page [Find your BitLocker recovery key](https://support.microsoft.com/windows/security/encryption/find-your-bitlocker-recovery-key) lists the places to look: your Microsoft account at `aka.ms/myrecoverykey` for a personal device, `aka.ms/aadrecoverykey` for a work or school account, a printout, a USB drive, or your IT department. Note the first 8 digits of the key ID on the recovery screen so you can match the right key. Microsoft Support can't retrieve or recreate a lost key. If you manage [BitLocker](https://www.m365.fm/entity/bitlocker/) for a team, store those keys somewhere your help desk can reach before the day someone needs them.
 
 ## Which options should you pick?
 
@@ -76,7 +76,7 @@ The second choice is how Windows gets reinstalled.
 - **Cloud download** downloads a fresh copy of Windows. It includes the latest updates and helps when local files are corrupted or missing.
 - **Local reinstall** uses the files already on the PC. It's faster on a slow connection but may not include the latest updates.
 
-A simple rule: if you suspect damaged system files, choose cloud download. If the connection is poor and the PC otherwise works, local reinstall is fine, and you'll install updates afterwards. Microsoft's page doesn't say where in the flow this choice appears, and the order of screens can differ between PCs, so read each screen before you confirm.
+A simple rule: if you suspect damaged system files, choose cloud download. If the connection is poor and the PC otherwise works, local reinstall is fine, and you'll install updates afterwards. The order of screens can differ between PCs, so read each screen before you confirm.
 
 ## When Windows 11 won't start
 
@@ -92,12 +92,12 @@ For a damaged startup rather than a damaged system, try Startup Repair before yo
 
 If the PC belongs to an organization, don't reset it on your own and call it done. A standard reset with Remove everything wipes the device, and the user lands in setup like on any new PC.
 
-Microsoft's [Windows Autopilot Reset](https://learn.microsoft.com/en-us/autopilot/windows-autopilot-reset) is built for this. It returns a device to a business-ready state: it removes personal files, apps and settings, and it keeps the Microsoft Entra ID connection, the MDM enrollment, Wi-Fi details and previously applied provisioning packages. [Windows Autopilot](https://www.m365.fm/entity/windows-autopilot/) Reset can be local or remote:
+Microsoft's [Windows Autopilot Reset](https://learn.microsoft.com/autopilot/windows-autopilot-reset) is built for this. It returns a device to a business-ready state: it removes personal files, apps and settings, and it keeps the Microsoft Entra ID connection, the MDM enrollment, Wi-Fi details and previously applied provisioning packages. [Windows Autopilot](https://www.m365.fm/entity/windows-autopilot/) Reset can be local or remote:
 
 - A **local reset** is started at the device by an admin. The policy must be enabled first, because it's disabled by default. At the lock screen, press `CTRL` + `WIN` + `R`, then sign in with an account that has local admin credentials.
 - A **remote reset** is started through MDM. In the [Intune](https://www.m365.fm/entity/intune/) admin center, go to **Devices**, **All devices**, select the devices, choose **More** and select **Autopilot Reset**. The device must be MDM-managed and Entra-joined.
 
-There are limits. Microsoft says Autopilot Reset is not supported on Microsoft Entra hybrid joined devices or Surface Hub, which need a full device wipe. Windows RE must be enabled, or the reset fails immediately with error `0x80070032`. You check and enable it with `reagentc.exe /enable`.
+There are limits. Microsoft says Autopilot Reset is not supported on Microsoft Entra hybrid joined devices or Surface Hub, which need a full device wipe. Windows RE must be enabled, or the reset fails with error `0x80070032` (ERROR_NOT_SUPPORTED). You check and enable it with `reagentc.exe /enable`.
 
 ## After the reset
 
@@ -124,3 +124,13 @@ If you reset the PC because of a suspected infection, don't treat the reset as t
 ## Next step
 
 Make a backup today, find your BitLocker key, and decide between Keep my files and Remove everything before you click anything. When you know that, the steps to factory reset Windows 11 take a few minutes, and the rest is waiting.
+
+## Sources
+
+- [Recovery options in Windows (Microsoft Support)](https://support.microsoft.com/windows/experience/backup-recovery/recovery-options-in-windows)
+- [Reset your PC (Microsoft Support)](https://support.microsoft.com/windows/experience/backup-recovery/reset-your-pc)
+- [Back up and restore with Windows Backup (Microsoft Support)](https://support.microsoft.com/windows/experience/backup-recovery/back-up-and-restore-with-windows-backup)
+- [Windows recovery environment (Microsoft Support)](https://support.microsoft.com/windows/experience/backup-recovery/windows-recovery-environment)
+- [Startup Repair (Microsoft Support)](https://support.microsoft.com/windows/experience/startup-boot/startup-repair)
+- [Find your BitLocker recovery key (Microsoft Support)](https://support.microsoft.com/windows/find-your-bitlocker-recovery-key-6b71ad27-0b89-ea08-f143-056f5ab347d6)
+- [Windows Autopilot Reset (Microsoft Learn)](https://learn.microsoft.com/autopilot/windows-autopilot-reset)

@@ -132,3 +132,10 @@ If your KPIs should compare plan and actual, iFAKT Polaris is one option to look
 ## Next step
 
 A good manufacturing KPI dashboard starts with a definition, not a chart. Pick the one line you know best, write the definition card for its three most important KPIs, and agree on an owner and an action for each before you open Power BI.
+
+## Sources
+
+- [OEE FAQ - OEE.com (Vorne Industries)](https://www.oee.com/faq/)
+- [ISO 22400-1:2014 Key performance indicators (KPIs) for manufacturing operations management, Part 1 - ISO](https://www.iso.org/standard/56847.html)
+- [Tips for designing a great Power BI dashboard - Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboards-design-tips)
+- [Data alerts in the Power BI service - Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/create-reports/service-set-data-alerts)

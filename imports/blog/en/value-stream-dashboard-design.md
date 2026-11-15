@@ -100,7 +100,7 @@ The weekly review opens with the biggest gap: lead time of 14 days against 10, a
 
 ## How is this different for software and DevOps teams?
 
-Software organisations also build dashboards of value stream metrics, often for software delivery and software development in DevOps settings. They distinguish an operational value stream from a development value stream: the first delivers value to customers, the second builds the product. Their delivery process and development process are tracked through tickets and releases. The best-known set is from DORA, which describes [four key metrics](https://dora.dev/guides/dora-metrics-four-keys) of software delivery: deployment frequency, lead time for changes, change failure rate and time to restore service. These track code and releases through a delivery pipeline. A plant tracks orders, material and machines. The wish to deliver value faster and to see the flow of value is the same, but the data and the metrics differ, so do not copy a software dashboard into a plant, or the reverse.
+Software organisations also build dashboards of value stream metrics, often for software delivery and software development in DevOps settings. They distinguish an operational value stream from a development value stream: the first delivers value to customers, the second builds the product. Their delivery process and development process are tracked through tickets and releases. The best-known set is from DORA, which describes [five software delivery metrics](https://dora.dev/guides/dora-metrics-four-keys): change lead time, deployment frequency, failed deployment recovery time, change fail rate and deployment rework rate. These track code and releases through a delivery pipeline. A plant tracks orders, material and machines. The wish to deliver value faster and to see the flow of value is the same, but the data and the metrics differ, so do not copy a software dashboard into a plant, or the reverse.
 
 ## Common mistakes
 
@@ -120,3 +120,10 @@ iFAKT's [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/) is a mo
 ## Next step
 
 A value stream dashboard works when it is short, current and tied to an action list. This week, pick five metrics for the value stream of one product family, write the formula, data source and owner for each, and put the first trend on the board.
+
+## Sources
+
+- [Andon - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/andon/)
+- [The Mythical Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-mythical-value-stream-manager)
+- [ISO 22400-2:2014 Key performance indicators (KPIs) for manufacturing operations management, Part 2 - ISO](https://www.iso.org/standard/54497.html)
+- [DORA metrics: the software delivery performance metrics - DORA](https://dora.dev/guides/dora-metrics-four-keys)

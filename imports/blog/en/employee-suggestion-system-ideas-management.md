@@ -49,7 +49,7 @@ Employees feel heard when they get an answer within days, and they stop proposin
 
 ## Which principles make a suggestion system work?
 
-A Quality Digest interview by Norman Bodek describes the program at one plant, Technicolor's site in Livonia, Michigan, which was emulating the Toyota Production System. The numbers are the company's own report, not a multi-company study, but the principles are useful. Read the full [Quality Digest article](https://www.qualitydigest.com/june03/articles/03_article.shtml).
+A Quality Digest interview by Norman Bodek describes the program at one plant, Technicolor's site in Livonia, Michigan, which was emulating the Toyota Production System. The numbers are the company's own report, not a multi-company study, and we could not re-open the page for this review, so treat the figures below as that interview's reported claims. The principles are useful either way. Read the full [Quality Digest article](https://www.qualitydigest.com/june03/articles/03_article.shtml).
 
 The principles it lists:
 
@@ -76,7 +76,7 @@ A [gemba walk](https://www.m365.fm/entity/gemba-walk/) is a good moment to colle
 
 ## How should you reward ideas?
 
-Keep rewards modest and fair. Technicolor's program, as the article describes it, used a Bravo award, small thank-you tokens from supervisors and a bonus for suggestions with exceptional savings. Other plants use only recognition. Whichever way you choose, avoid a system where the biggest savings take all the attention. The small ideas are the base of the continuous flow, and they build the habit.
+Keep rewards modest and fair. Technicolor's program, as the interview reports it, used a Bravo award, small thank-you tokens from supervisors and a bonus for suggestions with exceptional savings. Other plants use only recognition. Whichever way you choose, avoid a system where the biggest savings take all the attention. The small ideas are the base of the continuous flow, and they build the habit.
 
 If you pay for ideas, check local labor rules and any works council agreements before you start, and write the rules down.
 
@@ -123,3 +123,8 @@ A board is enough to start. Software helps once the number of ideas grows: it ca
 ## Next step
 
 This month, set up an idea board in one area with the three lanes and a 48-hour triage promise. Then review participation and time to first answer after four weeks. That is the simplest way to see whether your employee suggestion system works.
+
+## Sources
+
+- Bodek, N.: Quality Conversation with Gary Smuda, Technicolor (Quality Digest, June 2003; page could not be re-opened for this review) - https://www.qualitydigest.com/june03/articles/03_article.shtml
+- Lean Enterprise Institute: How Do You Define Respect for People? - https://www.lean.org/the-lean-post/articles/how-do-you-define-respect-for-people/

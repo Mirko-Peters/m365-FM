@@ -147,3 +147,9 @@ If you'd like to include a planning optimizer in your test, iFAKT Polaris is one
 ## Next step
 
 Manufacturing optimization in aerospace pays off when the constraints and the goal are written down before any tool is chosen. Write your top six hard constraints and one primary goal on a single page, and use them as the test sheet for every vendor conversation.
+
+## Sources
+
+- [How AS9100 Provides Trust for the Aerospace Industry - The ANSI Blog](https://blog.ansi.org/anab/as9100-certification-aerospace-qms/)
+- [Nadcap - Wikipedia](https://en.wikipedia.org/wiki/Nadcap)
+- [Introduction to scheduling - PyJobShop documentation](https://pyjobshop.org/stable/setup/intro_to_scheduling.html)

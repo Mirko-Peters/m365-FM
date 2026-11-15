@@ -127,3 +127,10 @@ iFAKT's [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) is a module of iF
 ## Next step
 
 Value stream management in manufacturing starts with one stream, one owner and a weekly look at a few shared numbers. This week, pick one product family and write down who should own it and which three measures would show whether its flow is getting better.
+
+## Sources
+
+- [Value Stream - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/value-stream/)
+- [The Mythical Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-mythical-value-stream-manager)
+- [Learning to See, Foreword (Womack and Jones) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-foreward.pdf)
+- [Toyota Production System - Toyota Motor Corporation (global site)](https://global.toyota/en/company/vision-and-philosophy/production-system/)

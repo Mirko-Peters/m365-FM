@@ -89,3 +89,10 @@ Tools help when the plan changes faster than a spreadsheet can follow. [iFAKT's 
 ## Next step
 
 Pick one product family, calculate its takt time and find its bottleneck this week. Then choose the one way from this list that targets that step, and start your shop floor optimization with a single measured test.
+
+## Sources
+
+- [Single-Minute Exchange of Die - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/single-minute-exchange-of-die/)
+- [Lean Definitions - Pawley Lean Institute, Oakland University](https://oakland.edu/lean/resources/definitions/)
+- [Glossary - LeanProduction.com](https://www.leanproduction.com/lean-glossary/)
+- [Value Stream Mapping in a Make-to-Order Environment - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/value-stream-mapping-in-a-make-to-order-environment/)

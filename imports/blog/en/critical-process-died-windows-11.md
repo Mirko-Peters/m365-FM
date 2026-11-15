@@ -28,7 +28,7 @@ The error is bug check 0xEF. Microsoft's reference says it indicates that a crit
 
 The reference does not name a single root cause, and the Microsoft troubleshooting guide doesn't either. That matters for how you troubleshoot. There is no one switch to flip. A driver, a failed update, damaged system files, a hardware fault or malware can all lead to a critical process dying, so the plan is to rule them out one by one.
 
-What you see depends on the version. According to Microsoft's page on [unexpected restarts and stop code errors](https://support.microsoft.com/en-us/windows/experience/performance-optimization/troubleshooting-windows-unexpected-restarts-and-stop-code-errors), Windows 11 24H2 and later shows a black screen with an unexpected-error message, while Windows 11 23H2 and older shows the traditional stop code screen. The stop code is at the bottom of the screen, together with the module name of the failing code when it's available. Write it down or take a photo.
+What you see depends on the version. According to Microsoft's page on [unexpected restarts and stop code errors](https://support.microsoft.com/windows/experience/performance-optimization/troubleshooting-windows-unexpected-restarts-and-stop-code-errors), Windows 11 24H2 and later shows a black screen with an unexpected-error message, while Windows 11 23H2 and older shows the traditional stop code screen. The stop code is at the bottom of the screen, together with the module name of the failing code when it's available. Write it down or take a photo.
 
 ## The basic steps, in Microsoft's order
 
@@ -36,7 +36,7 @@ Microsoft's guide for stop code errors lists six basic steps. Do them in this or
 
 1. Remove new hardware. If you added something before the error began, shut down, remove it and restart. That covers docks, USB devices, extra memory and cards.
 2. Start in Safe Mode. If you can't restart normally, boot into Safe Mode and do the remaining steps from there. In the recovery environment, choose **Troubleshoot**, **Advanced options**, **Startup Settings**, then **Restart**. On the Startup Settings screen press 4 or F4 for Safe Mode, or 5 or F5 for Safe Mode with Networking.
-3. Check Device Manager. Right-click the Start button and open Device Manager. Look for devices with a yellow exclamation point. Right-click one and choose **Update driver**. If that doesn't help, disable or uninstall the device.
+3. Check Device Manager. Right-click the Start button and open Device Manager. Look for devices marked with an exclamation point. Right-click one and choose **Update driver**. If that doesn't help, disable or uninstall the device.
 4. Free up disk space. Microsoft suggests keeping roughly 10% to 15% of the drive free, because Windows uses space for swap files and other functions.
 5. Install Windows updates. Go to **Settings**, **Windows Update** and select **Check for updates**.
 6. Restore Windows. If nothing above works, use a restore point or another option from Microsoft's recovery options article.
@@ -45,7 +45,7 @@ Microsoft's bug check page adds more ideas that apply here. Remove or update rec
 
 ## Repair system files with DISM and SFC
 
-Damaged system files are one reason a critical process dies, and two built-in tools address them. Microsoft's page on the [System File Checker](https://support.microsoft.com/en-us/windows/experience/backup-recovery/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files) says to run DISM first, because DISM supplies the files SFC needs.
+Damaged system files are one reason a critical process dies, and two built-in tools address them. Microsoft's page on the [System File Checker](https://support.microsoft.com/windows/experience/backup-recovery/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files) says to run DISM first, because DISM supplies the files SFC needs.
 
 1. Type `cmd` in the search box, right-click **Command Prompt** and select **Run as administrator**.
 2. Run `DISM.exe /Online /Cleanup-Image /RestoreHealth` and wait for it to finish. Microsoft says it can take several minutes.
@@ -59,7 +59,7 @@ When Windows Update is broken, DISM can use another repair source such as a moun
 
 If the PC shows the stop code on every start, you have to work from the Windows Recovery Environment. Windows enters it on its own after several failed starts. You can also force it: turn the PC on, hold the power button as soon as the logo appears, and repeat once. On the third start, the **Automatic Repair** screen appears, where you select **Advanced options**.
 
-Microsoft's page on [recovery options in Windows](https://support.microsoft.com/en-us/windows/experience/backup-recovery/recovery-options-in-windows) lists these tools for a PC that won't start, in order:
+Microsoft's page on [recovery options in Windows](https://support.microsoft.com/windows/experience/backup-recovery/recovery-options-in-windows) lists these tools for a PC that won't start, in order:
 
 1. Point-in-time restore (**Troubleshoot**, **Point-in-time restore**), listed for Windows 11, version 24H2 or later.
 2. **Uninstall updates** (**Troubleshoot**, **Advanced options**, **Uninstall updates**). Useful if the crash started right after a Windows update.
@@ -67,7 +67,7 @@ Microsoft's page on [recovery options in Windows](https://support.microsoft.com/
 4. **Cloud rebuild**, which removes personal files, apps and settings.
 5. Reinstall from recovery media.
 
-System Restore is also available: it rolls back system files and settings, but not personal files. Startup Repair sits under **Troubleshoot**, **Advanced options**. Microsoft says it can fix missing or damaged system files, corrupted boot configuration data, a damaged master boot record, incompatible drivers and registry errors, and it gives you a report if it can't fix the problem.
+System Restore is also available: it rolls back system files and settings, but not personal files. Startup Repair sits under **Troubleshoot**, **Advanced options**. Microsoft says it can fix missing or damaged system files, corrupted boot configuration data, a damaged master boot record, incompatible drivers and registry errors.
 
 If the drive is encrypted with BitLocker, expect to be asked for the recovery key. Find it on another device before you start. Resetting or reinstalling erases things, so copy off what you can first. If the PC starts in Safe Mode, use that to back up your files before you try anything drastic.
 
@@ -79,7 +79,7 @@ For help desk work, one more habit pays off: write down the stop code, the modul
 
 ## For admins: stop the update from spreading
 
-If a quality or feature update looks like the trigger across several devices, pause it. Microsoft's page on Windows Update client policies (formerly Windows Update for Business) says an admin can pause an update for up to 35 days from a chosen start date, which stops other devices from installing it. Pausing feature updates doesn't stop quality updates, so devices stay secure. The policies are free for Pro, Pro for Workstations, Education and Enterprise editions and are configured through Group Policy or MDM such as Intune. [Windows Update for Business](https://www.m365.fm/entity/windows-update-for-business/) is the control point here: deferrals can delay feature updates for up to 365 days and quality updates for up to 30 days, so you can stage a rollout in waves instead of hitting everyone at once.
+If a quality or feature update looks like the trigger across several devices, pause it. Microsoft's page on Windows Update client policies (formerly Windows Update for Business) says an admin can pause an update for up to 35 days from a chosen start date, which stops other devices from installing it. Pausing feature updates doesn't stop quality updates, so devices stay secure. The policies apply to the Pro, Education and Enterprise editions and are configured through Group Policy or MDM such as Intune. [Windows Update for Business](https://www.m365.fm/entity/windows-update-for-business/) is the control point here: deferrals can delay feature updates for up to 365 days and quality updates for up to 30 days, so you can stage a rollout in waves instead of hitting everyone at once.
 
 Microsoft's page doesn't explain how to roll back a problem update, so use the recovery steps above for the affected PCs.
 
@@ -102,3 +102,12 @@ Microsoft's page doesn't explain how to roll back a problem update, so use the r
 ## Next step
 
 Start with the cheap checks today: unplug anything new, update your drivers, and run DISM and then SFC from a Command Prompt run as administrator. If critical process died in Windows 11 keeps coming back after that, move on to the recovery environment and write down what you see on each crash.
+
+## Sources
+
+- [Bug Check 0xEF: CRITICAL_PROCESS_DIED (Microsoft Learn)](https://learn.microsoft.com/windows-hardware/drivers/debugger/bug-check-0xef--critical-process-died)
+- [Troubleshooting Windows unexpected restarts and stop code errors (Microsoft Support)](https://support.microsoft.com/windows/experience/performance-optimization/troubleshooting-windows-unexpected-restarts-and-stop-code-errors)
+- [Use the System File Checker tool to repair missing or corrupted system files (Microsoft Support)](https://support.microsoft.com/windows/experience/backup-recovery/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files)
+- [Recovery options in Windows (Microsoft Support)](https://support.microsoft.com/windows/experience/backup-recovery/recovery-options-in-windows)
+- [Startup Repair (Microsoft Support)](https://support.microsoft.com/windows/experience/startup-boot/startup-repair)
+- [Manage Windows Update client policies (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/update/waas-manage-updates-wufb)

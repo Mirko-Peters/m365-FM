@@ -132,3 +132,10 @@ A business case is only as good as its data. KPI dashboards that compare planned
 ## Next step
 
 Pick one project, write down its baseline and its costs, and calculate operational excellence ROI with hard savings only. Then ask finance to review the register before you present the case.
+
+## Sources
+
+- [How to Calculate ROI to Maximize Business Returns - Coursera](https://www.coursera.org/articles/how-to-calculate-roi)
+- [Continuous Improvement ROI: Hard vs. Soft Savings - Airacad](https://airacad.com/calculating-the-roi-hard-vs-soft-savings/)
+- [It's Not All About the Cash: How to Help Leadership Understand Lean's Financial Benefits - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/its-not-all-about-the-cash-how-to-help-leadership-understand-leans-financial-benefits/)
+- [Rapid Improvement Event: An essential element of continuous improvement - Kaizen Institute](https://kaizen.com/insights/rapid-improvement-event-continuous-improvement/)

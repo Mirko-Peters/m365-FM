@@ -35,7 +35,7 @@ Lean thinking is simple to state, but it takes steady practice. In daily practic
 
 There is no single OpEx definition, and sources differ. The [Juran Institute](https://www.juran.com/?p=4644) defines operational excellence as "the goal of improved business performance". It says OpEx usually means using lean techniques to eliminate waste and lower production time and costs, and that it looks beyond cost reduction and process improvement toward long-term, sustainable growth.
 
-The Shingo Institute offers a more detailed picture. Its model groups guiding principles into cultural enablers, continuous improvement, enterprise alignment and results, and it states that "the foundation of an enterprise is culture". You can see the structure on the [Shingo Model page](https://shingo.org/model). Programs also borrow from quality management approaches such as total quality management (TQM). In that view, [operational excellence](https://www.m365.fm/entity/operational-excellence/) is a management system with a purpose, methods and expected behavior, not a single program.
+The Shingo Institute offers a more detailed picture. Its model groups ten guiding principles into three dimensions, cultural enablers, continuous improvement and enterprise alignment, and places them in layers from culture up to results. It states that "the foundation of an enterprise is culture". You can see the structure on the [Shingo Model page](https://shingo.org/model). Programs also borrow from quality management approaches such as total quality management (TQM). In that view, [operational excellence](https://www.m365.fm/entity/operational-excellence/) is a management system with a purpose, methods and expected behavior, not a single program.
 
 A working definition for your own plant: operational excellence is the consistent delivery of safety, quality, delivery and cost results through a management system in which people at every level improve the work.
 
@@ -104,3 +104,9 @@ Software supports improvement work by giving everyone the same facts: flow data,
 ## Next step
 
 Write a one-page statement for your plant that says which problems you will solve with lean tools and which routines will keep the results in place. That statement is the practical answer to operational excellence vs lean in your own context. Share it with your plant manager before you choose any framework.
+
+## Sources
+
+- [What is Lean? - Lean Enterprise Institute](https://www.lean.org/explore-lean/what-is-lean/)
+- [Operational Excellence - Juran](https://www.juran.com/?p=4644)
+- [Shingo Model - Shingo Institute](https://shingo.org/model)

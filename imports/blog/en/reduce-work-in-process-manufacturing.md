@@ -112,3 +112,9 @@ A manual count shows work in progress at one moment. A plan that respects capaci
 ## Next step
 
 Count the work in progress in one cell on three different days, and divide the average by daily throughput to find your current lead time. Then pick one lever from this article and use it to reduce work in progress in that cell by a fixed amount you can check.
+
+## Sources
+
+- [Little's Law as Viewed on Its 50th Anniversary (J. D. C. Little)](https://people.cs.umass.edu/~emery/classes/cmpsci691st/readings/OS/Littles-Law-50-Years-Later.pdf)
+- [Work In Process - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/work-in-process/)
+- [Kanban - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/kanban/)

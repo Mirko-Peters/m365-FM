@@ -81,3 +81,7 @@ Also decide where a human stays in the loop. Many agent designs include approval
 - Require evidence: logs, screenshots and an audit trail, and review them.
 - Pilot first, keep a way back, and verify vendor claims yourself; treat product descriptions, including those about Genta Automation, as the vendor's statements until you have tested them.
 - Check Microsoft Learn for current guidance on permissions and auditing in your own Microsoft 365 tenant.
+
+## Sources
+
+- [What is an AI agent? (Microsoft)](https://www.microsoft.com/en-us/copilot/ai-knowledge/what-is-an-ai-agent)

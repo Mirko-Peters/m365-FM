@@ -25,7 +25,7 @@ Digital twin manufacturing means keeping a digital model of a real machine, line
 
 ## What is a digital twin in manufacturing?
 
-The standard ISO 23247-1 defines a [digital twin](https://www.m365.fm/entity/digital-twin/) as a fit-for-purpose digital representation of an observable manufacturing element, kept in synchronization with that element. The standard lists what such an element can be: personnel, equipment, material, process, facility, environment, product and supporting documents. See the [ISO 23247-1 overview](https://standards.iteh.ai/catalog/standards/iso/7df6fef2-6487-43da-9a48-eaba332a9ffc/iso-23247-1-2021). The same series has further parts for a reference architecture, information attributes and information exchange.
+The standard ISO 23247-1 defines a [digital twin](https://www.m365.fm/entity/digital-twin/) as a fit-for-purpose digital representation of an observable manufacturing element, kept in synchronization with that element. The standard describes an observable manufacturing element as an item that has an observable physical presence or operation in manufacturing; typical examples are equipment, material, processes and people. See the [ISO 23247-1 preview](https://cdn.standards.iteh.ai/samples/75066/ec0a1c59176e488887873acda6b7ecd9/iso-23247-1-2021.pdf). The standard is a series, and this part is the overview.
 
 Two words in that definition matter most:
 
@@ -120,3 +120,9 @@ Manufacturing software for a digital twin must hold the model and the data toget
 ## Next step
 
 Choose one line and write down one question that a digital twin manufacturing project should answer, with a number such as units per day or on-time delivery. Then check whether the data for that line is complete and reliable, before you look at any tool.
+
+## Sources
+
+- [ISO 23247-1:2021 preview (terms and definitions) - iTeh Standards](https://cdn.standards.iteh.ai/samples/75066/ec0a1c59176e488887873acda6b7ecd9/iso-23247-1-2021.pdf)
+- [Essential Elements (digital twins) - NIST](https://www.nist.gov/el/applied-economics-office/manufacturing/topics-manufacturing/digital-twins/essential-elements)
+- [Digital twins: What could they do for your business? - McKinsey](https://www.mckinsey.com/capabilities/operations/our-insights/digital-twins-what-could-they-do-for-your-business)

@@ -63,11 +63,11 @@ Draw the current state first, walking the process yourself and writing down real
 
 ## How do you create flow and pull?
 
-Flow comes first, and it is the core principle that ties the others together. The Lean Enterprise Institute defines [continuous flow](https://lean.org/?p=1697) as producing and moving one item at a time, or a small and consistent batch of items, through processing steps as continuously as possible, where each step makes only what the next step requests. It also notes that this can be achieved in different ways, from moving assembly lines to manual cells. The Shingo Institute adds that flow is created by removing waste, unevenness and overburden.
+Flow comes first, and it is the core principle that ties the others together. The Lean Enterprise Institute defines [continuous flow](https://lean.org/?p=1697) as producing and moving one item at a time, or a small and consistent batch of items, through processing steps as continuously as possible, where each step makes only what the next step requests. It also notes that this can be achieved in different ways, from moving assembly lines to manual cells.
 
 In practice, flow means shorter distances between steps, smaller batches, balanced work content and fewer stops. Steps that belong together sit together, ideally in a cell.
 
-Flow is not always possible. Some steps have to run in large batches, or machines stand far apart. For these cases, the Shingo Institute offers a rule of thumb: [flow where you can, pull where you can't](https://shingo.org/?p=484). It describes pull as a production control system in which upstream work starts only when a downstream operation signals a need, using a kanban.
+Flow is not always possible. Some steps have to run in large batches, or machines stand far apart. For these cases, a common rule of thumb in lean practice is: flow where you can, pull where you can't. Pull is a production control system in which upstream work starts only when a downstream operation signals a need, often with a kanban.
 
 So a pull system is the link between steps that cannot flow. It limits the stock between them and tells each step what to make next. It avoids building parts that nobody has asked for yet.
 
@@ -116,3 +116,8 @@ A pen and paper are enough for the first map. As soon as you have many products,
 ## Next step
 
 Choose one product family, write down what its customer values and draw its current value stream on one sheet of paper. Then use the lean principles in order: remove the biggest wait, create flow where you can and use pull where you cannot.
+
+## Sources
+
+- [Lean Thinking And Practice - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/lean-thinking-and-practice/)
+- [Continuous Flow - Lean Enterprise Institute (Lean Lexicon)](https://lean.org/?p=1697)

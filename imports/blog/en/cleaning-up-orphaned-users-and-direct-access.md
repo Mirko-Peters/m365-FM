@@ -12,7 +12,7 @@ faq:
   - q: "Why is direct access to single items a problem?"
     a: "Permissions on a site, group or team give access to all content in it, while direct entries on single files and folders sit outside that model. They are easy to forget, hard to review, and can leave data reachable long after the original reason ended. Microsoft recommends managing access through the Microsoft 365 group or team where possible."
   - q: "Is it safe to delete a former employee's account right away?"
-    a: "Not without preparation. Microsoft Learn describes that deleted accounts can be restored for 30 days by default, and OneDrive data is kept only for a limited time. Accounts with forwarding or a converted shared mailbox should not be deleted. Hand over files first, and check the current Microsoft Learn pages on removing a former employee."
+    a: "Not without preparation. Microsoft Learn describes that you have 30 days to restore a deleted account before the user's data is permanently deleted, and OneDrive data is kept only for a limited time. Accounts with forwarding or a converted shared mailbox should not be deleted. Hand over files first, and check the current Microsoft Learn pages on removing a former employee."
 ---
 
 Every organization has people who leave. Their accounts get handled, their mailboxes get archived or forwarded, and their licenses get reduced. What often stays behind is quieter: entries in permission lists, sharing links on single files, and group memberships that nobody reviewed afterwards.
@@ -95,9 +95,16 @@ Cleanup is a one-off effort unless the routine changes. A few habits help:
 
 - Treat "orphaned user" and "direct access" as two separate problems: entries for people who left, and access granted outside groups.
 - The offboarding points described above focus on the account and OneDrive; consider adding your own check for SharePoint permissions and sharing links.
-- Do the access review and handover before deleting the account. Deleted accounts can be restored for 30 days by default, and OneDrive data is kept only for a limited time.
+- Do the access review and handover before deleting the account. A deleted account can be restored for 30 days, and OneDrive data is kept only for a limited time.
 - Do not delete accounts with e-mail forwarding or a converted shared mailbox.
 - Prefer group-based access, and document every exception with an owner and a reason.
 - Test cleanup on a pilot site first, and keep a backup or a way back before removing permissions or links.
 - Reducing outdated and overly broad access lowers your permission debt, which matters more once search and AI tools can surface content quickly.
 - Check the linked Microsoft Learn pages regularly; behaviour and defaults can change.
+
+## Sources
+
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Default SharePoint groups (Microsoft Learn)](https://learn.microsoft.com/sharepoint/default-sharepoint-groups)
+- [Delete a user from your organization (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/add-users/delete-a-user)
+- [Step 5 - Give another employee access to OneDrive and Outlook data (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/add-users/remove-former-employee-step-5)

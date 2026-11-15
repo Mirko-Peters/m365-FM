@@ -136,3 +136,8 @@ A bottleneck is easy to see in one cell and hard to see in a plant with many pro
 ## Next step
 
 Choose one product family and calculate the capacity of each step this week, using net times you have watched yourself. Then start your bottleneck analysis at the lowest-capacity step by writing down every minute it stops for one full shift.
+
+## Sources
+
+- [Theory Of Constraints - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/theory-of-constraints/)
+- [Five Focusing Steps, a Process of On-Going Improvement - Theory of Constraints Institute](https://www.tocinstitute.org/five-focusing-steps.html)

@@ -8,11 +8,11 @@ date: 2027-01-02
 topics: [power-automate, sharepoint-governance]
 faq:
   - q: "Can Power Automate help with SharePoint governance?"
-    a: "Yes, in specific areas. Microsoft Learn's intranet governance guidance names Power Automate as one way to automate a review cycle. Flows can send reminders, collect approvals and notify owners. They support governance but do not replace policies, roles or the built-in SharePoint admin tools."
+    a: "Yes, in specific areas. Microsoft Learn's intranet governance guidance raises Power Automate flows as one way to trigger content reviews at a set interval. Flows can send reminders, collect approvals and notify owners. They support governance but do not replace policies, roles or the built-in SharePoint admin tools."
   - q: "Should a governance alert flow run on a production site right away?"
     a: "No. Build and test the flow on a pilot site or in a test tenant first. Alerts that notify people are low risk, but flows that change permissions, delete content or modify settings can cause damage. Always keep a backup or a way back before enabling anything like that."
   - q: "Who should own governance alerts?"
-    a: "Microsoft Learn says the business is responsible for governance, not IT alone. A governance team with business and IT members should define who receives alerts and what they must do. Defining a primary and a secondary contact per site gives alerts a clear recipient."
+    a: "Microsoft Learn says governance should reflect the goals of business stakeholders, not just the expectations of IT. A governance team with business and IT members should define who receives alerts and what they must do. Defining a primary and a secondary contact per site gives alerts a clear recipient."
 ---
 
 A governance policy on paper does not change behaviour by itself. Someone has to notice when a site has no owner, when a review is due, or when a rule is not followed. In many organizations that "someone" is nobody in particular, so the checks do not happen.
@@ -21,16 +21,16 @@ A governance policy on paper does not change behaviour by itself. Someone has to
 
 ## Start with the governance, not the flow
 
-Alerts are only useful if they point to a rule and a responsible person. Microsoft defines governance in general as "the set of policies, roles, responsibilities, and processes that control how an organization's business divisions and IT teams work together to achieve its goals." That sentence comes from the SharePoint Server documentation, which does not cover SharePoint in Microsoft 365, but the idea carries over.
+Alerts are only useful if they point to a rule and a responsible person. The [SharePoint governance overview on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/governance-overview) defines governance as "the set of policies, roles, responsibilities, and processes that control how your organization's business divisions and IT teams work together to achieve its goals." It recommends considering governance first and having a plan in place early.
 
 For SharePoint in Microsoft 365, the [Microsoft Learn guide on intranet governance](https://learn.microsoft.com/en-us/sharepoint/intranet-governance) makes several points that matter before you build anything:
 
 - Start governance planning early and review it regularly.
 - A governance team should include business and IT and stay in place after launch.
-- The business is responsible, not IT alone.
+- Governance should reflect the goals of business stakeholders, not just the expectations of IT, and IT should not be the exclusive owner.
 - Policies are requirements; guidelines are recommendations.
 - Topics include external sharing, default sharing links and metadata.
-- Ownership of sites should be defined, for example with a primary and a secondary contact per site.
+- Site ownership is a typical policy topic. Microsoft's example policy: every SharePoint site has a primary and a secondary contact responsible for the site and its content.
 
 If these points are not settled, a flow will only send messages that nobody knows how to act on. Decide first which rules are requirements, who owns each site, and who is the fallback when the owner does not respond.
 
@@ -38,7 +38,7 @@ If these points are not settled, a flow will only send messages that nobody know
 
 The same Microsoft guidance says that policies work best when site owners do not have to think about them, for example through site designs. One approach is to build the rule into how sites are created.
 
-Alerts can be a complement. They cover what cannot be built in, such as recurring checks that need a human decision. The guidance explicitly says that a review cycle can be automated, for example with Power Automate. That is the use documented in the Microsoft guidance.
+Alerts can be a complement. They cover what cannot be built in, such as recurring checks that need a human decision. The guidance raises Power Automate flows as one way to trigger an intranet content review at a set interval. Everything beyond that in this article is a design suggestion, not Microsoft guidance.
 
 Imagine a team site that was created for a project. A year later the project is over, but the site still exists. A governance rule might say that every site owner confirms twice a year that the site is still needed and that its sharing settings are still appropriate. A scheduled flow can remind the owner, record the answer and notify the governance team if there is none.
 
@@ -92,10 +92,17 @@ Whatever mix you choose, the questions stay the same: what is the rule, who is r
 ## Practical takeaways
 
 - Define policies, roles and responsibilities first. Alerts without an owner go nowhere.
-- Assign a primary and a secondary contact per site, as the Microsoft Learn guidance suggests, and store them somewhere a flow can read.
+- Assign a primary and a secondary contact per site, as in Microsoft's example policy, and store them somewhere a flow can read.
 - Build rules into site creation where possible, for example through site designs, and use flows for recurring checks that need a human decision.
 - Start with notification-only flows: reminders, approvals and escalations.
 - Make every message specific: site, question, deadline, next step.
 - Test every flow on a pilot site or test tenant first, and have a way back before any flow is allowed to change permissions, content or settings.
 - Assign an owner to each governance flow and review the flows regularly.
 - Check Microsoft Learn for current native options, licensing and connector limits before you build.
+
+## Sources
+
+- [SharePoint governance overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/governance-overview)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)
+- [Power Automate cloud flows overview (Microsoft Learn)](https://learn.microsoft.com/power-automate/overview-cloud)

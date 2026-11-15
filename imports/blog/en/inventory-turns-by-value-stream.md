@@ -44,7 +44,7 @@ A plant-wide inventory turnover number mixes fast and slow families. One stream 
 
 Stream-level turns also connect to the rest of the stream's measures. A shorter lead time and less work in process raise turns. Seeing the three stock types separately tells you which lever to pull.
 
-One caution about the accounting effect. Art Byrne of the Lean Enterprise Institute (LEI) describes [a company whose inventory turns rose from about 3 to 6](https://www.lean.org/the-lean-post/articles/ask-art-what-happens-when-standard-cost-accounting-meets-takt-time/) while its non-cash earnings fell, because under standard costing overhead that had sat in stock reached the P&L. Better turns can look like worse profit for a period. Involve finance before you set targets.
+One caution about the accounting effect. Art Byrne of the Lean Enterprise Institute (LEI) describes [a company whose inventory turns rose from about 3 or 4 to 6](https://www.lean.org/the-lean-post/articles/ask-art-what-happens-when-standard-cost-accounting-meets-takt-time/) and explains that standard costing rewards building inventory, because it absorbs hours of overhead. In my reading, when inventory falls that absorption stops, so better turns can look like worse profit for a period. Involve finance before you set targets.
 
 ## How do you collect the inventory data for the turnover ratio?
 
@@ -112,3 +112,9 @@ iFAKT's [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) autom
 ## Next step
 
 Inventory turns by value stream start with one product family and one clear formula. This month, assign the stream's parts, take twelve month-end stock values and compare the stream's days of inventory with the plant average.
+
+## Sources
+
+- [Inventory turnover definition - AccountingTools](https://www.accountingtools.com/articles/what-is-inventory-turnover.html)
+- [What is a limitation of the inventory turnover ratio? - AccountingCoach](https://accountingcoach.com/blog/inventory-turnover-ratio)
+- [Ask Art: What Happens When Standard Cost Accounting Meets Takt Time? - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/ask-art-what-happens-when-standard-cost-accounting-meets-takt-time/)

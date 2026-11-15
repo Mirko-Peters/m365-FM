@@ -22,11 +22,11 @@ faq:
 ---
 To lock cells in Excel, you do two things: make sure the cells are marked as locked, then protect the sheet. Select the cells, press **Ctrl+1**, tick **Locked** on the **Protection** tab, then go to **Review** > **Protect Sheet**. The second step is what turns the lock on. This article is for Excel users who share budgets, trackers, templates and grade sheets and want people to type in the input cells without breaking the formulas. You'll see the right order of steps, how to hide formulas, how to open selected ranges for specific people, and what to check when protection doesn't behave.
 
-The part that confuses most people is the default. In an unprotected sheet, every cell already counts as locked. Microsoft's article on [locking cells to protect them](https://support.microsoft.com/en-us/excel/lock-cells-to-protect-them-in-excel) says locking takes effect only after you protect the sheet or workbook. So the real work in [Excel](https://www.m365.fm/entity/excel/) is the reverse of what the title suggests: you unlock the cells that people may change, and then switch protection on.
+The part that confuses most people is the default. In an unprotected sheet, every cell already counts as locked. Microsoft's article on [locking cells to protect them](https://support.microsoft.com/excel/lock-cells-to-protect-them-in-excel) says locking takes effect only after you protect the sheet or workbook. So the real work in [Excel](https://www.m365.fm/entity/excel/) is the reverse of what the title suggests: you unlock the cells that people may change, and then switch protection on.
 
 ## Lock only the cells you choose
 
-This is the standard recipe, and it follows Microsoft's guide to [protecting a worksheet](https://support.microsoft.com/en-us/excel/protect-a-worksheet).
+This is the standard recipe, and it follows Microsoft's guide to [protecting a worksheet](https://support.microsoft.com/excel/protect-a-worksheet).
 
 1. **Decide what stays editable.** Write down which cells people must be able to fill in: the input area, a date, a status column.
 2. **Select those cells.** Drag across the range. To pick several separate areas, hold **Ctrl** while you select.
@@ -52,7 +52,7 @@ When a sheet is protected, the **Protect Sheet** button on the Review tab change
 
 ### On a Mac
 
-Microsoft documents the same two-step logic for Excel for Mac. Select the cells, press **Command+1**, and use the **Protection** tab to set or clear **Locked**. Then go to **Review** and select **Protect Sheet** or **Protect Workbook**. Enter a password and retype it under **Verify**, or leave it empty, in which case anyone can unprotect the sheet. In the same dialog, clear **Select locked cells** to stop users from selecting locked cells, or keep **Select unlocked cells** ticked so they can work in the open ones. To change protection later, choose **Unprotect Sheet**, adjust the cells, and protect again.
+Microsoft's page on locking cells in Excel for Mac documents the same two-step logic. Select the cells, press **Command+1**, and use the **Protection** tab to set or clear **Locked**. Then go to **Review** and select **Protect Sheet** or **Protect Workbook**. Enter a password and retype it under **Verify**, or leave it empty, in which case anyone can unprotect the sheet. In the same dialog, clear **Select locked cells** to stop users from selecting locked cells, or keep **Select unlocked cells** ticked so they can work in the open ones. To change protection later, choose **Unprotect Sheet**, adjust the cells, and protect again.
 
 ### A worked example: a monthly budget sheet
 
@@ -72,7 +72,7 @@ A formula cell is the most common reason to protect a sheet. Locking stops overw
 
 First, find the cells. One quick way is **Go To Special**: press **Ctrl+G**, select **Special**, choose **Formulas** and select **OK**. That selects every cell that holds a formula, so you can check how many there are before you lock them. Because the cells are locked by default, you often need no further change for locking.
 
-To also hide the formulas, follow Microsoft's article on [displaying or hiding formulas](https://support.microsoft.com/en-us/excel/display-or-hide-formulas):
+To also hide the formulas, follow Microsoft's article on [displaying or hiding formulas](https://support.microsoft.com/excel/display-or-hide-formulas):
 
 1. Select the cells whose formulas you want to hide.
 2. Go to **Home** > **Format** > **Format Cells**.
@@ -80,13 +80,13 @@ To also hide the formulas, follow Microsoft's article on [displaying or hiding f
 4. Go to **Review** > **Protect Sheet**.
 5. Keep **Protect worksheet and contents of locked cells** ticked and select **OK**.
 
-Microsoft points out two things. Hiding formulas also stops those cells from being edited. And hiding takes effect only once the sheet is protected. To show the formulas again, select **Unprotect Sheet**. If that button is unavailable, turn off the Shared Workbook feature first.
+Microsoft points out that hiding formulas also stops those cells from being edited. The steps end with protecting the sheet, and in practice the Hidden setting does nothing until protection is on (our reading of those steps, not a separate Microsoft statement). To show the formulas again, select **Unprotect Sheet**. If that button is unavailable, turn off the Shared Workbook feature first.
 
 One more thing that people mix up: the shortcut **Ctrl + `** (grave accent) toggles between showing formulas and showing results across the sheet. It doesn't hide anything from other users.
 
 ## Let selected people edit selected ranges
 
-Sometimes the editable area depends on the person. The finance team may fill in one block, while managers fill in another. Excel's **Allow Edit Ranges** feature handles this. The steps come from Microsoft's page on [locking or unlocking specific areas of a protected worksheet](https://support.microsoft.com/en-us/office/lock-or-unlock-specific-areas-of-a-protected-worksheet-75481b72-db8a-4267-8c43-042a5f2cd93a).
+Sometimes the editable area depends on the person. The finance team may fill in one block, while managers fill in another. Excel's **Allow Edit Ranges** feature handles this. The steps come from Microsoft's page on [locking or unlocking specific areas of a protected worksheet](https://support.microsoft.com/office/lock-or-unlock-specific-areas-of-a-protected-worksheet-75481b72-db8a-4267-8c43-042a5f2cd93a).
 
 1. Select the worksheet. It must not be protected yet. Microsoft says the command is available only when the worksheet is not protected.
 2. On the **Review** tab, select **Allow Edit Ranges**.
@@ -103,7 +103,7 @@ Two requirements from Microsoft: permissions per user need your computer to be i
 
 Protecting a sheet doesn't stop someone from deleting the sheet itself. For that, use **Review** > **Protect Workbook**. Microsoft's page on protecting a workbook says it stops other users from viewing hidden worksheets, and from adding, moving, deleting, hiding or renaming worksheets. The password is optional, but without one anybody can remove the protection.
 
-Note what it doesn't do. It doesn't stop people from opening the file, and it doesn't lock the data in cells. Cell protection stays a sheet-level job. Use both when the file goes to many people: sheet protection for the cells and workbook protection for the structure.
+Note what it doesn't cover. The Microsoft page describes structure protection only, and it points to a separate article for locking a file so others can't open it. It doesn't lock the data in cells either, so cell protection stays a sheet-level job. Use both when the file goes to many people: sheet protection for the cells and workbook protection for the structure.
 
 ## Limits and passwords you should know about
 
@@ -131,7 +131,7 @@ The feature isn't available everywhere either. Microsoft notes that worksheet pr
 - Protecting the sheet before unlocking the input cells, so users can't type anywhere.
 - Losing the password with no backup copy.
 - Treating sheet protection as security for confidential data.
-- Hiding formulas but leaving the sheet unprotected. Hidden has no effect until protection is on.
+- Hiding formulas but leaving the sheet unprotected. In practice Hidden does nothing until protection is on.
 - Protecting the sheet and forgetting the workbook structure, so the sheet can still be deleted.
 
 ## Related topics to explore
@@ -144,3 +144,12 @@ The feature isn't available everywhere either. Microsoft notes that worksheet pr
 ## Next step
 
 Open a copy of your file, unlock the input cells, protect the sheet and try to break it. Once you know how to lock cells in Excel without trapping your own users, write the password down somewhere safe and keep an unprotected original.
+
+## Sources
+
+- [Lock cells to protect them in Excel (Microsoft Support)](https://support.microsoft.com/excel/lock-cells-to-protect-them-in-excel)
+- [Protect a worksheet (Microsoft Support)](https://support.microsoft.com/excel/protect-a-worksheet)
+- [Display or hide formulas (Microsoft Support)](https://support.microsoft.com/excel/display-or-hide-formulas)
+- [Lock or unlock specific areas of a protected worksheet (Microsoft Support)](https://support.microsoft.com/office/lock-or-unlock-specific-areas-of-a-protected-worksheet-75481b72-db8a-4267-8c43-042a5f2cd93a)
+- [Lock cells to protect them in Excel for Mac (Microsoft Support)](https://support.microsoft.com/excel/lock-cells-to-protect-them-in-excel-for-mac)
+- [Protect a workbook (Microsoft Support)](https://support.microsoft.com/excel/protect-a-workbook)

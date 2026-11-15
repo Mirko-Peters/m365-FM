@@ -26,12 +26,12 @@ To remove duplicates in Excel, select your data, go to **Data** > **Remove Dupli
 
 ## Remove duplicates with the Data tab command
 
-This is the fastest route and the one most people need. It follows Microsoft's article on [filtering for unique values or removing duplicate values](https://support.microsoft.com/en-us/office/filter-for-unique-values-or-remove-duplicate-values-ccf664b0-81d6-449b-bbe1-8daaec1e83c2).
+This is the fastest route and the one most people need. It follows Microsoft's article on [filtering for unique values or removing duplicate values](https://support.microsoft.com/office/filter-for-unique-values-or-remove-duplicate-values-ccf664b0-81d6-449b-bbe1-8daaec1e83c2).
 
 1. **Back up the data.** Copy the range to another sheet or workbook. Microsoft is blunt about it: the duplicates are permanently deleted.
 2. **Select the range.** Click any cell in your data, or in an Excel Table, or select the range yourself. Only the selected range or table is changed. Cells outside it stay where they are.
 3. **Open the command.** Go to **Data** and select **Remove Duplicates** in the Data Tools group.
-4. **Choose the columns.** In the dialog, tick the columns Excel should compare. You can use **Select All** or **Unselect All**. If your first row holds column names, keep **My data has headers** ticked.
+4. **Choose the columns.** In the dialog, tick the columns Excel should compare. You can use **Select All** or **Unselect All**. If your first row holds column names, keep **My data has headers** ticked (the box is in the dialog, but Microsoft's page doesn't describe it).
 5. **Select OK.** Excel shows a message with the number of duplicate values removed and the number of unique values left.
 
 Pay attention to step 4, because it trips people up. A row is only a duplicate when all the columns you ticked match. Take a list with ID, Name and Price. If you tick ID and Name but not Price, two rows with the same ID and name are duplicates even when their prices differ, and Excel deletes the entire second row, price included. If you want to keep every row where something differs, tick every column. If the ID alone defines a record, tick only the ID, and be aware of what you throw away.
@@ -44,7 +44,7 @@ Microsoft states that the first occurrence stays and the later identical rows ar
 
 ### What counts as identical
 
-Excel compares what's shown in the cell, not what's stored. Microsoft's example: 3/8/2006 and Mar 8, 2006 are treated as different values, even though the date is the same. The same goes for numbers formatted differently or text with a trailing space. The article on finding and removing duplicates also notes that the counts Excel shows afterward can include empty cells or spaces.
+Excel compares what's shown in the cell, not what's stored. Microsoft's example: 3/8/2006 and Mar 8, 2006 are treated as different values, even though the date is the same. The same goes for numbers formatted differently or text with a trailing space.
 
 Before you remove anything, make the cells look the same. Apply one date format, trim stray spaces (the `TRIM` function does that), and check that numbers aren't stored as text. Microsoft's pages don't say whether the command ignores upper and lower case, so test it on a small range if case matters to you.
 
@@ -136,7 +136,7 @@ If your data comes from a CSV file, a database or another workbook, remove the d
 3. Go to **Home** > **Remove Rows** > **Remove Duplicates**.
 4. Close and load the result.
 
-Microsoft's page on [keeping or removing duplicate rows in Power Query](https://support.microsoft.com/en-us/excel/keep-or-remove-duplicate-rows-power-query) lists these steps. Its guidance on duplicates is worth knowing: the selected columns decide what counts as a duplicate, and Power Query does not guarantee it keeps the first row of a set. If which row survives matters, don't rely on sorting alone. Microsoft points to its "Preserve sort" guidance in the common issues article for Power Query. A related option, **Keep Duplicates**, does the opposite: it keeps only rows whose values appear more than once, which is a quick way to audit a list.
+Microsoft's page on [keeping or removing duplicate rows in Power Query](https://support.microsoft.com/excel/keep-or-remove-duplicate-rows-power-query) lists these steps, and the columns you select decide what counts as a duplicate. Microsoft's Power Query documentation on [working with duplicates](https://learn.microsoft.com/power-query/working-with-duplicates) adds that Power Query does not guarantee it keeps the first row of a set. If which row survives matters, don't rely on sorting alone. That page points to a separate "Preserve sort" article. A related option, **Keep Duplicates**, does the opposite: it keeps only rows whose values appear more than once, which is a quick way to audit a list.
 
 If you merge two tables, think about where the deduplication belongs. Removing duplicates from each source before the merge keeps the merge small and predictable. Removing them after the merge cleans up what the merge created. Choose based on where your duplicates come from, and check the row count in the preview before you load.
 
@@ -172,3 +172,11 @@ Microsoft's articles on removing duplicates list only the desktop versions of Ex
 ## Next step
 
 Before your next cleanup, copy the data, highlight the duplicates with conditional formatting and see how many there are. Then run Remove Duplicates on the copy, and compare the counts to the numbers Excel reports.
+
+## Sources
+
+- [Filter for unique values or remove duplicate values (Microsoft Support)](https://support.microsoft.com/office/filter-for-unique-values-or-remove-duplicate-values-ccf664b0-81d6-449b-bbe1-8daaec1e83c2)
+- [UNIQUE function (Microsoft Support)](https://support.microsoft.com/office/unique-function-c5ab87fd-30a3-4ce9-9d1a-40204fb85e1e)
+- [Keep or remove duplicate rows (Power Query, Microsoft Support)](https://support.microsoft.com/excel/keep-or-remove-duplicate-rows-power-query)
+- [Working with duplicates (Microsoft Learn)](https://learn.microsoft.com/power-query/working-with-duplicates)
+- [Range.RemoveDuplicates method, Excel (Microsoft Learn)](https://learn.microsoft.com/office/vba/api/excel.range.removeduplicates)

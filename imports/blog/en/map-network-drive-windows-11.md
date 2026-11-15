@@ -24,7 +24,7 @@ To map a network drive in Windows 11, open File Explorer, select **This PC**, op
 
 ## Map a network drive in File Explorer
 
-Microsoft's page on [file sharing over a network in Windows](https://support.microsoft.com/en-us/windows/experience/connectivity-networking/file-sharing-over-a-network-in-windows) lists the steps for Windows 11.
+Microsoft's page on [file sharing over a network in Windows](https://support.microsoft.com/windows/experience/connectivity-networking/file-sharing-over-a-network-in-windows) lists the steps for Windows 11.
 
 1. Open **File Explorer** from the taskbar or press the Windows logo key + E.
 2. Select **This PC** in the left pane.
@@ -39,7 +39,7 @@ If the share doesn't show up at all, the Microsoft article suggests the usual su
 
 ## Map a drive with net use
 
-The command line is better when you map drives often, test a share quickly or write a logon script. Microsoft Learn documents [net use](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/gg651155(v=ws.11)), though the page sits in the archived part of the documentation.
+The command line is better when you map drives often, test a share quickly or write a logon script. Microsoft Learn documents [net use](https://learn.microsoft.com/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/gg651155(v=ws.11)), though the page sits in the archived part of the documentation.
 
 The basic form assigns a drive letter to a share:
 
@@ -63,7 +63,7 @@ If the server name contains spaces, put quotation marks around it, from the doub
 
 ## Map a drive with PowerShell
 
-PowerShell has two routes. `New-PSDrive` is the one most admins know. According to Microsoft's [New-PSDrive documentation](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/new-psdrive), `-Persist` creates a Windows mapped network drive that is saved in Windows and is not session-specific. A drive without `-Persist` is temporary: it exists only in that PowerShell session, and you can't see it in File Explorer or with `net use`.
+PowerShell has two routes. `New-PSDrive` is the one most admins know. According to Microsoft's [New-PSDrive documentation](https://learn.microsoft.com/powershell/module/microsoft.powershell.management/new-psdrive), `-Persist` creates a Windows mapped network drive that is saved in Windows and is not session-specific. A drive without `-Persist` is temporary: it exists only in that PowerShell session, and you can't see it in File Explorer or with `net use`.
 
 A persistent drive has rules. The name must be a drive letter, the root must be a UNC path to a different computer, and the provider must be FileSystem. For a script, add `-Scope Global`. Otherwise the drive goes away when the script exits.
 
@@ -107,13 +107,13 @@ Two cautions. Drives belong to the user session that created them, as the PowerS
 
 ## Map drives for many users
 
-Hand-mapping doesn't scale. On a domain, use [Group Policy preferences](https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/group-policy/group-policy-preferences). Microsoft lists the Drive Maps extension as a way to create, modify or delete mapped drives and to configure the visibility of all drives, using the logged-on user's security context.
+Hand-mapping doesn't scale. On a domain, use [Group Policy preferences](https://learn.microsoft.com/windows-server/identity/ad-ds/manage/group-policy/group-policy-preferences). Microsoft lists the Drive Maps extension as a way to create, modify or delete mapped drives and to configure the visibility of all drives, using the logged-on user's security context.
 
-The Drive Map preference item supports four actions. Create makes a new mapping, Delete removes one, Replace deletes and recreates it, and Update changes only the settings you define. Update can't change the location, the reconnect setting or the credentials. Use Replace for those. The location is a UNC path such as `\\server\share`, and the **Reconnect** setting corresponds to a persistent mapping. You can also attach item-level targeting so a drive appears only for the users or groups that need it.
+The Drive Map preference item uses the usual preference actions: Create, Replace, Update and Delete. Replace deletes and recreates the mapping, which is the safer choice when a drive has to point somewhere new. The location is a UNC path such as `\\server\share`, and the **Reconnect** setting corresponds to a persistent mapping. Microsoft's preferences page also describes item-level targeting, where each targeting item evaluates to true or false, and if the combined result is false, the item's settings aren't applied, so a drive appears only for the users or groups that need it.
 
-Two warnings from the same Microsoft pages. The Drive Map item can store a password for connecting as another account, but it's stored obfuscated in a file that all domain users can read, so don't use it for sensitive accounts. And preferences, unlike policy settings, are defaults that users can change and that return to your value at the next Group Policy refresh.
+Two warnings. Don't plan on storing a password in a Drive Map item: Microsoft's security bulletin MS14-025 removed that capability because the password was stored insecurely, and it disabled the password fields in Drive Maps and the other affected preferences. Use the user's own sign-in, or a different mechanism, for shares that need other credentials. And preferences, unlike policy settings, don't prevent users from changing them. A change a user makes persists only until the next Group Policy refresh, when the preference reverts to the value you set.
 
-On the question of editions, Microsoft's Windows 11 comparison ties domain join and Group Policy to Windows 11 Pro paired with Windows Server, and it doesn't claim the same for Home. The File Explorer method above works the same on any edition as far as Microsoft's page shows, so a Home PC can still map a drive by hand, with a script or with Task Scheduler. For a fleet of managed machines that's not how you want to do it, though. Check how your environment applies [Windows Server](https://www.m365.fm/entity/windows-server/) policy to your Windows 11 clients and map once, centrally.
+For a fleet of managed machines, hand-mapping is not how you want to do it. Check how your environment applies [Windows Server](https://www.m365.fm/entity/windows-server/) Group Policy to your Windows 11 clients, or which central tool your organization uses instead, and map once, centrally.
 
 ## Common mistakes
 
@@ -121,7 +121,7 @@ On the question of editions, Microsoft's Windows 11 comparison ties domain join 
 - Using New-PSDrive without -Persist and wondering why File Explorer doesn't show the drive.
 - Running a mapping script as administrator and expecting the signed-in user to see the drive.
 - Mapping with another account while an old connection to the same server is still open. Delete the old one first.
-- Using Update in a Group Policy preference to change the location. Use Replace.
+- Storing a password in a Group Policy preference. Microsoft removed that capability in 2014 because it was insecure.
 - Mapping everyone to the share root when each team only needs its own folder.
 
 ## Related topics to explore
@@ -134,3 +134,11 @@ On the question of editions, Microsoft's Windows 11 comparison ties domain join 
 ## Next step
 
 Open File Explorer and map one share with Reconnect at sign-in ticked, then check that `net use` lists it. Once that works for one person, write the same mapping down as a Group Policy preference so you never have to map a network drive in Windows 11 by hand for the next ten users.
+
+## Sources
+
+- [File sharing over a network in Windows (Microsoft Support)](https://support.microsoft.com/windows/experience/connectivity-networking/file-sharing-over-a-network-in-windows)
+- [net use (Microsoft Learn, archived)](https://learn.microsoft.com/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/gg651155(v=ws.11))
+- [New-PSDrive (Microsoft Learn)](https://learn.microsoft.com/powershell/module/microsoft.powershell.management/new-psdrive)
+- [Group Policy preferences (Microsoft Learn)](https://learn.microsoft.com/windows-server/identity/ad-ds/manage/group-policy/group-policy-preferences)
+- [MS14-025: Vulnerability in Group Policy Preferences could allow elevation of privilege (Microsoft Support)](https://support.microsoft.com/topic/ms14-025-vulnerability-in-group-policy-preferences-could-allow-elevation-of-privilege-may-13-2014-60734e15-af79-26ca-ea53-8cd617073c30)

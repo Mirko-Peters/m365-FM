@@ -38,7 +38,7 @@ It does not need every number in the plant. It needs the numbers that the questi
 
 ## Where simulation input data comes from: data collection in practice
 
-A paper by Maja Bärring and colleagues at the [2018 Winter Simulation Conference](https://www.informs-sim.org/wsc18papers/includes/files/057.pdf) describes the sources in two groups, following earlier work by Anders Skoogh and colleagues.
+Simulation data is commonly sorted into two groups.
 
 - **Primary data** is gathered for the study: measurements, stopwatch studies and observation on the line.
 - **Secondary data** already exists. It includes external references such as industrial standards and domain experts, corporate business systems such as ERP, MES, PDM and CAD, and project-specific data such as production volume forecasts.
@@ -47,26 +47,26 @@ For a continuous improvement manager, the data collection looks like this in pra
 
 ## Why the data is often not good enough
 
-Bärring and colleagues studied two case companies with five interviewees, so the findings are indicative, not general. In the case that collected data manually from ERP and spreadsheets, they report problems that many plants will recognise:
+In my experience, these problems recur when data is collected manually from ERP and spreadsheets:
 
 - Preset ERP values were used in place of actual times, so it was unclear which times to use.
 - The same item was stored in both the ERP system and in spreadsheets.
 - Labels were inconsistent, and departments differed.
 - Reality changed, but the system did not.
 
-The authors also note that ERP systems emphasise deterministic values over stochastic ones, so the variation that a simulation needs is often missing. In the second case, automatic acquisition avoided five of the eight challenges they list. The paper recommends, among other things, assigning ownership of the data to functions within the company. A survey by Skoogh, Perera and Johansson in [Simulation Modelling Practice and Theory](https://research.chalmers.se/publication/166418) found that around 80 per cent of simulation users still rely on highly manual work procedures for input data.
+ERP systems usually hold deterministic planning values, so the variation that a simulation needs is often missing. My advice is to assign ownership of each data set to a function within the company.
 
 ## Routing and bill of materials in a simulation
 
 Two kinds of master data often cause trouble. The routing says which operations a product needs, in which order, on which resource and with which time. The bill of materials says which parts go into the product. For a flow model, the routing is usually the backbone, and the bill of materials matters when parts can be missing or when a station waits for an assembly.
 
-Routings in the ERP are often planning values, set once and rarely updated, which is the problem Bärring and colleagues describe. Before you load a routing into a model, compare its times with actual times from the MES for the same product and station. Check that the sequence of operations still matches the shop floor, and that the bill of materials shows the variants you really build. Do not fill a gap with simulated data, also called synthetic data, and forget to label it.
+Routings in the ERP are often planning values, set once and rarely updated, which is the problem described above. Before you load a routing into a model, compare its times with actual times from the MES for the same product and station. Check that the sequence of operations still matches the shop floor, and that the bill of materials shows the variants you really build. Do not fill a gap with simulated data, also called synthetic data, and forget to label it.
 
 ## How good must simulation data quality be?
 
-The answer is: good enough for the decision. Averill Law, in his paper on [pitfalls in simulation modelling](https://informs-sim.org/wsc24papers/inv198.pdf), asks for records of input distributions and for validation, and he recommends collecting data on all possible sources of system randomness if at all possible. He warns about two errors: replacing a random input with its average, which in his example removes the queue entirely, and choosing a normal distribution out of habit, which in one of his examples gave an output error of 39 per cent.
+The answer is: good enough for the decision. Keep records of the input distributions, collect data on the sources of randomness that matter for the question, and validate the model. Two errors are common: replacing a random input with its average, which can remove the queue entirely, and choosing a normal distribution out of habit, which can distort the output.
 
-A practical way to decide how much effort to spend is to rank the inputs by their effect and by the uncertainty of each parameter. Law also recommends sensitivity analysis to see which factors affect the performance measures most. This grading is our own planning aid, not a standard:
+A practical way to decide how much effort to spend is to rank the inputs by their effect and by the uncertainty of each parameter. Sensitivity analysis also shows which factors affect the performance measures most. This grading is our own planning aid, not a standard:
 
 1. **Grade A: measured and checked.** Use it for inputs that move the result most, such as the cycle time at the bottleneck and the stop pattern before it.
 2. **Grade B: taken from a system and checked on a sample.** Use it for inputs with a medium effect.
@@ -111,3 +111,7 @@ A knowledge graph that links products, process steps and resources can reduce du
 ## Next step
 
 Take the bottleneck station of one line and compare the routing time in the ERP with the actual cycle time in the MES over the last four weeks. If they differ, you have found the first gap in the data for simulation model building, and you know where to start.
+
+## Sources
+
+This article describes general practice and the author's experience. It does not rely on a single external source.

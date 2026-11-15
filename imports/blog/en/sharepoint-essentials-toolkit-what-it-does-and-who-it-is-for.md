@@ -110,3 +110,8 @@ After a migration, use the verification reports the vendor describes and compare
 - Treat the vendor's figures, such as migration speed, as claims to verify in your own pilot.
 - Put oversharing on your list before a Copilot rollout, because AI assistants can surface content that is open more widely than intended.
 - Never run bulk permission or content changes without a pilot and a way back.
+
+## Sources
+
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)
+- [Data access governance reports for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)

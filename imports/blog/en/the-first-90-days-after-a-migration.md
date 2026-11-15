@@ -12,7 +12,7 @@ faq:
   - q: "Why do links break after a migration or a site address change?"
     a: "When a site address changes, SharePoint creates a redirect at the old address, so favorites and sharing links keep working. Embedded URLs in web parts are not updated and may break. If a redirect is later deleted, requests to the old address are no longer forwarded."
   - q: "Who should own governance after a migration?"
-    a: "Microsoft Learn's intranet governance guidance says the business is responsible, not IT alone. A governance team with business and IT members should stay in place after launch, review policies regularly, and define ownership for each site, for example a primary and a secondary contact."
+    a: "Microsoft Learn's intranet governance guidance says governance should reflect the goals of business stakeholders, not just the expectations of IT. A governance team with business and IT members should stay in place after launch and review policies regularly. Site ownership is a typical policy topic; Microsoft's example is a primary and a secondary contact per site."
 ---
 
 Moving the last batch of files into SharePoint feels like the end of a project. For users it is the beginning. They open the new sites, look for their documents, click old links and find out whether the new structure makes sense.
@@ -38,11 +38,11 @@ If you find gaps and decide to re-run or correct content, treat that as a change
 
 ## Rebuild what did not migrate
 
-Some things do not simply arrive as they were. Microsoft Learn notes that classic SharePoint Server workflows should be rebuilt as Power Automate flows. If your source was an older SharePoint Server version, make a list of workflows, custom forms and classic pages and decide for each one whether it is still needed.
+Some things do not simply arrive as they were. Microsoft Learn recommends moving classic SharePoint Server workflows to Power Automate flows, and SPMT can migrate certain SharePoint Server 2010 workflows. Classic pages are covered by a separate Microsoft guide on transforming them to modern pages. If your source was an older SharePoint Server version, make a list of workflows, custom forms and classic pages and decide for each one whether it is still needed.
 
 Imagine a department that relied on an approval workflow for contracts. If the documents migrate but the approval step does not, nobody may notice until the first contract needs sign-off. A workflow inventory before go-live, and a check against it afterwards, catches this kind of gap early.
 
-Also keep in mind who is doing the work. Microsoft describes a Migration Administrator role that lets a migration team work without full SharePoint admin access. Once the project phase is over, review whether those role assignments are still needed, and remove them according to your own access policies. Test role changes on a pilot first and note the previous state so you can restore it.
+Also keep in mind who is doing the work. Microsoft describes a Migration Administrator role that gives a migration team access to Migration Manager in the Microsoft 365 admin center without the broader SharePoint administrator role. Once the project phase is over, review whether those role assignments are still needed, and remove them according to your own access policies. Test role changes on a pilot first and note the previous state so you can restore it.
 
 ## Look for broken links early
 
@@ -70,7 +70,7 @@ A practical approach for the first weeks:
 
 A migration often creates many sites at once. Without clear owners, they drift. Content gets outdated, sharing settings stay as they were on day one, and nobody feels responsible when something goes wrong.
 
-Microsoft's intranet governance guidance recommends defining ownership of sites, for example with a primary and a secondary contact per site. In the first 90 days, this is a realistic goal: every migrated site has two named people, they know they are the owners, and they know where to turn with questions.
+Microsoft's intranet governance guidance gives site ownership as a policy example: every SharePoint site has a primary and a secondary contact responsible for the site and its content. In the first 90 days, this is a realistic goal: every migrated site has two named people, they know they are the owners, and they know where to turn with questions.
 
 Imagine a team site for a project office with a long document history. If its only owner left the company during the migration project, nobody may be able to approve access requests or decide what to archive. A secondary owner prevents that situation.
 
@@ -85,14 +85,14 @@ Good starting steps:
 
 [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) is easy to postpone because the migration project already took all the energy. Microsoft's guidance says the opposite: start governance planning early and review it regularly.
 
-Microsoft's general definition describes governance as the set of policies, roles, responsibilities and processes that control how an organization's business divisions and IT teams work together to achieve its goals. For SharePoint in Microsoft 365, the intranet governance guide adds some useful points:
+The [SharePoint governance overview on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/governance-overview) describes governance as the set of policies, roles, responsibilities and processes that control how your organization's business divisions and IT teams work together to achieve its goals. For SharePoint in Microsoft 365, the intranet governance guide adds some useful points:
 
 - A governance team should include business and IT, and stay in place after launch.
-- The business is responsible, not IT alone.
+- Governance should reflect the goals of business stakeholders, not just the expectations of IT.
 - Policies are requirements; guidelines are recommendations. Be clear about which is which.
 - Topics to cover include external sharing, default sharing links and metadata.
 - Policies work best when site owners do not have to think about them, for example through site designs.
-- A review cycle can be automated, for example with Power Automate.
+- Power Automate flows are one way to trigger an intranet content review at a set interval.
 
 You do not need a large framework in the first 90 days. Start with a few decisions: who may share externally and how, what the default sharing link should be, who approves new sites, and how often owners review their content. Write them down on one or two pages.
 
@@ -104,7 +104,7 @@ Any policy change that affects access, such as tightening sharing settings, can 
 
 - **Keep the source until you are done validating.** Migration copies content, so you have a fallback. Set a clear date and rule for retiring the old source.
 - **Validate with samples and owners.** Compare content and permissions, and write down known gaps.
-- **Inventory what needs rebuilding.** Classic workflows should become Power Automate flows; custom forms and customizations need their own check.
+- **Inventory what needs rebuilding.** Microsoft recommends moving classic workflows to Power Automate flows; custom forms and customizations need their own check.
 - **Do not delete redirects early.** They keep old addresses working until you have fixed embedded links.
 - **Check your most visited pages first.** Embedded URLs in web parts are not updated automatically after an address change.
 - **Name a primary and a secondary owner for every site.** Tell them what is expected.
@@ -112,3 +112,12 @@ Any policy change that affects access, such as tightening sharing settings, can 
 - **Test before you change access or delete anything.** Use a pilot site or test tenant, and keep a backup or a way back.
 
 Check the linked Microsoft Learn pages for the current state of tools and features: [Migrate to SharePoint in Microsoft 365](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) and the [intranet governance guide](https://learn.microsoft.com/en-us/sharepoint/intranet-governance).
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)
+- [Change a site address (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-site-address)
+- [Manage site redirects (Microsoft Learn)](https://learn.microsoft.com/sharepoint/manage-site-redirects)
+- [SharePoint governance overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/governance-overview)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)

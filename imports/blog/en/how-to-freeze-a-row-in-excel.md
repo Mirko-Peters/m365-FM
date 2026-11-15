@@ -22,7 +22,7 @@ faq:
 ---
 To freeze a row in Excel, open the **View** tab, select **Freeze Panes** and choose **Freeze Top Row**. The first row then stays on screen while you scroll down through the rest of the sheet. To freeze more than one row, select the cell below the last row you want to keep and choose **Freeze Panes** > **Freeze Panes**. This article is for people who work with long lists in [Excel](https://www.m365.fm/entity/excel/) and keep losing track of which column is which. You'll learn the three ways to freeze, how Excel decides what to lock, how to undo it, and what to check when the commands don't respond.
 
-Microsoft's article on how to [freeze panes to lock rows and columns](https://support.microsoft.com/en-us/excel/get-started/freeze-panes-to-lock-rows-and-columns) states the core rule in one line: Freeze Panes freezes the rows above and the columns to the left of the selected cell. Keep that in mind and the rest of this guide takes care of itself.
+Microsoft's article on how to [freeze panes to lock rows and columns](https://support.microsoft.com/excel/get-started/freeze-panes-to-lock-rows-and-columns) states the core rule in one line: Freeze Panes freezes the rows above and the columns to the left of the selected cell. Keep that in mind and the rest of this guide takes care of itself.
 
 ## Freeze the top row
 
@@ -32,7 +32,7 @@ This is the case most people need: a header in row 1 and hundreds of rows of dat
 2. Go to the **View** tab.
 3. Select **Freeze Panes**, then **Freeze Top Row**.
 
-A thin line appears under row 1. Scroll down and the header stays where it is while the rest of the data moves. On a Mac, Microsoft's article for [Excel for Mac](https://support.microsoft.com/en-us/excel/freeze-panes-to-lock-the-first-row-or-column-in-excel-for-mac) puts the buttons on the **View** tab too, and describes a slightly darker border under row 1 as the sign that it worked. You do not need to select anything beforehand.
+A thin line appears under row 1. Scroll down and the header stays where it is while the rest of the data moves. On a Mac, Microsoft's article for [Excel for Mac](https://support.microsoft.com/excel/freeze-panes-to-lock-the-first-row-or-column-in-excel-for-mac) puts the buttons on the **View** tab too, and describes a slightly darker border under row 1 as the sign that it worked. You do not need to select anything beforehand.
 
 Check that row 1 really holds the headers. If your sheet has a title in row 1 and the column names in row 2, Freeze Top Row would lock only the title. Use the next method for that.
 
@@ -88,7 +88,7 @@ Go to **View** > **Freeze Panes** > **Unfreeze Panes**. All frozen rows and colu
 
 ## Freeze panes versus Split
 
-The View tab also has a **Split** command, and the two get mixed up. Microsoft's article on [splitting panes](https://support.microsoft.com/en-us/excel/split-panes-to-lock-rows-or-columns-in-separate-worksheet-areas) describes how it works: you select the row below, the column to the right, or a cell below and to the right of the split point, and then choose **View** > **Window** > **Split**. The sheet then has separate areas, and each scrolls on its own. Select **Split** again to remove it.
+The View tab also has a **Split** command, and the two get mixed up. Microsoft's article on [splitting panes](https://support.microsoft.com/excel/split-panes-to-lock-rows-or-columns-in-separate-worksheet-areas) describes how it works: you select the row below, the column to the right, or a cell below and to the right of the split point, and then choose **View** > **Window** > **Split**. The sheet then has separate areas, and each scrolls on its own. Select **Split** again to remove it.
 
 Use Freeze Panes for the normal case, a header that stays put. Use Split when you want to look at two distant parts of the same sheet at once, for example the top of the list and row 180. If you set up a split by accident, remove it before you troubleshoot anything else.
 
@@ -96,7 +96,7 @@ Use Freeze Panes for the normal case, a header that stays put. Use Split when yo
 
 Most of the time a freeze fails for one of four reasons.
 
-**The command is grayed out.** Microsoft's Mac article says to go to the **View** tab and select **Normal** if the freeze buttons are grayed out. The same fix is the first thing to try on Windows: if you're in Page Layout view, switch back to Normal view.
+**The command is grayed out.** Microsoft's Mac article says to go to the **View** tab and select **Normal** if the freeze buttons are grayed out. On Windows, check the view mode too: if you're in Page Layout view, switch back to Normal view. That Windows tip is not on the Microsoft pages cited here.
 
 **You can't find the View tab.** Microsoft notes that if you don't see the View tab, you may be using Excel Starter, which doesn't support all features.
 
@@ -106,7 +106,7 @@ Most of the time a freeze fails for one of four reasons.
 
 ### Excel for the web and mobile
 
-Microsoft's main article doesn't list Excel for the web among its versions and gives no steps for the browser, so there's no verified menu path to quote here. Look at the View tab in your own version. For the mobile apps, Microsoft has a separate article for Excel on iPad and iPhone. On an iPad, tap **View** > **Freeze Panes** and choose the option you need. On an iPhone, tap the ellipsis to show the ribbon, then **Home** > **View**, scroll down and tap **Freeze Panes**. To freeze multiple rows on a phone or tablet, select the row just below the last row you want locked, and then use the same command.
+Microsoft's main article doesn't list Excel for the web among its versions and gives no steps for the browser, so there's no verified menu path to quote here. Look at the View tab in your own version. For the mobile apps, Microsoft has a separate article for Excel on iPad and iPhone. On an iPad, tap **View**, then **Freeze Panes**, then **Freeze Panes** again. On an iPhone, tap the ellipsis to show the ribbon, then **Home** > **View**, scroll down and tap **Freeze Panes**. To freeze multiple rows on a phone or tablet, Microsoft says to select the row below the last row you want frozen, and then use the same steps.
 
 ## Common mistakes
 
@@ -128,3 +128,10 @@ Microsoft's main article doesn't list Excel for the web among its versions and g
 ## Next step
 
 Open your biggest worksheet and freeze its header row now. If it has a title above the headers, click the cell below the header row and use Freeze Panes. The next time you scroll past row 500, you will know how to freeze a row in Excel and still see what each column means.
+
+## Sources
+
+- [Freeze panes to lock rows and columns (Microsoft Support)](https://support.microsoft.com/excel/get-started/freeze-panes-to-lock-rows-and-columns)
+- [Freeze panes to lock the first row or column in Excel for Mac (Microsoft Support)](https://support.microsoft.com/excel/freeze-panes-to-lock-the-first-row-or-column-in-excel-for-mac)
+- [Freeze panes to lock the first row or column in Excel for iOS (Microsoft Support)](https://support.microsoft.com/excel/freeze-panes-to-lock-the-first-row-or-column-in-excel-for-ios)
+- [Split panes to lock rows or columns in separate worksheet areas (Microsoft Support)](https://support.microsoft.com/excel/split-panes-to-lock-rows-or-columns-in-separate-worksheet-areas)

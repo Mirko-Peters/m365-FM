@@ -1,6 +1,6 @@
 """SEO-Titel und Meta-Descriptions der Podcast-Seiten (Bereich B, 12.11.2026: "SEO Title and Description search intent friendly").
 
-Reine Funktionen ohne Seitenbau: Folgenseiten (Dub-Sprachen, englische Hauptshow, lokalisierte Show-Fassungen), Sprach-Startseiten,
+Reine Funktionen ohne Seitenbau: Folgenseiten (Dub-Sprachen, englische Hauptshow, lokalisierte Show-Fassungen),
 Podcast-Hub je Sprache, Top-Seiten, Themen-Seiten, Show-Netzwerk, Livestreams, Community-Folgen/-Videos und die Podpage-Unterseiten.
 
 Regeln (Auftrag): Hauptbegriff zuerst, dann das Format (Podcast-Folge / Podcast Episode), Marke genau einmal hinten (' | M365.FM'),
@@ -38,25 +38,6 @@ _NOSPACE = {"ja"}   # Sprachen ohne Leerzeichen zwischen Saetzen und Zusaetzen
 DUB_LABELS = ("KI-Synchronfassung", "Doblaje IA", "Doublage IA", "Doppiaggio IA", "Dublagem IA", "AI-nasynchronisatie", "Dubbing AI", "Sulih Suara AI", "ИИ-дубляж",
               "ШІ-дубляж", "دبلجة بالذكاء الاصطناعي", "דיבוב AI", "AI吹き替え", "AI 더빙")
 _DUB_RX = re.compile(r"\s*[（(]\s*(?:" + "|".join(re.escape(x) for x in DUB_LABELS) + r")\s*[)）]\s*$")
-
-# Startseite je Sprache: (Titel, Beschreibung mit {n} = Zahl der Sprachen). Marke steht vorn: sie ist hier der Suchbegriff.
-HOME = {
-    "de": ("M365.FM – Microsoft 365 Podcast, Blog & Erklärvideos", "Microsoft 365, Copilot, Azure und Power Platform verständlich erklärt: Podcast, Blog, Events und Videos von Microsoft MVP Mirko Peters in {n} Sprachen."),
-    "fr": ("M365.FM – Podcast, blog et vidéos sur Microsoft 365", "Microsoft 365, Copilot, Azure et Power Platform expliqués simplement : podcast, blog, événements et vidéos du Microsoft MVP Mirko Peters, en {n} langues."),
-    "es": ("M365.FM – Pódcast, blog y vídeos sobre Microsoft 365", "Microsoft 365, Copilot, Azure y Power Platform explicados con claridad: pódcast, blog, eventos y vídeos del Microsoft MVP Mirko Peters en {n} idiomas."),
-    "it": ("M365.FM – Podcast, blog e video su Microsoft 365", "Microsoft 365, Copilot, Azure e Power Platform spiegati in modo chiaro: podcast, blog, eventi e video del Microsoft MVP Mirko Peters in {n} lingue."),
-    "pt": ("M365.FM – Podcast, blog e vídeos sobre Microsoft 365", "Microsoft 365, Copilot, Azure e Power Platform explicados de forma clara: podcast, blog, eventos e vídeos do Microsoft MVP Mirko Peters em {n} idiomas."),
-    "nl": ("M365.FM – Podcast, blog en uitlegvideo’s over Microsoft 365", "Microsoft 365, Copilot, Azure en Power Platform helder uitgelegd: podcast, blog, events en uitlegvideo’s van Microsoft MVP Mirko Peters in {n} talen."),
-    "pl": ("M365.FM – podcast, blog i filmy o Microsoft 365", "Microsoft 365, Copilot, Azure i Power Platform po ludzku: podcast, blog, wydarzenia i filmy od Microsoft MVP Mirko Petersa w {n} językach."),
-    "id": ("M365.FM – Podcast, blog & video tentang Microsoft 365", "Microsoft 365, Copilot, Azure, dan Power Platform dijelaskan jelas: podcast, blog, acara, dan video dari Microsoft MVP Mirko Peters dalam {n} bahasa."),
-    "ru": ("M365.FM – подкаст, блог и видео о Microsoft 365", "Microsoft 365, Copilot, Azure и Power Platform простым языком: подкаст, блог, события и видео от Microsoft MVP Mirko Peters на {n} языках."),
-    "uk": ("M365.FM – подкаст, блог і відео про Microsoft 365", "Microsoft 365, Copilot, Azure і Power Platform простою мовою: подкаст, блог, події та відео від Microsoft MVP Mirko Peters {n} мовами."),
-    "ar": ("M365.FM – بودكاست ومدونة وفيديوهات عن Microsoft 365", "شرح واضح لـ Microsoft 365 وCopilot وAzure وPower Platform: بودكاست ومدونة وفعاليات وفيديوهات من خبير Microsoft MVP ميركو بيترز بـ {n} لغة."),
-    "he": ("M365.FM – פודקאסט, בלוג וסרטונים על Microsoft 365", "Microsoft 365, ‏Copilot, ‏Azure ו-Power Platform בהסבר ברור: פודקאסט, בלוג, אירועים וסרטוני הסבר מאת Microsoft MVP מירקו פטרס, ב-{n} שפות."),
-    "ja": ("M365.FM – Microsoft 365のポッドキャスト・ブログ・解説動画", "Microsoft 365、Copilot、Azure、Power Platformをわかりやすく解説。Microsoft MVP Mirko Petersによるポッドキャスト、ブログ、イベント、解説動画を{n}言語で。"),
-    "ko": ("M365.FM – Microsoft 365 팟캐스트, 블로그, 설명 영상", "Microsoft 365, Copilot, Azure, Power Platform을 쉽게 설명합니다. Microsoft MVP Mirko Peters의 팟캐스트, 블로그, 이벤트, 설명 영상을 {n}개 언어로."),
-}
-HOME["en"] = ("M365.FM – Microsoft 365 Podcast, Blog & Explainer Videos", "Microsoft 365, Copilot, Azure and Power Platform explained clearly: podcast, blog, events and videos by Microsoft MVP Mirko Peters in {n} languages.")
 
 # Podcast-Hub der Sprache (/<l>/podcast/): Beschreibung mit {n} = Zahl der Folgen
 PODHUB_D = {
@@ -143,7 +124,7 @@ def _word_cut(s, width):
     """Auf width kuerzen: an einer Wortgrenze (bzw. zeichenweise bei CJK), mit Auslassungszeichen."""
     if wlen(s) <= width: return s
     cut = _cut_to(s, width - 1)
-    if " " in cut and not re.search(r"[　-鿿가-힯]", cut[-3:]):
+    if " " in cut and not re.search(r"[　-鿿가-힯]", cut.rsplit(" ", 1)[1] or cut[-3:]):   # CJK nach dem letzten Leerzeichen: zeichenweise statt alles bis zum Leerzeichen zu verlieren
         cut = cut.rsplit(" ", 1)[0]
     return cut.rstrip(" ,;:–—-、，") + "…"
 
@@ -165,7 +146,7 @@ def clean_title(raw):
     return re.sub(r"[\s:;,–—-]+$", "", t).strip()
 
 
-_CUT = re.compile(r"(?<=[?!？！])\s+|:\s+|：|\s+[–—]\s+|\s*[（(]|[、，]|\s+with\s+|,\s+|،\s+")
+_CUT = re.compile(r"(?<=[?!？！])\s+|(?<=[？！])(?=\S)|:\s+|:(?=[　-鿿])|：|\s+[–—]\s+|――|\s*[（(]|[、，]|\s+with\s+|,\s+|،\s+")   # Japanisch: nach '？' ohne Leerzeichen, ':' direkt vor CJK, Geviertstrich '――'
 
 
 # Verbindungswoerter, vor denen ein langer Titel ohne Satzzeichen ganz (ohne Auslassungszeichen) enden darf
@@ -359,12 +340,6 @@ def en_episode_meta(name, meta_title="", meta_desc="", summary="", fallback="", 
 
 
 # ---------------------------------------------------------------- Seitentypen
-def home_meta(lang, n):
-    """(Titel, Beschreibung) der Sprach-Startseite /<l>/."""
-    t, d = HOME.get(lang) or HOME["en"]
-    return t, d.format(n=n)
-
-
 def podcast_hub_meta(lang, series_title, n):
     """(Titel, Beschreibung) von /<l>/podcast/. series_title = Titel der Show (shows_seo.json: Marke + Thema + Sprache), bleibt, wenn er passt."""
     t = plain(series_title)

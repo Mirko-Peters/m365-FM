@@ -37,13 +37,13 @@ If all three answers are yes, a simulation is a strong candidate. If only one is
 
 ## How manufacturing simulation works: discrete event simulation
 
-Most factory models use discrete event simulation. The simulation model changes its state at points in time: a part arrives, a machine starts, a stop ends. It follows the queues and waiting that result, and reports output, utilization and lead time. Before you trust it, you validate it against the real-world line. Because the events are random, you run many replications and look at the range of results. You test a change in the model and compare it with the baseline under the same conditions. The WSC 2000 paper by J. Michael Knoll and Joseph Heim of Genie Industries, [on the adoption of discrete event simulation](https://informs-sim.org/wsc00papers/175.PDF), makes a point that also helps: comparing all options under the same conditions reduces the reliance on individual opinion.
+Most factory models use discrete event simulation. The simulation model changes its state at points in time: a part arrives, a machine starts, a stop ends. It follows the queues and waiting that result, and reports output, utilization and lead time. Before you trust it, you validate it against the real-world line. Because the events are random, you run many replications and look at the range of results. You test a change in the model and compare it with the baseline under the same conditions. A further benefit: comparing all options under the same conditions reduces the reliance on individual opinion.
 
 In practice, manufacturing simulation is a way to use simulation on the factory floor without disturbing it. You can identify bottlenecks on an assembly line, test a change to the production planning and see the system behavior under peak load, all in a virtual environment. A smart factory programme often starts with the same questions.
 
 ## Use case 1: Designing a new line or a new layout
 
-The most classic use case is the design of a new line or facility. The Knoll and Heim paper says simulation allows modelling any number of layout changes before moving a single piece of equipment. The Autodesk article lists the testing of new lines or facilities and the planning of layout changes first among its use cases.
+The most classic use case is the design of a new line or facility. Simulation allows you to model layout changes before moving a single piece of equipment. The Autodesk article lists the testing of new lines or facilities and the planning of layout changes first among its use cases.
 
 The question is concrete: does the proposed layout deliver the planned output, and where do parts wait? A model of the design answers it before steel is bought, and the same model can later use real-time data from the running line. It also helps to compare two layouts under the same demand. This pays off most when the design is new, because there is no real line to measure and the cost of a wrong layout is high.
 
@@ -88,7 +88,7 @@ The expected gain is 45,000 − 24,000 = 21,000. The break-even chance is 24,000
 
 ## When simulation does not pay off
 
-Simulation is not always the right tool. The Knoll and Heim paper, which reports one mid-sized manufacturer and no quantified savings, gives practical cautions:
+Simulation is not always the right tool. In my experience, these are the common cautions:
 
 - **No champion.** Success depends on a champion with modelling experience. Without it, the champion will not have credibility.
 - **Scope creep.** Keep the scope tight, and do not expand a model only because it is possible.
@@ -113,3 +113,8 @@ Add three of our own. The question may be simple enough for a calculation. The d
 ## Next step
 
 Take your next investment decision and apply the three tests of stakes, interaction and variation. If it passes, write down the value at stake, the cost of a study and the chance that it changes the decision. That is a short, evidence-based way to decide when to use factory simulation, and it gives the sponsor a clear question to answer.
+
+## Sources
+
+- [Factory Simulation Basics: How Manufacturers Use Simulation to Design Better Production Systems - Autodesk Design & Manufacturing blog](https://www.autodesk.com/blogs/design-and-manufacturing/factory-simulation-basics-how-manufacturers-use-simulation-to-design-better-production-systems/)
+- [Simulation to assist in resolution of manufacturing problems - TWI](https://www.twi-global.com/technical-knowledge/faqs/faqmanufacturing-when-should-i-employ-simulation-to-assist-in-resolution-of-manufacturing-problems)

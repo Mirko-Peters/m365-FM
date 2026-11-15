@@ -126,10 +126,16 @@ class UnitTest(unittest.TestCase):
         self.assertTrue(t.startswith("Azure Bicep at Scale"), t)
         self.assertNotIn("plain English", d)
 
+    def test_ja_title_cut_after_question_mark(self):
+        # Japanisch: nach '？' ohne Leerzeichen schneiden statt mit Auslassungszeichen; gemischter Text nicht am letzten Leerzeichen kappen
+        t = M.episode_title("ja", "Infrastructure as Codeとは？クリック操作をやめてBicep・ARM・TerraformでAzureを自動化する入門")
+        self.assertTrue(t.startswith("Infrastructure as Codeとは？"), t)
+        self.assertNotIn("…", t)
+        self.assertTrue(M._word_cut("Dynamics 365 Copilotとは営業・カスタマーサービス・財務・Business Centralの入門ガイド", 40).startswith("Dynamics 365 Copilot"))
+
     def test_fallback_to_english_for_unknown_language(self):
         self.assertTrue(M.episode_title("xx", "Teams Governance Basics for Admins").endswith("M365.FM"))
-        t, d = M.home_meta("xx", 15)
-        self.assertEqual((t, d), M.home_meta("en", 15))
+        self.assertEqual(M.podcast_hub_meta("xx", "M365.FM Podcast", 7), M.podcast_hub_meta("en", "M365.FM Podcast", 7))
 
 
 class DubEpisodeTest(unittest.TestCase):
@@ -199,18 +205,6 @@ class LocalizedEpisodeTest(unittest.TestCase):
 
 
 class HubTest(unittest.TestCase):
-    def test_language_homes(self):
-        titles = []
-        for l in DUB_LANGS + ["en"]:
-            t, d = M.home_meta(l, 15)
-            check_title(self, t); check_desc(self, d, lo=120, hi=155)
-            self.assertTrue(t.startswith("M365.FM"), t)
-            titles.append(t)
-        self.assertEqual(len(titles), len(set(titles)))
-        # die Zahl der Sprachen kommt aus dem Bau, nicht aus der Vorlage
-        self.assertIn("15", M.home_meta("de", 15)[1])
-        self.assertIn("14", M.home_meta("de", 14)[1])
-
     def test_podcast_hubs(self):
         seo = json.load(open(ROOT / "shows_seo.json", encoding="utf-8"))
         ts = []

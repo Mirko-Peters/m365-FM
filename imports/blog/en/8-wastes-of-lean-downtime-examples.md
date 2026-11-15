@@ -119,3 +119,8 @@ A paper map is enough to start. Software helps once many products and steps need
 ## Next step
 
 Pick one workstation, watch it for an hour and mark every example of the 8 wastes of lean that you see. Then bring the three most frequent ones to the team and agree on one fix for each.
+
+## Sources
+
+- [Toyota Production System - Toyota Motor Corporation (global site)](https://global.toyota/en/company/vision-and-philosophy/production-system/index.html)
+- [The 8 Wastes of Lean: A Practical Guide - LeanBlog.org](https://www.leanblog.org/2026/04/8-wastes-of-lean/)

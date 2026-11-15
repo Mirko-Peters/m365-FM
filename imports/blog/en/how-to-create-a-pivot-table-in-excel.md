@@ -26,13 +26,13 @@ A pivot table doesn't change your data. It reads the source and shows a summary 
 
 ## Prepare your source data
 
-Most pivot table trouble starts here, before the first click. Microsoft's article on how to [create a PivotTable to analyze worksheet data](https://support.microsoft.com/en-us/office/create-a-pivottable-to-analyze-worksheet-data-a9a84538-bfe9-40a9-a8e9-f99134456576) asks for clean, tabular data with these properties:
+Most pivot table trouble starts here, before the first click. Microsoft's article on how to [create a PivotTable to analyze worksheet data](https://support.microsoft.com/office/create-a-pivottable-to-analyze-worksheet-data-a9a84538-bfe9-40a9-a8e9-f99134456576) asks for clean, tabular data with these properties:
 
 - One header row, and every column has a header that is unique and not blank.
 - No double header rows and no merged cells.
 - No subtotals in the source. Microsoft's overview of PivotTables says to remove existing subtotals before you create the PivotTable.
-- No blank rows or columns inside the list.
-- One kind of data per column. Don't mix numbers and text.
+- No blank rows or columns inside the list, so Excel picks up the whole block. That is practical advice, not a line from Microsoft's page.
+- No mixed data types in value fields. Microsoft says not to mix data types there.
 
 The last point has a real effect on your results. Microsoft explains that numeric value fields default to **Sum**, but if Excel reads the field as text, it defaults to **Count**. One cell with "N/A" or "n/a" in a column of amounts is enough to cause it. If your pivot table shows counts where you expected totals, look at the source column first.
 
@@ -54,7 +54,7 @@ The dialog has an optional checkbox, **Add this data to the Data Model**. Leave 
 
 ### Let Excel suggest a layout
 
-If you don't know what to build, **Insert** > **Recommended PivotTables** shows a few ready-made layouts for your data. Microsoft's PivotTable page I opened doesn't walk through this feature, but it states that PivotTable recommendations are part of Microsoft 365's connected experiences and use AI services to analyze your data. If your organization has turned off connected experiences, you won't get them. The manual route above always works.
+If you don't know what to build, **Insert** > **Recommended PivotTables** shows a few ready-made layouts for your data. Microsoft's page calls this feature PivotTable Recommendations. It doesn't walk through it, but it states that it is part of Microsoft 365's connected experiences and uses AI services to analyze your data. If your organization has turned off connected experiences, you won't get them. The manual route above always works.
 
 ## Build the layout with the PivotTable Fields pane
 
@@ -89,7 +89,7 @@ The **Show Values As** tab in Value Field Settings changes what the number means
 
 Once the table works, the next question is usually how to look at one part of it. There are three tools, and all of them are on Microsoft's pages.
 
-**Slicers** are buttons that stay visible next to the table. Click anywhere in the PivotTable, go to **Insert** > **Slicer**, tick the fields you want in the Insert Slicers dialog and select **OK**. You get one slicer for each field. Click a button to filter, hold **Ctrl** and click to select more than one item, and use **Clear Filter** to reset. Microsoft's page on [using slicers to filter data](https://support.microsoft.com/en-us/office/use-slicers-to-filter-data-249f966b-a9d5-4b0f-b31a-12651785d29d) adds a useful detail: a slicer can control more than one PivotTable, but only if they share a data source. Select the slicer, go to the **Slicer** tab, choose **Report Connections** and tick the PivotTables.
+**Slicers** are buttons that stay visible next to the table. Click anywhere in the PivotTable, go to **Insert** > **Slicer**, tick the fields you want in the Insert Slicers dialog and select **OK**. You get one slicer for each field. Click a button to filter, hold **Ctrl** and click to select more than one item, and use **Clear Filter** to reset. Microsoft's page on [using slicers to filter data](https://support.microsoft.com/office/use-slicers-to-filter-data-249f966b-a9d5-4b0f-b31a-12651785d29d) adds a useful detail: a slicer can control more than one PivotTable, but only if they share a data source. Select the slicer, go to the **Slicer** tab, choose **Report Connections** and tick the PivotTables.
 
 **Filter drop-downs.** The arrow in a row or column label opens a menu with **Label Filters** and **Value Filters**. Under Value Filters you'll find **Top 10**, which can show the top or bottom items by number, percentage or sum. In the item list you clear **Select All** and tick only what you need, or type in the **Search** box.
 
@@ -99,7 +99,7 @@ Report filters (the Filters area) have a nice extra: **Show Report Filter Pages*
 
 ## Refresh a pivot table when the data changes
 
-A pivot table is a snapshot of the source at the moment it was built or last refreshed. If a new row lands in the source, the table may not show it right away. Microsoft's page on [refreshing PivotTable data](https://support.microsoft.com/en-us/excel/refresh-pivottable-data) lists these options:
+A pivot table is a snapshot of the source at the moment it was built or last refreshed. If a new row lands in the source, the table may not show it right away. Microsoft's page on [refreshing PivotTable data](https://support.microsoft.com/excel/refresh-pivottable-data) lists these options:
 
 1. **Refresh one table.** Select the PivotTable, go to **PivotTable Analyze** and select **Refresh** in the Data group, or press **Alt+F5**. Right-clicking the table and choosing **Refresh** works too.
 2. **Refresh everything.** Open the arrow under **Refresh** and select **Refresh All**. This updates every PivotTable in the workbook.
@@ -109,7 +109,7 @@ Microsoft's page also describes an Auto Refresh setting, where PivotTables built
 
 ### What if the new rows still don't show?
 
-The source range is probably too small. If your data is an Excel table, new rows are included automatically on refresh. If it's a plain range, the PivotTable still points at the old cells. Fix it as Microsoft describes in its article on [changing the source data for a PivotTable](https://support.microsoft.com/en-us/excel/change-the-source-data-for-a-pivottable): select the PivotTable, go to the **Analyze** tab, select **Change Data Source** twice (the button and then the menu item), select **Select a table or range**, enter the range in the Table/Range box and select **OK**. Microsoft adds that if the data changes a lot, for example by gaining or losing columns, a new PivotTable is often the cleaner choice.
+The source range is probably too small. If your data is an Excel table, new rows are included automatically on refresh. If it's a plain range, the PivotTable still points at the old cells. Fix it as Microsoft describes in its article on [changing the source data for a PivotTable](https://support.microsoft.com/excel/change-the-source-data-for-a-pivottable): select the PivotTable, go to the **Analyze** tab, select **Change Data Source** twice (the button and then the menu item), select **Select a table or range**, enter the range in the Table/Range box and select **OK**. Microsoft adds that if the data changes a lot, for example by gaining or losing columns, a new PivotTable is often the cleaner choice.
 
 If the PivotTable uses the Workbook Data Model, you can't change the data source this way.
 
@@ -117,7 +117,7 @@ If the PivotTable uses the Workbook Data Model, you can't change the data source
 
 Microsoft's article on deleting a PivotTable gives two ways. First, select the entire PivotTable and press **Delete**. If you see "Cannot change this part of a PivotTable report," press **Ctrl+A** to select everything and press Delete again. Second, click a cell in the PivotTable, go to **PivotTable Analyze** > **Select** > **Entire PivotTable**, and delete it from there. If the PivotTable sits alone on a sheet, you can delete the whole sheet.
 
-Be careful with that last route when the sheet also holds your source data. Microsoft's page doesn't say what happens to the source, so check that your data lives on a different sheet before you delete anything. Slicers are separate objects. Select a slicer and press **Delete** to remove it.
+Be careful with that last route. Microsoft says deleting the sheet is a fast way only when the PivotTable is on its own sheet with no other data you need, so check that your source data lives on a different sheet before you delete anything. Slicers are separate objects. Select a slicer and press **Delete** to remove it.
 
 ## When a pivot table gives wrong results
 
@@ -149,3 +149,13 @@ For work you'll hand to others, give the pivot table a clear sheet name, such as
 ## Next step
 
 Take one of your own lists, press Ctrl+T to make it a table, and create a pivot table from it with only one field in Rows and one in Values. When that works, add a slicer and refresh once after you change a number in the source. That's the whole loop for how to create a pivot table in Excel: prepare, build, filter and refresh.
+
+## Sources
+
+- [Create a PivotTable to analyze worksheet data (Microsoft Support)](https://support.microsoft.com/office/create-a-pivottable-to-analyze-worksheet-data-a9a84538-bfe9-40a9-a8e9-f99134456576)
+- [Overview of PivotTables and PivotCharts (Microsoft Support)](https://support.microsoft.com/excel/overview-of-pivottables-and-pivotcharts)
+- [Use slicers to filter data (Microsoft Support)](https://support.microsoft.com/office/use-slicers-to-filter-data-249f966b-a9d5-4b0f-b31a-12651785d29d)
+- [Filter data in a PivotTable (Microsoft Support)](https://support.microsoft.com/excel/get-started/filter-data-in-a-pivottable)
+- [Refresh PivotTable data (Microsoft Support)](https://support.microsoft.com/excel/refresh-pivottable-data)
+- [Change the source data for a PivotTable (Microsoft Support)](https://support.microsoft.com/excel/change-the-source-data-for-a-pivottable)
+- [Delete a PivotTable (Microsoft Support)](https://support.microsoft.com/excel/delete-a-pivottable)

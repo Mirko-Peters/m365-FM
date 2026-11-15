@@ -26,7 +26,7 @@ First, work out how the rows disappeared. Row numbers that jump, say from 14 to 
 
 ## Unhide a few rows
 
-Microsoft's article on how to [hide or show rows or columns](https://support.microsoft.com/en-us/excel/get-started/hide-or-show-rows-or-columns) gives two ways. A double line between two row numbers is the sign that a row is hidden there.
+Microsoft's article on how to [hide or show rows or columns](https://support.microsoft.com/excel/get-started/hide-or-show-rows-or-columns) gives two ways. A double line between two row numbers is the sign that a row is hidden there.
 
 **With the right-click menu:**
 
@@ -49,7 +49,7 @@ When rows are hidden in many places, don't hunt for each one.
 3. Under **Visibility**, choose **Hide & Unhide**, then **Unhide Rows**.
 4. For hidden columns, repeat step 3 and choose **Unhide Columns**.
 
-The menu path appears on Microsoft's page for the first row and column, which I'll get to next. The Select All step is the usual way to apply it to the whole sheet. Microsoft's hide-and-show page doesn't describe it, so check the result by looking at the row numbers afterward. The numbers should run in order without gaps.
+The menu path appears on Microsoft's page on unhiding the first row and column, covered below. The Select All step is the usual way to apply it to the whole sheet. Microsoft's hide-and-show page doesn't describe it, so check the result by looking at the row numbers afterward. The numbers should run in order without gaps.
 
 You can also right-click a row number after selecting the whole sheet and choose **Unhide**.
 
@@ -59,7 +59,7 @@ A row that was shrunk to a tiny height instead of being hidden still looks hidde
 
 ## Unhide row 1 or column A
 
-Row 1 is a special case. To unhide a row you normally select the rows above and below it, but nothing sits above row 1. So the right-click method fails. Microsoft's article on [unhiding the first column or row](https://support.microsoft.com/en-us/excel/unhide-the-first-column-or-row-in-a-worksheet) gives the fix:
+Row 1 is a special case. To unhide a row you normally select the rows above and below it, but nothing sits above row 1. So the right-click method fails. Microsoft's article on [unhiding the first column or row](https://support.microsoft.com/excel/unhide-the-first-column-or-row-in-a-worksheet) gives the fix:
 
 1. Select cell A1. Type `A1` in the **Name Box** next to the formula bar and press **Enter**. Or use **Home** > **Find & Select** > **Go To**, enter `A1` in the Reference box and select **OK**.
 2. On the **Home** tab, in the **Cells** group, select **Format**.
@@ -73,7 +73,7 @@ A filter hides rows too, but unhiding them doesn't work. You must clear the filt
 
 How to tell: a filter button sits in the header of the filtered column. Microsoft's filter article says the drop-down arrow changes to a filter icon when a filter is applied. Rows that don't match are hidden.
 
-The steps from Microsoft's page on [clearing or removing a filter](https://support.microsoft.com/en-us/excel/clear-or-remove-a-filter):
+The steps from Microsoft's page on [clearing or removing a filter](https://support.microsoft.com/excel/clear-or-remove-a-filter):
 
 1. To clear one column, click the filter button in its header and choose **Clear Filter from** the column name.
 2. To clear every filter on the sheet, go to the **Data** tab and select **Clear**.
@@ -85,17 +85,17 @@ Microsoft also notes that data hidden by a filter may be why you can't find a va
 
 Sometimes you want to see where the hidden rows are before you reveal them, for example when you inherit a file and don't know why parts are missing.
 
-**Locate hidden cells.** Microsoft's page on [locating hidden cells](https://support.microsoft.com/en-au/office/locate-hidden-cells-on-a-worksheet-94d66405-2d11-486d-925b-3575da95e5d8) describes this: press **Ctrl+G**, select **Special**, choose **Visible cells only** and select **OK**. The visible cells are selected, and the rows and columns next to hidden ones show a white border that marks where the hidden sections are.
+**Locate hidden cells.** Microsoft's page on [locating hidden cells](https://support.microsoft.com/office/locate-hidden-cells-on-a-worksheet-94d66405-2d11-486d-925b-3575da95e5d8) describes this: press **Ctrl+G**, select **Special**, choose **Visible cells only** and select **OK**. The visible cells are selected, and the rows and columns next to hidden ones show a white border that marks where the hidden sections are.
 
-**Document Inspector.** If you are about to share a file and want to know what you are hiding in it, use **File** > **Info** > **Check for Issues** > **Inspect Document**. Microsoft's general instructions for the inspector recommend running it on a copy, because removed content may not be recoverable. Microsoft's page that I checked does not list hidden rows and columns for Excel, so confirm in the dialog that this option exists in your version.
+**Document Inspector.** If you are about to share a file and want to know what you are hiding in it, use **File** > **Info** > **Check for Issues** > **Inspect Document**. Microsoft's page on the inspector recommends running it on a copy, because it is not always possible to restore the data it removes. That page doesn't say which Excel items the inspector checks, so confirm in the dialog that hidden rows and columns are listed in your version.
 
 ## Unhide with keyboard shortcuts
 
-Microsoft's shortcut list for Excel includes **Ctrl+9** to hide the selected rows and **Ctrl+0** to hide the selected columns. The unhide counterparts are widely used: **Ctrl+Shift+9** for rows and **Ctrl+Shift+0** for columns. Microsoft's page doesn't list them, and the column shortcut may not respond on some Windows setups, so if it does nothing, use the ribbon. Select rows on both sides of the hidden ones first, just like with the menu.
+Microsoft's shortcut list for Excel includes **Ctrl+9** to hide the selected rows and **Ctrl+0** to hide the selected columns. The unhide counterparts are widely used: **Ctrl+Shift+9** for rows and **Ctrl+Shift+0** for columns. Microsoft's page doesn't list them, and in our experience the column shortcut may not respond on some Windows setups, so if it does nothing, use the ribbon. Select rows on both sides of the hidden ones first, just like with the menu.
 
 ## Unhide all rows with a macro
 
-If you open many workbooks that hide rows, a short macro saves time. Microsoft's VBA documentation describes the `Hidden` property of a Range. You set it to False to show rows and columns, and the range has to span entire rows or columns. A macro that goes through every sheet is made of these lines, in this order:
+If you open many workbooks that hide rows, a short macro saves time. Microsoft's VBA documentation describes the `Hidden` property of a Range, and the range has to span entire rows or columns. The documentation's example sets it to True to hide a column, so setting it to False is the reverse, which shows the rows or columns again. A macro that goes through every sheet is made of these lines, in this order:
 
 - `Sub UnhideAllRowsCols()`
 - `Dim ws As Worksheet`
@@ -124,7 +124,7 @@ Note that this macro also reveals things that someone hid on purpose, such as he
 - Trying to unhide filtered rows with Unhide Rows. Clear the filter instead.
 - Forgetting row 1 and column A need the Name Box method.
 - Unhiding everything in a file that someone hid rows in on purpose, without asking.
-- Assuming the Document Inspector or any other tool covers every hidden item. White text on a white background, for example, is not found by it.
+- Assuming the Document Inspector or any other tool covers every hidden item. White text on a white background, for example, may not be found by it.
 
 ## Related topics to explore
 
@@ -137,3 +137,13 @@ Note that this macro also reveals things that someone hid on purpose, such as he
 ## Next step
 
 Open your file, select the whole sheet and run Unhide Rows once. Then scan the row numbers for gaps and check the headers for filter icons. If you need to unhide all rows in Excel regularly, keep the macro in a copy of your workbook, not in the original.
+
+## Sources
+
+- [Hide or show rows or columns (Microsoft Support)](https://support.microsoft.com/excel/get-started/hide-or-show-rows-or-columns)
+- [Unhide the first column or row in a worksheet (Microsoft Support)](https://support.microsoft.com/excel/unhide-the-first-column-or-row-in-a-worksheet)
+- [Clear or remove a filter (Microsoft Support)](https://support.microsoft.com/excel/clear-or-remove-a-filter)
+- [Locate hidden cells on a worksheet (Microsoft Support)](https://support.microsoft.com/office/locate-hidden-cells-on-a-worksheet-94d66405-2d11-486d-925b-3575da95e5d8)
+- [Keyboard shortcuts in Excel (Microsoft Support)](https://support.microsoft.com/office/keyboard-shortcuts-in-excel-1798d9d5-842a-42b8-9c99-9b7213f0040f)
+- [Range.Hidden property, Excel (Microsoft Learn)](https://learn.microsoft.com/office/vba/api/excel.range.hidden)
+- [Remove hidden data and personal information by inspecting documents, presentations, or workbooks (Microsoft Support)](https://support.microsoft.com/office/remove-hidden-data-and-personal-information-by-inspecting-documents-presentations-or-workbooks-356b7b5d-77af-44fe-a07f-9aa4d085966f)
