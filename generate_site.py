@@ -1965,7 +1965,7 @@ Mirko Peters, {BASE}/about/
     from site_i18n import write_src
     write_src(OUT, ROOT / "data" / "ui_js_en.json")
     import site_trstatus as TRS
-    try:
+    try:   # die Blogzeilen liest TRS.build selbst aus translate_blog.posts(); die Listen frueherer Beitraege und Content-Pakete hier sind nur der Rueckfall, wenn weder die noch die Podpage-Datei etwas liefern
         TRS.build(write, TODAY, list(ENT.ENTS.values()), [{"slug": p["slug"], "title": p["title"]} for p in _leg_all if p.get("legacy") and (p.get("lang") or "en") == "en"], [{"slug": x["slug"], "title": x["e"]["title"]} for x in PP.episode_index(BASE)["items"]], [{"slug": x["slug"], "title": x["title"]} for x in CBL.tr_sources(LRN.ENTS)])
     except Exception as _e:
         print("Uebersetzungsstatus nicht geschrieben:", str(_e)[:160])
