@@ -101,6 +101,10 @@
     }));
   }
   var currentPeriod = null, currentOrgs = [], currentCompanies = [], currentAdmin = false;
+  // Eigene Herkunft: nur Pfad und Abfrage. Liegt das Ziel woanders (PARTNER_BASE gesetzt, Seite noch auf www.m365.fm), die volle Adresse, sonst entstuenden tote Links wie www.m365.fm/placement/.
+  function linkTo(url) {
+    return url.origin === location.origin ? url.pathname + url.search : url.href;
+  }
   function detailUrl(org, placement) {
     var url = new URL(C.urls.placement, location.origin);
     url.searchParams.set("org", org.handle);
@@ -109,7 +113,7 @@
       url.searchParams.set("from", currentPeriod.from);
       url.searchParams.set("to", currentPeriod.to);
     }
-    return url.pathname + url.search;
+    return linkTo(url);
   }
   function nav(admin) {
     var links = [["overview", "dashboard"], ["placement", "placement_view"], ["report", "report_view"]];
@@ -118,7 +122,7 @@
       var url = new URL(C.urls[entry[0]], location.origin);
       var selected = currentOrgs.length === 1 ? currentOrgs[0].handle : new URLSearchParams(location.search).get("org");
       if (selected) url.searchParams.set("org", selected);
-      return node("a", { class: "btn", href: url.pathname + url.search, text: text(entry[1]) });
+      return node("a", { class: "btn", href: linkTo(url), text: text(entry[1]) });
     }));
   }
   function metricValue(value) {
@@ -565,7 +569,7 @@
     ]);
     var reportUrl = new URL(C.urls.report, location.origin);
     if (admin && orgs.length === 1) reportUrl.searchParams.set("org", orgs[0].handle);
-    actions.children[0].href = reportUrl.pathname + reportUrl.search;
+    actions.children[0].href = linkTo(reportUrl);
     actions.children[1].addEventListener("click", function () { exportCsv(orgs); });
     root.insertBefore(actions, root.children[1] || null);
     root.appendChild(node("section", { class: "sdb-panel" }, [
@@ -735,7 +739,7 @@
       var target = new URL(C.urls.report, location.origin);
       target.searchParams.set("org", org.handle);
       target.searchParams.set("month", monthInput.value);
-      location.href = target.pathname + target.search;
+      location.href = linkTo(target);
     });
     var month = /^\d{4}-(0[1-9]|1[0-2])$/.test(monthInput.value) ? monthInput.value : new Date().toISOString().slice(0, 7);
     monthInput.value = month;
@@ -748,7 +752,7 @@
         var target = new URL(C.urls.report, location.origin);
         target.searchParams.set("org", orgSelect.value);
         target.searchParams.set("month", month);
-        location.href = target.pathname + target.search;
+        location.href = linkTo(target);
       });
       root.appendChild(node("label", {}, [text("company"), orgSelect]));
     }

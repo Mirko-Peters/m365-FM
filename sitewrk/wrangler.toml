@@ -18,8 +18,8 @@ ORIGIN = "https://www.m365.fm"
 MIGRATED = "1"
 PARTNER_HOST = "partner.m365.fm"   # leer = keine Subdomain, keine Umleitung
 # "1" = www.m365.fm/sponsor/dashboard/... leitet per 301 auf partner.m365.fm um; "0" = nur die Subdomain, keine Umleitung (Notschalter).
-# Vorerst "0": erst auf "1" stellen, wenn https://partner.m365.fm/ nach dem Deploy antwortet (Zertifikat aktiv), sonst ist das Dashboard nicht erreichbar.
-PARTNER_REDIRECT = "0"
+# Seit 15.11.2026 "1": https://partner.m365.fm/ antwortet nach dem Deploy (Zertifikat aktiv). Zurueck auf "0" nur als Notschalter.
+PARTNER_REDIRECT = "1"
 # Hier aendern, nicht im Dashboard (wrangler deploy ueberschreibt Dashboard-Variablen).
 # R2 als Ursprung: "1" = Seiten und Dateien zuerst aus dem Bucket (pages/<pfad>, Spiegel der Website aus dem Deploy-Job, tools/r2_site_sync.py),
 # aber nur solange pages/r2-build.txt mit /r2-build.txt auf GitHub Pages uebereinstimmt - sonst automatisch GitHub Pages.

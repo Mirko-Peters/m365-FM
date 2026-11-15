@@ -230,3 +230,30 @@ test("sponsor dashboard: Status laeuft / Karenzzeit bis TT.MM.JJJJ / beendet mit
   assert.match(en, /Grace period until 07\/17\/2027/);
   assert.match(en, /Ended – figures stay visible/);
 });
+
+test("sponsor dashboard: Links auf partner.m365.fm bleiben volle Adresse, eigene Herkunft nur Pfad", async () => {
+  const hrefs = async (urls) => {
+    const root = new Element("main");
+    const document = { getElementById: () => root, createElement: (tag) => new Element(tag),
+      createTextNode: (text) => ({ textContent: String(text), children: [], querySelectorAll: () => [] }) };
+    const copy = new Proxy({}, { get: (t, k) => t[k] ?? String(k) });
+    const config = { api: "https://api.example", base: "https://www.m365.fm", lang: "en", today: "2026-11-30", view: "overview", urls, campaigns: [], copy };
+    const context = { window: { M365SP: config }, document, URL, URLSearchParams, Blob, Intl, Date, console, location: { origin: "https://www.m365.fm", search: "" },
+      fetch: async () => ({ status: 200, json: async () => ({ orgs: [{ handle: "acme", name: "Acme", metrics: [], placements: [], ads: [] }] }) }) };
+    vm.runInNewContext(readFileSync(new URL("../../assets/sponsor-dashboard.js", import.meta.url), "utf8"), context);
+    await new Promise((resolve) => setImmediate(resolve));
+    const out = [];
+    const walk = (e) => { if (e.tagName === "a") out.push(e.href || e.attributes.href); (e.children || []).forEach(walk); };
+    walk(root);
+    return out.filter(Boolean);
+  };
+  // PARTNER_BASE gesetzt, Seite aber noch auf www.m365.fm (PARTNER_REDIRECT "0"): keine toten Links wie www.m365.fm/placement/
+  const far = await hrefs({ dashboard: "https://partner.m365.fm/", placement: "https://partner.m365.fm/placement/", report: "https://partner.m365.fm/report/", sources: "https://partner.m365.fm/sources/" });
+  assert.ok(far.some((h) => h.startsWith("https://partner.m365.fm/placement/")), far.join(" "));
+  assert.ok(far.some((h) => h.startsWith("https://partner.m365.fm/report/")), far.join(" "));
+  assert.ok(!far.some((h) => /^\/(placement|report)\//.test(h)), far.join(" "));
+  // gleiche Herkunft: weiter nur Pfad und Abfrage
+  const near = await hrefs({ dashboard: "/en/sponsor/dashboard/", placement: "/en/sponsor/dashboard/placement/", report: "/en/sponsor/dashboard/report/", sources: "/en/sponsor/dashboard/sources/" });
+  assert.ok(near.some((h) => h.startsWith("/en/sponsor/dashboard/placement/")), near.join(" "));
+  assert.ok(!near.some((h) => h.startsWith("https://www.m365.fm/")), near.join(" "));
+});
