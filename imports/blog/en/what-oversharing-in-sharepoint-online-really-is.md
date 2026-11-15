@@ -1,8 +1,8 @@
 ---
 title: "What oversharing in SharePoint Online really is"
 summary: "Oversharing in SharePoint Online means content is reachable by more people than intended. Learn how sharing links and permissions cause it and which native Microsoft features to check first."
-status: review
-publish: false
+status: approved
+publish: true
 author: mirko-p
 date: 2026-11-15
 topics: [oversharing, sharepoint, sharepoint-permissions, sharepoint-sharing-links]
