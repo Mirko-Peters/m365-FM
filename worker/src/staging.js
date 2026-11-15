@@ -21,6 +21,7 @@ export const STAGING_STRIPPED = [
   "GOOGLE_MAPS_API_KEY", "GOOGLE_GEOCODING_KEY",               // Maps / Geocoding (kostet)
   "VAPID_PRIVATE_JWK", "VAPID_PUBLIC",                         // Web-Push
   "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT_SECRET", "PAYPAL_WEBHOOK_ID",   // echte PayPal-Zugaenge (nur die Sandbox-Variante bleibt)
+  "CF_API_TOKEN", "CF_ZONE_ID",                                // Blog auf eigener Domain: Custom Hostnames in der Live-Zone (byod_cf.js)
   "ADMIN_SUBS",                                                // kein Live-Admin in Staging
 ];
 
@@ -43,6 +44,7 @@ export const BLOCKED_HOSTS = [
   "api.heysummit.com",                                                    // HeySummit
   "api-m.paypal.com",                                                     // echtes PayPal (api-m.sandbox.paypal.com bleibt erlaubt)
   "updates.push.services.mozilla.com", "web.push.apple.com", "*.notify.windows.com",   // Web-Push der Browser-Anbieter
+  "api.cloudflare.com",                                                   // Cloudflare-API (byod_cf.js legt Custom Hostnames an/loescht sie)
   "api-dub.m365.fm",                                                      // Live-API: Staging redet nie mit Live
 ];
 

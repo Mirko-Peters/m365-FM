@@ -40,7 +40,7 @@ test("isStaging nur bei ENVIRONMENT=staging", () => {
 test("stagingEnv: gesperrte Secrets und Bindungen sind weg, DB bleibt, Zahlung und Werbung erzwungen", () => {
   const DB = { marker: 1 };
   const env = { ...STAGING, DB, EMAIL: {}, AI: {}, VEC: {}, RESEND_API_KEY: "r", ANTHROPIC_API_KEY: "a", CF_AIG_TOKEN: "c", SPREAKER_TOKEN: "s", YT_REFRESH_TOKEN: "y",
-    LINKEDIN_CLIENT_ID: "l", HEYSUMMIT_API_KEY: "h", GOOGLE_MAPS_API_KEY: "m", VAPID_PRIVATE_JWK: "v", PAYPAL_ENV: "live", ADS_BOOKING: "1", GOOGLE_CLIENT_ID: "login-ok" };
+    LINKEDIN_CLIENT_ID: "l", HEYSUMMIT_API_KEY: "h", CF_API_TOKEN: "cf", CF_ZONE_ID: "0123456789abcdef0123456789abcdef", GOOGLE_MAPS_API_KEY: "m", VAPID_PRIVATE_JWK: "v", PAYPAL_ENV: "live", ADS_BOOKING: "1", GOOGLE_CLIENT_ID: "login-ok" };
   const e = stagingEnv(env);
   for (const k of STAGING_STRIPPED) assert.equal(e[k], undefined, k + " muss in Staging fehlen");
   assert.equal(e.DB, DB, "D1 bleibt");
@@ -54,7 +54,7 @@ test("stagingEnv: gesperrte Secrets und Bindungen sind weg, DB bleibt, Zahlung u
 test("blockedHost: Dienste mit Wirkung nach aussen gesperrt, Lesen und Anmelden nicht", () => {
   for (const h of ["api.resend.com", "api.anthropic.com", "gateway.ai.cloudflare.com", "api.spreaker.com", "api.linkedin.com", "www.linkedin.com", "www.googleapis.com",
     "maps.googleapis.com", "fcm.googleapis.com", "api.heysummit.com", "api-m.paypal.com", "updates.push.services.mozilla.com", "web.push.apple.com",
-    "db5p.notify.windows.com", "API.RESEND.COM", "api-dub.m365.fm"]) assert.ok(blockedHost(h), h);
+    "db5p.notify.windows.com", "API.RESEND.COM", "api-dub.m365.fm", "api.cloudflare.com"]) assert.ok(blockedHost(h), h);
   for (const h of ["api-m.sandbox.paypal.com", "oauth2.googleapis.com", "openidconnect.googleapis.com", "login.microsoftonline.com", "graph.microsoft.com", "github.com",
     "api.github.com", "challenges.cloudflare.com", "staging.m365.fm", "api-staging.m365.fm", "www.m365.fm", "img.m365.fm", "www.youtube.com", "notify.windows.com.evil.example"]) assert.ok(!blockedHost(h), h);
 });
@@ -171,8 +171,12 @@ test("jeder Host im Quelltext des Workers ist klassifiziert (gesperrt oder erlau
     "www.youtube.com", "m.youtube.com", "music.youtube.com", "studio.youtube.com", "youtu.be", "youtube.com", "www.spreaker.com", "spreaker.com", "www.microsoft.com",
     "mvp.microsoft.com", "learn.microsoft.com", "powerbi.microsoft.com", "blog.fabric.microsoft.com", "sessionize.com", "www.meetup.com", "communitydays.org", "bsky.app",
     "www.powershellgallery.com", "www.nuget.org", "azuresearch-usnc.nuget.org", "www.npmjs.com", "registry.npmjs.org", "api.stackexchange.com",
+    "cloudflare-dns.com",   // nur DNS lesen (byod_cf.js, DNS-over-HTTPS)
+    // Namensraeume in erzeugtem XML/JSON-LD (byod_site.js)
+    "schema.org", "www.sitemaps.org",
     // Platzhalter im Quelltext
-    "x", "url", "host", "..", "...", "bild.jpg",
+    "x", "url", "host", "..", "...", "bild.jpg", "blog.kunde.de",
+    "invalid.invalid",   // nur Basis zum URL-Parsen in communitydays.js extUrl(), wird nie abgerufen
   ]);
   const dir = new URL("../src/", import.meta.url);
   const unknown = new Map();
