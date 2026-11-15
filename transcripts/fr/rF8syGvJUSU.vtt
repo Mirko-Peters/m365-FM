@@ -1,0 +1,1468 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.780
+Vous asseyez devant votre ordinateur, saisissez votre adresse e-mail, tapez votre mot de passe et appuyez sur Entrée.
+
+00:00:04.380 --> 00:00:06.640
+Il y a cette brève pause pendant que le système détermine si c'est bien vous.
+
+00:00:07.360 --> 00:00:09.740
+La plupart des gens supposent que cette pause sert juste à vérifier le mot de passe.
+
+00:00:10.220 --> 00:00:12.220
+Si le mot de passe correspond, vous êtes connecté, n'est-ce pas ?
+
+00:00:12.220 --> 00:00:12.620
+En fait, non.
+
+00:00:13.040 --> 00:00:15.180
+Il se passe beaucoup plus de choses en coulisses que vous n'imaginez probablement.
+
+00:00:15.580 --> 00:00:18.840
+Pendant que vous attendez, Microsoft 365 effectue une série de vérifications en arrière-plan.
+
+00:00:19.180 --> 00:00:23.040
+Il examine où vous vous trouvez, quel appareil vous utilisez et si la connexion semble normale ou suspecte.
+
+00:00:23.320 --> 00:00:24.980
+Et il fait tout cela avant de vous laisser entrer.
+
+00:00:24.980 --> 00:00:33.840
+A la fin de cet épisode, vous comprendrez ce qu'est l'accès conditionnel, comment il fonctionne, à chaque connexion et pourquoi c'est l'un des contrôles de sécurité les plus importants de votre tenant Microsoft 365.
+
+00:00:35.080 --> 00:00:36.560
+Commençons donc par la définition la plus simple.
+
+00:00:37.360 --> 00:00:39.620
+Qu'est-ce que l'accès conditionnel en réalité ?
+
+00:00:39.620 --> 00:00:40.840
+Voici une définition en termes simples.
+
+00:00:41.440 --> 00:00:44.920
+L'accès conditionnel est un moteur de stratégie qui vérifie le contexte avant d'autoriser l'accès.
+
+00:00:45.580 --> 00:00:47.680
+Il ne se contente pas de regarder votre mot de passe pour dire que c'est suffisant.
+
+00:00:48.300 --> 00:00:52.040
+Il pose plutôt des questions supplémentaires sur qui vous êtes et ce qui entoure votre tentative de connexion.
+
+00:00:52.940 --> 00:00:54.180
+Considérez cela comme le fils d'une boîte de nuit.
+
+00:00:54.180 --> 00:00:57.260
+Montrez votre pièce d'identité à la porte, c'est votre nom d'utilisateur et votre mot de passe.
+
+00:00:57.500 --> 00:00:59.960
+Mais un bon physionomiste ne se contente pas d'y jeter un coup d'œil pour vous faire entrer.
+
+00:01:00.340 --> 00:01:04.740
+Il vérifie votre nom sur la liste des invités, regarde votre tenue et pourrait même se souvenir si vous avez déjà causé des problèmes.
+
+00:01:05.300 --> 00:01:06.640
+L'accès conditionnel fait exactement la même chose.
+
+00:01:07.020 --> 00:01:12.760
+Il vérifie votre identité par rapport à des règles, voit d'où vous venez, contrôle votre appareil et décide si tout semble correct avant de vous laisser entrer.
+
+00:01:13.420 --> 00:01:14.220
+Voici un point clé.
+
+00:01:14.580 --> 00:01:17.160
+L'accès conditionnel s'exécute une fois que vous avez déjà saisi votre mot de passe.
+
+00:01:17.380 --> 00:01:19.380
+Ce n'est pas un remplacement de l'authentification multifacteur.
+
+00:01:19.720 --> 00:01:20.660
+C'est une couche supplémentaire par-dessus.
+
+00:01:24.180 --> 00:01:29.880
+La logique est simple, si alors, si un utilisateur tente d'accéder à une application cloud et qu'il remplit certaines conditions, alors appliquez cette règle.
+
+00:01:30.900 --> 00:01:35.600
+Par exemple, si quelqu'un essaie d'accéder à Outlook depuis l'extérieur du bureau, alors exigez une authentification multifacteur.
+
+00:01:36.740 --> 00:01:39.040
+C'est la structure de base derrière chaque stratégie d'accès conditionnel.
+
+00:01:39.940 --> 00:01:41.800
+Pourquoi les mots de passe ne suffisent plus ?
+
+00:01:41.800 --> 00:01:43.540
+Alors pourquoi avons-nous besoin de cette étape supplémentaire ?
+
+00:01:43.540 --> 00:01:44.960
+Parce que des mots de passe sont volés chaque jour.
+
+00:01:45.580 --> 00:01:48.860
+Attaques par phishing, violations de données, personne ne réutilise en même mot de passe sur plusieurs sites.
+
+00:01:49.480 --> 00:01:52.440
+Votre mot de passe pourrait être compromis en ce moment même, et vous ne le sauriez même pas.
+
+00:01:52.440 --> 00:01:55.420
+Alors, pourriez-vous dire, eh bien c'est bon, nous avons l'authentification multifacteur.
+
+00:01:55.760 --> 00:01:56.320
+Cela nous protège.
+
+00:01:56.700 --> 00:01:59.540
+Et vous avez raison, l'authentification multifacteur aide beaucoup, mais ce n'est pas une solution miracle.
+
+00:02:00.220 --> 00:02:02.500
+Imaginez qu'un pirate s'empare des mots de passe de l'un de vos employés.
+
+00:02:03.620 --> 00:02:07.900
+Il tente de se connecter depuis un pays inconnu avec un appareil jamais vu auparavant.
+
+00:02:08.500 --> 00:02:10.760
+L'authentification multifacteur pourrait le bloquer si il déclenche une demande de veille.
+
+00:02:11.100 --> 00:02:13.440
+Mais que se passe-t-il si le pirate a aussi accès au téléphone de l'employé ?
+
+00:02:14.100 --> 00:02:17.500
+Ou s'il utilise une attaque par hameçonnage qui intercepte aussi le code MFA ?
+
+00:02:17.500 --> 00:02:19.680
+Soudain, l'authentification multifacteur ne semble plus aussi infaillible.
+
+00:02:19.920 --> 00:02:20.900
+Voici un exemple concret.
+
+00:02:21.500 --> 00:02:23.340
+Les identifiants d'un commercial fuitent sur le dark web.
+
+00:02:24.040 --> 00:02:27.320
+Sans accès conditionnel, un attaquant peut se connecter depuis n'importe où.
+
+00:02:27.860 --> 00:02:30.580
+Peut accéder aux emails, aux fichiers, aux données clients, à tout.
+
+00:02:30.960 --> 00:02:32.480
+Et vous ne le sauriez jamais avant qu'il ne soit trop tard.
+
+00:02:32.800 --> 00:02:34.340
+L'ancienne méthode était basée sur le quinquennat.
+
+00:02:34.340 --> 00:02:38.400
+Vous donniez une licence, et l'utilisateur pouvait se connecter de partout, depuis n'importe quel appareil.
+
+00:02:38.840 --> 00:02:42.060
+Aucun contexte, aucune intelligence, juste une vérification de mot de passe et un accès total.
+
+00:02:42.400 --> 00:02:44.020
+L'accès conditionnel change radicalement la donne.
+
+00:02:44.440 --> 00:02:46.160
+Il ajoute du contexte à chaque tentative de connexion.
+
+00:02:46.520 --> 00:02:52.840
+Il analyse votre position, votre appareil, l'application visée et le risque, selon les critères Microsoft Point.
+
+00:02:53.300 --> 00:02:56.040
+Il transforme une décision binaire en un jugement intelligent et multicouche.
+
+00:02:57.060 --> 00:02:58.960
+Les signaux, ce que l'accès conditionnel examine.
+
+00:02:59.500 --> 00:03:01.880
+Alors que vérifie précisément l'accès conditionnel ?
+
+00:03:01.880 --> 00:03:04.140
+Décomposons les signaux utilisés pour prendre ces décisions.
+
+00:03:04.940 --> 00:03:06.100
+L'identité est le premier signal.
+
+00:03:06.600 --> 00:03:07.740
+Qui êtes-vous ?
+
+00:03:07.740 --> 00:03:12.040
+Un employé, un administrateur avec des privilèges ou un invité externe ?
+
+00:03:12.040 --> 00:03:15.220
+L'accès conditionnel analyse votre compte utilisateur et vos groupes d'appartenance.
+
+00:03:15.940 --> 00:03:19.220
+Un administrateur peut être soumis à des règles plus strictes qu'un utilisateur standard.
+
+00:03:19.900 --> 00:03:21.980
+Un invité pourrait être totalement bloqué sur certaines applications.
+
+00:03:22.520 --> 00:03:26.060
+Votre identité définit la base de ce qui est autorisé, la localisation et le point suivant.
+
+00:03:26.300 --> 00:03:27.720
+D'où provient la connexion ?
+
+00:03:27.720 --> 00:03:30.420
+Si vous vous connectez depuis le réseau du bureau, c'est un emplacement approuvé.
+
+00:03:31.020 --> 00:03:33.660
+L'accès conditionnel connaît la plage IP du siège de votre entreprise.
+
+00:03:34.480 --> 00:03:37.840
+Se connecter depuis un café dans un autre pays est un signal d'alerte ?
+
+00:03:37.840 --> 00:03:40.640
+Si le système ne peut même pas identifier votre position, c'est une autre alerte.
+
+00:03:41.060 --> 00:03:43.380
+La localisation est un signal fort car il est difficile à falsifier.
+
+00:03:43.740 --> 00:03:44.840
+L'appareil a également son importance.
+
+00:03:45.080 --> 00:03:46.400
+Que utilisez-vous pour vous connecter ?
+
+00:03:46.400 --> 00:03:49.840
+Un ordinateur portable d'entreprise géré par Intune et conforme à vos politiques ?
+
+00:03:50.480 --> 00:03:52.860
+Ou un téléphone personnel sans aucun contrôle ?
+
+00:03:52.860 --> 00:03:58.080
+L'accès conditionnel peut vérifier si l'appareil est géré, chiffré et à jour.
+
+00:03:59.200 --> 00:04:01.340
+Un appareil non géré peut être bloqué ou restreint.
+
+00:04:01.700 --> 00:04:02.500
+L'application compte aussi.
+
+00:04:02.900 --> 00:04:04.620
+A quelle application essayez-vous d'accéder ?
+
+00:04:04.620 --> 00:04:08.120
+Outlook, SharePoint, Teams ou une application métier personnalisée ?
+
+00:04:08.120 --> 00:04:10.060
+Toutes les applications n'ont pas les mêmes exigences de sécurité.
+
+00:04:10.660 --> 00:04:15.360
+Un système financier traitant des données sensibles peut exiger des contrôles plus stricts qu'un espace collaboratif.
+
+00:04:16.200 --> 00:04:19.060
+L'accès conditionnel vous permet de définir des règles différentes selon les applications.
+
+00:04:19.600 --> 00:04:22.400
+Si vous avez la licence appropriée, il existe un niveau supplémentaire, le risque de connexion.
+
+00:04:22.620 --> 00:04:25.540
+Microsoft utilise l'apprentissage automatique pour éveiller chaque connexion en temps réel.
+
+00:04:26.080 --> 00:04:28.620
+Il recherche des modèles suspects, déplacement impossible,
+
+00:04:28.940 --> 00:04:31.080
+connexion depuis New York puis Londres 5 minutes plus tard,
+
+00:04:31.200 --> 00:04:34.860
+adresse IP anonyme ou identifiant issu de fuites de données connues.
+
+00:04:35.720 --> 00:04:39.600
+Le système attribue un niveau de risque, faible, moyen ou élevé, sur lequel l'accès conditionnel peut agir.
+
+00:04:40.060 --> 00:04:41.180
+Il existe également le risque à l'utiliser.
+
+00:04:41.500 --> 00:04:42.640
+C'est différent du risque de connexion.
+
+00:04:43.100 --> 00:04:44.540
+Le risque utilisateur se concentre sur le compte lui.
+
+00:04:44.840 --> 00:04:47.020
+Le mot de passe de cet utilisateur est-il apparu dans une fuite de deux ?
+
+00:04:47.020 --> 00:04:49.100
+Y a-t-il eu une activité inhabituelle au fil du temps ?
+
+00:04:49.100 --> 00:04:51.040
+Si le système détecte qu'un compte peut être compromis,
+
+00:04:51.040 --> 00:04:54.060
+il peut bloquer l'accès jusqu'à ce que l'utilisateur réinitialise son mot de passe.
+
+00:04:54.680 --> 00:04:56.260
+Enfin, il existe le contexte d'authentification.
+
+00:04:56.640 --> 00:05:00.000
+Cela vous permet d'ajouter des exigences de sécurité spécifiques à certains contenus sensibles.
+
+00:05:00.360 --> 00:05:03.240
+Par exemple, toute personne accédant au site SharePoint financier doit utiliser
+
+00:05:03.240 --> 00:05:06.160
+un appareil conforme et une méthode MFA résistante au hameçonnage.
+
+00:05:06.820 --> 00:05:09.680
+Cela protège vos données les plus précieuses, sans ralentir le reste.
+
+00:05:10.740 --> 00:05:13.600
+Une fois ces signaux collectés, le moteur de stratégie décide de la marche à suivre.
+
+00:05:14.160 --> 00:05:15.040
+Voyons comment cela fonctionne.
+
+00:05:15.640 --> 00:05:18.140
+Le moteur de décision, comment fonctionnent les stratégies ?
+
+00:05:18.140 --> 00:05:20.820
+Chaque stratégie d'accès conditionnel fonctionne comme une règle qu'excie à l'Europe.
+
+00:05:21.260 --> 00:05:24.100
+Vous sélectionnez les signaux comme conditions, puis décidez de l'action à entreprendre.
+
+00:05:24.480 --> 00:05:25.180
+C'est tout simplement cela.
+
+00:05:25.680 --> 00:05:27.400
+Il y a donc trois parties principales dans une stratégie.
+
+00:05:27.700 --> 00:05:29.200
+La première partie concerne les affectations.
+
+00:05:29.440 --> 00:05:30.540
+A qui s'applique la stratégie ?
+
+00:05:30.540 --> 00:05:31.520
+Quelle application est visée ?
+
+00:05:31.520 --> 00:05:33.360
+Et quelles conditions déclenchent la règle ?
+
+00:05:33.360 --> 00:05:34.940
+La deuxième partie concerne les contrôles d'accès.
+
+00:05:35.040 --> 00:05:37.140
+Que se passe-t-il lorsque ces conditions sont remplies ?
+
+00:05:37.140 --> 00:05:38.700
+Autorisez-vous l'accès, le bloquez-vous ?
+
+00:05:38.700 --> 00:05:42.140
+Ou exigez-vous quelque chose comme une MFA ou un appareil conforme ?
+
+00:05:42.140 --> 00:05:43.920
+La troisième partie concerne les contrôles de session,
+
+00:05:43.920 --> 00:05:45.800
+qui gère ce qui se passe une fois l'utilisateur connecté.
+
+00:05:46.360 --> 00:05:48.460
+Par exemple, la fréquence à laquelle il doit se réauthentifier.
+
+00:05:48.920 --> 00:05:50.000
+Laissez-moi vous donner un exemple concret.
+
+00:05:50.420 --> 00:05:52.860
+Si un utilisateur du groupe commercial tente d'accéder à SharePoint
+
+00:05:52.860 --> 00:05:55.540
+depuis un appareil non géré, alors bloquez l'accès.
+
+00:05:55.820 --> 00:05:56.660
+Voilà une stratégie complète.
+
+00:05:57.280 --> 00:05:59.380
+Qui, quelle application, quelles conditions, quelles actions ?
+
+00:05:59.380 --> 00:06:00.600
+Les contrôles d'autorisation sont flexibles.
+
+00:06:01.000 --> 00:06:02.240
+Vous pouvez exiger plusieurs choses à la fois.
+
+00:06:02.880 --> 00:06:04.720
+Par exemple, vous voulez qu'un utilisateur effectue une MFA
+
+00:06:04.720 --> 00:06:05.980
+et utilise un appareil conforme.
+
+00:06:06.360 --> 00:06:07.400
+Les deux conditions doivent être remplies.
+
+00:06:07.800 --> 00:06:09.320
+Ou vous pourriez dire qu'ils ont besoin de l'un ou de l'autre.
+
+00:06:09.680 --> 00:06:10.580
+Le système vous laisse choisir.
+
+00:06:10.580 --> 00:06:12.380
+Maintenant, le blocage est le contrôle le plus puissant.
+
+00:06:12.600 --> 00:06:14.440
+Si une stratégie impose un blocage, c'est le blocage qui l'emporte.
+
+00:06:14.640 --> 00:06:17.420
+Il n'y a aucune exception, sauf pour les exclusions que vous définissez explicitement.
+
+00:06:17.740 --> 00:06:18.740
+C'est pourquoi vous devez être prudent.
+
+00:06:19.180 --> 00:06:21.280
+Une erreur, et vous pourriez bloquer l'accès à toute votre organisation.
+
+00:06:21.940 --> 00:06:24.600
+Avant d'activer une stratégie et une fonctionnalité essentielle à connaître,
+
+00:06:25.820 --> 00:06:26.960
+le mode ACAM rapporte uniquement.
+
+00:06:27.600 --> 00:06:30.400
+Cela vous permet de voir ce qu'une stratégie ferait avant qu'elle ne soit réellement appliquée.
+
+00:06:30.900 --> 00:06:32.980
+Vous pouvez exécuter une stratégie en mode rapport pendant une semaine,
+
+00:06:33.200 --> 00:06:34.100
+vérifier les gens d'autres connexions,
+
+00:06:34.100 --> 00:06:36.800
+et voir combien d'utilisateurs auraient été bloqués ou invités à s'authentifier par MFA.
+
+00:06:37.340 --> 00:06:38.920
+C'est un moyen sûr de tester sans rien casser.
+
+00:06:39.600 --> 00:06:40.720
+Maintenant que vous comprenez le moteur,
+
+00:06:41.100 --> 00:06:43.460
+parlons des stratégies les plus courantes que chaque entreprise devrait avoir.
+
+00:06:44.340 --> 00:06:46.640
+Le trio gagnant, les stratégies de base dès le premier jour.
+
+00:06:47.160 --> 00:06:49.240
+Alors que devriez-vous configurer en premier ?
+
+00:06:49.240 --> 00:06:52.520
+Laissez-moi vous donner les trois stratégies de base que chaque entreprise devrait avoir dès le premier jour.
+
+00:06:53.120 --> 00:06:54.800
+Pas au 30e jour, et pas après un audit.
+
+00:06:55.660 --> 00:06:57.460
+La stratégie numéro 1 est fondamentale,
+
+00:06:57.820 --> 00:06:59.840
+exigez la MFA pour tous les utilisateurs,
+
+00:07:00.180 --> 00:07:01.200
+pas seulement les administrateurs, tout le monde.
+
+00:07:01.520 --> 00:07:05.080
+Chaque personne qui se connecte à votre tenant doit prouver son identité avec un second facteur.
+
+00:07:05.080 --> 00:07:06.840
+Mais voici le point important,
+
+00:07:06.940 --> 00:07:08.340
+toutes les méthodes MFA ne se valent pas.
+
+00:07:08.760 --> 00:07:10.840
+Vous ne voulez pas que les gens utilisent des codes SMS ou des appels vocaux.
+
+00:07:11.320 --> 00:07:13.240
+Ces méthodes sont faibles, peuvent être interceptées.
+
+00:07:13.640 --> 00:07:14.880
+Ce que vous voulez c'est quelque chose de plus robuste.
+
+00:07:15.540 --> 00:07:17.420
+Microsoft propose les forces d'authentification AMU
+
+00:07:17.420 --> 00:07:20.320
+qui vous permettent de choisir précisément quelles méthodes sont acceptables.
+
+00:07:21.360 --> 00:07:22.840
+L'application Microsoft Authenticator,
+
+00:07:22.980 --> 00:07:26.040
+les clés de sécurité Fido2, Windows et l'O entreprise, ce sont les bonnes.
+
+00:07:27.100 --> 00:07:28.820
+Donc lorsque vous créez votre stratégie MFA,
+
+00:07:28.820 --> 00:07:30.960
+ne cochez pas simplement la case exigeur MFA.
+
+00:07:30.960 --> 00:07:34.280
+Soyez précis, ne choisissez que les méthodes fortes.
+
+00:07:34.680 --> 00:07:37.020
+Stratégie numéro 2, bloquer l'authentification héritée.
+
+00:07:37.280 --> 00:07:38.540
+Cela semble technique, mais c'est simple.
+
+00:07:39.080 --> 00:07:42.240
+Il existe d'anciens protocoles que Microsoft 365 prend toujours en charge.
+
+00:07:42.500 --> 00:07:45.680
+POP, IMAP, SMTP, les anciennes versions d'Exchange ActiveSync.
+
+00:07:46.240 --> 00:07:49.420
+Ces protocoles ont été créés avant que quiconque ne pense à l'authentification multifacteur
+
+00:07:49.420 --> 00:07:50.520
+et ne la supporte pas.
+
+00:07:51.020 --> 00:07:52.600
+Ainsi, si un attaquant obtient un mot de passe,
+
+00:07:52.660 --> 00:07:54.740
+il peut utiliser l'un de ces vieux protocoles pour se connecter
+
+00:07:54.740 --> 00:07:56.040
+et contourner complètement votre MFA.
+
+00:07:56.500 --> 00:07:57.240
+C'est une faille majeure.
+
+00:07:57.240 --> 00:07:58.340
+La solution est simple.
+
+00:07:58.900 --> 00:08:01.600
+Créez une stratégie d'accès conditionnel qui bloque toute authentification héritée
+
+00:08:01.600 --> 00:08:02.600
+pour tous les utilisateurs,
+
+00:08:03.240 --> 00:08:05.400
+à moins d'un besoin professionnel spécifique pour un vieux scanner
+
+00:08:05.400 --> 00:08:07.160
+ou une imprimante utilisant SMTP.
+
+00:08:07.540 --> 00:08:08.840
+Désactivez-la, désactivez-la.
+
+00:08:09.040 --> 00:08:11.460
+C'est l'un des contrôles de sécurité les plus efficaces que vous puissiez activer.
+
+00:08:12.060 --> 00:08:14.640
+Stratégie numéro 3, exigez des appareils conformes pour les administrateurs.
+
+00:08:15.140 --> 00:08:17.160
+Les comptes administrateurs sont les joyaux de la couronne de votre nom.
+
+00:08:17.520 --> 00:08:19.300
+Si quelqu'un compromet un compte administrateur global,
+
+00:08:19.640 --> 00:08:20.260
+il a accès à tout.
+
+00:08:20.720 --> 00:08:23.020
+Vous devez donc verrouiller ses comptes plus étroitement que n'importe qui d'autre.
+
+00:08:23.720 --> 00:08:26.460
+Cette politique stipule que toute personne ayant un rôle d'administrateur
+
+00:08:26.460 --> 00:08:28.460
+doit utiliser un appareil appartenant à l'entreprise
+
+00:08:28.460 --> 00:08:30.740
+qui respecte vos exigences de sécurité inscrits dans la gestion
+
+00:08:30.740 --> 00:08:32.460
+avec chiffrement activé comme BitLocker,
+
+00:08:32.800 --> 00:08:34.580
+Defender en cours d'exécution et les correctifs à jour.
+
+00:08:35.400 --> 00:08:37.960
+Si un administrateur tente de se connecter depuis un ordinateur personnel
+
+00:08:37.960 --> 00:08:39.660
+ou une vieille machine ne répondant pas à ses normes,
+
+00:08:39.760 --> 00:08:40.440
+l'accès est bloqué.
+
+00:08:41.220 --> 00:08:43.340
+C'est un moyen simple de s'assurer que vos comptes les plus puissants
+
+00:08:43.340 --> 00:08:44.500
+sont aussi les mieux protégés.
+
+00:08:45.300 --> 00:08:47.060
+Avant de continuer, je dois aborder un point critique,
+
+00:08:47.180 --> 00:08:48.760
+les comptes Kaglaski ou comptes de secours.
+
+00:08:49.560 --> 00:08:50.880
+Ce sont des comptes administrateurs d'urgence
+
+00:08:50.880 --> 00:08:53.040
+que vous gardez en dehors de vos politiques d'accès conditionnels.
+
+00:08:53.640 --> 00:08:54.340
+Vous en créez au moins deux,
+
+00:08:54.340 --> 00:08:55.640
+utilisant des mots de passe long et complexe
+
+00:08:55.640 --> 00:08:57.660
+ainsi qu'une authentification MFA résistante au phishing
+
+00:08:57.660 --> 00:08:59.020
+comme une clé de sécurité FIDO2.
+
+00:08:59.620 --> 00:09:01.300
+Vous stockez les identifiants de manière sécurisée,
+
+00:09:01.440 --> 00:09:02.920
+peut-être dans un coffre-fort ou une armoire verrouillée.
+
+00:09:03.440 --> 00:09:04.120
+L'objectif est simple.
+
+00:09:04.720 --> 00:09:06.820
+Si vous vous verrouillez accidentellement hors de votre locataire
+
+00:09:06.820 --> 00:09:07.680
+avec une mauvaise politique,
+
+00:09:07.800 --> 00:09:09.320
+vous pouvez utiliser un compte de secours pour revenir.
+
+00:09:10.180 --> 00:09:12.080
+Ils sont exclus de chaque politique d'accès conditionnel.
+
+00:09:12.520 --> 00:09:12.960
+C'est voulu.
+
+00:09:13.480 --> 00:09:15.380
+Sans eux, vous risquez d'être bloqués hors de haute propre système
+
+00:09:15.380 --> 00:09:16.080
+sans moyen d'y rentrer.
+
+00:09:16.560 --> 00:09:18.200
+Pourquoi seulement trois politiques pour le premier jour ?
+
+00:09:18.200 --> 00:09:19.180
+Est-ce que vous voulez vous concentrer d'abord
+
+00:09:19.180 --> 00:09:20.940
+sur les contrôles ayant le plus fort impact ?
+
+00:09:20.940 --> 00:09:22.580
+Ces trois-là comblent les plus grandes failles de sécurité.
+
+00:09:22.880 --> 00:09:24.520
+Le MFA stoppe la plupart des vols d'identifiant,
+
+00:09:24.700 --> 00:09:25.700
+bloquez l'authentification héritée,
+
+00:09:25.780 --> 00:09:26.320
+ferme la porte des robots.
+
+00:09:26.880 --> 00:09:28.320
+Des appareils conformes pour les administrateurs
+
+00:09:28.320 --> 00:09:29.500
+protègent vos comptes les plus sensibles.
+
+00:09:30.120 --> 00:09:31.860
+Vous pourrez affiner plus tard avec des politiques granulaires,
+
+00:09:32.000 --> 00:09:32.640
+mais commencez par là.
+
+00:09:33.480 --> 00:09:35.500
+Politiques avancées, risques et personnaces.
+
+00:09:36.140 --> 00:09:36.840
+Une fois les bases en place,
+
+00:09:36.920 --> 00:09:38.500
+vous pouvez ajouter des contrôles plus avancés.
+
+00:09:39.000 --> 00:09:40.580
+C'est là qu'interviennent les politiques basées sur le risque
+
+00:09:40.580 --> 00:09:41.400
+et les règles basées sur les personnes.
+
+00:09:41.780 --> 00:09:42.840
+Les politiques de risque de connexion
+
+00:09:42.840 --> 00:09:44.380
+utilisent l'apprentissage automatique de Microsoft
+
+00:09:44.380 --> 00:09:46.140
+pour surveiller chaque tentative de connexion en temps réel.
+
+00:09:46.140 --> 00:09:49.140
+Si quelqu'un tente de se connecter depuis une adresse IP anonyme,
+
+00:09:49.520 --> 00:09:51.420
+ou si le système détecte un déplacement impossible,
+
+00:09:51.920 --> 00:09:53.440
+comme une connexion depuis New York puis Tokyo
+
+00:09:53.440 --> 00:09:54.080
+dix minutes plus tard,
+
+00:09:54.160 --> 00:09:55.960
+il classe cette connexion comme à haut risque.
+
+00:09:56.760 --> 00:09:57.940
+A partir de là, vous définissez une politique
+
+00:09:57.940 --> 00:09:58.900
+qui dit que si le risque est élevé,
+
+00:09:58.980 --> 00:10:00.700
+bloquez l'accès ou forcez immédiatement le MFA.
+
+00:10:01.460 --> 00:10:03.540
+Le piège est que vous avez besoin d'une licence central IDP2,
+
+00:10:03.640 --> 00:10:04.880
+mais c'est l'un des contrôles les plus puissants
+
+00:10:04.880 --> 00:10:05.540
+que vous puissiez ajouter
+
+00:10:05.540 --> 00:10:07.500
+car il intercepte des attaques que l'air extatique manque.
+
+00:10:08.320 --> 00:10:09.340
+Les politiques de risque utilisateurs
+
+00:10:09.340 --> 00:10:10.680
+examinent le compte lui-même au fil du temps,
+
+00:10:10.820 --> 00:10:11.960
+pas seulement un événement de connexion.
+
+00:10:11.960 --> 00:10:14.480
+Si Microsoft détecte que les identifiants d'un utilisateur
+
+00:10:14.480 --> 00:10:15.880
+sont apparus dans une violation de données connue,
+
+00:10:15.960 --> 00:10:17.220
+marque cet utilisateur comme étant en risque.
+
+00:10:17.500 --> 00:10:18.440
+Vous pouvez alors définir une politique
+
+00:10:18.440 --> 00:10:20.420
+qui bloque l'accès jusqu'à ce qu'il réinitialise leur mot de passe.
+
+00:10:20.840 --> 00:10:21.920
+Et oui, cela nécessite aussi une licence central.
+
+00:10:22.620 --> 00:10:24.240
+Ensemble, les stratégies de risque de connexion
+
+00:10:24.240 --> 00:10:25.120
+et de risque utilisateur
+
+00:10:25.120 --> 00:10:26.340
+créent une couche de sécurité dynamique
+
+00:10:26.340 --> 00:10:27.500
+qui s'adapte aux menaces en temps réel.
+
+00:10:28.040 --> 00:10:29.620
+Les stratégies basées sur les personas, quant à elles,
+
+00:10:29.720 --> 00:10:30.420
+répondent à un problème différent.
+
+00:10:30.800 --> 00:10:31.720
+Tous les membres de votre organisation
+
+00:10:31.720 --> 00:10:33.040
+n'ont pas les mêmes besoins en matière de sécurité.
+
+00:10:33.580 --> 00:10:35.200
+Vos administrateurs ont besoin des règles plus strictes
+
+00:10:35.200 --> 00:10:36.800
+tandis que les contractuels et le personnel temporaire
+
+00:10:36.800 --> 00:10:37.760
+peuvent nécessiter un accès limité.
+
+00:10:38.180 --> 00:10:39.480
+Et les invités extérieurs à votre entreprise
+
+00:10:39.480 --> 00:10:40.780
+requièrent des contrôles totalement différents.
+
+00:10:41.940 --> 00:10:43.020
+Les stratégies basées sur les personas
+
+00:10:43.020 --> 00:10:44.520
+vous permettent de regrouper les utilisateurs par rôle
+
+00:10:44.520 --> 00:10:45.800
+et d'appliquer le niveau de protection approprié.
+
+00:10:46.040 --> 00:10:46.900
+Voici un exemple concret.
+
+00:10:47.400 --> 00:10:49.060
+Les contractuels utilisent souvent leurs propres appareils
+
+00:10:49.060 --> 00:10:49.700
+que vous ne gérez pas.
+
+00:10:50.020 --> 00:10:51.520
+Vous ne savez donc pas s'ils utilisent un antivirus
+
+00:10:51.520 --> 00:10:52.660
+ou s'ils effectuent les mises à jour.
+
+00:10:53.600 --> 00:10:54.680
+Au lieu de leur donner un accès complet,
+
+00:10:54.940 --> 00:10:56.400
+vous créez une stratégie qui les limite à un accès
+
+00:10:56.400 --> 00:10:57.340
+via navigateur uniquement,
+
+00:10:57.540 --> 00:10:59.000
+sans application de bureau ni mobile.
+
+00:10:59.500 --> 00:11:00.480
+Et même au sein du navigateur,
+
+00:11:00.560 --> 00:11:01.300
+vous restreignez les actions.
+
+00:11:01.720 --> 00:11:03.340
+Ils peuvent visualiser et modifier des fichiers
+
+00:11:03.340 --> 00:11:04.240
+mais ne peuvent pas les télécharger
+
+00:11:04.240 --> 00:11:05.440
+ou les synchroniser sur leur propre appareil.
+
+00:11:05.740 --> 00:11:07.860
+Ainsi, les contractuels restent productifs
+
+00:11:07.860 --> 00:11:09.960
+sans exposer vos données à des risques inutiles.
+
+00:11:11.060 --> 00:11:12.860
+Les contextes d'authentification poussent cette idée plus loin
+
+00:11:12.860 --> 00:11:15.040
+en protégeant un contenu spécifique au sein d'une application
+
+00:11:15.040 --> 00:11:16.320
+plutôt que l'application entière.
+
+00:11:17.060 --> 00:11:19.060
+Par exemple, votre équipe financière possède un site SharePoint
+
+00:11:19.060 --> 00:11:20.280
+contenant des données financières sensibles.
+
+00:11:20.940 --> 00:11:22.560
+Vous pouvez y associer un contexte d'authentification
+
+00:11:22.560 --> 00:11:24.240
+de sorte que toute personne souhaitant y accéder
+
+00:11:24.240 --> 00:11:25.880
+doivent utiliser un appareil conforme
+
+00:11:25.880 --> 00:11:27.960
+et une authentification multifacteur résistante au phishing
+
+00:11:27.960 --> 00:11:30.040
+même si elle est déjà connectée à Microsoft 365.
+
+00:11:30.820 --> 00:11:31.720
+C'est un ciblage de précision
+
+00:11:31.720 --> 00:11:33.000
+pour vos informations les plus sensibles.
+
+00:11:33.340 --> 00:11:34.800
+L'évaluation continue de l'accès
+
+00:11:34.800 --> 00:11:36.180
+révoque les accès en tant que quasi réels
+
+00:11:36.180 --> 00:11:37.060
+dès qu'un changement survient.
+
+00:11:37.900 --> 00:11:39.300
+Si un administrateur désactive un compte
+
+00:11:39.300 --> 00:11:40.600
+ou qu'un appareil est déclaré perdu,
+
+00:11:41.000 --> 00:11:42.240
+la session se termine immédiatement
+
+00:11:42.240 --> 00:11:43.660
+sans attendre l'expiration du jeton.
+
+00:11:44.340 --> 00:11:46.120
+C'est essentiel pour répondre rapidement aux incidents.
+
+00:11:46.700 --> 00:11:47.640
+Tout cela semble puissant,
+
+00:11:48.240 --> 00:11:50.920
+mais comment s'y prendre concrètement sans rien casser ?
+
+00:11:50.920 --> 00:11:52.740
+Démarrez en passant des paramètres de sécurité par défaut
+
+00:11:52.740 --> 00:11:53.700
+stratégie personnalisée.
+
+00:11:54.560 --> 00:11:55.640
+Si vous avez un tout nouveau tenant,
+
+00:11:55.760 --> 00:11:56.500
+vous ne partez pas de zéro
+
+00:11:56.500 --> 00:11:57.920
+car Microsoft active par défaut
+
+00:11:57.920 --> 00:11:59.920
+ce qu'on appelle les paramètres de sécurité par défaut.
+
+00:12:01.240 --> 00:12:02.980
+Il s'agit d'un ensemble de protections de base
+
+00:12:02.980 --> 00:12:04.420
+qui impose l'authentification multifacteur
+
+00:12:04.420 --> 00:12:05.000
+aux administrateurs
+
+00:12:05.000 --> 00:12:06.180
+et bloque l'authentification héritée.
+
+00:12:06.860 --> 00:12:07.740
+C'est un bon point de départ,
+
+00:12:07.900 --> 00:12:08.660
+mais il est limité.
+
+00:12:09.260 --> 00:12:10.180
+Vous ne pouvez pas le personnaliser
+
+00:12:10.180 --> 00:12:10.980
+ou cibler des applications
+
+00:12:10.980 --> 00:12:11.920
+ou des utilisateurs spécifiques.
+
+00:12:12.520 --> 00:12:14.060
+C'est une solution unique pour tous.
+
+00:12:14.720 --> 00:12:16.160
+Dès que vous créez votre première stratégie
+
+00:12:16.160 --> 00:12:17.480
+d'accès conditionnel personnalisé,
+
+00:12:17.600 --> 00:12:18.980
+les paramètres de sécurité par défaut
+
+00:12:18.980 --> 00:12:20.060
+se désactivent automatiquement
+
+00:12:20.060 --> 00:12:21.200
+en vous donnant ainsi le contrôle.
+
+00:12:21.720 --> 00:12:22.360
+C'est une bonne chose,
+
+00:12:22.500 --> 00:12:23.200
+mais cela signifie aussi
+
+00:12:23.200 --> 00:12:24.040
+que vous devez savoir ce que vous faites
+
+00:12:24.040 --> 00:12:25.120
+car vous ne pouvez plus compter
+
+00:12:25.120 --> 00:12:25.940
+sur les filets de sécurité.
+
+00:12:26.440 --> 00:12:27.620
+Voici donc comment procéder en toute sécurité.
+
+00:12:27.620 --> 00:12:28.260
+Tout d'abord,
+
+00:12:28.580 --> 00:12:29.200
+commencez par le mode
+
+00:12:29.200 --> 00:12:30.580
+rapport seul pour chaque nouvelle stratégie
+
+00:12:30.580 --> 00:12:31.340
+et laissez-le fonctionner
+
+00:12:31.340 --> 00:12:32.040
+pendant moins une semaine.
+
+00:12:32.560 --> 00:12:33.480
+Consultez les journaux de connexion
+
+00:12:33.480 --> 00:12:34.320
+pour voir ce qui se serait passé,
+
+00:12:34.520 --> 00:12:35.220
+comme le nombre d'utilisateurs
+
+00:12:35.220 --> 00:12:35.840
+qui auraient été bloqués
+
+00:12:35.840 --> 00:12:36.440
+ou invités à effectuer
+
+00:12:36.440 --> 00:12:37.460
+une authentification multifacteur.
+
+00:12:38.040 --> 00:12:38.700
+Ces données vous indiquent
+
+00:12:38.700 --> 00:12:40.060
+si votre stratégie est trop stricte
+
+00:12:40.060 --> 00:12:40.640
+ou trop souple
+
+00:12:40.640 --> 00:12:41.420
+avant de l'appliquer.
+
+00:12:42.380 --> 00:12:42.660
+Deuxièmement,
+
+00:12:42.780 --> 00:12:43.880
+utilisez l'outil Ake Siokme
+
+00:12:43.880 --> 00:12:45.000
+dans le centre d'administration
+
+00:12:45.000 --> 00:12:46.160
+ENTRA pour tester une stratégie
+
+00:12:46.160 --> 00:12:46.840
+sur un utilisateur,
+
+00:12:46.920 --> 00:12:47.320
+une application,
+
+00:12:47.440 --> 00:12:47.860
+une application,
+
+00:12:47.980 --> 00:12:48.820
+une application de l'activé.
+
+00:12:49.300 --> 00:12:50.200
+Vous pouvez simuler exactement
+
+00:12:50.200 --> 00:12:50.700
+ce qui se passerait
+
+00:12:50.700 --> 00:12:51.320
+si quelqu'un tentait
+
+00:12:51.320 --> 00:12:52.320
+de se connecter depuis un café
+
+00:12:52.320 --> 00:12:52.960
+dans un autre pays
+
+00:12:52.960 --> 00:12:54.120
+avec un appareil personnel.
+
+00:12:54.940 --> 00:12:55.580
+C'est un moyen sûr
+
+00:12:55.580 --> 00:12:56.420
+de détecter les problèmes
+
+00:12:56.420 --> 00:12:57.460
+avant qu'ils ne deviennent réels.
+
+00:12:58.680 --> 00:12:59.000
+Troisièmement,
+
+00:12:59.060 --> 00:12:59.480
+et c'est crucial,
+
+00:12:59.900 --> 00:13:00.940
+créez vos comptes d'accès d'urgence
+
+00:13:00.940 --> 00:13:02.320
+avant de déployer toute stratégie.
+
+00:13:02.800 --> 00:13:03.760
+Je ne soulignerai jamais ça.
+
+00:13:04.040 --> 00:13:05.060
+Si vous créez accidentellement
+
+00:13:05.060 --> 00:13:05.620
+une stratégie
+
+00:13:05.620 --> 00:13:07.000
+qui bloque tous les administrateurs
+
+00:13:07.000 --> 00:13:07.980
+sans avoir configuré
+
+00:13:07.980 --> 00:13:09.200
+de comptes d'urgence exclus de tout,
+
+00:13:09.500 --> 00:13:10.180
+vous vous exclurez
+
+00:13:10.180 --> 00:13:11.740
+de votre propre locataire.
+
+00:13:12.420 --> 00:13:13.540
+Le seul moyen d'y accéder à nouveau
+
+00:13:13.540 --> 00:13:14.560
+est d'appeler le support Microsoft
+
+00:13:14.560 --> 00:13:15.880
+et de prouver que vous possédez le domaine,
+
+00:13:15.960 --> 00:13:16.700
+ce qui peut prendre des jours.
+
+00:13:17.460 --> 00:13:18.240
+Configurez donc deux comptes
+
+00:13:18.240 --> 00:13:19.020
+d'accès d'urgence stockés
+
+00:13:19.020 --> 00:13:19.580
+en toute sécurité
+
+00:13:19.580 --> 00:13:20.400
+avec une authentification
+
+00:13:20.400 --> 00:13:21.160
+multifacteur résistante.
+
+00:13:21.820 --> 00:13:22.780
+Faites-le avant de commencer.
+
+00:13:23.360 --> 00:13:23.680
+Quatrièmement,
+
+00:13:24.120 --> 00:13:25.020
+déployez par phase.
+
+00:13:25.640 --> 00:13:26.660
+N'activez pas une stratégie
+
+00:13:26.660 --> 00:13:27.160
+pour tout le monde
+
+00:13:27.160 --> 00:13:27.860
+dès le premier jour.
+
+00:13:28.520 --> 00:13:29.680
+Commencez par un petit groupe de tests
+
+00:13:29.680 --> 00:13:30.740
+comme l'équipe informatique
+
+00:13:30.740 --> 00:13:32.220
+et laissez-le fonctionner quelques jours.
+
+00:13:32.580 --> 00:13:33.160
+Vérifiez les journaux
+
+00:13:33.160 --> 00:13:33.720
+pour voir si quelqu'un
+
+00:13:33.720 --> 00:13:34.800
+a été bloqué de manière inattendue.
+
+00:13:35.300 --> 00:13:36.380
+Puis étendez à un groupe plus large
+
+00:13:36.380 --> 00:13:37.660
+et enfin à tous les utilisateurs.
+
+00:13:38.260 --> 00:13:39.160
+Chaque phase vous donne l'occasion
+
+00:13:39.160 --> 00:13:39.980
+de détecter les problèmes
+
+00:13:39.980 --> 00:13:40.660
+avant qu'ils n'affectent
+
+00:13:40.660 --> 00:13:41.320
+toute l'entreprise.
+
+00:13:42.040 --> 00:13:42.640
+Surveillez les journaux
+
+00:13:42.640 --> 00:13:43.520
+de connexion en continu
+
+00:13:43.520 --> 00:13:44.740
+et en cas de blocage imprévu,
+
+00:13:44.860 --> 00:13:45.600
+ajustez la stratégie
+
+00:13:45.600 --> 00:13:46.900
+avant de passer à l'étape suivante.
+
+00:13:47.940 --> 00:13:48.300
+Écapitulette.
+
+00:13:48.580 --> 00:13:49.200
+Pourquoi est-ce important
+
+00:13:49.200 --> 00:13:50.300
+pour votre entreprise ?
+
+00:13:50.300 --> 00:13:50.920
+Alors pourquoi tout cela
+
+00:13:50.920 --> 00:13:51.860
+est-il important ?
+
+00:13:51.860 --> 00:13:52.560
+L'accès conditionnel
+
+00:13:52.560 --> 00:13:53.160
+est le videur à la porte
+
+00:13:53.160 --> 00:13:53.700
+qui ne se contente pas
+
+00:13:53.700 --> 00:13:55.240
+de vérifier votre carte d'identité ?
+
+00:13:55.240 --> 00:13:55.840
+Il examine tout.
+
+00:13:56.580 --> 00:13:57.180
+Qui vous êtes ?
+
+00:13:57.180 --> 00:13:58.080
+D'où vous vous connectez ?
+
+00:13:58.080 --> 00:13:59.420
+Quel appareil vous utilisez ?
+
+00:13:59.420 --> 00:14:00.240
+Et si votre compte
+
+00:14:00.240 --> 00:14:02.120
+semble compromis ?
+
+00:14:02.120 --> 00:14:02.920
+Il transforme une simple
+
+00:14:02.920 --> 00:14:03.820
+vérification de mot de passe
+
+00:14:03.820 --> 00:14:04.360
+par oui ou par non
+
+00:14:04.360 --> 00:14:05.460
+en une décision intelligente
+
+00:14:05.460 --> 00:14:06.560
+basée sur l'ensemble du contexte.
+
+00:14:07.060 --> 00:14:07.340
+Sans cela,
+
+00:14:07.440 --> 00:14:08.040
+toute personne munie
+
+00:14:08.040 --> 00:14:08.740
+d'un mot de passe volé
+
+00:14:12.640 --> 00:14:13.080
+Quand on pense
+
+00:14:13.080 --> 00:14:13.820
+au nombre de mots de passe
+
+00:14:13.820 --> 00:14:14.520
+volés chaque jour,
+
+00:14:14.620 --> 00:14:16.020
+c'est une pensée effrayante.
+
+00:14:16.700 --> 00:14:17.580
+Les trois stratégies de base
+
+00:14:17.580 --> 00:14:18.260
+comblent à elles seules
+
+00:14:18.260 --> 00:14:18.960
+les plus grandes lacunes.
+
+00:14:19.440 --> 00:14:20.520
+L'authentification multifacteur
+
+00:14:20.520 --> 00:14:21.440
+bloque nette la plupart des values.
+
+00:14:21.660 --> 00:14:22.920
+Le blocage de l'authentification
+
+00:14:22.920 --> 00:14:23.660
+héritée ferme une porte
+
+00:14:23.660 --> 00:14:24.880
+dérobée que les attaquants adorent.
+
+00:14:25.500 --> 00:14:26.540
+Exiger des appareils conformes
+
+00:14:26.540 --> 00:14:27.260
+pour les administrateurs
+
+00:14:27.260 --> 00:14:27.900
+protège vos comptes
+
+00:14:27.900 --> 00:14:28.500
+les plus sensibles.
+
+00:14:29.220 --> 00:14:30.140
+Rien que ces trois stratégies
+
+00:14:30.140 --> 00:14:31.060
+relèvent considérablement
+
+00:14:31.060 --> 00:14:31.860
+votre niveau de sécurité.
+
+00:14:32.620 --> 00:14:33.220
+Et quand vous êtes prêt
+
+00:14:33.220 --> 00:14:33.740
+à aller plus loin,
+
+00:14:33.840 --> 00:14:34.620
+les stratégies avancées
+
+00:14:34.620 --> 00:14:35.840
+vous offrent une protection précise
+
+00:14:35.840 --> 00:14:37.220
+sans nuire à la productivité.
+
+00:14:37.740 --> 00:14:38.740
+Les contrôles basés sur les risques
+
+00:14:42.640 --> 00:14:42.920
+indifféremment.
+
+00:14:43.360 --> 00:14:44.380
+Les contextes d'authentification
+
+00:14:44.380 --> 00:14:45.000
+protègent vos données
+
+00:14:45.000 --> 00:14:45.540
+les plus sensibles
+
+00:14:45.540 --> 00:14:47.100
+avec une précision chirurgicale.
+
+00:14:47.460 --> 00:14:48.080
+Vous pouvez être à la fois
+
+00:14:48.080 --> 00:14:49.000
+sécurisé et flexible.
+
+00:14:49.700 --> 00:14:50.660
+Alors voici vos devoirs.
+
+00:14:50.760 --> 00:14:51.460
+Connectez-vous à votre centre
+
+00:14:51.460 --> 00:14:52.180
+d'administration en tra.
+
+00:14:52.600 --> 00:14:53.520
+Accédez à l'accès conditionné.
+
+00:14:54.120 --> 00:14:55.000
+Vérifiez si vous avez au moins
+
+00:14:55.000 --> 00:14:56.300
+ces trois stratégies de base en place.
+
+00:14:57.040 --> 00:14:57.540
+Si ce n'est pas le cas,
+
+00:14:57.660 --> 00:14:58.620
+commencez par le mode rapport seul
+
+00:14:58.620 --> 00:14:59.520
+et développez à partir de là.
+
+00:14:59.860 --> 00:15:00.620
+N'attendez pas un audit
+
+00:15:00.620 --> 00:15:01.540
+ou une faille pour agir.
+
+00:15:02.280 --> 00:15:03.220
+Si cet épisode vous a aidé
+
+00:15:03.220 --> 00:15:03.900
+à y voir plus clair,
+
+00:15:04.060 --> 00:15:05.700
+abonnez-vous à Microsoft Knowledge Nuggets
+
+00:15:05.700 --> 00:15:06.920
+pour plus d'explications simples
+
+00:15:06.920 --> 00:15:07.620
+sur la sécurité
+
+00:15:07.620 --> 00:15:08.420
+et l'identité
+
+00:15:08.420 --> 00:15:09.300
+et l'identité.
+
+00:15:09.860 --> 00:15:10.820
+Et partagez-le avec quelqu'un
+
+00:15:10.820 --> 00:15:11.560
+qui débute son parcours
+
+00:15:11.560 --> 00:15:12.700
+Microsoft 365.
+
+00:15:13.200 --> 00:15:13.900
+Il vous en remerciera.

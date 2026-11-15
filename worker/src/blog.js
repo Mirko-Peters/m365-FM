@@ -1,7 +1,10 @@
 // Blog je Mitglied: Beitraege schreiben (Wiki-Markup mit Quellen), Pruefung fuer Neue, Upvotes, Export fuer den Seitenbau
+import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { translatedBlogItems } from "./autotr.js";
 import { stats } from "./badges.js";
+import { decide, noteAuthorSave, dropBlogHistory } from "./editor.js";
+import { gate, inScope } from "./perm.js";
 import { baseIds } from "./entities.js";
 import { sanitize } from "./wiki.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
@@ -30,7 +33,9 @@ export async function syncFeed(env, db, uid, post, handle, live) {
 }
 
 export async function deleteUserBlog(db, uid) {
-  await db.batch([db.prepare("DELETE FROM blog_follows WHERE user_id=?").bind(uid), db.prepare("DELETE FROM blog_votes WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_coauthors WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_posts WHERE user_id=?").bind(uid)]);
+  const mine = "(SELECT CAST(id AS TEXT) FROM blog_posts WHERE user_id=?)";   // Verlauf, Empfehlungen und Textauszuege der Redaktion zu diesen Beitraegen gehen mit
+  await db.batch([db.prepare(`DELETE FROM content_rev WHERE kind='blog' AND item_id IN ${mine}`).bind(uid), db.prepare(`DELETE FROM edit_proposals WHERE kind='blog' AND item_id IN ${mine}`).bind(uid), db.prepare(`UPDATE edit_log SET before='',after='' WHERE kind='blog' AND item_id IN ${mine}`).bind(uid),
+    db.prepare("DELETE FROM blog_follows WHERE user_id=?").bind(uid), db.prepare("DELETE FROM blog_votes WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_coauthors WHERE post_id IN (SELECT id FROM blog_posts WHERE user_id=?) OR user_id=?").bind(uid, uid), db.prepare("DELETE FROM blog_posts WHERE user_id=?").bind(uid)]);
 }
 
 // Co-Autoren: Profil-Adressen (max. 3, oeffentliche Profile, nicht man selbst). Eingeladene bestaetigen selbst - erst dann erscheinen sie auf der Seite.
@@ -83,17 +88,14 @@ export async function handleBlog(env, request, url, path, user, J) {
   }
 
   if (path.startsWith("/api/admin/blog")) {
-    if (!user || !(user.admin || user.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // alte Liste: Editoren und Admin (perm.js can())
     if (path === "/api/admin/blog" && method === "GET") {
-      const rows = (await db.prepare("SELECT b.id,b.title,b.summary,b.body,b.lang,b.created,u.name FROM blog_posts b JOIN users u ON u.id=b.user_id WHERE b.status='pending' ORDER BY b.created").all()).results || [];
-      return J({ items: rows });
+      const rows = (await db.prepare("SELECT b.id,b.title,b.summary,b.body,b.lang,b.topics,b.created,u.name FROM blog_posts b JOIN users u ON u.id=b.user_id WHERE b.status='pending' ORDER BY b.created").all()).results || [];
+      return J({ items: rows.filter((r) => inScope(g.actor, { topics: parse(r.topics, []), lang: r.lang })).map(({ topics, ...r }) => r) });   // Fach-Editor: nur der eigene Bereich
     }
     if (path === "/api/admin/blog/decide" && method === "POST") {
-      const b = await request.json().catch(() => ({})), id = +b.id;
-      const p = await db.prepare("SELECT id FROM blog_posts WHERE id=? AND status='pending'").bind(id).first(); if (!p) return J({ error: "not_found" }, 404);
-      if (b.ok) await db.prepare("UPDATE blog_posts SET status='live',published=COALESCE(NULLIF(published,0),?),note='',updated=? WHERE id=?").bind(now(), now(), id).run();
-      else await db.prepare("UPDATE blog_posts SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(b.note || "", 300), now(), id).run();
-      return J({ ok: true });
+      const b = await request.json().catch(() => ({})), r = await decide(env, user, { kind: "blog", id: String(+b.id), action: b.ok ? "approve" : "reject", reason: b.note || "", legacy: true });   // can() + Protokoll in editor.js
+      return J(r.body, r.status);
     }
     return null;
   }
@@ -117,7 +119,7 @@ export async function handleBlog(env, request, url, path, user, J) {
     const sb = sanitize(String(b.body || ""), { viz: true }); if (sb.err) return J({ error: sb.err }, 400);
     if (b.submit && sb.body.length < 300) return J({ error: "too_short" }, 400);
     const known = await baseIds(env), topics = [];
-    for (const t of (Array.isArray(b.topics) ? b.topics : []).slice(0, 10)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
+    for (const t of limitTopics(b.topics)) { if (!known.has(t)) return J({ error: "bad_topic", topic: t }, 400); if (!topics.includes(t)) topics.push(t); }
     const pr = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=?").bind(user.id).first();
     if (b.submit && !(pr?.public && pr.handle)) return J({ error: "need_profile" }, 400);
     const cos = await resolveCoauthors(db, user, b.coauthors); if (cos.err) return J({ error: cos.err, handle: cos.handle }, 400);
@@ -132,6 +134,7 @@ export async function handleBlog(env, request, url, path, user, J) {
         .bind(title, summary, sb.body, sb.body, lang, JSON.stringify(topics), kp ? JSON.stringify(kp.list) : null, fq ? JSON.stringify(fq.list) : null, status, t, status, t, cur.id).run();
       await syncFeed(env, db, user.id, { lang, slug: cur.slug, title, published: cur.published || t }, pr?.handle, status === "live" && !!pr?.handle);
       if (cos.list) await saveCoauthors(db, cur.id, cos.list);
+      await noteAuthorSave(db, user.id, { id: cur.id, title, summary, body: sb.body, topics: JSON.stringify(topics), updated: t });   // Verlauf der Redaktion: die Fassung des Autors gehoert hinein
       return J({ ok: true, id: cur.id, slug: cur.slug, status });
     }
     const day = (await db.prepare("SELECT COUNT(*) n FROM blog_posts WHERE user_id=? AND created>?").bind(user.id, t - 86400).first())?.n || 0;
@@ -162,7 +165,7 @@ export async function handleBlog(env, request, url, path, user, J) {
     const b = await request.json().catch(() => ({})), p = await db.prepare("SELECT b.id,b.user_id,b.lang,b.slug,b.title,p.handle FROM blog_posts b LEFT JOIN profiles p ON p.user_id=b.user_id WHERE b.id=? AND (b.user_id=? OR ?=1)").bind(+b.id, user.id, user.admin ? 1 : 0).first();
     if (!p) return J({ error: "not_found" }, 404);
     if (p.handle) await syncFeed(env, db, p.user_id, p, p.handle, false);
-    await db.prepare("DELETE FROM comments WHERE vid=?").bind("blog" + p.id).run();
+    await db.prepare("DELETE FROM comments WHERE vid=?").bind("blog" + p.id).run(); await dropBlogHistory(db, p.id);
     await db.batch([db.prepare("DELETE FROM blog_votes WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_coauthors WHERE post_id=?").bind(p.id), db.prepare("DELETE FROM blog_posts WHERE id=?").bind(p.id)]);
     return J({ ok: true });
   }

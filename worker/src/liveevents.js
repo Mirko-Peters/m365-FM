@@ -31,7 +31,7 @@ export async function syncLiveEvents(env, entityMap) {
     if (!start) continue;
     const ex = await db.prepare("SELECT id FROM events WHERE handle=?").bind(handle).first();
     if (ex) {
-      const r = await db.prepare("UPDATE events SET title=?,summary=?,start=?,url=?,updated=? WHERE id=? AND (title<>? OR start<>? OR summary<>?)").bind(s.title, summary, start, url, t, ex.id, s.title, start, summary).run(); if (r.meta?.changes) updated++;
+      const r = await db.prepare("UPDATE events SET title=?,summary=?,start=?,url=?,updated=?,keys_v=0 WHERE id=? AND (title<>? OR start<>? OR summary<>?)").bind(s.title, summary, start, url, t, ex.id, s.title, start, summary).run(); if (r.meta?.changes) updated++;
     } else {
       await db.prepare("INSERT INTO events(handle,owner_id,org_id,title,summary,about,start,end,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,created,updated) VALUES(?,?,NULL,?,?,?,?,'','online','YouTube (M365 Show)','',?,'',1,'en',?,0,1,?,?)")
         .bind(handle, owner.id, s.title, summary, "Live stream of the M365 Show on YouTube. " + summary, start, url, topics, t, t).run(); created++;

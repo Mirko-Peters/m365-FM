@@ -1,0 +1,133 @@
+{
+ "de": {
+  "html": "<p>Das Wort Copilot taucht inzwischen überall auf: in Word, in Teams, in GitHub, in Windows. Wer von Copilot für Microsoft Fabric hört, nimmt deshalb schnell an, es sei dieselbe Funktion in einer weiteren App. Das ist ein Irrtum. Copilot in Fabric ist ein eigener Assistent, der gezielt für Daten und Analysen gebaut wurde.</p>\n<p>Dieser Artikel erklärt, was Copilot für Microsoft Fabric ist, wo er funktioniert, was Sie zum Start brauchen und warum er auch dann interessant ist, wenn Sie noch nie eine Zeile SQL geschrieben haben.</p>\n\n<h2>Copilot ist nicht gleich Copilot: die Unterschiede im Überblick</h2>\n<p>Microsoft bietet mehrere Copilots an, und sie erfüllen sehr unterschiedliche Aufgaben:</p>\n<ul>\n<li><strong>Microsoft 365 Copilot</strong> unterstützt beim Schreiben von Dokumenten in Word, beim Zusammenfassen von E-Mails in Outlook und beim Mitschreiben in Teams.</li>\n<li><strong>GitHub Copilot</strong> schlägt Code vor, während Sie in VS Code arbeiten. Er richtet sich an Softwareentwickler, die Anwendungen bauen.</li>\n<li><strong>Copilot in Fabric</strong> arbeitet speziell mit Daten und Analysen innerhalb von Microsoft Fabric.</li>\n</ul>\n<p>Stellen Sie sich ein Unternehmen mit drei Spezialisten vor. Einer schreibt Berichte für die Führung, einer entwickelt Softwareprodukte, einer kümmert sich um die Unternehmensdaten: bereinigen, abfragen, Berichte daraus erstellen. Alle drei sind kompetent, aber sie machen verschiedene Jobs. Genauso verhält es sich mit den Copilots. Microsoft 365 Copilot ist der Berichtsschreiber, GitHub Copilot der Softwareentwickler und Copilot in Fabric der Datenspezialist.</p>\n\n<h2>Was ist Copilot für Microsoft Fabric?</h2>\n<p>Die einfachste Definition: Copilot für Fabric ist ein KI-Assistent, der direkt in Microsoft Fabric integriert ist. Sie beschreiben in einfacher Sprache, was Sie brauchen. Copilot schreibt daraufhin den Code, stellt Abfragen zusammen oder erzeugt Berichte.</p>\n<p>Im Hintergrund arbeiten große Sprachmodelle von Azure OpenAI. Entscheidend ist aber, dass Copilot Ihre konkreten Schemata, Tabellen und Daten versteht. Wenn Sie eingeben „Zeige mir den Gesamtumsatz nach Region für das letzte Quartal“, weiß der Assistent bereits, welche Tabellen relevant sind und wie die Abfrage aussehen muss.</p>\n<p>Am besten verstehen Sie Copilot als Junior-Datenanalysten, der unglaublich schnell arbeitet, dessen Arbeit Sie aber prüfen müssen. Sie geben eine Anweisung und erhalten Sekunden später etwas Nützliches. Es kann jedoch passieren, dass Ihre Anfrage falsch interpretiert wird oder dass der Code zwar läuft, aber nicht effizient ist. Ergebnisse sollten Sie deshalb immer kontrollieren, bevor sie in die Produktion gehen.</p>\n<p>Der eigentliche Vorteil: Sie müssen weder SQL noch DAX noch PySpark beherrschen, um loszulegen. Wer seine Daten versteht und beschreiben kann, was er braucht, kommt mit Copilot voran.</p>\n\n<h2>Wo Copilot in Fabric steckt: Data Factory, Notebooks, Warehouse und Power BI</h2>\n<p>Copilot ist kein separates Werkzeug, das Sie zusätzlich öffnen. Er ist in mehrere Fabric-Workloads integriert und erscheint dort, wo Sie ohnehin arbeiten.</p>\n\n<h3>Data Factory: Pipelines per Beschreibung</h3>\n<p>In Data Factory bauen Sie Pipelines, um Daten zu verschieben und zu transformieren. Statt Aktivitäten manuell auf eine Arbeitsfläche zu ziehen und einzeln zu konfigurieren, beschreiben Sie den gewünschten Ablauf, etwa: „Kombiniere diese beiden Tabellen und entferne Nullwerte.“ Copilot erzeugt die passenden Power Query-Schritte, also Zusammenführung, Filter und Datentypänderung. Die Ausgabe prüfen Sie weiterhin selbst, aber die repetitive Arbeit entfällt.</p>\n\n<h3>Data Engineering: PySpark in Fabric Notebooks</h3>\n<p>In Fabric Notebooks schreiben Sie PySpark-Code, um Daten in großem Umfang zu laden, zu bereinigen und zu transformieren. Wer neu in der Spark-Syntax ist, empfindet schon einfache Transformationen schnell als neue Sprache. Mit Copilot beschreiben Sie nur die Logik, zum Beispiel: „Lade diese CSV aus dem Lakehouse, filtere stornierte Bestellungen heraus und gruppiere nach Region.“ Der PySpark-Code wird generiert, und Sie können ihn ausführen, anpassen und daraus lernen.</p>\n<p>Copilot kann auch bestehenden Code erklären. Öffnen Sie ein Notebook, das jemand anderes geschrieben hat, und fragen Sie, was eine bestimmte Transformation macht. Copilot liest den Code und fasst ihn in verständlicher Sprache zusammen. Dasselbe funktioniert für Pipelines: Auf Wunsch erklärt er, was jeder Schritt bewirkt und in welcher Reihenfolge die Schritte ablaufen.</p>\n\n<h3>Data Warehouse: SQL in natürlicher Sprache</h3>\n<p>Im Data Warehouse fordern Sie SQL-Abfragen in einfacher Sprache an, etwa: „Zeige mir den Gesamtumsatz pro Produkt für das letzte Quartal.“ Copilot schreibt das SQL. Sie müssen sich die genaue Syntax von GROUP BY oder WHERE nicht merken.</p>\n<p>Das hilft vor allem Menschen, die ihre Daten in- und auswendig kennen, aber nicht täglich SQL schreiben. Sie kennen die fachliche Fragestellung und wissen, in welchen Tabellen die Antwort steckt. Daraus eine korrekte, effiziente Abfrage zu bauen, kostet jedoch Zeit. Genau diese Hürde nimmt Copilot weg.</p>\n\n<h3>Power BI: Berichte, Zusammenfassungen und DAX-Erklärungen</h3>\n<p>In Power BI helfen Sie sich mit Copilot, Berichte von Grund auf zu erstellen. Sie beschreiben zum Beispiel: „Erstelle einen Bericht, der den Umsatz pro Monat in einem Balkendiagramm zeigt.“ Copilot schlägt passende Visualisierungen vor, ordnet sie an und schreibt im Hintergrund die DAX-Measures.</p>\n<p>Weitere Möglichkeiten:</p>\n<ul>\n<li><strong>Dashboards zusammenfassen:</strong> Sie öffnen einen Bericht mit 20 Diagrammen und haben nur fünf Minuten für die Präsentation. Copilot liefert einen klaren Überblick über die wichtigsten Trends und Zahlen.</li>\n<li><strong>Kennzahlen erklären:</strong> Sie sehen eine Zahl und wissen nicht, wie sie entsteht. Copilot liest den DAX-Code und erklärt seine Funktion.</li>\n</ul>\n<p>Dadurch können Fachanwender Fragen in natürlicher Sprache stellen und Antworten erhalten, ohne auf das Datenteam zu warten.</p>\n\n<h2>Praxisbeispiel: Copilot im Einzelhandel</h2>\n<p>Ein Einzelhandelsunternehmen verkauft online und in Filialen. Die Daten stammen aus unterschiedlichen Quellen: Transaktionen aus dem POS-System, Kundendaten aus dem CRM und Inventarprotokolle aus dem Lager. Drei Personen im Team nutzen Copilot auf verschiedene Weise.</p>\n<h3>Der Dateningenieur</h3>\n<p>Er bereitet Rohdaten für die Analyse vor. Im Fabric Notebook gibt er ein: Lade die Verkaufs-CSV aus dem Lakehouse, filtere alle Zeilen mit dem Transaktionstyp „Rückgabe“ heraus, gruppiere nach Region und berechne den Gesamtumsatz je Gruppe. Copilot erzeugt den PySpark-Code in Sekunden. Der Ingenieur prüft ihn, führt ihn aus und macht weiter. Was früher etwa 20 Minuten dauerte, erledigt er nun in etwa zwei.</p>\n<h3>Der Business Analyst</h3>\n<p>Er braucht einen Bericht für das wöchentliche Vertriebsmeeting. In Power BI verbindet er sich mit den bereinigten Daten und bittet Copilot um einen Bericht mit monatlichem Umsatz als Balkendiagramm samt einer Linie für das Ziel. Copilot erstellt das Layout, wählt passende Visuals und schreibt das DAX-Measure für den Zielvergleich. Der Analyst passt Farben und Layout an und hat in Minuten statt Stunden einen ausgearbeiteten Bericht.</p>\n<h3>Der SQL-Anwender ohne Datenbank-Expertise</h3>\n<p>Er kennt SQL, ist aber kein Datenbankexperte. Der Verkaufstabelle soll er eine Spalte für die Gewinnmarge hinzufügen, berechnet als (Umsatz minus Kosten) geteilt durch Umsatz und formatiert als Prozentsatz. Im Data Warehouse beschreibt er das, und Copilot schreibt die ALTER TABLE-Anweisung. Er führt sie aus, prüft die Zahlen und macht weiter.</p>\n<p>In allen drei Fällen liefert Copilot einen funktionierenden ersten Entwurf, den der Mensch verfeinert. Man kann ihn sich als Vorlagenfabrik auf Knopfdruck vorstellen, die sich für den Einstieg, für Prototypen und zum Lernen eignet.</p>\n\n<h2>Voraussetzungen: Was Sie für den Start brauchen</h2>\n<p>Die Anforderungen sind überschaubar:</p>\n<ol>\n<li><strong>Eine kostenpflichtige Fabric-Kapazität</strong>, mindestens F2. Wer eine Testkapazität oder Power BI Premium hat, könnte bereits Zugriff besitzen. Das lässt sich in den Mandanteneinstellungen prüfen.</li>\n<li><strong>Die Aktivierung durch den Fabric-Administrator</strong> in den Mandanteneinstellungen. Manche Administratoren führen Copilot schrittweise ein, testen ihn zunächst mit einer Pilotgruppe und geben ihn danach breit frei. Sehen Sie in Fabric kein Copilot-Symbol, liegt es wahrscheinlich daran. Dann hilft ein Gespräch mit dem Administrator.</li>\n</ol>\n<p>Zusätzliche Lizenzkosten über die Fabric-Kapazität hinaus fallen nicht an. Copilot ist enthalten, ein separates Abonnement ist nicht nötig. Ist die Funktion aktiviert, erscheint in den unterstützten Workloads ein Copilot-Symbol. Ein Klick öffnet einen Bereich, in dem Sie Ihre Prompts eingeben. Konfiguration, Setup oder vorbereitete Trainingsdaten sind nicht erforderlich.</p>\n<p>Eine wichtige Einschränkung gibt es: Copilot arbeitet nur mit Daten, auf die Sie bereits Zugriff haben, und respektiert Ihre bestehenden Berechtigungen. Sehen Sie eine Tabelle im Warehouse nicht, sieht Copilot sie ebenfalls nicht. Haben Sie keinen Zugriff auf ein semantisches Modell, erzeugt Copilot dafür keine Abfragen. Ihre Sicherheitskontrollen bleiben also intakt.</p>\n\n<h2>Warum Copilot für Einsteiger in die Datenanalyse wichtig ist</h2>\n<p>Die größte Hürde bei der Arbeit mit Daten war selten fehlende Intelligenz oder mangelndes Geschäftswissen, sondern die technische Fertigkeit. SQL, Python und DAX zu lernen, dauert Monate, manchmal Jahre. Wer hauptsächlich Berichte erstellen, Fragen beantworten und Entscheidungen treffen muss, hat diese Zeit oft nicht.</p>\n<p>Copilot senkt die Hürde drastisch. Sie erklären in einfacher Sprache, was Sie wollen, und erhalten funktionierenden Code, vielleicht nicht immer perfekt, aber ausführbar, prüfbar und zum Lernen geeignet. Im Alltag heißt das: Nicht-technische Teammitglieder können Daten erkunden, Berichte bauen und Fragen stellen, ohne auf die IT zu warten.</p>\n<ul>\n<li>Wer im Marketing die Kampagnenleistung verstehen will, muss kein Ticket einreichen und drei Tage warten.</li>\n<li>Wer als Betriebsleiter Bestandstrends verfolgen will, muss kein PySpark lernen, sondern fragt einfach.</li>\n</ul>\n<p>Für Self-Service-Analysen ist das ein Wandel, der die Arbeitsweise von Teams verändern kann.</p>\n<p>Zugleich ersetzt Copilot kein Verständnis. Sie sollten weiterhin wissen, was ein Join ist, was ein Measure bewirkt und was ein Filter bedeutet. Aber statt wochenlang Syntax auswendig zu lernen, nutzen Sie die Zeit für Konzepte. Der von Copilot geschriebene Code lässt sich lesen, anpassen und nachvollziehen, ähnlich wie bei einem Tutor, der zuerst die Antwort schreibt und sie dann erklärt. Mit der Zeit erkennen Sie Muster, etwa die immer gleiche Join-Syntax, und bauen Fähigkeiten auf, ohne vor einem leeren Bildschirm zu verzweifeln.</p>\n\n<h2>Stolpersteine: Grenzen von Copilot und die Rolle des Menschen</h2>\n<p>Copilot ist leistungsfähig, aber nicht perfekt. Typische Probleme:</p>\n<ul>\n<li>Die Anfrage wird falsch verstanden.</li>\n<li>Der Code funktioniert technisch, läuft aber langsam oder ist nicht optimal.</li>\n<li>Eine DAX-Abfrage liefert falsche Zahlen, weil die falsche Tabelle verwendet wurde.</li>\n<li>Ein Bericht sieht gut aus, nutzt aber das falsche Maß oder das falsche Visual.</li>\n<li>Eine Abfrage wirkt korrekt, beantwortet aber die falsche Frage, weil die Fragestellung ungenau war.</li>\n</ul>\n<p>Behandeln Sie alles, was Copilot erzeugt, deshalb als ersten Entwurf, nicht als endgültige Antwort. Prüfen Sie SQL-Code, testen Sie DAX und validieren Sie jeden Pipeline-Schritt, bevor er live geht. Das ist keine Frage des Misstrauens, sondern der Verantwortung: Zeigt ein Bericht falsche Zahlen, interessiert das Unternehmen nicht, dass Copilot die Kennzahl erstellt hat, sondern dass Sie das Ergebnis freigegeben haben.</p>\n<h3>Datenqualität und Governance bleiben Ihre Aufgabe</h3>\n<p>Copilot funktioniert nur gut, wenn die zugrunde liegenden Daten gut organisiert sind. Sind Tabellen unklar benannt oder Beziehungen nicht definiert, tut sich der Assistent schwer. „Garbage in, garbage out“ gilt weiterhin. Auch Datenqualität, Zugriffskontrolle und Compliance bleiben in Ihrer Verantwortung. Copilot repariert kein fehlerhaftes Datenmodell und keine schlecht durchdachte Zugriffsstruktur. Diese Grundlagen müssen stimmen, damit er echten Mehrwert liefert.</p>\n<h3>Entlastung für IT-Profis</h3>\n<p>Für IT-Fachleute gibt es einen Silberstreif: Copilot übernimmt Routinearbeit wie Standardberichte, grundlegende Abfragen und alltägliche Pipelines. Das schafft Freiraum für Performance-Optimierung, Datenarchitektur und komplexe Modellierung. Und weil Fachanwender ihre einfachen Fragen selbst beantworten können, bekommt das Team weniger Routineanfragen.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Copilot in Fabric ist ein eigener Assistent für Daten und Analysen, nicht dasselbe wie Microsoft 365 Copilot oder GitHub Copilot.</li>\n<li>Sie beschreiben Ihr Anliegen in einfacher Sprache, Copilot liefert SQL, PySpark, Power Query-Schritte, DAX oder Berichtsentwürfe.</li>\n<li>Er steckt in Data Factory, Fabric Notebooks, Data Warehouse und Power BI, ohne separates Tool.</li>\n<li>Copilot kann auch erklären: Code in Notebooks, Pipelines, DAX-Kennzahlen und ganze Dashboards.</li>\n<li>Voraussetzungen: kostenpflichtige Fabric-Kapazität ab F2 und die Aktivierung durch den Fabric-Administrator. Zusätzliche Lizenzkosten entstehen nicht.</li>\n<li>Copilot respektiert Ihre Berechtigungen und sieht nur Daten, auf die Sie selbst Zugriff haben.</li>\n<li>Gut benannte Tabellen und definierte Beziehungen verbessern die Ergebnisse spürbar.</li>\n<li>Prüfen Sie jedes Ergebnis, bevor es in die Produktion geht: Copilot liefert den ersten Entwurf, Sie tragen die Verantwortung.</li>\n<li>Nutzen Sie den erzeugten Code zum Lernen, um Konzepte wie Joins, Filter und Measures zu verstehen.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot für Microsoft Fabric verwandelt einfache Sprache in Datenarbeit: Sie beschreiben, was Sie brauchen, und der Assistent schreibt Code, Abfragen und Berichtsentwürfe. Er ist keine Magie, sondern ein Werkzeug, das Einsteigern den Zugang erleichtert und Profis schneller macht. Voraussetzung sind saubere Daten, klare Berechtigungen und ein Mensch, der die Ergebnisse prüft und verantwortet. Wer neu in Fabric ist, findet in Copilot einen Helfer, der Hürden senkt und das Lernen beschleunigt, ohne das eigene Urteilsvermögen zu ersetzen.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "So starten Sie mit Copilot in Fabric",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Kapazität prüfen",
+     "text": "Kostenpflichtige Fabric-Kapazität ab F2 notwendig; Testkapazität oder Power BI Premium können bereits ausreichen."
+    },
+    {
+     "kopf": "Admin aktiviert Copilot",
+     "text": "Der Fabric-Administrator schaltet Copilot in den Mandanteneinstellungen frei, oft zunächst für eine Pilotgruppe."
+    },
+    {
+     "kopf": "Copilot-Symbol öffnen",
+     "text": "In unterstützten Workloads öffnet ein Klick auf das Symbol einen Bereich für Prompts."
+    },
+    {
+     "kopf": "Anliegen beschreiben",
+     "text": "Aufgabe in einfacher Sprache eingeben; Copilot erzeugt SQL, PySpark, DAX oder Berichtsentwürfe."
+    },
+    {
+     "kopf": "Ergebnis prüfen",
+     "text": "Den Entwurf kontrollieren, anpassen und erst dann produktiv nutzen. Die Verantwortung bleibt beim Menschen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist Copilot für Microsoft Fabric und worin unterscheidet er sich von Microsoft 365 Copilot und GitHub Copilot?",
+    "a": "Copilot für Fabric ist ein KI-Assistent, der direkt in Microsoft Fabric integriert ist und speziell für Daten und Analysen gebaut wurde. Microsoft 365 Copilot unterstützt bei Dokumenten und E-Mails, GitHub Copilot schlägt Entwicklern Code vor."
+   },
+   {
+    "q": "In welchen Bereichen von Microsoft Fabric kann ich Copilot nutzen?",
+    "a": "Copilot ist in mehrere Fabric-Workloads integriert: in Data Factory für Pipelines, in Fabric Notebooks für PySpark-Code, im Data Warehouse für SQL-Abfragen und in Power BI für Berichte und DAX. Er erklärt auch bestehenden Code, Pipelines und Kennzahlen."
+   },
+   {
+    "q": "Was brauche ich, um Copilot in Fabric zu nutzen, und kostet er extra?",
+    "a": "Sie benötigen eine kostenpflichtige Fabric-Kapazität ab F2 und die Aktivierung durch den Fabric-Administrator in den Mandanteneinstellungen. Zusätzliche Lizenzkosten fallen nicht an, ein separates Abonnement ist nicht nötig. Fehlt das Copilot-Symbol, ist er wahrscheinlich noch nicht freigegeben."
+   },
+   {
+    "q": "Kann ich Copilot in Fabric ohne SQL-, DAX- oder PySpark-Kenntnisse verwenden und sind die Ergebnisse zuverlässig?",
+    "a": "Ja, Sie beschreiben Ihr Anliegen in einfacher Sprache, und Copilot erzeugt Code, Abfragen oder Berichte. Die Ergebnisse sind nur ein erster Entwurf, da Anfragen falsch verstanden werden können. Prüfen Sie alles vor dem Produktiveinsatz; die Verantwortung bleibt bei Ihnen."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Drei Copilots, drei Aufgaben",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Microsoft 365 und GitHub Copilot",
+     "punkte": [
+      "Microsoft 365 Copilot unterstützt bei Word, Outlook und Teams.",
+      "Er fasst E-Mails zusammen und schreibt Dokumente.",
+      "GitHub Copilot schlägt Code in VS Code vor.",
+      "Er richtet sich an Entwickler, die Anwendungen bauen."
+     ]
+    },
+    "rechts": {
+     "titel": "Copilot in Fabric",
+     "punkte": [
+      "Arbeitet speziell mit Daten und Analysen in Microsoft Fabric.",
+      "Versteht Ihre Schemata, Tabellen und Daten.",
+      "Liefert SQL, PySpark, DAX, Power Query und Berichtsentwürfe.",
+      "Gleicht dem Datenspezialisten im Unternehmen."
+     ]
+    }
+   },
+   {
+    "titel": "Das braucht Copilot in Fabric zum Start",
+    "typ": "checkliste",
+    "punkte": [
+     "Kostenpflichtige Fabric-Kapazität mindestens F2 vorhanden",
+     "Testkapazität oder Power BI Premium in den Mandanteneinstellungen prüfen",
+     "Copilot vom Fabric-Administrator in den Mandanteneinstellungen aktivieren lassen",
+     "Bei fehlendem Copilot-Symbol den Administrator ansprechen",
+     "Zugriff auf die benötigten Tabellen und semantischen Modelle sicherstellen",
+     "Tabellen klar benennen und Beziehungen definieren",
+     "Ergebnisse vor dem Produktivbetrieb immer prüfen"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wofür wurde Copilot in Microsoft Fabric gezielt entwickelt?",
+    "opts": [
+     "Für das Schreiben von Dokumenten und das Zusammenfassen von E-Mails",
+     "Für Datenarbeit und Analysen innerhalb von Microsoft Fabric",
+     "Für Codevorschläge beim Entwickeln von Software in VS Code",
+     "Für die Verwaltung von Berechtigungen und Lizenzen im Unternehmen"
+    ],
+    "a": 1,
+    "why": "Copilot in Fabric ist ein eigener Assistent speziell für Daten und Analysen, anders als Microsoft 365 Copilot oder GitHub Copilot."
+   },
+   {
+    "q": "Was ist laut Artikel Voraussetzung, um Copilot in Fabric zu nutzen?",
+    "opts": [
+     "Ein separates Copilot-Abonnement zusätzlich zur Fabric-Kapazität",
+     "Vorbereitete Trainingsdaten und eine aufwendige Konfiguration",
+     "Kostenpflichtige Fabric-Kapazität ab F2 und Aktivierung durch den Administrator",
+     "Fundierte Kenntnisse in SQL, DAX und PySpark"
+    ],
+    "a": 2,
+    "why": "Nötig sind mindestens F2 und die Aktivierung durch den Fabric-Administrator. Zusätzliche Lizenzkosten, Setup oder Programmierkenntnisse sind nicht erforderlich."
+   },
+   {
+    "q": "Welche Daten kann Copilot in Fabric für eine Person verwenden?",
+    "opts": [
+     "Alle Daten im Mandanten, unabhängig von individuellen Berechtigungen",
+     "Nur Daten aus dem Data Warehouse, nicht aus Power BI",
+     "Nur Daten, die Administratoren ausdrücklich für Copilot freigegeben haben",
+     "Nur Daten, auf die die Person bereits Zugriff hat"
+    ],
+    "a": 3,
+    "why": "Copilot respektiert bestehende Berechtigungen: Was Sie nicht sehen, sieht auch Copilot nicht. Die Sicherheitskontrollen bleiben intakt."
+   },
+   {
+    "q": "Wie sollten Nutzer mit den von Copilot erzeugten Ergebnissen umgehen?",
+    "opts": [
+     "Als ersten Entwurf behandeln und vor dem Produktiveinsatz prüfen",
+     "Direkt veröffentlichen, da Copilot die Verantwortung für Fehler trägt",
+     "Nur bei Berichten prüfen, bei SQL-Code ist das unnötig",
+     "Ungeprüft übernehmen, wenn der Code technisch ohne Fehler läuft"
+    ],
+    "a": 0,
+    "why": "Ergebnisse sind ein erster Entwurf. Die Verantwortung liegt beim Menschen, der Code, DAX und Pipeline-Schritte vor dem Livegang prüfen muss."
+   }
+  ]
+ }
+}

@@ -1,0 +1,919 @@
+WEBVTT
+
+00:00:00.060 --> 00:00:03.700
+Willkommen zu einer weiteren Episode der Microsoft Knowledge Nuggets hier auf M365FM.
+
+00:00:03.960 --> 00:00:04.900
+Ich bin Ihr Gastgeber Mirko Peters.
+
+00:00:05.220 --> 00:00:08.680
+Unser heutiges Thema ist etwas, von dem fast jeder schon gehört hat, das aber nur wenige wirklich verstehen.
+
+00:00:09.360 --> 00:00:12.840
+Ich spreche von Power Automate, einem Tool, das die meisten als dieses Floating abtun,
+
+00:00:12.920 --> 00:00:14.960
+das irgendwo in Microsoft 365 vergraben ist.
+
+00:00:15.760 --> 00:00:18.000
+Vielleicht haben Sie es in einem Menü gesehen oder versehentlich angeklickt,
+
+00:00:18.100 --> 00:00:19.440
+aber hier ist der Punkt, aber hier ist der Punkt.
+
+00:00:19.760 --> 00:00:23.160
+Power Automate ist eines der mächtigsten Werkzeuge in der gesamten Microsoft-Plattform.
+
+00:00:23.660 --> 00:00:26.340
+Am Ende dieser Folge wissen Sie genau, was es ist, wie es funktioniert
+
+00:00:26.340 --> 00:00:28.480
+und warum es für Ihre tägliche Arbeit wichtig ist.
+
+00:00:28.480 --> 00:00:32.320
+Tellen Sie es sich wie einen virtuellen Assistenten vor, der niemals schläft,
+
+00:00:32.460 --> 00:00:34.640
+nie etwas vergisst und nie nach einer Gehaltserhöhung fragt.
+
+00:00:34.760 --> 00:00:36.140
+Nehmen Sie sich Ihren Kaffee und lassen Sie uns ein.
+
+00:00:36.840 --> 00:00:38.020
+Das Problem ist Power Automate löst.
+
+00:00:38.520 --> 00:00:39.720
+Beginnen wir zuerst mit dem Problem.
+
+00:00:40.260 --> 00:00:43.320
+Denken Sie an Ihren typischen Arbeitstag und wie oft Sie dieselben Aktionen wiederholen.
+
+00:00:43.960 --> 00:00:46.960
+Dateien zwischen Ordnern verschieben, Daten in ein anderes System kopieren,
+
+00:00:46.960 --> 00:00:50.320
+zum hundertsten Mal dieselbe E-Mail senden, ein Dokument zur Genehmigung weiterleiten
+
+00:00:50.320 --> 00:00:53.060
+oder eine Tabelle aktualisieren, weil jemand ein Formular ausgefüllt hat.
+
+00:00:54.300 --> 00:00:56.040
+Diese Aufgaben fressen jede Woche Stunden.
+
+00:00:56.040 --> 00:00:59.560
+Und das Frustrierende daran ist, dass sie kaum einen strategischen Mehrwert bieten.
+
+00:01:00.140 --> 00:01:02.840
+Niemand wurde jemals befördert, weil er gut im Kopieren und Einfügen war,
+
+00:01:02.960 --> 00:01:04.820
+aber wir tun es trotzdem, weil es erledigt werden muss.
+
+00:01:05.300 --> 00:01:08.320
+Vor 20 Jahren hatte man, wenn man diese repetitiven Aufgaben automatisieren wollte,
+
+00:01:08.380 --> 00:01:09.100
+eigentlich nur zwei Möglichkeiten.
+
+00:01:09.580 --> 00:01:12.280
+Man konnte jemanden einstellen, der die langweilige Arbeit für einen erledigte
+
+00:01:12.280 --> 00:01:13.600
+oder man konnte selbst lernen, konnte es schaffen.
+
+00:01:14.020 --> 00:01:17.340
+Keine der Optionen war großartig, da Skripte anfällig waren und ständig ausfielen,
+
+00:01:17.420 --> 00:01:19.620
+während Unternehmensautomatisierung Software ein Vermögen kostete
+
+00:01:19.620 --> 00:01:21.620
+und ein ganzes Experten-Team zur Wartung erforderte.
+
+00:01:21.620 --> 00:01:24.660
+Also machten die meisten Leute die repetitive Arbeit einfach weiter in Manuel.
+
+00:01:25.300 --> 00:01:28.280
+Microsoft erkannte diese frustrierende Situation und entschied sich, sie zu ändern,
+
+00:01:28.460 --> 00:01:30.980
+indem ein Tool entwickelt wurde, das es jedem, und ich meine wirklich jedem,
+
+00:01:31.100 --> 00:01:34.480
+ermöglicht, repetitive Aufgaben zu automatisieren, ohne eine einzige Zeile Code zu schreiben.
+
+00:01:35.060 --> 00:01:36.080
+Dieses Tool ist Power Automate.
+
+00:01:36.620 --> 00:01:38.520
+Vereinfacht gesagt verbindet es ihre Apps und Dienste,
+
+00:01:38.660 --> 00:01:41.120
+sodass diese miteinander kommunizieren können, ohne dass sie dazwischen sitzen müssen.
+
+00:01:41.420 --> 00:01:43.920
+Anstatt dass sie die Brücke zwischen Outlook, SharePoint und Teams bilden,
+
+00:01:44.260 --> 00:01:45.680
+wird Power Automate zu dieser Brücke,
+
+00:01:45.680 --> 00:01:48.380
+die rund um die Uhr arbeitet, ohne Mittagspause zu machen
+
+00:01:48.380 --> 00:01:49.920
+oder jemals einen Tippfehler zu begehen.
+
+00:01:49.920 --> 00:01:55.360
+Was genau ist also Power Automate?
+
+00:01:55.640 --> 00:01:56.780
+Hier ist die einfachste Definition.
+
+00:01:57.140 --> 00:01:58.500
+Power Automate besteht aus zwei Dingen.
+
+00:01:58.900 --> 00:02:00.940
+Einem Auslöser, Trigger und einer oder mehreren Aktionen.
+
+00:02:01.120 --> 00:02:01.480
+Das ist alles.
+
+00:02:01.820 --> 00:02:03.240
+Alles andere baut auf diesem Fundament auf.
+
+00:02:03.660 --> 00:02:05.200
+Betrachten Sie einen Auslöser wie den Startschuss.
+
+00:02:05.580 --> 00:02:06.020
+Ist es erwarten?
+
+00:02:07.180 --> 00:02:09.040
+Wenn eine neue E-Mail in Ihrem Posteingang eintrifft,
+
+00:02:09.120 --> 00:02:10.880
+eine Datei in einem SharePoint-Ordner erstellt wird,
+
+00:02:10.960 --> 00:02:14.180
+jemand ein Microsoft-Formular abschickt oder ein Kalenderereignis beginnt,
+
+00:02:14.520 --> 00:02:16.240
+nichts passiert, bis der Auslöser aktiviert wird.
+
+00:02:16.760 --> 00:02:17.320
+Das ist der entscheidende Punkt.
+
+00:02:17.320 --> 00:02:20.160
+Eine Aktion ist das, was danach geschieht.
+
+00:02:20.860 --> 00:02:22.720
+Eine Benachrichtigung senden, eine Datei erstellen,
+
+00:02:22.820 --> 00:02:25.160
+eine Tabellenzeile aktualisieren, eine Nachricht in Teams posten,
+
+00:02:25.220 --> 00:02:26.980
+eine Aufgabe im Planner hinzufügen, eine E-Mail versenden.
+
+00:02:27.220 --> 00:02:29.360
+Das ist es, was die Automatisierung als Reaktion auf den Auslöser tut.
+
+00:02:29.700 --> 00:02:30.300
+So einfach ist das.
+
+00:02:30.660 --> 00:02:32.000
+Lassen Sie uns ein reales Szenario durchgehen.
+
+00:02:32.400 --> 00:02:34.820
+Stellen Sie sich vor, ein Kunde füllt ein Kontaktformular auf Ihrer Website aus.
+
+00:02:35.100 --> 00:02:36.360
+Diese Formularübermittlung ist der Auslöser.
+
+00:02:36.760 --> 00:02:37.500
+Was passiert als Nächste?
+
+00:02:37.840 --> 00:02:39.740
+Sie können die Informationen in einer SharePoint-Liste speichern.
+
+00:02:40.120 --> 00:02:40.900
+Das ist Aktion Nummer 1.
+
+00:02:40.900 --> 00:02:43.440
+Senden Sie eine Benachrichtigung an Ihr Vertriebsteam in Teams.
+
+00:02:44.140 --> 00:02:44.820
+Aktion Nummer 2.
+
+00:02:45.320 --> 00:02:47.560
+Erstellen Sie eine Nachverfolgungsaufgabe im Planner für morgen früh.
+
+00:02:47.920 --> 00:02:48.620
+Aktion Nummer 3.
+
+00:02:49.140 --> 00:02:52.080
+Ein Auslöser, mehrere Aktionen, die alle automatischen Sekunden ablaufen.
+
+00:02:52.420 --> 00:02:53.400
+Keine manuelle Arbeit erforderlich.
+
+00:02:53.640 --> 00:02:56.400
+Die Sache ist die, Sie schreiben keine einzige Zeile Code, um diese Flow zu erstellen.
+
+00:02:56.780 --> 00:02:58.800
+Sie verbinden vorgefertigte Bausteine wie bei Lego.
+
+00:02:59.280 --> 00:03:01.740
+Microsoft hat bereits die Bausteine für hunderte verschiedener Dienste erstellt.
+
+00:03:02.020 --> 00:03:02.860
+Sie fügen sie einfach zusammen.
+
+00:03:03.220 --> 00:03:04.680
+Möchten Sie einen Schritt zum Senden einer E-Mail hinzufügen?
+
+00:03:04.840 --> 00:03:05.520
+Ziehen Sie ihn einfach hinein.
+
+00:03:05.700 --> 00:03:07.180
+Möchten Sie einen Schritt zum Erstellen einer Datei hinzufügen?
+
+00:03:07.480 --> 00:03:08.180
+Ziehen Sie ihn einfach hinein.
+
+00:03:08.380 --> 00:03:11.060
+Möchten Sie eine Bedingung hinzufügen, die prüft, ob etwas wahr ist, bevor es weitergeht?
+
+00:03:11.220 --> 00:03:11.920
+Ziehen Sie ihn einfach hinein.
+
+00:03:12.080 --> 00:03:13.340
+Es ist wirklich so visuell und so einfach.
+
+00:03:13.660 --> 00:03:15.380
+Die meisten Leute halten Power Automate für kompliziert.
+
+00:03:16.180 --> 00:03:19.120
+Aber wenn man das Marketing und Fachchinesisch weglässt, ist es eigentlich nur, wenn das passiert,
+
+00:03:19.200 --> 00:03:19.740
+dann tue das.
+
+00:03:20.740 --> 00:03:21.780
+Das ist das gesamte Konzept.
+
+00:03:22.220 --> 00:03:24.960
+Sobald Sie dieses Fundament verstehen, ergibt alles andere einen Sinn.
+
+00:03:24.960 --> 00:03:26.880
+Die drei Arten von Flows
+
+00:03:26.880 --> 00:03:29.720
+Jetzt, da Sie das Grundkonzept kennen, lassen Sie uns die verschiedenen Arten betrachten,
+
+00:03:29.780 --> 00:03:30.820
+wie Flows ausgeführt werden können.
+
+00:03:30.960 --> 00:03:32.300
+Nicht alle Flows funktionieren auf die gleiche Weise.
+
+00:03:32.660 --> 00:03:34.520
+Lassen Sie uns die drei Arten aufschlüsseln, die Sie kennen müssen.
+
+00:03:34.880 --> 00:03:36.000
+Zuerst gibt es automatisierte Flow.
+
+00:03:36.320 --> 00:03:38.260
+Diese laufen völlig eigenständig ab, wenn etwas Bestimmtes passiert.
+
+00:03:38.560 --> 00:03:42.460
+Eine neue E-Mail landet in Ihrem Posteingang und schwupps, wird eine Aufgabe in Planner erstellt.
+
+00:03:42.860 --> 00:03:44.040
+Kein menschliches Eingreifen vordrückt.
+
+00:03:44.400 --> 00:03:47.420
+Er läuft einfach im Hintergrund und erledigt seine Arbeit, während Sie sich auf anderes konzentrieren.
+
+00:03:47.900 --> 00:03:50.920
+Dies ist die häufigste Art von Flow für die tägliche Geschäftsautomatisierung.
+
+00:03:51.740 --> 00:03:54.000
+Sie richten ihn einmal ein und er läuft für immer, bis Sie ihn ausschalten.
+
+00:03:54.960 --> 00:03:56.200
+Zweitens gibt es Sofort Flows.
+
+00:03:56.800 --> 00:04:01.400
+Diese starten, wenn Sie eine Schaltfläche auf Ihrem Telefon, in Teams oder auf einer SharePoint-Seite anklicken.
+
+00:04:02.080 --> 00:04:06.220
+Stellen Sie sich vor, Sie betrachten ein Dokument in SharePoint und dort gibt es eine Schaltfläche mit der Aufschrift zur Genehmigung senden.
+
+00:04:06.880 --> 00:04:08.660
+Sie klicken darauf und der Flow erledigt den Rest.
+
+00:04:09.840 --> 00:04:12.180
+Sofort Flows sind perfekt für Aktionen, die Sie selbst steuern möchten.
+
+00:04:12.720 --> 00:04:15.760
+Sie möchten nicht, dass diese automatisch ablaufen, da Sie entscheiden müssen, wann Sie starten.
+
+00:04:16.000 --> 00:04:18.400
+Aber sobald Sie sich entscheiden, übernimmt der Flow die ganze Arbeit für Sie.
+
+00:04:18.820 --> 00:04:20.280
+An dritter Stelle stehen geplante Flows.
+
+00:04:20.600 --> 00:04:21.520
+Diese werden zeitgesteuert aus.
+
+00:04:21.740 --> 00:04:24.680
+Jeden Montag um 8 Uhr senden Sie mir eine Zusammenfassung aller unvollständigen Aufgaben.
+
+00:04:24.960 --> 00:04:26.500
+Jeden Tag um 12 Uhr diesen Ordner sichern.
+
+00:04:27.000 --> 00:04:28.720
+An jedem 1. des Monats einen Bericht erstellen.
+
+00:04:29.320 --> 00:04:33.400
+Sie legen Ihr Zeitplan fest, täglich, wöchentlich, monatlich, was auch immer Sie brauchen und es läuft wie am Schnürchen.
+
+00:04:33.860 --> 00:04:37.500
+Geplante Flows eignen sich hervorragend für wiederkehrende Berichte, Erinnerungen und Aufräumarbeiten.
+
+00:04:38.000 --> 00:04:38.880
+Hier ist, was Sie verstehen müssen.
+
+00:04:39.700 --> 00:04:41.780
+Die Kernengine ist bei allen drei Typen genau dieselbe.
+
+00:04:42.440 --> 00:04:43.940
+Der einzige wirkliche Unterschied ist der Auslöser.
+
+00:04:43.940 --> 00:04:46.040
+Automatisierte Flows verwenden Ereignisauslöser.
+
+00:04:46.360 --> 00:04:47.820
+Sofort Flows verwenden manuelle Auslöser.
+
+00:04:48.160 --> 00:04:52.600
+Geplante Flows verwenden Zeitauslöser, aber sobald der Auslöser greift, funktioniert alles danach genau gleich.
+
+00:04:53.280 --> 00:04:56.480
+Wählen Sie also den Auslöser, der dazu passt, wie der Flow starten soll und schon kann es losgehen.
+
+00:04:58.080 --> 00:05:00.020
+Connector, so kommuniziert Power Automate mit allem.
+
+00:05:00.540 --> 00:05:04.340
+Sie haben also Auslöser und Aktionen, aber wie kommuniziert Power Automate eigentlich mit all diesen verschiedenen Apps?
+
+00:05:04.760 --> 00:05:05.820
+Die Antwort lautet Connectors.
+
+00:05:06.140 --> 00:05:07.100
+Connectors sind die Übersetzer.
+
+00:05:07.720 --> 00:05:11.780
+Power Automate spricht nicht nativ SharePoint, Outlook, Teams oder Excel, aber Connectors tun das.
+
+00:05:12.920 --> 00:05:18.540
+Jeder Connector weiß, wie man mit einem bestimmten Dienst kommuniziert, was er tun kann, welche Daten er erwartet und wie man Befehle sendet.
+
+00:05:19.300 --> 00:05:23.340
+Wenn Sie Ihrem Flow einen Schritt hinzufügen, wählen Sie eigentlich nur einen Connector aus und sagen ihm, was er tun soll.
+
+00:05:23.880 --> 00:05:27.280
+Es gibt derzeit über 1400 vorgefertigte Connectors und diese Zahl wächst ständig.
+
+00:05:27.820 --> 00:05:33.200
+Die Microsoft Connectors wie SharePoint, Teams, Outlook und OneDrive sind in den meisten Plänen standardmäßig enthalten
+
+00:05:33.200 --> 00:05:35.160
+und decken die Dienste ab, die Sie wahrscheinlich täglich nutzen.
+
+00:05:35.340 --> 00:05:37.820
+Aber die Drittanbieter Connectors eröffnen eine ganz neue Welt.
+
+00:05:38.500 --> 00:05:42.960
+Salesforce, Adobe, DocuSign, Google, Twitter, Mailchimpower Automate kann mit Ihnen allen kommunizieren.
+
+00:05:43.700 --> 00:05:47.560
+Sie können einen Flow erstellen, der mit einer Google-Forms-Übermittlung beginnt, die Daten in SharePoint speichert,
+
+00:05:47.780 --> 00:05:50.380
+eine DocuSign-Vereinbarung sendet und eine Benachrichtigung in Teams post.
+
+00:05:50.800 --> 00:05:53.380
+Alles in einem einzigen Flow, ohne das Microsoft-Ökosystem zu verlassen.
+
+00:05:53.760 --> 00:05:56.780
+Und wenn es für das System, das Sie benötigen, keinen Connector gibt, können Sie Ihren eigenen erstellen.
+
+00:05:57.140 --> 00:06:00.280
+Mit benutzerdefinierten Connectors können Sie eine Verbindung zu jedem Dienst herstellen, der über eine API fügt.
+
+00:06:00.280 --> 00:06:03.480
+Es erfordert etwas mehr Arbeit, aber es bedeutet, dass Power Automate mit einem kommunizieren kann.
+
+00:06:03.800 --> 00:06:06.040
+Jeder Connector hat seinen eigenen Satz an Auslösern und Aktionen.
+
+00:06:06.180 --> 00:06:08.600
+Wenn Sie einen auswählen, sehen Sie nur, was dieser Dienst tatsächlich tun kann.
+
+00:06:08.940 --> 00:06:11.080
+Der Connector für SharePoint kennt Listen und Bibliotheken.
+
+00:06:11.660 --> 00:06:13.540
+Der Connector für Outlook verwaltet E-Mails und Kalender.
+
+00:06:14.140 --> 00:06:15.820
+Der Teams-Connector arbeitet mit Kanälen und Nachrichten.
+
+00:06:16.220 --> 00:06:18.860
+Sie müssen nicht raten, denn der Connector zeigt Ihnen genau, was verfügbar ist.
+
+00:06:19.280 --> 00:06:20.820
+Das ist die wahre Stärke von Power Automate.
+
+00:06:21.200 --> 00:06:22.580
+Es ist nicht nur für Microsoft-Dienste gedacht.
+
+00:06:22.940 --> 00:06:29.120
+Es verbindet Ihren gesamten Tech-Stack, Ihr CRM, Ihre E-Mails, Ihre Dateispeicher und Ihr Projektmanagement zu einem einheitlichen Automatisierungssystem.
+
+00:06:29.120 --> 00:06:31.120
+Sie alle werden Teil desselben Flows.
+
+00:06:32.060 --> 00:06:33.640
+Cloud Flows vs. Desktop Flows.
+
+00:06:34.300 --> 00:06:35.600
+Hier entstehen bei vielen Leuten Verwirrungen.
+
+00:06:36.060 --> 00:06:38.980
+Es gibt tatsächlich zwei Arten von Power Automate und sie funktionieren sehr unterschiedlich.
+
+00:06:39.420 --> 00:06:40.420
+Die erste Art sind Cloud Flows.
+
+00:06:40.860 --> 00:06:42.340
+Diese laufen vollständig auf Microsoft-Server.
+
+00:06:42.680 --> 00:06:44.760
+Wenn Sie ein Cloud Flow erstellen, geschieht alles in der Cloud.
+
+00:06:45.240 --> 00:06:47.320
+Ein Formular wird gesendet und die Daten in SharePoint gespeichert.
+
+00:06:47.840 --> 00:06:50.100
+Eine E-Mail kommt an und ein Kalenderereignis wird erstellt.
+
+00:06:50.580 --> 00:06:53.860
+Ihr Computer muss nicht eingeschaltet sein und Sie benötigen keine installierte Software.
+
+00:06:54.400 --> 00:06:57.620
+Der Flow läuft auf der Infrastruktur von Microsoft und Sie prüfen später nur die Ergebnisse.
+
+00:06:57.620 --> 00:07:01.100
+Cloud Flows sind das, woran die meisten denken, wenn Sie Power Automate hören.
+
+00:07:01.760 --> 00:07:03.120
+Die zweite Art sind Desktop Flows.
+
+00:07:03.540 --> 00:07:04.300
+Das ist etwas völlig anderes.
+
+00:07:04.880 --> 00:07:08.100
+Desktop Flows nutzen etwas namens Robotic Process Automation oder RPR.
+
+00:07:08.860 --> 00:07:13.360
+Und das bedeutet in einfachen Worten ausgedrückt, Power Automate übernimmt buchstäblich die Steuerung von Maus und Tastatur.
+
+00:07:14.000 --> 00:07:19.260
+Es öffnet Browserfenster, klickt auf Schaltflächen, gibt Text in Felder ein und kopiert Daten von einer Anwendung in eine andere.
+
+00:07:19.260 --> 00:07:24.140
+Aber wenn Sie schon einmal gesehen haben, wie jemand Remote Desktop Software nutzt, um einen anderen Computer zu steuern,
+
+00:07:24.420 --> 00:07:26.960
+genauso sieht es aus, nur ohne eine Person am anderen Ende.
+
+00:07:27.580 --> 00:07:29.100
+Es ist einfach nur Software, die Ihre Maus bewegt.
+
+00:07:29.540 --> 00:07:32.200
+Wenn man zum ersten Mal einen Desktop Flow sieht, ist das schon etwas unheimlich.
+
+00:07:32.980 --> 00:07:37.660
+Ihr Cursor bewegt sich von alleine, Fenster öffnen und schließen sich und Text erscheint in Feldern, die Sie nicht angeklickt haben.
+
+00:07:38.180 --> 00:07:39.820
+Es sieht aus, als würde ein Geist den Computer benutzen.
+
+00:07:40.320 --> 00:07:43.240
+Aber wenn man die anfängliche Skepsis überwunden hat, erkennt man, wie mächtig das ist.
+
+00:07:43.240 --> 00:07:45.220
+Warum sollten Sie also Desktop Flows benötigen?
+
+00:07:45.440 --> 00:07:48.020
+Weil nicht jedes System über eine moderne API oder einen Connector verfügt.
+
+00:07:48.340 --> 00:07:50.660
+Denken Sie an die alten Geschäftsanwendungen, die Unternehmen immer noch verwenden.
+
+00:07:51.220 --> 00:07:55.180
+Das Buchhaltungssystem aus den frühen 2000ern, die maßgeschneiderte Datenbank von vor 15 Jahren,
+
+00:07:55.320 --> 00:07:57.140
+die alte HR-Software auf einem lokalen Server.
+
+00:07:57.960 --> 00:08:01.940
+Diese Systeme haben keine Trigger, Konnektoren oder Möglichkeiten, mit der Außenwelt zu kommunizieren,
+
+00:08:02.240 --> 00:08:06.920
+aber ein Desktop Flow kann mit Ihnen interagieren wie ein Mensch, indem er Buttons klickt und Text eingibt, entgibt.
+
+00:08:07.440 --> 00:08:08.120
+Welchen benötigen Sie?
+
+00:08:08.500 --> 00:08:11.580
+Cloud Flows eignen sich für moderne Dienste, die über APIs und Konnektoren verfügen.
+
+00:08:11.580 --> 00:08:13.840
+Desktop Flows bewältigen Legacy-Anwendungen.
+
+00:08:13.980 --> 00:08:17.580
+Alte Software oder alles, was sich nicht programmgesteuert verbinden lässt, dann...
+
+00:08:17.580 --> 00:08:21.820
+In vielen Unternehmen werden Sie am Ende beides nutzen, wie die Teile zusammenpassen, das System.
+
+00:08:22.540 --> 00:08:25.380
+Die Sache ist die, die meisten halten Power Automate für ein einzelnes Tool,
+
+00:08:25.540 --> 00:08:29.460
+aber erst wenn man versteht, wie die Teile ineinander greifen, entfaltet sich die Ware greifen, entfaltet sich die Ware greifen.
+
+00:08:29.720 --> 00:08:31.140
+Es sind eigentlich drei Ebenen, die zusammenarbeiten.
+
+00:08:31.620 --> 00:08:32.360
+Fangen wir mit dem Auslöser an.
+
+00:08:32.860 --> 00:08:34.080
+Etwas geschieht in Ihrer Arbeitswelt.
+
+00:08:34.480 --> 00:08:37.400
+Ein Formular wird abgeschickt, eine Datei hochgeladen oder eine E-Mail trifft ein.
+
+00:08:37.800 --> 00:08:39.100
+Das ist der Funke, der alles in Gang setzt.
+
+00:08:39.260 --> 00:08:40.380
+Als Nächste kommt die Aktion.
+
+00:08:40.380 --> 00:08:43.920
+Die Automatisierung erledigt etwas Nützliches, wie Daten zu speichern, eine Benachrichtigung zu senden,
+
+00:08:43.980 --> 00:08:45.920
+eine Aufgabe zu erstellen oder einen Datensatz zu aktualisieren.
+
+00:08:46.020 --> 00:08:47.020
+Dort die eigentliche Arbeit verrichtet.
+
+00:08:47.340 --> 00:08:48.260
+Dann gibt es noch den Connector.
+
+00:08:48.600 --> 00:08:50.260
+Er schließt die Lücke zwischen Ihren verschiedenen Tools.
+
+00:08:50.660 --> 00:08:54.140
+Er lässt den Auslöser mit der Aktion kommunizieren, selbst wenn sie in völlig verschiedenen Systemen liegen.
+
+00:08:54.360 --> 00:08:57.080
+Die wahre Stärke liegt nicht in einem einzelnen Teil, sondern in Ihrem Zusammenspiel.
+
+00:08:57.260 --> 00:08:58.320
+Lassen Sie mich ein echtes Beispiel geben.
+
+00:08:58.560 --> 00:09:00.640
+Angenommen, ein Kunde füllt ein Kontaktformular auf Ihrer Website aus.
+
+00:09:00.860 --> 00:09:01.620
+Das ist der Auslöser.
+
+00:09:01.980 --> 00:09:05.660
+Power Automate erkennt dies und findet den richtigen Vertriebsmitarbeiter in einer SharePoint-Liste.
+
+00:09:06.160 --> 00:09:06.700
+Aktion 1.
+
+00:09:07.060 --> 00:09:09.340
+Dann sendet es eine Teams-Benachrichtigung an diese Vertriebsmitarbeiter.
+
+00:09:09.800 --> 00:09:10.260
+Aktion 2.
+
+00:09:10.980 --> 00:09:13.420
+Dann erstellt es eine Nachverfolgungsaufgabe im Planner für den nächsten Morgen.
+
+00:09:13.900 --> 00:09:14.400
+Aktion 3.
+
+00:09:14.860 --> 00:09:17.300
+Dann protokolliert es alles in einer Excel-Tabelle für die Berichterstattung.
+
+00:09:17.860 --> 00:09:18.340
+Aktion 4.
+
+00:09:18.960 --> 00:09:22.100
+Vier Aktionen durch einen Auslöser über drei verschiedene Dienste hinweg.
+
+00:09:22.420 --> 00:09:23.380
+Und alles passiert in Sekunden.
+
+00:09:23.380 --> 00:09:26.680
+Ein Auslöser kann Dutzende von Aktionen über mehrere Dienste hinweg verkennen.
+
+00:09:26.680 --> 00:09:31.400
+Sie können Flows erstellen, die SharePoint, Teams, Outlook, Planner, Excel und Salesforce
+
+00:09:31.400 --> 00:09:33.020
+in derselben Automatisierung einbinden.
+
+00:09:34.100 --> 00:09:37.040
+Jede Aktion gibt Daten an die nächste weiter und baut auf dem Vorhergehen dann auf.
+
+00:09:37.840 --> 00:09:39.160
+Der Flow erledigt nicht nur eine Sache.
+
+00:09:39.760 --> 00:09:41.640
+Er wickelt einen kompletten Prozess von Anfang bis Ende.
+
+00:09:42.220 --> 00:09:42.940
+Das ist magisch daran.
+
+00:09:42.940 --> 00:09:47.300
+Was früher ein manueller 10-Minuten-Prozess war, Formular prüfen, richtige Person finden,
+
+00:09:47.700 --> 00:09:52.420
+Nachricht senden, Aufgabe erstellen, Daten protokollieren, geschieht jetzt sofort und automatisch.
+
+00:09:52.820 --> 00:09:53.260
+Keine Fehler.
+
+00:09:53.660 --> 00:09:55.020
+Der Kunde erhält eine schnellere Antwort.
+
+00:09:55.520 --> 00:09:57.100
+Der Vertriebsmitarbeiter erhält einen klarnächsten Schuld.
+
+00:09:57.380 --> 00:09:58.460
+Und Sie mussten keinen Finger rühren.
+
+00:09:59.420 --> 00:10:00.860
+Praxisbeispiele, die Sie morgen schon nutzen können.
+
+00:10:01.400 --> 00:10:02.240
+Lassen Sie uns konkret werden.
+
+00:10:02.960 --> 00:10:05.040
+Hier sind drei Flows, die Sie ab heute direkt erstellen können.
+
+00:10:05.860 --> 00:10:07.440
+Beginnen wir mit einem Flow für Formularübermittlung.
+
+00:10:07.800 --> 00:10:09.180
+Jemand füllt ein Microsoft-Formular aus.
+
+00:10:09.540 --> 00:10:12.540
+Vielleicht eine Veranstaltungsanmeldung, ein Feedback-Formular oder eine Supportanfrage.
+
+00:10:12.940 --> 00:10:15.980
+Wenn auf Send geklickt wird, speichert Power Automate die Antworten in einer SharePoint-Liste.
+
+00:10:16.380 --> 00:10:18.100
+Dann sendet es eine E-Mail mit den Details an Ihr Team.
+
+00:10:18.520 --> 00:10:18.900
+Das war schon.
+
+00:10:19.440 --> 00:10:23.660
+Ein Auslöser, zwei Aktionen und Sie müssen nie wieder Formularantworten manuell in eine Tabelle kopieren.
+
+00:10:24.680 --> 00:10:29.140
+Jede Übermittlung wird automatisch erfasst, organisiert und mit den Personen geteilt, die Sie sehen müssen.
+
+00:10:30.060 --> 00:10:31.980
+Als nächstes folgt ein Genehmigungsprozess für Dokumente.
+
+00:10:32.420 --> 00:10:33.940
+Jemand lädt eine Datei in einen SharePoint-Ordner hoch.
+
+00:10:34.540 --> 00:10:37.820
+Power Automate erkennt die neue Datei und sendet eine Genehmigungsanfrage an der Vorgesetzten.
+
+00:10:37.820 --> 00:10:42.180
+Der Vorgesetzte erhält eine E-Mail- oder Teams-Benachrichtigung mit einer einfachen Schaltfläche zum Genehmigen oder Ablegen.
+
+00:10:42.760 --> 00:10:45.520
+Bei einer Genehmigung wird die Datei automatisch in einen Veröffentlichungsordner verschoben.
+
+00:10:46.000 --> 00:10:47.500
+Bei einer Ablehnung verbleibt sie im Entwurfsoor.
+
+00:10:47.740 --> 00:10:49.460
+Kein Hinterherlaufen mehr für Unterschriften.
+
+00:10:49.800 --> 00:10:51.940
+Kein Rätselraten mehr, ob ein Dokument geprüft wurde oder nicht.
+
+00:10:52.640 --> 00:10:55.100
+Ihr Flow übernimmt die gesamte Genehmigungskette von Anfang bis Ende.
+
+00:10:55.820 --> 00:10:57.240
+Dann gibt es noch die tägliche Aufgaben über Sie.
+
+00:10:57.800 --> 00:11:02.520
+Jeden Morgen um 7 Uhr prüft Power Automate Ihre SharePoint-Aufgabenliste auf unvollständige Elemente.
+
+00:11:03.040 --> 00:11:06.400
+Es sammelt alle überfälligen und ausstehenden Punkte und sendet Ihnen eine Zusammenfassung in Teams.
+
+00:11:06.520 --> 00:11:08.880
+Sie beginnen Ihren Tag und wissen genau, was auf Sie wartet.
+
+00:11:09.480 --> 00:11:11.620
+Sie müssen keine Listen öffnen oder verschiedene Tools prüfen.
+
+00:11:11.620 --> 00:11:14.520
+Die Zusammenfassung ist direkt in Ihrem Chat, wenn Sie sich mit Ihrem Kaffee hinsetzen.
+
+00:11:15.020 --> 00:11:17.460
+Jeder dieser Flows lässt sich in etwa 10 bis 15 Minuten erstellen.
+
+00:11:17.840 --> 00:11:18.840
+Keine Programmierung erforderlich.
+
+00:11:19.060 --> 00:11:19.980
+Keine IT-Abteilung nötig.
+
+00:11:20.480 --> 00:11:22.320
+Nur Sie, ein Browser und der Power Automate Editor.
+
+00:11:23.040 --> 00:11:25.560
+Der Trick ist, mit einem Prozess zu beginnen, der Sie am meisten nervt.
+
+00:11:26.060 --> 00:11:28.400
+Der, den Sie täglich ausführen und bei dem Sie denken, das muss besser gehen.
+
+00:11:29.260 --> 00:11:30.660
+Das ist Ihr erstes Ziel für die Automatisierung.
+
+00:11:31.360 --> 00:11:31.820
+Der Einstieg.
+
+00:11:32.440 --> 00:11:33.520
+Ihr erster Flow in 5 Minuten.
+
+00:11:34.200 --> 00:11:34.960
+Bereit es auszuprobieren?
+
+00:11:35.200 --> 00:11:38.340
+Hier erfahren Sie, wie Sie Ihren ersten Flow in wenigen Minuten zum Laufen bringen.
+
+00:11:38.340 --> 00:11:40.880
+Öffnen Sie Ihren Browser und gehen Sie zu Make.Power Automate.
+
+00:11:41.240 --> 00:11:43.760
+Das ist Ihre zentrale Anlaufstelle zum Erstellen und Verwalten von Flow.
+
+00:11:44.300 --> 00:11:48.420
+Melden Sie sich mit demselben Microsoft 365 Arbeitskonto an, das Sie bereits für E-Mail und Teams verwenden.
+
+00:11:49.100 --> 00:11:53.380
+Sobald Sie angemeldet sind, klicken Sie in der linken Seitenleiste auf Erstellen und wählen Sie automatisierter Cloudflow.
+
+00:11:53.920 --> 00:11:57.280
+Damit sagen Sie Power Automate, dass der Flow automatisch starten soll, wenn ein Ereignis eintritt.
+
+00:11:57.280 --> 00:12:01.600
+Für Ihren ersten Flow empfehle ich die Verwendung des Triggers, wenn eine neue E-Mail eingeht.
+
+00:12:02.340 --> 00:12:04.460
+Das ist einfach, leicht zu testen und jeder bekommt E-Mails.
+
+00:12:05.500 --> 00:12:06.900
+Klicken Sie auf Erstellen in den Editor.
+
+00:12:07.480 --> 00:12:08.340
+Jetzt benötigen Sie eine Aktion.
+
+00:12:08.740 --> 00:12:10.840
+Klicken Sie auf das Pluszeichen unter Ihrem Trigger und suchen Sie nach dem.
+
+00:12:11.300 --> 00:12:13.020
+Wählen Sie Nachricht in einem Chat oder Kanalposten.
+
+00:12:14.560 --> 00:12:16.160
+Wählen Sie FlowBot als Absender aus.
+
+00:12:17.160 --> 00:12:21.140
+Wählen Sie sich selbst als Empfänger und schreiben Sie eine Nachricht wie Neue E-Mail erhalten.
+
+00:12:21.800 --> 00:12:22.400
+Das ist schon alles.
+
+00:12:22.920 --> 00:12:24.600
+Klicken Sie auf Speichern und die erste Flow ist bereit.
+
+00:12:24.960 --> 00:12:26.440
+Und hier ist ein Tipp, den Sie immer wieder verwenden werden.
+
+00:12:26.440 --> 00:12:28.260
+Die Testschaltfläche ist Ihr bester Freund.
+
+00:12:28.780 --> 00:12:32.900
+Wenn Sie darauf klicken, führt Power Automate Ihren Flow sofort mit den verfügbaren Trigger-Daten aus.
+
+00:12:33.700 --> 00:12:36.000
+Beim E-Mail-Trigger wartet er auf den Eingang einer neuen E-Mail.
+
+00:12:36.740 --> 00:12:39.500
+Sendet ihr einfach eine kurze Test-E-Mail und beobachte, wie der Flow startet.
+
+00:12:39.920 --> 00:12:41.860
+Du musst nicht darauf warten, dass der echte Auslöser von alleine passiert.
+
+00:12:42.260 --> 00:12:43.660
+Falls doch etwas schief geht, keine Panik.
+
+00:12:44.200 --> 00:12:47.440
+Klicke auf den fehlerhaften Schritt und schau dir die Eingabe- und Ausgabebereiche an.
+
+00:12:47.980 --> 00:12:49.820
+Die Eingaben zeigen, welche Daten der Schritt erhalten hat.
+
+00:12:50.160 --> 00:12:51.300
+Die Ausgaben zeigen, was er versucht hat.
+
+00:12:51.560 --> 00:12:54.880
+In neun von zehn Fällen wird das Problem sofort klar, wenn man diese beiden Bereiche prüft.
+
+00:12:54.880 --> 00:12:57.860
+Vielleicht war der E-Mail-Betreff anders formatiert als erwartet.
+
+00:12:58.220 --> 00:12:59.000
+Vielleicht war ein Feld leer.
+
+00:12:59.480 --> 00:13:02.040
+Die Fehlermeldungen sind überraschend hilfreich, sobald man weiß, wo man sie findet.
+
+00:13:02.420 --> 00:13:04.700
+Fang klein an, teste oft und baue alles schrittweise auf.
+
+00:13:05.040 --> 00:13:06.720
+Dein allererster Flow besteht vielleicht nur aus zwei Schritten.
+
+00:13:07.060 --> 00:13:08.500
+Dein zehter Flow könnte schon 20 Schritte haben.
+
+00:13:08.760 --> 00:13:09.540
+Und das ist völlig in Ordnung.
+
+00:13:09.940 --> 00:13:13.820
+Jeder Flow, den du erstellst, lehrt dich etwas Neues darüber, wie deine Tools zusammenarbeiten.
+
+00:13:14.620 --> 00:13:15.420
+Das ist also das System.
+
+00:13:15.420 --> 00:13:19.120
+Auslöser, Aktionen und Konnektoren arbeiten zusammen, um die Routinearbeit zu erledigen,
+
+00:13:19.180 --> 00:13:20.280
+die dir täglich Zeit raubt.
+
+00:13:21.080 --> 00:13:24.220
+Die meisten denken, Automatisierung sei kompliziert oder erfordere Programmierkenntnisse.
+
+00:13:24.360 --> 00:13:25.260
+Aber das ist heute nicht mehr so.
+
+00:13:25.660 --> 00:13:29.420
+Der klügste Schritt, den du jetzt machen kannst, ist eine tägliche, repetitive Aufgabe zu wählen
+
+00:13:29.420 --> 00:13:31.100
+und dafür einen Flow zu bauen.
+
+00:13:31.880 --> 00:13:33.580
+Abonnier den Kanal für weitere Erklärungen wie diese
+
+00:13:33.580 --> 00:13:35.840
+und schreibe in die Kommentare, was du als erstes automatisieren würdest.
+
+00:13:35.840 --> 00:14:05.820
+Bis zum nächsten Mal.

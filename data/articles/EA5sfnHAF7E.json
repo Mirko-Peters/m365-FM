@@ -1,0 +1,134 @@
+{
+ "de": {
+  "html": "<h2>Warum viele Enterprise-Bots nur gut klingen: Das Problem ohne RAG</h2>\n<p>Viele KI-Assistenten wirken in der Demo beeindruckend. Fragt man sie aber nach Firmenrichtlinien oder dem Status eines Projekts, scheitern sie. Der Grund: Es sind große Sprachmodelle ohne Anbindung an die Daten des eigenen Mandanten. Sie liefern Antworten, die offiziell klingen, dem Unternehmen aber nichts nützen. Wer die Urlaubsrichtlinie der Personalabteilung sucht, bekommt dann einen generischen Text zur Work-Life-Balance aus dem Internet.</p>\n<p>Dieser Artikel erklärt, wie Retrieval Augmented Generation (RAG) das Problem löst, wo Copilot Studio und Azure AI Foundry ihre Stärken haben, wie ein Drei-Stufen-Modell die Plattformwahl vereinfacht und welche Stolpersteine im Betrieb auf Teams warten.</p>\n\n<h2>RAG erklärt: Suche plus Sprachmodell</h2>\n<p>RAG bedeutet Suche plus LLM. Das Modell formuliert seine Antwort erst, nachdem es indexierte Unternehmensinhalte durchsucht hat, etwa aus SharePoint, OneDrive oder Dataverse. Es improvisiert also nicht frei, sondern wird über eine Suchpipeline mit Daten aus der eigenen Umgebung versorgt. Das ist der Unterschied zwischen einer Demo, die schlau aussieht, und einem System, dem man vertrauen kann.</p>\n<p>Ohne RAG häufen sich die Risiken. Ein einfaches Sprachmodell ist breit mit Internetdaten trainiert und gibt womöglich eine Antwort, die korrekt klingt, aber falsch ist. Das ist nicht nur peinlich, sondern gefährlich, wenn falsche Compliance-Informationen an tausende Mitarbeiter gehen, bevor die Personalabteilung davon erfährt. Microsoft Digital stieß bei der Entwicklung von HR- und IT-Copilots auf dieses Risiko. Die Lösung bestand darin, autoritative Quellen zu kennzeichnen und im Studio mit Connectoren zu arbeiten, um falsche Antworten zu reduzieren.</p>\n\n<h3>Sichere Suche durch Zugriffskontrolle</h3>\n<p>RAG sollte nicht nur besser, sondern auch sicherer suchen. Man kann sich die Zugriffskontrolle als Türsteher vorstellen: Das System führt die Suche aus, prüft aber vor der Antwort die Benutzer-ID. Die Finanzabteilung sieht Finanzdaten, der Vertrieb Vertriebsmaterial, und niemand sieht Vorstandsprotokolle ohne Berechtigung.</p>\n<p>Ein Beispiel: Ein Mitarbeiter im Vertrieb und eine Kollegin im Finanzwesen fragen denselben Bot nach Quartalszahlen. Der Vertrieb erhält den bereinigten öffentlichen Bericht, die Finanzabteilung die detaillierten Konten aus ihrem geschützten Ordner. Gleicher Index, gleicher Bot, unterschiedliche Antworten. Das funktioniert jedoch nur, wenn Berechtigungen und Indizierung korrekt verknüpft sind. Sonst bleibt es eine Halluzinationsmaschine mit Firmenbranding.</p>\n\n<h2>Copilot Studio: schnelle Erfolge mit Stützrädern</h2>\n<p>Copilot Studio ist die Low-Code-Umgebung von Microsoft für den Bau von Copilots. Man wählt eine Startvorlage und verbindet sie über mehr als 1000 Konnektoren mit den eigenen Daten, darunter SharePoint, Dynamics, ServiceNow, Excel und OneDrive. Ohne Code entsteht schnell ein Chatbot, der Fragen beantwortet. Der große Vorteil ist die kurze Zeit bis zur Wertschöpfung: Kleine IT-Teams haben Live-Helpdesk-Bots in unter zwei Wochen eingeführt, meist indem sie bestehende SharePoint-Seiten in Konversationsabläufe überführten.</p>\n<h3>Die Grenzen von Studio</h3>\n<p>Diese Einfachheit hat ihren Preis. Studio verbirgt bewusst die meisten erweiterten Einstellungen: Es gibt keine Temperaturregler, keine Top-P-Anpassung, keine Promptversionierung und keine Evaluierungsschwellen. Man kann die Kreativität des Modells nicht steuern, keine A/B-Tests für Prompts durchführen und keine Leitplanken gegen schleichende Qualitätsverluste setzen. Auch die Integration von GPT-5 mit intelligentem Modellrouting ändert daran nichts. Die Plattform schaltet zwar je nach Frage zwischen schneller und tieferer Analyse um, die Parameter bleiben aber unzugänglich. Das ist eine Designentscheidung: zugänglich, nicht anpassbar.</p>\n<p>Ein hilfreiches Gegengewicht ist die Kennzeichnung als autoritative Quelle. Ohne sie wirkt jede Antwort gleich legitim, die alte SharePoint-FAQ von 2009 ebenso wie das HR-Handbuch von heute Morgen. Mit der Kennzeichnung lässt sich zeigen: Das kommt von der Personalabteilung, der Rest zählt nicht. Microsoft Digital setzte bei den eigenen HR- und IT-Bots stark darauf, weil Mitarbeiter kreative KI-Antworten sonst als verbindliche Richtlinie nahmen und die Helpdesks mit Prüftickets überfluteten.</p>\n<h3>Wofür Studio geeignet ist</h3>\n<ul>\n<li>interne IT- und HR-Bots</li>\n<li>FAQs für Teams und einfache Q&amp;A-Szenarien</li>\n<li>Anwendungen, die ohne großen Aufwand in Teams und Outlook laufen sollen</li>\n<li>schnelle Prototypen, um der Führungsebene einen funktionierenden Bot zu zeigen</li>\n</ul>\n<p>Bei Compliance-Prüfungen, systemübergreifender Orchestrierung oder Governance auf Mandantenebene stößt Studio an seine Grenzen. Dann wird die Geschwindigkeit zur Belastung.</p>\n\n<h2>Azure AI Foundry: die Plattform für Kontrolle und Governance</h2>\n<p>Azure AI Foundry ist eine Code-First-Umgebung für Unternehmen, die volle Kontrolle brauchen. Sie bietet Zugriff auf einen Katalog mit über 11.000 Modellen, darunter die GPT-5-Familie, Open-Source-Gewichte sowie Vision- und Audio-Engines, und auf Anbieter wie Mistral, Cohere, Meta, Hugging Face und NVIDIA. Vorausgesetzt werden Kenntnisse in Python und GitHub sowie Vertrautheit mit CI/CD-Pipelines.</p>\n<p>Dafür gibt es Kontrolle über den gesamten Lebenszyklus. Man wählt Modelle aus, optimiert sie, testet Prompts und überführt sie mit sauberem MLOps durch Entwicklungs-, Test- und Produktionsumgebung. Jeder Parameter ist zugänglich: Die Kreativität lässt sich auf null setzen, Tokens begrenzen, Halluzinationsraten messen. Es gibt Audit-Logs, Bewertungsberichte und nachvollziehbare Ergebnisse.</p>\n<h3>Was Foundry bietet</h3>\n<ul>\n<li>Modellwahl und Feinabstimmung</li>\n<li>Anbindung an eigene Data Lakes</li>\n<li>MLOps mit richtigen Pipelines</li>\n<li>CI/CD für das Deployment</li>\n<li>vollständige Telemetrie und Audit-Trails</li>\n</ul>\n<p>Ein Praxisbeispiel: Ein Kunde musste sensible Forschungsdokumente zugänglich machen und genau nachverfolgen, wer was bis auf den Absatz genau gesehen hat. Der private Data Lake wurde indexiert, mit der Azure Cognitive Search verknüpft, und jede Abfrage wurde mit Benutzeridentität und Dokumenten-ID protokolliert. Die Compliance-Abteilung erhielt so eine Transparenz, die das Audit bestand.</p>\n<p>Der Haken: Foundry kostet Zeit und Fachwissen. Man muss jede Ebene der Verkabelung verstehen, und ein Bot entsteht nicht mal eben an einem Wochenende. Der Vorteil liegt in der Orchestrierung. Agenten, APIs, Suche und Bewertungsebenen lassen sich zu einem verwalteten Fluss verbinden, der während eines Gesprächs Rest-Endpunkte ansteuert, strukturierte und unstrukturierte Quellen nutzt und den Lebenszyklus per Continuous Integration steuert. Deshalb gilt Foundry in Fertigung, Finanzen und Gesundheitswesen als die ernsthafte Option.</p>\n\n<h2>Das Drei-Stufen-Modell: erkunden, skalieren, steuern</h2>\n<p>Statt zwischen Studio und Foundry zu wählen, hilft die Frage, in welcher Phase sich ein Projekt befindet. Der Lebenszyklus besteht aus drei Stufen.</p>\n<h3>Erkunden</h3>\n<p>Hier führt Copilot Studio. Man baut schnell Bots, etwa einen HR-FAQ-Bot oder einen Helfer für Passwort-Resets, um zu prüfen, ob eine Idee trägt. Das ist in unter zwei Wochen mit Konnektoren und ohne Code machbar. Die Checkliste: die drei wichtigsten Anwendungsfälle identifizieren, in ein bis zwei Wochen im Studio prototypisch umsetzen und messen, ob der Bot tatsächlich genutzt wird. Zusätzlich sollte man den Tokenverbrauch beobachten, damit der Pilot vor der Skalierung keine ausufernden Kosten verursacht.</p>\n<h3>Skalieren</h3>\n<p>Hier kommt Foundry ins Spiel. Zwei Auslöser deuten auf den Wechsel hin: Der Bot muss auf Systeme außerhalb von Microsoft 365 zugreifen, etwa ERP, SAP oder Finanzdatenbanken. Oder Halluzinationen sind nicht mehr nur lästig, sondern riskant, zum Beispiel bei Compliance-Fragen mit erfundenen Richtlinien. Viele Unternehmen fahren hybrid: Studio für FAQs und einfache Abläufe, Foundry für komplexe Workloads mit hohen Anforderungen an Sicherheit und Präzision.</p>\n<h3>Steuern</h3>\n<p>Ist die KI in sensible Arbeitsabläufe oder kundennahe Systeme eingebunden und spielen Audits, SLAs oder regionale Datenkontrollen eine Rolle, ist Foundry Pflicht. Das ist der dritte Auslöser: Datensouveränität, Erklärbarkeit oder Zugriffsprotokolle auf Datensatzebene. Foundry liefert Audit-Trails, Telemetrie, Pipeline-Gating und Datengovernance, für die Microsoft-365-Konnektoren nie ausgelegt waren.</p>\n<p>Zur Veranschaulichung: Erkunden gleicht dem Fahren auf einem leeren Parkplatz, um zu sehen, ob das Auto läuft. Skalieren ist die Auffahrt auf die Autobahn, wo Fehler Konsequenzen haben. Steuern ist die Abgasuntersuchung, bei der jeder Sensor angeschlossen wird.</p>\n<p>Auch Microsofts HR-Team ging diesen Weg: Es baute einfache FAQ-Bots im Studio. Als sie sensible, regionsspezifische HR-Dateien abriefen, schlug die Compliance Alarm. Die Migration zu Foundry brachte strengere Zugriffskontrollen, Audit-Protokolle und saubere Datentrennung. Nichts war kaputt, der Umfang war lediglich über das hinausgewachsen, wofür Studio konzipiert wurde. Das kommende Microsoft 365 Agents SDK soll Studio und Foundry enger verbinden. Man prototypt dann im Studio und erweitert um Modellrouting, Konnektoren und Governance in Foundry, alles in einem Lebenszyklus.</p>\n\n<h2>Häufige Fehler und Stolpersteine im Betrieb</h2>\n<h3>1. Verborgene Modellsteuerung</h3>\n<p>Studio bietet keine Temperatur, kein Top-P, keine Evaluierungsschleifen und keine Promptversionierung. Diese Hebel entscheiden, ob ein Agent konsistente Ergebnisse liefert oder sich wie ein Glückskeks-Automat verhält. Wenn Zuverlässigkeit zählt, gehören diese Workloads in Foundry: Temperature auf null, eingefrorene Prompts, Prüfung jeder Ausgabe vor der Auslieferung.</p>\n<h3>2. Verbrauchsbasierte Preise</h3>\n<p>Beide Plattformen rechnen nach Verbrauch ab. Tokenverbrauch und Modellmix bestimmen die Rechnung. In Studio überraschen Kostensprünge, wenn die Nutzung steigt und kein Budget für Governance oder Lizenzen eingeplant war. In Foundry sind die Skalierungskosten zumindest transparent. Abhilfe: Nutzungsmetriken von Anfang an erfassen, hochvolumige oder einfache Anfragen an günstigere Modelle im Katalog leiten und versteckte Posten wie Lizenzen, Governance-Tools und benutzerdefinierte Konnektoren früh einplanen.</p>\n<h3>3. Konnektoren sind nicht automatisch unternehmenstauglich</h3>\n<p>SharePoint, OneDrive oder Dynamics funktionieren für Prototypen gut. Andere Konnektoren, etwa für Salesforce oder SuccessFactors, brauchen oft Metadatenanpassungen oder eigene Entwicklung. Microsoft Digital erweiterte seine ServiceNow- und SuccessFactors-Konnektoren und ergänzte die Kennzeichnung autoritativer Quellen, damit offizielle HR-Richtlinien von veralteten Inhalten unterscheidbar blieben. Bei kritischen Systemen sollte man Anpassungsaufwand einplanen oder die Last gleich nach Foundry verlagern, wo benutzerdefinierte APIs und Pipelines Standard sind.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Setzen Sie auf RAG, damit Antworten aus Ihren eigenen, indexierten Quellen stammen.</li>\n<li>Verknüpfen Sie Berechtigungen und Indizierung korrekt, damit jeder nur sieht, was er sehen darf.</li>\n<li>Kennzeichnen Sie autoritative Quellen, damit veraltete Inhalte nicht gleichwertig wirken.</li>\n<li>Starten Sie in Studio: Top-3-Anwendungsfälle in ein bis zwei Wochen prototypisch umsetzen und die Nutzung messen.</li>\n<li>Wechseln Sie zu Foundry, wenn Systeme außerhalb von Microsoft 365 angebunden werden müssen, Halluzinationen riskant werden oder Audits, Datensouveränität und Erklärbarkeit gefordert sind.</li>\n<li>Erfassen Sie den Tokenverbrauch von Beginn an und budgetieren Sie auch Lizenzen, Governance und Konnektoren.</li>\n<li>Planen Sie bei kritischen Konnektoren Anpassungsarbeit ein.</li>\n<li>Denken Sie hybrid: Studio für Geschwindigkeit, Foundry für Kontrolle.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot Studio und Azure AI Foundry sind keine Konkurrenten, sondern Stufen eines Lebenszyklus. Studio bringt Geschwindigkeit und Reichweite in Microsoft 365, Foundry bringt Kontrolle, Modellvielfalt und Governance. Wer in Studio erkundet, in Foundry skaliert und dort auch steuert, wenn Prüfer kommen, vermeidet unnötige Kopfschmerzen. Entscheidend ist, früh Risiko und Tokenverbrauch zu messen und rechtzeitig zu wechseln, wenn Compliance oder Komplexität es verlangen.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Copilot Studio und Azure AI Foundry: erkunden, skalieren, steuern",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "RAG als Basis",
+     "text": "Suche plus LLM: Antworten stammen aus indexierten Unternehmensquellen, gefiltert durch Berechtigungen."
+    },
+    {
+     "kopf": "Erkunden in Studio",
+     "text": "Low-Code-Prototypen mit Konnektoren in ein bis zwei Wochen; Nutzung und Tokenverbrauch messen."
+    },
+    {
+     "kopf": "Skalieren mit Foundry",
+     "text": "Wechsel bei Systemen außerhalb von Microsoft 365 oder riskanten Halluzinationen."
+    },
+    {
+     "kopf": "Steuern mit Foundry",
+     "text": "Audit-Trails, Telemetrie und Datengovernance für Audits, Datensouveränität und Erklärbarkeit."
+    },
+    {
+     "kopf": "Stolpersteine einplanen",
+     "text": "Verborgene Modellsteuerung, verbrauchsbasierte Kosten und Konnektoren mit Anpassungsbedarf früh berücksichtigen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist RAG (Retrieval Augmented Generation) und warum brauchen Unternehmens-Bots es?",
+    "a": "RAG bedeutet Suche plus Sprachmodell: Das Modell durchsucht zuerst indexierte Unternehmensinhalte, etwa aus SharePoint, OneDrive oder Dataverse, und formuliert dann seine Antwort. So improvisiert es nicht frei, liefert weniger falsche Antworten und stützt sich auf die eigenen Daten des Unternehmens."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen Copilot Studio und Azure AI Foundry?",
+    "a": "Copilot Studio ist eine Low-Code-Umgebung für schnelle Bots mit über 1000 Konnektoren, bietet aber kaum einstellbare Modellparameter. Azure AI Foundry ist Code-First, bietet über 11.000 Modelle, volle Parameterkontrolle, Audit-Logs und Governance, erfordert jedoch deutlich mehr Zeit und Fachwissen."
+   },
+   {
+    "q": "Wann sollte man von Copilot Studio zu Azure AI Foundry wechseln?",
+    "a": "Ein Wechsel lohnt sich, wenn der Bot auf Systeme außerhalb von Microsoft 365 wie ERP oder SAP zugreifen muss, Halluzinationen riskant werden oder Audits, Datensouveränität, Erklärbarkeit und Zugriffsprotokolle auf Datensatzebene gefordert sind. Viele Unternehmen arbeiten auch hybrid."
+   },
+   {
+    "q": "Wie stellt man sicher, dass ein KI-Bot nur Daten zeigt, die Nutzer sehen dürfen?",
+    "a": "Das System prüft vor der Antwort die Benutzer-ID und gleicht sie mit den Berechtigungen ab, wie ein Türsteher. So erhalten Vertrieb und Finanzabteilung bei gleicher Frage unterschiedliche Antworten. Das klappt nur, wenn Berechtigungen und Indizierung korrekt verknüpft sind."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot Studio vs. Azure AI Foundry",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Studio",
+     "punkte": [
+      "Low-Code-Umgebung mit über 1000 Konnektoren",
+      "Helpdesk-Bots in unter zwei Wochen live",
+      "Keine Temperatur, kein Top-P, keine Promptversionierung",
+      "Ideal für interne IT- und HR-Bots sowie FAQs",
+      "Zugänglich, aber nicht anpassbar"
+     ]
+    },
+    "rechts": {
+     "titel": "Azure AI Foundry",
+     "punkte": [
+      "Code-First-Umgebung mit Katalog von über 11.000 Modellen",
+      "Jeder Parameter zugänglich, Halluzinationsraten messbar",
+      "Audit-Logs, Telemetrie und nachvollziehbare Ergebnisse",
+      "Erfordert Kenntnisse in Python, GitHub und CI/CD",
+      "Gilt in Fertigung, Finanzen und Gesundheitswesen als ernsthafte Option"
+     ]
+    }
+   },
+   {
+    "titel": "Wann der Wechsel zu Foundry ansteht",
+    "typ": "checkliste",
+    "punkte": [
+     "Der Bot muss auf Systeme außerhalb von Microsoft 365 zugreifen, etwa ERP oder SAP.",
+     "Halluzinationen sind nicht mehr lästig, sondern riskant, etwa bei Compliance-Fragen.",
+     "Audits, SLAs oder regionale Datenkontrollen spielen eine Rolle.",
+     "Datensouveränität, Erklärbarkeit oder Zugriffsprotokolle auf Datensatzebene sind gefordert.",
+     "KI ist in sensible Arbeitsabläufe oder kundennahe Systeme eingebunden.",
+     "Kritische Konnektoren brauchen Metadatenanpassungen oder eigene Entwicklung."
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Was beschreibt Retrieval Augmented Generation (RAG) im Kern?",
+    "opts": [
+     "Das Sprachmodell wird vollständig mit Firmendaten neu trainiert, bevor es antwortet",
+     "Das Modell formuliert seine Antwort erst, nachdem es indexierte Unternehmensinhalte durchsucht hat",
+     "Das Modell speichert alle früheren Antworten und wiederholt sie bei ähnlichen Fragen",
+     "Das Modell greift ausschließlich auf öffentliche Internetquellen zu und prüft diese manuell"
+    ],
+    "a": 1,
+    "why": "RAG bedeutet Suche plus LLM: Das Modell wird über eine Suchpipeline mit Daten aus der eigenen Umgebung versorgt."
+   },
+   {
+    "q": "Welche Einschränkung gilt laut Artikel für Copilot Studio?",
+    "opts": [
+     "Es unterstützt weniger als hundert Konnektoren zu externen Datenquellen",
+     "Es lässt sich nicht in Teams und Outlook einbinden",
+     "Temperatur, Top-P, Promptversionierung und Evaluierungsschwellen sind nicht zugänglich",
+     "Es erfordert fortgeschrittene Python-Kenntnisse und CI/CD-Pipelines"
+    ],
+    "a": 2,
+    "why": "Studio verbirgt bewusst erweiterte Einstellungen wie Temperatur, Top-P, Promptversionierung und Evaluierungsschwellen – zugänglich, aber nicht anpassbar."
+   },
+   {
+    "q": "Welcher Auslöser spricht für den Wechsel von Studio zu Foundry beim Skalieren?",
+    "opts": [
+     "Der Bot soll ausschließlich SharePoint-Seiten in Konversationen umwandeln",
+     "Die Nutzerzahl im Helpdesk-Bot sinkt nach den ersten Wochen deutlich",
+     "Das Team möchte einen schnellen Prototyp für die Führungsebene zeigen",
+     "Der Bot muss auf Systeme außerhalb von Microsoft 365 wie SAP zugreifen"
+    ],
+    "a": 3,
+    "why": "Auslöser sind der Zugriff auf Systeme außerhalb von Microsoft 365 (z. B. ERP, SAP) oder riskante Halluzinationen, etwa bei Compliance-Fragen."
+   },
+   {
+    "q": "Wozu dient die Kennzeichnung als autoritative Quelle?",
+    "opts": [
+     "Sie unterscheidet offizielle Inhalte wie HR-Richtlinien von veralteten Dokumenten",
+     "Sie erhöht automatisch die Anzahl der verfügbaren Konnektoren",
+     "Sie senkt den Tokenverbrauch durch kürzere Antworten des Modells",
+     "Sie ersetzt die Zugriffskontrolle über die Benutzer-ID vollständig"
+    ],
+    "a": 0,
+    "why": "Ohne Kennzeichnung wirkt jede Antwort gleich legitim; mit ihr lässt sich zeigen, was offiziell von der Personalabteilung stammt."
+   }
+  ]
+ }
+}

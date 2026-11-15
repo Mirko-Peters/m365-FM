@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Location and map – profile settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+</style>
+</helmet>
+<div style="min-height: 1120px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14)">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #17191c; text-decoration: none">M365<span style="color: #3b6391">.FM</span></a>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: 15px; color: #5d6470">My profile</span>
+    </div>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 36px 32px 80px; display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start">
+
+    <nav aria-label="Profile sections" style="flex: 1 1 220px; min-width: 0; display: grid; gap: 0; border: 1px solid rgba(23,25,28,.14); background: #ffffff">
+      <a href="#" style="padding: 14px 18px; border-bottom: 1px solid rgba(23,25,28,.14); color: #17191c; text-decoration: none">Profile</a>
+      <a href="#" style="padding: 14px 18px; border-bottom: 1px solid rgba(23,25,28,.14); color: #17191c; text-decoration: none">Contributions</a>
+      <a href="#" aria-current="page" style="padding: 14px 18px; border-bottom: 1px solid rgba(23,25,28,.14); background: #1a1d21; color: #eef0f3; text-decoration: none; font-weight: 600">Location &amp; map</a>
+      <a href="#" style="padding: 14px 18px; border-bottom: 1px solid rgba(23,25,28,.14); color: #17191c; text-decoration: none">Subscriptions</a>
+      <a href="#" style="padding: 14px 18px; color: #17191c; text-decoration: none">Privacy</a>
+    </nav>
+
+    <div style="flex: 999 1 640px; min-width: 0; display: grid; gap: 28px">
+      <div style="display: grid; gap: 10px">
+        <div class="kicker" style="display: flex; align-items: center; gap: 14px; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #3b6391; font-size: 15px">Directory</div>
+        <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 48px; line-height: 1">Location &amp; map display</h1>
+        <p style="margin: 0; color: #5d6470; max-width: 38em">Decide whether people can find you in the directory by place. This is off until you turn it on.</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+        <form style="flex: 999 1 380px; min-width: 0; display: grid; gap: 20px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); padding: 24px">
+          <label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer">
+            <input type="checkbox" checked="{{show}}" onChange="{{toggleShow}}" style="width: 22px; height: 22px; margin-top: 2px; accent-color: #3b6391; flex: 0 0 auto">
+            <span style="display: grid; gap: 2px">
+              <b style="font-weight: 600">Show me on the directory map</b>
+              <span style="font-size: 14px; color: #5d6470">Your profile appears in the list and as a pin in your city.</span>
+            </span>
+          </label>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 16px">
+            <label style="flex: 1 1 200px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Country</span>
+              <select value="{{country}}" onChange="{{onCountry}}" style="height: 46px; box-sizing: border-box; padding: 0 10px; border: 1px solid rgba(23,25,28,.35); border-radius: 0; background: #ffffff">
+                <option value="Germany">Germany</option>
+                <option value="Austria">Austria</option>
+                <option value="Switzerland">Switzerland</option>
+              </select>
+            </label>
+            <label style="flex: 1 1 200px; min-width: 0; display: grid; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">City</span>
+              <input type="text" value="{{city}}" onChange="{{onCity}}" style="height: 46px; box-sizing: border-box; padding: 0 14px; border: 1px solid #17191c; border-radius: 0; background: #ffffff">
+            </label>
+          </div>
+
+          <label style="display: flex; gap: 14px; align-items: flex-start; cursor: pointer">
+            <input type="checkbox" checked="{{remote}}" onChange="{{toggleRemote}}" style="width: 22px; height: 22px; margin-top: 2px; accent-color: #3b6391; flex: 0 0 auto">
+            <span style="display: grid; gap: 2px">
+              <b style="font-weight: 600">Also list me as “available remotely”</b>
+              <span style="font-size: 14px; color: #5d6470">You also show up under Online, for people outside your region.</span>
+            </span>
+          </label>
+
+          <div style="display: grid; gap: 6px; padding: 14px 16px; background: #f3f3f2; border: 1px solid rgba(23,25,28,.14); font-size: 14px">
+            <b style="font-weight: 600">What is public</b>
+            <span>City and country only. The pin is rounded to about 2 km.</span>
+            <span>Never shown: street, postcode, email, phone.</span>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+            <button type="button" onClick="{{save}}" style="min-height: 46px; padding: 0 24px; background: #3b6391; color: #ffffff; border: 1px solid #3b6391; border-radius: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 16px; letter-spacing: .1em; text-transform: uppercase; cursor: pointer">Save</button>
+            <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}">
+              <span role="status" style="color: #2f6b3a; font-weight: 600">{{savedText}}</span>
+            </sc-if>
+          </div>
+        </form>
+
+        <div style="flex: 1 1 300px; min-width: 0; display: grid; gap: 10px">
+          <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Preview</span>
+          <sc-if value="{{show}}" hint-placeholder-val="{{ false }}">
+            <div style="display: grid; gap: 0; border: 1px solid rgba(23,25,28,.14); background: #ffffff">
+              <div style="position: relative; height: 180px; background: #dfe4ea; overflow: hidden">
+                <span aria-hidden="true" style="position: absolute; left: 50%; top: 50%; width: 96px; height: 96px; transform: translate(-50%, -50%); border-radius: 50%; background: rgba(59,99,145,.18); border: 1px dashed #3b6391"></span>
+                <span aria-hidden="true" style="position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; transform: translate(-50%, -50%); border-radius: 50%; background: #3b6391; border: 2px solid #ffffff; color: #ffffff; display: grid; place-items: center; font-weight: 700; font-size: 13px">E</span>
+                <span style="position: absolute; left: 10px; bottom: 8px; font-size: 12px; color: #5d6470">Area ≈ 2 km, not your address</span>
+              </div>
+              <div style="padding: 16px; display: grid; gap: 4px">
+                <span style="font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #3b6391">Expert · {{city}}, {{country}}</span>
+                <span style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 24px">Mirko Peters</span>
+                <span style="font-size: 14px; color: #5d6470">Host, M365.FM podcast</span>
+                <sc-if value="{{remote}}" hint-placeholder-val="{{ false }}">
+                  <span style="justify-self: start; margin-top: 6px; padding: 1px 8px; border: 1px solid #17191c; font: 600 12px/1.7 'Barlow Condensed', sans-serif; letter-spacing: .09em; text-transform: uppercase">Available remotely</span>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{hidden}}" hint-placeholder-val="{{ true }}">
+            <div style="border: 1px dashed rgba(23,25,28,.35); padding: 24px; color: #5d6470; font-size: 15px">You are not on the map. Your profile page stays public as before.</div>
+          </sc-if>
+          <a href="Main.dc.html" style="font-size: 14px">See the directory →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const show = !!s.show;
+    const remote = !!s.remote;
+    const city = s.city ?? 'Stuttgart';
+    const country = s.country || 'Germany';
+    return {
+      show, hidden: !show, remote, city, country,
+      saved: !!s.saved,
+      savedText: show ? 'Saved. You appear in ' + city + ' within a few minutes.' : 'Saved. You are not shown on the map.',
+      toggleShow: () => this.setState({ show: !show, saved: false }),
+      toggleRemote: () => this.setState({ remote: !remote, saved: false }),
+      onCity: (ev) => this.setState({ city: ev.target.value, saved: false }),
+      onCountry: (ev) => this.setState({ country: ev.target.value, saved: false }),
+      save: () => this.setState({ saved: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

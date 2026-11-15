@@ -35,6 +35,17 @@ TODAY = date(2026, 12, 4)
 OK_GSC = {"status": "ok", "source": U.GSC_SOURCE, "property": "sc-domain:m365.fm", "period": {"from": "2026-06-01", "to": "2026-08-31"},
           "retrieved": "2026-09-04", "entered": "api", "clicks": 900, "impressions": 40000, "ctr": 0.0225, "position": 19.2, "pages": 800,
           "pages_clicked": 120, "note": ""}
+# Feste Ausgangslage der Tests (Stand des Repos vom 1.11.2026). Nicht die echte Datei kopieren: die aendert sich mit jedem Monatslauf
+# (echte Search-Console- und Bing-Werte), die Tests sollen davon nicht abhaengen. Die echte Datei prueft Files.test_repo_seed_files_valid.
+SEED_WEEKS = [["2026-08-03", 62300], ["2026-08-10", 65400], ["2026-08-17", 61100], ["2026-08-24", 85800], ["2026-08-31", 89100],
+              ["2026-09-07", 85800], ["2026-09-14", 96800], ["2026-09-21", 97500], ["2026-09-28", 97200], ["2026-10-05", 84800],
+              ["2026-10-12", 89100], ["2026-10-19", 87200]]
+SEED_AI = {"version": 1, "_doc": U.DOC, "updated": "2026-11-01",
+           "bing_ai": {"status": "ok", "source": U.BING_SOURCE, "period": {"from": "2026-08-01", "to": "2026-10-30"}, "retrieved": "2026-11-01",
+                       "entered": "manual", "citations": 1100000, "cited_pages_per_day": 622, "weekly": SEED_WEEKS},
+           "google_ai": U.google_empty(),
+           "gsc": U.gsc_block({"status": "missing_secret", "property": U.GSC_DEFAULT_SITE,
+                               "note": "Secret GSC_SERVICE_ACCOUNT_JSON fehlt; Werte unveraendert"})}
 
 
 def unb64(s):
@@ -82,8 +93,8 @@ class Base(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.dir = Path(self.tmp.name)
-        for f in (U.AI_FILE, U.DIFF_FILE):   # echte Startdateien des Repos als Ausgangslage
-            shutil.copy(ROOT / "data" / "stats" / f, self.dir / f)
+        (self.dir / U.AI_FILE).write_text(U.dump(json.loads(json.dumps(SEED_AI))) + "\n", "utf-8")   # feste Ausgangslage
+        shutil.copy(ROOT / "data" / "stats" / U.DIFF_FILE, self.dir / U.DIFF_FILE)
         p = patch.object(U, "SLEEP", lambda s: None)
         p.start(); self.addCleanup(p.stop)
         if KEY is None:
@@ -103,7 +114,10 @@ class Base(unittest.TestCase):
         return (self.dir / f).read_bytes()
 
     def put_gsc(self, blk):
-        d = self.ai(); d["gsc"] = blk
+        self.put("gsc", blk)
+
+    def put(self, key, blk):
+        d = self.ai(); d[key] = blk
         (self.dir / U.AI_FILE).write_text(U.dump(d) + "\n", "utf-8")
 
     def assert_no_secret(self, *texts):
@@ -315,7 +329,8 @@ class BingManual(Base):
                                         ["2026-10-05", 94000], ["2026-10-12", 95000]]})
         self.assertEqual(self.ai()["updated"], "2026-12-04")
         self.assertEqual(self.raw(U.DIFF_FILE), diff_before)
-        self.assertNotIn("neuer Export faellig", out)
+        self.assertNotIn("Bing AI Performance: neuer Export faellig", out)
+        self.assertEqual(self.ai()["google_ai"], U.google_empty())   # Google bleibt unberuehrt
 
     def test_manual_args_without_weekly_keep_old_weeks_in_period(self):
         code, out = self.run_main("--bing-citations", "1,250,000", "--bing-pages-per-day", "650", "--bing-from", "2026-09-01",
@@ -363,21 +378,140 @@ class BingManual(Base):
         self.assertIn("::warning::Bing AI Performance: neuer Export faellig (letzter Stand 2026-11-01", out)
 
 
+class GoogleInputParse(unittest.TestCase):
+    def test_pairs_lenient(self):
+        self.assertEqual(U.parse_google_input("impressions=123,456; pages=420; from=2026-08-01; to=2026-10-31"),
+                         {"impressions": "123,456", "pages": "420", "from": "2026-08-01", "to": "2026-10-31"})
+        self.assertEqual(U.parse_google_input("Impressionen: 1.2M | Seiten: 420 | von: 2026-08-01 | bis: 2026-10-31 | Stand: 2026-11-04"),
+                         {"impressions": "1.2M", "pages": "420", "from": "2026-08-01", "to": "2026-10-31", "retrieved": "2026-11-04"})
+        self.assertEqual(U.parse_google_input("from=2026-08-01, to=2026-10-31, impressions=9000, weekly=2026-08-03=100, 2026-08-10=200; retrieved=2026-11-04"),
+                         {"from": "2026-08-01", "to": "2026-10-31", "impressions": "9000", "weekly": "2026-08-03=100, 2026-08-10=200",
+                          "retrieved": "2026-11-04"})
+        self.assertEqual(U.parse_google_input("  "), {})
+        self.assertEqual(U.parse_google_input("impressions=5; pages=; from=2026-08-01; to=2026-08-31"),   # leerer Wert = nicht angegeben
+                         {"impressions": "5", "from": "2026-08-01", "to": "2026-08-31"})
+
+    def test_parse_errors(self):
+        for txt, msg in [("123456", "keine Angabe"), ("123; impressions=5", "vor dem ersten Schluessel"), ("clicks=5; impressions=7", "unbekannter Schluessel 'clicks'"),
+                         ("impressions=5; impr=6", "doppelt")]:
+            with self.assertRaises(U.Invalid, msg=txt) as cm:
+                U.parse_google_input(txt)
+            self.assertIn(msg, str(cm.exception), txt)
+
+
+class GoogleManual(Base):
+    WEEKS = "2026-08-03=90000, 2026-08-10=91000, 2026-08-17=92000"
+    GOOD = "impressions=1,250,000; pages=420; from=2026-08-01; to=2026-10-31"
+
+    def test_google_ok(self):
+        before = self.ai()
+        env = {"GOOGLE_AI": self.GOOD + "; retrieved=2026-11-04; weekly=" + self.WEEKS}
+        code, out = self.run_main(env=env)
+        self.assertEqual(code, 0, out)
+        d = self.ai()
+        self.assertEqual(d["google_ai"], {"status": "ok", "source": U.GOOGLE_AI_SOURCE, "period": {"from": "2026-08-01", "to": "2026-10-31"},
+                                          "retrieved": "2026-11-04", "entered": "manual", "impressions": 1250000, "pages": 420,
+                                          "weekly": [["2026-08-03", 90000], ["2026-08-10", 91000], ["2026-08-17", 92000]]})
+        self.assertEqual((d["bing_ai"], d["gsc"]), (before["bing_ai"], before["gsc"]))   # Bing und GSC unberuehrt
+        self.assertEqual(d["updated"], "2026-12-04")
+        self.assertIn("::notice::Google AI 2026-08-01 bis 2026-10-31: 1,250,000 Impressionen, 420 Seiten, 3 Wochen", out)
+        self.assertNotIn("Google AI (Search Console Generative AI): neuer Export faellig", out)
+
+    def test_google_cli_minimal_without_pages_and_weekly(self):
+        self.put("google_ai", dict(U.google_empty(), status="ok", period={"from": "2026-07-01", "to": "2026-09-30"}, retrieved="2026-10-02",
+                                   impressions=800000, pages=380, weekly=[["2026-06-29", 5000], ["2026-07-06", 6000], ["2026-08-03", 7000]]))
+        code, out = self.run_main("--google-ai", "impressions=1.1M; from=2026-08-01; to=2026-10-31", "--skip-gsc")
+        self.assertEqual(code, 0, out)
+        g = self.ai()["google_ai"]
+        self.assertEqual((g["status"], g["impressions"], g["pages"], g["retrieved"]), ("ok", 1100000, None, "2026-12-04"))   # pages nie aus altem Zeitraum
+        self.assertEqual(g["weekly"], [["2026-08-03", 7000]])   # alte Wochen nur, soweit im neuen Zeitraum
+        self.assertIn("bisherige Wochenwerte", out)
+
+    def test_google_daily_csv_prefers_impressions(self):
+        days = [date.fromordinal(date(2026, 9, 1).toordinal() + i) for i in range(30)]
+        csv_txt = "Date,Clicks,Impressions,CTR\n" + "\n".join(f"{d.isoformat()},5,1000,0.5%" for d in days)
+        code, out = self.run_main(env={"GOOGLE_AI": "impressions=30000; from=2026-09-01; to=2026-09-30; weekly=" + csv_txt})
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.ai()["google_ai"]["weekly"], [["2026-09-07", 7000], ["2026-09-14", 7000], ["2026-09-21", 7000]])
+
+    def test_google_invalid_fails_and_writes_nothing(self):
+        cases = [("impressions=5000", "from, to fehlt"),                                                  # Pflichtfelder fehlen
+                 ("pages=10; from=2026-08-01; to=2026-10-31", "impressions fehlt"),
+                 ("impressions=5000; from=2026-05-01; to=2026-06-30", "vor 2026-05-18"),                    # vor Beginn des Berichts
+                 ("impressions=5000; from=2026-05-17; to=2026-06-30", "vor 2026-05-18"),
+                 ("impressions=5000; from=2026-10-31; to=2026-08-01", "liegt nach"),
+                 ("impressions=5000; from=2026-08-01; to=2026-12-24", "Zukunft"),
+                 ("impressions=5000; from=2026-08-01; to=2026-02-30", "gueltiges Datum"),
+                 ("impressions=5000; from=1.8.2026; to=2026-10-31", "YYYY-MM-DD"),
+                 ("impressions=viele; from=2026-08-01; to=2026-10-31", "google_ai impressions"),
+                 ("impressions=5000; pages=6000; from=2026-08-01; to=2026-10-31", "groesser als impressions"),
+                 ("impressions=5000; pages=x; from=2026-08-01; to=2026-10-31", "google_ai pages"),
+                 ("impressions=5000; from=2026-08-01; to=2026-10-31; retrieved=2026-10-01", "retrieved"),
+                 ("impressions=5000; from=2026-08-01; to=2026-10-31; weekly=2026-07-06=100", "ausserhalb"),
+                 ("impressions=1000; from=2026-08-01; to=2026-10-31; weekly=" + self.WEEKS, "25 %"),        # Wochensumme passt nicht
+                 ("impressions=5000; from=2026-08-01; to=2026-10-31; weekly=2026-08-03=1, 2026-08-06=2", "7 Tage"),
+                 ("impressions=5000; clicks=10; from=2026-08-01; to=2026-10-31", "unbekannter Schluessel")]
+        for txt, msg in cases:
+            before = self.raw()
+            code, out = self.run_main(env={"GOOGLE_AI": txt})
+            self.assertEqual(code, 1, (txt, out))
+            self.assertIn("::error::", out)
+            self.assertIn(msg, out, txt)
+            self.assertEqual(self.raw(), before, txt)
+
+    def test_google_weekly_sum_within_tolerance_ok(self):   # 25 % Spielraum wie bei Bing (Wochen ragen ueber den Zeitraum hinaus)
+        code, out = self.run_main(env={"GOOGLE_AI": "impressions=220000; from=2026-08-01; to=2026-10-31; weekly=" + self.WEEKS})
+        self.assertEqual(code, 0, out)
+
+    def test_google_due_warning(self):
+        code, out = self.run_main()
+        self.assertEqual(code, 0, out)
+        self.assertIn("::warning::Google AI (Search Console Generative AI): neuer Export faellig - Werte ueber die Workflow-Eingabe google_ai", out)
+
+    def test_broken_google_block_fails(self):
+        for blk, msg in [(dict(U.google_empty(), status="missing_secret"), "google_ai.status"),
+                         (dict(U.google_empty(), status="ok"), "google_ai.period"),
+                         (dict(U.google_empty(), status="ok", period={"from": "2026-05-01", "to": "2026-06-30"}, retrieved="2026-07-01",
+                               impressions=10), "vor 2026-05-18"),
+                         (dict(U.google_empty(), status="ok", period={"from": "2026-08-01", "to": "2026-08-31"}, retrieved="2026-09-01",
+                               impressions=10, pages=11), "pages groesser"),
+                         (dict(U.google_empty(), status="ok", period={"from": "2026-08-01", "to": "2026-08-31"}, retrieved="2026-09-01",
+                               impressions=10, weekly=[["2026-08-03", 100]]), "25 %")]:
+            self.put("google_ai", blk)
+            code, out = self.run_main()
+            self.assertEqual(code, 1, (blk, out))
+            self.assertIn(msg, out, blk)
+
+
 class Files(Base):
     def test_repo_seed_files_valid(self):
-        today = date(2026, 11, 3)
+        """Echte Dateien des Repos: nur Aufbau und Format pruefen (die Werte aendert der Monatslauf)."""
+        today = date(2099, 12, 31)   # Daten duerfen nicht in der Zukunft liegen - das prueft main() mit dem echten Datum
         ai = json.loads((ROOT / "data" / "stats" / U.AI_FILE).read_text("utf-8"))
         df = json.loads((ROOT / "data" / "stats" / U.DIFF_FILE).read_text("utf-8"))
         self.assertEqual(U.validate_ai(ai, today), [])
         self.assertEqual(U.validate_diff(df, today), [])
-        b = ai["bing_ai"]   # Vertrag aus design.md D4
-        self.assertEqual((b["status"], b["period"], b["retrieved"], b["entered"], b["citations"], b["cited_pages_per_day"], len(b["weekly"])),
-                         ("ok", {"from": "2026-08-01", "to": "2026-10-30"}, "2026-11-01", "manual", 1100000, 622, 12))
+        self.assertEqual(list(ai), ["version", "_doc", "updated", "bing_ai", "google_ai", "gsc"])
+        self.assertEqual(ai["_doc"], U.DOC)
+        b = ai["bing_ai"]
+        self.assertEqual(b["entered"], "manual")
         self.assertTrue(all(date.fromisoformat(w[0]).weekday() == 0 for w in b["weekly"]))
-        self.assertEqual(sum(w[1] for w in b["weekly"]), 1002100)
-        self.assertEqual(ai["gsc"]["status"], "missing_secret")
-        self.assertEqual((df["example"], len(df["levels"]), df["levels"]["Microsoft Entra ID"]), (True, 13, 4))
+        self.assertEqual((ai["google_ai"]["entered"], ai["google_ai"]["source"]), ("manual", U.GOOGLE_AI_SOURCE))
+        self.assertIn(ai["google_ai"]["status"], U.GOOGLE_STATUSES)
         self.assertEqual((ROOT / "data" / "stats" / U.AI_FILE).read_text("utf-8"), U.dump(ai) + "\n")   # Format wie vom Werkzeug geschrieben
+
+    def test_fixture_valid(self):
+        self.assertEqual(U.validate_ai(SEED_AI, date(2026, 11, 3)), [])
+        self.assertEqual(sum(w[1] for w in SEED_AI["bing_ai"]["weekly"]), 1002100)
+
+    def test_old_file_without_google_ai_gets_empty_block(self):
+        d = self.ai(); del d["google_ai"]
+        (self.dir / U.AI_FILE).write_text(U.dump(d) + "\n", "utf-8")
+        self.assertEqual(U.validate_ai(d, TODAY), [])
+        code, out = self.run_main()
+        self.assertEqual(code, 0, out)
+        self.assertEqual(self.ai()["google_ai"], U.google_empty())
+        self.assertIn("google_ai fehlt", out)
 
     def test_invalid_difficulty_fails(self):
         d = json.loads(self.raw(U.DIFF_FILE)); d["levels"]["Windows 365"] = 5
@@ -405,7 +539,8 @@ class Files(Base):
         code, out = self.run_main()
         self.assertEqual(code, 0, out)
         d = self.ai()
-        self.assertEqual((d["bing_ai"]["status"], d["gsc"]["status"], d["updated"]), ("empty", "missing_secret", "2026-12-04"))
+        self.assertEqual((d["bing_ai"]["status"], d["google_ai"]["status"], d["gsc"]["status"], d["updated"]),
+                         ("empty", "empty", "missing_secret", "2026-12-04"))
         self.assertIn("neuer Export faellig", out)
 
     def test_dry_run_writes_nothing(self):
@@ -426,6 +561,7 @@ class Files(Base):
         self.assertIn("unveraendert", out)
         s = summ.read_text("utf-8")
         self.assertIn("| Bing AI Performance | ok | 2026-09-01 bis 2026-11-29 | 2026-12-04 |", s)
+        self.assertIn("| Google AI (Generative AI) | empty | - | - |", s)
         self.assertIn("Keine Aenderung", s)
 
 

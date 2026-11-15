@@ -99,6 +99,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Wie muss der Endpunkt beim Validierungshandshake das validationToken zurücksenden?",
+    "opts": [
+     "Als JSON-Objekt mit dem Content-Type application/json",
+     "Als reinen Text mit dem Content-Type text/plain",
+     "Als HTML-Seite mit dem Content-Type text/html",
+     "Als Base64-codierte Zeichenfolge im Antwort-Header"
+    ],
+    "a": 1,
+    "why": "Das Token muss binnen 10 Sekunden als einfacher Text mit text/plain zurückkommen. JSON oder HTML lässt die Validierung scheitern."
+   },
+   {
+    "q": "Was passiert, wenn mehr als 15 % der Antworten innerhalb von 10 Minuten länger als 10 Sekunden dauern?",
+    "opts": [
+     "Graph verzögert neue Benachrichtigungen um 10 Minuten",
+     "Graph löscht das Abonnement und erstellt es automatisch neu",
+     "Graph verwirft Benachrichtigungen 10 Minuten lang vollständig und unwiederbringlich",
+     "Graph wechselt automatisch zu Polling mit einer Abfrage pro Minute"
+    ],
+    "a": 2,
+    "why": "Der Endpunkt gilt dann als „verworfen“. Benachrichtigungen werden 10 Minuten lang verworfen und lassen sich nicht wiederherstellen."
+   },
+   {
+    "q": "Wie verlängern Sie ein bestehendes Graph-Abonnement vor seinem Ablauf?",
+    "opts": [
+     "Mit einer DELETE-Anforderung und anschließendem neuen Abonnement",
+     "Mit einer GET-Anforderung an die Benachrichtigungs-URL",
+     "Mit einer PUT-Anforderung, die den Client-Status ersetzt",
+     "Mit einer PATCH-Anforderung unter Angabe der Abonnement-ID und neuem Ablaufdatum"
+    ],
+    "a": 3,
+    "why": "Per PATCH mit Abonnement-ID wird ein neues Ablaufdatum gesetzt. Das geht beliebig oft, solange es vor dem aktuellen Ablauf geschieht."
+   },
+   {
+    "q": "Welche Aufgabenteilung empfiehlt der Artikel bei der Kombination aus Webhooks und Delta-Abfragen?",
+    "opts": [
+     "Webhooks melden, dass sich etwas geändert hat; Delta-Abfragen zeigen, was sich geändert hat",
+     "Webhooks liefern alle Details; Delta-Abfragen dienen nur der Authentifizierung",
+     "Delta-Abfragen melden Änderungen in Echtzeit; Webhooks liefern den Basisstatus",
+     "Webhooks ersetzen Delta-Abfragen bei Ausfällen des Endpunkts vollständig"
+    ],
+    "a": 0,
+    "why": "Webhooks sorgen für Geschwindigkeit, Delta-Abfragen für Zuverlässigkeit: Erstere melden das „dass“, letztere das „was“ der Änderung."
+   }
   ]
  }
 }

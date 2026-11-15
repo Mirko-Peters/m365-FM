@@ -84,6 +84,52 @@
      "Endpunkte und Schlüssel über Umgebungsvariablen statt Hartcodierung austauschen"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Was ist laut Artikel die häufigste Ursache fehlgeschlagener Power-Platform-Bereitstellungen?",
+    "opts": [
+     "Zu große Lösungs-ZIP-Dateien",
+     "Fehlende Connector-Verweise und schlecht verwaltete Umgebungsvariablen",
+     "Veraltete Versionen der Power Platform CLI",
+     "Zu viele parallel laufende GitHub-Actions-Workflows"
+    ],
+    "a": 1,
+    "why": "Der Artikel nennt fehlende Connector-Verweise und schlecht verwaltete Umgebungsvariablen als häufigste Gründe für fehlgeschlagene Bereitstellungen."
+   },
+   {
+    "q": "Warum sollte man Importe mit einem Dienstprinzipal statt mit einem persönlichen Benutzerkonto ausführen?",
+    "opts": [
+     "Dienstprinzipale importieren Lösungen deutlich schneller als Benutzerkonten",
+     "Dienstprinzipale benötigen keine App-Registrierung in Azure AD",
+     "Dienstprinzipale umgehen die Datenrichtlinien (DLP) der Organisation",
+     "Er ist nicht an eine Person gebunden und liefert einen sauberen Prüfpfad"
+    ],
+    "a": 3,
+    "why": "Ein Dienstprinzipal ist eine App-Identität mit minimalen Rechten; Änderungen werden unter ihm protokolliert, unabhängig von einzelnen Personen."
+   },
+   {
+    "q": "Welches Risiko entsteht, wenn der gesamte ALM-Prozess über einen einzigen Workflow läuft?",
+    "opts": [
+     "Der Build kann keine Lösungen mehr entpacken",
+     "Secrets werden zwischen Jobs geteilt und gelangen unbemerkt in andere Umgebungen",
+     "Die Power Platform CLI lässt sich nicht mehr verwenden",
+     "Umgebungsvariablen können überhaupt nicht mehr ausgetauscht werden"
+    ],
+    "a": 1,
+    "why": "Im Beispiel tauchte eine Produktions-Verbindungszeichenfolge in der Entwicklung auf, weil Secrets zwischen Jobs geteilt wurden – ohne Fehlermeldung."
+   },
+   {
+    "q": "Was passiert, wenn ein Flow auf einen benutzerdefinierten Connector basiert, der nie in die Quellcode-Verwaltung gelangte?",
+    "opts": [
+     "Der Build bricht sofort mit einer Fehlermeldung ab",
+     "GitHub blockiert automatisch den Import in die Produktion",
+     "Der Build verpackt stillschweigend eine unvollständige Lösung",
+     "Der Connector wird automatisch aus der Entwicklung nachgeladen"
+    ],
+    "a": 2,
+    "why": "Der Build ist technisch erfolgreich, aber die Lösung ist unvollständig, sodass in UAT oder Produktion Funktionen fehlen."
+   }
   ]
  }
 }

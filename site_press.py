@@ -89,8 +89,8 @@ def build_press(g):
         url = f"{BASE}/press/" if lang == "en" else f"{BASE}/de/press/"
         about_url = f"{BASE}/entity/mirko-peters/" if lang == "en" else f"{BASE}/de/entity/mirko-peters/"
         ids = ["about", "media", "files", "colors", "team", "contact", "mentions", "press"]
-        nav = "".join(f'<a href="#{i}">{E(n)}</a>' for i, n in zip(ids, t["nav"]) if i != "mentions" or MEN.ALL)
-        ment = (f'<section id="mentions"><h2>{E(t["mentions"])}</h2><p>{E(t["mentions_p"])}</p><ul class="kpl">{"".join(MEN.item_html(m, lang) for m in MEN.ALL)}</ul></section>') if MEN.ALL else ""
+        nav = "".join(f'<a href="#{i}">{E(n)}</a>' for i, n in zip(ids, t["nav"]) if i != "mentions" or MEN.PRESSKIT)
+        ment = (f'<section id="mentions"><h2>{E(t["mentions"])}</h2><p>{E(t["mentions_p"])}</p><ul class="kpl">{"".join(MEN.item_html(m, lang) for m in MEN.PRESSKIT)}</ul></section>') if MEN.PRESSKIT else ""
         facts = "".join(f'<dt>{E(k)}</dt><dd>{E(v.replace("{L}", str(L)).replace("{N}", str(N)))}</dd>' for k, v in t["f"])
         topics = "".join(f"<li>{E(x)}</li>" for x in t["topics_l"])
         base_files = f"{BASE}/press/files/"
@@ -111,6 +111,6 @@ def build_press(g):
                 f'<section id="contact"><h2>{E(t["contact"])}</h2><p>{E(t["contact_p"])}</p><p><a class="kcta" href="mailto:{g["EMAIL"]}">{g["EMAIL"]}</a></p><p class="mut">{E(t["addr"])}: Julius-Hölder-Str 60, 70597 Stuttgart, Germany</p></section>'
                 f'{ment}<section id="press"><h2>{E(t["press"])}</h2><ul class="kpl">{pl}</ul><p>{E(t["machine"])} <a href="{BASE}/llms.txt">llms.txt</a> · <a href="{BASE}/episodes.json">episodes.json</a></p><p class="mut">{E(t["usage"])}</p></section></main>'
                 f'{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}{JS}')
-        ld = [g["person_ld"](), g["org_ld"](), {"@context": "https://schema.org", "@type": "WebPage", "@id": f"{url}#page", "url": url, "name": t["title"], "inLanguage": lang, "about": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "dateModified": TODAY, **({"mentions": [MEN.ld(m, BASE) for m in MEN.ALL]} if MEN.ALL else {})}]
+        ld = [g["person_ld"](), g["org_ld"](), {"@context": "https://schema.org", "@type": "WebPage", "@id": f"{url}#page", "url": url, "name": t["title"], "inLanguage": lang, "about": {"@id": f"{BASE}/entity/mirko-peters/#entity"}, "dateModified": TODAY, **({"mentions": [MEN.ld(m, BASE) for m in MEN.PRESSKIT]} if MEN.PRESSKIT else {})}]
         write("press/index.html" if lang == "en" else "de/press/index.html", page(lang, t["title"], t["meta"], url, body, None, ld, og_type="website", extra_head=CSS))
         sitemap.append((url, TODAY, None))

@@ -1,0 +1,3100 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.580
+Un commercial met à jour l'adresse d'un client.
+
+00:00:02.160 --> 00:00:05.320
+Plus tard, le service financier ouvre le même dossier et voit toujours l'ancienne adresse.
+
+00:00:06.020 --> 00:00:07.320
+Alors, quelle est la bonne adresse ?
+
+00:00:07.320 --> 00:00:09.700
+Pendant des années, pour corriger cela, il fallait exporter des données,
+
+00:00:09.820 --> 00:00:12.880
+modifier une feuille de calcul, l'envoyer par e-mail et saisir deux fois la mise à jour dans une seconde application.
+
+00:00:13.400 --> 00:00:15.300
+La double écriture de Dynamics 365 change.
+
+00:00:15.760 --> 00:00:19.480
+Elle connecte les applications finance et opérations aux applications clientes basées sur Dataverse,
+
+00:00:19.660 --> 00:00:22.680
+de sorte que les enregistrements partagés, comme les clients et les commandes, restent synchronisés automatiquement.
+
+00:00:23.280 --> 00:00:25.560
+Vous êtes avec moi, je suis Milko Peters de M365FM,
+
+00:00:25.620 --> 00:00:28.280
+et cette capsule de connaissances explique la double écriture en termes simples.
+
+00:00:28.280 --> 00:00:32.380
+Nous verrons ce qui est transféré, comment, où la double écriture s'intègre et où elle ne s'applique pas.
+
+00:00:33.480 --> 00:00:36.300
+Commençons d'abord par le problème métier, qui a rendu cela nécessaire,
+
+00:00:38.430 --> 00:00:39.850
+le problème que résout la double écriture.
+
+00:00:41.430 --> 00:00:43.490
+Imaginez une entreprise où deux groupes travaillent sur le même client,
+
+00:00:43.570 --> 00:00:45.530
+mais utilisent des applications totalement différentes au quotidien.
+
+00:00:46.230 --> 00:00:48.610
+Les applications finance et opérations gèrent le travail de back-office.
+
+00:00:48.870 --> 00:00:51.690
+Il s'agit de l'argent, des stocks, des produits, des commandes, des achats et de la chaîne approvisionne.
+
+00:00:52.050 --> 00:00:54.690
+C'est ici qu'une entreprise suit ce qu'elle vend, ce qu'elle peut livrer, ce qu'elle doit,
+
+00:00:54.690 --> 00:00:56.590
+et ce qu'un client doit payer.
+
+00:00:56.590 --> 00:00:59.610
+Les applications clients se concentrent sur le travail au plus près du client.
+
+00:01:00.210 --> 00:01:02.210
+Les équipes commerciales suivent les pistes et développent des opportunités.
+
+00:01:02.650 --> 00:01:04.410
+Le service client gère les questions et les dossiers.
+
+00:01:04.950 --> 00:01:07.310
+Le service après-vente planifie les interventions et envoie du personnel sur site.
+
+00:01:07.830 --> 00:01:09.630
+Les équipes projet suivent le travail promis à un client.
+
+00:01:10.130 --> 00:01:11.690
+Des tâches différentes nécessitent des écrans différents.
+
+00:01:12.030 --> 00:01:14.170
+Un commercial ne devrait pas refouiller dans un écran financier
+
+00:01:14.170 --> 00:01:15.750
+juste pour mettre à jour un contact après un appel.
+
+00:01:16.410 --> 00:01:18.870
+Un utilisateur financier a besoin de détails sur le client et la commande
+
+00:01:18.870 --> 00:01:20.150
+qui correspondent à ce que voit le commercial,
+
+00:01:20.150 --> 00:01:22.910
+car les factures et les livraisons dépendent de ces informations.
+
+00:01:24.030 --> 00:01:26.970
+Sans connexion, un seul client devient silencieusement deux enregistrements.
+
+00:01:27.470 --> 00:01:29.030
+Les ventes peuvent lister dans Windbikes et Ecom,
+
+00:01:29.110 --> 00:01:31.370
+tandis que la finance peut lister dans Windbikes et Ecom.
+
+00:01:31.770 --> 00:01:33.190
+L'un des dossiers possède la nouvelle adresse,
+
+00:01:33.290 --> 00:01:35.630
+l'autre envoie toujours les factures à l'ancien bureau, à l'ancien bureau.
+
+00:01:36.470 --> 00:01:38.230
+Les deux enregistrements semblent corrects individuellement,
+
+00:01:38.590 --> 00:01:40.150
+mais ils ne décrivent plus la même relation commerciale.
+
+00:01:40.970 --> 00:01:42.050
+Deux petits problèmes apparaissent en premier.
+
+00:01:42.510 --> 00:01:45.110
+Quelqu'un ne trouve pas un client parce que le nom est différent dans une autre application.
+
+00:01:45.670 --> 00:01:47.270
+Un commercial promet un prix ou vérifie un stock,
+
+00:01:47.270 --> 00:01:49.470
+mais les informations ne correspondent pas au côté opérationnel.
+
+00:01:50.030 --> 00:01:51.370
+La finance doit traiter une commande,
+
+00:01:51.450 --> 00:01:53.090
+mais les détails du client nécessitent une vérification,
+
+00:01:53.290 --> 00:01:54.570
+un email et une autre mise à jour manuelle.
+
+00:01:55.130 --> 00:01:56.350
+Ensuite, ces petits problèmes s'accumulent.
+
+00:01:56.810 --> 00:01:58.750
+Quelqu'un exporte les données clies dans une feuille de calcul.
+
+00:01:59.310 --> 00:02:01.590
+Une autre personne corrige quelques lignes et les importe ailleurs.
+
+00:02:02.390 --> 00:02:04.110
+Quelqu'un d'autre saisit un nouveau client dans les deux applications,
+
+00:02:04.270 --> 00:02:06.030
+car personne ne sait quel enregistrement apparaîtra en premier.
+
+00:02:06.730 --> 00:02:08.850
+Rapidement, on se retrouve avec des doubles, des adresses divergentes
+
+00:02:08.850 --> 00:02:10.970
+et plus de temps passé à vérifier les données qu'à les utiliser.
+
+00:02:11.690 --> 00:02:13.250
+Rien de tout cela n'arrive par négligence.
+
+00:02:13.730 --> 00:02:15.870
+Cela arrive parce que les systèmes demandent aux gens de faire le lien,
+
+00:02:16.350 --> 00:02:17.070
+les gens copient des données.
+
+00:02:17.370 --> 00:02:18.950
+Les gens retiennent quelle application utilisée en premier.
+
+00:02:19.230 --> 00:02:21.430
+Les gens remarquent les erreurs après qu'elles ont déjà atteint une autre équipe.
+
+00:02:21.890 --> 00:02:23.890
+Cette approche fonctionnait quand les systèmes restaient séparés
+
+00:02:23.890 --> 00:02:25.310
+et que les équipes acceptaient les délais.
+
+00:02:25.830 --> 00:02:27.950
+Mais quand les ventes, le service, la finance et les opérations
+
+00:02:27.950 --> 00:02:29.490
+ont besoin des mêmes informations clients,
+
+00:02:29.650 --> 00:02:31.610
+un tableur devient un mauvais outil de transfert.
+
+00:02:32.450 --> 00:02:34.450
+Prenons l'exemple d'une simple commande.
+
+00:02:34.630 --> 00:02:35.950
+Un client appelle le service commercial et demande
+
+00:02:35.950 --> 00:02:37.530
+« Pouvez-vous livrer la semaine prochaine ? »
+
+00:02:37.530 --> 00:02:38.610
+Combien cela coûtera-t-il ?
+
+00:02:38.610 --> 00:02:40.290
+L'équipe commerciale a besoin de détails sur le produit,
+
+00:02:40.390 --> 00:02:41.530
+le prix et les stocks pour répondre.
+
+00:02:43.230 --> 00:02:44.150
+Une fois le client d'accord,
+
+00:02:44.470 --> 00:02:46.570
+la finance et les opérations ont besoin des bonnes informations
+
+00:02:46.570 --> 00:02:47.450
+pour traiter la vente.
+
+00:02:48.530 --> 00:02:49.910
+Les deux parties ont besoin des mêmes faits.
+
+00:02:50.170 --> 00:02:51.530
+Les ventes ont besoin de ces faits dans l'application
+
+00:02:51.530 --> 00:02:52.410
+où travaillent les commerciaux.
+
+00:02:53.130 --> 00:02:54.810
+La finance et les opérations en ont besoin
+
+00:02:54.810 --> 00:02:56.190
+dans l'application où ils gèrent les commandes,
+
+00:02:56.350 --> 00:02:57.250
+l'argent et la livraison.
+
+00:02:57.890 --> 00:02:59.270
+L'objectif n'est pas de forcer chaque équipe
+
+00:02:59.270 --> 00:03:00.890
+à utiliser un écran unique et géant.
+
+00:03:01.290 --> 00:03:02.870
+L'objectif est que les enregistrements partagés
+
+00:03:02.870 --> 00:03:04.010
+suivent un chemin clair et convenu.
+
+00:03:04.690 --> 00:03:06.270
+C'est là que le Ken DualWrite, où il entre en scène.
+
+00:03:07.670 --> 00:03:09.570
+Qu'est-ce que le DualWrite ad ad ad ?
+
+00:03:09.570 --> 00:03:11.570
+Voici la définition la plus simple.
+
+00:03:12.130 --> 00:03:14.970
+Le Dynke DualWrite est une connexion Microsoft intégrée
+
+00:03:14.970 --> 00:03:16.030
+qui synchronise certaines données
+
+00:03:16.030 --> 00:03:18.610
+entre les applications Dynamics 365 Finance & Operations
+
+00:03:18.610 --> 00:03:19.230
+et Dataverse.
+
+00:03:19.870 --> 00:03:21.210
+Dataverse est la base de données communes
+
+00:03:21.210 --> 00:03:23.110
+derrière de nombreuses applications professionnelles Microsoft.
+
+00:03:23.590 --> 00:03:26.210
+Dynamics 365 Sales, Customer Service, Field Service
+
+00:03:26.210 --> 00:03:28.150
+et des parties de Project Operations l'utilisent.
+
+00:03:28.610 --> 00:03:30.250
+PowerApps et Power Automate peuvent également l'utiliser.
+
+00:03:30.790 --> 00:03:32.050
+Vous n'avez pas besoin de savoir comment Dataverse
+
+00:03:32.050 --> 00:03:33.950
+toque chaque enregistrement pour comprendre le cas DualWrite.
+
+00:03:34.530 --> 00:03:36.450
+Considérez-le simplement comme la zone de données communes
+
+00:03:36.450 --> 00:03:38.190
+côté application client de Dynamics 365.
+
+00:03:38.890 --> 00:03:40.790
+Imaginez un immeuble de bureau avec un front office égale
+
+00:03:40.790 --> 00:03:41.490
+mais un back office égale.
+
+00:03:41.770 --> 00:03:43.830
+Le front office gère les conversations avec les clients.
+
+00:03:44.590 --> 00:03:46.330
+Commerciaux, agents de service, techniciens de terrain.
+
+00:03:48.110 --> 00:03:49.950
+Ils ont tous besoin d'écran pour communiquer,
+
+00:03:50.230 --> 00:03:51.670
+suivre les demandes et gérer le travail.
+
+00:03:52.250 --> 00:03:54.350
+Le back office gère le travail qui fait tourner l'entreprise.
+
+00:03:54.890 --> 00:03:57.830
+Régistre financier, stock, commande, achat, livraison.
+
+00:03:58.610 --> 00:03:59.930
+Les deux travaillent pour la même société.
+
+00:04:00.510 --> 00:04:04.050
+Mais sans connexion, quelqu'un doit transférer manuellement les informations.
+
+00:04:04.050 --> 00:04:06.330
+Ils apportent un formulaire papier, envoient un email
+
+00:04:06.330 --> 00:04:07.810
+ou copient les données dans un autre système.
+
+00:04:08.430 --> 00:04:10.230
+Le travail est fait, mais cela prend plus de temps
+
+00:04:10.230 --> 00:04:11.830
+et les détails peuvent changer en cours de route.
+
+00:04:12.390 --> 00:04:14.070
+Le DualWrite carré qu'est comme une porte interne
+
+00:04:14.070 --> 00:04:15.350
+avec personnel entre ces deux bureaux.
+
+00:04:15.910 --> 00:04:17.150
+Quand un enregistrement change d'un côté,
+
+00:04:17.250 --> 00:04:19.230
+le GAD DualWrite a une transmet la modification
+
+00:04:19.230 --> 00:04:20.570
+par cette porte vers l'autre côté.
+
+00:04:21.110 --> 00:04:22.730
+Cela ne combine pas toutes les applications géantes
+
+00:04:22.730 --> 00:04:24.430
+à l'équipe commerciale votre main devant.
+
+00:04:24.830 --> 00:04:26.250
+L'équipe financière peut toujours travailler dans le domaine.
+
+00:04:26.610 --> 00:04:28.630
+Chaque équipe conserve les écrans conçus pour son travail,
+
+00:04:28.790 --> 00:04:30.190
+tandis que certaines informations partagées
+
+00:04:30.190 --> 00:04:31.190
+restent connectées en coulisses.
+
+00:04:31.190 --> 00:04:32.450
+Ce terme est capré en chargé.
+
+00:04:32.950 --> 00:04:34.970
+DualWrite ne copie pas aveuglément chaque donnée
+
+00:04:34.970 --> 00:04:35.770
+dans les deux systèmes.
+
+00:04:36.250 --> 00:04:37.610
+Il fonctionne grâce à des connexions définies
+
+00:04:37.610 --> 00:04:39.110
+entre des enregistrements qui vont ensemble.
+
+00:04:40.090 --> 00:04:41.950
+Microsoft appelle ces connexions des mappages de table.
+
+00:04:42.610 --> 00:04:43.850
+Une table est simplement un endroit
+
+00:04:43.850 --> 00:04:45.430
+où une application conserve un type d'enregistrement.
+
+00:04:45.810 --> 00:04:47.470
+Une table client conserve les enregistrements des clients.
+
+00:04:47.810 --> 00:04:49.410
+Une table produit conserve les enregistrements des produits.
+
+00:04:49.650 --> 00:04:51.290
+Une table d'adresse conserve les détails des adresses.
+
+00:04:51.650 --> 00:04:53.070
+Un mappage de table indique à DualWrite
+
+00:04:53.070 --> 00:04:54.570
+quelle table du côté finance et opération
+
+00:04:54.570 --> 00:04:56.210
+se connecte à quelle table dans Dataverse.
+
+00:04:57.130 --> 00:04:58.150
+Considérez le mappage de table
+
+00:04:58.150 --> 00:04:59.290
+comme une feuille de traduction convenue.
+
+00:04:59.290 --> 00:05:01.210
+Une colonne identifie un enregistrement d'un côté.
+
+00:05:01.690 --> 00:05:03.170
+Une autre colonne identifie son enregistrement
+
+00:05:03.170 --> 00:05:04.110
+correspondant de l'autre côté.
+
+00:05:04.550 --> 00:05:05.690
+Le reste de la feuille explique
+
+00:05:05.690 --> 00:05:06.850
+quels champs vont ensemble.
+
+00:05:07.830 --> 00:05:09.530
+Nom, numéro de téléphone, ligne d'adresse.
+
+00:05:10.210 --> 00:05:11.650
+Cet accord définit les règles de connexion.
+
+00:05:12.030 --> 00:05:13.650
+Sans cela, deux applications pourraient utiliser
+
+00:05:13.650 --> 00:05:14.450
+des étiquettes différentes
+
+00:05:14.450 --> 00:05:15.230
+ou stocker les mêmes détails
+
+00:05:15.230 --> 00:05:15.850
+à des endroits différents.
+
+00:05:16.030 --> 00:05:17.230
+Un mappage indique à DualWrite
+
+00:05:17.230 --> 00:05:18.250
+comment ces détails sont liés.
+
+00:05:18.670 --> 00:05:19.730
+Ainsi, les applications n'ont pas besoin
+
+00:05:19.730 --> 00:05:20.450
+d'une intervention humaine
+
+00:05:20.450 --> 00:05:21.170
+pour les interpréter à chaque fois.
+
+00:05:21.510 --> 00:05:23.810
+Souvent, les gens entendent le nom DualWrite
+
+00:05:23.810 --> 00:05:25.290
+et supposent que chaque modification
+
+00:05:25.290 --> 00:05:26.490
+se répercute toujours dans les deux sens.
+
+00:05:26.730 --> 00:05:27.270
+C'est parfois le cas.
+
+00:05:27.270 --> 00:05:29.150
+Pour un mappage bidirectionnel pris en charge,
+
+00:05:29.230 --> 00:05:30.250
+une modification dans Dataverse
+
+00:05:30.250 --> 00:05:31.110
+peut mettre à jour l'enregistrement
+
+00:05:31.110 --> 00:05:32.150
+associé dans Finance et Opérations.
+
+00:05:32.770 --> 00:05:33.910
+Une modification prise en charge
+
+00:05:33.910 --> 00:05:34.750
+dans Finance et Opérations
+
+00:05:34.750 --> 00:05:35.610
+peut également mettre à jour
+
+00:05:35.610 --> 00:05:36.790
+l'enregistrement associé dans Dataverse.
+
+00:05:37.230 --> 00:05:38.270
+Les deux côtés peuvent participer
+
+00:05:38.270 --> 00:05:39.290
+au même enregistrement partagé.
+
+00:05:39.730 --> 00:05:40.510
+C'est la partie DualWrite.
+
+00:05:40.830 --> 00:05:42.190
+La mise à jour s'effectue en temps quasi réel.
+
+00:05:42.750 --> 00:05:43.630
+Cela se déplace rapidement
+
+00:05:43.630 --> 00:05:44.750
+pendant que les utilisateurs travaillent
+
+00:05:44.750 --> 00:05:45.710
+au lieu d'attendre une tâche planifiée
+
+00:05:45.710 --> 00:05:46.350
+qui s'exécute la nuit.
+
+00:05:47.030 --> 00:05:48.030
+Un utilisateur met à jour
+
+00:05:48.030 --> 00:05:49.270
+un enregistrement pris en charge
+
+00:05:49.270 --> 00:05:50.730
+et la connexion transmet cette mise à jour
+
+00:05:50.730 --> 00:05:51.990
+pendant que le travail est en cours.
+
+00:05:52.510 --> 00:05:53.190
+Le temps quasi réel
+
+00:05:53.190 --> 00:05:53.990
+ne signifie pas de la magie
+
+00:05:53.990 --> 00:05:54.470
+ou un délai nul.
+
+00:05:55.070 --> 00:05:56.130
+Cela signifie que la connexion
+
+00:05:56.130 --> 00:05:57.490
+est conçue pour le travail métier en direct,
+
+00:05:57.670 --> 00:05:59.030
+pas pour un échange de fichiers quotidiens.
+
+00:05:59.550 --> 00:06:00.670
+Si quelqu'un modifie un détail,
+
+00:06:00.970 --> 00:06:01.570
+l'équipe concernée
+
+00:06:01.570 --> 00:06:02.210
+n'a pas besoin d'attendre
+
+00:06:02.210 --> 00:06:03.030
+demain matin pour le voir.
+
+00:06:03.470 --> 00:06:04.110
+Cela change la façon
+
+00:06:04.110 --> 00:06:04.930
+dont les équipes peuvent travailler.
+
+00:06:05.270 --> 00:06:06.270
+Le front office peut utiliser
+
+00:06:06.270 --> 00:06:07.390
+des données provenant du back office.
+
+00:06:07.790 --> 00:06:08.530
+Le back office peut recevoir
+
+00:06:08.530 --> 00:06:09.370
+des mises à jour prises en charge
+
+00:06:09.370 --> 00:06:10.050
+provenant d'applications
+
+00:06:10.050 --> 00:06:10.590
+tournées vers le clear.
+
+00:06:11.290 --> 00:06:12.370
+Dataverse devient la base de données
+
+00:06:12.370 --> 00:06:13.690
+d'un côté, Finance et Opérations
+
+00:06:13.690 --> 00:06:15.010
+restent la base opérationnelle de l'autre
+
+00:06:15.010 --> 00:06:15.950
+et DualWrite maintient
+
+00:06:15.950 --> 00:06:17.050
+les enregistrements partagés,
+
+00:06:17.050 --> 00:06:17.910
+approuvés, connectés.
+
+00:06:19.130 --> 00:06:20.230
+Néanmoins, une porte interne ouverte
+
+00:06:20.230 --> 00:06:20.930
+nécessite des règles.
+
+00:06:21.550 --> 00:06:22.690
+Avant de laisser un enregistrement
+
+00:06:22.690 --> 00:06:23.710
+voyager dans les deux sens,
+
+00:06:23.970 --> 00:06:24.530
+vous devez savoir
+
+00:06:24.530 --> 00:06:25.190
+où il doit commencer,
+
+00:06:25.410 --> 00:06:26.030
+qui peut le modifier
+
+00:06:26.030 --> 00:06:27.250
+et quel côté doit primer
+
+00:06:27.250 --> 00:06:28.110
+en cas de désaccord
+
+00:06:28.110 --> 00:06:28.990
+entre les deux applications.
+
+00:06:30.250 --> 00:06:31.390
+Quelles données peuvent être transférées
+
+00:06:31.390 --> 00:06:33.270
+et quel système les détient ?
+
+00:06:33.270 --> 00:06:34.510
+Alors, quels enregistrements DualWrite
+
+00:06:34.510 --> 00:06:35.650
+peut-il garder connectés ?
+
+00:06:35.650 --> 00:06:36.250
+Les exemples courants
+
+00:06:36.250 --> 00:06:37.270
+commencent par les enregistrements
+
+00:06:37.270 --> 00:06:38.130
+que de nombreux départements
+
+00:06:38.130 --> 00:06:38.850
+partagent au quotidien.
+
+00:06:39.650 --> 00:06:40.170
+Dossiers clients,
+
+00:06:40.490 --> 00:06:41.150
+adresses, contacts,
+
+00:06:41.330 --> 00:06:42.430
+produits, fournisseurs,
+
+00:06:42.650 --> 00:06:43.430
+détails de l'entreprise
+
+00:06:43.430 --> 00:06:44.690
+et informations de référence
+
+00:06:44.690 --> 00:06:46.130
+pour la finance et la fiscalité.
+
+00:06:47.410 --> 00:06:48.170
+Réfléchissez un instant
+
+00:06:48.170 --> 00:06:48.890
+à un dossier client.
+
+00:06:49.290 --> 00:06:49.930
+Le service commercial
+
+00:06:49.930 --> 00:06:50.830
+a besoin du nom du client,
+
+00:06:50.950 --> 00:06:51.670
+du contact principal,
+
+00:06:51.890 --> 00:06:52.630
+du numéro de téléphone
+
+00:06:52.630 --> 00:06:53.530
+et de l'adresse de livraison.
+
+00:06:54.530 --> 00:06:55.350
+Service financier a besoin
+
+00:06:55.350 --> 00:06:56.190
+du dossier client légal,
+
+00:06:56.330 --> 00:06:57.130
+des détails de facturation
+
+00:06:57.130 --> 00:06:58.230
+et des informations nécessaires
+
+00:06:58.230 --> 00:06:58.910
+aux commandes et factures.
+
+00:06:59.350 --> 00:07:00.090
+Si chaque département
+
+00:07:00.090 --> 00:07:01.130
+tient sa propre liste de clients,
+
+00:07:01.270 --> 00:07:02.310
+l'entreprise passe son temps
+
+00:07:02.310 --> 00:07:03.090
+à comparer les dossiers
+
+00:07:03.090 --> 00:07:04.390
+au lieu de servir le client.
+
+00:07:05.070 --> 00:07:06.090
+Avec les bons mappages DualWrite
+
+00:07:06.090 --> 00:07:06.410
+en place,
+
+00:07:06.510 --> 00:07:07.230
+ces équipes peuvent travailler
+
+00:07:07.230 --> 00:07:08.530
+à partir de détails clients connectés.
+
+00:07:09.190 --> 00:07:09.770
+Cela ne signifie pas
+
+00:07:09.770 --> 00:07:10.450
+que les utilisateurs commerciaux
+
+00:07:10.450 --> 00:07:11.050
+doivent soudainement apprendre
+
+00:07:11.050 --> 00:07:11.810
+à utiliser l'application finance.
+
+00:07:12.230 --> 00:07:13.370
+Cela signifie qu'ils peuvent travailler
+
+00:07:13.370 --> 00:07:14.390
+avec les informations clients
+
+00:07:14.390 --> 00:07:15.730
+dans Dynamics 365 Sales,
+
+00:07:16.170 --> 00:07:17.290
+tandis que les utilisateurs finance
+
+00:07:17.290 --> 00:07:18.250
+travaillent avec les informations
+
+00:07:18.250 --> 00:07:18.990
+liées dans Finance.
+
+00:07:20.030 --> 00:07:21.050
+Le client reste identifiable
+
+00:07:21.050 --> 00:07:21.690
+comme étant le même
+
+00:07:21.690 --> 00:07:22.630
+dans les deux environnements.
+
+00:07:23.770 --> 00:07:24.530
+Les adresses sont importantes.
+
+00:07:25.030 --> 00:07:25.610
+Un client peut avoir
+
+00:07:25.610 --> 00:07:26.470
+une adresse de facturation,
+
+00:07:26.610 --> 00:07:27.310
+une adresse de livraison
+
+00:07:27.310 --> 00:07:27.950
+et peut-être un site
+
+00:07:27.950 --> 00:07:28.970
+nécessitant une intervention.
+
+00:07:29.830 --> 00:07:30.910
+Ces détails ne peuvent pas être traités
+
+00:07:30.910 --> 00:07:31.710
+comme du texte brut
+
+00:07:31.710 --> 00:07:32.470
+copié dans une case
+
+00:07:32.470 --> 00:07:33.030
+car chaque adresse
+
+00:07:33.030 --> 00:07:33.930
+a une fonction différente.
+
+00:07:34.110 --> 00:07:34.310
+GADE.
+
+00:07:35.410 --> 00:07:36.210
+DualWrite prend en charge
+
+00:07:36.210 --> 00:07:37.490
+la structure d'enregistrement partagé
+
+00:07:37.490 --> 00:07:38.270
+nécessaire à cette relation.
+
+00:07:38.270 --> 00:07:39.550
+Les contacts suivent le même schéma.
+
+00:07:40.150 --> 00:07:41.130
+Une entreprise cliente
+
+00:07:41.130 --> 00:07:42.050
+peut avoir un acheteur,
+
+00:07:42.130 --> 00:07:42.890
+un contact comptable
+
+00:07:42.890 --> 00:07:43.990
+et un responsable de service.
+
+00:07:44.550 --> 00:07:45.210
+Le service commercial
+
+00:07:45.210 --> 00:07:46.250
+doit savoir qui prend les décisions.
+
+00:07:46.650 --> 00:07:47.250
+Le service financier
+
+00:07:47.250 --> 00:07:47.930
+doit savoir à qui adresser
+
+00:07:47.930 --> 00:07:48.630
+les questions de facturation.
+
+00:07:48.890 --> 00:07:49.490
+Le service technique
+
+00:07:49.490 --> 00:07:50.690
+doit savoir qui attend sur le site.
+
+00:07:50.970 --> 00:07:51.970
+Les enregistrements connectés
+
+00:07:51.970 --> 00:07:52.670
+aident chaque équipe
+
+00:07:52.670 --> 00:07:53.690
+à voir les personnes liées au client
+
+00:07:53.690 --> 00:07:54.850
+sans ressaisir ces informations
+
+00:07:54.850 --> 00:07:55.710
+dans chaque application,
+
+00:07:55.850 --> 00:07:56.370
+dans chaque application.
+
+00:07:56.470 --> 00:07:57.670
+Les produits sont un autre exemple courant.
+
+00:07:58.050 --> 00:07:58.890
+Un représentant commercial
+
+00:07:58.890 --> 00:08:00.070
+doit savoir ce que l'entreprise vend,
+
+00:08:00.290 --> 00:08:00.930
+le coût du produit,
+
+00:08:01.090 --> 00:08:02.510
+si le stock est disponible.
+
+00:08:03.150 --> 00:08:03.790
+Ces réponses proviennent
+
+00:08:03.790 --> 00:08:05.050
+généralement du côté opérationnel,
+
+00:08:05.270 --> 00:08:06.130
+là où sont gérés les produits,
+
+00:08:06.130 --> 00:08:06.710
+les stocks,
+
+00:08:06.710 --> 00:08:08.270
+les achats et l'exécution.
+
+00:08:08.750 --> 00:08:09.930
+C'est pourquoi les informations produits
+
+00:08:09.930 --> 00:08:10.610
+commencent souvent
+
+00:08:10.610 --> 00:08:11.610
+dans Finance & Operations.
+
+00:08:12.250 --> 00:08:13.150
+Une équipe opérationnelle
+
+00:08:13.150 --> 00:08:14.370
+y crée et prépare un produit.
+
+00:08:15.150 --> 00:08:16.110
+Une fois ce produit prêt
+
+00:08:16.110 --> 00:08:16.670
+pour le client,
+
+00:08:16.850 --> 00:08:18.250
+DualWrite peut envoyer
+
+00:08:18.250 --> 00:08:19.650
+les détails associés
+
+00:08:19.650 --> 00:08:20.610
+vers Dataverse.
+
+00:08:21.650 --> 00:08:22.390
+Les utilisateurs commerciaux
+
+00:08:22.390 --> 00:08:23.210
+peuvent alors sélectionner
+
+00:08:23.210 --> 00:08:24.010
+et discuter du produit
+
+00:08:24.010 --> 00:08:24.830
+dans leur propre application
+
+00:08:24.830 --> 00:08:25.710
+sans avoir à ressaisir
+
+00:08:25.710 --> 00:08:26.470
+la liste des produits.
+
+00:08:27.530 --> 00:08:28.390
+Cela permet aux conversations
+
+00:08:28.390 --> 00:08:29.550
+commerciales de rester fondées
+
+00:08:29.550 --> 00:08:30.150
+sur ce que l'entreprise
+
+00:08:30.150 --> 00:08:30.970
+peut réellement fournir.
+
+00:08:31.610 --> 00:08:32.290
+Les détails sur les prix
+
+00:08:32.290 --> 00:08:32.630
+et les stocks
+
+00:08:32.630 --> 00:08:33.250
+peuvent également atteindre
+
+00:08:33.250 --> 00:08:33.950
+le service commercial
+
+00:08:33.950 --> 00:08:35.030
+via les applications connectées.
+
+00:08:35.890 --> 00:08:36.470
+Au lieu de deviner
+
+00:08:36.470 --> 00:08:37.370
+si un article existe,
+
+00:08:37.510 --> 00:08:38.290
+si le prix a changé
+
+00:08:38.290 --> 00:08:38.910
+ou si le stock
+
+00:08:38.910 --> 00:08:39.970
+permet de tenir une promesse,
+
+00:08:40.190 --> 00:08:40.930
+l'équipe commerciale
+
+00:08:40.930 --> 00:08:42.150
+travaille avec des informations
+
+00:08:42.150 --> 00:08:43.510
+liées aux opérations.
+
+00:08:44.270 --> 00:08:44.970
+Cela ne remplace pas
+
+00:08:44.970 --> 00:08:45.770
+le besoin d'un bon jugement
+
+00:08:45.770 --> 00:08:46.190
+commercial.
+
+00:08:46.790 --> 00:08:47.590
+Cela élimine une raison
+
+00:08:47.590 --> 00:08:48.490
+évitable pour un commercial
+
+00:08:48.490 --> 00:08:49.230
+d'appeler l'entrepôt
+
+00:08:49.230 --> 00:08:50.150
+simplement pour confirmer
+
+00:08:50.150 --> 00:08:50.870
+des détails de base.
+
+00:08:51.450 --> 00:08:52.530
+Les informations sur les fournisseurs
+
+00:08:52.530 --> 00:08:53.410
+peuvent également être reliées
+
+00:08:53.410 --> 00:08:54.230
+là où un processus métier
+
+00:08:54.230 --> 00:08:54.530
+en a besoin.
+
+00:08:54.770 --> 00:08:55.650
+Les détails de l'entreprise,
+
+00:08:55.750 --> 00:08:56.770
+les structures organisationnelles,
+
+00:08:56.830 --> 00:08:57.530
+les données financières
+
+00:08:57.530 --> 00:08:58.350
+et fiscales de référence
+
+00:08:58.350 --> 00:08:59.170
+peuvent être importants
+
+00:08:59.170 --> 00:08:59.610
+pour le client
+
+00:08:59.610 --> 00:09:00.930
+comme pour l'exploitation
+
+00:09:00.930 --> 00:09:01.830
+comme pour l'exploitation.
+
+00:09:02.210 --> 00:09:03.110
+Les enregistrements exacts
+
+00:09:03.110 --> 00:09:03.850
+dépendent des applications
+
+00:09:03.850 --> 00:09:04.530
+et des processus
+
+00:09:04.530 --> 00:09:05.510
+utilisés par une entreprise,
+
+00:09:05.690 --> 00:09:06.550
+mais les modèles restent le même.
+
+00:09:07.290 --> 00:09:08.210
+Partagez les enregistrements
+
+00:09:08.210 --> 00:09:08.690
+qui doivent signifier
+
+00:09:08.690 --> 00:09:09.130
+la même chose
+
+00:09:09.130 --> 00:09:09.730
+dans les deux systèmes.
+
+00:09:10.490 --> 00:09:11.370
+Ne supposez pas pour autant
+
+00:09:11.370 --> 00:09:12.090
+que chaque enregistrement
+
+00:09:12.090 --> 00:09:13.110
+doit circuler dans les deux sens.
+
+00:09:13.470 --> 00:09:13.930
+Taines applications
+
+00:09:13.930 --> 00:09:14.350
+prennent en charge
+
+00:09:14.350 --> 00:09:15.030
+de mise à jour 8 directions.
+
+00:09:15.730 --> 00:09:17.030
+Une modification peut débuter
+
+00:09:17.030 --> 00:09:17.630
+dans Dataverse
+
+00:09:17.630 --> 00:09:18.170
+pour aller vers
+
+00:09:18.170 --> 00:09:19.270
+Finance and Operations
+
+00:09:19.270 --> 00:09:20.410
+ou inversement.
+
+00:09:21.210 --> 00:09:21.890
+Cette approche convient
+
+00:09:21.890 --> 00:09:22.450
+aux enregistrements
+
+00:09:22.450 --> 00:09:23.270
+pour lesquels les deux parties
+
+00:09:23.270 --> 00:09:24.210
+ont une raison métier valable
+
+00:09:24.210 --> 00:09:24.650
+de mettre à jour
+
+00:09:24.650 --> 00:09:25.330
+des détails approuvés.
+
+00:09:25.830 --> 00:09:26.170
+D'autres ma page
+
+00:09:26.170 --> 00:09:27.030
+ne fonctionnent que dans un sens.
+
+00:09:27.290 --> 00:09:27.910
+Des produits nous offrent
+
+00:09:27.910 --> 00:09:28.470
+un exemple utile.
+
+00:09:29.090 --> 00:09:30.090
+Dans de nombreuses entreprises,
+
+00:09:33.110 --> 00:09:34.350
+on contrôle le référentiel produit,
+
+00:09:34.630 --> 00:09:35.590
+les stocks, les unités
+
+00:09:35.590 --> 00:09:36.750
+et autres détails nécessaires
+
+00:09:36.750 --> 00:09:37.590
+à la vente et à la livraison.
+
+00:09:38.250 --> 00:09:38.910
+Le produit est ensuite
+
+00:09:38.910 --> 00:09:39.890
+transmis vers Dataverse
+
+00:09:39.890 --> 00:09:40.870
+où les équipes de vente
+
+00:09:40.870 --> 00:09:41.350
+et de services
+
+00:09:41.350 --> 00:09:41.930
+peuvent l'utiliser.
+
+00:09:42.350 --> 00:09:43.050
+C'est une règle claire.
+
+00:09:43.470 --> 00:09:44.190
+Le produit n'a pas besoin
+
+00:09:44.190 --> 00:09:44.770
+que deux équipes
+
+00:09:44.770 --> 00:09:45.810
+créent des versions concurrentes.
+
+00:09:46.690 --> 00:09:47.270
+Une partie crée
+
+00:09:47.270 --> 00:09:47.910
+et gère le produit,
+
+00:09:48.230 --> 00:09:48.990
+l'autre le reçoit
+
+00:09:48.990 --> 00:09:49.530
+et l'utilise
+
+00:09:49.530 --> 00:09:50.650
+dans le cadre de son travail.
+
+00:09:51.410 --> 00:09:52.510
+Chaque enregistrement partagé
+
+00:09:52.510 --> 00:09:53.250
+nécessite ces décisions
+
+00:09:53.250 --> 00:09:54.350
+ou cet enregistrement commencé.
+
+00:09:54.690 --> 00:09:55.630
+Qui peut le modifier ?
+
+00:09:55.630 --> 00:09:56.510
+Si un nom, une adresse,
+
+00:09:56.630 --> 00:09:57.450
+un prix ou une classification
+
+00:09:57.450 --> 00:09:58.290
+semblent incorrectes,
+
+00:09:58.330 --> 00:09:59.950
+quelle équipe le corrige ?
+
+00:09:59.950 --> 00:10:00.810
+Ces questions semblent simples
+
+00:10:00.810 --> 00:10:01.250
+mais elles évitent
+
+00:10:01.250 --> 00:10:02.470
+beaucoup de confusion par la suite.
+
+00:10:02.930 --> 00:10:03.810
+Une connexion peut transmettre
+
+00:10:03.810 --> 00:10:04.710
+une modification très rapide.
+
+00:10:05.090 --> 00:10:05.890
+Si personne ne s'est entendu
+
+00:10:05.890 --> 00:10:06.910
+sur le responsable de ce changement,
+
+00:10:06.990 --> 00:10:07.710
+une erreur peut être transmise
+
+00:10:07.710 --> 00:10:08.170
+tout aussi rapide.
+
+00:10:08.390 --> 00:10:09.290
+Choisissez un propriétaire
+
+00:10:09.290 --> 00:10:10.010
+pour l'enregistrement
+
+00:10:10.010 --> 00:10:10.750
+et si nécessaire,
+
+00:10:10.970 --> 00:10:11.830
+pour les détails individuels
+
+00:10:11.830 --> 00:10:12.670
+au sein de cet enregistrement.
+
+00:10:12.990 --> 00:10:13.310
+Par exemple,
+
+00:10:13.370 --> 00:10:13.950
+les ventes peuvent gérer
+
+00:10:13.950 --> 00:10:14.890
+les détails de relations clients
+
+00:10:14.890 --> 00:10:15.430
+et les informations
+
+00:10:15.430 --> 00:10:16.430
+de contact principales.
+
+00:10:17.230 --> 00:10:17.890
+La finance peut gérer
+
+00:10:17.890 --> 00:10:18.630
+les détails liés au paiement,
+
+00:10:18.710 --> 00:10:19.410
+l'exploitation peut gérer
+
+00:10:19.410 --> 00:10:20.110
+les détails de produits
+
+00:10:20.110 --> 00:10:20.550
+et de stocks.
+
+00:10:21.310 --> 00:10:22.330
+Votre répartition exacte
+
+00:10:22.330 --> 00:10:23.030
+dépend du fonctionnement
+
+00:10:23.030 --> 00:10:23.690
+de votre entreprise
+
+00:10:23.690 --> 00:10:24.830
+et elle doit être documentée
+
+00:10:24.830 --> 00:10:25.930
+et comprise par les utilisateurs
+
+00:10:25.930 --> 00:10:26.470
+des applications.
+
+00:10:26.870 --> 00:10:27.490
+Il existe également
+
+00:10:27.490 --> 00:10:27.910
+deux termes
+
+00:10:27.910 --> 00:10:28.630
+que vous pourriez rencontrer
+
+00:10:28.630 --> 00:10:29.470
+après que l'écriture double
+
+00:10:29.470 --> 00:10:30.170
+de Write et Entendue
+
+00:10:30.170 --> 00:10:30.770
+Dataverse Party
+
+00:10:30.770 --> 00:10:32.410
+et Dataverse Party Company.
+
+00:10:32.870 --> 00:10:33.430
+Une partie back
+
+00:10:33.430 --> 00:10:33.830
+est la manière
+
+00:10:33.830 --> 00:10:34.630
+dont Microsoft gère
+
+00:10:34.630 --> 00:10:35.030
+une personne
+
+00:10:35.030 --> 00:10:35.590
+ou une organisation
+
+00:10:35.590 --> 00:10:36.470
+de façon cohérente.
+
+00:10:37.310 --> 00:10:37.930
+Cela aide à relier
+
+00:10:37.930 --> 00:10:38.430
+les personnes,
+
+00:10:38.710 --> 00:10:39.250
+les organisations,
+
+00:10:39.410 --> 00:10:39.730
+les contacts
+
+00:10:39.730 --> 00:10:40.230
+et les adresses
+
+00:10:40.230 --> 00:10:40.650
+sans traiter.
+
+00:10:41.190 --> 00:10:41.750
+Chaque relation
+
+00:10:41.750 --> 00:10:42.650
+comme un enregistrement
+
+00:10:42.650 --> 00:10:44.010
+séparé et non lié.
+
+00:10:44.750 --> 00:10:45.250
+Une entreprise
+
+00:10:45.250 --> 00:10:45.990
+que aide Dataverse
+
+00:10:45.990 --> 00:10:46.790
+à comprendre le contexte
+
+00:10:46.790 --> 00:10:47.690
+de société commerciale
+
+00:10:47.690 --> 00:10:48.470
+utilisée par Finance
+
+00:10:48.470 --> 00:10:48.930
+et Operations.
+
+00:10:49.450 --> 00:10:49.870
+Vous n'avez pas besoin
+
+00:10:49.870 --> 00:10:50.510
+de devenir un expert
+
+00:10:50.510 --> 00:10:51.030
+de ces deux termes
+
+00:10:51.030 --> 00:10:51.550
+dès le premier jour.
+
+00:10:52.150 --> 00:10:52.650
+Sachez simplement
+
+00:10:52.650 --> 00:10:53.290
+qu'ils existent
+
+00:10:53.290 --> 00:10:54.330
+car Finance & Operations
+
+00:10:54.330 --> 00:10:55.370
+gère des structures métiers
+
+00:10:55.370 --> 00:10:56.190
+que les applications clients
+
+00:10:56.190 --> 00:10:56.750
+doivent reconnaître
+
+00:10:56.750 --> 00:10:57.610
+lorsque les enregistrements
+
+00:10:57.610 --> 00:10:58.630
+passent d'un côté à l'autre.
+
+00:10:59.410 --> 00:11:00.390
+Une fois que les enregistrements
+
+00:11:00.390 --> 00:11:00.890
+peuvent circuler
+
+00:11:00.890 --> 00:11:01.410
+dans les deux sens,
+
+00:11:01.530 --> 00:11:02.370
+le processus associé
+
+00:11:02.370 --> 00:11:02.830
+compte tout autant
+
+00:11:02.830 --> 00:11:03.590
+que les données elles-mêmes.
+
+00:11:04.630 --> 00:11:05.170
+Comment un changement
+
+00:11:05.170 --> 00:11:07.330
+se propage entre les applications ?
+
+00:11:07.330 --> 00:11:08.050
+Suivons un changement
+
+00:11:08.050 --> 00:11:08.550
+dans le système
+
+00:11:08.550 --> 00:11:10.050
+pour voir ce qui se passe réellement.
+
+00:11:10.650 --> 00:11:11.510
+Un commercial est en ligne
+
+00:11:11.510 --> 00:11:12.030
+avec un client
+
+00:11:12.030 --> 00:11:12.990
+qui vient de déménager
+
+00:11:12.990 --> 00:11:13.510
+d'un nouveau bureau.
+
+00:11:14.570 --> 00:11:15.430
+Au cours de cette conversation,
+
+00:11:15.910 --> 00:11:16.510
+il ouvre la fiche client
+
+00:11:16.510 --> 00:11:17.930
+dans Dynamics 365 Sales
+
+00:11:17.930 --> 00:11:18.430
+et met à jour
+
+00:11:18.430 --> 00:11:19.170
+l'adresse postale.
+
+00:11:19.170 --> 00:11:21.130
+Assez simple, n'est-ce pas ?
+
+00:11:21.130 --> 00:11:22.070
+Ensuite, il enregistre la fiche.
+
+00:11:22.550 --> 00:11:23.030
+C'est là que la partie
+
+00:11:23.030 --> 00:11:23.770
+intéressante commence.
+
+00:11:24.390 --> 00:11:25.190
+Sales stock ce changement
+
+00:11:25.190 --> 00:11:25.750
+dans Dataverse
+
+00:11:25.750 --> 00:11:26.610
+qui est la plateforme de données
+
+00:11:26.610 --> 00:11:27.270
+pour les applications
+
+00:11:27.270 --> 00:11:27.890
+orientées clients.
+
+00:11:28.630 --> 00:11:29.570
+Ensuite, la double écriture
+
+00:11:29.570 --> 00:11:30.350
+vérifie le mappage
+
+00:11:30.350 --> 00:11:31.110
+qui relie les informations
+
+00:11:31.110 --> 00:11:31.810
+clients et d'adresse
+
+00:11:31.810 --> 00:11:32.330
+entre ce site
+
+00:11:32.330 --> 00:11:33.170
+et Finance & Operations.
+
+00:11:34.070 --> 00:11:34.870
+Elle transmet automatiquement
+
+00:11:34.870 --> 00:11:35.850
+la modification correspondante.
+
+00:11:36.370 --> 00:11:37.330
+Pas de fichier d'exportation
+
+00:11:37.330 --> 00:11:38.090
+qui traîne dans un dossier
+
+00:11:38.090 --> 00:11:39.130
+partagé en attendant quelqu'un.
+
+00:11:39.610 --> 00:11:40.110
+Personne n'a besoin
+
+00:11:40.110 --> 00:11:40.610
+d'envoyer un email
+
+00:11:40.610 --> 00:11:41.470
+à la finance avec une note
+
+00:11:41.470 --> 00:11:41.710
+disant
+
+00:11:41.710 --> 00:11:42.570
+« Eh, merci de mettre à jour
+
+00:11:42.570 --> 00:11:43.590
+cette adresse. »
+
+00:11:43.590 --> 00:11:44.370
+Le mappage sait déjà
+
+00:11:44.370 --> 00:11:45.110
+quels champs sont liés
+
+00:11:45.110 --> 00:11:46.650
+et envoie la modification
+
+00:11:46.650 --> 00:11:47.810
+directement à la fiche client
+
+00:11:47.810 --> 00:11:48.330
+associée dans
+
+00:11:48.330 --> 00:11:49.590
+Finance & Operations.
+
+00:11:50.270 --> 00:11:51.410
+Ainsi, un utilisateur finance
+
+00:11:51.410 --> 00:11:52.330
+peut ouvrir cette fiche client
+
+00:11:52.330 --> 00:11:52.690
+plus tard,
+
+00:11:52.890 --> 00:11:53.670
+voir l'adresse mise à jour
+
+00:11:53.670 --> 00:11:54.510
+et traiter une commande
+
+00:11:54.510 --> 00:11:55.310
+ou préparer une facture
+
+00:11:55.310 --> 00:11:56.170
+sans interrupture,
+
+00:11:56.270 --> 00:11:56.790
+sans interruption.
+
+00:11:57.110 --> 00:11:57.910
+C'est le résultat pratique
+
+00:11:57.910 --> 00:11:58.350
+tout simplement.
+
+00:11:59.310 --> 00:12:00.030
+Deux personnes continuent
+
+00:12:00.030 --> 00:12:00.330
+de travailler
+
+00:12:00.330 --> 00:12:01.370
+dans des applications différentes
+
+00:12:01.370 --> 00:12:02.270
+sans avoir retapé
+
+00:12:02.270 --> 00:12:03.210
+les mêmes détails clients.
+
+00:12:03.870 --> 00:12:04.630
+Le commercial travaille
+
+00:12:04.630 --> 00:12:05.390
+sur un écran conçu
+
+00:12:05.390 --> 00:12:05.990
+pour les échanges
+
+00:12:05.990 --> 00:12:06.570
+avec les clients.
+
+00:12:07.250 --> 00:12:07.990
+L'utilisateur finance
+
+00:12:07.990 --> 00:12:08.910
+travaille sur un écran conçu
+
+00:12:08.910 --> 00:12:09.710
+pour les tâches financières.
+
+00:12:10.470 --> 00:12:10.830
+Chacun envoie
+
+00:12:10.830 --> 00:12:11.610
+les informations clients
+
+00:12:11.610 --> 00:12:12.530
+dont il a réellement besoin,
+
+00:12:12.530 --> 00:12:13.410
+là où il en a besoin,
+
+00:12:13.570 --> 00:12:14.230
+là où il en a besoin.
+
+00:12:14.730 --> 00:12:15.550
+Et le voyage fonctionne aussi
+
+00:12:15.550 --> 00:12:16.070
+dans l'autre sens.
+
+00:12:16.850 --> 00:12:17.570
+Imaginez que la finance
+
+00:12:17.570 --> 00:12:17.970
+mette à jour
+
+00:12:17.970 --> 00:12:18.850
+des informations clientes
+
+00:12:18.850 --> 00:12:19.750
+dans Finance & Operations.
+
+00:12:20.990 --> 00:12:22.070
+Disons qu'un utilisateur finance
+
+00:12:22.070 --> 00:12:22.710
+corrige un détail
+
+00:12:22.710 --> 00:12:23.150
+qui concerne
+
+00:12:23.150 --> 00:12:24.290
+la fiche client opérationnelle.
+
+00:12:25.410 --> 00:12:25.990
+La double écriture
+
+00:12:25.990 --> 00:12:26.630
+utilise le mappage
+
+00:12:26.630 --> 00:12:27.630
+correspondant en sens inverse
+
+00:12:27.630 --> 00:12:28.490
+et envoie cette mise à jour
+
+00:12:28.490 --> 00:12:29.090
+à Dataverse.
+
+00:12:30.010 --> 00:12:30.290
+Ensuite,
+
+00:12:30.410 --> 00:12:31.370
+Sales ou toute autre application
+
+00:12:31.370 --> 00:12:32.210
+basée sur Dataverse
+
+00:12:32.210 --> 00:12:32.930
+peut la récupérer.
+
+00:12:34.150 --> 00:12:35.230
+Cette connexion est synchrone
+
+00:12:35.230 --> 00:12:36.490
+pour le travail quotidien normal.
+
+00:12:36.990 --> 00:12:37.670
+Synchrone signifie
+
+00:12:37.670 --> 00:12:38.330
+que les applications
+
+00:12:38.330 --> 00:12:39.050
+tentent d'effectuer
+
+00:12:39.050 --> 00:12:39.550
+la mise à jour
+
+00:12:39.550 --> 00:12:40.090
+au même moment,
+
+00:12:40.210 --> 00:12:40.930
+au lieu de la confier
+
+00:12:40.930 --> 00:12:41.930
+à une tâche de fond
+
+00:12:41.930 --> 00:12:42.590
+qui ne s'exécuterait
+
+00:12:42.590 --> 00:12:43.670
+que 20 minutes plus tard.
+
+00:12:44.630 --> 00:12:45.290
+Si la connexion
+
+00:12:45.290 --> 00:12:45.950
+ne peut pas effectuer
+
+00:12:45.950 --> 00:12:46.470
+la mise à jour,
+
+00:12:46.550 --> 00:12:47.230
+ce problème doit être
+
+00:12:47.230 --> 00:12:48.350
+traité immédiatement
+
+00:12:48.350 --> 00:12:49.090
+sans rester caché
+
+00:12:49.090 --> 00:12:49.710
+jusqu'à ce que quelqu'un
+
+00:12:49.710 --> 00:12:50.850
+remarque une incohérence.
+
+00:12:51.490 --> 00:12:52.330
+Ce comportement est logique
+
+00:12:52.330 --> 00:12:53.010
+pour des enregistrements
+
+00:12:53.010 --> 00:12:53.610
+métiers partagés.
+
+00:12:53.970 --> 00:12:54.390
+Vous ne voulez pas
+
+00:12:54.390 --> 00:12:54.990
+qu'une adresse client,
+
+00:12:55.070 --> 00:12:55.610
+un détail produit
+
+00:12:55.610 --> 00:12:56.370
+ou toute autre information
+
+00:12:56.370 --> 00:12:57.010
+partagée divergent
+
+00:12:57.010 --> 00:12:57.430
+pendant des heures
+
+00:12:57.430 --> 00:12:58.190
+parce qu'un traitement par l'eau
+
+00:12:58.190 --> 00:12:59.030
+n'a pas encore été lancé.
+
+00:12:59.410 --> 00:13:00.170
+Les gens prennent des décisions
+
+00:13:00.170 --> 00:13:00.830
+basées sur ce qu'ils voient
+
+00:13:00.830 --> 00:13:01.330
+sur leur écran
+
+00:13:01.330 --> 00:13:01.890
+à l'instant présent.
+
+00:13:02.390 --> 00:13:03.130
+Ainsi, la connexion
+
+00:13:03.130 --> 00:13:03.850
+maintient les deux côtés
+
+00:13:03.850 --> 00:13:04.510
+en synchronisation
+
+00:13:04.510 --> 00:13:05.090
+pendant le travail.
+
+00:13:05.930 --> 00:13:06.830
+Pourtant, le travail en direct
+
+00:13:06.830 --> 00:13:07.450
+nécessite parfois
+
+00:13:07.450 --> 00:13:08.210
+une pause contrôlée.
+
+00:13:08.970 --> 00:13:09.570
+La double écriture
+
+00:13:09.570 --> 00:13:10.130
+inclut des options
+
+00:13:10.130 --> 00:13:10.490
+de lecture,
+
+00:13:10.610 --> 00:13:11.350
+de pause et de rattrapage.
+
+00:13:11.650 --> 00:13:12.270
+La lecture signifie
+
+00:13:12.270 --> 00:13:13.050
+que le mappage est actif
+
+00:13:13.050 --> 00:13:13.570
+et que les modifications
+
+00:13:13.570 --> 00:13:14.070
+prises en charge
+
+00:13:14.070 --> 00:13:14.570
+en transmisant.
+
+00:13:14.870 --> 00:13:15.370
+La pause arrête
+
+00:13:15.370 --> 00:13:16.170
+temporairement le mappage
+
+00:13:16.170 --> 00:13:16.650
+lorsqu'une équipe
+
+00:13:16.650 --> 00:13:17.050
+doit effectuer
+
+00:13:17.050 --> 00:13:17.810
+des travaux planifiés,
+
+00:13:18.050 --> 00:13:18.770
+enquêter sur un problème
+
+00:13:18.770 --> 00:13:19.530
+ou gérer un changement
+
+00:13:19.530 --> 00:13:20.070
+en toute sécurité.
+
+00:13:20.530 --> 00:13:21.110
+Mais la pause n'est pas
+
+00:13:21.110 --> 00:13:21.930
+un espace de stationnement
+
+00:13:21.930 --> 00:13:22.250
+permanent.
+
+00:13:22.630 --> 00:13:23.230
+Pendant qu'un mappage
+
+00:13:23.230 --> 00:13:23.650
+est en pause,
+
+00:13:23.850 --> 00:13:24.590
+les modifications peuvent
+
+00:13:24.590 --> 00:13:25.370
+être mises en fil d'attente
+
+00:13:25.370 --> 00:13:25.810
+pour une durée,
+
+00:13:25.870 --> 00:13:26.290
+un espace et demi.
+
+00:13:26.290 --> 00:13:27.490
+Lorsque le mappage reprend,
+
+00:13:27.570 --> 00:13:28.290
+le rattrapage traite
+
+00:13:28.290 --> 00:13:29.470
+ces modifications en attente.
+
+00:13:29.870 --> 00:13:30.650
+Cela aide les équipes
+
+00:13:30.650 --> 00:13:31.210
+à se rétablir
+
+00:13:31.210 --> 00:13:32.370
+après une interruption planifiée.
+
+00:13:33.150 --> 00:13:33.490
+Cependant,
+
+00:13:33.590 --> 00:13:34.310
+quelqu'un doit être responsable
+
+00:13:34.310 --> 00:13:34.710
+de cette pause
+
+00:13:34.710 --> 00:13:35.650
+et savoir quand le mappage
+
+00:13:35.650 --> 00:13:36.250
+doit redémarrer.
+
+00:13:37.270 --> 00:13:37.770
+Avant que tout cela
+
+00:13:37.770 --> 00:13:38.770
+ne commence dans le travail quotidien,
+
+00:13:39.010 --> 00:13:39.750
+il existe une autre étape,
+
+00:13:39.830 --> 00:13:40.690
+la synchronisation initiale.
+
+00:13:40.950 --> 00:13:41.990
+La synchronisation initiale
+
+00:13:41.990 --> 00:13:42.810
+amène les enregistrements
+
+00:13:42.810 --> 00:13:43.570
+existants des deux côtés
+
+00:13:43.570 --> 00:13:44.430
+vers un point de départ commun.
+
+00:13:44.890 --> 00:13:45.670
+Imaginez une entreprise
+
+00:13:45.670 --> 00:13:46.330
+qui a déjà des clients
+
+00:13:46.330 --> 00:13:47.210
+dans Finance and Operations
+
+00:13:47.210 --> 00:13:48.210
+et des enregistrements clients
+
+00:13:48.210 --> 00:13:48.810
+dans Dataverse.
+
+00:13:49.530 --> 00:13:50.330
+La connexion ne peut pas
+
+00:13:50.330 --> 00:13:51.070
+simplement être activée
+
+00:13:51.070 --> 00:13:52.090
+en supposant que chaque enregistrement
+
+00:13:52.090 --> 00:13:53.270
+existant correspond déjà parfaitement.
+
+00:13:53.630 --> 00:13:54.530
+Elle a besoin d'une ligne de départ.
+
+00:13:55.070 --> 00:13:56.030
+La synchronisation initiale
+
+00:13:56.030 --> 00:13:56.530
+aide à transférer
+
+00:13:56.530 --> 00:13:57.350
+les données existantes
+
+00:13:57.350 --> 00:13:58.070
+avant que les utilisateurs
+
+00:13:58.070 --> 00:13:58.890
+ne comptent sur les mises à jour
+
+00:13:58.890 --> 00:13:59.350
+en direct.
+
+00:14:00.110 --> 00:14:00.990
+Ce travail nécessite
+
+00:14:00.990 --> 00:14:01.650
+de la prudence
+
+00:14:01.650 --> 00:14:02.350
+car les doublons,
+
+00:14:02.450 --> 00:14:03.370
+les adresses incomplètes
+
+00:14:03.370 --> 00:14:04.470
+et les anciennes données de test
+
+00:14:04.470 --> 00:14:05.570
+ne se nettoient pas par magie
+
+00:14:05.570 --> 00:14:06.790
+au lancement d'une synchronisation.
+
+00:14:07.670 --> 00:14:08.350
+Ils peuvent en fait
+
+00:14:08.350 --> 00:14:08.910
+créer des problèmes
+
+00:14:08.910 --> 00:14:09.370
+plus rapidement
+
+00:14:09.370 --> 00:14:10.110
+si les enregistrements
+
+00:14:10.110 --> 00:14:10.650
+ne respectent pas
+
+00:14:10.650 --> 00:14:11.190
+les règles convenues.
+
+00:14:11.730 --> 00:14:12.330
+Une fois les mappages
+
+00:14:12.330 --> 00:14:13.030
+en cours d'exécution,
+
+00:14:13.110 --> 00:14:13.690
+les personnes qui gèrent
+
+00:14:13.690 --> 00:14:14.290
+la double écriture
+
+00:14:14.290 --> 00:14:15.070
+ont besoin d'un espace clair
+
+00:14:15.070 --> 00:14:15.970
+pour vérifier son état de santé.
+
+00:14:15.970 --> 00:14:16.850
+La double écriture
+
+00:14:16.850 --> 00:14:17.430
+fournit des journaux
+
+00:14:17.430 --> 00:14:18.590
+d'activités et d'erreurs combinées
+
+00:14:18.590 --> 00:14:19.510
+afin que les administrateurs
+
+00:14:19.510 --> 00:14:19.850
+puissent voir
+
+00:14:19.850 --> 00:14:20.850
+ce que la connexion a traité
+
+00:14:20.850 --> 00:14:21.590
+et où elle a rencontré
+
+00:14:21.590 --> 00:14:22.210
+des difficultés.
+
+00:14:22.910 --> 00:14:23.470
+Ils peuvent également
+
+00:14:23.470 --> 00:14:24.230
+définir des alertes
+
+00:14:24.230 --> 00:14:24.610
+et des solides.
+
+00:14:25.110 --> 00:14:25.630
+Cela signifie
+
+00:14:25.630 --> 00:14:26.370
+que les bonnes personnes
+
+00:14:26.370 --> 00:14:27.330
+sont informées des problèmes
+
+00:14:27.330 --> 00:14:28.270
+avant que les utilisateurs
+
+00:14:28.270 --> 00:14:28.770
+ne les découvrent
+
+00:14:28.770 --> 00:14:29.370
+par une mise à jour
+
+00:14:29.370 --> 00:14:30.150
+manquante ou échouée.
+
+00:14:30.810 --> 00:14:31.350
+Cette vue de support
+
+00:14:31.350 --> 00:14:31.930
+est importante
+
+00:14:31.930 --> 00:14:32.770
+car chaque erreur
+
+00:14:32.770 --> 00:14:33.310
+a une cause.
+
+00:14:33.990 --> 00:14:34.390
+Peut-être qu'un champ
+
+00:14:34.390 --> 00:14:35.170
+obligatoire est manquant.
+
+00:14:35.590 --> 00:14:36.330
+Peut-être qu'un enregistrement
+
+00:14:36.330 --> 00:14:37.010
+lié n'est pas encore rêvé.
+
+00:14:37.290 --> 00:14:37.750
+Peut-être que quelqu'un
+
+00:14:37.750 --> 00:14:38.350
+a modifié des données
+
+00:14:38.350 --> 00:14:39.150
+d'une manière incompatible
+
+00:14:39.150 --> 00:14:39.590
+avec le mappage.
+
+00:14:40.050 --> 00:14:41.010
+Réessayer un enregistrement
+
+00:14:41.010 --> 00:14:42.130
+échoué sans corriger la cause
+
+00:14:42.130 --> 00:14:42.990
+entraîne généralement
+
+00:14:42.990 --> 00:14:43.810
+le même échec.
+
+00:14:44.810 --> 00:14:45.330
+Une configuration
+
+00:14:45.330 --> 00:14:46.130
+de double écriture
+
+00:14:46.130 --> 00:14:46.610
+bien gérée
+
+00:14:46.610 --> 00:14:47.730
+surveille la connexion,
+
+00:14:47.950 --> 00:14:48.970
+corrige la raison des erreurs
+
+00:14:48.970 --> 00:14:49.970
+et concentre les mappages
+
+00:14:49.970 --> 00:14:50.810
+sur les enregistrements
+
+00:14:50.810 --> 00:14:51.670
+qui doivent vraiment
+
+00:14:51.670 --> 00:14:52.470
+rester connectés.
+
+00:14:53.350 --> 00:14:53.990
+Ou la double écriture
+
+00:14:53.990 --> 00:14:54.230
+s'adapte.
+
+00:14:54.470 --> 00:14:55.210
+La double écriture
+
+00:14:55.210 --> 00:14:55.650
+est idéale
+
+00:14:55.650 --> 00:14:56.390
+lorsque votre entreprise
+
+00:14:56.390 --> 00:14:57.990
+utilise Dynamics 365 Finance
+
+00:14:57.990 --> 00:14:58.970
+ou Supply Chain Management
+
+00:14:58.970 --> 00:15:00.010
+parallèlement à des applications
+
+00:15:00.010 --> 00:15:00.590
+orientées clients
+
+00:15:00.590 --> 00:15:01.150
+comme Sales,
+
+00:15:01.370 --> 00:15:01.990
+Customer Service,
+
+00:15:02.090 --> 00:15:02.530
+Field Service,
+
+00:15:02.750 --> 00:15:03.310
+Customer Service
+
+00:15:03.310 --> 00:15:03.990
+ou Project Operation.
+
+00:15:04.490 --> 00:15:04.990
+Ces applications
+
+00:15:04.990 --> 00:15:05.530
+prennent en charge
+
+00:15:05.530 --> 00:15:06.090
+différentes parties
+
+00:15:06.090 --> 00:15:07.090
+d'une même conversation commerciale.
+
+00:15:08.350 --> 00:15:08.970
+échange avec le client,
+
+00:15:09.370 --> 00:15:10.550
+une autre planifie la livraison,
+
+00:15:10.870 --> 00:15:11.390
+gère les stocks,
+
+00:15:11.570 --> 00:15:12.050
+suit les coûts
+
+00:15:12.050 --> 00:15:13.130
+ou envoie la facture.
+
+00:15:14.090 --> 00:15:14.810
+Lorsque les deux groupes
+
+00:15:14.810 --> 00:15:15.290
+doivent travailler
+
+00:15:15.290 --> 00:15:16.130
+sur des enregistrements
+
+00:15:16.130 --> 00:15:16.770
+liés au quotidien,
+
+00:15:16.850 --> 00:15:17.410
+la double écriture
+
+00:15:17.410 --> 00:15:18.470
+peut connecter ce travail
+
+00:15:18.470 --> 00:15:19.290
+sans forcer tout le monde
+
+00:15:19.290 --> 00:15:20.650
+à utiliser la même application.
+
+00:15:21.350 --> 00:15:21.830
+Prenons l'exemple
+
+00:15:21.830 --> 00:15:22.410
+d'un processus
+
+00:15:22.410 --> 00:15:23.150
+prospect vers encaissement.
+
+00:15:23.790 --> 00:15:24.490
+Un commercial travaille
+
+00:15:24.490 --> 00:15:25.410
+avec un client potentiel
+
+00:15:25.410 --> 00:15:26.670
+dans Danix 365 Sales.
+
+00:15:27.470 --> 00:15:28.490
+Il assure le suivi du contact,
+
+00:15:28.730 --> 00:15:29.290
+discute des produits,
+
+00:15:29.530 --> 00:15:30.090
+établit un devis
+
+00:15:30.090 --> 00:15:31.370
+et avance vers une commande.
+
+00:15:31.950 --> 00:15:32.770
+Durant cet échange,
+
+00:15:32.890 --> 00:15:33.650
+le commercial a besoin
+
+00:15:33.650 --> 00:15:34.410
+des détails du client,
+
+00:15:34.510 --> 00:15:35.490
+d'informations sur les produits,
+
+00:15:35.650 --> 00:15:36.070
+des tarifs
+
+00:15:36.070 --> 00:15:36.990
+et des données de commande
+
+00:15:36.990 --> 00:15:37.990
+liées au service financier
+
+00:15:37.990 --> 00:15:38.610
+de l'entreprise.
+
+00:15:39.690 --> 00:15:40.630
+Une fois la vente conclue,
+
+00:15:40.710 --> 00:15:41.710
+la gestion financière
+
+00:15:41.710 --> 00:15:42.750
+et de la chaîne logistique
+
+00:15:42.750 --> 00:15:43.210
+prend le relais
+
+00:15:43.210 --> 00:15:43.690
+pour le travail
+
+00:15:43.690 --> 00:15:44.410
+qui suit l'engagement.
+
+00:15:45.090 --> 00:15:45.750
+Elle gère l'exécution
+
+00:15:45.750 --> 00:15:46.250
+de la commande,
+
+00:15:46.290 --> 00:15:47.070
+la facturation des stocks
+
+00:15:47.070 --> 00:15:47.930
+et les enregistrements financiers.
+
+00:15:48.590 --> 00:15:49.290
+La double écriture
+
+00:15:49.290 --> 00:15:50.050
+aide ces deux parties
+
+00:15:50.050 --> 00:15:50.990
+à rester connectées.
+
+00:15:51.550 --> 00:15:52.010
+Les commerciaux
+
+00:15:52.010 --> 00:15:52.410
+peuvent travailler
+
+00:15:52.410 --> 00:15:53.190
+dans l'application client
+
+00:15:53.190 --> 00:15:54.010
+adaptée à leur métier,
+
+00:15:54.270 --> 00:15:54.870
+tandis que la finance
+
+00:15:54.870 --> 00:15:55.450
+et les opérations
+
+00:15:55.450 --> 00:15:56.090
+gèrent la transaction
+
+00:15:56.090 --> 00:15:56.730
+dans l'application
+
+00:15:56.730 --> 00:15:57.610
+conçue pour leur travail.
+
+00:15:58.110 --> 00:15:58.930
+Le client ne devient pas
+
+00:15:58.930 --> 00:15:59.870
+deux histoires distinctes,
+
+00:15:59.950 --> 00:16:00.950
+l'une racontée par les ventes
+
+00:16:00.950 --> 00:16:02.050
+et l'autre par la finance.
+
+00:16:02.790 --> 00:16:03.430
+Le service sur site
+
+00:16:03.430 --> 00:16:04.150
+fournit un autre bon exemple.
+
+00:16:04.750 --> 00:16:05.450
+Imaginez une entreprise
+
+00:16:05.450 --> 00:16:06.130
+qui envoie des techniciens
+
+00:16:06.130 --> 00:16:06.930
+installés, réparés
+
+00:16:06.930 --> 00:16:07.810
+ou entretenir des équipements
+
+00:16:07.810 --> 00:16:08.250
+chez des clients.
+
+00:16:09.290 --> 00:16:09.750
+L'agent sur site
+
+00:16:09.750 --> 00:16:10.450
+a besoin des coordonnées
+
+00:16:10.450 --> 00:16:10.810
+du client,
+
+00:16:10.930 --> 00:16:11.650
+de détails sur le travail
+
+00:16:11.650 --> 00:16:12.210
+et d'informations
+
+00:16:12.210 --> 00:16:12.810
+sur l'actif client
+
+00:16:12.810 --> 00:16:13.610
+correspondant à l'équipement
+
+00:16:13.610 --> 00:16:14.390
+installé ou pris en charge
+
+00:16:14.390 --> 00:16:14.930
+par l'entreprise.
+
+00:16:15.710 --> 00:16:16.110
+En coulisses,
+
+00:16:16.190 --> 00:16:16.990
+l'entreprise doit également
+
+00:16:16.990 --> 00:16:17.710
+suivre les pièces,
+
+00:16:17.850 --> 00:16:18.710
+les coûts, les achats
+
+00:16:18.710 --> 00:16:19.570
+et les flux financiers
+
+00:16:19.570 --> 00:16:20.390
+liés à cette intervention.
+
+00:16:20.990 --> 00:16:21.530
+Le service sur site
+
+00:16:21.530 --> 00:16:22.490
+se concentre sur la planification
+
+00:16:22.490 --> 00:16:23.350
+et l'achèvement de l'intervention.
+
+00:16:23.690 --> 00:16:24.650
+La finance et les opérations
+
+00:16:24.650 --> 00:16:25.450
+se concentrent sur les données
+
+00:16:25.450 --> 00:16:26.330
+opérationnelles et financières
+
+00:16:26.330 --> 00:16:26.910
+qui y sont associées.
+
+00:16:27.510 --> 00:16:28.350
+Lorsque ces enregistrements
+
+00:16:28.350 --> 00:16:29.210
+sont correctement connectés,
+
+00:16:29.270 --> 00:16:30.070
+le travail du technicien
+
+00:16:30.070 --> 00:16:30.710
+n'est plus dissocié
+
+00:16:30.710 --> 00:16:31.430
+des pièces utilisées,
+
+00:16:31.710 --> 00:16:32.330
+du coût du travail
+
+00:16:32.330 --> 00:16:33.670
+ou du dossier client associé.
+
+00:16:35.070 --> 00:16:35.810
+Project Operations
+
+00:16:35.810 --> 00:16:36.430
+suit le même modèle,
+
+00:16:36.670 --> 00:16:37.630
+en particulier pour les entreprises
+
+00:16:37.630 --> 00:16:38.410
+qui vendent des prestations
+
+00:16:38.410 --> 00:16:38.810
+par projet.
+
+00:16:39.370 --> 00:16:39.950
+Une équipe projet
+
+00:16:39.950 --> 00:16:40.910
+peut gérer le travail client,
+
+00:16:41.030 --> 00:16:41.910
+le temps des collaborateurs,
+
+00:16:41.970 --> 00:16:42.490
+les coûts prévus
+
+00:16:42.490 --> 00:16:43.630
+et les jalons du projet.
+
+00:16:44.310 --> 00:16:44.930
+La finance doit avoir
+
+00:16:44.930 --> 00:16:45.910
+une vision de l'aspect financier
+
+00:16:45.910 --> 00:16:46.310
+des achats,
+
+00:16:46.410 --> 00:16:47.270
+des coûts de la facturation
+
+00:16:47.270 --> 00:16:47.890
+et du reporting.
+
+00:16:48.810 --> 00:16:49.410
+Sans connexion,
+
+00:16:49.630 --> 00:16:50.210
+les chefs de projet
+
+00:16:50.210 --> 00:16:51.110
+peuvent passer trop de temps
+
+00:16:51.110 --> 00:16:52.070
+à solliciter la finance
+
+00:16:54.650 --> 00:16:55.270
+et le projet confirme
+
+00:16:55.270 --> 00:16:56.030
+ce qui s'est passé.
+
+00:16:57.230 --> 00:16:57.850
+Des enregistrements
+
+00:16:57.850 --> 00:16:58.530
+de projets connectés
+
+00:16:58.530 --> 00:16:59.130
+offrent aux deux groupes
+
+00:16:59.130 --> 00:17:00.050
+une vue plus claire du travail,
+
+00:17:00.310 --> 00:17:00.970
+depuis l'engagement client
+
+00:17:00.970 --> 00:17:02.130
+jusqu'à l'activité financière.
+
+00:17:02.790 --> 00:17:03.410
+Il existe également
+
+00:17:03.410 --> 00:17:04.270
+un avantage plus large
+
+00:17:04.270 --> 00:17:05.110
+lié à Power Platform.
+
+00:17:05.350 --> 00:17:06.150
+Comme l'application client
+
+00:17:06.150 --> 00:17:06.910
+utilise Dataverse,
+
+00:17:06.990 --> 00:17:07.590
+les données approuvées
+
+00:17:07.590 --> 00:17:08.110
+dans Dataverse
+
+00:17:08.110 --> 00:17:09.150
+peuvent alimenter Power Apps
+
+00:17:09.150 --> 00:17:09.810
+et Power Apps
+
+00:17:09.810 --> 00:17:10.630
+et Power Automate.
+
+00:17:11.030 --> 00:17:11.850
+Une entreprise peut créer
+
+00:17:11.850 --> 00:17:12.510
+une petite application
+
+00:17:12.510 --> 00:17:13.350
+pour une équipe interne
+
+00:17:13.350 --> 00:17:14.430
+ou configurer un flux
+
+00:17:14.430 --> 00:17:15.530
+qui réagit lorsqu'un enregistrement
+
+00:17:15.530 --> 00:17:16.630
+métier atteint un certain stade.
+
+00:17:17.270 --> 00:17:17.890
+Cela ne signifie pas
+
+00:17:17.890 --> 00:17:18.510
+que chaque enregistrement
+
+00:17:18.510 --> 00:17:19.330
+financier et opérationnel
+
+00:17:19.330 --> 00:17:20.010
+doit soudainement figurer
+
+00:17:20.010 --> 00:17:20.750
+dans chaque application Power.
+
+00:17:20.750 --> 00:17:21.590
+Cela signifie
+
+00:17:21.590 --> 00:17:22.670
+que les enregistrements connectés
+
+00:17:22.670 --> 00:17:23.150
+peuvent faire partie
+
+00:17:23.150 --> 00:17:23.950
+d'un ensemble plus large
+
+00:17:23.950 --> 00:17:24.670
+d'outils professionnels
+
+00:17:24.670 --> 00:17:25.530
+à condition que l'entreprise
+
+00:17:25.530 --> 00:17:26.310
+choisisse cet objectif
+
+00:17:26.310 --> 00:17:26.710
+avec soin
+
+00:17:26.710 --> 00:17:27.810
+et protège les données correctement.
+
+00:17:28.170 --> 00:17:29.390
+Une limite doit rester claire.
+
+00:17:29.890 --> 00:17:30.770
+La double écriture DualWrite
+
+00:17:30.770 --> 00:17:31.370
+ne prend pas en charge
+
+00:17:31.370 --> 00:17:32.610
+Dynamics 365 Business Central.
+
+00:17:32.950 --> 00:17:34.230
+Business Central peut se connecter
+
+00:17:34.230 --> 00:17:35.230
+à d'autres produits Microsoft
+
+00:17:35.230 --> 00:17:36.110
+par d'autres méthodes.
+
+00:17:36.410 --> 00:17:37.150
+Mais la double écriture
+
+00:17:37.150 --> 00:17:38.310
+est destinée au volet finance
+
+00:17:38.310 --> 00:17:39.870
+et opération de Dynamics 365
+
+00:17:39.870 --> 00:17:40.990
+et aux applications clients
+
+00:17:40.990 --> 00:17:41.790
+basées sur Dataverse.
+
+00:17:42.490 --> 00:17:43.010
+Ce n'est pas non plus
+
+00:17:43.010 --> 00:17:44.110
+un outil pour copier chaque table
+
+00:17:44.110 --> 00:17:44.850
+que vous pouvez trouver.
+
+00:17:45.630 --> 00:17:46.890
+Un enregistrement doit être déplacé
+
+00:17:46.890 --> 00:17:47.550
+parce que les utilisateurs
+
+00:17:47.550 --> 00:17:48.530
+ont besoin du même enregistrement
+
+00:17:48.530 --> 00:17:49.430
+opérationnel aux deux endroits.
+
+00:17:49.510 --> 00:17:50.290
+Pas parce que copier des données
+
+00:17:50.290 --> 00:17:50.890
+semble plus sûr.
+
+00:17:51.430 --> 00:17:51.950
+La double écriture
+
+00:17:51.950 --> 00:17:52.590
+ne remplace pas non plus
+
+00:17:52.590 --> 00:17:53.630
+un plan d'intégration plus large
+
+00:17:53.630 --> 00:17:54.270
+lorsqu'une entreprise
+
+00:17:54.270 --> 00:17:55.110
+a besoin de flux de reporting,
+
+00:17:55.390 --> 00:17:56.370
+de liens vers des systèmes tiers
+
+00:17:56.370 --> 00:17:56.930
+ou d'une migration
+
+00:17:56.930 --> 00:17:57.610
+de données importantes.
+
+00:17:58.310 --> 00:17:59.350
+Traiter chaque connexion de données
+
+00:17:59.350 --> 00:18:00.230
+comme une tâche identique
+
+00:18:00.230 --> 00:18:01.270
+crée rapidement des problèmes.
+
+00:18:02.830 --> 00:18:05.430
+Limite, préparation et erreur courante.
+
+00:18:05.970 --> 00:18:06.790
+Voyez la double écriture
+
+00:18:06.790 --> 00:18:07.590
+comme un accord conclu
+
+00:18:07.590 --> 00:18:08.530
+entre deux systèmes.
+
+00:18:09.250 --> 00:18:09.850
+Il convient de garder
+
+00:18:09.850 --> 00:18:10.650
+certains enregistrements
+
+00:18:10.650 --> 00:18:11.550
+partagés et synchronisés
+
+00:18:11.550 --> 00:18:12.510
+mais ce n'est pas un canal magique
+
+00:18:12.510 --> 00:18:13.010
+pour chaque table,
+
+00:18:13.130 --> 00:18:14.190
+rapport ou système externe.
+
+00:18:14.870 --> 00:18:15.830
+Avant de la configurer,
+
+00:18:16.170 --> 00:18:17.050
+vérifiez quelles intégrations
+
+00:18:17.050 --> 00:18:17.550
+existent déjà.
+
+00:18:18.250 --> 00:18:19.110
+Si une ancienne connexion
+
+00:18:19.110 --> 00:18:19.890
+et la double écriture
+
+00:18:19.890 --> 00:18:20.430
+mettent à jour
+
+00:18:20.430 --> 00:18:21.450
+le même enregistrement client,
+
+00:18:21.550 --> 00:18:22.210
+vous pouvez rapidement
+
+00:18:22.210 --> 00:18:22.910
+créer des conflits.
+
+00:18:23.450 --> 00:18:23.930
+C'est un casse-tête
+
+00:18:23.930 --> 00:18:24.570
+dont vous n'avez pas besoin.
+
+00:18:24.990 --> 00:18:25.650
+Alors mettez-vous d'abord
+
+00:18:25.650 --> 00:18:26.290
+d'accord sur les bases.
+
+00:18:26.550 --> 00:18:27.710
+Comment allez-vous saisir des noms ?
+
+00:18:27.710 --> 00:18:28.450
+Quelle entité juridique
+
+00:18:28.450 --> 00:18:29.590
+détient chaque enregistrement ?
+
+00:18:29.590 --> 00:18:30.850
+Qui peut effectuer des modifications ?
+
+00:18:30.850 --> 00:18:31.550
+Quels rôles de sécurité
+
+00:18:31.550 --> 00:18:33.090
+sont nécessaires pour chaque équipe ?
+
+00:18:33.090 --> 00:18:33.790
+Éliminez les doublons
+
+00:18:33.790 --> 00:18:34.690
+et les enregistrements incomplets
+
+00:18:34.690 --> 00:18:35.650
+avant la première synchronisation.
+
+00:18:35.930 --> 00:18:36.590
+Commencez par les mappages
+
+00:18:36.590 --> 00:18:37.310
+préétablis de Microsoft.
+
+00:18:37.830 --> 00:18:38.310
+Connecte déjà
+
+00:18:38.310 --> 00:18:38.970
+les enregistrements courts.
+
+00:18:39.350 --> 00:18:40.310
+Les tables et champs personnalisés
+
+00:18:40.310 --> 00:18:41.490
+eux nécessitent des tests minutiaux.
+
+00:18:41.810 --> 00:18:42.710
+Vérifiez les tables liées
+
+00:18:42.710 --> 00:18:43.750
+et les dépendances de mappage
+
+00:18:43.750 --> 00:18:45.030
+car parfois un enregistrement
+
+00:18:45.030 --> 00:18:45.790
+doit en précéder un autre
+
+00:18:45.790 --> 00:18:47.150
+pour pouvoir être synchronisé.
+
+00:18:47.690 --> 00:18:49.030
+Planifiez votre première synchronisation
+
+00:18:49.030 --> 00:18:49.890
+en fonction du volume de données.
+
+00:18:50.110 --> 00:18:50.730
+Ne traitez pas cela
+
+00:18:50.730 --> 00:18:51.410
+comme un interrupteur
+
+00:18:51.410 --> 00:18:52.630
+que vous actionnez pendant le déjeuner.
+
+00:18:52.710 --> 00:18:53.450
+Cela causera des problèmes.
+
+00:18:53.790 --> 00:18:54.410
+Un mappage en pause
+
+00:18:54.410 --> 00:18:55.410
+nécessite toujours un responsable
+
+00:18:55.410 --> 00:18:56.090
+et un plomb de redémarrage.
+
+00:18:56.450 --> 00:18:57.550
+Les modifications en fil d'attente
+
+00:18:57.550 --> 00:18:58.430
+et les enregistrements ayant échoué
+
+00:18:58.430 --> 00:18:59.110
+ne restent pas définies.
+
+00:18:59.510 --> 00:19:00.610
+Surveillez les journaux d'activité,
+
+00:19:00.850 --> 00:19:02.150
+les erreurs, les alertes et les seuils.
+
+00:19:02.630 --> 00:19:03.130
+En cas d'échec,
+
+00:19:03.190 --> 00:19:03.910
+trouvez le champ manquant,
+
+00:19:03.910 --> 00:19:04.870
+l'enregistrement erroné
+
+00:19:04.870 --> 00:19:05.670
+ou la règle rompue
+
+00:19:05.670 --> 00:19:06.310
+qui en est la cause.
+
+00:19:06.810 --> 00:19:07.530
+Les tentatives répétées
+
+00:19:07.530 --> 00:19:08.610
+ne corrigeront pas des données incorrectes.
+
+00:19:08.930 --> 00:19:09.510
+Lorsque vous percevez
+
+00:19:09.510 --> 00:19:10.070
+la double écriture
+
+00:19:10.070 --> 00:19:10.790
+comme un pont contrôlé,
+
+00:19:10.970 --> 00:19:11.650
+tout prend sa place.
+
+00:19:13.370 --> 00:19:13.730
+Conclusion,
+
+00:19:14.130 --> 00:19:15.350
+une conversation métier partagée.
+
+00:19:16.210 --> 00:19:16.790
+La double écriture
+
+00:19:16.790 --> 00:19:17.510
+maintient la circulation
+
+00:19:17.510 --> 00:19:18.550
+des enregistrements partagés
+
+00:19:18.550 --> 00:19:18.950
+pris en charge
+
+00:19:18.950 --> 00:19:20.010
+entre la finance et les opérations
+
+00:19:20.010 --> 00:19:20.530
+et vos applications
+
+00:19:20.530 --> 00:19:21.410
+cliquées en basée sur DataLars.
+
+00:19:22.070 --> 00:19:23.050
+Ainsi, les équipes peuvent travailler
+
+00:19:23.050 --> 00:19:24.470
+à partir de données commerciales connectées.
+
+00:19:25.590 --> 00:19:26.590
+Abonnez-vous sur votre plateforme
+
+00:19:26.590 --> 00:19:27.330
+de podcast préférée
+
+00:19:27.330 --> 00:19:28.490
+pour plus de pépites de connaissances
+
+00:19:28.490 --> 00:19:29.830
+avec moi, Mirko Peters
+
+00:19:29.830 --> 00:19:31.310
+sur m365.fm
+
+00:19:31.310 --> 00:19:33.170
+et partagez cet épisode
+
+00:19:33.170 --> 00:19:33.630
+avec quelqu'un
+
+00:19:33.630 --> 00:19:34.650
+qui connecte encore les ventes,
+
+00:19:34.770 --> 00:19:35.730
+le service et la finance
+
+00:19:35.730 --> 00:19:36.930
+via une énième feuille de calcul.

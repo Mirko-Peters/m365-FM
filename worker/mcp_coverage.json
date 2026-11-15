@@ -1,6 +1,129 @@
 {
  "_doc": "Jede API-Route unter worker/src muss hier einem MCP-Tool zugeordnet (tools) oder mit Begründung ausgenommen (skip) sein. tools/check_mcp_coverage.mjs prüft das täglich.",
  "routes": {
+  "/api/events/import/sessionize-profile/preview": {
+   "tools": [
+    "import_sessionize_profile"
+   ]
+  },
+  "/api/events/import/sessionize-profile/confirm": {
+   "tools": [
+    "import_sessionize_profile"
+   ]
+  },
+  "/api/admin/events/dupes": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/unmerge": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/import": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/review": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/claims": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/admin/events/claim": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
+  "/api/me/identities": {
+   "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
+  },
+  "/api/me/identities/link": {
+   "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
+  },
+  "/api/me/merge": {
+   "skip": "Anmeldungen verknüpfen/entfernen und Konten zusammenführen (#279) nur mit Browser-Sitzung und frischer Anmeldung, bewusst nicht per KI-Token"
+  },
+  "/api/editor/queue": {
+   "tools": [
+    "editor_queue"
+   ]
+  },
+  "/api/editor/item": {
+   "tools": [
+    "editor_view_item"
+   ]
+  },
+  "/api/editor/proposals": {
+   "tools": [
+    "editor_propose_decision"
+   ]
+  },
+  "/api/editor/edit": {
+   "skip": "Inhaltsbearbeitung nur im Browser (/redaktion/): wird protokolliert und der Autor benachrichtigt, bewusst nicht per KI-Token"
+  },
+  "/api/editor/decide": {
+   "skip": "Entscheidungen werden per MCP nur vorgeschlagen (editor_propose_decision) und im Browser bestätigt"
+  },
+  "/api/admin/editlog": {
+   "skip": "Admin-Protokoll mit Rückgängig nur im Browser"
+  },
+  "/api/editor/applications": {
+   "skip": "Abstimmung über Bewerbungen nur im Browser durch angemeldete Editoren"
+  },
+  "/api/editor/apply": {
+   "skip": "Bewerbung um Editor/Moderator nur im Browser (Profil)"
+  },
+  "/api/editor/history": {
+   "skip": "Versionsverlauf mit Diff nur im Browser (/redaktion/)"
+  },
+  "/api/editor/my-history": {
+   "skip": "Verlauf des eigenen Beitrags nur im Browser (Profilbereich)"
+  },
+  "/api/editor/revert": {
+   "skip": "Zurücksetzen auf eine Version nur im Browser"
+  },
+  "/api/editor/i18n/overrides": {
+   "skip": "Sprachfassungen bearbeiten nur im Browser (/redaktion/); per MCP nur Vorschlag (propose_translation_edit)"
+  },
+  "/api/editor/i18n/history": {
+   "skip": "Sprachfassungen: Verlauf nur im Browser"
+  },
+  "/api/editor/i18n/retranslate": {
+   "skip": "Neuübersetzung nur vormerken im Browser; der Workflow holt die Wünsche ab"
+  },
+  "/api/editor/i18n/open": {
+   "skip": "Absatz-Ansicht eines Eintrags anfordern nur im Browser (/redaktion/); der nächste Seitenbau veröffentlicht sie"
+  },
+  "/api/editor/i18n/revert": {
+   "skip": "Zurücksetzen nur im Browser"
+  },
+  "/api/editor/i18n/save": {
+   "skip": "Speichern nur nach Bestätigung im Browser; per MCP nur Vorschlag (propose_translation_edit)"
+  },
+  "/api/i18n/overrides": {
+   "skip": "Maschinen-Export für den Seitenbau (öffentlich, gecacht), kein Agenten-Werkzeug nötig"
+  },
+  "/api/i18n/retranslate": {
+   "skip": "Wunschliste für den Workflow-Lauf mit --stale, kein Agenten-Werkzeug nötig"
+  },
+  "/api/i18n/retranslate/done": {
+   "skip": "Rückmeldung des Workflows mit Cron-Schlüssel"
+  },
+  "/api/directory": {
+   "tools": [
+    "search_directory"
+   ]
+  },
+  "/api/directory/key": {
+   "skip": "Öffentlicher Maps-Schlüssel wird ausschließlich vom zustimmungsgebundenen Karten-Frontend abgerufen"
+  },
   "/api/admin/blog": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
@@ -12,6 +135,21 @@
   },
   "/api/admin/demo": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/expert-requests/reports": {
+   "skip": "Moderationsberichte sind Admin-Funktionen und bewusst nicht per KI-Token erreichbar"
+  },
+  "/api/admin/expert-requests/close": {
+   "skip": "Admin-Funktionen: Publisher-Anfragen werden nur im Admin-Panel moderiert"
+  },
+  "/api/admin/expert-requests/reply-delete": {
+   "skip": "Admin-Funktionen: gemeldete Antworten werden nur im Admin-Panel entfernt"
+  },
+  "/api/admin/expert-requests/moderation-log": {
+   "skip": "Das Moderationsprotokoll ist ausschließlich für Admins im Verwaltungsbereich bestimmt"
+  },
+  "/api/admin/expert-requests/resolve": {
+   "skip": "Zurückgehaltene Anfragen werden nur durch Admins moderiert"
   },
   "/api/admin/entity/claim": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
@@ -31,23 +169,35 @@
   "/api/admin/mail": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
   },
-  "/api/admin/panel/flag": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
+  "/api/admin/mail/test": {
+   "skip": "Admin-Testmail: geschützter Browser-Endpunkt, absichtlich nicht per KI-Token auslösbar"
   },
-  "/api/admin/panel/import-entities": {
+  "/api/admin/mediakit": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/panel/episode-urls": {
+   "skip": "Admin-Funktionen: Spreaker-Adressen (Zuordnung Folge <-> m365.fm-Adresse) nur im Admin-Reiter; Daten kommen aus dem GitHub-Workflow spreaker-urls.yml"
+  },
+  "/api/admin/panel/episode-urls/list": {
+   "skip": "Admin-Funktionen: Liste der Spreaker-Adressen je Status (klickbare Kacheln im Admin-Reiter), bewusst nicht per KI-Token"
+  },
+  "/api/admin/panel/episode-urls/import": {
+   "skip": "Admin-Funktionen: Import der Spreaker-Adressen laeuft per Cron (importEpisodeUrls); der Knopf im Admin-Reiter stoesst ihn nur an, bewusst nicht per KI-Token"
+  },
+  "/api/admin/panel/flag": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
   "/api/admin/panel/ops": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
+  },
+  "/api/admin/panel/overview": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
   "/api/admin/panel/sponsor-requests": {
    "skip": "Admin-Funktionen: Sponsor-Anfragen werden nur im Admin-Panel verwaltet"
   },
   "/api/admin/panel/sponsor-requests/status": {
    "skip": "Admin-Funktionen: Sponsor-Anfragen werden nur im Admin-Panel verwaltet"
-  },
-  "/api/admin/panel/overview": {
-   "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung ueber /admin/"
   },
   "/api/admin/panel/topic": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Verwaltung unter /admin/"
@@ -78,6 +228,9 @@
   },
   "/api/admin/run-daily": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token; Admin-Listen laufen über list_*_todo, list_event_transfers"
+  },
+  "/api/admin/run-weekly": {
+   "skip": "Cron-Ausführungspunkt: ausschließlich mit CRON_KEY, nicht als Nutzerfunktion"
   },
   "/api/admin/show": {
    "skip": "Admin-Funktionen: bewusst nicht per KI-Token (Freigabe von Shows durch die Redaktion)"
@@ -174,6 +327,63 @@
   "/api/comments": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
+  "/api/contributions/export": {
+   "tools": [
+    "export_contributions",
+    "export_mvp_activities",
+    "export_gde_activities"
+   ]
+  },
+  "/api/contributions/settings": {
+   "tools": [
+    "list_my_contributions",
+    "update_contribution_settings"
+   ]
+  },
+  "/api/contributions/preview": {
+   "skip": "Formularhilfe des MVP-Trackers (Titel/Datum aus einem Link vorschlagen); eine KI liest Links selbst und legt Einträge mit add_contribution an"
+  },
+  "/api/contributions/manual": {
+   "tools": [
+    "add_contribution"
+   ]
+  },
+  "/api/contributions/mine": {
+   "tools": [
+    "list_my_contributions"
+   ]
+  },
+  "/api/contributions/source": {
+   "tools": [
+    "add_contribution_source"
+   ]
+  },
+  "/api/contributions/source/delete": {
+   "tools": [
+    "delete_contribution_source"
+   ]
+  },
+  "/api/contributions/source/update": {
+   "tools": [
+    "update_contribution_source"
+   ]
+  },
+  "/api/contributions/sources": {
+   "tools": [
+    "list_my_contributions",
+    "list_contribution_sources"
+   ]
+  },
+  "/api/contributions/update": {
+   "tools": [
+    "update_contribution"
+   ]
+  },
+  "/api/contributions/delete": {
+   "tools": [
+    "delete_contribution"
+   ]
+  },
   "/api/credit/mine": {
    "tools": [
     "list_my_guest_credits"
@@ -237,6 +447,18 @@
     "list_my_entity_claims"
    ]
   },
+  "/api/entity/claim/confirm": {
+   "skip": "Übernahme per Firmen-E-Mail (#309): nur angemeldet im Browser, Einmal-Link aus der Mail, bewusst nicht per KI-Token"
+  },
+  "/api/entity/claim/domain": {
+   "skip": "Übernahme per Firmen-E-Mail (#309): nur angemeldet im Browser, Einmal-Link aus der Mail, bewusst nicht per KI-Token"
+  },
+  "/api/entity/claim/domains": {
+   "skip": "Übernahme per Firmen-E-Mail (#309): nur angemeldet im Browser, Einmal-Link aus der Mail, bewusst nicht per KI-Token"
+  },
+  "/api/entity/claim/forward": {
+   "skip": "Übernahme per Firmen-E-Mail (#309): nur angemeldet im Browser, Einmal-Link aus der Mail, bewusst nicht per KI-Token"
+  },
   "/api/entity/claims": {
    "skip": "Redaktions-Prüfung der Beanspruchungen (Admin)"
   },
@@ -299,6 +521,17 @@
     "get_event"
    ]
   },
+  "/api/events/entity": {
+   "tools": [
+    "set_event_entity",
+    "search_entities"
+   ]
+  },
+  "/api/admin/events/entity": {
+   "tools": [
+    "manage_event_entity"
+   ]
+  },
   "/api/events/for-sponsors": {
    "tools": [
     "list_events_for_sponsors"
@@ -334,6 +567,67 @@
   "/api/experts": {
    "tools": [
     "find_experts"
+   ]
+  },
+  "/api/experts/search": {
+   "tools": [
+    "search_experts"
+   ]
+  },
+  "/api/expert-calls": {
+   "tools": [
+    "list_expert_calls"
+   ]
+  },
+  "/api/expert-settings": {
+   "skip": "Opt-in, Kontaktpräferenz und Pause werden nur im angemeldeten Browser verwaltet"
+  },
+  "/api/expert-requests/block": {
+   "skip": "Publisher sperren oder entsperren ist eine Browser-Funktion"
+  },
+  "/api/expert-requests/close": {
+   "skip": "Eigene Publisher-Anfragen werden im Browser geschlossen"
+  },
+  "/api/expert-requests/accept": {
+   "tools": [
+    "accept_expert_answer"
+   ]
+  },
+  "/api/expert-requests/apply": {
+   "tools": [
+    "apply_to_expert_call"
+   ]
+  },
+  "/api/expert-requests/create": {
+   "tools": [
+    "create_expert_request"
+   ]
+  },
+  "/api/expert-requests/list": {
+   "tools": [
+    "list_expert_requests"
+   ]
+  },
+  "/api/expert-requests/matches": {
+   "tools": [
+    "list_my_matches"
+   ]
+  },
+  "/api/expert-requests/preview": {
+   "skip": "Die Vorschau liefert nur Trefferzahlen für das Anfrageformular"
+  },
+  "/api/expert-requests/update": {
+   "skip": "Entwürfe und Anfragen werden nur im angemeldeten Browser bearbeitet"
+  },
+  "/api/expert-requests/extend": {
+   "skip": "Fristen eigener Publisher-Anfragen werden nur im angemeldeten Browser verlängert"
+  },
+  "/api/expert-requests/report": {
+   "skip": "Meldungen sind eine Browser-Funktion"
+  },
+  "/api/expert-requests/respond": {
+   "tools": [
+    "answer_expert_request"
    ]
   },
   "/api/feed": {
@@ -381,6 +675,18 @@
   },
   "/api/health": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/internal/entity-fill": {
+   "skip": "Ausschließlich durch den Actions-Workflow entity-fill mit CRON_KEY aufrufbar (KI-Entwurf für Entitäten)"
+  },
+  "/api/internal/sponsor-metrics": {
+   "skip": "Ausschließlich durch den täglichen Cron-Workflow mit CRON_KEY aufrufbar"
+  },
+  "/api/internal/sponsor-placements": {
+   "skip": "Ausschließlich durch den täglichen Cron-Workflow mit CRON_KEY aufrufbar"
+  },
+  "/api/internal/ai-spend": {
+   "skip": "Interner Actions-Endpunkt mit CRON_KEY; absichtlich nicht per MCP-Token erreichbar"
   },
   "/api/library/delete": {
    "tools": [
@@ -449,6 +755,12 @@
   },
   "/api/me/li-follow": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/mediakit": {
+   "skip": "Öffentliches Formular für Gäste ohne Konto (Name, Firma, E-Mail) – Versand an die eingegebene Adresse; per KI-Token nicht sinnvoll und Missbrauchsrisiko"
+  },
+  "/api/mediakit/summary": {
+   "skip": "Öffentliche Kennzahlen-Vorschau (nur Summen) für die M365Con-Sponsorseite und die HeySummit-Einbettung; keine Nutzerfunktion, Zahlen stehen auch im PDF"
   },
   "/api/msg/prefs": {
    "skip": "Benachrichtigungs-Einstellungen gehören in den Browser"
@@ -574,7 +886,13 @@
   "/api/push/key": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
+  "/api/push/status": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
   "/api/push/subscribe": {
+   "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
+  },
+  "/api/push/digest": {
    "skip": "Seiten-Infrastruktur (kein Nutzerfunktion)"
   },
   "/api/push/unsubscribe": {
@@ -613,9 +931,6 @@
     "vote_answer"
    ]
   },
-  "/api/search": {
-   "skip": "Oeffentliche Seitensuche fuer Browser und nicht fuer KI-Agenten"
-  },
   "/api/quotes/export": {
    "skip": "Datenexport der Quotes je Personen-Entitaet fuer Seitenbau und Agenten (Lesen ohne Token)"
   },
@@ -644,6 +959,9 @@
    "tools": [
     "mark_review_helpful"
    ]
+  },
+  "/api/search": {
+   "skip": "Oeffentliche Seitensuche fuer Browser und nicht fuer KI-Agenten"
   },
   "/api/seo/check": {
    "tools": [
@@ -718,11 +1036,52 @@
     "suggest_my_speaker_entries"
    ]
   },
+  "/api/admin/sponsor-links": {
+   "skip": "Admin-only Sponsorlinks werden ausschließlich im geschützten Admin-Bereich verwaltet"
+  },
+  "/api/sponsor/dashboard": {
+   "skip": "Browser-Dashboard mit CSV-/PDF-Export; Event-Partnerschaften sind über list_my_event_partners abrufbar"
+  },
+  "/api/sponsor/go-codes": {
+   "skip": "Öffentliche Liste aktiver Sponsorlink-Codes ausschließlich für den Seitenbau; enthält keine Ziele"
+  },
+  "/api/sponsor/link-stats": {
+   "tools": [
+    "list_sponsor_link_stats"
+   ]
+  },
+  "/api/sponsor/manual-metric": {
+   "skip": "Admin-Eingabe mit Belegprüfung ist ausschließlich im rollenbeschränkten Dashboard verfügbar"
+  },
+  "/api/sponsor/placement": {
+   "skip": "Platzierungsdetails und -zuordnung gehören in das rollenbeschränkte Browser-Dashboard"
+  },
   "/api/sponsor/request": {
    "skip": "Öffentliches Formular für Sponsor-Anfragen; Bearbeitung ausschließlich im Admin-Panel"
   },
+  "/api/sponsor/sources": {
+   "skip": "Status und Firmenauswahl der Datenquellenverwaltung sind Admin-only im Web-Dashboard"
+  },
+  "/api/topics/clear": {
+   "skip": "Persönliche Benachrichtigungs-Abos werden nur in der Website-Verwaltung gelöscht, nicht per KI-Token"
+  },
+  "/api/topics/email-unsub": {
+   "skip": "Signierter Abmeldelink aus einer Themen-E-Mail; wird im Browser geöffnet, nicht per KI"
+  },
   "/api/topics/export": {
    "skip": "Datenexport fuer Seitenbau und Agenten (Inhalt <-> Entitaet mit Gewicht); Lesetools nutzen die Entitaetsseiten/articles.json"
+  },
+  "/api/topics/follow": {
+   "skip": "Themen-Abos erfordern ausdrückliche Einwilligung und werden nur über die Website verwaltet"
+  },
+  "/api/topics/mine": {
+   "skip": "Persönliche Benachrichtigungs-Abos werden nur in der Website-Verwaltung angezeigt"
+  },
+  "/api/topics/status": {
+   "skip": "Private Abo-Prüfung für die Follow-Schaltfläche; Browser-Infrastruktur"
+  },
+  "/api/topics/unfollow": {
+   "skip": "Themen-Abos erfordern ausdrückliche Einwilligung und werden nur über die Website verwaltet"
   },
   "/api/tr-queue": {
    "skip": "Schnittstelle fuer die Uebersetzungs-Pipelines (translate_blog.py --queue): nur Schluessel, kein Inhalt"
@@ -802,6 +1161,186 @@
    "tools": [
     "vote_wish"
    ]
+  },
+  "/api/admin/org-pair": {
+   "skip": "Admin-Sammelaktion (Firmen und Entitäten paaren, mit Probelauf) nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/account": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/bookings": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/house": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/lead": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/leads": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/lead-status": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/mark-paid": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/pricing": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/review": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/stats": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/status": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/ads/banner": {
+   "skip": "Banner-Upload (Bilddatei) nur im Browser beim Buchen"
+  },
+  "/api/ads/bookings": {
+   "skip": "Buchung mit Zahlungspflicht nur im Browser (PayPal), nicht per KI-Token"
+  },
+  "/api/ads/pay": {
+   "skip": "Zahlung über PayPal nur im Browser, nicht per KI-Token"
+  },
+  "/api/ads/paypal-return": {
+   "skip": "Rücksprung von PayPal (Browser-Weiterleitung)"
+  },
+  "/api/ads/lead": {
+   "skip": "Kontaktformular mit Turnstile und Einwilligung nur für Besucher im Browser"
+  },
+  "/api/ads/sponsor-lead": {
+   "skip": "Formulardaten (Sponsorname, Turnstile-Schlüssel) für das Sponsor-Lead-Formular im Browser; kein Anwendungsfall für Agenten"
+  },
+  "/api/ads/leads": {
+   "skip": "Leads enthalten personenbezogene Daten: nur im Firmen-Dashboard, nicht per KI-Token"
+  },
+  "/api/ads/leads/dispute": {
+   "skip": "Beanstandung von Leads nur im Firmen-Dashboard"
+  },
+  "/api/ads/mine": {
+   "skip": "Buchungen der eigenen Firmen nur im Browser (Zahlungsdaten)"
+  },
+  "/api/ads/pricing": {
+   "skip": "Öffentliche Preisliste für den Konfigurator der Seite /for/advertisers/; Preise stehen auch auf der Seite"
+  },
+  "/api/ads/quote": {
+   "skip": "Preisrechner des Konfigurators; reine Rechnung ohne Daten"
+  },
+  "/api/ads/serve": {
+   "skip": "Auslieferung der Werbeplätze an Seitenbesucher (zählt Einblendungen), kein Werkzeug für KI"
+  },
+  "/api/sponsor/order": {
+   "skip": "Bestellung mit Zahlungspflicht (PayPal-Rechnung) nur im Browser, nicht per KI-Token"
+  },
+  "/api/sponsor/orders": {
+   "skip": "Bestellungen mit Rechnungsdaten nur im Browser für Inhaber/Admins der Firma"
+  },
+  "/api/admin/sponsor-orders": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/admin/ads/house-stats": {
+   "skip": "Admin-Funktionen (#281 Werbeplätze): nur im Admin-Panel, bewusst nicht per KI-Token"
+  },
+  "/api/entityinvite/send-batch": {
+   "skip": "Nur Admin: Sammelversand und Probelauf der Einladungen, bewusst nicht per KI-Token"
+  },
+  "/api/entityinvite/test": {
+   "skip": "Nur Admin: Testmail an das eigene Konto, bewusst nicht per KI-Token"
+  },
+  "/api/invite/me": {
+   "tools": [
+    "my_invite_link"
+   ]
+  },
+  "/api/invite/click": {
+   "skip": "Klick-Beleg (Kuerzel + Serverzeit, signiert) beim Oeffnen eines Einladungslinks, nur durch die Website"
+  },
+  "/api/invite/ref": {
+   "skip": "Klick-Beleg aus dem Browser (localStorage) nach der Anmeldung einloesen, nur durch die Website"
+  },
+  "/api/admin/invites": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
+  },
+  "/api/admin/invite/void": {
+   "skip": "Admin-Funktionen: bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/status": {
+   "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/orgs": {
+   "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/org": {
+   "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/disconnect": {
+   "skip": "LinkedIn-Events (#323): nur für Admins mit Browser-Sitzung unter /admin/#li, bewusst nicht per KI-Token"
+  },
+  "/api/admin/linkedin/proposals": {
+   "tools": [
+    "linkedin_event_proposals"
+   ]
+  },
+  "/api/admin/linkedin/publish": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/admin/linkedin/update": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/admin/linkedin/cancel": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/admin/linkedin/resolve": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/admin/linkedin/release": {
+   "skip": "LinkedIn-Events (#323): Veröffentlichen, Ändern, Absagen und das Auflösen einer Reservierung nur per Klick mit Admin-Sitzung im Browser (/admin/#li), nie per KI-Token; publish_linkedin_event liefert nur die Vorschau"
+  },
+  "/api/contributions/review-batch": {
+   "tools": [
+    "review_new_contributions"
+   ]
+  },
+  "/api/contributions/source/preview": {
+   "skip": "Vorschau der letzten 3 Einträge beim Hinzufügen einer Quelle (Oberfläche); eine KI legt die Quelle mit add_contribution_source an und sieht Funde in review_new_contributions"
+  },
+  "/api/contributions/linkedin-og": {
+   "skip": "Formularhilfe für LinkedIn-Artikel-Links (nur Open-Graph-Tags); eine KI legt Artikel mit add_contribution an"
+  },
+  "/api/contributions/import": {
+   "skip": "Import gewählter Einträge aus dem LinkedIn-Datenexport (im Browser gelesen) bzw. \"andere Links\" in der Oberfläche; per KI gibt es add_contribution"
+  },
+  "/api/contributions/review": {
+   "skip": "Einzelaktionen der Neu-gefunden-Liste in der Oberfläche; per KI review_new_contributions (Vorschau + confirm)"
+  },
+  "/api/contributions/unpublish": {
+   "tools": [
+    "unpublish_contribution"
+   ]
+  },
+  "/api/search/report": {
+   "tools": [
+    "search_report"
+   ]
+  },
+  "/api/search/gaps": {
+   "tools": [
+    "search_content_gaps"
+   ]
+  },
+  "/api/search/demand-export": {
+   "skip": "Schnittstelle für den Seitenbau (translate_show.py, translate_notes.py, translate_blog.py lesen sie nur als Reihenfolge); dieselben Übersetzungslücken liefert search_report"
+  },
+  "/api/entity/claim/evidence": {
+   "skip": "Adress-Nachweis zur Übernahme (Geschäftsadresse, privat): nur angemeldet im Browser, bewusst nicht per KI-Token; die Redaktion entscheidet"
+  },
+  "/api/profile/business": {
+   "skip": "Private Geschäftsadresse je Firma (nie öffentlich): nur angemeldet im Browser, bewusst nicht per KI-Token"
   }
  }
 }

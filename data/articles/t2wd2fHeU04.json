@@ -1,0 +1,144 @@
+{
+ "de": {
+  "html": "<p>Ist Microsoft Fabric Data Factory nur Azure Data Factory unter neuem Namen oder etwas grundlegend anderes? Wer in Fabric Daten bewegt, bereinigt oder repliziert, kommt an dieser Engine nicht vorbei. Dabei ist sie einfacher, als der Name vermuten lässt.</p>\n<p>Dieser Artikel erklärt, was Fabric Data Factory ist, wie sie sich vom klassischen ADF unterscheidet und welche vier Bausteine Sie kennen sollten: Datenpipelines, Dataflow Gen2, Copy-Jobs und Mirroring.</p>\n\n<h2>Was ist Microsoft Fabric Data Factory?</h2>\n<p>Fabric Data Factory ist die Engine in Microsoft Fabric, die Ihre Daten verschiebt und integriert. Sie ersetzt Azure Data Factory und Synapse Pipelines und vereint beides in einer einzigen SaaS-Plattform. Es ist also kein separater Dienst, den Sie verwalten müssen. Data Factory ist direkt in Fabric integriert und mit OneLake verbunden.</p>\n<p>Ein Bild hilft: Ist Fabric ein Bürogebäude, dann ist Data Factory die Poststelle samt Fördersystem, die Dokumente zwischen den Etagen bewegt. Man denkt selten darüber nach, aber ohne sie kommt nichts von A nach B.</p>\n<p>Der größte Unterschied zur alten Welt: Sie brauchen keine zusätzliche Speicherkonfiguration. Ihre Daten landen direkt in OneLake. In Azure Data Factory mussten Sie Speicherkonten einrichten, Container erstellen und verknüpfte Dienste konfigurieren. In Fabric entfällt das, denn OneLake ist bereits vorhanden. Sie verknüpfen Ihre Pipeline und legen los.</p>\n\n<h2>Fabric Data Factory vs. Azure Data Factory: die wichtigsten Unterschiede</h2>\n<p>Die Annahme, Fabric Data Factory sei nur ein umbenanntes ADF, stimmt nicht. Es ändert sich einiges.</p>\n<h3>Preismodell: Kapazität statt Aktivitätslauf</h3>\n<p>ADF rechnet pro Aktivitätslauf ab. Jede Kopieraktivität, gespeicherte Prozedur und Pipeline-Ausführung erhöht die Rechnung. Fabric Data Factory nutzt dagegen eine kapazitätsbasierte Preisgestaltung. Sie erwerben eine Fabric-Kapazität (etwa F2, F4 oder F16), und alle Workloads teilen sich diesen Compute-Pool: Data Factory, Power BI, Lakehouse und die gesamte Plattform. Haben Sie bereits eine Fabric-Kapazität, kostet das Ausführen von Pipelines kaum etwas extra. Andernfalls müssen Sie die Gesamtkosten von Fabric gegen Ihre aktuelle ADF-Rechnung abwägen.</p>\n<h3>Verbindungen mit weniger Klicks</h3>\n<p>In ADF erstellten Sie für jede Quelle und jedes Ziel einen verknüpften Dienst, bauten darauf Datasets auf und konfigurierten die Integration Runtime. In Fabric definieren Sie Verbindungen direkt, und OneLake ist automatisch eingebunden. Sie wählen Quelle und Ziel aus, und die Verbindung steht.</p>\n<h3>Neue integrierte Aktivitäten und bessere Bereitstellung</h3>\n<p>Aus einer Pipeline heraus können Sie E-Mails oder Teams-Nachrichten senden, ohne Logic Apps oder eigene Webhooks. Das ist eine Drag-and-Drop-Aktivität. Auch die Bereitstellung ist komfortabler: Fabric bietet integrierte Bereitstellungspipelines mit Beförderung auf Workspace-Ebene. In wenigen Klicks gelangen Sie von Entwicklung über Test zur Produktion, manuelle Skripte sind nicht nötig.</p>\n<h3>Was noch fehlt</h3>\n<p>Die Unterstützung für SSIS ist derzeit nicht verfügbar. Wer stark in SQL Server Integration Services investiert ist, muss noch warten. Für die meisten Szenarien ist das unkritisch, weil der Großteil der Datenintegrationsarbeit kein SSIS benötigt.</p>\n\n<h2>Datenpipelines: der Orchestrator in Fabric</h2>\n<p>Pipelines bestimmen, was wann und in welcher Reihenfolge läuft. Alle anderen Bausteine werden dort eingebunden. Am besten stellen Sie sich eine Pipeline wie ein Rezept vor: Es gibt Schritte, Verzweigungen und Schleifen. Kopieren Sie zuerst Daten aus einer Quelle, prüfen Sie, ob die Datei existiert, und führen Sie bei Erfolg eine Transformation aus. Falls nicht, senden Sie eine Benachrichtigung.</p>\n<h3>Die Kernaktivitäten</h3>\n<ul>\n<li><strong>Datenkopieren:</strong> verschiebt Daten von Punkt A nach Punkt B.</li>\n<li><strong>ForEach:</strong> durchläuft eine Liste, zum Beispiel Dateien in einem Ordner.</li>\n<li><strong>If-Bedingung:</strong> prüft, ob etwas wahr oder falsch ist.</li>\n<li><strong>Metadaten abrufen:</strong> beantwortet Fragen zu Ihren Daten, etwa Dateigröße oder letzte Änderung.</li>\n<li><strong>Lookup:</strong> liest eine Konfigurationsdatei und übergibt die Werte an die Pipeline.</li>\n</ul>\n<p>Das Ganze ist Low-Code: Sie ziehen Aktivitäten auf eine Arbeitsfläche, verbinden sie mit Pfeilen und legen die Eigenschaften fest. Für die meisten Aufgaben ist keine Programmierung erforderlich. Es sieht aus wie ein Flussdiagramm, weil es genau das ist.</p>\n<h3>Ein Beispiel aus der Praxis</h3>\n<p>Sie rufen jeden Morgen Verkaufsdaten über eine API ab. Die Pipeline startet mit einer Kopieraktivität, die die Daten in einem Lakehouse ablegt. Danach bereinigt ein Dataflow Gen2 die Daten, entfernt Nullwerte und korrigiert Datumsformate. Ein Notebook reichert sie mit Kundensegmenten an, und eine Teams-Aktivität informiert zum Schluss Ihr Team. So erledigt eine Pipeline, wofür früher mehrere Tools nötig waren.</p>\n<h3>Wiederverwendbar durch Parametrisierung</h3>\n<p>Haben Sie dieselbe Logik für zehn Datenquellen, bauen Sie nicht zehn Pipelines. Sie erstellen eine und übergeben Quell-URL, Tabellenname und Zielordner als Parameter. Neu ist außerdem, dass Copilot Pipeline-Ausdrücke in einfacher Sprache schreibt. Eine Anweisung wie „Add two days to this date“ genügt, und der passende Ausdruck wird erzeugt. Funktionssyntax müssen Sie sich nicht mehr merken.</p>\n\n<h2>Dataflow Gen2: Daten bereinigen ohne Code</h2>\n<p>Dataflow Gen2 ist das Low-Code-Transformationswerkzeug innerhalb von Fabric Data Factory. Wer Power Query in Excel oder Power BI kennt, findet sich sofort zurecht: dieselbe Oberfläche, dieselben über 300 Transformationen, dieselbe Engine, nur in der Cloud und mit einem Lakehouse als Ziel.</p>\n<p>Wenn Pipelines das Fließband sind, das Pakete bewegt, ist Dataflow Gen2 die Küche, in der Zutaten geschnitten, gewürzt und gekocht werden. Pipelines übernehmen die Logistik, Dataflow Gen2 macht die Daten nutzbar.</p>\n<h3>Wann Dataflow Gen2 die richtige Wahl ist</h3>\n<p>Greifen Sie darauf zurück, wenn Sie Daten bereinigen, Typen ändern, Tabellen zusammenführen oder Zeilen filtern müssen, ganz ohne Spark oder SQL. Als Faustregel gilt: Passt Ihre Transformation auf ein Whiteboard, passt sie wahrscheinlich auch in Dataflow Gen2.</p>\n<p>Ein Beispiel: Sie importieren eine CSV-Datei mit Kundenbestellungen. Sie enthält doppelte Zeilen, falsche Datumsformate und fehlende Werte. In Dataflow Gen2 entfernen Sie mit wenigen Klicks die Duplikate, passen den Typ der Datumsspalte an, ergänzen fehlende Werte und führen die Daten mit einer Produkttabelle zusammen. Das dauert etwa zehn Minuten, und die Ausgabe landet in einer Lakehouse-Tabelle, bereit für die Berichterstellung.</p>\n<p>Eine Diagrammansicht stellt jeden Schritt als Knoten dar: Quelle, Filter, Zusammenführung, Ausgabe. Das hilft bei der Fehlersuche und wenn Sie die Logik jemand anderem erklären müssen.</p>\n<h3>Ausführung und Grenzen</h3>\n<p>Sie können einen Dataflow eigenständig zeitgesteuert ausführen, etwa jeden Morgen um sechs Uhr, oder als Schritt aus einer übergeordneten Pipeline aufrufen. In den meisten Produktionsumgebungen übernimmt die Pipeline die Orchestrierung und der Dataflow den Transformationsschritt darin.</p>\n<p>Für sehr umfangreiche Transformationen, etwa bei Milliarden von Zeilen, komplexen Fensterfunktionen oder eigener Machine-Learning-Logik, bleiben Notebooks mit Spark weiterhin sinnvoll. Für die typischen Aufgaben (bereinigen, strukturieren, zusammenführen, aggregieren) deckt Dataflow Gen2 etwa 80 % der Arbeit ab.</p>\n\n<h2>Copy-Jobs und Mirroring: Daten kontinuierlich bewegen</h2>\n<h3>Copy-Jobs: einrichten und vergessen</h3>\n<p>Ein Copy-Job ist eine vereinfachte Möglichkeit, Daten mit integrierter Änderungsnachverfolgung von einer Quelle zu einem Ziel zu kopieren. Sie wählen Quelle und Ziel, ordnen die Felder zu, legen fest, ob inkrementell oder vollständig aktualisiert wird, und bestimmen die Häufigkeit. Eine komplexe Pipeline-Konfiguration oder eigene Skripte brauchen Sie nicht.</p>\n<p>Das Kernmerkmal ist Change Data Capture (CDC). Copy-Jobs verfolgen Einfügungen, Aktualisierungen und Löschungen in der Quelle automatisch. Eine manuelle Watermarking-Logik, also das Speichern eines Zeitstempels zur Suche nach neueren Datensätzen, ist nicht nötig. Zusätzlich unterstützen Copy-Jobs Slowly Changing Dimensions Typ 2 (SCD Typ 2). Ändert ein Kunde seine Adresse, bleibt die alte Adresse mit Enddatum erhalten, die neue erhält ein Startdatum. Das ist wichtig für Audits und historische Berichte.</p>\n<p><strong>Copy-Job oder Kopieraktivität?</strong></p>\n<ul>\n<li>Copy-Jobs eignen sich für kontinuierliche Datenaufnahme nach dem Prinzip „Einrichten und Vergessen“ mit minimalem Wartungsaufwand.</li>\n<li>Kopieraktivitäten eignen sich für einmalige oder geplante Massenladungen, bei denen Sie mehr Kontrolle über Mappings und Fehlerbehandlung brauchen.</li>\n</ul>\n<p>Ein Copy-Job gleicht einem Bibliothekar, der neue Bücher automatisch erkennt und einsortiert. Bei der Kopieraktivität gehen Sie selbst in die Bibliothek und bestimmen jeden Standort.</p>\n<h3>Mirroring: nahezu Echtzeit-Replikation</h3>\n<p>Mirroring repliziert Ihre operative Datenbank kontinuierlich in OneLake, ohne eine Zeile Code. Sie richten es einmal ein, dann läuft es im Hintergrund. Dabei liest Mirroring das Transaktionsprotokoll der Quelle: Jedes Einfügen, Aktualisieren und Löschen wird erfasst und erscheint innerhalb von Minuten in OneLake. Das ist keine Stapelverarbeitung, sondern kontinuierliche Replikation.</p>\n<p>Derzeit lassen sich unter anderem Azure SQL Database, Azure Cosmos DB und Snowflake spiegeln. Weitere Quellen kommen hinzu, darunter Mirroring über private Netzwerke für Datenbanken hinter Firewalls, das bereits angekündigt wurde.</p>\n<p>Der Vorteil: Sie erhalten eine Live-Kopie Ihrer Datenbank, ohne ETL-Pipelines, Kopieraktivitäten, Change-Tracking-Skripte oder Logik für inkrementelles Laden zu bauen. Mirroring bietet bis zu einer gewissen Grenze kostenlose Rechenleistung und Speicher; Sie zahlen nur für die Fabric-Kapazität, die Sie ohnehin besitzen. Praktisch: Power BI-Berichte lassen sich direkt auf gespiegelten Daten erstellen, ohne die Quelldatenbank zu belasten. Das operative System läuft mit voller Geschwindigkeit weiter, während Analysten aktuelle Daten erhalten.</p>\n\n<h2>Wie die Bausteine zusammenspielen: Medaillon-Architektur</h2>\n<p>Die meisten realen Implementierungen folgen einem einfachen Muster: erfassen, bereinigen, anreichern, bereitstellen. Das entspricht der Medaillon-Architektur mit drei Schichten:</p>\n<ul>\n<li><strong>Bronze:</strong> Rohdaten, genau so, wie sie angekommen sind.</li>\n<li><strong>Silber:</strong> bereinigt und dedupliziert.</li>\n<li><strong>Gold:</strong> angereichert und bereit für die Berichterstellung.</li>\n</ul>\n<p>In der Praxis landet ein Mirroring- oder Copy-Job-Lauf die Rohdaten in einer Bronze-Lakehouse-Tabelle (Erfassung). Ein Dataflow Gen2 bereinigt und transformiert sie in die Silberschicht, entfernt Nullwerte, standardisiert Formate und verknüpft Tabellen. Eine Pipeline orchestriert das Ganze: Sie löst den Copy-Job aus, wartet auf dessen Abschluss, führt den Dataflow aus und sendet eine Teams-Benachrichtigung.</p>\n<p>Die eigentliche Stärke liegt darin, dass alle Komponenten über OneLake zusammenarbeiten. Gespiegelte Daten, Dataflow-Ausgaben und die Quellen der Pipeline liegen in derselben Speicherschicht. Über Shortcuts lassen sich Daten sogar ohne Kopieren zwischen Arbeitsbereichen teilen. Pipelines können Dataflows Gen2, Notebooks, dbt-Jobs und sogar Azure-Data-Factory-Pipelines einbinden, was bei einer schrittweisen Migration hilft. Eine Pipeline orchestriert alles.</p>\n<p>Sie müssen also keine fünf verschiedenen Dienste mehr verknüpfen: eine Plattform, eine Speicherschicht, ein Satz an Berechtigungen. Ein Distributor setzte genau dieses Muster ein, mit Copy-Jobs für SAP-Daten, Dataflow Gen2 für die Bereinigung und Pipelines für die Orchestrierung. Er verkürzte damit seinen Monatsabschluss von neun auf zwei Tage.</p>\n\n<h2>Für wen lohnt sich Fabric Data Factory – und wann nicht?</h2>\n<p>Wenn Sie Daten in Fabric verschieben oder transformieren müssen, ist Fabric Data Factory das richtige Werkzeug. Das gilt für Dateningenieure, die Pipelines bauen, Analytics-Ingenieure bei der Datenmodellierung und Business-Analysten, die Dataflow Gen2 für Self-Service-Transformationen nutzen.</p>\n<h3>Stolpersteine und Gegenargumente</h3>\n<ul>\n<li><strong>SSIS:</strong> Wer stark in SQL Server Integration Services investiert ist, sollte auf die entsprechende Unterstützung warten.</li>\n<li><strong>Kleine ADF-Rechnung:</strong> Liegt sie unter 1.500 Dollar pro Monat und nutzen Sie Fabric nicht, bleiben Sie bei ADF. Bei geringen Workload-Volumina ist es günstiger.</li>\n<li><strong>Einmalige Uploads:</strong> Für einzelne Dateien beginnen Sie direkt im Lakehouse und ziehen die CSV-Datei per Drag-and-Drop hinein.</li>\n<li><strong>Sehr große Transformationen:</strong> Bei Milliarden von Zeilen, komplexen Fensterfunktionen oder Machine-Learning-Logik sind Notebooks mit Spark weiterhin die bessere Wahl.</li>\n<li><strong>Kosten über der Schwelle:</strong> Liegen Ihre ADF-Kosten darüber, lohnt es sich, die Fabric-Kapazität einmal durchzurechnen.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Fabric Data Factory ersetzt Azure Data Factory und Synapse Pipelines in einer SaaS-Plattform und schreibt Daten direkt in OneLake.</li>\n<li>Abgerechnet wird über die Fabric-Kapazität, nicht pro Aktivitätslauf. Mit vorhandener Kapazität kosten Pipelines kaum extra.</li>\n<li>Pipelines orchestrieren, Dataflow Gen2 transformiert ohne Code, Copy-Jobs laden kontinuierlich mit CDC, Mirroring repliziert in nahezu Echtzeit.</li>\n<li>Nutzen Sie Parameter, um eine Pipeline für viele Datenquellen wiederzuverwenden.</li>\n<li>Copy-Jobs sind für „Einrichten und Vergessen“, Kopieraktivitäten für Massenladungen mit mehr Kontrolle.</li>\n<li>Bronze, Silber, Gold: Erfassen Sie Rohdaten, bereinigen Sie sie im Dataflow und orchestrieren Sie alles per Pipeline.</li>\n<li>Prüfen Sie vor dem Wechsel SSIS-Abhängigkeiten und rechnen Sie Ihre ADF-Kosten gegen die Fabric-Kapazität.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Fabric Data Factory ist weit mehr als ein umbenanntes ADF: Sie ist die in Fabric integrierte Datenbewegungs-Engine mit kapazitätsbasiertem Preismodell, einfacheren Verbindungen und OneLake als gemeinsamer Speicherschicht. Pipelines, Dataflow Gen2, Copy-Jobs und Mirroring decken zusammen den Großteil typischer Integrationsaufgaben ab, von der Orchestrierung über die Bereinigung bis zur Echtzeit-Replikation. Wer bereits in Fabric arbeitet, nutzt Data Factory ohnehin mit. Wer von ADF kommt, sollte vorher SSIS-Abhängigkeiten und Kosten prüfen.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Fabric Data Factory: vier Bausteine im Zusammenspiel",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Mirroring / Copy-Job",
+     "text": "Rohdaten kontinuierlich in die Bronze-Schicht von OneLake laden, per Replikation oder Change Data Capture."
+    },
+    {
+     "kopf": "Dataflow Gen2",
+     "text": "Daten ohne Code bereinigen, zusammenführen und in die Silberschicht schreiben."
+    },
+    {
+     "kopf": "Anreichern",
+     "text": "Daten für Berichte aufbereiten, etwa per Notebook, bis die Goldschicht bereitsteht."
+    },
+    {
+     "kopf": "Pipeline orchestriert",
+     "text": "Eine Pipeline steuert Reihenfolge, Abhängigkeiten und Aktivitäten vom Copy-Job bis zur Benachrichtigung."
+    },
+    {
+     "kopf": "Teams-Benachrichtigung",
+     "text": "Nach Abschluss informiert eine integrierte Aktivität das Team direkt aus der Pipeline."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Ist Microsoft Fabric Data Factory dasselbe wie Azure Data Factory?",
+    "a": "Nein, Fabric Data Factory ist mehr als ein umbenanntes ADF. Sie ersetzt Azure Data Factory und Synapse Pipelines in einer SaaS-Plattform, schreibt Daten direkt in OneLake und nutzt ein kapazitätsbasiertes Preismodell. Verknüpfte Dienste und eigene Speicherkonfiguration entfallen."
+   },
+   {
+    "q": "Wie wird Fabric Data Factory abgerechnet?",
+    "a": "Die Abrechnung erfolgt über eine Fabric-Kapazität (zum Beispiel F2, F4 oder F16), nicht pro Aktivitätslauf wie in ADF. Alle Workloads teilen sich diesen Compute-Pool. Mit vorhandener Kapazität kostet das Ausführen von Pipelines kaum etwas extra."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen einem Copy-Job und einer Kopieraktivität in Fabric?",
+    "a": "Copy-Jobs eignen sich für kontinuierliche Datenaufnahme nach dem Prinzip „Einrichten und Vergessen“ mit integrierter Änderungsnachverfolgung (CDC). Kopieraktivitäten passen zu einmaligen oder geplanten Massenladungen, bei denen Sie mehr Kontrolle über Mappings und Fehlerbehandlung brauchen."
+   },
+   {
+    "q": "Wann sollte ich bei Azure Data Factory bleiben, statt zu Fabric Data Factory zu wechseln?",
+    "a": "Bleiben Sie bei ADF, wenn Ihre Rechnung unter 1.500 Dollar pro Monat liegt und Sie Fabric nicht nutzen, oder wenn Sie stark in SSIS investiert sind, da dessen Unterstützung derzeit nicht verfügbar ist. Bei höheren Kosten lohnt sich eine Berechnung der Fabric-Kapazität."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Fabric Data Factory vs. Azure Data Factory",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Azure Data Factory",
+     "punkte": [
+      "Abrechnung pro Aktivitätslauf",
+      "Speicherkonten, Container und verknüpfte Dienste müssen eingerichtet werden",
+      "Pro Quelle und Ziel ein verknüpfter Dienst samt Datasets",
+      "Unterstützung für SSIS vorhanden",
+      "Bei kleiner Rechnung unter 1.500 Dollar pro Monat günstiger"
+     ]
+    },
+    "rechts": {
+     "titel": "Fabric Data Factory",
+     "punkte": [
+      "Kapazitätsbasierte Abrechnung über einen gemeinsamen Compute-Pool",
+      "Daten landen direkt in OneLake, keine Speicherkonfiguration",
+      "Verbindungen direkt definiert, OneLake automatisch eingebunden",
+      "Integrierte Aktivitäten für E-Mail und Teams sowie Bereitstellungspipelines",
+      "SSIS-Unterstützung derzeit nicht verfügbar"
+     ]
+    }
+   },
+   {
+    "titel": "Die vier Bausteine im Überblick",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Datenpipelines",
+      "text": "Orchestrieren, was wann und in welcher Reihenfolge läuft."
+     },
+     {
+      "wert": "über 300",
+      "text": "Transformationen bietet Dataflow Gen2, um Daten ohne Code zu bereinigen."
+     },
+     {
+      "wert": "CDC",
+      "text": "Copy-Jobs verfolgen Einfügungen, Aktualisierungen und Löschungen automatisch in der Quelle."
+     },
+     {
+      "wert": "Minuten",
+      "text": "Mirroring bringt Änderungen der Quelldatenbank in nahezu Echtzeit nach OneLake."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wie wird bei Fabric Data Factory im Unterschied zu ADF abgerechnet?",
+    "opts": [
+     "Pro Aktivitätslauf wie bei ADF, nur mit niedrigeren Preisen",
+     "Über eine Fabric-Kapazität, die sich alle Workloads teilen",
+     "Pro übertragenem Gigabyte an Daten in OneLake",
+     "Pro erstelltem verknüpftem Dienst und Dataset"
+    ],
+    "a": 1,
+    "why": "Fabric nutzt kapazitätsbasierte Preise (z. B. F2, F4, F16); alle Workloads teilen sich diesen Compute-Pool, statt pro Aktivitätslauf abzurechnen."
+   },
+   {
+    "q": "Welche Aufgabe übernimmt ein Dataflow Gen2 typischerweise in einer Pipeline?",
+    "opts": [
+     "Er orchestriert alle Schritte und bestimmt deren Reihenfolge",
+     "Er repliziert Datenbanken über das Transaktionsprotokoll in OneLake",
+     "Er bereinigt und transformiert Daten ohne Code mit Power-Query-Oberfläche",
+     "Er sendet Teams-Nachrichten und E-Mails an das Team"
+    ],
+    "a": 2,
+    "why": "Dataflow Gen2 ist das Low-Code-Transformationswerkzeug auf Power-Query-Basis; Pipelines übernehmen dagegen die Orchestrierung."
+   },
+   {
+    "q": "Was zeichnet Copy-Jobs gegenüber der klassischen Kopieraktivität besonders aus?",
+    "opts": [
+     "Sie bieten mehr Kontrolle über Mappings und Fehlerbehandlung",
+     "Sie unterstützen ausschließlich einmalige Massenladungen ohne Wiederholung",
+     "Sie benötigen zwingend eine manuelle Watermarking-Logik für neue Datensätze",
+     "Sie verfolgen Änderungen per CDC automatisch und eignen sich für kontinuierliche Aufnahme"
+    ],
+    "a": 3,
+    "why": "Copy-Jobs erfassen Einfügungen, Aktualisierungen und Löschungen automatisch per CDC, ohne manuelles Watermarking, und passen zu „Einrichten und Vergessen“."
+   },
+   {
+    "q": "Was enthält in der Medaillon-Architektur die Silberschicht?",
+    "opts": [
+     "Rohdaten genau so, wie sie angekommen sind",
+     "Bereinigte und deduplizierte Daten",
+     "Angereicherte, berichtsfertige Daten für die Berichterstellung",
+     "Archivierte Daten aus der Quelldatenbank hinter Firewalls"
+    ],
+    "a": 1,
+    "why": "Bronze enthält Rohdaten, Silber bereinigte und deduplizierte Daten, Gold angereicherte und berichtsfertige Daten."
+   }
+  ]
+ }
+}

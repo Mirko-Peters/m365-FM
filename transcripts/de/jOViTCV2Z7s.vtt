@@ -1,0 +1,1738 @@
+WEBVTT
+
+00:00:00.500 --> 00:00:10.800
+Willkommen alle beim M365FM Podcast. Heute gehen wir über eines der häufigsten Gesprächsthemen rund um Microsoft 365 Co-Pilot Prompt Engineering hinaus.
+
+00:00:10.800 --> 00:00:29.200
+Denn, sobald Unternehmen anfangen, Co-Pilot ernsthaft zu nutzen, ändert sich die Frage schnell von, wie schreiben wir bessere Prompts zu, wie verbinden wir Co-Pilot mit den Anwendungen, Daten, Apps, Geschäftsprozessen und dem Wissen, die tatsächlich in unserer Firma laufen.
+
+00:00:29.200 --> 00:00:33.360
+Ähm, und genau da wird die Co-Pilot Erweiterbarkeit interessant.
+
+00:00:34.620 --> 00:00:42.740
+Mein Gast heute ist Evers Harvest, Microsoft MVP Business Application Consultant bei der AI Word Group in der Schweiz.
+
+00:00:44.560 --> 00:00:54.960
+Evers arbeitet mit Microsoft 365, Azure Dynamics 365 und der Power Plattform mit besonderem Fokus auf die Erweiterung von Microsoft 365 Co-Pilot durch Agents und individuelle Entwicklungen.
+
+00:00:54.960 --> 00:01:08.940
+Wir werden die Microsoft 365 Co-Pilot Erweiterbarkeit, Co-Pilot Studio, Microsoft Azure AI Foundry, ich weiß auch nicht, Sie erinnern ja ständig die Namen, MUI, Microsoft Graph, Custom Development, MCPS und so weiter erkunden.
+
+00:01:08.940 --> 00:01:12.880
+Also ja, Evers, willkommen im M365 Podcast.
+
+00:01:14.400 --> 00:01:16.320
+Ja, hallo zusammen, danke, dass ich hier sein darf.
+
+00:01:17.460 --> 00:01:20.760
+Es ist wirklich eine tolle Gelegenheit für mich, hier zu sein.
+
+00:01:21.360 --> 00:01:22.560
+Also danke für die Einladung.
+
+00:01:24.020 --> 00:01:24.740
+Ja, ich danke dir.
+
+00:01:24.740 --> 00:01:34.520
+Bevor wir technisch werden, kannst du uns ein wenig von deinem Weg erzählen, wie du in das Microsoft-Ökosystem gekommen bist.
+
+00:01:35.740 --> 00:01:37.720
+Ja, ja, natürlich.
+
+00:01:38.060 --> 00:01:40.920
+Denn um ehrlich zu sein, habe ich meine Karriere nicht in der Microsoft-Welt begonnen.
+
+00:01:41.420 --> 00:01:43.100
+Ich habe meine Karriere in der Apple-Welt gestartet.
+
+00:01:44.440 --> 00:01:50.780
+Ich war Softwareentwickler auf der Mac-Plattform und bin danach zu iOS und solchen Dingen gewechselt.
+
+00:01:50.780 --> 00:01:59.780
+Und, oh, das ist schon eine lange Zeit her, vielleicht vor 15 oder 20 Jahren, da bin ich in die Microsoft-Welt gewechselt.
+
+00:02:01.080 --> 00:02:04.000
+Um ehrlich zu sein, habe ich meine Karriere mit SharePoint begonnen.
+
+00:02:06.520 --> 00:02:09.500
+Und danach bin ich zur Cloud gewechselt, zu Azure und M365.
+
+00:02:12.650 --> 00:02:15.110
+Ich habe mit SharePoint On-Premises angefangen, so fing es an.
+
+00:02:15.670 --> 00:02:22.030
+Und danach bin ich zu allen Cloud-Diensten übergegangen, am Ende zur Power-Plattform und zuletzt zu all den KI-Themen.
+
+00:02:22.030 --> 00:02:31.370
+Ehrlich gesagt, weil das jetzt ein großer Teil von M365 ist, da wir jetzt diesen agentenbasierten Wandel haben.
+
+00:02:31.550 --> 00:02:35.530
+Und das ist im Grunde, kurz gefasst, meine Reise.
+
+00:02:37.820 --> 00:02:40.160
+Aber ich habe meine Karriere in der Softwareentwicklung begonnen.
+
+00:02:40.360 --> 00:02:46.100
+Ein Begriff, den heute vielleicht viele vergessen, weil wir, du weißt schon, all diese KI-Sachen haben.
+
+00:02:46.100 --> 00:02:51.940
+Und im Grunde haben sich diese Art von Aktivitäten oder Jobs zur KI hin verlagert.
+
+00:02:52.060 --> 00:02:58.380
+Daher ist es heute ganz anders als noch vor 20 Jahren.
+
+00:03:01.460 --> 00:03:07.600
+Ja, du arbeitest mit SharePoint und ich sehe, du arbeitest auch mit GraphSpeak, Dynamics und der Power-Plattform.
+
+00:03:09.520 --> 00:03:14.540
+Wie hat dich dieser Hintergrund auf die aktuelle Generation der KI-Entwicklung vorbereitet?
+
+00:03:14.540 --> 00:03:28.430
+Also im Grunde ist mein Profil wirklich sehr transversal, weil ich in meiner Laufbahn mit sehr vielen verschiedenen Produkten gearbeitet habe.
+
+00:03:29.630 --> 00:03:32.630
+Das können Microsoft- oder nicht Microsoft-Produkte gewesen sein.
+
+00:03:33.690 --> 00:03:38.070
+Daher verfüge ich über ein breites Spektrum an Fähigkeiten in vielen verschiedenen Technologien und Tools.
+
+00:03:38.070 --> 00:03:44.260
+Diese ganzen Jobs bieten mir eine gute Grundlage.
+
+00:03:44.520 --> 00:03:54.040
+Denn bei der KI ist es heute ein weites Feld, da es verschiedene Ansätze und Technologien gibt, um KI umzusetzen.
+
+00:03:55.400 --> 00:03:58.740
+Kann agentenbasiert sein, es kann eher workflow-orientiert sein, solche Dinge.
+
+00:03:59.780 --> 00:04:07.540
+Im Grunde haben mir alle meine bisherigen Jobs viele Fähigkeiten gegeben, um ehrlich zu sein, um für diesen KI-Wandel bereit zu sein.
+
+00:04:07.540 --> 00:04:12.380
+Ich habe mich also hin zu Low-Code und auch zu Pro-Code-Tools bewegt.
+
+00:04:14.000 --> 00:04:26.120
+Ja, all diese Möglichkeiten und Aktivitäten in meinen Jobs haben mir wirklich gute Fähigkeiten verliehen, um in der KI-Welt Fuß zu fassen, um ehrlich zu sein.
+
+00:04:29.610 --> 00:04:31.330
+Und jetzt bist du AI-Test-Lead.
+
+00:04:32.570 --> 00:04:34.430
+Was genau macht ein AI-Test-Lead?
+
+00:04:36.760 --> 00:04:40.060
+Das ist eine wirklich gute Frage, denn es fragen mich viele Leute...
+
+00:04:40.060 --> 00:04:48.160
+Meine Aufgabe ist es, die funktionalen Spezifikationen mit dem technischen Stack abzugleichen.
+
+00:04:50.520 --> 00:04:53.560
+Ich übernehme die Führung, sobald die Geschäftsanalyse abgeschlossen ist.
+
+00:04:54.860 --> 00:04:58.080
+Wir haben Anwendungsfälle für die KI-Sachen definiert.
+
+00:04:58.080 --> 00:05:01.540
+Wir haben Szenarien und Use-Cases festgelegt.
+
+00:05:02.120 --> 00:05:04.400
+Wir haben die vollständige Geschäftsanalyse durchgeführt.
+
+00:05:04.880 --> 00:05:12.200
+Und meine Aufgabe ist es, diese Anforderungen zu nehmen und sie mit der technischen Infrastruktur im Hintergrund abzugleichen.
+
+00:05:12.760 --> 00:05:13.040
+Warne.
+
+00:05:14.000 --> 00:05:22.320
+Und danach leite ich die gesamte Implementierung der Tools und der Lösung, sobald wir bereit sind, mit der Entwicklung zu beginnen.
+
+00:05:22.320 --> 00:05:25.410
+Ja, interessant.
+
+00:05:26.370 --> 00:05:35.290
+Eigentlich kaufen viele Unternehmen Schulungen für ihre Mitarbeiter, besonders für Prompt Engineering.
+
+00:05:35.790 --> 00:05:41.710
+Äh, äh, warum würdest du sagen, dass das nicht ausreicht?
+
+00:05:46.720 --> 00:05:49.000
+Nur Prompt Engineering, meinst du heute, äh?
+
+00:05:49.000 --> 00:06:02.580
+Warum, warum, warum, warum sie, warum es nur, weißt du, warum reicht es für, für die Unternehmen, äh, nicht, nicht aus den Leuten nur das Prompt Engineering beizubringen?
+
+00:06:04.120 --> 00:06:04.800
+Ah ja, okay.
+
+00:06:05.260 --> 00:06:05.840
+Ich verstehe, ich verstehe.
+
+00:06:06.180 --> 00:06:14.820
+Ja, ja, äh, im Grunde, um ehrlich zu sein, hast du heutzutage, wie ich schon sagte, eine Menge verschiedener Tools und Technologien.
+
+00:06:14.820 --> 00:06:23.060
+Also, und im Grunde kann die KI irgendwann verstehen, was zu tun ist und dich, äh, vielleicht ein wenig anleiten.
+
+00:06:25.060 --> 00:06:34.060
+Aber für mich, äh, bei der Rolle eines Architekten oder Software Designers beispielsweise, äh, brauchst du einen Menschen hinter den Kulissen, weil du den Kunden verstehen musst.
+
+00:06:36.810 --> 00:06:40.410
+Im Grunde kann die KI manchmal den Kontext des Kunden nicht verstehen, mich verstehen.
+
+00:06:41.050 --> 00:06:46.670
+Äh, man sieht dort das ganze Netz, aber hinter den Kulissen, äh, sich nur auf das Prompt Engineering zu konzentrieren,
+
+00:06:46.770 --> 00:06:58.530
+mag zwar bis zu einem gewissen Punkt gut sein, aber man braucht mehr, weil man hinter den Kulissen, äh, einige Leute braucht, die, äh, Architekten, Softwareentwickler, äh, hinter den Kulissen sind.
+
+00:06:58.850 --> 00:07:11.250
+Und im Grunde eine Menge Leute, die Fähigkeiten in Technologien, äh, Informationstechnologien wie SharePoint, wie OneDrive, wie, ich weiß nicht, oder Salesforce, diese Art von Dingen haben.
+
+00:07:11.930 --> 00:07:16.690
+Du brauchst Spezialisten für diese Technologien, weil die KI eine Menge Dinge verstehen kann.
+
+00:07:17.710 --> 00:07:28.430
+Sie kann, äh, sie kann dich anleiten, sie kann großartige technische oder funktionale Dokumente erstellen, aber du, du musst Menschen hinter den Kulissen haben, die sich darum kümmern, okay, ist das gut?
+
+00:07:30.350 --> 00:07:36.350
+Beantwortet das, äh, die Kundenbedürfnisse, diese Art von Dingen, weißt du, um alles zu validieren und sich nur auf das Prompt Engineering zu konzentrieren?
+
+00:07:36.350 --> 00:07:49.290
+Für mich ist das jetzt, ja, es könnte, es könnte eine Option sein, wenn du, wenn du nicht die, äh, Zeit hast, um, um zu trainieren oder zu investieren, äh, in, äh, in, äh, den Erwerb von, von Fähigkeiten.
+
+00:07:49.290 --> 00:07:57.250
+Fähigkeiten, aber für mich musst du, äh, gute Fähigkeiten in den grundlegenden Technologien haben, wo du deine Lösungen aufbauen willst, um ehrlich zu sein.
+
+00:07:57.250 --> 00:08:15.920
+Und du bist ein Experte für Copilot-Erweiterbarkeit. Äh, wo hört um? Der Standard-Copilot Microsoft 365 Copilot. Auf und wo fängt Copilot-Erweiterbarkeit an?
+
+00:08:15.920 --> 00:08:32.320
+Ha, ja, das ist eine gute Frage, denn, um ehrlich zu sein, vor zwei Jahren, als, äh, Copilot, äh, veröffentlicht wurde und, äh, vielleicht die erste Version, äh, war der Chat im Grunde, äh, um ehrlich zu sein, wirklich, äh, wirklich minimalistisch.
+
+00:08:33.200 --> 00:08:42.320
+Im Grunde kann man, okay, es war wie ein Chat-GPT, aber Microsoft hat Microsoft 300er von Bodo, von Fon60 Copilot stark weiterentwickelt.
+
+00:08:42.320 --> 00:09:02.800
+Jetzt hat man verschiedene Funktionen, also ist die Erweiterbarkeit geringer als früher, denn früher habe ich, äh, äh, Plugins und dergleichen entwickelt, aber, heutzutage, um ehrlich zu sein, beginnt die Erweiterbarkeit dort, wo man etwas bauen und den Orchestrator anpassen will.
+
+00:09:02.800 --> 00:09:21.200
+Oder, wenn man etwas mehr personalisieren möchte, etwa die Benutzeroberfläche, oder wenn man seinen Agenten nicht nur in den Microsoft 300er von Fon50 Chat, sondern beispielsweise auch auf die eigene Website integrieren will,
+
+00:09:21.540 --> 00:09:29.600
+die Erweiterbarkeit beginnt, also da, wo man im Hintergrund mehr anpassen möchte.
+
+00:09:29.600 --> 00:09:47.100
+Äh, ähm, das könnte der Orchestrator sein, wenn man ihn anpassen will, oder die Benutzeroberfläche oder verschiedene andere Aspekte, bei denen, äh, Co-Pilot-Chat im Grunde nicht weiterhelfen oder antworten kann.
+
+00:09:47.100 --> 00:10:16.180
+Ähm, und, und, ich glaube, viele Leute sprechen über Agenten, äh, sind, ähm, sind, warum, warum denken wir jetzt so viel über Co-Pilot-Agenten nach und warum bauen wir nicht, ich weiß es nicht, einen großen Co-Pilot für alles, alles?
+
+00:10:16.180 --> 00:10:32.140
+Ja, das ist wirklich interessant, denn, um ehrlich zu sein, Microsoft hat sich, wie ich schon sagte, stark weiterentwickelt und vielleicht vor sechs Monaten war ein Agent noch ein wichtiges Thema.
+
+00:10:32.140 --> 00:10:47.580
+Ja, jetzt hat Microsoft Co-Pilot-Co-Worker eingeführt und ehrlich gesagt können Co-Pilot-Co-Worker heute viele Agenten ersetzen und wenn wir über Agenten nachdenken, dann nur, um Dinge zu trennen.
+
+00:10:47.760 --> 00:10:56.060
+Denn wir befinden uns jetzt eher in einem Multi-Agenten-Modell, in dem jeder Agent seinen eigenen Bereich und seine eigenen Verantwortlichkeiten hat.
+
+00:10:56.060 --> 00:11:02.460
+Und wir machen keinen großen Co-Pilot ganz einfach wegen der Performance, ne.
+
+00:11:03.280 --> 00:11:09.440
+Erstens, weil es bei einer großen Menge an Anweisungen und Tools in Sachen Performance ein ziemliches Durcheinander gäbe.
+
+00:11:10.800 --> 00:11:14.840
+Und die Architektur ist heute eher Multi-Agent, das kann ein Co-Pilot-Studio sein.
+
+00:11:15.420 --> 00:11:21.220
+Oder durch individuell entwickelte Agenten via Code oder kundenspezifische Entwicklungen.
+
+00:11:21.220 --> 00:11:36.240
+Aber heutzutage ist es besser, einen Multi-Agenten-Ansatz zu verfolgen, bei dem jeder Agent seinen eigenen Bereich und seine eigene Verantwortung hat, einfach im Hinblick auf die Leistung und um eine klare Architektur für die Agenten zu haben.
+
+00:12:04.210 --> 00:12:15.470
+Und wenn wir uns das ansehen, okay, ich denke, bei einer grundlegenden KI-Agenten-Architektur haben wir, sage ich mal, einige Schlagworte.
+
+00:12:15.470 --> 00:12:25.020
+Wir, wir Schlagworte. Aber wir müssen über Schlussfolgerungen, Tools, Wissen und Anweisungen nachdenken.
+
+00:12:26.460 --> 00:12:30.860
+Wie passt das in eine KI-Agenten-Architektur?
+
+00:12:32.080 --> 00:12:40.990
+Das Erste, worüber man nachdenken muss, eine der ersten Fragen, die man beantworten muss, ist, okay, was ist das Ziel?
+
+00:12:40.990 --> 00:12:43.990
+Das Erste Ziel dieses Agenten.
+
+00:12:45.370 --> 00:12:54.250
+Im Grunde hängt die Architektur eines Agenten wirklich davon ab, ob man einen Low-Code-Ansatz oder einen Ansatz mit individueller Entwicklung verfolgt.
+
+00:12:54.610 --> 00:13:01.790
+Denn der Ansatz ist völlig anders, da man bei der individuellen Entwicklung alles selbst verwaltet.
+
+00:13:03.070 --> 00:13:08.310
+Man verwaltet also die Sicherheit, das Hosting und man verwaltet viele verschiedene Dinge.
+
+00:13:08.310 --> 00:13:15.830
+Beim Low-Code-Ansatz ist es ganz anders, denn man überlegt, okay, man gibt die Anweisungen und wählt einige Tools aus.
+
+00:13:17.980 --> 00:13:22.020
+Im Grunde ist die Architektur bei einem Low-Code-Ansatz nicht so einfach, wie ich es gerade gesagt habe.
+
+00:13:22.020 --> 00:13:36.460
+Aber es könnte sehr schnell gehen, da man definieren kann, okay, man hat die Anweisungen, man kann seine Tools auswählen, man kann verschiedene andere Agenten auswählen, wenn man sie verbinden möchte.
+
+00:13:36.460 --> 00:13:44.160
+Aber es ist wirklich einfach, wenn man sich mit individueller Entwicklung befasst oder wenn man seinen eigenen Agenten entwickelt, wickelt.
+
+00:13:45.220 --> 00:13:48.240
+Das könnte zum Beispiel Semantic Kernel, Agent Framework oder ähnliche Dinge sein.
+
+00:13:49.220 --> 00:13:55.900
+Die Architektur könnte wirklich komplexer sein, weil man sich mit wirklich fortgeschrittenen Konzepten auseinandersetzen muss, wie ich schon sagte, der Sicherheit.
+
+00:13:55.900 --> 00:14:10.670
+Was die Authentifizierung betrifft, wenn man zum Beispiel mehrere Tools hat und einige Endpunkte integrieren möchte, wenn man sich mit internen Tools verbinden will, die durch Reverse Proxies geschützt sind, solche Dinge.
+
+00:14:10.670 --> 00:14:21.890
+Man muss also im Grunde mehr über die Architektur nachdenken, wenn man es mit benutzerdefinierten Agenten zu tun hat, zum Beispiel in Co-Pilot Studio.
+
+00:14:23.050 --> 00:14:37.450
+Was die Architektur betrifft, ist es wirklich schnell, die Architektur bei einem individuellen Entwicklungsansatz zu definieren, man muss sich mit fortgeschrittenen Konzepten auseinandersetzen und für viele Leute könnte das schwierig sein, weil es sich um wirklich grundlegende Aspekte handelt.
+
+00:14:37.450 --> 00:14:47.570
+Und in meinem Job habe ich es ehrlich gesagt mit einer Vielzahl verschiedener Anforderungen zu tun.
+
+00:14:48.370 --> 00:14:55.550
+Das kann eine kundenspezifische Entwicklung sein, Co-Pilot Studio oder ein einfacher Agent im Agent Builder für eine sehr simple Aufgabe, für eine simple Aufgabe.
+
+00:14:56.890 --> 00:15:02.630
+Die Definition einer Architektur hängt also grundlegend davon ab, welchen Ansatz man verfolgen möchte.
+
+00:15:02.630 --> 00:15:11.570
+Im Grunde gibt es eine allgemeine Architektur, die man erstellen kann, aber danach hängt es wirklich vom Ansatz ab, Low-Code oder Full-Code, verstehen Sie?
+
+00:15:15.820 --> 00:15:24.080
+Aber können Sie die Anatomie eines typischen KI-Unternehmens Agenten beschreiben?
+
+00:15:27.410 --> 00:15:28.090
+Oh ja, das kann ich.
+
+00:15:28.090 --> 00:15:45.270
+Im Grunde, wenn man es so einfach wie möglich ausdrücken will, wenn man einen Bedarf hat, zum Beispiel IIT-Support-Agenten, dann hat man im Grunde eine Reihe von Anforderungen.
+
+00:15:45.270 --> 00:15:56.620
+Aber heutzutage gibt es, wie ich schon sagte, diesen Multi-Agenten-Ansatz und ich setze den ersten Agenten als Frontend ein, sozusagen als Fassade.
+
+00:15:58.710 --> 00:16:06.790
+Das ist also ein Front-Agent, der alle Anfragen an die verschiedenen anderen Agenten weiterleitet.
+
+00:16:07.490 --> 00:16:17.690
+Wenn der Benutzer zum Beispiel eine Frage zu Salesforce hat, leitet er die gesamte Anfrage an den Salesforce-IT-Support-Agenten weiter.
+
+00:16:17.890 --> 00:16:26.450
+Alter. Sehen Sie, wir haben für einige Kunden diese Art von Architektur erstellt, weil jeder Agent seinen eigenen Zuständigkeitsbereich hat.
+
+00:16:27.290 --> 00:16:33.390
+Das könnte für Produkte wie Salesforce sein. Es könnte für M365 oder ähnliche Dinge sein.
+
+00:16:34.670 --> 00:16:39.050
+Und im Hintergrund hat jeder Agent eine Reihe von Anweisungen, Werkzeugen.
+
+00:16:41.160 --> 00:16:46.660
+Heutzutage ist es besser, MCP-Server zu verwenden, da MCP-Server mittlerweile eine universelle Schnittstelle
+
+00:16:46.660 --> 00:16:50.460
+zur Integration verschiedener Dienste mit KI sind.
+
+00:16:52.320 --> 00:16:58.660
+Ich habe also eine Reihe von MCP-Servern und verfüge zudem über einige interne Wissensquellen.
+
+00:17:00.060 --> 00:17:03.580
+Das könnte Jira sein, eine ServiceNow, Wissensdatenbank oder ähnliche Dinge.
+
+00:17:05.360 --> 00:17:07.340
+Wir haben also einen Satz von Anweisungen pro Agent.
+
+00:17:07.340 --> 00:17:13.680
+Und diese Anweisungen definieren den Aufgabenbereich und die Rolle jedes Agenten.
+
+00:17:14.340 --> 00:17:22.500
+Und dazu kommen dann die MCP-Server und vielleicht Wissensquellen wie PDF-Dateien.
+
+00:17:22.500 --> 00:17:28.420
+Es können also ganz verschiedene Arten von Datenquellen sein.
+
+00:17:33.070 --> 00:17:37.750
+Und nach der... Entschuldigung, wenn ein Nutzer zum Beispiel eine Anfrage an den Hauptagenten stellt,
+
+00:17:38.350 --> 00:17:44.110
+wird dieser definieren, okay, ich muss diese Aufgabe an den entsprechenden Agenten delegieren.
+
+00:17:44.110 --> 00:17:49.620
+Lassen Sie uns ein wenig die Möglichkeiten betrachten.
+
+00:17:50.940 --> 00:17:51.500
+Oder...
+
+00:17:51.500 --> 00:17:57.300
+Wie fügt sich Co-Pilot Studio in die Gesamtarchitektur ein?
+
+00:18:00.260 --> 00:18:04.700
+Co-Pilot Studio ist, um ehrlich zu sein, ein Low-Code-Tool von Microsoft.
+
+00:18:05.980 --> 00:18:14.640
+Zunächst einmal in Bezug auf die Architektur ist Co-Pilot Studio wirklich für Maker konzipiert,
+
+00:18:14.720 --> 00:18:17.360
+im Grunde für Leute, die nicht in erster Linie Entwickler sind.
+
+00:18:17.360 --> 00:18:25.610
+Und was die Architektur angeht, wenn wir zum Beispiel das Beispiel nehmen, das ich vorhin genannt habe,
+
+00:18:25.850 --> 00:18:31.830
+den IT-Support, dann passt Co-Pilot Studio, weil es architektonisch gesehen seinen Zweck erfüllt.
+
+00:18:32.330 --> 00:18:33.470
+Man kann es definieren.
+
+00:18:33.830 --> 00:18:43.530
+Man kann einen Co-Pilot-Server festlegen und man kann problemlos externe oder interne Wissensquellen integrieren, wenn man möchte.
+
+00:18:46.130 --> 00:18:51.370
+Wie ich bereits sagte, falls Sie einen Anwendungsfall haben, bei dem Sie den Orchestrator ein wenig anpassen,
+
+00:18:51.390 --> 00:18:59.290
+im Hintergrund von Co-Pilot Studio können Sie den Orchestrator nicht anpassen, man aktiviert den KI-Orchestrator und das war's.
+
+00:19:01.550 --> 00:19:06.370
+Man kann zum Beispiel nicht die Priorität der Aufgaben anpassen, die man erledigen möchte,
+
+00:19:06.650 --> 00:19:11.050
+da Co-Pilot Studio im Hintergrund den Plan festlegt, den es dann ausführt.
+
+00:19:13.220 --> 00:19:19.380
+Wenn Sie jedoch etwas mehr Anpassungsmöglichkeiten benötigen, müssen Sie auf eine eigene Entwicklung zurückgreifen,
+
+00:19:19.380 --> 00:19:27.720
+zum Beispiel mit Semantic-Kernel oder Langchain einem Framework, das Microsoft kürzlich veröffentlicht hat.
+
+00:19:27.720 --> 00:19:36.420
+In dieser Phase können Sie die Orchestrierung einfach anpassen, Workflows definieren und alles nach Wunsch konfigurieren.
+
+00:19:38.120 --> 00:19:43.260
+Das ist Co-Pilot Studio als Architektur, die wirklich für Erbauer und Maker definiert ist,
+
+00:19:43.360 --> 00:19:46.760
+weil es sehr einfach ist, einen Agenten zum Laufen zu bringen.
+
+00:19:46.760 --> 00:19:54.760
+Das einzige Problem bei Co-Pilot Studio und darauf müssen Sie achten, wenn Sie Ihren Pfad wählen
+
+00:19:54.760 --> 00:19:59.720
+und Ihre Architektur definieren ist, dass Sie die Lizenzierung im Blick behalten müssen,
+
+00:19:59.860 --> 00:20:04.560
+da sie mittlerweile ein großer Teil jeder Lösung ist.
+
+00:20:06.670 --> 00:20:11.170
+Heutzutage hat sich Co-Pilot Studio etwas in Richtung eines Pay-as-you-go-Modells entwickelt
+
+00:20:11.170 --> 00:20:15.590
+und man muss bei der Kostenschätzung aufpassen, denn je nachdem, was man erreichen will,
+
+00:20:16.170 --> 00:20:19.270
+ist es manchmal besser, eine eigene Entwicklung zu machen,
+
+00:20:19.470 --> 00:20:23.930
+da man dann selbst hostet, wo man will, sich um alle Kosten kümmert
+
+00:20:23.930 --> 00:20:27.030
+und diese leichter abschätzen kann als jetzt.
+
+00:20:29.230 --> 00:20:33.550
+Denn mit dem Co-Pilot-Credit-Ansatz ist es manchmal schwierig, vorherzusagen,
+
+00:20:34.530 --> 00:20:39.110
+wie viel es für einen Monat, zwei Monate und dergleichen kosten wird.
+
+00:20:39.110 --> 00:20:46.100
+Und was sind die Einschränkungen von Co-Pilot Studio?
+
+00:20:47.420 --> 00:20:50.440
+Studio, wann sollte ich mich entscheiden?
+
+00:20:51.060 --> 00:20:55.160
+Dann denke ich, ja, Microsoft Foundry, Azure Foundry, weiß nicht, wie das wirklich heißt.
+
+00:20:55.820 --> 00:21:02.920
+Und wann ich sagen muss, okay, ich muss eine komplett eigene Entwicklung machen.
+
+00:21:02.920 --> 00:21:13.350
+Die erste Frage, die es zu beantworten gilt, lautet, okay, muss ich die Orchestrierung anpassen?
+
+00:21:14.510 --> 00:21:18.430
+Das ist für mich die erste Frage, denn diese Frage sagt dir,
+
+00:21:18.630 --> 00:21:23.130
+okay, wenn du die Orchestrierung nicht anpassen willst, um tief in die Details zu gehen,
+
+00:21:23.470 --> 00:21:26.650
+wie die Orchestrierung gemacht wird oder wie der Plan generiert wird,
+
+00:21:26.650 --> 00:21:34.110
+kannst du einen Low-Code-Ansatz mit Co-Pilot Studio verwenden, zum Beispiel einen Bilder,
+
+00:21:34.770 --> 00:21:35.730
+zum Beispiel einen Bilder.
+
+00:21:36.010 --> 00:21:39.750
+Außerdem kann man solche Tools manchmal verwenden, wenn man einfache Anwendungsfälle hat.
+
+00:21:42.420 --> 00:21:48.220
+Aber wenn man die Orchestrierung anpassen will, okay, dann muss man auf eine spezifische Entwicklung setzen
+
+00:21:48.220 --> 00:21:53.160
+und in diesem Fall muss man, okay, man muss Foundry für das Modell nutzen oder seine eigene Plattform,
+
+00:21:53.160 --> 00:22:02.150
+denn der Vorteil einer individuellen Entwicklung ist, du kannst Modelle integrieren,
+
+00:22:02.230 --> 00:22:04.010
+die nicht bei Microsoft Foundry gehostet werden.
+
+00:22:04.590 --> 00:22:09.850
+Wenn du willst, kannst du Foundry-Modelle nutzen, aber wenn du auch eine AWS- oder Google-Plattform hast,
+
+00:22:09.910 --> 00:22:16.330
+Entschuldigung, Google-Plattform, und du zum Beispiel Gemini hast oder Modelle extern bereitgestellt hast,
+
+00:22:16.390 --> 00:22:22.710
+hast du die Möglichkeit, diese Modelle direkt in deinen Agenten zu integrieren,
+
+00:22:22.710 --> 00:22:27.510
+wenn du einen individuellen Ansatz wählst.
+
+00:22:29.510 --> 00:22:30.590
+Das ist auch ein Vorteil.
+
+00:22:31.850 --> 00:22:35.750
+Und danach kannst du die Orchestrierung anpassen, wie der Plan generiert wird.
+
+00:22:35.930 --> 00:22:39.510
+All diese Dinge fließen dann in den Agenten Foundry ein.
+
+00:22:40.990 --> 00:22:46.590
+Das Problem mit Foundry heutzutage ist, dass Foundry am Anfang nur eine Plattform zum Hosten von Modellen war.
+
+00:22:47.690 --> 00:22:50.790
+Wenn man ein paar Jahre zurückblickt, war es nur ein einfacher Modellkatalog,
+
+00:22:50.790 --> 00:22:57.290
+den man bereitgestellt hat, heutzutage hat Microsoft dieses Produkt so weiterentwickelt,
+
+00:22:57.490 --> 00:23:03.190
+dass man Agenten mit einer Benutzeroberfläche wie bei Copilot Studio erstellen kann.
+
+00:23:03.370 --> 00:23:05.570
+Im Grunde ganz ohne Code.
+
+00:23:06.250 --> 00:23:11.050
+Man kann die Governance verwalten und eine ganze Menge andere Dinge steuern.
+
+00:23:11.510 --> 00:23:18.190
+Es ist wirklich zu einer Agenten-basierten Plattform geworden wie Copilot Studio für Low-Code und ähnliche Dinge.
+
+00:23:18.190 --> 00:23:24.850
+Und heutzutage ist es wirklich schwierig, Foundry im Ökosystem einzuordnen,
+
+00:23:25.070 --> 00:23:27.470
+weil sich Foundry so schnell weiterentwickelt.
+
+00:23:30.230 --> 00:23:32.890
+Microsoft hat im Grunde einige Funktionen eingeführt,
+
+00:23:33.330 --> 00:23:39.150
+die, ich weiß nicht, nicht direkt anders aber doch ähnlich wie bei Copilot Studio sind.
+
+00:23:39.450 --> 00:23:42.510
+Etwa bei der MCP-Integration und solchen Dingen.
+
+00:23:42.510 --> 00:23:48.810
+Aber die Haupteinschränkung von Copilot Studio liegt bei den Modellen.
+
+00:23:50.430 --> 00:23:53.830
+Man hat also die Möglichkeit, Code zu integrieren oder Dinge zu visualisieren.
+
+00:23:55.390 --> 00:23:58.170
+Wenn man aber zum Beispiel sein eigenes Modell integrieren möchte,
+
+00:23:58.650 --> 00:24:01.810
+weil man eine spezifische Version hat, geht das nicht.
+
+00:24:01.890 --> 00:24:04.350
+Man braucht im Grunde eine individuelle Entwicklung,
+
+00:24:04.530 --> 00:24:08.970
+um beispielsweise seine eigene LLM-Plattform anzubinden, falls vorhanden.
+
+00:24:08.970 --> 00:24:13.390
+Ich habe Kunden, die ihre eigene AWS-Plattform nutzen.
+
+00:24:13.530 --> 00:24:18.970
+In diesem Fall kann man dieses Modell mit einer extern verwalteten Preisgestaltung integrieren.
+
+00:24:25.190 --> 00:24:30.250
+Und ich denke, wenn wir einen Agenten bauen, ist ein Thema auch immer wichtig.
+
+00:24:38.940 --> 00:24:49.800
+Ja, Schopenhauer.
+
+00:24:58.110 --> 00:25:00.990
+Die meisten Leute sprechen vom MCP, dem Model Context Protocol.
+
+00:25:00.990 --> 00:25:08.410
+Warum wird das zu einem der größten Themen bei der Entwicklung von Agenten?
+
+00:25:09.070 --> 00:25:15.870
+Und für jemanden, der noch nicht damit gearbeitet hat, was ist das Model Context Protocol?
+
+00:25:16.550 --> 00:25:19.040
+Ja, das ist ein großes Wort.
+
+00:25:19.820 --> 00:25:25.280
+Im Grunde sprechen viele Leute darüber, weil es ein großes Problem löste.
+
+00:25:25.280 --> 00:25:34.760
+Es geht darum, wie man die Integration von Tools, Fähigkeiten oder vielleicht externen Werkzeugen in die KI vereinheitlicht.
+
+00:25:36.160 --> 00:25:41.640
+Es löst dieses Problem, denn früher war es ohne MCP ein ziemliches Chaos,
+
+00:25:41.860 --> 00:25:44.600
+weil viele Dienste auf unterschiedliche Weise kommunizierten.
+
+00:25:46.840 --> 00:25:51.640
+Man hatte verschiedene Technologieprotokolle und unterschiedliche Architekturansätze.
+
+00:25:51.640 --> 00:26:01.720
+Im Grunde vereinheitlicht MCP die Art und Weise, wie man Dienste in seinen KI-Agenten oder seine KI-Lösung integriert.
+
+00:26:03.060 --> 00:26:11.040
+Wenn ich es allgemein ausdrücke, MCP ist heute der Standard, um externe oder interne Tools zu integrieren.
+
+00:26:11.420 --> 00:26:12.300
+Das kann beides sein.
+
+00:26:13.680 --> 00:26:17.240
+Aber MCP ist mittlerweile ein wichtiger Bestandteil der KI-Architektur,
+
+00:26:17.240 --> 00:26:20.620
+weil man diese technologische Einheitlichkeit hatte.
+
+00:26:21.760 --> 00:26:23.820
+Und heutzutage ist es ein bedeutender Punkt.
+
+00:26:24.880 --> 00:26:28.260
+Denn früher war es die API-Integration und jetzt ist es MCP.
+
+00:26:31.240 --> 00:26:32.720
+Das ist nicht die Evolution.
+
+00:26:32.980 --> 00:26:36.640
+Aber in der Vergangenheit hat man seinen Agenten mit APIs integriert.
+
+00:26:38.340 --> 00:26:42.080
+Man musste verwalten, wie man sich authentifiziert oder das verwaltet oder das Tool aufruft.
+
+00:26:42.080 --> 00:26:46.800
+Jetzt kann die KI sagen, okay, ich habe dieses Tool verfügbar.
+
+00:26:46.880 --> 00:26:49.600
+Ich kann auswählen, was ich brauche, um das Ziel zu erreichen.
+
+00:26:53.560 --> 00:26:58.440
+Und was hat sich wirklich geändert von MCP zu API-Verbindungen?
+
+00:27:02.580 --> 00:27:08.300
+Im Grunde genommen waren APIs in der Vergangenheit, was die Integration angeht, nicht intelligent.
+
+00:27:08.300 --> 00:27:19.420
+Und wenn ich das so sagen darf, APIs sind einfach, okay, du rufst ein Tool auf und es gibt dir Daten.
+
+00:27:21.020 --> 00:27:25.160
+Der Unterschied bei MCP ist, MCP ist architektonisch intelligenter,
+
+00:27:25.220 --> 00:27:30.360
+denn hinter den Kulissen hast du nicht nur Tools, die dir Daten oder Informationen liefern,
+
+00:27:30.360 --> 00:27:38.300
+sondern du hast auch Fähigkeiten, Anweisungen und verschiedene andere Dinge,
+
+00:27:38.800 --> 00:27:40.700
+die MCP wirklich intelligent machen.
+
+00:27:42.910 --> 00:27:46.850
+Und im Grunde kann MCP der KI sagen, okay, du möchtest das erreichen?
+
+00:27:48.230 --> 00:27:53.510
+Ich kann dir die genauen Tools geben, die zu deiner Anfrage passen.
+
+00:27:53.510 --> 00:27:57.210
+Und du kannst nicht nur ein Tool aufrufen, sondern musst diese Tools aufrufen,
+
+00:27:57.450 --> 00:28:00.550
+um das zu erreichen, was du willst.
+
+00:28:01.670 --> 00:28:02.870
+Das ist die Rolle von MCP.
+
+00:28:03.410 --> 00:28:08.350
+Es gibt der KI vor, okay, ich habe diese Tools und danach kannst du dieses oder jenes
+
+00:28:08.350 --> 00:28:13.330
+oder mehrere Tools aufrufen, um deine Ziele zu erreichen und holen sie.
+
+00:28:14.170 --> 00:28:19.750
+Es gibt der KI den Kontext, den echten Kontext von allem und eine API ist nur,
+
+00:28:19.750 --> 00:28:22.790
+okay, du hast Tools, du hast eine Beschreibung und das war es eigentlich schon.
+
+00:28:26.290 --> 00:28:33.470
+Also ist es das Model-Kontext-Protokoll, ich denke, ähnlich wie Metadaten
+
+00:28:33.470 --> 00:28:34.810
+oder wie funktioniert das?
+
+00:28:37.080 --> 00:28:42.180
+Nein, MCP hinter den Kulissen, es ist einfach, es ist ein Protokoll.
+
+00:28:44.180 --> 00:28:49.040
+Im Grunde ist es ein Technologie-Protokoll und hinter den Kulissen hast du, ja, du hast Metadaten,
+
+00:28:49.240 --> 00:28:53.240
+du hast Beschreibungen, du hast KI-Fähigkeiten, die mehr beschreiben.
+
+00:28:53.540 --> 00:28:55.720
+Es ist wirklich auf KI fokussiert.
+
+00:28:55.720 --> 00:29:01.810
+Im Grunde hast du Fähigkeiten, du hast Anweisungen und die KI kann besser verstehen,
+
+00:29:02.010 --> 00:29:07.250
+okay, diese Tools machen das, dieses Tool macht jenes, okay, ich kann diese Fähigkeiten abrufen,
+
+00:29:07.370 --> 00:29:12.430
+ich kann diese Informationen vom MCP-Server anfordern, um meine Aufgabe zu erfüllen.
+
+00:29:12.430 --> 00:29:18.940
+Aber man hat, ja, man hat einen Teil Metadaten, denn man muss definieren, okay,
+
+00:29:19.140 --> 00:29:21.340
+den Namen des Tools, was es im Hintergrund tut.
+
+00:29:24.220 --> 00:29:26.740
+Schau, können wir sagen, die Zukunft ist MCP.
+
+00:29:28.500 --> 00:29:32.820
+Also müssen wir anfangen, darüber nachzudenken, ich weiß nicht, Firmen haben hunderte von REST-APIs
+
+00:29:32.820 --> 00:29:36.160
+in der Organisation, sollten sie anfangen, MCP-Server da rumzubauen.
+
+00:29:36.160 --> 00:29:44.860
+Ja, ja, im Grunde, im Grunde, MCP-Server, wir arbeiten mit APIs im Hintergrund.
+
+00:29:46.420 --> 00:29:47.940
+Das ist im Grunde kein Ersatz.
+
+00:29:49.800 --> 00:29:53.080
+Wenn ich das zusammenfasse, weil der MCP-Server ist einfach okay.
+
+00:29:54.960 --> 00:29:59.960
+Er liefert den Kontext und im Hintergrund kann der MCP-APIs aufrufen, im Hintergrund,
+
+00:30:00.960 --> 00:30:02.640
+aber der MCP-Server ist ein Frontend.
+
+00:30:02.640 --> 00:30:10.100
+Das ist das Front-Tool, das man aufrufen muss, weil man im Hintergrund seine Anfrage weiterleitet,
+
+00:30:10.620 --> 00:30:12.100
+basierend auf okay.
+
+00:30:13.420 --> 00:30:18.160
+Im Hintergrund könnte es eine API sein, eine Datenbank, es könnten mehrere Tools sein,
+
+00:30:18.380 --> 00:30:21.880
+aber man muss, wenn man seinen eigenen MCP-Server haben möchte,
+
+00:30:22.240 --> 00:30:30.240
+zum Beispiel, wenn man intern in seiner Firma APIs und verschiedene Arten von Diensten hat,
+
+00:30:30.240 --> 00:30:34.500
+es könnte, ich weiß nicht, ein Finanzdienst sein, es könnte ein HR-Dienst sein,
+
+00:30:34.580 --> 00:30:39.920
+wenn man seinen eigenen MCP bauen will, muss man im Hintergrund mit all diesen APIs umgehen
+
+00:30:39.920 --> 00:30:47.520
+und der MCP-Server muss all diese APIs offenlegen, was sind die, was sind die Dienste,
+
+00:30:47.620 --> 00:30:50.780
+welche Tools sind verfügbar, was sind die Fähigkeiten und diese Art von Dingen.
+
+00:30:55.170 --> 00:30:57.530
+Danach muss man sich um die Authentifizierung im Hintergrund kümmern,
+
+00:30:57.730 --> 00:30:59.330
+weil die APIs nicht gleich funktionieren.
+
+00:30:59.330 --> 00:31:05.750
+Denn man kann eine Authentifizierung per Schlüssel haben, per Eingabe, diese Art von Dingen.
+
+00:31:07.490 --> 00:31:08.490
+Man muss sich also darum kümmern.
+
+00:31:08.750 --> 00:31:14.470
+Aber der MCP wird die verfügbaren Tools offenlegen und im Hintergrund können all diese Tools mehrere APIs abfragen.
+
+00:31:15.790 --> 00:31:19.410
+Eine API könnte sein, man hat verschiedene Arten von Architekturen im Hintergrund.
+
+00:31:22.100 --> 00:31:33.840
+Und wie macht das MCP die Auswahl des richtigen Tools, wenn ich, ich weiß nicht, 100, 500 KI-Agenten habe?
+
+00:31:33.840 --> 00:31:38.540
+Das wird auf ersten Dingen basieren.
+
+00:31:39.080 --> 00:31:44.780
+Im Grunde, wenn man eine Anfrage an einen Agenten hat, entdeckt man alle verfügbaren Tools.
+
+00:31:45.700 --> 00:31:50.120
+Der MCP-Server wird, man wird prüfen, okay, ich habe all diese Tools zur Verfügung.
+
+00:31:51.200 --> 00:31:59.320
+Und im Grunde versteht der Orchestrator des Agenten, okay, ich habe dies, ich habe ein LLM zur Verfügung.
+
+00:31:59.320 --> 00:32:05.240
+Danach erstellen Sie den Plan, wenn ich es kurz zusammenfasse.
+
+00:32:05.380 --> 00:32:10.400
+Sie erstellen einen Plan mit einigen auszuführenden Aktionen und in dieser Aktion, die Sie ausführen möchten,
+
+00:32:10.540 --> 00:32:20.140
+können Sie ein, zwei, drei oder mehr Tools aufrufen, um die vom Benutzer angeforderte Aufgabe zu erledigen.
+
+00:32:20.140 --> 00:32:28.820
+Im Grunde versteht der Orchestrator des Agenten, also MCP-Tools und wählt das Beste für die Anfrage aus, äh, stehen Sie?
+
+00:32:28.820 --> 00:32:35.860
+Und das ist wirklich die Rolle des Orchestrators, Tools und ähnliches auszuwählen.
+
+00:32:36.100 --> 00:32:44.760
+Natürlich mit Hilfe des LLM, denn das LLM ist Teil des Gehirns und der Orchestrator kommuniziert mit dem LLM und auch mit den Tools,
+
+00:32:44.980 --> 00:32:51.660
+um die beste Wahl zu treffen und den besten Plan zur Erledigung der Aufgabe zu erstellen.
+
+00:32:51.660 --> 00:32:58.130
+Ja, ich denke, eine ganze Weile haben viele Unternehmen mit PowerShell begonnen.
+
+00:32:58.970 --> 00:33:01.630
+Und jetzt nutzen Sie die Microsoft Graph API.
+
+00:33:04.270 --> 00:33:07.890
+Gab es eine Verbindung zwischen Graph und MCP oder wie?
+
+00:33:07.890 --> 00:33:23.790
+Ja, ich denke tatsächlich, ehrlich gesagt, nein, es gibt kein MCP für Graph, wenn man es so nennt.
+
+00:33:23.790 --> 00:33:29.170
+Wissen Sie, gibt es jetzt in der Microsoft 365 Welt viele von Microsoft eingeführte MCP-Server.
+
+00:33:29.630 --> 00:33:34.030
+Und diese MCP-Server basieren im Hintergrund auf Microsoft Graph.
+
+00:33:36.280 --> 00:33:40.760
+Wenn Sie zum Beispiel, ich weiß nicht, den Teams, ähm, MCP-Server verwenden möchten,
+
+00:33:40.920 --> 00:33:47.560
+wird im Hintergrund die Graph API aufgerufen, wenn Sie den MCP-Server nutzen.
+
+00:33:47.560 --> 00:33:59.300
+Ähm, Graph API ist also in der Microsoft 365 Welt zentral, da der MCP im Hintergrund mit Graph kommuniziert,
+
+00:33:59.520 --> 00:34:02.580
+damit die Anfrage gut funktioniert.
+
+00:34:04.950 --> 00:34:08.790
+Aber ja, heutzutage ist Graph auch in Copilot allgemein zentral,
+
+00:34:09.250 --> 00:34:12.370
+da der semantische Index von Copilot auf Rohdaten basiert.
+
+00:34:12.370 --> 00:34:17.990
+Aber eigentlich konsumiert man Graph über MCP-Server.
+
+00:34:19.090 --> 00:34:20.730
+Heutzutage ist das einfach so.
+
+00:34:27.760 --> 00:34:33.880
+Microsoft 365 enthält einen unglaublichen Mehrwert organisatorische Kontexte, Dokumente, Besprechungen,
+
+00:34:34.320 --> 00:34:40.080
+E-Mails, Personen, Teams, Unterhaltungen und, wie ich sage, freigegebene Inhalte.
+
+00:34:42.320 --> 00:34:43.600
+Wie legen wir diesen Kontext?
+
+00:34:44.100 --> 00:34:45.300
+Offen? Ohne ja.
+
+00:34:46.160 --> 00:34:48.420
+Einen Albtraum in Sachen Sicherheit zu schaffen?
+
+00:34:48.420 --> 00:34:52.630
+Sie meinen im Sinne von Governance und solchen Dingen?
+
+00:34:53.530 --> 00:34:59.200
+Ja, das ist immer ein Problem, weil viele Leute Agenten bauen,
+
+00:34:59.420 --> 00:35:03.400
+ohne im Hintergrund eine angemessene Governance zu etablieren.
+
+00:35:04.280 --> 00:35:05.400
+Also ich möchte einen Agenten bauen?
+
+00:35:06.080 --> 00:35:06.720
+Okay, legen wir los.
+
+00:35:07.680 --> 00:35:13.160
+Wir bauen und implementieren ihn und danach, ach, okay, dieser Agent wird mit einer Menge Daten arbeiten.
+
+00:35:14.360 --> 00:35:15.080
+Wie manage ich das?
+
+00:35:15.360 --> 00:35:21.200
+Die erste Frage ist, okay, wie setze ich die Governance für den Agenten um?
+
+00:35:22.240 --> 00:35:32.240
+Vorher könnte es, wie du schon sagtest, ein Chaos werden, denn viele Leute wollen, okay, ich will einen Agenten bauen, Agent, Agent, oder ich will etwas aufbauen, ich will eine KI-Lösung bauen.
+
+00:35:32.240 --> 00:35:41.940
+Aber im Hintergrund, wenn man zum Beispiel im Microsoft 365-Kontext arbeitet, ist eines der ersten Dinge, die man tun muss, okay, seine Daten zu verstehen.
+
+00:35:41.940 --> 00:35:46.020
+Denn ohne ein Verständnis der Daten ist man aufgeschmissen.
+
+00:35:47.020 --> 00:35:52.720
+Man muss seine Daten verstehen, denn es ist wichtig zu wissen, okay, habe ich es mit vertraulichen Daten zu tun oder nicht?
+
+00:35:53.600 --> 00:35:56.460
+Habe ich es mit hochvertraulichen Daten zu tun?
+
+00:35:56.460 --> 00:35:59.900
+Okay, du musst deine Daten verstehen.
+
+00:36:01.520 --> 00:36:12.660
+Danach, wenn du in einem Microsoft-Umfeld bist, musst du zum Beispiel die LP-Funktion oder Sensitivitätslabeling und solche Dinge implementieren, denn ohne das könnte es ein Problem geben.
+
+00:36:12.660 --> 00:36:24.210
+Und danach musst du auch deine Daten ein wenig bereinigen, denn KI mit schlechten Daten, dein Agent wird nicht so arbeiten, wie du es willst.
+
+00:36:24.210 --> 00:36:41.610
+Denn wenn du ein Durcheinander in deinem, ich weiß nicht, SharePoint-Teamkanal oder Ähnlichem hast, wenn es ein Durcheinander ist, wird es im Grunde schwierig, korrekt zu arbeiten bei einem agentenbasierten Ansatz.
+
+00:36:41.610 --> 00:37:03.190
+Aber ja, du musst deine Daten verstehen, du musst einige grundlegende Sicherheitsmaßnahmen ergreifen, wie Authentifizierung, wie ich sagte, Purview-Funktionen und Purview ist zu einer zentralen Lösung geworden, um all diese Sicherheits- und Governance-Sachen umzusetzen.
+
+00:37:03.190 --> 00:37:35.980
+Und nachdem sie ihre Daten bereinigt und grundlegende Sicherheitsmaßnahmen implementiert haben, müssen sie sich auch mit der Lizenzierung befassen, bevor sie mit der Entwicklung von Agenten beginnen, müssen sie verstehen, ob die Entwickler dafür geschult sind und ob wir die richtigen Lizenzen für den Start haben oder ob wir Abonnements benötigen.
+
+00:37:39.430 --> 00:37:58.990
+Ein großes Problem ist die Tooling-Frage. Wie integriere ich alle Werkzeuge ordnungsgemäß in meine Entwicklung und meine Agenten? Muss ich etwas einschränken? Um ehrlich zu sein, ist das eine komplexe Frage mit vielen verschiedenen Aspekten, die man berücksichtigen muss.
+
+00:37:58.990 --> 00:38:09.890
+Aber für mich ist das Wichtigste, ihre Daten zu verstehen. Wenn ein Unternehmen seine Daten nicht versteht, wird das von Anfang an ein Problem sein.
+
+00:38:09.890 --> 00:38:45.260
+Und wenn wir wie, haben wir okay gefragt. Das Thema Sicherheit. Da gibt es glaube ich zwei Arten von Leuten. Die einen sagt, sie benötigen Benutzerberechtigungen und die anderen sagen, sie benötigen Anwendungsberechtigungen.
+
+00:38:45.260 --> 00:39:07.420
+Generell ist meine Empfehlung, wenn sie mit agentischen Lösungen arbeiten, immer delegierte Benutzerberechtigungen zu verwenden. Das ist aus Sicherheitssicht.
+
+00:39:07.420 --> 00:39:19.880
+Ehrlicherweise besser, da der Benutzer nur mit Daten und Tools arbeitet, auf die er auch Zugriff hat. Das ist das wichtigste Prinzip.
+
+00:39:21.640 --> 00:39:27.960
+Wenn sie später Anwendungsberechtigungen für eine spezifische API oder einen bestimmten Kontext benötigen, können sie das tun.
+
+00:39:27.960 --> 00:39:37.580
+Aber verwenden sie diese nicht direkt. Nutzen sie sie im Kontext eines Wrappers.
+
+00:39:40.140 --> 00:39:48.640
+Sie erstellen also, ich weiß nicht, vielleicht einen MCP-Server und integrieren diesen MCP-Server im Hintergrund mit Anwendungsberechtigungen.
+
+00:39:48.640 --> 00:40:06.200
+Wenn der MCP-Server ruft dann zum Beispiel ihre API im Hintergrund mit Anwendungsberechtigungen auf und liefert ihnen die benötigten Informationen, ohne dass der Benutzer direkt mit den Anwendungsberechtigungen in Berührung kommt.
+
+00:40:07.560 --> 00:40:17.460
+Wir rufen zum Beispiel den MCP-Server mit Benutzerberechtigungen auf und dieser Server ruft im Hintergrund Anwendungen oder Dienste mit dedizierten Anwendungsberechtigungen auf.
+
+00:40:17.460 --> 00:40:19.600
+E. Verstehen Sie den Unterschied?
+
+00:40:21.740 --> 00:40:32.000
+Okay. Interessant. Ich denke, wenn wir über Architektur nachdenken, sollten wir auch etwas tiefer blicken.
+
+00:40:32.000 --> 00:40:37.040
+Ich glaube, es gibt drei große Themen in der Architektur.
+
+00:40:38.640 --> 00:40:46.300
+Wir haben die Retrieval Augmented Generation, wir haben das Thema Wissen und wir haben das, was ich die Backdoor-Unternehmen suche, nenne.
+
+00:40:46.300 --> 00:40:52.690
+Ähm, lass uns mit RAG beginnen.
+
+00:40:53.930 --> 00:40:56.150
+Wo passt RAG in die Architektur?
+
+00:40:56.150 --> 00:40:59.150
+Äh, A. A. A. G.
+
+00:40:59.990 --> 00:41:10.770
+Um ehrlich zu sein, ist RAG leistungstechnisch am wichtigsten, denn die KI muss verschiedene Arten von Daten verstehen.
+
+00:41:10.770 --> 00:41:18.630
+Und im Grunde ist RAG dazu da, eine Frage zu beantworten.
+
+00:41:19.130 --> 00:41:27.770
+Äh, denn früher, als wir kein RAG hatten, musste man sich im Grunde mit anderen Ansätzen befassen.
+
+00:41:28.610 --> 00:41:31.210
+Nicht unbedingt altmodisch, aber es war kompliziert.
+
+00:41:31.210 --> 00:41:46.710
+Aber RAG ist zentral, weil RAG verschiedene Arten von Daten versteht und man im Grunde die benötigten Informationen aus Dokumenten abruft, was viele verschiedene Datentypen sein können.
+
+00:41:47.490 --> 00:41:53.790
+Äh, also ja, RAG ist heutzutage zentral in der KI-Architektur.
+
+00:41:53.790 --> 00:42:14.360
+Aber es stimmt, dass viele Nutzer nicht wissen, was RAG ist, wenn man hinter den Kulissen davon spricht, weil Microsoft oder viele andere Softwareunternehmen heutzutage nicht darüber reden, da hinter den Kulissen zwar RAG arbeitet,
+
+00:42:14.360 --> 00:42:23.000
+aber beispielsweise in Co-Pilot-Studio der Nutzer nicht versteht, dass es RAG ist.
+
+00:42:23.620 --> 00:42:37.920
+Man kann zwar tief in diese Konzepte eintauchen, aber für viele Nutzer ist RAG völlig unbekannt, weil sie nur das Tool verwenden, während dahinter diese Konzepte stehen.
+
+00:42:37.920 --> 00:42:43.740
+Und dann haben wir das nächste Thema, Wissen.
+
+00:42:44.560 --> 00:42:47.160
+Wie erhalten die KI-Systeme ihr Wissen?
+
+00:42:47.920 --> 00:42:48.900
+Sammle ich das selbst?
+
+00:42:49.220 --> 00:42:51.380
+Oder wie funktioniert das?
+
+00:42:53.610 --> 00:42:56.150
+Eigentlich muss man ehrlich sein.
+
+00:42:56.910 --> 00:43:06.480
+Das Wissen könnte in vielen verschiedenen Systemen gehostet sein.
+
+00:43:06.480 --> 00:43:12.000
+Es könnte eine einfache Textdatei sein, eine Markdown-Datei in der Wissensdatenbank.
+
+00:43:12.080 --> 00:43:13.520
+Es könnte alles Mögliche sein.
+
+00:43:14.820 --> 00:43:18.820
+Aber tatsächlich, wenn man einen MCP-Server hat, kann man auf dieses Wissen zugreifen.
+
+00:43:20.540 --> 00:43:29.360
+Oder wenn man zum Beispiel Konnektoren zu SharePoint oder vielen anderen Diensten hat, dann ist der Zugriff auf Wissen heutzutage einfacher als früher.
+
+00:43:30.140 --> 00:43:30.820
+Seien wir ehrlich.
+
+00:43:31.780 --> 00:43:35.320
+Denn früher musste man seine eigenen Plugins bauen und alles selbst anbinden.
+
+00:43:35.320 --> 00:43:44.780
+Heutzutage haben sie direkte Konnektoren zu beliebigen Systemen und können ihr Wissen integrieren, ohne sich mit großem Entwicklungsaufwand herumschlagen zu müssen.
+
+00:43:47.090 --> 00:43:53.290
+Ich denke, oft haben wir, ich weiß nicht, ich sammle das für meine, ich sage meinen, ich weiß nicht, meinen Leuten.
+
+00:43:53.290 --> 00:44:01.960
+Und wie versteht die KI, was keine fertigen Dokumente sind?
+
+00:44:02.780 --> 00:44:06.000
+Oder veraltet oder, ich weiß nicht, dupliziert.
+
+00:44:09.590 --> 00:44:12.910
+Wie kann das ein KI-System verstehen?
+
+00:44:13.710 --> 00:44:14.810
+Was sollten wir wofür verwenden?
+
+00:44:14.810 --> 00:44:26.580
+Im Grunde nutzen sie RAG, weil sie hinter den Kulissen verstehen müssen, okay, was ihre Daten sind.
+
+00:44:28.380 --> 00:44:34.600
+Aber um ehrlich zu sein, wenn ich es ein wenig zusammenfasse, fangen sie mit dem Prompt an, okay?
+
+00:44:36.040 --> 00:44:42.980
+Der Benutzer möchte zum Beispiel eine Suche in einer Wissensdatenbank und zum Beispiel OneDrive durchführen.
+
+00:44:42.980 --> 00:44:55.640
+Hinter den Kulissen, wenn der Orchestrator mit Hilfe eines LM den Prompt und die Benutzerabsicht versteht, haben sie im Grunde den Index.
+
+00:44:55.640 --> 00:44:59.640
+Jetzt haben sie im Grunde den Index.
+
+00:45:00.400 --> 00:45:03.220
+Denn zum Beispiel haben sie in Co-Pilot den semantischen Index.
+
+00:45:03.300 --> 00:45:08.760
+Und dieser semantische Index gibt ihnen im Grunde zu verstehen, okay, ich habe all dieses Wissen.
+
+00:45:09.400 --> 00:45:15.760
+Und sie können mit einer semantischen Indexabfrage, kann die KI den semantischen Index direkt abfragen,
+
+00:45:15.760 --> 00:45:26.680
+um zum Beispiel RAG durchzuführen und sie können direkt, okay, die richtigen Dokumente basierend auf den Bedürfnissen auswählen.
+
+00:45:27.360 --> 00:45:35.920
+Aber in Co-Pilot haben sie diesen semantischen Index und die KI kann diesen Index hinter den Kulissen direkt mit natürlicher Sprache abfragen.
+
+00:45:37.100 --> 00:45:42.820
+Ich werde also fragen, okay, ich möchte verstehen, ich weiß nicht, wie ich meinen Firmen VPN einrichte.
+
+00:45:42.820 --> 00:45:51.180
+Und hinter den Kulissen führen sie RAG auf dem semantischen Index durch und rufen im Grunde das Dokument ab,
+
+00:45:51.340 --> 00:45:54.820
+das zum Beispiel die gesamte Einrichtung des Firmen VPNs enthält.
+
+00:45:56.140 --> 00:46:01.360
+Zum Beispiel im Microsoft 365 Co-Pilot Chat, hinter den Kulissen ist es die Graph API,
+
+00:46:01.600 --> 00:46:05.320
+weil sie, wie ich bereits sagte, den semantischen Index auf der Graph API aufgebaut haben.
+
+00:46:06.360 --> 00:46:09.830
+Es ist hinter den Kulissen eine Graph-Funktion.
+
+00:46:09.830 --> 00:46:15.490
+Aber bei kundenspezifischen Entwicklungen haben sie zum Beispiel Foundry AI hinter den Kulissen.
+
+00:46:17.290 --> 00:46:19.490
+Es war ein Azure-Dienst mit einem anderen Namen.
+
+00:46:20.430 --> 00:46:22.810
+Aber jetzt können sie ihr eigenes RAG-System haben, wenn sie möchten.
+
+00:46:23.790 --> 00:46:26.810
+Und im Grunde können sie, wenn sie einen benutzerdefinierten Agenten haben,
+
+00:46:26.910 --> 00:46:30.370
+diesen direkt für eine Foundry IQ Instanz anfragen.
+
+00:46:30.370 --> 00:46:36.350
+Ich möchte die Einrichtung meines VPN-Unternehmens abrufen.
+
+00:46:36.470 --> 00:46:41.070
+Und die KI kann abrufen, was sie an Dokumenten benötigen.
+
+00:46:42.530 --> 00:46:44.710
+Es könnten PDFs, Word, Excel oder ähnliche Dinge sein.
+
+00:46:48.160 --> 00:46:54.930
+Und so funktioniert die Suche, oder?
+
+00:47:01.240 --> 00:47:02.500
+Hinter den Kulissen, meinen Sie?
+
+00:47:02.500 --> 00:47:05.300
+Ah, hinter den Kulissen.
+
+00:47:06.040 --> 00:47:07.360
+Sie haben die Suche.
+
+00:47:08.320 --> 00:47:17.500
+Aber im Grunde haben sie heutzutage hinter den Kulissen von Copilot Chat drei Funktionen.
+
+00:47:18.480 --> 00:47:19.620
+Sie haben die Standardsuche.
+
+00:47:19.760 --> 00:47:25.260
+Das ist im Grunde eine Suche, bei der sie einfach ein paar Schlüsselwörter eingeben
+
+00:47:25.260 --> 00:47:29.140
+und sie durchsuchen ihre Dokumente und diese Art von Dingen.
+
+00:47:30.500 --> 00:47:31.420
+Das ist eine einfache Suche.
+
+00:47:31.420 --> 00:47:33.700
+Wir alle kennen die Stichwortsuche wie bei Google.
+
+00:47:34.920 --> 00:47:39.260
+Danach haben sie zwei verschiedene Funktionen.
+
+00:47:39.960 --> 00:47:43.260
+Sie haben zuerst RAG hinter den Kulissen.
+
+00:47:44.380 --> 00:47:52.620
+Sie haben die RAG-Funktion in Graph und sie haben auch die semantische Index-Suche von Copilot,
+
+00:47:53.140 --> 00:47:58.800
+die ein wenig anders ist, da RAG wirklich fortgeschrittener ist als die semantische Index-Suche von Copilot.
+
+00:47:58.800 --> 00:48:06.940
+Aber sie haben alle diese drei Funktionen hinter den Kulissen, damit ihre, äh, es sind nicht sie, aber hinter den Kulissen,
+
+00:48:07.060 --> 00:48:15.980
+kann die KI diese drei verschiedenen Funktionen aufrufen, um die Daten über OneDrive Teams M3565 im Allgemeinen abzurufen.
+
+00:48:15.980 --> 00:48:22.130
+Er kann, der semantische Index von Copilot beinhaltet auch die Copilot-Konnektoren.
+
+00:48:23.190 --> 00:48:26.790
+Wenn sie also zum Beispiel Salesforce mit dem Copilot-Connector verbunden haben,
+
+00:48:26.910 --> 00:48:33.490
+kann er auch ihre gesamten Daten in Salesforce, in ServiceNow, in mehreren Tools durchsuchen.
+
+00:48:33.490 --> 00:48:40.270
+Und da alles, äh, mit dem Copilot-Connector, sie alle Daten in den Graph, äh, index, semantischen Index integriert haben,
+
+00:48:41.250 --> 00:48:45.110
+können sie ihre externen Systeme direkt abfragen, e.g. abfragen.
+
+00:48:49.270 --> 00:48:58.200
+Und, ähm, ich denke, der, wenn wir Agenten bauen, haben wir den, äh, Governance-Teil und, ähm,
+
+00:48:58.260 --> 00:49:06.000
+ein Teil davon ist für mich auch, sage ich mal, das Agenten-Lebenszyklus-Management, ähm, ähm, wie sieht das eigentlich aus?
+
+00:49:06.000 --> 00:49:13.480
+Wie sieht das eigentlich aus? Äh, ehrlich gesagt ist das im Microsoft-Ökosystem ziemlich einfach,
+
+00:49:13.840 --> 00:49:20.740
+wenn ich das so sagen darf, äh, denn, wenn sie, wenn sie mit Low-Code arbeiten, zum Beispiel Copilot-Studio,
+
+00:49:20.800 --> 00:49:24.200
+haben sie es mit der Power-Plattform zu tun, Konzept-IM.
+
+00:49:24.740 --> 00:49:27.000
+Und, äh, daran hat sich nichts geändert.
+
+00:49:27.720 --> 00:49:30.580
+Sie haben also Lösungen, sie haben ALM vor Ort, sie haben Pipelines, äh,
+
+00:49:31.300 --> 00:49:34.120
+wenn man sich mit Copilot-Studio beschäftigt, ist es ehrlich gesagt wie vorher,
+
+00:49:34.120 --> 00:49:40.200
+weil man alles hat, worin man im Bereich Power-Plattform-Governance, Lebenszyklus und ALM investiert hat.
+
+00:49:40.680 --> 00:49:43.080
+Äh, es ist exakt dasselbe.
+
+00:49:44.340 --> 00:49:49.420
+Das ist eine gute Sache, denn viele Leute fragen mich, oh, Copilot-Studio, wie verwaltet man das?
+
+00:49:51.040 --> 00:49:51.580
+Ist es anders?
+
+00:49:52.000 --> 00:49:57.160
+Nein, es ist genauso einfach wie das Application-Lifecycle-Management für Power-Apps oder Power-Automate.
+
+00:49:57.160 --> 00:50:03.580
+In diesem Fall ist es ein Agent-Lifecycle-Management, aber im Hintergrund gilt das gleiche Konzept wie bei der Power-Plattform.
+
+00:50:06.080 --> 00:50:11.280
+Und wenn man es beispielsweise mit individueller Entwicklung zu tun hat,
+
+00:50:11.820 --> 00:50:16.100
+ist es im Grunde so, als würde man Anwendungen oder Doc-Net-Anwendungen bauen,
+
+00:50:16.220 --> 00:50:18.460
+weil man alles wie Code verwaltet.
+
+00:50:20.500 --> 00:50:23.780
+Man hat also Frameworks, man hat Sicherheitsaspekte und solche Dinge.
+
+00:50:23.780 --> 00:50:30.040
+Ehrlich gesagt ist alles, was das Application- oder Agent-Lifecycle-Management betrifft,
+
+00:50:30.100 --> 00:50:32.660
+wirklich das gleiche Konzept wie vorher.
+
+00:50:34.500 --> 00:50:41.700
+Und das ist für mich ein guter Punkt, weil man nicht viel in Lebenszyklus-Prozesse oder ähnliches investieren muss.
+
+00:50:43.760 --> 00:50:46.800
+Es gibt zwar einige Änderungen, aber eine der großen Änderungen ist,
+
+00:50:48.020 --> 00:50:51.860
+okay, man muss sich um LLM-Bereitstellung und solche Dinge kümmern.
+
+00:50:51.860 --> 00:50:58.380
+Aber im Hintergrund sieht es aus wie beim früheren DevOps-Ansatz mit Pipelines und dergleichen.
+
+00:50:59.600 --> 00:51:03.360
+Meiner Meinung nach hat sich also nichts geändert, weil wir Agenten verwalten, walten.
+
+00:51:06.840 --> 00:51:08.940
+Könnte eine individuelle Entwicklung oder Co-Pilot sein,
+
+00:51:09.000 --> 00:51:12.180
+man nutzt heutzutage ehrlich gesagt den gleichen Ansatz wie vorher.
+
+00:51:14.530 --> 00:51:22.430
+Und das bedeutet, wenn ein Unternehmen vorher keine KI eingesetzt hat,
+
+00:51:22.430 --> 00:51:28.810
+ist aber das perfekte Setup für Purview, Defender und all die anderen Tools.
+
+00:51:30.450 --> 00:51:35.120
+Muss da noch etwas geändert werden?
+
+00:51:35.680 --> 00:51:38.320
+Oder bedeutet das bereits KI-Bereitschaft?
+
+00:51:41.830 --> 00:51:48.250
+Das ist eine große Frage, denn KI-Bereitschaft ist für Microsoft zwar in Ordnung.
+
+00:51:48.250 --> 00:51:52.370
+Berechtigungen schärfen und solche Dinge verwalten,
+
+00:51:52.490 --> 00:51:56.770
+aber KI-Bereitschaft ist für mich nicht nur ein technischer Ansatz,
+
+00:51:56.870 --> 00:52:00.270
+denn technisch gesehen wissen wir, was zu tun ist.
+
+00:52:01.750 --> 00:52:05.450
+Okay, wir müssen die Berechtigungen über viele Dienste hinweg verwalten.
+
+00:52:05.870 --> 00:52:06.310
+Wissen Sie?
+
+00:52:07.010 --> 00:52:09.810
+Für mich muss KI-Bereitschaft auch die Daten beinhalten.
+
+00:52:10.490 --> 00:52:11.870
+Die Daten, verstehen Sie?
+
+00:52:12.190 --> 00:52:13.090
+Ähm, wenn Sie.
+
+00:52:13.090 --> 00:52:17.450
+Weil, wenn man seine Daten nicht versteht, wie ich vorhin sagte,
+
+00:52:17.750 --> 00:52:21.870
+kann man nicht, man kann den technischen Teil nicht verwalten,
+
+00:52:22.690 --> 00:52:26.890
+weil, wenn man nicht weiß, was vertraulich ist oder nicht zum Beispiel,
+
+00:52:27.610 --> 00:52:31.010
+ist es schwierig, einige Sicherheitsvorkehrungen zu treffen.
+
+00:52:33.230 --> 00:52:35.750
+Aber wenn wir Microsoft folgen, ist KI-Bereitschaft.
+
+00:52:35.950 --> 00:52:37.570
+Okay, man muss Berechtigungen verwalten,
+
+00:52:37.570 --> 00:52:39.710
+man möchte Vertraulichkeitsbezeichnungen einführen,
+
+00:52:40.030 --> 00:52:44.110
+man muss GLP umsetzen, diese Art von Dingen.
+
+00:52:47.630 --> 00:52:52.310
+Aber es gibt auch einen übergeordneten Aspekt
+
+00:52:52.310 --> 00:52:55.670
+und für mich ist KI-Bereitschaft nicht nur technisch,
+
+00:52:55.770 --> 00:53:00.670
+man muss heutzutage ehrlich gesagt auch einen funktionalen
+
+00:53:00.670 --> 00:53:03.250
+oder übergeordneten Aspekt berücksichtigen.
+
+00:53:07.080 --> 00:53:09.200
+Äh, ja, das ist wirklich interessant.
+
+00:53:11.470 --> 00:53:14.670
+Ich denke, viele Unternehmen, bei denen das mit der KI angefangen hat,
+
+00:53:14.750 --> 00:53:16.130
+sagen jetzt mit den Agenten,
+
+00:53:16.130 --> 00:53:20.790
+Oh, sie hat alle meine, ich weiß nicht, E-Mails gelöscht
+
+00:53:20.790 --> 00:53:23.330
+oder irgendwelche bösen, bösen Dinge getan.
+
+00:53:28.320 --> 00:53:32.260
+Was denken Sie, warum sagen Unternehmen, dass sie Angst vor KI haben?
+
+00:53:32.260 --> 00:53:39.500
+Ah, das ist eine gute Frage, denn ich lebe in der Schweiz
+
+00:53:39.500 --> 00:53:42.580
+und im Grunde haben wir, wir haben viele Privatbanken
+
+00:53:42.580 --> 00:53:48.200
+und wir haben viele, um ehrlich zu sein, wirklich sensible Kunden
+
+00:53:48.200 --> 00:53:51.140
+und im Grunde ist der der kritischste Teil.
+
+00:53:51.640 --> 00:53:53.520
+Okay, wo werden die Daten verarbeitet?
+
+00:53:53.520 --> 00:53:56.020
+Grundsätzlich.
+
+00:53:56.800 --> 00:54:00.900
+Und, ja, auch okay, durchsucht die KI meine E-Mails.
+
+00:54:02.100 --> 00:54:02.740
+Diese Art von Dingen.
+
+00:54:03.060 --> 00:54:05.620
+Also hinter, hinter den Kulissen fragen Sie das immer.
+
+00:54:05.960 --> 00:54:09.040
+Aber wissen Sie, der kritischste Teil für Sie ist,
+
+00:54:09.320 --> 00:54:14.160
+okay, ich muss verstehen, okay, wo werden die Daten verarbeitet?
+
+00:54:14.160 --> 00:54:20.780
+Und, äh, und auch, okay, äh, ich bin der, der, der, der,
+
+00:54:20.780 --> 00:54:23.720
+äh, Eigentümer der KI.
+
+00:54:24.860 --> 00:54:28.140
+Also ich, ich gebe der KI die Anweisung
+
+00:54:28.140 --> 00:54:30.460
+und die KI erledigt im Hintergrund die Arbeit
+
+00:54:30.460 --> 00:54:34.360
+und Sie haben zum Beispiel Angst vor dem autonomen, äh, Aspekt,
+
+00:54:34.600 --> 00:54:37.520
+weil man heutzutage, okay, das tun kann
+
+00:54:37.520 --> 00:54:40.760
+und hinter den Kulissen sucht die KI nach etwas, äh,
+
+00:54:41.520 --> 00:54:43.340
+fragt, äh, etwas im Hintergrund ab.
+
+00:54:43.840 --> 00:54:48.040
+Und Sie haben Angst, okay, äh, wenn ich die bitte etwas zu tun,
+
+00:54:48.400 --> 00:54:50.140
+was wird da im Hintergrund ausgeführt?
+
+00:54:52.020 --> 00:54:55.720
+Und, äh, ja, es gibt viele Fragen dieser Art, okay.
+
+00:54:56.660 --> 00:54:59.440
+Wie benehme ich die Kontrolle über den gesamten Prozess
+
+00:54:59.440 --> 00:55:02.980
+hinter einer Sache, sei es ein KI-Agent oder ein KI-Dienst?
+
+00:55:04.380 --> 00:55:09.880
+Ja, es gibt solche Fragen, aber es ist wirklich eine Frage
+
+00:55:09.880 --> 00:55:15.220
+der Akzeptanz und auch der Schulung, um Schulungen anzubieten, okay,
+
+00:55:15.500 --> 00:55:18.300
+wie man KI versteht, wie man versteht,
+
+00:55:18.300 --> 00:55:21.300
+was genau hinter den Kulissen passiert.
+
+00:55:23.740 --> 00:55:26.060
+Und Transparenz ist auch ein wichtiger Punkt,
+
+00:55:26.260 --> 00:55:30.660
+denn Transparenz muss bei jeder KI-Lösung umgesetzt werden,
+
+00:55:31.040 --> 00:55:33.860
+da Transparenz für mich ein großes Thema ist,
+
+00:55:33.920 --> 00:55:36.300
+weil man alles implementieren muss.
+
+00:55:36.800 --> 00:55:39.960
+Denn die KI-Lösung muss transparent sein.
+
+00:55:42.240 --> 00:55:43.920
+Man muss verstehen, was hinter den Kulissen passiert,
+
+00:55:44.020 --> 00:55:45.180
+welche Daten abgefragt werden,
+
+00:55:45.260 --> 00:55:47.660
+man muss nachverfolgen und alles protokollieren können.
+
+00:55:47.660 --> 00:55:52.780
+Alles muss heute transparent sein, wenn man eine Lösung hat.
+
+00:55:53.080 --> 00:55:56.360
+Denn man muss genau verstehen, was im Hintergrund abläuft,
+
+00:55:57.300 --> 00:55:58.860
+welche Daten verarbeitet werden
+
+00:55:58.860 --> 00:56:01.980
+und was die Überlegungen dahinter sind.
+
+00:56:03.560 --> 00:56:04.960
+Wie haben Sie diesen Plan erstellt,
+
+00:56:05.360 --> 00:56:08.560
+auf welchen Fakten basierend und dergleichen dergleichen?
+
+00:56:09.920 --> 00:56:10.360
+Großartig.
+
+00:56:10.600 --> 00:56:12.620
+Oh, ich sehe, wir laufen ein wenig aus der Zeit.
+
+00:56:13.820 --> 00:56:14.260
+Entschuldigung.
+
+00:56:14.260 --> 00:56:17.120
+Wissen Sie, das war wirklich fantastisch,
+
+00:56:17.700 --> 00:56:20.440
+aber ich habe in jedem Podcast eine Schnellfragerunde.
+
+00:56:21.300 --> 00:56:25.000
+Also, ich gebe einen kurzen Satz vor
+
+00:56:25.000 --> 00:56:26.680
+und Sie geben eine kurze Antwort.
+
+00:56:28.120 --> 00:56:29.080
+Also, sind Sie bereit?
+
+00:56:31.480 --> 00:56:33.220
+Co-Pilot Studio oder benutzerdefinierter Code?
+
+00:56:34.500 --> 00:56:35.560
+Co-Pilot Studio.
+
+00:56:36.500 --> 00:56:38.520
+Microsoft Foundry oder Co-Pilot Studio?
+
+00:56:39.900 --> 00:56:40.920
+Co-Pilot Studio.
+
+00:56:41.720 --> 00:56:43.040
+Typescript oder C-ShirtScript?
+
+00:56:46.780 --> 00:56:47.780
+GitHub oder Azure DevOps?
+
+00:56:47.780 --> 00:56:48.780
+GitHub.
+
+00:56:50.500 --> 00:56:51.860
+RAG oder Feintuning?
+
+00:56:54.010 --> 00:56:54.450
+Alles klar.
+
+00:56:55.590 --> 00:56:59.330
+Was ist die am meisten unterschätzte Microsoft 365 API?
+
+00:56:59.910 --> 00:57:00.110
+Zinn.
+
+00:57:04.700 --> 00:57:05.140
+Ragapi.
+
+00:57:07.390 --> 00:57:10.470
+Eine Technologie, die jeder Microsoft-Entwickler 2026 lernen sollte.
+
+00:57:12.760 --> 00:57:13.480
+GitHub Co-Pilot.
+
+00:57:16.180 --> 00:57:18.660
+Wenn Satya Nadella zu Ihnen kommt und sagt,
+
+00:57:18.740 --> 00:57:20.540
+Sie bekommen alles Geld und alle Ressourcen,
+
+00:57:20.540 --> 00:57:24.940
+die Sie wollen, um unsere KI-Plattform zu verbessern,
+
+00:57:26.060 --> 00:57:27.220
+Sie können eine Funktion entwickeln.
+
+00:57:27.760 --> 00:57:28.380
+Welche wäre das?
+
+00:57:29.680 --> 00:57:31.380
+All die Governance-Sachen, die wir brauchen.
+
+00:57:34.420 --> 00:57:34.720
+Und um?
+
+00:57:36.580 --> 00:57:38.580
+Wen soll ich als nächstes in den Podcast einladen
+
+00:57:38.580 --> 00:57:39.700
+und welche Frage soll ich stellen?
+
+00:57:47.030 --> 00:57:48.450
+Oh, gute Frage.
+
+00:57:49.250 --> 00:57:50.130
+Ich habe viele Freunde.
+
+00:57:50.130 --> 00:57:55.590
+Aber, äh, ja, vielleicht können Sie meine Co-Speakerin von vielen Konferenzen fragen.
+
+00:57:56.590 --> 00:57:58.590
+Sie könnten zum Beispiel Chloe Moro fragen.
+
+00:58:00.010 --> 00:58:04.390
+Sie war früher funktionale Beraterin, bevor sie jetzt zur technischen Seite gewechselt ist.
+
+00:58:06.730 --> 00:58:12.310
+Und sie hat eine wirklich gute Geschichte über funktionale, weniger technische Dinge in der Dynamics-Welt.
+
+00:58:12.310 --> 00:58:15.790
+Vielleicht kannst du sie ja einladen und sie fragen,
+
+00:58:15.930 --> 00:58:20.970
+Sag mal, wie geht man heutzutage eigentlich mit dem Spagat zwischen funktionaler und technischer Arbeit um?
+
+00:58:20.970 --> 00:58:25.530
+Denn da gibt es ja einige sehr große Herausforderungen.
+
+00:58:28.240 --> 00:58:33.080
+Und meine abschließende Frage ist, was sollten die Leute, wenn sie eine einzige Erkenntnis aus dieser Sitzung mitnehmen können,
+
+00:58:33.200 --> 00:58:38.550
+was sollten sie aus dieser Sitzung mitnehmen?
+
+00:58:38.550 --> 00:58:39.270
+So meinst du.
+
+00:58:42.030 --> 00:58:44.350
+Im Grunde entwickelt sich KI schnell weiter.
+
+00:58:46.920 --> 00:58:51.500
+Und wenn man heute auf dem Laufenden bleiben will, muss man alles verfolgen.
+
+00:58:51.580 --> 00:58:57.180
+Denn ehrlich gesagt durchzieht KI heutzutage wirklich den gesamten Microsoft-Stack.
+
+00:58:59.440 --> 00:59:04.140
+Und heutzutage ist eine der Dinge, die man verstehen muss, dass die Entwicklung rasant ist.
+
+00:59:04.140 --> 00:59:09.000
+Und man muss wirklich, wirklich jederzeit auf dem neuesten Stand sein.
+
+00:59:09.000 --> 00:59:13.980
+Denn man wird irgendwann etwas verpassen, wenn man nicht lernt.
+
+00:59:14.180 --> 00:59:17.740
+Wenn man die Entwicklung in dieser Art nicht versteht.
+
+00:59:21.190 --> 00:59:23.450
+Ja, also danke, dass du bei mir warst.
+
+00:59:24.610 --> 00:59:27.170
+Ich denke, die wichtige Erkenntnis aus unserem Gespräch ist,
+
+00:59:27.290 --> 00:59:32.270
+dass es bei der Erweiterbarkeit von Microsoft 365 Co-Pilot nicht einfach nur darum geht,
+
+00:59:32.630 --> 00:59:35.610
+immer ausgefeiltere Prompts zu schreiben.
+
+00:59:35.610 --> 00:59:40.110
+Ich denke, wir bewegen uns aber eine Architektur zu,
+
+00:59:40.370 --> 00:59:43.310
+bei der Co-Pilot und Agenten eine Verbindung zu Unternehmenswissen,
+
+00:59:43.690 --> 00:59:47.730
+Microsoft Graph, Geschäftsanwendungen, APIs und so weiter herstellen können.
+
+00:59:49.860 --> 00:59:53.060
+Um, ja, ich denke Co-Pilot Studio, Microsoft Foundry,
+
+00:59:53.300 --> 00:59:55.280
+individuelle Entwicklungen und Technologien wie MCP
+
+00:59:55.280 --> 01:00:00.440
+geben Entwicklern einen, ja, einen erstaunlich mächtigen Werkzeugkasten an die Hand.
+
+01:00:00.440 --> 01:00:07.500
+Und, ja, aber je fähiger die Agenten werden,
+
+01:00:07.640 --> 01:00:10.380
+desto wichtiger werden auch die Grundlagen Identität,
+
+01:00:10.500 --> 01:00:14.460
+Berechtigungen, Sicherheit, Governance, Tests, Beobachtbarkeit,
+
+01:00:14.820 --> 01:00:17.100
+Anwendungslebenszyklusmanagement und so weiter.
+
+01:00:19.020 --> 01:00:21.940
+Also, ja, ich denke, du hast einen wirklich, wirklich guten Überblick
+
+01:00:21.940 --> 01:00:23.420
+über all diese Themen gegeben.
+
+01:00:23.420 --> 01:00:28.560
+Also, danke, dass du bei mir warst und für die Zuhörer alle Informationen dazu
+
+01:00:28.560 --> 01:00:32.720
+findet ihr in den Shownotes auf der M365FM-Podcast-Seite
+
+01:00:32.720 --> 01:00:37.080
+und, ja, wo ihr euch vernetzen und die Arbeit von EES sehen könnt.
+
+01:00:37.480 --> 01:00:39.560
+Und, ja, danke, dass du hier warst.
+
+01:00:40.900 --> 01:00:41.900
+Danke, dass ich hier sein durfte.
+
+01:00:42.220 --> 01:00:43.720
+Es war eine wirklich gute Zeit mit dir.

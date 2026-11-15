@@ -1,0 +1,1126 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.360
+Stel je dit scenario voor, je bouwt een applicatie en hebt een API-sleutel nodig om verbinding te maken met een service, een database-wachtwoord of een opslagaccount-sleutel.
+
+00:00:07.480 --> 00:00:11.520
+Dus je plaatst deze direct in je code, misschien in een configuratiebestand of een omgevingsvariabelen.
+
+00:00:11.680 --> 00:00:16.580
+Het werkt en alles draait prima totdat je die code naar GitHub, Pust of een notebook deelt met een teamgenoot.
+
+00:00:16.760 --> 00:00:19.120
+En zo is je geheim ineens niet zo geheim meer.
+
+00:00:19.400 --> 00:00:22.860
+Als die code in verkeerde handen valt, ligt je hele systeem bloot.
+
+00:00:23.180 --> 00:00:25.680
+Azure Key Vault is de tool die dat probleem oplost.
+
+00:00:25.680 --> 00:00:29.880
+Het biedt een veilige plek om geheimen op te slaan, zodat ze nooit in je code terechtkomen.
+
+00:00:30.000 --> 00:00:31.780
+Maar hier gaan de meeste mensen de mist in.
+
+00:00:31.980 --> 00:00:34.720
+Alleen een Key Vault hebben maakt je nog niet automatisch veilig.
+
+00:00:34.880 --> 00:00:38.760
+De manier waarop je het instelt, toegang beheert en rechten toewijst is net zo belangrijk.
+
+00:00:39.080 --> 00:00:46.540
+Aan het einde van deze aflevering weet je wat Key Vault precies is, wat je erin kunt opslaan, hoe toegang werkt en de grootste fout waardoor je geheimen blootgesteld kunnen worden.
+
+00:00:46.740 --> 00:00:50.200
+Alles in begrijpelijke taal, zonder jargon, alleen de essentiële informatie die je nodig hebt.
+
+00:00:50.380 --> 00:00:51.960
+Dus, wat is Azure Key Vault precies?
+
+00:00:52.200 --> 00:00:53.300
+Wat is Azure Key Vault?
+
+00:00:53.300 --> 00:00:55.120
+Hier is de simpelste definitie.
+
+00:00:55.280 --> 00:00:58.320
+Azure Key Vault is een cloud-gebaseerde digitale kluis voor je geheimen.
+
+00:00:58.320 --> 00:01:05.560
+Het is een beheerde service van Microsoft voor API-sleutels, database-wachtwoorden, verbindingsreeksen, versleutelingssleutels en certificaten op één centrale plek.
+
+00:01:05.680 --> 00:01:10.040
+Je hoeft je geen zorgen te maken over de infrastructuur, want Azure regelt patching, uptime en beveiliging.
+
+00:01:10.180 --> 00:01:12.540
+Je gebruikt het gewoon, zie het als een kantoorpand.
+
+00:01:12.700 --> 00:01:18.440
+Je hebt werkstations, vergaderuimtes en archiefkasten, maar ergens in de kelder is een beveiligde kluisruimte waar je de belangrijke dingen bewaart.
+
+00:01:18.440 --> 00:01:20.900
+Hoofdsleutels, contant geld, juridische documenten.
+
+00:01:21.060 --> 00:01:23.200
+Niemand komt daar binnen zonder toestemming en authenticatie.
+
+00:01:23.360 --> 00:01:25.720
+En elke keer dat iemand de deur opent, wordt dat geregistreerd.
+
+00:01:25.940 --> 00:01:26.720
+Dat is Key Vault.
+
+00:01:26.940 --> 00:01:29.740
+De beveiligde ruimte in de kelder van je Azure-architectuur.
+
+00:01:29.980 --> 00:01:31.620
+Vergelijk dat nu eens met de oude manier.
+
+00:01:31.800 --> 00:01:36.480
+Twintig jaar geleden, als je een database-wachtwoord nodig had, hardcodeerde je dat in een configuratiebestand.
+
+00:01:36.720 --> 00:01:40.700
+Misschien in een omgevingsvariabele, of erger, je liet het in platte tekst in je broncode staan.
+
+00:01:40.900 --> 00:01:43.420
+Als iemand toegang kreeg tot die server, hadden ze alles.
+
+00:01:43.420 --> 00:01:46.680
+En als je dat wachtwoord wilde wijzigen, moest je het overal bijwerken.
+
+00:01:46.840 --> 00:01:49.680
+Elk configuratiebestand, elke omgeving, elke implementatie.
+
+00:01:49.840 --> 00:01:50.820
+Het was een nachtmerrie.
+
+00:01:51.000 --> 00:01:52.260
+Key Vault verandert dat allemaal.
+
+00:01:52.460 --> 00:01:57.060
+In plaats van geheimen te verspreiden over je code- en configuratiebestanden, sla je ze op één centrale plek op.
+
+00:01:57.140 --> 00:02:00.280
+Je applicaties vragen ze tijdens runtime op, alleen wanneer ze ze nodig hebben.
+
+00:02:00.440 --> 00:02:03.720
+En omdat alles gecentraliseerd is, kun je een geheim op één plek roteren,
+
+00:02:03.920 --> 00:02:08.920
+waarna elke toepassing die het gebruikt automatisch de nieuwe waarde ophaalt zonder codewijzigingen of herimplementaties.
+
+00:02:09.080 --> 00:02:12.120
+Maar het punt is, Key Vault is niet zomaar een wachtwoordbeheerder voor je apps.
+
+00:02:12.120 --> 00:02:14.220
+Het is een essentiële beveiligingsdienst.
+
+00:02:14.440 --> 00:02:16.340
+Elke Azure-dienst kan ermee integreren.
+
+00:02:16.540 --> 00:02:22.380
+App Service functies, AX, Data Factory, Synapse, Logic Apps en DevOps Pipelines weten allemaal hoe ze met Key Vault moeten communiceren.
+
+00:02:22.560 --> 00:02:24.860
+Het wordt de ruggegraad van je veilige cloud-architectuur.
+
+00:02:25.020 --> 00:02:29.160
+En zodra je het correct hebt ingesteld, hoef je helemaal niet meer na te denken over het beheer van inloggegevens.
+
+00:02:29.400 --> 00:02:30.360
+Wat kun je opslaan?
+
+00:02:30.540 --> 00:02:34.300
+Nu je weet wat Key Vault is, laten we het hebben over wat je er daadwerkelijk in kunt plaatsen.
+
+00:02:34.460 --> 00:02:38.000
+Er zijn drie hoofdcategorieën, geheimen, sleutels en certificaten.
+
+00:02:38.000 --> 00:02:42.620
+Elk heeft een andere functie en het begrijpen van het verschil helpt je om Key Vault op de juiste manier te gebruiken.
+
+00:02:42.800 --> 00:02:44.100
+Laten we beginnen met geheimen.
+
+00:02:44.260 --> 00:02:46.220
+Dit is het meest voorkomende wat mensen opslaan.
+
+00:02:46.400 --> 00:02:50.480
+Geheimen zijn verbindingsreeksen, API-sleutels, database-wachtwoorden, opslagaccount-sleutels,
+
+00:02:50.680 --> 00:02:53.940
+eigenlijk alle dagelijkse inloggegevens die je apps nodig hebben om met andere diensten te praten.
+
+00:02:54.120 --> 00:02:57.840
+In plaats van ze in je code of configuratiebestand te plaatsen, zet je ze in Key Vault.
+
+00:02:58.020 --> 00:03:01.280
+Je app haalt ze op tijdens runtime en niemand ziet ze ooit in leesbare tekst.
+
+00:03:01.460 --> 00:03:03.960
+Zie het als een afgesloten laden in je digitale archiefkast.
+
+00:03:04.220 --> 00:03:05.520
+Vervolgens zijn er de sleutels.
+
+00:03:05.760 --> 00:03:07.800
+Dit zijn versleutelingssleutels voor data-adrest.
+
+00:03:08.000 --> 00:03:13.120
+Als je door de klant beheerde sleutels gebruikt voor Azure Storage, SQL-databases of het versleutelen van schijven van virtuele machines,
+
+00:03:13.300 --> 00:03:14.500
+kunnen die sleutels in Key Vault staan.
+
+00:03:14.720 --> 00:03:17.480
+Dat geeft je volledige controle over wie ze mag gebruiken en wanneer.
+
+00:03:17.600 --> 00:03:22.320
+En als je hardware-ondersteunde sleutels nodig hebt voor compliance, biedt de premium laag uitkomst met HSM-beveiliging.
+
+00:03:22.480 --> 00:03:23.780
+Dan hebben we nog certificaten.
+
+00:03:24.080 --> 00:03:27.760
+TLS en SSL-certificaten voor je webapps, APIs en interne diensten.
+
+00:03:27.960 --> 00:03:32.380
+Key Vault kan ze opslaan, hun levenscyclus beheren en ze zelfs automatisch vernieuwen wanneer ze bijna verlopen.
+
+00:03:32.380 --> 00:03:36.760
+Dat is een redding voor iedereen die wel eens een verlopen certificaat heeft gehad om drie uur op zondag.
+
+00:03:36.900 --> 00:03:38.260
+Hier is een concreet voorbeeld.
+
+00:03:38.540 --> 00:03:43.200
+Stel je voor dat je een webapp hebt die een database-verbindingsreeks en een API-sleutel voor een externe dienst nodig heeft.
+
+00:03:43.380 --> 00:03:46.500
+Op de oude manier zou je beide in je JSON-bestand met app-instellingen zetten.
+
+00:03:46.700 --> 00:03:52.240
+Als dat bestand in je repository terechtkomt, kan iedereen met toegang tot de code waarschijnlijk je database-inloggegevens zien.
+
+00:03:52.460 --> 00:03:54.700
+Met Key Vault sla je beide waarden op als geheimen.
+
+00:03:54.820 --> 00:03:57.800
+Je app haalt ze op bij het opstarten en ze verschijnen nooit in je broncode.
+
+00:03:58.040 --> 00:04:00.920
+Moet je het database-wachtwoord roteren, update het in Key Vault.
+
+00:04:00.920 --> 00:04:03.800
+De app haalt de nieuwe waarden automatisch op bij de volgende herstart.
+
+00:04:03.980 --> 00:04:06.060
+Geen codewijzigingen, geen herimplementatie.
+
+00:04:06.220 --> 00:04:08.660
+Iets wat mensen vaak verrast is dat versiebeheer is ingebouwd.
+
+00:04:08.820 --> 00:04:11.440
+Wanneer je een geheim bijwerkt, overschrijft Key Vault de oude waarden niet.
+
+00:04:11.580 --> 00:04:12.820
+Het maakt een nieuwe versie aan.
+
+00:04:13.020 --> 00:04:16.220
+De oude versies blijven bewaard, zodat je kunt terugdraaien als er iets misgaat.
+
+00:04:16.400 --> 00:04:18.460
+Dat is ongelooflijk handig tijdens incidenten.
+
+00:04:18.620 --> 00:04:22.540
+Je kunt snel terugkeren naar een vorig geheim zonder dat je de oude waarden hoeft te onthouden.
+
+00:04:22.720 --> 00:04:27.200
+Je kunt alle drie de type, geheimen, sleutels en certificaten in dezelfde kluis opslaan.
+
+00:04:27.340 --> 00:04:29.800
+Maar de best practice is om ze te scheiden per omgeving.
+
+00:04:29.800 --> 00:04:33.580
+Gebruik één kluis voor ontwikkeling, één voor testen en één voor productie.
+
+00:04:33.720 --> 00:04:37.620
+Dit voorkomt dat iemand per ongeluk een productiegeheim gebruikt in een ontwikkelomgeving...
+
+00:04:37.620 --> 00:04:40.160
+...en beperkte schade als één kluis gecompromitteerd raakt.
+
+00:04:40.320 --> 00:04:42.700
+Maar geheimen opslaan is slechts de helft van het verhaal.
+
+00:04:42.880 --> 00:04:44.880
+De echte vraag is wie er toegang toe krijgt.
+
+00:04:45.040 --> 00:04:46.280
+Hoe toegangsbeheer werkt?
+
+00:04:46.480 --> 00:04:48.360
+Laten we het nu hebben over wie er toegang krijgt.
+
+00:04:48.500 --> 00:04:51.560
+Key Vault heeft twee verschillende manieren om toegang tot de inhoud te beheren...
+
+00:04:51.560 --> 00:04:53.020
+...en de keuze die je maakt is erg belangrijk.
+
+00:04:53.280 --> 00:04:55.460
+Het eerste model is legacy toegangsbeleid.
+
+00:04:55.460 --> 00:04:56.660
+Dit is de oude manier.
+
+00:04:56.900 --> 00:04:59.820
+Je maakt beleid rechtstreeks op de kluis aan en wijst machtigingen toe...
+
+00:04:59.820 --> 00:05:04.380
+...aan specifieke gebruikers of groepen voor specifieke datatypen, geheimen, sleutels of certificaten.
+
+00:05:04.580 --> 00:05:07.320
+Het probleem is dat dit beleid direct aan de kluis is gekoppeld.
+
+00:05:07.480 --> 00:05:10.960
+Als je meerdere kluizen hebt, moet je het beleid voor elke kluis afzonderlijk beheren.
+
+00:05:11.080 --> 00:05:12.020
+Het schaalt niet goed.
+
+00:05:12.280 --> 00:05:16.120
+Microsoft raadt het gebruik ervan nu af omdat er bekende beveiligingsproblemen zijn.
+
+00:05:16.340 --> 00:05:18.740
+Ze ondersteunen geen privileged identity management...
+
+00:05:18.740 --> 00:05:21.340
+...en kunnen onverwachte paden voor privilege escalatie creëren.
+
+00:05:21.340 --> 00:05:24.820
+Het tweede model is Azure RBAC, op rollen gebaseerd toegangsbeheer.
+
+00:05:24.960 --> 00:05:26.080
+Dit is de moderne manier.
+
+00:05:26.300 --> 00:05:30.740
+Het gebruikt intra-ID identiteiten en is consistent met hoe je machtigingen overal elders in Azure beheert.
+
+00:05:30.900 --> 00:05:34.480
+Als je al weet hoe je iemand toegang geeft tot een opslagaccount of virtuele machine...
+
+00:05:34.480 --> 00:05:36.140
+...dan weet je al hoe je toegang geeft tot Key Vault.
+
+00:05:36.420 --> 00:05:38.260
+Hetzelfde systeem, dezelfde patronen.
+
+00:05:38.440 --> 00:05:40.820
+Dit is de gouden regel, de minste bevoegdheid, least privilege.
+
+00:05:41.200 --> 00:05:43.880
+Geef alleen de minimale toegang die iemand nodig heeft, niets meer.
+
+00:05:44.060 --> 00:05:45.700
+Als iemand alleen geheimen hoeft te lezen...
+
+00:05:45.700 --> 00:05:47.900
+...geef ze dan geen toestemming om ze aan te maken of te verwijderen.
+
+00:05:47.900 --> 00:05:51.440
+Als iemand alleen certificaten hoeft te beheren, geef ze dan geen toegang tot sleutels.
+
+00:05:51.560 --> 00:05:53.200
+Ik loop de belangrijkste rollen even door.
+
+00:05:53.380 --> 00:05:54.480
+Je hebt Key Vault Reader.
+
+00:05:54.680 --> 00:05:57.300
+Hiermee kan iemand geheimen weergeven, maar de waarden niet lezen.
+
+00:05:57.440 --> 00:05:58.580
+Key Vault Secrets User.
+
+00:05:58.820 --> 00:06:01.180
+Hiermee kan iemand daadwerkelijk de waarden van geheimen lezen.
+
+00:06:01.380 --> 00:06:02.740
+En Key Vault Secrets Officer.
+
+00:06:03.020 --> 00:06:05.880
+Hiermee kan iemand geheimen aanmaken, bijwerken en verwijderen.
+
+00:06:06.060 --> 00:06:06.860
+Zie je het patroon?
+
+00:06:07.000 --> 00:06:10.340
+Elke rol is specifiek voor de gegevens in de kluis, niet voor de kluis zelf.
+
+00:06:10.580 --> 00:06:13.640
+Vergelijk dat nu eens met de brede rollen, eigenaar, medewerker en lezer.
+
+00:06:13.880 --> 00:06:16.780
+Deze zijn van toepassing op de kluis als resource, niet op de gegevens erin.
+
+00:06:16.780 --> 00:06:18.940
+Een eigenaar kan de volledige kluis verwijderen.
+
+00:06:19.080 --> 00:06:21.280
+Een medewerker kan de kluisinstellingen wijzigen.
+
+00:06:21.480 --> 00:06:24.720
+Maar geen van deze rollen geeft op zichzelf toegang tot de geheimen binnenin.
+
+00:06:24.940 --> 00:06:27.760
+Dat is een aparte machtigingslaag en dat is het belangrijkste punt.
+
+00:06:28.120 --> 00:06:29.720
+Toegangsbeheer is als een gelaagde taart.
+
+00:06:29.900 --> 00:06:32.540
+Je hebt toegang nodig tot de kluis zelf, dat is de eerste laag.
+
+00:06:32.760 --> 00:06:35.320
+En toegang tot de gegevens in de kluis, dat is de tweede laag.
+
+00:06:35.420 --> 00:06:37.060
+Beiden moeten afzonderlijk worden verleend.
+
+00:06:37.300 --> 00:06:40.320
+De meeste beginners denken alleen aan de eerste laag en vergeten de tweede.
+
+00:06:40.520 --> 00:06:41.780
+Daar beginnen de problemen.
+
+00:06:41.940 --> 00:06:43.440
+De grootste beveiligingsfout.
+
+00:06:43.640 --> 00:06:44.300
+Dit is het punt.
+
+00:06:44.300 --> 00:06:47.500
+De meeste mensen kijken naar de rol Key Vault Contributor en denken dat deze veilig is.
+
+00:06:47.660 --> 00:06:50.460
+Ze zien het woord medewerker en gaan ervan uit dat ze de kluisinstellingen kunnen beheren,
+
+00:06:50.540 --> 00:06:51.800
+maar niet aan de geheimen erin kunnen komen.
+
+00:06:51.960 --> 00:06:54.700
+De eigen documentatie van Microsoft zei oorspronkelijk precies dat.
+
+00:06:54.900 --> 00:06:58.320
+Deze rol staat je niet toe om toegang te krijgen tot geheimen, sleutels of certificaten.
+
+00:06:58.540 --> 00:06:59.800
+Alleen is dat niet helemaal waar.
+
+00:06:59.980 --> 00:07:04.100
+Een gebruiker met de rol Key Vault Contributor kan toegangsbeleid op de kluis wijzigen.
+
+00:07:04.280 --> 00:07:07.580
+En als die kluis nog gebruik maakt van verouderd toegangsbeleid, wat bij velen het geval is,
+
+00:07:07.720 --> 00:07:10.600
+dan kunnen ze zichzelf eenvoudig volledige leestoegang verlenen tot elk geheim,
+
+00:07:10.600 --> 00:07:12.380
+elke sleutel en elk certificaat binnenin.
+
+00:07:12.500 --> 00:07:15.140
+Geen speciale exploit nodig, geen kwetsbaarheid om te patchen.
+
+00:07:15.280 --> 00:07:16.920
+Het is simpelweg hoe de machten gingen werken.
+
+00:07:17.620 --> 00:07:20.220
+Beveiligingsonderzoekers bij Datadoc hebben dit in 2024 aangetoond.
+
+00:07:20.420 --> 00:07:24.060
+Ze lieten zien dat een medewerker volledige gegevenstoegang kon verkrijgen in elke kluis
+
+00:07:24.060 --> 00:07:25.480
+die verouderd toegangsbeleid gebruikt.
+
+00:07:25.620 --> 00:07:27.540
+De reactie van Microsoft was interessant.
+
+00:07:27.780 --> 00:07:31.680
+Ze zeiden dat dit geen kwetsbaarheid is omdat medewerkers ontworpen zijn om toegangsbeleid te beheren,
+
+00:07:31.720 --> 00:07:35.120
+maar ze hebben ook de documentatie bijgewerkt om expliciet te waarschuwen dat de rol zichzelf
+
+00:07:35.120 --> 00:07:36.600
+toegang tot de datavlak kan verlenen.
+
+00:07:36.600 --> 00:07:39.840
+Het is dus geen bak in Key Vault zelf, maar een configuratie-valstrik.
+
+00:07:39.940 --> 00:07:42.740
+En het treft zelfs ervaren teams omdat de rolnaam onschuldig klinkt.
+
+00:07:43.180 --> 00:07:46.320
+Apostrof, medewerker, klinkt niet als iemand die je database-wachtwoorden kan lezen,
+
+00:07:46.540 --> 00:07:47.760
+maar in de praktijk kunnen ze dat wel.
+
+00:07:47.960 --> 00:07:49.220
+Denk eens na over het risico.
+
+00:07:49.440 --> 00:07:53.240
+Als een aanvaller een account met de rol, medewerker, op je Key Vault in handen krijgt,
+
+00:07:53.360 --> 00:07:54.880
+hoeven ze niet in te breken in de kluis.
+
+00:07:55.100 --> 00:07:56.740
+Ze hoeven de encryptie niet te kraken.
+
+00:07:56.960 --> 00:08:01.380
+Ze wijzigen gewoon het toegangsbeleid, geven zichzelf leestoegang en exfiltreren stilletjes elk geheim
+
+00:08:01.380 --> 00:08:05.360
+dat je hebt opgeslagen, verbindingsreeksen, API-sleutels, certificaten, alles.
+
+00:08:05.360 --> 00:08:08.820
+En omdat wijzigingen in het toegangsbeleid normale administratieve activiteiten zijn,
+
+00:08:08.920 --> 00:08:10.380
+activeert dit mogelijk geen waarschuwingen.
+
+00:08:10.480 --> 00:08:11.460
+Dus, wat is de oplossing?
+
+00:08:11.720 --> 00:08:15.340
+Gebruik eerst Azure RBAC voor toegang tot het datavlak in plaats van verouderd toegangsbeleid.
+
+00:08:15.660 --> 00:08:18.420
+RBAC scheidt het beheer van de kluis van de gegevens die erin staan.
+
+00:08:18.620 --> 00:08:22.580
+Ten tweede, geef de rol van Key Vault-bijdrager nooit aan iemand die deze niet absoluut nodig heeft.
+
+00:08:22.760 --> 00:08:26.260
+Ten derde, als je al gebruikers met die rol hebt, controleer deze dan vandaag nog.
+
+00:08:26.420 --> 00:08:31.220
+Vervang de bijdragerrol door specifiekere rollen zoals Key Vault-geheimgebruiker of Key Vault-geheimbeheerder.
+
+00:08:31.220 --> 00:08:35.340
+Er is een tweede fout die dit verergert, al je geheimen in één kluis plaatsen.
+
+00:08:35.500 --> 00:08:40.360
+Als je één kluis hebt voor alles, def, test, staging, productie en al je applicaties,
+
+00:08:40.600 --> 00:08:43.300
+en die kluis wordt gecompromitteerd, dan ligt alles bloot.
+
+00:08:43.420 --> 00:08:45.000
+Het is een single point of failure.
+
+00:08:45.260 --> 00:08:48.760
+We praten zo direct verder over een Multivolt-strategie, maar het principe is simpel.
+
+00:08:48.980 --> 00:08:53.620
+Stop niet al je eieren in één mandje, zeker niet als dat mandje de sleutels van je hele infrastructuur bevat.
+
+00:08:53.840 --> 00:08:55.820
+Managed Identity, de gouden standaard.
+
+00:08:56.000 --> 00:08:57.200
+Dus, hoe pak je dit goed aan?
+
+00:08:57.200 --> 00:08:59.720
+Laten we praten over de beste manier om toegang te krijgen tot Key Vault.
+
+00:08:59.880 --> 00:09:01.220
+Er is een fundamenteel probleem.
+
+00:09:01.380 --> 00:09:04.500
+Om inloggegevens uit Key Vault te halen, moet je applicatie zichzelf authenticeren,
+
+00:09:04.700 --> 00:09:06.400
+maar voor authenticatie zijn inloggegevens nodig.
+
+00:09:06.640 --> 00:09:09.700
+Waar sla je de inloggegevens op die je app gebruikt om inloggegevens te verkrijgen?
+
+00:09:09.840 --> 00:09:11.240
+Het is het kip-en-ei-probleem.
+
+00:09:11.420 --> 00:09:14.080
+Het oude antwoord was een service principle met een client-geheim,
+
+00:09:14.240 --> 00:09:17.220
+maar dat client-geheim moet ergens staan, misschien in een config-bestand,
+
+00:09:17.340 --> 00:09:19.440
+omgevingsvariabelen of een deployment-pipeline.
+
+00:09:19.640 --> 00:09:21.520
+En dan ben je weer terug bij hetzelfde probleem.
+
+00:09:21.660 --> 00:09:23.760
+Je hebt het geheim alleen maar ergens anders neergezet.
+
+00:09:23.940 --> 00:09:25.620
+Managed Identity lost dit volledig op.
+
+00:09:25.620 --> 00:09:26.700
+Dit is hoe het werkt.
+
+00:09:26.900 --> 00:09:29.720
+Wanneer je Managed Identity inschakelt op een Azure resource,
+
+00:09:29.980 --> 00:09:32.340
+zoals een webapp, functie of virtuele machine,
+
+00:09:32.620 --> 00:09:35.140
+maakt Azure automatisch een identiteit aan in Entra IDE.
+
+00:09:35.480 --> 00:09:37.800
+Die identiteit wordt volledig door Azure beheerd.
+
+00:09:38.000 --> 00:09:41.820
+Geen inloggegevens om aan te maken, geen geheimen om te roteren, niets om op te slaan.
+
+00:09:41.980 --> 00:09:44.720
+De resource heeft gewoon een identiteit waar Azure vanaf weet.
+
+00:09:44.900 --> 00:09:45.860
+Er zijn twee typen.
+
+00:09:46.080 --> 00:09:49.560
+Systeem toegewezen Managed Identity is gekoppeld aan één specifieke resource.
+
+00:09:49.800 --> 00:09:52.480
+Als je de resource verwijdert, verdwijnt de identiteit ook.
+
+00:09:52.480 --> 00:09:55.340
+Ze delen een levenscyclus, wat het beheer eenvoudig maakt.
+
+00:09:55.340 --> 00:10:00.460
+Door gebruiker toegewezen Managed Identity is een losstaande identiteit die je aan meerdere resources kunt toewijzen.
+
+00:10:00.680 --> 00:10:05.620
+Deze deelt geen levenscyclus met hen, dus het is handig als je dezelfde identiteit voor meerdere services nodig hebt.
+
+00:10:05.800 --> 00:10:07.640
+Dit is hoe dat er in de praktijk uitziet.
+
+00:10:07.820 --> 00:10:11.240
+Je hebt een webapp die een database verbindingsreeks uit Key Vault moet lezen.
+
+00:10:11.420 --> 00:10:14.680
+Je schakelt systeem toegewezen Managed Identity in op de webapp.
+
+00:10:14.960 --> 00:10:18.660
+Vervolgens verleen je die identiteit de rol van Key Vault geheimgebruiker op je kluis.
+
+00:10:18.900 --> 00:10:19.580
+Dat is alles.
+
+00:10:19.840 --> 00:10:23.040
+Geen verbindingsreeksen in de code, geen clientgeheimen in conflictbestanden.
+
+00:10:23.240 --> 00:10:29.000
+De webapp verifieert bij Key Vault met behulp van zijn beheerde identiteit en Azure regelt al het beheer van inloggegevens op de achtergrond.
+
+00:10:29.220 --> 00:10:32.480
+Dit komt het dichtst in de buurt van verificatie zonder inloggegevens in Azure.
+
+00:10:32.680 --> 00:10:36.540
+Het is een doorbraak voor beveiliging omdat het de meest voorkomende aanvalsfactor elimineert.
+
+00:10:36.700 --> 00:10:37.860
+Gestolen inloggegevens.
+
+00:10:37.860 --> 00:10:41.900
+Als er geen inloggegevens zijn om te stelen, is er niets voor een aanvaller om te compromitteren.
+
+00:10:42.060 --> 00:10:43.660
+Laat me je een praktijkvoorbeeld geven.
+
+00:10:43.900 --> 00:10:47.320
+Stel je een datapijplijn in Synapse voor die toegang nodig heeft tot een opslagaccount.
+
+00:10:47.480 --> 00:10:51.400
+Op de oude manier zou je de sleutel van het opslagaccount in de configuratie van de pijplijn opslaan.
+
+00:10:51.580 --> 00:10:54.200
+Als iemand toegang kreeg tot die pijplijn, hadden ze de sleutel.
+
+00:10:54.360 --> 00:10:57.540
+Met beheerde identiteit heeft de Synapse werkruimte een eigen identiteit.
+
+00:10:57.760 --> 00:11:01.600
+Die identiteit krijgt toegang tot Key Vault waar de sleutel van het opslagaccount is opgeslagen.
+
+00:11:01.600 --> 00:11:05.740
+De pijplijn haalt de sleutel tijdens runtime op, gebruikt deze en slaat hem nergens op.
+
+00:11:05.740 --> 00:11:09.060
+Geen sleutels in de code, geen geheimen in de configuratie van de pijplijn.
+
+00:11:09.280 --> 00:11:12.580
+Wanneer je beheerde identiteit combineert met RBAC en het principe van minimale rechten,
+
+00:11:12.740 --> 00:11:14.580
+krijg je een veilige basis voor elke Azure werkbelasting.
+
+00:11:14.740 --> 00:11:16.980
+Je applicaties verifiëren zonder inloggegevens.
+
+00:11:17.200 --> 00:11:20.680
+Ze hebben alleen toegang tot wat ze nodig hebben en elke toegang wordt gelogd en is controleerbaar.
+
+00:11:20.880 --> 00:11:23.900
+Dit is het patroon dat Microsoft voor bijna elk scenario aanbeveelt.
+
+00:11:24.100 --> 00:11:27.180
+Zodra je het gebruikt, zul je je afvragen waarom je het ooit anders deed.
+
+00:11:27.340 --> 00:11:29.280
+Kosten en strategie voor meerdere kluizen.
+
+00:11:29.280 --> 00:11:30.920
+Laten we het dus over kosten hebben.
+
+00:11:31.140 --> 00:11:32.800
+Dit is waar de meeste mensen verrast worden.
+
+00:11:32.980 --> 00:11:34.520
+Hoeveel kost Azure Key Vault eigenlijk?
+
+00:11:34.520 --> 00:11:36.260
+Het prijsmodel is eenvoudig.
+
+00:11:36.460 --> 00:11:37.720
+Geen opslagkosten per geheim.
+
+00:11:37.900 --> 00:11:40.340
+Je betaalt niet voor elk wachtwoord of elke API-sleutel die je opslaat.
+
+00:11:40.460 --> 00:11:41.980
+In plaats daarvan betaal je per bewerking.
+
+00:11:42.180 --> 00:11:45.260
+Voor de standaardlaag is het ongeveer 3 cent voor elke 10.000 bewerkingen.
+
+00:11:45.380 --> 00:11:47.500
+Een GetSecret aanroep telt als één bewerking.
+
+00:11:47.720 --> 00:11:50.300
+Net als het aanmaken van een geheim of het bekijken van wat er in de kluis staat.
+
+00:11:50.520 --> 00:11:53.820
+Voor een typische kleine tot middelgrote applicatie komt dat neer op enkele centen per maand.
+
+00:11:53.980 --> 00:11:55.280
+Echt letterlijk enkele centen.
+
+00:11:55.460 --> 00:11:57.520
+Vergelijk dat eens met AWS Secrets Manager.
+
+00:11:57.780 --> 00:12:00.280
+Zij rekenen 40 cent per geheim per maand alleen al voor de opslag,
+
+00:12:00.280 --> 00:12:02.040
+plus extra kosten voor API-aanroepen.
+
+00:12:02.140 --> 00:12:05.680
+Als je 100 geheimen hebt, is dat 40 dollar per maand voordat je er zelfs maar één hebt gelezen.
+
+00:12:05.880 --> 00:12:09.520
+Bij Azure Key Vault kosten 100 geheimen met gemiddeld gebruik je misschien 15 cent.
+
+00:12:09.680 --> 00:12:11.620
+Het verschil groeit snel naarmate je opschaalt.
+
+00:12:11.800 --> 00:12:13.100
+Nu is er ook een premium laag.
+
+00:12:13.280 --> 00:12:15.620
+Deze voegt HSM-ondersteunde sleutels toe voor werkbelastingen
+
+00:12:15.620 --> 00:12:17.720
+die het hoogste niveau van cryptografische zekerheid vereisen.
+
+00:12:17.960 --> 00:12:21.120
+Denk aan financiële transacties, zorgegevens, overheidssystemen.
+
+00:12:21.240 --> 00:12:22.820
+De kosten per bewerking zijn hoger,
+
+00:12:23.020 --> 00:12:26.500
+rond de 15 cent per 10.000 bewerkingen voor geavanceerde sleuteltypes,
+
+00:12:26.500 --> 00:12:28.740
+plus een maandelijks bedrag per HSM-sleutel.
+
+00:12:28.880 --> 00:12:31.960
+Maar voor de meeste applicaties is de standaardlaag meer dan voldoende.
+
+00:12:32.180 --> 00:12:34.620
+Hier is de kostenverrassing die mensen vaak overvalt.
+
+00:12:34.860 --> 00:12:38.720
+Voor een typische webapp met een handvol geheimen en een paar duizend operaties per maand,
+
+00:12:38.900 --> 00:12:40.180
+kost Key Vault minder dan een dollar.
+
+00:12:40.420 --> 00:12:42.960
+Je bent meer kwijt aan de koffie die je drinkt tijdens het instellen.
+
+00:12:43.160 --> 00:12:45.360
+Maar er is een strategie die belangrijker is dan de kosten.
+
+00:12:45.580 --> 00:12:46.900
+Hoeveel kluizen je gebruikt?
+
+00:12:47.080 --> 00:12:49.280
+De slimme aanpak is een strategie met meerdere kluizen.
+
+00:12:49.500 --> 00:12:52.580
+Gebruik aparte kluizen voor ontwikkeling, testen, staging en productie.
+
+00:12:52.760 --> 00:12:54.640
+Dit voorkomt het meest voorkomende ongeluk.
+
+00:12:54.640 --> 00:12:59.740
+Iemand die een testscript draait dat per ongeluk een productiedtabase leest omdat de verbindingsreeks in dezelfde kluis stond.
+
+00:12:59.940 --> 00:13:02.620
+Wanneer omgevingen gescheiden zijn, wordt die fout onmogelijk.
+
+00:13:02.800 --> 00:13:05.800
+Je moet ook scheiden op basis van bedrijfsonderdeel of compliance domein.
+
+00:13:05.960 --> 00:13:09.200
+Als je betaalkaartgegevens verwerkt, zet die geheimen dan in een eigen kluis.
+
+00:13:09.460 --> 00:13:12.640
+Algemene bedrijfswerkbelastingen gaan in een andere, zorggegevens in een derde.
+
+00:13:12.800 --> 00:13:15.700
+Dit gaat niet om moeilijk doen, het gaat om het beperken van de explosieradius.
+
+00:13:15.880 --> 00:13:19.220
+Als één kluis wordt gecompromitteerd, zijn alleen de geheimen in die kluis blootgesteld.
+
+00:13:19.420 --> 00:13:21.240
+De rest van je infrastructuur blijft veilig.
+
+00:13:21.240 --> 00:13:23.300
+En twee ingebouwde vangnetten die je altijd moet inschakelen.
+
+00:13:23.640 --> 00:13:27.440
+Apostrofe soft delete betekent dat als iemand een geheim verwijderd, het niet permanent weg is.
+
+00:13:27.600 --> 00:13:31.180
+Het gaat naar een herstelbaar status voor een bewaarperiode die je kiest, tot 90 dagen.
+
+00:13:31.980 --> 00:13:34.320
+Apostrofe purge protection gaat nog een stap verder.
+
+00:13:34.580 --> 00:13:38.600
+Niemand kan de kluis of de inhoud ervan permanent verwijderen totdat die bewaarperiode is verstreken.
+
+00:13:38.860 --> 00:13:42.820
+Samen voorkomen ze het soort onbedoeld gegevensverlies waar beveiligingsteams wakker van liggen.
+
+00:13:43.000 --> 00:13:44.480
+Hoe alles met elkaar verbonden is.
+
+00:13:44.700 --> 00:13:47.300
+Laten we dit alles samenvoegen en zien hoe de stukjes in elkaar passen.
+
+00:13:47.300 --> 00:13:52.060
+Key Vault is geen eiland. Het is het centrale zenuwstelsel voor geheimen in je Azure architectuur.
+
+00:13:52.300 --> 00:13:55.360
+Wanneer je begrijpt hoe het hele systeem stroomt, valt alles op zijn plek.
+
+00:13:55.560 --> 00:13:58.120
+Dit is wat er gebeurt wanneer een applicatie een geheim nodig heeft.
+
+00:13:58.320 --> 00:14:00.840
+De applicatie doet het verzoek met haar beheerde identiteit.
+
+00:14:01.060 --> 00:14:03.340
+Die identiteit is al geregistreerd in Entra ID.
+
+00:14:03.660 --> 00:14:07.560
+Azure maakte die automatisch aan toen je beheerde identiteit op de resource inschakelde.
+
+00:14:07.740 --> 00:14:12.060
+Entra ID valideert dat de identiteit legitiem is en stuurt het verzoek door naar Key Vault.
+
+00:14:12.260 --> 00:14:15.160
+Key Vault controleert de RBAC-machtigingen die je hebt toegewezen.
+
+00:14:15.160 --> 00:14:19.320
+Als de identiteit de juiste rol heeft, zegt Key Vault Secrets User, wordt het geheim geretourneerd.
+
+00:14:19.480 --> 00:14:20.980
+Dit alles gebeurt in milliseconden.
+
+00:14:21.140 --> 00:14:22.880
+De applicatie ziet nooit een inlog gegeven.
+
+00:14:23.060 --> 00:14:24.260
+Het slaat nooit een wachtwoord op.
+
+00:14:24.400 --> 00:14:26.020
+Het krijgt gewoon de waarde die het nodig heeft.
+
+00:14:26.240 --> 00:14:28.560
+Denk nu eens aan hoeveel Azure services hierop kunnen aansluiten.
+
+00:14:28.760 --> 00:14:32.860
+App Service, Functions, Axe, Data Factory, Synapse, Logic Apps, DevOps Pipelines.
+
+00:14:32.980 --> 00:14:34.580
+Ze weten allemaal hoe ze met Key Vault moeten praten.
+
+00:14:34.760 --> 00:14:39.100
+Je kunt een webapp zo configureren dat deze direct in de applicatie instellingen naar een geheim verwijst.
+
+00:14:39.240 --> 00:14:43.800
+Je kunt een Data Factory Pipeline instellen om tijdens runtime een opslagaccount-sleutel uit Key Vault te halen.
+
+00:14:43.800 --> 00:14:48.200
+Je kunt een Kubernetes-cluster configureren om secrets op te halen met de Key Vault CSI Driver.
+
+00:14:48.400 --> 00:14:54.380
+Elke service integreert op dezelfde manier, met hetzelfde identiteitssysteem, dezelfde RBAC-rollen en dezelfde audit-logging.
+
+00:14:54.520 --> 00:14:56.960
+Het CI-CD-patroon is bijzonder krachtig.
+
+00:14:57.100 --> 00:14:59.920
+Je pipelines halen secrets op uit Key Vault tijdens de implementatie.
+
+00:15:00.100 --> 00:15:03.280
+Ze slaan deze nooit op in pipeline-variabelen of repository-secrets.
+
+00:15:03.460 --> 00:15:06.360
+Als je een database-wachtwoord moet roteren, update je dit in Key Vault.
+
+00:15:06.540 --> 00:15:09.700
+De volgende keer dat je pipeline draait, pak deze automatisch de nieuwe waarde op.
+
+00:15:09.860 --> 00:15:12.860
+Geen pipeline-wijzigingen, geen codewijzigingen, geen herimplementaties.
+
+00:15:12.860 --> 00:15:14.740
+Dit is wat het allemaal op zijn plek laat vallen.
+
+00:15:14.940 --> 00:15:19.640
+Zodra je Key Vault instelt met Managed Identity en RBAC, hoef je niet meer na te denken over het beheer van inloggegevens.
+
+00:15:19.820 --> 00:15:21.120
+Je applicaties werken gewoon.
+
+00:15:21.360 --> 00:15:23.360
+Secrets worden geroteerd zonder dat iemand het merkt.
+
+00:15:23.760 --> 00:15:25.760
+Certificaten worden vernieuwd zonder nachtelijke noodgevallen.
+
+00:15:25.920 --> 00:15:27.800
+Het systeem regelt alles op de achtergrond.
+
+00:15:28.040 --> 00:15:29.680
+Dit is de beveiligingshouding die ertoe doet.
+
+00:15:30.040 --> 00:15:31.940
+Identiteit is de perimeter, niet het netwerk.
+
+00:15:32.120 --> 00:15:35.400
+Het maakt niet uit of iemand zich binnen of buiten je virtuele netwerk bevindt.
+
+00:15:35.520 --> 00:15:38.500
+Wat telt is of ze een geldige identiteit hebben met de juiste rechten.
+
+00:15:38.500 --> 00:15:40.500
+Key Vault dwingt dit af door het ontwerp.
+
+00:15:40.620 --> 00:15:46.440
+Elk toegangsverzoek verloopt via Entra ID-authenticatie en RBAC-autorisatie, ongeacht waar het verzoek vandaan komt.
+
+00:15:46.600 --> 00:15:47.680
+En alles wordt gelogd.
+
+00:15:47.780 --> 00:15:50.640
+Elke secret lezing, elke sleuteloperatie, elke certificaat opvraging.
+
+00:15:50.800 --> 00:15:52.300
+Je kunt zien wie wat wanneer heeft geopend.
+
+00:15:52.500 --> 00:15:55.220
+Als iets er verdacht uitziet, heb je de gegevens om het te onderzoeken.
+
+00:15:55.460 --> 00:15:59.480
+Dit is cruciaal voor compliance, incident response en om te weten wat er in je omgeving gebeurt.
+
+00:15:59.680 --> 00:16:01.060
+Dat is de schoonheid van dit alles.
+
+00:16:01.260 --> 00:16:06.460
+Key Vault, Entra ID, RBAC en Managed Identity werken samen als een uniform beveiligingsframework.
+
+00:16:06.460 --> 00:16:08.340
+Elk onderdeel versterkt de andere.
+
+00:16:08.560 --> 00:16:15.660
+En als alles correct is ingesteld, heb je een beheersysteem voor inloggegevens dat veiliger en eenvoudiger is dan wat je zelf zou kunnen bouwen.
+
+00:16:15.940 --> 00:16:17.140
+Concrete actiepunten.
+
+00:16:17.380 --> 00:16:18.920
+Dus wat moet je nu daadwerkelijk doen?
+
+00:16:19.160 --> 00:16:20.940
+Laten we deze kennis omzetten in actie.
+
+00:16:21.140 --> 00:16:23.040
+Dit zijn de dingen die je deze week kunt aanpakken.
+
+00:16:23.220 --> 00:16:24.380
+Begin bij je toegangsmodel.
+
+00:16:24.600 --> 00:16:27.840
+Open je Key Vault in de portal, ga naar de configuratie van toegang en kijk wat daar staat.
+
+00:16:28.040 --> 00:16:30.460
+Als je Vault Access Policy ziet, is dat de oude methode.
+
+00:16:30.660 --> 00:16:33.520
+Je wilt in plaats daarvan Azure oprollen gebaseerd toegangsbeheer, RBAC.
+
+00:16:33.520 --> 00:16:40.040
+De migratie is eenvoudig. Schakel het toegangsmodel om en wijs RBAC rollen toe aan dezelfde personen die al toegangspolicies hadden.
+
+00:16:40.200 --> 00:16:41.100
+Doe het vandaag nog.
+
+00:16:41.420 --> 00:16:44.920
+Microsoft raadt het aan en het onderzoek waar we over spraken liet precies zien waarom.
+
+00:16:45.220 --> 00:16:48.400
+Controleer vervolgens alle accounts met de Key Vault Contributor-rol.
+
+00:16:48.600 --> 00:16:51.840
+Open het IAM-blad op je Vault en kijk wie Contributor toegang heeft.
+
+00:16:52.040 --> 00:16:53.940
+Iedereen met die rol moet een goede reden hebben.
+
+00:16:54.200 --> 00:16:55.280
+Meestal is dat niet zo.
+
+00:16:55.520 --> 00:16:57.640
+Vervang Contributor door iets specifiekers.
+
+00:16:57.640 --> 00:17:01.000
+Als iemand alleen geheimen moet lezen, geef ze dan Key Vault Secrets User.
+
+00:17:01.180 --> 00:17:04.240
+Als ze geheimen moeten beheren, gebruik dan Key Vault Secrets Officer.
+
+00:17:04.460 --> 00:17:06.900
+Het doel is om dat escalatiepad volledig te sluiten.
+
+00:17:07.180 --> 00:17:09.100
+Maak vervolgens gebruik van Managed Identity.
+
+00:17:09.300 --> 00:17:12.640
+Elke Azure service die toegang nodig heeft tot Key Vault, zou dit moeten gebruiken.
+
+00:17:12.820 --> 00:17:18.720
+Als je een webapp, functie, data factory of virtuele machine hebt die nog een service principle met Client Secret gebruikt,
+
+00:17:18.960 --> 00:17:20.420
+stap dan over op Managed Identity.
+
+00:17:20.580 --> 00:17:24.280
+Het is eenvoudiger, veiliger en lost het kip- en ei-probleem op dat we bespraken.
+
+00:17:24.280 --> 00:17:27.500
+Azure regelt het beheer van inloggegevens achter de schermen voor je.
+
+00:17:27.660 --> 00:17:31.100
+Nog één ding, schakel Soft Delete en Purge Protection in voor elke kluis.
+
+00:17:31.320 --> 00:17:34.900
+Soft Delete staat standaard aan voor nieuwe kluizen, maar Purge Protection niet.
+
+00:17:35.140 --> 00:17:35.680
+Zet het aan.
+
+00:17:35.900 --> 00:17:40.520
+Die instelling voorkomt dat iemand tijdens de bewaarperiode een kluis of de inhoud ervan definitief verwijdert.
+
+00:17:40.680 --> 00:17:43.200
+Het heeft meer dan één team gered van een rampzalige fout.
+
+00:17:43.420 --> 00:17:44.680
+Hier is je oproep tot actie.
+
+00:17:44.900 --> 00:17:46.980
+Bekijk je huidige aanpak voor het beheer van geheimen.
+
+00:17:47.140 --> 00:17:51.180
+Zoek één geheim dat nog in een configuratie bestand, een omgevingsvariabele of hardcode in de code staat.
+
+00:17:51.360 --> 00:17:52.760
+Verplaats het deze week naar Key Vault.
+
+00:17:52.760 --> 00:17:55.960
+Slechts één. Zodra je ziet hoe eenvoudig het is, zul je de rest ook willen verplaatsen.
+
+00:17:56.160 --> 00:17:57.740
+Beveiliging is geen eenmalige configuratie.
+
+00:17:57.900 --> 00:17:58.720
+Het is een proces.
+
+00:17:58.940 --> 00:18:01.620
+Key Vault maakt dat proces makkelijker, maar alleen als je het correct gebruikt.
+
+00:18:01.740 --> 00:18:02.800
+De tools zijn aanwezig.
+
+00:18:02.980 --> 00:18:04.180
+De patronen zijn bewezen.
+
+00:18:04.380 --> 00:18:06.060
+Nu is het aan jou om ze te implementeren.
+
+00:18:06.300 --> 00:18:07.140
+Dat is het systeem.
+
+00:18:07.280 --> 00:18:11.340
+Key Vault is je digitale kluis, maar het is slechts zo veilig als de toegangscontroles die je eromheen plaatst.
+
+00:18:11.520 --> 00:18:13.100
+Begin met de adden die ik net beschreef.
+
+00:18:13.440 --> 00:18:14.500
+Controleer je rechtenmodel.
+
+00:18:14.760 --> 00:18:18.060
+Controleer je contributortoewijzingen en verplaats deze week één geheim naar een kluis.
+
+00:18:18.060 --> 00:18:23.860
+Abonneer je voor meer cloudbeveiligingstips in begrijpelijke taal en deel dit met iemand die nog steeds geheimen opslaat in configuratiebestanden.

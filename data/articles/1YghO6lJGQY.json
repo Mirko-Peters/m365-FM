@@ -1,0 +1,133 @@
+{
+ "de": {
+  "html": "<p>Copilot ist für viele Administratoren kein abgeschlossenes Feature-Release, sondern ein sich ständig änderndes Ziel. Microsoft entwickelt das Zusammenspiel von Berechtigungen, Plugins und Lizenzen laufend weiter. Wer die Standardeinstellungen unbesehen übernimmt, riskiert Sicherheitslücken, unbeabsichtigte Datenfreigaben und eine stagnierende Akzeptanz.</p>\n<p>Dieser Artikel beleuchtet Einstellungen und Stolperfallen, die Microsoft kaum hervorhebt, die aber stark prägen, wie Nutzer Copilot erleben: Webzugriff, Lizenzvergabe, Copilot in Edge, Loop und DLP sowie die Vorbereitung auf Copilot-Agenten.</p>\n\n<h2>Copilot-Webzugriff: Der versteckte Schalter für externe Inhalte</h2>\n<p>Einer der am wenigsten offensichtlichen Punkte ist die Webzugriffseinstellung, je nach Tenant auch als Bing-Plugin-Schalter zu finden. Sie entscheidet, ob Copilot öffentliche Inhalte in seine Antworten einbeziehen darf. Standardmäßig ist sie meist aktiviert. Copilot greift dann nicht nur auf Unternehmensdokumente, E-Mails oder SharePoint-Bibliotheken zu, sondern kann auch Erkenntnisse von externen Webseiten einbinden.</p>\n\n<h3>Produktivitätsgewinn mit Nebenwirkung</h3>\n<p>Auf dem Papier klingt das gut: vollständigere Antworten, mehr Kontext, weniger Sackgassen. Das Problem beginnt, sobald externe Inhalte neben internen Daten erscheinen. Stellt ein Nutzer in Outlook oder Word eine Frage, kann Copilot hilfreiche Definitionen oder Inhalte von Microsoft Learn liefern. Es können aber auch Wettbewerbermaterialien oder ungeprüfte technische Blogs auftauchen. Innerhalb des Microsoft 365 Tenants halten Nutzer solche Informationen leicht für firmengeprüft, obwohl es nur aufbereitete öffentliche Inhalte sind.</p>\n<p>Microsoft versteckt die Einstellung nicht absichtlich, kommuniziert sie aber nicht klar. Es gibt keinen Hinweis, dass Webergebnisse vor der Einführung geprüft werden sollten. Der Umschalter liegt je nach Umgebung an unterschiedlichen Stellen, etwa in den Copilot-Richtlinien, und der Wortlaut variiert. Verlassen Sie sich deshalb nicht allein auf die Dokumentation, sondern prüfen Sie die Bezeichnung direkt im Admin-Portal.</p>\n\n<h3>Kontrolliert testen</h3>\n<p>Lassen Sie in der Pilotumgebung Copilot die Website eines Konkurrenten zusammenfassen oder aktuelle Nachrichten eines Partners hervorheben. Beobachten Sie dabei:</p>\n<ul>\n<li>Wo der Inhalt auftaucht,</li>\n<li>ob Copilot ihn direkt im Text präsentiert, als wäre er Teil Ihres Dokuments,</li>\n<li>ob zwischen externen und internen Quellen unterschieden wird.</li>\n</ul>\n<p>Nur so sehen Sie, wie es für Endbenutzer aussieht. Ohne diese Prüfung kopieren Mitarbeiter externe Zusammenfassungen womöglich in Präsentationen oder Strategiedokumente, ohne die Quelle zu kennen.</p>\n\n<h3>Bewusst entscheiden und offen kommunizieren</h3>\n<p>Organisationen entscheiden hier unterschiedlich. Manche lassen den Webzugriff aktiv, weil sie Geschwindigkeit und Kontext schätzen. Andere, etwa in Finanzwesen, Behörden oder Gesundheitswesen, sperren ihn für eine strikte Trennung von nicht kontrollierten Inhalten. Die eigentliche Gefahr ist, die Einstellung unberührt zu lassen und Risiken ungewollt zu übernehmen.</p>\n<p>Wer den Schalter umlegt, sollte vorab erklären, was sich ändert, zum Beispiel: Copilot bezieht standardmäßig keine öffentlichen Webergebnisse ein, das kann in manchen Fällen langsamere Antworten bedeuten, und bei geschäftlichem Bedarf an externen Daten werden andere Wege bereitgestellt. Solche kurzen Erklärungen ersparen später viele Support-Tickets.</p>\n\n<h2>Copilot-Lizenzierung: Wo Rollouts ins Wanken geraten</h2>\n<p>Die Herausforderung liegt nicht im Kauf, denn die Zuweisung ist unkompliziert. Probleme entstehen, wenn Lizenzen ohne Strategie für Nutzung, Rollenanpassung und laufende Änderungen vergeben werden. Allzu oft folgt die Verteilung der Hierarchie statt dem Arbeitsalltag: Führungskräfte erhalten die Plätze zuerst, während Mitarbeiter, die den ganzen Tag mit Excel oder Teams arbeiten und am meisten profitieren würden, warten müssen.</p>\n\n<h3>Lizenzen als flexibler Pool</h3>\n<p>Die Microsoft 365 Lizenzierung verlangte schon immer ein Gleichgewicht, etwa beim Mischen von E3 und E5 oder beim Ergänzen weiterer Pläne. Copilot fügt eine weitere Ebene hinzu. Die Sitzverteilung bietet Mechanismen, mit denen sich der Zugriff priorisieren lässt, doch in der Praxis ist nicht immer klar, wie sie wirken. Behandeln Sie Zuweisungen deshalb nicht als starr oder dauerhaft, sondern als Steuerelemente, die laufend überwacht werden. Prüfen Sie in Ihrem Tenant, wie die Priorisierung funktioniert, statt davon auszugehen, dass das System die Plätze automatisch an die richtigen Nutzer verteilt.</p>\n\n<h3>Ungenutzte Lizenzen und fragmentierte Einführung</h3>\n<p>Eine verbreitete Falle ist die Annahme, die Nutzung werde sich von selbst entwickeln. Viele große Umgebungen stellen fest, dass die Auslastung deutlich unter den gekauften Zahlen liegt. Lizenzen bleiben monatelang ungenutzt, wenn niemand die Berichte prüft. Die Lizenz- und Nutzungsberichte im Microsoft 365 Admin-Bereich oder in vergleichbaren Reporting-Tools zeigen oft, dass ein erheblicher Teil ungenutzt bleibt, während Intensivnutzer leer ausgehen.</p>\n<p>Das verschwendet nicht nur Budget, sondern fragmentiert auch die Einführung. Erstellt eine Person einen Entwurf mit Copilot und die Kollegen können ihn nicht mit demselben Werkzeug weiterentwickeln, wirken Abläufe inkonsistent. Zudem fehlt eine verlässliche Basis, um die tatsächlichen Auswirkungen zu messen.</p>\n\n<h3>Ein bewährter Rhythmus</h3>\n<ul>\n<li>Lizenzen zuerst in kleinen Gruppen testen, in denen sich die Wirkung messen lässt.</li>\n<li>Monatlich oder vierteljährlich die Lizenzberichte prüfen.</li>\n<li>Inaktive Lizenzen einziehen und an Nutzer mit klarer Nutzung vergeben.</li>\n<li>Mitarbeiter bevorzugen, deren Aufgaben von Copilot sichtbar profitieren, etwa Analysten bei der Dokumentation oder Kundenservice-Teams, die viele E-Mails schreiben.</li>\n</ul>\n<p>Microsoft liefert dafür keine erschöpfenden Anleitungen. Die Dokumentation erklärt die Zuweisungsmethoden, nicht aber die organisatorischen Auswirkungen. Betrachten Sie Lizenzierung daher weniger als Softwarekauf, sondern als Ressourcenmanagement in der Cloud: Sie verlagern Ressourcen dorthin, wo sie gerade am meisten bringen.</p>\n\n<h2>Copilot in Edge: Gleiche Optik, anderes Verhalten</h2>\n<p>Copilot in der Edge-Seitenleiste sieht aus wie der Assistent in Word oder Teams und erweckt den Eindruck einer universellen KI, die überall gleich funktioniert. Beim direkten Vergleich zeigen sich Unterschiede. Öffnet ein Mitarbeiter ein SharePoint-Dokument in Word, kann Copilot Abschnitte mit kontextbezogenen Vorschlägen zusammenfassen. In Edge verarbeitet die Seitenleiste dasselbe Dokument möglicherweise anders, manchmal mit weniger Optionen oder weniger direkter Integration. Das ist keine Frage von richtig oder falsch, aber die Erfahrung ist nicht identisch.</p>\n\n<h3>Supportfälle und Compliance</h3>\n<p>Diese Lücken zeigen sich oft erst, wenn Nutzer experimentieren. Dann häufen sich Tickets: Warum lässt sich eine PowerPoint-Datei in Office zusammenfassen, in der Edge-Seitenleiste aber nicht? Warum wirkte eine E-Mail-Überarbeitung gestern besser als heute? Die Frustration rührt weniger von Copilot selbst als von der Erwartung, dass es überall gleich arbeitet.</p>\n<p>Auch bei Richtlinien und Compliance ist Vorsicht geboten. Einige Administratoren berichten, dass DLP- und Compliance-Regeln bei Interaktionen in Office anders greifen als in Edge. Das heißt nicht, dass Schutzmaßnahmen generell versagen, wohl aber, dass Sie das Verhalten in Ihrer Umgebung validieren sollten.</p>\n\n<h3>Strukturierter Test in drei Schritten</h3>\n<ol>\n<li>Eine sensible Datei in Word öffnen und Copilot um eine Zusammenfassung bitten.</li>\n<li>Dieselbe Datei in Edge öffnen und die Anfrage über die Seitenleiste wiederholen.</li>\n<li>Protokollieren, ob die Ergebnisse unterschiedlich aussehen und ob die DLP-Regeln die Anfrage in beiden Kontexten blockieren oder zulassen.</li>\n</ol>\n<p>Hinweise auf solche host-spezifischen Eigenheiten sind oft über technische Notizen, Produktankündigungen und Update-Beiträge verstreut. Das Admin-Center weist nicht zuverlässig darauf hin. Beobachten Sie deshalb die offiziellen Release-Notes und verknüpfen Sie sie mit eigenen Kontrolltests.</p>\n\n<h3>Erwartungen steuern statt deaktivieren</h3>\n<p>Es ist verlockend, Copilot in Edge einfach abzuschalten. Das verringert widersprüchliche Erfahrungen, nimmt den Mitarbeitern aber auch legitime Anwendungsfälle. Besser ist es, den Edge-Copilot als leichten Begleiter für das Surfen und schnelle Entwürfe zu positionieren und seine Grenzen klar zu benennen. Ein Zweizeiler in Schulungsunterlagen genügt: Copilot in Edge eignet sich für schnelle Web-Zusammenfassungen und leichte Entwurfsaufgaben, kann sich aber anders verhalten als in den Office-Apps, und kritische Ergebnisse sollten in der Anwendung geprüft werden, in der sie tatsächlich verwendet werden.</p>\n\n<h2>Loop, Copilot und DLP: Wo Schutzmaßnahmen Lücken haben können</h2>\n<p>Loop bietet eine neue Art der Zusammenarbeit, wirft mit Copilot aber knifflige Fragen auf. Wer erwartet, dass gewohnte Sicherheits- und Compliance-Regeln automatisch übertragen werden, sollte das prüfen. Loop-Komponenten werden von der Plattform bereitgestellt und können je nach Tenant auf SharePoint- oder OneDrive-Speicher verweisen. Sie existieren also nicht isoliert, und Vertraulichkeitskennzeichnungen sowie DLP greifen nicht ohne Validierung selbstverständlich.</p>\n\n<h3>Die KI-Antwort als neue Oberfläche</h3>\n<p>Ein Projektteam verfasst Produktstrategie-Notizen in Loop, die Seite ist nur mit einer kleinen Gruppe geteilt, die Berechtigung wirkt korrekt. Fragt später jemand Copilot nach allen Projekt-Updates, könnte der Assistent dennoch Informationen aus diesem Bereich zusammenfassen. Das Dokument hat den Besitzer nicht gewechselt, doch die KI-generierte Antwort wird zu einer neuen Oberfläche für sensible Inhalte.</p>\n\n<h3>Testprotokoll</h3>\n<ol>\n<li>Mit einer Datei oder Seite beginnen, die ein Vertraulichkeitslabel oder eine klare DLP-Bedingung hat.</li>\n<li>Eine Loop-Komponente erstellen, die darauf verweist, und sie mit einem begrenzten Kreis teilen.</li>\n<li>Copilot bitten, Informationen aus dem Projekt zusammenzufassen oder zu extrahieren.</li>\n<li>Beobachten, ob das Label erhalten bleibt, eine Blockierungsmeldung erscheint oder der Inhalt durchschlüpft.</li>\n<li>Die Sequenz mehrmals wiederholen und Labels, Zeitabläufe und Zugriffe variieren.</li>\n</ol>\n<p>Dokumentieren Sie die Szenarien sorgfältig mit Screenshots, Zeitstempeln und Schritten zur Reproduktion. Falls Sie später eine Klärung durch den Anbieter benötigen oder ein Support-Ticket eröffnen, haben Sie konkrete Belege statt vager Beschwerden.</p>\n\n<h3>Sicherheit in Schichten</h3>\n<p>Traditionelle SharePoint-Regeln wurden für relativ statische Dokumente mit klaren Grenzen konzipiert. Loop lebt von Live-Fragmenten, die nahezu in Echtzeit neu zusammengesetzt werden, und genau dort spielt Copilot seine Stärken aus. Ihre Richtlinie hält mit dieser Geschwindigkeit womöglich nicht Schritt. Verlassen Sie sich deshalb nicht auf eine einzelne Schutzmaßnahme:</p>\n<ul>\n<li>DLP zur Kennzeichnung sensibler Daten nutzen,</li>\n<li>bedingten Zugriff zur Einschränkung des Nutzerkreises einsetzen,</li>\n<li>Standardfreigaben restriktiver gestalten,</li>\n<li>Loop-Pilotprojekte mit kleinen Gruppen durchführen, bevor Sie breit ausrollen.</li>\n</ul>\n<p>Klären Sie auch die Nutzer auf. Wer glaubt, in Loop sei alles so geschützt wie in SharePoint, teilt womöglich zu viel. Zudem sollten Sie vierteljährlich die Szenarien neu testen, besonders nach größeren Microsoft-Updates.</p>\n\n<h2>Copilot-Agenten: Governance vorbereiten</h2>\n<p>Copilot-Agenten wirken weniger wie ein Tool und mehr wie ein Teilnehmer in Ihrer Umgebung. Sie können in mehreren Apps Aufgaben für Benutzer übernehmen und sind personalisierte Helfer, die Mitarbeiter zur Automatisierung wiederkehrender Aufgaben konfigurieren. Ein Vertriebsmitarbeiter lässt Kundenanfragen vorformulieren, ein Finanzanalyst prüft Spesenberichte auf Muster. Der Reiz liegt in Effizienz, Konsistenz und Zeitersparnis.</p>\n\n<h3>Sich ändernde Fähigkeiten</h3>\n<p>Für Administratoren ist entscheidend, dass jede neue Version verändern kann, worauf Agenten zugreifen. Eine Funktion, die anfangs nur zusammenfasste, könnte später auch antworten oder aktiv handeln. Die Angriffsfläche wächst, daher gehören neue Funktionen in kontrollierte Pilotprojekte, bevor sie tenantweit freigegeben werden.</p>\n\n<h3>Regeln vor dem Rollout</h3>\n<p>Soll ein Agent E-Mails an Kunden verfassen und senden, legen Sie vorab Freigabe- und Human-in-the-Loop-Anforderungen fest: Wer prüft die Ergebnisse, wer erteilt die finale Freigabe, wie werden Protokolle für Audits gespeichert? Das ist weniger eine Rechtsfrage als die Definition eines konkreten Workflows mit klarer Verantwortung.</p>\n\n<h3>Überprüfungsrhythmus und Zuständigkeit</h3>\n<p>Ein praktischer Rhythmus sind monatliche Reviews während der Einführung neuer Funktionen, bei Bedarf mit zusätzlichen Checks. Halten Sie je Sitzung drei Dinge fest:</p>\n<ul>\n<li>welche Aktionen der Agent ausgeführt hat,</li>\n<li>welche Ergebnisse er generiert hat,</li>\n<li>welche Identität oder Rolle die Aktion ausgelöst hat.</li>\n</ul>\n<p>Führen Sie diese Angaben in einem Änderungsprotokoll, das neue Versionen mit konkreten Richtlinien verknüpft. Das sichert Kontinuität, selbst wenn sich Portalbezeichnungen oder Berichtsformate ändern. Viele Organisationen profitieren zudem von einem Copilot-Verantwortlichen oder AI-Governance-Owner in IT oder Sicherheitsteam, der Pilot-Tests koordiniert, den Rhythmus überwacht und das Protokoll pflegt. Ein monatlicher Bericht mit Beispielen für Agentenausgaben, Richtlinienanpassungen und Entscheidungen schafft Vertrauen bei der Führung.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Standardeinstellungen übernehmen:</strong> Der Webzugriff bleibt unbemerkt aktiv, und Nutzer halten externe Inhalte für geprüft.</li>\n<li><strong>Lizenzen nach Hierarchie vergeben:</strong> Intensivnutzer warten, während Plätze ungenutzt bleiben.</li>\n<li><strong>Keine Auswertung der Nutzungsberichte:</strong> Die Auslastung liegt unter den gekauften Zahlen, ohne dass es jemand merkt.</li>\n<li><strong>Gleiches Verhalten in allen Apps erwarten:</strong> Edge und Office-Apps arbeiten unterschiedlich, die Folge sind Tickets und Misstrauen.</li>\n<li><strong>Loop wie SharePoint behandeln:</strong> DLP und Labels greifen nicht zwingend wie erwartet.</li>\n<li><strong>Agenten-Richtlinien einmalig festlegen:</strong> Schleichende Funktionsänderungen können Kontrollen umgehen.</li>\n<li><strong>Keine klare Verantwortung:</strong> Ohne Zuständigen misst niemand dauerhaft das Agentenverhalten.</li>\n</ul>\n\n<h2>Praktische Takeaways und Fazit</h2>\n<ul>\n<li>Webzugriffseinstellung im eigenen Tenant suchen, mit realistischen Szenarien testen und bewusst entscheiden.</li>\n<li>Änderungen an Copilot-Einstellungen vorab kommunizieren, inklusive der Folgen.</li>\n<li>Lizenzen als flexiblen Pool behandeln: Pilotgruppen, regelmäßige Berichtsprüfung, Umverteilung nach Nutzung.</li>\n<li>Gleiche Aufgaben in Word, Teams und Edge testen und DLP-Verhalten je Kontext dokumentieren.</li>\n<li>Release-Notes verfolgen und mit eigenen Kontrolltests koppeln.</li>\n<li>Loop-Szenarien mit Labels und DLP prüfen, Fehler mit Belegen dokumentieren und Kontrollen schichten.</li>\n<li>Governance vierteljährlich überprüfen, besonders nach größeren Microsoft-Updates.</li>\n<li>Für Agenten Freigabe- und Human-in-the-Loop-Regeln definieren, monatlich prüfen, Änderungsprotokoll führen und einen Verantwortlichen benennen.</li>\n</ul>\n<p>Fazit: Copilot verhält sich nicht überall gleich und ändert sich mit jedem Update. Wer Webzugriff, Lizenzen, Edge, Loop und Agenten bewusst steuert, statt sich auf Standardeinstellungen zu verlassen, vermeidet Datenrisiken, Budgetverschwendung und Vertrauensverlust. Entscheidend sind strukturierte Tests, klare Kommunikation und ein adaptives Governance-Modell, das mit der Technologie Schritt hält.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Versteckte Copilot-Einstellungen im Überblick",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Webzugriff prüfen",
+     "text": "Schalter für externe Inhalte im Tenant finden, testen und bewusst entscheiden."
+    },
+    {
+     "kopf": "Lizenzen flexibel steuern",
+     "text": "Pilotgruppen, regelmäßige Berichtsprüfung, inaktive Lizenzen einziehen und gezielt neu vergeben."
+    },
+    {
+     "kopf": "Edge gesondert testen",
+     "text": "Gleiche Aufgaben in Word, Teams und Edge vergleichen, DLP-Verhalten dokumentieren."
+    },
+    {
+     "kopf": "Loop und DLP validieren",
+     "text": "Labels und DLP mit Testprotokoll prüfen, Kontrollen schichten, vierteljährlich neu testen."
+    },
+    {
+     "kopf": "Agenten-Governance aufbauen",
+     "text": "Freigaberegeln, monatliche Reviews, Änderungsprotokoll und einen benannten Verantwortlichen etablieren."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was bewirkt der Copilot-Webzugriff und sollte man ihn aktiviert lassen?",
+    "a": "Der Webzugriff, je nach Tenant auch Bing-Plugin-Schalter genannt, erlaubt Copilot, öffentliche Webinhalte in Antworten einzubeziehen. Er ist meist standardmäßig aktiv. Ob man ihn aktiviert lässt, ist eine bewusste Entscheidung: Behörden, Finanz- und Gesundheitswesen sperren ihn oft, andere schätzen Geschwindigkeit und Kontext."
+   },
+   {
+    "q": "Wie sollten Unternehmen Copilot-Lizenzen sinnvoll verteilen?",
+    "a": "Lizenzen sollten nicht nach Hierarchie, sondern nach tatsächlichem Nutzen vergeben werden. Zuerst in kleinen Gruppen testen, monatlich oder vierteljährlich die Lizenzberichte prüfen, inaktive Lizenzen einziehen und an klare Nutzer vergeben, etwa Analysten oder Kundenservice-Teams, die viele E-Mails schreiben."
+   },
+   {
+    "q": "Warum verhält sich Copilot in Edge anders als in Word oder Teams?",
+    "a": "Die Edge-Seitenleiste sieht aus wie der Assistent in Office-Apps, verarbeitet Dokumente aber möglicherweise anders, teils mit weniger Optionen oder weniger direkter Integration. Auch DLP- und Compliance-Regeln greifen mitunter unterschiedlich. Deshalb sollte man das Verhalten im eigenen Tenant testen und Erwartungen klar kommunizieren."
+   },
+   {
+    "q": "Wie schützt man sensible Inhalte in Loop bei der Nutzung von Copilot?",
+    "a": "Man sollte sich nicht auf eine einzelne Maßnahme verlassen: DLP zur Kennzeichnung sensibler Daten nutzen, bedingten Zugriff einsetzen, Standardfreigaben restriktiver gestalten und Loop zunächst in kleinen Pilotgruppen testen. Zudem Nutzer aufklären und die Testszenarien vierteljährlich, besonders nach Microsoft-Updates, wiederholen."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Webzugriff: Aktiv lassen oder sperren",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Webzugriff aktiv",
+     "punkte": [
+      "Vollständigere Antworten und mehr Kontext für Nutzer",
+      "Weniger Sackgassen und höhere Geschwindigkeit",
+      "Externe Inhalte erscheinen neben internen Daten",
+      "Nutzer halten öffentliche Inhalte leicht für firmengeprüft"
+     ]
+    },
+    "rechts": {
+     "titel": "Webzugriff gesperrt",
+     "punkte": [
+      "Strikte Trennung von nicht kontrollierten Inhalten",
+      "Üblich in Finanzwesen, Behörden und Gesundheitswesen",
+      "Antworten können in manchen Fällen langsamer sein",
+      "Andere Wege für externen Datenbedarf müssen bereitgestellt werden"
+     ]
+    }
+   },
+   {
+    "titel": "Sicherheit in Schichten bei Loop und Copilot",
+    "typ": "checkliste",
+    "punkte": [
+     "DLP zur Kennzeichnung sensibler Daten nutzen",
+     "Bedingten Zugriff zur Einschränkung des Nutzerkreises einsetzen",
+     "Standardfreigaben restriktiver gestalten",
+     "Loop-Pilotprojekte mit kleinen Gruppen vor dem breiten Rollout durchführen",
+     "Nutzer darüber aufklären, dass Loop nicht automatisch wie SharePoint geschützt ist",
+     "Szenarien vierteljährlich neu testen, besonders nach größeren Microsoft-Updates",
+     "Testszenarien mit Screenshots, Zeitstempeln und Reproduktionsschritten dokumentieren"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welches Risiko entsteht, wenn der Copilot-Webzugriff unbemerkt aktiviert bleibt?",
+    "opts": [
+     "Copilot kann keine Unternehmensdokumente mehr lesen",
+     "Nutzer halten externe Webinhalte leicht für firmengeprüfte Informationen",
+     "Alle Lizenzen werden automatisch entzogen",
+     "Copilot arbeitet ausschließlich offline und langsamer"
+    ],
+    "a": 1,
+    "why": "Externe, aufbereitete Inhalte erscheinen im Tenant neben internen Daten, weshalb Nutzer sie fälschlich für firmengeprüft halten können."
+   },
+   {
+    "q": "Was empfiehlt der Artikel für den Umgang mit ungenutzten Copilot-Lizenzen?",
+    "opts": [
+     "Alle Lizenzen dauerhaft den Führungskräften zuweisen",
+     "Lizenzen nie neu verteilen, um Konsistenz zu wahren",
+     "Inaktive Lizenzen einziehen und an Nutzer mit klarer Nutzung vergeben",
+     "Auf die automatische Verteilung durch das System vertrauen"
+    ],
+    "a": 2,
+    "why": "Lizenzberichte regelmäßig prüfen, inaktive Lizenzen einziehen und an aktive Nutzer vergeben, statt Zuweisungen als starr zu betrachten."
+   },
+   {
+    "q": "Wie sollten Administratoren laut Artikel mit Copilot in Edge umgehen?",
+    "opts": [
+     "Ihn sofort abschalten, um Tickets zu vermeiden",
+     "Ihn als identisch mit Office-Copilot kommunizieren",
+     "DLP-Regeln in Edge grundsätzlich ausschalten",
+     "Ihn als leichten Begleiter positionieren und Grenzen klar benennen"
+    ],
+    "a": 3,
+    "why": "Abschalten nimmt legitime Anwendungsfälle; besser ist es, Edge-Copilot für Surfen und schnelle Entwürfe zu positionieren und Grenzen zu erklären."
+   },
+   {
+    "q": "Was sollten Administratoren vor dem Rollout eines Agenten festlegen, der Kunden-E-Mails sendet?",
+    "opts": [
+     "Freigabe- und Human-in-the-Loop-Anforderungen samt Protokollen für Audits",
+     "Nur eine Rechtsprüfung durch externe Anwälte",
+     "Den Verzicht auf jegliche Pilotprojekte",
+     "Eine tenantweite Freigabe ohne weitere Kontrolle"
+    ],
+    "a": 0,
+    "why": "Vorab sollte ein Workflow definiert werden: Wer prüft Ergebnisse, wer gibt final frei und wie werden Audit-Protokolle gespeichert."
+   }
+  ]
+ }
+}

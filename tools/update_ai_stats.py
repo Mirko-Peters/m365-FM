@@ -5,6 +5,9 @@ Quellen
 - bing_ai: Bing Webmaster Tools, AI Performance (Zitate in Microsoft Copilot und Partnern). Dafuer gibt es keine API (Stand 11/2026),
   deshalb kommen die Werte aus dem monatlichen Export von Hand: Workflow-Eingaben bing_* bzw. Umgebung BING_* bzw. Argumente --bing-*.
   citations, pages_per_day, from und to nur zusammen; weekly und retrieved sind optional.
+- google_ai: Google Search Console, Bericht "Generative AI" (Impressionen in AI Overviews und AI Mode; Daten ab 2026-05-18). Dafuer
+  gibt es keine API (Stand 11/2026), deshalb ebenfalls monatlich von Hand: EINE Workflow-Eingabe google_ai bzw. Umgebung GOOGLE_AI bzw.
+  Argument --google-ai mit "schluessel=wert"-Paaren (Format unten). workflow_dispatch erlaubt hoechstens 10 Eingaben, daher ein Feld.
 - gsc: Google Search Console, Search Analytics (Websuche), letzte 3 volle Kalendermonate (am 1. bis 3. eines Monats gilt der Vormonat
   noch nicht als endgueltig und zaehlt nicht mit). Dienstkonto aus GSC_SERVICE_ACCOUNT_JSON (Secret), Property aus GSC_SITE
   (Repo-Variable, Standard sc-domain:m365.fm). HTTP nur mit der Standardbibliothek; fuer die JWT-Signatur (RS256) braucht es das
@@ -32,6 +35,16 @@ data/stats/ai_performance.json
     citations           int   Zitate im Zeitraum
     cited_pages_per_day int   zitierte Seiten pro Tag im Mittel (gerundet)
     weekly              [["YYYY-MM-DD", int], ...]  Datum = Wochenbeginn, aufsteigend, jede Woche beruehrt den Zeitraum
+  google_ai             Karte "Impressionen in Google AI Overviews und AI Mode" (auch /services/ und Mediadaten), nur bei status "ok"
+    status              "ok" | "empty"
+    source              "Google Search Console, Generative AI performance (AI Overviews and AI Mode)"
+    period              {"from", "to"} Zeitraum der Zahlen, from nicht vor 2026-05-18 (oder null)
+    retrieved           "YYYY-MM-DD" Datum des Exports = Stand (oder null)
+    entered             "manual"
+    impressions         int   Impressionen im Zeitraum (oder null)
+    pages               int   Zahl der Seiten mit KI-Impressionen im Zeitraum, optional (oder null; nie aus einem alten Zeitraum)
+    weekly              [["YYYY-MM-DD", int], ...] wie bing_ai.weekly (Impressionen je Woche), optional
+    Fehlt der Block (aeltere Datei), legt das Werkzeug ihn mit status "empty" an.
   gsc                   Karte "Google-Suche" nur bei status "ok"
     status              "ok" | "missing_secret" | "error" | "empty"
     source              "Google Search Console, Search Analytics (web search)"
@@ -57,9 +70,14 @@ Formate der Handeingabe
   weekly mehrzeilig: CSV-Text des Zeitreihen-Exports (Trenner Tab, ";" oder ","; Kopfzeile optional, Spalte mit "Citations"/"Zitate"
   wird bevorzugt, sonst die erste Zahl nach dem Datum). Tageswerte werden zu Wochen ab Montag summiert, angeschnittene Wochen fallen weg.
 - Fehlt weekly, bleiben die bisherigen Wochenwerte stehen, soweit sie im neuen Zeitraum liegen.
+- google_ai (ein Feld): "impressions=123456; pages=420; from=2026-08-01; to=2026-10-31; retrieved=2026-11-04; weekly=2026-08-03=9000, ..."
+  Schluessel gross/klein egal, auch deutsch: impressionen, seiten, von, bis, stand, wochen; Trenner zwischen den Paaren ";" "," "|" oder
+  Zeilenumbruch, "=" oder ":" nach dem Schluessel. impressions, from und to nur zusammen; pages, retrieved und weekly optional; weekly am
+  besten zuletzt (Format wie bing_weekly, bei CSV wird die Spalte "Impressions"/"Impressionen" bevorzugt). from nicht vor 2026-05-18.
+  Fehlt pages, bleibt pages leer (null). Leeres Feld = google_ai bleibt unveraendert.
 
 Aufruf: python tools/update_ai_stats.py [--dry-run] [--skip-gsc] [--data-dir DIR] [--bing-citations N --bing-pages-per-day N
-        --bing-from YYYY-MM-DD --bing-to YYYY-MM-DD [--bing-weekly TEXT] [--bing-retrieved YYYY-MM-DD]]
+        --bing-from YYYY-MM-DD --bing-to YYYY-MM-DD [--bing-weekly TEXT] [--bing-retrieved YYYY-MM-DD]] [--google-ai TEXT]
 Test:   python tools/test_update_ai_stats.py"""
 import argparse, base64, csv, json, os, re, sys, time, urllib.error, urllib.parse, urllib.request
 from datetime import date, datetime, timedelta, timezone
@@ -69,8 +87,11 @@ ROOT = Path(__file__).resolve().parent.parent
 STATS = ROOT / "data" / "stats"
 AI_FILE, DIFF_FILE = "ai_performance.json", "topic_difficulty.json"
 STATUSES = ("ok", "missing_secret", "error", "empty")
+GOOGLE_STATUSES = ("ok", "empty")
 BING_SOURCE = "Bing Webmaster Tools, AI Performance (Microsoft Copilot and partners)"
 GSC_SOURCE = "Google Search Console, Search Analytics (web search)"
+GOOGLE_AI_SOURCE = "Google Search Console, Generative AI performance (AI Overviews and AI Mode)"
+GOOGLE_AI_START = date(2026, 5, 18)       # erster Tag mit Daten im Bericht "Generative AI" der Search Console
 GSC_DEFAULT_SITE = "sc-domain:m365.fm"
 GSC_SCOPE = "https://www.googleapis.com/auth/webmasters.readonly"
 GSC_API = "https://searchconsole.googleapis.com/webmasters/v3/sites/{site}/searchAnalytics/query"
@@ -81,15 +102,24 @@ DUE_DAYS = 35                             # aelterer Bing-Export -> Hinweis "neu
 WEEKLY_TOLERANCE = 1.25                   # Summe der Wochenwerte darf citations um hoechstens 25 % uebersteigen
 RETRY_WAIT = (5, 15)                      # Wartezeiten bei 429/5xx/Netzfehlern
 BING_KEYS = ("status", "source", "period", "retrieved", "entered", "citations", "cited_pages_per_day", "weekly")
+GOOGLE_KEYS = ("status", "source", "period", "retrieved", "entered", "impressions", "pages", "weekly")
 GSC_KEYS = ("status", "source", "property", "period", "retrieved", "entered", "clicks", "impressions", "ctr", "position", "pages",
             "pages_clicked", "note")
 INPUTS = {   # Feld: (Umgebungsvariable = Workflow-Eingabe in Grossbuchstaben, Name der Workflow-Eingabe)
     "citations": ("BING_CITATIONS", "bing_citations"), "pages": ("BING_PAGES_PER_DAY", "bing_pages_per_day"),
     "from": ("BING_FROM", "bing_from"), "to": ("BING_TO", "bing_to"), "weekly": ("BING_WEEKLY", "bing_weekly"),
     "retrieved": ("BING_RETRIEVED", "bing_retrieved")}
+GOOGLE_INPUT = ("GOOGLE_AI", "google_ai")   # eine Eingabe mit "schluessel=wert"-Paaren (workflow_dispatch: hoechstens 10 Eingaben)
+GOOGLE_FIELDS = {   # Schluessel in der Eingabe google_ai -> Feld (gross/klein egal)
+    "impressions": "impressions", "impression": "impressions", "impr": "impressions", "impressionen": "impressions",
+    "pages": "pages", "page": "pages", "seiten": "pages",
+    "from": "from", "von": "from", "start": "from", "to": "to", "bis": "to", "end": "to",
+    "retrieved": "retrieved", "stand": "retrieved", "abgerufen": "retrieved", "export": "retrieved",
+    "weekly": "weekly", "weeks": "weekly", "wochen": "weekly"}
 DOC = ("Belegzahlen fuer /sponsor/ (T37). Pflege: .github/workflows/ai-stats.yml mit tools/update_ai_stats.py (Felder im Kopf des "
        "Werkzeugs). bing_ai: Bing Webmaster Tools AI Performance, keine API, Werte aus dem monatlichen Export per Workflow-Eingaben. "
-       "gsc: Google Search Console per Dienstkonto. Nur Summen, keine Suchanfragen oder Einzel-URLs.")
+       "google_ai: Google Search Console Generative AI (AI Overviews und AI Mode), keine API, Impressionen aus dem monatlichen "
+       "Export per Workflow-Eingabe google_ai. gsc: Google Search Console per Dienstkonto. Nur Summen, keine Suchanfragen oder Einzel-URLs.")
 SLEEP = time.sleep
 
 
@@ -169,22 +199,26 @@ def iso(s, what, today=None):
 SEPS = "=,;:|\t \"'"
 
 
-def _rows_single(text):
+BING_COL = (r"citation|zitat|zitier", r"share|anteil|page|seite")      # bevorzugte CSV-Spalte (Muster, Ausschluss)
+GOOGLE_COL = (r"impression", r"share|anteil|ctr|click|klick|page|seite")
+
+
+def _rows_single(text, what="bing_weekly"):
     """Einzeilig: Datum, Trenner, Zahl, Datum, Trenner, Zahl ..."""
     hits = list(DATE_ANY.finditer(text))
     if not hits:
-        raise Invalid("bing_weekly: kein Datum gefunden")
+        raise Invalid(f"{what}: kein Datum gefunden")
     if re.search(r"\d", text[:hits[0].start()]):
-        raise Invalid(f"bing_weekly: unerwarteter Text vor dem ersten Datum: '{text[:hits[0].start()][:40]}'")
+        raise Invalid(f"{what}: unerwarteter Text vor dem ersten Datum: '{text[:hits[0].start()][:40]}'")
     rows = []
     for i, m in enumerate(hits):
         d = _date_of(m)
         if not d:
-            raise Invalid(f"bing_weekly: '{m.group(0)}' ist kein gueltiges Datum")
+            raise Invalid(f"{what}: '{m.group(0)}' ist kein gueltiges Datum")
         chunk = text[m.end():hits[i + 1].start() if i + 1 < len(hits) else len(text)].strip(SEPS)
         if not chunk:
-            raise Invalid(f"bing_weekly: kein Wert nach {m.group(0)}")
-        rows.append((d, parse_int(chunk, f"bing_weekly {m.group(0)}")))
+            raise Invalid(f"{what}: kein Wert nach {m.group(0)}")
+        rows.append((d, parse_int(chunk, f"{what} {m.group(0)}")))
     return rows
 
 
@@ -195,11 +229,12 @@ def _delimiter(lines):
     return None
 
 
-def _rows_csv(text):
-    """Mehrzeilig: CSV-Export. Kopfzeile optional; Spalte "Citations"/"Zitate" bevorzugt, sonst erste Zahl nach dem Datum."""
+def _rows_csv(text, what="bing_weekly", col_rx=BING_COL):
+    """Mehrzeilig: CSV-Export. Kopfzeile optional; Spalte nach col_rx bevorzugt (Bing "Citations"/"Zitate", Google "Impressions"),
+    sonst erste Zahl nach dem Datum."""
     lines = [ln for ln in text.splitlines() if ln.strip()]
     if len(lines) > 1000:
-        raise Invalid("bing_weekly: mehr als 1000 Zeilen")
+        raise Invalid(f"{what}: mehr als 1000 Zeilen")
     dl = _delimiter(lines)
     table = list(csv.reader(lines, delimiter=dl)) if dl else [ln.split() for ln in lines]
     col, rows = None, []
@@ -208,36 +243,36 @@ def _rows_csv(text):
         di = next((i for i, c in enumerate(cells) if cell_date(c)), None)
         if di is None:
             if not rows and not any(INT_RX.fullmatch(c) for c in cells):         # Kopfzeile
-                col = next((i for i, c in enumerate(cells) if re.search(r"citation|zitat|zitier", c, re.I)
-                            and not re.search(r"share|anteil|page|seite", c, re.I)), None)
+                col = next((i for i, c in enumerate(cells) if re.search(col_rx[0], c, re.I)
+                            and not re.search(col_rx[1], c, re.I)), None)
                 continue
             if re.match(r"(total|summe|gesamt|sum)\b", cells[0], re.I):         # Summenzeile des Exports
                 continue
-            raise Invalid(f"bing_weekly Zeile {no}: kein Datum gefunden")
+            raise Invalid(f"{what} Zeile {no}: kein Datum gefunden")
         if col is not None and col != di:
             if col >= len(cells):
-                raise Invalid(f"bing_weekly Zeile {no}: Spalte {col + 1} fehlt")
-            v = parse_int(cells[col], f"bing_weekly Zeile {no}")
+                raise Invalid(f"{what} Zeile {no}: Spalte {col + 1} fehlt")
+            v = parse_int(cells[col], f"{what} Zeile {no}")
         else:
             nums = [c for c in cells[di + 1:] if c]
             if not nums:
-                raise Invalid(f"bing_weekly Zeile {no}: kein Wert")
-            v = parse_int(nums[0], f"bing_weekly Zeile {no}")
+                raise Invalid(f"{what} Zeile {no}: kein Wert")
+            v = parse_int(nums[0], f"{what} Zeile {no}")
         rows.append((cell_date(cells[di]), v))
     return rows
 
 
-def parse_weekly(text):
+def parse_weekly(text, what="bing_weekly", col_rx=BING_COL):
     """Text -> [["YYYY-MM-DD", n], ...] mit Wochenbeginn; Tageswerte werden zu vollen Wochen ab Montag summiert."""
     t = (text or "").strip()
     if not t:
         return []
-    rows = _rows_csv(t) if "\n" in t else _rows_single(t)
+    rows = _rows_csv(t, what, col_rx) if "\n" in t else _rows_single(t, what)
     rows.sort()
     ds = [d for d, _ in rows]
     if len(set(ds)) != len(ds):
         dup = sorted({d for d in ds if ds.count(d) > 1})[0]
-        raise Invalid(f"bing_weekly: Datum {dup.isoformat()} doppelt")
+        raise Invalid(f"{what}: Datum {dup.isoformat()} doppelt")
     gaps = {(b - a).days for a, b in zip(ds, ds[1:])}
     if not gaps or gaps == {7}:
         out = rows
@@ -247,11 +282,11 @@ def parse_weekly(text):
             weeks.setdefault(d - timedelta(days=d.weekday()), []).append(v)
         out = [(w, sum(vs)) for w, vs in sorted(weeks.items()) if len(vs) == 7]
         if not out:
-            raise Invalid("bing_weekly: Tageswerte ergeben keine volle Woche (Montag bis Sonntag)")
+            raise Invalid(f"{what}: Tageswerte ergeben keine volle Woche (Montag bis Sonntag)")
     else:
-        raise Invalid("bing_weekly: Daten muessen 7 Tage (Wochenwerte) oder 1 Tag (Tageswerte) auseinander liegen")
+        raise Invalid(f"{what}: Daten muessen 7 Tage (Wochenwerte) oder 1 Tag (Tageswerte) auseinander liegen")
     if len(out) > 104:
-        raise Invalid("bing_weekly: mehr als 104 Wochen")
+        raise Invalid(f"{what}: mehr als 104 Wochen")
     return [[d.isoformat(), v] for d, v in out]
 
 
@@ -288,8 +323,7 @@ def bing_manual(vals, today, old):
         if bad:
             raise Invalid(f"bing_weekly: Woche {bad[0]} liegt ausserhalb des Zeitraums {frm} bis {to}")
     else:
-        weekly = [list(r) for r in (old.get("weekly") or []) if isinstance(r, list) and len(r) == 2
-                  and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(r[0])) and in_window(date.fromisoformat(r[0]), frm, to)]
+        weekly = _weekly_in(old, frm, to)
         notes.append(("notice", f"bing_weekly leer: {len(weekly)} bisherige Wochenwerte im neuen Zeitraum bleiben stehen"))
     total = sum(v for _, v in weekly)
     if weekly and total > cit * WEEKLY_TOLERANCE:
@@ -298,6 +332,90 @@ def bing_manual(vals, today, old):
     out = {"status": "ok", "source": BING_SOURCE, "period": {"from": frm.isoformat(), "to": to.isoformat()},
            "retrieved": got.isoformat(), "entered": "manual", "citations": cit, "cited_pages_per_day": ppd, "weekly": weekly}
     out.update(blk)
+    return out, notes
+
+
+# ---- Google Search Console, Generative AI (Handeingabe, ein Feld) ----
+KEY_RX = re.compile(r"(?<![A-Za-z0-9_])([A-Za-z][A-Za-z_]*)\s*[=:](?!//)")
+PAIR_SEPS = ";,|\t\n\r "
+
+
+def parse_google_input(text):
+    """'impressions=123456; pages=420; from=...; to=...; retrieved=...; weekly=...' -> {Feld: Text}. Leer -> {}.
+    Werte reichen bis zum naechsten Schluessel (so darf weekly selbst "=" und "," enthalten)."""
+    t = (text or "").strip()
+    if not t:
+        return {}
+    name = GOOGLE_INPUT[1]
+    keys = [m for m in KEY_RX.finditer(t)]
+    if not keys:
+        raise Invalid(f"{name}: keine Angabe 'schluessel=wert' gefunden (Beispiel: impressions=123456; from=2026-08-01; to=2026-10-31)")
+    head = t[:keys[0].start()].strip(PAIR_SEPS)
+    if head:
+        raise Invalid(f"{name}: unerwarteter Text vor dem ersten Schluessel: '{head[:40]}' (Beispiel: impressions=123456; ...)")
+    out = {}
+    for i, m in enumerate(keys):
+        k = m.group(1).lower()
+        if k not in GOOGLE_FIELDS:
+            raise Invalid(f"{name}: unbekannter Schluessel '{m.group(1)}' (erlaubt: impressions, pages, from, to, retrieved, weekly)")
+        f = GOOGLE_FIELDS[k]
+        if f in out:
+            raise Invalid(f"{name}: '{f}' doppelt angegeben")
+        v = t[m.end():keys[i + 1].start() if i + 1 < len(keys) else len(t)].strip(PAIR_SEPS)
+        out[f] = v
+    return {k: v for k, v in out.items() if v}
+
+
+def _weekly_in(old, frm, to):
+    return [list(r) for r in (old.get("weekly") or []) if isinstance(r, list) and len(r) == 2
+            and re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(r[0])) and in_window(date.fromisoformat(r[0]), frm, to)]
+
+
+def google_empty():
+    return {"status": "empty", "source": GOOGLE_AI_SOURCE, "period": None, "retrieved": None, "entered": "manual",
+            "impressions": None, "pages": None, "weekly": []}
+
+
+def google_manual(text, today, old):
+    """text: Inhalt der Eingabe google_ai. None, wenn leer; sonst neuer google_ai-Block (oder Invalid)."""
+    given = parse_google_input(text)
+    if not given:
+        return None, []
+    name, what = GOOGLE_INPUT[1], "Google AI (Search Console Generative AI)"
+    missing = [k for k in ("impressions", "from", "to") if k not in given]
+    if missing:
+        raise Invalid(f"{what}: " + ", ".join(missing) + f" fehlt in {name} (impressions, from und to nur zusammen eingeben; "
+                      "Beispiel: impressions=123456; pages=420; from=2026-08-01; to=2026-10-31)")
+    frm, to = iso(given["from"], f"{name} from", today), iso(given["to"], f"{name} to", today)
+    if frm < GOOGLE_AI_START:
+        raise Invalid(f"{what}: from {frm} liegt vor {GOOGLE_AI_START} (erster Tag mit Daten im Bericht Generative AI)")
+    if frm > to:
+        raise Invalid(f"{what}: from {frm} liegt nach to {to}")
+    if (to - frm).days > 400:
+        raise Invalid(f"{what}: Zeitraum laenger als 400 Tage")
+    got = iso(given["retrieved"], f"{name} retrieved", today) if "retrieved" in given else today
+    if got < to:
+        raise Invalid(f"{what}: retrieved {got} liegt vor dem Ende des Zeitraums {to}")
+    imp = parse_int(given["impressions"], f"{name} impressions")
+    pages = parse_int(given["pages"], f"{name} pages") if "pages" in given else None
+    if pages is not None and pages > imp:
+        raise Invalid(f"{what}: pages {pages:,} ist groesser als impressions {imp:,} (jede Seite braucht mindestens eine Impression)")
+    notes = []
+    if "weekly" in given:
+        weekly = parse_weekly(given["weekly"], f"{name} weekly", GOOGLE_COL)
+        bad = [d for d, _ in weekly if not in_window(date.fromisoformat(d), frm, to)]
+        if bad:
+            raise Invalid(f"{name} weekly: Woche {bad[0]} liegt ausserhalb des Zeitraums {frm} bis {to}")
+    else:
+        weekly = _weekly_in(old, frm, to)
+        if weekly:
+            notes.append(("notice", f"{name} ohne weekly: {len(weekly)} bisherige Wochenwerte im neuen Zeitraum bleiben stehen"))
+    total = sum(v for _, v in weekly)
+    if weekly and total > imp * WEEKLY_TOLERANCE:
+        raise Invalid(f"{what}: Summe der Wochenwerte {total:,} ist mehr als 25 % groesser als impressions {imp:,}")
+    out = {"status": "ok", "source": GOOGLE_AI_SOURCE, "period": {"from": frm.isoformat(), "to": to.isoformat()},
+           "retrieved": got.isoformat(), "entered": "manual", "impressions": imp, "pages": pages, "weekly": weekly}
+    out.update({k: v for k, v in old.items() if k not in GOOGLE_KEYS})
     return out, notes
 
 
@@ -491,6 +609,47 @@ def _period(p, what, errs, today, null):
     return a, b
 
 
+def _weekly_ok(wk, name, total_key, b, a, z, errs, today):
+    """Wochenreihe pruefen: [Datum, Zahl], aufsteigend, im Zeitraum, Summe hoechstens 25 % ueber der Gesamtzahl."""
+    if not isinstance(wk, list):
+        errs.append(f"{name}.weekly: Liste erwartet"); return
+    prev = None
+    for r in wk:
+        if not (isinstance(r, list) and len(r) == 2):
+            errs.append(f"{name}.weekly: Eintrag {r!r} ist kein [Datum, Zahl]"); break
+        d = _day(r[0], f"{name}.weekly Datum", errs, today, False)
+        _num(r[1], f"{name}.weekly {r[0]}", errs, False, hi=10 ** 9)
+        if d and prev and d <= prev:
+            errs.append(f"{name}.weekly: {r[0]} nicht aufsteigend")
+        if d and a and z and not in_window(d, a, z):
+            errs.append(f"{name}.weekly: {r[0]} liegt ausserhalb von period")
+        prev = d or prev
+    tot = sum(r[1] for r in wk if isinstance(r, list) and len(r) == 2 and isinstance(r[1], int))
+    if wk and isinstance(b.get(total_key), int) and tot > b[total_key] * WEEKLY_TOLERANCE:
+        errs.append(f"{name}.weekly: Summe mehr als 25 % ueber {total_key}")
+
+
+def validate_google(b, today, errs):
+    if not isinstance(b, dict):
+        errs.append("google_ai: Objekt erwartet"); return
+    ok = b.get("status") == "ok"
+    if b.get("status") not in GOOGLE_STATUSES:
+        errs.append(f"google_ai.status: {b.get('status')!r} (erlaubt: {', '.join(GOOGLE_STATUSES)})")
+    if not isinstance(b.get("source"), str) or not b.get("source", "").strip():
+        errs.append("google_ai.source fehlt")
+    a, z = _period(b.get("period"), "google_ai.period", errs, today, not ok)
+    if a and a < GOOGLE_AI_START:
+        errs.append(f"google_ai.period.from liegt vor {GOOGLE_AI_START}")
+    got = _day(b.get("retrieved"), "google_ai.retrieved", errs, today, not ok)
+    if got and z and got < z:
+        errs.append("google_ai.retrieved liegt vor dem Ende des Zeitraums")
+    _num(b.get("impressions"), "google_ai.impressions", errs, not ok, hi=10 ** 11)
+    _num(b.get("pages"), "google_ai.pages", errs, True, hi=10 ** 8)
+    if all(isinstance(b.get(k), int) for k in ("pages", "impressions")) and b["pages"] > b["impressions"]:
+        errs.append("google_ai.pages groesser als google_ai.impressions")
+    _weekly_ok(b.get("weekly"), "google_ai", "impressions", b, a, z, errs, today)
+
+
 def validate_ai(doc, today):
     errs = []
     if not isinstance(doc, dict) or doc.get("version") != 1:
@@ -512,23 +671,7 @@ def validate_ai(doc, today):
         if name == "bing_ai":
             _num(b.get("citations"), "bing_ai.citations", errs, not ok, hi=10 ** 10)
             _num(b.get("cited_pages_per_day"), "bing_ai.cited_pages_per_day", errs, not ok, integer=False, hi=10 ** 7)
-            wk = b.get("weekly")
-            if not isinstance(wk, list):
-                errs.append("bing_ai.weekly: Liste erwartet"); continue
-            prev = None
-            for r in wk:
-                if not (isinstance(r, list) and len(r) == 2):
-                    errs.append(f"bing_ai.weekly: Eintrag {r!r} ist kein [Datum, Zahl]"); break
-                d = _day(r[0], "bing_ai.weekly Datum", errs, today, False)
-                _num(r[1], f"bing_ai.weekly {r[0]}", errs, False, hi=10 ** 9)
-                if d and prev and d <= prev:
-                    errs.append(f"bing_ai.weekly: {r[0]} nicht aufsteigend")
-                if d and a and z and not in_window(d, a, z):
-                    errs.append(f"bing_ai.weekly: {r[0]} liegt ausserhalb von period")
-                prev = d or prev
-            tot = sum(r[1] for r in wk if isinstance(r, list) and len(r) == 2 and isinstance(r[1], int))
-            if wk and isinstance(b.get("citations"), int) and tot > b["citations"] * WEEKLY_TOLERANCE:
-                errs.append("bing_ai.weekly: Summe mehr als 25 % ueber citations")
+            _weekly_ok(b.get("weekly"), "bing_ai", "citations", b, a, z, errs, today)
         else:
             for k in ("clicks", "impressions", "pages", "pages_clicked"):
                 _num(b.get(k), f"gsc.{k}", errs, not ok or k.startswith("pages"))
@@ -538,6 +681,8 @@ def validate_ai(doc, today):
                 errs.append("gsc.clicks groesser als gsc.impressions")
             if not isinstance(b.get("note", ""), str):
                 errs.append("gsc.note: Text erwartet")
+    if "google_ai" in doc:   # fehlt in aelteren Dateien; main() legt ihn dann an
+        validate_google(doc["google_ai"], today, errs)
     return errs
 
 
@@ -565,6 +710,7 @@ def skeleton():
     return {"version": 1, "_doc": DOC, "updated": None,
             "bing_ai": {"status": "empty", "source": BING_SOURCE, "period": None, "retrieved": None, "entered": "manual",
                         "citations": None, "cited_pages_per_day": None, "weekly": []},
+            "google_ai": google_empty(),
             "gsc": gsc_block({"status": "missing_secret", "property": GSC_DEFAULT_SITE})}
 
 
@@ -596,10 +742,13 @@ def summary(env, doc, changed, dry):
     path = env.get("GITHUB_STEP_SUMMARY")
     if not path:
         return
-    b, g = doc["bing_ai"], doc["gsc"]
+    b, g, ga = doc["bing_ai"], doc["gsc"], doc.get("google_ai") or google_empty()
     per = lambda x: f"{x['period']['from']} bis {x['period']['to']}" if x.get("period") else "-"
     rows = [("Bing AI Performance", b["status"], per(b), b.get("retrieved") or "-",
              f"{b.get('citations') or 0:,} Zitate, {b.get('cited_pages_per_day') or 0:,} Seiten/Tag, {len(b.get('weekly') or [])} Wochen"),
+            ("Google AI (Generative AI)", ga["status"], per(ga), ga.get("retrieved") or "-",
+             f"{ga.get('impressions') or 0:,} Impressionen" + (f", {ga['pages']:,} Seiten" if isinstance(ga.get("pages"), int) else "")
+             + f", {len(ga.get('weekly') or [])} Wochen"),
             ("Search Console", g["status"], per(g), g.get("retrieved") or "-",
              f"{g.get('clicks') or 0:,} Klicks, {g.get('impressions') or 0:,} Impressionen {g.get('note') or ''}".strip())]
     txt = ["### Belegzahlen /sponsor/", "", "| Quelle | Status | Zeitraum | Stand | Werte |", "|---|---|---|---|---|"]
@@ -616,6 +765,8 @@ def args_of(argv):
     ap.add_argument("--data-dir", help="Ordner mit ai_performance.json und topic_difficulty.json (Standard data/stats)")
     for k, (_, name) in INPUTS.items():
         ap.add_argument("--" + name.replace("_", "-"), dest=k, help=f"wie Workflow-Eingabe {name}")
+    ap.add_argument("--google-ai", dest="google_ai", help="wie Workflow-Eingabe google_ai: 'impressions=N; pages=N; from=YYYY-MM-DD; "
+                    "to=YYYY-MM-DD; retrieved=YYYY-MM-DD; weekly=...'")
     return ap.parse_args(argv)
 
 
@@ -656,6 +807,24 @@ def main(argv=None, env=None, today=None, now=None):
             if age is None or age > DUE_DAYS:
                 emit("warning", "Bing AI Performance: neuer Export faellig" + (f" (letzter Stand {got}, vor {age} Tagen)" if got else "")
                      + " - Werte ueber die Workflow-Eingaben bing_* eintragen")
+        old_g = old.get("google_ai") if isinstance(old.get("google_ai"), dict) else {}
+        if "google_ai" not in new:
+            new["google_ai"] = google_empty()
+            emit("notice", "google_ai fehlt in der Datei, wird mit status empty angelegt")
+        g_text = a.google_ai if a.google_ai is not None else env.get(GOOGLE_INPUT[0], "")
+        gai, notes = google_manual(g_text, today, old_g)
+        for n in notes: emit(*n)
+        if gai:
+            new["google_ai"] = gai
+            emit("notice", f"Google AI {gai['period']['from']} bis {gai['period']['to']}: {gai['impressions']:,} Impressionen"
+                           + (f", {gai['pages']:,} Seiten" if gai["pages"] is not None else "")
+                           + f", {len(gai['weekly'])} Wochen (Stand {gai['retrieved']})")
+        else:
+            got = old_g.get("retrieved")
+            age = (today - date.fromisoformat(got)).days if got else None
+            if age is None or age > DUE_DAYS:
+                emit("warning", "Google AI (Search Console Generative AI): neuer Export faellig"
+                     + (f" (letzter Stand {got}, vor {age} Tagen)" if got else "") + " - Werte ueber die Workflow-Eingabe google_ai eintragen")
         if a.skip_gsc:
             emit("notice", "Search Console uebersprungen (--skip-gsc)")
         else:

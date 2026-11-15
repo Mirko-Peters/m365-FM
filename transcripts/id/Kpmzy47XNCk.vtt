@@ -1,0 +1,1594 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.440
+Topik hari ini adalah topik yang hampir semua orang perhatikan, tapi sedikit yang benar-benar paham.
+
+00:00:03.720 --> 00:00:05.080
+Co-pilot di Microsoft Entra ID.
+
+00:00:05.860 --> 00:00:08.840
+Anda mungkin pernah melihat namanya di pusat admin Anda atau mendengarnya disebut dikonferensi.
+
+00:00:09.240 --> 00:00:10.040
+Jadi apa sebenarnya fungsinya?
+
+00:00:10.320 --> 00:00:13.420
+Apakah itu hanya chatbot yang menjawab pertanyaan dasar atau sesuatu yang jauh lebih besar?
+
+00:00:13.700 --> 00:00:14.820
+Inilah cara termudian untuk memikirkan.
+
+00:00:15.300 --> 00:00:19.820
+Bayangkan Anda seorang admin TI dan seorang pengguna menelpon helpdesk dengan frustrasi karena mereka tidak bisa mengakses jadat.
+
+00:00:20.020 --> 00:00:21.580
+Mereka membuang waktu dan butuh jawaban sekarang juga.
+
+00:00:21.880 --> 00:00:23.020
+Tugas Anda adalah mencari tahu alasan.
+
+00:00:23.380 --> 00:00:27.580
+Anda membuka pusat admin Entra, menafigasi ke log masuk, memfilter berdasarkan nama pengguna,
+
+00:00:27.580 --> 00:00:31.700
+dan Anda menetap lembar data mentah, ID korelasi, kode kesalahan, stempel waktu, dan blob JSON.
+
+00:00:32.180 --> 00:00:34.440
+Di suatu tempat dalam kekacauan itu ada jawabannya tetap dimiliki.
+
+00:00:34.840 --> 00:00:38.060
+Jika Anda seorang admin junior atau baru di Entra, Anda tidak tahu harus menai derimata.
+
+00:00:38.500 --> 00:00:39.760
+Itulah masalah yang diselesaikan Co-pilot.
+
+00:00:40.040 --> 00:00:43.380
+Di akhir penjelasan singkat ini, Anda akan mengerti apa sebenarnya Co-pilot di Entra ID,
+
+00:00:43.640 --> 00:00:46.000
+bagaimana ia mengubah log kompleks menjadi jawaban bahasa manusia,
+
+00:00:46.180 --> 00:00:47.840
+dan mengapa hal itu mengubah manajemen identitas.
+
+00:00:48.220 --> 00:00:52.000
+Tanpa bahasa-bahasi pemasaran, hanya dasar-dasar masalah, pemecahan masalah identitas.
+
+00:00:52.660 --> 00:00:54.420
+Mari kita lihat masalah yang diselesaikan Co-pilot.
+
+00:00:54.420 --> 00:00:56.940
+Karena untuk memahami mengapa asisten A itu penting,
+
+00:00:57.720 --> 00:01:00.160
+Anda harus melihat betapa sulitnya pemecahan masalah identitas.
+
+00:01:01.120 --> 00:01:02.540
+Pikirkan tentang skala identitas modern.
+
+00:01:03.160 --> 00:01:05.640
+Dalam organisasi pada umumnya, ribbon login terjadi setiap hari.
+
+00:01:06.660 --> 00:01:08.760
+Ada yang berhasil, ada yang gagal, ada yang diblokir oleh kebijakan.
+
+00:01:09.320 --> 00:01:12.780
+Anda memiliki ratusan kebijakan akses bersyarat yang berinteraksi dengan cara yang tidak terduga.
+
+00:01:13.140 --> 00:01:17.320
+Dan di atas itu, perlindungan identitas menghasilkan sinyal risiko untuk pengguna yang mungkin disusupi.
+
+00:01:17.900 --> 00:01:19.800
+Itu adalah banyak data dari banyak tempat yang berbeda.
+
+00:01:20.300 --> 00:01:23.260
+Sekarang bayangkan Anda mencoba mencari tahu mengapa pengguna tertentu diblokir.
+
+00:01:23.260 --> 00:01:26.160
+Anda mulai dari log masuk dan menemukan peristiwanya, tetap itu.
+
+00:01:26.360 --> 00:01:28.340
+Hanya memberitahu Anda bahwa login gagal, bukan alasannya.
+
+00:01:28.780 --> 00:01:32.440
+Jadi, Anda melompat ke tab akses bersyarat, lalu memeriksa kepatuhan perangkat pengguna,
+
+00:01:32.660 --> 00:01:35.280
+lalu log audit untuk melihat apakah ada kebijakan yang baru diubah,
+
+00:01:35.580 --> 00:01:37.920
+lalu membuka perlindungan identitas untuk memeriksa deteksi risiko.
+
+00:01:38.620 --> 00:01:41.240
+Setiap hal ini merupakan tab terpisah dengan tampilan dan filternya sendiri.
+
+00:01:41.940 --> 00:01:44.920
+Saat Anda selesai menghubungkan semua titik, 15 atau 20 menit sudah berlalu.
+
+00:01:45.620 --> 00:01:46.960
+Hambatan bahasa membuatnya menjadi lebih buruk.
+
+00:01:47.440 --> 00:01:48.660
+Log mentah tidak menggunakan bahasa yang sederhana.
+
+00:01:48.660 --> 00:01:53.500
+Log tersebut berbicara dalam kode teknis ID korelasi yang terlihat seperti rangkaian acak,
+
+00:01:53.640 --> 00:01:57.500
+nomer kesalahan yang harus Anda cari, dan blog JSON dengan bidang bersarang yang sulit diurai.
+
+00:01:58.620 --> 00:02:02.180
+Jika Anda seorang admin junior atau staff helpdesk, Anda tidak tahu kolom mana yang harus dilihat,
+
+00:02:02.280 --> 00:02:04.620
+sehingga Anda melimpakannya ke admin senior yang sudah kewalahan.
+
+00:02:05.080 --> 00:02:05.560
+Ini contoh nyata.
+
+00:02:06.120 --> 00:02:09.660
+Seorang pengguna menelpon helpdesk dan mengatakan mereka tidak bisa mengakses Microsoft Teams.
+
+00:02:10.420 --> 00:02:11.440
+Itu saja informasi yang Anda miliki.
+
+00:02:11.440 --> 00:02:12.560
+Dari mana Anda harus mulai?
+
+00:02:12.820 --> 00:02:16.640
+Apakah Anda meriksa lisensi pengguna, kepatuhan perangkatnya, kebijakan akses bersyarat log masuk,
+
+00:02:16.860 --> 00:02:17.800
+atau skor risikonya?
+
+00:02:18.280 --> 00:02:21.000
+Tanpa pengetang Entra, Anda pada dasarnya hanya menebak dan begitu membuang waktu.
+
+00:02:21.440 --> 00:02:22.820
+Di sini peran copilot sangat dibutuhkan.
+
+00:02:23.500 --> 00:02:24.800
+Apa itu security copilot di Entra ID?
+
+00:02:25.460 --> 00:02:27.800
+Jadi apa sebenarnya security copilot di Entra ID itu?
+
+00:02:28.240 --> 00:02:29.240
+Rikur definisi paling sederhananya.
+
+00:02:29.640 --> 00:02:32.320
+Ini adalah asisten AI yang dibangun langsung ke dalam pusat admin Entra,
+
+00:02:32.420 --> 00:02:35.300
+bukan situs web atau portal terpisah yang harus Anda masuki secara terpisah.
+
+00:02:35.700 --> 00:02:37.340
+Fitur ini tersemat di tempat Anda bekerja,
+
+00:02:37.340 --> 00:02:41.280
+seperti memiliki satpam yang mengetahui setiap log, setiap kebijakan, dan setiap pengguna di dalam gedung.
+
+00:02:41.840 --> 00:02:43.540
+Anda tidak perlu lagi bersusah payah mencari informasi.
+
+00:02:43.880 --> 00:02:44.540
+Anda tinggal bertanya.
+
+00:02:45.420 --> 00:02:46.180
+Begini cara kerjanya.
+
+00:02:46.640 --> 00:02:48.340
+Anda mengetik pertanyaan dalam bahasa yang sudah dipahami,
+
+00:02:48.440 --> 00:02:50.220
+seperti tunjukkan pengguna berisiko tinggi di penyewasa,
+
+00:02:50.580 --> 00:02:51.780
+atau mengapa masuk ini gagal.
+
+00:02:52.600 --> 00:02:55.300
+Atau rangkum aktivitas masuk selama 24 jam terakhir.
+
+00:02:56.100 --> 00:02:58.420
+Copilot menerima pertanyaan itu meminta data Entra Anda
+
+00:02:58.420 --> 00:03:00.220
+dan memberi Anda jawaban dalam bahasa alami.
+
+00:03:00.880 --> 00:03:03.780
+Ia terhubung ke log masuk, log audit, kebijakan akses bersyarat,
+
+00:03:03.780 --> 00:03:05.540
+perlindungan identitas, dan detail pengguna.
+
+00:03:05.540 --> 00:03:07.500
+Semua data itu sudah ada di Entra,
+
+00:03:07.600 --> 00:03:09.980
+tetapi Copilot menggabungkannya dalam hitungan detik, bukan menit.
+
+00:03:10.460 --> 00:03:11.500
+Dan inilah poin kuncinya.
+
+00:03:11.700 --> 00:03:13.460
+Copilot tidak hanya membuang data mentah kepada Anda.
+
+00:03:13.960 --> 00:03:16.220
+Ia memberikan ringkasan, narasi, dan penjelasan.
+
+00:03:16.580 --> 00:03:18.240
+Daripada menatap tabel kode kesalahan,
+
+00:03:18.520 --> 00:03:20.020
+Anda mendapatkan informasi seperti,
+
+00:03:20.280 --> 00:03:23.020
+pengguna ini diblokir karena kebijakan akses bersyarat X
+
+00:03:23.020 --> 00:03:25.500
+memerlukan perangkat yang patuh dan perangkat mereka tidak patuh.
+
+00:03:25.980 --> 00:03:27.460
+Itu adalah sesuatu yang bisa segera Anda tindak lanjut.
+
+00:03:27.940 --> 00:03:30.520
+Copilot juga menyarankan perintah lanjutan berdasarkan konteks.
+
+00:03:30.980 --> 00:03:32.660
+Setelah menjawab pertanyaan pertama Anda,
+
+00:03:32.880 --> 00:03:33.660
+ia mungkin bertanya,
+
+00:03:33.660 --> 00:03:35.660
+apakah Anda ingin melihat semua kegagalan masuk
+
+00:03:35.660 --> 00:03:37.280
+untuk pengguna ini dalam tujuh hari terakhir?
+
+00:03:38.060 --> 00:03:40.080
+Atau apakah Anda ingin tahu kebijakan lain apa yang berlaku?
+
+00:03:41.080 --> 00:03:42.320
+Ia memandu Anda langkah demi langkah,
+
+00:03:42.440 --> 00:03:43.920
+bukannya memikirkan langkah selanjutnya sendirian.
+
+00:03:44.560 --> 00:03:45.160
+Ini suara lagi.
+
+00:03:45.640 --> 00:03:47.900
+Data Entra adalah perpustakaan yang penuh dengan informasi,
+
+00:03:48.040 --> 00:03:49.340
+tetapi menemukan buku yang tepat butuh.
+
+00:03:49.660 --> 00:03:52.160
+Copilot adalah pustakawan yang tahu persis di mana semuanya berada.
+
+00:03:52.560 --> 00:03:54.200
+Anda memberitahu apa yang Anda butuhkan dan mereka mawakannya.
+
+00:03:54.540 --> 00:03:55.320
+Tidak perlu menyusuri lorong,
+
+00:03:55.420 --> 00:03:57.240
+tidak perlu menembak rak, cukup jawaban saat Anda membutuhkannya.
+
+00:03:57.900 --> 00:03:58.720
+Kasus penggunaan pertama,
+
+00:03:59.040 --> 00:03:59.940
+pemecahan masalah masuk.
+
+00:03:59.940 --> 00:04:01.860
+Mari kita buat ini nyata dengan contoh konkret.
+
+00:04:02.500 --> 00:04:04.720
+Seorang karyawan melaporkan bahwa mereka tidak bisa mengakses Microsoft.
+
+00:04:05.080 --> 00:04:06.380
+Mereka sudah mencobanya selama satu jam,
+
+00:04:06.500 --> 00:04:07.800
+meristart komputer mereka, dan tidak ada web.
+
+00:04:08.300 --> 00:04:09.300
+Mereka menghubungi helpdesk.
+
+00:04:09.920 --> 00:04:11.840
+Cara lama menanganinya, Anda membuka log masuk,
+
+00:04:12.300 --> 00:04:13.440
+memfilter berdasarkan nama pengguna,
+
+00:04:13.640 --> 00:04:15.480
+lalu Anda harus menembak rentang tanggal dan waktu yang tepat.
+
+00:04:15.920 --> 00:04:17.620
+Apakah mereka mencoba masuk 10 menit yang lalu, 20?
+
+00:04:18.240 --> 00:04:20.220
+Anda menelusuri daftar acara mencari yang gagal,
+
+00:04:20.220 --> 00:04:22.660
+dan saat menemukannya, Anda melihat kode kesalahan mentah
+
+00:04:22.660 --> 00:04:24.400
+dengan status yang hanya bertuliskan gagal,
+
+00:04:24.740 --> 00:04:25.500
+tanpa penjelasan.
+
+00:04:25.920 --> 00:04:27.060
+Hanya angka yang harus Anda cari.
+
+00:04:27.060 --> 00:04:29.220
+Kemudian Anda mengklik tab akses bersyarat
+
+00:04:29.220 --> 00:04:31.540
+untuk melihat apakah ada kebijakan yang memblokir masuknya,
+
+00:04:31.660 --> 00:04:32.920
+memeriksa detail perangkat untuk kepatuhan,
+
+00:04:33.120 --> 00:04:34.180
+dan meriksa tingkat risiko pengguna.
+
+00:04:34.440 --> 00:04:36.060
+Setiap langkah adalah klik terpisah,
+
+00:04:36.320 --> 00:04:37.080
+tampilan terpisah,
+
+00:04:37.420 --> 00:04:38.820
+peralihan konteks mental yang terpisah.
+
+00:04:39.400 --> 00:04:41.480
+15 menit kemudian, Anda mungkin mendapatkan jawaban,
+
+00:04:41.580 --> 00:04:42.520
+atau Anda mungkin malah semakin pink.
+
+00:04:42.800 --> 00:04:43.720
+Sekarang inilah cara kopilot.
+
+00:04:44.240 --> 00:04:46.280
+Anda membuka pusat admin entra dan mengetik satu kalimat.
+
+00:04:46.880 --> 00:04:48.980
+Mengapa pengguna ini tidak bisa masuk ke Teams?
+
+00:04:49.700 --> 00:04:50.080
+Hanya itu.
+
+00:04:50.440 --> 00:04:52.280
+Tanpa filter, tanpa menebak, tanpa berpindah-pindah.
+
+00:04:52.440 --> 00:04:54.380
+Di balik layar, kopilot melakukan pekerjaan
+
+00:04:54.380 --> 00:04:55.400
+yang biasa Anda lakukan secara manual.
+
+00:04:55.860 --> 00:04:57.640
+Kopilot menarik log masuk pengguna terbaru,
+
+00:04:58.240 --> 00:04:59.740
+meriksa evaluasi akses bersyarat,
+
+00:05:00.340 --> 00:05:01.720
+melihat status kepatuhan perangkat,
+
+00:05:01.840 --> 00:05:03.580
+dan mengidentifikasi alasan kegagalan.
+
+00:05:05.120 --> 00:05:06.560
+Kemudian memberikan Anda hasil seperti ini.
+
+00:05:07.420 --> 00:05:09.320
+Masuk gagal karena kebijakan akses bersyarat
+
+00:05:09.320 --> 00:05:10.480
+yang mewajibkan perangkat patuh
+
+00:05:10.480 --> 00:05:11.520
+memblokir sesi tersebut.
+
+00:05:12.500 --> 00:05:14.200
+Perangkat pengguna ditandai sebagai tidak patuh.
+
+00:05:14.800 --> 00:05:16.040
+Itulah keseluruhan cerita dalam satu kalimat.
+
+00:05:16.660 --> 00:05:17.700
+Anda tahu persis apa yang terjadi
+
+00:05:17.700 --> 00:05:18.540
+dan apa yang perlu diubah.
+
+00:05:19.100 --> 00:05:20.580
+Perangkat pengguna harus menjadi patuh,
+
+00:05:20.720 --> 00:05:22.720
+atau Anda perlu membuat pengecualian.
+
+00:05:22.720 --> 00:05:25.280
+Apapun itu, Anda memiliki jelas ke depan.
+
+00:05:25.680 --> 00:05:26.780
+Namun kopilot tidak berhenti di situ.
+
+00:05:27.140 --> 00:05:28.480
+Kopilot juga dapat menunjukkan konteks sama.
+
+00:05:29.160 --> 00:05:30.560
+Platform perangkat, versi OS,
+
+00:05:30.700 --> 00:05:32.080
+browser, alamat IP, lokasi,
+
+00:05:32.200 --> 00:05:33.300
+dan metode autentikasi.
+
+00:05:34.080 --> 00:05:35.040
+Semua informasi itu tersedia
+
+00:05:35.040 --> 00:05:36.340
+dengan perintah tidak lanjut sederhana
+
+00:05:36.340 --> 00:05:38.200
+seperti tunjukkan semua kegagalan masuk
+
+00:05:38.200 --> 00:05:39.800
+untuk pengguna ini dalam tujuh hari terakhir.
+
+00:05:40.320 --> 00:05:41.760
+Atau kebijakan apalagi yang berlaku.
+
+00:05:42.420 --> 00:05:43.720
+Penghematan waktunya sangat dramatik.
+
+00:05:44.120 --> 00:05:45.700
+Apa yang dulu memakan waktu 15 menit kini
+
+00:05:45.700 --> 00:05:46.960
+hanya butuh sekitar 30 detik.
+
+00:05:47.380 --> 00:05:48.500
+Dan inilah manfaat sebenarnya.
+
+00:05:48.500 --> 00:05:50.380
+Staff junior dapat menangani masalah ini
+
+00:05:50.380 --> 00:05:51.120
+tanpa eskalasi.
+
+00:05:51.120 --> 00:05:53.020
+Seseorang di helpdesk yang tidak memiliki
+
+00:05:53.020 --> 00:05:54.340
+pengetahuan mendalam tentang Entra
+
+00:05:54.340 --> 00:05:55.660
+dapat menanyakan pertanyaan yang sama
+
+00:05:55.660 --> 00:05:57.380
+kepada kopilot dan mendapatkan jawaban yang jelas.
+
+00:05:57.540 --> 00:05:58.860
+Itu berarti admin senior
+
+00:05:58.860 --> 00:06:00.080
+menghabiskan lebih sedikit waktu
+
+00:06:00.080 --> 00:06:01.220
+untuk pemecahan masalah rutin
+
+00:06:01.220 --> 00:06:02.680
+dan lebih banyak waktu untuk masalah kompleks
+
+00:06:02.680 --> 00:06:04.100
+yang benar-benar membutuhkan keahlian mereka.
+
+00:06:05.100 --> 00:06:05.920
+Kasus penggunaan 2
+
+00:06:05.920 --> 00:06:07.060
+menyelidiki pengguna berisiko.
+
+00:06:07.580 --> 00:06:08.920
+Kegagalan masuk adalah satu hal.
+
+00:06:09.040 --> 00:06:11.240
+Tetapi risiko identitas itu tingkat yang berbeda sama sekali.
+
+00:06:11.760 --> 00:06:13.000
+Perlindungan identitas EntraID
+
+00:06:13.000 --> 00:06:14.660
+menghasilkan skor risiko untuk pengguna
+
+00:06:14.660 --> 00:06:15.980
+dan meskipun terdengar mudah
+
+00:06:15.980 --> 00:06:17.700
+mencari tahu alasan seorang ditandai
+
+00:06:17.700 --> 00:06:19.420
+berisiko tinggi adalah tantangan tersendiri.
+
+00:06:20.380 --> 00:06:22.160
+Data mentah dari perlindungan identitas
+
+00:06:22.160 --> 00:06:23.440
+bisa terasa sangat kewalahan.
+
+00:06:24.080 --> 00:06:25.660
+Anda melihat skor risiko dan daftar deteksi
+
+00:06:25.660 --> 00:06:27.000
+tetapi menghubungkan poin-poin tersebut
+
+00:06:27.000 --> 00:06:28.560
+dengan perilaku penggunaan sebenarnya yang membutuhkan.
+
+00:06:28.800 --> 00:06:30.740
+Anda harus memperiksa setiap deteksi satu per satu,
+
+00:06:30.960 --> 00:06:31.860
+mencocokkan stempel waktu,
+
+00:06:32.000 --> 00:06:33.380
+mereferensikan silang aktivitas masuk,
+
+00:06:33.480 --> 00:06:34.460
+melalui memutuskan apa yang harus jelas.
+
+00:06:34.600 --> 00:06:36.080
+Hal ini dapat dilakukan, tetapi lambat.
+
+00:06:36.700 --> 00:06:38.400
+Dan ketika Anda berurusan dengan ratusan pengguna,
+
+00:06:38.520 --> 00:06:39.280
+kecepatan itu penting.
+
+00:06:40.000 --> 00:06:41.000
+Kopilot mengubah permainan
+
+00:06:41.000 --> 00:06:41.920
+dengan sesuatu yang disebut
+
+00:06:41.920 --> 00:06:42.840
+ringkasan pengguna berisiko.
+
+00:06:42.840 --> 00:06:45.000
+Ini adalah salah satu fitur paling praktis
+
+00:06:45.000 --> 00:06:46.440
+dalam pengalaman kopilot yang tersemat
+
+00:06:46.440 --> 00:06:47.220
+dan beginilah cara kerja.
+
+00:06:47.900 --> 00:06:49.340
+Anda membuka laporan pengguna berisiko
+
+00:06:49.340 --> 00:06:50.360
+di perlindungan identitas
+
+00:06:50.360 --> 00:06:52.340
+dan menemukan pengguna dengan skor risiko tinggi.
+
+00:06:53.080 --> 00:06:54.980
+Daripada menelusuri setiap deteksi secara manual,
+
+00:06:55.300 --> 00:06:56.600
+Anda cukup bertanya kepada kopilot.
+
+00:06:56.980 --> 00:06:58.660
+Ringkas aktivitas risiko untuk pengguna ini.
+
+00:06:59.340 --> 00:06:59.580
+Selesai.
+
+00:07:00.620 --> 00:07:02.240
+Kopilot menarik deteksi risiko
+
+00:07:02.240 --> 00:07:04.100
+seperti properti masuk yang tidak dikenal,
+
+00:07:04.200 --> 00:07:05.200
+kredensial yang bocor,
+
+00:07:05.440 --> 00:07:06.620
+alamat IP yang mencurigakan,
+
+00:07:06.760 --> 00:07:07.600
+dan mengorelasikannya
+
+00:07:07.600 --> 00:07:10.280
+dengan aktivitas masuk pengguna baru-baru ini.
+
+00:07:11.160 --> 00:07:12.600
+Kemudian menyajikannya sebagai narasi.
+
+00:07:13.600 --> 00:07:14.740
+Hasilnya mungkin terlihat seperti ini.
+
+00:07:15.600 --> 00:07:17.400
+Mengguna ini ditandai sebagai berisiko tinggi
+
+00:07:17.400 --> 00:07:19.180
+karena dua deteksi
+
+00:07:19.180 --> 00:07:21.120
+masuk dari lokasi yang tidak dikenal di negara
+
+00:07:21.120 --> 00:07:22.540
+yang belum pernah diakses sebelumnya
+
+00:07:22.540 --> 00:07:25.020
+dan aktivitas yang cocok dengan kredensial bocor
+
+00:07:25.020 --> 00:07:26.340
+yang ditemukan di dark web.
+
+00:07:27.280 --> 00:07:27.820
+Itu sangat kuat.
+
+00:07:28.200 --> 00:07:29.080
+Daripada daftar peristiwa,
+
+00:07:29.260 --> 00:07:30.100
+Anda mendapatkan sebuah cerita.
+
+00:07:30.420 --> 00:07:31.540
+Anda memahami apa yang terjadi,
+
+00:07:31.700 --> 00:07:32.600
+mengapa itu mencurigakan,
+
+00:07:32.920 --> 00:07:33.520
+dan seberapa sebut.
+
+00:07:33.780 --> 00:07:35.320
+Namun kopilot tidak berhenti pada ringkasan saja.
+
+00:07:35.640 --> 00:07:36.800
+Kopilot juga memberikan rekomendasi
+
+00:07:36.800 --> 00:07:38.100
+tentang apa yang harus dilakukan selanjutnya,
+
+00:07:38.220 --> 00:07:38.960
+mengatur ulang kata sandi,
+
+00:07:39.060 --> 00:07:39.820
+memblokir ulang kata sandi,
+
+00:07:39.900 --> 00:07:40.800
+memblokir upaya masuk lebih lanjut,
+
+00:07:42.840 --> 00:07:45.060
+Komendasi disesuaikan dengan deteksi risiko tertentu,
+
+00:07:45.220 --> 00:07:45.960
+bukan saran umum.
+
+00:07:46.440 --> 00:07:47.640
+Ini mengubah percakapan sepenuhnya.
+
+00:07:48.220 --> 00:07:49.420
+Daripada bertanya pada diri sendiri,
+
+00:07:49.540 --> 00:07:50.520
+apakah pengguna ini disusupi?
+
+00:07:50.900 --> 00:07:51.960
+Anda bisa bertanya bagaimana semuanya.
+
+00:07:52.660 --> 00:07:54.480
+Kopilot memberi Anda jalan yang jelas ke depan,
+
+00:07:54.640 --> 00:07:56.540
+sehingga tim identitas dapat merespons lebih cepat
+
+00:07:56.540 --> 00:07:57.440
+dan dengan lebih percaya diri.
+
+00:07:57.860 --> 00:07:58.960
+Dampak dunia nyatanya sangat besar.
+
+00:07:59.560 --> 00:08:00.900
+Daripada menghabiskan 20 menit
+
+00:08:00.900 --> 00:08:02.040
+menyelidiki pengguna berisiko
+
+00:08:02.040 --> 00:08:03.040
+dan masih merasa tidak yakin,
+
+00:08:03.120 --> 00:08:04.760
+Anda mendapatkan gambaran lengkap dalam hitungan detik
+
+00:08:04.760 --> 00:08:06.140
+beserta langkah selanjutnya yang dapat ditidak.
+
+00:08:06.900 --> 00:08:08.920
+Bagi organisasi yang berurusan dengan ribuan pengguna
+
+00:08:08.920 --> 00:08:09.900
+dan sinyal risiko konstan,
+
+00:08:10.020 --> 00:08:10.860
+itu bukan sekadar nyaman,
+
+00:08:11.020 --> 00:08:11.820
+melainkan esensial.
+
+00:08:12.800 --> 00:08:13.720
+Kasus penggunaan tiga,
+
+00:08:14.000 --> 00:08:14.980
+wawasan akses bersyarat.
+
+00:08:15.340 --> 00:08:16.660
+Akses bersyarat adalah salah satu fitur
+
+00:08:16.660 --> 00:08:17.340
+paling kuat di Android.
+
+00:08:17.840 --> 00:08:19.160
+Ini juga salah satu yang paling kompleks.
+
+00:08:19.520 --> 00:08:20.520
+Saat Anda memiliki puluhan
+
+00:08:20.520 --> 00:08:21.880
+atau bahkan ratusan kebijakan,
+
+00:08:22.140 --> 00:08:23.920
+memahami apa yang sebenarnya terjadi saat masuk
+
+00:08:23.920 --> 00:08:25.260
+bisa sangat membingungkan.
+
+00:08:25.700 --> 00:08:26.680
+Berikut adalah cara manualnya.
+
+00:08:27.020 --> 00:08:28.220
+Anda mencari catatan masuk,
+
+00:08:28.520 --> 00:08:29.740
+gulir ke tab akses bersyarat,
+
+00:08:30.000 --> 00:08:31.620
+dan Anda melihat daftar nama kebijakan
+
+00:08:31.620 --> 00:08:33.060
+beserta hasilnya, berhasilnya.
+
+00:08:33.260 --> 00:08:35.220
+Berhasil, gagal, atau tidak diterapkan.
+
+00:08:35.840 --> 00:08:37.100
+Itu berguna, tetapi hanya menceritakan
+
+00:08:37.100 --> 00:08:37.760
+sebagian dari situasi.
+
+00:08:38.140 --> 00:08:39.360
+Anda masih harus mencari tahu
+
+00:08:39.360 --> 00:08:41.000
+kondisi mana yang memicu kebijakan tersebut,
+
+00:08:41.180 --> 00:08:42.860
+mengapa itu berlaku bagi pengguna tertentu,
+
+00:08:43.100 --> 00:08:44.380
+dan apakah hasilnya masuk akal.
+
+00:08:44.960 --> 00:08:46.000
+Nah, sekarang ini adalah cara Copilot.
+
+00:08:46.380 --> 00:08:47.880
+Anda cukup mengajukan satu pertanyaan,
+
+00:08:47.940 --> 00:08:49.500
+kebijakan akses bersyarat mana yang diterapkan
+
+00:08:49.500 --> 00:08:50.500
+pada masuk ini, dan apa yang lakukan.
+
+00:08:51.160 --> 00:08:52.440
+Copilot memberikan daftar jelas
+
+00:08:52.440 --> 00:08:54.460
+tentang kebijakan yang dievaluasi hasilnya
+
+00:08:54.460 --> 00:08:56.160
+dan kondisi spesifik yang memicunya.
+
+00:08:56.880 --> 00:08:57.840
+Alih-alih membaca tabel Anda
+
+00:08:57.840 --> 00:08:58.760
+mendapatkan penjelasan.
+
+00:08:59.300 --> 00:09:00.720
+Kebijakan X memerlukan MFA
+
+00:09:00.720 --> 00:09:02.840
+karena masuk berasal dari lokasi yang tidak terpercaya.
+
+00:09:03.500 --> 00:09:04.820
+Kebijakan Y memblokir sesi
+
+00:09:04.820 --> 00:09:06.400
+karena perangkat tidak memenuhi syarat.
+
+00:09:07.040 --> 00:09:08.400
+Itulah jenis wawasan yang menghemat waktu
+
+00:09:08.400 --> 00:09:09.400
+dan mengurangi kesalahan.
+
+00:09:09.780 --> 00:09:11.900
+Karena saat Anda memahami alasan kebijakan diterapkan,
+
+00:09:12.020 --> 00:09:13.420
+Anda dapat membuat keputusan yang lebih baik
+
+00:09:13.420 --> 00:09:14.580
+tentang apakah perlu menyesuaikannya.
+
+00:09:15.220 --> 00:09:16.720
+Copilot juga dapat membantu pada tingkat yang lebih.
+
+00:09:17.200 --> 00:09:17.900
+Anda bisa bertanya,
+
+00:09:18.060 --> 00:09:19.980
+tunjukkan kebijakan yang paling sering membelokir akses, mas.
+
+00:09:20.320 --> 00:09:21.400
+Ini sangat berguna untuk
+
+00:09:21.400 --> 00:09:23.520
+mengidentifikasi kebijakan yang terlalu ketat
+
+00:09:23.520 --> 00:09:24.640
+atau kesalahan konfigurasi.
+
+00:09:25.440 --> 00:09:27.320
+Mungkin sebuah kebijakan memblokir terlalu banyak pengguna
+
+00:09:27.320 --> 00:09:28.580
+seh karena kondisinya terlalu luas
+
+00:09:28.580 --> 00:09:30.920
+atau mungkin kebijakan memiliki terlalu banyak pengecualian
+
+00:09:30.920 --> 00:09:32.200
+sehingga menciptakan celah cakupan.
+
+00:09:32.900 --> 00:09:34.240
+Copilot menampilkan pola-pola ini
+
+00:09:34.240 --> 00:09:36.320
+agar Anda dapat mengatasinya secara proaktif
+
+00:09:36.320 --> 00:09:37.920
+daripada menunggu pengguna mengeluh.
+
+00:09:38.480 --> 00:09:39.700
+Ada perkembangan baru yang patut disebut.
+
+00:09:40.320 --> 00:09:41.700
+Microsoft telah memperkenalkan
+
+00:09:41.700 --> 00:09:43.240
+agen optimasi akses bersyarat
+
+00:09:43.240 --> 00:09:44.600
+yang bekerja bersama Copilot.
+
+00:09:45.400 --> 00:09:47.320
+Agen ini menganalisis kebijakan Anda yang ada
+
+00:09:47.320 --> 00:09:48.260
+dan menyarankan perubah.
+
+00:09:48.600 --> 00:09:49.960
+Misalnya, agen mungkin berkata
+
+00:09:49.960 --> 00:09:51.740
+kebijakan ini memiliki terlalu banyak pengecualian.
+
+00:09:52.140 --> 00:09:53.220
+Pertimbangkan untuk mempersempitkan.
+
+00:09:53.500 --> 00:09:54.820
+Atau kedua kebijakan ini teman dini.
+
+00:09:55.420 --> 00:09:56.440
+Pertimbangkan untuk mengabungannya.
+
+00:09:57.340 --> 00:09:58.940
+Saran tersebut didasarkan pada data nyata
+
+00:09:58.940 --> 00:10:01.060
+dari penyewa Anda, bukan praktik terbaik yang bersifat umum.
+
+00:10:01.460 --> 00:10:02.820
+Hal itu membuat penyesuaian kebijakan
+
+00:10:02.820 --> 00:10:03.920
+lebih aman dan tepat sasaran.
+
+00:10:04.340 --> 00:10:06.320
+Intinya adalah, akses bersyarat itu canggih
+
+00:10:06.320 --> 00:10:08.100
+tetapi juga mudah jika salah pengaturan.
+
+00:10:08.880 --> 00:10:10.540
+Copilot memberi Anda visibilitas tentang
+
+00:10:10.540 --> 00:10:12.340
+bagaimana kebijakan Anda sebenarnya berperilaku
+
+00:10:12.340 --> 00:10:13.480
+sehingga Anda dapat menyesuaikannya
+
+00:10:13.480 --> 00:10:14.680
+dengan percaya diri alih-alih mendapat.
+
+00:10:15.440 --> 00:10:17.000
+Buktinya, apakah ini benar-benar membantu?
+
+00:10:17.620 --> 00:10:19.120
+Jadi Copilot terbenar hebat secara teori,
+
+00:10:19.240 --> 00:10:20.240
+tetapi apakah benar-benar berfungsi?
+
+00:10:20.640 --> 00:10:22.660
+Microsoft melakukan studi tentang Copilot di Entra
+
+00:10:22.660 --> 00:10:23.960
+dan angkanya patut diperhatikan.
+
+00:10:24.380 --> 00:10:26.400
+Inilah temuan mereka admin yang menggunakan Copilot
+
+00:10:26.400 --> 00:10:27.900
+menyelesaikan tugas pemecahan masalah
+
+00:10:27.900 --> 00:10:29.340
+masuk 46 persen lebih cepat.
+
+00:10:29.620 --> 00:10:30.600
+Itu hampir setengah dari waktu biasa.
+
+00:10:31.020 --> 00:10:32.860
+Alih-alih menghabiskan 15 menit mencari di log
+
+00:10:32.860 --> 00:10:34.480
+mereka mendapatkan jawaban dalam hitungan menit
+
+00:10:34.480 --> 00:10:35.120
+atau bahkan detik.
+
+00:10:35.560 --> 00:10:37.080
+Dan inilah faktanya mereka juga lebih akurat.
+
+00:10:37.600 --> 00:10:39.380
+Akurasi meningkat sebesar 46 persen.
+
+00:10:39.760 --> 00:10:40.900
+Jadi mereka tidak hanya lebih cepat
+
+00:10:40.900 --> 00:10:42.300
+tetapi juga lebih mungkin mendapatkan jawabannya.
+
+00:10:42.520 --> 00:10:44.160
+Hal itu penting ketika sebuah kesalahan
+
+00:10:44.160 --> 00:10:45.020
+bisa mengunci pengguna salah
+
+00:10:45.020 --> 00:10:46.000
+atau melewatkan ancaman nyata.
+
+00:10:46.580 --> 00:10:48.180
+95 persen admin mengatakan Copilot
+
+00:10:48.180 --> 00:10:49.480
+meningkatkan kualitas kerja mereka.
+
+00:10:49.880 --> 00:10:51.060
+Itu adalah dukungan yang cukup kuat
+
+00:10:51.060 --> 00:10:52.380
+dari orang-orang yang menggunakannya seharian.
+
+00:10:52.380 --> 00:10:54.360
+Dan 95 persen mengatakan
+
+00:10:54.360 --> 00:10:55.340
+mereka ingin terus menggunakannya
+
+00:10:55.340 --> 00:10:56.020
+dalam alur kerja mereka.
+
+00:10:56.720 --> 00:10:57.840
+Tik hampir semua orang yang mencobanya
+
+00:10:57.840 --> 00:10:58.620
+ingin terus menggunakannya
+
+00:10:58.620 --> 00:10:59.380
+itu berarti sesuatu.
+
+00:10:59.920 --> 00:11:01.240
+Apa arti angka-angka tersebut dalam praktiknya?
+
+00:11:01.840 --> 00:11:03.440
+Eskalasi ke admin senior lebih sedikit.
+
+00:11:03.880 --> 00:11:05.200
+Waktu respons insider lebih cepat.
+
+00:11:05.560 --> 00:11:06.800
+Beban tim identitas berkurang.
+
+00:11:07.340 --> 00:11:08.720
+Alih-alih menghabiskan waktu berjam-jam
+
+00:11:08.720 --> 00:11:10.480
+untuk investigasi rutin admin bisa fokus
+
+00:11:10.480 --> 00:11:11.360
+pada masalah yang benar-benar
+
+00:11:11.360 --> 00:11:12.320
+membutuhkan keahlian mereka.
+
+00:11:12.840 --> 00:11:13.660
+Namun satu catatan,
+
+00:11:13.860 --> 00:11:15.320
+angka-angka ini berasal dari studi terkontrol.
+
+00:11:15.860 --> 00:11:17.740
+Hasilnya akan bervariasi tergantung pada lingkungan,
+
+00:11:17.900 --> 00:11:18.440
+kualitas data,
+
+00:11:18.440 --> 00:11:20.160
+dan bagaimana tim Anda mengadopsi alat ini.
+
+00:11:20.940 --> 00:11:21.800
+Namun arahnya sudah jelas.
+
+00:11:22.400 --> 00:11:23.720
+AI membuat manajemen identitas
+
+00:11:23.720 --> 00:11:25.180
+lebih mudah diakses dan efisien.
+
+00:11:25.960 --> 00:11:27.260
+Dan tren itu terus meningkat.
+
+00:11:28.040 --> 00:11:28.520
+Apakah ini aman?
+
+00:11:29.160 --> 00:11:30.160
+Tata kelola dan keamanan.
+
+00:11:30.600 --> 00:11:31.960
+Sekarang pertanyaan yang sering saya dengar.
+
+00:11:32.120 --> 00:11:32.680
+Apakah ini aman?
+
+00:11:33.180 --> 00:11:34.480
+Apakah Copilot melewati keamanan
+
+00:11:34.480 --> 00:11:35.260
+dan kontrol akses Anda?
+
+00:11:35.780 --> 00:11:36.500
+Kekhawatiran yang maju.
+
+00:11:36.820 --> 00:11:38.260
+Anda memberikan akses asisten AI
+
+00:11:38.260 --> 00:11:38.800
+ke log masuk,
+
+00:11:38.940 --> 00:11:39.960
+kebijakan akses bersyarat,
+
+00:11:40.080 --> 00:11:40.940
+dan data pengguna Anda.
+
+00:11:41.360 --> 00:11:42.480
+Tetap dengar seperti kepercayaan yang besar.
+
+00:11:42.720 --> 00:11:43.260
+Ginda jawabannya.
+
+00:11:43.540 --> 00:11:44.540
+Copilot mewarisi peran
+
+00:11:44.540 --> 00:11:45.780
+dan izin entera Anda yang sudah ada.
+
+00:11:45.780 --> 00:11:46.820
+Oleh poin kuncinya.
+
+00:11:47.160 --> 00:11:48.340
+Jika Anda tidak memiliki izin
+
+00:11:48.340 --> 00:11:49.880
+untuk melihat log atau sumber daya tertentu,
+
+00:11:50.060 --> 00:11:51.240
+Copilot juga tidak bisa melihatnya.
+
+00:11:51.520 --> 00:11:52.240
+Tidak ada pintu belakang,
+
+00:11:52.320 --> 00:11:53.280
+tidak ada peningkatan hak istimewa.
+
+00:11:53.580 --> 00:11:55.240
+AI bekerja dalam batasan yang telah Anda tetap.
+
+00:11:55.620 --> 00:11:57.060
+Akses bersyarat juga berlaku untuk Copilot.
+
+00:11:57.560 --> 00:11:59.180
+Jika kebijakan Anda memerlukan MFA
+
+00:11:59.180 --> 00:11:59.900
+untuk pusat admin,
+
+00:12:00.060 --> 00:12:00.760
+Copilot mematuhinya.
+
+00:12:01.180 --> 00:12:02.160
+Jika Anda memblokir masuk
+
+00:12:02.160 --> 00:12:03.260
+dari lokasi yang tidak terpercaya,
+
+00:12:03.640 --> 00:12:04.640
+Copilot juga mematuhinya.
+
+00:12:05.080 --> 00:12:05.580
+Aturan yang sama,
+
+00:12:05.680 --> 00:12:06.320
+keren kekerjaan yang sama.
+
+00:12:06.720 --> 00:12:08.000
+Semua perintah dan respons Copilot
+
+00:12:08.000 --> 00:12:09.720
+dicatat dalam log audit yang teras standar.
+
+00:12:10.020 --> 00:12:11.660
+Jika seseorang mengajukan pertanyaan
+
+00:12:11.660 --> 00:12:12.720
+yang seharusnya tidak dilakukan,
+
+00:12:12.840 --> 00:12:13.720
+interaksi tersebut akan terlihat.
+
+00:12:14.120 --> 00:12:15.760
+Tim keamanan dapat meninjau log tersebut
+
+00:12:15.760 --> 00:12:17.240
+seperti aktivitas admin lainnya.
+
+00:12:17.680 --> 00:12:18.160
+Tidak ditibut.
+
+00:12:18.500 --> 00:12:19.520
+Presidensi data lah poin lain.
+
+00:12:19.920 --> 00:12:21.300
+Copilot beroperasi di dalam penyawa Anda.
+
+00:12:21.700 --> 00:12:22.760
+Data Anda tetap berada di tempatnya.
+
+00:12:23.100 --> 00:12:24.340
+AI bekerja pada data Anda
+
+00:12:24.340 --> 00:12:25.160
+di dalam penyawa Anda
+
+00:12:25.160 --> 00:12:25.920
+dibawakan dari Anda.
+
+00:12:26.220 --> 00:12:27.420
+Dan ini adalah prinsip yang benar-benar penting.
+
+00:12:27.780 --> 00:12:28.900
+Copilot menyarankan tindakan
+
+00:12:28.900 --> 00:12:30.700
+tetapi tidak mengeksekusinya secara otomatis.
+
+00:12:30.940 --> 00:12:31.920
+AI mungkin merekomendasikan
+
+00:12:31.920 --> 00:12:32.560
+pengaturan ulang
+
+00:12:32.560 --> 00:12:33.240
+kata Sandy pengguna
+
+00:12:33.240 --> 00:12:34.040
+atau memblokir masuk.
+
+00:12:34.220 --> 00:12:35.160
+Tetapi tidak akan melakukannya
+
+00:12:35.160 --> 00:12:36.620
+tanpa admin menyetujui tindakan tersebut.
+
+00:12:36.920 --> 00:12:37.780
+Manusia tetap memikirkan kena.
+
+00:12:38.220 --> 00:12:38.940
+Contoh nyata,
+
+00:12:39.420 --> 00:12:40.900
+pengguna helpdesk dengan izin terbatas
+
+00:12:40.900 --> 00:12:42.100
+dapat bertanya kepada Copilot
+
+00:12:42.100 --> 00:12:43.460
+tentang pengguna yang mereka dukung.
+
+00:12:44.240 --> 00:12:45.100
+Mereka bisa mendapatkan
+
+00:12:45.100 --> 00:12:46.120
+ringkasan kegagal masuk
+
+00:12:46.120 --> 00:12:46.920
+dan deteksi risiko.
+
+00:12:47.280 --> 00:12:48.180
+Tetapi tidak bisa bertanya
+
+00:12:48.180 --> 00:12:49.080
+tentang akun admin global
+
+00:12:49.080 --> 00:12:50.080
+atau sumber daya sensitif
+
+00:12:50.080 --> 00:12:51.300
+yang tidak memiliki izin untuk dilihat.
+
+00:12:51.680 --> 00:12:52.560
+Copilot secara otomatis
+
+00:12:52.560 --> 00:12:53.560
+menegakkan batasan tersebut.
+
+00:12:54.040 --> 00:12:54.960
+Ini yang memutamakan tetap keluar.
+
+00:12:55.440 --> 00:12:56.600
+Microsoft merancang Copilot
+
+00:12:56.600 --> 00:12:57.720
+adar bekerja di dalam model
+
+00:12:57.720 --> 00:12:58.740
+keamanan Anda yang ada,
+
+00:12:58.960 --> 00:12:59.420
+bukan di luarnya.
+
+00:12:59.740 --> 00:13:00.600
+Dan itulah yang membuatnya aman
+
+00:13:00.600 --> 00:13:01.060
+untuk digunakan.
+
+00:13:01.060 --> 00:13:02.640
+Untuk siapa sebenarnya ini?
+
+00:13:03.220 --> 00:13:04.000
+Jadi siapa yang sebenarnya
+
+00:13:04.000 --> 00:13:04.940
+diuntungkan dari Copilot
+
+00:13:04.940 --> 00:13:05.640
+di dalam Entry ID?
+
+00:13:06.020 --> 00:13:06.800
+Bukan hanya admin senior.
+
+00:13:07.240 --> 00:13:08.280
+Admin identitas mendapatkan
+
+00:13:08.280 --> 00:13:09.000
+bantuan yang paling nyata.
+
+00:13:09.300 --> 00:13:10.320
+Mereka masalah kebijakan setiap hari.
+
+00:13:10.780 --> 00:13:12.040
+Kini, investigasi 15 menit
+
+00:13:12.040 --> 00:13:13.300
+berubah menjadi jawaban 30 detik.
+
+00:13:13.740 --> 00:13:14.640
+Copilot memunculkan pola
+
+00:13:14.640 --> 00:13:15.480
+yang mungkin terlewatkan oleh mereka.
+
+00:13:15.900 --> 00:13:16.580
+Ini membantu mereka
+
+00:13:16.580 --> 00:13:17.460
+mengelola kompleksitas
+
+00:13:17.460 --> 00:13:18.160
+tanpa kewalahan.
+
+00:13:18.600 --> 00:13:19.880
+Vimeopdesk juga mendapatkan manfaatnya.
+
+00:13:20.700 --> 00:13:21.700
+Staff pendukung ini pertama
+
+00:13:21.700 --> 00:13:23.200
+dapat menyelesaikan masalah masuk sendiri
+
+00:13:23.200 --> 00:13:24.120
+tanpa perlu eskalasi.
+
+00:13:24.640 --> 00:13:25.700
+Mereka menanyakan pertanyaan sama
+
+00:13:25.700 --> 00:13:26.220
+kepada Copilot
+
+00:13:26.220 --> 00:13:27.340
+dan mendapatkan jawaban jelas yang sama.
+
+00:13:27.340 --> 00:13:28.780
+Itu berarti lebih sedikit tiket
+
+00:13:28.780 --> 00:13:29.580
+yang tertahan di antrean
+
+00:13:29.580 --> 00:13:30.340
+menunggu admin senior.
+
+00:13:30.820 --> 00:13:31.840
+Ini seperti miliki seorang ahli
+
+00:13:31.840 --> 00:13:32.480
+tepat di meja anda.
+
+00:13:32.960 --> 00:13:34.300
+Analis keamanan juga mendapatkan
+
+00:13:34.300 --> 00:13:35.200
+waktu responsen lebih cepat.
+
+00:13:35.560 --> 00:13:36.660
+Saat terjadi kemungkinan kompromi,
+
+00:13:36.760 --> 00:13:37.960
+mereka bisa meminta gambaran penuh
+
+00:13:37.960 --> 00:13:38.560
+kepada Copilot,
+
+00:13:38.720 --> 00:13:39.360
+aktivitas pengguna,
+
+00:13:39.460 --> 00:13:40.060
+deteksi risiko,
+
+00:13:40.140 --> 00:13:41.360
+dan langkah selanjutnya yang direkomendasikan.
+
+00:13:41.620 --> 00:13:42.360
+Daripada menghabiskan
+
+00:13:42.360 --> 00:13:43.260
+satu jam mengumpulkan data,
+
+00:13:43.420 --> 00:13:44.500
+mereka menghabiskan beberapa menit
+
+00:13:44.500 --> 00:13:45.060
+untuk memahamin.
+
+00:13:45.680 --> 00:13:46.500
+Pemilik aplikasi di pengembang
+
+00:13:46.500 --> 00:13:47.340
+warga citizen developers
+
+00:13:47.340 --> 00:13:47.780
+juga diuntung.
+
+00:13:48.260 --> 00:13:49.020
+Saat aplikasi kustom,
+
+00:13:49.100 --> 00:13:50.060
+mereka gagal autentikasi
+
+00:13:50.060 --> 00:13:50.940
+atau terkena kebijakan
+
+00:13:50.940 --> 00:13:51.720
+yang tidak mereka ketahui.
+
+00:13:51.820 --> 00:13:52.380
+Mereka tinggal bertanggung
+
+00:13:52.380 --> 00:13:53.360
+kepada Copilot atau pilot asal.
+
+00:13:53.660 --> 00:13:55.040
+Tidak perlu menjadi ahli identitas,
+
+00:13:55.240 --> 00:13:55.980
+mereka hanya perlu tahu
+
+00:13:55.980 --> 00:13:56.500
+apa yang salah
+
+00:13:56.500 --> 00:13:57.520
+dan cara memperbaikinya.
+
+00:13:58.320 --> 00:13:59.140
+Sekarang ini kelompok
+
+00:13:59.140 --> 00:14:00.060
+yang sering diupakan orang,
+
+00:14:00.260 --> 00:14:01.420
+manajer dan peranon teknis.
+
+00:14:02.000 --> 00:14:02.740
+Mereka perlu memahami
+
+00:14:02.740 --> 00:14:04.100
+postur keamanan departemen mereka,
+
+00:14:04.240 --> 00:14:05.100
+tetapi tidak punya waktu
+
+00:14:05.100 --> 00:14:05.800
+untuk memeriksa log.
+
+00:14:06.380 --> 00:14:07.160
+Copilot memberi mereka
+
+00:14:07.160 --> 00:14:07.940
+ringkasan dalam mengerti.
+
+00:14:08.640 --> 00:14:09.340
+Berikut adalah pengguna
+
+00:14:09.340 --> 00:14:09.880
+bisik ketinggian.
+
+00:14:10.240 --> 00:14:11.140
+Inilah yang kami rekomendasikan.
+
+00:14:11.520 --> 00:14:12.340
+Itu adalah informasi berguna
+
+00:14:12.340 --> 00:14:13.420
+yang bisa langsung mereka tindak lanjutin.
+
+00:14:13.780 --> 00:14:14.540
+Kesimpulannya adalah,
+
+00:14:14.720 --> 00:14:16.080
+Copilot membuat manajemen identitas
+
+00:14:16.080 --> 00:14:16.900
+lebih mudah bagi semua orang.
+
+00:14:17.140 --> 00:14:18.200
+Ini tidak menggantikan keahlian,
+
+00:14:18.420 --> 00:14:19.400
+melainkan menyebarkannya ke seluruh.
+
+00:14:19.760 --> 00:14:20.780
+Manajemen identitas dulunya
+
+00:14:20.780 --> 00:14:21.920
+merupakan keterampilan khusus
+
+00:14:21.920 --> 00:14:22.880
+yang terkunci di kelompok kecil.
+
+00:14:23.300 --> 00:14:24.040
+Sekarang lebih banyak orang
+
+00:14:24.040 --> 00:14:24.800
+dapat berpartisipasi
+
+00:14:24.800 --> 00:14:25.820
+karena mereka memiliki asisten
+
+00:14:25.820 --> 00:14:26.920
+AI yang berbicara dalam bahasa mereka.
+
+00:14:27.520 --> 00:14:28.420
+Manajemen identitas kini
+
+00:14:28.420 --> 00:14:29.240
+menjadi tugas semua orang.
+
+00:14:29.620 --> 00:14:30.240
+Copilot menjadikannya
+
+00:14:30.240 --> 00:14:30.960
+alat untuk semua orang.
+
+00:14:31.740 --> 00:14:33.080
+Itulah Copilot di Microsoft Enter ID.
+
+00:14:33.600 --> 00:14:34.720
+Ini mengubah direktor yang kompleks
+
+00:14:34.720 --> 00:14:35.620
+menjadi sesuatu yang benar-benar
+
+00:14:35.620 --> 00:14:36.260
+bisa Anda ajak-bicara.
+
+00:14:36.720 --> 00:14:37.600
+Jika ini membantu Anda
+
+00:14:37.600 --> 00:14:38.460
+melihat gambaran besarnya,
+
+00:14:38.680 --> 00:14:39.520
+bagikan kepada seseorang
+
+00:14:39.520 --> 00:14:40.920
+yang baru mulai perjalanan identitas mereka.
+
+00:14:41.320 --> 00:14:42.120
+Berlangganan di platform
+
+00:14:42.120 --> 00:14:43.100
+podcast favorit Anda
+
+00:14:43.100 --> 00:14:43.980
+dan sampai jumpa
+
+00:14:43.980 --> 00:14:45.280
+di nugget pengetahuan berikutnya.

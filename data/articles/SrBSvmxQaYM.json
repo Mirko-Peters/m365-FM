@@ -1,0 +1,152 @@
+{
+ "de": {
+  "html": "<p>Microsoft 365 Copilot kann viel, aber nur über das, was er sieht. Standardmäßig greift er auf Inhalte in SharePoint Online und OneDrive zu, dazu kommen E-Mails, Teams-Nachrichten und Dokumente. Die wichtigen Daten vieler Unternehmen liegen aber in Salesforce, ServiceNow, Confluence oder einem alten Google Drive.</p>\n<p>Copilot-Konnektoren schließen diese Lücke. Sie unterscheiden sich allerdings deutlich darin, ob sie Daten kopieren oder live abfragen. Dieser Artikel erklärt beide Modelle, zeigt, wann welches sinnvoll ist, und geht auf Sicherheit und Einrichtung ein.</p>\n\n<h2>Copilot-Konnektoren: Warum Copilot Ihre externen Daten nicht sieht</h2>\n<p>Die meisten Unternehmen speichern nicht alles in Microsoft 365. Kundendaten liegen im CRM wie Salesforce, IT-Support-Fälle in ServiceNow, Dokumentation in Confluence. Manche Teams nutzen noch ein Google Drive oder Dropbox aus der Zeit vor der Umstellung auf Microsoft.</p>\n<p>Fragen Sie Copilot dann nach dem Status eines Deals oder nach dem neuesten Support-Ticket eines Kunden, bleibt die Antwort leer. Es ist, als hätten Sie einen Bibliotheksausweis, der nur für ein einziges Regal in einem Gebäude mit 50 Räumen gilt.</p>\n<p>Ohne Anbindung bleibt nur der manuelle Weg: Kundendaten in Salesforce suchen und kopieren, das Ticket in ServiceNow heraussuchen, Projektnotizen in Confluence finden und alles in eine E-Mail oder Teams-Nachricht einfügen. Das bedeutet fünf Browser-Tabs, separate Anmeldungen und manuelles Zusammensetzen. Das kostet Zeit und unterbricht den Arbeitsfluss, also genau die Routinearbeit, die Copilot eigentlich abnehmen soll.</p>\n<p>Schwerer wiegt, dass die Antworten unvollständig werden. Eine Kundenbeschwerde im CRM, die nie in Ihrem Postfach landete, oder ein Vertragsverlängerungsdatum im ERP-System, das in keinem Kalender steht, kann Entscheidungen verfälschen. Solche Lücken summieren sich.</p>\n\n<h2>Was sind Graph-Konnektoren – und warum heißen sie jetzt Copilot-Konnektoren?</h2>\n<p>Ein Graph-Konnektor ist eine Software, die externe Daten in den Microsoft Graph integriert. Der Microsoft Graph ist der Index, der Microsoft Search, die SharePoint-Suche und inzwischen auch Copilot antreibt. Man kann ihn sich als zentrales Nervensystem von Microsoft 365 vorstellen. Ein Konnektor funktioniert wie ein Fließband: Daten aus dem externen System kommen auf das Band und werden in den Microsoft-365-Index geliefert.</p>\n<p>Liegen die Daten dort, kann Copilot sie durchsuchen, zusammenfassen und in natürlicher Sprache Fragen dazu beantworten. Einen Salesforce-Kontodatensatz kann er dann finden, ein ServiceNow-Ticket zusammenfassen und eine Confluence-Wikiseite als Wissensquelle nutzen.</p>\n<p>Neu ist die Technik nicht. Graph-Konnektoren gibt es seit Jahren, und sie treiben die SharePoint-Suche an. Wer in SharePoint schon einmal Ergebnisse aus einem externen System gesehen hat, hat einen Konnektor im Einsatz erlebt. Neu ist, dass Copilot sie nutzt und die Daten nicht nur findet, sondern auch analysiert und zusammenfasst. Inzwischen heißen sie Copilot-Konnektoren.</p>\n<p>Microsoft bietet dabei zwei grundverschiedene Modelle an. Die Leitfrage lautet: Sollen die Daten kopiert oder live abgefragt werden?</p>\n\n<h2>Synchronisierte Konnektoren: Daten kopieren, indexieren, semantisch durchsuchen</h2>\n<p>Beim synchronisierten Konnektor werden Daten aus dem externen System in den Microsoft Graph kopiert, indexiert, gespeichert und semantisch verarbeitet. Das ist, als stünde Ihr Aktenschrank direkt neben dem Schreibtisch, organisiert und durchsuchbar. Die Daten werden dauerhafter Bestandteil Ihres Microsoft-365-Tenants.</p>\n<h3>So läuft die Einrichtung</h3>\n<p>Ein Administrator öffnet im Microsoft 365 Admin Center den Bereich „Suche und Intelligenz“ und dort die Datenquellen. Eine Galerie bietet über 100 vorgefertigte Konnektoren, zum Beispiel für Salesforce, ServiceNow, Jira, Confluence, Google Drive, GitHub, Box und Dropbox. Der Admin wählt einen aus und authentifiziert sich per OAuth 2.0, sodass keine Passwörter im Klartext gespeichert werden. Anschließend legt er fest, welche Daten abgerufen und wie häufig sie synchronisiert werden. Danach beginnt der Konnektor, Daten in den Graph zu ziehen. Eine Person richtet die Verbindung für die ganze Organisation ein, und jeder mit den passenden Berechtigungen kann sie nutzen.</p>\n<h3>Semantische Suche als Stärke</h3>\n<p>Die Daten erhalten einen semantischen Index. Copilot gleicht dann nicht nur Schlüsselwörter ab, sondern versteht die Bedeutung der Frage. Wer nach dem Budget für das dritte Quartal sucht, kann ein Dokument mit dem Titel „Finanzbericht 2025“ finden, weil Copilot die Zusammenhänge zwischen den Begriffen erkennt. Dazu kommt die breite Verfügbarkeit: Die Daten stehen in der Suche, in Copilot und in SharePoint zur Verfügung.</p>\n<h3>Grenzen und lokale Daten</h3>\n<p>Ein einzelnes Element darf bis zu 4 MB groß sein, und ein Konnektor kann bis zu 25 gleichzeitige Vorgänge über eine Verbindung verarbeiten. Liegen die Daten lokal, etwa auf einem Dateiserver oder in einer SQL-Datenbank im eigenen Rechenzentrum, braucht es den Microsoft Graph Connector Agent. Er liest die lokalen Daten und sendet nur Text und Metadaten in die Cloud. Die eigentlichen Dateien bleiben vor Ort.</p>\n\n<h2>Föderierte Konnektoren: Live-Abfrage ohne Datenkopie</h2>\n<p>Das zweite Modell ist neuer und funktioniert grundlegend anders. Bei einem föderierten Konnektor werden keine Daten in Microsoft 365 gespeichert. Stellt ein Benutzer Copilot eine Frage, sendet Copilot eine Anfrage über das Model Context Protocol (MCP) an das externe System. MCP ist ein Standardweg, mit dem Copilot sagt: „Ich brauche Informationen zu diesem Thema.“ Das externe System sucht, liefert die Ergebnisse zurück, und Copilot präsentiert sie. Die Originaldaten verlassen das Quellsystem nie. Es ist, als bäten Sie einen Bibliothekar in einem anderen Gebäude, etwas nachzuschlagen: Das Buch bleibt in seinem Regal.</p>\n<h3>Ideal für Live-Daten</h3>\n<p>Das Modell passt zu Informationen, die sich ständig ändern, etwa Lagerbestände, Support-Ticket-Status oder Echtzeitpreise. Eine synchronisierte Kopie wäre bei der Ankunft im Index schon veraltet. Beim föderierten Konnektor geht jede Anfrage direkt an die Quelle.</p>\n<h3>Authentifizierung pro Benutzer</h3>\n<p>Hier muss sich jede Person selbst beim externen Dienst anmelden. Wer Copilot nach einem Salesforce-Datensatz fragen will, authentifiziert sich zuerst bei Salesforce. Copilot respektiert dann die Berechtigungen, die der Nutzer dort hat. Sieht er nur seine eigenen Konten, bekommt er auch nur dazu Ergebnisse. Das gilt pro Benutzer und pro Sitzung. Der Einrichtungsaufwand pro Nutzer ist höher, dafür sieht jeder nur, was er sehen darf.</p>\n<h3>Aktueller Stand und Schreibschutz</h3>\n<p>Föderierte Konnektoren werden noch eingeführt. Derzeit sind sie auf die Researcher-Umgebung im Copilot-Chat beschränkt, in der man tiefgehende, recherchierende Fragen stellt. In Teams, Outlook oder dem Seitenbereich von Word und Excel stehen sie noch nicht zur Verfügung. Der Katalog wächst, und es wird erwartet, dass weitere Umgebungen folgen.</p>\n<p>Außerdem sind föderierte Konnektoren standardmäßig schreibgeschützt. Copilot kann suchen und abrufen, aber weder ein Ticket in ServiceNow anlegen noch einen Kontakt in Salesforce aktualisieren. Das ist aus Sicherheitsgründen so gewollt. Sollen Aktionen ausgeführt werden, ist ein anderes Erweiterbarkeitsmodell zuständig: Plugins.</p>\n\n<h2>Synchronisiert oder föderiert: Welches Modell passt wann?</h2>\n<p>Die Entscheidung hängt vom Szenario ab.</p>\n<ul>\n<li><strong>Synchronisiert</strong> eignet sich für Daten, die sich selten ändern: HR-Richtlinien, die einmal pro Quartal aktualisiert werden, weitgehend stabile Projekt-Wikis oder archivierte Verträge. Man indexiert einmal, aktualisiert etwa täglich, und die Daten stehen mit semantischer Suche überall in Microsoft 365 bereit.</li>\n<li><strong>Föderiert</strong> eignet sich für Daten, die sich ständig ändern: Live-Support-Tickets, Lagerbestände im Tagesverlauf oder ein in Echtzeit aktualisierter Projektstatus. Da keine Kopie existiert, gibt es keine veralteten Daten.</li>\n</ul>\n<p>Beides lässt sich kombinieren. Viele Unternehmen setzen synchronisierte Konnektoren für die statische Wissensbasis ein, also HR-Richtlinien, Onboarding-Dokumente und Referenzmaterial, und föderierte für dynamische Betriebsdaten wie Live-Tickets, aktuellen Bestand und Echtzeit-Projektstatus. Es ist eine Sowohl-als-auch-Strategie.</p>\n<h3>Kosten und Last</h3>\n<p>Synchronisierte Konnektoren beanspruchen Speicher und Rechenleistung, denn jedes indizierte Element belegt Platz und wird vom semantischen Index verarbeitet. Das ist in der Lizenz enthalten, aber je nach Plan gibt es Einschränkungen. Föderierte Konnektoren verbrauchen diesen Speicher nicht, verlagern die Last aber auf das externe System, das jede Abfrage in Echtzeit beantworten muss. Hat Ihre Salesforce-Instanz schon Leistungsprobleme, könnten hunderte zusätzliche Copilot-Abfragen sie verschärfen.</p>\n\n<h2>Sicherheit und Compliance bei Copilot-Konnektoren</h2>\n<p>Sicherheit sollten Sie vor allem anderen klären. Jedes Element, das einen Konnektor durchläuft, braucht eine Zugriffssteuerungsliste (ACL), die Microsoft 365 mitteilt, wer die Daten sehen darf. Bei synchronisierten Konnektoren folgen die Berechtigungen den Daten: Wer im Quellsystem keinen Zugriff hat, sieht das Element auch in Copilot nicht. Dürfen etwa in Salesforce nur bestimmte Vertriebsteams bestimmte Datensätze sehen, gilt das auch in Copilot.</p>\n<ul>\n<li><strong>Authentifizierung:</strong> Alle Konnektoren nutzen OAuth 2.0, dasselbe Protokoll wie bei der Anmeldung mit einem Google- oder Microsoft-Konto. Es gibt keine Passwörter im Klartext und keine gemeinsamen Dienstkonten mit schwachen Anmeldedaten.</li>\n<li><strong>Verschlüsselung:</strong> Daten sind bei der Übertragung verschlüsselt. Bei synchronisierten Konnektoren sind sie auch im Ruhezustand in Microsoft 365 verschlüsselt.</li>\n<li><strong>Lokale Daten:</strong> Mit dem Graph Connector Agent werden nur Text und Metadaten zur Indexierung übertragen, nicht die Originaldateien.</li>\n<li><strong>Compliance:</strong> Graph-Konnektoren erben die Compliance-Zertifizierungen von Microsoft 365. Nutzen Sie Microsoft 365 bereits für konforme Arbeitslasten, gelten dieselben Zertifizierungen auch für die über Konnektoren eingebundenen Daten. Separate Audits für die Konnektor-Ebene sind nicht nötig.</li>\n</ul>\n\n<h2>Erste Schritte: Einen Copilot-Konnektor einrichten</h2>\n<p>Der Startpunkt ist das Microsoft 365 Admin Center: „Suche und Intelligenz“, dann „Datenquellen“, dort liegt der Konnektor-Katalog. Am Beispiel ServiceNow führt ein Einrichtungsassistent durch den Prozess:</p>\n<ol>\n<li>Per OAuth 2.0 bei ServiceNow authentifizieren.</li>\n<li>Festlegen, welche Daten synchronisiert werden, zum Beispiel nur Vorfälle und Wissensartikel statt der ganzen Datenbank.</li>\n<li>Die ServiceNow-Felder dem Microsoft-Graph-Schema zuordnen.</li>\n<li>Die ACLs konfigurieren, damit die Berechtigungen übernommen werden.</li>\n</ol>\n<p>Bei einer unkomplizierten Einrichtung dauert das etwa 30 Minuten.</p>\n<p>Gibt es für eine Datenquelle keinen vorgefertigten Konnektor, können Sie einen eigenen bauen, mit der Microsoft Graph Connectors API oder dem Microsoft 365 Agent Toolkit. Dafür brauchen Sie eine Verbindung, die angibt, wo die Daten liegen, ein Schema, das Felder und Zuordnung definiert, und eine Möglichkeit, externe Elemente zu verwalten, also hinzuzufügen, zu aktualisieren und zu löschen, wenn sie sich im Quellsystem ändern. Das ist mehr Arbeit, bietet aber volle Kontrolle darüber, was und wie indexiert wird.</p>\n<p>Testen Sie danach mit Fragen wie „Zeige mir offene Vorfälle aus ServiceNow“ oder „Was ist der neueste Vertrag in Salesforce?“. Prüfen Sie, ob Ergebnisse erscheinen und ob nur Berechtigte sie sehen.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Fehlende oder falsche ACLs:</strong> Wer sie vergisst, riskiert, dass Daten für alle oder für niemanden sichtbar sind. Beides ist ein Problem. Prüfen Sie die Zuordnung der Berechtigungen aus dem Quellsystem genau.</li>\n<li><strong>Berechtigungen nicht getestet:</strong> Fragt jemand aus dem Marketing nach einem Konto, das nur der Vertrieb sehen darf, sollte nichts erscheinen. Tut es das doch, müssen die ACLs überarbeitet werden.</li>\n<li><strong>Falsches Modell für den Datentyp:</strong> Schnell veraltende Daten gehören nicht in eine Kopie, selten geänderte Daten brauchen keine Live-Abfrage.</li>\n<li><strong>Last auf dem Quellsystem:</strong> Föderierte Abfragen belasten das externe System, besonders wenn es ohnehin schon an der Leistungsgrenze läuft.</li>\n<li><strong>Erwartung an föderierte Konnektoren:</strong> Sie sind derzeit auf Researcher im Copilot-Chat beschränkt und schreibgeschützt.</li>\n<li><strong>Größenlimits ignoriert:</strong> Elemente über 4 MB passen nicht in synchronisierte Konnektoren.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Copilot sieht standardmäßig nur Microsoft-365-Inhalte. Externe Systeme wie Salesforce, ServiceNow oder Confluence brauchen Konnektoren.</li>\n<li>Synchronisiert heißt kopieren, indexieren und semantisch durchsuchen, und das überall in Microsoft 365. Es passt zu selten geänderten Daten.</li>\n<li>Föderiert heißt live abfragen ohne Kopie, per MCP, mit Anmeldung pro Benutzer. Es passt zu schnelllebigen Daten.</li>\n<li>Kombinieren Sie beide Modelle: synchronisiert für die statische Wissensbasis, föderiert für dynamische Betriebsdaten.</li>\n<li>Planen Sie ACLs von Anfang an ein und testen Sie, dass nur autorisierte Nutzer die richtigen Ergebnisse sehen.</li>\n<li>Starten Sie im Admin Center unter „Suche und Intelligenz“ → „Datenquellen“ mit einem der über 100 vorgefertigten Konnektoren.</li>\n<li>Wählen Sie zuerst ein externes System mit kritischen Daten für Ihr Team und binden Sie es an.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Ein Copilot, der nur E-Mails und Dokumente kennt, bleibt ein eingeschränkter Assistent. Erst mit Zugriff auf CRM, Ticketsystem, HR-Datenbank und Projekt-Wiki wird er zu einem Werkzeug, das die tägliche Arbeit verändert. Copilot-Konnektoren machen das möglich: synchronisiert für stabiles Wissen mit semantischer Suche, föderiert für aktuelle Live-Daten ohne Kopie. Entscheidend sind die richtige Wahl des Modells und saubere Berechtigungen. Binden Sie am besten ein wichtiges externes System an und prüfen Sie selbst, wie viel nützlicher Copilot mit den Daten wird, die Ihr Geschäft antreiben.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Copilot-Konnektoren: synchronisiert oder föderiert?",
+   "typ": "vergleich",
+   "links": {
+    "titel": "Synchronisiert",
+    "punkte": [
+     "Daten werden kopiert und im Microsoft Graph indexiert",
+     "Semantische Suche, überall in Microsoft 365 verfügbar",
+     "Einmalige Einrichtung durch einen Administrator",
+     "Ideal für selten geänderte Daten wie HR-Richtlinien",
+     "Nutzt Speicher und Rechenleistung in Microsoft 365"
+    ]
+   },
+   "rechts": {
+    "titel": "Föderiert",
+    "punkte": [
+     "Live-Abfrage der Quelle per Model Context Protocol",
+     "Keine Datenkopie in Microsoft 365",
+     "Anmeldung jedes Benutzers im externen System",
+     "Ideal für Live-Daten wie Tickets und Lagerbestände",
+     "Derzeit nur in Researcher, schreibgeschützt"
+    ]
+   }
+  },
+  "faq": [
+   {
+    "q": "Was ist der Unterschied zwischen synchronisierten und föderierten Copilot-Konnektoren?",
+    "a": "Synchronisierte Konnektoren kopieren Daten aus dem externen System in den Microsoft Graph, indexieren sie und machen sie semantisch durchsuchbar. Föderierte Konnektoren speichern nichts in Microsoft 365, sondern fragen das externe System bei jeder Anfrage live über das Model Context Protocol (MCP) ab."
+   },
+   {
+    "q": "Warum sieht Microsoft 365 Copilot meine Daten aus Salesforce, ServiceNow oder Confluence nicht?",
+    "a": "Copilot greift standardmäßig nur auf Microsoft-365-Inhalte wie SharePoint Online, OneDrive, E-Mails, Teams-Nachrichten und Dokumente zu. Externe Systeme wie Salesforce, ServiceNow oder Confluence sind erst sichtbar, wenn sie über Copilot-Konnektoren angebunden werden."
+   },
+   {
+    "q": "Wann sollte ich einen synchronisierten und wann einen föderierten Konnektor verwenden?",
+    "a": "Synchronisierte Konnektoren eignen sich für selten geänderte Daten wie HR-Richtlinien, stabile Projekt-Wikis oder archivierte Verträge. Föderierte passen zu sich ständig ändernden Daten wie Live-Support-Tickets, Lagerbeständen oder Echtzeit-Projektstatus. Beide Modelle lassen sich auch kombinieren."
+   },
+   {
+    "q": "Wie richte ich einen Copilot-Konnektor im Microsoft 365 Admin Center ein?",
+    "a": "Öffnen Sie im Admin Center „Suche und Intelligenz“ und dann „Datenquellen“. Wählen Sie aus über 100 vorgefertigten Konnektoren einen aus, authentifizieren Sie sich per OAuth 2.0, legen Sie Daten und Synchronisationsintervall fest, ordnen Sie Felder zu und konfigurieren Sie die ACLs. Das dauert etwa 30 Minuten."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Synchronisierten Konnektor einrichten",
+    "typ": "schritte",
+    "punkte": [
+     {
+      "kopf": "Datenquellen öffnen",
+      "text": "Im Microsoft 365 Admin Center unter „Suche und Intelligenz“ den Bereich „Datenquellen“ aufrufen."
+     },
+     {
+      "kopf": "Konnektor wählen",
+      "text": "Aus der Galerie mit über 100 vorgefertigten Konnektoren die passende Quelle auswählen, etwa ServiceNow."
+     },
+     {
+      "kopf": "Per OAuth 2.0 anmelden",
+      "text": "Der Administrator authentifiziert sich per OAuth 2.0, sodass keine Passwörter im Klartext gespeichert werden."
+     },
+     {
+      "kopf": "Daten und Felder festlegen",
+      "text": "Abzurufende Daten und Synchronisationshäufigkeit bestimmen und die Felder dem Microsoft-Graph-Schema zuordnen."
+     },
+     {
+      "kopf": "ACLs konfigurieren",
+      "text": "Zugriffssteuerungslisten einrichten, damit die Berechtigungen aus dem Quellsystem übernommen werden."
+     },
+     {
+      "kopf": "Berechtigungen testen",
+      "text": "Mit Testfragen prüfen, ob Ergebnisse erscheinen und nur Berechtigte sie sehen."
+     }
+    ]
+   },
+   {
+    "titel": "Zahlen und Grenzen von Copilot-Konnektoren",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "über 100",
+      "text": "vorgefertigte Konnektoren in der Galerie, etwa für Salesforce, ServiceNow und Confluence"
+     },
+     {
+      "wert": "4 MB",
+      "text": "maximale Größe eines einzelnen Elements bei synchronisierten Konnektoren"
+     },
+     {
+      "wert": "25",
+      "text": "gleichzeitige Vorgänge pro Verbindung, die ein Konnektor verarbeiten kann"
+     },
+     {
+      "wert": "ca. 30 Minuten",
+      "text": "Dauer einer unkomplizierten Einrichtung, etwa am Beispiel ServiceNow"
+     },
+     {
+      "wert": "Researcher",
+      "text": "Föderierte Konnektoren sind derzeit auf diese Umgebung im Copilot-Chat beschränkt"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Worin unterscheiden sich synchronisierte und föderierte Copilot-Konnektoren grundlegend?",
+    "opts": [
+     "Synchronisierte kopieren Daten in den Graph, föderierte fragen sie live ab",
+     "Synchronisierte fragen live ab, föderierte kopieren Daten in den Graph",
+     "Synchronisierte funktionieren nur lokal, föderierte nur mit Cloud-Systemen",
+     "Synchronisierte sind schreibgeschützt, föderierte erlauben Änderungen im Quellsystem"
+    ],
+    "a": 0,
+    "why": "Synchronisierte Konnektoren kopieren und indexieren Daten im Microsoft Graph, föderierte senden bei jeder Frage eine Live-Anfrage ans externe System."
+   },
+   {
+    "q": "Für welche Art von Daten eignet sich ein föderierter Konnektor am besten?",
+    "opts": [
+     "Archivierte Verträge, die kaum noch verändert werden",
+     "HR-Richtlinien, die einmal pro Quartal aktualisiert werden",
+     "Ständig wechselnde Daten wie Lagerbestände oder Support-Ticket-Status",
+     "Große Dateien über 4 MB aus lokalen Dateiservern"
+    ],
+    "a": 2,
+    "why": "Da keine Kopie existiert, gibt es keine veralteten Daten. Das passt zu Informationen, die sich ständig ändern."
+   },
+   {
+    "q": "Wie läuft die Authentifizierung bei föderierten Konnektoren ab?",
+    "opts": [
+     "Ein Administrator authentifiziert einmal für die gesamte Organisation",
+     "Jeder Nutzer meldet sich selbst beim externen Dienst an",
+     "Passwörter werden verschlüsselt im Microsoft-365-Tenant hinterlegt",
+     "Ein gemeinsames Dienstkonto ruft alle Daten für alle Nutzer ab"
+    ],
+    "a": 1,
+    "why": "Jede Person authentifiziert sich selbst beim externen Dienst; Copilot respektiert dann die dortigen Berechtigungen, pro Benutzer und Sitzung."
+   },
+   {
+    "q": "Wofür wird der Microsoft Graph Connector Agent benötigt?",
+    "opts": [
+     "Um föderierte Abfragen per MCP an Salesforce zu senden",
+     "Um eigene Konnektoren mit dem Agent Toolkit zu entwickeln",
+     "Um Berechtigungen automatisch in Zugriffssteuerungslisten umzuwandeln",
+     "Um lokale Daten anzubinden und nur Text und Metadaten zu übertragen"
+    ],
+    "a": 3,
+    "why": "Der Agent liest lokale Daten, etwa von Dateiservern oder SQL-Datenbanken, und sendet nur Text und Metadaten in die Cloud."
+   }
+  ]
+ }
+}

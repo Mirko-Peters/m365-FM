@@ -1,0 +1,946 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.660
+Stellen Sie sich folgendes vor. Es ist zwei Uhr morgens und Sie sind die einzige IT-Kraft in Ihrem Unternehmen.
+
+00:00:03.780 --> 00:00:07.700
+Ihr Telefon beginnt zu vibrieren und hört nicht mehr auf. Sicherheitswarnungen gehen ein und hat der anderen ein.
+
+00:00:08.040 --> 00:00:13.040
+Die meisten sind wahrscheinlich belanglos, aber Sie können sie nicht ignorieren, da sich hinter dem Lärm ein echter Angriff verbergen könnte.
+
+00:00:13.700 --> 00:00:18.700
+Was wäre, wenn Sie einen KI-Assistenten hätten, der diese Warnungen für Sie sortiert, Ihnen sagt, welche wichtig sind und sogar Lösungsvorschläge macht?
+
+00:00:19.200 --> 00:00:21.240
+Genau das leistet Microsoft Security Co-Pilot.
+
+00:00:21.780 --> 00:00:27.860
+Am Ende dieser Folge werden Sie verstehen, was es wirklich ist, wie die KI-Agenten funktionieren und warum es ein mächtiges Werkzeug ist, besonders für kleine Teams.
+
+00:00:27.860 --> 00:00:33.340
+Wir unterteilen es in das Problem, dass es löst, was das Tool wirklich ist, die Agenten, die die Arbeit erledigen und wie sie es heute noch einsetzen können.
+
+00:00:34.040 --> 00:00:38.140
+Das Problem, Überlastung durch Warnmeldungen. Für die meisten Sicherheitsteams ist die Realität simpel.
+
+00:00:38.720 --> 00:00:41.600
+Hunderte Warnungen gehen jeden Tag ein, weit mehr als eine Person bewältigen kann.
+
+00:00:42.120 --> 00:00:45.320
+Und die meisten sind Fehlalarme. Eine Regel schlägt an, aber es gibt keine echte Bedrohung.
+
+00:00:45.420 --> 00:00:50.240
+Dennoch muss jede einzelne Warnung überprüft werden. Für kleine Teams ist es sogar noch schlimmer. Sicherheit ist nicht die einzige Aufgabe.
+
+00:00:50.500 --> 00:00:55.040
+Sie sind auch die IT-Kraft, der Compliance-Beauftragte und der Druckereparator. Sie tragen alle Hüte im Gebäude.
+
+00:00:55.040 --> 00:00:58.880
+Wenn sie so überlastet sind, gehen echte Bedrohungen unter und die Reaktionszeiten sinken.
+
+00:00:59.220 --> 00:01:00.620
+Burnout ist hier eine Frage des Warnlichtes.
+
+00:01:00.980 --> 00:01:03.060
+Microsoft hat dieses Problem erkannt und eine Antwort entwickelt.
+
+00:01:03.280 --> 00:01:06.080
+Ein KI-Assistenten, der direkt in den Sicherheitstools lebt, die sie bereits nutzen.
+
+00:01:06.340 --> 00:01:09.680
+Er sortiert Warnmeldungen. Er fasst Vorfälle zusammen. Er empfiehlt Maßnahmen.
+
+00:01:10.060 --> 00:01:13.780
+Das Ziel ist einfach. Anstatt im Lärm zu versinken, konzentrieren Sie sich auf das, was wirklich wichtig ist.
+
+00:01:14.040 --> 00:01:17.380
+Was genau ist also dieses Ding? Was Security Co-Pilot wirklich ist?
+
+00:01:17.960 --> 00:01:19.320
+Was genau ist also Security Co-Pilot?
+
+00:01:19.740 --> 00:01:21.260
+Lassen Sie uns gleich mit einem verbreiteten Mythos auf.
+
+00:01:21.260 --> 00:01:26.220
+Es ist kein neues Sicherheitsprodukt, das Sie von Grund auf neu lernen müssen und es ist kein weiteres Dashboard, das Sie jeden Morgen prüfen müssen.
+
+00:01:26.760 --> 00:01:29.840
+Stattdessen ist es eine KI-Ebene, die auf den Tools aufsetzt, die Sie bereits besitzen.
+
+00:01:30.200 --> 00:01:32.220
+Microsoft Defender, Entry & Tune, Purview.
+
+00:01:32.760 --> 00:01:35.900
+Denen Sie es sich so vor, als hätten Sie einen Leitenden Analyst in Ihrem Team, der eine klare Sprache spricht.
+
+00:01:36.480 --> 00:01:38.220
+Sie können Fragen stellen wie, was ist letzte Nacht passiert?
+
+00:01:38.820 --> 00:01:40.900
+Oder zeige mir, welche Geräte nicht die Compliance-Vorgaben erfüllen.
+
+00:01:41.380 --> 00:01:44.340
+Und er fasst Vorfälle zusammen, erstellt Abfragen und sagt Ihnen, was als nächstes zu tun ist.
+
+00:01:44.660 --> 00:01:46.820
+Hier ist nun der entscheidende Unterschied zu etwas wie ChatGPT.
+
+00:01:47.440 --> 00:01:48.800
+ChatGPT kennt das öffentliche Internet.
+
+00:01:48.800 --> 00:01:53.580
+Aber Security Co-Pilot kennt Ihre Umgebung, Ihre Anmeldungen, Ihre Geräte, Ihre Warnungen, Ihre Gewarnungen.
+
+00:01:53.880 --> 00:01:57.080
+Es wurde mit Microsoft-Bedrohungsdaten und Ihren eigenen Sicherheitsdaten trainiert.
+
+00:01:57.440 --> 00:01:59.860
+Daher liefert es Antworten, die für Ihre Situation relevant sind.
+
+00:02:00.360 --> 00:02:04.120
+Allgemeines KI-Tool hat diesen Zugriff nicht, da es nicht weiß, was innerhalb Ihres Tenants geschieht.
+
+00:02:04.700 --> 00:02:07.800
+Im Hintergrund läuft Co-Pilot auf sogenannten Security-Compute-Units, kurz SCUs.
+
+00:02:08.760 --> 00:02:10.740
+Denen Sie sich diese als den Treibstoff vor, der den Motor antreibt.
+
+00:02:10.740 --> 00:02:15.700
+Jeder Prompt und jeder Agent verbraucht etwas von diesem Treibstoff, aber der wahre Wert liegt nicht im Chat-Fenster.
+
+00:02:16.700 --> 00:02:22.520
+Der wahre Wert liegt darin, wie Co-Pilot Daten von Defender, Entra, Intune und Purview gleichzeitig zusammenführt und Ihnen eine klare Antwort liefert.
+
+00:02:23.040 --> 00:02:27.560
+Sie müssen nicht mehr zwischen fünf Konsolen wechseln, um die Lage zu verstehen und die Möglichkeiten gehen weit über den Chat hinaus.
+
+00:02:28.020 --> 00:02:30.660
+Es sind die Agenten, die Aufgaben für Sie automatisieren und erledigen.
+
+00:02:30.660 --> 00:02:32.740
+Funktion 2
+
+00:02:32.740 --> 00:02:34.860
+Die Logik, SCUs und Integration
+
+00:02:34.860 --> 00:02:38.400
+Sprechen wir nun darüber, was Security Co-Pilot eigentlich antreibt.
+
+00:02:39.240 --> 00:02:41.960
+Im Hintergrund nutzt es Security-Compute-Units, also SCUs.
+
+00:02:42.500 --> 00:02:43.880
+Betrachten Sie diese als Treibstoff für den Motor.
+
+00:02:44.480 --> 00:02:49.080
+Jedes Mal, wenn Sie einen Prompt ausführen, einen Agenten starten oder einen Bericht erstellen, verbrauchen Sie ein wenig von diesem Treibstoff.
+
+00:02:49.700 --> 00:02:54.580
+Microsoft berechnet SCUs pro Stunde und mit einer E5-Lizenz erhalten Sie monatlich ein Kontingent dazu.
+
+00:02:55.200 --> 00:02:56.080
+So funktioniert die Rechnung.
+
+00:02:56.640 --> 00:02:59.860
+Für jeweils 1000 Benutzer erhalten Sie mit E5 400 SCUs pro Monat.
+
+00:02:59.860 --> 00:03:04.180
+Wenn Sie als ein kleines Team mit 50 Benutzern sind, sind das etwa 20 SCUs pro Monat.
+
+00:03:04.660 --> 00:03:06.080
+Bei 200 Benutzern erhalten Sie 80.
+
+00:03:06.500 --> 00:03:13.440
+Die Skalierung erfolgt automatisch basierend auf Ihren E5-Lizenzen mit einem Maximum von 10.000 SCUs pro Monat ab etwa 25.000 Benutzern.
+
+00:03:14.200 --> 00:03:16.520
+Doch wie verbindet sich Co-Pilot eigentlich mit Ihrer Umgebung?
+
+00:03:16.980 --> 00:03:17.600
+Über Plugins.
+
+00:03:18.180 --> 00:03:21.860
+Es lässt sich in Defender, Entra, Intune, Sentinel und bei Bedarf auch in RIT-Anbieter-Tools integrieren.
+
+00:03:22.380 --> 00:03:25.160
+Jedes Plugin fungiert als Brücke zwischen Co-Pilot und der jeweiligen Datenquelle.
+
+00:03:25.780 --> 00:03:26.860
+Und hier ist ein wichtiges Detail.
+
+00:03:27.280 --> 00:03:28.980
+Co-Pilot kopiert oder speichert Ihre Daten nicht.
+
+00:03:28.980 --> 00:03:32.620
+Es fragt Ihre Systeme in Echtzeit ab, sodass alles innerhalb Ihres Tenants bleibt.
+
+00:03:33.080 --> 00:03:34.440
+Ihre Daten verlassen niemals Ihre Kontrolle.
+
+00:03:35.180 --> 00:03:38.420
+Sie können über das Co-Pilot-Dashboard genau überwachen, wie viele SCUs Sie verbrauchen.
+
+00:03:38.580 --> 00:03:40.900
+Es zeigt jeden Prompt den Nutzer und den Treibstoffverbrauch.
+
+00:03:42.040 --> 00:03:43.780
+Eine Überschreitung ist standardmäßig deaktiviert.
+
+00:03:44.260 --> 00:03:48.080
+Wenn Ihre SCUs vor Monatsende aufgebraucht sind, pausiert Co-Pilot, bis das neue Kontingent verfügbar ist.
+
+00:03:48.360 --> 00:03:49.340
+Keine unerwarteten Rechnungen.
+
+00:03:49.720 --> 00:03:55.060
+Sie können bei Bedarf weitere SCUs erwerben, aber für die meisten kleinen Teams reicht das enthaltene Kontingent völlig aus.
+
+00:03:55.060 --> 00:03:57.860
+Schauen wir uns nun die Agenten an, die wahren Arbeitstiere.
+
+00:03:58.600 --> 00:04:00.120
+Die Agenten, Ihr KI-Sicherheitsteam.
+
+00:04:00.880 --> 00:04:02.920
+Ihr beweist Security Co-Pilot seinen wahren Wert.
+
+00:04:03.620 --> 00:04:07.400
+Agents sind vorgefertigte KI-Assistenten, die spezifische Sicherheitsaufgaben für Sie übernehmen.
+
+00:04:08.140 --> 00:04:09.780
+Einige laufen automatisch nach Zeitplan.
+
+00:04:10.100 --> 00:04:11.960
+Andere starten Sie manuell, wenn Sie sie brauchen.
+
+00:04:12.920 --> 00:04:14.980
+Betrachten Sie jeden Agenten als einen Spezialisten in Ihrem Team.
+
+00:04:15.400 --> 00:04:19.640
+Einer kümmert sich um Phishing, ein anderer um Zugriffsrichtlinien und ein weiterer um Geräte-Schwachstellen.
+
+00:04:20.120 --> 00:04:22.020
+Sie müssen Sie weder trainieren noch komplexe Abfragen schreiben.
+
+00:04:22.100 --> 00:04:23.100
+Sie erledigen einfach Ihre Arbeit.
+
+00:04:23.540 --> 00:04:26.260
+Als erstes haben wir den Phishing-Triage-Agenten in Microsoft Defender.
+
+00:04:27.080 --> 00:04:30.180
+Dieser Agent überprüft automatisch jede E-Mail, die Ihre Benutzer als verdächtig melden.
+
+00:04:30.940 --> 00:04:36.700
+Er analysiert den Inhalt, prüft die Links, bewertet die Absender-Reputation und entscheidet dann, ob es eine echte Bedrohung oder nur Spam ist.
+
+00:04:37.160 --> 00:04:39.880
+Die gefährlichsten E-Mails werden nach oben geschoben, damit Sie sie zuerst sehen.
+
+00:04:39.880 --> 00:04:46.780
+Microsoft gibt an, dass Analysten mit diesem Agenten bösartige E-Mails bis zu 550% schneller erkennen, eine beachtliche Verbesserung.
+
+00:04:47.540 --> 00:04:53.560
+Für ein Team von ein oder zwei Personen kann diese Geschwindigkeit den Unterschied zwischen dem frühzeitigen Stopp meiner Sicherheitsverletzung und der Bewältigung eines Inzidens ausmachen.
+
+00:04:54.060 --> 00:04:56.660
+Als nächstes folgt der Agent zur Optimierung des bedingten Zugriffs in Entra.
+
+00:04:57.340 --> 00:04:59.420
+Dieser Agent scannt ihre Zugriffsrichtlinien und sucht nach Lücken.
+
+00:04:59.800 --> 00:05:03.720
+Vielleicht ist eine neue App noch nicht durch eine Richtlinie abgedeckt oder Benutzer schlüpfen ohne MFA durch.
+
+00:05:04.620 --> 00:05:06.340
+Der Agent findet diese Lücken und schlägt Korrekturen vor.
+
+00:05:06.340 --> 00:05:10.320
+Er kann sogar neue Richtlinien im Nurberichtmodus erstellen, damit Sie die Auswirkungen sehen, bevor Sie sie aktivieren.
+
+00:05:11.820 --> 00:05:19.460
+Identitätsadministratoren, die diesen Agenten nutzen, erzielen eine bis zu 204% höhere Genauigkeit beim Auffinden fehlender Zero-Trust-Richtlinien, mehr als das Doppelte einer manuellen Prüfung.
+
+00:05:20.280 --> 00:05:22.780
+Dann gibt es noch den Agenten zur Schwachstellenbehebung in Intune.
+
+00:05:23.500 --> 00:05:29.020
+Er identifiziert Geräte, die gepatcht werden müssen, priorisiert sie nach schwere Grad und kann Gruppen für die Bereitstellung erstellen.
+
+00:05:29.020 --> 00:05:35.000
+Anstatt jedes Gerät manuell zu prüfen, erhalten Sie eine klare Liste mit Prioritäten, was Ihnen wöchentlich Stunden an Arbeit erspart.
+
+00:05:35.800 --> 00:05:38.080
+Für die Führungsebene gibt es den Threat Intelligence Briefing Agenten.
+
+00:05:38.540 --> 00:05:44.440
+Dieser läuft nach einem Zeitplan wöchentlich, täglich oder wie Sie es festlegen und erstellt ein Briefing, das auf Ihre Branche und aktuelle Bedrohung zugeschnitten ist.
+
+00:05:45.000 --> 00:05:51.140
+Er nutzt Microsofts Threat Intelligence, gleicht sie mit Ihrer Umgebung ab und liefert einen Bericht, den Sie direkt an Ihren CEO senden können.
+
+00:05:51.140 --> 00:05:54.420
+Kein hektisches Zusammenstellen von Informationen mehr vor einer Vorstandsse.
+
+00:05:55.020 --> 00:05:57.380
+Der Security Alert-Triage-Agent geht weit über Phishing hinaus.
+
+00:05:58.040 --> 00:06:01.180
+Er sortiert Warnmeldungen aus den Bereichen Identität, Endpunkt und Cloud.
+
+00:06:02.060 --> 00:06:08.020
+Wenn sich also jemand von einem ungewöhnlichen Ort anmeldet und ein Gerät verdächtige Aktivitäten meldet, verbindet der Agent diese Punkte für Sie.
+
+00:06:08.820 --> 00:06:13.280
+Und in Purview heben die Insider-Risk- und DLP-Agenten nur die Warnmeldung hervor, die tatsächlich eine menschliche Überprüfung erfolgt.
+
+00:06:13.280 --> 00:06:17.660
+Sie filtern das Rauschen heraus, damit Sie keine Zeit mit Fehlalarm Ihrer Datenschutzrichtlinien verschwenden.
+
+00:06:18.540 --> 00:06:20.120
+Sie können auch sogenannte Prompt-Books verwenden.
+
+00:06:20.120 --> 00:06:24.840
+Das sind gespeicherte Abfolgen von Prompts, die Sie wiederholt ausführen, wie eine wöchentliche Geräte-Compliance-Prüfung.
+
+00:06:25.380 --> 00:06:30.080
+Anstatt jeden Montagmorgen dieselben Fragen einzutippen, erstellen Sie ein Prompt-Book einmalig und führen es mit einem Klick aus.
+
+00:06:30.560 --> 00:06:32.560
+Es ist wie ein Makro für Ihre Sicherheitsuntersuchungen.
+
+00:06:33.060 --> 00:06:34.560
+Wie fühlt es sich also an, das tatsächlich zu nutzen?
+
+00:06:35.760 --> 00:06:37.360
+Wie es sich anfühlt, ein Tag in Ihrem Leben?
+
+00:06:38.040 --> 00:06:39.960
+Lassen Sie uns durchgehen, wie das in der Praxis aussieht.
+
+00:06:40.160 --> 00:06:43.480
+Sie sind alleiniger IT-Administrator in einem mittelständischen Unternehmen und es ist Montagmorgen.
+
+00:06:43.980 --> 00:06:46.840
+Sie nehmen Ihren Kaffee, öffnen das Defender-Portal und da ist es.
+
+00:06:47.800 --> 00:06:50.020
+Eine Zusammenfassung von allem, was am Wochenende passiert.
+
+00:06:50.660 --> 00:06:53.420
+Drei Warnmeldungen sind aufgetaucht und Co-Pilot hat bereits den ersten Durchlauf gemacht.
+
+00:06:54.100 --> 00:06:57.980
+Zwei Warnfehlarme, gelöscht und ein echter Phishing-Versuch erfordert Ihre Aufmerksamkeit.
+
+00:06:58.600 --> 00:06:59.980
+Sie klicken auf den Phishing-Triageagent.
+
+00:07:00.640 --> 00:07:05.860
+Er hat die E-Mail bereits analysiert, den schädlichen Link gefunden, den Zielpfad nachverfolgt und den Empfänger identifiziert.
+
+00:07:06.680 --> 00:07:10.020
+Der Agent empfiehlt, den Absender zu blockieren und das Passwort des Benutzers zurückzusetzen.
+
+00:07:10.560 --> 00:07:12.600
+Ein Klick zur Bestätigung und 30 Sekunden später ist erledigt.
+
+00:07:12.600 --> 00:07:17.280
+Ohne Co-Pilot müssten Sie die E-Mail öffnen, die Header prüfen, die URL manuell kontrollieren,
+
+00:07:17.520 --> 00:07:20.780
+Sie mit Threat Intelligence abgleichen, herausfinden, wer Sie sonst noch erhalten haben könnte
+
+00:07:20.780 --> 00:07:24.300
+und dann im Admin-Center den Absender blockieren und die Anmeldedaten zurücksetzen.
+
+00:07:25.020 --> 00:07:27.900
+Das dauert mindestens 15 Minuten wahrscheinlich mehr und ist eine einzige Warnmeldung.
+
+00:07:27.900 --> 00:07:30.740
+Später am Vormittag müssen Sie die Geräte Compliance prüfen.
+
+00:07:31.280 --> 00:07:35.560
+Anstatt tief in Intune einzutauchen, nach Compliance-Status zu filtern und jedes Gerät zu öffnen,
+
+00:07:35.680 --> 00:07:38.880
+tippen Sie einfach, zeige mir, welche Geräte nicht konform sind und warum.
+
+00:07:40.260 --> 00:07:43.960
+Co-Pilot greift auf Intune zu, listet die Geräte auf und sagt Ihnen genau, was nicht stimmt.
+
+00:07:44.920 --> 00:07:46.380
+Bei diesem Gerät fehlt ein Windows-Update.
+
+00:07:46.880 --> 00:07:49.060
+Enes dort hat nicht die neuesten Antivirus-Definitionen.
+
+00:07:49.420 --> 00:07:52.080
+Klar, umsetzbar und Sie mussten keine einzige Abfrage schreiben.
+
+00:07:52.680 --> 00:07:54.120
+Dann müssen Sie nach riskanten Anmeldungen suchen.
+
+00:07:54.120 --> 00:07:57.220
+Sie fragen, welche Benutzer haben sich von nicht verwalteten Geräten angemeldet?
+
+00:07:57.900 --> 00:08:00.320
+Co-Pilot greift auf die Entra-Anmelde-Protokolle zu und gibt Ihnen eine Liste.
+
+00:08:00.780 --> 00:08:03.820
+Sie entdecken einen Benutzer, der sich von einem privaten Gerät in einem anderen Land angemeldet hat.
+
+00:08:04.140 --> 00:08:06.220
+Sie untersuchen es, bestätigen die Legitimität und machen weiter.
+
+00:08:06.580 --> 00:08:07.320
+Insgesamt 5 Minuten.
+
+00:08:08.160 --> 00:08:10.500
+Am Ende des Tages führen Sie den Threat Intelligence Briefing Agenten.
+
+00:08:11.060 --> 00:08:14.440
+Er stellt einen Bericht, der die Bedrohungen in Ihrer Branche der letzten Woche zusammenfasst,
+
+00:08:14.820 --> 00:08:18.360
+zugeschnitten auf das Profil Ihres Unternehmens und sendet ihn automatisch an Ihren CEO.
+
+00:08:19.340 --> 00:08:21.480
+Sie mussten nichts recherchieren, schreiben oder formatieren.
+
+00:08:22.000 --> 00:08:22.700
+Es erscheint einfach.
+
+00:08:23.400 --> 00:08:26.340
+All das geschah, ohne zwischen 5 verschiedenen Konsolen zu wechseln,
+
+00:08:26.340 --> 00:08:29.840
+ohne eine einzige KQL-Abfrage zu schreiben und ohne stundenlange manuelle Untersuchungen.
+
+00:08:30.640 --> 00:08:32.380
+Genau das soll Ihnen Security Co-Pilot bieten.
+
+00:08:32.980 --> 00:08:33.920
+Aber für wen ist das eigentlich gedacht?
+
+00:08:34.800 --> 00:08:35.600
+Die Zielgruppe.
+
+00:08:35.900 --> 00:08:37.040
+Kleine Teams und IT-Profis.
+
+00:08:37.680 --> 00:08:39.220
+Hier ist das Wesentliche zu Security Co-Pilot.
+
+00:08:39.720 --> 00:08:41.520
+Es ist nicht dazu gedacht, Ihr Sicherheitsteam zu ersetzen.
+
+00:08:42.040 --> 00:08:43.400
+Es wurde entwickelt, um Ihr Team zu stärken.
+
+00:08:43.900 --> 00:08:45.700
+Microsoft nennt es einen Kraftmultiplikator.
+
+00:08:45.860 --> 00:08:46.580
+Und genau das ist es auch.
+
+00:08:47.300 --> 00:08:49.740
+Es ist für IT-Manager gedacht, die auch die Sicherheit verantworten,
+
+00:08:50.100 --> 00:08:52.580
+für MSPs, die ein Dutzend Kunden mit wenigen Leuten verwalten,
+
+00:08:52.580 --> 00:08:55.560
+und für kleine Unternehmen mit ein oder zwei IT-Mitarbeitern,
+
+00:08:55.900 --> 00:08:57.720
+die plötzlich für Cybersicherheit zuständig sind.
+
+00:08:58.480 --> 00:08:59.300
+Die Zahlen belegen dies.
+
+00:08:59.640 --> 00:09:02.460
+Frühe Nutzer berichten von 30% schnelleren Reaktionszeiten bei Vorfeld.
+
+00:09:02.680 --> 00:09:04.000
+Das bedeutet, wenn etwas Schlimmes passiert,
+
+00:09:04.100 --> 00:09:06.000
+können Sie es fast ein Drittel schneller eindämmen als zuvor.
+
+00:09:06.420 --> 00:09:09.260
+Sie verzeichnen zudem 54% weniger Zeitaufwand bei Geräterichtlinien.
+
+00:09:09.620 --> 00:09:13.040
+Diese lästigen Situationen, in denen ein Gerät nicht ihren Sicherheitseinstellungen entspricht
+
+00:09:13.040 --> 00:09:14.080
+und Sie herausfinden müssen, warum.
+
+00:09:15.360 --> 00:09:19.040
+Bei der Phishing-Triage erreicht die Reduzierung der manuellen Arbeit 95%.
+
+00:09:19.040 --> 00:09:21.320
+Denn anstatt jede gemeldete E-Mail selbst zu prüfen,
+
+00:09:21.880 --> 00:09:23.500
+übernimmt der Agent den ersten Durchgang
+
+00:09:23.500 --> 00:09:25.820
+und zeigt nur die Fälle an, die ihr Urteil erfordern.
+
+00:09:26.360 --> 00:09:28.080
+Es unterstützt auch ihre weniger erfahrene Mitarbeiter.
+
+00:09:28.720 --> 00:09:30.840
+Die geführten Arbeitsabläufe und verständlichen Erklärungen
+
+00:09:30.840 --> 00:09:32.260
+ermöglichen es einem Junior-Analysten,
+
+00:09:32.400 --> 00:09:35.020
+Vorfälle zu bearbeiten, die normalerweise jahrelange Erfahrungen erfordern würden.
+
+00:09:35.900 --> 00:09:37.940
+Co-Pilot führt Sie Schritt für Schritt durch die Untersuchung,
+
+00:09:38.040 --> 00:09:40.180
+als würde ein erfahrener Mentor über Ihre Schulter schauen,
+
+00:09:40.240 --> 00:09:41.440
+ohne dass man einen einstellen muss.
+
+00:09:42.520 --> 00:09:45.100
+Microsoft positioniert dies als mehr erreichen mit weniger unter Stimmen.
+
+00:09:45.540 --> 00:09:47.200
+Sie brauchen keine fünf Sicherheitsspezialisten,
+
+00:09:47.200 --> 00:09:49.800
+wenn Sie Co-Pilot und einen guten Analysten haben, der es zu bedienen weiß.
+
+00:09:50.240 --> 00:09:51.740
+Die KI übernimmt die repetitive Arbeit,
+
+00:09:51.840 --> 00:09:53.580
+während sich Ihre Leute auf die Entscheidungen konzentrieren,
+
+00:09:53.660 --> 00:09:55.380
+die tatsächlich menschliches Urteilsvermögen erfordern.
+
+00:09:55.720 --> 00:09:56.320
+Aber es gibt einen Haken.
+
+00:09:56.720 --> 00:09:58.300
+Security Co-Pilot funktioniert am besten,
+
+00:09:58.400 --> 00:10:00.620
+wenn Sie bereits im Microsoft-Sicherheits-Ökosystem arbeiten.
+
+00:10:01.340 --> 00:10:04.140
+Defender, Entra, Intune, Purview, da glänzt es.
+
+00:10:04.980 --> 00:10:06.820
+Wenn Ihr Stack komplett aus Drittambiter-Tools besteht,
+
+00:10:06.940 --> 00:10:07.760
+sinkt der Nutzen deutlich,
+
+00:10:07.900 --> 00:10:10.000
+auch wenn es über Plugins mit einigen davon verbunden werden kann.
+
+00:10:10.660 --> 00:10:12.740
+Die tiefe Integration besteht mit Microsofts eigenen Produkt.
+
+00:10:13.260 --> 00:10:14.140
+Und es ist nicht vollständig, Otto.
+
+00:10:14.140 --> 00:10:16.560
+Die Agenten empfehlen, schlagen vor und zeigen auf,
+
+00:10:16.620 --> 00:10:17.720
+was Aufmerksamkeit erfordert,
+
+00:10:17.780 --> 00:10:19.040
+aber sie treffen die endgültige Entscheidung.
+
+00:10:19.620 --> 00:10:20.660
+Menschen, die nehmen die Aktion.
+
+00:10:20.860 --> 00:10:21.700
+Und das ist beabsichtigt,
+
+00:10:21.740 --> 00:10:22.300
+denn sie möchten nicht,
+
+00:10:22.420 --> 00:10:24.320
+dass seine KI ohne Aufsicht Sicherheitsentscheidungen trifft.
+
+00:10:24.780 --> 00:10:25.440
+Das bedeutet aber auch,
+
+00:10:25.480 --> 00:10:26.560
+dass Sie es nicht einfach einrichten und vergessen.
+
+00:10:27.020 --> 00:10:28.140
+Sie müssen weiterhin einbezogen bleiben.
+
+00:10:28.440 --> 00:10:29.540
+Wie fängt man also eigentlich an?
+
+00:10:30.140 --> 00:10:31.260
+Die ersten Schritte, was Sie benötigen.
+
+00:10:31.760 --> 00:10:33.240
+Zuerst benötigen Sie die richtige Lizenz.
+
+00:10:33.740 --> 00:10:37.320
+Security Co-Pilot ist im Microsoft 365 E5 und E7 enthalten.
+
+00:10:37.600 --> 00:10:38.360
+Und das ist die einzige Möglichkeit,
+
+00:10:38.500 --> 00:10:39.500
+es ohne Zusatzkosten zu erhalten.
+
+00:10:39.500 --> 00:10:40.860
+Der erste Schritt ist also zu prüfen,
+
+00:10:40.960 --> 00:10:42.560
+ob Ihr Unternehmen bereits über diese Lizenzen verfügen.
+
+00:10:42.560 --> 00:10:44.060
+Wenn ja, haben Sie den Großteil des Weges berechnet.
+
+00:10:44.520 --> 00:10:46.260
+Sie benötigen außerdem ein Azure-Abonnement,
+
+00:10:46.440 --> 00:10:48.560
+da dort die SCUs bereitgestellt und abgerechnet werden.
+
+00:10:48.860 --> 00:10:49.760
+Wenn Sie je fünf Kunde sind,
+
+00:10:50.180 --> 00:10:52.240
+stellt Microsoft Ihnen 400 SCUs pro Monat
+
+00:10:52.240 --> 00:10:53.680
+für jeweils 1.000 Benutzer zur Verfügung,
+
+00:10:53.820 --> 00:10:55.820
+die automatisch einem gemeinsamen Pool hinzugefügt werden.
+
+00:10:56.540 --> 00:10:58.080
+Sie müssen dies weder berechnen noch anfordern.
+
+00:10:58.780 --> 00:10:59.420
+Es erscheint einfach.
+
+00:10:59.860 --> 00:11:01.740
+Wenn Sie mehr als Ihr enthaltenes Kontingent benötigen,
+
+00:11:01.820 --> 00:11:03.060
+können Sie zusätzliche SCUs erheben.
+
+00:11:03.300 --> 00:11:04.200
+Aber hier ist etwas Wichtiges.
+
+00:11:04.540 --> 00:11:06.340
+Die Mehrnutzung, Overage, ist standardmäßig dialogiert.
+
+00:11:06.400 --> 00:11:09.020
+Das bedeutet, wenn Ihre SCUs vom Monatsende aufgebraucht sind,
+
+00:11:09.180 --> 00:11:10.400
+funktioniert Co-Pilot einfach nicht mehr,
+
+00:11:10.440 --> 00:11:11.800
+bis Ihr nächstes Kontingent bereitsteht.
+
+00:11:12.560 --> 00:11:14.080
+Es gibt keine überraschenden Kosten,
+
+00:11:14.200 --> 00:11:15.780
+da Sie die Mehrnutzung bewusst aktivieren müssen,
+
+00:11:15.840 --> 00:11:16.420
+wenn Sie sie wünschen.
+
+00:11:16.660 --> 00:11:17.740
+Lassen Sie sie zum Testen ausgeschalten.
+
+00:11:18.140 --> 00:11:19.140
+Die Einrichtung ist überraschenderfach.
+
+00:11:19.580 --> 00:11:22.340
+Für E5-Tenants wird Security Co-Pilot automatisch aktiviert.
+
+00:11:22.520 --> 00:11:23.580
+Sie müssen also nichts installieren
+
+00:11:23.580 --> 00:11:25.140
+oder komplexe Einstellungen vornehmen.
+
+00:11:25.940 --> 00:11:27.540
+Sie müssen nur den Personen, die es nutzen werden,
+
+00:11:27.700 --> 00:11:28.380
+Rollen zuweisen.
+
+00:11:29.600 --> 00:11:31.160
+Sicherheitsadministratoren, Globaladministratoren, solche Dinge.
+
+00:11:31.580 --> 00:11:33.760
+Gehen Sie dann auf securitycopilot.com,
+
+00:11:33.920 --> 00:11:34.960
+erstellen Sie einen Arbeitsbereich
+
+00:11:34.960 --> 00:11:35.980
+und beginnen Sie mit den Prompts.
+
+00:11:36.300 --> 00:11:36.640
+Das ist alles.
+
+00:11:37.000 --> 00:11:38.260
+Ein Punkt, den Sie beachten sollten,
+
+00:11:38.260 --> 00:11:40.220
+wenn Sie testen, deaktivieren Sie die Mehrnutzungskapazität.
+
+00:11:40.220 --> 00:11:42.160
+Und wenn Sie fertig sind, löschen Sie die SCUs,
+
+00:11:42.240 --> 00:11:43.240
+um laufende Kosten zu vermeiden.
+
+00:11:43.780 --> 00:11:45.240
+Machen Sie es keine Sorgen, dass Ihr Arbeit verlangt.
+
+00:11:45.320 --> 00:11:47.540
+Co-Pilot speichert Ihre Arbeitsbereichsdaten für 90 Tage,
+
+00:11:47.640 --> 00:11:48.860
+auch nachdem Sie die SCUs gelöscht haben.
+
+00:11:49.360 --> 00:11:51.500
+Ihre Untersuchungen, der Promptverlauf, alles bleibt erhalten.
+
+00:11:52.020 --> 00:11:53.800
+Sie können also später dort weitermachen, wo Sie aufgehört haben.
+
+00:11:54.300 --> 00:11:56.200
+Bevor Sie loslegen, gibt es ein paar Dinge zu wissen.
+
+00:11:57.600 --> 00:11:59.140
+Die Abwägungen, Datenschutz und Vertrauen.
+
+00:11:59.720 --> 00:12:01.120
+Hier ist das Wichtige zu Security Co-Pilot.
+
+00:12:01.700 --> 00:12:03.520
+Es kann auf alles zugreifen, worauf der Benutzer zugreift.
+
+00:12:03.900 --> 00:12:04.960
+Das macht es so leistungsfähig,
+
+00:12:04.960 --> 00:12:05.920
+aber hier liegt auch das Risiko.
+
+00:12:06.400 --> 00:12:07.120
+Denken Sie es sich so vor,
+
+00:12:07.120 --> 00:12:08.960
+als würden Sie jemandem einen Hauptschlüssel für Ihr Bürogebäude geben.
+
+00:12:09.480 --> 00:12:10.820
+Wenn die Berechtigungen zu weitreichend sind,
+
+00:12:10.900 --> 00:12:12.340
+kann Co-Pilot sensible Daten anzeigen,
+
+00:12:12.400 --> 00:12:14.040
+die der Benutzer, der den Prompt ausführt, nicht sehen sollte.
+
+00:12:14.680 --> 00:12:16.260
+Ein falsch konfigurierter SharePoint-Ordner
+
+00:12:16.260 --> 00:12:18.100
+oder ein zu freigegebenes Dokument wird zum Problem,
+
+00:12:18.180 --> 00:12:19.620
+wenn die KI es sofort finden kann.
+
+00:12:20.180 --> 00:12:22.100
+Microsoft gibt an, dass Kundendaten nicht zum Trainieren
+
+00:12:22.100 --> 00:12:23.180
+der Basismodelle verwendet werden.
+
+00:12:23.580 --> 00:12:25.300
+Die gesamte Verarbeitung bleibt innerhalb Ihres Tenants.
+
+00:12:25.740 --> 00:12:27.280
+Ihre Sicherheitsdaten gelangen nicht nach außen
+
+00:12:27.280 --> 00:12:28.680
+und werden nicht in ein öffentliches Modell integriert.
+
+00:12:29.060 --> 00:12:29.880
+Dieser Teil ist also solide.
+
+00:12:29.880 --> 00:12:32.200
+Aber worauf Sie achten müssen, ist Ihre eigene Governance.
+
+00:12:33.240 --> 00:12:35.260
+Bevor Sie Co-Pilot aktivieren, prüfen Sie Ihre Berechtigung,
+
+00:12:35.400 --> 00:12:36.860
+klassifizieren Sie Ihre sensiblen Daten
+
+00:12:36.860 --> 00:12:38.540
+und überwachen Sie die Anfragen der Benutzer.
+
+00:12:38.940 --> 00:12:39.600
+Und hier ist noch eine Sache.
+
+00:12:40.120 --> 00:12:41.560
+Co-Pilot-Outputs übernehmen nicht immer
+
+00:12:41.560 --> 00:12:43.460
+die Vertraulichkeitskennzeichnungen der Quelldateien.
+
+00:12:44.000 --> 00:12:46.340
+Ein generierter Bericht könnte also sensible Informationen
+
+00:12:46.340 --> 00:12:48.140
+ohne die richtige Klassifizierung enthalten.
+
+00:12:51.010 --> 00:12:52.750
+Für die meisten kleinen Teams überwiegen die Vorteile
+
+00:12:52.750 --> 00:12:53.610
+bei weitem die Risiken.
+
+00:12:54.010 --> 00:12:55.310
+Aber vernachlässigen Sie nicht die Grundlage.
+
+00:12:55.690 --> 00:12:57.810
+Ein wenig Vorarbeit bei Berechtigungen und Klassifizierung
+
+00:12:57.810 --> 00:12:58.390
+zahlt sich aus.
+
+00:12:58.390 --> 00:13:00.710
+Kommen wir dazu, was Sie konkret dagegen tun können.
+
+00:13:01.410 --> 00:13:02.290
+Was sollten Sie also jetzt tun?
+
+00:13:02.710 --> 00:13:04.030
+Prüfen Sie zunächst, ob Ihr Unternehmen
+
+00:13:04.030 --> 00:13:05.190
+über E5-Lizenzen verfügt.
+
+00:13:05.710 --> 00:13:07.830
+Gehen Sie in das Microsoft 365 Admin Center
+
+00:13:07.830 --> 00:13:08.830
+und prüfen Sie Ihre Abonnements.
+
+00:13:09.070 --> 00:13:11.150
+Wenn Sie Microsoft 365 E5 sehen,
+
+00:13:11.230 --> 00:13:12.770
+ist Security Co-Pilot bereits enthalten.
+
+00:13:13.390 --> 00:13:14.610
+Weisen Sie Ihrem Sicherheits-Team-Rollen zu
+
+00:13:14.610 --> 00:13:15.630
+und beginnen Sie mit dem Testen.
+
+00:13:16.090 --> 00:13:17.630
+Überprüfen Sie als nächstes Ihre Berechtigungen,
+
+00:13:17.710 --> 00:13:18.770
+bevor Sie Co-Pilot aktivieren.
+
+00:13:19.170 --> 00:13:20.690
+Finden Sie übermäßig geteilte Daten und Korriere.
+
+00:13:20.690 --> 00:13:22.090
+Sie können Microsoft Purview
+
+00:13:22.090 --> 00:13:23.390
+oder ein Drittanbietertool verwenden,
+
+00:13:23.490 --> 00:13:24.670
+um nach exponierten Dateien zu suchen.
+
+00:13:24.990 --> 00:13:26.630
+Betrachten Sie dies als Ihre Versicherungspolizei.
+
+00:13:26.630 --> 00:13:28.650
+Es verhindert, dass Co-Pilot Dinge anzeigt,
+
+00:13:28.730 --> 00:13:29.210
+die es nicht sollte.
+
+00:13:29.690 --> 00:13:30.870
+Beginnen Sie dann mit einem Agenten.
+
+00:13:31.130 --> 00:13:32.950
+Der Agent zur Optimierung des bedingten Zugriffs
+
+00:13:32.950 --> 00:13:33.990
+ist am einfachsten einzurichten.
+
+00:13:34.410 --> 00:13:35.030
+Aktivieren Sie ihn,
+
+00:13:35.130 --> 00:13:36.370
+lassen Sie ihn Ihre Richtlinien scannen
+
+00:13:36.370 --> 00:13:37.210
+und prüfen Sie die Empfehlung.
+
+00:13:37.530 --> 00:13:38.790
+Er bietet Ihnen sofortigen Mehrwert
+
+00:13:38.790 --> 00:13:39.570
+ohne großen Aufwand.
+
+00:13:40.230 --> 00:13:41.210
+Wenn Sie sich damit sicher fühlen,
+
+00:13:41.290 --> 00:13:42.910
+fügen Sie den Phishing-Triage-Agenten hinzu
+
+00:13:42.910 --> 00:13:43.710
+und bauen Sie darauf auf.
+
+00:13:44.150 --> 00:13:45.470
+Wenn Ihnen diese Folge geholfen hat,
+
+00:13:45.510 --> 00:13:46.630
+Security Co-Pilot zu verstehen,
+
+00:13:46.890 --> 00:13:48.610
+abonnieren Sie uns für weitere einfache Erklärungen.
+
+00:13:48.870 --> 00:13:50.090
+Und wenn Sie es bereits nutzen,
+
+00:13:50.190 --> 00:13:51.090
+hinterlassen Sie einen Kommentar
+
+00:13:51.090 --> 00:13:51.970
+mit Ihrem Lieblingsagenten.
+
+00:13:52.190 --> 00:13:52.970
+Würde mich freuen, davon zu hören.

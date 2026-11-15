@@ -1,0 +1,146 @@
+{
+ "de": {
+  "html": "<p>Viele Unternehmen kennen das Bild: Datamarts stehen isoliert nebeneinander, Pipelines laufen ins Leere, und Dashboards speisen sich aus veralteten Quellen. Fragmentierung, Latenz, abweichende Definitionen und doppelte Daten sind die Folge. Microsoft Fabric setzt dem ein Gesamtbild entgegen: ein gemeinsamer Datensee, klare Verantwortlichkeiten und eine geteilte semantische Sprache.</p>\n<p>Dieser Artikel erklärt, wie OneLake, Lakehouse, Warehouse, Governance und Power BI zusammenspielen. Er zeigt auch, warum Power BI nur dann überzeugt, wenn die vorgelagerten Datenströme sauber sind.</p>\n\n<h2>OneLake, Domänen und Arbeitsbereiche: das Fundament von Microsoft Fabric</h2>\n<p>Unter allem liegt OneLake, ein einziger organisatorischer Datensee. Er speichert Tabellen im Delta-Format und Dateien nebeneinander. Er verlangt keinen riesigen gemeinsamen Arbeitsbereich: OneLake ist ein Einzugsgebiet, kein einzelnes Nest. Domänen und Arbeitsbereiche bestimmen weiterhin, wer wofür zuständig ist.</p>\n<h3>Domänen definieren Verantwortung</h3>\n<p>Domänen wie Vertrieb, Finanzen, Betrieb, Personal und Marketing bilden die Verantwortlichkeitsgrenzen. Dadurch ist die Zuständigkeit erkennbar, die Herkunft leichter nachvollziehbar, und die Verwaltung hat einen festen Ort. Sie wirken nicht nur durch Abgrenzung, sondern durch geteilte Sorgfaltspflichten:</p>\n<ul>\n<li>Datenverträge</li>\n<li>Aktualisierungsdisziplin</li>\n<li>konsequente Nutzung von Labels</li>\n<li>definierte Wege für Vorfälle</li>\n</ul>\n<h3>Arbeitsbereiche und Kapazität</h3>\n<p>Innerhalb jeder Domäne arbeiten Arbeitsbereiche, die an eine Kapazität gebunden sind. Entwicklungs-Arbeitsbereiche bieten Raum zum Experimentieren, Produktions-Arbeitsbereiche schützen gefestigte Inhalte. Die Kapazität sollte den Domänen bewusst zugewiesen werden, Entwicklung und Produktion bleiben getrennt. Ist sie zu schwach, entstehen Aktualisierungsstaus. Ist sie ohne Governance zu üppig, bleibt Verschwendung zurück.</p>\n<h3>Bronze, Silber, Gold</h3>\n<p>Die Schichten strukturieren die Daten wie Bodenschichten:</p>\n<ul>\n<li><strong>Bronze</strong> nimmt Rohdaten genau so auf, wie sie ankommen.</li>\n<li><strong>Silber</strong> standardisiert, bereinigt und gleicht Schlüssel ab.</li>\n<li><strong>Gold</strong> ist kuratiert und bereit für den breiten Konsum.</li>\n</ul>\n<p>Ad-hoc-Änderungen in Gold bringen Unruhe. Promotions-Pipelines, Freigaben und Versionierung stellen sie wieder her.</p>\n\n<h2>Lakehouse und Warehouse in Fabric: ergänzen statt ersetzen</h2>\n<p>Das Lakehouse ist das offene Gelände mit Dateien, Delta-Tabellen und Shortcuts. Analysten, Ingenieure und Datenwissenschaftler arbeiten hier gemeinsam, etwa mit Power Query, Spark oder Notebooks.</p>\n<p>Shortcuts verbinden Bereiche ohne Duplizierung. Sie tragen die Verantwortung mit: Verweist ein Sales-Lakehouse per Shortcut auf eine Finance-Gold-Tabelle, gilt dafür weiterhin die Governance der Finanzen.</p>\n<p>Das Warehouse ist der strukturiertere Gegenpart, ein SQL-fokussiertes Umfeld für relationale Workloads. Es eignet sich für Sternschemata und vertraute Werkzeuge wie T-SQL, Views, Stored Procedures und Performance-Dashboards. Es ergänzt das Lakehouse, es ersetzt es nicht. Ein typisches Muster: Daten im Lakehouse aufnehmen und verfeinern, dann über das Warehouse stabile SQL-Endpunkte bereitstellen, wenn konsistente Zugriffswege und Indizierung gefragt sind.</p>\n<p>Über beiden steht das semantische Modell. Kennzahlen, Beziehungen und Rollen schaffen ein gemeinsames Vokabular, sodass „Umsatz“ überall dasselbe bedeutet.</p>\n\n<h2>Datenflüsse in Fabric: Data Factory, Dataflows Gen2, Shortcuts und Mirroring</h2>\n<p>Jedes Datenökosystem lebt von seinen Zuflüssen: Quellsysteme, CRM-Daten, Dateien und Datenbanken. Eine einfache Regel gilt dabei vorab: Legen Sie zuerst die Ufer fest, denn ein Datenfluss ohne klare Grenzen wird zum Risiko.</p>\n<h3>Die wichtigsten Werkzeuge</h3>\n<ul>\n<li><strong>Data Factory</strong> liefert über 300 Konnektoren, die Daten zu OneLake leiten.</li>\n<li><strong>Dataflows Gen2</strong> nutzen die vertraute Power Query Engine. Analysten legen etwa eine CSV-Datei ab, transformieren Datentypen, führen Merges durch und schreiben das Ergebnis als Delta-Tabellen ins Lakehouse, ohne schweres Gerät.</li>\n<li><strong>Shortcuts</strong> binden Daten aus einem anderen Speicherort ein, ohne Kopien. Die Herkunft bleibt erhalten.</li>\n<li><strong>Mirroring</strong> bildet operative Datenbanken wie SQL, Postgres oder Cosmos nahezu in Echtzeit in kuratierten Delta-Tabellen ab, ohne die Quelle zu belasten.</li>\n</ul>\n<p>Sobald Daten in OneLake liegen, können Spark, SQL und Power BI darauf zugreifen, ohne separate Datenkopien anzulegen.</p>\n<h3>Betrieb und Ordnung der Flows</h3>\n<p>Lineage zeigt, welcher Zufluss welches Ziel speist. Der Katalog macht Datenbestände über Namen, Beschreibungen und Verantwortlichkeiten auffindbar. Drifterkennung meldet fehlende Spalten, geänderte Typen oder abweichende Pipelines. Dann gilt: Schema aktualisieren, Verantwortliche informieren, Zeitplan prüfen.</p>\n<p>Die zentrale Regel lautet: <strong>ein Eigentümer pro Flow</strong>. Gemeinsame Flows ohne benannten Verantwortlichen veralten oder laufen aus dem Ruder. Zusätzlich sollten Sie Aufbewahrungsfristen je Schicht festlegen: Bronze für Wochen zur Vorfallanalyse, Silber für Monate zur Stabilität, Gold so lange, wie Governance und Kosten es erlauben. Kontingente und Obergrenzen für Gleichzeitigkeit schützen vor Überlastung. Der Zeitplan richtet sich nach dem Bedarf, etwa stündlich für Bestände, täglich für Verkäufe und in Echtzeit für Betrugserkennung.</p>\n\n<h2>Power BI, semantisches Modell und Direct Lake</h2>\n<p>Power BI ist nicht der See, sondern die sichtbare Schicht darüber. Ihre Qualität hängt vom semantischen Modell und von den vorgelagerten Daten ab.</p>\n<h3>Ein sauberes semantisches Modell</h3>\n<ul>\n<li>Die Granularität jeder Tabelle sorgfältig definieren.</li>\n<li>Eine klare Sternstruktur mit direkten, gezielten Beziehungen aufbauen.</li>\n<li>Measures aus Basisspalten ableiten statt auf anderen Measures aufzubauen.</li>\n<li>Das Modell als zertifiziertes Modell im Gold-Arbeitsbereich der Domäne veröffentlichen und so die Wiederverwendung fördern.</li>\n</ul>\n<p>Ein einziges, gut abgestimmtes Modell skaliert besser als viele leicht abweichende Kopien. Außerdem hört man auf, Kennzahlen wie den Umsatz immer wieder neu zu definieren.</p>\n<h3>Direct Lake: Frische ohne Importläufe</h3>\n<p>Direct Lake liest direkt auf Delta-Tabellen in OneLake. Importe und Aktualisierungsschlangen entfallen. Visualisierungen reagieren dabei so schnell wie bei Import und liefern die Frische von Live-Daten. Voraussetzungen sind das Delta-Format, eine kompatible Modellstruktur und der Zugriff auf die richtigen Datenquellen.</p>\n<p>Auch Direct Lake kann an Grenzen stoßen, wenn Sternschemata unsauber sind oder die Kardinalität stark wächst. Entfernen Sie breite Textspalten aus Faktentabellen, aggregieren Sie, wo es die Geschäftsfragen erlauben, und setzen Sie Verbundmodelle nur ein, wenn die Migration einen Zwischenschritt braucht.</p>\n<h3>Eine Demo in Kurzform</h3>\n<p>Im Vertriebsbereich entsteht ein Lakehouse. Ein Shortcut führt zu kuratierten Internetverkäufen in Silber, dazu kommen Dimensionen für Datum, Geografie, Produkt und Kunde. Im standardmäßigen semantischen Modell werden 1:n-Beziehungen von den Internetverkäufen zu den Dimensionen gesetzt. Ein Basismaß „Gesamtumsatz“ summiert den Umsatzbetrag und wird als Währung formatiert. Power BI Desktop verbindet sich per Direct Lake und zeigt Karte, Balkendiagramm und Trendlinie ohne Aktualisierungsritual.</p>\n\n<h2>Sicherheit, Governance und Copilot im Fabric-Ökosystem</h2>\n<p>Schutzmaßnahmen gehören von Anfang an in den Lebensraum der Daten, statt nachträglich übergestülpt zu werden.</p>\n<h3>Zugriff und Rollen</h3>\n<p>Arbeitsbereichsrollen (Administrator, Mitglied, Mitwirkender, Betrachter) sollten bewusst vergeben werden. Entwicklung darf offener sein, Produktion bleibt geschützt. Deployment-Pipelines für Entwicklung, Test und Produktion mit parametrisierten Verbindungen, Genehmigungen und versionierten Definitionen sorgen für planbare Übergänge.</p>\n<p>Row-Level-Security gehört ins semantische Modell, nicht in einzelne Visualisierungen. So erbt jeder Bericht dieselben Grenzen. Eine Regionalmanagerin sieht nur ihre Region. Wer Sicherheit in Visuals versteckt, kaschiert sie nur. Objekt- und Spaltenebene schützen zusätzlich sensible Felder wie nationale IDs, Kreditkartentoken oder Gehaltsbänder. Im Warehouse übernehmen SQL-Berechtigungen und Views diese Aufgabe, im Lakehouse die Sicherheit auf Element-, Ordner- und Spaltenebene.</p>\n<h3>Vertraulichkeitsbezeichnungen und OneLake-Schutz</h3>\n<p>Purview-Vertraulichkeitsbezeichnungen (öffentlich, intern, vertraulich, streng vertraulich) begleiten die Daten durch Power BI, Excel, Teams und sogar die externe Zusammenarbeit. Wenden Sie sie nach Möglichkeit auf Arbeitsbereichsebene an und nutzen Sie die Vererbung. Ändert sich die Bezeichnung, ziehen nachgelagerte Elemente automatisch nach, ebenso Exportbeschränkungen, Wasserzeichen und Datensicherheitsrichtlinien. Ergänzend wirken Ausgangskontrollen gegen unbemerkte Verbindungen zu fremden Datenquellen, Private Link für gesicherten Datenverkehr und vom Kunden verwaltete Schlüssel.</p>\n<p>Demo B zeigt das in der Praxis: Im Sales-Gold-Arbeitsbereich wird eine Rolle für den Regionalmanager zugewiesen, abgeleitet vom User Principal Name. Die Bezeichnung „vertraulich“ wird auf den Arbeitsbereich angewendet. Zwei Betrachter, einer aus EMEA und einer aus Nordamerika, sehen im selben Bericht unterschiedliche Werte, mit Wasserzeichen und begrenztem Export. Es gibt keine fragilen visuellen Filter und keine regional duplizierten Berichte.</p>\n<h3>Audit, Lebenszyklus und Stewardship</h3>\n<p>Lineage zeigt den Weg von der Quelle über die Tabelle und das Modell bis zum Bericht. Ändern sich Zahlen, folgt man der Spur flussaufwärts. Nutzungsmetriken zeigen, welche Berichte und Modelle die Last tragen, und ungewöhnliche Exporte oder Aktivitäten nach Feierabend lösen Alarme aus. Quellcodeverwaltung dokumentiert, wer wann ein Maß geändert hat. Ein Rollback ist so kontrolliert möglich.</p>\n<p>Benennen Sie Verantwortliche je Bereich, veröffentlichen Sie Kontaktstellen und definieren Sie Wege für Vorfälle: Schemaabweichungen in Bronze, Konformitätsverstöße in Silber, semantische Änderungen in Gold.</p>\n<h3>Copilot als Assistent</h3>\n<p>Copilot unterstützt, ersetzt aber niemanden. Im Lakehouse entwirft er Aufnahmeschritte, schlägt Power Query-Transformationen und Spaltentypen vor und erstellt Dataflows Gen2 von Bronze nach Silber. Im semantischen Modell hilft er bei Maßdefinitionen und Beziehungen und übersetzt Geschäftsfragen in DAX-Entwürfe. Er sieht nur, was die jeweilige Identität sehen darf, Row-Level-Security und Elementkontrollen gelten also auch für ihn.</p>\n<p>Seine Hilfe ist nur so gut wie die Datenbasis. Fehlen Schlüssel oder Bezeichnungen oder sind Verantwortlichkeiten unklar, sinkt die Verlässlichkeit. Prompts mit Governance-Bezug stärken die Zusammenarbeit: zertifizierte Silberquellen nutzen, vertrauliche Tags respektieren und die Ausgabe auf exportfreigegebene Felder begrenzen.</p>\n\n<h2>Migration zu Fabric und Direct Lake in neun Schritten</h2>\n<p>Der Umstieg von klassischen Datasets, geplanten Importen und Gateways gelingt am besten Schritt für Schritt:</p>\n<ol>\n<li><strong>Bestand prüfen:</strong> Datasets mit Größe, Aktualisierungsfrequenz, Quellen, Gateway-Abhängigkeiten, RLS-Regeln und Berichtsanbindungen katalogisieren. Kandidaten für Direct Lake sind Sternschemata mit hohem Importaufwand und Quellen, die als Delta in OneLake liegen können.</li>\n<li><strong>Ziel vorbereiten:</strong> Lakehouse oder Warehouse in der richtigen Domäne anlegen, zuerst in Entwicklung, Kapazität zuweisen, Benennung angleichen. Komplexe Transformationen gehören in Dataflows Gen2.</li>\n<li><strong>Daten bewegen:</strong> in Bronze laden, nach Silber mit Konformität, Datentypen, Surrogatschlüsseln und Geschäftslogik überführen und Datensatzanzahlen gegen das alte Modell validieren.</li>\n<li><strong>Semantisches Modell neu aufbauen:</strong> automatisch generieren oder gezielt nachbauen, Namen und Formate beibehalten, RLS neu implementieren und mit echten Identitäten testen.</li>\n<li><strong>Berichte neu anbinden:</strong> auf das neue Modell verweisen. Wo Visuals auf verborgenen Transformationen beruhten, richtige Kennzahlen oder Silberlogik einsetzen.</li>\n<li><strong>Performance prüfen:</strong> Filterreaktion, Ladezeiten, Lesezeichen. Ungenutzte Spalten entfernen, Kardinalitäten vereinfachen.</li>\n<li><strong>Rollen migrieren:</strong> Berechtigungen replizieren, Modell zertifizieren, Labels setzen, bei Bedarf OneLake-Sicherheit konfigurieren.</li>\n<li><strong>Umstellung planen:</strong> Zeitfenster kommunizieren, Änderungen am alten Modell einfrieren, Bindungen kontrolliert wechseln, das alte Modell kurz schreibgeschützt als Vergleich behalten, danach Gateways deaktivieren, archivieren und entfernen.</li>\n<li><strong>Überwachen:</strong> Herkunft, Nutzung und Aktualisierungsstatus beobachten, auf Rückfragen schnell reagieren und Erfolge sichtbar machen.</li>\n</ol>\n<p>Beginnen Sie mit risikoarmen Bereichen wie Abteilungs-Sandboxes oder reinen Lese-Dashboards, und migrieren Sie in Gruppen statt in einem großen Wurf.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<h3>Drei verbreitete Irrtümer</h3>\n<ul>\n<li><strong>„Fabric ersetzt Power BI.“</strong> Falsch: Power BI bleibt die Schicht, die Daten zeigt. Fabric ist das Ökosystem, das sie versorgt.</li>\n<li><strong>„OneLake ist ein riesiger Arbeitsbereich.“</strong> Falsch: Domänen und Arbeitsbereiche bleiben maßgeblich.</li>\n<li><strong>„Fabric ist nur etwas für Ingenieure.“</strong> Falsch: Mit Dataflows Gen2 und Shortcuts wird Technik auch für Analysten zugänglich.</li>\n</ul>\n<h3>Technische Fallen</h3>\n<ul>\n<li>Direct Lake erfordert Delta. Parquet ohne Delta reicht nicht aus.</li>\n<li>Sehr komplexe M-Logik aus alten Datasets gehört in Dataflows Gen2 oder Pipelines, nicht ins Modell.</li>\n<li>RLS migriert nie automatisch und muss im neuen Modell sorgfältig definiert und getestet werden.</li>\n<li>Wer die Silberschicht umgeht, trägt Ablagerungen bis in die Dashboards.</li>\n<li>Sicherheit in Visualisierungen statt im Modell bietet nur scheinbaren Schutz.</li>\n<li>Flows ohne benannten Verantwortlichen verlieren den Anschluss an ihren Zeitplan.</li>\n<li>Sensible Zahlen in Berichten, die bei Filtern „seltsam“ springen, kosten Vertrauen. Die Ursache liegt meist in der Silberkonformität oder in unklaren Rollen und Maßen.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Legen Sie Domänen mit klaren Verantwortlichen an und trennen Sie Entwicklung und Produktion in eigenen Arbeitsbereichen.</li>\n<li>Nutzen Sie Namen, die wie Wegweiser funktionieren, zum Beispiel Sales Bronze Lakehouse oder Sales Gold Semantikmodell.</li>\n<li>Setzen Sie Bronze, Silber und Gold mit Deployment-Pipelines, Genehmigungen und versionierten Definitionen um.</li>\n<li>Vergeben Sie genau einen Eigentümer pro Flow und veröffentlichen Sie Zeitpläne und Kontaktstellen.</li>\n<li>Definieren Sie Aufbewahrungsfristen und Backpressure-Schwellenwerte pro Schicht.</li>\n<li>Veröffentlichen Sie ein zertifiziertes semantisches Modell im Gold-Arbeitsbereich und legen Sie RLS dort ab.</li>\n<li>Wenden Sie Purview-Vertraulichkeitsbezeichnungen auf Arbeitsbereichsebene an und nutzen Sie die Vererbung.</li>\n<li>Überwachen Sie Herkunft, Nutzung, Datenausgang und Rechenzeit und passen Sie Quoten, Zeitpläne und Caching an.</li>\n<li>Planen Sie eine 30-Tage-Baseline: Bereiche und Stewards in Woche 1, Benennung und Katalog bis Tag 14, Schichten und Pipelines bis Tag 21, danach Sicherheit, Kapazitäten und das zertifizierte Modell.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Power BI wirkt dann überzeugend, wenn das Fundament stimmt: ein gemeinsamer Datensee, Domänen mit klarer Verantwortung, Arbeitsbereiche mit passender Kapazität, saubere Schichten von Bronze bis Gold und eine gemeinsame semantische Sprache. Sicherheit und Governance gehören von Anfang an in dieses System, denn sie bremsen es nicht, sondern geben ihm die Verlässlichkeit, sich weiterzuentwickeln. Wer klein startet, etwa mit dem Vertriebsbereich, und Schritt für Schritt vorgeht, erhält Berichte, die mit Direct Lake schnell und aktuell sind und deren Zahlen Bestand haben.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Von verstreuten Daten zu Power BI mit Direct Lake",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Fundament legen",
+     "text": "OneLake als gemeinsamer See, Domänen für Verantwortung, Arbeitsbereiche mit Kapazität, getrennte Entwicklung und Produktion."
+    },
+    {
+     "kopf": "Daten veredeln",
+     "text": "Data Factory, Dataflows Gen2, Shortcuts und Mirroring führen Daten durch Bronze, Silber und Gold."
+    },
+    {
+     "kopf": "Gemeinsame Sprache",
+     "text": "Zertifiziertes semantisches Modell mit Sternschema, Kennzahlen und Rollen im Gold-Arbeitsbereich."
+    },
+    {
+     "kopf": "Direct Lake nutzen",
+     "text": "Berichte lesen Delta-Tabellen direkt, ohne Importläufe, mit schneller Reaktion und frischen Daten."
+    },
+    {
+     "kopf": "Schützen und steuern",
+     "text": "RLS im Modell, Purview-Labels, OneLake-Sicherheit, Lineage und ein Eigentümer pro Flow."
+    },
+    {
+     "kopf": "Schrittweise migrieren",
+     "text": "Bestand prüfen, Ziel vorbereiten, Modell neu aufbauen, Berichte anbinden und die neuen Pfade überwachen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist der Unterschied zwischen Lakehouse und Warehouse in Microsoft Fabric?",
+    "a": "Das Lakehouse ist das offene Gelände mit Dateien, Delta-Tabellen und Shortcuts, in dem Analysten, Ingenieure und Datenwissenschaftler mit Power Query, Spark oder Notebooks arbeiten. Das Warehouse ist SQL-fokussiert und eignet sich für Sternschemata und T-SQL. Es ergänzt das Lakehouse, ersetzt es aber nicht."
+   },
+   {
+    "q": "Was ist Direct Lake in Power BI und welche Voraussetzungen gelten dafür?",
+    "a": "Direct Lake liest direkt auf Delta-Tabellen in OneLake, sodass Importe und Aktualisierungsschlangen entfallen. Visualisierungen reagieren so schnell wie bei Import und liefern die Frische von Live-Daten. Voraussetzungen sind das Delta-Format, eine kompatible Modellstruktur und der Zugriff auf die richtigen Datenquellen. Parquet ohne Delta reicht nicht."
+   },
+   {
+    "q": "Wo sollte Row-Level-Security in Power BI und Fabric umgesetzt werden?",
+    "a": "Row-Level-Security gehört ins semantische Modell, nicht in einzelne Visualisierungen. So erbt jeder Bericht dieselben Grenzen, und eine Regionalmanagerin sieht nur ihre Region. Sicherheit in Visuals kaschiert nur. Bei einer Migration wird RLS nie automatisch übernommen und muss neu definiert und mit echten Identitäten getestet werden."
+   },
+   {
+    "q": "Was bedeuten Bronze, Silber und Gold in der Fabric-Datenarchitektur?",
+    "a": "Bronze nimmt Rohdaten genau so auf, wie sie ankommen. Silber standardisiert, bereinigt und gleicht Schlüssel ab. Gold ist kuratiert und bereit für den breiten Konsum. Wer die Silberschicht umgeht, trägt Ablagerungen bis in die Dashboards. Ad-hoc-Änderungen in Gold bringen Unruhe."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Lakehouse und Warehouse im Vergleich",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Lakehouse",
+     "punkte": [
+      "Offenes Gelände mit Dateien, Delta-Tabellen und Shortcuts",
+      "Analysten, Ingenieure und Datenwissenschaftler arbeiten gemeinsam",
+      "Werkzeuge: Power Query, Spark und Notebooks",
+      "Geeignet zum Aufnehmen und Verfeinern von Daten"
+     ]
+    },
+    "rechts": {
+     "titel": "Warehouse",
+     "punkte": [
+      "Strukturierter Gegenpart, SQL-fokussiert für relationale Workloads",
+      "Eignet sich für Sternschemata",
+      "Werkzeuge: T-SQL, Views und Stored Procedures",
+      "Stabile SQL-Endpunkte bei Bedarf an konsistenten Zugriffswegen"
+     ]
+    }
+   },
+   {
+    "titel": "Die Datenfluss-Werkzeuge in Fabric",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "über 300",
+      "text": "Konnektoren in Data Factory leiten Daten zu OneLake."
+     },
+     {
+      "wert": "Dataflows Gen2",
+      "text": "Nutzen die Power Query Engine und schreiben Delta-Tabellen ins Lakehouse."
+     },
+     {
+      "wert": "Shortcuts",
+      "text": "Binden Daten aus anderen Speicherorten ein, ohne Kopien."
+     },
+     {
+      "wert": "Mirroring",
+      "text": "Bildet SQL, Postgres oder Cosmos nahezu in Echtzeit ab, ohne die Quelle zu belasten."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welche Voraussetzung muss erfüllt sein, damit Direct Lake auf Daten in OneLake zugreifen kann?",
+    "opts": [
+     "Die Daten müssen als Delta-Tabellen vorliegen, reines Parquet ohne Delta genügt nicht",
+     "Die Daten müssen ausschließlich als CSV-Dateien im Bronze-Bereich liegen",
+     "Die Daten müssen vorher in ein Importmodell mit Aktualisierungsplan kopiert werden",
+     "Die Daten müssen über ein lokales Gateway bereitgestellt werden"
+    ],
+    "a": 0,
+    "why": "Direct Lake erfordert das Delta-Format. Parquet ohne Delta reicht nicht aus."
+   },
+   {
+    "q": "Wohin gehört Row-Level-Security, damit jeder Bericht dieselben Zugriffsgrenzen erbt?",
+    "opts": [
+     "In einzelne Visualisierungen des jeweiligen Berichts",
+     "In das semantische Modell",
+     "In regional duplizierte Berichte",
+     "In die Bronze-Schicht des Lakehouse"
+    ],
+    "a": 1,
+    "why": "RLS gehört ins semantische Modell. Sicherheit in Visuals kaschiert sie nur und bietet scheinbaren Schutz."
+   },
+   {
+    "q": "Was gilt, wenn ein Sales-Lakehouse per Shortcut auf eine Finance-Gold-Tabelle verweist?",
+    "opts": [
+     "Die Daten werden kopiert und unterliegen künftig der Governance des Vertriebs",
+     "Der Shortcut hebt alle Vertraulichkeitsbezeichnungen der Finanzdaten automatisch auf",
+     "Für die Tabelle gilt weiterhin die Governance der Finanzen",
+     "Der Shortcut funktioniert nur innerhalb desselben Arbeitsbereichs"
+    ],
+    "a": 2,
+    "why": "Shortcuts verbinden ohne Duplizierung und tragen die Verantwortung mit. Die Finanz-Governance bleibt gültig."
+   },
+   {
+    "q": "Welche Aufgabe hat die Silberschicht im Bronze-Silber-Gold-Modell?",
+    "opts": [
+     "Sie nimmt Rohdaten unverändert genau so auf, wie sie ankommen",
+     "Sie stellt kuratierte Daten für den breiten Konsum bereit",
+     "Sie speichert ausschließlich Berichte und Dashboards für Endnutzer",
+     "Sie standardisiert, bereinigt und gleicht Schlüssel ab"
+    ],
+    "a": 3,
+    "why": "Silber standardisiert, bereinigt und gleicht Schlüssel ab. Bronze nimmt Rohdaten auf, Gold ist kuratiert."
+   }
+  ]
+ }
+}

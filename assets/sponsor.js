@@ -1,7 +1,9 @@
 /* T37 Sponsor-Seite (/sponsor/): Bedienung des Paket-Konfigurators. Rechnen, Texte und HTML-Bausteine: assets/sponsor-calc.js.
    INP-Regeln (T29a): ein Listener je Ereignistyp am Wurzelelement, ein Rendern je Frame (requestAnimationFrame), nur Schreiben ins DOM
    (keine Layout-Abfragen), Fokus erst nach dem naechsten Frame und ohne Scrollen, live ist nur die Summenzeile.
-   Das Standardpaket rendert der Seitenbau vorab (data-ssr="1"); beim Laden wird nur neu gerendert, wenn der Zustand abweicht. */
+   Das Standardpaket rendert der Seitenbau vorab (data-ssr="1"); beim Laden wird nur neu gerendert, wenn der Zustand abweicht.
+   Banner-Werbung (Mirko, 6.11.2026): der Haken klappt den Rechner und die Buchung der Werbeplaetze auf (assets/ads-book.js aus #285,
+   erst beim ersten Aufklappen geladen); Themen-Targeting mit den Themen aus Schritt 2, Preis nur vom Server. */
 (function () {
   var root = document.getElementById("spn"), SC = window.SponsorCalc;
   if (!root || !SC) return;
@@ -11,31 +13,32 @@
   function $(id) { return document.getElementById(id); }
   var el = { month: $("spn-month"), tline: $("spn-tline"), rows: $("spn-rows"), notopic: $("spn-notopic"), tl: $("spn-tl"), fgeo: $("spn-fgeo"), fseo: $("spn-fseo"),
              ttext: $("spn-ttext"), rec: $("spn-rec"), pk: $("spn-pk"), prrec: $("spn-prrec"), rtrec: $("spn-rtrec"), picked: $("spn-picked"), sum: $("spn-sum"),
-             lock: $("spn-lock"), dash: $("spn-dash"), cpr: $("spn-cnt-pr"), cex: $("spn-cnt-ex"), cli: $("spn-cnt-li"), q: $("spn-q"), own: $("spn-own"), dl: $("spn-dl"),
-             qmsg: $("spn-q-msg"), ownmsg: $("spn-own-msg"), form: $("spn-form"), status: $("spn-status"), done: $("spn-done"), submit: $("spn-submit"), terr: $("spn-topics-e") };
+             lock: $("spn-lock"), dash: $("spn-dash"), cpr: $("spn-cnt-pr"), cex: $("spn-cnt-ex"), cli: $("spn-cnt-li"), clv: $("spn-cnt-lv"), q: $("spn-q"), own: $("spn-own"), dl: $("spn-dl"),
+             qmsg: $("spn-q-msg"), ownmsg: $("spn-own-msg"), form: $("spn-form"), status: $("spn-status"), done: $("spn-done"), submit: $("spn-submit"), terr: $("spn-topics-e"),
+             inv: $("spn-inv"), invBody: $("spn-inv-body"), invCon: $("spn-inv-con"), ads: $("spn-ads"), adsBox: $("spn-adsbox"), adb: $("spn-adb") };
   var chips = root.querySelectorAll(".spn-chip");
 
   /* Themen: Schnellauswahl, kuratierte Suche, eigene Themen (Namen ohne Gross-/Kleinschreibung verglichen) */
   var QUICK = {}, BYNAME = {};
   function key(s) { return SC.clean(s).toLowerCase(); }
   C0.quick.forEach(function (q) {
-    var o = { id: q[0], name: q[1], en: q[2], lvl: q[3], rated: q[4], example: q[5], url: q[6], custom: false };
+    var o = { id: q[0], name: q[1], en: q[2], lvl: q[3], rated: q[4], example: q[5], url: q[6], custom: false, eid: q[9] || "" };
     QUICK[o.id] = o;
     [q[1], q[2]].concat(q[8] || []).forEach(function (n) { BYNAME[key(n)] = BYNAME[key(n)] || o; });
   });
   C0.ents.forEach(function (x) {
-    var o = { id: "e:" + x[0], name: x[1], en: x[1], lvl: x[2], rated: !!x[2], example: !!x[3], url: C0.entBase + x[0] + "/", custom: false };
+    var o = { id: "e:" + x[0], name: x[1], en: x[1], lvl: x[2], rated: !!x[2], example: !!x[3], url: C0.entBase + x[0] + "/", custom: false, eid: x[0] };
     [x[1]].concat(x[4] || []).forEach(function (n) { BYNAME[key(n)] = BYNAME[key(n)] || o; });
   });
-  var S = { topics: [], cnt: { pr: 1, ex: P.defaults.cnt.ex, li: P.defaults.cnt.li }, prTouched: false };
+  var S = { topics: [], cnt: { pr: 1, ex: P.defaults.cnt.ex, li: P.defaults.cnt.li, lv: P.defaults.cnt.lv || 1 }, prTouched: false, adsSel: null };
   C0.quick.forEach(function (q) { if (q[7]) S.topics.push(QUICK[q[0]]); });
 
   function radio(name) { var r = root.querySelector('input[name="' + name + '"]:checked'); return r ? r.value : null; }
   function chk(id) { var x = $(id); return !!(x && x.checked); }
   function state() {
     return { goal: radio("spn-goal") || P.defaults.goal, rt: +(radio("spn-rt") || P.defaults.runtime), topics: S.topics, video: chk("spn-video"), pr: chk("spn-pr"),
-             auth: chk("spn-auth"), dash: chk("spn-dash"), l14: chk("spn-l14"), topic: chk("spn-topic"), expert: chk("spn-expert"), li: chk("spn-li"), con: chk("spn-con"),
-             cnt: S.cnt, prTouched: S.prTouched };
+             auth: chk("spn-auth"), dash: chk("spn-dash"), l14: chk("spn-l14"), ads: chk("spn-ads"), expert: chk("spn-expert"), li: chk("spn-li"), live: chk("spn-live"), con: chk("spn-con"),
+             cnt: S.cnt, prTouched: S.prTouched, adsSel: S.adsSel };
   }
 
   /* Rendern: hoechstens einmal je Frame, nur geaenderte Knoten */
@@ -62,8 +65,9 @@
     prop(el.fseo, "sa", "--a", pc(v.bars.seo[0])); prop(el.fseo, "sw", "--w", pc(v.bars.seo[1]));
     put(el.ttext, "x", v.tText); put(el.rec, "rec", SC.recHtml(v), true);
     put(el.pk, "pk", v.pkCount); put(el.prrec, "pr", v.prRec); flag(el.prrec, "hidden", !v.prRecShow); put(el.rtrec, "rt", v.rtRec);
-    put(el.cpr, "cpr", String(v.counts.pr)); put(el.cex, "cex", String(v.counts.ex)); put(el.cli, "cli", String(v.counts.li));
+    put(el.cpr, "cpr", String(v.counts.pr)); put(el.cex, "cex", String(v.counts.ex)); put(el.cli, "cli", String(v.counts.li)); put(el.clv, "clv", String(v.counts.lv));
     put(el.picked, "pk2", SC.pickedHtml(s, P, L), true); put(el.sum, "sum", v.summary);
+    invSync(s); adsSync(s);
     if (focusNext) { var f = focusNext; focusNext = null; focusLater(f()); }
   }
   function focusLater(node) {
@@ -92,6 +96,7 @@
       if (chips[i].getAttribute("aria-pressed") !== on) chips[i].setAttribute("aria-pressed", on);
     }
     msg(el.terr, "");
+    if (adb) adb.refresh();   // Themen-Targeting folgt den Themen aus Schritt 2
     schedule();
   }
   function toggleQuick(id) {
@@ -123,7 +128,7 @@
     var cur = k === "pr" ? (S.prTouched ? S.cnt.pr : (lastV ? lastV.calc.prCount : SC.compute(state(), P).prCount)) : S.cnt[k];
     S.cnt[k] = SC.clampStep(cur + d, P);
     if (k === "pr") S.prTouched = true;
-    var cb = $({ pr: "spn-pr", ex: "spn-expert", li: "spn-li" }[k]);
+    var cb = $({ pr: "spn-pr", ex: "spn-expert", li: "spn-li", lv: "spn-live" }[k]);
     if (cb && !cb.checked) cb.checked = true;
     schedule();
   }
@@ -213,6 +218,95 @@
   }
   if (el.form) { el.form.addEventListener("submit", onSubmit); if (el.submit) el.submit.disabled = false; }   // vorher gesperrt: ohne Skript kein natives Absenden
 
+  /* #281: direkt bestellen und per PayPal-Rechnung bezahlen - nur ohne M365Con (bleibt auf Anfrage); der Server rechnet den Preis neu */
+  function invSync(s) { var ok = SC.invoiceAllowed(s); flag(el.inv, "hidden", !ok); flag(el.invCon, "hidden", ok); }
+  var invReady = false;
+  function mk(tag, attrs, kids) {
+    var n = document.createElement(tag); for (var k in attrs) { if (k === "text") n.textContent = attrs[k]; else n.setAttribute(k, attrs[k]); }
+    (kids || []).forEach(function (c) { if (c) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }); return n;
+  }
+  function call(path, opt) {
+    opt = opt || {}; opt.credentials = "include"; opt.headers = { "x-requested-with": "m365", "content-type": "application/json" };
+    return fetch(C0.api + path, opt).then(function (r) { return r.json().then(function (j) { return { s: r.status, j: j }; }, function () { return { s: r.status, j: {} }; }); },
+      function () { return { s: 0, j: {} }; });
+  }
+  function invForm(orgs) {
+    var n = 0, f = mk("form", { class: "spn-form", novalidate: "" }), F = {};
+    function fld(k, label, type, auto) {
+      var id = "spn-inv-" + (++n), inp = mk(type === "select" ? "select" : "input", { id: id, name: k });
+      if (type !== "select") { inp.type = type || "text"; inp.maxLength = 200; if (auto) inp.autocomplete = auto; }
+      F[k] = inp; f.appendChild(mk("div", { class: "spn-f" }, [mk("label", { for: id, text: label }), inp])); return inp;
+    }
+    var org = fld("org", SC.t(L, "inv_org"), "select");
+    orgs.forEach(function (o) { org.appendChild(mk("option", { value: String(o.id), text: o.name })); });
+    fld("company", SC.t(L, "f_company"), "text", "organization"); fld("contact", SC.t(L, "f_name"), "text", "name");
+    fld("address", SC.t(L, "f_address"), "text", "street-address"); fld("postal", SC.t(L, "f_postal"), "text", "postal-code");
+    fld("city", SC.t(L, "f_city"), "text", "address-level2"); fld("country", SC.t(L, "f_country"), "text", "country"); fld("vat", SC.t(L, "f_vat"));
+    fld("email", SC.t(L, "f_bemail"), "email", "email");
+    var btn = mk("button", { type: "submit", class: "spn-btn", text: SC.t(L, "inv_submit") }), st = mk("p", { class: "spn-fine", role: "status" });
+    f.appendChild(mk("div", {}, [btn])); f.appendChild(st);
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var s = state(); if (s.goal === "lead") s.dash = true;
+      if (!SC.invoiceAllowed(s)) { invSync(s); return; }
+      btn.disabled = true; st.textContent = SC.t(L, "sending");
+      call("/api/sponsor/order", { method: "POST", body: JSON.stringify({ org_id: +F.org.value, lang: C0.lang, package: SC.orderPackage(s),
+        billing: { company: F.company.value, contact: F.contact.value, address: F.address.value, postal_code: F.postal.value, city: F.city.value,
+          country: F.country.value, vat_id: F.vat.value, email: F.email.value } }) }).then(function (r) {
+        btn.disabled = false;
+        if (r.s !== 200) { st.textContent = SC.t(L, "inv_err"); return; }
+        st.textContent = SC.t(L, "inv_sent", { email: F.email.value });
+        if (/^https:\/\/www\.(sandbox\.)?paypal\.com\//.test(r.j.invoice_url || "")) st.appendChild(mk("span", {}, [" ", mk("a", { href: r.j.invoice_url, target: "_blank", rel: "noopener", text: SC.t(L, "inv_open") })]));
+        f.querySelectorAll("input,select,button").forEach(function (x) { x.disabled = true; });
+      });
+    });
+    return f;
+  }
+  if (el.inv) {
+    invSync(state());
+    el.inv.addEventListener("toggle", function () {
+      if (!el.inv.open || invReady) return; invReady = true;
+      call("/api/me").then(function (me) {
+        if (!me.j || !me.j.user) {
+          var back = encodeURIComponent(location.href.split("#")[0] + "#spn-inv");
+          el.invBody.appendChild(mk("p", {}, [SC.t(L, "inv_login") + " ", mk("a", { href: C0.community + "?return=" + back, text: SC.t(L, "inv_signin") })])); return;
+        }
+        call("/api/ads/mine").then(function (r) {
+          var orgs = (r.j && r.j.orgs) || [];
+          if (!orgs.length) { el.invBody.appendChild(mk("p", { text: SC.t(L, "inv_noorg") })); return; }
+          el.invBody.appendChild(invForm(orgs));
+        });
+      });
+    });
+  }
+
+  /* Banner-Werbung: Rechner und Buchung der Werbeplaetze (#285) im aufgeklappten Bereich, dieselbe Komponente wie auf /for/advertisers/ */
+  var adb = null, adbLoading = false;
+  function adsTopics() {   // Themen aus Schritt 2 mit Themenseite auf m365.fm (nur diese lassen sich ansteuern)
+    var out = [], seen = {};
+    S.topics.forEach(function (tp) { var id = String(tp.eid || ""); if (/^[a-z0-9][a-z0-9-]{1,79}$/.test(id) && !seen[id]) { seen[id] = 1; out.push({ id: id, name: tp.name }); } });
+    return out;
+  }
+  function onAdsQuote(q, inp, name) {
+    S.adsSel = { product: inp.product, name: name, page_types: inp.page_types, topics: inp.topics, months: inp.months, quantity: inp.quantity, exclusive: !!inp.exclusive,
+                 net_cents: q && typeof q.net_cents === "number" ? q.net_cents : null };
+    schedule();
+  }
+  function adsMount() {
+    if (adb || !el.adb || !window.AdBook) return;
+    var cfg; try { cfg = JSON.parse(el.adb.getAttribute("data-cfg")); } catch (e) { return; }
+    adb = window.AdBook.mount(el.adb, cfg, { topics: adsTopics, onQuote: onAdsQuote });
+  }
+  function adsSync(s) {
+    flag(el.adsBox, "hidden", !s.ads);
+    if (!s.ads || adb || adbLoading || !el.adb) return;
+    if (window.AdBook) return adsMount();
+    adbLoading = true;   // Skript erst beim ersten Aufklappen laden (kein Aufwand fuer alle, die keine Banner wollen)
+    var js = document.createElement("script"); js.src = C0.adsJs; js.onload = adsMount; document.head.appendChild(js);
+  }
+
+  if (el.ads && location.hash === "#spn-ads" && !el.ads.checked) el.ads.checked = true;   // zurueck von der Anmeldung: Banner-Bereich wieder offen
+
   /* Start: nur rendern, wenn der Browser einen anderen Zustand wiederhergestellt hat oder nichts vorab gerendert ist. Sonst in einer
      Leerlaufphase einmal vorrechnen (JIT, Intl.PluralRules) und die vorab gerenderten Texte merken: die erste Interaktion schreibt dann nur,
      was sich aendert (T29a: erste Klicks ohne lange Aufgabe). */
@@ -220,7 +314,7 @@
     if (lastV || raf) return;
     var s = state(), v = SC.view(s, P, L, CTX); lastV = v;
     var k = { m: v.monthly, t: v.totalLine, r: SC.rowsHtml(v.rows), x: v.tText, rec: SC.recHtml(v), pk: v.pkCount, pr: v.prRec, rt: v.rtRec, cpr: String(v.counts.pr),
-              cex: String(v.counts.ex), cli: String(v.counts.li), pk2: SC.pickedHtml(s, P, L), sum: v.summary, run: pc(v.bars.run), ga: pc(v.bars.geo[0]),
+              cex: String(v.counts.ex), cli: String(v.counts.li), clv: String(v.counts.lv), pk2: SC.pickedHtml(s, P, L), sum: v.summary, run: pc(v.bars.run), ga: pc(v.bars.geo[0]),
               gw: pc(v.bars.geo[1]), sa: pc(v.bars.seo[0]), sw: pc(v.bars.seo[1]) };
     for (var n in k) if (!(n in last)) last[n] = k[n];
   }

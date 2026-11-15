@@ -95,6 +95,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Welche Aufgabe übernimmt Power Automate im beschriebenen GRC-Agenten?",
+    "opts": [
+     "Es speichert alle Audit-Logs dauerhaft als maßgebliche Quelle.",
+     "Es steuert den Ablauf, filtert Rauschen und führt die definierte Logik aus.",
+     "Es formuliert aus strukturierten Daten den lesbaren Bericht.",
+     "Es ersetzt Dashboards durch grafische Auswertungen mit Diagrammen."
+    ],
+    "a": 1,
+    "why": "Power Automate ist das Nervensystem: Es löst pünktlich aus, sammelt Signale, filtert Rauschen und stellt den planmäßigen Ablauf sicher."
+   },
+   {
+    "q": "Was passiert, wenn dem Dienstkonto die Rolle „Audit-Logs-Leser“ fehlt?",
+    "opts": [
+     "Der Flow bricht sofort ab und sendet eine Teams-Warnung.",
+     "Der Agent liest nur die Hälfte der Ereignisse aus.",
+     "Der Agent meldet pflichtbewusst, dass keine Probleme gefunden wurden.",
+     "Copilot Studio erfindet eigene Risiken, um die Lücke zu füllen."
+    ],
+    "a": 2,
+    "why": "Ohne Leserechte sieht der Agent nichts und meldet null Probleme. Das ist laut Artikel als Erfolg getarnte Blindheit."
+   },
+   {
+    "q": "Wie sollen HTTP-Aufrufe an die Purview-API gegen Drosselung abgesichert werden?",
+    "opts": [
+     "Scope-Container mit Wiederholungsrichtlinie: drei Versuche mit exponentiellem Backoff",
+     "Täglicher Abruf des gesamten Audit-Feeds ohne jede Filterung",
+     "Umstellung der Zeitzone auf UTC, damit Anfragen seltener kollidieren",
+     "Ein einzelner Versuch, danach Verzicht auf ein Fehlerprotokoll"
+    ],
+    "a": 0,
+    "why": "HTTP-Aufrufe werden in einem Scope mit Retry-Richtlinie gekapselt: drei Versuche mit exponentiellem Backoff, Fehler gehen ins Protokoll."
+   },
+   {
+    "q": "Warum sollte der System-Prompt des Copiloten versioniert werden?",
+    "opts": [
+     "Damit der Copilot automatisch bessere Formulierungen lernt",
+     "Um die Kosten für API-Aufrufe zu senken",
+     "Damit SharePoint bei großen Mengen nicht unhandlich wird",
+     "Um nachzuvollziehen, wie das Modell beim jeweiligen Bericht instruiert war"
+    ],
+    "a": 3,
+    "why": "Mit Versionsnummern lässt sich festhalten, welche Prompt-Version welchen Bericht erzeugt hat und wie das Modell instruiert war."
+   }
   ]
  },
  "es": {
@@ -195,6 +241,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué función cumple Power Automate dentro del agente de GRC descrito?",
+    "opts": [
+     "Es la memoria que almacena los registros de auditoría y la clasificación",
+     "Es el sistema nervioso que recopila señales, filtra el ruido y ejecuta el proceso",
+     "Es la voz que convierte los datos estructurados en resúmenes legibles",
+     "Es el panel que muestra gráficos dinámicos a los directivos"
+    ],
+    "a": 1,
+    "why": "Power Automate es el sistema nervioso: recopila señales, filtra ruido y asegura que el proceso se ejecute a tiempo. La memoria es Purview."
+   },
+   {
+    "q": "¿Qué ocurre si la cuenta de servicio no tiene el rol de lector de registros de auditoría?",
+    "opts": [
+     "El flujo se detiene y envía una alerta inmediata a los auditores",
+     "El flujo extrae todo el registro sin aplicar ningún filtro",
+     "El flujo informa de que no hay problemas aunque en realidad no ve nada",
+     "El flujo usa automáticamente credenciales de administrador para continuar"
+    ],
+    "a": 2,
+    "why": "Sin permisos de lectura el agente no ve datos y comunica obedientemente que no hay problemas, porque aplica solo lo que se le concede."
+   },
+   {
+    "q": "¿Qué se recomienda hacer con la configuración de la recurrencia del flujo?",
+    "opts": [
+     "Dejarla siempre en UTC para unificar todos los informes",
+     "Ejecutarla únicamente justo antes de cada auditoría anual",
+     "Ajustarla a la zona horaria propia, con resúmenes diarios o semanales",
+     "Programarla cada hora para no perder ningún evento"
+    ],
+    "a": 2,
+    "why": "El artículo aconseja definir la cadencia diaria o semanal y ajustarla a la zona horaria propia, no a UTC, para evitar horas inesperadas."
+   },
+   {
+    "q": "¿Por qué se recomienda versionar el prompt del sistema de Copilot Studio?",
+    "opts": [
+     "Para saber qué versión produjo cada informe y cómo se instruyó al modelo",
+     "Para reducir el coste de las licencias de Copilot Studio",
+     "Para evitar que Power Automate necesite filtrar eventos duplicados",
+     "Para que Purview pueda borrar registros de auditoría antiguos"
+    ],
+    "a": 0,
+    "why": "Versionar el prompt y registrar qué versión generó cada informe permite a futuras auditorías consultar cómo se instruyó al modelo narrativo."
+   }
   ]
  },
  "fr": {
@@ -279,6 +371,52 @@
      "Versionner le prompt système et noter quelle version a produit quel rapport.",
      "Alerter dans Teams si les seuils dépassent les paramètres prévus."
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Quel rôle joue Copilot Studio dans l'agent GRC décrit dans l'article ?",
+    "opts": [
+     "Il collecte et conserve les journaux d'audit de conformité",
+     "Il transforme des données structurées en rapports rédigés en langage naturel",
+     "Il déclenche les flux à l'heure prévue et filtre le bruit",
+     "Il attribue les niveaux de risque à partir de seuils numériques"
+    ],
+    "a": 1,
+    "why": "Copilot Studio est « la parole » : il convertit le JSON structuré en synthèses de risques lisibles, tandis que Purview et Power Automate gèrent données et logique."
+   },
+   {
+    "q": "Quelle autorisation doit avoir le compte de service dans Purview pour que l'agent fonctionne ?",
+    "opts": [
+     "Administrateur global avec authentification MFA interactive à chaque exécution",
+     "Propriétaire du site SharePoint de gouvernance uniquement",
+     "Lecteur de journaux d'audit, avec authentification sans interruption liée à la MFA",
+     "Contributeur Dataverse avec accès complet aux données des utilisateurs"
+    ],
+    "a": 2,
+    "why": "Le compte de service doit avoir le rôle de lecteur de journaux d'audit et pouvoir s'authentifier sans interruption liée à la MFA."
+   },
+   {
+    "q": "Que recommande l'article pour les appels HTTP vers l'API de Purview en cas de ralentissement ou d'erreur ?",
+    "opts": [
+     "Une politique de réessai de trois tentatives avec recul exponentiel",
+     "Un seul appel quotidien sans aucune nouvelle tentative",
+     "Dix tentatives immédiates à intervalle fixe d'une seconde",
+     "Une désactivation automatique du flux après le premier échec"
+    ],
+    "a": 0,
+    "why": "L'article conseille trois tentatives avec recul exponentiel, la consignation de l'échec dans une table dédiée et une alerte dans Teams."
+   },
+   {
+    "q": "Comment la diffusion des rapports est-elle assurée à la fin du flux ?",
+    "opts": [
+     "Par envoi d'un fichier Excel à chaque auditeur par courriel",
+     "Par publication du résumé dans Teams et archivage HTML complet dans SharePoint",
+     "Par stockage exclusif du rapport dans une base SQL non partagée",
+     "Par impression automatique du rapport pour le comité de direction"
+    ],
+    "a": 1,
+    "why": "Deux branches du flux : le résumé va dans un canal Teams et une version HTML complète est archivée dans SharePoint, avec un contenu identique."
    }
   ]
  },
@@ -370,6 +508,52 @@
      "Definisci soglie di rischio e gestisci il caso «nessun risultato»",
      "Vincola i prompt con intestazioni e tono, e versionali"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Quale ruolo svolge Copilot Studio nell'agente GRC descritto nell'articolo?",
+    "opts": [
+     "Traduce il gergo tecnico dei log in sintesi leggibili dalle persone",
+     "Registra tutte le azioni degli utenti in Microsoft 365",
+     "Raccoglie i segnali e garantisce il rispetto della pianificazione",
+     "Archivia i dati puliti per i confronti storici"
+    ],
+    "a": 0,
+    "why": "Copilot Studio è la «voce» dell'agente: trasforma il riepilogo strutturato in testi leggibili. Purview registra i dati e Power Automate orchestra il processo."
+   },
+   {
+    "q": "Perché il service account del flusso deve potersi autenticare senza interruzioni dovute a MFA?",
+    "opts": [
+     "Perché l'MFA non è supportato dal connettore di Purview",
+     "Perché l'automazione non può confermare l'accesso né rispondere a un prompt",
+     "Perché l'MFA rallenta la scrittura dei report in Teams",
+     "Perché l'MFA impedisce di assegnare il ruolo di lettore dei log"
+    ],
+    "a": 1,
+    "why": "L'automazione non clicca per confermare l'accesso né risponde a prompt notturni, quindi l'autenticazione interattiva la bloccherebbe."
+   },
+   {
+    "q": "Che cosa dovrebbe fare il flusso se non emerge nulla di insolito dai log?",
+    "opts": [
+     "Restare in silenzio per non generare rumore inutile",
+     "Eliminare l'esecuzione dal registro per risparmiare spazio",
+     "Registrare un messaggio di «nessun risultato» invece di tacere",
+     "Inviare comunque un report con tutti i log grezzi"
+    ],
+    "a": 2,
+    "why": "Nella conformità la differenza tra dati mancanti e assenza di dati è fondamentale, perciò il flusso registra un messaggio di «nessun risultato»."
+   },
+   {
+    "q": "Perché un prompt di Copilot deve specificare intestazioni, tono e metriche precise?",
+    "opts": [
+     "Per rendere il report più creativo e coinvolgente",
+     "Per ridurre il numero di eventi estratti da Purview",
+     "Per evitare che il flusso richieda l'autenticazione Azure AD",
+     "Per rendere l'output riproducibile, base della conformità"
+    ],
+    "a": 3,
+    "why": "Più le istruzioni sono precise, più l'output è riproducibile, e la conformità si basa sulla riproducibilità, non sulla personalità."
    }
   ]
  },
@@ -471,6 +655,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Qual é o papel do Power Automate no agente de GRC descrito?",
+    "opts": [
+     "Atuar como a memória, fornecendo os logs de auditoria brutos",
+     "Atuar como a voz, transformando dados estruturados em narrativa",
+     "Atuar como o sistema nervoso, disparando no horário certo e executando cada etapa",
+     "Atuar como painel visual que explica os indicadores de risco"
+    ],
+    "a": 2,
+    "why": "O Power Automate é o sistema nervoso: dispara no horário certo, coleta sinais, filtra ruído e executa todas as etapas."
+   },
+   {
+    "q": "O que acontece se a conta de serviço não puder ler o log de auditoria?",
+    "opts": [
+     "O fluxo falha imediatamente e envia um alerta ao Teams",
+     "O agente reporta que nenhum problema foi encontrado, o que é cegueira disfarçada",
+     "O Copilot Studio gera um relatório com dados estimados",
+     "O Purview concede automaticamente a permissão de leitura necessária"
+    ],
+    "a": 1,
+    "why": "Sem permissão de leitura, o agente indica ausência de problemas, o que o artigo chama de cegueira disfarçada de sucesso."
+   },
+   {
+    "q": "Em que situação o Dataverse é preferível ao SharePoint para armazenar os dados?",
+    "opts": [
+     "Quando se precisa de colunas e relacionamentos entre conjuntos de dados",
+     "Quando o volume de dados é pequeno e o fluxo é muito simples",
+     "Quando os relatórios precisam ser gravados em formato HTML",
+     "Quando se deseja evitar o uso de credenciais na automação"
+    ],
+    "a": 0,
+    "why": "O Dataverse funciona melhor com colunas e relacionamentos; o SharePoint é mais simples, mas fica desajeitado acima de alguns milhares de linhas."
+   },
+   {
+    "q": "Por que o artigo recomenda instruções rigorosas e versionamento nos prompts do Copilot Studio?",
+    "opts": [
+     "Para que o modelo escreva textos mais criativos e impressionantes",
+     "Para reduzir o custo de cada chamada HTTP ao endpoint",
+     "Para dispensar a validação de respostas vazias no Power Automate",
+     "Para tornar o resultado reproduzível e explicar como o modelo foi instruído"
+    ],
+    "a": 3,
+    "why": "Instruções rigorosas dão reprodutibilidade, e o versionamento permite explicar como o modelo narrativo foi instruído quando o relatório foi gerado."
+   }
   ]
  },
  "nl": {
@@ -533,6 +763,52 @@
      "Stuur Copilot aan met vaste koppen en een neutrale toon",
      "Sla per flowrun statistieken, run-ID en flowversie op"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welke rol heeft Copilot Studio in de AI-GRC-agent?",
+    "opts": [
+     "Het fungeert als zenuwstelsel dat signalen verzamelt en ruis filtert",
+     "Het zet technische logdata om in samenvattingen die mensen kunnen lezen",
+     "Het levert het ruwe geheugen met auditlogs en classificatiegegevens",
+     "Het slaat de opgeschoonde data op als kortetermijngeheugen"
+    ],
+    "a": 1,
+    "why": "Copilot Studio is de vertaler: het maakt van technische logdata leesbare samenvattingen. Purview levert data, Power Automate verzamelt en filtert."
+   },
+   {
+    "q": "Wat gebeurt er als het service account de auditlog niet kan lezen?",
+    "opts": [
+     "De flow stopt direct en stuurt een foutmelding naar het Teams-kanaal",
+     "De agent haalt automatisch een kleinere selectie van de auditfeed op",
+     "De agent meldt dat er geen problemen zijn gevonden",
+     "Copilot Studio vraagt de beheerder handmatig om extra rechten"
+    ],
+    "a": 2,
+    "why": "Zonder leesrechten ziet de agent niets en meldt hij braaf dat er geen problemen zijn: hij is gehoorzaam blind."
+   },
+   {
+    "q": "Welk herhalingsbeleid wordt aanbevolen voor HTTP-aanroepen in een scope-container?",
+    "opts": [
+     "Eén nieuwe poging na vijf minuten zonder verdere vertraging",
+     "Tien pogingen met een vast interval van één seconde",
+     "Drie pogingen met exponentieel uitstel",
+     "Geen herhaling, maar direct afbreken en de flow handmatig herstarten"
+    ],
+    "a": 2,
+    "why": "Het artikel adviseert een scope-container met een herhalingsbeleid van drie pogingen en exponentieel uitstel, plus foutlogging."
+   },
+   {
+    "q": "Waarom moet de systeemprompt van Copilot worden geversioneerd?",
+    "opts": [
+     "Om de snelheid van de flow bij elke run te verhogen",
+     "Zodat Copilot automatisch emoji en narratieve flair kan toevoegen",
+     "Om de opslagkosten in SharePoint en Dataverse te beperken",
+     "Zodat auditors later kunnen zien hoe het taalmodel was geïnstrueerd"
+    ],
+    "a": 3,
+    "why": "Door promptversies (V1, V1.1) vast te leggen per rapport kunnen auditors herleiden hoe het taalmodel op dat moment was geïnstrueerd."
    }
   ]
  },
@@ -625,6 +901,52 @@
      "Narzuć Copilotowi strukturę, ton i wersjonuj prompt"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Jaką rolę w agencie GRC pełni Power Automate?",
+    "opts": [
+     "Jest „ustami” agenta i zamienia dane w raport",
+     "Jest „układem nerwowym”: zbiera sygnały, filtruje szum i pilnuje harmonogramu",
+     "Jest „pamięcią” agenta z dziennikami audytu",
+     "Jest źródłem danych klasyfikacyjnych o zgodności"
+    ],
+    "a": 1,
+    "why": "Power Automate zbiera sygnały, odfiltrowuje szum i pilnuje harmonogramu. Pamięcią jest Purview, a „ustami” Copilot Studio."
+   },
+   {
+    "q": "Dlaczego konto serwisowe przepływu nie powinno być objęte wymogiem MFA?",
+    "opts": [
+     "Ponieważ MFA blokuje dostęp do Azure Key Vault",
+     "Ponieważ konto z MFA nie może mieć roli czytelnika dzienników",
+     "Ponieważ automat nie jest w stanie przejść dodatkowego uwierzytelniania",
+     "Ponieważ MFA spowalnia API dziennika audytu o kilka godzin"
+    ],
+    "a": 2,
+    "why": "Automat nie kliknie niczego o drugiej w nocy, więc nie przejdzie dodatkowego uwierzytelniania, a przepływ by się zatrzymał."
+   },
+   {
+    "q": "Jaką politykę ponawiania zaleca się dla wywołań HTTP w przepływie?",
+    "opts": [
+     "Dziesięć prób w stałych odstępach jednej minuty",
+     "Jedną próbę, a potem natychmiastowe zatrzymanie przepływu",
+     "Pięć prób bez żadnych przerw między nimi",
+     "Trzy próby z wykładniczym wycofywaniem"
+    ],
+    "a": 3,
+    "why": "Wywołania HTTP owija się w kontener zakresu z polityką ponawiania: trzy próby z wykładniczym wycofywaniem."
+   },
+   {
+    "q": "Po co wersjonować prompt systemowy Copilota i zapisywać wersję przy raporcie?",
+    "opts": [
+     "Aby przyszłe audyty mogły ustalić, jak model był wtedy instruowany",
+     "Aby Copilot mógł samodzielnie zmieniać progi ryzyka",
+     "Aby przyspieszyć zapis pełnej wersji HTML w SharePoint",
+     "Aby zastąpić identyfikator uruchomienia przepływu w logach"
+    ],
+    "a": 0,
+    "why": "Dzięki wersjom audyty odniosą się nie tylko do tego, co się stało, ale też do sposobu instruowania modelu."
+   }
   ]
  },
  "id": {
@@ -716,6 +1038,52 @@
      "Versikan prompt, ambang batas, dan alat serta simpan bukti eksekusi"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Apa peran Power Automate dalam agen GRC yang dijelaskan?",
+    "opts": [
+     "Menjadi penerjemah yang mengubah jargon teknis menjadi ringkasan",
+     "Menyediakan memori mentah berupa log audit dan data klasifikasi",
+     "Bertindak sebagai sistem saraf yang mengumpulkan sinyal dan menjalankan proses terjadwal",
+     "Menggantikan auditor dalam mengambil keputusan berdasarkan penilaian"
+    ],
+    "a": 2,
+    "why": "Power Automate adalah sistem saraf: mengumpulkan sinyal, menyaring kebisingan, dan memastikan proses berjalan sesuai jadwal. Penerjemah adalah Copilot Studio."
+   },
+   {
+    "q": "Apa yang terjadi jika akun layanan alur tidak punya peran pembaca log audit di Purview?",
+    "opts": [
+     "Alur otomatis berhenti dan mengirim peringatan kegagalan ke manajemen",
+     "Agen melaporkan \"tidak ada masalah\" padahal sebenarnya tidak bisa melihat data",
+     "Agen membaca seluruh log tetapi hanya menampilkan peristiwa berisiko tinggi",
+     "Laporan tetap akurat karena Copilot Studio mengambil data langsung"
+    ],
+    "a": 1,
+    "why": "Tanpa izin baca, agen melaporkan nol masalah. Itu bukan kepatuhan sempurna, melainkan agen yang buta."
+   },
+   {
+    "q": "Menurut contoh ambang batas risiko dalam artikel, kapan tingkat risiko ditetapkan tinggi?",
+    "opts": [
+     "Ketika berbagi eksternal mencapai 1",
+     "Ketika eskalasi hak istimewa mencapai 3",
+     "Ketika login administrator terjadi satu kali",
+     "Ketika kebijakan label dimodifikasi dua kali"
+    ],
+    "a": 1,
+    "why": "Contohnya: eskalasi hak istimewa mencapai 3 berarti risiko tinggi, sedangkan berbagi eksternal mencapai 1 berarti risiko sedang."
+   },
+   {
+    "q": "Bagaimana validasi output Copilot sebaiknya dilakukan di Power Automate?",
+    "opts": [
+     "Memeriksa respons tidak kosong; jika kosong, catat kegagalan dan ulangi satu kali",
+     "Meminta analis membaca ulang setiap laporan sebelum dikirim ke Teams",
+     "Mengabaikan respons kosong karena berarti tidak ada temuan kepatuhan",
+     "Menjalankan ulang alur sepuluh kali sampai respons berbeda muncul"
+    ],
+    "a": 0,
+    "why": "Langkah validasi: tambahkan kondisi yang memeriksa respons tidak kosong; bila kosong, catat kegagalan ke log dan ulangi satu kali."
+   }
   ]
  },
  "ru": {
@@ -800,6 +1168,52 @@
      "Добавьте повторные попытки и журнал ошибок в список «Здоровье автоматизации».",
      "Версионируйте промпты и проверяйте, что ответ Copilot не пуст."
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Какую роль в GRC-агенте выполняет Power Automate?",
+    "opts": [
+     "Хранит журналы аудита и данные классификации",
+     "Собирает сигналы, фильтрует шум и выполняет процессы по расписанию",
+     "Превращает структурированные данные в понятные текстовые сводки",
+     "Заменяет аудиторов при принятии итоговых решений о соответствии"
+    ],
+    "a": 1,
+    "why": "Power Automate — «нервная система»: собирает сигналы, фильтрует шум и следит за выполнением процессов по расписанию."
+   },
+   {
+    "q": "Почему сервисной учётной записи потока не следует требовать запрос MFA?",
+    "opts": [
+     "MFA замедляет работу API журнала аудита",
+     "MFA запрещает чтение журналов в Purview",
+     "Поток не сможет подтвердить вход ночью, и автоматика остановится",
+     "MFA удаляет учётные данные из Azure Key Vault"
+    ],
+    "a": 2,
+    "why": "Автоматизация не может пройти проверку MFA, например в два часа ночи, поэтому поток остановится."
+   },
+   {
+    "q": "Что рекомендуется делать, если в журнале аудита не найдено ничего необычного?",
+    "opts": [
+     "Не отправлять отчёт, чтобы не создавать лишний шум",
+     "Записать явное сообщение об отсутствии находок",
+     "Повторно выгрузить весь поток аудита",
+     "Снизить пороги риска до нулевых значений"
+    ],
+    "a": 1,
+    "why": "Для комплайенса принципиально фиксировать явное сообщение об отсутствии находок, а не молчать."
+   },
+   {
+    "q": "Как предлагается публиковать готовый отчёт GRC-агента?",
+    "opts": [
+     "Только в виде вкладок Excel в общей папке",
+     "Полная версия в Teams, краткая сводка в SharePoint",
+     "Краткая сводка в Teams и полная HTML-версия в SharePoint",
+     "Только письмом руководству без архивирования документации"
+    ],
+    "a": 2,
+    "why": "Поток делится на две ветви: сводка в канале Teams и полная HTML-версия в SharePoint для аудиторов."
    }
   ]
  },
@@ -891,6 +1305,52 @@
      "Політика повторних спроб, лог помилок і сповіщення в Teams працюють",
      "Промпт містить точні заголовки, нейтральний тон і вимогу кількісних показників"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Яку роль у GRC-агенті виконує Power Automate?",
+    "opts": [
+     "Пам'ять і сирі дані: журнали аудиту та класифікація",
+     "Нервова система: збирає сигнали, фільтрує шум і запускає процеси за графіком",
+     "«Рот» і перекладач, що пише зрозумілі підсумки для керівників",
+     "Інтерактивний дашборд для візуалізації ризиків у реальному часі"
+    ],
+    "a": 1,
+    "why": "Power Automate збирає сигнали, відфільтровує шум і запускає процеси за розкладом, тоді як Purview дає дані, а Copilot Studio пише звіти."
+   },
+   {
+    "q": "Що станеться, якщо сервісний обліковий запис потоку не може читати журнал аудиту?",
+    "opts": [
+     "Потік зупиниться й одразу надішле критичну помилку в Teams",
+     "Агент перейде на ручний режим і запросить аналітика",
+     "Агент звітуватиме про відсутність проблем, бо фактично нічого не бачить",
+     "Copilot Studio сам згенерує відсутні дані на основі минулих звітів"
+    ],
+    "a": 2,
+    "why": "Без ролі читача журналів аудиту агент дивиться в порожнечу й повідомляє «нуль проблем» — це сліпота, замаскована під успіх."
+   },
+   {
+    "q": "Як у статті пропонується визначати рівень ризику в логіці агента?",
+    "opts": [
+     "За числовими порогами, наприклад три підвищення привілеїв означають «високий» ризик",
+     "За суб'єктивною оцінкою Copilot Studio під час написання кожного звіту",
+     "За загальною кількістю подій доступу до файлів за добу",
+     "За рішенням аналітика, який вручну переглядає кожен запис журналу"
+    ],
+    "a": 0,
+    "why": "Пороги задають явно: наприклад, три підвищення привілеїв дають «високий» ризик, одне зовнішнє поширення — «середній», тож «забагато» отримує числове вираження."
+   },
+   {
+    "q": "Навіщо фіксувати версію системного запиту (V1, V1.1) для кожного звіту?",
+    "opts": [
+     "Щоб прискорити генерацію тексту моделлю за рахунок кешування",
+     "Щоб аудити могли посилатися на інструкції, які мала мовна модель у момент створення звіту",
+     "Щоб автоматично змінювати часовий пояс розкладу Recurrence",
+     "Щоб замінити ідентифікатор запуску та версію потоку в метаданих"
+    ],
+    "a": 1,
+    "why": "Версія промпту дозволяє майбутнім аудитам побачити, які інструкції мала мовна модель, коли формувала конкретний звіт."
    }
   ]
  },
@@ -988,6 +1448,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "ما الدور الذي تؤديه Power Automate في وكيل GRC؟",
+    "opts": [
+     "الذاكرة الخام التي تحفظ سجلات التدقيق وبيانات التصنيف",
+     "الجهاز العصبي الذي يجمع الإشارات ويفلتر الضوضاء ويشغّل العملية في موعدها",
+     "المترجم الذي يحوّل الرموز التقنية المعقدة إلى ملخصات مفهومة",
+     "لوحة التحكم التي تعرض البيانات دون شرحها"
+    ],
+    "a": 1,
+    "why": "Power Automate هو الجهاز العصبي: يجمع الإشارات ويفلتر الضوضاء ويضمن تشغيل العملية في موعدها، بينما Purview هو الذاكرة وCopilot Studio المترجم."
+   },
+   {
+    "q": "ماذا يحدث إذا لم يستطع حساب الخدمة قراءة سجل التدقيق؟",
+    "opts": [
+     "يتوقف التدفق فوراً ويرسل تنبيهاً إلى المدققين",
+     "يستخرج الوكيل بيانات ناقصة ويصنفها كلها مخاطر عالية",
+     "يبلّغ الوكيل بأنه لم يجد أي مشكلة، وهو عمى متنكر في هيئة نجاح",
+     "ينتقل الوكيل تلقائياً إلى مصدر بيانات بديل داخل SharePoint"
+    ],
+    "a": 2,
+    "why": "الوكيل يعمل بحدود الأذونات الممنوحة له، فيبلّغ بعدم وجود مشاكل رغم عجزه عن الرؤية، وهذا عمى متنكر في هيئة نجاح."
+   },
+   {
+    "q": "وفق مثال العتبات في المقال، متى يكون مستوى الخطر عالياً؟",
+    "opts": [
+     "عند حدوث مشاركة خارجية واحدة",
+     "عند تسجيل دخول واحد من موقع جديد",
+     "عند بلوغ تصعيدات الصلاحيات ثلاثة",
+     "عند تعديل أي سياسة تسمية خلال اليوم"
+    ],
+    "a": 2,
+    "why": "المثال ينص على أن بلوغ تصعيدات الصلاحيات ثلاثة يعني مستوى عالياً، أما مشاركة خارجية واحدة فمستوى متوسط."
+   },
+   {
+    "q": "ما سياسة إعادة المحاولة المقترحة عند ظهور خطأ \"طلبات كثيرة جداً\" من واجهة Purview؟",
+    "opts": [
+     "محاولة واحدة فقط دون أي فاصل زمني بين الطلبات",
+     "ثلاث محاولات مع تراجع أسّي للفواصل الزمنية",
+     "خمس محاولات متتالية بفاصل زمني ثابت قدره دقيقة",
+     "تعطيل التدفق حتى يتدخل المسؤول يدوياً"
+    ],
+    "a": 1,
+    "why": "يُنصح بتغليف طلبات HTTP في نطاق مع سياسة إعادة محاولة من ثلاث محاولات مع تراجع أسّي للفواصل الزمنية."
+   }
   ]
  },
  "he": {
@@ -1076,6 +1582,52 @@
      "לרשום \"אין ממצאים\" במקום שתיקה ולתעד כשלים בטבלת בריאות האוטומציה",
      "לנהל גרסאות לזרימה ולהנחיות של Copilot ולהפיץ ל-Teams ול-SharePoint"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "מה תפקידו של Power Automate בסוכן ה-GRC לפי הארכיטקטורה המתוארת?",
+    "opts": [
+     "הוא משמש כמערכת העצבים: אוסף אותות, מסנן רעשים ומוודא שהתהליך רץ לפי לוח זמנים",
+     "הוא משמש כזיכרון שבו נשמרים יומני הביקורת ונתוני הסיווג",
+     "הוא כותב את הדוח הסופי בשפה טבעית עבור ההנהלה",
+     "הוא מנחש תשובות ומפיק תובנות באמצעות בינה מלאכותית יצירתית"
+    ],
+    "a": 0,
+    "why": "Power Automate הוא מערכת העצבים: אוסף, מסנן ומתזמן. Purview הוא הזיכרון, ו-Copilot Studio כותב את הדוח."
+   },
+   {
+    "q": "מדוע דוח נקי לחלוטין בהרצה הראשונה של הסוכן עלול להיות מטעה?",
+    "opts": [
+     "כי הזרימה מסננת באופן אוטומטי את כל האירועים בסיכון גבוה",
+     "כי לחשבון השירות חסר תפקיד קורא יומני ביקורת, והסוכן פשוט \"עיוור\"",
+     "כי Copilot Studio לא מסוגל לנסח ממצאים שליליים בשפה טבעית",
+     "כי אזור הזמן של הטריגר הוגדר ל-UTC ולא לאזור המקומי"
+    ],
+    "a": 1,
+    "why": "בלי הרשאת קריאה ליומן הביקורת, הסוכן לא רואה נתונים ומדווח על אפס בעיות – כשל שמוסווה כהצלחה."
+   },
+   {
+    "q": "איזו התנהגות מומלצת כשהזרימה לא מוצאת שום אירוע חריג?",
+    "opts": [
+     "לא לשלוח דוח כלל, כדי לא להציף את המבקרים",
+     "להחזיר שתיקה ולהניח שהמבקרים יבינו שהכול תקין",
+     "לרשום הודעה מפורשת של \"אין ממצאים\", כי יש הבחנה בין נתונים חסרים להעדר ממצאים",
+     "להריץ מחדש את השאילתה עד שיימצא אירוע כלשהו לדיווח"
+    ],
+    "a": 2,
+    "why": "הודעה מפורשת של \"אין ממצאים\" מבדילה בין העדר ממצאים לבין נתונים חסרים, עיקרון יסודי בציות."
+   },
+   {
+    "q": "מה מומלץ לעשות בקריאות HTTP ל-API של Purview כדי להתמודד עם שגיאת \"יותר מדי בקשות\"?",
+    "opts": [
+     "להגדיל את תדירות הטריגר כדי לקבל את הנתונים מהר יותר",
+     "לעבור לייצוא ידני של הנתונים לגיליון אלקטרוני",
+     "לוותר על סינון ולמשוך את כל פיד הביקורת בבת אחת",
+     "לעטוף אותן ב-Scope עם שלושה ניסיונות חוזרים והשהיה אקספוננציאלית, ולתעד כשלים"
+    ],
+    "a": 3,
+    "why": "עוטפים את קריאות ה-HTTP ב-Scope עם מדיניות ניסיון חוזר והשהיה אקספוננציאלית, ורושמים את הכשל בטבלת בריאות האוטומציה."
    }
   ]
  },
@@ -1171,6 +1723,52 @@
      ]
     }
    }
+  ],
+  "quiz": [
+   {
+    "q": "AI GRC एजेंट के तीन-सिर वाले ढांचे में Power Automate की भूमिका क्या बताई गई है?",
+    "opts": [
+     "कथावाचक, जो रिपोर्ट को पढ़ने योग्य भाषा में बदलता है",
+     "कच्ची याददाश्त, जो ऑडिट लॉग को सहेजकर रखता है",
+     "तंत्रिका तंत्र और लॉजिक लेयर, जो घटनाओं और डेटा लाने का तरीका तय करता है",
+     "सुरक्षा परत, जो क्रेडेंशियल्स और उपयोगकर्ता अनुमतियाँ नियंत्रित करती है"
+    ],
+    "a": 2,
+    "why": "Power Automate तंत्रिका तंत्र और लॉजिक लेयर है; Purview याददाश्त है और Copilot Studio कथावाचक है।"
+   },
+   {
+    "q": "लेख के अनुसार जोखिम स्तर तय करने का उदाहरण कौन सा है?",
+    "opts": [
+     "Privilege escalation की संख्या तीन हो तो जोखिम स्तर High रखें",
+     "External share एक हो तो जोखिम स्तर High रखें",
+     "Privilege escalation की संख्या तीन हो तो जोखिम स्तर Low रखें",
+     "कोई असामान्य घटना न मिले तो जोखिम स्तर Medium रखें"
+    ],
+    "a": 0,
+    "why": "लेख में privilege escalation तीन होने पर High और external share एक होने पर Medium रखने का उदाहरण है।"
+   },
+   {
+    "q": "जब Purview डेटा में कुछ भी असामान्य न मिले, तो लेख क्या करने की सलाह देता है?",
+    "opts": [
+     "फ़्लो को बंद कर देना और अगले रन तक प्रतीक्षा करना",
+     "पिछले रन की रिपोर्ट दोबारा Teams चैनल में पोस्ट करना",
+     "बिना कोई रिकॉर्ड बनाए रिपोर्ट को छोड़ देना",
+     "\"कोई findings नहीं\" का संदेश लॉग करना"
+    ],
+    "a": 3,
+    "why": "चुप्पी से पता नहीं चलता कि डेटा नहीं था या जाँच ही नहीं हुई, इसलिए \"कोई findings नहीं\" लॉग करें।"
+   },
+   {
+    "q": "रिपोर्ट प्रकाशित करने के लिए दो समानांतर शाखाओं में क्या किया जाता है?",
+    "opts": [
+     "सारांश SharePoint में जाता है और HTML संस्करण Teams में",
+     "सारांश Teams चैनल में पोस्ट होता है और पूरा HTML संस्करण SharePoint में लॉग होता है",
+     "दोनों शाखाएँ रिपोर्ट को केवल Dataverse टेबल में सहेजती हैं",
+     "एक शाखा ईमेल भेजती है और दूसरी Excel फ़ाइल बनाती है"
+    ],
+    "a": 1,
+    "why": "प्रबंधन Teams की पोस्ट पढ़ता है, जबकि ऑडिटर दस्तावेज़ीकरण के लिए SharePoint आर्काइव खोलता है।"
+   }
   ]
  },
  "ja": {
@@ -1261,6 +1859,52 @@
      "異常がない場合も「検出なし」を記録しているか"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "GRCエージェントの構成で、Power Automateが担う役割は何ですか?",
+    "opts": [
+     "シグナルを集めてノイズを除き、決められた時刻に処理を実行する",
+     "構造化データを人間が読める文章に変換する",
+     "監査ログや分類データを保管する信頼できる情報源になる",
+     "リスクの判定を人間の直感で行い、結果を承認する"
+    ],
+    "a": 0,
+    "why": "Power Automateは「神経系」として、シグナルの収集、ノイズ除去、定時実行を担当します。文章化はCopilot Studio、ログ保管はPurviewの役割です。"
+   },
+   {
+    "q": "サービスアカウントに監査ログ閲覧者ロールがない場合、どんな問題が起こりますか?",
+    "opts": [
+     "エージェントが何も見えないまま「問題なし」と報告してしまう",
+     "フローが直ちに停止し、Teamsへ詳細なエラーが通知される",
+     "Copilotが推測で架空の高リスクイベントを作り出してしまう",
+     "ログは取得できるが、JSONの解析だけが失敗する"
+    ],
+    "a": 0,
+    "why": "権限がないとログが見えず、「問題なし」と報告します。記事はこれを成功を装った盲目状態と表現しています。"
+   },
+   {
+    "q": "リスクレベル判定の例として、記事で「高」とされる条件はどれですか?",
+    "opts": [
+     "外部共有が1回行われた場合",
+     "特権昇格が3回行われた場合",
+     "新しい場所からのログインが1回あった場合",
+     "ラベルポリシーが1回修正された場合"
+    ],
+    "a": 1,
+    "why": "記事の例では、特権昇格が3回なら「高」、外部共有が1回なら「中」、それ以外は「標準」と判定されます。"
+   },
+   {
+    "q": "Copilot Studioのレポート出力の再現性を高めるために、記事が勧めている方法はどれですか?",
+    "opts": [
+     "プロンプトを自由記述にして、毎回異なる表現で書かせる",
+     "全フィールドを加工せず、そのままCopilotに読ませる",
+     "見出しとトーンを指定し、応答の空チェックも入れる",
+     "プロンプトのバージョンは記録せず、常に最新のみを使う"
+    ],
+    "a": 2,
+    "why": "見出し・トーンの指定、コンテキスト変数、応答の検証といったガードレールで再現性を高めます。バージョン記録も推奨されています。"
+   }
   ]
  },
  "ko": {
@@ -1338,6 +1982,70 @@
       "'발견 사항 없음' 메시지를 로그에 기록합니다."
      ]
     }
+   }
+  ],
+  "faq": [
+   {
+    "q": "GRC 에이전트란 무엇이고 Purview, Power Automate, Copilot Studio는 각각 어떤 역할을 하나요?",
+    "a": "GRC 에이전트는 Microsoft 스택 위에 구축한 구조화된 자동화입니다. Purview는 감사 로그와 규정 준수 이벤트를 기록하고, Power Automate는 정해진 시간에 데이터를 수집·필터링해 실행하며, Copilot Studio는 구조화된 데이터를 사람이 읽을 수 있는 요약으로 바꿉니다."
+   },
+   {
+    "q": "Power Automate로 Purview 감사 로그를 가져오려면 어떤 권한과 설정이 필요한가요?",
+    "a": "서비스 계정에 Purview의 감사 로그 읽기 역할이 있어야 하며, MFA 때문에 인증이 막히지 않아야 합니다. 자격 증명은 Azure Key Vault 또는 연결 참조에 저장합니다. 또한 전체 피드 대신 규정 준수에 영향을 주는 이벤트로 범위를 좁히는 편이 효율적입니다."
+   },
+   {
+    "q": "GRC 에이전트는 위험 수준을 어떻게 판정하나요? AI가 추측해서 정하나요?",
+    "a": "추측하지 않습니다. Power Automate가 사람이 정의한 임계값에 따라 판정합니다. 예를 들어 권한 상승이 3회 발생하면 높음, 외부 공유가 1회 발생하면 중간, 그 외에는 정상으로 설정합니다. 높음은 고위험 배열에, 중간은 검토 대기열에 추가됩니다."
+   },
+   {
+    "q": "자동화된 GRC 보고에서 자주 하는 실수와 오류 처리 방법은 무엇인가요?",
+    "a": "대표적인 실수는 권한 부족, 범위 미설정, 표현식 오타, 시간대 불일치, 결과 없음 미기록입니다. 오류에 대비해 HTTP 호출을 재시도 정책이 활성화된 Scope에 넣고 지수 백오프로 3회 시도하게 하며, 실패는 오류 메시지·타임스탬프·실행 ID로 기록하고 Teams로 알립니다."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "GRC 에이전트 구조에서 Power Automate는 어떤 역할에 비유되며, 무엇을 담당합니까?",
+    "opts": [
+     "번역가로서 구조화된 데이터를 사람이 읽는 요약으로 바꾼다",
+     "신경계로서 정해진 시간에 신호를 수집하고 모든 단계를 빠짐없이 실행한다",
+     "원시 메모리로서 감사 로그와 규정 준수 이벤트를 기록한다",
+     "장기 기억으로서 모든 보고서를 영구적으로 보관하고 검색한다"
+    ],
+    "a": 1,
+    "why": "Power Automate는 신경계에 비유되며 정해진 시간에 신호를 수집하고 노이즈를 거르며 모든 단계를 실행합니다."
+   },
+   {
+    "q": "서비스 계정에 Purview 감사 로그 읽기 역할이 없을 때 에이전트는 어떻게 됩니까?",
+    "opts": [
+     "즉시 오류를 발생시키고 Teams 채널에 경고를 보낸다",
+     "자동으로 관리자 권한을 요청해 로그를 대신 읽어 온다",
+     "로그를 읽지 못한 채 \"문제 없음\"이라고 보고해 성공으로 위장한 무지가 된다",
+     "전체 감사 피드를 가져와 플로우가 스스로 과부하에 빠진다"
+    ],
+    "a": 2,
+    "why": "권한이 없으면 로그를 읽지 못하고도 \"문제 없음\"이라 보고하며, 이는 성공으로 위장한 무지입니다."
+   },
+   {
+    "q": "위험 수준 판정 예시에서 외부 공유가 1회 발생하면 어떻게 분류됩니까?",
+    "opts": [
+     "정상",
+     "높음",
+     "낮음",
+     "중간"
+    ],
+    "a": 3,
+    "why": "권한 상승 3회는 높음, 외부 공유 1회는 중간, 그 외에는 정상으로 설정합니다."
+   },
+   {
+    "q": "HTTP 호출의 오류 처리 방안으로 글에서 권장하는 것은 무엇입니까?",
+    "opts": [
+     "재시도 정책이 활성화된 범위 안에 넣고 지수 백오프로 3회 시도한다",
+     "실패하면 즉시 플로우를 삭제하고 수동으로 다시 만든다",
+     "고정 간격으로 무제한 재시도해 성공할 때까지 반복한다",
+     "오류가 나면 아무 기록 없이 다음 실행 주기까지 기다린다"
+    ],
+    "a": 0,
+    "why": "모든 HTTP 호출을 재시도 정책이 있는 범위에 넣고 지수 백오프로 3회 시도하게 합니다."
    }
   ]
  }

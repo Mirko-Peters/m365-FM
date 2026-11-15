@@ -1,5 +1,7 @@
 // Creator-Videos fuer den YouTube-Kanal "m365 Show": Der Worker legt eine resumable Upload-Session an (privat), der Browser
 // laedt direkt zu YouTube hoch. Abstimmung -> ab Schwelle Aufgabe fuer Mirko -> Freigabe (oeffentlich schalten) in YouTube Studio.
+import { gate, inScope } from "./perm.js";
+import { decide } from "./editor.js";
 import { guestsOf, dropGuests } from "./credits.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
@@ -31,7 +33,7 @@ async function notifyAdmins(env, v) {
   const ids = users.filter((u) => adm.includes(`${u.provider}:${u.sub}`) || u.role === "editor").map((u) => u.id);
   if (!ids.length || !env.VAPID_PRIVATE_JWK) return;
   const subs = (await db.prepare(`SELECT endpoint,p256dh,auth FROM push_subs WHERE user_id IN (${ids.map(() => "?").join(",")})`).bind(...ids).all()).results || [];
-  for (const s of subs) { try { const r = await sendPush(env, s, { title: "Creator-Video: 25 Stimmen erreicht", body: "Video prüfen und in YouTube Studio freigeben: " + v.title, url: `${env.SITE}/community/` }); if (r.gone) await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint).run(); } catch {} }
+  for (const s of subs) { try { const r = await sendPush(env, s, { title: "Creator-Video: 25 Stimmen erreicht", body: "Video prüfen und in YouTube Studio freigeben: " + v.title, url: `${env.SITE}/community/` }); if (r.gone) await db.batch([db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(s.endpoint), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(s.endpoint), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(s.endpoint), db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(s.endpoint)]); } catch {} }
 }
 
 async function dropVideo(env, v) {
@@ -72,6 +74,14 @@ export async function pollVideos(env) {
   return { published: pub, expired: old.length };
 }
 
+// Pitch ablehnen (nur ueber editor.js decide()): privates Video bei YouTube entfernen, Status setzen. -> false, wenn es das Video nicht gibt
+export async function rejectVideo(env, id, note) {
+  const db = env.DB, v = await db.prepare("SELECT * FROM yt_videos WHERE id=?").bind(+id).first(); if (!v) return false;
+  await dropVideo(env, v);
+  await db.prepare("UPDATE yt_videos SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(note || "", 300), now(), v.id).run();
+  return true;
+}
+
 export async function deleteUserVideos(db, uid) {
   await db.batch([db.prepare("DELETE FROM yt_votes WHERE user_id=? OR vid_id IN (SELECT id FROM yt_videos WHERE user_id=?)").bind(uid, uid), db.prepare("DELETE FROM yt_videos WHERE user_id=?").bind(uid)]);
 }
@@ -97,16 +107,14 @@ export async function handleVideo(env, request, url, path, user, J) {
   }
 
   if (path.startsWith("/api/admin/video")) {
-    if (!user || !(user.admin || user.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
     if (path === "/api/admin/video" && method === "GET") {
-      const rows = (await db.prepare("SELECT v.id,v.title,v.description,v.lang,v.status,v.video_id,v.ai,v.created,u.name,(SELECT COUNT(*) FROM yt_votes x WHERE x.vid_id=v.id) votes FROM yt_videos v JOIN users u ON u.id=v.user_id WHERE v.status IN ('review','submitted') ORDER BY (v.status='review') DESC, v.created").all()).results || [];
-      return J({ items: rows.map((r) => ({ ...r, youtube: r.video_id ? `https://studio.youtube.com/video/${r.video_id}/edit` : "" })), threshold: THRESHOLD });
+      const rows = (await db.prepare("SELECT v.id,v.title,v.description,v.lang,v.topics,v.status,v.video_id,v.ai,v.created,u.name,(SELECT COUNT(*) FROM yt_votes x WHERE x.vid_id=v.id) votes FROM yt_videos v JOIN users u ON u.id=v.user_id WHERE v.status IN ('review','submitted') ORDER BY (v.status='review') DESC, v.created").all()).results || [];
+      return J({ items: rows.filter((r) => inScope(g.actor, { topics: parse(r.topics, []), lang: r.lang })).map(({ topics, ...r }) => ({ ...r, youtube: r.video_id ? `https://studio.youtube.com/video/${r.video_id}/edit` : "" })), threshold: THRESHOLD });
     }
-    if (path === "/api/admin/video/reject" && method === "POST") {
-      const b = await request.json().catch(() => ({})), v = await db.prepare("SELECT * FROM yt_videos WHERE id=?").bind(+b.id).first(); if (!v) return J({ error: "not_found" }, 404);
-      await dropVideo(env, v);
-      await db.prepare("UPDATE yt_videos SET status='rejected',note=?,updated=? WHERE id=?").bind(txt(b.note || "", 300), now(), v.id).run();
-      return J({ ok: true });
+    if (path === "/api/admin/video/reject" && method === "POST") {   // Entscheidung: can() (eigener Inhalt, eigene Firma, Fachbereich, Tageslimit) und Protokoll in editor.js decide()
+      const b = await request.json().catch(() => ({})), r = await decide(env, user, { kind: "video", id: String(+b.id), action: "reject", reason: b.note || "", legacy: true });
+      return J(r.body, r.status);
     }
     if (path === "/api/admin/video/poll" && method === "POST") return J(await pollVideos(env));
     return null;

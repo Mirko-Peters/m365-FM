@@ -2,6 +2,8 @@
 // Die Show erscheint nach Freigabe (Admin/Editor) auf /shows/<slug>/ der Plattform.
 import { cleanText, rateLimit, esc } from "./util.js";
 import { notify } from "./mail.js";
+import { can, gate, inScope, logEdit } from "./perm.js";
+import { queueTopicNotification } from "./topic_notifications.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 export const LANGS = ["en","de","es","fr","it","pt","nl","pl","id","ru","uk","ar","he","ja","ko"];
@@ -59,14 +61,24 @@ export async function syncShow(env, s) {
     const { show, items } = parseRss(await get(s.feed));
     if (!items.length) throw new Error("no_items");
     const used = new Set(((await db.prepare("SELECT slug FROM show_eps WHERE show_id=?").bind(s.id).all()).results || []).map((r) => r.slug));
-    const stmts = [];
+    const stmts = [], added = [];
     for (const it of items) {
       const have = await db.prepare("SELECT slug FROM show_eps WHERE show_id=? AND guid=?").bind(s.id, it.guid).first();
       if (have) { stmts.push(db.prepare("UPDATE show_eps SET title=?,descr=?,pub=?,audio=?,dur=?,image=?,season=?,num=?,link=?,tr_url=? WHERE show_id=? AND guid=?").bind(it.title, it.descr, it.pub, it.audio, it.dur, it.image, it.season, it.num, it.link, it.tr_url, s.id, it.guid)); continue; }
       let sl = slugify(it.title), n = 2; while (used.has(sl)) sl = slugify(it.title).slice(0, 55) + "-" + n++; used.add(sl);
       stmts.push(db.prepare("INSERT INTO show_eps(show_id,guid,slug,title,descr,pub,audio,dur,image,season,num,link,tr_url) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(s.id, it.guid, sl, it.title, it.descr, it.pub, it.audio, it.dur, it.image, it.season, it.num, it.link, it.tr_url));
+      added.push({ ...it, slug: sl });
     }
     for (let i = 0; i < stmts.length; i += 50) await db.batch(stmts.slice(i, i + 50));
+    if (s.status === "live" && added.length) {
+      const owner = await db.prepare("SELECT p.handle FROM shows s JOIN profiles p ON p.user_id=s.user_id WHERE s.id=? AND p.public=1").bind(s.id).first();
+      for (const item of added) {
+        const url = `${env.SITE}/shows/${s.slug}/${item.slug}/`;
+        const key = `show:${s.slug}:${item.guid}`;
+        await queueTopicNotification(env, { kind: "show", topicId: s.slug, key, title: item.title, body: item.descr || "", url });
+        if (owner?.handle) await queueTopicNotification(env, { kind: "creator", topicId: owner.handle, key, title: item.title, body: item.descr || "", url });
+      }
+    }
     await db.prepare("UPDATE shows SET title=?,descr=?,site=?,image=?,synced=?,err='' WHERE id=?").bind(s.title || show.title, show.descr || s.descr, show.site, show.image, now(), s.id).run();
     // Transkripte schrittweise nachladen
     const todo = (await db.prepare("SELECT id,tr_url FROM show_eps WHERE show_id=? AND tr_url!='' AND transcript='' ORDER BY pub DESC LIMIT ?").bind(s.id, TR_PER_SYNC).all()).results || [];
@@ -98,7 +110,7 @@ export async function handleShows(env, request, url, path, user, J) {
     return J({ items: rows }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/admin/show" && method === "GET") {
-    if (!user.admin && !user.editor) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok || !inScope(g.actor, {})) return J({ error: "forbidden" }, 403);   // Editoren und Admin; Shows haben kein Thema, also nicht fuer Fach-Editoren
     return J({ items: (await db.prepare("SELECT s.id,s.slug,s.title,s.feed,s.status,s.err,s.created,u.name FROM shows s JOIN users u ON u.id=s.user_id ORDER BY (s.status='pending') DESC, s.created DESC LIMIT 200").all()).results || [] });
   }
   if (method !== "POST") return J({ error: "bad_request" }, 400);
@@ -114,10 +126,11 @@ export async function handleShows(env, request, url, path, user, J) {
     if (await db.prepare("SELECT 1 x FROM shows WHERE feed=?").bind(feed).first()) return J({ error: "exists" }, 400);
     let parsed; try { parsed = parseRss(await get(feed)); } catch (e) { return J({ error: "fetch" }, 400); }
     if (!parsed.items.length || !parsed.show.title) return J({ error: "rss" }, 400);
+    const direct = can(user, "review.approve", { ownerId: user.id }).ok;   // die eigene Show gibt niemand selbst frei: nur beim Admin sofort live, auch Editoren warten auf die Pruefung
     let sl = slugify(parsed.show.title), n = 2; while (await db.prepare("SELECT 1 x FROM shows WHERE slug=?").bind(sl).first()) sl = slugify(parsed.show.title).slice(0, 55) + "-" + n++;
-    const r = await db.prepare("INSERT INTO shows(user_id,slug,title,descr,feed,site,image,lang,status,created,consent) VALUES(?,?,?,?,?,?,?,?,?,?,?)").bind(user.id, sl, parsed.show.title, parsed.show.descr, feed, parsed.show.site, parsed.show.image, lang, user.admin || user.editor ? "live" : "pending", now(), now()).run();
+    const r = await db.prepare("INSERT INTO shows(user_id,slug,title,descr,feed,site,image,lang,status,created,consent) VALUES(?,?,?,?,?,?,?,?,?,?,?)").bind(user.id, sl, parsed.show.title, parsed.show.descr, feed, parsed.show.site, parsed.show.image, lang, direct ? "live" : "pending", now(), now()).run();
     const out = await syncShow(env, { id: r.meta.last_row_id, feed, title: parsed.show.title, descr: parsed.show.descr });
-    return J({ ok: true, id: r.meta.last_row_id, eps: out.eps || 0, status: user.admin || user.editor ? "live" : "pending" });
+    return J({ ok: true, id: r.meta.last_row_id, eps: out.eps || 0, status: direct ? "live" : "pending" });
   }
   if (path === "/api/show/sync") {
     const s = await db.prepare("SELECT * FROM shows WHERE id=? AND (user_id=? OR ?=1)").bind(+b.id, user.id, user.admin ? 1 : 0).first(); if (!s) return J({ error: "not_found" }, 404);
@@ -129,9 +142,13 @@ export async function handleShows(env, request, url, path, user, J) {
     await db.batch([db.prepare("DELETE FROM show_eps WHERE show_id=?").bind(s.id), db.prepare("DELETE FROM shows WHERE id=?").bind(s.id)]); return J({ ok: true });
   }
   if (path === "/api/admin/show/status") {
-    if (!user.admin && !user.editor) return J({ error: "forbidden" }, 403);
+    // Show freigeben/ablehnen/zurueckstellen: can() wie jede Entscheidung - nie die eigene Show, nie die eines Kollegen der eigenen Firma; im Protokoll
     if (!["live", "pending", "rejected"].includes(b.status)) return J({ error: "bad_status" }, 400);
+    const cur = await db.prepare("SELECT user_id,status,lang FROM shows WHERE id=?").bind(+b.id).first();
+    const g = await gate(db, user, b.status === "live" ? "review.approve" : "review.reject", { ownerId: cur?.user_id ?? null }); if (!g.ok) return J({ error: g.why }, 403);
+    if (!cur) return J({ error: "not_found" }, 404);
     await db.prepare("UPDATE shows SET status=? WHERE id=?").bind(b.status, +b.id).run();
+    await logEdit(db, g.actor, b.status === "live" ? "review.approve" : "review.reject", "show", +b.id, { before: { status: cur.status }, after: { status: b.status } });
     const sh = await db.prepare("SELECT user_id,title,slug FROM shows WHERE id=?").bind(+b.id).first();
     if (sh && b.status === "live") await notify(env, sh.user_id, "show", `Deine Show „${sh.title.slice(0, 80)}“ ist veröffentlicht`, `<p>Deine Show <b>${esc(sh.title)}</b> ist jetzt auf M365.FM veröffentlicht:</p><p><a href="${env.SITE}/shows/${sh.slug}/">${env.SITE}/shows/${sh.slug}/</a></p>`, `show:${+b.id}:live`);
     if (sh && b.status === "rejected") await notify(env, sh.user_id, "show", `Deine Show „${sh.title.slice(0, 80)}“ wurde abgelehnt`, `<p>Deine Show <b>${esc(sh.title)}</b> wurde nicht freigegeben. Bei Fragen antworte über die Nachrichten auf der Plattform.</p>`, `show:${+b.id}:rejected`);

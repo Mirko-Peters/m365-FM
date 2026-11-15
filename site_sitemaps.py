@@ -32,7 +32,7 @@ def classify(path, langs):
         return lang, "community"
     if a in ("live", "events"):
         return lang, "events"
-    if a in ("learn", "glossary", "updates", "press", "legal", "privacy", "datenschutz", "imprint", "impressum", "accessibility", "top", "podcast", "shows", "mcp", "about", "sessions", "speakers", "m365con", "search", "sponsor"):   # T37: /<lang>/sponsor/ ist keine Dub-Folge
+    if a in ("learn", "glossary", "updates", "press", "legal", "privacy", "datenschutz", "imprint", "impressum", "accessibility", "top", "podcast", "shows", "mcp", "about", "sessions", "speakers", "m365con", "search", "sponsor", "services", "for", "i-want-to"):   # T37: /<lang>/sponsor/ ist keine Dub-Folge
         return lang, "pages"
     # Dub-Folgen: /<lang>/<slug>/ (eine Ebene) in den Sprach-Shows; auf Englisch gibt es diese Ebene fuer Kernseiten
     if lang != "en" and len(seg) == 1:
@@ -51,6 +51,19 @@ def _xml(entries, langs):
         x.append("</url>")
     x.append("</urlset>")
     return "\n".join(x)
+
+
+def drop_redirected(sitemap, table):
+    """Eintraege ohne Adressen, die der Site-Worker per Regel weiterleitet (show/redirects.json, Regeln vor der Seite):
+    solche Seiten liefert er nie aus. Sonst schreibt der Link-Umbau (site_links.fix_tree) ihre loc auf das Ziel um,
+    und das Ziel steht doppelt in der Sitemap (z. B. zusammengefuehrte Personen /entity/<alt>/ -> /entity/<neu>/).
+    -> (bereinigte Liste, entfernte URLs)."""
+    import site_links as SLK
+    keep, gone = [], []
+    for x in sitemap:
+        p = urlsplit(x[0]).path or "/"
+        (gone if SLK.rule_target(p, table) else keep).append(x)
+    return keep, [x[0] for x in gone]
 
 
 def write_all(sitemap, write, base, langs, today):
