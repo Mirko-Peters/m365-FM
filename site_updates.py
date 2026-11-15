@@ -70,21 +70,3 @@ def block(lang, eid, n=14):
     note = f'<p class="mut">{esc(T(lang, "Summaries of official Microsoft release information, checked daily.", "Zusammenfassungen offizieller Microsoft-Release-Informationen, täglich geprüft."))}</p>'
     return f'{CSS}<section class="en-upd"><h2>{esc(T(lang, "Latest update", "Neuestes Update"))}</h2>{new}{more}{note}</section>'
 
-
-def page_block(lang, eurl, names, n=60):
-    """Updates-Seite: neueste Updates nach Tag gruppiert, je Eintrag aufklappbar, mit Link auf die Produktseite (keine externen Links)."""
-    if not ALL:
-        return ""
-    seen, out, cur = set(), [], None
-    for u in sorted(ALL, key=lambda x: (x["modified"], x["created"]), reverse=True):
-        if u["id"] in seen: continue
-        seen.add(u["id"])
-        if len(seen) > n: break
-        d = u["modified"]
-        if d != cur:
-            if cur: out.append("</div>")
-            out.append(f'<h3>{esc(day(d, lang))}</h3><div>'); cur = d
-        prods = ", ".join(f'<a href="{esc(eurl(e))}">{esc(names.get(e, e))}</a>' for e in u["eids"][:3])
-        out.append(f'<details class="u-it"><summary>{esc(u["title"])} <span class="mut">· {prods}</span></summary><div><div class="u-meta">{_meta(u, lang)}</div>{_body(u, lang)}</div></details>')
-    out.append("</div>")
-    return f'{CSS}<section class="en-upd"><h2>{esc(T(lang, "Microsoft updates", "Microsoft-Updates"))}</h2>' + "".join(out) + f'<p class="mut">{esc(T(lang, "Summaries of official Microsoft release information; matched to products by their official product tags.", "Zusammenfassungen offizieller Microsoft-Release-Informationen; über die offiziellen Produkt-Tags den Produkten zugeordnet."))}</p></section>'

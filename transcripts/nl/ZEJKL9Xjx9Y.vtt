@@ -1,0 +1,1120 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.400
+Je hebt gehoord dat het toevoegen van het modelcontextprotocol, kortweg MCP, aan Copilot Studio eenvoudig is.
+
+00:00:04.580 --> 00:00:06.640
+Gebruik gewoon een aangepaste connector, zeggen ze.
+
+00:00:06.800 --> 00:00:07.920
+Technisch gezien klopt dat.
+
+00:00:08.180 --> 00:00:09.640
+Functioneel gezien is het een leugen.
+
+00:00:09.800 --> 00:00:14.540
+Dezelfde soort leugen als plug de USB erin, zonder te vertellen welke kant boven is of dat je een driver,
+
+00:00:14.800 --> 00:00:18.740
+drie registerwijzigingen en een klein gebed aan de cloudgoden nodig hebt voor pakketstabiliteit.
+
+00:00:19.020 --> 00:00:22.180
+MCP wordt op de markt gebracht als USB voor AI-agents.
+
+00:00:22.400 --> 00:00:23.620
+Het idee klinkt strak.
+
+00:00:23.780 --> 00:00:27.900
+Elke agent kan met elke kennisbron praten als ze beide hetzelfde protocol volgen,
+
+00:00:27.900 --> 00:00:29.800
+een universele handdruk voor context.
+
+00:00:30.000 --> 00:00:33.260
+Maar Microsoft, altijd de minimalist, geeft je alleen de poort.
+
+00:00:33.480 --> 00:00:36.260
+Geen kabel, geen schema, zelfs geen waarschuwingslabel.
+
+00:00:36.480 --> 00:00:39.820
+Dus ja, je kunt iets verbinden, maar de helft van de tijd is het puur decoratief.
+
+00:00:39.980 --> 00:00:42.560
+De mythe blijft bestaan omdat de interface er gehoorzaam uitziet.
+
+00:00:42.760 --> 00:00:45.880
+Voeg een tool toe, koert het, filter op modelcontextprotocol.
+
+00:00:46.080 --> 00:00:49.860
+Je klikt, een vervolgkeuzemenu verschijnt en voila, directe interoperabiliteit.
+
+00:00:50.120 --> 00:00:55.220
+Behalve dat het niet zo is, waar je echt verbinding meemaakt, zijn ingebouwde MCP's al direct in het product verwerkt.
+
+00:00:55.220 --> 00:00:58.680
+Dataverse MCP? Dat werkt omdat het van Microsoft zelf is.
+
+00:00:58.680 --> 00:01:00.140
+Jouw aangepaste MCP?
+
+00:01:00.300 --> 00:01:02.420
+Copilot herkent het niet eens totdat je een vertaler bouwt.
+
+00:01:02.600 --> 00:01:05.060
+Een aangepaste connector die zich niet gedraagt als een snelkoppeling,
+
+00:01:05.260 --> 00:01:08.940
+maar als een volledige diplomatieke missie tussen systemen die geen vocabulair of tempo delen.
+
+00:01:09.080 --> 00:01:10.900
+Dus, vandaag gaan we die mythe ontmantelen.
+
+00:01:11.120 --> 00:01:15.520
+Ik laat je zien wat MCP echt is, waarom jouw connector niet zo verbonden is als hij doet voorkomen,
+
+00:01:15.780 --> 00:01:19.220
+en hoe je er een bouwt die echt context uitwisselt in plaats van connectiviteit te feinzen.
+
+00:01:19.220 --> 00:01:24.940
+MCP is geen gegevensbron, het is een contextuele brug, de tolk tussen je copilot en je externe intelligentie.
+
+00:01:25.100 --> 00:01:28.820
+En aangepaste connectoren zijn geen add-ons, het zijn bouwstijgers voor die brug.
+
+00:01:28.960 --> 00:01:35.560
+Dus, laten we de marketinglaag van Microsoft verwijderen en kijken naar wat er echt gebeurt in Copilot Studio wanneer je denkt dat je een MCP hebt verbonden.
+
+00:01:35.780 --> 00:01:37.040
+De illusie van eenvoud.
+
+00:01:37.280 --> 00:01:42.380
+Op het eerste gezicht laat Copilot Studio MCP integratie er zo casual uitzien als melk toevoegen aan koffie.
+
+00:01:42.380 --> 00:01:47.120
+Klik op Tool toevoegen, filter op model context protocol, kies je server, klaar.
+
+00:01:47.380 --> 00:01:50.620
+Een paar seconden later staat hij daar, trots vermeld onder Tools.
+
+00:01:50.900 --> 00:01:55.080
+De meeste gebruikers stoppen daar en posten op forums dat hun externe context live is.
+
+00:01:55.320 --> 00:01:57.760
+Dat is het niet. Wat je hebt verbonden is een placebo.
+
+00:01:58.120 --> 00:02:02.540
+Dit is waarom. Dat vriendelijke MCP filter toont alleen Microsofts eigen ingebouwde opties.
+
+00:02:02.780 --> 00:02:06.700
+Dataverse MCP, SharePoint MCP, misschien eentje voor GitHub als je geluk hebt.
+
+00:02:06.900 --> 00:02:09.060
+Ze leven diep binnen dezelfde tenant-infrastructuur.
+
+00:02:09.060 --> 00:02:15.240
+Op het moment dat je een externe MCP probeert te koppelen, zoals Microsoft Learn of je interne semantische zoekopdracht, ontdek je een leegschap.
+
+00:02:15.320 --> 00:02:18.760
+Er is geen importslot, geen authenticatieprompt, geen daadwerkelijke handshake.
+
+00:02:18.920 --> 00:02:23.460
+De veronderstelde protocoloptie is eigenlijk slechts een categorie-label voor vooraf geïnstalleerd speelgoed.
+
+00:02:23.620 --> 00:02:27.180
+Onder de motorkap verwacht Copilot een zeer specifieke opmaakdiscipline.
+
+00:02:27.360 --> 00:02:31.460
+Het wil een streambaar HTTP-eindpunt dat voldoet aan het MCP-schema.
+
+00:02:31.700 --> 00:02:37.920
+Verzoeken gevormd als contextuele JSON, reacties uitgezonden als events, alles op tijd om tokens te streamen, niet te dumpen.
+
+00:02:37.920 --> 00:02:42.200
+Je externe dienst, hoe intelligent ook, is onzichtbaar tenzij deze reageert in dat dialect.
+
+00:02:42.420 --> 00:02:48.100
+Zonder dat gedraagt Copilot zich als een toerist die drie reisfrases heeft geleerd en volhoudt dat de lokale bevolking niet goed spreekt.
+
+00:02:48.320 --> 00:02:49.320
+Dit is de kernleugen.
+
+00:02:49.560 --> 00:02:52.380
+Wat er uitziet als plug-and-play is in werkelijkheid code en pray.
+
+00:02:52.580 --> 00:02:56.020
+De zichtbare UI verbergt de schema-handhaving die MCP doet draaien.
+
+00:02:56.260 --> 00:03:00.180
+Wanneer je een MCP selecteert uit het menu, sluit je niet je eigen modelcontext in.
+
+00:03:00.180 --> 00:03:02.300
+Je roept een intern ophaalmechanisme op.
+
+00:03:02.480 --> 00:03:10.220
+Het werkt ingenieus goed met Bing-style indexen en dataverse APIs, maar het raadpleegt nooit je MCP-eindpunt tenzij je de brug handmatig bouwt.
+
+00:03:10.340 --> 00:03:11.600
+En hier ligt de paradox.
+
+00:03:11.860 --> 00:03:18.560
+Copilot Studio is tegelijkertijd een van de krachtigste orchestratietools die Microsoft ooit heeft gebouwd en een van de meest bedriegelijk beperkte.
+
+00:03:18.760 --> 00:03:24.180
+Het belooft universele contextuitwisseling, maar levert selectief geheugenverlies tenzij je het nieuwe manieren aanleert via configuratie.
+
+00:03:24.180 --> 00:03:27.780
+De meeste beheerders die dit voor het eerst ontdekken, gaan uit van een bak.
+
+00:03:27.940 --> 00:03:32.960
+Ze hebben de documentatie gevolgd, de URL geïmporteerd, drie keer op vernieuwen geklikt, maar er verschijnt nog steeds niets.
+
+00:03:33.180 --> 00:03:35.020
+Dat komt omdat ze de brug niet hebben gebouwd.
+
+00:03:35.200 --> 00:03:37.240
+Ze hebben slechts een tunnel op de muur geschilderd.
+
+00:03:37.460 --> 00:03:39.920
+Die illusie herkennen is de eerste stap naar competentie.
+
+00:03:40.100 --> 00:03:42.120
+Je connectorpaneel ligt niet met kwade opzet.
+
+00:03:42.280 --> 00:03:46.140
+Het vertelt simpelweg de vereenvoudigde versie van de werkelijkheid die bedoeld is voor de gemiddelde gebruiker.
+
+00:03:46.300 --> 00:03:47.480
+Maar jij bent niet gemiddeld.
+
+00:03:47.720 --> 00:03:49.920
+Jij bent degene van wie wordt verwacht dat het echt werkt.
+
+00:03:50.060 --> 00:03:51.820
+En dat is de eerste stap naar verlichting.
+
+00:03:51.820 --> 00:03:55.160
+Weten dat dat heerlijke kleine paneel in Copilot Studio tegen je ligt.
+
+00:03:55.380 --> 00:03:56.860
+Wat MCP werkelijk is.
+
+00:03:57.020 --> 00:03:59.400
+Oké, laten we het wezen definiëren waar we mee te maken hebben.
+
+00:03:59.700 --> 00:04:03.500
+MCP, het model context protocol, is geen bestandsformaat of API wrapper.
+
+00:04:03.740 --> 00:04:06.320
+Het is een lingua franca voor kunstmatige intelligentiesystemen.
+
+00:04:06.480 --> 00:04:09.900
+Een manier voor verschillende breinen om niet data, maar betekenis over data te delen.
+
+00:04:10.140 --> 00:04:15.160
+Microsoft noemt het USB voor agents niet omdat het bytes verstuurt, maar omdat het de handshake standaardiseert.
+
+00:04:15.360 --> 00:04:20.240
+Wie waar inplucht, welke stroom vloeit en hoe beide partijen overeen komen dat wat er beweegt geldige context is.
+
+00:04:20.240 --> 00:04:20.900
+Geen ruis.
+
+00:04:20.900 --> 00:04:29.120
+Technisch gezien definieert MCP hoe een agent en een contextbron gestructureerde metadata, toolschema's, acties, parameters en context tokens uitwisselen.
+
+00:04:29.300 --> 00:04:31.080
+Zie het als internationale diplomatie.
+
+00:04:31.320 --> 00:04:34.760
+De MCP server vertegenwoordigt een soevereine natie van informatie.
+
+00:04:34.960 --> 00:04:39.660
+Een set regels over hoe een specifieke kennisbron kan worden bevraagd, samengevat of bijgewerkt.
+
+00:04:39.820 --> 00:04:45.240
+De MCP client, in dit geval Copilot Studio, is de bezoekende afgezand die namens de gebruikers spreekt.
+
+00:04:45.240 --> 00:04:53.860
+De verbinding tussen de twee is de connector, onze zeer geduldige vertaler die ervoor zorgt dat een SharePoint query in de ene taal een POS 2.1 contextverzoek wordt in de andere.
+
+00:04:54.180 --> 00:04:57.780
+Binnen het protocol is alles JSON, voorspelbaar, efficiënt.
+
+00:04:58.040 --> 00:05:02.480
+Soms zij JSON, zodat zelfs een groot taalmodel het kan ontleden zonder af te dwalen.
+
+00:05:02.800 --> 00:05:04.460
+Elk verzoek bevat een intentie.
+
+00:05:04.680 --> 00:05:07.240
+Elk antwoord bevat context tokens en optionele bronvermeldingen.
+
+00:05:07.240 --> 00:05:10.100
+Nog interessanter is dat die antwoorden streambaar zijn.
+
+00:05:10.240 --> 00:05:14.040
+Copilot ontvangt gedeeltelijke fragmenten terwijl de MCP server de betekenis samenstelt.
+
+00:05:14.220 --> 00:05:17.720
+Dat voorkomt dat de AI halverwege zijn gedachten bevriest terwijl hij wacht op het volledige antwoord.
+
+00:05:17.860 --> 00:05:19.940
+Het is een estafette race, geen pakketbezorging.
+
+00:05:20.120 --> 00:05:23.640
+De USB metafoor van Microsoft verleidt omdat deze zin speelt op eenvoud.
+
+00:05:23.820 --> 00:05:26.720
+Plug A in B en de elektronen van kennis beginnen te stromen.
+
+00:05:26.940 --> 00:05:29.140
+Maar die analogie houdt bijna onmiddellijk op te werken.
+
+00:05:29.300 --> 00:05:33.680
+Een fysieke USB kabel gaat uit van vaste pinnen, stabiele voltages en één soort elektriciteit.
+
+00:05:33.980 --> 00:05:36.780
+MCP onderhandelt daarentegen over dynamische schema's.
+
+00:05:36.780 --> 00:05:42.740
+Elk apparaat, elke serverimplementatie, kan zijn eigen werkwoorden, eigenschappen en contextuele mogelijkheden definiëren.
+
+00:05:42.940 --> 00:05:46.380
+Stel je een USB-stick voor die zijn bedrading aanpast aan de hand van waar hij in wordt geplugd.
+
+00:05:46.520 --> 00:05:48.000
+Dat komt dichter bij de realiteit.
+
+00:05:48.260 --> 00:05:49.640
+Dus, wat bevindt zich precies waar?
+
+00:05:49.820 --> 00:05:58.380
+In de basislaag bevat de MCP server hulpmiddeldefinities, beschrijvingen van acties zoals documenten zoeken, record aanmaken of tabellen weergeven, samen met vereiste parameters en datatypes.
+
+00:05:58.560 --> 00:06:00.120
+Het is de Intelligentie Cortex.
+
+00:06:00.320 --> 00:06:06.560
+De MCP Client Copilot Studio host het agentbrein dat natuurlijke taalproms interpreteert en beslist welke acties moeten worden aangeroepen.
+
+00:06:06.560 --> 00:06:15.000
+Daartussen implementeert de aangepaste connector het contract, regelt authenticatie, valideert schema's en streamt het gesprek via HTTP met behoud van structuur.
+
+00:06:15.200 --> 00:06:19.640
+Wanneer Copilot een prompt stuurt, zegt, zoek artikelen over SharePoint indexering.
+
+00:06:19.880 --> 00:06:21.400
+Schraapt het geen webpagina's?
+
+00:06:21.540 --> 00:06:30.140
+Het genereert een contextuele query ingebed in JSON, stuurt deze via de connector naar de MCP server en ontvangt een gestructureerde contextuele payload terug, geen platte tekst.
+
+00:06:30.140 --> 00:06:37.860
+Die payload bevat metadata, bronnen, relevantiescores en tekstfragmenten die het grote taalmodel vervolgens samenvat in vloeiend Nederlands voor de gebruiker.
+
+00:06:38.060 --> 00:06:40.560
+Het is context synthese, geen simpele opvraging.
+
+00:06:40.860 --> 00:06:44.980
+Zonder die discipline werkt Copilot als een papegaai die samenvattingen herhaalt van wat hem wordt gevoerd.
+
+00:06:45.200 --> 00:06:47.780
+Voeg MCP toe en plotseling herinnert hij zich relaties.
+
+00:06:48.020 --> 00:06:54.400
+Welk document verwijst naar welke API, welk veld in dataverse koppelt aan welke eigenschap in uw CRM, welke licentieklausule die actie beheerst.
+
+00:06:54.400 --> 00:07:02.460
+In essentie upgradet MCP Copilot van automatische aanvulling met zwijger naar een semi-betrouwbare analist die de topologie van de gegevens van uw organisatie daadwerkelijk begrijpt.
+
+00:07:02.500 --> 00:07:09.760
+Dus ja, USB voor agents klinkt pakkend, maar de praktische betekenis is dat MCP een beleefde conversatie afdwingt tussen eigenzinnige systemen.
+
+00:07:09.880 --> 00:07:13.120
+Het dwingt Copilot Studio om te vragen, mag ik dit schema bevragen?
+
+00:07:13.340 --> 00:07:15.560
+In plaats van eruit te flappen, geef me alles.
+
+00:07:15.760 --> 00:07:19.380
+Die kleine beleefdheid is het verschil tussen een hallucinatie en een correct antwoord.
+
+00:07:19.520 --> 00:07:21.820
+En hier is de twist die Microsoft nooit benadrukt.
+
+00:07:21.820 --> 00:07:26.520
+Het MCP-menu in Copilot Studio spreekt dit protocol al, maar alleen met zijn eigen service.
+
+00:07:26.780 --> 00:07:30.620
+Wanneer je een eigen variant bouwt, creëer je in feite een nieuw dialect binnen dat verdrag.
+
+00:07:30.780 --> 00:07:34.480
+Je definieert wat context werkelijk betekent binnen de muren van jouw organisatie.
+
+00:07:34.740 --> 00:07:38.520
+Weten wat MCP is een dynamische, gestructureerde grammatica voor context?
+
+00:07:38.760 --> 00:07:42.520
+Geen databron geeft je de theorie voordat je de misdaad van implementatie begaat.
+
+00:07:42.660 --> 00:07:44.300
+Want daarna gaan we die samen begaan.
+
+00:07:44.480 --> 00:07:50.480
+We bouwen de handshake zelf en bewijzen dat de echte kracht van Copilot Studio niet uit het menu komt, maar uit het begrijpen van het contract.
+
+00:07:50.480 --> 00:07:58.580
+Dat is onze praktische ketterij, het bouwen van je eigen, volledig conforme, straataanmable custom connector die vloeiend MCP spreekt in plaats van het accent na te apen.
+
+00:07:58.740 --> 00:08:00.540
+Een echte custom connector bouwen.
+
+00:08:00.760 --> 00:08:04.440
+Nu komen we bij het deel waar iedereen doorheen haast, de daadwerkelijke constructie.
+
+00:08:04.620 --> 00:08:08.620
+De meeste tutorials zwaaien vaag met hun handen en zeggen, importeer het gewoon vanuit GitHub.
+
+00:08:08.620 --> 00:08:15.360
+Ze negeren het mijneveld van schema fouten, postconfiguratie problemen en verificatie eigenaardigheden dat onder die onschuldige knop schuilt.
+
+00:08:15.580 --> 00:08:21.540
+Vandaag lopen we er pedant doorheen, want precisie is het verschil tussen een agent die denkt en een agent die in stilte mokt.
+
+00:08:21.920 --> 00:08:23.780
+Begrijp eerst het skelet van de workflow.
+
+00:08:24.100 --> 00:08:27.500
+GitHub import, het point configuratie, connector publiceren.
+
+00:08:27.760 --> 00:08:30.720
+Drie botten, mis één gevricht en je hebt een levenloos ledemaat.
+
+00:08:30.880 --> 00:08:34.220
+Laten we dus beginnen waar Microsoft de botten verstopt in de PowerApps Microomgeving.
+
+00:08:34.460 --> 00:08:37.680
+Daar worden custom connectors geboren, niet in Copilot Studio zelf.
+
+00:08:37.680 --> 00:08:40.920
+Copilot is slechts de eindgebruiker van wat je hier articuleert.
+
+00:08:41.060 --> 00:08:49.400
+Wanneer je klikt op nieuwe custom connector, krijg je opties uit de hoge hoed, vanuit OpenAPI, vanuit Postman, vanaf nul of de gezegende import vanuit GitHub.
+
+00:08:49.640 --> 00:08:55.700
+Kies die laatste, want Microsoft onderhoudt stilletjes een repository met MCP connector templates in zijn developerbranche.
+
+00:08:55.900 --> 00:08:59.180
+De template die je echt nodig hebt, heet MCP stratenamable.
+
+00:08:59.400 --> 00:09:05.740
+Alles wat niet stratenamable is, lijkt functioneel totdat Copilot de eerste vraag stelt waarna het geruisloos faalt.
+
+00:09:05.740 --> 00:09:09.440
+Geen vuurwerk, geen foutmeldingen, gewoon een beleefd niets.
+
+00:09:09.680 --> 00:09:13.860
+Kies MCP stratenamable, verwijs naar de devbranche en klik op doorgaan.
+
+00:09:14.020 --> 00:09:17.940
+Het systeem haalt een blok JSON op dat de parameters van de connector definieert.
+
+00:09:18.420 --> 00:09:27.140
+Authenticatie, meestal geen, omdat MCP momenteel vertrouwt op tenant isolatie, een handvol vereiste request, bodies en cruciale header mappings voor streaming.
+
+00:09:27.140 --> 00:09:33.160
+Raak deze voorlopig nog niet aan. Iedereen heeft de neiging ze direct aan te passen, wat onvermijdelijk de hele reeks verstoort.
+
+00:09:33.380 --> 00:09:34.960
+Scroll in plaats daarvan naar host.
+
+00:09:35.280 --> 00:09:38.540
+Microsofts documentatie fluistert dit als voetnoot, maar dit is de waarheid.
+
+00:09:38.700 --> 00:09:40.840
+Het hostveld verwacht enkel de domeinnaam.
+
+00:09:41.100 --> 00:09:49.620
+Als je een volledige URL met HTTPS plakt of het achtervoegsel naar API MCP laat staan, vaalt de connector validatie in stilte.
+
+00:09:50.160 --> 00:09:54.620
+Het vertelt je dat alles correct is gevalideerd, maar weigert dan te verschijnen in Copilot.
+
+00:09:54.620 --> 00:09:59.000
+Verwijder het voorvoegsel, haal AP MCP weg en voer alleen de host in.
+
+00:09:59.220 --> 00:10:00.600
+Geen slash, geen protocol.
+
+00:10:00.940 --> 00:10:04.980
+Die ene chirurgisch ingreep lost 80% van de, het verschijnt niet in mijn menu, klachten op.
+
+00:10:05.100 --> 00:10:07.060
+Vervolgens moet je de basis URL aanpassen.
+
+00:10:07.300 --> 00:10:09.800
+Het schabloon bevat standaard API MCP.
+
+00:10:10.040 --> 00:10:10.740
+Verwijder dat.
+
+00:10:10.980 --> 00:10:11.320
+Waarom?
+
+00:10:11.480 --> 00:10:15.380
+Omdat Copilot bij het samenvoegen van paden intern al uitgaat van dat voorvoegsel.
+
+00:10:15.380 --> 00:10:23.980
+Laat je het staan, dan krijg je dubbele paden zoals API MCP, API MCP, zaarch, wat de server afwijst als overbodig en belachelijk.
+
+00:10:23.980 --> 00:10:25.460
+Snoei meedogenloos.
+
+00:10:25.700 --> 00:10:27.600
+Geef je creatie nu een duidelijke naam.
+
+00:10:27.820 --> 00:10:30.020
+Weersta de dram om het test connector te noemen.
+
+00:10:30.240 --> 00:10:33.060
+De interne cache van Copilot respecteert alleen unieke namen.
+
+00:10:33.260 --> 00:10:37.060
+Gebruik je een dubbele naam, dan verstopt je nieuwe connector zich als een verlegen kind achter de eerste.
+
+00:10:37.340 --> 00:10:42.160
+Kies beschrijvende titels Microsoft Learn MCP of Internal Resarch Context MCP.
+
+00:10:42.160 --> 00:10:43.160
+Klik daarna op aanmaken.
+
+00:10:43.900 --> 00:10:47.400
+In dit stadium houdt de interface van Microsoft een lange, theatrale pauze.
+
+00:10:47.400 --> 00:10:53.000
+De connector service valideert de structuur, registreert metadata in de omgeving en distribueert deze over regionale datacenters.
+
+00:10:53.220 --> 00:10:54.500
+Dit kan tot vijf minuten duren.
+
+00:10:54.720 --> 00:10:56.940
+Tijdens die minuten zul je in de verleiding komen om te verversen.
+
+00:10:57.140 --> 00:10:57.640
+Doe dat niet.
+
+00:10:57.820 --> 00:11:01.520
+Elke verversing herstart de caching, waardoor je wachtdijd eindeloos wordt als Sisyphus met zijn draaiende wiel.
+
+00:11:01.720 --> 00:11:02.500
+Haal een drankje.
+
+00:11:02.740 --> 00:11:07.120
+Wanneer de validatie succesvol is afgerond, bestaat de connector officieel in jouw omgeving.
+
+00:11:07.320 --> 00:11:09.320
+Maar bestaan is niet hetzelfde als nuttig zijn.
+
+00:11:09.540 --> 00:11:13.720
+De volgende stap, door bijna elke quick start blog genegeerd, is schema afstemming.
+
+00:11:13.720 --> 00:11:18.840
+Antwoorden van de MCP-server bevatten velden zoals actiebeschrijving, toolschema en streamtokenidee.
+
+00:11:18.960 --> 00:11:22.620
+Copilot verwacht deze precies zoals gedefinieerd in de MCP-specificatie.
+
+00:11:22.820 --> 00:11:30.900
+Als jouw externe MCP-server anders hoofdletters gebruikt of metadata nest onder payload response in plaats van data, tool, negeert Copilot het als wartaal.
+
+00:11:31.080 --> 00:11:33.940
+Geen waarschuwing, geen foutmelding, alleen opnieuw, stilte.
+
+00:11:34.120 --> 00:11:38.060
+Het LLM achter Copilot interpreteert dat als ik weet niet hoe ik je daarbij kan helpen.
+
+00:11:38.540 --> 00:11:40.760
+Gefeliciteerd, je hebt een conforme leegte gebouwd.
+
+00:11:40.760 --> 00:11:44.480
+Open voor een juiste afstemming het tabbladdefinitie in je zojuist gemaakte connector.
+
+00:11:44.720 --> 00:11:51.440
+Vouw de eerste bewerking uit, meestal query of get context, en vergelijk de sectie met antwoorden met het nieuwste MCP-schema op GitHub.
+
+00:11:51.620 --> 00:11:57.320
+Pas eigenschapsnamen en types aan zodat er razerays zijn, objecten, objecten zijn en elke string de juiste hoofdlettergebruik hanteert.
+
+00:11:57.520 --> 00:11:59.060
+Ja, het voelt administratief.
+
+00:11:59.240 --> 00:12:00.400
+Welkom bij de diplomatie.
+
+00:12:00.620 --> 00:12:02.440
+Vertalers improviseren geen grammatica.
+
+00:12:02.680 --> 00:12:05.580
+Zodra de afstemming voltooid is, zet je ondersteuning voor streaming op ja.
+
+00:12:05.580 --> 00:12:12.720
+Nogmaals, de documentatie plaatst dit achter een uitklapmenu genaamd optionele geavanceerde instellingen, alsof het de garnering is in plaats van het hoofdgerecht.
+
+00:12:12.900 --> 00:12:17.280
+Maar Copilot vereist streambare eindpunten omdat het AI-antwoorden incrementeel weergeeft.
+
+00:12:17.460 --> 00:12:24.520
+Als je dit vergeet, authentiseert de connector technisch wel, maar treedt er halverwege de reactie een time-out op, wat halve zinnen oplevert of erger, markdown die midden in een woord stopt.
+
+00:12:24.520 --> 00:12:27.520
+Iemand vraagt onvermijdelijk, kan ik niet gewoon synchronisatie gebruiken?
+
+00:12:27.680 --> 00:12:32.760
+Nee, MCP verwacht getokeniseerde streams, geen bulkdumps, juist om de gesprekstroom levend te houden.
+
+00:12:32.980 --> 00:12:38.120
+Zie het als het voelen van het grote taalmodel via een infuus in plaats van een hele maaltijd door zijn keel te duwen.
+
+00:12:38.300 --> 00:12:40.360
+Het infuus laat het nadenken terwijl het eet.
+
+00:12:40.520 --> 00:12:42.720
+Op dit punt denk je wellicht dat succes in zicht is.
+
+00:12:42.900 --> 00:12:48.380
+Je gaat terug naar Copilot Studio, klikt op Tool toevoegen, filtert op MCP en ververst herhaaldelijk wanneer je connector niet verschijnt.
+
+00:12:48.500 --> 00:12:52.700
+Hier is de ongemakkelijke waarheid, omgevingspropagatie loopt enkele minuten achter op publicatie.
+
+00:12:52.700 --> 00:12:56.300
+De werkruimte moet zijn lijst met connectoren synchroniseren met de Power Platform Service.
+
+00:12:56.460 --> 00:12:58.740
+Het spammen van de verversknop vertraagt de synchronisatie.
+
+00:12:58.900 --> 00:13:00.400
+De efficiënte beheerder loopt weg.
+
+00:13:00.580 --> 00:13:04.220
+De ongeduldige beheerder raakt verstrikt in een zelfgecreëerde temporele paradox.
+
+00:13:04.420 --> 00:13:08.960
+Wanneer je connector eindelijk verschijnt, merk je iets subtiels op dat afwijkt van de eigen connectoren van Microsoft.
+
+00:13:09.220 --> 00:13:11.060
+Het icoon mist het ingebouwde zegel.
+
+00:13:11.280 --> 00:13:13.160
+Dat is prima, je hebt iets unieks gemaakt.
+
+00:13:13.480 --> 00:13:16.560
+Selecteer het, kies toevoegen en authenticeer indien gevraagd.
+
+00:13:16.740 --> 00:13:22.480
+Copilot legt nu een koppeling met die connector en haalt de metadata van de tool op, titel, beschrijving en parameters.
+
+00:13:22.700 --> 00:13:26.560
+De aanwezigheid van die metadata is het bewijs dat de handshake is geslaagd.
+
+00:13:26.620 --> 00:13:29.300
+Als je niets ziet, controleer dan je schema afstemming opnieuw.
+
+00:13:29.440 --> 00:13:32.380
+Het eindpunt spreekt, maar Copilot verstaat het accent niet.
+
+00:13:32.540 --> 00:13:34.940
+Er blijven twee valkuilen over, beide heerlijk dom.
+
+00:13:35.100 --> 00:13:37.040
+Ten eerste, certificaat ad validatie.
+
+00:13:37.240 --> 00:13:41.880
+Als je MCP-server gebruik maakt van zelfondertekende TLS en je hebt dat certificaat niet toegevoegd aan de connectoromgeving,
+
+00:13:42.040 --> 00:13:43.400
+dan sterven gesprekken direct bij de verbinding.
+
+00:13:43.620 --> 00:13:49.000
+Gebruik een geldig certificaat uitgegeven door een publieke circa- of upload je root-certificaat via de Power Platform instellingen.
+
+00:13:49.120 --> 00:13:50.900
+Ten tweede, time-out budgettering.
+
+00:13:50.900 --> 00:13:54.920
+Streambare eindpunten moeten reageren met de header Transfer Encoding Chunked.
+
+00:13:55.040 --> 00:14:00.480
+Zonder dit gaat Copilot uit van een standaard HTTP-sluiting om het einde van een bericht aan te duiden en kapt het voor tijdig af.
+
+00:14:00.620 --> 00:14:03.040
+Test met Curl voordat je Microsoft de schuld geeft.
+
+00:14:03.220 --> 00:14:05.860
+Hier is een kort verhaal dat dit ritueel perfect samenvat.
+
+00:14:06.020 --> 00:14:09.160
+Een beheerder klaagde ooit dat hun connector plotseling stopte met werken.
+
+00:14:09.160 --> 00:14:16.080
+Na een forensische inspectie ontdekten we dat hun hosting-engineer Cloudflare had geplaatst voor het MCP-eindpunt, zogenaamd voor caching.
+
+00:14:16.300 --> 00:14:21.020
+En Cloudflare verwijderde, in zijn goedwillende onwetendheid, de streaming-headers om het verkeer te comprimeren.
+
+00:14:21.440 --> 00:14:22.880
+Resultaat? Totale stilte.
+
+00:14:23.060 --> 00:14:25.580
+Moraal? De pijplijn geeft niets om jouw optimalisaties.
+
+00:14:25.800 --> 00:14:28.120
+Volg de specificaties of bereid je voor op een debugging-hel.
+
+00:14:28.300 --> 00:14:29.040
+Nu het inzicht.
+
+00:14:29.280 --> 00:14:31.500
+Dit hele proces is geen kwaadwillende complexiteit.
+
+00:14:31.760 --> 00:14:35.180
+Microsoft heeft geen vallen opgezet, het veronderstelt slechts professioneel gedeeld.
+
+00:14:35.180 --> 00:14:40.260
+De leugen over custom connectors blijft bestaan omdat de UI de technische stappen weglaat die correctheid garanderen.
+
+00:14:40.380 --> 00:14:43.100
+Het vertelt een halve waarheid voor de informele gebruiker.
+
+00:14:43.280 --> 00:14:45.720
+Als je nog steeds kijkt, ben je die groep al ontstegen.
+
+00:14:45.920 --> 00:14:48.620
+Als het goed gedaan is, is wat je gebouwd hebt meer dan een connector.
+
+00:14:48.840 --> 00:14:50.380
+Het is een bruggehoofd voor de waarheid.
+
+00:14:50.580 --> 00:14:52.840
+Je co-pilot zal niet langer kennis van Bing faken.
+
+00:14:53.060 --> 00:14:59.420
+Het zal een geauthenticeerde, schema-conforme en streambare context-uitwisseling uitvoeren met elke intelligentielaag die je blootstelt.
+
+00:14:59.580 --> 00:15:03.680
+De volgende keer dat iemand in je organisatie zegt, ik heb MCP verbonden, maar het reageert niet.
+
+00:15:03.680 --> 00:15:08.320
+Zul je grimmig glimlachen en antwoorden, ja, want je hebt een tunnel op een schilderij gebouwd, geen echte brug.
+
+00:15:08.460 --> 00:15:12.000
+Nu de brug staat, gaan we controleren of het oversteken daadwerkelijk werkt.
+
+00:15:12.200 --> 00:15:16.000
+Want een prachtige hangbrug is nog steeds nutteloos totdat er iets overheen gaat.
+
+00:15:16.760 --> 00:15:18.880
+De integratie testen en verifiëren.
+
+00:15:19.440 --> 00:15:25.860
+Verificatie is het onderdeel dat iedereen als bijzaak behandelt, totdat hun agent beleeft, glimlacht en zegt, daar kan ik je niet bij helpen.
+
+00:15:26.080 --> 00:15:28.720
+Die zin is de versie van een blauw scherm voor co-pilot.
+
+00:15:28.940 --> 00:15:32.040
+Het protocol faalde ergens tussen de connector en het model.
+
+00:15:32.040 --> 00:15:37.080
+MCP testen is niet glamoureus, maar zo bewijs je dat je een brug hebt gebouwd en geen performance art.
+
+00:15:37.280 --> 00:15:38.620
+Begin met de lakmoesproef.
+
+00:15:38.820 --> 00:15:41.100
+Ziet co-pilot studio je connector daadwerkelijk?
+
+00:15:41.320 --> 00:15:44.300
+Filter in het toolspaneel nogmaals op modelcontext protocol.
+
+00:15:44.520 --> 00:15:49.820
+Je vers aangemaakte titel, misschien Microsoft Learn MCP, zou naast de officiële dataverse MCP moeten verschijnen.
+
+00:15:50.000 --> 00:15:51.480
+Als dat niet zo is, stop dan direct.
+
+00:15:51.860 --> 00:15:53.380
+Zichtbaarheid staat gelijk aan registratie.
+
+00:15:53.560 --> 00:15:56.420
+Geen vermelding betekent dat het schema of de host nog steeds niet op elkaar zijn afgestemd.
+
+00:15:56.420 --> 00:15:58.900
+Als het verschijnt, voeg de tool dan toe aan je co-pilot.
+
+00:15:59.060 --> 00:16:06.420
+Op het moment dat je het verbindt, haalt co-pilot beschrijvende metadata op van de MCP-server een woordenboek van beschikbare tools, elk met parameters en duidelijke omschrijvingen.
+
+00:16:07.240 --> 00:16:11.420
+Als je ziet dat het beschrijvingsveld wordt gevuld met Microsoft Docs, arg of vergelijkbaar, gefeliciteerd.
+
+00:16:12.200 --> 00:16:13.160
+De handshake is gelukt.
+
+00:16:13.380 --> 00:16:15.340
+Context wordt nu herkend, niet geraden.
+
+00:16:15.540 --> 00:16:18.840
+Om de functionaliteit te verifiëren, heb je een gecontroleerde vraag nodig.
+
+00:16:18.840 --> 00:16:24.420
+Gebruik de Microsoft Learn MCP als testerijn omdat het publiek en beleefd is en waarschijnlijk niet zal exploderen.
+
+00:16:24.660 --> 00:16:27.340
+Vraag je agent, hoe stel ik SharePoint in als kennisbron?
+
+00:16:27.500 --> 00:16:30.180
+Als je pijplijn intact is, bekijk dan de telemetrie.
+
+00:16:30.380 --> 00:16:31.740
+De prompt reist via dit pad.
+
+00:16:31.880 --> 00:16:37.320
+Gebruiker, custom connector, MCP-server, large language model, antwoord met bronvermelding.
+
+00:16:37.540 --> 00:16:40.280
+Elke stap brengt een potentieel risico op falen met zich mee.
+
+00:16:40.620 --> 00:16:48.800
+Wanneer het antwoord onsamenhangend Engels bevat met markdown verwijzingen naar de heilige drieeenheid, verbinding, begrip en contextualisering.
+
+00:16:49.680 --> 00:16:53.380
+De markdown zelf is het bewijs dat de streamingmodus correct functioneert.
+
+00:16:53.520 --> 00:16:58.980
+Je zult zien dat de tekststapsgewijs wordt weergegeven, zin, pauze, zin, bronvermelding, in plaats van alles tegelijk te dumpen.
+
+00:16:59.160 --> 00:17:04.160
+Dat ritme is de kenmerkende hardslag van MCP, maar als er iets misgaat, wordt Copilot passief agressief.
+
+00:17:04.360 --> 00:17:05.840
+Laten we de stemmingen decoderen.
+
+00:17:06.060 --> 00:17:06.800
+Lege reactie.
+
+00:17:06.980 --> 00:17:09.800
+Je typte een geldige vraag, Copilot knikte en leverde niets.
+
+00:17:10.000 --> 00:17:13.540
+Dat is een URL-fout, hoogstwaarschijnlijk een dubbel voorvoegsel van API, MCP.
+
+00:17:13.800 --> 00:17:19.800
+Controleer het volledige pad in het definitietabblad van je connector, verwijder de redundantie, publiceer opnieuw en wacht de verplichte vijf minuten.
+
+00:17:20.040 --> 00:17:25.820
+Afgekapte markdown, het antwoord komt binnen maar eindigt midden in een zin, als een verveelde stagiair die halverwege een gesprek wegloopt.
+
+00:17:25.980 --> 00:17:29.140
+Je eindpunt declareert de transferencoding niet als chunked.
+
+00:17:29.280 --> 00:17:32.380
+Met andere woorden, je belooft de streaming maar stuurde een statische dump.
+
+00:17:32.580 --> 00:17:35.600
+Stem je headers af op de HTTP 1.1 streamingregels.
+
+00:17:35.760 --> 00:17:37.240
+Ik weet niet hoe ik je daarbij kan helpen.
+
+00:17:37.480 --> 00:17:39.160
+Deze roept existentiële angst op.
+
+00:17:39.160 --> 00:17:42.720
+Het betekent dat Copilot de connector kan bereiken, maar het schema niet kan verwerken.
+
+00:17:42.880 --> 00:17:46.580
+Je eigenschapsnamen wijken af van de MCP-specificatie of een essentieel object ontbreekt.
+
+00:17:46.780 --> 00:17:49.140
+Vergelijk het opnieuw met de referentie JSON van Microsoft.
+
+00:17:49.420 --> 00:17:51.580
+De oplossing is niet mystiek, slechts administratief.
+
+00:17:51.700 --> 00:17:54.980
+En als je verbindingsfouten ontvangt, inspecteer dan je SSL-certificaatketen.
+
+00:17:55.200 --> 00:18:01.100
+Zelf ondertekende of verlopen certificaten veroorzaken vaak stille afwijzingen omdat Power Platform Services niet geverifieerde Roots wantrouwen.
+
+00:18:01.260 --> 00:18:05.880
+Vervang het door een certificaat uitgegeven door een vertrouwde circa- of uploaded Root-certificaat expliciet.
+
+00:18:05.880 --> 00:18:09.060
+Bevestigingstesten zijn nu niet alleen technisch, maar ook logisch.
+
+00:18:09.280 --> 00:18:12.200
+Stel gevarieerde vragen om semantische afwijkingen op te sporen.
+
+00:18:12.380 --> 00:18:18.400
+Toon mij SharePoint indexeringsdocumenten zou dezelfde Microsoft-zoekactie moeten activeren als hoe indexeert SharePoint bestanden.
+
+00:18:18.600 --> 00:18:22.920
+Andere bewoordingen, identieke gereedschapkeuze, dat is contextueel begrip, geen trefwoordherstel.
+
+00:18:23.080 --> 00:18:26.960
+Als reacties stabiel blijven bij verschillende formuleringen, is je copilot officieel vloeiend.
+
+00:18:27.120 --> 00:18:29.420
+Hier is de diagnostische truc waar weinigen over spreken.
+
+00:18:29.640 --> 00:18:32.060
+Observeer de streamheaders in het netwerk tabblad van je browser.
+
+00:18:32.060 --> 00:18:37.300
+Je zou response-chunks moeten zien met het voorvoegsel, data, gevolgd door JSON-objecten die incrementele tokens vertegenwoordigen.
+
+00:18:37.460 --> 00:18:39.540
+Elke chunk komt overeen met een deel van het antwoord.
+
+00:18:39.700 --> 00:18:44.520
+Als je aan het einde van de stream een enkele enorme payload ziet, ben je de streaming kwijt en riskeer je timeouts bij langere queries.
+
+00:18:44.740 --> 00:18:47.300
+Beschouw testen conceptueel als het dirigeren van een orkest.
+
+00:18:47.480 --> 00:18:51.160
+De MCP-server bespeelt de instrumenten, data, schema, indexen.
+
+00:18:51.280 --> 00:18:52.680
+De connector hanteert de baton.
+
+00:18:52.860 --> 00:18:55.500
+Copilot is het oor van de dirigent die het ritme interpreteert.
+
+00:18:55.680 --> 00:18:59.840
+Als één muzikant achterblijft of in de verkeerde toonsoort begint, vervalt de muziek in lawaai.
+
+00:18:59.840 --> 00:19:04.980
+Validatie is je repetitie om ieders timing af te stemmen voor het concert voor leidinggevende die magie verwachten.
+
+00:19:05.240 --> 00:19:10.500
+Wanneer elke sectie harmonieert, promptverzending, HTTP-uitwisseling, streamsequencing,
+
+00:19:10.780 --> 00:19:18.120
+zul je een klein wonder aanschouwen, consistenten, gesiteerden, bedrijfsgestuurden antwoorden in plaats van de improvisatie Jazzware Copilot standaard in vervalt.
+
+00:19:18.280 --> 00:19:20.700
+Pas dan kun je verklaren dat de integratie voltooid is.
+
+00:19:20.880 --> 00:19:24.700
+Je hebt de mechanische laag van MCP bereikt, het betrouwbare transport van context.
+
+00:19:24.940 --> 00:19:28.620
+Dus ja, geniet van de mooie kleine testresultaten, maar onthoud dat dit niet de finale is.
+
+00:19:28.620 --> 00:19:33.020
+Het is het diagnostische piepsignaal dat bevestigt dat je AI hard nu synchroon klopt met de polslag van je data.
+
+00:19:33.200 --> 00:19:34.500
+Het mechanische is klaar.
+
+00:19:34.660 --> 00:19:36.160
+Nu stuiten we op het filosofische.
+
+00:19:36.400 --> 00:19:39.440
+Waarom iemand erom zou geven dat deze complexe symfonie überhaupt bestaat?
+
+00:19:39.660 --> 00:19:41.200
+Waarom dit van belang is voor beide demo?
+
+00:19:41.440 --> 00:19:42.960
+Hier is de ongemakkelijke waarheid.
+
+00:19:43.180 --> 00:19:45.620
+Het opzetten van MCP is geen trucje voor de show.
+
+00:19:45.820 --> 00:19:46.980
+Het is infrastructuur.
+
+00:19:47.160 --> 00:19:53.540
+Terwijl anderen najagen dat ze indruk maken, bouw jij aan de grondwet die bepaalt hoe AI in jouw organisatie de waarheid uitwisselt.
+
+00:19:53.660 --> 00:19:56.280
+Het model contextprotocol standaardiseert die waarheid.
+
+00:19:56.280 --> 00:19:59.960
+Elke zoekopdracht, elke ophaalactie, alles beperkt door schema compliance.
+
+00:20:00.240 --> 00:20:02.320
+Zonder dat gaat Copilot simpelweg fantaseren.
+
+00:20:02.540 --> 00:20:05.060
+Met MCP redeneert het binnen afgebakende kaders.
+
+00:20:05.300 --> 00:20:10.320
+Dat is het onderscheid tussen verbeelding en governance, tussen een grillige stagiair en een regelconforme analist.
+
+00:20:10.520 --> 00:20:12.620
+Voor ondernemingen is dit van fundamenteel belang.
+
+00:20:12.820 --> 00:20:17.840
+Een goed geïntegreerd MCP zorgt ervoor dat elke Copilot reactie afkomstig is uit goedgekeurde systemen,
+
+00:20:17.940 --> 00:20:22.460
+SharePoint, dataverse, interne APIs, in plaats van gescrapte fragmenten die via Bing binnenkomen.
+
+00:20:22.460 --> 00:20:27.040
+Je AI-raad pleegt nu primaire bronnen, geen geruchten. Beveiliging volgt op natuurlijke wijze.
+
+00:20:27.200 --> 00:20:32.360
+In 2025 rapporteerde beveiligingsonderzoekers Spieken in inbreuken gekoppeld aan verkeerd geconfigureerde custom connectors,
+
+00:20:32.560 --> 00:20:35.320
+waarbij endpoints met de ruime rechten nonchalant data lieten lekken tussen tenants.
+
+00:20:35.520 --> 00:20:39.040
+MCP-integratie die correct wordt uitgevoerd, versterkt zero-trust-principes.
+
+00:20:39.240 --> 00:20:41.680
+De connector fungeert als een controlepost bij een ambassade.
+
+00:20:41.880 --> 00:20:46.460
+Minste privileges afgedwongen, inloggegevens beperkt, context alleen uitgewisseld onder vastgelegde verdragen.
+
+00:20:46.680 --> 00:20:49.860
+Reference teams waarderen een nog diepere waarde, controleerbaarheid.
+
+00:20:49.860 --> 00:20:55.860
+Elke MCP-transactie genereert expliciete logs, wie vroeg het, welk schema antwoordde, welke metadata werd geretourneerd.
+
+00:20:56.620 --> 00:20:59.660
+Dat is een audit trail waar je compliance officers nachts rustig van kan slapen.
+
+00:20:59.860 --> 00:21:04.280
+Vergelijk dat met generatieve AI-hallucinaties waarvan de oorsprong ergens op het internet ligt.
+
+00:21:04.500 --> 00:21:06.800
+Future-proofing maakt het argument compleet.
+
+00:21:07.220 --> 00:21:12.200
+Naarmate Microsoft, OpenAI en anderen convergeren naar gestandardiseerde interagentprotocollen,
+
+00:21:12.420 --> 00:21:15.660
+zal MCP-compliance evolueren van een curiositeit naar een vereiste.
+
+00:21:15.660 --> 00:21:21.720
+Gereguleerde sectoren, financiën, zorg, overheid, zullen het verplicht stellen voor AI-systemen die contextuele data uitwisselen.
+
+00:21:21.900 --> 00:21:24.260
+Wanneer dat memo arriveert, hoef je niet in paniek te raken.
+
+00:21:24.440 --> 00:21:27.220
+Je hebt dan al een conforme brug die stilletjes draait in productie.
+
+00:21:27.420 --> 00:21:32.060
+Dus, wanneer collega's je nauwgezette configuratie afdoen als over engineering, glimlach dan kalm.
+
+00:21:32.280 --> 00:21:34.660
+Governance voelt altijd als bureaucratie totdat de inbreuk plaatsvindt.
+
+00:21:35.400 --> 00:21:36.780
+Dan voelt het als vooruitziendheid.
+
+00:21:37.000 --> 00:21:40.120
+Doe het één keer goed en elk co-pilot-exemplaar dat je daarna inzet,
+
+00:21:40.280 --> 00:21:43.420
+erft die discipline contextueel bewustzijn binnen gecontroleerde kaders.
+
+00:21:43.420 --> 00:21:46.800
+Dat is het punt voor bij de demo. Je verbindt niet zomaar een protocol.
+
+00:21:47.100 --> 00:21:49.720
+Je definieert institutioneel geheugen in machinevorm.
+
+00:21:49.920 --> 00:21:55.540
+De volgende keer dat co-pilot een vraag over regelgeving beantwoordt met exacte bron- en citatieketen die jij hebt geautoriseerd,
+
+00:21:55.760 --> 00:21:59.920
+denk dan aan dit moment, de uren aan URL-opschoning, schema-matching en sanity-checks.
+
+00:22:00.140 --> 00:22:02.800
+Dat is de ongeziene techniek achter elke verantwoorde AI.
+
+00:22:03.060 --> 00:22:07.280
+Nu, met herstelde morele voldoening en een structureel solide brug, blijft er één vraag over.
+
+00:22:07.540 --> 00:22:11.800
+Blijf je gedisciplineerde intelligentie bouwen, of laat je je door marketing eenvoud terugleiden naar de chaos?
+
+00:22:11.800 --> 00:22:16.340
+De efficiënte keuze is overduidelijk. Het toevoegen van MCP is niet zomaar een schakelaar omzetten.
+
+00:22:16.500 --> 00:22:20.540
+Het is het herbedraden van het brein van co-pilot studio, zodat het stopt met hallucineren en begint met redeneren.
+
+00:22:20.720 --> 00:22:25.900
+De luie belofte van gebruik gewoon een custom connector stoort in als je beseft dat zo'n connector geen deur is,
+
+00:22:26.020 --> 00:22:28.860
+maar een hele gang die je moet bouwen, verstevigen en testen oplekken.
+
+00:22:29.000 --> 00:22:32.480
+Maar eenmaal voltooid, verandert het hoe elke toekomstige co-pilot zich gedraagt.
+
+00:22:32.680 --> 00:22:36.820
+Wat je hebt bereikt, is een structureel geletterdheidssysteem dat ontworpen is om zijn bedrading te verbergen.
+
+00:22:36.820 --> 00:22:43.740
+Je hebt co-pilot studio geleerd om beleefd om context te vragen, zich te authenticeren voordat het spreekt en citaties terug te geven in plaats van creatieve fictie.
+
+00:22:43.940 --> 00:22:47.500
+Die discipline transformeert het van een flitsende chatbot tot een compliant-analyst.
+
+00:22:47.700 --> 00:22:52.280
+En ja, het vereiste geduld, schema-validatie en een heroïsch geduld voor Microsoft's verversingsvertragingen,
+
+00:22:52.420 --> 00:22:54.320
+maar dat geldt voor alles wat het waard is om te vertrouwen.
+
+00:22:54.480 --> 00:22:58.420
+De zogenaamde custom connector leugen is geen complot, het is marketing vereenvoudiging.
+
+00:22:58.720 --> 00:23:01.220
+Microsoft vertelt de waarheid die geschikt is voor demo's.
+
+00:23:01.220 --> 00:23:03.520
+Jij bouwde de versie die geschikt is voor productie.
+
+00:23:03.680 --> 00:23:09.260
+Je weet nu dat het model context-protocol minder, plug-and-play is en meer, plug-and-negotiate, van verdragsbepalingen.
+
+00:23:09.420 --> 00:23:14.940
+Behandel daarom elke connector die je publiceert als een grondwetswijziging, minimale rechten, strikte regels, verifiëerbare resultaten.
+
+00:23:15.180 --> 00:23:17.660
+Dat is hoe je governance schaalt zonder aan snelheid in te boeten.
+
+00:23:17.940 --> 00:23:23.900
+Sla je dit over, dan breng je je avonden door met het uitleggen aan directieleden waarom de chatbot Bing citeerde in plaats van het beleid.
+
+00:23:24.140 --> 00:23:29.900
+Zet je upgraden pad vast, abonneer je, schakel meldingen in en laat gedisciplineerde kennis automatisch binnenkomen.
+
+00:23:29.900 --> 00:23:36.540
+Geen handmatige controles, geen zorgen over halfwerkende demo's, alleen continu levering van intelligentie die context en compliance respecteert.
+
+00:23:36.720 --> 00:23:38.820
+En Tropy wint, tenzij je voor structuur kiest.
+
+00:23:39.060 --> 00:23:40.200
+Abonneren is structuur.
+
+00:23:40.440 --> 00:23:49.280
+Druk op volgen, blijf rationele AI bouwen en de volgende update arriveert volgens schema als een correct geconfigureerde connector die exact één keer uitvoert en real-time de waarheid streamt.
+
+00:23:49.440 --> 00:23:49.880
+Ga door.

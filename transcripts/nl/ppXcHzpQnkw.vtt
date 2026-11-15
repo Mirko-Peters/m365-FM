@@ -1,0 +1,883 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.560
+Klaar voor 10 dagen vol Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven.
+
+00:00:07.960 --> 00:00:12.300
+In januari is M365 kom terug en we pakken het groter aan.
+
+00:00:12.620 --> 00:00:18.660
+Doe mee aan live sessies, praktijkdemonstraties en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.860 --> 00:00:21.640
+Geen generieke slieders, geen eindeloze modewoorden.
+
+00:00:21.640 --> 00:00:29.140
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.140 --> 00:00:34.980
+Of je nu een IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.220 --> 00:00:40.620
+Gedurende 10 volle dagen kun je verschillende technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.940 --> 00:00:44.560
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.900 --> 00:00:49.140
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.700 --> 00:00:51.180
+Registratie is nu geopend.
+
+00:00:51.900 --> 00:00:55.780
+Ga naar M365com.net en verzeker je plek vandaag nog.
+
+00:00:56.720 --> 00:00:58.980
+Dat is M365com.net.
+
+00:01:00.140 --> 00:01:04.580
+Meld je nu aan op M365com.net en we zien je live in januari.
+
+00:01:04.820 --> 00:01:09.160
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:01:09.320 --> 00:01:11.060
+Ik ben Mirko Peters, uw gastheer.
+
+00:01:11.240 --> 00:01:14.640
+Het onderwerp van vandaag is iets waar bijna iedereen die in Azure bouwt wel eens van heeft gehoord,
+
+00:01:14.760 --> 00:01:17.900
+maar wat maar weinig mensen in begrijpelijke taal uitleggen, Azure Virtual One.
+
+00:01:18.060 --> 00:01:22.700
+Het zit zo, als u ooit op de traditionele manier een wereldwijd netwerk in Azure hebt proberen op te bouwen,
+
+00:01:22.860 --> 00:01:24.280
+weet u dat het snel ingewikkeld wordt.
+
+00:01:24.280 --> 00:01:27.920
+U begint met één regio en een paar virtuele netwerken en alles werkt prima,
+
+00:01:28.120 --> 00:01:32.000
+maar dan voegt u een tweede regio toe, dan een derde, en plotseling moet u filialen verbinden.
+
+00:01:32.240 --> 00:01:37.500
+Dan moet u perings, routetabellen, firewall regels en VPN gateways beheren op een half dozijn locaties.
+
+00:01:37.660 --> 00:01:41.260
+Het is alsof u elke weg, elk verkeerslicht en elke kruising zelf aanlegt.
+
+00:01:41.440 --> 00:01:44.440
+En elke keer dat u een nieuwe regio toevoegt, moet u meer wegen aanleggen.
+
+00:01:44.600 --> 00:01:47.760
+Azure Virtual One neemt het lastige werk uit handen, zodat u dat niet hoeft te doen.
+
+00:01:47.960 --> 00:01:49.280
+Zie het als een snelwegennet.
+
+00:01:49.280 --> 00:01:52.760
+Microsoft bouwt en beheert de snelweg. U bouwt alleen de opritten.
+
+00:01:53.000 --> 00:01:57.700
+Aan het einde van deze aflevering begrijpt u hoe het werkt, waarom het bestaat en wanneer u het moet gebruiken.
+
+00:01:57.880 --> 00:02:00.540
+De oude manier, de complexiteit van een hub- en spooknetwerk.
+
+00:02:00.780 --> 00:02:02.220
+Laten we beginnen met de oude methode.
+
+00:02:02.500 --> 00:02:05.120
+Zodra je het probleem ziet, wordt de oplossing veel duidelijker.
+
+00:02:05.340 --> 00:02:07.960
+De traditionele aanpak in Azure heet hub- en spook.
+
+00:02:08.220 --> 00:02:10.500
+Stel je voor één centraal virtueel netwerk.
+
+00:02:10.500 --> 00:02:15.920
+Dat is je hub, waar je gedeelde services zoals firewalls, domingcontrollers en VPN gateways plaatst.
+
+00:02:15.920 --> 00:02:20.380
+Vervolgens verbind je je virtuele applicatienetwerken, de spokes, met die hub via v-netpering,
+
+00:02:20.680 --> 00:02:24.420
+zodat het verkeer van de spokes via de hub stroomt, waar je het kunt inspecteren en beheren.
+
+00:02:24.600 --> 00:02:25.540
+Wanneer werkt dit goed?
+
+00:02:25.700 --> 00:02:29.980
+In één regio met een handvol virtuele netwerken heb je volledige controle over routing en beveiliging.
+
+00:02:30.140 --> 00:02:33.880
+Je weet precies waar elk pakket naartoe gaat en het is eenvoudig, overzichtelijk en werkt.
+
+00:02:34.040 --> 00:02:35.000
+Maar hier gaat het mis.
+
+00:02:35.260 --> 00:02:37.860
+Zodra je een tweede regio toevoegt, wordt het ingewikkeld.
+
+00:02:37.860 --> 00:02:45.700
+Je moet je hubs met elkaar verbinden door de gebruiker gedefinieerde routes, UDR's, instellen om verkeer door firewalls te leiden en routetabellen configureren voor elke afzonderlijke spook.
+
+00:02:45.820 --> 00:02:49.020
+En elke keer dat je een nieuwe regio toevoegt, vermenigvuldig je die complexiteit.
+
+00:02:49.240 --> 00:02:50.660
+Laat ik een concreet voorbeeld geven.
+
+00:02:50.900 --> 00:02:54.740
+Stel je een bedrijf voor met vestigingen in drie regio's, Noord-Amerika, Europa en Azië.
+
+00:02:54.920 --> 00:02:57.300
+Dat bedrijf heeft connectiviteit nodig tussen al deze vestigingen.
+
+00:02:57.480 --> 00:03:00.840
+In een traditionele hub- en spookopstelling betekent dat minstens 12 peringverbindingen.
+
+00:03:00.960 --> 00:03:05.740
+Elke hub moet met elke andere hub verbonden zijn en elke spook heeft routetabellen nodig die naar de juiste firewall verwijzen.
+
+00:03:05.740 --> 00:03:09.740
+En wanneer er een nieuwe regio bij komt, moeten alle routetabellen handmatig worden bijgewerkt.
+
+00:03:09.880 --> 00:03:12.920
+Dat is de nachtmerrie van het beheren van wereldwijde netwerken op de oude manier.
+
+00:03:12.920 --> 00:03:15.300
+Het werkt niet per se niet, maar het is niet schaalbaar.
+
+00:03:15.460 --> 00:03:17.640
+Hoe meer vestigingen je toevoegt, hoe meer je moet beheren.
+
+00:03:17.800 --> 00:03:20.960
+En uiteindelijk wordt de complexiteit een fulltime baan voor een team van netwerk-engineers.
+
+00:03:21.160 --> 00:03:23.540
+Daarom heeft Microsoft Azure Virtual One ontwikkeld.
+
+00:03:23.660 --> 00:03:26.440
+Het lost het schaalbaarheidsprobleem op zonder de controle te verliezen.
+
+00:03:26.600 --> 00:03:27.600
+Maar wat is het precies?
+
+00:03:28.960 --> 00:03:30.560
+Laten we het eens nader bekijken.
+
+00:03:30.800 --> 00:03:32.660
+Wat is Azure Virtual One nu eigenlijk?
+
+00:03:32.660 --> 00:03:40.400
+De eenvoudigste definitie is een beheerde netwerkservice die je vestigingen, gebruikers en cloud resources verbindt via één door Microsoft beheerde backbone.
+
+00:03:40.700 --> 00:03:45.480
+In plaats van zelf alle verbindingen te bouwen en te beheren, neemt Microsoft het zware werk uit handen.
+
+00:03:45.660 --> 00:03:46.960
+Zie het als een snelwegennet.
+
+00:03:47.160 --> 00:03:48.940
+Je bouwt of onderhoudt de snelweg niet zelf.
+
+00:03:49.160 --> 00:03:50.140
+Je bouwt alleen de opritten.
+
+00:03:50.340 --> 00:03:54.620
+Je opritten zijn de verbindingen van je vestigingen, je externe gebruikers en je virtuele netwerken.
+
+00:03:54.780 --> 00:03:59.580
+De snelweg zelf, de routering, de onderlinge verbindingen tussen regio's, de backbone, dat wordt allemaal beheerd door Microsoft.
+
+00:03:59.580 --> 00:04:01.540
+Dus, wat zijn de daadwerkelijke componenten?
+
+00:04:01.660 --> 00:04:03.920
+Laten we het opsplitsen in de vier belangrijkste onderdelen.
+
+00:04:04.040 --> 00:04:06.160
+Ten eerste, de virtuele One Resource zelf.
+
+00:04:06.360 --> 00:04:09.700
+Dat is de overkoepelende netwerkkontainer, de naam voor je hele snelwegennet.
+
+00:04:09.840 --> 00:04:13.880
+Ten tweede, virtuele hubs, de regionale verbindingspunten, één per Azure regio.
+
+00:04:14.080 --> 00:04:15.900
+Elke hub is als een knooppunt op de snelweg.
+
+00:04:16.040 --> 00:04:19.540
+Ten derde, virtuele spooknetwerken, je applicaties die met die hubs zijn verbonden.
+
+00:04:19.760 --> 00:04:21.160
+En ten vierde, gateways.
+
+00:04:21.420 --> 00:04:25.520
+Deze verzorgen VPN-verbindingen vanuit je vestigingen en express-routeverbindingen vanuit je datacenters.
+
+00:04:25.680 --> 00:04:27.420
+Er zijn twee niveaus van virtuele One.
+
+00:04:27.420 --> 00:04:29.340
+Basic biedt alleen site-to-site VPN.
+
+00:04:29.580 --> 00:04:31.120
+Het is eenvoudig, maar beperkt.
+
+00:04:31.340 --> 00:04:33.080
+Standard biedt de volledige setfuncties.
+
+00:04:33.280 --> 00:04:38.780
+Express route, point-to-site VPN voor externe gebruikers, interhub routing, Azure firewall integratie en meer.
+
+00:04:38.980 --> 00:04:41.720
+Voor vrijwel elk praktijkscenario wilt u de standaardoplossing.
+
+00:04:41.940 --> 00:04:44.660
+Het grote verschil met een traditioneel hub- en spooknetwerk is dit.
+
+00:04:44.780 --> 00:04:46.960
+Microsoft beheert de routing tussen hubs automatisch.
+
+00:04:47.120 --> 00:04:49.880
+U hoeft geen perings aan te maken of routetabellen te configureren.
+
+00:04:50.040 --> 00:04:52.460
+U verbindt uw spokes met de hub en de hub regelt de rest.
+
+00:04:52.700 --> 00:04:53.700
+Zo eenvoudig is het.
+
+00:04:53.700 --> 00:04:56.060
+Het hart van een virtueel One is de virtuele hub.
+
+00:04:56.200 --> 00:04:57.340
+Laten we daar eens naar kijken.
+
+00:04:57.560 --> 00:05:00.500
+De virtuele hub, uw toegangspoort tot het wereldwijde netwerk.
+
+00:05:00.700 --> 00:05:02.380
+Wat is een virtuele hub nu eigenlijk?
+
+00:05:02.600 --> 00:05:08.680
+Simpel gezegd, het is een door Microsoft beheerde regionale router die zich in een specifieke Azure regio bevindt.
+
+00:05:08.840 --> 00:05:09.520
+Dat is alles.
+
+00:05:09.720 --> 00:05:14.240
+Een router die Microsoft voor u instelt en onderhoudt, zodat u zich geen zorgen hoeft te maken over de routing aan de achterkant.
+
+00:05:14.240 --> 00:05:21.620
+Elke hub is een verbindingspunt voor vier dingen, virtuele netwerken, uw spookapplicaties, filialen die via VPN of Express route zijn verbonden,
+
+00:05:21.900 --> 00:05:25.820
+externe gebruikers die via Point2Site VPN verbinding maken en andere hubs.
+
+00:05:25.960 --> 00:05:28.240
+Hubs in verschillende regio's die met elkaar communiceren.
+
+00:05:28.440 --> 00:05:32.620
+En dit is het belangrijkste, de hub regelt automatisch alle routering tussen deze verbindingen.
+
+00:05:32.780 --> 00:05:37.280
+Geen handmatige routetabellen, geen door de gebruiker gedefinieerde routes, geen peringconfiguraties.
+
+00:05:37.460 --> 00:05:41.500
+U verbindt iets met de hub en de hub bepaalt hoe het verkeer op de juiste plek terechtkomt.
+
+00:05:41.600 --> 00:05:43.380
+U moet echter wel uw adresbereik plannen.
+
+00:05:43.380 --> 00:05:47.220
+Elke hub heeft zijn eigen IP-bereik nodig, net als elk ander netwerkonderdeel.
+
+00:05:47.360 --> 00:05:50.500
+Wanneer u een spookv-net met de hub verbindt, is het een eenvoudige v-netverbinding.
+
+00:05:50.680 --> 00:05:52.100
+Een paar klikken en u bent klaar.
+
+00:05:52.260 --> 00:05:54.660
+De hub leert automatisch het adresbereik van het v-net.
+
+00:05:54.800 --> 00:05:57.280
+Maar hier komt de vergelijking met de snelweg echt tot zijn recht.
+
+00:05:57.440 --> 00:06:01.320
+U kunt meerdere hubs in verschillende regio's hebben en deze maken automatisch verbinding met elkaar.
+
+00:06:01.560 --> 00:06:05.580
+Zo communiceert een hub in Noord-Amerika met een hub in Europa, die weer communiceert met een hub in Azië,
+
+00:06:05.760 --> 00:06:07.460
+allemaal via de wereldwijde backbone van Microsoft.
+
+00:06:07.700 --> 00:06:09.560
+Elke hub is als een oprit naar die backbone.
+
+00:06:09.560 --> 00:06:13.200
+Je bouwt de oprit voor je regio en Microsoft zorgt voor de snelweg ertussen.
+
+00:06:13.380 --> 00:06:15.180
+En de schaalbaarheid is indrukwekkend.
+
+00:06:15.340 --> 00:06:18.300
+Een enkele hub kan tot 1000 site-to-site VPN verbindingen,
+
+00:06:18.460 --> 00:06:23.660
+tot 100.000 externe gebruikers en een doorvoer van maximaal 50 gigabit per seconde via de hub-router aan.
+
+00:06:23.860 --> 00:06:26.920
+Dat is niet voor een klein kantoor, dat is voor een bedrijfsomgeving.
+
+00:06:27.160 --> 00:06:29.480
+Nieuwe hubs hebben, laten we alles erop aansluiten.
+
+00:06:29.800 --> 00:06:32.180
+Vestigingen, gebruikers en cloud resources verbinden.
+
+00:06:32.440 --> 00:06:33.840
+Laten we beginnen met vestigingen.
+
+00:06:34.100 --> 00:06:38.580
+Site-to-site VPN verbind je fysieke locaties met Azure via standaard IPsec VPN tunnels.
+
+00:06:38.580 --> 00:06:42.920
+Het werkt met vrijwel elk VPN-apparaat, Cisco, Fortinet, wat je ook gebruikt.
+
+00:06:42.920 --> 00:06:44.820
+Er is geen speciale hardware nodig.
+
+00:06:45.100 --> 00:06:45.640
+Zo werkt het.
+
+00:06:45.740 --> 00:06:51.300
+Je maakt een VPN-site aan in de hub, geeft het openbare IP-adres en de adresruimte van je vestiging op en Azure regelt de rest.
+
+00:06:51.480 --> 00:06:54.580
+Het creëert de tunnel, beheert de encryptie en zorgt ervoor dat deze blijft werken.
+
+00:06:54.780 --> 00:06:56.460
+Externe gebruikers zijn de volgende stap.
+
+00:06:56.600 --> 00:07:00.680
+Met een point-to-site VPN kunnen medewerkers overal verbinding maken, thuis, in een café of hotel.
+
+00:07:00.900 --> 00:07:04.260
+Ze gebruiken de Azure VPN Client, OpenVPN of standaard IKEV2.
+
+00:07:04.260 --> 00:07:08.100
+En hier is het belangrijkste, het ondersteunt Microsoft Entra ID voor authenticatie.
+
+00:07:08.380 --> 00:07:11.520
+Gebruikers loggen dus in met hun werkgegevens, net zoals voor al hun andere diensten.
+
+00:07:11.740 --> 00:07:14.680
+Geen aparte VP en wachtwoorden, geen certificaten om te beheren.
+
+00:07:14.860 --> 00:07:17.760
+Wanneer een gebruiker verbinding maakt, belt hij of zij in op de dichtstbijzijnde hub.
+
+00:07:17.860 --> 00:07:23.380
+En ze krijgen automatisch toegang tot alle resources die op die hub zijn aangesloten, VNET's, filiaalnetwerken en andere regio's.
+
+00:07:23.520 --> 00:07:25.820
+Geen complexe split-tunneling, geen handmatige routering.
+
+00:07:26.020 --> 00:07:28.360
+Ze maken één keer verbinding en ze zijn direct verbonden met het netwerk.
+
+00:07:28.540 --> 00:07:31.000
+Voor uw hoofdkantoren en datacenters is er expressroute.
+
+00:07:31.000 --> 00:07:34.240
+Dit is een privé, dedicated verbinding van uw locatie naar Azure.
+
+00:07:34.440 --> 00:07:36.000
+Het omzeilt het openbare internet volledig.
+
+00:07:36.660 --> 00:07:39.040
+Uw verkeer komt nooit in aanraking met een openbaar netwerk.
+
+00:07:39.200 --> 00:07:43.900
+En Virtual One ondersteunt zowel VPN als expressroute op dezelfde hub met automatische failover ertussen.
+
+00:07:44.060 --> 00:07:48.980
+Als uw expressroute verbinding uitvalt, wordt het verkeer automatisch overgeschakeld naar VPN zonder handmatige tussenkomst.
+
+00:07:49.140 --> 00:07:50.000
+En dan nu uw cloud-applicaties.
+
+00:07:50.820 --> 00:07:53.820
+Het verbinden van Spook VNET-S met de hub is een kwestie van een paar klikken.
+
+00:07:53.960 --> 00:07:57.000
+U selecteert de hub, selecteert het VNET en de verbinding wordt tot stand gebracht.
+
+00:07:57.220 --> 00:07:59.580
+De hub leert automatisch de adresruimte van het VNET.
+
+00:07:59.580 --> 00:08:02.520
+Geen pering-instellingen, geen routering-stabelconfiguratie.
+
+00:08:02.680 --> 00:08:06.380
+En tussen regio's communiceren hubs automatisch met elkaar via het Microsoft Backbone.
+
+00:08:06.540 --> 00:08:08.600
+U hoeft geen verbindingen tussen hubs te configureren.
+
+00:08:08.760 --> 00:08:10.660
+U hoeft dus geen transit-routering te beheren.
+
+00:08:10.780 --> 00:08:11.560
+Het werkt gewoon.
+
+00:08:11.760 --> 00:08:17.520
+Het resultaat is connectiviteit tussen alle vestigingen, elke externe gebruiker, elk VNET, elke locatie op locatie.
+
+00:08:17.700 --> 00:08:21.660
+Ze kunnen elkaar allemaal bereiken, waarbij het verkeerde hele tijd binnen het privé-netwerk van Microsoft blijft.
+
+00:08:21.800 --> 00:08:23.300
+Laat ik een praktijkvoorbeeld geven.
+
+00:08:23.560 --> 00:08:26.720
+Stel je een retailer voor met winkels in Europa, Azië en Noord-Amerika.
+
+00:08:26.720 --> 00:08:30.300
+Elke winkel maakt via een site-to-site VP een verbinding verbinding met de regionale hub.
+
+00:08:30.400 --> 00:08:32.660
+De Europese winkels maken verbinding met de Europese hub.
+
+00:08:32.760 --> 00:08:35.080
+De Aziatische winkels maken verbinding met de Aziatische hub.
+
+00:08:35.180 --> 00:08:42.360
+En wanneer er verkeer tussen regio's moet worden verzonden, bijvoorbeeld wanneer een Aziatische winkel de voorraad in het Noord-Amerikaanse magazijn moet controleren, gaat het verkeer via het Microsoft Backbone.
+
+00:08:42.560 --> 00:08:46.420
+Niet het openbare internet, niet een MPLS-netwerk van een derde partij, maar het privé-netwerk van Microsoft.
+
+00:08:46.660 --> 00:08:48.600
+Maar connectiviteit is slechts de helft van het verhaal.
+
+00:08:48.740 --> 00:08:51.640
+De echte kracht zit hem in hoe Virtual One routing en beveiliging afhandelt.
+
+00:08:51.840 --> 00:08:53.480
+Routing en beveiliging zijn ingebouwd.
+
+00:08:53.480 --> 00:08:55.780
+Maar connectiviteit is slechts de helft van het verhaal.
+
+00:08:55.920 --> 00:08:59.480
+De echte kracht van Virtual One zit hem in hoe het routing en beveiliging afhandelt.
+
+00:08:59.640 --> 00:09:08.360
+In een traditionele hub- en spookopstelling moet je, als je verkeer door een firewall wilt leiden, gebruikersgedefiniëerde routes, UDR's, aanmaken voor elk subnet in elke spook.
+
+00:09:08.520 --> 00:09:11.240
+En als je meerdere regio's hebt, moet je dat helemaal opnieuw doen.
+
+00:09:11.440 --> 00:09:12.260
+Het is complex.
+
+00:09:12.540 --> 00:09:13.660
+Het is foutgevoelig.
+
+00:09:13.800 --> 00:09:17.640
+En als er iets misgaat, is het lastig om te achterhalen welke routetabel de verkeerde vermelding bevat.
+
+00:09:17.640 --> 00:09:20.460
+Virtual One lost dit op met iets dat routing en tent heet.
+
+00:09:20.640 --> 00:09:23.120
+Zie het als één enkele configuratie die de hub vertelt.
+
+00:09:23.320 --> 00:09:24.700
+Stuur al het verkeer door de firewall.
+
+00:09:25.060 --> 00:09:25.760
+Dat is alles.
+
+00:09:26.000 --> 00:09:26.600
+Eén instelling.
+
+00:09:26.800 --> 00:09:27.980
+Geen honderden routetabellen.
+
+00:09:28.180 --> 00:09:29.660
+En dit is wat het dekt internetverkeer.
+
+00:09:29.900 --> 00:09:30.860
+Alles wat naar het web gaat.
+
+00:09:31.300 --> 00:09:31.700
+Privéverkeer.
+
+00:09:31.940 --> 00:09:32.740
+VNet naar VNet.
+
+00:09:32.940 --> 00:09:33.580
+Tussen vestigingen.
+
+00:09:33.780 --> 00:09:35.000
+Tussen vestigingen en VNet.
+
+00:09:35.180 --> 00:09:35.960
+En verkeer tussen hubs.
+
+00:09:36.080 --> 00:09:37.500
+Verkeer dat tussen regio's beweegt.
+
+00:09:37.500 --> 00:09:38.160
+Eén beleid.
+
+00:09:38.460 --> 00:09:39.380
+Wereldwijde handhaving.
+
+00:09:39.560 --> 00:09:41.660
+U stelt het één keer in en het is overal van toepassing.
+
+00:09:41.860 --> 00:09:43.660
+Maar hoe komt de firewall nu precies in beeld?
+
+00:09:43.860 --> 00:09:45.500
+Via beveiligde virtuele hubs.
+
+00:09:45.500 --> 00:09:51.360
+U implementeert Azure Firewall rechtstreeks in de hub of een NGFW van een derde partij zoals Fortinet, Checkpoint of Palo Alto.
+
+00:09:51.600 --> 00:09:53.920
+De firewall bevindt zich transparant in het verkeerspad.
+
+00:09:54.140 --> 00:09:55.100
+Geen UDR's nodig.
+
+00:09:55.300 --> 00:09:56.320
+Geen complexe routering.
+
+00:09:56.540 --> 00:09:59.020
+Verkeer stroomt erin, wordt gecontroleerd en stroomt eruit.
+
+00:09:59.180 --> 00:09:59.960
+Het werkt gewoon.
+
+00:10:00.200 --> 00:10:03.220
+Voor encryptie gebruiken alle VPN-tunnels standaard IP-sechnieken.
+
+00:10:03.420 --> 00:10:07.480
+Microsoft raadt GCMA's 256 aan voor de beste balans tussen prestaties en beveiliging.
+
+00:10:07.620 --> 00:10:10.600
+En als u express route gebruikt, kunt u dat verkeer ook versleutelen.
+
+00:10:10.820 --> 00:10:12.900
+Dus zelfs uw privéverbinding is beschermd.
+
+00:10:13.060 --> 00:10:15.100
+Dit sluit aan bij de principes van Zero Trust.
+
+00:10:15.100 --> 00:10:18.600
+Geen directe internettoegang vanuit de spokes, al het verkeer wordt geïnspecteerd,
+
+00:10:18.820 --> 00:10:23.860
+microsegmentatie binnen de spoke-VNET's en alles wordt centraal beheerd via Azure Firewall Manager.
+
+00:10:24.080 --> 00:10:26.520
+Een beleid wordt wereldwijd op alle hubs toegepast.
+
+00:10:26.700 --> 00:10:28.420
+Het beveiligingsvoordeel is simpel.
+
+00:10:28.640 --> 00:10:33.120
+In plaats van firewallregels per regio te beheren, beheert u één beleid dat overal van toepassing is.
+
+00:10:33.280 --> 00:10:36.800
+In plaats van routetabellen te debuggen, configureert u de routeringsintentie één keer.
+
+00:10:36.980 --> 00:10:39.600
+In plaats van te hopen dat er niets misgaat wanneer u een nieuwe regio toevoegt,
+
+00:10:39.760 --> 00:10:41.480
+weet u dat het beleid automatisch wordt overgenomen.
+
+00:10:41.480 --> 00:10:45.600
+Dus, wanneer moet u virtual one gebruiken in plaats van het traditionele hub-and-spoke-model?
+
+00:10:45.860 --> 00:10:48.100
+Virtual one versus traditioneel hub-and-spoke.
+
+00:10:48.380 --> 00:10:49.320
+Wanneer wat te gebruiken?
+
+00:10:49.520 --> 00:10:50.980
+Laten we één ding duidelijk maken.
+
+00:10:51.200 --> 00:10:52.480
+Hub-and-spoke is niet kapot.
+
+00:10:52.640 --> 00:10:54.800
+Het is gewoon het juiste gereedschap voor de juiste taak.
+
+00:10:54.920 --> 00:10:56.220
+Dus, wanneer wint hub-and-spoke?
+
+00:10:56.440 --> 00:10:58.140
+Wanneer u zich in één regio bevindt.
+
+00:10:58.300 --> 00:11:01.520
+Wanneer u een handvol virtuele netwerken hebt, misschien vijf, misschien tien.
+
+00:11:01.680 --> 00:11:04.720
+U wilt volledige controle over elke route, elke firewallregel.
+
+00:11:04.880 --> 00:11:07.120
+U hebt een klein tien dat dit netwerk door en door kent.
+
+00:11:07.300 --> 00:11:09.720
+In dat geval is hub-and-spoke eenvoudiger en goedkoper.
+
+00:11:09.720 --> 00:11:11.940
+U hebt de overhead van een beheerderservice niet nodig.
+
+00:11:12.200 --> 00:11:15.040
+Virtual one is de beste keuze wanneer u in meerdere regio's actief bent.
+
+00:11:15.260 --> 00:11:16.800
+Wanneer u overal vestigingen hebt.
+
+00:11:17.040 --> 00:11:19.280
+Wanneer externe gebruikers overal verbinding moeten kunnen maken.
+
+00:11:19.520 --> 00:11:22.760
+Wanneer uw netwerk zich over de hele wereld uitstrekt en u niet langer elk onderdeel afzonderlijk wilt beheren.
+
+00:11:22.900 --> 00:11:25.700
+Hoe meer uw netwerk verspreid is, hoe meer virtual one zinvol is.
+
+00:11:25.900 --> 00:11:27.100
+Laten we naar de cijfers kijken.
+
+00:11:27.340 --> 00:11:30.440
+Op kleine schaal, bijvoorbeeld met tien VNET's, is hub-and-spoke goedkoper.
+
+00:11:30.620 --> 00:11:32.840
+U betaalt dan alleen voor perings- en basis-gateways.
+
+00:11:33.020 --> 00:11:36.720
+Maar bij 200 VNET's is virtual one ongeveer 21% goedkoper.
+
+00:11:36.720 --> 00:11:41.020
+Waarom? Omdat u uw team niet hoeft te betalen om honderden perings- en routetabellen te beheren.
+
+00:11:41.220 --> 00:11:43.360
+Die operationele besparingen lopen snel op.
+
+00:11:43.500 --> 00:11:44.400
+En de prestaties?
+
+00:11:44.640 --> 00:11:48.620
+Bij wereldwijde implementaties biedt virtual one 15 tot 25% lagere latentie.
+
+00:11:48.840 --> 00:11:52.280
+Dat komt doordat de backbone-routing van Microsoft is geoptimaliseerd voor wereldwijd verkeer.
+
+00:11:52.440 --> 00:11:56.380
+Uw pakketten volgen het beste pad, niet het pad dat u drie jaar geleden handmatig hebt geconfigureerd.
+
+00:11:56.540 --> 00:11:58.140
+Het verschil in beheer is nog groter.
+
+00:11:58.140 --> 00:12:02.700
+Met hub-and-spoke beheert u perings, routetabellen, gateways en firewalls per regio.
+
+00:12:02.860 --> 00:12:04.480
+Elke regio wordt een eigen project.
+
+00:12:04.740 --> 00:12:09.460
+Met virtual one heb je één centraal beheerscherm, één overzicht, één set beleidsregels en één manier om alles te beheren.
+
+00:12:09.620 --> 00:12:11.000
+Dus, hoe maak je de juiste keuze?
+
+00:12:11.240 --> 00:12:14.040
+Stel jezelf één vraag, bouw ik voor vandaag of voor over drie jaar.
+
+00:12:14.260 --> 00:12:17.760
+Als je een start-up bent met één regio en vijf VNET's, is hub-and-spoke prima.
+
+00:12:18.020 --> 00:12:20.880
+Maar als je van plan bent uit te breiden, groeit virtual one met je mee.
+
+00:12:21.040 --> 00:12:24.000
+En het goede nieuws is, je kunt beginnen met hub-and-spoke en later migreren.
+
+00:12:24.500 --> 00:12:26.200
+Microsoft ondersteunt die migratieroute.
+
+00:12:26.200 --> 00:12:28.020
+Je hoeft het niet meteen perfect te doen.
+
+00:12:28.180 --> 00:12:33.780
+Als je dit ooit in een sollicitatiegesprek krijgt, is dit het korte antwoord, hub-and-spoke voor gecontroleerde implementaties in één regio.
+
+00:12:34.040 --> 00:12:36.640
+Virtual one voor grootschalige wereldwijde connectiviteit.
+
+00:12:36.880 --> 00:12:39.060
+Die ene zin laat zien dat je de afweging begrijpt.
+
+00:12:39.280 --> 00:12:42.540
+Laten we een paar praktijkvoorbeelden bekijken om te zien hoe dit in de praktijk werkt.
+
+00:12:43.240 --> 00:12:44.680
+Praktijkvoorbeelden en migratieroutes.
+
+00:12:44.940 --> 00:12:47.340
+Laten we dit concreet maken met drie praktijkvoorbeelden.
+
+00:12:47.560 --> 00:12:51.340
+Scenario 1, een wereldwijde winkelketen met vijftig vestigingen verspreid over drie continenten.
+
+00:12:51.580 --> 00:12:54.620
+Medewerkers op afstand verzorgen de inventarisatie, klantenservice en het management.
+
+00:12:54.620 --> 00:12:57.140
+Een gecentraliseerd ERP-systeem draait in Azure.
+
+00:12:57.420 --> 00:13:02.480
+Zo maakt Virtual, want dit mogelijk, implementeerhaps in Noord-Amerika, Europa en Azië, één per continent.
+
+00:13:02.740 --> 00:13:06.160
+Elke winkel maakt via een site-to-site VP en verbinding verbinding met de regionale hub.
+
+00:13:06.240 --> 00:13:08.460
+Een winkel in Londen maakt verbinding met de Europese hub.
+
+00:13:08.560 --> 00:13:10.940
+Een winkel in Tokio maakt verbinding met de Aziatische hub.
+
+00:13:11.100 --> 00:13:17.640
+Medewerkers op afstand gebruiken een point-to-site VP en verbinding, geauthenticeerd via Microsoft en Traide, hun werkgegevens, niets extra's.
+
+00:13:17.640 --> 00:13:21.980
+En nu komt het belangrijkste al het verkeer tussen de winkels en Azure blijft binnen het Microsoft-netwerk.
+
+00:13:22.160 --> 00:13:27.220
+De winkel in Londen die de inventaris controleert in het Noord-Amerikaanse magazijn, dat verkeer komt nooit in aanraking met het openbare internet.
+
+00:13:27.400 --> 00:13:32.880
+Het gaat van de Europese hub via het privé-netwerk van Microsoft naar de Noord-Amerikaanse hub en vervolgens naar het ERP-systeem.
+
+00:13:33.060 --> 00:13:33.980
+Het resultaat?
+
+00:13:34.160 --> 00:13:39.380
+Overal consistente connectiviteit, gecentraliseerde beveiliging via de hubs en lagere kosten dan MPLS.
+
+00:13:39.620 --> 00:13:43.500
+Geen contracten met providers, geen lange termijn verplichtingen, u betaalt alleen voor wat u gebruikt.
+
+00:13:43.720 --> 00:13:45.940
+Scenario 2, vervanging van MPLS.
+
+00:13:45.940 --> 00:13:50.680
+Dit is een belangrijke. Veel bedrijven betalen al jaren aan providers voor MPLS-verbindingen.
+
+00:13:50.860 --> 00:13:52.760
+Duur, inflexibel en moeilijk aan te passen.
+
+00:13:52.980 --> 00:13:54.340
+Virtual One biedt een oplossing.
+
+00:13:54.620 --> 00:13:57.440
+Begin met Virtual One voor nieuwe vestigingen en Azure-connectiviteit.
+
+00:13:57.640 --> 00:14:00.800
+Elke nieuwe locatie die u opent, wordt direct aangesloten op de Virtual One-backbone.
+
+00:14:01.000 --> 00:14:04.360
+Migreer vervolgens geleidelijk bestaande MPLS-locaties naar VPN- of expressroute.
+
+00:14:04.580 --> 00:14:07.880
+Gebruik expressroute voor uw legacy datacenters die privé-connectiviteit nodig hebben.
+
+00:14:08.080 --> 00:14:12.180
+Verminder na verloop van tijd het aantal MPLS-verbindingen naarmate het verkeer verschuift naar de Virtual One-backbone.
+
+00:14:12.180 --> 00:14:14.120
+U hoeft niet alles in één keer over te zetten.
+
+00:14:14.300 --> 00:14:15.840
+U kunt beide parallel gebruiken.
+
+00:14:16.020 --> 00:14:20.580
+Wanneer elk MPLS-contract afloopt, beslist u, migreert de locatie naar Virtual One.
+
+00:14:20.880 --> 00:14:22.080
+Meestal is het antwoord ja.
+
+00:14:22.380 --> 00:14:24.200
+Scenario 3, een cloud-first startup.
+
+00:14:24.460 --> 00:14:28.860
+U bent nu actief in één regio, met één hap, een handvol VNET's en een klein team, maar u bent van plan uit te breiden.
+
+00:14:29.000 --> 00:14:32.160
+U hebt klanten in Europa en Azië en u neemt wereldwijd remote medewerkers aan.
+
+00:14:32.480 --> 00:14:34.060
+Implementeer één hap in uw huidige regio.
+
+00:14:34.300 --> 00:14:35.540
+Verbind uw VNET's.
+
+00:14:35.760 --> 00:14:37.880
+Stel een point-to-site VPN in voor uw team op afstand.
+
+00:14:38.100 --> 00:14:39.000
+Dat is uw startpunt.
+
+00:14:39.180 --> 00:14:41.220
+Naarmate u uitbreidt naar nieuwe regio's, voegt uw haps toe.
+
+00:14:41.360 --> 00:14:42.640
+De routering verloopt automatisch.
+
+00:14:42.800 --> 00:14:44.120
+U hoeft niets opnieuw te configureren.
+
+00:14:44.280 --> 00:14:46.900
+Uw gebruikers op afstand maken verbinding met de dichtstbijzijnde hap zonder dat ze iets hoeven te wijzigen.
+
+00:14:47.040 --> 00:14:48.720
+U bent klaar om te schalen zonder een herontwerp.
+
+00:14:48.860 --> 00:14:50.060
+Dat is de kracht van Virtual One.
+
+00:14:50.260 --> 00:14:51.100
+Het groeit met u mee.
+
+00:14:51.320 --> 00:14:52.960
+Dus hoe gaat u er nu eigenlijk mee aan de slag?
+
+00:14:53.140 --> 00:14:54.620
+Aan de slag met Azure Virtual One.
+
+00:14:54.860 --> 00:14:56.480
+Dus hoe gaat u er nu eigenlijk mee aan de slag?
+
+00:14:56.480 --> 00:14:57.680
+Een virtueel one maken.

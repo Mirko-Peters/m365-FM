@@ -1,0 +1,673 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:07.020
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA Azure et aux personnes qui façonnent l'avenir du travail.
+
+00:00:07.920 --> 00:00:12.060
+En janvier prochain, la M365 con est de retour et nous voyons encore plus grand.
+
+00:00:12.940 --> 00:00:18.140
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des conseils pratiques d'experts et de MVPs du monde entier.
+
+00:00:18.840 --> 00:00:21.160
+Pas de diapositives génériques, pas de jargon marketing interminable.
+
+00:00:21.800 --> 00:00:22.860
+Nous abordons les vrais défis.
+
+00:00:23.580 --> 00:00:29.220
+Copilot Studio, les agents IA fabriquent la sécurité, la gouvernance et l'automatisation et l'automatisation.
+
+00:00:29.400 --> 00:00:34.140
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.540 --> 00:00:40.080
+Sur 10 jours complets, vous pourrez explorer de multiples technologies et échanger avec une communauté mondiale.
+
+00:00:41.000 --> 00:00:44.220
+Suivez le direct et rapportez des idées pratiques au sein de votre organisation.
+
+00:00:45.200 --> 00:00:50.820
+Janvier 2027, 10 jours. Une seule communauté Microsoft. Les inscriptions sont désormais ouvertes.
+
+00:00:51.880 --> 00:00:55.560
+Rendez-vous sur m365con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.560 --> 00:00:58.540
+C'est m365con.net.
+
+00:01:00.280 --> 00:01:04.580
+Inscrivez-vous sur m365con.net et nous nous retrouverons en direct en janvier.
+
+00:01:04.580 --> 00:01:08.780
+Bienvenue dans un nouvel épisode des Microsoft Knowledge Nuggets UGA ici sur M365FM.
+
+00:01:08.980 --> 00:01:10.020
+Je suis votre Oudemil Computers.
+
+00:01:10.240 --> 00:01:13.160
+Le sujet du jour est une situation que presque tous ceux qui travaillent avec Azure ont rencontré.
+
+00:01:13.700 --> 00:01:19.620
+Vous lancez une nouvelle machine virtuelle et par défaut, elle possède une IP publique avec le port RDP389 ouvert sur Internet.
+
+00:01:20.680 --> 00:01:23.800
+Si vous faites cela depuis un moment, vous êtes probablement posé la même question que moi.
+
+00:01:24.580 --> 00:01:26.940
+Est-ce vraiment le seul moyen d'accéder à mon serveur ?
+
+00:01:26.940 --> 00:01:31.700
+Le fait est que chaque port exposé est une cible et les groupes de ransomware scannent constamment les ports RDP ouverts.
+
+00:01:32.320 --> 00:01:34.040
+Ce n'est pas une question de savoir s'ils vont le trouver, mais quand.
+
+00:01:34.600 --> 00:01:37.080
+A la fin de cet épisode, vous comprendrez ce qu'est réellement Azure Bastion
+
+00:01:37.080 --> 00:01:40.080
+et comment il offre un meilleur moyen d'accéder à vos VM en toute sécurité.
+
+00:01:40.860 --> 00:01:43.540
+Nous examinerons l'ancienne méthode, pourquoi elle est défaillante et la meilleure approche,
+
+00:01:43.700 --> 00:01:46.580
+ainsi que la nouvelle intégration entre ID qui rend tout encore plus simple que prévu.
+
+00:01:47.460 --> 00:01:49.840
+L'ancienne méthode, les tiens pox et guéguer le RDP public.
+
+00:01:49.840 --> 00:01:52.040
+Commençons donc par l'ancienne méthode.
+
+00:01:52.820 --> 00:01:54.380
+La configuration traditionnelle est la suivante.
+
+00:01:54.520 --> 00:01:58.080
+Vous déployez une VM, lui attribuez une IP publique et ouvrez le port RDP33389.
+
+00:01:59.060 --> 00:02:01.600
+Ensuite, vous ajoutez une règle de groupe de sécurité réseau pour restreindre les accès.
+
+00:02:01.860 --> 00:02:04.720
+Peut-être limitez-vous l'accès à la plage IP de votre bureau ou à un point de terminaison VPN.
+
+00:02:05.340 --> 00:02:09.000
+C'est le modèle de base, mais il existe un autre modèle utilisé depuis des années, la Gajumpbox.
+
+00:02:09.800 --> 00:02:11.300
+Voyez cela comme un point de contrôle de sécurité.
+
+00:02:11.640 --> 00:02:14.280
+Vous devez passer par lui avant de pouvoir atteindre le reste de votre réseau.
+
+00:02:15.060 --> 00:02:18.180
+Une Jumboxer est une VM unique qui sert de passerelle vers votre réseau privé.
+
+00:02:18.180 --> 00:02:23.420
+Vous connectez d'abord en RDP à cette machine, puis de là vous rebondissez vers les autres serveurs de votre réseau.
+
+00:02:24.020 --> 00:02:27.900
+C'est une idée simple qui a fonctionné pendant des années et qui fonctionne toujours dans les petits environnements aujourd'hui.
+
+00:02:28.300 --> 00:02:31.960
+Le hic, c'est que cela ne fonctionne que si vous le durcissez, le patchez, le surveillez et ne jamais faire d'erreur.
+
+00:02:32.380 --> 00:02:36.060
+Le problème n'est pas que cela ne puisse pas fonctionner, c'est que cela demande un travail constant pour le maintenir en sécurité.
+
+00:02:36.680 --> 00:02:37.600
+Alors voici le vrai problème.
+
+00:02:38.020 --> 00:02:39.760
+Les serveurs rebond sont simplement des machines virtuelles classiques.
+
+00:02:39.760 --> 00:02:44.020
+Elles ont besoin de mises à jour systèmes d'antivirus, de bases de sécurité et de quelqu'un pour gérer tout cela.
+
+00:02:44.580 --> 00:02:47.540
+Elles ont des IP publiques avec des ports RDP ou SSH exposés.
+
+00:02:47.960 --> 00:02:50.800
+Même si vous restreignez ces ports avec des règles NSG, ils restent détectables.
+
+00:02:51.280 --> 00:02:52.180
+Elles sont toujours scannées.
+
+00:02:52.440 --> 00:02:57.480
+Chaque jour, à grande échelle, gérer des serveurs rebondes devient vite complexe.
+
+00:02:57.980 --> 00:03:01.860
+Vous avez plusieurs machines virtuelles dans différentes régions, des configurations incohérentes, des configures actifs, des dérives de croix.
+
+00:03:02.100 --> 00:03:03.380
+Une équipe durcit les siennes, une autre non.
+
+00:03:03.980 --> 00:03:08.660
+Et le coup caché dont personne ne parle, ce sont les heures d'administration passées à patcher, durcir et dépanner ces machines.
+
+00:03:08.660 --> 00:03:12.140
+J'ai vu des estimations d'environ 3 heures par mois rien que pour la maintenance.
+
+00:03:12.800 --> 00:03:13.440
+C'est de l'argent réel.
+
+00:03:14.100 --> 00:03:16.840
+Alors et s'il existait un service qui gérait tout cela pour vous ?
+
+00:03:16.840 --> 00:03:21.160
+Un service qui supprime totalement le point de terminaison public et vous offre un accès plus propre et plus sûr ?
+
+00:03:21.160 --> 00:03:22.480
+Qu'est-ce qu'Azure Bastion ?
+
+00:03:22.480 --> 00:03:24.140
+Voici la définition la plus simple que je puisse ou deux.
+
+00:03:24.520 --> 00:03:32.800
+Azure Bastion est un service PAS entièrement géré qui vous offre un accès RDP et SSH sécurisé aux machines virtuelles Azure sans exposer d'IP public sur ces dernières, sans exposer dernières.
+
+00:03:32.960 --> 00:03:33.200
+C'est tout.
+
+00:03:33.560 --> 00:03:36.380
+Pas d'IP public, pas de port ouvert, pas de point de terminaison de gestion exposé.
+
+00:03:36.960 --> 00:03:37.980
+Vous voyez cela comme un tunnel sécurisé.
+
+00:03:38.520 --> 00:03:42.660
+Vous connectez à Bastion via HTTPS et Bastion se connecte à votre VM de manière privée au sein du réseau virtuel.
+
+00:03:43.300 --> 00:03:47.720
+Votre navigateur communique avec Bastion sur le port 443, le même port utilisé pour les sites web sécurisés.
+
+00:03:48.260 --> 00:03:50.940
+Bastion communique ensuite avec votre VM via RDP ou SSH.
+
+00:03:50.940 --> 00:03:53.420
+Mais cette conversation reste dans votre réseau virtuel.
+
+00:03:53.840 --> 00:03:55.020
+Le monde extérieur ne le voit jamais.
+
+00:03:55.560 --> 00:03:57.160
+Voici la différence clé par rapport à un serveur robot.
+
+00:03:57.540 --> 00:03:58.480
+Bastion n'est pas une machine virtuelle.
+
+00:03:58.820 --> 00:04:00.260
+Ce n'est pas quelque chose que vous devez patcher ou maintenir.
+
+00:04:00.560 --> 00:04:01.560
+Microsoft s'occupe de tout ça.
+
+00:04:01.960 --> 00:04:05.840
+Les mises à jour systèmes, le durcissement de sécurité, la mise à l'échelle, tout est pris en charge pour vous.
+
+00:04:06.120 --> 00:04:07.140
+Vous n'avez qu'à le déployer et l'utiliser.
+
+00:04:07.460 --> 00:04:10.260
+Pour un usage courant, vous vous connectez depuis le portail Azure directement dans votre navigateur.
+
+00:04:10.860 --> 00:04:14.560
+Aucun logiciel client supplémentaire, aucun VPN à installer, aucun client RDP à configurer.
+
+00:04:15.120 --> 00:04:16.780
+Juste votre navigateur et vos identifiants Azure.
+
+00:04:16.780 --> 00:04:20.980
+Aux machines virtuelles restent privées, aucune IP publique requise, aucun port RDP exposé à Internet.
+
+00:04:21.580 --> 00:04:23.380
+Et voici ce qu'il faut retenir des modèles de sécurité moderne.
+
+00:04:23.780 --> 00:04:25.660
+Bastion s'intègre parfaitement dans un cadre de confiance zéro d'ordre.
+
+00:04:26.160 --> 00:04:29.280
+L'accès est régi par l'identité et la politique et non, par l'emplacement réseau.
+
+00:04:29.720 --> 00:04:31.220
+Vous n'y accédez pas parce que vous êtes sur la bonne plage IP.
+
+00:04:31.840 --> 00:04:34.060
+Vous y accédez parce que vous êtes la bonne personne avec les bonnes autorisations.
+
+00:04:34.800 --> 00:04:38.500
+Parlons de son fonctionnement interne car l'architecture est plus simple que vous ne le pensez.
+
+00:04:39.360 --> 00:04:40.780
+Comment fonctionne Azure Bastion ?
+
+00:04:40.780 --> 00:04:53.260
+Bastion se déploie dans un sous-réseau dédié de votre réseau virtuel qui doit être nommé Azure Bastion Subnet avec un espace d'adressage soit 26 ou plus, soit environ 64 adresses IP minimum, ce qui laisse au service la marge nécessaire pour fonctionner et évoluer.
+
+00:04:54.200 --> 00:04:56.640
+Ce sous-réseau est exclusif à Bastion, rien d'autre ne peut donc y résider.
+
+00:04:57.120 --> 00:04:58.860
+Ni machine virtuelle ni autre service, rien du tout.
+
+00:04:59.380 --> 00:05:02.960
+Cela permet de garder les choses propres et sécurisées et vous savez exactement ce que contient ce sous-réseau et ce qu'il y fait.
+
+00:05:02.960 --> 00:05:09.680
+Lorsque vous connectez via le portail, votre navigateur ouvre une session TLS vers l'IP publique de Bastion sur le port 443 chiffré pour que personne ne puisse voir ce que vous faites.
+
+00:05:10.280 --> 00:05:18.880
+Ensuite, Bastion initie une connexion RDP ou SSH vers votre VM cible sur le réseau privé afin que la VM perçoive la connexion comme provenant de l'intérieur du réseau virtuel et non d'Internet.
+
+00:05:19.440 --> 00:05:20.960
+Et elle ne sait même pas que le monde extérieur existe.
+
+00:05:21.540 --> 00:05:24.200
+Bastion peut servir des VM dans le même réseau virtuel ou des réseaux appairés.
+
+00:05:24.520 --> 00:05:27.760
+Et avec la bonne référence, SKU, même des machines locales connectées via ExpressRoute ou VPN.
+
+00:05:27.760 --> 00:05:34.520
+Cela signifie que vous pouvez utiliser un seul déploiement Bastion pour atteindre des VM sur plusieurs réseaux, tant qu'ils sont connectés et dans le même locataire.
+
+00:05:35.300 --> 00:05:41.200
+Un moyen intelligent de renforcer la sécurité consiste à utiliser des groupes de sécurité réseau pour autoriser uniquement le RDP et le SSH depuis le sous-réseau Bastion.
+
+00:05:41.780 --> 00:05:46.040
+Ainsi même si quelqu'un parvenait à accéder à votre réseau virtuel, il ne pourrait pas atteindre ses ports de gestion.
+
+00:05:46.460 --> 00:05:50.160
+Il devrait passer par Bastion, ce qui signifie qu'il lui faudrait d'abord la bonne identité et les bonnes autorisations.
+
+00:05:50.680 --> 00:05:56.700
+C'est déjà une grande amélioration par rapport aux jumpboxes, mais une nouvelle fonctionnalité va encore plus loin et tout repose sur l'identité.
+
+00:05:57.760 --> 00:05:59.500
+L'intégration entre ID.
+
+00:06:00.580 --> 00:06:01.240
+Cela change tout.
+
+00:06:02.080 --> 00:06:05.300
+Pendant des années, il y avait un inconvénient avec Bastion qui agaçait beaucoup de monde.
+
+00:06:05.840 --> 00:06:11.400
+Vous aviez toujours besoin de comptes locaux sur les VM, de noms d'utilisateurs, de mots de passe ou de clés SSH à gérer sur chaque machine.
+
+00:06:12.480 --> 00:06:16.540
+Ainsi, bien que Bastion résolve le problème de sécurité réseau, vous restiez coincés avec l'ancien problème d'identité.
+
+00:06:16.980 --> 00:06:21.680
+Des mots de passe différents sur des VM différentes, des comptes jamais supprimés après le départ d'un monde de l'équipe, tout ce bazar.
+
+00:06:22.560 --> 00:06:24.380
+Puis en 2025, Microsoft a changé cela.
+
+00:06:24.380 --> 00:06:28.740
+Ils ont ajouté l'authentification native entre ID pour Bastion et cela a tout changé, et cela a tout changé.
+
+00:06:28.920 --> 00:06:34.380
+Désormais, vous pouvez vous connecter à une VM Windows via Bastion en utilisant votre identité professionnelle, sans compte local ni mot de passe à retenir.
+
+00:06:35.120 --> 00:06:36.280
+Juste vos identifiants entre ID.
+
+00:06:36.800 --> 00:06:39.960
+Le même nom d'utilisateur et le même mot de passe que pour vos emails, Teams ou SharePoint.
+
+00:06:40.400 --> 00:06:40.660
+C'est tout.
+
+00:06:41.080 --> 00:06:44.580
+Entre ID applique l'authentification multifacteur et les politiques d'accès conditionnels à vos connexions VM.
+
+00:06:44.980 --> 00:06:48.100
+Ainsi, les mêmes politiques qui protègent vos emails et applications protègent désormais vos serveurs.
+
+00:06:48.100 --> 00:06:54.760
+Si votre entreprise exige la MFA pour les données sensibles, cette même demande apparaîtra lors de votre accès RDP.
+
+00:06:55.860 --> 00:07:00.060
+Si votre politique d'accès conditionnel bloque les connexions depuis des lieux non approuvés, cela s'applique aussi.
+
+00:07:00.420 --> 00:07:01.040
+Cela s'applique aussi.
+
+00:07:01.300 --> 00:07:04.040
+Vos serveurs héritent du même niveau de sécurité que le reste de votre environnement.
+
+00:07:04.540 --> 00:07:05.740
+Il y a quelques prérequis à connaître.
+
+00:07:06.240 --> 00:07:13.360
+La VM doit exécuter Windows 10 à H2 ou plus récent, ou Windows Server 2022, avec l'extension de connexion AD installée, installée.
+
+00:07:13.360 --> 00:07:16.660
+Vous devez également attribuer les rôles RBAC appropriés à vos utilisateurs.
+
+00:07:17.300 --> 00:07:17.980
+Il existe deux rôles.
+
+00:07:18.180 --> 00:07:21.020
+Connexion utilisateur de machines virtuelles et gué pour un accès standard et dégué.
+
+00:07:21.200 --> 00:07:23.060
+Connexion administrateur que gué pour les droits admins.
+
+00:07:23.880 --> 00:07:27.040
+C'est une séparation nette qui permet d'accorder précisément le niveau d'accès nécessaire.
+
+00:07:27.340 --> 00:07:27.800
+Rien de plus.
+
+00:07:29.160 --> 00:07:34.500
+Une fois configuré, entra ID apparaît comme type d'authentification par défaut dans Bastion et un clic suffit.
+
+00:07:35.720 --> 00:07:40.440
+Fini la saisie d'identifiant, la recherche de mot de passe ou les clés SSH, cliquez et connectez-vous.
+
+00:07:40.440 --> 00:07:46.480
+C'est là que l'ancien modèle de Jumpbox échoue, car Bastion et Entra ID offrent ce qu'une Jumpbox ne peut donner.
+
+00:07:47.820 --> 00:07:51.820
+Un accès basé sur l'identité et sécurisé plutôt qu'un compte local sur une VM.
+
+00:07:52.280 --> 00:07:52.440
+Ah !
+
+00:07:53.200 --> 00:07:54.760
+Tarifs des références et réalités du terrain.
+
+00:07:55.500 --> 00:07:56.000
+Parlons argent.
+
+00:07:56.720 --> 00:07:58.620
+Tout le monde veut savoir combien coûte réellement Bastion.
+
+00:07:59.360 --> 00:08:00.320
+Il existe quatre niveaux.
+
+00:08:00.560 --> 00:08:02.040
+Développeur, Basics, Standard et Premium.
+
+00:08:02.480 --> 00:08:03.400
+Le niveau développeur est gratuit.
+
+00:08:03.800 --> 00:08:05.100
+Il est destiné aux tests, pas au travail réel.
+
+00:08:05.640 --> 00:08:08.380
+Vous ne pouvez connecter qu'une seule VM à la fois sur une infrastructure partagée.
+
+00:08:08.380 --> 00:08:10.680
+Idéal pour apprendre, mais n'y mettez rien d'important.
+
+00:08:11.200 --> 00:08:14.880
+Le niveau basique débute à environ 0,0,19$ par mois, soit 140$ par mois.
+
+00:08:15.540 --> 00:08:17.560
+Il convient aux petites configurations, mais avec des limites.
+
+00:08:18.360 --> 00:08:21.260
+Pas de support client natif, pas de transfert des fichiers, pas de lien partageable.
+
+00:08:21.940 --> 00:08:24.040
+Suffisant pour un accès portail, mais limité en fonctionnalité.
+
+00:08:24.320 --> 00:08:27.620
+Le niveau standard est à 0,29$ par heure, soit 210$ par mois.
+
+00:08:28.160 --> 00:08:29.660
+Il inclut deux instances par défaut.
+
+00:08:30.240 --> 00:08:31.860
+Et c'est là que vous bénéficiez des fonctionnalités avancées.
+
+00:08:31.860 --> 00:08:36.460
+Support client natif pour utiliser votre client RDP ou SSH habituel au lieu du navigateur.
+
+00:08:36.960 --> 00:08:38.380
+I-impartageable pour un accès temporaire.
+
+00:08:38.860 --> 00:08:39.580
+Transfert des fichiers.
+
+00:08:40.180 --> 00:08:43.740
+Connexion IP pour atteindre des machines locales via ExpressRoute ou VPN.
+
+00:08:44.620 --> 00:08:48.600
+La version Premium coûte 0,27$ par heure, soit environ 200$ par mois, également avec deux instances.
+
+00:08:49.540 --> 00:08:51.460
+Oui, c'est légèrement moins cher que la version standard l'heure.
+
+00:08:52.180 --> 00:08:54.800
+La version Premium ajoute l'enregistrement de session et le déploiement privé uniquement.
+
+00:08:55.240 --> 00:08:57.120
+Cela signifie que Bastion lui-même n'a pas besoin d'adresse IP plus.
+
+00:08:57.120 --> 00:08:59.340
+C'est un atout majeur pour les environnements soumis à de fortes contraintes.
+
+00:08:59.340 --> 00:09:01.160
+Voici maintenant la comparaison qui compte vraiment.
+
+00:09:01.480 --> 00:09:05.160
+Une machine virtuelle Gumbox peut être peut-être que 35 à 50$ par mois à calculer stockage,
+
+00:09:05.240 --> 00:09:06.000
+mais ce n'est pas le coût réel.
+
+00:09:06.380 --> 00:09:07.100
+Mais ce n'est pas le coût réel.
+
+00:09:07.740 --> 00:09:11.540
+Les coûts cachés, comme la mise à jour, le renforcement, la surveillance et la gestion de cette VM,
+
+00:09:11.780 --> 00:09:13.480
+dépassent souvent les 200$ par mois.
+
+00:09:14.320 --> 00:09:17.840
+Trois heures de travail administratif à 60$ de l'heure représentent déjà 180$.
+
+00:09:18.580 --> 00:09:20.960
+Ajoutez le coût de la VM et vous arrivez à 220$ ou plus.
+
+00:09:21.600 --> 00:09:24.800
+Ainsi, Bastion standard à 210$ par mois semble assez raisonnable
+
+00:09:24.800 --> 00:09:27.160
+si l'on prend en compte tout ce que vous ne payez plus, si la haine est.
+
+00:09:27.740 --> 00:09:29.120
+Pour la plupart des environnements de production,
+
+00:09:29.340 --> 00:09:30.560
+standard ou premium est le bon choix.
+
+00:09:31.120 --> 00:09:34.360
+La différence de coût entre ces options et une KeyJumpbox correctement entretenue est faible,
+
+00:09:34.540 --> 00:09:36.820
+tandis que les gains en sécurité et en exploitation sont immenses.
+
+00:09:38.200 --> 00:09:40.760
+Rassemblons le tout pour voir comment ces éléments forment une image claire.
+
+00:09:41.800 --> 00:09:43.660
+La vue d'ensemble, la façon dont tout est connecté.
+
+00:09:44.180 --> 00:09:46.140
+Prenons un peu de recul pour voir comment tout cela s'articule.
+
+00:09:46.980 --> 00:09:48.240
+L'ancien modèle ressemblait à ceci.
+
+00:09:48.620 --> 00:09:51.000
+Une IP publique sur votre VM, un port air d'épées ouvert,
+
+00:09:51.560 --> 00:09:53.560
+une KeyJumpbox qui nécessitant un entretien constant,
+
+00:09:53.560 --> 00:09:55.420
+et des comptes locaux dispersés sur chaque machine.
+
+00:09:56.160 --> 00:09:58.080
+Chaque élément représentait un problème distinct à résoudre.
+
+00:09:58.760 --> 00:10:01.820
+Sécurité réseau, mise à jour, gestion des identités, rotation des identifiants,
+
+00:10:01.900 --> 00:10:03.460
+cela fait beaucoup d'éléments en mouvement.
+
+00:10:04.040 --> 00:10:06.320
+Et si l'un d'eux échouait, vous étiez exposé à une faille ?
+
+00:10:06.320 --> 00:10:07.640
+Regardez maintenant le nouveau modèle à vue Bastion.
+
+00:10:08.060 --> 00:10:10.540
+Pas d'IP publique sur vos VM, pas de port exposé, un service.
+
+00:10:11.180 --> 00:10:13.020
+Gérer que Microsoft maintient à jour et sécurisé,
+
+00:10:13.380 --> 00:10:16.340
+et un accès basé sur l'identité avec MFA et accès conditionnel.
+
+00:10:17.200 --> 00:10:18.660
+Soudainement, la complexité chute drastiquement.
+
+00:10:18.900 --> 00:10:20.400
+Voici comment les rôles sont répartis.
+
+00:10:20.940 --> 00:10:22.380
+Bastion gère la couche de sécurité réseau.
+
+00:10:22.380 --> 00:10:23.600
+C'est la méthode pour entrer.
+
+00:10:24.300 --> 00:10:26.260
+Il s'assure que vos VM sont invisibles sur Internet,
+
+00:10:26.680 --> 00:10:29.260
+et que chaque connexion passe par un tunnel sécurisé et géré.
+
+00:10:30.280 --> 00:10:31.780
+EntraID gère la couche d'identité.
+
+00:10:32.260 --> 00:10:34.060
+Il s'agit de savoir qui vous êtes et si vous y êtes autorisé.
+
+00:10:34.960 --> 00:10:36.200
+Garantie que seules les bonnes personnes,
+
+00:10:36.360 --> 00:10:38.340
+avec les bonnes autorisations et la bonne configuration d'appareil,
+
+00:10:38.440 --> 00:10:39.020
+peuvent se connecter.
+
+00:10:39.460 --> 00:10:41.840
+Ensemble, il vous offre ce qu'aucune GunJumpbox ne peut égaler.
+
+00:10:42.000 --> 00:10:44.580
+Une séparation nette entre l'accès réseau et le contrôle des identités.
+
+00:10:45.120 --> 00:10:46.440
+Vous n'avez pas besoin de faire confiance au réseau.
+
+00:10:46.760 --> 00:10:48.260
+Vous n'avez pas besoin de faire confiance à l'adresse IP.
+
+00:10:48.660 --> 00:10:49.600
+Vous faites confiance à l'identité.
+
+00:10:49.600 --> 00:10:52.500
+Cette identité est soutenue par l'ensemble de votre pile de sécurité.
+
+00:10:53.160 --> 00:10:54.460
+C'est la direction prise par Microsoft.
+
+00:10:55.200 --> 00:10:56.960
+C'est la direction que prend la sécurité dans le cloud.
+
+00:10:57.280 --> 00:10:59.060
+La vraie puissance ne réside pas dans un produit seul,
+
+00:10:59.180 --> 00:11:00.120
+mais dans leur complémentarité.
+
+00:11:01.380 --> 00:11:03.180
+Au premier pas, pour bien démarrer avec Bastion.
+
+00:11:03.900 --> 00:11:04.920
+Alors, par où commencer ?
+
+00:11:04.920 --> 00:11:06.000
+Laissez-moi vous proposer une approche seule.
+
+00:11:06.260 --> 00:11:08.120
+D'abord, vous devez décider si vous partez de zéro
+
+00:11:08.120 --> 00:11:10.160
+ou si vous migrez depuis des serveurs rebonds existants.
+
+00:11:10.620 --> 00:11:12.260
+Si vous partez de zéro, vous êtes dans une situation ille.
+
+00:11:12.700 --> 00:11:14.480
+Mais si vous migrez, ne vous inquiétez pas.
+
+00:11:15.000 --> 00:11:17.100
+Bastion peut coexister avec votre configuration actuelle,
+
+00:11:17.100 --> 00:11:18.100
+le temps du transfert.
+
+00:11:18.100 --> 00:11:19.760
+Ensuite, choisissez votre référence.
+
+00:11:20.160 --> 00:11:22.240
+Le SKU Développeur est gratuit et idéal pour les tests,
+
+00:11:22.420 --> 00:11:24.320
+mais pour la production préférée, le standard ou le premium.
+
+00:11:24.980 --> 00:11:26.480
+La différence de coût avec le basic est faible
+
+00:11:26.480 --> 00:11:28.020
+et vous bénéficiez de fonctionnalités réellement utiles.
+
+00:11:28.520 --> 00:11:30.600
+Ensuite, vous déployez Bastion dans votre réseau virtuel.
+
+00:11:31.160 --> 00:11:33.100
+Créez le sous-réseau Azure Bastion avec un...
+
+00:11:33.100 --> 00:11:34.100
+...
+
+00:11:34.100 --> 00:11:35.100
+...
+
+00:11:35.100 --> 00:11:36.100
+...
+
+00:11:36.100 --> 00:11:39.100
+...
+
+00:11:39.100 --> 00:11:41.100
+...
+
+00:11:41.100 --> 00:11:43.100
+...
+
+00:11:43.100 --> 00:11:44.100
+...

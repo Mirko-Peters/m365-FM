@@ -1,7 +1,7 @@
 name: Microsoft-Updates holen (Release-Communications-API)
 on:
   schedule:
-    - cron: "20 4 * * *"
+    - cron: "20 0 * * *"   # vor dem naechtlichen Seitenbau (site.yml 01:07 UTC), damit die Updates noch in der Nacht auf die Website kommen
   workflow_dispatch:
 permissions:
   contents: write

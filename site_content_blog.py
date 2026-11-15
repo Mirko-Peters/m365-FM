@@ -5,13 +5,18 @@ Pakete mit status: review bleiben liegen. Geprueft wird: Titel, Kurzfassung, Lae
 Bilder nur von img.m365.fm (CLAUDE.md), keine Skripte. Fehler stehen im Bericht blog-content/report.json und im Build-Log; nichts wird geloescht.
 
 Kopf: title, summary, status (review|approved), publish (true|false), author (Profil-Handle, Standard mirko-p), date (JJJJ-MM-TT),
-topics (Entitaets-IDs), faq ([{q, a}]). Text: Markdown mit ##-Ueberschriften, Absaetzen, Listen, **fett**, *kursiv*, `code`,
-[Link](https://...) und Bildern ![Alt](https://img.m365.fm/...)."""
+topics (Entitaets-IDs), faq ([{q, a}]), keypoints (optional, 3-8 Zeilen je 10-200 Zeichen, Abschnitt Key points nach dem ersten Absatz). Text: Markdown mit ##-Ueberschriften, Absaetzen, Listen, **fett**, *kursiv*, `code`,
+[Link](https://...) und Bildern ![Alt](https://img.m365.fm/...).
+Englische Pakete uebersetzt das Uebersetzer-Team (translate_blog.py, Schluessel content/<slug>) in die 14 Sprachen; translations() baut daraus
+die Sprachfassungen unter /<sprache>/community/u/<autor>/blog/<slug>/ wie bei den frueheren Beitraegen."""
 import hashlib, json, re, time
 from datetime import datetime, timezone
 from pathlib import Path
 
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_shownotes as SNS
+import site_milestones as MST
+from site_i18n import T
 from site_learn import esc
 
 ROOT = Path(__file__).resolve().parent
@@ -52,17 +57,25 @@ def check(rec, lang, slug, ents):
     if not 10 <= len(title) <= 140: err.append(f"Titel {len(title)} Zeichen (10-140)")
     if not 50 <= len(summary) <= 300: err.append(f"Kurzfassung {len(summary)} Zeichen (50-300)")
     if not HANDLE.match(author): err.append("Autor-Handle ungueltig")
-    words = len(re.sub(r"[#*`>\[\]()!-]", " ", body).split())
-    if words < 300: err.append(f"Text {words} Woerter (mindestens 300)")
+    ms = MST.week_of(slug) is not None   # Wochenzusammenfassung "M365.FM milestones" (Freitagsaufgabe): auch kurze Wochen erscheinen, Thema M365.FM immer dabei
+    words, wmin = len(re.sub(r"[#*`>\[\]()!-]", " ", body).split()), (MST.MIN_WORDS if ms else 300)
+    if words < wmin: err.append(f"Text {words} Woerter (mindestens {wmin})")
     if re.search(r"<\s*(script|iframe|style|form)", body, re.I): err.append("HTML-Element nicht erlaubt (script/iframe/style/form)")
     bad = sorted({u for _, u in IMG.findall(body) if not u.startswith("https://img.m365.fm/")})
     if bad: err.append("Bilder nur von https://img.m365.fm/: " + ", ".join(bad[:3]))
     topics = [t for t in (m.get("topics") or []) if isinstance(t, str)]
+    if ms and MST.TOPIC not in topics and MST.TOPIC in ents: topics.insert(0, MST.TOPIC)
     unknown = [t for t in topics if t not in ents]
     if unknown: err.append("unbekannte Themen: " + ", ".join(unknown[:5]))
     faq = [{"q": str(x.get("q") or "")[:200], "a": str(x.get("a") or "")[:600]} for x in (m.get("faq") or []) if isinstance(x, dict) and x.get("q") and x.get("a")]
+    kp = [str(x).strip() for x in (m.get("keypoints") or []) if str(x).strip()]   # Kernpunkte (3-8, je 10-200 Zeichen): Liste nach dem ersten Absatz, wird mit dem Text uebersetzt
+    if kp and (not 3 <= len(kp) <= 8 or any(not 10 <= len(x) <= 200 for x in kp)): err.append("Kernpunkte: 3-8 Punkte mit je 10-200 Zeichen")
     if err: return None, err
     html = render(body)
+    if kp:
+        box = f"<h2>{esc(T(lang, 'Key points', 'Kernpunkte'))}</h2>\n<ul>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in kp) + "</ul>"   # Ueberschrift in der Paketsprache (data/py_i18n.json); englische Pakete uebersetzt translate_blog samt h2
+        cut = html.find("</p>")
+        html = box + "\n" + html if cut < 0 else html[:cut + 4] + "\n" + box + html[cut + 4:]
     item = {"slug": slug, "lang": lang, "title": title, "summary": summary, "author": author, "html": html, "topics": topics[:10], "faq": faq[:10],
             "publish": m.get("publish") in (True, "true", "yes", 1), "published": _ts(m.get("date")) or int(time.time())}
     item["hash"] = hashlib.sha1(json.dumps(item, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:16]
@@ -87,6 +100,12 @@ def collect(ents):
     return items, rep
 
 
+def live_refs(ents):
+    """Freigegebene, fehlerfreie Pakete mit publish: true als {"handle", "slug"}: der Worker legt sie erst nach diesem Bau live an. Fuer SPM.check_posts,
+    damit ein Eintrag unter "posts" in data/sponsorships.json (taeglicher Lauf der Cognillo-Reihe, gleicher Commit wie publish: true) den Bau nicht abbricht."""
+    return [{"handle": it["author"], "slug": it["slug"]} for it in collect(ents)[0] if it.get("publish")]
+
+
 def publish(write, ents):
     """Schreibt blog-content/index.json (nur freigegebene, fehlerfreie Pakete) und blog-content/report.json."""
     items, rep = collect(ents)
@@ -96,3 +115,63 @@ def publish(write, ents):
         print(f"Content-Pakete Blog: {rep['approved']} freigegeben, {rep['review']} in Pruefung, {len(rep['errors'])} mit Fehlern")
         for e in rep["errors"][:20]: print("  FEHLER", e["file"], "; ".join(e["errors"]))
     return len(items)
+
+
+# ---------- Sprachfassungen der englischen Pakete (Uebersetzer-Team, translate_blog.py) ----------
+TR_PREFIX = "content/"   # Schluessel in data/blog_i18n: "content/<slug>" - getrennt von den Slugs der frueheren Podpage-Beitraege (kein Slug enthaelt "/")
+
+
+class _AnyTopic:
+    """Themen-Pruefung aus: das Uebersetzer-Team braucht die Entitaeten nicht (der Seitenbau prueft sie trotzdem)."""
+    def __contains__(self, x): return True
+
+
+def tr_sources(ents=None):
+    """Freigegebene, fehlerfreie englische Pakete als Quelle fuer translate_blog.py, mit denselben Feldern wie die frueheren Beitraege
+    (title, desc, html, faq im schema.org-Format, iso). HTML genau wie im Index fuer den Worker (render). Ohne ents keine Themen-Pruefung."""
+    items, _ = collect(_AnyTopic() if ents is None else ents)
+    return [{"slug": TR_PREFIX + it["slug"], "cp_slug": it["slug"], "author": it["author"], "title": it["title"], "desc": it["summary"], "html": it["html"],
+             "faq": [{"name": q["q"], "acceptedAnswer": {"text": q["a"]}} for q in it["faq"]],
+             "iso": datetime.fromtimestamp(it["published"], timezone.utc).isoformat()} for it in items if it["lang"] == "en"]
+
+
+COPY = ("id", "handle", "name", "slug", "topics", "published", "created", "updated", "coauthors")   # vom englischen Original (Datenbank) uebernommen
+
+
+def translations(BASE, posts, ents):
+    """Sprachfassungen der englischen Pakete aus data/blog_i18n, derselbe Weg wie bei den frueheren Beitraegen (site_legacy_blog.translations):
+    tr_of='en', ai_tr (KI-Hinweis + Link aufs Original), tr_index je Sprache aus data/blog_tr.json (Index, Sitemap, hreflang).
+    Nur vollstaendige, zum aktuellen Paket passende Fassungen (translate_blog.assemble) und nur, wenn das englische Original live in der
+    Datenbank steht (sonst zeigte 'Englisches Original lesen' ins Leere). Statisch wie die frueheren Beitraege (legacy: keine Stimmen/Kommentare)."""
+    import site_legacy_blog as LBL
+    build, index = LBL.tr_config()
+    srcs = tr_sources(ents) if build else []
+    if not srcs: return []
+    import translate_blog as TB
+    old = {p.get("slug") for p in LBL.P.load("blog_posts")}   # Slug eines frueheren Beitrags: der Worker uebernimmt das Paket dann nicht, das Original waere der alte Beitrag
+    clash = [s["cp_slug"] for s in srcs if s["cp_slug"] in old]
+    if clash: print(f"Content-Pakete Blog: Slug schon von einem frueheren Beitrag belegt, keine Sprachfassungen: {', '.join(clash[:5])}")
+    srcs = [s for s in srcs if s["cp_slug"] not in old]
+    orig = {(p["handle"], p["slug"]): p for p in posts if (p.get("lang") or "en") == "en" and not p.get("tr_of")}
+    # Der Worker uebernimmt ein Paket nicht, wenn der Slug schon von Hand vergeben ist: dann waere das live stehende "Original" ein
+    # fremder Beitrag (falsches hreflang, falscher Link aufs Original). Nur Originale mit dem Titel des Pakets zaehlen.
+    other = [s["cp_slug"] for s in srcs if (o := orig.get((s["author"], s["cp_slug"]))) and (o.get("title") or "").strip() != s["title"].strip()]
+    if other: print(f"Content-Pakete Blog: Slug gehoert einem anderen Beitrag (Titel weicht ab), keine Sprachfassungen: {', '.join(other[:5])}")
+    srcs = [s for s in srcs if s["cp_slug"] not in other]
+    out = []
+    for lang in build:
+        import site_i18n_overrides as OVR
+        data = TB.load_lang(lang); n = 0   # Handtexte der Redaktion legt nur TB.assemble(..., lang) darueber (i18n_overrides); OVR liefert der Redaktion nur zu
+        for s in srcs:
+            o = orig.get((s["author"], s["cp_slug"]))
+            if o: OVR.note_blog(lang, s["slug"], s, data.get(s["slug"]))
+            r = TB.assemble(s, data.get(s["slug"]), lang) if o else None
+            if not r: continue
+            title, desc, html, faq = r
+            out.append({**{k: o[k] for k in COPY if k in o}, "lang": lang, "title": title, "summary": (desc or "")[:400], "body": "", "html": html, "keypoints": [], "votes": 0,
+                        "faq": [{"q": q["name"], "a": q["acceptedAnswer"]["text"]} for q in faq if q.get("name")], "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html),
+                        "legacy": True, "content_tr": True, "tr_of": "en", "ai_tr": True, "tr_index": IR.index_or_long(lang in index, desc, html)}); n += 1   # 13.11.2026: ab 2500 Zeichen eigener Text immer index (site_index_rule)
+        if n: print(f"Content-Pakete Blog {lang}: {n} Sprachfassungen{' (index)' if lang in index else ' (noindex, ausser Fassungen ab 2500 Zeichen)'}")
+    wait = [s["cp_slug"] for s in srcs if (s["author"], s["cp_slug"]) not in orig]
+    if wait: print(f"Content-Pakete Blog: {len(wait)} englische Originale noch nicht live, Sprachfassungen warten: {', '.join(wait[:5])}")
+    return out

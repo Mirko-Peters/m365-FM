@@ -1,0 +1,1093 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.300
+Wat als een van je beheerdersaccounts nu gestolen zou worden?
+
+00:00:02.500 --> 00:00:05.340
+Geen normaal gebruikersaccount, maar een account met de sleutels tot alles.
+
+00:00:05.520 --> 00:00:08.420
+Je e-mailsysteem, je bestandsopslag, je gebruikersdatabase.
+
+00:00:08.580 --> 00:00:11.060
+Hoeveel schade kan iemand aanrichten voordat je het überhaupt doorhebt?
+
+00:00:11.260 --> 00:00:12.740
+Dit is het ongemakkelijke antwoord.
+
+00:00:12.940 --> 00:00:15.460
+Als die beheerder permanente toegang heeft, en dat is meestal zo,
+
+00:00:15.620 --> 00:00:17.120
+hoeft de aanvaller niet opnieuw in te breken.
+
+00:00:17.340 --> 00:00:19.100
+Ze zijn al binnen en kunnen elke e-mail lezen,
+
+00:00:19.320 --> 00:00:21.480
+elk wachtwoord wijzigen en elke gebruiker verwijderen.
+
+00:00:21.580 --> 00:00:24.700
+En dat kunnen ze doen om 3 uur s'nachts op een zaterdag, wanneer niemand toekijkt.
+
+00:00:24.700 --> 00:00:28.300
+De meesten denken dat zwakke wachtwoorden het risico vormen, en ja, dat is een deel ervan.
+
+00:00:28.460 --> 00:00:31.640
+Maar het grotere probleem is iets waar de meeste organisaties nooit bij stilstaan.
+
+00:00:31.800 --> 00:00:34.380
+Het is niet dat mensen beheerdersrechten hebben, maar dat ze die altijd hebben,
+
+00:00:34.540 --> 00:00:35.780
+zelfs wanneer ze ze niet gebruiken.
+
+00:00:35.980 --> 00:00:38.100
+Dat is alsof je je voordeur wagenwijd open laat staan,
+
+00:00:38.180 --> 00:00:39.960
+omdat je later misschien iets uit de auto moet pakken.
+
+00:00:40.120 --> 00:00:43.420
+Aan het einde van deze aflevering begrijp je wat Privileged Identity Management is
+
+00:00:43.420 --> 00:00:44.560
+en waarom dit het probleem oplost.
+
+00:00:44.740 --> 00:00:47.280
+Het is alsof je iemand een hotelsleutelkaart geeft die precies werkt
+
+00:00:47.280 --> 00:00:49.660
+voor de tijd dat ze die nodig hebben en daarna verloopt bij het uitchecken.
+
+00:00:49.880 --> 00:00:52.140
+Geen permanente toegang, geen open deuren.
+
+00:00:54.700 --> 00:00:55.980
+Zo'n probleem vormen.
+
+00:00:56.160 --> 00:00:58.080
+Het probleem van permanente privileges.
+
+00:00:58.600 --> 00:01:02.320
+Permanente privileges, dat is de technische term voor rechten die altijd actief zijn,
+
+00:01:02.460 --> 00:01:03.620
+ook als je ze niet nodig hebt.
+
+00:01:03.780 --> 00:01:04.620
+En ze zijn overal.
+
+00:01:04.880 --> 00:01:06.140
+Zie het als een kantoorpand.
+
+00:01:06.340 --> 00:01:09.340
+Je hebt een beveiliger bij de voordeur en misschien een badge systeem,
+
+00:01:09.380 --> 00:01:11.660
+maar binnen is elke deur de hele nacht ontgrendeld.
+
+00:01:11.820 --> 00:01:15.660
+De serverruimte, de archiefkasten met personeelsdossiers, de directiekantoren,
+
+00:01:15.880 --> 00:01:19.120
+allemaal ontgrendeld omdat er misschien één persoon na werktijd naar binnen moet.
+
+00:01:19.320 --> 00:01:21.820
+Dat zijn permanente privileges in de fysieke wereld.
+
+00:01:21.820 --> 00:01:23.860
+Het klinkt belachelijk als je het hardop zegt,
+
+00:01:23.860 --> 00:01:26.800
+maar zo gaan de meeste organisaties om met beheerdersrechten.
+
+00:01:27.000 --> 00:01:28.780
+Het probleem is het aanvalsoppervlak.
+
+00:01:28.940 --> 00:01:32.080
+Als een beheerdersaccount gecompromiteerd wordt via phishing, credential,
+
+00:01:32.260 --> 00:01:35.340
+stafing of een gestolen laptop, heeft de aanvaller al de sleutels tot alles.
+
+00:01:35.620 --> 00:01:38.420
+Ze hoeven hun rechten niet te escaleren omdat de rechten er al zijn
+
+00:01:38.420 --> 00:01:42.080
+en ze hoeven geen tweede kwetsbaarheid te zoeken omdat de eerste hen al alles gaf.
+
+00:01:42.220 --> 00:01:44.300
+En dit is het deel dat de meeste mensen verrast.
+
+00:01:44.480 --> 00:01:47.620
+Een gemiddelde beheerder heeft 168 uur toegang per week.
+
+00:01:47.840 --> 00:01:49.260
+Dat is 24 zevende.
+
+00:01:49.260 --> 00:01:52.560
+Maar ze gebruiken die beheerdersrechten in werkelijkheid misschien 30 minuten.
+
+00:01:52.720 --> 00:01:54.820
+30 minuten van de 168 uur.
+
+00:01:55.000 --> 00:02:00.560
+Dat betekent dat hun verhoogde toegang elke week 167 en een half uur ongebruikt en onbeschermd open staat.
+
+00:02:00.800 --> 00:02:02.560
+Dat is een enorme kans voor een aanvaller.
+
+00:02:02.780 --> 00:02:04.780
+Praktijk scenario's maken dit nog enger.
+
+00:02:04.980 --> 00:02:06.340
+Een phishing e-mail komt binnen.
+
+00:02:06.520 --> 00:02:09.080
+Iemand klikt op de link en hun inloggegevens worden gestolen.
+
+00:02:09.300 --> 00:02:13.740
+De aanvaller logt om twee uur s'nachts in met volledige beheerdersrechten zonder extra stappen.
+
+00:02:13.740 --> 00:02:19.040
+Of een laptop blijft achter in een café en de dief heeft nu een apparaat dat toegang heeft tot uw volledige tenant.
+
+00:02:19.280 --> 00:02:25.580
+Of iemand gebruikt hetzelfde wachtwoord op meerdere sites, één wordt gehackt en hun beheerdersgegevens zwerven rond op het dark web.
+
+00:02:25.780 --> 00:02:28.680
+Kortom, het probleem is niet dat mensen beheerdersrechten hebben.
+
+00:02:29.180 --> 00:02:31.060
+Het probleem is dat ze die constant hebben.
+
+00:02:31.380 --> 00:02:35.100
+Permanente rechten maken van elk gecompromitteerd account een potentiële ram.
+
+00:02:35.260 --> 00:02:39.520
+En het ergste is dat de meeste organisaties niet eens weten hoeveel permanente beheerders ze hebben.
+
+00:02:39.520 --> 00:02:43.580
+Dus, wat als er een manier was om mensen alleen toegang te geven wanneer ze die nodig hebben?
+
+00:02:43.740 --> 00:02:47.400
+Wat is PIM? Dat is precies wat Privileged Identity Management doet.
+
+00:02:47.560 --> 00:02:48.400
+PIM voor het gemak.
+
+00:02:48.560 --> 00:02:52.820
+Het is een dienst binnen Microsoft en tra die verandert hoe rollen worden toegewezen, niet welke rollen er bestaan.
+
+00:02:52.920 --> 00:02:53.740
+Die blijven hetzelfde.
+
+00:02:53.900 --> 00:02:56.240
+Het beheert hoe en wanneer iemand ze daadwerkelijk mag gebruiken.
+
+00:02:56.420 --> 00:02:57.860
+Hier is de simpelste definitie.
+
+00:02:58.040 --> 00:03:01.760
+In plaats van iemand permanent een beheerdersrol te geven, maak je ze in aanmerking komend om deze op te eisen.
+
+00:03:01.960 --> 00:03:03.820
+Ze hebben de bevoegdheid niet totdat ze erom vragen.
+
+00:03:04.040 --> 00:03:07.920
+Wanneer ze erom vragen, moeten ze bewijzen dat ze het echt nodig hebben en dan krijgen ze het voor een beperkte tijd.
+
+00:03:07.920 --> 00:03:10.100
+En als die tijd om is, verdwijnt de bevoegdheid.
+
+00:03:10.100 --> 00:03:11.920
+Zie het als een hotelsleutelkaart.
+
+00:03:12.120 --> 00:03:15.400
+Wanneer je incheckt in een hotel, krijg je een sleutel voor je kamer tijdens je verblijf.
+
+00:03:15.580 --> 00:03:17.580
+Geen permanente toegang tot elke kamer voor altijd.
+
+00:03:17.800 --> 00:03:20.480
+Als je die na het uitchecken probeert te gebruiken, blijft de deur op slot.
+
+00:03:20.660 --> 00:03:21.880
+PIM werkt op dezelfde manier.
+
+00:03:22.100 --> 00:03:23.960
+Je krijgt geen permanente toegang tot de penthouse suite.
+
+00:03:24.220 --> 00:03:26.540
+Je krijgt een sleutel die een paar uur werkt en daarna zichzelf vernietigt.
+
+00:03:26.740 --> 00:03:28.480
+Laten we nu een paar mythes uit de wereld helpen.
+
+00:03:28.620 --> 00:03:29.880
+PIM is geen nieuwe set rollen.
+
+00:03:30.040 --> 00:03:31.820
+Het creëert geen nieuwe beheerdersmogelijkheden.
+
+00:03:32.000 --> 00:03:33.620
+Het vervangt geen wachtwoorden of MFA.
+
+00:03:33.620 --> 00:03:35.600
+En het is niet alleen voor IT-professionals.
+
+00:03:35.800 --> 00:03:38.300
+Elke organisatie met Microsoft Entra kan het gebruiken.
+
+00:03:38.460 --> 00:03:41.400
+Het voegt een extra laag controle toe aan de rollen die je al hebt.
+
+00:03:41.600 --> 00:03:44.580
+Het kernconcept heet Just-in-time toegang of JIT.
+
+00:03:44.940 --> 00:03:47.520
+Zie het als een tijdelijk ticket in plaats van een permanente badge.
+
+00:03:47.780 --> 00:03:50.800
+Je komt opdagen, vraagt het ticket aan, gebruikt het en het verloopt.
+
+00:03:51.020 --> 00:03:55.580
+Geen achterblijvende rechten, geen vergeten beheerdersaccounts die iemand vijf jaar geleden gebruikte en nooit heeft opgeruimd.
+
+00:03:55.660 --> 00:03:58.400
+Er zijn twee soorten toewijzingen in PIM, in aanmerking komend en actief.
+
+00:03:58.540 --> 00:04:01.080
+In aanmerking komend betekent dat je het recht hebt om de rol aan te vragen.
+
+00:04:01.260 --> 00:04:02.640
+Actief betekent dat u het al heeft.
+
+00:04:02.640 --> 00:04:04.640
+Dat is de oude manier, permanente toegang.
+
+00:04:04.780 --> 00:04:07.660
+Het hele punt van PIM is om mensen van actief naar in aanmerking komend te verplaatsen.
+
+00:04:07.780 --> 00:04:10.160
+U kunt uw werk nog steeds doen, u moet alleen eerst toestemming vragen.
+
+00:04:10.320 --> 00:04:12.520
+Dus, hoe werken deze twee type toewijzingen in de praktijk?
+
+00:04:12.720 --> 00:04:13.740
+Laten we het opsplitsen.
+
+00:04:13.900 --> 00:04:15.980
+In aanmerking komende versus actieve toewijzingen.
+
+00:04:16.140 --> 00:04:18.140
+Wat is dus het verschil tussen in aanmerking komend en actief?
+
+00:04:18.280 --> 00:04:19.440
+Laten we het concreet maken.
+
+00:04:19.640 --> 00:04:22.820
+In aanmerking komend betekent dat u het recht heeft op een rol, maar deze nog niet bezit.
+
+00:04:23.000 --> 00:04:25.260
+Denk eraan als een lidmaatschapskaart waarmee u een deur opent,
+
+00:04:25.440 --> 00:04:28.220
+maar alleen als u deze scant en het systeem controleert of u toestemming heeft.
+
+00:04:28.360 --> 00:04:30.420
+Zonder scannen doet de kaart uit zichzelf niets.
+
+00:04:30.560 --> 00:04:32.720
+U heeft de kaart in uw zak, maar de deur blijft op slot.
+
+00:04:32.940 --> 00:04:34.580
+Actief betekent dat u de rol al heeft.
+
+00:04:34.820 --> 00:04:36.600
+Dat is de oude manier, permanente toegang.
+
+00:04:36.720 --> 00:04:39.520
+U loopt op elk gewenst moment door elke deur, omdat uw badge nooit verloopt.
+
+00:04:39.700 --> 00:04:42.600
+Dat is natuurlijk handig, maar het maakt gecompromitteerde accounts ook zo gevaarlijk.
+
+00:04:42.720 --> 00:04:44.920
+In eenvoudige bewoordingen, in aanmerking komend betekent dat het kan.
+
+00:04:45.080 --> 00:04:46.280
+Actief betekent dat het zo is.
+
+00:04:46.480 --> 00:04:47.840
+Dat onderscheid is alles bepalend.
+
+00:04:48.020 --> 00:04:49.360
+Hier is een voorbeeld uit de praktijk.
+
+00:04:49.560 --> 00:04:51.460
+Stel u een helpdesk medewerker voorgenaamd Sarah.
+
+00:04:51.460 --> 00:04:55.240
+Zij heeft af en toe toegang nodig als globale beheerder om een synchronisatieprobleem op te lossen,
+
+00:04:55.400 --> 00:04:57.200
+misschien eenmaal per maand gedurende 30 minuten.
+
+00:04:57.400 --> 00:05:00.120
+Zonder Pim zou u haar permanent globale beheerdersrechten geven.
+
+00:05:00.380 --> 00:05:04.460
+Nu heeft ze die bevoegdheid 24 zevende, zelfs als ze slaapt of op vakantie is.
+
+00:05:04.640 --> 00:05:07.920
+Als haar account wordt gevist, heeft de aanvaller volledige controle over uw tenant.
+
+00:05:08.180 --> 00:05:10.820
+Met Pim maakt u Sarah in aanmerking komend voor de rol van globale beheerder.
+
+00:05:11.000 --> 00:05:12.820
+Ze heeft de rol niet in haar dagelijkse werkzaamheden.
+
+00:05:13.060 --> 00:05:16.260
+Wanneer het synchronisatieprobleem zich voordoet, activeert ze de rol voor 30 minuten,
+
+00:05:16.380 --> 00:05:17.800
+lost het probleem op en de toegang verloopt.
+
+00:05:17.800 --> 00:05:20.580
+De aanvaller die later haar inloggegevens stilt, vindt niets.
+
+00:05:20.760 --> 00:05:22.960
+Geen permanente bevoegdheden, geen open deuren.
+
+00:05:23.140 --> 00:05:24.980
+Dit is het belangrijkste beveiligingsvoordeel.
+
+00:05:25.120 --> 00:05:27.300
+In aanmerking komend geeft een aanvaller helemaal niets.
+
+00:05:27.460 --> 00:05:31.120
+Ze zouden de rol ook moeten activeren, waarvoor MFA, rechtvaardiging en goedkeuring vereist zijn.
+
+00:05:31.280 --> 00:05:32.700
+Elke stap is een nieuwe hindernis.
+
+00:05:32.920 --> 00:05:35.320
+De meeste aanvallers zullen verder gaan naar een makkelijker doelwit.
+
+00:05:35.460 --> 00:05:37.660
+Nu een korte opmerking over permanente geschiktheid.
+
+00:05:37.780 --> 00:05:39.780
+U kunt iemand permanent in aanmerking laten komen voor een rol,
+
+00:05:39.920 --> 00:05:43.240
+wat betekent dat ze deze op elk moment kunnen activeren zonder verloopdatum voor hun geschiktheid zelf.
+
+00:05:43.340 --> 00:05:44.900
+Maar best practices adviseren dit te vermijden.
+
+00:05:44.900 --> 00:05:47.180
+Stel in plaats daarvan een tijdsgebonden geschiktheid in.
+
+00:05:47.300 --> 00:05:50.880
+Maak iemand voor een jaar of zes maanden in aanmerking komend, of wat logisch is voor uw organisatie.
+
+00:05:51.080 --> 00:05:52.160
+Dat dwingt tot een beoordeling.
+
+00:05:52.360 --> 00:05:53.440
+Hebben ze dit nog steeds nodig?
+
+00:05:53.680 --> 00:05:54.660
+Zo ja, verleng het dan.
+
+00:05:54.840 --> 00:05:55.880
+Zo nee, verwijder het dan.
+
+00:05:56.040 --> 00:05:59.480
+Anders stapelt geschiktheid zich in de loop van de tijd op en eindigt u met hetzelfde probleem waarmee u begon.
+
+00:05:59.640 --> 00:06:01.560
+Te veel mensen die te veel bevoegdheden kunnen claimen.
+
+00:06:01.700 --> 00:06:04.340
+Dus, zodra iemand in aanmerking komt, hoe wordt de rol dan daadwerkelijk geactiveerd?
+
+00:06:04.500 --> 00:06:06.500
+Dat is waar de echte beveiligingspoorten in werking treden.
+
+00:06:06.920 --> 00:06:07.600
+Activatie workflow.
+
+00:06:07.860 --> 00:06:10.300
+Het activatieproces is waar Pim echt zijn waarde bewijst.
+
+00:06:10.300 --> 00:06:12.760
+Laten we dit proces vanuit het perspectief van de gebruiker bekijken.
+
+00:06:12.960 --> 00:06:16.120
+Stel je voor, Sarah moet een probleem met de directory synchronisatie oplossen.
+
+00:06:16.340 --> 00:06:24.340
+Ze opent de Pim portal in de Azure portal of het entrabeheercentrum, zoekt de rol waarvoor ze in aanmerking komt, in dit geval globale beheerder, en klikt op activeren.
+
+00:06:24.480 --> 00:06:26.340
+Eerst kiest ze hoelang ze de rol nodig heeft.
+
+00:06:26.540 --> 00:06:30.000
+De standaardduur is misschien 8 uur, maar ze weet dat dit klusje 30 minuten duurt.
+
+00:06:30.200 --> 00:06:31.540
+Dus stelt ze het in op 1 uur.
+
+00:06:31.760 --> 00:06:33.300
+Slim, want korter is altijd beter.
+
+00:06:33.520 --> 00:06:37.960
+De beheerder kan een maximale duur voor elke rol instellen, van 30 minuten tot 24 uur.
+
+00:06:37.960 --> 00:06:40.660
+Sarah's verzoek van 1 uur past binnen dat beleid.
+
+00:06:40.940 --> 00:06:42.960
+Vervolgens moet ze een motivatie opgeven.
+
+00:06:43.140 --> 00:06:43.820
+Een echte reden?
+
+00:06:44.000 --> 00:06:45.500
+Niet zomaar, ik heb beheer nodig.
+
+00:06:45.700 --> 00:06:49.460
+Ze typt oplossen synchronisatieprobleem directory, ticket 48291.
+
+00:06:49.700 --> 00:06:52.240
+Dat is geen bureaucratie, het creëert een auditlogboek.
+
+00:06:52.380 --> 00:06:57.420
+Als iemand later vraagt waarom Sarah dinsdag om 2 uur smiddags globale beheerdersrechten had, is er een record met die reden.
+
+00:06:57.620 --> 00:07:02.300
+Als MFA vereist is, en dat zou zo moeten zijn, krijgt Sarah een extra controle ook al is ze al ingelogd op de portal.
+
+00:07:02.480 --> 00:07:04.020
+Pim vereist een nieuwe verificatie.
+
+00:07:04.240 --> 00:07:07.200
+Ze opent haar Authenticator app, keurt de melding goed en gaat door.
+
+00:07:07.200 --> 00:07:08.280
+Dit is cruciaal.
+
+00:07:08.440 --> 00:07:13.020
+Als Sarah's wachtwoord gestolen zou zijn, maar de aanvaller heeft haar telefoon niet, dan kan deze de rol niet activeren.
+
+00:07:13.220 --> 00:07:17.120
+MFA bij activatie is het verschil tussen een gecompromitteerd account en een beheerst incident.
+
+00:07:17.420 --> 00:07:20.860
+Als goedkeuring vereist is, gaat het verzoek naar een aangewezen goedkeurder.
+
+00:07:21.060 --> 00:07:23.820
+Misschien Sarah's manager of een lid van het beveiligingsteam.
+
+00:07:24.040 --> 00:07:27.600
+Zij ontvangen een melding, bekijken de motivatie en keuren het goed of wijzen het af.
+
+00:07:27.800 --> 00:07:31.240
+Sommige organisaties vereisen meerdere goedkeurders voor de meest gevoelige rollen.
+
+00:07:31.360 --> 00:07:32.400
+Het idee is simpel.
+
+00:07:32.400 --> 00:07:37.000
+Niemand zou zichzelf onbeperkte rechten moeten kunnen toekennen zonder dat iemand anders akkoord gaat.
+
+00:07:37.160 --> 00:07:39.180
+Eenmaal goedgekeurd, wordt de rol geactiveerd.
+
+00:07:39.400 --> 00:07:41.820
+Sarah heeft nu gedurende één uur globale beheerdersrechten.
+
+00:07:42.080 --> 00:07:48.620
+Ze opent het Entrabeheercentrum, navigeert naar de synchronisatieinstellingen, lost het probleem op, sluit de portal en hervat haar normale werk.
+
+00:07:48.800 --> 00:07:51.600
+Het mooie is, ze hoeft er niet aan te denken om het uit te zetten.
+
+00:07:51.780 --> 00:07:53.640
+Pim regelt het verlopen automatisch.
+
+00:07:53.900 --> 00:07:58.400
+Wanneer het uur voorbij is, deactiveert de rol en vallen Sarah's rechten terug naar haar normale gebruikersrechten.
+
+00:07:58.400 --> 00:08:02.420
+Er blijven geen privileges hangen en er zijn geen vergeten beheerdersessies.
+
+00:08:02.600 --> 00:08:06.200
+Ze kan de rol ook handmatig eerder deactiveren als ze sneller klaar is dan verwacht.
+
+00:08:06.380 --> 00:08:11.100
+Sarah had dus precies de toegang die ze nodig had, voor precies de tijd die ze nodig had, met volledige controleerbaarheid.
+
+00:08:11.260 --> 00:08:16.820
+Als iemand in dat uur haar inloggegevens had gestolen, zou diegene zeer beperkt de tijd hebben gehad om schade aan te richten en zou elke actie zijn vastgelegd.
+
+00:08:16.960 --> 00:08:20.060
+Dat is de kernworkflow voor Entra-rollen, maar Pim kan meer dan dat.
+
+00:08:20.220 --> 00:08:22.500
+Het werkt ook voor groepen en Azure resources.
+
+00:08:22.500 --> 00:08:24.560
+Pim voor groepen
+
+00:08:24.560 --> 00:08:30.160
+Pim is niet alleen voor individuele beheerdersrollen, het beheert ook groepslidmaatschap en daar wordt het echt praktisch.
+
+00:08:30.360 --> 00:08:32.880
+Er zijn twee typen groepen die je met Pim kunt beheren.
+
+00:08:33.080 --> 00:08:38.420
+Microsoft 365 groepen, het soort dat je gebruikt voor Teams, gedeelde mailboxen en samenwerking.
+
+00:08:38.700 --> 00:08:43.580
+En beveiligingsgroepen, het type dat je gebruikt om toegang te verlenen tot apps, resources of machtigingen.
+
+00:08:43.860 --> 00:08:46.520
+Pim werkt met toegewezen groepen, niet met dynamische groepen.
+
+00:08:46.700 --> 00:08:49.800
+Dynamische groepen zijn gebaseerd op regels, dus lidmaatschap verandert automatisch,
+
+00:08:49.800 --> 00:08:52.440
+maar Pim heeft groepen nodig waarbij je mensen expliciet toevoegt en verwijderd.
+
+00:08:52.500 --> 00:08:53.440
+Dus, hoe werkt het?
+
+00:08:53.560 --> 00:08:56.340
+Je kunt iemand een in aanmerking komende eigenaar of lid van een groep maken.
+
+00:08:56.540 --> 00:08:58.540
+Ze hebben het lidmaatschap pas als ze het activeren.
+
+00:08:58.720 --> 00:09:01.180
+Wanneer ze dat doen, krijgen ze alle machtigingen die bij die groep horen,
+
+00:09:01.380 --> 00:09:03.620
+en zodra de activering verloopt, worden ze verwijderd.
+
+00:09:03.740 --> 00:09:05.020
+Hier is een praktijkvoorbeeld.
+
+00:09:05.300 --> 00:09:08.300
+Stel, je hebt een projectteam dat werkt aan een gevoelige documentbibliotheek
+
+00:09:08.300 --> 00:09:10.880
+die alleen toegankelijk is voor leden van een specifieke beveiligingsgroep.
+
+00:09:11.080 --> 00:09:13.700
+Normaal gesproken is niemand in het bedrijf lid van die groep.
+
+00:09:13.700 --> 00:09:17.820
+Wanneer iemand in het project toegang nodig heeft, activeert diegene het lidmaatschap in Pim,
+
+00:09:17.980 --> 00:09:21.120
+krijgt voor een paar uur toegang, doet het werk en het lidmaatschap verloopt.
+
+00:09:21.320 --> 00:09:23.580
+Daarna is de documentbibliotheek weer vergrendeld.
+
+00:09:23.760 --> 00:09:27.000
+Het activeringsproces voor groepen werkt precies hetzelfde als voor rollen.
+
+00:09:27.140 --> 00:09:31.480
+MFA indien vereist, rechtvaardiging, goedkeuring indien nodig, tijdslimiet, alles wordt gelogd.
+
+00:09:31.540 --> 00:09:33.500
+Dezelfde beveiligingsdrempels zijn van toepassing.
+
+00:09:33.740 --> 00:09:34.560
+Waarom is dit belangrijk?
+
+00:09:34.860 --> 00:09:37.020
+Omdat groepen veel meer bepalen dan je misschien denkt.
+
+00:09:37.020 --> 00:09:41.240
+Groepslidmaatschap kan toegang verlenen tot applicaties, licenties toewijzen of machtigingen geven
+
+00:09:41.240 --> 00:09:43.880
+voor SharePoint sites, Teams kanalen of Azure resources.
+
+00:09:44.160 --> 00:09:47.320
+Door groepslidmaatschap in aanmerking komend in plaats van permanent te maken,
+
+00:09:47.560 --> 00:09:49.540
+controleer je al die zaken via één Pim-beleid.
+
+00:09:49.700 --> 00:09:52.740
+Eén belangrijk ding om te weten, je moet groepen eerst anboorden naar Pim.
+
+00:09:52.960 --> 00:09:54.480
+Ze verschijnen niet automatisch.
+
+00:09:54.660 --> 00:09:58.980
+Je gaat naar de Pim-portal, ontdekt de groepen in je tenant en selecteert degene die je wilt beheren.
+
+00:09:59.140 --> 00:10:02.120
+Zodra een groep is geënboord, kun je deze niet meer uit Pim verwijderen.
+
+00:10:02.120 --> 00:10:05.180
+Denk dus goed na over welke groepen dit niveau van controle nodig hebben.
+
+00:10:05.180 --> 00:10:08.800
+Voor de meeste organisaties zijn de beste kandidaten groepen die toegang verlenen
+
+00:10:08.800 --> 00:10:10.920
+tot gevoelige gegevens of kritieke applicaties.
+
+00:10:11.100 --> 00:10:13.180
+Begin daar, je kunt later altijd meer toevoegen.
+
+00:10:13.380 --> 00:10:18.060
+En dan zijn er nog Azure resources, de daadwerkelijke infrastructuur zoals virtuele machines en databases.
+
+00:10:18.380 --> 00:10:19.620
+Pim voor Azure resources.
+
+00:10:19.960 --> 00:10:22.100
+Pim werkt ook voor Azure RBAC-rollen.
+
+00:10:22.280 --> 00:10:25.180
+Dat is het permissiesysteem dat bepaalt wie wat mag doen binnen uw Azure-abonnementen,
+
+00:10:25.360 --> 00:10:26.980
+resource-groepen en individuele resources.
+
+00:10:27.260 --> 00:10:28.440
+Het model is hetzelfde.
+
+00:10:28.660 --> 00:10:30.900
+Iemand komt in aanmerking voor eigenaar van een abonnement,
+
+00:10:31.180 --> 00:10:33.660
+maar is slechts een uur actief wanneer er een wijziging nodig is.
+
+00:10:33.660 --> 00:10:35.660
+Ze vragen de rol aan, verantwoorden hun behoeften,
+
+00:10:35.800 --> 00:10:38.480
+slagen voor MFA indien vereist en krijgen goedkeuring indien nodig.
+
+00:10:38.660 --> 00:10:39.900
+Dan wordt de rol geactiveerd.
+
+00:10:40.080 --> 00:10:42.120
+Als de tijd om is, deactiveert het automatisch.
+
+00:10:42.320 --> 00:10:43.480
+Geen permanente toegang.
+
+00:10:43.680 --> 00:10:45.220
+Waarom is dit anders dan bij Intune-rollen?
+
+00:10:45.320 --> 00:10:48.120
+Omdat Azure resources rollen uw werkelijke infrastructuur beheren.
+
+00:10:48.240 --> 00:10:51.720
+De virtuele machines, de databases, de opslagaccounts, het netwerk.
+
+00:10:51.940 --> 00:10:53.920
+Dit zijn de zaken die uw bedrijf draaiende houden.
+
+00:10:54.120 --> 00:10:57.140
+Als iemand permanente eigenaarstoegang heeft op een productieabonnement,
+
+00:10:57.300 --> 00:10:58.360
+kunnen ze alles verwijderen.
+
+00:10:58.480 --> 00:11:01.420
+En als dat account gecompromitteerd raakt, kan de aanvaller dat ook.
+
+00:11:01.420 --> 00:11:02.840
+Hier is een typisch voorbeeld.
+
+00:11:03.040 --> 00:11:06.860
+Een ontwikkelaar heeft bijdrager toegang nodig om updates naar een productieomgeving te implementeren.
+
+00:11:07.080 --> 00:11:09.140
+Zonder PIM zou je ze permanent bijdrager toegang geven,
+
+00:11:09.360 --> 00:11:12.180
+en nu hebben ze die macht elke dag, zelfs als ze niet aan het implementeren zijn.
+
+00:11:12.400 --> 00:11:13.800
+Met PIM komen ze in aanmerking.
+
+00:11:14.040 --> 00:11:18.020
+Ze activeren de rol wanneer het implementatievenster opent, doen hun werk en de rol verloopt.
+
+00:11:18.220 --> 00:11:21.000
+De rest van de tijd hebben ze geen speciale toegang tot productie.
+
+00:11:21.160 --> 00:11:24.100
+Het contrast met permanente RBAC-toewijzingen is groot.
+
+00:11:24.280 --> 00:11:27.080
+De meeste Azure-omgevingen hebben veel te veel permanente eigenaren.
+
+00:11:27.300 --> 00:11:30.220
+Mensen verzamelen door de jaren heen permissies en geven ze nooit meer terug.
+
+00:11:30.220 --> 00:11:31.900
+PIM dwingt een schone lei af.
+
+00:11:32.020 --> 00:11:33.880
+Als je het nu niet nodig hebt, heb je het niet.
+
+00:11:34.080 --> 00:11:38.040
+Dit alles creëert een veel veiligere omgeving, maar hoe ziet dat er in de praktijk uit?
+
+00:11:38.940 --> 00:11:39.820
+Beveiligingsvoordelen en audit.
+
+00:11:40.040 --> 00:11:43.060
+Het grootste voordeel is simpel, het verkleinen van het aanvalsoppervlak.
+
+00:11:43.240 --> 00:11:46.900
+Als een account wordt gecompromitteerd maar geen actieve rollen heeft, bereikt de aanvaller niets.
+
+00:11:47.100 --> 00:11:49.720
+Ze zijn ingelogd als standaardgebruiker zonder speciale rechten.
+
+00:11:49.920 --> 00:11:53.880
+Ze kunnen geen resources verwijderen, geen gevoelige gegevens lezen en geen configuraties wijzigen.
+
+00:11:54.040 --> 00:11:55.260
+Het gevaar is ingedamt.
+
+00:11:55.260 --> 00:11:59.000
+Maar zelfs als de aanvaller probeert een rol te activeren, stuiten ze op meerdere barrières.
+
+00:11:59.340 --> 00:12:02.160
+MFA stopt iedereen die niet over de telefoon van de gebruiker beschikt.
+
+00:12:02.620 --> 00:12:04.600
+Rechtvaardiging vereist dat ze uitleggen wat ze aan het doen zijn.
+
+00:12:04.820 --> 00:12:06.780
+Goedkeuring betekent dat iemand anders akkoord moet gaan.
+
+00:12:06.960 --> 00:12:08.440
+Elke barrière maakt het moeilijker voor hen.
+
+00:12:08.620 --> 00:12:10.780
+De meeste aanvallers zullen opgeven en een makkelijker doelwit zoeken.
+
+00:12:10.980 --> 00:12:11.980
+Dan is er nog het audit-spoor.
+
+00:12:12.140 --> 00:12:13.520
+Elke activering wordt geregistreerd.
+
+00:12:13.700 --> 00:12:14.840
+Wie heeft welke rol geactiveerd?
+
+00:12:15.080 --> 00:12:15.400
+Wanneer?
+
+00:12:15.520 --> 00:12:16.100
+Voor hoe lang?
+
+00:12:16.280 --> 00:12:17.320
+Met welke rechtvaardiging?
+
+00:12:17.500 --> 00:12:18.420
+Wie heeft het goed gekeurd?
+
+00:12:18.600 --> 00:12:20.080
+Dit is geen eenvoudig inlogoverzicht.
+
+00:12:20.080 --> 00:12:22.440
+Het is een volledige geschiedenis van elke geprivilegeerde actie.
+
+00:12:22.560 --> 00:12:23.580
+Auditors zijn hier dol op.
+
+00:12:23.720 --> 00:12:26.800
+Je kunt bewijzen dat bevoorrechte toegang tijdelijk, gerechtvaardigd en goedgekeurd was.
+
+00:12:27.000 --> 00:12:29.120
+Niet meer gissen wie zes maanden geleden beheerdersrechten had.
+
+00:12:29.260 --> 00:12:31.100
+Pim ondersteunt ook toegangsbeoordelingen.
+
+00:12:31.280 --> 00:12:35.460
+Dit zijn geplande controles waarbij managers beoordelen wie nog in aanmerking komt voor bepaalde rollen.
+
+00:12:35.600 --> 00:12:39.560
+Als iemand een rol zes maanden niet heeft geactiveerd, is deze misschien niet meer nodig.
+
+00:12:39.760 --> 00:12:42.980
+De beoordeling kan verouderde toewijzingen automatisch verwijderen.
+
+00:12:43.200 --> 00:12:47.840
+Dit voorkomt privilege creep, de langzame opbouw van rechten wanneer niemand ooit opschoont.
+
+00:12:47.840 --> 00:12:50.320
+En er is een direct voordeel voor de beveiligingsscoren.
+
+00:12:50.500 --> 00:12:54.080
+Het gebruik van Pim verbetert je identiteitsbeveiligingsscoren in Microsoft Entra.
+
+00:12:54.340 --> 00:12:58.080
+Microsoft volgt hoe goed je je omgeving beschermt en Pim-gebruik is een belangrijke factor.
+
+00:12:58.300 --> 00:13:01.980
+Hoe meer rollen je van permanent naar in aanmerking komend verplaatst, hoe hoger je scoren.
+
+00:13:02.100 --> 00:13:03.460
+Maar een eerlijke kanttekening.
+
+00:13:03.680 --> 00:13:05.040
+Pim alleen is geen wondermiddel.
+
+00:13:05.200 --> 00:13:06.840
+Het moet onderdeel zijn van een bredere beveiligingsstrategie.
+
+00:13:07.560 --> 00:13:09.500
+Je hebt nog steeds beveiligde beheerwerkstations nodig.
+
+00:13:09.680 --> 00:13:11.620
+Je hebt nog steeds beleid voor voorwaardelijke toegang nodig.
+
+00:13:11.800 --> 00:13:13.780
+Je hebt nog steeds een goede wachtwoordhygiëne nodig.
+
+00:13:13.780 --> 00:13:18.220
+Pim pakt één specifiek probleem aan permanente privileges en dat doet het erg goed.
+
+00:13:18.380 --> 00:13:20.680
+Maar het vervangt niet alle andere beveiligingsmaatregelen.
+
+00:13:20.920 --> 00:13:26.860
+Dat gezegdhebbende, als je niets anders doet, is het verplaatsen van je globale beheerder accounts van permanent naar in aanmerking komend van de meest impactvolle wijzigingen.
+
+00:13:27.000 --> 00:13:31.420
+Het verkleint je aanvalsoppervlak van 168 uur per week naar het korte venster dat je zelf kiest.
+
+00:13:31.660 --> 00:13:32.840
+Dat is moeilijk te overtreffen.
+
+00:13:33.100 --> 00:13:35.160
+Veel voorkomende valkuilen en best practices.
+
+00:13:35.420 --> 00:13:37.180
+Pim is krachtig, maar niet onfeilbaar.
+
+00:13:37.400 --> 00:13:38.420
+Mensen maken fouten.
+
+00:13:38.640 --> 00:13:41.260
+Laten we de meest voorkomende doornemen zodat jij ze niet maakt.
+
+00:13:41.260 --> 00:13:44.140
+Ten eerste, Pim behandelen als een fire and forget raket.
+
+00:13:44.280 --> 00:13:46.320
+Je kunt het niet instellen en er dan niet meer naar omkijken.
+
+00:13:46.500 --> 00:13:47.980
+Je moet regelmatig controleren.
+
+00:13:48.180 --> 00:13:49.360
+Zijn de juiste rollen gedekt?
+
+00:13:49.600 --> 00:13:51.240
+Zijn je activeringstijden nog redelijk?
+
+00:13:51.480 --> 00:13:53.040
+Zijn de goedkeurders nog de juiste mensen?
+
+00:13:53.220 --> 00:13:54.760
+Pim vereist voortdurende aandacht.
+
+00:13:55.000 --> 00:13:56.760
+Behandel het als een plant, niet als een steen.
+
+00:13:56.920 --> 00:13:59.480
+Ten tweede, te veel permanente actieve toewijzingen laten staan.
+
+00:13:59.700 --> 00:14:01.220
+Dit gaat volledig voorbij aan het doel.
+
+00:14:01.380 --> 00:14:06.820
+Als je één globale beheerder in aanmerking laat komen, maar drie anderen permanent actief laat, is je aanvalsoppervlak nauwelijks verkleind.
+
+00:14:06.980 --> 00:14:10.320
+Je wilt permanente privileges elimineren, niet alleen wat accounts verplaatsen.
+
+00:14:10.320 --> 00:14:11.420
+Wees meedogenloos.
+
+00:14:11.560 --> 00:14:14.720
+Als iemand geen permanente toegang nodig heeft, maak diegene dan in aanmerking komend.
+
+00:14:14.860 --> 00:14:15.900
+Dat is precies het idee.
+
+00:14:16.100 --> 00:14:18.280
+Ten derde, activeringsduren veel te lang instellen.
+
+00:14:18.440 --> 00:14:21.360
+Een activeringsvenster van 24 uur is in feite permanente toegang.
+
+00:14:21.500 --> 00:14:22.940
+Het punt is tijdsgebonden toegang.
+
+00:14:23.120 --> 00:14:24.740
+Hou de duur zo kort als praktisch haalbaar.
+
+00:14:24.920 --> 00:14:27.960
+Eén uur voor de meeste taken, vier uur voor grotere onderhoudsvensters.
+
+00:14:28.200 --> 00:14:30.520
+Alles wat langer is, vereist een serieuze rechtvaardiging.
+
+00:14:30.680 --> 00:14:33.040
+Ten vierde, geen MFA vereisen bij activering.
+
+00:14:33.300 --> 00:14:35.240
+Dit is de allerbelangrijkste beveiligingsspoort.
+
+00:14:35.240 --> 00:14:39.420
+Als je rolactivering zonder MFA toestaat, heeft een aanvaller alleen een gestolen wachtwoord nodig.
+
+00:14:39.600 --> 00:14:42.680
+MFA bij activering is voor elke gevoelige rol niet onderhandelbaar.
+
+00:14:42.920 --> 00:14:46.460
+Zie het als de receptie die je identiteitsbewijs controleert voordat je het gebouw binnengaat.
+
+00:14:46.580 --> 00:14:51.060
+Ten vijfde, teveel vertrouwen op in aanmerking komende toewijzingen zonder goede goedkeuringsworkflows.
+
+00:14:51.260 --> 00:14:55.100
+In aanmerking komen is beter dan permanent actief zijn, maar het is op zichzelf niet genoeg.
+
+00:14:55.220 --> 00:15:01.420
+Als iedereen op elk moment zonder toezicht een rol kan activeren, heb je alleen een extra klik toegevoegd zonder echte beveiliging.
+
+00:15:01.420 --> 00:15:04.980
+Combineer geschiktheid met goedkeuring voor de meest gevoelige rollen.
+
+00:15:05.340 --> 00:15:07.900
+Ten zesde, het negeren van break-blast accounts.
+
+00:15:08.100 --> 00:15:10.660
+Je hebt noodaccounts nodig die PIM volledig omzeilen.
+
+00:15:10.880 --> 00:15:16.840
+Als er iets misgaat, een goedkeurder onbereikbaar is, een beleid faalt of iemand wordt buitengesloten, heb je een toegangsweg nodig.
+
+00:15:17.060 --> 00:15:20.600
+Maak één of twee break-blast accounts met permanente globale beheerdersrechten.
+
+00:15:20.840 --> 00:15:24.900
+Beveilig ze met lange, complexe wachtwoorden, bewaar ze veilig en bewaak ze streng.
+
+00:15:25.100 --> 00:15:27.500
+Ze mogen nooit bij normale werkzaamheden worden gebruikt.
+
+00:15:27.680 --> 00:15:29.840
+De beste algemene werkwijze, begin klein.
+
+00:15:29.840 --> 00:15:34.780
+Kies één risicovolle rol, globale beheerder is de voor de hand liggende keuze en maak deze alleen in aanmerking komend.
+
+00:15:34.940 --> 00:15:38.320
+Test de workflow, train je beheerders en breed daarna geleidelijk uit naar andere rollen.
+
+00:15:38.480 --> 00:15:40.120
+Hou de waarschuwingen in PIM in de gaten.
+
+00:15:40.340 --> 00:15:44.660
+Het vertelt je of je te veel globale beheerders hebt of rollen niet worden geactiveerd of dat er iets vreemds is.
+
+00:15:44.900 --> 00:15:47.640
+Let op die signalen en combineer PIM met voorwaardelijke toegang.
+
+00:15:47.840 --> 00:15:50.580
+Verrijs sterkere authenticatie-methode voor rolactivering.
+
+00:15:50.880 --> 00:15:53.020
+Forseer activering vanaf conforme apparaten.
+
+00:15:53.260 --> 00:15:54.680
+Voeg locatiebeperkingen toe.
+
+00:15:54.840 --> 00:15:57.440
+Hoe meer lagen je toevoegt, hoe moeilijker je het maakt voor een aanvaller.
+
+00:15:57.440 --> 00:15:59.020
+Dus, dit is waar we uitkomen.
+
+00:15:59.300 --> 00:16:01.520
+Permanente beheerdersrechten vormen een enorm risico.
+
+00:16:01.720 --> 00:16:04.240
+Het is de ontgrendelde deur die de hele nacht open blijft staan.
+
+00:16:04.440 --> 00:16:06.860
+PIM vervangt dat door tijdelijke just-in-time toegang.
+
+00:16:07.020 --> 00:16:09.520
+Een sleutel die een paar uur werkt en daarna stopt met werken.
+
+00:16:09.700 --> 00:16:13.260
+De belangrijkste actie die je vandaag kunt ondernemen, ga naar je entra-beheercentrum.
+
+00:16:13.460 --> 00:16:18.360
+Open PIM, zoek je globale beheerdersaccounts en maak er tenminste één in aanmerking komend in plaats van permanent actief.
+
+00:16:18.520 --> 00:16:23.580
+Die ene verandering verkleint je aanvalsoppervlak van 168 uur per week naar welk klein venster je ook kiest.
+
+00:16:23.580 --> 00:16:26.060
+Weet je hoeveel permanente beheerders je op dit moment hebt?
+
+00:16:26.260 --> 00:16:28.640
+De meesten weten dat niet en dat is precies het probleem.
+
+00:16:28.820 --> 00:16:33.440
+Als deze aflevering hielp, abonneer je dan voor meer uitleg in begrijpelijke taal over Microsoft Beveiliging.
+
+00:16:33.640 --> 00:16:38.320
+En klik op de volgende video om meer te leren over toegangsbeoordelingen en het controleren wie nog rechten nodig heeft,
+
+00:16:38.440 --> 00:16:41.080
+want weten wie macht heeft, is de eerste stap om dit te beheersen.
+
+00:16:41.080 --> 00:16:42.080
+***
+
+00:16:42.080 --> 00:16:43.080
+***
+
+00:16:43.080 --> 00:16:44.080
+***
+
+00:16:44.080 --> 00:16:45.080
+***
+
+00:16:45.080 --> 00:16:46.080
+***
+
+00:16:46.080 --> 00:16:47.080
+***

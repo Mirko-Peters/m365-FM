@@ -1,0 +1,1993 @@
+WEBVTT
+
+00:00:00.430 --> 00:00:06.750
+Pronto per dieci giorni di Microsoft 365, Copilot, IA, Azure e le persone che plasmano il futuro del lavoro?
+
+00:00:07.870 --> 00:00:11.990
+Questo gennaio, M365 con ritorna e puntiamo ancora più in alto.
+
+00:00:12.870 --> 00:00:17.950
+Unisciti a noi per sessioni dal vivo, demo concrete e conoscenze pratiche da MVP ed esperti del settore.
+
+00:00:18.810 --> 00:00:21.130
+Niente slide generiche, niente gergo infinito.
+
+00:00:22.070 --> 00:00:23.230
+Affrontiamo le vere sfide.
+
+00:00:23.810 --> 00:00:28.550
+Copilot Studio, agenti IA, Fabric, sicurezza, governance e automazione.
+
+00:00:28.550 --> 00:00:34.330
+Che tu sia un professionista IT, uno sviluppatore, un leader aziendale, ci sono sessioni pensate per te.
+
+00:00:35.430 --> 00:00:40.110
+Con dieci giorni interi potrai esplorare tecnologie diverse e connetterti con una community globale.
+
+00:00:41.050 --> 00:00:44.210
+Segui in diretta e porta intuizioni pratiche nella tua organizzazione.
+
+00:00:45.170 --> 00:00:49.010
+Gennaio 2027, dieci giorni, un'unica Microsoft Community.
+
+00:00:49.450 --> 00:00:50.530
+Le iscrizioni sono aperte.
+
+00:00:51.830 --> 00:00:53.070
+Assicurati il tuo posto oggi stesso.
+
+00:00:53.070 --> 00:00:58.170
+Vai su m365.com.net
+
+00:00:58.170 --> 00:01:04.710
+Iscriviti ora su m365.com.net e ci vediamo in diretta a gennaio.
+
+00:01:05.270 --> 00:01:07.190
+Immagina di dover inviare un messaggio a un collega.
+
+00:01:07.690 --> 00:01:10.950
+Vai da lui, gli consegni un biglietto e aspetti che lega e risponda.
+
+00:01:11.610 --> 00:01:12.990
+Funziona bene quando siete entrambi presenti.
+
+00:01:13.470 --> 00:01:16.070
+Ma se fosse in riunione, a pranzo o in vacanza per una settimana,
+
+00:01:16.890 --> 00:01:19.110
+non puoi andare avanti con il lavoro finché non risponde.
+
+00:01:19.110 --> 00:01:21.950
+È esattamente quello che succede quando due app comunicano direttamente.
+
+00:01:22.450 --> 00:01:23.750
+Un'app invia una richiesta e attende.
+
+00:01:24.470 --> 00:01:27.310
+Se l'altra app è lenta, occupata o in crash, la prima resta bloccata.
+
+00:01:28.210 --> 00:01:29.930
+Gli sviluppatori chiamano questo accoppiamento stretto.
+
+00:01:30.190 --> 00:01:31.210
+Le due app sono legate tra l'altro.
+
+00:01:31.610 --> 00:01:33.230
+Se una si rompe, anche l'altra si rompe.
+
+00:01:33.570 --> 00:01:36.190
+In un sistema con decine di servizi, è un disastro.
+
+00:01:36.550 --> 00:01:37.790
+La soluzione è mettere un intermediario a 3.
+
+00:01:37.970 --> 00:01:42.390
+Un buffer digitale che accetta i messaggi quando il mittente è pronto e li conserva finché il ricevente non può lavorare.
+
+00:01:42.730 --> 00:01:44.210
+Questo intermediario si chiama Message Broker.
+
+00:01:44.210 --> 00:01:47.230
+E Azure Service Bus è la versione Microsoft di questo intermediario.
+
+00:01:47.230 --> 00:01:49.430
+Cos'è esattamente un Message Broker?
+
+00:01:50.090 --> 00:01:51.290
+Quindi cos'è davvero un Message Broker?
+
+00:01:51.790 --> 00:01:54.590
+È un software che si posiziona tra le app e gestisce lo scambio dei messaggi.
+
+00:01:55.110 --> 00:01:57.170
+Il mittente invia un messaggio al broker e prosegue il suo lavoro.
+
+00:01:57.890 --> 00:01:58.410
+Nessuna attesa.
+
+00:01:58.810 --> 00:02:00.570
+Il ricevente preleva il messaggio quando è pronto.
+
+00:02:01.070 --> 00:02:02.670
+Le due parti non comunicano mai direttamente.
+
+00:02:03.030 --> 00:02:03.910
+Parlano solo con il broker.
+
+00:02:04.530 --> 00:02:06.710
+Chiamano questo disaccoppiamento ed è proprio il punto cruciale.
+
+00:02:06.770 --> 00:02:09.270
+Quando due app sono disaccoppiate, possono fallire indipendentemente.
+
+00:02:09.550 --> 00:02:11.610
+Il ricevente va in crash, il mittente non se ne accorge nemmeno.
+
+00:02:11.610 --> 00:02:13.550
+Il messaggio resta semplicemente nel BrokerNet.
+
+00:02:13.930 --> 00:02:16.290
+Quando il ricevente torna online, riprende da dove va lasciato.
+
+00:02:16.290 --> 00:02:18.390
+Nessuna perdita dei dati, nessun errore da gestire.
+
+00:02:18.630 --> 00:02:19.890
+Possono anche scalare in modo indipendente.
+
+00:02:20.390 --> 00:02:22.310
+Se il mittente riceve un flusso intenso di traffico,
+
+00:02:22.410 --> 00:02:24.210
+può continuare a inviare messaggi alla velocità che preferisce.
+
+00:02:24.450 --> 00:02:25.510
+Il broker assorbe il picco.
+
+00:02:25.990 --> 00:02:27.430
+Il ricevente elabora al proprio ritmo.
+
+00:02:28.070 --> 00:02:29.490
+Dieci messaggi al minuto, diecimila.
+
+00:02:30.050 --> 00:02:33.130
+E se devi aggiornare un'app, puoi farlo senza mettere fuori uso l'intero sistema.
+
+00:02:33.630 --> 00:02:35.070
+L'altra parte non noterà alcuna differenza.
+
+00:02:35.330 --> 00:02:36.370
+Ecco un modo semplice per pensare.
+
+00:02:36.850 --> 00:02:39.830
+Sei in un ufficio e devi consegnare un documento a qualcuno al terzo piano.
+
+00:02:39.830 --> 00:02:41.070
+Ma è in riunione.
+
+00:02:41.430 --> 00:02:43.070
+Potresti aspettare fuori dalla sala riunioni.
+
+00:02:43.650 --> 00:02:45.390
+Oppure lasciare il documento alla reception.
+
+00:02:46.170 --> 00:02:47.790
+L'addetto lo prende, tu torni alla tua scrivania
+
+00:02:47.790 --> 00:02:50.010
+e il documento viene consegnato quando la persona è libera.
+
+00:02:50.710 --> 00:02:51.950
+La reception è il tuo message broker.
+
+00:02:52.650 --> 00:02:54.530
+Accetta il messaggio, lo conserva al sicuro
+
+00:02:54.530 --> 00:02:56.290
+e lo consegna quando il destinatario è pronto.
+
+00:02:57.310 --> 00:03:00.730
+Azure Service Pass è la versione completamente gestita di Microsoft di questa reception.
+
+00:03:01.670 --> 00:03:04.130
+Completamente gestita significa che non devi preoccuparti di infrastrutture.
+
+00:03:04.130 --> 00:03:07.590
+Nessun server da aggiornare, nessun disco rigido da sostituire, nessun backup da pianificare.
+
+00:03:07.730 --> 00:03:08.750
+Microsoft gestisce tutto questo.
+
+00:03:09.170 --> 00:03:11.330
+Devi solo creare uno spazio di nomi, configurare code e argomenti
+
+00:03:11.330 --> 00:03:12.450
+e iniziare a inviare messaggi.
+
+00:03:13.030 --> 00:03:14.030
+È una messaggistica serverless.
+
+00:03:14.470 --> 00:03:16.910
+Paghi per ciò che usi e non pensi mai all'hardware sottostante.
+
+00:03:17.690 --> 00:03:19.490
+Quindi come organizza i messaggi questo intermediario?
+
+00:03:19.810 --> 00:03:21.770
+Utilizza due strutture principali, code e argomenti.
+
+00:03:22.150 --> 00:03:23.330
+Iniziamo con quella più semplice.
+
+00:03:24.150 --> 00:03:25.050
+Anatomia di un messaggio.
+
+00:03:25.470 --> 00:03:26.510
+Dunque abbiamo esaminato le strutture.
+
+00:03:26.810 --> 00:03:28.530
+Ora parliamo di ciò che viaggia al loro interno.
+
+00:03:28.790 --> 00:03:29.670
+Il messaggio stesso.
+
+00:03:31.570 --> 00:03:33.530
+Pensa a un messaggio in Azure Service Pass
+
+00:03:33.530 --> 00:03:35.890
+come a un contenitore con due parti principali.
+
+00:03:36.510 --> 00:03:37.590
+Il corpo e i metadati.
+
+00:03:38.390 --> 00:03:40.910
+Il corpo è il tuo dato effettivo, ciò che stai cercando di inviare.
+
+00:03:41.330 --> 00:03:43.210
+Di solito è formattato come JSON o XML.
+
+00:03:43.870 --> 00:03:44.770
+Anche il testo è semplice 1.
+
+00:03:45.190 --> 00:03:48.490
+I dati binari sono supportati, ma in pratica il JSON è il formato più comune.
+
+00:03:48.990 --> 00:03:50.690
+È leggibile dagli umani, facile da gestire,
+
+00:03:50.810 --> 00:03:52.390
+ogni linguaggio di programmazione lo supporta.
+
+00:03:52.750 --> 00:03:54.230
+I metadati sono la parte più interessante.
+
+00:03:54.850 --> 00:03:56.570
+Ogni messaggio include una serie di proprietà di sistema
+
+00:03:56.570 --> 00:03:58.230
+che Service Pass assegna automaticamente
+
+00:03:58.230 --> 00:04:01.030
+elementi come un ID messaggio univoco,
+
+00:04:01.030 --> 00:04:02.430
+un timestamp di accodamento
+
+00:04:02.430 --> 00:04:05.110
+e un numero di sequenza che indica la posizione nella coda.
+
+00:04:05.990 --> 00:04:06.990
+Questi sono i gestiti dal sistema.
+
+00:04:07.330 --> 00:04:08.730
+Non imposti tu, sono semplicemente lì.
+
+00:04:09.170 --> 00:04:11.150
+Tuttavia puoi anche aggiungere le tue proprietà personalizzate.
+
+00:04:11.570 --> 00:04:13.610
+Si tratta di coppie chiave valore definite da te
+
+00:04:13.610 --> 00:04:15.610
+come regione cliente con valore Europa
+
+00:04:15.610 --> 00:04:18.770
+o totale ordine con 29,9 e 20,99
+
+00:04:18.770 --> 00:04:21.210
+o priorità con alta.
+
+00:04:21.910 --> 00:04:23.670
+Queste proprietà personalizzate sono fondamentali
+
+00:04:23.670 --> 00:04:24.470
+per il filtraggio nero.
+
+00:04:25.030 --> 00:04:26.790
+Ricordi i filtri di sottoscrizione di cui abbiamo parlato.
+
+00:04:27.230 --> 00:04:29.390
+Funzionano confronti i dati con queste proprietà personalizzate.
+
+00:04:29.390 --> 00:04:30.990
+Imposti il filtro che dice
+
+00:04:30.990 --> 00:04:33.850
+ricevi solo i messaggi in cui la regione del cliente è Europa
+
+00:04:33.850 --> 00:04:36.710
+e la sottoscrizione usa la proprietà personalizzata
+
+00:04:36.710 --> 00:04:38.150
+per decidere se accettare il messaggio.
+
+00:04:38.710 --> 00:04:39.990
+Ci sono dei limiti e delle dimensioni dei messaggi.
+
+00:04:40.350 --> 00:04:43.490
+Nel livello standard un messaggio può pesare fino a 256 KB.
+
+00:04:44.170 --> 00:04:46.070
+È sufficiente per la maggior parte dei dati aziendali
+
+00:04:46.070 --> 00:04:47.130
+un ordine a un profilo cliente
+
+00:04:47.130 --> 00:04:48.070
+o una conferma di pagamento,
+
+00:04:48.210 --> 00:04:49.050
+tutti ben sotto quei limiti.
+
+00:04:49.050 --> 00:04:50.390
+Se hai bisogno di più spazio,
+
+00:04:50.450 --> 00:04:52.270
+il livello premium supporta messaggi fino a un megabyte.
+
+00:04:52.730 --> 00:04:54.770
+Tuttavia, se invii regolarmente dati più grandi,
+
+00:04:54.910 --> 00:04:57.110
+probabilmente non dovresti inserirli in un messaggio.
+
+00:04:57.550 --> 00:04:58.810
+Archivi ai dati voluminosi altrove
+
+00:04:58.810 --> 00:05:00.110
+e inserisci un riferimento nel messaggio.
+
+00:05:00.410 --> 00:05:01.190
+È il modello più comune.
+
+00:05:01.510 --> 00:05:03.070
+La consegna è pianificata da una funzionalità U.
+
+00:05:03.490 --> 00:05:04.210
+Invii un messaggio ora,
+
+00:05:04.270 --> 00:05:05.950
+ma dici a Service Bus di non renderlo visibile
+
+00:05:05.950 --> 00:05:07.390
+fino a un momento specifico nel futuro.
+
+00:05:08.050 --> 00:05:09.850
+Immagina di voler inviare un'email di pro memoria
+
+00:05:09.850 --> 00:05:10.670
+tra 24 ore.
+
+00:05:11.090 --> 00:05:11.830
+Invii un messaggio ora
+
+00:05:11.830 --> 00:05:13.370
+con un orario di accodamento programmato
+
+00:05:13.370 --> 00:05:14.090
+fissato per domani.
+
+00:05:14.450 --> 00:05:15.430
+Service Bus lo trattiene,
+
+00:05:15.430 --> 00:05:16.250
+rimane invisibile
+
+00:05:16.250 --> 00:05:17.150
+e nessuno può leggerlo.
+
+00:05:17.450 --> 00:05:18.930
+Poi, al momento esatto programmato,
+
+00:05:19.090 --> 00:05:19.750
+appare nella coda
+
+00:05:19.750 --> 00:05:21.030
+come se fosse appena stato inviato.
+
+00:05:21.650 --> 00:05:22.650
+È perfetto per flussi di lavoro
+
+00:05:22.650 --> 00:05:23.370
+basati sul tempo,
+
+00:05:23.490 --> 00:05:25.010
+per memoria, timeout e elaborazione di ritardo.
+
+00:05:25.630 --> 00:05:27.110
+Il ciclo di vita di un messaggio funziona così.
+
+00:05:27.590 --> 00:05:28.010
+Per prima cosa,
+
+00:05:28.090 --> 00:05:29.070
+viene inviato alla coda l'argomento.
+
+00:05:29.550 --> 00:05:31.050
+Service Bus lo archivia in modo permanente,
+
+00:05:31.130 --> 00:05:32.570
+scritto su uno storage a tripla ridondanza.
+
+00:05:32.810 --> 00:05:34.170
+Quindi un ricevitore richiede un messaggio.
+
+00:05:34.490 --> 00:05:35.370
+Service Bus lo blocca,
+
+00:05:35.630 --> 00:05:37.150
+in modo che nessun altro ricevitore possa prendere.
+
+00:05:37.290 --> 00:05:38.290
+Il ricevitore elabora il messaggio.
+
+00:05:38.930 --> 00:05:39.650
+Se tutto va bene,
+
+00:05:39.770 --> 00:05:41.110
+il ricevitore chiama a complete.
+
+00:05:41.890 --> 00:05:43.170
+Service Bus elimina il messaggio.
+
+00:05:43.170 --> 00:05:44.370
+Se qualcosa va storto,
+
+00:05:44.410 --> 00:05:45.730
+il ricevitore può chiamare abandon.
+
+00:05:46.390 --> 00:05:47.390
+Il blocco viene rilasciato
+
+00:05:47.390 --> 00:05:48.390
+e il messaggio torna nella coda
+
+00:05:48.390 --> 00:05:49.170
+per un altro tentativo.
+
+00:05:49.750 --> 00:05:50.750
+Se il messaggio continua a fallire,
+
+00:05:50.810 --> 00:05:51.590
+alla fine viene spostato
+
+00:05:51.590 --> 00:05:52.830
+nella coda dei messaggi non recapitabili.
+
+00:05:53.090 --> 00:05:54.110
+Non parleremo nel prossimo passaggio.
+
+00:05:54.450 --> 00:05:56.210
+Il punto chiave è che i messaggi sono permanenti.
+
+00:05:56.570 --> 00:05:57.610
+Non scompaiono se un ricevitore
+
+00:05:57.610 --> 00:05:58.150
+si arresta e abandon.
+
+00:05:58.410 --> 00:05:59.990
+Non vanno persi se la rete smette di funzionare.
+
+00:06:00.270 --> 00:06:01.130
+Rimangono in Service Bus
+
+00:06:01.130 --> 00:06:01.990
+archiviati in sicurezza
+
+00:06:01.990 --> 00:06:03.370
+affinché non vengono elaborati correttamente
+
+00:06:03.370 --> 00:06:04.190
+e spostati esplicitamente
+
+00:06:04.190 --> 00:06:05.490
+nella coda dei messaggi non recapitabili.
+
+00:06:05.710 --> 00:06:07.190
+Quella affidabilità è il motivo principale
+
+00:06:07.190 --> 00:06:08.550
+per cui si utilizza un message broker.
+
+00:06:10.030 --> 00:06:11.650
+Funzionalità avanzate che fanno la differenza.
+
+00:06:12.190 --> 00:06:13.210
+Ora parliamo delle funzionalità
+
+00:06:13.210 --> 00:06:14.710
+che trasformano la semplice coda di messaggi
+
+00:06:14.710 --> 00:06:15.970
+in una piattaforma su cui puoi contare
+
+00:06:15.970 --> 00:06:17.730
+iniziando dalla coda dei messaggi non recapitabili.
+
+00:06:18.390 --> 00:06:19.190
+Abbiamo menzionato prima
+
+00:06:19.190 --> 00:06:20.770
+che i messaggi che continuano a fallire
+
+00:06:20.770 --> 00:06:22.190
+vengono infine spostati altrove.
+
+00:06:22.510 --> 00:06:23.150
+Quella altrove è la coda
+
+00:06:23.150 --> 00:06:24.410
+dei messaggi non recapitabili ad elettere.
+
+00:06:24.670 --> 00:06:25.890
+Pensare a come una cella di detenzione.
+
+00:06:26.150 --> 00:06:27.090
+Quando un messaggio supera
+
+00:06:27.090 --> 00:06:28.730
+il numero massimo di tentativi di consegna
+
+00:06:28.730 --> 00:06:30.370
+o scade perché il suo tempo di vita è terminato
+
+00:06:30.370 --> 00:06:31.450
+e non scompare semplicemente,
+
+00:06:31.830 --> 00:06:32.910
+viene spostato in una sottocoda
+
+00:06:32.910 --> 00:06:34.830
+separata all'interno della stessa coda o sottoscrizione.
+
+00:06:35.450 --> 00:06:36.570
+Puoi esaminare quei messaggi
+
+00:06:36.570 --> 00:06:37.870
+capire cosa non ha funzionato
+
+00:06:37.870 --> 00:06:38.790
+e decidere cosa fare.
+
+00:06:39.470 --> 00:06:40.730
+Magari i dati erano formattati male
+
+00:06:40.730 --> 00:06:41.470
+e devi correggerli.
+
+00:06:42.010 --> 00:06:43.330
+Magari la logica di elaborazione è un bug.
+
+00:06:43.830 --> 00:06:45.170
+Magari il sistema VAL era inattivo
+
+00:06:45.170 --> 00:06:46.250
+e vuoi riprovare più tardi.
+
+00:06:46.630 --> 00:06:48.110
+La Dead Letter qui ti offre un piano di riserva.
+
+00:06:48.470 --> 00:06:49.570
+Nulla va perso silenziosamente.
+
+00:06:50.150 --> 00:06:52.310
+Ora chiariamo un malinteso comune sulle sessioni.
+
+00:06:52.890 --> 00:06:54.010
+Per impostazione predefinita
+
+00:06:54.010 --> 00:06:54.770
+Azure Service Bus
+
+00:06:54.770 --> 00:06:55.810
+non garantisce che i messaggi
+
+00:06:55.810 --> 00:06:56.850
+vengono elaborati in ordine.
+
+00:06:57.310 --> 00:06:58.870
+So che abbiamo detto che le code sono fifo
+
+00:06:58.870 --> 00:07:00.190
+prima entrare e prima uscire
+
+00:07:00.190 --> 00:07:01.590
+ed è vero per come arrivano i messaggi
+
+00:07:02.910 --> 00:07:03.510
+un'altra storia.
+
+00:07:03.930 --> 00:07:05.210
+Se hai più consumer che prelevano
+
+00:07:05.210 --> 00:07:05.870
+dalla stessa coda
+
+00:07:05.870 --> 00:07:07.050
+un messaggio richiede più tempo
+
+00:07:07.050 --> 00:07:08.310
+di un altro per essere elaborato
+
+00:07:08.310 --> 00:07:09.630
+o il secondo potrebbe finire
+
+00:07:09.630 --> 00:07:10.330
+prima del primo.
+
+00:07:11.150 --> 00:07:11.990
+L'ordine va perso.
+
+00:07:12.410 --> 00:07:13.450
+Le sessioni esaurono questo problema.
+
+00:07:13.730 --> 00:07:14.790
+Una sessione raggruppa insieme
+
+00:07:14.790 --> 00:07:15.570
+i messaggi correlati.
+
+00:07:15.970 --> 00:07:17.490
+Assegno un ID sessione a ogni messaggio
+
+00:07:17.490 --> 00:07:18.690
+come un numero d'ordine cliente
+
+00:07:18.690 --> 00:07:19.850
+o una distanza di workflow.
+
+00:07:20.750 --> 00:07:22.410
+Tutti i messaggi con lo stesso ID sessione
+
+00:07:22.410 --> 00:07:24.010
+vengono elaborati dallo stesso consumer
+
+00:07:24.010 --> 00:07:25.390
+uno alla volta, in ordine.
+
+00:07:25.890 --> 00:07:27.150
+Nessun altro consumer può toccarli.
+
+00:07:27.510 --> 00:07:29.270
+Questo garantisce un'elaborazione fifo rigorosa
+
+00:07:29.270 --> 00:07:30.190
+all'interno di quella sessione.
+
+00:07:30.470 --> 00:07:31.830
+Sessioni diverse possono ancora essere
+
+00:07:31.830 --> 00:07:33.710
+elaborati in parallelo da consumer diversi.
+
+00:07:34.030 --> 00:07:35.390
+In questo modo mantieni il throughput
+
+00:07:35.390 --> 00:07:36.630
+preservando l'ordine importante.
+
+00:07:37.150 --> 00:07:38.070
+Il rilevamento dei duplicati
+
+00:07:38.070 --> 00:07:38.950
+è un altro ottimo funzionario.
+
+00:07:39.350 --> 00:07:40.190
+A volte la rete è dentro.
+
+00:07:40.730 --> 00:07:42.030
+La tua applicazione invia un messaggio
+
+00:07:42.030 --> 00:07:43.370
+ma la risposta viene persa.
+
+00:07:43.670 --> 00:07:44.730
+Quindi la tua app lo invia di nuovo
+
+00:07:44.730 --> 00:07:46.190
+pensando che il primo non sia mai arrivato.
+
+00:07:46.790 --> 00:07:48.010
+Senza il rilevamento dei duplicati
+
+00:07:48.010 --> 00:07:49.450
+quel messaggio verrebbe elaborato due volte.
+
+00:07:50.110 --> 00:07:51.650
+Con esso Service Bus ricorda l'ID
+
+00:07:51.650 --> 00:07:52.930
+del messaggio per una finestra
+
+00:07:52.930 --> 00:07:54.070
+configurabile solitamente
+
+00:07:54.070 --> 00:07:55.110
+fino a 30 giorni.
+
+00:07:56.030 --> 00:07:57.490
+Se vede di nuovo lo stesso ID messaggio
+
+00:07:57.490 --> 00:07:59.010
+scarta silenziosamente il duplicato.
+
+00:07:59.370 --> 00:08:00.210
+Il destinatario non saprà mai
+
+00:08:00.210 --> 00:08:01.010
+che c'è stato un nuovo tentativo.
+
+00:08:01.010 --> 00:08:02.470
+Le transazioni ti consentono
+
+00:08:02.470 --> 00:08:03.490
+di raggruppare più operazioni
+
+00:08:03.490 --> 00:08:04.290
+in un'unica unità top.
+
+00:08:04.690 --> 00:08:05.770
+Magari devi prendere un messaggio
+
+00:08:05.770 --> 00:08:06.850
+da una coda, elaborarlo
+
+00:08:06.850 --> 00:08:08.410
+e inviare un risultato a un'altra coda.
+
+00:08:08.870 --> 00:08:09.830
+Se un passaggio fallisce
+
+00:08:09.830 --> 00:08:11.090
+vuoi che tutto venga annullato.
+
+00:08:11.610 --> 00:08:12.890
+Il messaggio torna alla prima coda.
+
+00:08:13.410 --> 00:08:14.390
+Il risultato non viene mai inviato.
+
+00:08:14.670 --> 00:08:15.510
+Tu rimane coerente.
+
+00:08:16.170 --> 00:08:16.810
+Questo è fondamentale
+
+00:08:16.810 --> 00:08:17.710
+per i sistemi finanziari
+
+00:08:17.710 --> 00:08:18.850
+dove un'elaborazione parziale
+
+00:08:18.850 --> 00:08:20.130
+è peggiore di nessuna elaborazione.
+
+00:08:20.630 --> 00:08:21.650
+Inoltre automatico ti consente
+
+00:08:21.650 --> 00:08:22.270
+di concatenerlo.
+
+00:08:22.690 --> 00:08:23.710
+I messaggi arrivano a una coda
+
+00:08:23.710 --> 00:08:24.630
+e vengono automaticamente
+
+00:08:24.630 --> 00:08:25.670
+inoltrati a un'altra.
+
+00:08:26.310 --> 00:08:27.950
+È utile per costruire pipeline di elaborazione.
+
+00:08:27.950 --> 00:08:29.490
+Un messaggio grezzo arriva,
+
+00:08:29.550 --> 00:08:30.170
+viene convalidato
+
+00:08:30.170 --> 00:08:31.490
+e poi inoltrato a una coda diversa
+
+00:08:31.490 --> 00:08:32.310
+per il lavoro vero e proprio.
+
+00:08:32.670 --> 00:08:33.730
+La prima coda rimane pulita.
+
+00:08:34.150 --> 00:08:35.510
+La seconda coda gestisce il lavoro pesante.
+
+00:08:35.910 --> 00:08:36.770
+Il differimento ti permette
+
+00:08:36.770 --> 00:08:38.090
+di saltare temporaneamente un messaggio.
+
+00:08:38.550 --> 00:08:39.350
+Magari ricevi un messaggio
+
+00:08:39.350 --> 00:08:40.350
+ma i dati a cui fa riferimento
+
+00:08:40.350 --> 00:08:41.170
+non sono ancora pronti.
+
+00:08:41.530 --> 00:08:42.190
+Puoi differirlo.
+
+00:08:42.730 --> 00:08:43.250
+Rimane la coda
+
+00:08:43.250 --> 00:08:44.050
+ma diventa invisibile.
+
+00:08:44.650 --> 00:08:46.050
+In seguito, usando il numero di sequenza
+
+00:08:46.050 --> 00:08:47.230
+puoi recuperarlo ed elaborarlo
+
+00:08:47.230 --> 00:08:47.970
+al momento giusto.
+
+00:08:48.630 --> 00:08:49.310
+Queste funzionalità
+
+00:08:49.310 --> 00:08:50.110
+sono ciò che distinguono
+
+00:08:50.110 --> 00:08:50.830
+la semplice coda
+
+00:08:50.830 --> 00:08:52.390
+da un sistema su cui costruire la tua azienda.
+
+00:08:53.210 --> 00:08:54.530
+Service bus rispetto alle alternative.
+
+00:08:55.270 --> 00:08:56.030
+Quindi quando scegliere
+
+00:08:56.030 --> 00:08:57.330
+service bus invece di altro.
+
+00:08:57.830 --> 00:08:58.470
+Lascia che ti spieghi.
+
+00:08:58.990 --> 00:08:59.850
+Azure Storage Cudes
+
+00:08:59.850 --> 00:09:00.970
+sono l'opzione più semplice,
+
+00:09:01.110 --> 00:09:01.910
+economiche, veloci
+
+00:09:01.910 --> 00:09:02.990
+e facili da configurare.
+
+00:09:03.750 --> 00:09:04.370
+Ma sono limitati.
+
+00:09:04.830 --> 00:09:05.890
+I messaggi arrivano al massimo
+
+00:09:05.890 --> 00:09:06.910
+a 64 KB
+
+00:09:06.910 --> 00:09:08.110
+e non hai argomenti,
+
+00:09:08.210 --> 00:09:08.710
+sessioni,
+
+00:09:08.870 --> 00:09:10.150
+dead letter o transazioni.
+
+00:09:11.130 --> 00:09:12.150
+Sono ottime per code di lavoro
+
+00:09:12.150 --> 00:09:12.610
+in background
+
+00:09:12.610 --> 00:09:14.270
+di base dove devi solo scaricare il lavoro
+
+00:09:14.270 --> 00:09:16.130
+ma se ti servono le funzionalità avanzate
+
+00:09:16.130 --> 00:09:16.870
+di cui abbiamo parlato
+
+00:09:16.870 --> 00:09:18.050
+le supererai presto.
+
+00:09:18.870 --> 00:09:19.710
+Event Apps è pensato
+
+00:09:19.710 --> 00:09:21.170
+per qualcosa di completamente diverso
+
+00:09:21.170 --> 00:09:21.970
+allo streaming di eventi
+
+00:09:21.970 --> 00:09:22.670
+ad alto throughput.
+
+00:09:23.490 --> 00:09:24.710
+Pensa a milioni di eventi al secondo,
+
+00:09:24.810 --> 00:09:25.530
+dispositivi IoT
+
+00:09:25.530 --> 00:09:26.610
+o log di applicazioni.
+
+00:09:27.810 --> 00:09:28.610
+Non è un message broker
+
+00:09:28.610 --> 00:09:29.950
+è una pipeline in gestione dati.
+
+00:09:30.470 --> 00:09:31.230
+Quindi non lo useresti
+
+00:09:31.230 --> 00:09:32.270
+per flussi di lavoro transazionale.
+
+00:09:32.550 --> 00:09:33.750
+Si usa quando devi acquisire
+
+00:09:33.750 --> 00:09:35.490
+ed elaborare enormi flussi di dati.
+
+00:09:36.690 --> 00:09:37.970
+Event Grid è l'opzione leggera,
+
+00:09:38.030 --> 00:09:39.010
+un sistema PubSub
+
+00:09:39.010 --> 00:09:40.470
+per trigger basati su eventi.
+
+00:09:41.350 --> 00:09:41.830
+Quando un blob
+
+00:09:41.830 --> 00:09:43.010
+viene caricato nello storage,
+
+00:09:43.130 --> 00:09:43.430
+Event Grid
+
+00:09:43.430 --> 00:09:44.570
+può attivare un Azure Function.
+
+00:09:45.350 --> 00:09:46.410
+Quando viene creata una risorsa,
+
+00:09:46.550 --> 00:09:47.810
+può notificare altri servizi.
+
+00:09:48.370 --> 00:09:48.750
+È veloce,
+
+00:09:48.830 --> 00:09:49.530
+economico e perfetto
+
+00:09:49.530 --> 00:09:50.310
+per scenari rattivi
+
+00:09:50.310 --> 00:09:51.030
+ma non è una coda.
+
+00:09:51.450 --> 00:09:52.650
+Non conserva i messaggi
+
+00:09:52.650 --> 00:09:53.850
+per un'elaborazione successiva,
+
+00:09:53.850 --> 00:09:54.950
+quindi se il ricevitore è inattivo
+
+00:09:54.950 --> 00:09:55.710
+l'evento va perso.
+
+00:09:56.190 --> 00:09:56.830
+Ora Service Bus
+
+00:09:56.830 --> 00:09:58.070
+si colloca esattamente nel mezzo.
+
+00:09:58.630 --> 00:09:59.510
+Ha le ricche funzionalità
+
+00:09:59.510 --> 00:10:00.430
+di un broker aziendale
+
+00:10:00.430 --> 00:10:01.290
+senza la complessità
+
+00:10:01.290 --> 00:10:02.050
+di gestirne uno.
+
+00:10:02.930 --> 00:10:03.430
+Se ti servono
+
+00:10:03.430 --> 00:10:04.070
+coded letter,
+
+00:10:04.170 --> 00:10:04.590
+sessioni,
+
+00:10:04.650 --> 00:10:05.150
+transazioni,
+
+00:10:05.310 --> 00:10:06.190
+argomenti con filtri
+
+00:10:06.190 --> 00:10:07.070
+o consegna garantita,
+
+00:10:07.190 --> 00:10:07.650
+Service Bus
+
+00:10:07.650 --> 00:10:08.410
+è la scelta giusta
+
+00:10:08.410 --> 00:10:09.550
+e Kafka.
+
+00:10:09.950 --> 00:10:10.710
+Quella è una conversazione
+
+00:10:10.710 --> 00:10:11.390
+del tutto diversa.
+
+00:10:11.930 --> 00:10:12.470
+Service Bus
+
+00:10:12.470 --> 00:10:13.230
+serve per comandi
+
+00:10:13.230 --> 00:10:14.350
+e flussi di lavoro aziendali,
+
+00:10:14.670 --> 00:10:15.410
+mentre Kafka serve
+
+00:10:15.410 --> 00:10:16.270
+per streaming di eventi
+
+00:10:16.270 --> 00:10:16.710
+e analisi.
+
+00:10:17.330 --> 00:10:18.050
+Molti grandi sistemi
+
+00:10:18.050 --> 00:10:18.570
+usano entrambi.
+
+00:10:19.010 --> 00:10:19.490
+Service Bus
+
+00:10:19.490 --> 00:10:20.630
+gestisce la messaggistica operativa,
+
+00:10:20.750 --> 00:10:21.270
+Kafka gestisce
+
+00:10:21.270 --> 00:10:22.150
+la pipeline dei dati.
+
+00:10:22.510 --> 00:10:23.170
+Sono complementari,
+
+00:10:23.230 --> 00:10:23.890
+non in competizione.
+
+00:10:24.370 --> 00:10:25.330
+Ecco una semplice regola in Piri.
+
+00:10:25.770 --> 00:10:26.190
+Se ti chiedi
+
+00:10:26.190 --> 00:10:26.690
+questo messaggio
+
+00:10:26.690 --> 00:10:28.010
+è stato elaborato correttamente,
+
+00:10:28.990 --> 00:10:29.830
+usa Service Bus.
+
+00:10:30.590 --> 00:10:31.010
+Se ti chiedi
+
+00:10:31.010 --> 00:10:31.590
+posso riprodurre
+
+00:10:31.590 --> 00:10:32.150
+il flusso di eventi
+
+00:10:32.150 --> 00:10:33.010
+della scorsa settimana,
+
+00:10:33.630 --> 00:10:34.130
+usa Kafka.
+
+00:10:34.550 --> 00:10:35.170
+Strumenti diversi
+
+00:10:35.170 --> 00:10:35.750
+per avere diversi.
+
+00:10:36.370 --> 00:10:36.710
+Casi d'uso
+
+00:10:36.710 --> 00:10:37.570
+in mondo reale.
+
+00:10:37.650 --> 00:10:38.330
+Prendiamolo concreto
+
+00:10:38.330 --> 00:10:39.030
+con alcuni esempi.
+
+00:10:39.350 --> 00:10:39.910
+Ecco come funziona
+
+00:10:39.910 --> 00:10:40.810
+Service Bus in produzione.
+
+00:10:41.290 --> 00:10:42.050
+Partiamo dall'e-commerce.
+
+00:10:42.630 --> 00:10:43.450
+Un cliente effettua
+
+00:10:43.450 --> 00:10:44.450
+un ordine su un sito web.
+
+00:10:45.210 --> 00:10:45.870
+Il server web
+
+00:10:45.870 --> 00:10:46.510
+riceve l'ordine
+
+00:10:46.510 --> 00:10:47.370
+e pubblica immediatamente
+
+00:10:47.370 --> 00:10:48.210
+un singolo messaggio
+
+00:10:48.210 --> 00:10:49.230
+in una coda di Service Bus
+
+00:10:49.230 --> 00:10:49.950
+poi dice al cliente
+
+00:10:49.950 --> 00:10:51.190
+grazie il tuo ordine è confermato.
+
+00:10:51.910 --> 00:10:52.470
+Il cliente ottiene
+
+00:10:52.470 --> 00:10:53.330
+una risposta rapida
+
+00:10:53.330 --> 00:10:54.030
+senza attesia.
+
+00:10:54.730 --> 00:10:55.290
+Dietro le quinte
+
+00:10:55.290 --> 00:10:55.970
+un pool di servizi
+
+00:10:55.970 --> 00:10:56.930
+worker preleva i messaggi
+
+00:10:56.930 --> 00:10:57.350
+dalla coda.
+
+00:10:57.730 --> 00:10:58.990
+Un worker elabora il pagamento,
+
+00:10:59.110 --> 00:11:00.130
+un altro controlla l'inventario,
+
+00:11:00.190 --> 00:11:00.690
+un altro prepara
+
+00:11:00.690 --> 00:11:01.630
+l'etichetta di spedizione.
+
+00:11:02.330 --> 00:11:02.770
+Ogni worker
+
+00:11:02.770 --> 00:11:03.870
+prende il messaggio successivo,
+
+00:11:03.950 --> 00:11:04.630
+svolge il suo compito
+
+00:11:04.630 --> 00:11:05.170
+e passa oltre.
+
+00:11:05.770 --> 00:11:06.370
+Il cliente non vede
+
+00:11:06.370 --> 00:11:07.090
+nulla di tutto questo.
+
+00:11:07.490 --> 00:11:08.190
+Vede solo la conferma.
+
+00:11:08.810 --> 00:11:09.430
+Questo è il classico
+
+00:11:09.430 --> 00:11:10.270
+modello di elaborazione
+
+00:11:10.270 --> 00:11:10.750
+asincrona.
+
+00:11:11.390 --> 00:11:12.190
+Feedback istantaneo
+
+00:11:12.190 --> 00:11:12.690
+per l'utente,
+
+00:11:12.950 --> 00:11:13.790
+lavoro pesante in background.
+
+00:11:14.370 --> 00:11:15.050
+I sistemi finanziari
+
+00:11:15.050 --> 00:11:15.650
+portano tutto ciò
+
+00:11:15.650 --> 00:11:16.050
+a un livello su.
+
+00:11:16.230 --> 00:11:17.290
+L'elaborazione dei pagamenti
+
+00:11:17.290 --> 00:11:18.350
+richiede una consegna garantita.
+
+00:11:18.750 --> 00:11:19.190
+Non puoi perdere
+
+00:11:19.190 --> 00:11:19.770
+una transazione
+
+00:11:19.770 --> 00:11:20.690
+o elaborarla due volte.
+
+00:11:21.270 --> 00:11:22.030
+Hai bisogno di ordinamento
+
+00:11:22.030 --> 00:11:22.490
+e transazione.
+
+00:11:22.870 --> 00:11:23.350
+Service Bus
+
+00:11:23.350 --> 00:11:24.090
+ti offre tutto questo.
+
+00:11:24.470 --> 00:11:25.170
+Un metodo di pagamento
+
+00:11:25.170 --> 00:11:26.230
+arriva, viene elaborato
+
+00:11:26.230 --> 00:11:26.930
+e il risultato
+
+00:11:26.930 --> 00:11:27.370
+viene inviato
+
+00:11:27.370 --> 00:11:27.930
+un'altra coda.
+
+00:11:28.510 --> 00:11:29.330
+Se qualcosa fallisce
+
+00:11:29.330 --> 00:11:29.990
+l'intera operazione
+
+00:11:29.990 --> 00:11:30.570
+viene annullata
+
+00:11:30.570 --> 00:11:31.090
+così il denaro
+
+00:11:31.090 --> 00:11:32.090
+non si sposta mai moderato.
+
+00:11:32.750 --> 00:11:33.430
+È qui che Service Bus
+
+00:11:33.430 --> 00:11:33.810
+eccella.
+
+00:11:34.490 --> 00:11:35.370
+Non solo spostare dati
+
+00:11:35.370 --> 00:11:36.370
+ma spostarli in sicurezza.
+
+00:11:36.810 --> 00:11:37.610
+Ora pensa al fan out
+
+00:11:37.610 --> 00:11:38.190
+in tutti i servizi.
+
+00:11:38.590 --> 00:11:39.150
+Un nuovo cliente
+
+00:11:39.150 --> 00:11:40.290
+si registra sulla tua piattaforma.
+
+00:11:40.590 --> 00:11:41.430
+Vuoi che il sistema CRM
+
+00:11:41.430 --> 00:11:41.870
+lo sappia?
+
+00:11:41.950 --> 00:11:42.670
+Che il sistema di marketing
+
+00:11:42.670 --> 00:11:43.710
+invia un email di benvenuto
+
+00:11:43.710 --> 00:11:44.430
+e che il team di supporto
+
+00:11:44.430 --> 00:11:44.830
+crea un ticket.
+
+00:11:45.310 --> 00:11:45.870
+Invece di chiamare
+
+00:11:45.870 --> 00:11:46.790
+tre servizi diversi
+
+00:11:46.790 --> 00:11:47.530
+pubblichi un messaggio
+
+00:11:47.530 --> 00:11:48.010
+in un argomento
+
+00:11:48.010 --> 00:11:49.410
+chiamato cliente registrato.
+
+00:11:50.230 --> 00:11:50.810
+Ogni servizio
+
+00:11:50.810 --> 00:11:51.630
+ha la sua sottoscrizione.
+
+00:11:51.630 --> 00:11:53.490
+La sottoscrizione CRM
+
+00:11:53.490 --> 00:11:53.930
+prende
+
+00:11:53.930 --> 00:11:54.990
+ogni messaggio
+
+00:11:54.990 --> 00:11:55.650
+quella di marketing
+
+00:11:55.650 --> 00:11:56.830
+filtra solo i nuovi clienti
+
+00:11:56.830 --> 00:11:57.790
+quella di supporto
+
+00:11:57.790 --> 00:11:59.050
+filtra solo i clienti premium.
+
+00:11:59.890 --> 00:12:00.310
+Un messaggio
+
+00:12:00.310 --> 00:12:00.830
+ha tre reazioni
+
+00:12:00.830 --> 00:12:01.730
+e se aggiungi
+
+00:12:01.730 --> 00:12:02.450
+un quarto servizio
+
+00:12:02.450 --> 00:12:02.850
+in seguito
+
+00:12:02.850 --> 00:12:03.530
+crea semplicemente
+
+00:12:03.530 --> 00:12:04.310
+una nuova sottoscrizione.
+
+00:12:04.610 --> 00:12:05.450
+Il mittente non cambia mai.
+
+00:12:05.790 --> 00:12:06.530
+Le aziende logistica
+
+00:12:06.530 --> 00:12:07.530
+lo usano su scala massiccia.
+
+00:12:07.950 --> 00:12:08.590
+Immagina un sistema
+
+00:12:08.590 --> 00:12:09.470
+di tracciamento pacchi
+
+00:12:09.470 --> 00:12:10.430
+in cui centinaia di migliaia
+
+00:12:10.430 --> 00:12:10.850
+di camion
+
+00:12:10.850 --> 00:12:11.790
+inviano aggiornamenti
+
+00:12:11.790 --> 00:12:12.310
+sulla posizione
+
+00:12:12.310 --> 00:12:13.090
+ogni pochi secondi.
+
+00:12:13.630 --> 00:12:14.190
+Ogni aggiornamento
+
+00:12:14.190 --> 00:12:14.670
+ha un messaggio
+
+00:12:14.670 --> 00:12:15.270
+e gli aggiornamenti
+
+00:12:15.270 --> 00:12:15.870
+di ogni pacco
+
+00:12:15.870 --> 00:12:17.110
+devono essere elaborati in ordine.
+
+00:12:17.110 --> 00:12:18.150
+Non puoi elaborare
+
+00:12:18.150 --> 00:12:19.130
+l'aggiornamento consegnato
+
+00:12:19.130 --> 00:12:20.330
+prima di quello in consegna.
+
+00:12:20.770 --> 00:12:21.530
+Le sessioni gestiscono
+
+00:12:21.530 --> 00:12:21.910
+questo aspetto.
+
+00:12:22.530 --> 00:12:23.070
+Ogni pacco
+
+00:12:23.070 --> 00:12:24.070
+tiene il suo ID sessione
+
+00:12:24.070 --> 00:12:24.890
+e tutti gli aggiornamenti
+
+00:12:24.890 --> 00:12:25.510
+per quel pacco
+
+00:12:25.510 --> 00:12:26.190
+passano attraverso
+
+00:12:26.190 --> 00:12:27.290
+la stessa sessione in ordine.
+
+00:12:27.730 --> 00:12:28.270
+Pacchi diversi
+
+00:12:28.270 --> 00:12:28.810
+possono comunque
+
+00:12:28.810 --> 00:12:29.930
+essere elaborati in parallelo.
+
+00:12:30.370 --> 00:12:31.090
+Milioni di pacchi
+
+00:12:31.090 --> 00:12:32.230
+miliardi di aggiornamenti
+
+00:12:32.230 --> 00:12:33.270
+tutto gestito in modo affidabile.
+
+00:12:33.650 --> 00:12:34.630
+Le architetture microservizi
+
+00:12:34.630 --> 00:12:35.490
+usano service bus
+
+00:12:35.490 --> 00:12:36.350
+come spina dorsale
+
+00:12:36.350 --> 00:12:37.150
+per la comunicazione.
+
+00:12:38.270 --> 00:12:39.050
+I servizi non si chiamano
+
+00:12:39.050 --> 00:12:39.790
+direttamente tra loro
+
+00:12:39.790 --> 00:12:40.790
+scambiano messaggi.
+
+00:12:41.950 --> 00:12:42.550
+Il servizio A
+
+00:12:42.550 --> 00:12:43.210
+invia un comando
+
+00:12:43.210 --> 00:12:43.610
+a una coda
+
+00:12:43.610 --> 00:12:44.330
+il servizio B
+
+00:12:44.330 --> 00:12:44.750
+lo preleva
+
+00:12:44.750 --> 00:12:45.470
+ed esegue il lavoro.
+
+00:12:46.270 --> 00:12:46.890
+Il servizio C
+
+00:12:46.890 --> 00:12:47.630
+pubblica un evento
+
+00:12:47.630 --> 00:12:48.170
+su un topic
+
+00:12:48.170 --> 00:12:49.210
+e i servizi D e D
+
+00:12:49.210 --> 00:12:50.210
+reagiscono ognuno
+
+00:12:50.210 --> 00:12:50.890
+a modo proprio.
+
+00:12:51.350 --> 00:12:52.170
+Nessuna chiamata diretta
+
+00:12:52.170 --> 00:12:52.750
+nessun accoppiamento.
+
+00:12:53.050 --> 00:12:53.910
+Ogni servizio
+
+00:12:53.910 --> 00:12:54.690
+può essere aggiornato
+
+00:12:54.690 --> 00:12:55.110
+scalato
+
+00:12:55.110 --> 00:12:55.690
+sostituito
+
+00:12:55.690 --> 00:12:56.550
+senza toccare gli ad.
+
+00:12:56.970 --> 00:12:57.490
+Ecco un modello
+
+00:12:57.490 --> 00:12:57.790
+che si vede
+
+00:12:57.790 --> 00:12:58.610
+nelle aziende più datate.
+
+00:12:58.930 --> 00:12:59.650
+Hanno un sistema legacy
+
+00:12:59.650 --> 00:13:00.490
+locale che non può essere
+
+00:13:00.490 --> 00:13:01.470
+sostituito facilmente
+
+00:13:01.470 --> 00:13:02.170
+ma vogliono usare
+
+00:13:02.170 --> 00:13:03.370
+moderni servizi cloud
+
+00:13:03.370 --> 00:13:04.990
+quindi con un divario
+
+00:13:04.990 --> 00:13:05.730
+con il service bus.
+
+00:13:06.210 --> 00:13:06.710
+Il sistema legacy
+
+00:13:06.710 --> 00:13:07.850
+invia messaggi a una coda
+
+00:13:07.850 --> 00:13:08.870
+e le applicazioni cloud
+
+00:13:08.870 --> 00:13:09.510
+li consumano.
+
+00:13:10.090 --> 00:13:10.650
+Vecchio sistema
+
+00:13:10.650 --> 00:13:11.070
+non sa mai
+
+00:13:11.070 --> 00:13:11.790
+che sta comunicando
+
+00:13:11.790 --> 00:13:12.350
+con il cloud
+
+00:13:12.350 --> 00:13:13.230
+e il cloud non sa mai
+
+00:13:13.230 --> 00:13:13.870
+che sta comunicando
+
+00:13:13.870 --> 00:13:14.630
+con un vecchio sistema.
+
+00:13:14.930 --> 00:13:15.510
+Il service bus
+
+00:13:15.510 --> 00:13:16.350
+si posiziona nel mezzo
+
+00:13:16.350 --> 00:13:17.230
+traducendo in oltrano.
+
+00:13:17.650 --> 00:13:18.430
+La consegna pianificata
+
+00:13:18.430 --> 00:13:18.990
+gestisce i lavori
+
+00:13:18.990 --> 00:13:19.610
+basati sul tempo.
+
+00:13:20.290 --> 00:13:20.670
+Invia un email
+
+00:13:20.670 --> 00:13:21.130
+di promemoria
+
+00:13:21.130 --> 00:13:21.810
+tra 24 ore.
+
+00:13:22.390 --> 00:13:23.410
+Fai scadere questa prenotazione
+
+00:13:23.410 --> 00:13:24.150
+tra 30 minuti
+
+00:13:24.150 --> 00:13:24.850
+se non confermata.
+
+00:13:25.650 --> 00:13:26.670
+Genera un report settimanale
+
+00:13:26.670 --> 00:13:27.430
+ogni lunedì alle 8?
+
+00:13:28.130 --> 00:13:28.770
+Invia il messaggio
+
+00:13:28.770 --> 00:13:29.350
+ora con un orario
+
+00:13:29.350 --> 00:13:30.150
+di consegna futuro
+
+00:13:30.150 --> 00:13:30.910
+e il service bus
+
+00:13:30.910 --> 00:13:31.390
+lo trattiene
+
+00:13:31.390 --> 00:13:32.190
+e lo rilascia esattamente
+
+00:13:32.190 --> 00:13:32.830
+al momento giusto.
+
+00:13:33.630 --> 00:13:34.290
+Niente cron job
+
+00:13:34.290 --> 00:13:35.310
+niente timer in background
+
+00:13:35.310 --> 00:13:35.990
+solo un messaggio
+
+00:13:35.990 --> 00:13:36.530
+con un timer.
+
+00:13:36.530 --> 00:13:37.670
+Il filo conduttore
+
+00:13:37.670 --> 00:13:38.430
+in tutti questi esempi
+
+00:13:38.430 --> 00:13:38.890
+è lo stesso.
+
+00:13:39.770 --> 00:13:40.690
+Il mittente non aspetta
+
+00:13:40.690 --> 00:13:41.390
+il destinatario
+
+00:13:41.390 --> 00:13:42.190
+e il destinatario
+
+00:13:42.190 --> 00:13:42.910
+non deve essere online
+
+00:13:42.910 --> 00:13:43.490
+quando il messaggio
+
+00:13:43.490 --> 00:13:43.970
+viene inviato.
+
+00:13:44.390 --> 00:13:45.250
+Sono disaccoppiati
+
+00:13:45.250 --> 00:13:46.150
+questo disaccoppiamento
+
+00:13:46.150 --> 00:13:47.010
+rende l'intero sistema
+
+00:13:47.010 --> 00:13:47.610
+più resiliente
+
+00:13:47.610 --> 00:13:48.150
+più scalabile
+
+00:13:48.150 --> 00:13:49.150
+e più facile da modificare.
+
+00:13:49.890 --> 00:13:50.690
+Quadro generale
+
+00:13:50.690 --> 00:13:51.690
+perché tutto si incastra.
+
+00:13:52.330 --> 00:13:53.090
+Quindi cos'è esattamente
+
+00:13:53.090 --> 00:13:53.630
+il service bus?
+
+00:13:54.070 --> 00:13:54.750
+È la spina dorsale
+
+00:13:54.750 --> 00:13:55.950
+che permette a servizi indipendenti
+
+00:13:55.950 --> 00:13:57.030
+di comunicare in modo affidabile
+
+00:13:57.030 --> 00:13:58.090
+senza dipendere uno dall'altro.
+
+00:13:59.090 --> 00:14:00.070
+Tre parole lo riassumono
+
+00:14:00.070 --> 00:14:00.710
+disaccoppiare
+
+00:14:00.710 --> 00:14:01.290
+e bufferizzare
+
+00:14:01.290 --> 00:14:01.790
+e instradare.
+
+00:14:02.250 --> 00:14:03.030
+Disaccoppiare significa
+
+00:14:03.030 --> 00:14:03.550
+che i servizi
+
+00:14:06.530 --> 00:14:07.330
+Ciò significa
+
+00:14:07.330 --> 00:14:08.210
+che puoi modificare
+
+00:14:08.210 --> 00:14:08.750
+un servizio
+
+00:14:08.750 --> 00:14:09.730
+senza rompere gli altri
+
+00:14:09.730 --> 00:14:10.470
+scalarne uno
+
+00:14:10.470 --> 00:14:11.510
+senza influenzare il resto
+
+00:14:11.510 --> 00:14:12.670
+e distribuire aggiornamenti
+
+00:14:12.670 --> 00:14:12.870
+a uno
+
+00:14:12.870 --> 00:14:13.430
+mentre gli altri
+
+00:14:13.430 --> 00:14:14.290
+continuano a funzionare.
+
+00:14:14.550 --> 00:14:15.270
+Bufferizzare significa
+
+00:14:15.270 --> 00:14:16.010
+che quando il traffico
+
+00:14:16.010 --> 00:14:16.570
+aumenta la coda
+
+00:14:16.570 --> 00:14:17.210
+assorbe il carico.
+
+00:14:17.690 --> 00:14:18.430
+Il mittente continua
+
+00:14:18.430 --> 00:14:19.350
+a inviare a piena velocità
+
+00:14:19.350 --> 00:14:20.190
+mentre il destinatario
+
+00:14:20.190 --> 00:14:21.110
+elabora il proprio ritmo
+
+00:14:21.110 --> 00:14:22.370
+così nessuno va in crash
+
+00:14:22.370 --> 00:14:23.190
+o viene sopraffatto
+
+00:14:23.190 --> 00:14:24.370
+e il buffer spiana i picchi
+
+00:14:24.370 --> 00:14:25.110
+e colma le valli.
+
+00:14:26.270 --> 00:14:27.070
+Instradare significa
+
+00:14:27.070 --> 00:14:27.650
+che le code
+
+00:14:27.650 --> 00:14:28.490
+inviano messaggio
+
+00:14:28.490 --> 00:14:29.430
+a un singolo consumatore
+
+00:14:29.430 --> 00:14:30.050
+mentre i topic
+
+00:14:30.050 --> 00:14:31.010
+trasmettono a molti
+
+00:14:31.010 --> 00:14:31.870
+e i filtri assicurano
+
+00:14:31.870 --> 00:14:32.570
+che ogni consumatore
+
+00:14:32.570 --> 00:14:33.210
+riceva solo ciò
+
+00:14:33.210 --> 00:14:33.810
+di cui ha bisogno
+
+00:14:33.810 --> 00:14:34.410
+così il messaggio
+
+00:14:34.410 --> 00:14:35.030
+trova la sua strada
+
+00:14:35.030 --> 00:14:35.570
+nel posto giusto
+
+00:14:35.570 --> 00:14:36.130
+automaticamente.
+
+00:14:36.690 --> 00:14:37.410
+Le code gestiscono
+
+00:14:37.410 --> 00:14:37.990
+la distribuzione
+
+00:14:37.990 --> 00:14:38.890
+del lavoro point to point
+
+00:14:38.890 --> 00:14:39.890
+e i topic gestiscono
+
+00:14:39.890 --> 00:14:40.450
+la trasmissione
+
+00:14:40.450 --> 00:14:41.230
+a molti consumatori.
+
+00:14:41.810 --> 00:14:42.630
+Funzionalità avanzate
+
+00:14:42.630 --> 00:14:43.490
+gestiscono i casilini.
+
+00:14:44.150 --> 00:14:44.730
+Fallimenti vanno
+
+00:14:44.730 --> 00:14:45.110
+nella colla
+
+00:14:45.110 --> 00:14:46.310
+dei messaggi non recapitabili
+
+00:14:46.310 --> 00:14:46.850
+l'ordinamento
+
+00:14:46.850 --> 00:14:47.630
+delle stesse utenti
+
+00:14:47.630 --> 00:14:48.090
+i duplicati
+
+00:14:48.090 --> 00:14:48.770
+vengono rilevati
+
+00:14:48.770 --> 00:14:49.330
+le transazioni
+
+00:14:49.330 --> 00:14:50.390
+mantengono tutto coerente.

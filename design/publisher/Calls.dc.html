@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Expert Connect – open calls</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+.kicker{display:flex;align-items:center;gap:14px;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#3b6391;font-size:15px}
+.kicker:after{content:"";flex:1;height:1px;background:rgba(23,25,28,.14)}
+.x{position:relative}
+.x:before,.x:after{content:"+";position:absolute;top:-10px;font:300 19px/1 Barlow,sans-serif;color:#5d6470;background:#f3f3f2}
+.x:before{left:-6px}.x:after{right:-6px}
+.card{background:#fff;border:1px solid rgba(23,25,28,.14);padding:20px;display:grid;gap:12px;align-content:start}
+.h1{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:52px;line-height:1}
+.h2{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:26px;line-height:1.1}
+.h3{margin:0;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:20px;line-height:1.15}
+.mut{color:#5d6470}
+.sm{font-size:13px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border:1px solid #17191c;background:#fff;color:#17191c;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:15px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn.main{background:#17191c;color:#fff}
+.btn.ac{background:#3b6391;border-color:#3b6391;color:#fff}
+.btn.sm2{padding:6px 12px;font-size:13px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border:1px solid rgba(23,25,28,.2);font-size:13px;background:#fff;white-space:nowrap}
+.chip.on{background:#17191c;color:#fff;border-color:#17191c}
+.tag{display:inline-block;padding:0 7px;font:600 11px/1.8 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:#3b6391;white-space:nowrap}
+.tag.g{background:#2f6b3a}.tag.o{background:#9a4f0f}.tag.k{background:#17191c}.tag.l{background:#e4e6e8;color:#17191c}
+.field{display:grid;gap:6px}
+.field label{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#5d6470}
+.in{border:1px solid rgba(23,25,28,.3);background:#fff;padding:10px 12px;min-height:22px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.av{width:48px;height:48px;flex:none;display:flex;align-items:center;justify-content:center;background:#e4e6e8;font:600 18px/1 'Barlow Condensed',sans-serif;color:#17191c}
+.note{border-left:3px solid #3b6391;background:#eef2f7;padding:10px 14px;font-size:14px}
+.warn{border-left:3px solid #9a4f0f;background:#f7efe7;padding:10px 14px;font-size:14px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid rgba(23,25,28,.14);font-size:14px;vertical-align:top}
+th{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#5d6470;font-weight:600}
+</style>
+</helmet>
+<div style="min-height: 1240px; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5">
+  <header style="border-bottom: 1px solid rgba(23,25,28,.14); background:#f3f3f2">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="Main.dc.html" style="font-size: 20px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #17191c; text-decoration: none">M365<span style="color: #3b6391">.FM</span> <span style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;letter-spacing:.12em;color:#5d6470">Expert Connect</span></a>
+      <nav aria-label="Demo screens" style="display:flex;flex-wrap:wrap;gap:18px;align-items:center"><a href="Main.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">For publishers</a><a href="Search.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Find experts</a><a href="Request.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Post a request</a><a href="Publisher-Inbox.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">My requests</a><a href="Calls.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#17191c;border-bottom:2px solid #3b6391">Open calls</a><a href="Expert-Inbox.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Expert view</a><a href="Moderation.dc.html" style="text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:14px;color:#5d6470">Admin</a></nav>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+        <span style="padding: 1px 10px; border: 1px dashed #9a4f0f; color: #9a4f0f; font: 600 13px/1.8 'Barlow Condensed', sans-serif; letter-spacing: .1em; text-transform: uppercase">Demo · sample data</span>
+        <span class="sm mut" style="font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:.1em;text-transform:uppercase">Anna Keller · Expert</span>
+      </div>
+    </div>
+  </header>
+  <main style="max-width: 1240px; margin: 0 auto; padding: 36px 32px 80px; display: grid; gap: 28px">
+
+    <section style="display:flex;flex-wrap:wrap;gap:20px;align-items:end;justify-content:space-between">
+      <div style="display:grid;gap:10px"><div class="kicker" style="min-width:320px">Open calls</div><h1 class="h1">Topics looking for experts</h1>
+      <p class="mut" style="margin:0;max-width:720px">Publishers post a topic as an open call, experts apply with a short pitch. Sorted by how well the call fits your profile (vector match on topics, contributions and languages).</p></div>
+      <div class="row"><div class="in" style="width:320px">copilot</div><a class="btn main" href="#">Search</a></div>
+    </section>
+    <section style="display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:start">
+      <aside class="card" style="gap:16px">
+        <b class="h3">Filter</b>
+        <div class="field"><label>Sort</label><div class="row"><span class="chip on">Fits me</span><span class="chip">Newest</span><span class="chip">Deadline</span></div></div>
+        <div class="field"><label>Format</label><div class="row"><span class="chip">Quote</span><span class="chip on">Interview</span><span class="chip">Guest article</span><span class="chip">Podcast</span><span class="chip on">Talk</span></div></div>
+        <div class="field"><label>Language</label><div class="row"><span class="chip on">EN</span><span class="chip on">DE</span><span class="chip">+13</span></div></div>
+        <div class="field"><label>Topic</label><div class="in">Copilot ×  Governance ×</div></div>
+        <div class="note sm">Weekly e-mail “New calls in your topics” – on. <a href="Expert-Inbox.dc.html">Settings</a></div>
+      </aside>
+      <div style="display:grid;gap:20px"><div class="card x" style="gap:8px">
+          <div class="row" style="justify-content:space-between"><b class="h3">Call for experts: Copilot in public administration</b><span class="sm" style="color:#2f6b3a;font-weight:600">94% fit to your profile</span></div>
+          <span class="sm mut">Interview · EN · due 28 Nov · Contoso Media</span><div class="row"><span class="chip">Copilot</span><span class="chip">Public sector</span><span class="chip">Governance</span><span class="tag l">Open call</span><span class="sm mut">5 applications</span></div>
+          <div class="field"><label>Your application (max. 600 characters)</label><div class="in" style="min-height:64px">I advise two German federal agencies on Copilot readiness (data classification, works council, BSI requirements) and can share what worked …</div></div><div class="row" style="justify-content:space-between"><span class="sm mut">Formats: Interview · Available: Tue–Thu · 3 of 10 answers today</span><div class="row"><a class="btn sm2" href="#">Save</a><a class="btn sm2 main" href="Publisher-Inbox.dc.html">Apply</a></div></div>
+        </div><div class="card x" style="gap:8px">
+          <div class="row" style="justify-content:space-between"><b class="h3">Podcast guests wanted: Intune for frontline workers</b><span class="sm" style="color:#2f6b3a;font-weight:600">71% fit to your profile</span></div>
+          <span class="sm mut">Podcast guest · DE · due 6 Dec · Tailspin Podcast</span><div class="row"><span class="chip">Intune</span><span class="chip">Frontline</span><span class="chip">Windows 365</span><span class="tag l">Open call</span><span class="sm mut">2 applications</span></div>
+          <div class="row"><a class="btn sm2" href="#">Details</a><a class="btn sm2 main" href="#">Apply</a></div>
+        </div><div class="card x" style="gap:8px">
+          <div class="row" style="justify-content:space-between"><b class="h3">Guest articles: Power Platform CoE in practice</b><span class="sm" style="color:#2f6b3a;font-weight:600">88% fit to your profile</span></div>
+          <span class="sm mut">Guest article · EN · due 15 Dec · Fabrikam Tech Journal</span><div class="row"><span class="chip">Power Platform</span><span class="chip">CoE</span><span class="chip">Governance</span><span class="tag l">Open call</span><span class="sm mut">9 applications</span></div>
+          <div class="row"><a class="btn sm2" href="#">Details</a><a class="btn sm2 main" href="#">Apply</a></div>
+        </div><div class="card x" style="gap:8px">
+          <div class="row" style="justify-content:space-between"><b class="h3">Speakers for a community day track on Purview</b><span class="sm" style="color:#2f6b3a;font-weight:600">79% fit to your profile</span></div>
+          <span class="sm mut">Talk · EN · 20 Mar 2027 · Northwind Community Day</span><div class="row"><span class="chip">Purview</span><span class="chip">Compliance</span><span class="chip">Copilot</span><span class="tag l">Open call</span><span class="sm mut">4 applications</span></div>
+          <div class="row"><a class="btn sm2" href="#">Details</a><a class="btn sm2 main" href="#">Apply</a></div>
+        </div></div>
+    </section>
+
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

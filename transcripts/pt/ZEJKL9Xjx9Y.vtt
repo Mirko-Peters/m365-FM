@@ -1,0 +1,997 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.160
+Disseram a você que adicionar o protocolo de contexto de modelo, MCP para abreviar,
+
+00:00:03.300 --> 00:00:06.440
+ao Copilou Estúdio é fácil. Basta usar um conector personalizado, dizem eles.
+
+00:00:06.800 --> 00:00:09.780
+Tecnicamente, isso é verdade. Funcionalmente, é uma mentira.
+
+00:00:09.940 --> 00:00:13.880
+O mesmo tipo de mentira de, apenas conecte o USB, sem lhe dizer qual lado fica para cima
+
+00:00:13.880 --> 00:00:17.480
+ou que você precisa de um driver. Três edições no registro e uma breve prece aos deuses da nuvem
+
+00:00:17.480 --> 00:00:22.100
+pela estabilidade dos pacotes. O MCP é comercializado como USB para agentes de IA.
+
+00:00:22.260 --> 00:00:26.380
+A ideia parece limpa. Qualquer agente pode conversar com qualquer fonte de conhecimento
+
+00:00:26.380 --> 00:00:29.760
+se ambos seguirem o mesmo protocolo, um aperto de mão universal para contexto.
+
+00:00:29.760 --> 00:00:34.940
+Mas a Microsoft, sempre minimalista, entrega a você apenas a porta. Sem cabo, sem diagrama de pinagem,
+
+00:00:35.160 --> 00:00:39.020
+nem mesmo um aviso de advertência. Então, sim, você pode conectar algo, mas na metade das vezes,
+
+00:00:39.160 --> 00:00:43.460
+é apenas ornamental. O mito persiste porque a interface parece obediente. Adicione uma ferramenta,
+
+00:00:43.640 --> 00:00:48.260
+ela murmura. Filtre pelo protocolo de contexto de modelo. Você clica, um menu suspenso aparece e,
+
+00:00:48.400 --> 00:00:53.220
+pronto, interoperabilidade instantânea. Só que não. Ao que você realmente está se conectando são MCPs
+
+00:00:53.220 --> 00:00:57.980
+integrados, conectados diretamente ao produto. MCP do Dataverse? Isso funciona porque é da própria
+
+00:00:57.980 --> 00:01:02.600
+Microsoft. Seu MCP personalizado? O copilou nem o reconhece até que você construa um tradutor,
+
+00:01:02.800 --> 00:01:06.200
+um conector personalizado que não se comporta como um atalho, mas como uma missão diplomática
+
+00:01:06.200 --> 00:01:10.080
+completa entre sistemas que não compartilham vocabulário ou ritmo. Portanto, hoje vamos
+
+00:01:10.080 --> 00:01:14.560
+desmontar esse mito. Vou mostrar o que o MCP realmente é, porque seu conector não está tão
+
+00:01:14.560 --> 00:01:18.560
+conectado quanto finge e como construir um que genuinamente troca contexto em vez de simular
+
+00:01:18.560 --> 00:01:23.680
+conectividade. MCP não é uma fonte de dados, é uma ponte contextual, o intérprete entre seu copilou e
+
+00:01:23.680 --> 00:01:28.220
+sua inteligência externa. E conectores personalizados não são complementos, são andames de construção
+
+00:01:28.220 --> 00:01:32.460
+para essa ponte. Então, vamos remover o verniz de marketing da Microsoft e observar o que realmente
+
+00:01:32.460 --> 00:01:37.100
+acontece dentro do Copilou Studio quando você pensa que conectou um MCP. A ilusão da simplicidade.
+
+00:01:37.380 --> 00:01:42.000
+À primeira vista, o Copilou Studio faz a integração do MCP parecer tão casual quanto adicionar leite ao
+
+00:01:42.000 --> 00:01:46.540
+café. Clique em adicionar ferramenta, filtre pelo protocolo de contexto de modelo, escolha seu servidor,
+
+00:01:46.740 --> 00:01:51.460
+pronto. Alguns segundos depois, lá está ele, listado orgulhosamente em ferramentas. A maioria dos
+
+00:01:51.460 --> 00:01:55.940
+usuários para por aí e posta em fóruns gabando-se de que seu contexto externo está ativo. Não está.
+
+00:01:56.140 --> 00:02:01.180
+O que você conectou é um placebo. Eis o porquê. Aquele filtro amigável de MCP mostra apenas os
+
+00:02:01.180 --> 00:02:05.980
+integrados da própria Microsoft. MCP do Dataverse, MCP do SharePoint, talvez um para o GitHub, se você
+
+00:02:05.980 --> 00:02:09.960
+tiver sorte. Eles vivem profundamente dentro da mesma infraestrutura de locatário. No momento em que
+
+00:02:09.960 --> 00:02:13.880
+você tenta vincular um MCP externo, digamos, o Microsoft Learn ou sua busca semântica interna,
+
+00:02:14.020 --> 00:02:17.700
+você descobre uma prateleira vazia. Não há slot de importação, nem prompt de autenticação,
+
+00:02:17.700 --> 00:02:22.060
+nem handshake real. A suposta opção de protocolo é, na verdade, apenas uma etiqueta de categoria
+
+00:02:22.060 --> 00:02:25.820
+para ferramentas pré-instaladas. Por baixo do capô, o Copilot exige uma disciplina de
+
+00:02:25.820 --> 00:02:30.880
+formatação muito específica. Ele quer um endpoint HTTP transmissível que esteja em conformidade com o
+
+00:02:30.880 --> 00:02:35.800
+esquema MCP. Requisições moldadas como JSON contextual, respostas emitidas como eventos,
+
+00:02:36.040 --> 00:02:40.300
+sempre transmitindo tokens, não os despejando. Seu serviço externo, não importa quão inteligente,
+
+00:02:40.460 --> 00:02:45.120
+é invisível se não responder nesse dialeto. Sem isso, o Copilot age como um turista que decorou três
+
+00:02:45.120 --> 00:02:49.340
+frases de viagem e insiste que os locais não falam direito. Essa é a mentira central.
+
+00:02:49.540 --> 00:02:53.940
+O que parece, plug-end play, é, na verdade, code-end play. A interface visível esconde a
+
+00:02:53.940 --> 00:02:58.140
+aplicação do esquema que faz o MCP funcionar. Quando você seleciona um MCP no menu, você não
+
+00:02:58.140 --> 00:03:02.260
+está incorporando seu próprio contexto de modelo. Você está invocando um mecanismo de recuperação
+
+00:03:02.260 --> 00:03:07.200
+interno. Ele funciona genialmente bem com índices estilo Bing e apps Dataverse, mas nunca consulta
+
+00:03:07.200 --> 00:03:11.800
+seu endpoint MCP a menos que você crie a ponte manualmente. E aqui reside o paradoxo.
+
+00:03:11.800 --> 00:03:15.860
+O Copilot Studio é, simultaneamente, uma das ferramentas de orquestração mais poderosas
+
+00:03:15.860 --> 00:03:19.660
+que a Microsoft já criou e uma das mais enganosamente limitadas. Ele promete troca
+
+00:03:19.660 --> 00:03:23.800
+universal de contexto, mas entrega amnésia seletiva, a menos que você o ensine novas maneiras
+
+00:03:23.800 --> 00:03:27.640
+via configuração. A maioria dos administradores descobrindo isso pela primeira vez assume que
+
+00:03:27.640 --> 00:03:32.000
+é um erro. Eles seguiram a documentação, importaram a URL, atualizaram três vezes e ainda assim
+
+00:03:32.000 --> 00:03:36.760
+nada aparece. Isso acontece porque eles não construíram a ponte. Eles apenas pintaram um túnel na
+
+00:03:36.760 --> 00:03:41.140
+parede. Reconhecer essa ilusão é o primeiro passo para a competência. Seu painel de conectores
+
+00:03:41.140 --> 00:03:44.740
+não está mentindo por malícia. Ele está apenas narrando a versão simplificada da realidade
+
+00:03:44.740 --> 00:03:48.800
+destinada aos usuários comuns. Mas você não é comum. Você é quem deve fazer as coisas
+
+00:03:48.800 --> 00:03:52.600
+realmente funcionarem. E esse é o primeiro passo para a iluminação. Saber que aquele
+
+00:03:52.600 --> 00:03:56.960
+painelzinho encantador no Copilot Studio está mentindo para você. O que o MCP realmente é?
+
+00:03:57.140 --> 00:04:01.600
+Certo, vamos definir a criatura com a qual estamos lidando. O MCP, o protocolo de contexto de modelo,
+
+00:04:01.820 --> 00:04:05.180
+não é um formato de arquivo ou um rapper de app. É uma língua franca para sistemas de
+
+00:04:05.180 --> 00:04:08.440
+inteligência artificial, uma maneira de cérebros distintos compartilharem não dados,
+
+00:04:08.440 --> 00:04:13.320
+mas o significado sobre os dados. A Microsoft o chama de USB para agentes, não porque transmite
+
+00:04:13.320 --> 00:04:17.900
+bytes, mas porque padroniza o handshake, quem conecta onde, que corrente flui e como ambos
+
+00:04:17.900 --> 00:04:21.620
+concordam que o que está sendo movido é contexto válido, não ruído. Tecnicamente,
+
+00:04:21.820 --> 00:04:25.600
+o MCP define como um agente e uma fonte de contexto trocam metadados estruturados,
+
+00:04:25.880 --> 00:04:30.460
+esquemas de ferramentas, ações, parâmetros e tokens de contexto. Pense nisso como diplomacia
+
+00:04:30.460 --> 00:04:35.920
+internacional. O servidor MCP representa uma nação soberana de informação. Um conjunto de regras sobre
+
+00:04:35.920 --> 00:04:39.800
+como um corpo específico de conhecimento pode ser consultado, resumido ou atualizado.
+
+00:04:39.800 --> 00:04:45.140
+O cliente MCP, neste caso o Copilou Estúdio, é o enviado visitante que fala em nome do usuário.
+
+00:04:45.300 --> 00:04:49.820
+E fazendo a ponte entre os dois está o conector, nosso paciente tradutor que garante que uma consulta
+
+00:04:49.820 --> 00:04:53.740
+ao SharePoint em um idioma se torne uma requisição de contexto post v um em outro.
+
+00:04:53.940 --> 00:04:58.560
+Dentro do protocolo, tudo é JSON, de forma previsível, eficiente e às vezes tediosamente
+
+00:04:58.560 --> 00:05:02.440
+JSON, para que até um modelo de linguagem grande consiga processá-lo sem se distrair.
+
+00:05:02.440 --> 00:05:07.020
+Cada requisição contém uma intenção. Cada resposta carrega tokens de contexto e citações
+
+00:05:07.020 --> 00:05:10.440
+opcionais. Mais interessante ainda, essas respostas são transmitidas via streaming.
+
+00:05:10.620 --> 00:05:14.720
+O Copilou recebe fragmentos parciais enquanto o servidor MCP monta o significado. Isso evita
+
+00:05:14.720 --> 00:05:18.780
+que a IA congele no meio do pensamento esperando pela resposta completa. É uma corrida de revezamento,
+
+00:05:19.000 --> 00:05:23.560
+não uma entrega de encomenda. Agora, a metáfora USB da Microsoft seduz porque sugere simplicidade.
+
+00:05:23.760 --> 00:05:28.320
+Conecte-a em B e os elétrons do conhecimento começam a fluir. Mas essa analogia perde o sentido
+
+00:05:28.320 --> 00:05:33.100
+quase imediatamente. Um cabo USB físico pressupõe pinos fixos, voltagens estáveis e um único tipo
+
+00:05:33.100 --> 00:05:38.180
+de eletricidade. O MCP, por outro lado, negocia esquemas dinâmicos. Cada dispositivo, cada
+
+00:05:38.180 --> 00:05:42.000
+implementação de servidor, pode definir seus próprios verbos, propriedades e recursos
+
+00:05:42.000 --> 00:05:46.100
+contextuais. Imagine um pendrive que altera sua fiação dependendo de onde é conectado.
+
+00:05:46.300 --> 00:05:49.940
+Isso está mais próximo da realidade. Então, o que exatamente fica onde?
+
+00:05:50.100 --> 00:05:54.120
+Na camada base, o servidor MCP contém definições de ferramentas, descrições de ações como
+
+00:05:54.120 --> 00:05:57.920
+pesquisar documentos, criar registros ou listar tabelas, junto com parâmetros e tipos de dados
+
+00:05:57.920 --> 00:06:03.040
+necessários. É o córtex de inteligência. O cliente MCP, o Copilow Studio, hospeda o cérebro
+
+00:06:03.040 --> 00:06:07.100
+do agente que interpreta comandos em linguagem natural e decide quais ações invocar. Entre eles,
+
+00:06:07.300 --> 00:06:11.880
+o conector personalizado implementa o contrato, gerencia a autenticação, valida o esquema e
+
+00:06:11.880 --> 00:06:16.440
+transmite a conversa via HTTP enquanto preserva a estrutura. Quando o Copilow envia um comando,
+
+00:06:16.660 --> 00:06:21.380
+digamos, encontre artigos sobre indexação do SharePoint. Ele não está fazendo scraping de páginas
+
+00:06:21.380 --> 00:06:26.560
+da web. Ele gera uma consulta contextual incorporada em JSON. Envia através do conector para o servidor
+
+00:06:26.560 --> 00:06:31.100
+MCP e recebe de volta um payload contextual estruturado, não texto bruto. Esse payload contém
+
+00:06:31.100 --> 00:06:35.280
+metadados, fontes, pontuações de relevância e trechos de texto que o modelo de linguagem
+
+00:06:35.280 --> 00:06:39.420
+grande então condensa em um português fluente para o usuário. É síntese de contexto, não
+
+00:06:39.420 --> 00:06:43.640
+uma simples recuperação. Sem essa disciplina, o Copilow opera como um papagaio, repetindo resumos
+
+00:06:43.640 --> 00:06:47.920
+de qualquer coisa que lhe seja fornecida. Adicione o MCPI, de repente, ele se lembra das relações.
+
+00:06:48.120 --> 00:06:51.240
+Qual documento referencia qual app, qual campo no Dataverse mapeia para qual
+
+00:06:51.240 --> 00:06:55.080
+propriedade no seu CRM, qual cláusula de licenciamento rege aquela ação? Em essência,
+
+00:06:55.280 --> 00:06:59.560
+o MCP promove o Copilow de um preenchimento automático com Swagger para um analista semi-confiável
+
+00:06:59.560 --> 00:07:03.860
+que realmente entende a topologia dos dados da sua organização. Então, sim, USB para
+
+00:07:03.860 --> 00:07:08.300
+agentes, soa atraente. Mas a interpretação prática é que o MCP impõe uma conversa educada
+
+00:07:08.300 --> 00:07:12.820
+entre sistemas muito específicos. Ele diz ao Copilow Studio para perguntar, posso consultar
+
+00:07:12.820 --> 00:07:17.320
+este esquema? Em vez de disparar, me dê tudo. Essa pequena cortesia é a diferença entre
+
+00:07:17.320 --> 00:07:21.200
+uma alucinação e uma resposta compatível. E aqui está a reviravolta que a Microsoft
+
+00:07:21.200 --> 00:07:25.560
+nunca destaca. O menu suspenso MCP no Copilow Studio já fala esse protocolo, mas apenas
+
+00:07:25.560 --> 00:07:29.140
+com seu próprio serviço. Quando você cria um personalizado, está efetivamente criando
+
+00:07:29.140 --> 00:07:32.620
+um novo dialeto dentro desse tratado. Você está definindo o que o contexto realmente
+
+00:07:32.620 --> 00:07:37.120
+significa dentro das paredes da sua empresa. Saber o que é o MCP, uma gramática estruturada
+
+00:07:37.120 --> 00:07:40.840
+dinâmica para contexto, não uma fonte de dados, lhe dá a teoria necessária antes de
+
+00:07:40.840 --> 00:07:45.220
+cometer o crime da implementação. Porque, em seguida, nós o cometeremos juntos. Nós mesmos
+
+00:07:45.220 --> 00:07:49.140
+construiremos o Handshake, e provaremos que o verdadeiro poder no Copilow Studio não vem do
+
+00:07:49.140 --> 00:07:52.960
+menu, mas da compreensão do contrato. Essa é a nossa heresia prática. Construir seu próprio
+
+00:07:52.960 --> 00:07:57.060
+conector personalizado, totalmente compatível e transmissível, que fala MCP fluentemente em
+
+00:07:57.060 --> 00:08:01.400
+vez de apenas imitar o sotaque. Construindo um conector personalizado real. Agora entramos
+
+00:08:01.400 --> 00:08:05.140
+na parte pela qual todos passam correndo. A construção propriamente dita. A maioria
+
+00:08:05.140 --> 00:08:09.780
+dos tutoriais gesticula vagamente e diz. Apenas importe do GitHub. Eles omitem o campo minado
+
+00:08:09.780 --> 00:08:13.440
+de incompatibilidades de esquema, erros de configuração de host e peculiaridades de autenticação
+
+00:08:13.440 --> 00:08:17.520
+à espera sob aquele botão de aparência inofensiva. Hoje, vamos percorrer isso minuciosamente
+
+00:08:17.520 --> 00:08:21.320
+porque a precisão é a diferença entre um agente que pensa e um que se cala em silêncio.
+
+00:08:21.460 --> 00:08:25.800
+Primeiro, entenda o esqueleto do fluxo de trabalho. Importação do GitHub, configuração
+
+00:08:25.800 --> 00:08:30.260
+de endpoint, publicação do conector. Três ossos. Se perder uma articulação, terá um
+
+00:08:30.260 --> 00:08:33.860
+membro sem vida. Então, vamos começar onde a Microsoft esconde os ossos no Power Apps
+
+00:08:33.860 --> 00:08:38.100
+Make. É lá que os conectores personalizados nascem, não no Copilow Studio em si. O Copilow
+
+00:08:38.100 --> 00:08:42.500
+é apenas o consumidor final de qualquer articulação que você criar aqui. Ao clicar em novo conector
+
+00:08:42.500 --> 00:08:46.980
+personalizado, você recebe opções tiradas da cartola do mágico, do Open App, do Postman,
+
+00:08:46.980 --> 00:08:51.340
+do zero ou a abençoada importação do GitHub. Escolha a última, porque a Microsoft mantém
+
+00:08:51.340 --> 00:08:55.560
+silenciosamente um repositório de modelos de conector MCP em sua ramificação de desenvolvedor.
+
+00:08:55.680 --> 00:09:00.040
+O modelo que você realmente precisa é rotulado como MCP Streamable. Qualquer coisa que não
+
+00:09:00.040 --> 00:09:03.840
+seja Streamable, parecerá funcional até o instante em que o Copilow fizer a primeira
+
+00:09:03.840 --> 00:09:08.860
+pergunta, momento em que falhará silenciosamente. Sem fogos de artifício, sem erros, apenas um
+
+00:09:08.860 --> 00:09:13.980
+nada educado. Após escolher MCP Streamable, aponte para ramificação, dev, e clique em Continuar.
+
+00:09:13.980 --> 00:09:18.660
+O sistema busca um bloco de JSON definindo os parâmetros do conector. Autenticação,
+
+00:09:18.900 --> 00:09:23.920
+geralmente nenhuma, pois o MCP depende atualmente do isolamento de locatário, alguns corpos de
+
+00:09:23.920 --> 00:09:28.060
+solicitação obrigatórios e mapeamentos de cabeçalho críticos para streaming. Não toque
+
+00:09:28.060 --> 00:09:32.320
+neles ainda. O instinto de todos é ajustá-los imediatamente, o que inevitavelmente quebra
+
+00:09:32.320 --> 00:09:36.520
+toda a sequência. Role a tela até, host, hospedeiro. A documentação da Microsoft menciona
+
+00:09:36.520 --> 00:09:40.380
+isso como uma nota de rodapé, mas aqui está a verdade. O campo host espera apenas o nome
+
+00:09:40.380 --> 00:09:45.660
+do domínio. Se você colar uma URL completa com HTTPS ou deixar o caminho final para a
+
+00:09:45.660 --> 00:09:50.660
+app MCP, a etapa de validação do conector falha em um silêncio absoluto. Ele diz que
+
+00:09:50.660 --> 00:09:55.840
+tudo foi validado corretamente e, em seguida, se recusa a aparecer no Copilow. Remova o prefixo,
+
+00:09:56.140 --> 00:10:01.760
+corte o app MCP e forneça apenas o host puro. Sem barras, sem esquema. Esse movimento cirúrgico
+
+00:10:01.760 --> 00:10:05.980
+resolve 80% das reclamações de, não aparece no meu menu suspenso. Em seguida, você deve
+
+00:10:05.980 --> 00:10:11.720
+ajustar a URL base. O modelo inclui, app MCP por padrão. Remova isso. Por quê? Porque
+
+00:10:11.720 --> 00:10:16.620
+quando o Copilow concatena caminhos internamente, ele já assume esse prefixo. Se deixar, você
+
+00:10:16.620 --> 00:10:22.920
+criará raízes duplicadas como, app MCP, app MCP, cert, que o servidor rejeita por ser
+
+00:10:22.920 --> 00:10:28.120
+redundante e ridículo. Corte sem dó. Agora, nomeie sua criação com clareza. Resista
+
+00:10:28.120 --> 00:10:32.400
+à tentação de chamá-lo de, conector de teste. O caixa interno do Copilow respeita apenas
+
+00:10:32.400 --> 00:10:36.540
+nomes únicos. Duplique um e seu novo conector se esconderá como uma criança tímida atrás
+
+00:10:36.540 --> 00:10:42.300
+do primeiro. Adote títulos descritivos, Microsoft Learn MCP, ou, Internal Research Context MCP.
+
+00:10:42.460 --> 00:10:47.700
+Então, clique em Criar. Nesta fase, a interface da Microsoft faz uma longa pausa teatral. O
+
+00:10:47.700 --> 00:10:51.560
+serviço de conector valida a estrutura, registra metadados no ambiente e os distribui entre
+
+00:10:51.560 --> 00:10:55.860
+data centers regionais. Isso pode levar até 5 minutos. Durante esses minutos, você ficará
+
+00:10:55.860 --> 00:10:59.660
+tentado a atualizar a página. Não faça isso. Cada atualização reinicia o caixa, estendendo
+
+00:10:59.660 --> 00:11:03.500
+sua espera como sísifo com a roda de carregamento. Vá buscar uma bebida. Quando a validação
+
+00:11:03.500 --> 00:11:07.540
+for concluída com sucesso, o conector passará a existir oficialmente em seu ambiente. Mas
+
+00:11:07.540 --> 00:11:12.000
+nascer não é o mesmo que ser útil. O próximo passo, ignorado por quase todos os blogs de
+
+00:11:12.000 --> 00:11:15.980
+início rápido, é o alinhamento de esquema. As respostas do servidor MCP incluem campos
+
+00:11:15.980 --> 00:11:19.980
+como descrição da ação, esquema da ferramenta e ID do token de fluxo. O Copilow os espera
+
+00:11:19.980 --> 00:11:24.820
+exatamente como definidos na especificação MCP. Se o seu servidor MCP externo usar maiúsculas
+
+00:11:24.820 --> 00:11:29.440
+de forma diferente ou alinhar metadados sob Payload Response, em vez de Data To, o Copilow
+
+00:11:29.440 --> 00:11:33.960
+descartará como algo sem sentido. Sem aviso, sem erro, apenas, novamente, silêncio.
+
+00:11:33.960 --> 00:11:38.840
+O LLM por trás do Copilow interpreta isso como, eu não sei como ajudar com isso. Parabéns,
+
+00:11:39.040 --> 00:11:43.200
+você construiu um vazio funcional. Para alinhar corretamente, abra a guia de definição
+
+00:11:43.200 --> 00:11:46.980
+no seu conector recém criado. Expanda a primeira operação, geralmente consulta
+
+00:11:46.980 --> 00:11:50.860
+ou obter contexto, e compare sua sessão de respostas com o esquema MCP mais recente
+
+00:11:50.860 --> 00:11:54.540
+no GitHub. Ajuste os nomes e tipos das propriedades para que arrays sejam arrays, objetos sejam
+
+00:11:54.540 --> 00:11:57.580
+objetos e todas as strings usem as letras maiúsculas e minúsculas corretas. Sim,
+
+00:11:57.780 --> 00:12:02.380
+parece um trabalho burocrático. Bem-vindo à diplomacia. Tradutores não improvisam a gramática.
+
+00:12:02.380 --> 00:12:05.680
+Assim que o alinhamento estiver concluído, altere o suporte a streaming para sim.
+
+00:12:05.880 --> 00:12:09.480
+Novamente, a documentação coloca isso atrás de um menu suspenso chamado Configurações
+
+00:12:09.480 --> 00:12:12.620
+Avançadas Opcionais, como se fosse um acompanhamento e não o prato principal.
+
+00:12:12.780 --> 00:12:16.900
+Mas o Copilow exige endpoints transmissíveis porque ele renderiza as respostas da IA de forma
+
+00:12:16.900 --> 00:12:20.680
+incremental. Se você não marcar essa opção, o conector tecnicamente autentica, mas expira no
+
+00:12:20.680 --> 00:12:24.140
+meio da resposta, produzindo frases incompletas ou, pior, markdown que termina no meio de uma
+
+00:12:24.140 --> 00:12:27.880
+palavra. Alguém invariavelmente pergunta. Não posso apenas usar sincronização? Não.
+
+00:12:28.100 --> 00:12:32.080
+O MCP espera fluxos tokenizados, não despejos em massa, justamente para manter o fluxo da
+
+00:12:32.080 --> 00:12:35.440
+conversa vivo. Pense nisso como alimentar o modelo de linguagem grande por meio de soro
+
+00:12:35.440 --> 00:12:39.300
+intravenoso em vez de empurrar uma refeição inteira goela abaixo. O soro permite que ele
+
+00:12:39.300 --> 00:12:43.400
+pense enquanto come. Nesse ponto, você pode acreditar que o sucesso está à vista. Você
+
+00:12:43.400 --> 00:12:47.140
+volta ao Copilow Studio, clica em Adicionar ferramenta, filtra por MCP e atualiza repetidamente
+
+00:12:47.140 --> 00:12:50.940
+quando seu conector não aparece. Aqui está a verdade inconveniente. A propagação no ambiente
+
+00:12:50.940 --> 00:12:54.620
+leva alguns minutos a mais do que a publicação. O Workspace precisa sincronizar sua lista de
+
+00:12:54.620 --> 00:12:58.480
+conectores com o serviço do Power Platform. Ficar atualizando a página atrasa a sincronização.
+
+00:12:58.740 --> 00:13:03.700
+O administrador eficiente se afasta. O impaciente se coloca em um paradoxo temporal criado por
+
+00:13:03.700 --> 00:13:07.940
+si mesmo. Quando seu conector finalmente aparecer, você notará algo sutilmente diferente dos
+
+00:13:07.940 --> 00:13:12.680
+nativos da Microsoft. Seu ícone não tem o emblema integrado. Tudo bem, você criou algo
+
+00:13:12.680 --> 00:13:17.920
+único. Selecione-o, escolha Adicionar e Autentique, se solicitado. O Copilow agora estabelece uma
+
+00:13:17.920 --> 00:13:21.960
+vinculação com esse conector, recuperando seus metadados de ferramenta, título, descrição
+
+00:13:21.960 --> 00:13:26.360
+e parâmetros. A presença desses metadados é a prova de que o handshake foi bem sucedido.
+
+00:13:26.580 --> 00:13:30.700
+Se você não vir nada, revise o alinhamento do seu esquema. O endpoint está falando, mas
+
+00:13:30.700 --> 00:13:34.660
+o Copilow não consegue entender o sotaque. Restam duas armadilhas, ambas deliciosamente
+
+00:13:34.660 --> 00:13:39.780
+estúpidas. Primeiro, validação de certificado. Se o seu servidor MCP usa TLS autoassinado e
+
+00:13:39.780 --> 00:13:43.300
+você não adicionou esse certificado ao ambiente do conector, as conversas morrerão na conexão.
+
+00:13:43.300 --> 00:13:47.340
+Use um certificado válido emitido por uma K pública ou carregue seu certificado raiz pelas
+
+00:13:47.340 --> 00:13:52.340
+configurações do Power Platform. Segundo, orçamento de tempo limite. Endpoints transmissíveis
+
+00:13:52.340 --> 00:13:56.880
+devem responder com o cabeçalho Transfer Encoding Shunked. Sem ele, o Copilow assume um fechamento
+
+00:13:56.880 --> 00:14:01.220
+HTTP padrão para sinalizar o fim da mensagem e a interrompe prematuramente. Teste com Kel
+
+00:14:01.220 --> 00:14:05.280
+antes de acusar a Microsoft. Aqui está uma microhistória que encapsula perfeitamente
+
+00:14:05.280 --> 00:14:09.280
+esse ritual. Um administrador reclamou certa vez que seu conector parou de funcionar de repente.
+
+00:14:09.580 --> 00:14:13.100
+Após uma inspeção forense, descobrimos que seu engenheiro de hospedagem havia colocado
+
+00:14:13.100 --> 00:14:17.900
+o Claudifler na frente do Endpoint MCP, supostamente para a caixa. E a Claudifler, em sua ignorância
+
+00:14:17.900 --> 00:14:21.040
+benevolente, removeu os cabeçalhos de streaming para comprimir o tráfego.
+
+00:14:21.380 --> 00:14:25.840
+Resultado? Silêncio total. Moral, o canal não se importa com suas otimizações. Siga a
+
+00:14:25.840 --> 00:14:30.200
+especificação ou aproveite o purgatório da depuração. Agora, a epifania. Todo esse processo
+
+00:14:30.200 --> 00:14:34.640
+não é uma complexidade maliciosa. A Microsoft não armou armadilhas, ela apenas pressupõe paciência
+
+00:14:34.640 --> 00:14:39.040
+profissional. A mentira do conector personalizado persiste porque a interface omite as etapas de baixo
+
+00:14:39.040 --> 00:14:43.680
+nível que garantem a precisão. Ela diz uma meia-verdade para o público casual. Se você ainda
+
+00:14:43.680 --> 00:14:47.860
+está assistindo, já transcendeu esse público. Quando feito corretamente, o que você construiu
+
+00:14:47.860 --> 00:14:51.860
+é mais que um conector, é uma cabeça de ponte para a verdade. Seu copilô não fingirá mais
+
+00:14:51.860 --> 00:14:56.740
+conhecimento vindo do Bing. Ele realizará uma troca de contexto autenticada, compatível com esquema e
+
+00:14:56.740 --> 00:15:00.660
+transmissível com qualquer camada de inteligência que você expuser. Na próxima vez que alguém na sua
+
+00:15:00.660 --> 00:15:05.040
+organização disser, eu conectei o MCP, mas ele não está respondendo. Você sorrirá sombriamente e
+
+00:15:05.040 --> 00:15:08.980
+responderá, sim, porque você construiu uma pintura de túnel, não uma ponte. Agora que a ponte
+
+00:15:08.980 --> 00:15:13.340
+está erguida, vamos verificar se a travessia realmente funciona. Porque uma bela ponte
+
+00:15:13.340 --> 00:15:19.660
+pêncio ainda é inútil até que algo a atravesse. Testando e verificando a integração. A verificação
+
+00:15:19.660 --> 00:15:24.320
+é a parte que todos tratam como algo secundário, até que seu agente sorri educadamente e diz,
+
+00:15:24.600 --> 00:15:29.580
+não sei como ajudar com isso. Essa frase é a versão do copilô para a tela azul. O protocolo
+
+00:15:29.580 --> 00:15:34.460
+falhou em algum ponto entre o conector e o modelo. Testar o MCP não é glamuroso, mas é como você
+
+00:15:34.460 --> 00:15:38.620
+prova que construiu uma ponte e não uma performance artística. Comece com o teste de fogo.
+
+00:15:38.620 --> 00:15:43.320
+O copilô Studio realmente vê seu conector no painel de ferramentas, filtre pelo protocolo
+
+00:15:43.320 --> 00:15:47.780
+de contexto do modelo mais uma vez. Seu título recém-criado, talvez Microsoft Learn MCP, deve
+
+00:15:47.780 --> 00:15:52.420
+aparecer ao lado do MCP oficial do Dataverse. Se não aparecer, pare aí mesmo. Visibilidade
+
+00:15:52.420 --> 00:15:56.220
+equivale a registro. Sem entrada significa que o esquema ou o host ainda estão desalinhados.
+
+00:15:56.440 --> 00:16:00.480
+Assumindo que ele apareça, adicione a ferramenta ao seu copilô. No momento em que você o conecta,
+
+00:16:00.600 --> 00:16:04.700
+o copilô busca metadados descritivos do servidor MCP, um dicionário de ferramentas disponíveis,
+
+00:16:04.700 --> 00:16:08.260
+cada uma com parâmetros e descrições em linguagem simples. Se você notar o campo de
+
+00:16:08.260 --> 00:16:12.860
+descrição preenchido com Microsoft Docs Search ou algo similar, parabéns, o handshake funcionou.
+
+00:16:13.000 --> 00:16:17.120
+O contexto agora está sendo reconhecido, não adivinhado. Para verificar a funcionalidade,
+
+00:16:17.340 --> 00:16:21.500
+você precisa de uma pergunta controlada. Use o Microsoft Learn MCP como campo de prova,
+
+00:16:21.760 --> 00:16:26.300
+pois é público, educado e improvável de explodir. Pergunte ao seu agente. Como configura o SharePoint
+
+00:16:26.300 --> 00:16:30.460
+como uma fonte de conhecimento? Se seu pipeline estiver intacto, observe a telemetria.
+
+00:16:30.460 --> 00:16:34.940
+O prompt viaja por este caminho. Usuário, conector personalizado, servidor MCP,
+
+00:16:35.220 --> 00:16:39.940
+modelo de linguagem grande, resposta com citações. Cada etapa introduz uma falha potencial.
+
+00:16:40.340 --> 00:16:46.200
+Quando a resposta retorna um inglês incoerente com citações em Markdown ligando a Santa Trindade.
+
+00:16:46.660 --> 00:16:51.640
+Conexão, compreensão e contextualização. O próprio Markdown é a prova de que o modo
+
+00:16:51.640 --> 00:16:55.940
+de streaming funciona corretamente. Você verá o texto ser renderizado incrementalmente, frase,
+
+00:16:55.940 --> 00:16:59.980
+pausa, frase, citação, em vez de despejar tudo de uma vez. Esse ritmo é o batimento
+
+00:16:59.980 --> 00:17:03.940
+cardíaco revelador do MCP, mas se algo falha, o copilô torna-se passivo agressivo.
+
+00:17:04.120 --> 00:17:08.400
+Vamos decodificar seus humores. Resposta vazia. Você digitou uma consulta válida,
+
+00:17:08.520 --> 00:17:12.240
+o copilô concordou e não entregou nada. Isso é desalinhamento de URL, provavelmente com
+
+00:17:12.240 --> 00:17:16.760
+prefixo duplo app MCP. Revise o caminho completo na aba de definição do seu conector, remova a
+
+00:17:16.760 --> 00:17:20.820
+redundância, publique novamente, aguarde os 5 minutos obrigatórios. Markdown truncado,
+
+00:17:21.000 --> 00:17:25.660
+a resposta chega, mas termina no meio da frase como um estagiário entediado saindo no meio da conversa.
+
+00:17:25.660 --> 00:17:30.580
+Seu endpoint não está declarando transferencoding chunqued. Em outras palavras, você prometeu
+
+00:17:30.580 --> 00:17:34.340
+streaming, mas enviou um despejo estático. Alinhe seus cabeçalhos com as regras de streaming
+
+00:17:34.340 --> 00:17:40.220
+do HTTP 1,1. Não sei como ajudar com isso. Esta causa um pavor existencial. Significa que o copilô
+
+00:17:40.220 --> 00:17:43.940
+consegue alcançar o conector, mas não consegue passar o esquema. Os nomes das suas propriedades
+
+00:17:43.940 --> 00:17:48.680
+divergem da especificação MCP ou falta um objeto aparente. Compare novamente com o JSON de referência
+
+00:17:48.680 --> 00:17:53.000
+da Microsoft. A correção não é mística, apenas burocrática. E se você receber falhas de conexão,
+
+00:17:53.000 --> 00:17:56.760
+inspecione sua cadeia de certificados SSL. Certificados autoassinados ou expirados
+
+00:17:56.760 --> 00:18:00.100
+frequentemente causam rejeições silenciosas porque os serviços da Power Platform desconfiam
+
+00:18:00.100 --> 00:18:04.620
+de raízes não verificadas. Substitua por um emitido por uma K confiável ou carregue o certificado
+
+00:18:04.620 --> 00:18:10.040
+raiz explicitamente. Agora, o teste de confirmação não é apenas técnico, é lógico. Faça perguntas
+
+00:18:10.040 --> 00:18:14.840
+variadas para detectar desvio semântico. Mostre-me documentos de indexação do SharePoint. Deve acionar
+
+00:18:14.840 --> 00:18:19.220
+a mesma ação de pesquisa de docs da Microsoft que, como o SharePoint, indexa arquivos. Word indiferente,
+
+00:18:19.440 --> 00:18:22.960
+escolha de ferramenta idêntica. Isso é compreensão contextual, não recuperação por palavra-chave.
+
+00:18:23.120 --> 00:18:26.880
+Se as respostas permanecerem estáveis entre as frases, seu copilou está oficialmente fluente.
+
+00:18:27.100 --> 00:18:31.040
+Aqui está o truque de diagnóstico que poucos mencionam. Observe os cabeçalhos de stream na
+
+00:18:31.040 --> 00:18:34.440
+aba de rede do seu navegador. Você deve ver blocos de resposta prefixados por data,
+
+00:18:34.660 --> 00:18:38.860
+seguidos por objetos JSON que representam tokens incrementais. Cada bloco corresponde à parte
+
+00:18:38.860 --> 00:18:42.640
+da resposta. Se você vir uma única carga útil massiva no final do stream, você perdeu o streaming
+
+00:18:42.640 --> 00:18:46.860
+e corre risco de timeouts em consultas mais longas. Conceitualmente, pense no teste como reger uma
+
+00:18:46.860 --> 00:18:52.720
+orquestra. O servidor MCP toca os instrumentos. Dados, esquema, índices. O conector empunha a batuta.
+
+00:18:52.720 --> 00:18:57.700
+O copilou é o ouvido do seu regente, interpretando o ritmo. Se um músico atrasa ou começa no tom
+
+00:18:57.700 --> 00:19:02.580
+errado, a música colapsa em ruído. A verificação é o seu ensaio, alinhando o tempo de todos
+
+00:19:02.580 --> 00:19:05.140
+antes do show para executivos que assumem que é mágica.
+
+00:19:05.140 --> 00:19:10.200
+Quando cada sessão harmoniza, despacho de prompt, troca HTTP, sequenciamento de stream,
+
+00:19:10.480 --> 00:19:15.220
+você testemunhará um pequeno milagre. Respostas consistentes, citadas e governadas pela empresa,
+
+00:19:15.480 --> 00:19:19.700
+em vez do jazz improvisado que o copilou usa por padrão. Só então você pode declarar a
+
+00:19:19.700 --> 00:19:24.680
+integração concluída. Você alcançou a camada mecânica do MCP, o transporte confiável de contexto.
+
+00:19:24.920 --> 00:19:28.640
+Então sim, alegre-se com os pequenos resultados de teste, mas lembre-se de que eles não são o final.
+
+00:19:28.820 --> 00:19:32.880
+Eles são o sinal diagnóstico confirmando que seu coração de IA agora bate no ritmo do pulso dos seus dados.
+
+00:19:32.880 --> 00:19:37.640
+O mecânico está feito. A seguir, confrontamos o filosófico. Por que alguém deveria se importar
+
+00:19:37.640 --> 00:19:41.200
+que essa sinfonia complexa sequer exista? Por que isso importa além da demonstração?
+
+00:19:41.460 --> 00:19:46.940
+Aqui está a verdade desconfortável. Configurar o MCP não é um truque de festa. É infraestrutura.
+
+00:19:47.160 --> 00:19:51.520
+Enquanto outros buscam respostas surpreendentes, você está construindo a constituição que rege
+
+00:19:51.520 --> 00:19:55.860
+como a IA na sua empresa troca a verdade. O protocolo de contexto de modelo padroniza essa
+
+00:19:55.860 --> 00:20:00.640
+verdade. Cada consulta, cada recuperação, tudo limitado pela conformidade de esquema. Sem ele,
+
+00:20:00.640 --> 00:20:05.020
+o copilô simplesmente embeleza. Com o MCP, ele raciocina dentro de limites definidos.
+
+00:20:05.200 --> 00:20:08.680
+Essa é a distinção entre imaginação e governança, entre um estagiário criativo e
+
+00:20:08.680 --> 00:20:12.840
+um analista em conformidade regulatória. Para as empresas, isso é profundamente importante.
+
+00:20:13.060 --> 00:20:17.040
+Um MCP devidamente integrado garante que cada resposta do copilô se origine de sistemas
+
+00:20:17.040 --> 00:20:21.820
+sancionados, SharePoint, Dataverse, apps internas, em vez de fragmentos coletados vagando
+
+00:20:21.820 --> 00:20:27.020
+pelo Bing. Sua IA agora consulta fontes primárias, não rumores. A segurança segue naturalmente.
+
+00:20:27.020 --> 00:20:31.680
+Em 2025, pesquisadores de segurança registraram picos em violações ligadas a conectores personalizados
+
+00:20:31.680 --> 00:20:35.300
+mal configurados, endpoints com excesso de permissões deixando dados vazarem entretenantes.
+
+00:20:35.460 --> 00:20:40.020
+A integração MCP feita corretamente reforça os princípios de confiança zero. O conector atua
+
+00:20:40.020 --> 00:20:44.240
+como um posto de controle de embaixada. Privilégio mínimo aplicado, credenciais com escopo definido,
+
+00:20:44.460 --> 00:20:48.360
+contexto trocado apenas sob tratados definidos. Equipes de governança apreciam um valor ainda
+
+00:20:48.360 --> 00:20:53.560
+mais profundo, a auditabilidade. Cada transação MCP produz logs explícitos. Quem perguntou,
+
+00:20:53.560 --> 00:20:57.620
+qual esquema respondeu, qual metadado foi retornado. Esse é um rastro documental que
+
+00:20:57.620 --> 00:21:01.380
+seu oficial de conformidade pode abraçar à noite. Compare isso com alucinações de
+
+00:21:01.380 --> 00:21:04.220
+IA generativa cujas origens estão em algum lugar na internet.
+
+00:21:04.460 --> 00:21:09.680
+A preparação para o futuro sela o argumento. À medida que a Microsoft, a OpenAI e outros
+
+00:21:09.680 --> 00:21:15.020
+convergem para protocolos interagentes padronizados, a conformidade com o MCP evoluirá de curiosidade
+
+00:21:15.020 --> 00:21:19.980
+para requisito. Setores regulamentados, finanças, saúde, governo, exigirão isso para sistemas
+
+00:21:19.980 --> 00:21:24.060
+de IA que trocam dados contextuais. Quando esse memorando chegar, você não precisará correr.
+
+00:21:24.240 --> 00:21:27.860
+Você já terá uma ponte compatível funcionando silenciosamente em produção. Portanto,
+
+00:21:28.040 --> 00:21:31.520
+quando os colegas descartarem sua configuração trabalhosa como excesso de engenharia, sorria
+
+00:21:31.520 --> 00:21:36.820
+calmamente. Governança sempre parece burocracia até que a violação ocorra. Então, parece previsão.
+
+00:21:37.040 --> 00:21:40.980
+Faça certo uma vez, e cada instância do copilô que você implantar depois herdará essa disciplina,
+
+00:21:41.200 --> 00:21:45.100
+consciência contextual dentro de limites controlados. Esse é o ponto além da demonstração.
+
+00:21:45.380 --> 00:21:49.100
+Você não está apenas conectando um protocolo, você está definindo a memória institucional
+
+00:21:49.100 --> 00:21:52.540
+em forma de máquina. Da próxima vez que o copilô responder a uma consulta regulatória
+
+00:21:52.540 --> 00:21:56.040
+usando a fonte exata e a cadeia de citação que você autorizou, lembre-se deste momento,
+
+00:21:56.260 --> 00:21:59.780
+das horas de ajuste de URL, correspondência de esquema e verificações de sanidade.
+
+00:21:59.940 --> 00:22:02.940
+Essa é a engenharia invisível por trás de toda IA responsável.
+
+00:22:03.120 --> 00:22:07.220
+Agora, com a satisfação moral restaurada e a ponte estruturalmente sólida, resta uma pergunta.
+
+00:22:07.420 --> 00:22:10.940
+Você continuará construindo uma inteligência disciplinada ou deixará a simplicidade do marketing
+
+00:22:10.940 --> 00:22:15.960
+seduzi-lo de volta ao caos? O caminho eficiente é óbvio. Adicionar o MCP não é apenas apertar
+
+00:22:15.960 --> 00:22:19.760
+um botão. É religar o cérebro do Copilô Studio para que ele pare de alucinar e comece
+
+00:22:19.760 --> 00:22:23.860
+a raciocinar. A promessa preguiçosa de, apenas use um conector personalizado, desmorona quando
+
+00:22:23.860 --> 00:22:27.060
+você percebe que esse conector não é uma porta, é um corredor inteiro que você precisa
+
+00:22:27.060 --> 00:22:31.280
+construir, reforçar e testar contra falhas. Mas, uma vez concluído, isso muda como todo
+
+00:22:31.280 --> 00:22:35.100
+copilô futuro se comporta. O que você realizou é um sistema de alfabetização estrutural
+
+00:22:35.100 --> 00:22:39.340
+projetado para esconder suas conexões. Você ensinou o Copilô Studio a solicitar contexto
+
+00:22:39.340 --> 00:22:43.160
+educadamente, a autenticar antes de falar e a retornar citações em vez de ficção
+
+00:22:43.160 --> 00:22:47.640
+criativa. Essa disciplina o transforma de um chatbot chamativo em um analista compatível.
+
+00:22:47.840 --> 00:22:51.800
+E sim, exigiu paciência, validação de esquema e uma tolerância heróica aos atrasos de atualização
+
+00:22:51.800 --> 00:22:56.120
+da Microsoft. Mas tudo que vale a pena confiar exige isso. A suposta mentira do conector personalizado
+
+00:22:56.120 --> 00:22:59.760
+não é uma conspiração, é marketing de simplificação. A Microsoft diz a verdade
+
+00:22:59.760 --> 00:23:04.420
+adequada para demonstrações. Você construiu a verdade adequada para a produção. Você agora
+
+00:23:04.420 --> 00:23:08.800
+sabe que o Model Context Protocol é menos, plug-in de play, e mais, plug-in de negocio e termos
+
+00:23:08.800 --> 00:23:12.200
+de tratado. Portanto, trate cada conector que você publicar como uma emenda constitucional.
+
+00:23:12.200 --> 00:23:16.040
+Direitos mínimos, regras rígidas, resultados verificáveis. É assim que você escala a
+
+00:23:16.040 --> 00:23:20.360
+governança sem sacrificar a velocidade. Ignore isso e você passará suas noites explicando
+
+00:23:20.360 --> 00:23:24.480
+aos executivos por que o chatbot citou o Bing em vez da política da empresa. Garanta seu
+
+00:23:24.480 --> 00:23:28.940
+caminho de atualização, inscreva-se, ative as notificações e deixe o conhecimento disciplinado
+
+00:23:28.940 --> 00:23:32.440
+chegar automaticamente. Sem verificações manuais, sem preocupações com demonstrações
+
+00:23:32.440 --> 00:23:35.700
+que funcionam pela metade, apenas entrega contínua de inteligência que respeita o contexto
+
+00:23:35.700 --> 00:23:38.800
+e a conformidade. A entropia vence a menos que você escolha a estrutura.
+
+00:23:38.800 --> 00:23:43.360
+Inscrever-se é estrutura. Pressione seguir, continue construindo uma IA racional, e a próxima
+
+00:23:43.360 --> 00:23:47.160
+atualização chegará no prazo como um conector configurado corretamente, executando exatamente
+
+00:23:47.160 --> 00:23:49.820
+uma vez e transmitindo a verdade em tempo real. Prossiga.

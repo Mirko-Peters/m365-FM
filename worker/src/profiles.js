@@ -1,16 +1,27 @@
 // Experten- und Firmenprofile, Programme (MVP/MCT/...), Kanaele mit Feeds, Upvotes, Bestaetigungen
+import { scopeOf, can, gate, inScope, logEdit, roleOf } from "./perm.js";
+import { decide } from "./editor.js";
+import { syncAutoRoles } from "./roles.js";
 import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./sections.js";
 import { sanitize } from "./wiki.js";
 import { cleanText, rateLimit } from "./util.js";
 import { baseIds, knownIds, validate, trustedUser, entityMap } from "./entities.js";
 import { findExperts } from "./experts.js";
 import { computeLevels } from "./levels.js";
+import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
+import { checkKindIds } from "./kinds.js";
+import { recordInvite } from "./inviter.js";
+import { publicKindSql, publicItemSql, FEED_DAYS, HIDDEN_MOD } from "./feedpolicy.js";
+import { createOrgEntity, findOrgEntity, setOrgEntity, unclaimedOrgOf, adoptOrg } from "./orgpair.js";
+import { cleanAddress, BIZ_MAX } from "./claimverify.js";
 
-export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner"];
+export const PROGRAMS = ["mvp", "mct", "rd", "msa", "ms_employee", "partner", "gde"];   // gde: Google Developer Experts (MVP-Tracker, format=gde)
 export const RELATIONS = ["colleague", "manager", "report", "client", "trainer", "student", "cospeaker", "podcast", "community", "mentor", "other"];
 export const KINDS = ["linkedin", "github", "youtube", "x", "mastodon", "bluesky", "twitch", "spotify", "apple", "amazon", "deezer", "instagram", "tiktok", "facebook", "blog", "podcast", "newsletter", "website", "other"];
 const KIND_HOST = { linkedin: /(^|\.)linkedin\.com$/, github: /(^|\.)github\.com$/, youtube: /(^|\.)(youtube\.com|youtu\.be)$/, x: /(^|\.)(x\.com|twitter\.com)$/, twitch: /(^|\.)twitch\.tv$/, bluesky: /(^|\.)bsky\.app$/, spotify: /(^|\.)spotify\.com$/, apple: /(^|\.)(podcasts|music)\.apple\.com$/, amazon: /(^|\.)(music\.amazon\.[a-z.]+|audible\.[a-z.]+)$/, deezer: /(^|\.)deezer\.com$/, instagram: /(^|\.)instagram\.com$/, tiktok: /(^|\.)tiktok\.com$/, facebook: /(^|\.)(facebook\.com|fb\.com)$/ };
 const HANDLE = /^[a-z0-9][a-z0-9-]{2,29}$/, ID = /^[a-z0-9-]{2,48}$/;
+// Feste Unterpfade von /api/profile/ (me, business, company) stehen vor der Handle-Route /api/profile/<handle> und wuerden ein gleichnamiges Profil verdecken
+export const RESERVED_HANDLES = new Set(["me", "business", "company"]);
 const SIZES = ["1", "2-10", "11-50", "51-200", "201-1000", "1000+"];
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
@@ -32,11 +43,23 @@ export async function ownedEntity(env, user, o) {
       if (v.err) return "";
       await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,'live',?)").bind(o.eid, JSON.stringify(v.data), "Selbst verwaltet", user.id, now()).run(); created = true;
     }
-    if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO NOTHING").bind(o.eid, user.id, now()).run();
+    if (created || user.admin) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(o.eid, user.id, now()).run();
     return o.eid;
   } catch (e) { return ""; }
 }
 const slug = (s) => String(s || "").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 24);
+
+// Firmenkonto mit einer Firmen-Entitaet verknuepfen (Feld eid, z. B. "ifakt"): die oeffentlichen Mitglieder erscheinen dann auf der Entitaetsseite.
+// Bestaetigt nur, wenn die Entitaet vom Typ org ist und der Nutzer sie bestaetigt beansprucht hat (oder Redaktion/Admin ist) - sonst koennte
+// jede Firma ihr Team z. B. auf die Microsoft-Seite schreiben. Fehler: bad_entity (keine Firmen-Entitaet), entity_claim_required.
+export async function orgEntityCheck(env, user, eid) {
+  if (!ID.test(eid || "")) return { error: "bad_entity" };
+  const e = (await entityMap(env)).get(eid);
+  if (!e || e.type !== "org") return { error: "bad_entity" };
+  if (can(user, "entity.edit_live", { ownerId: user.id }).ok) return { ok: true };   // die EIGENE Firma verknuepfen ist eine Entscheidung in eigener Sache: ohne Uebernahme nur der Admin, kein Editor
+  const c = await env.DB.prepare("SELECT 1 x FROM entity_claims WHERE eid=? AND user_id=? AND status='verified'").bind(eid, user.id).first();
+  return c ? { ok: true } : { error: "entity_claim_required" };
+}
 
 function channelFeed(kind, url, feed) {
   const m = kind === "youtube" ? /\/channel\/(UC[\w-]{22})/.exec(url) : null;
@@ -85,7 +108,7 @@ async function resolve(db, ref) {   // "u:handle" | "o:handle"
 async function itemsOf(db, where, binds, viewer, limit = 10) {
   const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.published,i.owner_type ot,i.owner_id oid,c.kind,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes,
       ${viewer ? "(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id AND v.user_id=" + (+viewer) + ")" : "0"} voted
-      FROM feed_items i JOIN channels c ON c.id=i.channel_id WHERE i.hidden=0 AND ${where} ORDER BY i.published DESC LIMIT ${+limit}`).bind(...binds).all()).results || [];
+      FROM feed_items i JOIN channels c ON c.id=i.channel_id WHERE i.hidden=0 AND ${publicKindSql()} AND ${where} ORDER BY i.published DESC LIMIT ${+limit}`).bind(...binds).all()).results || [];
   return rows.map((r) => ({ id: r.id, title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, voted: !!r.voted, owner: r.ot + ":" + r.oid }));
 }
 
@@ -125,7 +148,7 @@ const ORG_ROLES = ["owner", "admin", "editor", "events", "member"];
 const assignable = (mine, role) => ORG_ROLES.includes(role) && (mine === "owner" || (mine === "admin" && ["editor", "events", "member"].includes(role)));
 
 async function personView(db, uid, viewer) {
-  const p = await db.prepare("SELECT p.*,u.name,u.bio FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND u.banned=0").bind(uid).first(); if (!p) return null;
+  const p = await db.prepare("SELECT p.*,u.name,u.bio,u.role urole,u.lang ulang FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=? AND u.banned=0").bind(uid).first(); if (!p) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
   // Stufe und Punkte setzt das System (levels.js); ev = Belege je Art (z. B. {blog: 2, session: 1})
   const exp = await q("SELECT e.eid e,e.level,e.verified,COALESCE(s.score,0) score,COALESCE(s.endorsed_ev,0) endorsed_ev,(SELECT COUNT(*) FROM endorsements n WHERE n.owner_id=e.owner_id AND n.eid=e.eid) endorsed, (SELECT COUNT(*) FROM endorsements n2 WHERE n2.owner_id=e.owner_id AND n2.eid=e.eid AND n2.by_id=?) me FROM expertise e LEFT JOIN expertise_score s ON s.owner_id=e.owner_id AND s.eid=e.eid WHERE e.owner_type='u' AND e.owner_id=? ORDER BY e.level DESC,s.score DESC,e.verified DESC", +viewer || 0, uid);
@@ -136,16 +159,23 @@ async function personView(db, uid, viewer) {
   const org = p.show_org ? await db.prepare("SELECT o.handle,o.name FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=? AND m.status='active' AND o.public=1 ORDER BY m.created LIMIT 1").bind(uid).first() : null;
   const contrib = [...(await q("SELECT 'wiki' k,term t,lang l,summary s,created c FROM wiki_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid)),
     ...(await q("SELECT 'entity' k,eid t,'' l,summary s,created c FROM entity_rev WHERE user_id=? AND status IN ('live','old') ORDER BY created DESC LIMIT 15", uid))].sort((a, b) => b.c - a.c).slice(0, 15);
+  // MVP-Tracker (#231): nur freigegebene (public=1) und nicht verborgene/unbestaetigte (review='') Beitraege, nur bei oeffentlichem Profil
+  const mvpContributions = p.public ? (await q("SELECT id,title,url,published,category,kind,topics FROM contributions WHERE user_id=? AND public=1 AND review='' ORDER BY published DESC,id DESC LIMIT 50", uid).catch(() => [])).map((c) => {
+    let topics = []; try { topics = JSON.parse(c.topics || "[]"); } catch {}
+    return { id: c.id, title: c.title, url: c.url, published: c.published, category: c.category, kind: c.kind, topics };
+  }) : [];
   const counts = { wiki: (await db.prepare("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first()).n, entity: (await db.prepare("SELECT COUNT(*) n FROM entity_rev WHERE user_id=? AND status IN ('live','old')").bind(uid).first()).n };
   const badges = (await q("SELECT badge FROM user_badges WHERE user_id=?", uid)).map((b) => b.badge);
   const recs = (await q("SELECT r.id,r.relation,r.body,r.created,u.name,(SELECT handle FROM profiles WHERE user_id=r.author_id AND public=1) h FROM recommendations r JOIN users u ON u.id=r.author_id AND u.banned=0 WHERE r.subject_id=? AND r.status='live' ORDER BY r.created DESC LIMIT 30", uid)).map((r) => ({ id: r.id, relation: r.relation, body: r.body, created: r.created, by: { name: r.name, handle: r.h || "" } }));
   const im = await db.prepare("SELECT updated FROM images WHERE kind='u' AND owner_id=?").bind(uid).first();
   const pce = (await db.prepare("SELECT eid FROM profile_company WHERE user_id=?").bind(uid).first())?.eid || "";
+  const industries = (await q("SELECT eid FROM profile_industry WHERE user_id=? ORDER BY rowid", uid).catch(() => [])).map((r) => r.eid);   // Branchen (Entitaeten vom Typ industry) und Job/Rolle (Typ job), 0030
+  const jobEid = (await db.prepare("SELECT eid FROM profile_job WHERE user_id=?").bind(uid).first().catch(() => null))?.eid || "";
   const pv = await db.prepare("SELECT * FROM profile_private WHERE user_id=?").bind(uid).first(), CF = ["city", "zip", "street", "email", "phone"];
   const contact = {}; let priv = null;
-  if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]); }
-  return { type: "u", i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, id: uid, handle: p.handle, name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
-    expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me, ev: evs[e.e] || {} })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, counts, badges, recs,
+  if (pv) { for (const k of CF) if (pv["vis_" + k] === "all" && pv[k]) contact[k] = pv[k]; if (+viewer === uid) priv = { ...Object.fromEntries([...CF.map((k) => [k, pv[k]]), ...CF.map((k) => ["vis_" + k, pv["vis_" + k]])]), map_public: !!pv.map_public }; }
+  return { type: "u", ...(p.urole === "editor" || p.urole === "moderator" ? { role: p.urole } : {}), ...(p.urole === "editor" && (await scopeOf(db, uid)) ? { scope: [...(await scopeOf(db, uid)).topics].slice(0, 6) } : {}), i18n: await readI18n(db, uid), contact, ...(priv ? { private: priv } : {}), img: im?.updated || 0, company_eid: pce, industries, job_eid: jobEid, id: uid, handle: p.handle, lang: p.ulang || "", name: p.name, bio: p.bio, headline: p.headline, about: p.about, company: p.company, job: p.job, country: p.country, public: !!p.public, show_org: !!p.show_org,
+    expertise: exp.map((e) => ({ ...e, verified: !!e.verified, me: !!e.me, ev: evs[e.e] || {} })), programs: programs.map((x) => ({ ...x, verified: !!x.verified })), certs, channels, org, contrib, mvp_contributions: mvpContributions, counts, badges, recs,
     items: await itemsOf(db, "i.owner_type='u' AND i.owner_id=?", [uid], viewer, 8) };
 }
 export async function ensureFeedCols(db) {
@@ -161,18 +191,48 @@ async function ensureCols(db) {
   await ensureFeedCols(db);
   colsOk = true;
 }
-async function orgView(db, oid, viewer) {
+async function orgView(db, oid, viewer, showPrivate = false) {
   const o = await db.prepare("SELECT * FROM orgs WHERE id=?").bind(oid).first(); if (!o) return null;
   const q = async (sql, ...b) => (await db.prepare(sql).bind(...b).all()).results || [];
   const im = await db.prepare("SELECT updated FROM images WHERE kind='o' AND owner_id=?").bind(oid).first();
-  const oe = (await db.prepare("SELECT eid FROM org_entity WHERE org_id=?").bind(oid).first())?.eid || "";
-  return { type: "o", eid: oe, img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public,
+  const oer = await db.prepare("SELECT * FROM org_entity WHERE org_id=?").bind(oid).first(), oe = oer?.eid || "";   // confirmed (0026): nur bestaetigte Verknuepfung zeigt das Team auf der Entitaetsseite
+  const locations = await q(`SELECT id,label,address,city,country,public,lat,lng,geo_precision FROM org_locations WHERE org_id=? ${showPrivate ? "" : "AND public=1"} ORDER BY id`, oid);
+  const industries = (await q("SELECT eid FROM org_industry WHERE org_id=? ORDER BY rowid", oid).catch(() => [])).map((r) => r.eid);
+  return { type: "o", claimed: !o.unclaimed, eid: oe, industries, eid_ok: !!(oe && oer?.confirmed), img: im?.updated || 0, id: o.id, handle: o.handle, name: o.name, tagline: o.tagline, about: o.about, website: o.website, country: o.country, size: o.size, public: !!o.public, locations,
     expertise: (await q("SELECT eid e,level,verified FROM expertise WHERE owner_type='o' AND owner_id=?", oid)).map((e) => ({ ...e, verified: !!e.verified })),
     programs: (await q("SELECT program p,year,url,verified FROM programs WHERE owner_type='o' AND owner_id=?", oid)).map((x) => ({ ...x, verified: !!x.verified })),
     channels: await q("SELECT kind,url,feed,followers FROM channels WHERE owner_type='o' AND owner_id=?", oid),
     ms: await q("SELECT area,level,since FROM org_ms WHERE org_id=? ORDER BY area", oid),
     members: await q("SELECT p.handle,u.name,m.role,p.headline FROM org_members m JOIN users u ON u.id=m.user_id AND u.banned=0 JOIN profiles p ON p.user_id=m.user_id AND p.public=1 AND p.show_org=1 WHERE m.org_id=? AND m.status='active' ORDER BY m.role='owner' DESC, u.name", oid),
     items: await itemsOf(db, "i.owner_type='o' AND i.owner_id=?", [oid], viewer, 8) };
+}
+function cleanOrgLocations(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw.slice(0, 10).map((x) => ({
+    id: Number.isSafeInteger(+x?.id) && +x.id > 0 ? +x.id : 0,
+    label: txt(x?.label, 80), address: txt(x?.address, 160), city: txt(x?.city, 80), country: txt(x?.country, 60), public: x?.public ? 1 : 0,
+  })).filter((x) => x.address || x.city || x.country || x.label);
+}
+export async function saveOrgLocations(env, orgId, locations) {
+  const db = env.DB, retainedIds = [];
+  for (const location of locations) {
+    let id = location.id;
+    const previous = id ? await db.prepare("SELECT * FROM org_locations WHERE id=? AND org_id=?").bind(id, orgId).first() : null;
+    if (!previous) id = (await db.prepare("INSERT INTO org_locations(org_id,label,address,city,country,public,updated) VALUES(?,?,?,?,?,?,?)")
+      .bind(orgId, location.label, location.address, location.city, location.country, location.public, now()).run()).meta.last_row_id;
+    else await db.prepare("UPDATE org_locations SET label=?,address=?,city=?,country=?,public=?,updated=? WHERE id=? AND org_id=?")
+      .bind(location.label, location.address, location.city, location.country, location.public, now(), id, orgId).run();
+    retainedIds.push(id);
+    const address = location.public ? [location.address || location.city, location.country].filter(Boolean).join(", ") : "";
+    const geo = address ? await geocodeAddress(env, address, previous || {}, location.address ? "address" : "city") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
+    await recordGeocodeStatus(db, geo, address);
+    await db.prepare("UPDATE org_locations SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=? WHERE id=? AND org_id=?")
+      .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, id, orgId).run();
+  }
+  // Entfernte Standorte loeschen (nicht nur verbergen): Adresse und Stadt sollen nicht gespeichert bleiben
+  const ids = retainedIds;
+  if (ids.length) await db.prepare(`DELETE FROM org_locations WHERE org_id=? AND id NOT IN (${ids.map(() => "?").join(",")})`).bind(orgId, ...ids).run();
+  else await db.prepare("DELETE FROM org_locations WHERE org_id=?").bind(orgId).run();
 }
 
 async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
@@ -181,7 +241,8 @@ async function replaceLists(db, t, id, { exp, prog, chan, certs }) {
   for (const x of exp || []) ops.push(db.prepare("INSERT INTO expertise(owner_type,owner_id,eid,level) VALUES(?,?,?,?) ON CONFLICT(owner_type,owner_id,eid) DO UPDATE SET level=excluded.level").bind(t, id, x.e, x.level));
   ops.push(db.prepare("DELETE FROM programs WHERE owner_type=? AND owner_id=? AND program NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(prog.map((x) => x.p))));
   for (const x of prog) ops.push(db.prepare("INSERT INTO programs(owner_type,owner_id,program,year,url) VALUES(?,?,?,?,?) ON CONFLICT(owner_type,owner_id,program) DO UPDATE SET year=excluded.year, url=excluded.url, verified=CASE WHEN programs.url=excluded.url THEN programs.verified ELSE 0 END").bind(t, id, x.p, x.year, x.url));
-  ops.push(db.prepare("DELETE FROM channels WHERE owner_type=? AND owner_id=? AND url NOT IN (SELECT value FROM json_each(?))").bind(t, id, JSON.stringify(chan.map((x) => x.url))));
+  // Ein Kanal, in dem Kurzposts stehen (der automatisch angelegte Blog-Kanal), bleibt: sonst fielen die Kurzposts aus dem Feed-Export (JOIN channels)
+  ops.push(db.prepare("DELETE FROM channels WHERE owner_type=?1 AND owner_id=?2 AND url NOT IN (SELECT value FROM json_each(?3)) AND id NOT IN (SELECT channel_id FROM feed_items WHERE owner_type=?1 AND owner_id=?2 AND origin='kurzpost')").bind(t, id, JSON.stringify(chan.map((x) => x.url))));
   for (const x of chan) ops.push(db.prepare("INSERT INTO channels(owner_type,owner_id,kind,url,feed,followers,followers_at) VALUES(?,?,?,?,?,?,?) ON CONFLICT(owner_type,owner_id,url) DO UPDATE SET followers=excluded.followers, followers_at=CASE WHEN excluded.followers<>channels.followers THEN excluded.followers_at ELSE channels.followers_at END, kind=excluded.kind, feed=CASE WHEN excluded.feed<>'' THEN excluded.feed ELSE channels.feed END, fails=0").bind(t, id, x.kind, x.url, x.feed, x.followers || 0, now()));
   if (certs) {
     ops.push(db.prepare("DELETE FROM certs WHERE user_id=?").bind(id));
@@ -195,23 +256,25 @@ export async function refreshProfilesExport(env) {
   const db = env.DB;
   await db.prepare("CREATE TABLE IF NOT EXISTS export_cache (k TEXT PRIMARY KEY, v TEXT NOT NULL, updated INTEGER NOT NULL)").run();
     const us = (await db.prepare("SELECT user_id FROM profiles WHERE public=1 AND handle IS NOT NULL ORDER BY updated DESC LIMIT 300").all()).results || [];
-    const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 ORDER BY created DESC LIMIT 200").all()).results || [];
+    const os = (await db.prepare("SELECT id FROM orgs WHERE public=1 AND unclaimed=0 ORDER BY created DESC LIMIT 200").all()).results || [];
     const people = [], orgs = [], errs = [];
     const emap = await entityMap(env);
     const one = async (u) => {
       const v = await personView(db, u.user_id, 0); if (!v) return null;
       v.expertise = v.expertise.filter((e) => emap.has(e.e));
+      v.industries = (v.industries || []).filter((e) => emap.get(e)?.type === "industry");   // oeffentlich nur live veroeffentlichte Entitaeten
+      if (v.job_eid && emap.get(v.job_eid)?.type !== "job") v.job_eid = "";
       delete v.id; return v;
     };
     for (let k = 0; k < us.length; k += 6) for (const v of await Promise.all(us.slice(k, k + 6).map((u) => one(u).catch((e) => { errs.push(String((e && e.message) || e).slice(0, 200)); return null; })))) if (v) people.push(v);   // in Gruppen parallel, Reihenfolge bleibt; ein defektes Profil stoppt den Export nicht
-    for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; orgs.push(v); } }
+    for (const o of os) { const v = await orgView(db, o.id, 0); if (v) { delete v.id; v.industries = (v.industries || []).filter((e) => emap.get(e)?.type === "industry"); orgs.push(v); } }
   const out = { people, orgs, ...(errs.length ? { failed: errs.length, errors: errs.slice(0, 3) } : {}) };   // Fehler einzelner Profile bleiben sichtbar (Diagnose), der Seitenbau ignoriert die Felder
   await db.prepare("INSERT INTO export_cache(k,v,updated) VALUES('profiles',?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v,updated=excluded.updated").bind(JSON.stringify(out), now()).run();
   return out;
 }
 
 export async function handleProfiles(env, request, url, path, user, J) {
-  const db = env.DB, method = request.method; let m; await ensureCols(db);
+  const db = env.DB, method = request.method; let m; await ensureCols(db); await ensureDirectoryCols(db);
   const need = () => (user ? null : J({ error: "login" }, 401));
   const body = async () => await request.json().catch(() => ({}));
 
@@ -231,6 +294,23 @@ export async function handleProfiles(env, request, url, path, user, J) {
       await db.prepare("INSERT INTO org_sponsor(org_id,open,criteria,updated) VALUES(?,?,?,?) ON CONFLICT(org_id) DO UPDATE SET open=excluded.open,criteria=excluded.criteria,updated=excluded.updated").bind(o.id, b.open ? 1 : 0, JSON.stringify(crit), Math.floor(Date.now() / 1000)).run();
       return J({ ok: true });
     }
+  }
+
+  // ---- Geschaeftsadresse je Firma (privat, 0046): nur das eigene Konto liest und aendert sie, nie oeffentlich; Vorbefuellung fuer den Adress-Nachweis ----
+  if (path === "/api/profile/business") {
+    if (need()) return need();
+    if (method === "GET") return J({ items: (await db.prepare("SELECT eid,company,street,zip,city,country,updated FROM profile_business WHERE user_id=? ORDER BY company,eid").bind(user.id).all()).results || [], max: BIZ_MAX });
+    if (method !== "POST" && method !== "DELETE") return J({ error: "not_found" }, 404);
+    const b = method === "POST" ? await body() : {}, eid = String(b.eid ?? url.searchParams.get("eid") ?? "").toLowerCase().trim();
+    if (!/^[a-z0-9][a-z0-9-]{1,78}$/.test(eid)) return J({ error: "bad_id" }, 400);
+    if (!(await rateLimit(db, `biz:${user.id}`, 30, 3600))) return J({ error: "rate_limit" }, 429);
+    if (method === "DELETE") { const r = await db.prepare("DELETE FROM profile_business WHERE user_id=? AND eid=?").bind(user.id, eid).run(); return Number(r.meta?.changes || 0) ? J({ ok: true }) : J({ error: "not_found" }, 404); }
+    const ent = (await entityMap(env)).get(eid); if (!ent || ent.type !== "org") return J({ error: "bad_entity" }, 400);   // nur Firmen-Entitaeten
+    const a = cleanAddress(b); if (a.error) return J({ error: a.error }, 400);
+    if ((await db.prepare("SELECT COUNT(*) n FROM profile_business WHERE user_id=? AND eid<>?").bind(user.id, eid).first()).n >= BIZ_MAX) return J({ error: "limit" }, 400);
+    await db.prepare("INSERT INTO profile_business(user_id,eid,company,street,zip,city,country,updated) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(user_id,eid) DO UPDATE SET company=excluded.company,street=excluded.street,zip=excluded.zip,city=excluded.city,country=excluded.country,updated=excluded.updated")
+      .bind(user.id, eid, txt(ent.name, 120), a.street, a.zip, a.city, a.country, now()).run();
+    return J({ ok: true });
   }
 
   // ---- Firma als Entitaet anlegen/wiederverwenden ----
@@ -317,8 +397,10 @@ export async function handleProfiles(env, request, url, path, user, J) {
     if (need()) return need();
     if (!(await rateLimit(db, `prof:${user.id}`, 20, 3600))) return J({ error: "rate_limit" }, 429);
     const b = await body();
+    const previousLocation = await db.prepare("SELECT p.country,pp.* FROM profiles p LEFT JOIN profile_private pp ON pp.user_id=p.user_id WHERE p.user_id=?").bind(user.id).first();
     let handle = String(b.handle || "").toLowerCase().trim(); const isPublic = b.public ? 1 : 0;
     if (handle && !HANDLE.test(handle)) return J({ error: "bad_handle" }, 400);
+    if (RESERVED_HANDLES.has(handle) && (await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first())?.handle !== handle) return J({ error: "handle_taken" }, 409);   // nur neu vergeben gesperrt: wer das Kuerzel schon hat, speichert weiter
     if (isPublic && !handle) return J({ error: "bad_handle" }, 400);
     const taken = handle ? await db.prepare("SELECT user_id FROM profiles WHERE handle=? AND user_id<>?").bind(handle, user.id).first() : null;
     if (taken || (handle && (await db.prepare("SELECT 1 x FROM orgs WHERE handle=?").bind(handle).first()))) return J({ error: "handle_taken" }, 409);
@@ -329,11 +411,15 @@ export async function handleProfiles(env, request, url, path, user, J) {
       const u = cleanUrl(c?.url, null); if (!ID.test(c?.e || "") || !known.has(c.e) || u === null) return J({ error: "bad_cert" }, 400);
       certs.push({ e: c.e, year: Math.min(2100, Math.max(0, parseInt(c.year) || 0)), url: u });
     }
+    const ind = b.industries === undefined ? null : await checkKindIds(env, user, b.industries, "industry", 5); if (ind?.err) return J({ error: ind.err }, 400);
+    const jb = b.job_eid === undefined ? null : await checkKindIds(env, user, b.job_eid ? [b.job_eid] : [], "job", 1); if (jb?.err) return J({ error: jb.err }, 400);
     await db.prepare(`INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(?,?,?,?,?,?,?,?,?,?)
       ON CONFLICT(user_id) DO UPDATE SET public=excluded.public,handle=excluded.handle,headline=excluded.headline,about=excluded.about,company=excluded.company,job=excluded.job,country=excluded.country,show_org=excluded.show_org,updated=excluded.updated`)
       .bind(user.id, isPublic, handle || null, txt(b.headline, 100), long(b.about, 1500), txt(b.company, 80), txt(b.job, 80), txt(b.country, 60), b.show_org === false ? 0 : 1, now()).run();
     await db.prepare("UPDATE users SET bio=? WHERE id=?").bind(txt(b.headline, 100), user.id).run();
     if (b.i18n && typeof b.i18n === "object") await saveI18n(db, user.id, cleanI18n(b.i18n));
+    if (ind) await db.batch([db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(user.id), ...ind.list.map((e) => db.prepare("INSERT INTO profile_industry(user_id,eid) VALUES(?,?)").bind(user.id, e))]);
+    if (jb) await db.batch(jb.list.length ? [db.prepare("INSERT INTO profile_job(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, jb.list[0])] : [db.prepare("DELETE FROM profile_job WHERE user_id=?").bind(user.id)]);
     const ce = String(b.company_eid || "").toLowerCase();
     if (ce) { if (ID.test(ce) && ((await baseIds(env)).has(ce) || (await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(ce).first()))) await db.prepare("INSERT INTO profile_company(user_id,eid) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET eid=excluded.eid").bind(user.id, ce).run(); }
     else await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(user.id).run();
@@ -342,9 +428,14 @@ export async function handleProfiles(env, request, url, path, user, J) {
       const city = txt(pr.city, 80), zip = String(pr.zip || "").replace(/[^A-Za-z0-9 -]/g, "").slice(0, 10).trim(), street = txt(pr.street, 120);
       const email = String(pr.email || "").trim().slice(0, 120), phone = String(pr.phone || "").replace(/[^0-9+()\- ]/g, "").slice(0, 30).trim();
       if (email && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/.test(email)) return J({ error: "bad_email" }, 400);
-      await db.prepare(`INSERT INTO profile_private(user_id,city,zip,street,email,phone,vis_city,vis_zip,vis_street,vis_email,vis_phone,updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
-        ON CONFLICT(user_id) DO UPDATE SET city=excluded.city,zip=excluded.zip,street=excluded.street,email=excluded.email,phone=excluded.phone,vis_city=excluded.vis_city,vis_zip=excluded.vis_zip,vis_street=excluded.vis_street,vis_email=excluded.vis_email,vis_phone=excluded.vis_phone,updated=excluded.updated`)
-        .bind(user.id, city, zip, street, email, phone, V(vis.city), V(vis.zip), V(vis.street), V(vis.email), V(vis.phone), now()).run();
+      await db.prepare(`INSERT INTO profile_private(user_id,city,zip,street,email,phone,vis_city,vis_zip,vis_street,vis_email,vis_phone,map_public,updated) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+        ON CONFLICT(user_id) DO UPDATE SET city=excluded.city,zip=excluded.zip,street=excluded.street,email=excluded.email,phone=excluded.phone,vis_city=excluded.vis_city,vis_zip=excluded.vis_zip,vis_street=excluded.vis_street,vis_email=excluded.vis_email,vis_phone=excluded.vis_phone,map_public=excluded.map_public,updated=excluded.updated`)
+        .bind(user.id, city, zip, street, email, phone, V(vis.city), V(vis.zip), V(vis.street), V(vis.email), V(vis.phone), pr.map_public ? 1 : 0, now()).run();
+      const location = pr.map_public && city && b.country ? `${city}, ${txt(b.country, 60)}` : "";
+      const geo = location ? await geocodeAddress(env, location, previousLocation || {}, "city") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
+      await recordGeocodeStatus(db, geo, location);
+      await db.prepare("UPDATE profile_private SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,geo_city=? WHERE user_id=?")
+        .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, geo.city || "", user.id).run();
     }
     const oldC = Object.fromEntries(((await db.prepare("SELECT eid,url FROM certs WHERE user_id=?").bind(user.id).all()).results || []).map((x) => [x.eid, x.url]));
     await replaceLists(db, "u", user.id, { exp: null, prog: pr.list, chan: ch.list, certs });
@@ -406,14 +497,14 @@ export async function handleProfiles(env, request, url, path, user, J) {
     return J({ ok: true });
   }
   if (path === "/api/admin/cert-queue" && method === "GET") {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
     const rows = (await db.prepare("SELECT c.user_id uid,c.eid e,c.year,c.url,u.name,p.handle FROM cert_check k JOIN certs c ON c.user_id=k.user_id AND c.eid=k.eid JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id WHERE k.status='pending' ORDER BY k.created LIMIT 50").all()).results || [];
-    return J({ items: rows });
+    return J({ items: rows.filter((r) => inScope(g.actor, { topics: [r.e] })) });   // Fach-Editor: nur der eigene Bereich
   }
   if ((m = /^\/api\/vote\/(\d+)$/.exec(path)) && method === "POST") {
     if (need()) return need();
     if (!(await rateLimit(db, `vote:${user.id}`, 120, 3600))) return J({ error: "rate_limit" }, 429);
-    const id = +m[1]; if (!(await db.prepare("SELECT 1 x FROM feed_items WHERE id=? AND hidden=0").bind(id).first())) return J({ error: "not_found" }, 404);
+    const id = +m[1]; if (!(await db.prepare(`SELECT 1 x FROM feed_items i WHERE i.id=? AND i.hidden=0 AND ${publicItemSql()}`).bind(id).first())) return J({ error: "not_found" }, 404);
     const has = await db.prepare("SELECT 1 x FROM item_votes WHERE item_id=? AND user_id=?").bind(id, user.id).first();
     if (has) await db.prepare("DELETE FROM item_votes WHERE item_id=? AND user_id=?").bind(id, user.id).run(); else await db.prepare("INSERT INTO item_votes(item_id,user_id,created) VALUES(?,?,?)").bind(id, user.id, now()).run();
     return J({ ok: true, voted: !has, votes: (await db.prepare("SELECT COUNT(*) n FROM item_votes WHERE item_id=?").bind(id).first()).n });
@@ -421,13 +512,13 @@ export async function handleProfiles(env, request, url, path, user, J) {
   if (path === "/api/feed/mine" && method === "GET") {   // eigene gezogene Inhalte (fuer SEO-Texte, auch per MCP)
     if (need()) return need();
     await ensureSectionCols(db);
-    const rows = (await db.prepare("SELECT id,title,url,summary,thumb,body,published,topics,keypoints,faq,CASE WHEN length(body)>0 THEN 1 ELSE 0 END has_text FROM feed_items WHERE owner_type='u' AND owner_id=? ORDER BY published DESC LIMIT 100").bind(user.id).all()).results || [];
+    const rows = (await db.prepare(`SELECT id,title,url,summary,thumb,body,published,topics,keypoints,faq,CASE WHEN length(body)>0 THEN 1 ELSE 0 END has_text FROM feed_items WHERE owner_type='u' AND owner_id=? AND ${publicItemSql("feed_items")} ORDER BY published DESC LIMIT 100`).bind(user.id).all()).results || [];
     return J({ items: rows.map((r) => ({ ...r, has_text: !!r.has_text, keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })() })) });
   }
   if (path === "/api/feed/text" && method === "POST") {   // Creator ergaenzt den gezogenen Inhalt um eigenen Text (Wiki-Markup, Quellen nur als {{ref}})
     if (need()) return need();
     if (!(await rateLimit(db, `ftext:${user.id}`, 60, 3600))) return J({ error: "rate_limit" }, 429);
-    const b = await body(), it = await db.prepare("SELECT id FROM feed_items WHERE id=? AND owner_type='u' AND owner_id=?").bind(+b.id, user.id).first(); if (!it) return J({ error: "not_found" }, 404);
+    const b = await body(), it = await db.prepare(`SELECT id FROM feed_items WHERE id=? AND owner_type='u' AND owner_id=? AND ${publicItemSql("feed_items")}`).bind(+b.id, user.id).first(); if (!it) return J({ error: "not_found" }, 404);
     const sb = sanitize(String(b.body || ""), { viz: true }); if (sb.err) return J({ error: sb.err }, 400);
     if (sb.body && sb.body.length < 300) return J({ error: "too_short" }, 400);
     const known = await baseIds(env), topics = [];
@@ -441,20 +532,20 @@ export async function handleProfiles(env, request, url, path, user, J) {
   }
   if (path === "/api/feed/export" && method === "GET") {   // oeffentlich fuer den Seitenbau: externe Quellen (nur Titel+Link), eigene Seiten ausgenommen
     await ensureSectionCols(db);
-    const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.keypoints,i.faq,i.published,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
-      WHERE i.hidden=0 AND c.kind<>'github' AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
-      ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - 120 * 86400).all()).results || [];
+    const rows = (await db.prepare(`SELECT i.id,i.title,i.url,i.summary,i.thumb,i.body,i.topics,i.keypoints,i.faq,i.published,i.origin,c.kind,i.owner_type,i.owner_id,(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) votes FROM feed_items i JOIN channels c ON c.id=i.channel_id
+      WHERE i.hidden=0 AND ${publicKindSql()} AND i.url NOT LIKE ? AND i.published>? AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
+      ORDER BY i.published DESC LIMIT 300`).bind(env.SITE + "%", now() - FEED_DAYS * 86400).all()).results || [];
     const names = new Map(), out = [];
     for (const r of rows) {
       const k = r.owner_type + r.owner_id;
       if (!names.has(k)) names.set(k, r.owner_type === "u" ? await db.prepare("SELECT p.handle,u.name FROM profiles p JOIN users u ON u.id=p.user_id WHERE p.user_id=?").bind(r.owner_id).first() : await db.prepare("SELECT handle,name FROM orgs WHERE id=?").bind(r.owner_id).first());
-      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
+      const o = names.get(k); if (o) out.push({ id: r.id, summary: r.summary || "", thumb: r.thumb || "", body: r.body || "", keypoints: jsonList(r.keypoints), faq: jsonList(r.faq), topics: (() => { try { return JSON.parse(r.topics || "[]"); } catch { return []; } })(), title: r.title, url: r.url, published: r.published, kind: r.kind, origin: r.origin || "", votes: r.votes, type: r.owner_type, handle: o.handle, name: o.name });
     }
     return J({ items: out }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/feed" && method === "GET") {   // Neuestes der Creator (nur oeffentliche Profile/Firmen)
     const sort = url.searchParams.get("sort") === "top" ? "votes" : "published";
-    const rows = (await db.prepare(`SELECT i.id FROM feed_items i WHERE i.hidden=0 AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
+    const rows = (await db.prepare(`SELECT i.id FROM feed_items i WHERE i.hidden=0 AND ${publicItemSql()} AND ((i.owner_type='u' AND i.owner_id IN (SELECT p.user_id FROM profiles p JOIN users u ON u.id=p.user_id AND u.banned=0 WHERE p.public=1)) OR (i.owner_type='o' AND i.owner_id IN (SELECT id FROM orgs WHERE public=1)))
        ${sort === "votes" ? "AND i.published>" + (now() - 30 * 86400) : ""} ORDER BY ${sort === "votes" ? "(SELECT COUNT(*) FROM item_votes v WHERE v.item_id=i.id) DESC, i.published" : "i.published"} DESC LIMIT 30`).all()).results || [];
     const ids = rows.map((r) => r.id); if (!ids.length) return J({ items: [] });
     const items = await itemsOf(db, `i.id IN (${ids.join(",")})`, [], user?.id, 30);
@@ -470,7 +561,7 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const rows = (await db.prepare("SELECT o.id,o.handle,o.name,m.role,m.status FROM org_members m JOIN orgs o ON o.id=m.org_id WHERE m.user_id=?").bind(user.id).all()).results || [];
     const out = [];
     for (const r of rows) {
-      const v = r.status === "active" ? await orgView(db, r.id, user.id) : null;
+      const v = r.status === "active" ? await orgView(db, r.id, user.id, true) : null;
       const pend = r.status === "active" && ["owner", "admin"].includes(r.role) ? (await db.prepare("SELECT m.user_id,u.name FROM org_members m JOIN users u ON u.id=m.user_id WHERE m.org_id=? AND m.status='pending'").bind(r.id).all()).results || [] : [];
       const team = r.status === "active" && ["owner", "admin"].includes(r.role) ? (await db.prepare("SELECT m.user_id,u.name,m.role FROM org_members m JOIN users u ON u.id=m.user_id WHERE m.org_id=? AND m.status='active'").bind(r.id).all()).results || [] : [];
       out.push({ handle: r.handle, name: r.name, role: r.role, status: r.status, org: v, pending: pend, team });
@@ -486,43 +577,75 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const ch = await checkChannels(b.channels); if (ch.err) return J({ error: ch.err }, 400);
     const ex = await checkExpertise(env, b.expertise); if (ex.err) return J({ error: ex.err }, 400);
     const pr = checkPrograms(b.programs, true); if (pr.err) return J({ error: pr.err }, 400);
+    const oind = b.industries === undefined ? null : await checkKindIds(env, user, b.industries, "industry", 5); if (oind?.err) return J({ error: oind.err }, 400);
+    const locations = cleanOrgLocations(b.locations);
     const size = SIZES.includes(b.size) ? b.size : "";
-    let o = await db.prepare("SELECT id FROM orgs WHERE handle=?").bind(handle).first();
+    const wantEid = b.eid === undefined || b.eid === null ? undefined : String(b.eid).toLowerCase().trim();   // Firmen-Entitaet waehlen (leer = Verknuepfung loesen)
+    let o = await db.prepare("SELECT id,handle,unclaimed FROM orgs WHERE handle=?").bind(handle).first();
+    let link = null;   // { eid, confirmed } -> nach dem Speichern setzen
+    if (wantEid) {   // vor dem Anlegen pruefen: eine ungueltige Wahl legt keine Firma an
+      const cur = o ? await db.prepare("SELECT * FROM org_entity WHERE org_id=?").bind(o.id).first() : null;
+      const role = o ? (await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first())?.role : "owner";
+      if (!cur || cur.eid !== wantEid || !cur.confirmed) {
+        const chk = ["owner", "admin"].includes(role) ? await orgEntityCheck(env, user, wantEid) : { error: "forbidden" };
+        if (chk.ok) link = { eid: wantEid, confirmed: 1 };
+        else if (!(cur && cur.eid === wantEid)) return J({ error: chk.error }, chk.error === "bad_entity" ? 400 : 403);   // dieselbe (unbestaetigte) Verknuepfung bleibt einfach stehen
+      }
+    }
     if (!o) {
       if (await db.prepare("SELECT 1 x FROM profiles WHERE handle=?").bind(handle).first()) return J({ error: "handle_taken" }, 409);
-      if ((await db.prepare("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner'").bind(user.id).first()).n >= 3) return J({ error: "limit" }, 400);
-      const r = await db.prepare("INSERT INTO orgs(handle,name,tagline,about,website,country,size,public,created) VALUES(?,?,?,?,?,?,?,?,?)").bind(handle, name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, now()).run();
-      o = { id: r.meta.last_row_id };
-      await db.prepare("INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(?,?,'owner','active',?)").bind(o.id, user.id, now()).run();
-      // Firmen-Entitaet erzeugen oder wiederverwenden (nie Freitext): gleiche Namen -> gleiche Entitaet
-      try {
-        const eid = slug(name).replace(/-+$/g, "") || `firma-${o.id}`;
-        const known = await baseIds(env), ex = await db.prepare("SELECT 1 x FROM entity_rev WHERE eid=? AND status IN ('live','pending')").bind(eid).first();
-        if (!known.has(eid) && !ex) {
-          const v = await validate(env, eid, { name, type: "org", desc: { en: `${name} is a company in the Microsoft ecosystem.`, de: `${name} ist ein Unternehmen im Microsoft-Umfeld.` }, web: website || "", rel: [] });
-          if (!v.err) await db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,?,?,?)").bind(eid, JSON.stringify(v.data), "Firma angelegt", user.id, (await trustedUser(db, user)) ? "live" : "pending", now()).run();
-        }
-        await db.prepare("INSERT OR REPLACE INTO org_entity(org_id,eid) VALUES(?,?)").bind(o.id, eid).run();
-        if (!known.has(eid) && !ex) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO NOTHING").bind(eid, user.id, now()).run();
-      } catch (e) { /* Entitaet ist optional, Firmenkonto bleibt gueltig */ }
+      // Firma und Entitaet sind immer ein Paar: gewaehlte Entitaet (eid) > Treffer ueber Domain/Name ohne Rechtsform > neue Entitaet (live bei vertrauenswuerdigen Mitgliedern, sonst wartend)
+      let eid = link ? link.eid : "", made = false;
+      // nur freigegebene Firmen-Entitaeten: ein ungeprueftes Mitglied darf mit einem wartenden Vorschlag keine echte Firma blockieren (claim_required ohne Domain)
+      try { if (!eid) eid = findOrgEntity(name, website, [...(await entityMap(env)).values()].filter((e) => e.type === "org")); } catch { /* ohne Treffer weiter */ }
+      const un = eid ? await unclaimedOrgOf(db, eid) : null;   // zur Entitaet gibt es schon eine unbeanspruchte Firma: nicht verdoppeln
+      if (un && !link) return J({ ok: true, handle: un.handle, eid, claim_required: true });   // Inhaber wird, wer die Entitaet per Firmen-E-Mail uebernimmt
+      // Limit erst hier: claim_required legt nichts an (sonst meldete die Seite "limit", und nach der Mail-Bestaetigung gehoerte die Firma trotzdem dir)
+      if (!user.admin && (await db.prepare("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner'").bind(user.id).first()).n >= 3) return J({ error: "limit" }, 400);   // Admin: kein Limit (wie orgpair.js)
+      if (un) { o = { id: un.id }; await adoptOrg(db, un.id, user.id); await db.prepare("UPDATE orgs SET name=?,tagline=?,about=?,website=?,country=?,size=?,public=? WHERE id=?").bind(name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, o.id).run(); }
+      else {
+        const r = await db.prepare("INSERT INTO orgs(handle,name,tagline,about,website,country,size,public,created) VALUES(?,?,?,?,?,?,?,?,?)").bind(handle, name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, now()).run();
+        o = { id: r.meta.last_row_id };
+        const trusted = await trustedUser(db, user);   // Vertrauen VOR dem Anlegen messen: das Gruenden der Firma (30 Punkte) soll nicht selbst vertrauenswuerdig machen
+        await db.prepare("INSERT INTO org_members(org_id,user_id,role,status,created) VALUES(?,?,'owner','active',?)").bind(o.id, user.id, now()).run();
+        if (!link) try {
+          if (!eid) { const c = await createOrgEntity(env, user, { name, tagline: txt(b.tagline, 120), website, trusted }); if (!c.error) { eid = c.eid; made = true; } }
+          if (eid) {
+            // selbst erzeugte Entitaet gehoert der Firma (bestaetigt); eine schon vorhandene bleibt unbestaetigt, bis Inhaber/Admin sie mit Claim bestaetigt
+            if (made) await db.prepare("INSERT INTO entity_claims(eid,user_id,status,via,created) VALUES(?,?,'verified','owner',?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,status='verified',via='owner',created=excluded.created WHERE entity_claims.status='rejected'").bind(eid, user.id, now()).run();
+            await setOrgEntity(db, o.id, eid, made);
+          }
+        } catch (e) { /* Entitaet ist optional, Firmenkonto bleibt gueltig */ }
+      }
     } else {
       const mem = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();
+      if (!mem && o.unclaimed && wantEid === undefined) {
+        // "Diese Firma uebernehmen" schickt den Namen als Handle: bei Firmen-Entitaeten gibt es schon die unbeanspruchte Paar-Firma mit genau diesem Handle (gleiche Slug-Regel).
+        // Das ist kein Fehler (war 403 forbidden -> "Das hat nicht geklappt"): Inhaber wird, wer die Entitaet per Firmen-E-Mail uebernimmt (adoptUnclaimedForEntity).
+        const pe = await db.prepare("SELECT eid FROM org_entity WHERE org_id=?").bind(o.id).first();
+        return J({ ok: true, handle: o.handle, eid: pe?.eid || "", claim_required: true });
+      }
       if (!mem || !["owner", "admin", "editor"].includes(mem.role)) return J({ error: "forbidden" }, 403);
       await db.prepare("UPDATE orgs SET name=?,tagline=?,about=?,website=?,country=?,size=?,public=? WHERE id=?").bind(name, txt(b.tagline, 120), long(b.about, 1500), website, txt(b.country, 60), size, b.public ? 1 : 0, o.id).run();
+      if (wantEid === "" && ["owner", "admin"].includes(mem.role)) await db.prepare("DELETE FROM org_entity WHERE org_id=?").bind(o.id).run();   // Verknuepfung loesen
     }
+    if (link) await setOrgEntity(db, o.id, link.eid, link.confirmed);
+    if (oind) await db.batch([db.prepare("DELETE FROM org_industry WHERE org_id=?").bind(o.id), ...oind.list.map((e) => db.prepare("INSERT INTO org_industry(org_id,eid) VALUES(?,?)").bind(o.id, e))]);
+    if (Array.isArray(b.locations)) await saveOrgLocations(env, o.id, locations);
     await replaceLists(db, "o", o.id, { exp: ex.list, prog: pr.list, chan: ch.list, certs: null });
     return J({ ok: true });
   }
   if ((m = /^\/api\/org\/([a-z0-9-]{3,30})$/.exec(path)) && method === "GET") {
-    const o = await db.prepare("SELECT id,public FROM orgs WHERE handle=?").bind(m[1]).first(); if (!o) return J({ error: "not_found" }, 404);
+    const o = await db.prepare("SELECT id,public,unclaimed FROM orgs WHERE handle=?").bind(m[1]).first(); if (!o) return J({ error: "not_found" }, 404);
     const mem = user ? await db.prepare("SELECT 1 x FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first() : null;
-    if (!o.public && !mem) return J({ error: "not_found" }, 404);
+    if ((!o.public || o.unclaimed) && !mem) return J({ error: "not_found" }, 404);
     const v = await orgView(db, o.id, user?.id); delete v.id; return J({ org: v }, 200, { "cache-control": "no-store" });
   }
   if ((m = /^\/api\/org\/([a-z0-9-]{3,30})\/(join|leave|member)$/.exec(path)) && method === "POST") {
     if (need()) return need();
-    const o = await db.prepare("SELECT id,public FROM orgs WHERE handle=?").bind(m[1]).first(); if (!o) return J({ error: "not_found" }, 404);
+    const o = await db.prepare("SELECT id,public,unclaimed FROM orgs WHERE handle=?").bind(m[1]).first(); if (!o) return J({ error: "not_found" }, 404);
     if (m[2] === "join") {
+      if (o.unclaimed) return J({ error: "claim_required" }, 409);   // ohne Inhaber: erst die Firmen-Entitaet uebernehmen
       if (!(await rateLimit(db, `join:${user.id}`, 10, 86400))) return J({ error: "rate_limit" }, 429);
       await db.prepare("INSERT OR IGNORE INTO org_members(org_id,user_id,role,status,created) VALUES(?,?,'member','pending',?)").bind(o.id, user.id, now()).run(); return J({ ok: true });
     }
@@ -534,11 +657,13 @@ export async function handleProfiles(env, request, url, path, user, J) {
     const me = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=? AND status='active'").bind(o.id, user.id).first();
     if (!me || !["owner", "admin"].includes(me.role)) return J({ error: "forbidden" }, 403);
     const b = await body(), target = +b.user_id; if (!target) return J({ error: "bad_request" }, 400);
-    const tr = await db.prepare("SELECT role FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, target).first(); if (!tr) return J({ error: "not_found" }, 404);
+    const tr = await db.prepare("SELECT role,status,created FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, target).first(); if (!tr) return J({ error: "not_found" }, 404);
     const role = String(b.role || "member");
     if (b.action === "approve") {
       if (!assignable(me.role, role)) return J({ error: "forbidden" }, 403);
       await db.prepare("UPDATE org_members SET status='active',role=? WHERE org_id=? AND user_id=?").bind(role, o.id, target).run();
+      // Team-Beitritt: wer kurz nach der Kontoanlage (7 Tage) in eine Firma aufgenommen wird, zaehlt fuer die aufnehmende Person
+      if (tr.status === "pending") await recordInvite(env, { inviter: user.id, invitee: target, source: "org", ref: m[1], since: (tr.created || 0) - 7 * 86400 });
     }
     else if (b.action === "remove" && tr.role !== "owner" && (me.role === "owner" || !["admin"].includes(tr.role))) await db.prepare("DELETE FROM org_members WHERE org_id=? AND user_id=?").bind(o.id, target).run();
     else if (b.action === "role") {   // Rolle aendern: Inhaber alles, Admins nur Redakteur/Events/Mitglied bei Nicht-Admins
@@ -551,35 +676,57 @@ export async function handleProfiles(env, request, url, path, user, J) {
   }
   if (path === "/api/orgs/search" && method === "GET") {
     const q = String(url.searchParams.get("q") || "").toLowerCase().replace(/[^a-z0-9 -]/g, "").trim(); if (q.length < 2) return J({ items: [] });
-    const rows = (await db.prepare("SELECT handle,name FROM orgs WHERE public=1 AND (handle LIKE ? OR lower(name) LIKE ?) LIMIT 8").bind(q + "%", "%" + q + "%").all()).results || [];
+    const rows = (await db.prepare("SELECT handle,name FROM orgs WHERE public=1 AND unclaimed=0 AND (handle LIKE ? OR lower(name) LIKE ?) LIMIT 8").bind(q + "%", "%" + q + "%").all()).results || [];
     return J({ items: rows });
   }
 
-  // ---- Bestaetigen durch Editor/Admin ----
+  // ---- Bestaetigen (Angaben eines Profils) ----
+  // Alles ueber can(verify.set) bzw. die Pruefliste. Was Rolle, Vertrauen oder Fachbereich verleiht, bestaetigt NUR der Admin (item.confers): Programme
+  // von Personen (MVP/MCT machen zum Editor, alle Programme geben das Vertrauen "pro") und Expertise von Personen (daraus wird der Bereich eines
+  // Fach-Editors abgeleitet). Editoren bestaetigen Angaben von Firmen (nie der eigenen) und Zertifikate (nie die eigenen); Moderatoren nichts.
   if (path === "/api/admin/verify" && method === "POST") {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
+    const pre = await gate(db, user, "queue.review"); if (!pre.ok) return J({ error: "forbidden" }, 403);
     const b = await body(), o = await resolve(db, b.owner); if (!o) return J({ error: "not_found" }, 404);
-    const v = b.value ? 1 : 0;
-    if (b.kind === "program" && PROGRAMS.includes(b.key)) await db.prepare("UPDATE programs SET verified=? WHERE owner_type=? AND owner_id=? AND program=?").bind(v, o.t, o.id, b.key).run();
-    else if (b.kind === "exp" && ID.test(b.key || "")) { await db.prepare("UPDATE expertise SET verified=? WHERE owner_type=? AND owner_id=? AND eid=?").bind(v, o.t, o.id, b.key).run(); if (o.t === "u") await computeLevels(db, { uid: o.id, eid: b.key }).catch(() => 0); }
-    else if (b.kind === "cert" && o.t === "u" && ID.test(b.key || "")) {
-      if (v) await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='verified',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
-      else await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'rejected','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='rejected',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
+    const v = b.value ? 1 : 0, kind = b.kind === "program" && PROGRAMS.includes(b.key) ? "program" : b.kind === "exp" && ID.test(b.key || "") ? "exp" : b.kind === "cert" && o.t === "u" && ID.test(b.key || "") ? "cert" : "";
+    if (!kind) return J({ error: "bad_request" }, 400);
+    if (kind === "cert" && roleOf(pre.actor) !== "admin") {   // Editoren: wie in der Pruefliste, nur wartende Nachweise
+      const r = await decide(env, user, { kind: "cert", id: `${o.id}:${b.key}`, action: v ? "approve" : "reject", legacy: true });
+      return J(r.body, r.status);
     }
-    else return J({ error: "bad_request" }, 400);
+    const item = o.t === "u" ? { ownerId: o.id, topics: kind === "program" ? [] : [b.key], confers: kind !== "cert" } : { ownerId: null, orgIds: [o.id], topics: kind === "program" ? [] : [b.key] };
+    const g = await gate(db, user, "verify.set", item); if (!g.ok) return J({ error: g.why }, 403);
+    let n = 1;
+    if (kind === "program") n = (await db.prepare("UPDATE programs SET verified=? WHERE owner_type=? AND owner_id=? AND program=?").bind(v, o.t, o.id, b.key).run()).meta.changes;
+    else if (kind === "exp") { n = (await db.prepare("UPDATE expertise SET verified=? WHERE owner_type=? AND owner_id=? AND eid=?").bind(v, o.t, o.id, b.key).run()).meta.changes; if (o.t === "u") await computeLevels(db, { uid: o.id, eid: b.key }).catch(() => 0); }
+    else if (v) await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'verified','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='verified',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
+    else await db.prepare("INSERT INTO cert_check(user_id,eid,status,via,created) VALUES(?,?,'rejected','admin',?) ON CONFLICT(user_id,eid) DO UPDATE SET status='rejected',via='admin',created=excluded.created").bind(o.id, b.key, now()).run();
+    if (n) await logEdit(db, g.actor, "verify.set", "verify", `${o.t}:${o.id}:${kind}:${b.key}`, { reason: v ? "bestätigt" : "Bestätigung entzogen", after: { verified: v } });
+    if (kind === "program" && o.t === "u" && (b.key === "mvp" || b.key === "mct")) await syncAutoRoles(db, o.id).catch(() => 0);   // vom Admin verifiziert -> Editor (oder Rolle zurueck, wenn entzogen)
     return J({ ok: true });
   }
-  if (path === "/api/admin/feed-hide" && method === "POST") {
-    if (!(user?.admin || user?.editor)) return J({ error: "forbidden" }, 403);
-    const b = await body(); await db.prepare("UPDATE feed_items SET hidden=? WHERE id=?").bind(b.hidden ? 1 : 0, +b.id).run(); return J({ ok: true });
+  if (path === "/api/admin/feed-hide" && method === "POST") {   // Feed-Eintrag aus-/einblenden: can(review.hide) - nicht der eigene, nicht der der eigenen Firma; im Protokoll
+    if (!(await gate(db, user, "queue.review")).ok) return J({ error: "forbidden" }, 403);   // wie bisher nur Editoren und Admin
+    const b = await body(), it = await db.prepare("SELECT id,owner_type,owner_id,hidden,topics FROM feed_items WHERE id=?").bind(+b.id).first();
+    let topics = []; try { topics = JSON.parse(it?.topics || "[]"); } catch { topics = []; }
+    const g = await gate(db, user, "review.hide", !it ? {} : it.owner_type === "u" ? { ownerId: it.owner_id, topics } : { ownerId: null, orgIds: [it.owner_id], topics }); if (!g.ok) return J({ error: g.why }, 403);
+    if (!it) return J({ error: "not_found" }, 404);
+    // hidden (feedpolicy.js): Bit 1 = von der Moderation ausgeblendet, Bit 2 = vom Mitglied zurueckgezogen (Kurzpost, contrib_sources.js). Die
+    // Redaktion setzt und loescht nur ihren eigenen Schalter: Aus- und wieder Einblenden macht nichts oeffentlich, was das Mitglied zurueckgezogen hat.
+    const nh = b.hidden ? (it.hidden | HIDDEN_MOD) : (it.hidden & ~HIDDEN_MOD);
+    await db.prepare(b.hidden ? "UPDATE feed_items SET hidden=hidden|? WHERE id=?" : "UPDATE feed_items SET hidden=hidden&? WHERE id=?").bind(b.hidden ? HIDDEN_MOD : ~HIDDEN_MOD, it.id).run();
+    await logEdit(db, g.actor, "review.hide", "feed", it.id, { before: { hidden: it.hidden }, after: { hidden: nh } });
+    return J({ ok: true });
   }
   return null;
 }
 
 // Konto loeschen: alle Profil-, Firmen- und Entitaetsdaten des Nutzers entfernen bzw. anonymisieren
 export async function deleteUserData(db, id) {
+  const mailAddress = await db.prepare("SELECT email FROM mail_addr WHERE user_id=?").bind(id).first().catch(() => null);
   await db.prepare("DELETE FROM recommendations WHERE author_id=? OR subject_id=?").bind(id, id).run();
   await db.prepare("DELETE FROM profile_company WHERE user_id=?").bind(id).run();
+  await db.prepare("DELETE FROM profile_business WHERE user_id=?").bind(id).run();   // Geschaeftsadressen (0046)
+  await db.prepare("DELETE FROM profile_industry WHERE user_id=?").bind(id).run(); await db.prepare("DELETE FROM profile_job WHERE user_id=?").bind(id).run();
   await db.prepare("DELETE FROM images WHERE kind='u' AND owner_id=?").bind(id).run();
   const own = (await db.prepare("SELECT org_id FROM org_members WHERE user_id=? AND role='owner'").bind(id).all()).results || [];
   const ops = [];
@@ -588,15 +735,22 @@ export async function deleteUserData(db, id) {
     if (other) ops.push(db.prepare("UPDATE org_members SET role='owner' WHERE org_id=? AND user_id=?").bind(o.org_id, other.user_id));
     else ops.push(db.prepare("DELETE FROM org_sponsor WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM images WHERE kind='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM expertise WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM programs WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
       db.prepare("DELETE FROM item_votes WHERE item_id IN (SELECT id FROM feed_items WHERE owner_type='o' AND owner_id=?)").bind(o.org_id), db.prepare("DELETE FROM feed_items WHERE owner_type='o' AND owner_id=?").bind(o.org_id),
-      db.prepare("DELETE FROM channels WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM org_members WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM orgs WHERE id=?").bind(o.org_id));
+      db.prepare("DELETE FROM channels WHERE owner_type='o' AND owner_id=?").bind(o.org_id), db.prepare("DELETE FROM org_locations WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM org_members WHERE org_id=?").bind(o.org_id), db.prepare("DELETE FROM orgs WHERE id=?").bind(o.org_id));
   }
   ops.push(
     db.prepare("DELETE FROM org_members WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM contributions WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_sources WHERE user_id=?").bind(id), db.prepare("DELETE FROM contribution_ignored WHERE user_id=?").bind(id),   // Loeschmarken enthalten URLs geloeschter Beitraege (DSGVO)
     db.prepare("DELETE FROM item_votes WHERE user_id=? OR item_id IN (SELECT id FROM feed_items WHERE owner_type='u' AND owner_id=?)").bind(id, id),
     db.prepare("DELETE FROM feed_items WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM channels WHERE owner_type='u' AND owner_id=?").bind(id),
+    db.prepare("DELETE FROM ratelimit WHERE k=? OR k LIKE ?").bind(`kurzpost:${id}`, `contrib-%:${id}`),   // Zaehler des MVP-Trackers (Kurzposts je Tag, Importe, Aenderungen) tragen die Konto-Nummer
     db.prepare("DELETE FROM expertise WHERE owner_type='u' AND owner_id=?").bind(id), db.prepare("DELETE FROM expertise_evidence WHERE owner_id=?").bind(id), db.prepare("DELETE FROM expertise_score WHERE owner_id=?").bind(id), db.prepare("DELETE FROM programs WHERE owner_type='u' AND owner_id=?").bind(id),
     db.prepare("DELETE FROM profile_private WHERE user_id=?").bind(id), db.prepare("DELETE FROM profile_i18n WHERE user_id=?").bind(id), db.prepare("DELETE FROM certs WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_check WHERE user_id=?").bind(id), db.prepare("DELETE FROM cert_endorse WHERE owner_id=? OR by_id=?").bind(id, id), db.prepare("DELETE FROM endorsements WHERE owner_id=? OR by_id=?").bind(id, id),
     db.prepare("DELETE FROM profiles WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM mail_topic_follows WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM mail_prefs WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM mail_outbox WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM mail_addr WHERE user_id=?").bind(id),
     db.prepare("DELETE FROM entity_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE entity_rev SET user_id=0 WHERE user_id=?").bind(id));
   await db.batch(ops);
+  if (mailAddress?.email) await db.prepare("DELETE FROM mail_weekly_unsub WHERE lower(email)=lower(?) AND NOT EXISTS (SELECT 1 FROM email_subs WHERE lower(email)=lower(?) AND confirmed=1) AND NOT EXISTS (SELECT 1 FROM mail_addr WHERE lower(email)=lower(?) AND verified=1)").bind(mailAddress.email, mailAddress.email, mailAddress.email).run();
 }

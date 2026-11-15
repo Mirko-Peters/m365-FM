@@ -1,0 +1,2758 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.440
+Alors qu'est-ce qui change exactement lorsqu'une entreprise passe d'un chatbot IA à des dizaines d'outils d'IA ?
+
+00:00:04.440 --> 00:00:05.520
+Au début, cela semble simple.
+
+00:00:06.360 --> 00:00:08.320
+Une équipe ajoute un chatbot pour le support client,
+
+00:00:09.080 --> 00:00:11.360
+une autre utilise l'IA pour fouiller dans les documents de l'entreprise,
+
+00:00:11.740 --> 00:00:13.420
+et les notes de réunion sont rédigées automatiquement.
+
+00:00:14.440 --> 00:00:17.700
+Un workflow peut lire un email, en extraire une demande et l'envoyer au bon système.
+
+00:00:18.500 --> 00:00:20.420
+Rapidement, l'entreprise se retrouve avec plusieurs modèles,
+
+00:00:20.560 --> 00:00:23.240
+des agents capables d'agir et des outils accédant aux données métiers.
+
+00:00:23.560 --> 00:00:24.280
+Mais...
+
+00:00:24.280 --> 00:00:26.980
+Chaque équipe se connecte souvent directement à un fournisseur d'IA différent,
+
+00:00:26.980 --> 00:00:30.240
+avec sa propre clé, ses limites et ses règles de sécurité,
+
+00:00:30.820 --> 00:00:31.900
+les coûts deviennent difficiles à suivre.
+
+00:00:32.300 --> 00:00:33.420
+Une clé peut se retrouver au mauvais endroit.
+
+00:00:34.100 --> 00:00:35.240
+Et lorsqu'un agent sollicite un outil,
+
+00:00:35.360 --> 00:00:37.260
+personne n'a forcément de traces claires de ce qu'il a tenté de faire.
+
+00:00:38.020 --> 00:00:39.740
+C'est là qu'intervient Microsoft AI Gateway.
+
+00:00:40.420 --> 00:00:42.020
+A la fin de cet épisode, vous comprendrez ce que c'est,
+
+00:00:42.140 --> 00:00:45.220
+comment ces composants s'articulent et quand cela devient pertinent pour votre activité.
+
+00:00:46.320 --> 00:00:48.540
+Imaginez un immeuble de bureau avec de nombreuses portes dérobées.
+
+00:00:49.160 --> 00:00:51.860
+Vous pourriez laisser chaque porte ouverte et espérer qu'elle soit bien utilisée.
+
+00:00:52.220 --> 00:00:54.380
+Ou vous pouvez faire passer tout le monde par une entrée unique gérée.
+
+00:00:55.400 --> 00:00:56.420
+Une porte d'entrée unique pour l'IA.
+
+00:00:56.980 --> 00:01:00.340
+Microsoft AI Gateway est un ensemble de fonctionnalités de gestion d'API Azure
+
+00:01:00.340 --> 00:01:02.720
+qui centralise le contrôle de votre trafic IA, IA.
+
+00:01:03.220 --> 00:01:04.040
+Analysons cela simplement.
+
+00:01:04.900 --> 00:01:07.460
+Imaginez l'infrastructure IA de votre entreprise comme un immeuble de bureau moderne.
+
+00:01:07.880 --> 00:01:10.060
+Les modèles d'IA sont les salles où s'effectue la réflexion.
+
+00:01:10.620 --> 00:01:12.320
+Vos agents sont les employés circulant dans le bâtiment,
+
+00:01:12.480 --> 00:01:14.200
+décidant de la prochaine tâche approuvée à accomplir.
+
+00:01:15.100 --> 00:01:17.060
+Les outils sont des portes de service menant au RH,
+
+00:01:17.300 --> 00:01:19.940
+à la finance, aux dossiers clients et aux fichiers internes.
+
+00:01:20.960 --> 00:01:23.940
+Les AI Gateway est le bureau d'accueil et le poste de sécurité à l'entrée.
+
+00:01:23.940 --> 00:01:28.340
+Ils vérifient qui entre, appliquent les règles et enregistrent la destination des requêtes
+
+00:01:28.340 --> 00:01:29.820
+avant qu'elles n'atteignent le reste du bâtiment.
+
+00:01:31.100 --> 00:01:32.260
+Une requête suit un chemin simple.
+
+00:01:33.120 --> 00:01:35.980
+Une application, un copilote ou un agent envoie une requête à la passerelle.
+
+00:01:36.700 --> 00:01:38.760
+La passerelle vérifie les règles applicables à cet appelant,
+
+00:01:38.860 --> 00:01:42.300
+puis l'envoie vers le modèle, l'outil, l'agent ou le métier approuvé.
+
+00:01:43.760 --> 00:01:44.940
+Et lorsqu'une réponse est générée,
+
+00:01:45.360 --> 00:01:47.840
+elle repasse par la passerelle avant d'atteindre l'utilisateur.
+
+00:01:48.840 --> 00:01:51.820
+Ce chemin unique offre à l'entreprise un point central pour gérer les accès,
+
+00:01:52.040 --> 00:01:53.680
+les limites, la sécurité et les logs,
+
+00:01:53.840 --> 00:01:55.820
+sans intégrer ses contrôles dans chaque application.
+
+00:01:56.680 --> 00:01:59.140
+Cela permet aussi de séparer deux fonctions souvent confondues.
+
+00:01:59.540 --> 00:02:02.440
+Les équipes applicatives peuvent se concentrer sur l'expérience réellement utilisée par les utilisateurs.
+
+00:02:02.880 --> 00:02:03.980
+Elles développent l'assistant de support,
+
+00:02:04.120 --> 00:02:06.640
+l'interface de recherche documentaire ou le workflow qui fait gagner du temps.
+
+00:02:07.360 --> 00:02:10.100
+Pendant ce temps, l'équipe plateforme gère les règles communes en arrière-plan
+
+00:02:10.100 --> 00:02:11.700
+en décidant quels services sont approuvés,
+
+00:02:11.820 --> 00:02:13.000
+quelles identités peuvent les utiliser,
+
+00:02:13.280 --> 00:02:16.920
+quel volume de trafic un projet peut envoyer et ce qui est journalisé.
+
+00:02:17.700 --> 00:02:20.480
+Vous ne voulez pas que chaque équipe invente un nouveau plan de sécurité pour chaque chatbot.
+
+00:02:20.920 --> 00:02:23.840
+Microsoft AI Gateway peut être placé devant plusieurs types de trafic IA.
+
+00:02:24.240 --> 00:02:27.420
+Il peut gérer les appels au modèle d'IA et les appels d'outils via le protocole MCP,
+
+00:02:27.680 --> 00:02:28.460
+modèle contexte-protocol.
+
+00:02:29.420 --> 00:02:31.680
+Il peut aussi gérer le trafic agent-à-agent E2A
+
+00:02:31.680 --> 00:02:33.760
+et les API métiers que votre entreprise utilise déjà,
+
+00:02:33.920 --> 00:02:35.460
+comme une API pour vérifier une commande,
+
+00:02:35.560 --> 00:02:38.260
+lire une politique RH ou ouvrir un ticket de support.
+
+00:02:38.260 --> 00:02:41.260
+Ce dernier point est important car la plupart des entreprises
+
+00:02:41.260 --> 00:02:43.640
+n'ont pas besoin de supprimer leur système existant pour utiliser l'IA.
+
+00:02:44.300 --> 00:02:46.980
+Elles ont juste besoin d'un moyen sécurisé pour que l'IA fonctionne avec ces systèmes
+
+00:02:46.980 --> 00:02:49.300
+et une passerelle permet de contrôler cette connexion.
+
+00:02:50.180 --> 00:02:51.860
+Pour clarifier, Microsoft AI Gateway n'est pas un modèle.
+
+00:02:52.300 --> 00:02:53.480
+Il ne rédige pas lui-même les réponses.
+
+00:02:53.700 --> 00:02:54.800
+Il n'est pas non plus un outil de création d'agents.
+
+00:02:55.140 --> 00:02:56.940
+Vous n'utilisez donc pas pour concevoir un assistant RH
+
+00:02:56.940 --> 00:02:58.380
+ou apprendre à un agent financier ce qu'il doit faire.
+
+00:02:58.780 --> 00:02:59.900
+Et il ne remplace pas Microsoft Foundry
+
+00:02:59.900 --> 00:03:02.500
+où les équipes peuvent construire, tester et gérer des projets d'IA.
+
+00:03:03.340 --> 00:03:04.600
+Au contraire, il se situe au milieu.
+
+00:03:05.720 --> 00:03:07.840
+Foundry vous aide à travailler avec des modèles et des agents d'IA
+
+00:03:07.840 --> 00:03:09.700
+tandis qu'Azure API Management et AI Gateway
+
+00:03:09.700 --> 00:03:12.520
+aident à contrôler le trafic généré par ces modèles, agents et outils.
+
+00:03:13.600 --> 00:03:15.120
+Connaissez peut-être déjà Azure API Management
+
+00:03:15.120 --> 00:03:16.660
+comme un moyen de gérer les API classiques.
+
+00:03:17.580 --> 00:03:19.760
+Une API est simplement un moyen pour un logiciel
+
+00:03:19.760 --> 00:03:21.800
+de demander quelque chose à un autre logiciel.
+
+00:03:22.420 --> 00:03:24.500
+AI Gateway est en ce même concept au travail lié à l'IA.
+
+00:03:25.040 --> 00:03:26.560
+Car les requêtes IA soulèvent de nouvelles questions.
+
+00:03:27.020 --> 00:03:28.140
+Qui a utilisé quel modèle ?
+
+00:03:28.140 --> 00:03:29.760
+Combien de jetons ont été consommés ?
+
+00:03:29.760 --> 00:03:31.420
+Cet agent peut-il appeler cet outil ?
+
+00:03:31.420 --> 00:03:33.300
+Ce prompt doit-il vraiment atteindre le modèle ?
+
+00:03:33.300 --> 00:03:35.260
+Placer la passerelle au milieu vous offre un point central
+
+00:03:35.260 --> 00:03:36.220
+pour répondre à ces questions.
+
+00:03:36.220 --> 00:03:38.040
+Le premier point de tension apparaît
+
+00:03:38.040 --> 00:03:39.440
+quand chaque application commence à choisir
+
+00:03:39.440 --> 00:03:40.940
+son propre point de terminaison de modèle.
+
+00:03:42.060 --> 00:03:43.740
+Un point de terminaison de nombreux modèles.
+
+00:03:44.320 --> 00:03:46.020
+Quand votre application se connecte directement
+
+00:03:46.020 --> 00:03:47.160
+à un seul point de terminaison,
+
+00:03:47.520 --> 00:03:49.400
+ce choix est ancré dans le code, lui-même.
+
+00:03:50.340 --> 00:03:51.840
+Souvent, le code est lié à un fournisseur,
+
+00:03:51.900 --> 00:03:52.820
+un déploiement spécifique,
+
+00:03:53.160 --> 00:03:55.180
+une région Azure et un ensemble de limites fixes.
+
+00:03:56.400 --> 00:03:57.900
+Cela fonctionne bien tant que le projet est petit,
+
+00:03:57.960 --> 00:03:59.380
+mais imaginez que votre système de support
+
+00:03:59.380 --> 00:04:00.920
+tourne sur un modèle dans une région précise.
+
+00:04:01.080 --> 00:04:03.160
+Des mois plus tard, ce modèle atteint sa capacité.
+
+00:04:03.160 --> 00:04:04.840
+Un meilleur modèle apparaît à moindre coût
+
+00:04:04.840 --> 00:04:07.080
+où votre entreprise doit migrer vers une autre région.
+
+00:04:07.800 --> 00:04:08.620
+Sans couche partagée,
+
+00:04:08.920 --> 00:04:10.920
+chaque équipe applicative doit modifier son code,
+
+00:04:11.120 --> 00:04:12.880
+le tester à nouveau et déployer une mise à jour.
+
+00:04:13.380 --> 00:04:14.840
+Cela rend le changement lent et complexe.
+
+00:04:15.300 --> 00:04:17.140
+Microsoft AI Gateway offre à vos applications
+
+00:04:17.140 --> 00:04:18.200
+une porte d'entrée stable.
+
+00:04:18.920 --> 00:04:19.680
+Ils y envoient leurs requêtes
+
+00:04:19.680 --> 00:04:21.300
+et le choix du modèle peut changer en coulisses
+
+00:04:21.300 --> 00:04:22.740
+sans que vous ayez à modifier l'application.
+
+00:04:23.280 --> 00:04:24.680
+Voyez cela comme un numéro de téléphone d'entreprise.
+
+00:04:25.140 --> 00:04:26.220
+Les clients composent un seul numéro
+
+00:04:26.220 --> 00:04:27.640
+même si l'appel est transféré vers une équipe
+
+00:04:27.640 --> 00:04:28.420
+ou un bureau différent.
+
+00:04:29.060 --> 00:04:30.540
+Ils n'ont jamais besoin de savoir comment l'appel est traité.
+
+00:04:30.540 --> 00:04:32.900
+Avec AI Gateway, votre application appelle
+
+00:04:32.900 --> 00:04:34.020
+un point de terminaison approuvé
+
+00:04:34.020 --> 00:04:34.740
+et derrière celui-ci,
+
+00:04:34.780 --> 00:04:35.800
+la passerelle transmet la requête
+
+00:04:35.800 --> 00:04:36.860
+au modèle adapté à la tâche.
+
+00:04:37.900 --> 00:04:38.880
+Microsoft propose également
+
+00:04:38.880 --> 00:04:39.740
+une approche plus récente
+
+00:04:39.740 --> 00:04:41.060
+appelée Unified Model API.
+
+00:04:41.880 --> 00:04:42.460
+En termes simples,
+
+00:04:42.800 --> 00:04:43.700
+elle permet à une application
+
+00:04:43.700 --> 00:04:45.200
+d'utiliser une méthode de requête
+
+00:04:45.200 --> 00:04:45.900
+de type OpenAI,
+
+00:04:46.220 --> 00:04:47.480
+tandis que la passerelle peut connecter
+
+00:04:47.480 --> 00:04:49.000
+cette requête à différents fournisseurs
+
+00:04:49.000 --> 00:04:50.380
+de modèles en arrière-plan.
+
+00:04:51.420 --> 00:04:52.600
+Ainsi, votre application envoie
+
+00:04:52.600 --> 00:04:53.720
+un type de requête familier
+
+00:04:53.720 --> 00:04:55.080
+et la passerelle gère tous les détails
+
+00:04:55.080 --> 00:04:56.140
+liés aux fournisseurs.
+
+00:04:57.000 --> 00:04:57.940
+Selon votre configuration,
+
+00:04:58.120 --> 00:04:59.160
+cette requête peut être dirigée
+
+00:04:59.160 --> 00:05:00.560
+vers un déploiement Azure OpenAI
+
+00:05:00.560 --> 00:05:01.780
+et un modèle dans Microsoft Foundry,
+
+00:05:02.140 --> 00:05:03.480
+Anthropic, Google Gemini
+
+00:05:03.480 --> 00:05:04.380
+ou Amazon Bedrock.
+
+00:05:05.100 --> 00:05:05.960
+Le routage suit des règles
+
+00:05:05.960 --> 00:05:06.600
+que vous définissez
+
+00:05:06.600 --> 00:05:07.580
+et non un choix codé en dur
+
+00:05:07.580 --> 00:05:08.460
+au cœur de chaque application.
+
+00:05:09.120 --> 00:05:10.060
+Cela donne à l'équipe plateforme
+
+00:05:10.060 --> 00:05:10.680
+la marge nécessaire
+
+00:05:10.680 --> 00:05:11.560
+pour effectuer des changements
+
+00:05:11.560 --> 00:05:12.640
+sans perturber les utilisateurs
+
+00:05:12.640 --> 00:05:13.180
+de l'application.
+
+00:05:13.700 --> 00:05:14.560
+Imaginez que votre entreprise
+
+00:05:14.560 --> 00:05:15.440
+utilise un assistant IA
+
+00:05:15.440 --> 00:05:16.040
+pour le support client.
+
+00:05:16.700 --> 00:05:17.640
+La plupart des questions sont simples.
+
+00:05:18.180 --> 00:05:19.520
+Où est ma commande ?
+
+00:05:19.520 --> 00:05:21.220
+Comment réinitialiser mon mot de passe ?
+
+00:05:21.220 --> 00:05:22.280
+Celles-ci peuvent être traitées rapidement
+
+00:05:22.280 --> 00:05:23.260
+par un modèle plus petit
+
+00:05:23.260 --> 00:05:23.880
+et moins coûteux,
+
+00:05:24.020 --> 00:05:25.440
+sans dépenses inutiles à...
+
+00:05:25.440 --> 00:05:26.480
+Un client envoie une question longue
+
+00:05:26.480 --> 00:05:27.040
+et inhabituel,
+
+00:05:27.120 --> 00:05:28.380
+nécessitant un raisonnement approfondi
+
+00:05:28.380 --> 00:05:29.220
+ou une connaissance des produits.
+
+00:05:29.860 --> 00:05:30.600
+La passerelle achemine
+
+00:05:30.600 --> 00:05:31.220
+ce type de requête
+
+00:05:31.220 --> 00:05:32.140
+vers un modèle plus puissant.
+
+00:05:32.780 --> 00:05:33.560
+L'application de support
+
+00:05:33.560 --> 00:05:34.600
+continue d'envoyer les requêtes
+
+00:05:34.600 --> 00:05:35.200
+de la même manière,
+
+00:05:35.320 --> 00:05:36.280
+donc votre équipe n'a jamais besoin
+
+00:05:36.280 --> 00:05:37.000
+de savoir quel modèle
+
+00:05:37.000 --> 00:05:37.700
+à traiter la question
+
+00:05:37.700 --> 00:05:38.660
+et vos développeurs n'ont pas
+
+00:05:38.660 --> 00:05:39.760
+à gérer des connexions distinctes
+
+00:05:39.760 --> 00:05:40.360
+pour chaque option.
+
+00:05:42.280 --> 00:05:43.660
+Qu'en est-il de la capacité ?
+
+00:05:43.660 --> 00:05:44.280
+Les points de terminaison
+
+00:05:44.280 --> 00:05:44.920
+des modèles imitent.
+
+00:05:45.500 --> 00:05:46.040
+Ils ne peuvent gérer
+
+00:05:46.040 --> 00:05:47.260
+qu'une certaine quantité de trafic
+
+00:05:47.260 --> 00:05:48.080
+sur une période donnée.
+
+00:05:48.840 --> 00:05:49.360
+Si chaque requête
+
+00:05:49.360 --> 00:05:50.340
+atteint un seul déploiement,
+
+00:05:50.540 --> 00:05:51.340
+une heure de forte affluence
+
+00:05:51.340 --> 00:05:51.860
+peut ralentir
+
+00:05:51.860 --> 00:05:52.840
+ou bloquer toute l'expérience.
+
+00:05:53.720 --> 00:05:54.200
+Une passerelle
+
+00:05:54.200 --> 00:05:55.060
+peut répartir le trafic
+
+00:05:55.060 --> 00:05:55.920
+entre plusieurs déploiements
+
+00:05:55.920 --> 00:05:56.300
+approuvés,
+
+00:05:56.700 --> 00:05:57.680
+en routant vers une autre région,
+
+00:05:57.800 --> 00:05:58.380
+en cas de saturation
+
+00:05:58.380 --> 00:05:59.720
+ou en utilisant une route de secours
+
+00:05:59.720 --> 00:06:00.480
+si un point de terminaison
+
+00:06:00.480 --> 00:06:00.920
+tombe en panne.
+
+00:06:01.300 --> 00:06:02.080
+Cela ne signifie pas
+
+00:06:02.080 --> 00:06:02.880
+que les requêtes doivent distribuer
+
+00:06:02.880 --> 00:06:03.420
+de manière aléatoire.
+
+00:06:03.700 --> 00:06:04.540
+C'est toujours vous qui fixez les règles.
+
+00:06:04.780 --> 00:06:05.240
+Par exemple,
+
+00:06:05.560 --> 00:06:06.840
+le trafic client est prioritaire
+
+00:06:06.840 --> 00:06:07.960
+sur votre modèle principal
+
+00:06:07.960 --> 00:06:09.320
+tandis que les tests internes
+
+00:06:09.320 --> 00:06:10.420
+utilisent un chemin différent
+
+00:06:10.420 --> 00:06:11.200
+ou une région.
+
+00:06:11.560 --> 00:06:12.760
+Gère les utilisateurs locaux
+
+00:06:12.760 --> 00:06:14.300
+alors qu'une autre sert de secours.
+
+00:06:16.120 --> 00:06:16.820
+Objectif est simple.
+
+00:06:17.420 --> 00:06:18.400
+Vos applications se connectent
+
+00:06:18.400 --> 00:06:19.400
+à une porte d'entrée contrôlée
+
+00:06:19.400 --> 00:06:19.920
+et derrière,
+
+00:06:20.120 --> 00:06:21.040
+la plateforme peut ajuster
+
+00:06:21.040 --> 00:06:21.440
+les modèles,
+
+00:06:21.620 --> 00:06:22.820
+les régions ou les fournisseurs
+
+00:06:22.820 --> 00:06:24.200
+avec un minimum de perturbations.
+
+00:06:24.740 --> 00:06:25.180
+C'est important
+
+00:06:25.180 --> 00:06:26.040
+car l'IA évolue rapidement.
+
+00:06:26.580 --> 00:06:27.600
+Un modèle qui fonctionne aujourd'hui
+
+00:06:27.600 --> 00:06:28.120
+pourrait ne plus être
+
+00:06:28.120 --> 00:06:28.840
+le meilleur choix le mois prochain.
+
+00:06:29.440 --> 00:06:30.140
+Si chaque application
+
+00:06:30.140 --> 00:06:30.920
+communique directement
+
+00:06:30.920 --> 00:06:31.720
+avec son fournisseur,
+
+00:06:31.800 --> 00:06:32.240
+changer de modèle
+
+00:06:32.240 --> 00:06:33.280
+devient un projet pour chaque équipe.
+
+00:06:33.760 --> 00:06:34.340
+Avec la passerelle,
+
+00:06:34.400 --> 00:06:35.400
+la décision concernant le modèle
+
+00:06:35.400 --> 00:06:36.520
+se situe dans un endroit partagé.
+
+00:06:37.220 --> 00:06:37.880
+Une brève remarque
+
+00:06:37.880 --> 00:06:39.120
+sur l'API de modèles unifiés.
+
+00:06:39.940 --> 00:06:40.720
+Microsoft la présente
+
+00:06:40.720 --> 00:06:41.560
+en préversion publique.
+
+00:06:42.300 --> 00:06:43.220
+Les fonctionnalités en préversion
+
+00:06:43.220 --> 00:06:43.660
+peuvent changer
+
+00:06:43.660 --> 00:06:44.280
+et ne passent de prête
+
+00:06:44.280 --> 00:06:45.340
+pour tous les cas d'usage en production.
+
+00:06:45.940 --> 00:06:46.240
+Cependant,
+
+00:06:46.240 --> 00:06:46.740
+le schéma global
+
+00:06:46.740 --> 00:06:47.420
+ne dépend pas uniquement
+
+00:06:47.420 --> 00:06:48.080
+de cette fonctionnalité
+
+00:06:48.080 --> 00:06:49.700
+car votre gestion d'API
+
+00:06:49.700 --> 00:06:50.420
+peut déjà se placer
+
+00:06:50.420 --> 00:06:51.260
+devant les points de terminaison
+
+00:06:51.260 --> 00:06:51.580
+de modèle,
+
+00:06:51.940 --> 00:06:53.020
+appliquer des règles de routage
+
+00:06:53.020 --> 00:06:54.460
+et gérer plusieurs back-ends.
+
+00:06:55.280 --> 00:06:56.280
+L'API de modèles unifiés
+
+00:06:56.280 --> 00:06:57.040
+vise à faciliter
+
+00:06:57.040 --> 00:06:57.720
+cette expérience
+
+00:06:57.720 --> 00:06:58.480
+multifournisseur
+
+00:06:58.480 --> 00:06:59.160
+pour les applications.
+
+00:07:00.400 --> 00:07:01.100
+Choisir le bon modèle
+
+00:07:01.100 --> 00:07:02.000
+n'est que la moitié du travail
+
+00:07:02.000 --> 00:07:02.960
+car un modèle peut répondre
+
+00:07:02.960 --> 00:07:03.480
+à une question
+
+00:07:03.480 --> 00:07:05.160
+mais un agent peut décider
+
+00:07:05.160 --> 00:07:06.400
+d'agir sur les systèmes réels
+
+00:07:06.400 --> 00:07:07.020
+de l'entreprise.
+
+00:07:08.300 --> 00:07:08.980
+Gouverner les agents
+
+00:07:08.980 --> 00:07:09.400
+et les outils.
+
+00:07:09.980 --> 00:07:10.800
+Un agent permet à l'IA
+
+00:07:10.800 --> 00:07:11.320
+d'aller au-delà
+
+00:07:11.320 --> 00:07:12.440
+de la simple réponse aux questions.
+
+00:07:13.140 --> 00:07:13.940
+C'est un logiciel capable
+
+00:07:13.940 --> 00:07:14.600
+d'analyser une tâche,
+
+00:07:14.700 --> 00:07:15.240
+de choisir parmi
+
+00:07:15.240 --> 00:07:15.860
+des options approuvées
+
+00:07:15.860 --> 00:07:16.740
+et d'appeler un outil
+
+00:07:16.740 --> 00:07:17.120
+ou un service
+
+00:07:17.120 --> 00:07:17.840
+pour accomplir le travail.
+
+00:07:18.500 --> 00:07:19.200
+Un agent RH
+
+00:07:19.200 --> 00:07:19.740
+peut consulter
+
+00:07:19.740 --> 00:07:20.540
+une politique de congé,
+
+00:07:20.780 --> 00:07:21.460
+un agent de support
+
+00:07:21.460 --> 00:07:22.480
+vérifier une commande
+
+00:07:22.480 --> 00:07:23.260
+et un agent financier
+
+00:07:23.260 --> 00:07:24.340
+préparer une demande de paiement.
+
+00:07:24.940 --> 00:07:26.000
+Cette capacité est utile
+
+00:07:26.000 --> 00:07:27.040
+mais elle modifie aussi
+
+00:07:27.040 --> 00:07:27.760
+le profil de risque.
+
+00:07:28.120 --> 00:07:28.800
+Une réponse erronée
+
+00:07:28.800 --> 00:07:29.160
+d'un modèle
+
+00:07:29.160 --> 00:07:29.860
+crée de la confusion
+
+00:07:29.860 --> 00:07:30.640
+mais un agent
+
+00:07:30.640 --> 00:07:31.440
+utilisant le mauvais outil
+
+00:07:31.440 --> 00:07:32.240
+peut exposer des données,
+
+00:07:32.400 --> 00:07:33.360
+modifier un enregistrement
+
+00:07:33.360 --> 00:07:34.380
+ou déclencher
+
+00:07:34.380 --> 00:07:35.220
+un processus critique.
+
+00:07:36.020 --> 00:07:36.680
+C'est pourquoi les outils
+
+00:07:36.680 --> 00:07:37.680
+ont besoin de leurs propres règles.
+
+00:07:38.120 --> 00:07:38.660
+Vous entendrez parler
+
+00:07:38.660 --> 00:07:39.420
+du terme MCP
+
+00:07:39.420 --> 00:07:40.540
+ou modèle contexte protocole.
+
+00:07:41.180 --> 00:07:42.160
+Voyez-le comme une forme
+
+00:07:42.160 --> 00:07:43.060
+de connecteur standard
+
+00:07:43.060 --> 00:07:43.800
+offrant à un agent
+
+00:07:43.800 --> 00:07:44.800
+un moyen connu de trouver
+
+00:07:44.800 --> 00:07:46.080
+et d'utiliser un outil d'entreprise
+
+00:07:46.080 --> 00:07:46.700
+comme un service
+
+00:07:46.700 --> 00:07:47.780
+de recherche documentaire.
+
+00:07:48.620 --> 00:07:49.080
+Au lieu de créer
+
+00:07:49.080 --> 00:07:49.920
+une connexion différente
+
+00:07:49.920 --> 00:07:50.420
+pour chaque agent
+
+00:07:50.420 --> 00:07:50.980
+et chaque système,
+
+00:07:51.080 --> 00:07:52.080
+le MCP offre aux équipes
+
+00:07:52.080 --> 00:07:52.720
+un schéma commun.
+
+00:07:53.700 --> 00:07:54.080
+Ensuite il y a
+
+00:07:54.080 --> 00:07:54.560
+l'A2A
+
+00:07:54.560 --> 00:07:55.440
+ou agent à agent
+
+00:07:55.440 --> 00:07:56.020
+à moyen standard
+
+00:07:56.020 --> 00:07:56.520
+pour qu'un agent
+
+00:07:56.520 --> 00:07:57.440
+contacte un autre agent.
+
+00:07:58.140 --> 00:07:58.520
+Par exemple,
+
+00:07:58.600 --> 00:07:59.200
+un agent de support
+
+00:07:59.200 --> 00:08:00.260
+demande à un agent d'expédition
+
+00:08:00.260 --> 00:08:01.100
+les détails de livraison
+
+00:08:01.100 --> 00:08:02.020
+au lieu d'essayer de comprendre
+
+00:08:02.020 --> 00:08:03.160
+le système d'expédition lui-même.
+
+00:08:03.800 --> 00:08:04.940
+Cela semble simple en théorie.
+
+00:08:05.240 --> 00:08:05.880
+Mais une chaîne d'agents
+
+00:08:05.880 --> 00:08:06.540
+devient complexe
+
+00:08:06.540 --> 00:08:07.300
+lorsque chaque connexion
+
+00:08:07.300 --> 00:08:07.920
+a des règles d'accès,
+
+00:08:07.980 --> 00:08:08.780
+des identifiants cachés
+
+00:08:08.780 --> 00:08:10.060
+et des outils inconnus différents.
+
+00:08:10.960 --> 00:08:11.920
+Imaginez un agent financier
+
+00:08:11.920 --> 00:08:12.580
+qui répond aux questions
+
+00:08:12.580 --> 00:08:13.140
+sur les factures.
+
+00:08:13.600 --> 00:08:14.340
+Il ne devrait utiliser
+
+00:08:14.340 --> 00:08:15.040
+qu'un outil de recherche
+
+00:08:15.040 --> 00:08:15.800
+de facture approuvée.
+
+00:08:16.080 --> 00:08:16.760
+Mais quelqu'un lui donne
+
+00:08:16.760 --> 00:08:17.380
+un accès large
+
+00:08:17.380 --> 00:08:18.260
+au système financier
+
+00:08:18.260 --> 00:08:18.960
+car c'est plus rapide
+
+00:08:18.960 --> 00:08:20.220
+que de définir un outil restreint.
+
+00:08:21.080 --> 00:08:21.780
+Un utilisateur envoie
+
+00:08:21.780 --> 00:08:23.060
+une requête apparemment inoffensive
+
+00:08:23.060 --> 00:08:24.000
+mais des instructions cachées
+
+00:08:24.000 --> 00:08:24.660
+dans un document joint
+
+00:08:24.660 --> 00:08:25.280
+poussent l'agent
+
+00:08:25.280 --> 00:08:26.360
+vers une action non approuvée.
+
+00:08:27.000 --> 00:08:27.920
+Si l'agent a trop d'accès,
+
+00:08:28.060 --> 00:08:28.500
+il pourrait de bord,
+
+00:08:28.720 --> 00:08:29.720
+demander des données inutiles
+
+00:08:29.720 --> 00:08:30.600
+ou lancer un flux de travail
+
+00:08:30.600 --> 00:08:32.300
+nécessitant une approbation humaine.
+
+00:08:32.980 --> 00:08:33.780
+L'agent n'est pas malveillant.
+
+00:08:34.360 --> 00:08:34.920
+Il a simplement eu
+
+00:08:34.920 --> 00:08:35.360
+trop de liberté
+
+00:08:35.360 --> 00:08:35.860
+lors du traitement
+
+00:08:35.860 --> 00:08:36.520
+d'une entrée non fiable.
+
+00:08:37.060 --> 00:08:38.060
+Microsoft AI Gateway
+
+00:08:38.060 --> 00:08:38.940
+vous permet d'ajouter
+
+00:08:38.940 --> 00:08:39.480
+des contrôles
+
+00:08:39.480 --> 00:08:40.620
+devant vos serveurs MCP
+
+00:08:40.620 --> 00:08:41.600
+et vos API métiers.
+
+00:08:42.380 --> 00:08:43.220
+Au lieu d'un accès direct
+
+00:08:43.220 --> 00:08:43.560
+d'une IA
+
+00:08:43.560 --> 00:08:44.240
+vers une base de données,
+
+00:08:44.340 --> 00:08:44.840
+vous exposez.
+
+00:08:45.100 --> 00:08:45.740
+Un outil restreint
+
+00:08:45.740 --> 00:08:46.260
+est contrôlé
+
+00:08:46.260 --> 00:08:47.180
+pour une tâche précise.
+
+00:08:48.060 --> 00:08:48.460
+Par exemple,
+
+00:08:48.540 --> 00:08:49.080
+un agent demande
+
+00:08:49.080 --> 00:08:49.680
+à qui vérifie
+
+00:08:49.680 --> 00:08:50.580
+le statut de cette commande.
+
+00:08:51.100 --> 00:08:51.860
+L'outil renvoie
+
+00:08:51.860 --> 00:08:52.580
+uniquement le statut
+
+00:08:52.580 --> 00:08:53.840
+et non l'ensemble des commandes
+
+00:08:53.840 --> 00:08:54.860
+ou le dossier client complet.
+
+00:08:55.340 --> 00:08:56.160
+C'est une tâche limitée
+
+00:08:56.160 --> 00:08:57.120
+et la passerelle vérifie
+
+00:08:57.120 --> 00:08:57.760
+qui fait la requête
+
+00:08:57.760 --> 00:08:58.640
+avant d'autoriser l'appel.
+
+00:08:59.280 --> 00:09:00.140
+L'identité est au cœur
+
+00:09:00.140 --> 00:09:00.840
+de cette configuration.
+
+00:09:01.540 --> 00:09:02.540
+Avec Microsoft en 3D,
+
+00:09:02.640 --> 00:09:03.640
+les applications se connectent
+
+00:09:03.640 --> 00:09:04.560
+via des identités gérées
+
+00:09:04.560 --> 00:09:05.140
+au lieu de partager
+
+00:09:05.140 --> 00:09:05.900
+des clés de fournisseur.
+
+00:09:06.740 --> 00:09:07.500
+Une identité gérée
+
+00:09:07.500 --> 00:09:08.140
+prouve qu'il y a laissant
+
+00:09:08.140 --> 00:09:08.680
+qu'un développeur
+
+00:09:08.680 --> 00:09:09.560
+est à copier un secret
+
+00:09:09.560 --> 00:09:10.060
+dans le code.
+
+00:09:11.380 --> 00:09:12.180
+Chaque agent doit posséder
+
+00:09:12.180 --> 00:09:12.920
+sa propre identité.
+
+00:09:13.240 --> 00:09:13.840
+Ainsi, vous pouvez voir
+
+00:09:13.840 --> 00:09:14.720
+quel agent a appelé un outil,
+
+00:09:14.800 --> 00:09:15.580
+révoqué l'accès pour l'un
+
+00:09:15.580 --> 00:09:16.380
+sans affecter les autres
+
+00:09:16.380 --> 00:09:17.700
+et appliqué des règles différentes.
+
+00:09:17.960 --> 00:09:18.700
+Et appliqué des règles différentes.
+
+00:09:18.820 --> 00:09:19.360
+Un agent RH
+
+00:09:19.360 --> 00:09:20.080
+ne devrait pas hériter
+
+00:09:20.080 --> 00:09:20.480
+des permissions
+
+00:09:20.480 --> 00:09:21.200
+d'un agent financier
+
+00:09:21.200 --> 00:09:22.140
+simplement parce qu'ils utilisent
+
+00:09:22.140 --> 00:09:22.580
+tous deux l'IA.
+
+00:09:23.200 --> 00:09:23.820
+Cela suit le principe
+
+00:09:23.820 --> 00:09:24.180
+de confiance.
+
+00:09:24.580 --> 00:09:25.440
+Vérifiez chaque requête,
+
+00:09:25.780 --> 00:09:26.860
+n'accordez que l'accès nécessaire
+
+00:09:26.860 --> 00:09:27.480
+à la tâche en cours
+
+00:09:27.480 --> 00:09:28.580
+et supposez que chaque prompt
+
+00:09:28.580 --> 00:09:29.200
+aux réponses d'outils
+
+00:09:29.200 --> 00:09:29.880
+peut être risquée.
+
+00:09:30.440 --> 00:09:30.780
+En pratique,
+
+00:09:30.900 --> 00:09:31.820
+l'agent reçoit l'autorisation
+
+00:09:31.820 --> 00:09:32.420
+pour un outil
+
+00:09:32.420 --> 00:09:33.280
+et une action spécifique.
+
+00:09:33.920 --> 00:09:34.460
+Il peut consulter
+
+00:09:34.460 --> 00:09:35.160
+un solde de congé
+
+00:09:35.160 --> 00:09:35.980
+mais pas télécharger
+
+00:09:35.980 --> 00:09:36.540
+le fichier de paie.
+
+00:09:36.860 --> 00:09:37.460
+Il peut créer un brouillon
+
+00:09:37.460 --> 00:09:38.020
+de tickets de support
+
+00:09:38.020 --> 00:09:38.920
+mais pas clore un dossier.
+
+00:09:39.820 --> 00:09:40.700
+La passerelle applique également
+
+00:09:40.700 --> 00:09:41.560
+des contrôles de sécurité
+
+00:09:41.560 --> 00:09:42.080
+sur les prompts
+
+00:09:42.080 --> 00:09:42.860
+et le trafic des outils.
+
+00:09:42.860 --> 00:09:43.960
+Si une requête
+
+00:09:43.960 --> 00:09:45.140
+contient du contenu malveillant
+
+00:09:45.140 --> 00:09:45.960
+ou des données sensibles,
+
+00:09:46.040 --> 00:09:46.660
+une règle l'arrête
+
+00:09:46.660 --> 00:09:47.380
+avant qu'elle n'atteigne
+
+00:09:47.380 --> 00:09:48.360
+le système back-end.
+
+00:09:48.940 --> 00:09:50.000
+Aucun filtre ne bloque tout
+
+00:09:50.000 --> 00:09:51.120
+mais vérifier le trafic
+
+00:09:51.120 --> 00:09:51.720
+en un point unique
+
+00:09:51.720 --> 00:09:52.260
+est bien plus sûr
+
+00:09:52.260 --> 00:09:52.700
+que d'espérer
+
+00:09:52.700 --> 00:09:53.620
+que chaque créateur d'agent
+
+00:09:53.620 --> 00:09:54.600
+ajoute la même protection.
+
+00:09:55.360 --> 00:09:56.120
+Vous avez également besoin
+
+00:09:56.120 --> 00:09:57.140
+d'un catalogue d'outils approuvé.
+
+00:09:57.860 --> 00:09:58.660
+API Center sert
+
+00:09:58.660 --> 00:09:59.360
+de catalogue privé
+
+00:09:59.360 --> 00:10:00.760
+pour les API et les services MCP
+
+00:10:00.760 --> 00:10:01.500
+permettant aux équipes
+
+00:10:01.500 --> 00:10:02.300
+de trouver le bon outil
+
+00:10:02.300 --> 00:10:03.380
+sans fouiller dans de vieux documents
+
+00:10:03.380 --> 00:10:04.220
+ou copier des adresses
+
+00:10:04.220 --> 00:10:04.840
+non vérifiées.
+
+00:10:05.500 --> 00:10:06.420
+Cela permet de transformer
+
+00:10:06.420 --> 00:10:07.160
+le choix des outils
+
+00:10:07.160 --> 00:10:07.700
+pour vos agents
+
+00:10:07.700 --> 00:10:09.340
+en une décision métier contrôlée.
+
+00:10:12.860 --> 00:10:14.280
+Quelles équipes utilisent ce chemin
+
+00:10:14.280 --> 00:10:15.480
+et quel volume d'utilisation
+
+00:10:15.480 --> 00:10:17.640
+de l'IA génère-t-elle ?
+
+00:10:17.640 --> 00:10:18.180
+Coût en jetons
+
+00:10:18.180 --> 00:10:19.100
+limite visibilité.
+
+00:10:19.820 --> 00:10:20.440
+Les coûts liés à l'IA
+
+00:10:20.440 --> 00:10:21.340
+fonctionnent différemment
+
+00:10:21.340 --> 00:10:22.300
+d'une licence logicielle classique.
+
+00:10:22.580 --> 00:10:23.160
+Le compteur est basé
+
+00:10:23.160 --> 00:10:23.600
+sur les jetons.
+
+00:10:23.960 --> 00:10:24.760
+Qu'est-ce qu'un jeton ?
+
+00:10:24.760 --> 00:10:26.080
+C'est un petit morceau de texte ?
+
+00:10:26.080 --> 00:10:26.480
+Un mot court
+
+00:10:26.480 --> 00:10:27.160
+peut utiliser un jeton.
+
+00:10:27.580 --> 00:10:28.040
+Un mot plus long
+
+00:10:28.040 --> 00:10:28.800
+en utilise davantage.
+
+00:10:29.020 --> 00:10:29.760
+Le modèle comptabilise
+
+00:10:29.760 --> 00:10:30.360
+tout ce que vous envoyez.
+
+00:10:30.900 --> 00:10:31.360
+Votre question.
+
+00:10:31.760 --> 00:10:32.720
+Les instructions ajoutées,
+
+00:10:33.040 --> 00:10:33.700
+les documents joints
+
+00:10:33.700 --> 00:10:34.880
+et la réponse fournie en retour.
+
+00:10:35.340 --> 00:10:36.240
+Ainsi, une question simple
+
+00:10:36.240 --> 00:10:36.940
+consomme très peu.
+
+00:10:37.160 --> 00:10:37.560
+Mais un agent
+
+00:10:37.560 --> 00:10:38.700
+qui lit un long document de politique
+
+00:10:38.700 --> 00:10:39.620
+pose des questions de suivi,
+
+00:10:39.760 --> 00:10:40.320
+appelle un outil
+
+00:10:40.320 --> 00:10:41.560
+et rédige une réponse détaillée
+
+00:10:41.560 --> 00:10:42.700
+peut utiliser beaucoup plus
+
+00:10:42.700 --> 00:10:43.980
+que prévu, prévu.
+
+00:10:44.260 --> 00:10:44.780
+Vous avez probablement
+
+00:10:44.780 --> 00:10:45.260
+déjà vu cela
+
+00:10:45.260 --> 00:10:46.140
+avec une transcription de réunion.
+
+00:10:46.340 --> 00:10:47.260
+Voyez quelques pages de notes.
+
+00:10:48.080 --> 00:10:48.660
+Le système d'IA
+
+00:10:48.660 --> 00:10:49.160
+traite également
+
+00:10:49.160 --> 00:10:50.020
+ses instructions système,
+
+00:10:50.120 --> 00:10:50.600
+la transcription,
+
+00:10:50.880 --> 00:10:51.800
+les données d'entreprise extraites,
+
+00:10:51.880 --> 00:10:52.600
+les résultats des outils
+
+00:10:52.600 --> 00:10:53.460
+et la réponse finale.
+
+00:10:54.280 --> 00:10:54.680
+Chaque élément
+
+00:10:54.680 --> 00:10:55.460
+augmente l'utilisation.
+
+00:10:55.980 --> 00:10:56.260
+C'est pourquoi
+
+00:10:56.260 --> 00:10:57.120
+un agent très sollicité
+
+00:10:57.120 --> 00:10:57.800
+peut consommer une limite
+
+00:10:57.800 --> 00:10:58.460
+de modèles partagés
+
+00:10:58.460 --> 00:10:59.020
+étonnamment vite.
+
+00:10:59.700 --> 00:11:00.320
+Imaginez une équipe
+
+00:11:00.320 --> 00:11:01.600
+testant un nouvel assistant marketing
+
+00:11:01.600 --> 00:11:02.480
+un vendredi après-midi.
+
+00:11:03.140 --> 00:11:03.620
+Quelqu'un lui donne
+
+00:11:03.620 --> 00:11:04.100
+un large ensemble
+
+00:11:04.100 --> 00:11:04.780
+de fichiers de campagne
+
+00:11:04.780 --> 00:11:05.120
+et lui demande
+
+00:11:05.120 --> 00:11:05.740
+de les comparer,
+
+00:11:06.200 --> 00:11:06.700
+les réécrire
+
+00:11:06.700 --> 00:11:07.980
+et les résumer en boucle.
+
+00:11:08.600 --> 00:11:09.060
+Pendant ce temps,
+
+00:11:09.260 --> 00:11:09.800
+le support client
+
+00:11:09.800 --> 00:11:10.760
+dépend de la même capacité
+
+00:11:10.760 --> 00:11:11.080
+de modèle
+
+00:11:11.080 --> 00:11:11.580
+pour les personnes
+
+00:11:11.580 --> 00:11:12.200
+cherchant de l'aide.
+
+00:11:12.920 --> 00:11:13.620
+Si la charge de travail
+
+00:11:13.620 --> 00:11:14.980
+de test utilise le quota partagé,
+
+00:11:15.280 --> 00:11:15.980
+l'assistant de support
+
+00:11:15.980 --> 00:11:16.900
+peut ralentir ou échouer
+
+00:11:16.900 --> 00:11:17.700
+quand les clients en ont besoin.
+
+00:11:18.260 --> 00:11:19.040
+Le problème n'est pas seulement
+
+00:11:19.040 --> 00:11:19.540
+que l'entreprise
+
+00:11:19.540 --> 00:11:20.240
+a dépensé de l'argent.
+
+00:11:20.680 --> 00:11:21.540
+La mauvaise charge de travail
+
+00:11:21.540 --> 00:11:22.280
+a pris la capacité
+
+00:11:22.280 --> 00:11:23.260
+de celle qui comptait le plus.
+
+00:11:23.800 --> 00:11:24.400
+La passerelle IA
+
+00:11:24.400 --> 00:11:25.240
+d'Azure API Management
+
+00:11:25.240 --> 00:11:26.040
+peut appliquer des limites
+
+00:11:26.040 --> 00:11:26.880
+avant que cela n'arrive.
+
+00:11:28.100 --> 00:11:28.680
+Vous pouvez définir
+
+00:11:28.680 --> 00:11:29.420
+des limites de requêtes,
+
+00:11:29.640 --> 00:11:30.580
+de jetons et des quotas
+
+00:11:30.580 --> 00:11:31.300
+pour une application,
+
+00:11:31.460 --> 00:11:31.760
+une équipe,
+
+00:11:32.000 --> 00:11:33.200
+un projet ou un consommateur.
+
+00:11:33.960 --> 00:11:34.700
+Un quota peut courir
+
+00:11:34.700 --> 00:11:35.360
+une courte fenêtre,
+
+00:11:35.600 --> 00:11:36.300
+des jetons par minute
+
+00:11:36.300 --> 00:11:37.500
+ou une période plus longue
+
+00:11:37.500 --> 00:11:38.060
+comme une allocation
+
+00:11:38.060 --> 00:11:39.020
+quotidienne ou mensuelle.
+
+00:11:40.060 --> 00:11:40.800
+Cela donne à chaque charge
+
+00:11:40.800 --> 00:11:41.400
+de travail une limite.
+
+00:11:41.740 --> 00:11:42.360
+L'assistant marketing
+
+00:11:42.360 --> 00:11:43.000
+peut avoir un budget
+
+00:11:43.000 --> 00:11:44.200
+adapté à son objectif.
+
+00:11:44.740 --> 00:11:45.320
+Le support client
+
+00:11:45.320 --> 00:11:46.300
+peut avoir sa propre allocation
+
+00:11:46.300 --> 00:11:47.400
+et une priorité plus élevée.
+
+00:11:48.220 --> 00:11:49.200
+Lorsque l'assistant marketing
+
+00:11:49.200 --> 00:11:49.820
+atteint sa limite,
+
+00:11:50.080 --> 00:11:50.880
+la passerelle peut rejeter
+
+00:11:50.880 --> 00:11:51.360
+ou ralentir
+
+00:11:51.360 --> 00:11:52.040
+ses prochaines requêtes.
+
+00:11:52.680 --> 00:11:53.220
+Le support client
+
+00:11:53.220 --> 00:11:53.960
+continue de fonctionner
+
+00:11:53.960 --> 00:11:54.780
+car un projet de test
+
+00:11:54.780 --> 00:11:55.680
+ne peut pas tout utiliser.
+
+00:11:56.440 --> 00:11:57.000
+Cela change aussi
+
+00:11:57.000 --> 00:11:57.440
+la discussion
+
+00:11:57.440 --> 00:11:58.280
+sur les coûts mensuels.
+
+00:11:58.820 --> 00:11:59.380
+Sans vue partagée,
+
+00:11:59.440 --> 00:12:00.080
+une équipe financière
+
+00:12:00.080 --> 00:12:01.160
+peut recevoir une grosse facturier
+
+00:12:01.160 --> 00:12:01.480
+et demander
+
+00:12:01.480 --> 00:12:02.380
+qui a consommé tout ça.
+
+00:12:02.680 --> 00:12:03.640
+Qui a consommé tout ça ?
+
+00:12:03.640 --> 00:12:04.640
+La réponse peut être difficile
+
+00:12:04.640 --> 00:12:05.440
+à trouver quand les équipes
+
+00:12:05.440 --> 00:12:06.160
+se connectent directement
+
+00:12:06.160 --> 00:12:06.900
+à différents services
+
+00:12:06.900 --> 00:12:07.720
+avec des clés partagées.
+
+00:12:08.740 --> 00:12:09.800
+Une passerelle peut enregistrer
+
+00:12:09.800 --> 00:12:10.700
+la plan, le modèle,
+
+00:12:10.840 --> 00:12:11.680
+l'utilisation des jetons,
+
+00:12:11.760 --> 00:12:12.460
+le statut de la réponse
+
+00:12:12.460 --> 00:12:13.300
+et les appels d'outiliers
+
+00:12:13.300 --> 00:12:13.860
+à une requête.
+
+00:12:14.420 --> 00:12:14.840
+Cela vous donne
+
+00:12:14.840 --> 00:12:15.620
+une piste plus claire.
+
+00:12:16.640 --> 00:12:17.140
+Vous pouvez voir
+
+00:12:17.140 --> 00:12:18.000
+si les dépenses proviennent
+
+00:12:18.000 --> 00:12:18.960
+d'un assistant RH,
+
+00:12:19.060 --> 00:12:19.560
+d'un environnement
+
+00:12:19.560 --> 00:12:20.340
+de test développeur,
+
+00:12:20.420 --> 00:12:21.100
+d'un chatbot client
+
+00:12:21.100 --> 00:12:21.860
+ou d'un agent
+
+00:12:21.860 --> 00:12:23.000
+qui a multiplié les tentatives
+
+00:12:23.000 --> 00:12:23.700
+après une erreur.
+
+00:12:25.060 --> 00:12:25.700
+Vous pouvez également
+
+00:12:25.700 --> 00:12:26.880
+repérer des modèles inhabituels
+
+00:12:26.880 --> 00:12:27.540
+comme une application
+
+00:12:27.540 --> 00:12:28.120
+envoyant des pompes
+
+00:12:28.120 --> 00:12:28.520
+bien plus larges
+
+00:12:28.520 --> 00:12:28.980
+que la normale.
+
+00:12:29.440 --> 00:12:30.240
+Si votre équipe commence
+
+00:12:30.240 --> 00:12:31.200
+dans Microsoft Foundry,
+
+00:12:31.280 --> 00:12:31.960
+la passerelle peut aussi
+
+00:12:31.960 --> 00:12:32.760
+se connecter à ce travail.
+
+00:12:33.360 --> 00:12:33.920
+Les projets Foundry
+
+00:12:33.920 --> 00:12:34.800
+peuvent utiliser des limites
+
+00:12:34.800 --> 00:12:35.720
+de jetons au niveau du projet
+
+00:12:35.720 --> 00:12:36.400
+tandis que la passerelle
+
+00:12:36.400 --> 00:12:37.300
+applique les règles de trafic
+
+00:12:37.300 --> 00:12:37.680
+autour d'eux.
+
+00:12:38.040 --> 00:12:39.040
+Cela offre au concepteur d'IA
+
+00:12:39.040 --> 00:12:39.980
+un point de départ plus simple
+
+00:12:39.980 --> 00:12:40.960
+tout en donnant à l'équipe
+
+00:12:40.960 --> 00:12:41.960
+plateforme un lieu partagé
+
+00:12:41.960 --> 00:12:42.660
+pour gérer les limites
+
+00:12:42.660 --> 00:12:43.260
+et le suivi.
+
+00:12:43.920 --> 00:12:44.960
+Il existe aussi une fonctionnalité
+
+00:12:44.960 --> 00:12:45.520
+utile à plus mise
+
+00:12:45.520 --> 00:12:46.080
+en cache sémantique.
+
+00:12:46.500 --> 00:12:47.460
+Disons qu'un employé demande
+
+00:12:47.460 --> 00:12:48.240
+« Où puis-je trouver
+
+00:12:48.240 --> 00:12:49.420
+la politique de voyage ? »
+
+00:12:49.420 --> 00:12:50.220
+Quelques secondes plus tard,
+
+00:12:50.280 --> 00:12:50.840
+un autre demande
+
+00:12:50.840 --> 00:12:51.980
+« Où est notre politique
+
+00:12:51.980 --> 00:12:53.520
+pour les voyages d'affaires ? »
+
+00:12:53.520 --> 00:12:54.160
+Les mots d'y faire
+
+00:12:54.160 --> 00:12:55.360
+mais le sens peut être
+
+00:12:55.360 --> 00:12:55.860
+assez proche
+
+00:12:55.860 --> 00:12:56.600
+pour que la passerelle
+
+00:12:56.600 --> 00:12:57.400
+réutilise une réponse
+
+00:12:57.400 --> 00:12:58.300
+précédente appropriée
+
+00:12:58.300 --> 00:12:59.200
+au lieu de rappeler le modèle.
+
+00:13:00.720 --> 00:13:01.540
+Cela peut réduire les coûts
+
+00:13:01.540 --> 00:13:02.420
+et accélérer la réponse.
+
+00:13:02.700 --> 00:13:03.500
+Cela ne convient qu'aux questions
+
+00:13:03.500 --> 00:13:04.500
+où la réutilisation est pertinente.
+
+00:13:04.940 --> 00:13:05.780
+Vous ne mettriez pas en cache
+
+00:13:05.780 --> 00:13:06.540
+une demande concernant
+
+00:13:06.540 --> 00:13:07.420
+le solde de congé actuel
+
+00:13:07.420 --> 00:13:08.420
+ou le statut d'une commande
+
+00:13:08.420 --> 00:13:09.760
+car ces réponses peuvent changer.
+
+00:13:10.260 --> 00:13:10.960
+Le routage peut également
+
+00:13:10.960 --> 00:13:11.700
+aider à réduire les coûts.
+
+00:13:12.100 --> 00:13:13.100
+Une entreprise peut diriger
+
+00:13:13.100 --> 00:13:13.880
+le travail adapté
+
+00:13:13.880 --> 00:13:14.840
+vers un modèle moins coûteux,
+
+00:13:15.120 --> 00:13:15.920
+utiliser la capacité
+
+00:13:15.920 --> 00:13:16.560
+déjà réservée
+
+00:13:16.560 --> 00:13:17.040
+avant de payer
+
+00:13:17.040 --> 00:13:18.160
+pour un usage supplémentaire
+
+00:13:18.160 --> 00:13:19.300
+et passer à un chemin de secours
+
+00:13:19.300 --> 00:13:19.900
+en cas de limite.
+
+00:13:20.880 --> 00:13:21.200
+Cependant,
+
+00:13:21.260 --> 00:13:21.960
+une passerelle ne supprime
+
+00:13:21.960 --> 00:13:22.860
+pas le besoin de responsabilité.
+
+00:13:23.680 --> 00:13:24.460
+Les équipes ont besoin de budget.
+
+00:13:24.800 --> 00:13:25.440
+Quelqu'un doit examiner
+
+00:13:25.440 --> 00:13:26.120
+les réponses du modèle.
+
+00:13:26.660 --> 00:13:27.420
+Quelqu'un doit décider
+
+00:13:27.420 --> 00:13:28.780
+si un agent doit même exister.
+
+00:13:29.540 --> 00:13:30.380
+La passerelle vous fournit
+
+00:13:30.380 --> 00:13:30.860
+le compteur,
+
+00:13:30.960 --> 00:13:31.740
+les garde-fouilles historiques
+
+00:13:31.740 --> 00:13:32.160
+du trafic.
+
+00:13:32.820 --> 00:13:33.260
+Elle ne prend pas
+
+00:13:33.260 --> 00:13:33.920
+de décision commerciale
+
+00:13:33.920 --> 00:13:34.360
+à votre place.
+
+00:13:34.740 --> 00:13:35.460
+Une fois que vous pouvez voir
+
+00:13:35.460 --> 00:13:36.440
+et contrôler le trafic,
+
+00:13:36.720 --> 00:13:37.700
+l'ensemble devient plus facile
+
+00:13:37.700 --> 00:13:38.260
+à visualiser
+
+00:13:38.260 --> 00:13:39.220
+avec un exemple quotidien.
+
+00:13:39.220 --> 00:13:40.920
+Le parcours d'une demande simple.
+
+00:13:41.340 --> 00:13:42.240
+Imaginez un assistant RH
+
+00:13:42.240 --> 00:13:42.940
+au sein d'une entreprise.
+
+00:13:43.500 --> 00:13:44.280
+Un employé demande
+
+00:13:44.280 --> 00:13:45.040
+« Combien de jours
+
+00:13:45.040 --> 00:13:46.200
+de congé parental puis-je prendre
+
+00:13:46.200 --> 00:13:46.860
+et pouvez-vous lancer
+
+00:13:46.860 --> 00:13:47.820
+la demande pour moi ? »
+
+00:13:47.820 --> 00:13:48.640
+L'objectif est simple,
+
+00:13:48.800 --> 00:13:49.380
+donner à l'employé
+
+00:13:49.380 --> 00:13:50.500
+une réponse rapide et utile
+
+00:13:50.500 --> 00:13:51.520
+puis aider à l'étape suivante
+
+00:13:51.520 --> 00:13:51.840
+à prouver.
+
+00:13:52.720 --> 00:13:53.460
+Mais l'assistant RH
+
+00:13:53.460 --> 00:13:54.140
+ne doit pas divulguer
+
+00:13:54.140 --> 00:13:54.760
+de données de paye,
+
+00:13:54.920 --> 00:13:55.760
+ouvrir tous les dossiers RH
+
+00:13:55.760 --> 00:13:56.480
+ou contenir une clé
+
+00:13:56.480 --> 00:13:57.180
+de fournisseur de modèle
+
+00:13:57.180 --> 00:13:57.640
+dans son code.
+
+00:13:58.560 --> 00:13:59.420
+La demande commence
+
+00:13:59.420 --> 00:14:00.380
+lorsque l'employé se connecte.
+
+00:14:01.080 --> 00:14:01.680
+Avant que l'assistant
+
+00:14:01.680 --> 00:14:02.360
+n'envoie quoi que ce soit
+
+00:14:02.360 --> 00:14:03.320
+à un modèle ou à un outil,
+
+00:14:03.660 --> 00:14:04.380
+la passerelle vérifie
+
+00:14:04.380 --> 00:14:04.920
+qu'est l'employé
+
+00:14:04.920 --> 00:14:05.660
+si peu utilisé,
+
+00:14:05.900 --> 00:14:06.520
+l'assistant RH
+
+00:14:06.520 --> 00:14:07.000
+et quelles limites
+
+00:14:07.000 --> 00:14:08.000
+s'appliquent à cette application.
+
+00:14:08.860 --> 00:14:09.360
+L'employé voit
+
+00:14:09.360 --> 00:14:10.380
+une simple fenêtre de chat
+
+00:14:10.380 --> 00:14:11.220
+tandis que ses vérifications
+
+00:14:11.220 --> 00:14:12.220
+s'effectuent en arrière-plan.
+
+00:14:12.920 --> 00:14:13.160
+Ensuite,
+
+00:14:13.220 --> 00:14:13.780
+l'assistant a besoin
+
+00:14:13.780 --> 00:14:14.220
+d'une réponse.
+
+00:14:14.580 --> 00:14:15.420
+Question de politique générale
+
+00:14:15.420 --> 00:14:16.000
+peut être envoyée
+
+00:14:16.000 --> 00:14:16.680
+au point de terminaison
+
+00:14:16.680 --> 00:14:17.260
+du modèle approuvé
+
+00:14:17.260 --> 00:14:17.800
+par l'entreprise.
+
+00:14:18.600 --> 00:14:19.540
+Si ce point de terminaison
+
+00:14:19.540 --> 00:14:20.120
+est occupé
+
+00:14:20.120 --> 00:14:21.440
+ou atteint une limite définie,
+
+00:14:21.820 --> 00:14:22.620
+la passerelle peut suivre
+
+00:14:22.620 --> 00:14:23.260
+une route de secours
+
+00:14:23.260 --> 00:14:24.380
+déjà approuvée par l'entreprise.
+
+00:14:25.320 --> 00:14:25.960
+L'employé obtient
+
+00:14:25.960 --> 00:14:26.700
+tout de même une réponse
+
+00:14:26.700 --> 00:14:27.820
+via le même assistant RH
+
+00:14:27.820 --> 00:14:28.780
+au lieu de voir une erreur
+
+00:14:28.780 --> 00:14:29.420
+parce qu'un déploiement
+
+00:14:29.420 --> 00:14:30.100
+de modèle était
+
+00:14:30.100 --> 00:14:31.180
+trop chargé.
+
+00:14:31.740 --> 00:14:31.960
+Ensuite,
+
+00:14:32.040 --> 00:14:32.520
+l'employé demande
+
+00:14:32.520 --> 00:14:33.460
+à lancer la demande de congé.
+
+00:14:34.040 --> 00:14:34.460
+À ce stade,
+
+00:14:34.520 --> 00:14:34.960
+l'agent a besoin
+
+00:14:34.960 --> 00:14:35.780
+de plus qu'un simple modèle.
+
+00:14:36.340 --> 00:14:37.140
+Il lui faut un outil capable
+
+00:14:37.140 --> 00:14:37.960
+de vérifier les détails
+
+00:14:37.960 --> 00:14:38.420
+de l'employé
+
+00:14:38.420 --> 00:14:39.520
+et de créer la demande appropriée.
+
+00:14:40.020 --> 00:14:40.520
+L'agent demande
+
+00:14:40.520 --> 00:14:41.660
+à utiliser un outil MCP
+
+00:14:41.660 --> 00:14:42.040
+approuvé
+
+00:14:42.040 --> 00:14:42.980
+pour la gestion des congés.
+
+00:14:43.840 --> 00:14:44.540
+La passerelle vérifie
+
+00:14:44.540 --> 00:14:45.080
+également ses demandes.
+
+00:14:45.520 --> 00:14:46.220
+Cet agent RH
+
+00:14:46.220 --> 00:14:47.620
+peut-il appeler cet outil ?
+
+00:14:47.620 --> 00:14:48.740
+Cet employé est-il autorisé
+
+00:14:48.740 --> 00:14:50.320
+à lancer ce type de demande ?
+
+00:14:50.320 --> 00:14:51.180
+L'action correspond-t-elle
+
+00:14:51.180 --> 00:14:52.040
+aux permissions attribuées
+
+00:14:52.040 --> 00:14:53.080
+à l'agent ?
+
+00:14:53.080 --> 00:15:06.720
+Cette réponse ciblée
+
+00:15:06.720 --> 00:15:07.180
+est importante.
+
+00:15:07.500 --> 00:15:07.960
+L'agent dispose
+
+00:15:07.960 --> 00:15:08.900
+d'informations suffisantes
+
+00:15:08.900 --> 00:15:09.640
+mais il n'obtient pas
+
+00:15:09.640 --> 00:15:10.260
+un accès étendu
+
+00:15:10.260 --> 00:15:10.980
+simplement parce qu'il a
+
+00:15:10.980 --> 00:15:11.500
+posé une question
+
+00:15:11.500 --> 00:15:12.260
+en langage clair.
+
+00:15:12.760 --> 00:15:13.340
+Imaginez maintenant
+
+00:15:13.340 --> 00:15:14.220
+que l'employé colle du texte
+
+00:15:14.220 --> 00:15:15.280
+provenant d'un document externe
+
+00:15:15.280 --> 00:15:15.780
+dans le chat.
+
+00:15:16.540 --> 00:15:17.180
+Ce texte contient
+
+00:15:17.180 --> 00:15:18.040
+des instructions visant
+
+00:15:18.040 --> 00:15:18.780
+à pousser l'assistant
+
+00:15:18.780 --> 00:15:19.540
+à ignorer ses règles
+
+00:15:19.540 --> 00:15:20.080
+ou à divulguer
+
+00:15:20.080 --> 00:15:21.300
+des informations confidentielles.
+
+00:15:22.180 --> 00:15:23.060
+La passerelle peut appliquer
+
+00:15:23.060 --> 00:15:23.940
+des contrôles de sécurité
+
+00:15:23.940 --> 00:15:24.580
+avant que l'invite
+
+00:15:24.580 --> 00:15:25.200
+n'atteigne le modèle
+
+00:15:25.200 --> 00:15:25.700
+ou qu'un outil
+
+00:15:25.700 --> 00:15:26.480
+ne reçoive une requête.
+
+00:15:27.000 --> 00:15:27.400
+Si la requête
+
+00:15:27.400 --> 00:15:27.920
+en ferait une règle
+
+00:15:27.920 --> 00:15:28.480
+elle peut être arrêtée
+
+00:15:28.480 --> 00:15:28.820
+sur le champ.
+
+00:15:29.320 --> 00:15:30.160
+Ce même type de contrôle
+
+00:15:30.160 --> 00:15:31.160
+peut examiner une réponse
+
+00:15:31.160 --> 00:15:31.960
+avant qu'elle ne parvienne
+
+00:15:31.960 --> 00:15:32.480
+à l'employer.
+
+00:15:33.200 --> 00:15:33.660
+Tous les problèmes
+
+00:15:33.660 --> 00:15:34.520
+ne proviennent pas non plus
+
+00:15:34.520 --> 00:15:35.300
+d'une mauvaise invite.
+
+00:15:36.060 --> 00:15:36.980
+Un modèle pourrait produire
+
+00:15:36.980 --> 00:15:37.780
+une réponse contenant
+
+00:15:37.780 --> 00:15:38.320
+des informations
+
+00:15:38.320 --> 00:15:39.500
+qu'il ne devrait pas renvoyer.
+
+00:15:40.300 --> 00:15:41.320
+Un point de contrôle partagé
+
+00:15:41.320 --> 00:15:42.040
+permet à l'entreprise
+
+00:15:42.040 --> 00:15:42.820
+d'inspecter ce flux
+
+00:15:42.820 --> 00:15:43.420
+et d'intervenir.
+
+00:15:44.040 --> 00:15:44.360
+Parallèlement,
+
+00:15:44.440 --> 00:15:45.000
+la requête génère
+
+00:15:45.000 --> 00:15:45.580
+un enregistrement.
+
+00:15:45.880 --> 00:15:46.800
+L'entreprise peut associer
+
+00:15:46.800 --> 00:15:47.380
+le jeton utilisé
+
+00:15:47.380 --> 00:15:48.360
+au projet d'assistant RH.
+
+00:15:48.920 --> 00:15:49.320
+Elle peut voir
+
+00:15:49.320 --> 00:15:50.340
+quel modèle a traité la question,
+
+00:15:50.440 --> 00:15:51.320
+si l'appel d'outil a réussi,
+
+00:15:51.460 --> 00:15:52.400
+si une requête a été bloquée
+
+00:15:52.400 --> 00:15:53.240
+et combien de temps
+
+00:15:53.240 --> 00:15:54.560
+a duré le processus.
+
+00:15:55.140 --> 00:15:55.860
+Cela facilite grandement
+
+00:15:55.860 --> 00:15:56.660
+le support et l'analyse.
+
+00:15:57.200 --> 00:15:58.240
+Si l'équipe RH signale
+
+00:15:58.240 --> 00:15:58.800
+que les employés
+
+00:15:58.800 --> 00:15:59.340
+ne peuvent pas créer
+
+00:15:59.340 --> 00:16:00.080
+de demande de congé,
+
+00:16:00.600 --> 00:16:01.320
+l'équipe opérationnelle
+
+00:16:01.320 --> 00:16:01.740
+peut rechercher
+
+00:16:01.740 --> 00:16:02.280
+les appels d'outils
+
+00:16:02.280 --> 00:16:02.840
+ayant échoué.
+
+00:16:03.480 --> 00:16:04.140
+Une règle de sécurité
+
+00:16:04.140 --> 00:16:05.080
+bloque des questions valides
+
+00:16:05.080 --> 00:16:06.220
+et peuvent identifier le modèle
+
+00:16:06.220 --> 00:16:07.060
+et améliorer la politique.
+
+00:16:07.860 --> 00:16:08.480
+Si un agent utilise
+
+00:16:08.480 --> 00:16:09.260
+soudainement beaucoup plus
+
+00:16:09.260 --> 00:16:09.960
+de capacités IA
+
+00:16:09.960 --> 00:16:10.500
+que la normale,
+
+00:16:10.620 --> 00:16:11.600
+ce changement devient visible.
+
+00:16:11.600 --> 00:16:13.020
+Et si l'entreprise
+
+00:16:13.020 --> 00:16:13.800
+met à jour une règle
+
+00:16:13.800 --> 00:16:14.200
+comme l'ajout
+
+00:16:14.200 --> 00:16:15.380
+d'une vérification supplémentaire
+
+00:16:15.380 --> 00:16:16.080
+pour certaines demandes,
+
+00:16:16.140 --> 00:16:16.620
+elle peut modifier
+
+00:16:16.620 --> 00:16:17.540
+la politique de la passerelle
+
+00:16:17.540 --> 00:16:18.100
+une seule fois.
+
+00:16:18.900 --> 00:16:19.480
+Il n'est pas nécessaire
+
+00:16:19.480 --> 00:16:20.120
+d'attendre des mises à jour
+
+00:16:20.120 --> 00:16:20.760
+de code distinctes
+
+00:16:20.760 --> 00:16:21.720
+pour chaque application RH,
+
+00:16:21.900 --> 00:16:22.600
+chatbot ou workflow
+
+00:16:22.600 --> 00:16:23.840
+utilisant ce chemin contrôlé.
+
+00:16:25.000 --> 00:16:25.920
+Le même schéma de requête
+
+00:16:25.920 --> 00:16:26.580
+fonctionne toujours
+
+00:16:26.580 --> 00:16:27.580
+lorsque l'entreprise
+
+00:16:27.580 --> 00:16:28.580
+ajoute un autre modèle,
+
+00:16:28.960 --> 00:16:29.580
+une nouvelle région,
+
+00:16:29.740 --> 00:16:30.860
+plus d'outils internes
+
+00:16:30.860 --> 00:16:31.620
+ou un agent
+
+00:16:31.620 --> 00:16:32.660
+pour une autre tâche
+
+00:16:32.660 --> 00:16:33.680
+RH RH.
+
+00:16:34.400 --> 00:16:34.880
+Comment c'est petit,
+
+00:16:34.980 --> 00:16:35.420
+cependant ?
+
+00:16:35.420 --> 00:16:36.320
+Une passerelle devient utile
+
+00:16:36.320 --> 00:16:37.140
+lorsque le trafic IA
+
+00:16:37.140 --> 00:16:37.660
+commence à devenir
+
+00:16:37.660 --> 00:16:38.420
+un trafic partagé.
+
+00:16:39.180 --> 00:16:40.160
+Pas où commencer ?
+
+00:16:40.160 --> 00:16:42.400
+Alors, pas où commencer réellement ?
+
+00:16:42.400 --> 00:16:43.620
+Choisissez une seule charge
+
+00:16:43.620 --> 00:16:44.260
+de travail réelle.
+
+00:16:44.460 --> 00:16:45.480
+Peut-être un assistant de support
+
+00:16:45.480 --> 00:16:46.460
+appelant déjà un modèle
+
+00:16:46.460 --> 00:16:47.680
+ou un agent prévu pour les RH,
+
+00:16:47.800 --> 00:16:48.120
+la finance
+
+00:16:48.120 --> 00:16:49.500
+ou la recherche documentaire interne.
+
+00:16:50.500 --> 00:16:51.200
+N'essayez pas
+
+00:16:51.200 --> 00:16:51.940
+de traiter tous les modèles
+
+00:16:51.940 --> 00:16:52.820
+et tous les outils en même temps.
+
+00:16:53.200 --> 00:16:54.160
+C'est la voie rapide vers le chaos.
+
+00:16:54.480 --> 00:16:55.000
+Au lieu de donner
+
+00:16:55.000 --> 00:16:55.700
+les clés de fournisseur
+
+00:16:55.700 --> 00:16:56.860
+directement à chaque application,
+
+00:16:57.380 --> 00:16:58.340
+placez le point de terminaison
+
+00:16:58.340 --> 00:16:58.940
+du modèle derrière
+
+00:16:58.940 --> 00:16:59.760
+la passerelle IA
+
+00:16:59.760 --> 00:17:00.860
+d'Azure API Management.
+
+00:17:01.620 --> 00:17:02.120
+Considérez cela
+
+00:17:02.120 --> 00:17:02.800
+comme un point de contrôle
+
+00:17:02.800 --> 00:17:03.540
+de sécurité unique
+
+00:17:03.540 --> 00:17:04.200
+pour votre trafic IA.
+
+00:17:04.560 --> 00:17:05.500
+Ensuite, établissez les bases.
+
+00:17:05.900 --> 00:17:06.660
+Nommez un responsable clair
+
+00:17:06.660 --> 00:17:07.260
+pour la charge de travail.
+
+00:17:07.260 --> 00:17:08.720
+Utilisez l'accès via ENTRA
+
+00:17:08.720 --> 00:17:09.760
+pour que seules les bonnes personnes
+
+00:17:09.760 --> 00:17:10.760
+ou services puissent y accéder.
+
+00:17:11.400 --> 00:17:12.320
+Fixez une limite de jetons
+
+00:17:12.320 --> 00:17:13.000
+adaptée à la tâche,
+
+00:17:13.320 --> 00:17:13.780
+ni plus ni moins.
+
+00:17:14.160 --> 00:17:14.940
+Activez la journalisation
+
+00:17:14.940 --> 00:17:15.780
+pour que vous puissiez voir ce qui se passe.
+
+00:17:16.100 --> 00:17:17.520
+Ajoutez une règle de sécurité du contenu
+
+00:17:17.520 --> 00:17:18.660
+que votre équipe peut tester et réviser.
+
+00:17:18.940 --> 00:17:19.480
+Commencez simplement.
+
+00:17:19.960 --> 00:17:20.860
+Une fois le chemin du modèle
+
+00:17:20.860 --> 00:17:22.140
+et la limite d'accès opérationnel,
+
+00:17:22.500 --> 00:17:23.500
+ajoutez des outils MCP
+
+00:17:23.500 --> 00:17:24.140
+approuvés un par un.
+
+00:17:24.800 --> 00:17:25.580
+Chaque outil doit avoir
+
+00:17:25.580 --> 00:17:26.360
+une fonction précise
+
+00:17:26.360 --> 00:17:27.060
+et une raison claire
+
+00:17:27.060 --> 00:17:27.840
+pour que l'agent l'utilise.
+
+00:17:28.280 --> 00:17:28.940
+Pas de superflu.
+
+00:17:30.020 --> 00:17:30.700
+À partir de là,
+
+00:17:30.760 --> 00:17:31.660
+vous passez d'une charge de travail
+
+00:17:31.660 --> 00:17:32.160
+contrôlée
+
+00:17:32.160 --> 00:17:32.820
+à des modèles,
+
+00:17:32.960 --> 00:17:33.800
+outils et agents partagés.
+
+00:17:34.700 --> 00:17:35.740
+Sans ce point de contrôle initial,
+
+00:17:36.120 --> 00:17:37.140
+chaque nouvelle application IA
+
+00:17:37.140 --> 00:17:37.740
+crée un chemin
+
+00:17:37.740 --> 00:17:39.060
+non géré vers les données de l'entreprise
+
+00:17:39.060 --> 00:17:40.080
+et une ligne supplémentaire
+
+00:17:40.080 --> 00:17:40.820
+sur la facture IA.
+
+00:17:41.440 --> 00:17:42.580
+Pour la prochaine pépite de connaissances,
+
+00:17:42.700 --> 00:17:43.860
+consultez Casio API Management
+
+00:17:43.860 --> 00:17:44.920
+Simply Explain Explain the Go.
+
+00:17:45.540 --> 00:17:46.240
+C'est la base sur laquelle
+
+00:17:46.240 --> 00:17:47.620
+s'appuie Microsoft AI Gateway.

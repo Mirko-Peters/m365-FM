@@ -1,0 +1,826 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:08.540
+Dlaczego więc zamknięcie miesiąca wciąż wymaga pięciu różnych wersji arkusza kalkulacyjnego, szukania właściwego pliku i czekania przez menedżera na odpowiedź, która powinna być już oczywista?
+
+00:00:08.780 --> 00:00:14.840
+Możesz mieć jedną księgę główną, kilka działów i tysiące transakcji, a mimo to nie potrafisz przejrzyście przedstawić sytuacji finansowej firmy.
+
+00:00:15.020 --> 00:00:25.220
+W tym miejscu pojawia się Dynamics 365 Finance. Nazywam się Mirko Peters z M365FM, a ta porcja wiedzy wyjaśnia, jak zaksięgowane dane finansowe przekształcają się w raporty, które można łatwo zrozumieć.
+
+00:00:25.220 --> 00:00:31.480
+Potraktuj każdą transakcję jako dokument przechowywany w centralnej kartotece, który można odczytywać na różne sposoby bez każdorazowego przeliczania danych.
+
+00:00:31.720 --> 00:00:37.540
+Zacznijmy od rekordów znajdujących się w tej kartotece. Fundament, księga główna, konta główne i kategorie.
+
+00:00:37.840 --> 00:00:43.580
+Księga główna to główny rejestr finansowy firmy, w którym każda zaksięgowana transakcja kończy się w jakiejś formie.
+
+00:00:43.780 --> 00:00:50.540
+Faktura sprzedaży, rachunek od dostawcy, lista płac, płatność bankowa czy korekta stanu magazynowego – wszystko to zostawia ślad w księgowości.
+
+00:00:50.540 --> 00:00:59.260
+Pomyśl o księdze głównej, jak o dużej szafce na akta z surową zasadą nie wkładasz rachunku za czynsz do tej samej szuflady, co sprzedaż produktów ani salda bankowego do wynagrodzeń pracowników.
+
+00:00:59.420 --> 00:01:06.080
+Każda kwota potrzebuje swojego finansowego miejsca. To miejsce zaczyna się od konta głównego, które odpowiada na jedno proste pytanie – czego dotyczą te pieniądze?
+
+00:01:06.260 --> 00:01:13.820
+Gotówka znajduje się na jednym koncie głównym, przychody ze sprzedaży na innym, a koszty czynszu, płace, należności, zobowiązania, kredyty i podatki mają swoje własne.
+
+00:01:13.820 --> 00:01:20.200
+Gdy Twoja firma płaci comiesięczny rachunek za czynsz, Dynamics 365 Finance zapisuje tę kwotę na koncie kosztów czynszu.
+
+00:01:20.360 --> 00:01:25.900
+A gdy klient opłaca fakturę, przychód trafia na konto sprzedaży, podczas gdy nieopłacona kwota trafia do należności.
+
+00:01:26.120 --> 00:01:29.440
+Konto informuje system finance, co wydarzyło się pod względem finansowym.
+
+00:01:29.600 --> 00:01:36.120
+Ta struktura ma znaczenie, ponieważ sprawozdanie finansowe nie wymyśla liczb, lecz odczytuje i grupuje dane już zaksięgowane w księdze głównej.
+
+00:01:36.320 --> 00:01:41.500
+Jeśli rekordy księgowe trafią w niewłaściwe miejsce, żaden projekt raportu nie naprawi błędów bezręcznej pracy.
+
+00:01:41.500 --> 00:01:47.820
+Konta główne mają również typy, a typ konta zapewnia Dynamics 365 Finance ogólną klasyfikację.
+
+00:01:48.300 --> 00:01:54.260
+Konta zysków i strat rejestrują przychody i wydatki w danym okresie, a ich łączne saldo wpływa na wynik końcowy roku.
+
+00:01:54.540 --> 00:02:00.420
+Bilans rejestruje to, co firma posiada, co jest winna i jaki jest udział właściciela, czyli aktywa, pasywa i kapitał własny.
+
+00:02:00.620 --> 00:02:06.740
+Gotówka to zazwyczaj aktywo, kredyt bankowy to zazwyczaj zobowiązanie, przychód ze sprzedaży należy do zysków i strat, a czynsz do kosztów.
+
+00:02:06.740 --> 00:02:15.620
+Może to brzmieć jak podstawy księgowości i tak właśnie jest, ale to również pierwszy punkt kontrolny raportowania, ponieważ system musi wiedzieć, czy konto należy do rachunku zysków i strat, czy do bilansu.
+
+00:02:15.780 --> 00:02:19.980
+Istnieje również specjalny typ konta sumującego, który może dodawać do siebie zakres saltkont.
+
+00:02:20.200 --> 00:02:27.200
+Można go użyć, gdy potrzebna jest suma z określonego przedziału, choć wiele zespołów finansowych buduje sumy zestawień bezpośrednio w raportowaniu finansowym.
+
+00:02:27.400 --> 00:02:30.920
+Typy kont pozostają ogólne i właśnie tutaj pojawiają się kategorie kont głównych.
+
+00:02:30.920 --> 00:02:34.820
+Tworzą one bardziej użyteczną grupę raportową w ramach tej szerokiej klasyfikacji.
+
+00:02:35.060 --> 00:02:41.060
+Na przykład konta aktywów mogą znajdować się w kategoriach takich jak gotówka, środki trwałe, należności lub inwestycje krótkoterminowe,
+
+00:02:41.240 --> 00:02:46.080
+podczas gdy konta pasywów mogą znajdować się w zobowiązaniach, zobowiązaniach podatkowych lub długoterminowym zadłużeniu.
+
+00:02:46.280 --> 00:02:47.320
+Różnica jest prosta.
+
+00:02:47.540 --> 00:02:53.540
+Typ konta wskazuje ogólną klasę księgową, a kategoria konta głównego określa grupę raportową, którą chcesz pokazać odbiorcom.
+
+00:02:53.780 --> 00:02:57.740
+Wyobraź sobie, że masz kilka kont bankowych, konto kasy drobnych wydatków i konto rozliczeniowe gotówki.
+
+00:02:57.740 --> 00:03:02.100
+Każde z nich może mieć własne konto główne, ponieważ dział finansowy potrzebuje takiego poziomu szczegółowości.
+
+00:03:02.280 --> 00:03:04.560
+Mimo to wszystkie mogą należeć do jednej kategorii gotówki.
+
+00:03:04.780 --> 00:03:08.460
+Dzięki temu raport może pokazać jedną przejrzystą pozycję gotówki, gdy tylko tego potrzebuje czytelnik.
+
+00:03:08.640 --> 00:03:11.840
+Dlatego domyślne raporty finansowe wykorzystują kategorie kont głównych.
+
+00:03:12.000 --> 00:03:18.360
+Potrzebują one znanej struktury, zanim będą mogły wyświetlić salda w sekcjach takich jak aktywa, pasywa, przychody czy koszty.
+
+00:03:18.760 --> 00:03:22.640
+Porządna konfiguracja procentuje później, ponieważ gdy konta główne przestrzegają jasnych zasad,
+
+00:03:22.640 --> 00:03:29.000
+typy kont są poprawne, a kategorie odpowiadają sposobowi, w jaki firma czyta sprawozdania finansowe, raportowanie staje się znacznie łatwiejsze.
+
+00:03:29.200 --> 00:03:31.380
+Zaczynasz od danych, które mają już swoje miejsce.
+
+00:03:31.620 --> 00:03:35.780
+Konta wyjaśniają, co wydarzyło się finansowo, ale liderzy zazwyczaj pytają o coś więcej.
+
+00:03:36.060 --> 00:03:41.460
+Chcą też wiedzieć, gdzie to się stało, kto wydał pieniądze i która część biznesu wypracowała ten wynik.
+
+00:03:41.460 --> 00:03:46.420
+Wymiary finansowe dodające pytania, które faktycznie zadają liderzy.
+
+00:03:46.580 --> 00:03:48.820
+Konto główne mówi, czego dotyczą pieniądze.
+
+00:03:49.220 --> 00:03:53.600
+Wystarczająco proste, jednak wymiary finansowe dodają kontekst biznesowy wokół tej kwoty.
+
+00:03:53.820 --> 00:03:56.260
+Odpowiadają na pytania, które zadają liderzy, widząc sumę.
+
+00:03:56.400 --> 00:03:57.540
+Który dział wydał te środki?
+
+00:03:57.740 --> 00:03:58.900
+Która lokalizacja je zarobiła?
+
+00:03:59.080 --> 00:04:00.160
+Która jednostka biznesowa?
+
+00:04:00.300 --> 00:04:01.620
+Czy było to powiązane z projektem?
+
+00:04:01.740 --> 00:04:03.000
+Przyjrzyjmy się kosztom czynszu.
+
+00:04:03.000 --> 00:04:06.720
+Twoja firma może płacić czynsz za centrale, magazyn i kilka punktów sprzedaży detalicznej.
+
+00:04:06.860 --> 00:04:09.800
+Jeśli każda płatność jest księgowana na kosztach czynszu, widzisz całkowity rachunek.
+
+00:04:09.980 --> 00:04:13.340
+Jest to przydatne, ale nie mówi menedżerowi regionalnemu, ile kosztuje jego placówka.
+
+00:04:13.540 --> 00:04:15.100
+Wymiar finansowy wypełnia tę lukę.
+
+00:04:15.340 --> 00:04:20.460
+Możesz dodać działu, finanse, sprzedaż lub operacje albo centrum kosztów, jednostkę biznesową, region lub projekt.
+
+00:04:20.700 --> 00:04:23.440
+Wartości te są przypisane do zapisu księgowego w momencie jego zaksięgowania.
+
+00:04:23.660 --> 00:04:26.540
+Konto pozostaje więc kosztem czynszu, ale zapis opowiada pełniejszą historię.
+
+00:04:26.540 --> 00:04:29.040
+Jedna płatność może brzmieć koszt czynszu, centrala.
+
+00:04:29.200 --> 00:04:30.600
+Inna koszt czynszu, magazyn.
+
+00:04:30.720 --> 00:04:32.920
+Trzecia koszt czynszu, sprzedaż detaliczna północ.
+
+00:04:33.060 --> 00:04:34.960
+To samo konto, inne znaczenie biznesowe.
+
+00:04:35.180 --> 00:04:40.120
+Daje to działowi finansów spójną strukturę kont, pozwalając jednocześnie liderom przeglądać wyniki dla ich części firmy.
+
+00:04:40.320 --> 00:04:42.080
+Dyrektor sprzedaży patrzy na sprzedaż.
+
+00:04:42.220 --> 00:04:44.000
+Kierownik magazynu patrzy na magazyn.
+
+00:04:44.220 --> 00:04:45.980
+Dział finansów widzi sumę dla wszystkich.
+
+00:04:46.260 --> 00:04:48.820
+Eliminuje to powszechny nawyk pracy w arkuszach kalkulacyjnych.
+
+00:04:48.820 --> 00:04:52.960
+Bez wymiarów ktoś eksportuje salda księgi głównej i zaczyna ręcznie dodawać kolumny.
+
+00:04:53.200 --> 00:04:58.820
+Sortuje, filtruje, kopiuje liczby do nowego skoroszytu, a potem próbuje wyjaśnić, dlaczego suma działu nie zgadza się z sumą firmy.
+
+00:04:59.040 --> 00:05:03.060
+Dzięki wymiarom wprowadzonym podczas księgowania transakcji, praca zaczyna się z lepszego poziomu.
+
+00:05:03.240 --> 00:05:07.820
+Szczegół należy już do rekordu księgowego, ale działa to tylko wtedy, gdy wartości są spójne.
+
+00:05:07.820 --> 00:05:16.580
+Jeśli jedna osoba wybierze region północny, druga północ, a trzecia północ01, raport rozdzieli to, co powinno być jednym saldem na osobne linie.
+
+00:05:16.800 --> 00:05:21.800
+Dział finansów potrzebuje jasnych nazw, przejrzystej odpowiedzialności i zasad dotyczących tego, jakich wartości mogą używać pracownicy.
+
+00:05:21.800 --> 00:05:25.100
+Dynamics 365 Finance wspiera to poprzez reguły kont.
+
+00:05:25.260 --> 00:05:29.820
+W zależności od konta, system może wymagać wymiaru lub ograniczyć wartości, które użytkownicy mogą wybrać.
+
+00:05:29.960 --> 00:05:34.720
+Na przykład konto kosztowe może wymagać centrum kosztów, podczas gdy konto bankowe może potrzebować tylko jednostki biznesowej.
+
+00:05:34.720 --> 00:05:37.300
+Nie potrzebujesz takich samych szczegółów dla każdego konta.
+
+00:05:37.420 --> 00:05:38.340
+Oto prosta zasada.
+
+00:05:38.540 --> 00:05:42.500
+Użyj wymiaru finansowego, gdy spodziewasz się wielokrotnego użycia wartości i raportowania sald według niej w czasie.
+
+00:05:42.740 --> 00:05:44.020
+Dział jest wielokrotnego użytku.
+
+00:05:44.200 --> 00:05:45.820
+Centrum kosztów jest wielokrotnego użytku.
+
+00:05:46.020 --> 00:05:47.460
+Region jest wielokrotnego użytku.
+
+00:05:47.620 --> 00:05:48.160
+Projekt również.
+
+00:05:48.160 --> 00:05:53.600
+Jeśli Twój zespół finansowy śledzi salda i koszty według projektów, numer faktury to co innego, numer zamówienia zakupu to co innego.
+
+00:05:53.840 --> 00:05:57.380
+Wartości te często dotyczą jednej transakcji lub krótkotrwałego zadania.
+
+00:05:57.380 --> 00:06:03.600
+Tworzenie wymiaru finansowego dla każdego numeru faktury pozostawi tysiące unikalnych wartości, których nikt nie chce widzieć w zestawieniu.
+
+00:06:03.740 --> 00:06:05.960
+W tym przypadku lepiej sprawdzają się tagi finansowe.
+
+00:06:06.140 --> 00:06:13.160
+Tag finansowy przechowuje elastyczne odniesienie, na przykład numer faktury, zamówienie zakupu, referencje płatności lub identyfikator systemu zewnętrznego.
+
+00:06:13.160 --> 00:06:18.600
+Znajduje się na zapisie księgowym w celach informacyjnych i analitycznych, ale nie pełni tak sformalizowanej roli jak wymiar finansowy.
+
+00:06:19.360 --> 00:06:21.760
+Wymiary finansowe są częścią struktury konta.
+
+00:06:21.960 --> 00:06:26.200
+System sprawdza, czy wartość jest poprawna, a dział finansowy może jej użyć do sumowania salt.
+
+00:06:26.200 --> 00:06:27.920
+Tagi finansowe są lżejsze.
+
+00:06:28.120 --> 00:06:31.580
+Etykietują transakcje, nie zamieniając tej etykiety w stały element raportowania.
+
+00:06:31.800 --> 00:06:35.460
+Więc nie twórz wymiaru o nazwie numer faktury, tylko po to, by później łatwiej wyszukiwać faktury.
+
+00:06:35.640 --> 00:06:37.940
+Użyj do tego szczegółów transakcji lub tagów finansowych.
+
+00:06:38.140 --> 00:06:40.240
+Jeszcze jedna kwestia konfiguracyjna, o której warto wiedzieć.
+
+00:06:40.460 --> 00:06:44.220
+Raportowanie finansowe może korzystać z wymiarów już istniejących w systemie bez dodatkowych narzędzi.
+
+00:06:44.220 --> 00:06:50.120
+Na stronie konfiguracji raportowania finansowego dział finansowy wybiera, które wymiary będą widoczne przy projektowaniu i przeglądaniu raportów oraz w jakiej kolejności.
+
+00:06:50.120 --> 00:06:52.720
+Ta kolejność ma większe znaczenie niż mogłoby się wydawać.
+
+00:06:52.820 --> 00:06:58.020
+Jeśli Twoje raporty zazwyczaj wyświetlają konto główne, dział, centrum kosztów i projekt, użytkownicy wiedzą, gdzie szukać informacji.
+
+00:06:58.220 --> 00:07:02.580
+Jeśli kolejność zmienia się między raportami, odczytywanie szczegółów trwa dłużej i łatwiej obłędy.
+
+00:07:02.820 --> 00:07:10.920
+Gdy każdy zapis posiada odpowiednie etykiety, księga główna odpowiada nie tylko na pytanie, ile wydaliśmy, odpowiada na pytania, gdzie, kto i która część firmy.
+
+00:07:10.920 --> 00:07:17.300
+Mając te szczegóły, Dynamics 365 Finance może przekształcić zaksięgowane wpisy w sprawozdanie finansowe.
+
+00:07:17.460 --> 00:07:19.640
+Czym właściwie jest raportowanie finansowe?
+
+00:07:19.840 --> 00:07:24.480
+Skoro wpisy w księdze zawierają już odpowiednie konta i wymiary, co właściwie robi z nimi raportowanie finansowe?
+
+00:07:24.640 --> 00:07:30.220
+Raportowanie finansowe to dodatek w Dynamics 365 Finance, służący do tworzenia, utrzymywania i przeglądania sprawozdań finansowych.
+
+00:07:30.440 --> 00:07:32.880
+Brzmi to technicznie, więc powiedzmy to prostszym językiem.
+
+00:07:32.880 --> 00:07:42.720
+To część Dynamics 365 Finance, która zmienia salda księgi głównej w raporty takie jak rachunek zysków i strat, bilans, przepływy pieniężne, obroty i salda lub raport budżet kontra wykonanie.
+
+00:07:42.860 --> 00:07:44.320
+To nie jest nowa księga główna.
+
+00:07:44.560 --> 00:07:48.120
+Nikt nie księguje faktury w module raportowania finansowego ani nie płaci z niego dostawcom.
+
+00:07:48.320 --> 00:07:52.980
+Księgowanie odbywa się w Dynamics 365 Finance, a raportowanie finansowe odczytuje wyniki po fakcie.
+
+00:07:53.120 --> 00:07:55.800
+To też nie jest tylko pulpit nawigacyjny z kilkoma wykresami.
+
+00:07:55.960 --> 00:07:58.100
+Pulpit pozwala szybko przeanalizować trend.
+
+00:07:58.100 --> 00:08:05.920
+Sprawozdanie finansowe zapewnia uporządkowany widok grup kont, sum, okresów raportowania, porównań oraz możliwość wglądu w szczegóły każdej liczby.
+
+00:08:06.100 --> 00:08:09.140
+Pomyśl o tym jak o pokoju raportów połączonym z księgą główną.
+
+00:08:09.340 --> 00:08:10.900
+Księga rejestruje transakcje.
+
+00:08:11.140 --> 00:08:16.540
+Raportowanie finansowe układa je w formacie, którego potrzebuje Twój zespół finansowy, menedżerowie, audytorzy czy zarząd.
+
+00:08:16.680 --> 00:08:21.280
+W tle raportowanie finansowe wykorzystuje hurtownię danych finansowych, która odświeża się z księgi głównej.
+
+00:08:21.280 --> 00:08:28.500
+Hurtownia danych to kopia danych finansowych przeznaczona do raportowania, dzięki czemu raporty działają bez spowalniania pracy osób wprowadzających faktury czy księgujących dzienniki.
+
+00:08:28.680 --> 00:08:33.520
+Ta separacja sprawia, że dział finansowy może analizować sprawozdanie, podczas gdy inni użytkownicy mogą dalej pracować.
+
+00:08:33.700 --> 00:08:38.040
+Nie musisz eksportować każdego salda do arkusza kalkulacyjnego, aby przygotować przejrzysty raport miesięczny.
+
+00:08:38.200 --> 00:08:42.280
+Microsoft dostarcza 22 domyślne raporty finansowe wraz z Dynamics 365 Finance.
+
+00:08:42.280 --> 00:08:51.960
+Otrzymujesz rachunek zysków i strat, bilans, raport przepływów pieniężnych, szczegółowe obroty i salda, podsumowanie obrotów i salt, kroczące raporty wydatków oraz raporty budżet kontra wykonanie.
+
+00:08:52.180 --> 00:08:57.200
+Dodatkowo raporty tygodniowej sprzedaży i rabatów, szczegóły audytu, wskaźniki lub bilans obok rachunku zysków i strat.
+
+00:08:57.340 --> 00:09:00.180
+To jednak nie oznacza, że wszystko od razu pasuje do Twojej firmy.
+
+00:09:00.360 --> 00:09:05.480
+Układ raportu może wyglądać poprawnie, ale Twoje konta główne i kategorie muszą zostać właściwie przypisane do wierszy.
+
+00:09:05.480 --> 00:09:11.860
+Jeśli Twoja firma nazywa grupę kont kosztami bezpośrednimi, a domyślny raport oczekuje kosztów sprzedaży, ktoś musi sprawdzić te ustawienia.
+
+00:09:12.080 --> 00:09:13.480
+Mimo to zacznij od raportu domyślnego.
+
+00:09:14.280 --> 00:09:19.900
+Daje on gotowy przykład, znaną strukturę i znacznie szybszy punkt wyjścia niż tworzenie każdego raportu od zera.
+
+00:09:20.080 --> 00:09:25.200
+Otwórz go, porównaj salda z księgą, sprawdź grupowanie kont i dostosuj tylko to, czego wymaga Twoja firma.
+
+00:09:25.440 --> 00:09:30.120
+Dynamics 365 Finance posiada kilka narzędzi do raportowania i tutaj użytkownicy często się gubią.
+
+00:09:30.120 --> 00:09:34.120
+Raportowanie finansowe obsługuje sprawozdania finansowe oparte na księdze głównej.
+
+00:09:34.260 --> 00:09:41.020
+SSRS, czyli SQL Server Reporting Services, zazwyczaj obsługuje sformatowane dokumenty biznesowe i szczegółowe raporty,
+
+00:09:41.100 --> 00:09:45.120
+takie jak faktury, zamówienia zakupu, wyciągi klientów czy długie listy transakcji.
+
+00:09:45.360 --> 00:09:48.060
+Jest stworzone do stron wymagających stałego układu.
+
+00:09:48.240 --> 00:09:55.760
+Raportowanie elektroniczne obsługuje pliki, które muszą zostać przesłane dalej pliki bankowe, deklaracje podatkowe, pliki XML, pliki CSV lub inne formaty regulowane.
+
+00:09:55.920 --> 00:09:59.180
+To narzędzie koncentruje się na wysyłaniu lub odbieraniu ustrukturyzowanych danych.
+
+00:09:59.180 --> 00:10:01.460
+PowerB obsługuje analizę interaktywną.
+
+00:10:01.620 --> 00:10:06.860
+Używasz PowerB, gdy potrzebujesz wykresów, filtrów, trendów i widoków zarządczych, które pomagają zgłębiać pytania.
+
+00:10:07.060 --> 00:10:09.080
+Który region ma najszybciej rosnące koszty?
+
+00:10:09.300 --> 00:10:12.460
+Jak wydatki rzeczywiste wypadają na tle budżetu w ciągu kilku miesięcy?
+
+00:10:12.660 --> 00:10:15.360
+Raportowanie finansowe obsługuje formalne sprawozdanie.
+
+00:10:15.540 --> 00:10:18.080
+PowerB pomaga analizować wzorce z nim związane.
+
+00:10:18.280 --> 00:10:21.880
+Excel daje działom finansowym znane miejsce do sprawdzania liczb lub dodatkowej analizy,
+
+00:10:21.980 --> 00:10:25.720
+ale nie musi stać się miejscem, w którym każde sprawozdanie finansowe powstaje od podstaw.
+
+00:10:25.720 --> 00:10:27.440
+Każde narzędzie ma swoje zadanie.
+
+00:10:27.680 --> 00:10:32.300
+Wybierz odpowiednie, a raportowanie stanie się mniej o przebudowywaniu liczb, a bardziej o ich odczytywaniu.
+
+00:10:32.700 --> 00:10:35.880
+Budowanie raportu, wiersze, kolumny i definicje raportów.
+
+00:10:36.560 --> 00:10:39.140
+Każde sprawozdanie finansowe zaczyna się od kształtu.
+
+00:10:39.380 --> 00:10:44.300
+Musisz zdecydować, co znajdzie się po lewej stronie, co na górze i jak raport połączy te dwa elementy.
+
+00:10:44.500 --> 00:10:50.220
+W Dynamics 365 Finance nazywamy te części definicjami wierszy, definicjami kolumn i definicjami raportów.
+
+00:10:50.220 --> 00:10:51.500
+Zacznijmy od wierszy.
+
+00:10:51.720 --> 00:10:54.360
+Definicja wiersza kontroluje lewą stronę Twojego sprawozdania.
+
+00:10:54.640 --> 00:10:58.160
+Mówi systemowi, które konta, kategorie kont lub kombinacje wymiarów mają zostać pobrane.
+
+00:10:58.360 --> 00:11:01.400
+Określa również, jak nazwać każdą linię i gdzie powinny pojawić się sumy.
+
+00:11:01.560 --> 00:11:03.380
+Pomyśl o zwykłym rachunku zysków i strat.
+
+00:11:03.580 --> 00:11:06.380
+Przychody na górze, następnie koszty sprzedaży, a potem marża brutto.
+
+00:11:06.540 --> 00:11:09.700
+Poniżej znajdują się koszty operacyjne, a na samym dole wynik netto.
+
+00:11:09.900 --> 00:11:11.920
+Każdy z tych wierszy wymaga własnych instrukcji.
+
+00:11:11.920 --> 00:11:16.680
+Przychody mogą wskazywać na grupę kont sprzedaży, podczas gdy koszt własny sprzedaży wskazuje na konta kosztowe.
+
+00:11:16.880 --> 00:11:19.180
+Marża brutto nie wskazuje na żadne konto.
+
+00:11:19.680 --> 00:11:23.100
+Oblicza sumę poprzez odjęcie kosztu własnego sprzedaży od przychodów.
+
+00:11:23.220 --> 00:11:25.200
+To właśnie jest zadanie definicji wiersza.
+
+00:11:25.400 --> 00:11:32.840
+Informuje ona moduł raportowania finansowego, które zaksięgowane salda należą do każdego wiersza oraz wskazuje raportowi, jak dodawać lub odejmować te wiersze, gdy trzeba obliczyć sumę.
+
+00:11:33.040 --> 00:11:37.360
+Wiersz można zbudować w oparciu o pojedyncze konta główne, zakres kont lub kategorie konta głównego.
+
+00:11:37.360 --> 00:11:40.100
+Kategorie pozwalają zaoszczędzić mnóstwo pracy przy konfiguracji.
+
+00:11:40.300 --> 00:11:43.780
+Na przykład bilans zazwyczaj oddziela aktywa, pasywa i kapitał własny.
+
+00:11:43.980 --> 00:11:47.860
+W ramach aktywów można wykazać gotówkę, należności, środki trwałe i zapasy.
+
+00:11:48.120 --> 00:11:55.060
+Jeśli te konta znajdują się już w odpowiednich kategoriach kont głównych, domyślne wiersze bilansu mogą wykorzystać te grupy bez konieczności wymieniania każdego konta z osobna.
+
+00:11:55.280 --> 00:11:57.120
+Dzięki temu projekt jest bardziej przejrzysty.
+
+00:11:57.360 --> 00:12:03.400
+Moduł finansowy nadal prowadzi oddzielne konta dla poszczególnych sald, ale czytelnik widzi tylko taki poziom szczegółowości, jaki ma sens w oficjalnym sprawozdaniu.
+
+00:12:03.400 --> 00:12:06.020
+Jeśli potrzebują więcej szczegółów, mogą sprawdzić głębiej.
+
+00:12:06.180 --> 00:12:09.300
+Samo sprawozdanie nie musi zamieniać się w książkę telefoniczną pełną numerów kont.
+
+00:12:09.500 --> 00:12:11.740
+Wiersze odpowiadają na jedno pytanie, co raportujemy.
+
+00:12:11.980 --> 00:12:14.600
+Kolumny odpowiadają na inne, jak chcemy to wyświetlić.
+
+00:12:14.760 --> 00:12:17.800
+Definicja kolumny kontroluje informacje biegnące w poprzek strony.
+
+00:12:18.120 --> 00:12:26.040
+Można pokazać bieżący miesiąc, wyniki od początku roku, wyniki od początku roku ubiegłego, budżet, wartości rzeczywiste lub różnice między wartościami rzeczywistymi a budżetem.
+
+00:12:26.200 --> 00:12:29.380
+Prosty rachunek zysków i strat mógłby zaczynać się od kolumny z opisem.
+
+00:12:29.380 --> 00:12:35.400
+Następnie można pokazać wartości rzeczywiste dla bieżącego okresu, potem narastająco od początku roku, następnie budżet, a potem odchylenie.
+
+00:12:35.540 --> 00:12:42.560
+Kolumna odchyleń oblicza różnice automatycznie, więc menedżerowie nie muszą otwierać programu Excel i tworzyć kolejnych formuł po wygenerowaniu raportu.
+
+00:12:42.760 --> 00:12:50.500
+Można również umieścić okresy obok siebie, być może od stycznia do grudnia, bieżący kwartał obok tego samego kwartału w roku ubiegłym lub wyniki rzeczywiste obok prognozy.
+
+00:12:50.760 --> 00:12:53.120
+Wiersze decydują o tematach, a kolumny o widoku.
+
+00:12:53.120 --> 00:13:02.280
+Połącz te dwa elementy, a otrzymasz większość sprawozdania finansowego, ale system nadal potrzebuje miejsca, w którym nazwiesz raport i powiesz Dynamics 365 Finance, które definicje wierszy i kolumn do siebie pasują.
+
+00:13:02.480 --> 00:13:04.740
+Tym elementem zewnętrznym jest definicja raportu.
+
+00:13:04.920 --> 00:13:08.540
+Definicja raportu łączy wiersze i kolumny w coś, co użytkownicy mogą wygenerować.
+
+00:13:08.740 --> 00:13:12.600
+Kontroluje ona również ustawienia, takie jak zaokrąglenia i sposób wyświetlania kwot ujemnych.
+
+00:13:12.760 --> 00:13:13.820
+Oto konkretny przykład.
+
+00:13:14.120 --> 00:13:20.840
+Można utworzyć definicję wiersza o nazwie wiersze rachunku zysków i strat, a następnie definicję kolumny o nazwie miesięczne wartości rzeczywiste, budżet i odchylenia.
+
+00:13:20.840 --> 00:13:26.360
+Definicja raportu łączy je ze sobą i nadaje gotowemu raportowi nazwę, na przykład sprawozdanie z zysków i strat.
+
+00:13:26.500 --> 00:13:30.140
+To rozdzielenie jest przydatne, ponieważ pozwala na ponowne wykorzystanie elementów.
+
+00:13:30.340 --> 00:13:37.720
+Jedna definicja wierszy dla rachunku zysków i strat może być używana z układem kolumn miesięcznych, narastających od początku roku oraz porównawczych z poprzednim rokiem.
+
+00:13:37.960 --> 00:13:42.380
+Nie musisz ponownie budować tej samej struktury przychodów i wydatków za każdym razem, gdy ktoś zada nowe pytanie.
+
+00:13:42.660 --> 00:13:45.080
+Niektóre firmy potrzebują jednego raportu dla jednej firmy.
+
+00:13:45.300 --> 00:13:48.500
+Inne potrzebują raportu, który odzwierciedla bardziej rozbudowaną strukturę organizacyjną.
+
+00:13:48.500 --> 00:13:50.520
+Wtedy z pomocą przychodzi drzewo raportowania.
+
+00:13:50.720 --> 00:13:54.080
+Drzewo raportowania pozwala organizować wyniki finansowe w jednostki raportowe.
+
+00:13:54.300 --> 00:13:59.240
+Jednostki te mogą reprezentować podmioty prawne, regiony, działy, jednostki biznesowe lub inne części struktury firmy.
+
+00:13:59.440 --> 00:14:01.520
+Wyobraźmy sobie grupę z trzema spółkami zależnymi.
+
+00:14:01.760 --> 00:14:05.560
+Spółka matka chce widzieć każdą spółkę zależną z osobna, a następnie łączną sumę dla całej grupy.
+
+00:14:05.740 --> 00:14:10.800
+Drzewo raportowania może opisać tę strukturę, traktując każdą spółkę jako jednostkę raportową, a sumę grupy jako nadrzędną.
+
+00:14:10.800 --> 00:14:13.180
+To samo podejście sprawdza się w przypadku regionów.
+
+00:14:13.340 --> 00:14:17.840
+Możesz przedstawić północ, południe i zachód jako oddzielne jednostki, a następnie uwzględnić sumę dla całej firmy.
+
+00:14:18.040 --> 00:14:23.240
+Lub kierownik działu może potrzebować wglądu tylko we własną jednostkę, podczas gdy zespół finansowy potrzebuje pełnego obrazu.
+
+00:14:23.440 --> 00:14:29.460
+Jedna definicja raportu może być powiązana z jednym drzewem raportowania naraz, więc wybierz strukturę odpowiadającą na pytanie, które raport ma wyjaśnić.
+
+00:14:29.620 --> 00:14:35.860
+Osobom początkującym projektant raportów oferuje kreator, który pomaga zacząć tworzenie elementów bez konieczności konfrontacji ze wszystkimi opcjami jednocześnie.
+
+00:14:35.860 --> 00:14:40.340
+Wybierasz typ raportu, przechodzisz przez podstawowe ustawienia i tworzysz projekt początkowy.
+
+00:14:40.580 --> 00:14:47.060
+Gdy zespół finansowy nabierze wprawy, może bezpośrednio edytować definicję wierszy, kolumn, raportów oraz drzewa raportowania.
+
+00:14:47.340 --> 00:14:51.920
+Daje im to większą kontrolę nad obliczeniami, układem, grupowaniem i sposobem prezentacji wymiarów.
+
+00:14:52.080 --> 00:14:55.280
+Celem nie jest stworzenie możliwie najbardziej skomplikowanego raportu.
+
+00:14:55.480 --> 00:15:02.840
+Chodzi o to, aby stworzyć raport, w którym każdy wiersz odpowiada na realne pytanie biznesowe, każda kolumna czyni porównania przejrzystymi, a liczby są zgodne z księgą główną.
+
+00:15:02.840 --> 00:15:05.560
+Uruchamianie, odczytywanie i utrzymywanie raportów.
+
+00:15:05.720 --> 00:15:10.600
+Raport staje się użyteczny tylko wtedy, gdy ludzie potrafią go odczytać, zakwestionować i zaufać temu, co widzą.
+
+00:15:10.780 --> 00:15:15.260
+Po wygenerowaniu raportu finansowego nie jesteś automatycznie ograniczony do jednej statycznej strony.
+
+00:15:15.580 --> 00:15:22.080
+Możesz zmienić datę raportu, wybrać walutę, przełączać się między podsumowaniem a szczegółami oraz stosować filtry dla wymiarów finansowych lub atrybutów.
+
+00:15:22.240 --> 00:15:26.680
+Oznacza to, że ten sam raport może odpowiadać na różne pytania bez konieczności kopiowania go do nowego arkusza.
+
+00:15:26.680 --> 00:15:30.620
+Menedżer finansowy może zacząć od pełnego rachunku zysków i strat firmy dla bieżącego miesiąca.
+
+00:15:30.620 --> 00:15:35.900
+Następnie można przefiltrować raport dla jednej jednostki biznesowej, wyświetlić go w innej walucie lub zmienić datę, aby porównać inny okres.
+
+00:15:36.040 --> 00:15:37.640
+Projekt raportu pozostaje bez zmian.
+
+00:15:37.880 --> 00:15:39.740
+Widok dostosowuje się do bieżącego pytania.
+
+00:15:39.980 --> 00:15:41.180
+Liczą się tutaj dwa widoki.
+
+00:15:41.440 --> 00:15:46.140
+Widok podsumowania przedstawia ogólną sytuację finansową, całkowity przychód, koszty ogółem i wynik netto.
+
+00:15:46.360 --> 00:15:49.480
+Widok szczegółowy pozwala sprawdzić więcej pozycji, gdy suma nie wygląda właściwie.
+
+00:15:49.700 --> 00:15:51.540
+To prowadzi nas do analizy szczegółowej drill down.
+
+00:15:51.740 --> 00:15:54.660
+Wyobraźmy sobie, że pozycja kosztów operacyjnych jest znacznie wyższa niż w budżecie.
+
+00:15:54.660 --> 00:16:00.560
+Zamiast wysyłać e-maile, eksportować zestawienia księgowe i ręcznie dopasowywać numery kont, możesz przejść do tej kwoty bezpośrednio z raportu.
+
+00:16:00.740 --> 00:16:03.720
+Możesz prześledzić saldo aż do transakcji, które się na nie składają.
+
+00:16:03.920 --> 00:16:08.280
+Pozwala to zobaczyć wpisy w dzienniku, daty, dokumenty i inne szczegóły, które złożyły się na tę kwotę.
+
+00:16:08.480 --> 00:16:12.360
+Raport staje się punktem wyjścia do dyskusji, a nie ostateczną odpowiedzią wydrukowaną na papierze.
+
+00:16:12.560 --> 00:16:14.900
+Jest to szczególnie pomocne podczas zamykania miesiąca.
+
+00:16:15.060 --> 00:16:17.500
+Ktoś pyta, och, dlaczego koszty magazynowania wzrosły?
+
+00:16:17.500 --> 00:16:25.620
+Zaczynasz od widoku magazynu, znajdujesz linię kosztów, przechodzisz do transakcji i sprawdzasz, czy wzrost wynika z czynszu, napraw, personelu czy jednorazowej opłaty.
+
+00:16:25.880 --> 00:16:29.880
+Dział finansowy traci mniej czasu na szukanie źródła, a więcej na wyjaśnianie wyników.
+
+00:16:30.060 --> 00:16:32.380
+Raporty można również generować według harmonogramu.
+
+00:16:32.560 --> 00:16:36.640
+Zespół może generować raporty codziennie, tygodniowo, miesięcznie lub rocznie, w zależności od potrzeb.
+
+00:16:36.840 --> 00:16:43.640
+Miesięczne pakiety zarządcze to oczywisty przykład, ale harmonogramy pomagają też przygotowywać regularne przeglądy budżetu lub cykliczne raporty grupowe.
+
+00:16:43.640 --> 00:16:51.400
+W przypadku firm z kilkoma podmiotami prawnymi, sprawozdawczość finansowa wspiera raportowanie między tymi podmiotami i może przeliczać waluty na potrzeby raportów.
+
+00:16:51.600 --> 00:16:58.300
+Zespół finansowy grupy może potrzebować danych każdej firmy w walucie lokalnej, podczas gdy kierownictwo może wymagać jednego widoku w walucie raportowania.
+
+00:16:58.560 --> 00:17:04.000
+Struktura wymaga starannej konfiguracji, ale czytelnik nie musi co miesiąc budować raportu od nowa z oddzielnych plików.
+
+00:17:04.140 --> 00:17:06.960
+Oto jeden szczegół konserwacyjny, o którym warto pamiętać.
+
+00:17:07.160 --> 00:17:11.240
+Nowo wygenerowane raporty otrzymują domyślną datę wygaśnięcia po 90 dniach.
+
+00:17:11.240 --> 00:17:16.520
+Użytkownicy z odpowiednimi uprawnieniami mogą zmienić ten okres, w tym ustawić raport tak, aby nigdy nie wygasał.
+
+00:17:16.640 --> 00:17:19.440
+Osoba generująca raport może usunąć własny raport.
+
+00:17:19.600 --> 00:17:25.600
+Użytkownicy z uprawnieniem do raportowania finansowego mogą usuwać raporty utworzone przez innych oraz zarządzać ustawieniami wygasania.
+
+00:17:25.840 --> 00:17:30.500
+Zapobiega to przekształceniu listy raportów w długie archiwum starych plików, których nikt nie potrafi zidentyfikować.
+
+00:17:30.740 --> 00:17:32.920
+Należy jednak uważać również na starsze raporty.
+
+00:17:32.920 --> 00:17:42.220
+Począwszy od wersji raportowania finansowego 10.0.45, po ponownym uruchomieniu zapisanego raportu lub sprawdzeniu szczegółów, Dynamics 365 Finance korzysta z bieżących danych transakcyjnych.
+
+00:17:42.400 --> 00:17:48.580
+Jeśli ktoś edytował podstawową transakcję po pierwszym wygenerowaniu raportu, szczegóły po rozwinięciu mogą różnić się od tego, co widziałeś pierwotnie.
+
+00:17:48.800 --> 00:17:53.360
+Zapisane salda najwyższego poziomu zazwyczaj nie ulegają zmianie, ale szczegóły pomocnicze mogą się zmienić.
+
+00:17:53.520 --> 00:18:01.700
+Jeśli więc dział finansów potrzebuje niezmiennej kopii audytowej dla zamkniętego okresu, wyeksportuj gotowy raport do formatu Excel lub PDF i przechowuj plik zgodnie ze standardową procedurą archiwizacji.
+
+00:18:01.700 --> 00:18:04.200
+Ostatnie ostrzeżenie dotyczące samego dodatku.
+
+00:18:04.440 --> 00:18:12.460
+Jeśli ktoś odinstaluje dodatek do raportowania finansowego, Dynamics 365 Finance trwale usunie wcześniej utworzone raporty, projekty raportów i konfiguracje.
+
+00:18:12.680 --> 00:18:15.700
+Microsoft nie zapewnia wsparcia w odzyskiwaniu danych po takiej operacji.
+
+00:18:15.880 --> 00:18:20.320
+Potraktuj to jak usuwanie współdzielonego obszaru roboczego finansów, a nie jak usuwanie aplikacji z telefonu.
+
+00:18:20.460 --> 00:18:24.260
+Formalne sprawozdania pomagają działowi finansów wyjaśnić liczby w kontrolowanym formacie.
+
+00:18:24.500 --> 00:18:28.160
+Do szybszego wizualnego przeglądu i pytań o trendy stosuje się inne narzędzia.
+
+00:18:28.160 --> 00:18:30.100
+Gdzie pasują Power BI i Excel?
+
+00:18:30.100 --> 00:18:32.540
+Więc gdzie tak naprawdę pasują Power BI i Excel?
+
+00:18:32.760 --> 00:18:36.360
+Raportowanie finansowe obsługuje formalne sprawozdania, te których potrzebują audytorzy.
+
+00:18:36.520 --> 00:18:39.880
+Power BI zajmuje się wykresami, trendami i interaktywnymi widokami zarządczymi.
+
+00:18:40.060 --> 00:18:42.360
+Przychody według regionu, budżet kontra wykonanie.
+
+00:18:42.560 --> 00:18:44.300
+Excel również nadal ma swoje miejsce.
+
+00:18:44.600 --> 00:18:49.280
+Twój zespół używa go do weryfikacji, obliczeń i udostępniania danych w formacie, który wszyscy już znają.
+
+00:18:49.480 --> 00:18:52.760
+Obszar roboczy analizy finansowej zawiera zawartość Power BI dla typowych widoków,
+
+00:18:52.860 --> 00:18:55.480
+ale utrzymuj każdy pulpit nawigacyjny skupiony na jednym pytaniu.
+
+00:18:55.480 --> 00:18:57.520
+Nie upychaj wszystkiego na tym samym ekranie.
+
+00:18:57.720 --> 00:19:01.240
+Najlepsza część, wszystkie te narzędzia odczytują dane z tych samych rekordów finansowych.
+
+00:19:01.460 --> 00:19:02.460
+Wszystko działa razem.
+
+00:19:03.200 --> 00:19:03.740
+Zakończenie.
+
+00:19:04.240 --> 00:19:05.560
+Najpierw zbuduj księgę.
+
+00:19:06.260 --> 00:19:08.400
+Czytelny raport nie zaczyna się od układu.
+
+00:19:08.600 --> 00:19:09.780
+Zaczyna się znacznie wcześniej.
+
+00:19:10.040 --> 00:19:12.360
+Czyste konta główne, wymiary wielokrotnego użytku.
+
+00:19:12.600 --> 00:19:14.640
+Bez tego fundamentu nic innego nie ma znaczenia.
+
+00:19:14.920 --> 00:19:17.800
+Zacznij od domyślnego raportu, przetestuj go na swoich rzeczywistych saldach,
+
+00:19:17.900 --> 00:19:20.160
+a następnie zmień tylko to, czego potrzebuje Twoja firma.
+
+00:19:20.160 --> 00:19:24.640
+Zasubskrybuj, aby otrzymywać więcej wiedzy o rozwiązaniach Microsoft od Mirko Pettersa z M365FM
+
+00:19:24.640 --> 00:19:26.140
+i udostępnij to komuś, kto wciąż myśli,
+
+00:19:26.300 --> 00:19:29.520
+że raportowanie finansowe w Dynamics 365 zaczyna się i kończy na Excelu.

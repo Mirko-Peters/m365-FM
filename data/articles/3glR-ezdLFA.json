@@ -101,6 +101,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Welches Kernproblem klassischer Dashboards soll Fabric Data Activator laut Artikel lösen?",
+    "opts": [
+     "Die Lücke zwischen Erkenntnis und Handlung, weil ein Mensch als Flaschenhals wirkt",
+     "Die fehlende Möglichkeit, Daten aus Warehouse-Tabellen zu visualisieren",
+     "Die zu hohen Lizenzkosten für Power BI",
+     "Die mangelnde Anzahl verfügbarer Diagramme und Visualisierungen"
+    ],
+    "a": 0,
+    "why": "Dashboards zeigen, was passiert, doch ein Mensch muss reagieren. Data Activator verkürzt diese Lücke zwischen Wissen und Handeln auf Sekunden."
+   },
+   {
+    "q": "Wie kann Data Activator beim Fall von Duplikaten in einer Synapse-Pipeline helfen?",
+    "opts": [
+     "Er löscht automatisch alle Datensätze aus dem Warehouse",
+     "Er sendet nur eine Teams-Nachricht an das gesamte Team",
+     "Er stellt den Anbieter des vorgeschalteten Systems automatisch um",
+     "Er hält die Pipeline an, sobald Duplikate eintreffen"
+    ],
+    "a": 3,
+    "why": "Die Pipeline wird genau beim Eintreffen der Duplikate angehalten, sodass fehlerhafte Daten nicht ins Warehouse gelangen und das Team Zeit zur Reparatur gewinnt."
+   },
+   {
+    "q": "Warum können zu viele Trigger in Fabric problematisch werden?",
+    "opts": [
+     "Sie verhindern die Anbindung externer APIs und Webhooks vollständig",
+     "Jeder Trigger belastet dieselbe Kapazität, was andere Workloads verlangsamen kann",
+     "Sie lassen sich nur mit Power BI, nicht mit Synapse kombinieren",
+     "Sie erzeugen automatisch doppelte Datensätze im Warehouse"
+    ],
+    "a": 1,
+    "why": "Trigger nutzen den gleichen Kapazitätspool wie BI-Aktualisierungen, Datenflüsse und Abfragen. Übertreibung kann einen Domino-Effekt mit langsameren Workloads auslösen."
+   },
+   {
+    "q": "Wie sollte man laut Artikel am sichersten mit Data Activator starten?",
+    "opts": [
+     "Mit möglichst vielen Bedingungen, um alle Schwankungen abzudecken",
+     "Ausschließlich mit häufigen, geringwertigen Ereignissen im Proof of Concept",
+     "Mit wertvollen, aber seltenen Bedingungen, bevor man erweitert",
+     "Mit der Anbindung aller externen Systeme gleichzeitig"
+    ],
+    "a": 2,
+    "why": "Wenige, aber wirkungsvolle Auslöser pro Tag beweisen die Effektivität, ohne Kapazität oder nachgelagerte Dienste zu überlasten. Erst danach wird erweitert."
+   }
   ]
  }
 }

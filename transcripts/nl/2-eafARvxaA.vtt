@@ -1,0 +1,859 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.360
+Dus, wat gebeurt er met je data als een oud-medewerker zes maanden na vertrek inlogt op je tenant?
+
+00:00:04.560 --> 00:00:06.780
+Ik meen het serieus. Denk er maar eens over na.
+
+00:00:06.940 --> 00:00:11.020
+Je hebt hun account uitgeschakeld bij vertrek, maar heb je gecontroleerd of een apparaat nog gekachte inloggegevens bevat?
+
+00:00:11.160 --> 00:00:13.820
+Heb je gekeken of een app-registratie die zij hebben gemaakt nog steeds werkt?
+
+00:00:13.960 --> 00:00:16.560
+De meeste Microsoft 365 beheerders hebben geen idee.
+
+00:00:16.780 --> 00:00:20.660
+Niet omdat ze slecht zijn in hun werk, maar omdat de informatie die ze nodig hebben over 20 verschillende plekken verspreid is.
+
+00:00:20.840 --> 00:00:26.340
+Dit is de oude manier. Je wilt een verdachte inlogpoging onderzoeken, dus open je het Entrabeheercentrum om de auditlogboeken te bekijken.
+
+00:00:26.340 --> 00:00:29.560
+Daarna ga je naar Exchange om te zien of er e-mailregels zijn aangemaakt.
+
+00:00:29.760 --> 00:00:34.760
+Vervolgens controleer je SharePoint op ongebruikelijke bestandstoegang, dan Defender op waarschuwingen en Teams op vreemde activiteiten.
+
+00:00:34.940 --> 00:00:37.960
+Tegen de tijd dat je vijf dashboards hebt bekeken, ben je de draad al kwijt.
+
+00:00:38.040 --> 00:00:39.800
+En dat is nog maar één gebruiker op één dag.
+
+00:00:40.020 --> 00:00:42.140
+Dit is waar Microsoft Sentinel om de hoek komt kijken.
+
+00:00:42.380 --> 00:00:45.520
+Zie het als het beveiligingscamera-systeem voor je gehele digitale gebouw.
+
+00:00:45.640 --> 00:00:52.100
+Je weet hoe een fysiek kantoor camera's heeft bij elke ingang, elke gang en elke deur, en één beveiliger alles vanaf één scherm kan bekijken?
+
+00:00:52.280 --> 00:00:55.480
+Dat is wat Sentinel doet voor je Microsoft 365 tenant.
+
+00:00:55.480 --> 00:01:02.380
+Het neemt al die afzonderlijke lags van Entra, Exchange, SharePoint en Defender en zet ze op één plek waar je echt kunt zien wat er gebeurt.
+
+00:01:02.560 --> 00:01:08.680
+Aan het einde van deze aflevering begrijp je wat Sentinel echt doet, hoe het nieuwe datameer lags bewaren betaalbaar maakt,
+
+00:01:08.840 --> 00:01:15.380
+en waarom dit belangrijk is voor elke Microsoft 365 beheerder, niet alleen voor beveiligingsteams met hippe titels.
+
+00:01:15.580 --> 00:01:17.100
+Pak je koffie en laten we beginnen.
+
+00:01:17.460 --> 00:01:18.620
+Wat een SIEM echt doet
+
+00:01:18.620 --> 00:01:21.020
+Sentinel is wat de industrie een SIEM noemt.
+
+00:01:21.200 --> 00:01:23.660
+Dat staat voor Security Information & Event Management.
+
+00:01:23.660 --> 00:01:25.680
+Laten we dat in begrijpelijke taal zeggen.
+
+00:01:25.860 --> 00:01:32.260
+Een SIEM is een tool die lags verzamelt van overal, je servers, firewalls, apps en identiteitssystemen en vervolgens de verbanden daartussen legt.
+
+00:01:32.400 --> 00:01:33.740
+Dit is waarom dat belangrijk is.
+
+00:01:33.940 --> 00:01:35.640
+Een enkel logboekitem is slechts ruis.
+
+00:01:35.800 --> 00:01:37.420
+Iemand probeerde in te loggen en faalde.
+
+00:01:37.620 --> 00:01:38.300
+Grote zaak.
+
+00:01:38.480 --> 00:01:40.040
+Dat gebeurt honderden keren per dag.
+
+00:01:40.220 --> 00:01:42.060
+Maar een SIEM kijkt niet naar één logboekitem.
+
+00:01:42.240 --> 00:01:47.380
+Het bekijkt ze allemaal samen, zodat het kan zien dat hetzelfde IP-adres in 30 seconden tijd probeerde in te loggen op vijf verschillende accounts.
+
+00:01:47.380 --> 00:01:48.640
+Dat is geen ruis meer.
+
+00:01:48.860 --> 00:01:50.200
+Dat is een brute force aanval.
+
+00:01:50.400 --> 00:01:51.800
+De magie zit in de correlatie.
+
+00:01:51.980 --> 00:01:57.480
+Een SIEM koppelt een verdachte inlogpoging uit en traa aan een bestandsdownload uit SharePoint en een e-mail doorstuurregel uit Exchange.
+
+00:01:57.720 --> 00:01:59.780
+Op zichzelf lijkt niets van dit alles op een aanval.
+
+00:02:00.040 --> 00:02:01.460
+Samen vertellen ze een heel verhaal.
+
+00:02:01.620 --> 00:02:05.040
+Iemand is binnengekomen, vond wat hij zocht en zette een manier op om je e-mail te blijven ontvangen.
+
+00:02:05.260 --> 00:02:06.800
+Zie het als een verkeersleidingscentrum.
+
+00:02:07.000 --> 00:02:08.420
+Je kijkt niet naar slechts één camera.
+
+00:02:08.680 --> 00:02:10.860
+Je bekijkt ze allemaal tegelijk en zoekt naar patronen.
+
+00:02:10.860 --> 00:02:15.360
+Een auto die vier keer hetzelfde kruispunt passeert, iemand die het gebouw binnen gaat maar nooit meer vertrekt.
+
+00:02:15.560 --> 00:02:17.580
+Dat is wat een SIEM doet voor je digitale omgeving.
+
+00:02:17.760 --> 00:02:19.960
+Het belangrijkste inzicht hier is simpel, maar krachtig.
+
+00:02:20.080 --> 00:02:21.620
+Je kunt niet beschermen wat je niet kunt zien.
+
+00:02:21.820 --> 00:02:24.980
+Als je beveiligingsgegevens verspreidt staan over 20 dashboards, ben je blind.
+
+00:02:25.160 --> 00:02:30.800
+Je ziet misschien de voor de hand liggende zaken, maar de subtiele aanvallen, die langzaam over weken of maanden plaatsvinden, die ontglippen je volledig.
+
+00:02:30.920 --> 00:02:32.400
+En nu, dit is het punt over Sentinel.
+
+00:02:32.740 --> 00:02:34.480
+Het is een SIEM, maar het is meer dan dat.
+
+00:02:34.660 --> 00:02:37.460
+Het zorgedeelte, de reden waarom Sentinel handen, heeft.
+
+00:02:37.660 --> 00:02:39.880
+Een traditionele SIEM werkt als een beveiligingscamera.
+
+00:02:39.880 --> 00:02:43.020
+Het laat je alles zien wat er gebeurt, maar het kan er zelf niets aan doen.
+
+00:02:43.180 --> 00:02:45.300
+Het ziet een inbraak, maar kan niet de politie bellen.
+
+00:02:45.460 --> 00:02:46.820
+Daar komt SOAR om de hoek kijken.
+
+00:02:47.080 --> 00:02:50.040
+SOAR staat voor Security Orchestration, Automation en Response.
+
+00:02:50.240 --> 00:02:51.900
+Het deel van Sentinel dat handen, heeft.
+
+00:02:52.120 --> 00:02:53.440
+Dit is hoe het in de praktijk werkt.
+
+00:02:53.700 --> 00:02:55.140
+Sentinel detecteert een dreiging.
+
+00:02:55.280 --> 00:02:57.220
+Het account van een gebruiker is gecompromitteerd.
+
+00:02:57.400 --> 00:03:01.480
+Iemand logt in vanuit een land waar diegene nog nooit is geweest en begint bestanden te downloaden die nog nooit zijn aangeraakt.
+
+00:03:01.640 --> 00:03:05.520
+Een traditionele SIEM zou een waarschuwing sturen en wachten op een menselijke reactie, wat uren kan duren.
+
+00:03:05.680 --> 00:03:07.580
+En tegen die tijd is de schade al aangericht.
+
+00:03:07.960 --> 00:03:08.820
+Sentinel wacht niet.
+
+00:03:08.820 --> 00:03:10.240
+Het handelt automatisch.
+
+00:03:10.400 --> 00:03:18.980
+Het kan het account van die gebruiker uitschakelen, hun apparaat blokkeren voor bedrijfsbronnen, actieve sessies intrekken en het beveiligingsteam waarschuwen, allemaal binnen seconden zonder menselijke tussenkomst.
+
+00:03:19.160 --> 00:03:22.240
+Deze automatisering draait op iets wat Sentinel Playbooks noemt.
+
+00:03:22.320 --> 00:03:24.820
+Kort gezegd zijn dit geautomatiseerde takenlijsten voor beveiligingsincidenten.
+
+00:03:25.580 --> 00:03:28.900
+Wanneer een specifieke waarschuwing afgaat, voert Sentinel het bijbehorende playbook uit.
+
+00:03:29.060 --> 00:03:30.440
+Als dit gebeurt, doe dan dat.
+
+00:03:30.640 --> 00:03:31.000
+Simpel.
+
+00:03:31.000 --> 00:03:33.240
+En je hoeft geen programmeur te zijn om ze te bouwen.
+
+00:03:33.400 --> 00:03:36.540
+Ze worden gemaakt met een visuele designers, precies als het tekenen van een stroomdiagram.
+
+00:03:36.760 --> 00:03:39.820
+Dus, waarom is dit belangrijk voor jou als Microsoft 365-beheerder?
+
+00:03:39.940 --> 00:03:43.040
+Omdat je niet om drie uur wakker wilt worden om handmatig een IP-adres te blokkeren.
+
+00:03:43.220 --> 00:03:44.380
+Je hebt wel wat beters te doen.
+
+00:03:44.580 --> 00:03:46.840
+En eerlijk gezegd ben je waarschijnlijk toch niet snel genoeg.
+
+00:03:47.000 --> 00:03:50.920
+Tegen de tijd dat je naar je laptop strompelt en inlogt, heeft de aanvaller al gedaan waarvoor ze kwamen.
+
+00:03:51.440 --> 00:03:53.580
+Automatisering is geen luxe, het is een noodzaak.
+
+00:03:53.660 --> 00:03:57.540
+Kortom, Sentinel detecteert dreigingen en correleert signalen in je volledige omgeving.
+
+00:03:57.720 --> 00:04:00.160
+En wanneer er iets misgaat, reageert het automatisch.
+
+00:04:00.380 --> 00:04:01.980
+Dat is Siem en Soar die samenwerken.
+
+00:04:02.160 --> 00:04:04.880
+Maar waar bevindt Sentinel zich eigenlijk in de Microsoft-wereld?
+
+00:04:05.060 --> 00:04:06.240
+Dat bespreken we hierna.
+
+00:04:06.440 --> 00:04:09.060
+De plek van Sentinel in de Microsoft-beveiligingstack.
+
+00:04:09.260 --> 00:04:11.800
+Microsoft heeft een heel portfolio aan beveiligingsproducten.
+
+00:04:11.940 --> 00:04:17.500
+Defender voor het Point-beveiliging, Entra voor identiteit en toegang, Purview voor databeveiliging en Intune voor apparaatbeheer.
+
+00:04:17.700 --> 00:04:19.720
+Stuk voor stuk doen ze hun eigen werk uitstekend.
+
+00:04:19.720 --> 00:04:22.400
+Maar het punt is, ze communiceren niet van nature met elkaar.
+
+00:04:22.560 --> 00:04:28.040
+Defender ziet een verdacht bestand, Entra signaleert een vreemde inlogpoging, Purview ontdekt ongebruikelijke datatoegang.
+
+00:04:28.200 --> 00:04:31.820
+Drie afzonderlijke meldingen, drie afzonderlijke dashboards, drie afzonderlijke onderzoeken.
+
+00:04:32.020 --> 00:04:33.500
+Dat is waar Sentinel in beeld komt.
+
+00:04:33.680 --> 00:04:37.280
+Het bevindt zich onder al deze producten, niet als concurrent, maar als fundament.
+
+00:04:37.660 --> 00:04:39.100
+Zie het als de vloer van een gebouw.
+
+00:04:39.260 --> 00:04:43.200
+De kamers zijn Defender, Entra, Purview en Intune, elk met een eigen doel.
+
+00:04:43.360 --> 00:04:47.720
+Maar de vloer verbindt ze, waardoor je van de ene naar de andere kamer kunt lopen zonder in het luchtledige te stappen.
+
+00:04:47.720 --> 00:04:50.300
+Merk op dat ik niet zei dat Sentinel concurreert met Defender.
+
+00:04:50.500 --> 00:04:51.260
+Dat doet het niet.
+
+00:04:51.440 --> 00:04:57.080
+Defender is geweldig in het detecteren van bedreigingen op endpoints en binnen Microsoft 365, maar het ziet alleen wat het ziet.
+
+00:04:57.260 --> 00:05:01.360
+Het weet niets van je on-premises firewall logboeken of je AWS CloudTrail logboeken.
+
+00:05:01.660 --> 00:05:05.100
+Sentinel is het platform waar Defender op draait, niet het product dat het vervangt.
+
+00:05:05.220 --> 00:05:07.380
+Dit is een grote verandering waar je van op de hoogte moet zijn.
+
+00:05:07.740 --> 00:05:09.800
+Microsoft consolideert alles op één plek.
+
+00:05:09.980 --> 00:05:14.600
+Na 31 maart 2027 is Sentinel niet langer beschikbaar in de Azure portal.
+
+00:05:14.600 --> 00:05:17.580
+Het zal alleen nog in de Microsoft Defender portal staan.
+
+00:05:17.820 --> 00:05:22.340
+Jarenlang moest je schakelen tussen de Azure portal voor Sentinel en de Defender portal voor XDR.
+
+00:05:22.600 --> 00:05:23.520
+Dat gaat veranderen.
+
+00:05:23.700 --> 00:05:28.080
+Microsoft bouwt één uniform security operations center en de Defender portal is de plek waar dat komt.
+
+00:05:28.300 --> 00:05:29.380
+Wat betekent dit voor jou?
+
+00:05:29.580 --> 00:05:32.400
+Minder portals om te leren, minder schakelen tussen contexten.
+
+00:05:32.540 --> 00:05:36.800
+Eén plek waar je incidenten kunt zien, kunt zoeken naar bedreigingen en je beveiligingsstatus kunt beheren.
+
+00:05:36.940 --> 00:05:42.400
+Het is een stap richting eenvoud en voor Microsoft 365 beheerders die al in de Defender portal werken, is dat goed nieuws.
+
+00:05:42.400 --> 00:05:44.500
+Maar de echte gamechanger is het Data Lake.
+
+00:05:44.700 --> 00:05:45.780
+Dat bespreken we hierna.
+
+00:05:45.980 --> 00:05:48.280
+Het nieuwe uniforme Data Lake, wat is er veranderd?
+
+00:05:48.400 --> 00:05:50.160
+Dit is het probleem dat Sentinel altijd had.
+
+00:05:50.280 --> 00:05:51.960
+Het bewaren van logboeken kostte veel geld.
+
+00:05:52.180 --> 00:05:53.560
+Niet zomaar een beetje, erg veel.
+
+00:05:53.740 --> 00:05:55.520
+De standaardretentie was 90 dagen.
+
+00:05:55.800 --> 00:05:59.700
+Daarna betaalde je ofwel een premie om de data te behouden, of je nam er voor goed afscheid van.
+
+00:05:59.900 --> 00:06:05.080
+De meeste organisaties kozen ervoor om logboeken na drie maanden te verwijderen, waardoor ze daarna in het duister tasten.
+
+00:06:05.280 --> 00:06:09.140
+Microsoft heeft dit opgelost met het Unified Data Lake en dat verandert de rekensom volledig.
+
+00:06:09.380 --> 00:06:11.360
+Sentinel scheidt nu opslag van rekenkracht.
+
+00:06:11.360 --> 00:06:16.160
+In het oude model betaalde je één prijs voor zowel het opslaan van gegevens als de mogelijkheid om ze snel te doorzoeken.
+
+00:06:16.380 --> 00:06:19.920
+Dat was logisch voor actieve onderzoeken, maar vreselijk voor lange termijnretentie.
+
+00:06:20.080 --> 00:06:23.120
+Je betaalde voor snelheid die je niet nodig had voor gegevens die je nauwelijks gebruikte.
+
+00:06:23.300 --> 00:06:24.680
+Het Data Lake draait dat om.
+
+00:06:24.840 --> 00:06:26.860
+Je slaat je gegevens op in een goedkope laag.
+
+00:06:27.020 --> 00:06:32.300
+Ze zijn er nog steeds, toegankelijk en doorzoekbaar, maar je betaalt alleen voor rekenkracht als je er daadwerkelijk een query op uitvoert.
+
+00:06:32.520 --> 00:06:35.580
+Zie het als het verschil tussen een opslagruimte huren of een kelder hebben.
+
+00:06:35.780 --> 00:06:38.700
+De opslagruimte kost je elke maand geld, of je hem nu gebruikt of niet.
+
+00:06:38.700 --> 00:06:42.520
+De kelder is er gewoon. Je geeft alleen geld uit als je naar beneden gaat om iets te zoeken.
+
+00:06:42.680 --> 00:06:43.980
+De cijfers spreken voor zich.
+
+00:06:44.200 --> 00:06:49.580
+Microsoft zegt dat gegevens opslaan in het Data Lake minder dan 15% kost van wat traditionele Analytics Laks kostte.
+
+00:06:49.780 --> 00:06:56.600
+Dat is het verschil tussen Laks drie maanden bewaren versus drie jaar of zelfs twaalf jaar, wat het nieuwe retentie maximum is, zonder dat het je vermogen kost.
+
+00:06:56.800 --> 00:06:59.000
+En het mooiste is, je hoeft niets extra's te doen.
+
+00:06:59.220 --> 00:07:02.840
+Elke log die je al opneemt, wordt automatisch naar het Data Lake gekopieerd.
+
+00:07:02.840 --> 00:07:06.660
+Geen configuratie. Geen nieuwe connectoren. Het gebeurt gewoon.
+
+00:07:06.920 --> 00:07:11.820
+Dit opent krachtige mogelijkheden, zoals Threat Hunting op grote schaal, wat precies is waar we nu naar gaan kijken.
+
+00:07:12.020 --> 00:07:14.820
+Threat Hunting. Aanvallen vinden die voor iedereen zichtbaar zijn.
+
+00:07:15.040 --> 00:07:17.300
+De meeste mensen realiseren zich dit niet over cyberaanvallen.
+
+00:07:17.500 --> 00:07:19.700
+Ze gebeuren niet snel. Ze gebeuren langzaam.
+
+00:07:20.320 --> 00:07:21.760
+Beveiligingsexperts noemen dit low en slow.
+
+00:07:21.960 --> 00:07:25.620
+Een aanvaller test misschien een wachtwoord op één account, heeft het fout en verdwijnt een maand.
+
+00:07:25.800 --> 00:07:27.700
+Dan proberen ze het opnieuw bij een andere account.
+
+00:07:27.700 --> 00:07:30.520
+Er gaat weer een maand voorbij. Ze testen een derde account.
+
+00:07:30.740 --> 00:07:33.600
+Elke poging ziet er onschuldig uit als iemand die zijn wachtwoord is vergeten.
+
+00:07:33.720 --> 00:07:38.060
+Maar dit is het probleem. Met het oude retentievenster van 90 dagen zou je het patroon nooit zien.
+
+00:07:38.260 --> 00:07:42.000
+Tegen de tijd dat de derde poging plaatsvond, was de eerste al uit je logs verwijderd.
+
+00:07:42.100 --> 00:07:46.560
+Je zou een enkele mislukte aanmelding zien zonder context, zonder patroon, zonder manier om de punten te verbinden.
+
+00:07:46.720 --> 00:07:48.460
+Het data Lake verandert dat volledig.
+
+00:07:48.640 --> 00:07:51.480
+Nu kun je queries uitvoeren over jaren aan gegevens, niet maanden.
+
+00:07:51.660 --> 00:07:56.100
+Je vraagt Sentinel om elke mislukte aanmelding van een specifiek IP-adres over de afgelopen 12 maanden te tonen.
+
+00:07:56.100 --> 00:07:57.820
+Plotseling wordt het patroonglas helder.
+
+00:07:58.060 --> 00:08:01.460
+Drie pogingen vanaf hetzelfde IP-adres met dezelfde techniek op verschillende accounts.
+
+00:08:01.720 --> 00:08:03.520
+Dat is een aanval, geen vergeetachtigheid.
+
+00:08:03.720 --> 00:08:07.100
+De tool om deze vragen te stellen is KQL, Kusto Query Language.
+
+00:08:07.360 --> 00:08:09.640
+Zie het als een zoekmachine voor je beveiligingslogboeken.
+
+00:08:09.820 --> 00:08:15.340
+Je typt waar je naar zoekt, zoals mislukte aanmeldingen vanaf een verdacht IP-adres of ongebruikelijke doorstuurregels buiten kantooruren.
+
+00:08:15.540 --> 00:08:16.820
+En Sentinel geeft de resultaten.
+
+00:08:16.820 --> 00:08:20.060
+Het stelt je in staat om vragen te stellen waarvan je niet eens wist dat je ze moest stellen.
+
+00:08:20.300 --> 00:08:24.340
+Daarom zijn beveiligingsteams enthousiast over het data Lake niet vanwege een flitsende nieuwe functie,
+
+00:08:24.340 --> 00:08:26.780
+maar omdat ze eindelijk kunnen zien wat er in het zicht verborgen was.
+
+00:08:26.960 --> 00:08:30.400
+Aanvallers die langzaam opereren, de situatie verkennen en opgaan in het normale verkeer,
+
+00:08:30.600 --> 00:08:33.540
+vertrouwden erop dat je niet ver genoeg terug kon kijken om de punten met elkaar te verbinden.
+
+00:08:33.680 --> 00:08:35.500
+Het data Lake neemt dat voordeel weg.
+
+00:08:35.680 --> 00:08:39.020
+Maar Sentinel kijkt niet alleen achteruit, het kijkt ook vooruit.
+
+00:08:39.420 --> 00:08:41.980
+Grafieken en AI, de toekomst die al hier is.
+
+00:08:42.280 --> 00:08:44.440
+Aanvallers denken in grafieken, niet in lijsten.
+
+00:08:44.440 --> 00:08:48.080
+Ze zien geen individuele gebruikers en apparaten, ze zien de verbindingen daartussen.
+
+00:08:48.300 --> 00:08:50.040
+Deze gebruiker heeft toegang tot die server.
+
+00:08:50.240 --> 00:08:52.080
+Die server maakt verbinding met deze database.
+
+00:08:52.080 --> 00:08:54.200
+En die database bevat precies wat ze willen.
+
+00:08:54.400 --> 00:08:57.040
+Ze brengen het hele pad in kaart voordat ze ook maar een stap zetten.
+
+00:08:57.220 --> 00:08:58.180
+Nu is dit het probleem.
+
+00:08:58.480 --> 00:09:00.040
+Verdedigers hebben altijd in lijsten gedacht.
+
+00:09:00.240 --> 00:09:03.260
+Een lijst met waarschuwingen, een lijst met IP-adressen, een lijst met gebruikers.
+
+00:09:03.480 --> 00:09:06.060
+Natuurlijk zijn lijsten nuttig, maar ze laten je de verbindingen niet zien.
+
+00:09:06.260 --> 00:09:08.340
+Ze laten je niet het pad zien dat een aanvaller kan nemen.
+
+00:09:08.680 --> 00:09:09.900
+Sentinel Graph verandert dat.
+
+00:09:10.060 --> 00:09:12.940
+Het stelt verdedigers in staat om te doen wat aanvallers al die tijd al deden.
+
+00:09:13.080 --> 00:09:14.980
+Het laat je de kaart zien, niet alleen de punten.
+
+00:09:15.160 --> 00:09:17.040
+Je ziet dat gebruiker A toegang heeft tot server B.
+
+00:09:17.120 --> 00:09:18.680
+Server B maakt verbinding met database C.
+
+00:09:18.680 --> 00:09:21.480
+En database C bevat je meest gevoelige klantgegevens.
+
+00:09:21.480 --> 00:09:23.780
+Dat is niet zomaar informatie, dat is context.
+
+00:09:24.000 --> 00:09:26.460
+En context maakt van een goed onderzoek een geweldig onderzoek.
+
+00:09:26.620 --> 00:09:27.820
+Dit werkt twee kanten op.
+
+00:09:27.980 --> 00:09:31.720
+Voordat er een inbreuk plaatsvindt, gebruik je de grafiek om potentiële aanvalspaden te zien.
+
+00:09:31.920 --> 00:09:36.780
+Je vindt knelpunten, een enkele gebruiker wiens accountcompromis de helft van je netwerk zou openstellen.
+
+00:09:37.020 --> 00:09:42.120
+Dan kun je prioriteit geven aan die gebruiker, extra controles toepassen en de schade beperken voordat er iets misgaat.
+
+00:09:42.120 --> 00:09:44.080
+Na een inbreuk toont de grafiek de werkelijke impact.
+
+00:09:44.240 --> 00:09:50.320
+Zodra een waarschuwing afgaat, laat SentinelGraph direct elk systeem zien dat de gebruiker heeft aangeraakt, elk bestand dat ze hebben geopend en elke gemaakte verbinding.
+
+00:09:50.540 --> 00:09:53.220
+Geen gegok, geen handmatige tracering, de grafiek doet het allemaal.
+
+00:09:53.480 --> 00:09:54.640
+Laten we het nu over AI hebben.
+
+00:09:54.900 --> 00:09:57.700
+Microsoft Security Copilot brengt natuurlijke taal in beeld.
+
+00:09:57.860 --> 00:10:01.840
+In plaats van complexe KQL-queries te schrijven, stel je gewoon vragen in begrijpelijke taal.
+
+00:10:02.040 --> 00:10:05.140
+Laat me alle aanmeldingen zien vanaf ongebruikelijke locaties in de afgelopen week.
+
+00:10:05.340 --> 00:10:09.060
+Security Copilot zet dat om in een query, voert deze uit op je data en toont de resultaten.
+
+00:10:09.060 --> 00:10:12.940
+Het verlaagt de drempel. Je hoeft geen KQL-expert te zijn om op bedreigingen te jagen.
+
+00:10:13.080 --> 00:10:16.780
+Er is ook de MCP-server. MCP staat voor modelcontextprotocol.
+
+00:10:16.960 --> 00:10:21.140
+In gewone mensentaal, het laat AI-agents, slimme bots, direct communiceren met Sentinel.
+
+00:10:21.440 --> 00:10:27.240
+Een agent kan Sentinel vragen stellen, queries uitvoeren, resultaten analyseren en zelfs acties ondernemen, zonder menselijke tussenkomst.
+
+00:10:27.340 --> 00:10:29.660
+Het klinkt futuristisch, maar het wordt al uitgerold.
+
+00:10:29.860 --> 00:10:32.320
+Dus, Sentinel laat je zoeken in gegevens van jaren terug.
+
+00:10:32.480 --> 00:10:34.460
+Je ziet de relaties die aanvallers exploiteren.
+
+00:10:34.580 --> 00:10:36.980
+En je kunt met AI vragen stellen in gewone taal.
+
+00:10:36.980 --> 00:10:39.880
+Maar hoe begin je nu eigenlijk zonder beveiligingsexpert te zijn?
+
+00:10:40.080 --> 00:10:41.180
+Dat bespreken we nu.
+
+00:10:41.400 --> 00:10:43.080
+Beginnen zonder overweldig te raken.
+
+00:10:43.280 --> 00:10:46.760
+Je denkt misschien dat dit iets is wat alleen een beveiligingsteam met een enorm budget aan kan.
+
+00:10:47.000 --> 00:10:47.680
+Dat is niet waar.
+
+00:10:47.860 --> 00:10:50.040
+Je hebt geen moeizame, eindeloze certificering nodig.
+
+00:10:50.220 --> 00:10:53.540
+Je hebt alleen een Microsoft 365 ten het nodig en de bereidheid om klein te beginnen.
+
+00:10:53.700 --> 00:10:55.400
+De basisopzet is echt heel eenvoudig.
+
+00:10:55.540 --> 00:10:57.760
+Je activeert Sentinel in de Microsoft Defender Portal.
+
+00:10:58.000 --> 00:10:59.380
+Vervolgens verbind je je gegevensbronnen.
+
+00:10:59.620 --> 00:11:00.240
+Dat is alles.
+
+00:11:00.420 --> 00:11:02.020
+Je hoeft niet alles tegelijk te configureren.
+
+00:11:02.240 --> 00:11:03.520
+Sterker nog, dat moet je ook niet doen.
+
+00:11:03.720 --> 00:11:05.860
+Begin met slechts een paar bronnen die voor jou het belangrijkst zijn.
+
+00:11:05.860 --> 00:11:10.680
+Azure AD aanmeldlogboeken, Exchange Online mailstroomlogboeken, Defender for Office 365 waarschuwingen.
+
+00:11:10.820 --> 00:11:14.080
+Die drie alleen al geven je meer inzicht dan de meeste organisaties nu hebben.
+
+00:11:14.300 --> 00:11:15.360
+Dit maakt het makkelijker.
+
+00:11:15.720 --> 00:11:17.120
+Sentinel heeft een content hub.
+
+00:11:17.280 --> 00:11:19.320
+Zie het als een appstore voor beveiligingsregels.
+
+00:11:19.500 --> 00:11:25.000
+Je bladert op categorie identiteitsbedreigingen, e-mailbedreigingen, compliance monitoring en installeert kant- en klare detectieregels.
+
+00:11:25.160 --> 00:11:26.660
+Je schrijft geen queries vanaf nul.
+
+00:11:26.840 --> 00:11:28.500
+Je hebt op dag 1 geen KQL nodig.
+
+00:11:28.700 --> 00:11:31.220
+De content hub biedt een startpunt dat direct uit de doos werkt.
+
+00:11:31.420 --> 00:11:32.740
+Laten we het nu over kosten hebben.
+
+00:11:32.960 --> 00:11:34.320
+Dat is de vraag die iedereen stelt.
+
+00:11:34.320 --> 00:11:36.340
+Sentinel gebruikt een pay-as-you-go-model.
+
+00:11:36.500 --> 00:11:39.220
+Je betaalt voor de gegevens die je binnenhaalt, maar je kunt de kosten beheersen.
+
+00:11:39.360 --> 00:11:42.620
+Commitment tires laten je vastleggen op een minimum volume voor een flinke korting.
+
+00:11:42.760 --> 00:11:44.100
+En weet je nog, de data lake?
+
+00:11:44.200 --> 00:11:45.920
+Het verandert de economische kant ervan.
+
+00:11:46.140 --> 00:11:51.320
+Logboeken met een hoog volume en laag waarde, zoals firewallverkeer, gaan direct naar de data lake laag tegen een fractie van de kosten.
+
+00:11:51.520 --> 00:11:53.900
+Je hoeft dus niet langer te kiezen tussen inzicht en je budget.
+
+00:11:54.120 --> 00:11:56.860
+Het moeilijkste deel is niet de technologie, maar weten waar je moet beginnen.
+
+00:11:57.080 --> 00:11:58.220
+Dus, dit is mijn advies.
+
+00:11:58.440 --> 00:12:00.520
+Begin met één gegevensbron en één detectieregel.
+
+00:12:00.520 --> 00:12:02.120
+Verbind Entra ID logboeken.
+
+00:12:02.300 --> 00:12:05.740
+Installeer een regel die waarschuwt wanneer een globale beheerder inlogt vanaf een ongebruikelijke locatie.
+
+00:12:05.880 --> 00:12:07.180
+Kijk wat Sentinel je vertelt.
+
+00:12:07.400 --> 00:12:08.460
+Dat is genoeg om te beginnen.
+
+00:12:08.700 --> 00:12:10.540
+Breathe daarna uit naarmate je je meer op je gemak voelt.
+
+00:12:10.720 --> 00:12:11.900
+Laten we alles samenvatten.
+
+00:12:12.080 --> 00:12:13.120
+Het grotere geheel.
+
+00:12:13.380 --> 00:12:14.680
+Waarom dit jouw werk verandert.
+
+00:12:14.980 --> 00:12:16.260
+Sentinel is in ontwikkeling.
+
+00:12:16.480 --> 00:12:21.180
+Het begon als een tool voor beveiligingsprofessionals en wordt nu het platform achter alle Microsoft-beveiliging.
+
+00:12:21.180 --> 00:12:26.300
+Voor jou als M365-beheerder betekent dit een flink upgrade van je beveiliging, zonder dat je het zelf hoeft te bouwen.
+
+00:12:26.480 --> 00:12:28.100
+Denk eens na over wat we hebben besproken.
+
+00:12:28.420 --> 00:12:30.820
+Sentinel verzamelt signalen uit je gehele omgeving.
+
+00:12:31.020 --> 00:12:33.900
+Het correleert deze om patronen te vinden die je handmatig nooit zou zien.
+
+00:12:34.080 --> 00:12:36.380
+Het kan automatisch reageren wanneer er iets misgaat.
+
+00:12:36.580 --> 00:12:40.060
+Dankzij het nieuwe data leek is het betaalbaar om jaren aan data te bewaren in plaats van maanden.
+
+00:12:40.220 --> 00:12:42.620
+De graaf laat je aanvalspaden zien voordat ze worden uitgebuit.
+
+00:12:42.800 --> 00:12:45.260
+AI stelt je in staat om vragen te stellen in begrijpelijke taal.
+
+00:12:45.420 --> 00:12:46.980
+Dit alles is ingebouwd in het platform.
+
+00:12:46.980 --> 00:12:49.180
+Je hoeft het niet samen te stellen uit losse tools.
+
+00:12:49.420 --> 00:12:54.980
+Het data leek neemt de afweging tussen kosten en zichtbaarheid weg, dus je hoeft niet langer te kiezen tussen laks bewaren en geld besparen.
+
+00:12:54.980 --> 00:12:57.920
+Je kunt beide doen. Dat verandert hoe je over beveiliging denkt.
+
+00:12:58.120 --> 00:13:00.620
+In plaats van te vragen, kunnen we het ons veroorloven dit te monitoren?
+
+00:13:00.800 --> 00:13:02.800
+Vraag je, wat zouden we nog meer in de gaten moeten houden?
+
+00:13:02.940 --> 00:13:05.800
+Je hoeft geen SOC-analyst te zijn om van Sentinel te profiteren.
+
+00:13:05.920 --> 00:13:08.440
+Je hoeft alleen iemand te zijn die geeft om de veiligheid van je tenant.
+
+00:13:08.640 --> 00:13:10.360
+En als je dit hoort, dan ben jij dat.
+
+00:13:10.520 --> 00:13:16.480
+De integratie met Defender, Entra en Purview betekent minder portals om te beheren, minder context wisselen en meer controle vanaf één plek.
+
+00:13:16.780 --> 00:13:19.800
+Microsoft wet erop dat beveiliging ingebouwd moet zijn, niet toegevoegd.
+
+00:13:20.020 --> 00:13:23.060
+Sentinel is het fundament van die weddenschap en dat werpt zijn vruchten af.
+
+00:13:23.060 --> 00:13:25.780
+Jouw volgende stap. Dus, dit is wat je nu begrijpt.
+
+00:13:26.060 --> 00:13:28.560
+Sentinel is het centrale brein voor je beveiligingsdata.
+
+00:13:28.760 --> 00:13:33.180
+Het verzamelt alles, correleert de signalen en onderneemt automatisch actie wanneer er iets misgaat.
+
+00:13:33.280 --> 00:13:36.760
+Het data lake maakt het betaalbaar om laks jarenlang te bewaren in plaats van maanden.
+
+00:13:37.040 --> 00:13:43.020
+Grafieken en ani maken het na verloop van tijd slimmer en dit alles bevindt zich in de Defender portal, naast de tools die je al gebruikt.
+
+00:13:43.180 --> 00:13:45.300
+Je hoeft het niet van de ene op de andere dag te beheersen.
+
+00:13:45.300 --> 00:13:49.940
+Mijn advies is simpel, ga naar security.microsoft.com, open Sentinel en blader door de content hub.
+
+00:13:50.080 --> 00:13:53.640
+Verken het gewoon, kijk wat er beschikbaar is, kies één connector en één detectieregel.
+
+00:13:53.880 --> 00:13:56.960
+Dat is jouw startpunt. Veel mensen zullen die eerste stap niet zetten.
+
+00:13:57.180 --> 00:14:01.000
+Ze lezen over Sentinel, knikken instemmend, sluiten hun browser en gaan door met hun dag.
+
+00:14:01.220 --> 00:14:04.680
+Daarom loop jij voorop, omdat je daadwerkelijk iets hebt gedaan met wat je hebt geleerd.
+
+00:14:04.860 --> 00:14:09.300
+Als deze aflevering je hielp Sentinel wat beter te begrijpen, abonneer je dan op Microsoft Knowledge Nuggets.
+
+00:14:09.500 --> 00:14:14.240
+We bespreken in elke aflevering Microsoft beveiliging en M365 onderwerpen in begrijpelijke taal.
+
+00:14:14.240 --> 00:14:17.980
+Deel dit met iemand die meer wil leren over Sentinel, maar niet wist waar te beginnen.
+
+00:14:18.180 --> 00:14:19.200
+Tot de volgende keer!

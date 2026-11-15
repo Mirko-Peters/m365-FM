@@ -1,0 +1,68 @@
+name: Community-Agent prüfen und veröffentlichen
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ["agents/**", "worker/src/**", "site_mcp.py", "tests/test_site_mcp.py", ".github/workflows/agents.yml"]
+  push:
+    branches: [main]
+    paths: ["agents/src/**", "agents/package.json", "agents/package-lock.json", "agents/wrangler.toml", ".github/workflows/agents.yml"]
+concurrency: { group: "agents-${{ github.ref }}", cancel-in-progress: false }
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agents
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: agents/package-lock.json
+      - run: npm ci
+      - name: Deutsche und englische Anleitung prüfen
+        working-directory: ${{ github.workspace }}
+        run: python3 -m py_compile site_mcp.py tests/test_site_mcp.py && python3 -m unittest discover -s tests -p test_site_mcp.py
+      - name: Syntax, Tests und Deploy-Build prüfen
+        env:
+          WRANGLER_SEND_METRICS: "false"
+        run: node --check src/index.js && node --check src/session.js && node --check src/gateway.js && npm test && npm run build
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+        working-directory: agents
+      - name: Deploy
+        working-directory: agents
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SESSION_SIGNING_SECRET: ${{ secrets.AGENT_SESSION_SIGNING_SECRET }}
+          WRANGLER_SEND_METRICS: "false"
+        run: |
+          # Signier-Secret: Ein GitHub-Secret AGENT_SESSION_SIGNING_SECRET hat Vorrang. Ohne GitHub-Secret behaelt der Worker
+          # seinen Wert; beim ersten Deploy wird einmalig ein Zufallswert erzeugt (wie SESSION_SECRET im Community-Worker).
+          # Der Wert wird nie ausgegeben.
+          SECRET_FILE="$(mktemp)"
+          export SECRET_FILE
+          trap 'rm -f "$SECRET_FILE"' EXIT
+          HAVE=$(npx wrangler secret list --format json 2>/dev/null | node -e 'let s="";process.stdin.on("data",(d)=>s+=d).on("end",()=>{try{console.log(JSON.parse(s).some((x)=>x.name==="SESSION_SIGNING_SECRET")?1:0)}catch{console.log(0)}})')
+          export HAVE
+          node --input-type=module -e '
+            import { writeFileSync } from "node:fs";
+            import { randomBytes } from "node:crypto";
+            let secret = process.env.SESSION_SIGNING_SECRET || "";
+            if (secret && secret.length < 32) throw new Error("GitHub-Secret AGENT_SESSION_SIGNING_SECRET ist zu kurz (mindestens 32 Zeichen)");
+            if (!secret && process.env.HAVE === "1") { console.log("SESSION_SIGNING_SECRET: vorhandener Wert bleibt"); process.exit(0); }
+            if (!secret) { secret = randomBytes(32).toString("base64url"); console.log("SESSION_SIGNING_SECRET: einmalig erzeugt"); }
+            writeFileSync(process.env.SECRET_FILE, JSON.stringify({ SESSION_SIGNING_SECRET: secret }), { mode: 0o600 });
+          '
+          if [ -s "$SECRET_FILE" ]; then npx wrangler deploy --secrets-file "$SECRET_FILE"; else npx wrangler deploy; fi

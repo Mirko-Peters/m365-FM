@@ -93,6 +93,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Que se passe-t-il par défaut quand Copilot n'est relié à aucun connecteur, ancrage ou agent personnalisé ?",
+    "opts": [
+     "Il accède automatiquement à l'ERP et aux manuels RH de l'entreprise",
+     "Il s'appuie sur le modèle de base et le contenu du tenant",
+     "Il refuse de répondre à toute question métier de l'entreprise",
+     "Il utilise uniquement des sources web publiques pour répondre aux utilisateurs"
+    ],
+    "a": 1,
+    "why": "Par défaut, Copilot utilise les connaissances du modèle de base et le contenu du tenant ; l'ERP et les procédures restent inaccessibles."
+   },
+   {
+    "q": "Quelle est la couche de l'architecture d'un agent qui relie celui-ci au contenu de l'entreprise pour éviter des réponses inventées ?",
+    "opts": [
+     "L'orchestrateur",
+     "Les compétences",
+     "Le modèle de base",
+     "L'ancrage"
+    ],
+    "a": 3,
+    "why": "L'ancrage (grounding) est le lien vers le contenu de l'entreprise et évite les réponses inventées."
+   },
+   {
+    "q": "Quel profil d'utilisateur correspond le mieux à Copilot Studio selon l'article ?",
+    "opts": [
+     "Un utilisateur averti déployant des agents low-code sans solliciter l'informatique",
+     "Un développeur fullstack souhaitant réécrire lui-même les garde-fous de Microsoft",
+     "Une équipe voulant appeler des modèles externes avec une orchestration personnalisée",
+     "Un administrateur cherchant à supprimer toute gouvernance pour gagner en rapidité"
+    ],
+    "a": 0,
+    "why": "Studio est un outil visuel low-code, adapté aux utilisateurs avancés qui déploient des agents rapides et contrôlés sans passer par l'informatique."
+   },
+   {
+    "q": "Que se passe-t-il quand le réservoir de crédits Copilot Studio du tenant est vide ?",
+    "opts": [
+     "Les agents passent automatiquement sur un bac à sable gratuit",
+     "Seuls les agents de test sont interrompus, la production continue",
+     "Les agents sont interrompus jusqu'au rechargement des crédits",
+     "Les agents basculent sous la licence Microsoft 365 Copilot de l'utilisateur"
+    ],
+    "a": 2,
+    "why": "Les crédits sont partagés au niveau du tenant et, une fois épuisés, les agents sont interrompus jusqu'au rechargement."
+   }
   ]
  },
  "nl": {
@@ -189,6 +235,52 @@
       "text": "Basismodel, orchestrator, grounding en vaardigheden moeten als één geheel worden ontworpen."
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welke laag van de Copilot-architectuur zorgt ervoor dat antwoorden niet worden verzonnen?",
+    "opts": [
+     "Het basismodel",
+     "De orchestrator",
+     "Grounding",
+     "De vaardigheden"
+    ],
+    "a": 2,
+    "why": "Grounding verbindt de agent met bedrijfscontent, zodat antwoorden op echte bronnen berusten en niet op aannemelijke gissingen uit algemene modelkennis."
+   },
+   {
+    "q": "Wanneer kies je volgens het artikel voor de Agents Toolkit in plaats van Copilot Studio?",
+    "opts": [
+     "Bij aangepaste orkestratie, externe AI-modellen of diepe integraties",
+     "Wanneer power users zonder IT snel een agent willen opzetten",
+     "Wanneer je een visuele drag-and-drop bouwer met sjablonen wilt",
+     "Wanneer je andere promptvakken en antwoordkaarten voor gebruikers wilt"
+    ],
+    "a": 0,
+    "why": "De toolkit is voor developers die orkestratie, externe LLM's of diepe integraties nodig hebben. De UX-laag is in beide tools gelijk."
+   },
+   {
+    "q": "Wat gebeurt er in Copilot Studio wanneer de credits van de tenant op zijn?",
+    "opts": [
+     "Agents schakelen automatisch over op een gratis sandbox",
+     "Alleen generatieve antwoorden worden uitgeschakeld, andere acties blijven werken",
+     "Beheerders krijgen eerst een waarschuwing en een respijtperiode van een week",
+     "De agents worden gepauzeerd tot de credits zijn aangevuld, zonder waarschuwing"
+    ],
+    "a": 3,
+    "why": "Alle agents delen één creditpool. Is die leeg, dan pauzeert Copilot Studio de agents zonder waarschuwing, zelfs midden in een transactie."
+   },
+   {
+    "q": "Wat kunnen beheerders met ingeschakelde diagnostische logs onder meer doen?",
+    "opts": [
+     "Automatisch alle verlopen content uit SharePoint verwijderen",
+     "Prompts en antwoorden terugkijken en namens gebruikers logboeken indienen",
+     "Het aantal Copilot Credits per prompt vastleggen en verlagen",
+     "Agents automatisch publiceren naar alle Teams-kanalen in de tenant"
+    ],
+    "a": 1,
+    "why": "Diagnostische logs tonen prompts, antwoorden, inhoudsreferenties en systeemlogboeken. Beheerders kunnen ook namens gebruikers logboeken indienen, wat probleemoplossing proactief maakt."
    }
   ]
  },
@@ -289,6 +381,52 @@
       "text": "stosu agenta: model, orkiestrator, ugruntowanie i umiejętności"
      }
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Co dzieje się z agentami w Copilot Studio, gdy pula kredytów Copilot zostanie wyczerpana?",
+    "opts": [
+     "Agenci przełączają się automatycznie na tańszy model o ograniczonej wydajności",
+     "Copilot Studio wstrzymuje działanie agentów do czasu uzupełnienia kredytów",
+     "Agenci działają dalej, a nadwyżka jest rozliczana w kolejnym miesiącu",
+     "Agenci przechodzą do darmowej piaskownicy przeznaczonej do testów"
+    ],
+    "a": 1,
+    "why": "Studio nie ogranicza wydajności, tylko wstrzymuje agentów do uzupełnienia kredytów. Ukrytej darmowej piaskownicy nie ma."
+   },
+   {
+    "q": "Które narzędzie wybrać, gdy potrzebna jest niestandardowa orkiestracja zewnętrznych modeli LLM i głęboka integracja z systemami firmy?",
+    "opts": [
+     "Copilot Studio, ponieważ ma wbudowaną analitykę i szablony",
+     "Microsoft Purview, ponieważ pozwala budować własne silniki agentów",
+     "Teams Toolkit (Agent Toolkit), ponieważ daje pełną kontrolę nad orkiestracją",
+     "Power Automate, ponieważ automatyzuje raporty i wywołania modeli"
+    ],
+    "a": 2,
+    "why": "Toolkit pozwala budować własną orkiestrację, modyfikować zabezpieczenia i wywoływać zewnętrzne modele LLM, w przeciwieństwie do Studio."
+   },
+   {
+    "q": "Co zmienia się dla użytkownika końcowego po wyborze między Copilot Studio a Teams Toolkit?",
+    "opts": [
+     "Interfejs jest zupełnie inny, bo każde narzędzie ma własną warstwę UX",
+     "Użytkownik widzi inne pole zapytania i inną kartę odpowiedzi",
+     "Nic w interfejsie, różnice dotyczą ugruntowania, skalowalności i kontroli administracyjnej",
+     "Tylko agenci z Toolkit mają dostęp do kanałów zewnętrznych w interfejsie"
+    ],
+    "a": 2,
+    "why": "Warstwa UX jest ujednolicona. Różnice są za kulisami, więc decyzja jest operacyjna, a nie kosmetyczna."
+   },
+   {
+    "q": "Dlaczego warto włączyć dzienniki diagnostyczne Copilot?",
+    "opts": [
+     "Pozwalają odtworzyć historię interakcji, gdy trzeba wyjaśnić błędną odpowiedź agenta",
+     "Automatycznie zwiększają pulę kredytów Copilot dla całego tenanta",
+     "Zastępują etykiety wrażliwości i zasady DLP w Microsoft Purview",
+     "Przyspieszają model podstawowy dzięki buforowaniu odpowiedzi użytkowników"
+    ],
+    "a": 0,
+    "why": "Dzienniki dają pełną widoczność poleceń, odpowiedzi i odwołań do treści, więc można odtworzyć historię zamiast wzruszać ramionami."
    }
   ]
  },
@@ -391,6 +529,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Что происходит, когда общий пул кредитов Copilot Studio заканчивается?",
+    "opts": [
+     "Студия приостанавливает работу агентов до пополнения кредитов",
+     "Студия постепенно снижает скорость ответов агентов",
+     "Студия автоматически переводит агентов на бесплатную песочницу",
+     "Студия отправляет мягкое предупреждение и продолжает работу"
+    ],
+    "a": 0,
+    "why": "Studio не ограничивает скорость и не предупреждает мягко, а приостанавливает работу агентов до пополнения пула кредитов."
+   },
+   {
+    "q": "Для какой задачи в статье рекомендуется выбирать Teams Toolkit?",
+    "opts": [
+     "Для быстрых агентов, которых создают продвинутые пользователи без участия IT",
+     "Для пользовательской оркестрации, внешних моделей и глубокой интеграции в инфраструктуру",
+     "Для изменения интерфейса поля ввода и карточки ответа",
+     "Для сборки агентов методом drag-and-drop без кода"
+    ],
+    "a": 1,
+    "why": "Toolkit подходит для пользовательской оркестрации, внешних LLM и глубокой интеграции; Studio — для быстрых low-code агентов."
+   },
+   {
+    "q": "Какую роль в архитектуре Copilot выполняет граундинг?",
+    "opts": [
+     "Определяет, какие функции и когда вызывать",
+     "Служит движком обработки языка",
+     "Связывает агента с корпоративным контентом, чтобы ответы не выдумывались",
+     "Предоставляет плагины и коннекторы для конкретных задач"
+    ],
+    "a": 2,
+    "why": "Граундинг — связь с корпоративным контентом. Оркестратор вызывает функции, модель обрабатывает язык, навыки — плагины и коннекторы."
+   },
+   {
+    "q": "Как безопаснее подключать источники данных к агенту, по мнению статьи?",
+    "opts": [
+     "Подключать всё сразу, а ограничения доступа добавить позже",
+     "Выдать агенту права глобального администратора для полного доступа",
+     "Отключить политики DLP, чтобы агент мог читать все поля",
+     "Сочетать коннекторы с метками конфиденциальности и классификацией Purview с первого дня"
+    ],
+    "a": 3,
+    "why": "Метки конфиденциальности и классификация Purview в плане граундинга позволяют агенту извлекать только то, что разрешено правилами доступа."
+   }
   ]
  },
  "uk": {
@@ -491,6 +675,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Що станеться, коли в Copilot Studio закінчаться кредити Copilot?",
+    "opts": [
+     "Агенти призупинять роботу, доки пул не буде поповнено",
+     "Швидкість роботи агентів поступово знизиться з м'якими попередженнями",
+     "Агенти автоматично перейдуть на безкоштовну пісочницю для тестування",
+     "Роботу агентів перебере Teams Toolkit без додаткової оплати"
+    ],
+    "a": 0,
+    "why": "Copilot Studio не обмежує швидкість і не надсилає м'яких попереджень, а просто призупиняє роботу агентів до поповнення пулу."
+   },
+   {
+    "q": "Який інструмент підходить, якщо потрібні власна оркестрація та зовнішні моделі?",
+    "opts": [
+     "Copilot Studio із шаблонами та drag-and-drop потоками",
+     "Power Automate без додаткових інструментів розробки",
+     "Teams Toolkit (Microsoft 365 Agents Toolkit) у VS Code",
+     "Лічильник споживання агентів Copilot"
+    ],
+    "a": 2,
+    "why": "Toolkit дозволяє переписувати обмеження, будувати власну оркестрацію та викликати зовнішні LLM, тоді як Studio працює в межах обмежень Microsoft."
+   },
+   {
+    "q": "Що рекомендовано додати до плану grounding, щоб агент отримував лише дозволений вміст?",
+    "opts": [
+     "Збільшення кількості конекторів Power Platform до максимуму",
+     "Мітки конфіденційності та класифікацію Microsoft Purview",
+     "Окремий пул кредитів для кожного тестового запиту",
+     "Відмову від діагностичних журналів для швидшої роботи"
+    ],
+    "a": 1,
+    "why": "Мітки конфіденційності та класифікація Purview гарантують, що агент отримує лише той вміст, який відповідає його правам доступу."
+   },
+   {
+    "q": "Чим відрізняється приховування витрат у Teams Toolkit порівняно зі Studio?",
+    "opts": [
+     "Toolkit повністю безкоштовний, а витрати є лише в Studio",
+     "Toolkit списує кредити з пулу орендаря за кожен запит",
+     "Витрати Toolkit залежать лише від кількості створених агентів",
+     "Витрати Toolkit ховаються в API, конекторах і зовнішніх сервісах"
+    ],
+    "a": 3,
+    "why": "Toolkit працює в межах ліцензії Copilot користувача, але зовнішні API, корпоративні конектори та згоди адміністратора додають окремі витрати."
+   }
   ]
  },
  "he": {
@@ -525,7 +755,123 @@
      "text": "סוכן מוצלח נמדד בעמידה בתנאים אמיתיים לאורך זמן, לא בהדגמה מרשימה."
     }
    ]
-  }
+  },
+  "faq": [
+   {
+    "q": "מתי כדאי לבחור ב-Copilot Studio ומתי ב-Teams Toolkit לבניית סוכן Copilot?",
+    "a": "Copilot Studio הוא בונה ויזואלי בקוד נמוך, מתאים לסוכנים מהירים, מנוהלים וניתנים לביקורת שמשתמשים מתקדמים בונים. Teams Toolkit (Microsoft 365 Agents Toolkit) מתאים לתזמור מותאם, מודלי AI חיצוניים ואינטגרציה עמוקה, אבל האחריות על כל פרט בידי המפתחים."
+   },
+   {
+    "q": "מהו ביסוס (grounding) ב-Copilot ולמה הוא חשוב?",
+    "a": "ביסוס הוא חיבור הסוכן לתוכן הארגוני האמיתי, כמו SharePoint, Dataverse ו-ERP, כדי שלא ינחש. הסוכן שולף את המסמך עצמו ומצרף קישור ציטוט במקום מידע כללי של המודל. כך התשובה אמינה, וגם ניתן לבקר אותה דרך היומנים."
+   },
+   {
+    "q": "איך מונעים התפשטות בלתי מבוקרת של סוכנים בארגון?",
+    "a": "באמצעות ממשל: להגדיר מי יוצר סוכנים, מי מפרסם והיכן הם פועלים, בעזרת מרכזי הניהול של Microsoft 365 ו-Power Platform. בנוסף משתמשים ב-Purview לתוויות רגישות ו-DLP, ומפעילים יומני אבחון לביקורת. ניהול התרחישים מוגבל לתפקידים ספציפיים."
+   },
+   {
+    "q": "איך עובדים הרישוי והעלויות של Copilot Studio?",
+    "a": "Copilot Studio פועל על קרדיטים של Copilot, למשל 25 אלף קרדיטים ב-200 דולר לחודש לכל הדייר, או בתשלום לפי שימוש. המאגר משותף לבדיקות ולייצור, וכשהוא מתרוקן הסוכנים מושהים. מומלץ להגדיר ניטור צריכה, ספי התראה ותקציבים לכל יחידה עסקית."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot Studio לעומת Teams Toolkit",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Studio",
+     "punkte": [
+      "בונה ויזואלי בקוד נמוך, שנועד למהירות ולבהירות",
+      "מתאים לצוותים שכבר עובדים עם Power Apps או Power Automate",
+      "הרחבה בתוך מעקות הבטיחות של Microsoft, עם ממשל קל משקל",
+      "פרסום ישירות ל-Microsoft 365 Copilot או כסוכן עצמאי",
+      "גובה מראש בקרדיטים של Copilot"
+     ]
+    },
+    "rechts": {
+     "titel": "Teams Toolkit (Agents Toolkit)",
+     "punkte": [
+      "מתחבר ל-VS Code ומיועד למפתחי Full Stack",
+      "מאפשר תזמור מותאם וקריאות למערכות LLM חיצוניות",
+      "אפשר לכתוב מחדש את המעקות, והאחריות על כל פרט בידיכם",
+      "פרסום ל-Copilot, ל-Teams, לאינטרנט ולערוצים חיצוניים",
+      "עלויות מצטברות בשכבות האינטגרציה והשירות"
+     ]
+    }
+   },
+   {
+    "titel": "ארבע שכבות הארכיטקטורה של Copilot",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "מודל הבסיס",
+      "text": "מנוע השפה הגולמי שעליו נשען הכול."
+     },
+     {
+      "wert": "תזמור",
+      "text": "קובע אילו פונקציות נקראות ומתי; Microsoft 365 Copilot מספק אותה כברירת מחדל."
+     },
+     {
+      "wert": "ביסוס",
+      "text": "החיבור לתוכן הארגוני, שמונע תשובות מפוברקות."
+     },
+     {
+      "wert": "מיומנויות ומחברים",
+      "text": "השכבה שמבצעת משימות בפועל, באמצעות תוספים ומחברים מותאמים."
+     },
+     {
+      "wert": "ערימה אחת",
+      "text": "רק טיפול בשכבות כמכלול משאיר את הסוכן יציב."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "מה קורה כאשר מאגר הקרדיטים של Copilot Studio ברמת הדייר מתרוקן?",
+    "opts": [
+     "הסוכנים עוברים אוטומטית לרישיון Microsoft 365 Copilot של כל משתמש",
+     "Copilot Studio משהה את הסוכנים עד למילוי מחדש של המאגר",
+     "רק סוכני הבדיקה נעצרים וסוכני הייצור ממשיכים לפעול כרגיל",
+     "המערכת מחייבת אוטומטית כרטיס אשראי נוסף בתעריף מופחת"
+    ],
+    "a": 1,
+    "why": "הקרדיטים משותפים לכל הדייר, ובהתרוקנות המאגר Copilot Studio משהה את הסוכנים עד למילוי מחדש."
+   },
+   {
+    "q": "מה ההבדל המרכזי בין Copilot Studio ל-Teams Toolkit לפי המאמר?",
+    "opts": [
+     "משתמשי הקצה רואים ממשק שונה לגמרי בכל אחד מהכלים",
+     "Toolkit פועל רק בתוך Teams ואינו תומך בפרסום לערוצים חיצוניים",
+     "Studio מאפשר לכתוב מחדש את המעקות ולקרוא למערכות LLM חיצוניות",
+     "ההבדל הוא מאחורי הקלעים: ביסוס, מדרגיות ובקרה ניהולית, ולא שכבת ה-UX"
+    ],
+    "a": 3,
+    "why": "שכבת ה-UX מאוחדת, וההבדל נמצא באפשרויות הביסוס, במדרגיות ובבקרה הניהולית, ולכן ההחלטה תפעולית."
+   },
+   {
+    "q": "מה קורה כשסוכן שואל על מדיניות חופשת הורות ויש לו ביסוס נכון?",
+    "opts": [
+     "הוא שולף את המדיניות מ-SharePoint ומצרף קישור ציטוט למדריך",
+     "הוא עונה לפי ידע כללי של המודל, בלי קישור למסמך",
+     "הוא מעביר את השאלה אוטומטית למנהל משאבי אנוש",
+     "הוא מסרב לענות עד שמנהל מאשר את המסמך ידנית"
+    ],
+    "a": 0,
+    "why": "עם ביסוס הסוכן שולף את המדיניות עצמה מ-SharePoint ומצרף קישור ציטוט, וכך התשובה אמינה."
+   },
+   {
+    "q": "מדוע חשוב לשלב תוויות רגישות וסיווג של Purview מהיום הראשון?",
+    "opts": [
+     "כדי להאיץ את זמני התגובה של הסוכן בעומס ארגוני",
+     "כדי להפחית את צריכת הקרדיטים בכל הנחיה",
+     "כדי שהסוכן ישלוף רק תוכן התואם את כללי ההרשאות ויכבד סיווגי נתונים",
+     "כדי לאפשר פרסום סוכנים ללא אישור מנהל"
+    ],
+    "a": 2,
+    "why": "בלי תוויות וסיווג, חיבור מקורות עלול לחשוף רשומות פרטיות או נתוני שכר; Purview מגביל את השליפה."
+   }
+  ]
  },
  "ja": {
   "html": "<p>Microsoft 365 Copilot を導入すると、強力なアイテムを手に入れたような気分になります。しかし標準の状態では、モデルが持つ基本知識とテナント内のコンテンツを使うだけで、いわばスターターキットにすぎません。社内の SOP や人事ガイドライン、奥に控える ERP システムには、コネクタやグラウンディング、カスタムエージェントがなければアクセスできません。</p>\n<p>そこで重要になるのが、Copilot Studio と Teams Toolkit のどちらを使うか、そしてガバナンス、監視、ライセンスをどう運用に組み込むかです。この記事では、Copilot エージェントを本番で長く使える形にするための考え方を整理します。</p>\n\n<h2>エージェントは作って終わりではない:本番環境で問われること</h2>\n<p>最初のエージェントを作り、プロンプトが動いてデモデータもきれいに見えると、つい「クリアした」と感じます。しかしそれはチュートリアルが終わっただけで、本当の仕事は本番環境に向けた時に始まります。本番が求めるのは、ストレス下での安定性、コンプライアンスチェック、ID のガードレール、厳格な稼働率基準です。</p>\n<h3>本番で立ちはだかる3つの壁</h3>\n<ul>\n<li><strong>スケーラビリティ:</strong>エンタープライズ規模の負荷に耐えられるか。ここでは Copilot control system の監視ログと診断ログが重要になります。</li>\n<li><strong>グラウンディングの陳腐化:</strong>SharePoint や Dataverse のデータが変わっても、最新のデータに接続し続けられるか。コネクタと Graph グラウンディングが防波堤になります。</li>\n<li><strong>コンプライアンスと監査可能性:</strong>規制当局や内部監査人に問われたとき、履歴をログと秘密度ラベルでレビューできるか。</li>\n</ul>\n<p>セキュリティとコンプライアンスは、後から足せばよいオプションではありません。最初から計画に入れておくべきものです。</p>\n<h3>Copilot の「頭脳」は4つの要素でできている</h3>\n<p>Copilot の頭脳は単一のブロックではありません。言語エンジンである基盤モデル、どの機能をいつ呼び出すかを調整するオーケストレーター、エンタープライズコンテンツにつなぎ止めて回答の捏造を防ぐグラウンディング、そして実際のタスクを実行するカスタムプラグインやコネクタといったスキルで構成されます。これらをバラバラのサイロではなく、1つのスタックとして扱って初めて、エージェントは頑丈になります。</p>\n\n<h2>Copilot Studio と Teams Toolkit の違い</h2>\n<p>Microsoft は2種類のキットを用意しています。どちらも「Copilot を拡張する」と言うので似て聞こえますが、対象とする構築者やニーズは大きく異なります。選択を誤ると、時間と予算を浪費するだけでなく、本番でデモ通りに動かず信頼を失うことにもなります。</p>\n<h3>Copilot Studio:スピードと明快さのローコード</h3>\n<p>Copilot Studio は、ドラッグ&ドロップでフローを作れるローコードのビジュアルビルダーです。テンプレートによるガイド付き対話や、組み込みの分析機能も使えます。Microsoft 365 のデータソースへの接続が豊富で、パワーユーザーならコードを書かずに、SharePoint コンテンツの抽出、Teams メッセージの監視、人事規定ドキュメントの参照などができます。テストと調整を経て Microsoft 365 Copilot へ直接公開することも、スタンドアロンのエージェントとして公開することも可能です。</p>\n<p>すでに16万社以上の顧客が、財務データの照合、従業員のオンボーディング、小売店での製品問い合わせ対応などに活用しています。Power Apps や Power Automate に慣れたチームなら、使い慣れた環境に感じられるはずです。ソフトウェアエンジニアでなくても、明確な目標と基本的なローコードスキルがあれば構築できます。</p>\n<h3>Teams Toolkit:フルスタック開発者の領域</h3>\n<p>Teams Toolkit(Microsoft 365 Agents Toolkit とも呼ばれます)は VS Code に組み込まれるツールで、キャンバスではなくコードで作ります。構造化されたルールを持つ宣言型エージェントを設計できるほか、オーケストレーションモデルの呼び出しや API 処理をゼロから定義するカスタムエンジンエージェントも作れます。Copilot だけでなく、Teams、Microsoft 365 アプリ、Web、外部チャンネルまで、スキャフォールディング、デバッグ構成、公開のルートが手に入ります。</p>\n<p>たとえるなら、Copilot Studio はカタログから選ぶ組み立て家具、Teams Toolkit は木材を削り出して配線まで自分で行う家づくりです。Studio は Microsoft が定めたガードレール、安全なコネクタ管理、軽量なガバナンスの範囲内で拡張します。Toolkit ではガードレールの書き換え、独自オーケストレーション、外部 LLM の呼び出しなど、標準にない動作も実装できますが、その力を責任を持って使うことが前提です。</p>\n<h3>変わるのは見た目ではなく舞台裏</h3>\n<p>ツールを選ぶと UI も変わると思われがちですが、そうではありません。どちらで作っても、エンドユーザーが見るプロンプトボックスや回答カードは同じです。変わるのは、グラウンディングの選択肢、スケーラビリティ、管理制御といった裏側です。つまりこれは見かけではなく運用の問題です。</p>\n<h3>選び方のチェックリスト</h3>\n<ol>\n<li>IT 部門を煩わせずにパワーユーザーが作れる、素早く、監査可能で、管理者が制御できるエージェントが必要なら、Copilot Studio。</li>\n<li>カスタムオーケストレーション、外部 AI モデル、企業の基幹システムへの深い統合が必要なら、Agents Toolkit。</li>\n<li>ラベルではなく、チームの実際のスキルセットと目標で判断する。</li>\n</ol>\n<p>住宅にたとえると、Studio はプレハブ住宅です。色やキャビネットは選べ、配管や配線はすでに安全な状態です。Toolkit は更地で、すべてを設計できる代わりに、設計が崩れたときのリスクも自分で負います。どちらでも良い家は建ちますが、グラウンディングがなければどちらも崩壊します。</p>\n\n<h2>グラウンディング:エージェントに根拠を与える</h2>\n<p>コネクタのない Studio エージェントはただのオウムであり、グラウンディングのない Toolkit エージェントはカスタムコードで書かれたオウムにすぎません。どちらも、推測をさえずる鳥を飼っているようなものです。グラウンディングとは、脳に栄養を与えることです。適切なソースを与えれば、ハッタリではなく根拠のある回答ができるようになります。</p>\n<p>Microsoft 365 Copilot は、Microsoft Graph を通じて見えるファイル、チャット、会議、予定表のイベントに依存しています。しかし最も価値のあるコンテンツは、その外側にあることも少なくありません。ERP の在庫、CRM の顧客ライフサイクル、SharePoint の奥にある人事のプレイブック、厳重なフォルダーにあるポリシー文書などです。</p>\n<h3>接続の選択肢</h3>\n<ul>\n<li>Copilot Studio と Microsoft Graph コネクタで、SharePoint のドキュメント、Dataverse の構造化テーブル、Exchange のメール、Teams のチャット内容にアクセスできます。</li>\n<li>Power Platform 経由の1200以上のコネクタで、財務、人事、チケット管理などの外部システムとも連携できます。</li>\n<li>既存コネクタで足りない場合は、API を使って標準コネクタにない業務アプリを組み込めます。</li>\n</ul>\n<p>人事ヘルプデスクで「育児休暇のポリシーは?」と聞かれた場面を考えてみましょう。グラウンディングがなければ、エージェントはモデルの一般知識からもっともらしい回答を組み立てます。グラウンディングがあれば、引用付きで元のソースを示せるため、監査担当者や人事が承認できる回答になります。コンプライアンス部門に理由を問われても、ログでプロンプト、参照したドキュメント、生成された回答を示せます。</p>\n<p>ただし、すべての接続はリスクポイントでもあります。人事データの連携がずさんだと、公開 FAQ と一緒に従業員の個人記録が表示されるかもしれません。ERP のアクセス権限を誤れば、営業担当者が給与データを見てしまう恐れもあります。対策として、グラウンディング計画に秘密度ラベルと Purview による分類を最初から組み込み、権限ルールに一致するコンテンツだけを取得させましょう。</p>\n\n<h2>ガバナンス:エージェントの増殖と変異を防ぐ</h2>\n<p>ここでのガバナンスとは、誰が作成でき、どこで実行され、どのデータに触れられるかを、運任せにせず決めるためのルールセットです。Microsoft はすでに、次の4つの柱となるツールを提供しています。</p>\n<ul>\n<li>Microsoft 365 管理センターの Copilot control system</li>\n<li>Power Platform 管理センターのライフサイクル管理</li>\n<li>秘密度ラベルと DLP のための Microsoft Purview</li>\n<li>監査のための Copilot 診断ログ</li>\n</ul>\n<p>Copilot のシナリオ管理は、グローバル管理者や AI 管理者といった特定の役割が必要です。最小権限の原則を守り、スイッチを切り替えられる人を制限することも、ガバナンスの一部です。</p>\n<h3>設計段階で決める4つのルール</h3>\n<ol>\n<li>エージェントを作成できるユーザーを定義し、Power Platform 管理センターの環境に紐付ける。</li>\n<li>365 管理センターの Copilot 設定で、エージェントを公開できるユーザーを定義し、リリースを承認またはブロックする。</li>\n<li>実行できる場所を定義し、分離された環境に割り当てて、本番環境を無法地帯にしない。</li>\n<li>クレジットの割り当て方法を定義する。Copilot エージェント消費メーターが、消費の速さと消費している人を数値で示してくれます。</li>\n</ol>\n<p>Purview では、データに付けた秘密度ラベルが回答まで引き継がれます。DLP ポリシーで機密フィールドが回答に出るのをブロックし、保持ポリシーで期限切れのはずの古いデータをグラウンディングに使わないようにできます。一度ガードレールを設定すれば、すべてのエージェントが自動的にその監視下に入ります。</p>\n<p>見落としがちなのが診断ログの有効化です。プロンプト、応答、コンテンツ参照、システムログが記録として残り、「なぜ誤った指示を出したのか」と聞かれても履歴を再生できます。ユーザーがフィードバックを送らない場合は、管理者が代わりにログを送信することもでき、トラブルシューティングが予防型になります。ガバナンスがなければスピードは重複や矛盾を生み、あれば同じスピードで、コンプライアンスが守られた再利用可能な資産を生み出せます。</p>\n\n<h2>ライセンスとコスト:見えないトラップカード</h2>\n<p>ガバナンスを整えても、次の驚きは経済面から来ます。ライセンスとコストは、管理すべき中心的な仕組みです。</p>\n<h3>Copilot Studio はクレジットで動く</h3>\n<p>Copilot Studio は Copilot クレジットで動作します。パックを購入するなら、テナント全体で月額約200ドルで25,000クレジットです。もう1つは、消費量に応じて期間終了後に請求される従量課金メーターです。料金は段階的で、標準的な非生成アクションは安価ですが、生成型回答はより多くを消費します。正確な数値はライセンスガイドによって変わるため、課金ドキュメントもビルドキットの一部として扱いましょう。</p>\n<p>テスト用のプロンプトも本番の応答も、同じリソースプールから消費されます。無料のサンドボックスはどこにもありません。クレジットはテナント全体で共有されるので、ある部門の集中的なテストが別のチームの本番リソースを枯渇させることがあります。プールが空になると、Copilot Studio はスロットルも警告もせず、クレジットが補充されるまでエージェントを停止させます。従量課金は前払いのコミットメントを避けたいときに役立ちますが、予算アラートがなければ簡単に超過します。</p>\n<h3>Teams Toolkit のコストは別の場所に現れる</h3>\n<p>Toolkit で作ったエージェントを Microsoft 365 Copilot に公開すると、ユーザーの Microsoft 365 Copilot ライセンスの下で動くため、プロンプトごとのクレジット消費はありません。ただしそれは基本機能に限った話です。カスタムエンジンエージェントや外部サービスとの連携では、API 独自の課金、エンタープライズコネクタのライセンス、管理者の同意による予算外ティアへの移行などでコストが積み上がります。</p>\n<p>Studio はクレジットとして前払いし、Toolkit はコストを統合やサービスレイヤーに隠します。どちらが常に安いとは言えません。SharePoint ベースの軽量な承認ボットなら Studio が適しているでしょう。外部 CRM との大規模な統合なら、Copilot のクレジットの代わりに CRM の API 料金を払うことになりますが、Toolkit の方が理にかなう場合があります。大切なのはコストを避けることではなく、どこに発生するかを把握することです。</p>\n<h3>予期せぬ請求を防ぐ3つの管理策</h3>\n<ol>\n<li>Copilot エージェント消費メーターや従量課金レポートで、テナントレベルの利用監視を有効にする。</li>\n<li>予算がゼロになる前に、財務部門や IT 部門へ通知が届くようアラートを設定する。</li>\n<li>指定のクレジットパックや社内規定で、部署ごとに予算を割り当てる。</li>\n</ol>\n\n<h2>よくある失敗・落とし穴</h2>\n<ul>\n<li><strong>テストでの成功を完成と勘違いする。</strong>本番ではファイアウォールによる遮断や、過負荷な外部データソースによる応答遅延が起きます。ユーザーはそれを「賢い」とは呼ばず、サポートチケットを出し始めます。</li>\n<li><strong>ガバナンスを後回しにする。</strong>「後で追加すればいい」と考えると、スケーリングの問題、データの不一致、コンプライアンスの欠如が最悪のタイミングで露呈します。</li>\n<li><strong>使い捨てのプロジェクトとして扱う。</strong>プロトタイプを派手にデモした後、監視せず放置するパターンです。各部署が独自のエージェントを作り、ドキュメントもないままトークンを消費し続けます。コネクタを誰が管理し、グラウンディングを誰が監査し、クレジット消費を誰が確認するのかが決まっていません。</li>\n<li><strong>ライセンスの確認不足。</strong>SharePoint、Teams の会議やチャット、メール、Dataverse などのグラウンディングは、テナントで Microsoft 365 Copilot のライセンスか Copilot Studio の従量課金が有効な場合に限り使えます。権利がなければ、Studio を選んでも開放されません。</li>\n<li><strong>コネクタ追加時のコスト見落とし。</strong>テスト中に使った外部 API は、Microsoft ではなく利用者に請求されます。</li>\n</ul>\n\n<h2>今日から使える実践ポイント</h2>\n<ul>\n<li>ローコードで素早く作るなら Copilot Studio、フルカスタムのエンジンや詳細な制御が必要なら Teams Toolkit を選ぶ。</li>\n<li>ツール選択の前に、テナントのライセンス構成を確認する。</li>\n<li>グラウンディング計画に、初日から秘密度ラベルと Purview の分類を組み込む。</li>\n<li>公開前に、Purview ラベル、管理者ロール、診断ログ、利用状況の監視をすべて有効にする。</li>\n<li>作成者、公開者、実行場所、クレジット割り当ての4つのルールを設計段階で決める。</li>\n<li>テストビルドもクレジット計画に含め、早い段階で上限とアラートを設定する。</li>\n<li>設計時にライセンスとコネクタをリスト化し、誰が何に対して支払うかを展開前に確認する。</li>\n<li>想定ワークフローを文書化された価格体系に照らして検討する。</li>\n</ul>\n\n<h2>まとめ</h2>\n<p>成功とは、華やかなデモではなく、エージェントが暴走せず有用であり続けるためのルールを守ることです。構築パスを慎重に選び、開始時点からガバナンスを適用し、支出計画を立てる。この3点を押さえれば、Copilot エージェントは「珍しいだけのもの」から信頼できる運用ツールへと変わります。あなたのチームには、Copilot Studio と Teams Toolkit のどちらが合っているでしょうか。</p>",
@@ -555,7 +901,123 @@
      "text": "消費メーターで監視し、アラートと部署ごとの予算割り当てを設定する。"
     }
    ]
-  }
+  },
+  "faq": [
+   {
+    "q": "Copilot Studio と Teams Toolkit の違いは何ですか?",
+    "a": "Copilot Studio はドラッグ&ドロップのローコードビジュアルビルダーで、パワーユーザーが素早くエージェントを作れます。Teams Toolkit は VS Code 上でコードを書くフルスタック開発者向けで、カスタムオーケストレーションや外部 AI モデル、基幹システムとの深い統合に向いています。エンドユーザーが見る画面は、どちらで作っても同じです。"
+   },
+   {
+    "q": "Copilot Studio の料金はどのように決まりますか?",
+    "a": "Copilot Studio は Copilot クレジットで動作します。テナント全体で月額約200ドルの25,000クレジットパックか、消費量に応じて後から請求される従量課金を選べます。テストも本番も同じプールから消費され、空になるとエージェントが停止するため、予算アラートの設定が重要です。"
+   },
+   {
+    "q": "Copilot エージェントのグラウンディングとは何ですか?なぜ必要ですか?",
+    "a": "グラウンディングとは、エージェントを SharePoint、Dataverse、ERP などの適切なデータソースに接続し、推測ではなく根拠のある回答をさせる仕組みです。回答の捏造を防ぎ、引用付きで元のソースを示せるため、監査担当者や人事が承認できる回答になります。"
+   },
+   {
+    "q": "Copilot エージェントのガバナンスで、設計段階に決めるべきルールは何ですか?",
+    "a": "決めるべきルールは4つです。誰がエージェントを作成できるか、誰が公開できるか、どこで実行できるか、クレジットをどう割り当てるかです。あわせて、公開前に Purview の秘密度ラベル、管理者ロール、診断ログ、利用状況の監視を有効にしておきます。"
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot Studio と Teams Toolkit の違い",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Studio",
+     "punkte": [
+      "ドラッグ&ドロップで作るローコードのビジュアルビルダー",
+      "パワーユーザーがコードなしで構築できる",
+      "Microsoft 定めのガードレールと軽量なガバナンス",
+      "クレジットとして前払いするコスト構造",
+      "SharePoint ベースの軽量な承認ボット向き"
+     ]
+    },
+    "rechts": {
+     "titel": "Teams Toolkit",
+     "punkte": [
+      "VS Code に組み込まれ、コードで作るツール",
+      "宣言型エージェントやカスタムエンジンエージェントを開発",
+      "ガードレールの書き換えや外部 LLM の呼び出しも可能",
+      "コストは API 料金などの統合・サービス層に現れる",
+      "外部 CRM との大規模な統合に向く"
+     ]
+    }
+   },
+   {
+    "titel": "Copilot の運用で押さえたい数字と事実",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "16万社以上",
+      "text": "すでに多くの顧客が Copilot Studio を業務で活用している"
+     },
+     {
+      "wert": "1200以上",
+      "text": "Power Platform 経由のコネクタで外部システムとも連携できる"
+     },
+     {
+      "wert": "月額約200ドル",
+      "text": "テナント全体で25,000クレジットのパックを購入できる"
+     },
+     {
+      "wert": "4つの柱",
+      "text": "管理センター、ライフサイクル管理、Purview、診断ログがガバナンスを支える"
+     },
+     {
+      "wert": "3つの壁",
+      "text": "スケーラビリティ、グラウンディングの陳腐化、コンプライアンスと監査可能性"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Copilot Studio と Teams Toolkit の選択で、変わるのはどの部分だと説明されていますか?",
+    "opts": [
+     "プロンプトボックスや回答カードなどエンドユーザーの見た目",
+     "グラウンディングの選択肢、スケーラビリティ、管理制御などの裏側",
+     "回答に使われる言語モデルの種類そのもの",
+     "Microsoft 365 Copilot へ公開できるかどうか"
+    ],
+    "a": 1,
+    "why": "どちらで作ってもエンドユーザーのUIは同じで、違うのはグラウンディング、スケーラビリティ、管理制御といった舞台裏です。"
+   },
+   {
+    "q": "Copilot Studio のクレジットプールが空になった場合、どうなりますか?",
+    "opts": [
+     "自動的に従量課金へ切り替わり、通常どおり動き続ける",
+     "スロットルがかかり、応答速度だけが徐々に低下する",
+     "警告メールが届き、一週間の猶予期間が与えられる",
+     "スロットルも警告もなく、補充されるまでエージェントが停止する"
+    ],
+    "a": 3,
+    "why": "プールが空になると、スロットルも警告もなく、クレジットが補充されるまでエージェントが停止します。"
+   },
+   {
+    "q": "グラウンディングがないエージェントを、記事は何にたとえていますか?",
+    "opts": [
+     "地図を持たない旅人",
+     "燃料のない自動車",
+     "推測をさえずるオウム",
+     "鍵のかかっていない金庫"
+    ],
+    "a": 2,
+    "why": "記事は、グラウンディングのないエージェントを、根拠なく推測をさえずるオウムにたとえています。"
+   },
+   {
+    "q": "Teams Toolkit で作ったエージェントを Microsoft 365 Copilot に公開した場合のコストの特徴は?",
+    "opts": [
+     "基本機能ではプロンプトごとのクレジット消費がなく、統合側でコストが発生しうる",
+     "すべての機能で毎回 Copilot クレジットが前払いで必要になる",
+     "外部 API を使っても追加コストは一切かからない",
+     "Microsoft が外部 API の料金を肩代わりして請求する"
+    ],
+    "a": 0,
+    "why": "ユーザーの Copilot ライセンスで動くためクレジット消費はありませんが、API 課金やコネクタライセンスなどで費用が積み上がります。"
+   }
+  ]
  },
  "de": {
   "html": "<p>Microsoft 365 Copilot greift sofort auf grundlegendes Modellwissen und die Inhalte Ihres Mandanten zu. Das ist nützlich, aber noch nicht genug. Ihre SOPs, das HR-Playbook oder das ERP-System bleiben ohne Konnektoren, Grounding oder benutzerdefinierte Agents außer Reichweite. Die gute Nachricht: Sie können Copilot dafür erweitern.</p>\n<p>Entscheidend ist, wann Sie Copilot Studio nutzen, wann das Teams Toolkit (auch Microsoft 365 Agents Toolkit genannt) die bessere Wahl ist und wie Governance, Überwachung und Lizenzierung zusammenspielen. Dieser Artikel zeigt, worauf es ankommt, damit aus einer gelungenen Demo ein verlässlicher Agent im Produktivbetrieb wird.</p>\n\n<h2>Vom Proof of Concept in die Produktion: Warum der erste Agent erst der Anfang ist</h2>\n<p>Ihr erster Agent antwortet sauber, die Demodaten sehen gut aus, und man glaubt, das Ziel sei erreicht. Das ist die Falle. Ein Test auf dem Entwicklungslaptop sagt wenig darüber aus, wie sich der Agent in der Produktion schlägt. Dort zählen Stabilität unter Last, Compliance-Prüfungen, Identitätsschutz und Verfügbarkeitsstandards.</p>\n<p>Drei Probleme zeigen sich typischerweise erst im Live-Betrieb:</p>\n<ul>\n<li><strong>Skalierbarkeit:</strong> Kommt der Agent mit der Unternehmenslast zurecht? Überwachungs- und Diagnoseprotokolle des Copilot Control Systems helfen, das zu beurteilen.</li>\n<li><strong>Veraltetes Grounding:</strong> Ändern sich Daten in SharePoint oder Dataverse, muss der Agent weiterhin auf dem richtigen Stand arbeiten. Konnektoren und Graph-Grounding sind hier die Schutzmaßnahmen.</li>\n<li><strong>Compliance und Prüfbarkeit:</strong> Fragt ein Regulierer oder interner Prüfer nach, muss sich der Verlauf des Agenten mit Audit-Protokollen und Vertraulichkeitsbezeichnungen nachvollziehen lassen.</li>\n</ul>\n<p>Hinzu kommt: In der Testumgebung von Copilot Studio sieht alles glänzend aus. Im Live-Einsatz bremsen blockierende Firewalls und überlastete externe Datenquellen die Antworten aus. Dann nennen Nutzer den Agenten nicht mehr intelligent, sondern erstellen Tickets.</p>\n\n<h3>Die Architektur: ein Stapel aus vier Ebenen</h3>\n<p>Das „Gehirn“ von Copilot besteht aus mehreren Schichten:</p>\n<ol>\n<li>dem Foundation Model als Sprach-Engine,</li>\n<li>dem Orchestrator, der entscheidet, welche Funktionen wann aufgerufen werden (Microsoft 365 Copilot liefert diese Orchestrierung standardmäßig),</li>\n<li>dem Grounding, also der Verbindung zu Unternehmensinhalten, damit Antworten nicht erfunden werden,</li>\n<li>den Skills, also eigenen Plugins oder Konnektoren, die tatsächliche Aufgaben erledigen.</li>\n</ol>\n<p>Behandelt man diese Ebenen als getrennte Silos, wird die Konstruktion instabil. Ein starker Skill ohne solides Fundament produziert Halluzinationen, und ein Fundament ohne Compliance-Kontrollen wird zum Risiko. Stabil bleibt ein Agent nur, wenn alle Ebenen als ein Stapel betrachtet werden.</p>\n\n<h3>Agenten als Systeme betreiben, nicht als Wegwerfprojekte</h3>\n<p>Viele Agenten scheitern, weil Unternehmen sie als Wegwerfprojekte behandeln: Jemand baut einen Prototyp, zeigt eine auffällige Demo und überlässt ihn sich selbst. Bald entstehen in verschiedenen Abteilungen weitere, undokumentierte Agenten, die ungeprüft Credits verbrauchen. Ein einfaches Betriebshandbuch schafft Abhilfe. Es legt fest, wem die Konnektoren gehören, wer das Grounding prüft und wer den Verbrauch kontrolliert. Administratoren finden im Microsoft 365 Admin Center bereits brauchbare Steuerelemente, um Szenarien zu verwalten und früh Diagnose-Feedback zu sehen.</p>\n\n<h2>Copilot Studio oder Teams Toolkit: Welches Tool passt zu Ihrem Agenten?</h2>\n<p>Beide Werkzeuge erweitern Copilot, richten sich aber an unterschiedliche Entwicklergruppen. Die falsche Wahl kostet Zeit, Budget und möglicherweise Glaubwürdigkeit.</p>\n\n<h3>Copilot Studio: visuell, schnell, mit Leitplanken</h3>\n<p>Copilot Studio ist ein visueller Low-Code-Builder, ausgelegt auf Geschwindigkeit und Klarheit. Sie erhalten Drag-and-Drop-Flows, Vorlagen, geführte Dialoge und integrierte Analysen. Konnektoren zu Microsoft 365 Datenquellen sind enthalten. Ein Power-User kann so SharePoint-Inhalte abrufen, Teams-Nachrichten überwachen oder HR-Richtliniendokumente einbinden, ohne Code zu schreiben. Agenten lassen sich direkt in Microsoft 365 Copilot testen, anpassen und veröffentlichen oder mit geringem Aufwand als eigenständiger Agent freigeben.</p>\n<p>Wenn eine Abteilung noch in diesem Quartal einen funktionierenden Workflow braucht, ist Studio die naheliegende Wahl. Laut Angaben nutzen über 160.000 Kunden Studio bereits, etwa zum Abgleich von Finanzdaten, zur Einarbeitung neuer Mitarbeiter oder zur Beantwortung von Produktfragen im Einzelhandel. Besonders gut passt das Tool zu Teams, die schon mit Power Apps oder Power Automate arbeiten. Gefragt sind ein klares Ziel und grundlegende Low-Code-Kenntnisse.</p>\n\n<h3>Teams Toolkit: Code, Kontrolle und Verantwortung</h3>\n<p>Das Toolkit richtet sich an Full-Stack-Entwickler und integriert sich in VS Code statt in eine grafische Arbeitsfläche. Sie entwerfen deklarative Agenten mit strukturierten Regeln oder bauen Custom-Engine-Agenten, bei denen Sie Orchestrierung, Modellaufrufe und API-Verarbeitung selbst definieren. Dazu kommen Scaffolding, Debugging, Konfiguration und Veröffentlichungswege. Diese führen nicht nur in Copilot, sondern auch in Microsoft 365 Apps, ins Web und in externe Kanäle.</p>\n<p>Der Unterschied lässt sich so zusammenfassen: Studio arbeitet innerhalb der von Microsoft definierten Leitplanken, mit sicheren Konnektoren und administrativen Kontrollen. Das Toolkit erlaubt, diese Leitplanken zu verlassen, eine eigene Orchestrierung einzuführen, externe LLMs aufzurufen oder Verhalten zu bauen, das Microsoft nicht standardmäßig bereitstellt. Die Freiheit ist groß, aber Sie tragen auch die Verantwortung dafür.</p>\n\n<h3>Was Endnutzer sehen und was nicht</h3>\n<p>Für Endnutzer macht die Wahl keinen Unterschied: Eingabefeld und Antwortkarte sind identisch, die UX-Ebene ist vereinheitlicht. Was sich ändert, passiert im Hintergrund, nämlich bei Basisfunktionen, Skalierbarkeit und administrativer Kontrolle. Die Entscheidung ist daher operativ, nicht kosmetisch.</p>\n<p>Beachten Sie außerdem die Lizenzfrage: Bestimmte grundlegende Funktionen stehen nur zur Verfügung, wenn Ihr Mandant über eine Microsoft 365 Copilot-Lizenzierung oder die Copilot-Studio-Messung verfügt. Dazu zählen SharePoint-Inhalte, Teams-Chats und -Besprechungen, eingebettete Dateien, Dataverse-Daten sowie Konnektoren für E-Mails und Personensuche. Diese Prüfung kann die Entscheidung bereits vorwegnehmen.</p>\n\n<h3>Kurze Checkliste zur Auswahl</h3>\n<ul>\n<li>Brauchen Sie schnelle, überprüfbare, administrativ gesteuerte Agenten, die Power-User einrichten können? Wählen Sie Copilot Studio.</li>\n<li>Brauchen Sie eigene Orchestrierung, externe KI-Modelle oder tiefe Integration in die Unternehmensarchitektur? Wählen Sie das Agents Toolkit.</li>\n<li>Orientieren Sie sich nicht an Bezeichnungen, sondern an den tatsächlichen Fähigkeiten und Zielen Ihres Teams.</li>\n</ul>\n\n<h2>Grounding: Agenten mit echten Unternehmensdaten verbinden</h2>\n<p>Ohne Grounding hört sich ein Agent kompetent an, rät aber. Das gilt für Studio ebenso wie für das Toolkit. Ein Studio-Agent ohne Konnektoren und ein Toolkit-Agent ohne Grounding liefern beide Vermutungen statt Antworten.</p>\n<p>In Microsoft 365 stützt sich Copilot bereits auf Daten, die über Microsoft Graph sichtbar sind: Dateien, Chats, Besprechungen und Kalenderereignisse. Die wertvollsten Inhalte liegen aber oft darüber hinaus: ERP-Systeme mit Inventar, CRM-Systeme mit Kundenlebenszyklen, HR-Playbooks, tief verschachtelte SharePoint-Bereiche oder Richtlinien im Ordner der Rechtsabteilung.</p>\n\n<h3>Wege zur Datenanbindung</h3>\n<ul>\n<li>Copilot Studio und Microsoft Graph-Konnektoren erschließen Dokumente in SharePoint, strukturierte Tabellen in Dataverse, E-Mail-Datensätze in Exchange und Chats in Teams.</li>\n<li>Über die Power Platform öffnen mehr als 9200 Konnektoren den Zugang zu externen Systemen wie Finanzen, Personalwesen oder Ticketing.</li>\n<li>Für Branchenanwendungen ohne fertigen Konnektor lassen sich Standard-APIs einbinden.</li>\n</ul>\n<p>Auch hier gilt: Der Zugriff auf Quellen wie SharePoint-Inhalte, Teams-Besprechungen, E-Mails oder Dataverse setzt häufig eine im Mandanten aktivierte Copilot-Lizenzierung oder -Nutzung voraus. Prüfen Sie Ihre Lizenzübersicht, bevor Sie planen.</p>\n\n<h3>Der Prüfpfad als eigentlicher Gewinn</h3>\n<p>Fragt jemand nach den Richtlinien zur Elternzeit, erzeugt ein Agent ohne Grounding eine plausible, aber unbelegte Antwort. Mit Grounding ruft er die tatsächliche Richtlinie aus SharePoint ab, nennt den Dokumenttitel und verlinkt das Handbuch. Aus einer unverifizierten Aussage wird eine Antwort, die Prüfer und Personalabteilung abzeichnen können. Fragt die Compliance, warum der Agent etwas gesagt hat, zeigen die Protokolle den Weg: Eingabe, abgerufenes Dokument, generierte Antwort.</p>\n\n<h3>Das Risiko falscher Anbindung</h3>\n<p>Jede Verbindung ist auch ein Risiko. Wer HR-Daten nachlässig anbindet, riskiert, dass private Mitarbeiterdaten neben öffentlichen FAQs auftauchen. Wird der ERP-Zugriff falsch zugeordnet, sieht plötzlich ein Vertriebsmitarbeiter die Gehaltsabrechnung. Sicherer ist es, Vertraulichkeitsbezeichnungen und die Purview-Klassifizierung von Anfang an in den Grounding-Plan einzubeziehen. So ruft der Agent nur Inhalte ab, die zu seinen Berechtigungen passen.</p>\n\n<h2>Governance: Agenten-Wildwuchs verhindern</h2>\n<p>Governance ist der Regelsatz, der festlegt, wer Agenten erstellen darf, wo sie laufen und auf welche Daten sie zugreifen. Microsoft stellt dafür vier Säulen bereit:</p>\n<ul>\n<li>das Copilot Control System im Microsoft 365 Admin Center,</li>\n<li>die Lebenszyklusverwaltung im Power Platform Admin Center,</li>\n<li>Microsoft Purview für Vertraulichkeitsbezeichnungen und DLP,</li>\n<li>Copilot-Diagnoseprotokolle für die Überwachung.</li>\n</ul>\n<p>Die Verwaltung von Copilot-Szenarien erfordert bestimmte Rollen, etwa globale Administratoren oder KI-Administratoren. Vergeben Sie Rechte nach dem Prinzip der geringsten Rechte. Schon die Beschränkung, wer diese Schalter bedienen darf, ist Teil der Governance.</p>\n\n<h3>Vier Regeln für den Start</h3>\n<ol>\n<li>Legen Sie fest, wer Agenten erstellen darf, und verknüpfen Sie das mit Ihren Umgebungen im Power Platform Admin Center.</li>\n<li>Bestimmen Sie über die Copilot-Einstellungen im Microsoft 365 Admin Center, wer Agenten veröffentlichen darf, um Releases zu genehmigen oder zu blockieren.</li>\n<li>Definieren Sie, wo Agenten laufen, indem Sie isolierte Umgebungen zuweisen, damit die Produktion kein offenes Feld wird.</li>\n<li>Regeln Sie, wie Guthaben zugewiesen wird. Die Verbrauchsanzeige des Copilot-Agenten zeigt, wann das Kontingent zu schnell schrumpft und wer es verbraucht.</li>\n</ol>\n\n<h3>Purview und Diagnoseprotokolle</h3>\n<p>Mit Vertraulichkeitsbezeichnungen auf Datenquellen wirkt die Bezeichnung auch in den Antworten eines Agenten. DLP-Richtlinien verhindern, dass vertrauliche Felder offengelegt werden. Aufbewahrungsrichtlinien sorgen dafür, dass Agenten nicht auf Inhalte zurückgreifen, die längst hätten ablaufen sollen. Einmal gesetzt, erbt jeder Agent diese Aufsicht automatisch.</p>\n<p>Einen Schritt überspringen viele Teams: die Diagnoseprotokolle zu aktivieren. Eingaben, Antworten, Inhaltsverweise und Systemprotokolle stehen dann für spätere Analysen bereit. Fragt ein Manager, warum ein Agent eine falsche Anweisung gegeben hat, lässt sich der Verlauf nachvollziehen. Administratoren können sogar im Namen von Nutzern Protokolle übermitteln, auch wenn diese selbst kein Feedback senden. Das macht die Fehlersuche proaktiv.</p>\n<p>Governance bremst Innovation nicht, sondern kanalisiert sie. Studio und Toolkit beschleunigen die Entwicklung. Ohne Kontrollen führt das zu Duplikaten und Widersprüchen, mit Governance zu wiederverwendbaren, konformen und überwachbaren Assets.</p>\n\n<h2>Lizenzierung und Kosten: Die unterschätzte Hürde</h2>\n<p>Lizenzierung gehört zur Architektur, nicht zum Kleingedruckten. Wer sie ignoriert, erlebt, dass Agenten ausfallen, sobald Menschen beginnen, sich auf sie zu verlassen.</p>\n\n<h3>Kostenmodell von Copilot Studio</h3>\n<p>Copilot Studio läuft mit Copilot Credits. Sie lassen sich in Paketen kaufen, genannt wird ein Paket mit 25.000 Credits für ca. 200 US-Dollar pro Monat für den gesamten Mandanten. Alternativ gibt es einen Pay-as-you-go-Zähler, bei dem am Periodenende nach tatsächlichem Verbrauch abgerechnet wird. Der Verbrauch ist gestaffelt: Standardmäßige, nicht-generative Aktionen kosten weniger, generative Antworten mehr. Die genauen Zahlen ändern sich mit den Lizenzierungsleitfäden von Microsoft, daher sollten Sie die aktuellen Abrechnungsdokumente prüfen.</p>\n<p>Wichtig ist, dass Testaufforderungen und Produktionsantworten aus demselben Pool stammen. Eine kostenlose Sandbox gibt es nicht. Da die Credits mandantenweit gelten, greifen alle Agenten auf denselben Pool zu, vom Onboarding-Bot der Personalabteilung bis zum Berichtsassistenten der Finanzabteilung. Ein intensiver Testlauf in einer Abteilung kann somit Ressourcen eines produktiven Agenten in einer anderen verbrauchen. Ist der Pool leer, drosselt Copilot Studio nicht und warnt nicht, sondern hält die Agenten an, bis die Credits aufgefüllt sind.</p>\n\n<h3>Kostenmodell des Toolkits</h3>\n<p>Beim Toolkit sehen Sie keine Credits pro Eingabeaufforderung, weil bei Veröffentlichung in der Suite die Microsoft 365 Copilot-Lizenz des Nutzers greift. Das deckt jedoch nur die Grundlagen ab. Bei Custom-Engine-Agenten oder externen Diensten steigen die Kosten: APIs haben eigene Verbrauchseinheiten, Enterprise Connectors brauchen oft eigene Lizenzen, und Administratoreinwilligungen können nicht budgetierte Ebenen einbeziehen.</p>\n<p>Die Faustregel: Studio verlangt Zahlung im Voraus über Credits, das Toolkit verlagert Kosten in Integrations- und Dienstebenen. Keines von beiden ist pauschal günstiger. Ein einfacher Genehmigungsbot auf SharePoint-Basis kann in Studio mit wenigen Credits auskommen. Eine umfassende Integration in ein externes CRM ist im Toolkit oft sinnvoller, auch wenn dann API-Gebühren des CRM anfallen. Ordnen Sie die erwarteten Workflows den dokumentierten Preisen zu, bevor Sie sich festlegen.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Governance aufschieben:</strong> Skalierungsprobleme, Datenkonflikte und Compliance-Lücken tauchen im ungünstigsten Moment auf.</li>\n<li><strong>Erfolg an der Demo messen:</strong> Ein sauberer Testlauf beweist keine Produktionstauglichkeit.</li>\n<li><strong>Agenten ohne Betriebskonzept:</strong> Ohne klare Zuständigkeiten für Konnektoren, Grounding und Verbrauch entsteht Wildwuchs.</li>\n<li><strong>Lizenzvoraussetzungen übersehen:</strong> Konnektoren funktionieren nicht ohne die passende Copilot-Lizenzierung oder -Messung.</li>\n<li><strong>Zu lockere Datenanbindung:</strong> Fehlende Klassifizierung kann zu Datenabfluss führen.</li>\n<li><strong>Tests aus dem Produktionspool:</strong> Testschleifen verbrauchen dieselben Credits wie Live-Agenten.</li>\n<li><strong>Integrationskosten ignorieren:</strong> Externe APIs, die im Test genutzt wurden, werden in der Produktion vom Anbieter abgerechnet, nicht von Microsoft.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Wählen Sie Copilot Studio für schnelle Low-Code-Agenten innerhalb von Microsoft-Leitplanken, das Teams Toolkit für eigene Engines, externe Modelle und tiefe Integration.</li>\n<li>Prüfen Sie vor der Toolwahl, ob Ihr Mandant die nötige Microsoft 365 Copilot-Lizenzierung oder Copilot-Studio-Messung besitzt.</li>\n<li>Binden Sie Agenten per Grounding an echte Quellen an und nutzen Sie Vertraulichkeitsbezeichnungen und Purview-Klassifizierung von Beginn an.</li>\n<li>Aktivieren Sie vor der Veröffentlichung Admin-Rollen nach dem Prinzip der geringsten Rechte, Diagnoseprotokolle und Verbrauchsüberwachung.</li>\n<li>Regeln Sie, wer Agenten erstellen und veröffentlichen darf, und trennen Sie Umgebungen.</li>\n<li>Aktivieren Sie die Verbrauchsüberwachung auf Mandantenebene, setzen Sie Warnschwellen und weisen Sie Budgets pro Geschäftseinheit zu.</li>\n<li>Katalogisieren Sie Lizenzen und Konnektoren schon im Entwurf und klären Sie vor dem Rollout, wer welche Kosten trägt.</li>\n<li>Führen Sie ein einfaches Betriebshandbuch für Konnektoren, Grounding und Credits.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Ein Copilot-Agent beweist seinen Wert nicht in der Demo, sondern im Betrieb unter realen Bedingungen. Die Toolwahl zwischen Copilot Studio und Teams Toolkit ist eine operative Entscheidung: Studio bietet Geschwindigkeit und Leitplanken, das Toolkit Freiheit und Verantwortung. In beiden Fällen entscheiden Grounding, Governance und Kostenkontrolle darüber, ob Ihre Agenten nützlich und verlässlich bleiben. Wer diese Punkte vor dem Start klärt, verhindert Halluzinationen, Datenlecks und unerwartete Rechnungen.</p>",
@@ -603,6 +1065,100 @@
     "q": "Wie verhindere ich Agenten-Wildwuchs und sorge für Governance bei Copilot-Agenten?",
     "a": "Legen Sie fest, wer Agenten erstellen und veröffentlichen darf, und weisen Sie isolierte Umgebungen zu. Regeln Sie die Credit-Zuteilung. Nutzen Sie Copilot Control System, Power Platform Admin Center, Purview und Diagnoseprotokolle. Rechte vergeben Sie nach dem Prinzip der geringsten Rechte."
    }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot Studio oder Teams Toolkit",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Studio",
+     "punkte": [
+      "Visueller Low-Code-Builder mit Drag-and-Drop-Flows und Vorlagen",
+      "Für Power-User mit grundlegenden Low-Code-Kenntnissen",
+      "Arbeitet innerhalb der Microsoft-Leitplanken mit sicheren Konnektoren",
+      "Zahlung im Voraus über Copilot Credits",
+      "Ideal für schnelle Workflows innerhalb eines Quartals"
+     ]
+    },
+    "rechts": {
+     "titel": "Teams Toolkit",
+     "punkte": [
+      "Code-basiert in VS Code für Full-Stack-Entwickler",
+      "Eigene Orchestrierung und externe LLMs möglich",
+      "Leitplanken können verlassen werden, Verantwortung liegt beim Team",
+      "Kosten entstehen in Integrations- und Dienstebenen",
+      "Veröffentlichung auch in Apps, Web und externe Kanäle"
+     ]
+    }
+   },
+   {
+    "titel": "Governance: Vier Säulen von Microsoft",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Control System",
+      "text": "Steuerung von Copilot-Szenarien im Microsoft 365 Admin Center"
+     },
+     {
+      "wert": "Lebenszyklus",
+      "text": "Verwaltung von Umgebungen und Agenten im Power Platform Admin Center"
+     },
+     {
+      "wert": "Purview",
+      "text": "Vertraulichkeitsbezeichnungen und DLP-Richtlinien schützen sensible Inhalte in Agentenantworten"
+     },
+     {
+      "wert": "Diagnose",
+      "text": "Protokolle machen Eingaben, Antworten und Inhaltsverweise nachvollziehbar"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welche Eigenschaft unterscheidet Copilot Studio vom Teams Toolkit laut Artikel?",
+    "opts": [
+     "Studio arbeitet innerhalb von Microsoft-Leitplanken, das Toolkit erlaubt eigene Orchestrierung und externe LLMs.",
+     "Studio zeigt Endnutzern eine andere Oberfläche als das Toolkit.",
+     "Das Toolkit arbeitet ausschließlich mit Drag-and-Drop-Flows ohne Code.",
+     "Studio erlaubt externe LLMs, das Toolkit nur Microsoft-Modelle."
+    ],
+    "a": 0,
+    "why": "Studio bietet sichere Konnektoren und administrative Kontrollen; das Toolkit verlässt die Leitplanken, bringt aber mehr Verantwortung."
+   },
+   {
+    "q": "Was passiert, wenn der Credit-Pool in Copilot Studio aufgebraucht ist?",
+    "opts": [
+     "Copilot Studio drosselt die Antworten und warnt Administratoren vorab.",
+     "Die Agenten werden angehalten, bis die Credits aufgefüllt sind.",
+     "Agenten wechseln automatisch in eine kostenlose Sandbox.",
+     "Nur Testagenten stoppen, produktive Agenten laufen weiter."
+    ],
+    "a": 1,
+    "why": "Copilot Studio drosselt nicht und warnt nicht, sondern hält die Agenten an. Eine kostenlose Sandbox gibt es nicht."
+   },
+   {
+    "q": "Welchen Vorteil bringt Grounding laut Artikel für den Prüfpfad?",
+    "opts": [
+     "Der Agent verzichtet vollständig auf Protokolle, weil Antworten automatisch korrekt sind.",
+     "Der Agent beantwortet Fragen schneller, weil er keine Dokumente abruft.",
+     "Protokolle zeigen Eingabe, abgerufenes Dokument und generierte Antwort nachvollziehbar.",
+     "Der Agent benötigt dadurch keine Vertraulichkeitsbezeichnungen mehr."
+    ],
+    "a": 2,
+    "why": "Mit Grounding ruft der Agent echte Dokumente ab; die Protokolle zeigen den Weg von Eingabe über Dokument zur Antwort."
+   },
+   {
+    "q": "Welche Regel gehört zu den vier Startregeln der Governance?",
+    "opts": [
+     "Alle Agenten laufen zunächst in einer gemeinsamen offenen Produktionsumgebung.",
+     "Jeder Nutzer darf Agenten veröffentlichen, um Innovation zu beschleunigen.",
+     "Diagnoseprotokolle bleiben deaktiviert, um Kosten und Credits zu sparen.",
+     "Agenten laufen in isolierten Umgebungen, damit die Produktion kein offenes Feld wird."
+    ],
+    "a": 3,
+    "why": "Der Artikel empfiehlt, durch isolierte Umgebungen festzulegen, wo Agenten laufen, damit die Produktion nicht zum offenen Feld wird."
+   }
   ]
  },
  "es": {
@@ -633,7 +1189,123 @@
      "text": "Activa el medidor, configura alertas y asigna presupuestos por área para evitar que los agentes se pausen."
     }
    ]
-  }
+  },
+  "faq": [
+   {
+    "q": "¿Cuál es la diferencia entre Copilot Studio y Teams Toolkit?",
+    "a": "Copilot Studio es un constructor visual de código bajo, pensado para la rapidez, con conectores seguros y gobernanza ligera, y no exige programar. Teams Toolkit se integra con VS Code y da control a los desarrolladores para crear su propia orquestación o llamar a LLM externos, pero te hace responsable de cada detalle."
+   },
+   {
+    "q": "¿Qué es la fundamentación (grounding) en un agente de Copilot y por qué es importante?",
+    "a": "La fundamentación vincula al agente con el contenido real de la empresa, como SharePoint, Dataverse, el ERP o el CRM. Sin ella, el agente responde con conocimiento general del modelo y puede inventar. Con ella, cita documentos verificables, y los registros muestran la solicitud, el documento recuperado y la respuesta."
+   },
+   {
+    "q": "¿Cómo se cobra Copilot Studio?",
+    "a": "Copilot Studio funciona con créditos de Copilot: paquetes de 25.000 créditos por unos 200 dólares al mes para todo el tenant, o pago por uso con factura al final del periodo. Las respuestas generativas cuestan más que las acciones estándar. Si el fondo se agota, los agentes se pausan hasta recargar créditos."
+   },
+   {
+    "q": "¿Cómo se puede evitar la proliferación descontrolada de agentes de Copilot en una empresa?",
+    "a": "Con gobernanza basada en cuatro pilares: el sistema de control de Copilot, la gestión del ciclo de vida en Power Platform, Microsoft Purview (etiquetas de sensibilidad y DLP) y los registros de diagnóstico. Además, se definen quién crea y publica agentes, dónde se ejecutan y cómo se asignan los créditos."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot Studio frente a Teams Toolkit",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Studio",
+     "punkte": [
+      "Constructor visual de código bajo, con flujos de arrastrar y soltar",
+      "Pensado para usuarios avanzados, sin escribir código",
+      "Extiende Copilot dentro de los límites definidos por Microsoft",
+      "Conectores seguros, controles administrativos y gobernanza ligera",
+      "Más rápido y simple de usar"
+     ]
+    },
+    "rechts": {
+     "titel": "Teams Toolkit",
+     "punkte": [
+      "Se integra con VS Code y no ofrece lienzo visual",
+      "Pensado para desarrolladores: agentes declarativos o de motor personalizado",
+      "Permite reescribir los límites y llamar a LLM externos",
+      "Publica en Copilot, Teams, la web y canales externos",
+      "Libertad enorme, pero eres responsable de cada detalle"
+     ]
+    }
+   },
+   {
+    "titel": "Las cuatro capas de un agente de Copilot",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Modelo base",
+      "text": "El motor de lenguaje puro del agente."
+     },
+     {
+      "wert": "Orquestador",
+      "text": "Decide qué funciones se llaman y cuándo; Microsoft 365 Copilot lo proporciona por defecto."
+     },
+     {
+      "wert": "Fundamentación",
+      "text": "Vincula el agente con el contenido de la empresa para evitar respuestas inventadas."
+     },
+     {
+      "wert": "Habilidades",
+      "text": "Acciones o conectores personalizados que realizan tareas reales."
+     },
+     {
+      "wert": "Una sola pila",
+      "text": "Solo funciona bien si las capas se gestionan juntas."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué ocurre en Copilot Studio cuando se agota el fondo de créditos del tenant?",
+    "opts": [
+     "Limita el rendimiento de los agentes, que responden más despacio",
+     "Pausa los agentes hasta que se recarguen los créditos",
+     "Cambia automáticamente los agentes a un entorno de pruebas gratuito",
+     "Traslada los agentes a Teams Toolkit sin coste adicional"
+    ],
+    "a": 1,
+    "why": "Studio no reduce el rendimiento: detiene los agentes hasta recargar créditos. Además, pruebas y producción comparten el mismo fondo y no hay entorno gratuito oculto."
+   },
+   {
+    "q": "¿Qué permite hacer Teams Toolkit que Copilot Studio no ofrece dentro de sus límites?",
+    "opts": [
+     "Crear agentes con flujos de arrastrar y soltar y plantillas",
+     "Usar conectores preconfigurados a fuentes de datos de Microsoft 365",
+     "Aplicar gobernanza ligera con controles administrativos integrados",
+     "Crear orquestación propia y llamar a modelos de lenguaje externos"
+    ],
+    "a": 3,
+    "why": "El Toolkit permite reescribir los límites: orquestación propia, LLM externos y comportamientos no nativos, a costa de asumir toda la responsabilidad."
+   },
+   {
+    "q": "¿Para qué sirve la fundamentación (grounding) en un agente de Copilot?",
+    "opts": [
+     "Vincula el agente con contenido real de la empresa para evitar respuestas inventadas",
+     "Aumenta la velocidad del modelo base al procesar cada solicitud",
+     "Decide qué funciones se llaman y en qué orden",
+     "Reduce el consumo de créditos de los agentes en producción"
+    ],
+    "a": 0,
+    "why": "La fundamentación conecta el agente con información verificable de la empresa, en lugar de depender solo del conocimiento general del modelo."
+   },
+   {
+    "q": "¿Qué efecto tienen las etiquetas de sensibilidad de Purview cuando el agente se conecta a una fuente?",
+    "opts": [
+     "Eliminan automáticamente todos los registros de diagnóstico del agente",
+     "Impiden que los usuarios avanzados creen agentes en Copilot Studio",
+     "La etiqueta se traslada a las respuestas generadas por el agente",
+     "Convierten el pago por uso en un paquete fijo de créditos"
+    ],
+    "a": 2,
+    "why": "Con las etiquetas aplicadas a los datos, la etiqueta pasa a las respuestas del agente, y las políticas DLP evitan exponer campos confidenciales."
+   }
+  ]
  },
  "it": {
   "html": "<p>Attivare Microsoft 365 Copilot è solo il punto di partenza. Subito dopo l'installazione, Copilot attinge alla conoscenza del modello di base e ai contenuti presenti nel tenant. È utile, ma non basta: che ne è delle vecchie procedure, del manuale HR o del grande sistema ERP che regge l'azienda? Senza connettori, grounding o agenti personalizzati, Copilot non può accedervi.</p>\n<p>La buona notizia è che si può istruire. Bisogna però sapere quando usare Copilot Studio, quando passare a Teams Toolkit e come gestire governance, monitoraggio e licenze. In questo articolo trovi i criteri per orientarti.</p>\n\n<h2>Dal prototipo alla produzione: perché creare un agente non basta</h2>\n<p>Il primo agente funziona: i prompt rispondono bene, i dati demo sono perfetti e sembra di aver finito il lavoro. È la trappola più comune. Una risposta corretta in fase di test è solo la modalità facile. La produzione chiede stabilità sotto sforzo, controlli di conformità, protezione dell'identità e standard di uptime sempre attivi.</p>\n<h3>I tre ostacoli principali</h3>\n<ul>\n<li><strong>Scalabilità:</strong> l'agente deve reggere il carico aziendale senza bloccarsi. Qui servono il monitoraggio e i log diagnostici del Copilot Control System.</li>\n<li><strong>Grounding obsoleto:</strong> quando i dati in SharePoint o Dataverse cambiano, l'agente deve restare collegato alla versione corretta. Connettori e Graph grounding servono a questo.</li>\n<li><strong>Conformità e verificabilità:</strong> se un ente regolatore o un revisore interno bussa alla porta, la cronologia dell'agente deve essere consultabile, con log completi ed etichette di sensibilità attive.</li>\n</ul>\n<p>Nei test tutto sembra facile, come allenarsi con la salute infinita. Nell'uso reale ogni blocco del firewall è una risposta fallita, e una fonte dati sovraccarica rallenta tutto. A quel punto gli utenti smettono di considerare l'agente intelligente e iniziano ad aprire ticket.</p>\n<h3>Errore tipico: rimandare la governance</h3>\n<p>Molti team pensano che la governance si possa aggiungere dopo. Quasi sempre il risultato sono brutte sorprese: problemi di scalabilità, dati discordanti o lacune di conformità che emergono nel momento sbagliato. Sicurezza e conformità fanno parte del progetto fin dall'inizio.</p>\n<h3>Progetto o sistema operativo?</h3>\n<p>Un altro motivo di fallimento è trattare gli agenti come progetti usa e getta. Qualcuno crea un prototipo, mostra una demo accattivante e lo lascia incustodito. Presto diversi reparti ne creano di propri, senza documentazione e consumando token senza controllo. Senza un manuale operativo semplice nessuno sa chi possiede i connettori, chi controlla il grounding e chi verifica il consumo di crediti. Con una mentalità operativa, invece, si progetta per l'uso quotidiano: log di audit, filtri di amministrazione, backup e controlli di integrità. Gli amministratori dispongono già di controlli nell'interfaccia di amministrazione di Microsoft 365, dove gli scenari si gestiscono e i feedback diagnostici emergono subito.</p>\n\n<h2>L'architettura di Copilot: quattro livelli da trattare come un unico stack</h2>\n<p>Il \"cervello\" di Copilot non è un blocco unico. Si compone di quattro elementi:</p>\n<ol>\n<li><strong>Modello di base:</strong> il motore linguistico grezzo.</li>\n<li><strong>Orchestratore:</strong> decide quali funzioni chiamare e quando. Microsoft 365 Copilot lo fornisce per impostazione predefinita.</li>\n<li><strong>Grounding:</strong> il collegamento ai contenuti aziendali, perché le risposte non siano inventate.</li>\n<li><strong>Competenze:</strong> plug-in o connettori personalizzati che svolgono attività concrete.</li>\n</ol>\n<p>Se questi livelli diventano silos separati, la struttura vacilla. Una competenza solida senza grounding produce un'allucinazione sofisticata. Un modello di base senza controlli di conformità diventa una responsabilità. Il vero successo si misura con la resistenza in condizioni reali: picchi di buste paga, migrazioni di dati in corso, responsabili della conformità che vigilano e carichi elevati di richieste.</p>\n\n<h2>Copilot Studio o Teams Toolkit: come scegliere lo strumento giusto</h2>\n<p>Microsoft offre due strade, con regole diverse. Teams Toolkit, chiamato anche Microsoft 365 Agents Toolkit, e Copilot Studio dichiarano entrambi di estendere Copilot, ma servono gruppi di sviluppatori ed esigenze molto diversi. Sbagliare scelta costa tempo, budget e credibilità.</p>\n<h3>Copilot Studio: il costruttore visuale low-code</h3>\n<p>Copilot Studio è pensato per velocità e chiarezza. Offre flussi drag and drop, modelli, dialoghi guidati e analisi integrate, oltre a molti connettori per le origini dati di Microsoft 365. Un utente esperto può estrarre contenuti da SharePoint, monitorare i messaggi di Teams o gestire documenti di policy HR senza scrivere codice. Si può testare, regolare e pubblicare direttamente in Microsoft 365 Copilot, o rilasciare un agente indipendente con poco sforzo.</p>\n<p>Oltre 160.000 clienti lo usano già, per esempio per riconciliare dati finanziari, inserire nuovi dipendenti o rispondere a domande sui prodotti nel retail. Se il team lavora già con Power Apps o Power Automate, l'ambiente risulterà familiare: bastano un obiettivo chiaro e competenze low-code di base.</p>\n<h3>Teams Toolkit: il terreno degli sviluppatori full stack</h3>\n<p>Il Toolkit si integra in VS Code e non è un'interfaccia drag and drop. Permette di creare agenti dichiarativi con regole strutturate, oppure agenti con motori personalizzati, in cui si definiscono da zero le chiamate al modello, l'orchestrazione e la gestione delle API. Offre strumenti di scaffolding, debugging, configurazione e percorsi di pubblicazione non solo in Copilot ma anche in Teams, nelle app Microsoft 365, sul web e in canali esterni.</p>\n<h3>Estendere dentro i confini o riscriverli</h3>\n<p>Con Studio si estende entro i confini definiti da Microsoft, con connettori sicuri, controlli amministrativi e una governance leggera. Con il Toolkit si riscrivono i confini: si crea una propria orchestrazione, si chiamano LLM esterni, si costruiscono comportamenti non previsti di default. Il primo approccio protegge con i modelli, il secondo offre potenza grezza e chiede di usarla con responsabilità.</p>\n<p>Per gli utenti finali la differenza non si vede: il box dei prompt e la scheda di risposta sono gli stessi, comunque sia stato costruito l'agente. Cambiano invece le opzioni di grounding, la scalabilità e il controllo amministrativo. Per questo la scelta è operativa, non estetica.</p>\n<h3>Una checklist rapida</h3>\n<ul>\n<li>Servono agenti rapidi, verificabili e gestiti dall'amministratore, che gli utenti esperti possano creare senza disturbare l'IT? Scegli Copilot Studio.</li>\n<li>Servono orchestrazione personalizzata, modelli esterni e integrazioni profonde nelle infrastrutture aziendali? Scegli Teams Toolkit.</li>\n<li>Non fidarti delle etichette: valuta le competenze reali e gli obiettivi del tuo team.</li>\n</ul>\n<p>La metafora è quella della casa. Studio è una casa prefabbricata: scegli colori e armadi, ma impianto idraulico ed elettrico sono già sicuri. Il Toolkit è un terreno edificabile: progetti ogni centimetro, ma ti assumi anche tutti i rischi se il progetto cede.</p>\n<p>Un controllo pesa più degli altri: alcune funzioni di grounding si attivano solo se il tenant ha licenze Microsoft 365 Copilot o la misurazione di Copilot Studio attiva. Senza questo diritto, scegliere Studio non sblocca quelle funzioni.</p>\n\n<h2>Grounding: collegare gli agenti ai dati giusti</h2>\n<p>Il grounding è il punto in cui l'agente smette di fingere di sapere e lavora con conoscenze reali. Microsoft 365 Copilot si basa già sui dati visibili tramite Microsoft Graph: file, chat, riunioni, eventi del calendario. Ma i contenuti più preziosi stanno spesso oltre quel nucleo: l'ERP gestisce l'inventario, il CRM traccia i clienti, le risorse umane conservano i manuali in SharePoint e il settore legale le policy in cartelle protette. Se l'agente non è collegato a queste fonti, risponde con sicurezza usando la conoscenza generale del modello.</p>\n<h3>Come si collegano le fonti</h3>\n<p>Copilot Studio e i connettori di Microsoft Graph danno accesso a SharePoint per i documenti, a Dataverse per le tabelle strutturate, a Exchange per le email e a Teams per le chat. Oltre a questo nucleo, più di 1200 connettori tramite Power Platform aprono la strada a sistemi esterni come finanza, risorse umane e ticketing. Se non esiste un connettore pronto, le API permettono di integrare applicazioni aziendali non coperte.</p>\n<h3>Un esempio concreto</h3>\n<p>Qualcuno chiede: \"Qual è la politica sul congedo parentale?\". Senza grounding l'agente assembla una risposta plausibile, senza link né prove. Con il grounding estrae la politica effettiva da SharePoint, cita il titolo del documento e inserisce un link al manuale. Così un'affermazione non verificata diventa una risposta attendibile, che i revisori HR possono approvare. Se la conformità chiede perché l'agente abbia detto quella cosa, i log mostrano il percorso: il prompt, il documento estratto e la risposta generata.</p>\n<h3>Il rischio di ogni connessione</h3>\n<p>Ogni connessione è anche un punto di rischio. Un collegamento superficiale ai dati HR può far emergere record privati dei dipendenti insieme alle FAQ pubbliche. Un accesso configurato male all'ERP può mostrare a un agente di vendita i dati delle buste paga. La strategia più sicura è integrare etichette di sensibilità e classificazione nel piano di grounding, così l'agente recupera solo contenuti conformi alle regole di autorizzazione. Strumenti come Purview esistono per questo: abbina connettori e classificazione dal primo giorno.</p>\n<p>Il grounding quindi non è una funzione bonus. Gli agenti senza grounding inventano con autorità, quelli con un grounding scarso espongono ciò che non dovrebbe uscire. Va ricordato anche il vincolo di licenza: fonti come SharePoint, riunioni di Teams, email o Dataverse richiedono spesso una licenza Copilot o la misurazione attiva nel tenant. Conviene controllare la mappa delle licenze prima di dare per scontato un semplice interruttore.</p>\n\n<h2>Governance: come evitare la proliferazione di agenti</h2>\n<p>La governance è l'insieme di regole che impedisce agli agenti di trasformarsi in caos. Decide chi può crearli, dove possono operare e a quali dati possono accedere. Microsoft offre già quattro pilastri:</p>\n<ul>\n<li>il Copilot Control System nell'interfaccia di amministrazione di Microsoft 365;</li>\n<li>la gestione del ciclo di vita nel Power Platform Admin Center;</li>\n<li>Microsoft Purview per etichette di sensibilità e DLP;</li>\n<li>i log di diagnostica di Copilot per l'auditing.</li>\n</ul>\n<p>La gestione degli scenari Copilot non è per chiunque abbia accesso da amministratore: richiede ruoli specifici, come amministratore globale o amministratore IA. Vale il principio dei privilegi minimi.</p>\n<h3>Quattro regole di ciclo di vita</h3>\n<ol>\n<li><strong>Chi può creare agenti:</strong> definiscilo e collegalo agli ambienti nel Power Platform Admin Center.</li>\n<li><strong>Chi può pubblicare:</strong> usa le impostazioni Copilot nell'interfaccia di amministrazione 365 per approvare o bloccare i rilasci.</li>\n<li><strong>Dove possono girare:</strong> assegna ambienti isolati, perché la produzione non diventi un'arena aperta.</li>\n<li><strong>Come si allocano i crediti:</strong> il contatore di consumo degli agenti Copilot mostra quando le risorse si consumano troppo in fretta e chi le sta usando.</li>\n</ol>\n<h3>Purview e log diagnostici</h3>\n<p>Con Purview le etichette di sensibilità si trasferiscono alle risposte anche quando l'agente si connette a una fonte. Le policy DLP impediscono di esporre campi riservati. Le policy di conservazione evitano che contenuti scaduti restino disponibili, così gli agenti non si basano su dati che dovevano sparire da settimane. Una volta impostati questi guardrail, ogni agente eredita la supervisione.</p>\n<p>Molti team trascurano i log di diagnostica. Attivandoli si ottiene visibilità su ogni interazione: prompt, risposte, riferimenti ai contenuti, log di sistema. Se un manager chiede perché un agente ha dato istruzioni errate, si può ricostruire la cronologia. Inoltre gli amministratori possono inviare i log per conto degli utenti anche quando l'utente non lascia feedback.</p>\n<p>La governance non frena l'innovazione, la canalizza. Studio permette agli utenti avanzati di creare flussi in fretta e il Toolkit porta rapidamente in produzione scenari complessi. Senza controlli quella velocità produce duplicazioni e contraddizioni, con la governance produce risorse riutilizzabili, conformi e monitorate.</p>\n\n<h2>Licenze e costi: le carte trappola da prevedere</h2>\n<p>Licenze e costi sono parte dell'architettura, non una nota a margine. Se i crediti finiscono o un connettore aggiunge un requisito di licenza, gli agenti si fermano proprio quando le persone iniziano a dipenderne.</p>\n<h3>Come funziona Copilot Studio</h3>\n<p>Copilot Studio lavora a crediti: pacchetti da 25.000 crediti per circa 200 dollari al mese per tenant, oppure il contatore pay as you go, con fatturazione a fine periodo in base al consumo. Il consumo non è lineare: le azioni standard non generative costano meno, le risposte generative di più. Le cifre precise variano con le guide alle licenze Microsoft, quindi i documenti di fatturazione vanno consultati con attenzione.</p>\n<p>I prompt di test e le risposte in produzione attingono allo stesso fondo, perché i crediti sono a livello di tenant e non esiste una sandbox gratuita. Lo sprint di test di un reparto può quindi drenare risorse dal lavoro in produzione di un altro. Se il fondo si esaurisce, gli agenti vengono sospesi finché i crediti non sono ricaricati. Il pay as you go evita impegni anticipati, ma un ciclo di test consuma come un flusso reale: senza limiti di budget è facile spendere troppo.</p>\n<h3>Come funziona Teams Toolkit</h3>\n<p>Con il Toolkit non si vedono crediti per singolo prompt: il lavoro usa la licenza Microsoft 365 Copilot dell'utente quando si pubblica nella suite. Ma appena si crea un agente con motore personalizzato o ci si collega a servizi esterni, i costi si accumulano. Le API hanno i propri contatori, i connettori enterprise richiedono spesso licenze proprie e il consenso dell'amministratore può introdurre costi non previsti. In sintesi, Studio fa pagare in anticipo con i crediti, mentre il Toolkit nasconde i costi negli strati di integrazione e di servizio.</p>\n<p>Un semplice bot di approvazione basato su SharePoint può funzionare bene in Studio con pochi crediti. Un'integrazione complessa con un CRM esterno può avere più senso nel Toolkit, pagando le commissioni API del CRM invece dei crediti Copilot.</p>\n<h3>Tre controlli contro le sorprese</h3>\n<ol>\n<li>Abilita il monitoraggio dei consumi a livello di tenant, con il misuratore di consumo dell'agente Copilot o i report pay as you go.</li>\n<li>Configura soglie di avviso, così amministrazione e IT ricevono notifiche prima che il budget si esaurisca.</li>\n<li>Assegna budget per unità aziendale con pacchetti di crediti dedicati o policy interne chiare, in modo che un team non azzeri il pool in un singolo sprint.</li>\n</ol>\n<p>Nello sviluppo esteso le integrazioni richiedono spesso consensi amministrativi, e l'app esterna collegata durante i test addebita i costi in produzione. Conviene catalogare licenze e connettori in fase di progettazione e chiarire chi paga cosa prima del lancio.</p>\n\n<h2>Takeaway pratici</h2>\n<ul>\n<li>Considera il primo test riuscito solo l'inizio: la vera sfida è la produzione con governance e monitoraggio attivi.</li>\n<li>Tratta modello di base, orchestratore, grounding e competenze come un unico stack.</li>\n<li>Scegli Copilot Studio per velocità e low-code, Teams Toolkit per motori personalizzati e controllo profondo.</li>\n<li>Verifica le licenze prima di scegliere: molte funzioni di grounding richiedono Microsoft 365 Copilot o la misurazione di Copilot Studio.</li>\n<li>Collega gli agenti alle fonti giuste e abbina fin dall'inizio etichette di sensibilità e classificazione con Purview.</li>\n<li>Definisci chi crea, chi pubblica, dove girano gli agenti e come si allocano i crediti.</li>\n<li>Attiva i log di diagnostica e il monitoraggio dei consumi prima della pubblicazione.</li>\n<li>Pianifica la spesa: Studio consuma crediti a livello di tenant o pay as you go, il Toolkit sposta i costi su API e servizi esterni.</li>\n</ul>\n\n<h2>Conclusione</h2>\n<p>Un agente Copilot riuscito non si riconosce da una demo brillante, ma dal rispetto delle regole che lo rendono utile invece che rischioso. Scegliere lo strumento adatto, curare il grounding, stabilire la governance prima della pubblicazione e prevedere i costi sono passaggi tutti necessari. Chi li affronta con una mentalità operativa ottiene agenti affidabili, verificabili e disponibili quando servono davvero.</p>",
@@ -680,6 +1352,105 @@
    {
     "q": "Quanto costa Copilot Studio e come funzionano i crediti?",
     "a": "Copilot Studio usa crediti: pacchetti da 25.000 per circa 200 dollari al mese per tenant, oppure pay as you go con fatturazione in base al consumo. Le risposte generative costano più delle azioni standard. Test e produzione attingono allo stesso fondo e, se si esaurisce, gli agenti si sospendono."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot Studio o Teams Toolkit",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Studio",
+     "punkte": [
+      "Costruttore visuale low-code con flussi drag and drop e modelli",
+      "Si estende entro i confini definiti da Microsoft",
+      "Connettori sicuri, controlli amministrativi e governance leggera",
+      "Ideale per utenti esperti, senza scrivere codice",
+      "Costi anticipati tramite crediti a livello di tenant"
+     ]
+    },
+    "rechts": {
+     "titel": "Teams Toolkit",
+     "punkte": [
+      "Terreno degli sviluppatori full stack, integrato in VS Code",
+      "Si riscrivono i confini: orchestrazione propria e LLM esterni",
+      "Potenza grezza da usare con responsabilità",
+      "Pubblicazione in Copilot, Teams, app Microsoft 365, web e canali esterni",
+      "Costi nascosti negli strati di integrazione e di servizio"
+     ]
+    }
+   },
+   {
+    "titel": "Dal prototipo alla produzione: gli ostacoli",
+    "typ": "fakten",
+    "punti": [],
+    "punkte": [
+     {
+      "wert": "Scalabilità",
+      "text": "L'agente deve reggere il carico aziendale; servono monitoraggio e log diagnostici."
+     },
+     {
+      "wert": "Grounding",
+      "text": "Quando i dati in SharePoint o Dataverse cambiano, l'agente resta collegato alla versione corretta."
+     },
+     {
+      "wert": "Conformità",
+      "text": "La cronologia deve essere consultabile, con log completi ed etichette di sensibilità attive."
+     },
+     {
+      "wert": "160.000",
+      "text": "Clienti che usano già Copilot Studio, per esempio per riconciliare dati finanziari."
+     },
+     {
+      "wert": "1200",
+      "text": "Connettori tramite Power Platform verso sistemi esterni come finanza, risorse umane e ticketing."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Quale vantaggio offre Copilot Studio rispetto a Teams Toolkit secondo l'articolo?",
+    "opts": [
+     "Permette di chiamare liberamente LLM esterni e riscrivere l'orchestrazione da zero",
+     "Consente agli utenti esperti di creare agenti low-code, con governance leggera e controlli amministrativi",
+     "Elimina qualsiasi necessità di licenze Copilot o di misurazione del consumo",
+     "Si integra solo in VS Code e richiede competenze di sviluppo full stack"
+    ],
+    "a": 1,
+    "why": "Copilot Studio è un costruttore visuale low-code che estende Copilot entro confini definiti, con connettori sicuri e governance leggera."
+   },
+   {
+    "q": "Che cosa accade a un agente privo di grounding quando riceve una domanda sulla politica del congedo parentale?",
+    "opts": [
+     "Estrae automaticamente il manuale da SharePoint e ne cita il titolo",
+     "Rifiuta di rispondere e apre subito un ticket per l'amministratore",
+     "Assembla una risposta plausibile, senza link né prove a supporto",
+     "Chiede all'utente di caricare il documento della politica aziendale"
+    ],
+    "a": 2,
+    "why": "Senza grounding l'agente produce una risposta plausibile ma non verificabile, senza link né prove; con il grounding cita invece il documento reale."
+   },
+   {
+    "q": "Come funzionano i crediti di Copilot Studio riguardo a test e produzione?",
+    "opts": [
+     "Esiste una sandbox gratuita separata per tutti i prompt di test",
+     "I crediti si assegnano a ogni singolo agente e non si condividono",
+     "I test non consumano crediti, che servono solo in produzione",
+     "Test e produzione attingono allo stesso fondo di crediti a livello di tenant"
+    ],
+    "a": 3,
+    "why": "I crediti sono a livello di tenant e non c'è sandbox gratuita: i test di un reparto possono drenare risorse alla produzione di un altro."
+   },
+   {
+    "q": "Qual è il ruolo di Microsoft Purview nella governance degli agenti Copilot?",
+    "opts": [
+     "Trasferisce le etichette di sensibilità alle risposte e applica policy DLP e di conservazione",
+     "Gestisce l'allocazione dei crediti e mostra il consumo per singolo agente",
+     "Definisce chi può creare agenti negli ambienti del Power Platform Admin Center",
+     "Fornisce l'orchestratore predefinito che decide quali funzioni chiamare"
+    ],
+    "a": 0,
+    "why": "Purview porta le etichette di sensibilità nelle risposte, con DLP contro l'esposizione di campi riservati e conservazione contro contenuti scaduti."
    }
   ]
  },
@@ -728,6 +1499,90 @@
    {
     "q": "Como evitar a proliferação descontrolada de agentes do Copilot na empresa?",
     "a": "Com governança: defina quem cria e quem publica agentes, onde eles rodam (ambientes isolados) e como os créditos são alocados. Use o Copilot control system, o Power Platform Admin Center, o Purview e os logs de diagnóstico, aplicando privilégio mínimo aos administradores."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Copilot Studio ou Teams Toolkit",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Copilot Studio",
+     "punkte": [
+      "Construtor visual de código baixo, com arrastar e soltar",
+      "Usuários avançados criam agentes sem programar",
+      "Opera dentro das proteções definidas pela Microsoft",
+      "Cobrança por créditos, em pacotes ou pagamento conforme o uso"
+     ]
+    },
+    "rechts": {
+     "titel": "Teams Toolkit (Agents Toolkit)",
+     "punkte": [
+      "Funciona no VS Code, voltado a desenvolvedores full stack",
+      "Permite orquestração personalizada e modelos de IA externos",
+      "Publica no Copilot, Teams, web e canais externos",
+      "Você assume a responsabilidade por cada detalhe das proteções",
+      "Custos surgem em APIs, conectores e licenças de integração"
+     ]
+    }
+   },
+   {
+    "titel": "Checklist para levar o agente à produção",
+    "typ": "checkliste",
+    "punkte": [
+     "Verificar o licenciamento do Microsoft 365 Copilot ou a medição do Copilot Studio",
+     "Conectar as fontes certas de dados ao grounding do agente",
+     "Aplicar rótulos de sensibilidade e classificação do Purview antes de conectar os dados",
+     "Habilitar os logs de diagnóstico do Copilot para auditoria",
+     "Definir quem cria e quem publica agentes, e onde eles rodam",
+     "Definir como os créditos são alocados e acompanhar o consumo",
+     "Documentar dono dos conectores, auditoria do grounding e monitoramento"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Qual é a principal diferença entre o Copilot Studio e o Teams Toolkit quanto às proteções?",
+    "opts": [
+     "No Studio é possível reescrever as proteções; no Toolkit elas são fixas",
+     "No Studio você estende o Copilot dentro das proteções da Microsoft; no Toolkit pode reescrevê-las",
+     "Ambos impedem qualquer alteração nas proteções definidas pela Microsoft",
+     "O Toolkit usa as proteções da Microsoft e o Studio exige que você crie todas"
+    ],
+    "a": 1,
+    "why": "O Studio mantém conectores seguros e governança leve da Microsoft; o Toolkit permite reescrever proteções, mas transfere a responsabilidade por cada detalhe."
+   },
+   {
+    "q": "O que o artigo diz sobre a camada de grounding na arquitetura do agente?",
+    "opts": [
+     "Define quais funções são chamadas e em que ordem",
+     "É o motor de linguagem bruto do agente",
+     "Vincula o agente ao conteúdo corporativo para que as respostas não sejam inventadas",
+     "Executa tarefas reais por meio de plugins personalizados"
+    ],
+    "a": 2,
+    "why": "Grounding é o vínculo com o conteúdo corporativo; orquestrador, modelo de base e habilidades têm outras funções."
+   },
+   {
+    "q": "Como funciona a cobrança de créditos do Copilot Studio, segundo o artigo?",
+    "opts": [
+     "Cada agente tem seu próprio pool de créditos, isolado dos demais",
+     "Há um sandbox gratuito para prompts de teste, separado da produção",
+     "Os créditos são do tenant, e todos os agentes consomem do mesmo pool",
+     "Respostas generativas custam menos que ações padrão não generativas"
+    ],
+    "a": 2,
+    "why": "Os créditos pertencem ao tenant e todos os agentes usam o mesmo pool, então testes intensos num departamento podem esgotar recursos de outro."
+   },
+   {
+    "q": "Qual abordagem é a mais segura para proteger dados sensíveis ao conectar fontes ao agente?",
+    "opts": [
+     "Aplicar rótulos de sensibilidade e classificação do Purview já no plano de grounding",
+     "Liberar o acesso total e restringir apenas depois da implantação",
+     "Usar somente o Toolkit, que dispensa classificação de dados",
+     "Conectar os dados primeiro e adiar a governança para depois"
+    ],
+    "a": 0,
+    "why": "Aplicar rótulos de sensibilidade e classificação do Purview no grounding faz o agente recuperar só o conteúdo permitido pelas regras de acesso."
    }
   ]
  },
@@ -829,6 +1684,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Apa fungsi lapisan orkestrator dalam arsitektur Copilot?",
+    "opts": [
+     "Mengaitkan jawaban ke konten perusahaan agar tidak direkayasa",
+     "Mengatur fungsi mana yang dipanggil dan kapan, serta disediakan default oleh Microsoft 365 Copilot",
+     "Menyediakan plugin atau konektor kustom untuk menjalankan tugas nyata",
+     "Berperan sebagai mesin mentah yang menghasilkan teks dasar"
+    ],
+    "a": 1,
+    "why": "Orkestrator mengatur fungsi yang dipanggil dan waktunya, dan Microsoft 365 Copilot menyediakannya secara default."
+   },
+   {
+    "q": "Mana pernyataan yang benar tentang perbedaan Copilot Studio dan Teams Toolkit?",
+    "opts": [
+     "Pengguna akhir melihat antarmuka berbeda tergantung alat yang dipakai membangun agen",
+     "Copilot Studio mewajibkan pengembang full stack menulis orkestrasi dari nol",
+     "Toolkit hanya dapat menerbitkan agen ke Copilot, tidak ke Teams atau web",
+     "Pengalaman pengguna sama; perbedaannya ada pada grounding, skalabilitas, dan kontrol admin"
+    ],
+    "a": 3,
+    "why": "Pengguna akhir melihat kotak perintah dan kartu jawaban yang sama; perbedaan ada di balik layar, sehingga keputusannya operasional."
+   },
+   {
+    "q": "Apa akibatnya jika kumpulan kredit Copilot Studio tenant habis?",
+    "opts": [
+     "Agen dijeda sampai kredit diisi kembali",
+     "Agen otomatis beralih ke lisensi Microsoft 365 Copilot pengguna",
+     "Hanya agen pengujian yang berhenti, agen produksi tetap berjalan",
+     "Agen terus berjalan dengan tarif bertingkat yang lebih murah"
+    ],
+    "a": 0,
+    "why": "Kredit bersifat menyeluruh per tenant; jika kumpulan habis, agen dijeda sampai kredit diisi kembali."
+   },
+   {
+    "q": "Mengapa label sensitivitas dan klasifikasi Purview sebaiknya dimasukkan ke rencana grounding sejak awal?",
+    "opts": [
+     "Agar agen menjawab lebih cepat tanpa memerlukan konektor tambahan",
+     "Agar biaya kredit per prompt otomatis turun",
+     "Agar agen hanya mengambil konten sesuai aturan izinnya dan tidak membocorkan data sensitif",
+     "Agar lisensi Microsoft 365 Copilot tidak diperlukan lagi"
+    ],
+    "a": 2,
+    "why": "Setiap koneksi adalah titik risiko; label dan klasifikasi memastikan agen hanya mengambil konten yang diizinkan."
+   }
   ]
  },
  "hi": {
@@ -913,6 +1814,52 @@
      "डिज़ाइन के दौरान लाइसेंस और connector की सूची बनाएँ",
      "Audit logs, backup और health check को रोज़मर्रा के संचालन में रखें"
     ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Copilot Studio और Teams Toolkit के बीच मुख्य फ़र्क़ लेख के अनुसार कहाँ दिखता है?",
+    "opts": [
+     "अंतिम उपयोगकर्ता को दिखने वाले प्रॉम्प्ट बॉक्स और UI में",
+     "grounding विकल्प, scalability और प्रशासनिक नियंत्रण में, पर्दे के पीछे",
+     "उत्तरों की भाषा और टोन में",
+     "केवल एजेंट के नाम और आइकन में"
+    ],
+    "a": 1,
+    "why": "उपयोगकर्ता को दोनों में एक-सा UI मिलता है। असली फ़र्क़ grounding, scalability और admin नियंत्रण में है, इसलिए यह आर्किटेक्चर का फ़ैसला है।"
+   },
+   {
+    "q": "Grounding में Sensitivity Labels और permission-आधारित वर्गीकरण शामिल करने से क्या होता है?",
+    "opts": [
+     "एजेंट सभी कर्मचारियों को हर डेटा दिखा सकता है",
+     "एजेंट बाहरी LLMs को अपने आप कॉल करने लगता है",
+     "एजेंट सिर्फ़ वही सामग्री पाता है जो उपयोगकर्ता की अनुमति से मेल खाती है",
+     "Copilot credits की खपत पूरी तरह बंद हो जाती है"
+    ],
+    "a": 2,
+    "why": "लेख के अनुसार इससे एजेंट केवल अनुमति-योग्य सामग्री तक पहुँचता है, यानी डेटा वर्गीकरण का सम्मान होता है और उसे ओवरराइट नहीं किया जाता।"
+   },
+   {
+    "q": "Copilot Studio की लागत के बारे में कौन-सा कथन सही है?",
+    "opts": [
+     "टेस्ट प्रॉम्प्ट के लिए अलग मुफ़्त sandbox मिलता है",
+     "Production और टेस्टिंग का खर्च अलग-अलग पूल से होता है",
+     "सभी क्रियाओं की credit दर एक समान होती है",
+     "टेस्ट और Production रिस्पॉन्स एक ही credit पूल से खर्च होते हैं"
+    ],
+    "a": 3,
+    "why": "कोई मुफ़्त sandbox नहीं है। भारी टेस्टिंग दूसरी टीम के Production रन के credits ख़त्म कर सकती है, और पूल खाली होने पर एजेंट रुक जाते हैं।"
+   },
+   {
+    "q": "Toolkit में Custom Engine Agent बनाकर बाहरी सेवाओं से जुड़ने पर लागत कैसे बढ़ती है?",
+    "opts": [
+     "APIs के अपने मीटर और Enterprise Connectors के लाइसेंस से लागत बढ़ती है",
+     "हर प्रॉम्प्ट पर Copilot credit अपने आप कटने लगता है",
+     "VS Code के लिए अलग मासिक शुल्क देना पड़ता है",
+     "Sensitivity Labels के उपयोग पर अतिरिक्त शुल्क लगता है"
+    ],
+    "a": 0,
+    "why": "Toolkit में प्रति-प्रॉम्प्ट credit नहीं दिखता, पर बाहरी APIs के मीटर, connectors के लाइसेंस और admin सहमति वाले टियर लागत बढ़ाते हैं।"
    }
   ]
  },
@@ -1014,6 +1961,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Copilot Studio와 Teams Toolkit의 가장 큰 차이로 기사가 설명하는 것은 무엇인가?",
+    "opts": [
+     "최종 사용자가 보는 프롬프트 창과 답변 카드의 디자인",
+     "두 도구는 서로 다른 Copilot 모델을 사용한다는 점",
+     "그라운딩 옵션, 확장성, 관리 제어 방식 같은 보이지 않는 뒷단",
+     "게시할 수 있는 언어와 지원 국가의 범위"
+    ],
+    "a": 2,
+    "why": "최종 사용자는 어느 도구든 같은 화면을 보며, 차이는 그라운딩, 확장성, 관리 제어 같은 뒷단에서 나타납니다."
+   },
+   {
+    "q": "기사에 따르면 그라운딩이 없는 에이전트가 인사 정책 질문을 받으면 어떻게 되는가?",
+    "opts": [
+     "SharePoint에서 정책을 찾아 인용 링크를 자동으로 제공한다",
+     "일반 모델 지식으로 그럴듯한 답을 만들지만 출처와 증거가 없다",
+     "질문을 거부하고 관리자에게 티켓을 자동 발행한다",
+     "Purview 분류 체계로 답변을 스스로 검증한다"
+    ],
+    "a": 1,
+    "why": "그라운딩이 없으면 일반 모델 지식으로 그럴듯한 답을 조립하지만 출처도 증거도 없습니다."
+   },
+   {
+    "q": "Copilot Studio의 크레딧 모델에 관한 설명으로 기사 내용과 일치하는 것은?",
+    "opts": [
+     "테스트 프롬프트는 별도의 무료 샌드박스에서 차감된다",
+     "크레딧은 부서별로 분리되어 다른 팀에 영향을 주지 않는다",
+     "풀이 비면 속도를 제한하고 경고한 뒤 계속 운영된다",
+     "테스트 프롬프트와 운영 응답은 같은 크레딧 풀에서 차감된다"
+    ],
+    "a": 3,
+    "why": "숨겨진 무료 샌드박스는 없으며 테스트와 운영 응답이 같은 풀에서 차감되고, 풀이 비면 에이전트가 일시 중지됩니다."
+   },
+   {
+    "q": "기사에서 Teams Toolkit으로 만든 에이전트의 비용 특성으로 설명한 것은?",
+    "opts": [
+     "모든 경우에 Copilot Studio보다 항상 더 저렴하다",
+     "프롬프트당 크레딧이 보이지 않지만 API와 커넥터 등 통합 비용이 생길 수 있다",
+     "Microsoft 365 Copilot 라이선스 없이도 모든 기능이 작동한다",
+     "비용이 전혀 발생하지 않고 관리자 동의도 필요 없다"
+    ],
+    "a": 1,
+    "why": "Toolkit 에이전트는 크레딧이 보이지 않지만, API 측정기와 별도 커넥터 라이선스 등 통합·서비스 계층에 비용이 숨어 있습니다."
+   }
   ]
  },
  "te": {
@@ -1098,6 +2091,70 @@
       "text": "ఫైర్‌వాల్ బ్లాక్‌లు, విఫల ప్రయత్నాలు, ఓవర్‌లోడ్ సోర్సులు సమాధానాలను నెమ్మది చేస్తాయి."
      }
     ]
+   }
+  ],
+  "faq": [
+   {
+    "q": "Copilot Studio మరియు Teams Toolkit మధ్య తేడా ఏమిటి?",
+    "a": "Copilot Studio సిద్ధంగా ఉన్న సౌకర్యాలు, Microsoft 365 డేటా కోసం కనెక్టర్లు ఇస్తుంది, కోడ్ రాయకుండానే ఏజెంట్‌ను తయారు చేయవచ్చు. Teams Toolkit పూర్తి స్వేచ్ఛ ఇస్తుంది, కానీ ప్రతి విషయానికీ మీరే బాధ్యత వహించాలి. నియంత్రణ, బాధ్యత ఎంత కావాలో చూసి ఎంచుకోవాలి."
+   },
+   {
+    "q": "Copilot ఏజెంట్లకు డేటా గ్రౌండింగ్ ఎందుకు అవసరం?",
+    "a": "గ్రౌండింగ్ లేకపోతే ఏజెంట్ సాధారణ మోడల్ పరిజ్ఞానం నుంచి ఆధారం, లింక్ లేని సమాధానాన్ని తయారు చేసి నమ్మకంగా తప్పులు చెబుతుంది. సరిగ్గా చేసిన గ్రౌండింగ్ ధృవీకరించదగిన లాగ్‌లతో సమాధానాలు ఇస్తుంది. తప్పుగా చేస్తే రహస్య సమాచారం బయటపడవచ్చు."
+   },
+   {
+    "q": "Copilot ఏజెంట్ల గవర్నెన్స్‌కు ఏ సాధనాలు, పాలసీలు ఉపయోగపడతాయి?",
+    "a": "Microsoft 365 admin centerలో Copilot Control System, Power Platform admin center, లైఫ్‌సైకిల్ మేనేజ్‌మెంట్ కేంద్రం, Copilot డయాగ్నస్టిక్ లాగ్‌లు ఉపయోగపడతాయి. వీటితో పాటు Purview లేబుల్స్, DLP, రిటెన్షన్ పాలసీలు సెట్ చేస్తే ప్రతి ఏజెంట్ ఆ నిబంధనలను స్వయంచాలకంగా అనుసరిస్తుంది."
+   },
+   {
+    "q": "Copilot ఏజెంట్ల డయాగ్నస్టిక్ లాగ్‌లను ఎందుకు ఎనేబుల్ చేయాలి?",
+    "a": "డయాగ్నస్టిక్ లాగ్‌లు ప్రాంప్ట్‌లు, సమాధానాలు, కంటెంట్ రిఫరెన్స్‌లు, సిస్టమ్ లాగ్‌లను రికార్డులుగా భద్రపరుస్తాయి. ఏజెంట్ తప్పుగా ఎందుకు సూచించిందో చరిత్రను మళ్లీ చూడవచ్చు. సమస్య పరిష్కారం ప్రోయాక్టివ్ అవుతుంది, ఆడిటర్లు వచ్చినప్పుడు ఇబ్బంది రాదు."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "కోడ్ రాయకుండానే సిద్ధంగా ఉన్న కనెక్టర్లతో ఏజెంట్‌ను తయారు చేయడానికి ఏ సాధనం సరిపోతుందని వ్యాసం చెబుతుంది?",
+    "opts": [
+     "Teams Toolkit",
+     "Copilot Studio",
+     "Purview లేబుల్స్",
+     "Power Platform admin center"
+    ],
+    "a": 1,
+    "why": "Copilot Studio సిద్ధంగా ఉన్న సౌకర్యాలు, అనేక Microsoft 365 కనెక్టర్లు ఇస్తుంది. Teams Toolkit పూర్తి స్వేచ్ఛతో పాటు పూర్తి బాధ్యత ఇస్తుంది."
+   },
+   {
+    "q": "గ్రౌండింగ్ లేని ఏజెంట్‌ను \"పేరెంటల్ లీవ్ పాలసీ ఏమిటి?\" అని అడిగితే ఏమవుతుంది?",
+    "opts": [
+     "అది సమాధానం ఇవ్వడానికి పూర్తిగా నిరాకరిస్తుంది",
+     "సాధారణ మోడల్ పరిజ్ఞానం నుంచి ఆధారం, లింక్ లేని సమాధానం తయారు చేస్తుంది",
+     "ఎల్లప్పుడూ HR పాలసీ పత్రం లింక్‌తో సమాధానం ఇస్తుంది",
+     "అడ్మిన్ ఆమోదం వచ్చే వరకు సమాధానాన్ని ఆపివేస్తుంది"
+    ],
+    "a": 1,
+    "why": "గ్రౌండింగ్ లేకపోతే ఏజెంట్ సాధారణ మోడల్ పరిజ్ఞానం నుంచి సమాధానం తయారు చేస్తుంది; దానికి ఆధారం లేదా లింక్ ఉండదు."
+   },
+   {
+    "q": "ఏజెంట్ తప్పుగా ఎందుకు సూచించిందని మేనేజర్ అడిగినప్పుడు ఏది సహాయపడుతుంది?",
+    "opts": [
+     "DLP పాలసీలను పూర్తిగా నిలిపివేయడం",
+     "ఏజెంట్‌ను కొత్తగా మళ్లీ తయారు చేయడం",
+     "డయాగ్నస్టిక్ లాగ్‌లు ఎనేబుల్ చేసి ఆ చరిత్రను మళ్లీ చూడటం",
+     "వినియోగదారుల ఫీడ్‌బ్యాక్ కోసం మాత్రమే ఎదురుచూడటం"
+    ],
+    "a": 2,
+    "why": "డయాగ్నస్టిక్ లాగ్‌లు ప్రాంప్ట్‌లు, సమాధానాలు, రిఫరెన్స్‌లను రికార్డు చేస్తాయి. అందువల్ల ఊహలు లేకుండా చరిత్రను సమీక్షించవచ్చు."
+   },
+   {
+    "q": "సమాధానాల్లో రహస్య సమాచారం బయటపడకుండా అడ్డుకోవడానికి వ్యాసం ఏ సాధనాన్ని సూచిస్తుంది?",
+    "opts": [
+     "రిటెన్షన్ పాలసీలు",
+     "Teams Toolkit",
+     "Power Automate రిపోర్టులు",
+     "DLP పాలసీలు"
+    ],
+    "a": 3,
+    "why": "రహస్య సమాచారం సమాధానాల్లో బయటపడకుండా DLP పాలసీలు అడ్డుకుంటాయి. రిటెన్షన్ పాలసీలు పాత కంటెంట్ నిలిచిపోకుండా చూస్తాయి."
    }
   ]
  }

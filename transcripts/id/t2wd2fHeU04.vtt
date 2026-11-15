@@ -1,0 +1,1015 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:07.250
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI, Azure, dan para tokoh yang membentuk masa depan kerja DAT.
+
+00:00:07.850 --> 00:00:11.990
+Januari ini, M365 Con kembali hadir dan kami akan tampil lebih besar.
+
+00:00:12.710 --> 00:00:18.430
+Bergabunglah dengan kami untuk sesi langsung demo dunia nyata dan pengetahuan praktis dari MVP serta pakar industri di seluruh dunia.
+
+00:00:18.730 --> 00:00:21.170
+Tanpa slide yang umum, tanpa jargon yang tak ada habisnya.
+
+00:00:22.010 --> 00:00:28.570
+Kami akan membahas tantangan nyata, Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.570 --> 00:00:34.410
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.450 --> 00:00:39.910
+Dengan 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.870 --> 00:00:44.270
+Tonton secara langsung, dan bawa wasam praktis kembali ke organisasi Anda.
+
+00:00:45.070 --> 00:00:48.910
+Januari 2020, 10 hari, 1 komunitas Microsoft.
+
+00:00:49.430 --> 00:00:50.490
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.830 --> 00:00:55.350
+Kunjungi M365Con.net dan amankan tempat Anda hari ini.
+
+00:00:55.970 --> 00:00:58.450
+Itu adalah M365Con.net.
+
+00:00:58.570 --> 00:01:04.790
+Bergabunglah sekarang di M365Con.net dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.450 --> 00:01:07.070
+Apa sebenarnya Microsoft Fabric Data Factory itu?
+
+00:01:07.610 --> 00:01:10.610
+Apakah itu hanya Azure Data Factory dengan nama baru atau sesuatu yang benar-benar berbeda?
+
+00:01:10.990 --> 00:01:14.030
+Jika Anda pernah mendengar istilah itu dan bertanya-tanya apa artinya, Anda tidak sendirian.
+
+00:01:14.830 --> 00:01:20.650
+Di akhir episode ini, Anda akan tahu apa itu, perbedaannya dengan ADF klasik dan bagian inti yang perlu Anda pahami.
+
+00:01:21.590 --> 00:01:25.970
+Jika Anda menangani perpindahan data di Fabric, inilah mesin yang wujudkannya dan lebih sederhana dengan yang Anda kira.
+
+00:01:26.710 --> 00:01:29.610
+Kita akan melihat empat blok penyusun utama dan melihat bagaimana mereka sering terkini.
+
+00:01:30.010 --> 00:01:32.070
+Namun pertama-tama, mari definisikan apa yang sedang ditambah.
+
+00:01:32.530 --> 00:01:33.810
+Berikut adalah definisi paling sederhana.
+
+00:01:34.190 --> 00:01:38.090
+Fabric Data Factory adalah mesin di dalam Microsoft Fabric yang memindahkan dan mengintegrasikan data Anda.
+
+00:01:38.090 --> 00:01:43.550
+Anggap ini sebagai pengganti Azure Data Factory dan alur kerja Synapse semuanya dalam satu platform Saas.
+
+00:01:44.410 --> 00:01:45.570
+Itu adalah hal pertama yang harus dipahami.
+
+00:01:46.110 --> 00:01:47.510
+Ini bukan layar yang terpisah yang perlu Anda kelola.
+
+00:01:48.110 --> 00:01:50.330
+Ini terintegrasi langsung ke dalam Fabric terhubung ke One Lake.
+
+00:01:50.850 --> 00:01:51.650
+Mari gunakan analogi.
+
+00:01:51.970 --> 00:01:57.190
+Jika Fabric adalah sebuah gedung perkantoran, Data Factory adalah ruang surat dan benberjalan yang memindahkan dokumen antar lantai.
+
+00:01:57.650 --> 00:02:02.190
+Anda mungkin tidak memikirkan ruang surat setiap hari, tetapi tampaknya tidak ada yang bisa berpindah dari titik A ke B.
+
+00:02:02.190 --> 00:02:03.010
+Begitu juga di sini.
+
+00:02:03.470 --> 00:02:05.430
+Data Factory menangani perpindahan data di balik layar.
+
+00:02:05.430 --> 00:02:09.230
+Perbedaan besar dari dunia lama tidak perlu konfigurasi penyimpanan tambahan.
+
+00:02:09.630 --> 00:02:10.850
+Data Anda langsung tersimpan di One Lake.
+
+00:02:11.190 --> 00:02:15.990
+Di Azure Data Factory, Anda harus menyiapkan akun penyimpanan, membuat kontainer, dan mengonfigurasi layanan tertaut.
+
+00:02:16.250 --> 00:02:17.350
+Di Fabric, semua itu sudah tidak ada.
+
+00:02:17.770 --> 00:02:20.530
+One Lake sudah tersedia, tidak Anda cukup arahkan pipeline Anda ke sana dan selesai.
+
+00:02:20.810 --> 00:02:21.550
+Terdengar familiar, bu.
+
+00:02:22.170 --> 00:02:24.590
+Jadi bagaimana perbedaannya dengan Azure Data Factory yang sudah Anda kenal?
+
+00:02:25.230 --> 00:02:26.830
+Apa perbedaannya dengan Azure Data Factory?
+
+00:02:27.290 --> 00:02:31.650
+Banyak orang mengira Fabric Data Factory hanyalah Azure Data Factory dengan label baru, tapi bukan.
+
+00:02:32.150 --> 00:02:32.930
+Mari kita berpembitasi.
+
+00:02:33.570 --> 00:02:34.570
+Pendatangan negara-negara berubah.
+
+00:02:34.570 --> 00:02:40.250
+ADF mengenakan biaya peraktifitas, jadi setiap aktivitas salin, prosedur tersimpan, dan eksekusi pipeline menambah tagihan Anda.
+
+00:02:41.190 --> 00:02:43.710
+Fabric Data Factory menggunakan penetapan harga berbasis kapasitas.
+
+00:02:44.250 --> 00:02:50.170
+Anda memberi kapasitas Fabric, F2, F4, F16, atau lainnya, dan semua beban kerja Anda berbagi kumpulan komputasi tersebut.
+
+00:02:50.870 --> 00:02:53.110
+Data Factory, Power BI, Lake House, dan seluruh pelafong.
+
+00:02:53.110 --> 00:02:57.030
+Jika Anda sudah memiliki kapasitas Fabric, menjalankan pipeline hanya menambah sedikit biaya.
+
+00:02:57.910 --> 00:03:01.370
+Jika belum, Anda perlu membandingkan total biaya Fabric dengan tagihan ADF Anda saat ini.
+
+00:03:01.890 --> 00:03:02.650
+Koneksi juga lebih serah.
+
+00:03:03.330 --> 00:03:09.370
+Di ADF, Anda harus membuat layanan tertaut untuk setiap sumber dan tujuan, lalu membuat data set di atasnya, kemudian mengonfigurasi integration runtime.
+
+00:03:09.370 --> 00:03:13.370
+Dengan Fabric, koneksi ditentukan secara langsung, inline, dan one leg bersifat otomatis.
+
+00:03:13.730 --> 00:03:16.910
+Anda memilih sumber, memilih tujuan, dan koneksi langsung dibuat saat itu juga.
+
+00:03:17.550 --> 00:03:18.310
+Jauh lebih sedikit klik.
+
+00:03:18.950 --> 00:03:20.250
+Ada juga aktivitas bawaan yang baru.
+
+00:03:20.870 --> 00:03:25.550
+Anda bisa mengirim email atau pesan Teams langsung dari pipeline Anda tanpa perlu logic apps atau webhook custom.
+
+00:03:25.970 --> 00:03:28.590
+Ini hanya aktivitas tarik dan lepas, dan itu saja menghemat banyak konten.
+
+00:03:28.930 --> 00:03:30.210
+Dan penyebaran deployment sekarang lebih banyak.
+
+00:03:30.390 --> 00:03:32.370
+ADF memiliki pipeline deployment, tetapi tersakaku.
+
+00:03:32.850 --> 00:03:35.770
+Fabric memiliki pipeline deployment bawaan dengan promosi tingkat workspace,
+
+00:03:35.770 --> 00:03:38.430
+jadi Anda bisa beralih dari dev ke test ke produksi hanya dengan beberapa.
+
+00:03:38.430 --> 00:03:39.710
+Tidak perlu skrip manual.
+
+00:03:40.290 --> 00:03:41.590
+Sekarang mari jujur tentang apa yang kurang.
+
+00:03:41.970 --> 00:03:44.170
+Dukungan SSIS dan Manager Finet belum tersedia di sini.
+
+00:03:44.790 --> 00:03:48.150
+Jika Anda sangat bergantung pada SQL Server Integration Services, Anda perlu menunggu.
+
+00:03:48.810 --> 00:03:49.930
+Lagi kebanyakan orang itu tidak masak.
+
+00:03:50.510 --> 00:03:53.370
+Sebagian besar pekerjaan integrasi data tidak memerlukan SSIS.
+
+00:03:54.070 --> 00:03:55.150
+Jadilah aturan praktis yang sederhana.
+
+00:03:55.650 --> 00:03:58.170
+Jika tagihan ADF Anda di bawah $1.500 per bulan,
+
+00:03:58.230 --> 00:04:01.850
+dan Anda tidak menggunakan Fabric, tetaplah di ADF karena lebih murah untuk beban kerja volume rendah.
+
+00:04:02.010 --> 00:04:05.150
+Jika Anda sudah menggunakan Fabric, Data Factory sudah termasuk di dalamnya, jadi kurang.
+
+00:04:05.510 --> 00:04:07.470
+Dan jika biaya ADF Anda lebih tinggi dari itu,
+
+00:04:07.470 --> 00:04:09.570
+ada baiknya menghitung kembali kapasitas Fabric.
+
+00:04:10.430 --> 00:04:12.170
+Blok bangunan 1, Pipeline Data.
+
+00:04:12.770 --> 00:04:14.850
+Sekarang mari kita lihat blok bangunan pertama, Pipeline Data.
+
+00:04:15.270 --> 00:04:16.490
+Pipeline adalah pengatur risetnya.
+
+00:04:16.830 --> 00:04:18.990
+Mereka menentukan apa yang berjalan kapan dan dalam urutan apa,
+
+00:04:19.150 --> 00:04:20.410
+dan semua hal lain terhubung ke dalamnya.
+
+00:04:20.690 --> 00:04:21.810
+Bayangkan Pipeline seperti sebuah reset.
+
+00:04:22.330 --> 00:04:23.110
+Anda memiliki langkah-langkah.
+
+00:04:23.410 --> 00:04:24.850
+Anda bisa berjambung dan Anda bisa melakukan balik.
+
+00:04:25.210 --> 00:04:27.730
+Pertama, Anda memanaskan oven, lalu mencampur bahan-bahannya.
+
+00:04:27.870 --> 00:04:30.730
+Dan jika adunan terlihat terlalu kering, Anda menambahkan lebih banyak susu sebelum memanggap.
+
+00:04:30.870 --> 00:04:31.930
+Pipeline bekerja dengan cara yang sama.
+
+00:04:32.250 --> 00:04:35.170
+Pertama, salin data dari sumber, lalu periksa apakah filenya ada,
+
+00:04:35.450 --> 00:04:36.990
+dan jika ada, jalankan transformasi.
+
+00:04:37.270 --> 00:04:38.370
+Jika tidak ada, kirimkan peringatan.
+
+00:04:38.730 --> 00:04:39.490
+Anda yang mendirikan alurnya.
+
+00:04:39.790 --> 00:04:42.290
+Aktivitas utama yang akan sering Anda gunakan adalah salin data,
+
+00:04:42.410 --> 00:04:44.330
+for each, if condition, get metadata, dan lookup.
+
+00:04:44.830 --> 00:04:46.890
+Salin data memindahkan data dari titik A ke titik B.
+
+00:04:47.110 --> 00:04:49.590
+For each melakukan perulangan pada daftar, misalnya 10 file dalam folder.
+
+00:04:50.030 --> 00:04:52.090
+If condition memeriksa apakah sesuatu benar atau salah,
+
+00:04:52.090 --> 00:04:54.490
+get metadata mengajukan pertanyaan tentang data Anda.
+
+00:04:54.930 --> 00:04:55.850
+Seberapa besar ukuran filing?
+
+00:04:56.190 --> 00:04:57.410
+Kapan terakhir kali file ini diubah?
+
+00:04:57.830 --> 00:05:00.710
+Lookup membaca file konfigurasi dan membawa nilai-nilainya ke dalam pipeline-an.
+
+00:05:00.710 --> 00:05:01.810
+Itu adalah perangkat permulaannya.
+
+00:05:02.250 --> 00:05:03.190
+Semuanya berbasis local.
+
+00:05:03.590 --> 00:05:05.630
+Anda cukup tarik dan lepas aktivitas ke kanvas,
+
+00:05:05.730 --> 00:05:07.750
+hubungkan dengan panah, atur propertinya, dan selesai.
+
+00:05:08.090 --> 00:05:09.670
+Tidak perlu coding untuk sebagian besar tugas.
+
+00:05:10.070 --> 00:05:12.030
+Tampilannya seperti diagram alur, karena memang itulah fungsi.
+
+00:05:12.370 --> 00:05:13.330
+Berikut adalah contoh nyata.
+
+00:05:13.690 --> 00:05:16.070
+Bayangkan menarik data penjualan dari API setiap pagi.
+
+00:05:16.350 --> 00:05:19.090
+Pipen Anda dimulai dengan aktivitas salin data yang menyimpannya ke dalam lake house.
+
+00:05:19.310 --> 00:05:20.810
+Lalu langkah data flow gen 2,
+
+00:05:21.090 --> 00:05:23.650
+membersihkan data, menghapus nilai nul, memperbaiki format tanggal.
+
+00:05:24.370 --> 00:05:26.370
+Kemudian sebuah notebook memperkayanya dengan segmen pelan.
+
+00:05:26.770 --> 00:05:29.090
+Terakhir, aktivitas teams mengirimkan pesan ke tim Anda.
+
+00:05:29.090 --> 00:05:30.790
+Data penjualan di perbaru.
+
+00:05:31.570 --> 00:05:34.470
+Itu adalah satu pipeline yang mengerjakan tugas yang belum memerlukan banyak hal.
+
+00:05:34.830 --> 00:05:36.370
+Anda juga bisa membuat pipeline agar dapat digunakan.
+
+00:05:36.770 --> 00:05:39.070
+Katakanlah Anda memiliki logika yang sama untuk 10 sumber data berbeda.
+
+00:05:39.430 --> 00:05:42.430
+Daripada membangun 10 pipeline, Anda cukup buat 1 dan gunakan parameter,
+
+00:05:42.570 --> 00:05:45.230
+URL sumber, nama, tabel, folder tujuan, semuanya sebagai variable.
+
+00:05:45.810 --> 00:05:47.310
+1 pipeline, 10 pekerjaan berbeda.
+
+00:05:47.630 --> 00:05:48.590
+Setelah yang disebut parametrisasi.
+
+00:05:49.790 --> 00:05:50.650
+Dan ini adalah sesuatu yang baru.
+
+00:05:51.430 --> 00:05:54.350
+Anda bisa minta kopilot untuk menulis ekspresi pipeline dalam bahasa yang sederhana.
+
+00:05:54.670 --> 00:05:56.070
+Ketik tambahkan 2 hari ke tanggal ini,
+
+00:05:56.070 --> 00:05:57.750
+dan ia akan membuat ekspresinya untuk Anda.
+
+00:05:57.750 --> 00:06:01.330
+Tidak perlu lagi menghafal sintaks fungsi atau mencari cara memformat setempat waktu di Google.
+
+00:06:01.790 --> 00:06:02.750
+Cukup katakan apa yang Anda butuh.
+
+00:06:03.530 --> 00:06:05.450
+Blok penyusun kedua, data flow gen 2.
+
+00:06:05.970 --> 00:06:09.230
+Jadi, apa yang terjadi ketika Anda perlu membersihkan data tetapi tidak ingin menulis kode?
+
+00:06:09.610 --> 00:06:11.450
+Itulah masalah yang diselesaikan oleh data flow gen 2.
+
+00:06:12.190 --> 00:06:15.170
+Data flow gen 2 adalah alat transformasi low-code di dalam fabrik data factory.
+
+00:06:15.830 --> 00:06:18.570
+Jika Anda pernah menggunakan power query di Excel atau power BI sebelumnya,
+
+00:06:18.650 --> 00:06:19.650
+ini akan terasa sangat familiar.
+
+00:06:20.190 --> 00:06:22.750
+Antar mukanya sama, memiliki lebih dari 300 transformasi,
+
+00:06:22.750 --> 00:06:26.470
+dan mesin yang sama, hanya saja berjalan di cloud dengan lighthouse sebagai tujuannya.
+
+00:06:26.470 --> 00:06:27.970
+Pikirkan dengan cara ini.
+
+00:06:28.430 --> 00:06:30.730
+Jika pipeline adalah lini perakitan yang memindahkan kotak,
+
+00:06:30.850 --> 00:06:34.570
+data flow gen 2 adalah dapur tempat Anda memotong, membumbui, dan memasak bahan mentah.
+
+00:06:35.230 --> 00:06:36.210
+Pipeline menangani logistik.
+
+00:06:36.650 --> 00:06:39.450
+Data flow gen 2 menangani pekerjaan nyata dalam membuat data menjadi berguna.
+
+00:06:39.870 --> 00:06:40.610
+Kapan Anda harus menggunakan?
+
+00:06:41.050 --> 00:06:44.970
+Saat Anda perlu membersihkan data, mengubah tipe, menggabungkan tabel, atau memfilter baris.
+
+00:06:45.270 --> 00:06:46.950
+Semuanya tanpa menyentuh SPAC atau SKL.
+
+00:06:47.330 --> 00:06:49.270
+Jika transformasi Anda bisa digambarkan di papan tulis,
+
+00:06:49.270 --> 00:06:50.950
+kemungkinan besar itu cocok untuk data flow gen 2.
+
+00:06:51.590 --> 00:06:52.330
+Berikut contoh singkat.
+
+00:06:52.330 --> 00:06:55.170
+Anda mengimpor file CSV yang berisi pesan pelanggan.
+
+00:06:55.650 --> 00:06:57.990
+Terdapat baris duplikat, beberapa tanggal dalam format yang salah,
+
+00:06:58.250 --> 00:06:59.330
+dan beberapa kolom memiliki nilai.
+
+00:06:59.690 --> 00:07:02.930
+Anda membuka data flow gen 2, klik beberapa tombol untuk menghapus duplikat,
+
+00:07:03.250 --> 00:07:05.130
+mengubah tipe kolom tanggal, dan mengisi nilai yang hilang.
+
+00:07:05.490 --> 00:07:07.530
+Lalu Anda menggabungkannya dengan tabel produk dari sumber lain.
+
+00:07:07.890 --> 00:07:09.310
+Seluruh proses ini hanya memakan waktu sebut.
+
+00:07:09.530 --> 00:07:09.850
+Nampak kode.
+
+00:07:10.190 --> 00:07:12.430
+Outputnya masuk ke tabel lighthouse, siap untuk pelaporan.
+
+00:07:13.010 --> 00:07:13.930
+Anda juga bisa melihat visual.
+
+00:07:13.990 --> 00:07:16.490
+Ada tampilan diagram yang menunjukkan setiap langkah sebagai node.
+
+00:07:17.010 --> 00:07:17.890
+Sumber masuk ke node filter.
+
+00:07:18.290 --> 00:07:19.490
+Filter mengalir ke node penggabungan.
+
+00:07:20.150 --> 00:07:21.090
+Penggabungan mengalir ke node.
+
+00:07:21.490 --> 00:07:23.030
+Anda bisa melihat keseluruhan alur dalam sekejap.
+
+00:07:23.390 --> 00:07:25.190
+Dan itu sangat membantu saat Anda melakukan debugging
+
+00:07:25.190 --> 00:07:26.930
+atau perlu menjelaskan logikanya kepada orang lain.
+
+00:07:27.470 --> 00:07:28.350
+Penjadwalan juga fleksibel.
+
+00:07:28.810 --> 00:07:30.350
+Anda bisa menjalankan data flow gen 2 secara manitik.
+
+00:07:30.750 --> 00:07:32.330
+Atur untuk menyegarkan setiap pagi pukul rumah.
+
+00:07:32.650 --> 00:07:34.990
+Atau Anda bisa memanggilnya dari pipeline induk sebagai satu langkah
+
+00:07:34.990 --> 00:07:36.030
+dalam alur kerja yang lebih besar.
+
+00:07:36.570 --> 00:07:38.010
+Kebanyakan pengaturan reduksi melanggantar terak.
+
+00:07:38.410 --> 00:07:40.450
+Pipeline menangani orkestrasi dan data flow gen 2
+
+00:07:40.450 --> 00:07:42.110
+menangani langkah transformasi di dalamnya.
+
+00:07:42.950 --> 00:07:45.590
+Namun, sejujurnya, untuk transformasi yang sangat berat,
+
+00:07:45.790 --> 00:07:47.570
+seperti miliaran baris, fungsi window yang kopleks,
+
+00:07:49.490 --> 00:07:50.930
+perlu menggunakan notebook dengan Spark.
+
+00:07:52.150 --> 00:07:54.030
+Data flow gen 2 tidak dibuat untuk setiap skenario,
+
+00:07:54.510 --> 00:07:56.170
+tetapi untuk sebagian besar kebutuhan tim
+
+00:07:56.170 --> 00:07:59.350
+seperti pembersihan, pembentukan, penggabungan, dan agregasi,
+
+00:07:59.530 --> 00:08:01.210
+ini mencakup sekitar 80 persen pekerjaan.
+
+00:08:01.630 --> 00:08:03.030
+Itu adalah banyak kode yang tidak perlu Anda tulis.
+
+00:08:03.830 --> 00:08:05.210
+Vlog penyusun ketiga, copy job.
+
+00:08:05.650 --> 00:08:07.070
+Sekarang mari kita bicara tentang pindahkan.
+
+00:08:07.530 --> 00:08:10.030
+Bagaimana jika Anda perlu mengalirkan data secara terus-menerus dari data-nya?
+
+00:08:10.550 --> 00:08:11.570
+Disitulah copy job properat.
+
+00:08:12.050 --> 00:08:14.090
+Copy job adalah cara sederhana untuk menyalin data
+
+00:08:14.090 --> 00:08:16.090
+dari sumber ke like dengan pelacakan perubahan bawaan.
+
+00:08:16.470 --> 00:08:17.950
+Tanpa konfigurasi pipeline yang kompleks,
+
+00:08:17.950 --> 00:08:19.850
+tanpa skrip kustom, Anda cukup memilih sumber,
+
+00:08:19.950 --> 00:08:22.210
+memilih tujuan, dan menentukan seberapa sering Anda ingin menjalankan.
+
+00:08:22.670 --> 00:08:23.070
+Hanya itu.
+
+00:08:24.090 --> 00:08:26.310
+Fitur utamanya adalah change data capture atau CDC.
+
+00:08:26.690 --> 00:08:28.550
+Copy job secara otomatis melacak misipan,
+
+00:08:28.670 --> 00:08:29.910
+pembaruan, dan penghapusan di sumber.
+
+00:08:30.110 --> 00:08:32.430
+Anda tidak perlu membangun logika watermarking manual,
+
+00:08:32.790 --> 00:08:34.410
+yaitu cara di mana Anda menyimpan timestamp
+
+00:08:34.410 --> 00:08:35.590
+dan menyintai data rekaman terbaru.
+
+00:08:35.730 --> 00:08:37.150
+Copy job menangani hal itu di balik layar.
+
+00:08:37.450 --> 00:08:38.990
+Semuanya berjalan lancar tanpa usaha ekstra.
+
+00:08:39.290 --> 00:08:39.690
+Masih ada like.
+
+00:08:40.050 --> 00:08:41.790
+Pekerjaan penyaringan mendukung SCD tipe 2,
+
+00:08:41.950 --> 00:08:43.350
+yaitu dimensi yang berubah secara pelan tipe 2.
+
+00:08:43.350 --> 00:08:44.890
+Itu berarti sistem menyimpan realnya.
+
+00:08:45.430 --> 00:08:46.810
+Saat pelanggan mengubah alamat mereka,
+
+00:08:47.010 --> 00:08:48.810
+alamat lama tetap ada di tabel dengan tanggal akhir.
+
+00:08:49.270 --> 00:08:50.610
+Alamat baru akan mendapatkan tanggal mulut.
+
+00:08:50.930 --> 00:08:52.670
+Anda bisa melihat dengan tepat bagaimana catatan berubah dari web.
+
+00:08:53.130 --> 00:08:54.990
+Ini sangat penting untuk audit dan pelaporan historis.
+
+00:08:55.450 --> 00:08:57.190
+Jadi kapan Anda menggunakan pekerjaan penyaringan
+
+00:08:57.190 --> 00:08:58.390
+dibanding aktivitas penyaringan stand?
+
+00:08:58.750 --> 00:08:59.230
+Ini aturannya.
+
+00:08:59.650 --> 00:09:01.770
+Pekerjaan penyaringan digunakan untuk penyerapan berkelanjutan
+
+00:09:01.770 --> 00:09:02.450
+yang tinggal pasang lalu.
+
+00:09:03.010 --> 00:09:05.550
+Anda ingin data mengalir masuk secara otomatis setiap hari
+
+00:09:05.550 --> 00:09:06.510
+dengan pemeliharaan minimal.
+
+00:09:07.030 --> 00:09:08.710
+Aktivitas penyaringan digunakan untuk
+
+00:09:08.710 --> 00:09:10.470
+pemuatan masalah satu kali atau terjedwal
+
+00:09:10.470 --> 00:09:12.950
+di mana Anda butuh kendali lebih atas pemetaan dan penanganan error.
+
+00:09:13.610 --> 00:09:15.250
+Anggaplah seperti ini, pekerjaan penyaringan
+
+00:09:15.250 --> 00:09:17.610
+seperti memiliki pustakawan yang otomatis melihat buku baru
+
+00:09:17.610 --> 00:09:18.490
+dan menaruhnya di rak.
+
+00:09:19.150 --> 00:09:20.870
+Anda tidak perlu meriksa katalog setiap saat
+
+00:09:20.870 --> 00:09:22.350
+karena pustakawan yang menanganinya.
+
+00:09:23.050 --> 00:09:25.470
+Aktivitas penyaringan lebih seperti Anda masuk ke perpustakaan,
+
+00:09:25.570 --> 00:09:26.230
+memilih buku sendiri,
+
+00:09:26.410 --> 00:09:27.950
+dan menentukan tempatnya di mana buku ditaruh.
+
+00:09:28.510 --> 00:09:29.750
+Keduanya menyelesaikan pekerjaan,
+
+00:09:29.830 --> 00:09:32.270
+tetapi pekerjaan penyaringan menghemat tenaga Anda untuk rutinitas.
+
+00:09:32.710 --> 00:09:33.450
+Pengaturannya sederhana.
+
+00:09:33.810 --> 00:09:35.810
+Anda memilih sumbernya, misalnya basis data SG Server.
+
+00:09:36.430 --> 00:09:38.230
+Anda memilih tujuannya, yaitu table lake house.
+
+00:09:38.230 --> 00:09:39.510
+Anda mengetahkan kolom.
+
+00:09:39.850 --> 00:09:42.290
+Anda tentukan apakah ingin pembaruan bertahap atau penuh.
+
+00:09:42.630 --> 00:09:43.190
+Dan selesai.
+
+00:09:43.590 --> 00:09:45.090
+Pekerjaan berjalan sesuai jadwal Anda
+
+00:09:45.090 --> 00:09:46.490
+dan menjaga lake house Anda tetap sinkronis.
+
+00:09:46.970 --> 00:09:48.310
+Log penyusun untuk pencerminan.
+
+00:09:48.810 --> 00:09:50.430
+Sekarang bagaimana jika Anda butuh replikasi waktunya?
+
+00:09:50.810 --> 00:09:51.850
+Disitulah pencerminan berperan.
+
+00:09:52.170 --> 00:09:52.970
+Ini definisi yang paling sederhana.
+
+00:09:53.370 --> 00:09:56.350
+Pencerminan adalah cara untuk mereplikasi basis data operasional Anda
+
+00:09:56.350 --> 00:09:58.710
+ke one lake secara terus menerus tanpa menulis satu baris kurung.
+
+00:09:59.130 --> 00:10:01.270
+Anda mengaturnya sekali dan ia berjalan di latar belakang
+
+00:10:01.270 --> 00:10:03.130
+dan tetap segar secara mendekati waktu nyata.
+
+00:10:03.590 --> 00:10:04.750
+Tidak perlu membangun alur pipa,
+
+00:10:04.750 --> 00:10:05.830
+tidak perlu melihara darah Anda.
+
+00:10:06.090 --> 00:10:06.810
+Semuanya berjalan lancar.
+
+00:10:07.130 --> 00:10:08.010
+Bagaimana caranya secara teknis?
+
+00:10:08.390 --> 00:10:10.690
+Pencerminan membaca log transaksi basis data sumberan.
+
+00:10:11.210 --> 00:10:13.710
+Setiap perubahan, sisipan, pembaruan, dan penghapusan
+
+00:10:13.710 --> 00:10:15.870
+akan terdeteksi dan muncul di one lake dalam hitungan menit.
+
+00:10:16.190 --> 00:10:17.170
+Ini bukan pemusasan batch.
+
+00:10:17.510 --> 00:10:18.670
+Ini adalah replikasi berkanggung.
+
+00:10:19.110 --> 00:10:21.090
+Begitu ada perubahan di basis data sumberan Anda
+
+00:10:21.090 --> 00:10:22.150
+yang akan muncul di fabrik.
+
+00:10:22.630 --> 00:10:23.550
+Lekas kita bicara soal sumberan.
+
+00:10:23.930 --> 00:10:26.390
+Saat ini Anda bisa mencerminkan Azure SQL Database,
+
+00:10:26.510 --> 00:10:28.210
+Azure Cosmos DBS, Noflake, dan lainnya.
+
+00:10:28.530 --> 00:10:30.990
+Akan ada lebih banyak lagi seperti pencerminan jaringan pribadi
+
+00:10:30.990 --> 00:10:33.910
+untuk basis data dibalik firewall yang diumumkan di build 2026.
+
+00:10:34.190 --> 00:10:34.930
+Mengapa Anda harus menggunakan?
+
+00:10:35.150 --> 00:10:37.410
+Karena Anda mendapatkan salinan langsung basis data Anda di one lake
+
+00:10:37.410 --> 00:10:38.750
+tanpa membangun alur pipa ETL apapun.
+
+00:10:38.970 --> 00:10:39.990
+Anda tidak perlu aktivitas penyelidik.
+
+00:10:40.370 --> 00:10:41.670
+Anda tidak perlu skrip pelacakan perubahan.
+
+00:10:42.010 --> 00:10:43.210
+Anda tidak perlu logika penguatan yang keren.
+
+00:10:43.550 --> 00:10:44.710
+Sistem menangani semua itu untuk Anda.
+
+00:10:45.070 --> 00:10:46.370
+Berikut adalah analogi agar muda di.
+
+00:10:46.630 --> 00:10:50.090
+Bayangkan mirroring seperti memiliki klon basis data waktu nyata di dalam fabrik.
+
+00:10:50.430 --> 00:10:52.630
+Perbarui sumbernya sekali dan klon tersebut langsung terbaru.
+
+00:10:53.090 --> 00:10:54.470
+Tidak perlu kode untuk menyingkronkannya.
+
+00:10:54.910 --> 00:10:56.090
+Sistem yang melakukan semua pekerjaan berat
+
+00:10:56.090 --> 00:10:57.450
+dan juga manfaat biaya yang patut disebutkan.
+
+00:10:57.450 --> 00:11:00.830
+Mirroring dilengkapi komputasi dan penyimpanan gratis hingga batas tertentu.
+
+00:11:01.290 --> 00:11:03.570
+Anda hanya membayar kapasitas fabrik yang sudah Anda miliki.
+
+00:11:03.970 --> 00:11:04.910
+Bagi banyak organisasi,
+
+00:11:05.050 --> 00:11:08.150
+itu lebih murah daripada membangun dan mengelola jalur replikasi custom.
+
+00:11:08.670 --> 00:11:09.770
+Dan inilah contoh penggunaan praktis.
+
+00:11:10.070 --> 00:11:12.830
+Anda bisa membangun laporan Power BI langsung dari data yang dimiror
+
+00:11:12.830 --> 00:11:14.330
+tanpa mengengaruhi basis data sumber.
+
+00:11:14.690 --> 00:11:16.610
+Sistem operasional Anda tetap berjalan dengan kecepatan.
+
+00:11:16.930 --> 00:11:18.630
+Analis Anda mendapatkan data yang segera.
+
+00:11:18.630 --> 00:11:19.210
+Lebih aduh bukan.
+
+00:11:19.690 --> 00:11:20.770
+Bagaimana bagian bekerja bersama?
+
+00:11:21.210 --> 00:11:24.150
+Jadi Anda memiliki pipeline aliran data pekerja penyalinan dan mirroring.
+
+00:11:24.470 --> 00:11:25.270
+Bagaimana saling melengkapi?
+
+00:11:25.270 --> 00:11:28.330
+Sebagian besar implementasi dunia nyata mengikuti pola sederhana.
+
+00:11:28.870 --> 00:11:30.870
+Inges, bersihkan, perkaya, sajikan.
+
+00:11:32.010 --> 00:11:33.110
+Disebut arsitektur medali.
+
+00:11:33.970 --> 00:11:35.050
+Perunggu, perak, emas.
+
+00:11:35.590 --> 00:11:36.510
+Bayangkan sebagai tiga lapisan.
+
+00:11:36.870 --> 00:11:38.710
+Perunggu menyimpan data mentah persis seperti saat datang.
+
+00:11:39.090 --> 00:11:40.530
+Perak telah dibersihkan dan dihapus duplikasinya.
+
+00:11:40.970 --> 00:11:42.650
+Emas telah diperkaya dan siap untuk pelaporan.
+
+00:11:43.070 --> 00:11:44.050
+Beginilah bentuknya dalam praktek.
+
+00:11:44.510 --> 00:11:45.950
+Pekerjaan mirroring atau penyalinan
+
+00:11:45.950 --> 00:11:47.770
+memasukkan data mentah ke tabli lakehouse perunggu.
+
+00:11:48.170 --> 00:11:48.890
+Itu adalah langkah ingesti.
+
+00:11:49.390 --> 00:11:51.990
+Kemudian data flow gen 2 membersihkan dan mengubahnya menjadi perak.
+
+00:11:52.330 --> 00:11:53.010
+Menghapus nilain.
+
+00:11:53.010 --> 00:11:54.270
+Mestandarisasi format.
+
+00:11:54.670 --> 00:11:55.570
+Menggabungkan tabel terkait.
+
+00:11:56.050 --> 00:11:57.690
+Terakhir, pipeline mengorkestrasi semuanya.
+
+00:11:58.370 --> 00:11:59.770
+Pipeline memicu pekerjaan penyalinan.
+
+00:11:59.890 --> 00:12:00.370
+Menunggu selesai.
+
+00:12:00.470 --> 00:12:02.930
+Menjalankan aliran data dan mengirim notifikasi tim saat selesai.
+
+00:12:03.550 --> 00:12:04.270
+Itulah alur lengkapnya.
+
+00:12:04.690 --> 00:12:06.450
+Keajaiban sebenarnya bukan pada satu alat saja.
+
+00:12:06.930 --> 00:12:08.590
+Menelah semuanya berkomunikasi melalui satu dengah data.
+
+00:12:09.130 --> 00:12:10.570
+Data yang dimirror hidup di satu danau.
+
+00:12:11.010 --> 00:12:12.670
+Output aliran data Anda mendarat di satu danau.
+
+00:12:13.050 --> 00:12:14.190
+Pipeline Anda membaca di satu danau.
+
+00:12:14.750 --> 00:12:16.250
+Semuanya berbagi lapisan penyimpanan yang sama.
+
+00:12:16.450 --> 00:12:19.090
+Anda bahkan dapat berbagi data antar ruang kerja menggunakan pintasan.
+
+00:12:19.090 --> 00:12:20.430
+Tidak perlu penyalinan.
+
+00:12:20.850 --> 00:12:22.410
+Ada rantai ketergantungan yang perlu dipahami.
+
+00:12:23.130 --> 00:12:25.770
+Pipeline dapat memanggil data flow gain 2 sebagai langkah di dalam pipeline.
+
+00:12:26.330 --> 00:12:28.510
+Pipeline juga bisa menyertakan notebook, pekerjaan DPT,
+
+00:12:28.590 --> 00:12:31.110
+bahkan pipeline Azure Data Factory jika Anda bermigrasi secara bertahan.
+
+00:12:31.410 --> 00:12:32.650
+Satu pipeline dapat mengorkestrasi semua.
+
+00:12:33.010 --> 00:12:35.970
+Intinya adalah, Anda tidak perlu lagi menyatukan lima layanan berbeda.
+
+00:12:36.350 --> 00:12:38.850
+Satu platform, satu lapisan penyimpanan, satu set izin.
+
+00:12:39.230 --> 00:12:40.070
+Itulah tujuan dari Fabric.
+
+00:12:40.450 --> 00:12:41.410
+Dan itu berhasil diuniannya.
+
+00:12:41.710 --> 00:12:44.110
+Distributor yang berbasis di UAE menggunakan pola persis ini.
+
+00:12:44.470 --> 00:12:47.890
+Pekerjaan penyalinan untuk data SAP, data flow gain 2 untuk pembersihan,
+
+00:12:47.970 --> 00:12:49.030
+pipeline untuk orkestrasi.
+
+00:12:49.350 --> 00:12:51.290
+Mereka memangkas penutupan akhir bulan mereka dari sembilan hari.
+
+00:12:51.630 --> 00:12:52.170
+Itu bukan demo.
+
+00:12:52.550 --> 00:12:53.110
+Itu produksi.
+
+00:12:53.630 --> 00:12:54.470
+Panduan praktis dan biaya.
+
+00:12:55.070 --> 00:12:57.130
+Jadi, siapa yang sebenarnya harus menggunakan Fabric Data Factory?
+
+00:12:57.510 --> 00:13:00.190
+Jika Anda perlu memindahkan atau mengubah data di dalam Fabric ini alatnya,
+
+00:13:00.650 --> 00:13:02.410
+itu mencakup data engineer yang membangun pipeline,
+
+00:13:02.710 --> 00:13:04.110
+analytics engineer yang memodalkan data,
+
+00:13:04.470 --> 00:13:07.530
+bahkan analis bisnis yang menggunakan data flow gain 2 untuk transformasi mandiri.
+
+00:13:08.430 --> 00:13:09.210
+Siapa yang harus melewatkan ini?
+
+00:13:09.610 --> 00:13:11.370
+Jika Anda hanya perlu unggah file satu kali saja,
+
+00:13:11.370 --> 00:13:12.630
+mulai langsung dengan lake house.
+
+00:13:13.170 --> 00:13:14.590
+Tarik dan lepas CSV selesai.
+
+00:13:15.170 --> 00:13:17.490
+Jika Anda sangat bergantung ber-SSIS, tunggulah dukungan itu.
+
+00:13:17.490 --> 00:13:20.810
+Dan jika tagian ADF Anda di bawah 1.500 per bulan
+
+00:13:20.810 --> 00:13:22.950
+dan Anda tidak menggunakan Fabric bertahan untuk saat ini.
+
+00:13:23.150 --> 00:13:23.770
+Berbicara soal biaya.

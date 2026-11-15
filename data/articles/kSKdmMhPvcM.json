@@ -1,0 +1,136 @@
+{
+ "de": {
+  "html": "<p>Viele Teams starten mit hohen Erwartungen in Microsoft 365 BizChat und sind nach kurzer Zeit ernüchtert. Das Tool fasst E-Mails zusammen und beantwortet allgemeine Fragen, bei wichtigen Entscheidungen aber fehlt ihm der Zugriff auf die proprietären Daten und Kernanwendungen des Unternehmens. Genau diese Lücke trennt allgemeine Antworten von Erkenntnissen, die auf dem tatsächlichen Geschäftskontext beruhen.</p>\n<p>Dieser Artikel richtet sich an Entwickler und Ersteller, die Microsoft 365 kennen. Er zeigt, wie Sie die richtigen Systeme zur Anbindung auswählen, wie Copilot Connectors funktionieren und wie Sie einen ersten Connector sauber absichern.</p>\n\n<h2>Warum sich Microsoft 365 BizChat oft halbblind anfühlt</h2>\n<p>BizChat kommt gut mit Informationen zurecht, die bereits in Microsoft 365 liegen: Outlook-Nachrichten, Teams-Chats, OneDrive-Dateien und SharePoint-Bibliotheken. Probleme entstehen, sobald Nutzer nach Daten fragen, die anderswo gespeichert sind, etwa im CRM für den Vertrieb, im ERP für Lagerbestand und Rechnungen oder im Projekt-Tool für Fristen.</p>\n<p>Ein Beispiel: Ein Vertriebsleiter fragt im Montagsmeeting nach der aktuellen Pipeline. BizChat greift auf E-Mail-Verläufe, Angebotsdokumente und vielleicht Besprechungsnotizen zurück. Ohne CRM-Zugriff bleiben die Zahlen aber unvollständig, und statt einer verlässlichen Prognose kommt eine vage Antwort. Der Manager muss ein anderes System öffnen, die echten Zahlen heraussuchen und dem Team das Defizit erklären.</p>\n<p>Das Muster wiederholt sich in anderen Abteilungen. Ein Finanzdirektor fragt nach offenen Rechnungsbeträgen, und ohne ERP-Sichtbarkeit kommt ein leerer Bericht. Ein Projektmanager fragt nach Fälligkeitsterminen, und ohne Zugriff auf das Tracking-System bleibt die Antwort aus.</p>\n\n<h3>Die Folgen: Kontextwechsel und schwindendes Vertrauen</h3>\n<p>Der praktische Preis ist ständiger Kontextwechsel. Mitarbeiter kopieren Zahlen in den Thread, fügen Screenshots aus Dashboards ein oder erstellen Analysen manuell neu, die eigentlich automatisiert sein sollten. Mit der Zeit fragen sie BizChat gar nicht mehr nach den wirklich wichtigen Dingen und greifen auf Downloads, Pivot-Tabellen oder die Suche in verschiedenen Apps zurück.</p>\n<p>Die Führungsebene stellt dann den Nutzen der Einführung infrage. Die Ursache liegt nicht in schwachen Algorithmen oder Fehlern der Plattform, sondern in blinden Flecken: Dem Modell mangelt es nicht an Intelligenz, sondern an Sichtbarkeit. Wer nur halb so viele Eingaben hat, erhält auch nur halb so gute Ergebnisse.</p>\n\n<h2>Assistent oder Copilot: Der Unterschied liegt in der Integration</h2>\n<p>Ohne Anbindung agiert BizChat eher als Assistent. Es beantwortet Fragen, fasst E-Mails zusammen und erstellt kurze Notizen, doch das sind oberflächliche Aufgaben auf Basis dessen, was ohnehin zugänglich ist. Ein Copilot dagegen arbeitet an Ihrer Seite und hilft bei echten Entscheidungen. Das gelingt nur mit kontrolliertem Zugriff auf die Stammdatensysteme, also auf die Daten und Abläufe, die Ihr Geschäft definieren.</p>\n\n<h3>Drei Fragen zur Einordnung</h3>\n<ol>\n<li><strong>Live-Systeme:</strong> Hat die KI Zugriff auf die Orte, an denen wichtige Datensätze tatsächlich gespeichert sind, und nicht nur auf E-Mails und Dateien?</li>\n<li><strong>Rollenbasierte Berechtigungen:</strong> Respektiert sie diese, sodass Informationen sicher und auf den jeweiligen Nutzer zugeschnitten sind?</li>\n<li><strong>Ergebnisse:</strong> Kann sie Aufgaben lösen oder Entscheidungsprozesse beschleunigen, statt für die Bestätigung an eine andere Stelle zu verweisen?</li>\n</ol>\n<p>Wer alle drei Fragen mit Ja beantwortet, erlebt einen Copilot. Andernfalls bewegt man sich noch im Bereich der Assistenten.</p>\n\n<h3>Beispiele aus Finanzen und Vertrieb</h3>\n<p>Fragt ein Finanzteam nach Ausgabentrends, durchsucht ein Assistent E-Mail-Anhänge und freigegebene Ordner und zeichnet ein grobes Bild der Reisekosten. Ein Copilot mit Verbindung zur Ausgabenverwaltungs-App oder zum Hauptbuch liefert eine präzise Prognose und weist auf bevorstehende Abweichungen im Cashflow hin. Im Vertrieb fasst ein Assistent Angebotsentwürfe zusammen, während ein Copilot die aktuellen Pipeline-Zahlen aus dem CRM zieht und zeigt, wo Abschlüsse ins Stocken geraten.</p>\n<p>Copilot lernt die einzigartigen Daten eines Unternehmens nicht von selbst. Ohne strukturierten Zugriff hat BizChat keinen Einblick in Transaktionsdatensätze, Produktkataloge oder Genehmigungsworkflows und greift auf allgemeine Antworten zurück.</p>\n\n<h2>Die richtigen Integrationspunkte identifizieren</h2>\n<p>Das Microsoft-Ökosystem erlaubt es, dutzende Apps und Datenquellen anzubinden. Kein Team hat jedoch die Ressourcen, alles auf einmal zu verknüpfen. Sinnvoll ist es, mit den Integrationen zu beginnen, die früh sichtbare Ergebnisse liefern. Gelingen sie, wächst das Vertrauen in BizChat, misslingen sie, stagniert die Nutzung.</p>\n\n<h3>Ein Filter mit drei Fragen</h3>\n<ul>\n<li><strong>Häufigkeit:</strong> Wie oft werden die Daten im Arbeitsalltag benötigt?</li>\n<li><strong>Kontextwechsel:</strong> Beseitigt die Anbindung einen lästigen Wechsel, bei dem Menschen BizChat verlassen, um in einem anderen System zu suchen?</li>\n<li><strong>Expositionsrisiko:</strong> Sind die Daten so sensibel, dass vor der Integration zusätzliche Governance nötig ist?</li>\n</ul>\n<p>Bei hoher Häufigkeit, spürbarer Entlastung und überschaubarem Risiko haben Sie einen Top-Kandidaten gefunden. Hilfreich ist eine 60-Sekunden-Übung mit einem Stakeholder: Wohin gehen Sie, wenn Sie mit BizChat nicht weiterkommen? Ob Produktkatalog, Projekttool oder gemeinsame Dokumentenbibliothek, die Antwort zeigt die Schwachstellen, die ohnehin jeder kennt.</p>\n<p>Ein gutes Beispiel ist der Projektstatus. Statt Zeitpläne in einem separaten Tracker nachzuschlagen, fragen Teams direkt in BizChat. Solche täglich wiederholten Interaktionen haben einen sofortigen, kumulativen Effekt, anders als etwa ein monatlicher Bericht. Systeme mit geringerer Frequenz lassen sich später anbinden, sobald die wertvollen Ziele den Nutzen bewiesen haben.</p>\n\n<h2>Was Copilot Connectors sind und wie sie funktionieren</h2>\n<p>Ein Connector ist eine kontrollierte Integration, über die BizChat ein System of Record abfragen und gezielte Antworten zurückgeben kann. Er ist eine verwaltete Brücke zwischen der KI und den vertrauenswürdigen Quellen im Unternehmen. Dabei gilt:</p>\n<ul>\n<li>Connectoren verändern das Modell selbst nicht, sie liefern ihm Kontext.</li>\n<li>Sie lassen sich im gesamten Spektrum von No-Code über Low-Code bis Pro-Code erstellen.</li>\n</ul>\n<p>Stellt jemand eine Frage, entscheidet der Connector, wohin die Abfrage geht, etwa zu Live-Verkaufszahlen im CRM, zu Rechnungen im ERP oder zu aktiven Projekten in einem Planungstool, und liefert nur die benötigten Informationen zurück. Ohne Connector erhält man Annäherungswerte aus Erwähnungen, Chats und Dokumenten. Mit Connector erhält man aktuelle, maßgebliche Daten.</p>\n\n<h3>No-Code, Low-Code und Pro-Code</h3>\n<p>Es ist ein Missverständnis, dass Connectors nur etwas für Entwickler mit hunderten Zeilen Code sind. Für einfache Fälle können Business-Anwender Integrationen über No-Code- und Low-Code-Optionen konfigurieren, ein Business-Analyst kann oft einen Connector zu einer gängigen SaaS-App einrichten. Copilot Studio ist die Umgebung, um Microsoft Copilot mit benutzerdefinierten Agentenaktionen und Integrationen zu erweitern. Bei komplexen oder stark regulierten Szenarien kommen Entwickler zum Zug. Für API-Plugin-Szenarien mit hohem Code-Anteil wird das Teams-Toolkit unterstützt, mit dem sich sichere APIs bereitstellen lassen, die Daten aus proprietären Anwendungen unter Anwendung der entsprechenden Berechtigungen in BizChat verfügbar machen. Der richtige Weg hängt von den internen Fähigkeiten und der Toleranz für Komplexität ab.</p>\n\n<h3>Das Zusammenspiel mit der KI</h3>\n<p>Connectoren ersetzen nicht die KI, die Antworten generiert, sondern verbessern deren Grundlage. Bei der Frage nach offenen Bestellungen sammelt BizChat ohne Connector verstreute Erwähnungen aus E-Mails oder Besprechungen. Mit Connector fragt es das ERP ab, ruft exakte Zahlen und Status ab und formuliert sie in natürlicher Sprache. Das Modell bleibt das Arbeitspferd, die Genauigkeit kommt vom Connector. Angebunden werden können Microsoft-Dienste ebenso wie HR-Plattformen, Logistik-Tools oder benutzerdefinierte Datenbanken. Jede Übergabe läuft über einen Connector, der Anfragen verwaltet weiterleitet und Berechtigungen respektiert.</p>\n<p>Connectoren sind zudem eine Frage der geschäftlichen Ausrichtung. Ihre Einrichtung erzwingt ein Gespräch zwischen IT und Fachbereichen darüber, welche Fragen wirklich wichtig sind, und zeigt, welche Arbeitsabläufe Unterstützung am meisten verdienen.</p>\n\n<h2>Einen ersten Connector erstellen und absichern</h2>\n<p>Beim ersten Connector geht es weniger um Programmierkenntnisse als um Disziplin bei der Gestaltung des Zugriffs. Entscheidend ist, was BizChat sehen soll, wie eng dieser Bereich gefasst ist und wie streng Berechtigungen durchgesetzt werden. Sicherheit ist keine Ebene, die man später ergänzt, sondern das Fundament.</p>\n<p>Das Teams-Toolkit liefert Entwicklertools und Vorlagen, um Copilot-API-Plugins zu erstellen und Azure-Ressourcen einzubinden. Es beschleunigt die technische Arbeit, nimmt aber die Designentscheidungen nicht ab. Einstiegspunkte müssen an geschäftlichen Anforderungen ausgerichtet sein, und jeder Aufruf muss in engen Grenzen bleiben.</p>\n\n<h3>Die Checkliste in sechs Schritten</h3>\n<ol>\n<li><strong>Anwendungsfall definieren:</strong> Welche geschäftliche Frage soll BizChat beantworten?</li>\n<li><strong>Abfragen und minimalen Datensatz festlegen:</strong> Nicht alles freigeben, wenn nur wenige Felder relevant sind.</li>\n<li><strong>Schnittstelle entwerfen:</strong> Welche Felder sind sichtbar, welche tabu?</li>\n<li><strong>Authentifizierung und Scoping umsetzen:</strong> Identitätsbasierte Zugriffskontrollen legen fest, wer was abfragen und sehen darf.</li>\n<li><strong>Gemeinsam testen:</strong> IT und Fachabteilungen prüfen mit einer kleinen Nutzergruppe Berechtigung und Nutzen der Ergebnisse.</li>\n<li><strong>Mit Monitoring und Governance bereitstellen:</strong> So lässt sich die Nutzung verfolgen und bei Abweichungen gegensteuern.</li>\n</ol>\n\n<h3>Beispiel: CRM-Pipeline ohne sensible Notizen</h3>\n<p>Soll BizChat den Status der CRM-Pipeline zusammenfassen, klingt das einfach: Deals, Phasen, Verantwortliche. CRM-Rohdaten enthalten aber auch freie Notizen, die oft sensible Kundendetails umfassen. Der Connector sollte daher strukturierte Felder wie Phase, Wert und Inhaber anzeigen und unstrukturierte Notizen ausdrücklich ausschließen. So erhalten Manager die benötigten Einblicke, ohne Datenschutz- oder Compliance-Vorgaben zu verletzen.</p>\n<p>Die Authentifizierung macht dieses Scoping erst wirksam. Rollenbasierte Kontrollen übertragen Geschäftsregeln auf den Connector: Ein regionaler Vertriebsleiter sieht die Pipeline seines Gebiets, nicht die anderer Regionen. Ein authentifizierter Aufruf validiert Identität und Berechtigung, bevor ein Datensatz angezeigt wird.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Mit Quick Wins ohne Wirkung beginnen:</strong> Eine unbedeutende Datenquelle anzubinden, fühlt sich produktiv an, löst aber keine realen Probleme. Die Arbeitsabläufe bleiben fragmentiert, und das Tool gilt als Spielerei. Gefragt sind operative Erfolge, keine Demo-Erfolge.</li>\n<li><strong>Nach technischer Machbarkeit priorisieren:</strong> Fast jedes System lässt sich verbinden, aber nicht jede Verbindung ändert das Verhalten. Maßgeblich ist die Wirkung.</li>\n<li><strong>Einen Demo-Connector überstürzen:</strong> Er gibt womöglich mehr Informationen preis als erwartet. Verschwinden rollenbasierte Grenzen, entsteht ein Problem statt einer Lösung.</li>\n<li><strong>Den Scope zu weit fassen:</strong> Wird alles freigegeben, sind die Daten übermäßig exponiert. Wird zu stark abgeriegelt, hilft der Connector niemandem.</li>\n<li><strong>Nur eine Gruppe einbeziehen:</strong> Die IT kennt die Systemarchitektur, die Fachverantwortlichen wissen, welche Daten geschäftskritisch sind und welche nie offengelegt werden dürfen. Fehlt eine Perspektive, wird die Lösung zu restriktiv oder zu offen.</li>\n<li><strong>Ohne echte Anwender testen:</strong> Erst reale Abfragen bestätigen, dass die Ergebnisse korrekt und richtig eingegrenzt sind.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>BizChat fehlt es nicht an Intelligenz, sondern an Sichtbarkeit auf Ihre Kernsysteme.</li>\n<li>Prüfen Sie mit den drei Kriterien Live-Systeme, rollenbasierte Berechtigungen und Ergebnisse, ob Sie einen Assistenten oder einen Copilot haben.</li>\n<li>Priorisieren Sie Integrationen nach Häufigkeit, Kontextwechsel und Expositionsrisiko.</li>\n<li>Fragen Sie Stakeholder, wohin sie gehen, wenn BizChat nicht weiterhilft.</li>\n<li>Wählen Sie je nach Fähigkeiten No-Code, Low-Code oder Pro-Code mit Copilot Studio beziehungsweise dem Teams-Toolkit.</li>\n<li>Geben Sie nur den minimal nötigen Datensatz frei und schließen Sie sensible Felder explizit aus.</li>\n<li>Setzen Sie identitätsbasierte Zugriffskontrollen durch und testen Sie gemeinsam mit IT und Fachabteilung.</li>\n<li>Starten Sie klein: ein häufig genutzter Workflow, definierte Felder, ein begrenzter Connector.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Copilot Connectors machen aus BizChat einen Copilot, der auf präzise, aktuelle Daten zugreift und dabei bestehende Berechtigungen respektiert. Der Weg dorthin beginnt nicht mit komplexer Programmierung, sondern mit der Wahl der Integration, die den größten Reibungspunkt beseitigt, und mit einem eng gefassten, sauber abgesicherten ersten Connector. Wer den Wert an einem Workflow beweist, schafft eine Vertrauensbasis, auf der sich weitere Systeme anbinden lassen.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "In sechs Schritten zum sicheren Copilot Connector",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Anwendungsfall definieren",
+     "text": "Welche geschäftliche Frage soll BizChat beantworten? Einfach und klar formulieren."
+    },
+    {
+     "kopf": "Minimale Daten festlegen",
+     "text": "Genaue Abfragen bestimmen und nur die wirklich relevanten Felder freigeben."
+    },
+    {
+     "kopf": "Schnittstelle entwerfen",
+     "text": "Festlegen, welche Felder sichtbar und welche tabu sind, etwa freie Notizen."
+    },
+    {
+     "kopf": "Authentifizierung und Scoping",
+     "text": "Identitätsbasierte Zugriffskontrollen bestimmen, wer was abfragen und sehen darf."
+    },
+    {
+     "kopf": "Gemeinsam testen",
+     "text": "IT und Fachabteilungen prüfen mit kleiner Nutzergruppe Berechtigung und Nutzen der Ergebnisse."
+    },
+    {
+     "kopf": "Mit Governance bereitstellen",
+     "text": "Monitoring verfolgt die Nutzung, damit man bei Abweichungen gegensteuern kann."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Warum liefert Microsoft 365 BizChat oft nur vage Antworten?",
+    "a": "BizChat kennt nur Daten in Microsoft 365, etwa Outlook, Teams, OneDrive und SharePoint. Ohne Zugriff auf CRM, ERP oder Projekt-Tools fehlen die proprietären Daten. Dem Modell mangelt es nicht an Intelligenz, sondern an Sichtbarkeit, deshalb bleiben Antworten allgemein oder unvollständig."
+   },
+   {
+    "q": "Was sind Copilot Connectors und wie funktionieren sie?",
+    "a": "Ein Connector ist eine kontrollierte Integration, über die BizChat ein System of Record abfragen kann. Er entscheidet, wohin eine Anfrage geht, liefert nur die benötigten Informationen zurück und respektiert Berechtigungen. Das Modell wird nicht verändert, der Connector liefert ihm aktuellen Kontext."
+   },
+   {
+    "q": "Braucht man Programmierkenntnisse, um einen Copilot Connector zu erstellen?",
+    "a": "Nicht zwingend. Einfache Fälle lassen sich mit No-Code- oder Low-Code-Optionen umsetzen, etwa über Copilot Studio. Bei komplexen oder stark regulierten Szenarien kommen Entwickler zum Einsatz, für API-Plugins mit viel Code wird das Teams-Toolkit unterstützt. Der Weg hängt von Fähigkeiten und Komplexitätstoleranz ab."
+   },
+   {
+    "q": "Wie sichere ich meinen ersten Connector richtig ab?",
+    "a": "Geben Sie nur den minimal nötigen Datensatz frei und schließen Sie sensible Felder wie freie CRM-Notizen aus. Setzen Sie identitätsbasierte, rollenbasierte Zugriffskontrollen durch, testen Sie gemeinsam mit IT und Fachabteilung und stellen Sie den Connector mit Monitoring und Governance bereit."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Assistent oder Copilot",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Assistent (ohne Anbindung)",
+     "punkte": [
+      "Beantwortet allgemeine Fragen und fasst E-Mails zusammen",
+      "Nutzt nur Outlook, Teams, OneDrive und SharePoint",
+      "Liefert vage Antworten statt verlässlicher Prognosen",
+      "Verweist für die Bestätigung an andere Systeme"
+     ]
+    },
+    "rechts": {
+     "titel": "Copilot (mit Connectors)",
+     "punkte": [
+      "Greift kontrolliert auf CRM, ERP und Projekt-Tools zu",
+      "Liefert aktuelle, maßgebliche Daten statt Annäherungswerten",
+      "Respektiert rollenbasierte Berechtigungen der Nutzer",
+      "Beschleunigt Entscheidungen und löst Aufgaben"
+     ]
+    }
+   },
+   {
+    "titel": "Häufige Fehler bei Connectors",
+    "typ": "checkliste",
+    "punkte": [
+     "Nicht mit Quick Wins ohne echte Wirkung beginnen",
+     "Nicht nach technischer Machbarkeit, sondern nach Wirkung priorisieren",
+     "Keinen Demo-Connector überstürzen, der zu viele Informationen preisgibt",
+     "Den Scope weder zu weit noch zu eng fassen",
+     "IT und Fachverantwortliche gemeinsam einbeziehen",
+     "Mit echten Anwendern und realen Abfragen testen"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Warum fühlt sich Microsoft 365 BizChat laut Artikel ohne Anbindung oft halbblind an?",
+    "opts": [
+     "Die Algorithmen der Plattform sind zu schwach für Geschäftsfragen.",
+     "Es fehlt der Zugriff auf proprietäre Daten und Kernanwendungen des Unternehmens.",
+     "Es kann keine E-Mails oder Teams-Chats auswerten.",
+     "Es darf grundsätzlich keine Fragen zu Finanzdaten beantworten."
+    ],
+    "a": 1,
+    "why": "Dem Modell mangelt es nicht an Intelligenz, sondern an Sichtbarkeit auf Systeme wie CRM oder ERP."
+   },
+   {
+    "q": "Welche drei Kriterien dienen dem Filter zur Priorisierung von Integrationen?",
+    "opts": [
+     "Lizenzkosten, Codeumfang und Anzahl der Nutzer",
+     "Häufigkeit, Kontextwechsel und Expositionsrisiko",
+     "Datenmenge, Alter des Systems und Herstellerzertifizierung",
+     "Live-Systeme, rollenbasierte Berechtigungen und Ergebnisse"
+    ],
+    "a": 1,
+    "why": "Der Filter fragt nach Häufigkeit der Nutzung, Beseitigung von Kontextwechseln und Expositionsrisiko. Die Option mit Live-Systemen gehört zur Copilot-Einordnung."
+   },
+   {
+    "q": "Wie sollte ein Connector für die CRM-Pipeline laut Artikel gestaltet werden?",
+    "opts": [
+     "Alle CRM-Rohdaten inklusive freier Notizen für maximale Transparenz freigeben",
+     "Nur Notizen anzeigen, da sie den meisten Kontext liefern",
+     "Strukturierte Felder wie Phase, Wert und Inhaber zeigen, Notizen ausschließen",
+     "Alle Regionen sichtbar machen, damit Manager Gebiete vergleichen können"
+    ],
+    "a": 2,
+    "why": "Freie Notizen enthalten oft sensible Kundendetails; strukturierte Felder liefern Einblicke ohne Datenschutz- oder Compliance-Verstöße."
+   },
+   {
+    "q": "Welche Rolle spielt der Connector im Zusammenspiel mit der KI?",
+    "opts": [
+     "Er trainiert das Modell mit Unternehmensdaten dauerhaft neu.",
+     "Er ersetzt das Sprachmodell vollständig durch eine Datenbankabfrage.",
+     "Er verbessert die Grundlage der Antworten, während das Modell sie formuliert.",
+     "Er macht Berechtigungsprüfungen überflüssig, weil Daten zentral vorliegen."
+    ],
+    "a": 2,
+    "why": "Connectoren verändern das Modell nicht, sondern liefern Kontext; die Genauigkeit kommt vom Connector, das Modell bleibt das Arbeitspferd."
+   }
+  ]
+ }
+}

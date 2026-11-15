@@ -1,0 +1,1702 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:00.880
+Xadoite, não morreu.
+
+00:00:01.200 --> 00:00:02.060
+Ela aprendeu a automatizar.
+
+00:00:02.440 --> 00:00:06.400
+Seus agentes prestativos estão movendo dados silenciosamente como estagiários com as chaves do cofre.
+
+00:00:06.520 --> 00:00:08.700
+Você acha que Purview entra e Copilot Studio te protege, hein?
+
+00:00:09.500 --> 00:00:10.820
+Assim como o papelão molhado na chuva.
+
+00:00:11.320 --> 00:00:12.080
+Vou defender os dois lados.
+
+00:00:12.640 --> 00:00:15.400
+Agentes como ganhos reais de produtividade e agentes como abismos de governança.
+
+00:00:15.840 --> 00:00:19.760
+Depois entregarei uma arquitetura de referência e uma régua de pontuação de risco se você pode implementar isso mesmo.
+
+00:00:20.160 --> 00:00:23.620
+Fique até o fim pra ver o mapa de políticas que reduz o raio de impacto dos agentes pela metade.
+
+00:00:24.460 --> 00:00:26.780
+Vamos definir a bagunça antes de discutir como sobreviver a ela.
+
+00:00:26.780 --> 00:00:31.260
+O mito, como os agentes se tornam a Xadoite 2.0.
+
+00:00:31.660 --> 00:00:32.380
+Aqui estão o mito.
+
+00:00:32.620 --> 00:00:33.440
+Velocidade sem estrutura.
+
+00:00:33.880 --> 00:00:35.420
+O backlog de TI se estende por trimestre.
+
+00:00:35.740 --> 00:00:38.540
+O negócio quer resultados até sexta, então criam bots que acessam tudo.
+
+00:00:39.000 --> 00:00:39.820
+Eles não são maliciosos.
+
+00:00:40.060 --> 00:00:40.560
+Estão cansados.
+
+00:00:40.880 --> 00:00:43.800
+Então conectam bots do Copilot Studio a fluxos do Power Automate,
+
+00:00:43.900 --> 00:00:47.880
+adicionam permissões generosas no Graph e conectam as cinco fontes de dados com três conectores e muita fé.
+
+00:00:48.480 --> 00:00:49.520
+Agora com o que estamos lidando de fato?
+
+00:00:49.960 --> 00:00:54.720
+Bots do Copilot Studio que executam ações, rastreiam o SharePoint, pingam o Dataverse e chamam APIs externas.
+
+00:00:54.720 --> 00:01:01.120
+Fluxos do Power Automate que fingem ser usuários ou rodam como Service Principles com direitos elevados temporários que nunca são revogados.
+
+00:01:01.820 --> 00:01:06.120
+Permissões delegadas do Graph configuradas pra ler tudo, porque a versão de privilégio mínimo levaria uma hora a mais.
+
+00:01:06.740 --> 00:01:08.640
+Essa hora é cortada e seu alternante vira um buffer liberado.
+
+00:01:09.060 --> 00:01:10.340
+Letores não gerenciados estão por toda parte.
+
+00:01:10.740 --> 00:01:12.820
+Ferramentas baseadas em navegador rodando na Edge Chrome.
+
+00:01:13.600 --> 00:01:16.220
+Pontes e MCP trazendo agentes de terceiros do Gira ou GitHub.
+
+00:01:16.900 --> 00:01:21.760
+Agente SAS que você nunca ouviu falar, pois vivem na aba do navegador de alguém e não aparecem nas suas listas de permissão ligada.
+
+00:01:21.760 --> 00:01:23.520
+Controle de aplicativos tradicional vem instalador.
+
+00:01:23.880 --> 00:01:24.600
+Estes não precisam.
+
+00:01:24.900 --> 00:01:27.760
+Eles desfiltram dados por campos de formulário, janelas de upload ou copiar e colar.
+
+00:01:27.840 --> 00:01:29.680
+Os caminhos de desfiltração de dados são irritantemente simples.
+
+00:01:30.020 --> 00:01:31.200
+Copiar e colar pra um LLM da web.
+
+00:01:31.640 --> 00:01:35.760
+Upload de arquivo pra resumir algo com previsões internas e dados de RH indo de carona.
+
+00:01:36.640 --> 00:01:40.640
+Pior, agentes resumem dados fantasmos que você compartilhou demais no SharePoint ou André anos atrás.
+
+00:01:41.320 --> 00:01:43.720
+Aquelas pastas qualquer um com link que nunca foram limpas.
+
+00:01:44.280 --> 00:01:47.200
+Copilot é muito bom encontrar as coisas que você esqueceu que expôs...
+
+00:01:47.200 --> 00:01:47.960
+A superfíde é taquinho.
+
+00:01:47.960 --> 00:01:52.440
+Agentes rodam com escopos amplos no Graph, sem patrocinador humano, sem revisão de acesso, sem silo de vida.
+
+00:01:52.760 --> 00:01:56.560
+Não há trilha de auditoria pra metade dos passos, porque conectores de terceiros mascaram o destino.
+
+00:01:56.980 --> 00:02:00.840
+Quando algo dá errado, você fica seguindo migalhas em cinco sistemas que registram logs de formas diferentes.
+
+00:02:00.920 --> 00:02:01.520
+Ou nem registram.
+
+00:02:01.860 --> 00:02:02.760
+O curso já tá sentindo.
+
+00:02:03.280 --> 00:02:09.420
+A Shadow IT consome 30% a 40% dos gastos em grandes empresas e violações envolvendo dados ocultos custam mais e levam mais tempo pra serem contidas.
+
+00:02:09.600 --> 00:02:10.260
+Isso não é teórico.
+
+00:02:10.660 --> 00:02:13.160
+É o que acontece quando você descobre o radioimpacto depois da explosão.
+
+00:02:13.160 --> 00:02:17.720
+Você perde tempo mapeando quem tinha acesso, quem o concedeu e qual agente extraiu o que de onde.
+
+00:02:18.420 --> 00:02:18.840
+É simples.
+
+00:02:19.680 --> 00:02:23.720
+Sem identidade, DLP e privilégio mínimo, os agentes se tornam túneis autônomos de contrabando.
+
+00:02:24.280 --> 00:02:25.420
+Você pensa, mas é interno.
+
+00:02:26.200 --> 00:02:30.860
+Só que não é, não quando uma sessão de navegador envia dados rotulados por um endpoint público sem controle no caminho.
+
+00:02:31.440 --> 00:02:35.320
+E sim, você pode bloquear colagem com o preview DLP em endpoints e navegadores,
+
+00:02:35.440 --> 00:02:39.640
+mas apenas se você ativá-lo e restringir as políticas ou os domínios de IA, a maioria de vocês não resiste.
+
+00:02:39.860 --> 00:02:40.400
+Deixe-me ilustrar.
+
+00:02:40.400 --> 00:02:43.220
+Você tem um fluxo do Power Automate criado por um gerente de projetos.
+
+00:02:43.680 --> 00:02:47.420
+Ele usa o graph delegado pra ler todos os calendários de usuários apenas pra encontrar janelas de reuniões.
+
+00:02:48.020 --> 00:02:52.020
+Então alguém adiciona uma etapa pra exportar os resultados pra um bot de agendamento de terceiras via Webhook.
+
+00:02:52.380 --> 00:02:53.360
+Logs do lado de terceiras?
+
+00:02:53.700 --> 00:02:54.360
+Nem que você possa ver.
+
+00:02:54.780 --> 00:02:55.240
+Para o fluxo?
+
+00:02:55.640 --> 00:02:56.840
+Aquele gerente saiu no trimestre passado.
+
+00:02:57.240 --> 00:02:59.160
+O fluxo continua rodando, lendo e postando.
+
+00:02:59.840 --> 00:03:02.580
+Parabéns, você criou uma conta de serviço fantasma que nunca dorme.
+
+00:03:03.080 --> 00:03:04.340
+Agora é aqui que a maioria das pessoas erram.
+
+00:03:04.680 --> 00:03:07.780
+Elas acham que o acesso condicional do Entra Pro Humanos equivale à cobertura pra agentes.
+
+00:03:08.180 --> 00:03:10.260
+Não equivale a menos que o agente tenha a sua própria identidade.
+
+00:03:10.620 --> 00:03:15.800
+Se o bot roda como um humano, suas políticas acham que é a linda do financeiro às 2 da manhã de um dispositivo não gerenciado em outro país.
+
+00:03:16.360 --> 00:03:17.480
+A linda está definitivamente dormindo.
+
+00:03:17.720 --> 00:03:18.260
+Ou a agente não.
+
+00:03:19.000 --> 00:03:20.580
+Quando você acerta isso, tudo mais se encaixa.
+
+00:03:21.020 --> 00:03:25.380
+Dê a cada agente seu próprio ID e a agente não entra, ou você não conseguirá isolá-lo, monitorá-lo ou encerrá-lo rapidamente.
+
+00:03:26.120 --> 00:03:31.060
+Rotule seus dados no SharePoint e OneDrive pra que o preview da LP consiga reconhecê-los na área de transferência e no navegador.
+
+00:03:31.480 --> 00:03:36.240
+Use funções de aplicativo em vez de Graph Delegado e restringe o acesso ao SharePoint a sites específicos na alterna de inteiro.
+
+00:03:36.240 --> 00:03:39.780
+Se não se lembrar de mais nada, lembre-se de identidade, rótulos e privilégio mínimo.
+
+00:03:40.400 --> 00:03:41.940
+Sem isso, você está apenas fazendo segurança.
+
+00:03:42.620 --> 00:03:44.900
+O divisor de águas de que ninguém fala é visibilidade em termos de execução.
+
+00:03:45.180 --> 00:03:49.380
+Se você não consegue ver pra onde o agente está chamando RLs, APIs ou servidores MCP, não pode impedir a filtração.
+
+00:03:49.680 --> 00:03:51.040
+Você só poderá escrever uma análise pós-mail.
+
+00:03:51.360 --> 00:03:52.760
+O Globo Secure Access oferece a visão.
+
+00:03:53.300 --> 00:03:55.900
+Comece apenas com logs pra não quebrar os brinquedos frágeis.
+
+00:03:56.400 --> 00:03:58.440
+Passe para a lista de permissão quando identificar os padrões.
+
+00:03:59.120 --> 00:04:00.980
+E pronto, agora você tem um mapa em vez de um...
+
+00:04:00.980 --> 00:04:01.440
+O ato.
+
+00:04:02.060 --> 00:04:04.440
+O argumento a favor dos agentes e onde eles realmente brigam.
+
+00:04:04.440 --> 00:04:05.580
+Ok, era das boas notícias.
+
+00:04:05.580 --> 00:04:08.200
+Os agentes acabam com o trabalho braçal quando se prepara o terreno corretamente.
+
+00:04:08.500 --> 00:04:11.080
+Eles consultam, resumem, agem sem um humano, monitorando cada clique.
+
+00:04:11.560 --> 00:04:16.400
+Operações se limpam tickets, financeiro fecha balanço, RH processa contratações, suporte, tria ruídos.
+
+00:04:17.240 --> 00:04:22.160
+Você recupera horas, não por mágica, mas porque o trabalho repetitivo de conexão é feito por algo que nunca tira hora de almoço.
+
+00:04:22.820 --> 00:04:24.100
+O que a maioria das pessoas ignora é o escopo.
+
+00:04:24.540 --> 00:04:25.440
+O restrito supera o amplo.
+
+00:04:25.820 --> 00:04:26.980
+Orientado a eventos supera o livro.
+
+00:04:26.980 --> 00:04:32.380
+Quando um agente desperta por um gatilho claro, acessa dados rotulados e detém apenas os direitos necessários.
+
+00:04:32.840 --> 00:04:34.300
+É rápido e entediante da melhor forma possível.
+
+00:04:34.680 --> 00:04:36.300
+É aí que você o quer previsivelmente entediante.
+
+00:04:36.720 --> 00:04:37.960
+WorkIQ e Grounding ajudam nisso.
+
+00:04:38.440 --> 00:04:42.900
+Mantenha as respostas dentro do limite de permissão do usuário, ancoradas nos dados do seu tenant e não na web aberta.
+
+00:04:43.280 --> 00:04:45.120
+Ora, você não está disparando prontos para modelos aleatórios.
+
+00:04:45.400 --> 00:04:48.040
+Você está perguntando sim dentro que tem a permissão para ver qual é a próxima ação correta.
+
+00:04:48.380 --> 00:04:51.720
+Isso é mais seguro e mais rápido, porque você não está trazendo toda a internet para a sala.
+
+00:04:52.200 --> 00:04:53.720
+A identidade entre a gente é eranciosa.
+
+00:04:53.720 --> 00:04:58.340
+Dê a cada agente uma identidade única que lhe garante acesso condicional, detecção de risco e um botão de interrupção.
+
+00:04:58.820 --> 00:04:59.920
+Você vincula a identidade a um blueprint.
+
+00:05:00.420 --> 00:05:01.800
+Mesma classe de agente, mesmas diretrizes.
+
+00:05:02.220 --> 00:05:06.820
+Seu agente de follow-up de vendas com mensagem como um guaxininho, um data center, a proteção de identidade sinaliza.
+
+00:05:07.360 --> 00:05:10.040
+Você pode colocar essa identidade em quarentena sem parar toda a equipe.
+
+00:05:10.840 --> 00:05:11.700
+Por view ou seu segurança?
+
+00:05:12.680 --> 00:05:17.600
+Rótulos e DLP nos apps M365, endpoints e navegadores mantêm dados sensíveis cercados,
+
+00:05:17.600 --> 00:05:19.420
+mesmo se alguém tentar colá-los em um chat.
+
+00:05:19.960 --> 00:05:20.700
+Só para verificar a redação.
+
+00:05:21.040 --> 00:05:23.100
+E as mensagens de DLP educativas fazem mais do que bloquear.
+
+00:05:23.100 --> 00:05:26.040
+Elas ensinam ao usuário por que foi bloqueado e como fazer da maneira certa.
+
+00:05:26.340 --> 00:05:27.840
+Menos brincadeira de martelo, mais construção.
+
+00:05:28.220 --> 00:05:30.200
+Power Automate não é o inimigo quando é governado.
+
+00:05:30.700 --> 00:05:33.500
+Use aprovações de DLP de ambiente e conectores conscientes de solução.
+
+00:05:34.180 --> 00:05:36.900
+Isso significa que dev e prod são salas separadas com chaves separadas.
+
+00:05:37.360 --> 00:05:42.640
+O mesmo fluxo promovido como solução é das políticas certas em vez de ganhar direitos silenciosamente como uma coleção de imãs.
+
+00:05:43.120 --> 00:05:45.040
+Ora, deixa eu mostrar exatamente como isso funciona a breve.
+
+00:05:45.280 --> 00:05:50.220
+Imagine um agente fechamento financeiro acionado quando uma fatura rotulada chega a uma biblioteca SharePoint designada.
+
+00:05:50.220 --> 00:05:51.780
+O que ele precisa?
+
+00:05:51.880 --> 00:05:53.500
+Daí naquele site, escrevei uma lista de revisão.
+
+00:05:53.920 --> 00:05:54.740
+Postar em um canal do Teams.
+
+00:05:55.640 --> 00:05:58.660
+Identidade, ID de agente, entra sob o blueprint de entrada financeira.
+
+00:05:59.200 --> 00:06:02.480
+Acesso, funções de aplicativo sobre graph delegado, apenas permissões de escopo de site.
+
+00:06:03.460 --> 00:06:06.820
+Diretrizes, o preview bloqueia uploads de dados rotulados para domínios de IA.
+
+00:06:07.760 --> 00:06:09.220
+Endpoints impõem bloqueios de ritmo.
+
+00:06:10.100 --> 00:06:14.800
+Rede, acesso seguro global em modo de log por uma semana, depois inclua na lista de permissões essas poucas APIs que ele realmente chama.
+
+00:06:14.800 --> 00:06:16.480
+Erros comuns a evitar.
+
+00:06:17.020 --> 00:06:19.800
+Deixar o agente usar o escopo delegado de um humano, apenas para testar.
+
+00:06:21.820 --> 00:06:26.060
+Pular rótulos porque vou marcar depois e conectar um conector a um endpoint terceiros opaco que você não pode auditar.
+
+00:06:27.580 --> 00:06:30.120
+Além disso, não deixe agentes de dev viverem para sempre em prod.
+
+00:06:30.480 --> 00:06:33.040
+Promova a solução, retire o protótipo, mantém a identidade.
+
+00:06:33.540 --> 00:06:36.000
+Uma vitória rápida que você pode entregar essa semana, escolha uma fila de suporte.
+
+00:06:36.420 --> 00:06:39.700
+Crie um bot no Copilot Studio que utilize uma base de conhecimento rotulada.
+
+00:06:39.700 --> 00:06:44.520
+Responda dentro dos direitos do usuário, escale via fluxo do Power Automate que registre cada passo.
+
+00:06:45.040 --> 00:06:50.580
+Atribua um ID de agente, aplique acesso condicional a dispositivos compatíveis e ative o coaching de DLP para sites de IA.
+
+00:06:51.120 --> 00:06:54.560
+Você reduzirá o tempo da primeira resposta e dormirá melhor porque o raio de impacto está mensurado.
+
+00:06:55.260 --> 00:07:00.180
+Em resumo, os agentes funcionam quando identidade, classificação de dados e políticas de tempo de execução caminham juntas.
+
+00:07:00.620 --> 00:07:04.180
+Faça isso e eles deixarão de parecer Shadow IT para se comportar com uma equipe júnior confiável,
+
+00:07:04.260 --> 00:07:06.340
+só que eles não pedem demissão, só que eles não pedem demissão.
+
+00:07:06.540 --> 00:07:08.500
+Argumento contra os agentes, onde tudo quebra no mundo real.
+
+00:07:08.500 --> 00:07:11.740
+Agora a tempestade, desvio de identidade é a primeira falha.
+
+00:07:12.340 --> 00:07:15.260
+Alguém testa um bot com suas próprias credenciais e depois sai da empresa.
+
+00:07:15.700 --> 00:07:18.340
+O bot mantém esses direitos como um guaxinim acumulando objetos brilhantes.
+
+00:07:18.660 --> 00:07:22.680
+Sem patrocinador, sem revisões de acesso, sem rotação e sem como provar quem aprovou o quê.
+
+00:07:23.100 --> 00:07:26.300
+Você não pode colocar o bot de calendário da Carla em quarentena quando ele está se passando pela Carla.
+
+00:07:26.400 --> 00:07:27.240
+Você pode desativar a Carla.
+
+00:07:27.660 --> 00:07:29.040
+Isso interrompe o trabalho, então ninguém faz.
+
+00:07:29.220 --> 00:07:30.340
+E o fantasma continua circulando.
+
+00:07:30.960 --> 00:07:32.240
+O excesso de escopo é o próximo.
+
+00:07:32.380 --> 00:07:35.880
+O graph delegado é mais fácil, então as pessoas concedem permissões de e-mail, leitura de arquivos,
+
+00:07:35.880 --> 00:07:38.780
+leitura de sites e leitura de usuários só porque um conector reclamou uma vez.
+
+00:07:39.480 --> 00:07:41.940
+Claro, assim como deixar a porta da sala de servidores aberta com uma cadeira.
+
+00:07:42.400 --> 00:07:44.360
+Funções de aplicativo com escopo de recursos exigem planejado.
+
+00:07:44.680 --> 00:07:46.020
+O modo delegado é um clique e um dar de onde.
+
+00:07:46.400 --> 00:07:46.760
+O resultado.
+
+00:07:47.280 --> 00:07:51.220
+Agentes que vascurem o SharePoint como um aspirador robô com um pé de cabra acessando sites que nunca precisaram.
+
+00:07:51.520 --> 00:07:53.440
+Dados ocultos transformam erros leves em grandes problemas.
+
+00:07:53.940 --> 00:07:55.240
+Pasta de RH compartilhadas demais.
+
+00:07:55.380 --> 00:07:58.200
+Arquivos financeiros de uma migração onde as permissões nunca foram corrigidas.
+
+00:07:58.200 --> 00:08:02.400
+O Copilot faz exatamente o que você pediu, exibindo arquivos relevantes de forma prestativa.
+
+00:08:02.880 --> 00:08:06.060
+Ou a gente gera resumos que vazam com textos que ninguém sabia que estavam expostos.
+
+00:08:06.580 --> 00:08:09.700
+Você não vê um download, então passa pelos alarmes, mas os resumos causam o mesmo dano.
+
+00:08:10.060 --> 00:08:10.920
+É vazamento por inferência.
+
+00:08:11.440 --> 00:08:12.820
+As lacunas de DLP são as essenciais.
+
+00:08:13.120 --> 00:08:14.820
+Os rótulos não são aplicados ou são inconsistentes.
+
+00:08:15.120 --> 00:08:18.240
+As políticas de DLP de endpoint e navegador não abrangem domínios de A.
+
+00:08:18.640 --> 00:08:20.280
+Navegadores não gerenciados ignoram tudo.
+
+00:08:20.620 --> 00:08:24.740
+Aos usuários copiam texto para o prompt web, são bloqueados no Edge, abrem o Chrome pessoal e tentam novamente.
+
+00:08:24.740 --> 00:08:26.120
+A política diz não.
+
+00:08:26.440 --> 00:08:27.220
+O navegador diz sim.
+
+00:08:27.680 --> 00:08:31.220
+Se seus controles não acompanham onde as pessoas realmente trabalham, seus controles são apenas fachados.
+
+00:08:31.600 --> 00:08:33.220
+Pontos cegos de monitoramento completam instante.
+
+00:08:33.540 --> 00:08:35.200
+Etapas de terceiros mascaram os destinos.
+
+00:08:35.520 --> 00:08:36.380
+É birru que a tudo se obtém.
+
+00:08:36.780 --> 00:08:37.520
+Nenhum URL log.
+
+00:08:37.800 --> 00:08:40.700
+As pontes MCP roteiam chamadas por um servidor que você não incluiu na lista de permissão.
+
+00:08:40.940 --> 00:08:43.140
+Tem uma inspeção de rede, então você fica cego para a saída de dados.
+
+00:08:43.780 --> 00:08:47.280
+Você acaba correlacionando atividades do Graph com registro de data e hora de convidados,
+
+00:08:47.360 --> 00:08:51.060
+torcendo para que seu CM tenha achado um vestígio que não foi sobrescrito por um log verboso de algo tagarela.
+
+00:08:51.580 --> 00:08:53.160
+O caos no ciclo de vida é o que une tudo isso.
+
+00:08:53.160 --> 00:08:56.320
+Agentes de desenvolvimento são copiados para a produção com direitos elevados temporais.
+
+00:08:56.480 --> 00:08:59.220
+Temporário vira até o fim do trimestre, que acaba virando para sempre.
+
+00:08:59.580 --> 00:09:02.360
+Sem caminho de desprovisionamento, sem SLA de proprietários, sem revisões de acesso.
+
+00:09:02.640 --> 00:09:06.720
+Fluxos zumbis rodam às 2 da manhã, falhando silenciosamente até que um limite de taxa é atingido
+
+00:09:06.720 --> 00:09:08.640
+e o suporte é acionado por um mistério que eles não criaram.
+
+00:09:08.840 --> 00:09:09.200
+Resultado.
+
+00:09:09.620 --> 00:09:13.540
+Tempo maior para detectar, maior para conter violações de conformidade, gastos duplicados
+
+00:09:13.540 --> 00:09:15.540
+e uma limpeza que parece religar um hack com a energia.
+
+00:09:15.960 --> 00:09:19.600
+IBM e outros mostraram que violações de dados ocultos custam mais e duram mais.
+
+00:09:20.040 --> 00:09:20.940
+Você sabe o porquê.
+
+00:09:20.940 --> 00:09:23.460
+Você não pode consertar o que não vê e não pode ver o que nunca registrou.
+
+00:09:23.880 --> 00:09:27.760
+Um erro comum que ainda vejo é acreditar que o acesso condicional do tenant abrange silenciosamente
+
+00:09:27.760 --> 00:09:28.800
+agentes rodando como humanos.
+
+00:09:29.180 --> 00:09:30.360
+Não protege o que não consegue identificar.
+
+00:09:30.900 --> 00:09:32.580
+Outro erro é confiar nos padrões dos conectores.
+
+00:09:32.880 --> 00:09:34.760
+Conector corporativo não significa privilégio mínimo.
+
+00:09:35.200 --> 00:09:36.440
+Significa que funciona pronto para usar.
+
+00:09:36.960 --> 00:09:38.440
+Pronto para usar também é como tudo vaza.
+
+00:09:38.880 --> 00:09:39.980
+Então o que realmente reduz a dor?
+
+00:09:40.480 --> 00:09:42.800
+Leia a cada gente um ID entre a gente e anexe-se a um blueprint.
+
+00:09:42.800 --> 00:09:46.940
+Isso te garante um patrocinador, que o switch, revisões de acesso e acesso condicional por
+
+00:09:46.940 --> 00:09:47.200
+tipo.
+
+00:09:47.820 --> 00:09:49.440
+Substitua o graph delegado por funções de aplicativo.
+
+00:09:50.000 --> 00:09:52.220
+Limite o acesso ao SharePoint e a sites específicos.
+
+00:09:52.660 --> 00:09:55.780
+Teve a rotulagem automática por visualização para que os dados não sejam talvez sensíveis
+
+00:09:55.780 --> 00:09:56.400
+na cabeça de alguém.
+
+00:09:56.660 --> 00:09:58.640
+Eles são marcados em repouso e validados em tempo de execução.
+
+00:09:59.040 --> 00:10:02.420
+Aplique DLP endpoints e navegadores com regras de colar e upload para domínios de A.
+
+00:10:02.800 --> 00:10:06.580
+Inicie o acesso seguro global em modo de auditoria coletando uma semana de chamadas de URL e API,
+
+00:10:06.720 --> 00:10:08.460
+então adicione a lista de permissões apenas o que importa.
+
+00:10:08.680 --> 00:10:10.080
+Vai ser quebrar menos coisas e virar muito mais.
+
+00:10:10.080 --> 00:10:11.800
+Deixe-me consolidar isso com um pequeno stram.
+
+00:10:12.520 --> 00:10:14.960
+Um agente de triagem de suporte precisa de acesso à caixa de correio.
+
+00:10:15.480 --> 00:10:18.040
+A leitura de e-mail delegada vira um rastreamento de e-mail do tenente interno.
+
+00:10:18.120 --> 00:10:22.000
+Em vez disso, atribua a função de leitura de e-mail para uma caixa compartilhada, restrita
+
+00:10:22.000 --> 00:10:25.160
+pelo acesso condicional a dispositivos compatíveis e registre toda chamada graph.
+
+00:10:25.300 --> 00:10:28.620
+Combine isso com uma política de DLP que bloqueia a saída de dados rotulados via formulários
+
+00:10:28.620 --> 00:10:29.060
+de navegador.
+
+00:10:29.260 --> 00:10:29.920
+Mesmo que o negócio.
+
+00:10:30.660 --> 00:10:31.820
+Redução massiva no raio de explosão.
+
+00:10:32.320 --> 00:10:35.200
+Não é perfeito, mas agora você pode provar quem aprovou, que ele pode tocar e com quem você
+
+00:10:35.200 --> 00:10:35.660
+comunica.
+
+00:10:36.400 --> 00:10:38.280
+Essa é a diferença entre um incidente e um boato.
+
+00:10:38.280 --> 00:10:42.340
+Arquitetura de referência para agentes governados no Microsoft 365.
+
+00:10:43.040 --> 00:10:44.180
+A arquitetura é o esqueleto.
+
+00:10:44.800 --> 00:10:48.040
+Vamos adicionar ossos suficientes para que a coisa se sustente sem fita adesiva.
+
+00:10:48.680 --> 00:10:49.420
+Identidade em primeiro lugar.
+
+00:10:49.740 --> 00:10:51.280
+Todo agente recebe um ID entre agente.
+
+00:10:51.760 --> 00:10:52.780
+Nada de identidades compartilhadas.
+
+00:10:53.120 --> 00:10:53.880
+Nada de rodar com linda.
+
+00:10:54.360 --> 00:10:55.940
+Você cria um blueprint por tipo de agente.
+
+00:10:56.460 --> 00:10:58.920
+Bote de entrada, bote de triagem, bote de fechamento financeiro.
+
+00:10:59.360 --> 00:11:02.860
+O blueprint captura o patrocinador, funções de aplicativo necessários, conectores permitidos,
+
+00:11:02.960 --> 00:11:04.180
+perfil de rede, periodicidade de revisão.
+
+00:11:04.280 --> 00:11:07.100
+Se você não se lembrar de mais nada, saiba que os blueprints oferecem controle centralizado.
+
+00:11:07.100 --> 00:11:09.880
+Você pode colocar um tipo em quarentena em vez de perseguir casos isolados.
+
+00:11:10.220 --> 00:11:11.160
+Patrocinadores não são efeito.
+
+00:11:11.500 --> 00:11:14.680
+O patrocinador é responsável pelo escopo, revisões de acesso e desprovisionamento.
+
+00:11:15.020 --> 00:11:17.220
+Se o patrocinador sair, a política de ciclo de vida desabilita o agente.
+
+00:11:17.600 --> 00:11:18.640
+Sem patrocinador, sem agente.
+
+00:11:19.020 --> 00:11:20.760
+Essa regra única elimina metade dos seus problemas que se...
+
+00:11:20.760 --> 00:11:22.360
+O acesso condicional está vinculado ao blueprint.
+
+00:11:22.760 --> 00:11:24.020
+Exige um ambiente de execução e conformidade.
+
+00:11:24.420 --> 00:11:25.600
+Restringe-a por locais confiáveis.
+
+00:11:25.960 --> 00:11:28.280
+Bloqueie logins de alto risco e imponha frequência de login.
+
+00:11:28.580 --> 00:11:30.860
+Para agentes sem interface, use identidades gerenciadas sempre que possível.
+
+00:11:30.860 --> 00:11:35.700
+Para tudo o que precisar de um token fora do Azure, use credenciais federadas com confiança restrita.
+
+00:11:36.440 --> 00:11:41.680
+Se a proteção de identidade sinalizar comportamento de risco, coloque a identidade do agente em quarentena automaticamente e notifique o patrocinador.
+
+00:11:42.220 --> 00:11:43.400
+O privilégio mínimo não é negociável.
+
+00:11:43.920 --> 00:11:46.320
+Prefira funções de aplicativo do Graphics Copos Delegado.
+
+00:11:46.800 --> 00:11:50.340
+Se o agente precisar do SharePoint, conceda permissões de escopo de site apenas para sites específicos.
+
+00:11:50.980 --> 00:11:56.140
+Para o Exchange, atribua acesso a caixas de correio compartilhadas ou de recursos específicos, não a leitura de e-mail de todo o tênum.
+
+00:11:56.640 --> 00:11:58.440
+Para o Teams, defina o escopo dos canais e explica-se também.
+
+00:11:58.440 --> 00:12:01.060
+Trate permissões totais com o extintor de incêndio.
+
+00:12:01.400 --> 00:12:03.000
+Quebre o lacre, documente, expire.
+
+00:12:03.420 --> 00:12:06.080
+Pacote de acesso por conector controla o restante da expansão desordena.
+
+00:12:06.320 --> 00:12:09.440
+Se o Blueprint diz que pode chamar o Dataverse em uma API externa específica, é só isso.
+
+00:12:09.640 --> 00:12:11.460
+Qualquer outra coisa é bloqueada no nível da política de conector.
+
+00:12:11.620 --> 00:12:12.740
+Webhooks e o Paco não são aceitos.
+
+00:12:13.180 --> 00:12:13.300
+É.
+
+00:12:13.660 --> 00:12:14.020
+Existe.
+
+00:12:14.600 --> 00:12:14.740
+É.
+
+00:12:15.400 --> 00:12:15.600
+P.
+
+00:12:16.260 --> 00:12:16.420
+É.
+
+00:12:17.540 --> 00:12:17.900
+É.
+
+00:12:18.300 --> 00:13:22.920
+A felicidade não tem apenas muitas faces, mas também muitas vozes.
+
+00:13:23.780 --> 00:13:28.340
+E como é a sua felicidade?
+
+00:13:28.340 --> 00:13:47.640
+A rotulagem automática do Purview é executada no SharePoint e no OneDrive para que arquivos sensíveis não sejam jogo de adivinhação.
+
+00:13:48.040 --> 00:13:51.340
+Rótulos de sensibilidade acompanham o arquivo e aplicam criptografia quando necessário.
+
+00:13:51.800 --> 00:13:55.340
+Bloqueamos upload sem rótulo para endpoints de chat de IA no nível do navegador e dispositivo.
+
+00:13:55.900 --> 00:13:58.360
+Se estiver sem rótulo, permanece dentro do ambiente até ser marcado.
+
+00:13:58.860 --> 00:14:01.300
+Isso transfere o trabalho para onde ele pertence, próximo aos dados.
+
+00:14:01.820 --> 00:14:03.180
+O DLP é o seu segurança e interpriscação.
+
+00:14:03.400 --> 00:14:05.240
+Implante o DLP de endpoint no Windows e no MacWare.
+
+00:14:05.240 --> 00:14:10.240
+Estenda para o Edge o Chrome com regras de colar e upload direcionadas a domínios de IA e sites genéricos.
+
+00:14:11.060 --> 00:14:14.700
+Use mensagens educativas para que os usuários aprendam o limite em vez de apenas colidir com ele.
+
+00:14:15.360 --> 00:14:21.400
+Vincule incidentes de DLP a políticas de risco interno que busquem violações repetidas ou picos anômalos em comportamentos de cópia e exportação.
+
+00:14:22.000 --> 00:14:23.820
+O design do ambiente na Power Platform é fundamental.
+
+00:14:24.140 --> 00:14:27.280
+Coloque o desenvolvimento em um ambiente herenciado, o teste em outro e a produção exótica.
+
+00:14:27.280 --> 00:14:30.860
+Implique políticas de prevenção contra a perda de dados para que conectores arriscados não existam na produção.
+
+00:14:31.220 --> 00:14:34.440
+A segmentação de soluções força a promoção com revisões, controle de versão e reversões.
+
+00:14:34.440 --> 00:14:38.940
+Fluxos e bots em produção originam-se de soluções, não de espaços de trabalho pessoais aleatórios.
+
+00:14:39.260 --> 00:14:40.680
+Monitoramento e auditoria não são opcionais.
+
+00:14:41.040 --> 00:14:43.340
+Partive os logs de entrada e logs de auditoria para a identidade de agência.
+
+00:14:43.620 --> 00:14:44.420
+Export pelo seu CIEM.
+
+00:14:44.760 --> 00:14:46.820
+Estabeleça padrões normais de chamadas de gráfico para cada blueprint.
+
+00:14:47.140 --> 00:14:50.560
+Configure alertas para alto volume de leituras, enumerações amplas e chamadas entre tênas.
+
+00:14:50.820 --> 00:14:54.140
+Se você não consegue descrever o que é normal, não notará o estranho até que tudo pegue fogo.
+
+00:14:54.420 --> 00:14:55.900
+As barreiras de proteção de rede fecham sim.
+
+00:14:56.440 --> 00:14:58.220
+Direcione a saída do agente pelo acesso seguro global.
+
+00:14:58.640 --> 00:15:00.720
+Comece apenas com logs para mapear URLs e APIs.
+
+00:15:00.720 --> 00:15:04.680
+Adicione listas de permissão de servidores MCP para que agentes falem apenas com corretores aprovados.
+
+00:15:05.480 --> 00:15:08.920
+Crie políticas que coloque em quarentena quando o agente alcança destinos desconhecidos
+
+00:15:08.920 --> 00:15:10.460
+ou tenta esfiltrar conteúdo rotulado.
+
+00:15:10.920 --> 00:15:12.920
+Você precisa de visibilidade total da identidade ao pacote.
+
+00:15:13.400 --> 00:15:14.120
+Aqui está o modelo mental.
+
+00:15:14.520 --> 00:15:17.060
+Identidade aqui em permissões é o que, por view, tipo,
+
+00:15:17.140 --> 00:15:19.240
+DLP é como se move, rede é onde.
+
+00:15:19.940 --> 00:15:22.820
+O blueprint une tudo isso em uma estrutura única que você pode operar.
+
+00:15:23.400 --> 00:15:26.440
+Deixe-me mostrar uma instanciação de referência para um agente de triagem de suporte.
+
+00:15:26.440 --> 00:15:29.340
+No print de triagem de suporte para um patrocinador,
+
+00:15:29.520 --> 00:15:31.760
+gerente de operações de suporte, revisa trimestralmente.
+
+00:15:32.300 --> 00:15:34.600
+Identidade em siroide do agente com identidade gerenciada.
+
+00:15:34.700 --> 00:15:36.980
+Acesso condicional requer runtime compatível e rede confiável.
+
+00:15:37.960 --> 00:15:38.360
+Permissões.
+
+00:15:38.620 --> 00:15:41.640
+Funções de aplicativo do Graph para leitura de caixa de correio compartilhada.
+
+00:15:41.760 --> 00:15:44.120
+Site do SharePoint com escopo de leitura na base de conhecimento.
+
+00:15:44.280 --> 00:15:46.520
+Teams para enviar mensagens para escalonamentos de suporte.
+
+00:15:46.900 --> 00:15:49.080
+Conectores do Dataverse e webhooks externos bloqueados,
+
+00:15:49.140 --> 00:15:50.800
+a menos que o destino seja registrado e auditado.
+
+00:15:51.400 --> 00:15:53.440
+Camada de dados, base de conhecimento rotulada como interna.
+
+00:15:54.200 --> 00:15:56.220
+Exportações de casos rotuladas como suporte confidencial.
+
+00:15:57.020 --> 00:15:59.080
+DLP de endpoint, navegador, bloqueio colar.
+
+00:15:59.180 --> 00:16:03.100
+Upload de dados rotulados para domínios de chat, de... e a...
+
+00:16:03.100 --> 00:16:04.220
+Mensagem de orientação habilitada.
+
+00:16:04.800 --> 00:16:05.060
+Rede.
+
+00:16:05.660 --> 00:16:06.940
+Logs de acesso seguro global.
+
+00:16:07.160 --> 00:16:08.600
+Semana 1 com lista de permissões.
+
+00:16:08.720 --> 00:16:09.560
+Graph SharePoint.
+
+00:16:10.080 --> 00:16:12.200
+Teams, Dataverse, servidores MCP registrados.
+
+00:16:12.360 --> 00:16:13.460
+Alertas de saída desconhecida.
+
+00:16:14.000 --> 00:16:16.780
+Monitoramento de alertas do CIEM sobre picos de leitura de caixa de correio
+
+00:16:16.780 --> 00:16:19.020
+e enumerações do SharePoint, além do escopo da base de conhecimento.
+
+00:16:19.600 --> 00:16:20.140
+Ciclo de vida.
+
+00:16:20.560 --> 00:16:21.920
+Desabilitar na saída do patrocinador.
+
+00:16:22.360 --> 00:16:23.740
+Revisões de acesso a cada trimestre.
+
+00:16:23.740 --> 00:16:25.000
+Portões de promoção de solução.
+
+00:16:25.360 --> 00:16:26.420
+Plano de reversão documentado.
+
+00:16:26.780 --> 00:16:29.260
+Agora, o equivalente financeiro troca e-mail para bibliotecas e documentos
+
+00:16:29.260 --> 00:16:30.680
+e adiciona rotas de criptografia obrigatória.
+
+00:16:31.040 --> 00:16:32.260
+Mesmo padrão e estrutura é diferente.
+
+00:16:32.660 --> 00:16:34.580
+Armadilhas comuns a evitar nesta arquitetura.
+
+00:16:34.980 --> 00:16:37.200
+Deixar permissões delegadas apenas para testes
+
+00:16:37.200 --> 00:16:39.180
+e esquecer de registrar destinos de terceiros.
+
+00:16:39.540 --> 00:16:39.920
+E pular.
+
+00:16:40.280 --> 00:16:42.680
+Rotulagem automática porque a biblioteca só tem faturas.
+
+00:16:43.540 --> 00:16:46.040
+Bem, tem tudo o que foi migrado no verão passado às 3 da manhã.
+
+00:16:46.360 --> 00:16:47.700
+Você não precisa de perfeição no primeiro dia.
+
+00:16:48.180 --> 00:16:50.600
+Configure Blueprints para seus três principais tipos de agentes.
+
+00:16:50.780 --> 00:16:51.020
+Emita identidades.
+
+00:16:51.020 --> 00:16:53.020
+Aplique acesso condicional básico.
+
+00:16:53.100 --> 00:16:55.680
+Ative a rotulagem automática para as bibliotecas mais ativas.
+
+00:16:55.840 --> 00:16:58.880
+Envie DLP para endpoints e navegadores com controles de domínio de IA.
+
+00:16:59.100 --> 00:17:00.460
+Coloque a rede em modo de auditoria.
+
+00:17:00.620 --> 00:17:03.200
+Após uma semana, você terá sinal suficiente para restringir com segurança.
+
+00:17:03.400 --> 00:17:04.860
+Faça isso e os agentes deixarão de ser tudo.
+
+00:17:05.220 --> 00:17:07.500
+Eles se tornarão faixas com limites de velocidade, câmeras e freio.
+
+00:17:07.840 --> 00:17:09.000
+Não é glamouroso, mas se dormirá tranquilo.
+
+00:17:09.000 --> 00:17:10.080
+Manual operacional.
+
+00:17:10.220 --> 00:17:12.040
+Políticas, auditoria e fluxo de incidentes.
+
+00:17:12.680 --> 00:17:14.140
+As operações mantêm o esqueleto de pé.
+
+00:17:14.700 --> 00:17:15.660
+Comece com a descoberta.
+
+00:17:15.900 --> 00:17:19.400
+Use o Defender for Cloud Apps para inventariar o uso de IA a partir de logs de rede e agentes
+
+00:17:19.400 --> 00:17:19.760
+de endpoint.
+
+00:17:20.380 --> 00:17:21.420
+Crie um registro simples.
+
+00:17:21.520 --> 00:17:25.840
+Nome, ID do agente, blueprint, patrocinador, conectores, escopos do graph, pontos de contato
+
+00:17:25.840 --> 00:17:28.300
+de dados, perfil de saída e concili-saída e concili-semanamento.
+
+00:17:28.680 --> 00:17:32.840
+Qualquer coisa sem um ID de agente é marcada como agente sombra, isolada, até ser registrada
+
+00:17:32.840 --> 00:17:33.460
+ou eliminada.
+
+00:17:33.940 --> 00:17:34.500
+Opti-políticas.
+
+00:17:35.060 --> 00:17:36.260
+Decida quem pode criar agentes.
+
+00:17:36.260 --> 00:17:39.540
+Quais blueprints existem, quais conectores são permitidos e quais escopos do graph são
+
+00:17:39.540 --> 00:17:40.220
+totalmente proibidos.
+
+00:17:40.680 --> 00:17:41.840
+Publique onde todos possam ver.
+
+00:17:42.440 --> 00:17:46.060
+Se alguém precisar de um escopo proibido, deve enviar uma exceção com validade e um plano
+
+00:17:46.060 --> 00:17:46.700
+de reversão.
+
+00:17:47.200 --> 00:17:47.620
+É irritante.
+
+00:17:48.060 --> 00:17:49.660
+Assim como limpar uma violação às três da manhã.
+
+00:17:50.080 --> 00:17:51.680
+Linhas de base ordenadas não são negociáveis.
+
+00:17:52.140 --> 00:17:54.500
+Ative os logs de login, atividade para toda a identidade de agente.
+
+00:17:55.040 --> 00:17:55.840
+Transporte para o seu CIEM.
+
+00:17:56.260 --> 00:17:59.840
+Etabeleça a base de chamadas normais do graph por hora, sites típicos do SharePoint, caixas
+
+00:17:59.840 --> 00:18:01.820
+de correio esperadas e servidores MCP usuais.
+
+00:18:02.240 --> 00:18:05.760
+Configure alertas para leituras de alto volume, enumeração de sites fora do escopo, chamadas
+
+00:18:05.760 --> 00:18:07.160
+entre tenants e destinos desconhecidos.
+
+00:18:07.340 --> 00:18:10.260
+Se você não definir o que é normal, o estranho parecerá normal até causar dano.
+
+00:18:11.000 --> 00:18:13.660
+Controle de mudanças, revise fluxos e botes com pares antes da promoção.
+
+00:18:14.000 --> 00:18:14.900
+Soluções é apenas em produção.
+
+00:18:15.240 --> 00:18:17.100
+Use tags de versão e mantenha o artefato de reversão.
+
+00:18:17.400 --> 00:18:18.820
+Vincule as promoções a verificações de botões.
+
+00:18:19.140 --> 00:18:20.700
+As permissões ainda seguem o princípio do privilégio mínimo.
+
+00:18:20.960 --> 00:18:22.340
+Os destinos ainda estão na lista de permitidos.
+
+00:18:22.720 --> 00:18:23.600
+Patrocinador precisa aprovar.
+
+00:18:23.860 --> 00:18:24.480
+Quer um pouco de atrito?
+
+00:18:24.820 --> 00:18:27.260
+Isso evita ou vamos consertar depois o que você não fará.
+
+00:18:27.520 --> 00:18:29.340
+O desprovisionamento é um fluxo de trabalho, não me espera.
+
+00:18:29.340 --> 00:18:33.480
+A automação do ciclo de vida desativa agentes quando o patrocinador sai ou conforme limite
+
+00:18:33.480 --> 00:18:34.200
+de inatividade.
+
+00:18:34.780 --> 00:18:38.300
+Revisões trimestrais de acesso forçam a pergunta, este agente ainda precisa desses direitos?
+
+00:18:38.980 --> 00:18:41.340
+Se a resposta for não sabemos, a ação correta é não.
+
+00:18:41.920 --> 00:18:43.380
+O caminho de incidentes precisa de memoscular.
+
+00:18:43.760 --> 00:18:46.800
+Gatilhos, alerta de DLP, anômalia no CIEM ou sinalização de agente de risco.
+
+00:18:47.020 --> 00:18:49.260
+Primeiro, triagem de IRM é um padrão ou evento isolado.
+
+00:18:49.660 --> 00:18:50.540
+Depois, ele é o agente de risco.
+
+00:18:50.900 --> 00:18:52.060
+Confirme o comprometimento ou descarte.
+
+00:18:52.060 --> 00:18:56.180
+Se houver risco, isole via acesso condicional, bloqueie logins ou restringe a uma rede de
+
+00:18:56.180 --> 00:18:56.480
+teste.
+
+00:18:57.080 --> 00:18:58.260
+Limpe ou remita as credenciais.
+
+00:18:58.680 --> 00:18:59.440
+Vai surgir da chave.
+
+00:19:00.020 --> 00:19:00.880
+Revogue esse concessimento.
+
+00:19:01.840 --> 00:19:03.780
+Faça um breve post-mortem até 48 horas.
+
+00:19:04.160 --> 00:19:06.620
+Causa raiz, controles que falharam, mudanças necessárias no blueprint.
+
+00:19:07.080 --> 00:19:08.680
+Print higiene, mantém a degradação sobre controle.
+
+00:19:08.960 --> 00:19:11.300
+Caça mensal a dados sombra no SharePoint e OneDrive.
+
+00:19:11.860 --> 00:19:15.220
+Corrige o compartilhamento excessivo, elimine fluxos zumbis, aposente agentes duplicados
+
+00:19:15.220 --> 00:19:17.060
+e recetifique permissões dos agentes principais.
+
+00:19:17.420 --> 00:19:17.960
+É entediante.
+
+00:19:18.400 --> 00:19:20.240
+No meu tempo, desfragmentávamos os discos e rezávamos.
+
+00:19:20.240 --> 00:19:20.800
+É bem.
+
+00:19:20.800 --> 00:19:21.960
+Uma pequena história.
+
+00:19:22.540 --> 00:19:25.780
+No trimestre passado, uma equipe permitiu temporariamente um webhook para um endpoint
+
+00:19:25.780 --> 00:19:27.480
+de terceiros opaco, sem registro URL.
+
+00:19:27.860 --> 00:19:29.860
+Uma semana depois, as leituras de caixa de correio dispararam no número.
+
+00:19:30.000 --> 00:19:30.300
+Eu dito.
+
+00:19:30.780 --> 00:19:32.240
+Não conseguimos rastrear a sede de dados, caramente.
+
+00:19:32.720 --> 00:19:36.160
+Reforçamos os conectores, forçamos o registro de destinos e adicionamos listas de permissão
+
+00:19:36.160 --> 00:19:36.700
+para a MCP.
+
+00:19:36.980 --> 00:19:37.560
+Problema parou.
+
+00:19:37.960 --> 00:19:40.640
+Prova de que apenas registrar primeiro e então permitir listas mantém as ferramentas
+
+00:19:40.640 --> 00:19:41.440
+funcionando e conseguir o mapa.
+
+00:19:41.980 --> 00:19:44.340
+Pubrica de pontuação de risco priorize o que corrigir primeiro.
+
+00:19:45.000 --> 00:19:46.060
+Agora você precisa de um placar.
+
+00:19:46.060 --> 00:19:49.380
+Seis entradas, identidade, dados, permissões, rede, monitoramento, ciclo de vida.
+
+00:19:49.900 --> 00:19:50.640
+De 0 a 5 cada.
+
+00:19:51.600 --> 00:19:52.000
+Obrigado.
+
+00:19:52.660 --> 00:19:53.020
+Identidade.
+
+00:19:53.120 --> 00:19:53.780
+Comece do 0.
+
+00:19:53.940 --> 00:19:55.440
+Adicione 1 se usar ID, a gente entra.
+
+00:19:55.500 --> 00:19:56.280
+Adicione 1 para um blueprint.
+
+00:19:56.520 --> 00:19:57.560
+Adicione 1 para acesso condicional.
+
+00:19:58.120 --> 00:19:59.520
+Adicione 1 para um patrocinador nomeado.
+
+00:19:59.600 --> 00:20:01.120
+Adicione 1 para revisões periódicas de acesso.
+
+00:20:01.480 --> 00:20:03.340
+Credenciais compartilhadas ou execução como humano.
+
+00:20:03.420 --> 00:20:04.240
+Isso é 0 e pula a fila.
+
+00:20:04.700 --> 00:20:05.040
+Dados.
+
+00:20:05.280 --> 00:20:05.880
+Comece do 0.
+
+00:20:06.320 --> 00:20:08.640
+Adicione 2 se as fontes estiverem rotuladas com preview.
+
+00:20:08.820 --> 00:20:11.320
+Adicione 1 se DLP de endpoint e navegadores estiverem implantados.
+
+00:20:11.420 --> 00:20:14.020
+Adicione 1 se uploads para domínios de chat de IA estiverem bloqueados.
+
+00:20:14.220 --> 00:20:16.820
+Adicione 1 se guarda-lhe de processamento do copado estiverem ativados.
+
+00:20:16.820 --> 00:20:18.860
+Fonte sem rótulo mantém você no grupo de perigo.
+
+00:20:19.400 --> 00:20:19.760
+Permissões.
+
+00:20:19.840 --> 00:20:20.460
+Comece do 0.
+
+00:20:20.540 --> 00:20:22.780
+Adicione 2 se funções de aplicativo Graph forem usadas.
+
+00:20:22.880 --> 00:20:24.420
+Adicione 1 para escopo de recurso de site.
+
+00:20:24.540 --> 00:20:26.120
+Adicione 1 para privilégio mínimo por conector.
+
+00:20:26.280 --> 00:20:28.760
+Adicione 1 para recertificação periódica com inspiração e exceções.
+
+00:20:29.460 --> 00:20:30.480
+Delegou tudo para qualquer lugar.
+
+00:20:30.660 --> 00:20:31.260
+Adeus, fim de semana.
+
+00:20:32.280 --> 00:20:32.540
+Rede.
+
+00:20:32.780 --> 00:20:33.440
+Comece do 0.
+
+00:20:33.580 --> 00:20:36.040
+Adicione 2 se o acesso seguro global governar o tráfego do agente.
+
+00:20:36.140 --> 00:20:37.680
+Adicione 1 para listas de permissão MCP.
+
+00:20:37.840 --> 00:20:39.260
+Adicione 1 para auditoria de API de URL.
+
+00:20:39.260 --> 00:20:41.460
+Adicione 1 para alertas de anomalia e saída desconhecida.
+
+00:20:42.200 --> 00:20:45.000
+Saída desconhecida equivale a risco desconhecido, o que equivale a prioridade 1.
+
+00:20:45.640 --> 00:20:46.040
+Monitoramento.
+
+00:20:46.040 --> 00:20:46.820
+Comece do 0.
+
+00:20:47.000 --> 00:20:49.280
+Adicione 2 se os logs forem exportados para o CIEM.
+
+00:20:49.360 --> 00:20:51.860
+Adicione 1 para uma cadência de revisão de relatório de agente e risco.
+
+00:20:51.920 --> 00:20:54.440
+Adicione 1 para políticas de risco interno vinculadas a eventos de IA.
+
+00:20:54.520 --> 00:20:56.920
+Adicione 1 se um ano de acidentes foi testado no último trimestre.
+
+00:20:57.820 --> 00:20:58.660
+Sem logs, sem ajuda.
+
+00:20:59.080 --> 00:20:59.660
+Ciclo de vida.
+
+00:20:59.760 --> 00:21:00.340
+Comece do 0.
+
+00:21:00.500 --> 00:21:02.180
+Adicione 1 para controles de ciclo de vida de blueprint.
+
+00:21:02.420 --> 00:21:03.920
+Adicione 1 para SLA de patrocinador.
+
+00:21:04.080 --> 00:21:07.320
+Adicione 1 para desprovisionamento automatizado por inatividade ou saída do patrocinador.
+
+00:21:07.620 --> 00:21:08.840
+Adicione 1 para controle de mudança.
+
+00:21:08.960 --> 00:21:10.440
+Adicione 1 para tarefas de detecção de zumbis.
+
+00:21:10.560 --> 00:21:12.400
+Se você não desligar as coisas, se votaram contra você.
+
+00:21:16.040 --> 00:21:20.940
+Sprint de 30 dias, 17, 25, baixo trimestral, 26, 30 agentes modelos usam estes como barra.
+
+00:21:21.200 --> 00:21:23.820
+Execute isso nos seus 10 principais agentes da semana e depois torne sua operação.
+
+00:21:24.120 --> 00:21:26.600
+Torne a pontuação visível ao lado de cada agente no registro.
+
+00:21:27.000 --> 00:21:28.580
+Você terá menos discussões e correções mais rápido.
+
+00:21:28.920 --> 00:21:32.940
+Claro, as pessoas adoram discutir números na reunião, contrapontos e refutações,
+
+00:21:33.020 --> 00:21:34.560
+o debate que você terá na sala.
+
+00:21:35.420 --> 00:21:36.180
+Inovaremos mais devagar.
+
+00:21:36.620 --> 00:21:38.520
+Claro, você também se recuperará mais devagar de uma veloz.
+
+00:21:38.520 --> 00:21:40.260
+O truque não é quebrar, é usar faixas.
+
+00:21:40.700 --> 00:21:43.420
+Blueprints e ambientes gerenciados oferecem padrões pré-aprovados.
+
+00:21:43.420 --> 00:21:47.260
+Construtores escolhem um projeto, obtêm a identidade certa e escopos de privilégio mínimo,
+
+00:21:47.360 --> 00:21:49.460
+conectores permitidos e um patrocinador em 10 minutos.
+
+00:21:50.000 --> 00:21:51.860
+Isso é mais rápido que um ping-pong de chamados com a segurança.
+
+00:21:52.400 --> 00:21:55.980
+Se a velocidade importa, elimine revisões personalizadas e padronize as partes entediantes.
+
+00:21:56.500 --> 00:21:59.280
+Você entregará mais rápido porque parou de discutir princípios básicos.
+
+00:21:59.820 --> 00:22:02.060
+Etiquetas de visuação retardam a colaboração, mas retardam o vazamento.
+
+00:22:02.400 --> 00:22:04.240
+A rotulagem automática faz o trabalho pesado,
+
+00:22:04.320 --> 00:22:07.100
+e as mensagens educativas de DLP ensinam aos usuários o limite no momento.
+
+00:22:07.620 --> 00:22:11.120
+Duas pessoas aprendem mais rápido quando a ferramenta diz que você pode compartilhar internamente
+
+00:22:11.120 --> 00:22:12.660
+e não externamente exatamente onde trabalha.
+
+00:22:12.660 --> 00:22:15.380
+No meu tempo, enviávamos PDFs de políticas que ninguém lia.
+
+00:22:15.780 --> 00:22:18.360
+Agora, a política aparece quando importa e corrige hábitos silenciosamente.
+
+00:22:19.060 --> 00:22:20.020
+O grafo delegado é mais simples.
+
+00:22:20.640 --> 00:22:22.800
+Assim como escorar a porta do datacenter com uma lixeira.
+
+00:22:23.380 --> 00:22:26.020
+O delegado transforma cada agente no usuário que ele tomou emprestado.
+
+00:22:26.340 --> 00:22:28.380
+Funções de aplicativo levam um tempo extra para configurar,
+
+00:22:28.460 --> 00:22:30.920
+mas você obtém um escopo comprovável e um raio de impacto que pode medir.
+
+00:22:31.120 --> 00:22:34.480
+Se sua exceção realmente precisa de tudo, coloque uma data de inspiração e registra chamadas.
+
+00:22:34.880 --> 00:22:36.320
+Se for permanente, não era uma exceção.
+
+00:22:36.580 --> 00:22:37.180
+Era preguiça.
+
+00:22:38.020 --> 00:22:39.380
+A inspeção de rede quebra agentes.
+
+00:22:40.000 --> 00:22:40.760
+Comece apenas com logs.
+
+00:22:40.760 --> 00:22:45.080
+Uma semana de telemetria de acesso seguro global lhe dá o mapa de URLs e APIs.
+
+00:22:45.480 --> 00:22:48.780
+Então coloque uma lista de permissões dos cinco destinos que importam e coloque os desconhecidos em quarentena.
+
+00:22:49.100 --> 00:22:52.280
+Se um agente quebra porque precisava de uma saída misteriosa, não era um agente confiável.
+
+00:22:52.340 --> 00:22:53.820
+Era uma gambiarra com marketing melhor.
+
+00:22:54.760 --> 00:22:55.820
+Não temos pessoal para isso.
+
+00:22:56.280 --> 00:22:57.940
+Você também não tem pessoal para o caos personalizado.
+
+00:22:58.360 --> 00:23:01.660
+Desloque para a esquerda com projetos da LP de ambiente e revisões periódicas de acesso.
+
+00:23:01.660 --> 00:23:05.520
+Patrocinadores assumem a propriedade, a segurança fornece diretrizes e não babá.
+
+00:23:06.240 --> 00:23:10.700
+O registro e as pontuações de risco reduzem o ruído para que sua equipe persiga focos de problemas, não intuições.
+
+00:23:11.320 --> 00:23:14.120
+Essa é a diferença entre aparar o gramado e caçar cobras no mato alto.
+
+00:23:14.700 --> 00:23:15.920
+Agentes de terceiros não vão integrar.
+
+00:23:16.440 --> 00:23:17.160
+Então não roda em produção.
+
+00:23:17.840 --> 00:23:18.980
+Registre o primeiro isolamento.
+
+00:23:18.980 --> 00:23:21.400
+Se querem acesso aos seus dados, precisam de um ID de agente.
+
+00:23:21.520 --> 00:23:24.940
+Entra, mostrar destinos e aceitar suas regras de DLP e rede.
+
+00:23:25.580 --> 00:23:30.060
+Se eles não podem, segmente e use uma sandbox sem fontes sensíveis e sem saída para desconhecidos.
+
+00:23:30.880 --> 00:23:32.700
+Interoperabilidade não significa sem regra existente.
+
+00:23:32.800 --> 00:23:33.800
+Significa termos claros.
+
+00:23:33.880 --> 00:23:35.620
+Onde tenant torna impossível, torna irritante.
+
+00:23:36.220 --> 00:23:37.040
+Consolide onde puder.
+
+00:23:37.780 --> 00:23:41.820
+Onde não puder, espelhe os projetos, centralize logs e imponha limites entre tenants.
+
+00:23:42.340 --> 00:23:44.880
+A parte difícil é concordar com os padrões, não copiá-los e colá-los.
+
+00:23:45.340 --> 00:23:46.100
+Conjunto de modelos.
+
+00:23:46.100 --> 00:23:48.980
+Muitos tenants, você já fez pior com florestas de recursos do Exchange.
+
+00:23:49.460 --> 00:23:50.620
+Isso é apenas Jason e paciência.
+
+00:23:51.160 --> 00:23:52.360
+Usuários vão contornar controles.
+
+00:23:52.460 --> 00:23:52.940
+Alguns vão...
+
+00:23:52.940 --> 00:23:55.120
+É por isso que o DLP de endpoint e navegador ficam onde eles trabalham.
+
+00:23:55.180 --> 00:23:56.620
+Não onde você gostaria que estivessem.
+
+00:23:57.100 --> 00:24:00.580
+Mensagens destrutivas reduzem a rebeldia porque explicam o porquê e oferecem alternativas.
+
+00:24:01.120 --> 00:24:02.320
+E sim, você ainda precisa de consequências.
+
+00:24:02.740 --> 00:24:04.400
+Política sem aplicação é apenas um protetor de tela.
+
+00:24:04.840 --> 00:24:06.100
+O Aging 365 é isso pra nós.
+
+00:24:06.800 --> 00:24:07.640
+Útil não mágico.
+
+00:24:08.440 --> 00:24:13.780
+Um painel de controle sem dados rotulados, sem privilégio mínimo e sem sinal de rede é apenas um dashboard brilhante de padrões ruins.
+
+00:24:13.780 --> 00:24:18.440
+Use o Aging 365 como sua janela de visão depois de definir rótulos de identidade DLP.
+
+00:24:19.080 --> 00:24:21.260
+Observabilidade sem diretrizes claras é apenas um espelho.
+
+00:24:21.720 --> 00:24:23.820
+Podemos simplesmente confiar que o Copilot respeitará as permissões.
+
+00:24:24.500 --> 00:24:25.480
+Ele já respeita esse seu ponto.
+
+00:24:25.920 --> 00:24:29.480
+A bagunça não é o Copilot se comportando mal, são seus dados compartilhados em excesso e escopos deixados.
+
+00:24:29.720 --> 00:24:31.380
+Corrige a isso e as respostas ficarão dentro dos limites.
+
+00:24:31.920 --> 00:24:35.040
+Não corrija e o Copilot mostrará fielmente tudo o que você deixou jogado por aí.
+
+00:24:35.540 --> 00:24:37.020
+Uma política única acabou com as pequenas vitórias.
+
+00:24:37.020 --> 00:24:40.080
+Não se você separa a DEV de PROD e a DEV é uma via de acesso.
+
+00:24:40.880 --> 00:24:45.260
+Ambientes gerenciados com conectores flexíveis em DEV, mais rígidos em teste e bloqueados em PROD.
+
+00:24:45.800 --> 00:24:48.480
+A promoção força a conversa antes que a bagunça atinja dados reais.
+
+00:24:49.160 --> 00:24:52.700
+Os desenvolvedores continuam criando, você só para de permitir que protótipos virem produção por ideia.
+
+00:24:53.260 --> 00:24:53.860
+Esforço final.
+
+00:24:54.060 --> 00:24:55.940
+Toda objeção se resume ao medo do atrito.
+
+00:24:56.900 --> 00:25:00.480
+Adicione um atrito inteligente no início, como blueprints, rótulos e permissões de escopo,
+
+00:25:00.520 --> 00:25:03.480
+e você elimina atritos catastróficos depois, incidentes, auditorias e retrabalho.
+
+00:25:03.760 --> 00:25:04.660
+Escolhe onde sentir a dor.
+
+00:25:04.660 --> 00:25:06.100
+É uma escolha que é previsível e breve.
+
+00:25:06.620 --> 00:25:07.480
+Conclusão principal.
+
+00:25:07.840 --> 00:25:09.980
+Agentes não são ameaça, acesso sem controle é,
+
+00:25:10.200 --> 00:25:14.240
+identidade, rótulos e privilégio mínimo são os três parafusos que impedem as rodas de soltarem.
+
+00:25:15.100 --> 00:25:15.640
+Faça isso a seguir.
+
+00:25:16.060 --> 00:25:17.600
+Configure seus três primeiros blueprints.
+
+00:25:17.860 --> 00:25:19.520
+Envie o DLP para endpoints e navegadores
+
+00:25:19.520 --> 00:25:23.080
+e execute a rubrica de pontuação de risco nos seus dez principais agentes desta semana,
+
+00:25:23.360 --> 00:25:25.620
+que é o mapa de políticas e o modelo de pontuação.
+
+00:25:26.180 --> 00:25:27.560
+Inscreva-se e veja o próximo episódio.
+
+00:25:28.060 --> 00:25:30.260
+Vou desmontar um agente real e reconstruí-lo da maneira correta.

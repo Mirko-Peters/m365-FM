@@ -1,0 +1,1117 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.660
+Jadi, apa yang terjadi dengan data Anda ketika mantan karyawan masuk ke tenan Anda 6 bulan setelah mereka keluar?
+
+00:00:05.020 --> 00:00:08.380
+Serius, Anda pikirkan. Anda menonaktifkan akun mereka saat mereka pergi.
+
+00:00:08.500 --> 00:00:10.940
+Tetapi apakah Anda meriksa apakah perangkat mereka masih menyimpan kredensial?
+
+00:00:11.200 --> 00:00:13.720
+Apakah Anda meriksa apakah registrasi aplikasi yang mereka buat masih berfungsi?
+
+00:00:14.180 --> 00:00:16.160
+Kebanyakan admin Microsoft 365 tidak tahu.
+
+00:00:16.500 --> 00:00:20.660
+Bukan karena mereka tidak kompeten, tetapi karena informasi yang mereka butuhkan tersebar di 20 tempat berbeda.
+
+00:00:20.860 --> 00:00:23.380
+Bicara yang lama, Anda ingin menyelidiki login yang mencurigakan,
+
+00:00:23.560 --> 00:00:26.060
+jadi Anda membuka pusat admin Entra untuk memeriksa log audit.
+
+00:00:26.320 --> 00:00:29.420
+Lalu Anda beralih ke Exchange untuk melihat apakah ada aturan email yang dibuat.
+
+00:00:29.420 --> 00:00:32.160
+Lalu Anda memeriksa SharePoint untuk akses file yang tidak biasa,
+
+00:00:32.300 --> 00:00:34.960
+lalu Defender untuk peringatan, lalu Teams untuk aktivitas aneh.
+
+00:00:35.040 --> 00:00:37.820
+Saat Anda sudah memeriksa 5 dashboard, Anda sudah kehilangan jejak.
+
+00:00:38.180 --> 00:00:39.540
+Dan itu baru satu pengguna dalam satu hari.
+
+00:00:40.140 --> 00:00:41.260
+Di sini laporan Microsoft Sentinel.
+
+00:00:41.840 --> 00:00:44.900
+Anggaplah ini sebagai sistem kamera keamanan untuk seluruh bangunan digital Anda.
+
+00:00:45.280 --> 00:00:49.380
+Anda tahu bagaimana kantor fisik, memiliki kamera di setiap pintu masuk, lorong, dan pintu,
+
+00:00:49.560 --> 00:00:52.020
+serta satu penjaga keamanan bisa memantau semuanya dari satu layar.
+
+00:00:52.580 --> 00:00:54.900
+Itulah yang dilakukan Sentinel untuk tandaan Microsoft 365 Anda.
+
+00:00:54.900 --> 00:00:58.540
+Sentinel mengambil semua log terpisah dari Entra, Exchange, SharePoint, Defender,
+
+00:00:58.620 --> 00:01:01.980
+dan menyatukannya di satu tempat agar Anda bisa melihat terjadi.
+
+00:01:02.340 --> 00:01:05.340
+Di akhir episode ini, Anda akan mengerti apa yang sebenarnya dilakukan Sentinel,
+
+00:01:05.560 --> 00:01:08.360
+bagaimana data lag barunya mengubah cara menyimpan log tanpa menguras biaya,
+
+00:01:08.720 --> 00:01:11.100
+dan mengapa ini penting bagi setiap admin Microsoft 365,
+
+00:01:11.500 --> 00:01:13.380
+bukan hanya tim keamanan dengan gelar mewah.
+
+00:01:13.600 --> 00:01:15.560
+Bukan hanya tim keamanan dengan gelar mewah.
+
+00:01:15.720 --> 00:01:16.760
+Ambil kopi Anda dan mari kita mulai.
+
+00:01:16.900 --> 00:01:18.480
+Apa yang sebenarnya dilakukan CM?
+
+00:01:18.980 --> 00:01:20.920
+Sentinel adalah apa yang disebut industri sebagai CM.
+
+00:01:20.920 --> 00:01:23.740
+Itu adalah singkatan dari Security Information and Event Management.
+
+00:01:24.000 --> 00:01:25.120
+Mari kita bahas dengan bahasa sederhana.
+
+00:01:25.480 --> 00:01:27.500
+CM adalah alat yang mengumpulkan log dari mana saja,
+
+00:01:27.680 --> 00:01:30.000
+server, firewall, aplikasi, sistem identitas Anda,
+
+00:01:30.160 --> 00:01:32.240
+lalu menghubungkan titik-titik di antaranya.
+
+00:01:32.580 --> 00:01:33.500
+Inilah alat yang penting.
+
+00:01:34.000 --> 00:01:35.340
+Satu entry log hanyalah kebisingan.
+
+00:01:35.880 --> 00:01:37.160
+Seseorang mencoba masuk dan gagal.
+
+00:01:37.460 --> 00:01:38.020
+Bukan masalah besar.
+
+00:01:38.320 --> 00:01:39.560
+Itu terjadi ratusan kali seharik.
+
+00:01:40.020 --> 00:01:41.580
+Tapi CM tidak melihat satu entry log saja.
+
+00:01:42.060 --> 00:01:43.340
+Ia melihat semuanya secara bersamaan,
+
+00:01:43.580 --> 00:01:47.280
+sehingga bisa melihat bahwa alamat IP yang sama mencoba masuk ke 5 akun berbeda dalam 30 detik.
+
+00:01:47.700 --> 00:01:48.460
+Bukan lagi kebisingan.
+
+00:01:48.460 --> 00:01:49.740
+Itu adalah serangan brute force.
+
+00:01:49.740 --> 00:01:51.360
+Ajebannya ada pada korelasinya.
+
+00:01:51.840 --> 00:01:53.620
+CM mengambil login, mencurigakan dari Entra,
+
+00:01:53.700 --> 00:01:55.640
+dan menghubungkannya dengan unduhan file dari SharePoint
+
+00:01:55.640 --> 00:01:57.420
+serta aturan penerusan email dari Exchange.
+
+00:01:57.840 --> 00:01:59.780
+Jika sendirian, hal-hal itu tidak terlihat seperti serang.
+
+00:02:00.140 --> 00:02:01.220
+Namun bersama-sama mereka mencetak dikit.
+
+00:02:01.460 --> 00:02:03.280
+Seseorang berhasil masuk, menemukan apa yang dicari,
+
+00:02:03.360 --> 00:02:05.120
+dan menyiapkan cara untuk terus mendapatkan email Anda.
+
+00:02:05.340 --> 00:02:06.540
+Bayangkan seperti pusat kendali lalu.
+
+00:02:07.020 --> 00:02:08.120
+Anda tidak hanya mengawasi satu kamar.
+
+00:02:08.480 --> 00:02:10.360
+Anda mengawasi semuanya sekaligus dan mencari pulang.
+
+00:02:10.800 --> 00:02:12.760
+Mobil yang melewati persimpangan yang sama 4 kali,
+
+00:02:12.900 --> 00:02:14.880
+seseorang yang masuk ke gedung tapi tidak pernah keluar.
+
+00:02:15.500 --> 00:02:17.460
+Itulah hilaguan CM untuk lingkungan digital Anda.
+
+00:02:17.460 --> 00:02:19.460
+Bawasan utamanya sederhana namun kuat.
+
+00:02:19.960 --> 00:02:21.120
+Anda tidak bisa melindungi apa yang tidak bisa.
+
+00:02:21.540 --> 00:02:23.400
+Jika data keamanan Anda tersebar di 20 dashboard,
+
+00:02:23.520 --> 00:02:24.380
+Anda tidak akan bisa melihat apa.
+
+00:02:24.760 --> 00:02:26.580
+Anda mungkin bisa menangkap hal-hal yang jelas.
+
+00:02:26.740 --> 00:02:28.540
+Tetapi serangan halus yang terjadi perlahan
+
+00:02:28.540 --> 00:02:29.940
+selama berminggu-minggu atau berbulan-bulan
+
+00:02:29.940 --> 00:02:30.780
+akan lulus begitu saja.
+
+00:02:31.100 --> 00:02:31.900
+Nah inilah keunggulan Sentinel.
+
+00:02:32.620 --> 00:02:34.120
+Sentinel adalah CM, tetapi dari itu.
+
+00:02:35.160 --> 00:02:37.260
+Bagian Soar alasan mengapa Sentinel memiliki tangan.
+
+00:02:37.780 --> 00:02:39.560
+CM tradisional bekerja seperti kamera pengawas.
+
+00:02:40.040 --> 00:02:41.140
+Ia menunjukkan semua yang terjadi,
+
+00:02:41.320 --> 00:02:42.600
+tetapi tidak bisa berbuat apa-apa.
+
+00:02:43.260 --> 00:02:44.000
+Ia melihat pembobolan,
+
+00:02:44.140 --> 00:02:45.080
+tapi tidak bisa menempon polisi.
+
+00:02:45.520 --> 00:02:46.440
+Disitulah peran Soar.
+
+00:02:46.440 --> 00:02:49.160
+Soar, singkatan dari Orkestrasi Otomatisasi
+
+00:02:49.160 --> 00:02:50.000
+dan Respons Keamanan.
+
+00:02:50.400 --> 00:02:51.720
+Bagian dari Sentinel yang memiliki tangan.
+
+00:02:52.360 --> 00:02:53.200
+Beginilah cara kerjanya.
+
+00:02:53.600 --> 00:02:54.580
+Sentinel mendeteksi ancaman.
+
+00:02:55.100 --> 00:02:56.220
+Akun pengguna disusupi.
+
+00:02:57.100 --> 00:02:59.000
+Seseorang masuk dari negara yang belum pernah dikunjungi
+
+00:02:59.000 --> 00:03:01.060
+dan mulai mengunduh file yang tidak pernah disentuh.
+
+00:03:01.680 --> 00:03:03.200
+CM tradisional akan membuat peringatan
+
+00:03:03.200 --> 00:03:05.380
+dan menunggu respons manusia yang bisa melakukan waktu berjam-jam.
+
+00:03:05.820 --> 00:03:06.520
+Dan saat itu terjadi,
+
+00:03:06.620 --> 00:03:07.260
+kerusakan suatu terjadi.
+
+00:03:07.620 --> 00:03:08.520
+Sentinel tidak menunggu.
+
+00:03:08.860 --> 00:03:09.820
+Ia bertindak secara otomatis.
+
+00:03:10.460 --> 00:03:11.980
+Ia bisa menonaktifkan akun tersebut,
+
+00:03:12.120 --> 00:03:13.900
+memblokir perangkat dari sumber daya perusahaan,
+
+00:03:13.900 --> 00:03:14.760
+mencabut sesi aktif,
+
+00:03:14.760 --> 00:03:16.740
+dan memberitahu tim keamanan semua dalam hitungan detik
+
+00:03:16.740 --> 00:03:18.040
+tanpa campur tangan manusia.
+
+00:03:19.600 --> 00:03:21.960
+Otomatisasi ini dijalankan pada sebut Sentinel sebagai playbook.
+
+00:03:22.460 --> 00:03:22.980
+Pada dasarnya,
+
+00:03:23.120 --> 00:03:25.080
+ini adalah daftar tubas otomatis untuk insiden keamanan.
+
+00:03:25.700 --> 00:03:26.860
+Saat peringatan tertentu muncul,
+
+00:03:27.080 --> 00:03:28.500
+Sentinel menjalankan playbook yang sesuai.
+
+00:03:28.940 --> 00:03:29.920
+Jika ini terjadi, lakukan itu.
+
+00:03:30.600 --> 00:03:30.920
+Sederhana.
+
+00:03:31.360 --> 00:03:32.920
+Dan Anda tidak perlu menjadi pemrogram untuk membuat.
+
+00:03:33.420 --> 00:03:34.840
+Playbook dibuat dengan perancang visual,
+
+00:03:35.080 --> 00:03:36.100
+seperti menggambar bagan alur.
+
+00:03:36.620 --> 00:03:37.860
+Jadi, mengapa ini penting bagi Anda
+
+00:03:37.860 --> 00:03:39.080
+sebagai admin Microsoft 365?
+
+00:03:39.080 --> 00:03:41.660
+Karena Anda pasti tidak ingin terbangun jam 3 pagi
+
+00:03:41.660 --> 00:03:43.000
+hanya untuk memblokir alamat TV secara mat.
+
+00:03:43.240 --> 00:03:44.240
+Anda punya hal yang lebih baik untuk Anda.
+
+00:03:44.580 --> 00:03:46.300
+Dan sejujurnya, Anda pun tidak akan cukup cepat.
+
+00:03:46.760 --> 00:03:48.720
+Saat Anda tertati-tati menuju laptop dan masuk,
+
+00:03:49.060 --> 00:03:50.560
+penyerang sudah menyelesaikan tujuan mereka.
+
+00:03:51.300 --> 00:03:52.400
+Otomatisasi bukanlah kemewahan,
+
+00:03:52.520 --> 00:03:53.060
+mereka kebutuhan.
+
+00:03:53.580 --> 00:03:55.540
+Jadi, Sentinel mendeteksi ancaman
+
+00:03:55.540 --> 00:03:57.420
+dan mengoreasikan sinyal di seluruh lingkungan Anda.
+
+00:03:57.800 --> 00:03:58.860
+Dan saat sesuatu yang buruk terjadi,
+
+00:03:58.980 --> 00:04:00.020
+sistem merespon secara otomatis.
+
+00:04:00.220 --> 00:04:01.780
+Itulah cara kerja SIEM dan SOAR secara besar.
+
+00:04:02.060 --> 00:04:03.740
+Namun, dimanakah posisi Sentinel sebenarnya
+
+00:04:03.740 --> 00:04:04.620
+dalam dunia Microsoft?
+
+00:04:05.040 --> 00:04:05.820
+Itulah yang akan kita bahas.
+
+00:04:05.820 --> 00:04:08.620
+Posisi Sentinel dalam tumpukan keamanan Microsoft.
+
+00:04:09.160 --> 00:04:11.180
+Microsoft memiliki protokolio produk keamanan yang up.
+
+00:04:11.720 --> 00:04:13.260
+Defender untuk perlindungan titik akhir,
+
+00:04:13.440 --> 00:04:14.780
+Entra untuk identitas dan akses,
+
+00:04:15.000 --> 00:04:16.040
+Purview untuk keamanan data,
+
+00:04:16.180 --> 00:04:17.540
+dan Intune untuk manajemen perangkat.
+
+00:04:18.020 --> 00:04:19.160
+Asing menjalankan tugasnya dengan baik.
+
+00:04:19.620 --> 00:04:21.680
+Namun, masalahnya adalah mereka tidak saling terhubung serala.
+
+00:04:22.440 --> 00:04:24.020
+Defender mendeteksi file mencurigakan,
+
+00:04:24.440 --> 00:04:25.640
+Entra menandai login aneh,
+
+00:04:25.840 --> 00:04:27.660
+Purview menangkap akses data yang tidak biasa.
+
+00:04:28.480 --> 00:04:29.380
+Tiga peringatan terpisah,
+
+00:04:29.380 --> 00:04:30.320
+tiga dashboard terpisah,
+
+00:04:30.460 --> 00:04:31.660
+tiga investigasi terpisah.
+
+00:04:32.220 --> 00:04:33.060
+Disitulah peran Sentinel.
+
+00:04:33.600 --> 00:04:34.480
+Ia berada di bawah semuanya.
+
+00:04:34.480 --> 00:04:36.020
+Bukan sebagai kompetitor,
+
+00:04:36.180 --> 00:04:36.940
+melainkan sebagai fondasi.
+
+00:04:37.540 --> 00:04:38.780
+Tangankan seperti lantai sebuah bangunan.
+
+00:04:39.180 --> 00:04:40.260
+Ruangannya adalah Defender,
+
+00:04:40.400 --> 00:04:41.560
+Entra, Purview, dan Intune
+
+00:04:41.560 --> 00:04:42.860
+masing-masing dengan tujuannya sendiri.
+
+00:04:43.480 --> 00:04:44.780
+Namun, lantainya adalah penghubung,
+
+00:04:44.900 --> 00:04:46.580
+memungkinkan Anda berpindah dari satu ruangan lain
+
+00:04:46.580 --> 00:04:47.600
+tanpa jatuh ke ruang kosong.
+
+00:04:48.020 --> 00:04:50.140
+Perhatikan bahwa saya tidak mengatakan Sentinel bersaing dengan Defender.
+
+00:04:50.400 --> 00:04:50.980
+Tidak sama sekali.
+
+00:04:51.340 --> 00:04:53.480
+Defender sangat hebat dalam mendeteksi ancaman di titik akhir
+
+00:04:53.480 --> 00:04:54.780
+dan di seluruh Microsoft 365,
+
+00:04:55.000 --> 00:04:56.580
+tetapi ia hanya melihat apa yang bisa ia lihat.
+
+00:04:56.580 --> 00:04:58.540
+Ia tidak mengetahui log firewall lokal
+
+00:04:58.540 --> 00:05:00.760
+atau log AWS Cloud Trail Anda.
+
+00:05:01.900 --> 00:05:04.020
+Sentinel adalah platform tempat Defender berada,
+
+00:05:04.020 --> 00:05:05.180
+bukan produk yang menggantikannya.
+
+00:05:05.580 --> 00:05:06.900
+Ada perubahan besar yang perlu Anda ketahui.
+
+00:05:07.220 --> 00:05:09.240
+Microsoft mengonsolidasikan semuanya ke dalam satu tempat.
+
+00:05:09.840 --> 00:05:11.680
+Setelah 31 Maret 2027,
+
+00:05:11.980 --> 00:05:14.080
+Sentinel tidak akan lagi tersedia di portal Azure.
+
+00:05:15.240 --> 00:05:17.080
+Ia hanya akan ada di portal Microsoft Defender.
+
+00:05:17.620 --> 00:05:18.360
+Selama bertahun-tahun,
+
+00:05:18.500 --> 00:05:20.620
+Anda harus berpindah antara portal Azure untuk Sentinel
+
+00:05:20.620 --> 00:05:22.400
+dan portal Defender untuk XDR.
+
+00:05:22.740 --> 00:05:23.500
+Hal itu akan ditiadakan.
+
+00:05:23.500 --> 00:05:26.040
+Microsoft sedang membangun satu pusat operasi keamanan terpadu
+
+00:05:26.040 --> 00:05:27.720
+dan portal Defender adalah tempatnya.
+
+00:05:28.220 --> 00:05:29.040
+Apa ingin ini bagi Anda?
+
+00:05:29.440 --> 00:05:30.900
+Lebih sedikit portal untuk dipelajari,
+
+00:05:31.000 --> 00:05:31.960
+lebih sedikit perpindahan kon.
+
+00:05:31.960 --> 00:05:34.060
+Satu tempat di mana Anda dapat melihat insiden,
+
+00:05:34.420 --> 00:05:35.040
+berburu ancaman,
+
+00:05:35.400 --> 00:05:36.720
+dan mengelola postur keamanan Anda.
+
+00:05:37.020 --> 00:05:38.700
+Ini adalah langkah menuju kesederhanaan
+
+00:05:38.700 --> 00:05:40.020
+dan bagi admin Microsoft 365
+
+00:05:40.020 --> 00:05:41.620
+yang sudah terbiasa dengan portal Defender.
+
+00:05:41.820 --> 00:05:42.460
+Ini adalah kabar baik.
+
+00:05:42.760 --> 00:05:44.340
+Namun, terobosan yang sebenarnya adalah data lag.
+
+00:05:44.760 --> 00:05:45.640
+Kita akan membahasnya selanjutnya.
+
+00:05:46.320 --> 00:05:47.440
+Data lag terpadu yang baru.
+
+00:05:47.620 --> 00:05:48.080
+Apa yang berubah?
+
+00:05:48.440 --> 00:05:49.980
+Jadi, inilah masalah yang selalu dimiliki Sentinel.
+
+00:05:50.160 --> 00:05:51.460
+Menyimpan log membutuhkan biaya yang besar.
+
+00:05:51.980 --> 00:05:53.020
+Bukan sekadar segi, tapi sangat besar.
+
+00:05:53.480 --> 00:05:54.800
+Rata si defaultnya adalah 90an.
+
+00:05:55.600 --> 00:05:57.080
+Setelah itu, Anda harus membayar mahal
+
+00:05:57.080 --> 00:05:58.860
+untuk menyimpan data atau merelakannya selamanya.
+
+00:05:58.860 --> 00:06:02.420
+Kebanyakan organisasi memilih untuk menghapus log setelah 3 bulan,
+
+00:06:02.580 --> 00:06:05.080
+yang berarti mereka tidak bisa melihat apapun setelah periode tersebut.
+
+00:06:05.420 --> 00:06:07.640
+Microsoft mecahkan masalah ini dengan danodata terpadu,
+
+00:06:07.720 --> 00:06:08.760
+dan ini benar-benar mengubah segala.
+
+00:06:09.280 --> 00:06:11.100
+Sentinel kini memisahkan penyimpanan dari komputasi.
+
+00:06:11.460 --> 00:06:13.140
+Dalam model lama, Anda membayar satu harga
+
+00:06:13.140 --> 00:06:15.460
+yang mencakup penyimpanan data dan kemampuan query cepat.
+
+00:06:16.240 --> 00:06:18.160
+Hal itu masuk akal untuk investigasi aktif,
+
+00:06:18.260 --> 00:06:19.940
+namun sangat buruk untuk retensi jangka panjang.
+
+00:06:20.520 --> 00:06:23.040
+Anda membayar untuk kecepatan yang tidak dibutuhkan pada data yang jarang akses.
+
+00:06:23.360 --> 00:06:24.420
+Danodata mengubah hal tersebut.
+
+00:06:24.420 --> 00:06:26.300
+Anda menyimpan data di tingkat berbayarnya.
+
+00:06:26.300 --> 00:06:28.900
+Data tetap ada, tetap dapat diakses dan dicari.
+
+00:06:29.200 --> 00:06:31.540
+Namun Anda hanya membayar komputasi saat menjalankan query.
+
+00:06:32.180 --> 00:06:32.960
+Bayangkan perbedaannya,
+
+00:06:33.100 --> 00:06:35.820
+seperti menyewa kudang penyimpanan dibandingkan memiliki ruang bawah tanah.
+
+00:06:36.280 --> 00:06:38.540
+Kudang penyimpanan membuatnya Anda setiap bulan baik Anda menggunakannya.
+
+00:06:38.880 --> 00:06:39.760
+Ruang bawah tanah hanya di sana.
+
+00:06:40.180 --> 00:06:42.200
+Anda hanya mengeluarkan uang saat turun dan mencari sesuatu.
+
+00:06:42.580 --> 00:06:43.360
+Angkanya berbicara sendiri.
+
+00:06:43.800 --> 00:06:45.840
+Microsoft mengatakan menyimpan data di danau data
+
+00:06:45.840 --> 00:06:48.820
+biayanya kurang dari 15% dari log analitik tradisional.
+
+00:06:48.820 --> 00:06:56.160
+Itulah perbedaan antara menyimpan log selama 3 bulan versus 3 tahun atau bahkan 12 tahun retensi maksimum baru tanpa menguras kantong.
+
+00:06:56.820 --> 00:06:58.780
+Dan bagian terbaiknya, Anda tidak perlu melakukan apa pun lain.
+
+00:06:59.400 --> 00:07:02.400
+Setiap log yang sudah Anda masukkan akan dicerminkan ke danau data secara otomatis.
+
+00:07:03.160 --> 00:07:03.880
+Tanpa konfigurasi.
+
+00:07:04.360 --> 00:07:05.120
+Tanpa konektor bug.
+
+00:07:05.520 --> 00:07:06.380
+Semua terjadi begitu saja.
+
+00:07:07.220 --> 00:07:11.260
+Ini membuka kemungkinan hebat seperti perburuan ancaman berskala besar yang akan kita bahas selanjutnya.
+
+00:07:12.080 --> 00:07:12.780
+Perburuan ancaman.
+
+00:07:12.780 --> 00:07:14.820
+Menemukan serangan yang tersembunyi di depan mata.
+
+00:07:15.160 --> 00:07:17.220
+Kebanyakan orang tidak menyadari hal ini tentang serangan sibuk.
+
+00:07:17.460 --> 00:07:18.420
+Serangan tidak terjadi dengan cepat.
+
+00:07:18.660 --> 00:07:19.620
+Serangan terjadi secara otomatis.
+
+00:07:19.720 --> 00:07:21.180
+Lalu profesional keamanan menyebutnya renang-renang.
+
+00:07:21.700 --> 00:07:25.340
+Penyerang mungkin mencoba kata Sandi pada satu akun salah lalu menghilang selama sebulan.
+
+00:07:26.080 --> 00:07:27.720
+Kemudian mereka mencoba lagi pada akun yang berbeda.
+
+00:07:28.100 --> 00:07:28.900
+Satu bulan lagi berlalu.
+
+00:07:29.280 --> 00:07:30.140
+Mereka menguji akun ketiga.
+
+00:07:30.720 --> 00:07:33.120
+Setiap upaya tampak tidak berbahaya seperti seorang yang lupa kata Sandi.
+
+00:07:33.500 --> 00:07:34.060
+Namun tidak masalah.
+
+00:07:34.420 --> 00:07:37.620
+Dengan jendela retensi 90 hari yang lama, Anda tidak akan pernah melihat polanya.
+
+00:07:37.620 --> 00:07:41.540
+Saat upaya ketiga terjadi, upaya pertama sudah dihapus dari log Anda.
+
+00:07:42.280 --> 00:07:46.400
+Anda hanya akan melihat satu login gagal tanpa konteks, tanpa pola, tanpa cara menghubungkan titik-titiknya.
+
+00:07:46.860 --> 00:07:48.180
+Dan no data mengubah hal itu sepenuhnya.
+
+00:07:48.500 --> 00:07:51.220
+Sekarang Anda bisa menjalankan query selama bertahun-tahun, bukan berbulan-bulan.
+
+00:07:51.580 --> 00:07:55.820
+Anda meminta Sentinel menunjukkan setiap login gagal dari IP tertentu selama 12 bulan terakhir.
+
+00:07:56.260 --> 00:07:57.480
+Tiba-tiba polanya menjadi sangat jelas.
+
+00:07:58.240 --> 00:08:01.060
+Tiga upaya dari IP yang sama menggunakan teknik yang sama pada akun yang berbeda.
+
+00:08:01.840 --> 00:08:02.980
+Itu rasrangan, bukan sekadar keupatan.
+
+00:08:02.980 --> 00:08:06.680
+Alat untuk mengajukan pertanyaan ini adalah KKL, Gusto Query Language.
+
+00:08:07.300 --> 00:08:09.300
+Anggap saja ini sebagai mesin pencari untuk log keamanan Anda.
+
+00:08:09.660 --> 00:08:16.520
+Anda mengetik apa yang Anda cari, seperti login gagal dari IP mencurigakan atau aturan penerusan tidak biasa yang dibuat di luar jam kerja, dan Sentinel memberikan hasilnya.
+
+00:08:17.260 --> 00:08:19.560
+Ini memungkinkan Anda mengajukan pertanyaan yang bahkan tidak Anda sadari belum.
+
+00:08:20.040 --> 00:08:22.360
+Itulah mengapatin keamanan entusias dengan data layak, bukan karena.
+
+00:08:22.700 --> 00:08:26.000
+Fitur baru mencolok, tetapi karena mereka akhirnya bisa melihat apa yang tersembunyi di depan mata.
+
+00:08:26.000 --> 00:08:33.600
+Penyerang yang beroperasi secara perlahan, yang mencoba-coba dan membaur dengan fakta bahwa Anda tidak bisa melihat tas normal, mengandalkan fakta bahwa Anda tidak bisa melihat cukup jauh ke belakang untuk menghubungkan titik-titiknya.
+
+00:08:33.760 --> 00:08:35.120
+Data layak menghilangkan keuntungan tersebut.
+
+00:08:35.460 --> 00:08:41.540
+Namun Sentinel bukan hanya tentang melihat ke belakang, tetapi juga tentang melihat ke depan, grafik dan AI masa depan yang sudah ada di sini.
+
+00:08:42.480 --> 00:08:44.140
+Penyerang berpikir dalam bentuk grafik, bukan daftar.
+
+00:08:45.020 --> 00:08:47.820
+Mereka tidak melihat pengguna dan perangkat selain individu, mereka melihat koneksi di antaranya.
+
+00:08:48.280 --> 00:08:49.640
+Pengguna ini memiliki akses ke server itu.
+
+00:08:49.640 --> 00:08:53.960
+Server itu terhubung ke basis data ini, dan basis data itu menyimpan persis apa yang mereka inginkan.
+
+00:08:54.380 --> 00:08:56.880
+Mereka memetakkan seluruh jalur sebelum mereka melakukan pergerakan apapun.
+
+00:08:57.340 --> 00:08:57.860
+Nah, inilah masalah.
+
+00:08:58.340 --> 00:08:59.980
+Para pembelak keamanan selalu berpikir dalam bentuk daftar.
+
+00:09:00.320 --> 00:09:02.720
+Daftar peringatan, daftar alamat IP, daftar pengguna.
+
+00:09:03.060 --> 00:09:05.940
+Tentu, daftar memang berguna, tetapi daftar tidak menunjukkan koneksi kebedaan.
+
+00:09:06.340 --> 00:09:08.260
+Daftar tidak menunjukkan jalur yang bisa diambil oleh penyerang.
+
+00:09:08.540 --> 00:09:09.540
+Grafik Sentinel mengubah hal itu.
+
+00:09:09.960 --> 00:09:12.480
+Ini memungkinkan para pembelak melakukan apa yang telah dilakukan penyerang selama.
+
+00:09:12.480 --> 00:09:14.680
+Ini menunjukkan peta kepada Anda, bukan hanya titik-titik ini.
+
+00:09:15.060 --> 00:09:18.940
+Anda melihat bahwa pengguna A memiliki akses ke server B, server B terhubung ke basis data C,
+
+00:09:19.060 --> 00:09:21.380
+dan basis data C berisi data pelanggan Anda yang paling sensitif.
+
+00:09:21.880 --> 00:09:23.600
+Itu bukan sekadar informasi, itu adalah konteks.
+
+00:09:23.960 --> 00:09:26.200
+Dan konteks mengubah investigasi yang baik menjadi investigasi yang lain.
+
+00:09:26.440 --> 00:09:27.460
+Ini bekerja dalam dua arah.
+
+00:09:27.860 --> 00:09:31.180
+Sebelum pelanggaran terjadi, Anda menggunakan grafik untuk melihat potensi jalur serangan.
+
+00:09:31.660 --> 00:09:32.560
+Anda menggunakan titik-titik krusial.
+
+00:09:33.560 --> 00:09:36.280
+Satu pengguna yang jika disusupi akan membuka separuh jaringan Anda.
+
+00:09:36.760 --> 00:09:38.860
+Kemudian Anda bisa memprioritaskan pengguna tersebut,
+
+00:09:38.860 --> 00:09:41.920
+menerapkan kontrol tambahan dan memperkecil radius dampak sebelum terjadi masalah.
+
+00:09:42.200 --> 00:09:44.640
+Setelah pelanggaran, grafik menunjukkan radius dampak yang sebenarnya.
+
+00:09:44.780 --> 00:09:48.280
+Peringatan muncul, grafik sentinel secara instan menunjukkan setiap sistem yang disuntuh pengguna tersebut,
+
+00:09:48.420 --> 00:09:50.860
+setiap file yang diakses, setiap koneksi yang dibuat, setiap koneksi yang dibuat.
+
+00:09:50.980 --> 00:09:53.060
+Tanpa menebak-nebak, tanpa pelacakan manual, grafik melakukan sen.
+
+00:09:53.280 --> 00:09:54.200
+Nah, mari kita bicara tentangnya.
+
+00:09:54.600 --> 00:09:57.420
+Microsoft Security Co-Pilot membawa bahasa alami ke dalam gambar ini.
+
+00:09:58.000 --> 00:10:01.320
+Alih menulis query KKL yang rumit, Anda cukup mengajukan pertanyaan dalam asa yang sederhana.
+
+00:10:01.320 --> 00:10:04.740
+Nah, tunjukkan semua login dari lokasi yang tidak biasa dalam seminggu terakhir.
+
+00:10:05.220 --> 00:10:09.060
+Security Co-Pilot mengubahnya menjadi query menjalankannya terhadap data Anda dan menampilkan hasilnya.
+
+00:10:09.380 --> 00:10:10.040
+Ini menurutkan hambatan.
+
+00:10:10.640 --> 00:10:12.640
+Anda tidak perlu menjadi ahli KKL untuk memburu ancam.
+
+00:10:12.960 --> 00:10:13.880
+Ada juga server MCP.
+
+00:10:14.400 --> 00:10:16.160
+MCP adalah singkatan dari modal konteks protokol.
+
+00:10:17.180 --> 00:10:20.220
+Dalam bahasa sederhana, ini memungkinkan agen AI, Boat Cerdas.
+
+00:10:21.580 --> 00:10:25.720
+Agen dapat mengajukan pertanyaan kepada sentinel menjalankan query menganalisis hasil bahkan mengambil tindakan,
+
+00:10:25.900 --> 00:10:27.100
+semuanya tanpa campur tangan manusia.
+
+00:10:27.400 --> 00:10:29.480
+Terdengar futuristik, namun ini sudah mulai diluncurkan.
+
+00:10:29.480 --> 00:10:32.020
+Jadi sentinel, mungkinkan Anda memburu data selama bertonton.
+
+00:10:32.400 --> 00:10:34.140
+Anda melihat hubungan yang dieksploitasi oleh penyerahan.
+
+00:10:34.380 --> 00:10:36.580
+Dan Anda bisa mengajukan pertanyaan dalam bahasa sederhana menggunakan AI.
+
+00:10:36.920 --> 00:10:39.580
+Tapi bagaimana cara memulainya tanpa menjadi pakar keamanan?
+
+00:10:39.980 --> 00:10:40.940
+Setelah yang akan kita bahas selanjutnya.
+
+00:10:41.520 --> 00:10:42.820
+Memulai tanpa rasa kewalahan.
+
+00:10:43.440 --> 00:10:47.060
+Anda mungkin mengira ini terdengar seperti sesuatu yang hanya bisa ditangani tim keamanan dengan anggaran besok.
+
+00:10:47.280 --> 00:10:47.640
+Tidak benar.
+
+00:10:47.920 --> 00:10:49.760
+Anda tidak perlu sertifikasi yang rumit dan tak berujuk.
+
+00:10:50.020 --> 00:10:53.400
+Anda hanya perlu tenan Microsoft 365 dan kemauan untuk memulai dari yang kecil.
+
+00:10:53.780 --> 00:10:55.020
+Pengaturan dasarnya sangat mudah.
+
+00:10:55.400 --> 00:10:57.860
+Anda mengaktifkan sentinel di portal Microsoft Defender.
+
+00:10:57.860 --> 00:10:59.800
+Selain Anda menghubungkan sumber data, selesai.
+
+00:11:00.180 --> 00:11:01.680
+Anda tidak perlu memanfigurasi semuanya sekaligus.
+
+00:11:02.060 --> 00:11:03.040
+Faktanya ada disarankan melakukan.
+
+00:11:03.400 --> 00:11:05.200
+Mulailah dengan beberapa sumber yang penting bagi Anda.
+
+00:11:05.780 --> 00:11:10.080
+Log masuk Azure AD, log aliran email, exchange online, peringatan Defender untuk Office 365.
+
+00:11:10.460 --> 00:11:13.860
+Ketiganya saja sudah memberi Anda visibilitas lebih dari yang dimiliki kebanyakan organisasi saat ini.
+
+00:11:14.380 --> 00:11:15.500
+Inilah yang membuatnya lebih mudah.
+
+00:11:15.760 --> 00:11:16.760
+Sentinel memiliki hub konten.
+
+00:11:17.200 --> 00:11:19.040
+Anggap saja seperti tokoh aplikasi untuk aturan keamanan.
+
+00:11:19.480 --> 00:11:24.840
+Anda melusuri berdasarkan kategori, ancaman identitas, ancaman email, pemantauan kepatuhan, dan menginstal aturan deteksi bawaan.
+
+00:11:24.840 --> 00:11:26.600
+Anda tidak perlu melulis kuedi dari awal.
+
+00:11:26.980 --> 00:11:28.040
+Anda tidak butuh kakuel peralatan.
+
+00:11:28.520 --> 00:11:31.000
+Hub konten memberi Anda titik awal yang langsung siap digunakan.
+
+00:11:31.360 --> 00:11:32.560
+Sekarang mari kita bicara tentang pihak.
+
+00:11:32.940 --> 00:11:34.060
+Itulah pertanyaan yang diajukan semua.
+
+00:11:34.520 --> 00:11:36.120
+Sentinan menggunakan modal bayar soya pemakaian.
+
+00:11:36.380 --> 00:11:38.740
+Anda membayar untuk data yang Anda masukkan, tetapi Anda bisa mengontrol biaya.
+
+00:11:39.120 --> 00:11:42.680
+Tingkat komitmen memungkinkan Anda berkomitmen pada volume minimum dan mendapatkan diskon besar.
+
+00:11:43.060 --> 00:11:45.060
+Dan ingat data lag, itu mengubah ekonominya.
+
+00:11:45.720 --> 00:11:50.940
+Log bervolumen tinggi dan berkesetiaan rendah seperti lalu lintas firewall langsung masuk ke tingkat data lag dengan biaya yang jauh lebih murah.
+
+00:11:50.940 --> 00:11:53.980
+Jadi Anda tidak perlu lagi memilih antara visibilitas dan anggaran Anda.
+
+00:11:54.320 --> 00:11:56.960
+Bagian tersulit bukanlah teknologinya, melainkan mengetahui dari mana harus.
+
+00:11:57.300 --> 00:12:00.360
+Jadi ini saran saya, mulailah dengan satu sumber data dan satu aturan deteksi.
+
+00:12:00.760 --> 00:12:01.500
+Hubungkan log edi.
+
+00:12:02.180 --> 00:12:05.500
+Instal aturan yang memberi peringatan saat kami global masuk dari lokasi yang tidak biasa.
+
+00:12:05.960 --> 00:12:07.100
+Lihat apa yang diberitakan Sentinel kepada Anda.
+
+00:12:07.360 --> 00:12:08.400
+Itu sudah cukup untuk memulai.
+
+00:12:08.800 --> 00:12:10.060
+Kemudian kembangkan saat Anda sudah merasanya.
+
+00:12:10.300 --> 00:12:11.380
+Mari kita rangkum semuanya.
+
+00:12:12.100 --> 00:12:12.560
+Gambar besar.
+
+00:12:13.080 --> 00:12:14.280
+Mengapa ini mengubah pekerjaan Anda?
+
+00:12:14.760 --> 00:12:15.720
+Sentinel terus berkembang.
+
+00:12:15.720 --> 00:12:20.500
+Dulu ini alat bagi profesional keamanan dan kini menjadi platform di balik semua keamanan Microsoft.
+
+00:12:21.240 --> 00:12:26.040
+Bagi Anda sebagai admin M365, berarti keamanan Anda mendapat peningkatan besar tanpa harus membangunnya sendiri.
+
+00:12:26.620 --> 00:12:27.640
+Pikirkan apa sudah kita bahas.
+
+00:12:28.040 --> 00:12:30.400
+Sentinel mengumpulkan sinyal dari seluruh lingkungan Anda.
+
+00:12:30.980 --> 00:12:33.880
+Sentinel mengorelasikannya untuk menemukan pola yang tak mungkin Anda sadari secara.
+
+00:12:34.060 --> 00:12:36.060
+Sentinel dapat merespon secara otomatis saat terjadi masalah.
+
+00:12:36.740 --> 00:12:39.680
+Data lag baru membuatnya terjantau untuk menyimpan data bertahun-tahun, bukan belum-belum.
+
+00:12:40.100 --> 00:12:42.460
+Grafik menunjukkan jaru serangan sebelum sempat dieksploitasi.
+
+00:12:43.060 --> 00:12:45.000
+Ini memungkinkan Anda mengajukan pertanyaan dengan bahasa yang lugas.
+
+00:12:45.000 --> 00:12:46.580
+Semua ini sudah terintegrasi ke dalam waktu.
+
+00:12:46.900 --> 00:12:48.820
+Anda tidak perlu menyatukannya dari alat yang terpisah.
+
+00:12:49.380 --> 00:12:51.940
+Data lag menghilangkan pertukaran antara biaya dan visibilitas,
+
+00:12:52.100 --> 00:12:54.740
+jadi Anda tidak perlu lagi memilih antara menyimpan log atau menghemat uang.
+
+00:12:55.200 --> 00:12:55.900
+Anda bisa melakukan kedua.
+
+00:12:56.260 --> 00:12:57.840
+Hal itu mengubah cara Anda memandang keamanan.
+
+00:12:58.440 --> 00:13:00.060
+Alih-alih bertanya, apakah kita mampu membantu ini?
+
+00:13:00.780 --> 00:13:02.120
+Anda bertanya, apalagi yang harus kita awasi?
+
+00:13:02.880 --> 00:13:05.360
+Anda tidak perlu menjadi analis SOC untuk mendapatkan manfaat dari Sentinel.
+
+00:13:05.660 --> 00:13:08.060
+Anda hanya perlu menjadi seseorang yang peduli untuk menjaga keamanan tenang.
+
+00:13:08.700 --> 00:13:12.520
+Dan jika Anda mendengarkan ini berarti-berarti integrasi dengan defender, entra, dan purview berarti
+
+00:13:12.520 --> 00:13:16.240
+lebih sedikit portal untuk dikelola, lebih sedikit perpindahan konteks, dan kontrol lebih banyak di satu.
+
+00:13:16.640 --> 00:13:19.560
+Microsoft bertaruh bahwa keamanan harus dibangun sejak awal, bukan sekedar tambah.
+
+00:13:19.920 --> 00:13:22.640
+Sentinel adalah fondasi dari taruhan itu, dan hasilnya terbukti.
+
+00:13:23.220 --> 00:13:24.200
+Langkah Anda selanjutnya.
+
+00:13:24.320 --> 00:13:25.280
+Di inilah yang sekarang Anda pahami.
+
+00:13:25.960 --> 00:13:28.220
+Sentinel adalah otak pusat untuk data keamanan Anda.
+
+00:13:28.780 --> 00:13:32.740
+Sentinel mengumpulkan segalanya, mengorelasikan sinyal, dan bertindak otomatis saat ada masalah.
+
+00:13:33.380 --> 00:13:36.280
+Data lag membuatnya terjangkau untuk menyimpan log selama bertahun-tahun, bukan berbelum.
+
+00:13:36.840 --> 00:13:38.960
+Grafik dan AI membuatnya makin cerdas seiring waktu.
+
+00:13:39.320 --> 00:13:42.980
+Dan semua ini ada di portal defender bersama alat yang sudah Anda gunakan.
+
+00:13:43.580 --> 00:13:45.080
+Anda tidak perlu menguasainya dalam semangat.
+
+00:13:45.220 --> 00:13:45.960
+Saran saya sederhana.
+
+00:13:46.240 --> 00:13:49.900
+Buka security.microsoft.com, buka Sentinel, dan jelajahi pusat konten.
+
+00:13:50.180 --> 00:13:53.460
+Jelajahi saja, lihat apa yang tersedia, pilih satu konektor dan satu aturan deteksi.
+
+00:13:53.720 --> 00:13:54.640
+Itu adalah titik awal Anda.
+
+00:13:55.000 --> 00:13:56.380
+Banyak orang tidak akan mengambil langkah pertama.
+
+00:13:56.680 --> 00:14:00.900
+Mereka akan membaca tentang Sentinel, mengangguk setuju, lalu meletup browser, dan kembali ke rutinitas mereka.
+
+00:14:01.160 --> 00:14:02.380
+Itulah mengapa Anda akan lebih unggul.
+
+00:14:02.480 --> 00:14:04.540
+Karena Anda benar-benar melakukan sesuatu dengan apa yang Anda pelajari.
+
+00:14:04.540 --> 00:14:09.300
+Jika episode ini membantu Anda memahami Sentinel sedikit lebih baik, berlanggananlah ke Microsoft Knowledge Nuggets.
+
+00:14:09.640 --> 00:14:13.620
+Kami membahas topik keamanan Microsoft dan M3M5 dengan bahasa yang lugas di setiap episodenya.
+
+00:14:14.080 --> 00:14:17.580
+Bagikan ini kepada seseorang yang ingin mempelajari Sentinel, namun bingung harus mulai dari mana.
+
+00:14:18.120 --> 00:14:18.720
+Sampai jumpa berikutnya.

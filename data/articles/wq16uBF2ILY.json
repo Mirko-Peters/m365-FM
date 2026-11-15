@@ -1,0 +1,151 @@
+{
+ "de": {
+  "html": "<p>Fast jeder hat schon vom Hauptbuch gehört, aber nur wenige können es verständlich erklären. Dabei ist die Idee einfach: Im Unternehmen bewegt sich ständig Geld. Kunden zahlen Rechnungen, Lieferantenrechnungen werden genehmigt, Gehaltsabrechnungen laufen, Waren treffen im Lager ein, und auf dem Bankkonto gehen Beträge ein oder ab. Jedes dieser Ereignisse verändert die finanzielle Lage des Unternehmens.</p>\n<p>Das Hauptbuch in Dynamics 365 Finance gibt jedem dieser Ereignisse einen festen Platz unter der richtigen Überschrift. So lässt sich später nachvollziehen, woher das Geld kam, wohin es ging und was übrig geblieben ist. Dieser Artikel erklärt, wie Kontenplan, Finanzdimensionen, Nebenbücher und Belege zusammenspielen.</p>\n\n<h2>Was ist das Hauptbuch in Dynamics 365 Finance?</h2>\n<p>Stellen Sie sich ein Unternehmen vor, das seine Zahlen auf getrennte Werkzeuge verteilt: eine Tabellenkalkulation für den Vertrieb, eine weitere für Lieferantenrechnungen, ein eigenes Tool für die Gehaltsabrechnung und dazu Bankdateien. Eine Zeit lang geht das gut. Dann fragt die Finanzabteilung: „Wie viel Bargeld haben wir gerade?“ Die eine Datei zeigt diese Zahl, die Bankdatei eine andere, und das Vertriebsteam hat eine dritte. Niemand weiß, welche in den Bericht gehört.</p>\n<p>Genau dieses Problem löst das Hauptbuch. Es ist eine einzige Finanzaufzeichnung, in der alle Buchhaltungseinträge einheitlich zusammenlaufen. Die Finanzabteilung muss Zahlen nicht mehr aus zusammenhanglosen Dateien zusammensetzen.</p>\n\n<h3>Soll und Haben: zwei Seiten jedes Ereignisses</h3>\n<p>Das Hauptbuch ist ein Register der Soll- und Haben-Buchungen. Diese Buchungen liegen auf Konten wie Barmittel, Umsatzerlöse, Mietaufwendungen, Lagerbestände oder Verbindlichkeiten. Soll und Haben sind einfach die beiden Seiten jedes finanziellen Ereignisses. Geht an einer Stelle ein Wert ein, erfasst das System, woher er stammt oder was das Unternehmen nun schuldet. Bucht das Unternehmen 100 im Soll, bucht es auch 100 im Haben. Die Summen müssen immer ausgeglichen sein. Dynamics 365 Finance wendet diese Regel der doppelten Buchführung an und verhindert, dass ein einseitiger Datensatz in die Bücher gelangt.</p>\n\n<h3>Ein Hauptbuch pro juristischer Person</h3>\n<p>Dynamics 365 Finance führt ein Hauptbuch für jede juristische Person. Das ist das Unternehmen, das eigene Finanzunterlagen führt, eigene Berichte einreicht und möglicherweise eigene Steuer- und Bankpflichten hat. Eine Gruppe kann etwa ein Unternehmen in Großbritannien und eines in Deutschland umfassen. Beide arbeiten zusammen, brauchen aber jeweils eigene Finanzunterlagen.</p>\n\n<h3>Die Bausteine vor der ersten Buchung</h3>\n<p>Bevor Benutzer buchen können, braucht das Hauptbuch drei Grundlagen:</p>\n<ul>\n<li><strong>Kontenplan:</strong> die Liste der Kontonamen und Nummern, die das Geld des Unternehmens organisiert.</li>\n<li><strong>Geschäftskalender:</strong> Er teilt dem System mit, wie das Geschäftsjahr in Zeiträume wie Monate unterteilt ist. Ohne ihn kann keine Transaktion der richtigen Buchhaltungsperiode zugeordnet werden.</li>\n<li><strong>Buchhaltungswährung</strong> (auch Heimatwährung): die gemeinsame Währungssprache des Hauptbuchs, selbst wenn das Unternehmen in anderen Währungen kauft oder verkauft.</li>\n</ul>\n<p>Diese Einstellungen klingen nach Einrichtungsdetails, wirken sich aber auf jede spätere Buchung aus.</p>\n\n<h2>Kontenplan und Hauptkonten: der Aktenschrank der Finanzen</h2>\n<p>Wo landet eine Transaktion im Hauptbuch? Auf einem Konto. Der Kontenplan ist eine strukturierte Liste, mit der eine juristische Person ihre Finanzen sortiert. Man kann ihn sich als Aktenschrank mit beschrifteten Schubladen vorstellen: Jede Schublade hat einen Zweck, und jede Transaktion muss ihren Platz finden. Ohne Beschriftung wüsste man nur, dass Geld bewegt wurde, nicht wofür.</p>\n<p>Der Kontenplan enthält die Hauptkonten, also die groben Bezeichnungen für Transaktionen. Beispiele sind Barmittel, Umsatzerlöse, Mietaufwendungen, Verbindlichkeiten aus Lieferung und Leistung und Lagerbestände.</p>\n<ul>\n<li>Zahlt das Unternehmen Büromiete, verlässt das Geld die Barmittel, und die Kosten landen in den Mietaufwendungen.</li>\n<li>Kauft es Produkte für den späteren Verkauf, steigt der Wert des Lagerbestands.</li>\n<li>Geht eine unbezahlte Lieferantenrechnung ein, entsteht eine Verpflichtung in den Verbindlichkeiten.</li>\n</ul>\n\n<h3>Bilanz und Gewinn- und Verlustrechnung</h3>\n<p>Die Konten sind in größere Gruppen eingeteilt, aus denen die Finanzabteilung ihre Berichte erstellt. Vermögenswerte, Verbindlichkeiten und Eigenkapital gehören in die Bilanz. Sie zeigt, was das Unternehmen besitzt, was es schuldet und wie hoch das verbleibende Eigentum ist. Einnahmen und Ausgaben gehören in die Gewinn- und Verlustrechnung, die klärt, ob das Unternehmen in einem Zeitraum mehr eingenommen als ausgegeben hat. Barmittel und Lagerbestände sind Vermögenswerte, Verbindlichkeiten sind Geld, das Lieferanten zusteht, Umsatzerlöse erfassen Einnahmen, Mietaufwendungen Betriebskosten. Sind die Kategorien richtig gepflegt, ordnet Dynamics 365 Finance Beträge im passenden Teil des Berichts ein.</p>\n\n<h2>Finanzdimensionen und Kontenstrukturen: Details und Regeln</h2>\n<p>Ein Kontoname sagt oft nicht genug. „Reisekosten“ zeigt, dass Geld für Reisen ausgegeben wurde. Wer es ausgegeben hat und welcher Unternehmensteil die Kosten trägt, bleibt offen. Hier kommen die Finanzdimensionen ins Spiel. Das sind zusätzliche Bezeichnungen an jedem Eintrag, etwa Abteilung, Kostenstelle, Geschäftseinheit oder Standort.</p>\n<p>Das Hauptkonto entspricht dem „Betreff“ in einem Formular, die Dimensionen füllen die Details darunter aus. Die Abteilung sagt, ob der Vertrieb betroffen ist, die Kostenstelle identifiziert das Teambudget, die Geschäftseinheit trennt Unternehmensbereiche, und der Standort zeigt etwa London oder Berlin.</p>\n<p>Buchen drei Mitarbeiter Flüge für Kundenbesprechungen, landen alle Kosten auf demselben Reisekostenkonto. Ein Eintrag trägt aber den Vertrieb als Abteilung, einer den Support und einer die Finanzen. Die Finanzabteilung kann dann die gesamten Reisekosten ansehen oder genauer fragen, wie viel der Vertrieb in diesem Monat ausgegeben hat. Dafür braucht es keine separaten Hauptkonten pro Team, die Dimensionen liefern diese Sichten.</p>\n\n<h3>Kontenstrukturen steuern die Eingabe</h3>\n<p>Mitarbeiter sollen Bezeichnungen nicht willkürlich wählen, sonst werden die Daten unübersichtlich. Dynamics 365 Finance steuert das über Kontenstrukturen und Regeln. Eine Kontenstruktur legt fest, welche Kombinationen aus Hauptkonto und Dimensionen zulässig sind und welche Werte Benutzer auswählen können. Reisekosten können etwa Abteilung und Kostenstelle verlangen, ein Bankeintrag erlaubt womöglich nur eine Geschäftseinheit. Wer eine Miete mit einem unpassenden Standort bucht oder eine erforderliche Abteilung auslässt, wird vom System gestoppt, bevor der Eintrag die Datensätze erreicht. Die Regeln greifen also im Moment der Eingabe.</p>\n\n<h3>Gemeinsamer Kontenplan für mehrere Gesellschaften</h3>\n<p>Größere Organisationen können einen Kontenplan für mehrere juristische Personen gemeinsam nutzen. Das macht die Konzernberichterstattung vergleichbarer. Die Daten werden dadurch aber nicht vermischt: Jede juristische Person führt weiterhin ihr eigenes Hauptbuch. Es ist, als verwendeten zwei Unternehmen dasselbe Aktenschrankdesign. Die Beschriftungen stimmen überein, die Papiere gehören aber verschiedenen Firmen.</p>\n\n<h2>Nebenbücher, Buchungsprofile und Belege: wo Transaktionen beginnen</h2>\n<p>Das Hauptbuch enthält die Finanzdatensätze der gesamten juristischen Person, aber nicht alle Details des Tagesgeschäfts. Bei einer Kreditorenrechnung muss das Unternehmen Lieferantennamen, Rechnungsnummer, Fälligkeitsdatum, Bestellung, Zahlungsstatus, Steuerdetails und manchmal einzelne Positionen kennen. Die Finanzabteilung braucht davon das Buchhaltungsergebnis, nicht jede Zeile. Diese Details liegen in den Nebenbüchern.</p>\n\n<h3>Die wichtigsten Nebenbücher</h3>\n<ul>\n<li><strong>Kreditorenbuchhaltung:</strong> Lieferantenrechnungen, geschuldete Beträge und Zahlungen.</li>\n<li><strong>Debitorenbuchhaltung:</strong> Kundenrechnungen, eingehende Zahlungen und offene Kundenbeträge.</li>\n<li><strong>Lager:</strong> Lagerbewegungen und Bestandswerte.</li>\n<li><strong>Anlagevermögen:</strong> Ausrüstung, Fahrzeuge oder Gebäude, die das Unternehmen langfristig besitzt.</li>\n<li><strong>Steuern:</strong> Steuercodes und Beträge.</li>\n<li><strong>Produktion:</strong> die finanzielle Seite von Fertigungsmaterial, Arbeit und weiteren Kosten, die die Artikelkosten beeinflussen.</li>\n</ul>\n<p>Diese Module arbeiten nicht isoliert. Sie speisen Buchhaltungseinträge in das Hauptbuch ein und halten so Betrieb und Finanzunterlagen verbunden. Ein Geschäftsereignis erzeugt zwei Ansichten: Die operative fragt, welchen Lieferanten man wann bezahlen muss. Die Buchhaltungsansicht fragt, welche Konten sich durch die Rechnung verändert haben.</p>\n\n<h3>Buchungsprofile: Buchhaltungsanweisungen im Prozess</h3>\n<p>Niemand soll bei einer normalen Rechnung alle Soll- und Haben-Konten selbst erraten. Dafür gibt es Buchungsprofile. Sie enthalten Regeln im Hintergrund, die das System für einen Transaktionstyp auf die richtigen Hauptkonten verweisen. Ein Kreditorenbuchungsprofil leitet etwa den geschuldeten Betrag auf das Kreditorenkonto, weitere Regeln steuern die andere Seite. Mitarbeiter erfassen weiterhin den Geschäftsbeleg, das System wendet die Finanzregeln mit den zulässigen Konten und Dimensionen an. Das Ergebnis ist einheitlicher, als wenn jeder die Buchhaltung selbst festlegte.</p>\n\n<h3>Der Beleg als Brücke</h3>\n<p>Der Beleg verknüpft Quellbeleg, Nebenbucheinträge und die ins Hauptbuch übernommenen Einträge. Wer im Hauptbuch einen Betrag sieht und seine Herkunft klären muss, verfolgt ihn über den Beleg bis zur Lieferantenrechnung, zum Produkteingang, zur Kundenrechnung oder zu einem anderen Quellbeleg. Der Beleg ersetzt das Original nicht, er verbindet die Finanzdaten damit. Die Lieferantenrechnung zeigt in der Kreditorenbuchhaltung Geschäftsbeleg und Zahlungsdetails. Die Belegtransaktionen zeigen die Finanzbuchung dahinter. Es ist dasselbe Ereignis mit anderem Zweck.</p>\n\n<h2>Einkaufsbeispiel: Wie Geld durch Dynamics 365 Finance fließt</h2>\n<p>Ein Unternehmen bestellt 100 Bürostühle bei einem Lieferanten. Die folgenden Schritte zeigen den Ablauf.</p>\n<ol>\n<li><strong>Bestellung:</strong> Sie beschreibt, was das Unternehmen von wem zu welchem Preis kaufen will. Das ist nur eine Verpflichtung im Plan, noch keine Buchung.</li>\n<li><strong>Produktbeleg:</strong> Trifft die Lieferung ein, bestätigt der Produktbeleg den Erhalt. Der Lagerbestand steigt, und es entsteht ein Buchhaltungseintrag.</li>\n<li><strong>Rechnung:</strong> Das Kreditorenteam erfasst und bucht sie. Das System kann sie mit Bestellung und Produktbeleg abgleichen.</li>\n</ol>\n<p>Zur Vereinfachung kosten die Stühle 10.000 Dollar in der Buchhaltungswährung. Beim Wareneingang wird der Lagerbestand mit 10.000 belastet und die Einkaufsabgrenzung mit 10.000 gutgeschrieben. Die Belastung erfasst den Wert, der ins Lager gekommen ist. Die Gutschrift erfasst die Gegenseite: den Betrag für Waren, die erhalten, aber noch nicht in Rechnung gestellt wurden. Die Einkaufsabgrenzung ist ein temporärer Platzhalter zwischen Wareneingang und Rechnung. Dynamics 365 prüft beim Erstellen des Eintrags, ob Soll und Haben übereinstimmen. Jeder Betrag braucht eine Quelle und ein Ziel.</p>\n<p>Wird die Rechnung gebucht, belastet das System die Einkaufsabgrenzung mit 10.000 und gleicht sie damit aus. Gleichzeitig schreibt es die Kreditoren mit 10.000 gut, denn so viel schuldet das Unternehmen dem Lieferanten jetzt. Die Stühle werden dabei nicht ein zweites Mal gebucht. Die Verpflichtung wandelt sich nur vom Platzhalter in einen konkreten Betrag gegenüber einem bestimmten Lieferanten.</p>\n<p>Jedes Team sieht genau das, was es braucht. Das Lager bestätigt die Ankunft, der Einkauf prüft die Bestellung, die Kreditorenbuchhaltung sieht Rechnung und Zahlungsziel, die Finanzabteilung sieht die Buchungen über Lager, Einkaufsabgrenzung und Kreditoren. Über die Belegreferenz lässt sich ein Betrag von 10.000 auf dem Lagerkonto bis zum Produktbeleg, zur Bestellung und zur Kreditorenrechnung zurückverfolgen. Die Spur führt in beide Richtungen.</p>\n\n<h2>Tägliche Arbeit der Finanzabteilung: Journale, Zuordnungen, Steuer und Periodenabschluss</h2>\n<h3>Journaleinträge und Rückstellungen</h3>\n<p>Nicht jedes Ereignis beginnt mit Bestellung, Rechnung oder Lagerbewegung. Ein Journaleintrag erfasst Anpassungen, die direkt vom Finanzteam kommen, etwa eine Korrektur, eine Rückstellung oder die Verschiebung eines Betrags zwischen Konten. Deckt eine Stromrechnung die letzten Märztage ab und trifft erst im April ein, bucht die Finanzabteilung im März eine Rückstellung. So tragen die Märzkonten die dazugehörigen Kosten, und die Periode zeigt, was in ihr geschehen ist, nicht nur, wann Unterlagen eingingen.</p>\n<h3>Zuordnungen</h3>\n<p>Eine Zuordnung verteilt einen Betrag nach definierten Regeln auf andere Konten, Abteilungen oder Kostenstellen. Eine feste Zuordnung folgt festen Prozentsätzen, etwa Miete der Hauptgeschäftsstelle zu 50 % auf den Vertrieb, zu 30 % auf den Support und zu 20 % auf die Finanzen. Eine variable Zuordnung richtet sich nach einer Kennzahl, zum Beispiel nach der Zahl der bearbeiteten Artikel in einem gemeinsamen Lager. Die ursprünglichen Kosten bleiben nachvollziehbar.</p>\n<h3>Umsatzsteuercodes</h3>\n<p>Steuercodes speichern die Informationen für die Steuerbuchung. Sie legen fest, welcher Satz oder Betrag gilt und wie er auf eine Transaktion angewendet wird. Steueranforderungen unterscheiden sich nach Land, Region, Bundesland, Landkreis und Stadt. Benutzer müssen deshalb nicht jedes Mal selbst rechnen. Ändern sich die Regeln, wird der Code aktualisiert.</p>\n<h3>Periodenabschluss, Jahresabschluss und Konsolidierung</h3>\n<p>Der Geschäftskalender gibt den Rhythmus vor. Am Ende jeder Periode prüft die Finanzabteilung die Einträge, bucht Anpassungen und erstellt Berichte. Zum Jahresende bereiten Abschlussbuchungen die Konten der Gewinn- und Verlustrechnung für das neue Geschäftsjahr vor. Umsatz- und Aufwandskonten beginnen dann neu, das Gesamtergebnis fließt in das Eigenkapital. Bilanzkonten wie Barmittel, Vorräte und Verbindlichkeiten werden übertragen, weil Besitz und offene Rechnungen bestehen bleiben.</p>\n<p>Konzerne konsolidieren zusätzlich: Die Ergebnisse mehrerer Tochtergesellschaften werden zu einer einheitlichen Ansicht zusammengefasst, auch wenn sie in separaten Datenbanken liegen. Die Einzelunternehmen führen ihre eigenen Datensätze weiter.</p>\n\n<h2>Häufige Stolpersteine im Hauptbuch</h2>\n<ul>\n<li><strong>Getrennte Tabellenkalkulationen:</strong> Eine fehlende Zeile, ein geänderter Betrag oder eine verspätete Aktualisierung führen dazu, dass die Datensätze nicht mehr übereinstimmen. Dynamics 365 verknüpft Einkaufsaktivitäten und Buchhaltungseinträge, verringert wiederholte Eingaben und hält Originalbelege nahe an den Finanzbuchungen.</li>\n<li><strong>Annahme, das System korrigiere schlechte Daten:</strong> Mitarbeiter müssen weiterhin genaue Informationen eingeben und den Genehmigungsprozess befolgen. Das System macht aus einer schlechten Rechnung keine gute.</li>\n<li><strong>Fehlende Dimensionen oder falsche Kombinationen:</strong> Fehlt eine geforderte Abteilung oder passt ein Standort nicht zum Konto, stoppt das System die Buchung. Die Kontenstruktur muss daher sauber gepflegt sein.</li>\n<li><strong>Vermischung von Hauptbuch und Nebenbuch:</strong> Das Hauptbuch zeigt den Buchhaltungsdatensatz, die Geschäftsdetails liegen in den Nebenbüchern. Wer das trennt, erspart sich viel Verwirrung.</li>\n<li><strong>Gemeinsamer Kontenplan als gemeinsames Hauptbuch missverstanden:</strong> Auch bei gleichen Kontonamen führt jede juristische Person ihre eigenen Daten.</li>\n<li><strong>Grundeinstellungen unterschätzt:</strong> Kalender, Buchhaltungswährung und Kontenplan wirken auf jede spätere Buchung.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Das Hauptbuch ist die zentrale Finanzaufzeichnung je juristischer Person. Soll und Haben müssen stets ausgeglichen sein.</li>\n<li>Richten Sie Kontenplan, Geschäftskalender und Buchhaltungswährung zuerst ein, denn sie prägen alle Buchungen.</li>\n<li>Hauptkonten sagen, was gebucht wurde, Finanzdimensionen sagen, wer oder wo.</li>\n<li>Kontenstrukturen legen fest, welche Dimensionen zu welchem Konto gehören, und halten Berichte sauber.</li>\n<li>Nebenbücher bewahren die Details auf, das Hauptbuch den Buchhaltungsdatensatz.</li>\n<li>Buchungsprofile bestimmen die Konten für einen Transaktionstyp, sodass Mitarbeiter nicht selbst Konten wählen müssen.</li>\n<li>Der Beleg verbindet Quellbeleg, Nebenbuch und Hauptbuch und macht jeden Betrag nachvollziehbar.</li>\n<li>Journale, Zuordnungen und Steuercodes decken Korrekturen, Kostenverteilung und Steuerregeln ab.</li>\n<li>Periodenabschluss, Jahresabschluss und Konsolidierung geben der Finanzarbeit ihren festen Rhythmus.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Das Hauptbuch in Dynamics 365 Finance ist kein Ort, an dem Zahlen verschwinden, sondern der finanzielle Hauptdatensatz des Unternehmens. Der Kontenplan liefert die Struktur, Finanzdimensionen und Kontenstrukturen ergänzen sie um Geschäftsdetails und klare Regeln. Nebenbücher, Buchungsprofile und Belege verbinden das Tagesgeschäft mit der Buchhaltung, sodass jede Zahl im Bericht auf ihr auslösendes Ereignis zurückführbar bleibt. Wer diese Bausteine versteht, kann die Frage „Warum steht dieser Saldo hier?“ verlässlich beantworten.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Hauptbuch in Dynamics 365 Finance",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Kontenplan aufbauen",
+     "text": "Hauptkonten ordnen jede Transaktion einer Kategorie in Bilanz oder Gewinn- und Verlustrechnung zu."
+    },
+    {
+     "kopf": "Dimensionen ergänzen",
+     "text": "Abteilung, Kostenstelle, Geschäftseinheit und Standort liefern Details; Kontenstrukturen regeln zulässige Kombinationen."
+    },
+    {
+     "kopf": "Nebenbücher führen",
+     "text": "Kreditoren, Debitoren, Lager und mehr halten Geschäftsdetails und speisen Buchungen ins Hauptbuch."
+    },
+    {
+     "kopf": "Buchungsprofile anwenden",
+     "text": "Hinterlegte Regeln leiten Beträge automatisch auf die richtigen Hauptkonten, ohne dass Mitarbeiter raten."
+    },
+    {
+     "kopf": "Über Belege verfolgen",
+     "text": "Der Beleg verknüpft Quellbeleg, Nebenbuch und Hauptbuch und macht jeden Betrag nachvollziehbar."
+    },
+    {
+     "kopf": "Periode abschließen",
+     "text": "Journale, Zuordnungen und Steuercodes unterstützen Abschluss, Jahresabschluss und Konsolidierung."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist das Hauptbuch in Dynamics 365 Finance?",
+    "a": "Das Hauptbuch ist die zentrale Finanzaufzeichnung, in der alle Buchhaltungseinträge einer juristischen Person einheitlich zusammenlaufen. Es erfasst Soll- und Haben-Buchungen auf Konten wie Barmittel oder Umsatzerlöse, sodass die Finanzabteilung Zahlen nicht mehr aus getrennten Dateien zusammensetzen muss."
+   },
+   {
+    "q": "Was bedeuten Soll und Haben im Hauptbuch?",
+    "a": "Soll und Haben sind die beiden Seiten jedes finanziellen Ereignisses. Wer 100 im Soll bucht, bucht auch 100 im Haben. Dynamics 365 Finance wendet diese doppelte Buchführung an, verlangt ausgeglichene Summen und verhindert, dass einseitige Datensätze in die Bücher gelangen."
+   },
+   {
+    "q": "Wozu dienen Finanzdimensionen in Dynamics 365 Finance?",
+    "a": "Finanzdimensionen sind zusätzliche Bezeichnungen an jedem Eintrag, etwa Abteilung, Kostenstelle, Geschäftseinheit oder Standort. Sie liefern Details unter dem Hauptkonto, sodass man Auswertungen nach Teams erhält, ohne separate Hauptkonten pro Team anlegen zu müssen. Kontenstrukturen steuern, welche Kombinationen zulässig sind."
+   },
+   {
+    "q": "Welche Rolle spielen Nebenbücher und Belege im Hauptbuch?",
+    "a": "Nebenbücher wie Kreditoren, Debitoren, Lager oder Anlagevermögen speichern die Details des Tagesgeschäfts und speisen Buchhaltungseinträge ins Hauptbuch ein. Der Beleg verknüpft Quellbeleg, Nebenbucheinträge und Hauptbuchbuchungen, sodass sich jeder Betrag bis zur Lieferantenrechnung oder zum Produkteingang zurückverfolgen lässt."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Hauptkonto und Finanzdimensionen im Vergleich",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Hauptkonto",
+     "punkte": [
+      "Grobe Bezeichnung für Transaktionen, etwa Reisekosten oder Mietaufwendungen",
+      "Entspricht dem „Betreff“ in einem Formular",
+      "Steht im Kontenplan, dem Aktenschrank der Finanzen",
+      "Sagt nur, wofür Geld ausgegeben wurde"
+     ]
+    },
+    "rechts": {
+     "titel": "Finanzdimensionen",
+     "punkte": [
+      "Zusätzliche Bezeichnungen an jedem Eintrag, etwa Abteilung oder Standort",
+      "Füllen die Details unter dem Betreff aus",
+      "Zeigen, wer ausgegeben hat und welcher Bereich zahlt",
+      "Ersetzen separate Hauptkonten pro Team",
+      "Kontenstrukturen legen zulässige Kombinationen fest"
+     ]
+    }
+   },
+   {
+    "titel": "Die wichtigsten Nebenbücher",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Kreditoren",
+      "text": "Lieferantenrechnungen, geschuldete Beträge und Zahlungen"
+     },
+     {
+      "wert": "Debitoren",
+      "text": "Kundenrechnungen, eingehende Zahlungen und offene Kundenbeträge"
+     },
+     {
+      "wert": "Lager",
+      "text": "Lagerbewegungen und Bestandswerte"
+     },
+     {
+      "wert": "Anlagevermögen",
+      "text": "Ausrüstung, Fahrzeuge oder Gebäude, die langfristig besessen werden"
+     },
+     {
+      "wert": "Steuern",
+      "text": "Steuercodes und Beträge"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Was passiert in Dynamics 365 Finance, wenn jemand ein Konto mit unzulässiger Dimensionskombination bucht?",
+    "opts": [
+     "Das System stoppt die Eingabe, bevor der Eintrag die Datensätze erreicht.",
+     "Der Eintrag wird gebucht und am Periodenende automatisch korrigiert.",
+     "Der Eintrag wird gebucht und später vom Kreditorenteam geprüft.",
+     "Das System ersetzt die falsche Dimension automatisch durch einen Standardwert."
+    ],
+    "a": 0,
+    "why": "Kontenstrukturen und Regeln greifen im Moment der Eingabe und verhindern unzulässige Kombinationen, bevor sie in die Datensätze gelangen."
+   },
+   {
+    "q": "Welche Buchung erfolgt beim Wareneingang der 100 Bürostühle im Einkaufsbeispiel?",
+    "opts": [
+     "Kreditoren werden mit 10.000 belastet, Lagerbestand wird mit 10.000 gutgeschrieben.",
+     "Lagerbestand wird mit 10.000 belastet, Einkaufsabgrenzung wird mit 10.000 gutgeschrieben.",
+     "Barmittel werden mit 10.000 belastet, Lagerbestand wird mit 10.000 gutgeschrieben.",
+     "Einkaufsabgrenzung wird mit 10.000 belastet, Kreditoren werden mit 10.000 gutgeschrieben."
+    ],
+    "a": 1,
+    "why": "Beim Wareneingang steigt der Lagerbestand im Soll, die Einkaufsabgrenzung dient im Haben als temporärer Platzhalter bis zur Rechnung."
+   },
+   {
+    "q": "Wozu dienen Finanzdimensionen wie Abteilung oder Kostenstelle im Hauptbuch?",
+    "opts": [
+     "Sie ersetzen den Kontenplan vollständig durch Konten pro Team.",
+     "Sie legen die Buchhaltungswährung für jede juristische Person fest.",
+     "Sie liefern zusätzliche Details zu Einträgen, ohne separate Hauptkonten pro Team.",
+     "Sie bestimmen, wie das Geschäftsjahr in Perioden unterteilt wird."
+    ],
+    "a": 2,
+    "why": "Dimensionen sind zusätzliche Bezeichnungen an Einträgen und liefern Sichten pro Team, ohne dass separate Hauptkonten nötig wären."
+   },
+   {
+    "q": "Welche Aufgabe hat der Beleg im Zusammenspiel von Hauptbuch und Nebenbüchern?",
+    "opts": [
+     "Er ersetzt die Originalrechnung des Lieferanten im Nebenbuch.",
+     "Er verteilt Beträge nach festen Prozentsätzen auf Kostenstellen.",
+     "Er legt fest, welche Steuersätze für eine Transaktion gelten.",
+     "Er verknüpft Quellbeleg, Nebenbucheinträge und Hauptbucheinträge und macht Beträge rückverfolgbar."
+    ],
+    "a": 3,
+    "why": "Der Beleg verbindet Finanzdaten mit dem Quellbeleg, ersetzt das Original aber nicht; so lassen sich Beträge in beide Richtungen verfolgen."
+   }
+  ]
+ }
+}

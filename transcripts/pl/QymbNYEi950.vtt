@@ -1,0 +1,826 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:07.540
+Gotowi na 10 dni z Microsoft 365, Copilotem AI, Azure oraz ludźmi, którzy kształtują przyszłość pracy?
+
+00:00:08.120 --> 00:00:12.120
+W styczniu M365 CON powraca i będzie jeszcze większy.
+
+00:00:12.860 --> 00:00:18.300
+Dołącz do nas na sesję na żywo, praktyczne dema i wiedzę od MVP oraz ekspertów z całego świata.
+
+00:00:18.560 --> 00:00:21.980
+Żadnych ogólnych slajdów, żadnych niekończących się modnych haseł.
+
+00:00:22.280 --> 00:00:28.840
+Stawiamy czoła prawdziwym wyzwaniom, Copilot Studio, agentom AI Fabrik, bezpieczeństwu, zarządzaniu i automatyzacji.
+
+00:00:28.840 --> 00:00:35.120
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, mamy sesje zaprojektowane dla Ciebie.
+
+00:00:35.340 --> 00:00:40.660
+Podczas 10 pełnych dni możesz zgłębiać różne technologie i nawiązać kontakt z globalną społecznością.
+
+00:00:40.880 --> 00:00:44.600
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.600 --> 00:00:51.140
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.760 --> 00:00:56.100
+Wejdź na m365con.net i zapewnij sobie miejsce już dziś.
+
+00:00:56.100 --> 00:00:58.880
+To m365con.net
+
+00:00:58.880 --> 00:01:02.940
+Dołącz teraz na m365con.net.
+
+00:01:03.080 --> 00:01:04.520
+Widzimy się na żywo w styczniu.
+
+00:01:04.720 --> 00:01:07.060
+Witamy w kolejnym odcinku Microsoft Knowledge Nugget.
+
+00:01:07.240 --> 00:01:09.240
+Nazywam się Milczo Peters i jestem Waszym gospodarzem.
+
+00:01:09.380 --> 00:01:13.400
+Co by było, gdyby można było celowo i w kontrolowany sposób zepsuć własne aplikacje w chmurze, aby uczynić je silniejszymi?
+
+00:01:13.600 --> 00:01:17.320
+Brzmi to niedorzecznie, ale to ta sama logika, której używają strażacy przy wypalaniu kontrolowanym.
+
+00:01:17.460 --> 00:01:22.320
+Celowo wzniecają małe ogniska, aby usunąć suche zarośla, więc gdy pojawi się prawdziwy pożar, nie ma już czego podpalać.
+
+00:01:22.320 --> 00:01:25.320
+Właśnie to Azure Chaos Studio robi dla Twoich aplikacji w chmurze.
+
+00:01:25.440 --> 00:01:32.740
+Pod koniec tego odcinka zrozumiesz, czym jest ta usługa, dlaczego warto jej używać i jak pomaga budować systemy, które nie padają w razie awarii.
+
+00:01:32.900 --> 00:01:35.060
+Więc weź kawę i zacznijmy od problemu.
+
+00:01:35.060 --> 00:01:38.480
+Problem. Dlaczego tradycyjne testowanie nie wystarcza?
+
+00:01:38.680 --> 00:01:40.920
+Oto jak to wygląda w przypadku tradycyjnych testów.
+
+00:01:41.120 --> 00:01:44.520
+Sprawdzają one, czy oprogramowanie działa zgodnie z założeniami w normalnych warunkach.
+
+00:01:44.700 --> 00:01:47.760
+Piszesz test, uruchamiasz go i jeśli wynik się zgadza, przechodzisz dalej.
+
+00:01:47.940 --> 00:01:52.200
+To świetne do wyłapywania błędów, ale nie pokazuje, jak system zachowuje się podczas nieoczekiwanych awarii,
+
+00:01:52.300 --> 00:01:56.820
+takich jak przekroczenie limitu czasu sieci, awaria maszyny wirtualnej czy wyłączenie całej strefy dostępności.
+
+00:01:57.060 --> 00:01:59.240
+Współczesne aplikacje w chmurze nie są już proste.
+
+00:01:59.240 --> 00:02:04.920
+To systemy rozproszone, które komunikują się z bazami danych, pamięciami podręcznymi, usługami tożsamości, zewnętrznymi API i innymi mikroserwisami,
+
+00:02:05.000 --> 00:02:06.680
+a wszystkie te elementy mają ukryte zależności.
+
+00:02:06.920 --> 00:02:09.480
+Jedna mała awaria może wywołać kaskadę w całym systemie.
+
+00:02:09.680 --> 00:02:13.360
+Baza danych zwalnia, aplikacja przekracza limit czasu, moduł równoważenia obciążenia oznacza ją jako niesprawną,
+
+00:02:13.440 --> 00:02:17.060
+ruch jest przekierowywany, inne instancje zostają przeciążone i nagle cała aplikacja przestaje działać.
+
+00:02:17.180 --> 00:02:21.200
+Tradycyjne testy tego nie wyłapują, ponieważ testują w idealnych warunkach, gdzie wszystko jest dostępne,
+
+00:02:21.200 --> 00:02:24.740
+opóźnienia sieci są zerowe, a nikt nie wyłącza maszyn wirtualnych podczas testu.
+
+00:02:24.880 --> 00:02:28.560
+Więc wdrażasz rozwiązanie na produkcję z pewnością siebie, a potem zderzasz się z rzeczywistością.
+
+00:02:28.740 --> 00:02:33.940
+Ta złudna pewność siebie jest niebezpieczna, bo stanowi różnicę między wiedzą, że system działa, a pewnością, że przetrwa.
+
+00:02:34.100 --> 00:02:36.180
+I tutaj z pomocą przychodzi inżynieria chaosu.
+
+00:02:36.340 --> 00:02:38.120
+Czym właściwie jest inżynieria chaosu?
+
+00:02:38.280 --> 00:02:40.040
+Inżynieria chaosu to praktyczna metoda.
+
+00:02:40.300 --> 00:02:43.740
+Wprowadzasz do systemu rzeczywiste, kontrolowane awarie i obserwujesz, jak reaguje.
+
+00:02:43.940 --> 00:02:45.880
+Nie dzieje się to w laboratorium, ani w symulacji.
+
+00:02:46.140 --> 00:02:47.960
+Dzieje się to na Twoich rzeczywistych zasobach.
+
+00:02:47.960 --> 00:02:52.080
+Pomysł jest prosty. Zaczynasz od hipotezy, na przykład, jeśli stracimy jedną maszynę wirtualną,
+
+00:02:52.200 --> 00:02:54.780
+równoważnik obciążenia powinien kierować ruch do pozostałych instancji.
+
+00:02:54.980 --> 00:02:56.440
+Następnie przeprowadzasz eksperyment.
+
+00:02:56.620 --> 00:02:58.460
+Wyłączasz tę maszynę wirtualną i obserwujesz, co się stanie.
+
+00:02:58.600 --> 00:03:00.220
+Czy równoważnik obciążenia wykonuje swoje zadanie?
+
+00:03:00.340 --> 00:03:03.000
+Czy aplikacja nadal działa? Czy alerty uruchamiają się poprawnie?
+
+00:03:03.200 --> 00:03:06.040
+Mierzysz wszystko, a następnie naprawiasz to, co uległo awarii.
+
+00:03:06.100 --> 00:03:09.060
+Rzecz w tym, że inżynieria chaosu to nie jest przypadkowa destrukcja.
+
+00:03:09.240 --> 00:03:12.480
+To nie programista wchodzący do serwerowni i wypinający kable dla zabawy.
+
+00:03:12.480 --> 00:03:15.080
+To podejście naukowe, powtarzalne i bezpieczne.
+
+00:03:15.340 --> 00:03:19.000
+Definiujesz zasięg rażenia i kontrolujesz dokładnie, co, kiedy i jak długo ma zawieść.
+
+00:03:19.160 --> 00:03:21.140
+A co najważniejsze, wyciągasz z tego wnioski.
+
+00:03:21.340 --> 00:03:23.060
+Każdy eksperyment dostarcza dowodów.
+
+00:03:23.220 --> 00:03:25.640
+Albo twoja hipoteza była słuszna i system jest odporny,
+
+00:03:25.720 --> 00:03:27.840
+albo była błędna i odkryłeś słabość do naprawienia.
+
+00:03:28.060 --> 00:03:29.360
+W obu przypadkach wygrywasz.
+
+00:03:29.520 --> 00:03:32.960
+Wyzwanie polega na tym, że stworzenie własnych narzędzi do inżynierii chaosu jest trudne.
+
+00:03:33.180 --> 00:03:35.800
+Musiałbyś pisać skrypty do wyłączania maszyn, obciążania procesora,
+
+00:03:35.800 --> 00:03:39.120
+blokowania ruchu sieciowego i bezpiecznego oraz powtarzalnego sterowania tym wszystkim.
+
+00:03:39.320 --> 00:03:43.080
+To mnóstwo pracy i właśnie dlatego Azure stworzył usługę zarządzaną, która się tym zajmuje.
+
+00:03:43.340 --> 00:03:44.880
+Przedstawiamy Azure Chaos Studio.
+
+00:03:45.100 --> 00:03:50.220
+Azure Chaos Studio to w pełni zarządzana usługa do uruchamiania eksperymentów chaosu bezpośrednio na twoich zasobach Azure.
+
+00:03:50.440 --> 00:03:54.700
+Bez własnych skryptów, narzędzi firm trzecich i budowania własnej platformy do wprowadzania awarii.
+
+00:03:54.880 --> 00:03:57.100
+Wszystko jest w portalu Azure gotowe do użycia.
+
+00:03:57.280 --> 00:03:58.080
+Oto jak to działa.
+
+00:03:58.320 --> 00:04:00.700
+Chaos Studio oferuje dwa sposoby wprowadzania awarii.
+
+00:04:00.860 --> 00:04:03.720
+Awarie bezpośrednie usługi działają poprzez sam płaszczyzna sterowania Azure.
+
+00:04:03.720 --> 00:04:07.580
+Mówisz Chaos Studio, aby wyłączyło maszynę, a ono robi to za pomocą własnych interfejsów API Azure.
+
+00:04:07.760 --> 00:04:08.960
+Nie potrzeba żadnego agenta.
+
+00:04:09.180 --> 00:04:12.840
+Awarie oparte na agencie wymagają zainstalowania małego oprogramowania wewnątrz twojej maszyny wirtualnej.
+
+00:04:13.040 --> 00:04:17.180
+Może ono wtedy zwiększyć użycie procesora do 100%, zapełnić pamięć lub ubić określony proces.
+
+00:04:17.400 --> 00:04:21.960
+Pozwalają one symulować problemy, które występują wewnątrz systemu operacyjnego, a nie tylko na poziomie zasobów.
+
+00:04:22.080 --> 00:04:22.820
+Oto analogia.
+
+00:04:23.040 --> 00:04:25.120
+Wyobraź sobie, że jesteś właścicielem dużego biurowca.
+
+00:04:25.320 --> 00:04:27.500
+Chcesz wiedzieć, czy twoje wyjścia ewakuacyjne rzeczywiście działają.
+
+00:04:27.500 --> 00:04:31.580
+Czekanie na prawdziwy pożar to fatalny pomysł, więc zatrudniasz wyspecjalizowaną ekipę ratunkową.
+
+00:04:31.760 --> 00:04:35.360
+Wchodzą, blokują klatkę schodową, symulują dym na trzecim piętrze i obserwują reakcję ludzi.
+
+00:04:35.520 --> 00:04:36.520
+To jest Chaos Studio.
+
+00:04:36.720 --> 00:04:38.520
+To twoja ekipa od sytuacji awaryjnych.
+
+00:04:38.740 --> 00:04:43.880
+Wzywasz ich, przeprowadzają ćwiczenia, a ty dowiadujesz się, czy twój budynek jest bezpieczny, zanim wydarzy się prawdziwa katastrofa.
+
+00:04:44.060 --> 00:04:49.580
+Chaos Studio obsługuje szeroki wachlarz zasobów Azure, maszyny wirtualne, zestawy skalowania maszyn wirtualnych,
+
+00:04:49.580 --> 00:04:55.920
+klastry Azure Kubernetes, Service, Azure Cosmos DB, Azure Cash, 4Redis, sieciowe grupy zabezpieczeń i wiele innych.
+
+00:04:56.140 --> 00:05:00.560
+Biblioteka błędów stale się powiększa, więc niezależnie od tego, czy uruchamiasz prostą aplikację dwuwarstwową,
+
+00:05:00.660 --> 00:05:03.200
+czy złożoną architekturę mikrousług w AKS, możesz ją przetestować.
+
+00:05:03.360 --> 00:05:04.380
+Oto dobra wiadomość.
+
+00:05:04.540 --> 00:05:06.360
+Nie musisz tworzyć żadnych własnych narzędzi.
+
+00:05:06.580 --> 00:05:10.960
+Wszystko jest dostępne za pośrednictwem portalu Azure, CLI, interfejsów REST API, szablonów ARM lub BICEP.
+
+00:05:11.180 --> 00:05:14.580
+Możesz definiować swoje eksperymenty jako kod i integrować je ze swoimi potokami wdrażania.
+
+00:05:14.580 --> 00:05:16.300
+Ale nie wybiegajmy zbytnio w przyszłość.
+
+00:05:19.580 --> 00:05:22.200
+Bloki konstrukcyjne, cele, kroki, gałęzie, akcje.
+
+00:05:22.380 --> 00:05:24.620
+Każdy eksperyment chaosu zaczyna się od celów.
+
+00:05:24.760 --> 00:05:25.420
+Czym jest cel?
+
+00:05:25.580 --> 00:05:28.360
+To po prostu zasób Azure, wobec którego chcesz uruchomić błędy.
+
+00:05:28.520 --> 00:05:33.920
+Otwierasz Chaos Studio, znajdujesz swój zasób maszyny wirtualną, zestaw skalowania, klaster AKS i dodajesz go do systemu.
+
+00:05:34.040 --> 00:05:37.900
+To oznacza, że mówisz Chaos Studio, ten zasób jest dostępny do eksperymentów.
+
+00:05:38.040 --> 00:05:39.040
+Oto kluczowa sprawa.
+
+00:05:39.280 --> 00:05:42.780
+Dodając cel, wybierasz również, na jakie błędy chcesz pozwolić w tym zasobie.
+
+00:05:42.940 --> 00:05:43.940
+Nie włączasz wszystkiego.
+
+00:05:44.100 --> 00:05:45.060
+Ty dokonujesz wyboru.
+
+00:05:45.180 --> 00:05:46.100
+Obciążenie procesora?
+
+00:05:46.240 --> 00:05:46.500
+Tak.
+
+00:05:46.500 --> 00:05:48.060
+Całkowite wyłączenie maszyny wirtualnej?
+
+00:05:48.220 --> 00:05:49.060
+Może nie na produkcji.
+
+00:05:49.220 --> 00:05:49.960
+Ty decydujesz.
+
+00:05:50.180 --> 00:05:52.140
+Gdy cele są dodane, tworzysz eksperyment.
+
+00:05:52.300 --> 00:05:54.060
+Pomyśl o eksperymencie jako planie.
+
+00:05:54.240 --> 00:05:58.700
+Opisuje on dokładnie, jakie awarie wywołać, w jakiej kolejności, przeciwko jakim celom i na jak długo.
+
+00:05:58.920 --> 00:06:00.460
+Nie mówisz po prostu zepsuj coś.
+
+00:06:00.800 --> 00:06:02.440
+Definiujesz cały scenariusz z góry.
+
+00:06:02.800 --> 00:06:05.640
+Eksperymenty mają prostą strukturę, kroki, gałęzie i akcje.
+
+00:06:05.840 --> 00:06:07.400
+Kroki wykonują się jeden po drugim.
+
+00:06:07.600 --> 00:06:09.880
+Kończy się krok pierwszy, zaczyna drugi, potem trzeci.
+
+00:06:10.040 --> 00:06:11.540
+W ten sposób modelujesz oś czasu.
+
+00:06:11.540 --> 00:06:15.120
+Najpierw pogarszasz działanie sieci, potem obciążasz procesor, a na końcu wyłączasz maszynę wirtualną.
+
+00:06:15.280 --> 00:06:17.100
+Każdy krok to faza twojego scenariusza.
+
+00:06:17.320 --> 00:06:19.820
+Wewnątrz każdego kroku możesz mieć jedną lub więcej gałęzi.
+
+00:06:19.980 --> 00:06:21.080
+Tutaj robi się ciekawie.
+
+00:06:21.300 --> 00:06:28.760
+Gałęzie działają równolegle, więc wewnątrz kroku pierwszego możesz mieć gałąź A, która zwiększa opóźnienie bazy danych, oraz gałąź B, która obciąża procesor na serwerach www.
+
+00:06:29.260 --> 00:06:33.780
+Pozwala to symulować złożone scenariusze wieloawaryjne, które odzwierciedlają prawdziwe incydenty.
+
+00:06:33.960 --> 00:06:34.900
+Potem masz akcje.
+
+00:06:35.120 --> 00:06:36.540
+Akcje to rzeczywiste awarie.
+
+00:06:36.540 --> 00:06:42.000
+Obciążenie CPU, wyczerpanie pamięci, wyłączenie maszyny wirtualnej, opóźnienie sieci, blokada DNS, ubicie procesu.
+
+00:06:42.100 --> 00:06:44.980
+Każda akcja dotyczy określonego zasobu lub grupy zasobów.
+
+00:06:45.080 --> 00:06:48.180
+I ponownie możesz używać tylko tych akcji, które włączono dla danego celu.
+
+00:06:48.300 --> 00:06:49.640
+To twoja siatka bezpieczeństwa.
+
+00:06:49.840 --> 00:06:53.100
+Jeśli nie włączyłeś wyłączania maszyny wirtualnej dla celu, eksperyment po prostu nie wykona tej akcji.
+
+00:06:53.280 --> 00:06:54.920
+Przepływ pracy wygląda więc następująco.
+
+00:06:55.060 --> 00:06:56.480
+Wprowadź swoje zasoby onboarding.
+
+00:06:56.640 --> 00:06:58.440
+Włącz awarie, z którymi czujesz się komfortowo.
+
+00:06:58.600 --> 00:07:01.500
+Utwórz eksperyment z krokami, gałęziami i akcjami, a następnie uruchom go.
+
+00:07:01.500 --> 00:07:04.360
+Ale zanim przejdziemy do uruchamiania, należy zrozumieć coś ważnego.
+
+00:07:04.540 --> 00:07:07.100
+Kiedy Chaos Studio uruchamia eksperyment, niczego nie symuluje.
+
+00:07:07.220 --> 00:07:09.020
+To naprawdę robi te rzeczy z twoimi zasobami.
+
+00:07:09.180 --> 00:07:11.140
+Obciążenie CPU to prawdziwe obciążenie procesora.
+
+00:07:11.320 --> 00:07:13.060
+Wyłączenie maszyny wirtualnej to prawdziwe wyłączenie.
+
+00:07:13.240 --> 00:07:14.000
+O to właśnie chodzi.
+
+00:07:14.200 --> 00:07:16.740
+Testujesz, jak twój system zachowuje się w rzeczywistych warunkach awarii.
+
+00:07:16.840 --> 00:07:18.440
+A to oznacza, że musisz być ostrożny.
+
+00:07:18.640 --> 00:07:21.260
+Przeanalizujmy więc prawdziwy eksperyment i zobaczmy, jak to wszystko działa razem.
+
+00:07:21.440 --> 00:07:23.500
+Uruchamianie twojego pierwszego eksperymentu chaosu.
+
+00:07:23.660 --> 00:07:24.600
+Uczyńmy to realnym.
+
+00:07:24.600 --> 00:07:29.200
+Wyobraź sobie, że masz aplikację internetową działającą na trzech maszynach wirtualnych w ramach zestawu skalowania.
+
+00:07:29.400 --> 00:07:32.040
+Każda maszyna wirtualna znajduje się w innej strefie dostępności.
+
+00:07:32.300 --> 00:07:35.300
+Masz przed nimi równoważnik obciążenia rozdzielający ruch na wszystkie trzy.
+
+00:07:35.500 --> 00:07:36.700
+Hipoteza jest prosta.
+
+00:07:36.980 --> 00:07:44.020
+Jeśli stracimy całą strefę dostępności, równoważnik obciążenia powinien przekierować ruch na pozostałe dwie maszyny, a aplikacja pozostanie dostępna.
+
+00:07:44.220 --> 00:07:46.420
+Projektujesz więc eksperyment z dwoma krokami.
+
+00:07:46.620 --> 00:07:47.080
+Krok pierwszy.
+
+00:07:47.240 --> 00:07:51.140
+Obciąż dwie z trzech maszyn wirtualnych procesorem na 95% przez 5 minut.
+
+00:07:51.140 --> 00:07:54.800
+Symuluje to scenariusz głośnego sąsiada lub niekontrolowanego procesu.
+
+00:07:54.920 --> 00:07:55.400
+Krok drugi.
+
+00:07:55.520 --> 00:07:58.020
+Nagle wyłącz wszystkie maszyny wirtualne w strefie drugiej.
+
+00:07:58.220 --> 00:08:00.140
+To symuluje rzeczywistą awarię strefy.
+
+00:08:00.340 --> 00:08:02.620
+Uruchamiasz eksperyment i obserwujesz, co się dzieje.
+
+00:08:02.800 --> 00:08:03.660
+Oto co zobaczysz.
+
+00:08:03.820 --> 00:08:07.520
+W ciągu pierwszych pięciu minut dwie maszyny wirtualne osiągają 100% obciążenia CPU.
+
+00:08:07.780 --> 00:08:10.120
+Trzecia pozostaje w normie, ponieważ jej nie obciążyłeś.
+
+00:08:10.300 --> 00:08:12.320
+Twoje panele monitorowania świecą się, alarmy wyją.
+
+00:08:12.440 --> 00:08:17.440
+Równoważnik obciążenia zauważa, że te dwie maszyny mają problemy, ale ponieważ technicznie nadal działają, wysyła do nich ruch.
+
+00:08:17.440 --> 00:08:19.660
+Aplikacja zwalnia, ale nie przechodzi w tryb offline.
+
+00:08:19.820 --> 00:08:20.820
+To interesujące.
+
+00:08:21.020 --> 00:08:22.120
+Już czegoś się nauczyłeś.
+
+00:08:22.320 --> 00:08:23.600
+Następnie wchodzi krok drugi.
+
+00:08:23.760 --> 00:08:26.920
+Maszyny w strefie drugiej zostają nagle wyłączone nie w sposób bezpieczny, bez ostrzeżenia.
+
+00:08:27.100 --> 00:08:28.020
+Po prostu znikają.
+
+00:08:28.300 --> 00:08:31.080
+Jedna z tych dwóch obciążonych maszyn była w tej strefie, więc przepadła.
+
+00:08:31.260 --> 00:08:36.480
+Równoważnik obciążenia widzi niepowodzenie testu kondycji, usuwa maszynę z puli zaplecza i kieruje cały ruch na pozostałe sprawne maszyny.
+
+00:08:36.720 --> 00:08:37.780
+Aplikacja działa dalej.
+
+00:08:38.020 --> 00:08:41.040
+Hipoteza się sprawdza, ale oto, czego możesz się nie spodziewać.
+
+00:08:41.040 --> 00:08:43.980
+Pozostałe maszyny wirtualne muszą teraz obsłużyć 100% ruchu.
+
+00:08:44.100 --> 00:08:47.680
+Jeśli nie masz wystarczającej przepustowości, by przyjąć to obciążenie, zauważysz skok opóźnień.
+
+00:08:47.820 --> 00:08:50.680
+Aplikacja może technicznie działać, ale użytkownicy odczują problemy.
+
+00:08:50.780 --> 00:08:51.660
+To jest wniosek.
+
+00:08:51.800 --> 00:08:55.060
+Już wiesz, że potrzebujesz większego zapasu mocy lub szybszego skalowania automatycznego.
+
+00:08:55.220 --> 00:08:56.820
+I pamiętaj, to nie jest symulacja.
+
+00:08:57.020 --> 00:09:01.300
+Kiedy Chaos Studio uruchamia ten eksperyment, te maszyny wirtualne faktycznie osiągają 95% użycia procesora.
+
+00:09:01.440 --> 00:09:03.560
+To wyłączenie drugiej strefy jest prawdziwym wyłączeniem.
+
+00:09:03.560 --> 00:09:07.720
+Maszyna wirtualna się zatrzymuje, równoważnik obciążenia zmienia rozkład, a twoja aplikacja albo przetrwa, albo nie.
+
+00:09:07.920 --> 00:09:08.720
+Właśnie o to chodzi.
+
+00:09:08.960 --> 00:09:09.660
+Nie zgadujesz.
+
+00:09:09.860 --> 00:09:12.580
+Obserwujesz rzeczywiste zachowanie w warunkach realnej awarii.
+
+00:09:12.780 --> 00:09:15.060
+Dowiadujesz się, czy twoja aplikacja działa, czy pada.
+
+00:09:15.240 --> 00:09:18.240
+A jeśli padnie, naprawisz, to zanim klienci w ogóle się o tym dowiedzą.
+
+00:09:18.480 --> 00:09:20.520
+Jednak ta moc wiąże się z odpowiedzialnością.
+
+00:09:20.740 --> 00:09:21.760
+Musisz być ostrożny.
+
+00:09:22.120 --> 00:09:24.760
+Bezpieczeństwo przede wszystkim unikaj nieplanowanych przestojów.
+
+00:09:24.940 --> 00:09:27.720
+Chaos Studio posiada wbudowane liczne mechanizmy bezpieczeństwa.
+
+00:09:27.860 --> 00:09:31.060
+I zanim uruchomisz swój pierwszy eksperyment, musisz zrozumieć każdy z nich.
+
+00:09:33.560 --> 00:09:37.500
+Każdy tworzony eksperyment otrzymuje własną tożsamość zarządzaną przypisaną przez system.
+
+00:09:37.720 --> 00:09:40.600
+Domyślnie jednak ta tożsamość zaczyna z zerowymi uprawnieniami.
+
+00:09:40.820 --> 00:09:45.360
+Musisz wyraźnie przyznać jej dostęp do potrzebnych zasobów i nadać minimalne wymagane uprawnienia.
+
+00:09:45.620 --> 00:09:48.920
+Jeśli eksperyment ma tylko obciążyć procesor na dwóch maszynach wirtualnych,
+
+00:09:49.040 --> 00:09:53.060
+ograniczasz uprawnienia ściśle, zamiast pozwalać na wyłączenie wszystkiego w grupie zasobów.
+
+00:09:53.240 --> 00:09:55.760
+Następnie mamy wspomniane wcześniej włączanie błędów.
+
+00:09:55.940 --> 00:09:59.820
+Podczas dodawania obiektu docelowego wybierasz dokładnie te błędy, na które chcesz pozwolić.
+
+00:09:59.820 --> 00:10:04.560
+Jeśli nigdy nie włączysz wyłączania maszyn wirtualnych w produkcyjnym zestawie skalowalnym,
+
+00:10:04.720 --> 00:10:06.400
+żaden eksperyment ich nie wyłączy.
+
+00:10:06.580 --> 00:10:10.160
+To twarda blokada, która wymaga świadomego wyboru każdego typu błędu.
+
+00:10:10.320 --> 00:10:11.620
+A teraz od czego zacząć?
+
+00:10:11.740 --> 00:10:12.800
+Odpowiedź jest prosta.
+
+00:10:13.080 --> 00:10:15.240
+Zacznij od małych rzeczy i w środowisku nieprodukcyjnym.
+
+00:10:15.420 --> 00:10:18.300
+Przeprowadź swoje pierwsze eksperymenty w środowisku programistycznym lub testowym.
+
+00:10:18.480 --> 00:10:21.260
+Testuj na pojedynczej maszynie wirtualnej z jednym błędem i sprawdź,
+
+00:10:21.340 --> 00:10:25.440
+czy monitorowanie działa, alerty się aktywują, a ty możesz anulować eksperyment, gdy coś pójdzie nie tak.
+
+00:10:25.440 --> 00:10:30.140
+Dopiero gdy zbudujesz to zaufanie w bezpiecznym środowisku, powinieneś pomyśleć o dotknięciu produkcji.
+
+00:10:30.340 --> 00:10:33.460
+Microsoft ma ostrzeżenie na ten temat, którym chce się bezpośrednio podzielić.
+
+00:10:33.640 --> 00:10:36.260
+Nazywają to wydarzeniem generującym konieczność szukania nowej pracy.
+
+00:10:36.520 --> 00:10:39.120
+Jeśli uruchomisz eksperyment chaosu na produkcji bez odpowiednich zabezpieczeń
+
+00:10:39.120 --> 00:10:42.720
+i doprowadzisz do awarii całej aplikacji, to jest właśnie taki błąd, który może skutkować zwolnieniem.
+
+00:10:42.860 --> 00:10:43.800
+To nie jest przesada.
+
+00:10:44.060 --> 00:10:48.840
+Chaos Studio jest potężne, ponieważ faktycznie wpływa na Twoje zasoby, więc korzystaj z tej mocy mądrze.
+
+00:10:49.040 --> 00:10:51.880
+Ostatnią linią obrony jest monitorowanie i możliwość przerwania.
+
+00:10:51.880 --> 00:10:55.280
+Podczas trwania eksperymentu możesz śledzić postępy w czasie rzeczywistym.
+
+00:10:55.500 --> 00:10:59.860
+Widzisz, które kroki zostały zakończone, które gałęzie są aktywne i jakie akcje są wykonywane.
+
+00:11:00.060 --> 00:11:03.760
+Jeśli coś wygląda nie tak, klikasz Anuluj i eksperyment natychmiast się zatrzymuje.
+
+00:11:04.000 --> 00:11:07.980
+Zasoby, na które wpłynęły zmiany, pozostają w swoim stanie, ale nowe błędy nie są wprowadzane.
+
+00:11:08.200 --> 00:11:11.000
+Miej więc otwarte pulpity nawigacyjne i palec na przycisku anulowania.
+
+00:11:11.260 --> 00:11:14.000
+Zacznij od małych kroków, działaj rozważnie i szanuj moc tego narzędzia.
+
+00:11:14.220 --> 00:11:18.640
+Skoro wiesz już, jak zachować bezpieczeństwo, pojawia się pytanie, gdzie faktycznie przeprowadzać te eksperymenty?
+
+00:11:18.640 --> 00:11:20.920
+Przesunięcie w lewo kontra przesunięcie w prawo.
+
+00:11:21.160 --> 00:11:23.220
+Gdzie więc faktycznie uruchamiać te eksperymenty?
+
+00:11:23.400 --> 00:11:26.200
+Istnieją dwa główne podejścia i większość zespołów stosuje oba.
+
+00:11:26.360 --> 00:11:28.820
+Pierwszym z nich jest Shifting Left, czyli przesunięcie w lewo.
+
+00:11:29.000 --> 00:11:32.360
+Przeprowadzasz eksperymenty chaosu na wczesnym etapie cyklu życia oprogramowania.
+
+00:11:32.640 --> 00:11:37.720
+Gdy tylko kod trafi do środowiska testowego, poddajesz go awariom w ramach potoku CI, ciąg dalszy.
+
+00:11:37.720 --> 00:11:41.340
+Potok wdraża aplikację uruchamia eksperyment chaosu, by ją obciążyć.
+
+00:11:41.500 --> 00:11:44.340
+Sprawdza, czy przetrwała i dopiero wtedy promuje wersję dalej.
+
+00:11:44.560 --> 00:11:48.640
+Potraktuj to jak bramkę jakości, podobnie jak testy jednostkowe czy skanowanie bezpieczeństwa.
+
+00:11:48.880 --> 00:11:52.880
+Jeśli aplikacja nie radzi sobie z wyłączeniem maszyny wirtualnej w środowisku testowym, nie trafia na produkcję.
+
+00:11:53.100 --> 00:11:56.960
+Drugie podejście to Shifting Right, czyli przesunięcie w prawo, co oznacza eksperymenty na produkcji.
+
+00:11:57.140 --> 00:11:59.300
+Tak, brzmi to przerażająco, ale wysłuchaj mnie.
+
+00:11:59.520 --> 00:12:00.400
+Nie zaczynasz od tego.
+
+00:12:00.400 --> 00:12:04.280
+Do przesunięcia w prawo przechodzisz dopiero, gdy zyskasz pewność w środowiskach innych niż produkcyjne.
+
+00:12:04.440 --> 00:12:06.560
+Zaczynasz od małych, ograniczonych eksperymentów.
+
+00:12:06.760 --> 00:12:10.000
+Możesz na przykład obciążyć procesor jednej instancji w okresie niskiego ruchu.
+
+00:12:10.140 --> 00:12:12.880
+Obserwujesz uważnie, wyciągasz wnioski, a potem zwiększasz zakres.
+
+00:12:13.100 --> 00:12:17.000
+Możesz wyłączyć pojedynczą maszynę wirtualną na produkcji w godzinach pracy i sprawdzić,
+
+00:12:17.120 --> 00:12:21.920
+czy balansator obciążenia przekieruje ruch, użytkownicy nic nie zauważą, a monitoring wszystko wychwyci.
+
+00:12:22.140 --> 00:12:24.800
+Z czasem przechodzisz do bardziej agresywnych eksperymentów.
+
+00:12:24.800 --> 00:12:27.900
+Istnieje trzecie podejście pośrodku, czyli Game Days – dni treningowe.
+
+00:12:28.100 --> 00:12:35.160
+Dzień treningowy to zaplanowane ćwiczenie chaosu, podczas którego zbierasz zespół programistów operacyjnych do spraw bezpieczeństwa wszystkich zaangażowanych w rzeczywisty incydent.
+
+00:12:35.300 --> 00:12:37.780
+Uruchamiacie eksperyment chaosu i ćwiczycie reagowanie na awarię.
+
+00:12:37.780 --> 00:12:43.800
+Kto otrzymuje powiadomienie? Kto podejmuje decyzję o eskalacji? Jak wygląda łańcuch komunikacji? Jak szybko potraficie zdiagnozować problem?
+
+00:12:44.040 --> 00:12:47.880
+Dni treningowe testują technologie, ale co ważniejsze, sprawdzają ludzi i procesy wokół niej.
+
+00:12:48.020 --> 00:12:52.040
+Kluczową ideą wszystkich trzech podejść jest to, że inżynieria chaosu nie jest jednorazowym testem.
+
+00:12:52.040 --> 00:12:55.540
+Nie przeprowadzasz jednego eksperymentu, nie ogłaszasz systemu odpornym i nie idziesz dalej.
+
+00:12:55.780 --> 00:12:59.340
+Systemy się zmieniają, kod się zmienia, konfiguracje się zmieniają, zależności się zmieniają.
+
+00:12:59.480 --> 00:13:02.200
+To, co było odporne w zeszłym miesiącu, dziś może być kruche.
+
+00:13:02.420 --> 00:13:04.700
+Celem jest ciągła weryfikacja odporności.
+
+00:13:04.700 --> 00:13:10.300
+Przeprowadzasz eksperymenty regularnie, integrujesz je z procesem wydawniczym i włączasz w rytm operacyjny.
+
+00:13:10.560 --> 00:13:12.980
+Jaka jest więc prawdziwa wartość tego całego wysiłku?
+
+00:13:13.160 --> 00:13:14.960
+Prawdziwa wartość to budowanie pewności.
+
+00:13:15.220 --> 00:13:17.740
+Inżynieria chaosu robi coś więcej niż tylko znajdowanie błędów.
+
+00:13:17.740 --> 00:13:19.700
+Buduje pewność, a to zupełnie inna sprawa.
+
+00:13:19.940 --> 00:13:22.760
+Błąd to konkretna usterka. Naprawiasz go i idziesz dalej.
+
+00:13:22.940 --> 00:13:24.180
+Ale pewność to odczucie.
+
+00:13:24.320 --> 00:13:29.640
+To wiedza, że Twój system przetrwa nieoczekiwane zdarzenia, której nie dadzą same testy jednostkowe czy integracyjne.
+
+00:13:29.820 --> 00:13:33.680
+Zdobywasz ją, obserwując, jak system radzi sobie z prawdziwą awarią i wychodzi z niej obronną ręką.
+
+00:13:33.680 --> 00:13:37.220
+Ten proces zmusza do ulepszania rzeczy, które w przeciwnym razie mógłbyś pominąć.
+
+00:13:37.360 --> 00:13:38.580
+Na przykład monitorowanie.
+
+00:13:38.800 --> 00:13:42.880
+Podczas eksperymentu chaosu szybko odkryjesz, czy dashboardy pokazują właściwe metryki,
+
+00:13:43.000 --> 00:13:47.680
+czy alerty uruchamiają się przy odpowiednich progach i czy zespół on-call dostaje powiadomienia na czas.
+
+00:13:47.900 --> 00:13:50.860
+Jeśli nie widzisz, że awaria występuje, nie możesz na nią zareagować.
+
+00:13:51.180 --> 00:13:52.880
+Eksperymenty chaosu obnażają te luki.
+
+00:13:53.120 --> 00:13:54.760
+Odkrywają również ukryte założenia.
+
+00:13:55.000 --> 00:14:00.540
+Każdy architekt powiedział coś w stylu, jeśli baza danych padnie, aplikacja powinna po prostu zbuforować ostatnie znane dane i działać dalej.
+
+00:14:00.540 --> 00:14:02.860
+Brzmi to dobrze na tablicy, ale czy faktycznie działa?
+
+00:14:02.860 --> 00:14:04.380
+Czy kiedykolwiek to testowałeś?
+
+00:14:04.560 --> 00:14:07.100
+Eksperymenty chaosu odpowiadają na to pytanie za pomocą twardych dowodów.
+
+00:14:07.260 --> 00:14:09.020
+Wyłączasz bazę danych i obserwujesz, co się stanie.
+
+00:14:09.260 --> 00:14:10.980
+Może aplikacja poradzi sobie z tym bezbłędnie.
+
+00:14:11.200 --> 00:14:11.980
+Może się zawiesi.

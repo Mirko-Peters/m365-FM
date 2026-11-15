@@ -27,7 +27,7 @@ def fetch(url):
             time.sleep(4 * (a + 1))
 
 
-def parse_feed(xml):
+def parse_feed(xml, include_guid=False):
     root = ET.fromstring(xml)
     eps = {}
     for it in root.iter("item"):
@@ -53,6 +53,8 @@ def parse_feed(xml):
                "image": (it.find("itunes:image", NS).get("href") if it.find("itunes:image", NS) is not None else ""),
                "markup": body, "keypoints": key_pts, "faq": faq, "persons": persons,
                "chapters_url": ch.get("url") if ch is not None and ch.get("url") else "", "transcript_url": tr.get("url") if tr is not None and tr.get("url") else ""}
+        if include_guid:
+            rec["guid"] = guid
         eps[key] = rec
     return eps
 
@@ -66,7 +68,7 @@ def main():
         if not sid or (only and lang not in only):
             continue
         try:
-            eps = parse_feed(fetch(f"https://www.spreaker.com/show/{sid}/episodes/feed"))
+            eps = parse_feed(fetch(f"https://www.spreaker.com/show/{sid}/episodes/feed"), include_guid=lang == "en")
         except Exception as e:
             print("Show Notes", lang, "uebersprungen:", str(e)[:120]); continue
         f = out_dir / f"{lang}.json"

@@ -1,0 +1,1216 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.460
+Wciąż ręcznie przeciągasz zadania w Microsoft Planner?
+
+00:00:02.920 --> 00:00:03.520
+Fascynujące!
+
+00:00:03.680 --> 00:00:06.340
+Patrzenie, jak klikasz, wpisujesz i przesuwasz kafelki jeden po drugim,
+
+00:00:06.460 --> 00:00:09.920
+przypomina obserwowanie kogoś, kto w erze e-maili ręcznie wypisuje adresy na kopertach.
+
+00:00:10.020 --> 00:00:12.400
+To cyfrowa krzątanina przebrana za produktywność.
+
+00:00:12.540 --> 00:00:16.240
+Planner ma zarządzać Twoimi projektami, a nie stać się kolejnym obowiązkiem.
+
+00:00:16.480 --> 00:00:19.260
+Oto Copilot Studio, część platformy Microsoft Power,
+
+00:00:19.480 --> 00:00:23.220
+która pozwala budować agentów, a i zdolnych do analizowania Twoich poleceń.
+
+00:00:23.380 --> 00:00:25.700
+Powiedz mu, żeby utworzył trzy zadania na przyszły tydzień,
+
+00:00:25.760 --> 00:00:28.220
+a on nie tylko grzecznie przytaknie, on je faktycznie utworzy.
+
+00:00:28.220 --> 00:00:32.680
+Potrafi je wypisać, zaktualizować, a nawet nadać im priorytety, bez kiwnięcia palcem.
+
+00:00:32.840 --> 00:00:36.140
+Pod koniec tego filmu zbudujesz własnego agenta dla Planera od podstaw.
+
+00:00:36.400 --> 00:00:37.780
+Żadnej magii, tylko logika.
+
+00:00:37.980 --> 00:00:40.100
+Omówimy, jak zbudować agenta połączonego z Planerem,
+
+00:00:40.220 --> 00:00:43.560
+nauczyć go rozumowania i przetestować wewnątrz Microsoft 365 Copilot.
+
+00:00:43.720 --> 00:00:46.040
+Ty dbasz o jasność celów? On zajmuje się resztą.
+
+00:00:46.260 --> 00:00:48.400
+Zrozumienie połączenia Planera z Copilotem.
+
+00:00:48.600 --> 00:00:50.780
+Microsoft Planner to Twoja tablica zadań.
+
+00:00:50.920 --> 00:00:53.380
+Karty, listy, terminy, iluzja porządku.
+
+00:00:53.580 --> 00:00:57.620
+Ale porządek utrzymywany ręcznie to wciąż chaos, tylko starannie uporządkowany.
+
+00:00:57.620 --> 00:01:00.460
+Planer nigdy nie miał służyć do skalowania ludzkiej pracy.
+
+00:01:00.700 --> 00:01:01.720
+Miał ją porządkować.
+
+00:01:01.880 --> 00:01:04.340
+Problem w tym, że Ty wciąż stajesz się wąskim gardłem.
+
+00:01:04.580 --> 00:01:08.680
+Każdy termin, każde przeciągnięcie wymaga od Ciebie klikania niczym mechaniczny gołąb.
+
+00:01:08.840 --> 00:01:12.060
+Copilot Studio naprawia to nie poprzez dodawanie kolejnych przycisków,
+
+00:01:12.200 --> 00:01:14.640
+ale przez wyeliminowanie konieczności ich naciskania.
+
+00:01:14.800 --> 00:01:18.760
+To warstwa konwersacyjna, która zmienia język ludzki w zautomatyzowane działanie.
+
+00:01:18.940 --> 00:01:20.620
+Pytasz, dodaj zadanie przetestowania prototypu,
+
+00:01:21.280 --> 00:01:25.520
+a agent rozumie kontekst, który projekt, który plan i jak dopasować to do tablicy.
+
+00:01:25.520 --> 00:01:28.440
+Porównaj to z Power Automate, który zajmuje się logiką zaplecza,
+
+00:01:28.560 --> 00:01:31.300
+niewidoczną hydrauliką przepływów pracy opartych na zdarzeniach.
+
+00:01:31.420 --> 00:01:34.920
+Power Automate czeka na wyzwalacze, uruchamia przepływy, przestrzega zasad.
+
+00:01:35.100 --> 00:01:39.840
+Copilot Studio natomiast słucha, analizuje, decyduje, kiedy wywołać odpowiedni łącznik.
+
+00:01:40.020 --> 00:01:42.740
+Pomyśl o Power Automate jak o taśmie produkcyjnej w magazynie.
+
+00:01:42.900 --> 00:01:45.660
+Copilot Studio to kierownik, który mówi mu, kiedy ma ruszyć.
+
+00:01:45.820 --> 00:01:49.240
+To dwa uzupełniające się gatunki w ekosystemie automatyzacji Microsoftu.
+
+00:01:49.360 --> 00:01:51.000
+Power Automate wykonuje zasady.
+
+00:01:51.000 --> 00:01:53.140
+Copilot Studio interpretuje intencje.
+
+00:01:53.340 --> 00:01:56.860
+Razem stanowią różnicę między sztywnym makrem, a responsywnym asystentem.
+
+00:01:57.020 --> 00:02:01.420
+Pod maską Copilot Studio wykorzystuje coś, co Microsoft uroczo nazywa orkiestracją.
+
+00:02:01.600 --> 00:02:06.100
+To nie jest losowa magia, to LLM, czyli duży model językowy wybierający właściwe narzędzie
+
+00:02:06.100 --> 00:02:08.080
+na podstawie kontekstu Twojej instrukcji.
+
+00:02:08.320 --> 00:02:11.100
+Narzędzia to łączniki, planner, outlook, sharepoint.
+
+00:02:11.340 --> 00:02:13.880
+Kiedy wydajesz polecenie, model przekazuje Twoją prośbę,
+
+00:02:14.020 --> 00:02:18.360
+sprawdza opisy dostępnych narzędzi i wybiera to, które najlepiej odpowiada Twojej intencji.
+
+00:02:18.360 --> 00:02:21.980
+Na przykład mówisz, wylistuj moje otwarte zadania dla projektu projektowego.
+
+00:02:22.240 --> 00:02:24.900
+Model rozpoznaje, że wymaga to narzędzia do listowania zadań w planerze,
+
+00:02:25.020 --> 00:02:27.880
+uzupełnia parametry, takie jak identyfikator planu i wykonuje polecenie.
+
+00:02:28.060 --> 00:02:30.860
+Otrzymujesz odpowiedź nie dlatego, że zgadł, ale dlatego, że nauczyłeś go,
+
+00:02:31.000 --> 00:02:32.300
+kiedy każde narzędzie jest przydatne.
+
+00:02:32.420 --> 00:02:34.540
+A teraz wyobraź sobie swój obecny przepływ pracy.
+
+00:02:34.740 --> 00:02:37.580
+Ręcznie otwierasz planera, czytasz każde zadanie, aktualizujesz terminy,
+
+00:02:37.700 --> 00:02:40.180
+przełączasz karty, może o czymś zapominasz, a potem powtarzasz.
+
+00:02:40.320 --> 00:02:43.240
+To ustrukturyzowana nieefektywność, spójna, ale marnotrawna.
+
+00:02:43.240 --> 00:02:48.280
+Dzięki Copilot Studio ten opór poznawczy przenosi się z Twojego mózgu do silnika wnioskowania modelu.
+
+00:02:48.460 --> 00:02:53.320
+Pamięta kontekst, rozpoznaje wzorce i przenosi dane dokładnie tam, gdzie powinny się znaleźć.
+
+00:02:53.440 --> 00:02:56.720
+Oto metafora, którą warto wyryć w swojej korze produktywności.
+
+00:02:56.920 --> 00:03:00.040
+Planer to szafka na dokumenty, a Copilot Studio to starzysta,
+
+00:03:00.260 --> 00:03:04.820
+który faktycznie segreguje rzeczy za Ciebie bez pensji, humorków czy potrzeby przerw na kawę.
+
+00:03:04.820 --> 00:03:08.440
+Po skonfigurowaniu Twój nowy cyfrowy urzędnik rozumie naturalne instrukcje,
+
+00:03:08.560 --> 00:03:10.860
+takie jak utwórz zadania na przyszłotygodniowy sprint
+
+00:03:10.860 --> 00:03:13.840
+lub zaktualizuj status zadań, których termin mija dzisiaj.
+
+00:03:14.080 --> 00:03:16.780
+Gdy mówisz, on porządkuje, warstwa orkiestracji zapewnia,
+
+00:03:16.920 --> 00:03:19.600
+że Twoje instrukcje nie są tylko przetwarzane, ale interpretowane.
+
+00:03:19.780 --> 00:03:21.100
+I to jest kluczowe rozróżnienie.
+
+00:03:21.340 --> 00:03:23.540
+Automatyzacja bez wnioskowania to tylko bezmyślna szybkość.
+
+00:03:23.700 --> 00:03:26.020
+Automatyzacja z wnioskowaniem staje się adaptacyjną inteligencją.
+
+00:03:26.240 --> 00:03:28.340
+Większość ludzi podchodzi do automatyzacji od niewłaściwej strony.
+
+00:03:28.340 --> 00:03:31.840
+Zaczynają od narzędzi, a potem dziwią się, że przepływ pracy wciąż wydaje się robotyczny.
+
+00:03:32.040 --> 00:03:34.820
+Właściwa kolejność to najpierw wnioskowanie, potem narzędzia.
+
+00:03:35.040 --> 00:03:38.700
+Naucz agenta, dlaczego zadanie istnieje, zanim nauczysz go, jak je wykonać.
+
+00:03:38.880 --> 00:03:43.540
+Gdy opanujesz tę mentalną hierarchię, przestaniesz pisać skrypty, a zaczniesz projektować zachowania.
+
+00:03:43.780 --> 00:03:47.940
+Teraz, gdy rozumiesz architekturę, relacje między plannerem, przepływami power-automatem
+
+00:03:47.940 --> 00:03:50.720
+i interfejsem konwersacyjnym, czas przejść do działania.
+
+00:03:50.980 --> 00:03:53.460
+Zbudujemy Twojego pierwszego agenta w Copilot Studio,
+
+00:03:53.660 --> 00:03:57.480
+zdefiniujemy jego osobowość, ograniczymy jego impulsy i zmusimy go do pracy,
+
+00:03:57.480 --> 00:03:59.440
+na którą marnujesz swój ludzki mózg.
+
+00:03:59.560 --> 00:04:02.900
+Przygotuj się na zamianę, przeciągnij i upuść na Stwórz i Działaj.
+
+00:04:03.100 --> 00:04:04.840
+Budowanie agenta w Copilot Studio.
+
+00:04:05.060 --> 00:04:06.240
+Otwórz Copilot Studio.
+
+00:04:06.500 --> 00:04:10.320
+Nie mrugaj, nie rozpraszaj się i proszę, powstrzymaj chęć bezcelowego klikania,
+
+00:04:10.440 --> 00:04:13.280
+jak przeciętny użytkownik odkrywający nowy przycisk.
+
+00:04:13.480 --> 00:04:14.620
+Zrobimy coś celowego.
+
+00:04:14.840 --> 00:04:20.640
+Kliknij Nowy agent, nadaj mu rozsądną nazwę Planista Zadań, a nie Planner Bot 300, czy A i coś tam.
+
+00:04:20.880 --> 00:04:25.180
+Nazwa agenta decyduje o tym, jak łatwo znajdziesz go później, a zapomnisz, jak go nazwałeś.
+
+00:04:25.180 --> 00:04:30.200
+Zanim zaczniesz wyobrażać sobie świadomego asystenta biurowego, pamiętaj, że to urzędnik, a nie jasnowic.
+
+00:04:30.360 --> 00:04:33.720
+Trzeba mu powiedzieć, kim jest, co potrafi, a co ważniejsze, czego nie może robić.
+
+00:04:33.880 --> 00:04:35.420
+Tu właśnie wkraczają instrukcje.
+
+00:04:35.620 --> 00:04:40.640
+Traktuj je jak filozofię działania agenta, niczym prawa asimowa, ale mniej literackie, a bardziej biurokratyczne.
+
+00:04:40.860 --> 00:04:45.520
+Definiujesz zakres wnioskowania, tworzenia, wyświetlania i aktualizowania zadań w planerze i nic poza tym.
+
+00:04:45.760 --> 00:04:49.920
+Edytor instrukcji pozwala na wpisanie akapitów wytycznych dotyczących tonu, celów i granic.
+
+00:04:49.920 --> 00:04:56.600
+Bądź precyzyjny. Jesteś asystentem planisty, który potrafi tworzyć zadania, wyświetlać je i ustawiać terminy za pomocą narzędzi planera.
+
+00:04:56.820 --> 00:04:58.720
+Odpowiadaj zwięźle, nigdy nie spekuluj.
+
+00:04:58.920 --> 00:05:02.380
+Jasność w tym miejscu przekłada się bezpośrednio na lepszą koordynację w przyszłości.
+
+00:05:02.620 --> 00:05:06.420
+Niejasność myli modele językowe, tak samo jak niejasne zaproszenia na spotkania mylą ludzi.
+
+00:05:06.680 --> 00:05:11.360
+Gdy to zapiszesz, zobaczysz panel testowy po prawej stronie zachęcający obszar roboczy, który domaga się uwagi.
+
+00:05:11.560 --> 00:05:12.220
+Zignoruj go.
+
+00:05:12.480 --> 00:05:17.040
+Wiem, że kliknięcie testu wydaje się postępem, ale w tej chwili agent nie ma czego testować.
+
+00:05:17.040 --> 00:05:26.040
+To jak włączanie odkurzacza bez prądu. Model może powtarzać skrypty, ale nie może jeszcze wykonywać działań, bo brakuje mu narzędzi mięśni funkcjonalnych dla jego ujmującego szkieletu konwersacyjnego.
+
+00:05:26.840 --> 00:05:29.560
+To prowadzi nas do filozoficznego sedna Copilot Studio.
+
+00:05:29.880 --> 00:05:31.140
+Instrukcje kontra narzędzia.
+
+00:05:31.440 --> 00:05:33.540
+Instrukcje to logika, narzędzia to wykonanie.
+
+00:05:33.740 --> 00:05:37.980
+Instrukcje mówią mu, jakim jest agentem, narzędzia mówią mu, jak robić to, co twierdzi, że robi.
+
+00:05:38.200 --> 00:05:40.720
+Jedno definiuje charakter, drugie zapewnia zdolności.
+
+00:05:41.000 --> 00:05:45.260
+Mnóstwo ludzi nigdy nie dostrzega tej różnicy, a potem narzeka, że Copilot nie zrobił tego, co kazali.
+
+00:05:45.260 --> 00:05:48.260
+Nie zrobił, bo nigdy nie podłączyli narzędzi, które umożliwiają posłuszeństwo.
+
+00:05:49.020 --> 00:05:54.240
+Teraz otwórz panel narzędzi, zobaczysz bibliotekę łączników, Planner, Outlook, Teams, SharePoint i niezliczone inne.
+
+00:05:54.480 --> 00:05:59.680
+Wszechświat integracji Microsoftu rozpościera się przed tobą jak szwedzki stół, a mimo to większość użytkowników zamiera na jego widok.
+
+00:05:59.820 --> 00:06:01.380
+Paradoks nieskończonego wyboru.
+
+00:06:01.480 --> 00:06:03.160
+To moment, w którym większość ludzi utyka.
+
+00:06:03.340 --> 00:06:05.660
+Jak to lubię powtarzać, Microsoft daje ci skrzynkę z narzędziami.
+
+00:06:05.880 --> 00:06:07.440
+Większość ludzi tylko się w nią wpatruje.
+
+00:06:07.640 --> 00:06:08.800
+My jednak tego nie zrobimy.
+
+00:06:08.800 --> 00:06:13.540
+Przefiltrujemy według planera i wybierzemy odpowiednie akcje później, ale najpierw zauważ, co jest możliwe.
+
+00:06:13.700 --> 00:06:17.220
+Każdy łącznik reprezentuje punkt końcowy API ujęty w prosty język.
+
+00:06:17.340 --> 00:06:20.040
+Utwórz zadanie, zaktualizuj rekord, wyślij e-mail.
+
+00:06:20.220 --> 00:06:23.900
+Copilot Studio deleguje te możliwości do warstwy wnioskowania twojego agenta.
+
+00:06:24.160 --> 00:06:25.700
+Model nie posiada mistycznych mocy.
+
+00:06:25.880 --> 00:06:29.380
+To po prostu dobrze wyszkolony bibliotekarz, który wyciąga właściwą książkę z właściwej półki.
+
+00:06:29.600 --> 00:06:32.760
+Zanim dodasz jakiekolwiek narzędzia planera, przejrzyj ustawienia konfiguracji.
+
+00:06:32.940 --> 00:06:37.080
+Połączenia wymagają uwierzytelnionych kont, zazwyczaj powiązanych z twoją tożsamością Microsoft 365.
+
+00:06:37.080 --> 00:06:40.980
+Użyj konta, który jest właścicielem lub zarządza planem, który zamierzasz zautomatyzować.
+
+00:06:41.120 --> 00:06:46.160
+W przeciwnym razie twoja przyszła sesja testowa zakończy się błędem uwierzytelniania, przez który zwątpisz w swoje życiowe wybory.
+
+00:06:46.440 --> 00:06:48.820
+Konfiguracje są zapisywane dla każdego agenta z osobna.
+
+00:06:49.000 --> 00:06:53.980
+Oznacza to, że jeśli chcesz mieć wielu agentów, powiedzmy jednego do planera, drugiego do Teams, musisz autoryzować każdego z nich oddzielnie.
+
+00:06:54.180 --> 00:06:56.040
+Microsoft nazywa to bezpieczeństwem.
+
+00:06:56.220 --> 00:06:58.320
+Ja nazywam to niewielką przeszkodą dla wydajności.
+
+00:06:58.600 --> 00:07:01.960
+Niezależnie od tego, zrób to porządnie teraz, aby zaoszczędzić sobie późniejszych udręk.
+
+00:07:01.960 --> 00:07:06.560
+Gdy tożsamość i instrukcje agenta zostaną zatwierdzone, oficjalnie zaistnieje on w twoim środowisku.
+
+00:07:06.840 --> 00:07:10.140
+Gratulacje, właśnie stworzyłeś pustą, ale wysoce samoświadomą powłokę.
+
+00:07:10.340 --> 00:07:16.400
+Wie, że ma zarządzać zadaniami w planerze, ale bez łączności jest jak starzysta bez dostępu do sieci, dobrze ubrany, ale bezużyteczny.
+
+00:07:16.600 --> 00:07:18.360
+W tym miejscu liczy się powściągliwość.
+
+00:07:18.600 --> 00:07:20.400
+Wiele osób od razu rzuca się do debugowania.
+
+00:07:20.640 --> 00:07:21.180
+Nie rób tego.
+
+00:07:21.420 --> 00:07:23.920
+Twoim celem jest zrozumienie architektury przed działaniem funkcji.
+
+00:07:23.920 --> 00:07:26.400
+Zdefiniowaliśmy osobowość, granice i strukturę.
+
+00:07:26.400 --> 00:07:28.360
+Teraz musimy dać mu ręce i nogi.
+
+00:07:28.580 --> 00:07:34.520
+Osiągniemy to poprzez dodanie narzędzi, a konkretnie akcji planera, które generują wyniki zamiast uprzejmych odpowiedzi.
+
+00:07:34.720 --> 00:07:37.240
+W nadchodzących etapach połączymy trzy niezbędne narzędzia.
+
+00:07:37.340 --> 00:07:39.820
+Tworzenie zadania, listę zadań i aktualizację zadania.
+
+00:07:40.040 --> 00:07:46.880
+Każde z nich wykonuje interakcję na poziomie API z Microsoft Planner, ale poprzez wnioskowanie w języku naturalnym, a nie z góry określone wyzwalacze.
+
+00:07:47.120 --> 00:07:51.260
+Gdy to połączenie będzie gotowe, twój agent planowania zadań nie będzie tylko odpowiadał, będzie działał.
+
+00:07:51.260 --> 00:07:54.700
+Na razie zapisz swoją pracę i pozwól mu przez chwilę przemyśleć swoją tożsamość.
+
+00:07:54.840 --> 00:07:58.280
+To, co zbudowałeś, to szkielet, układ nerwowy i odrobina osobowości.
+
+00:07:58.560 --> 00:08:02.900
+Następnie dodamy funkcjonalność mięśnie, które uczynią tego uprzejmego filozofa użytecznym.
+
+00:08:03.140 --> 00:08:07.320
+Gdy narzędzia planera zostaną połączone, twój agent przestanie udawać i zacznie działać.
+
+00:08:07.580 --> 00:08:08.560
+Zbudowałeś umysł.
+
+00:08:08.760 --> 00:08:09.940
+Teraz zbudujemy ruch.
+
+00:08:10.460 --> 00:08:13.480
+Dodaj narzędzia planera, utwórz, wyświetl, zaktualizuj.
+
+00:08:13.640 --> 00:08:17.800
+Czas sprawić, by ten agent był czymś więcej niż tylko uprzejmą, egzystencjalną mgiełką.
+
+00:08:17.800 --> 00:08:23.100
+Właśnie zainstalujemy narzędzia planera, czasowniki, które pozwolą twojemu planerowi zadań naprawdę działać.
+
+00:08:23.220 --> 00:08:24.360
+Oto trzy kluczowe mięśnie.
+
+00:08:24.500 --> 00:08:27.240
+Utwórz zadanie, wyświetl zadania i zaktualizuj zadanie.
+
+00:08:27.400 --> 00:08:31.780
+Po podłączeniu twój agent przekształci się z filozoficznego hotbota w asystenta operacyjnego.
+
+00:08:32.040 --> 00:08:33.640
+Zacznijmy od utworzenia zadania.
+
+00:08:33.820 --> 00:08:36.600
+To atomowy akt produktywności, tworzący jednostkę pracy.
+
+00:08:36.880 --> 00:08:40.140
+Bez tego twój agent może jedynie komentować twoje lenistwo, a nie je naprawić.
+
+00:08:40.280 --> 00:08:41.980
+W panelu narzędzi wyszukaj planer.
+
+00:08:42.200 --> 00:08:43.760
+Zobaczysz listę dostępnych akcji.
+
+00:08:44.000 --> 00:08:45.100
+Wybierz, utwórz zadanie.
+
+00:08:45.100 --> 00:08:48.760
+Dodaj je do swojego agenta. Może pojawić się prośba o utworzenie połączenia.
+
+00:08:49.000 --> 00:08:52.820
+Zatwierdź ją przy użyciu konta, które jest właścicielem wybranej grupy i planu w planerze.
+
+00:08:53.020 --> 00:08:57.000
+Pojawią się trzy parametry identyfikator grupy, identyfikator planu oraz tytuł.
+
+00:08:57.280 --> 00:09:00.440
+Oto współrzędne każdego zadania w planerze, kto, gdzie i co.
+
+00:09:01.060 --> 00:09:05.720
+Domyślnie agent próbuje wypełniać je dynamicznie za pomocą AI, ale nie zawsze jest to rozsądne.
+
+00:09:06.020 --> 00:09:10.800
+Identyfikatory grup i planów rzadko się zmieniają, a agent nie posiada intuicji co do twojej struktury organizacyjnej.
+
+00:09:10.800 --> 00:09:16.360
+Zmień te dwie wartości na własne, wybierz odpowiednią grupę Microsoft 365, a następnie przypisany do niej plan.
+
+00:09:16.540 --> 00:09:21.760
+To blokuje współrzędne, więc agent tworzy zadania tam, gdzie chcesz, a nie w próżni środowiska testowego.
+
+00:09:22.020 --> 00:09:26.240
+Pozostaw tytuł dynamiczny, to właśnie nim, a i powinno zarządzać na podstawie języka naturalnego.
+
+00:09:26.460 --> 00:09:28.660
+Nie pomijaj jednak pola opisanego jako opis.
+
+00:09:28.920 --> 00:09:32.500
+Wygląda na błahe, a odgrywa kluczową rolę w sposobie rozumowania modelu językowego.
+
+00:09:32.760 --> 00:09:36.440
+Model czyta te opisy, decydując, które narzędzie pasuje do prośby użytkownika.
+
+00:09:36.440 --> 00:09:40.260
+Utwórz nowe zadanie w planerze, jest poprawne technicznie, ale boleśnie ogólne.
+
+00:09:40.460 --> 00:09:43.580
+Możesz wspomóc silnik rozumowania, dostarczając mu bogatsze wskazówki.
+
+00:09:43.760 --> 00:09:47.120
+Utwórz jedno lub więcej zadań w planerze na podstawie prośby użytkownika.
+
+00:09:47.380 --> 00:09:49.800
+Streszczaj długie tytuły i nie proś o nie wprost.
+
+00:09:49.940 --> 00:09:55.220
+To jedno zdanie powstrzymuje agenta przed dopytywaniem o szczegóły za każdym razem, gdy zlecasz wiele zadań.
+
+00:09:55.400 --> 00:09:58.740
+Teraz potrafi on wywnioskować tytuły bezpośrednio z treści prośby.
+
+00:09:58.740 --> 00:10:10.060
+Więc jeśli powiesz, utwórz trzy zadania, przejrzyj projekty, zaktualizuj cennik i przygotuj demo, model rozpozna te osobne elementy i uruchomi akcję tworzenia zadania trzykrotnie bez dodatkowych pytań.
+
+00:10:10.640 --> 00:10:14.120
+Na tym etapie twój agent zyskał już pierwszą sprawną kończynę.
+
+00:10:14.320 --> 00:10:17.920
+Gratulacje potrafi generować pracę szybciej niż większość starzystów.
+
+00:10:18.080 --> 00:10:19.720
+Kolejny krok – lista zadań.
+
+00:10:20.060 --> 00:10:23.760
+Wydaje się to oczywiste, ale to niedoceniany bohater zarządzania kontekstem.
+
+00:10:24.040 --> 00:10:27.260
+Bez umiejętności wyświetlania istniejących zadań model działa po omacku.
+
+00:10:27.260 --> 00:10:30.180
+Nie potrafi sprawdzić, co zostało już zrobione, a co oczekuje na wykonanie.
+
+00:10:30.380 --> 00:10:32.480
+Dodaj akcję – lista zadań z łącznika planera.
+
+00:10:32.740 --> 00:10:36.920
+Skonfiguruj ją za pomocą tych samych identyfikatorów grupy i planu co poprzednio, jako wartości własne.
+
+00:10:37.100 --> 00:10:41.220
+Opis może brzmieć – wyświetl zadania w planie, co działa, ale znów możemy to poprawić.
+
+00:10:41.420 --> 00:10:47.160
+Spróbuj – pobierz wszystkie zadania z określonego planu w planerze, aby agent mógł się do nich odwoływać lub weryfikować je w odpowiedziach.
+
+00:10:47.280 --> 00:10:52.920
+To sformułowanie wskazuje, że akcja nie służy tylko do wglądu człowieka, ale stanowi także dane kontekstowe do rozumowania.
+
+00:10:52.920 --> 00:10:56.660
+Teraz otwórz panel testowy, tym razem testowanie jest naprawdę warte zachodu.
+
+00:10:56.900 --> 00:10:59.040
+Zapytaj – jakie zadania mam w swoim planie?
+
+00:11:00.160 --> 00:11:04.340
+Model wywoła listę zadań, pobierze wyniki i przedstawi je w formie rozmowy.
+
+00:11:04.520 --> 00:11:08.020
+Na przykład – obecnie masz zadania o tytułach X, Y oraz Z.
+
+00:11:08.140 --> 00:11:10.140
+Całe piękno kryje się za kulisami.
+
+00:11:10.320 --> 00:11:12.920
+Te wyniki mogą teraz zasilać przyszłe zapytania.
+
+00:11:13.180 --> 00:11:17.820
+Gdy później powiesz ustaw termin zadania przeglądu projektu na jutro, model orkiestracji sprawdzi listę,
+
+00:11:17.820 --> 00:11:21.880
+zidentyfikuje właściwy identyfikator i wywoła kolejne narzędzie, które podłączymy.
+
+00:11:22.020 --> 00:11:24.860
+To prowadzi nas do trzeciego elementu – aktualizacji zadania.
+
+00:11:25.100 --> 00:11:27.900
+Funkcji, która zamienia statyczne rekordy w dynamiczny postęp.
+
+00:11:28.160 --> 00:11:30.740
+Dodaj narzędzie aktualizacji zadania do swojego agenta.
+
+00:11:30.940 --> 00:11:35.520
+Ponownie zobaczysz pola – identyfikator zadania, termin wykonania oraz menu opcjonalnych parametrów.
+
+00:11:35.660 --> 00:11:37.780
+Identyfikator zadania powinien pozostać dynamiczny.
+
+00:11:37.980 --> 00:11:41.180
+Sztuczna inteligencja dopasuje odpowiedni element po nazwie z poprzedniej akcji listy.
+
+00:11:41.180 --> 00:11:46.980
+W przypadku terminu wykonania również możesz zostawić ustawienie dynamiczne, ponieważ ludzie rzadko używają formatu ISO 8601 w swobodnej rozmowie.
+
+00:11:46.980 --> 00:11:51.160
+Na szczęście podstawowy model przekształca słowo jutro w poprawnie sformatowany znacznik czasu.
+
+00:11:51.420 --> 00:11:53.340
+Dodaj jednak modelowi wskazówkę w opisie.
+
+00:11:53.540 --> 00:11:57.280
+Szkoda, że tak wiele agentów zawodzi, ponieważ twórcy ignorują pola dokumentacji.
+
+00:11:57.540 --> 00:12:00.920
+Dodaj użyj tego, aby zmienić termin lub szczegóły istniejącego zadania.
+
+00:12:01.140 --> 00:12:04.480
+Akceptuj daty w języku naturalnym, takie jak w przyszły piątek lub jutro.
+
+00:12:04.620 --> 00:12:11.640
+Ta wskazówka informuje warstwę wnioskowania o możliwościach, poprawiając jej zdolność do tłumaczenia luźnych zapytań użytkownika na ustrukturyzowane aktualizacje.
+
+00:12:11.640 --> 00:12:13.500
+Po zapisaniu przetestuj ponownie.
+
+00:12:13.740 --> 00:12:16.740
+Zapytaj, ustaw termin zadania przeglądu projektu na piątek.
+
+00:12:16.900 --> 00:12:21.000
+Przy pierwszym podejściu Kopilot Studio poprosi o udzielenie uprawnień dla tego połączenia z plannerem.
+
+00:12:21.260 --> 00:12:23.780
+Zatwierdź to. W kilka sekund twój plan zostanie zaktualizowany.
+
+00:12:24.020 --> 00:12:25.080
+Data zgadza się idealnie.
+
+00:12:25.260 --> 00:12:26.620
+Nie musiałeś niczego przeciągać.
+
+00:12:26.740 --> 00:12:31.800
+Teraz, dla małej demonstracji wielozadaniowości AI, spróbuj podyktować polecenie przez Windows Plus H lub używając mikrofonów Teams.
+
+00:12:31.960 --> 00:12:35.020
+Powiedz, ustaw wszystkie moje zadania z tego tygodnia na przyszły wtorek.
+
+00:12:35.020 --> 00:12:40.580
+Model wypisze bieżące zadania, wykryje te spełniające warunki, a następnie odpowiednio wykona pętlę aktualizacji zadań.
+
+00:12:40.720 --> 00:12:42.300
+Przyznaj, że jesteś pod wrażeniem.
+
+00:12:42.480 --> 00:12:46.100
+To, co zajmowało 15 kliknięć, teraz dzieje się za sprawą jednego wypowiedzianego zdania.
+
+00:12:46.340 --> 00:12:56.000
+Dzięki tym trzem narzędziom tworzeniu, listowaniu i aktualizowaniu wyposażyłeś swojego agenta w pełne możliwości CRUD, pomijając D od usuwania, ponieważ ludzie wciąż panikują na myśl o nieodwracalnych akcjach.
+
+00:12:56.160 --> 00:13:00.880
+Ta trójka narzędzi pokrywa niemal każdy scenariusz w planerze, oszczędzając wymierne minuty pracy.
+
+00:13:00.880 --> 00:13:02.740
+Oto etyczny podział pracy.
+
+00:13:02.940 --> 00:13:05.240
+Ty zapewniasz jasność, on zapewnia precyzję.
+
+00:13:05.400 --> 00:13:07.940
+Ty mówisz mu, co trzeba zrobić, on decyduje, jak to wykonać.
+
+00:13:08.080 --> 00:13:10.000
+Przestań mikrozarządzać własnym oprogramowaniem.
+
+00:13:10.240 --> 00:13:15.520
+Gdy jasno opiszesz swoje intencje, model orkiestracji zajmie się resztą wypełnianiem identyfikatorów, formatowaniem dat i wywoływaniem funkcji.
+
+00:13:15.800 --> 00:13:17.840
+Bądź niejasny, a on posłusznie zgadnie błędnie.
+
+00:13:17.980 --> 00:13:20.720
+Co najważniejsze, nie przejmuj się obsesyjnie idealnymi ciągami logicznymi.
+
+00:13:20.720 --> 00:13:22.420
+Model orkiestracji się adaptuje.
+
+00:13:22.620 --> 00:13:25.080
+Nie programujesz w kodzie, programujesz w oczekiwaniach.
+
+00:13:25.080 --> 00:13:28.280
+Naucz go, jak wygląda dobre zachowanie, stosując te jasne opisy.
+
+00:13:28.560 --> 00:13:32.740
+Z czasem zacznie przewidywać Twoje intencje niczym uprzejmy, choć nieco przemądrzały współpracownik.
+
+00:13:32.920 --> 00:13:35.380
+I na tym transformacja Twojego agenta dobiega końca.
+
+00:13:35.540 --> 00:13:36.820
+Teraz przechodzi do działania.
+
+00:13:37.040 --> 00:13:40.920
+Każde kolejne polecenie wypowiedziane, wpisane czy wykrzyknięte przez biuro przechodzi przez proces rozumowania,
+
+00:13:41.060 --> 00:13:44.020
+znajduje odpowiednie narzędzie planowania i zostaje wykonane bez mrugnięcia okiem.
+
+00:13:44.240 --> 00:13:46.260
+Rezultat mniej przeciągania, więcej działania.
+
+00:13:46.260 --> 00:13:50.520
+Teraz możemy wyprowadzić tego cyfrowego urzędnika z piaskownicy prosto do Twojej codziennej pracy.
+
+00:13:50.720 --> 00:13:51.580
+Czas na wdrożenie.
+
+00:13:51.840 --> 00:13:54.480
+Wdrażanie w Microsoft 365 Kopilot.
+
+00:13:54.480 --> 00:13:57.520
+Skoro Twój agent potrafi już myśleć i działać, czas wypuścić go tam,
+
+00:13:57.660 --> 00:14:00.920
+gdzie odbywa się prawdziwa praca wewnątrz Microsoft 365 Kopilot.
+
+00:14:01.120 --> 00:14:05.680
+Trzymanie go tylko w Kopilot Studio to jak nauczenie robota zmywania podłóg i zamknięcie go w klasie.
+
+00:14:05.860 --> 00:14:12.160
+Korzyści pojawiają się dopiero wtedy, gdy działa on w Twoim środowisku, w Teams Outlooku czy samym interfejsie Microsoft 365.
+
+00:14:12.740 --> 00:14:14.620
+Oto dlaczego wdrożenie jest tak istotne.
+
+00:14:14.620 --> 00:14:16.680
+Kopilot Studio to środowisko deweloperskie.
+
+00:14:16.900 --> 00:14:19.640
+Microsoft 365 Kopilot to środowisko produkcyjne.
+
+00:14:19.740 --> 00:14:22.000
+To tam toczą się rozmowy i tam powstają zapytania.
+
+00:14:22.000 --> 00:14:26.360
+Osadzenie tam agenta oznacza, że możesz powiedzieć, utwórz dwa zadania na przyszłotygodniowy sprint.
+
+00:14:26.580 --> 00:14:29.320
+Bezpośrednio na czacie w Teams, podczas gdy wszyscy widzą, jak się to dzieje.
+
+00:14:29.500 --> 00:14:32.240
+Bez osobnych kart, bez przełączania kontekstów, bez zbędnego klikania.
+
+00:14:32.460 --> 00:14:34.860
+Sztuczna inteligencja wykonuje zadanie, a Ty zajmujesz się czymś innym.
+
+00:14:35.040 --> 00:14:37.400
+W Kopilot Studio wybierz Opublikuj w prawym górnym rogu.
+
+00:14:37.620 --> 00:14:38.420
+Zobaczysz kanały.
+
+00:14:38.560 --> 00:14:39.940
+To Twoje punkty końcowe wdrożenia.
+
+00:14:40.220 --> 00:14:42.240
+Wybierz Microsoft 365 lub Teams.
+
+00:14:42.440 --> 00:14:45.260
+Za pierwszym razem poprosi Cię o uwierzytelnienie i zatwierdzenie uprawnień.
+
+00:14:45.260 --> 00:14:49.740
+W tłumaczeniu dajesz firmie Microsoft znać, że agent może korzystać z planera w Twoim imieniu.
+
+00:14:49.900 --> 00:14:51.760
+To kluczowy moment nawiązania zaufania.
+
+00:14:51.980 --> 00:14:53.260
+Nie ulegaj pokusie pomijania szczegółów.
+
+00:14:53.940 --> 00:14:58.180
+Działy ładu korporacyjnego uwielbiają odrzucać wnioski o automatyzację, którym brakuje udokumentowanych uprawnień.
+
+00:14:58.300 --> 00:15:02.720
+Po opublikowaniu Twój agent pojawi się jako dostępne rozszerzenie Kopilot wewnątrz Microsoft 365.
+
+00:15:03.240 --> 00:15:05.060
+Otwórz Teams i rozpocznij nowy czat.
+
+00:15:05.260 --> 00:15:08.540
+Wywołaj agenta planowania zadań po imieniu lub wybierz go w panelu Kopilot.
+
+00:15:08.760 --> 00:15:11.840
+Od tego momentu Twoje polecenia stają się rzeczywistymi działaniami.
+
+00:15:11.840 --> 00:15:12.940
+Przetestujmy to.
+
+00:15:13.120 --> 00:15:14.040
+Wpisz lub podyktuj.
+
+00:15:14.180 --> 00:15:16.520
+Jeśli lubisz teatralne gesty, utwórz dwa zadania.
+
+00:15:16.700 --> 00:15:19.760
+Sporządź raport dla klienta i zorganizuj przegląd zaległości.
+
+00:15:20.060 --> 00:15:22.920
+Obserwuj, jak AI przetwarza, analizuje i potwierdza.
+
+00:15:23.140 --> 00:15:27.180
+Jeśli przejdziesz do tablicy w planerze, zobaczysz, że oba zadania pojawiły się niemal natychmiast.
+
+00:15:27.340 --> 00:15:30.640
+Trudno przecenić satysfakcję płynącą z tego, że nie trzeba przeciągać ani jednej karty.
+
+00:15:30.800 --> 00:15:32.460
+Kolejny test – wyświetlanie listy.
+
+00:15:32.640 --> 00:15:35.080
+Zapytaj, jakie zadania są otwarte w moim planie grupowym.
+
+00:15:35.080 --> 00:15:41.700
+Kopilot odpytuje planer za pośrednictwem Twojego agenta, pobiera dane za pomocą narzędzia listowania zadań i formułuje odpowiedź w formie konwersacji.
+
+00:15:41.860 --> 00:15:42.840
+To nie tylko tekst.
+
+00:15:42.980 --> 00:15:45.960
+To wynik rozumowania wsparty aktywnością API na żywo.
+
+00:15:46.420 --> 00:15:47.800
+A teraz rzuć mu wyzwanie.
+
+00:15:48.040 --> 00:15:50.760
+Ustaw zadanie przeglądu zaległości na przyszłą środę.
+
+00:15:50.760 --> 00:15:59.140
+Identyfikuje odpowiedni rekord, dopasowując tytuł z poprzedniej listy, zmienia przyszłą środę na datę ISO wymaganą przez backend planera i wykonuje aktualizację.
+
+00:15:59.340 --> 00:16:05.760
+Gratulacje, właśnie przeprowadziłeś pełną transakcję konwersacyjną z użyciem AI interfejsów API planera i Teams bez opuszczania okna czatu.
+
+00:16:05.980 --> 00:16:08.620
+Oto ważny model myślowy, pętla rozumowania kopilota.
+
+00:16:08.860 --> 00:16:13.040
+Każda wiadomość użytkownika wywołuje interpretację, przywołanie kontekstu i uruchomienie narzędzi.
+
+00:16:13.040 --> 00:16:17.680
+Kiedy mówisz, zaktualizuj moje zaległe zadania, orkiestracja kopilota nie tylko sprawdza regułę.
+
+00:16:17.920 --> 00:16:24.760
+Decyduje, który łańcuch działań pasuje do intencji wyświetlenie zadań, przefiltrowanie zaległych, aktualizacja terminów i wykonuje je sekwencyjnie.
+
+00:16:24.900 --> 00:16:26.380
+Ty w międzyczasie pijesz kawę.
+
+00:16:26.620 --> 00:16:30.640
+Możesz również dyktować polecenia za pomocą Windows Plus H lub ikony mikrofonów Teams.
+
+00:16:30.900 --> 00:16:33.520
+Głos to nie tylko nowinka, to dostępność z charakterem.
+
+00:16:33.740 --> 00:16:39.040
+Polecenie oznacz moje otwarte zadania na ten tydzień jako przyszły poniedziałek, przekłada naturalne frasowanie na uporządkowaną automatyzację.
+
+00:16:39.040 --> 00:16:44.720
+Kopilot interpretuje ton, analizuje język czasowy i przekształca go w deterministyczne dane dla planera.
+
+00:16:44.960 --> 00:16:46.440
+Dla niewprawnego ucha to czary.
+
+00:16:46.680 --> 00:16:49.740
+Dla Ciebie to satysfakcja z dobrze zaprojektowanej pętli rozumowania.
+
+00:16:49.940 --> 00:16:55.660
+Ostrzeżenie techniczne, przy pierwszym uruchomieniu każdego narzędzia w 365, musisz ponownie zatwierdzić uprawnienia jego łącznika.
+
+00:16:55.840 --> 00:16:59.860
+To koncepcja Microsoftu dotycząca spójności zabezpieczeń, zbędna, ale konieczna.
+
+00:17:00.080 --> 00:17:03.480
+Zatwierdź raz, a system nie będzie Ci przeszkadzał, dopóki sesja nie wygaśnie.
+
+00:17:03.680 --> 00:17:06.360
+Teraz przetestujmy wspólnie mowę i łańcuch rozumowania.
+
+00:17:06.360 --> 00:17:10.360
+Powiedz, wypisz moje oczekujące zadania, a potem ustaw wszystkie na piątek.
+
+00:17:13.270 --> 00:17:16.910
+Silnik orkiestracji przetwarza frazę spójnikową, a potem ustaw wszystkie.
+
+00:17:17.170 --> 00:17:22.990
+Logicznie wnioskuję, że potrzebuje zarówno akcji wyświetlenia, jak i aktualizacji, wywołuje je sekwencyjnie i odświeża kontekst.
+
+00:17:23.210 --> 00:17:24.890
+Wynik pojawia się kilka sekund później.
+
+00:17:25.110 --> 00:17:28.230
+To, nawiasem mówiąc, punkt, w którym tradycyjna automatyzacja zawodzi.
+
+00:17:28.470 --> 00:17:30.650
+Wiele akcji wywołanych jednym naturalnym zdaniem.
+
+00:17:30.850 --> 00:17:34.310
+Kopilot radzi sobie z tym, ponieważ nie przestrzega sztywnych reguł, lecz rozumuje.
+
+00:17:34.310 --> 00:17:39.170
+Gdy sprawdzisz przepływy tworzenia listy i aktualizacji, możesz śmiało zamknąć kartę studia.
+
+00:17:39.370 --> 00:17:40.870
+Twój agent już tam nie mieszka.
+
+00:17:41.070 --> 00:17:44.630
+Teraz działa w Teams i 365 jako autonomiczny operator.
+
+00:17:44.890 --> 00:17:48.010
+Od tego momentu każdy członek zespołu z uprawnieniami może go wywołać.
+
+00:17:48.130 --> 00:17:51.390
+I tak, gdy ktoś pierwszy raz zorientuje się, że może wypowiedzieć, dodaj trzy zadania,
+
+00:17:51.530 --> 00:17:54.470
+zamiast klikać 14 razy, zyskasz status pomniejszego bóstwa.
+
+00:17:54.670 --> 00:17:56.150
+Twoje wdrożenie jest kompletne.
+
+00:17:56.350 --> 00:17:58.470
+Cyfrowy pracownik pracuje teraz tam, gdzie ty.
+
+00:17:58.470 --> 00:18:01.990
+Zastąpiłeś monotonie przeciągania i upuszczania wykonaniem sterowanym językiem.
+
+00:18:02.210 --> 00:18:06.650
+Zajmijmy się tym, jak utrzymać wydajność, zgodność i możliwości rozbudowy, zanim nowość przeminie.
+
+00:18:06.890 --> 00:18:08.890
+Strategia automatyzacji i ograniczenia.
+
+00:18:09.170 --> 00:18:12.330
+Skoro już cieszysz się blaskiem w pełni działającej automatyzacji,
+
+00:18:12.510 --> 00:18:15.730
+zepsujmy to nieco rozmową o realiach, strategii i ograniczeniach.
+
+00:18:15.930 --> 00:18:20.470
+Każdy inteligentny system wymaga utrzymania, nadzoru i od czasu do czasu wyznaczenia granic.
+
+00:18:20.610 --> 00:18:21.530
+Oto pierwsza prawda.
+
+00:18:21.770 --> 00:18:24.770
+Kopilot Studio nie zastępuje Power Automate, lecz go uzupełnia.
+
+00:18:24.770 --> 00:18:30.810
+Power Automate pozostaje zapleczem dla ustrukturyzowanych przepływów pracy, niewidzialnym mechanizmem obsługującym rutynowe wyzwalacze.
+
+00:18:30.950 --> 00:18:37.470
+Kopilot Studio to konwersacyjny interfejs, warstwa rozumowania, która przekłada chaotyczne żądania ludzi na ustrukturyzowaną logikę.
+
+00:18:37.710 --> 00:18:39.730
+W połączeniu tworzą zamkniętą pętlę.
+
+00:18:39.890 --> 00:18:43.070
+Kopilot rozmawia z ludźmi, Power Automate rozmawia z systemami.
+
+00:18:43.310 --> 00:18:45.070
+Razem usuwają Cię z całego procesu.
+
+00:18:45.230 --> 00:18:47.610
+Używaj odpowiedniego narzędzia do odpowiedniego poziomu złożoności.
+
+00:18:47.850 --> 00:18:52.430
+Jeśli potrzebujesz deterministycznego przepływu, na przykład, gdy pojawi się odpowiedź w formularzu, utwórz zadanie.
+
+00:18:52.430 --> 00:18:59.210
+To terytorium Power Automate. Kiedy potrzebujesz elastyczności interpretacyjnej, na przykład, dodaj zadania, które pojawiły się na dzisiejszym spotkaniu.
+
+00:18:59.390 --> 00:19:00.450
+To domena kopilota.
+
+00:19:00.710 --> 00:19:04.090
+Dojrzały strateg automatyzacji rozumie synergie zamiast ridendencji.
+
+00:19:04.290 --> 00:19:06.010
+Po drugie, dopracuj swoje opisy.
+
+00:19:06.230 --> 00:19:11.310
+Pola tekstowe, które zignorowałeś podczas dodawania narzędzi, to instrukcje Prompti, które czyta model, wybierając działanie.
+
+00:19:11.530 --> 00:19:16.530
+Aktualizacja ich za pomocą jasnych fraz intencji, takich jak użyj tej akcji, gdy użytkownik chce ustawić datę.
+
+00:19:16.750 --> 00:19:18.330
+Drastycznie poprawia niezawodność.
+
+00:19:18.330 --> 00:19:21.810
+Słabe opisy to główny powód, dla którego agenci działają nieprawidłowo.
+
+00:19:21.810 --> 00:19:22.930
+Po trzecie, nadzór.
+
+00:19:23.090 --> 00:19:29.310
+Każde połączenie używane przez agenta Planner Teams SharePoint działa w ramach Twoich uprawnień Microsoft 365 Przestrzegaj granic.
+
+00:19:29.450 --> 00:19:33.710
+Nie autoryzuj swobodnie połączeń w osobistych środowiskach Tenant, jeśli plan należy do zespołów firmowych.
+
+00:19:33.930 --> 00:19:35.230
+Regularnie kontroluj połączenia.
+
+00:19:35.470 --> 00:19:39.090
+Twoje przyszłe ja, odpowiedzialne za zgodność z zasadami bezpieczeństwa, będzie Ci wdzięczne.
+
+00:19:39.330 --> 00:19:41.270
+Monitoring to kolejny poziom dojrzałości.
+
+00:19:41.590 --> 00:19:46.170
+W widoku analityki Kopilot Studio śledź wskaźniki wywołań, opóźnienia, odpowiedzi i użycie narzędzi.
+
+00:19:46.170 --> 00:19:50.690
+Jeśli jakaś akcja ciągle zawodzi, prawdopodobnie chodzi o błędne dane logowania lub wygasłe uprawnienia.
+
+00:19:50.930 --> 00:19:52.910
+Napraw, opublikuj ponownie, działaj dalej.
+
+00:19:53.130 --> 00:19:54.550
+A teraz przyjemna część.
+
+00:19:54.890 --> 00:19:58.710
+Ograniczenia lub jak woli marketing Microsoftu kwestie użytkowania.
+
+00:19:59.130 --> 00:20:03.210
+Okno kontekstowe Kopilota obsługuje około 3000 słów w procesie rozumowania.
+
+00:20:03.470 --> 00:20:08.990
+Oznacza to, że jeśli wkleisz historię całego projektu w jeden czat, zapomni on początek, zanim dotrze do podsumowania.
+
+00:20:08.990 --> 00:20:12.050
+Formułuj żądania z więźle, skupiając się na jednej intencji naraz.
+
+00:20:12.190 --> 00:20:18.310
+Ponadto środowiska Teams narzucają limit około 10 sesji Kopilota na użytkownika co 24 godziny, chyba że korzystasz z pełnego środowiska Enterprise.
+
+00:20:18.490 --> 00:20:21.810
+Po osiągnięciu limitu agent uprzejmie odmawia pracy aż do następnego dnia.
+
+00:20:21.990 --> 00:20:23.870
+Potraktuj to jako przymusowy odpoczynek.
+
+00:20:24.050 --> 00:20:25.630
+Roboty też zasługują na granicę.
+
+00:20:25.930 --> 00:20:27.110
+Licencjonowanie ma znaczenie.
+
+00:20:27.350 --> 00:20:32.530
+Środowiska programistyczne często nie mają funkcji indeksu semantycznego, co oznacza brak bogatego powiązania z danymi w SharePoint.
+
+00:20:32.750 --> 00:20:35.550
+Środowiska produkcyjne odblokowują te zaawansowane integracje.
+
+00:20:35.730 --> 00:20:36.310
+Tłumaczenie.
+
+00:20:36.310 --> 00:20:39.390
+Prototypy mogą wydawać się mniej inteligentne niż agenci produkcyjni.
+
+00:20:39.510 --> 00:20:41.350
+To nie Twoja wina, to kwestia licencji.
+
+00:20:41.530 --> 00:20:45.210
+Połącz Kopilot Studio z Power Automate, aby obsługiwać złożone zależności.
+
+00:20:45.530 --> 00:20:56.110
+Na przykład, niech Kopilot zbiera kontekst w rozmowie, przypisuje zadania wszystkim uczestnikom spotkania i przekazuje te dane do przepływu Power Automate, który tworzy indywidualne zadania w planerze.
+
+00:20:57.530 --> 00:21:00.170
+Niech ludzie rozmawiają, a przepływy zajmą się logiką.
+
+00:21:00.430 --> 00:21:01.230
+Dobra praktyka.
+
+00:21:01.490 --> 00:21:03.010
+Dokumentuj swoje konfiguracje.
+
+00:21:03.010 --> 00:21:06.490
+Twoje przyszłe, ja, zapomnij, który identyfikator grupy należy do którego planu.
+
+00:21:06.610 --> 00:21:08.850
+Prowadź prostą tabelę w OneNote lub SharePoint.
+
+00:21:09.090 --> 00:21:12.750
+Nazwa agenta, typ łącznika, właściciel uwierzytelnienia, data ostatniej publikacji.
+
+00:21:12.990 --> 00:21:16.170
+Administracja przez arkusz kalkulacyjny paradoksalnie zapobiega chaosowi AI.
+
+00:21:16.350 --> 00:21:18.450
+Krótka historyjka, aby zilustrować korzyści.
+
+00:21:18.450 --> 00:21:22.510
+Mały zespół produktowy zbudował własnego agenta do sprintów, postępując zgodnie z tymi krokami.
+
+00:21:22.690 --> 00:21:26.850
+Obsługiwał rutynowe tworzenie zadań, planowanie tygodnia i codzienne dostosowywanie terminów.
+
+00:21:26.970 --> 00:21:31.070
+To, co kiedyś zajmowało 15 minut na spotkanie, skróciło się do jednego polecenia głosowego.
+
+00:21:31.270 --> 00:21:37.010
+Pomnóż to przez 50 spotkań kwartalnie, a zdumiewająco odzyskali dni w roku, nie pisząc ani jednej linijki kodu.
+
+00:21:37.190 --> 00:21:38.470
+Ale mityguj oczekiwania.
+
+00:21:38.470 --> 00:21:41.650
+Inteligencja kopilota jest ograniczona kontekstem i jasnością.
+
+00:21:41.850 --> 00:21:45.350
+Jest genialny w konwersji, zamieniając swobodne ludzkie zwroty w ustrukturyzowane działania.
+
+00:21:45.590 --> 00:21:47.070
+Jest przeciętny w filozofowaniu.
+
+00:21:47.290 --> 00:21:50.190
+Kiedy się waha, to problem z projektem promptu, a nie bunt maszyny.
+
+00:21:50.490 --> 00:21:55.770
+Podsumowując strategię, rozumuj w kopilocie, wykonuj w automatę, monitoruj w studio i szanuj granice licencji.
+
+00:21:55.770 --> 00:21:59.070
+Ten kwartet utrzymuje automatyzację wydajną i zgodną z zasadami.
+
+00:21:59.290 --> 00:22:03.650
+Zbudowałeś nie tylko cyfrowego stażystę, ale szkielet do skalowania powtarzalnej pracy poznawczej.
+
+00:22:03.750 --> 00:22:07.090
+Krótko mówiąc, niech A i zajmie się tym, co przyziemne, a ty tym, co ważne.
+
+00:22:07.090 --> 00:22:09.270
+A teraz wyostrz swoje kolejne żądanie.
+
+00:22:09.470 --> 00:22:11.330
+Cały przepływ pracy czeka na rozkazy.
+
+00:22:11.670 --> 00:22:13.690
+Od żonglera zadań do dowódcy zadań.
+
+00:22:13.870 --> 00:22:19.090
+Więc tak smakuje postęp, wypowiadanie zadań w istnienie zamiast przeciągania ich jak nałogowiec arkuszy kalkulacyjnych.
+
+00:22:19.970 --> 00:22:22.310
+Przeszedłeś od niańczenia planera do dowodzenia nim.
+
+00:22:22.530 --> 00:22:27.730
+Twój nowy agent kopilot studio słucha, rozumuje i wykonuje, podczas gdy ty pozostajesz na poziomie myślenia.
+
+00:22:27.870 --> 00:22:30.210
+To nie automatyzacja dla samej automatyzacji.
+
+00:22:30.390 --> 00:22:32.630
+To delegowanie wykonane z prędkością maszyny.
+
+00:22:32.630 --> 00:22:37.270
+Pamiętaj, nie tylko podłączyłeś API, zbudowałeś warstwę rozumowania, która interpretuje ludzkie intencje.
+
+00:22:37.430 --> 00:22:43.710
+Oznacza to, że każda notatka ze spotkania, każdą blistę powinniśmy to zrobić w przyszłym tygodniu, może teraz stać się ustrukturyzowanym zadaniem bezbiurowego cierpienia.
+
+00:22:43.930 --> 00:22:51.330
+Różnica między projektem tonącym w ręcznych aktualizacjach, a takim, który pozostaje aktualny automatycznie, polega po prostu na tym, czy ktoś taki jak ty zadał sobie trud, by to skonfigurować.
+
+00:22:51.330 --> 00:22:58.270
+W swojej istocie to prawdziwa obietnica Microsoft 365, kopilot nie więcej narzędzi, a po prostu mądrzejsza orkiestracja między nimi.
+
+00:22:58.450 --> 00:22:59.650
+Planer to nadal planer.
+
+00:22:59.810 --> 00:23:02.230
+Po prostu awansowałeś go z tablicy na siłę roboczą.
+
+00:23:02.450 --> 00:23:06.070
+Więc tak przestań przeciągać, przestań klikać w menu, które obrażają Twoją inteligencję.
+
+00:23:06.290 --> 00:23:08.970
+Zbudowałeś urzędnika, a i w konkretnym celu pozwól mu pracować.
+
+00:23:09.210 --> 00:23:13.130
+Zajmij się oceną, kreatywnością i przywództwem tym, co dla krzemu wciąż jest zagadką.
+
+00:23:13.370 --> 00:23:18.190
+Jeśli zaoszczędziło Ci to choć 10 minut lub odrobinę spokoju, spłać dług wszechświatowi subskrypcją.
+
+00:23:18.190 --> 00:23:23.150
+Nadchodzi więcej Power Platform, rozwinięcia co pilota, ten lepszy rodzaj uzależnienia od automatyzacji.
+
+00:23:23.310 --> 00:23:27.190
+Kliknij Obserwuj, włącz powiadomienia i pozwól, by kolejna aktualizacja wdrożyła się automatycznie.
+
+00:23:28.050 --> 00:23:30.210
+Efektywność to nawyk, zainstaluj go na stałe.

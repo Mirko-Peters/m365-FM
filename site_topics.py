@@ -4,6 +4,7 @@
 - related: verwandte Beitraege ueber gemeinsame Themen (Hauptthema zaehlt doppelt), dann nach Datum.
 Ergebnisse der Zuordnung werden je Beitrag in data/cache/blog_topics.json gehalten (Hash von Titel und Textanfang)."""
 import hashlib, html as _h, json, re
+from functools import lru_cache
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -27,9 +28,20 @@ def save():
         pass
 
 
-def score_topics(ix, title, text, k=8, key=None):
+_FP = {}
+
+
+def _fp(ix):
+    """Kurzer Fingerabdruck des Entitaeten-Index (IDs und Namen), damit der Themen-Cache nach neuen Entitaeten nicht veraltet."""
+    k = id(ix)
+    if k not in _FP:
+        _FP[k] = hashlib.sha1("|".join(sorted(ix.names)).encode("utf-8")).hexdigest()[:10]
+    return _FP[k]
+
+
+def score_topics(ix, title, text, k=10, key=None):
     """-> [eid, ...] nach Gewicht; key: Cache-Schluessel (z. B. Slug)."""
-    h = hashlib.sha1((title + "\n" + text[:3000]).encode("utf-8")).hexdigest()[:12]
+    h = hashlib.sha1((title + "\n" + text[:12000] + "\n" + _fp(ix)).encode("utf-8")).hexdigest()[:12]   # Fingerabdruck der Entitaeten: neue Entitaeten werten den Cache neu aus
     if key:
         c = _load().get(key)
         if c and c.get("h") == h: return list(c["t"])
@@ -40,7 +52,7 @@ def score_topics(ix, title, text, k=8, key=None):
         for m in ix.rx.finditer(s):
             i = ix.names.get(m.group(1).lower())
             if i: sc[i] = sc.get(i, 0) + w
-    add(title, 4); add(text[:600], 2); add(text[600:3000], 1)
+    add(title, 4); add(text[:600], 2); add(text[600:3000], 1); add(text[3000:12000], 0.5)   # ganzer Artikel: spaeter Genanntes zaehlt ab zwei Nennungen
     in_title = {ix.names.get(m.group(1).lower()) for m in ix.rx.finditer(title)}
     for i in list(sc):
         if i in GENERIC and i not in in_title: sc[i] *= 0.35   # allgemeine Begriffe nur mit Titeltreffer voll werten
@@ -51,6 +63,9 @@ def score_topics(ix, title, text, k=8, key=None):
     if key:
         _load()[key] = {"h": h, "t": top}
     return top
+
+
+_rx_big = lru_cache(maxsize=32)(re.compile)   # das Muster aller Entitaetsnamen (~50 KB) nicht je Beitrag neu kompilieren, falls der re-Cache (512) es verdraengt hat
 
 
 _SKIP = re.compile(r"<(a|h1|h2|h3|h4|h5|h6|code|pre|script|style|figure|figcaption)\b[^>]*>.*?</\1>", re.S | re.I)
@@ -66,7 +81,7 @@ def autolink_html(html, ents, url_of, max_links=8, exclude=()):
             if len(n) >= 4 and (len(n) >= 6 or " " in n or n in ("Teams", "Excel", "Azure", "Loop", "Viva")): names.append((n, e["id"]))
     if not names: return html, []
     names.sort(key=lambda x: -len(x[0]))
-    rx = re.compile(r"(?<![\w-])(" + "|".join(re.escape(n) for n, _ in names) + r")(?![\w-])")
+    rx = _rx_big(r"(?<![\w-])(" + "|".join(re.escape(n) for n, _ in names) + r")(?![\w-])")   # einmal je Bau (je Muster) kompiliert
     byname = {n.lower(): i for n, i in names}
     # geschuetzte Bereiche herausnehmen
     parts, pos, used, links = [], 0, set(), []

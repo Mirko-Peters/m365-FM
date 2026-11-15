@@ -1,0 +1,142 @@
+{
+ "de": {
+  "html": "<p>Ein unterschriebener Vertrag ist plötzlich aus dem freigegebenen Ordner verschwunden. Niemand weiß, wer ihn entfernt hat, ob er noch existieren sollte oder ob es irgendwo eine Kopie gibt. Mit Papierakten wäre das kaum passiert: Es gab einen Aktenschrank, eine abschließbare Schublade und einen Aufbewahrungsplan, und an einem festgelegten Datum gab jemand die Vernichtung frei.</p>\n<p>Heute liegt der Vertrag in SharePoint, die Genehmigungs-E-Mail in Exchange Online, die Diskussion in Teams und eine weitere Kopie in OneDrive. Microsoft Purview Records Management hilft dabei, offizielle Datensätze für die erforderliche Zeit zu schützen und anschließend kontrolliert zu löschen. Dieser Artikel zeigt, wie Aufbewahrungslabels, Datensatzdeklaration, Dispositionsprüfung und Audit zusammenspielen.</p>\n\n<h2>Was ist ein Datensatz, und welche Regel gehört dazu?</h2>\n<p>Ein Datensatz ist mehr als eine Datei. Er ist ein offizieller Nachweis dafür, dass Ihre Organisation etwas getan, entschieden, genehmigt oder vereinbart hat. Beispiele sind ein unterzeichneter Vertrag, ein endgültiger Finanzbericht, eine Personalakte oder eine genehmigte Unternehmensrichtlinie. Entscheidend ist das Wort „offiziell“.</p>\n<p>Während einer Verhandlung entstehen Word-Dokumente mit nachverfolgten Änderungen und Namen wie „Vertrag Final V3“. Das sind Arbeitsdateien, die sich ändern dürfen. Erst die unterzeichnete Kopie belegt später, worauf sich beide Seiten geeinigt haben. Auch die E-Mail mit der endgültigen Genehmigung kann wichtig sein. Solche Elemente brauchen mehr Sorgfalt, weil Sie Jahre später noch beantworten müssen, was vereinbart wurde und wer es genehmigt hat.</p>\n<p>Deshalb sollte nicht jede Datei gleich behandelt werden. Wer jeden Entwurf, jeden Chat und jeden Download wie einen formellen Datensatz behandelt, erzeugt einen unüberschaubaren Berg an Inhalten und speichert mehr als nötig. Wer die offiziellen Elemente dagegen nicht schützt, riskiert, genau die Nachweise zu verlieren, auf die sich die Organisation verlässt.</p>\n\n<h3>Die drei Bausteine jeder Aufbewahrungsregel</h3>\n<ul>\n<li><strong>Auslöser:</strong> Was lässt die Uhr ticken? Manchmal ist es das Erstellungsdatum, etwa bei einem Abschlussbericht. Oft ist es ein geschäftliches Ereignis wie das Vertragsende oder das Ausscheiden eines Mitarbeiters. Dann zählt nicht das Datum der Datei.</li>\n<li><strong>Aufbewahrungsfrist:</strong> Wie lange wird aufbewahrt? Das entscheidet Ihre Organisation anhand ihrer geschäftlichen, rechtlichen und regulatorischen Anforderungen. Purview legt nicht fest, ob ein Vertrag fünf oder sieben Jahre bleibt. Das klären die Verantwortlichen des Geschäftsprozesses gemeinsam mit Rechts- oder Compliance-Teams.</li>\n<li><strong>Endaktion:</strong> Was passiert nach Ablauf? Der Datensatz kann gelöscht werden, vorher geprüft werden oder einen weiteren Geschäftsprozess durchlaufen. Planen Sie das von Anfang an, statt Jahre später zu raten.</li>\n</ul>\n<p>Ein Beispiel für eine vollständige Regel: Die unterzeichnete Vereinbarung wird nach Vertragsablauf sieben Jahre aufbewahrt und dann vor der Löschung zur Prüfung gesendet. Dieser eine Satz enthält Auslöser, Zeitraum und Endaktion. Die Fachbereiche wissen, was das Dokument bedeutet und wann der Vertrag endet. Compliance-Teams helfen bei der Regelfindung, und Microsoft 365-Admins setzen sie technisch um. Sie beginnen also nicht mit der Technik, sondern mit der Entscheidung, was als Nachweis gilt.</p>\n\n<h2>Aufbewahrungslabels: Die Regel hängt am Inhalt</h2>\n<p>Ein Aufbewahrungslabel ist eine digitale Regelkarte, die an einem Dokument, einer E-Mail oder einem anderen Inhalt hängt. Es teilt Microsoft 365 mit, wann die Zeitrechnung beginnt, wie lange das Element aufbewahrt wird und was danach geschieht.</p>\n<p>Das ist wichtig, weil Inhalte selten ordentlich an einem Ort bleiben. Jemand verschiebt die Datei, ein Team strukturiert eine SharePoint-Website um, oder die Datei wird über Teams genutzt, obwohl sie in SharePoint liegt. Das Label bleibt am Element, und die Regel bleibt damit bei dem Inhalt, der sie braucht. Für formelle Aufzeichnungen ist diese Steuerung auf Elementebene deutlich präziser als eine pauschale Regel für einen ganzen Speicherort.</p>\n<p>Stellen Sie sich ein Label „Vertrag: sieben Jahre nach Ablauf, dann Entsorgungsprüfung“ vor. Die Uhr beginnt nicht beim ersten Speichern, sondern wenn der Vertrag abläuft. Danach bewahrt Purview den Datensatz sieben Jahre auf und leitet ihn anschließend in den definierten Prüfungsprozess weiter.</p>\n\n<h3>Aufbewahrungslabel oder Aufbewahrungsrichtlinie?</h3>\n<p>Anfänger verwechseln beides häufig. Beide können Inhalte aufbewahren oder löschen, sie arbeiten aber auf unterschiedlichen Ebenen:</p>\n<ul>\n<li><strong>Aufbewahrungsrichtlinie:</strong> eine einheitliche Hausregel für einen ganzen Bereich, zum Beispiel ein Exchange-Online-Postfach, eine SharePoint-Website oder Teams-Nachrichten. Sie passt zu allgemeinen Inhalten mit einer gemeinsamen Grundregel.</li>\n<li><strong>Aufbewahrungslabel:</strong> gezielt für ein bestimmtes Element, das zu einer Datensatzkategorie gehört. Es eignet sich für offizielle Dokumente mit eigenem Aufbewahrungspfad, besonders wenn die Frist durch ein Geschäftsereignis beginnt oder am Ende eine Kontrollentscheidung nötig ist.</li>\n</ul>\n<p>Beide Ansätze lassen sich auf derselben Plattform kombinieren, lösen aber unterschiedliche Probleme.</p>\n\n<h3>Manuell oder automatisch kennzeichnen</h3>\n<p>Manuelles Kennzeichnen funktioniert, wenn jemand mit Fachwissen einen offiziellen Datensatz im richtigen Moment erkennt, etwa beim Eintreffen einer endgültigen Vereinbarung. Sich darauf zu verlassen, dass Mitarbeiter immer an das richtige Label denken, ist aber schwierig. Purview kann Labels deshalb auch automatisch anwenden, wenn das Unternehmen klare Bedingungen festlegt, etwa anhand bekannter Signale oder Eigenschaften, die den Elementtyp erkennen lassen. Erfordert ein Datensatz eine Ermessensentscheidung, passt die manuelle Kennzeichnung. Folgt er einem klaren Muster, sorgt die automatische Kennzeichnung für mehr Konsistenz.</p>\n\n<h2>Datensatzdeklaration: Den Nachweis sperren</h2>\n<p>Ein Aufbewahrungslabel sagt Purview, wie lange ein Element bleibt. Die Datensatzdeklaration geht weiter: Sie kennzeichnet das Element als offiziellen Datensatz und wendet strengere Kontrollen an. Eine gewöhnliche Arbeitsdatei gleicht Unterlagen auf dem Schreibtisch, die bearbeitet, kommentiert und ersetzt werden. Ein deklarierter Datensatz gleicht den finalen unterschriebenen Unterlagen im abgeschlossenen Archivraum. Die Arbeit drumherum geht weiter, eine neue Richtlinienversion wird geschrieben oder ein Vertrag erneuert, aber der Datensatz bewahrt die offizielle Fassung, wie sie zu diesem Zeitpunkt existierte.</p>\n<p>Diese Sperre ist sinnvoll, weil Datensätze zu Beweismitteln werden können. Ein Wirtschaftsprüfer will den genehmigten Finanzbericht eines bestimmten Jahres sehen, ein Rechtsteam braucht die unterschriebene Vereinbarung zu einem Streitfall, oder eine interne Untersuchung muss klären, welche Richtlinie bei einer Entscheidung galt. Dann reicht es nicht, eine Datei zu finden. Man muss darauf vertrauen können, dass es die Datei ist, die damals galt.</p>\n\n<h3>Abgrenzung zu Vertraulichkeitslabel und DLP</h3>\n<p>Die Datensatzverwaltung steuert die Aufbewahrung über die Zeit. Sie stellt sicher, dass ein offizielles Element so lange verfügbar bleibt, wie es die Regel vorschreibt, selbst wenn jemand versucht, es vorher zu löschen. Sie verschlüsselt aber nichts und regelt nicht, wer ein Dokument öffnen darf.</p>\n<ul>\n<li><strong>Vertraulichkeitslabel:</strong> schützt Zugriff und Freigabe und kann Verschlüsselung anwenden.</li>\n<li><strong>Data Loss Prevention (DLP):</strong> überwacht riskante Bewegungen vertraulicher Informationen und kann Aktionen erkennen oder blockieren, etwa unzulässiges Teilen.</li>\n<li><strong>Datensatzlabel:</strong> steuert die Lebensdauer des Dokuments als Nachweis und verhindert, dass es vor Ablauf der Frist verschwindet.</li>\n</ul>\n<p>Bei einem Vertrag mit vertraulichen Konditionen können alle drei zusammenarbeiten. Das eine schützt das Dokument während der Nutzung, das andere die geschäftliche Verpflichtung über die Zeit.</p>\n\n<h2>Dispositionsprüfung: Die Schranke vor der Löschung</h2>\n<p>Einen Datensatz die richtige Zeit aufzubewahren, ist nur die halbe Aufgabe. Die andere Hälfte ist die Entscheidung am Ende, die Disposition. Wer zu früh löscht, verliert Beweise für Rechtsstreit, Prüfung oder geschäftliche Auseinandersetzung. Wer abgelaufene Datensätze ewig behält, sammelt immer mehr Inhalte an, die geschützt werden müssen und in einem Verfahren angefordert werden könnten.</p>\n<p>Die Dispositionsprüfung liegt zwischen diesen beiden Risiken. Sie entspricht dem Papierprozess: Ein Karton erreicht sein Vernichtungsdatum, aber jemand Verantwortlicher sieht ihn an, bestätigt, dass sich nichts geändert hat, und genehmigt dann das Vorgehen. In Purview geht ein Datensatz am Ende der Frist an bestimmte Prüfer, statt sofort gelöscht zu werden. Der Prüfer öffnet das Element im Purview-Portal und entscheidet, ob es dauerhaft gelöscht werden kann. Im Vertragsbeispiel prüft er, ob es einen laufenden Rechtsstreit, eine rechtliche Anfrage oder einen anderen geschäftlichen Grund zur Aufbewahrung gibt. Spricht nichts dagegen, genehmigt er die Vernichtung. Ist der Vertrag noch relevant, kann er den Prozess pausieren.</p>\n\n<h3>Ein- oder mehrstufige Prüfung</h3>\n<p>Einfache Datensatztypen brauchen oft nur eine Stufe, etwa ein Records-Team, das Routineverträge nach Ablauf prüft. Ein sensibler Finanzdatensatz erfordert dagegen eventuell erst die Bestätigung des Geschäftsinhabers, dass er nicht mehr benötigt wird, und danach eine Prüfung durch Compliance oder Records-Team. Purview unterstützt solche mehrstufigen Prüfungen. Mehr Stufen bedeuten mehr Kontrolle, aber auch mehr Arbeit. Stimmen Sie den Aufwand deshalb auf das Risiko ab: keine lange Genehmigungskette für gewöhnliche Elemente, aber auch keine Einzelentscheidung bei Datensätzen mit rechtlichem, finanziellem oder Compliance-Bezug.</p>\n\n<h2>Audit: Die Spur nachvollziehbar machen</h2>\n<p>Datensatzverwaltung heißt auch, nachweisen zu können, dass die Regeln eingehalten wurden. Microsoft Purview Audit speichert eine zentrale Historie der Aktivitäten in Microsoft 365. Je nach Aktivität und Audit-Konfiguration lässt sich damit untersuchen, wer gehandelt hat, was getan wurde und wann.</p>\n<p>Fragt jemand, warum ein unterzeichneter Vertrag nicht mehr existiert, reicht ein leerer Ordner nicht als Antwort. Sie sollten die Kette zeigen können: Der Vertrag hatte ein Aufbewahrungslabel, die Frist lief ab, der zuständige Prüfer genehmigte die Löschung, und die Aktivität wurde protokolliert. Weitere typische Fragen: Wer hat das Label angewendet? Hat jemand versucht, das Element vor Fristablauf zu löschen? Wann wurde die Löschung genehmigt?</p>\n<p>Die Historie steht nicht im Dokument selbst. Purview speichert sie im einheitlichen Überwachungsprotokoll, einem zentralen Ort für Audit-Datensätze über Dienste wie SharePoint, OneDrive, Exchange Online, Teams und Entra ID hinweg. Man kann es sich wie das Besucher- und Aktivitätenregister eines Gebäudes vorstellen.</p>\n<p>Daraus folgt: Die Aufbewahrung der Audit-Daten ist getrennt von der Aufbewahrung der Datensätze zu betrachten. Welche Audit-Informationen verfügbar sind, hängt von der Einrichtung von Purview Audit und den vorhandenen Lizenzen ab. Brauchen Sie eine lange Historie zu datensatzbezogenen Aktivitäten, muss die Audit-Konfiguration sie für den geforderten Zeitraum behalten. Sonst haben Sie zwar den Datensatz noch, aber nicht mehr die Details, die seinen Weg erklären.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Alles als Datensatz behandeln:</strong> Wer jeden Entwurf, jedes Duplikat und jede Notiz sperrt, erschwert die normale Arbeit. Ziel ist der Schutz der endgültigen offiziellen Nachweise.</li>\n<li><strong>Datensatzlabel als Sicherheitseinstellung verstehen:</strong> Es regelt Aufbewahrung und Kontrollen, nicht Verschlüsselung oder Zugriff. Dafür sind Vertraulichkeitslabel und DLP zuständig.</li>\n<li><strong>Labels und Richtlinien verwechseln:</strong> Richtlinien gelten breit, Labels gezielt für Datensätze mit eigenem Pfad.</li>\n<li><strong>Auslöser falsch wählen:</strong> Hängt die Frist an einem Geschäftsereignis, genügt das Datum des Uploads nicht.</li>\n<li><strong>Prüfer als Einzelpersonen benennen:</strong> Menschen wechseln die Stelle, gehen in den Urlaub oder verlassen das Unternehmen. Eine verwaltete Gruppe führt die Prüfarbeit weiter.</li>\n<li><strong>Berechtigungen übersehen:</strong> Wer allgemein Microsoft 365-Admin ist, darf nicht automatisch Datensätze prüfen, die auf Vernichtung warten. Die nötigen Berechtigungen für die Datensatzverwaltung sollten vor der Aktivierung eines Labels geklärt sein, das große Mengen zur Prüfung sendet.</li>\n<li><strong>Audit-Aufbewahrung ignorieren:</strong> Ohne passende Audit-Konfiguration fehlt später die Nachweiskette.</li>\n<li><strong>Die Entscheidung allein bei einem Team belassen:</strong> Geschäftsbereiche kennen die Datensätze, Compliance und Recht definieren Regeln und Nachweise, die Administratoren konfigurieren Labels, Berechtigungen und Audit.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Legen Sie zuerst fest, welche Dateien als offizieller Nachweis gelten, bevor Sie Purview konfigurieren.</li>\n<li>Beantworten Sie für jeden Datensatztyp drei Fragen: Was startet die Uhr? Wie lange bleibt das Element? Was passiert am Ende?</li>\n<li>Nutzen Sie Aufbewahrungsrichtlinien für breite Inhalte und Aufbewahrungslabels für Datensätze mit individuellem Pfad.</li>\n<li>Kennzeichnen Sie manuell, wenn Ermessen nötig ist, und automatisch, wenn der Datensatz einem klaren Muster folgt.</li>\n<li>Deklarieren Sie nur die endgültigen, offiziellen Versionen als Datensatz.</li>\n<li>Trennen Sie die Aufgaben von Datensatzlabel, Vertraulichkeitslabel und DLP.</li>\n<li>Schreiben Sie auf, wer pro Datensatztyp die Löschung genehmigt und was bei einem aktiven rechtlichen oder geschäftlichen Grund geschieht.</li>\n<li>Weisen Sie Prüfer über verwaltete Gruppen zu und prüfen Sie ihre Berechtigungen.</li>\n<li>Stimmen Sie die Zahl der Prüfstufen auf das Risiko des Datensatzes ab.</li>\n<li>Stellen Sie sicher, dass die Audit-Konfiguration die Historie für den geforderten Zeitraum behält.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Purview Records Management gibt offiziellen Inhalten einen kontrollierten Weg durch ihre gesamte Nutzungsdauer. Zuerst definiert die Organisation, was als Nachweis gilt. Das Aufbewahrungslabel legt Auslöser, Frist und Endaktion fest, die Datensatzdeklaration schützt die offizielle Fassung, die Dispositionsprüfung kontrolliert die Entscheidung am Ende, und Audit dokumentiert die Spur. Wenn Sie in einigen Jahren eine Löschung begründen müssen, können Sie dann Regel, Genehmigung und aufgezeichnete Aktivität vorlegen. Das gelingt nur, wenn Fachbereiche, Compliance und Administration zusammenarbeiten.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Purview Records Management: Der Weg eines Datensatzes",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Datensatz definieren",
+     "text": "Festlegen, welche Dateien als offizieller Nachweis gelten, statt jede Datei gleich zu behandeln."
+    },
+    {
+     "kopf": "Aufbewahrungslabel zuweisen",
+     "text": "Auslöser, Aufbewahrungsfrist und Endaktion als Regelkarte direkt am Element hinterlegen."
+    },
+    {
+     "kopf": "Als Datensatz deklarieren",
+     "text": "Die offizielle Fassung wird mit strengeren Kontrollen für die geforderte Zeit geschützt."
+    },
+    {
+     "kopf": "Dispositionsprüfung",
+     "text": "Nach Fristablauf entscheiden Prüfer, ob der Datensatz endgültig gelöscht werden darf."
+    },
+    {
+     "kopf": "Audit-Spur sichern",
+     "text": "Das einheitliche Überwachungsprotokoll dokumentiert, wer wann was getan hat."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist ein Datensatz in Microsoft Purview Records Management?",
+    "a": "Ein Datensatz ist mehr als eine Datei: Er ist ein offizieller Nachweis, dass die Organisation etwas getan, entschieden, genehmigt oder vereinbart hat, zum Beispiel ein unterzeichneter Vertrag oder ein endgültiger Finanzbericht. Entwürfe und Arbeitsdateien zählen in der Regel nicht dazu."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen Aufbewahrungslabel und Aufbewahrungsrichtlinie?",
+    "a": "Eine Aufbewahrungsrichtlinie ist eine einheitliche Regel für einen ganzen Bereich, etwa ein Postfach, eine SharePoint-Website oder Teams-Nachrichten. Ein Aufbewahrungslabel gilt gezielt für ein einzelnes Element einer Datensatzkategorie und bleibt auch beim Verschieben erhalten. Beide lassen sich kombinieren."
+   },
+   {
+    "q": "Welche drei Bausteine hat eine Aufbewahrungsregel?",
+    "a": "Jede Regel besteht aus dem Auslöser, der die Frist startet (etwa Erstellungsdatum oder Vertragsende), der Aufbewahrungsfrist und der Endaktion nach Ablauf, zum Beispiel Löschung oder vorherige Prüfung. Die Dauer legt die Organisation fest, nicht Purview."
+   },
+   {
+    "q": "Wozu dient die Dispositionsprüfung in Purview?",
+    "a": "Am Ende der Aufbewahrungsfrist geht ein Datensatz an bestimmte Prüfer, statt sofort gelöscht zu werden. Diese prüfen, ob etwa ein Rechtsstreit oder ein anderer Grund gegen die Löschung spricht, und genehmigen die Vernichtung oder pausieren den Prozess. Mehrstufige Prüfungen sind möglich."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Aufbewahrungsrichtlinie oder Aufbewahrungslabel",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Aufbewahrungsrichtlinie",
+     "punkte": [
+      "Einheitliche Hausregel für einen ganzen Bereich",
+      "Gilt z. B. für Postfach, SharePoint-Website oder Teams-Nachrichten",
+      "Passt zu allgemeinen Inhalten mit gemeinsamer Grundregel",
+      "Wirkt breit auf den Speicherort"
+     ]
+    },
+    "rechts": {
+     "titel": "Aufbewahrungslabel",
+     "punkte": [
+      "Gezielt für ein einzelnes Element einer Datensatzkategorie",
+      "Regel bleibt am Inhalt, auch wenn er verschoben wird",
+      "Geeignet für offizielle Dokumente mit eigenem Aufbewahrungspfad",
+      "Sinnvoll bei Fristbeginn durch Geschäftsereignis oder Kontrollentscheidung am Ende"
+     ]
+    }
+   },
+   {
+    "titel": "Wofür welcher Schutz zuständig ist",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "Datensatzlabel",
+      "text": "Steuert die Lebensdauer als Nachweis und verhindert Verschwinden vor Fristablauf."
+     },
+     {
+      "wert": "Vertraulichkeitslabel",
+      "text": "Schützt Zugriff und Freigabe und kann Verschlüsselung anwenden."
+     },
+     {
+      "wert": "DLP",
+      "text": "Überwacht riskante Bewegungen vertraulicher Informationen und kann unzulässiges Teilen blockieren."
+     },
+     {
+      "wert": "Audit",
+      "text": "Speichert zentral, wer wann was getan hat, getrennt von der Datensatzaufbewahrung."
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welche drei Bausteine enthält jede vollständige Aufbewahrungsregel?",
+    "opts": [
+     "Auslöser, Aufbewahrungsfrist und Endaktion",
+     "Speicherort, Verschlüsselung und Aufbewahrungsfrist",
+     "Auslöser, Zugriffsrecht und Löschdatum",
+     "Datensatzkategorie, Audit-Protokoll und Endaktion"
+    ],
+    "a": 0,
+    "why": "Jede Regel legt fest, was die Uhr startet, wie lange aufbewahrt wird und was am Ende geschieht."
+   },
+   {
+    "q": "Worin unterscheidet sich ein Aufbewahrungslabel von einer Aufbewahrungsrichtlinie?",
+    "opts": [
+     "Das Label gilt einheitlich für einen ganzen Speicherort, die Richtlinie für einzelne Elemente.",
+     "Das Label verschlüsselt Inhalte, die Richtlinie regelt nur die Löschung.",
+     "Das Label wirkt gezielt auf ein Element, die Richtlinie breit auf einen Bereich.",
+     "Das Label funktioniert nur manuell, die Richtlinie nur automatisch."
+    ],
+    "a": 2,
+    "why": "Richtlinien gelten als Hausregel für ganze Bereiche; Labels hängen gezielt an Elementen mit eigenem Aufbewahrungspfad."
+   },
+   {
+    "q": "Was passiert in Purview mit einem Datensatz am Ende der Aufbewahrungsfrist bei Dispositionsprüfung?",
+    "opts": [
+     "Er wird sofort automatisch endgültig gelöscht.",
+     "Er wird an Prüfer gesendet, die über die Löschung entscheiden.",
+     "Er wird automatisch in ein Archiv mit Verschlüsselung verschoben.",
+     "Er wird dem Dokumentersteller zur freien Entscheidung zurückgegeben."
+    ],
+    "a": 1,
+    "why": "Statt sofortiger Löschung prüfen bestimmte Prüfer, ob etwa Rechtsstreit besteht, und genehmigen oder pausieren die Vernichtung."
+   },
+   {
+    "q": "Wo speichert Purview die Historie zu datensatzbezogenen Aktivitäten wie Label-Anwendung und Löschfreigabe?",
+    "opts": [
+     "In den Eigenschaften des jeweiligen Dokuments selbst",
+     "Im Aufbewahrungslabel, das am Element hängt",
+     "Im einheitlichen Überwachungsprotokoll von Purview Audit",
+     "Im Postfach des zuständigen Prüfers in Exchange Online"
+    ],
+    "a": 2,
+    "why": "Die Historie steht nicht im Dokument, sondern im zentralen einheitlichen Überwachungsprotokoll über mehrere Microsoft-365-Dienste hinweg."
+   }
+  ]
+ }
+}

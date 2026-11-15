@@ -1,3 +1,19 @@
+(function () {
+  /* Sidebar scrollt mit: haftet oben, wenn sie hoeher als das Fenster ist, wandert sie beim Runterscrollen mit, bis ihr Ende sichtbar ist, und beim Hochscrollen zurueck, bis ihr Anfang sichtbar ist. Nur top des sticky-Elements aendert sich (kein Layout-Sprung, keine Animation). */
+  var bar = document.querySelector("aside.sbar"); if (!bar || !window.matchMedia) return;
+  var mq = matchMedia("(min-width:62rem)"), PAD = 16, off = PAD, last = scrollY, tick = false, h = 0;
+  function lim() { return Math.min(PAD, innerHeight - h - PAD); }
+  function apply(d) {
+    tick = false;
+    if (!mq.matches) { bar.style.top = ""; return; }
+    h = bar.offsetHeight; off = Math.max(lim(), Math.min(PAD, off - d)); bar.style.top = off + "px";
+  }
+  var pend = 0;
+  addEventListener("scroll", function () { var y = scrollY; pend += y - last; last = y; if (!tick) { tick = true; requestAnimationFrame(function () { var d = pend; pend = 0; apply(d); }); } }, { passive: true });
+  addEventListener("resize", function () { off = PAD; apply(0); }, { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(function () { apply(0); }).observe(bar);
+  apply(0);
+})();
 /* "I'm attending M365Con 2027": Countdown (Sidebar) + Popup nach 2 Minuten Inaktivitaet. */
 (function () {
   var START = new Date("2027-01-11T00:00:00+01:00"), END = new Date("2027-01-23T00:00:00+01:00");
@@ -25,7 +41,7 @@
   if (/\/(?:community|sponsor)\//.test(location.pathname)) return;   // kein Popup auf Community- und Sponsor-Seiten (T37)
   var until = +ls("m365_attend_until") || 0; if (until > Date.now()) return;
   var timer, shown = false, last;
-  function css() { if (document.querySelector('link[href*="sbar.css"]')) return; var l = document.createElement("link"); l.rel = "stylesheet"; l.href = BASE + "/assets/sbar.css"; document.head.appendChild(l); }
+  function css() { if (document.querySelector('link[href*="sbar.css"],link[data-sbar]')) return;   /* data-sbar: Regeln stecken schon im Hash-Bundle (site.<hash>.css) */ var l = document.createElement("link"); l.rel = "stylesheet"; l.href = BASE + "/assets/sbar.css"; document.head.appendChild(l); }
   function close(days) { var o = document.getElementById("att-ov"); if (o) o.remove(); ls("m365_attend_until", String(Date.now() + days * 864e5)); if (last && last.focus) try { last.focus(); } catch (e) {} document.removeEventListener("keydown", esc); }
   function esc(e) {
     if (e.key === "Escape") { close(7); return; }

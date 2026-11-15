@@ -88,7 +88,7 @@
   var box = h("div", { class: "wk" }); root.appendChild(box);
   function pruneLogin(box){var P=window.__m365p=window.__m365p||fetch(W.api+"/api/providers").then(function(r){return r.json()}).catch(function(){return null});P.then(function(j){if(!j||!j.providers)return;[].slice.call(box.querySelectorAll("a[href*=\"/auth/login/\"]")).forEach(function(a){var m=/login\/(\w+)/.exec(a.href);if(m&&j.providers.indexOf(m[1])<0)a.remove()})})}
   function login() { var b = login0(); pruneLogin(b); return b; }
-  function login0() { var ret = encodeURIComponent(location.href.split("#")[0]); return h("div", { class: "wk-login" }, [h("p", { text: T.login }), h("div", { class: "btns" }, [h("a", { class: "btn main", href: W.api + "/auth/login/google?return=" + ret, rel: "nofollow", text: "Google" }), h("a", { class: "btn", href: W.api + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: "Microsoft" }), h("a", { class: "btn", href: W.api + "/auth/login/linkedin?return=" + ret, rel: "nofollow", text: "LinkedIn" })])]); }
+  function login0() { var ret = encodeURIComponent(location.href.split("#")[0]); return h("div", { class: "wk-login" }, [h("p", { text: T.login }), h("div", { class: "btns" }, [h("a", { class: "btn main", href: W.api + "/auth/login/google?return=" + ret, rel: "nofollow", text: "Google" }), h("a", { class: "btn", href: W.api + "/auth/login/microsoft?return=" + ret, rel: "nofollow", text: "Microsoft" }), h("a", { class: "btn", href: W.api + "/auth/login/linkedin?return=" + ret, rel: "nofollow", text: "LinkedIn" }), h("a", { class: "btn", href: W.api + "/auth/login/github?return=" + ret, rel: "nofollow", text: "GitHub" })])]); }
 
   /* ---------- Editor ---------- */
   function editor(d, cur) {
@@ -165,7 +165,7 @@
           diff(prevRev.body, x.body).forEach(function (r) { if (r[0] !== 0) pre.appendChild(h("div", { class: r[0] > 0 ? "wk-add" : "wk-del" }, [h("b", { "aria-hidden": "true", text: r[0] > 0 ? "+ " : "− " }), h("span", { class: "sr", text: r[0] > 0 ? T.added + ": " : T.removed + ": " }), txt(r[1])])); });
           dd.appendChild(pre); li.appendChild(dd);
         }
-        if (d.admin && i > 0) li.appendChild(h("button", { type: "button", class: "wk-link", text: T.restore, onclick: function () { api("/api/admin/wiki/approve/" + x.id, { method: "POST" }).then(load); } }));
+        if (d.admin && i > 0) li.appendChild(h("button", { type: "button", class: "wk-link", text: T.restore, onclick: function (e) { act("/api/admin/wiki/approve/" + x.id, e.target); } }));
         ul.appendChild(li);
       });
       hd.appendChild(ul); box.appendChild(hd);
@@ -186,6 +186,11 @@
       box.appendChild(sec);
     });
   }
+  // Redaktionsknoepfe: bei Erfolg neu laden, sonst den Grund am Knopf zeigen (z. B. own_content, out_of_scope) statt still neu zu laden
+  function act(path, btn) {
+    var label = btn.textContent; btn.disabled = true;
+    api(path, { method: "POST" }).then(function (r) { if (r.s === 200) return load(); btn.disabled = false; btn.textContent = label + " – " + T.error + (r.j && r.j.error ? " (" + r.j.error + ")" : ""); }).catch(function () { btn.disabled = false; btn.textContent = label + " – " + T.error; });
+  }
   function adminQueue() {
     api("/api/admin/wiki/pending").then(function (r) {
       var list = (r.j.pending || []).filter(function (x) { return x.term === W.term && x.lang === W.lang; }); if (!list.length) return;
@@ -193,7 +198,7 @@
       list.forEach(function (x) {
         var pb = h("div", { class: "wk-body" }); pb.appendChild(renderWiki(x.body));
         sec.appendChild(h("div", { class: "wk-pend" }, [h("p", { class: "cmut", text: x.name + (x.summary ? " – " + x.summary : "") }), pb,
-          h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: T.approve, onclick: function () { api("/api/admin/wiki/approve/" + x.id, { method: "POST" }).then(load); } }), h("button", { type: "button", class: "btn", text: T.reject, onclick: function () { api("/api/admin/wiki/reject/" + x.id, { method: "POST" }).then(load); } })])]));
+          h("div", { class: "btns" }, [h("button", { type: "button", class: "btn main", text: T.approve, onclick: function (e) { act("/api/admin/wiki/approve/" + x.id, e.target); } }), h("button", { type: "button", class: "btn", text: T.reject, onclick: function (e) { act("/api/admin/wiki/reject/" + x.id, e.target); } })])]));
       });
       box.appendChild(sec);
     });
