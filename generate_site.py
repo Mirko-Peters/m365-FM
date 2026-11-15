@@ -1540,7 +1540,7 @@ def build():
             ENT.EVENTS.setdefault(_t, _ev)
     for _x in (LRN._fetch_json(f"{COMMUNITY_API}/api/qa/export") or {}).get("items", []):
         ENT.FAQ.setdefault(_x["eid"], []).append(_x)
-    ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
+    ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.load_claims(_cl, ENT.ENTS)
     import site_event_link as _EVL; _EVL.load(_events, {p["handle"] for p in _people}, {o["handle"] for o in _orgs}, TODAY)   # Event <-> Event-Entitaet (bestaetigte Zuordnung aus dem Export): Termine auf der Entitaetsseite, superEvent auf der Event-Seite
     ENT.set_kinds(_orgs, _people)   # Branchen und Jobs: Mitglieder und Firmen auf den Entitaetsseiten
     ENT.set_teams(_orgs, _people, {p["handle"]: MEM.person_entity(p["handle"]) for p in _people})   # Mitarbeitende der Community-Firma -> Personen auf der verknuepften Firmen-Entitaet

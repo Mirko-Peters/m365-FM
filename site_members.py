@@ -156,6 +156,12 @@ def person_entity(handle):
     return CLAIMED.get(handle) or AUTHOR_ENT.get(handle)
 
 
+def load_claims(claims, ents):
+    """Bestaetigte Claims (Export) -> CLAIMED, nur Personen-Entitaeten: Wer eine Firma uebernommen hat (z. B. mirko-p -> ifakt),
+    ist nicht diese Firma; sonst stuende die Firma als Autor (BlogPosting.author) und als Person im Team der Firma."""
+    CLAIMED.update({c["handle"]: c["eid"] for c in claims or [] if c.get("handle") and (ents.get(c.get("eid")) or {}).get("type") == "person"})
+
+
 def _https(u):
     return u if isinstance(u, str) and u.startswith("https://") else ""
 
