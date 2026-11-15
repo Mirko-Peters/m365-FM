@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-14 04:58 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-15 04:57 UTC)
 
-Gesetzt laut Protokoll: 3697 · im Feed gleich: 3601 · im Feed anders: 0 · nicht im Feed: 96 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3922 · im Feed gleich: 3820 · im Feed anders: 0 · nicht im Feed: 102 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -98,3 +98,7 @@ Gesetzt laut Protokoll: 3697 · im Feed gleich: 3601 · im Feed anders: 0 · nic
 - 67750560: nicht_im_feed · soll https://www.m365.fm/show/episodes/unit-vs-integration-vs-front-end-the-testing-face-off/ · Feed None
 - 67754723: nicht_im_feed · soll https://www.m365.fm/show/episodes/stop-using-entity-framework-like-this/ · Feed None
 - 67760699: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-cloud-promise-is-broken/ · Feed None
+- 67768620: nicht_im_feed · soll https://www.m365.fm/show/episodes/quantum-code-isnt-magic-its-debuggable/ · Feed None
+- 67774564: nicht_im_feed · soll https://www.m365.fm/show/episodes/build-azure-apps-without-writing-boilerplate/ · Feed None
+- 67780825: nicht_im_feed · soll https://www.m365.fm/show/episodes/your-sharepoint-content-map-is-lying-to-you/ · Feed None
+- 67788801: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-hidden-ai-engine-inside-net-10/ · Feed None
