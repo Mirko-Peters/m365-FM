@@ -1,0 +1,613 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.880 --> 00:00:12.440
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.680 --> 00:00:18.460
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.680 --> 00:00:21.840
+Geen algemene presentaties, geen eindeloze modewoorden.
+
+00:00:21.840 --> 00:00:29.140
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.140 --> 00:00:34.920
+Of je nu IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.340 --> 00:00:40.420
+Met 10 volle dagen kun je meerdere technologieën verkennen en contact leggen met een wereldwijde community.
+
+00:00:40.940 --> 00:00:44.520
+Kijk live en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.900 --> 00:00:49.160
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.420 --> 00:00:51.160
+De registratie is nu geopend.
+
+00:00:52.000 --> 00:00:55.820
+Ga naar m365com.net en bemachtig vandaag nog je plek.
+
+00:00:56.700 --> 00:00:58.960
+Dat is m365com.net.
+
+00:00:59.980 --> 00:01:04.500
+Meld je nu aan op m365com.net en we zien je live in januari.
+
+00:01:04.740 --> 00:01:08.700
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:01:08.880 --> 00:01:10.120
+Ik ben je host Milko Peters.
+
+00:01:10.400 --> 00:01:13.620
+Het onderwerp van vandaag is er een waar bijna iedereen die met Azurewerk tegenaan is gelopen.
+
+00:01:13.820 --> 00:01:20.340
+Je start een nieuwe virtuele machine en de standaard is een openbaar IP-adres met RDP-poort 3389 open naar het internet.
+
+00:01:20.580 --> 00:01:24.260
+Als je dit al een tijdje doet, heb je jezelf waarschijnlijk dezelfde vraag gesteld als ik.
+
+00:01:24.380 --> 00:01:26.760
+Is dit echt de enige manier om op mijn server te komen?
+
+00:01:26.760 --> 00:01:31.940
+Het punt is elke openstaande poort is een doelwit en ransomware benden scannen voortdurend naar open RDP.
+
+00:01:32.220 --> 00:01:34.480
+Het is niet de vraag of ze het vinden, maar wanneer.
+
+00:01:34.620 --> 00:01:40.620
+Aan het eind van deze aflevering begrijp je wat Azure Bastion precies is en hoe het een betere manier biedt om veilig toegang te krijgen tot je VM's.
+
+00:01:40.780 --> 00:01:47.560
+We kijken naar de oude manier, waarom die gebrekkig is, en de betere manier, plus de nieuwe entra-ID integratie die het nog eenvoudiger maakt dan je zou verwachten.
+
+00:01:47.560 --> 00:01:50.320
+De oude manier, jumpboxes en openbare RDP.
+
+00:01:50.660 --> 00:01:52.340
+Laten we dus beginnen met de oude manier.
+
+00:01:52.540 --> 00:01:53.980
+De traditionele opzet werkt als volgt.
+
+00:01:54.080 --> 00:01:58.160
+Je implementeert een VM, geeft deze een openbaar IP en opent RDP-poort 3389.
+
+00:01:58.740 --> 00:02:02.000
+Daarna voeg je een netwerkbeveiligingsgroepregel toe om te beperken wie er toegang heeft.
+
+00:02:02.220 --> 00:02:05.320
+Misschien beperk je het tot je kantoor-IP-bereik of een VPN-eindpunt.
+
+00:02:05.540 --> 00:02:08.640
+Dat is het basispatroon, maar er is nog een model dat al jaren bestaat.
+
+00:02:08.860 --> 00:02:09.560
+De jumpbox.
+
+00:02:09.800 --> 00:02:11.620
+Zie het als een veiligheidscontrolepost.
+
+00:02:11.840 --> 00:02:14.780
+Je moet er eerst doorheen voordat je de rest van je netwerk kunt bereiken.
+
+00:02:14.780 --> 00:02:18.660
+Een jumpbox is een enkele VM die fungeert als gateway naar je privé-netwerk.
+
+00:02:18.840 --> 00:02:23.680
+Je maakt eerst via RDP verbinding met die box en vanaf daar spring je naar andere servers in je netwerk.
+
+00:02:23.880 --> 00:02:28.020
+Het is een simpel idee dat jarenlang werkte en vandaag de dag nog steeds werkt in kleine omgevingen.
+
+00:02:28.180 --> 00:02:32.400
+Het addertje onder het gras is dat het alleen werkt als je het beveiligt, patcht, monitort en nooit een fout maakt.
+
+00:02:32.560 --> 00:02:36.300
+Het probleem is niet dat het niet kan werken, maar dat het voortdurend werk kost om het veilig te houden.
+
+00:02:36.500 --> 00:02:37.880
+Dus, dit is het echte probleem.
+
+00:02:38.200 --> 00:02:40.000
+Jumpboxen zijn gewoon normale VM's.
+
+00:02:40.200 --> 00:02:44.300
+Ze hebben OS-updates, antivirus, beveiligingsbaselines en iemand nodig om dat allemaal te beheren.
+
+00:02:44.300 --> 00:02:47.980
+Ze hebben publieke IP-adressen met RDP- of SSH-poorten die openstaan.
+
+00:02:48.160 --> 00:02:51.460
+Zelfs als je die poorten beperkt met NSG-regels, blijven ze vindbaar.
+
+00:02:51.660 --> 00:02:53.500
+Ze worden nog steeds elke dag gescand.
+
+00:02:54.420 --> 00:02:57.520
+Op grote schaal wordt het beheren van jumpboxen snel een rommeltje.
+
+00:02:57.700 --> 00:03:01.660
+Je hebt meerdere VM's in verschillende regio's, inconsistente configuraties en patchdrift.
+
+00:03:01.820 --> 00:03:04.280
+Het ene team beveiligt hun systemen wel, het andere team niet.
+
+00:03:04.400 --> 00:03:07.760
+En de verborgen kosten waar niemand over praat, zijn de uren aan beheertijd die opgaan aan het patchen,
+
+00:03:07.960 --> 00:03:09.460
+beveiligen en troubleshooten van deze boxen.
+
+00:03:09.460 --> 00:03:12.700
+Ik heb schattingen gezien van ongeveer drie uur per maand alleen al voor onderhoud.
+
+00:03:12.880 --> 00:03:13.820
+Dat is echt geld.
+
+00:03:14.060 --> 00:03:16.640
+Dus, wat als er een service was die dit allemaal voor je regelt?
+
+00:03:16.820 --> 00:03:20.920
+Een die het publieke eindpunt volledig verwijdert en je een schonere, veiligere ingang biedt.
+
+00:03:21.060 --> 00:03:22.100
+Wat is Azure Bastion?
+
+00:03:22.340 --> 00:03:24.680
+Dus, dit is de simpelste definitie die ik je kan geven.
+
+00:03:24.860 --> 00:03:30.380
+Azure Bastion is een volledig beheerde paasservice die je veilige RDP- en SSH-toegang geeft tot Azure VM's
+
+00:03:30.380 --> 00:03:32.540
+zonder publieke IP's op die VM's bloot te stellen.
+
+00:03:32.800 --> 00:03:33.300
+Dat is het.
+
+00:03:33.460 --> 00:03:36.800
+Geen publieke IP's, geen open poorten, geen blootgestolde beheer-eindpunten.
+
+00:03:36.800 --> 00:03:38.320
+Zie het als een beveiligde tunnel.
+
+00:03:38.540 --> 00:03:43.240
+Je verbindt via HTTPS met Bastion en Bastion maakt privéverbinding met je VM binnen het virtuele netwerk.
+
+00:03:43.420 --> 00:03:48.140
+Je browser praat met Bastion via poort 443, dezelfde poort die je gebruikt voor veilige websites.
+
+00:03:48.420 --> 00:03:53.540
+Bastion praat vervolgens met je VM via RDP of SSH, maar dat verkeer blijft binnen je virtuele netwerk.
+
+00:03:53.740 --> 00:03:55.040
+De buitenwereld ziet het nooit.
+
+00:03:55.320 --> 00:03:57.220
+Dit is nu het belangrijkste verschil met een jumpbox.
+
+00:03:57.460 --> 00:03:58.560
+Bastion is geen VM.
+
+00:03:58.780 --> 00:04:00.520
+Het is niet iets wat je hoeft te patchen of te onderhouden.
+
+00:04:00.720 --> 00:04:02.200
+Microsoft regelt dat allemaal voor je.
+
+00:04:02.340 --> 00:04:05.800
+De OS-updates, de beveiligingshardening, de schaling, het wordt allemaal voor je verzorgd.
+
+00:04:05.800 --> 00:04:07.560
+Je implementeert het gewoon en gebruikt het.
+
+00:04:07.680 --> 00:04:10.580
+Voor basisgebruik maak je verbinding vanuit de Azure portal direct in je browser.
+
+00:04:10.800 --> 00:04:15.220
+Geen extra client software nodig, geen VP en client om te installeren, geen RDP client om te configureren.
+
+00:04:15.420 --> 00:04:16.860
+Alleen je browser en je Azure login.
+
+00:04:17.100 --> 00:04:21.260
+Je VM's blijven privé, geen publiek IP nodig, geen RDP port blootgesteld aan het internet.
+
+00:04:21.480 --> 00:04:23.700
+En dit is het punt met moderne beveiligingsmodellen.
+
+00:04:23.940 --> 00:04:25.920
+Bastion past in een Zero Trust raamwerk.
+
+00:04:26.120 --> 00:04:29.240
+Toegang wordt beheerd door identiteit en beleid, niet door netwerklocatie.
+
+00:04:29.420 --> 00:04:32.000
+Je krijgt geen toegang omdat je je in de juiste IP-reeks bevindt.
+
+00:04:32.060 --> 00:04:34.680
+Je krijgt toegang omdat je de juiste persoon bent met de juiste rechten.
+
+00:04:34.680 --> 00:04:39.200
+Laten we bespreken hoe het onder de motorkap werkt, want de architectuur is eenvoudiger dan je misschien denkt.
+
+00:04:39.360 --> 00:04:40.820
+Hoe Azure Bastion werkt.
+
+00:04:41.040 --> 00:04:44.680
+Bastion wordt geïmplementeerd in een toegewezen subnet in je virtuele netwerk.
+
+00:04:44.920 --> 00:04:50.780
+Dat Azure Bastion subnet moet heten met een 26 adresruimte of groter, minimaal 64 IP-adressen,
+
+00:04:50.960 --> 00:04:53.320
+wat ruimte biedt voor de werking en schaalbaarheid van de service.
+
+00:04:53.700 --> 00:04:56.900
+Dat subnet is exclusief voor Bastion, dus er kan niets anders in draaien.
+
+00:04:57.120 --> 00:04:59.300
+Geen VM's, geen andere services, niets.
+
+00:04:59.460 --> 00:05:03.260
+Dit houdt alles overzichtelijk en veilig en je weet precies wat er in dat subnet staat en wat het doet.
+
+00:05:03.260 --> 00:05:08.700
+Wanneer je verbinding maakt via de portal, opent je browser een TLS-sessie naar het openbare IP-adres van Bastion op port 443,
+
+00:05:08.800 --> 00:05:10.220
+versleuteld zodat niemand kan zien wat je doet.
+
+00:05:10.440 --> 00:05:14.680
+Vervolgens initieert Bastion, RDP of SSH naar je doel VM via het privé-netwerk,
+
+00:05:14.840 --> 00:05:18.920
+zodat de VM de verbinding ziet als afkomstig van binnen het virtuele netwerk, niet vanaf het internet.
+
+00:05:19.140 --> 00:05:21.360
+En de VM weet niet eens dat de buitenwereld bestaat.
+
+00:05:21.580 --> 00:05:24.360
+Bastion kan VM's in hetzelfde VNet en gekoppelde VNets bedienen,
+
+00:05:24.540 --> 00:05:28.400
+en met de juiste SKU zelfs on-premises machines die verbonden zijn via expressroute of VPN.
+
+00:05:28.400 --> 00:05:32.880
+Dat betekent dat je één Bastion-implementatie kunt gebruiken om VM's in meerdere netwerken te bereiken,
+
+00:05:33.040 --> 00:05:35.000
+zolang ze maar verbonden zijn en in dezelfde tenant zitten.
+
+00:05:35.180 --> 00:05:36.920
+Een slimme manier om de boel verder te vergrendelen,
+
+00:05:37.140 --> 00:05:41.420
+is door netwerkbeveiligingsgroepen te gebruiken die alleen RDP en SSH vanuit het Bastion-subnet toestaan.
+
+00:05:41.560 --> 00:05:45.280
+Op die manier kan iemand, zelfs als diegene op de een of andere manier in je virtuele netwerk terechtkomt,
+
+00:05:45.380 --> 00:05:46.560
+nog steeds niet bij die beheerpoorten.
+
+00:05:46.720 --> 00:05:50.660
+Ze moeten via Bastion gaan, wat betekent dat ze eerst de juiste identiteit en rechten moeten hebben.
+
+00:05:50.880 --> 00:05:53.400
+Dit alleen is al een grote verbetering ten opzichte van jumphosts,
+
+00:05:53.400 --> 00:05:57.680
+jumphosts, maar er is een nieuwe functie die het nog verder brengt en die draait volledig om identiteit.
+
+00:05:58.240 --> 00:06:00.040
+De entra-ID-integratie.
+
+00:06:00.600 --> 00:06:01.640
+Dit verandert alles.
+
+00:06:02.140 --> 00:06:05.400
+Jarenlang was er één nadeel aan Bastion dat veel mensen dwarsjaat.
+
+00:06:05.560 --> 00:06:11.960
+Je had nog steeds lokale VM-accounts, gebruikersnamen, wachtwoorden of SSH-sleutels nodig die je op elke machine moest beheren.
+
+00:06:12.140 --> 00:06:16.940
+Dus, hoewel Bastion het netwerkbeveiligingsprobleem oploste, zat je nog steeds met het oude identiteitsprobleem.
+
+00:06:17.140 --> 00:06:18.920
+Verschillende wachtwoorden op verschillende VM's,
+
+00:06:19.080 --> 00:06:21.240
+accounts die nooit werden opgeschoond als iemand het team verliet.
+
+00:06:21.240 --> 00:06:24.940
+De hele rompslong. Toen, in 2025, veranderde Microsoft dat.
+
+00:06:25.100 --> 00:06:28.840
+Ze voegde native entra-ID-verificatie voor Bastion toe en dat veranderde alles.
+
+00:06:29.080 --> 00:06:32.180
+Nu kun je via Bastion inloggen op een Windows-VM met je werkidentiteit,
+
+00:06:32.380 --> 00:06:34.500
+zonder lokaal account en zonder wachtwoord om te onthouden.
+
+00:06:34.700 --> 00:06:36.540
+Gewoon je entra-ID-inloggegevens.
+
+00:06:36.780 --> 00:06:40.160
+Dezelfde gebruikersnaam en hetzelfde wachtwoord als voor je e-mail, Teams en SharePoint.
+
+00:06:40.420 --> 00:06:41.040
+Dat is alles.
+
+00:06:41.260 --> 00:06:44.940
+Entra-ID brengt MFA en voorwaardelijke toegangsbeleidsregels naar je VM-login.
+
+00:06:45.120 --> 00:06:48.660
+Dus, hetzelfde beleid dat je e-mail en apps beschermt, beveiligt nu ook je servers.
+
+00:06:48.660 --> 00:06:55.720
+Als je bedrijf MFA vereist voor gevoelige data, verschijnt diezelfde MFA-prompt zodra je via RDP inlogt op een VM.
+
+00:06:55.940 --> 00:07:00.920
+En als je beleid voor voorwaardelijke toegang-inlogpogingen vanaf onbetrouwbare locaties blokkeert, geldt dat ook hier.
+
+00:07:01.080 --> 00:07:04.180
+Je servers erven dezelfde beveiligingsstatus als de rest van je omgeving.
+
+00:07:04.360 --> 00:07:06.500
+Er zijn een paar vereisten waar je rekening mee moet houden.
+
+00:07:06.660 --> 00:07:13.760
+De VM moet draaien op Windows 10.2.0 H2 of Nieuwer of Windows Server 2022 en je hebt de AD-login-extensie nodig op de VM.
+
+00:07:13.940 --> 00:07:17.040
+Je moet ook de juiste RBAC-rollen toewijzen aan je gebruikers.
+
+00:07:17.040 --> 00:07:23.700
+Er zijn hier twee rollen, Virtual Machine User Login voor standaard toegang en Virtual Machine Administrator Login voor beheerdersrechten.
+
+00:07:23.880 --> 00:07:28.320
+Het is een duidelijke scheiding waarmee je mensen precies de toegang geeft die ze nodig hebben, niets meer.
+
+00:07:28.500 --> 00:07:34.100
+Als alles correct is ingesteld, verschijnt Entra ID als standaard type voor authenticatie in de Bastion Verbindingsblade.
+
+00:07:34.260 --> 00:07:35.360
+Je bent met één klik binnen.
+
+00:07:35.580 --> 00:07:40.780
+Geen gebruikersnaam typen, geen wachtwoord zoeken, geen SSH-sleutel kopiëren, gewoon klikken en verbinden.
+
+00:07:40.780 --> 00:07:47.500
+Hier valt het oude Jumpbox-model echt door de mand, want met Bastion en Entra ID samen krijg je iets wat een Jumpbox nooit kan bieden.
+
+00:07:48.220 --> 00:07:52.960
+Identiteitsgebaseerde toegang ondersteunt door je volledige security stack, niet slechts een lokaal account op een VM.
+
+00:07:53.200 --> 00:07:55.060
+SKU prijzen en de werkelijkheid.
+
+00:07:55.280 --> 00:07:56.580
+Laten we het dus over geld hebben.
+
+00:07:56.820 --> 00:07:58.860
+Iedereen wil weten wat Bastion werkelijk kost.
+
+00:07:59.060 --> 00:08:02.180
+Er zijn vier niveaus, Developer, Basic, Standard en Premium.
+
+00:08:02.440 --> 00:08:03.540
+Developer is gratis.
+
+00:08:03.780 --> 00:08:05.600
+Dit is bedoeld voor testen, niet voor echt werk.
+
+00:08:05.600 --> 00:08:08.920
+Je kunt slechts één VM tegelijk verbinden en het draait op gedeelde infrastructuur.
+
+00:08:09.060 --> 00:08:11.180
+Geweldig om te leren, maar zet er niets belangrijks op.
+
+00:08:11.400 --> 00:08:15.180
+Basic begint rond de 19 cent per uur, ongeveer 140 dollar per maand.
+
+00:08:15.340 --> 00:08:17.940
+Het werkt voor kleine opstellingen, maar je mist een paar zaken.
+
+00:08:18.160 --> 00:08:21.640
+Geen Native Client ondersteuning, geen Best & Subload of Download, geen deelbare links.
+
+00:08:21.820 --> 00:08:24.260
+Prima voor basistoegang via de portal, maar niets bijzonders.
+
+00:08:24.500 --> 00:08:27.940
+Standard kost 29 cent per uur, ongeveer 210 dollar per maand.
+
+00:08:28.140 --> 00:08:29.600
+Dat is standaard inclusief twee instanties.
+
+00:08:30.320 --> 00:08:32.260
+En dit is waar je de echt goede functies krijgt.
+
+00:08:32.260 --> 00:08:36.680
+Native Client ondersteuning, zodat je je normale RDP of SSH Client kunt gebruiken in plaats van de browser.
+
+00:08:36.900 --> 00:08:38.520
+Deelbare links voor tijdelijke toegang.
+
+00:08:38.700 --> 00:08:40.300
+Bestanden uploaden en downloaden.
+
+00:08:40.420 --> 00:08:44.440
+IP gebaseerde verbindingen om on-premises machines te bereiken via express route of VPN.
+
+00:08:44.680 --> 00:08:49.240
+Premium kost 27 cent per uur, ongeveer 200 dollar per maand, ook met twee instances.
+
+00:08:49.560 --> 00:08:51.820
+Ja, het is per uur iets goedkoper dan standaard.
+
+00:08:51.980 --> 00:08:54.720
+Premium voegt sessieopname en een puur private implementatie toe.
+
+00:08:54.920 --> 00:08:57.300
+Dat betekent dat Bastion zelf geen publiek IP-adres nodig heeft.
+
+00:08:57.480 --> 00:08:59.760
+Dat is erg belangrijk voor omgevingen met strenge compliance-eisen.
+
+00:08:59.960 --> 00:09:01.580
+Nu volgt de vergelijking die er echt toe doet.
+
+00:09:01.580 --> 00:09:07.400
+Een Jumpbox VM kost je misschien maar 35 dollar tot 50 dollar per maand aan rekenkracht en opslag, maar dat zijn niet de werkelijke kosten.
+
+00:09:07.640 --> 00:09:14.160
+De verborgen kosten voor patchen, beveiligen, monitoren en beheren van die VM drijven het totaal vaak boven de 200 dollar per maand.
+
+00:09:14.400 --> 00:09:18.080
+Drie uur aan beheertijd tegen 60 dollar per uur is al 180 dollar.
+
+00:09:18.340 --> 00:09:21.640
+Tel daar de VM-kosten bij op en je zit op 220 dollar of meer.
+
+00:09:21.860 --> 00:09:27.320
+Dus Bastion standaard voor 210 dollar per maand ziet er redelijk uit als je meer rekent waar je niet meer voor betaalt.
+
+00:09:27.520 --> 00:09:31.100
+Voor de meeste productieomgevingen is standaard of premium de juiste keuze.
+
+00:09:31.100 --> 00:09:37.340
+Het prijsverschil tussen hen en een goed onderhouden Jumpbox is klein, terwijl de beveiligings- en operationele winst enorm is.
+
+00:09:37.560 --> 00:09:41.340
+Laten we alles op een rij zetten en kijken hoe deze onderdelen in één duidelijk beeld passen.
+
+00:09:41.520 --> 00:09:44.020
+Het grote geheel, hoe alles met elkaar verbonden is.
+
+00:09:44.260 --> 00:09:46.860
+Laten we uitzoomen en zien hoe dit allemaal samenkomt.
+
+00:09:46.860 --> 00:09:55.640
+Het oude model zag er zo uit. Een publiek IP op je VM, een open RDP-poort, een Jumpbox die constante zorg vereiste en lokale accounts verspreid over elke machine.
+
+00:09:55.860 --> 00:09:58.420
+Elk onderdeel was een apart probleem dat je moest oplossen.
+
+00:09:59.220 --> 00:10:03.880
+Netwerkbeveiliging, patchen, identiteitsbeheer, inloggegevens roteren. Dat zijn veel bewegende delen.
+
+00:10:04.000 --> 00:10:06.100
+En als er eentje faalde, had je een inbreuk.
+
+00:10:06.100 --> 00:10:08.060
+Kijk nu naar het nieuwe model met Bastion.
+
+00:10:08.260 --> 00:10:13.480
+Geen publieke IP-adressen op je VM's, geen open poorten, een beheerdedienst die Microsoft patcht en beveiligt,
+
+00:10:13.640 --> 00:10:16.580
+en identiteitsgebaseerde toegang met MFA en voorwaardelijke toegang.
+
+00:10:16.740 --> 00:10:18.740
+Plotseling neemt de complexiteit enorm af.
+
+00:10:18.920 --> 00:10:20.580
+Hier is hoe de onderdelen het werk verdelen.
+
+00:10:20.820 --> 00:10:24.580
+Bastion regelt de netwerkbeveiligingslaag. Het is de manier waarop je binnenkomt.
+
+00:10:24.620 --> 00:10:29.900
+Het zorgt ervoor dat je VM's onzichtbaar zijn voor het internet en dat elke verbinding via een veilige, beheerde tunnel verloopt.
+
+00:10:30.100 --> 00:10:34.540
+Entra ID regelt de identiteitslaag. Het draait om wie je bent en of je toestemming hebt.
+
+00:10:34.540 --> 00:10:39.340
+Het zorgt ervoor dat alleen de juiste mensen met de juiste rechten en de juiste apparaat status verbinding kunnen maken.
+
+00:10:39.580 --> 00:10:44.780
+Samen bieden ze iets wat geen enkele jumpbox kan evenaren, een scherpe scheiding tussen netwerktoegang en identiteitscontrole.
+
+00:10:44.960 --> 00:10:48.500
+Je hoeft het netwerk niet te vertrouwen. Je hoeft het IP-adres niet te vertrouwen.
+
+00:10:48.660 --> 00:10:52.940
+Je vertrouwt de identiteit. En die identiteit wordt ondersteund door je volledige security stack.
+
+00:10:53.140 --> 00:10:57.460
+Dit is de richting die Microsoft opgaat. En dat is de richting die cloudbeveiliging opgaat.
+
+00:10:57.600 --> 00:11:00.860
+De echte kracht zit niet in één product, maar in hoe ze samenwerken.
+
+00:11:01.260 --> 00:11:03.400
+Je eerste stappen aan de slag met Bastion.
+
+00:11:03.400 --> 00:11:06.260
+Dus, waar begin je? Ik geef je een eenvoudig pad.
+
+00:11:06.440 --> 00:11:10.160
+Eerst moet je beslissen of je opnieuw begint of migreert vanaf bestaande jumpboxen.
+
+00:11:10.340 --> 00:11:12.840
+Als je opnieuw begint, heb je de beste uitgangspositie.
+
+00:11:13.020 --> 00:11:14.800
+Maar maak je geen zorgen als je migreert.
+
+00:11:15.020 --> 00:11:18.460
+Bastion kan naast je huidige setup bestaan terwijl je alles overzet.
+
+00:11:18.640 --> 00:11:19.980
+Kies vervolgens je SKU.
+
+00:11:20.140 --> 00:11:24.620
+De developer SKU is gratis en ideaal om te testen, maar kies voor productiestandaard of premium.
+
+00:11:24.940 --> 00:11:28.360
+Het prijsverschil met Basic is klein en je krijgt functies die je echt gebruikt.
+
+00:11:28.600 --> 00:11:31.200
+Daarna implementeer je Bastion in je virtuele netwerk.
+
+00:11:31.200 --> 00:11:33.440
+Maak het Azure Bastion subnet met een
+
+00:11:33.440 --> 00:11:35.440
+...
+
+00:11:35.440 --> 00:11:36.440
+...
+
+00:11:36.440 --> 00:11:38.440
+...
+
+00:11:38.440 --> 00:11:39.440
+...
+
+00:11:39.440 --> 00:11:40.440
+...
+
+00:11:40.440 --> 00:11:42.440
+...
+
+00:11:42.440 --> 00:11:43.440
+...
+
+00:11:43.440 --> 00:11:44.440
+...

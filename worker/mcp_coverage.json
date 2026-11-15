@@ -26,6 +26,11 @@
     "manage_event_duplicates"
    ]
   },
+  "/api/admin/events/review": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
   "/api/admin/events/claims": {
    "tools": [
     "manage_event_duplicates"
@@ -514,6 +519,17 @@
    "tools": [
     "list_events",
     "get_event"
+   ]
+  },
+  "/api/events/entity": {
+   "tools": [
+    "set_event_entity",
+    "search_entities"
+   ]
+  },
+  "/api/admin/events/entity": {
+   "tools": [
+    "manage_event_entity"
    ]
   },
   "/api/events/for-sponsors": {
@@ -1322,6 +1338,12 @@
   },
   "/api/byod/serve": {
    "skip": "Infrastruktur: liefert dem Site-Worker die Seiten des Blogs einer aktiven Mitglieds-Domain (HTML, RSS und Sitemap für Leser, keine Daten für KI-Werkzeuge); die Verwaltung der Domains läuft über die byod_* Tools"
+  },
+  "/api/entity/claim/evidence": {
+   "skip": "Adress-Nachweis zur Übernahme (Geschäftsadresse, privat): nur angemeldet im Browser, bewusst nicht per KI-Token; die Redaktion entscheidet"
+  },
+  "/api/profile/business": {
+   "skip": "Private Geschäftsadresse je Firma (nie öffentlich): nur angemeldet im Browser, bewusst nicht per KI-Token"
   }
  }
 }

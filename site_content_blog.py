@@ -5,7 +5,7 @@ Pakete mit status: review bleiben liegen. Geprueft wird: Titel, Kurzfassung, Lae
 Bilder nur von img.m365.fm (CLAUDE.md), keine Skripte. Fehler stehen im Bericht blog-content/report.json und im Build-Log; nichts wird geloescht.
 
 Kopf: title, summary, status (review|approved), publish (true|false), author (Profil-Handle, Standard mirko-p), date (JJJJ-MM-TT),
-topics (Entitaets-IDs), faq ([{q, a}]). Text: Markdown mit ##-Ueberschriften, Absaetzen, Listen, **fett**, *kursiv*, `code`,
+topics (Entitaets-IDs), faq ([{q, a}]), keypoints (optional, 3-8 Zeilen je 10-200 Zeichen, Abschnitt Key points nach dem ersten Absatz). Text: Markdown mit ##-Ueberschriften, Absaetzen, Listen, **fett**, *kursiv*, `code`,
 [Link](https://...) und Bildern ![Alt](https://img.m365.fm/...).
 Englische Pakete uebersetzt das Uebersetzer-Team (translate_blog.py, Schluessel content/<slug>) in die 14 Sprachen; translations() baut daraus
 die Sprachfassungen unter /<sprache>/community/u/<autor>/blog/<slug>/ wie bei den frueheren Beitraegen."""
@@ -13,8 +13,10 @@ import hashlib, json, re, time
 from datetime import datetime, timezone
 from pathlib import Path
 
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_shownotes as SNS
 import site_milestones as MST
+from site_i18n import T
 from site_learn import esc
 
 ROOT = Path(__file__).resolve().parent
@@ -66,8 +68,14 @@ def check(rec, lang, slug, ents):
     unknown = [t for t in topics if t not in ents]
     if unknown: err.append("unbekannte Themen: " + ", ".join(unknown[:5]))
     faq = [{"q": str(x.get("q") or "")[:200], "a": str(x.get("a") or "")[:600]} for x in (m.get("faq") or []) if isinstance(x, dict) and x.get("q") and x.get("a")]
+    kp = [str(x).strip() for x in (m.get("keypoints") or []) if str(x).strip()]   # Kernpunkte (3-8, je 10-200 Zeichen): Liste nach dem ersten Absatz, wird mit dem Text uebersetzt
+    if kp and (not 3 <= len(kp) <= 8 or any(not 10 <= len(x) <= 200 for x in kp)): err.append("Kernpunkte: 3-8 Punkte mit je 10-200 Zeichen")
     if err: return None, err
     html = render(body)
+    if kp:
+        box = f"<h2>{esc(T(lang, 'Key points', 'Kernpunkte'))}</h2>\n<ul>" + "".join(f"<li>{SNS._inline(x)}</li>" for x in kp) + "</ul>"   # Ueberschrift in der Paketsprache (data/py_i18n.json); englische Pakete uebersetzt translate_blog samt h2
+        cut = html.find("</p>")
+        html = box + "\n" + html if cut < 0 else html[:cut + 4] + "\n" + box + html[cut + 4:]
     item = {"slug": slug, "lang": lang, "title": title, "summary": summary, "author": author, "html": html, "topics": topics[:10], "faq": faq[:10],
             "publish": m.get("publish") in (True, "true", "yes", 1), "published": _ts(m.get("date")) or int(time.time())}
     item["hash"] = hashlib.sha1(json.dumps(item, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:16]
@@ -90,6 +98,12 @@ def collect(ents):
         if err: rep["errors"].append({"file": f"{lang}/{slug}.md", "errors": err}); continue
         seen[key] = lang; items.append(it); rep["approved"] += 1
     return items, rep
+
+
+def live_refs(ents):
+    """Freigegebene, fehlerfreie Pakete mit publish: true als {"handle", "slug"}: der Worker legt sie erst nach diesem Bau live an. Fuer SPM.check_posts,
+    damit ein Eintrag unter "posts" in data/sponsorships.json (taeglicher Lauf der Cognillo-Reihe, gleicher Commit wie publish: true) den Bau nicht abbricht."""
+    return [{"handle": it["author"], "slug": it["slug"]} for it in collect(ents)[0] if it.get("publish")]
 
 
 def publish(write, ents):
@@ -156,8 +170,8 @@ def translations(BASE, posts, ents):
             title, desc, html, faq = r
             out.append({**{k: o[k] for k in COPY if k in o}, "lang": lang, "title": title, "summary": (desc or "")[:400], "body": "", "html": html, "keypoints": [], "votes": 0,
                         "faq": [{"q": q["name"], "a": q["acceptedAnswer"]["text"]} for q in faq if q.get("name")], "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html),
-                        "legacy": True, "content_tr": True, "tr_of": "en", "ai_tr": True, "tr_index": lang in index}); n += 1
-        if n: print(f"Content-Pakete Blog {lang}: {n} Sprachfassungen{' (index)' if lang in index else ' (noindex)'}")
+                        "legacy": True, "content_tr": True, "tr_of": "en", "ai_tr": True, "tr_index": IR.index_or_long(lang in index, desc, html)}); n += 1   # 13.11.2026: ab 2500 Zeichen eigener Text immer index (site_index_rule)
+        if n: print(f"Content-Pakete Blog {lang}: {n} Sprachfassungen{' (index)' if lang in index else ' (noindex, ausser Fassungen ab 2500 Zeichen)'}")
     wait = [s["cp_slug"] for s in srcs if (s["author"], s["cp_slug"]) not in orig]
     if wait: print(f"Content-Pakete Blog: {len(wait)} englische Originale noch nicht live, Sprachfassungen warten: {', '.join(wait[:5])}")
     return out

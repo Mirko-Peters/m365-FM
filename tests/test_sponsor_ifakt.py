@@ -31,7 +31,8 @@ class OpenEnded(unittest.TestCase):
     def test_sponsors_json(self):
         self.assertEqual(S.sponsors_json("2027-06-01", ENTS, [REC]), {"orgs": [{"id": "acme", "name": "Acme", "manager": "mirko-p"}]})
         self.assertEqual(S.sponsors_json("2026-01-01", ENTS, [REC]), {"orgs": []})
-        self.assertEqual(S.sponsors_json("2027-06-01", ENTS, [{**REC, "end": "2027-01-01"}]), {"orgs": []})   # befristet und abgelaufen: kein Lead-Formular
+        self.assertEqual(S.sponsors_json("2027-07-02", ENTS, [{**REC, "end": "2027-01-01"}])["orgs"][0]["id"], "acme")   # befristet, in der Karenzzeit (end + 182): bleibt
+        self.assertEqual(S.sponsors_json("2027-07-03", ENTS, [{**REC, "end": "2027-01-01"}]), {"orgs": []})   # befristet und Karenzzeit vorbei: kein Lead-Formular
 
 
 class Ifakt(unittest.TestCase):

@@ -1,0 +1,976 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.480
+Het onderwerp van vandaag is iets waar bijna iedereen die met PowerBee werkt van heeft gehoord, maar wat bijna niemand echt kan uitleggen.
+
+00:00:05.660 --> 00:00:09.980
+Wat is DAX precies? Zijn het gewoon Excel-formules in PowerBee of is het iets compleet anders?
+
+00:00:10.200 --> 00:00:14.640
+Het zit zo, de meeste mensen denken dat DAX eigenlijk Excel-formules met een andere naam zijn, maar dat is niet zo.
+
+00:00:14.880 --> 00:00:17.540
+DAX is een compleet andere manier van denken over berekeningen.
+
+00:00:17.740 --> 00:00:22.460
+Als je het als Excel probeert te behandelen, raak je gefrustreerd en in de war omdat je cijfers niet kloppen.
+
+00:00:22.640 --> 00:00:28.820
+Aan het eind van deze aflevering weet je wat DAX echt is, waarom het belangrijk is en wat de kernconcepten zijn om het met vertrouwen te gebruiken.
+
+00:00:28.820 --> 00:00:30.880
+Pak je koffie erbij en laten we beginnen.
+
+00:00:31.320 --> 00:00:32.360
+Wat is DAX precies?
+
+00:00:32.860 --> 00:00:41.140
+DAX staat voor Data Analysis Expressions en het is de formuletaal die wordt gebruikt in PowerBee, PowerPivot in Excel en SQL Server Analysis Services.
+
+00:00:41.460 --> 00:00:44.600
+Zie het als de motor die achter de schermen je berekeningen aandrijft.
+
+00:00:44.860 --> 00:00:49.660
+DAX is niet nieuw. Het bestaat al sinds Excel PowerPivot meer dan 10 jaar geleden werd geïntroduceerd.
+
+00:00:49.820 --> 00:00:54.040
+Maar met PowerBee is het de standaardtaal geworden voor iedereen die serieus bezig is met data-analyse.
+
+00:00:54.220 --> 00:00:55.540
+En dit is wat het anders maakt.
+
+00:00:55.540 --> 00:00:58.560
+In Excel schrijf je formules die werken met individuele cellen.
+
+00:00:58.560 --> 00:01:02.220
+Wijs naar A1, vermenigvuldig met B1 en je krijgt een resultaat voor één cel.
+
+00:01:02.460 --> 00:01:05.920
+DAX werkt niet op die manier. Het werkt met hele tabellen en kolommen tegelijk.
+
+00:01:06.080 --> 00:01:07.680
+Je berekent niet één cel per keer.
+
+00:01:07.900 --> 00:01:13.860
+In plaats daarvan zeg je tegen de engine, neem deze hele kolom met getallen en tel deze op of filter deze hele tabel op basis van deze voorwaarden.
+
+00:01:14.060 --> 00:01:15.340
+Dus, hoe moet je dit voor je zien?
+
+00:01:15.580 --> 00:01:17.360
+Stel je voor dat je een kantoorgebouw bouwt.
+
+00:01:17.500 --> 00:01:20.360
+PowerBee geeft je de structuur, de vloeren, muren en kamers.
+
+00:01:20.580 --> 00:01:21.560
+Dat is je datamodel.
+
+00:01:21.820 --> 00:01:23.260
+DAX is de bedrading en de leidingen.
+
+00:01:23.260 --> 00:01:24.760
+Het is wat alles laat werken.
+
+00:01:24.980 --> 00:01:28.700
+Zonder DAX heb je een gebouw dat er mooi uitziet, maar geen elektriciteit of stromend water heeft.
+
+00:01:28.900 --> 00:01:33.440
+Met DAX gaan de lichten aan, werken de kranen en reageren je rapporten echt als iemand op een slicer klikt.
+
+00:01:33.640 --> 00:01:35.580
+Dat reactievermogen is precies het punt.
+
+00:01:35.860 --> 00:01:39.560
+DAX laat je berekeningen maken die automatisch reageren op filters en interacties.
+
+00:01:39.800 --> 00:01:45.160
+Maak één measure en het toont het juiste getal of iemand nu kijkt naar de totale verkoop per regio, per product of per maand.
+
+00:01:45.320 --> 00:01:46.160
+Het werkt gewoon.
+
+00:01:46.160 --> 00:01:50.020
+Maar om het goed te gebruiken, moet je de twee belangrijkste manieren begrijpen om met DAX te werken.
+
+00:01:50.220 --> 00:01:51.280
+Laten we die doornemen.
+
+00:01:51.500 --> 00:01:54.220
+De twee werelden, berekende kolommen versus measures.
+
+00:01:54.520 --> 00:01:58.080
+Vandaag bespreken we twee bouwstenen in DAX, berekende kolommen en measures.
+
+00:01:58.360 --> 00:02:00.180
+De meeste mensen denken dat ze hetzelfde zijn.
+
+00:02:00.400 --> 00:02:01.140
+Dat zijn ze niet.
+
+00:02:01.340 --> 00:02:03.760
+Ze door elkaar halen is een van de meest gemaakte fouten die ik zie.
+
+00:02:03.900 --> 00:02:05.440
+Een berekende kolom is statisch.
+
+00:02:05.620 --> 00:02:07.260
+Het voegt een nieuwe kolom toe aan je tabel.
+
+00:02:07.440 --> 00:02:09.700
+Het wordt gevuld tijdens een verversing en blijft daarna staan.
+
+00:02:09.880 --> 00:02:11.580
+Het verandert niet tot de volgende verversing.
+
+00:02:11.780 --> 00:02:13.680
+Dit is de eenvoudigste manier om erover na te denken.
+
+00:02:13.680 --> 00:02:16.580
+Stel je een archiefkast voor, je stopt een fel papier in een map.
+
+00:02:16.680 --> 00:02:18.520
+Op dat papier staat de volledige naam van de klant.
+
+00:02:18.680 --> 00:02:20.780
+Het maakt niet uit of je het dossier vandaag of volgende week bekijkt.
+
+00:02:20.940 --> 00:02:21.960
+De naam staat er nog steeds.
+
+00:02:22.220 --> 00:02:23.340
+Dat is een berekende kolom.
+
+00:02:23.500 --> 00:02:24.780
+Een meting is compleet anders.
+
+00:02:25.020 --> 00:02:26.140
+Het staat niet in de tabel.
+
+00:02:26.340 --> 00:02:27.860
+Het leeft in het geheugen van je rapport.
+
+00:02:28.120 --> 00:02:32.640
+Telkens wanneer iemand filtert, segmenteert of op een visual klikt, wordt de meting actief en herberekent deze.
+
+00:02:32.880 --> 00:02:33.740
+Waarom is dit belangrijk?
+
+00:02:34.060 --> 00:02:38.080
+Als een gebruiker op een slicer voor de noordoostelijke regio klikt, herberekent een meting direct.
+
+00:02:38.260 --> 00:02:40.140
+Een berekende kolom negeert de slicer.
+
+00:02:40.380 --> 00:02:41.000
+Dat moet wel.
+
+00:02:41.200 --> 00:02:42.100
+Het is statisch.
+
+00:02:42.100 --> 00:02:43.880
+Dit is de simpele regel.
+
+00:02:44.120 --> 00:02:47.860
+Als het getal moet veranderen wanneer iemand op een knop klikt, gebruik dan een meting.
+
+00:02:48.040 --> 00:02:51.020
+Als het altijd hetzelfde blijft, is een berekende kolom prima.
+
+00:02:51.280 --> 00:02:53.300
+Totale verkoop moet altijd een meting zijn.
+
+00:02:53.520 --> 00:02:56.240
+Als iemand filtert op regio of maand moet het totaal bijwerken.
+
+00:02:56.400 --> 00:02:57.960
+De volledige klantnaam is een kolom.
+
+00:02:58.120 --> 00:02:58.960
+Die verandert nooit.
+
+00:02:59.140 --> 00:03:00.560
+Een slicer heeft er geen invloed op.
+
+00:03:00.700 --> 00:03:02.320
+Hier raken de meeste beginners in de war.
+
+00:03:02.540 --> 00:03:04.380
+Ze maken voor alles berekende kolommen aan.
+
+00:03:04.560 --> 00:03:06.480
+Het voelt natuurlijk, want zo werkt Excel.
+
+00:03:06.480 --> 00:03:09.040
+Maar overmatig gebruik van kolommen maakt je model zwaar.
+
+00:03:09.180 --> 00:03:10.380
+Je rapporten worden traag.
+
+00:03:10.560 --> 00:03:13.800
+Berekende kolommen creëren statische cijfers die je gebruikers negeren.
+
+00:03:13.960 --> 00:03:16.020
+Metingen zijn bijna altijd de betere keuze.
+
+00:03:16.260 --> 00:03:17.220
+Ze zijn dynamisch.
+
+00:03:17.460 --> 00:03:18.360
+Ze reageren.
+
+00:03:18.560 --> 00:03:22.120
+Zodra je dit verschil begrijpt, ben je klaar voor de echte magie van DAX.
+
+00:03:22.340 --> 00:03:23.940
+Die magie heet filter context.
+
+00:03:24.240 --> 00:03:26.020
+Het grote idee, filter context.
+
+00:03:26.300 --> 00:03:28.140
+Oké, we hebben onze twee bouwstenen.
+
+00:03:28.360 --> 00:03:30.140
+Laten we het nu hebben over de motor erachter.
+
+00:03:30.140 --> 00:03:34.300
+Elk getal dat je in een Power BI rapport ziet, wordt berekend binnen iets dat filter context heet.
+
+00:03:34.420 --> 00:03:36.320
+Het klinkt ingewikkeld, maar het is simpel.
+
+00:03:36.560 --> 00:03:39.740
+Filter context is gewoon een reeks filters die op dat exacte moment actief zijn.
+
+00:03:39.940 --> 00:03:41.220
+Waar komen die filters vandaan?
+
+00:03:41.360 --> 00:03:42.820
+Ze komen van de slicers op je pagina.
+
+00:03:43.020 --> 00:03:44.720
+Ze komen van de visual waarop je hebt geklikt.
+
+00:03:44.900 --> 00:03:46.240
+Ze komen van de pagina zelf.
+
+00:03:46.480 --> 00:03:48.720
+Zelfs de rij die je bekijkt, creëert een filter context.
+
+00:03:48.960 --> 00:03:50.180
+Dit is waarom het je zou moeten boeien.
+
+00:03:50.400 --> 00:03:53.480
+Wanneer je een meting zoals totale verkoop schrijft, vertel je deze niet om naar de noordoostelijke
+
+00:03:53.480 --> 00:03:54.440
+regio in Q3 te kijken.
+
+00:03:54.640 --> 00:03:56.880
+Je vertelt de meting alleen om de verkoopkolom op te tellen.
+
+00:03:56.880 --> 00:03:57.700
+Dat is alles.
+
+00:03:57.700 --> 00:04:00.120
+De meting weet niets van regio's of kwartalen.
+
+00:04:00.260 --> 00:04:03.100
+Ze telt simpelweg alle rijen op die op dat moment zichtbaar zijn.
+
+00:04:03.300 --> 00:04:05.520
+De filter context bepaalt wat er zichtbaar is.
+
+00:04:05.760 --> 00:04:06.920
+Stel je een spotlight voor.
+
+00:04:07.120 --> 00:04:08.680
+Je gehele dataset is de kamer.
+
+00:04:08.860 --> 00:04:10.220
+De filter context is de spotlight.
+
+00:04:10.540 --> 00:04:13.180
+De meting is een camera die een foto maakt van precies datgene wat in het licht staat.
+
+00:04:13.380 --> 00:04:15.140
+Verplaats de spotlight naar de noordoostelijke regio.
+
+00:04:15.320 --> 00:04:16.520
+De meting wordt opnieuw berekend.
+
+00:04:16.680 --> 00:04:18.460
+Verplaats hem naar Q3 en hij wordt opnieuw berekend.
+
+00:04:18.600 --> 00:04:20.000
+Je hebt de formule niet gewijzigd.
+
+00:04:20.120 --> 00:04:21.260
+De context is veranderd.
+
+00:04:21.420 --> 00:04:22.620
+Dit verwart de meeste mensen.
+
+00:04:22.620 --> 00:04:26.440
+Ze schrijven een meting die er in één visual goed uitziet, maar zodra ze die in een matrix met
+
+00:04:26.440 --> 00:04:28.200
+andere filters plaatsen, verandert het getal.
+
+00:04:28.360 --> 00:04:29.740
+Ze denken dat er iets kapot is.
+
+00:04:29.900 --> 00:04:30.800
+Het is niet kapot.
+
+00:04:31.040 --> 00:04:32.640
+Dat is precies wat de meting hoort te doen.
+
+00:04:32.820 --> 00:04:33.740
+Hij is dynamisch.
+
+00:04:33.980 --> 00:04:35.000
+Dit is de echte kracht.
+
+00:04:35.180 --> 00:04:39.040
+Je schrijft één formule en die werkt voor elke mogelijke filter combinatie in je hele rapport.
+
+00:04:39.240 --> 00:04:41.140
+Eén formule, oneindig veel antwoorden.
+
+00:04:41.380 --> 00:04:42.560
+Maar je moet voorzichtig zijn.
+
+00:04:42.780 --> 00:04:45.820
+Als je niet weet welke filters actief zijn, zul je je getal niet begrijpen.
+
+00:04:46.020 --> 00:04:47.260
+Je moet de spotlight volgen.
+
+00:04:47.500 --> 00:04:50.940
+Word vertrouwd met de filter context en je ontgrendelt de echte kracht van DAX.
+
+00:04:50.940 --> 00:04:55.440
+En dat brengt ons bij de ster van de show, de Kelkje Leed functie, de belangrijkste functie,
+
+00:04:55.600 --> 00:04:56.200
+Kelkje Leed.
+
+00:04:56.400 --> 00:04:57.120
+Welkom terug.
+
+00:04:57.340 --> 00:05:00.540
+De kennissnack van vandaag gaat over de allerbelangrijkste functie in DAX.
+
+00:05:00.760 --> 00:05:01.820
+Die heet Kelkje Leed.
+
+00:05:02.000 --> 00:05:04.660
+Als je maar één functie onder de knie krijgt, laat het dan deze zijn.
+
+00:05:04.860 --> 00:05:08.640
+Met Kelkje Leed kun je de filter context aansturen in plaats van alleen de actieve filters
+
+00:05:08.640 --> 00:05:09.340
+te accepteren.
+
+00:05:09.520 --> 00:05:10.980
+Dit is hoe normale metingen werken.
+
+00:05:11.200 --> 00:05:14.380
+Wanneer je een meting schrijft, respecteert deze automatisch de huidige filter context.
+
+00:05:14.600 --> 00:05:18.340
+Als iemand 2024 selecteert in een slicer, toont je meting de cijfers van 2024.
+
+00:05:18.340 --> 00:05:21.880
+Als ze de noordoostelijke regio kiezen, toont deze de noordoostelijke cijfers.
+
+00:05:22.060 --> 00:05:25.160
+De meting reageert op alle actieve filters, zonder extra werk.
+
+00:05:25.360 --> 00:05:26.580
+Dat is het standaardgedrag.
+
+00:05:26.760 --> 00:05:29.320
+Maar wat als je een getal nodig hebt dat de huidige filters negeert?
+
+00:05:29.520 --> 00:05:33.160
+Misschien wil je de totale verkoop voor alle regio's naast de verkoop van de geselecteerde
+
+00:05:33.160 --> 00:05:33.700
+regio zien.
+
+00:05:33.880 --> 00:05:36.960
+Of je hebt de verkoop van vorig jaar nodig terwijl iemand naar dit jaar kijkt.
+
+00:05:37.140 --> 00:05:39.420
+In die gevallen kun je niet vertrouwen op de standaardcontext.
+
+00:05:39.600 --> 00:05:40.540
+Je moet deze aanpassen.
+
+00:05:40.780 --> 00:05:42.200
+Dat is precies wat Kelkje Leed doet.
+
+00:05:42.400 --> 00:05:44.900
+Kelkje Leed werkt door de filter context tijdelijk te wijzigen.
+
+00:05:44.900 --> 00:05:48.260
+Je geeft het een uitdrukking om te berekenen en vervolgens geef je één of meer filters op
+
+00:05:48.260 --> 00:05:48.880
+om toe te passen.
+
+00:05:49.000 --> 00:05:52.100
+Het wijzigt de context, voert de berekening uit en geeft het resultaat terug.
+
+00:05:52.260 --> 00:05:54.480
+De oorspronkelijke filter context blijft onaangetast.
+
+00:05:54.700 --> 00:05:55.460
+Dat is de magie.
+
+00:05:55.620 --> 00:05:57.060
+De syntaxis is eenvoudig.
+
+00:05:57.220 --> 00:06:00.380
+Je schrijft Kelkje Leed, Expressie, Filter 1, Filter 2.
+
+00:06:00.600 --> 00:06:03.020
+De expressie is meestal een meting die je al hebt gemaakt.
+
+00:06:03.280 --> 00:06:05.260
+Filters zijn de voorwaarden die je wilt toepassen.
+
+00:06:05.440 --> 00:06:07.460
+Je kunt zoveel filters toevoegen als je nodig hebt.
+
+00:06:07.680 --> 00:06:08.880
+Laten we kijken hoe dit werkt.
+
+00:06:09.100 --> 00:06:10.960
+Stel je hebt een meting genaamd totale verkoop.
+
+00:06:10.960 --> 00:06:13.060
+Deze toont de verkoop voor de geselecteerde periode.
+
+00:06:13.220 --> 00:06:16.260
+Om de verkoop voor dezelfde periode vorig jaar te tonen, schrijf je Kelkje Leed totale
+
+00:06:16.260 --> 00:06:18.220
+verkoop, dezelfde periode vorig jaar kalenderdatum.
+
+00:06:18.380 --> 00:06:19.600
+Dat is alles wat nodig is.
+
+00:06:19.800 --> 00:06:22.820
+Kelkje Leed neemt je bestaande meting en verschuift de datum context met één jaar
+
+00:06:22.820 --> 00:06:23.100
+terug.
+
+00:06:23.260 --> 00:06:25.400
+Je krijgt de vergelijking die je nodig hebt in één regel.
+
+00:06:25.700 --> 00:06:28.440
+Zonder Kelkje Leed zit je vast aan de bestaande filter context.
+
+00:06:28.700 --> 00:06:32.400
+Met Kelkje Leed kun je filters overschrijven, nieuwe toevoegen of bestaande verwijderen.
+
+00:06:32.540 --> 00:06:35.700
+Je kunt de totale verkoop voor alle producten opvragen, zelfs als iemand filtert op een
+
+00:06:35.700 --> 00:06:36.460
+specifieke categorie.
+
+00:06:36.460 --> 00:06:39.540
+Je kunt de verkoop van vorige maand ophalen terwijl het rapport deze maand toont.
+
+00:06:39.680 --> 00:06:41.080
+De controle ligt in jouw handen.
+
+00:06:41.240 --> 00:06:43.980
+Ongeveer 80% van geavanceerde DAX leunt op Kelkje Leed.
+
+00:06:44.440 --> 00:06:48.100
+Tijdsintelligentie, dynamische vergelijkingen, aangepaste aggregaties, lopende totalen, ze
+
+00:06:48.100 --> 00:06:49.760
+gebruiken allemaal Kelkje Leed op de achtergrond.
+
+00:06:50.100 --> 00:06:53.460
+Comfortabel worden met deze ene functie geeft je enorme macht over je rapporten.
+
+00:06:53.620 --> 00:06:55.480
+Maar Kelkje Leed werkt op het filterniveau.
+
+00:06:55.640 --> 00:06:57.860
+Hoe zit het met rij voor rij logica binnen een meting?
+
+00:06:58.080 --> 00:07:00.240
+Dat is waar een andere set functies van pas komt.
+
+00:07:00.460 --> 00:07:02.880
+Iterator functies, wanneer je rij voor rij moet denken.
+
+00:07:02.880 --> 00:07:06.820
+Kelkje Leed handelt wijzigingen op filterniveau uitstekend af, maar soms moet je in een tabel
+
+00:07:06.820 --> 00:07:09.860
+stappen en berekeningen uitvoeren op elke rij afzonderlijk binnen een meting.
+
+00:07:10.000 --> 00:07:11.440
+De eenvoudige som kan dat niet.
+
+00:07:11.620 --> 00:07:13.840
+Je hebt iets nodig dat rij voor rij door de tabel loopt.
+
+00:07:14.040 --> 00:07:15.700
+Hier is een veelvoorkomende situatie.
+
+00:07:15.900 --> 00:07:18.840
+Je hebt een verkooptabel met hoeveelheid en eenheidsprijs in aparte kolommen.
+
+00:07:19.020 --> 00:07:20.900
+Je wilt een meting die de totale omzet toont.
+
+00:07:21.080 --> 00:07:23.880
+Je kunt niet zomaar een hoeveelheid vermenigvuldigen met een eenheidsprijs.
+
+00:07:24.080 --> 00:07:26.780
+Dat vermenigvuldigt de totale, niet de individuele rijen.
+
+00:07:26.780 --> 00:07:31.480
+Je moet de hoeveelheid van elke rij vermenigvuldigen met de eenheidsprijs en daarna al die resultaten optellen.
+
+00:07:31.700 --> 00:07:33.100
+Dat is rij voor rij wiskunde.
+
+00:07:34.440 --> 00:07:35.860
+Iterator functies zijn hiervoor gebouwd.
+
+00:07:36.060 --> 00:07:41.920
+Dat zijn de functies die eindigen op x, sumx, ave, r, age, x, c, u, n, t, x, minx, max.
+
+00:07:42.120 --> 00:07:43.420
+De x staat voor expressie.
+
+00:07:43.680 --> 00:07:50.540
+Deze functies nemen een tabel, lopen elke rij af, voeren een berekening uit op elke rij en aggregeren de resultaten tot één waarde.
+
+00:07:50.780 --> 00:07:56.220
+Voor het omzetvoorbeeld schrijf je sumx, verkoop, verkoophoeveelheid, verkoopeenheidsprijs.
+
+00:07:56.220 --> 00:07:59.220
+Het eerste argument is de tabel om overheen te itereren.
+
+00:07:59.400 --> 00:08:02.920
+Het tweede argument is de expressie die op elke rij moet worden geëvalueerd.
+
+00:08:03.260 --> 00:08:07.520
+Sumx gaat rij voor rij, vermenigvuldigt hoeveelheid met prijs en telt alles op.
+
+00:08:07.600 --> 00:08:11.100
+Eén meting geeft je de correcte totale omzet, eenvoudig en direct.
+
+00:08:11.340 --> 00:08:15.440
+Gebruik iterators wanneer je berekening meerdere kolommen van dezelfde rij betreft.
+
+00:08:15.680 --> 00:08:18.720
+Winst per regelitem, kortingsprijs, gewogen scores.
+
+00:08:19.140 --> 00:08:23.620
+Wanneer de berekening rij voor rijlogica vereist binnen een measure, is een iterator je hulpmiddel.
+
+00:08:23.620 --> 00:08:25.700
+Maar iterators hebben een prestatiekost.
+
+00:08:25.700 --> 00:08:31.120
+Ze lopen elke rij langs, dus overmatig gebruik op tabellen met miljoenen rijen kan je rapporten enorm vertragen.
+
+00:08:31.320 --> 00:08:35.380
+De simpele regel, gebruik alleen een iterator wanneer je echt rij voor rijlogica nodig hebt.
+
+00:08:35.580 --> 00:08:39.040
+Als een simpele som of gemiddelde het juiste antwoord geeft, gebruik dat dan in plaats daarvan.
+
+00:08:39.200 --> 00:08:40.720
+Je rapporten zullen je dankbaar zijn.
+
+00:08:40.940 --> 00:08:45.160
+Nog een tip, soms is een berekende kolom plus een simpele som sneller dan een sumx.
+
+00:08:45.380 --> 00:08:49.440
+Als je een berekende kolom maakt die de berekening op rijniveau één keer uitvoert tijdens het verversen,
+
+00:08:49.440 --> 00:08:54.680
+en daarna een normale som op die kolom gebruikt, vermijd je de kosten van de iterator telkens wanneer iemand het rapport bekijkt.
+
+00:08:54.860 --> 00:08:56.960
+Test beide benaderingen met je eigen gegevens.
+
+00:08:57.180 --> 00:09:00.760
+De snelste optie hangt af van de grootte van je model en hoe vaak de gegevens veranderen.
+
+00:09:00.920 --> 00:09:01.740
+Kies verstandig.
+
+00:09:01.920 --> 00:09:03.680
+Time Intelligence simpel uitgelegd.
+
+00:09:03.820 --> 00:09:07.900
+Laten we het nu hebben over een van de meest gevraagde functies in Power BI, het vergelijken van tijdsperiode.
+
+00:09:08.100 --> 00:09:10.600
+Hoe zijn de verkopen van deze maand vergeleken met vorige maand?
+
+00:09:10.740 --> 00:09:12.620
+Hoe loopt het jaar ten opzichte van vorig jaar?
+
+00:09:12.620 --> 00:09:17.420
+Deze vragen komen in bijna elk bedrijfsrapport naar voren en DAX heeft functies die daarvoor zijn gemaakt.
+
+00:09:17.620 --> 00:09:23.740
+Time Intelligence functies verwerken year-to-date totalen, dezelfde periode vorig jaar, voortschrijdende gemiddelden en maand-op-maand wijzigingen.
+
+00:09:23.940 --> 00:09:27.840
+Ze maken deel uit van DAX, dus je hoeft geen complexe filterlogica vanaf nul te schrijven.
+
+00:09:28.000 --> 00:09:29.380
+Maar er is een addertje onder het gras.
+
+00:09:29.500 --> 00:09:33.820
+Time Intelligence functies vereisen een correcte datumtabel, niet zomaar een datumkolom uit je feitentabel.
+
+00:09:34.020 --> 00:09:38.000
+Je hebt een aparte tabel nodig met één rij per dag die je volledige datumbereik zonder gaten beslaat,
+
+00:09:38.100 --> 00:09:40.020
+en deze moet in je model worden gemarkeerd als datumtabel.
+
+00:09:40.020 --> 00:09:42.220
+Sla je die stap over, dan zullen de functies simpelweg niet werken.
+
+00:09:42.400 --> 00:09:50.800
+Zodra je die datumtabel hebt ingesteld, zijn de meest nuttige functies TOTALGYTD, SAMEPERIODLASTGYEAR, DATEADD en DATESBETWEN.
+
+00:09:51.220 --> 00:09:52.800
+TOTALGYTD is de eenvoudigste.
+
+00:09:52.900 --> 00:09:58.620
+Je schrijft TOTALGYTD, Total Sales, Calendar, Date, en je krijgt een lopend totaal vanaf het begin van het jaar tot de datum die in de context staat.
+
+00:09:58.800 --> 00:10:02.260
+Plaats dit in een lijngrafiek per maand en je ziet dat cumulatieve totaal groeien naarmate het jaar voordert.
+
+00:10:02.780 --> 00:10:05.860
+SAMEPERIODLASTGYEAR doet precies wat de naam suggereert.
+
+00:10:05.860 --> 00:10:13.460
+Het verschuift de datumcontext 1 jaar terug. Je combineert het met Calculate, zoals dit, Calculate, Total Sales, SAMEPERIODLASTGYEAR, calendar, date.
+
+00:10:13.620 --> 00:10:16.980
+Nu staan de verkopen van vorig jaar naast de cijfers van dit jaar voor een eenvoudige vergelijking.
+
+00:10:17.840 --> 00:10:22.220
+DATADD is nog flexibeler. Hiermee kun je verschuiven PERDAGEN, maanden, kwartalen of jaren.
+
+00:10:22.380 --> 00:10:27.340
+Je kunt dit kwartaal vergelijken met hetzelfde kwartaal van 2 jaar geleden of de cijfers van vorige maand bekijken door min 1 maand te gebruiken.
+
+00:10:27.520 --> 00:10:29.640
+Het is het Zwitsers zakmes voor het verschuiven van tijd.
+
+00:10:29.640 --> 00:10:32.740
+De meest gemaakte fout is het vergeten om de datummaattabel te markeren.
+
+00:10:32.920 --> 00:10:36.520
+Je kunt een perfecte datummaattabel hebben met elke dag van 2020 tot en met 2030,
+
+00:10:36.740 --> 00:10:40.880
+maar als je deze niet markeert als datummaattabel in het model, zullen de functies fouten of lege waarde retourneren.
+
+00:10:41.020 --> 00:10:45.740
+Het is een eenvoudige instelling. Klik met de rechter muisknop op de tabel, kies markeren als datummaattabel en selecteer de datumkolom.
+
+00:10:45.940 --> 00:10:47.620
+Doe dit één keer en alles begint te werken.
+
+00:10:47.800 --> 00:10:53.440
+Een andere fout is het gebruik van tijdintelligentiefuncties op een datumkolom in je feitentabel in plaats van een speciale datummaattabel.
+
+00:10:53.440 --> 00:10:58.260
+De functies verwachten een aaneengesloten datumbereik zonder gaten en feitentabellen hebben dat bijna nooit.
+
+00:10:58.460 --> 00:11:02.380
+Bouw dus een juiste datummaattabel, markeer deze en je tijdintelligentie zal soepel werken.
+
+00:11:02.600 --> 00:11:04.380
+Veel voorkomende valkuilen voor beginners.
+
+00:11:04.680 --> 00:11:07.660
+Zelfs met de juiste functies trappen beginners nog in veel voorkomende valstrikken.
+
+00:11:07.860 --> 00:11:10.920
+Laat me de grootste met je doornemen, zodat je ze vanaf dag 1 kunt vermijden.
+
+00:11:11.080 --> 00:11:14.780
+De nummer 1 bron van Bax in DAX is het verwarren van rijkontext met filtercontext.
+
+00:11:14.980 --> 00:11:19.340
+Eerder bespraken we hoe berekende kolommen een rijkontext creëren en één rij tegelijk evalueren,
+
+00:11:19.540 --> 00:11:22.700
+terwijl metingen filtercontext gebruiken op basis van de actieve filters.
+
+00:11:22.700 --> 00:11:26.440
+Beginners schrijven vaak een meting alsof deze toegang heeft tot individuele rijen
+
+00:11:26.440 --> 00:11:28.760
+en vragen zich dan af waarom de resultaten onjuist zijn.
+
+00:11:28.960 --> 00:11:32.480
+Als je meting individuele rijen moet zien, gebruik dan een iteratorfunctie.
+
+00:11:32.700 --> 00:11:33.920
+Zo niet, hou het dan simpel.
+
+00:11:34.140 --> 00:11:37.880
+De tweede grote fout is het gebruik van berekende kolommen wanneer een meting zou volstaan.
+
+00:11:38.080 --> 00:11:41.500
+Berekende kolommen voelen vertrouwd aan omdat je de waarden in de tabel kunt zien,
+
+00:11:41.700 --> 00:11:44.880
+maar elke berekende kolom maakt je model groter en het vernieuwen langzamer.
+
+00:11:45.160 --> 00:11:49.420
+Vraag jezelf voor het toevoegen af, moet deze waarde veranderen wanneer iemand het rapport filtert.
+
+00:11:49.540 --> 00:11:51.160
+Indien ja, dan moet het een meting zijn.
+
+00:11:51.160 --> 00:11:53.820
+Een andere valkouw is het negeren van het datamodel zelf.
+
+00:11:54.020 --> 00:11:55.280
+DAX werkt niet in isolatie.
+
+00:11:55.480 --> 00:11:57.680
+Het is afhankelijk van de relaties tussen je tabellen.
+
+00:11:57.860 --> 00:12:01.720
+Als je model zwakke relaties, een verkeerde kardinaliteit of ontbrekende join sleutels heeft,
+
+00:12:01.900 --> 00:12:03.300
+zullen je DAX-formules stilletjes falen.
+
+00:12:03.420 --> 00:12:05.880
+Je krijgt getallen die aannemelijk lijken, maar in werkelijkheid onjuist zijn.
+
+00:12:06.060 --> 00:12:07.440
+De oplossing is niet betere DAX.
+
+00:12:07.640 --> 00:12:08.620
+Herstel eerst je model.
+
+00:12:08.900 --> 00:12:10.800
+Dan is er nog het verkeerd gebruik van Kelkjeleet.
+
+00:12:11.020 --> 00:12:15.100
+Beginners voegen meerdere filters toe in Kelkjeleet zonder te beseffen dat ze elkaar kunnen opheffen.
+
+00:12:15.100 --> 00:12:19.960
+Een filter voor de verkoop van 2024 en een ander voor de verkoop van vorig jaar conflicteren bijvoorbeeld,
+
+00:12:20.160 --> 00:12:21.740
+en het resultaat zal niet zijn wat je verwacht.
+
+00:12:21.900 --> 00:12:24.320
+Elk filter in Kelkjeleet moet een duidelijk doel hebben.
+
+00:12:24.520 --> 00:12:27.120
+Als je niet zeker weet wat het doet, test het dan eerst apart.
+
+00:12:27.380 --> 00:12:30.040
+Nog een veelgemaakte fout is het niet gebruiken van variabelen.
+
+00:12:30.240 --> 00:12:34.860
+Met VAR gedeclareerde variabelen laten je tussen resultaten opslaan en hergebruiken in dezelfde measure.
+
+00:12:35.140 --> 00:12:38.180
+Zonder deze herhaal je dezelfde berekening meerdere keren in één formule,
+
+00:12:38.400 --> 00:12:41.180
+wat je code minder leesbaar, moeilijker te debuggen en trager maakt.
+
+00:12:41.180 --> 00:12:43.360
+Maak er een gewoonte van om VAR vroeg te gebruiken.
+
+00:12:43.520 --> 00:12:45.260
+Het bespaart je uren aan frustratie.
+
+00:12:45.440 --> 00:12:48.400
+En tot slot, valideer je measures altijd in verschillende contexten.
+
+00:12:48.520 --> 00:12:52.320
+Een measure die perfect werkt in een kaartvisual, kan in een matrix totaal fout gaan.
+
+00:12:52.540 --> 00:12:56.600
+Dat komt doordat de totaalrij in een andere filter context evalueert dan de detailrijen.
+
+00:12:56.740 --> 00:13:00.920
+Test je measures in tabellen, kaarten, matrices en met verschillende slicer combinaties.
+
+00:13:01.140 --> 00:13:04.800
+Als een measure in al die scenario's standhoudt, weet je dat deze solide is.
+
+00:13:05.360 --> 00:13:06.380
+Alles samenbrengen
+
+00:13:06.380 --> 00:13:09.840
+Goed, laten we een concreet voorbeeld doornemen dat alles samenbrengt.
+
+00:13:09.840 --> 00:13:12.460
+Stel je bouwt een verkooprapport en je moet drie getallen tonen.
+
+00:13:12.580 --> 00:13:18.240
+De totale verkoop voor deze periode, de totale verkoop voor dezelfde periode vorig jaar en het groeipercentage daartussen.
+
+00:13:18.420 --> 00:13:20.880
+Het eerste wat je nodig hebt, is een schone datumtabel.
+
+00:13:21.100 --> 00:13:25.800
+Ga naar je model, maak een datumtabel die je volledige datumbereik beslaat, één rij per dag, zonder gaten.
+
+00:13:26.000 --> 00:13:29.800
+Klik er vervolgens met de rechter muisknop op, kies markeren als datumtabel en selecteer de datumkolom.
+
+00:13:30.020 --> 00:13:33.720
+Doe dit één keer en elke tijdslimiet functie die je daarna schrijft, zal gewoon werken.
+
+00:13:33.940 --> 00:13:35.340
+Schrijf daarna je basismeasure.
+
+00:13:35.340 --> 00:13:39.160
+Noem het totale verkoop en type, totale verkoop is gelijk aan som van verkoopbedrag.
+
+00:13:39.340 --> 00:13:42.960
+Dat is het fundament en elke andere berekening zal voortbouwen op deze ene eenvoudige regel.
+
+00:13:43.200 --> 00:13:44.880
+Schrijf vervolgens de measure voor het voorgaande jaar.
+
+00:13:45.100 --> 00:13:47.340
+Gebruik kelkje leed met SAMEPERIODLASTGXYAR.
+
+00:13:48.140 --> 00:13:49.180
+Het ziet er als volgt uit.
+
+00:13:49.360 --> 00:13:54.260
+Verkoop vorig jaar is gelijk aan kelkje leed totale verkoop SAMEPERIODLASTGYAR kalenderdatum.
+
+00:13:54.400 --> 00:13:56.840
+Nu heb je het huidige jaar direct naast het vorige jaar staan.
+
+00:13:57.080 --> 00:13:58.260
+Nu het groeipercentage.
+
+00:13:58.560 --> 00:14:02.580
+Gebruik de feit om situaties af te handelen waarin de verkoop van vorig jaar nul kan zijn.
+
+00:14:02.580 --> 00:14:03.840
+En dat zal gebeuren.
+
+00:14:03.840 --> 00:14:05.220
+Schrijf het als volgt op.
+
+00:14:05.800 --> 00:14:10.440
+Groeipercentage is gelijk aan de feit totale verkoop min verkoop vorig jaar gedeeld door verkoop vorig jaar.
+
+00:14:10.660 --> 00:14:14.580
+De feit geeft veilig een blank terug in plaats van een foutmelding als de noemer nul is.
+
+00:14:14.800 --> 00:14:16.900
+Dat is de slimme manier om crashes te voorkomen.
+
+00:14:17.120 --> 00:14:20.580
+Nu heb je drie herbruikbare measures die werken met elk filter dat je erop loslaat.
+
+00:14:20.780 --> 00:14:23.420
+Sliep ze in een tabel per product, per regio, per maand.
+
+00:14:23.620 --> 00:14:25.200
+Ze zullen elke keer correct reageren.
+
+00:14:25.360 --> 00:14:26.440
+Dat is precies het punt.
+
+00:14:26.720 --> 00:14:30.340
+Bouw op een schoon model, beheers een handvol kernfuncties en de rest valt op zijn plek.
+
+00:14:30.340 --> 00:14:32.720
+Probeer dus niet op dag één complexe daks te schrijven.
+
+00:14:32.720 --> 00:14:34.380
+Zorg eerst dat je model klopt.
+
+00:14:34.620 --> 00:14:37.500
+Leer de basis, measures, filter, context en calculate.
+
+00:14:37.940 --> 00:14:41.600
+En je lost de meeste zakelijke problemen op met slechts een paar regelscode.
+
+00:14:41.800 --> 00:14:42.880
+Dus hier komen we uit.
+
+00:14:43.080 --> 00:14:47.420
+Je weet wat daks is, waarom filter, context belangrijk is en hoe calculate en iteratorfuncties werken.
+
+00:14:47.580 --> 00:14:50.260
+Je hebt de gebruikelijke valkuilen gezien en hoe je ze kunt vermijden.
+
+00:14:50.440 --> 00:14:53.260
+En we hebben een concreet voorbeeld doorlopen dat alles met elkaar verbindt.
+
+00:14:53.360 --> 00:14:56.240
+De echte kracht van daks zit niet in het uit het hoofd leren van honderd functies,
+
+00:14:56.440 --> 00:14:58.520
+maar in een goed datamodel en een paar kernpatronen.
+
+00:14:58.520 --> 00:15:01.320
+Zorg voor een goed model en de daks wordt bijna vanzelfsprekend.
+
+00:15:01.480 --> 00:15:03.120
+Dit is wat ik je aanraad om te proberen.
+
+00:15:03.260 --> 00:15:04.140
+Open Power B.
+
+00:15:04.380 --> 00:15:08.060
+Bouw een simpel model met een datumtabel, een verkoopstabel en een producttabel.
+
+00:15:08.300 --> 00:15:10.320
+Schrijf daarna een week lang elke dag één measure.
+
+00:15:10.560 --> 00:15:15.220
+Begin met de totale verkoop, voeg de verkoop van vorig jaar toe, voeg het groeipercentage toe en probeer daarna een lopend totaal.
+
+00:15:15.340 --> 00:15:17.920
+Aan het eind van de week schrijf je measures zonder erbij na te denken.
+
+00:15:18.200 --> 00:15:19.100
+Zo valt het kwartje.
+
+00:15:19.300 --> 00:15:22.600
+Als deze aflevering je heeft geholpen, abonneer je dan en blijf je kennis uitbreiden.
+
+00:15:22.600 --> 00:15:28.740
+De volgende keer praten we over het debuggen van daks als er dingen misgaan, want dat gebeurt, en weten hoe je ze oplost is het halve werk.
+
+00:15:28.900 --> 00:15:29.260
+Tot dan!

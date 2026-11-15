@@ -1,0 +1,1117 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.560
+Bem-vindos a mais uma pílula de conhecimento do M305FM.
+
+00:00:03.100 --> 00:00:04.160
+Eu sou seu anfitrião, Melco Peter.
+
+00:00:04.440 --> 00:00:06.060
+Hoje vamos falar sobre gestão de estoque.
+
+00:00:06.460 --> 00:00:07.900
+O estoque você não vê pode custar caro.
+
+00:00:08.200 --> 00:00:11.420
+Você consegue responder as 5 perguntas sobre o único item no seu armazém agora mesmo.
+
+00:00:11.600 --> 00:00:13.020
+Quantos você tem? Onde eles estão?
+
+00:00:13.180 --> 00:00:14.820
+Você pode vendê-los? A quem eles pertencem?
+
+00:00:15.040 --> 00:00:15.800
+E quanto eles custam?
+
+00:00:16.080 --> 00:00:18.860
+Para a maioria das empresas, essas respostas estão em lugares completamente diferentes.
+
+00:00:19.280 --> 00:00:21.820
+Uma planilha diz uma coisa, a contagem do armazém diz outra,
+
+00:00:21.900 --> 00:00:23.240
+e o financeiro tem um terceiro número.
+
+00:00:24.200 --> 00:00:26.320
+Pense na gestão de estoque do Dynamics 365
+
+00:00:26.320 --> 00:00:30.180
+um arquivo compartilhado para cada caixa, peça e produto que sua empresa manuseia.
+
+00:00:30.660 --> 00:00:32.340
+Quando algo se move, seu registro também se move.
+
+00:00:33.060 --> 00:00:35.300
+Ao final deste episódio, você acompanhará um item,
+
+00:00:35.440 --> 00:00:37.460
+desde a entrega do fornecedor até o envio ao cliente,
+
+00:00:37.580 --> 00:00:38.820
+incluindo o dinheiro associado a ele.
+
+00:00:41.000 --> 00:00:42.500
+Por que a gestão de estoque existe?
+
+00:00:43.960 --> 00:00:45.380
+Imagine que você vende máquinas de café.
+
+00:00:45.860 --> 00:00:47.900
+O cliente faz um pedido, mas o armazém não tem mais nenhum,
+
+00:00:47.980 --> 00:00:50.600
+então as vendas prometem uma data de entrega de qualquer forma.
+
+00:00:51.080 --> 00:00:53.200
+O setor de compras corre para ligar para um fornecedor,
+
+00:00:53.260 --> 00:00:54.860
+e o cliente pode decidir comprar em outro lugar.
+
+00:00:55.460 --> 00:00:56.720
+Isso é uma ruptura de estoque.
+
+00:00:56.720 --> 00:00:58.540
+Estoque insuficiente significa pedidos atrasados,
+
+00:00:58.620 --> 00:01:00.000
+vendas perdidas e clientes satisfeitos.
+
+00:01:00.500 --> 00:01:01.980
+Isso também pode parar a produção totalmente.
+
+00:01:02.540 --> 00:01:04.420
+Se você fabrica máquinas e falta uma pequena peça,
+
+00:01:04.500 --> 00:01:05.500
+toda a linha pode ficar parada.
+
+00:01:06.220 --> 00:01:08.880
+Mas encher todas as prateleiras com estoque extra não resolve o problema.
+
+00:01:09.380 --> 00:01:11.860
+Cada caixa na prateleira representa dinheiro que sua empresa já gastou.
+
+00:01:12.420 --> 00:01:14.660
+Você paga para armazená-la, e alguns produtos podem quebrar,
+
+00:01:14.880 --> 00:01:16.740
+vencer, sair de moda ou simplesmente parar de vender.
+
+00:01:17.260 --> 00:01:18.620
+Esse dinheiro não pode pagar um fornecedor,
+
+00:01:18.680 --> 00:01:20.480
+financiar um novo projeto, cobrir a folha do pagamento
+
+00:01:20.480 --> 00:01:21.400
+enquanto está parada no armazém.
+
+00:01:21.920 --> 00:01:24.040
+A gestão de estoque ajuda você a encontrar o equilíbrio.
+
+00:01:24.040 --> 00:01:26.940
+Você precisa de estoque suficiente para atender a demanda do cliente,
+
+00:01:27.000 --> 00:01:29.540
+mas não tanto a ponto de seu armazém se tornar um depósito caríssimo.
+
+00:01:30.040 --> 00:01:32.620
+O inventário não significa apenas produtos acabados prontos para os clientes.
+
+00:01:32.960 --> 00:01:34.540
+Um fabricante de imóveis rastreia madeira,
+
+00:01:34.660 --> 00:01:36.440
+parafusos, tecido e tinta como matérias-prima.
+
+00:01:36.820 --> 00:01:38.660
+Assim que os trabalhadores começam a montar uma cadeira,
+
+00:01:38.740 --> 00:01:40.080
+aquelas cadeiras parcialmente concluídas
+
+00:01:40.080 --> 00:01:41.060
+tornam-se trabalho em progresso.
+
+00:01:41.240 --> 00:01:42.540
+E quando a cadeira está pronta para venda,
+
+00:01:42.820 --> 00:01:43.860
+ela se torna um produto acabado.
+
+00:01:44.580 --> 00:01:46.980
+Uma empresa também pode rastrear peças de reposição,
+
+00:01:47.220 --> 00:01:49.660
+materiais de limpeza embalagens ou peças para manutenção
+
+00:01:49.660 --> 00:01:51.100
+que podem não aparecer no produto final,
+
+00:01:51.580 --> 00:01:53.620
+mas a empresa ainda precisa deles para continuar funcionando.
+
+00:01:54.120 --> 00:01:55.660
+Agora imagine a maneira antiga de fazer isso.
+
+00:01:56.080 --> 00:01:58.160
+Setor de compras mantém uma lista do que pediu,
+
+00:01:58.320 --> 00:01:59.660
+a equipe do armazém conta o que chegou,
+
+00:02:00.000 --> 00:02:01.300
+as vendas rastreiam os pedidos,
+
+00:02:01.440 --> 00:02:02.520
+a produção rastreia o que usou
+
+00:02:02.520 --> 00:02:03.880
+e o financeiro rastreia o custo.
+
+00:02:04.560 --> 00:02:05.520
+Cada equipe trabalha muito,
+
+00:02:05.620 --> 00:02:07.520
+mas com listas separadas os números acabam divergindo.
+
+00:02:07.980 --> 00:02:08.880
+Alguém recebe a entrega,
+
+00:02:08.940 --> 00:02:10.080
+mas só atualiza a planilha depois.
+
+00:02:10.740 --> 00:02:12.080
+O limove um palete para outro armazém,
+
+00:02:12.160 --> 00:02:13.320
+mas esquece de avisar o setor de venda.
+
+00:02:13.660 --> 00:02:14.660
+Alguém envia um pedido,
+
+00:02:14.800 --> 00:02:16.620
+mas o financeiro só vê o custo dias depois.
+
+00:02:16.620 --> 00:02:19.100
+Isso gera discussões sobre uma pergunta simples.
+
+00:02:19.200 --> 00:02:20.480
+Quanto estoque nós realmente temos?
+
+00:02:21.120 --> 00:02:22.980
+O gerenciamento de estoque do Dynamics 365
+
+00:02:22.980 --> 00:02:24.940
+oferece às equipes um registro único compartilhado.
+
+00:02:25.540 --> 00:02:27.440
+O setor de compras registra as mercadorias,
+
+00:02:27.540 --> 00:02:29.140
+o pessoal do armazém registra os movimentos,
+
+00:02:29.560 --> 00:02:30.800
+as vendas registram as saídas,
+
+00:02:30.880 --> 00:02:32.200
+a produção registra os materiais usados
+
+00:02:32.200 --> 00:02:34.020
+e o financeiro vê o valor por trás desses movimentos.
+
+00:02:34.960 --> 00:02:36.140
+Ninguém precisa criar uma nova versão
+
+00:02:36.140 --> 00:02:37.280
+da mesma planilha toda sexta-feira.
+
+00:02:37.840 --> 00:02:39.840
+O objetivo não é tornar os armazéns mais técnicos,
+
+00:02:39.960 --> 00:02:41.720
+mas dar às pessoas uma resposta atualizada
+
+00:02:41.720 --> 00:02:42.980
+e compartilhada quando precisarem.
+
+00:02:43.360 --> 00:02:44.500
+Podemos atender este pedido.
+
+00:02:44.500 --> 00:02:46.080
+Para onde devemos enviar a próxima entrega?
+
+00:02:46.080 --> 00:02:48.160
+O que a contagem física difere do sistema?
+
+00:02:49.140 --> 00:02:50.300
+Para responder a essas perguntas,
+
+00:02:50.380 --> 00:02:52.780
+o Dynamics precisa de mais do que o nome de um produto e um número.
+
+00:02:53.340 --> 00:02:54.580
+Ele precisa de um registro claro do que mudou
+
+00:02:54.580 --> 00:02:55.640
+cada vez que um item é movimentado.
+
+00:02:56.520 --> 00:02:58.260
+O registro digital por trás de cada item.
+
+00:02:58.800 --> 00:03:01.200
+Bem-vindos a mais um episódio de Microsoft Knowledge Nudits
+
+00:03:01.200 --> 00:03:02.420
+aqui na M35FM.
+
+00:03:03.060 --> 00:03:04.180
+Eu sou seu anfitrião, aqui.
+
+00:03:04.500 --> 00:03:07.000
+Hoje vamos falar sobre o que acontece dentro do Dynamics 365
+
+00:03:07.000 --> 00:03:09.100
+quando o estoque se move de um lugar para outro.
+
+00:03:09.700 --> 00:03:12.320
+Então, o que exatamente o Dynamics 365 registra
+
+00:03:12.320 --> 00:03:14.100
+quando um item muda de mãos ou de local?
+
+00:03:14.100 --> 00:03:16.100
+Aqui está a definição M35FM.
+
+00:03:16.680 --> 00:03:17.880
+Ele rastrea cinco coisas.
+
+00:03:18.020 --> 00:03:19.960
+Quanto você tem, onde está, se pode usar.
+
+00:03:20.140 --> 00:03:21.640
+Quem é o proprietário e quanto custa.
+
+00:03:22.100 --> 00:03:25.540
+Parece simples, mas cada parte responde a uma pergunta de negócio diferente.
+
+00:03:25.960 --> 00:03:26.720
+Vamos analisar, ponto alto.
+
+00:03:27.000 --> 00:03:28.960
+A quantidade diz quantas máquinas de café existem.
+
+00:03:29.580 --> 00:03:32.500
+A localização responde em qual prédio, armazém ou prateleira elas estão.
+
+00:03:33.320 --> 00:03:36.060
+O status diz podemos vendê-las ou estão aguardando a inspeção.
+
+00:03:36.680 --> 00:03:37.460
+Uma propriedade explica.
+
+00:03:37.540 --> 00:03:40.540
+Nós já somos donos destas máquinas ou fornecedoras estão armazenando aqui?
+
+00:03:40.540 --> 00:03:43.980
+E o custo responde qual o valor está imobilizado nesse store.
+
+00:03:44.980 --> 00:03:47.300
+O ponto de partida para tudo isso é o cadastro do produto.
+
+00:03:47.780 --> 00:03:50.000
+Cada item precisa de uma identidade dentro do sistema.
+
+00:03:50.500 --> 00:03:52.520
+Geralmente, isso é um número de item e uma descrição clara.
+
+00:03:53.300 --> 00:03:54.820
+Você também define a unidade de contagem.
+
+00:03:55.100 --> 00:03:58.020
+Hora, unidade, caixa, palete, quilograma ao metro.
+
+00:03:58.920 --> 00:04:00.880
+É aqui que pequenas coisas podem se tornar grandes problemas.
+
+00:04:01.600 --> 00:04:04.800
+Se o setor de compras adquire filtros de café por caixa, mas as vendem por pacote,
+
+00:04:05.200 --> 00:04:07.320
+o Dynamics precisa entender como essas unidades se relacionam.
+
+00:04:07.320 --> 00:04:11.260
+Caso contrário, uma equipe acha que tem 10 caixas, enquanto a outra acha que tem 10 filtros individuais.
+
+00:04:12.180 --> 00:04:13.160
+Isso é uma receita para confusão.
+
+00:04:13.580 --> 00:04:14.940
+Alguns produtos também vêm em variações.
+
+00:04:15.380 --> 00:04:17.240
+Uma camiseta pode vir nos tamanhos pequeno, médio e grano.
+
+00:04:17.600 --> 00:04:19.100
+Ela pode ser preta, azul ou branca.
+
+00:04:19.720 --> 00:04:23.120
+Um único produto pode ter diferentes tamanhos, cores, estilos ou configurações.
+
+00:04:23.820 --> 00:04:26.180
+O sistema pode tratar cada combinação como seu próprio registro.
+
+00:04:26.560 --> 00:04:28.100
+Tanto você não tem apenas uma camiseta.
+
+00:04:28.620 --> 00:04:32.900
+Você pode ter 12 camisetas pretas médias em um armazém e 6 camisetas brancas grandes em outro lugar.
+
+00:04:33.280 --> 00:04:36.900
+Esse é o tipo de detalhe que importa quando o cliente pede algo específico.
+
+00:04:37.320 --> 00:04:40.540
+O Dynamics usa dimensões de estoque para manter esses detalhes organizados.
+
+00:04:41.120 --> 00:04:46.340
+Essa frase parece técnica, mas significa simplesmente os rótulos que ajudam o sistema a distinguir um item de estoque de outro.
+
+00:04:47.000 --> 00:04:48.260
+Eles respondem duas perguntas para mim.
+
+00:04:48.620 --> 00:04:50.260
+Onde está o item e qual é exatamente esse item?
+
+00:04:50.840 --> 00:04:52.960
+Vamos dividir isso nos principais componentes.
+
+00:04:53.420 --> 00:04:54.840
+Primeiro, existem as dimensões de armazenamento.
+
+00:04:55.320 --> 00:04:56.920
+Elas descrevem o local onde o estoque está guardado.
+
+00:04:57.360 --> 00:05:00.560
+O Dynamics pode rastrear um local ou um armazém e uma posição dentro desse armazém.
+
+00:05:01.020 --> 00:05:02.100
+Pense nisso como um endereço de um item.
+
+00:05:02.100 --> 00:05:06.720
+O local representa uma área comercial ampla como uma fábrica ou um centro de distribuição.
+
+00:05:07.560 --> 00:05:09.640
+Dentro desse local você pode ter vários armazéns.
+
+00:05:09.980 --> 00:05:13.760
+Talvez um para mercadorias recebidas, um para produtos acabados e um para devoluções.
+
+00:05:14.600 --> 00:05:15.340
+Você pode ir mais fundo.
+
+00:05:15.940 --> 00:05:20.840
+Uma localização aponta para o ponto preciso dentro do armazém, como um corredor, estante, prateleira e compartimento.
+
+00:05:21.500 --> 00:05:25.460
+Assim, em vez de dizer a um funcionário do armazém, as peças da máquina estão em algum lugar do armazém A,
+
+00:05:25.520 --> 00:05:28.880
+o sistema pode dizer, verifica o corredor 4, estante 2, prateleira 3, compartimento 1.
+
+00:05:28.880 --> 00:05:31.640
+Isso economiza tempo quando alguém precisa encontrar estoque rapidamente.
+
+00:05:32.080 --> 00:05:35.980
+As dimensões de armazenamento dizem onde ele está, mas as dimensões de rastreamento dizem qual é o estoque.
+
+00:05:36.800 --> 00:05:40.780
+Números de lote agrupam itens que chegaram ou foram produzidos juntos.
+
+00:05:41.520 --> 00:05:46.140
+Eles são importantes quando as mercadorias têm datas de validade, resultados de testes ou registro fornecedor que você pode precisar depois.
+
+00:05:46.460 --> 00:05:49.080
+Imagine que uma empresa de alimentos receba duas entregas da mesma origem.
+
+00:05:49.640 --> 00:05:53.220
+Os potes parecem idênticos, mas um lote vence em junho e outro em setembro.
+
+00:05:53.220 --> 00:05:58.840
+Se surgir um problema de qualidade, a empresa precisa encontrar o lote afetado, sem retirar todos os potes de todas as prateleiras.
+
+00:05:59.140 --> 00:06:00.140
+Os números de série vão ainda mais longe.
+
+00:06:00.780 --> 00:06:05.900
+O número de série identifica um item individual, um notebook, um dispositivo médico ou uma máquina industrial, o E.
+
+00:06:06.460 --> 00:06:11.020
+Isso ajuda com reparos, reivindicações de garantia, devoluções e recalls, pois você pode rastrear a unidade exata.
+
+00:06:11.360 --> 00:06:15.280
+Ao abrir a visualização de estoque disponível no Dynamics, você não obtém um número vago de toda a empresa.
+
+00:06:15.660 --> 00:06:20.220
+Você pode ver o estoque por local, endereço de armazém, lote, número de série e outros detalhes que sua empresa precisa.
+
+00:06:20.220 --> 00:06:25.760
+Você também pode ver onde a quantidade está fisicamente presente, disponível para uso, reservada para um pedido ou retida.
+
+00:06:26.360 --> 00:06:27.980
+Por isso que apenas o nome do produto não é suficiente.
+
+00:06:28.440 --> 00:06:30.600
+O componente final é o histórico de transações do item.
+
+00:06:31.240 --> 00:06:37.180
+Cada vez que o estoque chega, é enviado, transferido, contado, recebe uma correção ou entra em produção, o Dynamics registra uma transação.
+
+00:06:37.500 --> 00:06:40.340
+E esse histórico dá às pessoas uma maneira de investigar em vez de vir.
+
+00:06:40.840 --> 00:06:45.340
+Se a contagem parecer errada, você pode verificar o registro do item e perguntar qual movimento alterou este número.
+
+00:06:45.980 --> 00:06:46.760
+Essa é a mágica disso.
+
+00:06:46.760 --> 00:06:52.640
+A seguir, vamos acompanhar um item em sua jornada diária, pois esses registros se tornam muito mais fáceis de entender quando o estoque começa a se mover.
+
+00:06:53.900 --> 00:06:55.760
+Da entrega do fornecedor ao pedido do cliente
+
+00:06:55.760 --> 00:06:59.520
+Imagine que sua empresa de máquinas de café peça 100 bombas de água a um fornecedor.
+
+00:06:59.860 --> 00:07:01.100
+O pedido de compra inicia a jornada.
+
+00:07:01.440 --> 00:07:05.820
+Ele registra o que você espera, quantas unidades pediu, quem as enviará e onde devem chegar.
+
+00:07:06.480 --> 00:07:09.700
+Antes que o caminhão chegue ao seu prédio, a empresa já tem uma expectativa clara.
+
+00:07:10.440 --> 00:07:12.980
+Isso é importante porque uma entrega esperada não é um estoque que você pode vender.
+
+00:07:12.980 --> 00:07:16.160
+Quando a remessa chega, alguém confere a entrega com o pedido de compra.
+
+00:07:16.740 --> 00:07:18.180
+O fornecedor enviou as bombas corretas?
+
+00:07:18.500 --> 00:07:19.660
+Eles enviaram 100 ou 98?
+
+00:07:20.240 --> 00:07:21.440
+Elas chegaram ao armazém correto?
+
+00:07:21.900 --> 00:07:25.400
+Uma vez registrada a entrada de mercadorias, o Dynamics sabe que as bombas chegaram fisicamente.
+
+00:07:25.780 --> 00:07:30.560
+O sistema pode aumentar o registro de estoque físico, mas isso nem sempre significa que as bombas estão prontas para um pedido de cliente.
+
+00:07:30.940 --> 00:07:32.240
+Alguns bens precisam de expressão primeiro.
+
+00:07:32.660 --> 00:07:35.260
+Uma empresa alimentícia pode verificar um ótimo quanto a danos ou datas de validade.
+
+00:07:35.780 --> 00:07:37.820
+O fabricante pode testar uma peça antes que ela entre na produção.
+
+00:07:37.980 --> 00:07:42.220
+Uma empresa que lida com bens regulamentados pode precisar de prova de que a remessa atende às suas normas.
+
+00:07:42.220 --> 00:07:47.620
+No Dynamics, o estoque pode ir para uma área de quarentena ou receber um status que impede as pessoas de usá-lo prematuramente.
+
+00:07:48.160 --> 00:07:49.780
+A equipe do armazém pode ver que as bombas chegam.
+
+00:07:50.300 --> 00:07:52.780
+Vendas e produção também podem ver que elas ainda não estão disponíveis.
+
+00:07:53.780 --> 00:07:57.620
+Isso evita o erro doloroso de prometer a um cliente um estoque que ainda precisa de aprovação.
+
+00:07:58.460 --> 00:08:02.180
+Após a inspeção, as bombas se movem da área de recebimento para o seu local de armazenamento normal.
+
+00:08:02.600 --> 00:08:06.040
+Isso é chamado de armazenamento, embora o trabalho real possa envolver uma empilhadeira, uma paleteira
+
+00:08:06.040 --> 00:08:07.800
+ou alguém carregando uma caixa pequena até uma prateleira.
+
+00:08:08.120 --> 00:08:08.800
+Movimento importante.
+
+00:08:09.180 --> 00:08:11.700
+Uma doca de entrega não é onde as bombas devem ficar pelos próximos seis meses.
+
+00:08:11.700 --> 00:08:15.780
+A equipe do armazém precisa delas no lugar certo para que alguém possa encontrá-las quando o pedido chegar.
+
+00:08:16.380 --> 00:08:19.840
+O Dynamics registra a movimentação interna do recebimento para o local designado no armazém.
+
+00:08:20.280 --> 00:08:21.940
+Agora imagine que a demanda mude em outro local.
+
+00:08:22.480 --> 00:08:24.040
+Seu armazém principal mantém 80 bombas.
+
+00:08:24.560 --> 00:08:27.120
+Um centro de serviço em outra cidade precisa de 20 para reparos.
+
+00:08:27.600 --> 00:08:31.460
+Você não quer que a equipe de serviço simplesmente as retire da prateleira e espere que alguém atualize a lista depois.
+
+00:08:32.000 --> 00:08:35.380
+Uma ordem de transferência registra solicitação e movimento entre armazéns ou locais.
+
+00:08:35.380 --> 00:08:38.740
+Enquanto os produtos viajam, o Dynamics pode tratá-los como em trânsito.
+
+00:08:39.120 --> 00:08:41.500
+Eles não desapareceram e também não chegaram ao destino.
+
+00:08:42.060 --> 00:08:43.660
+Isso dá a ambos os locais uma visão mais clara.
+
+00:08:43.980 --> 00:08:45.620
+O armazém de envio sabe que o estoque saiu.
+
+00:08:46.000 --> 00:08:47.940
+O armazém de recebimento sabe o que esperar.
+
+00:08:48.740 --> 00:08:51.920
+Se o caminhão chegar com menos itens, a diferença tem um registro para investigação.
+
+00:08:52.540 --> 00:08:53.520
+Um cliente faz um pedido.
+
+00:08:53.940 --> 00:08:56.620
+O pedido de venda informa a empresa o que o cliente quer e quando precisa.
+
+00:08:56.620 --> 00:09:01.720
+Se houver estoque e a empresa decidir comprometer com o cliente, o Dynamics pode reservar a quantidade.
+
+00:09:02.640 --> 00:09:05.120
+Reservar significa que aquelas bombas não são mais apenas estoque geral.
+
+00:09:05.740 --> 00:09:10.080
+Elas são separadas por um pedido específico para que outro vendedor não prometa as mesmas unidades a outra pessoa.
+
+00:09:10.580 --> 00:09:14.420
+Isso é crucial quando o estoque está baixo ou quando um cliente tem um prazo de entrega a cumprir.
+
+00:09:14.800 --> 00:09:15.080
+Entregam.
+
+00:09:15.600 --> 00:09:17.980
+O armazém então separa as bombas e seu local de armazenamento.
+
+00:09:18.260 --> 00:09:21.220
+Em uma operação simples, um funcionário pode imprimir uma lista de separação e produto.
+
+00:09:21.460 --> 00:09:26.240
+Em uma operação maior, a gestão de armazém pode direcionar o trabalho via leitura móvel e regras de depósito.
+
+00:09:26.620 --> 00:09:28.460
+O registro de inventário permanece envolvido de qualquer maneira.
+
+00:09:28.940 --> 00:09:30.760
+Após a separação, o pedido segue para a embalagem.
+
+00:09:31.260 --> 00:09:34.500
+O dano em que os produtos são enviados, o Dynamics registra que as bombas saíram do armazém.
+
+00:09:34.840 --> 00:09:36.300
+A quantidade de disponível muda.
+
+00:09:36.520 --> 00:09:40.680
+O histórico do item mostra uma cadeia completa do recebimento do fornecedor ao armazenamento e entrega.
+
+00:09:41.060 --> 00:09:41.440
+Entrega.
+
+00:09:42.100 --> 00:09:44.940
+Mas o trabalho real de armazém raramente segue uma linha perfeitamente reta.
+
+00:09:45.380 --> 00:09:47.600
+Um cliente pode devolver uma bomba porque ela chegou danificada.
+
+00:09:48.080 --> 00:09:50.460
+Um funcionário pode descobrir duas unidades quebradas em uma prateleira.
+
+00:09:50.560 --> 00:09:53.720
+Durante uma contagem de estoque, o número físico pode diferir do número no sistema.
+
+00:09:53.720 --> 00:09:58.180
+O Dynamics pode registrar devoluções, diferenças de contagem, correções de movimento e ajustes manuais.
+
+00:09:59.100 --> 00:10:01.700
+Essas ações não devem se tornar uma forma silenciosa de apagar erros.
+
+00:10:02.180 --> 00:10:04.960
+Elas criam um rastro que mostra o que mudou, quando mudou e porquê.
+
+00:10:05.500 --> 00:10:06.940
+Esse rastro ajuda as equipes a encontrar padrão.
+
+00:10:07.340 --> 00:10:09.440
+Talvez o mesmo local continue produzindo erros de contagem.
+
+00:10:09.800 --> 00:10:11.220
+Talvez o envio do fornecedor chegue a financiamento.
+
+00:10:11.620 --> 00:10:15.600
+Talvez os produtos devolvidos precisem de um processo de inspeção melhor antes de retornarem ao estoque.
+
+00:10:15.920 --> 00:10:17.780
+A quantidade diz o que aconteceu com as bombas.
+
+00:10:17.920 --> 00:10:21.340
+Mas cada bomba carrega um custo e é aí que a atividade do armazém se conecta ao financeiro.
+
+00:10:21.340 --> 00:10:26.080
+Inscreva-se em sua plataforma de podcast favorita e compartilhe isto com quem está começando sua jornada.
+
+00:10:27.340 --> 00:10:28.620
+O dinheiro atrelado ao estoque.
+
+00:10:29.260 --> 00:10:33.620
+Então, aquelas bombas nas prateleiras do seu armazém são mais do que apenas objetos físicos esperando para serem enviados.
+
+00:10:34.160 --> 00:10:35.700
+Elas são dinheiro que a empresa já gastou.
+
+00:10:36.240 --> 00:10:42.440
+E esse dinheiro permanece nos registros financeiros da empresa como ativo até que as bombas sejam vendidas, usadas, baixadas ou saiam do estoque de alguma outra forma.
+
+00:10:43.200 --> 00:10:45.580
+Esse elo simples muda a maneira como você encara um recebimento.
+
+00:10:45.580 --> 00:10:53.780
+A questão é, quando 100 bombas chegam, a equipe do armazém vê 100 unidades, mas o financeiro também precisa saber o valor que acabou de ser adicionado ao estoque.
+
+00:10:54.160 --> 00:11:00.660
+E quando essas bombas são enviadas a um cliente, o armazém vê espaço liberado nas prateleiras, enquanto o financeiro precisa registrar o custo dos produtos que estão saindo.
+
+00:11:00.900 --> 00:11:02.860
+O Dynamics conecta essas duas visões automaticamente.
+
+00:11:03.220 --> 00:11:04.340
+É aí que entram os grupos de item.
+
+00:11:04.740 --> 00:11:09.240
+Pense em um grupo de itens como uma forma de organizar produtos similares para que o sistema saiba como lidar com suas finanças.
+
+00:11:09.240 --> 00:11:14.240
+Por exemplo, você pode colocar peças de reposição em um grupo, máquinas de café prontas em outro e matérias-primas em um terceiro.
+
+00:11:15.080 --> 00:11:22.660
+Nos bastidores, esses grupos dizem ao Dynamics quais contas do Razão Geral devem receber o impacto financeiro de cada compra, venda, ajuste ou atividade de produção.
+
+00:11:23.600 --> 00:11:25.180
+Agora você não precisa ser um contador para entender isso?
+
+00:11:25.820 --> 00:11:33.420
+O Razão Geral é simplesmente o principal registro financeiro da empresa, o livro contábil oficial onde o financeiro rastreia tudo, ativos, custos, vendas, o panorama geral.
+
+00:11:33.420 --> 00:11:39.620
+A gestão de estoque envia todos esses valores relacionados a itens para esse registro, usando as regras que você configurou em seus grupos de itens.
+
+00:11:40.340 --> 00:11:46.840
+Isso significa que no fim do mês a equipe do armazém e a equipe financeira não ficam comparando dois sistemas diferentes e discutindo sobre qual número está correto.
+
+00:11:47.780 --> 00:11:52.080
+Ambas observam a mesma atividade de item no Dynamics, mas ainda há uma grande questão que precisa ser respondida.
+
+00:11:52.920 --> 00:11:54.180
+Quanto custa realmente uma bomba?
+
+00:11:54.580 --> 00:11:56.020
+Isso depende do método de custeio escolher.
+
+00:11:56.720 --> 00:12:00.900
+O método de custeio é apenas a regra que o Dynamics usa ao atribuir um custo ao estoque que sai.
+
+00:12:00.900 --> 00:12:03.920
+Deixa eu me dar um exemplo. FIFO significa primeiro açaí, Pepsi.
+
+00:12:04.440 --> 00:12:09.200
+Digamos que você compre 50 bombas em janeiro para o S24 cada e depois outras 50 em fevereiro para o S24 cada.
+
+00:12:09.660 --> 00:12:13.660
+Ao enviar 10 bombas usando o FIFO, o Dynamics trata as bombas mais antigas, como as primeiras a sair.
+
+00:12:14.180 --> 00:12:17.040
+Portanto, essas 10 vêm do seu lote de janeiro, a US20 da US cada.
+
+00:12:17.340 --> 00:12:21.420
+Este método geralmente se ajusta a mercadorias onde você deseja fisicamente usar o estoque mais antigo,
+
+00:12:21.560 --> 00:12:23.800
+antes do novo, como alimentos, remédios ou qualquer coisa que você consiga absorver.
+
+00:12:23.920 --> 00:12:25.520
+O custo melhor e ponderado adota uma abordagem diferente.
+
+00:12:25.840 --> 00:12:29.640
+Em vez de manter o custo de janeiro e o de fevereiro separados para cada unidade de saída,
+
+00:12:29.640 --> 00:12:32.640
+ele combina o custo de todas as unidades disponíveis em uma média.
+
+00:12:32.880 --> 00:12:36.700
+Então, se você compra bombas similares a preços diferentes, o sistema calcula um custo médio por bomba,
+
+00:12:36.780 --> 00:12:39.420
+com base no valor total do estoque dividido pelo total de unidades.
+
+00:12:40.100 --> 00:12:44.280
+Isso faz sentido quando as unidades individuais são misturadas e você não precisa rastrear cada entrega separada.
+
+00:12:44.620 --> 00:12:49.300
+A média móvel também usa uma média, mas ela muda toda vez que um novo estoque chega a um novo preço.
+
+00:12:49.980 --> 00:12:51.600
+O custo padrão funciona de forma diferente.
+
+00:12:51.600 --> 00:12:57.660
+A empresa define um custo esperado para um item, então, registra quaisquer diferenças entre esse custo planejado e o que você realmente paga.
+
+00:12:58.440 --> 00:13:00.560
+Cada método responde a mesma pergunta à sua própria maneira.
+
+00:13:01.200 --> 00:13:03.080
+Qual custo deve acompanhar este item ao cérebro do estoque?
+
+00:13:03.480 --> 00:13:06.480
+Mas os custos não mudam apenas quando você recebe uma entrega ou envia um pedido.
+
+00:13:06.960 --> 00:13:12.340
+Um fabricante pode liberar matérias-primas para a produção e, em seguida, trazer produtos acabados de volta ao estoque com um novo custo associado.
+
+00:13:12.780 --> 00:13:14.880
+Uma correção de contagem cíclica pode alterar o valor do estoque.
+
+00:13:15.280 --> 00:13:16.800
+Mercadorias danificadas baixadas podem reduzir.
+
+00:13:17.180 --> 00:13:19.460
+É exatamente por isso que o estoque não pode ficar separado financeiro.
+
+00:13:19.460 --> 00:13:25.220
+Se os registros do seu armazém mostram 500 bombas, mas o financeiro acha que você tem um valor de 450, você tem um problema.
+
+00:13:25.820 --> 00:13:27.700
+Mesmo que ninguém perceba isso no chão do armazém,
+
+00:13:28.380 --> 00:13:33.180
+cada decisão sobre lucro, caixa, compras e vendas depende de que tanto a quantidade quanto o custo estejam precisos.
+
+00:13:33.880 --> 00:13:37.000
+Uma vez que o Dynamics mantém esses registros juntos, você pode olhar, além da contagem de hoje,
+
+00:13:37.080 --> 00:13:39.400
+começar a tomar decisões de estoque mais inteligentes todos os dias.
+
+00:13:40.720 --> 00:13:42.420
+Visibilidade, reposição e controle diário.
+
+00:13:42.960 --> 00:13:46.380
+Quando você pode confiar nos seus registros de estoque, as decisões diárias tornam-se muito mais fácil.
+
+00:13:46.380 --> 00:13:49.920
+Um comprador não precisa ligar para todos os armazéns e pedir alguém para verificar fisicamente o item.
+
+00:13:50.300 --> 00:13:53.520
+Eles podem ver exatamente o que está disponível em locais, armazéns e endereços,
+
+00:13:53.620 --> 00:13:56.100
+incluindo o estoque que está em trânsito ou aguardando em inspeção.
+
+00:13:57.140 --> 00:13:58.100
+E essa distinção importa.
+
+00:13:58.680 --> 00:14:02.920
+Você pode ter 500 unidades no total, mas apenas 300 estão realmente disponíveis para prometer aos clientes.
+
+00:14:03.780 --> 00:14:08.320
+Algumas estão em trânsito, outras aguardam verificações de qualidade e algumas já estão reservadas para outros pedidos.
+
+00:14:09.020 --> 00:14:12.360
+Dynamics ajuda você a ver a quantidade utilizável, não apenas o maior número possível.
+
+00:14:13.000 --> 00:14:14.820
+Essa visão, claro, também favorece uma reposição melhor.
+
+00:14:14.820 --> 00:14:19.460
+Toda empresa precisa saber quando comprar mais, mas a resposta não se resume apenas à quantidade de hoje.
+
+00:14:20.000 --> 00:14:23.880
+Você também precisa pensar na rapidez com que o item é vendido, no tempo que seu fornecedor leva para entregar,
+
+00:14:24.300 --> 00:14:27.000
+enquanto estoque de segurança você deseja caso demanda a um mente repentinamente.
+
+00:14:27.520 --> 00:14:29.080
+Essa reserva extra chamada de estoque de segurança.
+
+00:14:29.460 --> 00:14:32.560
+Pense nisso como seu plano de contingência para os dias em que as coisas não saem como planejado.
+
+00:14:32.820 --> 00:14:35.940
+Um fornecedor entrega com atraso, um cliente faz um pedido maior que o habitual,
+
+00:14:36.500 --> 00:14:38.460
+uma linha de produção usa mais material do que o esperado.
+
+00:14:38.940 --> 00:14:41.100
+Sem esse amortecedor, uma única surpresa pode parar tudo.
+
+00:14:41.100 --> 00:14:44.400
+Mas com muito estoque de segurança, você volta a deixar dinheiro parado nas prateleiras.
+
+00:14:45.020 --> 00:14:47.980
+Dynamics fornece os dados para definir esses níveis de estoque com mais precisão
+
+00:14:47.980 --> 00:14:50.940
+e revisá-los quando a demanda ou os prazos dos fornecedores mudam.
+
+00:14:51.320 --> 00:14:54.380
+Mas tudo isso só funciona se os registros do seu sistema corresponderem a um mundo real.
+
+00:14:54.920 --> 00:14:57.400
+É por isso que a contagem de inventário ainda faz parte do controle diário.
+
+00:14:57.900 --> 00:15:00.140
+Algumas equipes fazem o inventário completo uma vez por ano,
+
+00:15:00.220 --> 00:15:03.720
+enquanto outras contam grupos menores de itens ao longo do ano e sua chamada de contagem cíclica.
+
+00:15:04.260 --> 00:15:05.320
+O processo é simples.
+
+00:15:05.320 --> 00:15:07.660
+Você conta o que realmente está na prateleira,
+
+00:15:07.760 --> 00:15:09.740
+compara com o que o Dynamics diz que deveria estar lá,
+
+00:15:09.960 --> 00:15:12.460
+investiga qualquer diferença antes de registrar uma correção.
+
+00:15:13.180 --> 00:15:15.700
+Essa diferença pode vir de danos, roubo, uma leitura perdida,
+
+00:15:15.740 --> 00:15:18.380
+um local incorreto ou um erro antigo de uma movimentação anterior.
+
+00:15:18.980 --> 00:15:21.420
+A correção ajusta o número, a investigação ajusta o processo.
+
+00:15:21.900 --> 00:15:24.540
+O Dynamics também pode ajudar você a identificar estoques parados há muito tempo.
+
+00:15:25.020 --> 00:15:27.480
+O envelhecimento de inventário mostra itens que não se movimentam algum.
+
+00:15:27.700 --> 00:15:29.980
+Isso é crucial para mercadorias com data de validade,
+
+00:15:30.100 --> 00:15:33.380
+produtos sazonais, peças de reposição antigas ou itens que os clientes não desejam mais.
+
+00:15:33.380 --> 00:15:35.900
+Identifique esse estoque antigo cedo e você terá opções.
+
+00:15:36.640 --> 00:15:37.780
+Você pode vender com desconto,
+
+00:15:37.860 --> 00:15:39.300
+mover para um local onde a demanda é maior,
+
+00:15:39.440 --> 00:15:42.380
+devolver se o contrato permitir ou simplesmente parar de comprar mais ou...
+
+00:15:43.040 --> 00:15:46.600
+Espere até que suas prateleiras estejam cheias de estoque obsoleto e essas opções desaparecem.
+
+00:15:46.920 --> 00:15:48.860
+Nem todo item merece o mesmo nível de atenção.
+
+00:15:49.840 --> 00:15:52.460
+A análise ABC ajuda a classificar os itens pelo impacto financeiro.
+
+00:15:52.860 --> 00:15:55.540
+Pequeno número de itens pode representar a maior parte do valor do seu inventário.
+
+00:15:55.900 --> 00:15:57.600
+Eles precisam de contagens mais frequentes,
+
+00:15:57.700 --> 00:16:00.160
+decisões de reabastecimento rigorosas e uma revisão mais cuidadora.
+
+00:16:00.160 --> 00:16:03.280
+Itens de baixo custo que giram frequentemente podem ter controles, mas sim,
+
+00:16:03.620 --> 00:16:05.280
+o objetivo não é tratar tudo da mesma forma.
+
+00:16:05.740 --> 00:16:08.300
+Dedicar seu tempo onde um erro custaria mais caro para um negócio.
+
+00:16:09.520 --> 00:16:12.340
+Há também um caso especial que vale a pena conhecer, o estoque em consignação.
+
+00:16:12.860 --> 00:16:15.160
+Imagine que um fornecedor coloca as peças dele no seu armazém,
+
+00:16:15.240 --> 00:16:16.780
+mas o fornecedor continua sendo dono.
+
+00:16:16.960 --> 00:16:20.120
+O estoque está bem ali perto da sua equipe de produção, pronto para uso,
+
+00:16:20.480 --> 00:16:23.280
+mas não se torna seu inventário até que você assuma a propriedade.
+
+00:16:24.240 --> 00:16:25.560
+Dynamics pode rastrear essa diferença.
+
+00:16:25.560 --> 00:16:29.880
+Sua equipe vê que as peças estão no local, enquanto o financeiro mantém a propriedade clara.
+
+00:16:30.700 --> 00:16:34.400
+Quando você usa essa peça, o sistema registra a mudança de propriedade e o custo torna-se seu.
+
+00:16:34.860 --> 00:16:38.440
+Isso é ótimo quando você precisa de acesso rápido ao estoque sem pagar por tudo antecipadamente.
+
+00:16:39.300 --> 00:16:42.620
+Tudo isso funciona porque as equipes de compras, vendas, produção, armazém e financeiro
+
+00:16:42.620 --> 00:16:44.000
+trabalham com dados compartilhados.
+
+00:16:44.460 --> 00:16:46.340
+Os relatórios podem extrair a idade de um histórico de estoque.
+
+00:16:46.900 --> 00:16:50.640
+Outros sistemas de negócios também podem se conectar a esse histórico em vez de criar outra lista separada.
+
+00:16:50.940 --> 00:16:54.560
+Ainda assim, uma confusão comum pode confundir novos usuários do Dynamics.
+
+00:16:54.560 --> 00:16:59.340
+O gerenciamento de estoque e o gerenciamento de armazém trabalham em conjunto, mas isso significa a mesma coisa.
+
+00:17:00.000 --> 00:17:01.460
+Esse é um tópico para outra pílula de conhecimento.
+
+00:17:02.660 --> 00:17:05.520
+Gerenciamento de estoque e de armazém relacionados não são iguais.
+
+00:17:06.980 --> 00:17:08.860
+Vamos esclarecer um ponto comum de confusão.
+
+00:17:09.480 --> 00:17:12.000
+O gerenciamento de estoque e de armazém resolvem problemas diferentes.
+
+00:17:12.420 --> 00:17:14.880
+O gerenciamento de estoque mantém o registro de mercadorias de toda a empresa.
+
+00:17:15.220 --> 00:17:16.580
+Ele responde às grandes perguntas.
+
+00:17:16.640 --> 00:17:17.240
+Quanto nós temos?
+
+00:17:17.560 --> 00:17:18.360
+Onde está registrado?
+
+00:17:18.620 --> 00:17:19.320
+Podemos usá-lo?
+
+00:17:19.640 --> 00:17:20.340
+E quanto vale?
+
+00:17:20.340 --> 00:17:22.740
+Esse registro acompanha o estoque em todo lugar.
+
+00:17:22.900 --> 00:17:25.820
+Compras, vendas, produção, transferências, devoluções e contagens.
+
+00:17:26.620 --> 00:17:29.540
+O gerenciamento de armazém trata do trabalho físico dentro do armazém.
+
+00:17:30.060 --> 00:17:34.480
+Ele orienta os funcionários no recebimento de mercadorias, armazenamento, separação de pedidos e carregamento de remessas.
+
+00:17:35.220 --> 00:17:41.020
+Em configurações mais detalhadas, os funcionários usam dispositivos móveis para ler códigos de barras e rastrear paletes com números de placa.
+
+00:17:41.560 --> 00:17:42.400
+Pense desta forma.
+
+00:17:42.480 --> 00:17:44.260
+O gerenciamento de estoque é o arquivo principal.
+
+00:17:44.780 --> 00:17:46.900
+Ele mantém o histórico completo do estoque para toda a empresa.
+
+00:17:46.900 --> 00:17:52.380
+O gerenciamento de armazém ajuda as pessoas a realizarem o trabalho no armazém usando as informações desse arquivo.
+
+00:17:53.240 --> 00:17:57.960
+Um registra a história ou outro ajuda os funcionários a manusear o estoque com precisão e rapidez no local físico.
+
+00:17:58.440 --> 00:17:59.860
+Nem toda empresa precisa da mesma profundidade.
+
+00:18:00.360 --> 00:18:04.120
+Um pequeno distribuidor pode começar com registros claros de itens, armazen, transferências e contagem.
+
+00:18:04.580 --> 00:18:09.700
+Uma operação maior com muitos funcionários, compartimentos, paletes e pedidos rápidos pode precisar de processos de armazém mais profundos.
+
+00:18:10.220 --> 00:18:13.140
+Mas, de qualquer forma, todos os departamentos precisam do mesmo histórico de itens.
+
+00:18:13.140 --> 00:18:14.680
+Conclusão.
+
+00:18:14.880 --> 00:18:16.380
+Uma história de estoque compartilhada?
+
+00:18:16.780 --> 00:18:20.540
+O gerenciamento de estoque do Dynamics 365 registra toda a vida útil do item,
+
+00:18:20.660 --> 00:18:23.780
+desde o recebimento do fornecedor, que é armazenamento até o envio ao cliente e valor financeiro.
+
+00:18:24.220 --> 00:18:26.360
+É uma história de estoque compartilhada para toda a sua empresa.
+
+00:18:26.960 --> 00:18:28.420
+Obrigado por assistir a uma pílula de conhecimento.
+
+00:18:28.900 --> 00:18:32.200
+Inscreva-se para mais episódios comigo, Milko Peters, no M305FM.
+
+00:18:32.740 --> 00:18:36.140
+E assista ao próximo episódio para ver como o gerenciamento de cadeia de suprimentos do Dynamics 365
+
+00:18:36.660 --> 00:18:40.500
+conecta compras, armazéns e planejamento em torno desse mesmo registro de estoque compartilhado.

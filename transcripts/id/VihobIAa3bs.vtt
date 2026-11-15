@@ -1,0 +1,2089 @@
+WEBVTT
+
+00:00:04.940 --> 00:00:07.540
+Selamat datang di Microsoft Nugget. Saya Mirko Peters.
+
+00:00:08.120 --> 00:00:09.960
+Topik hari ini seringkali membingungkan banyak orang.
+
+00:00:11.340 --> 00:00:12.300
+Apa sebenarnya Dataverse itu?
+
+00:00:13.020 --> 00:00:16.120
+Apakah itu bahasa data aplikasi atau layanan Dynamics 365 tersembunyi
+
+00:00:16.120 --> 00:00:17.820
+yang hanya perlu dipahami staff IT?
+
+00:00:18.500 --> 00:00:19.440
+Ini definisi yang paling sederhan.
+
+00:00:20.180 --> 00:00:23.620
+Dataverse adalah fondasi data bersama dibalik banyak pengalaman Dynamics 365.
+
+00:00:24.500 --> 00:00:29.160
+Bayangkan Dynamics di garung kantor, penjualan, layanan pelanggan, dan aplikasi lain
+
+00:00:29.160 --> 00:00:30.680
+adalah ruangan tempat orang bekerja,
+
+00:00:30.860 --> 00:00:33.740
+sementara Dataverse adalah sistem pengarsipan dan aturan dibalik dindingnya.
+
+00:00:33.740 --> 00:00:37.100
+Di akhir episode ini, Anda akan tahu di mana Data Dynamics berada
+
+00:00:37.100 --> 00:00:39.680
+dan bagaimana satu pembaraan pelanggan bisa muncul dalam pekerjaan penjualan,
+
+00:00:39.800 --> 00:00:40.940
+otomatisasi, dan pelaporan.
+
+00:00:41.520 --> 00:00:44.740
+Namun sebelum kita membahas nama produk, mari mulai dengan masalah bisnis yang diselesaikannya.
+
+00:00:46.060 --> 00:00:47.040
+Satu tempat bersama.
+
+00:00:47.980 --> 00:00:49.120
+Bukan seringan yang terpisah-pisah.
+
+00:00:49.840 --> 00:00:52.880
+Bayangkan sebuah perusahaan dengan tim penjualan, tim dukungan, dan tim keuangan.
+
+00:00:53.520 --> 00:00:55.120
+Penjualan menyimpan detail pelanggan di spreadsheet.
+
+00:00:55.680 --> 00:00:57.420
+Tim dukungan bekerja di alat penguruan kasus yang terpisah.
+
+00:00:57.740 --> 00:00:59.600
+Tim keuangan memiliki nama pelanggan di sistemnya sendiri.
+
+00:01:00.260 --> 00:01:02.520
+Orang lain menyimpan rangkaian email di kotak surat bersama,
+
+00:01:02.520 --> 00:01:05.860
+sementara orang lain menyimpan catatan di folder yang tidak bisa ditemukan siapapun.
+
+00:01:06.080 --> 00:01:07.600
+Pelanggan sama kini ada di matempat berbeda.
+
+00:01:08.120 --> 00:01:09.560
+Pengaturan itu terasa normal pada awalnya,
+
+00:01:09.740 --> 00:01:11.960
+karena setiap tim hanya melihat bagian pekerjaan di permata mereka saja.
+
+00:01:12.520 --> 00:01:15.020
+Namun masalahnya, segera setelah pelanggan mengubah nama telepon,
+
+00:01:15.160 --> 00:01:17.740
+alamat, nama perusahaan, atau kontak utama mereka, masalah pun dimulai.
+
+00:01:18.160 --> 00:01:20.460
+Penjualan memperbarui spreadsheet, dukungan tidak melihatnya,
+
+00:01:20.640 --> 00:01:22.380
+keuangan masih mengirim dokumen ke alamat lama.
+
+00:01:22.800 --> 00:01:25.420
+Lalu seseorang mengekspor daftar, merapikannya secara manual,
+
+00:01:25.420 --> 00:01:27.460
+mengirimnya lewat email, dan tiba-tiba tiga orang
+
+00:01:27.460 --> 00:01:29.500
+meyakini salinan mereka masing-masing adalah yang paling benar.
+
+00:01:29.700 --> 00:01:30.740
+Daftar mana yang harus Anda percaya?
+
+00:01:31.140 --> 00:01:32.940
+Pertanyaannya itu membuang lebih banyak waktu daripada yang adik.
+
+00:01:33.340 --> 00:01:34.560
+Tapi nanti bekerja untuk membandingkan catatan.
+
+00:01:35.020 --> 00:01:37.640
+Manager bertanya mengapa laporan tidak cocok dengan sistem penjual.
+
+00:01:38.060 --> 00:01:40.180
+Agen dukungan membuka kasus untuk pelanggan yang detailnya
+
+00:01:40.180 --> 00:01:41.680
+sudah ada di tempat lain hanya sedikit.
+
+00:01:42.100 --> 00:01:44.200
+Berbeda, tidak ada yang berniat menciptakan kacau.
+
+00:01:44.480 --> 00:01:45.360
+Kacauan itu muncul kanaknya.
+
+00:01:45.360 --> 00:01:48.300
+20 tahun lalu, sistem terpisah berarti server terpisah,
+
+00:01:48.420 --> 00:01:51.040
+basis data terpisah, dan tim terpisah yang menyimpan informasinya sendiri.
+
+00:01:51.440 --> 00:01:53.040
+Menghubungkannya, membutuhkan pekerjaan custom,
+
+00:01:53.180 --> 00:01:54.720
+importer jadwal, dan banyak pemeriksaan manual.
+
+00:01:55.240 --> 00:01:57.400
+Perubahan di suatu tempat mungkin sampai ke sistem lain besok,
+
+00:01:57.500 --> 00:01:58.740
+minggu depan, atau tidak sama sekali.
+
+00:01:59.500 --> 00:02:02.300
+Dataverse memberi aplikasi bisnis tempat bersama untuk jenis informasi ini.
+
+00:02:03.000 --> 00:02:05.700
+Singkatnya, Dataverse adalah platform data cloud Microsoft
+
+00:02:05.700 --> 00:02:06.880
+untuk informasi bisnis.
+
+00:02:07.840 --> 00:02:10.220
+Ia menyimpan informasi tersebut dalam tabel terstruktur,
+
+00:02:10.220 --> 00:02:12.240
+sehingga data memiliki bentuk yang jelas alih-alih
+
+00:02:12.240 --> 00:02:15.140
+hanya berupa catatan acak, file lepas, dan tab spreadsheet yang terputus.
+
+00:02:15.940 --> 00:02:18.160
+Anda bisa menganggapnya sebagai lemari arsip perusahaan
+
+00:02:18.160 --> 00:02:20.640
+yang dapat digunakan oleh beberapa perangkat resmi secara bersama.
+
+00:02:20.900 --> 00:02:22.340
+Seorang pelanggan muncul sekali Dataverse.
+
+00:02:22.640 --> 00:02:26.540
+Pelanggan tersebut bisa muncul di Dynamics 365 Customer Service
+
+00:02:26.540 --> 00:02:26.580
+mengerjakan kesepakatan.
+
+00:02:27.180 --> 00:02:30.500
+Detail pelanggan yang sama bisa muncul di Dynamics 365 Customer Service
+
+00:02:30.500 --> 00:02:32.240
+saat agen menangani permintaan dukungan.
+
+00:02:33.060 --> 00:02:35.200
+Power App dapat menggunakan informasi pelanggan yang sama
+
+00:02:35.200 --> 00:02:36.980
+untuk pekerja lapangan atau manajer akun
+
+00:02:36.980 --> 00:02:39.080
+tanpa harus menyalin data ke aplikasi baru terlebih dahulu.
+
+00:02:39.820 --> 00:02:41.660
+Satu baris pelanggan, satu titik referensi bersama.
+
+00:02:42.140 --> 00:02:44.040
+Ini tidak berarti setiap tim tiba-tiba bisa melihat segalanya.
+
+00:02:44.040 --> 00:02:46.840
+Akses tetap memerlukan aturan dan kita akan membahasnya sebentar.
+
+00:02:47.280 --> 00:02:50.420
+Artinya aplikasi resmi dapat bekerja dari informasi bisnis yang sama
+
+00:02:50.420 --> 00:02:52.620
+alih-alih membangun versinya sendiri yang tumpang tindih.
+
+00:02:53.120 --> 00:02:56.160
+Ilah sebabnya Dynamics 365 dan Dataverse sangat cocok satu sama lain.
+
+00:02:56.480 --> 00:02:59.100
+Aplikasi Dynamics 365 seperti Sales dan Customer Service
+
+00:02:59.100 --> 00:03:01.640
+menggunakan Dataverse untuk menyimpan dan mengamankan data yang mereka kelola.
+
+00:03:01.880 --> 00:03:04.880
+Namun begini, saat seseorang berbicara tentang integrasi Dynamics 365
+
+00:03:04.880 --> 00:03:08.060
+dengan Dataverse, mereka sering membayangkan dua produk terpisah
+
+00:03:08.060 --> 00:03:09.340
+yang memerlukan konektor di antaranya.
+
+00:03:09.340 --> 00:03:12.360
+Untuk banyak aplikasi Dynamics 365, situasinya tidak seperti itu.
+
+00:03:12.640 --> 00:03:13.760
+Datanya sudah ada dalam Dataverse.
+
+00:03:14.600 --> 00:03:17.220
+Anda tidak perlu menarik daftar pelanggan dari Dynamics 365,
+
+00:03:17.840 --> 00:03:20.480
+menyalahnya ke basis data lain dan berharap kedua sisi tetap sinkron.
+
+00:03:21.140 --> 00:03:22.880
+Anda dapat membangun di atas fundasi yang sama
+
+00:03:22.880 --> 00:03:25.940
+menggunakan informasi bisnis yang sudah digunakan oleh Dynamics 365.
+
+00:03:26.580 --> 00:03:27.580
+Hal itu mengubah pembicaraan kita.
+
+00:03:28.180 --> 00:03:28.760
+Alih-alih bertanya,
+
+00:03:29.260 --> 00:03:31.020
+bagaimana cara menyingkronkan kedua daftar pelanggan ini?
+
+00:03:31.360 --> 00:03:33.420
+Anda bisa bertanya siapa saja orang dan aplikasi
+
+00:03:33.420 --> 00:03:35.000
+yang perlu bekerja dengan catatan pelanggan ini
+
+00:03:35.000 --> 00:03:36.200
+dan apa saja yang boleh mereka lakukan.
+
+00:03:36.200 --> 00:03:39.480
+Saat ini, Dataverse tidak menggantikan setiap sistem yang diperusahaan.
+
+00:03:40.260 --> 00:03:42.240
+Bisnis mungkin masih menggunakan perangkat lunak keuangan,
+
+00:03:42.400 --> 00:03:44.060
+alat industri, sistem kudang, situs web,
+
+00:03:44.220 --> 00:03:46.580
+atau aplikasi lama yang memiliki datanya sendiri.
+
+00:03:47.660 --> 00:03:50.500
+Dataverse bukanlah perkat ajaib yang menghapus setiap sistem luar dalam semalam.
+
+00:03:51.160 --> 00:03:52.540
+Yang ia berikan adalah tempat umum
+
+00:03:52.540 --> 00:03:55.220
+bagi data bisnis yang perlu dibagikan oleh aplikasi-aplikasi yang terubah.
+
+00:03:56.700 --> 00:03:59.860
+Detail pelanggan, pekerjaan penjualan, dukungan, tugas, dan tindak lanjut.
+
+00:04:00.300 --> 00:04:02.000
+Catatan-catatan tersebut bisa tersimpan bersama
+
+00:04:02.000 --> 00:04:03.880
+dalam satu sumber yang dapat dibaca dan berbeda berangkat.
+
+00:04:04.140 --> 00:04:05.800
+Jadi mari buka lemari arsip itu bersama saya.
+
+00:04:06.200 --> 00:04:08.860
+Setelah Anda melihat bagaimana Dataverse mengatur informasi di dalamnya,
+
+00:04:09.060 --> 00:04:12.240
+keseluruhan koneksi Dynamics 365 akan jauh lebih mudah dipahami.
+
+00:04:13.580 --> 00:04:16.380
+Lemari arsip, tabel, baris, kolom, dan relasi.
+
+00:04:17.460 --> 00:04:18.480
+Mari kita buka lemari arsip itu.
+
+00:04:19.020 --> 00:04:20.700
+Di dalam Dataverse, informasi tersimpan dalam tab.
+
+00:04:20.860 --> 00:04:22.980
+Bayangkan seperti lemari sungguhan dengan laci-laci yang terpisah.
+
+00:04:23.480 --> 00:04:25.840
+Satu laci menyimpan perusahaan, yang lain menyimpan orang,
+
+00:04:26.180 --> 00:04:27.540
+dan yang ketiga menyimpan permintaan dukungan.
+
+00:04:27.980 --> 00:04:30.140
+Anda tidak membuang setiap kertas ke dalam satu laci besar
+
+00:04:30.140 --> 00:04:31.740
+dan berharap seseorang bisa merapikannya Anda.
+
+00:04:32.140 --> 00:04:33.200
+Setiap laci memiliki tugasnya masing-masing.
+
+00:04:33.200 --> 00:04:35.860
+Jadi Dataverse sebuah tabel menampung satu jenis informasi bisnis.
+
+00:04:36.160 --> 00:04:38.000
+Tabel akun biasanya menampung perusahaan tempat Anda bekerja sama.
+
+00:04:38.620 --> 00:04:40.240
+Tabel kontak menampung data perorangan.
+
+00:04:40.600 --> 00:04:43.480
+Tabel prospek menampung calon pelanggan sebelum mereka menjadi pelanggan nyata.
+
+00:04:44.000 --> 00:04:45.680
+Tabel kasus menampung permintaan dukungan.
+
+00:04:45.840 --> 00:04:48.360
+Sementara tabel aktivitas dapat melacak pekerjaan seperti panggilan,
+
+00:04:48.480 --> 00:04:50.640
+seperti panggilan, suril, janji temu, dan tugas.
+
+00:04:50.980 --> 00:04:51.760
+Itu adalah tabel standar.
+
+00:04:52.120 --> 00:04:53.040
+Microsoft menyertakannya,
+
+00:04:53.440 --> 00:04:56.640
+karena sebagian besar bisnis perlu melacak pelanggan, orang, pekerjaan, dan pecakap.
+
+00:04:56.880 --> 00:04:59.540
+Anda tidak perlu repot membuat tabel baru untuk sesuatu yang umum
+
+00:04:59.540 --> 00:05:01.460
+jika tabel standar sudah sesuai untuk tugas tersebut.
+
+00:05:01.660 --> 00:05:03.060
+Namun setiap perusahaan juga memiliknya sendiri.
+
+00:05:03.500 --> 00:05:05.900
+Perusahaan pelatihan mungkin perlu melacak kursus dan sertifikat.
+
+00:05:06.580 --> 00:05:09.100
+Bisnis properti mungkin memerlukan data gedung, unit, dan inspeksi.
+
+00:05:09.900 --> 00:05:12.400
+Produsen mungkin melacak pemeriksaan peralatan atau kunjungan layanan.
+
+00:05:12.980 --> 00:05:15.020
+Dalam kasus tersebut, Anda dapat membuat tabel kustom
+
+00:05:15.020 --> 00:05:17.040
+yang sesuai dengan pekerjaan yang sebenarnya dari perusahaan Anda.
+
+00:05:17.640 --> 00:05:19.940
+Bayangkan tabel kustom seperti menambahkan laci baru ke lemari,
+
+00:05:20.240 --> 00:05:21.340
+lalu memberinya label yang jelas.
+
+00:05:21.700 --> 00:05:23.040
+Sekarang setiap tabel berisi baris.
+
+00:05:23.480 --> 00:05:25.180
+Satu baris adalah satu item di dalam laci tersebut.
+
+00:05:25.180 --> 00:05:28.920
+Misalnya, satu baris di tabel kontak bisa mewakili Maria Gomez seseorang
+
+00:05:28.920 --> 00:05:30.320
+di perusahaan pelanggan.
+
+00:05:31.120 --> 00:05:34.100
+Barisnya menyimpan detail pribadinya, terpisah dari semua kontak lain di sistem.
+
+00:05:34.800 --> 00:05:36.800
+Kolom menjelaskan detail yang ingin Anda simpan untuk setebut.
+
+00:05:37.340 --> 00:05:40.340
+Baris kontak Maria mungkin memiliki kolom untuk nama depan, nama belakang,
+
+00:05:40.480 --> 00:05:44.320
+alamat surel, nomer telepon, jabatan, perusahaan, perusahaan, pemilik data, dan status.
+
+00:05:44.900 --> 00:05:47.500
+Kolom menentukan jenis informasi yang sesuai di tempat tersebut
+
+00:05:47.500 --> 00:05:49.400
+sehingga kolom surel mengharapkan alamat surel
+
+00:05:49.400 --> 00:05:51.860
+dan kolom status dapat menampung pilihan status yang disetujui.
+
+00:05:52.180 --> 00:05:54.160
+Begitulah cara informasi bisnis mendapatkan bentuk yang andal.
+
+00:05:54.160 --> 00:05:57.640
+Tanpa kolom, satu orang mungkin mengetik nomor telepon di kotak catatan,
+
+00:05:57.780 --> 00:05:59.660
+orang lain mungkin menambahkannya ke kolom nama,
+
+00:05:59.740 --> 00:06:01.760
+dan orang lain mungkin tidak memasukkannya sama sekali.
+
+00:06:02.880 --> 00:06:03.900
+Dengan tabel kontak yang jelas,
+
+00:06:04.100 --> 00:06:06.400
+semua orang bekerja dengan kumpulan detail yang sama di tempat yang sama.
+
+00:06:06.900 --> 00:06:08.800
+Struktur tersebut juga membantu aplikasi memahami datanya.
+
+00:06:09.420 --> 00:06:11.200
+Sebuah formulir dapat menampilkan kotak yang tepat,
+
+00:06:11.320 --> 00:06:13.320
+laporan dapat mengelompokkan kontak berdasarkan status,
+
+00:06:13.420 --> 00:06:15.220
+dan otomatisasi dapat bereaksi saat pemilik beru.
+
+00:06:15.520 --> 00:06:17.080
+Informasi tidak hanya disimpan begitu saja,
+
+00:06:17.300 --> 00:06:20.540
+tetapi memiliki label yang memberi tahu alat yang terhubung tentang artis setiap bagian.
+
+00:06:20.540 --> 00:06:23.780
+Mulailah dengan tabel standar kapanpun tabel tersebut sesuai dengan kebutuhan bisnisan.
+
+00:06:24.020 --> 00:06:25.280
+Jika Anda menjual ke perusahaan,
+
+00:06:25.420 --> 00:06:28.260
+akun dan kontak sudah mendeskripsikan pola yang dipahami sebagian besar orang.
+
+00:06:28.800 --> 00:06:30.200
+Jika Anda menangani dukungan pelanggan,
+
+00:06:30.320 --> 00:06:31.520
+kasus memberi Anda titik awal.
+
+00:06:31.920 --> 00:06:36.280
+Kemudian, tambahkan tabel kustom hanya jika bisnis Anda memiliki informasi yang tidak sesuai dengan pola bawaan.
+
+00:06:37.180 --> 00:06:38.380
+Ini menghindari masalah umum,
+
+00:06:38.640 --> 00:06:40.920
+yaitu membuat lima tabel berbeda yang semuanya berarti pelanggan.
+
+00:06:41.800 --> 00:06:42.900
+Satu tim menyebutnya klien,
+
+00:06:43.240 --> 00:06:44.620
+tim lain menyebutnya master pelanggan,
+
+00:06:45.000 --> 00:06:46.560
+tim ketiga menyebutnya kontak mitra.io.
+
+00:06:46.560 --> 00:06:49.100
+Segera orang tidak tahu tabel mana yang harus mereka gunakan.
+
+00:06:49.620 --> 00:06:51.880
+Tabel standar yang jelas dan tabel kustom dengan nama yang tepat
+
+00:06:51.880 --> 00:06:54.560
+membuat lemari ini tetap mudah dipahami saat lebih banyak orang mengembangkan.
+
+00:06:54.900 --> 00:06:57.460
+Bagian selanjutnya adalah saat laci-laci tersebut mulai bekerja bersama.
+
+00:06:57.840 --> 00:06:59.120
+Sebuah kontak menjadi milik sebuah akun.
+
+00:06:59.780 --> 00:07:01.260
+Maria bekerja untuk contoso LPD.
+
+00:07:01.520 --> 00:07:02.680
+Daripada mengetik ulang alamat,
+
+00:07:02.800 --> 00:07:03.580
+nomor telepon utama,
+
+00:07:03.700 --> 00:07:05.660
+dan detail perusahaan contoso ke dalam baris Maria,
+
+00:07:05.840 --> 00:07:08.820
+dataverse dapat membuat hubungan antara tabel kontak dan tabel akun.
+
+00:07:09.380 --> 00:07:10.300
+Maria tertaut ke contoso,
+
+00:07:10.300 --> 00:07:13.400
+dan tautan itu penting karena informasi perusahaan tersebut pada perusahaan tersebut.
+
+00:07:13.400 --> 00:07:15.100
+Jika contoso mengubah alamat kantor,
+
+00:07:15.200 --> 00:07:17.080
+seseorang cukup memperbarui baris akun sekali saja,
+
+00:07:17.380 --> 00:07:19.380
+setiap kontak terkait tetap dapat merujuk ke perusahaan yang sama
+
+00:07:19.380 --> 00:07:20.480
+tanpa harus membawa salinah sendiri.
+
+00:07:21.240 --> 00:07:24.100
+Hubungan juga menghubungkan kasus dukungan dengan pelanggan yang mengajukannya.
+
+00:07:24.700 --> 00:07:26.320
+Hubungan dapat menghubungkan peluang penjualan
+
+00:07:26.320 --> 00:07:29.040
+dengan panggilan, email, rapat, dan tugas seputar kesepakatan tersebut.
+
+00:07:29.600 --> 00:07:30.880
+Saat tenaga penjual membuka peluang,
+
+00:07:31.060 --> 00:07:33.040
+mereka dapat melihat aktivitas yang terhubung dengannya
+
+00:07:33.040 --> 00:07:35.620
+alih-alih mencari melalui catatan dan kalender yang tidak relevan.
+
+00:07:36.360 --> 00:07:37.500
+Informasi tersebut memiliki kontak.
+
+00:07:38.100 --> 00:07:39.380
+Anda tidak hanya melihat nomor kasus,
+
+00:07:39.380 --> 00:07:41.100
+Anda melihat pelanggan mana yang memilikinya.
+
+00:07:41.880 --> 00:07:43.060
+Anda tidak hanya melihat kontak,
+
+00:07:43.180 --> 00:07:45.700
+Anda dapat melihat perusahaan yang terhubung dengan orang tersebut.
+
+00:07:46.240 --> 00:07:48.040
+Tautan tersebut menjaga data tetap berguna
+
+00:07:48.040 --> 00:07:50.420
+tanpa perlu mengetik ulang fakta yang sama di beberapa tempat.
+
+00:07:50.980 --> 00:07:53.640
+Satu catatan kecil mengenai penaman sebelum Anda membaca panduan lama
+
+00:07:53.640 --> 00:07:54.480
+atau menonton video lama.
+
+00:07:55.060 --> 00:07:57.240
+Anda mungkin mendengar kata entitas bidang rekam.
+
+00:07:57.320 --> 00:07:58.460
+Itu adalah istilah data verse yang lebih lama.
+
+00:07:59.140 --> 00:08:01.300
+Microsoft sekarang menggunakan tabel alih-alih entitas,
+
+00:08:01.300 --> 00:08:03.480
+kolom alih-alih bidang, dan baris alih rekam.
+
+00:08:04.140 --> 00:08:05.100
+Artinya tidak berubah.
+
+00:08:05.860 --> 00:08:07.240
+Panduan lama yang menyuruh Anda
+
+00:08:07.240 --> 00:08:09.600
+membuat entitas sebenarnya berbicara tentang membuat tabel,
+
+00:08:09.940 --> 00:08:12.180
+bidang adalah kolom, dan rekam adalah baris.
+
+00:08:13.700 --> 00:08:15.200
+Mengetahui kedua rangkaian kata tersebut
+
+00:08:15.200 --> 00:08:17.160
+mencegah Anda mengira telah menemukan produk yang berbeda.
+
+00:08:17.420 --> 00:08:20.040
+Jadi, tabel mengatur informasi dan hubungan menghumpungkannya.
+
+00:08:20.740 --> 00:08:22.520
+Namun lemari yang teratur tetap memerlukan kontrol.
+
+00:08:23.080 --> 00:08:24.920
+Seseorang harus memutuskan apa yang boleh dimasukkan,
+
+00:08:25.040 --> 00:08:26.560
+diubah, dan diakses oleh orang dengan aman.
+
+00:08:27.600 --> 00:08:28.840
+Aturan dan meja reseksionis.
+
+00:08:29.060 --> 00:08:30.820
+Data ribalik data verse hanya berfungsi
+
+00:08:30.820 --> 00:08:32.600
+jika orang yang tepat dapat mengerjakannya dengan aman.
+
+00:08:33.000 --> 00:08:34.880
+Perwakilan penjualan memerlukan detail pelanggan,
+
+00:08:35.000 --> 00:08:36.440
+agen dukungan memerlukan rewrite kasus,
+
+00:08:36.440 --> 00:08:38.100
+manajer memerlukan tampilan yang lebih luas,
+
+00:08:38.200 --> 00:08:39.820
+dan mitra eksternal mungkin hanya memerlukan akses
+
+00:08:39.820 --> 00:08:41.040
+ke bagian kecil dari proses tersebut.
+
+00:08:41.540 --> 00:08:42.960
+Mereka tidak seharusnya melihat informasi yang selalu.
+
+00:08:43.500 --> 00:08:45.480
+Pikirkan catatan pelanggan dengan catatan kontak pribadi,
+
+00:08:45.620 --> 00:08:48.100
+harga yang dinegosiasikan, dan kasus dukungan yang terbuka.
+
+00:08:49.160 --> 00:08:50.540
+Memberikan akses penuh kepada setiap pengguna
+
+00:08:50.540 --> 00:08:51.380
+akan menciptakan cepat.
+
+00:08:51.820 --> 00:08:53.020
+Membatasi semua orang terlalu ketat,
+
+00:08:53.140 --> 00:08:55.240
+sehingga mereka tidak bisa bekerja justru menciptakan masalah lain.
+
+00:08:55.560 --> 00:08:56.760
+Data verse memberi Anda kendali untuk hal.
+
+00:08:57.120 --> 00:08:58.740
+Dan kendali pertama dimulai dari identitas.
+
+00:08:59.240 --> 00:09:00.760
+Saat Anda masuk dengan akun perusahaan,
+
+00:09:00.760 --> 00:09:02.840
+Microsoft Enter ID akan mengidentifikasi Anda.
+
+00:09:02.840 --> 00:09:05.980
+Anggaplah Enter ID sebagai meja resepsionis di pintu masuk kantor.
+
+00:09:06.480 --> 00:09:07.900
+Anda tiba menunjukkan kartu pengenal,
+
+00:09:08.060 --> 00:09:10.040
+dan resepsionis memeriksa siapa Anda sebelum Anda bisa masuk.
+
+00:09:10.500 --> 00:09:11.880
+Data verse menggunakan identitas tersebut
+
+00:09:11.880 --> 00:09:13.700
+untuk mengetahui pengguna mana yang sedang bekerja dengan data.
+
+00:09:13.960 --> 00:09:15.360
+Data verse tidak berhenti hanya dengan bertanya
+
+00:09:15.360 --> 00:09:16.240
+apakah orang ini diizinkan masuk.
+
+00:09:16.660 --> 00:09:17.600
+Data verse juga bertanya,
+
+00:09:17.780 --> 00:09:19.580
+apa yang boleh dilakukan orang ini setelah mereka masuk?
+
+00:09:20.040 --> 00:09:21.340
+Disitulah peran keamanan berperan.
+
+00:09:21.820 --> 00:09:23.360
+Peran keamanan adalah sekumpulan izin
+
+00:09:23.360 --> 00:09:25.560
+yang ditautkan ke suatu pekerjaan atau tanggung jawab.
+
+00:09:25.820 --> 00:09:28.060
+Anda bisa membuat satu peran untuk staff penjualan,
+
+00:09:28.160 --> 00:09:29.360
+satu untuk aking layanan pelanggan,
+
+00:09:29.440 --> 00:09:30.360
+dan satu lagi untuk manajer.
+
+00:09:32.840 --> 00:09:34.860
+Sebagai contoh, seorang staff penjualan mungkin diizinkan
+
+00:09:34.860 --> 00:09:37.780
+untuk membaca, membuat, dan memperbarui akun kontak prospek dan peluang.
+
+00:09:37.980 --> 00:09:40.440
+Mereka mungkin tidak diizinkan untuk menghapus informasi pelanggan yang penting.
+
+00:09:40.880 --> 00:09:42.420
+Seorang agen dukungan mungkin dapat membuat
+
+00:09:42.420 --> 00:09:44.660
+dan memperbarui kasus tetapi tidak mengubah peluang menjual.
+
+00:09:45.120 --> 00:09:46.680
+Izin tersebut dapat mencakup membaca,
+
+00:09:46.840 --> 00:09:48.160
+membuat, mengubah, dan menghapus baris.
+
+00:09:48.660 --> 00:09:50.340
+Itu berarti akses tidak bergantung pada seseorang
+
+00:09:50.340 --> 00:09:52.480
+yang harus mengingat tombol mana yang harus disembunyikan di setiap aplikasi.
+
+00:09:52.860 --> 00:09:54.220
+Izin tersebut melekat pada data itu sendiri.
+
+00:09:54.700 --> 00:09:57.300
+Jadi batasan yang sama berlaku dimanapun data data verse tersebut muncul,
+
+00:09:57.300 --> 00:09:59.620
+kemudian Anda bisa mempersempit akses lebih jauh lagi.
+
+00:09:59.900 --> 00:10:01.700
+Keamanan tingkat baris menentukan baris individual
+
+00:10:01.700 --> 00:10:03.200
+mana yang dapat dikerjakan oleh seseorang.
+
+00:10:03.600 --> 00:10:05.660
+Staff penjualan mungkin hanya melihat pelanggan yang mereka miliki,
+
+00:10:05.800 --> 00:10:07.700
+sementara manajer penjualan dapat melihat baris pelanggan
+
+00:10:07.700 --> 00:10:09.200
+yang dimiliki oleh semua orang di tim mereka.
+
+00:10:09.720 --> 00:10:11.080
+Keduanya menggunakan tabel akun yang sama.
+
+00:10:11.520 --> 00:10:12.920
+Mereka hanya tidak melihat bagian yang sama dari tabel.
+
+00:10:13.300 --> 00:10:15.720
+Pengaturan itu membantu orang fokus pada pekerjaan mereka sendiri
+
+00:10:15.720 --> 00:10:17.120
+sambil mereka pendangan yang dibutuhkan menit.
+
+00:10:17.120 --> 00:10:19.060
+Hal ini juga mengurangi kemungkinan seseorang
+
+00:10:19.060 --> 00:10:21.400
+membuka informasi tentang pelanggan yang tidak perlu mereka akses.
+
+00:10:21.940 --> 00:10:23.820
+Beberapa informasi membutuhkan perlindungan yang lebih ketat.
+
+00:10:23.820 --> 00:10:27.220
+Keamanan tingkat kolom dapat melindungi kolom individual di dalam tabel.
+
+00:10:27.720 --> 00:10:29.660
+Mungkin seorang pengguna bisa membuka baris pelanggan
+
+00:10:29.660 --> 00:10:31.300
+tetapi tidak boleh melihat pengenal pribadi
+
+00:10:31.300 --> 00:10:33.580
+angka gaji detail bank atau catatan keuangan pribadi.
+
+00:10:34.320 --> 00:10:36.460
+Baris pelanggan tetap tersedia untuk pekerjaan yang perlu mereka akut.
+
+00:10:37.080 --> 00:10:38.380
+Kolom yang dilindungi tetap dibatasi.
+
+00:10:39.080 --> 00:10:40.100
+Untuk perusahaan yang lebih besar,
+
+00:10:40.340 --> 00:10:42.840
+unit bisnis dapat menciptakan batasan antar bagian organisasi.
+
+00:10:43.280 --> 00:10:45.480
+Sebuah perusahaan mungkin memisahkan wilayah divisi
+
+00:10:45.480 --> 00:10:47.800
+atau anak perusahaan yang bekerja dengan kelompok pelanggan yang berbeda.
+
+00:10:48.260 --> 00:10:51.340
+Unit bisnis membantu membentuk bagaimana akses pekerja di seluruh batasan tersebut.
+
+00:10:51.340 --> 00:10:53.920
+Ini tidak berarti setiap bisnis membutuhkan peta keamanan yang rumit.
+
+00:10:54.460 --> 00:10:56.280
+Tim kecil mungkin hanya memerlukan beberapa peran yang jelas.
+
+00:10:56.840 --> 00:10:58.700
+Perusahaan yang lebih besar mungkin butuh lebih banyak lapisan
+
+00:10:58.700 --> 00:11:00.640
+karena tim, wilayah, dan tanggung jawabnya berbeda.
+
+00:11:01.120 --> 00:11:02.760
+Intinya adalah data first dapat menyesuaikan akses
+
+00:11:02.760 --> 00:11:03.880
+dengan cara bisnis sebenarnya bekerja.
+
+00:11:04.560 --> 00:11:06.520
+Kontrol akses melindungi siapa yang dapat menjangkau data,
+
+00:11:06.640 --> 00:11:08.760
+tetapi aturan juga melindungi kualitas data itu sendiri.
+
+00:11:09.560 --> 00:11:11.140
+Aturan bisnis dapat mengharuskan seseorang,
+
+00:11:11.280 --> 00:11:13.020
+memasukkan nomor telepon sebelum menyimpan kontak baru.
+
+00:11:13.520 --> 00:11:14.820
+Aturan ini dapat memeriksa kondisi
+
+00:11:14.820 --> 00:11:16.700
+seperti mengharuskan adanya alasan saat suatu kasus di.
+
+00:11:16.700 --> 00:11:18.460
+Aturan ini juga dapat mengubah apa yang dilihat
+
+00:11:18.460 --> 00:11:19.980
+mengguna berdasarkan informasi yang mereka masukkan.
+
+00:11:20.440 --> 00:11:22.800
+Aturan yang sama berlaku di semua aplikasi yang menggunakan tabel tersebut.
+
+00:11:23.220 --> 00:11:24.480
+Ini penting karena Anda tidak ingin
+
+00:11:24.480 --> 00:11:26.260
+satu aplikasi menerima data yang tidak lengkap
+
+00:11:26.260 --> 00:11:27.580
+sementara aplikasi lain menolaknya.
+
+00:11:27.920 --> 00:11:29.600
+Aturan tersebut melekat pada informasi bisnis,
+
+00:11:29.720 --> 00:11:31.280
+bukan pada satu layar yang kebetulan menampilkan.
+
+00:11:31.820 --> 00:11:33.820
+Data first juga dapat menjalankan logika di balik layar
+
+00:11:33.820 --> 00:11:35.840
+untuk membantu menjaga konsistensi proses bisnis.
+
+00:11:36.240 --> 00:11:37.600
+Detail yang perlu Anda ingat sangat sederhana.
+
+00:11:38.480 --> 00:11:40.360
+Data hadir dengan aturan, bukan hanya penyimpanan.
+
+00:11:40.700 --> 00:11:42.720
+Jadi fondasinya mencakup informasi
+
+00:11:42.720 --> 00:11:44.380
+orang yang diizinkan bekerja dengannya
+
+00:11:44.380 --> 00:11:46.280
+dan aturan yang menjaganya tetap dapat digunakan.
+
+00:11:46.940 --> 00:11:49.140
+Setelah Dynamics 365 bekerja pada fondasi yang sama,
+
+00:11:49.280 --> 00:11:50.760
+ia tidak memerlukan jembatan tradisional
+
+00:11:50.760 --> 00:11:52.440
+hanya untuk menjangkau data bisnisnya sendiri.
+
+00:11:53.200 --> 00:11:55.160
+Apa arti integrasi Dynamics 365 sebenarnya?
+
+00:11:55.820 --> 00:11:56.840
+Kebanyakan orang mendengar
+
+00:11:56.840 --> 00:11:59.060
+integrasi Dynamics 365 dengan data first
+
+00:11:59.060 --> 00:12:00.440
+dan membayangkan dua sistem terpisah
+
+00:12:00.440 --> 00:12:01.560
+yang digabungkan oleh konektor.
+
+00:12:02.560 --> 00:12:04.000
+Satu sistem menyimpan data pelanggan,
+
+00:12:04.380 --> 00:12:05.620
+sistem lain memerlukan salinannya,
+
+00:12:05.780 --> 00:12:07.560
+jadi seseorang menyiapkan sinkronisasi,
+
+00:12:07.760 --> 00:12:08.860
+menunggu prosesnya berjalan,
+
+00:12:08.980 --> 00:12:10.120
+dan berharap tidak ada yang gagal.
+
+00:12:11.040 --> 00:12:12.740
+Gambaran itu masuk akal untuk banyak alat bisnis.
+
+00:12:12.740 --> 00:12:14.260
+Namun di sini,
+
+00:12:14.600 --> 00:12:16.360
+untuk Dynamics 365 Sales
+
+00:12:16.360 --> 00:12:18.440
+dan Dynamics 365 Customer Service
+
+00:12:18.440 --> 00:12:20.360
+koneksinya jauh lebih erat dari itu,
+
+00:12:21.020 --> 00:12:22.500
+aplikasi-aplikasi ini menggunakan data first
+
+00:12:22.500 --> 00:12:23.600
+sebagai fondasi data bersama mereka.
+
+00:12:24.040 --> 00:12:25.660
+Keduanya bukan dua basis data terpisah
+
+00:12:25.660 --> 00:12:26.980
+yang saling bertukar baris pelanggan
+
+00:12:26.980 --> 00:12:28.320
+hanya agar bisa saling memahami.
+
+00:12:29.000 --> 00:12:31.040
+Mereka bekerja dari informasi bisnis yang sama sejak awal.
+
+00:12:31.700 --> 00:12:32.740
+Mari kita buat lebih konkret.
+
+00:12:33.880 --> 00:12:35.480
+Bayangkan Anda seorang staff penjualan
+
+00:12:35.480 --> 00:12:36.920
+dan Anda membuat perusahaan baru
+
+00:12:36.920 --> 00:12:38.720
+di Dynamics 365 Sales.
+
+00:12:39.200 --> 00:12:40.820
+Anda menambahkan kontak utama
+
+00:12:40.820 --> 00:12:42.260
+dan mulai mengerjakan calon kesepakatan.
+
+00:12:42.600 --> 00:12:44.740
+Detail tersebut segera menjadi bagian dari data bersama
+
+00:12:44.740 --> 00:12:45.560
+yang digunakan aplikasi.
+
+00:12:45.900 --> 00:12:48.080
+Kemudian, pelanggan tersebut menghubungi dukungan.
+
+00:12:48.560 --> 00:12:50.460
+Agen dukungan dapat bekerja dengan detail perusahaan
+
+00:12:50.460 --> 00:12:51.280
+dan kontak yang persisam.
+
+00:12:51.980 --> 00:12:54.060
+Tidak ada yang perlu mengekspor daftar dari penjualan
+
+00:12:54.060 --> 00:12:55.100
+atau membuat ulang pelanggan
+
+00:12:55.100 --> 00:12:56.300
+di dalam alat dukungan terpisah.
+
+00:12:56.840 --> 00:12:58.400
+Agen cukup menghubungkan kasus dukungan
+
+00:12:58.400 --> 00:12:59.120
+ke pelanggan tersebut
+
+00:12:59.120 --> 00:13:00.500
+dan melihat riwayat yang membantu mereka
+
+00:13:00.500 --> 00:13:01.980
+memahami apa yang sedang terjadi.
+
+00:13:02.640 --> 00:13:03.560
+Sales melihat kesepakatan,
+
+00:13:03.780 --> 00:13:04.580
+dukungan melihat kasus,
+
+00:13:04.700 --> 00:13:06.280
+dan kedua tim bekerja di sekitar pelanggan yang sama.
+
+00:13:06.280 --> 00:13:08.880
+Hal ini tidak berarti setiap layar terlihat sama
+
+00:13:08.880 --> 00:13:11.140
+atau setiap tim mengikuti proses yang sama.
+
+00:13:11.980 --> 00:13:13.000
+Sales membutuhkan prospek,
+
+00:13:13.160 --> 00:13:14.540
+peluang, panggilan, dan rapat.
+
+00:13:14.920 --> 00:13:16.380
+Layanan pelanggan membutuhkan kasus,
+
+00:13:16.520 --> 00:13:17.540
+antrean, dan riwayat lain.
+
+00:13:18.120 --> 00:13:19.340
+Setiap aplikasi Dynamics 365
+
+00:13:19.340 --> 00:13:21.400
+memberikan alat yang dirancang khusus untuk pekerjaan penguat.
+
+00:13:21.980 --> 00:13:23.480
+Meskipun informasi bisnis dibaliknya
+
+00:13:23.480 --> 00:13:24.920
+dapat terhubung kemanapun dibutuhkan.
+
+00:13:25.340 --> 00:13:27.020
+Fondasi bersama itulah yang sering dimaksud orang
+
+00:13:27.020 --> 00:13:29.280
+saat mereka berbicara tentang integrasi Dynamics 365
+
+00:13:29.280 --> 00:13:30.060
+dan Dataverse.
+
+00:13:30.740 --> 00:13:33.420
+Ini bukan sekadar memindahkan data dari titik A ke titik B.
+
+00:13:33.420 --> 00:13:36.500
+Ini tentang bagaimana aplikasi bekerja dengan baris
+
+00:13:36.500 --> 00:13:39.320
+hubungan, aturan, dan kontrol akses yang sama sejak awal.
+
+00:13:40.080 --> 00:13:41.880
+Mari kita bahas perjalanan penjualan yang sederhana.
+
+00:13:42.460 --> 00:13:44.320
+Prospek masuk dari situs web atau sebuah acara.
+
+00:13:45.140 --> 00:13:47.680
+Seorang tenaga penjualan melindaklanjutnya prospek tersebut
+
+00:13:47.680 --> 00:13:48.900
+mempelajari orang tersebut
+
+00:13:48.900 --> 00:13:50.960
+dan mengubahnya menjadi hubungan pelanggan serta peluang.
+
+00:13:51.520 --> 00:13:53.500
+Panggilan, email, janji temu, dan tugas semuanya
+
+00:13:53.500 --> 00:13:54.720
+dapat terhubung ke pekerjaan tersebut.
+
+00:13:55.180 --> 00:13:57.100
+Jadi tim tidak perlu mencari di alat terpisah
+
+00:13:57.100 --> 00:13:58.160
+untuk menyusun ceritanya.
+
+00:13:58.980 --> 00:14:00.560
+Jika pelanggan nantinya memerlukan bantuan,
+
+00:14:00.560 --> 00:14:02.700
+kasus dukungan dapat terhubung kembali ke pelanggan yang sama.
+
+00:14:03.400 --> 00:14:05.740
+Agen dukungan tidak hanya melihat nama dan alamat email.
+
+00:14:06.660 --> 00:14:09.020
+Mereka dapat bekerja sesuai konteks dengan hubungan pelanggan
+
+00:14:09.020 --> 00:14:10.160
+yang telah teridentifikasi.
+
+00:14:10.780 --> 00:14:12.580
+Sementara itu, tim penjualan dapat melihat bahwa
+
+00:14:12.580 --> 00:14:14.600
+pelanggan memiliki masalah layanan yang terbuka
+
+00:14:14.600 --> 00:14:16.020
+dan menghindari pembicaraan pembaruan
+
+00:14:16.020 --> 00:14:17.220
+tanpa mengetahui adanya masalah.
+
+00:14:17.700 --> 00:14:20.580
+Satu hubungan pelanggan dapat mendukung berbagai jenis pekerjaan
+
+00:14:20.580 --> 00:14:22.140
+yang jauh lebih bermanfaat daripada sekadar
+
+00:14:22.140 --> 00:14:23.560
+menyamakan nama pelanggan di dua sistem.
+
+00:14:24.520 --> 00:14:26.180
+Anda mungkin juga mendengar istilah komandata modal
+
+00:14:26.180 --> 00:14:27.320
+yang terkadang singkat CDM.
+
+00:14:27.320 --> 00:14:30.020
+Jangan biarkan namanya terdengar lebih misterius
+
+00:14:30.020 --> 00:14:30.840
+daripada yang sebenarnya.
+
+00:14:31.640 --> 00:14:34.380
+Ini hanya berarti Microsoft menyediakan pola tabel bisnis umum
+
+00:14:34.380 --> 00:14:36.040
+untuk hal-hal yang dilacak banyak perusahaan
+
+00:14:36.040 --> 00:14:38.380
+seperti akun, kontak, aktivitas, dan kasus.
+
+00:14:39.220 --> 00:14:40.640
+Pola ini memberikan bahasa awal yang sama
+
+00:14:40.640 --> 00:14:43.020
+bagi aplikasi berbasis Dynamics 365 dan Dataverse.
+
+00:14:43.560 --> 00:14:44.560
+Akun berarti sebuah perusahaan,
+
+00:14:44.920 --> 00:14:45.920
+kontak berarti seorang individu.
+
+00:14:46.460 --> 00:14:48.580
+Aktivitas melacak pekerjaan terkait hubungan bisnis.
+
+00:14:49.080 --> 00:14:51.160
+Anda dapat menyesuaikan pengaturan untuk perusahaan Anda
+
+00:14:51.160 --> 00:14:53.160
+dan menambahkan tabel Anda sendiri jika diperlukan,
+
+00:14:53.280 --> 00:14:54.860
+tetapi Anda tidak perlu selalu mulai dari nol.
+
+00:14:54.860 --> 00:14:57.240
+Saat satu aplikasi memahami tabel akun
+
+00:14:57.240 --> 00:14:58.860
+dan aplikasi lain menggunakan tabel yang sama,
+
+00:14:59.060 --> 00:15:01.260
+keduanya merujuk pada jenis informasi bisnis yang sama.
+
+00:15:01.640 --> 00:15:03.480
+Hal ini juga mengubah apa yang dapat Anda bangun.
+
+00:15:03.880 --> 00:15:06.040
+Misalkan tim lapangan Anda membutuhkan aplikasi sederhana
+
+00:15:06.040 --> 00:15:06.900
+untuk mencari pelanggan,
+
+00:15:07.020 --> 00:15:07.780
+mengonfirmasi kunjungan,
+
+00:15:07.840 --> 00:15:09.180
+dan menambahkan catatan setelah janji temu.
+
+00:15:09.500 --> 00:15:11.100
+Anda dapat membangun power app yang bekerja
+
+00:15:11.100 --> 00:15:12.300
+dengan tabel Dataverse yang sama
+
+00:15:12.300 --> 00:15:13.780
+yang sudah digunakan oleh Dynamics 365.
+
+00:15:14.140 --> 00:15:16.120
+Tidak perlu mengekspor pelanggan ke daftar baru
+
+00:15:16.120 --> 00:15:17.300
+hanya untuk aplikasi tersebut.
+
+00:15:18.240 --> 00:15:20.200
+Pekerja lapangan membuka aplikasi mencari pelanggan
+
+00:15:20.200 --> 00:15:21.600
+dan memperbarui informasi kunjungan.
+
+00:15:21.600 --> 00:15:23.800
+Data tetap terhubung dengan hubungan pelanggan
+
+00:15:23.800 --> 00:15:25.280
+yang sudah digunakan tim penjualan
+
+00:15:25.280 --> 00:15:26.160
+atau layanan pelanggan
+
+00:15:26.160 --> 00:15:28.960
+sesuai aturan keamanan yang kita bahas sebelumnya.
+
+00:15:29.500 --> 00:15:30.860
+Untuk pekerjaan bisnis yang lebih terstruktur,
+
+00:15:31.000 --> 00:15:32.280
+Anda dapat membangun aplikasi berbasis.
+
+00:15:32.620 --> 00:15:34.780
+Aplikasi berbasis model dimulai dengan model Dataverse.
+
+00:15:34.840 --> 00:15:36.000
+Anda memilih tabel Dataverse,
+
+00:15:36.320 --> 00:15:37.040
+menentukan hubungan,
+
+00:15:37.380 --> 00:15:38.520
+mengatur formulir dan tampilan,
+
+00:15:38.660 --> 00:15:39.780
+serta menerapkan peran keamanan.
+
+00:15:40.100 --> 00:15:41.800
+Power Apps kemudian menggunakan struktur tersebut
+
+00:15:41.800 --> 00:15:43.920
+untuk menciptakan pengalaman aplikasi bisnis yang berfungsi.
+
+00:15:44.100 --> 00:15:45.560
+Bayangkan seperti menata meja kerja
+
+00:15:45.560 --> 00:15:47.460
+di sekitar alat dan bahan yang benar-benar digunakan tim Anda.
+
+00:15:47.460 --> 00:15:49.160
+Tabel mendeskripsikan pekerjaan,
+
+00:15:49.260 --> 00:15:50.500
+hubungan menghubungkan bagian-bagian.
+
+00:15:51.060 --> 00:15:53.440
+Formulir memberi orang cara untuk memasukkan dan meninjodik.
+
+00:15:53.960 --> 00:15:55.660
+Tampilan membantu mereka menemukan perhatian.
+
+00:15:56.480 --> 00:15:57.900
+Keamanan menentukan apa yang bisa dibuka
+
+00:15:57.900 --> 00:15:58.820
+atau diubah oleh setiap orang.
+
+00:15:59.240 --> 00:16:00.920
+Aplikasi berbasis model dapat berdampingan
+
+00:16:00.920 --> 00:16:01.800
+dengan Dynamics 365,
+
+00:16:02.080 --> 00:16:03.120
+karena keduanya bekerja dengan data.
+
+00:16:03.560 --> 00:16:05.400
+Mungkin Dynamics 365 Sales
+
+00:16:05.400 --> 00:16:06.560
+menangani proses penjualan penuh,
+
+00:16:06.620 --> 00:16:08.220
+sementara aplikasi model yang lebih kecil
+
+00:16:08.220 --> 00:16:09.740
+memberi manajer kontrak tempat terfokus
+
+00:16:09.740 --> 00:16:11.080
+untuk melacak perjanjian pelanggan.
+
+00:16:12.320 --> 00:16:13.820
+Keduanya dapat bekerja dengan data pelanggan
+
+00:16:13.820 --> 00:16:15.560
+terkait tambah membuat basis data pelanggan kedua.
+
+00:16:15.560 --> 00:16:18.200
+Tentu saja akses tersebut tetap memerlukan kehatian.
+
+00:16:18.300 --> 00:16:19.940
+Hanya karena sebuah aplikasi dapat bekerja
+
+00:16:19.940 --> 00:16:21.420
+dengan tabel Dataverse bukan berarti
+
+00:16:21.420 --> 00:16:23.360
+setiap pengguna harus mengedit setiap baris
+
+00:16:23.360 --> 00:16:24.660
+atau melihat setiap kolom.
+
+00:16:25.420 --> 00:16:26.880
+Peran akses baris dan aturan bisnis
+
+00:16:26.880 --> 00:16:28.280
+tetap mengendalikan apa yang terjadi.
+
+00:16:28.640 --> 00:16:30.600
+Aplikasi lapangan dapat memberikan detail pelanggan
+
+00:16:30.600 --> 00:16:32.280
+dan tindakan yang tepat kepada seseorang
+
+00:16:32.280 --> 00:16:34.580
+tanpa mengekspos data perusahaan lainnya.
+
+00:16:35.440 --> 00:16:37.660
+Jadi, integrasi Dynamics 365 dengan Dataverse
+
+00:16:37.660 --> 00:16:38.800
+kini bukan lagi sekadar kabel
+
+00:16:38.800 --> 00:16:40.500
+yang menghubungkan dua ruangan yang jauh.
+
+00:16:41.340 --> 00:16:42.400
+Aplikasi Dynamics 365,
+
+00:16:42.400 --> 00:16:43.220
+aplikasi kustom,
+
+00:16:43.320 --> 00:16:44.220
+dan proses bisnis semuanya
+
+00:16:44.220 --> 00:16:45.840
+dapat bekerja dari fondasi bersama yang sama.
+
+00:16:46.520 --> 00:16:47.300
+Begitu Anda melihatnya,
+
+00:16:47.320 --> 00:16:48.480
+pertanyaan berikutnya menjadi jelas.
+
+00:16:49.560 --> 00:16:51.000
+Apa lagi yang bisa Anda gunakan
+
+00:16:51.000 --> 00:16:52.340
+dari pembaruan pelanggan yang sama
+
+00:16:52.340 --> 00:16:54.360
+di seluruh platform Microsoft yang terhubung?
+
+00:16:55.420 --> 00:16:56.440
+Bagaimana platform yang terhubung
+
+00:16:56.440 --> 00:16:57.260
+bekerja dalam pekerjaannya?
+
+00:16:57.920 --> 00:16:59.140
+Pembaruan pelanggan bersama
+
+00:16:59.140 --> 00:17:00.540
+menjadi berguna saat alat di sekitarnya
+
+00:17:00.540 --> 00:17:01.120
+dapat merespon.
+
+00:17:01.800 --> 00:17:03.320
+Power Automate menangani pekerjaan
+
+00:17:03.320 --> 00:17:04.920
+tindak lanjut dengan memantau perubahan
+
+00:17:04.920 --> 00:17:05.780
+pada baris Dataverse
+
+00:17:05.780 --> 00:17:07.340
+dan memulai tindakan saat perubahan itu terjadi.
+
+00:17:07.700 --> 00:17:08.060
+Misalnya,
+
+00:17:08.460 --> 00:17:10.520
+Prospe baru masuk ke Dynamics 365 Sales.
+
+00:17:10.520 --> 00:17:12.400
+Sebuah alur dapat memberitahu
+
+00:17:12.400 --> 00:17:13.720
+tenaga penjual yang ditugaskan,
+
+00:17:13.840 --> 00:17:14.660
+mengirim pesan di Teams,
+
+00:17:14.800 --> 00:17:16.000
+atau membuat tugas tindak lanjut.
+
+00:17:16.700 --> 00:17:17.740
+Tidak ada yang perlu memantau kotak masuk
+
+00:17:17.740 --> 00:17:18.160
+bersama-sama.
+
+00:17:18.760 --> 00:17:19.620
+Prospek berubah,
+
+00:17:19.760 --> 00:17:20.580
+dan langkah berikutnya
+
+00:17:20.580 --> 00:17:21.560
+dimulai secara otomatis.
+
+00:17:22.140 --> 00:17:22.780
+Power Automate
+
+00:17:22.780 --> 00:17:24.220
+tidak memerlukan salinan terpisah
+
+00:17:24.220 --> 00:17:25.060
+dari prospek tersebut
+
+00:17:25.060 --> 00:17:26.540
+hanya untuk melakukan pekerjaan itu.
+
+00:17:27.160 --> 00:17:28.120
+Ia dapat bereaksi terhadap
+
+00:17:28.120 --> 00:17:28.800
+baris di Dataverse
+
+00:17:28.800 --> 00:17:29.680
+menggunakan detail pelanggan
+
+00:17:29.680 --> 00:17:30.460
+kepemilikan yang sama
+
+00:17:30.460 --> 00:17:31.760
+dengan digunakan aplikasi penjualan.
+
+00:17:32.140 --> 00:17:33.320
+Hal itu menjaga otomatisasi
+
+00:17:33.320 --> 00:17:34.520
+tetap dekat dengan proses bisnis
+
+00:17:34.520 --> 00:17:35.680
+alih-alih mengandalkan seseorang
+
+00:17:35.680 --> 00:17:36.560
+untuk mengekspor file
+
+00:17:36.560 --> 00:17:37.780
+dan memulai rangkaian email manual.
+
+00:17:38.340 --> 00:17:39.200
+Kemudian ada Power BI.
+
+00:17:39.760 --> 00:17:40.720
+Manager penjualan mungkin ingin
+
+00:17:40.720 --> 00:17:41.700
+mempunyai jalur penjualan pipeline.
+
+00:17:42.280 --> 00:17:43.480
+Manager layanan pelanggan mungkin
+
+00:17:43.480 --> 00:17:44.020
+perlu melihat
+
+00:17:44.020 --> 00:17:45.620
+berapa banyak kasus yang masuk minggu ini.
+
+00:17:45.880 --> 00:17:46.960
+Kasus mana yang masih terbuka
+
+00:17:46.960 --> 00:17:47.720
+atau pelanggan mana
+
+00:17:47.720 --> 00:17:49.240
+yang paling sering menghubungi dukungan.
+
+00:17:50.120 --> 00:17:51.280
+Power BI dapat melaporkan
+
+00:17:51.280 --> 00:17:52.300
+data bisnis Dataverse
+
+00:17:52.300 --> 00:17:53.420
+sehingga tim tersebut
+
+00:17:53.420 --> 00:17:54.400
+dapat melihat pekerjaan
+
+00:17:54.400 --> 00:17:55.080
+yang sedang berlangsung
+
+00:17:55.080 --> 00:17:56.260
+tanpa perlu mengekspor spetsheet
+
+00:17:56.260 --> 00:17:57.240
+baru setiap Jumat sore.
+
+00:17:58.220 --> 00:17:58.800
+Laporan tersebut
+
+00:17:58.800 --> 00:17:59.680
+diambil dari data bisnis
+
+00:17:59.680 --> 00:18:00.520
+yang sudah digunakan orang.
+
+00:18:00.980 --> 00:18:02.160
+Itu berarti bagian jalur penjualan
+
+00:18:02.160 --> 00:18:02.900
+dapat berubah seiring
+
+00:18:02.900 --> 00:18:03.700
+dengan majunya peluang.
+
+00:18:04.160 --> 00:18:05.260
+Dasbor kasus dapat menunjukkan
+
+00:18:05.260 --> 00:18:06.020
+beban kerja saat ini
+
+00:18:06.020 --> 00:18:07.340
+seiring agen memperpadui kasus.
+
+00:18:08.060 --> 00:18:08.960
+Intinya sekarang adalah
+
+00:18:08.960 --> 00:18:10.060
+dasbor menggantikan orang
+
+00:18:10.060 --> 00:18:11.540
+yang memeriksa detail secara manual.
+
+00:18:12.240 --> 00:18:12.880
+Hal ini memberi mereka
+
+00:18:12.880 --> 00:18:13.620
+pandangan yang lebih jelas
+
+00:18:13.620 --> 00:18:14.200
+tentang pekerjaan
+
+00:18:14.200 --> 00:18:15.080
+sebelum mereka memutuskan
+
+00:18:15.080 --> 00:18:15.920
+apa yang perlu diperhatikan.
+
+00:18:16.840 --> 00:18:18.020
+Power Apps menambahkan jalur lain
+
+00:18:18.020 --> 00:18:18.820
+ke dalam proses yang sama.
+
+00:18:19.480 --> 00:18:20.380
+Bayangkan seorang pekerjaan
+
+00:18:20.380 --> 00:18:21.600
+lapangan tiba di lokasi pelanggan.
+
+00:18:22.520 --> 00:18:23.360
+Mereka tidak memerlukan
+
+00:18:23.360 --> 00:18:24.060
+seluruh pengalaman
+
+00:18:24.060 --> 00:18:25.300
+penjualan Dynamics 365.
+
+00:18:26.340 --> 00:18:27.200
+Mereka mungkin hanya perlu
+
+00:18:27.200 --> 00:18:27.960
+menemukan pelanggan
+
+00:18:27.960 --> 00:18:28.900
+meninjau detail kunjungan
+
+00:18:28.900 --> 00:18:30.000
+mengonfirmasi apa yang terjadi
+
+00:18:30.000 --> 00:18:31.040
+dan menambahkan catatan
+
+00:18:31.040 --> 00:18:31.600
+atau foto.
+
+00:18:32.400 --> 00:18:33.200
+Power Apps yang terfokus
+
+00:18:33.200 --> 00:18:33.840
+dapat memberi mereka
+
+00:18:33.840 --> 00:18:35.080
+pengalaman yang lebih ringkas tersebut.
+
+00:18:35.660 --> 00:18:36.280
+Tim akun mungkin
+
+00:18:36.280 --> 00:18:37.100
+memerlukan aplikasi
+
+00:18:37.100 --> 00:18:38.280
+untuk meninjau perjanjian pelanggan.
+
+00:18:38.800 --> 00:18:39.460
+Seorang manajer mungkin
+
+00:18:39.460 --> 00:18:40.500
+memerlukan aplikasi sederhana
+
+00:18:40.500 --> 00:18:41.120
+untuk menyetujui.
+
+00:18:41.520 --> 00:18:42.680
+Setiap aplikasi dapat berfokus
+
+00:18:42.680 --> 00:18:43.480
+pada satu pekerjaan
+
+00:18:43.480 --> 00:18:44.700
+sambil bekerja dengan informasi
+
+00:18:44.700 --> 00:18:45.520
+Dataverse yang dikontrol
+
+00:18:45.520 --> 00:18:46.280
+sama di balik layar.
+
+00:18:46.740 --> 00:18:47.380
+Orang tersebut melihat
+
+00:18:47.380 --> 00:18:48.360
+alat yang sesuai dengan kesehatan.
+
+00:18:48.700 --> 00:18:49.360
+Bisnis tetap menyimpan
+
+00:18:49.360 --> 00:18:50.040
+informasi yang terhubung.
+
+00:18:50.660 --> 00:18:51.700
+Terkadang informasi tersebut
+
+00:18:51.700 --> 00:18:52.880
+berawal dari luar Dataverse.
+
+00:18:53.420 --> 00:18:54.220
+Perusahaan mungkin memiliki
+
+00:18:54.220 --> 00:18:55.160
+daftar dari sumber daring
+
+00:18:55.160 --> 00:18:55.960
+yang perlu menjadi bagian
+
+00:18:55.960 --> 00:18:56.820
+dari data bisnisnya.
+
+00:18:57.440 --> 00:18:57.960
+Power Query
+
+00:18:57.960 --> 00:18:59.040
+dapat membawa data
+
+00:18:59.040 --> 00:18:59.780
+dari sumber daring
+
+00:18:59.780 --> 00:19:00.360
+yang didukung
+
+00:19:00.360 --> 00:19:01.720
+membersihkannya selama impor
+
+00:19:01.720 --> 00:19:02.980
+dan memuatnya
+
+00:19:02.980 --> 00:19:04.480
+ke dalam tabel Dataverse yang tepat.
+
+00:19:05.020 --> 00:19:05.700
+Ini berguna ketika
+
+00:19:05.700 --> 00:19:06.980
+sumber luar menyimpan informasi
+
+00:19:06.980 --> 00:19:07.640
+yang perlu digunakan
+
+00:19:07.640 --> 00:19:08.620
+oleh alat Dynamics
+
+00:19:08.620 --> 00:19:09.640
+dan power platform Anda.
+
+00:19:10.180 --> 00:19:11.360
+Anda tetap perlu memutuskan
+
+00:19:11.360 --> 00:19:11.900
+apa yang termasuk
+
+00:19:11.900 --> 00:19:12.420
+dalam Dataverse
+
+00:19:12.420 --> 00:19:13.160
+dan bagaimana hal itu
+
+00:19:13.160 --> 00:19:13.980
+harus terhubung ke tabel.
+
+00:19:14.460 --> 00:19:15.180
+Mengimpor data
+
+00:19:15.180 --> 00:19:16.200
+tanpa pemikiran tersebut
+
+00:19:16.200 --> 00:19:17.160
+hanya akan memindahkan
+
+00:19:17.160 --> 00:19:18.200
+kebingungan ke lokasi baru.
+
+00:19:19.300 --> 00:19:20.100
+Mari kita biarkan auto
+
+00:19:20.100 --> 00:19:21.120
+menyatukan kepingan-kepingan itu
+
+00:19:22.880 --> 00:19:24.560
+Dynamics 365 dan aturan penugasan
+
+00:19:24.560 --> 00:19:25.460
+memeriksa siapa yang harus
+
+00:19:25.460 --> 00:19:26.420
+memiliki prospek tersebut
+
+00:19:26.420 --> 00:19:27.380
+mungkin berdasarkan wilayah
+
+00:19:27.380 --> 00:19:27.740
+atau produk.
+
+00:19:28.340 --> 00:19:29.380
+Pemilik menerima pesan tim
+
+00:19:29.380 --> 00:19:30.520
+melalui alur Power Automate
+
+00:19:30.520 --> 00:19:31.180
+sehingga mereka tahu
+
+00:19:31.180 --> 00:19:32.100
+ada pekerjaan yang menunggu.
+
+00:19:32.600 --> 00:19:33.300
+Saat tenaga penjual
+
+00:19:33.300 --> 00:19:34.140
+memperbarui prospek
+
+00:19:34.140 --> 00:19:34.840
+dan memindahkannya
+
+00:19:34.840 --> 00:19:35.940
+melalui proses penjualan,
+
+00:19:36.080 --> 00:19:36.760
+dasbor Power BI
+
+00:19:36.760 --> 00:19:37.780
+berubah untuk menunjukkan
+
+00:19:37.780 --> 00:19:38.440
+kepada tim bagaimana
+
+00:19:38.440 --> 00:19:39.560
+alur penjualan autom saat ini.
+
+00:19:40.000 --> 00:19:40.760
+Satu pembaruan memulai
+
+00:19:40.760 --> 00:19:41.560
+pekerjaan yang bermanfaat
+
+00:19:41.560 --> 00:19:42.140
+di beberapa tempat.
+
+00:19:42.580 --> 00:19:43.460
+Power Automate memindahkan
+
+00:19:43.460 --> 00:19:44.680
+pekerjaan dari satu langkah berikutnya.
+
+00:19:45.140 --> 00:19:46.020
+Power BI membantu orang
+
+00:19:46.020 --> 00:19:46.800
+melihat pekerjaan tersebut.
+
+00:19:47.200 --> 00:19:48.120
+Power Apps memberikan tim
+
+00:19:48.120 --> 00:19:48.980
+tertentu cara yang fokus
+
+00:19:48.980 --> 00:19:49.820
+untuk berpartisipasi.
+
+00:19:50.360 --> 00:19:51.520
+Dataverse menjaga informasi
+
+00:19:51.520 --> 00:19:52.720
+bisnis tetap terorganisir
+
+00:19:52.720 --> 00:19:53.960
+dan aman saat alat tersebut
+
+00:19:53.960 --> 00:19:54.420
+bekerja.
+
+00:19:55.160 --> 00:19:55.940
+Perbedaan itu penting.
+
+00:19:56.320 --> 00:19:57.220
+Otomatisasi bukanlah
+
+00:19:57.220 --> 00:19:58.080
+sistem pengarsipan
+
+00:19:58.080 --> 00:19:59.460
+dan dasbor bukanlah
+
+00:19:59.460 --> 00:20:00.440
+basis data pelanggan.
+
+00:20:01.060 --> 00:20:02.380
+Setiap alat memiliki tugas terpisah
+
+00:20:02.380 --> 00:20:03.020
+namun semuanya dapat
+
+00:20:03.020 --> 00:20:03.780
+bekerja dari sumbernya.
+
+00:20:04.140 --> 00:20:04.700
+Mengetahui hal itu
+
+00:20:04.700 --> 00:20:05.760
+membantu Anda memilih alat
+
+00:20:05.760 --> 00:20:06.480
+yang tepat daripada
+
+00:20:06.480 --> 00:20:07.600
+menganggap setiap lembar kerja
+
+00:20:07.600 --> 00:20:08.360
+atau daftar sederhana
+
+00:20:08.360 --> 00:20:09.020
+dapat menjalankan
+
+00:20:09.020 --> 00:20:09.760
+seluruh proses bisnis.
+
+00:20:12.040 --> 00:20:13.000
+Kapan Dataverse cocok digunakan
+
+00:20:13.000 --> 00:20:13.580
+dan apa yang dilanikan?
+
+00:20:14.700 --> 00:20:15.600
+Ini masalahnya.
+
+00:20:16.220 --> 00:20:17.020
+Pilih Dataverse ketika
+
+00:20:17.020 --> 00:20:17.980
+banyak orang dan aplikasi
+
+00:20:17.980 --> 00:20:18.600
+perlu bekerja dengan
+
+00:20:18.600 --> 00:20:19.400
+data bisnis yang terhubung.
+
+00:20:19.820 --> 00:20:20.360
+Anda pemerhukan
+
+00:20:20.360 --> 00:20:20.900
+atas yang jelas
+
+00:20:20.900 --> 00:20:21.820
+dan proses yang dapat diubung.
+
+00:20:22.440 --> 00:20:23.340
+Dataverse menanganinya
+
+00:20:23.340 --> 00:20:24.880
+tetapi tidak menggantikan segalanya.
+
+00:20:25.380 --> 00:20:26.060
+Excel tetap menjadi
+
+00:20:26.060 --> 00:20:26.780
+pilihan utama Anda
+
+00:20:26.780 --> 00:20:27.620
+untuk analisis pribadi
+
+00:20:27.620 --> 00:20:28.200
+dan daftar cepat.
+
+00:20:28.640 --> 00:20:29.300
+Daftar SharePoint
+
+00:20:29.300 --> 00:20:30.040
+berfungsi baik untuk
+
+00:20:30.040 --> 00:20:30.900
+kelecakan tim yang sederhana.
+
+00:20:31.440 --> 00:20:32.540
+Dan jika Anda seorang pengembang
+
+00:20:32.540 --> 00:20:33.540
+yang butuhkan kontrol mendalam,
+
+00:20:33.680 --> 00:20:34.240
+SQL tetap menjadi
+
+00:20:34.240 --> 00:20:34.920
+pilihan yang kuat.
+
+00:20:35.520 --> 00:20:36.220
+Jadi kapan Dataverse
+
+00:20:36.220 --> 00:20:36.720
+benar-benar cocok?
+
+00:20:37.220 --> 00:20:38.420
+Saat data Anda perlu terhubung
+
+00:20:38.420 --> 00:20:39.180
+di seluruh aplikasi
+
+00:20:39.180 --> 00:20:39.840
+Dynamics 365
+
+00:20:39.840 --> 00:20:41.540
+otomatisasi dan laporan
+
+00:20:41.540 --> 00:20:42.560
+tanpa membuat salinan lagi.
+
+00:20:43.040 --> 00:20:43.780
+Disitulah keunggulannya.
+
+00:20:44.220 --> 00:20:44.440
+Namun,
+
+00:20:44.520 --> 00:20:45.020
+sebalik kesimpul.
+
+00:20:45.660 --> 00:20:46.260
+Satu fondasi
+
+00:20:46.260 --> 00:20:47.080
+banyak alat bisnis.
+
+00:20:48.440 --> 00:20:49.220
+Jadi inilah intinya.
+
+00:20:49.700 --> 00:20:50.500
+Dynamics 365
+
+00:20:50.500 --> 00:20:51.040
+dan Dataverse
+
+00:20:51.040 --> 00:20:51.780
+bekerja paling baik
+
+00:20:51.780 --> 00:20:52.560
+ketika semua data,
+
+00:20:52.720 --> 00:20:53.520
+aturan, keamanan,
+
+00:20:53.600 --> 00:20:54.680
+aplikasi, otomatisasi,
+
+00:20:54.760 --> 00:20:55.360
+dan laporan Anda
+
+00:20:55.360 --> 00:20:56.440
+berbagi satu fondasi yang sama.
+
+00:20:57.000 --> 00:20:57.640
+Berlanggananlah ke
+
+00:20:57.640 --> 00:20:58.580
+Microsoft Knowledge Nuggets
+
+00:20:58.580 --> 00:20:59.840
+di M365.fm
+
+00:20:59.840 --> 00:21:01.020
+untuk panduan yang lebih sederhana
+
+00:21:01.020 --> 00:21:02.140
+tentang Dynamics 365,
+
+00:21:02.400 --> 00:21:02.960
+Power Platform,
+
+00:21:03.140 --> 00:21:04.200
+dan Microsoft 365.
+
+00:21:05.100 --> 00:21:05.920
+Lalu tonton episode kami
+
+00:21:05.920 --> 00:21:07.080
+tentang aplikasi berbasis model
+
+00:21:07.080 --> 00:21:07.860
+untuk melihat bagaimana
+
+00:21:07.860 --> 00:21:08.700
+tablet Dataverse berubah
+
+00:21:08.700 --> 00:21:09.820
+menjadi aplikasi bisnis yang berfungsi.

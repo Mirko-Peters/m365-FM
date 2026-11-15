@@ -1,0 +1,817 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.980
+Was genau ändert sich also, wenn ein Unternehmen von einem KI-Chatbot zu Dutzende von KI-Tools übergeht?
+
+00:00:04.420 --> 00:00:05.440
+Anfangs wirkt es einfach.
+
+00:00:06.240 --> 00:00:08.400
+Ein Team fügt ein Chatbot für den Kundensupport hinzu.
+
+00:00:09.140 --> 00:00:13.460
+Ein anderes Nutzt-KI zur Durchsuchung von Firmendokumenten und Besprechungsnotizen werden automatisch erstellt.
+
+00:00:14.280 --> 00:00:18.160
+Ein Workflow kann eine E-Mail lesen, eine Anfrage extrahieren und sie an das richtige System senden.
+
+00:00:18.520 --> 00:00:23.820
+Schon bald hat das Unternehmen mehrere Modelle, Agenten, die Aktionen ausführen können und Tools, die auf Geschäftsdaten zugreifen.
+
+00:00:24.420 --> 00:00:29.380
+Jedes Team verbindet sich oft direkt mit einem anderen KI-Anbieter, nutzt eigene Schlüssel, Limits und Sicherheitsregeln.
+
+00:00:30.340 --> 00:00:33.700
+Die Kosten werden schwer nachvollziehbar. Ein Schlüssel kann an die falsche Stelle gelangen.
+
+00:00:34.020 --> 00:00:37.380
+Und wenn ein Agent ein Tool aufruft, hat vielleicht niemand einen klaren Überblick darüber, was er zu tun versucht.
+
+00:00:37.860 --> 00:00:39.700
+Hier kommt das Microsoft AI Gateway ins Spiel.
+
+00:00:40.240 --> 00:00:45.160
+Am Ende dieser Folge werden Sie verstehen, was es ist, wie die Bausteine zusammenpassen und ab wann es für Ihr Unternehmen sinnvoll ist.
+
+00:00:46.040 --> 00:00:48.620
+Stellen Sie es sich wie ein Bürogebäude mit vielen Seiteneingängen vor.
+
+00:00:49.380 --> 00:00:52.060
+Sie könnten jede Tür offen lassen und hoffen, dass sie richtig genutzt werden.
+
+00:00:52.220 --> 00:00:54.380
+Oder Sie führen alle durch einen verwalteten Eingang.
+
+00:00:55.400 --> 00:00:56.460
+Eine Eingangstür für Gänge.
+
+00:00:56.460 --> 00:01:02.680
+Das Microsoft AI Gateway ist eine Reihe von Azure API Management Funktionen, die Ihrem KI-Verkehr einen zentralen Kontrollpunkt geben.
+
+00:01:03.040 --> 00:01:04.520
+Lassen Sie uns das einfach und verständlich aufschlüsse.
+
+00:01:04.840 --> 00:01:07.720
+Stellen Sie sich die KI-Infrastruktur Ihres Unternehmens als modernes Bürogebäude vor.
+
+00:01:07.880 --> 00:01:10.320
+Die KI-Modelle sind Räume, in denen das Denken stattfindet.
+
+00:01:10.620 --> 00:01:14.520
+Ihre Agenten sind Mitarbeiter, die sich durch das Gebäude bewegen und entscheiden, welche genehmigte Aufgabe als nächstes ansteht.
+
+00:01:14.780 --> 00:01:19.900
+Tools sind Servicetüren, die zu Bereichen wie HR, Finanzen, Kundendaten und internen Dateien führen.
+
+00:01:19.900 --> 00:01:24.080
+Das AI Gateway ist die Rezeption und der Sicherheitsdienst am Haupteingang.
+
+00:01:24.720 --> 00:01:30.120
+Es prüft, wer hereinkommt, wendet die Regeln an und protokolliert, wohin Anfragen gehen, bevor Sie den Rest des Gebäudes erreichen.
+
+00:01:31.000 --> 00:01:32.540
+Eine Anfrage folgt einem einfachen Pfad.
+
+00:01:32.960 --> 00:01:36.000
+Eine App, ein Co-Pilot oder ein Agent sendet eine Anfrage an das Gateway.
+
+00:01:36.880 --> 00:01:42.760
+Das Gateway prüft die für diesen Aufrufer geltenden Regeln und leitet Sie dann an das genehmigte Modell, Tool, den Agenten oder die Business API weiter.
+
+00:01:42.760 --> 00:01:47.800
+Und wenn eine Antwort zurückkommt, durchläuft sie erneut das Gateway, bevor sie den Benutzer erreicht.
+
+00:01:48.720 --> 00:01:55.980
+Diese eine Pfad gibt dem Unternehmen die Möglichkeit, Zugrifflimits, Sicherheitsprüfungen und Protokollierung zentral zu verwalten, ohne diese Kontrollen in diese Kontrollen in jede App einzeln einzubauen.
+
+00:01:56.640 --> 00:01:59.040
+Dies trennt zudem zwei Aufgaben, die oft vermischt werden.
+
+00:01:59.660 --> 00:02:02.280
+Anwendungsteams können sich auf die Erfahrung konzentrieren, die die Menschen tatsächlich nutzen.
+
+00:02:02.840 --> 00:02:06.620
+Sie entwickeln den Support-Assistenten, die Dokumentensuche oder den zeitsparenden Workflow.
+
+00:02:07.440 --> 00:02:10.280
+Währenddessen verwaltet das Plattform-Team im Hintergrund die gemeinsamen Regeln.
+
+00:02:10.280 --> 00:02:17.060
+Es entscheidet, welche Dienste zugelassen sind, welche Identitäten sie nutzen dürfen, wie viel Traffic ein Projekt senden kann und was protokolliert wird.
+
+00:02:17.600 --> 00:02:20.420
+Sie möchten nicht, dass jedes Team für jeden Chatbot einen neuen Sicherheitsplan erfinden muss.
+
+00:02:20.900 --> 00:02:23.960
+Microsoft AI Gateway kann vor verschiedenen Arten von KI-Traffic geschaltet werden.
+
+00:02:24.360 --> 00:02:28.160
+Es kann Aufrufe an KI-Modelle sowie Tool-Aufrufe über das Model-Context-Protokoll-MCP verwalten.
+
+00:02:29.100 --> 00:02:38.420
+Es verwaltet zudem den Agent-to-Agent-Traffic A2A und die geschäftlichen APIs, die Ihr Unternehmen bereits nutzt, etwa für die Auftragsprüfung, HR-Richtlinien oder Support-Tickets.
+
+00:02:38.420 --> 00:02:43.600
+Dieser letzte Punkt ist wichtig, da die meisten Unternehmen ihre bestehenden Systeme für die KI-Nutzung nicht verwerfen müssen.
+
+00:02:44.200 --> 00:02:49.620
+Sie benötigen lediglich einen sicheren Weg für die KI-Interaktion mit diesen Systemen und ein Gateway-Lift dabei, diese Verbindung zu kontrollieren.
+
+00:02:50.180 --> 00:02:53.340
+Microsoft AI Gateway ist jedoch kein Modell. Es schreibt selbst keine Antworten.
+
+00:02:53.740 --> 00:02:58.720
+Es ist auch kein Agent-Builder. Sie nutzen es also nicht, um einen HR-Assistenten zu entwerfen oder einem Finanzagenten Aufgaben beizubringen.
+
+00:02:58.760 --> 00:03:02.680
+Und es ersetzt dann nicht Microsoft Foundry, wo Teams KI-Projekte erstellen, testen und verwalten können.
+
+00:03:03.380 --> 00:03:04.600
+Stattdessen fungiert es als Schnittstelle.
+
+00:03:05.300 --> 00:03:10.940
+Foundry unterstützt Sie bei der Arbeit mit KI-Modellen und Agenten, während das Azure API Management AI Gateway den Traffic steuert, den diese Modelle.
+
+00:03:11.160 --> 00:03:12.880
+Agenten und Tools erzeugen, den diese Modelle.
+
+00:03:13.500 --> 00:03:16.900
+Sie kennen Azure API Management vielleicht bereits als Lösung zur Verwaltung herkömmlicher APIs.
+
+00:03:17.760 --> 00:03:21.520
+Eine API ist einfach eine Methode, mit der eine Software bei einer anderen etwas anfragen kann.
+
+00:03:22.080 --> 00:03:24.580
+AI Gateway erweitert dieses Konzept für KI-Anwendungen.
+
+00:03:24.980 --> 00:03:26.560
+Denn KI-Anfragen werfen neue Fragen auf.
+
+00:03:26.960 --> 00:03:29.300
+Wer hat welches Modell verwenden? Wie viele Token wurden verbraucht?
+
+00:03:29.740 --> 00:03:30.900
+Darf dieser Agent dieses Tool aufrufen?
+
+00:03:30.900 --> 00:03:32.880
+Sollte dieser Prompt das Modell überhaupt erreichen?
+
+00:03:33.260 --> 00:03:36.300
+Das Gateway in der Mitte dient als zentraler Ort, um diese Fragen zu beantworten.
+
+00:03:36.960 --> 00:03:40.860
+Der erste Engpass entsteht, wenn jede Anwendung beginnt, Ihren eigenen Modellendpunkt zu wählen.
+
+00:03:42.020 --> 00:03:43.340
+Ein Endpunkt, viele Modelle.
+
+00:03:44.340 --> 00:03:49.380
+Wenn Ihre Anwendung direkt eine Verbindung zu einem einzelnen Modellendpunkt herstellt, ist diese Wahl fest im Code verankert.
+
+00:03:50.320 --> 00:03:54.920
+Oft ist der Code an einen Anbieter, eine spezifische Bereitstellung, eine Azure-Region und feste Limits gebunden.
+
+00:03:54.920 --> 00:04:00.660
+Das funktioniert gut, solange das Projekt klein ist, aber stellen Sie sich vor, Ihr Support-System läuft auf einem Modell in einer Region.
+
+00:04:01.220 --> 00:04:07.040
+Monate später erreicht das Modell seine Kapazitätsgrenze, ein besseres Modell ist günstiger verfügbar oder Ihr Unternehmen muss in eine andere Region umziehen.
+
+00:04:07.760 --> 00:04:12.320
+Ohne eine gemeinsame Ebene muss jedes App-Team seinen Code ändern, erneut testen und ein Update ausrollen.
+
+00:04:13.320 --> 00:04:14.820
+Das führt zu langsame, umständlichen Prozessen.
+
+00:04:15.260 --> 00:04:18.360
+Microsoft AI Gateway bietet Ihren Anwendungen ein stabiles Eingangsportal.
+
+00:04:18.360 --> 00:04:22.900
+Anfragen werden dorthin gesendet und die Modellwahl kann im Hintergrund geändert werden, ohne die App zu beeinflussen.
+
+00:04:23.240 --> 00:04:24.780
+Stellen Sie sich wie eine zentrale Unternehmensrufnummer.
+
+00:04:25.120 --> 00:04:28.760
+Kunden wählen eine Nummer, selbst wenn das Gespräch an ein anderes Team oder Büro weitergeleitet wird.
+
+00:04:29.080 --> 00:04:30.700
+Sie müssen nie wissen, wie die Anfrage intern bearbeitet wird.
+
+00:04:31.180 --> 00:04:36.920
+Mit dem AI Gateway ruft Ihre App einen zugelassenen Endpunkt auf und das Gateway leitet die Anfrage intern an das passende Modell weiter.
+
+00:04:37.900 --> 00:04:40.880
+Microsoft verfolgt zudem einen neueren Ansatz, die Unified Model API.
+
+00:04:40.880 --> 00:04:50.180
+Einfach ausgedrückt erlaubt sie eine Anwendung, Anfragen im OpenAI-Stil zu stellen, während das Gateway diese im Hintergrund mit verschiedenen Modellanbietern verbindet.
+
+00:04:51.200 --> 00:04:56.400
+Ihre App sendet also eine vertraute Art von Anfrage und das Gateway übernimmt die Details des Anbieters Anbieters.
+
+00:04:57.060 --> 00:05:04.160
+Je nach Einrichtung kann die Anfrage an eine Azure OpenAI-Bereitstellung ein Modell in Microsoft Foundry Anthropic, Google Gemini oder Amazon Bedrock gehen.
+
+00:05:04.620 --> 00:05:08.580
+Die Weiterleitung folgt von Ihnen festgelegten Regeln und nicht festprogrammierten Optionen innerhalb der Anwendung.
+
+00:05:08.580 --> 00:05:13.000
+Das gibt dem Plattform-Team Spielraum für Änderungen, ohne die Nutzer der App zu stören.
+
+00:05:13.680 --> 00:05:16.100
+Nehmen wir an, Ihr Unternehmen betreibt einen KI-Assistenten für den Kundsupport.
+
+00:05:16.640 --> 00:05:17.620
+Die meisten Fragen sind einfach.
+
+00:05:18.140 --> 00:05:18.820
+Was ist meine Bestellung?
+
+00:05:19.540 --> 00:05:20.520
+Wie setze ich mein Passwort zurück?
+
+00:05:21.100 --> 00:05:25.240
+Diese können schnell von einem kleineren, günstigeren Modell beantwortet werden, ohne unnötige Kosten zu verursachen.
+
+00:05:25.520 --> 00:05:29.220
+Dann stellt ein Kunde eine lange, ungewöhnliche Frage, die logisches Denken oder Produktwissen erfordert.
+
+00:05:29.700 --> 00:05:32.260
+Das Gateway leitet diese Art von Anfrage an ein leistungsfähigeres Modell.
+
+00:05:32.400 --> 00:05:37.800
+Die Support-App sendet Anfragen weiterhin auf die gleiche Weise, sodass Ihr Team nicht wissen muss, welches Modell die Frage beantwortet hat
+
+00:05:37.800 --> 00:05:40.460
+und Entwickler keine separaten Verbindungen für jede Option einrichten müssen.
+
+00:05:41.960 --> 00:05:43.080
+Was ist mit der Kapazität?
+
+00:05:43.660 --> 00:05:44.900
+KI-Modell-Endpunkte haben Grenzen.
+
+00:05:45.480 --> 00:05:48.000
+Sie können nur eine bestimmte Menge an Datenverkehr in einem Zeitraum bewältigen.
+
+00:05:48.580 --> 00:05:53.100
+Wenn jede Anfrage auf eine einzige Bereitstellung trifft, kann eine Stoßzeit die gesamte Anwendung verlangsamen oder blockieren.
+
+00:05:53.700 --> 00:05:56.920
+Ein Gateway kann den Datenverkehr auf mehrere genehmigte Bereitstellungen verteilen,
+
+00:05:57.040 --> 00:06:00.820
+Anfragen bei Auslastung in eine andere Region leiten oder Backup-Routen nutzen, falls ein Endpunkt ausfällt.
+
+00:06:00.820 --> 00:06:03.180
+Das bedeutet nicht, dass Anfragen zufällig verteilt werden.
+
+00:06:03.640 --> 00:06:04.580
+Wir liegen weiter in Ihre Linie fest.
+
+00:06:04.920 --> 00:06:14.500
+Zum Beispiel erhält der Kundenverkehr Priorität auf Ihrem Hauptmodell, während interne Tests einen anderen Pfad nutzen oder eine Region lokale Nutzer bedient, während eine andere als Backup dient.
+
+00:06:15.800 --> 00:06:16.800
+Der Punkt ist einfach.
+
+00:06:17.340 --> 00:06:24.140
+Ihre Anwendungen verbinden sich mit einem kontrollierten Portal und im Hintergrund kann die Plattform-Modelle Regionen oder Anbieter mit minimaler Unterbrechung anpassen.
+
+00:06:24.640 --> 00:06:26.120
+Das ist wichtig, weil sich die KI schnell entwickelt.
+
+00:06:26.560 --> 00:06:29.000
+Ein Modell, das heute funktioniert, ist nächsten Monat möglicherweise nicht mehr die beste Wahl.
+
+00:06:29.000 --> 00:06:33.100
+Wenn jede App direkt mit Ihrem Anbieter spricht, wird der Modellwechsel für jedes Team zum Projekt.
+
+00:06:33.700 --> 00:06:36.400
+Mit dem Gateway liegt die Entscheidung für das Modell an der zentralen Stelle.
+
+00:06:37.140 --> 00:06:39.200
+Eine kurze Anmerkung zur vereinheitlichten Modell-API.
+
+00:06:39.840 --> 00:06:41.540
+Microsoft führt sie als öffentliche Vorschauversion.
+
+00:06:42.400 --> 00:06:45.440
+Vorschaufunktionen können sich ändern und sind möglicherweise noch nicht für jeden Produktionseinsatz bereit.
+
+00:06:45.940 --> 00:06:48.240
+Dennoch hängt das übergeordnete Muster nicht von dieser einen Funktion ab.
+
+00:06:48.680 --> 00:06:54.600
+Denn Ihr API-Management kann bereits vor Modellendpunkten sitzen, Routing-Regeln anwenden und Ihnen helfen, mehrere Backhands zu verwalten.
+
+00:06:54.600 --> 00:06:59.460
+Die vereinheitlichte Modell-API zielt darauf ab, diese anbieterübergreifende Erfahrung für Anwendungen zu erleichtern.
+
+00:06:59.980 --> 00:07:03.460
+Die Wahl des richtigen Modells ist nur die halbe Miete, denn ein Modell kann eine Frage beantworten.
+
+00:07:03.720 --> 00:07:07.220
+Aber ein Agent kann entscheiden, eine Aktion auszuführen, die in echte Unternehmenssysteme eingreift.
+
+00:07:08.220 --> 00:07:09.460
+Die Steuerung von Agenten und Tools.
+
+00:07:09.960 --> 00:07:12.460
+Ein Agent bringt KI über das bloße Beantworten von Fragen hinaus.
+
+00:07:12.460 --> 00:07:17.960
+Es ist Software, der eine Aufgabe betrachten, aus genehmigten Optionen wählen und ein Tool oder einen Dienst aufrufen kann, um die Arbeit zu erledigen.
+
+00:07:18.500 --> 00:07:24.340
+Ein Personal Agent könnte eine Urlaubsrichtlinie nachschlagen, ein Support Agent eine Bestellung prüfen und ein Finanzagent eine Zahlungsanforderung vorbereiten.
+
+00:07:24.900 --> 00:07:27.660
+Diese Fähigkeit ist nützlich, verändert aber auch das Risikoprofil.
+
+00:07:28.040 --> 00:07:35.420
+Eine falsche Antwort eines Modells verwirrt jemanden, aber ein Agent, der das falsche Tool verwendet, kann Daten offenlegen, einen Datensatz ändern oder einen Prozess auslösen, den er niemals berühren soll.
+
+00:07:36.040 --> 00:07:37.480
+Deshalb brauchen Tools ihre eigene Regel.
+
+00:07:38.160 --> 00:07:40.580
+Sie werden den Begriff MCP oder Model Context Protocol hören.
+
+00:07:40.580 --> 00:07:48.040
+Dellen sie es sich als eine Art Standardanschluss vor, der einem Agenten eine bekannte Methode bietet, um ein Unternehmenstool wie ein Dokumentensuchdienst oder eine API zur Bestellsuche zu finden und zu nutzen.
+
+00:07:48.460 --> 00:07:53.040
+Anstatt für jeden Agenten und jedes System eine eigene Verbindung aufzubauen, bietet MCP den Teams ein gemeinsames Muster.
+
+00:07:53.520 --> 00:07:57.740
+Dann gibt es noch A2A, Agent2Agent, eine Standardmethode für einen Agenten, einander zu kontaktieren.
+
+00:07:58.200 --> 00:08:02.960
+Zum Beispiel fragt ein Support Agent einen Versandagent nach Lieferdetails, anstatt zu versuchen, das Versandsystem selbst zu verstehen.
+
+00:08:03.620 --> 00:08:04.720
+Auf dem Papier klingt das sauber.
+
+00:08:04.720 --> 00:08:10.520
+Aber eine Agentenkette wird kompliziert, wenn jede Verbindung unterschiedliche Zugriffsregeln, versteckte Anmeldinformationen und bekannte Tools hat.
+
+00:08:10.940 --> 00:08:13.240
+Stellen Sie sich einen Finanzagenten vor, der Fragen zu Rechnungen beantwortet.
+
+00:08:13.560 --> 00:08:20.260
+Er sollte nur ein genehmigtes Rechnungssuch-Tool verwenden, aber jemand gibt ihm umfassenden Zugriff auf das Finanzsystem, weil es schneller geht, als ein begrenztes Tool zu definieren.
+
+00:08:20.940 --> 00:08:26.500
+Ein Benutzer sendet eine harmlos aussehende Eingabeaufforderung, aber versteckte Anweisungen in einem angehängten Dokument drängen den Agenten, sondern nicht den Eingang.
+
+00:08:26.500 --> 00:08:32.640
+Wenn der Agent zu viel Zugriff hat, könnte er unnötige Daten anfordern oder einen Arbeitsablauf starten, der eine menschliche Genehmigung erfordern sollte.
+
+00:08:32.980 --> 00:08:36.560
+Der Agent ist nicht böswillig. Er hatte nur zu viel Freiheit bei der Verarbeitung nicht vertrauenswürdiger Eingang.
+
+00:08:36.960 --> 00:08:41.720
+Das Microsoft AI Gateway ermöglicht es Ihnen, Kontrollmechanismen vor MCP-Servern und Business APIs zu schalten.
+
+00:08:41.720 --> 00:08:47.640
+Statt eines direkten Pfades von einer KI-Anwendung zu einer Datenbank, stellen Sie ein kleines, kontrolliertes Tool für eine spezifische Aufgabe bereit.
+
+00:08:47.980 --> 00:08:50.840
+Ein Agent fragt zum Beispiel, überprüfe den Status dieser Bestellung.
+
+00:08:51.320 --> 00:08:54.900
+Das Tool gibt nur den Status zurück, nicht jede Bestellung oder den vollständigen Kundendatensatz.
+
+00:08:55.320 --> 00:08:58.700
+Es ist eine begrenzte Aufgabe und das Gateway prüft, wer fragt, bevor es den Aufruf zulässt.
+
+00:08:59.280 --> 00:09:00.960
+Identität steht im Mittelpunkt dieses Setups.
+
+00:09:01.440 --> 00:09:06.160
+Mit Microsoft Entrer-ID melden sich Apps über verwaltete Identitäten an, anstatt Anbieterschlüssel zu teilen.
+
+00:09:06.660 --> 00:09:10.660
+Eine verwaltete Identität weist sich aus, ohne dass ein Entwickler ein Geheimnis in den Code kopieren muss.
+
+00:09:10.660 --> 00:09:13.000
+Jeder Agent sollte seine eigene Identität haben.
+
+00:09:13.280 --> 00:09:18.580
+So können Sie sehen, welcher Agent ein Tool aufgerufen hat, den Zugriff für einen Agenten widerrufen, ohne andere zu beeinträchtigen und unterschiedliche Regeln anwenden.
+
+00:09:18.760 --> 00:09:22.600
+Ein HR-Agent sollte nicht die Berechtigung eines Finanzagenten erben, nur weil beide KI nutzen.
+
+00:09:23.160 --> 00:09:24.100
+Dies folgt dem Zero Trust Prinzip.
+
+00:09:24.460 --> 00:09:30.240
+Prüfen Sie jede Anfrage, gewähren Sie nur den für die aktuelle Aufgabe benötigten Zugriff und gehen Sie davon aus, dass jeder Prompt oder jede Tool Antwort unsicher sei.
+
+00:09:30.440 --> 00:09:33.560
+In der Praxis erhält der Agent die Berechtigung für ein spezifisches Tun und bestimmte Aktionen.
+
+00:09:33.800 --> 00:09:36.540
+Er kann einen Urlaubstand lesen, aber nicht die Gehaltsabrechnungsdatei herunterladen.
+
+00:09:36.540 --> 00:09:39.220
+Er kann einen Entwurf für ein Support-Ticket erstellen, aber keinen Fall schließen.
+
+00:09:39.220 --> 00:09:42.940
+Das Gateway erwendet außerdem Sicherheitsüberprüfungen auf Prompts und den Tool-Datenverkehr.
+
+00:09:43.200 --> 00:09:48.480
+Wenn eine Anfrage schädliche Inhalte oder Daten enthält, die das System nicht verlassen sollten, stoppt eine Richtlinie diese, bevor sie das Backend erreicht.
+
+00:09:48.840 --> 00:09:55.000
+Kein Filter fängt alles ab, aber die Überprüfung des Datenverkehrs an einem gemeinsamen Punkt ist viel sicherer als darauf zu hoffen, dass jeder Agententwickler denselben Schutz hinzufügt.
+
+00:09:55.280 --> 00:09:57.200
+Sie benötigen außerdem einen Katalog zugelassener Tools.
+
+00:09:57.580 --> 00:10:05.060
+Das API Center fungiert als privater Katalog für APIs und MCP-Dienste, damit Teams das richtige Tool finden, ohne alte Dokumente zu durchsuchen oder unverifizierte Webadressen zu kopieren.
+
+00:10:05.060 --> 00:10:09.260
+Das hilft dabei, die Frage, welches Tool kann man der Agent verwenden, in eine kontrollierte Geschäftsentscheidung zu verwandeln.
+
+00:10:10.320 --> 00:10:12.780
+Sicherheitskontrollen schützen den Pfad, werfen aber auch eine neue Frage auf.
+
+00:10:13.280 --> 00:10:16.260
+Welche Teams nutzen diesen Pfad und wie hoch ist deren KI-Nutzung?
+
+00:10:17.540 --> 00:10:19.120
+Tokenkosten, Limits und Transparenz.
+
+00:10:19.820 --> 00:10:22.160
+KI-Kosten funktionieren anders als eine normale Software-Lizenz.
+
+00:10:22.480 --> 00:10:23.700
+Das Messgerät läuft auf Tokenbasis.
+
+00:10:23.900 --> 00:10:24.380
+Was ist ein Token?
+
+00:10:24.700 --> 00:10:25.720
+Es ist ein kleines Textstück.
+
+00:10:26.100 --> 00:10:27.220
+Ein kurzes Wort möglicherweise ein Token.
+
+00:10:27.620 --> 00:10:28.700
+Ein längeres Wort verbraucht mehr.
+
+00:10:29.040 --> 00:10:30.340
+Das Modell zählt alles, was Sie einsenden.
+
+00:10:30.340 --> 00:10:34.940
+Ihre Frage, die hinzugefügten Anweisungen, alle angehängten Dokumente und die Antwort, die es zurückgibt.
+
+00:10:35.400 --> 00:10:37.120
+Eine einfache Frage verbraucht also sehr wenig.
+
+00:10:37.220 --> 00:10:43.660
+Aber ein Agent, der ein langes Richtliniendokument liest, Folgefragen stellt, ein Tool aufruft und dann eine detaillierte Antwort erstellt, kann weitaus mehr verbrauchen, als Sie erwarten.
+
+00:10:44.180 --> 00:10:45.980
+Das haben Sie wahrscheinlich schon einmal beim Meeting-Transkript gesehen.
+
+00:10:46.320 --> 00:10:47.520
+Sie sehen ein paar Seiten mit Notizen.
+
+00:10:47.980 --> 00:10:53.760
+Das KI-System verarbeitet außerdem seine Systemanweisungen, das Transkript, abgerufene Unternehmensdaten, Tool-Ergebnisse und die endgültige Antwort.
+
+00:10:54.200 --> 00:10:55.240
+Jeder Teil trägt zur Nutzung bei.
+
+00:10:55.620 --> 00:10:59.320
+Deshalb kann ein einziger ausgelasteter Agent ein gemeinsam genutztes Modell mit überraschend schnell erschaffen.
+
+00:10:59.320 --> 00:11:02.660
+Stellen Sie sich ein Team vor, das an einem Freitagnachmittag einen neuen Marketing-Assistenten testet.
+
+00:11:03.020 --> 00:11:08.080
+Jemand gibt ihm eine große Menge an Kampagnen-Dateien und fordert es auf, diese in einer Schleife zu vergleichen, umzuschreiben und zusammenzufassen.
+
+00:11:08.600 --> 00:11:12.400
+Währenddessen ist der Kunden Support auf dieselbe Modellkapazität angewiesen, um Menschen zu helfen.
+
+00:11:12.840 --> 00:11:17.760
+Wenn die Test-Workload das geteilte Kontingent verbraucht, kann der Support-Assistent langsamer werden oder ausfallen, wenn Kunden ihn brauchen.
+
+00:11:18.220 --> 00:11:20.220
+Das Problem ist nicht nur, dass das Unternehmen Geld ausgegeben hat.
+
+00:11:20.640 --> 00:11:23.400
+Die falsche Workload hat die Kapazität der Workload entzogen, die am wichtigsten war.
+
+00:11:23.820 --> 00:11:27.260
+Das Azure API Management KI Gateway kann Limits anwenden, bevor dies geschieht.
+
+00:11:27.260 --> 00:11:33.460
+Sie können Anforderungslimits, Token-Limits und Kontingente für eine App, ein Team, ein Projekt oder ein Nutzer festlegen.
+
+00:11:33.840 --> 00:11:39.380
+Ein Kontingent kann ein kurzes Zeitfenster, Token pro Minute oder einen längeren Zeitraum wie ein tägliches oder monatliches Budget abdecken.
+
+00:11:39.900 --> 00:11:41.240
+Das gibt jeder Workload mit klare Grenzen.
+
+00:11:41.700 --> 00:11:44.120
+Der Marketing-Assistent kann ein Budget erhalten, das seinem Zweck entspricht.
+
+00:11:44.700 --> 00:11:47.460
+Der Kundensupport kann eine eigene Zuteilung und eine höhere Priorität erhalten.
+
+00:11:48.080 --> 00:11:52.140
+Wenn der Marketing-Assistent sein Limit erreicht, kann das Gateway seine nächsten Anfragen ablehnen oder verlangsamen.
+
+00:11:52.140 --> 00:11:55.940
+Da Kundensupport läuft weiter, da ein einzelnes Testprojekt nicht alles verfügbare aufbrauchen kann,
+
+00:11:56.300 --> 00:11:58.300
+dies verändert auch die Diskussion über die monatlichen Kosten.
+
+00:11:58.900 --> 00:12:03.300
+Ohne eine gemeinsame Übersicht erhält ein Finanzteam möglicherweise eine große KI-Rechnung und fragt, wer hat das alles verbraucht?
+
+00:12:04.240 --> 00:12:08.020
+Die Antwort ist schwer zu finden, wenn Teams sich direkt mit gemeinsamen Schlüsseln mit verschiedenen Diensten verbinden.
+
+00:12:08.660 --> 00:12:14.000
+Ein Gateway kann den Aufrufer, das Modell, die Token-Nutzung, den Antwortstatus und die mit einer Anfrage verknüpften Tool-Aufrufe aufzeichnen.
+
+00:12:14.320 --> 00:12:15.500
+Das liefert Ihnen einen klaren Nachweis.
+
+00:12:15.500 --> 00:12:21.920
+Sie können sehen, ob die Ausgaben von einem HR-Assistenten einer Entwickler-Testumgebung, einem kundenorientierten Chatbot oder einem Agenten stammten,
+
+00:12:22.240 --> 00:12:24.260
+der nach einem Fehler immer wieder neu versucht hat.
+
+00:12:25.060 --> 00:12:28.980
+Sie können auch ungewöhnliche Muster erkennen, wie zum Beispiel eine Anwendung, die viel größere Prompts als normal sind.
+
+00:12:29.400 --> 00:12:32.720
+Wenn Ihr Team mit Microsoft Foundry beginnt, kann das Gateway auch mit dieser Arbeit verbunden werden.
+
+00:12:33.360 --> 00:12:37.740
+Foundry-Projekte können Token-Limits auf Projektebene nutzen, während das Gateway die Verkehrsregeln drumherum anwendet.
+
+00:12:37.740 --> 00:12:43.340
+Das gibt KI-Entwicklern einen einfachen Startpunkt, während das Plattform-Team weiterhin einen gemeinsamen Ort zur Verwaltung von Limits und Überwachung hat.
+
+00:12:43.340 --> 00:12:46.040
+Es gibt auch eine nützliche Funktion namens semantisches Caching.
+
+00:12:46.600 --> 00:12:48.980
+Angenommen, ein Mitarbeiter fragt, wo finde ich die leise Richtlinie?
+
+00:12:49.780 --> 00:12:53.180
+Ein paar Sekunden später fragt ein anderer, wo ist unsere Richtlinie für Geschäftsreisen?
+
+00:12:54.040 --> 00:12:59.980
+Die Worte unterscheiden sich zwar, aber die Bedeutung kann so ähnlich sein, dass das Gateway eine passende frühere Antwort wiederverwenden kann, anstatt das Modell erneut aufzurufen.
+
+00:13:00.580 --> 00:13:02.300
+Dies kann Kosten senken und die Antwortzeit beschleunigen.
+
+00:13:02.580 --> 00:13:04.740
+Dies eignet sich nur für Fragen, bei denen eine Wiederverwendung sinnvoll ist.
+
+00:13:04.740 --> 00:13:10.040
+Man würde eine Anfrage zum aktuellen Urlaubsstand oder zum Bestellstatus nicht zwischenspeichern, da sich diese Antworten ändern können.
+
+00:13:10.320 --> 00:13:11.660
+Auch Routing kann helfen, Kosten zu sparen.
+
+00:13:11.660 --> 00:13:20.240
+Ein Unternehmen kann geeignete Aufgaben an ein kostengünstigeres Modell senden, bereits reservierte Kapazitäten nutzen, bevor es für zusätzliche Nutzung zahlt und bei Erreichen eines Limits auf einem Backup-Pfad ausweichen.
+
+00:13:20.780 --> 00:13:22.920
+Denn nachher setzt ein Gateway nicht die Notwendigkeit von Verantwortlichkeit.
+
+00:13:23.620 --> 00:13:24.460
+Teams benötigen Budgets.
+
+00:13:24.800 --> 00:13:26.180
+Jemand muss die Antworten der Modelle überprüfen.
+
+00:13:26.580 --> 00:13:28.900
+Jemand muss entscheiden, ob ein Agent überhaupt existieren sollte.
+
+00:13:29.420 --> 00:13:32.480
+Das Gateway liefert Ihnen das Messinstrument, die Leitplanken und die Protokollierung des Datenverkehrs.
+
+00:13:32.480 --> 00:13:34.380
+Es trifft keine geschäftlichen Entscheidungen für Sie.
+
+00:13:34.680 --> 00:13:39.420
+Sobald Sie den Datenverkehr sehen und steuern können, lässt sich das gesamte System anhand eines alltäglichen Beispiels leichter nachvollziehen.
+
+00:13:39.420 --> 00:13:40.820
+Einfache Anfragereise.
+
+00:13:41.300 --> 00:13:43.140
+Stellen Sie sich eine HR-Assistentin in einem Unternehmen vor.
+
+00:13:43.520 --> 00:13:47.440
+Ein Mitarbeiter fragt, wie viele Tage Elternzeit kann ich nehmen und können Sie die Anfrage für mich starten?
+
+00:13:48.080 --> 00:13:48.900
+Das Ziel ist einfach.
+
+00:13:49.080 --> 00:13:52.340
+Dem Mitarbeiter eine schnelle, hilfreiche Antwort geben und dann beim nächsten genehmigten Schritt helfen.
+
+00:13:52.740 --> 00:13:58.040
+Der HR-Assistent darf jedoch keine Gehaltsdaten herausgeben, nicht alle Personalakten öffnen oder einen Schlüssel des Modellanbieters in seinem Code mitführen.
+
+00:13:58.040 --> 00:14:00.920
+Die Anfrage beginnt, sobald sich der Mitarbeiter anmeldet.
+
+00:14:00.920 --> 00:14:08.120
+Bevor der Assistent etwas an ein Modell oder ein Tool sendet, prüft das Gateway, wer der Mitarbeiter ist, ob er den HR-Assistenten nutzen darf und welche Limits für diese App gelten.
+
+00:14:08.860 --> 00:14:12.260
+Der Mitarbeiter sieht nur ein einfaches Chatfenster, während diese Prüfungen im Hintergrund ablaufen.
+
+00:14:12.860 --> 00:14:14.180
+Als nächstes benötigt der Assistent Antwort.
+
+00:14:14.580 --> 00:14:17.900
+Eine grundlegende Richtlinienfrage kann an den vom Unternehmen genehmigten Modellendpunkt gesendet werden.
+
+00:14:18.480 --> 00:14:24.440
+Wenn dieser Endpunkt ausgelastet ist oder ein festgelegtes Limit erreicht, kann das Gateway einen vom Unternehmen bereits genehmigten Backup-Weg nutzen.
+
+00:14:24.440 --> 00:14:31.100
+Der Mitarbeiter erhält trotzdem eine Antwort über denselben HR-Assistenten, anstatt eine Fehlermeldung zu sehen, nur weil eine Modellbereitstellung überlastet war.
+
+00:14:31.660 --> 00:14:33.680
+Dann bittet der Mitarbeiter darum, die Urlaubsanfrage zu starten.
+
+00:14:33.980 --> 00:14:35.820
+An diesem Punkt benötigt der Agent mehr als nur ein Modell.
+
+00:14:36.340 --> 00:14:39.540
+Er benötigt ein Tool, das die Mitarbeiter Details prüfen und die richtige Anfrage erstellen kann.
+
+00:14:39.960 --> 00:14:43.440
+Der Agent fragt an, ein genehmigtes MCP-Tool für das Urlaubsmanagement nutzen zu dürfen.
+
+00:14:43.820 --> 00:14:45.020
+Das Gateway prüft auch diese Anfrage.
+
+00:14:45.500 --> 00:14:47.180
+Darf dieser HR-Agent dieses Tool aufrufen?
+
+00:14:47.680 --> 00:14:49.760
+Darf dieser Mitarbeiter diese Art von Anfrage starten?
+
+00:14:50.280 --> 00:14:52.460
+Entspricht die Aktion dem Agenten zugewiesene Berechtigung?
+
+00:14:52.460 --> 00:14:57.440
+Erst dann erhält das Tool den Aufruf, das Tool gibt keine riesige Liste mit Mitarbeiterdatensätzen zurück.
+
+00:14:58.080 --> 00:15:00.000
+Es liefert nur, was für die Aufgabe nötig ist.
+
+00:15:00.160 --> 00:15:05.300
+Den Urlaubsanspruch des Mitarbeiters, die geltende Richtlinie und eine Bestätigung, dass der Antrag als Entwurf erstellt wurde.
+
+00:15:05.940 --> 00:15:07.100
+Diese präzise Antwort ist wichtig.
+
+00:15:07.480 --> 00:15:12.340
+Der Agent hat genug Informationen, um zu helfen, erhält aber keinen umfassenden Zugriff, nur weil er eine Frage in natürlicher Sprache gestellt hat.
+
+00:15:12.480 --> 00:15:15.980
+Denken Sie sich nun vor, der Mitarbeiter fügt Text aus einem externen Dokument in den Chat ein.
+
+00:15:16.360 --> 00:15:21.600
+Der Text enthält Anweisungen, die den Assistenten dazu bringen sollen, seine Regeln zu ignorieren oder vertrauliche Informationen anzufordern.
+
+00:15:21.600 --> 00:15:26.500
+Das Gateway kann Sicherheitsprüfungen durchführen, bevor die Eingabe das Modell erreicht oder ein Tool eine Anfrage erhält.
+
+00:15:26.940 --> 00:15:28.980
+Wenn die Anfrage gegen eine Regel verstößt, kann sie dort gestopft werden.
+
+00:15:29.260 --> 00:15:32.560
+Die selbe Art von Prüfung kann eine Antwort überprüfen, bevor sie den Mitarbeiter erreicht.
+
+00:15:33.120 --> 00:15:35.360
+Nicht jedes Problem resultiert zudem aus einer schlechten Eingabe.
+
+00:15:35.940 --> 00:15:39.600
+Ein Modell könnte eine Antwort generieren, die Informationen enthält, die nicht ausgegeben werden sollten.
+
+00:15:40.160 --> 00:15:43.620
+Ein gemeinsamer Kontrollpunkt bietet dem Unternehmen die Möglichkeit, diesen Pfad zu prüfen und einzugreifen.
+
+00:15:44.020 --> 00:15:45.360
+Währenddessen erstellt die Anfrage ein DANS.
+
+00:15:45.360 --> 00:15:48.620
+Das Unternehmen kann das verwendete Token dem HR-Assistentenprojekt zuordnen.
+
+00:15:48.960 --> 00:15:54.640
+Es kann sehen, welches Modell die Frage bearbeitet hat, ob der Toolaufruf erfolgreich war, ob eine Anfrage blockiert wurde und wie lange der Vorgang dauerte.
+
+00:15:55.100 --> 00:15:56.720
+Das macht Support und Überprüfung wesentlich einfacher.
+
+00:15:57.160 --> 00:16:02.780
+Wenn ein HR-Team meldet, dass Mitarbeiter keine Urlaubsanträge erstellen können, kann das Betriebsteam nach fehlgeschlagenen Toolaufrufen suchen.
+
+00:16:03.440 --> 00:16:07.100
+Wenn eine Sicherheitsregel gültige Fragen blockiert, kann das Team das Muster erkennen und die Richtlinie verbessern.
+
+00:16:07.700 --> 00:16:11.640
+Wenn ein Agent plötzlich viel mehr KI-Kapazität als normal verbraucht, wird diese Änderung sichtbar.
+
+00:16:11.640 --> 00:16:18.260
+Und wenn das Unternehmen eine Regel aktualisiert, etwa eine zusätzliche Prüfung vor bestimmten Urlaubsanträgen, kann die Gateway-Richtlinie einmalig angepasst werden.
+
+00:16:18.920 --> 00:16:24.820
+Es muss nicht auf separate Code-Updates in jeder HR-App, jedem Chatbot und Workflow warten, die denselben kontrollierten Pfad nutzen, die denselben Knotzen.
+
+00:16:25.080 --> 00:16:33.900
+Dasselbe Anfragemuster funktioniert weiterhin, wenn das Unternehmen ein weiteres Modell, eine neue Region, mehr interne Tools oder einen weiteren Agenten für eine verwandte HR-Aufgabe hinzufügt.
+
+00:16:34.300 --> 00:16:35.060
+Fangen Sie jedoch klein an.
+
+00:16:35.440 --> 00:16:38.680
+Ein Gateway wird nützlich, sobald KI-Datenverkehr zu gemeinsam genutztem Datenverkehr wird.
+
+00:16:39.100 --> 00:16:39.700
+Wo fängt man an?
+
+00:16:39.800 --> 00:16:41.220
+Wo beginnen Sie also tatsächlich?
+
+00:16:42.300 --> 00:16:50.040
+Wählen Sie zunächst eine einzelne reale Workload aus, vielleicht einen Support-Assistenten, der bereits ein Modell aufruft, oder einen Agenten, den Ihr Team für HR, Finanzen oder interne Dokumentensuche plant.
+
+00:16:50.520 --> 00:16:52.880
+Versuchen Sie nicht, jedes Modell und jedes Tool gleichzeitig in Angriff zu nehmen.
+
+00:16:53.220 --> 00:16:54.020
+Das führt schnell ins Chaos.
+
+00:16:54.540 --> 00:17:00.900
+Anstatt Anbieterschlüssel direkt an jede Anwendung weiterzugeben, platzieren Sie den Modellendpunkt dieser Workload hinter das Azure API Management AI Gateway.
+
+00:17:01.600 --> 00:17:04.240
+Wählen Sie es sich wie einen zentralen Sicherheitscheckpoint für Ihren KI-Datenverkehr vor.
+
+00:17:04.600 --> 00:17:05.580
+Legen Sie dann die Grundlagen fest.
+
+00:17:05.800 --> 00:17:07.480
+Benennen Sie einen klaren Verantwortlichen für den Wirken.
+
+00:17:07.480 --> 00:17:10.860
+Nutzen Sie den Entra-basierten Zugriff, damit nur die richtigen Personen oder Dienste ihn erreichen können.
+
+00:17:10.860 --> 00:17:13.700
+Setzen Sie ein Token-Limit, das genau zur Aufgabe passt, nicht mehr und nicht weniger.
+
+00:17:14.100 --> 00:17:15.900
+Aktivieren Sie die Protokollierung, damit Sie sehen können, was passiert.
+
+00:17:16.180 --> 00:17:18.760
+Fügen Sie eine Content-Safety-Regel hinzu, die Ihr Team testen und überprüfen kann.
+
+00:17:18.940 --> 00:17:19.500
+Fangen Sie einfach an.
+
+00:17:19.880 --> 00:17:24.260
+Sobald der Modellpfad und die Zugriffsgrenzen funktionieren, fügen Sie nacheinander zugelassene MCP-Tools hinzu.
+
+00:17:24.260 --> 00:17:27.940
+Jedes Tool sollte eine enge, fasste Aufgabe und einen klaren Grund für die Nutzung durch den Agenten.
+
+00:17:28.240 --> 00:17:29.280
+Keine unnötigen Extras.
+
+00:17:30.140 --> 00:17:33.900
+Von dort aus wachsen Sie von einem kontrollierten Workload zu gemeinsam genutzten Modellen, Tools und Agenten.
+
+00:17:34.600 --> 00:17:40.780
+Ohne diesen anfänglichen Kontrollpunkt schafft jede neue KI-App einen weiteren unmanaged Pfad zu Unternehmensdaten und eine weitere Zeile auf der KI-Rechnung.
+
+00:17:41.480 --> 00:17:44.720
+Für den nächsten Wissenshappen schauen Sie sich Azure API Management einfach erklärt an.
+
+00:17:45.160 --> 00:17:47.780
+Das ist das Fundament, auf dem das Microsoft AI Gateway aufbaut.

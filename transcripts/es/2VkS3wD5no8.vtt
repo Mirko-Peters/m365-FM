@@ -1,0 +1,1123 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.180
+¿Qué es una red virtual de Azure?
+
+00:00:01.520 --> 00:00:05.960
+La mayoría de la gente oye ese término y piensa que es solo otro ajuste que activas al implementar una máquina virtual.
+
+00:00:06.440 --> 00:00:08.460
+Algo que marcas en una casilla y luego olvidas.
+
+00:00:09.060 --> 00:00:09.720
+Pero aquí está la verdad.
+
+00:00:10.120 --> 00:00:11.820
+Una red virtual de Azure no es solo un ajuste.
+
+00:00:12.540 --> 00:00:14.160
+Es la base de todo lo que construyes en Azure.
+
+00:00:15.080 --> 00:00:19.780
+Cada máquina virtual, cada base de datos, cada servicio de aplicaciones, cada función que despliegas, todo reside dentro de él.
+
+00:00:20.380 --> 00:00:22.520
+Si no entiendes cómo funcionan, vas a ciegas.
+
+00:00:23.480 --> 00:00:27.180
+Al final de este episodio entenderás qué es realmente una OVNET, cómo funciona y por qué.
+
+00:00:27.720 --> 00:00:29.360
+Cada recurso que despliegas depende de ella.
+
+00:00:30.120 --> 00:00:34.960
+Cubriremos qué es una OVNET, cómo funcionan las direcciones IP, las subredes, la seguridad, el enrutamiento y cómo conectar OVNETs entre sí.
+
+00:00:35.220 --> 00:00:36.200
+Toma tu café y empecemos.
+
+00:00:37.260 --> 00:00:39.120
+Es una OVNET, la red de nube privada.
+
+00:00:39.660 --> 00:00:40.940
+Comencemos con la definición más simple.
+
+00:00:41.600 --> 00:00:46.220
+Una red virtual de Azure, o OVNET para abreviar, es tu propia red privada dentro de Azure.
+
+00:00:47.000 --> 00:00:48.400
+Piénsalo como un edificio de oficinas privadas.
+
+00:00:48.820 --> 00:00:50.020
+Solo las personas que tú permites pueden entrar.
+
+00:00:50.280 --> 00:00:54.040
+Tú controlas quién entra por la puerta, a qué piso y quién queda totalmente excluido.
+
+00:00:54.760 --> 00:00:56.540
+Antes de que existieran las OVNETs, las cosas son diferentes.
+
+00:00:57.180 --> 00:01:01.000
+Implementabas una máquina virtual en la nube y básicamente estaba expuesta a internet por defecto.
+
+00:01:01.320 --> 00:01:04.940
+Sin una red privada a su alrededor, cualquiera que conociera la dirección IP puede intentar conectarse.
+
+00:01:05.120 --> 00:01:05.960
+Eso es una empresa de seguridad.
+
+00:01:06.440 --> 00:01:06.860
+¿Qué cambio?
+
+00:01:07.320 --> 00:01:10.200
+Azure le dio la capacidad de crear espacios de red privados y aislados.
+
+00:01:10.640 --> 00:01:11.340
+Tú defines un límite.
+
+00:01:11.840 --> 00:01:12.820
+Tú decides qué va dentro de.
+
+00:01:13.200 --> 00:01:16.200
+Nada fuera de ese límite puede entrar a menos que tú lo permitas explícitamente.
+
+00:01:16.200 --> 00:01:20.400
+Algo que debes saber desde el principio, tu OVNET vive en una región de Azure específica, no es global.
+
+00:01:20.860 --> 00:01:23.040
+Creas una OVNET en Europa Occidental y ahí es donde se queda.
+
+00:01:23.380 --> 00:01:25.540
+Los recursos en una región diferente no pueden simplemente ser traer.
+
+00:01:25.800 --> 00:01:28.420
+Necesitarían su propia OVNET o tendrías que conectarlos después.
+
+00:01:28.740 --> 00:01:31.540
+Cuando creas una OVNET, tú mismo defines el espacio de direcciones IP.
+
+00:01:31.920 --> 00:01:32.880
+Azure no lo elige por ti.
+
+00:01:33.140 --> 00:01:35.360
+Tú decides el rango de direcciones IP que usarán tus recursos.
+
+00:01:35.860 --> 00:01:39.160
+Esa es una gran responsabilidad y hablaremos de cómo hacerlo correctamente en la siguiente sección.
+
+00:01:39.460 --> 00:01:40.280
+Aquí está el punto clave.
+
+00:01:40.280 --> 00:01:41.800
+Las OVNET son la base.
+
+00:01:42.360 --> 00:01:48.260
+Cada máquina virtual, cada base de datos, cada función de Azure que despliegas reside dentro de una.
+
+00:01:48.740 --> 00:01:51.300
+Sin una OVNET, tus recursos no tienen contexto de red privada.
+
+00:01:51.840 --> 00:01:54.740
+Solo flotan en la nube sin límites, sin aislamiento, sin seguridad.
+
+00:01:55.420 --> 00:01:56.480
+Entonces, ¿qué significa esto para ti?
+
+00:01:56.780 --> 00:01:59.120
+Si vas a crear algo en Azure, empieza primero con una OVNET.
+
+00:01:59.460 --> 00:02:01.420
+No después de implementar tus recursos, sino antes.
+
+00:02:01.920 --> 00:02:03.960
+Tu OVNET es el terreno sobre el cual vas a construir.
+
+00:02:04.300 --> 00:02:06.140
+No construirás una casa sin comprar el terreno primero.
+
+00:02:06.540 --> 00:02:07.140
+Es la misma idea.
+
+00:02:07.660 --> 00:02:10.060
+Direccionamiento IP y CD, reeligiendo tu espacio de direcciones.
+
+00:02:10.740 --> 00:02:11.640
+Así que, profundicemos.
+
+00:02:12.180 --> 00:02:15.160
+Cuando creas una OVNET, la primera gran decisión es elegir un rango de IP.
+
+00:02:15.500 --> 00:02:16.680
+Lo haces usando la anotación CD.
+
+00:02:17.240 --> 00:02:21.160
+DDR es la abriatura de Classless Interdomain Routing, pero en realidad solo significa que dices,
+
+00:02:21.280 --> 00:02:22.740
+necesito esta cantidad de direcciones IP.
+
+00:02:23.160 --> 00:02:24.620
+Ay, ¿por qué importa esto?
+
+00:02:25.040 --> 00:02:29.220
+Porque el rango que elijas determina cuántos recursos puedes incluir en tu red virtual.
+
+00:02:30.060 --> 00:02:30.700
+Así es como funciona.
+
+00:02:31.140 --> 00:02:33.840
+CDR usa una barra y un número como 16 o 24.
+
+00:02:34.480 --> 00:02:36.260
+Ese número te indica el tamaño de la espacio de direcciones.
+
+00:02:36.260 --> 00:02:39.660
+Un 16 te da cerca de 65,000 direcciones IP.
+
+00:02:40.120 --> 00:02:40.560
+Eso es mucho.
+
+00:02:41.040 --> 00:02:45.240
+Un 24 te da cerca de 250, lo cual es perfecto para un equipo pequeño o una sola capa de
+
+00:02:45.240 --> 00:02:45.660
+aplicación.
+
+00:02:46.320 --> 00:02:50.240
+Así que, al diseñar tu OVNET, debes pensar en cuántos recursos tendrás y cómo quieres.
+
+00:02:50.620 --> 00:02:51.020
+Agruparlos.
+
+00:02:51.020 --> 00:02:53.180
+Ahora, no puedes elegir cualquier rango de IP.
+
+00:02:53.720 --> 00:02:58.860
+Azure sigue el estándar RFC 1918, que reserva rangos de IP privados para redes internas.
+
+00:02:59.520 --> 00:03:00.160
+Tienes tres opciones.
+
+00:03:00.660 --> 00:03:03.660
+El rango 10.x.x es el más grande, dándote mucho espacio para crecer.
+
+00:03:04.280 --> 00:03:07.680
+El rango 172.16.x es un poco más pequeño, pero sigue siendo útil.
+
+00:03:08.400 --> 00:03:12.440
+Y el rango 192.68.x es el que probablemente tienes en casa en tu router.
+
+00:03:13.020 --> 00:03:13.500
+Aquí está el detalle.
+
+00:03:13.860 --> 00:03:16.940
+El espacio de direcciones de tu OVNET no puede superponerse con ninguna otra red a la que
+
+00:03:16.940 --> 00:03:17.620
+planes conectarte.
+
+00:03:17.980 --> 00:03:18.760
+Este es un error común.
+
+00:03:18.760 --> 00:03:22.180
+Muchas personas eligen un rango que les resulta familiar solo para descubrir después que
+
+00:03:22.180 --> 00:03:23.580
+entre en conflicto con su red corporativa.
+
+00:03:24.000 --> 00:03:28.940
+Así que, si la red de tu oficina usa 10.0.0.0.16, no uses ese mismo rango en Azure.
+
+00:03:29.540 --> 00:03:33.140
+Si intentas conectarlas más tarde, chocarán y el tráfico no sabrá a dónde ir.
+
+00:03:33.640 --> 00:03:34.780
+Déjame darte un ejemplo concreto.
+
+00:03:35.120 --> 00:03:38.580
+Imagina que estás construyendo una configuración híbrida, donde Azure se conecta a tu centro
+
+00:03:38.580 --> 00:03:43.420
+de datos local y tu centro de datos usa 10.0.0.0.0.0.1.16.
+
+00:03:43.900 --> 00:03:48.020
+Si creas una OVNET con el mismo rango, tendrás dos redes peleando por las mismas IP.
+
+00:03:48.760 --> 00:03:49.140
+Piénsalo.
+
+00:03:49.880 --> 00:03:52.660
+Dos redes que usan el mismo rango de IP no pueden comunicarse correctamente.
+
+00:03:53.120 --> 00:03:54.500
+Es como dos casas con la misma dirección.
+
+00:03:55.060 --> 00:03:55.920
+El correo se confunde.
+
+00:03:56.280 --> 00:03:58.120
+Ese es un problema que no querrá resolver que ya haya ocurrido.
+
+00:03:58.520 --> 00:03:59.960
+Así que planea contratación y elige un rango.
+
+00:04:00.480 --> 00:04:01.560
+Y aquí tienes un consejo de planificación.
+
+00:04:01.900 --> 00:04:03.500
+Elige un rango más grande de lo que crees que vas a necesitar.
+
+00:04:03.780 --> 00:04:07.020
+Quizás pienses que solo necesitas una 24 ahora, pero a medida que tu aplicación crezca,
+
+00:04:07.140 --> 00:04:08.100
+desearás tener una 16.
+
+00:04:08.820 --> 00:04:09.940
+No puedes cambiarla fácilmente.
+
+00:04:09.940 --> 00:04:13.900
+Una vez que tu VNET está creada y has desplegado recursos, cambiar el espacio de direcciones
+
+00:04:13.900 --> 00:04:14.480
+es complicado.
+
+00:04:15.040 --> 00:04:17.800
+Es posible, pero no es algo que quieras hacer en un sistema en vivo.
+
+00:04:18.180 --> 00:04:19.340
+Así que date espacio para crecer.
+
+00:04:19.560 --> 00:04:20.420
+¿Qué significa esto para ti?
+
+00:04:20.620 --> 00:04:22.940
+Piensa en el espacio de direcciones de tu VNET como si compraras un terreno.
+
+00:04:23.120 --> 00:04:24.320
+Pues sigue suficiente para el crecimiento futuro.
+
+00:04:24.680 --> 00:04:26.780
+Si crees que necesitas un terreno pequeño, compra uno mediano.
+
+00:04:27.040 --> 00:04:27.900
+Te lo agradecerás más tarde.
+
+00:04:28.320 --> 00:04:29.080
+Esa es la idea principal.
+
+00:04:29.620 --> 00:04:31.920
+Planifica tu espacio de direcciones pensando en el crecimiento futuro.
+
+00:04:32.920 --> 00:04:34.280
+Subredes dividiendo tu red.
+
+00:04:34.920 --> 00:04:37.080
+Entonces ya tienes tu VNET y has elegido tu espacio de direcciones.
+
+00:04:37.080 --> 00:04:39.600
+Ahora qué, no simplemente volques todo en un solo gran grupo.
+
+00:04:40.020 --> 00:04:41.020
+Ahí es donde entran las subredes.
+
+00:04:41.220 --> 00:04:43.500
+Las subredes son uno de los bloques fundamentales de tu VNET.
+
+00:04:44.180 --> 00:04:46.000
+Te permiten organizar y asegurar tus recursos.
+
+00:04:46.700 --> 00:04:49.380
+Una subred es una sección más pequeña del espacio de direcciones de tu VNET.
+
+00:04:50.020 --> 00:04:52.900
+Si tu VNET es el edificio, las subredes son las habitaciones individuales.
+
+00:04:53.180 --> 00:04:56.880
+No pondrías tu sala de servidores, tu recepción y tu sala de descanso en el mismo espacio abierto,
+
+00:04:56.980 --> 00:04:57.200
+¿verdad?
+
+00:04:57.720 --> 00:04:58.340
+La misma idea aplica.
+
+00:04:58.580 --> 00:05:01.720
+Es un concepto simple, pero marca una gran diferencia en cómo gestionas tu red.
+
+00:05:02.180 --> 00:05:03.760
+Diferentes recursos van en diferentes subredes.
+
+00:05:03.760 --> 00:05:09.040
+Tus servidores web van en una subred, tus bases de datos en otra y la lógica de tu aplicación en una tercera.
+
+00:05:09.320 --> 00:05:09.580
+¿Por qué?
+
+00:05:09.800 --> 00:05:10.260
+Dos razones.
+
+00:05:10.720 --> 00:05:11.740
+Seguridad y organización.
+
+00:05:12.080 --> 00:05:14.760
+Hablemos primero de seguridad, porque suele ser lo más importante.
+
+00:05:15.280 --> 00:05:15.640
+¿Seguridad?
+
+00:05:16.040 --> 00:05:20.120
+Si alguien entra en tu servidor web, no querrás que tengan acceso directo a tu base de datos.
+
+00:05:20.600 --> 00:05:22.060
+Las subredes separadas crean una barrera.
+
+00:05:22.320 --> 00:05:25.800
+El atacante tendría que cruzar ese límite y tú puedes controlar exactamente que lo cruza.
+
+00:05:26.340 --> 00:05:29.260
+También puedes usar grupos de seguridad de red para controlar el tráfico entre subredes.
+
+00:05:29.260 --> 00:05:33.800
+Ese es tema para otro video, pero vale la pena saber que las subredes son la base de esa seguridad.
+
+00:05:34.900 --> 00:05:35.840
+Organización en segundo lugar.
+
+00:05:36.080 --> 00:05:38.320
+Cuando todo tiene su lugar, gestionarlo es más fácil.
+
+00:05:38.940 --> 00:05:42.760
+¿Sabes qué subred contiene tus recursos de front-end y cuál alberga tus datos de back-end?
+
+00:05:43.440 --> 00:05:48.120
+Puedes aplicar políticas y reglas a toda la subred a la vez, en lugar de configurar cada recurso individualmente.
+
+00:05:49.200 --> 00:05:50.480
+Eso ahorra tiempo y reduce errores.
+
+00:05:51.160 --> 00:05:52.900
+Pero aquí hay un detalle que toma la gente desprevenida.
+
+00:05:53.500 --> 00:05:58.040
+Azure reserva cinco direcciones IP en cada subred para sus propios fines internos, como enrutamiento y DNS.
+
+00:05:58.040 --> 00:06:04.300
+Así que si creas una subred con un rango 24 que te da 256 direcciones, en realidad solo obtienes 256 utilizables.
+
+00:06:04.740 --> 00:06:05.560
+Es un inconveniente común.
+
+00:06:05.840 --> 00:06:07.840
+Planeas para 256, pero solo obtienes 256.
+
+00:06:08.260 --> 00:06:10.480
+Así que siempre añade un poco más al dimensionar tu subred.
+
+00:06:10.780 --> 00:06:13.280
+La buena noticia es que puedes añadir subredes después de crear la OVNET.
+
+00:06:13.680 --> 00:06:16.000
+No estás limitado a la que configuraste durante la creación.
+
+00:06:16.580 --> 00:06:20.780
+Así que si te das cuenta de que necesitas una subred separada para herramientas de gestión o sistemas de monitoreo, añádela después.
+
+00:06:21.380 --> 00:06:21.760
+No hay problema.
+
+00:06:22.220 --> 00:06:23.980
+Pero sigue siendo mejor planificarla desde el principio.
+
+00:06:23.980 --> 00:06:28.460
+Añadir subredes después es posible, pero podrías tener que mover recursos, lo cual puede ser disruptivo.
+
+00:06:29.000 --> 00:06:29.880
+Pero aquí está la mejor práctica.
+
+00:06:30.380 --> 00:06:33.160
+Usa subredes separadas para los diferentes niveles de tu aplicación desde el inicio.
+
+00:06:33.480 --> 00:06:34.720
+Piensa en la arquitectura de aplicación.
+
+00:06:34.720 --> 00:06:41.780
+Normalmente tienes un nivel frontal que maneja solicitudes de usuario y un nivel de backend, que procesa lógica de negocio y un nivel de datos que almacena información.
+
+00:06:42.900 --> 00:06:44.400
+Cada uno de estos debería tener su propia subred.
+
+00:06:44.540 --> 00:06:47.420
+No esperes a estar en producción para darte cuenta de que necesitas separar las cosas.
+
+00:06:47.700 --> 00:06:49.960
+Eso es mucho más difícil cuando los recursos ya están desplegados.
+
+00:06:50.260 --> 00:06:51.040
+¿Qué significa esto para ti?
+
+00:06:51.340 --> 00:06:53.840
+Las subredes son la forma en que mantienes tu red organizada y segura.
+
+00:06:54.180 --> 00:06:55.440
+Son como las habitaciones en tu edificio.
+
+00:06:55.680 --> 00:06:58.160
+Planifícalas pronto y dale a cada nivel de tu aplicación su propio espacio.
+
+00:06:58.600 --> 00:07:00.220
+Así es como mantienes tu red limpia y segura.
+
+00:07:01.160 --> 00:07:02.440
+IP es pública frente a privadas.
+
+00:07:02.740 --> 00:07:03.280
+¿Quién puede ver qué?
+
+00:07:03.620 --> 00:07:07.240
+Hablemos de direcciones IP porque no todas las direcciones IP son iguales.
+
+00:07:07.600 --> 00:07:11.080
+Cuando despliegas un recurso dentro de una UBnet, obtiene una dirección IP privada por defecto.
+
+00:07:11.800 --> 00:07:14.920
+Esa es la dirección que usa para comunicarse con otros recursos dentro de la UBnet.
+
+00:07:15.260 --> 00:07:16.780
+Piénsalo como una extensión teléfono y que interno.
+
+00:07:17.200 --> 00:07:18.880
+Solo las personas dentro del edificio pueden alcanzar.
+
+00:07:19.220 --> 00:07:23.020
+Las IPs privadas solo son accesibles desde dentro de la UBnet o desde redes conectadas a ella.
+
+00:07:23.540 --> 00:07:26.720
+Si estás en casa con tu laptop, no puedes alcanzar una IP privada en Azure.
+
+00:07:27.500 --> 00:07:29.460
+Está en Internet. Está dentro de tu red privada.
+
+00:07:30.420 --> 00:07:32.400
+Entonces, que un recurso sea alcanzable desde Internet.
+
+00:07:32.400 --> 00:07:33.960
+Le asignas una dirección IP pública.
+
+00:07:34.220 --> 00:07:38.800
+Esa es la dirección visible para el mundo exterior, como tener un número de teléfono público en lugar de una extensión interna.
+
+00:07:39.280 --> 00:07:40.060
+Aquí está lo fundamental.
+
+00:07:40.540 --> 00:07:41.640
+Las IPs públicas son opcionales.
+
+00:07:41.940 --> 00:07:46.560
+Las asignas explícitamente porque Azure nunca le da tus recursos a una IP pública a menos que lo pidas.
+
+00:07:47.060 --> 00:07:47.640
+Eso es por diseño.
+
+00:07:47.960 --> 00:07:50.640
+Lo predeterminado debe ser privado y lo público debe ser una elección deliberada.
+
+00:07:50.940 --> 00:07:52.440
+Aquí es donde muchos principiantes cometen un error.
+
+00:07:52.780 --> 00:07:53.900
+Le dan IPs públicas a todo.
+
+00:07:53.900 --> 00:07:56.540
+Su servidor web, su base de datos, su API de backend.
+
+00:07:56.680 --> 00:07:57.320
+Todos obtienen una.
+
+00:07:57.640 --> 00:07:58.440
+Eso es un riesgo de seguridad.
+
+00:07:58.860 --> 00:08:02.780
+Tu base de datos no necesita ser alcanzable desde Internet y tampoco tu API de backend.
+
+00:08:03.380 --> 00:08:07.040
+Solo los recursos de Frontend con los que interactúan los usuarios deberían tener IP públicas.
+
+00:08:07.580 --> 00:08:10.440
+Las IP públicas vienen en dos variantes, estáticas y dinámicas.
+
+00:08:10.880 --> 00:08:14.080
+Una IP pública estática permanece igual aunque detengas y reinicies el recurso.
+
+00:08:14.580 --> 00:08:15.760
+Una IP pública dinámica puede cambiar.
+
+00:08:16.080 --> 00:08:20.580
+Si ejecutas una aplicación de producción, probablemente necesites IP estáticas para que tus usuarios siempre te encuentren.
+
+00:08:20.580 --> 00:08:23.180
+Si estás probando algo, una dinámica podría ser suficiente.
+
+00:08:23.740 --> 00:08:27.360
+También puedes usar algo llamado prefijo de IP pública que te permite reservar un bloque de direcciones.
+
+00:08:28.240 --> 00:08:33.460
+En lugar de crearlas una por una, reservas un rango y luego asignas direcciones individuales de ese rango.
+
+00:08:34.120 --> 00:08:37.060
+Es útil si sabes que necesitarás varias IP públicas para un proyecto.
+
+00:08:37.960 --> 00:08:38.800
+¿Qué significa esto para ti?
+
+00:08:39.120 --> 00:08:40.660
+Las IP privadas son opción segura por efecto.
+
+00:08:41.020 --> 00:08:42.360
+Son como la extensión telefónica interna.
+
+00:08:42.600 --> 00:08:46.380
+Las IP públicas son una elección deliberada que haces solo cuando necesitas que algo sea accesible desde fuera.
+
+00:08:46.380 --> 00:08:51.300
+Cuando las necesites, piensa si requieres una estática o dinámica si un prefijo tiene sentido.
+
+00:08:52.000 --> 00:08:53.780
+Grupos de seguridad de red que controlan el tráfico.
+
+00:08:54.200 --> 00:08:57.080
+Ya tienes tu VNED, tus subredes y tus direcciones IP organizadas.
+
+00:08:57.580 --> 00:09:00.060
+¿Pero cómo controlas realmente qué tráfico entra y sale?
+
+00:09:00.560 --> 00:09:02.180
+Ahí es donde entran los grupos de seguridad de red.
+
+00:09:02.880 --> 00:09:06.180
+Un NSG es el guardián que controla qué tráfico entra y sale de tus recursos.
+
+00:09:07.200 --> 00:09:09.380
+Piénsalo como el portero de un club que revise identificaciones.
+
+00:09:09.540 --> 00:09:12.640
+Mira la lista de invitados y rechaza a quién no debería estar ahí.
+
+00:09:12.640 --> 00:09:17.920
+Cada fragmento de tráfico que intenta llegar a tu recurso debe pasar primero por este portero.
+
+00:09:18.040 --> 00:09:19.320
+Los NSG funcionan con reglas.
+
+00:09:19.840 --> 00:09:23.000
+Cada regla indica permitir o denegar basándose en cuatro elementos.
+
+00:09:23.360 --> 00:09:26.920
+La IP de origen, la IP de destino, el puerto y el protocolo.
+
+00:09:27.580 --> 00:09:34.220
+Así puedes permitir tráfico de la IP de mi oficina en el puerto 443 o denegar todo tráfico de internet en el puerto 22.
+
+00:09:35.000 --> 00:09:35.680
+Ese tipo de control.
+
+00:09:36.120 --> 00:09:37.320
+Ahora, aquí hay una característica potente.
+
+00:09:37.640 --> 00:09:41.540
+Puedes adjuntar un NSG a una subred o directamente a la interfaz de red de una sola máquina virtual.
+
+00:09:41.540 --> 00:09:45.440
+Si lo adjuntas a una subred, ese NSG se aplica a todo lo que hay dentro.
+
+00:09:45.780 --> 00:09:47.620
+Cada máquina virtual, cada base de datos, cada recurso.
+
+00:09:47.900 --> 00:09:48.740
+Es una política general.
+
+00:09:49.220 --> 00:09:53.020
+Si lo adjuntas a la interfaz de red de una máquina virtual específica, solo se aplica a esa máquina.
+
+00:09:53.720 --> 00:09:54.680
+Incluso puedes hacer ambas cosas.
+
+00:09:55.180 --> 00:09:59.360
+Un NSG a nivel de subred para reglas generales y uno a nivel de NIC para excepciones.
+
+00:10:00.280 --> 00:10:02.480
+Las reglas predeterminadas que crea Azure son bastante sensadas.
+
+00:10:02.480 --> 00:10:06.360
+Permiten todo el tráfico dentro de la OINET para que sus recursos puedan comunicarse entre sí.
+
+00:10:06.620 --> 00:10:11.620
+Y denegan todo el tráfico desde internet, por lo que nada externo puede llegar a sus recursos a menos que usted lo permita explícitamente.
+
+00:10:12.100 --> 00:10:13.220
+Es un buen punto de partida.
+
+00:10:13.640 --> 00:10:14.520
+Permítame darles un ejemplo.
+
+00:10:14.900 --> 00:10:17.860
+Digamos que administre una máquina virtual Linux y necesita conectarse a ella mediante SSH.
+
+00:10:18.300 --> 00:10:23.220
+Crearía una regla de NSG que permita tráfico entrante en el puerto 22, pero no querrá permitir SSH desde cualquier lugar.
+
+00:10:23.760 --> 00:10:24.640
+Eso es buscarse por él.
+
+00:10:24.640 --> 00:10:29.720
+Así que lo restringe a su propia dirección IP, de modo que solo usted pueda acceder por SSH y todos los demás queden bloqueados.
+
+00:10:30.160 --> 00:10:33.200
+La misma idea aplica para RDP en el puerto 3389 en máquinas Windows.
+
+00:10:33.620 --> 00:10:34.540
+¿Qué significa esto para usted?
+
+00:10:34.880 --> 00:10:37.800
+Los NSG son su primera línea de defensa y lo mejor de todo son gratuitos.
+
+00:10:38.340 --> 00:10:41.040
+No hay costo adicional por usarlos, así que no hay excusa para no configurarlas.
+
+00:10:41.620 --> 00:10:44.120
+Cada subred y cada recurso deberían tener un NSG asociado.
+
+00:10:44.420 --> 00:10:46.620
+Comience denegando todo y solo abra lo que necesite.
+
+00:10:47.300 --> 00:10:49.400
+Tablas de rutas y enrutamiento dirigiendo el tráfico.
+
+00:10:49.820 --> 00:10:53.300
+Ahora hablemos de enrutamiento, porque una vez que haya decidido qué tráfico está permitido,
+
+00:10:53.300 --> 00:10:54.820
+debe decidir a dónde va realmente.
+
+00:10:55.200 --> 00:10:55.860
+Aquí está la cuestión.
+
+00:10:56.040 --> 00:10:58.320
+Azure crea rutas del sistema automáticamente para cada Supra.
+
+00:10:58.740 --> 00:10:59.580
+No tiene que hacer nada.
+
+00:11:00.160 --> 00:11:02.820
+Piénselo como un GPS predeterminado que conoce las rutas básicas.
+
+00:11:03.400 --> 00:11:06.700
+Tráfico dentro de la UNED, tráfico a UNEDs vinculadas, tráfico a Internet.
+
+00:11:07.520 --> 00:11:11.380
+Todo funciona desde el primer momento, pero a veces el GPS predeterminado no lo lleva a donde quiere ir.
+
+00:11:11.940 --> 00:11:14.240
+Es ahí cuando necesita rutas definidas por el usuario UDR.
+
+00:11:14.780 --> 00:11:18.340
+Estas le permiten anular las rutas del sistema de Azure y tomar el control de la ruta que sigue el tráfico.
+
+00:11:18.640 --> 00:11:19.080
+¿Cómo funciona?
+
+00:11:19.480 --> 00:11:20.480
+Te crea una tabla de rutas.
+
+00:11:20.680 --> 00:11:21.540
+Agrega su rutas persona.
+
+00:11:21.540 --> 00:11:23.780
+Luego asocia esa tabla de rutas a una subred.
+
+00:11:24.180 --> 00:11:27.940
+A partir de ese momento, el tráfico que sale de esa subred sigue sus reglas en lugar de las predeterminadas.
+
+00:11:28.140 --> 00:11:29.460
+Permítame darles un ejemplo concreto.
+
+00:11:29.720 --> 00:11:33.160
+Digamos que desea que todo el tráfico de Internet desde su UNED pase primero por un firewall o un firewall.
+
+00:11:33.480 --> 00:11:36.220
+Quizás necesite inspeccionarlo, registrarlo o bloquear sitios maliciosos.
+
+00:11:36.500 --> 00:11:39.140
+La ruta del sistema predeterminada envía el tráfico de Internet directamente a ese fuente.
+
+00:11:39.460 --> 00:11:44.640
+Eso no es lo que usted quiere, así que crea una ruta que indique que cualquier tráfico dirigido a 0.0.0.0,
+
+00:11:44.740 --> 00:11:47.780
+lo cual significa cualquier lugar en Internet, debe ir al firewall en su lugar.
+
+00:11:48.620 --> 00:11:49.500
+Eso es una ruta del usuario.
+
+00:11:49.500 --> 00:11:52.020
+Las tablas de rutas utilizan algo llamado Próximo Santo.
+
+00:11:52.280 --> 00:11:54.240
+Es el destino al que se envía el tráfico a continuación.
+
+00:11:54.600 --> 00:11:55.360
+Este tiene algunas opciones.
+
+00:11:55.840 --> 00:11:57.800
+Puede enviarlo a un dispositivo virtual como un firewall.
+
+00:11:58.400 --> 00:12:02.220
+Puede enviarlo a una puerta de enlace de red virtual, que es como se conecta a redes locales.
+
+00:12:02.920 --> 00:12:07.340
+Puede enviarlo directamente a Internet o puede enviarlo a NON, lo que básicamente descarta el tráfico.
+
+00:12:08.280 --> 00:12:12.980
+Lo fundamental es entender que el embrutamiento es como usted controla la ruta que toma el tráfico a través de su red.
+
+00:12:13.580 --> 00:12:17.020
+Las rutas del sistema son un buen valor predeterminado, pero no siempre son adecuadas para su situación.
+
+00:12:17.020 --> 00:12:23.120
+Si necesita que el tráfico pase por un punto de inspección, una puerta enlace específica, o que se bloquee por completo, necesita rutas definidas por el usuario.
+
+00:12:23.560 --> 00:12:24.420
+¿Qué significa eso para usted?
+
+00:12:24.740 --> 00:12:29.840
+El enrutamiento es común indicar al tráfico a dónde ir, y usted tiene el poder de anular los valores predeterminados de Azure cuando sea necesario.
+
+00:12:30.400 --> 00:12:35.300
+Comience con las rutas del sistema, entienda lo que hacen y luego agregue rutas personalizadas cuando su arquitectura lo exige.
+
+00:12:35.300 --> 00:12:37.920
+Emparejamiento de UvNet conectando red
+
+00:12:37.920 --> 00:12:41.780
+Hasta ahora hemos hablado de una sola UvNet, un edificio, una red privada.
+
+00:12:42.180 --> 00:12:43.640
+¿Pero qué sucede cuando tiene múltiples UvNets?
+
+00:12:43.960 --> 00:12:49.560
+Quizás tiene una para su entorno de producción y otra para pruebas, o tal vez ejecuta aplicaciones en diferentes regiones de Azure.
+
+00:12:50.000 --> 00:12:53.220
+De forma predeterminada, estas UvNets están completamente aisladas, no comunicarse entre sí.
+
+00:12:53.620 --> 00:12:55.360
+Son como edificios separados sin caminos entre ellos.
+
+00:12:55.760 --> 00:12:56.980
+Allá es donde entra en juego el emparejamiento.
+
+00:12:56.980 --> 00:13:03.520
+El tráfico entre UvNets emparejadas permanece en la red troncal de Microsoft.
+
+00:13:03.940 --> 00:13:05.160
+Nunca toca la red pública de internet.
+
+00:13:05.560 --> 00:13:08.760
+Eso significa baja latencia, gran ancho de banda y ninguna exposición a amenazas externas.
+
+00:13:09.200 --> 00:13:10.300
+¿Qué hay algo que sorprende a la gente?
+
+00:13:10.880 --> 00:13:12.520
+El emparejamiento también funciona entre regiones.
+
+00:13:12.940 --> 00:13:13.900
+Eso se llama emparejamiento grupo.
+
+00:13:14.380 --> 00:13:17.820
+Puede tener una UvNet en Europa Occidental emparejada con una UvNet en el sudeste asiático,
+
+00:13:17.960 --> 00:13:20.100
+y el tráfico entre ellas permanece en la red privada de Microsoft.
+
+00:13:20.580 --> 00:13:23.480
+Sin puertas de enlace de VPN y sin IPs públicas son una conexión privada directa.
+
+00:13:23.480 --> 00:13:25.320
+Pero hay una regla que absolutamente no puede romper.
+
+00:13:25.320 --> 00:13:28.440
+Las UvNets emparejadas deben tener espacios de direcciones que no se suponen.
+
+00:13:28.860 --> 00:13:33.580
+Si ambas UvNets intentan usar el rango 10.0.0.0.16, no se pueden emparejar.
+
+00:13:34.280 --> 00:13:38.100
+Las direcciones IP entrarían en conflicto y Azure no sabría a qué red pertenece un paquete.
+
+00:13:38.980 --> 00:13:42.340
+Entonces, recuerde ese consejo de planificación anterior sobre elegir su espacio de direcciones cuidadosamente.
+
+00:13:42.760 --> 00:13:43.160
+Esa es la razón.
+
+00:13:43.760 --> 00:13:48.040
+Si cree que podría emparejar UvNets más adelante, asegúrese de que sus rangos no se superpongan desde el principio.
+
+00:13:48.380 --> 00:13:49.920
+Ahora, aquí hay un detalle que confunde a la gente.
+
+00:13:50.240 --> 00:13:51.220
+El emparejamiento no es tránsito.
+
+00:13:51.460 --> 00:13:52.060
+¿Qué significa eso?
+
+00:13:52.060 --> 00:13:56.180
+Supongamos que la UvNet A está emparejada con la UvNet B y la UvNet B está emparejada con la UvNet C.
+
+00:13:56.640 --> 00:13:59.100
+La UvNet A no llega automáticamente a la UvNet C a través de B.
+
+00:13:59.400 --> 00:14:00.180
+No están conectadas.
+
+00:14:00.400 --> 00:14:02.860
+Cada emparejamiento es un enlace directo entre exactamente dos UvNets.
+
+00:14:03.260 --> 00:14:05.960
+Si quiere que A se comunique con C necesita un emparejamiento separado entre A y C.
+
+00:14:06.100 --> 00:14:07.340
+Entonces, ¿cómo manejar esto a gran escala?
+
+00:14:07.860 --> 00:14:09.200
+Utiliza una arquitectura de Hub & Spoke.
+
+00:14:09.520 --> 00:14:12.600
+Una UvNet central, el Hub, se conecta mediante piling con muchas otras UvNets, lo supongo.
+
+00:14:12.600 --> 00:14:16.860
+El Hub puede contener servicios compartidos como un firewall, una puerta enlace VPN o herramientas de monitoreo.
+
+00:14:17.320 --> 00:14:19.100
+Los Spokes contienen sus cargas de trabajo individual.
+
+00:14:19.560 --> 00:14:22.660
+Cada Spoke se conecta directamente con el Hub, pero los Spokes no se conectan en sí.
+
+00:14:22.980 --> 00:14:25.720
+Si un Spoke necesita comunicarse con otro, el tráfico pasa a través del Hub.
+
+00:14:26.160 --> 00:14:29.520
+Esto mantiene el orden y le brinda un lugar central para aplicar políticas de seguridad.
+
+00:14:30.220 --> 00:14:31.060
+¿Qué significa esto para usted?
+
+00:14:31.060 --> 00:14:35.680
+El Piring, la forma de construir redes que abarcan múltiples UvNets y regiones, es el puente de sus edificios.
+
+00:14:36.320 --> 00:14:38.480
+Planifique sus espacios de direcciones para que no se superpongan.
+
+00:14:38.740 --> 00:14:43.580
+Recuerde que el Piring no es transitivo y considere un diseño Hub & Spoke cuando empiece a crecer más allá de una sola UvNet.
+
+00:14:44.500 --> 00:14:46.300
+¿Cómo se conecta todo el panorama general?
+
+00:14:46.640 --> 00:14:49.000
+Así que demos un paso atrás y veamos cómo encajan estas piezas.
+
+00:14:49.280 --> 00:14:50.380
+Ahí es donde recibe el verdadero poder.
+
+00:14:50.640 --> 00:14:51.520
+Usted comienza con una uvNet.
+
+00:14:51.800 --> 00:14:52.880
+Es su espacio privado en ASU.
+
+00:14:53.240 --> 00:14:54.320
+Piense en ello como su terreno.
+
+00:14:54.520 --> 00:14:56.220
+Dentro de ese terreno usted crea subredes.
+
+00:14:56.420 --> 00:14:57.120
+Esas son sus habitaciones.
+
+00:14:57.460 --> 00:15:00.160
+Una para servidores web, otra para bases de datos, otra para herramientas mixtas.
+
+00:15:00.160 --> 00:15:04.280
+Cada subrede obtiene su propio bloque de direcciones extraído del espacio de direcciones de lado.
+
+00:15:04.600 --> 00:15:05.380
+Luego usted añade seguridad.
+
+00:15:05.820 --> 00:15:08.020
+Los grupos de seguridad de red se vinculan a su subrede.
+
+00:15:08.300 --> 00:15:10.140
+Controlan qué tráfico tiene permitido entrar y salir.
+
+00:15:10.960 --> 00:15:13.880
+Su subrede web permite tráfico desde Internet por el puerto 4403.
+
+00:15:14.260 --> 00:15:18.160
+Su subrede de base de datos solo permite tráfico desde la subrede web por el puerto 1433.
+
+00:15:18.420 --> 00:15:20.420
+El portero en cada puerta sabe exactamente a quién dejar pasar.
+
+00:15:20.820 --> 00:15:22.020
+Continuación, usted configura el ruta.
+
+00:15:22.340 --> 00:15:25.740
+Quizás quiera que todo el tráfico de Internet saliente pase por un firewall para su inspección.
+
+00:15:26.320 --> 00:15:29.540
+Crea una tabla de rutas, añade una ruta personalizada y la vincula a su subrede.
+
+00:15:29.540 --> 00:15:33.000
+Ahora, el tráfico sigue la ruta que usted diseñó en lugar de la predeterminada diaria.
+
+00:15:33.380 --> 00:15:34.840
+Y finalmente, conecta todo.
+
+00:15:35.500 --> 00:15:37.420
+Conecta su UBnet mediante Peering con otras UBnets.
+
+00:15:37.500 --> 00:15:39.860
+Quizás una UBnet Hub que contenga su firewall y servicio compartido.
+
+00:15:40.280 --> 00:15:44.760
+Ahora, su aplicación abarca múltiples redes, pero todo funciona como un sistema conectado.
+
+00:15:45.340 --> 00:15:46.480
+Aquí llega el momento de redes.
+
+00:15:46.940 --> 00:15:48.520
+Ninguna de esas piezas funciona de forma exacta.
+
+00:15:48.720 --> 00:15:50.600
+Una UBnet sin subredes es solo un espacio vacío.
+
+00:15:50.780 --> 00:15:52.560
+Las subredes sin NSG están completamente abiertas.
+
+00:15:52.800 --> 00:15:55.460
+El enrutamiento sin un diseño claro envía el tráfico al lugar equivocado.
+
+00:15:55.680 --> 00:15:57.600
+Peering sin planificación crea conflicto de direcciones.
+
+00:15:57.600 --> 00:16:00.100
+Son un sistema. Cada pieza depende de las demás.
+
+00:16:00.460 --> 00:16:01.660
+Permítame darle un ejemplo concreto.
+
+00:16:02.100 --> 00:16:03.100
+Imagina una aplicación web.
+
+00:16:03.460 --> 00:16:07.880
+Sus servidores web residen en una subred pública con un NSG que permite tráfico HTTPS desde Internet.
+
+00:16:08.240 --> 00:16:12.500
+Sus servidores de aplicaciones residen en una subred privada que solo acepta tráfico de la subred web.
+
+00:16:12.980 --> 00:16:16.780
+Tu base de datos reside en otra subred privada que solo acepta tráfico de la subred de la aplicación.
+
+00:16:17.420 --> 00:16:22.060
+Una tabla de rutas fuerza todo el tráfico saliente a través de un firewall en la red virtual central para su registro e inspección.
+
+00:16:22.060 --> 00:16:26.120
+Todo el conjunto está conectado con tu red corporativa para que tu equipo interno pueda administrarlo.
+
+00:16:26.600 --> 00:16:28.300
+Ese es el valor real, no una sola funcionalidad.
+
+00:16:28.780 --> 00:16:29.920
+Es como funcionan todos juntos.
+
+00:16:30.500 --> 00:16:35.520
+Hace 20 años comprabas servidores separados, configurabas routers físicos y administrabas firewalls por dispositivo.
+
+00:16:36.460 --> 00:16:38.000
+Todo era manual, lento y costoso.
+
+00:16:38.400 --> 00:16:39.980
+Azure te ofrece todo esto como un servicio.
+
+00:16:40.540 --> 00:16:43.620
+Lo defines con unos pocos clics o un script y simplemente funciona.
+
+00:16:44.100 --> 00:16:44.980
+¿Qué significa esto para ti?
+
+00:16:45.460 --> 00:16:48.720
+Una vez que ves cómo encajan estas piezas, las redes de Azure se vuelven predecibles.
+
+00:16:49.500 --> 00:16:51.060
+Estás adivinando, estás diseñando.
+
+00:16:51.640 --> 00:16:54.700
+Cuando algo falla, sabes exactamente dónde buscar porque entiendes el sistema.
+
+00:16:55.840 --> 00:16:57.380
+Esto es lo que quiero que te lleves de este episodio.
+
+00:16:58.160 --> 00:16:59.900
+Primero, el paso más importante que puedes dar.
+
+00:17:00.560 --> 00:17:03.760
+Crea una red virtual con un espacio de direcciones bien planificado antes de implementar nada.
+
+00:17:04.020 --> 00:17:05.900
+Esa única decisión afecta a todo lo que viene después.
+
+00:17:06.400 --> 00:17:08.900
+Segundo, usa subreds para separar tus niveles de aplicación.
+
+00:17:09.420 --> 00:17:12.200
+Servidores web, servidores de aplicaciones, bases de datos, dale a cada uno su propio espacio.
+
+00:17:12.200 --> 00:17:13.700
+Y tercero, comienza con los NSG.
+
+00:17:13.940 --> 00:17:17.920
+Son gratuitos, son potentes y mejoran drásticamente tu seguridad desde el primer día.
+
+00:17:17.920 --> 00:17:20.880
+Tu red virtual es la base de todo lo que construyes en Azure.
+
+00:17:21.460 --> 00:17:23.320
+Hazlo bien y todo lo demás será más fácil.
+
+00:17:23.820 --> 00:17:26.120
+Hazlo mal y pasarás todo el tiempo luchando contra tu red.
+
+00:17:26.580 --> 00:17:30.540
+Suscríbete en tu plataforma de podcast favorita y comparte esto con alguien que esté comenzando su viaje en Azure.
+
+00:17:30.960 --> 00:17:32.460
+Deja un comentario si algo te resultó útil.
+
+00:17:32.820 --> 00:17:34.140
+Nos vemos en el próximo episodio.
+
+00:17:34.140 --> 00:17:35.140
+¡Gracias!
+
+00:17:35.140 --> 00:17:36.140
+¡Gracias!
+
+00:17:36.140 --> 00:17:37.140
+¡Gracias!
+
+00:17:37.140 --> 00:17:38.140
+¡Gracias!

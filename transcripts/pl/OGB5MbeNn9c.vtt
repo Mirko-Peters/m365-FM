@@ -1,0 +1,1138 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.760
+Dlaczego Twój plan ciągłości działania M365 zawiedzie bez architektury izolowanego skarbca kopii zapasowych?
+
+00:00:05.920 --> 00:00:10.380
+Poleganie na natywnym wersjonowaniu Microsoft 365 tworzy niebezpieczną iluzję bezpieczeństwa,
+
+00:00:10.500 --> 00:00:13.880
+ponieważ zsynchronizowana korupcja danych rozprzestrzenia się natychmiast na każdy węzeł.
+
+00:00:14.040 --> 00:00:17.260
+Musimy projektować odizolowane AirGapt i niezmienne skarbce kopii zapasowych,
+
+00:00:17.400 --> 00:00:20.400
+które istnieją całkowicie poza perymetrem tożsamości dzierżawcy produkcyjnego.
+
+00:00:20.640 --> 00:00:25.960
+Bez tej fizycznej i logicznej izolacji oprogramowanie ransomware systematycznie zniszczy całe nasze cyfrowe zasoby.
+
+00:00:26.180 --> 00:00:29.140
+Haki, pokaż więcej, podejście kontrariańskie oparte na strachu.
+
+00:00:29.140 --> 00:00:34.900
+Większość liderów IT śpi natykającej bombie, ponieważ ufa, że natywne wersjonowanie Microsoft 365 ich uratuje.
+
+00:00:35.080 --> 00:00:37.680
+W rzeczywistości ta synchronizacja to śmiertelna pułapka.
+
+00:00:37.920 --> 00:00:41.360
+Gdy uderza ransomware, uszkodzenie danych natychmiast rozprzestrzenia się na każdy węzeł.
+
+00:00:41.480 --> 00:00:45.620
+Jeśli Twoja kopia zapasowa nie znajduje się w odizolowanym skarbcu, cały Twój majątek cyfrowy już przepadł.
+
+00:00:45.740 --> 00:00:47.180
+Ostrzeżenie eksperta do spraw.
+
+00:00:47.360 --> 00:00:53.960
+Architektury, pokaż więcej, o iluzji natywnej redundencji, wyjaśnienie niebezpiecznego niezrozumienia różnicy między wysoką dostępnością a prawdziwym backupem danych.
+
+00:00:53.960 --> 00:01:00.060
+Wyjaśnienie, jak natychmiastowa synchronizacja powoduje, że ransomware i uszkodzenia plików rozprzestrzeniają się na wszystkie węzły w czasie rzeczywistym.
+
+00:01:00.180 --> 00:01:06.400
+Naświetlenie krajobrazu zagrożeń w 2026 roku, gdzie zautomatyzowane złośliwe oprogramowanie wykorzystuje natywne wersjonowanie do nadpisywania historii.
+
+00:01:06.520 --> 00:01:08.060
+Pułapka pojedynczej tożsamości.
+
+00:01:08.300 --> 00:01:10.100
+Miniatury, pokaż więcej, tytułów.
+
+00:01:10.240 --> 00:01:12.760
+Pokaż więcej, backup M365 to za mało.
+
+00:01:12.960 --> 00:01:15.160
+Argumenty za architekturą izolowanego skarbca.
+
+00:01:15.400 --> 00:01:20.080
+Dlaczego Twój plan ciągłości działania M365 zawiedzie, gdy będziesz go najbardziej potrzebować.
+
+00:01:20.080 --> 00:01:26.520
+Kluczowa rola izolacji, R-Gap, zabezpieczenie Microsoft 365 przed drwałością ransomware poza Jory Dandenią.
+
+00:01:26.720 --> 00:01:30.660
+Dlaczego odzyskiwanie danych po awarii w M365 wymaga izolowanych skarbców?
+
+00:01:30.900 --> 00:01:32.600
+Mechanika natychmiastowej korupcji danych.
+
+00:01:32.780 --> 00:01:36.040
+Pułapka synchronizacji to wybór projektowy, który stał się Twoją największą słabością.
+
+00:01:36.240 --> 00:01:39.100
+W świecie chmurowym priorytetem jest replikacja w czasie rzeczywistym.
+
+00:01:39.340 --> 00:01:44.820
+Chcemy, aby każda zmiana była natychmiast dostępna wszędzie, ale w sytuacji kryzysowej ta szybkość jest wrogiem odzyskiwania danych.
+
+00:01:45.060 --> 00:01:47.500
+Musimy odróżnić awarię mechaniczną od logicznej.
+
+00:01:47.500 --> 00:01:49.520
+Ridandencja rozwiązuje problemy ze sprzętem.
+
+00:01:49.520 --> 00:01:52.300
+Jeśli serwer w centrum danych w Dublinie ulegnie awarii, nawet tego nie zauważysz.
+
+00:01:52.480 --> 00:01:54.280
+System automatycznie przełączy się na inny węzeł.
+
+00:01:54.360 --> 00:01:57.300
+To jest odporność mechaniczna, ale ridandencja ignoruje złe intencje.
+
+00:01:57.480 --> 00:02:02.900
+Nie potrafi odróżnić legalnego użytkownika edytującego dokument od skryptu ransomware systematycznie niszczącego bibliotekę plików.
+
+00:02:03.060 --> 00:02:05.200
+Przyjrzyj się atakowi na 501 wersję.
+
+00:02:05.360 --> 00:02:06.480
+To już nie jest teoria.
+
+00:02:06.780 --> 00:02:12.900
+Badania potwierdziły, że zautomatyzowane skrypty ransomware as a service potrafią obejść zabezpieczenie 500 wersji w zaledwie kilka minut.
+
+00:02:13.140 --> 00:02:15.760
+Większość administratorów uważa, że historia wersji to skarbiec.
+
+00:02:15.760 --> 00:02:17.500
+Myślą, że to osobna kopia danych.
+
+00:02:17.660 --> 00:02:18.320
+Tak nie jest.
+
+00:02:18.620 --> 00:02:20.220
+Wersjonowanie to tylko atrybut pliku.
+
+00:02:20.400 --> 00:02:22.580
+To fragment metadanych przechowywany obok pliku.
+
+00:02:22.740 --> 00:02:25.080
+A ponieważ jest atrybutem, można nim manipulować.
+
+00:02:25.260 --> 00:02:28.260
+Napastnik z odpowiednimi uprawnieniami nie musi nawet szyfrować Twoich plików.
+
+00:02:28.440 --> 00:02:29.980
+Wystarczy, że będzie je edytował.
+
+00:02:30.180 --> 00:02:34.720
+Jeśli skrypt wykona 501 sekwencyjnych edycji, wypełni limit 500 wersji śmieciami.
+
+00:02:34.720 --> 00:02:38.280
+Oryginalna, czysta wersja zostaje wypchnięta ze stosu i usunięta na zawsze.
+
+00:02:38.500 --> 00:02:40.120
+Oto 10-minutowa katastrofa.
+
+00:02:40.380 --> 00:02:47.100
+Wykorzystując Microsoft Graph API, zautomatyzowany atak może usunąć historię wersji 10 tysięcy plików w czasie krótszym niż potrzeba na wypicie kawy.
+
+00:02:47.260 --> 00:02:48.800
+Ta prędkość jest porażająca.
+
+00:02:49.000 --> 00:02:50.080
+Nie walczysz z człowiekiem.
+
+00:02:50.300 --> 00:02:53.580
+Walczysz z automatyzacją sterowaną przez API, która działa z szybkością chmury.
+
+00:02:53.580 --> 00:03:00.480
+Gdy Twój zespół SOC wciąż próbuje przeanalizować pierwszy alert, skrypt zdążył już zniszczyć punkty odzyskiwania najważniejszych witryn SharePoint.
+
+00:03:00.660 --> 00:03:05.340
+Przemieszcza się przez foldery on-drive niczym pożar lasu i nie licz na ratunek ze strony kosza.
+
+00:03:05.560 --> 00:03:07.700
+Daje on jedynie złudne poczucie bezpieczeństwa.
+
+00:03:07.900 --> 00:03:12.080
+W przypadku przejęcia całego tenanta, pierwszą rzeczą, którą robi atakujący, jest atak na role uprzywilejowane.
+
+00:03:12.320 --> 00:03:18.340
+Gdy zdobędą rolę globalnego administratora lub nawet administratora konkretnej kolekcji witryn, mogą opróżnić kosz jednym poleceniem.
+
+00:03:18.540 --> 00:03:22.700
+Co gorsza, używają procedur trwałego usuwania, które całkowicie omijają kosz.
+
+00:03:22.700 --> 00:03:29.280
+Microsoft wprowadził niedawno priorytetowe procedury czyszczenia umożliwiające trwałe usuwanie danych w celu zarządzania nadmiarem pamięci.
+
+00:03:29.520 --> 00:03:31.680
+W rękach napastnika stają się one bronią.
+
+00:03:31.880 --> 00:03:35.340
+To nie są błędy. To funkcje platformy wykorzystywane przeciwko Tobie.
+
+00:03:35.580 --> 00:03:38.560
+Działasz w założeniu, że platforma jest neutralnym obserwatorem.
+
+00:03:38.760 --> 00:03:42.140
+Tak nie jest. Platforma to szybki silnik zaprojektowany do wysokiej wydajności.
+
+00:03:42.420 --> 00:03:48.480
+Jeśli nakarmisz go katastrofą, dostarczy ją do każdego punktu końcowego i każdej repliki w Twojej organizacji, zanim zdążysz sięgnąć po wyłącznik.
+
+00:03:48.480 --> 00:03:52.440
+Silnik synchronizacji nie dba o to, czy przenoszone dane to raport kwartalny, czy żądanie okupu.
+
+00:03:52.540 --> 00:03:56.380
+On po prostu przesyła bity, wykonuje swoją pracę perfekcyjnie i na tym polega problem.
+
+00:03:56.640 --> 00:03:58.160
+Dlatego obecny model jest wadliwy.
+
+00:03:58.380 --> 00:04:02.400
+Zbudowaliśmy system, w którym kopia zapasowa jest fizycznie i logicznie powiązana ze środowiskiem produkcyjnym.
+
+00:04:02.600 --> 00:04:08.260
+Dzielą tę samą infrastrukturę, dzielą te same interfejsy API, a co najważniejsze, dzielą ten sam obwód tożsamości.
+
+00:04:08.480 --> 00:04:12.260
+Szybkość ataku jest ogromnym problemem, ale można go opanować, jeśli masz klucze do osobnego pomieszczenia.
+
+00:04:12.480 --> 00:04:14.720
+Jeśli zdołasz zatamować krwawienie, możesz się podnieść.
+
+00:04:14.720 --> 00:04:18.700
+Prawdziwy problem, ten, który faktycznie zabija biznes, polega na tym, gdzie umieściliśmy te klucze.
+
+00:04:18.700 --> 00:04:21.380
+Włożyliśmy je do tej samej kieszeni, co dane produkcyjne.
+
+00:04:21.520 --> 00:04:23.120
+Pułapka pojedynczej tożsamości.
+
+00:04:23.220 --> 00:04:28.660
+Pułapka pojedynczej tożsamości to luka strukturalna, która zmienia lokalny incydent w całkowite zniszczenie biznesu.
+
+00:04:28.860 --> 00:04:31.680
+Mówimy o chmurze jako o czymś rozproszonym i odpornym.
+
+00:04:31.940 --> 00:04:37.300
+Jednak dla większości z Was cała organizacja wisi na jednej nitce zwanej Microsoft Entra ID.
+
+00:04:37.300 --> 00:04:39.500
+To właśnie wspólny obwód tożsamości.
+
+00:04:39.700 --> 00:04:42.180
+To jedyna granica zaufania, która zarządza wszystkim.
+
+00:04:42.440 --> 00:04:46.460
+Twój e-mail, Twoje pliki, Twój system ERP i co najważniejsze, Twoje kopie zapasowe.
+
+00:04:46.660 --> 00:04:51.200
+Jeśli używasz rozwiązania do tworzenia kopii zapasowych, które uwierzytelnia się w Twoim środowisku produkcyjnym, nie masz kopii zapasowej.
+
+00:04:51.400 --> 00:04:52.560
+Masz tylko lustrzane odbicie.
+
+00:04:52.840 --> 00:04:54.460
+Zastanów się nad mechaniką tej zależności.
+
+00:04:54.700 --> 00:04:57.880
+Zbudowałeś skarbiec, ale używasz do niego tej samej karty dostępu, która otwiera drzwi wejściowe.
+
+00:04:58.020 --> 00:05:00.700
+W tradycyjnym środowisku lokalnym mieliśmy fizyczną separację.
+
+00:05:00.700 --> 00:05:03.980
+Miałeś taśmę, wkładałeś ją do ciężarówki i wiozłeś do innego budynku.
+
+00:05:04.140 --> 00:05:05.620
+To była fizyczna izolacja danych.
+
+00:05:05.840 --> 00:05:08.520
+Jednak w chmurze zamieniliśmy fizyczny dystans na logiczną wygodę.
+
+00:05:08.980 --> 00:05:10.360
+Skonsolidowaliśmy naszą tożsamość.
+
+00:05:10.500 --> 00:05:12.080
+Teraz przeanalizuj zasięg rażenia.
+
+00:05:12.380 --> 00:05:19.900
+Jeśli jedno konto administratora globalnego zostanie przejęte lub ukradziony zostanie token OAuth o wysokich uprawnieniach, ta tożsamość może dosięgnąć każdego Twojego zasobu.
+
+00:05:20.060 --> 00:05:23.020
+Nie ma znaczenia, czy oznaczyłeś swoją kopię zapasową jako niezmienną.
+
+00:05:23.020 --> 00:05:29.140
+Jeśli tożsamość używana do zarządzania tą niezmiennością jest tą samą, która została właśnie przejęta, atakujący po prostu się loguje i wyłącza ochronę.
+
+00:05:29.280 --> 00:05:32.080
+Widzimy, jak to działa w rzeczywistości dzięki lukom w procesie wyrażania zgody.
+
+00:05:32.320 --> 00:05:34.460
+Atakujący nie szukają już tylko Twojego hasła.
+
+00:05:34.700 --> 00:05:35.540
+Chcą Twojej zgody.
+
+00:05:35.780 --> 00:05:39.560
+Wykorzystują legalne rejestracje aplikacji, by podstępem skłonić użytkowników do przyznania szerokich uprawnień.
+
+00:05:39.720 --> 00:05:42.100
+Gdy aplikacja zostanie autoryzowana, otrzymuje trwały token.
+
+00:05:42.320 --> 00:05:43.280
+Pozostaje w systemie.
+
+00:05:43.520 --> 00:05:45.060
+Działa poza Twoimi wymogami MFA.
+
+00:05:45.280 --> 00:05:46.940
+Nie przejmuje się tym, czy zmienisz hasło.
+
+00:05:46.940 --> 00:05:58.360
+Ma bezpośrednią linię do Twoich danych przez Apigraf, a ponieważ często przyznajemy tym aplikacjom dostęp do odczytu i zapisu, by uprościć pracę, w praktyce dajemy zautomatyzowanym skryptom uprawnienia do modyfikowania naszych kopii w czasie rzeczywistym.
+
+00:05:58.560 --> 00:06:02.280
+Dlatego 40% awarii niezmiennych kopii zapasowych nie ma podłoża technicznego.
+
+00:06:02.520 --> 00:06:04.780
+Nie powoduje ich błąd w kodzie ani awaria dysku.
+
+00:06:05.040 --> 00:06:06.940
+Są to błędne konfiguracje tożsamości.
+
+00:06:07.240 --> 00:06:13.260
+Dzieje się tak, ponieważ zakładamy, że skarbiec to oddzielne miejsce, ale w architekturze jednego dzierżawcy, tenant, nie ma oddzielnego miejsca.
+
+00:06:13.380 --> 00:06:15.380
+Istnieje tylko jedna granica zaufania.
+
+00:06:15.380 --> 00:06:24.060
+Jeśli izolujesz dane w innym folderze tego samego tenanta Entra, to tak, jakbyś przekładał pieniądze z lewej kieszeni do prawej, podczas gdy złodziej trzyma Cię za obie ręce.
+
+00:06:24.260 --> 00:06:28.000
+Mit wewnętrznego skarbca jest najbardziej niebezpiecznym mitem nowoczesnego id.
+
+00:06:28.120 --> 00:06:31.380
+Logiczna separacja jest niemożliwa wewnątrz jednej granicy zaufania.
+
+00:06:31.640 --> 00:06:36.320
+Jeśli ta sama główna tożsamość widzi dane produkcyjne i dane odzyskiwania, to izolacja jest kłamstwem.
+
+00:06:36.480 --> 00:06:38.780
+Prawdziwa odporność wymaga przerwania tego łańcucha.
+
+00:06:38.780 --> 00:06:45.400
+Wymaga architektury, w której tożsamość zarządzająca kopią zapasową nie ma żadnego związku z tożsamością zarządzającą środowiskiem produkcyjnym.
+
+00:06:45.600 --> 00:06:48.140
+Bez tego oddzielenia nie budujesz sieci bezpieczeństwa.
+
+00:06:48.380 --> 00:06:50.820
+Budujesz tylko kosztowniejszą wersję katastrofy.
+
+00:06:51.020 --> 00:06:56.040
+To nakładanie się tożsamości tworzy próżnię prawną i regulacyjną, na którą większość firm nie jest przygotowana.
+
+00:06:56.280 --> 00:06:59.400
+W zasadzie zbudowałeś dom, w którym każde drzwi otwiera ten sam klucz główny.
+
+00:06:59.620 --> 00:07:02.820
+Gdy ten klucz zostanie skradziony, skarbiec jest dla złodzieja tylko kolejnym pokojem do splądrowania.
+
+00:07:02.820 --> 00:07:04.420
+W tym właśnie miejscu model zawodzi.
+
+00:07:04.760 --> 00:07:08.880
+Nawigujesz, wyszukujesz, zakładasz, że jesteś bezpieczny, ale to założenie jest błędne.
+
+00:07:09.040 --> 00:07:12.880
+Praca nie zaczyna się od nawigacji, zaczyna się od kontekstu, a kontekst ma znaczenie.
+
+00:07:13.140 --> 00:07:15.100
+Luka w odpowiedzialności regulacyjnej i prawnej.
+
+00:07:15.240 --> 00:07:17.960
+To nakładanie się tożsamości nie tworzy tylko luki technicznej.
+
+00:07:18.140 --> 00:07:19.820
+Otwiera ogromną przepaść prawną.
+
+00:07:20.060 --> 00:07:24.340
+Jeśli działasz w sektorze finansowym, prawdopodobnie znasz zasady 17, a 4 sek.
+
+00:07:24.460 --> 00:07:26.560
+To złoty standard przechowywania dokumentacji.
+
+00:07:26.840 --> 00:07:30.460
+Wymaga ona, aby dane były przechowywane w formacie niezmienialnym i nieusuwalnym.
+
+00:07:30.460 --> 00:07:33.380
+Ale oto część, którą większość architektów IT pomija.
+
+00:07:33.640 --> 00:07:35.940
+SEC nie dba tylko o to, czy bity są zablokowane.
+
+00:07:36.220 --> 00:07:37.820
+Interesuje ich to, kto trzyma łom.
+
+00:07:38.020 --> 00:07:41.720
+Zasada 17, a 4 F wymaga wyznaczenia strony trzeciej, czyli D3P.
+
+00:07:41.860 --> 00:07:45.920
+To niezależny podmiot, który posiada zdolność techniczną do przekazania Twoich rekordów regulatorowi,
+
+00:07:46.040 --> 00:07:48.020
+jeśli Twoja firma nie może lub nie chce tego zrobić.
+
+00:07:48.220 --> 00:07:49.940
+Microsoft jasno stawia tę sprawę.
+
+00:07:50.200 --> 00:07:51.480
+Dostarczają infrastrukturę.
+
+00:07:51.680 --> 00:07:54.140
+Dostarczają narzędzia Perview, ale nie są Twoim D3P.
+
+00:07:54.300 --> 00:07:56.300
+Nie podpiszą za Ciebie listu potwierdzającego.
+
+00:07:56.480 --> 00:07:59.400
+Nie zapewnią bezpośredniego dostępu dla SEC wymaganego przez prawo.
+
+00:07:59.400 --> 00:08:03.580
+Kiedy puka regulator, a Ty wskazujesz na swoją natywną politykę retencji M365,
+
+00:08:03.700 --> 00:08:05.760
+nie pokazujesz im rozwiązania zgodnego z przepisami.
+
+00:08:05.920 --> 00:08:07.580
+Pokazujesz im przyznanie się do winy.
+
+00:08:07.740 --> 00:08:11.820
+Przyznajesz, że scentralizowałeś ryzyko w sposób, który narusza ducha i literę prawa.
+
+00:08:12.060 --> 00:08:14.560
+Bez niezależnego, izolowanego skarbca w zasadzie mówisz SEC,
+
+00:08:14.700 --> 00:08:18.620
+że Twoje dane są bezpieczne tylko tak bardzo, jak hasło Twojego globalnego administratora.
+
+00:08:18.740 --> 00:08:21.300
+To nie przejdzie podczas audytu w 2026 roku.
+
+00:08:21.560 --> 00:08:24.660
+Musimy spojrzeć na model współodpowiedzialności przez pryzmat sali sądowej.
+
+00:08:24.660 --> 00:08:26.460
+Microsoft odpowiada za SaaS.
+
+00:08:26.680 --> 00:08:28.280
+Gwarantują dostępność usługi.
+
+00:08:28.500 --> 00:08:31.540
+Gwarantują, że przyciski działają, ale to Ty odpowiadasz za dane.
+
+00:08:31.800 --> 00:08:35.900
+Jeśli atakujący użyje poprawnego API, by wyczyścić Twój tenant, Microsoft nie zawiódł.
+
+00:08:36.060 --> 00:08:38.600
+Ich system zadziałał dokładnie tak, jak został zaprogramowany.
+
+00:08:38.800 --> 00:08:41.340
+Przetworzył poprawne, uwierzytelnione żądanie usunięcia danych.
+
+00:08:41.560 --> 00:08:44.220
+Sądzie tłumaczenie, że zrobił to silnik synchronizacji, nie jest obroną.
+
+00:08:44.360 --> 00:08:45.700
+To przyznanie się do zaniedbania.
+
+00:08:45.940 --> 00:08:46.660
+Sam wybrałeś tę architekturę.
+
+00:08:47.460 --> 00:08:50.040
+Wybrałeś trzymanie kluczy odzyskiwania w tej samej granicy zaufania,
+
+00:08:50.140 --> 00:08:50.660
+co środowisko produkcyjne.
+
+00:08:50.660 --> 00:08:53.940
+Krajobraz prawny zmienia się gwałtownie pod naszymi stopami.
+
+00:08:54.140 --> 00:08:57.060
+Spójrzmy na wdrożenie dyrektyw NIS-2 i DORA w Europie.
+
+00:08:57.240 --> 00:09:00.400
+Odchodzimy od kar korporacyjnych w stronę odpowiedzialności osobistej.
+
+00:09:00.580 --> 00:09:04.520
+W ramach tych przepisów CISO i członkowie zarządów mogą odpowiadać osobiście
+
+00:09:04.520 --> 00:09:06.160
+za zaniedbania w odzyskiwaniu danych.
+
+00:09:06.380 --> 00:09:09.380
+NIST, jeśli wystąpi poważna awaria, a dochodzenie wykaże,
+
+00:09:09.520 --> 00:09:12.080
+że kopie zapasowe były przechowywane w tym samym środowisku,
+
+00:09:12.160 --> 00:09:14.720
+co dane produkcyjne, co pozwoliło oprogramowaniu ransomware
+
+00:09:14.720 --> 00:09:17.560
+zniszczyć jedne i drugie, to nie jest tylko słaby dzień w biurze.
+
+00:09:17.560 --> 00:09:19.560
+To naruszenie obowiązków powierniczych.
+
+00:09:19.740 --> 00:09:22.420
+Nie udało się wdrożyć najnowocześniejszych mechanizmów odporności,
+
+00:09:22.600 --> 00:09:25.620
+a w 2026 roku nowoczesność oznacza izolację.
+
+00:09:25.840 --> 00:09:27.560
+Jest jeszcze cichy zabójca, dryw konfiguracji.
+
+00:09:28.460 --> 00:09:30.560
+Narzędzia natywne często nie przechodzą audytów 17A4,
+
+00:09:31.240 --> 00:09:33.740
+ponieważ brakuje im odpornego na manipulację śladu kontrolnego
+
+00:09:33.740 --> 00:09:34.860
+poza pętlą produkcyjną.
+
+00:09:35.100 --> 00:09:37.300
+Jeśli administrator zmieni dziś politykę retencji,
+
+00:09:37.460 --> 00:09:39.500
+zmiana ta jest rejestrowana w tym samym systemie.
+
+00:09:39.700 --> 00:09:41.980
+Jeśli atakujący przejmie kontrolę nad tym systemem,
+
+00:09:42.080 --> 00:09:43.500
+może usunąć logi własnych zmian.
+
+00:09:43.700 --> 00:09:44.720
+Tracisz łańcuch dowodowy,
+
+00:09:44.720 --> 00:09:47.100
+tracisz zdolność udowodnienia organom regulacyjnym,
+
+00:09:47.200 --> 00:09:49.520
+że widziane przez nie dane są autentyczne i niezmienione.
+
+00:09:49.760 --> 00:09:51.760
+Narzędzie natywne to system samooceniający się,
+
+00:09:51.860 --> 00:09:54.040
+a organy regulacyjne nienawidzą takich rozwiązań.
+
+00:09:54.220 --> 00:09:55.740
+Wreszcie musimy przestać udawać,
+
+00:09:55.880 --> 00:09:59.100
+że wysoka dostępność spełnia prawną definicję pamięci niezmiennej.
+
+00:09:59.260 --> 00:10:00.200
+To przeciwieństwa.
+
+00:10:00.440 --> 00:10:03.160
+Wysoka dostępność oznacza płynną, ciągłą zmianę.
+
+00:10:03.360 --> 00:10:05.880
+Niezmienność oznacza zamrożoną, stałą prawdę.
+
+00:10:06.020 --> 00:10:07.940
+Próba osiągnięcia jednego za pomocą drugiego
+
+00:10:07.940 --> 00:10:09.020
+to błąd kategoryczny.
+
+00:10:09.220 --> 00:10:12.460
+Jeśli narzędzia natywne nie spełniają wymogów prawnych ani technicznych,
+
+00:10:12.460 --> 00:10:14.640
+musimy przyjrzeć się ekonomii alternatywy.
+
+00:10:14.780 --> 00:10:17.680
+Ponieważ dla wielu z Was koszt zrobienia tego źle jest wyższy
+
+00:10:17.680 --> 00:10:19.180
+niż koszt zrobienia tego dobrze.
+
+00:10:19.400 --> 00:10:22.380
+TC o architektury natywnej kontra architektury izolowanej.
+
+00:10:22.520 --> 00:10:23.640
+Większość architektów zakłada,
+
+00:10:23.800 --> 00:10:25.940
+że rozwiązanie natywne jest tańsze, bo jest wbudowane.
+
+00:10:26.200 --> 00:10:28.000
+Widzą model płatności według użycia i myślą,
+
+00:10:28.100 --> 00:10:29.180
+że skaluje się on do ich potrzeb,
+
+00:10:29.320 --> 00:10:31.340
+ale rzeczywistość to podatek odpuchnięcia danych.
+
+00:10:31.580 --> 00:10:34.420
+Microsoft pobiera 15 centów za gigabajt miesięcznie.
+
+00:10:34.680 --> 00:10:37.320
+Brzmi niedrogo, dopóki nie zdasz sobie sprawy, za co płacisz.
+
+00:10:37.480 --> 00:10:39.000
+Nie płacisz tylko za aktywne pliki,
+
+00:10:39.000 --> 00:10:44.200
+płacisz za każdą wersję, każdy usunięty element i każde śmieci zalegające w bibliotekach retencyjnych.
+
+00:10:44.320 --> 00:10:45.980
+To ekonomiczny, ślepy zaułek.
+
+00:10:46.180 --> 00:10:49.320
+W zasadzie płacisz premię za przechowywanie własnych cyfrowych odpadów.
+
+00:10:49.500 --> 00:10:51.860
+W miarę wzrostu danych ten rachunek staje się pociągiem,
+
+00:10:51.980 --> 00:10:53.740
+którego budżet nie jest w stanie zatrzymać.
+
+00:10:53.860 --> 00:10:56.120
+Porównaj to z architekturą izolowanego skarbca.
+
+00:10:56.360 --> 00:10:59.100
+Jeśli przeniesiesz dane do wyspecjalizowanego dostawcy pamięci obiektowej,
+
+00:10:59.160 --> 00:11:01.000
+jak Wasabi, cena spada poniżej 1 centa,
+
+00:11:01.080 --> 00:11:02.500
+dokładnie do 0,68.
+
+00:11:03.000 --> 00:11:06.340
+To 22-krotna różnica w kosztach surowego składowania danych.
+
+00:11:06.340 --> 00:11:10.060
+Pomyśl o tej różnicy. Przepłacasz o 2 tysiące procent za zasobnik pamięci,
+
+00:11:10.220 --> 00:11:13.760
+który jest mniej bezpieczny, ponieważ jest powiązany z Twoją tożsamością produkcyjną.
+
+00:11:13.900 --> 00:11:14.760
+To nie ma sensu.
+
+00:11:14.920 --> 00:11:17.080
+Płacisz za wygodę pozostania w zamkniętym ekosystemie,
+
+00:11:17.200 --> 00:11:19.160
+ale to pudełko jest ze złota i ma szklane drzwi.
+
+00:11:19.400 --> 00:11:22.280
+Spójrzmy na liczby dla organizacji z 10 tysięcy użytkowników.
+
+00:11:22.420 --> 00:11:25.240
+Przy tej skali prawdopodobnie masz 2 petabajty chronionych danych,
+
+00:11:25.400 --> 00:11:27.420
+gdy uwzględnisz repliki i wersjonowanie.
+
+00:11:27.680 --> 00:11:30.560
+W natywnym modelu kopii zapasowych Microsoft 365
+
+00:11:30.560 --> 00:11:35.320
+ten ślad 2 petabajtów kosztuje 300 tysięcy dolarów rocznie w samych opłatach za Azure.
+
+00:11:35.320 --> 00:11:39.480
+To 300 tysięcy dolarów za rozwiązanie, któremu brakuje pełnego wsparcia dla Microsoft Teams,
+
+00:11:39.640 --> 00:11:41.560
+oferuje ograniczoną szczegółowość odzyskiwania
+
+00:11:41.560 --> 00:11:45.280
+i trzyma Twoją siatkę bezpieczeństwa w tym samym płonącym budynku co dane produkcyjne.
+
+00:11:45.400 --> 00:11:47.620
+Teraz porównaj to z architekturą izolowanego skarbca,
+
+00:11:47.740 --> 00:11:50.660
+wykorzystującą oprogramowanie firm trzecich i tanią pamięć obiektową.
+
+00:11:50.900 --> 00:11:53.240
+Nawet po uwzględnieniu kosztów licencji za narzędzie premium,
+
+00:11:53.360 --> 00:11:56.700
+takie jak Vim lub Druva, komponent pamięci masowej u dostawcy takiego jak Wasabi
+
+00:11:56.700 --> 00:12:00.000
+przy stawce 0,68 tysięcy dolara za gigabajt,
+
+00:12:00.100 --> 00:12:03.180
+spada z 25 tysięcy do około 13 tysięcy dolarów miesięcznie.
+
+00:12:03.180 --> 00:12:06.180
+W perspektywie pięciu lat różnica w całkowitym koszcie posiadania
+
+00:12:06.180 --> 00:12:09.260
+dla średniej wielkości przedsiębiorstwa może przekroczyć milion dolarów.
+
+00:12:09.420 --> 00:12:12.020
+Płacisz ogromny podatek od prostoty za natywne narzędzia,
+
+00:12:12.200 --> 00:12:14.600
+które w rzeczywistości zwiększają Twój profil ryzyka.
+
+00:12:14.920 --> 00:12:18.640
+Model natywny opiera się na zużyciu, co oznacza, że nagradza nieefektywność.
+
+00:12:18.800 --> 00:12:23.000
+Im więcej śmieci masz w historii wersji i koszach, tym więcej zarabia Microsoft.
+
+00:12:23.660 --> 00:12:26.120
+Izolowana architektura odwraca ten scenariusz.
+
+00:12:26.300 --> 00:12:29.160
+Pozwala odfiltrować cyfrowy szum, tworzyć kopie zapasowe tylko tego,
+
+00:12:29.160 --> 00:12:32.320
+co istotne, i przechowywać je w skarbcu, który kosztuje 20 razy mniej.
+
+00:12:32.520 --> 00:12:34.480
+Nie tylko budujesz bardziej odporny system,
+
+00:12:34.620 --> 00:12:37.880
+ale zatrzymujesz ogromny, niewidoczny wyciek w swoim budżecie IT.
+
+00:12:38.060 --> 00:12:40.200
+Projektując izolowany skarbiec kopii zapasowych,
+
+00:12:40.360 --> 00:12:41.920
+koszt jest punktem wyjścia do rozmowy,
+
+00:12:42.060 --> 00:12:44.940
+ale budowa skarbca nie polega na oszczędzaniu groszy na przechowywaniu.
+
+00:12:45.180 --> 00:12:48.180
+Chodzi o fundamentalną zmianę w tym, jak definiujemy strefę bezpieczeństwa.
+
+00:12:48.380 --> 00:12:50.620
+Przez lata polegaliśmy na fizycznej izolacji, ERGAP.
+
+00:12:50.800 --> 00:12:51.720
+Pamiętasz tę rutynę.
+
+00:12:51.960 --> 00:12:53.080
+Zapisywałeś dane na taśmie.
+
+00:12:53.260 --> 00:12:54.940
+Wkładałeś tę taśmę do ołowianej skrzyni.
+
+00:12:55.140 --> 00:12:56.520
+Wysyłałeś ją do kopalni Soli.
+
+00:12:56.660 --> 00:12:58.660
+To była ostateczna obrona, ponieważ haker w Rosji
+
+00:12:58.660 --> 00:13:00.460
+nie mógł sięgnąć do fizycznej kopalni w Kansas.
+
+00:13:00.720 --> 00:13:02.640
+Ale w świecie chmurowym ten model nie żyje.
+
+00:13:02.880 --> 00:13:04.680
+Musimy przejść na logiczną izolację.
+
+00:13:04.880 --> 00:13:05.960
+Tu nie chodzi o dystans.
+
+00:13:06.180 --> 00:13:07.940
+Chodzi o całkowite odcięcie kontroli.
+
+00:13:08.160 --> 00:13:10.840
+Fundamentem tej architektury jest obwód oparty na tożsamości.
+
+00:13:11.060 --> 00:13:13.640
+Nie możesz zbudować skarbca wewnątrz swojego środowiska produkcyjnego.
+
+00:13:13.880 --> 00:13:16.580
+Musisz utworzyć drugiego, całkowicie odizolowanego tenanta Entra.
+
+00:13:16.580 --> 00:13:19.520
+Ten tenant istnieje w jednym celu, operację odzyskiwania danych.
+
+00:13:19.720 --> 00:13:22.100
+Nie ma on żadnej relacji zaufania z Twoją domeną główną.
+
+00:13:22.300 --> 00:13:23.500
+Nie ma tu żadnej federacji.
+
+00:13:23.740 --> 00:13:25.440
+Nie ma synchronizacji użytkowników.
+
+00:13:25.620 --> 00:13:28.320
+Jeśli Twój dzierżawca produkcyjny stanie się celem ataku typu
+
+00:13:28.320 --> 00:13:30.900
+spalona ziemia, ten dodatkowy pozostaje niewidoczny.
+
+00:13:31.060 --> 00:13:32.000
+To duch w maszynie.
+
+00:13:32.260 --> 00:13:36.220
+Nie zna haseł produkcyjnych, a administratorzy produkcji nie mają tam swoich kont.
+
+00:13:36.420 --> 00:13:39.200
+Wewnątrz tego odizolowanego dzierżawcy wdrażamy zasadę WERM
+
+00:13:39.200 --> 00:13:40.540
+zapisz raz, odczytaj wiele.
+
+00:13:40.540 --> 00:13:42.900
+To techniczne wymuszenie niezmienności danych.
+
+00:13:43.100 --> 00:13:45.020
+Nie zaznaczamy tylko opcji w menu polityki.
+
+00:13:45.140 --> 00:13:47.600
+Wdrażamy blokady magazynu na poziomie pamięci masowej.
+
+00:13:47.600 --> 00:13:50.100
+Blokadami tymi steruje zegar, a nie człowiek.
+
+00:13:50.240 --> 00:13:53.360
+Gdy punkt odzyskiwania zostanie zapisany, a blokada aktywowana
+
+00:13:53.360 --> 00:13:54.880
+staje się to trwałym zapisem.
+
+00:13:55.060 --> 00:13:57.540
+Nawet globalny administrator w dzierżawcy kopii zapasowych
+
+00:13:57.540 --> 00:13:58.480
+nie może tego obejść.
+
+00:13:58.660 --> 00:14:01.160
+Jeśli napastnik zdoła przełamać drugą linię obrony,
+
+00:14:01.260 --> 00:14:03.080
+napotka górę danych, które może zobaczyć,
+
+00:14:03.160 --> 00:14:05.320
+ale nie może ich dotknąć, zmienić ani usunąć.
+
+00:14:05.520 --> 00:14:07.180
+Jednak sama technologia to za mało.
+
+00:14:07.360 --> 00:14:08.740
+Potrzebujemy ludzkiego strażnika.
+
+00:14:08.740 --> 00:14:10.600
+To model zatwierdzania przez cztery oczy.
+
+00:14:10.800 --> 00:14:13.160
+W środowisku produkcyjnym priorytetem jest dla nas zwinność.
+
+00:14:13.360 --> 00:14:14.880
+Chcemy, aby wszystko działo się szybko.
+
+00:14:14.880 --> 00:14:17.400
+W magazynie kopii zapasowych stawiamy na ograniczenia.
+
+00:14:17.620 --> 00:14:20.580
+Każda operacja destrukcyjna, jak zmiana polityki retencji
+
+00:14:20.580 --> 00:14:23.560
+czy próba usunięcia magazynu, wymaga autoryzacji wielu stron.
+
+00:14:23.720 --> 00:14:26.460
+Ta autoryzacja musi odbywać się poza pętlą produkcyjną.
+
+00:14:26.720 --> 00:14:29.540
+Wymaga to dwóch odrębnych osób korzystających z dwóch oddzielnych urządzeń
+
+00:14:29.540 --> 00:14:31.480
+uwierzytelniających się w dwóch różnych systemach.
+
+00:14:31.640 --> 00:14:33.860
+Celowo spowalniasz system, aby zapobiec sytuacji,
+
+00:14:33.860 --> 00:14:37.220
+w której jeden skompromitowany człowiek staje się pojedynczym punktem awarii.
+
+00:14:37.340 --> 00:14:39.620
+Prowadzi to do kluczowego rozdzielenia płaszczyzny danych
+
+00:14:39.620 --> 00:14:40.740
+od płaszczyzny sterowania.
+
+00:14:40.740 --> 00:14:43.820
+Silnik kopii zapasowych, oprogramowanie faktycznie przenoszące bity,
+
+00:14:43.940 --> 00:14:46.660
+nigdy nie powinno widzieć ani znać Twoich poświadczeń produkcyjnych.
+
+00:14:46.860 --> 00:14:49.080
+Powinien działać w oparciu o zarządzane tożsamości
+
+00:14:49.080 --> 00:14:52.720
+lub ograniczone zasady usług, które mają jedynie uprawnienia do odczytu danych.
+
+00:14:52.940 --> 00:14:55.760
+Płaszczyzna sterowania, która zarządza harmonogramem i logiką,
+
+00:14:55.900 --> 00:14:57.480
+znajduje się w izolowanym magazynie.
+
+00:14:57.660 --> 00:14:59.560
+Płaszczyzna danych, która obsługuje transport,
+
+00:14:59.560 --> 00:15:01.060
+znajduje się w strefie pośredniej.
+
+00:15:01.260 --> 00:15:03.620
+Dzięki temu, nawet jeśli samo oprogramowanie do kopii zapasowych
+
+00:15:03.620 --> 00:15:05.780
+zostanie wykorzystane, napastnik nie może przeskoczyć
+
+00:15:05.780 --> 00:15:08.020
+z serwera kopii do serca Twoich sekretów produkcyjnych.
+
+00:15:08.020 --> 00:15:10.760
+Na koniec musisz zaprojektować odzyskiwanie w czystym pokoju.
+
+00:15:10.980 --> 00:15:12.100
+Gdy uderzy w Ciebie ransomware,
+
+00:15:12.200 --> 00:15:14.460
+Twoje środowisko produkcyjne staje się miejscem zbrodni.
+
+00:15:14.680 --> 00:15:15.600
+Jest ono skażone.
+
+00:15:15.800 --> 00:15:18.140
+Nie możesz po prostu przywrócić danych do zainfekowanego dzierżawcy
+
+00:15:18.140 --> 00:15:19.580
+i mieć nadzieję, że wszystko będzie dobrze.
+
+00:15:19.820 --> 00:15:23.240
+Twój izolowany magazyn musi wspierać przywracanie do piaskownicy informatycznej.
+
+00:15:23.400 --> 00:15:25.380
+To czyste środowisko, w którym możesz przeskanować dane
+
+00:15:25.380 --> 00:15:27.220
+pod kątem uśpionego złośliwego oprogramowania,
+
+00:15:27.220 --> 00:15:29.940
+zweryfikować integralność plików i odbudować podstawowe usługi
+
+00:15:29.940 --> 00:15:31.460
+przed ponownym połączeniem z internetem.
+
+00:15:31.460 --> 00:15:34.220
+Nie odzyskujesz tylko danych, odzyskujesz zaufanie.
+
+00:15:34.480 --> 00:15:37.720
+Zapewniasz firmie zweryfikowany, bezpieczny punkt wyjścia.
+
+00:15:38.100 --> 00:15:40.900
+Budowa skarbca to pierwszy krok do takiej odporności,
+
+00:15:41.140 --> 00:15:45.040
+ale ostatnim, najważniejszym krokiem jest odizolowanie samej tożsamości.
+
+00:15:45.840 --> 00:15:47.520
+Obwód tożsamości Zero Trust.
+
+00:15:47.740 --> 00:15:48.920
+Musimy zastosować zasadę
+
+00:15:48.920 --> 00:15:50.980
+Nigdy nie ufaj, zawsze weryfikuj do kanałów,
+
+00:15:51.040 --> 00:15:53.200
+przez które przesyłane są Twoje dane odzyskiwania.
+
+00:15:53.440 --> 00:15:54.460
+W większości środowisk M365
+
+00:15:54.460 --> 00:15:58.500
+M365 konto usługi kopii zapasowej jest cichym pasażerem w produkcyjnej magistrali tożsamości.
+
+00:15:58.700 --> 00:16:00.920
+Jest zsynchronizowane, sfederowane i widoczne.
+
+00:16:01.080 --> 00:16:02.040
+To ogromny błąd.
+
+00:16:02.160 --> 00:16:03.380
+Aby uzyskać pełną izolację,
+
+00:16:03.500 --> 00:16:06.880
+konta usług kopii zapasowej muszą być wykluczone z synchronizacji produkcyjnej.
+
+00:16:07.060 --> 00:16:09.520
+Nie powinny istnieć w Twoim głównym katalogu EntraID.
+
+00:16:09.740 --> 00:16:12.020
+Nie powinny być częścią Twojego zaufania federacyjnego.
+
+00:16:12.260 --> 00:16:15.020
+Jeśli atakujący uruchomi skrypt wykrywający w Twoim środowisku produkcyjnym,
+
+00:16:15.100 --> 00:16:16.980
+nie powinien znaleźć niczego, co wskazuje na skarbiec.
+
+00:16:17.160 --> 00:16:19.220
+Infrastruktura kopii zapasowych musi być niewidoczna.
+
+00:16:19.220 --> 00:16:22.460
+To właśnie tu zaleta tożsamości zarządzanych staje się Twoim najlepszym przyjacielem.
+
+00:16:22.660 --> 00:16:25.680
+Musimy przestać używać długotrwałych sekretów i tradycyjnych jednostek usługi,
+
+00:16:25.840 --> 00:16:27.440
+które wymagają ręcznej rotacji haseł.
+
+00:16:27.620 --> 00:16:29.840
+Dla atakującego są to po prostu statyczne cele.
+
+00:16:30.040 --> 00:16:31.820
+Używając tożsamości zarządzanych w Azure
+
+00:16:31.820 --> 00:16:34.200
+eliminujesz ryzyko wycieku danych uwierzytelniających
+
+00:16:34.200 --> 00:16:36.020
+lub ich przejęcia z pliku konfiguracyjnego.
+
+00:16:36.220 --> 00:16:38.260
+Tożsamość jest powiązana z samym zasobem.
+
+00:16:38.500 --> 00:16:41.100
+Istnieje tylko wtedy, gdy uruchomione jest zadanie kopii zapasowej
+
+00:16:41.100 --> 00:16:42.560
+i znika, gdy praca jest wykonana.
+
+00:16:42.780 --> 00:16:45.980
+Skracasz okno możliwości ataku z 24 godzin na dobę do 30 minut
+
+00:16:45.980 --> 00:16:47.720
+potrzebnych na synchronizację przyrostową.
+
+00:16:47.900 --> 00:16:49.240
+Ale musimy pójść głębiej.
+
+00:16:49.400 --> 00:16:51.840
+Musimy całkowicie ukryć skarbiec przed publicznym internetem.
+
+00:16:52.000 --> 00:16:54.560
+Do tego służy ZTNA, czyli Zero Trust Network Access.
+
+00:16:54.780 --> 00:16:57.700
+Twoja pamięć masowa kopii zapasowych nie powinna mieć publicznego adresu IP.
+
+00:16:57.960 --> 00:17:00.240
+Nie powinna być dostępna przez standardowy adres URL,
+
+00:17:00.420 --> 00:17:02.500
+który można poddać atakowi typu Brute Force lub DOS.
+
+00:17:02.760 --> 00:17:05.860
+Implementując bramę ZTNA zapewniasz, że tylko zweryfikowane,
+
+00:17:06.040 --> 00:17:08.480
+zdrowe urządzenia z izolowanego dzierżawcy odzyskiwania
+
+00:17:08.480 --> 00:17:10.220
+mogą w ogóle widzieć istnienie pamięci.
+
+00:17:10.420 --> 00:17:12.380
+W praktyce usuwasz swoje dane z mapy.
+
+00:17:12.580 --> 00:17:15.320
+Na koniec musisz monitorować anomalne użycie tokenów.
+
+00:17:15.320 --> 00:17:16.920
+To proaktywna warstwa obwodu.
+
+00:17:17.140 --> 00:17:20.200
+Przesyłając logi tożsamości kopii zapasowych do platformy XDR
+
+00:17:20.200 --> 00:17:23.200
+możesz ustawić wyzwalacze dla zachowań typowych dla atakującego.
+
+00:17:23.400 --> 00:17:26.820
+Jeśli tożsamość kopii zapasowej nagle próbuje uzyskać dostęp do skrzynki,
+
+00:17:26.960 --> 00:17:30.640
+której wcześniej nie dotykała lub żąda tokena z nietypowej lokalizacji geograficznej,
+
+00:17:30.800 --> 00:17:33.120
+system musi automatycznie unieważnić wszystkie sesje.
+
+00:17:33.320 --> 00:17:35.140
+Nie obserwujesz tylko nieudanych logowań,
+
+00:17:35.260 --> 00:17:37.740
+obserwujesz udane logowania, które nie mają sensu.
+
+00:17:37.940 --> 00:17:40.540
+Celem jest system kopii zapasowych, który jest jak duch.
+
+00:17:40.740 --> 00:17:44.240
+Wykonuje swoje zadanie, przesyła dane, a potem znika z powrotem w cieniu.
+
+00:17:44.240 --> 00:17:48.120
+Przejście od redendencji do odporności to nie jest tylko techniczna aktualizacja.
+
+00:17:48.280 --> 00:17:49.480
+To strategia przetrwania.
+
+00:17:49.700 --> 00:17:53.520
+Przechodzisz od modelu, który liczy na najlepsze, do modelu zaprojektowanego na najgorsze.
+
+00:17:53.700 --> 00:17:55.540
+Twoje wyzwanie na ten tydzień jest proste.
+
+00:17:55.700 --> 00:17:57.240
+Przeprowadź audyt z zasięgu rażenia.
+
+00:17:57.540 --> 00:17:59.820
+Zidentyfikuj każdy klucz do swojego skarbca kopii zapasowych
+
+00:17:59.820 --> 00:18:01.620
+i sprawdź, czy nie nosisz go w kieszeni produkcji.
+
+00:18:01.840 --> 00:18:04.540
+Jeśli tak, jeden incydent dzieli Cię od całkowitej porażki.
+
+00:18:04.720 --> 00:18:08.200
+Połącz się ze mną na LinkedIn, aby omówić standardy skarbca na 2026 rok.
+
+00:18:08.200 --> 00:18:11.860
+Zasubskrybuj M365FM, by poznać analizy, które musi usłyszeć Twój zarząd.
+
+00:18:12.020 --> 00:18:13.580
+Przestań nawigować, zacznij budować.

@@ -1,0 +1,985 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.240
+Je hebt een testomgeving nodig in Azure. Niets bijzonders. Gewoon een virtueel netwerk, een paar virtuele machines en een storage account.
+
+00:00:06.460 --> 00:00:09.920
+Dus je logt in op de portal, zoekt de knop voor resource groepen en begint te klikken.
+
+00:00:10.060 --> 00:00:13.460
+Eén klik om de groep aan te maken, nog een paar om het virtuele netwerk in te stellen.
+
+00:00:13.660 --> 00:00:19.900
+Dan doorloop je de wizard voor het maken van de VM, kies je de regio, de grootte, de image, configureer je de schijf en stel je het netwerk in.
+
+00:00:20.100 --> 00:00:27.120
+Dat zijn misschien wel 50 klikken. Dan doe je het opnieuw voor de tweede VM, dan configureer je het storage account en vervolgens stel je de firewall regels in.
+
+00:00:27.120 --> 00:00:33.120
+En het punt is, elke klik is een kans om een fout te maken. Kies je de verkeerde regio, dan draait je app trager dan zou moeten.
+
+00:00:33.280 --> 00:00:40.900
+Kies je de verkeerde VM grootte, dan betaal je vanaf dag 1 te veel. Vergeet je een poort te sluiten, dan heb je je omgeving onbedoeld blootgesteld aan het internet.
+
+00:00:41.480 --> 00:00:47.660
+Vermenigvuldig dat nu met drie omgevingen, def, test en productie, plotseling doe je geen 50 klikken meer, maar 150.
+
+00:00:48.060 --> 00:00:52.520
+En ergens in dat proces gaat de productieomgeving er totaal anders uitzien dan de ontwikkelomgeving.
+
+00:00:52.520 --> 00:00:56.680
+Een instelling hier, een vinkje daar, kleine verschillen die later voor grote hoofdpijn zorgen.
+
+00:00:56.680 --> 00:01:01.380
+Maar wat als je je volledige Azure setup in een bestand zou kunnen beschrijven in plaats van door al die schermen te klikken?
+
+00:01:01.560 --> 00:01:05.500
+Wat als je dat bestand één keer zou kunnen uitvoeren en elke keer hetzelfde resultaat zou krijgen?
+
+00:01:05.720 --> 00:01:07.380
+Dat is waar we het vandaag over gaan hebben.
+
+00:01:07.580 --> 00:01:12.080
+Aan het einde van deze aflevering begrijp je wat infrastructure als code precies is,
+
+00:01:12.300 --> 00:01:16.700
+waarom Azure Teams erop vertrouwen en hoe je ermee kunt beginnen zonder developer te zijn.
+
+00:01:17.660 --> 00:01:20.060
+Wat handmatige provisioning je werkelijk kost.
+
+00:01:20.060 --> 00:01:22.540
+Laten we een typische Azure setup doorlopen.
+
+00:01:22.740 --> 00:01:26.600
+Je hebt een resource groep nodig, daarin een virtueel netwerk met een paar subnets,
+
+00:01:26.820 --> 00:01:32.480
+dan een paar virtuele machines, één voor je webserver, één voor je database en een storage account voor je applicatiedata.
+
+00:01:32.700 --> 00:01:35.320
+In de portal ben je daar een hele middag mee aan het klikken.
+
+00:01:35.500 --> 00:01:38.220
+En dit is het probleem, elke klik is een kans op een fout.
+
+00:01:38.480 --> 00:01:43.060
+Misschien kies je de verkeerde regio omdat het opdouwmenu standaard op East US staat en je West Europe bedoelde.
+
+00:01:43.220 --> 00:01:46.640
+Misschien kies je een VM grote die veel te duur is voor wat je eigenlijk nodig hebt.
+
+00:01:46.640 --> 00:01:49.600
+Misschien laat je per ongeluk een beheerpoort openstaan naar het internet.
+
+00:01:49.800 --> 00:01:51.220
+Deze fouten gebeuren nu eenmaal.
+
+00:01:51.420 --> 00:01:53.400
+Ze gebeuren omdat de portal het makkelijk maakt om snel te klikken,
+
+00:01:53.520 --> 00:01:55.320
+maar lastig om rustig aan te doen en je werk te controleren.
+
+00:01:55.420 --> 00:01:58.500
+En de echte kosten zijn niet alleen de tijd die je verspilt aan het herstellen van die fouten.
+
+00:01:58.640 --> 00:02:02.600
+Het is de tijd die je kwijt bent aan het herhalen van dezelfde klikken voor dev, test, staging en productie.
+
+00:02:02.740 --> 00:02:03.780
+Want dit is wat er gebeurt.
+
+00:02:03.980 --> 00:02:06.840
+Je bouwt dev op maandag, het kost je drie uur en het werkt perfect.
+
+00:02:07.040 --> 00:02:08.780
+Op dinsdag bouw je de testomgeving.
+
+00:02:08.780 --> 00:02:12.700
+Je bent deze keer iets sneller, 2,5 uur, maar je vergeet één instelling.
+
+00:02:12.700 --> 00:02:15.840
+Een firewall-regel die open stond in dev, is gesloten in test.
+
+00:02:16.040 --> 00:02:18.960
+Je applicatie gedraagt zich anders en je bent een uur kwijt aan debuggen.
+
+00:02:19.100 --> 00:02:23.240
+Tegen de tijd dat je op vrijdag bij productie aankomt, lijkt je omgeving totaal niet meer op dev.
+
+00:02:23.380 --> 00:02:29.240
+Andere VM-groottes, andere opslagconfiguraties, een paar instellingen die je wijzigt omdat iemand zei, probeer dit even snel.
+
+00:02:29.460 --> 00:02:33.560
+Dat is configuratiedrift en het is het logische gevolg van het handmatig bouwen van omgevingen.
+
+00:02:33.680 --> 00:02:36.080
+Het echte probleem is dat je een muisklik niet kunt controleren.
+
+00:02:36.220 --> 00:02:36.480
+Odden.
+
+00:02:36.740 --> 00:02:38.460
+Je kunt een muisklik niet ongedaan maken.
+
+00:02:38.460 --> 00:02:43.140
+Als er over zes weken iets kapot gaat in productie, weet je niet meer welk vak je je hebt aan of uitgevinkt.
+
+00:02:43.240 --> 00:02:46.200
+Je hebt geen verslag van wat er tussen dev en productie is veranderd.
+
+00:02:46.320 --> 00:02:50.680
+Dus, wat als je je volledige Azure setup in een bestand kon beschrijven in plaats van door schermen te klikken?
+
+00:02:50.840 --> 00:02:53.340
+Eén bestand dat precies aangeeft hoe je omgeving eruit moet zien.
+
+00:02:53.560 --> 00:02:55.800
+Voer het één keer uit en krijg elke keer hetzelfde resultaat.
+
+00:02:55.980 --> 00:02:57.940
+Voer het opnieuw uit en krijg weer hetzelfde resultaat.
+
+00:02:58.120 --> 00:03:02.040
+Geen drift, geen vergeten instellingen, geen productieomgevingen die totaal anders zijn dan dev.
+
+00:03:02.540 --> 00:03:04.880
+Infrastructure als code, de definitie in één zin.
+
+00:03:04.880 --> 00:03:09.780
+Infrastructure als code betekent dat je je infrastructuur beschrijft in een bestand dat Azure kan lezen en voor je kan bouwen.
+
+00:03:10.000 --> 00:03:10.680
+Dat is alles.
+
+00:03:10.920 --> 00:03:11.360
+Eén zin.
+
+00:03:11.560 --> 00:03:14.560
+Je schrijft een bestand, Azure leest het en je omgeving verschijnt.
+
+00:03:14.760 --> 00:03:15.940
+Zie het als een kantoorpand.
+
+00:03:16.140 --> 00:03:21.120
+Als je een nieuw kantoor wilde inrichten, zou je rond kunnen lopen en elke werknemer kunnen vertellen waar elk bureau en elke stoel moet staan.
+
+00:03:21.380 --> 00:03:22.760
+Dat is de handmatige aanpak.
+
+00:03:22.940 --> 00:03:26.440
+Het werkt, maar het is traag en iedereen eindigt met een net iets andere indeling.
+
+00:03:26.660 --> 00:03:27.920
+Of je geeft ze een blauwdruk.
+
+00:03:28.080 --> 00:03:30.540
+Een fel papier waarop precies staat waar alles moet komen.
+
+00:03:30.540 --> 00:03:33.880
+Elke ruimte is identiek omdat iedereen hetzelfde plan heeft gevolgd.
+
+00:03:33.880 --> 00:03:35.720
+Je IAC-bestand is die blauwdruk.
+
+00:03:35.880 --> 00:03:38.980
+Het is de enige bron van waarheid voor je volledige Azure-omgeving.
+
+00:03:39.180 --> 00:03:46.700
+Alles wat je omgeving nodig heeft, de resource-groepen, de virtuele netwerken, de VM's, de opslagaccounts, de firewall-regels, het staat allemaal in dat ene bestand.
+
+00:03:46.880 --> 00:03:48.640
+Nu is er hier een belangrijk onderscheid.
+
+00:03:48.840 --> 00:03:51.520
+IAC gebruikt wat men een declaratieve aanpak noemt.
+
+00:03:51.680 --> 00:03:56.460
+Dat is een chique manier om te zeggen dat je Azure vertelt wat je wilt en niet hoe het stap voor stap gebouwd moet worden.
+
+00:03:56.460 --> 00:04:02.100
+Je zegt niet, maak een resource-groep, maak dan een virtueel netwerk daarbinnen en maak dan een subnet daarbinnen.
+
+00:04:02.100 --> 00:04:05.860
+Je zegt, ik wil een resource-groep met een virtueel netwerk dat een subnet bevat.
+
+00:04:06.060 --> 00:04:07.600
+Azure bepaalt zelf de volgorde.
+
+00:04:07.880 --> 00:04:10.980
+Dit is anders dan de scripts die systeembeheerders jarenlang hebben gebruikt.
+
+00:04:11.260 --> 00:04:12.420
+Scripts zijn imperatief.
+
+00:04:12.640 --> 00:04:15.160
+Ze vertellen het systeem precies wat het stap voor stap moet doen.
+
+00:04:15.400 --> 00:04:17.420
+Doe dit, doe dan dat, doe daarna dit andere ding.
+
+00:04:17.620 --> 00:04:19.620
+En als één stap faalt, loopt alles in de zoek.
+
+00:04:19.720 --> 00:04:21.440
+IAC is het tegenovergestelde.
+
+00:04:21.620 --> 00:04:24.680
+Je beschrijft de eindtoestand en het systeem bepaalt zelf hoe het daar komt.
+
+00:04:24.840 --> 00:04:26.220
+Hier is een concreet voorbeeld.
+
+00:04:26.220 --> 00:04:31.060
+In plaats van 50 losse CLI-commando's te typen om een virtuele machine te maken, schrijf je zoiets als
+
+00:04:31.060 --> 00:04:35.620
+Ik heb een virtuele machine nodig met 8 GB RAM, draaiend op Ubuntu 4 over 10 s'avonds,
+
+00:04:35.880 --> 00:04:38.920
+verbonden met dit virtuele netwerk en met een opslagaccount eraan gekoppeld.
+
+00:04:39.120 --> 00:04:39.820
+Dat is alles.
+
+00:04:40.040 --> 00:04:42.100
+Eén beschrijving in plaats van 100 commando's.
+
+00:04:42.260 --> 00:04:45.800
+En dit is specifiek belangrijk voor Azure omdat de portal het zo makkelijk maakt om te beginnen.
+
+00:04:46.000 --> 00:04:49.240
+Je kunt met een paar klikken binnen 10 minuten een virtuele machine laten draaien.
+
+00:04:49.400 --> 00:04:50.640
+Maar de portal schaalt niet.
+
+00:04:50.860 --> 00:04:54.360
+Wanneer je 10 omgevingen nodig hebt in plaats van 1, wordt de portal een blok aan je been.
+
+00:04:54.360 --> 00:04:56.400
+IAC is hoe je uit die valstrik ontsnapt.
+
+00:04:56.600 --> 00:04:57.940
+Dus, dat klinkt nuttig, toch?
+
+00:04:58.120 --> 00:05:01.620
+Maar welke tools geeft Microsoft je eigenlijk om deze blauwdruk bestanden te schrijven?
+
+00:05:01.760 --> 00:05:05.300
+De Azure IAC Toolkit, ARM, Bicep en de olifant in de kamer.
+
+00:05:05.440 --> 00:05:09.040
+Dus, welke tools geeft Microsoft je eigenlijk om deze blauwdruk bestanden te schrijven?
+
+00:05:09.180 --> 00:05:11.320
+De originele tool heet ARM Templates.
+
+00:05:11.540 --> 00:05:15.400
+ARM staat voor Azure Resource Manager en deze templates bestaan al sinds het begin.
+
+00:05:15.600 --> 00:05:20.380
+Ze zijn geschreven in JSON, een dataformaat dat er uitziet als een configuratiebestand uit 2015.
+
+00:05:20.760 --> 00:05:23.280
+Veel accolades, veel haakjes, veel inspringingen.
+
+00:05:23.280 --> 00:05:26.380
+Als je wel eens naar een JSON-bestand hebt gekeken, weet je wat ik bedoel?
+
+00:05:26.520 --> 00:05:28.760
+Het is functioneel, maar het leest niet prettig.
+
+00:05:28.920 --> 00:05:32.320
+ARM Templates worden nog steeds veel gebruikt, vooral in bedrijfsomgevingen.
+
+00:05:32.480 --> 00:05:36.120
+Grote bedrijven hebben jarenlang geïnvesteerd in het opbouwen van hun templatebibliotheken
+
+00:05:36.120 --> 00:05:37.660
+en die gaan dat werk niet zomaar weggooien.
+
+00:05:37.820 --> 00:05:41.820
+Maar als je een beginner bent, kan het bekijken van een ARM Template voor de eerste keer intimiderend zijn.
+
+00:05:42.020 --> 00:05:42.940
+Het is onslachtig.
+
+00:05:43.100 --> 00:05:44.520
+Het is makkelijk om het kapot te maken.
+
+00:05:44.740 --> 00:05:46.520
+Een ontbrekende komma en de hele boel faalt.
+
+00:05:46.700 --> 00:05:48.420
+Het met de hand schrijven ervan is pijnlijk.
+
+00:05:48.780 --> 00:05:51.260
+Microsoft erkende dit probleem, dus bouwde ze Bicep.
+
+00:05:51.260 --> 00:05:54.960
+Bicep is Microsoft's antwoord op het feit dat ARM Templates te ingewikkeld zijn.
+
+00:05:55.180 --> 00:05:59.900
+Het is een nieuwere taal die op de achtergrond compileert naar ARM Templates, maar de syntaxis is veel schoner.
+
+00:06:00.080 --> 00:06:01.600
+Het ziet eruit als echte code.
+
+00:06:01.860 --> 00:06:04.480
+Je schrijft iets als Resource MyV en Microsoft.
+
+00:06:05.500 --> 00:06:09.560
+Compute virtual machines in plaats van pagina's volgeneste JSON.
+
+00:06:10.640 --> 00:06:12.780
+Het is in de eerste plaats voor mensen ontworpen.
+
+00:06:12.980 --> 00:06:14.800
+Nu is er nog een optie waar je van zult horen.
+
+00:06:15.120 --> 00:06:15.600
+Terraform.
+
+00:06:15.600 --> 00:06:19.900
+Terraform is een tool van een bedrijf genaamd HashiCorp en het werkt met Azure en andere clouds.
+
+00:06:20.140 --> 00:06:25.740
+Als je infrastructuur moet beheren over AWS, Google Cloud en Azure tegelijk, is Terraform je beste keuze.
+
+00:06:25.920 --> 00:06:28.900
+Het is beter overdraagbaar, maar die overdraagbaarheid heeft een prijs.
+
+00:06:29.120 --> 00:06:31.640
+Terraform voegt een abstractielaag toe tussen jou en Azure.
+
+00:06:31.880 --> 00:06:36.000
+Je moet de eigen taal van Terraform, HCL, leren naast het begrijpen van Azure zelf.
+
+00:06:36.200 --> 00:06:38.960
+Het is krachtig, maar het introduceert zijn eigen complexiteit.
+
+00:06:39.160 --> 00:06:41.820
+Dus, welke moet een beginner kiezen als je alleen Azure gebruikt?
+
+00:06:42.000 --> 00:06:42.860
+Begin dan met Bicep.
+
+00:06:42.860 --> 00:06:44.760
+De reden is simpel, native integratie.
+
+00:06:44.980 --> 00:06:47.100
+Bicep is door Microsoft specifiek voor Azure gebouwd.
+
+00:06:47.240 --> 00:06:48.700
+Het heeft minder bewegende onderdelen.
+
+00:06:48.900 --> 00:06:50.840
+Het krijgt volledige ondersteuning van Microsoft.
+
+00:06:51.120 --> 00:06:54.080
+En omdat het compileert naar ARM templates, zit je nergens aan vast.
+
+00:06:54.240 --> 00:06:57.480
+Je kunt altijd later overstappen naar ruwe ARM templates als dat nodig is.
+
+00:06:57.700 --> 00:07:00.720
+Bicep is de weg van de minste weerstand voor iemand die net wil beginnen.
+
+00:07:00.940 --> 00:07:02.820
+Dit is hoe deze tools in de praktijk werken.
+
+00:07:02.980 --> 00:07:06.380
+Je schrijft een bestand, een Bicep bestand, een ARM template, wat je maar kiest.
+
+00:07:06.620 --> 00:07:08.160
+Vervolgens voer je een commando uit.
+
+00:07:08.360 --> 00:07:11.360
+Voor Bicep is dat commando as deployment group create.
+
+00:07:11.360 --> 00:07:16.540
+Azure leest je bestand, vergelijkt het met wat er al bestaat en bouwt wat ontbreekt of wijzigt wat anders is.
+
+00:07:16.740 --> 00:07:19.620
+Je hoeft Azure niet te vertellen in welke volgorde dingen moeten gebeuren.
+
+00:07:19.840 --> 00:07:20.920
+Dat zoekt het zelf uit.
+
+00:07:21.080 --> 00:07:22.560
+En hier wordt het pas echt interessant.
+
+00:07:22.900 --> 00:07:27.020
+Je kunt dit koppelen aan een CI-CD pipeline, continuous integration, continuous deployment.
+
+00:07:27.340 --> 00:07:30.360
+Dat betekent dat elke keer als je een wijziging naar je code repository bust,
+
+00:07:30.600 --> 00:07:33.660
+Azure automatisch je IAC bestand uitvoert en je infrastructuur bijwerkt.
+
+00:07:33.820 --> 00:07:38.700
+Geen handmatige stappen, niemand die inlogt op de portal, alleen code wijzigingen die automatisch naar productie stromen.
+
+00:07:38.700 --> 00:07:41.080
+Je hebt dus een bestand dat je infrastructuur beschrijft.
+
+00:07:41.200 --> 00:07:43.440
+Je kunt het uitvoeren en krijgt een consistent resultaat.
+
+00:07:43.560 --> 00:07:45.760
+Je kunt het hele proces zelfs automatiseren met een pipeline.
+
+00:07:45.940 --> 00:07:47.380
+Maar wat ontgrendelt dat nu eigenlijk?
+
+00:07:47.580 --> 00:07:49.360
+Dat is waar de dingen pas echt krachtig worden.
+
+00:07:49.600 --> 00:07:51.540
+Wat versiebeheer doet voor je Azure-omgeving?
+
+00:07:51.800 --> 00:07:53.900
+Dit is iets waar mensen niet vaak genoeg over praten.
+
+00:07:54.140 --> 00:07:56.980
+De echte superkracht van IAC is niet het template-formaat zelf.
+
+00:07:57.140 --> 00:07:59.440
+Het is niet Bicep versus ARM versus Terraform.
+
+00:07:59.640 --> 00:08:01.440
+De echte superkracht is versiebeheer.
+
+00:08:01.440 --> 00:08:07.500
+Wanneer je je IAC bestanden opslaat in een repository zoals GitHub of Azure Repos, wordt elke wijziging traceerbaar.
+
+00:08:07.720 --> 00:08:09.720
+Wie heeft wat veranderd, wanneer en waarom?
+
+00:08:09.880 --> 00:08:14.100
+Je krijgt een volledige historie van elke wijziging aan je infrastructuur vanaf dag 1.
+
+00:08:14.280 --> 00:08:16.080
+En dat betekent dat je terug kunt rollen.
+
+00:08:16.240 --> 00:08:19.200
+Als een implementatie iets kapot maakt, hoef je niet te raden wat er misging.
+
+00:08:19.380 --> 00:08:22.480
+Je hoeft niet in auditlogboeken van de portal te spitten in de hoop het antwoord te vinden.
+
+00:08:22.680 --> 00:08:26.260
+Je keert gewoon terug naar de laatst werkende versie van je IAC bestand en implementeert opnieuw.
+
+00:08:26.420 --> 00:08:27.580
+Het probleem verdwijnt.
+
+00:08:27.780 --> 00:08:30.200
+Dat is iets wat je simpelweg niet kunt doen met muisklikken.
+
+00:08:30.200 --> 00:08:32.800
+Het betekent ook dat je omgevingen consistent blijven.
+
+00:08:33.000 --> 00:08:35.580
+Dev, test en productie komen allemaal voort uit dezelfde bestanden.
+
+00:08:35.820 --> 00:08:39.340
+Geen vergelijkbare bestanden, geen bestanden die hetzelfde begonnen maar gaandeweg uit elkaar liepen.
+
+00:08:39.500 --> 00:08:40.340
+Dezelfde bestanden.
+
+00:08:40.560 --> 00:08:42.240
+Je implementeert dev vanuit je hoofdbranche.
+
+00:08:42.500 --> 00:08:45.880
+Wanneer je klaar bent voor test, implementeer je dezelfde bestanden naar het testabonnement.
+
+00:08:46.100 --> 00:08:49.260
+Wanneer je klaar bent voor productie, implementeer je diezelfde bestanden opnieuw.
+
+00:08:49.400 --> 00:08:53.400
+Elke omgeving is identiek omdat elke omgeving is gebouwd met hetzelfde blauwdrukontwerp.
+
+00:08:53.480 --> 00:08:57.640
+En omdat deze bestanden in een repository staan, kun je code reviews doen voor infrastructuur.
+
+00:08:57.640 --> 00:09:02.180
+Voordat iemand een wijziging implementeert, moet een ander teamlid ernaar kijken en deze goedkeuren.
+
+00:09:02.340 --> 00:09:04.860
+Dat vangt fouten op voordat ze ooit je omgeving bereiken.
+
+00:09:05.040 --> 00:09:09.760
+Het is hetzelfde proces dat softwareontwikkelaars voor applicatiecode gebruiken, toegepast op je Azure setup.
+
+00:09:09.900 --> 00:09:11.140
+Hier is een praktijkvoorbeeld.
+
+00:09:11.400 --> 00:09:14.540
+Iemand in je team stelt per ongeluk een storage account open voor het publiek.
+
+00:09:14.700 --> 00:09:18.900
+Zonder IAC merk je dat misschien pas als de rekening komt of als iemand je vertelt dat je data open ligt.
+
+00:09:19.120 --> 00:09:21.460
+Met IAC is die wijziging zichtbaar in de repository.
+
+00:09:21.840 --> 00:09:23.020
+Het gaat door een code review.
+
+00:09:23.020 --> 00:09:26.160
+Iemand ziet het en zegt, hé, dat storage account hoort niet openbaar te zijn.
+
+00:09:26.340 --> 00:09:29.000
+De wijziging wordt geblokkeerd voordat deze ooit de productieomgeving bereikt.
+
+00:09:29.160 --> 00:09:31.680
+En mocht het er toch doorheen glippen, dan kun je het in seconden terugdraaien.
+
+00:09:31.840 --> 00:09:33.560
+Je kunt zelfs branchestrategieën gebruiken.
+
+00:09:33.780 --> 00:09:35.660
+Wil je experimenteren met een nieuwe configuratie?
+
+00:09:35.860 --> 00:09:39.420
+Maak een aparte branche, breng je wijzigingen aan, implementeer naar een testomgeving en kijk of het werkt.
+
+00:09:39.580 --> 00:09:41.360
+Als het werkt, merge je terug naar de hoofdbranche.
+
+00:09:41.560 --> 00:09:44.120
+Als dat niet zo is, verwijder je de branche en probeer je iets anders.
+
+00:09:44.120 --> 00:09:48.100
+Je productieomgeving wordt niet aangeraakt totdat je zeker weet dat de wijziging veilig is.
+
+00:09:48.580 --> 00:09:52.060
+Consistentie is geweldig, maar IAC maakt je Azure setup ook veiliger.
+
+00:09:52.260 --> 00:09:55.860
+En dat is belangrijk of je nu in je eentje alles beheert of met een heel team.
+
+00:09:56.460 --> 00:09:58.400
+Beveiliging door ontwerp, niet bij toeval.
+
+00:09:58.640 --> 00:10:00.260
+Dit is iets wat veel mensen verrast.
+
+00:10:00.520 --> 00:10:03.700
+Wanneer je IAC gebruikt, is beveiliging niet iets wat je later toevoegt.
+
+00:10:03.900 --> 00:10:06.140
+Het zit vanaf het begin ingebakken in de schabloon.
+
+00:10:06.340 --> 00:10:10.600
+In plaats van te onthouden om encryptie in te schakelen voor elk nieuw opslagaccount, staat het al in je bestand.
+
+00:10:10.600 --> 00:10:16.360
+In plaats van te hopen dat iemand de firewall regels correct heeft geconfigureerd, zijn de regels vastgelegd en worden ze telkens afgedwongen.
+
+00:10:16.360 --> 00:10:18.440
+Dit idee heeft een naam, policy als code.
+
+00:10:18.640 --> 00:10:21.760
+Je codeert je beveiligingsregels direct in je implementatiepipeline.
+
+00:10:21.980 --> 00:10:29.660
+Dus, telkens wanneer iemand een opslagaccount probeert te implementeren, controleert de pipeline of HTTPS is ingeschakeld, encryptie aanstaat en openbare toegang is geblokkeerd.
+
+00:10:29.840 --> 00:10:32.820
+Als het schabloon niet aan die regels voldoet, mislukt de implementatie.
+
+00:10:33.020 --> 00:10:35.660
+De onveilige configuratie bereikt je omgeving nooit.
+
+00:10:35.920 --> 00:10:37.480
+Denk eens na over wat dat vervangt.
+
+00:10:37.480 --> 00:10:43.280
+Tientallen handmatige controles, iemand die eraan moet denken het juiste vakje aan te vinken, iemand anders die die vakjes later controleert.
+
+00:10:43.480 --> 00:10:44.580
+Dat verdwijnt allemaal.
+
+00:10:44.820 --> 00:10:50.720
+Eén veilig schabloon, één set beleidsregels en elke implementatie voldoet automatisch aan je beveiligingsbasislijn.
+
+00:10:50.920 --> 00:10:53.420
+Maar hier wordt het pas echt interessant, de zesde recovery.
+
+00:10:53.680 --> 00:10:56.900
+Het bestand dat je infrastructuur beschrijft, kan deze overal opnieuw opbouwen.
+
+00:10:57.100 --> 00:11:02.100
+Als een aanvaller je omgeving compromitteert, hoef je geen dagen te besteden aan uitzoeken wat ze hebben veranderd en hoe je het herstelt.
+
+00:11:02.100 --> 00:11:05.260
+Je breekt het af, je implementeert het opnieuw vanuit je IAC-bestand.
+
+00:11:05.380 --> 00:11:07.140
+Je schone omgeving is binnen minuten terug.
+
+00:11:07.360 --> 00:11:09.820
+Dat is niet mogelijk wanneer je infrastructuur handmatig is gebouwd.
+
+00:11:09.960 --> 00:11:12.400
+En omdat alles in versiebeheer staat, heb je een audit trail.
+
+00:11:12.620 --> 00:11:14.900
+Elke wijziging aan je infrastructuur wordt vastgelegd.
+
+00:11:15.040 --> 00:11:16.380
+Wie het deed, wanneer en waarom.
+
+00:11:16.560 --> 00:11:19.540
+Dat is compliance bewijs zonder dat iemand een spreadsheet hoeft in te vullen.
+
+00:11:19.740 --> 00:11:23.500
+Voor kleine teams zonder toegewijd beveiligingspersoneel is dit een enorme versterking.
+
+00:11:23.680 --> 00:11:27.880
+Je krijgt beveiligingspraktijken van bedrijfsniveau zonder een beveiligingsteam van bedrijfsniveau in te huren.
+
+00:11:27.880 --> 00:11:31.340
+Dit klinkt allemaal geweldig op papier, maar beginnen kan overweldigend voelen.
+
+00:11:31.540 --> 00:11:33.640
+Laat me je een realistisch pad vooruitgeven.
+
+00:11:33.920 --> 00:11:35.900
+Hoe te beginnen zonder iets kapot te maken?
+
+00:11:36.200 --> 00:11:38.020
+Regel 1, begin niet met productie.
+
+00:11:38.180 --> 00:11:39.720
+Ik kan dit niet genoeg benadrukken.
+
+00:11:39.880 --> 00:11:42.000
+IAC is krachtig, maar het is ook nieuw.
+
+00:11:42.120 --> 00:11:43.240
+Je zult fouten maken.
+
+00:11:43.500 --> 00:11:45.120
+Maak ze ergens waar het niet uitmaakt.
+
+00:11:45.320 --> 00:11:50.900
+Kies een klein onderdeel van je Azure-omgeving, een resource-groep met een enkele virtuele machine of een opslagaccount.
+
+00:11:51.120 --> 00:11:53.480
+Iets simpels dat al draait, iets waarvan je weet dat het werkt.
+
+00:11:53.680 --> 00:11:54.380
+Dit is de truc.
+
+00:11:54.380 --> 00:11:58.480
+De Azure-portal kan daadwerkelijk arm-schablonen genereren van je bestaande resources.
+
+00:11:58.780 --> 00:12:04.740
+Je gaat naar je resource-groep, klikt op schabloon exporteren en Azure geeft je het JSON-bestand dat alles in die groep beschrijft.
+
+00:12:04.900 --> 00:12:05.840
+Het is niet perfect.
+
+00:12:06.120 --> 00:12:10.260
+Het geëxporteerde schabloon bevat vaak dingen die je niet nodig hebt, maar het is een startpunt.
+
+00:12:10.460 --> 00:12:13.080
+Je neemt iets dat je handmatig hebt gebouwd en zet het om naar code.
+
+00:12:13.300 --> 00:12:16.580
+Dat is de reverse-engineering-benadering en het is de snelste manier om te leren.
+
+00:12:16.820 --> 00:12:18.960
+Begin met Bicep en de gratis Azure-tools.
+
+00:12:18.960 --> 00:12:25.200
+Microsoft heeft een VS-code-extensie voor Bicep die syntax-highlighting automatisch aanvullen en een visueel voorbeeld van je ontwerp biedt.
+
+00:12:25.280 --> 00:12:29.380
+Je kunt je virtuele netwerk en subnetten als een diagram bekijken voordat je iets implementeert.
+
+00:12:29.560 --> 00:12:32.620
+Dat maakt het veel makkelijker om te begrijpen wat je code daadwerkelijk doet.
+
+00:12:32.820 --> 00:12:34.680
+Gebruik een apart abonnement voor het testen.
+
+00:12:34.860 --> 00:12:37.980
+De meeste Azure-abonnementen hebben bestedingslimieten en gratis te goeden.
+
+00:12:38.220 --> 00:12:39.280
+Maak een testabonnement aan.
+
+00:12:39.620 --> 00:12:42.720
+Implementeer je IAC daar, maak dingen kapot, repareer ze en leer.
+
+00:12:42.900 --> 00:12:46.200
+Wanneer je er vertrouwen in hebt, ga je over naar een niet-productie-abonnement.
+
+00:12:46.520 --> 00:12:47.740
+Productie komt als laatste.
+
+00:12:47.960 --> 00:12:49.660
+Dit is het deel dat je misschien zal verrassen.
+
+00:12:49.860 --> 00:12:52.140
+Je hoeft geen software-engineer te zijn om dit te doen.
+
+00:12:52.320 --> 00:12:54.260
+De rol van citizen-developer is heel reëel.
+
+00:12:54.500 --> 00:12:58.420
+Bicep is ontworpen voor mensen die Azure-infrastructuur beheren, niet voor professionele programmeurs.
+
+00:12:58.600 --> 00:12:59.360
+Het is leesbaar.
+
+00:12:59.580 --> 00:13:01.920
+Het heeft minder poespas dan traditionele programmeertalen.
+
+00:13:02.120 --> 00:13:04.120
+Het is volledig gericht op Azure en niets anders.
+
+00:13:04.340 --> 00:13:07.800
+Als je begrijpt wat een virtuele machine is, kun je leren hoe je er een beschrijft in Bicep.
+
+00:13:07.800 --> 00:13:11.940
+Je eerste praktische project, automatiseer het afbreken en opnieuw opbouwen van je ontwikkelomgeving.
+
+00:13:12.180 --> 00:13:17.340
+Schrijf een Bicep bestand dat je ontwikkelomgeving opzet, implementeer het, gebruik het, breek het af en implementeer het opnieuw.
+
+00:13:17.560 --> 00:13:20.020
+Doe dat een paar keer totdat het proces routine voelt.
+
+00:13:20.260 --> 00:13:23.700
+Alleen die oefening al leert je meer over IAC dan welke handleiding dan ook.
+
+00:13:23.840 --> 00:13:25.860
+Een paar algemene adviezen voor beginners.
+
+00:13:26.140 --> 00:13:27.460
+Commit vroeg en commit vaak.
+
+00:13:27.660 --> 00:13:30.700
+Elke keer dat je een deel van je template werkend hebt, sla je het op in je repository.
+
+00:13:31.140 --> 00:13:33.080
+Dat geeft je checkpoints waar je naar terug kunt keren.
+
+00:13:33.260 --> 00:13:35.900
+En voer altijd het preview-commando uit voordat je implementeert.
+
+00:13:35.900 --> 00:13:37.540
+In Bicep is dat what-if.
+
+00:13:37.540 --> 00:13:40.980
+Het laat je precies zien wat er zal veranderen voordat er daadwerkelijk iets wijzigt.
+
+00:13:41.180 --> 00:13:42.020
+Geen verrassingen.
+
+00:13:42.260 --> 00:13:45.840
+Zelfs met de beste bedoelingen zijn er een paar valkuilen waar beginners in trappen.
+
+00:13:46.080 --> 00:13:48.340
+Laat me je wat nachtelijke deba-sessies besparen.
+
+00:13:48.580 --> 00:13:51.360
+Drie fouten die je zullen achtervolgen en hoe je ze kunt vermijden.
+
+00:13:51.560 --> 00:13:54.360
+Fout nummer 1 is de klassieker, het hardcoderen van secrets.
+
+00:13:54.580 --> 00:13:55.320
+Je hebt haast.
+
+00:13:55.500 --> 00:13:59.420
+Je moet een template werkend krijgen, dus zet je het database-wachtwoord rechtstreeks in het bestand.
+
+00:13:59.580 --> 00:14:00.060
+Het werkt.
+
+00:14:00.260 --> 00:14:00.920
+Je gaat verder.
+
+00:14:00.920 --> 00:14:04.640
+En nu staat je wachtwoord in je IAC-repository, zichtbaar voor iedereen met toegang.
+
+00:14:04.960 --> 00:14:06.340
+Achteraf gezien overduidelijk, toch?
+
+00:14:06.500 --> 00:14:09.880
+Maar het is ongelooflijk makkelijk om te doen als je gefocust bent op het werkend krijgen van iets.
+
+00:14:10.080 --> 00:14:11.660
+De oplossing is Azure Key Vault.
+
+00:14:11.940 --> 00:14:16.400
+Zowel Bicep als ARM templates kunnen secrets rechtstreeks uit Key Vault halen tijdens de implementatie.
+
+00:14:16.560 --> 00:14:20.700
+Je bestand zegt, haal het wachtwoord uit deze kluis in plaats van het daadwerkelijke wachtwoord te bevatten.
+
+00:14:20.860 --> 00:14:22.920
+Het secret raakt nooit je repository aan.
+
+00:14:23.180 --> 00:14:26.980
+Zet nooit wachtwoorden, connection strings of API-sleutels in je IAC-bestanden.
+
+00:14:27.220 --> 00:14:28.820
+Gebruik elke keer Key Vault.
+
+00:14:29.260 --> 00:14:32.480
+Fout nummer 2 is IAC behandelen als een eenmalig script.
+
+00:14:32.680 --> 00:14:36.260
+Je schrijft een template, implementeert het, het werkt en je kijkt er nooit meer naar om.
+
+00:14:36.480 --> 00:14:38.020
+Zes maanden later gaat er iets stuk.
+
+00:14:38.180 --> 00:14:40.900
+Je opent het bestand en hebt geen idee wat de helft ervan doet.
+
+00:14:41.140 --> 00:14:43.420
+Die parameter genaamd param1, geen idee.
+
+00:14:43.680 --> 00:14:46.220
+Die resource met die cryptische naam, geen flauw benul.
+
+00:14:46.600 --> 00:14:50.000
+Schrijf je IAC alsof iemand anders het over zes maanden moet onderhouden,
+
+00:14:50.000 --> 00:14:52.160
+want die iemand anders bent waarschijnlijk jijzelf.
+
+00:14:52.300 --> 00:14:53.520
+En dan ben je alles vergeten.
+
+00:14:53.680 --> 00:14:54.480
+Voeg commentaar toe.
+
+00:14:54.680 --> 00:14:56.800
+Gebruik beschrijvende namen in plaats van afkortingen.
+
+00:14:57.040 --> 00:14:58.660
+Hou bestanden klein en gefocust op één ding.
+
+00:14:58.840 --> 00:15:02.040
+Een bicep-bestand dat een virtueel netwerk maakt, moet over virtuele netwerken gaan,
+
+00:15:02.240 --> 00:15:03.280
+niet over het hele datacenter.
+
+00:15:03.460 --> 00:15:06.260
+Fout nummer 3 is de pipeline omzeilen voor snelle oplossingen.
+
+00:15:06.440 --> 00:15:07.940
+De portal is altijd verleidelijk.
+
+00:15:08.100 --> 00:15:09.440
+Je moet één instelling wijzigen.
+
+00:15:09.620 --> 00:15:11.520
+Het zou vijf minuten kosten om de template aan te passen,
+
+00:15:11.680 --> 00:15:13.340
+te committen en te implementeren via de pipeline.
+
+00:15:13.520 --> 00:15:17.100
+Of je logt gewoon in op de portal, klikt drie keer en bent in 30 seconden klaar.
+
+00:15:17.100 --> 00:15:19.080
+Die snelle wijziging creëert, drift.
+
+00:15:19.300 --> 00:15:21.820
+Je code zegt het ene, de realiteit zegt het andere.
+
+00:15:22.020 --> 00:15:24.100
+De volgende keer dat je vanuit je template implementeert,
+
+00:15:24.100 --> 00:15:26.480
+probeert Azure je handmatige wijziging ongedaan te maken?
+
+00:15:26.760 --> 00:15:29.780
+Of erger nog, het merkt de drift niet op en je omgevingen lopen langzaam uiteen
+
+00:15:29.780 --> 00:15:31.780
+totdat productie zich totaal anders gedraagt dan def.
+
+00:15:31.880 --> 00:15:33.080
+De discipline is simpel.
+
+00:15:33.340 --> 00:15:34.660
+Breng de wijziging aan in de code.
+
+00:15:34.660 --> 00:15:37.900
+Implementeer via de pipeline, zelfs als het vijf minuten extra kost.
+
+00:15:38.100 --> 00:15:40.340
+Die vijf minuten besparen je later uren aan debuggen.
+
+00:15:40.340 --> 00:15:44.040
+Eén bonustip, voer altijd het previewcommando uit voordat je wijzigingen doorvoert.
+
+00:15:44.180 --> 00:15:45.640
+In Bicep is dat what-if.
+
+00:15:45.860 --> 00:15:48.680
+Het laat je precies zien wat er wordt gemaakt, gewijzigd of verwijderd.
+
+00:15:48.820 --> 00:15:51.100
+Geen verrassingen, je ziet de impact voordat het gebeurt.
+
+00:15:51.320 --> 00:15:52.840
+Dat is IAC in begrijpelijke taal.
+
+00:15:53.040 --> 00:15:54.340
+Geen jargon, geen marketingpraatjes.
+
+00:15:55.220 --> 00:15:57.680
+Gewoon een praktisch hulpmiddel dat je Azure leven makkelijker maakt.
+
+00:15:57.840 --> 00:15:59.520
+Het enige om deze week te proberen.
+
+00:15:59.720 --> 00:16:00.940
+Dus, dit hebben we behandeld.
+
+00:16:01.120 --> 00:16:05.360
+IAC verandert je Azure-infrastructuur in een versiebeheerd, herhaalbaar en veilig blauwdruk.
+
+00:16:05.360 --> 00:16:08.980
+Eén bestand dat alles beschrijft, elke keer op dezelfde manier geïmplementeerd.
+
+00:16:09.140 --> 00:16:10.260
+Je uitdaging voor deze week?
+
+00:16:10.380 --> 00:16:12.980
+Exporteer één bestaande Azure resource als ARM-template.
+
+00:16:13.140 --> 00:16:14.380
+Open het in VS-code.
+
+00:16:14.600 --> 00:16:16.000
+Kijk of je begrijpt wat het doet.
+
+00:16:16.240 --> 00:16:19.380
+Die ene oefening leert je meer dan welke uitleg ik ook zou kunnen geven.
+
+00:16:19.600 --> 00:16:23.960
+De volgende keer in deze serie lopen we stap voor stap door het schrijven van je eerste Bicep-bestand.
+
+00:16:24.160 --> 00:16:29.340
+Abonneer je op je favoriete podcast-platform en deel dit met een teamgenoot die nog steeds alles in de portal klikt.
+
+00:16:29.520 --> 00:16:59.500
+Bedankt voor het kijken.

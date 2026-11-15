@@ -1,0 +1,919 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:07.080
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI, Azure, dan para tokoh yang membentuk masa depan kerja.
+
+00:00:07.980 --> 00:00:11.960
+Januari ini, M365 Con kembali dan kami hadir lebih besar.
+
+00:00:12.820 --> 00:00:18.140
+Bergabunglah untuk sesi langsung, demo dunia nyata, dan pengetahuan praktis dari MVP serta pakar industri dunia.
+
+00:00:18.740 --> 00:00:21.160
+Tanpa celet umum, tanpa jargon yang bertele-tele.
+
+00:00:21.880 --> 00:00:23.200
+Kami menangani tantangan nyata.
+
+00:00:23.200 --> 00:00:28.680
+Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi, B.
+
+00:00:28.680 --> 00:00:34.300
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.500 --> 00:00:40.140
+Selama 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.900 --> 00:00:44.320
+Tonton langsung, dan tawawasan praktis kembali ke organisasi Anda.
+
+00:00:45.200 --> 00:00:48.860
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.380 --> 00:00:50.480
+Pendaturan sudah dibuka sekarang.
+
+00:00:51.660 --> 00:00:55.480
+Kunjungi M365 Con.net dan amankan tempat Anda hari ini.
+
+00:00:55.480 --> 00:00:58.340
+Itu M365 Con.net
+
+00:00:58.340 --> 00:01:03.360
+Bergabunglah sekarang di M365 Con.net, dan sampai jumpa.
+
+00:01:03.740 --> 00:01:04.800
+Langsung di bulan Januari.
+
+00:01:05.300 --> 00:01:07.260
+Selamat datang di episode lain dari Microsoft Knowledge Nuggets.
+
+00:01:07.600 --> 00:01:08.680
+Saya pembawa acara Anda ambil kopiter.
+
+00:01:08.920 --> 00:01:13.240
+Bagaimana jika Anda bisa merusak aplikasi cloud Anda sendiri dengan sengaja secara terkendali agar menjadi lebih kuat.
+
+00:01:13.480 --> 00:01:17.020
+Terdengar terbalik, tapi logikanya sama dengan yang digunakan petugas pemedam kebakaran saat melakadak.
+
+00:01:17.020 --> 00:01:19.660
+Mereka sengaja menyalakan api kecil untuk membersihkan semak kering,
+
+00:01:19.860 --> 00:01:22.220
+jadi saat kebakaran hutan sungguhan datang, tidak ada lagi yang bisa terbakar.
+
+00:01:22.620 --> 00:01:24.600
+Itulah yang dilakukan Azure Castedio untuk aplikasi cloud-an.
+
+00:01:24.600 --> 00:01:27.500
+Di akhir episode ini, Anda akan memahami apa itu layanan ini,
+
+00:01:27.760 --> 00:01:28.680
+mengapa Anda ingin menggunakannya,
+
+00:01:29.000 --> 00:01:32.100
+dan bagaimana ini membantu Anda membangun sistem yang tidak tumbang saat terjadi masalah.
+
+00:01:32.640 --> 00:01:34.740
+Jadi ambil kopi Anda, dan mari kita mulai dengan masalah.
+
+00:01:35.680 --> 00:01:36.080
+Masalahnya.
+
+00:01:36.840 --> 00:01:38.380
+Mengapa pengujian tradisional tidak cukup?
+
+00:01:39.120 --> 00:01:40.380
+Gini masalahnya dengan pengujian tradisional.
+
+00:01:40.900 --> 00:01:43.780
+Pengujian ini memeriksa apakah perangkat lunak Anda berfungsi sesuai desain log.
+
+00:01:44.240 --> 00:01:47.340
+Anda menulis tes, menjalankannya, dan jika keluarannya cocok, Anda dulu.
+
+00:01:47.340 --> 00:01:52.280
+Bagus untuk melangkap bug, tetapi gagal mendeteksi perilaku sistem Anda saat terjadi kegagalan tak terduga,
+
+00:01:52.400 --> 00:01:56.080
+seperti time-out jaringan, mesin virtual yang mati, atau seluruh zona ketersediaan yang padam.
+
+00:01:57.520 --> 00:01:58.920
+Aplikasi cloud modern tidak lagi sederhana.
+
+00:01:59.320 --> 00:02:01.660
+Mereka adalah sistem terdistribusi yang berkomunikasi dengan database,
+
+00:02:01.820 --> 00:02:04.580
+cace, layanan identitas, api pihak ketiga, dan layanan mikro lainnya,
+
+00:02:04.640 --> 00:02:06.260
+dan semua bagian itu memiliki ketergantungan tersembunyi.
+
+00:02:06.980 --> 00:02:09.280
+Satu kegalan kecil bisa menyebabkan efek domino ke seluruh sistem.
+
+00:02:09.540 --> 00:02:13.160
+Database melambat, aplikasi mengalami time-out, penyeimbang beban menandainya tidak sehat,
+
+00:02:13.160 --> 00:02:16.700
+lalu lintas dialihkan, instan selain menjadi kewalahan, dan tiba-tiba seluruh aplikasi Anda mati.
+
+00:02:17.220 --> 00:02:21.140
+Pengujian tradisional tidak menangkap itu karena menguji dalam kondisi sempurna dengan semuanya tersedia,
+
+00:02:21.340 --> 00:02:24.260
+latensi jaringan nol, dan tidak ada yang mematikan VM selama uji coba Anda.
+
+00:02:25.140 --> 00:02:28.200
+Jadi Anda melakukan diploma keproduksi dengan percaya diri, lalu kenyataan pahit menyapa.
+
+00:02:28.560 --> 00:02:30.120
+Dan rasa percaya diri yang salah itu berbahaya,
+
+00:02:30.200 --> 00:02:34.040
+karena itulah perbedaan antara mengetahui sistem Anda berfungsi dan mengetahui sistem Anda berfungsi dan memperbaikasi.
+
+00:02:34.040 --> 00:02:35.780
+Dan disitulah kawas engineering berperan.
+
+00:02:36.400 --> 00:02:37.480
+Apa sebenarnya kawas engineering itu?
+
+00:02:38.040 --> 00:02:39.700
+Kawas engineering adalah sebuah metode praktis.
+
+00:02:43.160 --> 00:02:45.660
+Bagaimana sistem bereaksi? Ini tidak terjadi di laboratorium atau simulasi,
+
+00:02:46.080 --> 00:02:47.400
+ini terjadi pada sumber daya Anda yang sebenarnya.
+
+00:02:48.000 --> 00:02:50.280
+Idenya sederhana. Anda mulai dengan sebuah hipotesis,
+
+00:02:50.420 --> 00:02:55.040
+seperti jika kita kehilangan satu mesin virtual, penyeimbang beban harus tetap mengarahkan lalu lintas ke instansi yang tersisa.
+
+00:02:55.520 --> 00:02:58.360
+Kemudian Anda menjalankan eksperit. Anda mematikan VM terjadi, melihat apa yang terjadi.
+
+00:02:58.640 --> 00:03:02.460
+Apakah penyeimbang beban melakukan tugasnya? Apakah aplikasi terpercaya? Apakah peringatan Anda berfungsi dengan?
+
+00:03:02.460 --> 00:03:05.120
+Anda mengukur segalanya, lalu Anda memperbaiki apa yang urus.
+
+00:03:06.060 --> 00:03:08.720
+Begini masalahnya. Kawas engineering bukanlah hancuran acak.
+
+00:03:08.720 --> 00:03:12.200
+Bukan berarti seorang pengembang masuk ke ruang server dan mencapai kabel untuk bersenang-senang.
+
+00:03:12.640 --> 00:03:14.900
+Ini bersifat ilmiah dapat diulang dan dibatasi oleh keamanan.
+
+00:03:15.340 --> 00:03:19.060
+Anda menentukan radius dampak dan mengontrol dengan tepat apa yang gagal, kapan dan berapa lama.
+
+00:03:19.540 --> 00:03:20.860
+Dan yang terpenting Anda belajar dari ini.
+
+00:03:21.260 --> 00:03:22.520
+Setiap eksperimen memberi Anda buku.
+
+00:03:22.900 --> 00:03:25.500
+Entah hipotesis Anda benar dan sistem Anda tangguh atau salah,
+
+00:03:25.980 --> 00:03:27.660
+dan Anda menemukan kelemahan untuk diperbaiki.
+
+00:03:28.180 --> 00:03:28.960
+Bagaimanapun Anda tetap.
+
+00:03:29.380 --> 00:03:32.300
+Tantangannya adalah membangun perangkat kaos engineering sendiri itu sulit.
+
+00:03:32.760 --> 00:03:35.540
+Anda harus menulis skrip untuk mematikan VM, menyuntikkan tekanan CPU,
+
+00:03:35.540 --> 00:03:39.100
+memblokir lalu lintas jaringan, dan mengatur semua itu dengan aman dan berulang.
+
+00:03:39.440 --> 00:03:42.920
+Itu pekerjaan yang banyak, dan itulah mengapa Azure membangun layanan terkelola untuk menangani.
+
+00:03:43.360 --> 00:03:44.500
+Memperkenalkan Azure Chaos Studio.
+
+00:03:45.000 --> 00:03:47.100
+Azure Chaos Studio adalah layanan terkelola sepenuhnya
+
+00:03:47.100 --> 00:03:49.900
+untuk menjalankan eksperimen kaos langsung pada sumber daya azuran.
+
+00:03:50.360 --> 00:03:54.620
+Tanpa skrip khusus, tanpa alat pihak ketiga, tanpa membangun platform injeksi kegagalan Anda sendiri.
+
+00:03:55.180 --> 00:03:56.780
+Semuanya ada di portal Azure siap digunakan.
+
+00:03:57.300 --> 00:03:58.000
+Begini cara kerjanya.
+
+00:03:58.340 --> 00:04:00.520
+Chaos Studio memberi Anda dua cara untuk menentikan kesalahan.
+
+00:04:00.760 --> 00:04:03.360
+Kesalah langsung layanan berjalan melalui bidang kontrol Azure itu sendiri.
+
+00:04:03.360 --> 00:04:07.600
+Anda memerintahkan Chaos Studio untuk mematikan VM dan ia melakukannya melalui api milik Azure.
+
+00:04:07.920 --> 00:04:08.560
+Tidak perlu agen.
+
+00:04:09.240 --> 00:04:12.060
+Kesalahan berbasis agen menginstal agen kecil di dalam musim virtual Anda.
+
+00:04:12.560 --> 00:04:17.140
+Kemudian agen itu dapat meningkatkan CPU hingga 100%, memenuhi memori, atau mematikan proses tertentu.
+
+00:04:17.620 --> 00:04:20.740
+Ini memungkinkan Anda mensimulasikan masalah yang terjadi di dalam sistem operasi,
+
+00:04:20.840 --> 00:04:21.820
+bukan hanya di tingkat sumber daya.
+
+00:04:22.200 --> 00:04:22.760
+Ini analoginya.
+
+00:04:23.280 --> 00:04:24.800
+Bayangkan Anda memiliki gedung kantor yang besar.
+
+00:04:25.260 --> 00:04:27.240
+Anda ingin tahu apakah tangga darurat Anda benar-benar berfungsi.
+
+00:04:27.540 --> 00:04:29.280
+Menunggu kebakaran nyata adalah ide yang buruk.
+
+00:04:29.280 --> 00:04:31.120
+Anda mempekerjakan timurang-gulangan pencana laksus.
+
+00:04:31.120 --> 00:04:35.440
+Mereka datang, menutup tangga, menyimulasikan asap di lantai tiga, dan mengamati reaksi orang-orang.
+
+00:04:35.700 --> 00:04:36.320
+Itulah Chaos Studio.
+
+00:04:36.800 --> 00:04:37.800
+Ini adalah tim penanggulangan pencana.
+
+00:04:38.200 --> 00:04:40.140
+Anda memanggil mereka, mereka melakukan simulasi,
+
+00:04:40.220 --> 00:04:43.120
+dan Anda tahu apakah gedung Anda aman sebelum keadaan darurat yang nyata terjadi.
+
+00:04:43.740 --> 00:04:46.780
+Chaos Studio mendukung berbagai sumber daya Azure, mesin virtual,
+
+00:04:47.060 --> 00:04:49.980
+set skala VM, kluster Azure Kubernetes Service,
+
+00:04:50.380 --> 00:04:53.820
+Azure Cosmos DB, Azure Cosmos DB, Azure KC4 Redis,
+
+00:04:54.000 --> 00:04:54.940
+grup keamalan jaringan,
+
+00:04:54.940 --> 00:04:57.620
+dan banyak lagi mustaka kesalahan nyata semutam.
+
+00:04:57.620 --> 00:05:02.260
+Jadi, baik Anda menjalankan aplikasi dua tingkat yang sederhana atau arsitektur layanan mikro yang kompleks di AKS,
+
+00:05:02.380 --> 00:05:03.000
+Anda bisa mengujinya.
+
+00:05:03.500 --> 00:05:05.920
+Ika berbaiknya, Anda tidak perlu membangun alat khusus apapun.
+
+00:05:06.480 --> 00:05:10.800
+Semuanya tersedia melalui portal Azure, CLI, REST API, templat ARM, atau WICEP.
+
+00:05:11.260 --> 00:05:14.520
+Anda dapat mendefinisikan eksperimen sebagai kode dan mengintegrasikannya ke dalam pencarapanan.
+
+00:05:14.980 --> 00:05:15.860
+Namun, jangan terburu-buru.
+
+00:05:16.420 --> 00:05:18.700
+Pertama, mari kita bedah bagaimana eksperimen ini disusun.
+
+00:05:19.280 --> 00:05:21.820
+Blok penyusunnya, target, langkah, cabang, tindakan.
+
+00:05:24.480 --> 00:05:25.040
+Apa itu target?
+
+00:05:25.500 --> 00:05:27.920
+Ini hanyalah sumber daya Azure yang ingin Anda jalankan pengujian kesalahan.
+
+00:05:27.920 --> 00:05:30.500
+Anda membuka kaos studio, temukan sumber daya Anda.
+
+00:05:30.700 --> 00:05:33.500
+VM, set skala, kluster AKS, lalu Anda memasukkannya.
+
+00:05:34.060 --> 00:05:35.580
+Itu berarti Anda memberitahu kaos studio.
+
+00:05:35.980 --> 00:05:37.580
+Sumber daya ini tersedia untuk eksperimen.
+
+00:05:38.040 --> 00:05:38.500
+Ini kuncinya.
+
+00:05:39.220 --> 00:05:43.160
+Saat Anda memasukkan target, Anda juga memilih kesalahan mana yang diizinkan pada sumber daya tersebut.
+
+00:05:43.460 --> 00:05:44.320
+Anda tidak mengaktifkan semua.
+
+00:05:44.620 --> 00:05:45.300
+Anda menikmati.
+
+00:05:45.380 --> 00:05:45.860
+Tekanan CPU.
+
+00:05:46.600 --> 00:05:47.340
+Mematikan total VM.
+
+00:05:47.800 --> 00:05:48.560
+Mungkin tidak untuk produksi.
+
+00:05:48.880 --> 00:05:49.420
+Anda memutuskan.
+
+00:05:49.780 --> 00:05:51.840
+Setelah target dimasukkan, Anda membuat eksperimen.
+
+00:05:52.280 --> 00:05:53.400
+Anggap eksperimen sebagai cetak biru.
+
+00:05:53.400 --> 00:05:58.400
+Ini menjelaskan dengan tepat kegagalan apa yang akan disuntikan, dalam urutan apa, terhadap target mana, dan berapa lama.
+
+00:05:58.960 --> 00:06:00.040
+Anda tidak hanya sekedar menurut sesuatu.
+
+00:06:00.660 --> 00:06:02.240
+Anda menentukan seluruh skenario sejak awal.
+
+00:06:02.780 --> 00:06:05.520
+Eksperimen memiliki struktur sederhana langkah cabang yang tindakan.
+
+00:06:06.040 --> 00:06:06.960
+Langkah-langkah satu demi satu.
+
+00:06:07.500 --> 00:06:08.960
+Langkah satu selesai, lalu langkah dua dimulai.
+
+00:06:09.080 --> 00:06:09.640
+Lalu langkah tiga.
+
+00:06:10.180 --> 00:06:11.400
+Beginilah cara Anda memudilkan dimasukkan.
+
+00:06:11.680 --> 00:06:14.920
+Pertama, menurunkan kualitas jaringan, lalu menekan CPU, kemudian menentikan VI.
+
+00:06:15.140 --> 00:06:16.640
+Setiap langkah adalah fase dalam skenario Anda.
+
+00:06:16.780 --> 00:06:19.540
+Di dalam setiap langkah, Anda bisa memiliki satu berapa cabang.
+
+00:06:19.540 --> 00:06:20.920
+Di sinilah segalanya menjadi menarik.
+
+00:06:21.200 --> 00:06:22.300
+Cabang berjalan secara paralel.
+
+00:06:22.620 --> 00:06:26.520
+Jadi, di dalam langkah satu, Anda bisa memiliki cabang A yang menambahkan latensi kebasis data,
+
+00:06:26.700 --> 00:06:29.280
+dan cabang B yang meningkatkan CPU pada server web keduanya secara bersama.
+
+00:06:29.800 --> 00:06:33.620
+Ini memungkinkan Anda menyimulasikan skenario multi kesalahan kompleks yang mencerminkan insiden dunia nyata.
+
+00:06:34.040 --> 00:06:34.640
+Anda memiliki tindakan.
+
+00:06:35.140 --> 00:06:36.220
+Tindakan adalah kesalahan yang sebenarnya.
+
+00:06:36.680 --> 00:06:41.520
+Tekanan CPU, kehabisan memori, pemadaman VM, penundaan jaringan, blokir DNS, mematikan proses.
+
+00:06:42.280 --> 00:06:44.400
+Setiap tindakan menargetkan sumber daya tertentu.
+
+00:06:44.820 --> 00:06:48.360
+Dan sekali lagi, Anda hanya dapat menggunakan tindakan yang telah Anda aktifkan pada target tersebut.
+
+00:06:48.360 --> 00:06:49.300
+Belajari pengaman Anda.
+
+00:06:49.620 --> 00:06:53.400
+Jika Anda tidak mengaktifkan pemadaman VM pada target, eksperimen tidak akan menjalankan tindakan itu.
+
+00:06:53.700 --> 00:06:54.680
+Jadi, alur kerjanya seperti ini.
+
+00:06:55.040 --> 00:06:56.060
+Lakukan umpur di peta terkait.
+
+00:06:56.280 --> 00:06:58.000
+Aktifkan kesalahan yang Anda rasa nyaman untuk digunakan.
+
+00:06:58.240 --> 00:07:01.280
+Buat eksperimen dengan langkah, cabang, dan tindakan, lalu jalankan.
+
+00:07:01.520 --> 00:07:04.200
+Namun sebelum kita mulai menjalankannya, ada sesuatu yang penting untuk dipahami.
+
+00:07:04.560 --> 00:07:07.140
+Saat kau studio menjalankan eksperimen, ia tidak menyimulasikan apapun.
+
+00:07:07.460 --> 00:07:08.880
+Ia benar melakukan hal-hal ini pada sumber daya.
+
+00:07:09.400 --> 00:07:10.500
+Tekanan CPU yang nyata.
+
+00:07:11.340 --> 00:07:12.560
+Pemadaman VM adalah pemenangnya.
+
+00:07:12.940 --> 00:07:13.720
+Belah tujuan utamanya.
+
+00:07:13.720 --> 00:07:16.720
+Anda menguji bagaimana sistem Anda berperilaku dalam kondisi kegagalan yang sebenarnya.
+
+00:07:16.980 --> 00:07:18.000
+Dan itu berarti Anda harus berhati-hati.
+
+00:07:18.360 --> 00:07:20.860
+Jadi, mari kita pelajari eksperimen nyata dan melihat bagaimana semuanya bekerja.
+
+00:07:21.500 --> 00:07:23.000
+Menjalankan eksperimen kaos pertamaan.
+
+00:07:23.480 --> 00:07:24.140
+Mari kita buat nyata.
+
+00:07:24.560 --> 00:07:28.900
+Bayangkan Anda memiliki aplikasi web yang berjalan di tiga mesin virtual di dalam virtual machine scale set.
+
+00:07:29.620 --> 00:07:31.420
+Setiap VM berada di zona ketersediaan yang berbeda.
+
+00:07:32.120 --> 00:07:34.860
+Anda memiliki load balancer di depan yang mendistribusikan lalu lintas ke ketik.
+
+00:07:35.260 --> 00:07:36.040
+Potesisnya sederhana.
+
+00:07:36.040 --> 00:07:43.660
+Jika kita kehilangan satu zona ketersediaan, penuh load balancer harus mengalihkan lalu lintas ke dua VM sisanya dan aplikasi tetap tersedia.
+
+00:07:44.440 --> 00:07:46.020
+Anda meranjang eksperimen dengan dua langkah.
+
+00:07:46.740 --> 00:07:50.900
+Langkah satu, beri tekanan pada dua dari tiga VM dengan CPU 95% selama lima menit.
+
+00:07:51.440 --> 00:07:54.440
+Itu mensimulasikan skenario tetangga emising atau proses yang tidak terkendali.
+
+00:07:55.080 --> 00:07:57.620
+Langkah dua, matikan tiba-tiba semua VM di zona dua.
+
+00:07:58.320 --> 00:07:59.760
+Itu mensimulasikan pemadaman zona yang nyata.
+
+00:08:00.380 --> 00:08:02.320
+Anda menjalankan eksperimen dan kemudian Anda mengamati apa yang ini.
+
+00:08:02.320 --> 00:08:03.420
+Ini yang akan Anda lihat.
+
+00:08:03.880 --> 00:08:07.120
+Dalam lima menit pertama, dua VM meloncak hingga 100% CPU.
+
+00:08:07.660 --> 00:08:09.620
+VM ketiga tetap normal karena Anda tidak menarkitkannya.
+
+00:08:10.020 --> 00:08:11.300
+Dashboard pemantauan Anda menyala.
+
+00:08:11.480 --> 00:08:12.200
+Peringatan berbunyi.
+
+00:08:12.340 --> 00:08:14.780
+Load balancer menyadari bahwa dua VM tersebut sedang kesulitan.
+
+00:08:14.940 --> 00:08:17.800
+Tetapi karena secara teknis masih berjalan, ia tetap mengirimkan lalu lintas ke sana.
+
+00:08:18.120 --> 00:08:19.540
+Aplikasi Anda melambat tetapi tidak offline.
+
+00:08:20.040 --> 00:08:20.460
+Menarik.
+
+00:08:20.900 --> 00:08:21.760
+Anda sudah mempelajari slot.
+
+00:08:22.280 --> 00:08:23.080
+Dan langkah dua dimulai.
+
+00:08:23.480 --> 00:08:26.600
+VM di zona dua dimatikan secara tiba-tiba, bukan dengan rapi dan tanpa peringatan.
+
+00:08:26.960 --> 00:08:27.780
+Mereka menghilang begitu saja.
+
+00:08:28.060 --> 00:08:30.620
+Satu dua VM yang tertekan itu ada di zona tersebut, jadi ia hilang.
+
+00:08:30.620 --> 00:08:34.160
+Load balancer melihat pemeriksaan kesehatan gagal, menghapusnya dari kumpulan back-end,
+
+00:08:34.260 --> 00:08:36.440
+dan mengarahkan semua lalu lintas ke VM sehat yang tersisa.
+
+00:08:36.880 --> 00:08:37.540
+Aplikasi Anda tepap.
+
+00:08:37.820 --> 00:08:38.560
+Protesis terbukti.
+
+00:08:39.420 --> 00:08:40.720
+Namun inilah hal yang mungkin tidak ada dulu.
+
+00:08:41.340 --> 00:08:43.640
+VM yang tersisa sekarang harus menangani 100% grafik.
+
+00:08:44.020 --> 00:08:47.100
+Jika Anda tidak memiliki kapasitas yang cukup untuk menyerap beban tersebut, latensiakan.
+
+00:08:47.620 --> 00:08:50.560
+Mungkin aplikasi tetap daring secara teknis, tetapi pengguna merasakan dampaknya.
+
+00:08:50.900 --> 00:08:51.680
+Lalu ada sebuah tempat.
+
+00:08:51.760 --> 00:08:54.880
+Anda sekarang tahu Anda butuh lebih banyak ruang atau penskalaan otomatis yang lebih cepat.
+
+00:08:55.160 --> 00:08:56.340
+Dan ingat, ini bukan simulasi.
+
+00:08:56.340 --> 00:09:01.020
+Saat Kaos Studio menjalankan eksperimen ini, VM tersebut benar-benar mencapai 90 CCPU.
+
+00:09:01.600 --> 00:09:03.200
+Pemadaman zona 2 itu adalah pemadaman nyata.
+
+00:09:03.480 --> 00:09:07.540
+VM berhenti penyeimbang beban menyeimbangkan ulang dan aplikasi Anda bertahan atau tidak.
+
+00:09:07.860 --> 00:09:08.360
+Itu semua ya.
+
+00:09:08.680 --> 00:09:09.420
+Anda tidak serang depan.
+
+00:09:09.740 --> 00:09:12.540
+Anda mengamati perilaku nyata di bawah kondisi kegagalan nyata.
+
+00:09:12.960 --> 00:09:15.060
+Anda belajar apakah aplikasi Anda tetap berjalan atau tumbang.
+
+00:09:15.420 --> 00:09:17.660
+Dan jika tumbang, Anda memperbaikinya sebelum pelanggan Anda menyadari.
+
+00:09:18.320 --> 00:09:19.880
+Namun kekuatan ini disertai dengan tanggung jawab.
+
+00:09:20.580 --> 00:09:21.340
+Anda harus berhati-hati.
+
+00:09:21.340 --> 00:09:24.360
+Utamakan keselamatan, hindari gangguan yang tidak direncanakan.
+
+00:09:24.880 --> 00:09:27.320
+Kaos Studio memiliki banyak mekanisme keselamatan yang terpasang.
+
+00:09:27.780 --> 00:09:31.140
+Dan sebelum Anda menjalankan eksperimen pertama, Anda harus memahami setiap mekanisme tersebut.
+
+00:09:31.460 --> 00:09:33.520
+Lapisan keselamatan pertama adalah identitas dan izin.
+
+00:09:33.900 --> 00:09:37.120
+Setiap eksperimen yang Anda buat mendapatkan identitas terkelola yang ditetapkan sistem-sistem.
+
+00:09:37.680 --> 00:09:40.020
+Namun identitas itu dimulai dengan nol izin secara bawah.
+
+00:09:40.420 --> 00:09:43.240
+Anda harus secara eksplisit memberikan akses ke sumber daya yang dibutuhkan.
+
+00:09:43.400 --> 00:09:44.920
+Dan berikan izin minimum yang diperlukan.
+
+00:09:44.920 --> 00:09:52.600
+Jika eksperimen hanya perlu menekan CPU pada dua VM, batasi izinnya alih-alih membiarkannya mematikan semua yang ada di grup sumber daya.
+
+00:09:53.460 --> 00:09:55.440
+Lalu ada pengaktifan kesalahan yang saya sebutkan sebelumnya.
+
+00:09:55.940 --> 00:09:59.080
+Saat Anda memasukkan target, Anda memilih dengan tepat kesalahan mana yang bersedia Anda izinkan.
+
+00:09:59.740 --> 00:10:02.980
+Jika Anda tidak pernah mengaktifkan pemadaman VM pada set skala produksi,
+
+00:10:03.160 --> 00:10:07.120
+tidak ada eksperimen yang dapat mematikan VM tersebut, ini adalah blokir keras yang mengharuskan.
+
+00:10:07.120 --> 00:10:09.860
+Anda memilih setiap jenis kesalahan dengan sengaja.
+
+00:10:10.560 --> 00:10:11.520
+Tentang dari mana harus memulai?
+
+00:10:11.820 --> 00:10:12.400
+Dan jawabannya sudah.
+
+00:10:12.400 --> 00:10:15.000
+Mulai dari yang kecil dan mulai di lingkungan non-produksi.
+
+00:10:15.520 --> 00:10:17.440
+Jalankah eksperimen pertama Anda di lingkungan bangun atas stage.
+
+00:10:17.940 --> 00:10:19.600
+Uji dengan satu VM dan satu kesalahan,
+
+00:10:19.700 --> 00:10:21.520
+serta validasi bahwa pemantauan Anda berfungsi,
+
+00:10:21.680 --> 00:10:24.860
+peringatan Anda muncul, dan Anda dapat membatalkan eksperimen jika terjadi masalah.
+
+00:10:25.680 --> 00:10:28.200
+Hanya setelah Anda membangun kepercayaan diri itu di lingkungan yang aman,
+
+00:10:28.340 --> 00:10:30.080
+Anda baru perlu memikirkan untuk menyentuh produksi.
+
+00:10:30.800 --> 00:10:33.240
+Microsoft memiliki peringatan tentang ini yang ingin saya bagikan secara langsung.
+
+00:10:33.320 --> 00:10:35.820
+Mereka menyebutnya sebagai peristiwa yang memicu pembuatan resmi kepad.
+
+00:10:35.820 --> 00:10:38.940
+Jika Anda menjalankan eksperimen kaos di produksi tanpa pelindungan yang tepat
+
+00:10:38.940 --> 00:10:40.360
+dan itu menjatuhkan seluruh aplikasi Anda,
+
+00:10:40.460 --> 00:10:42.220
+itu adalah jenis kesalahan yang bisa membuat Anda dipecat.
+
+00:10:42.760 --> 00:10:43.380
+Itu bukan diperpula.
+
+00:10:44.000 --> 00:10:46.960
+Kaos studio sangat kuat karena benar-benar melakukan sesuatu pada sumber daya Anda
+
+00:10:46.960 --> 00:10:48.720
+jadi gunakan kekuatan itu dengan bijak.
+
+00:10:49.360 --> 00:10:51.020
+Jaring pengaman terakhir adalah pemantauan dan pembatalkan.
+
+00:10:51.020 --> 00:10:54.940
+Saat eksperimen berjalan, Anda dapat melihat progresnya secara waktunya.
+
+00:10:55.140 --> 00:10:57.860
+Anda melihat langkah apa yang selesai, cabang mana yang aktif,
+
+00:10:58.000 --> 00:10:59.400
+dan tindakan apa yang sedang dieksekusi.
+
+00:11:00.100 --> 00:11:03.240
+Jika ada yang terlihat salah, Anda tekan batal dan eksperimen langsung berhenti.
+
+00:11:04.060 --> 00:11:06.280
+Sumber daya yang terdampak tetap dalam kondisinya saat itu
+
+00:11:06.280 --> 00:11:07.980
+tanpa ada kesalahan baru yang dimasukkan.
+
+00:11:08.380 --> 00:11:10.580
+Jadi pantau daspor Anda dan siapkan jari Anda pada tombol batu.
+
+00:11:11.000 --> 00:11:13.440
+Mulai dari yang kecil bertindaklah hati-hati dan hormati kekuatan alat.
+
+00:11:13.860 --> 00:11:16.240
+Sekarang setelah Anda tahu cara tetap aman, pertanyaannya adalah
+
+00:11:16.240 --> 00:11:18.540
+di mana sebenarnya Anda harus menjalankan eksperimen ini?
+
+00:11:19.040 --> 00:11:20.620
+Beralih ke kiri versus beralih ke kanan.
+
+00:11:21.020 --> 00:11:22.900
+Jadi mana sebenarnya Anda menjalankan eksperimen ini?
+
+00:11:23.400 --> 00:11:25.860
+Ada dua pendekatan utama dan kebanyakan tim menggunakan kedua.
+
+00:11:26.440 --> 00:11:28.160
+Yang pertama adalah beralih ke kiri, shifting lab.
+
+00:11:28.740 --> 00:11:31.340
+Anda menjalankan eksperimen kaos di awal siklus pengembangan.
+
+00:11:32.200 --> 00:11:34.120
+Segera setelah kode diterapkan kelingguhan pengujian,
+
+00:11:34.620 --> 00:11:37.400
+Anda beri kesalahan dan jadikan bagian dari alur CI-PCD Anda.
+
+00:11:38.120 --> 00:11:41.360
+Alur tersebut menerapkan aplikasi, menjalankan eksperimen kaos untuk mengujinya,
+
+00:11:41.580 --> 00:11:44.260
+memastikan aplikasi bertahan lalu mempromosikan bil ke tahap berikutnya.
+
+00:11:44.880 --> 00:11:48.020
+Anggap ini sebagai gerbang kualitas seperti pengujian unit atau pemindaian keamanan.
+
+00:11:48.020 --> 00:11:52.560
+Jika aplikasi tidak bisa menangani pemandaman VMD staging, aplikasi tidak akan keproduksi.
+
+00:11:53.080 --> 00:11:56.800
+Pendekatan kedua adalah beralih ke kanan, shifting bra yang berarti menjalankan eksperimen di produksi.
+
+00:11:57.140 --> 00:11:59.040
+Dan ya, itu terdengar menakutkan, tapi dengarkan saya.
+
+00:11:59.500 --> 00:12:00.420
+Anda tidak mulainya dari sana.
+
+00:12:00.680 --> 00:12:03.600
+Anda hanya beralih ke kanan setelah Anda membangun kepercayaan di lingkungan non-produksi.
+
+00:12:04.020 --> 00:12:06.140
+Anda mulai dengan eksperimen kecil yang terbatas.
+
+00:12:06.140 --> 00:12:09.940
+Mungkin Anda memberi beban pada CPU di satu instan selama kerja di lalu lintas rendah.
+
+00:12:10.220 --> 00:12:12.100
+Anda amati dengan selesai sama Anda belajar lalu Anda kembang.
+
+00:12:12.440 --> 00:12:18.300
+Mungkin Anda membatikan satu VMD produksi selama jam kerja dan memvalidasi bahwa load balancer Anda mengalihkan lalu lintas,
+
+00:12:18.640 --> 00:12:21.600
+pengguna tidak menyadari apapun, dan pementauan Anda menangkap semuanya.
+
+00:12:22.400 --> 00:12:24.560
+Seiring waktu, Anda meningkat ke eksperimen yang lebih agresif.
+
+00:12:25.420 --> 00:12:27.540
+Ada pendekatan ketiga yang berada di tengah, yaitu Game Days.
+
+00:12:27.680 --> 00:12:34.720
+Game Day adalah latihan kaos terjadwal, di mana Anda mengumpulkan tim pengembang, tim operasional, tim keamanan, semua yang terlibat dalam insider nyata.
+
+00:12:34.720 --> 00:12:38.900
+Anda menjalankan eksperimen kaos dan melatih respons insiden yang mendapatkan peringatan.
+
+00:12:39.140 --> 00:12:40.260
+Siapa yang membuat keputusan untuk eskalasi?
+
+00:12:40.660 --> 00:12:41.600
+Bagaimana rantai komunikasi?
+
+00:12:41.900 --> 00:12:43.520
+Seberapa cepat Anda dapat mendiagnosis masalah itu?
+
+00:12:43.680 --> 00:12:47.440
+Game Days menguji teknologi, tetapi yang lebih penting menguji orang dan proses di sekitarnya.
+
+00:12:48.100 --> 00:12:51.640
+Ide utama dari ketiga pendekatan tersebut adalah bahwa kaos engineering bukanlah pengujian satu kali saja.
+
+00:12:52.280 --> 00:12:55.360
+Anda tidak menjalankan satu eksperimen, menyatakan sistem Anda tangguh, lalu selesai.
+
+00:12:55.820 --> 00:12:58.760
+Sistem berubah, kode berubah, konfigurasi berubah, dependensi berubah.
+
+00:12:59.480 --> 00:13:01.300
+Apa yang tangguh bulan lalu mungkin menjadi rapuh hari ini.
+
+00:13:01.860 --> 00:13:04.180
+Tujuannya adalah validasi ketangguhan yang berkelanjutan.
+
+00:13:04.720 --> 00:13:10.620
+Anda menjalankan eksperimen secara rutin, mengintegrasikannya ke proses rilis dan menjadikannya bagian dari ritme operasional, turn.
+
+00:13:11.020 --> 00:13:12.580
+Jadi apa nilai nyata dari semua upaya ini?
+
+00:13:13.360 --> 00:13:14.980
+Nilai nyatanya adalah membangun kepercayaan.
+
+00:13:15.340 --> 00:13:17.000
+Earth Engineering melakukan lebih dari sekadar mencari buku.
+
+00:13:17.340 --> 00:13:19.560
+Ini membangun kepercayaan dan itu adalah hal yang benar-benar beda.
+
+00:13:19.840 --> 00:13:22.300
+Bug adalah cacang spesifik. Anda memperbaikinya lalu lanjut.
+
+00:13:22.660 --> 00:13:23.920
+Namun kepercayaan adalah sebuah perasaan.
+
+00:13:24.220 --> 00:13:26.980
+Itu adalah keyakinan bahwa sistem Anda bisa bertahap menghadapi hal tak terduga.
+
+00:13:27.140 --> 00:13:29.900
+Dan Anda tidak bisa mendapatkannya hanya dari pengujian unit atau integrasi.
+
+00:13:29.900 --> 00:13:33.340
+Anda mendapatkannya dengan melihat sistem Anda menangani kegagalan nyata dan berhasil melaluinya.
+
+00:13:33.900 --> 00:13:36.300
+Proses ini memaksa Anda memperbaiki hal-hal yang mungkin Anda abaikan.
+
+00:13:37.200 --> 00:13:38.080
+Contohnya pembentuan Anda.
+
+00:13:38.620 --> 00:13:42.720
+Saat menjalankan eksperimen kaos, Anda akan segera tahu apakah dashboard menampilkan metrik yang tepat,
+
+00:13:43.220 --> 00:13:45.120
+apakah peringatan aktif di ambang batas yang pas,
+
+00:13:45.480 --> 00:13:47.660
+dan apakah tim on-call menerima notifikasi tepat waktu.
+
+00:13:47.660 --> 00:13:50.780
+Jika Anda tidak bisa melihat kegagalan yang terjadi, Anda tidak bisa meresum.
+
+00:13:51.080 --> 00:13:52.460
+Eksperimen kaos mengungkap salah-salah tersebut.
+
+00:13:53.040 --> 00:13:54.300
+Ini juga mengungkap asumsi tersembunyi.
+
+00:13:54.800 --> 00:13:56.000
+Setiap arsitek pernah berkata,
+
+00:13:56.580 --> 00:14:00.240
+jika basis data mati, aplikasi seharusnya menyimpan data terakhir dan terus berjalan.
+
+00:14:00.980 --> 00:14:03.080
+Itu terdengar bagus di papan tulis, tapi apakah benar-benar benar?
+
+00:14:03.400 --> 00:14:04.080
+Pernahkah Anda menguji?
+
+00:14:04.420 --> 00:14:06.740
+Eksperimen kaos menjawab pertanyaan itu dengan bukti nyata.
+
+00:14:07.120 --> 00:14:08.820
+Anda mematikan basis data dan melihat apa yang terjadi.
+
+00:14:09.300 --> 00:14:10.600
+Mungkin aplikasi menangani, ya dengan baik.
+
+00:14:10.600 --> 00:14:11.800
+Mungkin aplikasi itu melaruh.
