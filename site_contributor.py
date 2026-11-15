@@ -9,6 +9,7 @@ Neben dem seitenweiten Service Worker /sw.js (Web-Push, kein Caching; PR #204 pl
   (und an andere Hosts wie die Community-API) laufen immer direkt ins Netz und werden nie gespeichert - dort liegen private Daten.
 Bilder: nur vorhandene Symbole aus /assets (favicon-192.png, favicon.svg); neue Bilder gehoeren nach img.m365.fm (CLAUDE.md)."""
 import json
+import re
 from html import escape as esc
 from urllib.parse import urlparse
 
@@ -16,7 +17,26 @@ APP_NAME = "M365.FM Contributor"
 THEME = "#3b6391"        # --ac aus site_design.py
 BACKGROUND = "#f3f3f2"   # --bg aus site_design.py
 RTL = {"ar", "he"}
-SW_VERSION = "1"
+SW_VERSION = "2"   # 2: Teilen-in-die-App (?link=) braucht das neue mvp-tracker.js sofort, nicht erst beim zweiten Start
+
+
+ANDROID_PACKAGE = "fm.m365.contributor"   # applicationId der Android-Huelle (android/mvp-tracker), nach der Veroeffentlichung unveraenderlich
+_SHA256_FP = re.compile(r"^(?:[0-9A-F]{2}:){31}[0-9A-F]{2}$")
+
+
+def assetlinks(cfg):
+    """Digital Asset Links fuer /.well-known/assetlinks.json (App-Links der Android-App).
+    cfg: Inhalt von data/android_app_links.json, {"sha256_cert_fingerprints": [...]}. Der Fingerabdruck des Play-App-Signing-Schluessels
+    ist erst nach dem ersten Upload bekannt. Ohne gueltigen Eintrag gibt es keine Datei (None): nie raten, nie Platzhalter ausliefern."""
+    fps = []
+    for f in (cfg or {}).get("sha256_cert_fingerprints") or []:
+        f = str(f).strip().upper()
+        if _SHA256_FP.match(f) and f not in fps:
+            fps.append(f)
+    if not fps:
+        return None
+    return [{"relation": ["delegate_permission/common.handle_all_urls"],
+             "target": {"namespace": "android_app", "package_name": ANDROID_PACKAGE, "sha256_cert_fingerprints": fps}}]
 
 
 def path_of(lang):
@@ -123,4 +143,17 @@ def build(g):
         write(rel + "sw.js", service_worker(BASE, lang))
         write(rel + "offline.html", offline_html(BASE, lang, ci))
         out.append(url)
+    root = g.get("ROOT")   # Pfad des Repos; fehlt er (Tests), gibt es keine assetlinks.json
+    if root is not None:
+        cfg_file = root / "data" / "android_app_links.json"
+        try:
+            cfg = json.loads(cfg_file.read_text("utf-8")) if cfg_file.exists() else {}
+        except ValueError:
+            print("WARNUNG: data/android_app_links.json ist kein gueltiges JSON, keine assetlinks.json")
+            cfg = {}
+        links = assetlinks(cfg)
+        if cfg.get("sha256_cert_fingerprints") and not links:
+            print("WARNUNG: data/android_app_links.json enthaelt keinen gueltigen SHA-256-Fingerabdruck (AA:BB:... mit 32 Bytes), keine assetlinks.json")
+        if links:
+            write(".well-known/assetlinks.json", json.dumps(links, indent=2))
     return out

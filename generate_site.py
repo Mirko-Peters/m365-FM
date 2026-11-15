@@ -1428,7 +1428,7 @@ def build():
     # MVP-Tracker als eigene App "M365.FM Contributor" (PWA nur fuer /community/contributor/, eigenes Manifest und eigener Service Worker)
     import site_contributor as CONTRIB
     CONTRIB.build({"BASE": BASE, "write": write, "page": page, "header": header, "footer": footer, "community_tags": community_tags,
-                   "COMMUNITY_API": COMMUNITY_API, "CI": _CI, "langs": list(dict.fromkeys(list(active) + ["en"]))})
+                   "COMMUNITY_API": COMMUNITY_API, "CI": _CI, "langs": list(dict.fromkeys(list(active) + ["en"])), "ROOT": ROOT})
     shutil.copy(ROOT / "assets" / "sw.js", OUT / "sw.js")
     if (ROOT / "data" / "m365con_program.json").exists():
         shutil.copy(ROOT / "data" / "m365con_program.json", OUT / "m365con_program.json")
