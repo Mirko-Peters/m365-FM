@@ -99,3 +99,9 @@ Native features such as the term store and content types are the starting point.
 - Treat metadata and Copilot governance as two parts of the same job: metadata describes content, permissions control access.
 - Test changes to columns, content types and bulk tagging in a pilot site or test tenant first, and have a way back before touching production content.
 - Check [Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/managed-metadata) for current guidance on managed metadata and for how Copilot treats your content, since behaviour and options can change.
+
+## Sources
+
+- [Introduction to managed metadata (Microsoft Learn)](https://learn.microsoft.com/sharepoint/managed-metadata)
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)
+- [Introduction to content types and content type publishing (Microsoft Support)](https://support.microsoft.com/topic/a5026d23-8df8-42f6-b0d6-1920880c0d03)

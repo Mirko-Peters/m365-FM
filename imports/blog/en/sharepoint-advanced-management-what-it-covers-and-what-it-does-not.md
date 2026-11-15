@@ -8,7 +8,7 @@ date: 2026-11-28
 topics: [sharepoint-advanced-management, sharepoint-governance, oversharing]
 faq:
   - q: "What is SharePoint Advanced Management?"
-    a: "SharePoint Advanced Management (SAM) is a set of governance and lifecycle tools for SharePoint, such as site access reviews, inactive site policies, restricted access control and oversharing reports. Microsoft includes it with Microsoft 365 Copilot. Check Microsoft Learn for the current licensing details that apply to your tenant."
+    a: "SharePoint Advanced Management (SAM) is a set of governance and lifecycle tools for SharePoint, such as site access reviews, inactive site policies, restricted access control and oversharing reports. According to Microsoft's prerequisites, it needs a qualifying base license plus either at least one Microsoft 365 Copilot license or a SharePoint Advanced Management add-on; other qualifying options exist. Check Microsoft Learn for the current licensing details that apply to your tenant."
   - q: "Does SharePoint Advanced Management replace a governance plan?"
     a: "No. The tools help you find and act on issues like content sprawl, outdated sites and oversharing. Governance itself means policies, roles, responsibilities and processes, such as who owns a site and how sharing is handled. Those decisions need people from the business and IT, not just a tool."
   - q: "How does it relate to oversharing and Copilot?"
@@ -21,7 +21,7 @@ This article explains what [SharePoint Advanced Management](https://www.m365.fm/
 
 ## What SharePoint Advanced Management is
 
-SAM is a set of governance and lifecycle tools for SharePoint. Examples are site access reviews, inactive site policies, restricted access control and oversharing reports. Microsoft includes it with Microsoft 365 Copilot.
+SAM is a set of governance and lifecycle tools for SharePoint. Examples are site access reviews, inactive site policies, restricted access control and oversharing reports. According to Microsoft's prerequisites, it needs a qualifying base license plus either at least one Microsoft 365 Copilot license or a SharePoint Advanced Management add-on; other qualifying options exist.
 
 Microsoft groups these tools into three areas:
 
@@ -48,21 +48,21 @@ These are detection and control tools. They give you information and levers. The
 
 ## What it does not cover
 
-SAM does not replace [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/). Microsoft describes governance in general as the set of policies, roles, responsibilities and processes that control how an organization's business divisions and IT teams work together to achieve its goals. (That sentence appears on a page for SharePoint Server, which says it does not cover SharePoint in Microsoft 365. It is still a fair general definition.)
+SAM does not replace [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/). The [SharePoint governance overview on Microsoft Learn](https://learn.microsoft.com/sharepoint/governance-overview) defines governance as the set of policies, roles, responsibilities and processes that control how your organization's business divisions and IT teams work together to achieve its goals.
 
 For SharePoint in Microsoft 365, the [intranet governance guide on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/intranet-governance) makes several points a tool cannot make for you:
 
 - Start governance planning early and review it regularly.
 - A governance team should include business and IT, and it should stay in place after launch.
-- The business is responsible, not IT alone.
+- Governance should reflect the goals of business stakeholders, not just the expectations of IT.
 - Policies are requirements; guidelines are recommendations. Decide which is which.
-- Define site ownership, for example with a primary and a secondary contact per site.
+- Define site ownership. Microsoft's example policy: every SharePoint site has a primary and a secondary contact responsible for it.
 - Decide how sites are created, by request or by self-service.
 - Decide topics such as external sharing, default sharing links and metadata.
 
 None of these decisions is made by switching on a feature. SAM can help you enforce or check a decision once you have made it. It cannot make the decision.
 
-The guide also notes that policies work best when site owners do not have to think about them, for example through site designs, and that a review cycle can be automated, for example with Power Automate. Those are design choices in your own processes.
+The guide also notes that policies work best when site owners do not have to think about them, for example through site designs, and raises Power Automate flows as one way to trigger an intranet content review at a set interval. Those are design choices in your own processes.
 
 ## Oversharing and why it gets attention
 
@@ -91,8 +91,16 @@ Changing access across many sites at once multiplies any mistake, so start small
 - Treat SAM as a toolset that supports governance, not as governance itself.
 - Read the [SAM documentation](https://learn.microsoft.com/sharepoint/advanced-management) to confirm which features and licensing apply to your tenant.
 - Decide the policies first: ownership, site creation, external sharing, default sharing links, review frequency.
-- Make sure every site has a primary and a secondary contact, as Microsoft's intranet governance guidance suggests.
-- Involve the business. Microsoft's guidance is clear that the business is responsible, not IT alone.
+- Make sure every site has a primary and a secondary contact, as in Microsoft's example ownership policy.
+- Involve the business. Microsoft's guidance says governance should reflect business stakeholders, not just IT.
 - Use oversharing reports to find broadly shared content, then agree who reviews it and how it gets fixed.
 - Before changing permissions, deleting sites or running bulk changes, test on a pilot site and make sure you can go back.
 - Revisit your governance regularly. Microsoft's intranet governance guide says to review governance regularly and to keep the governance team in place after launch.
+
+## Sources
+
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)
+- [Prerequisites for SharePoint Advanced Management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharepoint-advanced-management-prerequisites)
+- [SharePoint governance overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/governance-overview)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)

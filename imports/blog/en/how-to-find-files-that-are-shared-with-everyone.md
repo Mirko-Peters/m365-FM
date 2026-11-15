@@ -10,7 +10,7 @@ faq:
   - q: "What does 'Everyone except external users' mean in SharePoint?"
     a: "It is a built-in group that covers internal users in your organization. If a site, folder or file is shared with this group, internal users can open it, whether or not that was intended. External users are not included, which is where the name comes from. Check Microsoft Learn for the exact scope in your tenant."
   - q: "Which built-in report shows content shared with everyone?"
-    a: "The activity reports in the data access governance area of the SharePoint admin center name content shared with 'Everyone except external users'. They require SharePoint Advanced Management and the SharePoint administrator role. Check Microsoft Learn for the current requirements and what each report contains."
+    a: "The data access governance reports in the SharePoint admin center cover it. The EEEU activity report shows sites where content was shared with all internal users in the last 28 days, and the snapshot report Sites and files shared via special SharePoint groups lists the individual items shared with 'Everyone except external users' or 'Everyone'. They need the SharePoint administrator role plus the licensing from the SharePoint Advanced Management prerequisites, and the item-level report needs the SharePoint Advanced Management Administrator role. Check Microsoft Learn for the current requirements and what each report contains."
   - q: "Does the single-site CSV report show all sharing links?"
     a: "No. According to Microsoft Learn, the report for a single site does not include Anyone links or links that were e-mailed but not clicked. It also shows SharePoint groups but not the individual people inside them. Treat it as a useful starting point, not a complete inventory."
 ---
@@ -21,7 +21,7 @@ This article shows how to find that content with built-in Microsoft 365 reports,
 
 ## What "shared with everyone" actually means
 
-In practice, the term covers several situations. The best known is content shared with the group **Everyone except external users**, which covers internal users in the organization (check Microsoft Learn for the exact scope). Others are organization-wide sharing links and anonymous links, which work for anyone who has the URL.
+In practice, the term covers several situations. The best known is content shared with the group **Everyone except external users**, which covers internal users in the organization (check Microsoft Learn for the exact scope). Others are organization-wide sharing links, which work for signed-in people in the organization who have the URL, and Anyone links, which work for anyone who has the URL.
 
 [Oversharing](https://www.m365.fm/entity/oversharing/) is the broader concept: content shared more widely than intended. It matters for security and privacy, and it matters more with AI assistants. AI assistants such as Copilot can surface content to users who already have access to it, so content that is open too widely can show up in places the owner never expected.
 
@@ -29,14 +29,18 @@ Imagine a team site for a project that ended two years ago. The team shared a pl
 
 ## Start with the built-in reports
 
-[SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/) is the natural first step because it uses Microsoft's own features. Note that the data access governance reports need SharePoint Advanced Management. Microsoft Learn describes two kinds of reports.
+[SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/) is the natural first step because it uses Microsoft's own features. Note that the data access governance reports need the licensing described in the SharePoint Advanced Management prerequisites. Microsoft Learn describes two kinds of reports.
 
-**Data access governance reports** live in the SharePoint admin center under Reports, Data access governance. They require SharePoint Advanced Management and the SharePoint administrator role. There are two types:
+**Data access governance reports** live in the SharePoint admin center under Reports, Data access governance. They require the SharePoint administrator role plus the licensing from the SharePoint Advanced Management prerequisites. There are two types:
 
-- **Snapshot reports** show data as of the day they were created. Microsoft Learn names site permissions across the organization and sensitivity labels applied to files.
+- **Snapshot reports** show data as of the day they were created. Microsoft Learn lists site permissions across the organization, site permissions for users, sites and files shared via special SharePoint groups, and sensitivity labels applied to files.
 - **Activity reports** cover the last 28 days. Microsoft Learn names sharing links and content shared with "Everyone except external users".
 
-Microsoft recommends running snapshot reports quarterly and activity reports monthly. Data collection pauses if no report is generated for three months, so a one-off run will not give you a continuous picture. Check the [SharePoint documentation on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports) for the current requirements and report list, since licensing and features can change.
+Microsoft recommends running snapshot reports quarterly and activity reports monthly. For organizations without SharePoint Advanced Management, activity reports need data collection to be enabled first, and collection pauses if no report is generated for three months. A one-off run shows one point in time; the cadence above is what gives you a continuous picture.
+
+To see exactly which items are affected, use the snapshot report **Sites and files shared via special SharePoint groups**. It lists every item where "Everyone except external users" or "Everyone" is a recipient, with the permission level and the parent group when access is indirect. You find it under Reports, Data access governance, Snapshot reports. Microsoft Learn lists these conditions: the SharePoint Advanced Management Administrator role, which a Global administrator assigns; the site permissions for your organization report generated at least once; one report for SharePoint and OneDrive together, with no scoping to a single site; a download of up to 1 million rows; and a re-run every 30 days at the earliest. System files and system groups are not included.
+
+Check the [SharePoint documentation on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports) for the current requirements and report list, since licensing and features can change.
 
 ## Use the single-site report for a closer look
 
@@ -75,8 +79,16 @@ A sensible order is to start with the sites where the content is most sensitive,
 ## Practical takeaways
 
 - **Define the problem:** "shared with everyone" can mean the Everyone except external users group, organization-wide links or Anyone links. Search for each separately.
-- **Start with the admin center:** data access governance reports need SharePoint Advanced Management and the SharePoint administrator role. Run snapshot reports quarterly and activity reports monthly, as Microsoft recommends.
+- **Start with the admin center:** data access governance reports need the SharePoint administrator role plus the licensing from the SharePoint Advanced Management prerequisites, and the item-level report needs the SharePoint Advanced Management Administrator role. Run snapshot reports quarterly and activity reports monthly, as Microsoft recommends.
 - **Use the single-site CSV report for detail**, but remember it omits Anyone links, unclicked e-mailed links and the members of SharePoint groups.
 - **Do not rely on one report.** Combine sources to get a fuller picture.
 - **Consider a tool only if you need one.** Compare options against your size, licensing and workload, and test any tool on a small scope first.
 - **Test and keep a way back** before removing permissions or links, and involve site owners before you change anything.
+
+## Sources
+
+- [Data access governance reports for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)
+- [Data access governance reports - get sites and files shared via special SharePoint groups (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-detailed-eeeu-everyone-permissions-report)
+- [Report on file and folder sharing in a SharePoint site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharing-reports)
+- [Prerequisites for SharePoint Advanced Management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharepoint-advanced-management-prerequisites)
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)

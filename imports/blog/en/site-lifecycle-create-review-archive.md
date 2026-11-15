@@ -8,7 +8,7 @@ date: 2026-12-21
 topics: [sharepoint-site-lifecycle, content-lifecycle-management, orphaned-sites]
 faq:
   - q: "Do SharePoint site lifecycle policies delete sites?"
-    a: "No. Microsoft states that site lifecycle management policies do not delete SharePoint sites directly. Depending on configuration, a policy can take no action, set a site to read-only, or archive it after a read-only period with Microsoft 365 Archive. Check Microsoft Learn for the current options."
+    a: "No. Microsoft states that site lifecycle management policies do not delete SharePoint sites directly. Depending on the policy type and configuration, a policy can take no action, set a site to read-only, or archive it after a read-only period with Microsoft 365 Archive. Check Microsoft Learn for the current options."
   - q: "What is the difference between an inactive site policy and a site attestation policy?"
     a: "An inactive site policy detects sites without meaningful activity across SharePoint and connected workloads such as Teams, Exchange and Viva Engage. A site attestation policy asks owners at regular intervals to confirm explicitly that the site is still needed. One looks at activity, the other asks for a decision."
   - q: "Can I test a site lifecycle policy before it sends notifications?"
@@ -54,11 +54,11 @@ Simulation mode is a sensible place to start. It lets you see which sites a poli
 
 ## Archive: what happens when nobody answers
 
-Notifications only help if someone responds. Microsoft documents what a policy can do when nobody answers after several notices: take no action, set the site to read-only, or archive it after a configurable read-only period with Microsoft 365 Archive.
+Notifications only help if someone responds. Microsoft documents what a policy can do when nobody answers after several notices. Depending on the policy type, the options are to take no action, set the site to read-only, or archive it after a configurable read-only period with Microsoft 365 Archive.
 
 Two points from the documentation deserve emphasis. First, Microsoft states: "Site lifecycle management policies don't delete SharePoint sites directly." Second, disabling or deleting a policy stops future actions but does not undo actions already taken.
 
-The second point has a practical consequence. If a policy has already set sites to read-only or archived them, switching the policy off will not reverse that. Plan for a way back before you activate anything that changes site state.
+The second point has a practical consequence. If a policy has already set sites to read-only or archived them, switching the policy off will not reverse that. Plan for a way back before you activate anything that changes site state. Microsoft Learn notes that site owners cannot take a site out of read-only mode: a tenant admin unlocks it on the Active sites page, and only tenant admins can reactivate an archived site on the Archived sites page.
 
 > **Test first.** Before you enable a policy that can set sites to read-only or archive them, run it in simulation mode and, where possible, try it on a pilot set of sites or in a test tenant. Make sure you know how to restore or reopen a site and who is allowed to do it. Check Microsoft Learn for how archived sites are handled in your setup.
 
@@ -99,3 +99,9 @@ Also check licensing and availability. Requirements for SharePoint Advanced Mana
 - Pilot on a small set of sites or in a test tenant before enabling read-only or archive actions, and know how to reverse them. Disabling a policy does not undo actions already taken.
 - Remember that these policies don't delete sites directly, and keep site-level and document-level lifecycle decisions separate.
 - Confirm current features, licensing and settings on Microsoft Learn before you plan a rollout.
+
+## Sources
+
+- [SharePoint site lifecycle management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/site-lifecycle-management)
+- [Request recurring site attestations for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/request-site-attestations)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)

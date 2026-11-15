@@ -8,9 +8,9 @@ date: 2026-11-24
 topics: [sharepoint-reporting, sharepoint-permissions, power-automate]
 faq:
   - q: "Which built-in SharePoint reports help with permissions and sharing?"
-    a: "Microsoft Learn describes two kinds. Data access governance reports in the SharePoint admin center cover the organization and need SharePoint Advanced Management and the SharePoint administrator role. A site admin can also create a CSV report of files, users, permissions and links for a single site or OneDrive."
+    a: "Microsoft Learn describes two kinds. Data access governance reports in the SharePoint admin center cover the organization and require the SharePoint administrator role plus the licensing described in the SharePoint Advanced Management prerequisites. A site admin can also create a CSV report of files, users, permissions and links for a single site or OneDrive."
   - q: "How often should I run SharePoint data access governance reports?"
-    a: "Microsoft recommends snapshot reports quarterly and activity reports monthly. Activity reports cover the last 28 days. Data collection pauses if no report is generated for three months, so a regular schedule matters. A weekly routine can still review the latest available report."
+    a: "Microsoft recommends snapshot reports quarterly and activity reports monthly. Activity reports cover the last 28 days. For organizations without SharePoint Advanced Management, data collection pauses if no report is generated for three months and must be re-enabled, so a regular schedule matters. A weekly routine can still review the latest available report."
   - q: "Does the single-site CSV report show everything about sharing?"
     a: "No. According to Microsoft Learn, it does not include Anyone links or links that were e-mailed but not clicked. It shows SharePoint groups but not the individual people inside them. Treat it as a useful starting point and check Microsoft Learn for the current scope."
 ---
@@ -23,7 +23,7 @@ This article looks at how to build a small, repeatable routine around the built-
 
 Microsoft Learn describes two kinds of built-in reports for permissions and sharing.
 
-**Data access governance reports** live in the SharePoint admin center under Reports, Data access governance. They need SharePoint Advanced Management and the SharePoint administrator role, so check your licensing and role assignments first. They come in two flavors:
+**Data access governance reports** live in the SharePoint admin center under Reports, Data access governance. You need the SharePoint administrator role and the licensing listed in the prerequisites for SharePoint Advanced Management, so check your licensing and role assignments first. Microsoft Learn adds that administrators with Microsoft 365 E5 can use the reports without the other SharePoint Advanced Management features, but then without snapshot reports, and activity reports return at most 10,000 sites. They come in two flavors:
 
 - **Snapshot reports** show data as of the day they were created. They cover site permissions across the organization and sensitivity labels applied to files.
 - **Activity reports** cover the last 28 days. They cover sharing links and content shared with "Everyone except external users".
@@ -42,7 +42,7 @@ A report you read weekly will shape your decisions, so it helps to know what it 
 
 The last point matters in practice. Imagine a team site where the CSV shows that "Project Alpha Members" has Edit access to a folder. The report tells you the group has access, but you still need to open the group to see who belongs to it. If your review question is "who can edit this folder?", the CSV answers only half of it.
 
-On the organization-wide side, the timing rules matter. Snapshot reports reflect a point in time, so a snapshot from last month will not show a sharing change made yesterday. Activity reports look at a 28-day window. And Microsoft notes that data collection pauses if no report is generated for three months. A routine that quietly stops means the reports lose their value, so build something that notices when it stops.
+On the organization-wide side, the timing rules matter. Snapshot reports reflect a point in time, so a snapshot from last month will not show a sharing change made yesterday. Activity reports look at a 28-day window. And for organizations without SharePoint Advanced Management, Microsoft notes that activity reports need data collection to be enabled first, and that data collection pauses if no report is generated for three months. A routine that quietly stops means the reports lose their value, so build something that notices when it stops.
 
 Details can change, so confirm the current behavior on the [data access governance reports](https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports) and [sharing reports](https://learn.microsoft.com/en-us/sharepoint/sharing-reports) pages on Microsoft Learn.
 
@@ -69,7 +69,7 @@ A workable split could look like this:
 - **Quarterly:** generate the snapshot report and review site permissions and sensitivity label coverage across the organization.
 - **Per site, when asked:** a site admin creates the CSV report for a single site or OneDrive, for example before a site owner review.
 
-Because data collection pauses after three months without a report, regularly generating reports matters. Check Microsoft Learn for exactly which report generation resumes or maintains collection. Put them in a shared calendar.
+If your tenant has no SharePoint Advanced Management, data collection pauses after three months without a report and must be re-enabled, so regularly generating reports matters. Put the report dates in a shared calendar.
 
 ## Use permissions knowledge to read the report faster
 
@@ -85,7 +85,7 @@ One caution: **fixing what the report finds can change access or remove content.
 
 ## Add a Power Automate reminder, not a report factory
 
-Power Automate is a service for building workflows between apps and services. Cloud flows react to triggers, for example a new email or a new file or SharePoint item. Scheduled triggers are also documented on Microsoft Learn. That makes it a reasonable tool for the *human* part of the routine, the nudge.
+Power Automate is a service for building workflows between apps and services. Cloud flows are automated workflows that can be triggered by events, such as the arrival of an email, or by a specific time of day. Scheduled cloud flows are one of the three documented cloud flow types. That makes it a reasonable tool for the *human* part of the routine, the nudge.
 
 Imagine a small flow that runs every Monday morning and posts a message to the governance channel in Teams: "Weekly permissions check: open the latest report, review your three questions, log the result." A second part could create an item in a SharePoint list, with a date, an owner and a result field, so the review leaves a trail.
 
@@ -100,8 +100,8 @@ What a flow can read from reports, and in which format, depends on the report ty
 
 ## Practical takeaways
 
-- Check that you have SharePoint Advanced Management and the SharePoint administrator role before planning around the data access governance reports.
-- Generate snapshot reports quarterly and activity reports monthly, as Microsoft recommends, and keep them going so data collection does not pause after three months.
+- Check your licensing (see the SharePoint Advanced Management prerequisites) and the SharePoint administrator role before planning around the data access governance reports.
+- Generate snapshot reports quarterly and activity reports monthly, as Microsoft recommends. Without SharePoint Advanced Management, keep them going so data collection does not pause after three months.
 - Choose two or three standing questions. Review those weekly instead of scanning everything.
 - Remember the CSV report's limits: no Anyone links, no e-mailed links that were never clicked, and SharePoint groups without their individual members.
 - Store site-level CSV reports in a folder only site owners can access.
@@ -109,3 +109,13 @@ What a flow can read from reports, and in which format, depends on the report ty
 - Use Power Automate for reminders and a simple review log, not for automatic permission changes.
 - Test any access change on a pilot site first and keep a way back.
 - Confirm current report behavior on Microsoft Learn, since features and licensing can change.
+
+## Sources
+
+- [Data access governance reports for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)
+- [Report on file and folder sharing in a SharePoint site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharing-reports)
+- [Prerequisites for SharePoint Advanced Management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharepoint-advanced-management-prerequisites)
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Default SharePoint groups (Microsoft Learn)](https://learn.microsoft.com/sharepoint/default-sharepoint-groups)
+- [Understanding permission levels in SharePoint (Microsoft Learn)](https://learn.microsoft.com/sharepoint/understanding-permission-levels)
+- [Overview of cloud flows (Microsoft Learn)](https://learn.microsoft.com/power-automate/overview-cloud)

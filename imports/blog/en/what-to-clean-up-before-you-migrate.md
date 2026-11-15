@@ -12,7 +12,7 @@ faq:
   - q: "Why should I deal with orphaned sites before a migration?"
     a: "Orphaned sites have no active owner, so nobody can confirm whether their content is still needed. If you migrate them anyway, you copy content and permissions that nobody is responsible for. Assigning an owner first, or deciding to archive or retire the site, avoids that."
   - q: "Which tools does Microsoft name for SharePoint migration?"
-    a: "Microsoft names Migration Manager in the SharePoint admin center for sources such as file shares, Box, Dropbox, Google Workspace and Egnyte, and the SharePoint Migration Tool (SPMT) for SharePoint Server 2010, 2013 and 2016. Third-party tools exist too. Check Microsoft Learn for the current state."
+    a: "Microsoft names Migration Manager in the SharePoint admin center for sources such as file shares, Box, Dropbox and Google Workspace, and the SharePoint Migration Tool (SPMT) for SharePoint Server 2010, 2013 and 2016. Third-party tools exist too. Check Microsoft Learn for the current state."
 ---
 
 A migration is often planned as a technical project: pick a tool, map the sources, schedule the cutover. The content itself gets less attention. That is a missed opportunity, because a [SharePoint migration](https://www.m365.fm/entity/sharepoint-migration/) copies whatever you point it at. Microsoft Learn is explicit that the source files are not deleted, so the old problems do not stay behind on their own. They travel along.
@@ -27,9 +27,9 @@ That has two consequences. First, you have a way back: the original is still the
 
 Microsoft names several tools depending on the source:
 
-- **Migration Manager** in the SharePoint admin center, for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares.
-- **SharePoint Migration Tool (SPMT)**, for SharePoint Server 2010, 2013 and 2016, including classic workflows and classic pages.
-- **Azure Data Box**, which Microsoft names for large amounts of data over a limited network connection.
+- **Migration Manager** in the SharePoint admin center, for sources such as file shares, Box, Dropbox and Google Workspace.
+- **SharePoint Migration Tool (SPMT)**, for SharePoint Server 2010, 2013 and 2016 environments. Microsoft notes that it can migrate certain SharePoint Server 2010 workflows.
+- **Azure Data Box**, which Microsoft names for large amounts of data so that you do not depend on the network link: you copy the data to a device, ship it to Microsoft, and then use SPMT to migrate it from Azure to SharePoint.
 
 Third-party tools such as ShareGate exist as well. Whichever you use, the tool moves what you select. It does not judge whether the content is still useful.
 
@@ -88,12 +88,12 @@ Before you migrate, look at:
 
 - **Access patterns:** Can groups replace individual assignments? Are there folders that only one person can open for no clear reason?
 - **Structure:** Does a deep folder hierarchy fit how people work today, or would several sites or libraries be a better fit? File paths and structure are worth reviewing against the limits in Microsoft's documentation.
-- **Legacy workflows:** Microsoft Learn states that classic SharePoint Server workflows should be rebuilt as Power Automate flows. Make a list of existing workflows and decide which are still needed.
-- **Classic pages and customisations:** Microsoft names SPMT for SharePoint Server 2010, 2013 and 2016, including classic workflows and classic pages, but it is still worth asking whether anyone uses them.
+- **Legacy workflows:** Microsoft Learn recommends moving classic SharePoint Server workflows to Power Automate flows, and SPMT can migrate certain SharePoint Server 2010 workflows. Make a list of existing workflows and decide which are still needed.
+- **Classic pages and customisations:** Classic pages are not an SPMT job. Microsoft points to a separate guide on transforming classic pages to modern pages, and it is worth asking whether anyone uses them at all.
 
 Changing permissions or breaking inheritance can affect who can see content, so plan those changes carefully, try them on a pilot site first, and keep a record of the original state so you can return to it.
 
-Also consider who runs the migration. Microsoft Learn describes a Migration Administrator role that lets a migration team work without full SharePoint admin access. Assigning the right role is designed to give the project team the access it needs without full SharePoint admin rights.
+Also consider who runs the migration. Microsoft Learn describes a Migration Administrator role that gives a migration team access to Migration Manager in the Microsoft 365 admin center without the broader SharePoint administrator role. Assigning the right role helps you limit what the project team can change.
 
 ## Practical takeaways
 
@@ -101,6 +101,10 @@ Also consider who runs the migration. Microsoft Learn describes a Migration Admi
 - Build an inventory of locations with an owner, a proposed action and a status.
 - Identify ownerless content and orphaned sites early, and get a decision on each before migration.
 - Use a simple lifecycle view (active, reference, archive, expired) to decide what actually needs to move, and confirm retention requirements before treating anything as expired.
-- Review permissions, structure and legacy workflows, and plan to rebuild classic workflows as Power Automate flows where they are still needed.
+- Review permissions, structure and legacy workflows, and plan to move classic workflows to Power Automate flows where they are still needed.
 - Test cleanup and migration steps on a pilot site or test tenant, and keep a backup or a way back before deleting or changing access.
 - Check [Microsoft Learn](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) for current tool capabilities, since they change over time.
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)

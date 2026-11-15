@@ -49,13 +49,13 @@ Do not guess at owners. If nobody claims a location, record that fact. Unowned c
 
 Some content needs more than a copy. Microsoft Learn gives a few examples that are worth checking against your inventory.
 
-**Classic workflows.** Microsoft states that classic SharePoint Server workflows should be rebuilt as Power Automate flows. If your inventory shows workflows on lists or libraries you plan to move, list them as separate work items. Someone has to understand what each workflow does and rebuild it.
+**Classic workflows.** Microsoft recommends moving classic SharePoint Server workflows to Power Automate flows, and SPMT can migrate certain SharePoint Server 2010 workflows. If your inventory shows workflows on lists or libraries you plan to move, list them as separate work items. Someone has to understand what each workflow does and move or rebuild it.
 
-**Classic pages.** For SharePoint Server 2010, 2013 and 2016, Microsoft names the SharePoint Migration Tool (SPMT), including classic workflows and classic pages. Check Microsoft Learn for what the tool does with them and what remains for you to rebuild.
+**Classic pages.** For SharePoint Server 2010, 2013 and 2016 environments, Microsoft names the SharePoint Migration Tool (SPMT). Classic pages are not an SPMT job: Microsoft points to a separate guide on transforming classic pages to modern pages. Check Microsoft Learn for what remains for you to rebuild.
 
 **Permissions.** Old environments often carry years of one-off sharing. Decide in advance whether you reproduce the old structure or design a simpler one in the target. SharePoint permissions affect what people, and Copilot on their behalf, can find, so review a messy structure before importing it unchanged.
 
-**Large volumes over slow links.** For large amounts of data over a limited network connection, Microsoft names Azure Data Box. Your size column is what tells you whether this is relevant.
+**Large volumes over slow links.** To avoid depending on the WAN link for large amounts of data, Microsoft names Azure Data Box: you copy the data to a device, ship it to Microsoft, and then use SPMT to migrate it from Azure to SharePoint. Your size column is what tells you whether this is relevant.
 
 ## Sort the inventory into waves
 
@@ -68,7 +68,7 @@ Ways to group content depend on your situation. Common criteria include:
 - **Complexity:** separate plain document libraries from content with workflows or special permissions.
 - **Source type:** content from the same source usually uses the same tool and the same checks.
 
-Imagine three waves. Wave one is a small, low-risk team share with an engaged owner, used as a pilot. Wave two is a set of departmental shares with straightforward permissions. Wave three is the SharePoint Server content with classic workflows to rebuild. Each wave ends with a short review: what broke, what surprised people, what should change in the next batch.
+Imagine three waves. Wave one is a small, low-risk team share with an engaged owner, used as a pilot. Wave two is a set of departmental shares with straightforward permissions. Wave three is the SharePoint Server content with classic workflows to move to Power Automate. Each wave ends with a short review: what broke, what surprised people, what should change in the next batch.
 
 The review is the point. If wave one shows that users cannot find their files in the new structure, you fix the structure before wave three, not after.
 
@@ -83,7 +83,7 @@ The same page says the Mover tool is retired for admin-led migrations. Tools and
 
 Third-party tools exist as well, ShareGate being one example. They are one option among others; compare them against your inventory and your requirements rather than choosing first and fitting the plan afterwards. Moving between two Microsoft 365 tenants is a separate topic with its own considerations, so do not assume the same approach applies.
 
-Microsoft also describes a Migration Administrator role that lets a migration team work without full SharePoint admin access. Consider it if you want to limit what the migration team can change.
+Microsoft also describes a Migration Administrator role that gives a migration team access to Migration Manager in the Microsoft 365 admin center without the broader SharePoint administrator role. Consider it if you want to limit what the migration team can change.
 
 Run every wave as a pilot first. Migrations create content and can change access in the target, so test with a small set in a pilot site or a test tenant before bulk runs, and make sure you have a backup and a way back. Because the source is copied rather than deleted, keep it intact until owners have signed off on the result.
 
@@ -92,8 +92,12 @@ Run every wave as a pilot first. Migrations create content and can change access
 - Treat migration as a copy, not a cleanup. Decide what is worth moving before you move it.
 - Build the inventory before choosing tools: location, owner, size, last activity, permissions, dependencies and target.
 - Record unowned content as a risk and resolve ownership before the wave that contains it.
-- List classic workflows as separate work items to rebuild as Power Automate flows.
+- List classic workflows as separate work items to move to Power Automate flows.
 - Decide deliberately whether to reproduce old permissions or design a simpler structure in SharePoint.
 - Group content into waves by risk, ownership, complexity and source type, and review each wave before starting the next.
 - Check Microsoft Learn for the current tool for each source before you commit to a plan.
 - Pilot first, keep a backup, and do not retire the source until owners have confirmed the result.
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)

@@ -37,7 +37,7 @@ It also separates policies from guidelines. Policies are requirements; guideline
 
 A guest review is only as good as the person answering it. If a team has no active owner, nobody can say whether the external consultant still works on the project.
 
-The same guide suggests defining site ownership, for example with a primary and a secondary contact per site. Apply that to every Microsoft 365 group and team that can contain guests.
+The same guide gives site ownership as an example policy: every site has a primary and a secondary contact responsible for it. Apply that idea to every Microsoft 365 group and team that can contain guests.
 
 Imagine a team created for a joint project with an agency. The project manager left the company, and the team now has a single owner account that is no longer active. The agency's guests still have access, and no one is in a position to say whether they should. A secondary owner, assigned from the start, is designed to help avoid this situation.
 
@@ -55,7 +55,7 @@ Because guest access is controlled at tenant, team and sensitivity-label level, 
 - **Team or site level:** the setting for a specific collaboration space.
 - **Sensitivity-label level:** a rule that follows the label, so a "confidential" label can restrict guests while a "partner project" label allows them.
 
-Which settings are available, and how the layers interact, depends on your tenant configuration and licensing. Check Microsoft Learn for the current options before relying on any particular combination. How the layers interact depends on the specific settings, so verify the effective behavior on a test site and check Microsoft Learn.
+For SharePoint, Microsoft Learn documents that a site has its own sharing setting that must be the same as or more restrictive than the organization-level setting, and that a sensitivity label applied to a site can control its external sharing. Which settings are available, and how the layers interact, depends on your tenant configuration and licensing. Check Microsoft Learn for the current options before relying on any particular combination. How the layers interact depends on the specific settings, so verify the effective behavior on a test site and check Microsoft Learn.
 
 The intranet governance guidance also observes that policies work best when site owners do not have to think about them, for example through site designs. The idea carries over: apply guest rules through labels, templates and defaults rather than expecting every owner to configure sharing correctly by hand.
 
@@ -105,3 +105,11 @@ Some organizations also use third-party tools for reporting or administration ac
 - Be careful with automatic removal. Pilot first, and know how you would restore access.
 - Keep the routine small enough that it actually happens, and review the plan itself regularly.
 - Check Microsoft Learn for current settings, limits and licensing, because they can change.
+
+## Sources
+
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [What are access reviews? (Microsoft Learn)](https://learn.microsoft.com/entra/id-governance/access-reviews-overview)
+- [Manage sharing settings for SharePoint and OneDrive in Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepoint/turn-external-sharing-on-or-off)
+- [Learn about sensitivity labels (Microsoft Learn)](https://learn.microsoft.com/purview/sensitivity-labels)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)

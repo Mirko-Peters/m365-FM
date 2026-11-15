@@ -95,10 +95,16 @@ Run this flow against a test account first, and keep a way back for every step t
 ## Practical takeaways
 
 - Treat OneDrive and SharePoint separately: SharePoint files stay with the sites, OneDrive needs a handover.
-- Do not rely on retention windows as your plan. A deleted account can be restored for 30 days by default, and OneDrive retention for deleted users is 30 days by default, followed by 93 days in the site collection recycle bin. Verify current values on Microsoft Learn.
+- Do not rely on retention windows as your plan. A deleted account can be restored for 30 days, and OneDrive retention for deleted users is 30 days by default, followed by 93 days in the site collection recycle bin. Verify current values on Microsoft Learn.
 - Moving files from OneDrive keeps only the latest version of each document.
 - Deleting an account does not stop license costs. Reduce licenses separately.
 - Do not delete accounts with e-mail forwarding or a converted shared mailbox, as Microsoft Learn advises.
 - Check site ownership so no site is left without an owner.
 - Use retention labels for content that must be kept for a defined time, and test how they behave in your tenant.
 - Test your process on a pilot account and keep a backup or recovery path before running it for real.
+
+## Sources
+
+- [Delete a user from your organization (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/add-users/delete-a-user)
+- [Step 5 - Give another employee access to OneDrive and Outlook data (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/add-users/remove-former-employee-step-5)
+- [Learn about retention policies & labels to retain or delete (Microsoft Learn)](https://learn.microsoft.com/purview/retention)
