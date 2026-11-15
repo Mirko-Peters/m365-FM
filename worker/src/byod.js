@@ -46,12 +46,39 @@ export async function checkDomain(env, d, t = now()) {
   return await set({ ...n, status: "active", activated_at: d.activated_at || t });
 }
 
-// Cron: offene und aktive Domains regelmaessig pruefen (hoechstens 20 je Lauf), damit "Jetzt pruefen" nicht noetig ist und eine entfernte DNS-Zeile die Domain abschaltet
+// Gegen Domain-Besetzen: Eintraege, die nach BYOD_PENDING_TTL nie nachgewiesen wurden (status pending, verified_at 0), geben die Domain wieder frei.
+// Sonst blockiert ein einmal eingetragener, nie eingerichteter Name die Domain fuer alle anderen Mitglieder (UNIQUE, domain_taken).
+// Mit domain nur diese eine Domain (beim Eintragen), sonst hoechstens 50 je Lauf (Cron). Ein Hostname bei Cloudflare wird mit entfernt (nur mit Secrets).
+export const BYOD_PENDING_TTL = 7 * 86400;
+export async function releaseStale(env, t = now(), domain = "") {
+  const db = env.DB, cut = t - BYOD_PENDING_TTL;
+  const rows = (await (domain ? db.prepare("SELECT id,cf_id FROM blog_domains WHERE domain=? AND status='pending' AND verified_at=0 AND created<?").bind(domain, cut)
+    : db.prepare("SELECT id,cf_id FROM blog_domains WHERE status='pending' AND verified_at=0 AND created<? ORDER BY created LIMIT 50").bind(cut)).all()).results || [];
+  let n = 0;
+  for (const d of rows) {
+    if (d.cf_id && cfOn(env) && !(await cfDelete(env, d.cf_id).catch(() => ({ ok: false }))).ok) continue;   // Cloudflare nicht erreichbar: beim naechsten Lauf erneut
+    await db.prepare("DELETE FROM blog_domains WHERE id=? AND status='pending' AND verified_at=0").bind(d.id).run(); n++;
+  }
+  return n;
+}
+
+// Kontoloeschung: alle Domains des Kontos entfernen, Hostnamen bei Cloudflare mit (nur mit Secrets; ein Fehler dort haelt die Loeschung nicht auf,
+// ohne Zeile in blog_domains wird ohnehin nichts mehr ausgeliefert).
+export async function deleteUserByod(env, uid) {
+  const db = env.DB;
+  const rows = (await db.prepare("SELECT id,cf_id FROM blog_domains WHERE user_id=?").bind(uid).all()).results || [];
+  if (cfOn(env)) for (const d of rows) if (d.cf_id) await cfDelete(env, d.cf_id).catch(() => 0);
+  await db.prepare("DELETE FROM blog_domains WHERE user_id=?").bind(uid).run();
+}
+
+// Cron: offene und aktive Domains regelmaessig pruefen (hoechstens 20 je Lauf), damit "Jetzt pruefen" nicht noetig ist und eine entfernte DNS-Zeile die Domain abschaltet.
+// Vorher werden nie nachgewiesene Eintraege nach 7 Tagen freigegeben (releaseStale).
 export async function runByodChecks(env, t = now()) {
   if (!byodOn(env) || !cnameTarget(env)) return { skipped: true };
+  const released = await releaseStale(env, t);
   const rows = (await env.DB.prepare(`SELECT ${COLS} FROM blog_domains WHERE status IN ('pending','verified','active') AND checked<? ORDER BY checked LIMIT 20`).bind(t - 900).all()).results || [];
   let n = 0; for (const d of rows) { await checkDomain(env, d, t).catch(() => 0); n++; }
-  return { checked: n };
+  return { checked: n, released };
 }
 
 export async function handleByodApi(env, request, url, path, user, J) {
@@ -87,6 +114,7 @@ export async function handleByodApi(env, request, url, path, user, J) {
     if (!v.ok) return J({ error: v.error }, 400);
     const pr = await db.prepare("SELECT handle,public FROM profiles WHERE user_id=?").bind(user.id).first();
     if (!(pr?.public && pr.handle)) return J({ error: "need_profile" }, 400);
+    await releaseStale(env, now(), v.host);   // nie nachgewiesener Eintrag aelter als 7 Tage (auch eigener): Domain wieder frei
     const n = (await db.prepare("SELECT COUNT(*) n FROM blog_domains WHERE user_id=?").bind(user.id).first()).n;
     if (n >= BYOD_MAX_DOMAINS_PER_USER) return J({ error: "limit" }, 400);
     if (await db.prepare("SELECT 1 x FROM blog_domains WHERE domain=?").bind(v.host).first()) return J({ error: "domain_taken" }, 409);
