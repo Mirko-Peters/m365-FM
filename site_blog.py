@@ -9,6 +9,7 @@ import site_topics as TOP
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
 import site_listen as LST   # Anhoeren-Karten (Stoerer) in den Beitraegen
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026), gilt weiter fuer Sprachfassungen
 import site_milestones as MST   # Wochenzusammenfassungen: eigene Vor/Zurueck-Reihe, darunter nur weitere Zusammenfassungen statt Inhaltslisten
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
@@ -73,10 +74,16 @@ TOPCSS = '<style>.bl-top{margin:1.5em 0}.bl-top h2{font-size:1.15rem}.bl-top .ta
 TOP_PERIODS = (("day", "Today", "Heute"), ("week", "This week", "Diese Woche"), ("month", "This month", "Dieser Monat"), ("year", "This year", "Dieses Jahr"), ("evergreen", "Evergreen", "Evergreen"))
 
 
+def is_translation(p):
+    """Sprachfassung statt Original: uebernommene Uebersetzungen (tr_of) und die automatischen DB-Uebersetzungen aus /api/blog/export
+    (worker/src/autotr.js translatedBlogItems: src_lang + ai_tr, aber kein tr_of)."""
+    return bool(p.get("tr_of") or p.get("src_lang") or p.get("ai_tr"))
+
+
 def top_block(lang, items, croot, api):
     """Top-Beitraege nach Upvotes: Tabs Tag / Woche / Monat / Jahr / evergreen. Ohne Skript steht die Evergreen-Liste (alle Stimmen, Stand Seitenbau) im HTML; die Tabs holen die Zahlen live
     aus /api/blog/top. Hat mit dem Index nichts zu tun (alle Beitraege stehen auf index)."""
-    orig = [p for p in items if not p.get("tr_of")]
+    orig = [p for p in items if not is_translation(p)]   # automatische DB-Uebersetzungen (src_lang/ai_tr ohne tr_of) zaehlen nicht als Originale: ihre Seite gibt es nur unter /<lang>/community/u/...
     pool = orig or items   # Sprache mit eigenen Originalen: nur diese (API filtert nach Sprache); reine Uebersetzungssprache: Stimmen des Originals, die API ohne Sprachfilter
     ev = sorted([p for p in pool if p.get("votes", 0) > 0], key=lambda p: (-p["votes"], -p["published"]))[:10]
     li = "".join(f'<li><a href="{croot}u/{p["handle"]}/blog/{p["slug"]}/">{esc(p["title"])}</a> <span class="mut">· ▲ {p["votes"]}</span></li>' for p in ev)
@@ -136,10 +143,11 @@ def build(g, posts, people, api):
             b = shell(lang, f'<h1>{esc(t0)}</h1><p class="mut">{esc(intro)}</p>')
             write(f"{pfx2(lang)}community/blog/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
             continue
+        INDEX_VOTES = 10   # nur noch fuer automatische Sprachfassungen ohne Freigabe (bisherige Regel); Originale stehen immer auf index
         w = WT.get(lang, WT["en"]); croot = f"{BASE}{pfx(lang)}/community/"
         links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
         title_blog = T(lang, "Blog", "Blog")
-        _idx_keys = set()   # (handle, slug) der indexierbaren Beitraege dieser Sprache: Grundlage der Verzeichnisse
+        _idx_keys = set(); _lifted = 0   # (handle, slug) der indexierbaren Beitraege dieser Sprache: Grundlage der Verzeichnisse; _lifted: Sprachfassungen nur wegen der Laenge auf index
         _seq = {}   # Beitraege je Autor in dieser Sprache, neueste zuerst: Vor/Zurueck blaettert durch den Blog der Autorin bzw. des Autors
         _sk = lambda q: (q["handle"], MST.is_milestone(q))   # Wochenzusammenfassungen blaettern nur untereinander, die uebrigen Beitraege ohne sie
         for q in sorted(mine, key=lambda q: (q.get("published") or 0, q["slug"]), reverse=True): _seq.setdefault(_sk(q), []).append(q)
@@ -156,6 +164,7 @@ def build(g, posts, people, api):
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
+            _own_txt = IR.plain_text(body_html)   # Haupttext vor den Anhoeren-Karten (die zeigen Folgentitel, keinen Beitragstext)
             _ms = MST.is_milestone(p)
             if not _ms: body_html = LST.apply(BASE, body_html, p, lang, ENTS)   # "Anhoeren"-Karten (site_listen): 1-2 passende Folgen und "Show folgen", nur bei guter Uebereinstimmung
             _rel = [] if _ms else TOP.related(_content, p, k=6)
@@ -192,9 +201,15 @@ def build(g, posts, people, api):
             if _spr:
                 ld[0]["sponsor"] = SPM.ld(_spr)   # T37 Sponsor: BlogPosting.sponsor
             b = SPM.mark(b, _spr + [r for r in _running if r not in _spr], "post")   # Links zur Website eines laufenden Sponsors tragen rel="sponsored", auch ohne Eintrag unter "posts" (Cognillo-Reihe); ohne Sponsoring unveraendert
-            noidx = False   # 13.11.2026: alle Blogbeitraege stehen auf index. Upvotes entscheiden nicht mehr ueber den Index, sondern nur noch ueber die Top-Listen (Tag, Woche, Monat, Jahr, evergreen)
-            if p.get("tr_of"):
-                noidx = not p.get("tr_index")   # Sprachfassungen: nur nach Freigabe je Sprache (data/blog_tr.json "index") oder ab 2500 Zeichen (site_index_rule, im Uebersetzungsschritt) indexierbar - an genau einer Stelle entschieden
+            if not is_translation(p):
+                noidx = False   # 13.11.2026: alle Originalbeitraege stehen auf index. Upvotes entscheiden nicht mehr ueber den Index, sondern nur noch ueber die Top-Listen (Tag, Woche, Monat, Jahr, evergreen)
+            else:   # Sprachfassungen (tr_of sowie automatische DB-Uebersetzungen mit src_lang/ai_tr): unveraendert die bisherige Regel
+                noidx = False if p.get("html") else p.get("votes", 0) < INDEX_VOTES
+                if p.get("tr_of"):
+                    noidx = not p.get("tr_index")   # nur nach Freigabe je Sprache (data/blog_tr.json "index") oder ab 2500 Zeichen (site_index_rule, im Uebersetzungsschritt) indexierbar - an genau einer Stelle entschieden
+                elif noidx and IR.long_enough(p.get("summary"), _own_txt, _kp, _fq):
+                    noidx = False   # automatische Uebersetzung mit >= 2500 Zeichen Text in der Sprache der Seite
+                    _lifted += 1
             if not noidx: _idx_keys.add((p["handle"], p["slug"]))
             _alt = None
             if p.get("html") and (p["slug"], p["handle"]) in tr_langs:   # hreflang nur zwischen indexierbaren Fassungen (Original + freigegebene Sprachen)
@@ -204,12 +219,13 @@ def build(g, posts, people, api):
             (g.get("write_r2") if (p.get("tr_of") and g.get("write_r2")) else write)(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, _alt, ld, xdefault=(_alt or {}).get("en"), og_type="article", extra_head=LCSS, noindex=noidx, og_of=_og, side=(g["side"](lang, p["title"] + " " + (p.get("summary") or ""), ids=topics) if g.get("side") else "")))   # Sprachfassungen liegen im R2-Bucket
             if not noidx:
                 sitemap.append((u, iso(p.get("updated") or p["published"]), _alt))
+        if _lifted: print(f"Blog {lang}: {_lifted} Sprachfassungen ab {IR.MIN_CHARS} Zeichen Text auf index")
         # Verzeichnisse: je Autor und gesamt
         def lst(items):
             return '<ul class="bl-list">' + "".join(f'<li><a href="{croot}u/{p["handle"]}/blog/{p["slug"]}/"><b>{esc(p["title"])}</b></a> <span class="mut">· {esc(pb[p["handle"]]["name"])} · {iso(p["published"])}</span>'
                                                    f'{("<br>" + esc(p["summary"])) if p.get("summary") else ""}</li>' for p in items) + "</ul>"
         is_by = lambda p, h: p["handle"] == h or any(c.get("handle") == h for c in (p.get("coauthors") or []))   # Co-Autoren: der Beitrag steht auch in ihrer Blogliste
-        _pub = lambda p: (p["handle"], p["slug"]) in _idx_keys   # zaehlt fuer den Index der Verzeichnisse: genau die Beitraege, die oben auf index stehen (alle Originalbeitraege, freigegebene Sprachfassungen)
+        _pub = lambda p: (p["handle"], p["slug"]) in _idx_keys   # zaehlt fuer den Index der Verzeichnisse: genau die Beitraege, die oben auf index stehen (alle Originalbeitraege, freigegebene oder lange Sprachfassungen)
         PER = 100   # T6: Verzeichnisse seitenweise (vorher alle ~2.300 Beitraege in einer Liste, ca. 1 MB)
         def paged(items, ru, rel, head_html, title, desc, noidx, ld=None, first_html=""):   # first_html: nur auf Seite 1 (z. B. Top-Liste mit Skript), nicht auf /page/N/
             npg = max(1, (len(items) + PER - 1) // PER)

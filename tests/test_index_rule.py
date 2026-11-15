@@ -200,6 +200,36 @@ class BlogPageTests(unittest.TestCase):
         self.assertTrue(pages[u("t1", "fr")]["noindex"])
         self.assertFalse(pages[u("t2", "fr")]["noindex"])
 
+    def test_db_auto_translation_keeps_previous_gate_original_is_index(self):
+        # automatische DB-Uebersetzung (worker autotr.js: src_lang + ai_tr, kein tr_of): ohne Freigabe/Laenge/Stimmen noindex, nicht in Sitemap und Verzeichnis-Index
+        auto = dict(src_lang="en", ai_tr=True)
+        pages, sitemap = build_blog([blog_post("kurz", "fr", body=words(40), **auto)])
+        self.assertTrue(pages[u("kurz", "fr")]["noindex"])
+        self.assertNotIn(u("kurz", "fr"), [x[0] for x in sitemap])
+        self.assertTrue(pages[f"{BASE}/fr/community/blog/"]["noindex"])
+        self.assertTrue(pages[f"{BASE}/fr/community/u/anna/blog/"]["noindex"])
+        # wie auf main: ab 2500 Zeichen eigener Text oder 10 Stimmen auf index
+        long_body = "\n\n".join(words(500) for _ in range(6))
+        pages, sitemap = build_blog([blog_post("lang", "fr", body=long_body, **auto), blog_post("stimmen", "fr", body=words(40), votes=10, **auto), blog_post("neun", "fr", body=words(40), votes=9, **auto)])
+        self.assertFalse(pages[u("lang", "fr")]["noindex"])
+        self.assertFalse(pages[u("stimmen", "fr")]["noindex"])
+        self.assertTrue(pages[u("neun", "fr")]["noindex"])
+        # Original derselben Kuerze: index
+        pages, sitemap = build_blog([blog_post("orig", "fr", body=words(40))])
+        self.assertFalse(pages[u("orig", "fr")]["noindex"])
+        self.assertIn(u("orig", "fr"), [x[0] for x in sitemap])
+
+    def test_top_block_treats_db_auto_translation_as_translation(self):
+        api = "https://api.example.test"
+        auto = blog_post("x", "fr", body=words(40), votes=5, src_lang="en", ai_tr=True)
+        h = BLG.top_block("fr", [auto], f"{BASE}/fr/community/", api)
+        self.assertIn('data-lang=""', h)
+        self.assertIn('data-tr="[&quot;anna/x&quot;]"', h)
+        self.assertIn("Titel x", h)
+        # neben einem Original derselben Sprache: nur das Original zaehlt fuer die Liste
+        h2 = BLG.top_block("fr", [auto, blog_post("o", "fr", body=words(40), votes=1)], f"{BASE}/fr/community/", api)
+        self.assertIn('data-lang="fr"', h2); self.assertIn("Titel o", h2); self.assertNotIn("Titel x", h2)
+
     def test_hreflang_between_original_and_long_translation(self):
         orig = blog_post("o", "en", html="<p>english original</p>", legacy=True)
         fr = blog_post("o", "fr", html="<p>" + words(2600) + "</p>", tr_of="en", tr_index=True, legacy=True)
