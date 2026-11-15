@@ -1,0 +1,2944 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:00.960
+Imaginez ce scénario.
+
+00:00:01.420 --> 00:00:03.620
+Vous développez une application et avez besoin d'une clé API
+
+00:00:03.620 --> 00:00:06.020
+pour vous connecter à un service d'un mot de passe, de base de données
+
+00:00:06.020 --> 00:00:07.280
+ou d'une clé de compte de stockage.
+
+00:00:07.620 --> 00:00:09.120
+Alors vous l'insérez directement dans votre code,
+
+00:00:09.220 --> 00:00:11.060
+peut-être dans un fichier de configuration ou une variable d'environnement.
+
+00:00:11.420 --> 00:00:13.920
+Ça fonctionne et tout tourne normalement jusqu'à ce que vous poussiez ce code sur GitHub
+
+00:00:13.920 --> 00:00:16.140
+ou partagez un notebook avec un collègue, avec un collègue.
+
+00:00:16.660 --> 00:00:18.600
+Et voilà, votre secret n'en est plus vraiment un.
+
+00:00:19.340 --> 00:00:22.500
+Si ce code tombe entre de mauvaises mains, tout votre système est exposé.
+
+00:00:23.160 --> 00:00:25.120
+Azure Key Vault est l'outil qui résout ce problème.
+
+00:00:26.260 --> 00:00:28.240
+Il vous offre un endroit sécurisé pour stocker vos secrets
+
+00:00:28.240 --> 00:00:29.640
+afin qu'ils ne finissent jamais dans votre code.
+
+00:00:30.000 --> 00:00:31.360
+Mais voici ce que la plupart des gens oublient.
+
+00:00:31.700 --> 00:00:34.480
+Le simple fait d'avoir un Key Vault ne vous rend pas automatiquement sécurisé.
+
+00:00:34.860 --> 00:00:36.680
+La manière dont vous le configurez, contrôlez l'accès
+
+00:00:36.680 --> 00:00:38.560
+et attribuez les permissions est tout aussi importante.
+
+00:00:39.040 --> 00:00:41.480
+À la fin de cet épisode, vous saurez ce qu'est réellement Key Vault,
+
+00:00:41.680 --> 00:00:43.680
+ce que vous pouvez y stocker, comment fonctionne l'accès
+
+00:00:43.680 --> 00:00:46.500
+et la plus grosse erreur qui pourrait exposer vos secrets.
+
+00:00:47.420 --> 00:00:49.660
+Le tout dans langage simple, sans jargon juste l'essentiel dont vous avez besoin.
+
+00:00:50.280 --> 00:00:52.320
+Alors qu'est-ce que Azure Key Vault exactement ?
+
+00:00:52.320 --> 00:00:53.620
+Qu'est-ce que Azure Key Vault ?
+
+00:00:53.620 --> 00:00:54.660
+Voici la définition la plus simple.
+
+00:00:55.120 --> 00:00:57.900
+Azure Key Vault est un coffre-fort numérique basé sur le cloud pour vos secrets.
+
+00:00:57.900 --> 00:01:01.060
+C'est un service géré par Microsoft pour centraliser clés API,
+
+00:01:01.420 --> 00:01:03.260
+mots de passe de base de données, chaînes de connexion,
+
+00:01:03.380 --> 00:01:04.980
+clés de chiffrement et certificats.
+
+00:01:05.940 --> 00:01:07.280
+Vous n'avez pas à vous soucier de l'infrastructure,
+
+00:01:07.440 --> 00:01:09.560
+car Azure gère les mises à jour, la disponibilité et la sécurité.
+
+00:01:10.140 --> 00:01:10.900
+Vous n'avez qu'à l'utiliser.
+
+00:01:11.300 --> 00:01:12.360
+Imaginez cela comme un immeuble de bureau.
+
+00:01:12.720 --> 00:01:14.700
+Vous avez des postes de travail, des salles de réunion et des dossiers,
+
+00:01:14.760 --> 00:01:16.460
+mais quelque part, au sous-sol, il y a une salle forte
+
+00:01:16.460 --> 00:01:18.900
+où vous gardez les éléments importants,
+
+00:01:18.940 --> 00:01:20.740
+clés maîtresses, argent liquide, documents juridiques.
+
+00:01:21.220 --> 00:01:23.100
+Personne n'y entre sans autorisation ni authentification.
+
+00:01:23.560 --> 00:01:24.460
+Et chaque fois qu'il y a un ouvre la porte,
+
+00:01:24.540 --> 00:01:25.280
+c'est qu'on signe dans un journal.
+
+00:01:25.580 --> 00:01:26.160
+C'est ça Key Vault.
+
+00:01:26.780 --> 00:01:28.780
+La salle sécurisée au sous-sol de votre architecture Azure.
+
+00:01:30.160 --> 00:01:31.380
+Maintenant, comparez cela à l'ancien état.
+
+00:01:31.840 --> 00:01:34.280
+Il y a 20 ans, si vous aviez besoin d'un mot de passe de base de données,
+
+00:01:34.440 --> 00:01:36.100
+vous le codiez en dur dans un fichier de configuration,
+
+00:01:36.280 --> 00:01:37.600
+une variable d'environnement, au pire,
+
+00:01:37.980 --> 00:01:40.040
+en texte brut dans votre code source.
+
+00:01:41.120 --> 00:01:43.100
+Si quelqu'un accédait à ce serveur, il avait tout.
+
+00:01:43.760 --> 00:01:45.060
+Et si vous deviez renouveler ce mot de passe,
+
+00:01:45.060 --> 00:01:46.500
+il fallait le mettre à jour partout.
+
+00:01:47.440 --> 00:01:49.780
+Chaque fichier de configuration, chaque environnement, chaque déploiement.
+
+00:01:49.780 --> 00:01:50.340
+C'est un cauchemar.
+
+00:01:50.880 --> 00:01:51.660
+Key Vault change tout cela.
+
+00:01:52.300 --> 00:01:53.840
+Au lieu de disperser vos secrets dans votre code
+
+00:01:53.840 --> 00:01:54.840
+et vos fichiers de configuration,
+
+00:01:55.040 --> 00:01:56.340
+vous les stockez en un seul endroit central.
+
+00:01:57.120 --> 00:01:58.700
+Vos applications les demandent lors de l'exécution,
+
+00:01:58.880 --> 00:01:59.680
+uniquement quand elles ont besoin.
+
+00:02:00.120 --> 00:02:01.180
+Et comme tout est centralisé,
+
+00:02:01.400 --> 00:02:03.000
+vous pouvez renouveler un secret à un seul endroit
+
+00:02:03.000 --> 00:02:05.340
+et chaque application qu'il utilise récupère la nouvelle valeur,
+
+00:02:05.520 --> 00:02:07.120
+automatiquement, sans modification de code,
+
+00:02:07.320 --> 00:02:08.800
+ni redéploiement, ni redéploiement.
+
+00:02:09.500 --> 00:02:10.280
+Mais voici le point important.
+
+00:02:10.420 --> 00:02:12.280
+Key Vault n'est pas juste un gestionnaire de mots de passe pour vos applications.
+
+00:02:12.280 --> 00:02:13.700
+C'est un service de sécurité fondamental.
+
+00:02:14.180 --> 00:02:15.900
+Chaque service Azure peut s'y intégrer.
+
+00:02:16.640 --> 00:02:19.580
+App Service, Functions, AKS, Data Factory, Synapse, Logic Apps,
+
+00:02:19.580 --> 00:02:21.700
+les Pipeline DevOps, tous savent communiquer avec Key Vault.
+
+00:02:22.680 --> 00:02:24.780
+Il devient l'épine dorsale de votre architecture cloud sécurisée.
+
+00:02:25.180 --> 00:02:26.180
+Une fois configuré correctement,
+
+00:02:26.260 --> 00:02:28.320
+vous n'avez plus du tout à vous soucier de la gestion des identifiants.
+
+00:02:29.200 --> 00:02:30.880
+Que pouvez-vous stocker ?
+
+00:02:30.880 --> 00:02:32.000
+Maintenant que vous savez ce qu'est Key Vault,
+
+00:02:32.120 --> 00:02:33.860
+parlons de ce que vous pouvez réellement y mettre.
+
+00:02:34.460 --> 00:02:35.940
+Vous disposez de trois catégories principales.
+
+00:02:36.140 --> 00:02:37.820
+Les secrets, les clés et les certificats.
+
+00:02:38.520 --> 00:02:39.420
+Chacune a un rôle différent
+
+00:02:39.420 --> 00:02:42.460
+et comprendre cette différence vous aide à utiliser Key Vault correctement.
+
+00:02:43.000 --> 00:02:43.720
+Commençons par les secrets.
+
+00:02:44.160 --> 00:02:45.420
+C'est ce que les gens stockent le plus couramment.
+
+00:02:46.020 --> 00:02:47.300
+Les secrets incluent les chaînes de connexion,
+
+00:02:47.420 --> 00:02:47.900
+les clés API,
+
+00:02:47.900 --> 00:02:49.200
+les mots de passe de base de données,
+
+00:02:49.300 --> 00:02:50.240
+les clés de compte de stockage,
+
+00:02:50.320 --> 00:02:51.520
+en somme tous les identifiants quotidiens
+
+00:02:51.520 --> 00:02:52.480
+dans vos applications quotidiens
+
+00:02:52.480 --> 00:02:54.140
+dont vos applications ont besoin pour déloguer avec d'autres services.
+
+00:02:54.300 --> 00:02:55.420
+Au lieu de les insérer dans votre code
+
+00:02:55.420 --> 00:02:56.320
+ou votre fichier de configuration,
+
+00:02:56.540 --> 00:02:57.520
+vous les placez dans Key Vault.
+
+00:02:58.060 --> 00:02:59.680
+Votre application les récupère à l'exécution
+
+00:02:59.680 --> 00:03:01.100
+et personne ne les voit jamais en texte clair.
+
+00:03:01.440 --> 00:03:02.840
+Voyez cela comme un tiroir verrouillé
+
+00:03:02.840 --> 00:03:04.120
+dans votre armoire de classement numérique.
+
+00:03:04.620 --> 00:03:05.200
+Viennent ensuite les clés.
+
+00:03:05.740 --> 00:03:07.280
+Il s'agit de clés de chiffrement pour les données au repos.
+
+00:03:07.700 --> 00:03:09.260
+Si vous utilisez des clés gérées par le client
+
+00:03:09.260 --> 00:03:10.060
+pour le stockage Azure,
+
+00:03:10.340 --> 00:03:11.180
+les bases de données SQL
+
+00:03:11.180 --> 00:03:12.920
+ou le chiffrement de disques de machines virtuelles,
+
+00:03:12.920 --> 00:03:14.260
+ces clés peuvent résider dans Key Vault.
+
+00:03:14.860 --> 00:03:15.940
+Cela vous donne un contrôle total
+
+00:03:15.940 --> 00:03:17.280
+sur qui peut les utiliser et quand.
+
+00:03:17.760 --> 00:03:19.040
+Et si vous avez besoin de clés matérielles
+
+00:03:19.040 --> 00:03:19.760
+pour la conformité,
+
+00:03:19.840 --> 00:03:21.860
+le niveau premium vous protège grâce au HSM.
+
+00:03:22.620 --> 00:03:23.920
+Les certificats ?
+
+00:03:23.920 --> 00:03:25.240
+Certificats TLS et SSL
+
+00:03:25.240 --> 00:03:26.220
+pour vos applications web,
+
+00:03:26.340 --> 00:03:27.500
+API et services internes.
+
+00:03:28.000 --> 00:03:28.920
+Key Vault peut les stocker,
+
+00:03:29.000 --> 00:03:29.820
+gérer leur cycle de vie
+
+00:03:29.820 --> 00:03:30.960
+et même les renouveler automatiquement
+
+00:03:30.960 --> 00:03:31.840
+lorsqu'ils arrivent à expiration.
+
+00:03:32.340 --> 00:03:33.260
+C'est un véritable soulagement
+
+00:03:33.260 --> 00:03:35.120
+pour quiconque a déjà vu un certificat expirer
+
+00:03:35.120 --> 00:03:36.640
+à 3h du matin, un dimanche.
+
+00:03:37.240 --> 00:03:37.940
+Voici un exemple concret.
+
+00:03:38.420 --> 00:03:39.440
+Imaginez une application web
+
+00:03:39.440 --> 00:03:40.660
+ayant besoin d'une chaîne de connexion
+
+00:03:40.660 --> 00:03:42.860
+et d'une clé API pour un service tiers.
+
+00:03:43.640 --> 00:03:44.660
+A l'ancienne, vous auriez mis les deux
+
+00:03:44.660 --> 00:03:45.980
+dans votre fichier de paramètres GISA.
+
+00:03:46.900 --> 00:03:48.200
+Si ce fichier finit dans votre dépôt,
+
+00:03:48.320 --> 00:03:49.240
+quiconque a accès au code
+
+00:03:49.240 --> 00:03:50.840
+peut voir vos identifiants de base de données.
+
+00:03:52.580 --> 00:03:53.020
+Avec Key Vault,
+
+00:03:53.080 --> 00:03:54.420
+vous stockez ces deux valeurs en tant que secret.
+
+00:03:54.920 --> 00:03:56.420
+Votre application les récupère au démarrage
+
+00:03:56.420 --> 00:03:57.720
+et ils n'apparaissent jamais dans votre code source.
+
+00:03:58.100 --> 00:03:59.020
+Besoin de renouveler le mot de passe
+
+00:03:59.020 --> 00:03:59.960
+de la base de données ?
+
+00:03:59.960 --> 00:04:00.780
+Mettez-le à jour dans Key Vault.
+
+00:04:01.100 --> 00:04:02.500
+L'application récupère la nouvelle valeur
+
+00:04:02.500 --> 00:04:03.960
+automatiquement au redémarrage suivant.
+
+00:04:04.300 --> 00:04:05.660
+Aucun changement de code, aucun redéploiement.
+
+00:04:06.120 --> 00:04:06.880
+Ce qui surprend souvent,
+
+00:04:07.140 --> 00:04:08.320
+c'est que le versionnage est intégré.
+
+00:04:08.680 --> 00:04:09.680
+Lorsque vous mettez à jour un secret,
+
+00:04:10.000 --> 00:04:11.340
+Key Vault ne remplace pas l'ancienne valeur
+
+00:04:11.340 --> 00:04:12.400
+et crée une nouvelle version.
+
+00:04:12.860 --> 00:04:14.020
+Les anciennes versions sont conservées
+
+00:04:14.020 --> 00:04:15.680
+pour pouvoir revenir en arrière en cas de problème.
+
+00:04:16.260 --> 00:04:17.740
+C'est extrêmement pratique lors d'incidents.
+
+00:04:18.480 --> 00:04:20.420
+Vous pouvez rapidement revenir à un secret précédent
+
+00:04:20.420 --> 00:04:22.240
+sans avoir à vous souvenir de son ancienne valeur.
+
+00:04:23.120 --> 00:04:24.020
+Vous pouvez stocker les trois types,
+
+00:04:24.260 --> 00:04:25.360
+secrets clés et certificats,
+
+00:04:25.980 --> 00:04:26.600
+dans le même coffre.
+
+00:04:26.600 --> 00:04:28.380
+Mais la meilleure pratique consiste
+
+00:04:28.380 --> 00:04:29.580
+à les séparer par environnement.
+
+00:04:30.060 --> 00:04:31.060
+Ayez un coffre pour le développement,
+
+00:04:31.580 --> 00:04:32.180
+un pour les tests
+
+00:04:32.180 --> 00:04:32.900
+et un pour la production.
+
+00:04:34.040 --> 00:04:35.460
+Cela évite d'utiliser accidentellement
+
+00:04:35.460 --> 00:04:36.340
+un secret de production
+
+00:04:36.340 --> 00:04:37.320
+en environnement de dev
+
+00:04:37.320 --> 00:04:38.400
+et limite l'impact
+
+00:04:38.400 --> 00:04:39.620
+si un coffre est compromis.
+
+00:04:40.760 --> 00:04:41.500
+Mais stocker des secrets
+
+00:04:41.500 --> 00:04:42.340
+n'est qu'une partie de l'histoire.
+
+00:04:42.800 --> 00:04:43.640
+La vraie question est de savoir
+
+00:04:43.640 --> 00:04:44.300
+qui peut y accéder.
+
+00:04:45.220 --> 00:04:46.780
+Comment fonctionne le contrôle d'accès ?
+
+00:04:46.780 --> 00:04:47.800
+Parlons maintenant de qui peut entrer.
+
+00:04:48.440 --> 00:04:49.480
+Key Vault propose deux manières
+
+00:04:49.480 --> 00:04:50.320
+de contrôler l'accès
+
+00:04:50.320 --> 00:04:52.440
+et votre choix a une grande importance.
+
+00:04:53.400 --> 00:04:53.920
+Le premier modèle
+
+00:04:53.920 --> 00:04:55.080
+concerne les stratégies d'accès hérité.
+
+00:04:55.620 --> 00:04:56.300
+C'est l'ancienne méthode.
+
+00:04:57.300 --> 00:04:58.140
+Vous créez des stratégies
+
+00:04:58.140 --> 00:04:59.140
+directement sur le coffre
+
+00:04:59.140 --> 00:05:00.500
+et vous attribuez des autorisations
+
+00:05:00.500 --> 00:05:01.600
+à des utilisateurs
+
+00:05:01.600 --> 00:05:02.440
+ou groupes
+
+00:05:02.440 --> 00:05:03.620
+pour des types de données précis.
+
+00:05:04.920 --> 00:05:06.000
+Le problème est que ces stratégies
+
+00:05:06.000 --> 00:05:07.160
+sont liées directement au coffre.
+
+00:05:07.620 --> 00:05:08.540
+Si vous avez plusieurs coffres,
+
+00:05:08.640 --> 00:05:09.120
+vous devez gérer
+
+00:05:09.120 --> 00:05:10.440
+les stratégies séparément pour chacun.
+
+00:05:10.860 --> 00:05:11.640
+Cela n'est pas extensible.
+
+00:05:12.300 --> 00:05:13.620
+Microsoft déconseille désormais
+
+00:05:13.620 --> 00:05:14.220
+leur utilisation
+
+00:05:14.220 --> 00:05:14.880
+en raison de problèmes
+
+00:05:14.880 --> 00:05:15.800
+de sécurité connus.
+
+00:05:16.960 --> 00:05:17.720
+Elles ne prennent pas en charge
+
+00:05:17.720 --> 00:05:19.100
+la gestion des identités privilégiées
+
+00:05:19.100 --> 00:05:19.640
+et peuvent créer
+
+00:05:19.640 --> 00:05:20.720
+des chemins d'escalade inattendus.
+
+00:05:21.820 --> 00:05:22.360
+Le second modèle
+
+00:05:22.360 --> 00:05:22.980
+est le contrôle d'accès
+
+00:05:22.980 --> 00:05:24.440
+en fonction du rôle Azure RBAC.
+
+00:05:25.020 --> 00:05:25.800
+C'est la méthode moderne.
+
+00:05:25.800 --> 00:05:27.160
+Elle utilise les identités
+
+00:05:27.160 --> 00:05:27.600
+entre ID
+
+00:05:27.600 --> 00:05:28.340
+et reste cohérente
+
+00:05:28.340 --> 00:05:29.440
+avec la gestion des autorisations
+
+00:05:29.440 --> 00:05:30.160
+dans le reste d'Azure.
+
+00:05:31.040 --> 00:05:31.600
+Si vous savez déjà
+
+00:05:31.600 --> 00:05:32.100
+accorder l'accès
+
+00:05:32.100 --> 00:05:33.000
+à un compte de stockage
+
+00:05:33.000 --> 00:05:33.880
+ou une machine virtuelle,
+
+00:05:34.000 --> 00:05:34.680
+vous savez déjà le faire.
+
+00:05:34.900 --> 00:05:35.660
+Pour Key Vault.
+
+00:05:35.660 --> 00:05:37.880
+Même système, même modèle.
+
+00:05:38.480 --> 00:05:39.340
+Voici la règle d'or,
+
+00:05:39.460 --> 00:05:40.360
+le moindre privilège.
+
+00:05:40.960 --> 00:05:41.740
+N'accorder que le minimum
+
+00:05:41.740 --> 00:05:42.580
+d'accès nécessaire,
+
+00:05:42.900 --> 00:05:43.420
+rien de plus.
+
+00:05:44.340 --> 00:05:45.200
+Si quelqu'un a seulement besoin
+
+00:05:45.200 --> 00:05:45.680
+de lire des secrets,
+
+00:05:45.900 --> 00:05:46.680
+ne lui donnez pas la permission
+
+00:05:46.680 --> 00:05:47.560
+de les créer ou de les supprimer.
+
+00:05:48.240 --> 00:05:49.020
+Si quelqu'un n'a besoin
+
+00:05:49.020 --> 00:05:50.080
+que de gérer des certificats,
+
+00:05:50.260 --> 00:05:51.160
+ne lui donnez pas accès aux clés.
+
+00:05:51.820 --> 00:05:52.500
+Laissez-moi passer en revue
+
+00:05:52.500 --> 00:05:53.040
+les rôles principaux.
+
+00:05:53.340 --> 00:05:54.160
+Il y a le lecteur Key Vault.
+
+00:05:54.900 --> 00:05:56.000
+Cela permet de lister les secrets,
+
+00:05:56.160 --> 00:05:56.880
+mais pas de lire leurs valeurs.
+
+00:05:57.640 --> 00:05:58.460
+Utisateur de secrets Key Vault.
+
+00:05:58.960 --> 00:06:00.160
+Cela permet de lire réellement
+
+00:06:00.160 --> 00:06:00.920
+les valeurs des secrets
+
+00:06:00.920 --> 00:06:02.400
+et responsable des secrets Key Vault.
+
+00:06:02.400 --> 00:06:03.840
+Cela permet de créer,
+
+00:06:03.980 --> 00:06:05.200
+mettre à jour et supprimer des secrets.
+
+00:06:05.940 --> 00:06:06.580
+Notez la logique.
+
+00:06:07.120 --> 00:06:08.000
+Chaque rôle est spécifique
+
+00:06:08.000 --> 00:06:08.740
+aux données dans le coffre,
+
+00:06:08.800 --> 00:06:09.600
+pas au coffre lui-même.
+
+00:06:10.080 --> 00:06:10.700
+Ah !
+
+00:06:10.700 --> 00:06:11.500
+Comparons maintenant cela
+
+00:06:11.500 --> 00:06:12.260
+aux rôles étendus.
+
+00:06:12.480 --> 00:06:13.600
+Propriétaire, contributeur, lecteur.
+
+00:06:14.000 --> 00:06:14.780
+S'applique au coffre-fort
+
+00:06:14.780 --> 00:06:15.520
+en tant que ressource
+
+00:06:15.520 --> 00:06:16.600
+et non aux données qu'il contient.
+
+00:06:16.880 --> 00:06:17.800
+Un propriétaire peut supprimer
+
+00:06:17.800 --> 00:06:18.640
+l'intégralité du coffre-fort.
+
+00:06:18.920 --> 00:06:19.840
+Un contributeur peut modifier
+
+00:06:19.840 --> 00:06:20.600
+les paramètres du coffre-fort.
+
+00:06:21.420 --> 00:06:22.500
+Cependant, aucun de ces rôles
+
+00:06:22.500 --> 00:06:24.220
+ne donne accès aux secrets à l'intérieur.
+
+00:06:25.260 --> 00:06:25.820
+Il s'agit d'une couche
+
+00:06:25.820 --> 00:06:26.780
+d'autorisation distincte
+
+00:06:26.780 --> 00:06:27.600
+et c'est le point essentiel.
+
+00:06:27.600 --> 00:06:28.480
+Le contrôle d'accès
+
+00:06:28.480 --> 00:06:29.720
+est comme un gâteau à plusieurs coups.
+
+00:06:29.760 --> 00:06:30.500
+Vous avez besoin d'accès
+
+00:06:30.500 --> 00:06:31.280
+au coffre-fort lui-même,
+
+00:06:31.360 --> 00:06:32.100
+c'est la première couche
+
+00:06:32.100 --> 00:06:33.360
+et aux données à l'intérieur,
+
+00:06:33.620 --> 00:06:34.620
+c'est la seconde.
+
+00:06:35.360 --> 00:06:36.700
+Les deux doivent être accordés séparément.
+
+00:06:37.320 --> 00:06:38.120
+La plupart des débutants
+
+00:06:38.120 --> 00:06:39.240
+ne pensent qu'à la première couche
+
+00:06:39.240 --> 00:06:40.120
+et oublient la seconde.
+
+00:06:40.680 --> 00:06:41.560
+C'est là que les problèmes commencent.
+
+00:06:42.280 --> 00:06:43.420
+L'erreur de sécurité numéro 1.
+
+00:06:43.700 --> 00:06:44.220
+Voici le problème.
+
+00:06:44.560 --> 00:06:45.140
+La plupart des gens
+
+00:06:45.140 --> 00:06:46.240
+voient le rôle de contributeur
+
+00:06:46.240 --> 00:06:47.080
+Key Vault et pensent qu'il est su.
+
+00:06:47.460 --> 00:06:48.500
+Ils voient le mot contributeur
+
+00:06:48.500 --> 00:06:49.680
+et supposent qu'ils peuvent gérer
+
+00:06:49.680 --> 00:06:50.180
+les paramètres
+
+00:06:50.180 --> 00:06:51.240
+sans toucher au secret.
+
+00:06:52.000 --> 00:06:52.980
+La documentation de Microsoft
+
+00:06:52.980 --> 00:06:54.340
+disait initialement exactement cela.
+
+00:06:54.340 --> 00:06:55.740
+Ce rôle ne vous permet pas
+
+00:06:55.740 --> 00:06:56.460
+d'accéder aux secrets,
+
+00:06:56.760 --> 00:06:57.820
+clés ou certificats.
+
+00:06:58.420 --> 00:06:59.380
+Sauf que ce n'est pas tout à fait vrai.
+
+00:07:00.000 --> 00:07:00.640
+Un utilisateur
+
+00:07:00.640 --> 00:07:01.940
+avec le rôle contributeur Key Vault
+
+00:07:01.940 --> 00:07:02.440
+peut modifier
+
+00:07:02.440 --> 00:07:03.760
+les stratégies d'accès du coffre.
+
+00:07:04.340 --> 00:07:05.100
+Et si ce coffre
+
+00:07:05.100 --> 00:07:05.660
+utilise encore
+
+00:07:05.660 --> 00:07:06.960
+les anciennes stratégies d'accès,
+
+00:07:07.240 --> 00:07:07.880
+ce qui est courant,
+
+00:07:08.020 --> 00:07:08.760
+il peut s'accorder
+
+00:07:08.760 --> 00:07:11.640
+un accès en lecture complet
+
+00:07:11.640 --> 00:07:12.300
+ou ads.
+
+00:07:12.780 --> 00:07:13.980
+Aucun exploit spécial n'est nécessaire,
+
+00:07:14.140 --> 00:07:15.180
+aucune vulnérabilité à corriger.
+
+00:07:15.440 --> 00:07:15.800
+C'est simplement
+
+00:07:15.800 --> 00:07:16.700
+le fonctionnement des autorisations.
+
+00:07:17.080 --> 00:07:17.800
+Des chercheurs en sécurité
+
+00:07:17.800 --> 00:07:19.440
+chez Datadog l'ont prouvé en 2024.
+
+00:07:19.960 --> 00:07:20.440
+Ils ont montré
+
+00:07:20.440 --> 00:07:21.280
+qu'un contributeur
+
+00:07:21.280 --> 00:07:22.720
+peut obtenir un accès complet
+
+00:07:22.720 --> 00:07:23.420
+aux données
+
+00:07:23.420 --> 00:07:24.320
+via les anciennes stratégies
+
+00:07:25.220 --> 00:07:26.480
+La réponse de Microsoft
+
+00:07:26.480 --> 00:07:27.200
+a été intéressante.
+
+00:07:28.160 --> 00:07:28.940
+Ils ont affirmé
+
+00:07:28.940 --> 00:07:29.460
+que ce n'était pas
+
+00:07:29.460 --> 00:07:30.300
+une vulnérabilité,
+
+00:07:30.480 --> 00:07:31.580
+mais ils ont mis à jour
+
+00:07:31.580 --> 00:07:32.260
+la documentation
+
+00:07:32.260 --> 00:07:33.940
+pour avertir que ce rôle
+
+00:07:33.940 --> 00:07:34.800
+peut s'octroyer
+
+00:07:34.800 --> 00:07:35.580
+un accès aux données.
+
+00:07:36.980 --> 00:07:37.520
+Ce n'est donc pas
+
+00:07:37.520 --> 00:07:38.500
+un bug de Key Vault,
+
+00:07:38.680 --> 00:07:39.500
+mais un piège de configuration.
+
+00:07:40.100 --> 00:07:41.140
+Même les équipes expérimentées
+
+00:07:41.140 --> 00:07:41.620
+se font avoir
+
+00:07:41.620 --> 00:07:42.260
+car le nom du rôle
+
+00:07:42.260 --> 00:07:42.960
+semble inoffensif.
+
+00:07:43.760 --> 00:07:44.540
+Contributeur ne semble pas
+
+00:07:44.540 --> 00:07:44.900
+être quelqu'un
+
+00:07:44.900 --> 00:07:45.740
+qui peut lire vos mots de passe
+
+00:07:45.740 --> 00:07:46.280
+de base de données,
+
+00:07:46.420 --> 00:07:46.900
+mais en pratique,
+
+00:07:47.120 --> 00:07:47.500
+il le peut.
+
+00:07:48.080 --> 00:07:48.700
+Réfléchissez au risque.
+
+00:07:49.220 --> 00:07:49.760
+Si un attaquant
+
+00:07:49.760 --> 00:07:50.580
+compromet un compte
+
+00:07:50.580 --> 00:07:51.820
+avec le rôle de contributeur,
+
+00:07:52.000 --> 00:07:52.640
+il n'a pas besoin
+
+00:07:52.640 --> 00:07:54.320
+de forcer le corps.
+
+00:07:54.340 --> 00:07:55.660
+Il n'a pas besoin
+
+00:07:55.660 --> 00:07:56.280
+de casser le chiffrement.
+
+00:07:56.780 --> 00:07:57.460
+Il modifie simplement
+
+00:07:57.460 --> 00:07:58.300
+la stratégie d'accès,
+
+00:07:58.520 --> 00:07:59.560
+s'accorde un accès en lecture
+
+00:07:59.560 --> 00:08:01.200
+et exfiltre silencieusement
+
+00:08:01.200 --> 00:08:01.900
+tous vos secrets,
+
+00:08:02.100 --> 00:08:02.820
+chaînes de connexion,
+
+00:08:03.080 --> 00:08:03.540
+clés API,
+
+00:08:03.840 --> 00:08:04.480
+certificats,
+
+00:08:04.860 --> 00:08:05.040
+tout.
+
+00:08:05.760 --> 00:08:06.360
+Et comme les changements
+
+00:08:06.360 --> 00:08:07.020
+de stratégie sont
+
+00:08:07.020 --> 00:08:08.120
+une activité administrative
+
+00:08:08.120 --> 00:08:08.500
+courante,
+
+00:08:08.580 --> 00:08:09.260
+cela ne peut nous déclencher
+
+00:08:09.260 --> 00:08:09.960
+aucune alerte.
+
+00:08:10.080 --> 00:08:10.260
+Son,
+
+00:08:10.700 --> 00:08:11.580
+quelle est la solution ?
+
+00:08:11.580 --> 00:08:11.820
+D'abord,
+
+00:08:11.900 --> 00:08:12.940
+utilisez le Airbacé Azure
+
+00:08:12.940 --> 00:08:13.600
+pour l'accès aux données
+
+00:08:13.600 --> 00:08:14.200
+au lieu des anciennes
+
+00:08:14.200 --> 00:08:14.840
+stratégies d'accès.
+
+00:08:15.580 --> 00:08:16.520
+Le Airbac sépare la gestion
+
+00:08:16.520 --> 00:08:17.300
+du coffre-fort des données
+
+00:08:17.300 --> 00:08:17.840
+qu'il contient.
+
+00:08:18.720 --> 00:08:19.000
+Deuxièmement,
+
+00:08:19.000 --> 00:08:19.580
+n'attribuez jamais
+
+00:08:19.580 --> 00:08:20.300
+le rôle de contributeur
+
+00:08:20.300 --> 00:08:20.980
+Key Vault à quelqu'un
+
+00:08:20.980 --> 00:08:22.060
+qui n'en a pas absolument besoin.
+
+00:08:23.100 --> 00:08:23.420
+Troisièmement,
+
+00:08:23.480 --> 00:08:23.980
+si vous avez déjà
+
+00:08:23.980 --> 00:08:24.620
+des utilisateurs
+
+00:08:24.620 --> 00:08:25.100
+avec ce rôle
+
+00:08:25.100 --> 00:08:25.840
+Auditélé dès aujourd'hui,
+
+00:08:26.320 --> 00:08:26.820
+remplacez le rôle
+
+00:08:26.820 --> 00:08:27.420
+de contributeur
+
+00:08:27.420 --> 00:08:28.100
+par des rôles plus précis
+
+00:08:28.100 --> 00:08:28.700
+comme utilisateur
+
+00:08:28.700 --> 00:08:29.360
+de secrets Key Vault
+
+00:08:29.360 --> 00:08:29.920
+ou responsable
+
+00:08:29.920 --> 00:08:30.640
+de secrets Key Vault.
+
+00:08:31.300 --> 00:08:32.260
+Il existe une deuxième erreur
+
+00:08:32.260 --> 00:08:33.000
+qui aggrave la première.
+
+00:08:33.500 --> 00:08:34.240
+Placez tous vos secrets
+
+00:08:34.240 --> 00:08:35.060
+dans un seul coffre.
+
+00:08:35.620 --> 00:08:36.260
+Si vous utilisez
+
+00:08:36.260 --> 00:08:37.060
+un seul coffre pour tout,
+
+00:08:37.560 --> 00:08:37.860
+développement,
+
+00:08:38.240 --> 00:08:38.440
+test,
+
+00:08:38.540 --> 00:08:39.040
+pré-production,
+
+00:08:39.340 --> 00:08:39.660
+production,
+
+00:08:39.840 --> 00:08:40.540
+toutes vos applications
+
+00:08:40.540 --> 00:08:41.800
+et qu'il est compromis,
+
+00:08:42.220 --> 00:08:43.380
+tout est exposé.
+
+00:08:43.940 --> 00:08:44.240
+C'est un point
+
+00:08:44.240 --> 00:08:45.220
+de défaillance unique ?
+
+00:08:45.220 --> 00:08:45.920
+Nous parlerons un peu plus
+
+00:08:49.000 --> 00:08:49.660
+Ne mettez pas tous vos oeufs
+
+00:08:49.660 --> 00:08:50.240
+dans le même panier,
+
+00:08:50.440 --> 00:08:51.100
+surtout quand ce panier
+
+00:08:51.100 --> 00:08:51.700
+contient les clés
+
+00:08:51.700 --> 00:08:52.660
+de toute votre infrastructure.
+
+00:08:54.000 --> 00:08:55.000
+L'identité gérée,
+
+00:08:55.200 --> 00:08:55.960
+la référence absolue.
+
+00:08:56.360 --> 00:08:57.720
+Alors comment bien faire les choses ?
+
+00:08:57.720 --> 00:08:58.540
+Parlons de la meilleure façon
+
+00:08:58.540 --> 00:08:59.360
+d'accéder à Key Vault.
+
+00:08:59.720 --> 00:09:00.540
+Il y a un problème fondamental.
+
+00:09:00.980 --> 00:09:01.960
+Pour obtenir des identifiants
+
+00:09:01.960 --> 00:09:02.460
+depuis Key Vault,
+
+00:09:02.540 --> 00:09:03.720
+votre application doit s'authentifier
+
+00:09:03.720 --> 00:09:04.520
+mais pour s'authentifier,
+
+00:09:04.800 --> 00:09:06.040
+elle a besoin d'identifiants
+
+00:09:06.040 --> 00:09:07.520
+ou stockez-vous les identifiants
+
+00:09:07.520 --> 00:09:08.500
+que votre application utilise
+
+00:09:08.500 --> 00:09:09.480
+pour obtenir des identifiants.
+
+00:09:09.780 --> 00:09:10.420
+C'est le problème de l'œuf
+
+00:09:10.420 --> 00:09:10.860
+et de la poule.
+
+00:09:11.160 --> 00:09:11.780
+L'ancienne solution
+
+00:09:11.780 --> 00:09:12.940
+était un principal de service
+
+00:09:12.940 --> 00:09:13.800
+avec un secret client.
+
+00:09:14.240 --> 00:09:15.040
+Mais ce secret doit être
+
+00:09:15.040 --> 00:09:15.800
+stocké quelque part
+
+00:09:15.800 --> 00:09:16.880
+dans un fichier de configuration,
+
+00:09:17.080 --> 00:09:17.820
+des variables d'environnement
+
+00:09:17.820 --> 00:09:19.180
+ou un pipeline de déploiement
+
+00:09:19.180 --> 00:09:20.160
+ou un pipeline de déploiement.
+
+00:09:20.240 --> 00:09:21.360
+Et voilà revenu au point de départ,
+
+00:09:21.820 --> 00:09:22.740
+vous avez simplement déplacé
+
+00:09:22.740 --> 00:09:23.240
+le secret ailleurs.
+
+00:09:23.680 --> 00:09:24.320
+L'identité gérée
+
+00:09:24.320 --> 00:09:25.120
+résout complètement ce problème.
+
+00:09:25.500 --> 00:09:26.320
+Voici comment cela fonctionne.
+
+00:09:26.560 --> 00:09:27.220
+Lorsque vous activez
+
+00:09:27.220 --> 00:09:27.940
+l'identité gérée
+
+00:09:27.940 --> 00:09:28.840
+sur une ressource Azure
+
+00:09:28.840 --> 00:09:30.000
+comme une application web,
+
+00:09:30.300 --> 00:09:30.720
+une fonction
+
+00:09:30.720 --> 00:09:31.620
+ou une machine virtuelle,
+
+00:09:32.180 --> 00:09:33.320
+Azure crée automatiquement
+
+00:09:33.320 --> 00:09:34.520
+une identité pour cette ressource
+
+00:09:34.520 --> 00:09:35.120
+dans EntraID.
+
+00:09:35.900 --> 00:09:36.480
+Cette identité
+
+00:09:36.480 --> 00:09:37.640
+est entièrement gérée par Azure.
+
+00:09:38.060 --> 00:09:39.040
+Aucun identifiant à créer,
+
+00:09:39.180 --> 00:09:40.180
+aucun secret à renouveler,
+
+00:09:40.280 --> 00:09:40.840
+rien à stocker.
+
+00:09:42.000 --> 00:09:43.100
+La ressource possède simplement
+
+00:09:43.100 --> 00:09:44.420
+une identité connue d'Azure.
+
+00:09:44.940 --> 00:09:45.640
+Il en existe deux types.
+
+00:09:46.100 --> 00:09:46.900
+L'identité gérée
+
+00:09:46.900 --> 00:09:47.940
+affectée par le système
+
+00:09:47.940 --> 00:09:49.240
+est liée à une ressource spécifique.
+
+00:09:50.000 --> 00:09:50.980
+Si vous supprimez la ressource,
+
+00:09:51.060 --> 00:09:51.960
+l'identité disparaît également.
+
+00:09:52.540 --> 00:09:53.640
+Elle partage le même cycle de vie,
+
+00:09:53.820 --> 00:09:54.820
+ce qui simplifie l'administration.
+
+00:09:55.520 --> 00:09:56.180
+L'identité gérée
+
+00:09:56.180 --> 00:09:57.240
+affectée par l'utilisateur
+
+00:09:57.240 --> 00:09:58.240
+est une identité autonome
+
+00:09:58.240 --> 00:09:59.180
+que vous pouvez attribuer
+
+00:09:59.180 --> 00:10:00.120
+à plusieurs ressources.
+
+00:10:00.680 --> 00:10:01.300
+Elle ne partage pas
+
+00:10:01.300 --> 00:10:02.300
+son cycle de vie avec elle,
+
+00:10:02.360 --> 00:10:02.680
+ce qui est utile
+
+00:10:02.680 --> 00:10:03.300
+lorsque vous avez besoin
+
+00:10:03.300 --> 00:10:04.000
+de la même identité
+
+00:10:04.000 --> 00:10:04.920
+pour plusieurs services.
+
+00:10:05.900 --> 00:10:07.100
+Voici à quoi cela ressemble en pratique.
+
+00:10:07.680 --> 00:10:08.620
+Vous avez une application web
+
+00:10:08.620 --> 00:10:08.980
+qui doit lire
+
+00:10:08.980 --> 00:10:09.740
+une chaîne de connexion
+
+00:10:09.740 --> 00:10:10.280
+de bases de données
+
+00:10:10.280 --> 00:10:10.980
+depuis Key Vault.
+
+00:10:11.580 --> 00:10:12.720
+Vous activez l'identité gérée
+
+00:10:12.720 --> 00:10:13.580
+affectée par le système
+
+00:10:13.580 --> 00:10:14.400
+sur l'application web.
+
+00:10:15.000 --> 00:10:15.280
+Ensuite,
+
+00:10:15.360 --> 00:10:16.360
+vous accordez à cette identité
+
+00:10:16.360 --> 00:10:17.440
+le rôle d'utilisateur
+
+00:10:17.440 --> 00:10:18.120
+de secrets Key Vault
+
+00:10:18.120 --> 00:10:19.020
+sur votre coffre.
+
+00:10:19.140 --> 00:10:19.360
+C'est tout.
+
+00:10:19.780 --> 00:10:20.520
+Plus de chaînes de connexion
+
+00:10:20.520 --> 00:10:20.840
+dans le code,
+
+00:10:20.920 --> 00:10:21.520
+plus de secrets clients
+
+00:10:21.520 --> 00:10:22.340
+dans les fichiers de configuration.
+
+00:10:23.000 --> 00:10:23.640
+L'application web
+
+00:10:23.640 --> 00:10:24.820
+s'authentifie auprès de Key Vault
+
+00:10:24.820 --> 00:10:26.240
+en utilisant son identité gérée
+
+00:10:26.240 --> 00:10:27.500
+et Azure gère toute la gestion
+
+00:10:27.500 --> 00:10:28.200
+des identifiants
+
+00:10:28.200 --> 00:10:28.820
+en arrière-plan.
+
+00:10:29.300 --> 00:10:29.920
+C'est ce qui se rapproche
+
+00:10:29.920 --> 00:10:30.940
+le plus d'une authentification
+
+00:10:30.940 --> 00:10:31.940
+sans identifiant dans Azure.
+
+00:10:32.520 --> 00:10:33.160
+C'est une révolution
+
+00:10:33.160 --> 00:10:33.780
+pour la sécurité
+
+00:10:33.780 --> 00:10:35.000
+car cela élimine
+
+00:10:35.000 --> 00:10:35.680
+le vecteur d'attaque
+
+00:10:35.680 --> 00:10:36.160
+le plus courant,
+
+00:10:36.360 --> 00:10:37.360
+le vol d'identifiant,
+
+00:10:37.560 --> 00:10:38.260
+le vol d'identifiant.
+
+00:10:38.400 --> 00:10:39.320
+S'il n'y a pas d'identifiant
+
+00:10:39.320 --> 00:10:39.680
+à voler,
+
+00:10:39.980 --> 00:10:40.700
+un attaquant n'a rien
+
+00:10:40.700 --> 00:10:41.380
+à compromettre.
+
+00:10:42.040 --> 00:10:42.640
+Laissez-moi vous donner
+
+00:10:42.640 --> 00:10:43.260
+un exemple concret.
+
+00:10:44.100 --> 00:10:44.760
+Imaginez un pipeline
+
+00:10:44.760 --> 00:10:45.620
+de données dans Synapse
+
+00:10:45.620 --> 00:10:46.140
+qui doit accéder
+
+00:10:46.140 --> 00:10:47.000
+à un compte de stockage.
+
+00:10:47.620 --> 00:10:48.100
+A l'ancienne,
+
+00:10:48.180 --> 00:10:48.680
+vous stockeriez
+
+00:10:48.680 --> 00:10:49.780
+la clé du compte de stockage
+
+00:10:49.780 --> 00:10:50.920
+dans la configuration du pipeline.
+
+00:10:51.720 --> 00:10:52.420
+Si quelqu'un obtenait
+
+00:10:52.420 --> 00:10:53.100
+l'accès à ce pipeline,
+
+00:10:53.200 --> 00:10:53.660
+il avait la clé.
+
+00:10:54.460 --> 00:10:55.280
+Avec l'identité gérée,
+
+00:10:55.420 --> 00:10:56.280
+l'espace de travail Synapse
+
+00:10:56.280 --> 00:10:57.020
+possède une identité.
+
+00:10:57.700 --> 00:10:58.420
+Cette identité reçoit
+
+00:10:58.420 --> 00:10:58.980
+l'accès à Key Vault
+
+00:10:58.980 --> 00:10:59.640
+où la clé du compte
+
+00:10:59.640 --> 00:11:00.660
+de stockage est stockage
+
+00:11:00.660 --> 00:11:01.220
+et stockée.
+
+00:11:01.900 --> 00:11:03.020
+Le pipeline récupère la clé
+
+00:11:03.020 --> 00:11:03.780
+lors de l'exécution,
+
+00:11:03.860 --> 00:11:04.760
+l'utilise et ne la stocke
+
+00:11:04.760 --> 00:11:05.320
+jamais nulle part.
+
+00:11:06.240 --> 00:11:06.920
+Aucune clé dans le code,
+
+00:11:07.060 --> 00:11:07.480
+aucun secret
+
+00:11:07.480 --> 00:11:08.540
+dans la configuration du pipeline.
+
+00:11:09.260 --> 00:11:10.040
+En combinant l'identité
+
+00:11:10.040 --> 00:11:10.920
+gérée avec RBAC
+
+00:11:10.920 --> 00:11:11.860
+et le moindre privilège,
+
+00:11:12.000 --> 00:11:13.180
+vous obtenez une base sécurisée
+
+00:11:13.180 --> 00:11:13.660
+pour toute charge
+
+00:11:13.660 --> 00:11:14.240
+de travail Azure.
+
+00:11:14.880 --> 00:11:16.080
+Vos applications s'authentifient
+
+00:11:16.080 --> 00:11:16.720
+sans identifiant.
+
+00:11:17.360 --> 00:11:17.740
+Elles n'accèdent
+
+00:11:17.740 --> 00:11:18.600
+qu'à ce dont elles ont besoin
+
+00:11:18.600 --> 00:11:19.160
+et chaque accès
+
+00:11:19.160 --> 00:11:20.120
+est journalisé et auditable.
+
+00:11:20.680 --> 00:11:21.620
+C'est le modèle recommandé
+
+00:11:21.620 --> 00:11:22.180
+par Microsoft
+
+00:11:22.180 --> 00:11:23.300
+pour presque tous les scénarios.
+
+00:11:24.140 --> 00:11:24.880
+Une fois que vous commencerez
+
+00:11:24.880 --> 00:11:25.280
+à l'utiliser,
+
+00:11:25.360 --> 00:11:25.780
+vous vous demanderez
+
+00:11:25.780 --> 00:11:26.800
+pourquoi vous faisiez autrement.
+
+00:11:27.680 --> 00:11:29.040
+Coût et stratégie multicoffre.
+
+00:11:29.680 --> 00:11:31.100
+Parlons donc des coûts.
+
+00:11:31.200 --> 00:11:31.740
+C'est là que la plupart
+
+00:11:31.740 --> 00:11:32.540
+des gens sont surpris.
+
+00:11:33.100 --> 00:11:33.940
+Combien coûte réellement
+
+00:11:33.940 --> 00:11:35.160
+Azure Key Vault ?
+
+00:11:35.160 --> 00:11:36.220
+Le modèle de tarification est ça.
+
+00:11:36.480 --> 00:11:37.120
+Pas de frais de stockage
+
+00:11:37.120 --> 00:11:37.500
+par secret.
+
+00:11:37.980 --> 00:11:38.460
+Vous ne payez pas
+
+00:11:38.460 --> 00:11:39.020
+pour chaque mot de passe
+
+00:11:39.020 --> 00:11:39.880
+ou clé API que vous stockez.
+
+00:11:40.220 --> 00:11:40.580
+Au lieu de cela,
+
+00:11:40.640 --> 00:11:41.300
+vous payez par opération.
+
+00:11:41.960 --> 00:11:42.660
+Pour le niveau standard,
+
+00:11:42.800 --> 00:11:43.660
+c'est environ 3 centimes
+
+00:11:43.660 --> 00:11:44.720
+pour 10 000 opérations.
+
+00:11:45.480 --> 00:11:46.320
+Un appel de récupération
+
+00:11:46.320 --> 00:11:47.320
+de secret compte comme une opération.
+
+00:11:47.780 --> 00:11:48.380
+Tout comme la création
+
+00:11:48.380 --> 00:11:48.780
+d'un secret
+
+00:11:48.780 --> 00:11:49.920
+ou la liste du contenu du coffre.
+
+00:11:49.920 --> 00:11:51.380
+Pour une application classique
+
+00:11:51.380 --> 00:11:52.300
+de petite à moyenne taille,
+
+00:11:52.420 --> 00:11:52.920
+cela représente
+
+00:11:52.920 --> 00:11:53.740
+quelques centimes par mois.
+
+00:11:54.120 --> 00:11:54.780
+Vraiment quelques centimes.
+
+00:11:55.300 --> 00:11:55.780
+Comparer cela
+
+00:11:55.780 --> 00:11:56.960
+à AWS Secrets Manager.
+
+00:11:57.740 --> 00:11:58.600
+Il facture 40 centimes
+
+00:11:58.600 --> 00:11:59.300
+par secret et par mois
+
+00:11:59.300 --> 00:12:00.140
+juste pour le stockage,
+
+00:12:00.340 --> 00:12:00.740
+plus des frais
+
+00:12:00.740 --> 00:12:01.600
+pour les appels API.
+
+00:12:02.280 --> 00:12:03.100
+Si vous avez 100 secrets,
+
+00:12:03.240 --> 00:12:04.420
+cela fait 40 dollars par mois
+
+00:12:04.420 --> 00:12:05.280
+avant même d'en lire un seul.
+
+00:12:05.660 --> 00:12:06.580
+Avec Azure Key Vault,
+
+00:12:06.780 --> 00:12:07.200
+100 secrets
+
+00:12:07.200 --> 00:12:08.300
+avec une utilisation modérée
+
+00:12:08.300 --> 00:12:09.400
+pourrait vous coûter 15 centimes.
+
+00:12:10.100 --> 00:12:10.760
+La différence augmente
+
+00:12:10.760 --> 00:12:11.540
+rapidement à grande échelle.
+
+00:12:11.800 --> 00:12:12.340
+Il existe également
+
+00:12:12.340 --> 00:12:12.740
+un niveau premium.
+
+00:12:13.080 --> 00:12:13.940
+Il ajoute des clés protégées
+
+00:12:13.940 --> 00:12:14.460
+par HSM
+
+00:12:14.460 --> 00:12:15.200
+pour les charges de travail
+
+00:12:15.200 --> 00:12:16.200
+nécessitant le plus haut niveau
+
+00:12:16.200 --> 00:12:17.180
+d'assurance cryptographique.
+
+00:12:17.180 --> 00:12:18.880
+Pensez aux transactions financières,
+
+00:12:19.080 --> 00:12:19.560
+aux données de santé,
+
+00:12:19.740 --> 00:12:20.600
+aux systèmes gouvernementaux.
+
+00:12:21.080 --> 00:12:21.900
+Le coût par opération
+
+00:12:21.900 --> 00:12:22.460
+est plus élevé.
+
+00:12:22.760 --> 00:12:23.540
+Environ 15 centimes
+
+00:12:23.540 --> 00:12:24.460
+pour 10 000 opérations
+
+00:12:24.460 --> 00:12:25.480
+pour les types de clés avancées,
+
+00:12:25.620 --> 00:12:26.460
+plus des frais mensuels,
+
+00:12:26.640 --> 00:12:27.560
+par clé HSM,
+
+00:12:27.820 --> 00:12:28.440
+par clé HSM.
+
+00:12:28.860 --> 00:12:29.400
+Mais pour la plupart
+
+00:12:29.400 --> 00:12:29.960
+des applications,
+
+00:12:30.380 --> 00:12:30.960
+le niveau standard
+
+00:12:30.960 --> 00:12:31.740
+est largement suffisant.
+
+00:12:32.320 --> 00:12:33.380
+Voici la surprise tarifaire
+
+00:12:33.380 --> 00:12:33.880
+qui prend les gens
+
+00:12:33.880 --> 00:12:34.340
+au dépourvu.
+
+00:12:35.180 --> 00:12:36.300
+Pour une application web classique
+
+00:12:36.300 --> 00:12:37.060
+avec quelques secrets
+
+00:12:37.060 --> 00:12:38.040
+et quelques milliers d'opérations
+
+00:12:38.040 --> 00:12:38.380
+par mois,
+
+00:12:38.580 --> 00:12:39.640
+Key Vault coûte moins d'un dollar.
+
+00:12:40.640 --> 00:12:41.300
+Vous dépenserez plus
+
+00:12:41.300 --> 00:12:42.060
+dans le café que vous boirez
+
+00:12:42.060 --> 00:12:42.760
+en le configurant.
+
+00:12:43.460 --> 00:12:44.380
+Mais il existe une stratégie
+
+00:12:44.380 --> 00:12:45.120
+qui compte plus que le coût.
+
+00:12:47.180 --> 00:12:47.720
+Proche intelligente
+
+00:12:47.720 --> 00:12:48.760
+est une stratégie multicoffre.
+
+00:12:49.420 --> 00:12:50.320
+Utilisez des coffres séparés
+
+00:12:50.320 --> 00:12:50.780
+pour le développement,
+
+00:12:51.000 --> 00:12:51.260
+les tests,
+
+00:12:51.340 --> 00:12:52.280
+la pré-production et la production.
+
+00:12:52.760 --> 00:12:53.540
+Cela évite l'accident
+
+00:12:53.540 --> 00:12:54.120
+le plus courant.
+
+00:12:54.620 --> 00:12:55.300
+Quelqu'un exécutant
+
+00:12:55.300 --> 00:12:55.980
+un script de test
+
+00:12:55.980 --> 00:12:56.760
+qui lie accidentellement
+
+00:12:56.760 --> 00:12:57.760
+à une base de données de production
+
+00:12:57.760 --> 00:12:58.680
+car la chaîne de connexion
+
+00:12:58.680 --> 00:12:59.400
+était dans le même coffre.
+
+00:13:00.120 --> 00:13:00.820
+Lorsque les environnements
+
+00:13:00.820 --> 00:13:01.320
+sont séparés,
+
+00:13:01.400 --> 00:13:02.380
+cette erreur devient impossible.
+
+00:13:02.840 --> 00:13:03.860
+Vous devriez également séparer
+
+00:13:03.860 --> 00:13:04.660
+par unité commerciale
+
+00:13:04.660 --> 00:13:05.360
+ou domaine de conformité.
+
+00:13:05.920 --> 00:13:06.680
+Si vous gérez des données
+
+00:13:06.680 --> 00:13:07.380
+de carte de paiement,
+
+00:13:07.540 --> 00:13:08.160
+placez ces secrets
+
+00:13:08.160 --> 00:13:09.040
+dans leur propre coffre.
+
+00:13:09.580 --> 00:13:10.140
+Les charges de travail
+
+00:13:10.140 --> 00:13:11.240
+métier général vont dans un autre,
+
+00:13:11.360 --> 00:13:11.900
+les données de santé
+
+00:13:11.900 --> 00:13:12.380
+et dans un troisième.
+
+00:13:12.780 --> 00:13:13.280
+Il ne s'agit pas
+
+00:13:13.280 --> 00:13:13.960
+de compliquer les choses,
+
+00:13:14.080 --> 00:13:14.520
+mais de limiter
+
+00:13:14.520 --> 00:13:15.440
+le rayon d'action d'un incident.
+
+00:13:16.040 --> 00:13:17.060
+Si un coffre est compromis,
+
+00:13:17.200 --> 00:13:17.720
+seuls les secrets
+
+00:13:17.720 --> 00:13:19.060
+de ce coffre sont exposés.
+
+00:13:19.560 --> 00:13:20.460
+Le reste de votre infrastructure
+
+00:13:20.460 --> 00:13:21.120
+reste en sécurité
+
+00:13:21.120 --> 00:13:22.520
+et deux filets de sécurité intégrés
+
+00:13:22.520 --> 00:13:23.320
+que vous devriez toujours activer.
+
+00:13:23.780 --> 00:13:24.540
+La suppression réversible
+
+00:13:24.540 --> 00:13:25.280
+signifie que si quelqu'un
+
+00:13:25.280 --> 00:13:25.840
+supprime un secret,
+
+00:13:25.900 --> 00:13:26.820
+il n'est pas définitivement perdu.
+
+00:13:27.400 --> 00:13:28.600
+Il passe dans un état récupérable
+
+00:13:28.600 --> 00:13:29.520
+pour une période de rétention
+
+00:13:29.520 --> 00:13:30.100
+que vous choisissez
+
+00:13:30.100 --> 00:13:31.600
+jusqu'à 90 jours.
+
+00:13:32.480 --> 00:13:33.520
+La protection contre la purge
+
+00:13:33.520 --> 00:13:33.940
+va encore plus.
+
+00:13:34.640 --> 00:13:35.500
+Personne ne peut supprimer
+
+00:13:35.500 --> 00:13:36.300
+définitivement le coffre
+
+00:13:36.300 --> 00:13:36.800
+ou son contenu
+
+00:13:36.800 --> 00:13:37.420
+avant l'expiration
+
+00:13:37.420 --> 00:13:38.360
+de cette période de rétention.
+
+00:13:38.660 --> 00:13:39.000
+Ensemble,
+
+00:13:39.320 --> 00:13:39.880
+ils empêchent le genre
+
+00:13:39.880 --> 00:13:40.900
+de perte de données accidentelles
+
+00:13:40.900 --> 00:13:41.620
+qui empêchent les équipes
+
+00:13:41.620 --> 00:13:42.540
+de sécurité de dormir.
+
+00:13:43.620 --> 00:13:44.700
+Comment tout cela se connaît ?
+
+00:13:44.700 --> 00:13:45.600
+Relions tout cela ensemble
+
+00:13:45.600 --> 00:13:46.140
+et voyons comment
+
+00:13:46.140 --> 00:13:46.860
+les pièces s'assemblent.
+
+00:13:47.280 --> 00:13:48.180
+Kivolt n'est pas une île.
+
+00:13:48.680 --> 00:13:49.720
+C'est le système nerveux central
+
+00:13:49.720 --> 00:13:50.180
+des secrets.
+
+00:13:50.380 --> 00:13:51.440
+Dans votre architecture Azure,
+
+00:13:52.320 --> 00:13:53.020
+lorsque vous comprenez
+
+00:13:53.020 --> 00:13:54.100
+comment tout le système fonctionne,
+
+00:13:54.300 --> 00:13:55.100
+tout devient clair.
+
+00:13:55.740 --> 00:13:56.400
+Voici ce qui se passe
+
+00:13:56.400 --> 00:13:56.960
+lorsqu'une application
+
+00:13:56.960 --> 00:13:57.720
+a besoin d'un secret.
+
+00:13:58.200 --> 00:13:59.060
+L'application le demande
+
+00:13:59.060 --> 00:14:00.460
+en utilisant son identité gérée.
+
+00:14:01.040 --> 00:14:01.820
+Cette identité est déjà
+
+00:14:01.820 --> 00:14:02.900
+enregistrée dans Antra ID.
+
+00:14:03.640 --> 00:14:04.620
+Azure la crée automatiquement
+
+00:14:04.620 --> 00:14:05.420
+lorsque vous avez activé
+
+00:14:05.420 --> 00:14:06.760
+l'identité gérée sur la ressource.
+
+00:14:08.320 --> 00:14:09.000
+Antra ID valide
+
+00:14:09.000 --> 00:14:10.100
+que l'identité légitime
+
+00:14:10.100 --> 00:14:11.420
+puis transmet la demande
+
+00:14:11.420 --> 00:14:11.940
+à Kivolt.
+
+00:14:12.640 --> 00:14:13.360
+Kivolt vérifie
+
+00:14:13.360 --> 00:14:14.260
+les autorisations RBS
+
+00:14:14.260 --> 00:14:14.960
+que vous avez attribuées.
+
+00:14:15.460 --> 00:14:16.200
+Si l'identité possède
+
+00:14:16.200 --> 00:14:16.660
+le bon rôle
+
+00:14:16.660 --> 00:14:17.680
+comme utilisateur des secrets,
+
+00:14:17.780 --> 00:14:18.540
+Kivolt, le secret,
+
+00:14:18.860 --> 00:14:19.300
+est renvoyé.
+
+00:14:19.700 --> 00:14:20.240
+Tout cela se produit
+
+00:14:20.240 --> 00:14:20.940
+en quelques millisecondes.
+
+00:14:21.320 --> 00:14:22.000
+L'application ne voit
+
+00:14:22.000 --> 00:14:22.680
+jamais d'identifiant.
+
+00:14:23.120 --> 00:14:23.620
+Elle ne stocke jamais
+
+00:14:23.620 --> 00:14:24.000
+de mots de passe.
+
+00:14:24.380 --> 00:14:24.940
+Elle obtient simplement
+
+00:14:24.940 --> 00:14:25.640
+la valeur dont elle a besoin.
+
+00:14:25.900 --> 00:14:26.520
+Maintenant, pensez à
+
+00:14:26.520 --> 00:14:27.240
+combien de services Azure
+
+00:14:27.240 --> 00:14:27.980
+peuvent s'y connecter.
+
+00:14:28.520 --> 00:14:29.420
+App Service, Functions,
+
+00:14:29.540 --> 00:14:30.800
+AKS, Data Factory, Synapse,
+
+00:14:30.880 --> 00:14:31.900
+Logic Apps, DevOps, Pipelines.
+
+00:14:31.900 --> 00:14:32.460
+Ils savent tous
+
+00:14:32.460 --> 00:14:33.540
+comment communiquer
+
+00:14:33.540 --> 00:14:34.100
+avec Kivolt.
+
+00:14:34.660 --> 00:14:35.280
+Vous pouvez configurer
+
+00:14:35.280 --> 00:14:35.960
+une application web
+
+00:14:35.960 --> 00:14:36.860
+pour référencer un secret
+
+00:14:36.860 --> 00:14:37.600
+directement dans
+
+00:14:37.600 --> 00:14:38.480
+ces paramètres d'application.
+
+00:14:39.420 --> 00:14:40.060
+Vous pouvez configurer
+
+00:14:40.060 --> 00:14:40.940
+un pipeline Data Factory
+
+00:14:40.940 --> 00:14:41.840
+pour récupérer une clé de compte
+
+00:14:41.840 --> 00:14:42.700
+de stockage depuis Kivolt
+
+00:14:42.700 --> 00:14:43.340
+hors de l'exécution.
+
+00:14:44.180 --> 00:14:44.860
+Vous pouvez configurer
+
+00:14:44.860 --> 00:14:45.740
+un cluster Kubernetes
+
+00:14:45.740 --> 00:14:46.720
+pour récupérer des secrets
+
+00:14:46.720 --> 00:14:47.920
+via le pilote CSI de Kivolt.
+
+00:14:48.500 --> 00:14:49.420
+Chaque service s'intègre
+
+00:14:49.420 --> 00:14:50.080
+de la même manière,
+
+00:14:50.520 --> 00:14:51.680
+avec le même système d'identité,
+
+00:14:52.020 --> 00:14:52.980
+les mêmes relais rebancés
+
+00:14:52.980 --> 00:14:54.160
+et les mêmes journaux d'audit.
+
+00:14:54.860 --> 00:14:55.660
+Le modèle CICD
+
+00:14:55.660 --> 00:14:56.620
+est particulièrement puissant.
+
+00:14:57.180 --> 00:14:57.940
+Vos pipelines récupèrent
+
+00:14:57.940 --> 00:14:58.880
+les secrets depuis Kivolt
+
+00:14:58.880 --> 00:14:59.640
+au moment du déploiement.
+
+00:14:59.640 --> 00:15:00.760
+Ils ne les stockent jamais
+
+00:15:00.760 --> 00:15:01.720
+dans des variables de pipeline
+
+00:15:01.720 --> 00:15:02.720
+ou des secrets de référentiel.
+
+00:15:03.320 --> 00:15:04.140
+Si vous devez renouveler
+
+00:15:04.140 --> 00:15:04.580
+le mot de passe
+
+00:15:04.580 --> 00:15:05.240
+d'une base de données,
+
+00:15:05.360 --> 00:15:05.920
+vous le mettez à jour
+
+00:15:05.920 --> 00:15:06.380
+dans Kivolt.
+
+00:15:06.840 --> 00:15:07.680
+A la prochaine exécution
+
+00:15:07.680 --> 00:15:08.260
+de votre pipeline,
+
+00:15:08.360 --> 00:15:09.140
+ils récupèrent automatiquement
+
+00:15:09.140 --> 00:15:09.600
+la nouvelle valeur.
+
+00:15:10.120 --> 00:15:11.080
+Aucune modification de pipeline,
+
+00:15:11.220 --> 00:15:11.840
+aucun changement de code,
+
+00:15:11.920 --> 00:15:12.500
+aucun redéploiement.
+
+00:15:13.040 --> 00:15:14.120
+Voici ce qui rend tout cela cohérent.
+
+00:15:14.720 --> 00:15:15.780
+Une fois Kivolt configuré
+
+00:15:15.780 --> 00:15:16.800
+avec une identité managée
+
+00:15:16.800 --> 00:15:17.360
+et air basse,
+
+00:15:17.620 --> 00:15:18.440
+vous n'avez plus à vous soucier
+
+00:15:18.440 --> 00:15:19.560
+de la gestion des identifiants.
+
+00:15:19.940 --> 00:15:20.760
+Vos applications fonctionnent
+
+00:15:20.760 --> 00:15:21.080
+tout simplement.
+
+00:15:21.420 --> 00:15:22.200
+Les secrets sont renouvelés
+
+00:15:22.200 --> 00:15:22.660
+sans que personne
+
+00:15:22.660 --> 00:15:23.240
+ne s'en aperçoive.
+
+00:15:23.700 --> 00:15:24.540
+Les certificats sont renouvelés
+
+00:15:24.540 --> 00:15:25.360
+sans urgence en pleine nuit.
+
+00:15:26.020 --> 00:15:26.840
+Le système gère tout cela
+
+00:15:26.840 --> 00:15:27.280
+en arrière-plan.
+
+00:15:27.700 --> 00:15:28.780
+C'est la posture de sécurité
+
+00:15:28.780 --> 00:15:29.200
+qui compte.
+
+00:15:29.900 --> 00:15:31.080
+L'identité est le périmètre
+
+00:15:31.080 --> 00:15:31.560
+par le réseau.
+
+00:15:31.980 --> 00:15:32.720
+Peu importe qu'une personne
+
+00:15:32.720 --> 00:15:33.220
+soit à l'intérieur
+
+00:15:33.220 --> 00:15:33.720
+ou à l'extérieur
+
+00:15:33.720 --> 00:15:34.580
+de votre réseau virtuel,
+
+00:15:35.360 --> 00:15:35.700
+ce qui compte,
+
+00:15:35.780 --> 00:15:36.080
+c'est de savoir
+
+00:15:36.080 --> 00:15:37.340
+si elle dispose d'une identité valide
+
+00:15:37.340 --> 00:15:38.220
+avec les bonnes autorisations.
+
+00:15:38.780 --> 00:15:39.600
+Kivolt impose cela
+
+00:15:39.600 --> 00:15:40.180
+par conception.
+
+00:15:40.840 --> 00:15:41.500
+Chaque demande d'accès
+
+00:15:41.500 --> 00:15:42.500
+passe par l'authentification
+
+00:15:42.500 --> 00:15:43.060
+entre ID
+
+00:15:43.060 --> 00:15:44.700
+et l'autorisation RBAC,
+
+00:15:44.880 --> 00:15:46.120
+quelle que soit sa provenance.
+
+00:15:46.900 --> 00:15:47.640
+Et tout est consigné.
+
+00:15:47.960 --> 00:15:48.720
+Chaque lecture de secret,
+
+00:15:48.820 --> 00:15:49.500
+chaque opération de clé,
+
+00:15:49.500 --> 00:15:50.020
+et chaque récupération
+
+00:15:50.020 --> 00:15:50.540
+de certificat.
+
+00:15:50.720 --> 00:15:50.980
+Vous pouvez voir
+
+00:15:50.980 --> 00:15:51.860
+qui a accédé à quoi et quand.
+
+00:15:52.320 --> 00:15:53.200
+Si quelque chose semble suspect,
+
+00:15:53.540 --> 00:15:54.260
+vous disposez des données
+
+00:15:54.260 --> 00:15:54.760
+pour enquêter.
+
+00:15:55.440 --> 00:15:56.620
+C'est crucial pour la conformité,
+
+00:15:56.700 --> 00:15:57.520
+la réponse aux incidents
+
+00:15:57.520 --> 00:15:58.040
+et pour savoir
+
+00:15:58.040 --> 00:15:58.460
+ce qui se passe
+
+00:15:58.460 --> 00:15:59.160
+dans votre environnement.
+
+00:15:59.780 --> 00:16:00.360
+C'est là toute la beauté
+
+00:16:00.360 --> 00:16:00.720
+du système.
+
+00:16:01.160 --> 00:16:02.700
+Kivolt, entre ID et RBAC
+
+00:16:02.700 --> 00:16:03.920
+et l'identité managée
+
+00:16:03.920 --> 00:16:04.480
+fonctionnent ensemble
+
+00:16:04.480 --> 00:16:04.920
+comme un cadre
+
+00:16:04.920 --> 00:16:05.920
+de sécurité unifié.
+
+00:16:06.700 --> 00:16:07.140
+Chaque élément
+
+00:16:07.140 --> 00:16:07.880
+renforce les autres.
+
+00:16:08.460 --> 00:16:09.180
+Et lorsqu'ils sont tous
+
+00:16:09.180 --> 00:16:09.820
+bien configurés,
+
+00:16:09.940 --> 00:16:10.780
+vous disposez d'un système
+
+00:16:10.780 --> 00:16:11.820
+de gestion des identifiants
+
+00:16:11.820 --> 00:16:12.520
+plus sécurisé
+
+00:16:12.520 --> 00:16:13.420
+et plus simple à utiliser
+
+00:16:13.420 --> 00:16:14.320
+que tout ce que vous pourriez
+
+00:16:14.320 --> 00:16:15.120
+créer vous-même.
+
+00:16:16.300 --> 00:16:16.980
+Conseil pratique.
+
+00:16:16.980 --> 00:16:18.260
+Alors que devriez-vous faire
+
+00:16:18.260 --> 00:16:19.260
+concrètement demain ?
+
+00:16:19.260 --> 00:16:20.380
+Transformons ces connaissances
+
+00:16:20.380 --> 00:16:20.760
+en actions.
+
+00:16:21.340 --> 00:16:21.820
+Voici les points
+
+00:16:21.820 --> 00:16:22.380
+que vous pouvez traiter
+
+00:16:22.380 --> 00:16:22.800
+cette semaine.
+
+00:16:23.120 --> 00:16:23.680
+Commencez par votre modèle
+
+00:16:23.680 --> 00:16:24.080
+d'autorisation.
+
+00:16:24.420 --> 00:16:25.140
+Ouvrez votre Kivolt
+
+00:16:25.140 --> 00:16:25.600
+dans le portail,
+
+00:16:25.700 --> 00:16:26.380
+accédez à la configuration
+
+00:16:26.380 --> 00:16:27.200
+d'accès et vérifiez
+
+00:16:27.200 --> 00:16:27.720
+ce qui est indiqué.
+
+00:16:28.100 --> 00:16:28.880
+Si vous voyez stratégie
+
+00:16:28.880 --> 00:16:29.580
+d'accès au coffre V,
+
+00:16:29.640 --> 00:16:30.320
+c'est l'ancienne méthode.
+
+00:16:30.860 --> 00:16:31.680
+Vous devriez privilégier
+
+00:16:31.680 --> 00:16:32.380
+le contrôle d'accès
+
+00:16:32.380 --> 00:16:33.200
+en fonction du rôle Azure.
+
+00:16:33.640 --> 00:16:34.400
+La migration est simple.
+
+00:16:35.400 --> 00:16:36.500
+Changez de modèle d'autorisation
+
+00:16:36.500 --> 00:16:37.300
+et attribuez des rôles
+
+00:16:37.300 --> 00:16:38.280
+RBAC aux personnes
+
+00:16:38.280 --> 00:16:38.760
+qui avaient déjà
+
+00:16:38.760 --> 00:16:39.640
+des stratégies d'accès.
+
+00:16:40.140 --> 00:16:40.760
+Faites-le dès aujourd'hui.
+
+00:16:41.120 --> 00:16:42.080
+Microsoft le recommande
+
+00:16:42.080 --> 00:16:42.860
+et les recherches
+
+00:16:42.860 --> 00:16:43.420
+dont nous avons parlé
+
+00:16:43.420 --> 00:16:43.840
+en ont montré
+
+00:16:43.840 --> 00:16:44.560
+la raison exacte.
+
+00:16:45.240 --> 00:16:45.480
+Ensuite,
+
+00:16:45.560 --> 00:16:46.200
+auditez les comptes
+
+00:16:46.200 --> 00:16:46.740
+possédant le rôle
+
+00:16:46.740 --> 00:16:47.600
+de contributeur Kivolt.
+
+00:16:48.560 --> 00:16:49.340
+Ouvrez le volet IM
+
+00:16:49.340 --> 00:16:49.940
+de votre coffre
+
+00:16:49.940 --> 00:16:50.320
+et vérifiez
+
+00:16:50.320 --> 00:16:50.740
+qu'il dispose
+
+00:16:50.740 --> 00:16:51.600
+d'un accès contributeur.
+
+00:16:52.000 --> 00:16:52.960
+Toute personne ayant ce rôle
+
+00:16:52.960 --> 00:16:54.000
+doit avoir une raison valable.
+
+00:16:54.180 --> 00:16:54.800
+La plupart du temps,
+
+00:16:54.840 --> 00:16:55.220
+ce n'est pas le cas.
+
+00:16:55.700 --> 00:16:56.540
+Remplacez contributeur
+
+00:16:56.540 --> 00:16:56.980
+par quelque chose
+
+00:16:56.980 --> 00:16:57.580
+de plus spécifique.
+
+00:16:57.960 --> 00:16:58.580
+Si quelqu'un a seulement
+
+00:16:58.580 --> 00:16:59.440
+besoin de dire des secrets,
+
+00:16:59.640 --> 00:17:00.340
+utilisez l'utilisateur
+
+00:17:00.340 --> 00:17:00.920
+des secrets Kivolt.
+
+00:17:01.100 --> 00:17:01.780
+S'ils doivent gérer
+
+00:17:01.780 --> 00:17:02.220
+des secrets,
+
+00:17:02.380 --> 00:17:03.120
+utilisez le responsable
+
+00:17:03.120 --> 00:17:03.960
+des secrets Kivolt.
+
+00:17:04.540 --> 00:17:05.480
+L'objectif est de fermer
+
+00:17:05.480 --> 00:17:06.220
+complètement ce chemin
+
+00:17:06.220 --> 00:17:06.700
+d'escalade.
+
+00:17:07.220 --> 00:17:07.460
+Ensuite,
+
+00:17:07.580 --> 00:17:08.740
+tirez parti de l'identité gérée.
+
+00:17:09.400 --> 00:17:10.060
+Tout service Azure
+
+00:17:10.060 --> 00:17:10.780
+nécessitant l'accès
+
+00:17:10.780 --> 00:17:11.920
+à Kivolt devrait l'utiliser.
+
+00:17:12.580 --> 00:17:12.920
+Si vous avez
+
+00:17:12.920 --> 00:17:13.660
+une application web,
+
+00:17:13.800 --> 00:17:14.200
+une fonction,
+
+00:17:14.360 --> 00:17:15.000
+une data factory
+
+00:17:15.000 --> 00:17:15.980
+ou une machine virtuelle,
+
+00:17:16.380 --> 00:17:16.940
+utilisant encore
+
+00:17:16.940 --> 00:17:17.940
+un principal de service
+
+00:17:17.940 --> 00:17:18.940
+avec un secret client
+
+00:17:18.940 --> 00:17:20.060
+passé à l'identité gérée.
+
+00:17:20.760 --> 00:17:21.300
+C'est plus simple,
+
+00:17:21.420 --> 00:17:22.040
+plus sécurisé
+
+00:17:22.040 --> 00:17:22.660
+et cela résout
+
+00:17:22.660 --> 00:17:23.400
+le problème de l'œuf
+
+00:17:23.400 --> 00:17:24.140
+et de la poule évoquée.
+
+00:17:24.740 --> 00:17:25.080
+Azure gère
+
+00:17:25.080 --> 00:17:25.820
+la gestion des informations
+
+00:17:25.820 --> 00:17:26.440
+d'identification
+
+00:17:26.440 --> 00:17:27.080
+pour vous en arrière.
+
+00:17:27.680 --> 00:17:28.240
+Une dernière chose,
+
+00:17:28.340 --> 00:17:29.440
+activez la suppression réversible
+
+00:17:29.440 --> 00:17:29.900
+et la protection
+
+00:17:29.900 --> 00:17:30.460
+contre le vidage
+
+00:17:30.460 --> 00:17:30.960
+sur chaque coffre.
+
+00:17:31.460 --> 00:17:32.340
+La suppression réversible
+
+00:17:32.340 --> 00:17:33.100
+est activée par défaut
+
+00:17:33.100 --> 00:17:33.680
+mais pas la protection
+
+00:17:33.680 --> 00:17:34.440
+contre le vidage.
+
+00:17:35.060 --> 00:17:35.480
+Activez-la.
+
+00:17:36.080 --> 00:17:36.600
+Ce paramètre
+
+00:17:36.600 --> 00:17:37.220
+empêche quiconque
+
+00:17:37.220 --> 00:17:38.220
+de supprimer définitivement
+
+00:17:38.220 --> 00:17:39.080
+un coffre ou son contenu
+
+00:17:39.080 --> 00:17:40.260
+pendant la période de rétention.
+
+00:17:40.960 --> 00:17:41.440
+Cela a sauvé
+
+00:17:41.440 --> 00:17:41.920
+plus d'une équipe
+
+00:17:41.920 --> 00:17:42.920
+d'une erreur désastreuse.
+
+00:17:43.560 --> 00:17:44.420
+Voici votre appel à l'action.
+
+00:17:45.060 --> 00:17:45.960
+Examinez votre approche actuelle
+
+00:17:45.960 --> 00:17:46.580
+de gestion des secrets.
+
+00:17:47.160 --> 00:17:47.720
+Trouvez un secret
+
+00:17:47.720 --> 00:17:48.360
+qui se trouve encore
+
+00:17:48.360 --> 00:17:49.400
+dans un fichier de configuration,
+
+00:17:49.580 --> 00:17:50.420
+une variable d'environnement
+
+00:17:50.420 --> 00:17:51.040
+au codé en dur.
+
+00:17:51.720 --> 00:17:52.460
+Déplacez-le vers Kivolt
+
+00:17:52.460 --> 00:17:52.820
+cette semaine,
+
+00:17:53.080 --> 00:17:53.520
+juste un seul.
+
+00:17:53.800 --> 00:17:54.360
+Une fois que vous verrez
+
+00:17:54.360 --> 00:17:55.000
+à quel point c'est simple
+
+00:17:55.000 --> 00:17:55.920
+que vous voudrez déplacer le reste.
+
+00:17:56.180 --> 00:17:56.820
+La sécurité n'est pas
+
+00:17:56.820 --> 00:17:57.460
+une configuration unique.
+
+00:17:57.820 --> 00:17:58.260
+C'est une pratique.
+
+00:17:58.640 --> 00:17:59.720
+Kivolt facilite cette pratique
+
+00:17:59.720 --> 00:18:00.160
+mais seulement
+
+00:18:00.160 --> 00:18:01.420
+si vous l'utilisez correctement.
+
+00:18:01.940 --> 00:18:02.500
+Les outils sont là.
+
+00:18:02.900 --> 00:18:03.680
+Les modèles ont fait leur propre.
+
+00:18:04.340 --> 00:18:04.560
+Maintenant,
+
+00:18:04.640 --> 00:18:05.400
+c'est à vous de les mettre en œuvre.
+
+00:18:06.200 --> 00:18:06.860
+C'est ça le système.
+
+00:18:07.220 --> 00:18:08.600
+Kivolt est votre coffre-fort numérique
+
+00:18:08.600 --> 00:18:09.620
+mais il n'est aussi sûr
+
+00:18:09.620 --> 00:18:10.340
+que les contrôles d'accès
+
+00:18:10.340 --> 00:18:11.020
+que vous mettez en place.
+
+00:18:11.460 --> 00:18:12.160
+Commencez par l'audit
+
+00:18:12.160 --> 00:18:12.860
+que je viens d'écrire.
+
+00:18:13.300 --> 00:18:14.220
+Vérifiez votre modèle d'autorisation.
+
+00:18:14.640 --> 00:18:15.480
+Vérifiez vos attributions
+
+00:18:15.480 --> 00:18:16.060
+de contributeurs
+
+00:18:16.060 --> 00:18:16.880
+et déplacez un secret
+
+00:18:16.880 --> 00:18:17.640
+dans un coffre cette semaine.
+
+00:18:17.960 --> 00:18:18.320
+Abonnez-vous
+
+00:18:18.320 --> 00:18:19.020
+pour plus de conseils
+
+00:18:19.020 --> 00:18:19.700
+en sécurité cloud
+
+00:18:19.700 --> 00:18:20.420
+et partagez ceci
+
+00:18:20.420 --> 00:18:20.860
+avec quelqu'un
+
+00:18:20.860 --> 00:18:21.780
+qui stocke encore des secrets
+
+00:18:21.780 --> 00:18:22.760
+dans des fichiers de configuration.

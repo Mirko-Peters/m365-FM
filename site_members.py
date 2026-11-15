@@ -1,32 +1,51 @@
 """Mitglieder- und Firmenverzeichnis: oeffentliche Experten-Profile (nur Opt-in) mit Schema.org-Verknuepfung zu den Entitaeten."""
-import json
+import json, re
 from pathlib import Path
 BLOGLANGS = set()
 BLOGS = {}   # handle -> Sprachen mit Beiträgen
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
-from site_entities import TL, eurl, eid_of
+import site_meta_community as PM   # Titel/Description der Profile und Verzeichnisse (Suchabsicht)
 
-PROG_FULL = {"mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
-PROG = {"mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
+
+def _topic_name(eid):
+    """Name einer Themen-Entitaet fuer die Description (Personen, Firmen, Jobs und Events zaehlen nicht als Expertise-Thema)."""
+    e = ENTS.get(eid) or {}
+    return e.get("name") if e.get("type") not in (None, "person", "org", "job", "event", "media") else ""
+from site_entities import TL, eurl, eid_of, tlab
+import site_roles as ROLE
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
+
+PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
+PROG = {"gde": ("Google Developer Expert", "Google Developer Expert"), "mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
         "msa": ("Microsoft Student Ambassador", "Microsoft Student Ambassador"), "ms_employee": ("Microsoft employee", "Microsoft-Mitarbeiter:in"), "partner": ("Microsoft Partner", "Microsoft Partner")}
 KIND = {"linkedin": "LinkedIn", "github": "GitHub", "youtube": "YouTube", "x": "X", "mastodon": "Mastodon", "bluesky": "Bluesky", "twitch": "Twitch", "spotify": "Spotify", "apple": "Apple Podcasts", "amazon": "Amazon Music / Audible", "deezer": "Deezer", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook", "blog": "Blog", "podcast": "Podcast", "newsletter": "Newsletter", "website": "Website", "other": "Link"}
 LV = {1: ("learning", "lernt"), 2: ("practitioner", "Praxis"), 3: ("expert", "Experte"), 4: ("Evangelist", "Evangelist"), 5: ("Master", "Master"), 6: ("Master Evangelist", "Master Evangelist")}   # gesetzt vom System (worker/src/levels.js)
 EVK = {"en": dict(blog="posts", coauthor="co-author", session="sessions", podcast="episodes", video="videos", guest="guest", library="library", listing="guest exchange", wiki="wiki", entity="entity", cert="certifications", answer="answers", self="former self-declaration"),
        "de": dict(blog="Beiträge", coauthor="Co-Autor", session="Sessions", podcast="Folgen", video="Videos", guest="Gast", library="Bibliothek", listing="Gäste-Börse", wiki="Wiki", entity="Entität", cert="Zertifikate", answer="Antworten", self="frühere Selbstangabe")}
 S = {"en": dict(members="Members", companies="Companies", mintro="Experts of the Microsoft community – with programs such as MVP and MCT, certifications, topics and channels. Profiles are opt-in.", cintro="Companies in the Microsoft ecosystem and their teams.",
-                about="About", expertise="Topics and expertise", certs="Certifications", channels="Channels and links", contrib="Contributions", latest="Latest from this creator", team="Team", verified="confirmed by the editorial team", selfdecl="self-declared", endorsed="confirmed by {n} members", evidence="evidence: {e}", points="{n} points",
+                about="About", expertise="Topics and expertise", certs="Certifications", channels="Channels and links", contrib="Contributions", mvp_contrib="Community contributions", mvp_other="Other", latest="Latest from this creator", team="Team", verified="confirmed by the editorial team", selfdecl="self-declared", endorsed="confirmed by {n} members", evidence="evidence: {e}", points="{n} points",
                 levels="Levels are set by the system from evidence: learning, practitioner (3 points), expert (10 points or editorial confirmation), evangelist (expert + 100 endorsements by members), master (1000 endorsements), master evangelist (1000 endorsements by evangelists of the same topic). Evidence: published posts, confirmed sessions, episodes, videos, library items, wiki and entity edits, verified certifications, accepted answers.",
                 none="No public profiles yet.", join="Create your profile", filter="Filter", all="All", feed="Latest from the creators", feedtop="Most upvoted (30 days)", company="Company", country="Country", wiki="wiki edit", entity="entity edit", prog="Programs", size="Employees", site="Website", since="since"),
      "de": dict(members="Mitglieder", companies="Firmen", mintro="Expert:innen der Microsoft-Community – mit Programmen wie MVP und MCT, Zertifizierungen, Themen und Kanälen. Profile sind freiwillig.", cintro="Firmen im Microsoft-Ökosystem und ihre Teams.",
-                about="Über", expertise="Themen und Expertise", certs="Zertifizierungen", channels="Kanäle und Links", contrib="Beiträge", latest="Das Neueste von diesem Creator", team="Team", verified="vom Redaktionsteam bestätigt", selfdecl="Selbstangabe", endorsed="von {n} Mitgliedern bestätigt", evidence="belegt durch {e}", points="{n} Punkte",
+                about="Über", expertise="Themen und Expertise", certs="Zertifizierungen", channels="Kanäle und Links", contrib="Beiträge", mvp_contrib="Community-Beiträge", mvp_other="Sonstige", latest="Das Neueste von diesem Creator", team="Team", verified="vom Redaktionsteam bestätigt", selfdecl="Selbstangabe", endorsed="von {n} Mitgliedern bestätigt", evidence="belegt durch {e}", points="{n} Punkte",
                 levels="Die Stufen setzt das System aus Belegen: Lernt, Praxis (3 Punkte), Experte (10 Punkte oder Redaktion), Evangelist (Experte + 100 Bestätigungen von Mitgliedern), Master (1000 Bestätigungen), Master Evangelist (1000 Bestätigungen von Evangelisten im selben Thema). Belege: veröffentlichte Beiträge, bestätigte Sessions, Folgen, Videos, Bibliotheks-Einträge, Wiki- und Entitäts-Änderungen, geprüfte Zertifikate, angenommene Antworten.",
                 none="Noch keine öffentlichen Profile.", join="Eigenes Profil anlegen", filter="Filter", all="Alle", feed="Das Neueste der Creator", feedtop="Meist gelobt (30 Tage)", company="Firma", country="Land", wiki="Wiki-Änderung", entity="Entitäts-Änderung", prog="Programme", size="Mitarbeitende", site="Webseite", since="seit")}
 SIZE_N = {"1": (1, 1), "2-10": (2, 10), "11-50": (11, 50), "51-200": (51, 200), "201-1000": (201, 1000), "1000+": (1001, None)}
 
 
 CACHE = Path(__file__).parent / "data" / "members_export.json"   # letzte erfolgreiche Fassung: faellt der Abruf aus, bleiben die Profilseiten erhalten
+# Merker fuer tools/r2_og_upload.py im Bilder-Ordner (OG_OUT, wird nicht hochgeladen): Stand des Profil-Exports dieses Baus. Nur bei "frisch" und
+# 0 Personen darf der Upload die letzten persoenlichen Karten loeschen; bei "cache"/"fehlt" (Export ausgefallen) greift seine Sicherung.
+MARK = Path(__file__).parent / __import__("os").environ.get("OG_OUT", "r2img") / "profiles-export.json"
+
+
+def _mark(state, people):
+    try:
+        MARK.parent.mkdir(parents=True, exist_ok=True); MARK.write_text(json.dumps({"state": state, "people": people}), encoding="utf-8")
+    except Exception:
+        pass
 
 
 def _fetch_export(url):
@@ -40,27 +59,51 @@ def _fetch_export(url):
     return j
 
 
+def strip_private_items(j):
+    """Gezogene Inhalte privater Kanal-Arten (GitHub-Aktivitaet, site_feed.PRIVATE_KINDS) aus Personen und Firmen entfernen - vor dem
+    Zwischenspeichern und fuer alle Abnehmer (Profilseiten, Verzeichnis, Suche). Kanaele selbst (Profil-Links) bleiben."""
+    import site_feed
+    for key in ("people", "orgs"):
+        for x in j.get(key) or []:
+            if isinstance(x, dict) and isinstance(x.get("items"), list):
+                x["items"] = site_feed.public_items(x["items"])
+    return j
+
+
+def public_orgs(orgs):
+    """Unbeanspruchte Firmen (Paar aus einer Entitaet, noch ohne Inhaber, orgs.unclaimed=1) bekommen KEINE eigene Seite: die Entitaetsseite
+    ist die einzige oeffentliche Seite (kein Duplikat). Der Export liefert sie schon nicht mehr aus (claimed=false); der Filter sichert aeltere
+    Zwischenspeicher und Sonderfaelle ab. Erst mit Inhaber (claimed) entsteht /community/c/<handle>/ mit sameAs auf die Entitaetsseite."""
+    return [o for o in orgs or [] if o.get("claimed", True) is not False]
+
+
 def fetch_members(api):
-    import sys, time
-    j = None
+    import sys, time, site_fetch as SF
+    j, url = None, f"{api}/api/profiles/export"
     for n in range(3):   # der Export liest alle Profile nacheinander aus D1: kann dauern
-        j = _fetch_export(f"{api}/api/profiles/export")
+        j = _fetch_export(url)
         if j and j.get("people") is not None:
             break
         print(f"WARNUNG: Profil-Export Versuch {n + 1}/3 fehlgeschlagen", file=sys.stderr); time.sleep(5 * (n + 1))
-    if j and j.get("people"):
+    live = SF.states().get(url) == "frisch"
+    # Frisch abgerufen, ohne Fehler und wirklich leer (kein oeffentliches Profil mehr): kein Rueckgriff auf die alte Fassung - sonst blieben Seiten und
+    # Teilen-Karten (Foto, Name) entfernter Profile stehen. Ein leerer Export mit Fehlern (failed) oder aus einem Zwischenspeicher gilt als ausgefallen.
+    empty = live and bool(j) and j.get("people") == [] and not j.get("failed")
+    if (j and j.get("people")) or empty:
+        j = strip_private_items(j); state = "frisch" if live else "cache"
         try:
             CACHE.write_text(json.dumps(j, ensure_ascii=False), encoding="utf-8")
         except Exception:
             pass
     elif CACHE.exists():
         print("WARNUNG: Profil-Export nicht erreichbar, nutze die gespeicherte Fassung", file=sys.stderr)
-        j = json.loads(CACHE.read_text("utf-8"))
+        j = strip_private_items(json.loads(CACHE.read_text("utf-8"))); state = "cache"
     else:
         print("FEHLER: Profil-Export nicht erreichbar und keine gespeicherte Fassung: es entstehen keine Profilseiten", file=sys.stderr)
-        j = j or {}
+        j = j or {}; state = "fehlt"
+    _mark(state, len(j.get("people") or []))
     print(f"Profile: {len(j.get('people', []))} Personen, {len(j.get('orgs', []))} Firmen", file=sys.stderr)
-    return j.get("people", []), j.get("orgs", [])
+    return j.get("people", []), public_orgs(j.get("orgs", []))
 
 
 def experts_index(people, orgs):
@@ -74,7 +117,8 @@ def experts_index(people, orgs):
     return ix
 
 
-LIVEMERGE = r'''(function(){var ul=document.querySelector(".mb-list");if(!ul||!window.M365P)return;fetch(M365P.api+"/api/profiles/export").then(function(r){return r.json()}).then(function(j){var arr=j.%KEY%||[],have={};[].forEach.call(ul.querySelectorAll("a[href]"),function(a){have[a.getAttribute("href")]=1});var base="%BASE%";arr.forEach(function(it){var u=base+it.handle+"/";if(have[u])return;var none=ul.querySelector(".mb-card.mut");if(none)none.remove();var li=document.createElement("li");li.className="mb-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=it.name;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" "+(it.headline||it.tagline||"");li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
+# Mitglieder- und Firmenlisten zeigen nur Eintraege mit eigener Seite (kein Nachladen aus /api/profiles/export): ein neues oder gerade oeffentlich
+# geschaltetes Profil erscheint mit dem naechsten Seitenbau, vorher fuehrte der Link auf die noch fehlende Seite ins 404 (Wunsch Mirko, 11.11.2026).
 
 
 def purl(BASE, lang, kind, h):
@@ -95,7 +139,13 @@ def img_url(kind, x):
 
 def img_tag(kind, x, alt):
     u = img_url(kind, x)
-    return f'<img src="{esc(u)}" alt="{esc(alt)}" width="112" height="112" loading="lazy" style="float:inline-end;border-radius:{"50%" if kind == "u" else "12px"};object-fit:cover;margin-inline-start:1em">' if u else ""
+    if not u:
+        return ""
+    role = ROLE.role_of(x) if kind == "u" else ""
+    if role:   # Editor/Moderator: Ring und Symbol um das Bild (site_roles), Float sitzt am Umschlag
+        im = f'<img src="{esc(u)}" alt="{esc(alt)}" width="112" height="112" loading="lazy" style="border-radius:50%;object-fit:cover">'
+        return f'<span style="float:inline-end;margin-inline-start:1em">{ROLE.avatar(im, role)}</span>'
+    return f'<img src="{esc(u)}" alt="{esc(alt)}" width="112" height="112" loading="lazy" style="float:inline-end;border-radius:{"50%" if kind == "u" else "12px"};object-fit:cover;margin-inline-start:1em">'
 
 
 CLAIMED = {}   # profil-handle -> entity id
@@ -104,6 +154,71 @@ AUTHOR_ENT = {"mirko-p": "mirko-peters"}   # Profil-Handle -> Entitaet derselben
 
 def person_entity(handle):
     return CLAIMED.get(handle) or AUTHOR_ENT.get(handle)
+
+
+def _https(u):
+    return u if isinstance(u, str) and u.startswith("https://") else ""
+
+
+def _day(ts):
+    """Datum eines Beitrags oder Feed-Eintrags; unbrauchbare Werte (z. B. Millisekunden) brechen den Seitenbau nicht ab (site_feed.iso)."""
+    import site_feed
+    return site_feed.iso(ts)
+
+
+def own_blog(BASE, url):
+    """Handle, wenn die Kanal-URL der eigene Blog eines Mitglieds auf dieser Website ist (/community/u/<handle>/blog/), sonst ''."""
+    m = re.fullmatch(re.escape(BASE) + r"/community/u/([^/]+)/blog/", url or "")
+    return m.group(1) if m else ""
+
+
+def shown_channels(BASE, x):
+    """Kanaele fuer Profilseite und sameAs. Der Kanal "eigener Blog" entsteht im Worker auch fuer Kurzposts aus dem MVP-Tracker
+    (contrib_sources.js); die Seite /community/u/<handle>/blog/ gibt es aber nur mit Blogbeitraegen in der Standardsprache (site_blog.py).
+    Ohne sie waere der Link tot - dann wird der Kanal nicht gezeigt. Den Blog verlinkt die Profilseite ohnehin selbst (BLOGS)."""
+    return [c for c in x.get("channels", []) if not own_blog(BASE, c.get("url")) or "en" in BLOGS.get(own_blog(BASE, c["url"]), ())]
+
+
+def mvp_contrib_html(p, s):
+    """MVP-Tracker (#231): oeffentliche Beitraege des Profils. Der Worker liefert nur public=1 und bestaetigte Eintraege (profiles.js)."""
+    items = p.get("mvp_contributions") or []
+    if not items:
+        return ""
+    li = []
+    for c in items:
+        day = _day(c.get("published") or 0)
+        title = esc(c.get("title") or "")
+        link = f'<a href="{esc(_https(c.get("url")))}" rel="nofollow ugc noopener">{title}</a>' if _https(c.get("url")) else title
+        li.append(f'<li>{link} <span class="mut">· {esc(c.get("category") or s["mvp_other"])} · <time datetime="{day}">{day}</time></span></li>')
+    return f'<h2 id="contributions">{esc(s["mvp_contrib"])}</h2><ul class="pf-mvp">{"".join(li)}</ul>'
+
+
+def mvp_contrib_ld(BASE, p):
+    """Schema.org CreativeWork je oeffentlichem Beitrag, author -> @id der Person (wie person_ld)."""
+    pid = f"{purl(BASE, 'en', 'u', p['handle'])}#person"
+    out = []
+    for c in p.get("mvp_contributions") or []:
+        url = _https(c.get("url"))
+        node = {"@context": "https://schema.org", "@type": "CreativeWork", "@id": url or f"{pid}-contribution-{c.get('id', '')}", "name": c.get("title") or "",
+                "datePublished": _day(c.get("published") or 0), "author": {"@id": pid}}
+        if url:
+            node["url"] = url
+        if c.get("category"):
+            node["genre"] = c["category"]
+        if c.get("topics"):
+            node["keywords"] = ", ".join(c["topics"])
+        out.append(node)
+    return out
+
+
+def kind_ids(x, kind):
+    """Auswahl eines Profils (Branchen: industries, Job: job_eid) als Liste vorhandener Entitaeten des Typs (nur live veroeffentlichte stehen im Export)."""
+    ids = x.get("industries") if kind == "industry" else ([x["job_eid"]] if x.get("job_eid") else [])
+    return [i for i in dict.fromkeys(ids or []) if (ENTS.get(i) or {}).get("type") == kind]
+
+
+def kind_links(BASE, lang, ids):
+    return ", ".join(f'<a href="{eurl(BASE, lang, i)}">{esc(ENTS[i]["name"])}</a>' for i in ids)
 
 
 def person_ld(BASE, p, orgs_by_handle):
@@ -117,12 +232,16 @@ def person_ld(BASE, p, orgs_by_handle):
         n["description"] = p["headline"]
     if p.get("about"):
         n["disambiguatingDescription"] = p["about"][:300]
+    _job = kind_ids(p, "job")
+    if _job:   # Job/Rolle als Entitaet (Occupation) und Titel als Text
+        n["hasOccupation"] = {"@id": eid_of(BASE, _job[0])}
     if p.get("job"):
         n["jobTitle"] = p["job"]
     elif any(x.get("verified") and x["p"] == "mvp" for x in p.get("programs", [])):
         n["jobTitle"] = PROG_FULL["mvp"]
-    if p.get("country"):
-        n["address"] = {"@type": "PostalAddress", "addressCountry": p["country"]}
+    _city = ((p.get("contact") or {}).get("city") or "").strip()   # nur, wenn das Mitglied die Stadt fuer alle freigegeben hat (vis_city=all)
+    if p.get("country") or _city:
+        n["address"] = {"@type": "PostalAddress", **({"addressLocality": _city} if _city else {}), **({"addressCountry": p["country"]} if p.get("country") else {})}
     org = p.get("org")
     if org and org["handle"] in orgs_by_handle:
         n["worksFor"] = {"@id": f"{purl(BASE, 'en', 'c', org['handle'])}#org"}
@@ -130,7 +249,7 @@ def person_ld(BASE, p, orgs_by_handle):
         n["worksFor"] = {"@id": eid_of(BASE, p["company_eid"])}
     elif p.get("company"):
         n["worksFor"] = {"@type": "Organization", "name": p["company"]}
-    n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in p.get("expertise", []) if e["e"] in ENTS]
+    n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in p.get("expertise", []) if e["e"] in ENTS] + [{"@id": eid_of(BASE, i)} for i in kind_ids(p, "industry")]
     creds = []
     for c in sorted(p.get("certs", []), key=lambda c: -c.get("endorsed", 0)):
         if c["e"] in ENTS and c.get("verified"):
@@ -154,7 +273,9 @@ def person_ld(BASE, p, orgs_by_handle):
     mem = [{"@type": "OrganizationRole", "memberOf": {"@id": eid_of(BASE, "microsoft")}, "roleName": PROG_FULL.get(x["p"], PROG[x["p"]][0])} for x in p.get("programs", []) if x.get("verified")]
     if mem:
         n["memberOf"] = mem
-    same = [c["url"] for c in p.get("channels", [])] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
+    if ROLE.role_of(p):   # Rolle bei M365.FM (Editor/Moderator) zusaetzlich, ohne Programme oder hasOccupation zu ueberschreiben
+        ROLE.add_to_person_ld(BASE, n, ROLE.role_of(p))
+    same = [c["url"] for c in shown_channels(BASE, p)] + [x["url"] for x in p.get("programs", []) if x.get("verified") and x.get("url")]
     if person_entity(p["handle"]):   # dieselbe Person in der Entitaetsdatenbank: Seite und Knoten (eine Identitaet, Profil haengt daran)
         same += [eurl(BASE, "en", person_entity(p["handle"])), f"{BASE}/entity/{person_entity(p['handle'])}/#entity"]
     if same:
@@ -178,7 +299,7 @@ def org_ld(BASE, o, people_by_handle):
     sz = SIZE_N.get(o.get("size") or "")
     if sz:
         n["numberOfEmployees"] = {"@type": "QuantitativeValue", "minValue": sz[0], **({"maxValue": sz[1]} if sz[1] else {})}
-    n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in o.get("expertise", []) if e["e"] in ENTS]
+    n["knowsAbout"] = [{"@id": eid_of(BASE, e["e"])} for e in o.get("expertise", []) if e["e"] in ENTS] + [{"@id": eid_of(BASE, i)} for i in kind_ids(o, "industry")]
     emp = [{"@id": f"{purl(BASE, 'en', 'u', m['handle'])}#person"} for m in o.get("members", []) if m["handle"] in people_by_handle]
     if emp:
         n["employee"] = emp
@@ -196,11 +317,30 @@ def build(g, people, orgs, extra=None):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     sitemap, TODAY = g["sitemap"], g["TODAY"]; api = g.get("api", "https://api-dub.m365.fm")
     shell = lambda lang, b: f'{header(lang, "")}<main class="wrap" style="max-width:56em">{b}</main>{footer(lang) if lang in LANGS else footer_en()}'
+    orgs = public_orgs(orgs)
     pb = {p["handle"]: p for p in people}; ob = {o["handle"]: o for o in orgs}
     css = ('<style>.mb-card{list-style:none;padding:.7em 0;border-bottom:1px solid var(--bd)}.mb-list{padding:0}.mb-tag{display:inline-block;border:1px solid var(--bd);border-radius:2em;padding:.1em .7em;margin:.15em .3em .15em 0;font-size:.88rem;background:var(--card)}'
            '.mb-tag.ok{border-color:var(--ac)}.mb-f{font:inherit;cursor:pointer;border:1px solid var(--bd);border-radius:2em;padding:.35em .9em;margin:.2em .3em .2em 0;background:var(--card);color:var(--fg);min-height:2.5rem}.mb-f[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}'
            '.pf-lvl{font-weight:600}.pf-lvl4,.pf-lvl5,.pf-lvl6{color:var(--ac)}.pf-lvl5,.pf-lvl6{text-decoration:underline dotted}.pf-levels{font-size:.85rem;margin-top:.4em}.mb-card[hidden]{display:none}.mb-facts{border-collapse:collapse}.mb-facts th{text-align:start;padding:.3em .8em .3em 0;vertical-align:top}.pf-item{display:flex;gap:.8em;align-items:flex-start;padding:.5em 0;border-bottom:1px solid var(--bd);list-style:none}.pf-item .vt{font:inherit;min-width:3.2rem;min-height:2.5rem;border:1px solid var(--bd);border-radius:.5em;background:var(--card);color:var(--fg);cursor:pointer}.pf-item .vt[aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.pf-list{padding:0}</style>')
     live_js = f'<script>window.M365P={{api:"{api}",base:"{BASE}"}}</script><script defer src="{BASE}/assets/pfpub.js"></script>'
+    topic_js = f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:document.documentElement.lang.slice(0,2)}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>'
+
+    def partner_block(lang, lst):
+        """Partner/Sponsoren (data/sponsorships.json, laufend inkl. 182 Tage Karenzzeit) oben im Firmenverzeichnis, als Anzeige gekennzeichnet; Link zur Firmen-Entitaet (mit Lead-Formular)
+        und, wenn es eine passende Community-Firma gibt (gleiche Website), zu deren Profil."""
+        import site_sponsorships as SPM
+        sp = SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)
+        if not sp: return ""
+        host = lambda u: re.sub(r"^https?://(www\.)?", "", str(u or "").lower()).split("/")[0]
+        items = ""
+        for o in sp:
+            e = ENTS.get(o["id"]) or {}
+            c = next((x for x in lst if (host(x.get("website")) and host(x.get("website")) == host(e.get("web"))) or x["name"].strip().lower() == o["name"].strip().lower()), None)
+            tag = (e.get("desc") or {}).get(lang) or (e.get("desc") or {}).get("en") or ""
+            items += (f'<li class="mb-card"><a href="{eurl(BASE, lang, o["id"])}"><b>{esc(o["name"])}</b></a> <span class="mb-tag">{esc(SPM.badge(lang, [o["rec"]]))}</span>'
+                      f'<br><span class="mut">{esc(tag[:160])}</span>' + (f' <a href="{purl(BASE, lang, "c", c["handle"])}">{esc(s["company"])}</a>' if c else "") + "</li>")
+        return (f'<section class="mb-partners" role="note" data-spm="partners" style="{SPM.NOTE_STYLE}"><h2 style="margin:.1em 0">{esc(T(lang, "Partners and sponsors", "Partner und Sponsoren"))} '
+                f'<small class="mut">· {esc(T(lang, "Advertisement", "Anzeige"))}</small></h2><ul class="mb-list">{items}</ul></section>')
 
     def rec_html(p, lang, li, pb):
         if not p.get("recs"):
@@ -237,11 +377,12 @@ def build(g, people, orgs, extra=None):
         return "<ul>" + "".join(out) + "</ul>" + legend if out else ""
 
     def items_ul(x):
-        its = x.get("items", [])
+        import site_feed
+        its = site_feed.public_items(x.get("items", []))   # GitHub-Aktivitaet nie auf Profil-/Firmenseiten (auch bei aelterem Export-Zwischenspeicher)
         if not its:
             return ""
         return '<ul class="pf-list">' + "".join(f'<li class="pf-item" data-id="{i["id"]}"><button type="button" class="vt" aria-pressed="false" aria-label="Upvote"><span aria-hidden="true">▲</span> <span class="n">{i["votes"]}</span></button>'
-                                                f'<div><a href="{esc(i["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(i["title"])}</a><br><span class="mut">{esc(KIND.get(i["kind"], i["kind"]))} · {datetime.fromtimestamp(i["published"], timezone.utc).strftime("%Y-%m-%d")}</span></div></li>' for i in its) + "</ul>"
+                                                f'<div><a href="{esc(i["url"])}" rel="nofollow ugc noopener" target="_blank">{esc(i["title"])}</a><br><span class="mut">{esc(KIND.get(i["kind"], i["kind"]))} · {_day(i["published"])}</span></div></li>' for i in its) + "</ul>"
 
     def fol(n, lang):
         n = int(n or 0)
@@ -252,7 +393,8 @@ def build(g, people, orgs, extra=None):
     MS_A = {"modern_work": ("Modern Work", "Modern Work"), "business_apps": ("Business Applications", "Business Applications"), "data_ai": ("Data & AI", "Data & AI"), "infrastructure": ("Infrastructure", "Infrastructure"), "digital_app": ("Digital & App Innovation", "Digital & App Innovation"), "security": ("Security", "Security"), "csp": ("Cloud Solution Provider (CSP)", "Cloud Solution Provider (CSP)"), "msp": ("Managed Service Provider", "Managed Service Provider"), "isv": ("Software Vendor (ISV)", "Softwarehersteller (ISV)"), "inner_circle": ("Inner Circle", "Inner Circle"), "other": ("Other", "Sonstiges")}
     MS_L = {"solutions_partner": ("Solutions Partner", "Solutions Partner"), "specialization": ("Specialization", "Spezialisierung"), "advanced_specialization": ("Advanced specialization", "Advanced Specialization"), "inner_circle": ("Inner Circle member", "Inner-Circle-Mitglied"), "poty_finalist": ("Partner of the Year finalist", "Partner-of-the-Year-Finalist"), "poty_winner": ("Partner of the Year winner", "Partner-of-the-Year-Gewinner"), "registered": ("Registered partner", "Registrierter Partner"), "other": ("Other", "Sonstiges")}
     def chan_ul(x, lang="en"):
-        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in x.get("channels", [])) + "</ul>" if x.get("channels") else ""
+        chans = shown_channels(BASE, x)
+        return '<ul>' + "".join(f'<li><a href="{esc(c["url"])}" rel="me nofollow ugc noopener" target="_blank">{esc(KIND.get(c["kind"], c["kind"]))}</a> <span class="mut">{esc(c["url"].replace("https://", "").rstrip("/")[:60])}{fol(c.get("followers"), lang)}</span></li>' for c in chans) + "</ul>" if chans else ""
 
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0; noidx = lang != "en"
@@ -260,6 +402,7 @@ def build(g, people, orgs, extra=None):
         # ---- Personen-Seiten ----
         for p in people:
             _tr = (p.get("i18n") or {}).get(lang) or {}   # Profiltexte in der Sprache der Seite, sonst Original
+            _pnoidx = noidx and not IR.long_enough(_tr.get("about"))   # 13.11.2026: Profiltext in DIESER Sprache (uebersetzt, kein Rueckfall aufs Original) ab 2500 Zeichen: index
             if _tr.get("headline") or _tr.get("about"):
                 p = {**p, "headline": _tr.get("headline") or p.get("headline"), "about": _tr.get("about") or p.get("about")}
             u = purl(BASE, lang, "u", p["handle"])
@@ -267,7 +410,10 @@ def build(g, people, orgs, extra=None):
             facts = []
             if p.get("job") or p.get("company") or org:
                 comp = f'<a href="{purl(BASE, lang, "c", org["handle"])}">{esc(org["name"])}</a>' if org and org["handle"] in ob else (f'<a href="{eurl(BASE, lang, p["company_eid"])}">{esc(ENTS[p["company_eid"]]["name"])}</a>' if p.get("company_eid") in ENTS else esc(p.get("company", "")))
-                facts.append((s["company"], esc(p.get("job", "")) + (" · " if p.get("job") and comp else "") + comp))
+                _jl = kind_links(BASE, lang, kind_ids(p, "job")) or esc(p.get("job", ""))
+                facts.append((s["company"], _jl + (" · " if _jl and comp else "") + comp))
+            if kind_ids(p, "industry"):
+                facts.append((tlab(lang, "industry"), kind_links(BASE, lang, kind_ids(p, "industry"))))
             if p.get("country"):
                 facts.append((s["country"], esc(p["country"])))
             _bl = BLOGS.get(p["handle"])
@@ -289,35 +435,38 @@ def build(g, people, orgs, extra=None):
                                      + (f' <span class="mut">· {c["endorsed"]} ' + (T(lang, "confirmations", "Bestätigungen")) + "</span>" if c.get("endorsed") else "")
                                      + f' <span class="pf-certend" data-h="{esc(p["handle"])}" data-e="{c["e"]}"></span></li>' for c in _cs) + "</ul>" if _cs else ""
             contrib = "<ul>" + "".join(f'<li><a href="{eurl(BASE, lang, c["t"])}">{esc(ENTS[c["t"]]["name"] if c["t"] in ENTS else c["t"])}</a> <span class="mut">· {esc(s["wiki"] if c["k"] == "wiki" else s["entity"])} · {datetime.fromtimestamp(c["c"], timezone.utc).strftime("%Y-%m-%d")}{" – " + esc(c["s"]) if c.get("s") else ""}</span></li>' for c in p.get("contrib", []) if c["t"] in ENTS) + "</ul>" if p.get("contrib") else ""
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}</h1><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}members/">{esc(s["members"])}</a></nav>{img_tag("u", p, p["name"])}<h1>{esc(p["name"])}{ROLE.chip(BASE, lang, ROLE.role_of(p), p.get("scope"))}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(p["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(p.get("headline", ""))}</p><p>{tags_of_p(p, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(p["about"])}</p>' if p.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(p, lang, li, s)}' if p.get("expertise") else "") + (f'<h2>{esc(s["certs"])}</h2>{certs}' if certs else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if p.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if p.get("channels") else "")
-                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + css)
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(p)}' if items_ul(p) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(p, lang)}' if chan_ul(p, lang) else "")
+                          + rec_html(p, lang, li, pb) + (f'<h2>{esc(s["contrib"])}</h2>{contrib}' if contrib else "") + mvp_contrib_html(p, s) + ((extra or {}).get(lang, {}).get("u", {}).get(p["handle"], "")) + live_js + topic_js + css)
             node = person_ld(BASE, p, ob)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
+            ld.extend(mvp_contrib_ld(BASE, p))
             ld.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": s["members"], "item": f"{BASE}{pfx(lang)}/community/members/"}, {"@type": "ListItem", "position": 3, "name": p["name"], "item": u}]})   # T4
-            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
-            if not noidx:
+            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, *(PM.profile_meta(lang, p, s["members"], _topic_name) or (f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155])), u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=_pnoidx, side=(g["side"](lang, (p.get("headline") or "") + " " + (p.get("about") or "")[:1500], ids=[x["e"] for x in p.get("expertise", []) + p.get("certs", [])], exclude=()) if g.get("side") else "")))
+            if not _pnoidx:
                 sitemap.append((u, TODAY, None))
         # ---- Firmen-Seiten ----
         for o in orgs:
             u = purl(BASE, lang, "c", o["handle"])
-            mem = "<ul>" + "".join(f'<li><a href="{purl(BASE, lang, "u", m["handle"])}">{esc(m["name"])}</a><span class="mut"> · {esc(m.get("headline", "")[:80])}</span></li>' for m in o.get("members", []) if m["handle"] in pb) + "</ul>" if o.get("members") else ""
+            mem = "<ul>" + "".join(f'<li><a href="{purl(BASE, lang, "u", m["handle"])}">{esc(m["name"])}</a>{ROLE.chip_for(BASE, lang, m["handle"])}<span class="mut"> · {esc(m.get("headline", "")[:80])}</span></li>' for m in o.get("members", []) if m["handle"] in pb) + "</ul>" if o.get("members") else ""
             facts = [(s["size"], esc(o["size"]))] if o.get("size") else []
             if o.get("country"):
                 facts.append((s["country"], esc(o["country"])))
+            if kind_ids(o, "industry"):
+                facts.append((tlab(lang, "industry"), kind_links(BASE, lang, kind_ids(o, "industry"))))
             if o.get("website"):
                 facts.append((s["site"], f'<a href="{esc(o["website"])}" rel="nofollow ugc noopener" target="_blank">{esc(o["website"].replace("https://", "").rstrip("/"))}</a>'))
             if o.get("ms"):
                 facts.append(("Microsoft", "<br>".join(f'{esc(MS_A.get(m["area"], (m["area"],)*2)[li])}: {esc(MS_L.get(m["level"], (m["level"],)*2)[li])}{(" (" + esc(m["since"]) + ")") if m.get("since") else ""}' for m in o["ms"])))
             ft = '<table class="mb-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b_}</td></tr>' for a, b_ in facts) + "</tbody></table>" if facts else ""
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{croot}companies/">{esc(s["companies"])}</a></nav>{img_tag("o", o, o["name"])}<h1>{esc(o["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="creator" data-topic-id="{esc(o["handle"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button><p style="font-size:1.1em">{esc(o.get("tagline", ""))}</p><p>{tags_of_p(o, li, s)}</p>{ft}'
                           + (f'<h2>{esc(s["about"])}</h2><p style="white-space:pre-line">{esc(o["about"])}</p>' if o.get("about") else "")
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
-                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if o.get("items") else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if o.get("channels") else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + css)
+                          + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
-            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, *(PM.company_meta(lang, o, _topic_name) or (f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155])), u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Verzeichnisse ----
@@ -325,15 +474,19 @@ def build(g, people, orgs, extra=None):
             pk = "u" if kind == "members" else "c"; ru = f"{croot}{kind}/"
             progs = sorted({x["p"] for it in lst for x in it.get("programs", [])})
             fb = f'<button type="button" class="mb-f" data-f="" aria-pressed="true">{esc(s["all"])}</button>' + "".join(f'<button type="button" class="mb-f" data-f="{p_}" aria-pressed="false">{esc(PROG[p_][li])}</button>' for p_ in progs)
-            cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a> <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
+            cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a>{ROLE.chip(BASE, lang, ROLE.role_of(it), it.get("scope")) if pk == "u" else ""} <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
                             + "".join(f'<span class="mb-tag">{esc(ENTS[e["e"]]["name"])}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
-            lm = '<script>' + LIVEMERGE.replace("%KEY%", "people" if kind == "members" else "orgs").replace("%BASE%", purl(BASE, lang, pk, "")) + '</script>'
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
-            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
+            if kind == "companies": partners = partner_block(lang, lst)
+            else: partners = ""
+            _prec = [o["rec"] for o in __import__("site_sponsorships").active_sponsor_orgs(__import__("site_sponsorships")._state()["today"], ENTS)] if partners else []
+            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
-            write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+            if _prec:   # Partner-Block ist als Anzeige gekennzeichnet: Sponsor auch im JSON-LD der Seite (check_schema: Kennzeichnung <-> sponsor)
+                ld[0]["sponsor"] = __import__("site_sponsorships").ld(_prec)
+            write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, *(PM.hub_meta(kind, lang) or (f'{title} – M365.FM', intro)), ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))
 

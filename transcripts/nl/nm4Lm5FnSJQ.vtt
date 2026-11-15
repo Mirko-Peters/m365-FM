@@ -1,0 +1,1066 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:02.480
+Welkom bij weer een aflevering van Microsoft Knowledge Nuggets.
+
+00:00:02.640 --> 00:00:04.080
+Ik ben uw host, Miro Peters.
+
+00:00:04.340 --> 00:00:05.400
+Dus, dit is het scenario.
+
+00:00:05.740 --> 00:00:08.640
+U werkt in Business Central en u heeft één kleine wijziging nodig.
+
+00:00:08.880 --> 00:00:12.140
+Misschien een extra veld bij een klantrecord, een andere goedkeuringstap...
+
+00:00:12.140 --> 00:00:14.640
+...of een regel die een order controleert voordat iemand deze boekt.
+
+00:00:14.860 --> 00:00:18.820
+Dan begint iemand overal extensies, tabellen, pagina's en codeunits...
+
+00:00:18.820 --> 00:00:21.660
+...en plotseling klinkt dat kleine verzoek als een compleet nieuwe taal.
+
+00:00:21.800 --> 00:00:24.640
+Het is een taal, zeker, maar het hoeft niet mysterieus aan te voelen.
+
+00:00:24.860 --> 00:00:27.020
+Zie Business Central als een kantoorgebouw.
+
+00:00:27.020 --> 00:00:30.880
+Al geeft ontwikkelaars de instructies om een kamer, een formulier of een nieuwe regel...
+
+00:00:30.880 --> 00:00:33.100
+...toe te voegen zonder gaten in het gebouw zelf te boren.
+
+00:00:33.380 --> 00:00:35.040
+Dat is de Kennis Nugget voor vandaag.
+
+00:00:35.200 --> 00:00:38.680
+Aan het einde van deze aflevering weet u wat al ontwikkeling betekent...
+
+00:00:38.680 --> 00:00:41.760
+...waarom extensies bestaan en hoe maatwerk in Business Central past.
+
+00:00:42.020 --> 00:00:44.080
+Waarom bedrijven Business Central aanpassen.
+
+00:00:44.320 --> 00:00:49.020
+Business Central regelt al veel dagelijkse zaken, financiën, klanten, verkooporders, voorraadfacturen...
+
+00:00:49.020 --> 00:00:51.980
+...alles in één verbonden systeem in plaats van een stapel spreadsheets en losse tools.
+
+00:00:51.980 --> 00:00:55.220
+Voor veel bedrijven dekt die standaardopstelling het grootste deel van het werk.
+
+00:00:55.400 --> 00:00:56.300
+Maar hier is het punt.
+
+00:00:56.300 --> 00:00:58.620
+Geen enkel bedrijf werkt op precies dezelfde manier.
+
+00:00:58.840 --> 00:01:02.280
+Neem een voedseldistributeur die batchdetails nodig heeft die een ander bedrijf nooit gebruikt.
+
+00:01:02.400 --> 00:01:06.020
+Een servicebedrijf dat een speciaal goedkeuringsproces vereist voor facturering.
+
+00:01:06.180 --> 00:01:08.580
+Een winkelier die beloningsniveaus voor kortingen wil.
+
+00:01:08.740 --> 00:01:13.060
+En iemand anders die een formulier nodig heeft met eigen bewoordingen, velden en interne regels.
+
+00:01:13.260 --> 00:01:16.360
+Het bedrijf zal zijn werkwijze niet aanpassen voor één ontbrekend veld.
+
+00:01:16.540 --> 00:01:20.580
+En u wilt ook niet dat elk klein verzoek verandert in een risicovolle wijziging van het hele systeem.
+
+00:01:20.740 --> 00:01:22.260
+Dat was vroeger een groter probleem.
+
+00:01:22.260 --> 00:01:26.340
+In oudere systemen openden ontwikkelaars de originele code en bewerkten deze direct.
+
+00:01:26.500 --> 00:01:28.260
+En dat werkte totdat de volgende update arriveerde.
+
+00:01:29.000 --> 00:01:33.880
+Dan had het bedrijf de nieuwe versie van Microsoft aan de ene kant en de eigen wijzigingen aan de andere kant.
+
+00:01:34.060 --> 00:01:36.880
+En moest iemand alles weer samenbrengen voordat de update door kon gaan.
+
+00:01:37.140 --> 00:01:41.300
+Stel u een kantoor voor waar elke huurder zonder plan nieuwe kabels door de muren trekt.
+
+00:01:41.500 --> 00:01:46.480
+Het werkt een tijdje, maar als het gebouw reparaties nodig heeft, weet niemand welke kabel van wie is.
+
+00:01:46.480 --> 00:01:48.460
+Business Central kiest een andere route.
+
+00:01:48.700 --> 00:01:53.480
+In plaats van de standaard applicatie te herschrijven, bouwen ontwikkelaars een aparte add-on die ermee verbindt,
+
+00:01:53.520 --> 00:01:59.240
+waarbij het standaard deel intact blijft terwijl de eigen wijzigingen van het bedrijf ernaast staan en werken via ondersteunde punten in het systeem.
+
+00:01:59.400 --> 00:02:05.700
+Die scheiding is van belang wanneer updates arriveren, omdat Microsoft zijn deel van het gebouw bijwerkt terwijl het maatwerk in zijn eigen ruimte blijft.
+
+00:02:05.820 --> 00:02:07.520
+Er zijn nog steeds tests en fixes nodig.
+
+00:02:07.820 --> 00:02:14.120
+Het blijft immers software, maar van de ontwikkelaar wordt niet verwacht dat hij elke wijziging in de originele Microsoft-code kopieert en opnieuw verwerkt.
+
+00:02:14.120 --> 00:02:16.120
+Dus, wat past een bedrijf nu eigenlijk aan?
+
+00:02:16.340 --> 00:02:17.640
+Maatwerk voegt gegevens toe.
+
+00:02:17.800 --> 00:02:24.240
+Het standaard systeem slaat zaken als afleverinstructies, een interne risico scoren, een lidmaatschapsniveau of een koppeling met een extern systeem niet op.
+
+00:02:24.300 --> 00:02:27.560
+En er worden schermen toegevoegd die medewerkers in de juiste volgorde door een taak leiden.
+
+00:02:27.740 --> 00:02:31.660
+Ook worden er regels afgedwongen, zoals het blokkeren van een order als een vereist document ontbreekt.
+
+00:02:31.860 --> 00:02:34.360
+Maatwerk helpt mensen ook om handmatige stappen te vermijden.
+
+00:02:34.580 --> 00:02:38.580
+Stel je voor dat medewerkers elke vrijdag klantgegevens kopiëren van Business Central naar een andere tool,
+
+00:02:38.780 --> 00:02:41.420
+voorwaarden handmatig controleren en dan een rapport naar een manager sturen.
+
+00:02:41.420 --> 00:02:48.320
+Een goed gebouwde aanpassing houdt die informatie in Business Central, past de regel consistent toe en geeft medewerkers een knop of pagina die past bij hun dagelijkse werk.
+
+00:02:48.500 --> 00:02:50.280
+Laten we een fabeltje uit de wereld helpen.
+
+00:02:50.440 --> 00:02:51.760
+Je wilt niet alles aanpassen.
+
+00:02:52.020 --> 00:02:54.640
+Standaard Business Central heeft al veel processen ingebouwd.
+
+00:02:54.800 --> 00:02:58.640
+Iets veranderen alleen omdat het er anders uitziet dan een oud systeem zorgt later voor extra werk.
+
+00:02:58.840 --> 00:03:01.320
+Goed maatwerk begint dus met een duidelijke zakelijke reden.
+
+00:03:01.580 --> 00:03:02.880
+Welk probleem ervaren mensen?
+
+00:03:03.140 --> 00:03:04.820
+Wat zou er in plaats daarvan moeten gebeuren?
+
+00:03:05.000 --> 00:03:06.620
+En kan het standaardproduct het al?
+
+00:03:06.880 --> 00:03:10.380
+Wanneer het standaardproduct niet in die behoefte voorziet, komt al in beeld.
+
+00:03:10.380 --> 00:03:15.260
+Al richt zich op Business Central zelf, waarbij records op database niveau worden gelezen, toegevoegd en gewijzigd.
+
+00:03:15.300 --> 00:03:19.020
+Terwijl wordt bepaald wat er gebeurt op pagina's, in rapporten en in andere delen van de applicatie.
+
+00:03:19.200 --> 00:03:24.500
+En het berekent waarde, verplaatst gegevens en toont berichten wanneer regels tijdens processen niet worden nageleefd.
+
+00:03:24.640 --> 00:03:29.020
+Dat is veel werk voor één taal, maar al is geen algemene tool voor elk type software.
+
+00:03:29.320 --> 00:03:33.940
+En je zou het niet kiezen om een publieke webshop, een mobiele game of een zelfstandige desktop app te bouwen.
+
+00:03:33.940 --> 00:03:41.140
+Al bestaat voor één gericht doel, het vormgeven van de gegevens en het gedrag binnen Business Central, zodat het systeem aansluit bij de werkwijze van een bedrijf.
+
+00:03:41.240 --> 00:03:43.180
+En dat is precies waar we straks naar kijken.
+
+00:03:43.400 --> 00:03:45.860
+Al en extensies, het veilige add-on model.
+
+00:03:46.820 --> 00:03:48.820
+Al staat voor Application Language.
+
+00:03:49.060 --> 00:03:58.020
+Het is de programmeertaal van Microsoft voor Business Central, en het geeft ontwikkelaars een gestructureerde manier om nieuwe bedrijfsfuncties te creëren of het gedrag van bestaande onderdelen van het systeem te wijzigen.
+
+00:03:58.020 --> 00:04:03.560
+Maar het woord extensie is net zo belangrijk als al. Een extensie is een aparte app die Business Central kan installeren.
+
+00:04:03.760 --> 00:04:08.460
+Het bevat het maatwerk van het bedrijf, terwijl de standaard Business Central applicatie onaangetast blijft.
+
+00:04:08.660 --> 00:04:12.260
+Zie je het minder als het herschrijven van een handboek en meer als het toevoegen van goedgekeurde pagina's.
+
+00:04:12.440 --> 00:04:15.220
+Ja, pagina's die de oorspronkelijke regels volgen zonder ze te wissen.
+
+00:04:15.460 --> 00:04:19.120
+Dat klinkt misschien als een technisch detail, maar het verandert hoe maatwerk op de lange termijn blijft bestaan.
+
+00:04:19.320 --> 00:04:22.180
+Stel je voor dat een bedrijf een nieuwe kantoorruimte nodig heeft voor een speciaal team.
+
+00:04:22.360 --> 00:04:26.280
+De oude aanpak betekende een muur in het hoofdgebouw doorbreken en de structuur zelf veranderen.
+
+00:04:26.280 --> 00:04:32.720
+Het lost de behoefte van vandaag misschien op, maar toekomstig onderhoud wordt een nachtmerrie omdat het oorspronkelijke gebouw niet meer overeenkomt met de blauwdrukken.
+
+00:04:32.880 --> 00:04:38.020
+Een extensie werkt anders. Het gebouw heeft al deuren, stopcontacten en regels voor het toevoegen van ruimte.
+
+00:04:38.180 --> 00:04:40.560
+U bouwt een nieuwe kamer via die goedgekeurde verbindingen.
+
+00:04:40.720 --> 00:04:45.220
+De kamer is van het bedrijf, maar het hoofdgebouw kan nog steeds worden onderhouden zonder alle aangepaste muren af te breken.
+
+00:04:45.440 --> 00:04:47.720
+Dat is precies hoe Business Central extensies werken.
+
+00:04:47.920 --> 00:04:50.840
+De basistoepassing bevat het standaardwerk dat Microsoft levert.
+
+00:04:50.840 --> 00:04:56.120
+Een extensie kan eigen velden, schermen, knoppen, regels, rapporten en zelfs koppelingen naar andere systemen toevoegen.
+
+00:04:56.260 --> 00:05:01.800
+Het kan reageren op bepaalde bedrijfsacties, maar doet dit via ondersteunde manieren om verbinding te maken met de standaardtoepassing.
+
+00:05:02.020 --> 00:05:04.560
+Grenzen zijn dus ingebouwd. Dat is een goede zaak.
+
+00:05:04.780 --> 00:05:08.700
+Zonder grenzen kan een klein aangepast verzoek diep doordringen in gebieden die het niet zou moeten raken.
+
+00:05:08.940 --> 00:05:12.840
+Met extensies werkt de ontwikkelaar met duidelijke objecttypes en gedefinieerde verbindingspunten,
+
+00:05:13.660 --> 00:05:16.560
+wat de code begrijpelijker maakt voor iemand die deze later moet lezen.
+
+00:05:16.560 --> 00:05:20.000
+Deze aanpak past ook perfect bij de cloudversie van Business Central.
+
+00:05:20.260 --> 00:05:22.400
+Microsoft werkt de service regelmatig bij.
+
+00:05:22.620 --> 00:05:25.020
+Een bedrijf moet zijn extensie nog steeds testen na wijzigingen,
+
+00:05:25.300 --> 00:05:28.200
+vooral als deze afhankelijk is van onderdelen van het product die zijn veranderd.
+
+00:05:28.380 --> 00:05:30.480
+Software neemt de noodzaak voor zorg nooit weg.
+
+00:05:30.640 --> 00:05:32.460
+Maar door maatwerkkode gescheiden te houden,
+
+00:05:32.680 --> 00:05:36.460
+wordt de kans verkleind dat elke update verandert in een grote herbouw van oude wijzigingen.
+
+00:05:36.660 --> 00:05:40.780
+Misschien hoort u mensen C al noemen als ze praten over oudere Dynamics en AV-systemen.
+
+00:05:40.960 --> 00:05:43.120
+C al kwam voort uit een eerder ontwikkelingsmodel,
+
+00:05:43.120 --> 00:05:46.820
+waarbij ontwikkelaars vaak rechtstreeks de originele applicatieobjecten wijzigden.
+
+00:05:47.020 --> 00:05:50.140
+Veel bedrijven draaiden jarenlang succesvolle systemen op die manier,
+
+00:05:50.340 --> 00:05:53.120
+maar het verbond maatwerk veel nauwer met de standaardcode en updates
+
+00:05:53.120 --> 00:05:55.220
+verrijste veel vergelijkings- en reparatiewerk.
+
+00:05:55.380 --> 00:05:58.180
+Al heeft Business Central richting app-gebaseerde ontwikkeling gebracht.
+
+00:05:58.460 --> 00:06:01.180
+Dat betekent niet dat elke extensie groot of ingewikkeld is.
+
+00:06:01.380 --> 00:06:05.500
+De ene extensie voegt misschien alleen een veld toe aan een klantrecord en toont dit op een bekend scherm.
+
+00:06:05.680 --> 00:06:09.000
+Een andere bevat misschien een volledige oplossing voor een bepaald bedrijfstype
+
+00:06:09.000 --> 00:06:11.840
+met eigen records, processen, pagina's en rapporten.
+
+00:06:11.840 --> 00:06:13.840
+Beiden volgen hetzelfde basis-idee.
+
+00:06:13.940 --> 00:06:17.980
+De aangepaste app leeft naast Business Central in plaats van een herschreven versie ervan te verbergen.
+
+00:06:18.120 --> 00:06:20.160
+U kunt ook meer dan één extensie installeren.
+
+00:06:20.360 --> 00:06:23.720
+Een bedrijf kan een extensie van een softwarepartner gebruiken voor loonadministratie,
+
+00:06:23.840 --> 00:06:28.020
+een andere voor verzending en een kleine interne extensie voor regels die alleen voor dat bedrijf relevant zijn.
+
+00:06:28.260 --> 00:06:31.000
+Business Central brengt ze samen in hetzelfde werkende systeem,
+
+00:06:31.140 --> 00:06:33.800
+zolang ze de regels van het platform volgen en niet conflicteren.
+
+00:06:33.940 --> 00:06:36.100
+Al is dus niet alleen een manier om code te schrijven.
+
+00:06:36.300 --> 00:06:39.180
+Het is de taal die ontwikkelaars gebruiken om deze add-on apps te maken,
+
+00:06:39.180 --> 00:06:42.440
+en extensies zijn de container die die wijzigingen in Business Central brengt.
+
+00:06:42.560 --> 00:06:44.920
+Dat model stelt een bedrijf in staat het systeem aan te passen,
+
+00:06:45.040 --> 00:06:47.700
+terwijl het standaard product herkenbaar en makkelijker te onderhouden blijft.
+
+00:06:47.880 --> 00:06:51.260
+Laten we nu een van deze extensies openen en naar de bouwstenen erin kijken.
+
+00:06:51.640 --> 00:06:54.260
+De belangrijkste al bouwstenen binnen een al-extensie.
+
+00:06:54.700 --> 00:06:56.060
+Ontwikkelaars werken met objecten.
+
+00:06:56.220 --> 00:06:58.720
+Een object is een benoemd onderdeel van de app met een duidelijke taak,
+
+00:06:58.960 --> 00:07:03.000
+zoals informatie opslaan, een scherm tonen, een regel uitvoeren of een document genereren.
+
+00:07:03.000 --> 00:07:06.800
+Zodra je die taken los van elkaar ziet, voelt al veel minder als een muur van code.
+
+00:07:07.000 --> 00:07:09.620
+Laten we beginnen bij de plek waar bedrijfsinformatie leeft.
+
+00:07:09.800 --> 00:07:11.820
+Tabellen slaan gegevens op in Business Central.
+
+00:07:12.140 --> 00:07:14.900
+Zie een tabel als een digitale archiefkast voor één type record.
+
+00:07:15.100 --> 00:07:19.300
+De ene kast kan klanten bevatten, een andere artikelen en weer een andere verkooporders.
+
+00:07:19.560 --> 00:07:21.640
+Elk record is één bestand in die kast.
+
+00:07:21.840 --> 00:07:24.480
+Een klantentabel bevat één record voor elke klant.
+
+00:07:24.660 --> 00:07:27.260
+Een artikeltabel bevat één record voor elk product.
+
+00:07:27.260 --> 00:07:31.220
+Als uw bedrijf informatie nodig heeft die standaard Business Central niet opslaat,
+
+00:07:31.360 --> 00:07:33.160
+kan een extensie een eigen tabel maken,
+
+00:07:33.360 --> 00:07:37.120
+bijvoorbeeld voor beloningsniveaus, apparatuurinspecties of projectgoedkeuringen.
+
+00:07:37.320 --> 00:07:39.760
+Velden zijn de gelabelde ruimtes binnen elk record.
+
+00:07:39.980 --> 00:07:44.180
+Een klantrecord kan een naam, adres, betalingstermijn en telefoonnummer bevatten,
+
+00:07:44.320 --> 00:07:46.600
+omdat de klantentabel velden heeft voor die details.
+
+00:07:46.900 --> 00:07:51.800
+Velden kunnen tekst, datums, bedragen, ja, nee antwoorden of een keuze uit een vaste lijst bevatten.
+
+00:07:51.940 --> 00:07:53.900
+Een veld kan ook naar een ander record verwijzen.
+
+00:07:53.900 --> 00:07:56.580
+Een klant kan bijvoorbeeld een veld voor een beloningsidee bevatten.
+
+00:07:56.580 --> 00:07:58.260
+In plaats van willekeurige teksten typen,
+
+00:07:58.480 --> 00:08:01.200
+selecteren medewerkers een beloningsniveau uit een aparte beloningstabel.
+
+00:08:01.380 --> 00:08:04.680
+Die koppeling houdt de gegevens zuiver omdat iedereen uit dezelfde bekende lijst kiest.
+
+00:08:04.880 --> 00:08:06.320
+Dus, tabellen bevatten de feiten.
+
+00:08:06.520 --> 00:08:08.180
+Maar hoe zien en werken mensen met die feiten?
+
+00:08:08.580 --> 00:08:09.020
+Pagina's.
+
+00:08:09.180 --> 00:08:11.240
+Een pagina is het scherm dat u opent in Business Central.
+
+00:08:11.460 --> 00:08:12.740
+De klantenkaart is een pagina.
+
+00:08:12.920 --> 00:08:14.640
+Een lijst met verkooporders is een pagina.
+
+00:08:14.780 --> 00:08:17.980
+Een pagina bepaalt wat gebruikers kunnen bekijken, invoeren, doorzoeken en uitvoeren.
+
+00:08:18.180 --> 00:08:20.140
+Verschillende pagina's passen bij verschillende taken.
+
+00:08:20.140 --> 00:08:24.040
+Een kaartpagina richt zich op één record tegelijk, zoals één klant of één artikel.
+
+00:08:24.040 --> 00:08:28.360
+Een lijstpagina toont veel records in rijen, wat goed werkt als u snel iets wilt scannen,
+
+00:08:28.540 --> 00:08:29.300
+filteren of vinden.
+
+00:08:29.500 --> 00:08:33.200
+Een werkbladpagina ondersteunt werkzaamheden waarbij mensen meerdere regels informatie
+
+00:08:33.200 --> 00:08:34.540
+tegelijk invoeren of verwerken.
+
+00:08:34.720 --> 00:08:36.320
+De tabel slaat de informatie op.
+
+00:08:36.460 --> 00:08:38.460
+De pagina presenteert deze aan de gebruiker.
+
+00:08:38.680 --> 00:08:41.960
+Die scheiding is handig omdat u het scherm kunt wijzigen zonder de opslaglocatie van de
+
+00:08:41.960 --> 00:08:45.580
+gegevens aan te passen of dezelfde tabel op meerdere pagina's kunt hergebruiken wanneer
+
+00:08:45.580 --> 00:08:48.100
+verschillende teams andere weergave van dezelfde records nodig hebben.
+
+00:08:48.260 --> 00:08:51.220
+Wat nu als de gegevens al bij een standaard Business Central record horen.
+
+00:08:51.220 --> 00:08:54.900
+Je maakt meestal geen vervangende klantentabel aan alleen omdat je één extra veld nodig
+
+00:08:54.900 --> 00:08:55.160
+hebt.
+
+00:08:55.300 --> 00:08:56.760
+Je gebruikt een tabel extensie.
+
+00:08:56.920 --> 00:08:59.940
+Een tabel extensie voegt jouw veld toe aan de bestaande klantentabel.
+
+00:09:00.140 --> 00:09:03.760
+Het standaard klantrecord blijft waar het hoort, terwijl jouw extensie het specifieke
+
+00:09:03.760 --> 00:09:05.840
+detail van het bedrijf toevoegt naast de standaardvelden.
+
+00:09:06.080 --> 00:09:09.820
+Dat kan een beloningsidee, een afleveringsnota, een accountmanager of een veld zijn dat verbinding
+
+00:09:09.820 --> 00:09:11.380
+maakt met een ander onderdeel van het bedrijf.
+
+00:09:11.460 --> 00:09:14.500
+Maar het toevoegen van het veld aan de tabel plaatst het niet automatisch op het scherm.
+
+00:09:14.740 --> 00:09:16.480
+Daarvoor gebruik je een pagina extensie.
+
+00:09:16.480 --> 00:09:20.000
+Een pagina extensie voegt een veld, groep of actie toe aan een bestaande pagina.
+
+00:09:20.160 --> 00:09:23.740
+Als het bedrijf wil dat personeel een beloningsniveau kiest bij het bekijken van een klant, kan de
+
+00:09:23.740 --> 00:09:27.160
+pagina extensie het beloningsideeveld op de klantenkaart plaatsen, precies waar het
+
+00:09:27.160 --> 00:09:27.940
+personeel al werkt.
+
+00:09:28.140 --> 00:09:29.660
+Dat houdt de ervaring vertrouwd.
+
+00:09:29.820 --> 00:09:33.640
+In plaats van gebruikers naar een apart aangepast scherm te sturen voor een simpel detail, voegt
+
+00:09:33.640 --> 00:09:35.840
+de extensie het detail toe aan de pagina die ze al kennen.
+
+00:09:36.000 --> 00:09:40.560
+Een pagina extensie kan ook een actie toevoegen, een knop of menuopdracht die een taak start.
+
+00:09:40.860 --> 00:09:44.780
+Bijvoorbeeld, een klantenkaart kan een beloningsactie bevatten die de beloningslijst opent.
+
+00:09:44.780 --> 00:09:47.580
+Achter het scherm heb je een plek nodig voor de bedrijfsregels.
+
+00:09:47.780 --> 00:09:49.340
+Die plek is vaak een codeunit.
+
+00:09:49.480 --> 00:09:53.840
+Een codeunit bevat al procedures, wat benoemde stukjes code zijn die een specifieke taak uitvoeren.
+
+00:09:54.060 --> 00:09:57.800
+Zie het als het backoffice team dat een taak afhandelt wanneer een pagina, rapport of
+
+00:09:57.800 --> 00:09:59.180
+ander proces om hulp vraagt.
+
+00:09:59.440 --> 00:10:02.840
+Stel dat het beloningsniveau bepaalt welke korting voor een klant geldt.
+
+00:10:02.880 --> 00:10:07.180
+De kortingsberekening hoort in een codeunit thuis, niet op de klantenkaartpagina zelf.
+
+00:10:07.420 --> 00:10:11.620
+Dan kan een verkoopproces, een rapport of een toekomstige pagina dezelfde regel gebruiken zonder
+
+00:10:11.620 --> 00:10:13.260
+deze op verschillende plekken te kopiëren.
+
+00:10:13.260 --> 00:10:15.480
+Eén regel, één plek om deze te onderhouden.
+
+00:10:15.700 --> 00:10:18.480
+Business Central bevat ook andere objecttypen voor verschillende taken.
+
+00:10:18.720 --> 00:10:22.200
+Rapporten verzamelen gegevens en presenteren deze in een document of layout, zoals een
+
+00:10:22.200 --> 00:10:23.320
+factuur of verkooprapport.
+
+00:10:23.460 --> 00:10:27.080
+Queries stellen gerichte vragen aan gegevens, bijvoorbeeld welke klanten een bepaald artikel
+
+00:10:27.080 --> 00:10:28.440
+hebben besteld gedurende een periode.
+
+00:10:28.640 --> 00:10:32.200
+XML-ports helpen bijvoorbeeld gegevens in een gestructureerd formaat in te voeren of te
+
+00:10:32.200 --> 00:10:35.480
+verzenden, vaak wanneer een ander systeem informatie moet uitwisselen met Business Central.
+
+00:10:35.740 --> 00:10:39.020
+Breng die onderdelen samen en je kunt je een kleine klantenbeloningsextensie voorstellen.
+
+00:10:39.020 --> 00:10:42.380
+Een beloningstabel slaat elk niveau en het bijbehorende kortingspercentage op.
+
+00:10:43.020 --> 00:10:44.940
+Beloningspagina's laten personeel die niveaus beheren.
+
+00:10:45.080 --> 00:10:49.000
+Een klanttabel-extensie voegt een beloningsidee toe aan elke klant, terwijl een pagina-extensie
+
+00:10:49.000 --> 00:10:50.180
+voor de klantenkaart dit weergeeft.
+
+00:10:50.360 --> 00:10:54.460
+Een pagina-actie opent de beloningslijst en de code-unit berekent de kortingsregel.
+
+00:10:54.620 --> 00:10:56.680
+Elk object behandelt een deel van de taak.
+
+00:10:56.840 --> 00:11:00.680
+Dat maakt de extensie makkelijker leesbaar, testbaar en aanpasbaar als de bedrijfsregel
+
+00:11:00.680 --> 00:11:01.840
+over zes maanden verandert.
+
+00:11:02.020 --> 00:11:05.740
+Maar een bedrijfsregel moet vaak op precies het juiste moment worden uitgevoerd, zoals wanneer iemand
+
+00:11:05.740 --> 00:11:06.340
+een order boekt.
+
+00:11:06.520 --> 00:11:08.400
+Dat is waar triggers en events om de hoek komen kijken.
+
+00:11:08.560 --> 00:11:10.220
+Events, triggers en bedrijfsregels.
+
+00:11:10.440 --> 00:11:12.340
+Dus, je hebt een klantbeloningsveld toegevoegd.
+
+00:11:12.460 --> 00:11:13.980
+Goed zo, dit is de echte vraag.
+
+00:11:14.240 --> 00:11:16.160
+Wanneer moet Business Central dat veld eigenlijk gebruiken?
+
+00:11:16.340 --> 00:11:18.300
+Stel je voor dat je op het punt staat een verkooporder te boeken.
+
+00:11:18.520 --> 00:11:21.460
+Voordat het systeem de definitieve posten aanmaakt, wil je één extra controle.
+
+00:11:21.700 --> 00:11:25.180
+Misschien heeft de klant een goedgekeurd beloningsniveau nodig voordat er korting wordt toegepast.
+
+00:11:25.340 --> 00:11:29.200
+Of misschien moet er een vereist leveringsdocument bestaan voordat de order verder kan.
+
+00:11:29.360 --> 00:11:33.200
+Je wilt die controle op het juiste moment, maar je wilt niet het volledige boekingsproces voor verkopen
+
+00:11:33.200 --> 00:11:35.780
+kopiëren naar je eigen extensie om slechts één regel toe te voegen.
+
+00:11:36.000 --> 00:11:38.100
+Dat proces regelt al veel op de achtergrond.
+
+00:11:38.280 --> 00:11:42.040
+Als je het kopieert, zit je extensie vast aan het onderhoud van al die toekomstige wijzigingen.
+
+00:11:42.240 --> 00:11:42.960
+Niet ideaal.
+
+00:11:43.120 --> 00:11:45.660
+Dus al geeft ontwikkelaars een paar manieren om code uit te voeren.
+
+00:11:45.860 --> 00:11:47.900
+Welke je kiest, hangt af van wat er moet gebeuren.
+
+00:11:48.060 --> 00:11:49.220
+Ten eerste, triggers.
+
+00:11:49.420 --> 00:11:52.660
+Een trigger is een benoemde plek binnen een al-object waar code kan worden uitgevoerd.
+
+00:11:52.900 --> 00:11:55.920
+Wanneer iemand een waarde in een tabelveld wijzigt, start de triggercode.
+
+00:11:56.120 --> 00:11:58.860
+Wanneer een pagina wordt geopend of gesloten, start de triggercode.
+
+00:11:59.060 --> 00:12:01.800
+Rapporten, queries, XML-ports, tabellen, extensies, AO.
+
+00:12:01.800 --> 00:12:03.940
+Ze hebben allemaal deze plekken waar een ontwikkelaar regels kan toevoegen.
+
+00:12:04.140 --> 00:12:05.800
+Neem het beloningsideeveld bij een klant.
+
+00:12:06.020 --> 00:12:09.120
+Wanneer een gebruiker een beloningsniveau kiest, kan een validatietrigger worden uitgevoerd.
+
+00:12:09.300 --> 00:12:11.200
+De code controleert, is de klant geblokkeerd.
+
+00:12:11.400 --> 00:12:13.800
+Bestaat het beloningsniveau, moet een ander veld worden bijgewerkt.
+
+00:12:14.520 --> 00:12:18.480
+De controle gebeurt precies wanneer de waarde verandert, niet pas later wanneer iemand een fout ontdekt.
+
+00:12:18.640 --> 00:12:21.380
+Triggers werken goed wanneer de regel nauw verbonden is met dat object.
+
+00:12:21.600 --> 00:12:23.380
+Maar Business Central gebruikt ook events.
+
+00:12:23.600 --> 00:12:25.060
+Een event is als een kennisgeving.
+
+00:12:25.260 --> 00:12:28.120
+Een deel van de applicatie verstuurt deze wanneer er iets gebeurt.
+
+00:12:28.120 --> 00:12:34.040
+Het kan aankondigen dat een record wordt ingevoegd, dat een document op het punt staat te worden geboekt of dat een proces is voltooid.
+
+00:12:34.240 --> 00:12:36.280
+Jouw extensie kan naar die kennisgeving luisteren.
+
+00:12:36.420 --> 00:12:38.860
+De code die luistert, wordt een eventsubscriber genoemd.
+
+00:12:39.000 --> 00:12:40.960
+Deze wacht op een specifieke, benoemde gebeurtenis.
+
+00:12:41.160 --> 00:12:44.440
+Wanneer Business Central dat event activeert, voert de subscriber zijn eigen procedure uit.
+
+00:12:44.600 --> 00:12:46.440
+Het standaard proces blijft de leiding houden.
+
+00:12:46.640 --> 00:12:50.940
+Bijvoorbeeld, wanneer Business Central begint met het boeken van een verkooporder, activeert het een event voordat het verder gaat.
+
+00:12:51.100 --> 00:12:52.940
+Uw rewards-extensie ontvangt die melding.
+
+00:12:53.180 --> 00:12:55.920
+Deze controleert het reward-idee en de kortingsregel van de klant.
+
+00:12:55.920 --> 00:12:59.440
+Vervolgens laat het het proces doorgaan of stopt het met een duidelijk bericht.
+
+00:12:59.640 --> 00:13:02.460
+Het standaard bookingsproces blijft van Business Central.
+
+00:13:02.740 --> 00:13:06.520
+Uw extensie voegt enkel een bedrijfsspecifieke regel toe op dat aansluitpunt.
+
+00:13:06.680 --> 00:13:09.620
+U hoort vaak eventnamen zoals on-before of on-after.
+
+00:13:09.820 --> 00:13:12.760
+On-before betekent dat uw code draait voordat een actie is voltooid.
+
+00:13:12.960 --> 00:13:15.360
+Dat is perfect voor een controle die de volgende stap kan voorkomen.
+
+00:13:15.560 --> 00:13:18.480
+O, zoals het stoppen van een verkooporder als aan een voorwaarde niet is voldaan.
+
+00:13:18.480 --> 00:13:20.620
+After betekent dat de actie al heeft plaatsgevonden.
+
+00:13:20.800 --> 00:13:22.000
+U kunt daarop reageren.
+
+00:13:22.160 --> 00:13:24.980
+Maak een gerelateerd record aan, werk een notitie bij of start ander werk.
+
+00:13:24.980 --> 00:13:27.400
+De namen geven de timing aan en timing is belangrijk.
+
+00:13:27.580 --> 00:13:29.840
+Een regel die na het boeken draait kan dit niet meer voorkomen.
+
+00:13:30.000 --> 00:13:32.920
+Een regel die te vroeg draait beschikt mogelijk nog niet over de benodigde gegevens.
+
+00:13:33.160 --> 00:13:36.360
+Dus kiezen ontwikkelaars de gebeurtenis op basis van wat de bedrijfsregel moet doen en wanneer.
+
+00:13:36.500 --> 00:13:38.200
+Code kan ook worden gestart vanuit een actie.
+
+00:13:38.360 --> 00:13:42.640
+Een gebruiker klikt op een knop, zoals reward status controleren, en die actie roept een procedure aan.
+
+00:13:42.820 --> 00:13:45.940
+Code kan ook draaien wanneer het ene object het andere aanroept via een variabele.
+
+00:13:45.940 --> 00:13:47.940
+Dat klinkt technisch, maar het is eenvoudig.
+
+00:13:48.080 --> 00:13:50.840
+Het ene deel van de extensie vraagt het andere om een taak uit te voeren.
+
+00:13:51.200 --> 00:13:52.260
+Variabele helpen daarbij.
+
+00:13:52.260 --> 00:13:55.700
+Een variabele is een benoemde plek die een waarde vasthoudt terwijl de code draait.
+
+00:13:55.900 --> 00:14:00.180
+Dit kan een getal, tekst, een datum of zelfs een business central record zijn, zoals de huidige klant.
+
+00:14:00.340 --> 00:14:02.000
+In al declareert u deze met FAR.
+
+00:14:02.200 --> 00:14:07.260
+Een rewards procedure kan bijvoorbeeld een variabele genaamd, customer, gebruiken om het huidige klantrecord vast te houden.
+
+00:14:07.420 --> 00:14:10.440
+Een andere variabele genaamd, discount percent, bevat de korting.
+
+00:14:10.640 --> 00:14:11.960
+Dit zijn geen permanente records.
+
+00:14:11.960 --> 00:14:14.220
+Het zijn slechts werkwaarden voor dat specifieke stukje code.
+
+00:14:14.380 --> 00:14:16.400
+Dit is belangrijk wat betreft de plek waar code zich bevindt.
+
+00:14:16.480 --> 00:14:19.560
+Als een regel op meerdere plaatsen gebruikt kan worden, zet deze dan in een codeunit.
+
+00:14:19.560 --> 00:14:26.500
+Op die manier kunnen de klantkaart, een verkoopproces en een rapport allemaal dezelfde kortingsprocedure aanroepen in plaats van elke eigen versie te hebben.
+
+00:14:26.740 --> 00:14:28.420
+Dat voorkomt een bekend probleem.
+
+00:14:28.580 --> 00:14:33.800
+Het ene scherm past 10% korting toe, het andere 5% en niemand weet welke regel correct is.
+
+00:14:34.000 --> 00:14:38.920
+Door gedeelde bedrijfsregels in één codeunit te houden, krijgt de extensie één bron voor die beslissing.
+
+00:14:39.080 --> 00:14:41.220
+Triggers verwerken dus regels dicht bij een object.
+
+00:14:41.460 --> 00:14:44.860
+Events laten een extensie reageren op de processen van Business Central zelf.
+
+00:14:44.860 --> 00:14:47.120
+Codeunits houden gedeelde logica bij elkaar.
+
+00:14:47.340 --> 00:14:49.820
+Zodra die onderdelen verbonden zijn, is de volgende vraag.
+
+00:14:50.040 --> 00:14:52.880
+Waar schrijven, testen en inspecteren ontwikkelaars al deze al code?
+
+00:14:53.040 --> 00:14:57.700
+Al ontwikkeling vindt doorgaans plaats in Visual Studio Code, vaak VS Code genoemd.
+
+00:14:57.860 --> 00:15:00.000
+Dit is uw werkruimte voor het schrijven van al bestanden.
+
+00:15:00.180 --> 00:15:01.920
+Het houdt uw extensie georganiseerd.
+
+00:15:02.080 --> 00:15:06.280
+Het helpt u problemen te vinden en stuurt de voltoide app naar een Business Central omgeving om te testen.
+
+00:15:06.420 --> 00:15:09.160
+Maar VS Code op zichzelf is slechts een algemene code-editor.
+
+00:15:09.360 --> 00:15:11.740
+Het heeft de Altaal-extensie van Microsoft nodig.
+
+00:15:11.740 --> 00:15:14.660
+Die extensie leert VS Code hoe Business Central werkt.
+
+00:15:14.780 --> 00:15:16.800
+Het kan objectnamen voorstellen terwijl u typt.
+
+00:15:16.960 --> 00:15:18.720
+Het wijst op fouten voordat u publiceert.
+
+00:15:18.900 --> 00:15:20.900
+Het helpt u bij het bladeren door velden en procedures.
+
+00:15:21.200 --> 00:15:23.500
+En het verbindt uw project met een Business Central omgeving.
+
+00:15:23.740 --> 00:15:25.080
+Dat bespaart een hoop GISwerk.
+
+00:15:25.340 --> 00:15:29.200
+Wanneer u een nieuw Al project start, kunt u het commando Algo uitvoeren in VS Code.
+
+00:15:29.420 --> 00:15:36.040
+Het maakt de basis projectmap en instellingsbestanden voor de extensienaam, uitgever, versie en welke Business Central omgeving moet worden gebruikt.
+
+00:15:36.260 --> 00:15:38.560
+Beschouw die projectmap als de werkbank van de extensie.
+
+00:15:38.760 --> 00:15:40.100
+Elk Al bestand hoort daar thuis.
+
+00:15:40.100 --> 00:15:44.440
+Eén bestand kan een tabel bevatten, een andere pagina extensie, een code-unit kan een eigen bestand hebben.
+
+00:15:44.580 --> 00:15:49.200
+Op die manier kan iemand die het project opent, het juiste onderdeel vinden zonder door één enorm document te scrollen.
+
+00:15:49.380 --> 00:15:52.980
+Wanneer de code klaar is om te testen, compileert VS Code deze tot een app-pakket.
+
+00:15:53.200 --> 00:15:55.300
+Dat is de installeerbare versie van de extensie.
+
+00:15:55.520 --> 00:15:58.600
+Business Central leest dat pakket en voegt de extensie toe aan de omgeving.
+
+00:15:58.800 --> 00:16:05.940
+Als er een veld ontbreekt, er een spelfout is of een ander probleem is dat verhindert dat de app wordt gebouwd, vertelt VS Code u dat voordat het pakket Business Central ooit bereikt.
+
+00:16:05.940 --> 00:16:13.260
+Testen moet eerst in een sandbox gebeuren. Een sandbox is een afzonderlijke Business Central omgeving waar u wijzigingen kunt uitproberen zonder live bedrijfsactiviteiten te riskeren.
+
+00:16:13.420 --> 00:16:18.720
+U publiceert de extensie, opent de pagina's, voert testrecords in en kijkt of de regels werken zoals verwacht.
+
+00:16:18.900 --> 00:16:24.940
+Die scheiding is belangrijk. U wilt niet ontdekken dat een nieuwe validatieregel verkooporders blokkeert terwijl medewerkers proberen hun werk te doen.
+
+00:16:24.940 --> 00:16:30.860
+In een sandbox kunt u fouten maken, testgegevens verwijderen, code wijzigen en opnieuw publiceren zonder live records te beïnvloeden.
+
+00:16:31.100 --> 00:16:35.380
+Soms draait de code, maar ziet het resultaat er toch fout uit. Dat is wanneer debuggen helpt.
+
+00:16:35.540 --> 00:16:40.120
+U plaatst een breakpunt in de code, start het proces en de extensie pauzeert terwijl deze draait.
+
+00:16:40.320 --> 00:16:47.460
+Bij die pauze kunt u waarden inspecteren, zoals de huidige klant, het geselecteerde beloningsniveau of het kortingspercentage dat de procedure heeft berekend.
+
+00:16:47.620 --> 00:16:51.400
+In plaats van te raden waarom een regel faalde, kunt u precies zien wat de code heeft ontvangen.
+
+00:16:51.700 --> 00:16:54.520
+Ontwikkelteams gebruiken ook Git om een geschiedenis van hun werk bij te houden.
+
+00:16:54.520 --> 00:16:57.600
+Git legt wijzigingen in de projectbestanden in de loop van de tijd vast.
+
+00:16:57.760 --> 00:17:03.560
+Als iemand een regel wijzigt en een probleem veroorzaakt, kan het teamversies vergelijken, zien wat er is veranderd en zo nodig terugdraaien.
+
+00:17:03.720 --> 00:17:07.180
+Het helpt ook wanneer meer dan één ontwikkelaar aan dezelfde extensie werkt.
+
+00:17:07.380 --> 00:17:09.740
+Voor een beginner is het beste pad om klein te beginnen.
+
+00:17:10.200 --> 00:17:14.000
+Leer eerst de weg in Business Central en maak daarna één tabel en één pagina.
+
+00:17:14.280 --> 00:17:20.460
+Breed daarna een standaardpagina uit, voeg een eenvoudige bedrijfsregel toe en leer hoe events en installatiegegevens in het project passen.
+
+00:17:20.460 --> 00:17:25.460
+Laten we vervolgens die onderdelen verbinden via een kleine add-on die een bedrijf echt zou kunnen gebruiken.
+
+00:17:26.360 --> 00:17:29.760
+Een eenvoudig voorbeeld, het bouwen van een add-on voor klantenbeloningen.
+
+00:17:30.060 --> 00:17:32.240
+Hoe ziet een echte al-extensie er eigenlijk uit?
+
+00:17:32.480 --> 00:17:34.460
+Laten we in een eenvoudig voorbeeld duiken.
+
+00:17:34.740 --> 00:17:38.600
+Stel je voor dat je bedrijf beloningsniveaus voor klanten wil, elk met zijn eigen korting.
+
+00:17:38.800 --> 00:17:40.720
+Je begint met het maken van een beloningstabel.
+
+00:17:40.980 --> 00:17:45.940
+Zie het als een digitale archiefkast waarin elk bestand een idee, een omschrijving en een kortingspercentage bevat.
+
+00:17:45.940 --> 00:17:48.020
+Goud krijgt bijvoorbeeld 10% korting.
+
+00:17:48.180 --> 00:17:51.160
+Je personeel moet die niveaus kunnen beheren zonder technische tools aan te raken.
+
+00:17:51.360 --> 00:17:56.540
+Dus voeg je twee pagina's toe, een beloningslijstpagina om alle niveaus te zien en een beloningskaartpagina om er een te bewerken of aan te maken.
+
+00:17:56.740 --> 00:18:01.960
+Ze kunnen een nieuw niveau toevoegen, een percentage aanpassen of bekijken wat er is, zonder enige ontwikkelomgeving te openen.
+
+00:18:02.200 --> 00:18:04.940
+Vervolgens breed je de klantentabel uit met een nieuw veld genaamd beloningsidee.
+
+00:18:05.660 --> 00:18:12.080
+Dat veld koppelt elke klant aan één beloningsrecord en je plaatst dat veld direct op de klantenkaartpagina waar medewerkers al klantgegevens beheren.
+
+00:18:12.080 --> 00:18:16.660
+Daarna voeg je een beloningsactie toe zodat ze de beloningslijst direct vanaf diezelfde kaart kunnen openen.
+
+00:18:16.780 --> 00:18:19.280
+De kortingsregel zelf bevindt zich in een codeunit.
+
+00:18:19.500 --> 00:18:25.280
+Wanneer een ander proces de korting van een klant nodig heeft, roept het die codeunit aan in plaats van het telkens opnieuw te berekenen op elke pagina.
+
+00:18:25.500 --> 00:18:26.380
+Dat is efficiënt.
+
+00:18:26.560 --> 00:18:30.640
+Een installatiecodeunit voegt standaard beloningsniveaus toe de eerste keer dat je extensie wordt geïnstalleerd.
+
+00:18:30.780 --> 00:18:36.800
+En een event subscriber controleert het gekozen beloningsniveau tijdens een verkoopproces en past de regel van je bedrijf op precies het juiste moment toe.
+
+00:18:37.000 --> 00:18:39.520
+Dat is één kleine extensie, maar let op wat deze bevat.
+
+00:18:39.520 --> 00:18:44.700
+Datatabellen, gebruikerschermen, navigatieacties, instellingslogica en bedrijfsregels die allemaal samenwerken.
+
+00:18:44.900 --> 00:18:46.200
+Dat is de ware kracht van al.
+
+00:18:46.400 --> 00:18:46.880
+All right.
+
+00:18:47.180 --> 00:18:49.140
+Conclusie, je startpunt voor alontwikkeling.
+
+00:18:49.380 --> 00:18:50.800
+Dus, dit is de belangrijkste lay.
+
+00:18:50.980 --> 00:18:57.060
+Met alontwikkeling kun je de specifieke functies die je bedrijf nodig heeft toevoegen aan Business Central zonder de kernapplicatie aan te passen.
+
+00:18:57.080 --> 00:18:58.840
+En je hoeft niet alles tegelijk te bouwen.
+
+00:18:59.080 --> 00:19:02.360
+Begin met één veld, één pagina extensie en één duidelijke regel.
+
+00:19:02.640 --> 00:19:03.960
+Dat is je eerste bouwsteen.
+
+00:19:03.960 --> 00:19:10.540
+Als je deze kennis nugget nuttig vond, abonneer je dan op je favoriete podcast platform en deel hem met iemand die net begint met Business Central ontwikkeling.
+
+00:19:10.760 --> 00:19:13.740
+Doe de volgende keer weer mee, wanneer we een nieuw puzzelstukje toevoegen.
+
+00:19:13.920 --> 00:19:19.240
+Ik ben Marco Peters en dit was weer een aflevering van Microsoft Knowledge Nuggets op M365FM.

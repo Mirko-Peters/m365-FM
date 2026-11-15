@@ -1,0 +1,2386 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:02.940
+Pernah merasa percakapan Microsoft 3 resmi di permukaan saja?
+
+00:00:03.860 --> 00:00:06.240
+Anda meminta alat untuk memandu keputusan penting,
+
+00:00:06.380 --> 00:00:09.100
+tetapi ia tidak bisa menjangkau data atau aplikasi utama Anda.
+
+00:00:09.640 --> 00:00:10.520
+Kesenjangan itu tidaklah kecil.
+
+00:00:11.000 --> 00:00:15.360
+Itu adalah perbedaan antara jawaban umum dan wawasan yang didasarkan pada konteks bisnis Anda yang sebenarnya.
+
+00:00:15.920 --> 00:00:18.060
+Dalam podcast ini, saya akan menunjukkan cara menutup kesenjangan tersebut.
+
+00:00:18.580 --> 00:00:21.220
+Anda akan belajar cara mengidentifikasi sistem yang tepat untuk dihubungkan,
+
+00:00:21.580 --> 00:00:24.420
+cara membangun konektor co-pilot, dan cara mengamankannya menggunakan Teams toolkit.
+
+00:00:25.020 --> 00:00:27.700
+Ini ditujukan bagi pembuat dan pengembang yang memahami Microsoft 365
+
+00:00:27.700 --> 00:00:30.520
+dan ingin BizChat bekerja dengan aplikasi utama mereka.
+
+00:00:31.020 --> 00:00:32.780
+Karena sebelum kita bisa memperbaiki masalahnya,
+
+00:00:32.900 --> 00:00:35.260
+kita perlu membahas mengapa BizChat sering terasa setengah buta.
+
+00:00:36.500 --> 00:00:37.780
+Mengapa BizChat terasa setengah buta?
+
+00:00:38.360 --> 00:00:41.940
+Kebanyakan orang datang ke BizChat berharap ia bertindak seperti ahli strategi berpengalaman
+
+00:00:41.940 --> 00:00:44.180
+yang siap dengan jawaban berdasarkan realitas bisnis mereka.
+
+00:00:44.740 --> 00:00:46.560
+Namun alasan mengapa ia sering mengecewakan sanjirana.
+
+00:00:46.920 --> 00:00:48.100
+Ia tidak bisa melihat teman-teman besarnya.
+
+00:00:48.780 --> 00:00:52.600
+Sejak awal, ia bekerja dengan baik dengan informasi yang sudah dimiliki Microsoft 365.
+
+00:00:54.080 --> 00:00:56.380
+Pesan Outlook, obrolan Teams, file OneDrive,
+
+00:00:56.380 --> 00:00:57.880
+perpustakaan SharePoint?
+
+00:00:58.800 --> 00:01:01.880
+Masalah muncul ketika pengguna bertanya tentang data yang tersimpan di tempat lain.
+
+00:01:02.280 --> 00:01:05.500
+CRM yang menjalankan penjualan, ERP yang melacak inventaris dan faktur,
+
+00:01:05.960 --> 00:01:07.680
+atau alat proyek yang memantau tenggat waktu.
+
+00:01:08.440 --> 00:01:10.540
+Begitu BizChat tidak bisa menjangkau sistem tersebut,
+
+00:01:10.680 --> 00:01:13.960
+ia mulai memberikan jawaban setengah-setengah yang terasa seperti tebakan daripada panduan.
+
+00:01:14.480 --> 00:01:15.060
+Ambil contoh umum.
+
+00:01:15.820 --> 00:01:17.900
+Seorang manajer penjualan memulai rapat hari Senin
+
+00:01:17.900 --> 00:01:19.920
+dengan bertanya kepada BizChat tentang pipeline saat ini.
+
+00:01:20.440 --> 00:01:23.660
+Tentu, BizChat akan menarik dari utas email terbaru, dokumen proposal,
+
+00:01:23.840 --> 00:01:24.860
+bahkan mungkin catatan rapat.
+
+00:01:24.860 --> 00:01:28.080
+Namun tanpa akses ke CRM, angka-angka itu tidak lengkap.
+
+00:01:28.580 --> 00:01:29.780
+Bukannya perakiraan yang andal,
+
+00:01:30.060 --> 00:01:32.100
+respons yang muncul justru samar, kurang data aktual,
+
+00:01:32.260 --> 00:01:35.100
+dan sebagian besar tidak bisa digunakan untuk keputusan berisiko tinggi.
+
+00:01:35.880 --> 00:01:38.020
+Apa yang seharusnya menjadi wawasan cepat malah menjadi pekerjaan.
+
+00:01:38.520 --> 00:01:40.600
+Manajer tersebut sekarang harus membuka sistem lain,
+
+00:01:40.840 --> 00:01:41.860
+mengambil angka yang sebenarnya,
+
+00:01:42.080 --> 00:01:43.320
+dan menjelaskan kekurangannya kepada tim.
+
+00:01:43.720 --> 00:01:45.620
+Dalam sekejap, kepercayaan terhadap alat tersebut menurut.
+
+00:01:46.040 --> 00:01:47.360
+Pola ini berulang di departemen lain.
+
+00:01:47.940 --> 00:01:50.720
+Seorang direktur keuangan menanyakan total faktur yang belum dibayar,
+
+00:01:50.860 --> 00:01:53.820
+namun tanpa visibilitas ERP, BizChat memberikan laporan kosong.
+
+00:01:53.820 --> 00:01:56.820
+Seorang manajer proyek menanyakan kapan hasil kerja harus diserahkan,
+
+00:01:56.940 --> 00:01:59.280
+namun tanpa akses ke sistem pelacakan, BizChat hanya angkat bahu.
+
+00:02:00.060 --> 00:02:01.760
+Setiap skenario berakhir dengan cara yang sama,
+
+00:02:01.960 --> 00:02:05.080
+berpindah-pindah antara BizChat dan sistem yang asli mengisi bagian yang hilang secara manual.
+
+00:02:05.520 --> 00:02:06.380
+Tanyakan pada diri sendiri,
+
+00:02:06.520 --> 00:02:08.980
+jika tim Anda harus memperiksa ulang setiap jawaban BizChat dengan alat lain,
+
+00:02:09.100 --> 00:02:11.020
+akankah mereka terus menggunakannya sebagai tujuan utama?
+
+00:02:11.660 --> 00:02:14.020
+Itulah biaya praktisnya, berpindah-pindah konteks secara konstan.
+
+00:02:14.480 --> 00:02:16.640
+Staff keluar masuk BizChat, menyalin angka ke dalam utas,
+
+00:02:16.640 --> 00:02:20.380
+menempelkan tangkapan layar dari dashboard atau membangun ulang analisis yang seharusnya otomatis.
+
+00:02:20.380 --> 00:02:24.260
+Alih alur kerja yang efisien dan berbasis AI,
+
+00:02:24.460 --> 00:02:26.780
+pengalamannya justru mundur ke cara manual yang tambal sulam.
+
+00:02:27.660 --> 00:02:30.940
+Sering waktu orang belajar untuk tidak perlu bertanya tentang hal-hal yang benar-benar penting,
+
+00:02:31.060 --> 00:02:32.240
+terutama saat taruhannya tinggi.
+
+00:02:32.800 --> 00:02:33.960
+Mereka kembali ke kebiasaan lama,
+
+00:02:34.160 --> 00:02:36.680
+mengunduh file, tabel pivot, atau mengejar data di berbagai aplikasi.
+
+00:02:37.520 --> 00:02:39.920
+Akhirnya, BizChat hanya digunakan untuk tugas tingkat permukaan,
+
+00:02:40.040 --> 00:02:41.300
+bukan karena algoritma intinya lemah,
+
+00:02:41.300 --> 00:02:43.780
+melainkan karena tidak terhubung ke tempat jawaban sebenarnya berada.
+
+00:02:44.580 --> 00:02:45.660
+Pemimpinan melihatnya jadi.
+
+00:02:46.360 --> 00:02:47.800
+Ketika adopsi tampak tidak merata,
+
+00:02:47.960 --> 00:02:49.580
+mereka mempertanyakan apakah peluncurannya sepat.
+
+00:02:50.380 --> 00:02:52.960
+Tim IT menerima keluhan yang bukan merujuk pada bug di platform,
+
+00:02:53.100 --> 00:02:54.500
+melainkan pada titik buta dalam jangkauannya.
+
+00:02:55.240 --> 00:02:57.520
+Karyawan yang awalnya dibekali ide tentang copelet cerdas
+
+00:02:57.520 --> 00:02:59.480
+mulai memperlakukannya seperti chatbot terbatas.
+
+00:03:00.440 --> 00:03:02.520
+Tidak sesuaian antara harapan dan kenyataan itu
+
+00:03:02.520 --> 00:03:04.620
+menciptakan pengikisan kepercayaan secara perlahan.
+
+00:03:05.240 --> 00:03:06.600
+Begitu kepercayaan terkikis momen terhenti.
+
+00:03:07.140 --> 00:03:10.300
+Dan ketika hasil produktivitas tidak memenuhi ekspektasi,
+
+00:03:10.460 --> 00:03:11.920
+dukungan organisasi melemah.
+
+00:03:12.700 --> 00:03:15.120
+Penyataannya, semua ini terjadi bukan karena BizChat kurang cerdas.
+
+00:03:15.500 --> 00:03:16.920
+Itu terjadi karena kurangnya visibilitas.
+
+00:03:17.420 --> 00:03:18.860
+Model ini bekerja dengan apa yang ada,
+
+00:03:18.860 --> 00:03:21.640
+tetapi dengan input setengah yang menghasilkan hasil yang setengah matang.
+
+00:03:22.060 --> 00:03:23.600
+Haber baiknya, kesenjangan itu bisa diperbaik.
+
+00:03:23.880 --> 00:03:24.800
+Dengan pendekatan yang tepat,
+
+00:03:24.960 --> 00:03:27.500
+Anda dapat memberikan BizChat akses terkontrol ke sistem yang penting.
+
+00:03:27.840 --> 00:03:30.020
+Jadi, jawaban terasa spesifik alih-alih generik.
+
+00:03:30.400 --> 00:03:32.900
+Dan pengambilan keputusan justru dipercepat alih-alih melambat.
+
+00:03:33.600 --> 00:03:35.540
+Dan itu mengarah pada pertanyaan yang lebih besar,
+
+00:03:35.720 --> 00:03:37.500
+apa yang membedakan alat yang terasa membantu
+
+00:03:37.500 --> 00:03:39.660
+dengan alat yang benar-benar mendorong hasil bagi bisnis.
+
+00:03:40.600 --> 00:03:42.060
+Perbedaan antara asisten dan copilot.
+
+00:03:42.060 --> 00:03:45.520
+Yang membuat BizChat terasa terbatas bagi banyak tim adalah,
+
+00:03:45.680 --> 00:03:46.120
+pada intinya,
+
+00:03:46.320 --> 00:03:48.600
+ia masih lebih berperan sebagai asisten daripada copilot.
+
+00:03:49.700 --> 00:03:50.380
+Secara mandiri,
+
+00:03:50.520 --> 00:03:51.800
+ia cukup baik dalam menjawab pertanyaan,
+
+00:03:51.900 --> 00:03:52.420
+meringkas email,
+
+00:03:52.620 --> 00:03:55.480
+dan mengambil catatan singkat dari lingkungan Microsoft 365 Anda.
+
+00:03:56.180 --> 00:03:57.800
+Namun, itu adalah tugas tingkat permukaan
+
+00:03:57.800 --> 00:03:59.160
+yang hanya didasarkan pada apa yang sudah terjadi.
+
+00:03:59.740 --> 00:04:01.140
+Seorang asisten memberi Anda komentar,
+
+00:04:01.360 --> 00:04:03.980
+seorang copilot bekerja bersama Anda untuk membentuk keputusan nyata.
+
+00:04:03.980 --> 00:04:06.220
+Dan satu-satunya cara perubahan itu terjadi adalah
+
+00:04:06.220 --> 00:04:09.160
+ketika alat tersebut memiliki akses terkontrol ke sistem catatan Anda,
+
+00:04:09.160 --> 00:04:11.900
+data dan alur kerja yang menentukan bagaimana bisnis Anda sebenarnya berjalan.
+
+00:04:12.440 --> 00:04:13.340
+Ini adalah perbedaan utama
+
+00:04:13.340 --> 00:04:15.480
+yang sering dilawatkan banyak organisasi saat peluncuran.
+
+00:04:16.160 --> 00:04:18.800
+Mereka berharap BizChat memberikan wawasan mendalam secara instan,
+
+00:04:18.920 --> 00:04:21.360
+namun ringkasan percakapan saja tidak menjadikannya copilot.
+
+00:04:21.960 --> 00:04:24.420
+Tanpa konektor yang memberinya informasi dari CRM, ERP,
+
+00:04:24.520 --> 00:04:25.400
+atau aplikasi custom Anda,
+
+00:04:25.520 --> 00:04:27.360
+ia pada dasarnya hanyalah pencatat yang dipoles.
+
+00:04:28.140 --> 00:04:29.040
+Dengan tautan tersebut,
+
+00:04:29.180 --> 00:04:32.260
+sistem mulai terasa benar-benar terlibat dalam proses pengambilan keputusan,
+
+00:04:32.480 --> 00:04:33.440
+menampilkan angka nyata,
+
+00:04:33.580 --> 00:04:34.360
+persetujuan langsung,
+
+00:04:34.500 --> 00:04:35.340
+atau lini masa akurat,
+
+00:04:35.340 --> 00:04:37.460
+alih-alih sekadar menyusun ulang apa yang sudah terlihat.
+
+00:04:38.200 --> 00:04:40.420
+Berikut adalah model mental sederhana yang bisa Anda gunakan
+
+00:04:40.420 --> 00:04:42.700
+untuk menilai apakah Anda sedang berurusan dengan asisten atau cop.
+
+00:04:43.200 --> 00:04:45.340
+Pertama, apakah AI memiliki akses ke sistem langsung,
+
+00:04:45.440 --> 00:04:47.100
+tempat di mana catatan penting benar-benar berada,
+
+00:04:47.260 --> 00:04:48.700
+bukan hanya rangkaian email atau file.
+
+00:04:49.540 --> 00:04:51.980
+Kedua, apakah AI mematuhi izin berbasis peran,
+
+00:04:52.060 --> 00:04:53.500
+sehingga informasi yang diberikan aman,
+
+00:04:53.740 --> 00:04:54.980
+dan disesuaikan dengan pengguna.
+
+00:04:55.660 --> 00:04:57.900
+Dan ketiga, apakah AI dapat mendorong hasil nyata,
+
+00:04:58.000 --> 00:04:59.280
+artinya jawabannya menyelesaikan tugas,
+
+00:04:59.340 --> 00:05:00.940
+atau mempercepat pengambilan keputusan alih-alih
+
+00:05:00.940 --> 00:05:02.100
+menyuruh Anda meriksa ke tempat lain.
+
+00:05:02.540 --> 00:05:04.160
+Jika Anda bisa mencintang ketiga poin tersebut,
+
+00:05:04.280 --> 00:05:05.500
+maka Anda mendapatkan pengalaman supel.
+
+00:05:05.980 --> 00:05:07.940
+Jika tidak, Anda masih berada di ranah asisten.
+
+00:05:08.680 --> 00:05:10.500
+Contohnya, tambah perbedaan ini menjadi lebih jelas.
+
+00:05:10.880 --> 00:05:13.240
+Bayangkan tim keuangan meminta tren pengeluaran kepada base chat.
+
+00:05:14.020 --> 00:05:14.760
+Sebagai asisten,
+
+00:05:15.000 --> 00:05:16.920
+AI mencari lampiran email dan folder bersama
+
+00:05:16.920 --> 00:05:18.820
+untuk menghasilkan gambaran kasar biaya perjalanan.
+
+00:05:19.260 --> 00:05:20.320
+Itu praktis namun tidak lengkap.
+
+00:05:20.680 --> 00:05:23.280
+Sebagai copilot dengan konektor ke aplikasi manajemen pengeluaran
+
+00:05:23.280 --> 00:05:24.020
+atau buku besar,
+
+00:05:24.480 --> 00:05:25.740
+AI memberikan perkiraan akurat
+
+00:05:25.740 --> 00:05:27.920
+dan bahkan menandai varian sarus khas yang akan datang.
+
+00:05:28.780 --> 00:05:30.140
+Pergeseran yang sama berlaku dalam penjualan.
+
+00:05:30.140 --> 00:05:32.580
+Alih-alih merangkum draft proposal copilot
+
+00:05:32.580 --> 00:05:34.660
+sejati menarik angka pipeline aktual dari CRM
+
+00:05:34.660 --> 00:05:36.700
+dan menunjukkan di mana kesepakatan terhambat.
+
+00:05:37.940 --> 00:05:39.320
+Satu versi menghemat beberapa klik,
+
+00:05:39.780 --> 00:05:41.460
+versi lainnya mengubah cara keputusan dibuat.
+
+00:05:42.340 --> 00:05:43.880
+Penting juga untuk memperjelas soal implementasi.
+
+00:05:44.420 --> 00:05:45.880
+Tim tidak harus memilih satu pendekatan saja.
+
+00:05:46.340 --> 00:05:48.760
+Konektor mencakup spektrum no-code, low-code, dan pro-code.
+
+00:05:49.320 --> 00:05:51.480
+Seorang analis bisnis seringkali dapat menghubungkan konektor
+
+00:05:51.480 --> 00:05:53.460
+ke aplikasi saat umum tanpa banyak menulis kode.
+
+00:05:53.820 --> 00:05:55.460
+Seorang pengembang dapat menggali lebih dalam
+
+00:05:55.460 --> 00:05:57.860
+dan memperluas logika custom melalui timstoolkit atau API.
+
+00:05:57.860 --> 00:06:01.340
+Jalur yang tepat bergantung pada keterampilan internal
+
+00:06:01.340 --> 00:06:03.120
+dan toleransi Anda terhadap kerumitan
+
+00:06:03.120 --> 00:06:05.320
+bukan klaim bahwa salah satunya lebih mudah.
+
+00:06:06.520 --> 00:06:08.240
+Intinya adalah selalu ada jalan ke depan
+
+00:06:08.240 --> 00:06:10.020
+apapun tingkat kedalaman teknis tim Anda.
+
+00:06:11.020 --> 00:06:12.960
+Hal yang sering menghambat kemajuan adalah asumsi
+
+00:06:12.960 --> 00:06:15.340
+bahwa copilot akan mempelajari data unik perusahaan
+
+00:06:15.340 --> 00:06:16.920
+tanpa diberikan akses terstruktur.
+
+00:06:17.480 --> 00:06:18.280
+Hal itu tidak akan berat.
+
+00:06:18.280 --> 00:06:21.540
+Tanpa konektor, bisjet tidak memiliki akses kecatatan transaksi,
+
+00:06:21.660 --> 00:06:23.460
+katalog produk, atau alur kerja persetujuan.
+
+00:06:30.010 --> 00:06:32.710
+Membangun jembatan itulah yang membuka tingkat nilai yang lebih tinggi.
+
+00:06:33.270 --> 00:06:34.450
+Dan begitu Anda melakukan perubahan itu,
+
+00:06:34.550 --> 00:06:35.550
+pengalaman sehari-hari pun berubah.
+
+00:06:35.970 --> 00:06:37.250
+Pembunan tidak perlu lagi berpindah-pindah
+
+00:06:37.250 --> 00:06:38.470
+antara bisjet dan aplikasi lain
+
+00:06:38.470 --> 00:06:40.510
+hanya untuk mencari informasi yang tidak bisa disediakan sistem.
+
+00:06:40.510 --> 00:06:42.230
+Mereka mendapatkan apa yang mereka butuhkan
+
+00:06:42.230 --> 00:06:43.130
+langsung dalam alur percakapan.
+
+00:06:43.410 --> 00:06:45.270
+Seiring waktu ini membangun keyakinan kepercayaan.
+
+00:06:45.650 --> 00:06:46.550
+Pertanyaan menjadi bimbenar.
+
+00:06:47.310 --> 00:06:48.390
+Tingkat adopsi meningkat karena
+
+00:06:48.390 --> 00:06:50.630
+orang melihat bisjet sebagai sistem yang bisa diandalkan
+
+00:06:50.630 --> 00:06:51.670
+bukan sekadar alat bantu.
+
+00:06:52.650 --> 00:06:54.070
+Pimpinan juga merasakan perbedaannya
+
+00:06:54.070 --> 00:06:56.010
+karena tim mampu mengambil keputusan lebih cepat
+
+00:06:56.010 --> 00:06:57.850
+dengan data yang jelas dan bisa dipertanggungjawabkan.
+
+00:06:58.570 --> 00:07:00.490
+Jadi perbedaan antara asisten dan kopilot
+
+00:07:00.490 --> 00:07:01.270
+bukan soal gaya,
+
+00:07:01.430 --> 00:07:02.750
+melainkan soal integrasi.
+
+00:07:03.790 --> 00:07:04.930
+Asisten mengulang apa yang mereka lihat?
+
+00:07:05.670 --> 00:07:07.110
+Kopilot terhubung ke hal yang paling penting
+
+00:07:07.110 --> 00:07:08.790
+dan membantu Anda mengarahkan berdasarkan hal tersebut.
+
+00:07:09.490 --> 00:07:10.630
+Mengenali perbedaan itu penting
+
+00:07:10.630 --> 00:07:11.850
+karena keputusan Anda berikutnya
+
+00:07:11.850 --> 00:07:14.250
+menentukan apakah Anda akan terus menjalankan bisjet
+
+00:07:14.250 --> 00:07:15.090
+dalam mode asisten
+
+00:07:15.090 --> 00:07:16.650
+atau mulai memungkinkannya berfungsi
+
+00:07:16.650 --> 00:07:17.910
+sebagai kopilot sejati.
+
+00:07:17.910 --> 00:07:20.730
+Dan itu dimulai dengan satu langkah praktis
+
+00:07:20.730 --> 00:07:23.070
+memutuskan sistem mana yang layak dihubungkan terlebih dahulu
+
+00:07:23.070 --> 00:07:25.050
+menemukan titik integrasi yang tepat.
+
+00:07:25.830 --> 00:07:27.550
+Untuk mendapatkan hasil nyata dari bisjet
+
+00:07:27.550 --> 00:07:29.350
+pertanyaannya bukan apa yang bisa saya hubungkan
+
+00:07:29.350 --> 00:07:31.190
+melainkan koneksi mana yang akan mengubah
+
+00:07:31.190 --> 00:07:32.090
+cara kerja tim saya.
+
+00:07:33.410 --> 00:07:35.470
+Ekosistem Microsoft sangat terbuka dengan kemampuan
+
+00:07:35.470 --> 00:07:37.790
+untuk menghubungkan puluhan aplikasi dan sumber data.
+
+00:07:38.790 --> 00:07:39.970
+Namun tidak ada tim yang memiliki waktu
+
+00:07:39.970 --> 00:07:41.450
+atau sumber daya untuk menghubungkan semuanya.
+
+00:07:41.650 --> 00:07:43.410
+Itulah mengapa langkah paling cerdas adalah
+
+00:07:43.410 --> 00:07:45.530
+fokus hanya pada integrasi yang memberikan dampak nyata
+
+00:07:45.530 --> 00:07:46.210
+sejak awal.
+
+00:07:47.250 --> 00:07:49.450
+Lakukan itu dengan benar maka kepercayaan pada bisjet akan meningkat.
+
+00:07:49.990 --> 00:07:51.550
+Lakukan dengan salah maka adopsi akan terhenti.
+
+00:07:52.190 --> 00:07:53.110
+Salah yang paling umum adalah
+
+00:07:53.110 --> 00:07:54.850
+memulai dengan kemenangan mudah yang tidak berarti.
+
+00:07:55.150 --> 00:07:56.870
+Terasa produktif menghubungkan sumber data minor
+
+00:07:56.870 --> 00:07:58.670
+hanya untuk menunjukkan bahwa sesuatu sudah aktif.
+
+00:07:59.290 --> 00:08:00.490
+Tetapi integrasi benar rendah
+
+00:08:00.490 --> 00:08:02.150
+tidak mengurangi masalah yang sebenarnya akan menggunakan.
+
+00:08:02.830 --> 00:08:04.750
+Akibatnya, alur kerja tetap terfragmentasi
+
+00:08:04.750 --> 00:08:06.770
+dan karyawan merasa alat tersebut lebih sebagai kebaruan
+
+00:08:06.770 --> 00:08:07.470
+daripada kebutuhan.
+
+00:08:07.530 --> 00:08:08.890
+Anda tidak menginginkan kemenangan.
+
+00:08:09.190 --> 00:08:10.510
+Anda menginginkan kemenangan operasional.
+
+00:08:10.850 --> 00:08:12.050
+Berarti memasang instalasi di Strictlyum.
+
+00:08:12.050 --> 00:08:14.030
+Top kontak pertama yang Anda pilih menentukan
+
+00:08:14.030 --> 00:08:15.610
+apakah ruangan yang paling dibutuhkan orang
+
+00:08:15.610 --> 00:08:16.830
+bisa digunakan atau justru gelap.
+
+00:08:17.210 --> 00:08:18.430
+Bagaimana cara Anda fokus pada bening?
+
+00:08:18.850 --> 00:08:19.910
+Salah satu cara cepat adalah
+
+00:08:19.910 --> 00:08:21.490
+menggunakan filter tiga pertanyaan sederhan.
+
+00:08:21.970 --> 00:08:23.490
+Pertama, seberapa sering data ini dibutuhkan
+
+00:08:23.490 --> 00:08:24.150
+dalam pekerjaan sadari.
+
+00:08:24.510 --> 00:08:25.650
+Kedua, apakah mengumumkannya
+
+00:08:25.650 --> 00:08:27.410
+menghilangkan perpindahan konteks yang merebutkan?
+
+00:08:27.910 --> 00:08:29.250
+Momen ketika orang meninggalkan bisjet
+
+00:08:29.250 --> 00:08:30.530
+untuk mencari-cari di sistem lain.
+
+00:08:31.130 --> 00:08:32.370
+Ketiga, berapa risiko paparannya?
+
+00:08:33.030 --> 00:08:34.250
+Apakah datanya cukup sensitif
+
+00:08:34.250 --> 00:08:36.030
+sehingga integrasi memerlukan tata kelola ekstra
+
+00:08:36.030 --> 00:08:36.810
+sebelum langkah maju?
+
+00:08:37.210 --> 00:08:38.490
+Jika Anda mendapatkan jawaban yang kuat
+
+00:08:42.050 --> 00:08:42.670
+dan kandidat utama,
+
+00:08:43.090 --> 00:08:44.230
+Anda tidak perlu analisis intensif
+
+00:08:44.230 --> 00:08:45.290
+untuk mengetahui dari mana harusmu.
+
+00:08:45.910 --> 00:08:46.870
+Coba latihan 60 detik
+
+00:08:46.870 --> 00:08:48.030
+dengan pemangku kepentingan manapun.
+
+00:08:48.730 --> 00:08:50.550
+Tanyakan saat bisjet menemui jalan bentuk bagi Anda
+
+00:08:50.550 --> 00:08:51.290
+kemana Anda beralisnya.
+
+00:08:52.390 --> 00:08:53.850
+Jawaban, yang dihasilkan,
+
+00:08:54.030 --> 00:08:54.990
+baik dari katalog produk,
+
+00:08:55.170 --> 00:08:55.730
+alat proyek,
+
+00:08:55.850 --> 00:08:56.930
+atau pustaka dokumen bersama,
+
+00:08:57.150 --> 00:08:57.950
+akan menyeroti kendala
+
+00:08:57.950 --> 00:08:59.070
+yang sudah diketahui semua orang.
+
+00:08:59.730 --> 00:09:00.750
+Momen-momen krusial ini adalah
+
+00:09:00.750 --> 00:09:01.750
+titik awal yang ideal
+
+00:09:01.750 --> 00:09:03.610
+karena integrasinya akan menghilangkan
+
+00:09:03.610 --> 00:09:04.430
+gangguan terus menerus
+
+00:09:04.430 --> 00:09:06.130
+dan membangun kepercayaan pada platform.
+
+00:09:06.650 --> 00:09:07.930
+Salah satu kemenangan awal yang nyata adalah
+
+00:09:07.930 --> 00:09:09.550
+dengan melargetkan query berfrekuensi tinggi
+
+00:09:09.550 --> 00:09:10.190
+dan pendapat pesan.
+
+00:09:10.690 --> 00:09:11.290
+Sebagai contoh,
+
+00:09:11.430 --> 00:09:12.450
+alih-alih mencari lima set proyek
+
+00:09:12.450 --> 00:09:13.250
+di pelajar terpisah,
+
+00:09:13.370 --> 00:09:14.170
+tim bisa langsung bertanya
+
+00:09:14.170 --> 00:09:15.130
+kepada obrolan bisnis
+
+00:09:15.130 --> 00:09:16.190
+tentang status terbaru.
+
+00:09:16.830 --> 00:09:17.690
+Itulah jenis interaksi
+
+00:09:17.690 --> 00:09:19.090
+yang dilakukan orang setiap hari
+
+00:09:19.090 --> 00:09:20.710
+di mana pengurangan perpindahan kontek
+
+00:09:20.710 --> 00:09:22.790
+memberikan efek gabungan yang instan
+
+00:09:22.790 --> 00:09:24.690
+bandingkan dengan laporan bulanan
+
+00:09:24.690 --> 00:09:25.550
+dan Anda bisa melihat
+
+00:09:25.550 --> 00:09:26.570
+mengapa memprioritaskan
+
+00:09:26.570 --> 00:09:27.390
+berdasarkan frekuensi
+
+00:09:27.390 --> 00:09:28.310
+dan hambatan alur kerja
+
+00:09:28.310 --> 00:09:29.510
+adalah strategi yang lebih cerdas.
+
+00:09:29.990 --> 00:09:30.930
+Sama pentingnya untuk menghindari
+
+00:09:30.930 --> 00:09:31.730
+pengejaran integrasi
+
+00:09:31.730 --> 00:09:33.370
+hanya karena hal itu memungkinkan secara teknis.
+
+00:09:33.970 --> 00:09:35.290
+Hampir semua sistem bisa dihubungkan
+
+00:09:35.290 --> 00:09:36.110
+dengan cara tertentu
+
+00:09:36.110 --> 00:09:37.010
+namun tidak semua koneksi
+
+00:09:37.010 --> 00:09:37.690
+mengubah perilaku.
+
+00:09:38.410 --> 00:09:39.190
+Integrasi yang tepat adalah
+
+00:09:39.190 --> 00:09:40.130
+yang secara langsung meningkatkan
+
+00:09:40.130 --> 00:09:41.130
+titik pengambilan keputusan
+
+00:09:41.130 --> 00:09:42.090
+yang padat lalu lintas.
+
+00:09:43.170 --> 00:09:44.290
+Dimanapun obrolan bisnis
+
+00:09:44.290 --> 00:09:45.410
+dapat menampilkan data nyata
+
+00:09:45.410 --> 00:09:46.010
+secara langsung
+
+00:09:46.010 --> 00:09:47.750
+angka prakiraan pencapaian proyek terkini
+
+00:09:47.750 --> 00:09:48.890
+atau pemeriksaan status,
+
+00:09:49.430 --> 00:09:50.410
+ia berhenti menjadi asisten
+
+00:09:50.410 --> 00:09:51.630
+dan mulai menjadi bagian terpercaya
+
+00:09:51.630 --> 00:09:52.530
+dari proses tersebut.
+
+00:09:53.570 --> 00:09:54.130
+Inilah sebabnya
+
+00:09:54.130 --> 00:09:55.130
+pemetaan titik integrasi
+
+00:09:55.130 --> 00:09:56.130
+lebih dari sekadar langkah
+
+00:09:56.130 --> 00:09:57.030
+perencanaan teknis.
+
+00:09:57.590 --> 00:09:58.610
+Ini tentang membentuk persepsi.
+
+00:09:58.990 --> 00:09:59.790
+Karyawan tidak peduli
+
+00:09:59.790 --> 00:10:01.030
+apakah konektor tersebut mudah dibuat.
+
+00:10:01.450 --> 00:10:02.110
+Mereka peduli bahwa
+
+00:10:02.110 --> 00:10:03.050
+obrolan bisnis akhirnya
+
+00:10:03.050 --> 00:10:04.070
+memberikan jawaban bermanfaat
+
+00:10:04.070 --> 00:10:04.610
+tanpa mereka harus
+
+00:10:04.610 --> 00:10:05.330
+meninggalkan percakapan.
+
+00:10:06.110 --> 00:10:07.230
+Dan begitu mereka melihatnya
+
+00:10:07.230 --> 00:10:08.290
+menangani kuari dengan andal,
+
+00:10:08.410 --> 00:10:09.250
+mereka akan terus kembali
+
+00:10:09.250 --> 00:10:09.950
+yang merupakan cara
+
+00:10:09.950 --> 00:10:10.630
+adopsi berkembang.
+
+00:10:11.110 --> 00:10:11.910
+Tentu saja prioritas
+
+00:10:11.910 --> 00:10:12.750
+tidak berarti mengabaikan
+
+00:10:12.750 --> 00:10:13.730
+peluang jangka panjang.
+
+00:10:14.650 --> 00:10:15.450
+Sistem dengan frekuensi
+
+00:10:15.450 --> 00:10:16.290
+lebih rendah mungkin layak
+
+00:10:16.290 --> 00:10:16.930
+dihubungkan nanti
+
+00:10:16.930 --> 00:10:18.190
+setelah target bernilai tinggi
+
+00:10:18.190 --> 00:10:19.350
+membuktikan kegunaan bis cat.
+
+00:10:19.730 --> 00:10:20.470
+Namun pada awalnya,
+
+00:10:20.690 --> 00:10:21.550
+semua ini tentang memotong
+
+00:10:21.550 --> 00:10:22.390
+sumber hambatan terbesar.
+
+00:10:22.830 --> 00:10:23.650
+Itulah yang memberi sinyal
+
+00:10:23.650 --> 00:10:24.810
+kepada karyawan dan pimpinan
+
+00:10:24.810 --> 00:10:26.050
+bahwa peluncuran ini berhasil
+
+00:10:26.050 --> 00:10:27.350
+dan bahwa mengintegrasikan
+
+00:10:27.350 --> 00:10:28.190
+lebih banyak sistem layak
+
+00:10:28.190 --> 00:10:29.170
+untuk waktu dan upaya tersebut.
+
+00:10:29.390 --> 00:10:30.250
+Jadi penyaring sebenarnya
+
+00:10:30.250 --> 00:10:31.530
+bukan tentang kemungkinan teknis
+
+00:10:31.530 --> 00:10:32.830
+melainkan tentang dampak,
+
+00:10:33.690 --> 00:10:34.850
+integrasi mana yang diperkenalkan
+
+00:10:34.850 --> 00:10:35.530
+saat ini memberikan
+
+00:10:35.530 --> 00:10:36.470
+kekuatan bagi bis cat
+
+00:10:36.470 --> 00:10:37.430
+untuk memberikan jawaban
+
+00:10:37.430 --> 00:10:38.230
+yang jelas dan andal
+
+00:10:38.230 --> 00:10:38.990
+pada saat keputusan
+
+00:10:38.990 --> 00:10:39.750
+sedang dibuat,
+
+00:10:40.430 --> 00:10:41.490
+identifikasi hal-hal tersebut
+
+00:10:41.490 --> 00:10:42.690
+dan Anda telah meletakkan dasar
+
+00:10:42.690 --> 00:10:43.410
+untuk mengubah interaksi
+
+00:10:43.410 --> 00:10:43.810
+sehari-hari.
+
+00:10:44.250 --> 00:10:45.070
+Dan setelah Anda mengetahui
+
+00:10:45.070 --> 00:10:46.110
+di mana peluang-peluang itu berada,
+
+00:10:46.370 --> 00:10:47.110
+langkah selanjutnya adalah
+
+00:10:47.110 --> 00:10:48.130
+memahami mekanisme sebenarnya
+
+00:10:48.130 --> 00:10:48.890
+mekanisme sebenarnya
+
+00:10:48.890 --> 00:10:49.930
+yang memungkinkan integrasi terjadi.
+
+00:10:50.630 --> 00:10:51.030
+Apa sebenarnya
+
+00:10:51.030 --> 00:10:51.830
+konektor copilot itu?
+
+00:10:52.730 --> 00:10:53.790
+Konektor copilot adalah
+
+00:10:53.790 --> 00:10:55.010
+bagian yang mengubah bis cat
+
+00:10:55.010 --> 00:10:55.990
+dari asisten superficial
+
+00:10:55.990 --> 00:10:57.310
+menjadi alat yang benar-benar
+
+00:10:57.310 --> 00:10:58.210
+berguna untuk pengambilan
+
+00:10:58.210 --> 00:10:59.090
+keputusan sehari-hari.
+
+00:10:59.910 --> 00:11:00.350
+Pada intinya,
+
+00:11:00.490 --> 00:11:00.990
+konektor adalah
+
+00:11:00.990 --> 00:11:01.950
+integrasi terkontrol
+
+00:11:01.950 --> 00:11:02.770
+yang memungkinkan bis cat
+
+00:11:02.770 --> 00:11:04.070
+meminta data dari sistem pencatatan
+
+00:11:04.070 --> 00:11:05.110
+dan memberikan jawaban yang teringkut.
+
+00:11:05.630 --> 00:11:06.750
+Itulah peran yang dimainkannya,
+
+00:11:06.950 --> 00:11:08.090
+menciptakan jembatan terkelola
+
+00:11:08.090 --> 00:11:09.510
+antara AI dan sumber terpercaya
+
+00:11:09.510 --> 00:11:10.330
+di dalam bisnis Anda.
+
+00:11:11.010 --> 00:11:12.030
+Dua fakta perlu diingat.
+
+00:11:12.790 --> 00:11:13.710
+Konektor tidak mengubah
+
+00:11:13.710 --> 00:11:14.410
+model itu sendiri,
+
+00:11:14.610 --> 00:11:15.810
+konektor memberikan konteks
+
+00:11:15.810 --> 00:11:17.610
+dan dapat dibangun dalam spektrum,
+
+00:11:17.850 --> 00:11:18.630
+mulai dari pengaturan
+
+00:11:18.630 --> 00:11:19.130
+tanpa kode
+
+00:11:19.130 --> 00:11:20.530
+hingga implementasi prokode penuh.
+
+00:11:21.870 --> 00:11:22.470
+Bayangkan bagaimana
+
+00:11:22.470 --> 00:11:23.230
+data Anda saat ini
+
+00:11:23.230 --> 00:11:24.390
+tersebar di pusaka dokumen,
+
+00:11:24.570 --> 00:11:25.230
+basis data terstruktur,
+
+00:11:25.350 --> 00:11:25.710
+sistem cloud,
+
+00:11:25.810 --> 00:11:26.630
+dan aplikasi khusus.
+
+00:11:28.350 --> 00:11:29.210
+Bis cat tidak memiliki
+
+00:11:29.210 --> 00:11:30.050
+pintu masuk alami
+
+00:11:30.050 --> 00:11:30.830
+ke lingkungan tersebut.
+
+00:11:31.190 --> 00:11:32.350
+Konektor membuka pintu tersebut
+
+00:11:32.350 --> 00:11:33.010
+namun melakukannya
+
+00:11:33.010 --> 00:11:33.710
+dengan cara yang aman
+
+00:11:33.710 --> 00:11:34.130
+dan terkelola.
+
+00:11:34.810 --> 00:11:35.790
+Saat Anda mengajukan
+
+00:11:35.790 --> 00:11:36.750
+pertanyaan ke bis cat,
+
+00:11:36.870 --> 00:11:37.930
+konektor menentukan ke mana?
+
+00:11:38.410 --> 00:11:39.550
+Query itu harus diarahkan,
+
+00:11:39.730 --> 00:11:40.490
+baik untuk menemukan
+
+00:11:40.490 --> 00:11:41.910
+angka penjualan langsung di CRM,
+
+00:11:42.030 --> 00:11:42.770
+faktur DRP,
+
+00:11:42.910 --> 00:11:43.590
+atau proyek aktif
+
+00:11:43.590 --> 00:11:44.450
+di alat perencanaan,
+
+00:11:44.550 --> 00:11:45.710
+lalu mengembalikan informasi
+
+00:11:45.710 --> 00:11:46.550
+yang Anda butuhkan.
+
+00:11:47.150 --> 00:11:48.010
+Berbedaannya terjadi jelas.
+
+00:11:48.510 --> 00:11:49.230
+Tanpa konektor,
+
+00:11:49.410 --> 00:11:50.550
+bis cat memberikan perkiraan
+
+00:11:50.550 --> 00:11:51.630
+yang diambil dari penyebutan
+
+00:11:51.630 --> 00:11:52.770
+dalam obrolan atau dokumen.
+
+00:11:53.430 --> 00:11:53.970
+Dengan konektor,
+
+00:11:54.070 --> 00:11:55.190
+Anda mendapatkan data langsung
+
+00:11:55.190 --> 00:11:56.190
+dan terpercaya mencerminkan
+
+00:11:56.190 --> 00:11:56.890
+apa yang dinyatakan
+
+00:11:56.890 --> 00:11:57.930
+sistem catatan saat ini.
+
+00:11:58.730 --> 00:11:59.670
+Ada kesalahpahaman umum
+
+00:11:59.670 --> 00:12:00.550
+bahwa konektor hanya
+
+00:12:00.550 --> 00:12:01.190
+untuk pengembang
+
+00:12:01.190 --> 00:12:02.630
+yang menulis ratusan baris kode.
+
+00:12:03.550 --> 00:12:04.510
+Kenyataannya lebih seimbang.
+
+00:12:04.930 --> 00:12:05.710
+Untuk kasus sederhana,
+
+00:12:05.890 --> 00:12:06.490
+pelaku bisnis dapat
+
+00:12:06.490 --> 00:12:07.910
+memonfigurasi integrasi-integrasi
+
+00:12:07.910 --> 00:12:08.950
+melalui opsi tanpa kode
+
+00:12:08.950 --> 00:12:09.510
+dan kode renang.
+
+00:12:10.230 --> 00:12:11.370
+Untuk skenario yang kompleks
+
+00:12:11.370 --> 00:12:12.530
+atau dengan tetap keolah tinggi,
+
+00:12:12.530 --> 00:12:13.750
+pengembang turun tangan
+
+00:12:13.750 --> 00:12:14.510
+dengan pengembangan
+
+00:12:14.510 --> 00:12:15.090
+yang lebih canggih.
+
+00:12:15.550 --> 00:12:16.070
+Dua peran tersebut.
+
+00:12:16.550 --> 00:12:18.050
+Disinilah Copilot Studio berperan.
+
+00:12:18.630 --> 00:12:19.430
+Ini adalah lingkungan
+
+00:12:19.430 --> 00:12:19.870
+yang dirancang
+
+00:12:19.870 --> 00:12:20.450
+untuk memperluas
+
+00:12:20.450 --> 00:12:21.190
+Microsoft Copilot
+
+00:12:21.190 --> 00:12:21.970
+dengan agen,
+
+00:12:22.110 --> 00:12:22.490
+tindakan,
+
+00:12:22.610 --> 00:12:23.370
+dan integrasi kustom
+
+00:12:23.370 --> 00:12:24.310
+memberikan cara bagi tim
+
+00:12:24.310 --> 00:12:25.250
+untuk merancang pengalaman
+
+00:12:25.250 --> 00:12:26.110
+yang mereka butuhkan.
+
+00:12:27.110 --> 00:12:28.190
+Untuk skenario plugin API
+
+00:12:28.190 --> 00:12:28.830
+yang berat kode,
+
+00:12:28.990 --> 00:12:30.030
+tim Stoolkit juga didukung.
+
+00:12:31.430 --> 00:12:32.650
+Pengembang dapat menggunakannya
+
+00:12:32.650 --> 00:12:33.930
+untuk mengekspos API aman
+
+00:12:33.930 --> 00:12:34.710
+yang menampilkan data
+
+00:12:34.710 --> 00:12:35.850
+dari aplikasi berpemilik
+
+00:12:35.850 --> 00:12:36.650
+langsung ke biscat
+
+00:12:36.650 --> 00:12:37.550
+dengan izin yang lepat.
+
+00:12:38.650 --> 00:12:39.670
+Fleksibilitas itu berarti
+
+00:12:39.670 --> 00:12:41.010
+integrasi dapat berskala
+
+00:12:41.010 --> 00:12:41.870
+sesuai tingkat keahlian
+
+00:12:41.870 --> 00:12:42.550
+dan kompleksitas,
+
+00:12:42.690 --> 00:12:43.630
+namun juga mengingatkan kita
+
+00:12:43.630 --> 00:12:44.910
+bahwa beberapa integrasi
+
+00:12:44.910 --> 00:12:45.690
+membutuhkan keterlibatan
+
+00:12:45.690 --> 00:12:46.390
+pengembangan yang intens
+
+00:12:46.390 --> 00:12:47.210
+dan tata keolah yang tepat
+
+00:12:47.210 --> 00:12:47.730
+agar berhasil.
+
+00:12:49.210 --> 00:12:49.730
+Sama pentingnya
+
+00:12:49.730 --> 00:12:50.310
+untuk menjelaskan
+
+00:12:50.310 --> 00:12:51.470
+bagaimana konektor berinteraksi
+
+00:12:51.470 --> 00:12:52.150
+dengan kecerdasan
+
+00:12:52.150 --> 00:12:52.730
+bawaan biscat.
+
+00:12:53.470 --> 00:12:54.430
+Konektor tidak menggantikan
+
+00:12:54.430 --> 00:12:55.350
+AI yang menghasilkan jawaban.
+
+00:12:55.890 --> 00:12:56.830
+Konektor hanya meningkatkan
+
+00:12:56.830 --> 00:12:58.390
+apa yang harus dikerjakan oleh AI.
+
+00:12:59.350 --> 00:12:59.950
+Bayangkan bertanya
+
+00:12:59.950 --> 00:13:01.150
+tentang pesanan pemula yang terbuka.
+
+00:13:01.910 --> 00:13:02.450
+Tanpa konektor,
+
+00:13:02.450 --> 00:13:03.770
+biscat mengumpulkan penyebutan
+
+00:13:03.770 --> 00:13:04.670
+yang tersebar dari email
+
+00:13:04.670 --> 00:13:05.110
+atau rapat
+
+00:13:05.110 --> 00:13:06.210
+dalam bentuk respons yang samar.
+
+00:13:06.210 --> 00:13:08.070
+Tambahkan konektor
+
+00:13:08.070 --> 00:13:09.090
+dan tiba-tiba biscat
+
+00:13:09.090 --> 00:13:10.050
+menanyakan ERP
+
+00:13:10.050 --> 00:13:10.910
+menarik kembali jumlah
+
+00:13:10.910 --> 00:13:11.710
+dan status yang tepat
+
+00:13:11.710 --> 00:13:12.470
+serta menyajikannya
+
+00:13:12.470 --> 00:13:13.210
+dalam bahasa alami.
+
+00:13:13.790 --> 00:13:14.370
+Pekerja kerasnya
+
+00:13:14.370 --> 00:13:15.290
+tetaplah model tersebut
+
+00:13:15.290 --> 00:13:15.970
+tetapi akurasinya
+
+00:13:15.970 --> 00:13:16.770
+berasal dari konektor.
+
+00:13:17.510 --> 00:13:18.330
+Hal yang membuatnya kuat
+
+00:13:18.330 --> 00:13:19.190
+adalah tidak terbatas
+
+00:13:19.190 --> 00:13:20.390
+pada sistem Microsoft saja.
+
+00:13:21.510 --> 00:13:22.350
+Ya, Anda dapat menautkan
+
+00:13:22.350 --> 00:13:23.070
+kelainan di seluruh
+
+00:13:23.070 --> 00:13:23.950
+tiga dapat dengan mudah
+
+00:13:23.950 --> 00:13:25.110
+menghubungkan platform SDM,
+
+00:13:25.750 --> 00:13:26.330
+alat logistik
+
+00:13:26.330 --> 00:13:27.310
+atau basis data custom
+
+00:13:27.310 --> 00:13:28.450
+yang diandalkan bisnis Anda.
+
+00:13:29.350 --> 00:13:30.130
+Bagian pentingnya adalah
+
+00:13:30.130 --> 00:13:31.090
+setiap serah terima ini
+
+00:13:31.090 --> 00:13:32.170
+terjadi melalui konektor.
+
+00:13:32.990 --> 00:13:33.830
+Biscat tidak mengambil data
+
+00:13:33.830 --> 00:13:34.490
+cara membambi buta
+
+00:13:34.490 --> 00:13:34.930
+di latar belak.
+
+00:13:35.290 --> 00:13:36.470
+Biscat mengarahkan pertanyaan
+
+00:13:36.470 --> 00:13:37.330
+dengan cara yang terkelola,
+
+00:13:37.470 --> 00:13:38.190
+menghormati izin
+
+00:13:38.190 --> 00:13:39.410
+dan mengembalikan hasil yang tepat sesat.
+
+00:13:39.730 --> 00:13:40.170
+Begitulah cara
+
+00:13:40.170 --> 00:13:40.830
+karena tetap terkelola
+
+00:13:40.830 --> 00:13:41.570
+namun tetap bermanfaat.
+
+00:13:42.230 --> 00:13:42.750
+Satu hal lagi
+
+00:13:42.750 --> 00:13:43.630
+yang sering terlewatkan,
+
+00:13:44.070 --> 00:13:44.750
+konektor bukan hanya
+
+00:13:44.750 --> 00:13:45.410
+soal teknologi
+
+00:13:45.410 --> 00:13:46.990
+tetapi juga penyelarasan bisnis.
+
+00:13:47.510 --> 00:13:48.170
+Menyiapkan konektor
+
+00:13:48.170 --> 00:13:49.070
+akan memicu diskusi
+
+00:13:49.070 --> 00:13:49.710
+antara tim TI
+
+00:13:49.710 --> 00:13:50.350
+dan tim bisnis
+
+00:13:50.350 --> 00:13:51.190
+tentang pertanyaan
+
+00:13:51.190 --> 00:13:52.170
+apa yang sebenarnya penting.
+
+00:13:52.650 --> 00:13:53.110
+Apakah manajer
+
+00:13:53.110 --> 00:13:53.890
+memperolehkan pejualan seorang?
+
+00:13:54.190 --> 00:13:55.070
+Apakah pimpinan keuangan
+
+00:13:55.070 --> 00:13:55.850
+memperolehkan visibilitas
+
+00:13:55.850 --> 00:13:56.850
+terhadap faktor yang belum dibayar?
+
+00:13:57.110 --> 00:13:57.830
+Apakah tim proyek
+
+00:13:57.830 --> 00:13:58.990
+perlu melihat pencapaian target
+
+00:13:58.990 --> 00:13:59.830
+selama rapat berlangsung?
+
+00:14:00.470 --> 00:14:01.770
+Konektor menyoroti prioritas tersebut
+
+00:14:01.770 --> 00:14:02.890
+dan menjadikannya operasional.
+
+00:14:03.410 --> 00:14:04.130
+Itulah salah satu nilai
+
+00:14:04.130 --> 00:14:04.590
+tersebut di mereka.
+
+00:14:04.910 --> 00:14:05.750
+Konektor bukan sekadar
+
+00:14:05.750 --> 00:14:06.530
+menghubungkan sistem,
+
+00:14:06.750 --> 00:14:07.410
+melainkan menentukan
+
+00:14:07.410 --> 00:14:07.890
+alur kerja
+
+00:14:07.890 --> 00:14:08.910
+yang paling layak didukung.
+
+00:14:09.470 --> 00:14:09.810
+Sampai di sini
+
+00:14:09.810 --> 00:14:10.610
+plan konektor seharusnya
+
+00:14:10.610 --> 00:14:11.130
+sudah jelas.
+
+00:14:11.750 --> 00:14:12.670
+Ini bukanlah head-on
+
+00:14:12.670 --> 00:14:13.450
+khusus atau proyek
+
+00:14:13.450 --> 00:14:14.370
+pengembangan sampingan.
+
+00:14:15.030 --> 00:14:15.910
+Ini adalah mekanisme
+
+00:14:15.910 --> 00:14:16.830
+yang mengubah biscek
+
+00:14:16.830 --> 00:14:17.970
+dari sekadar ringkasan cerdas
+
+00:14:17.970 --> 00:14:18.990
+menjadi kopilot terpercaya
+
+00:14:18.990 --> 00:14:20.270
+dengan akses ke data akurat.
+
+00:14:20.870 --> 00:14:21.230
+Tanpanya,
+
+00:14:21.350 --> 00:14:22.050
+adopsi akan sulit
+
+00:14:22.050 --> 00:14:22.730
+karena alat tersebut
+
+00:14:22.730 --> 00:14:23.830
+tidak bisa menjawab pertanyaan
+
+00:14:23.830 --> 00:14:24.750
+yang dianggap penting oleh pengguna.
+
+00:14:25.310 --> 00:14:25.990
+Dengan konektor,
+
+00:14:26.150 --> 00:14:27.330
+alat ini mengambil peran baru,
+
+00:14:27.490 --> 00:14:27.890
+cukup andal
+
+00:14:27.890 --> 00:14:29.450
+untuk digunakan di depan rekan kerja
+
+00:14:29.450 --> 00:14:30.830
+dalam pengambilan keputusan nyata
+
+00:14:30.830 --> 00:14:31.690
+dan selaras dengan
+
+00:14:31.690 --> 00:14:32.710
+operasional bisnis.
+
+00:14:33.450 --> 00:14:34.430
+Langkah alam berikutnya adalah
+
+00:14:34.430 --> 00:14:35.650
+mewujudkan ide tersebut ke dalam rak.
+
+00:14:36.410 --> 00:14:37.430
+Memahami apa itu konektor
+
+00:14:37.430 --> 00:14:37.930
+memang penting,
+
+00:14:38.050 --> 00:14:38.950
+tetapi nilai sesungguhnya
+
+00:14:38.950 --> 00:14:39.830
+terletak pada membangun
+
+00:14:39.830 --> 00:14:40.930
+dan memastikan keamanannya
+
+00:14:40.930 --> 00:14:41.590
+dengan benar.
+
+00:14:42.610 --> 00:14:43.410
+Membangun dan mengamalkan
+
+00:14:43.410 --> 00:14:44.190
+konektor pertama Anda.
+
+00:14:44.190 --> 00:14:45.610
+Membangun dan mengamalkan
+
+00:14:45.610 --> 00:14:46.450
+konektor pertama Anda
+
+00:14:46.450 --> 00:14:47.570
+lebih bergantung pada disiplin
+
+00:14:47.570 --> 00:14:48.350
+dalam merancang akses
+
+00:14:48.350 --> 00:14:49.710
+daripada sekadar keterampilan koding.
+
+00:14:50.290 --> 00:14:51.610
+Memang ada pengembangan yang terlibat,
+
+00:14:51.730 --> 00:14:52.930
+tetapi fokus utamanya adalah
+
+00:14:52.930 --> 00:14:54.010
+menentukan apa yang boleh dilihat
+
+00:14:54.010 --> 00:14:55.030
+bisa cek seberapa spesifik
+
+00:14:55.030 --> 00:14:55.610
+ruang lingkupnya
+
+00:14:55.610 --> 00:14:57.410
+dan seberapa ketat izin diterapkan.
+
+00:14:58.270 --> 00:14:59.010
+Jika kerangka kerja
+
+00:14:59.010 --> 00:15:00.250
+tidak direncanakan sejak awal,
+
+00:15:00.690 --> 00:15:01.610
+Anda berisiko membocorkan
+
+00:15:01.610 --> 00:15:02.270
+data sensitif
+
+00:15:02.270 --> 00:15:03.450
+atau justru menciptakan sistem
+
+00:15:03.450 --> 00:15:04.190
+yang terlalu terbatas
+
+00:15:04.190 --> 00:15:05.270
+sehingga tidak berguna bagi siapapun.
+
+00:15:05.710 --> 00:15:06.210
+Dalam hal ini,
+
+00:15:06.270 --> 00:15:06.970
+keaman menemukan lapisan
+
+00:15:06.970 --> 00:15:07.650
+yang ditambahkan di akhir.
+
+00:15:07.650 --> 00:15:09.130
+Keaman adalah fundasi yang Anda bangun.
+
+00:15:09.690 --> 00:15:10.470
+Alat utama yang digunakan
+
+00:15:10.470 --> 00:15:11.570
+sebagai besar tim adalah tim toolkit.
+
+00:15:12.330 --> 00:15:13.250
+Toolkit ini menyediakan
+
+00:15:13.250 --> 00:15:14.250
+alat pengembangan dan template
+
+00:15:14.250 --> 00:15:15.230
+untuk mempercepat pembuatan
+
+00:15:15.230 --> 00:15:16.150
+plugin APKoPilot
+
+00:15:16.150 --> 00:15:16.830
+serta integrasi
+
+00:15:16.830 --> 00:15:18.190
+dengan sumber daya Azure Anda.
+
+00:15:18.990 --> 00:15:20.110
+Ini membantu Anda bergerak
+
+00:15:20.110 --> 00:15:21.050
+cepat secara teknis,
+
+00:15:21.190 --> 00:15:21.850
+namun tidak mengambil
+
+00:15:21.850 --> 00:15:22.970
+keputusan desain untuk Anda.
+
+00:15:23.650 --> 00:15:24.830
+Anda tetap perlu menentukan
+
+00:15:24.830 --> 00:15:25.770
+titik masuk yang tepat,
+
+00:15:25.870 --> 00:15:27.410
+menyelaraskannya dengan kebutuhan bisnis
+
+00:15:27.410 --> 00:15:28.590
+dan memastikan setiap panggilan
+
+00:15:28.590 --> 00:15:29.750
+tetap dalam batasan yang ketat.
+
+00:15:30.710 --> 00:15:31.670
+Seringkali muncul godaan
+
+00:15:31.670 --> 00:15:32.390
+untuk terburu-buru
+
+00:15:32.390 --> 00:15:33.330
+membuat konektor demo
+
+00:15:33.330 --> 00:15:34.510
+demi memamerkan data langsung
+
+00:15:34.510 --> 00:15:35.550
+hanya untuk menyadari bahwa
+
+00:15:35.550 --> 00:15:36.630
+data yang terekspos lebih banyak
+
+00:15:36.630 --> 00:15:37.530
+dari yang seharusnya.
+
+00:15:38.310 --> 00:15:39.770
+Kemenangan cepat memang terlihat menarik,
+
+00:15:40.010 --> 00:15:41.190
+tetapi jika batasan berbasis peran
+
+00:15:41.190 --> 00:15:42.010
+hilang dalam prosesnya,
+
+00:15:42.270 --> 00:15:43.250
+Anda justru menciptakan masalah,
+
+00:15:43.410 --> 00:15:43.810
+bukan solusi.
+
+00:15:44.090 --> 00:15:44.890
+Pendekatan yang lebih baik
+
+00:15:44.890 --> 00:15:46.350
+adalah memperlakukan proses pembangunan
+
+00:15:46.350 --> 00:15:47.170
+sebagai urutan yang terselur.
+
+00:15:47.350 --> 00:15:48.450
+Berikut adalah daftar periksaan
+
+00:15:48.450 --> 00:15:49.630
+6 langkah agar prosesnya tetap.
+
+00:15:49.890 --> 00:15:50.450
+Langkah pertama,
+
+00:15:50.650 --> 00:15:51.610
+definisikan kasus penggunaan
+
+00:15:51.610 --> 00:15:52.150
+dalam istilah yang.
+
+00:15:52.550 --> 00:15:53.730
+Apa pertanyaan bisnis sebenarnya
+
+00:15:53.730 --> 00:15:54.910
+yang ingin Anda jawab melalui Bistek?
+
+00:15:55.630 --> 00:15:56.250
+Langkah kedua,
+
+00:15:56.410 --> 00:15:57.210
+letakkan QR yang tepat
+
+00:15:57.210 --> 00:15:58.770
+dan set data minimal yang diperlukan.
+
+00:15:59.370 --> 00:16:00.210
+Jangan berikan semuanya
+
+00:16:00.210 --> 00:16:01.570
+jika hanya beberapa kolom yang penting.
+
+00:16:02.490 --> 00:16:03.090
+Langkah ketiga,
+
+00:16:03.250 --> 00:16:04.290
+rancang antarmuka konektor
+
+00:16:04.290 --> 00:16:06.030
+dengan memilih kolom mana yang terlarang.
+
+00:16:07.010 --> 00:16:07.590
+Langkah keempat,
+
+00:16:07.730 --> 00:16:08.530
+terapkan autentikasi
+
+00:16:08.530 --> 00:16:09.410
+dan penentuan cakupan
+
+00:16:09.410 --> 00:16:10.510
+menggunakan kontrol akses
+
+00:16:10.510 --> 00:16:11.210
+berbasis identitas
+
+00:16:11.210 --> 00:16:12.190
+untuk mengatur siapa yang bisa
+
+00:16:12.190 --> 00:16:12.790
+menanyakan apa
+
+00:16:12.790 --> 00:16:14.070
+dan siapa yang bisa melayas silapan.
+
+00:16:14.930 --> 00:16:15.550
+Langkah kelima,
+
+00:16:15.650 --> 00:16:16.490
+uji bersama tim TI
+
+00:16:16.490 --> 00:16:17.650
+dan pemilik bisnis idealnya
+
+00:16:17.650 --> 00:16:18.850
+dengan sekelompok kecil pengguna
+
+00:16:18.850 --> 00:16:19.930
+yang menjalankan query nyata
+
+00:16:19.930 --> 00:16:21.150
+untuk memvalidasi apakah izin
+
+00:16:21.150 --> 00:16:21.990
+berfungsi dengan benar
+
+00:16:21.990 --> 00:16:22.850
+dan hasilnya benar-benar
+
+00:16:22.850 --> 00:16:23.870
+mendukung pengambilan keputusan.
+
+00:16:24.290 --> 00:16:24.910
+Langkah keenam,
+
+00:16:24.910 --> 00:16:25.990
+terapkan dengan pemantauan
+
+00:16:25.990 --> 00:16:26.570
+dan tata kelola
+
+00:16:26.570 --> 00:16:27.870
+agar Anda dapat melacak penggunaan
+
+00:16:27.870 --> 00:16:28.750
+dan melakukan penyesuaian
+
+00:16:28.750 --> 00:16:30.130
+jika ada sesuatu yang melancang dari jawab.
+
+00:16:30.410 --> 00:16:31.270
+Bacalah dengan lantang
+
+00:16:31.270 --> 00:16:32.130
+dan langkah-langkah itu
+
+00:16:32.130 --> 00:16:33.150
+hampir bisa menjadi panduan
+
+00:16:33.150 --> 00:16:34.410
+untuk merancang integrasi yang aman.
+
+00:16:34.990 --> 00:16:35.570
+Agar lebih nyata,
+
+00:16:35.690 --> 00:16:37.250
+mari kita pertimbangkan contoh hipotetis.
+
+00:16:37.790 --> 00:16:38.890
+Katakanlah tim Anda ingin pisjat
+
+00:16:38.890 --> 00:16:40.250
+menangkum kesehatan pipeline CRM.
+
+00:16:40.970 --> 00:16:42.090
+Permintanya terdengar sederhana,
+
+00:16:42.330 --> 00:16:43.650
+tarik ukuran kesepakatan mendatang,
+
+00:16:43.770 --> 00:16:44.530
+tahapan, dan pemilik.
+
+00:16:45.230 --> 00:16:46.490
+Namun, catatan CRM mentah
+
+00:16:46.490 --> 00:16:47.490
+juga berisi catatan bebas
+
+00:16:47.490 --> 00:16:48.570
+dari perwakilan yang seringkali
+
+00:16:48.570 --> 00:16:49.910
+mencakup detail pelanggan yang sensitif.
+
+00:16:49.910 --> 00:16:51.450
+Dalam skenario ini,
+
+00:16:51.790 --> 00:16:52.730
+konektor harus menampilkan
+
+00:16:52.730 --> 00:16:53.450
+bidang terstruktur,
+
+00:16:53.630 --> 00:16:55.010
+tahapan, nilai, pemilik,
+
+00:16:55.170 --> 00:16:56.050
+sambil secara eksplisit
+
+00:16:56.050 --> 00:16:56.890
+mengecualikan catatan
+
+00:16:56.890 --> 00:16:57.910
+tidak terstruktur tersebut.
+
+00:16:58.370 --> 00:16:59.410
+Jika Anda menghubungkan konektor
+
+00:16:59.410 --> 00:16:59.830
+ke semuanya,
+
+00:16:59.930 --> 00:17:00.970
+Anda telah mengeksposnya secara berbeda.
+
+00:17:01.310 --> 00:17:02.970
+Jika Anda menentukan cakupan dengan ketat,
+
+00:17:03.090 --> 00:17:04.030
+Anda mendapatkan wawasan
+
+00:17:04.030 --> 00:17:04.870
+yang dibutuhkan manajer
+
+00:17:04.870 --> 00:17:05.910
+tanpa membocorkan apapun
+
+00:17:05.910 --> 00:17:06.690
+yang melanggar privasi
+
+00:17:06.690 --> 00:17:07.630
+atau ekspektasi kepatutan.
+
+00:17:08.150 --> 00:17:09.450
+Ini bukan sekadar pengamanan teknis,
+
+00:17:09.610 --> 00:17:10.490
+ini adalah prinsip design.
+
+00:17:11.250 --> 00:17:12.370
+Autentikasi adalah hal yang membuat
+
+00:17:12.370 --> 00:17:13.410
+penegakan cakupan menjadinya
+
+00:17:13.410 --> 00:17:15.250
+manajemen identitas dan akses
+
+00:17:15.250 --> 00:17:16.330
+yang kuat memastikan pengguna
+
+00:17:16.330 --> 00:17:17.230
+hanya melihat apa yang memang
+
+00:17:17.230 --> 00:17:18.070
+diizinkan untuk merekali.
+
+00:17:18.590 --> 00:17:19.410
+Kontrol berbasis peran
+
+00:17:19.410 --> 00:17:20.410
+memperluas aturan bisnis
+
+00:17:20.410 --> 00:17:21.050
+ke dalam konektor.
+
+00:17:21.750 --> 00:17:23.050
+Seorang pemimpin penjualan regional
+
+00:17:23.050 --> 00:17:24.550
+dapat melihat pipeline wilayah mereka,
+
+00:17:24.770 --> 00:17:25.910
+tetapi tidak dapat menarik detail
+
+00:17:25.910 --> 00:17:26.630
+tentang wilayah lain.
+
+00:17:27.170 --> 00:17:28.370
+Panggilannya diautentikasi
+
+00:17:28.370 --> 00:17:29.470
+memvalidasi identitas
+
+00:17:29.470 --> 00:17:30.990
+dan hak akses sebelum catatan ditampilkan.
+
+00:17:31.570 --> 00:17:32.750
+Ini bukan mekanisme opsional,
+
+00:17:33.030 --> 00:17:33.890
+ini adalah langkah penting
+
+00:17:33.890 --> 00:17:34.990
+untuk menjaga batasan yang ada
+
+00:17:34.990 --> 00:17:36.010
+dan menghentikan data sensitif
+
+00:17:36.010 --> 00:17:36.610
+agar tidak bocor
+
+00:17:36.610 --> 00:17:37.610
+keobrolan yang tidak semestinya.
+
+00:17:38.350 --> 00:17:39.150
+Merupakan kesalahan juga
+
+00:17:39.150 --> 00:17:39.890
+jika membiarkan hanya
+
+00:17:39.890 --> 00:17:41.010
+satu kelompok yang menangani proses.
+
+00:17:41.150 --> 00:17:42.010
+TI mungkin mengetahui
+
+00:17:42.010 --> 00:17:42.750
+arsitektur sistem,
+
+00:17:42.850 --> 00:17:43.590
+tetapi pemilik bisnis
+
+00:17:43.590 --> 00:17:44.470
+mengetahui poin data mana
+
+00:17:44.470 --> 00:17:45.370
+yang sangat penting bagi misi
+
+00:17:45.370 --> 00:17:46.450
+dan mana yang tidak boleh dieksposi.
+
+00:17:47.150 --> 00:17:48.130
+Meninggalkan salah satu sisi
+
+00:17:48.130 --> 00:17:49.470
+akan menyebabkan ketidakseimbangan,
+
+00:17:49.590 --> 00:17:50.190
+terlalu terbatas
+
+00:17:50.190 --> 00:17:50.910
+sehingga tidak berguna
+
+00:17:50.910 --> 00:17:51.630
+atau terlalu terbuka
+
+00:17:51.630 --> 00:17:52.190
+sehingga tidak aman.
+
+00:17:52.930 --> 00:17:53.830
+Melibatkan kedua perspektif
+
+00:17:53.830 --> 00:17:54.270
+sejak awal
+
+00:17:54.270 --> 00:17:55.490
+akan menghindari jebakan tersebut.
+
+00:17:56.010 --> 00:17:56.710
+Dan selama pengujian,
+
+00:17:56.810 --> 00:17:57.390
+pastikan pengguna
+
+00:17:57.390 --> 00:17:58.150
+sebenarnya menjalankan
+
+00:17:58.150 --> 00:17:59.170
+query dunia nyata mereka.
+
+00:17:59.910 --> 00:18:00.750
+Begitulah cara Anda
+
+00:18:00.750 --> 00:18:02.050
+memastikan hasil yang akurat
+
+00:18:02.050 --> 00:18:03.070
+dan tercakup dengan tepat
+
+00:18:03.070 --> 00:18:04.210
+sebelum semuanya diluncurkan
+
+00:18:04.210 --> 00:18:04.990
+secara lebih luas.
+
+00:18:05.610 --> 00:18:06.630
+Setelah Anda melihatnya kembali,
+
+00:18:06.790 --> 00:18:07.350
+membangun konektor
+
+00:18:07.350 --> 00:18:08.890
+bukan soal trik pengodaan yang cerdas,
+
+00:18:08.990 --> 00:18:09.850
+melainkan soal krisipinan
+
+00:18:09.850 --> 00:18:10.370
+yang diterapkan.
+
+00:18:10.830 --> 00:18:12.190
+Tentukan dengan tepat pertanyaan
+
+00:18:12.190 --> 00:18:13.730
+apa yang ingin Anda selesaikan,
+
+00:18:14.030 --> 00:18:14.650
+beri bis cat akses
+
+00:18:14.650 --> 00:18:15.590
+yang cukup untuk menjawabnya,
+
+00:18:15.890 --> 00:18:16.890
+dan terapkan izin yang sama
+
+00:18:16.890 --> 00:18:18.090
+yang sudah dipercaya oleh bisnis Anda.
+
+00:18:19.530 --> 00:18:20.830
+Kombinasi kontrol lingkup,
+
+00:18:20.950 --> 00:18:21.670
+autentikasi,
+
+00:18:21.910 --> 00:18:23.070
+dan pengujian gabungan inilah
+
+00:18:23.070 --> 00:18:24.410
+yang membedakan demo yang menarik
+
+00:18:24.410 --> 00:18:25.950
+dengan alat bisnis yang andal.
+
+00:18:27.270 --> 00:18:28.270
+Ketika dasar-dasar tersebut
+
+00:18:28.270 --> 00:18:28.750
+terpenuhi,
+
+00:18:28.750 --> 00:18:29.970
+biskuit mendapatkan kredibilitas.
+
+00:18:30.450 --> 00:18:31.650
+Sistem ini tidak lagi dianggap
+
+00:18:31.650 --> 00:18:32.690
+sebagai eksperimen menarik,
+
+00:18:32.790 --> 00:18:33.650
+melainkan mulai diandalkan
+
+00:18:33.650 --> 00:18:34.410
+dalam alur kerjanya.
+
+00:18:34.990 --> 00:18:36.210
+Manfaat sebenarnya bukan sekadar
+
+00:18:36.210 --> 00:18:37.630
+sistem yang mampu memberikan jawaban,
+
+00:18:37.750 --> 00:18:39.130
+tetapi jawaban tersebut
+
+00:18:39.130 --> 00:18:40.050
+spesifik, aman,
+
+00:18:40.390 --> 00:18:40.990
+dan terpercaya.
+
+00:18:42.190 --> 00:18:43.030
+Dengan fondasi tersebut,
+
+00:18:43.170 --> 00:18:44.290
+Anda siap mengambil perspektif
+
+00:18:44.290 --> 00:18:44.970
+lebih luas tentang
+
+00:18:44.970 --> 00:18:45.910
+apa arti semua ini
+
+00:18:45.910 --> 00:18:47.150
+bagi organisasi Anda.
+
+00:18:48.150 --> 00:18:49.710
+Poin utamanya bukanlah teori,
+
+00:18:49.810 --> 00:18:50.410
+melainkan tindakan.
+
+00:18:51.050 --> 00:18:51.870
+Langkah selanjutnya,
+
+00:18:51.990 --> 00:18:52.970
+yang paling penting adalah ini.
+
+00:18:53.190 --> 00:18:54.070
+Pilih satu alur kerja
+
+00:18:54.070 --> 00:18:55.070
+dengan frekuensi tinggi,
+
+00:18:55.210 --> 00:18:56.270
+tentukan bidang yang tepat
+
+00:18:56.270 --> 00:18:57.230
+yang dibutuhkan biskuit
+
+00:18:57.230 --> 00:18:58.050
+dari sistem tersebut
+
+00:18:58.050 --> 00:18:59.410
+lalu buat konektor yang terlingkup.
+
+00:18:59.890 --> 00:19:00.550
+Mulai dari yang kecil,
+
+00:19:00.650 --> 00:19:01.390
+buktikan nilainya sekali
+
+00:19:01.390 --> 00:19:02.610
+dan Anda akan memiliki fondasi
+
+00:19:02.610 --> 00:19:03.190
+yang dapat dipercaya
+
+00:19:03.190 --> 00:19:03.690
+dan dikembangkan.
+
+00:19:04.250 --> 00:19:05.210
+Saya ingin mendengar dari Anda
+
+00:19:05.210 --> 00:19:06.030
+sistem apa yang pertama kali
+
+00:19:06.030 --> 00:19:06.570
+akan Anda hubungkan.
+
+00:19:07.030 --> 00:19:08.330
+CRM, ERP, katalog produk
+
+00:19:08.330 --> 00:19:09.070
+atau pelaca proyek?
+
+00:19:09.550 --> 00:19:10.270
+Diisikan di kolom komentar.
+
+00:19:10.630 --> 00:19:11.730
+Dan jika Anda ingin panduan langkah
+
+00:19:11.730 --> 00:19:12.590
+demi langkah lebih lanjut
+
+00:19:12.590 --> 00:19:13.470
+tentang membangun
+
+00:19:13.470 --> 00:19:14.290
+dan mengamankan konektor,
+
+00:19:14.430 --> 00:19:15.450
+pastikan Anda berlangganan.

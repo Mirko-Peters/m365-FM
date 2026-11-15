@@ -7,7 +7,6 @@ on:
         required: true
 permissions:
   contents: write
-  actions: write
 jobs:
   connect:
     runs-on: ubuntu-latest
@@ -22,11 +21,8 @@ jobs:
           SPREAKER_CLIENT_SECRET: ${{ secrets.SPREAKER_CLIENT_SECRET }}
           CODE: ${{ inputs.code }}
         run: python spreaker_auth.py connect "$CODE"
-      - name: Speichern und Seite neu bauen
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: "Speichern (die Website nutzt die Verbindung ab dem naechtlichen Seitenbau um 01:07 UTC, sofort nur per Run workflow von site.yml)"
         run: |
           git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
           git add data/spreaker_auth.enc && git commit -m "Spreaker verbunden (verschlüsselt)"
           (git pull --rebase -q -X theirs || git rebase --abort) && git push -q
-          gh workflow run site.yml --ref main

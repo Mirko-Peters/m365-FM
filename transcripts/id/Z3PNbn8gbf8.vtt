@@ -1,0 +1,2587 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.900
+Anda mengeklik beritahu saya untuk satu barang.
+
+00:00:02.300 --> 00:00:05.300
+Namun seseorang tetap harus menemukan barang tersebut di antara ratusan rak
+
+00:00:05.300 --> 00:00:08.480
+memastikan bahwa itu adalah barang yang benar dan memasukkannya ke truk yang tepat.
+
+00:00:09.080 --> 00:00:11.640
+Lembar bentang dapat memberitahu Anda bahwa ada 50 unit di sotem.
+
+00:00:12.160 --> 00:00:15.880
+Lembar bentang tidak dapat memandu pekerja di lantai gudang yang sibuk saat stok terus bergerak statement.
+
+00:00:16.900 --> 00:00:19.460
+Disitulah peran manajemen gudang Dynamics 365 masuk.
+
+00:00:20.220 --> 00:00:22.640
+Sistem ini bertindak seperti pandu digital di balik lantai gudang
+
+00:00:22.640 --> 00:00:26.580
+yang mengarahkan pekerjaan mulai dari saat barang tiba hingga pesanan meninggalkan rembaga bongkar muat.
+
+00:00:26.580 --> 00:00:30.660
+Pada akhirnya Anda akan memahami penerimaan penyimpanan, pengambilan, pengiriman
+
+00:00:30.660 --> 00:00:33.060
+dan bagaimana semua aktivitas terhubung dengan bisnis lainnya.
+
+00:00:35.220 --> 00:00:36.660
+Mengapa manajemen gudang itu penting?
+
+00:00:37.740 --> 00:00:40.420
+Bayangkan perpustakaan sibuk di mana setiap buku tiba di atas palet,
+
+00:00:40.740 --> 00:00:44.040
+berpindah antar ruangan dan mungkin harus segera diberikan kepada pembaca dalam satu jam.
+
+00:00:44.480 --> 00:00:46.780
+Buku adalah produk dan rak adalah lokasi penyimpanan.
+
+00:00:47.420 --> 00:00:50.100
+Staff perpustakaan membutuhkan lebih dari sekadar perkiraan kasar tentang letak barang.
+
+00:00:50.300 --> 00:00:52.520
+Mereka perlu mengetahui rak yang tepat, titik yang tepat
+
+00:00:52.520 --> 00:00:55.060
+dan apakah seseorang telah memesan buku itu untuk pembaca lain.
+
+00:00:55.060 --> 00:01:00.460
+Gudang memiliki masalah yang sama, hanya saja salah mengambil buku bisa berarti salah mengirim pesanan pelanggan.
+
+00:01:01.160 --> 00:01:03.600
+Untuk waktu yang lama, tim menangani sebagian besar pekerjaan ini
+
+00:01:03.600 --> 00:01:06.560
+dengan daftar pengambilan kertas, hitungan manual, dan sistem terpisah.
+
+00:01:07.040 --> 00:01:10.780
+Seorang pekerja mencatat apa yang dipindahkan, lalu seseorang memasukkan informasi itu nanti di komputer.
+
+00:01:11.580 --> 00:01:13.360
+Stok bisa meninggalkan rak pada pukul 09.00 pagi,
+
+00:01:13.440 --> 00:01:15.500
+sementara sistem masih menunjukkannya ada di sana saat jam makan siang.
+
+00:01:15.820 --> 00:01:17.000
+Penundaan itu menimbulkan kebingungan.
+
+00:01:17.540 --> 00:01:19.320
+Tim pembelian bertanya apa yang telah tiba dari pemasok.
+
+00:01:20.060 --> 00:01:22.060
+Bagian penjual bertanya apakah suatu barang masih bisa dikirim lagi.
+
+00:01:22.060 --> 00:01:24.500
+Manajer gudang bertanya di mana posisi palet tersebut.
+
+00:01:25.160 --> 00:01:27.000
+Bagian keuangan perlu tahu stok apa yang dimiliki bisnis.
+
+00:01:27.440 --> 00:01:29.120
+Jika setiap tim melihat jawaban yang berbeda,
+
+00:01:29.400 --> 00:01:32.620
+orang-orang mulai meriksa lembar bentang, berkeliling gudang, dan saling menelpon.
+
+00:01:33.300 --> 00:01:34.480
+Pekerjaan melambat dengan cepat.
+
+00:01:35.260 --> 00:01:36.960
+Manajemen, lantai pasokan dynamics.
+
+00:01:37.340 --> 00:01:40.480
+Tiga anbarang yang lebih luas di seluruh bisnis, di seluruh bisnis.
+
+00:01:40.860 --> 00:01:42.320
+Ini mencakup pembelian dari pemasok,
+
+00:01:42.600 --> 00:01:43.940
+pembuatan produk, pemindahan stok,
+
+00:01:44.280 --> 00:01:46.020
+penjualan ke pelanggan, penanganan batur, dan banyak lagi.
+
+00:01:46.360 --> 00:01:48.700
+Manajemen gudang berada dalam platform yang terhubungi itu
+
+00:01:48.700 --> 00:01:50.820
+dan berfokus pada pekerjaan fisik di dalam gudang.
+
+00:01:51.180 --> 00:01:52.680
+Sistem ini memberitahu pekerja apa yang harus dilakukan.
+
+00:01:52.980 --> 00:01:54.280
+Seorang pekerja dapat menerima pengiriman.
+
+00:01:54.640 --> 00:01:56.420
+Pekerja lain dapat memindahkan produk ke penyimpanan.
+
+00:01:56.660 --> 00:01:58.240
+Orang lain dapat mengambil pesanan pelanggan,
+
+00:01:58.340 --> 00:01:59.720
+mengumas kotak, dan menyiapkan pengiriman.
+
+00:02:00.020 --> 00:02:02.540
+Setiap tindakan tercatat dalam sistem bisnis yang sama saat terjadi.
+
+00:02:02.980 --> 00:02:04.580
+Catatan bersama itu mengubah komunikasi.
+
+00:02:05.560 --> 00:02:07.740
+Alih-alih bertanya bagaimana cara seorang memindahkan suku cadang itu.
+
+00:02:08.360 --> 00:02:11.360
+Oh, Anda dapat melihat tugas gudang, statusnya, dan posisi stok tersebut.
+
+00:02:11.360 --> 00:02:14.260
+Daripada mengirim daftar cetak dan berharap hasilnya kembali
+
+00:02:14.260 --> 00:02:15.240
+dengan tulisan tangan yang rapi,
+
+00:02:15.320 --> 00:02:17.080
+pekerja mengikuti langkah-langkah di perangkat seluler
+
+00:02:17.080 --> 00:02:18.820
+dan mengonfirmasi setiap tindakan dengan pemindahnya.
+
+00:02:19.280 --> 00:02:21.360
+Saat ini orang sering mencampur adukan manajemen inventaris
+
+00:02:21.360 --> 00:02:23.260
+dan manajemen gudang karena keduanya terdengar hampir sakit.
+
+00:02:23.740 --> 00:02:24.940
+Manajemen inventaris menjawab,
+
+00:02:25.080 --> 00:02:26.600
+Oh, berapa banyak stok yang kita miliki?
+
+00:02:27.600 --> 00:02:30.360
+Sistem ini melacak jumlah, biaya, detail produk,
+
+00:02:30.600 --> 00:02:31.980
+dan ketersediaan di seluruh bisnis.
+
+00:02:32.740 --> 00:02:34.560
+Manajemen gudang menjawab pertanyaan yang berbeda.
+
+00:02:35.360 --> 00:02:36.620
+Oh, di mana tepatnya stok itu berada?
+
+00:02:37.080 --> 00:02:38.420
+Dan apa yang harus dilakukan pekerja selanjutnya?
+
+00:02:38.420 --> 00:02:41.540
+Oh, mengetahui Anda memiliki 200 kotak produk memang berbeda.
+
+00:02:41.700 --> 00:02:44.120
+Mengetahui bahwa 40 kotak ada di dok penerimaan,
+
+00:02:44.360 --> 00:02:45.860
+120 di penyimpanan curah,
+
+00:02:45.980 --> 00:02:47.160
+20 di area pengambilan,
+
+00:02:47.320 --> 00:02:49.020
+dan 20 sudah dipesan untuk pesanan pelanggan
+
+00:02:49.020 --> 00:02:50.660
+adalah hal yang membantu operasional gudang.
+
+00:02:51.600 --> 00:02:53.920
+Jadi, anggaplah manajemen inventaris sebagai catatan stok.
+
+00:02:54.720 --> 00:02:56.160
+Manajemen gudang mengubah catatan tersebut
+
+00:02:56.160 --> 00:02:57.620
+menjadi pekerjaan fisik yang terpandu.
+
+00:02:57.820 --> 00:02:59.500
+Sebatur pengiriman baru saja tiba di dok mongkar.
+
+00:02:59.740 --> 00:03:01.680
+Pemasok mengharapkan seseorang untuk menurunkannya,
+
+00:03:01.680 --> 00:03:04.040
+tetapi pekerjaan yang sesungguhnya dimulai ketika sistem menentukan
+
+00:03:04.040 --> 00:03:05.020
+kemana setiap barang harus dibawa.
+
+00:03:06.580 --> 00:03:07.140
+Keta gudang.
+
+00:03:07.660 --> 00:03:08.060
+Lokasi.
+
+00:03:08.420 --> 00:03:09.160
+Gudang posisi.
+
+00:03:09.440 --> 00:03:10.580
+Dan detail stok.
+
+00:03:11.500 --> 00:03:13.060
+Sebelum siapapun dapat mengelah stok,
+
+00:03:13.180 --> 00:03:14.920
+sistem memerlukan peta ruang fisik tersebut.
+
+00:03:15.980 --> 00:03:18.020
+Anggaplah situs sebagai tempat bisnis yang lebih luas,
+
+00:03:18.160 --> 00:03:19.820
+seperti kompleks pabrik, pusat distribusi,
+
+00:03:19.920 --> 00:03:20.740
+atau operasi regional.
+
+00:03:21.220 --> 00:03:23.260
+Di dalam situs tersebut Anda bisa memiliki satu beberapa gudang.
+
+00:03:23.920 --> 00:03:25.180
+Gudang bisa berarti seluruh bangunan,
+
+00:03:25.260 --> 00:03:27.160
+tetapi bisa juga berarti area penyimpanan terpisah
+
+00:03:27.160 --> 00:03:28.220
+di dalam bangunan yang sama.
+
+00:03:29.020 --> 00:03:30.820
+Anda mungkin menyimpan bahan baku di satu gudang,
+
+00:03:30.820 --> 00:03:32.140
+produk jadi di gudang lain,
+
+00:03:32.360 --> 00:03:33.620
+dan barang retur di gudang ketiga.
+
+00:03:34.020 --> 00:03:34.840
+Kemudian berulah lokasi.
+
+00:03:35.340 --> 00:03:37.300
+Lokasi adalah tempat-tempat di mana pekerjaan dilakukan
+
+00:03:37.300 --> 00:03:38.000
+atau stok berada.
+
+00:03:38.580 --> 00:03:40.460
+Itu bisa berupa dok penerimaan, rak, rak buku,
+
+00:03:40.700 --> 00:03:41.760
+wadah, atau meja pengepakan.
+
+00:03:42.180 --> 00:03:44.160
+Itu juga bisa berupa area karantina tempat produk
+
+00:03:44.160 --> 00:03:44.860
+menunggu inspeksi.
+
+00:03:45.380 --> 00:03:46.760
+Tingkat detail ini menghilangkan tebak-tebakan.
+
+00:03:47.260 --> 00:03:48.840
+Bayangkan sebuah produk bernama Blue Widget Ceret.
+
+00:03:49.420 --> 00:03:50.420
+Tanpa kontrol lokasi,
+
+00:03:50.640 --> 00:03:52.040
+sistem mungkin hanya memberitahu Anda
+
+00:03:52.040 --> 00:03:53.800
+bahwa 200 unit ada di gudang A.
+
+00:03:54.460 --> 00:03:55.700
+Pekerja tetap harus mencarinya,
+
+00:03:56.140 --> 00:03:57.560
+yang tidak jauh lebih baik daripada bertanya
+
+00:03:57.560 --> 00:03:59.440
+kepada seseorang yang ingat pernah melihatnya minggu lalu.
+
+00:03:59.440 --> 00:04:00.600
+Dengan manajemen gudang,
+
+00:04:00.740 --> 00:04:02.720
+catatan dapat menunjukkan bahwa 80 unit
+
+00:04:02.720 --> 00:04:04.880
+berada di lorong 4, rak B, rak ngosong tiket.
+
+00:04:04.880 --> 00:04:06.660
+Sebanyak mana unit lainnya berada di penyimpanan.
+
+00:04:07.060 --> 00:04:08.760
+Sisanya mungkin berada di dekat area pengepakan,
+
+00:04:08.900 --> 00:04:09.720
+siap untuk pesanan terbuka.
+
+00:04:10.180 --> 00:04:11.660
+Setiap produk dimulai dengan identitasnya sendiri.
+
+00:04:12.200 --> 00:04:13.240
+Itu mencakup nomor barang,
+
+00:04:13.440 --> 00:04:14.760
+unit yang digunakan untuk menghitungnya,
+
+00:04:14.900 --> 00:04:15.820
+dan aturan yang berlaku untuk.
+
+00:04:16.300 --> 00:04:17.800
+Anda mungkin menghitung air minum kemasan
+
+00:04:17.800 --> 00:04:18.520
+berdasarkan kaktus,
+
+00:04:18.640 --> 00:04:19.380
+berdasarkan satuan,
+
+00:04:19.480 --> 00:04:20.240
+dan ubin lantai berdasarkan.
+
+00:04:20.680 --> 00:04:22.800
+Beberapa produk memerlukan aturan penyimpanan khusus
+
+00:04:22.800 --> 00:04:23.920
+karena berat, mudah pecah,
+
+00:04:23.980 --> 00:04:24.400
+harus dingin,
+
+00:04:24.520 --> 00:04:25.560
+atau perputarannya cepat.
+
+00:04:25.900 --> 00:04:28.500
+Sistem dapat melacak stok melalui beberapa detail sekaligus.
+
+00:04:28.960 --> 00:04:30.900
+Sistem dapat melacak situs, gudang, dan lokasinya.
+
+00:04:30.900 --> 00:04:32.040
+Jika diperlukan,
+
+00:04:32.140 --> 00:04:33.520
+sistem juga dapat melacak nomor batch,
+
+00:04:33.620 --> 00:04:34.900
+nomor seri, atau pelat lisensi.
+
+00:04:35.780 --> 00:04:37.000
+Setiap detail menjawab pertanyaan
+
+00:04:37.000 --> 00:04:38.560
+berbeda mengenai produk fisik yang sama.
+
+00:04:39.100 --> 00:04:40.280
+Nomor batch mengelompokkan barang
+
+00:04:40.280 --> 00:04:42.420
+yang berasal dari produksi atau pengiriman yang sama.
+
+00:04:43.340 --> 00:04:44.480
+Hal ini penting untuk makanan,
+
+00:04:44.680 --> 00:04:45.840
+obat-obatan, bahan kimia,
+
+00:04:46.000 --> 00:04:47.160
+dan barang lain yang mengharuskan Anda
+
+00:04:47.160 --> 00:04:48.480
+melacak masalah ke kelompok tertentu.
+
+00:04:49.120 --> 00:04:51.440
+Nomor seri mengidentifikasi satu barang secara individu.
+
+00:04:52.100 --> 00:04:53.440
+Jika Anda menjual mesin, laptop,
+
+00:04:53.440 --> 00:04:54.800
+atau komponen bernilai tinggi,
+
+00:04:55.040 --> 00:04:56.920
+Anda mungkin perlu mengetahui unit mana yang tiba,
+
+00:04:57.140 --> 00:04:57.740
+kemana perginya,
+
+00:04:57.920 --> 00:04:58.980
+dan pelanggan mana yang menerimanya.
+
+00:04:58.980 --> 00:05:00.920
+Hal itu menciptakan jejak yang jelas
+
+00:05:00.920 --> 00:05:02.540
+saat barang rusak atau perlu dikembalikan.
+
+00:05:03.080 --> 00:05:04.180
+Ada barang dengan pelat lisensi, Lisen.
+
+00:05:04.740 --> 00:05:05.660
+Meskipun namanya demikian,
+
+00:05:05.720 --> 00:05:06.360
+ini tidak ada hubungannya.
+
+00:05:06.840 --> 00:05:08.220
+Pelat lisensi adalah ID unik
+
+00:05:08.220 --> 00:05:09.640
+untuk palet, karton, wadah,
+
+00:05:09.720 --> 00:05:10.760
+atau kontainer lainnya.
+
+00:05:11.580 --> 00:05:13.100
+Anggaplah ini seperti label bagasi di bandara.
+
+00:05:13.600 --> 00:05:14.500
+Anda memindai labelnya,
+
+00:05:14.700 --> 00:05:16.520
+lalu sistem mengetahui wadah ini maksud dan isinya.
+
+00:05:17.720 --> 00:05:19.180
+Bekerja tidak perlu memindai setiap kotak
+
+00:05:19.180 --> 00:05:20.320
+di atas palet satu per satu
+
+00:05:20.320 --> 00:05:22.280
+jika palet tersebut sudah memiliki pelat lisensi
+
+00:05:22.280 --> 00:05:23.560
+dengan keterangan isi yang tepat.
+
+00:05:24.280 --> 00:05:25.180
+Hal itu menghemat waktu,
+
+00:05:25.280 --> 00:05:26.380
+namun hanya jika catat tak akurat.
+
+00:05:26.380 --> 00:05:28.460
+Jadi saat orang berbicara tentang stok yang ada,
+
+00:05:28.560 --> 00:05:30.660
+mereka tidak serta mereta hanya merujuk pada jumlah kotak.
+
+00:05:30.760 --> 00:05:32.640
+Sistem dapat menunjukkan berapa banyak stok yang ada,
+
+00:05:32.860 --> 00:05:33.460
+di mana letaknya,
+
+00:05:33.600 --> 00:05:34.400
+apakah bisa digunakan,
+
+00:05:34.500 --> 00:05:35.440
+serta batch, nomor seri,
+
+00:05:35.540 --> 00:05:36.220
+atau wadah merah seri,
+
+00:05:36.300 --> 00:05:37.580
+atau wadah merah yang menjadi milik barang tersebut.
+
+00:05:37.720 --> 00:05:39.380
+Beberapa stok mungkin secara fisik ada di gudang
+
+00:05:39.380 --> 00:05:40.380
+namun tetap tidak tersedia.
+
+00:05:40.760 --> 00:05:41.400
+Mungkin barang tersusat.
+
+00:05:41.780 --> 00:05:42.800
+Mungkin sedang menunggu pemeriksaan.
+
+00:05:43.080 --> 00:05:44.140
+Mungkin sudah menjadi pesan pelanggan.
+
+00:05:44.820 --> 00:05:46.560
+Sistem menjaga perbedaan tersebut tetap jelas,
+
+00:05:46.820 --> 00:05:48.600
+sehingga pekerja tidak akan salah mengambil barang
+
+00:05:48.600 --> 00:05:49.760
+yang seharusnya tidak keluar dari gudang.
+
+00:05:49.760 --> 00:05:50.860
+Setelah pemerintahnya ada,
+
+00:05:50.960 --> 00:05:51.380
+truk dapat tiba,
+
+00:05:51.460 --> 00:05:52.200
+pekerja dapat memindahkan.
+
+00:05:54.540 --> 00:05:56.160
+Dan Dynamics 365 dapat mengubah
+
+00:05:56.160 --> 00:05:58.120
+aturan penyimpanan tersebut menjadi tugas berikutnya.
+
+00:06:00.100 --> 00:06:00.720
+Pekerjaan masuk
+
+00:06:00.720 --> 00:06:02.500
+dari truk pengiriman kerak yang tepat.
+
+00:06:03.820 --> 00:06:05.500
+Pengiriman tidak dimulai saat truk tiba,
+
+00:06:05.960 --> 00:06:07.620
+hal itu dimulai lebih awal dengan pesanan pembelian.
+
+00:06:08.180 --> 00:06:09.400
+Pesanan pembelian memberitahu bisnis
+
+00:06:09.400 --> 00:06:10.720
+tentang apa yang diharapkan dari pemasok,
+
+00:06:10.860 --> 00:06:11.640
+produk apa yang harus tiba,
+
+00:06:11.740 --> 00:06:12.340
+beberapa jumlahnya,
+
+00:06:12.600 --> 00:06:13.280
+dan biasanya kapan.
+
+00:06:14.040 --> 00:06:15.020
+Saat truk tiba di dok,
+
+00:06:15.420 --> 00:06:17.420
+tim gudang dapat membandingkan pengiriman fisik
+
+00:06:17.420 --> 00:06:18.140
+dengan catatan
+
+00:06:18.140 --> 00:06:20.140
+yang diharapkan alih-alih menerima kotak
+
+00:06:20.140 --> 00:06:21.640
+tanpa tujuan yang jelas.
+
+00:06:22.460 --> 00:06:23.500
+Pekerja memindai produk
+
+00:06:23.500 --> 00:06:24.920
+atau memindai pelat nomor palet
+
+00:06:24.920 --> 00:06:27.040
+dan mengonfirmasi jumlah yang tiba.
+
+00:06:27.900 --> 00:06:29.400
+Jika pemasok mengirim 100 kotak
+
+00:06:29.400 --> 00:06:30.760
+tetapi hanya 90 dari truk,
+
+00:06:30.920 --> 00:06:31.920
+perbedaannya langsung terlihat.
+
+00:06:32.620 --> 00:06:33.640
+Tidak perlu menunggu seseorang
+
+00:06:33.640 --> 00:06:34.920
+mengetik catatan ke komputer
+
+00:06:34.920 --> 00:06:36.160
+di akhir giliran kerja.
+
+00:06:36.700 --> 00:06:37.980
+Bisnis dapat melihat apa yang sudah tiba
+
+00:06:37.980 --> 00:06:38.740
+dan apa yang masih kurang.
+
+00:06:39.220 --> 00:06:40.340
+Terkadang penerimaan melibatkan
+
+00:06:40.340 --> 00:06:41.360
+lebih dari sekadar pemeriksaan jumlah.
+
+00:06:41.800 --> 00:06:43.200
+Pemasok makanan mungkin mengirimkan produk
+
+00:06:43.200 --> 00:06:44.340
+dari kelompok yang perlu diperiksa.
+
+00:06:44.740 --> 00:06:45.980
+Produsen mungkin menerima suku cadang
+
+00:06:45.980 --> 00:06:46.920
+yang memerlukan persetujuan
+
+00:06:46.920 --> 00:06:48.100
+sebelum mencapai lantai produksi.
+
+00:06:48.620 --> 00:06:49.340
+Dalam kasus tersebut,
+
+00:06:49.420 --> 00:06:51.120
+Dynamics dikaren stok ke lokasi karantina
+
+00:06:51.120 --> 00:06:52.240
+dapat mengirim stok lok.
+
+00:06:52.520 --> 00:06:53.260
+Karantina berarti
+
+00:06:53.260 --> 00:06:54.980
+barang tetap berada secara fisik di gedung
+
+00:06:54.980 --> 00:06:56.420
+tetapi pekerja tidak dapat menggunakan
+
+00:06:56.420 --> 00:06:57.660
+atau mengirimnya sebagai stok nomor.
+
+00:06:57.980 --> 00:06:59.460
+Tim kualitas dapat memeriksa produk
+
+00:06:59.460 --> 00:07:00.260
+dan menyetujuinya,
+
+00:07:00.380 --> 00:07:00.840
+menolaknya,
+
+00:07:01.000 --> 00:07:01.680
+atau mencatat masalah.
+
+00:07:02.080 --> 00:07:03.140
+Sampai keputusan itu dibuat,
+
+00:07:03.340 --> 00:07:04.360
+sistem gudang menjauhkan stok
+
+00:07:04.360 --> 00:07:05.400
+dari pekerjaan reguler.
+
+00:07:06.140 --> 00:07:07.680
+Itu mencegah palet yang belum disetujui
+
+00:07:07.680 --> 00:07:09.600
+masuk ke pesanan pelanggan secara diam-diam.
+
+00:07:10.620 --> 00:07:11.620
+Setelah stok lolos penerimaan,
+
+00:07:11.760 --> 00:07:12.320
+stok itu butuh tempat.
+
+00:07:12.320 --> 00:07:13.980
+Langkah ini disebut penyimpanan atau
+
+00:07:13.980 --> 00:07:16.180
+daripada membiarkan pekerja memutuskan
+
+00:07:16.180 --> 00:07:17.420
+di mana palet harus diletakkan,
+
+00:07:17.540 --> 00:07:18.740
+perangkat seluler dapat mengarahkan
+
+00:07:18.740 --> 00:07:19.800
+mereka ke lokasi tertentu.
+
+00:07:20.500 --> 00:07:21.480
+Perangkat mungkin meminta
+
+00:07:21.480 --> 00:07:22.620
+mereka membawa palet
+
+00:07:22.620 --> 00:07:23.960
+dari dok penerimaan kerak besar,
+
+00:07:24.560 --> 00:07:25.400
+zona penyimpanan dingin,
+
+00:07:25.500 --> 00:07:26.320
+atau lokasi pengambilan
+
+00:07:26.320 --> 00:07:27.380
+di dekat area pengepakan.
+
+00:07:28.260 --> 00:07:29.120
+Sistem membuat pilihan itu
+
+00:07:29.120 --> 00:07:30.200
+melalui arahan lokasi.
+
+00:07:30.960 --> 00:07:31.960
+Nama itu terdengar teknis
+
+00:07:31.960 --> 00:07:32.960
+tetapi idenya sederhana.
+
+00:07:33.680 --> 00:07:34.440
+Arahan lokasi adalah
+
+00:07:34.440 --> 00:07:35.600
+sekumpulan aturan yang menjawab
+
+00:07:35.600 --> 00:07:36.540
+oh, kemana barang ini
+
+00:07:36.540 --> 00:07:37.340
+harus pergi sekarang.
+
+00:07:38.400 --> 00:07:39.160
+Aturan tersebut dapat
+
+00:07:39.160 --> 00:07:39.960
+mempertimbangkan produk,
+
+00:07:40.100 --> 00:07:40.500
+ukurannya,
+
+00:07:40.500 --> 00:07:41.500
+kebutuhan penyimpanannya,
+
+00:07:41.600 --> 00:07:42.440
+batas ruang zona gudang,
+
+00:07:42.520 --> 00:07:43.720
+dan tujuan lokasi barang tersebut.
+
+00:07:44.940 --> 00:07:45.860
+Stok berat mungkin diletakkan
+
+00:07:45.860 --> 00:07:46.600
+di rak lantai dasar.
+
+00:07:47.120 --> 00:07:47.980
+Barang kecil yang cepat terjual
+
+00:07:47.980 --> 00:07:48.620
+mungkin diletakkan
+
+00:07:48.620 --> 00:07:49.600
+di tempat dekat tempat pekerja
+
+00:07:49.600 --> 00:07:50.280
+yang mengambil pesanan.
+
+00:07:51.220 --> 00:07:52.320
+Stok yang memerlukan peninginan
+
+00:07:52.320 --> 00:07:53.260
+hanya bisa masuk ke lokasi
+
+00:07:53.260 --> 00:07:54.300
+penyimpanan dingin yang disetujui.
+
+00:07:54.780 --> 00:07:55.660
+Pekerja melihat hasilnya
+
+00:07:55.660 --> 00:07:56.760
+sebagai instruksi yang jelas,
+
+00:07:56.980 --> 00:07:58.320
+bukan halaman berisi aturan gudang,
+
+00:07:58.800 --> 00:08:00.340
+templat kerja bentuk pekerjaan itu sendiri.
+
+00:08:00.740 --> 00:08:01.500
+Anggap templat kerja
+
+00:08:01.500 --> 00:08:02.480
+sebagai kartu pekerjaan
+
+00:08:02.480 --> 00:08:03.620
+yang dapat diulang di dalam sistem.
+
+00:08:04.040 --> 00:08:04.940
+Untuk pengiriman pemasok,
+
+00:08:04.940 --> 00:08:06.080
+templat ini mungkin membuat dua langkah.
+
+00:08:06.600 --> 00:08:07.360
+Terima stok di dok,
+
+00:08:07.460 --> 00:08:08.660
+lalu simpan di lokasi
+
+00:08:08.660 --> 00:08:09.680
+yang dipilih oleh aturan.
+
+00:08:10.300 --> 00:08:11.260
+Perangkat seluler menyajikan
+
+00:08:11.260 --> 00:08:12.740
+setiap langkah dalam urutan yang tepat
+
+00:08:12.740 --> 00:08:13.540
+dan setiap pemindaian
+
+00:08:13.540 --> 00:08:14.260
+mengonfirmasi bahwa
+
+00:08:14.260 --> 00:08:15.220
+langkah tersebut telah dilakukan.
+
+00:08:15.680 --> 00:08:16.420
+Konsistensi terpenting
+
+00:08:16.420 --> 00:08:17.240
+ketika orang yang berbeda
+
+00:08:17.240 --> 00:08:18.480
+bekerja dalam giliran yang berbeda.
+
+00:08:18.840 --> 00:08:19.480
+Anggota tim baru
+
+00:08:19.480 --> 00:08:20.240
+tidak perlu menghafal
+
+00:08:20.240 --> 00:08:21.440
+setiap aturan penyimpanan.
+
+00:08:21.840 --> 00:08:23.340
+Perangkat meminta pemindaian yang tepat
+
+00:08:23.340 --> 00:08:24.540
+menampilkan tugas berikutnya
+
+00:08:24.540 --> 00:08:25.780
+dan mencatat perpindahan tersebut.
+
+00:08:26.320 --> 00:08:27.160
+Manager dapat melihat
+
+00:08:27.160 --> 00:08:28.540
+apakah stok masih menunggu di dok
+
+00:08:28.540 --> 00:08:29.900
+sedang dipindahkan ke penyimpanan
+
+00:08:29.900 --> 00:08:30.900
+atau sudah berada di lokasi
+
+00:08:30.900 --> 00:08:31.380
+yang ditentukan.
+
+00:08:31.900 --> 00:08:32.600
+Namun area penyimpanan
+
+00:08:32.600 --> 00:08:33.580
+dapat menimbulkan masalah bat.
+
+00:08:34.160 --> 00:08:35.160
+Banyak gudang menyimpan stok
+
+00:08:35.160 --> 00:08:35.920
+dalam jumlah besar
+
+00:08:35.920 --> 00:08:36.620
+di lokasi curah
+
+00:08:36.620 --> 00:08:37.760
+sementara lokasi pengambilan
+
+00:08:37.760 --> 00:08:38.380
+yang lebih kecil
+
+00:08:38.380 --> 00:08:39.280
+hanya menampung jumlah
+
+00:08:39.280 --> 00:08:40.080
+yang dibutuhkan pekerja
+
+00:08:40.080 --> 00:08:40.820
+untuk pesanan harian.
+
+00:08:41.400 --> 00:08:42.360
+Ketika lokasi pengambilan
+
+00:08:42.360 --> 00:08:43.180
+mulai menipis,
+
+00:08:43.440 --> 00:08:44.060
+gudang membutuhkan
+
+00:08:44.060 --> 00:08:44.660
+lebih banyak stok
+
+00:08:44.660 --> 00:08:45.280
+sebelum seseorang
+
+00:08:45.280 --> 00:08:45.960
+menjumpai rak kosong.
+
+00:08:46.580 --> 00:08:47.480
+Inilah yang disebut pengisian ulang.
+
+00:08:48.380 --> 00:08:49.100
+Dynamics 365
+
+00:08:49.100 --> 00:08:50.360
+dapat membuat tugas
+
+00:08:50.360 --> 00:08:51.320
+yang menginstruksikan pekerja
+
+00:08:51.320 --> 00:08:52.120
+untuk memindahkan stok
+
+00:08:52.120 --> 00:08:52.900
+dari penyimpanan curah
+
+00:08:52.900 --> 00:08:53.660
+ke lokasi pengambilan.
+
+00:08:53.660 --> 00:08:54.860
+Ini adalah pengisian
+
+00:08:54.860 --> 00:08:55.420
+yang terencana,
+
+00:08:55.640 --> 00:08:56.440
+bukan pencarian produk
+
+00:08:56.440 --> 00:08:57.240
+mendadak setelah pesanan
+
+00:08:57.240 --> 00:08:57.800
+sudah menunggu.
+
+00:08:58.480 --> 00:08:59.440
+Barang juga dapat datang
+
+00:08:59.440 --> 00:09:00.020
+melalui rute
+
+00:09:00.020 --> 00:09:01.540
+selain pesanan pembelian pemasok.
+
+00:09:02.220 --> 00:09:02.780
+Pesanan transfer
+
+00:09:02.780 --> 00:09:03.420
+memindahkan stok
+
+00:09:03.420 --> 00:09:04.020
+dari satu gudang
+
+00:09:04.020 --> 00:09:04.820
+atau lokasi ke lokasi.
+
+00:09:05.360 --> 00:09:06.040
+Pesanan produksi
+
+00:09:06.040 --> 00:09:07.020
+dapat membuat barang jadi
+
+00:09:07.020 --> 00:09:07.680
+yang perlu diterima
+
+00:09:07.680 --> 00:09:08.400
+ke dalam penyimpanan
+
+00:09:08.400 --> 00:09:09.640
+setelah pabrik menyelesaikannya.
+
+00:09:10.300 --> 00:09:11.140
+Dalam setiap kasus,
+
+00:09:11.240 --> 00:09:11.920
+gudang menggunakan
+
+00:09:11.920 --> 00:09:12.800
+pola dasar yang sama.
+
+00:09:13.580 --> 00:09:14.560
+Konfirmasi apa yang tiba,
+
+00:09:14.800 --> 00:09:15.720
+terapkan aturan yang tepat
+
+00:09:15.720 --> 00:09:17.120
+dan arahkan ke tempat yang benar.
+
+00:09:17.800 --> 00:09:18.800
+Sekarang stok tersimpan,
+
+00:09:18.920 --> 00:09:19.360
+terperiksa,
+
+00:09:19.360 --> 00:09:20.360
+dan siap untuk diproses.
+
+00:09:20.580 --> 00:09:21.580
+Hal itu hanya membuahkan hasil
+
+00:09:21.580 --> 00:09:22.580
+jika gudang dapat menemukannya
+
+00:09:22.580 --> 00:09:23.300
+kembali untuk pelanggan
+
+00:09:23.300 --> 00:09:23.660
+yang pesannya.
+
+00:09:24.080 --> 00:09:24.600
+Terus menambahkan.
+
+00:09:25.800 --> 00:09:26.500
+Pekerjaan keluar
+
+00:09:26.500 --> 00:09:27.460
+dari pesanan pelanggan
+
+00:09:27.460 --> 00:09:28.200
+hingga dopomotan.
+
+00:09:29.240 --> 00:09:29.940
+Pesanan pelanggan
+
+00:09:29.940 --> 00:09:30.880
+mengawali sisi keluar
+
+00:09:30.880 --> 00:09:31.440
+dari gudang.
+
+00:09:31.900 --> 00:09:32.700
+Penjualan mencatat
+
+00:09:32.700 --> 00:09:33.640
+apa yang diinginkan pelanggan
+
+00:09:33.640 --> 00:09:34.300
+berapa banyak unit
+
+00:09:34.300 --> 00:09:34.980
+yang mereka butuhkan
+
+00:09:34.980 --> 00:09:35.980
+dan kapan pesan harus dikirim.
+
+00:09:36.300 --> 00:09:37.040
+Pesanan itu masuk
+
+00:09:37.040 --> 00:09:37.880
+ke platform yang sama
+
+00:09:37.880 --> 00:09:38.560
+yang terhubung dengan
+
+00:09:38.560 --> 00:09:39.080
+catatan stok.
+
+00:09:39.460 --> 00:09:39.720
+Jadi,
+
+00:09:40.360 --> 00:09:41.280
+gudang tidak perlu bekerja
+
+00:09:41.280 --> 00:09:42.680
+dari daftar email yang terpisah.
+
+00:09:43.220 --> 00:09:44.060
+Sebelum pengambilan dimulai,
+
+00:09:44.060 --> 00:09:45.240
+bisnis dapat memesan stok
+
+00:09:45.240 --> 00:09:45.940
+untuk pesanan tersebut.
+
+00:09:46.480 --> 00:09:47.200
+Reservasi berarti
+
+00:09:47.200 --> 00:09:47.980
+sistem menyisikan stok
+
+00:09:47.980 --> 00:09:49.140
+tertentu secara administratif
+
+00:09:49.140 --> 00:09:49.780
+sehingga pesanan lain
+
+00:09:49.780 --> 00:09:50.720
+tidak dapat mengklaimnya.
+
+00:09:51.380 --> 00:09:52.100
+Jika hanya tersisa
+
+00:09:52.100 --> 00:09:52.980
+10 unit tersebut
+
+00:09:52.980 --> 00:09:53.720
+dan satu pelanggan
+
+00:09:53.720 --> 00:09:55.040
+sudah memesan ke 10 unit tersebut,
+
+00:09:55.160 --> 00:09:56.020
+tim gudang dan penjualan
+
+00:09:56.020 --> 00:09:56.700
+dapat melihat bahwa
+
+00:09:56.700 --> 00:09:57.780
+unit tersebut sudah terpesan.
+
+00:09:58.160 --> 00:09:58.740
+Hal itu menghindari
+
+00:09:58.740 --> 00:09:59.880
+percakapan yang sangat canggung nantinya.
+
+00:10:00.380 --> 00:10:01.460
+Pesanan tetap membutuhkan fisik.
+
+00:10:01.980 --> 00:10:02.680
+Seseorang harus berjalan
+
+00:10:02.680 --> 00:10:03.460
+ke lokasi yang tepat,
+
+00:10:03.600 --> 00:10:04.420
+mengambil barang yang benar,
+
+00:10:04.540 --> 00:10:05.420
+mengonfirmasi jumlahnya,
+
+00:10:05.500 --> 00:10:05.960
+mengemasnya,
+
+00:10:06.080 --> 00:10:06.680
+dan memindahkannya
+
+00:10:06.680 --> 00:10:07.340
+ke doa pemuatan.
+
+00:10:14.060 --> 00:10:16.140
+Sebaliknya, gudang dapat
+
+00:10:16.140 --> 00:10:16.760
+membuat gelombang.
+
+00:10:17.240 --> 00:10:17.860
+Gelombang adalah
+
+00:10:17.860 --> 00:10:19.020
+kelompok pesanan terencana
+
+00:10:19.020 --> 00:10:20.260
+yang ingin diproses tim secara bersama.
+
+00:10:20.400 --> 00:10:21.020
+Mungkin semua pesanan
+
+00:10:21.020 --> 00:10:21.940
+berangkat dengan truk yang sama.
+
+00:10:22.260 --> 00:10:23.300
+Mungkin mereka memiliki tanggal
+
+00:10:23.300 --> 00:10:24.480
+pengiriman zona gudang
+
+00:10:24.480 --> 00:10:25.440
+atau rute pelanggan yang sama.
+
+00:10:25.840 --> 00:10:27.040
+Sistem mengelompokkan pekerjaan tersebut
+
+00:10:27.040 --> 00:10:28.180
+sebelum orang mulai melakukan pengiriman.
+
+00:10:28.300 --> 00:10:29.080
+Bayangkan sebuah gelombang
+
+00:10:29.080 --> 00:10:30.160
+seperti menyiapkan daftar tugas
+
+00:10:30.160 --> 00:10:30.920
+sebelum Anda meninggalkan.
+
+00:10:31.580 --> 00:10:33.180
+Anda tidak akan pergi ke supermarket,
+
+00:10:33.340 --> 00:10:33.900
+kembali ke rumah,
+
+00:10:34.120 --> 00:10:35.140
+lalu pergi lagi ke apotek
+
+00:10:35.140 --> 00:10:36.540
+jika keduanya berada di rute yang sama.
+
+00:10:37.040 --> 00:10:38.180
+Anda mengelompokkan pekerjaan
+
+00:10:38.180 --> 00:10:38.920
+agar orang menghabiskan
+
+00:10:44.060 --> 00:10:45.020
+mengikuti aturan yang dipilih
+
+00:10:45.020 --> 00:10:45.460
+selama penyiapan.
+
+00:10:45.880 --> 00:10:46.920
+Sistem mungkin membuat tugas
+
+00:10:46.920 --> 00:10:47.860
+pengambilan terlebih dahulu,
+
+00:10:47.980 --> 00:10:49.140
+kemudian tugas untuk memindahkan
+
+00:10:49.140 --> 00:10:50.200
+barang ke area pengemasan
+
+00:10:50.200 --> 00:10:51.080
+dan terakhir tugas untuk
+
+00:10:51.080 --> 00:10:51.940
+menyiapkan pengiriman
+
+00:10:51.940 --> 00:10:52.860
+di pintu dok yang tepat.
+
+00:10:53.840 --> 00:10:55.200
+Pekerja melihat tindakan berikutnya
+
+00:10:55.200 --> 00:10:56.140
+pada perangkat genggam
+
+00:10:56.140 --> 00:10:57.500
+alih-alih mencoba menafsirkan
+
+00:10:57.500 --> 00:10:58.560
+daftar kertas yang panjang.
+
+00:10:58.960 --> 00:11:00.060
+Perangkat dapat meminta pekerja
+
+00:11:00.060 --> 00:11:01.220
+untuk memindah lokasi terlebih dahulu.
+
+00:11:01.580 --> 00:11:02.400
+Hal itu memastikan mereka
+
+00:11:02.400 --> 00:11:02.980
+telah mencapai rak
+
+00:11:02.980 --> 00:11:03.620
+atau tempat penyimpanan.
+
+00:11:03.780 --> 00:11:04.820
+Selanjutnya, mereka memindah produk
+
+00:11:04.820 --> 00:11:05.720
+lalu mengonfirmasi jumlah.
+
+00:11:06.260 --> 00:11:07.160
+Jika pekerja memindahi
+
+00:11:07.160 --> 00:11:07.700
+barang yang salah,
+
+00:11:07.860 --> 00:11:08.960
+sistem dapat menghentikan tugas
+
+00:11:08.960 --> 00:11:09.640
+sebelum barang tersebut
+
+00:11:09.640 --> 00:11:10.240
+masuk ke dalam kot.
+
+00:11:10.480 --> 00:11:11.160
+Pemeriksaan kecil
+
+00:11:11.160 --> 00:11:11.900
+menjaga kesalahan besar.
+
+00:11:12.440 --> 00:11:13.360
+Untuk pesanan sederhana,
+
+00:11:13.500 --> 00:11:14.400
+satu orang mungkin mengambil
+
+00:11:14.400 --> 00:11:15.740
+setiap barang untuk satu pelanggan
+
+00:11:15.740 --> 00:11:16.780
+dan membawanya ke pengemasan.
+
+00:11:17.420 --> 00:11:18.440
+Namun, gudang dengan banyak
+
+00:11:18.440 --> 00:11:19.100
+pesanan kecil mungkin
+
+00:11:19.100 --> 00:11:19.680
+menggunakan pengambilan
+
+00:11:19.680 --> 00:11:20.420
+berkelompok kaos terbik.
+
+00:11:20.840 --> 00:11:21.660
+Pengambilan berkelompok
+
+00:11:21.660 --> 00:11:22.620
+memungkinkan satu pekerja
+
+00:11:22.620 --> 00:11:23.380
+mengumpulkan barang
+
+00:11:23.380 --> 00:11:24.060
+untuk beberapa pesanan
+
+00:11:24.060 --> 00:11:25.100
+selama perjalanan yang sama di gudang.
+
+00:11:25.480 --> 00:11:26.520
+Pekerja dapat menggunakan kereta
+
+00:11:26.520 --> 00:11:27.280
+dengan badan terpisah
+
+00:11:27.280 --> 00:11:28.020
+yang masing-masing terkait
+
+00:11:35.720 --> 00:11:36.160
+pesanan pelanggan
+
+00:11:36.160 --> 00:11:37.360
+tanpa mencampur pesanan tersebut.
+
+00:11:37.740 --> 00:11:38.440
+Setelah pengambilan,
+
+00:11:38.560 --> 00:11:39.080
+barang dipindahkan
+
+00:11:39.080 --> 00:11:39.840
+ke bagian pengemasan.
+
+00:11:40.260 --> 00:11:40.840
+Bagian pengemasan
+
+00:11:40.840 --> 00:11:41.440
+mengonfirmasi apa
+
+00:11:41.440 --> 00:11:42.740
+yang masuk ke setiap kotak karton.
+
+00:11:43.180 --> 00:11:44.360
+Gudang dapat mencatat wadah
+
+00:11:44.360 --> 00:11:45.120
+yang menampung barang,
+
+00:11:45.300 --> 00:11:45.880
+mencetak webel,
+
+00:11:46.000 --> 00:11:46.860
+dan menyiapkan pengiriman
+
+00:11:46.860 --> 00:11:47.460
+untuk diambil.
+
+00:11:48.180 --> 00:11:48.920
+Langkah ini penting
+
+00:11:48.920 --> 00:11:49.420
+karena pelanggan
+
+00:11:49.420 --> 00:11:50.720
+tidak menerima tugas gudang.
+
+00:11:51.520 --> 00:11:52.240
+Mereka menerima paket
+
+00:11:52.240 --> 00:11:53.060
+dan paket tersebut
+
+00:11:53.060 --> 00:11:54.040
+harus memiliki isi yang benar
+
+00:11:54.040 --> 00:11:55.180
+serta detail pengiriman yang tepat.
+
+00:11:55.580 --> 00:11:56.200
+Beberapa barang
+
+00:11:56.200 --> 00:11:57.200
+tidak perlu disimpan lama
+
+00:11:57.200 --> 00:11:57.780
+di rak gudang.
+
+00:11:58.400 --> 00:11:59.120
+Bayangkan pelanggan
+
+00:11:59.120 --> 00:11:59.800
+menunggu produk
+
+00:11:59.800 --> 00:12:00.940
+yang datang dari pemasok
+
+00:12:00.940 --> 00:12:01.860
+pada pagi hari itu.
+
+00:12:02.640 --> 00:12:03.360
+Alih-alih menerimanya,
+
+00:12:03.440 --> 00:12:04.540
+menyimpannya dalam jumlah besar,
+
+00:12:04.720 --> 00:12:05.500
+dan mengambil lagi nanti
+
+00:12:05.500 --> 00:12:06.220
+gudang dapat menggunakan
+
+00:12:06.220 --> 00:12:06.800
+cross-docking.
+
+00:12:07.440 --> 00:12:08.360
+Cross-docking mengarahkan
+
+00:12:08.360 --> 00:12:08.840
+stok yang masuk
+
+00:12:08.840 --> 00:12:09.740
+menuju pengiriman keluar
+
+00:12:09.740 --> 00:12:10.380
+dengan sedikit atau
+
+00:12:10.380 --> 00:12:11.100
+tanpa penyimpanan
+
+00:12:11.100 --> 00:12:12.060
+jangka panjang di antaranya.
+
+00:12:12.320 --> 00:12:13.260
+Penanganan yang lebih sedikit
+
+00:12:13.260 --> 00:12:14.280
+berarti lebih sedikit peluang
+
+00:12:14.280 --> 00:12:15.440
+untuk menaruh sesuatu di tempatnya.
+
+00:12:15.580 --> 00:12:16.260
+Pengiriman kemudian
+
+00:12:16.260 --> 00:12:17.160
+mencapai area persiapan
+
+00:12:17.160 --> 00:12:17.740
+dan dokum kemuatan.
+
+00:12:18.200 --> 00:12:19.140
+Saat gudang mengonfirmasi
+
+00:12:19.140 --> 00:12:19.920
+pekerjaan keluar,
+
+00:12:20.120 --> 00:12:20.740
+Dynamics 365
+
+00:12:20.740 --> 00:12:21.900
+berbarui proses pesanan
+
+00:12:21.900 --> 00:12:22.460
+yang lebih luas.
+
+00:12:22.980 --> 00:12:23.820
+Stok tidak lagi tersedia
+
+00:12:23.820 --> 00:12:24.500
+dengan cara yang sama.
+
+00:12:25.140 --> 00:12:25.760
+Pesanan penjualan
+
+00:12:25.760 --> 00:12:26.320
+terus berlanjut,
+
+00:12:26.620 --> 00:12:27.320
+dan pekerjaan terkait
+
+00:12:27.320 --> 00:12:28.360
+transportasi dapat menggunakan
+
+00:12:28.360 --> 00:12:29.040
+detail pengiriman terus.
+
+00:12:29.440 --> 00:12:30.300
+Ini bukan sekadar kotak
+
+00:12:30.300 --> 00:12:30.880
+yang keluar dari gedung.
+
+00:12:31.600 --> 00:12:32.520
+Tindakan gudang terhubung
+
+00:12:32.520 --> 00:12:33.720
+dengan janji kepada pelanggan,
+
+00:12:33.940 --> 00:12:34.520
+catatan stok,
+
+00:12:34.840 --> 00:12:35.580
+dan langkah selanjutnya
+
+00:12:35.580 --> 00:12:36.380
+agar pesanan sampai
+
+00:12:36.380 --> 00:12:37.260
+ke kendaraan yang tepat.
+
+00:12:37.840 --> 00:12:38.680
+Namun, pesanan pelanggan
+
+00:12:38.680 --> 00:12:39.760
+hanyalah bagian dari kehidupan
+
+00:12:39.760 --> 00:12:40.420
+gudang sehari-hari
+
+00:12:40.420 --> 00:12:41.300
+karena stok juga butuh
+
+00:12:41.300 --> 00:12:42.220
+perhatian saat menunggu.
+
+00:12:44.100 --> 00:12:44.620
+Pengendalian,
+
+00:12:44.960 --> 00:12:45.440
+pemindahan,
+
+00:12:45.540 --> 00:12:45.960
+penghitungan,
+
+00:12:46.020 --> 00:12:46.860
+dan perlindungan stok hari.
+
+00:12:46.860 --> 00:12:48.280
+Stok tidak diam begitu saja,
+
+00:12:48.560 --> 00:12:49.680
+hanya karena sudah sampai di rak.
+
+00:12:50.540 --> 00:12:51.900
+Gudang mungkin memindahkan produk
+
+00:12:51.900 --> 00:12:53.380
+karena area pengambilan putu ruang,
+
+00:12:53.740 --> 00:12:54.440
+barang yang cepat laku
+
+00:12:54.440 --> 00:12:55.760
+harus lebih dekat ke pengemasan,
+
+00:12:56.080 --> 00:12:56.800
+atau palet besar
+
+00:12:56.800 --> 00:12:58.320
+harus pindah dari area sementara.
+
+00:12:58.900 --> 00:12:59.620
+Dynamics 365
+
+00:12:59.620 --> 00:13:01.160
+mencatat pergerakan internal ini
+
+00:13:01.160 --> 00:13:02.280
+agar sistem terus sesuai
+
+00:13:02.280 --> 00:13:03.260
+dengan kondisi fisik gudang
+
+00:13:03.260 --> 00:13:04.160
+setelah setiap perpindahan.
+
+00:13:04.960 --> 00:13:05.780
+Tanpa catatan itu,
+
+00:13:06.100 --> 00:13:07.060
+barang mungkin ada di sistem
+
+00:13:07.060 --> 00:13:07.700
+tetapi hilang
+
+00:13:07.700 --> 00:13:09.140
+bagi pekerja yang membutuhkannya.
+
+00:13:09.740 --> 00:13:10.440
+Penghitungan penting
+
+00:13:10.440 --> 00:13:11.060
+karena alasan yang sama.
+
+00:13:11.620 --> 00:13:12.280
+Kebanyakan orang
+
+00:13:12.280 --> 00:13:13.440
+membayangkan inventarisasi
+
+00:13:13.440 --> 00:13:14.420
+sebagai penutupan total
+
+00:13:14.420 --> 00:13:15.280
+dengan staf menghitung
+
+00:13:15.280 --> 00:13:16.340
+setiap rak dan setiap box
+
+00:13:16.860 --> 00:13:17.240
+normal berat.
+
+00:13:17.440 --> 00:13:18.220
+Hal itu bisa terjadi,
+
+00:13:18.320 --> 00:13:18.900
+tetapi banyak gudang
+
+00:13:18.900 --> 00:13:20.200
+menggunakan penghitungan siklus sebagainya.
+
+00:13:20.500 --> 00:13:21.500
+Mereka menghitung lokasi
+
+00:13:21.500 --> 00:13:22.320
+atau produk tertentu
+
+00:13:22.320 --> 00:13:23.020
+secara terjadwal
+
+00:13:23.020 --> 00:13:24.260
+sementara bagian gudang lainnya
+
+00:13:24.260 --> 00:13:25.120
+tetap beroperasi.
+
+00:13:25.780 --> 00:13:26.380
+Mungkin satu lorong
+
+00:13:26.380 --> 00:13:27.020
+dihitung minggu ini.
+
+00:13:27.480 --> 00:13:28.540
+Mungkin barang yang cepat laku
+
+00:13:28.540 --> 00:13:29.220
+dihitung lebih sering
+
+00:13:29.220 --> 00:13:29.980
+karena berpindah tangan
+
+00:13:29.980 --> 00:13:30.500
+sepanjang hari.
+
+00:13:31.260 --> 00:13:32.260
+Suku cadang bernilai tinggi
+
+00:13:32.260 --> 00:13:33.400
+mungkin juga perlu pemeriksaan
+
+00:13:33.400 --> 00:13:34.180
+lebih sering daripada
+
+00:13:34.180 --> 00:13:35.100
+karton selotip murah.
+
+00:13:35.900 --> 00:13:37.460
+Sistem dapat membuat tugas penghitungan
+
+00:13:37.460 --> 00:13:38.220
+dan mengirimkannya
+
+00:13:38.220 --> 00:13:39.000
+ke perangkat seluler
+
+00:13:39.000 --> 00:13:40.220
+seperti tugas gudang lainnya.
+
+00:13:40.220 --> 00:13:41.680
+Pekerja pergi ke lokasi,
+
+00:13:42.000 --> 00:13:42.460
+memindainya,
+
+00:13:42.620 --> 00:13:43.660
+dan memasukkan jumlah fisik
+
+00:13:43.660 --> 00:13:44.140
+yang terlihat.
+
+00:13:44.700 --> 00:13:45.580
+Dynamics 365
+
+00:13:45.580 --> 00:13:46.720
+membandingkan angka tersebut
+
+00:13:46.720 --> 00:13:47.600
+dengan jumlah yang tercatat.
+
+00:13:48.040 --> 00:13:49.000
+Jika kedua angka cocok,
+
+00:13:49.100 --> 00:13:49.780
+penghitungan selesai.
+
+00:13:50.260 --> 00:13:50.960
+Jika berbeda,
+
+00:13:51.120 --> 00:13:52.080
+gudang dapat menyelidiki
+
+00:13:52.080 --> 00:13:52.760
+sebelum ada yang
+
+00:13:52.760 --> 00:13:53.720
+mengubah catatan stok.
+
+00:13:54.300 --> 00:13:54.820
+Mungkin ada sesuatu
+
+00:13:54.820 --> 00:13:55.620
+yang belum pindah tangan dipindahkan.
+
+00:13:55.960 --> 00:13:56.400
+Mungkin ada barang
+
+00:13:56.400 --> 00:13:57.160
+yang letakkan box yang salah.
+
+00:13:57.780 --> 00:13:58.800
+Mungkin penghitungan sebelumnya
+
+00:13:58.800 --> 00:13:59.560
+mengandung kesalahan.
+
+00:13:59.840 --> 00:14:00.840
+Perbedaan harus dijelaskan.
+
+00:14:01.640 --> 00:14:02.480
+Ketika jumlah fisik
+
+00:14:02.480 --> 00:14:03.460
+dan sistem tidak cocok,
+
+00:14:03.600 --> 00:14:04.500
+penyesuaian inventaris
+
+00:14:04.500 --> 00:14:05.240
+yang disetujui
+
+00:14:05.240 --> 00:14:06.540
+akan memperbaiki catatan.
+
+00:14:07.320 --> 00:14:08.140
+Kontrol itu penting
+
+00:14:08.140 --> 00:14:09.080
+karena penyesuaian
+
+00:14:09.080 --> 00:14:09.660
+mengubah apa yang
+
+00:14:09.660 --> 00:14:10.420
+diyakini perusahaan
+
+00:14:10.420 --> 00:14:11.120
+sebagai miliknya.
+
+00:14:11.680 --> 00:14:12.380
+Ini tidak boleh menjadi
+
+00:14:12.380 --> 00:14:12.860
+jalan pintas
+
+00:14:12.860 --> 00:14:13.440
+untuk menghindari
+
+00:14:13.440 --> 00:14:14.220
+pekerjaan gudang yang salah.
+
+00:14:14.560 --> 00:14:15.320
+Ratur juga membutuhkan
+
+00:14:15.320 --> 00:14:15.800
+perhatian yang salah.
+
+00:14:16.180 --> 00:14:16.720
+Pelanggan mungkin
+
+00:14:16.720 --> 00:14:17.580
+mengembalikan produk
+
+00:14:17.580 --> 00:14:18.300
+yang belum dibuka,
+
+00:14:18.820 --> 00:14:19.300
+barang rusak,
+
+00:14:19.460 --> 00:14:20.020
+atau sesuatu
+
+00:14:20.020 --> 00:14:21.120
+yang perlu diuji.
+
+00:14:22.320 --> 00:14:23.300
+Gudang menerima ratur tersebut
+
+00:14:23.300 --> 00:14:24.180
+dan memeriksa kondisinya.
+
+00:14:24.660 --> 00:14:25.440
+Tergantung hasilnya,
+
+00:14:25.540 --> 00:14:26.660
+pekerja dapat mengembalikannya
+
+00:14:26.660 --> 00:14:27.340
+ke stok tersedia,
+
+00:14:27.480 --> 00:14:28.260
+mengirimnya ke karantina,
+
+00:14:28.340 --> 00:14:29.360
+memindahkannya untuk perbaikan
+
+00:14:29.360 --> 00:14:30.080
+atau menghapusnya
+
+00:14:30.080 --> 00:14:30.980
+dari stok yang dapat digunakan.
+
+00:14:31.300 --> 00:14:31.940
+Kondisi menentukan
+
+00:14:31.940 --> 00:14:32.600
+langkah selanjutnya.
+
+00:14:33.160 --> 00:14:33.860
+Manajemen kualitas
+
+00:14:33.860 --> 00:14:34.480
+terhubung langsung
+
+00:14:34.480 --> 00:14:35.200
+dengan pekerjaan ini.
+
+00:14:35.600 --> 00:14:36.440
+Pemeriksaan kualitas
+
+00:14:36.440 --> 00:14:37.320
+dapat menahan stok
+
+00:14:37.320 --> 00:14:38.340
+dari pengiriman pemasok
+
+00:14:38.340 --> 00:14:39.360
+retur atau proses gudang
+
+00:14:39.360 --> 00:14:40.040
+hingga seseorang
+
+00:14:40.040 --> 00:14:40.660
+menyetujuinya.
+
+00:14:41.280 --> 00:14:42.280
+Hal itu mencegah barang
+
+00:14:42.280 --> 00:14:43.140
+yang meragukan masuk
+
+00:14:43.140 --> 00:14:44.500
+ke produksi atau pengiriman pelanggan
+
+00:14:44.500 --> 00:14:45.640
+hanya karena posisinya
+
+00:14:45.640 --> 00:14:47.180
+berdekatan dengan stok normal.
+
+00:14:47.840 --> 00:14:48.380
+Semua tugas ini
+
+00:14:48.380 --> 00:14:49.060
+berjalan lebih baik
+
+00:14:49.060 --> 00:14:49.920
+jika dicatat langsung
+
+00:14:49.920 --> 00:14:50.840
+saat pekerjaan dilakukan.
+
+00:14:51.360 --> 00:14:52.280
+Pemindahian kode batang
+
+00:14:52.280 --> 00:14:52.840
+tidak menangkap
+
+00:14:52.840 --> 00:14:54.080
+informasi barang, lokasi,
+
+00:14:54.540 --> 00:14:54.840
+wadah,
+
+00:14:54.840 --> 00:14:56.060
+atau kuantitas saat pekerja
+
+00:14:56.060 --> 00:14:56.780
+menanganinya.
+
+00:14:57.380 --> 00:14:58.260
+Tidak ada catatan kertas
+
+00:14:58.260 --> 00:14:59.040
+yang tersimpan di saku
+
+00:14:59.040 --> 00:14:59.480
+untuk nanti.
+
+00:14:59.980 --> 00:15:00.780
+Tidak ada langkah kedua
+
+00:15:00.780 --> 00:15:01.560
+di mana seseorang
+
+00:15:01.560 --> 00:15:02.220
+mencoba mengingat
+
+00:15:02.220 --> 00:15:03.040
+apakah palet dipindahkan
+
+00:15:03.040 --> 00:15:04.140
+sebelum atau sudah makan siang.
+
+00:15:04.720 --> 00:15:05.380
+Menjadi catatannya.
+
+00:15:05.980 --> 00:15:06.640
+Label memungkinkan
+
+00:15:06.640 --> 00:15:07.220
+pemindahan tersebut.
+
+00:15:07.700 --> 00:15:08.720
+Gudang dapat mencetak label
+
+00:15:08.720 --> 00:15:09.520
+yang dapat dipindahi
+
+00:15:09.520 --> 00:15:10.420
+untuk barang, lokasi,
+
+00:15:10.520 --> 00:15:11.380
+palet, dan wadah
+
+00:15:11.380 --> 00:15:12.100
+termasuk label
+
+00:15:12.100 --> 00:15:12.720
+yang menggunakan
+
+00:15:12.720 --> 00:15:14.000
+Zebra Programming Language
+
+00:15:14.000 --> 00:15:15.280
+yang sering disebut ZPL.
+
+00:15:16.060 --> 00:15:16.600
+Secara sederhana
+
+00:15:16.600 --> 00:15:17.680
+itu berarti sistem dapat
+
+00:15:17.680 --> 00:15:18.640
+mengirim instruksi label
+
+00:15:18.640 --> 00:15:19.820
+ke printer zebra yang didukung
+
+00:15:19.820 --> 00:15:20.160
+sehingga
+
+00:15:20.160 --> 00:15:21.460
+dapat membuat ID
+
+00:15:21.460 --> 00:15:22.380
+yang dipahami pemindai.
+
+00:15:23.700 --> 00:15:24.560
+Label yang jelas
+
+00:15:24.560 --> 00:15:25.520
+memberikan alamat digital
+
+00:15:25.520 --> 00:15:26.620
+pada stok fisik yang penting
+
+00:15:26.620 --> 00:15:27.280
+saat pemindahan,
+
+00:15:27.400 --> 00:15:28.300
+perhitungan, pengembalian,
+
+00:15:28.420 --> 00:15:29.420
+atau pemeriksaan kualitas.
+
+00:15:30.040 --> 00:15:30.860
+Setiap tindakan di lapangan
+
+00:15:30.860 --> 00:15:32.360
+dapat memperbarui catatan yang sama
+
+00:15:32.360 --> 00:15:33.560
+yang digunakan staf kantor
+
+00:15:33.560 --> 00:15:34.360
+dan koneksi itu
+
+00:15:34.360 --> 00:15:35.080
+mengubah lebih dari
+
+00:15:35.080 --> 00:15:35.980
+sekadar akurasi gudang.
+
+00:15:37.100 --> 00:15:38.080
+Satu platform yang terhubung.
+
+00:15:38.740 --> 00:15:39.120
+Apa yang membuat
+
+00:15:39.120 --> 00:15:40.220
+Dynamics 3D berbeda?
+
+00:15:41.140 --> 00:15:41.840
+Beberapa sistem gudang
+
+00:15:41.840 --> 00:15:42.700
+terpisah dari bagian
+
+00:15:42.700 --> 00:15:43.300
+bisnis lainnya.
+
+00:15:43.660 --> 00:15:44.340
+Seseorang memasukkan
+
+00:15:44.340 --> 00:15:44.840
+pesanan pembelian
+
+00:15:44.840 --> 00:15:45.320
+di satu sistem.
+
+00:15:45.960 --> 00:15:47.080
+Staf gudang melacak pengiriman
+
+00:15:47.080 --> 00:15:47.780
+di tempat lain.
+
+00:15:47.780 --> 00:15:49.200
+Nanti seseorang
+
+00:15:49.200 --> 00:15:50.180
+akan menyalin informasi
+
+00:15:50.180 --> 00:15:51.080
+atau mencoba memperbaiki
+
+00:15:51.080 --> 00:15:51.840
+perbedaan di antara
+
+00:15:51.840 --> 00:15:52.620
+kedua catatan tersebut.
+
+00:15:53.140 --> 00:15:53.900
+Hal itu menciptakan
+
+00:15:53.900 --> 00:15:55.140
+penundaan pekerjaan ganda
+
+00:15:55.140 --> 00:15:55.880
+dan perdebatan
+
+00:15:55.880 --> 00:15:56.460
+tentang angka mana
+
+00:15:56.460 --> 00:15:57.060
+yang harus dipercaya.
+
+00:15:57.520 --> 00:15:59.280
+Manajemen gudang Dynamics 365
+
+00:15:59.280 --> 00:16:00.140
+bekerja di dalam
+
+00:16:00.140 --> 00:16:01.200
+manajemen rantai pasokan
+
+00:16:01.200 --> 00:16:02.180
+Dynamics 365.
+
+00:16:03.000 --> 00:16:03.900
+Pembelian, penjualan,
+
+00:16:03.980 --> 00:16:04.800
+transfer, produksi,
+
+00:16:04.940 --> 00:16:05.820
+kualitas, pengembalian,
+
+00:16:05.900 --> 00:16:06.980
+dan transportasi semuanya
+
+00:16:06.980 --> 00:16:07.560
+dapat terhubung
+
+00:16:07.560 --> 00:16:08.680
+ke catatan bisnis yang sama.
+
+00:16:09.140 --> 00:16:09.700
+Gudang melakukan
+
+00:16:09.700 --> 00:16:10.520
+pekerjaan fisiknya
+
+00:16:10.520 --> 00:16:11.520
+tetapi pekerjaan itu
+
+00:16:11.520 --> 00:16:12.280
+tidak terisolasi
+
+00:16:12.280 --> 00:16:12.920
+di sudut terpisah
+
+00:16:12.920 --> 00:16:13.760
+yang hanya bisa dilihat oleh
+
+00:16:13.760 --> 00:16:14.200
+staf gudang.
+
+00:16:14.680 --> 00:16:15.640
+Bayangkan pesan pelanggan tiba.
+
+00:16:16.320 --> 00:16:16.820
+Tim penjualan
+
+00:16:16.820 --> 00:16:17.700
+memasukkan pesanan tersebut.
+
+00:16:18.000 --> 00:16:18.460
+Gudang membuat
+
+00:16:18.460 --> 00:16:19.040
+dan menyelesaikan
+
+00:16:19.040 --> 00:16:19.800
+pekerjaan pengambilan.
+
+00:16:20.500 --> 00:16:21.520
+Saat pengiriman dilanjutkan,
+
+00:16:21.620 --> 00:16:22.480
+catatan stok berubah
+
+00:16:22.480 --> 00:16:23.400
+dan transaksi keuangan
+
+00:16:23.400 --> 00:16:23.980
+dapat mengikuti
+
+00:16:23.980 --> 00:16:24.960
+peristiwa bisnis yang sama.
+
+00:16:25.360 --> 00:16:25.980
+Orang-orang tidak perlu
+
+00:16:25.980 --> 00:16:26.900
+mengetik ulang pengiriman.
+
+00:16:27.260 --> 00:16:28.120
+Yang selesai ke sistem lain
+
+00:16:28.120 --> 00:16:28.880
+hanya untuk memberitahu
+
+00:16:28.880 --> 00:16:29.480
+bagian keuangan
+
+00:16:29.480 --> 00:16:30.380
+bahwa barang telah keluar.
+
+00:16:30.660 --> 00:16:31.240
+Setiap tim melihat
+
+00:16:31.240 --> 00:16:32.340
+bagiannya dari cerita yang sama.
+
+00:16:32.620 --> 00:16:33.600
+Tim pembelian dapat melihat
+
+00:16:33.600 --> 00:16:34.680
+apakah barang yang diharapkan
+
+00:16:34.680 --> 00:16:35.060
+telah tiba.
+
+00:16:35.440 --> 00:16:36.500
+Tim penjualan dapat melihat
+
+00:16:36.500 --> 00:16:37.280
+apakah pesanan telah
+
+00:16:37.280 --> 00:16:38.020
+melalui proses gudang.
+
+00:16:38.300 --> 00:16:39.220
+Tim produksi dapat bekerja
+
+00:16:39.220 --> 00:16:39.920
+dengan catatan bahan
+
+00:16:39.920 --> 00:16:40.420
+dan barang juga.
+
+00:16:40.860 --> 00:16:41.660
+Manager dapat melihat
+
+00:16:41.660 --> 00:16:42.280
+di mana pekerjaan
+
+00:16:42.280 --> 00:16:42.860
+menumpuk alih-alih
+
+00:16:42.860 --> 00:16:43.680
+mengumpulkan pembaruan
+
+00:16:43.680 --> 00:16:44.480
+dari alat yang terpisah.
+
+00:16:44.840 --> 00:16:45.520
+Pandangan bersama itu
+
+00:16:45.520 --> 00:16:46.220
+sering disebut sebagai
+
+00:16:46.220 --> 00:16:46.860
+sumber kebenaran tunggal.
+
+00:16:47.260 --> 00:16:48.300
+Artinya, tim kantor
+
+00:16:48.300 --> 00:16:49.080
+dan tim gudang
+
+00:16:49.080 --> 00:16:50.280
+melihat pesanan yang sama
+
+00:16:50.280 --> 00:16:51.460
+dan gambaran stok yang sama.
+
+00:16:52.040 --> 00:16:52.460
+Mereka mungkin
+
+00:16:52.460 --> 00:16:53.420
+menggunakan layar berbeda
+
+00:16:53.420 --> 00:16:54.460
+dan menanyakan hal berbeda.
+
+00:16:54.580 --> 00:16:55.360
+Tetapi mereka tidak boleh
+
+00:16:55.360 --> 00:16:56.440
+bekerja dengan versi fakta
+
+00:16:56.440 --> 00:16:57.020
+yang bertentangan.
+
+00:16:57.660 --> 00:16:58.580
+PowerB dapat menggunakan
+
+00:16:58.580 --> 00:16:59.420
+data yang terhubung tersebut
+
+00:16:59.420 --> 00:17:00.020
+untuk pelaporan.
+
+00:17:00.020 --> 00:17:01.440
+Seorang manajer mungkin
+
+00:17:01.440 --> 00:17:02.440
+melacak akurasi pesanan,
+
+00:17:02.680 --> 00:17:03.240
+waktu pemenuhan,
+
+00:17:03.380 --> 00:17:03.840
+tingkat stok,
+
+00:17:03.920 --> 00:17:04.660
+dan beban kerja gudang.
+
+00:17:05.480 --> 00:17:06.180
+Jika satu area
+
+00:17:06.180 --> 00:17:06.860
+sering melambat,
+
+00:17:06.980 --> 00:17:07.500
+data dapat
+
+00:17:07.500 --> 00:17:09.040
+menunjukkan masalahnya.
+
+00:17:10.480 --> 00:17:11.140
+Pertanyaan berikutnya
+
+00:17:11.140 --> 00:17:11.700
+menjadi praktek.
+
+00:17:11.960 --> 00:17:12.740
+Apakah terletak lokasi
+
+00:17:12.740 --> 00:17:13.740
+menyebabkan terlalu banyak perjalan?
+
+00:17:14.160 --> 00:17:15.040
+Apakah satu tim kelebihan?
+
+00:17:15.460 --> 00:17:16.360
+Apakah area pengambilan
+
+00:17:16.360 --> 00:17:17.280
+terlalu sering gabisan stok?
+
+00:17:17.740 --> 00:17:18.860
+Sistem mencatat pekerjaan tersebut
+
+00:17:18.860 --> 00:17:19.680
+sehingga manajer dapat
+
+00:17:19.680 --> 00:17:20.160
+mencari pun.
+
+00:17:20.760 --> 00:17:21.540
+Beberapa istilah
+
+00:17:21.540 --> 00:17:22.460
+pengaturan mendasari
+
+00:17:22.460 --> 00:17:23.500
+instruksi harian tersebut
+
+00:17:23.500 --> 00:17:24.640
+dan penting untuk memahaminya.
+
+00:17:25.800 --> 00:17:26.320
+Arahan lokasi
+
+00:17:26.320 --> 00:17:27.160
+menentukan kemana stok
+
+00:17:27.160 --> 00:17:27.620
+harus pergi
+
+00:17:27.620 --> 00:17:28.380
+atau dari mana asalnya.
+
+00:17:28.800 --> 00:17:29.280
+Tempat kerja
+
+00:17:29.280 --> 00:17:30.060
+membentuk langkah-langkah
+
+00:17:30.060 --> 00:17:31.420
+yang perlu diselesaikan pekerjaan.
+
+00:17:31.440 --> 00:17:32.100
+Gelombang merilis
+
+00:17:32.100 --> 00:17:33.040
+kelompok pekerjaan keluar
+
+00:17:33.040 --> 00:17:33.820
+pada waktu yang tepat.
+
+00:17:34.380 --> 00:17:35.160
+Aturan-aturan tersebut
+
+00:17:35.160 --> 00:17:35.700
+membuat perintah
+
+00:17:35.700 --> 00:17:36.240
+yang dilihat pekerja
+
+00:17:36.240 --> 00:17:36.860
+di perangkat mereka.
+
+00:17:37.240 --> 00:17:37.700
+Itu juga berarti
+
+00:17:37.700 --> 00:17:38.820
+pengaturannya memerlukan keteritian.
+
+00:17:39.100 --> 00:17:39.880
+Jika aturan lokasi
+
+00:17:39.880 --> 00:17:41.160
+mengarahkan stok ke area yang salah,
+
+00:17:41.580 --> 00:17:42.400
+pemindai akan dengan setia
+
+00:17:42.400 --> 00:17:43.320
+mengarahkan pekerja ke sana.
+
+00:17:43.820 --> 00:17:44.520
+Jika langkah kerja
+
+00:17:44.520 --> 00:17:45.240
+tidak sesuai dengan
+
+00:17:45.240 --> 00:17:46.340
+cara gudang beroperasi,
+
+00:17:46.460 --> 00:17:46.980
+perangkat dapat
+
+00:17:46.980 --> 00:17:47.680
+menambah hambatan
+
+00:17:47.680 --> 00:17:48.720
+alih-alih menghilangkannya.
+
+00:17:49.220 --> 00:17:49.780
+Sistem mengikuti
+
+00:17:49.780 --> 00:17:50.700
+aturan yang diterimanya.
+
+00:17:51.260 --> 00:17:51.820
+Ketika aturan
+
+00:17:51.820 --> 00:17:52.780
+sesuai dengan bangunan,
+
+00:17:52.920 --> 00:17:53.800
+produk, dan orang-orang
+
+00:17:53.800 --> 00:17:54.260
+di lapangan,
+
+00:17:54.380 --> 00:17:55.180
+setiap pemindahan berubah
+
+00:17:55.180 --> 00:17:56.020
+menjadi peristiwa bisnis
+
+00:17:56.020 --> 00:17:56.480
+yang berguna.
+
+00:17:56.680 --> 00:17:57.480
+Bukan sekadar bunyi bip
+
+00:17:57.480 --> 00:17:58.420
+dari perangkat genggam.
+
+00:17:59.820 --> 00:18:00.220
+Kesimpulan
+
+00:18:00.220 --> 00:18:01.460
+Panduran digital
+
+00:18:01.460 --> 00:18:02.660
+tentang dinamika lantai gudang.
+
+00:18:03.360 --> 00:18:04.500
+Manajemen gudang 310
+
+00:18:04.500 --> 00:18:05.560
+memberikan tugas terpandu
+
+00:18:05.560 --> 00:18:06.520
+kepada pekerja gudang,
+
+00:18:06.960 --> 00:18:07.780
+sementara setiap tugas
+
+00:18:07.780 --> 00:18:08.240
+yang selesai
+
+00:18:08.240 --> 00:18:09.120
+menjadi bagian dari
+
+00:18:09.120 --> 00:18:10.120
+catatan bisnis yang lebih luas.
+
+00:18:10.720 --> 00:18:11.720
+Jika informasi singkat ini
+
+00:18:11.720 --> 00:18:12.600
+memperjelas perbedaan
+
+00:18:12.600 --> 00:18:13.500
+antara catatan stok
+
+00:18:13.500 --> 00:18:14.400
+dan pekerjaan gudang,
+
+00:18:14.520 --> 00:18:15.360
+berlanggananlah di saluran
+
+00:18:15.360 --> 00:18:16.280
+M365FM
+
+00:18:16.280 --> 00:18:16.860
+favorit Anda.
+
+00:18:17.060 --> 00:18:18.160
+Lalu tonton episode berikutnya
+
+00:18:18.160 --> 00:18:19.300
+tentang manajemen inventaris
+
+00:18:19.300 --> 00:18:19.680
+dinamik,
+
+00:18:19.740 --> 00:18:19.980
+dinamik,
+
+00:18:20.020 --> 00:18:20.260
+dinamik,
+
+00:18:20.320 --> 00:18:20.600
+dinamik,
+
+00:18:20.600 --> 00:18:22.160
+dengan tempat penyimpanannya
+
+00:18:22.160 --> 00:18:22.560
+di gudang.

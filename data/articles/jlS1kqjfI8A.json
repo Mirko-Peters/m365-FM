@@ -81,6 +81,52 @@
      "Compliance-Berichte monatlich als festen Teil des Governance-Zyklus einplanen"
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Warum kann Copilot Inhalte liefern, auf die ein Benutzer eigentlich keinen Zugriff hätte?",
+    "opts": [
+     "Weil Copilot grundsätzlich alle Dateien im Tenant unverschlüsselt in einem Cache speichert",
+     "Weil über Microsoft Graph erteilte Berechtigungen, etwa auf Anwendungsebene, die Reichweite von Copilot bestimmen",
+     "Weil Copilot Benutzerrechte beim Abruf von Inhalten grundsätzlich nie auswertet",
+     "Weil Vertraulichkeitsbezeichnungen von Copilot technisch nicht gelesen werden können"
+    ],
+    "a": 1,
+    "why": "Die Reichweite hängt von den Graph-Berechtigungen ab. Anwendungsberechtigungen ignorieren individuelle Benutzerbeschränkungen, sofern sie nicht gezielt eingegrenzt werden."
+   },
+   {
+    "q": "Warum greifen klassische DLP-Richtlinien bei Copilot-Ausgaben oft nicht?",
+    "opts": [
+     "Copilot-Inhalte werden in Echtzeit erzeugt, ohne dass eine Datei versendet oder heruntergeladen wird",
+     "DLP-Richtlinien lassen sich in Microsoft Purview nicht für Teams konfigurieren",
+     "Copilot verschlüsselt alle Antworten, sodass DLP sie nicht lesen kann",
+     "DLP prüft ausschließlich Kreditkartennummern und keine anderen Informationstypen"
+    ],
+    "a": 0,
+    "why": "Klassische Regeln zielen auf Anhänge, USB-Downloads oder nicht genehmigte Apps. Copilot erzeugt Inhalt in Echtzeit und löst sie standardmäßig nicht aus."
+   },
+   {
+    "q": "Wie lassen sich Copilot-Datenzugriffe in Purview am besten nachverfolgen?",
+    "opts": [
+     "Mit allgemeinen Monitoring-Dashboards, die Aktivitäten möglichst grob bündeln",
+     "Durch Auswertung ausschließlich der Dateidownload-Berichte der Benutzer",
+     "Über die Audit-Protokollsuche mit gezielten Filtern, etwa nach der Copilot-Anwendungs-ID",
+     "Durch die Selbstauskunft der KI über ihre abgerufenen Quellen"
+    ],
+    "a": 2,
+    "why": "Die Audit-Funktion zeichnet Zugriffe auf, kennzeichnet KI aber nicht auffällig. Gezielte Filter rund um die Copilot-App-ID sind nötig."
+   },
+   {
+    "q": "Wie sollten Copilot-Zugriffe nach dem Rollenmodell mit Entra ID organisiert werden?",
+    "opts": [
+     "Alle Mitarbeiter erhalten einheitlich die gleichen Privilegien, um die Einführung zu beschleunigen",
+     "Nur Administratoren dürfen Copilot nutzen, alle anderen werden grundsätzlich gesperrt",
+     "Berechtigungen werden individuell pro Benutzer vergeben, ohne Gruppen zu verwenden",
+     "Sicherheitsgruppen entsprechend den Rollen erhalten Copilot-Berechtigungen und bestimmte Graph-API-Bereiche nach Bedarf"
+    ],
+    "a": 3,
+    "why": "Sicherheitsgruppen nach Rollen ermöglichen Berechtigungen auf Gruppenebene, etwa bestimmte Graph-API-Bereiche nur für Finanzen, statt einheitlich offener Aktivierung."
+   }
   ]
  }
 }

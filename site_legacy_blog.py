@@ -1,9 +1,10 @@
 """Die frueheren Podpage-Blogbeitraege (data/podpage/blog_posts.json.gz) als Community-Beitraege von mirko-p.
 Sie werden von site_blog.build wie echte Community-Beitraege ausgegeben (URL /community/u/mirko-p/blog/<slug>/, Autorenzeile, Verzeichnisse, RSS),
 bleiben aber statisch (HTML mit Tabellen und Bildern bleibt vollstaendig erhalten; kein Datenbank-Eintrag, kein Laengenlimit des Wiki-Markups)."""
-import ast, re, zlib
+import ast, json, re, zlib
 from datetime import datetime, timezone
 
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_media as MED
 import site_podpage as P
 import site_r2 as R2
@@ -45,7 +46,8 @@ def tr_config():
         c = json.loads(f.read_text("utf-8")) if f.exists() else {}
     except Exception:
         c = {}
-    build = [l for l in (c.get("build") or []) if l != "en"]
+    from site_i18n import only
+    build = only([l for l in (c.get("build") or []) if l != "en"])   # SITE_LANGS: verkleinerter Bau
     return build, [l for l in (c.get("index") or []) if l in build]
 
 
@@ -58,17 +60,27 @@ def translations(BASE, posts_by_slug, fixhtml):
     import translate_blog as TB
     out = []
     for lang in build:
-        data = TB.load_lang(lang); n = 0
+        import site_i18n_overrides as OVR
+        data = TB.load_lang(lang); n = 0   # Handtexte der Redaktion legt nur TB.assemble(..., lang) darueber (i18n_overrides); OVR liefert der Redaktion nur zu
         for slug, p in posts_by_slug.items():
-            r = TB.assemble(p["src"], data.get(slug))
+            OVR.note_blog(lang, slug, p["src"], data.get(slug))
+            r = TB.assemble(p["src"], data.get(slug), lang)
             if not r: continue
             title, desc, html, faq = r
             html = fixhtml(html)
             if not re.search(r"<img\b", html) and p.get("hero"): html = p["hero"] + html
             out.append({**{k: v for k, v in p.items() if k not in ("src", "hero")}, "lang": lang, "title": title, "summary": (desc or "")[:400], "html": html, "faq": [{"q": q["name"], "a": q["acceptedAnswer"]["text"]} for q in faq if q.get("name")],
-                        "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html), "tr_of": "en", "ai_tr": True, "tr_index": lang in index}); n += 1
-        print(f"Blog-Uebersetzungen {lang}: {n} Beitraege{' (index)' if lang in index else ' (noindex)'}")
+                        "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html), "tr_of": "en", "ai_tr": True, "tr_index": IR.index_or_long(lang in index, desc, html)}); n += 1   # 13.11.2026: auch eine nicht freigegebene Sprache steht auf index, wenn der uebersetzte Text >= 2500 Zeichen hat (assemble liefert nur vollstaendige Fassungen, kein Englisch-Rueckfall)
+        print(f"Blog-Uebersetzungen {lang}: {n} Beitraege{' (index)' if lang in index else ' (noindex, ausser Fassungen ab 2500 Zeichen)'}")
     return out
+
+
+_ROWS = {}   # BASE -> Zeilen fuer publish(): die englischen Originale, als Kopie gesichert, bevor Aufrufer die Beitraege veraendern
+
+
+def _rows(its):
+    rows = [{"slug": p["slug"], "title": p["title"], "summary": p["summary"], "html": p["html"], "topics": p["topics"], "faq": p["faq"], "published": p["published"], "updated": p["updated"]} for p in its if not p.get("tr_of")]   # nur die englischen Originale (Sprachfassungen liegen im R2-Bucket, nicht im Import)
+    return json.loads(json.dumps(rows, ensure_ascii=False))
 
 
 def items(BASE):
@@ -109,6 +121,7 @@ def items(BASE):
     by_slug = {x["slug"]: x for x in out}
     out += translations(BASE, by_slug, fix)
     for x in out: x.pop("src", None); x.pop("hero", None)
+    _ROWS[BASE] = _rows(out)
     return out
 
 
@@ -122,8 +135,9 @@ def publish(write, BASE):
     cfg = Path(__file__).parent / "data" / "blog_import.json"
     if not cfg.exists() or not json.loads(cfg.read_text("utf-8")).get("enabled"):
         return 0
-    its = items(BASE)
-    rows = [{"slug": p["slug"], "title": p["title"], "summary": p["summary"], "html": p["html"], "topics": p["topics"], "faq": p["faq"], "published": p["published"], "updated": p["updated"]} for p in its if not p.get("tr_of")]   # nur die englischen Originale (Sprachfassungen liegen im R2-Bucket, nicht im Import)
+    rows = _ROWS.pop(BASE, None)   # Stand aus items() dieses Baus (vorher lief items() hier ein zweites Mal komplett, mit allen Sprachfassungen)
+    if rows is None:
+        items(BASE); rows = _ROWS.pop(BASE)
     for i in range(0, len(rows), PER):
         write(f"blog-import/part-{i // PER + 1}.json", R2.rewrite(json.dumps(rows[i:i + PER], ensure_ascii=False, separators=(",", ":"))))
     write("blog-import/index.json", json.dumps({"total": len(rows), "per": PER}))

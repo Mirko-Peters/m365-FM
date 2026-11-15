@@ -1,0 +1,1048 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.560
+Sie benötigen eine Testumgebung in Azure.
+
+00:00:01.920 --> 00:00:02.600
+Nichts Ausgefallenes.
+
+00:00:02.960 --> 00:00:05.600
+Nur ein virtuelles Netzwerk, ein paar virtuelle Maschinen und ein Speicherkonto.
+
+00:00:06.020 --> 00:00:09.280
+Also melden Sie es hier im Portal an, suchen die Schaltfläche für Ressourcengruppen und legen los.
+
+00:00:09.740 --> 00:00:12.840
+Ein Klick zum Erstellen der Gruppe, ein paar weitere für das virtuelle Netzwerk,
+
+00:00:13.080 --> 00:00:16.740
+dann der Assistent zum Erstellen der VM, Region wählen, Größe wählen, Image wählen,
+
+00:00:16.860 --> 00:00:20.080
+Datenträger konfigurieren, Netzwerk einrichten, Netzwerk einrichten.
+
+00:00:20.200 --> 00:00:21.260
+Das sind locker 50 Klicks.
+
+00:00:21.900 --> 00:00:25.900
+Dann wiederholen Sie das für die zweite VM, konfigurieren das Speicherkonto und richten die Firewall-Regeln ein.
+
+00:00:26.160 --> 00:00:26.360
+Ein.
+
+00:00:26.860 --> 00:00:27.520
+Und das ist der Punkt.
+
+00:00:27.520 --> 00:00:29.700
+Jeder dieser Klicks birgt die Gefahr eines Fehlers.
+
+00:00:30.460 --> 00:00:31.280
+Falsche Region gewählt?
+
+00:00:31.720 --> 00:00:33.100
+Ihre App läuft langsamer als nötig.
+
+00:00:33.700 --> 00:00:34.320
+Falsche VM-Gruß?
+
+00:00:34.700 --> 00:00:36.060
+Sie zahlen vom ersten Tag an drauf.
+
+00:00:36.500 --> 00:00:37.540
+Vergessen, ein Port zu schließen?
+
+00:00:38.260 --> 00:00:40.520
+Schon ist Ihre Umgebung unbemerkt im Internet ausgesetzt.
+
+00:00:41.100 --> 00:00:42.640
+Multiplizieren Sie das mit drei Umgebungen.
+
+00:00:42.740 --> 00:00:44.220
+Entwicklung, Test, Produktion.
+
+00:00:44.780 --> 00:00:47.700
+Und plötzlich sind es keine 50, sondern 150 Klicks.
+
+00:00:48.400 --> 00:00:52.000
+Und irgendwo in diesem Prozess sieht die Produktion plötzlich ganz anders aus als die Entwicklung.
+
+00:00:52.740 --> 00:00:56.180
+Eine Einstellung hier, ein Häkchen dort, kleine Unterschiede, die später für große Kopfschmerzen sorgen.
+
+00:00:56.180 --> 00:01:01.220
+Aber was wäre, wenn Sie Ihr gesamtes Azure-Setup in einer Datei beschreiben könnten, statt sich durch all diese Bildschirme zu klicken?
+
+00:01:01.660 --> 00:01:04.980
+Was, wenn Sie diese Datei ausführen und jedes Mal das exakt gleiche Ergebnis erhalten könnten?
+
+00:01:05.640 --> 00:01:06.720
+Genau darüber sprechen wir heute.
+
+00:01:06.720 --> 00:01:19.820
+Am Ende dieser Folge werden Sie verstehen, was Infrastructure-as-Code wirklich ist, warum Azure-Teams darauf setzen und wie Sie es nutzen können, ohne Entwickler zu sein, der, was Sie die manuelle Bereitstellung tatsächlich kostet.
+
+00:01:20.460 --> 00:01:22.000
+Gehen wir ein typisches Azure-Setup durch.
+
+00:01:22.740 --> 00:01:31.900
+Sie brauchen eine Ressourcengruppe, darin ein virtuelles Netzwerk mit ein paar Subnetzen, dann ein paar virtuelle Maschinen, eine für den Webserver, eine für die Datenbank und ein Speicherkonto für Ihre Anwendungsdaten.
+
+00:01:32.880 --> 00:01:34.560
+Im Portal ist das ein ganzer Nachmittag voller Klicks.
+
+00:01:34.560 --> 00:01:38.160
+Und hier liegt das Problem. Jeder einzelne Klick ist eine potenzielle Fehlerquelle.
+
+00:01:38.840 --> 00:01:42.660
+Vielleicht wählen Sie die falsche Region, weil das Dropdown-Menü auf East-US voreingestellt ist, Sie aber West-Europe wollen.
+
+00:01:43.120 --> 00:01:46.480
+Vielleicht wählen Sie eine VM-Größe, die viel zu teuer für Ihren tatsächlichen Bedarf ist.
+
+00:01:47.160 --> 00:01:49.520
+Vielleicht lassen Sie versehentlich ein Verwaltungsport zum Internet offen.
+
+00:01:49.920 --> 00:01:50.680
+Solche Fehler passieren.
+
+00:01:51.100 --> 00:01:54.920
+Sie passieren, weil das Portal schnelles Klicken einfach macht, aber es schwierig ist, innezuhalten und seine Arbeit zu prüfen.
+
+00:01:55.240 --> 00:01:58.100
+Und die wahren Kosten sind nicht nur die Zeit, die Sie mit der Fehlerbehebung verschwenden.
+
+00:01:58.320 --> 00:02:02.380
+Es ist die Zeit, die Sie mit dem ständigen Wiederholen der gleichen Klicks für Entwicklung, Test, Staging und Produktion verbringen.
+
+00:02:02.380 --> 00:02:06.600
+Denn genau das passiert dabei. Sie bauen am Montag die Entwicklungsumgebung. Es dauert drei Stunden und alles funktioniert perfekt.
+
+00:02:06.960 --> 00:02:08.440
+Am Dienstag bauen Sie die Testumgebung.
+
+00:02:08.940 --> 00:02:11.980
+Sie sind diesmal etwas schneller, 2,5 Stunden. Aber Sie vergessen eine Einstellung.
+
+00:02:12.180 --> 00:02:15.460
+Einstellung. Eine Firewall-Regel, die in der Entwicklung offenbar ist, im Test geschlossen.
+
+00:02:15.940 --> 00:02:18.480
+Ihre Anwendung verhält sich anders und Sie verbringen eine Stunde mit der Fehler-Sucht.
+
+00:02:18.960 --> 00:02:22.380
+Wenn Sie am Freitag bei der Produktion ankommen, sieht Ihre Umgebung ganz anders aus als die Entwicklungsumgebung.
+
+00:02:23.780 --> 00:02:26.960
+Andere VM-Größen, andere Speicherkonfigurationen, ein paar Einstellungen, die Sie geändert haben.
+
+00:02:26.960 --> 00:02:33.320
+Weil jemand sagte, probier das mal schnell aus. Das ist Configuration Drift. Das natürliche Ergebnis beim manuellen Aufbau von Umgebungen.
+
+00:02:34.060 --> 00:02:37.840
+Eigentliche Problem ist, dass man einen Mausklick nicht prüfen kann. Man kann einen Mausklick nicht rückgängig machen.
+
+00:02:38.240 --> 00:02:43.120
+Wenn in sechs Wochen in der Produktion etwas kaputt geht, wissen Sie nicht mehr, welches Kontrollkästchen Sie aktiviert oder deaktiviert haben.
+
+00:02:43.220 --> 00:02:46.020
+Sie haben keine Aufzeichnung darüber, was sich zwischen Entwicklung und Produktion geändert hat.
+
+00:02:46.260 --> 00:02:50.600
+Was wäre also, wenn Sie Ihre gesamte Azure-Einrichtung in einer Datei beschreiben könnten, anstatt sich durch Menüs zu klicken?
+
+00:02:51.100 --> 00:02:53.360
+Eine Datei, die genau vorgibt, wie Ihre Umgebung aussehen soll.
+
+00:02:53.360 --> 00:02:57.360
+Fühlen Sie sie einmal aus, erhalten Sie jedes Mal das gleiche Ergebnis. Fühlen Sie sie erneut aus, erhalten Sie wieder das gleiche Ergebnis.
+
+00:02:57.680 --> 00:03:01.620
+Keine Abweichung, keine vergessene Einstellung, keine Produktionsumgebung, die völlig anders aussehen als die Entwicklungsumgebung.
+
+00:03:02.580 --> 00:03:04.720
+Infrastructure as Code, die Einsatzdefinition.
+
+00:03:05.380 --> 00:03:09.700
+Infrastructure as Code bedeutet, Ihre Infrastruktur in einer Datei zu beschreiben, die Azure lesen und für Sie aufbauen kann.
+
+00:03:09.940 --> 00:03:14.160
+Das ist alles. Ein einziger Satz. Sie schreiben eine Datei, Azure liest sie und Ihre Umgebung erscheint.
+
+00:03:14.580 --> 00:03:15.840
+Stellen Sie sich das wie ein Bürogebäude vor.
+
+00:03:15.840 --> 00:03:21.100
+Wenn Sie ein neues Büro einrichten wollten, könnten Sie herumgehen und jedem Mitarbeiter sagen, wo jeder Schreibtisch und jeder Stuhl stehen.
+
+00:03:21.320 --> 00:03:22.380
+Das ist der manuelle Ansatz.
+
+00:03:22.380 --> 00:03:26.080
+Es funktioniert, ist aber langsam und jeder wird am Ende eine etwas andere Anordnung haben.
+
+00:03:26.560 --> 00:03:30.200
+Oder Sie könnten Ihnen einen Bauplan geben. Ein Blatt Papier, auf dem genau steht, wo alles hinkommt.
+
+00:03:30.780 --> 00:03:33.260
+Jeder Raum ist identisch, weil jeder dem gleichen Plan gefolgt ist.
+
+00:03:33.880 --> 00:03:38.680
+Ihre IAC-Datei ist dieser Bauplan. Sie ist die einzige Quelle der Wahrheit für Ihre gesamte Azure-Umgebung.
+
+00:03:39.260 --> 00:03:46.040
+Alles, was Ihre Umgebung benötigt, Ressourcengruppen, virtuelle Netzwerke, VMs, Speicherkonten, Firewall-Regeln, steht in dieser einen Datei.
+
+00:03:46.040 --> 00:03:51.240
+Nun gibt es hier einen wichtigen Unterschied. IAC verwendet den sogenannten deklarativen Ansatz.
+
+00:03:51.500 --> 00:03:55.640
+Das ist eine schicke Art zu sagen, dass Sie Azure mitteilen, was Sie wollen und nicht, wie es Schritt für Schritt gebaut werden soll.
+
+00:03:56.460 --> 00:04:01.860
+Sie sagen nicht, erstelle eine Ressourcengruppe, dann ein virtuelles Netzwerk darin und schließe ich ein Subnetz darin und schließlich ein Subnetz.
+
+00:04:01.860 --> 00:04:05.900
+Sie sagen, ich möchte eine Ressourcengruppe mit einem virtuellen Netzwerk, das ein Subnetz enthält.
+
+00:04:06.320 --> 00:04:07.480
+Azure findet die richtige Reise heraus.
+
+00:04:07.660 --> 00:04:10.680
+Dies unterscheidet sich von den Skripten, die Systemadministratoren seit Jahren verwenden.
+
+00:04:11.260 --> 00:04:12.100
+Skripte sind imperativ.
+
+00:04:12.580 --> 00:04:14.780
+Sie sagen dem System Schritt für Schritt genau, was zu tun ist.
+
+00:04:15.400 --> 00:04:19.480
+To this, dann das, dann jenes und wenn ein Schritt fehlschlägt, bricht das Ganze zusammen.
+
+00:04:19.900 --> 00:04:20.740
+Hier ist das Gegenteil davon.
+
+00:04:21.460 --> 00:04:24.180
+Sie beschreiben den Endzustand und das System ermittelt den Weg dorthin.
+
+00:04:24.760 --> 00:04:25.580
+Das ist ein konkretes Beispiel.
+
+00:04:26.200 --> 00:04:30.960
+Anstatt 50 einzelne CLI-Befehle einzugeben, um eine virtuelle Maschine zu erstellen, schreiben Sie etwa,
+
+00:04:30.960 --> 00:04:35.060
+ich benötige eine virtuelle Maschine mit 8 GB RAM und der Ubuntu 22.4,
+
+00:04:35.240 --> 00:04:38.180
+verbunden mit diesem virtuellen Netzwerk und einem zugehörigen Speicherkonto.
+
+00:04:38.560 --> 00:04:38.720
+Hi.
+
+00:04:39.420 --> 00:04:39.920
+Das ist alles.
+
+00:04:40.180 --> 00:04:41.580
+Eine Beschreibung statt 100 Befehlen.
+
+00:04:42.020 --> 00:04:45.200
+Das ist gerade für Azure wichtig, weil das Portal den Einstieg so einfach macht.
+
+00:04:46.040 --> 00:04:48.760
+Sie können mit wenigen Klicks in 10 Minuten eine virtuelle Maschine zum Laufen bringen.
+
+00:04:49.460 --> 00:04:50.420
+Doch das Portal skaliert nicht.
+
+00:04:50.820 --> 00:04:54.040
+Wenn Sie 10 Umgebungen statt einer benötigen, wird das Portal zur Belastung.
+
+00:04:54.660 --> 00:04:56.140
+Mit IAC entkommen Sie dieser Falle.
+
+00:04:56.560 --> 00:04:57.320
+Das klingt nützlich, oder?
+
+00:04:57.320 --> 00:05:01.060
+Aber welche Werkzeuge gibt Ihnen Microsoft eigentlich an die Hand, um diese Bauplan-Dateien zu schreiben?
+
+00:05:01.740 --> 00:05:05.000
+Das Azure IRC Toolkit, ARM, BICEP und der Elefant im Raum.
+
+00:05:05.440 --> 00:05:08.560
+Also welche Werkzeuge stellt Microsoft Ihnen tatsächlich für diese Bauplan-Dateien zur Verfügung?
+
+00:05:09.120 --> 00:05:10.780
+Das ursprüngliche Tool heißt ARM Templates.
+
+00:05:11.420 --> 00:05:15.080
+ARM steht für Azure Resource Manager und diese Vorlagen gibt es schon von Anfang an.
+
+00:05:15.600 --> 00:05:20.200
+Sie sind in JSON geschrieben, einem Datenformat, das wie eine Konfigurationsdatei aus dem Jahr 2015 aussieht.
+
+00:05:20.840 --> 00:05:23.100
+Viele geschweifte Klammern, viele eckige Klammern, viel Einrückung.
+
+00:05:23.100 --> 00:05:25.800
+Wenn Sie schon einmal eine JSON-Datei gesehen haben, wissen Sie, was ich meine.
+
+00:05:26.240 --> 00:05:28.080
+Es ist funktional, aber nicht angenehm zu lesen.
+
+00:05:29.080 --> 00:05:32.000
+ARM Templates sind immer noch weit verbreitet, besonders im Unternehmensumgebung.
+
+00:05:32.460 --> 00:05:37.320
+Große Firmen haben Jahre in den Aufbau ihrer Vorlagenbibliotheken investiert und werden diese Arbeit nicht einfach wegwerfen.
+
+00:05:38.040 --> 00:05:41.680
+Doch für einen Anfänger kann der erste Blick auf ein ARM Template einschüchternd wirken.
+
+00:05:42.460 --> 00:05:43.100
+Es ist sehr wortrei.
+
+00:05:43.340 --> 00:05:43.980
+Es geht leicht kaputt.
+
+00:05:44.600 --> 00:05:46.040
+Ein fehlendes Komma und das Ganze scheitert.
+
+00:05:46.440 --> 00:05:47.700
+Eines von Herrn zu schreiben ist mühsam.
+
+00:05:48.140 --> 00:05:50.820
+Microsoft hat dieses Problem erkannt und daher BICEP entwickelt.
+
+00:05:50.820 --> 00:05:54.700
+BICEP ist Microsofts Antwort darauf, dass ARM Templates zu kompliziert sind.
+
+00:05:55.160 --> 00:05:59.660
+Es ist eine neuere Sprache, die im Hintergrund zu ARM Templates kompiliert wird, aber die Syntax ist wesentlich sauberer.
+
+00:06:00.060 --> 00:06:01.060
+Es sieht aus wie echter Programmkopf.
+
+00:06:01.460 --> 00:06:03.760
+Man schreibt etwas wie Resource MyVM Microsoft.
+
+00:06:05.160 --> 00:06:09.580
+Compute Virtual Machines statt seitenlanger, verschachtelter JSON-Dateien.
+
+00:06:11.040 --> 00:06:12.380
+Es wurde zuerst für Menschen entwickelt.
+
+00:06:12.960 --> 00:06:14.820
+Dann gibt es eine weitere Option, von der Sie hören werden.
+
+00:06:14.940 --> 00:06:15.400
+Terraform.
+
+00:06:15.900 --> 00:06:19.360
+Terraform ist ein Tool der Firma HashiCorp und funktioniert mit Azure und anderen Clouds.
+
+00:06:19.360 --> 00:06:25.460
+Wenn Sie Infrastruktur über AWS, Google Cloud und Azure gleichzeitig verwalten müssen, ist Terraform die beste Wahl.
+
+00:06:26.120 --> 00:06:26.840
+Es ist portabler.
+
+00:06:27.060 --> 00:06:28.500
+Doch diese Portabilität hat ihren Preis.
+
+00:06:29.020 --> 00:06:31.400
+Terraform fügt eine Abstraktionsebene zwischen Ihnen und Azure hinzu.
+
+00:06:31.940 --> 00:06:35.680
+Sie müssen zusätzlich zum Verständnis von Azure auch Terraforms eigene Sprache, HCL, erlernen.
+
+00:06:36.480 --> 00:06:38.840
+Es ist leistungsstark, bringt aber eine eigene Komplexität mit Sie.
+
+00:06:39.120 --> 00:06:40.540
+Welche Option sollte also ein Anfänger werden?
+
+00:06:40.820 --> 00:06:42.560
+Wenn Sie nur Azure nutzen, beginnen Sie mit BICEP.
+
+00:06:42.940 --> 00:06:44.400
+Der Grund dafür ist einfach Native Integration.
+
+00:06:44.980 --> 00:06:46.920
+BICEP wurde von Microsoft speziell für Azure entwickelt.
+
+00:06:46.920 --> 00:06:48.400
+Es hat weniger bewegliche Teile.
+
+00:06:48.760 --> 00:06:50.040
+Es erhält die Vollunterstützung von Microsoft.
+
+00:06:50.520 --> 00:06:53.340
+Und da es zu ARM-Templates kompiliert wird, sind Sie an nichts gebunden.
+
+00:06:53.560 --> 00:06:56.760
+Sie können bei Bedarf später jederzeit auf reine ARM-Templates umsteigen.
+
+00:06:57.540 --> 00:07:00.640
+BICEP ist der Weg des geringsten Widerstands für jemanden, der gerade erst anfangen möchte.
+
+00:07:01.160 --> 00:07:02.520
+So funktionieren diese Tools in der Praxis.
+
+00:07:03.160 --> 00:07:06.100
+Sie schreiben eine Datei, eine BICEP-Datei, ein ARM-Template, was auch immer Sie wählen.
+
+00:07:06.560 --> 00:07:07.500
+Dann führen Sie einen Befehl aus.
+
+00:07:08.080 --> 00:07:10.400
+Für BICEP lautet dieser Befehl as Deployment Group Create.
+
+00:07:11.740 --> 00:07:16.360
+Azure liest Ihre Datei, vergleicht sie mit dem Bestand und erstellt, was fehlt oder ändert, was anders ist.
+
+00:07:17.040 --> 00:07:19.280
+Sie müssen Azure nicht sagen, in welcher Reihenfolge Dinge erledigt werden sollen.
+
+00:07:19.580 --> 00:07:20.880
+Das findet das System von alleine heraus.
+
+00:07:21.220 --> 00:07:22.180
+Und hier wird es wirklich interessant.
+
+00:07:22.800 --> 00:07:24.740
+Sie können dies in eine CICD-Pipeline einbinden.
+
+00:07:24.920 --> 00:07:26.580
+Continuous Integration, Continuous Deployment.
+
+00:07:27.180 --> 00:07:30.240
+Das bedeutet jedes Mal, wenn Sie eine Änderung in Ihr Code Repository übertragen,
+
+00:07:30.320 --> 00:07:33.260
+führt Azure automatisch Ihre IAC-Datei aus und aktualisiert Ihre Infrastruktur.
+
+00:07:33.720 --> 00:07:36.080
+Keine manuellen Schritte, niemand muss sich im Portal anmelden.
+
+00:07:36.360 --> 00:07:38.660
+Einfach Code-Änderungen, die automatisch in die Produktion fließen.
+
+00:07:38.900 --> 00:07:41.080
+Sie haben also eine Datei, die Ihre Infrastruktur beschreibt.
+
+00:07:41.380 --> 00:07:43.120
+Sie können sie ausführen und erhalten ein konsistentes Ergebnis.
+
+00:07:43.520 --> 00:07:45.380
+Sie können das Ganze sogar mit einer Pipeline automatisieren.
+
+00:07:45.380 --> 00:07:46.880
+Doch was erschließt sich dadurch ein?
+
+00:07:47.260 --> 00:07:48.700
+Genau da wird es richtig leistungsstark.
+
+00:07:49.180 --> 00:07:51.420
+Was bewirkt Versionskontrolle für Ihre Azure-Umgebung?
+
+00:07:52.060 --> 00:07:53.800
+Hier ist der Punkt, über den die Leute nicht genug sprechen.
+
+00:07:54.340 --> 00:07:56.740
+Die wahre Superkraft von IAC ist nicht das Template-Format selbst.
+
+00:07:57.060 --> 00:07:58.940
+Es geht nicht um BZEP gegen ARM gegen Terraform.
+
+00:07:59.420 --> 00:08:00.920
+Die wahre Superkraft ist die Versionskontrolle.
+
+00:08:01.320 --> 00:08:04.800
+Wenn Sie Ihre IAC-Dateien in einem Repository wie GitHub oder Azure Repo speichern,
+
+00:08:05.140 --> 00:08:06.780
+wird jede einzelne Änderung nachvollziehbar.
+
+00:08:07.960 --> 00:08:08.980
+Wer hat was geändert und warum?
+
+00:08:08.980 --> 00:08:14.220
+Sie erhalten eine vollständige Historie jeder Änderung an Ihrer Infrastruktur seit dem ersten Tag.
+
+00:08:14.600 --> 00:08:15.700
+Und das bedeutet, dass Sie Änderungen rücken.
+
+00:08:15.940 --> 00:08:18.840
+Wenn eine Bereitstellung etwas beschädigt, müssen Sie sich raten, was schiefgelaufen ist.
+
+00:08:19.260 --> 00:08:22.460
+Sie müssen nicht in den Audit-Logs des Portals graben, in der Hoffnung, die Antwort zu finden.
+
+00:08:22.740 --> 00:08:26.100
+Sie kehren einfach zur letzten funktionierenden Version Ihrer IAC-Datei zurück und stellen sich neu bereit.
+
+00:08:26.300 --> 00:08:27.100
+Das Problem verschwindet.
+
+00:08:27.620 --> 00:08:29.800
+Das ist etwas, das man mit Mausklicks einfach nicht erreichen kann.
+
+00:08:30.580 --> 00:08:32.680
+Das bedeutet auch, dass Ihre Umgebungen konsistent bleiben.
+
+00:08:33.000 --> 00:08:35.200
+Entwicklung, Test und Produktion stammen alle aus denselben Daten.
+
+00:08:35.200 --> 00:08:38.940
+Nicht aus ähnlichen Dateien, nicht aus Dateien, die gleich begannen, aber mit der Zeit auseinanderdriften.
+
+00:08:39.440 --> 00:08:40.180
+Aus denselben Dateien.
+
+00:08:40.460 --> 00:08:42.060
+Sie stellen die Entwicklungsumgebung aus dem Hauptbranche bereit.
+
+00:08:42.220 --> 00:08:45.420
+Wenn Sie bereit für den Test sind, stellen Sie dieselben Dateien im Testabonnement bereit.
+
+00:08:46.120 --> 00:08:48.720
+Wenn Sie bereit für die Produktion sind, stellen Sie dieselben Dateien erneut bereit.
+
+00:08:49.260 --> 00:08:52.780
+Jede Umgebung ist identisch, da jede Umgebung auf demselben Bauplan basiert.
+
+00:08:53.420 --> 00:08:57.240
+Und da diese Dateien in einem Repository liegen, können Sie Code-Reviews für die Infrastruktur durchführen.
+
+00:08:57.800 --> 00:09:01.600
+Bevor jemand eine Änderung bereitstellt, muss ein anderes Teammitglied Sie prüfen und genehmigen.
+
+00:09:02.120 --> 00:09:04.600
+Das erkennt Fehler, bevor Sie überhaupt Ihre Umgebung erreichen.
+
+00:09:05.200 --> 00:09:10.960
+Es ist derselbe Prozess, den Softwareentwickler für Anwendungscode verwenden, nur angewandt auf Azure Setup, ist ein Beispiel aus der Praxis.
+
+00:09:11.320 --> 00:09:13.900
+Jemand aus Ihrem Team macht versehentlich ein Storage-Konto öffentlich zugänglich.
+
+00:09:14.300 --> 00:09:16.580
+Ohne IAC würden Sie es vielleicht erst merken, wenn die Rechnung kommt.
+
+00:09:17.100 --> 00:09:19.160
+Oder Sie jemand darauf hinweist, dass Ihre Daten exponiert sind.
+
+00:09:19.460 --> 00:09:21.520
+Mit IAC ist diese Änderung im Repository sichtbar.
+
+00:09:21.840 --> 00:09:22.740
+Sie durchläuft den Code-Review.
+
+00:09:23.240 --> 00:09:25.820
+Jemand bemerkt es und sagt, hey, dieses Storage-Konto sollte nicht öffentlich sein.
+
+00:09:26.640 --> 00:09:28.580
+Die Änderung wird blockiert, bevor Sie die Produktion erreichen.
+
+00:09:28.680 --> 00:09:31.440
+Und falls Sie doch durchschlüpft, können Sie sie in Sekunden schneller rückgängig machen.
+
+00:09:31.880 --> 00:09:33.140
+Sie können sogar Branching-Strategien verwenden.
+
+00:09:33.140 --> 00:09:35.120
+Möchten Sie mit einer neuen Konfiguration experimentieren?
+
+00:09:35.460 --> 00:09:39.540
+Erstellen Sie einen separaten Branch, nehmen Sie Ihre Änderungen vor, stellen Sie in einer Testumgebung bereit und prüfen Sie, ob es funktioniert.
+
+00:09:39.660 --> 00:09:41.080
+Wenn ja, führen Sie den Branch wieder mit dem Hauptbranch.
+
+00:09:41.400 --> 00:09:43.740
+Wenn nein, löschen Sie den Branch und versuchen Sie etwas anderes.
+
+00:09:44.200 --> 00:09:47.640
+Ihre Produktionsumgebung wird nicht angetastet, bis Sie sicher sind, dass die Änderung gefahrlos ist.
+
+00:09:47.640 --> 00:09:51.480
+Konsistenz ist großartig, aber IAC macht Ihre Azure-Einrichtung auch sicherer.
+
+00:09:52.160 --> 00:09:55.220
+Und es spielt eine Rolle, egal ob eine Person alles verwaltet oder ein ganzes Team.
+
+00:09:56.160 --> 00:09:58.140
+Sicherheit durch Design, nicht durch Zufall.
+
+00:09:58.700 --> 00:10:00.180
+Hier ist etwas, das viele Leute überraschen.
+
+00:10:00.860 --> 00:10:03.520
+Wenn Sie IAC verwenden, ist Sicherheit kein Zusatz, den man später implementiert.
+
+00:10:03.960 --> 00:10:05.640
+Sie ist von Anfang an fest in die Vorlage integriert.
+
+00:10:06.240 --> 00:10:10.100
+Anstatt daran denken zu müssen, bei jedem neuen Speicherkonto die Verschlüsselung zu aktivieren, ist dies bereits in Ihrer Teilende.
+
+00:10:10.720 --> 00:10:13.460
+Anstatt darauf zu hoffen, dass jemand die Firewall-Regeln korrekt konfiguriert hat,
+
+00:10:13.720 --> 00:10:15.960
+sind die Regeln schriftlich festgelegt und werden jedes Mal durchgesetzt.
+
+00:10:16.500 --> 00:10:18.200
+Dieses Konzept hat einen Namen, Policy as Code.
+
+00:10:18.700 --> 00:10:21.280
+Sie kodieren Ihre Sicherheitsregeln direkt in Ihre Bereitstellungspipeline.
+
+00:10:22.220 --> 00:10:24.560
+Jedes Mal, wenn jemand versucht, ein Speicherkonto bereitzustellen,
+
+00:10:24.560 --> 00:10:28.800
+prüft die Pipeline, ob HTTPS aktiviert, die Verschlüsselung eingeschaltet und der öffentliche Zugriff blockiert ist.
+
+00:10:29.860 --> 00:10:32.320
+Wenn die Vorlage diese Regeln nicht erfüllt, schlägt die Bereitstellung fehl.
+
+00:10:32.940 --> 00:10:35.340
+Die unsichere Konfiguration gelangt niemals in Ihre Umgebung.
+
+00:10:35.820 --> 00:10:37.140
+Denken Sie darüber nach, was dadurch ersetzt wird.
+
+00:10:37.560 --> 00:10:38.720
+Dutzende manueller Prüfungen.
+
+00:10:38.720 --> 00:10:40.800
+Jemand muss an das richtige Häkchen denken, jemand anderes.
+
+00:10:41.240 --> 00:10:42.340
+Prüft diese Häkchen später.
+
+00:10:42.680 --> 00:10:44.080
+All das entfällt.
+
+00:10:44.880 --> 00:10:50.320
+Eine sichere Vorlage, ein Regelsatz und jede Bereitstellung erfüllt automatisch Ihre Sicherheitsvorgaben.
+
+00:10:50.920 --> 00:10:53.160
+Aber hier wird es erst richtig interessant, Disaster Recovery.
+
+00:10:53.740 --> 00:10:56.300
+Die Datei, die Ihre Infrastruktur beschreibt, kann sie überall wieder aufbauen.
+
+00:10:56.900 --> 00:11:00.300
+Wenn ein Angreifer Ihre Umgebung kompromittiert, müssen Sie nicht tagelang herausfinden,
+
+00:11:00.380 --> 00:11:02.040
+was geändert wurde und wie es zu beheben ist.
+
+00:11:02.440 --> 00:11:03.040
+Sie reißen alles ab.
+
+00:11:03.260 --> 00:11:05.080
+Sie stellen es einfach aus Ihrer IAC-Datei neu bereit.
+
+00:11:05.280 --> 00:11:06.660
+Ihre saubere Umgebung ist in wenigen Millionen.
+
+00:11:06.660 --> 00:11:09.660
+Das ist nicht möglich, wenn Ihre Infrastruktur von Hand aufgebaut wurde.
+
+00:11:10.000 --> 00:11:12.260
+Und da alles in der Versionsverwaltung liegt, haben Sie einen lückenlosen Prüfer.
+
+00:11:12.600 --> 00:11:14.400
+Jede Änderung an Ihrer Infrastruktur wird aufgezeichnet.
+
+00:11:14.820 --> 00:11:16.040
+Wer hat Sie wann und warum durchgeführt?
+
+00:11:16.400 --> 00:11:18.920
+Das ist Compliance-Nachweis, ohne dass jemand eine Tabelle ausfüllen muss.
+
+00:11:19.640 --> 00:11:22.580
+Für kleine Teams ohne eigenes Sicherheitspersonal ist dies ein echter Multiplikator.
+
+00:11:23.440 --> 00:11:27.700
+Sie erhalten Sicherheitspraktiken auf Unternehmensniveau, ohne ein Sicherheitsteam auf Unternehmensebene einstellen zu müssen.
+
+00:11:27.920 --> 00:11:30.880
+Das klingt auf dem Papier alles großartig, aber der Anfang kann sich überwältigend anfühlen.
+
+00:11:30.880 --> 00:11:35.680
+Lassen Sie mich Ihnen einen realistischen Weg aufzeigen, wie Sie anfangen können, ohne etwas kaputt zu machen.
+
+00:11:36.200 --> 00:11:36.680
+Regel 1.
+
+00:11:36.940 --> 00:11:38.100
+Fangen Sie nicht mit der Produktion an.
+
+00:11:38.360 --> 00:11:39.460
+Das kann ich nicht oft genug betonen.
+
+00:11:39.900 --> 00:11:41.520
+Ihr IAC ist leistungsstark, aber es ist auch neu für Sie.
+
+00:11:42.160 --> 00:11:42.880
+Sie werden Fehler machen.
+
+00:11:43.240 --> 00:11:44.600
+Machen Sie diese dort, wo es nicht darauf ankommt.
+
+00:11:44.980 --> 00:11:46.920
+Wählen Sie einen kleinen Teil Ihrer Azure-Umgebung aus.
+
+00:11:47.300 --> 00:11:50.420
+Eine Ressourcengruppe mit einem einzelnen virtuellen Computer oder einem Speicherkonto.
+
+00:11:50.660 --> 00:11:53.080
+Etwas Einfaches, das bereits läuft und von dem Sie wissen, dass es funktioniert.
+
+00:11:53.720 --> 00:11:54.160
+Ist der Trick?
+
+00:11:54.160 --> 00:11:57.900
+Das Azure-Portal kann tatsächlich ARM-Vorlagen aus Ihren bestehenden Ressourcen generieren.
+
+00:11:58.580 --> 00:12:04.420
+Sie gehen zu Ihrer Ressourcengruppe, klicken auf Vorlage exportieren und Azure gibt Ihnen die JSON-Datei, die alles in dieser Gruppe beschreibt.
+
+00:12:04.900 --> 00:12:05.680
+Es ist nicht perfekt.
+
+00:12:06.180 --> 00:12:09.800
+Die exportierte Vorlage enthält oft Dinge, die Sie nicht benötigen, aber sie ist ein Ausgangspunkt.
+
+00:12:10.440 --> 00:12:13.080
+Sie nehmen etwas, das Sie manuell erstellt haben und wandeln es im Code um.
+
+00:12:13.500 --> 00:12:16.160
+Das ist der Reverse-Engineering-Ansatz und der schnellste Weg, um zu lernen.
+
+00:12:16.640 --> 00:12:18.540
+Beginnen Sie mit BICEP und den kostenlosen Azure-Tools.
+
+00:12:18.540 --> 00:12:24.640
+Microsoft bietet eine VS-Code-Erweiterung für BICEP, die Syntax-Hervorhebung, automatische Vervollständigung und eine visuelle Vorschau bietet.
+
+00:12:25.240 --> 00:12:28.940
+Sie können Ihr virtuelles Netzwerk und Ihre Subnetze als Diagramm sehen, bevor Sie etwas bereitstellen.
+
+00:12:29.660 --> 00:12:32.220
+Das macht es viel einfacher zu verstehen, was Ihr Code tatsächlich bewirkt.
+
+00:12:32.840 --> 00:12:34.360
+Verwenden Sie ein separates Abonnement zum Test.
+
+00:12:34.720 --> 00:12:37.620
+Die meisten Azure-Abonnements haben Ausgabenlimits und kostenlose Guthaben.
+
+00:12:38.080 --> 00:12:42.540
+Erstellen Sie ein Test-Abonnement, stellen Sie dort Ihre IAC bereit, probieren Sie Dinge aus, beheben Sie Fehlern, lernen Sie.
+
+00:12:43.020 --> 00:12:45.520
+Wenn Sie sich sicher fühlen, wechseln Sie zu einem Nicht-Produktions-Abonnement.
+
+00:12:45.820 --> 00:12:47.160
+Die Produktion kommt zuletzt.
+
+00:12:47.160 --> 00:12:49.320
+Hier ist der Teil, der Sie vielleicht überrascht.
+
+00:12:49.860 --> 00:12:52.000
+Sie müssen kein Software-Ingenieur sein, um dies zu tun.
+
+00:12:52.500 --> 00:12:53.960
+Der Ansatz für Citizen-Developer ist absolut real.
+
+00:12:54.340 --> 00:12:58.140
+BICEP wurde für Leute entwickelt, die Azure-Infrastruktur verwalten, nicht für professionelle Programmierer.
+
+00:12:58.480 --> 00:13:01.820
+Es ist leicht lesbar. Es erfordert weniger Aufwand als herkömmliche Programmiersprachen.
+
+00:13:02.160 --> 00:13:03.580
+Es konzentriert sich ausschließlich auf Azure.
+
+00:13:04.040 --> 00:13:07.380
+Wenn Sie verstehen, was eine virtuelle Maschine ist, können Sie lernen, sie in BICEP zu beschreiben.
+
+00:13:07.880 --> 00:13:09.020
+Ihr erstes praktisches Projekt?
+
+00:13:09.660 --> 00:13:11.640
+Automatisieren Sie den Auf- und Abbau Ihrer Entwicklungsumgebung.
+
+00:13:11.900 --> 00:13:13.980
+Schreiben Sie eine BICEP-Datei, die Ihr Setup erstellt.
+
+00:13:14.400 --> 00:13:17.060
+Stellen Sie es bereit, nutzen Sie es, bauen Sie es ab und stellen Sie es erneut bereit.
+
+00:13:17.420 --> 00:13:19.500
+Wiederholen Sie das ein paar Mal, bis der Prozess zur Routine wird.
+
+00:13:20.140 --> 00:13:23.000
+Diese Übung allein lehrt Sie mehr über EAC als jedes Tutorial.
+
+00:13:24.080 --> 00:13:25.400
+Ein paar allgemeine Tipps für Anfänger.
+
+00:13:26.160 --> 00:13:27.460
+Committen Sie früh und committen Sie oft.
+
+00:13:27.920 --> 00:13:30.860
+Jedes Mal, wenn ein Teil Ihrer Vorlage funktioniert, speichern Sie es in Ihrem Repository.
+
+00:13:31.200 --> 00:13:32.720
+Das gibt Ihnen Prüfpunkte, zu denen Sie zurückkehren.
+
+00:13:33.260 --> 00:13:35.320
+Und führen Sie vor der Bereitstellung immer den Vorschaubefehl aus.
+
+00:13:36.160 --> 00:13:37.100
+Im BICEP ist das What-If.
+
+00:13:37.660 --> 00:13:40.280
+Es zeigt Ihnen genau, was sich ändern wird, bevor tatsächlich etwas geändert wird.
+
+00:13:40.620 --> 00:13:41.380
+Keine Überraschung.
+
+00:13:41.380 --> 00:13:45.480
+Trotz bester Absichten gibt es ein paar Fallen, in die Anfänger tappen.
+
+00:13:46.200 --> 00:13:48.200
+Lassen Sie mich Ihnen einige nächtliche Debugging-Sitzungen ersparen.
+
+00:13:48.900 --> 00:13:50.060
+Drei Fehler, die Sie verfolgen werden.
+
+00:13:50.400 --> 00:13:51.100
+Und wie man sie vermeidet.
+
+00:13:51.620 --> 00:13:52.760
+Fehler Nummer eins ist der Klassiker.
+
+00:13:53.300 --> 00:13:54.060
+Secrets hardcodieren.
+
+00:13:54.480 --> 00:13:55.100
+Sie haben es eilig.
+
+00:13:55.500 --> 00:13:56.940
+Sie müssen eine Vorlage zum Laufen bringen.
+
+00:13:57.040 --> 00:13:59.120
+Also schreiben Sie das Datenbankpasswort direkt in die Datei.
+
+00:13:59.580 --> 00:13:59.960
+Es funktioniert.
+
+00:14:00.040 --> 00:14:00.460
+Sie machen weiter.
+
+00:14:00.460 --> 00:14:04.540
+Und jetzt liegt der Passwort in Ihrem IAC-Repository, wo jeder mit Zugriff es sehen kann.
+
+00:14:04.900 --> 00:14:05.920
+Im Nachhinein offensichtlich, oder?
+
+00:14:06.300 --> 00:14:09.420
+Aber es passiert unglaublich leicht, wenn man sich nur darauf konzentriert, dass etwas funktioniert.
+
+00:14:09.940 --> 00:14:10.980
+Die Lösung ist Azure Key Vault.
+
+00:14:11.600 --> 00:14:15.880
+Sowohl BICEP als auch ARM-Vorlagen können Secrets während der Bereitstellung direkt aus dem Key Vault abrufen.
+
+00:14:16.740 --> 00:14:20.440
+Ihre Datei weist an, das Passwort aus diesem Tresor zu holen, anstatt das eigentliche Passwort zu enthalten.
+
+00:14:20.900 --> 00:14:22.560
+Das Secret gelangt niemals in Ihr Repository.
+
+00:14:22.960 --> 00:14:26.500
+Schreibe niemals Passwörter, Verbindungszeichenfolgen oder API-Schlüssel in deine IAC-Datei.
+
+00:14:26.820 --> 00:14:28.340
+Verwende jedes Mal den Key Vault.
+
+00:14:28.340 --> 00:14:32.420
+Fehler Nummer 2 ist, IAC wie ein einmaliges Skript zu behandeln.
+
+00:14:32.960 --> 00:14:34.980
+Du schreibst eine Vorlage, stellst sie bereit, sie funktioniert.
+
+00:14:35.160 --> 00:14:36.000
+Und du schaust sie nie wieder an.
+
+00:14:36.480 --> 00:14:37.740
+Sechs Monate später geht etwas kaputt.
+
+00:14:38.120 --> 00:14:40.540
+Du eröffnest die Datei und hast keine Ahnung, was die Hälfte davon bewirkt.
+
+00:14:41.140 --> 00:14:43.000
+Dieser Parameter namens Param 1, keine Ahnung.
+
+00:14:43.540 --> 00:14:45.300
+Diese Ressource mit dem kryptischen Namen, keine Ahnung.
+
+00:14:46.940 --> 00:14:49.920
+Schreibe deinen IAC-Code so, als würde ihn in sechs Monaten jemand anderes warten.
+
+00:14:49.920 --> 00:14:52.900
+Denn dieser jemand bist wahrscheinlich du selbst und du wirst alles vergessen haben.
+
+00:14:53.740 --> 00:14:56.680
+Füge Kommentare hinzu, verwende aussagekräftige Namen statt Abkürzungen
+
+00:14:56.680 --> 00:14:58.520
+und halte Dateien klein und auf eine Sache fokussiert.
+
+00:14:58.900 --> 00:15:00.780
+Eine Buy-Sub-Datei, die ein virtuelles Netzwerk erstellt,
+
+00:15:00.860 --> 00:15:02.960
+sollte sich um virtuelle Netzwerke drehen und nicht um das gesamte Rechens.
+
+00:15:03.300 --> 00:15:05.980
+Fehler Nummer 3 ist, die Pipeline für schnelle Korrekturen zu umgehen.
+
+00:15:06.740 --> 00:15:07.720
+Das Portal ist immer verlockend.
+
+00:15:08.140 --> 00:15:09.160
+Du musst nur eine Einstellung ändern.
+
+00:15:09.500 --> 00:15:12.600
+Würde 5 Minuten dauern, die Vorlage zu bearbeiten, zu committen und über die Pipeline bereitzustellen.
+
+00:15:13.240 --> 00:15:14.900
+Oder du kannst dich einfach im Portal anmelden,
+
+00:15:14.900 --> 00:15:16.760
+dreimal klicken und bist in 30 Sekunden fertig.
+
+00:15:17.180 --> 00:15:18.640
+Diese schnelle Änderung erzeugt Drift.
+
+00:15:19.300 --> 00:15:21.300
+Dein Code sagt das eine, die Realität etwas anderes.
+
+00:15:21.300 --> 00:15:23.880
+Wenn du das nächste Mal über deine Vorlage bereitstellst,
+
+00:15:23.940 --> 00:15:26.080
+versucht Azure, deine manuelle Änderung rückgängig zu machen.
+
+00:15:26.480 --> 00:15:27.960
+Oder schlimmer noch, es bemerkt den Drift nicht
+
+00:15:27.960 --> 00:15:29.540
+und deine Umgebungen driften langsam auseinander,
+
+00:15:29.620 --> 00:15:31.560
+bis sich die Produktion völlig anders verhält als die Entwicklung.
+
+00:15:32.240 --> 00:15:33.080
+Die Disziplin ist einfach.
+
+00:15:33.420 --> 00:15:34.260
+Nimm die Änderung-Code vor.
+
+00:15:34.680 --> 00:15:37.200
+Stell über die Pipeline bereit, auch wenn es 5 Minuten länger dauert.
+
+00:15:37.760 --> 00:15:40.160
+Diese 5 Minuten ersparen dir später stundenlanges Debugging.
+
+00:15:40.800 --> 00:15:41.440
+Ein Bonustipp.
+
+00:15:41.520 --> 00:15:43.960
+Führe immer den Vorschaubefehl aus, bevor du Änderungen anwendest.
+
+00:15:44.320 --> 00:15:45.140
+Im Buy-Sub ist das What-If.
+
+00:15:45.920 --> 00:15:48.240
+Es zeigt dir genau, was erstellt, geändert oder gelöscht wird.
+
+00:15:48.640 --> 00:15:49.360
+Keine Überraschung.
+
+00:15:49.360 --> 00:15:51.080
+Du siehst die Auswirkungen, bevor sie eintreten.
+
+00:15:51.420 --> 00:15:52.500
+Das ISC in einfachem Deutsch.
+
+00:15:52.860 --> 00:15:53.420
+Kein Fachjargon.
+
+00:15:53.720 --> 00:15:54.540
+Kein Marketing, blablabla.
+
+00:15:54.940 --> 00:15:57.120
+Nur ein praktisches Werkzeug, das dein Azure-Leben einfacher macht.
+
+00:15:57.920 --> 00:15:59.160
+Die eine Sache, die wir diese Woche ausprobieren sollen.
+
+00:15:59.460 --> 00:16:00.400
+Hier ist eine Zusammenfassung der Verwaltung.
+
+00:16:00.760 --> 00:16:02.360
+IRC verwandelt deine Azure-Infrastruktur
+
+00:16:02.360 --> 00:16:05.040
+in einen versionskontrollierten, wiederholbaren und sicheren Entwurf.
+
+00:16:05.760 --> 00:16:07.000
+Eine Datei, die alles beschreibt
+
+00:16:07.000 --> 00:16:08.800
+und jedes Mal auf die gleiche Weise bereitgestellt wird.
+
+00:16:09.080 --> 00:16:10.360
+Deine Herausforderung für diese Woche.
+
+00:16:10.520 --> 00:16:12.740
+Exportiere eine bestehende Azure-Ressource als ARM-Vorlage.
+
+00:16:13.100 --> 00:16:14.020
+Öffne sie in VS Code.
+
+00:16:14.500 --> 00:16:15.880
+Schau, ob du verstehen kannst, was sie bewirkt.
+
+00:16:15.880 --> 00:16:17.400
+Diese einzige Übung wird dir mehr beibringen
+
+00:16:17.400 --> 00:16:18.860
+als jede Erklärung, die ich geben könnte.
+
+00:16:20.100 --> 00:16:22.020
+Als nächstes in dieser Serie gehen wir Schritt für Schritt
+
+00:16:22.020 --> 00:16:23.580
+durch das Schreiben deiner ersten Weiße-Platei.
+
+00:16:23.940 --> 00:16:25.880
+Abonniere den Podcast auf deiner bevorzugten Plattform
+
+00:16:25.880 --> 00:16:27.220
+und teile dies mit einem Teamkollegen,
+
+00:16:27.300 --> 00:16:28.540
+der sich immer noch durch das Portal klickt.

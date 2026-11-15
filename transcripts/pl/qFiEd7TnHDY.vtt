@@ -1,0 +1,856 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.640
+Dokonałeś sprzedaży, wysłałeś fakturę, ale kiedy pieniądze faktycznie trafią na Twoje konto?
+
+00:00:03.800 --> 00:00:05.000
+A co, jeśli tak się nie stanie?
+
+00:00:05.220 --> 00:00:09.100
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget w M365FM.
+
+00:00:09.300 --> 00:00:10.480
+Nazywam się Merko Peters.
+
+00:00:10.760 --> 00:00:14.580
+Dziś wyjaśnimy zagadnienie należności w Dynamics 365 prostym językiem.
+
+00:00:14.760 --> 00:00:18.700
+Pod koniec tego odcinka prześledzisz saldo jednego klienta od sprzedaży aż do płatności
+
+00:00:18.700 --> 00:00:21.520
+i zobaczysz, co robi firma, gdy płatność jest opóźniona.
+
+00:00:21.720 --> 00:00:23.120
+Oto najprostsza definicja.
+
+00:00:23.380 --> 00:00:27.980
+Należności śledzą pieniądze, które są Ci winni klienci oraz spływające od nich płatności.
+
+00:00:27.980 --> 00:00:31.100
+Pomyśl o tym, jak o segregatorze na pieniądze w Twojej firmie.
+
+00:00:31.240 --> 00:00:33.120
+Każdy klient otrzymuje własną teczkę.
+
+00:00:33.280 --> 00:00:37.480
+Ta teczka zawiera jego faktury, płatności, terminy wymagalności oraz wszelkie działania następcze.
+
+00:00:37.640 --> 00:00:39.700
+Owszem, arkusz kalkulacyjny może wymienić te rzeczy,
+
+00:00:39.840 --> 00:00:42.740
+ale nie potrafi niezawodnie połączyć nowej sprzedaży, uzgodnionego terminu,
+
+00:00:42.820 --> 00:00:45.020
+przelewu bankowego i decyzji kredytowej w całej firmie.
+
+00:00:45.240 --> 00:00:47.640
+Dynamics 365 Finance potrafi.
+
+00:00:47.820 --> 00:00:50.540
+Zacznijmy więc od początku, czyli od konta klienta.
+
+00:00:50.720 --> 00:00:54.220
+Punkt pierwszy. Konto klienta. Punkt wyjścia dla każdej faktury.
+
+00:00:54.220 --> 00:00:58.360
+Wyobraź sobie, że współpracujesz z klientem o nazwie Norwind Equipment.
+
+00:00:58.540 --> 00:01:03.120
+Zanim złoży zamówienie, Dynamics 365 potrzebuje czegoś więcej niż tylko nazwy i numeru telefonu.
+
+00:01:03.260 --> 00:01:06.260
+Potrzebuje zasad finansowych dotyczących prowadzenia interesów z Norwind.
+
+00:01:06.440 --> 00:01:09.660
+Konto klienta to właśnie ta opisana teczka w naszym segregatorze.
+
+00:01:09.880 --> 00:01:12.220
+Zawiera wszystkie szczegóły, które mówią Dynamics 365,
+
+00:01:13.320 --> 00:01:16.100
+kim jest klient, gdzie wysyłać faktury, jak zazwyczaj płaci
+
+00:01:16.100 --> 00:01:18.520
+i jak wysoki kredyt firma jest gotowa mu przyznać.
+
+00:01:18.520 --> 00:01:22.460
+Może to brzmieć jak podstawowa konfiguracja, ale zapobiega wielu nieporozumieniom w przyszłości.
+
+00:01:22.660 --> 00:01:25.020
+Na przykład konto przechowuje adres do faktury klienta.
+
+00:01:25.200 --> 00:01:26.860
+Często różni się on od adresu dostawy.
+
+00:01:27.120 --> 00:01:30.280
+Sprzęt może trafić do fabryki, podczas gdy faktury wysyłane są do działu finansowego.
+
+00:01:30.500 --> 00:01:32.060
+Przechowuje również warunki płatności.
+
+00:01:32.300 --> 00:01:35.520
+Warunki płatności odpowiadają na proste pytanie, ile czasu klient ma na zapłatę.
+
+00:01:35.680 --> 00:01:37.500
+Norwind może płacić w ciągu 30 dni.
+
+00:01:37.740 --> 00:01:39.000
+Inny klient płaci z góry.
+
+00:01:39.240 --> 00:01:41.360
+Większy klient może wynegocjować 60 dni.
+
+00:01:41.580 --> 00:01:45.880
+Gdy te warunki znajdą się na koncie, Dynamics 365 automatycznie oblicza termin płatności.
+
+00:01:45.880 --> 00:01:51.580
+Nikt nie musi przeszukiwać wątków mailowych ani zgadywać, czy netto 30 liczy się od daty zamówienia, dostawy czy faktury.
+
+00:01:51.820 --> 00:01:52.900
+System po prostu to wie.
+
+00:01:53.120 --> 00:01:53.640
+W tym rzecz.
+
+00:01:53.800 --> 00:01:56.420
+Konto klienta zawiera również standardową metodę płatności.
+
+00:01:56.700 --> 00:02:01.880
+Jeśli Norwind płaci przelewem, a inny klient kartą kredytową, zespół finansowy stosuje właściwy proces w momencie płatności.
+
+00:02:02.100 --> 00:02:04.480
+Nie muszą traktować każdego klienta jak odosobnionego przypadku.
+
+00:02:04.760 --> 00:02:06.400
+Do tego dochodzi jeszcze limit kredytowy.
+
+00:02:06.600 --> 00:02:10.560
+Limit kredytu to największa kwota, jaką firma jest skłonna pozwolić klientowi być winnym w danym momencie.
+
+00:02:10.780 --> 00:02:12.680
+Pomyśl o tym jak o recepcji w biurowcu.
+
+00:02:12.680 --> 00:02:18.420
+Recepcjonista sprawdza, czy ktoś może wejść na inne piętro, nie czy odwiedzający jest miły, tylko czy przepisy mu na to pozwalają.
+
+00:02:18.580 --> 00:02:19.940
+Tutaj zasada jest taka sama.
+
+00:02:20.180 --> 00:02:23.120
+Limit kredytu wyznacza jasną granicę między działem sprzedaży a działem finansów.
+
+00:02:23.280 --> 00:02:28.740
+Norwind może być solidnym klientem, ale jeśli już jest winien dużą kwotę, firma powinna się wstrzymać przed przyjęciem kolejnego dużego zamówienia.
+
+00:02:28.920 --> 00:02:32.900
+W tle Dynamics 365 może również korzystać z grup odbiorców i profili księgowania.
+
+00:02:33.160 --> 00:02:34.580
+Niech te nazwy Cię nie zniechęcają.
+
+00:02:34.820 --> 00:02:37.800
+Grupa odbiorców to po prostu sposób na zgrupowanie podobnych klientów.
+
+00:02:37.800 --> 00:02:39.720
+Detal w jednej grupie, hurt w drugiej.
+
+00:02:39.960 --> 00:02:43.160
+W ten sposób firma może stosować wspólne zasady tam, gdzie ma to sens.
+
+00:02:43.320 --> 00:02:49.840
+Profil księgowania to zasada księgowa, która mówi systemowi Dynamics 365, na które konta finansowe wpisać dług po wystawieniu faktury.
+
+00:02:50.060 --> 00:02:52.420
+Jako sprzedawca lub klient zwykle tego nie widzisz.
+
+00:02:52.560 --> 00:02:56.680
+Ale dział finansów polega na tym, ponieważ w księgach każda kwota musi być we właściwym miejscu.
+
+00:02:56.800 --> 00:02:58.580
+A oto prawdziwa siła tego rozwiązania.
+
+00:02:58.760 --> 00:03:01.520
+Konto klienta łączy dział sprzedaży z działem finansów.
+
+00:03:01.520 --> 00:03:06.080
+Sprzedawca może utworzyć zamówienie dla Norwind, a dział finansów nie musi później odtwarzać tych informacji.
+
+00:03:06.340 --> 00:03:09.500
+Widzą oni klienta, warunki płatności, pozycję kredytową oraz kwotę do zapłaty.
+
+00:03:09.720 --> 00:03:11.020
+Wszystko łączy się automatycznie.
+
+00:03:11.220 --> 00:03:13.860
+Na tym polega różnica między listą kontaktów a kontem klienta.
+
+00:03:14.040 --> 00:03:16.040
+Lista kontaktów pomaga Ci do kogoś zadzwonić.
+
+00:03:16.200 --> 00:03:21.280
+Konto klienta rejestruje relację finansową, w tym zasady kontrolujące proces sprzedaży na rzecz tego klienta.
+
+00:03:21.480 --> 00:03:26.860
+Gdy Norwind coś kupi, Dynamics 365 musi zmienić tę sprzedaż w odpowiednie żądanie zapłaty.
+
+00:03:26.860 --> 00:03:31.580
+2. Tworzenie faktury, zamiana sprzedaży na kwotę należności.
+
+00:03:31.900 --> 00:03:34.500
+Jaka jest więc różnica między zamówieniem a fakturą?
+
+00:03:34.720 --> 00:03:38.080
+Zamówienie mówi, czego klient chce, a faktura mówi, za co musi zapłacić.
+
+00:03:38.240 --> 00:03:38.980
+Oto w czym rzecz.
+
+00:03:39.160 --> 00:03:41.720
+Faktura tworzy otwarte saldo na koncie klienta.
+
+00:03:41.900 --> 00:03:46.500
+Po jej zaksięgowaniu formalnie obciążasz klienta, a dział należności może śledzić to, co jest do zapłaty.
+
+00:03:46.740 --> 00:03:48.280
+Wróćmy do Norwind Equipment.
+
+00:03:48.460 --> 00:03:49.620
+Zamówili 10 sztuk sprzętu.
+
+00:03:49.740 --> 00:03:51.360
+Twój zespół sprzedaży rejestruje zamówienie.
+
+00:03:51.460 --> 00:03:53.440
+Magazyn przygotowuje artykuły, a Ty je wysyłasz.
+
+00:03:53.620 --> 00:03:54.940
+Norwind ma teraz sprzęt.
+
+00:03:54.940 --> 00:03:59.320
+W tym momencie potrzebujesz jasnego zapisu tego, co kupili, ile to kosztuje i kiedy przypada termin płatności.
+
+00:03:59.500 --> 00:04:01.120
+Tym zapisem jest faktura sprzedaży.
+
+00:04:01.360 --> 00:04:05.120
+Większość faktur w Dynamics 365 Finance pochodzi bezpośrednio z zamówienia sprzedaży.
+
+00:04:05.360 --> 00:04:07.920
+Dzięki temu faktura pozostaje powiązana z pierwotną sprzedażą.
+
+00:04:08.120 --> 00:04:11.800
+Artykuły klienta, ceny, ilości i wszystkie uzgodnione zasady są już w systemie.
+
+00:04:11.980 --> 00:04:15.600
+Nie musisz zlecać nikomu ponownego wpisywania tych danych do oddzielnego systemu rozliczeniowego.
+
+00:04:15.860 --> 00:04:21.000
+Gdy towar zostanie wysłany lub usługa osiągnie etap wymagający rozliczenia, tworzysz fakturę na podstawie tego zamówienia sprzedaży.
+
+00:04:21.000 --> 00:04:23.520
+Dokładny moment zależy od sposobu pracy Twojej firmy.
+
+00:04:23.680 --> 00:04:26.960
+Niektóre firmy wystawiają faktury w momencie wysyłki, inne po zakończeniu danego etapu prac.
+
+00:04:27.100 --> 00:04:30.220
+Firma konsultingowa może wystawić fakturę po osiągnięciu określonego kamienia milowego.
+
+00:04:30.460 --> 00:04:33.860
+Dynamics 365 postępuje zgodnie z procesem, który już skonfigurowałeś.
+
+00:04:34.040 --> 00:04:36.760
+Możesz zetknąć się z terminem faktury na podstawie dokumentu w zastępstwie.
+
+00:04:37.000 --> 00:04:40.700
+Dokument WZ potwierdza, co fizycznie opuściło magazyn i przeszło do etapu dostawy.
+
+00:04:40.940 --> 00:04:45.900
+Gdy firma rozlicza się na podstawie tego, co faktycznie wysłano, faktura może wykorzystać te potwierdzone szczegóły dostawy.
+
+00:04:46.080 --> 00:04:47.740
+Pozwala to uniknąć częstego problemu.
+
+00:04:47.740 --> 00:04:51.800
+Załóżmy, że zamówienie opiewa na 10 sztuk, ale dziś wysłano tylko 8, ponieważ dwie nadal czekają na dostępność w magazynie.
+
+00:04:51.940 --> 00:04:55.160
+Jeśli fakturujesz na podstawie dokumentu WZ, rozliczasz tylko 8 wysłanych sztuk.
+
+00:04:55.320 --> 00:04:58.100
+Nie obciążasz firmy Norwind za wszystkie 10 sztuk, zanim je otrzyma.
+
+00:04:58.260 --> 00:05:02.480
+Zamówienie nadal jest ważne, ale potwierdzona dostawa informuje dział rozliczeń, co powinno znaleźć się na fakturze.
+
+00:05:02.620 --> 00:05:04.860
+Jednak nie każda faktura zaczyna się od zamówienia sprzedaży.
+
+00:05:05.060 --> 00:05:08.100
+Czasami musisz wystawić fakturę za jednorazową opłatę, która nie wiąże się z wysyłką.
+
+00:05:08.340 --> 00:05:10.500
+Może Norwind prosi o specjalną sesję szkoleniową.
+
+00:05:10.500 --> 00:05:14.360
+Może wystąpiła opłata serwisowa, koszt projektu lub korekta, która wymaga własnej faktury.
+
+00:05:14.520 --> 00:05:18.500
+W takich przypadkach Dynamics 365 Finance obsługuje faktury niezależne Free Text Invoice.
+
+00:05:18.720 --> 00:05:20.800
+Niezależna nie oznacza przypadkowa czy nieformalna.
+
+00:05:20.960 --> 00:05:23.460
+Oznacza to, że faktura nie jest powiązana z zamówieniem sprzedaży.
+
+00:05:23.660 --> 00:05:27.700
+Wprowadzasz klienta opłatę, kwotę, szczegóły podatkowe w razie potrzeby oraz informacje o płatności.
+
+00:05:27.900 --> 00:05:30.660
+Po zaksięgowaniu staje się to zwykłą należnością na koncie klienta.
+
+00:05:30.800 --> 00:05:32.620
+Klient nadal otrzymuje poprawną fakturę.
+
+00:05:32.800 --> 00:05:34.560
+Dział finansowy nadal widzi otwarte saldo.
+
+00:05:34.700 --> 00:05:36.080
+A co z powtarzającymi się pracami?
+
+00:05:36.080 --> 00:05:39.080
+Załóżmy, że Norwind płaci miesięczną opłatę za konserwację sprzętu.
+
+00:05:39.260 --> 00:05:42.920
+Ręczne tworzenie tej samej faktury co miesiąc to strata czasu i ryzyko drobnych błędów.
+
+00:05:43.120 --> 00:05:46.800
+Moduł subskrypcji wykorzystuje harmonogramy rozliczeń do obsługi powtarzających się opłat.
+
+00:05:46.940 --> 00:05:53.080
+Ustalasz umowę i termin rozliczenia, a Dynamics 365 może tworzyć faktury wraz z nadejściem każdego okresu rozliczeniowego.
+
+00:05:53.360 --> 00:05:58.820
+Daje to powtarzalny sposób rozliczania usług cyklicznych, a klient otrzymuje faktury zgodnie z ustalonym harmonogramem.
+
+00:05:59.000 --> 00:06:01.820
+Księgowanie to moment, w którym zmienia się status sprzedaży.
+
+00:06:01.820 --> 00:06:05.160
+Zapisuje ono kwotę na koncie klienta Norwind jako zobowiązanie.
+
+00:06:05.380 --> 00:06:11.060
+Wysyła również kwotę do rejestrów finansowych firmy, gdzie widać, że sprzedaż została rozliczona, a płatność nadal oczekuje.
+
+00:06:11.280 --> 00:06:14.060
+Faktura nie jest już szkicem, który ktoś mógłby dowolnie zmienić.
+
+00:06:14.280 --> 00:06:16.120
+Staje się ona częścią dokumentacji finansowej.
+
+00:06:16.320 --> 00:06:16.820
+Przejdźmy do konkretów.
+
+00:06:17.520 --> 00:06:20.000
+Firma Norwind zamawia sprzęt o wartości 10 tysięcy dolarów.
+
+00:06:20.160 --> 00:06:23.200
+Osiem jednostek jest wysyłanych najpierw, więc wystawiasz fakturę na te osiem jednostek.
+
+00:06:23.360 --> 00:06:26.580
+Faktura zawiera kwotę, termin płatności oraz instrukcje dotyczące zapłaty.
+
+00:06:26.580 --> 00:06:31.760
+Firma Norwind otrzymuje rachunek, a Dynamics 365 rejestruje tę samą kwotę jako otwartą na ich koncie.
+
+00:06:31.900 --> 00:06:36.300
+Ten wspólny zapis sprawia, że dział sprzedaży, magazyn i finanse koncentrują się na tej samej transakcji.
+
+00:06:36.480 --> 00:06:40.200
+Koniec kłótni o różne wersje w różnych plikach, jednak faktura tylko żąda zapłaty.
+
+00:06:40.380 --> 00:06:44.380
+Kolejnym zadaniem jest rozpoznanie płatności po jej dotarciu i powiązanie jej z odpowiednim saldem otwartym.
+
+00:06:44.580 --> 00:06:46.640
+2.3. Otrzymywanie i dopasowywanie płatności.
+
+00:06:46.900 --> 00:06:48.120
+Zamknięcie właściwej faktury.
+
+00:06:48.320 --> 00:06:49.860
+Otrzymanie płatności brzmi prosto.
+
+00:06:50.060 --> 00:06:52.240
+Saldo bankowe rośnie, więc zadanie wykonane, prawda?
+
+00:06:52.480 --> 00:06:53.140
+Nie do końca.
+
+00:06:53.140 --> 00:06:55.620
+Dział finansów wciąż musi odpowiedzieć na dwa pytania.
+
+00:06:55.800 --> 00:06:59.340
+Kto wysłał pieniądze i którą otwartą fakturę lub faktury te pieniądze powinny zamknąć?
+
+00:06:59.500 --> 00:07:02.100
+Pomyśl o firmie Norwind opłacającej fakturę za sprzęt.
+
+00:07:02.240 --> 00:07:05.320
+Bank może wykazać płatność z krótkim odniesieniem, kwotą i datą.
+
+00:07:05.560 --> 00:07:11.860
+Bez dopasowania tej płatności do otwartego salda Norwind, system może pokazywać gotówkę w banku, jednocześnie pokazując, że Norwind nadal jest winien pieniądze.
+
+00:07:12.000 --> 00:07:13.420
+Te zapisy muszą się spotkać.
+
+00:07:13.620 --> 00:07:18.140
+Dynamics 365 Finance obsługuje kilka sposobów, w jakie klienci mogą płacić.
+
+00:07:18.140 --> 00:07:25.180
+Możesz otrzymywać gotówkę, czeki, płatności kartą kredytową, przelewy bankowe lub weksle, które są formalnymi dokumentami płatniczymi używanymi w niektórych procesach biznesowych.
+
+00:07:25.320 --> 00:07:28.060
+Każda metoda ma swoją własną drogę do rejestrów finansowych.
+
+00:07:28.240 --> 00:07:30.440
+Przelew bankowy może pojawić się na wyciągu bankowym.
+
+00:07:30.640 --> 00:07:33.140
+Czek może wymagać zarejestrowania przed rozliczeniem go przez bank.
+
+00:07:33.300 --> 00:07:35.600
+Płatność kartą może przejść przez serwis płatniczy.
+
+00:07:35.600 --> 00:07:40.260
+Dynamics 365 daje finansom miejsce do rejestrowania szczegółów płatności na odpowiednim koncie klienta.
+
+00:07:40.400 --> 00:07:42.800
+Tym miejscem jest często dziennik płatności odbiorców.
+
+00:07:43.000 --> 00:07:49.320
+Dziennik brzmi jak papierowa księga, ale w Dynamics 365 to po prostu kontrolowane miejsce do wprowadzania i sprawdzania płatności przed ich zaksięgowaniem.
+
+00:07:49.540 --> 00:07:54.920
+Dział finansów rejestruje klienta, kwotę, metodę płatności, konto bankowe oraz wszelkie informacje towarzyszące płatności.
+
+00:07:55.200 --> 00:07:58.700
+Jest też słowo, które często brzmi trudniej niż jest w rzeczywistości rozliczenie.
+
+00:07:58.880 --> 00:08:01.960
+Rozliczenie oznacza dopasowanie płatności do faktury, którą ona opłaca.
+
+00:08:02.180 --> 00:08:04.620
+Norwind płaci dokładną kwotę z faktury za sprzęt.
+
+00:08:04.620 --> 00:08:08.260
+Dział finansów wybiera płatność i otwartą fakturę, a następnie rozlicza je ze sobą.
+
+00:08:08.420 --> 00:08:11.000
+Po zaksięgowaniu faktura nie widnieje już jako nieopłacona.
+
+00:08:11.200 --> 00:08:12.480
+Płatność ją zamknęła.
+
+00:08:12.720 --> 00:08:14.920
+Saldo klienta zmniejsza się o tę samą kwotę.
+
+00:08:15.060 --> 00:08:20.600
+To ważne, ponieważ płatność bez rozliczenia może pozostawić otwartą fakturę na koncie, mimo że gotówka już wpłynęła.
+
+00:08:20.800 --> 00:08:25.380
+Powoduje to błędne raporty, niepotrzebne monity i niezręczne telefony do klientów, którzy już zapłacili.
+
+00:08:25.600 --> 00:08:27.700
+Czasami płatność nie pokrywa całej faktury.
+
+00:08:27.960 --> 00:08:31.300
+Być może Norwind płaci część kwoty teraz i zgadza się uregulować resztę później.
+
+00:08:31.300 --> 00:08:36.280
+Dynamics 365 może rozliczyć otrzymaną kwotę z fakturą, pozostawiając nieopłaconą część jako otwartą.
+
+00:08:36.460 --> 00:08:38.960
+Faktura nie znika tylko dlatego, że wpłynęły jakieś pieniądze.
+
+00:08:39.160 --> 00:08:41.420
+Dział finansowy widzi dokładnie, jaka kwota pozostała do zapłaty.
+
+00:08:41.560 --> 00:08:44.200
+To znacznie lepsze niż omyłkowe oznaczenie faktury jako w pełni opłaconej,
+
+00:08:44.260 --> 00:08:47.560
+a następnie próba zapamiętania brakującej kwoty w notatce lub osobnym arkuszu kalkulacyjnym.
+
+00:08:47.760 --> 00:08:50.260
+Do wielu firm płatności bankowe wpływają w dużej liczbie.
+
+00:08:50.480 --> 00:08:53.900
+Ręczne sprawdzanie każdego przelewu i każdej otwartej faktury zajmuje czas,
+
+00:08:53.900 --> 00:08:58.720
+zwłaszcza gdy klienci płacą za kilka faktur naraz lub wpisują nie do końca jasny numer referencyjny.
+
+00:08:58.940 --> 00:09:03.000
+Dynamics 365 posiada dziennik uzgadniania płatności do tego typu zadań.
+
+00:09:03.200 --> 00:09:08.980
+Zespół może zaimportować wyciągi bankowe i wykorzystać je do dopasowania przychodzących płatności do otwartych faktur klientów.
+
+00:09:09.180 --> 00:09:15.280
+Numery referencyjne płatności, kwoty, dane klientów i reguły dopasowywania pomagają systemowi zasugerować, do czego przypisać płatność.
+
+00:09:15.500 --> 00:09:17.780
+Nadal sprawdzasz wynik. Ta część jest ważna.
+
+00:09:17.780 --> 00:09:24.040
+Automatyzacja ogranicza wyszukiwanie, ale dział finansowy odpowiada za upewnienie się, że płatność rozlicza właściwą fakturę.
+
+00:09:24.200 --> 00:09:29.360
+Jeśli klient przesyła jedną płatność za kilka faktur, osoba przetwarzająca może przypisać tę płatność do wielu faktur.
+
+00:09:29.520 --> 00:09:33.260
+Jeśli numer referencyjny wskazuje na niewłaściwy dokument, może go poprawić przed zaksięgowaniem.
+
+00:09:33.460 --> 00:09:39.400
+Celem nie jest wyeliminowanie ludzkiego osądu, lecz sprawienie, by pracownicy nie spędzali dnia na przeszukiwaniu plików bankowych i list faktur.
+
+00:09:39.520 --> 00:09:43.500
+Teraz wyobraź sobie, że Norwind działa w ramach kilku spółek w tej samej grupie biznesowej.
+
+00:09:43.500 --> 00:09:48.640
+Jeden podmiot prawny może sprzedawać sprzęt, podczas gdy centralna spółka finansowa otrzymuje płatności dla całej grupy.
+
+00:09:48.820 --> 00:09:52.420
+Dynamics 365 obsługuje scentralizowane płatności w takiej sytuacji.
+
+00:09:52.620 --> 00:09:55.980
+Płatność może zostać zarejestrowana w jednym podmiocie prawnym w imieniu drugiego.
+
+00:09:56.200 --> 00:10:01.300
+Firma nie musi udawać, że pieniądze wpłynęły najpierw do spółki sprzedającej, ani zarządzać procesem poza systemem.
+
+00:10:01.480 --> 00:10:05.160
+Rejestry mogą pokazywać, gdzie wpłynęła płatność i który dług klienta ona rozlicza.
+
+00:10:05.320 --> 00:10:09.900
+To utrzymuje przejrzystość współdzielonej pracy finansowej, zwłaszcza gdy kilka spółek korzysta z jednego centralnego zespołu do spraw.
+
+00:10:09.900 --> 00:10:14.220
+Płatności. Zatem pełny proces płatności to coś więcej niż tylko rejestrowanie pieniędzy w banku.
+
+00:10:14.400 --> 00:10:22.020
+Dynamics 365 łączy klienta, płatność i fakturę, dopóki saldo nie zostanie zamknięte lub pozostała kwota nie zasygnalizuje działowi finansowemu, że należność jest nadal otwarta.
+
+00:10:22.180 --> 00:10:23.680
+To rozlicza dzisiejszą płatność.
+
+00:10:23.880 --> 00:10:26.240
+Kolejne pytanie pojawia się przed następną sprzedażą.
+
+00:10:26.400 --> 00:10:29.080
+Czy firma powinna pozwolić klientowi na większe zadłużenie?
+
+00:10:29.480 --> 00:10:33.160
+4. Zarządzanie kredytem, czyli decyzja, kiedy kontynuować sprzedaż.
+
+00:10:33.160 --> 00:10:35.960
+5. Otrzymujesz płatność i czyści ona stare saldo.
+
+00:10:36.120 --> 00:10:37.160
+Całkiem proste, prawda?
+
+00:10:37.420 --> 00:10:40.780
+Ale oto, co sprawdza zarządzanie kredytem, zanim kolejne zamówienie ruszy dalej.
+
+00:10:40.980 --> 00:10:43.160
+Jak duże ryzyko jest w stanie podjąć Twoja firma?
+
+00:10:43.340 --> 00:10:44.780
+Pomyśl o recepcji w hotelu.
+
+00:10:44.960 --> 00:10:50.560
+Gość chce zostać na kolejną noc, więc personel sprawdza rezerwację, status płatności i zasady, zanim wyda nową kartę do pokoju.
+
+00:10:50.760 --> 00:10:53.780
+Dokładnie tak działa zarządzanie kredytem w przypadku zamówienia sprzedaży.
+
+00:10:53.980 --> 00:10:57.140
+Nie ocenia ono, czy Norwind Equipment jest ogólnie dobrym klientem.
+
+00:10:57.140 --> 00:11:01.100
+Sprawdza jedynie jego bieżącą sytuację finansową pod kątem zasad ustalonych przez firmę.
+
+00:11:01.100 --> 00:11:03.060
+Jedną z tych zasad jest limit kredytowy.
+
+00:11:03.260 --> 00:11:06.540
+Limit kredytowy to maksymalna kwota, jaką klient może być winien w danym momencie.
+
+00:11:06.820 --> 00:11:12.900
+Jeśli więc Norwind ma limit 50 tysięcy dolarów, a już zalega z 45 tysięcy dolarów, nowe zamówienie na 20 tysięcy dolarów wymaga uwagi.
+
+00:11:13.080 --> 00:11:17.020
+Klient nadal może złożyć zamówienie, ale firma nie powinna pozwolić, by ta decyzja przeszła bez echa.
+
+00:11:17.240 --> 00:11:20.320
+Dynamics 365 potrafi sprawdzić więcej niż jedną liczbę.
+
+00:11:20.500 --> 00:11:26.060
+Analizuje otwarte faktury, czas ich przeterminowania, wartość nowego zamówienia i pozostały dostępny dla klienta kredyt.
+
+00:11:26.060 --> 00:11:33.000
+Klient, który płaci terminowo, może mieć jeszcze wolny limit, podczas gdy inny może mieścić się w limicie, ale mieć poważnie przeterminowaną fakturę.
+
+00:11:33.140 --> 00:11:34.320
+To różne rodzaje ryzyka.
+
+00:11:34.640 --> 00:11:42.200
+Gdy zasada zostanie naruszona, Dynamics 365 może wstrzymać zamówienie, zanim wyślesz kolejne towary lub podejmiesz się nieopłaconej pracy.
+
+00:11:42.500 --> 00:11:48.500
+Dział sprzedaży widzi wstrzymanie, dział finansowy zna powód i nikt nie odkrywa problemu dopiero po wysłaniu towaru z magazynu.
+
+00:11:48.680 --> 00:11:51.840
+Wstrzymanie kredytowe nie oznacza, że zamówienie zostało odrzucone na stałe.
+
+00:11:51.840 --> 00:12:02.900
+Oznacza to, że ktoś musi je zweryfikować. Może Norwind przesłał dowód wpłaty, menedżer finansowy wie o błędzie w fakturze lub klient poprosił o tymczasowe zwiększenie limitu ze względu na duży projekt.
+
+00:12:03.100 --> 00:12:06.840
+Upoważniony personel może zwolnić zamówienie, jeśli istnieje ku temu uzasadniony powód.
+
+00:12:06.980 --> 00:12:09.980
+To ważne, ponieważ zasady biznesowe muszą uwzględniać realne życie.
+
+00:12:10.260 --> 00:12:15.680
+System może zatrzymać automatyczną decyzję, ale odpowiedzialne osoby decydują o dalszych krokach i zostawiają jasny ślad tej decyzji.
+
+00:12:15.860 --> 00:12:18.800
+W tym miejscu sprzedaż i finanse muszą korzystać z tych samych danych.
+
+00:12:18.800 --> 00:12:25.560
+Sprzedaż chce dbać o klienta, zwłaszcza przy ważnych zamówieniach, podczas gdy finanse muszą chronić firmę przed rosnącym zadłużeniem, które może nie zostać spłacone.
+
+00:12:25.780 --> 00:12:31.980
+Żadna ze stron nie musi wygrywać sporu. Potrzebują jedynie dostępu do zamówienia, kwoty zadłużenia i zasad kredytowych w jednym miejscu.
+
+00:12:32.160 --> 00:12:35.940
+Wiele osób słysząc o zarządzaniu kredytem zakłada, że chodzi o odrzucanie klientów.
+
+00:12:36.040 --> 00:12:40.720
+To nieprawda. Chodzi o ustalenie bezpiecznych granic, zanim opóźniona płatność stanie się znacznie większym problemem.
+
+00:12:40.920 --> 00:12:44.520
+Nadal możesz wspierać dobrych klientów, zatwierdzać wyjątki i sprzedawać z pewnością siebie.
+
+00:12:44.520 --> 00:12:51.800
+Po prostu przestajesz zwiększać zadłużenie bez wcześniejszego sprawdzenia faktów. Gdy termin płatności faktury minie, prewencja ustępuje miejsca działaniom kontrolnym.
+
+00:12:51.960 --> 00:12:56.080
+Punkt piąty. Windykacja i spory, czyli jak egzekwować płatności bez utraty klienta.
+
+00:12:56.260 --> 00:13:01.220
+Gdy minie termin płatności, charakter pracy ulega zmianie. Firma nie decyduje już o przyznaniu kredytu kupieckiego.
+
+00:13:01.440 --> 00:13:04.580
+Potrzebuje jasnego, pełnego szacunku sposobu na upomnienie się o należne pieniądze.
+
+00:13:04.820 --> 00:13:08.120
+Dynamics 365 Finance przenosi te zadania na stronę windykacji.
+
+00:13:08.120 --> 00:13:11.500
+Pomyśl o tym, jak o wspólnym biurku do obsługi zaległych kont klientów.
+
+00:13:11.680 --> 00:13:17.380
+Zamiast jednej osoby notującej w e-mailach, drugiej śledzącej rozmowy w arkuszu i trzeciej sprawdzającej faktury,
+
+00:13:17.560 --> 00:13:21.660
+zespół windykacji widzi saldo klienta i historię działań w jednym miejscu.
+
+00:13:21.800 --> 00:13:23.720
+To zmienia sposób prowadzenia rozmowy.
+
+00:13:23.980 --> 00:13:28.120
+Pracownik windykacji korzysta z list klientów stworzonych według kryteriów,
+
+00:13:28.280 --> 00:13:31.940
+które mogą obejmować faktury przeterminowane o określoną liczbę dni,
+
+00:13:32.120 --> 00:13:35.660
+powyżej wybranej kwoty lub wymagające uwagi według zasad firmy.
+
+00:13:35.660 --> 00:13:39.360
+Dzięki temu zespół nie musi zgadywać, z kim kontaktować się w pierwszej kolejności.
+
+00:13:39.640 --> 00:13:42.760
+Dla każdego klienta agent może podjąć działanie, wysłać przypomnienie,
+
+00:13:42.920 --> 00:13:46.800
+stworzyć pismo windykacyjne, napisać e-mail lub dodać zadanie wykonania telefonu.
+
+00:13:46.960 --> 00:13:49.120
+Celem nie jest wysyłanie napastliwych wiadomości.
+
+00:13:49.380 --> 00:13:52.060
+Większość opóźnień w płatnościach wynika z błahych przyczyn.
+
+00:13:52.200 --> 00:13:57.060
+Faktura trafiła na zły adres, klient potrzebuje duplikatu albo zespół płatności przegapił termin.
+
+00:13:57.380 --> 00:13:59.460
+Spokojne przypomnienie może wiele zdziałać.
+
+00:13:59.640 --> 00:14:02.580
+Czasami klient odpowiada obietnicą zapłaty w przyszły piątek.
+
+00:14:02.580 --> 00:14:07.560
+Dynamics 365 pozwala zarejestrować taką deklarację, dzięki czemu zespół wie o zobowiązaniu
+
+00:14:07.560 --> 00:14:09.760
+i może sprawdzić, czy płatność wpłynęła w terminie.
+
+00:14:09.980 --> 00:14:15.340
+Bez tego zapisu kolejny agent mógłby zadzwonić następnego ranka, nie wiedząc, że data została już ustalona.
+
+00:14:15.600 --> 00:14:17.480
+Spory wymagają podobnego podejścia.
+
+00:14:17.760 --> 00:14:21.120
+Spór oznacza, że klient kwestionuje całość lub część faktury.
+
+00:14:21.660 --> 00:14:26.580
+Może to wynikać z błędnej ceny niedostarczenia towaru lub faktury za usługi, których klient nie zatwierdził.
+
+00:14:27.320 --> 00:14:30.980
+Najgorszą reakcją jest pozwolenie, by problem zniknął w gąszczu skrzynki odbiorczej.
+
+00:14:30.980 --> 00:14:35.840
+Dynamics 365 pozwala oznaczyć fakturę jako sporną i utrzymać ją w polu widzenia podczas windykacji.
+
+00:14:36.080 --> 00:14:42.060
+Zespół może śledzić status i postępy w rozwiązaniu sprawy, zamiast traktować milczenie klienta jako powód do wysyłania kolejnych upomnień.
+
+00:14:42.200 --> 00:14:44.880
+Pomaga to również firmie dostrzec powtarzające się problemy.
+
+00:14:45.080 --> 00:14:50.640
+Jeśli kilku klientów kwestionuje ten sam typ opłaty, dział finansowy dowiaduje się czegoś więcej niż tylko o opóźnieniu w płatności.
+
+00:14:50.920 --> 00:14:55.700
+Działy rozliczeń, sprzedaży, dostaw czy obsługi klienta mogą potrzebować naprawy procesu, który generuje te spory.
+
+00:14:55.900 --> 00:15:00.560
+Windykacja korzysta również z raportów wiekowania, które sortują nieopłacone kwoty według czasu ich przeterminowania.
+
+00:15:00.560 --> 00:15:04.760
+Możesz przeglądać kwoty należne teraz, a następnie przeterminowane o 30, 60 lub 90 dni.
+
+00:15:04.900 --> 00:15:09.760
+Te przedziały czasowe pomagają zespołowi dostrzec, które długi wymagają uwagi, zanim przerodzą się w znacznie trudniejszą rozmowę.
+
+00:15:09.920 --> 00:15:15.180
+Faktura spóźniona o dwa dni nie zawsze wymaga takiej samej reakcji, jak ta, która pozostaje nieopłacona od trzech miesięcy.
+
+00:15:15.440 --> 00:15:19.560
+Dział finansowy może również korzystać z prognoz płatności, jeśli są dostępne, aby oszacować,
+
+00:15:19.680 --> 00:15:25.660
+czy otwarte faktury zostaną opłacone terminowo, z opóźnieniem czy z dużym opóźnieniem na podstawie danych o płatnościach i klientach.
+
+00:15:25.660 --> 00:15:33.320
+Raport wiekowania pokazuje, co już się wydarzyło, ale prognoza pomaga zespołowi zdecydować, na czym się skupić, zanim kolejne spóźnienie stanie się problemem.
+
+00:15:33.460 --> 00:15:34.820
+To nie zastępuje osądu.
+
+00:15:35.560 --> 00:15:40.400
+Daje zespołowi windykacyjnemu kolejny sygnał, gdy muszą dokonać wyboru spośród długiej listy kont.
+
+00:15:40.580 --> 00:15:47.140
+Cel jest prosty – ściągać należności w sposób stały i przejrzysty, traktując klienta jak partnera, a nie jak numer sprawy.
+
+00:15:47.140 --> 00:15:50.460
+Przeanalizujmy teraz całą tę drogę na prostym przykładzie.
+
+00:15:50.880 --> 00:15:54.760
+Sześć – jedna faktura, jeden połączony proces, pełny obraz sytuacji.
+
+00:15:55.140 --> 00:16:03.040
+Prześledźmy więc, co się dzieje, gdy Norwind składa zamówienie, system je przetwarza, a po osiągnięciu uzgodnionego punktu rozliczeniowego faktura zostaje wystawiona.
+
+00:16:03.240 --> 00:16:10.760
+Konto klienta zawiera już warunki płatności, więc Dynamics 365 automatycznie oblicza termin płatności na podstawie zasad ustalonych z Norwind.
+
+00:16:10.980 --> 00:16:14.820
+Dział finansowy widzi otwartą kwotę, a klient otrzymuje jasne wezwanie do zapłaty.
+
+00:16:14.820 --> 00:16:19.540
+To początek procesu. Kilka tygodni później Norwind wysyła przelew bankowy z odniesieniem do faktury.
+
+00:16:19.760 --> 00:16:22.620
+Dział finansowy dopasowuje płatność do faktury, a następnie ją rozlicza.
+
+00:16:22.780 --> 00:16:27.000
+Otwarte saldo zostaje zamknięte, a konto klienta pokazuje, że ta część relacji została zakończona.
+
+00:16:27.220 --> 00:16:28.840
+Bez konieczności ręcznego sprawdzania.
+
+00:16:29.060 --> 00:16:30.940
+Ale co się dzieje, gdy sprawy potoczą się inaczej?
+
+00:16:31.100 --> 00:16:34.180
+Jeśli Norwind przegapi termin płatności, faktura trafia do windykacji.
+
+00:16:34.360 --> 00:16:41.520
+Agent wysyła przypomnienie, Norwind odpowiada, że część opłaty jest błędna, a zespół rejestruje spór, zamiast traktować to jako niewyjaśnione spóźnienie.
+
+00:16:41.520 --> 00:16:46.240
+Wszyscy widzą ten sam status i znają kolejne kroki, ponieważ wszystko znajduje się w jednym miejscu.
+
+00:16:46.420 --> 00:16:50.660
+Oto różnica w Dynamics 365 Finance, nic nie pozostaje odizolowane.
+
+00:16:50.900 --> 00:16:59.420
+Zamówienia sprzedaży, faktury, płatności, kontrole kredytowe i windykacja, wszystko wiąże się z tą samą relacją z klientem, więc nie trzeba szukać informacji w wielu systemach.
+
+00:16:59.620 --> 00:17:01.880
+Oznacza to szybsze decyzje i mniej błędów.
+
+00:17:01.880 --> 00:17:09.900
+Stara metoda rozpraszała dane w arkuszach, folderach e-mail, notatkach i wyciągach bankowych, przez co tracono czas na sprawdzanie, która wersja jest właściwa.
+
+00:17:10.120 --> 00:17:14.960
+Dynamics 365 utrzymuje spójność historii, zapewniając jeden pełny wgląd w klienta.
+
+00:17:15.180 --> 00:17:20.280
+Należności to wiedza o tym, kto jest winien pieniądze, kiedy upływa termin, co się dotąd wydarzyło i co należy zrobić dalej.
+
+00:17:20.520 --> 00:17:25.000
+Jeśli brakuje jakiegokolwiek elementu, firma może sprzedawać dużo, a mimo to mieć trudności z ustaleniem, gdzie są jej pieniądze.
+
+00:17:25.200 --> 00:17:27.100
+Dlatego ten połączony proces ma znaczenie.
+
+00:17:27.100 --> 00:17:30.640
+Wniosek. Miej kontrolę nad przepływem gotówki wewnątrz firmy.
+
+00:17:30.840 --> 00:17:32.880
+Faktura to dopiero początek procesu.
+
+00:17:33.000 --> 00:17:38.720
+Czy Twój dział należności śledzi pieniądze aż do zamknięcia salda lub podjęcia działań w sprawie nieuregulowanych płatności?
+
+00:17:38.940 --> 00:17:42.340
+Utrzymywanie kontroli nad tymi środkami jest kluczowe dla kondycji firmy.
+
+00:17:42.560 --> 00:17:43.760
+Nazywam się Mirko Peters.
+
+00:17:44.000 --> 00:17:51.980
+Zasubskrybuj Microsoft Knowledge Magnets w M365FM, a następnie obejrzyj powiązany odcinek Dynamics 365 Finance na ekranie, aby dalej zgłębiać temat prostym językiem.

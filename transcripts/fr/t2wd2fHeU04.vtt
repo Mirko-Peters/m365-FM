@@ -1,0 +1,925 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:07.180
+Prêt pour 10 jours de Microsoft 365, copilote, l'IA, Azure et les personnes qui façonnent l'avenir du travail, IAM.
+
+00:00:07.920 --> 00:00:12.000
+En janvier, la M365 con est de retour et nous allons plus loin.
+
+00:00:12.880 --> 00:00:18.020
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des connaissances pratiques de MVP et d'experts du secteur du monde entier.
+
+00:00:18.700 --> 00:00:21.020
+Pas de diapositif générique, pas de mots à la mode sans fin.
+
+00:00:22.020 --> 00:00:23.220
+Nous nous attaquons aux vrais défis.
+
+00:00:23.760 --> 00:00:28.660
+Copilot Studio, Agenda DIA, Fabrique, Sécurité, Gouvernance et Automatisation.
+
+00:00:28.660 --> 00:00:34.300
+Que vous soyez un professionnel de l'informatique, un développeur ou un chef d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.500 --> 00:00:39.860
+Pendant 10 jours complets, vous pouvez explorer de multiples technologies et vous connecter à une communauté mondiale.
+
+00:00:40.880 --> 00:00:44.300
+Regardez en direct et rapportez des informations pratiques à votre organisation.
+
+00:00:45.120 --> 00:00:48.860
+Janvier 2027, 10 jours, une communauté Microsoft.
+
+00:00:49.400 --> 00:00:50.580
+Les inscriptions sont ouvertes dès maintenant.
+
+00:00:51.840 --> 00:00:55.500
+Rendez-vous sur m365.net et réservez votre place dès aujourd'hui.
+
+00:00:55.500 --> 00:00:58.220
+C'est m365.net.
+
+00:00:58.660 --> 00:01:04.520
+Rejoignez-nous dès maintenant sur m365.net et nous vous retrouverons en direct en janvier.
+
+00:01:05.100 --> 00:01:07.720
+Qu'est-ce que Microsoft fabrique Data Factory exactement ?
+
+00:01:07.720 --> 00:01:11.040
+S'agit-il simplement d'Azure Data Factory avec un nouveau nom ou de quelque chose de complètement différent ?
+
+00:01:11.040 --> 00:01:14.080
+Si vous avez entendu ce terme et que vous vous êtes demandé ce qu'il signifie réellement, vous n'êtes pas le seul.
+
+00:01:14.920 --> 00:01:17.240
+A la fin de cet épisode, vous saurez de quoi il s'agit, en quoi il diffère.
+
+00:01:17.300 --> 00:01:20.660
+De l'ADF classique et quels sont les éléments essentiels que vous devez réellement comprendre ?
+
+00:01:20.660 --> 00:01:26.080
+Si vous gérez le déplacement de données dans Fabrique, c'est le moteur qui le rend possible et c'est plus simple que vous ne le pensez.
+
+00:01:26.420 --> 00:01:29.520
+Et nous allons examiner quatre éléments de base clé et voir comment ils s'articulent.
+
+00:01:30.060 --> 00:01:32.000
+Mais commençons par définir de quoi nous parlons.
+
+00:01:32.840 --> 00:01:33.800
+Ici la définition la plus simple.
+
+00:01:34.180 --> 00:01:38.120
+Fabrique Data Factory est le moteur de Microsoft Fabrique qui déplace et intègre vos données.
+
+00:01:38.120 --> 00:01:43.620
+Considérez-le comme le remplacement des pipelines Azure Data Factory et Synapse, le tout dans une seule plateforme, SAAS.
+
+00:01:44.460 --> 00:01:45.520
+C'est la première chose à comprendre.
+
+00:01:46.200 --> 00:01:47.600
+Ce n'est pas un service distinct que vous gérez.
+
+00:01:48.160 --> 00:01:50.220
+Il est intégré directement à Fabrique, connecté à One Lake.
+
+00:01:50.800 --> 00:01:51.600
+Utilisons une analogie.
+
+00:01:52.160 --> 00:01:57.100
+Si Fabrique est un immeuble de bureau, Data Factory est la salle du courrier et les tapis roulants qui transportent les documents d'un étage à l'autre.
+
+00:01:57.520 --> 00:02:01.320
+Vous ne pensez pas à la salle du courrier tous les jours, mais sans elle, rien ne va du point A au point B.
+
+00:02:01.680 --> 00:02:02.180
+Pareil ici.
+
+00:02:02.600 --> 00:02:02.920
+Pareil ici.
+
+00:02:03.400 --> 00:02:05.440
+Data Factory gère le mouvement en coulisses.
+
+00:02:05.440 --> 00:02:09.320
+La grande différence avec l'ancien monde, c'est qu'aucune configuration de stockage supplémentaire n'est nécessaire.
+
+00:02:09.620 --> 00:02:10.920
+Vos données atterrissent directement dans One Lake.
+
+00:02:11.300 --> 00:02:15.900
+Dans Azure Data Factory, vous deviez configurer un compte de stockage, créer des conteneurs et configurer des services liés.
+
+00:02:16.340 --> 00:02:17.320
+Dans Fabrique, tout cela a disparu.
+
+00:02:17.640 --> 00:02:20.220
+One Lake est déjà là, il vous suffit donc de pointer votre pipeline vers lui et c'est parti.
+
+00:02:20.780 --> 00:02:22.260
+Cela vous semble familier, n'est-ce pas ?
+
+00:02:22.260 --> 00:02:25.320
+En quoi cela différe-t-il d'Azure Data Factory que vous connaissez déjà ?
+
+00:02:25.320 --> 00:02:27.660
+En quoi cela différe-t-il d'Azure Data Factory ?
+
+00:02:27.660 --> 00:02:31.780
+Beaucoup de gens pensent que Fabrique Data Factory n'est qu'Azure Data Factory avec une nouvelle étiquette, mais ce n'est pas le cas.
+
+00:02:32.180 --> 00:02:33.100
+Brisons quelques idées reçues.
+
+00:02:33.100 --> 00:02:34.780
+C'est au niveau de la tarification que les choses changent.
+
+00:02:35.160 --> 00:02:40.280
+ADF facture par exécution d'activité, donc chaque activité de copie, procédure stockée et exécution de pipeline s'ajoute à votre facture.
+
+00:02:41.200 --> 00:02:43.820
+Fabrique Data Factory utilise plutôt une tarification basée sur la capacité.
+
+00:02:44.280 --> 00:02:49.980
+Vous achetez une capacité Fabrique, F2, F4, F16, peu importe, et toutes vos charges de travail partagent ce pool de calcul.
+
+00:02:50.880 --> 00:02:53.000
+Data Factory, Power BI, Lake House, toute la plateforme.
+
+00:02:53.680 --> 00:02:57.420
+Si vous disposez déjà d'une capacité Fabrique, l'exécution de pipeline coûte très peu de frais supplémentaires.
+
+00:02:58.020 --> 00:03:01.540
+Si ce n'est pas le cas, vous devez comparer le coût total de Fabrique à votre facture ADF actuelle.
+
+00:03:01.540 --> 00:03:02.860
+Les connexions sont également puissantes.
+
+00:03:03.260 --> 00:03:07.140
+Dans ADF, vous deviez créer un service lié pour chaque source et destination, puis des ensembles de données par-dessus,
+
+00:03:07.240 --> 00:03:09.660
+puis configurer l'environnement d'exécution, de l'intégration, de l'intégration.
+
+00:03:10.160 --> 00:03:13.120
+Avec Fabrique, les connexions sont définies en ligne et One Lake est automatique.
+
+00:03:13.660 --> 00:03:17.100
+Vous choisissez votre source, votre destination, et la connexion est établie instantanément.
+
+00:03:17.600 --> 00:03:18.160
+Beaucoup moins de clics.
+
+00:03:18.840 --> 00:03:20.460
+Il existe également de nouvelles activités intégrées.
+
+00:03:20.800 --> 00:03:23.620
+Vous pouvez envoyer des e-mails ou des messages team directement depuis votre pipeline,
+
+00:03:23.740 --> 00:03:25.680
+sans avoir besoin de Logic Apps ou de Webhook personnalisés.
+
+00:03:26.000 --> 00:03:28.680
+Il s'agit simplement d'une activité de glisser-déposer, ce qui permet de gagner beaucoup de temps.
+
+00:03:28.680 --> 00:03:29.940
+Le déploiement est désormais plus simple.
+
+00:03:30.360 --> 00:03:32.420
+ADF disposait de pipelines de déploiement, mais ils étaient peu pratiques.
+
+00:03:32.920 --> 00:03:35.860
+Fabrique dispose de pipelines de déploiement intégrés et promotions au niveau de l'espace de travail,
+
+00:03:35.960 --> 00:03:38.400
+ce qui vous permet de passer du développement au test, puis à la production en quelques clics.
+
+00:03:38.880 --> 00:03:40.000
+Aucun script manuel n'est nécessaire.
+
+00:03:40.460 --> 00:03:41.520
+Soyons honnêtes quant à ce qui manque.
+
+00:03:41.900 --> 00:03:44.260
+La prise en charge de SSIS et le réseau virtuel géré ne sont pas encore disponibles.
+
+00:03:44.760 --> 00:03:48.480
+Si vous avez beaucoup investi dans SQL Server Integration Services, vous devrez attendre...
+
+00:03:48.480 --> 00:03:49.880
+Pour la plupart des gens, cela convient.
+
+00:03:50.460 --> 00:03:53.260
+La grande majorité des travaux d'intégration de données nécessitent pas SSIS.
+
+00:03:54.200 --> 00:03:55.220
+Voici donc une règle empirique sain.
+
+00:03:55.680 --> 00:03:59.120
+Si votre facture ADF est inférieure à 1 500 $ par mois et que vous n'utilisez pas Fabrique,
+
+00:03:59.240 --> 00:04:01.800
+restez avec ADF car il est moins cher pour les charges de travail à faible volume.
+
+00:04:02.340 --> 00:04:04.920
+Si vous utilisez déjà Fabrique, Data Factory est inclus, alors utilisez-le.
+
+00:04:05.560 --> 00:04:09.440
+Et si vos coûts ADF sont plus élevés, cela vaut la peine de faire le calcul sur une capacité Fabrique.
+
+00:04:10.680 --> 00:04:12.380
+Bloc de construction 1, les pipelines de données.
+
+00:04:12.860 --> 00:04:15.120
+Examinons maintenant le premier bloc de construction, les pipelines de données.
+
+00:04:15.120 --> 00:04:16.560
+Les pipelines sont les orchestrateurs.
+
+00:04:16.820 --> 00:04:20.120
+Ils décident de ce qui s'exécute, quand et dans quel ordre, et tout le reste s'y connecte.
+
+00:04:20.120 --> 00:04:21.780
+Imaginez un pipeline comme une recette.
+
+00:04:22.340 --> 00:04:24.720
+Vous avez des étapes, vous pouvez créer des branches et vous pouvez revenir en arrière.
+
+00:04:25.320 --> 00:04:27.540
+Tout d'abord, vous préchauffez le four, puis mélangez les ingrédients.
+
+00:04:27.800 --> 00:04:30.340
+Et si la pâte semble trop sèche, vous ajoutez du lait avant la cuisson.
+
+00:04:30.740 --> 00:04:31.940
+Un pipeline fonctionne de la même manière.
+
+00:04:32.380 --> 00:04:35.000
+Tout d'abord, copiez les données d'une source, puis vérifiez si le fichier existe,
+
+00:04:35.060 --> 00:04:36.720
+et si c'est le cas, exécutez une transformation.
+
+00:04:37.260 --> 00:04:38.560
+Si ce n'est pas le cas, envoyez une alerte.
+
+00:04:38.660 --> 00:04:39.380
+Vous contrôlez le flux.
+
+00:04:39.780 --> 00:04:42.300
+Les activités principales que vous utiliserez le plus souvent sont la copie de données
+
+00:04:42.300 --> 00:04:44.720
+pour chaque condition, si la condition, si la condition obtenir des métadonnées est large.
+
+00:04:44.720 --> 00:04:46.820
+La copie de données déplace les données du point A au point B.
+
+00:04:46.980 --> 00:04:49.580
+Pour chaque condition, elle parcourt une liste, disons 10 fichiers dans un dossier.
+
+00:04:50.180 --> 00:04:52.120
+Si la condition vérifie si quelque chose est vrai ou faux,
+
+00:04:52.620 --> 00:04:54.520
+obtenir des métadonnées pose des questions sur vos données.
+
+00:04:55.020 --> 00:04:56.080
+Quelle est la taille de ce fichier ?
+
+00:04:56.080 --> 00:04:57.840
+Quand a-t-il été modifié pour la dernière fois ?
+
+00:04:57.840 --> 00:05:00.720
+La recherche lit le fichier de configuration et importe les valeurs dans votre pipeline.
+
+00:05:01.120 --> 00:05:01.880
+C'est le kit de démarrage.
+
+00:05:02.260 --> 00:05:03.060
+Tout cela est low-code.
+
+00:05:03.600 --> 00:05:05.220
+Vous glissez-déposez des activités sur un canevas,
+
+00:05:05.360 --> 00:05:07.580
+vous les reliez avec des flèches, vous définissez les propriétés, et c'est terminé.
+
+00:05:08.140 --> 00:05:09.800
+Aucun codage n'est nécessaire pour la plupart des tâches.
+
+00:05:10.180 --> 00:05:12.020
+Cela ressemble à un organigramme, car c'est exactement ce que c'est.
+
+00:05:12.440 --> 00:05:13.280
+Voici un exemple concret.
+
+00:05:13.620 --> 00:05:15.860
+Imaginez que vous extrayez des données de vente d'une API tous les matins.
+
+00:05:16.360 --> 00:05:18.940
+Votre pipeline commence par une activité de copie de données qui les dépose dans un an.
+
+00:05:19.600 --> 00:05:21.700
+Ensuite, un flux de données générant deux étapes nettoie les données,
+
+00:05:21.820 --> 00:05:23.680
+supprime les valeurs nulles et corrige les formats de date.
+
+00:05:24.420 --> 00:05:26.260
+Puis un notebook l'enrichit avec des segments de clientèle.
+
+00:05:26.880 --> 00:05:29.000
+Enfin, une activité Teams envoie un message à votre équipe.
+
+00:05:29.860 --> 00:05:30.800
+Les données de vente sont mises à jour.
+
+00:05:31.580 --> 00:05:34.480
+C'est un pipeline qui effectue le travail qui nécessitait auparavant plusieurs outils.
+
+00:05:34.920 --> 00:05:36.400
+Vous pouvez également rendre les pipelines réutilisables.
+
+00:05:36.880 --> 00:05:38.840
+Imaginons que vous ayez la même logique pour 10 sources de données différentes.
+
+00:05:38.840 --> 00:05:42.120
+Au lieu de créer 10 pipelines, vous en créez un et utilisez des paramètres,
+
+00:05:42.320 --> 00:05:45.160
+l'URL source, le nom de la table, le dossier de destination, tous comme variables.
+
+00:05:45.820 --> 00:05:47.060
+Un pipeline, 10 tâches différentes.
+
+00:05:47.700 --> 00:05:48.560
+C'est du paramétrage.
+
+00:05:49.780 --> 00:05:50.400
+Et voici une nouveauté.
+
+00:05:51.500 --> 00:05:54.280
+Vous pouvez demander à Copilot d'écrire des expressions de pipeline en langage simple.
+
+00:05:54.700 --> 00:05:57.680
+Tapez « Ajouter 2 jours à cette date » et il génère l'expression pour vous.
+
+00:05:58.020 --> 00:06:01.380
+Plus besoin de mémoriser la syntaxe des fonctions ou de chercher sur Google comment formater un neurodatage.
+
+00:06:01.840 --> 00:06:02.720
+Dites simplement ce dont vous avez besoin.
+
+00:06:03.540 --> 00:06:05.540
+Blob de construction numéro 2, Dataflow Gen 2.
+
+00:06:05.540 --> 00:06:09.600
+Alors que se passe-t-il lorsque vous avez besoin de nettoyer des données sans écrire de code ?
+
+00:06:09.600 --> 00:06:11.500
+C'est exactement le problème que résout Dataflow Gen 2.
+
+00:06:12.500 --> 00:06:15.180
+Dataflow Gen 2 est l'outil de transformation low-code de Fabrique Data Factory.
+
+00:06:15.940 --> 00:06:19.820
+Si vous avez déjà utilisé Power Query dans Excel ou Power BI, cela vous semblera très familier.
+
+00:06:20.300 --> 00:06:23.320
+Il possède la même interface, les mêmes 300 transformations et plus et le même moteur.
+
+00:06:23.620 --> 00:06:24.200
+Mais il s'exécute.
+
+00:06:24.520 --> 00:06:26.140
+Dans le cloud avec un lake house comme destination.
+
+00:06:27.180 --> 00:06:27.980
+Voyez les choses de cette façon.
+
+00:06:27.980 --> 00:06:34.440
+Si les pipelines sont la chaîne de montage qui déplace les boîtes, Dataflow Gen 2 est la cuisine où vous achetez, assaisonnez et faites cuire les ingrédients bruts.
+
+00:06:35.220 --> 00:06:36.360
+Les pipelines gèrent la logistique.
+
+00:06:36.720 --> 00:06:39.540
+Dataflow Gen 2 s'occupe du travail réel consistant à rendre les données utiles.
+
+00:06:39.860 --> 00:06:41.140
+Quand devez-vous l'utiliser ?
+
+00:06:41.140 --> 00:06:46.780
+Lorsque vous devez nettoyer des données, modifier des types, fusionner des tables ou filtrer des lignes, le tout, sans avoir à utiliser Spark ou SQL.
+
+00:06:47.440 --> 00:06:50.880
+Si votre transformation tient sur un tableau blanc, elle tient probablement dans Dataflow Gen 2.
+
+00:06:51.640 --> 00:06:52.380
+Voici un exemple rapide.
+
+00:06:52.380 --> 00:06:55.060
+Vous importez un fichier CSV rempli de commandes client.
+
+00:06:55.720 --> 00:06:59.320
+Il y a des lignes en double, certaines dates sont au mauvais format, quelques colonnes ont des valeurs nulles.
+
+00:06:59.720 --> 00:07:04.880
+Vous ouvrez Dataflow Gen 2, cliquez sur quelques boutons pour supprimer les doublons, modifiez le type de colonne de date et remplissez les valeurs manquantes.
+
+00:07:05.620 --> 00:07:07.760
+Ensuite vous le joignez à une table de produit provenant d'une autre source.
+
+00:07:08.080 --> 00:07:08.940
+Le tout prend 10 minutes.
+
+00:07:09.400 --> 00:07:09.760
+Aucun code.
+
+00:07:10.040 --> 00:07:12.240
+Le résultat arrive dans une table lake house, prête pour le reporting.
+
+00:07:12.900 --> 00:07:13.900
+Vous pouvez également tout voir visuellement.
+
+00:07:14.360 --> 00:07:16.560
+Il existe une vue diagramme qui montre chaque étape sous forme de nœud.
+
+00:07:16.940 --> 00:07:18.020
+La source va dans un nœud de filtre.
+
+00:07:18.360 --> 00:07:19.580
+Le filtre alimente un nœud de fusion.
+
+00:07:20.180 --> 00:07:21.260
+La fusion alimente le résultat.
+
+00:07:21.260 --> 00:07:22.920
+Vous pouvez voir l'ensemble du flux en un coup d'œil.
+
+00:07:23.400 --> 00:07:26.740
+Et c'est vraiment utile lorsque vous déboguez ou lorsque vous devez expliquer la logique à quelqu'un d'autre.
+
+00:07:27.360 --> 00:07:28.540
+La planification est également flexible.
+
+00:07:28.900 --> 00:07:30.240
+Vous pouvez exécuter Dataflow Gen 2 seul.
+
+00:07:30.960 --> 00:07:32.660
+Configurez-le pour qu'il s'actualise tous les matins à 6 heures.
+
+00:07:33.200 --> 00:07:36.300
+Vous pouvez également l'appeler à partir d'un pipeline par an comme une étape d'un flux de travail plus vaste.
+
+00:07:36.480 --> 00:07:38.000
+La plupart des configurations de production font cédale.
+
+00:07:38.460 --> 00:07:42.100
+Le pipeline gère l'orchestration et Dataflow Gen 2 gère l'étape de transformation à l'intérieur.
+
+00:07:42.840 --> 00:07:46.100
+Mais soyons honnêtes, pour les transformations vraiment lourdes comme des milliards de lignes,
+
+00:07:46.100 --> 00:07:49.200
+des fonctions de fenêtres complexes ou une logique d'apprentissage automatique personnalisée,
+
+00:07:49.200 --> 00:07:51.180
+vous pouvez toujours utiliser des notebooks avec Spark.
+
+00:07:52.200 --> 00:07:54.080
+Dataflow Gen 2 n'est pas conçu pour tous les scénarios,
+
+00:07:54.560 --> 00:07:56.580
+mais pour la grande majorité des besoins de la plupart des équipes,
+
+00:07:57.040 --> 00:07:59.360
+à savoir le nettoyage, la mise en forme, la jointure et l'agrégation.
+
+00:07:59.620 --> 00:08:01.120
+Ils couvrent environ 80% du travail.
+
+00:08:01.640 --> 00:08:03.200
+Cela représente beaucoup de codes que vous n'avez pas à écrire.
+
+00:08:03.780 --> 00:08:05.360
+Troisième bloc de construction, les tâches de copie.
+
+00:08:05.680 --> 00:08:06.940
+Parlons maintenant du déplacement de données.
+
+00:08:07.600 --> 00:08:10.540
+Que faire si vous avez besoin d'un flux continu depuis une base de données ?
+
+00:08:10.540 --> 00:08:11.680
+C'est là qu'interviennent les tâches de copie.
+
+00:08:12.000 --> 00:08:16.060
+Une tâche de copie est un moyen simplifié de copier des données d'une source vers un lac avec un suivi des modifications antérieures.
+
+00:08:16.060 --> 00:08:18.740
+Pas de configuration de pipeline complexe, pas de script personnalisé,
+
+00:08:18.820 --> 00:08:22.320
+vous choisissez une source, une destination et vous lui indiquez la fréquence d'exécution et vous lui indiquez.
+
+00:08:22.640 --> 00:08:23.000
+C'est tout.
+
+00:08:24.100 --> 00:08:26.500
+La fonctionnalité clé est la capture des données modifiées ou c'est décidé.
+
+00:08:26.700 --> 00:08:29.980
+Les tâches de copie suivent automatiquement les insertions, les mises à jour et les suppressions à la source.
+
+00:08:30.380 --> 00:08:32.240
+Vous n'avez pas besoin de créer une logique de tatouage manuel.
+
+00:08:32.480 --> 00:08:35.380
+Cette chose, vous enregistrez un horodatage et recherchez les enregistrements les plus récents.
+
+00:08:35.740 --> 00:08:37.000
+Les tâches de copie gèrent cela en arrière-plan.
+
+00:08:37.540 --> 00:08:38.960
+Cela fonctionne sans effort supplémentaire.
+
+00:08:39.240 --> 00:08:39.640
+Ce n'est pas tout.
+
+00:08:39.640 --> 00:08:42.880
+Les tâches de copie prennent en charge les dimensions à évolution lente de type 2.
+
+00:08:43.060 --> 00:08:44.860
+Cela signifie qu'elles conservent un historique complet.
+
+00:08:45.540 --> 00:08:48.540
+Lorsqu'un client change d'adresse, l'ancienne adresse reste dans la table avec une date de fin.
+
+00:08:49.200 --> 00:08:50.540
+La nouvelle adresse obtient une date de début.
+
+00:08:50.900 --> 00:08:52.760
+Vous pouvez voir exactement comment un enregistrement est changé au fil.
+
+00:08:53.080 --> 00:08:54.900
+C'est énorme pour l'audit et les rapports historiques.
+
+00:08:55.480 --> 00:08:58.760
+Alors, quand utilisez-vous les tâches de copie par rapport à l'activité de copie standard ?
+
+00:08:58.760 --> 00:08:59.260
+Voici la règle.
+
+00:08:59.620 --> 00:09:02.420
+Les tâches de copie sont destinées à l'ingestion continue, une opération simple et rapide.
+
+00:09:02.940 --> 00:09:06.420
+Vous voulez que les données circulent automatiquement jour après jour avec une maintenance minimale ?
+
+00:09:06.420 --> 00:09:09.980
+Les activités de copie sont destinées au chargement groupé ponctuel ou planifié
+
+00:09:09.980 --> 00:09:12.960
+pour lesquelles vous avez besoin d'un meilleur contrôle sur les mappages et la gestion des erreurs.
+
+00:09:13.640 --> 00:09:14.580
+Voyez les choses de cette façon.
+
+00:09:14.680 --> 00:09:18.480
+Une tâche de copie, c'est comme si un bibliothécaire repérait automatiquement les nouveaux livres ajoutés et les mettait en rayon.
+
+00:09:19.160 --> 00:09:22.340
+Vous n'avez pas besoin de vérifier le catalogue à chaque fois, car c'est le bibliothécaire qui s'en charge.
+
+00:09:23.060 --> 00:09:25.240
+Une activité de copie, c'est plutôt comme si vous alliez à la bibliothèque,
+
+00:09:25.300 --> 00:09:27.960
+que vous choisissiez vous-même les livres et que vous décidiez exactement où ils vont.
+
+00:09:28.280 --> 00:09:32.280
+Les deux font le travail, mais les tâches de copie vous épargnent les efforts liés aux tâches de routine.
+
+00:09:32.680 --> 00:09:33.480
+La configuration est simple.
+
+00:09:33.480 --> 00:09:35.840
+Vous choisissez la source, par exemple une base de données SQL Server.
+
+00:09:36.260 --> 00:09:38.380
+Vous choisissez la destination, une table Lake House.
+
+00:09:38.900 --> 00:09:39.520
+Vous mappez les champs.
+
+00:09:39.840 --> 00:09:42.720
+Vous lui indiquez si vous souhaitez une actualisation incrémentielle ou complète, et c'est tout.
+
+00:09:43.340 --> 00:09:46.620
+La tâche s'exécute selon votre planning et maintient automatiquement votre Lake House synchroniste.
+
+00:09:47.460 --> 00:09:48.340
+Élément constitutif, c'est le mieux.
+
+00:09:48.860 --> 00:09:51.840
+Et si vous avez besoin d'une réplication en temps réel, c'est là qu'intervient la mise en miroir.
+
+00:09:52.080 --> 00:09:53.100
+Voici la définition la plus simple.
+
+00:09:53.440 --> 00:09:58.460
+La mise en miroir est un moyen de répliquer votre base de données opérationnelle dans One Lake en continu sans écrire une seule ligne de code.
+
+00:09:59.100 --> 00:10:01.060
+Vous le configurez une fois, et il s'exécute en arrière-plan.
+
+00:10:01.060 --> 00:10:03.140
+Les données restent à jour en temps quasi réel.
+
+00:10:03.680 --> 00:10:05.800
+Aucun pipeline n'a créé aucun flux de données à maintenir.
+
+00:10:06.020 --> 00:10:06.720
+Il fonctionne, c'est bon.
+
+00:10:07.000 --> 00:10:08.320
+Comment cela fonctionne-t-il concrètement ?
+
+00:10:08.320 --> 00:10:10.820
+La mise en miroir lit le journal des transactions de votre base de données source.
+
+00:10:11.260 --> 00:10:15.680
+Chaque modification, chaque insertion, mise à jour et suppression est récupérée et apparaît dans One Lake en quelques minutes.
+
+00:10:16.120 --> 00:10:17.200
+Il ne s'agit pas d'un traitement par l'eau.
+
+00:10:17.580 --> 00:10:18.640
+Il s'agit d'une réplication continue.
+
+00:10:19.200 --> 00:10:21.880
+Dès qu'un élément change dans votre base de données source, il apparaît dans Fabrique.
+
+00:10:22.740 --> 00:10:23.320
+Parlons des sources.
+
+00:10:24.040 --> 00:10:27.880
+Pour l'instant, vous pouvez mettre en miroir Azure SQL Database, Azure Cosmos DB, Snowflake et d'autres.
+
+00:10:28.500 --> 00:10:33.380
+D'autres sont à venir, comme la mise en miroir de réseaux privés pour les bases de données derrière des pare-feux qui a été annoncée lors de la Bill 26.
+
+00:10:33.600 --> 00:10:34.340
+Pourquoi l'utiliser ?
+
+00:10:34.340 --> 00:10:35.100
+Pourquoi l'utiliser ?
+
+00:10:35.100 --> 00:10:38.620
+Parce que vous obtenez une copie en direct de votre base de données dans One Lake sans créer de pipeline ETL.
+
+00:10:39.040 --> 00:10:40.020
+Vous n'avez pas besoin d'activité de copie.
+
+00:10:40.300 --> 00:10:41.580
+Vous n'avez pas besoin de script de suivi des modifications.
+
+00:10:41.940 --> 00:10:43.240
+Vous n'avez pas besoin de logique de chargement incrémentiel.
+
+00:10:43.520 --> 00:10:44.780
+Le système gère tout cela pour vous.
+
+00:10:45.120 --> 00:10:46.300
+Voici une analogie pour vous aider à comprendre.
+
+00:10:46.300 --> 00:10:50.180
+Considérez la mise en miroir comme un clone en temps réel de votre base de données hébergée dans Fabrique.
+
+00:10:50.440 --> 00:10:52.780
+Mettez à jour la source une fois et le clone se met à jour instantanément.
+
+00:10:53.140 --> 00:10:54.500
+Aucun code n'est requis pour les synchroniser.
+
+00:10:54.900 --> 00:10:55.940
+Le système fait le gros du travail.
+
+00:10:56.240 --> 00:10:57.760
+Il existe également un avantage financier que d'être notre compte.
+
+00:10:57.940 --> 00:11:01.000
+La mise en miroir est fournie avec des ressources de calcul et de stockage gratuites jusqu'à une certaine limite.
+
+00:11:01.280 --> 00:11:03.580
+Vous ne payez que pour la capacité Fabrique dont vous disposez déjà.
+
+00:11:03.920 --> 00:11:08.620
+Pour de nombreuses organisations, cela rend cette solution moins coûteuse que la création et la maintenance de pipelines de réplications personnalisées.
+
+00:11:08.620 --> 00:11:09.840
+Voici un cas d'utilisation pratique.
+
+00:11:10.120 --> 00:11:14.120
+Vous pouvez créer des rapports Power BI directement sur des données mises en miroir sans affecter la base de données source.
+
+00:11:14.120 --> 00:11:16.520
+Votre système opérationnel continue de fonctionner à plein régime.
+
+00:11:16.900 --> 00:11:18.280
+Vos analystes obtiennent des données actualisées.
+
+00:11:18.680 --> 00:11:19.180
+Tout le monde y gagne.
+
+00:11:19.560 --> 00:11:21.580
+Comment ces éléments fonctionnent-ils ensemble ?
+
+00:11:21.580 --> 00:11:23.920
+Vous avez donc des pipelines, des flûtes de données, des tâches de copier, des mises en miroir.
+
+00:11:24.860 --> 00:11:25.860
+Comment s'article ?
+
+00:11:25.860 --> 00:11:28.200
+La plupart des implémentations réelles suivent un modèle simple.
+
+00:11:28.880 --> 00:11:31.300
+Ingérer, nettoyer, enrichir, servir.
+
+00:11:31.940 --> 00:11:33.220
+C'est ce qu'on appelle l'architecture médalion.
+
+00:11:33.980 --> 00:11:35.060
+Bronze, silver, gold.
+
+00:11:35.560 --> 00:11:36.440
+Considérez-la comme trois couches.
+
+00:11:36.840 --> 00:11:38.860
+Bronze conserve les données brutes exactement telles qu'elles sont arrivées.
+
+00:11:39.180 --> 00:11:40.600
+Silver est nettoyé et dédupliqué.
+
+00:11:40.980 --> 00:11:42.740
+Gold est enrichi et prête pour la création de rapports.
+
+00:11:42.740 --> 00:11:44.180
+Voici à quoi cela ressemble en pratique.
+
+00:11:44.740 --> 00:11:47.800
+Une tâche de mise en miroir ou de copier envoie les données brutes dans une table Lakehouse Bronze.
+
+00:11:48.260 --> 00:11:49.040
+C'est l'étape d'ingestion.
+
+00:11:49.440 --> 00:11:51.700
+Ensuite, un flux de données Gen2 les nettoie et les transforme en silver.
+
+00:11:52.420 --> 00:11:55.600
+Supprime les valeurs, standardise les formats et joint les tables associées.
+
+00:11:56.160 --> 00:11:57.620
+Enfin, un pipeline orchestre le tout.
+
+00:11:58.420 --> 00:12:01.060
+Il déclenche la tâche de copie, attend qu'elle se termine, exécute le flux de données
+
+00:12:01.060 --> 00:12:02.900
+et envoie la notification de Teams lorsqu'elle est terminée.
+
+00:12:03.620 --> 00:12:04.220
+C'est le flux complet.
+
+00:12:04.720 --> 00:12:06.440
+La vraie magie ne réside pas dans un seul outil.
+
+00:12:06.960 --> 00:12:08.720
+C'est la manière dont ils communiquent tous entre eux via un seul lac.
+
+00:12:09.100 --> 00:12:10.680
+Une donnée mise en miroir résidant dans un seul lac.
+
+00:12:10.680 --> 00:12:12.760
+La sortie de votre flux de données arrive dans un seul lac.
+
+00:12:13.040 --> 00:12:14.300
+Votre pipeline lit à partir d'un seul lac.
+
+00:12:14.740 --> 00:12:16.080
+Tout partage la même couche de stockage.
+
+00:12:16.740 --> 00:12:19.220
+Vous pouvez même partager des données entre des espaces de travail à l'aide de raccourcis.
+
+00:12:19.620 --> 00:12:20.420
+Aucune copie n'est nécessaire.
+
+00:12:20.860 --> 00:12:22.740
+Il existe une chaîne de dépendance qui mérite d'être comprise.
+
+00:12:23.100 --> 00:12:25.860
+Les pipelines peuvent appeler DataFlow Gen2 comme une étape à l'intérieur du pipeline.
+
+00:12:26.400 --> 00:12:28.360
+Ils peuvent également inclure des blocs-notes, des tâches DBT
+
+00:12:28.360 --> 00:12:31.000
+et même des pipelines Azure Data Factory si vous migrez progressivement.
+
+00:12:31.360 --> 00:12:32.620
+Un seul pipeline peut tout orchestrer.
+
+00:12:33.040 --> 00:12:33.440
+Voici le truc.
+
+00:12:33.860 --> 00:12:35.800
+Vous n'avez plus besoin d'assembler 5 services différents.
+
+00:12:36.360 --> 00:12:38.820
+Une plateforme, une couche de stockage, un ensemble d'autorisation.
+
+00:12:38.820 --> 00:12:40.040
+C'est l'intérêt de Fabrique.
+
+00:12:40.380 --> 00:12:41.400
+Et cela fonctionne dans le monde réel.
+
+00:12:41.640 --> 00:12:44.160
+Un distributeur basé aux ingénieurs arabes uni a utilisé ce modèle Azure.
+
+00:12:44.700 --> 00:12:46.000
+Des tâches de copie pour les données SAP.
+
+00:12:46.580 --> 00:12:47.700
+DataFlow Gen2 pour le nettoyage.
+
+00:12:47.840 --> 00:12:48.980
+Des pipelines pour l'orchestration.
+
+00:12:49.380 --> 00:12:51.160
+Ils ont réduit leur clôture mensuelle de 9 à 2 jours.
+
+00:12:51.540 --> 00:12:52.200
+Ce n'est pas une démonstration.
+
+00:12:52.600 --> 00:12:53.120
+C'est de la production.
+
+00:12:53.620 --> 00:12:54.580
+Conseils, pratiques et coûts.
+
+00:12:55.080 --> 00:12:57.400
+Alors qui devrait réellement utiliser Fabrique Data Factory ?
+
+00:12:57.400 --> 00:12:59.600
+Si vous avez besoin de déplacer ou de transformer des données dans Fabrique,
+
+00:12:59.680 --> 00:13:00.380
+cet outil est fait pour vous.
+
+00:13:00.720 --> 00:13:02.620
+Cela couvre les ingénieurs de données qui créent des pipelines.
+
+00:13:02.800 --> 00:13:04.280
+Les ingénieurs d'analystes qui modélisent des données.
+
+00:13:04.280 --> 00:13:06.540
+Et même les analystes commerciaux qui utilisent DataFlow Gen2
+
+00:13:06.540 --> 00:13:07.760
+pour les transformations en libre-service.
+
+00:13:08.460 --> 00:13:09.580
+Qui devrait l'ignorer ?
+
+00:13:09.580 --> 00:13:11.480
+Si vous n'avez besoin que de téléchargement de fichiers ponctuels,
+
+00:13:11.660 --> 00:13:12.680
+commencez directement par les causes.
+
+00:13:13.340 --> 00:13:14.400
+Glissez déposer un fichier CSV.
+
+00:13:15.120 --> 00:13:16.580
+Si vous êtes fortement investi dans le SSIS,
+
+00:13:16.700 --> 00:13:17.620
+attendez cette prise en charge.
+
+00:13:18.140 --> 00:13:20.100
+Si votre facture ADF est inférieure à 1 500 par mois
+
+00:13:20.100 --> 00:13:21.280
+et que vous n'utilisez pas Fabrique,
+
+00:13:21.620 --> 00:13:23.000
+il est logique de rester sur place pour l'instant.
+
+00:13:23.260 --> 00:13:23.720
+Parlons du coup.

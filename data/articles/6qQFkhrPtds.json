@@ -1,0 +1,139 @@
+{
+ "de": {
+  "html": "<p>Shadow IT ist nicht verschwunden, sie hat nur gelernt zu automatisieren. Hilfreiche Agents verschieben Daten oft unbemerkt, mit weitreichenden Rechten und ohne klare Verantwortung. Viele Unternehmen glauben, Purview, Entra und Copilot Studio würden sie ausreichend schützen. Das gilt nur, wenn die Kontrollen auch konsequent auf Agents ausgerichtet sind.</p>\n<p>Dieser Artikel zeigt, warum KI-Agents zu Shadow IT 2.0 werden, wo sie echten Nutzen bringen und wie eine Referenzarchitektur für Microsoft 365 aussieht. Dazu gibt es ein einfaches Risikobewertungsschema und ein operatives Playbook, mit dem sich der Schadensradius von Agents deutlich begrenzen lässt.</p>\n\n<h2>Wie KI-Agents zu Shadow IT 2.0 werden</h2>\n<p>Am Anfang steht meist Tempo ohne Struktur. IT-Backlogs ziehen sich über Quartale, das Business will Ergebnisse bis Freitag. Also bauen Mitarbeitende Bots, die mit allem sprechen. Sie handeln nicht böswillig, sondern unter Zeitdruck. Sie verknüpfen Copilot Studio Bots mit Power Automate Flows, vergeben großzügige Graph-Berechtigungen und verbinden mehrere Datenquellen über verschiedene Konnektoren.</p>\n<p>Daraus entstehen typische Konstellationen:</p>\n<ul>\n<li>Copilot Studio Bots, die Aktionen ausführen, SharePoint durchsuchen, Dataverse ansprechen und externe APIs aufrufen.</li>\n<li>Power Automate Flows, die Benutzer imitieren oder als Service Principals mit erweiterten Rechten laufen, die nie wieder entzogen werden.</li>\n<li>Delegierte Graph-Berechtigungen mit Lesezugriff auf alles, weil die Variante mit den geringsten Rechten etwas länger gedauert hätte.</li>\n</ul>\n<p>Diese eingesparte Stunde macht den Tenant zum Selbstbedienungslager.</p>\n\n<h3>Unverwaltete Vektoren und einfache Abflusswege</h3>\n<p>Hinzu kommen Einfallstore, die klassische App-Kontrolle nicht kennt: browserbasierte Tools in Edge und Chrome, MCP-Brücken, die Drittanbieter-Agents etwa aus Jira oder GitHub einbinden, und SaaS-Agents, die in Browser-Tabs laufen und in keiner Positivliste auftauchen. Sie werden nicht installiert. Sie exfiltrieren über Formularfelder, Upload-Dialoge oder Copy-and-paste.</p>\n<p>Die Abflusswege sind erschreckend simpel: Text in ein Web-LLM kopieren oder Dateien zur Zusammenfassung hochladen, wobei interne Prognosen und HR-Daten mitreisen. Zudem fassen Agents Daten zusammen, die vor Jahren in SharePoint und OneDrive übermäßig freigegeben wurden, etwa in „Jeder mit dem Link“-Ordnern, die nie aufgeräumt wurden. Copilot ist sehr gut darin, Dinge zu finden, von denen man vergessen hat, dass sie offenliegen.</p>\n\n<h3>Angriffsfläche und Kosten</h3>\n<p>Agents laufen häufig ohne menschlichen Sponsor, ohne Zugriffsüberprüfungen und ohne Lebenszyklus. Audit-Protokolle fehlen für viele Schritte, weil Drittanbieter-Konnektoren das Ziel verschleiern. Im Ernstfall jagt man Spuren durch mehrere Systeme, die unterschiedlich oder gar nicht protokollieren. Shadow IT verschlingt in Großunternehmen laut den Angaben 30 bis 40 Prozent des Budgets. Sicherheitsverletzungen mit Shadow-Daten sind außerdem teurer und langwieriger einzudämmen, wie auch IBM und andere gezeigt haben.</p>\n<p>Ein Beispiel: Ein Projektmanager baut einen Power-Automate-Flow, der per Graph alle Benutzerkalender nach freien Zeitfenstern durchsucht. Später exportiert jemand die Ergebnisse per Webhook an einen Drittanbieter-Bot für die Terminplanung. Auf Anbieterseite lässt sich nichts einsehen, und der Ersteller hat das Unternehmen längst verlassen. Der Flow läuft weiter, liest weiter, postet weiter. Es ist ein Geisterdienstkonto, das nie schläft.</p>\n\n<h2>Häufige Fehler und Stolpersteine bei Agent-Governance</h2>\n<h3>Identitätsdrift</h3>\n<p>Jemand testet einen Bot mit den eigenen Anmeldedaten und verlässt dann das Unternehmen. Der Bot behält die Rechte, ohne Sponsor, Zugriffsüberprüfung oder Nachweis, wer was genehmigt hat. Einen Kalender-Bot, der eine Person imitiert, kann man nicht isoliert unter Quarantäne stellen, sondern nur den Account der Person deaktivieren. Das stört die Arbeit, also unterbleibt es.</p>\n<p>Ein verbreiteter Irrtum: Entra Conditional Access für Menschen decke auch Agents ab. Das stimmt nur, wenn der Agent eine eigene Identität hat. Läuft er als Mensch, hält die Richtlinie ihn für einen normalen Nutzer, der nachts von einem nicht verwalteten Gerät zugreift. Conditional Access schützt nicht, was er nicht identifizieren kann.</p>\n\n<h3>Ausweitung des Geltungsbereichs</h3>\n<p>Delegierter Graph-Zugriff ist bequem: ein Klick und ein Schulterzucken. Also werden Mails, Dateien und Sites lesbar, nur weil ein Konnektor danach fragt. App-Rollen mit Ressourcen-Scoping erfordern mehr Überlegung, begrenzen aber, worauf ein Agent zugreifen kann. Auch ein Enterprise-Konnektor bedeutet nicht automatisch geringste Rechte, sondern nur, dass er sofort einsatzbereit ist.</p>\n\n<h3>Schattendaten und Datenabfluss durch Schlussfolgerung</h3>\n<p>Übermäßig freigegebene HR-Ordner oder Finanzarchive aus einer Migration, bei der Berechtigungen nie korrigiert wurden, machen aus kleinen Fehlern große Probleme. Copilot tut, worum man bittet, und präsentiert relevante Dateien. Die Zusammenfassungen können Kontext preisgeben, von dem niemand wusste, dass er exponiert war. Es gibt keinen Download, also keinen Alarm, aber den gleichen Schaden.</p>\n\n<h3>DLP-, Überwachungs- und Lebenszyklus-Lücken</h3>\n<ul>\n<li><strong>DLP-Lücken:</strong> Labels fehlen oder sind inkonsistent, Endpunkt- und Browser-DLP zielen nicht auf KI-Domains, und nicht verwaltete Browser umgehen alles. Wer in Edge blockiert wird, öffnet eben einen privaten Chrome.</li>\n<li><strong>Überwachungslücken:</strong> Drittanbieter-Schritte maskieren Ziele, MCP-Aufrufe laufen über nicht gelistete Server, und ohne Netzwerkinspektion bleibt der ausgehende Verkehr unsichtbar.</li>\n<li><strong>Lebenszyklus-Chaos:</strong> Dev-Agents werden mit „temporären“ erweiterten Rechten in die Produktion kopiert, und temporär wird dauerhaft. Es gibt keinen Deprovisionierungspfad, keinen Besitzer und keine Zugriffsüberprüfung. Zombie-Flows laufen nachts weiter.</li>\n</ul>\n<p>Die Folge sind längere Erkennungs- und Eindämmungszeiten, Compliance-Verstöße, doppelte Ausgaben und aufwendige Aufräumaktionen. Man kann nicht beheben, was man nicht sieht, und nicht sehen, was nie registriert wurde.</p>\n\n<h2>Wo KI-Agents wirklich glänzen</h2>\n<p>Richtig eingesetzt beseitigen Agents lästige Routinearbeit: Tickets klären, Konten schließen, Onboarding abwickeln, Rauschen im Support sortieren. Der Zeitgewinn entsteht, weil Fleißarbeit von etwas erledigt wird, das nie Mittagspause macht. Entscheidend ist der Geltungsbereich: präzise schlägt allgemein, ereignisgesteuert schlägt beliebig. Ein Agent mit klarem Auslöser, gekennzeichneten Daten und nur den nötigen Rechten ist schnell und im besten Sinne langweilig.</p>\n<p>Grounding hilft zusätzlich. Antworten bleiben innerhalb der Nutzerberechtigungen in den Mandantendaten verankert, nicht im offenen Web. Die Frage lautet dann: Was ist innerhalb meiner Berechtigung der nächste richtige Schritt?</p>\n<ul>\n<li><strong>Entra-Agenten-ID:</strong> Jeder Agent erhält eine eindeutige Identität für bedingten Zugriff, Risikoerkennung und einen Kill-Switch. Verknüpft mit einem Blueprint lässt sich eine einzelne Identität isolieren, ohne das ganze Team auszubremsen.</li>\n<li><strong>Purview:</strong> Labels und DLP über Microsoft 365 Apps, Endpunkte und Browser schützen sensible Daten, auch beim Einfügen in Chats. Lehrreiche DLP-Meldungen erklären, warum etwas blockiert wurde und wie es richtig geht.</li>\n<li><strong>Power Automate:</strong> Mit Genehmigungen, Umgebungs-DLP und lösungsorientierten Konnektoren wird es beherrschbar. Dev und Prod sind getrennte Räume mit getrennten Schlüsseln.</li>\n</ul>\n\n<h3>Praxisbeispiel: Finanzabschluss-Agent</h3>\n<p>Ein Agent löst bei einer gelabelten Rechnung in einer SharePoint-Bibliothek aus. Er liest auf dieser Site, schreibt in eine Prüfliste und postet in einen Teams-Kanal. Seine Identität ist eine Entra-Agenten-ID unter dem Finanz-Blueprint. Der Zugriff läuft über App-Rollen mit seitenbezogenen Berechtigungen statt über delegierten Graph. Purview blockiert Uploads gelabelter Daten an KI-Domains, und Global Secure Access läuft eine Woche im Logging-Modus, danach folgt eine Positivliste der genutzten APIs.</p>\n<p>Zu vermeiden sind der delegierte Bereich eines Menschen für Tests, aufgeschobene Labels und Konnektoren zu undurchsichtigen Drittanbieter-Endpunkten. Entwicklungsagents gehören nicht dauerhaft in die Produktion: Lösung befördern, Prototyp stilllegen, Identität behalten.</p>\n\n<h3>Ein schneller Erfolg für diese Woche</h3>\n<p>Wählen Sie eine Support-Warteschlange. Ein Copilot Studio Bot greift auf eine gekennzeichnete Wissensdatenbank zu, antwortet innerhalb der Benutzerrechte und eskaliert über einen Power-Automate-Flow, der jeden Schritt protokolliert. Dazu kommen eine Agenten-ID, bedingter Zugriff auf konforme Geräte und DLP-Coaching für KI-Sites. So verkürzt sich die erste Antwortzeit bei begrenztem Schadensradius.</p>\n\n<h2>Referenzarchitektur für verwaltete Agents in Microsoft 365</h2>\n<p>Das mentale Modell: Identität ist das Wer, Berechtigungen sind das Was, Purview das Welche, DLP der Transportweg, das Netzwerk der Ort. Blueprints verbinden das zu einer Struktur, die sich verwalten lässt.</p>\n\n<h3>Identität, Blueprints und Sponsoren</h3>\n<p>Jeder Agent bekommt eine Entra-Agenten-ID, keine geteilten Identitäten, kein Ausführen als Benutzer. Pro Agententyp, etwa Intake-, Triage- oder Finanzabschluss-Bot, gibt es einen Blueprint. Er erfasst Sponsor, erforderliche App-Rollen, zugelassene Konnektoren, Netzwerkprofil und Prüfintervalle. So lässt sich eine ganze Agentenklasse unter Quarantäne stellen, statt Einzelausnahmen nachzujagen.</p>\n<p>Der Sponsor ist verantwortlich für Umfang, Zugriffsüberprüfungen und Deaktivierung. Verlässt er das Unternehmen, deaktiviert die Lifecycle-Richtlinie den Agent. Kein Sponsor, kein Agent.</p>\n\n<h3>Bedingter Zugriff und geringste Rechte</h3>\n<ul>\n<li>Eine konforme Laufzeitumgebung verlangen, risikoreiche Anmeldungen blockieren und Anmeldehäufigkeit erzwingen.</li>\n<li>Für Headless-Agents möglichst verwaltete Identitäten nutzen, außerhalb von Azure föderierte Anmeldeinformationen mit engem Vertrauensverhältnis.</li>\n<li>Bei riskantem Verhalten die Agent-Identität automatisch unter Quarantäne stellen und den Sponsor benachrichtigen.</li>\n<li>Graph-Anwendungsrollen statt delegierter Berechtigungen, SharePoint nur für spezifische Sites, Exchange nur für bestimmte Shared- oder Ressourcenpostfächer, Teams nur für ausgewählte Kanäle.</li>\n<li>Umfassende Berechtigungen wie einen Feuerlöscher behandeln: im Notfall nutzen, dokumentieren, ablaufen lassen.</li>\n</ul>\n<p>Über Connector-Richtlinien wird alles blockiert, was der Blueprint nicht vorsieht, ebenso undurchsichtige Webhooks.</p>\n\n<h3>Daten, DLP, Umgebungen und Netzwerk</h3>\n<p>Automatisches Purview-Labeling läuft über SharePoint und OneDrive, Sensitivitätslabels bleiben an der Datei und erzwingen bei Bedarf Verschlüsselung. Unmarkierte Uploads an KI-Chat-Endpunkte werden auf Browser- und Endpunktebene blockiert. Endpunkt-DLP für Windows und macOS wird auf Edge und Chrome ausgeweitet, mit Regeln für Einfügen und Hochladen. Coaching-Nachrichten erklären Grenzen, und DLP-Vorfälle lassen sich mit Insider-Risiko-Richtlinien verknüpfen.</p>\n<p>In der Power Platform gehören Entwicklung, Test und Produktion in getrennte verwaltete Umgebungen. DLP-Richtlinien halten riskante Konnektoren aus der Produktion heraus, und Flows und Bots kommen dort ausschließlich aus Lösungen mit Prüfungen, Versionierung und Rollbacks.</p>\n<p>Anmelde- und Audit-Logs für Agent-Identitäten werden aktiviert und exportiert. Basislinien für normale Graph-Aufrufmuster ermöglichen Warnungen bei hohen Lesevolumina, umfangreicher Enumeration und mandantenübergreifenden Aufrufen. Den Agent-Egress leitet man über Global Secure Access. Man beginnt mit reiner Protokollierung, nutzt dann Positivlisten, auch für MCP-Server, und sperrt bei unbekannten Zielen oder exfiltrierten markierten Inhalten.</p>\n\n<h2>Operatives Playbook: Richtlinien, Audits, Vorfallmanagement</h2>\n<h3>Discovery und Register</h3>\n<p>Mit Defender for Cloud Apps lässt sich die KI-Nutzung aus Netzwerkprotokollen und Endpunkt-Agents inventarisieren. Ein einfaches Register enthält Name, Agenten-ID, Blueprint, Sponsor, Konnektoren, Graph-Scopes, Datenkontaktpunkte und Egress-Profil und wird wöchentlich abgeglichen. Alles ohne Agenten-ID gilt als Schattenagent und wird isoliert, bis es registriert oder gelöscht ist.</p>\n\n<h3>Richtlinien, Baselines und Änderungskontrolle</h3>\n<p>Eine zentral veröffentlichte Richtlinie legt fest, wer Agents erstellen darf, welche Blueprints und Konnektoren erlaubt und welche Graph-Scopes verboten sind. Wer einen verbotenen Scope braucht, reicht eine Ausnahme mit Ablaufdatum und Rollback-Plan ein. Dauerhaft ist keine Ausnahme mehr, sondern Bequemlichkeit.</p>\n<p>Für jede Agent-Identität werden Baselines definiert: durchschnittliche Graph-Aufrufe pro Stunde, typische SharePoint-Sites, erwartete Postfächer, übliche MCP-Server. Alarme greifen bei hohem Leseaufkommen, Enumeration außerhalb des Scopes, mandantenübergreifenden Aufrufen und unbekannten Zielen. Vor der Produktivsetzung stehen Peer-Review, Versions-Tags und ein Rollback-Artefakt. Bei jeder Promotion wird geprüft, ob die geringsten Rechte gelten, die Ziele noch auf der Positivliste stehen und der Sponsor unterzeichnet hat.</p>\n\n<h3>Deprovisionierung und Incident-Ablauf</h3>\n<p>Lifecycle-Automatisierung deaktiviert Agents bei Ausscheiden des Sponsors oder bei Inaktivität. Vierteljährliche Zugriffsüberprüfungen stellen die Frage, ob der Agent seine Rechte noch braucht. Lautet die Antwort „wir wissen es nicht“, ist die richtige Aktion: Rechte entziehen.</p>\n<ol>\n<li>Triage: Muster oder Einzelfall?</li>\n<li>Risikoprüfung: Kompromittierung bestätigen oder verwerfen.</li>\n<li>Isolation per Conditional Access, Anmeldesperre oder Staging-Netzwerk.</li>\n<li>Anmeldedaten löschen oder neu ausstellen, Schlüssel rotieren, Zustimmungen widerrufen.</li>\n<li>Innerhalb von 48 Stunden einen kurzen Bericht mit Grundursache, fehlgeschlagenen Kontrollen und nötigen Richtlinienanpassungen erstellen.</li>\n</ol>\n<p>Monatliche Hygiene gehört dazu: Schattendaten in SharePoint und OneDrive aufspüren, Freigaben korrigieren, Zombie-Flows löschen, doppelte Agents entfernen und Berechtigungen der Top-Agents rezertifizieren.</p>\n<p>Ein Fall aus der Praxis: Ein Team erlaubte temporär einen Webhook zu einem undurchsichtigen Drittanbieter-Endpunkt ohne URL-Logging. Kurz darauf stiegen nächtliche Postfachlesezugriffe, und der Abfluss ließ sich nicht sauber nachverfolgen. Erst nach strengeren Konnektoren, Zielregistrierung und MCP-Positivlisten war das Problem gelöst. Die Lehre: erst protokollieren, dann Positivliste.</p>\n\n<h2>Risikobewertung: sechs Dimensionen, 0 bis 5 Punkte</h2>\n<p>Eine Anzeigetafel mit sechs Dimensionen hilft bei der Priorisierung. Jede Dimension startet bei 0 und erreicht maximal 5 Punkte:</p>\n<ul>\n<li><strong>Identität:</strong> je 1 Punkt für Entra-Agenten-ID, Vorlage, bedingten Zugriff, benannten Verantwortlichen und regelmäßige Zugriffsprüfungen. Geteilte Anmeldedaten oder Ausführen als Benutzer ergeben 0 und sofortigen Handlungsbedarf.</li>\n<li><strong>Daten:</strong> 2 Punkte für Purview-Labels an den Quellen, je 1 für DLP auf Endgeräten und im Browser, blockierte Uploads in KI-Chat-Domains und aktivierte Copilot-Schutzmaßnahmen.</li>\n<li><strong>Berechtigungen:</strong> 2 Punkte für Graph-App-Rollen, je 1 für Site- bzw. Ressourcen-Eingrenzung, geringste Rechte pro Konnektor sowie regelmäßige Rezertifizierung mit Ablaufdatum für Ausnahmen.</li>\n<li><strong>Netzwerk:</strong> 2 Punkte für Global Secure Access bei Agent-Traffic, dazu Punkte für MCP-Positivlisten, URL- und API-Audits sowie Alarme bei unbekanntem Datenausgang. Unbekannter Datenausgang bedeutet unbekanntes Risiko und damit Priorität 1.</li>\n<li><strong>Überwachung:</strong> 2 Punkte für Log-Export, je 1 für regelmäßige Berichte zu riskanten Agents, Insider-Risiko-Richtlinien bei KI-Ereignissen und einen im letzten Quartal getesteten Incident-Plan. Keine Logs, keine Hilfe.</li>\n<li><strong>Lebenszyklus:</strong> je 1 Punkt für Blueprint-Lebenszykluskontrollen, Sponsor-SLA, automatische Deprovisionierung, Änderungsmanagement und Zombie-Erkennungsjobs.</li>\n</ul>\n<p>Die Gesamtpunktzahl bestimmt das Vorgehen: niedrige Werte bedeuten hohes Risiko und sofortiges Handeln, Werte von 9 bis 16 einen 30-Tage-Sprint, 17 bis 25 eine quartalsweise Bearbeitung. Agents mit 26 bis 30 Punkten taugen als Vorlage. Wer den Score neben jedem Agent im Register sichtbar macht, führt weniger Grundsatzdiskussionen und behebt Probleme schneller.</p>\n\n<h2>Typische Einwände und wie man ihnen begegnet</h2>\n<p>„Das bremst Innovation.“ Blueprints und verwaltete Umgebungen bieten vorab genehmigte Muster. Wer eine Vorlage wählt, erhält in kurzer Zeit die richtige Identität, minimale Berechtigungen, zulässige Konnektoren und einen Sponsor, und das geht schneller als Ticket-Ping-Pong mit der Security. Automatische Etikettierung und lernorientierte DLP-Meldungen zeigen Nutzern Grenzen genau dort, wo sie arbeiten.</p>\n<p>„Copilot soll doch Berechtigungen respektieren.“ Das tut Copilot. Das Problem sind übermäßig freigegebene Daten und fehlender sauberer Scope. Wer das behebt, hält Antworten im Rahmen, sonst zeigt Copilot zuverlässig alles an, was ungeschützt herumliegt.</p>\n<p>Auch Agent 365 taugt als zentrale Übersicht, aber erst nachdem Identität, Labels und DLP eingerichtet sind. Observability ohne klare Leitplanken ist nur ein Spiegelbild. Drittanbieter-Agents, die sich nicht integrieren lassen, laufen nicht in der Produktion: erst registrieren oder in einer Sandbox ohne sensible Quellen und ohne ausgehende Verbindungen zu Unbekanntem isolieren. Und weil Nutzer Kontrollen umgehen, gehören Endpunkt- und Browser-DLP dorthin, wo tatsächlich gearbeitet wird. Richtlinien ohne Durchsetzung sind nur ein neuer Bildschirmschoner.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Geben Sie jedem Agent eine eigene Entra-Agenten-ID und verknüpfen Sie sie mit einem Blueprint samt Sponsor.</li>\n<li>Ersetzen Sie delegierte Graph-Berechtigungen durch App-Rollen und begrenzen Sie SharePoint-Zugriffe auf benannte Sites.</li>\n<li>Aktivieren Sie Auto-Labeling für die wichtigsten Bibliotheken und DLP für Endpunkte und Browser mit Regeln für KI-Domains.</li>\n<li>Starten Sie Global Secure Access eine Woche im Audit-Modus und setzen Sie danach nur die relevanten Ziele auf die Positivliste.</li>\n<li>Führen Sie ein Agent-Register und isolieren Sie alles ohne Agenten-ID.</li>\n<li>Trennen Sie Entwicklung, Test und Produktion und befördern Sie nur Lösungen, keine Prototypen.</li>\n<li>Erstellen Sie Blueprints für Ihre drei wichtigsten Agententypen und bewerten Sie diese Woche Ihre Top-10-Agents mit dem Risikoschema.</li>\n<li>Planen Sie vierteljährliche Zugriffsüberprüfungen und monatliche Hygiene-Sprints gegen Schattendaten und Zombie-Flows ein.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Agents sind nicht die Bedrohung, sondern unkontrollierter Zugriff. Identität, Labels und geringste Rechte sind die drei Bolzen, die verhindern, dass alles entgleist. Perfektion ist am ersten Tag nicht nötig, aber mit Blueprints, Labels, DLP und Netzwerksichtbarkeit werden aus dunklen Tunneln Fahrspuren mit Tempolimits, Kameras und Bremsen. Sie entscheiden, wo die Reibung auftritt: gezielt vorab durch Vorlagen und Regeln oder später durch Vorfälle, Audits und Nacharbeit.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "KI-Agents in Microsoft 365 sicher steuern",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Identität zuerst",
+     "text": "Jeder Agent erhält eine eigene Entra-Agenten-ID, einen Blueprint und einen verantwortlichen Sponsor."
+    },
+    {
+     "kopf": "Geringste Rechte",
+     "text": "Graph-App-Rollen statt delegierter Berechtigungen, Zugriff nur auf benannte SharePoint-Sites und Postfächer."
+    },
+    {
+     "kopf": "Daten labeln, DLP aktivieren",
+     "text": "Auto-Labeling in SharePoint und OneDrive, DLP auf Endpunkten und Browsern mit Regeln für KI-Domains."
+    },
+    {
+     "kopf": "Netzwerk erst beobachten",
+     "text": "Global Secure Access zuerst im Logging-Modus, danach Positivlisten für genutzte APIs und MCP-Server."
+    },
+    {
+     "kopf": "Register und Risikoscore",
+     "text": "Alle Agents erfassen, sechs Dimensionen bewerten, Agents ohne Agenten-ID isolieren."
+    },
+    {
+     "kopf": "Lebenszyklus steuern",
+     "text": "Deaktivierung bei Sponsor-Ausscheiden, vierteljährliche Zugriffsprüfungen, Entwicklung und Produktion trennen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Warum werden KI-Agents zur Shadow IT 2.0?",
+    "a": "Mitarbeitende bauen unter Zeitdruck Bots, die mit vielen Systemen sprechen, mit großzügigen Graph-Berechtigungen und über verschiedene Konnektoren. Diese Agents verschieben Daten oft unbemerkt, haben weitreichende Rechte und keinen klaren Verantwortlichen. Dadurch entsteht Shadow IT, die automatisiert arbeitet."
+   },
+   {
+    "q": "Schützt Entra Conditional Access auch KI-Agents?",
+    "a": "Nur, wenn der Agent eine eigene Identität hat. Läuft er als Mensch, behandelt die Richtlinie ihn wie einen normalen Nutzer. Conditional Access schützt nicht, was er nicht identifizieren kann. Deshalb braucht jeder Agent eine eigene Entra-Agenten-ID."
+   },
+   {
+    "q": "Wie begrenzt man Berechtigungen von KI-Agents in Microsoft 365?",
+    "a": "Man nutzt Graph-Anwendungsrollen statt delegierter Berechtigungen, SharePoint nur für bestimmte Sites, Exchange nur für ausgewählte Postfächer und Teams nur für ausgewählte Kanäle. Umfassende Rechte behandelt man wie einen Feuerlöscher: im Notfall nutzen, dokumentieren, ablaufen lassen."
+   },
+   {
+    "q": "Was gehört in das Register und den Lebenszyklus für KI-Agents?",
+    "a": "Das Register enthält Name, Agenten-ID, Blueprint, Sponsor, Konnektoren, Graph-Scopes, Datenkontaktpunkte und Egress-Profil und wird wöchentlich abgeglichen. Agents ohne ID gelten als Schattenagents und werden isoliert. Verlässt der Sponsor das Unternehmen, wird der Agent deaktiviert."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Shadow-IT-Agents vs. verwaltete Agents",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Shadow-Agent",
+     "punkte": [
+      "Läuft als Mensch oder mit dauerhaft erweiterten Rechten",
+      "Delegierter Graph-Zugriff mit Lesezugriff auf alles",
+      "Kein Sponsor, keine Zugriffsüberprüfung, kein Lebenszyklus",
+      "Drittanbieter-Konnektoren verschleiern Ziele, Audit-Protokolle fehlen",
+      "Dev-Agents bleiben mit temporären Rechten dauerhaft in Produktion"
+     ]
+    },
+    "rechts": {
+     "titel": "Verwalteter Agent",
+     "punkte": [
+      "Eigene Entra-Agenten-ID unter einem Blueprint",
+      "App-Rollen mit Ressourcen-Scoping statt delegiertem Graph",
+      "Sponsor verantwortet Umfang; ohne Sponsor wird deaktiviert",
+      "Anmelde- und Audit-Logs aktiviert und exportiert",
+      "Getrennte Umgebungen, Produktion nur aus geprüften Lösungen"
+     ]
+    }
+   },
+   {
+    "titel": "Checkliste: Agent-Governance im Überblick",
+    "typ": "checkliste",
+    "punkte": [
+     "Jeder Agent hat eine eigene Entra-Agenten-ID",
+     "Pro Agententyp existiert ein Blueprint mit Sponsor und Prüfintervallen",
+     "Graph-Anwendungsrollen und seitenbezogene Berechtigungen statt delegierter Rechte",
+     "Connector-Richtlinien blockieren alles, was der Blueprint nicht vorsieht",
+     "Purview-Labels und Endpunkt-DLP schützen Uploads an KI-Domains",
+     "Agent-Egress läuft über Global Secure Access mit Positivliste",
+     "Register wöchentlich abgleichen, Agents ohne ID isolieren"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Warum greift Entra Conditional Access bei Agents oft nicht, die als Mensch laufen?",
+    "opts": [
+     "Der Agent wird als normaler Nutzer behandelt, weil er keine eigene Identität hat.",
+     "Conditional Access unterstützt ausschließlich Geräte und keine Benutzerkonten.",
+     "Agents laufen grundsätzlich außerhalb des Microsoft-365-Mandanten.",
+     "Conditional Access lässt sich nur für Azure-Ressourcen aktivieren."
+    ],
+    "a": 0,
+    "why": "Conditional Access schützt nicht, was es nicht identifizieren kann. Ohne eigene Agent-Identität gilt der Agent als gewöhnlicher Nutzer."
+   },
+   {
+    "q": "Welche Berechtigungsart empfiehlt der Artikel für Agents statt delegiertem Graph-Zugriff?",
+    "opts": [
+     "Delegierte Berechtigungen mit Lesezugriff auf alle Sites des Mandanten.",
+     "Graph-Anwendungsrollen mit Ressourcen-Scoping, etwa SharePoint nur für bestimmte Sites.",
+     "Gemeinsam genutzte Administratorkonten mit zeitlich unbegrenzten Rechten.",
+     "Die Anmeldedaten des Erstellers, damit die Zuordnung eindeutig bleibt."
+    ],
+    "a": 1,
+    "why": "App-Rollen mit Ressourcen-Scoping erfordern mehr Überlegung, begrenzen aber, worauf ein Agent zugreifen kann."
+   },
+   {
+    "q": "Wie sieht der empfohlene Ablauf für Global Secure Access beim Agent-Egress aus?",
+    "opts": [
+     "Sofort alle ausgehenden Verbindungen blockieren und Ausnahmen einzeln genehmigen.",
+     "Nur Browser-Verkehr überwachen und Verbindungen der Agents unberücksichtigt lassen.",
+     "Zuerst reine Protokollierung, danach Positivlisten, auch für MCP-Server, dann Sperren.",
+     "Positivlisten dauerhaft vermeiden, damit Agents flexibel bleiben."
+    ],
+    "a": 2,
+    "why": "Man beginnt mit Logging, etabliert dann Positivlisten und sperrt bei unbekannten Zielen oder exfiltrierten markierten Inhalten."
+   },
+   {
+    "q": "Was gilt laut Playbook für Agents ohne Agenten-ID im Register?",
+    "opts": [
+     "Sie werden toleriert, solange sie keine Fehler verursachen.",
+     "Sie erhalten automatisch einen Blueprint und laufen unverändert weiter.",
+     "Sie werden nur beim vierteljährlichen Audit überprüft und danach gelöscht.",
+     "Sie gelten als Schattenagent und werden isoliert, bis sie registriert oder gelöscht sind."
+    ],
+    "a": 3,
+    "why": "Alles ohne Agenten-ID gilt als Schattenagent und wird isoliert, bis es registriert oder gelöscht ist."
+   }
+  ]
+ }
+}

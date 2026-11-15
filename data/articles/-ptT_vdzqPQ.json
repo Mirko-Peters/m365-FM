@@ -1,0 +1,669 @@
+{
+ "de": {
+  "html": "<p>Python gilt als die Sprache der KI. Innerhalb des Microsoft-Stacks stimmt das für den Klebstoff zwischen den Diensten aber nur eingeschränkt. Dort schreibt zunehmend die KI den Code, der Systeme verbindet. Wer trotzdem Python in Power Automate und Power BI hineinzwängt, bekommt Flows, die wackeln wie ein dreibeiniger Stuhl.</p>\n<p>Dieser Artikel zeigt, warum Office Scripts, Copilot und typisierte Agenten der bessere Klebstoff sind. Er erklärt, wo Python weiterhin die richtige Wahl ist und wie ein Hybrid-Modell ohne Schmerzen funktioniert.</p>\n\n<h2>Python in der Power Platform: Wo die Reibung entsteht</h2>\n<p>Power Automate führt kein beliebiges Python aus. Die native Skript-Oberfläche für Microsoft 365 sind Office Scripts auf TypeScript-Basis, gehostet etwa in Excel Online. Wer auf Python besteht, muss Azure Functions, Logic Apps oder benutzerdefinierte Konnektoren dazuschrauben. Damit holt man sich externes Compute, Deployment-Pipelines, Authentifizierung und jede Menge Laufzeitüberraschungen ins Haus.</p>\n<p>Das hat handfeste Folgen:</p>\n<ul>\n<li>Mehr Dienste müssen konfiguriert werden.</li>\n<li>Mehr Zugangsdaten müssen rotiert werden.</li>\n<li>Es fallen laufende Kosten an, auch wenn niemand arbeitet.</li>\n</ul>\n<p>Dazu kommt die dynamische Typisierung. Der Code „kompiliert“, weil es nichts zu kompilieren gibt, und stürzt erst zur Laufzeit ab, weil ein Feld anders aussieht als angenommen. In einem Flow bedeutet das eine unterbrochene Genehmigung oder eine verpasste SLA.</p>\n\n<h3>Typische Reibungspunkte je Dienst</h3>\n<ul>\n<li><strong>Power BI Dataflows:</strong> Copilot kann in Dataflow Gen2 Power Query M oder Python generieren. Mischt man das aber mit einem separaten Python-Dienst für Aufgaben, die Power Automate nativ erledigen könnte, zieht sich die Datenherkunft über mehrere Produkte. Die Fehlersuche vom Flow über die Funktion bis zum Dataflow wird mühsam.</li>\n<li><strong>Power Automate Flows:</strong> Hier zählen native Konnektoren und Office Scripts. Python hinter einem benutzerdefinierten Konnektor, nur um Spalten in Excel auszublenden, ist ein Umweg. Jeder zusätzliche Sprung erhöht die Fragilität: Connector-Schemas driften, Abhängigkeiten veralten, Berechtigungen wuchern über Rollen, Ressourcengruppen und Storage-Accounts.</li>\n<li><strong>Fabric Notebooks:</strong> Hier gehört Python hin, nämlich für Data Science, ML und ernsthafte Rechenleistung. Dient das Notebook aber als Orchestrierungsklebstoff, wird Geschäftslogik an einen Compute-Kernel geschweißt. Planung und Validierung werden zu Sonderlösungen, und ein kleines Bibliotheks-Update macht aus dem einfachen Kleber eine archäologische Schicht.</li>\n</ul>\n\n<h2>Die wahren Kosten: Geld und Aufmerksamkeit</h2>\n<p>Einfache Flows sind günstig, weil sie innerhalb der Plattform bleiben. Konnektoren, Trigger und Office Scripts nutzen die bestehende Lizenzierung. Holt man Python über Functions dazu, zahlt man in zwei Währungen.</p>\n<ul>\n<li><strong>Geld</strong> für Ausführung, Speicher und Netzwerk.</li>\n<li><strong>Aufmerksamkeit</strong> für Versionierung, Secrets, Retries, Cold-Starts und die Frage, warum nachts etwas ausgefallen ist.</li>\n</ul>\n<p>Im kleinen Maßstab lässt sich das verschmerzen. Auf Unternehmensebene wird daraus ein Budgetposten voller vorprogrammierter Reue.</p>\n<p>Die Fehlerquellen wiederholen sich:</p>\n<ul>\n<li>Brüchige Konnektoren, deren Spezifikation der Realität um ein Feld hinterherhängt.</li>\n<li>Versionsdrift durch Bibliotheks-Updates ohne Fixierung.</li>\n<li>Berechtigungswirrwarr, etwa Service Principals mit „temporären“ Rechten, die für immer bleiben.</li>\n<li>Dienstübergreifendes Debugging über Logs von Power Automate, Azure Functions und Dataflows.</li>\n</ul>\n\n<h2>Warum manueller Code und statische Playbooks scheitern</h2>\n<p>Die manuelle Coding-Schleife sieht auf dem Whiteboard gut aus: Anforderung, Code, Deployment, Test, Korrektur, erneutes Deployment. In der Praxis ändern sich Geschäftsregeln mitten im Sprint und Schemas vor dem Mittagessen. In der Power Platform verschärft sich das, weil jeder Sprung von Power Automate über Azure Functions zu Power BI die Reibung erhöht.</p>\n<p>Statische Playbooks sind die zweite Falle. Ein Runbook für die Quartalsabschlusslogik hält nur, bis der Vertrieb einen neuen Rabatt erfindet, die Finanzabteilung die Umsatzrealisierung anpasst und die Rechtsabteilung eine vierstufige Genehmigung ergänzt. Python-Kleber in Functions biegt sich dann nicht, er bricht. Man aktualisiert Code, hebt Abhängigkeiten an und baut Container neu.</p>\n\n<h3>Stille Fehler sind die teuersten</h3>\n<p>Ändert sich ein optionales Feld von String zu Zahl, läuft die Funktion munter weiter, bis ein Zweig Text erwartet und zur Laufzeit eine Ausnahme wirft. Schlimmer ist, wenn gar nichts knallt und eine Transaktion still falsch klassifiziert wird. Ein Beispiel: Ein Team fasste die Transformation für die monatliche Berichterstattung in einer einzigen Python-Funktion zusammen. Ein kleines Pandas-Update änderte einen Standardwert, die Funktion konvertierte still in Nullwerte, und die Abweichungsberichte waren zwei Wochen später gerade so weit daneben, dass es gefährlich wurde. Der Fehler wurde repariert und kehrte zurück, weil das Fixieren der Versionen nur auf dem Backlog stand.</p>\n<p>Hinzu kommt die Schnitzeljagd bei der Observability. Ein Fehler entsteht in Power Automate, wird im Konnektor transformiert, löst eine Python-Funktion aus, wandert in Dataflow Gen2 und taucht als kaputte Kennzahl in Power BI auf. Man liest fünf Protokolle, die sich nicht auf ein Zeitstempelformat einigen können. Jeder schnelle Fix wird so zur operativen Schuld.</p>\n\n<h2>Der bessere Weg: Typisierte Agenten und Copilot als Orchestrator</h2>\n<p>Die Orchestrierung muss adaptiv sein, an den Rändern typisiert und nah an den Primitiven der Plattform generiert. Agenten generieren, rufen Tools auf, beobachten Ergebnisse und korrigieren. Das ist kein unkontrollierter Code-Auswurf, sondern sind Tool-Aufrufe mit Leitplanken.</p>\n<p>Der Agent bekommt eine begrenzte Toolbox:</p>\n<ul>\n<li>Office Scripts für Aktionen in Microsoft 365,</li>\n<li>Dataflow Gen2 für Transformationen,</li>\n<li>Konnektoren für Datentransfers,</li>\n<li>strikt typisierte Schnittstellen dazwischen.</li>\n</ul>\n<p>Der Agent hält den Kontext über mehrere Schritte und schreibt nur dort Code, wo er hingehört. Dieses Vorgehen funktioniert, weil es die Code-Oberfläche begrenzt. Statisch typisierte Grenzen liegen an den Schnittstellen: Open-API-Schemas für Konnektoren, Objektmodelle der Office Scripts und semantische Modelle in Power BI. Innerhalb dieser Grenzen darf die KI Code nach Spezifikation erzeugen. Formfehler fallen so vor der Produktion auf, nicht erst im Ausfall. Und weil der Agent sich an frühere Fehler erinnert, kehren sie seltener wieder: Korrigiert wird das Muster, nicht nur die Datei.</p>\n<p>Das ist kein Kontrollverlust. Die Kontrolle verlagert sich auf Verträge, Tools, Leitplanken und Review-Gates.</p>\n\n<h2>Drei Anwendungsfelder in der Praxis</h2>\n\n<h3>Power BI Dataflow Gen2: Generieren statt handschreiben</h3>\n<p>Copilot in Dataflow Gen2 setzt Transformationen aus einfacher Sprache in Power Query M oder Python um. Er kennt das semantische Modell mit Tabellen, Spalten, Measures und Synonymen. Die Generierung bleibt damit an der Realität verankert und nicht an einem halluzinierten Schema, was viele „Spalte nicht gefunden“-Fehler vermeidet.</p>\n<p>Ein Beispiel-Prompt: Verkaufsdaten auf die letzten zwölf Monate filtern, normalisieren, per Left Join mit dem Customer Master verknüpfen und die Bruttomarge berechnen. Copilot schlägt M oder Python vor. Man prüft das Ergebnis am Beispiel, validiert die Spaltennamen gegen das semantische Modell und fixiert den Schritt. Python bleibt dabei den Analyse-Kernels vorbehalten, etwa zur Ausreißererkennung oder Saisonbereinigung. Python rechnet, die Plattform orchestriert.</p>\n<p>Auch das Berichtsgerüst entsteht in Sekunden. Das ist keine Magie, sondern liegt an den bereits gepflegten Metadaten: benannte Kennzahlen, Synonyme und Beziehungen. Ändert sich eine Anforderung, passt man den Prompt an und prüft das Diff, statt eine 400-Zeilen-Funktion zu durchforsten.</p>\n\n<h3>Power Automate: Office Scripts statt Python-Kleber</h3>\n<p>Hier ist der richtige Weg bewusst unspektakulär: native Konnektoren und Office Scripts. Man beschreibt die Schritte, Copilot entwirft Skript und Ablauf, und alles bleibt in Microsoft 365. Es gibt keine Azure Functions, kein Gerüst für benutzerdefinierte Konnektoren und keinen Container, der gepatcht werden muss.</p>\n<p>Ein typischer Fall: Für jede neue Zeile in einer Tabelle werden Datumsformate normalisiert, ein Status berechnet und eine Zusammenfassung an den Eigentümer gemailt. Das erledigen ein Flow und ein Skript. Die Daten bleiben bei Excel, SharePoint und OneDrive. Office Scripts liefern dabei typisierte Strukturen durch ihr definiertes Objektmodell.</p>\n<p>Für größere Abläufe empfiehlt sich ein agentenbasiertes Muster mit begrenzter Toolbox, etwa ein Office Script aufrufen, einen Graph-Konnektor nutzen, nach Dataverse schreiben oder eine Genehmigung senden. Ein- und Ausgaben sind schematisiert. Der Agent validiert Voraussetzungen, testet am Beispiel und übernimmt die Änderung erst dann. Entscheidend ist die Genauigkeit der Tool-Aufrufe, deshalb sollten Tools eindeutige Namen tragen. „Worksheet-Tabelle aktualisieren“ ist besser als „irgendwas tun“.</p>\n<p>Schnelle Erfolge liefern Excel-Operationen wie Spalten bereinigen, Duplikate entfernen und Felder aufteilen. Genehmigungen und Benachrichtigungen laufen als native Aktionen ohne eigene Authentifizierung, und Updates in Dataverse und SharePoint gehen über Konnektoren mit Metadatenbewusstsein statt über rohe HTTP-Aufrufe.</p>\n\n<h3>Fabric Notebooks: Python im Compute-Kern</h3>\n<p>In Fabric sitzt Python dort, wo es am stärksten ist: bei Analyse, Modellierung und komplexen Transformationen. Zeitplanung, Validierung und IO-Richtlinien übernehmen Agenten und TypeScript-ähnliche Tools. Der Agent ruft das Notebook über eine saubere Job-API auf, übergibt typisierte Eingaben und erwartet typisierte Ausgaben. Weicht die Form ab, scheitert der Lauf sofort am Rand und nicht erst nach der Hälfte eines 20-minütigen Laufs.</p>\n<p>Copilot hilft im Notebook bei explorativer Datenanalyse, Vektorisierung und Visualisierung. Notebooks werden wie Code versioniert, die Prompts hinter Hilfsfunktionen gespeichert, und Ausgaben werden mit Unit-Tests auf Metriken und Verteilungen geprüft. Geschäftslogik lebt in deklarativen Verträgen, Python bleibt rechnerisch.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Generierten Python-Code ausufern lassen:</strong> Beginnt er, Spalten umzubenennen, externe Endpunkte aufzurufen oder Workflow-Logik einzubetten, ist man zurück beim instabilen Klebercode.</li>\n<li><strong>Reviews überspringen, weil „die KI es geschrieben hat“:</strong> Besser sind standardisierte Prüfprompts und Checklisten. Spaltenstrukturen werden validiert, Nullwerte explizit behandelt und Joins deterministisch gehalten.</li>\n<li><strong>Orchestrierung und Analytik vermischen:</strong> Wer Genehmigungslogik in eine Python-Transformation packt, riskiert, dass die nächste Schemaänderung den Workflow zerstört.</li>\n<li><strong>Python per benutzerdefiniertem Konnektor für Triviales erzwingen:</strong> Wer eine Tabelle umformen will, nimmt ein Office Script.</li>\n<li><strong>Governance ignorieren:</strong> Skripte brauchen Versionierung, Prüfschritte und Namensstandards, denn es ist Code.</li>\n<li><strong>Geschäftslogik ohne Typverträge auf mehrere Flows verteilen:</strong> Eingabe- und Ausgabeschemas gehören vorab definiert.</li>\n<li><strong>Ablauflogik in Notebooks verstecken:</strong> Das betrifft Genehmigungen oder Umbenennungen im Notebook, Flows an Ad-hoc-Endpunkten und die einzige Definition eines KPI in einem Zellkommentar.</li>\n</ul>\n\n<h2>Der Hybrid-Ansatz und der 30-Tage-Plan</h2>\n<p>Python bleibt für Analysekerne, während M und plattformeigene Schritte die Infrastruktur übernehmen. Beide treffen sich an typisierten APIs oder Warteschlangen. Wird in einem Flow echte Vorhersage oder komplexe Transformation benötigt, ruft er einen Fabric-Notebook-Job oder einen ML-Endpunkt hinter einer sauberen API auf, keine improvisierte Flask-App. Der Flow orchestriert, Python berechnet, und die Schnittstelle ist ein Vertrag.</p>\n<p>Der Umstieg lässt sich in vier Wochen planen:</p>\n<ol>\n<li><strong>Woche 1 – Audit:</strong> Alle Workflows und Dataflows als Kleber oder Compute markieren und Python-Funktionen finden, die Freigaben, Umbenennungen oder Datei-IO berühren. Ein- und Ausgaben sowie Fehler-Hotspots werden dokumentiert, und die Basis-Metriken werden erhoben, etwa Lösungszeit und Vorlaufzeit für Änderungen.</li>\n<li><strong>Woche 2 – Triviales migrieren:</strong> Python-Endpunkte für Excel- oder SharePoint-Aufgaben werden durch Office Scripts und native Konnektoren ersetzt. Dazu gehören eine schlanke Prüfliste mit Spaltenformaten, Null-Handling und Idempotenz, Prompt-Vorlagen und sprechende Skriptnamen im Repository.</li>\n<li><strong>Woche 3 – Dataflows refaktorieren:</strong> Handgeschriebene Transformationen werden auf Copilot-gestützte Generierung in Dataflow Gen2 umgestellt, Python nur für Analyse-Kernels. Man validiert gegen das semantische Modell und speichert akzeptierte Diffs in einer Prompt-Bibliothek.</li>\n<li><strong>Woche 4 – Agent einführen:</strong> Die Toolbox wird beschränkt und jedes Tool erhält einen Typvertrag samt Beispiel-Payloads und Abnahmekriterien. Die Vorabvalidierung läuft gegen Beispiele, und Toolgenauigkeit sowie Lösungszeit werden verfolgt.</li>\n</ol>\n<p>Die Telemetrie sollte zentral zusammenlaufen: Ausführungshistorie von Power Automate, Dataflow-Lineage und Agenten-Traces. Rollback-Pläne sind Pflicht, mit vorherigen Skriptversionen, zuletzt funktionierenden Dataflows und Notebook-Job-Snapshots. Nach 30 Tagen sollten weniger benutzerdefinierte Konnektoren für Triviales, messbar niedrigere Laufkosten, schnellere Änderungen und dokumentierte Schnittstellen vorliegen, mit denen neue Teammitglieder in einem Tag statt in einer Woche produktiv werden.</p>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Für Klebstoff in Microsoft 365 zuerst native Konnektoren und Office Scripts nutzen, nicht Azure Functions oder benutzerdefinierte Konnektoren.</li>\n<li>Python auf Analysekerne beschränken: Data Science, ML und aufwendige Berechnungen in Fabric-Notebooks oder Dataflows.</li>\n<li>Typisierte Verträge an jeder Nahtstelle definieren: Eingabe- und Ausgabeschemas, Objektmodelle und semantische Modelle.</li>\n<li>Prompts als Assets behandeln: Mit Variablen und Abnahmekriterien speichern, zusammen mit der erwarteten Ausgabeform.</li>\n<li>Agenten eine begrenzte Toolbox mit eindeutigen Namen geben und vor jeder Produktionsänderung am Beispiel testen lassen.</li>\n<li>Copilot-Ergebnisse immer per Diff prüfen, Spalten und Datentypen gegen das semantische Modell validieren und Nullwerte explizit behandeln.</li>\n<li>Bibliotheksversionen fixieren und Skripte wie Code versionieren, mit Review-Gates und Rollback-Plänen.</li>\n<li>Beobachtbarkeit zentralisieren und Lösungszeit pro Vorfall, Erfolgsrate der Tool-Aufrufe und Vorlaufzeit für Änderungen messen.</li>\n<li>Azure Functions stilllegen, die nur Routineaufgaben wie Spaltenumbenennungen erledigen.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Python ist nicht tot, es wird nur auf seine Stärken zurückgeführt. Im Microsoft-Ökosystem orchestrieren typisierte Agenten und TypeScript-basierte Skripte die Ränder, Python rechnet im Kern. Entscheidend ist die Disziplin an den Schnittstellen, nicht die Loyalität zu einer Sprache. Wer Verträge, Tools, Leitplanken und Review-Gates definiert und die KI den Klebstoff schreiben lässt, spart Kosten und Aufmerksamkeit und bekommt weniger Fehler. Und wenn sich das Geschäft ändert, passt man einen Prompt an und nicht ein Container-Image.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Vom fragilen Python-Kleber zur typisierten Orchestrierung",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Woche 1: Audit",
+     "text": "Workflows als Kleber oder Compute markieren, Ein- und Ausgaben dokumentieren, Basis-Metriken erheben."
+    },
+    {
+     "kopf": "Woche 2: Kleber migrieren",
+     "text": "Python-Endpunkte für Excel und SharePoint durch Office Scripts und native Konnektoren ersetzen."
+    },
+    {
+     "kopf": "Woche 3: Dataflows refaktorieren",
+     "text": "Copilot-gestützte Generierung in Dataflow Gen2 nutzen, Python nur für Analyse-Kernels."
+    },
+    {
+     "kopf": "Woche 4: Agent einführen",
+     "text": "Begrenzte Toolbox mit Typverträgen, Vorabvalidierung gegen Beispiele und Messung der Toolgenauigkeit."
+    },
+    {
+     "kopf": "Dauerhaft absichern",
+     "text": "Review-Gates, zentrale Telemetrie und Rollback-Pläne für Skripte, Dataflows und Notebook-Jobs."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Kann Power Automate Python direkt ausführen?",
+    "a": "Nein, Power Automate führt kein beliebiges Python aus. Die native Skript-Oberfläche für Microsoft 365 sind Office Scripts auf TypeScript-Basis. Wer Python nutzen will, braucht Azure Functions, Logic Apps oder benutzerdefinierte Konnektoren und damit zusätzliche Dienste, Zugangsdaten, Deployment-Pipelines und laufende Kosten."
+   },
+   {
+    "q": "Wann sollte man in der Microsoft-Welt Python einsetzen und wann nicht?",
+    "a": "Python gehört in Analysekerne wie Data Science, ML und aufwendige Berechnungen, etwa in Fabric Notebooks oder für Ausreißererkennung in Dataflows. Für Klebstoff in Microsoft 365 sind native Konnektoren und Office Scripts besser. Der Flow orchestriert, Python berechnet, die Schnittstelle ist ein Vertrag."
+   },
+   {
+    "q": "Warum sind Python-Funktionen als Kleber in Power-Platform-Flows fehleranfällig?",
+    "a": "Dynamische Typisierung lässt Fehler erst zur Laufzeit auftreten, etwa wenn ein Feld anders aussieht als erwartet. Dazu kommen Versionsdrift durch Bibliotheks-Updates, brüchige Konnektoren, Berechtigungswirrwarr und aufwendiges Debugging über mehrere Dienste. Stille Fehler können Transaktionen unbemerkt falsch verarbeiten."
+   },
+   {
+    "q": "Wie gelingt der Umstieg auf Office Scripts, Copilot und typisierte Agenten in 30 Tagen?",
+    "a": "Woche 1: Workflows als Kleber oder Compute auditieren. Woche 2: Triviales auf Office Scripts und native Konnektoren migrieren. Woche 3: Dataflows mit Copilot in Dataflow Gen2 refaktorieren. Woche 4: einen Agenten mit begrenzter Toolbox und Typverträgen einführen. Zentrale Telemetrie und Rollback-Pläne sind Pflicht."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Python vs. Office Scripts und Copilot als Klebstoff",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Python als Kleber in Functions",
+     "punkte": [
+      "Braucht Azure Functions, Logic Apps oder benutzerdefinierte Konnektoren",
+      "Dynamische Typisierung: Fehler zeigen sich erst zur Laufzeit",
+      "Zusätzliche Kosten für Ausführung, Speicher und Netzwerk",
+      "Debugging über mehrere Logs und Dienste hinweg",
+      "Versionsdrift und wuchernde Berechtigungen erhöhen die Fragilität"
+     ]
+    },
+    "rechts": {
+     "titel": "Office Scripts, Copilot und typisierte Agenten",
+     "punkte": [
+      "Alles bleibt in Microsoft 365 mit nativen Konnektoren",
+      "Typisierte Schnittstellen fangen Formfehler vor der Produktion ab",
+      "Nutzt die bestehende Lizenzierung der Plattform",
+      "Agent korrigiert wiederkehrende Fehler als Muster, nicht nur als Datei",
+      "Kontrolle liegt in Verträgen, Leitplanken und Review-Gates"
+     ]
+    }
+   },
+   {
+    "titel": "Häufige Fehler vermeiden: Checkliste",
+    "typ": "checkliste",
+    "punkte": [
+     "Generierten Python-Code nicht in Workflow-Logik oder externe Aufrufe ausufern lassen",
+     "KI-Code immer prüfen, mit standardisierten Prüfprompts und Checklisten",
+     "Orchestrierung und Analytik strikt voneinander trennen",
+     "Für Triviales wie Tabellen umformen ein Office Script statt Python nehmen",
+     "Skripte mit Versionierung, Prüfschritten und Namensstandards governen",
+     "Eingabe- und Ausgabeschemas vorab als Typverträge definieren",
+     "Ablauflogik nicht in Notebooks oder Zellkommentaren verstecken"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Welche native Skript-Oberfläche nutzt Power Automate für Aktionen in Microsoft 365?",
+    "opts": [
+     "Office Scripts auf TypeScript-Basis",
+     "Beliebige Python-Skripte direkt im Flow",
+     "PowerShell-Module innerhalb von Excel Online",
+     "Java-Funktionen in SharePoint-Listen"
+    ],
+    "a": 0,
+    "why": "Power Automate führt kein beliebiges Python aus. Die native Oberfläche sind Office Scripts auf TypeScript-Basis, etwa in Excel Online."
+   },
+   {
+    "q": "Was passierte im Beispiel nach einem kleinen Pandas-Update in der Python-Funktion?",
+    "opts": [
+     "Die Funktion stürzte sofort ab und stoppte alle Berichte.",
+     "Die Funktion konvertierte still in Nullwerte, die Abweichungsberichte wurden verfälscht.",
+     "Die Funktion lief deutlich langsamer und verursachte hohe Cloud-Kosten.",
+     "Die Funktion verlor ihre Berechtigungen und konnte nicht mehr schreiben."
+    ],
+    "a": 1,
+    "why": "Ein geänderter Standardwert führte zu stiller Konvertierung in Nullwerte. Die Fehler fielen erst später auf und kehrten zurück."
+   },
+   {
+    "q": "Wofür sollte Python laut Hybrid-Ansatz in Fabric Notebooks vorrangig genutzt werden?",
+    "opts": [
+     "Für Genehmigungslogik und Benachrichtigungen in Flows",
+     "Für das Umbenennen von Dateien in SharePoint",
+     "Für Analyse, Modellierung und komplexe Transformationen",
+     "Für die Orchestrierung von Konnektoren und Zeitplänen"
+    ],
+    "a": 2,
+    "why": "Python gehört in den Compute-Kern: Data Science, ML und aufwendige Berechnungen. Orchestrierung übernehmen Flows und Agenten."
+   },
+   {
+    "q": "Was soll in Woche 2 des 30-Tage-Plans geschehen?",
+    "opts": [
+     "Ein Agent mit typisierten Tool-Verträgen wird eingeführt.",
+     "Dataflows werden auf Copilot-gestützte Generierung umgestellt.",
+     "Alle Workflows werden als Kleber oder Compute markiert.",
+     "Python-Endpunkte für Excel- oder SharePoint-Aufgaben werden durch Office Scripts ersetzt."
+    ],
+    "a": 3,
+    "why": "Woche 2 widmet sich dem Migrieren von Trivialem: Python-Endpunkte weichen Office Scripts und nativen Konnektoren."
+   }
+  ]
+ },
+ "es": {
+  "html": "<p>Muchos equipos siguen metiendo Python en Power Automate y Power BI por costumbre, y luego se preguntan por qué sus flujos se tambalean como una silla de tres patas. Dentro de la pila de Microsoft, Python es excelente para analizar datos, pero resulta una mala elección como pegamento de orquestación.</p>\n<p>Este artículo explica dónde nace la fricción, qué alternativa nativa existe con Office Scripts, Copilot y agentes tipados, y cómo mantener Python donde realmente aporta valor. Incluye también un plan de migración en 30 días.</p>\n\n<h2>El problema de Python como pegamento en Power Platform</h2>\n<p>Power Automate no ejecuta Python arbitrario. La superficie de scripting nativa para Excel Online en Microsoft 365 son los Office Scripts, con sabor a TypeScript. Quien insiste en Python acaba añadiendo Azure Functions, Logic Apps o conectores personalizados. Con ellos llegan el procesamiento externo, las canalizaciones de implementación, la autenticación y el llamado misterio de tiempo de ejecución.</p>\n\n<h3>Por qué sale caro</h3>\n<p>La configuración externa implica más servicios que configurar, más credenciales que rotar y costes que se acumulan incluso cuando nadie trabaja. Los flujos simples son baratos porque se quedan en la plataforma: conectores, desencadenadores y Office Scripts se apoyan en la licencia existente. Al incorporar Python mediante Functions se paga en dos monedas, dinero y atención.</p>\n<ul>\n  <li><strong>Dinero:</strong> ejecución, almacenamiento y red.</li>\n  <li><strong>Atención:</strong> control de versiones, seguridad de imágenes, secretos, reintentos, arranques en frío y la pregunta semanal de por qué falló algo de madrugada.</li>\n</ul>\n\n<h3>Tipado dinámico y observabilidad</h3>\n<p>La libertad del tipado dinámico es cómoda hasta que un campo opcional pasa de cadena a número y una rama espera texto. Entonces no falla una prueba unitaria: es producción clasificando mal transacciones en silencio. En un flujo, eso significa una aprobación fallida o un SLA incumplido.</p>\n<p>A ello se suma la observabilidad. Un error puede nacer en Power Automate, transformarse en un conector personalizado, pasar por una función de Python, rebotar en Dataflow Gen2 y aparecer como un mosaico roto en Power BI. Seguirlo exige leer varios registros con formatos de marca de tiempo distintos.</p>\n<p>Los cuadernos de Fabric tienen su propio riesgo. Usarlos como pegamento de orquestación suelda la lógica de negocio a un kernel de cómputo. Una actualización del entorno, por ejemplo una versión menor de Pandas, puede convertir un pegamento simple en una pieza arqueológica.</p>\n\n<h2>Orquestación con Copilot y agentes tipados</h2>\n<p>La alternativa consiste en que la IA escriba y ejecute el pegamento dentro de los carriles que la plataforma ya optimiza. Copilot traduce lenguaje natural a Office Scripts para tareas de Microsoft 365. En Power BI usa los metadatos del modelo semántico para generar Power Query M o Python con precisión. Los agentes coordinan herramientas con memoria y límites, y reúnen construcción, depuración e implementación en un único bucle de conversación.</p>\n\n<h3>Cómo se estructura</h3>\n<p>El patrón se apoya en una arquitectura sencilla: restringir la superficie y fijar límites tipados en las uniones. Esos límites son los esquemas de API abiertos de los conectores, los modelos de objetos de Office Scripts y los modelos semánticos de Power BI. Dentro de ellos, la IA genera código a medida.</p>\n<ul>\n  <li>El agente recibe una caja de herramientas limitada: Office Scripts para acciones de Microsoft 365, Dataflow Gen2 para transformaciones, conectores para el movimiento de datos e interfaces estrictamente tipadas entre ellos.</li>\n  <li>Genera el script, lo prueba con una muestra, valida los resultados y solo entonces promueve los cambios.</li>\n  <li>Al conservar la memoria, evita que reaparezca el error cuyo arreglo solo corrigió el archivo y no el patrón.</li>\n</ul>\n<p>Esto no significa ceder el control, sino subirlo de nivel. Las personas deciden los contratos, las herramientas, las barreras de seguridad y las puertas de revisión. Los contratos tipados definen esquemas de entrada y salida, de modo que el agente puede validar antes de ejecutar un solo paso en producción. Python también admite tipos, pero lo decisivo es la disciplina en los límites, no la lealtad a un lenguaje.</p>\n\n<h2>Tres aplicaciones prácticas</h2>\n\n<h3>Power BI: flujos de datos Gen2 generados con Copilot</h3>\n<p>En Power BI el valor está en entregar datos limpios e informes que funcionen, no en escribir M artesanal. Copilot dentro de Dataflow Gen2 permite describir la transformación en lenguaje sencillo y genera Power Query M o Python anclado al modelo semántico real: tus tablas, columnas y medidas. Eso evita toda una categoría de errores de columnas no encontradas.</p>\n<p>Un flujo de trabajo típico: indicar las transacciones de ventas, filtrar los últimos 12 meses, normalizar formatos de fecha, hacer una unión izquierda con el maestro de clientes y calcular el margen bruto. Copilot propone el código, tú previsualizas el resultado con la muestra, validas los nombres de columna frente al modelo semántico y fijas el paso. No se trata de confiar a ciegas: se usa Copilot para redactar rápido, se revisa la diferencia y se bloquea el patrón cuando es correcto.</p>\n<p>Si hace falta Python para un núcleo de análisis, como detección de valores atípicos o descomposición estacional, Copilot puede generarlo dentro del flujo de datos. La orquestación queda fuera: Python calcula y la plataforma orquesta. Cuando cambia una métrica, se actualiza un prompt y se revalida, en lugar de revisar una función de 400 líneas. Además, Copilot puede generar una página inicial de informe con elementos visuales en segundos, porque aprovecha medidas, sinónimos y relaciones que ya definiste.</p>\n\n<h3>Power Automate: Office Scripts y agentes en lugar de Python</h3>\n<p>En Power Automate el movimiento correcto es deliberadamente aburrido: conectores nativos y Office Scripts. Se describen los pasos, Copilot redacta el flujo y el script, y todo permanece en Microsoft 365, sin Azure Functions ni andamiaje de conectores personalizados. Los Office Scripts ofrecen un modelo de objetos definido con aristas tipadas, firmas de métodos y formas predecibles antes de que el tiempo de ejecución dé problemas.</p>\n<p>Un ejemplo: para cada fila nueva de una tabla, normalizar las fechas, calcular un estado y enviar un correo al propietario con un resumen. Eso es un flujo más un script, y los datos se quedan cerca de Excel, SharePoint y OneDrive. Para escalar, se adopta el patrón con agente, que elige entre herramientas con nombres inequívocos, como «actualizar tabla» en lugar de nombres vagos. Así deja de conectarse la acción equivocada al desencadenador correcto.</p>\n<p>Victorias rápidas:</p>\n<ul>\n  <li>Operaciones en Excel (limpiar columnas, eliminar duplicados): Office Scripts de forma nativa.</li>\n  <li>Aprobaciones y notificaciones: acciones nativas, sin autenticación personalizada.</li>\n  <li>Actualizaciones de Dataverse y SharePoint: conectores que reconocen metadatos, no llamadas HTTP directas.</li>\n</ul>\n<p>Si un flujo necesita predicciones o transformaciones avanzadas, se llama a un servicio adecuado, como un trabajo de cuaderno de Fabric o un punto final de ML tras una API limpia. El flujo orquesta, Python calcula y ambos se comunican mediante un contrato.</p>\n\n<h3>Fabric: Python en el núcleo de cómputo</h3>\n<p>En los cuadernos de Fabric, Python está donde es más fuerte: análisis, modelado y transformaciones pesadas. Programación, validación y políticas pertenecen al perímetro, gestionado por agentes y herramientas de estilo TypeScript. Si el cuaderno se invoca mediante una API de trabajo limpia, con entradas y salidas tipadas, una desviación de forma falla rápido en el borde y no a mitad de una ejecución larga.</p>\n<p>Copilot puede ayudar dentro del cuaderno con análisis exploratorio, vectorización y andamiajes de visualización, siempre con revisión y versiones de bibliotecas fijadas. El agente lanza el trabajo cuando llegan datos, comprueba el esquema y valida las salidas contra el contrato antes de publicarlas en OneLake o en un modelo semántico.</p>\n\n<h2>Errores frecuentes y stolpersteine</h2>\n<p>Los patrones que reintroducen fragilidad se repiten en las tres plataformas:</p>\n<ul>\n  <li><strong>Dejar crecer el Python generado por Copilot.</strong> Si empieza a renombrar columnas, llamar a puntos de conexión externos o incrustar lógica de flujo, vuelves al pegamento quebradizo.</li>\n  <li><strong>Saltarse la revisión porque la escribió la IA.</strong> Conviene usar una lista de comprobación: validar la forma de las columnas, gestionar nulos de forma explícita y hacer las uniones deterministas.</li>\n  <li><strong>Mezclar orquestación y análisis.</strong> Con la lógica de aprobación dentro de una transformación de Python, el siguiente cambio de esquema rompe el flujo.</li>\n  <li><strong>Forzar Python mediante un conector propio para tareas triviales.</strong> Si solo hay que remodelar una tabla, bastan los Office Scripts.</li>\n  <li><strong>Ignorar la gobernanza.</strong> Los scripts necesitan versionado, revisión y normas de nombres, porque son código.</li>\n  <li><strong>Enterrar la lógica de negocio en flujos sin contratos de tipo.</strong> Los esquemas de entrada y salida deben definirse por adelantado.</li>\n  <li><strong>Esconder aprobaciones o renombrados dentro del cuaderno</strong>, acoplar flujos a puntos de conexión ad hoc o guardar la única definición de un KPI en un comentario.</li>\n  <li><strong>Dependencias sin anclar y permisos temporales que se vuelven permanentes</strong>, que alimentan la desviación de versiones y la proliferación de permisos.</li>\n</ul>\n<p>Una objeción habitual es que Python domina la ciencia de datos. Es cierto, y por eso se mantiene en cuadernos y núcleos de análisis: es el motor. Pero los motores no gobiernan los semáforos. La orquestación son las carreteras, las señales y las reglas, y ese es el dominio de Power Platform. Dominar el análisis no equivale a ser apto como pegamento en la pila de Microsoft.</p>\n\n<h2>Plan de migración en 30 días</h2>\n<ol>\n  <li><strong>Semana 1, auditoría:</strong> etiqueta cada flujo y proceso de datos como «pegamento» o «análisis», localiza Python en funciones que tocan aprobaciones o renombrados, documenta entradas, salidas y puntos críticos, y establece una línea base con tiempo de resolución de incidentes, plazo de cambios y tasa de éxito de llamadas a herramientas.</li>\n  <li><strong>Semana 2, pegamento trivial:</strong> sustituye los puntos finales de Python usados para tareas de Excel o SharePoint por Office Scripts y conectores nativos. Añade una lista de revisión ligera (forma de columnas, nulos, idempotencia), estandariza plantillas y nombres con verbo, sustantivo y alcance, y guarda los scripts en un repositorio.</li>\n  <li><strong>Semana 3, flujos de datos:</strong> pasa las transformaciones escritas a mano a la generación asistida por Copilot en Dataflow Gen2, deja Python solo para núcleos de análisis, valida con el modelo semántico y guarda las diferencias aceptadas en una biblioteca de prompts.</li>\n  <li><strong>Semana 4, agente:</strong> introduce un agente para la orquestación compleja con una caja de herramientas restringida, contratos de tipo con cargas de muestra y criterios de aceptación, y validación previa a la ejecución. Mide la precisión de las llamadas y el tiempo de resolución.</li>\n</ol>\n<p>Durante todo el proceso, aplica interfaces tipadas en cada unión, versiona los prompts junto al código, añade puertas de revisión y centraliza la telemetría: historial de ejecución de Power Automate, linaje de datos y trazas del agente. Los planes de reversión no son negociables: versiones anteriores de scripts, el último flujo de datos bueno conocido e instantáneas de los trabajos de cuaderno.</p>\n<p>Al día 30 el resultado debería verse así: menos conectores a medida para uniones triviales, una reducción medible del coste operativo, cambios más rápidos con menor radio de impacto y un equipo en el que una persona nueva pueda desplegar en un día, no en una semana.</p>\n\n<h2>Takeaways prácticos</h2>\n<ul>\n  <li>Usa Office Scripts y conectores nativos como pegamento en Microsoft 365; reserva Python para análisis.</li>\n  <li>Deja que Copilot genere M, Python o scripts, pero revisa la diferencia y fija el patrón.</li>\n  <li>Define contratos de entrada y salida en cada unión para detectar errores antes de producción.</li>\n  <li>Trata los prompts como activos: plantillas con variables y criterios de aceptación.</li>\n  <li>Restringe la caja de herramientas del agente y da nombres inequívocos a las herramientas.</li>\n  <li>Separa orquestación y cómputo: la plataforma orquesta, Python calcula.</li>\n  <li>Centraliza la observabilidad y mide tiempo de resolución, tasa de éxito en llamadas a herramientas y plazo de cambios.</li>\n  <li>Prepara siempre planes de reversión para scripts, flujos de datos y trabajos de cuaderno.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Python no ha muerto: simplemente vuelve a su especialidad. En el ecosistema de Microsoft, los agentes y los scripts de estilo TypeScript orquestan con limpieza, mientras Python queda en los núcleos de análisis donde sus bibliotecas sí rinden. Con contratos tipados, prompts versionados y una plataforma que valida en los bordes, cambiar la lógica de negocio pasa a ser editar una intención en lugar de operar sobre un pegamento frágil. El resultado son menos partes móviles, menos costes ocultos y menos defectos recurrentes.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Del pegamento frágil a la orquestación tipada",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Auditar el pegamento",
+     "text": "Etiqueta cada flujo como pegamento o análisis y localiza Python en aprobaciones y renombrados."
+    },
+    {
+     "kopf": "Migrar lo trivial",
+     "text": "Sustituye puntos finales de Python por Office Scripts y conectores nativos redactados con Copilot."
+    },
+    {
+     "kopf": "Refactorizar Dataflow Gen2",
+     "text": "Genera transformaciones con Copilot, valida con el modelo semántico y deja Python solo para análisis."
+    },
+    {
+     "kopf": "Introducir un agente",
+     "text": "Caja de herramientas restringida, contratos de tipo y validación previa con muestras antes de promover."
+    },
+    {
+     "kopf": "Gobernar y medir",
+     "text": "Centraliza telemetría, versiona prompts y scripts, y prepara planes de reversión."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "¿Por qué no se recomienda usar Python como pegamento de orquestación en Power Automate?",
+    "a": "Power Automate no ejecuta Python arbitrario. Para usarlo hay que añadir Azure Functions, Logic Apps o conectores personalizados, lo que implica más servicios, credenciales y costes. Además, el tipado dinámico y la difícil observabilidad vuelven los flujos frágiles. Python rinde mejor en análisis de datos."
+   },
+   {
+    "q": "¿Qué alternativa nativa hay a Python en Power Automate y Excel Online?",
+    "a": "La alternativa son los Office Scripts, con sabor a TypeScript, junto con conectores nativos. Copilot puede redactar el flujo y el script a partir de una descripción. Todo permanece en Microsoft 365, sin Azure Functions ni conectores personalizados, con un modelo de objetos tipado y predecible."
+   },
+   {
+    "q": "¿Cuándo sigue siendo útil Python dentro de la pila de Microsoft?",
+    "a": "Python sigue siendo ideal en el núcleo de cómputo: análisis, modelado y transformaciones pesadas, como cuadernos de Fabric o detección de valores atípicos. La regla es separar funciones: la plataforma orquesta, Python calcula, y ambos se comunican mediante un contrato con entradas y salidas tipadas."
+   },
+   {
+    "q": "¿Cómo se migra de Python a Office Scripts, Copilot y agentes en 30 días?",
+    "a": "Semana 1: auditar flujos y etiquetarlos como pegamento o análisis. Semana 2: sustituir el pegamento trivial por Office Scripts y conectores nativos. Semana 3: pasar transformaciones a Copilot en Dataflow Gen2. Semana 4: introducir un agente con caja de herramientas restringida, contratos de tipo y validación previa."
+   }
+  ],
+  "infos": [
+   {
+    "titulo": "",
+    "titel": "Python como pegamento vs. orquestación nativa",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Python como pegamento",
+     "punkte": [
+      "Exige Azure Functions, Logic Apps o conectores personalizados",
+      "Más servicios, más credenciales que rotar y costes acumulados",
+      "El tipado dinámico provoca fallos silenciosos en producción",
+      "Un error cruza varios registros con marcas de tiempo distintas"
+     ]
+    },
+    "rechts": {
+     "titel": "Orquestación nativa con Copilot",
+     "punkte": [
+      "Office Scripts y conectores nativos dentro de Microsoft 365",
+      "Se apoya en la licencia existente, sin andamiaje externo",
+      "Contratos tipados validan antes de ejecutar en producción",
+      "Python queda en los núcleos de análisis donde rinde"
+     ]
+    }
+   },
+   {
+    "titel": "Errores frecuentes que reintroducen fragilidad",
+    "typ": "checkliste",
+    "punkte": [
+     "No dejar crecer el Python generado por Copilot",
+     "Revisar siempre el código de la IA: columnas, nulos y uniones deterministas",
+     "No mezclar orquestación y análisis en la misma transformación",
+     "Usar Office Scripts en lugar de conectores propios para tareas triviales",
+     "Aplicar versionado, revisión y normas de nombres a los scripts",
+     "Definir por adelantado los esquemas de entrada y salida",
+     "Anclar dependencias y retirar los permisos temporales"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "¿Qué herramienta es la superficie de scripting nativa para Excel Online en Microsoft 365?",
+    "opts": [
+     "Azure Functions con Python",
+     "Office Scripts, con sabor a TypeScript",
+     "Logic Apps con conectores personalizados",
+     "Cuadernos de Fabric con Pandas"
+    ],
+    "a": 1,
+    "why": "El artículo indica que Power Automate no ejecuta Python arbitrario y que la superficie nativa para Excel Online son los Office Scripts."
+   },
+   {
+    "q": "¿Qué riesgo aparece al usar cuadernos de Fabric como pegamento de orquestación?",
+    "opts": [
+     "Se pierde la licencia de Microsoft 365 automáticamente",
+     "Los cuadernos no pueden leer datos de OneLake",
+     "Se suelda la lógica de negocio a un kernel de cómputo",
+     "Copilot deja de generar código para el modelo semántico"
+    ],
+    "a": 2,
+    "why": "Usar cuadernos como pegamento une la lógica de negocio a un kernel de cómputo, y una actualización del entorno puede romperlo."
+   },
+   {
+    "q": "Según el artículo, ¿cuál es el reparto de papeles correcto entre la plataforma y Python?",
+    "opts": [
+     "Python orquesta los flujos y la plataforma calcula",
+     "Python orquesta y calcula, la plataforma solo almacena datos",
+     "La plataforma orquesta y Python calcula",
+     "Ambos orquestan sin necesidad de contratos tipados"
+    ],
+    "a": 2,
+    "why": "El artículo resume: la plataforma orquesta, Python calcula, y ambos se comunican mediante un contrato."
+   },
+   {
+    "q": "¿Qué debe hacerse en la semana 1 del plan de migración de 30 días?",
+    "opts": [
+     "Introducir un agente con una caja de herramientas restringida",
+     "Pasar las transformaciones a Dataflow Gen2 con Copilot",
+     "Sustituir puntos finales de Python por Office Scripts",
+     "Auditar y etiquetar flujos como «pegamento» o «análisis»"
+    ],
+    "a": 3,
+    "why": "La semana 1 es de auditoría: etiquetar cada flujo como pegamento o análisis, localizar Python y establecer una línea base."
+   }
+  ]
+ },
+ "fr": {
+  "html": "<p>« Python est le langage de l'IA » : l'affirmation est répandue, mais dans l'écosystème Microsoft elle induit souvent en erreur. Beaucoup d'équipes imposent Python dans Power Automate et Power BI, puis s'étonnent que leurs flux soient instables comme une chaise à trois pieds. Dans cet environnement, c'est l'IA qui peut assurer la liaison entre les briques, à condition de lui en laisser la place.</p>\n<p>Cet article explique pourquoi l'orchestration par agent et par Copilot fait des scripts de type TypeScript (les Office Scripts) l'outil de liaison privilégié. Il montre aussi comment cantonner Python à l'analytique, et comment réunir construction, débogage et déploiement dans une seule boucle conversationnelle gouvernée.</p>\n\n<h2>Python dans Power Platform : une friction coûteuse</h2>\n<p>Power Automate n'exécute pas de Python arbitraire. Pour Microsoft 365, l'interface de script native repose sur TypeScript : ce sont les Office Scripts, hébergés par Excel en ligne. Choisir Python revient donc à ajouter des Azure Functions, des Logic Apps ou des connecteurs personnalisés. On se retrouve avec du calcul externe, des pipelines de déploiement, de l'authentification et des erreurs d'exécution mystérieuses.</p>\n<h3>Une complexité qui s'accumule</h3>\n<p>Une configuration externe, c'est davantage de services à configurer, d'identifiants à renouveler et de coûts qui courent même pendant la nuit. Chaque saut supplémentaire fragilise l'ensemble :</p>\n<ul>\n<li>les schémas de connecteurs dérivent par rapport à la réalité ;</li>\n<li>les dépendances des fonctions vieillissent ;</li>\n<li>les permissions s'étendent sur les rôles Entra, les groupes de ressources et des comptes de stockage dont plus personne ne revendique la création.</li>\n</ul>\n<h3>Le typage dynamique, une roulette russe</h3>\n<p>Un code Python semble « fonctionner » puisqu'il n'y a pas de compilation, puis il échoue en cours d'exécution parce qu'un champ n'était pas celui prévu. Dans un flux, cela se traduit par une approbation bloquée ou un SLA manqué. Pire : le flux peut réussir avec des données erronées, par exemple lors d'une clôture trimestrielle. Les frontières fortement typées interceptent ces erreurs avant la mise en production. Python peut certes être typé, mais la plupart des équipes ne l'imposent pas dans leurs flux.</p>\n<h3>L'observabilité en pâtit</h3>\n<p>Une erreur née dans Power Automate peut traverser un connecteur personnalisé, une fonction Python, Dataflow Gen2, puis apparaître comme une tuile cassée dans Power BI. Il faut alors lire cinq journaux qui ne s'accordent pas sur le format des dates. Le lignage des données traverse plusieurs produits, et remonter à la source devient une enquête.</p>\n<h3>Le coût en argent et en attention</h3>\n<p>Les flux simples sont économiques parce qu'ils restent dans la plateforme : connecteurs, déclencheurs et Office Scripts utilisent vos licences existantes. Avec Python via Azure Functions, vous payez deux fois :</p>\n<ul>\n<li><strong>en argent</strong> : exécution, stockage, réseau ;</li>\n<li><strong>en attention</strong> : versionnage, sécurisation des images, secrets, nouvelles tentatives, démarrages à froid.</li>\n</ul>\n<p>À petite échelle, cela passe. À l'échelle d'une organisation, cela devient une ligne budgétaire teintée de regrets.</p>\n\n<h2>Pourquoi le code manuel et les playbooks statiques échouent</h2>\n<p>La boucle classique paraît héroïque : exigence, code, déploiement, test, correctif, redéploiement. Mais les règles métier changent en cours de sprint et le schéma final peut bouger avant le déjeuner. Dans Power Platform, chaque saut de Power Automate vers Azure Functions puis Power BI amplifie les frictions et multiplie les modes de défaillance.</p>\n<p>Les playbooks statiques sont l'autre piège. Un guide soigneusement écrit pour la logique de fin de trimestre ne résiste pas à une nouvelle remise commerciale, à un ajustement de la comptabilisation des revenus ou à une approbation supplémentaire exigée par le juridique. Il faut alors mettre à jour le code et les dépendances, reconstruire les conteneurs, et les démarrages à froid se produisent au pire moment.</p>\n<h3>Un exemple parlant</h3>\n<p>Une équipe avait gagné des heures sur ses rapports mensuels en regroupant les transformations dans une seule fonction Python. Une mise à jour mineure de Pandas a modifié un comportement par défaut, et la fonction a converti silencieusement des valeurs nulles. Deux semaines plus tard, le rapport d'écart était juste assez faux pour être dangereux. Le bug est revenu après correction, car le verrouillage des versions figurait encore dans le backlog.</p>\n<h3>La dette opérationnelle</h3>\n<p>Les connecteurs personnalisés vieillissent mal : les spécifications OpenAPI se décalent, les jetons expirent, les principaux de service accumulent des droits « temporaires » qui deviennent permanents. Chaque correctif rapide prépare une future panne. Le code manuel convient à un domaine stable, or la logique métier de Power Platform ne l'est pas. L'orchestration doit donc être adaptative, typée aux extrémités et générée au plus près des primitives de la plateforme.</p>\n\n<h2>Le bon modèle : Copilot, Office Scripts et agents typés</h2>\n<p>Au lieu de bricoler du code de liaison, on laisse l'IA l'écrire dans les limites de la plateforme. Copilot traduit le langage naturel en Office Scripts pour les tâches Microsoft 365. Dans Power BI, il s'appuie sur les métadonnées du modèle sémantique pour générer du Power Query M ou du Python, et il peut créer des structures de rapport en quelques secondes. Les agents, comme TypeAgent ou un framework d'agent similaire, coordonnent les outils avec de la mémoire et des garde-fous. Ils réduisent le ping-pong entre spécifications, code, déploiement et débogage.</p>\n<h3>Une boîte à outils limitée</h3>\n<p>L'agent dispose d'outils restreints : Office Scripts pour les actions Microsoft 365, Dataflow Gen2 pour les transformations, connecteurs pour le transfert de données, avec des interfaces strictement typées entre eux. Il garde le contexte, raisonne par étapes et n'écrit du code que là où c'est nécessaire. Il applique la gouvernance au lieu de la remplacer : il retient les échecs passés, choisit le bon outil et récupère les informations de façon pertinente.</p>\n<h3>Des contrats typés pour valider avant d'exécuter</h3>\n<p>Vous définissez les schémas d'entrée et de sortie, et l'agent peut valider avant d'exécuter la moindre étape en production. Il prépare, génère le script, teste sur un échantillon, valide les sorties et ne promeut les changements qu'ensuite. Les erreurs de forme sont détectées avant de devenir des pannes. Comme l'agent mémorise ses corrections, un bug ne revient pas parce qu'un correctif n'aurait touché que le fichier et pas le modèle.</p>\n<h3>Les prompts, des actifs à part entière</h3>\n<p>Traitez les prompts comme des modèles, avec des variables et des critères d'acceptation. Conservez le prompt qui a réussi et la forme attendue du résultat : l'agent pourra le réutiliser, l'adapter et vérifier le résultat par rapport à vos contrats. Quand l'activité change, on met à jour un prompt, pas une image de conteneur.</p>\n\n<h2>Trois applications concrètes</h2>\n<h3>1. Dataflows Power BI : générer plutôt qu'écrire à la main</h3>\n<p>Dans Dataflow Gen2, Copilot exprime la transformation à partir d'une demande en langage clair, puis génère du Power Query M ou du Python ancré dans votre modèle sémantique : vos tables, colonnes et mesures réelles. Toute une catégorie d'erreurs de colonnes introuvables disparaît ainsi avant d'apparaître.</p>\n<p>Le flux de travail ressemble à ceci : à partir des transactions de vente, filtrer sur les 12 derniers mois, normaliser les formats de date, faire une jointure gauche avec le fichier client et calculer la marge brute. Copilot propose du M ou du Python. Vous prévisualisez sur un échantillon, validez les noms de colonnes par rapport au modèle sémantique et fixez l'étape. Pour un noyau analytique tel que la détection d'anomalies ou la décomposition saisonnière, Python est le bon choix, mais l'orchestration reste en dehors : Python calcule, la plateforme orchestre. Côté rapport, Copilot peut aussi générer une première page avec des visuels, en s'appuyant sur les mesures nommées, les synonymes et les relations déjà organisés.</p>\n<h3>2. Power Automate : Office Scripts et agents à la place de Python</h3>\n<p>L'approche recommandée est volontairement ennuyeuse : connecteurs natifs et Office Scripts. Vous décrivez les étapes (pour chaque nouvelle ligne d'un tableau, normaliser les dates, calculer un statut, envoyer un résumé par email au propriétaire) et Copilot rédige le script et l'étape de flux. Pas d'environnement d'exécution externe, pas de conteneur à sécuriser, pas de secrets à stocker : le code vit là où sont les données, dans Excel en ligne, SharePoint ou OneDrive. Les scripts restent typés grâce à un modèle d'objet défini et à des signatures de méthode.</p>\n<p>Pour passer à l'échelle, un agent choisit parmi des outils nommés sans ambiguïté, aux entrées et sorties schématisées. Un outil intitulé « mettre à jour le tableau » vaut mieux qu'un vague « faire quelque chose ». Quand l'agent choisit systématiquement le bon outil, on cesse de relier la mauvaise action au bon déclencheur.</p>\n<h3>3. Notebooks Fabric : Python au cœur du calcul</h3>\n<p>Dans Fabric, Python trouve sa place : analytique, modélisation, transformations lourdes. La planification, la validation et la politique d'exécution relèvent des agents et des outils de type TypeScript. L'agent appelle le notebook via une API de tâche propre, transmet des entrées typées et attend des sorties typées : si le format dévie, l'échec est immédiat à la périphérie, pas au milieu d'une longue exécution. Copilot aide pour l'analyse exploratoire, la vectorisation et les squelettes de visualisation, mais les versions des bibliothèques restent revues et verrouillées. L'agent déclenche le pipeline à l'arrivée des données, vérifie le schéma, lance le notebook et valide les sorties avant publication dans OneLake ou un modèle sémantique.</p>\n\n<h2>Erreurs courantes et stolpersteine à éviter</h2>\n<ul>\n<li><strong>Laisser le Python généré par Copilot s'éparpiller</strong> : s'il renomme des colonnes, appelle des points de terminaison externes ou intègre de la logique de workflow, le code devient fragile.</li>\n<li><strong>Sauter la revue sous prétexte que l'IA a écrit le code</strong> : standardisez les prompts de revue et gardez une liste de contrôle (forme des colonnes validée, gestion explicite des nuls, jointure déterministe).</li>\n<li><strong>Mélanger orchestration et analyse</strong> : une logique d'approbation dans une transformation Python garantit qu'un changement de schéma cassera le workflow.</li>\n<li><strong>Forcer Python via un connecteur personnalisé pour des tâches triviales</strong> : pour remodeler un tableau, les Office Scripts suffisent.</li>\n<li><strong>Négliger la gouvernance des scripts</strong> : versionnage, points de contrôle et normes de nommage s'imposent, car les scripts sont du code.</li>\n<li><strong>Enfouir la logique métier dans plusieurs flux sans contrat de type</strong>, ou cacher la seule définition d'un KPI dans un commentaire de cellule.</li>\n</ul>\n\n<h2>Plan d'implémentation sur 30 jours</h2>\n<ol>\n<li><strong>Semaine 1 – Auditer</strong> : étiquetez chaque flux et dataflow, repérez le Python qui touche aux approbations, aux renommages ou aux fichiers, documentez entrées, sorties et points de défaillance, et relevez vos métriques de départ (temps de résolution, délai de déploiement, taux de réussite des appels d'outils).</li>\n<li><strong>Semaine 2 – Migrer les scripts de liaison triviaux</strong> : remplacez les endpoints Python utilisés pour des tâches Excel ou SharePoint par des Office Scripts et des connecteurs natifs, avec une liste de contrôle légère (forme des colonnes, nuls, idempotence) et des noms de scripts explicites de type verbe + nom.</li>\n<li><strong>Semaine 3 – Refactoriser les dataflows</strong> : passez à la génération assistée par Copilot dans Dataflow Gen2, réservez Python aux noyaux analytiques et validez par rapport au modèle sémantique.</li>\n<li><strong>Semaine 4 – Introduire un agent</strong> : restreignez la boîte à outils, définissez des contrats de type avec exemples de charges utiles et critères d'acceptation, activez la validation préalable sur échantillons et suivez la précision des appels d'outils.</li>\n</ol>\n<p>Côté gouvernance : interfaces typées à chaque jonction, prompts stockés avec le code, télémétrie centralisée (historique Power Automate, lignage des flux, traces d'agent) et plans de retour arrière (version de script précédente, dernier dataflow fonctionnel, instantané des jobs de notebook).</p>\n\n<h2>Points clés à retenir</h2>\n<ul>\n<li>Python n'est pas le langage de liaison de Power Platform : il y est indirect par conception.</li>\n<li>Les Office Scripts s'exécutent là où vivent vos données Microsoft 365 et Copilot les rédige en langage clair.</li>\n<li>Python reste pertinent pour les noyaux analytiques, le ML et les calculs lourds, dans les notebooks Fabric ou les dataflows.</li>\n<li>Typez les frontières : schémas OpenAPI, modèle d'objet des Office Scripts, modèle sémantique Power BI.</li>\n<li>Limitez la boîte à outils de l'agent et nommez les outils sans ambiguïté.</li>\n<li>Traitez les prompts comme des actifs : conservez le prompt réussi et la forme attendue du résultat.</li>\n<li>Suivez des indicateurs simples : temps de résolution par incident, taux de réussite des appels d'outils, délai de déploiement.</li>\n</ul>\n\n<h2>Conclusion</h2>\n<p>Python peut tout faire, le ruban adhésif aussi, mais cela n'en fait pas la bonne fixation pour un avion. Dans l'écosystème Microsoft, la liaison gagne à être générée, typée et volontairement ennuyeuse : des Office Scripts, des connecteurs natifs et un agent qui applique vos contrats. Python garde son rôle de moteur de calcul, derrière des interfaces propres. Cette séparation n'a rien d'une reddition, c'est une stratégie : elle réduit les coûts, la fréquence des pannes et les bugs récurrents, tout en vous permettant de livrer plus vite.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titre": "Remplacer le Python « colle » par des agents typés",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Auditer l'existant",
+     "text": "Repérer le Python qui touche approbations et renommages, documenter entrées et sorties, relever les métriques de départ."
+    },
+    {
+     "kopf": "Migrer la liaison",
+     "text": "Remplacer les endpoints Python triviaux par des Office Scripts et des connecteurs natifs rédigés avec Copilot."
+    },
+    {
+     "kopf": "Refactoriser les dataflows",
+     "text": "Générer les transformations avec Copilot dans Dataflow Gen2 et valider par rapport au modèle sémantique."
+    },
+    {
+     "kopf": "Introduire un agent",
+     "text": "Boîte à outils restreinte, contrats de type et validation sur échantillons avant toute promotion."
+    },
+    {
+     "kopf": "Gouverner de bout en bout",
+     "text": "Interfaces typées, prompts versionnés, télémétrie centralisée et plans de retour arrière."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Pourquoi Python n'est-il pas le meilleur choix pour relier les briques dans Power Automate ?",
+    "a": "Power Automate n'exécute pas de Python arbitraire : son interface de script native repose sur TypeScript (Office Scripts). Utiliser Python impose des Azure Functions, des Logic Apps ou des connecteurs personnalisés, donc plus de coûts, d'authentification, de maintenance et d'erreurs d'exécution difficiles à tracer."
+   },
+   {
+    "q": "Que sont les Office Scripts et pourquoi les privilégier dans Power Automate ?",
+    "a": "Les Office Scripts sont des scripts de type TypeScript hébergés par Excel en ligne. Ils utilisent vos licences existantes, sans conteneur ni secrets à gérer, restent typés grâce à un modèle d'objet défini, et Copilot peut les rédiger à partir d'une description en langage clair."
+   },
+   {
+    "q": "Dans quels cas Python reste-t-il pertinent dans l'écosystème Microsoft ?",
+    "a": "Python convient aux noyaux analytiques, au machine learning et aux calculs lourds, comme la détection d'anomalies ou la décomposition saisonnière, dans les notebooks Fabric ou les dataflows. Son rôle se limite au calcul : Python calcule, tandis que la plateforme et les agents assurent l'orchestration."
+   },
+   {
+    "q": "Comment un agent IA avec des contrats typés rend-il les flux Power Platform plus fiables ?",
+    "a": "Vous définissez les schémas d'entrée et de sortie ; l'agent valide avant d'exécuter, génère le script, teste sur un échantillon, vérifie les sorties, puis promeut les changements. Les erreurs de forme sont détectées avant la production, et l'agent mémorise ses corrections pour éviter le retour des bugs."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Python vs Office Scripts : qui fait quoi ?",
+    "typ": "vergleich",
+    "links": {
+     "titre": "Office Scripts, agents et connecteurs natifs",
+     "titel": "Office Scripts et connecteurs natifs : la liaison",
+     "punkte": [
+      "Le code vit là où sont les données : Excel en ligne, SharePoint, OneDrive",
+      "Pas d'environnement d'exécution externe, pas de conteneur ni de secrets à stocker",
+      "Scripts typés grâce à un modèle d'objet défini et à des signatures de méthode",
+      "Utilisent les licences existantes, donc des flux économiques",
+      "Copilot rédige le script à partir d'une demande en langage clair"
+     ]
+    },
+    "rechts": {
+     "titel": "Python : le moteur de calcul",
+     "punkte": [
+      "Pertinent pour les noyaux analytiques, le ML et les calculs lourds",
+      "Place idéale dans les notebooks Fabric et les dataflows",
+      "Python calcule, la plateforme orchestre",
+      "Via Azure Functions, on paie en argent et en attention",
+      "Versions des bibliothèques revues et verrouillées"
+     ]
+    }
+   },
+   {
+    "titel": "Plan d'implémentation sur 30 jours",
+    "typ": "checkliste",
+    "punkte": [
+     "Semaine 1 : étiqueter chaque flux et dataflow, repérer le Python sensible",
+     "Documenter entrées, sorties, points de défaillance et métriques de départ",
+     "Semaine 2 : remplacer les endpoints Python triviaux par des Office Scripts",
+     "Nommer les scripts de façon explicite : verbe + nom",
+     "Semaine 3 : passer à la génération Copilot dans Dataflow Gen2",
+     "Semaine 4 : restreindre la boîte à outils et définir des contrats de type",
+     "Activer la validation sur échantillons et suivre la précision des appels d'outils"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Sur quel langage repose l'interface de script native de Power Automate pour Microsoft 365 ?",
+    "opts": [
+     "Python, exécuté dans des conteneurs gérés par la plateforme",
+     "TypeScript, avec les Office Scripts hébergés par Excel en ligne",
+     "Power Query M, exécuté directement dans Power BI",
+     "PowerShell, exécuté via des Logic Apps dédiées"
+    ],
+    "a": 1,
+    "why": "Power Automate n'exécute pas de Python arbitraire : son interface de script native repose sur TypeScript, via les Office Scripts d'Excel en ligne."
+   },
+   {
+    "q": "Pourquoi le typage dynamique de Python est-il présenté comme risqué dans les flux ?",
+    "opts": [
+     "Il empêche tout déploiement dans Azure Functions",
+     "Il interdit l'utilisation de bibliothèques comme Pandas",
+     "Il augmente toujours la facture de licences Microsoft 365",
+     "Il peut échouer à l'exécution ou réussir avec des données erronées"
+    ],
+    "a": 3,
+    "why": "Sans compilation, un champ inattendu provoque un échec en cours d'exécution, ou un flux réussit avec de mauvaises données, par exemple en clôture trimestrielle."
+   },
+   {
+    "q": "Quel rôle l'article recommande-t-il de réserver à Python dans l'écosystème Microsoft ?",
+    "opts": [
+     "Le noyau analytique, tandis que la plateforme assure l'orchestration",
+     "L'orchestration des approbations dans Power Automate",
+     "La liaison entre Excel, SharePoint et OneDrive",
+     "La gestion des permissions et des secrets de l'agent"
+    ],
+    "a": 0,
+    "why": "Python convient aux noyaux analytiques, au ML et aux calculs lourds ; l'orchestration reste en dehors : Python calcule, la plateforme orchestre."
+   },
+   {
+    "q": "Que permet de faire la définition de contrats typés d'entrée et de sortie pour l'agent ?",
+    "opts": [
+     "Supprimer la nécessité de tester sur un échantillon",
+     "Remplacer entièrement la gouvernance des scripts",
+     "Valider avant d'exécuter, et détecter les erreurs de forme avant les pannes",
+     "Convertir automatiquement les Office Scripts en code Python"
+    ],
+    "a": 2,
+    "why": "Avec des schémas définis, l'agent valide avant toute étape en production et détecte les erreurs de forme avant qu'elles deviennent des pannes."
+   }
+  ]
+ },
+ "he": {
+  "html": "<p>הפיתוי גדול: Python היא שפת ה-AI והנתונים, אז למה שלא להשתמש בה גם כדבק בין חלקי המערכת? בתוך Power Platform זה מוביל בדרך כלל לזרימות שבירות, לעלויות שמתגלגלות ברקע ולחקירות תקלות בין כמה מערכות. הגישה המתאימה יותר למחסנית של Microsoft היא לתת לבינה מלאכותית לכתוב את הדבק בתוך גבולות מוגדרים, ולשמור את Python למקום שבו היא באמת מצטיינת.</p>\n<p>במאמר נעבור על הבעיה, על החלופה המקורית עם Office Scripts, Copilot וסוכנים מוקלדים, על שלושה יישומים מעשיים, על הטעויות הנפוצות ועל תוכנית עבודה ל-30 יום.</p>\n\n<h2>הבעיה: חיכוך של Python בתוך Power Platform</h2>\n<p>Power Automate לא מריץ קוד Python שרירותי. משטח הסקריפטים המקורי של Microsoft 365 ושל Excel Online הוא Office Scripts, שכתובים בטעם TypeScript. מי שמתעקש על Python מחבר בדרך כלל Azure Functions, Logic Apps או מחברים מותאמים אישית, ובכך מוסיף כוח מחשוב חיצוני, צינורות פריסה והרבה חלקים נעים.</p>\n<p>המחיר מורגש בכמה מישורים:</p>\n<ul>\n<li><strong>יותר שירותים להגדרה:</strong> יותר אישורים להחלפה ויותר עלויות שרצות גם כשאיש לא עובד.</li>\n<li><strong>הקלדה דינמית:</strong> הקוד עובר כי אין שלב הידור, ונכשל באמצע ריצה כי שדה לא נראה כפי שהניחו בזרימה. התוצאה יכולה להיות אישור שבור או SLA שהוחמץ.</li>\n<li><strong>שושלת חוצת מוצרים:</strong> כשמערבבים זרימות, פונקציות ו-Dataflow, כל מעקב אחרי שגיאה נמשך זמן רב.</li>\n</ul>\n<p>דוגמה אופיינית היא הסתרת Python מאחורי מחבר מותאם אישית רק כדי לשנות שמות עמודות באקסל. כל קפיצה נוספת מגדילה את השבירות: סכמות המחברים משתנות, תלויות מתיישנות והרשאות מתפשטות על פני תפקידי Entra, קבוצות משאבים וחשבונות אחסון ישנים.</p>\n\n<h2>Fabric Notebooks ו-Python: איפה היא כן שייכת</h2>\n<p>Python שייכת למדעי הנתונים, ללמידת מכונה ולעיבוד כבד, וב-Fabric Notebooks היא במקומה. הבעיה מתחילה כשמשתמשים במחברות כדבק תזמור ומרתכים לתוכן לוגיקה עסקית. אז תזמון, אישורים וטיפול בפלט הופכים להתאמה אישית, ועדכון סביבה אחד או עליית גרסה משנית של ספרייה כמו pandas הופכים את הדבק הפשוט לשכבות ארכיאולוגיות.</p>\n<p>הניסוח הקולע הוא שמנועים לא מנהלים רמזורים: ספריות, קהילה ומחברות הן המנוע, אבל התזמור הוא כבישים, צמתים וחוקים, ואלה בתחום של Power Platform. אפשר להריץ Python בתוך הפלטפורמה, אבל לשימוש כדבק זו דרך עקיפה מעצם התכנון.</p>\n\n<h2>למה הגישות הנוכחיות נכשלות</h2>\n<h3>קוד ידני: משחק חפרפרת בהילוך איטי</h3>\n<p>על הלוח המחזור נראה הרואי: דרישה, קוד, פריסה, בדיקה, תיקון ופריסה מחדש. בפועל החוקים העסקיים משתנים באמצע ספרינט, סכמת הנתונים משתנה עד הצהריים והקבוע היחיד הוא עוד פריסה מחדש. ב-Power Platform זה כואב יותר, כי כל מעבר בין Power Automate, Azure Functions ו-Power BI מגביר את החיכוך ומכפיל את נקודות הכשל.</p>\n<h3>ספרי הוראות סטטיים</h3>\n<p>כתבתם נתיב אידיאלי ללוגיקה של סוף רבעון, ואז הפיננסים משנים את אופן ההכרה בהכנסות והמחלקה המשפטית מוסיפה אישור בארבעה שלבים. דבק Python שיושב בתוך פונקציות לא מתכופף אלא נשבר. מעדכנים קוד, מקפיצים תלויות, בונים קונטיינרים מחדש ומגלים שגם cold starts אוהבים להופיע בדיוק בהצגה להנהלה.</p>\n<h3>הקלדה דינמית בקנה מידה</h3>\n<p>החופש הזה מרגיש מהיר כשעובדים לבד. בזרימות עבודה גדולות שדה אופציונלי משתנה ממחרוזת למספר, והפונקציה ממשיכה כרגיל עד שענף מסוים מצפה לטקסט וזורק חריגה. זה כבר לא בדיקת יחידה שנכשלת בקול אלא ייצור שמסווג עסקאות לא נכון בשקט.</p>\n<p>בדוגמה אחת צוות חסך שעות בדיווח חודשי כשאיחד טרנספורמציות לפונקציית Python אחת. עדכון גרסה מינורי של pandas שינה התנהגות ברירת מחדל, והדוחות הפכו לא מדויקים באופן מסוכן. התיקון חזר לתקלה כי קיבוע גרסאות נדחק לתחתית ה-backlog. הלקח הוא שבאגים חוזרים הם תוצאה של תהליך העבודה ולא תעלומה.</p>\n<h3>יכולת תצפית וממשל</h3>\n<p>שגיאה נולדת ב-Power Automate, עוברת טרנספורמציה במחבר מותאם, מפעילה פונקציית Python, קופצת ל-Dataflow Gen2 ובסוף מופיעה כדוח שבור ב-Power BI. אז קוראים חמישה לוגים בלי פורמט אחיד של חותמת זמן. מצד הממשל, מחברים מותאמים מתיישנים, מפרטי OpenAPI מתרחקים מהמציאות, סודות פוקעים ו-service principals צוברים הרשאות יתר זמניות. הלולאה הידנית לא רק עולה בזמן אלא צוברת חוב תפעולי.</p>\n\n<h2>המסלול המקורי: Office Scripts ו-Copilot</h2>\n<p>Office Scripts הם הקצה המאושר לאוטומציה של Excel ושל משימות Microsoft 365, בלי לגרור תשתית. הם נכתבים בסגנון TypeScript, עם מודל אובייקטים מוגדר, חתימות מתודות וצורות צפויות עוד לפני שהריצה מתחילה.</p>\n<p>Copilot מתרגם שפה טבעית לסקריפטים כאלה. אפשר לתאר את התוצאה הרצויה, למשל: כשנוספת שורה לטבלה, לנרמל תאריכים, למלא שדות ריקים ולשלוח סיכום למאשרים באימייל. Copilot ינסח סקריפט דמוי TypeScript ושלבי זרימה. אין סביבת ריצה חיצונית, אין קונטיינר להקשיח ואין מאגר סודות לנהל. הקוד יושב היכן שהנתונים נמצאים: Excel Online, SharePoint ו-OneDrive.</p>\n<p>הכלכלה פשוטה: זרימות עם מחברים מקוריים, טריגרים ו-Office Scripts נשענות על הרישוי הקיים. הוספת Python דרך Functions גורמת לתשלום בשני מטבעות: כסף עבור הרצה, אחסון ורשת, ותשומת לב עבור גרסאות, אבטחת תמונות, סודות, ניסיונות חוזרים וזמני התחלה.</p>\n\n<h2>סוכנים מוקלדים כמתזמרים</h2>\n<p>במקום להתנגש בפלטפורמה, נותנים לסוכן ממוגדר טיפוסים לתזמר יחד עם Copilot. הסוכן מייצר, קורא לכלים, בוחן תוצאות ומתקן. הוא לא זורק קוד בחופשיות אלא קורא לכלים עם מגבלות בטיחות. ארגז הכלים יכול לכלול:</p>\n<ul>\n<li>Office Scripts לפעולות Microsoft 365,</li>\n<li>Dataflow Gen2 לטרנספורמציות,</li>\n<li>מחברים להעברת נתונים,</li>\n<li>ממשקים בעלי טיפוסים קשיחים ביניהם.</li>\n</ul>\n<p>מסגרת כמו typeagent.py או דומה לה מוסיפה הסקה רב-שלבית. הסוכן לא מחליף את הממשל אלא אוכף אותו: הוא זוכר כישלונות קודמים, בוחר את הכלי הנכון ושולף מידע בחוכמה. שני דברים קריטיים כאן: דיוק בקריאה לכלים ושמירה על הקשר. כשהסוכן בוחר בעקביות בין עדכון גיליון לשליחת אימייל, שגיאות האנוש פוחתות. זמן הטיפול מתקצר כי הוא מטפל בשלבי ההכנה: יצירת הסקריפט, בדיקה מול דגימה ואימות פלטים, ורק אז מאשרים את השינוי.</p>\n<p>הארכיטקטורה פשוטה: מגבילים את שטח הפנים של הקוד ומציבים גבולות בעלי טיפוסים סטטיים בחיבורים. אלה סכמות OpenAPI במחברים, מודלי אובייקטים של Office Scripts ומודלים סמנטיים ב-Power BI. בתוך הגבולות הללו ה-AI מייצר קוד לפי מפרט. כך תופסים טעויות מבנה מוקדם, והזיכרון של הסוכן מונע הישנות של אותו באג, כי מתקנים את התבנית ולא רק את הקובץ.</p>\n<p>הטיפ שאף אחד לא מלמד: לקדד פרומפטים כנכסים. מתייחסים אליהם כאל תבניות עם משתנים וקריטריוני קבלה, והסוכן משתמש בהם שוב, מתאים אותם ובודק את התוצאה מול החוזים. כך בנייה, ניפוי ופריסה מתכנסים ללולאת שיחה אחת שעדיין מנוהלת. חוזים מוקלדים לכלי הסוכן, כלומר סכמות קלט ופלט, מאפשרים לאמת לפני שמריצים צעד אחד בייצור, במקום להריץ Python ולהתפלל שה-JSON לא הצמיח מאפיין נוסף.</p>\n\n<h2>שלושה יישומים מעשיים</h2>\n<h3>1. Dataflow Gen2 ב-Power BI עם Python שנוצר אוטומטית</h3>\n<p>Copilot בתוך Dataflow Gen2 מאפשר לתאר טרנספורמציה באנגלית פשוטה ולקבל Power Query M או Python. Copilot מכיר את המטא-דאטה של המודל הסמנטי, כלומר את הטבלאות, העמודות, המדדים והמילים הנרדפות שלכם, ולכן הקוד מעוגן במציאות ולא בסכמה מומצאת. זה מצמצם שגיאות מסוג \"עמודה לא נמצאה\".</p>\n<p>הוראה לדוגמה: מתוך עסקאות מכירה, לסנן ל-12 החודשים האחרונים, לנרמל פורמטי תאריך, לבצע left join לטבלת לקוחות ולחשב שולי רווח גולמי. Copilot מציע M או Python, ואתם צופים בתוצאה מול דגימה, מאמתים שמות עמודות מול המודל הסמנטי ונועלים את השלב. צריך ליבה אנליטית כמו זיהוי חריגים או פירוק עונתיות? Python בתוך זרימת הנתונים מתאימה, אבל התזמור נשאר בחוץ: Python מחשבת והפלטפורמה מתזמרת. גם שלד לדוח עם ויזואליזציות בשניות אינו קסם אלא ניצול מטא-דאטה שכבר הגדרתם.</p>\n<h3>2. Power Automate: Office Scripts וסוכנים במקום דבק Python</h3>\n<p>הצעד הנכון כאן משעמם במכוון: מחברים מקוריים ו-Office Scripts, בלי Azure Functions, בלי פיגום של מחברים מותאמים ובלי קונטיינר ששכחתם שקיים. הסוכן בוחר כלים מארגז כלים מוגבל, כמו הפעלת Office Script, קריאה למחבר Microsoft Graph, כתיבה ל-Dataverse או שליחת אישור. הכלים מבוססי סכמה, והסוכן מאמת תנאים מוקדמים ומריץ בדיקה מול דגימה לפני קידום השינוי. כדאי לתת לכלים שמות חד-משמעיים, למשל \"עדכון טבלת גיליון עבודה\" ולא \"בצע פעולות\".</p>\n<p>ניקוי עמודות, הסרת כפילויות ופיצול שדות הם משימות טבעיות ל-Office Scripts. אישורים והתראות הן פעולות טבעיות ב-Power Automate. עדכוני Dataverse ו-SharePoint מתבצעים דרך מחברים מודעי מטא-דאטה ולא קריאות HTTP גולמיות.</p>\n<h3>3. Fabric Notebooks: Python במקום החזק שלה</h3>\n<p>המחברת מבצעת ניתוח, מודלים וטרנספורמציות כבדות. התזמון, האימות ומדיניות הקלט והפלט שייכים לסוכנים ולכלים בסגנון TypeScript. הסוכן קורא למחברת דרך API של משימה נקי, מעביר קלטים מוגדרי טיפוס ומצפה לפלטים מוגדרי טיפוס. הוא מפעיל בעת הגעת נתונים, מריץ בדיקת סכמה, משיק את משימת המחברת ומעמת פלטים מול החוזה לפני פרסום ל-OneLake או למודל סמנטי. מנהלים גרסאות למחברות כמו קוד, שומרים פרומפטים שיצרו פונקציות עזר ומבצעים בדיקות יחידה לפלטים, למדדים, להתפלגויות ולספירת שורות.</p>\n\n<h2>טעויות נפוצות וסכנות</h2>\n<ul>\n<li><strong>כפיית Python דרך מחבר מותאם למשימות טריוויאליות.</strong> אם העבודה היא עיצוב מחדש של טבלה, משתמשים ב-Office Scripts.</li>\n<li><strong>התעלמות מממשל.</strong> סקריפטים דורשים ניהול גרסאות, שלבי ביקורת ותקני שמות, כי הם קוד לכל דבר.</li>\n<li><strong>פיזור לוגיקה עסקית על פני כמה זרימות בלי חוזי טיפוסים.</strong> מגדירים סכמות קלט ופלט כדי שהסוכן יוכל לאכוף אותן.</li>\n<li><strong>מתן ל-Python שנוצר על ידי Copilot \"להצמיח זרועות\".</strong> אם הוא מתחיל לשנות שמות עמודות, לקרוא לנקודות קצה חיצוניות או להטמיע לוגיקת זרימה, חזרתם לדבק.</li>\n<li><strong>דילוג על בדיקות כי ה-AI כתב את הקוד.</strong> הוסיפו הנחיות בדיקה סטנדרטיות ורשימת תיוג: תקינות עמודות, טיפול מפורש בערכי null וג'ויינים דטרמיניסטיים.</li>\n<li><strong>ערבוב תזמור וניתוח.</strong> לוגיקת אישור בתוך טרנספורמציית Python מבטיחה ששינוי הסכמה הבא ישבור את הזרימה.</li>\n<li><strong>הסתרת אישורים או שינויי שמות בתוך מחברת, וקישור זרימות לנקודות קצה מזדמנות.</strong> גם הגדרת KPI יחידה בהערת תא היא סכנה.</li>\n</ul>\n\n<h2>תוכנית ל-30 יום ונקודות מפתח</h2>\n<h3>מהלך מומלץ</h3>\n<ol>\n<li><strong>שבוע 1 – ביקורת:</strong> מיפוי כל תהליכי העבודה וזרימות הנתונים, וסימון פונקציות Python שנוגעות באישורים, בשינויי שמות או בפעולות קלט ופלט. מתעדים קלטים, פלטים ונקודות כשל חמות, ומודדים זמן פתרון תקריות, זמן הובלת שינויים ואחוז הצלחה בקריאות לכלים.</li>\n<li><strong>שבוע 2 – דבק טריוויאלי:</strong> מחליפים נקודות קצה של Python למשימות Excel ו-SharePoint ב-Office Scripts ובמחברים מקוריים. מתקננים תבניות פרומפט, נותנים לסקריפטים שמות של פועל ושם עצם עם הקשר ולא \"Script Final Two\", ומנהלים אותם במאגר.</li>\n<li><strong>שבוע 3 – Dataflows:</strong> מעבירים טרנספורמציות שנכתבו ידנית ליצירה בסיוע Copilot ב-Dataflow Gen2. מאמתים שמות עמודות, סוגי נתונים ומדדים מול המודל הסמנטי, ומוסיפים כל שינוי מאושר לספריית הפרומפטים.</li>\n<li><strong>שבוע 4 – סוכן מתזמר:</strong> מגבילים את ארגז הכלים, מגדירים חוזי טיפוסים עם דוגמאות מטען וקריטריוני קבלה, מפעילים אימות והרצה מול דגימות, ומתקנים את התבנית כשהסוכן נכשל.</li>\n</ol>\n\n<h3>נקודות מפתח</h3>\n<ul>\n<li>לשמור על תזמור מקורי ולתת ל-AI לכתוב את הדבק בתוך גבולות מוגדרים.</li>\n<li>להשתמש ב-Office Scripts ו-Copilot למשימות Microsoft 365, ובסוכנים לאכיפה ולשמירת הקשר.</li>\n<li>להגדיר חוזים מוקלדים לכלים ולטפל בפרומפטים כנכסים: תבניות עם משתנים וקריטריוני קבלה.</li>\n<li>לרכז טלמטריה בלוח מחוונים אחד: היסטוריית הרצות של Power Automate, שושלת נתונים ועקבות סוכנים.</li>\n<li>להכין תוכניות חזרה לאחור: גרסאות סקריפט קודמות, זרימת נתונים תקינה אחרונה וצילומי מצב של משימות מחברת.</li>\n<li>לשמור את Python לאנליטיקה, ל-ML ולחישוב כבד.</li>\n</ul>\n\n<h3>סיכום</h3>\n<p>Python לא מתה, היא פשוט צריכה להישאר בתחום המומחיות שלה: מחברות Fabric וליבות אנליטיות. בפלטפורמה של Microsoft, Office Scripts, Copilot, Dataflow Gen2 וסוכנים מוקלדים נותנים תזמור מהיר, בטוח וניתן לביקורת. הם מפחיתים עלויות, מקצרים זמן פתרון ומצמצמים הישנות תקלות, כי התפרים גלויים והשינויים נעשים בפרומפטים ובסכמות ולא בפריסה מחדש בחצות. כשהשליטה עוברת רמה אחת למעלה, אתם מחליטים על החוזים, הכלים והגבולות, והדבק נכתב אוטומטית, מוקלד ומשעמם, וזו בדיוק הנקודה.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "מדבק Python שביר לתזמור מוקלד ב-Microsoft",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "תזמור מקורי",
+     "text": "משאירים את התזמור בפלטפורמה, עם מחברים מקוריים, ולא ב-Azure Functions או במחברים מותאמים."
+    },
+    {
+     "kopf": "Office Scripts + Copilot",
+     "text": "Copilot מנסח סקריפטים בסגנון TypeScript למשימות Excel ו-Microsoft 365, ללא תשתית חיצונית."
+    },
+    {
+     "kopf": "Dataflow Gen2",
+     "text": "Copilot יוצר Power Query M או Python מעוגנים במודל הסמנטי, ואתם מאמתים מול דגימה."
+    },
+    {
+     "kopf": "סוכן עם חוזים",
+     "text": "ארגז כלים מוגבל, סכמות קלט ופלט, אימות לפני הרצה וזיכרון שמונע הישנות תקלות."
+    },
+    {
+     "kopf": "Python לאנליטיקה",
+     "text": "Python נשארת במחברות Fabric ובליבות חישוב, והפלטפורמה מתזמרת דרך API נקי."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "למה לא כדאי להשתמש ב-Python כדבק בין חלקי המערכת ב-Power Platform?",
+    "a": "Power Automate לא מריץ קוד Python שרירותי, ולכן נדרשים Azure Functions, Logic Apps או מחברים מותאמים. זה מוסיף שירותים, אישורים ועלויות רצות, ומביא להקלדה דינמית שנכשלת באמצע ריצה, ולמעקב שגיאות מסובך בין כמה מוצרים."
+   },
+   {
+    "q": "מה האלטרנטיבה ל-Python לאוטומציה של Excel ו-Microsoft 365?",
+    "a": "Office Scripts, שנכתבים בסגנון TypeScript עם מודל אובייקטים מוגדר, הם הכלי המקורי לאוטומציה של Excel ו-Microsoft 365. Copilot מתרגם שפה טבעית לסקריפטים כאלה. אין תשתית חיצונית, קונטיינר או מאגר סודות, והם נשענים על הרישוי הקיים."
+   },
+   {
+    "q": "מתי כן כדאי להשתמש ב-Python בסביבת Microsoft?",
+    "a": "Python שייכת למדעי הנתונים, ללמידת מכונה ולחישוב כבד, ובמחברות Fabric היא במקומה. גם ליבה אנליטית כמו זיהוי חריגים או פירוק עונתיות מתאימה לה. התזמור, האישורים והתזמון נשארים ב-Power Platform: Python מחשבת והפלטפורמה מתזמרת."
+   },
+   {
+    "q": "איך מיישמים את הגישה הזו בתוכנית של 30 יום?",
+    "a": "בשבוע 1 עורכים ביקורת ומסמנים פונקציות Python בעייתיות. בשבוע 2 מחליפים דבק טריוויאלי ב-Office Scripts ובמחברים מקוריים. בשבוע 3 מעבירים טרנספורמציות ל-Dataflow Gen2 עם Copilot. בשבוע 4 מגדירים סוכן מתזמר עם ארגז כלים מוגבל וחוזי טיפוסים."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Python כדבק לעומת Python במקום החזק שלה",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Python כדבק בין המערכות",
+     "punkte": [
+      "Azure Functions, Logic Apps ומחברים מותאמים מוסיפים הרבה חלקים נעים",
+      "הקלדה דינמית נכשלת באמצע ריצה כשהשדה שונה מהצפוי",
+      "מעקב אחרי שגיאה נמשך זמן רב בין כמה מוצרים",
+      "הרשאות, סודות ותלויות מצטברים והופכים לחוב תפעולי",
+      "עלויות שרצות ברקע גם כשאיש לא עובד"
+     ]
+    },
+    "rechts": {
+     "titel": "Python ב-Fabric Notebooks",
+     "punkte": [
+      "מדעי הנתונים, למידת מכונה ועיבוד כבד",
+      "ניתוח, מודלים וטרנספורמציות כבדות במחברת",
+      "ליבה אנליטית כמו זיהוי חריגים או פירוק עונתיות",
+      "התזמור נשאר ל-Power Platform והסוכנים",
+      "קלטים ופלטים מוגדרי טיפוס מול חוזה ברור"
+     ]
+    }
+   },
+   {
+    "titel": "נקודות מפתח ליישום נכון",
+    "typ": "checkliste",
+    "punkte": [
+     "לשמור על תזמור מקורי ולתת ל-AI לכתוב את הדבק בתוך גבולות מוגדרים",
+     "להשתמש ב-Office Scripts וב-Copilot למשימות Microsoft 365",
+     "להגדיר חוזים מוקלדים לכלים ולטפל בפרומפטים כנכסים",
+     "לתת לכלים שמות חד-משמעיים ולא \"בצע פעולות\"",
+     "לרכז טלמטריה בלוח מחוונים אחד",
+     "להכין תוכניות חזרה לאחור: גרסאות קודמות וצילומי מצב",
+     "לשמור את Python לאנליטיקה, ל-ML ולחישוב כבד"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "מהו משטח הסקריפטים המקורי של Microsoft 365 ושל Excel Online, שכתוב בטעם TypeScript?",
+    "opts": [
+     "Azure Functions",
+     "Office Scripts",
+     "Logic Apps",
+     "Power Query M"
+    ],
+    "a": 1,
+    "why": "Power Automate לא מריץ Python שרירותי. משטח הסקריפטים המקורי הוא Office Scripts, הכתובים בסגנון TypeScript."
+   },
+   {
+    "q": "מהי הבעיה בשימוש ב-Fabric Notebooks לפי המאמר?",
+    "opts": [
+     "הן לא תומכות בספריות ניתוח נתונים כמו pandas",
+     "הן איטיות מדי לאימון מודלים של למידת מכונה",
+     "הן מתאימות רק לדוחות Power BI פשוטים",
+     "שימוש בהן כדבק תזמור והטמעת לוגיקה עסקית בתוכן"
+    ],
+    "a": 3,
+    "why": "המחברת במקומה לניתוח וחישוב כבד. הבעיה מתחילה כשהופכים אותה לדבק תזמור ומרתכים אליה לוגיקה עסקית."
+   },
+   {
+    "q": "מה היתרון של Copilot בתוך Dataflow Gen2 לפי המאמר?",
+    "opts": [
+     "הוא מבטל לחלוטין את הצורך באימות מול דגימה",
+     "הוא מכיר את מטא-דאטה של המודל הסמנטי, ולכן הקוד מעוגן במציאות",
+     "הוא מריץ את התזמור במקום Power Automate",
+     "הוא מחליף את Office Scripts בקוד Python חיצוני"
+    ],
+    "a": 1,
+    "why": "Copilot מכיר טבלאות, עמודות, מדדים ומילים נרדפות במודל הסמנטי, ולכן מצמצם שגיאות כמו \"עמודה לא נמצאה\"."
+   },
+   {
+    "q": "מה נעשה לפי תוכנית 30 הימים בשבוע הראשון?",
+    "opts": [
+     "הגדרת חוזי טיפוסים לסוכן המתזמר",
+     "העברת טרנספורמציות ידניות ל-Dataflow Gen2",
+     "ביקורת: מיפוי תהליכים וסימון פונקציות Python שנוגעות באישורים ושינויי שמות",
+     "החלפת נקודות קצה של Python ב-Office Scripts"
+    ],
+    "a": 2,
+    "why": "שבוע 1 הוא ביקורת: מיפוי תהליכי עבודה וזרימות נתונים, וסימון פונקציות Python שנוגעות באישורים, בשינויי שמות או בקלט ופלט."
+   }
+  ]
+ },
+ "hi": {
+  "html": "<p>Microsoft के इकोसिस्टम में कई टीमें Power Automate और Power BI के भीतर Python को हर जगह \"गोंद\" की तरह ठूँस देती हैं। नतीजा तीन पैरों वाली कुर्सी जैसा होता है, जो हर बदलाव पर डगमगाती है। एक कॉलम का नाम बदलना हो या एक अप्रूवल जोड़ना हो, पूरी पाइपलाइन हिलने लगती है।</p>\n<p>इस लेख में देखेंगे कि टाइप्ड एजेंट-शैली का ऑर्केस्ट्रेशन और Copilot, TypeScript जैसी Office Scripts को भरोसेमंद गोंद कैसे बनाते हैं। Python अपनी असली जगह, यानी एनालिटिक्स, में रहता है। और Build, Debug, Deploy का चक्र एक ही लूप में सिमट जाता है।</p>\n\n<h2>Power Automate में Python गोंद: नाज़ुक फ्लो की जड़</h2>\n<p>बड़ी गलती अक्सर चुपचाप बजट खा जाती है। फ्लो में कुछ कठिन आता है तो लोग Azure Functions, Logic Apps या Custom Connector जोड़ देते हैं। इसके साथ आपने बाहरी कंप्यूट, डिप्लॉयमेंट पाइपलाइन, ऑथेंटिकेशन और रनटाइम हिस्ट्री की एक और परत जोड़ ली। बाहरी सेटअप का मतलब है अलग से कॉन्फ़िगर करना, अलग से निगरानी करना और अलग से सुधारना।</p>\n<p>कई लोग तो सिर्फ़ एक कॉलम का नाम बदलने के लिए Python को Custom Connector के पीछे रख देते हैं। यह ड्राइववे से निकलने के लिए टो ट्रक बुलाने जैसा है। हर अतिरिक्त हॉप नाज़ुकता बढ़ाता है:</p>\n<ul>\n<li><strong>Schema drift:</strong> कनेक्टर का स्कीमा असली डेटा से एक फ़ील्ड पीछे रह जाता है।</li>\n<li><strong>पुराने पड़ते फ़ंक्शन:</strong> एनवायरनमेंट अपडेट के बाद फ़ंक्शन टूट जाते हैं।</li>\n<li><strong>लाइब्रेरी का बहाव:</strong> जो लाइब्रेरी पिन नहीं की गई, उसका छोटा-सा वर्ज़न अपडेट भी, जैसे Pandas का, सीधा-सादा गोंद पूरे टेस्ट-स्तर की समस्या बना देता है।</li>\n<li><strong>अनुमतियों का फैलाव:</strong> सर्विस प्रिंसिपल धीरे-धीरे ज़रूरत से ज़्यादा अधिकार जमा कर लेते हैं।</li>\n</ul>\n<p>शुरुआती लोग सोचते हैं कि वे चीज़ें सरल कर रहे हैं। असल में वे विफलता का एक और बिंदु जोड़ रहे होते हैं। नेटिव फ्लो इसलिए सस्ते पड़ते हैं कि वे प्लैटफ़ॉर्म के भीतर ही रहते हैं। कनेक्टर, ट्रिगर और Office Scripts आपकी मौजूदा लाइसेंसिंग में ही चलते हैं। इसके उलट, Python को फ़ंक्शन के रास्ते चलाने पर वर्ज़न ड्रिफ्ट, लाइब्रेरी अपडेट और अनुमतियों का बोझ साथ आता है। Python में भी टाइप हो सकते हैं, पर ज़्यादातर लोग उन्हें प्रवाह में लागू नहीं करते।</p>\n\n<h2>मैन्युअल कोडिंग लूप: धीमी गति का जाल</h2>\n<p>व्हाइटबोर्ड पर मैन्युअल कोडिंग लूप बढ़िया लगता है: कोड डिप्लॉय करो, टेस्ट करो, ठीक करो, दोबारा डिप्लॉय करो। असल में यह धीमी गति का जाल है। स्टैटिक प्लेबुक का हाल भी यही होता है।</p>\n<p>मान लीजिए आपने राजस्व और लॉजिक के लिए एक \"गोल्डन\" प्लेबुक लिखी। फिर फ़ाइनेंस राजस्व की परिभाषा बदल देता है और एक नया अप्रूवल चरण जोड़ देता है। आपका Python फ़ंक्शन प्रवाह पर वापस आता है, और अंत में Power BI में एक टूटी हुई टाइल के रूप में दिखता है। अब आप पाँच लॉग पढ़ रहे हैं, जो एक टाइमस्टैम्प फ़ॉर्मैट पर भी सहमत नहीं हैं।</p>\n<p>एक टीम ने सारे बदलाव एक ही Python फ़ंक्शन में समेटकर मासिक रिपोर्टिंग के घंटे बचाए। यह तब तक चला, जब तक निर्भरता के टकराव फिर सामने नहीं आए, सीक्रेट्स की मियाद ख़त्म नहीं हुई और सर्विस प्रिंसिपलों ने स्थायी रूप से अतिरिक्त अधिकार जमा नहीं कर लिए। तब वह शानदार पाइपलाइन एक रूब गोल्डबर्ग मशीन बन गई। मैन्युअल लूप में सिर्फ़ समय नहीं जाता, परिचालन जोखिम भी बढ़ता है। इसलिए ऑपरेशनल गोंद को पहले की तरह इस्तेमाल करना बंद कीजिए और एजेंट को ऑर्केस्ट्रेट करने दीजिए।</p>\n\n<h2>टाइप्ड एजेंट और Copilot: ऑर्केस्ट्रेटर की नई भूमिका</h2>\n<p>बेहतर तरीका यह है कि एजेंट और Copilot ऑर्केस्ट्रेटर बनें। यह ऐसा मॉडल है जो प्लैटफ़ॉर्म से लड़ता नहीं। टाइप्ड एजेंट मेमरी और गार्डरेल के साथ टूल्स को ऑर्केस्ट्रेट करते हैं, इसलिए \"कोड लिखो, डिप्लॉय करो, डिबग करो\" की पिंग-पोंग कम होती है। एजेंट संदर्भ रखता है, चरणों में तर्क करता है और सिर्फ़ वहीं कोड लिखता है जहाँ कोड होना चाहिए। आप सतह का क्षेत्रफल सीमित रखते हैं और टाइप सिर्फ़ उन सीमाओं पर लगाते हैं जहाँ ज़रूरत है।</p>\n<p>इसकी शुरुआत Office Scripts और Copilot से करें।</p>\n\n<h3>Office Scripts क्यों</h3>\n<p>Office Scripts TypeScript-फ़्लेवर की स्क्रिप्ट हैं। इनका ऑब्जेक्ट मॉडल परिभाषित है, इसलिए टाइप किए गए किनारे, मेथड और सिग्नेचर रनटाइम की शर्मिंदगी से पहले ही अनुमान की गलतियाँ पकड़ लेते हैं। यह ढाँचा आपके चरणों को भरोसेमंद बनाता है।</p>\n\n<h3>एक सरल उदाहरण</h3>\n<p>टेबल में हर नई पंक्ति के लिए तारीख़ की स्ट्रिंग को सामान्य करें, एक सत्यापन करें और स्वामी को सारांश के साथ ईमेल करें। इसके लिए एक फ्लो और एक स्क्रिप्ट काफ़ी है। आपका डेटा Excel, SharePoint या OneDrive के पास रहता है, इसलिए गवर्नेंस सरल रहता है। आप अपने चरणों का वर्णन करते हैं, Copilot फ्लो और स्क्रिप्ट का मसौदा तैयार करता है, और सब कुछ Microsoft 365 के भीतर रहता है। न कोई Azure Function, न कोई Custom Connector, और न किसी भूले हुए कंटेनर की आधी रात की पैचिंग।</p>\n<p>जब आप चलते हिस्सों की संख्या घटाते हैं, तो विफलताएँ भी घटती हैं। जरूरत पड़ने पर आप Graph कनेक्टर को कॉल कर सकते हैं, Dataverse में लिख सकते हैं और अप्रूवल भेज सकते हैं। इनपुट और आउटपुट का स्कीमा तय रहता है। एजेंट पूर्व-शर्तें मानता है, नमूने के विरुद्ध टेस्ट चलाता है और उसके बाद ही बदलाव को आगे बढ़ाता है। मूल कनेक्टर मेटाडेटा-जागरूक होते हैं, कच्चे HTTP कॉल की तरह नहीं। लागत भी घटती है, क्योंकि कॉलम का नाम बदलने के लिए आपको हमेशा चालू रहने वाला कंप्यूट नहीं चाहिए।</p>\n<p>टाइप्ड कॉन्ट्रैक्ट का फ़ायदा यह है कि आप इनपुट और आउटपुट स्कीमा परिभाषित करते हैं। इसकी तुलना सिर्फ़ Python चलाने से करें और दुआ करें कि आपके JSON में कोई अतिरिक्त प्रॉपर्टी न आ जाए। निगरानी भी एक जगह होती है: Power Automate की रन हिस्ट्री, डेटा फ्लो की वंशावली और एजेंट का ट्रेस। बिखरे हुए, कटे हुए लॉग डैशबोर्ड नहीं रहते।</p>\n\n<h2>Dataflow Gen2, Power BI और Fabric में Python की सही जगह</h2>\n<p>Dataflow Gen2 में Copilot आपके प्रॉम्प्ट से Power Query M या Python बना सकता है। यह तेज़ ड्राफ़्ट के लिए बढ़िया है, पर इसे ब्लैक बॉक्स की तरह भरोसे के साथ न छोड़ें। पहले जनरेट करें, फिर पैटर्न के विरुद्ध समीक्षा करें। Copilot को अपनी भावनाओं की डायरी की तरह नहीं, एक टेम्पलेट की तरह इस्तेमाल करें, जिसमें कॉलम नाम और डेटा प्रकार चर (variables) हों।</p>\n<p>नियम सीधा है: ऑर्केस्ट्रेशन को Python से बाहर रखें। एनालिटिक्स के लिए डेटा फ्लो के अंदर Python इस्तेमाल करें, जैसे एनोमली डिटेक्शन या मौसमी विघटन (seasonal decomposition)। कॉलम का नाम बदलने या अप्रूवल जोड़ने के लिए नहीं। इसे इंजन और ट्रैफ़िक लाइट के फ़र्क़ की तरह समझें। Python इंजन है, यानी गणना। ऑर्केस्ट्रेशन सड़कें, सिग्नल और नियम हैं, जो Power Platform का क्षेत्र है: कनेक्टर, Office Scripts, Dataflow Gen2 और Copilot।</p>\n\n<h3>हाइब्रिड मॉडल</h3>\n<ul>\n<li>एनालिटिक्स के लिए Python।</li>\n<li>प्लंबिंग के लिए M या प्लैटफ़ॉर्म-नेटिव स्टेप।</li>\n<li>इनपुट और आउटपुट के लिए Dataverse या OneLake, जिसे बाक़ी प्लैटफ़ॉर्म समझता है।</li>\n</ul>\n<p>जब ट्रांसफ़ॉर्म बदलना हो, तो प्रॉम्प्ट बदलें और अंतर की समीक्षा करें। 400 लाइन के फ़ंक्शन में भटकने की ज़रूरत नहीं रहती। व्यावसायिक बदलाव इरादे में संपादन बन जाते हैं, गोंद पर सर्जरी नहीं। उदाहरण के लिए, अगर CFO मंगलवार दोपहर को नया मेट्रिक ले आए, तो आप एक प्रॉम्प्ट अपडेट करते हैं और आउटपुट दोबारा सत्यापित करते हैं। अवलोकन-क्षमता भी सुधरती है, क्योंकि डेटा वंशावली दिखाती है कि किसने क्या बदला और Copilot के सुझाए चरण कहाँ से आए। स्क्रिप्ट की बाल्टी की जगह आपको पढ़ने लायक़ श्रृंखला मिलती है, और कुछ विफल होने पर आप एक ही जगह समस्या ढूँढ सकते हैं।</p>\n\n<h3>Power BI में तेज़ जीत</h3>\n<p>Copilot Power BI में सेकंडों में विज़ुअल्स के साथ रिपोर्ट का पहला पेज तैयार कर सकता है। यह जादू नहीं, मेटाडेटा है। आपने मेज़र्स को नाम दिए, समानार्थी शब्द जोड़े और संबंध व्यवस्थित किए, तो Copilot चार्ट समझदारी से रखता है। कठिन काम बच जाता है और आप व्यावसायिक तर्क व प्रस्तुति निखारने में समय लगाते हैं।</p>\n\n<h3>Fabric नोटबुक के साथ</h3>\n<p>भविष्यवाणियों और भारी बदलावों के लिए Fabric नोटबुक, जॉब या ML एंडपॉइंट इस्तेमाल करें और एक साफ़ API उपलब्ध कराएँ। एजेंट पाइपलाइन संभाल सकता है: डेटा आने पर ट्रिगर करना, स्कीमा चेक चलाना, नोटबुक जॉब लॉन्च करना, और OneLake या सिमेंटिक मॉडल पर पब्लिश करने से पहले आउटपुट को वैलिडेट करना। कोड वर्ज़न कंट्रोल में रहता है और Python सिर्फ़ गणना करता है। प्लैटफ़ॉर्म ऑर्केस्ट्रेट करता है।</p>\n\n<h2>आम गलतियाँ और स्टोलपत्थर</h2>\n<ol>\n<li><strong>Copilot के बनाए Python को बढ़ने देना।</strong> अगर वह कॉलम का नाम बदलने, बाहरी एंडपॉइंट कॉल करने या वर्कफ़्लो लॉजिक निकालने लगे, तो आप फिर नाज़ुक गोंद में फिसल गए।</li>\n<li><strong>कोड समीक्षा छोड़ना, क्योंकि \"AI ने लिखा है\"।</strong> समीक्षा के लिए एक प्रॉम्प्ट जोड़ें और छोटी चेकलिस्ट रखें: कॉलम का आकार, स्पष्ट null हैंडलिंग और नियतात्मकता (determinism)।</li>\n<li><strong>ऑर्केस्ट्रेशन और एनालिटिक्स को मिलाना।</strong> अगर Python ट्रांसफ़ॉर्म में अप्रूवल मिला दिए, तो अगला स्कीमा बदलाव आपके वर्कफ़्लो को लगभग निश्चित रूप से तोड़ेगा।</li>\n<li><strong>Office Scripts में गवर्नेंस को नज़रअंदाज़ करना।</strong> इन्हें भी कोड की तरह वर्ज़निंग, रिव्यू गेट और नेमिंग स्टैंडर्ड चाहिए।</li>\n<li><strong>बिना टाइप की साफ़ API के काम चलाऊ जुगाड़ बनाना।</strong> फ्री टियर पर छोड़ा गया कोई तदर्थ Flask ऐप गोंद नहीं बन सकता।</li>\n<li><strong>नोटबुक के भीतर अप्रूवल या नाम बदलना।</strong> प्रवाह को तदर्थ एंडपॉइंट से जोड़ना और KPI की इकलौती परिभाषा सेल की टिप्पणी में छोड़ना भी इसी श्रेणी की गलतियाँ हैं।</li>\n</ol>\n\n<h2>व्यावहारिक Takeaways: 30 दिन का एजेंट प्लेबुक</h2>\n<ul>\n<li><strong>ऑडिट करें:</strong> हर वर्कफ़्लो और डेटा फ्लो में देखें कि Python कहाँ गोंद की तरह इस्तेमाल हो रहा है और कहाँ एनालिटिक्स की तरह। अप्रूवल, नाम बदलना और फ़ाइल I/O को निशान लगाएँ।</li>\n<li><strong>गोंद बदलें:</strong> इन चरणों को Office Scripts और मूल कनेक्टर से बदलें। स्क्रिप्ट का मसौदा सादी भाषा में Copilot से बनवाएँ।</li>\n<li><strong>हल्की समीक्षा चेकलिस्ट रखें:</strong> कॉलम का आकार, null हैंडलिंग और idempotency।</li>\n<li><strong>प्रॉम्प्ट टेम्पलेट बनाएँ:</strong> कॉलम नाम, डेटा प्रकार और मेज़र्स को चर के रूप में रखें। जो अंतर आपने स्वीकार किए, उन्हें प्रॉम्प्ट लाइब्रेरी में जोड़ें, ताकि अगला बदलाव सिर्फ़ प्रॉम्प्ट एडिट हो।</li>\n<li><strong>पैटर्न ठीक करें:</strong> जब दोहराव दिखे, तो प्रॉम्प्ट, स्कीमा या टूल नाम अपडेट करें।</li>\n<li><strong>हर सीमा पर टाइप्ड इंटरफ़ेस लागू करें</strong> और प्रॉम्प्ट को कोड के साथ वर्ज़न में रखें।</li>\n<li><strong>अनावश्यक Azure Function हटाएँ:</strong> जो सिर्फ़ कॉलम का नाम बदलता है, उसे हटाएँ। फ्लो प्लैटफ़ॉर्म में रखें, नोटबुक Fabric में और गोंद Office Scripts में।</li>\n<li><strong>बेंचमार्क ट्रैक करें:</strong> प्रति घटना समाधान का समय, टूल कॉल, सफलता दर और लीड टाइम में बदलाव।</li>\n</ul>\n<p>इस तरह कंटेनर पैचिंग और भूले हुए सीक्रेट्स का झंझट घटता है। साथ ही नई टीम एक हफ़्ते की जगह एक दिन में शिप कर सकती है।</p>\n\n<h2>निष्कर्ष</h2>\n<p>Python बुरा नहीं है। गलती यह है कि उसे ऐसी जगह गोंद बना दिया जाए जहाँ प्लैटफ़ॉर्म के नेटिव टूल पहले से बेहतर काम करते हैं। Python को नोटबुक और एनालिटिक्स के भीतर रखें, जहाँ वह अपनी कमाई करता है। ऑर्केस्ट्रेशन का काम Office Scripts, मूल कनेक्टर, Dataflow Gen2 और Copilot जैसे टाइप्ड एजेंट के हाथ में दें। जब गोंद जनरेट किया हुआ, टाइप्ड और उबाऊ होता है, तब फ्लो नहीं डगमगाते। तब आप कम जोखिम के साथ तेज़ी से शिप करते हैं, और बिल की चिंता भी घटती है।</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Python को गोंद बनाना बंद करें: 30 दिन का प्लेबुक",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "गोंद का ऑडिट",
+     "text": "हर वर्कफ़्लो और डेटा फ्लो में अप्रूवल, नाम बदलने और फ़ाइल I/O वाले Python चरण पहचानें।"
+    },
+    {
+     "kopf": "Office Scripts अपनाएँ",
+     "text": "ऐसे चरणों को Office Scripts और मूल कनेक्टर से बदलें; मसौदा Copilot से बनवाएँ।"
+    },
+    {
+     "kopf": "समीक्षा चेकलिस्ट",
+     "text": "कॉलम का आकार, स्पष्ट null हैंडलिंग और idempotency जाँचें; कोड समीक्षा कभी न छोड़ें।"
+    },
+    {
+     "kopf": "प्रॉम्प्ट लाइब्रेरी",
+     "text": "कॉलम नाम और डेटा प्रकार चर बनाएँ; अगला बदलाव सिर्फ़ प्रॉम्प्ट एडिट रहे।"
+    },
+    {
+     "kopf": "टाइप्ड सीमाएँ",
+     "text": "हर सीमा पर टाइप्ड इंटरफ़ेस लगाएँ; Python सिर्फ़ एनालिटिक्स और नोटबुक में रखें।"
+    },
+    {
+     "kopf": "बेंचमार्क ट्रैक करें",
+     "text": "समाधान का समय, टूल कॉल, सफलता दर और लीड टाइम में बदलाव नापें।"
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Power Automate में Python को गोंद की तरह इस्तेमाल करना समस्या क्यों बनता है?",
+    "a": "Python को Azure Functions या Custom Connector के पीछे रखने से हर अतिरिक्त हॉप विफलता का नया बिंदु बन जाता है। इससे schema drift, टूटते फ़ंक्शन, अनपिन लाइब्रेरी के वर्ज़न बदलाव और सर्विस प्रिंसिपलों के ज़्यादा अधिकार जैसी समस्याएँ आती हैं, और लागत व निगरानी का बोझ भी बढ़ता है।"
+   },
+   {
+    "q": "Office Scripts क्या हैं और Power Automate में ये Python से बेहतर विकल्प क्यों हैं?",
+    "a": "Office Scripts TypeScript-फ़्लेवर की स्क्रिप्ट हैं, जिनका ऑब्जेक्ट मॉडल परिभाषित है। टाइप किए गए इनपुट-आउटपुट रनटाइम से पहले गलतियाँ पकड़ते हैं। ये मौजूदा लाइसेंसिंग में चलती हैं, डेटा Microsoft 365 के भीतर रहता है, और अलग Azure Function या Custom Connector नहीं चाहिए।"
+   },
+   {
+    "q": "Dataflow Gen2, Power BI और Fabric में Python का सही इस्तेमाल कहाँ करना चाहिए?",
+    "a": "Python को एनालिटिक्स के लिए इस्तेमाल करें, जैसे एनोमली डिटेक्शन, मौसमी विघटन, भविष्यवाणियाँ और भारी बदलाव, जो Fabric नोटबुक में चल सकते हैं। कॉलम का नाम बदलने या अप्रूवल जोड़ने जैसी ऑर्केस्ट्रेशन का काम कनेक्टर, Office Scripts, Dataflow Gen2 और Copilot संभालें।"
+   },
+   {
+    "q": "Power Automate और Power BI में Python-आधारित गोंद से बचने के लिए 30 दिन में क्या कदम उठाएँ?",
+    "a": "पहले वर्कफ़्लो ऑडिट करके देखें कि Python कहाँ गोंद है। फिर उन चरणों को Office Scripts और मूल कनेक्टर से बदलें, छोटी समीक्षा चेकलिस्ट और प्रॉम्प्ट टेम्पलेट रखें, हर सीमा पर टाइप्ड इंटरफ़ेस लगाएँ, अनावश्यक Azure Function हटाएँ और बेंचमार्क ट्रैक करें।"
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Python: गोंद बनाम एनालिटिक्स",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Python गोंद के रूप में",
+     "punkte": [
+      "बाहरी कंप्यूट, डिप्लॉयमेंट पाइपलाइन और ऑथेंटिकेशन की एक और परत जुड़ती है",
+      "वर्ज़न ड्रिफ्ट, लाइब्रेरी अपडेट और अनुमतियों का बोझ साथ आता है",
+      "हर अतिरिक्त हॉप से नाज़ुकता और विफलता के बिंदु बढ़ते हैं",
+      "कॉलम का नाम बदलने पर भी पूरी पाइपलाइन हिलने लगती है"
+     ]
+    },
+    "रechts": null,
+    "rechts": {
+     "titel": "प्लैटफ़ॉर्म-नेटिव ऑर्केस्ट्रेशन",
+     "punkte": [
+      "कनेक्टर, ट्रिगर और Office Scripts मौजूदा लाइसेंसिंग में ही चलते हैं",
+      "इनपुट और आउटपुट का स्कीमा तय रहता है",
+      "निगरानी एक जगह: रन हिस्ट्री, डेटा वंशावली और एजेंट ट्रेस",
+      "चलते हिस्से घटते हैं, तो विफलताएँ और लागत भी घटती हैं"
+     ]
+    }
+   },
+   {
+    "titel": "आम गलतियाँ जिनसे बचें",
+    "typ": "checkliste",
+    "punkte": [
+     "Copilot के बनाए Python को नाम बदलने या वर्कफ़्लो लॉजिक तक न बढ़ने दें",
+     "\"AI ने लिखा है\" कहकर कोड समीक्षा न छोड़ें",
+     "ऑर्केस्ट्रेशन और एनालिटिक्स को एक ही Python ट्रांसफ़ॉर्म में न मिलाएँ",
+     "Office Scripts में वर्ज़निंग, रिव्यू गेट और नेमिंग स्टैंडर्ड न भूलें",
+     "बिना टाइप की साफ़ API के तदर्थ Flask ऐप गोंद न बनाएँ",
+     "नोटबुक के भीतर अप्रूवल या नाम बदलना न रखें"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "लेख के अनुसार Python को किस काम के लिए इस्तेमाल करना सबसे उचित है?",
+    "opts": [
+     "कॉलम का नाम बदलना",
+     "अप्रूवल चरण जोड़ना",
+     "एनोमली डिटेक्शन जैसे एनालिटिक्स",
+     "फ़ाइल I/O और वर्कफ़्लो लॉजिक संभालना"
+    ],
+    "a": 2,
+    "why": "लेख कहता है कि ऑर्केस्ट्रेशन Python से बाहर रहे और Python एनालिटिक्स, जैसे एनोमली डिटेक्शन, में इस्तेमाल हो।"
+   },
+   {
+    "q": "Office Scripts टाइप किए गए किनारों और सिग्नेचर के कारण क्या लाभ देती हैं?",
+    "opts": [
+     "वे हमेशा चालू कंप्यूट की ज़रूरत बढ़ाती हैं",
+     "वे रनटाइम से पहले अनुमान की गलतियाँ पकड़ लेती हैं",
+     "वे Azure Functions को अनिवार्य बना देती हैं",
+     "वे केवल कच्चे HTTP कॉल के साथ काम करती हैं"
+    ],
+    "a": 1,
+    "why": "परिभाषित ऑब्जेक्ट मॉडल के कारण टाइप किए गए मेथड और सिग्नेचर रनटाइम से पहले ही गलतियाँ पकड़ लेते हैं।"
+   },
+   {
+    "q": "Python को Custom Connector के पीछे रखने पर बताई गई एक समस्या कौन-सी है?",
+    "opts": [
+     "अनुमतियों का फैलाव, यानी सर्विस प्रिंसिपलों का अधिकार जमा करना",
+     "डेटा हमेशा Excel के बाहर चला जाता है",
+     "Power BI में विज़ुअल्स बनना बंद हो जाते हैं",
+     "Copilot का उपयोग पूरी तरह असंभव हो जाता है"
+    ],
+    "a": 0,
+    "why": "लेख में अनुमतियों के फैलाव को नाज़ुकता का कारण बताया गया है: सर्विस प्रिंसिपल ज़रूरत से ज़्यादा अधिकार जमा कर लेते हैं।"
+   },
+   {
+    "q": "Dataflow Gen2 में Copilot द्वारा बनाए कोड के बारे में लेख क्या सलाह देता है?",
+    "opts": [
+     "उसे ब्लैक बॉक्स मानकर बिना जाँचे भरोसा करें",
+     "उसे सीधे प्रोडक्शन में डिप्लॉय करें",
+     "समीक्षा छोड़ दें, क्योंकि AI ने लिखा है",
+     "पहले जनरेट करें, फिर पैटर्न के विरुद्ध समीक्षा करें"
+    ],
+    "a": 3,
+    "why": "लेख कहता है कि Copilot तेज़ ड्राफ़्ट के लिए अच्छा है, पर पहले जनरेट करें और फिर पैटर्न के विरुद्ध समीक्षा करें।"
+   }
+  ]
+ }
+}

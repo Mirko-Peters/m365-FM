@@ -1,4 +1,5 @@
 // Gaeste-Boerse: Podcaster, YouTuber und Veranstalter finden Gaeste/Speaker und umgekehrt - Zuordnung ueber Entitaeten (Themen), Sprache und Format
+import { limitTopics } from "./sponsor_extra.js";
 import { cleanText, rateLimit, isLang } from "./util.js";
 import { baseIds } from "./entities.js";
 import { cleanUrl } from "./profiles.js";
@@ -46,7 +47,7 @@ export async function handleGuests(env, request, url, path, user, J) {
     const langs = (Array.isArray(b.langs) ? b.langs : []).filter((x, i, a) => (x === "en" || isLang(x)) && a.indexOf(x) === i).slice(0, 8);
     if (!formats.length) return J({ error: "formats" }, 400); if (!langs.length) return J({ error: "langs" }, 400);
     const known = await baseIds(env), topics = [];
-    for (const x of (Array.isArray(b.topics) ? b.topics : []).slice(0, 10)) { if (!known.has(x)) return J({ error: "bad_topic", topic: x }, 400); if (!topics.includes(x)) topics.push(x); }
+    for (const x of limitTopics(b.topics)) { if (!known.has(x)) return J({ error: "bad_topic", topic: x }, 400); if (!topics.includes(x)) topics.push(x); }
     if (!topics.length) return J({ error: "topics" }, 400);
     const link = kind === "host" ? cleanUrl(b.link || "") : ""; if (link === null) return J({ error: "bad_link" }, 400);
     const title = txt(b.title || "", 120), note = txt(b.note || "", 500); if (kind === "host" && title.length < 3) return J({ error: "title" }, 400);

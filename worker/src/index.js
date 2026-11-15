@@ -1,36 +1,57 @@
 // Community-API (Cloudflare Worker + D1): Login (Google/Microsoft), Kommentare, Abzeichen, Kurator, Push, E-Mail
-import { json, cors, cookie, makeSession, readSession, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit } from "./util.js";
+import { json, cors, cookie, makeSession, readSession, readSessionInfo, sha256hex, cleanText, cleanName, randomToken, rateLimit, isLang, esc, b64u, sign, verify, audit, aiBudgetStatus, reportExternalAiUsage, memberOf } from "./util.js";
 import { evalBadges, stats, topUsers, badgesFor, award } from "./badges.js";
-import { runDigest, sendMail } from "./digest.js";
+import { runDigest, runPushDigest } from "./digest.js";
+import { sendMail } from "./mailer.js";
 import { handleEntity, importEntitiesFromSite } from "./entities.js";
 import { importLegacyBlog } from "./legacyblog.js";
 import { importContentBlog } from "./contentblog.js";
 import { handleA2a } from "./a2a.js";
 import { handleAdminPanel } from "./adminpanel.js";
-import { handleSponsor } from "./sponsor.js";
-import { autoTranslateItems, autoTranslateEntities, runTrQueue } from "./autotr.js";
+import { handleEditor, decide, deleteUserEditorial } from "./editor.js";
+import { syncAutoRoles, closeObsolete } from "./roles.js";
+import { handleI18nPublic } from "./i18n_edit.js";
+import { can, roleOf, isStaff, inScope, publicRoles, loadActor, logEdit } from "./perm.js";
+import { handleLinkedinEvents, oauthStartLE, oauthCallbackLE, deleteUserLinkedin, purgeLinkedinOrphans } from "./linkedin_events.js";
+import { handleSponsor, handleSponsorLink } from "./sponsor.js";
+import { handleAds, handlePaypalWebhook } from "./ads.js";
+import { handleSponsorOrders } from "./sponsor_orders.js";
+import { autoTranslateItems, autoTranslateEntities, runTrQueue, runTrDemand } from "./autotr.js";
 import { syncLiveEvents } from "./liveevents.js";
 import { syncContentTopics, handleTopics } from "./topics.js";
 import { importQuotesFromSite, handleQuotes } from "./quotes.js";
+import { importEpisodeUrls } from "./episode_urls.js";
 import { importEpisodes, importTranslations, handleRegister } from "./register.js";
-import { importSearchIndex, handleSearch } from "./search.js";
+import { importSearchIndex, syncSearchVectors, handleSearch } from "./search.js";
+import { handleSearchDemand, classifySearches, aggregateDemand, purgeSearchStats, deleteUserSearchDemand } from "./search_demand.js";
 import { entityMap } from "./entities.js";
 import { handleProfiles, deleteUserData, refreshProfilesExport } from "./profiles.js";
-import { handleEvents, deleteUserEvents, ensureM365Con } from "./events.js";
+import { handleClaimVerify } from "./claimverify.js";
+import { handleOrgPair } from "./orgpair.js";
+import { handleEntFill } from "./entfill.js";
+import { handleEventImport, IMPORT_ROUTE, runEventImport } from "./eventimport.js";
+import { handleEventEntity, ENTITY_ROUTE, suggestEventEntities } from "./evententity.js";
+import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
+import { handleByodServe, handleByodApi, runByodChecks, deleteUserByod } from "./byod.js";
+import { handleBlogImport, deleteUserBlogImport } from "./blog_import.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
 import { handleOrgOffers } from "./orgoffers.js";
 import { handleWish, seedRoadmap } from "./wish.js";
 import { handleShows, syncShows } from "./shows.js";
+import { handleMediakit } from "./mediakit.js";
 import { handleMail, flushOutbox, notify } from "./mail.js";
 import { handleReviews } from "./reviews.js";
 import { handleEntityInvite, remindInvites } from "./entinvite.js";
+import { handleInviter, syncInviterBadges, deleteUserInvites } from "./inviter.js";
 import { handleDemo } from "./demo.js";
 import { handleGuests, deleteUserGuests } from "./guests.js";
+import { deleteUserEntityInvites } from "./entinvite.js";
+import { handleExpertRequests, deleteUserExpertRequests, syncExpertVectors, closeExpiredExpertRequests } from "./expert_requests.js";
 import { handlePodcast, deleteUserPodcast, pollPodcast } from "./podcast.js";
 import { handleVideo, deleteUserVideos, pollVideos } from "./youtube.js";
 import { handleMcp, handleTokens, deleteUserTokens } from "./mcp.js";
@@ -43,6 +64,11 @@ import { refreshFeeds, refreshFollowers } from "./feeds.js";
 import { autoTranslate, translateStatus, uiI18nExport } from "./translate.js";
 import { handleWiki } from "./wiki.js";
 import { syncExpertise } from "./levels.js";
+import { backfillDirectoryGeocodes, ensureDirectoryCols, handleDirectory } from "./directory.js";
+import { handleTopicSubscriptions, dispatchTopicNotifications, queueTopicArticles, queueSessionReminders } from "./topic_notifications.js";
+import { savePushSubscription } from "./push.js";
+import { handleContributions, refreshContributions } from "./contributions.js";
+import { findUserByIdentity, createUserWithIdentity, linkIdentity, mergeProof, handleIdentities, MERGE_WINDOW, freshSession, reloginFor } from "./identities.js";
 
 const PROVIDERS = {
   google: {
@@ -55,7 +81,14 @@ const PROVIDERS = {
   },
   linkedin: {   // "Sign In with LinkedIn using OpenID Connect"
     auth: "https://www.linkedin.com/oauth/v2/authorization", token: "https://www.linkedin.com/oauth/v2/accessToken",
-    info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
+    info: "https://api.linkedin.com/v2/userinfo", scope: "openid profile email", id: (e) => e.LINKEDIN_CLIENT_ID, secret: (e) => e.LINKEDIN_CLIENT_SECRET,
+  },
+  github: {    // OAuth 2.0 ohne OIDC: Token als JSON anfordern, Profil von api.github.com/user, sub = stabile numerische ID (nie der Login-Name)
+    auth: "https://github.com/login/oauth/authorize", token: "https://github.com/login/oauth/access_token",
+    info: "https://api.github.com/user", scope: "read:user", id: (e) => e.GH_OAUTH_CLIENT_ID, secret: (e) => e.GH_OAUTH_CLIENT_SECRET,
+    noPrompt: true, tokenHeaders: { accept: "application/json" },
+    infoHeaders: { "user-agent": "m365fm", accept: "application/vnd.github+json", "x-github-api-version": "2022-11-28" },
+    profile: (info) => ({ sub: info && info.id != null ? String(info.id) : "", name: (info && (info.name || info.login)) || "" }),
   },
 };
 const VID = /^[A-Za-z0-9_-]{5,24}$/;
@@ -71,7 +104,6 @@ function shortName(full) {
   return `${p[0]} ${[...p[p.length - 1]][0]}.`;
 }
 const safeReturn = (env, u) => { try { const x = new URL(u); return x.origin === env.SITE ? x.href : env.SITE + "/"; } catch { return env.SITE + "/"; } };
-const isAdmin = (env, u) => u.role === "admin" || (env.ADMIN_SUBS || "").split(",").map((s) => s.trim()).includes(`${u.provider}:${u.sub}`);
 
 const firstName = (full) => cleanName(full).split(" ").filter(Boolean)[0] || "";
 async function namePrefs(db, user) {
@@ -92,32 +124,54 @@ async function applyNameMode(db, user, b) {
 
 async function upsertUser(env, provider, sub, name) {
   const db = env.DB;
-  let u = await db.prepare("SELECT * FROM users WHERE provider=? AND sub=?").bind(provider, sub).first();
-  if (!u) {
-    const r = await db.prepare("INSERT INTO users(provider,sub,name,created) VALUES(?,?,?,?)").bind(provider, sub, shortName(name), now()).run();
-    u = await db.prepare("SELECT * FROM users WHERE id=?").bind(r.meta.last_row_id).first();
-  }
+  // #279: zuerst die verknuepften Anmeldungen (user_identities), dann users.provider/sub; sonst neues Konto mit erster Identitaet
+  let u = await findUserByIdentity(db, provider, sub);
+  if (!u) u = await createUserWithIdentity(db, provider, sub, shortName(name));
   const rn = cleanName(name);
   if (rn) await env.DB.prepare("INSERT INTO user_prefs(user_id,real_name) VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET real_name=excluded.real_name").bind(u.id, rn).run();
   await evalBadges(env, u.id);
   return u;
 }
 
+// OAuth-Start (Anmeldung oder Verknuepfung): signiertes state-Cookie m365o = state|Ruecksprung[|Verknuepfungsabsicht].
+// Die Redirect-URI bleibt fuer beide Faelle /auth/callback/<anbieter> (keine neuen URIs bei den Anbietern noetig).
+async function oauthStart(env, provider, ret, intent = "") {
+  const P = PROVIDERS[provider], state = randomToken(16);
+  const val = `${state}|${b64u.enc(new TextEncoder().encode(ret))}${intent ? "|" + intent : ""}`;
+  const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: `${env.API}/auth/callback/${provider}`, response_type: "code", scope: P.scope, state, ...(provider === "linkedin" || P.noPrompt ? {} : { prompt: "select_account" }) });
+  return { location: `${P.auth}?${q}`, setCookie: cookie("m365o", `${val}.${await sign(env.SESSION_SECRET, val)}`, 600) };
+}
+
 async function auth(env, request, url, path) {
-  const m = /^\/auth\/(login|callback)\/(google|microsoft|linkedin)$/.exec(path);
+  const m = /^\/auth\/(login|callback)\/(google|microsoft|linkedin|github)$/.exec(path);
   if (path === "/auth/dev" && env.DEV_LOGIN === "1") {
     const u = await upsertUser(env, "dev", url.searchParams.get("name") || "dev", url.searchParams.get("name") || "Dev User");
     return new Response(null, { status: 302, headers: { location: safeReturn(env, url.searchParams.get("return") || env.SITE), "set-cookie": cookie("m365s", await makeSession(env, u.id), 5184000) } });
+  }
+  if (path === "/auth/youtube/connect") {
+    // Einmalige Kanal-Freigabe (m365 Show): Upload/Löschen + YouTube Analytics (Sponsor-Dashboard #173).
+    // Google zeigt danach auf www.m365.fm/callback einen Code; den trägt Mirko im Workflow „YouTube verbinden (einmalig)“ ein.
+    if (!env.YT_CLIENT_ID) return html("<p>YouTube not configured.</p>", 503);
+    const q = new URLSearchParams({ client_id: env.YT_CLIENT_ID, redirect_uri: "https://www.m365.fm/callback", response_type: "code",
+      scope: "https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/yt-analytics.readonly",
+      access_type: "offline", prompt: "consent", include_granted_scopes: "true" });
+    return new Response(null, { status: 302, headers: { location: `https://accounts.google.com/o/oauth2/v2/auth?${q}`, "cache-control": "no-store" } });
+  }
+  if (path === "/auth/linkedin-events/start" || path === "/auth/linkedin-events/callback") {   // einmalige Verbindung der LinkedIn-Seite, nur Admin
+    const sess = await readSessionInfo(env, request), admin = sess ? await me(env, sess.uid) : null;
+    if (!admin?.admin) return html("<p>Admin login required.</p>", 403);
+    const back = (r) => new Response(null, { status: 302, headers: { location: `${env.SITE}/admin/?li=${r}#li`, "set-cookie": cookie("m365le", "", 0) } });
+    if (path.endsWith("/start")) { const o = await oauthStartLE(env, admin); return o.error ? html("<p>LinkedIn not configured.</p>", 503) : new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } }); }
+    const r = await oauthCallbackLE(env, request, url, admin);
+    return back(r.ok ? "ok" : r.error);
   }
   if (!m) return null;
   const P = PROVIDERS[m[2]];
   if (!P.id(env) || !P.secret(env)) return html("<p>Login not configured.</p>", 503);
   const redirect = `${env.API}/auth/callback/${m[2]}`;
   if (m[1] === "login") {
-    const state = randomToken(16), ret = safeReturn(env, url.searchParams.get("return") || env.SITE);
-    const val = `${state}|${b64u.enc(new TextEncoder().encode(ret))}`;
-    const q = new URLSearchParams({ client_id: P.id(env), redirect_uri: redirect, response_type: "code", scope: P.scope, state, ...(m[2] === "linkedin" ? {} : { prompt: "select_account" }) });
-    return new Response(null, { status: 302, headers: { location: `${P.auth}?${q}`, "set-cookie": cookie("m365o", `${val}.${await sign(env.SESSION_SECRET, val)}`, 600) } });
+    const o = await oauthStart(env, m[2], safeReturn(env, url.searchParams.get("return") || env.SITE));
+    return new Response(null, { status: 302, headers: { location: o.location, "set-cookie": o.setCookie } });
   }
   // callback
   const c = /(?:^|;\s*)m365o=([^;]+)/.exec(request.headers.get("cookie") || "");
@@ -126,56 +180,165 @@ async function auth(env, request, url, path) {
   const dot = c[1].lastIndexOf("."), val = c[1].slice(0, dot);
   if (!(await verify(env.SESSION_SECRET, val, c[1].slice(dot + 1))) || val.split("|")[0] !== st) return html("<p>Login failed (invalid state).</p>", 400);
   const ret = safeReturn(env, new TextDecoder().decode(b64u.dec(val.split("|")[1])));
-  const tr = await fetch(P.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" },
+  const tr = await fetch(P.token, { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded", ...(P.tokenHeaders || {}) },
     body: new URLSearchParams({ code, client_id: P.id(env), client_secret: P.secret(env), redirect_uri: redirect, grant_type: "authorization_code" }) });
   if (!tr.ok) return html("<p>Login failed (token).</p>", 400);
-  const tok = await tr.json();
-  const ir = await fetch(P.info, { headers: { authorization: `Bearer ${tok.access_token}` } });
+  const tok = await tr.json().catch(() => ({}));
+  if (!tok || !tok.access_token) return html("<p>Login failed (token).</p>", 400);   // GitHub meldet Fehler mit Status 200 und {error}
+  const ir = await fetch(P.info, { headers: { authorization: `Bearer ${tok.access_token}`, ...(P.infoHeaders || {}) } });
   if (!ir.ok) return html("<p>Login failed (profile).</p>", 400);
-  const info = await ir.json();
+  const raw = await ir.json().catch(() => null);
+  const info = P.profile ? P.profile(raw) : { sub: raw && raw.sub ? String(raw.sub) : "", name: raw && (raw.name || raw.given_name) };
   if (!info.sub) return html("<p>Login failed.</p>", 400);
-  const u = await upsertUser(env, m[2], String(info.sub), info.name || info.given_name || "User");
+  const intent = val.split("|")[2] || "";
+  if (intent) {   // #279: weitere Anmeldung an das angemeldete Konto haengen; state ist an genau diese Sitzung gebunden (Hash), max. 10 Minuten
+    const sess = await readSessionInfo(env, request), [lu, lt, lh] = intent.slice(1).split(".");
+    const ok = intent[0] === "L" && sess && sess.uid === +lu && now() - +lt <= MERGE_WINDOW && (await sha256hex(sess.raw)).slice(0, 32) === lh;
+    const cur = ok ? await me(env, sess.uid) : null;
+    if (!cur) return html("<p>Linking failed (session expired). Please sign in and try again.</p>", 400);
+    const r = await linkIdentity(env, cur, m[2], info.sub);
+    const target = new URL(ret); target.searchParams.set("link", r.status);
+    const lh2 = new Headers({ location: target.href });
+    lh2.append("set-cookie", cookie("m365o", "", 0));
+    if (r.status === "merge") lh2.append("set-cookie", cookie("m365m", await mergeProof(env, cur.id, r.source), MERGE_WINDOW));
+    return new Response(null, { status: 302, headers: lh2 });
+  }
+  const u = await upsertUser(env, m[2], info.sub, info.name || "User");
   if (u.banned) return html("<p>This account is blocked.</p>", 403);
   const h = new Headers({ location: ret });
+  if (m[2] === "linkedin") {
+    const target = new URL(ret), claim = target.searchParams.get("claim");
+    const match = claim === "linkedin" && /^\/(?:[a-z]{2}\/)?entity\/([a-z0-9][a-z0-9-]{1,78})\/?$/i.exec(target.pathname);
+    if (match) {
+      const result = await claimLinkedinEntity(env, u, raw, match[1]);
+      if (result.error === "claimed") {
+        const response = html("<p>Dieses Profil wurde bereits beansprucht.</p>", 409);
+        response.headers.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
+        response.headers.append("set-cookie", cookie("m365o", "", 0));
+        return response;
+      }
+      target.searchParams.delete("claim");
+      target.searchParams.set("claim_result", result.status || result.error || "pending");
+      h.set("location", target.href);
+    }
+  }
   h.append("set-cookie", cookie("m365s", await makeSession(env, u.id), 5184000));
   h.append("set-cookie", cookie("m365o", "", 0));
   return new Response(null, { status: 302, headers: h });
 }
 
-async function me(env, uid) {
-  const u = await env.DB.prepare("SELECT id,provider,sub,name,bio,lang,banned,role,created FROM users WHERE id=?").bind(uid).first();
-  if (!u || u.banned) return null;
-  const pro = !!(await env.DB.prepare("SELECT 1 x FROM programs WHERE owner_type='u' AND owner_id=? AND verified=1 AND program IN ('mvp','mct','rd','msa','ms_employee') LIMIT 1").bind(uid).first());
-  return { ...u, admin: isAdmin(env, u), editor: u.role === "editor", pro };
+async function deleteAccount(env, id) {
+  const db = env.DB;
+  await db.batch([
+    db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
+    db.prepare("DELETE FROM entity_claim_mail WHERE claim_user=?").bind(id),
+    db.prepare("DELETE FROM entity_claim_evidence WHERE user_id=?").bind(id),   // Adress-Nachweis (0046): Geschaeftsadresse, Notiz, Beleg-Link
+    db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
+    db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
+    db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
+    db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM push_topics WHERE user_id=? OR endpoint IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(id, id), db.prepare("DELETE FROM email_topics WHERE user_id=?").bind(id),
+    db.prepare("DELETE FROM topic_queue WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+    db.prepare("DELETE FROM topic_deliveries WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+    db.prepare("DELETE FROM topic_recipient_state WHERE recipient=? OR recipient IN (SELECT endpoint FROM push_subs WHERE user_id=?)").bind(String(id), id),
+    db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
+  ]);
+  await deleteUserEvents(db, id);
+  await deleteUserByod(env, id);   // Blog auf der eigenen Domain (0049): Domains des Kontos samt Hostname bei Cloudflare (nur mit Secrets)
+  await deleteUserBlogImport(db, id);   // Blog-Import (0050): Herkunftsnachweise der importierten Entwuerfe
+  await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
+  await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
+  await deleteUserSearchDemand(db, id);   // Nachfrage zu eigenen Inhalten und zum Profil (#156): braucht Handle und Inhalte, also vor deleteUserBlog/deleteUserData
+  await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
+  await deleteUserData(db, id); await deleteUserExpertRequests(env, id);
+  await deleteUserLinkedin(db, id);   // LinkedIn-Zugang dieses Admins (verschluesselte Tokens) und "veroeffentlicht von"
+  await deleteUserInvites(env, id);   // Einlader: beide Seiten (eingeladen und Einlader samt eigenem Kuerzel in ref)
 }
 
-function pubComment(c, mine, liked, badges, admin) {
-  return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [] }, body: c.status === "hidden" ? "" : c.body,
+const me = memberOf;   // util.js: dieselbe Rollen-Ermittlung auch fuer Cron-Laeufe (Kurzposts)
+
+function pubComment(c, mine, liked, badges, admin, roles) {
+  return { id: c.id, parent: c.parent_id, user: { id: c.user_id, name: c.name, badges: badges.get(c.user_id) || [], ...(roles?.get(c.user_id) ? { role: roles.get(c.user_id) } : {}), ...(roles?.scopes?.get(c.user_id) ? { scope: roles.scopes.get(c.user_id) } : {}) }, body: c.status === "hidden" ? "" : c.body,
     hidden: c.status === "hidden", created: c.created, likes: c.likes, liked: liked.has(c.id), mine: mine === c.user_id, canDelete: mine === c.user_id || admin };
 }
 
-async function api(env, request, url, path, asUser) {
+async function api(env, request, url, path, asUser, ctx) {
   const method = request.method, J = (d, s = 200, x) => json(d, s, env, request, x);
   if (method === "OPTIONS") return new Response(null, { status: 204, headers: cors(env, request) });
-  if (asUser === undefined && method !== "GET" && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);
+  if (asUser === undefined && method !== "GET" && !["/api/internal/ai-spend", "/api/internal/sponsor-metrics", "/api/email/unsub", "/api/mail/unsub", "/api/topics/email-unsub", "/api/entityinvite/decline"].includes(path) && request.headers.get("x-requested-with") !== "m365") return J({ error: "bad_request" }, 400);   // interne Routen per CRON_KEY; Abmeldelinks (RFC 8058) senden keinen Zusatz-Header, alle per Token geschuetzt
   // asUser: vom MCP-Server (Token bereits geprueft) - dann keine Cookie-Sitzung noetig
   const uid = asUser === undefined ? await readSession(env, request) : null, user = asUser === undefined ? (uid ? await me(env, uid) : null) : asUser;
   const need = () => (user ? null : J({ error: "login" }, 401));
   const db = env.DB;
 
-  const sponsor = await handleSponsor(env, request, url, path, J);
+  if (path === "/api/internal/entity-fill") return handleEntFill(env, request, path, J);   // KI-Entwurf fuer Entitaeten (CRON_KEY), Details in entfill.js
+  if (path === "/api/internal/ai-spend") {
+    if (method !== "POST") return J({ error: "method_not_allowed" }, 405);
+    if (!env.CRON_KEY || request.headers.get("x-cron-key") !== env.CRON_KEY) return J({ error: "forbidden" }, 403);
+    const b = await request.json().catch(() => ({}));
+    if (b.action === "check") {
+      const estimate = Number(b.estimate_eur || 0);
+      if (!/^claude-haiku[-a-z0-9.]*$/i.test(String(b.model || "")) || !Number.isFinite(estimate) || estimate < 0 || estimate > 1000) return J({ error: "bad_request" }, 400);
+      const status = await aiBudgetStatus(env);
+      return J({ ...status, allowed: status.allowed && status.remaining_eur >= estimate });
+    }
+    const input = Number(b.input_tokens), output = Number(b.output_tokens);
+    const cacheRead = Number(b.cache_read_input_tokens ?? 0), cacheWrite = Number(b.cache_creation_input_tokens ?? 0);   // optional: Anteile von input_tokens (Prompt-Cache)
+    if (b.action !== "report" || !/^[A-Za-z0-9._:-]{1,100}$/.test(String(b.id || "")) ||
+        !/^[a-z0-9_]{1,60}$/i.test(String(b.job || "")) || !/^claude-haiku[-a-z0-9.]*$/i.test(String(b.model || "")) ||
+        !Number.isSafeInteger(input) || input < 0 || !Number.isSafeInteger(output) || output < 0 ||
+        !Number.isSafeInteger(cacheRead) || cacheRead < 0 || !Number.isSafeInteger(cacheWrite) || cacheWrite < 0 || cacheRead + cacheWrite > input ||
+        String(b.lang || "").length > 20) return J({ error: "bad_request" }, 400);
+    const status = await reportExternalAiUsage(env, {
+      id: b.id, job: b.job, lang: String(b.lang || ""), model: b.model, input_tokens: input, output_tokens: output, batch: b.batch === true,
+      cache_read_input_tokens: cacheRead, cache_creation_input_tokens: cacheWrite,
+    });
+    return J({ ok: true, ...status });
+  }
+
+  const sponsor = await handleSponsor(env, request, url, path, J, user);
   if (sponsor) return sponsor;
 
+  if (path === "/api/sponsor/order" || path === "/api/sponsor/orders" || path === "/api/admin/sponsor-orders") {   // Sponsoring-Paket per PayPal-Rechnung
+    const so = await handleSponsorOrders(env, request, url, path, user, J);
+    if (so) return so;
+  }
+  if (path.startsWith("/api/ads/") || path.startsWith("/api/admin/ads/")) {   // #281 Werbeplaetze buchen
+    const ads = await handleAds(env, request, url, path, user, J, ctx);
+    if (ads) return ads;
+  }
+
+  const contributions = await handleContributions(env, request, url, path, user, J);
+  if (contributions) return contributions;
+
   if (path === "/api/health") return J({ ok: true }, 200);
-  if (path === "/api/search") return handleSearch(env, request, url, J);
+  if (path === "/api/directory" || path === "/api/directory/key") {
+    await ensureDirectoryCols(db);
+    return (await handleDirectory(env, request, url, J)) || J({ error: "not_found" }, 404);
+  }
+  if (path === "/api/search") return handleSearch(env, request, url, J, asUser === undefined ? ctx : undefined);   // nur Suchen der Website zaehlen (#156), keine MCP-Aufrufe
+  if (path === "/api/search/report" || path === "/api/search/gaps" || path === "/api/search/demand-export") return await handleSearchDemand(env, request, url, path, user, J);   // #156
   if (path === "/api/providers") return J({ providers: Object.keys(PROVIDERS).filter((k) => PROVIDERS[k].id(env) && PROVIDERS[k].secret(env)) }, 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/me/li-follow" && method === "POST") {
     if (need()) return need();
     await award(db, user.id, "li_follower");
     return J({ ok: true });
   }
+  if (path === "/api/me/identities/link" && method === "POST") {   // #279: weitere Anmeldung verknuepfen (Start des OAuth-Ablaufs)
+    if (asUser !== undefined) return J({ error: "forbidden" }, 403);
+    if (need()) return need();
+    const b = await request.json().catch(() => ({})), P = Object.hasOwn(PROVIDERS, b.provider) ? PROVIDERS[b.provider] : null;
+    if (!P || !P.id(env) || !P.secret(env)) return J({ error: "bad_request" }, 400);
+    if (!(await freshSession(env, request, user))) return J({ error: "fresh", relogin: await reloginFor(db, user) }, 403);   // wie beim Zusammenfuehren
+    if (!(await rateLimit(db, `idl:${user.id}`, 10, 3600))) return J({ error: "rate" }, 429);
+    const sess = await readSessionInfo(env, request);
+    const o = await oauthStart(env, b.provider, safeReturn(env, b.return || env.SITE), `L${user.id}.${now()}.${(await sha256hex(sess.raw)).slice(0, 32)}`);
+    return J({ url: o.location }, 200, { "set-cookie": o.setCookie });
+  }
+  const ids = await handleIdentities(env, request, url, path, user, J, asUser !== undefined);
+  if (ids) return ids;
   if (path === "/api/me") {
-    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, provider: user.provider, ...(user.admin || user.editor ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
+    if (method === "GET") return J({ user: user ? { ...(await namePrefs(db, user)), id: user.id, name: user.name, bio: user.bio, lang: user.lang, admin: user.admin, editor: user.editor, moderator: user.moderator, provider: user.provider, ...(user.admin || user.editor || user.moderator ? {} : { sub_hint: `${user.provider}:${user.sub}` }), ...(await stats(db, user.id)) } : null });
     if (need()) return need();
     if (method === "POST") {
       const b = await request.json().catch(() => ({}));
@@ -184,17 +347,11 @@ async function api(env, request, url, path, asUser) {
       await db.prepare("UPDATE users SET name=?,bio=?,lang=? WHERE id=?").bind(name, bio, lang, user.id).run();
       return J({ ok: true });
     }
-    if (method === "DELETE") {   // Konto + alle eigenen Daten loeschen (DSGVO)
-      const id = user.id;
-      await db.batch([
-        db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
-        db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
-        db.prepare("DELETE FROM comments WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_badges WHERE user_id=?").bind(id),
-        db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
-      ]);
-      await deleteUserEvents(db, id);
-      await deleteUserMessages(db, id); await deleteUserTokens(db, id); await deleteUserQa(db, id); await deleteUserBlog(db, id); await deleteUserLibrary(db, id); await deleteUserPodcast(db, id); await deleteUserVideos(db, id); await deleteUserGuests(db, id); await deleteUserGuestCredits(db, id);
-      await deleteUserData(db, id);
+    if (method === "DELETE") {   // Konto + alle eigenen Daten loeschen (DSGVO), auch frueher zusammengefuehrte (stillgelegte) Konten
+      // rekursiv: auch Ketten R -> S -> T aus der Zeit vor dem Abflachen in mergeStatements
+      const merged = (await db.prepare("WITH RECURSIVE m(id) AS (SELECT id FROM users WHERE merged_into=? UNION SELECT u.id FROM users u JOIN m ON u.merged_into=m.id) SELECT id FROM m").bind(user.id).all().catch(() => ({ results: [] }))).results || [];
+      for (const x of merged) await deleteAccount(env, x.id);
+      await deleteAccount(env, user.id);
       return J({ ok: true }, 200, { "set-cookie": cookie("m365s", "", 0) });
     }
   }
@@ -206,9 +363,9 @@ async function api(env, request, url, path, asUser) {
     const rows = (await db.prepare(
       `SELECT c.id,c.user_id,c.parent_id,c.body,c.status,c.created,u.name,(SELECT COUNT(*) FROM likes l WHERE l.comment_id=c.id) likes
        FROM comments c JOIN users u ON u.id=c.user_id WHERE c.vid=? AND c.lang=? AND u.banned=0 ORDER BY c.created ASC LIMIT 300`).bind(vid, lang).all()).results || [];
-    const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]);
+    const badges = await badgesFor(db, [...new Set(rows.map((r) => r.user_id))]), roles = await publicRoles(db, rows.map((r) => r.user_id));
     const liked = new Set(user ? ((await db.prepare("SELECT comment_id FROM likes WHERE user_id=?").bind(user.id).all()).results || []).map((r) => r.comment_id) : []);
-    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin)) }, 200, { "cache-control": "no-store" });
+    return J({ comments: rows.filter((r) => r.status === "ok" || rows.some((x) => x.parent_id === r.id)).map((r) => pubComment(r, user?.id, liked, badges, user?.admin, roles)) }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/comments" && method === "POST") {
     if (need()) return need();
@@ -261,8 +418,14 @@ async function api(env, request, url, path, asUser) {
     return J({ ok: true });
   }
 
+  if (path.startsWith("/api/i18n/")) { const q = await handleI18nPublic(env, request, url, path, J); if (q) return q; }   // Overrides-Export fuer den Seitenbau, Neuuebersetzungs-Wuensche
+  if (path.startsWith("/api/editor/") || path.startsWith("/api/admin/editlog") || path.startsWith("/api/admin/editor-scope")) return await handleEditor(env, request, url, path, user, J);   // Redaktion/Moderation (perm.js can())
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
+  if (path === "/api/admin/org-pair") { const q = await handleOrgPair(env, request, url, path, user, J); if (q) return q; }
+  if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm|evidence)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
+  if (ENTITY_ROUTE.test(path)) { const p = await handleEventEntity(env, request, url, path, user, J); if (p) return p; }   // Event <-> Event-Entitaet (evententity.js)
+  if (IMPORT_ROUTE.test(path)) { const p = await handleEventImport(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/ui-i18n" && request.method === "GET") return J(await uiI18nExport(env), 200, { "cache-control": "public, max-age=300" });
   if (path === "/api/admin/translate" && user?.admin) {   // Status und Notaus der Auto-Uebersetzung
@@ -272,22 +435,31 @@ async function api(env, request, url, path, asUser) {
   if (path.startsWith("/api/ai-token")) { const k = await handleTokens(env, request, url, path, user, J); if (k) return k; }
   if (path === "/api/admin/demo") { const q = await handleDemo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/guests/")) { const q = await handleGuests(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/expert-requests/") || path.startsWith("/api/admin/expert-requests/") ||
+      path.startsWith("/api/expert-calls") || path.startsWith("/api/expert-settings") || path === "/api/experts/search") {
+    const q = await handleExpertRequests(env, request, path, user, J, ctx); if (q) return q;
+  }
   if (path.startsWith("/api/video/") || path.startsWith("/api/admin/video")) { const q = await handleVideo(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path.startsWith("/api/podcast/") || path.startsWith("/api/admin/podcast")) { const q = await handlePodcast(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
   if (path === "/api/updates/export" || path === "/api/admin/updates/poll") { const q = await handleUpdates(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/reviews")) { const q = await handleReviews(env, request, url, path, user, J); if (q) return q; }
+  if (path.startsWith("/api/invite/") || path === "/api/admin/invites" || path === "/api/admin/invite/void") { const q = await handleInviter(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/entityinvite/")) { const q = await handleEntityInvite(env, request, url, path, user, J); if (q) return q; }
+  if (path === "/api/mediakit" || path === "/api/mediakit/summary" || path === "/api/admin/mediakit") { const q = await handleMediakit(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/mail/") || path.startsWith("/api/admin/mail")) { const q = await handleMail(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/show/") || path.startsWith("/api/admin/show")) { const q = await handleShows(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/wish/")) { const q = await handleWish(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
+  if (path === "/api/byod/import/status" || path === "/api/byod/import/preview" || path === "/api/byod/import/save") { const q = await handleBlogImport(env, request, url, path, user, J); if (q) return q; }   // Blog-Import per Feed (eigener Schalter BYOD_IMPORT)
+  if (path.startsWith("/api/byod/") || path === "/api/admin/byod" || path === "/api/admin/byod/block") { const q = await handleByodApi(env, request, url, path, user, J); if (q) return q; }   // Blog auf der eigenen Domain (Schalter BYOD)
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/notes/")) { const q = await handleNotes(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/seo/")) { const q = await handleSeo(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/edits/")) { const v = await handleVotes(env, request, url, path, user, J); if (v) return v; }
+  if (path.startsWith("/api/admin/linkedin/")) return await handleLinkedinEvents(env, request, url, path, user, J);
   if (path.startsWith("/api/admin/panel/")) return await handleAdminPanel(env, request, url, path, user, J);
   if (path.startsWith("/api/entity") || path.startsWith("/api/admin/entity")) { const e = await handleEntity(env, request, url, path, user, J); if (e) return e; }
   if (/^\/api\/(profile|profiles|endorse|cert-endorse|vote|feed|org|orgs|img|recommend)(\/|$)/.test(path) || path === "/api/admin/verify" || path === "/api/admin/cert-queue" || path === "/api/admin/feed-hide") { const p = await handleProfiles(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
@@ -297,9 +469,9 @@ async function api(env, request, url, path, asUser) {
     const lang = url.searchParams.get("lang");
     if (!isLang(lang)) return J({ error: "bad_request" }, 400);
     const d = new Date(), since = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1) / 1000;
-    const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id));
+    const top = await topUsers(db, lang, since, 5), bm = await badgesFor(db, top.map((t) => t.id)), rm = await publicRoles(db, top.map((t) => t.id));
     const last = await db.prepare("SELECT c.month,c.points,u.id,u.name,u.bio FROM curators c JOIN users u ON u.id=c.user_id WHERE c.lang=? ORDER BY c.month DESC LIMIT 1").bind(lang).first();
-    return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [] })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
+    return J({ month: d.toISOString().slice(0, 7), top: top.map((t) => ({ ...t, badges: bm.get(t.id) || [], ...(rm.get(t.id) ? { role: rm.get(t.id) } : {}), ...(rm.scopes.get(t.id) ? { scope: rm.scopes.get(t.id) } : {}) })), last: last || null }, 200, { "cache-control": "public, max-age=300" });
   }
   if ((m = /^\/api\/u\/(\d+)$/.exec(path)) && method === "GET") {
     const u = await db.prepare("SELECT id,name,bio,lang,created FROM users WHERE id=? AND banned=0").bind(+m[1]).first();
@@ -309,19 +481,40 @@ async function api(env, request, url, path, asUser) {
     return J({ user: u, ...(await stats(db, u.id)), recent: rc, curator: cur }, 200, { "cache-control": "public, max-age=120" });
   }
 
+  const topicResponse = await handleTopicSubscriptions(env, request, url, path, user, J);
+  if (topicResponse) return topicResponse;
+
   if (path === "/api/push/key" && method === "GET") return J({ key: env.VAPID_PUBLIC || "" });
+  if (path === "/api/push/status" && method === "GET") {
+    const endpoint = String(url.searchParams.get("endpoint") || "").slice(0, 600);
+    if (!/^https:\/\//.test(endpoint)) return J({ error: "bad_request" }, 400);
+    const sub = await db.prepare("SELECT user_id,digest FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+    const topics = sub ? (await db.prepare("SELECT 1 x FROM push_topics WHERE endpoint=? LIMIT 1").bind(endpoint).first()) : null;
+    return J({ registered: !!sub, digest: !!sub?.digest, topics: !!topics }, 200, { "cache-control": "no-store" });
+  }
   if (path === "/api/push/subscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
     const e = b.endpoint, k = b.keys || {};
-    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !isLang(b.lang)) return J({ error: "bad_request" }, 400);
+    if (!/^https:\/\//.test(e || "") || e.length > 600 || !k.p256dh || !k.auth || !(b.lang === "en" || isLang(b.lang))) return J({ error: "bad_request" }, 400);
     if (!(await rateLimit(db, `ps:${ip(request)}`, 20, 3600))) return J({ error: "rate" }, 429);
-    await db.prepare("INSERT OR REPLACE INTO push_subs(endpoint,p256dh,auth,lang,user_id,created) VALUES(?,?,?,?,?,?)").bind(e, String(k.p256dh), String(k.auth), b.lang, user?.id ?? null, now()).run();
+    await savePushSubscription(db, {
+      endpoint: e, p256dh: String(k.p256dh), auth: String(k.auth), lang: b.lang,
+      userId: user?.id ?? null, created: now(), digest: b.digest === 0 ? 0 : 1,
+    });
     if (user) await award(db, user.id, "notified");
     return J({ ok: true });
   }
+  if (path === "/api/push/digest" && method === "POST") {
+    const b = await request.json().catch(() => ({})), endpoint = String(b.endpoint || "").slice(0, 600);
+    if (!/^https:\/\//.test(endpoint) || typeof b.on !== "boolean") return J({ error: "bad_request" }, 400);
+    const sub = await db.prepare("SELECT user_id FROM push_subs WHERE endpoint=?").bind(endpoint).first();
+    if (!sub || (b.on && sub.user_id && sub.user_id !== user?.id)) return J({ error: "bad_subscription" }, 400);
+    await db.prepare("UPDATE push_subs SET digest=? WHERE endpoint=?").bind(b.on ? 1 : 0, endpoint).run();
+    return J({ ok: true, digest: b.on });
+  }
   if (path === "/api/push/unsubscribe" && method === "POST") {
     const b = await request.json().catch(() => ({}));
-    if (b.endpoint) await db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(b.endpoint)).run();
+    if (b.endpoint) await db.batch([db.prepare("DELETE FROM push_topics WHERE endpoint=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_queue WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_deliveries WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM topic_recipient_state WHERE channel='push' AND recipient=?").bind(String(b.endpoint)), db.prepare("DELETE FROM push_subs WHERE endpoint=?").bind(String(b.endpoint))]);
     return J({ ok: true });
   }
 
@@ -335,8 +528,8 @@ async function api(env, request, url, path, asUser) {
     const token = ex?.token || randomToken(18);
     if (!ex) await db.prepare("INSERT INTO email_subs(email,lang,token,confirmed,created) VALUES(?,?,?,0,?)").bind(email, b.lang, token, now()).run();
     const link = `${env.API}/api/email/confirm?token=${encodeURIComponent(token)}&lang=${b.lang}`;
-    await sendMail(env, email, "M365.FM – please confirm / bitte bestätigen",
-      `<p>Please confirm your subscription to new M365.FM episodes (${esc(b.lang)}):</p><p><a href="${link}">${link}</a></p><p>Bitte bestätige dein Abo neuer M365.FM-Folgen. Wenn du das nicht warst, ignoriere diese E-Mail.</p>`);
+    await sendMail(env, { to: email, subject: "M365.FM – please confirm / bitte bestätigen",
+      html: `<p>Please confirm your subscription to new M365.FM episodes (${esc(b.lang)}):</p><p><a href="${link}">${link}</a></p><p>Bitte bestätige dein Abo neuer M365.FM-Folgen. Wenn du das nicht warst, ignoriere diese E-Mail.</p>` });
     return J({ ok: true });
   }
   if (path === "/api/email/confirm" && method === "GET") {
@@ -346,7 +539,16 @@ async function api(env, request, url, path, asUser) {
   }
   if (path === "/api/email/unsub" && (method === "GET" || method === "POST")) {
     const t = url.searchParams.get("token") || "";
-    await db.prepare("DELETE FROM email_subs WHERE token=?").bind(t).run();
+    const weekly = await db.prepare("SELECT email FROM mail_weekly_unsub WHERE token=?").bind(t).first().catch(() => null);
+    if (weekly && url.searchParams.get("lang") === "all") {
+      await db.batch([
+        db.prepare("DELETE FROM email_subs WHERE lower(email)=lower(?)").bind(weekly.email),
+        db.prepare("INSERT OR REPLACE INTO mail_prefs(user_id,kind,on_) SELECT user_id,'weekly',0 FROM mail_addr WHERE lower(email)=lower(?)").bind(weekly.email),
+        db.prepare("DELETE FROM mail_weekly_unsub WHERE email=?").bind(weekly.email),
+      ]);
+    } else {
+      await db.prepare("DELETE FROM email_subs WHERE token=?").bind(t).run();
+    }
     return method === "POST" ? new Response("ok") : html("<h2>✓ Unsubscribed</h2><p>You will not receive further e-mails.</p>");
   }
 
@@ -359,22 +561,32 @@ async function api(env, request, url, path, asUser) {
   }
   if (path.startsWith("/api/admin/")) {
     const keyOk = env.CRON_KEY && (request.headers.get("x-cron-key") === env.CRON_KEY || url.searchParams.get("key") === env.CRON_KEY);   // Header bevorzugt (Query landet in Logs)
-    if (path === "/api/admin/run-daily" && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
-    if (!user?.admin) return J({ error: "forbidden" }, 403);
+    if ((path === "/api/admin/run-weekly" || path === "/api/admin/run-daily") && keyOk) return J(await runDigest(env, { dry: url.searchParams.get("dry") === "1" }));
+    if (isStaff(user) && !user.admin && path === "/api/admin/reports" && method === "GET") {   // Redaktion/Moderation: gemeldete Kommentare (Lesen); Fach-Editoren sehen sie nicht (kein Thema)
+      const actor = await loadActor(db, user); if (!can(actor, "queue.view").ok || !inScope(actor, {})) return J({ error: "forbidden" }, 403);
+      const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
+      return J({ reports: rows });
+    }
+    if (isStaff(user) && !user.admin && (m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") {   // wie Admin, aber ueber can() und mit Protokoll
+      const r = await decide(env, user, { kind: "comment", id: m[2], action: m[1] === "hide" ? "hide" : "resolve", reason: "" });
+      return J(r.body, r.status);
+    }
+    if (!can(user, "role.assign").ok) return J({ error: "forbidden" }, 403);   // alles Weitere (Rollen, Sperren, Nutzerliste) nur Admin
     if (path === "/api/admin/expertise-sync" && method === "POST") { const r = await syncExpertise(env, entityMap); await audit(db, user.id, "expertise-sync", "", JSON.stringify(r)); return J(r); }   // Stufen sofort neu berechnen
     if (path === "/api/admin/reports" && method === "GET") {
       const rows = (await db.prepare("SELECT c.id,c.vid,c.lang,c.body,c.status,c.user_id,(SELECT COUNT(*) FROM reports r WHERE r.comment_id=c.id) n FROM comments c WHERE c.id IN (SELECT comment_id FROM reports) ORDER BY n DESC LIMIT 50").all()).results || [];
       return J({ reports: rows });
     }
-    if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); return J({ ok: true }); }
+    if ((m = /^\/api\/admin\/(hide|show)\/(\d+)$/.exec(path)) && method === "POST") { const c = await db.prepare("SELECT status FROM comments WHERE id=?").bind(+m[2]).first(); await db.prepare("UPDATE comments SET status=? WHERE id=?").bind(m[1] === "hide" ? "hidden" : "ok", +m[2]).run(); if (c) await logEdit(db, user, m[1] === "hide" ? "review.hide" : "report.resolve", "comment", m[2], { before: { status: c.status }, after: { status: m[1] === "hide" ? "hidden" : "ok" } }); return J({ ok: true }); }
     if (path === "/api/admin/users" && method === "GET") {
       const q = cleanName(url.searchParams.get("q") || "").replace(/[%_]/g, "");
-      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role='editor') DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
+      const rows = (await db.prepare("SELECT id,name,role,banned FROM users WHERE name LIKE ? ORDER BY (role IN ('editor','moderator','admin')) DESC, id DESC LIMIT 20").bind(`%${q}%`).all()).results || [];
       return J({ users: rows });
     }
     if ((m = /^\/api\/admin\/role\/(\d+)$/.exec(path)) && method === "POST") {
-      const b = await request.json().catch(() => ({})), role = b.role === "editor" ? "editor" : b.role === "admin" ? "admin" : "user";   // Rollen in der Datenbank: user, editor, admin
-      await db.prepare("UPDATE users SET role=? WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role);
+      const b = await request.json().catch(() => ({})), role = ["editor", "moderator", "admin"].includes(b.role) ? b.role : "user";   // Rollen in der Datenbank: user, moderator, editor, admin
+      await db.prepare("UPDATE users SET role=?,role_source='manual' WHERE id=?").bind(role, +m[1]).run(); await audit(db, user.id, "role", m[1], role); await logEdit(db, user, "admin.role", "user", m[1], { reason: role });
+      await closeObsolete(db, +m[1]);   // eine offene Bewerbung um diese (oder eine niedrigere) Rolle hat sich damit erledigt
       await evalBadges(env, +m[1]);
       return J({ ok: true, role });
     }
@@ -384,13 +596,19 @@ async function api(env, request, url, path, asUser) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url), path = url.pathname.replace(/\/+$/, "") || "/";
     try {
+      if (path === "/robots.txt") return new Response("User-agent: *\nDisallow: /go/\n", {
+        headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" },
+      });
+      if (path.startsWith("/go/")) return await handleSponsorLink(env, request, url, path, ctx);
+      if (path === "/paypal/webhook") return await handlePaypalWebhook(env, request);   // #281: Signatur wird vor jeder Aktion bei PayPal geprueft
       if (path.startsWith("/auth/")) return (await auth(env, request, url, path)) || new Response("not found", { status: 404 });
-      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user));
+      if (path === "/mcp") return await handleMcp(env, request, (uid) => me(env, uid), (req, user) => api(env, req, new URL(req.url), new URL(req.url).pathname, user, ctx));
       if (path === "/a2a") return await handleA2a(env, request);
-      if (path.startsWith("/api/")) return await api(env, request, url, path);
+      if (path === "/api/byod/serve") return await handleByodServe(env, request, url);   // Blog auf der eigenen Domain (nur mit BYOD=1), ohne Sitzung
+      if (path.startsWith("/api/")) return await api(env, request, url, path, undefined, ctx);
       return new Response("M365.FM community API", { status: 200, headers: { "content-type": "text/plain" } });
     } catch (e) {
       const rid = crypto.randomUUID().slice(0, 8);   // Request-ID: steht in der Antwort und im Log (Workers Logs), damit ein gemeldeter Fehler auffindbar ist
@@ -399,16 +617,47 @@ export default {
     }
   },
   async scheduled(event, env, ctx) {
-    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler; Digest nur um 06:00 UTC
+    // Jede Aufgabe mit Protokoll (cron_runs: Start, Ende, ok, Fehlertext) statt verschluckter Fehler.
+    const scheduledAt = event.scheduledTime || Date.now();
+    const tick = new Date(scheduledAt);
+    if (event.cron === "*/30 * * * *" && tick.getUTCHours() === 6 && tick.getUTCMinutes() === 0) return;
     const T = (name, fn) => ctx.waitUntil(track(env, name, fn));
-    if (event.cron === "0 6 * * *") T("runDigest", () => runDigest(env));
+    if (event.cron === "*/15 * * * *") {
+      const reminders = track(env, "topicSessionReminders", async () => {
+        const queued = await queueSessionReminders(env);
+        const dispatched = await dispatchTopicNotifications(env);
+        return { queued, dispatched };
+      });
+      ctx.waitUntil(reminders);
+      // Event-Import (Community Days, Sessionize) zur Minute 15 und 45: in diesem Aufruf, also nie im Aufruf der Digests (0 6 und */30) und der uebrigen
+      // Aufgaben, und erst NACH den Benachrichtigungen (sie bekommen ihr Kontingent zuerst). Jeder Lauf ist hart gedeckelt (eventimport.js CAP:
+      // rund 100 D1-Aufrufe und 12 Abrufe); was nicht hineinpasst, folgt im naechsten.
+      // Event <-> Event-Entitaet: Namensvergleich fuer neue Events (evententity.js suggestEventEntities, wenige D1-Aufrufe); eigene Aufgabe, damit die Zeile des Event-Imports unveraendert bleibt
+      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventEntity", () => suggestEventEntities(env))));
+      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventImport", () => runEventImport(env))));
+      return;
+    }
+    if (event.cron === "0 6 * * *") {
+      T("runPushDigest", () => runPushDigest(env));
+      T("syncAutoRoles", () => syncAutoRoles(env.DB));   // taeglich: MVP/MCT -> Editor, entzogene Verifizierung -> Rolle zurueck (idempotent)
+      T("runDigest", () => runDigest(env, { at: scheduledAt }));
+      T("syncInviterBadges", () => syncInviterBadges(env));   // einmal taeglich (Sicherheitsnetz: Zurechnung, Entwertung und Kontoloeschung bewerten sofort)
+      T("purgeLinkedinOrphans", () => purgeLinkedinOrphans(env.DB));   // verwaiste LinkedIn-Zeilen nach dem Ende des Events (#323)
+      T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
+    }
+    if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
+    if (event.cron === "*/30 * * * *") T("byodChecks", () => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)
     T("refreshFeeds", () => refreshFeeds(env));
+    T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));
+    T("queueTopicArticles", () => queueTopicArticles(env));
+    T("dispatchTopicNotifications", () => dispatchTopicNotifications(env));
     T("refreshFollowers", () => refreshFollowers(env));
     T("ensurePastEvents", () => ensurePastEvents(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
     T("ensureM365Con", () => ensureM365Con(env).then(() => linkSpeakers(env)).then(() => linkSpeakerEntities(env)));
     T("seedRoadmap", () => seedRoadmap(env));
     T("purgeMessages", () => purgeMessages(env.DB));
+    T("purgeEntityClaimReview", () => purgeEntityClaimReview(env.DB));
     T("autoTranslate", () => autoTranslate(env));
     T("autoTranslateItems", () => autoTranslateItems(env));
     T("autoTranslateEntities", () => autoTranslateEntities(env, entityMap));
@@ -419,16 +668,26 @@ export default {
     T("importLegacyBlog", () => importLegacyBlog(env));
     T("importContentBlog", () => importContentBlog(env));   // T15: Content-Pakete aus imports/blog/
     T("refreshProfilesExport", () => refreshProfilesExport(env));
+    T("backfillDirectoryGeocodes", () => backfillDirectoryGeocodes(env));
     T("remindInvites", () => remindInvites(env));
     T("runTrQueue", () => runTrQueue(env, entityMap));
+    T("searchDemand", async () => {   // #156: Begriffe einordnen (Workers AI/Vectorize, nie im Suchpfad), Nachfrage fortschreiben, im Haiku-Budget uebersetzen
+      // Fortschreiben liest die ganze Tabelle (12 Monate): nur nach neuen Uebersetzungsluecken und einmal taeglich um 06:00 (D1-Lesekontingent)
+      const classified = await classifySearches(env), demand = classified.translation_gap || event.cron === "0 6 * * *" ? await aggregateDemand(env) : { skipped: true };
+      return { classified, demand, translated: await runTrDemand(env, entityMap) };
+    });
     T("syncLiveEvents", () => syncLiveEvents(env, entityMap));
     T("syncContentTopics", () => syncContentTopics(env));
     T("importEntitiesFromSite", () => importEntitiesFromSite(env));
     T("importQuotesFromSite", () => importQuotesFromSite(env));
+    T("importEpisodeUrls", () => importEpisodeUrls(env));   // Spreaker-Folge <-> Adresse (Admin-Reiter Spreaker-Adressen); Korrektur bei Spreaker: GitHub-Workflow spreaker-urls.yml
     T("importEpisodes", () => importEpisodes(env));
     T("importTranslations", () => importTranslations(env));
     T("importSearchIndex", () => importSearchIndex(env));
-    if (event.cron !== "0 6 * * *") T("syncExpertise", () => syncExpertise(env, entityMap));   // nicht doppelt um 06:00 (beide Zeitplaene feuern)
+    T("syncSearchVectors", () => syncSearchVectors(env));
+    T("syncExpertVectors", () => syncExpertVectors(env));
+    T("closeExpiredExpertRequests", () => closeExpiredExpertRequests(env));
+    T("syncExpertise", () => syncExpertise(env, entityMap));   // */30 kehrt um 06:00 oben zurueck, daher nicht doppelt
     ctx.waitUntil(env.DB.prepare("DELETE FROM cron_runs WHERE started<?").bind(Math.floor(Date.now() / 1000) - 7 * 86400).run().catch(() => 0));
   },
 };

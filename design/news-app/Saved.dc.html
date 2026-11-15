@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Saved, offline and widget</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.45">
+
+  <header style="flex: 0 0 auto; padding: 18px 20px 10px; display: grid; gap: 12px">
+    <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 36px; line-height: 1">Saved</h1>
+    <div role="group" aria-label="View" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid #17191c">
+      <button type="button" onClick="{{showAll}}" aria-pressed="{{isAll}}" style="{{allStyle}}">All saved · 4</button>
+      <button type="button" onClick="{{showOff}}" aria-pressed="{{isOff}}" style="{{offStyle}}">Offline · 3</button>
+    </div>
+  </header>
+
+  <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 0 20px 16px; display: flex; flex-direction: column; gap: 10px">
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="4">
+      <a href="{{it.href}}" style="display: flex; gap: 12px; align-items: center; padding: 12px 14px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); text-decoration: none; color: #17191c">
+        <span style="display: grid; gap: 2px; flex: 1 1 auto; min-width: 0">
+          <span style="font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #3b6391">{{it.kind}}</span>
+          <b style="font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 20px; line-height: 1.12">{{it.title}}</b>
+          <span style="font-size: 13px; color: #5d6470">{{it.meta}}</span>
+        </span>
+        <sc-if value="{{it.off}}" hint-placeholder-val="{{ true }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" role="img" aria-label="Available offline" fill="none" stroke="#2f6b3a" stroke-width="1.8"><path d="M10 3v10M6 9l4 4 4-4M4 17h12"></path></svg>
+        </sc-if>
+      </a>
+    </sc-for>
+    <span style="font-size: 13px; color: #5d6470">Offline storage: [N] MB · removed automatically after 30 days</span>
+
+    <div style="margin-top: 10px; display: grid; gap: 10px">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Home screen widget</span>
+      <div style="background: #dfe4ea; padding: 18px; display: grid; justify-items: center">
+        <div style="width: 300px; box-sizing: border-box; padding: 16px; border-radius: 22px; background: #1a1d21; color: #eef0f3; display: grid; gap: 8px">
+          <span style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase"><span>M365<span style="color: #82a7d4">.FM</span> this week</span><span style="color: #c5cad2">Wed</span></span>
+          <span style="display: flex; gap: 8px; align-items: baseline"><b style="font-family: 'Barlow Condensed', sans-serif; font-size: 34px; color: #f0a86a">2</b><span>changes need action</span></span>
+          <span style="font-size: 14px; color: #c5cad2">Next deadline: Copilot agent sharing · [DATE]</span>
+          <span style="display: flex; gap: 8px; align-items: center; font-size: 14px"><span aria-hidden="true" style="width: 26px; height: 26px; border-radius: 50%; background: #82a7d4; display: grid; place-items: center"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="#101214"></path></svg></span>Today’s briefing · 4 min</span>
+        </div>
+      </div>
+      <span style="font-size: 13px; color: #5d6470">Also as lock screen widget and Apple Watch complication (later).</span>
+    </div>
+  </div>
+
+  <nav aria-label="App" style="flex: 0 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid rgba(23,25,28,.14); background: #ffffff; padding-bottom: 10px">
+    <a href="Feed.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="16" height="15"></rect><path d="M3 9h16M8 2v4M14 2v4"></path></svg>Today</a>
+    <a href="Player.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 14v-3a7 7 0 0 1 14 0v3"></path><rect x="3" y="13" width="4" height="6"></rect><rect x="15" y="13" width="4" height="6"></rect></svg>Listen</a>
+    <a href="Ask.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 4h16v11H9l-4 4v-4H3z"></path></svg>Ask</a>
+    <a href="Saved.dc.html" aria-current="page" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; font-weight: 600; color: #3b6391; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 3h12v16l-6-4-6 4z"></path></svg>Saved</a>
+    <a href="Notifications.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 16V10a6 6 0 0 1 12 0v6l2 2H3z"></path><path d="M9 20h4"></path></svg>Alerts</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const view = s.view || 'all';
+    const ALL = [
+      { kind: 'Episode · 34 min', title: 'Governance for Copilot Studio agents', meta: 'Saved today', off: true, href: 'Player.dc.html' },
+      { kind: 'Update · action', title: 'New admin setting for sharing Copilot agents', meta: 'Deadline [DATE] · in calendar', off: true, href: 'Update-Detail.dc.html' },
+      { kind: 'Answer', title: 'What do I need for Copilot in Teams meetings?', meta: '3 sources', off: false, href: 'Ask.dc.html' },
+      { kind: 'Briefing · 4 min', title: 'M365 today · Wed [DATE]', meta: 'Deutsch', off: true, href: 'Player.dc.html' }
+    ];
+    const seg = (on) => 'min-height: 44px; border: 0; border-radius: 0; cursor: pointer; font-family: Barlow Condensed, sans-serif; font-weight: 600; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; ' + (on ? 'background: #17191c; color: #ffffff;' : 'background: #ffffff; color: #17191c;');
+    return {
+      items: ALL.filter((i) => view === 'all' || i.off),
+      isAll: view === 'all', isOff: view === 'off',
+      allStyle: seg(view === 'all'), offStyle: seg(view === 'off'),
+      showAll: () => this.setState({ view: 'all' }),
+      showOff: () => this.setState({ view: 'off' })
+    };
+  }
+}
+</script>
+</body>
+</html>

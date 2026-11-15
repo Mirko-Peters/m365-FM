@@ -1,0 +1,52 @@
+/* Gemeinsames Formular-Design (Mirko, 6.11.2026: "Ueberall, wo noch dieser haessliche Editor drin ist, den schoenen einbauen. Ich will, dass das Design Konsistenz hat.")
+   Liegt im gehashten site.css (generate_site.py FORMS_CSS), weil viele Formulare auf Seiten ohne community.css entstehen (Entitaeten, Profile, Events,
+   Expert Connect, Verwaltung, Sponsor). Grundregeln mit :where() haben Spezifitaet 0: jede Komponentenregel mit Klasse gewinnt weiter.
+   Vorbild: der Profil-/Blog-Editor (community.css .ed-form, #c-expert). Tokens: --fg/--bg/--card/--bd/--mut/--ac/--onac aus dem Seiten-CSS.
+   Bei #295 (CSS je Seitentyp) gehoert die Datei ins Buendel fuer Community/Entitaeten/Landing. */
+:root{--f-r:8px;--f-bd:var(--bd);--f-bd:color-mix(in srgb,var(--fg) 30%,transparent);--f-err:#b3261e;--f-ok:#1e7a4a}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--f-err:#ff8a80;--f-ok:#91d59a}}
+:root[data-theme=dark]{--f-err:#ff8a80;--f-ok:#91d59a}
+html.a11y-hc{--f-bd:#fff;--f-err:#ffe600;--f-ok:#fff}
+
+/* Textfelder, Auswahllisten, mehrzeilige Felder: dunkel im dunklen Design (color-scheme nur an den Feldern, nicht an der Seite: Player-Iframes bleiben transparent) */
+:where(input:not([type=checkbox],[type=radio],[type=range],[type=file],[type=color],[type=submit],[type=button],[type=reset],[type=image],[type=hidden]),select,textarea){box-sizing:border-box;max-width:100%;min-height:44px;margin:0;padding:10px 12px;font:inherit;font-size:max(16px,1em);line-height:1.4;letter-spacing:normal;text-transform:none;color:var(--fg);background-color:var(--bg);border:1px solid var(--f-bd);border-radius:var(--f-r);color-scheme:light;transition:border-color .15s,box-shadow .15s}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) *:where(input,select,textarea){color-scheme:dark}}
+:root[data-theme=dark] *:where(input,select,textarea){color-scheme:dark}
+:where(input,select,textarea):where(:hover:not(:disabled,:focus)){border-color:var(--mut)}
+:where(input:not([type=checkbox],[type=radio],[type=range]),select,textarea):focus{outline:2px solid var(--ac);outline-offset:1px;border-color:var(--ac)}
+:where(input,textarea)::placeholder{color:var(--mut);opacity:1}
+:where(input,select,textarea,button):disabled{opacity:.6;cursor:not-allowed}
+:where(input,select,textarea):where([aria-invalid=true],:user-invalid){border-color:var(--f-err);box-shadow:0 0 0 1px var(--f-err)}
+:where(select:not([multiple],[size])){cursor:pointer}
+:where(textarea){display:block;width:100%;min-height:5.5em;max-height:70vh;line-height:1.55;resize:vertical;field-sizing:content;overflow-wrap:break-word}
+:where(textarea[rows="5"],textarea[rows="6"],textarea[rows="7"],textarea[rows="8"],textarea[rows="9"]){min-height:10em}
+:where(textarea[rows="14"],textarea[rows="18"],textarea[rows="20"],textarea[rows="22"]){min-height:18em}
+:where(textarea[maxlength]:not(.ed-ta)){padding-bottom:30px}
+:where(input[type=checkbox],input[type=radio]){width:20px;height:20px;margin:0;margin-inline-end:6px;flex:none;vertical-align:-4px;accent-color:var(--ac);cursor:pointer}
+:where(input[type=checkbox],input[type=radio],input[type=range],input[type=file],button,summary):focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+
+/* Zeichenzaehler (assets/page.js setzt ihn bei Textfeldern mit maxlength): sitzt im unteren Innenrand des Felds, verschiebt nichts */
+.f-cnt{display:block;width:fit-content;height:22px;margin-block:-26px 4px;margin-inline:auto 12px;position:relative;pointer-events:none;font-size:.78rem;line-height:22px;color:var(--mut);font-variant-numeric:tabular-nums}
+.f-cnt.near{color:var(--f-err);font-weight:600}
+
+/* Formularbereiche: Beschriftung, Hinweise, Breite, Knoepfe */
+:where(.f-form,.wk-form,.wk,.wk-edit,.wk-qa,.ed-form,#c-expert .ccard,#c-events,.cprof,.cform,.adm-form) label{display:block;margin:14px 0 6px;font-weight:600;line-height:1.35}
+:where(.f-form,.wk-form,.wk,.wk-edit,.ed-form,#c-expert .ccard,#c-events,.cprof,.cform,.adm-form) label:has(>:is(input,select,textarea):not([type=checkbox],[type=radio])){display:grid;gap:6px}
+:where(.f-form,.wk-form,.wk,.wk-edit,.ed-form,#c-expert .ccard,#c-events,.cprof,.cform,.adm-form) label:has(>input[type=checkbox],>input[type=radio]){display:flex;align-items:center;gap:4px;min-height:44px;margin:6px 0;font-weight:500;cursor:pointer}
+:where(.f-form,.wk-form,.wk,.ed-form,#c-expert .ccard,#c-events,.cprof,.cform,.adm-form,.ec-form,.rv-form) *:is(input:not([type=checkbox],[type=radio],[type=range],[type=file],[style*=width]),select:not([style*=width]),textarea){width:100%}
+:where(.f-form,.wk-form,.wk,.ed-form,#c-expert .ccard,#c-events,.cprof) *:is(div,p,span)[style*=flex]>:is(input:not([type=checkbox],[type=radio]),select){width:auto;flex:1 1 150px;min-width:0}
+:where(.f-form,.wk-form,.wk,.ed-form,#c-expert .ccard,#c-events,.cprof) *:is(div,p)[style*=flex]{gap:8px!important}
+:where(.f-form,.wk-form,.wk,.wk-edit,.wk-qa,.ed-form,#c-expert .ccard,#c-events,.cprof,.adm-form,.ec-form) *:is(.cmut,.mut,.f-hint){color:var(--mut);font-size:.9rem;line-height:1.5}
+.f-hint{display:block;margin:6px 0 0}
+:where(.f-form,.wk-form,.wk,.wk-edit,.wk-qa,.ed-form,#c-expert .ccard,#c-events,.cprof,.cform,.adm-form,.sdb-form,.ec-form,.ec-card,.rv-form,.spn-f,.mk-card) .btns{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 4px}
+:where(.f-form,.wk-form,.wk,.wk-edit,.wk-qa,.ed-form,#c-expert .ccard,#c-events,.cprof,.cform,.csub,.clogin,.adm-form,.adm-row,.sdb-form,.ec-form,.ec-card,.ec-bar,.rv-form,.spn-f,.mk-card) .btn{min-height:44px;justify-content:center;cursor:pointer}
+:where(.wk-edit,.wk-qa,.wk-form,.cform) *:is(input,textarea)+.btn{margin-top:10px}
+.btn:disabled,.btn[aria-disabled=true]{opacity:.55;cursor:not-allowed}
+:where(.wk-form,.ed-form,#c-expert .ccard,#c-events,.wk-edit,.adm-form) *:is(h3,h4){margin:26px 0 8px;padding-top:16px;border-top:1px solid var(--bd);font-size:1.05rem}
+:where(.wk-form,.ed-form,#c-expert .ccard,#c-events,.wk-edit,.adm-form)>:is(h3,h4):first-child{margin-top:8px;padding-top:0;border-top:0}
+.wk-edit>summary,.wk-hist>summary{min-height:44px;padding:10px 0;cursor:pointer;font-weight:700}
+:is(.wk-msg,.cmsg,.adm-msg,.ec-msg){min-height:1.4em;margin:.6em 0}
+.wk-msg:not(:empty){font-weight:600}
+.cmut{color:var(--mut);font-size:.9rem}
+@media (max-width:560px){:where(.f-form,.wk-form,.ed-form,#c-expert .ccard,#c-events,.adm-form,.ec-form) .btns>.btn{flex:1 1 auto}}
+@media (pointer:coarse){.cbtn,.wk-link,.wk-tb,.ed-b{min-height:44px}}

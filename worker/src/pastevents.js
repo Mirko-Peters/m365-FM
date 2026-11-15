@@ -9,6 +9,9 @@ const EVENTS = [
     summary: "Die Microsoft-365-Community-Convention für den DACH-Raum: fünf Tage online, deutschsprachig.",
     about: "Die M365Con DACH fand vom 14. bis 18. September 2026 online statt. Gleichgesinnte aus Deutschland, Österreich und der Schweiz teilten Wissen, lernten voneinander und vernetzten sich. Diese Seite hält Programm und Speaker als Archiv fest." },
 ];
+// Handles aller M365Con-Ausgaben: die laufende (events.js legt m365con-2027 an) und die vergangenen von oben. Nur Sessions dieser Events gelten
+// als "bei der M365Con gesprochen" (Einladungsmail fuer Speaker, entinvite.js); eine neue Ausgabe hier ergaenzen.
+export const M365CON_HANDLES = ["m365con-2027", ...EVENTS.map((e) => e.handle)];
 const addMin = (st, m) => { const d = new Date(st + ":00Z"); d.setUTCMinutes(d.getUTCMinutes() + (m || 45)); return d.toISOString().slice(0, 16); };
 const rndToken = () => [...crypto.getRandomValues(new Uint8Array(18))].map((b) => b.toString(16).padStart(2, "0")).join("");
 

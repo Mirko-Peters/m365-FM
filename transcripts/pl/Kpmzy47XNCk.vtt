@@ -1,0 +1,784 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:03.600
+Dzisiejszy temat to coś, o czym prawie każdy słyszał, ale niewielu faktycznie rozumie.
+
+00:00:03.740 --> 00:00:05.300
+Kopilot w Microsoft Entra ID.
+
+00:00:05.600 --> 00:00:08.960
+Prawdopodobnie widziałeś tę nazwę w centrum administracyjnym lub słyszałeś o niej na konferencji.
+
+00:00:09.160 --> 00:00:10.380
+Czym więc właściwie się zajmuje?
+
+00:00:10.560 --> 00:00:13.440
+Czy to tylko hotbot odpowiadający na proste pytania, czy coś znacznie większego?
+
+00:00:13.620 --> 00:00:15.480
+Oto najprostszy sposób, by o tym pomyśleć.
+
+00:00:15.620 --> 00:00:19.760
+Wyobraź sobie, że jesteś administratorem IT, a sfrustrowany użytkownik dzwoni do helpdesku, bo nie ma dostępu do CRM.
+
+00:00:19.940 --> 00:00:21.700
+Traci czas i potrzebuje odpowiedzi natychmiast.
+
+00:00:21.900 --> 00:00:23.540
+Twoim zadaniem jest dowiedzieć się dlaczego.
+
+00:00:23.540 --> 00:00:31.720
+Otwierasz centrum administracyjne Entra, przechodzisz do logów logowania, filtrujesz po nazwie użytkownika i patrzysz na arkusz surowych danych, identyfikatory korelacji, kody błędów, znaczniki czasu i obiekty JSON.
+
+00:00:32.000 --> 00:00:34.760
+Gdzieś w tym gąszczu jest odpowiedź, ale jej znalezienie zajmuje czas.
+
+00:00:34.960 --> 00:00:38.400
+Jeśli jesteś młodszym administratorem lub dopiero zaczynasz z Entra, nie wiesz od czego zacząć.
+
+00:00:38.500 --> 00:00:40.400
+To właśnie problem, który rozwiązuje Kopilot.
+
+00:00:40.400 --> 00:00:47.400
+Pod koniec tej porcji wiedzy zrozumiesz, czym naprawdę jest Kopilot w Entra ID, jak zamienia złożone logi w jasne odpowiedzi i dlaczego zmienia zarządzanie tożsamością.
+
+00:00:48.220 --> 00:00:52.380
+Żadnego marketingowego bełkotu, tylko fundamenty rozwiązywania problemów z tożsamością.
+
+00:00:52.580 --> 00:01:00.620
+Przyjrzyjmy się problemom, które rozwiązuje Kopilot, ponieważ aby zrozumieć, dlaczego asystent, a i ma znaczenie, musisz najpierw zobaczyć, jak trudne bywa diagnozowanie tożsamości.
+
+00:01:00.840 --> 00:01:02.860
+Pomyśl o skali nowoczesnej tożsamości.
+
+00:01:02.860 --> 00:01:06.080
+W typowej organizacji każdego dnia odbywają się tysiące logowań.
+
+00:01:06.240 --> 00:01:07.820
+Niektóre kończą się sukcesem, inne nie.
+
+00:01:07.920 --> 00:01:09.360
+Niektóre są blokowane przez zasady.
+
+00:01:09.580 --> 00:01:17.780
+Masz setki zasad dostępu warunkowego, które wchodzą w interakcję w nieprzewidywalny sposób, a dodatkowo ochrona tożsamości generuje sygnały ryzyka dla użytkowników, których konta mogą być zagrożone.
+
+00:01:17.920 --> 00:01:19.820
+To mnóstwo danych z wielu różnych źródeł.
+
+00:01:19.960 --> 00:01:23.680
+Teraz wyobraź sobie, że próbujesz ustalić, dlaczego konkretny użytkownik został zablokowany.
+
+00:01:23.940 --> 00:01:28.740
+Zaczynasz od logów logowania i znajdujesz zdarzenie, ale ono mówi tylko, że logowanie się nie powiodło bez podania przyczyny.
+
+00:01:28.740 --> 00:01:38.280
+Więc przechodzisz do zakładki dostępu warunkowego, sprawdzasz zgodność urządzenia użytkownika, następnie logi inspekcji, czy ostatnio zmieniono jakieś zasady, a potem otwierasz ochronę tożsamości, by sprawdzić wykryte zagrożenia.
+
+00:01:38.480 --> 00:01:41.680
+Każda z tych rzeczy to osobny panel z własnym widokiem i filtrami.
+
+00:01:41.880 --> 00:01:45.200
+Zanim połączysz wszystkie kropki, mija 15 lub 20 minut.
+
+00:01:45.460 --> 00:01:47.200
+Bariera językowa pogarsza sprawę.
+
+00:01:47.400 --> 00:01:49.300
+Surowe logi nie mówią prostym językiem.
+
+00:01:49.560 --> 00:01:58.180
+Mówią technicznymi kodami, identyfikatorami korelacji wyglądającymi jak losowe ciągi znaków, numerami błędów, które musisz sprawdzać oraz obiektami JSON z zagnieżdżonymi polami, które trudno przeanalizować.
+
+00:01:58.180 --> 00:02:04.680
+Jeśli jesteś młodszym administratorem lub pracujesz w helpdesku, nie wiesz, gdzie szukać, więc przekazujesz sprawę starszemu administratorowi, który jest już przeciążony.
+
+00:02:04.840 --> 00:02:05.780
+Oto prawdziwy przykład.
+
+00:02:06.020 --> 00:02:09.420
+Użytkownik dzwoni do helpdesku i mówi, że nie może uzyskać dostępu do Microsoft Teams.
+
+00:02:09.580 --> 00:02:10.080
+To wszystko.
+
+00:02:10.300 --> 00:02:11.940
+To jedyne informacje, jakie posiadasz.
+
+00:02:12.060 --> 00:02:13.120
+Od czego w ogóle zacząć?
+
+00:02:13.260 --> 00:02:18.060
+Sprawdzasz licencję użytkownika, zgodność jego urządzenia, zasady dostępu warunkowego, dzienniki logowania, czy wynik ryzyka?
+
+00:02:18.280 --> 00:02:21.440
+Bez głębokiej wiedzy o Entra w zasadzie zgadujesz, a zgadywanie zabiera czas.
+
+00:02:21.640 --> 00:02:23.060
+Właśnie tutaj wkracza kopilot.
+
+00:02:23.060 --> 00:02:25.320
+Czym jest security kopilot w Entra ID?
+
+00:02:25.320 --> 00:02:27.980
+Czym dokładnie jest security kopilot w Entra ID?
+
+00:02:28.220 --> 00:02:29.560
+Oto najprostsza definicja.
+
+00:02:29.720 --> 00:02:35.540
+To asystent AI wbudowany bezpośrednio w centrum administracyjne Entra, a nie osobna witryna, czy portal, do którego trzeba się oddzielnie logować.
+
+00:02:35.740 --> 00:02:41.300
+Jest osadzony tam, gdzie już pracujesz, jakbyś miał ochroniarza, który zna każdy log, każdą zasadę i każdego użytkownika w budynku.
+
+00:02:41.500 --> 00:02:44.040
+Nie musisz już przeszukiwać wszystkiego w poszukiwaniu informacji.
+
+00:02:44.220 --> 00:02:45.080
+Po prostu pytasz.
+
+00:02:45.240 --> 00:02:46.100
+Oto jak to działa.
+
+00:02:46.320 --> 00:02:50.440
+Wpisujesz pytanie prostym językiem, na przykład pokaż mi użytkowników wysokiego ryzyka w moim tenancie.
+
+00:02:50.440 --> 00:02:55.440
+Albo dlaczego to logowanie się nie powiodło, albo podsumuj aktywność logowania z ostatnich 24 godzin.
+
+00:02:56.140 --> 00:03:00.340
+Kopilot bierze to pytanie, przeszukuje dane Entra i daje odpowiedź w języku naturalnym.
+
+00:03:00.560 --> 00:03:06.180
+Łączy się z dziennikami logowań, dziennikami inspekcji, zasadami dostępu warunkowego, ochroną tożsamości i szczegółami użytkowników.
+
+00:03:06.360 --> 00:03:10.220
+Wszystkie te dane już są w Entra, ale kopilot zbiera je w sekundy zamiast w minuty.
+
+00:03:10.400 --> 00:03:11.620
+I to jest kluczowy punkt.
+
+00:03:11.800 --> 00:03:13.760
+Kopilot nie zarzuca Cię surowymi danymi.
+
+00:03:14.000 --> 00:03:16.420
+Daje Ci podsumowanie, narrację, wyjaśnienie.
+
+00:03:16.420 --> 00:03:25.700
+Zamiast wpatrywać się w tabelę kodów błędów, otrzymujesz informację, użytkownik został zablokowany, ponieważ zasada dostępu warunkowego X wymagała zgodnego urządzenia, a jego urządzenie nie było zgodne.
+
+00:03:25.840 --> 00:03:27.720
+To coś, z czym możesz działać natychmiast.
+
+00:03:27.900 --> 00:03:31.060
+Kopilot sugeruje również kolejne pytania na podstawie kontekstu.
+
+00:03:31.200 --> 00:03:40.420
+Po udzieleniu pierwszej odpowiedzi może zapytać, czy chcesz zobaczyć wszystkie nieudane próby logowania tego użytkownika z ostatnich 7 dni, albo czy chcesz wiedzieć, jakie inne zasady mają zastosowanie.
+
+00:03:40.600 --> 00:03:44.520
+Prowadzi Cię krok po kroku, zamiast zostawiać Cię z koniecznością samodzielnego wymyślenia kolejnego ruchu.
+
+00:03:44.520 --> 00:03:49.520
+Oto analogia. Dane entra to biblioteka pełna informacji, ale znalezienie odpowiedniej książki zajmuje czas.
+
+00:03:49.660 --> 00:03:54.320
+Kopilot to bibliotekarz, który dokładnie wie, gdzie wszystko jest. Mówisz mu, czego potrzebujesz, a on to przynosi.
+
+00:03:54.480 --> 00:03:57.680
+Bez błądzenia między alejkami, bez zgadywania na półkach, po prostu odpowiedź wtedy, gdy jej potrzebujesz.
+
+00:03:57.820 --> 00:04:00.300
+Pierwszy przypadek użycia – rozwiązywanie problemów z logowaniem.
+
+00:04:00.520 --> 00:04:02.160
+Przedstawmy to na konkretnym przykładzie.
+
+00:04:02.320 --> 00:04:05.140
+Pracownik zgłasza, że nie może uzyskać dostępu do Microsoft Teams.
+
+00:04:05.340 --> 00:04:07.860
+Próbuje od godziny, zrestartował komputer i nic nie działa.
+
+00:04:08.100 --> 00:04:09.840
+Dzwoni więc do działu wsparcia technicznego.
+
+00:04:09.840 --> 00:04:15.760
+Stary sposób postępowania – otwierasz dzienniki logowania, filtrujesz według nazwiska użytkownika, a potem musisz odgadnąć odpowiedni przedział dat i godzin.
+
+00:04:15.880 --> 00:04:18.340
+Czy próbowali się zalogować 10 minut temu, czy 20?
+
+00:04:18.660 --> 00:04:23.860
+Przewijasz zdarzenia w poszukiwaniu tego nieudanego, a gdy je znajdziesz, patrzysz na surowy kod błędu ze statusem
+
+00:04:23.860 --> 00:04:27.160
+Niepowodzenie, bez wyjaśnienia, tylko liczba, którą trzeba sprawdzić.
+
+00:04:27.360 --> 00:04:31.120
+Następnie klikasz kartę dostępu warunkowego, aby sprawdzić, czy zasada zablokowała logowanie.
+
+00:04:31.300 --> 00:04:34.220
+Sprawdzasz szczegóły zgodności urządzenia oraz poziom ryzyka użytkownika.
+
+00:04:34.220 --> 00:04:38.720
+Każdy krok to osobne kliknięcie, osobny widok, osobne przełączenie kontekstu umysłowego.
+
+00:04:38.900 --> 00:04:42.340
+15 minut później możesz mieć odpowiedź albo być jeszcze bardziej zdezorientowany.
+
+00:04:42.500 --> 00:04:44.100
+A teraz sposób z użyciem Kopilota.
+
+00:04:44.280 --> 00:04:46.920
+Otwierasz centrum administracyjne Entra i wpisujesz jedno zdanie.
+
+00:04:47.140 --> 00:04:49.360
+Dlaczego ten użytkownik nie mógł zalogować się do Teams?
+
+00:04:49.520 --> 00:04:52.900
+To wszystko. Żadnych filtrów, zgadywania ani przełączania się między kartami.
+
+00:04:53.060 --> 00:04:55.980
+W tle Kopilot wykonuje pracę, którą wcześniej wykonywałeś ręcznie.
+
+00:04:55.980 --> 00:05:04.220
+Pobiera ostatnie dzienniki logowania użytkownika, sprawdza ocenę dostępu warunkowego, przygląda się statusowi zgodności urządzenia i identyfikuje przyczynę niepowodzenia.
+
+00:05:04.760 --> 00:05:06.460
+Następnie podaje Ci odpowiedź w stylu
+
+00:05:06.460 --> 00:05:11.780
+Logowanie nie powiodło się, ponieważ zasada dostępu warunkowego wymagająca zgodnego urządzenia zablokowała sesję.
+
+00:05:11.980 --> 00:05:14.660
+Urządzenie użytkownika zostało oznaczone jako niezgodne.
+
+00:05:14.800 --> 00:05:16.440
+To cała historia w jednym zdaniu.
+
+00:05:16.700 --> 00:05:19.040
+Wiesz dokładnie, co się stało i co należy zmienić.
+
+00:05:19.220 --> 00:05:22.860
+Urządzenie użytkownika musi stać się zgodne albo musisz utworzyć wyjątek.
+
+00:05:22.860 --> 00:05:27.000
+W obu przypadkach masz jasną ścieżkę działania, ale na tym Kopilot nie poprzestaje.
+
+00:05:27.260 --> 00:05:29.200
+Może również wyświetlić dodatkowy kontekst.
+
+00:05:29.320 --> 00:05:33.960
+Platformę urządzenia, wersję systemu operacyjnego, przeglądarkę adres IP, lokalizację i metodę uwierzytelniania.
+
+00:05:34.140 --> 00:05:36.940
+Wszystkie te informacje są dostępne za pomocą prostego pytania uzupełniającego,
+
+00:05:37.040 --> 00:05:40.000
+na przykład pokaż mi wszystkie nieudane logowania tego użytkownika z ostatnich 7 dni.
+
+00:05:40.200 --> 00:05:42.160
+Albo jakie inne zasady mają zastosowanie?
+
+00:05:42.420 --> 00:05:43.900
+Oszczędność czasu jest ogromna.
+
+00:05:44.080 --> 00:05:47.400
+To, co kiedyś zajmowało 15 minut, teraz zajmuje około 30 sekund.
+
+00:05:47.540 --> 00:05:48.560
+Oto prawdziwa korzyść.
+
+00:05:48.560 --> 00:05:51.440
+Młodszy personel może rozwiązywać te problemy bez eskalacji.
+
+00:05:52.860 --> 00:05:57.500
+Kto nie ma głębokiej wiedzy o Entra, może zadać Kopilotowi to samo pytanie i uzyskać taką samą jasną odpowiedź.
+
+00:05:57.600 --> 00:06:01.360
+Oznacza to, że starsi administratorzy poświęcają mniej czasu na rutynowe rozwiązywanie problemów,
+
+00:06:01.420 --> 00:06:04.600
+a więcej na złożone wyzwania, które rzeczywiście wymagają ich wiedzy eksperckiej.
+
+00:06:04.800 --> 00:06:07.460
+Drugi przypadek użycia – badanie ryzykownych użytkowników.
+
+00:06:07.600 --> 00:06:11.560
+Nieudane logowania to jedno, ale ryzyko związane z tożsamością to zupełnie inny poziom.
+
+00:06:11.780 --> 00:06:15.140
+Funkcja Identity Protection w Entra ID generuje oceny ryzyka dla użytkowników
+
+00:06:15.140 --> 00:06:19.960
+i choć brzmi to prosto ustalenie, dlaczego ktoś został oznaczony jako użytkownik wysokiego ryzyka jest już wyzwaniem.
+
+00:06:19.960 --> 00:06:23.800
+Surowe dane z ochrony tożsamości mogą przypominać próbę picia z węża strażackiego.
+
+00:06:24.040 --> 00:06:28.620
+Widzisz ocenę ryzyka i listę wykryć, ale łączenie tych faktów z rzeczywistym zachowaniem użytkownika wymaga czasu.
+
+00:06:28.880 --> 00:06:34.420
+Musisz sprawdzić każde wykrycie z osobna, dopasować znaczniki czasu, porównać aktywność logowania, a następnie zdecydować, co zrobić.
+
+00:06:34.660 --> 00:06:36.340
+Jest to wykonalne, ale powolne.
+
+00:06:36.500 --> 00:06:39.580
+A kiedy masz do czynienia z setkami użytkowników, szybkość ma znaczenie.
+
+00:06:39.800 --> 00:06:43.420
+Kopilot zmienia zasady gry dzięki funkcji podsumowywania ryzykownych użytkowników.
+
+00:06:43.520 --> 00:06:47.520
+To jedna z najbardziej praktycznych funkcji wbudowanego środowiska Kopilot o to jak ona działa.
+
+00:06:47.520 --> 00:06:52.980
+Otwierasz raport ryzykownych użytkowników w module ochrony tożsamości i dostrzegasz użytkownika z wysoką oceną ryzyka.
+
+00:06:53.220 --> 00:06:58.520
+Zamiast ręcznie przeszukiwać każde wykrycie, po prostu pytasz Kopilota, podsumuj aktywność ryzyka dla tego użytkownika.
+
+00:06:59.300 --> 00:06:59.860
+To wszystko.
+
+00:07:00.420 --> 00:07:10.520
+Kopilot pobiera wykryte ryzyka, takie jak nieznane właściwości logowania, wycieki danych uwierzytelniających czy podejrzane adresy IP i koreluje je z ostatnią aktywnością logowania użytkownika.
+
+00:07:10.800 --> 00:07:13.180
+Następnie przedstawia wszystko w formie narracji.
+
+00:07:13.480 --> 00:07:15.420
+Wynik może wyglądać mniej więcej tak.
+
+00:07:15.420 --> 00:07:26.800
+Ten użytkownik został oznaczony jako wysokiego ryzyka z powodu dwóch wykryć logowania z nieznanej lokalizacji w kraju, z którego nigdy wcześniej nie korzystał, oraz aktywności pasującej do znanych wycieków danych znalezionych w darkwebie.
+
+00:07:26.960 --> 00:07:27.760
+To robi wrażenie.
+
+00:07:28.060 --> 00:07:30.100
+Zamiast listy zdarzeń otrzymujesz historię.
+
+00:07:30.340 --> 00:07:33.780
+Rozumiesz, co się stało, dlaczego jest to podejrzane i jak poważna jest sytuacja.
+
+00:07:33.940 --> 00:07:35.720
+Ale Kopilot nie kończy na podsumowaniu.
+
+00:07:35.980 --> 00:07:42.020
+Daje również rekomendacje, co zrobić dalej, zresetować hasło, zablokować kolejne logowania lub potwierdzić, czy aktywność była uzasadniona.
+
+00:07:42.020 --> 00:07:46.100
+Rekomendacje są dopasowane do konkretnych wykryć ryzyka, a nie są ogólnymi poradami.
+
+00:07:46.260 --> 00:07:47.920
+To całkowicie zmienia perspektywę.
+
+00:07:48.100 --> 00:07:52.400
+Zamiast zadawać sobie pytanie, czy to konto zostało przejęte, możesz zapytać, jak mam zareagować.
+
+00:07:52.560 --> 00:07:55.200
+Kopilot wyznacza jasną drogę działania, dzięki czemu zespoły do spraw.
+
+00:07:55.400 --> 00:07:57.720
+Tożsamości mogą reagować szybciej i z większą pewnością.
+
+00:07:57.980 --> 00:07:59.880
+Realny wpływ tego rozwiązania jest ogromny.
+
+00:07:59.880 --> 00:08:06.620
+Zamiast poświęcać 20 minut na badanie ryzykownego użytkownika i nadal mieć wątpliwości, otrzymujesz pełny obraz w kilka sekund wraz z konkretnymi krokami.
+
+00:08:06.840 --> 00:08:12.240
+Dla organizacji obsługujących tysiące użytkowników i stałe sygnały ryzyka nie jest to tylko udogodnienie, to konieczność.
+
+00:08:12.440 --> 00:08:14.860
+Trzeci przypadek użycia – wgląd w dostęp warunkowy.
+
+00:08:15.080 --> 00:08:17.780
+Dostęp warunkowy to jedna z najpotężniejszych funkcji w Entra ID.
+
+00:08:17.980 --> 00:08:19.760
+To również jedna z najbardziej złożonych.
+
+00:08:19.920 --> 00:08:25.760
+Gdy masz dziesiątki, a nawet setki zasad, zrozumienie tego, co faktycznie wydarzyło się podczas logowania, bywa zaskakująco trudne.
+
+00:08:25.760 --> 00:08:34.760
+Oto droga ręczna. Znajdujesz rekord logowania, przewijasz do karty dostępu warunkowego i widzisz listę nazw zasad wraz z wynikami sukces, porażka lub brak zastosowania.
+
+00:08:35.540 --> 00:08:38.240
+To przydatne, ale pokazuje tylko część historii.
+
+00:08:38.460 --> 00:08:44.520
+Wciąż musisz ustalić, jakie warunki wywołały zasadę, dlaczego dotyczyła konkretnego użytkownika i czy wynik ma sens.
+
+00:08:44.700 --> 00:08:46.220
+A teraz droga z kopilotem.
+
+00:08:46.420 --> 00:08:51.100
+Zadajesz jedno pytanie, które zasady dostępu warunkowego miały zastosowanie przy tym logowaniu i co zrobiły?
+
+00:08:51.100 --> 00:08:56.380
+Kopilot zwraca jasną listę ocenionych zasad, ich wyniki oraz konkretne warunki, które je uruchomiły.
+
+00:08:56.600 --> 00:08:59.000
+Zamiast przeglądać tabelę, otrzymujesz wyjaśnienie.
+
+00:08:59.240 --> 00:09:03.100
+Zasada X wymagała MFA, ponieważ logowanie pochodziło z niezaufanej lokalizacji.
+
+00:09:03.360 --> 00:09:06.820
+Zasada Y zablokowała sesję, ponieważ urządzenie nie było zgodne z wymogami.
+
+00:09:06.980 --> 00:09:09.620
+To rodzaj wglądu, który oszczędza czas i ogranicza błędy.
+
+00:09:09.780 --> 00:09:14.800
+Ponieważ gdy dokładnie rozumiesz, dlaczego zasada została zastosowana, możesz lepiej zdecydować, czy należy ją skorygować.
+
+00:09:14.960 --> 00:09:17.100
+Kopilot może również pomóc na wyższym poziomie.
+
+00:09:17.360 --> 00:09:20.360
+Możesz zapytać, pokaż mi zasady, które najczęściej blokują logowania.
+
+00:09:20.360 --> 00:09:25.160
+Jest to niezwykle przydatne do identyfikacji zbyt restrykcyjnych zasad lub błędnych konfiguracji.
+
+00:09:25.400 --> 00:09:32.400
+Może zasada blokuje zbyt wielu uprawnionych użytkowników, bo jej warunki są zbyt szerokie albo zawiera zbyt wiele wykluczeń, tworząc luki w ochronie.
+
+00:09:32.580 --> 00:09:38.120
+Kopilot ujawnia te wzorce, dzięki czemu możesz reagować proaktywnie, zamiast czekać, aż użytkownicy zaczną się skarżyć.
+
+00:09:38.380 --> 00:09:40.120
+Warto wspomnieć o nowszym rozwiązaniu.
+
+00:09:40.360 --> 00:09:45.240
+Firma Microsoft wprowadziła agenta optymalizacji dostępu warunkowego, który współpracuje z kopilotem.
+
+00:09:45.440 --> 00:09:48.560
+Agent ten analizuje Twoje istniejące zasady i sugeruje zmiany.
+
+00:09:48.560 --> 00:09:51.700
+Na przykład może stwierdzić, ta zasada ma zbyt wiele wykluczeń.
+
+00:09:51.920 --> 00:09:55.400
+Rozważ zawężenie zakresu, albo te dwie zasady nakładają się na siebie.
+
+00:09:55.660 --> 00:09:56.960
+Rozważ ich skonsolidowanie.
+
+00:09:57.220 --> 00:10:01.260
+Sugestie opierają się na rzeczywistych danych z Twojego dzierżawcy, a nie na ogólnych najlepszych praktykach.
+
+00:10:01.480 --> 00:10:04.320
+Dzięki temu korekty zasad są bezpieczniejsze i lepiej ukierunkowane.
+
+00:10:04.580 --> 00:10:08.740
+Wniosek jest taki, dostęp warunkowy jest potężny, ale łatwo go źle skonfigurować.
+
+00:10:08.940 --> 00:10:15.320
+Kopilot zapewnia wgląd w to, jak faktycznie zachowują się Twoje zasady, więc możesz je dostrajać z pewnością siebie, zamiast zgadywać.
+
+00:10:15.320 --> 00:10:17.180
+Dowody, czy to faktycznie pomaga?
+
+00:10:17.380 --> 00:10:20.200
+Kopilot brzmi świetnie w teorii, ale czy rzeczywiście działa?
+
+00:10:20.440 --> 00:10:24.120
+Microsoft przeprowadził badanie nad kopilotem w Entra i warto przyjrzeć się liczbom.
+
+00:10:24.260 --> 00:10:29.540
+Oto co ustalono, administratorzy korzystający z kopilota kończyli rozwiązywanie problemów z logowaniem o 46% szybciej.
+
+00:10:29.660 --> 00:10:30.660
+To niemal połowa czasu.
+
+00:10:30.960 --> 00:10:35.080
+Zamiast spędzać 15 minut na przeszukiwaniu logów, otrzymywali odpowiedzi w ciągu minut, a nawet sekund.
+
+00:10:35.220 --> 00:10:37.200
+Co więcej, byli oni również bardziej precyzyjni.
+
+00:10:37.420 --> 00:10:39.320
+Dokładność poprawiła się o 46,8%.
+
+00:10:39.940 --> 00:10:42.720
+Zatem nie tylko działali szybciej, ale częściej udzielali poprawnych odpowiedzi.
+
+00:10:42.720 --> 00:10:46.360
+Ma to ogromne znaczenie, gdy błąd może zablokować uprawnionego użytkownika lub przeoczyć realne zagrożenie.
+
+00:10:46.520 --> 00:10:49.720
+95% administratorów stwierdziło, że kopilot podniósł jakość ich pracy.
+
+00:10:49.880 --> 00:10:52.680
+To bardzo silne poparcie ze strony osób, które korzystają z niego na co dzień.
+
+00:10:52.820 --> 00:10:56.600
+A 96,7% z nich chce nadal używać go w swoich codziennych zadaniach.
+
+00:10:56.760 --> 00:10:59.780
+Gdy niemal każdy, kto go wypróbuje, chce go zatrzymać, to o czymś świadczy.
+
+00:10:59.960 --> 00:11:01.540
+Co te liczby oznaczają w praktyce?
+
+00:11:01.780 --> 00:11:06.460
+Mniej zgłoszeń do starszych administratorów, szybszy czas reakcji na incydenty, mniejszy stres dla zespołów do spraw.
+
+00:11:06.460 --> 00:11:07.340
+Tożsamości.
+
+00:11:07.600 --> 00:11:12.680
+Zamiast spędzać godziny na rutynowych dochodzeniach, administratorzy mogą skupić się na problemach wymagających ich wiedzy.
+
+00:11:12.900 --> 00:11:13.700
+Jedno zastrzeżenie.
+
+00:11:13.820 --> 00:11:15.660
+Te liczby pochodzą z kontrolowanych badań.
+
+00:11:15.880 --> 00:11:20.660
+Wyniki mogą się różnić w zależności od środowiska, jakości danych i sposobu wdrożenia narzędzia przez zespół.
+
+00:11:20.880 --> 00:11:22.200
+Jednak kierunek jest jasny.
+
+00:11:22.420 --> 00:11:27.600
+Sztuczna inteligencja czyni zarządzanie tożsamością bardziej dostępnym i efektywnym, a trend ten tylko przyspiesza.
+
+00:11:27.760 --> 00:11:28.580
+Czy to bezpieczne?
+
+00:11:28.740 --> 00:11:30.540
+Ład organizacyjny i bezpieczeństwo.
+
+00:11:30.540 --> 00:11:32.120
+Pytanie, które słyszę cały czas.
+
+00:11:32.260 --> 00:11:33.140
+Czy to jest bezpieczne?
+
+00:11:33.280 --> 00:11:35.660
+Czy kopilot omija zabezpieczenia i kontrolę dostępu?
+
+00:11:35.880 --> 00:11:36.680
+Słuszna obawa.
+
+00:11:36.920 --> 00:11:40.920
+Dajesz asystentowi AI dostęp do logów logowania, zasad dostępu warunkowego i danych użytkowników.
+
+00:11:41.100 --> 00:11:42.600
+Brzmi to jak spory kredyt zaufania.
+
+00:11:42.820 --> 00:11:43.560
+Oto odpowiedź.
+
+00:11:43.680 --> 00:11:46.040
+Kopilot dziedziczy istniejące role i uprawnienia w Entra.
+
+00:11:46.180 --> 00:11:47.000
+To kluczowy punkt.
+
+00:11:47.260 --> 00:11:51.000
+Jeśli nie masz uprawnień do wyświetlenia konkretnego logu lub zasobu, kopilot również go nie zobaczy.
+
+00:11:51.260 --> 00:11:53.500
+Żadnych tylnych furtek, żadnego podnoszenia uprawnień.
+
+00:11:53.660 --> 00:11:55.520
+Działa w ramach granic, które już wyznaczyłeś.
+
+00:11:55.720 --> 00:11:57.480
+Dostęp warunkowy dotyczy również kopilota.
+
+00:11:57.480 --> 00:12:01.220
+Jeśli twoja zasada wymaga MFA dla centrum administracyjnego, kopilot tego przestrzega.
+
+00:12:01.380 --> 00:12:04.820
+Jeśli blokujesz logowania z niezaufanych lokalizacji, kopilot również to respektuje.
+
+00:12:04.980 --> 00:12:06.400
+Te same zasady, te same ramy.
+
+00:12:06.640 --> 00:12:10.060
+Wszystkie zapytania i odpowiedzi kopilota są rejestrowane w standardowych logach audytu Entra.
+
+00:12:10.240 --> 00:12:13.420
+Więc jeśli ktoś zada pytanie, którego nie powinien, interakcja zostanie zapisana.
+
+00:12:13.640 --> 00:12:14.400
+Zespoły do spraw.
+
+00:12:14.600 --> 00:12:17.320
+Bezpieczeństwa mogą przeglądać te logi tak samo jak każdą inną aktywność administratora.
+
+00:12:17.480 --> 00:12:18.480
+Żadnych martwych punktów.
+
+00:12:18.620 --> 00:12:20.000
+Kolejną kwestią jest rezydencja danych.
+
+00:12:20.160 --> 00:12:21.560
+Kopilot działa wewnątrz twojego tenanta.
+
+00:12:21.760 --> 00:12:23.220
+Twoje dane pozostają tam, gdzie ich miejsce.
+
+00:12:23.220 --> 00:12:26.060
+A i pracuje na twoich danych wewnątrz twojego tenanta pod twoją kontrolą.
+
+00:12:26.180 --> 00:12:28.080
+I oto zasada, która ma największe znaczenie.
+
+00:12:28.240 --> 00:12:30.960
+Kopilot sugeruje działania, ale nie wykonuje ich automatycznie.
+
+00:12:31.220 --> 00:12:36.640
+Może zalecić reset hasła użytkownika lub blokadę logowania, ale nie zrobi tego bez zatwierdzenia przez administratora.
+
+00:12:36.800 --> 00:12:38.140
+Człowiek zachowuje kontrolę.
+
+00:12:38.300 --> 00:12:38.920
+Przykład z życia.
+
+00:12:39.080 --> 00:12:43.960
+Pracownik helpdesku z ograniczonymi uprawnieniami może zapytać kopilota o użytkowników, których obsługuje.
+
+00:12:44.220 --> 00:12:46.960
+Może uzyskać podsumowania błędów logowania i wykrytych zagrożeń,
+
+00:12:47.060 --> 00:12:51.260
+ale nie może pytać o konta administratorów globalnych ani zasoby wrażliwe, do których nie ma uprawnień.
+
+00:12:51.260 --> 00:12:53.320
+Kopilot automatycznie wymusza te ograniczenia.
+
+00:12:53.480 --> 00:12:55.680
+To projektowanie z naciskiem na zarządzanie i ład governance first.
+
+00:12:55.840 --> 00:12:59.340
+Firma Microsoft stworzyła kopilota tak, aby działał w ramach twojego istniejącego modelu bezpieczeństwa, a nie poza nim.
+
+00:12:59.540 --> 00:13:01.760
+Dzięki temu jest bezpieczny w użyciu w środowiskach produkcyjnych.
+
+00:13:01.940 --> 00:13:02.940
+Dla kogo to naprawdę jest?
+
+00:13:03.120 --> 00:13:05.460
+Kto tak naprawdę zyskuje na korzystaniu z kopilota w EntraID?
+
+00:13:05.680 --> 00:13:07.060
+Nie tylko starsi administratorzy.
+
+00:13:07.200 --> 00:13:09.140
+Administratorzy tożsamości otrzymują najbardziej oczywistą pomoc.
+
+00:13:09.300 --> 00:13:11.040
+Codziennie rozwiązują problemy z zasadami zabezpieczeń.
+
+00:13:11.160 --> 00:13:13.780
+Teraz 15-minutowe dochodzenie zmienia się w 30-sekundową odpowiedź.
+
+00:13:13.860 --> 00:13:15.900
+Kopilot wskazuje wzorce, które mogli przeoczyć.
+
+00:13:15.900 --> 00:13:18.340
+Pomaga im zarządzać złożonością, nie tonąc w niej.
+
+00:13:18.480 --> 00:13:20.520
+Zespoły helpdesku zyskują na tym równie wiele.
+
+00:13:20.680 --> 00:13:24.380
+Pracownicy pierwszej linii wsparcia mogą samodzielnie rozwiązywać problemy z logowaniem, bez eskalacji.
+
+00:13:24.620 --> 00:13:27.480
+Zadają kopilotowi to samo pytanie i otrzymują tę samą jasną odpowiedź.
+
+00:13:27.600 --> 00:13:30.820
+Oznacza to mniej zgłoszeń utkniętych w kolejce w oczekiwaniu na starszego administratora.
+
+00:13:30.940 --> 00:13:32.860
+To tak, jakby mieć eksperta tuż przy biurku.
+
+00:13:33.080 --> 00:13:35.600
+Analitycy bezpieczeństwa również zyskują szybsze czasy reakcji.
+
+00:13:35.820 --> 00:13:38.860
+Gdy pojawia się możliwe naruszenie, mogą zapytać kopilota o pełny obraz sytuacji,
+
+00:13:38.860 --> 00:13:41.380
+aktywność użytkownika, wykryte zagrożenia i zalecane kroki.
+
+00:13:41.580 --> 00:13:45.080
+Zamiast spędzać godzinę na zbieraniu danych, spędzają kilka minut na ich zrozumieniu.
+
+00:13:45.280 --> 00:13:48.480
+Właściciele aplikacji i programiści obywatelscy, Citizen Developers, również wygrywają.
+
+00:13:48.720 --> 00:13:51.980
+Gdy ich własna aplikacja nie może się uwierzytelnić lub trafia na nieznaną zasadę,
+
+00:13:52.060 --> 00:13:53.420
+po prostu pytają kopilota dlaczego.
+
+00:13:53.680 --> 00:13:57.860
+Nie muszą być ekspertami od tożsamości, muszą tylko wiedzieć, co poszło nie tak i jak to naprawić.
+
+00:13:58.000 --> 00:14:01.860
+A teraz grupa, o której często się zapomina, menedżerowie i osoby na stanowiskach nietechnicznych.
+
+00:14:01.860 --> 00:14:05.940
+Muszą rozumieć stan bezpieczeństwa swojego działu, ale nie mają czasu na przeszukiwanie logów.
+
+00:14:06.060 --> 00:14:08.200
+Kopilot daje im podsumowania w prostym języku.
+
+00:14:08.360 --> 00:14:10.120
+Oto twoi użytkownicy wysokiego ryzyka.
+
+00:14:10.360 --> 00:14:11.160
+Oto co zalecamy.
+
+00:14:11.320 --> 00:14:13.940
+To użyteczne informacje, na podstawie których mogą podjąć konkretne działania.
+
+00:14:14.160 --> 00:14:16.940
+Podsumowując, kopilot czyni zarządzanie tożsamością łatwiejszym dla każdego.
+
+00:14:17.120 --> 00:14:19.660
+Nie zastępuje wiedzy eksperckiej, lecz rozszerza ją na cały zespół.
+
+00:14:19.860 --> 00:14:23.260
+Zarządzanie tożsamością było kiedyś specjalistyczną umiejętnością zamkniętą w wąskiej grupie.
+
+00:14:23.420 --> 00:14:27.100
+Teraz więcej osób może brać w tym udział, ponieważ mają asystenta, który mówi w ich języku.
+
+00:14:27.100 --> 00:14:29.460
+Zarządzanie tożsamością to teraz praca dla każdego.
+
+00:14:29.460 --> 00:14:31.340
+Kopilot czyni to narzędziem dla każdego.
+
+00:14:31.500 --> 00:14:33.640
+To jest właśnie kopilot w Microsoft Entra ID.
+
+00:14:33.900 --> 00:14:36.680
+Zmienia złożony katalog w coś, z czym można normalnie porozmawiać.
+
+00:14:36.820 --> 00:14:41.260
+Jeśli pomogło ci to zobaczyć szerszy obraz, udostępnij to komuś, kto dopiero zaczyna swoją przygodę z tożsamością.
+
+00:14:41.500 --> 00:14:45.680
+Subskrybuj na swojej ulubionej platformie podcastowej i do zobaczenia w kolejnej pigułce wiedzy.

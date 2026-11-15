@@ -73,8 +73,16 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          GOOGLE_GEOCODING_KEY: ${{ secrets.GOOGLE_GEOCODING_KEY }}
           LINKEDIN_CLIENT_ID: ${{ secrets.LINKEDIN_CLIENT_ID }}
           LINKEDIN_CLIENT_SECRET: ${{ secrets.LINKEDIN_CLIENT_SECRET }}
+          LINKEDIN_EVENTS_CLIENT_ID: ${{ secrets.LINKEDIN_EVENTS_CLIENT_ID }}   # optional: sonst gilt LINKEDIN_CLIENT_ID (gleiche App)
+          LINKEDIN_EVENTS_CLIENT_SECRET: ${{ secrets.LINKEDIN_EVENTS_CLIENT_SECRET }}
+          LINKEDIN_TOKEN_KEY: ${{ secrets.LINKEDIN_TOKEN_KEY }}   # optional: Schlüssel für die Token-Verschlüsselung, sonst SESSION_SECRET
+          HEYSUMMIT_API_KEY: ${{ secrets.HEYSUMMIT_API_KEY }}
+          GH_OAUTH_CLIENT_ID: ${{ secrets.GH_OAUTH_CLIENT_ID }}
+          GH_OAUTH_CLIENT_SECRET: ${{ secrets.GH_OAUTH_CLIENT_SECRET }}
           SPREAKER_TOKEN: ${{ env.SPREAKER_TOKEN || secrets.SPREAKER_TOKEN }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
@@ -84,6 +92,10 @@ jobs:
           YT_REFRESH_TOKEN: ${{ env.YT_REFRESH_TOKEN || secrets.YT_REFRESH_TOKEN }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ADMIN_SUBS: ${{ secrets.ADMIN_SUBS }}
+          CRON_KEY: ${{ secrets.CRON_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}   # ein Schlüssel für alles (Mirko 5.11.)
+          AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+          CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
       # Das Repo ist oeffentlich: Artefakte kann jeder angemeldete GitHub-Nutzer laden. Die D1-Sicherung enthaelt personenbezogene Daten
       # (Konten, Mail-Adressen, Nachrichten, Sponsor-Anfragen) und wird deshalb nur verschluesselt hochgeladen (Secret D1_BACKUP_KEY,
       # AES-256 mit PBKDF2). Ohne Secret kein Artefakt; zurueckholen geht dann ueber D1 Time Travel (Workers Paid: 30 Tage).

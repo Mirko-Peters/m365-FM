@@ -1,0 +1,745 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.520
+Stel je een beveiligingsbalie voor bij de ingang van een kantoorpand.
+
+00:00:02.660 --> 00:00:05.660
+Iemand komt binnen, laat zijn badge zien en de bewaker controleert deze op een lijst.
+
+00:00:05.840 --> 00:00:07.780
+Ze melden zich aan en krijgen misschien een bezoekerspas.
+
+00:00:08.020 --> 00:00:10.320
+Stel je nu voordat datzelfde gebouw geen deuren of muren heeft.
+
+00:00:10.540 --> 00:00:13.260
+Mensen zouden vanaf elk punt ter wereld en op elk uur naar binnen kunnen lopen.
+
+00:00:13.520 --> 00:00:16.460
+Dat is het verschil tussen een traditioneel netwerk en een cloudnetwerk.
+
+00:00:16.620 --> 00:00:20.140
+Aan het eind van deze aflevering begrijp je wat Azure Firewall eigenlijk is,
+
+00:00:20.340 --> 00:00:24.840
+waarom cloud firewalls totaal anders werken dan de fysieke boxen die de meeste mensen voor ogen hebben
+
+00:00:24.840 --> 00:00:28.560
+en hoe een surface het verkeer in je volledige Azure-omgeving inspecteert en beheert.
+
+00:00:28.560 --> 00:00:29.920
+Laten we het opsplitsen.
+
+00:00:30.000 --> 00:00:32.520
+Eerst, wat een firewall is, ondaan van jargon.
+
+00:00:32.740 --> 00:00:35.720
+Dan, waarom de cloud alles verandert aan hoe firewalls moeten werken.
+
+00:00:35.900 --> 00:00:40.040
+En tot slot, hoe Azure Firewall dit alles samenbrengt in één systeem dat je kunt gebruiken.
+
+00:00:40.180 --> 00:00:41.220
+Pak je koffie erbij.
+
+00:00:41.480 --> 00:00:42.240
+Laten we beginnen.
+
+00:00:42.520 --> 00:00:43.360
+Wat is een firewall?
+
+00:00:43.640 --> 00:00:46.240
+De meeste mensen hebben het woord firewall duizend keer gehoord,
+
+00:00:46.420 --> 00:00:50.120
+maar als je ze vraagt uit te leggen wat het echt doet, zouden ze het waarschijnlijk niet precies weten.
+
+00:00:50.300 --> 00:00:51.780
+Dus, laten we het simpel houden.
+
+00:00:51.940 --> 00:00:54.080
+Een firewall is een bewaker bij de netwerkdeur.
+
+00:00:54.260 --> 00:00:57.640
+Elk stukje data dat je netwerk probeert binnen te komen of te verlaten, moet er doorheen.
+
+00:00:57.640 --> 00:01:01.260
+En de firewall inspecteert elk pakketje om te beslissen of het erdoor mag of geblokkeerd moet worden.
+
+00:01:01.460 --> 00:01:03.780
+Lange tijd waren firewalls fysieke apparaten.
+
+00:01:03.980 --> 00:01:08.220
+Je kocht er een, sloot hem aan in je serverruimte, configureerde hem en onderhield hem jarenlang.
+
+00:01:08.400 --> 00:01:11.520
+Die boxen werkten prima toen je netwerk nog een duidelijke grens had.
+
+00:01:11.700 --> 00:01:14.480
+Eén kantoor, één internetverbinding, één voordeur.
+
+00:01:14.680 --> 00:01:16.140
+Maar de cloud werkt niet op die manier.
+
+00:01:16.340 --> 00:01:19.180
+Je applicaties draaien misschien in de ene regio, je database in de andere,
+
+00:01:19.380 --> 00:01:21.100
+en je gebruikers zijn verspreid over de hele wereld.
+
+00:01:21.100 --> 00:01:23.860
+Sommige van je services staan in Azure, andere ergens anders.
+
+00:01:24.040 --> 00:01:25.060
+Er is geen voordeur.
+
+00:01:25.280 --> 00:01:25.960
+Dit is het punt.
+
+00:01:26.200 --> 00:01:30.020
+Je kunt geen fysieke firewall installeren in een datacenter dat niet van jou is.
+
+00:01:30.200 --> 00:01:34.060
+En zelfs als dat komt, zou het niet helpen omdat er geen enkele deur meer is om te bewaken.
+
+00:01:34.320 --> 00:01:36.080
+Waarom cloud firewalls anders zijn?
+
+00:01:36.280 --> 00:01:38.300
+In Azure maak je virtuele netwerken aan.
+
+00:01:38.540 --> 00:01:41.380
+Zie ze als privéterreinen in de cloud waar je applicaties wonen.
+
+00:01:41.560 --> 00:01:43.380
+Ze zijn niet verbonden aan een fysiek gebouw.
+
+00:01:43.520 --> 00:01:45.020
+Het zijn slechts logische ruimtes.
+
+00:01:45.280 --> 00:01:46.680
+Laten we de verkeerstroom bekijken.
+
+00:01:46.880 --> 00:01:49.420
+Verkeer in deze virtuele netwerken beweegt in twee richtingen.
+
+00:01:49.420 --> 00:01:54.340
+Noord-Zuid verkeer is data die vanaf internet je netwerk binnenkomt of vanuit je netwerk naar internet gaat.
+
+00:01:54.560 --> 00:01:57.780
+Zie het als bezoekers die bij je gebouw aankomen of pakketten die worden verzonden.
+
+00:01:58.040 --> 00:02:02.140
+Dan is er nog Oost-West verkeer, gegevens die zich verplaatsen tussen uw eigen workloads in Azure,
+
+00:02:02.360 --> 00:02:04.420
+tussen applicaties, databases en opslagaccounts.
+
+00:02:05.100 --> 00:02:08.000
+Dat is vergelijkbaar met mensen die tussen afdelingen in een bedrijf lopen.
+
+00:02:08.300 --> 00:02:09.880
+Beide richtingen vereisen inspectie.
+
+00:02:10.060 --> 00:02:13.800
+Als een hacker toegang krijgt tot één workload, wilt u niet dat deze vrij kan rondwalen naar anderen.
+
+00:02:14.040 --> 00:02:15.560
+Zo verspreiden datalekken zich.
+
+00:02:15.560 --> 00:02:20.840
+Uw applicaties maken ook verbinding met andere services, opslagaccounts, e-maildiensten en APIs van derde.
+
+00:02:21.020 --> 00:02:23.180
+De firewall controleert ook die uitgaande verbindingen.
+
+00:02:23.360 --> 00:02:26.280
+Deze bepaalt met welke onderdelen uw apps kunnen communiceren en met welke niet.
+
+00:02:26.460 --> 00:02:27.080
+Dit is het punt.
+
+00:02:27.340 --> 00:02:29.340
+Deze firewall is geen apparaat dat u zelf moet onderhouden.
+
+00:02:29.500 --> 00:02:31.560
+U hoeft hem niet te patchen, bij te werken of u zorgen te maken over capaciteitstekorten.
+
+00:02:32.200 --> 00:02:32.960
+Het is een service.
+
+00:02:33.340 --> 00:02:35.300
+Microsoft beheert de volledige infrastructuur.
+
+00:02:35.480 --> 00:02:38.900
+U definieert simpelweg de regels en de service voert deze automatisch op schaal uit.
+
+00:02:38.900 --> 00:02:42.600
+Dus, als uw verkeer op dinsdagmiddag om drie uur middag spiekt, groeit de firewall met u mee.
+
+00:02:42.760 --> 00:02:46.400
+Als Microsoft een beveiligingspatch uitbrengt, wordt deze toegepast zonder dat u er iets van merkt.
+
+00:02:46.600 --> 00:02:47.780
+Dat is het verschil met de cloud.
+
+00:02:47.960 --> 00:02:50.260
+De firewall wordt een onzichtbare infrastructuur.
+
+00:02:50.500 --> 00:02:51.920
+Maak kennis met Azure Firewall.
+
+00:02:52.140 --> 00:02:53.840
+Dus, wat is Azure Firewall nu precies?
+
+00:02:54.000 --> 00:02:56.700
+Het is een volledig beheerde, cloud-nate firewall als een service.
+
+00:02:56.900 --> 00:02:59.160
+Een hele mond vol, maar dit is wat het in de praktijk betekent.
+
+00:02:59.300 --> 00:03:01.920
+U implementeert het binnen enkele minuten via de Azure Portal.
+
+00:03:02.160 --> 00:03:06.620
+Geen hardware om te bestellen, geen virtuele machines om te configureren, geen besturingssysteem om te patchen.
+
+00:03:06.620 --> 00:03:09.980
+Klik op een paar knoppen, definieer uw netwerk en de firewall is actief.
+
+00:03:10.100 --> 00:03:12.460
+Het wordt geleverd met ingebouwde hoge beschikbaarheid.
+
+00:03:12.620 --> 00:03:15.320
+Als één instantie uitvalt, neemt een andere het direct over.
+
+00:03:15.500 --> 00:03:16.820
+En het schaalt automatisch.
+
+00:03:17.020 --> 00:03:19.460
+Als uw verkeer verdubbelt, groeit de firewall mee.
+
+00:03:19.640 --> 00:03:22.140
+U hoeft nooit te raden hoeveel capaciteit u nodig zult hebben.
+
+00:03:22.320 --> 00:03:26.520
+De simpelste manier om erover na te denken is als het inhuren van een beveiligingsteam voor uw cloud-kantoorpand.
+
+00:03:26.680 --> 00:03:30.520
+U hoeft elke bewaker niet individueel aan te sturen, te trainen of hun diensten in te plannen.
+
+00:03:30.520 --> 00:03:36.800
+U stelt het beleid vast, wie naar binnen mag en welke pakketten zijn toegestaan, en zij handhaven dat beleid 24 uur per dag.
+
+00:03:36.980 --> 00:03:41.200
+Azure Firewall staat op een centraal punt in uw netwerk en inspecteert alles wat er doorheen komt.
+
+00:03:41.380 --> 00:03:46.360
+Het controleert verkeer op basis van drie type regels, NAT-regels, netwerkregels en applicatie-regels.
+
+00:03:46.580 --> 00:03:48.400
+We zullen elk type zo meteen bespreken.
+
+00:03:48.600 --> 00:03:50.820
+Hier is iets wat de meeste mensen zich niet realiseren.
+
+00:03:51.020 --> 00:03:53.660
+Azure Firewall beschikt over ingebouwde threat intelligence.
+
+00:03:53.660 --> 00:04:02.280
+Microsoft monitort continu wereldwijde aanvalspatronen en bekende schadelijke IP-adressen, gevaarlijke domeinen en opkomende dreigingen worden automatisch naar uw firewall gestuurd.
+
+00:04:02.480 --> 00:04:09.100
+Dus, als een hackersgroep in een ander land Azure klanten aanvalt, weet uw firewall al dat ze geblokkeerd moeten worden voordat ze uw netwerk bereiken.
+
+00:04:09.280 --> 00:04:12.100
+De beveiliging verbetert continu zonder dat u er iets voor hoeft te doen.
+
+00:04:12.320 --> 00:04:15.300
+Geen handmatige updates, geen downloaden van handtekeningen, het gebeurt gewoon.
+
+00:04:15.500 --> 00:04:17.480
+Niet iedereen heeft hetzelfde beschermingsniveau nodig.
+
+00:04:17.480 --> 00:04:22.100
+Een klein bedrijf met één applicatie heeft andere behoefte dan een bank die financiële transacties verwerkt.
+
+00:04:22.100 --> 00:04:25.060
+Daarom is Azure Firewall beschikbaar in drie versies.
+
+00:04:25.260 --> 00:04:28.020
+De drie SKU's, Basic, Standard en Premium.
+
+00:04:28.340 --> 00:04:33.740
+Laten we beginnen met Azure Firewall Basic, de instapoptie voor kleine bedrijven en eenvoudigere omgevingen.
+
+00:04:33.880 --> 00:04:40.200
+Het verwerkt tot ongeveer 250 megabit per seconde aan verkeer, genoeg voor een bescheiden applicatie of een ontwikkelomgeving.
+
+00:04:40.460 --> 00:04:48.460
+Basic bevat essentiële netwerkfiltering die verkeer inspecteert en regels toepast op basis van IP-adressen en poorten, plus threat intelligence in alleen waarschuwingsmodus.
+
+00:04:48.460 --> 00:04:52.380
+Het waarschuwt je dus wanneer er iets verdachts verschijnt, maar blokkeert het niet automatisch.
+
+00:04:52.620 --> 00:04:59.140
+Zie Basic als een beveiliger die de ingang nauwlettend in de gaten houdt, het probleem ziet en rapporteert, maar toestemming nodig heeft voordat hij iemand tegenhoudt.
+
+00:04:59.280 --> 00:05:03.860
+Dan is er Azure Firewall Standard, om goede redenen de meest gekozen optie voor enterprise workloads.
+
+00:05:04.100 --> 00:05:09.900
+Het schaalt tot ongeveer 30 gigabit per seconde, waardoor het productieverkeer voor de meeste organisaties gemakkelijk wordt afgehandeld.
+
+00:05:10.120 --> 00:05:17.220
+Bij Standard werkt threat intelligence in zowel waarschuwings- als weigeringsmodus, zodat de firewall automatisch bekende kwaadwillende kan blokkeren zonder op jou te wachten.
+
+00:05:17.220 --> 00:05:19.540
+Het voegt ook webcategorie filtering toe.
+
+00:05:19.700 --> 00:05:25.280
+Je kunt hele categorieën zoals sociale media of gokken blokkeren voor je hele netwerk en het ondersteunt aangepaste DNS-configuratie.
+
+00:05:25.500 --> 00:05:28.860
+Standard is je volledig uitgeruste beveiligingsteam met de bevoegdheid om op te treden.
+
+00:05:29.040 --> 00:05:31.680
+Ze zien een probleem en lossen het op zonder te wachten op goedkeuring.
+
+00:05:31.880 --> 00:05:39.100
+Tot slot is er Azure Firewall Premium, gebouwd voor zeer gevoelige omgevingen zoals financiën, zorg, overheid, alles wat met gereguleerde gegevens werkt.
+
+00:05:39.280 --> 00:05:43.320
+Het schaalt tot 100 gigabit per seconde, maar het echte verschil zit in wat het kan inspecteren.
+
+00:05:43.320 --> 00:05:49.420
+Premium voegt TLS-inspectie toe, die versleuteld verkeer ontsleutelt, de inhoud inspecteert en het opnieuw versleutelt voordat het wordt doorgestuurd.
+
+00:05:49.560 --> 00:05:53.620
+Dat is belangrijk omdat het meeste kwaadaardige verkeer tegenwoordig verborgen zit in versleutelde verbindingen.
+
+00:05:53.800 --> 00:05:55.720
+Zonder TLS-inspectie vlieg je blind.
+
+00:05:55.920 --> 00:06:03.940
+Premium voegt ook IDPS toe, een systeem voor inbraakdetectie en preventie, met meer dan 67.000 handtekeningen in ruim 50 categorieën die in realtime worden bijgewerkt.
+
+00:06:04.080 --> 00:06:10.740
+Het controleert elk pakket op bekende aanvalspatronen zoals SQL-injectie, malware callbacks en portscans, en stopt het verkeer direct als er iets wordt gevonden.
+
+00:06:10.740 --> 00:06:18.180
+Premium voegt ook URL-filtering toe, waarmee je specifieke webadressen kunt toestaan of blokkeren in plaats van hele categorieën, granulaire controle op paginaniveau.
+
+00:06:18.360 --> 00:06:21.540
+Dit is bescherming van militair niveau, maar dit is de slimme aanpak.
+
+00:06:21.760 --> 00:06:23.880
+Stem de SKU af op wat je werkelijk nodig hebt.
+
+00:06:24.120 --> 00:06:26.140
+Standard dekt de meeste zakelijke toepassingen.
+
+00:06:26.400 --> 00:06:33.880
+Gebruik Premium alleen waar gevoelige gegevens diepgaande inspectie vereisen, basic voor kleine omgevingen of ontwikkeling en testen, en betaal niet voor functies die je niet gebruikt.
+
+00:06:34.240 --> 00:06:35.540
+Architectuur en verkeersstroom.
+
+00:06:35.540 --> 00:06:41.240
+Zodra je je SKU hebt gekozen, is de volgende vraag hoe je je netwerk inricht zodat de firewall het verkeer ook echt kan inspecteren.
+
+00:06:41.440 --> 00:06:42.300
+Want dit is het punt.
+
+00:06:42.500 --> 00:06:45.580
+Een firewall werkt alleen als er daadwerkelijk verkeer doorheen gaat.
+
+00:06:45.760 --> 00:06:48.660
+Als je hem op de verkeerde plek zet, kun je hem net zo goed niet hebben.
+
+00:06:48.880 --> 00:06:52.020
+De meest gebruikelijke aanpak is de hub- en spook-architectuur.
+
+00:06:52.280 --> 00:06:53.220
+Denk aan een fietswiel.
+
+00:06:53.400 --> 00:06:56.840
+De naaf-hub is het midden met spaken, spokes, die naar buiten uitstralen.
+
+00:06:56.980 --> 00:06:59.480
+In Azure maak je één centraal virtueel netwerk aan.
+
+00:06:59.480 --> 00:07:01.880
+Dat is de hub waar je Azure Firewall zich bevindt.
+
+00:07:01.980 --> 00:07:05.760
+Vervolgens creëer je meerdere spooknetwerken, elk voor een aparte workload of omgeving.
+
+00:07:05.960 --> 00:07:10.540
+Misschien één spook voor je webapplicatie, een andere voor je database, een derde voor je ontwikkelomgeving.
+
+00:07:10.740 --> 00:07:15.160
+Al het verkeer tussen spokes en tussen spokes en het internet wordt voor inspectie via de hub geleid.
+
+00:07:15.340 --> 00:07:22.920
+Je krijgt één beveiligingspunt voor je hele netwerk, efficiënt, consistent en veel makkelijker te beheren dan proberen in elke spook een firewall te plaatsen.
+
+00:07:22.920 --> 00:07:29.820
+Voor grotere organisaties is er ook Virtual One, een beheerde netwerkdienst met Azure Firewall direct geïntegreerd in de hub.
+
+00:07:30.020 --> 00:07:31.980
+Het grote voordeel is automatisering.
+
+00:07:32.260 --> 00:07:39.980
+Virtual One regelt de routering voor je, zodat verkeer van bijkantoren, externe gebruikers en spooknetwerken automatisch via de firewall loopt zonder handmatige configuratie.
+
+00:07:40.160 --> 00:07:43.300
+Het is meer hands-off, maar schaalt beter voor wereldwijde implementaties.
+
+00:07:43.480 --> 00:07:45.340
+Maar wat inspecteert de firewall nu eigenlijk?
+
+00:07:45.560 --> 00:07:51.520
+Drie dingen, inkomend verkeer vanaf het internet, uitgaand verkeer naar het internet en oost-west verkeer tussen je eigen workloads binnen Azure.
+
+00:07:51.520 --> 00:07:53.100
+Dat derde punt is cruciaal.
+
+00:07:53.260 --> 00:07:57.480
+Als er een inbreuk plaatsvindt in één workload, voorkomt oost-west inspectie dat dit zich verspreidt naar anderen.
+
+00:07:57.720 --> 00:08:01.000
+Zonder dit kan een hacker die je webserver binnendringt vrijelijk naar je database bewegen.
+
+00:08:01.240 --> 00:08:03.260
+Met deze inspectie wordt die beweging geblokkeerd.
+
+00:08:03.460 --> 00:08:06.800
+Dit is het belangrijkste punt, verkeer wordt alleen geïnspecteerd als het door de firewall gaat.
+
+00:08:06.980 --> 00:08:09.660
+De architectuur moet het verkeerdes door dat centrale punt dwingen.
+
+00:08:09.800 --> 00:08:12.100
+Je ontwerpt het zo dat er geen alternatieve route is.
+
+00:08:12.360 --> 00:08:15.620
+Daarom is het ontwerp van de implementatie net zo belangrijk als de regels zelf.
+
+00:08:15.800 --> 00:08:19.660
+Een perfecte set regels betekent niets als verkeer de firewall volledig kan omzeilen.
+
+00:08:19.660 --> 00:08:21.360
+Een diepe duik in de regels.
+
+00:08:21.520 --> 00:08:25.660
+Laten we het nu over de regels zelf hebben, want hiermee bepaal je wat er wel en niet doorkomt.
+
+00:08:25.760 --> 00:08:29.820
+Azure Firewall gebruikt drie soorten regels en elk heeft een eigen functie.
+
+00:08:30.020 --> 00:08:32.360
+Dus, not regels, netwerkadresvertaling.
+
+00:08:32.660 --> 00:08:37.340
+Zie het als een receptiebalie die je interne servers verbergt achter het publieke IP-adres van de firewall.
+
+00:08:37.600 --> 00:08:40.520
+Iemand op internet maakt verbinding met het IP van je firewall...
+
+00:08:40.520 --> 00:08:44.000
+...en de firewall vertaalt dat publieke adres naar het privéadres van je back-end server.
+
+00:08:44.220 --> 00:08:46.300
+De buitenwereld ziet nooit je interne netwerk.
+
+00:08:46.480 --> 00:08:47.940
+Je servers blijven onzichtbaar.
+
+00:08:47.940 --> 00:08:49.480
+Dan heb je nog netwerkregels.
+
+00:08:49.720 --> 00:08:52.340
+Deze zijn gebaseerd op IP-adressen, porten en protocollen.
+
+00:08:52.540 --> 00:08:55.600
+Laag 3 en laag 4 filtering, als je de technische termen wilt weten.
+
+00:08:55.800 --> 00:09:01.280
+Je kunt zeggen, sta verkeerd toe van dit IP-adres op port 443 naar dit andere IP-adres en blokkeer de rest.
+
+00:09:01.680 --> 00:09:02.680
+Eenvoudig en krachtig.
+
+00:09:02.840 --> 00:09:03.760
+Maar dit is de beperking.
+
+00:09:04.260 --> 00:09:06.320
+Netwerkregels begrijpen niet wat voor soort verkeer het is.
+
+00:09:06.540 --> 00:09:08.800
+Ze weten alleen waar het heen gaat en welke port het gebruikt.
+
+00:09:09.000 --> 00:09:09.940
+Als derde, toepassingsregels.
+
+00:09:10.700 --> 00:09:11.460
+Deze zijn slimmer.
+
+00:09:11.460 --> 00:09:15.060
+Ze filteren op basis van volledig gekwalificeerde domeinnamen en URL-patronen.
+
+00:09:15.180 --> 00:09:21.200
+Dus in plaats van verkeer naar een specifiek IP-adres toe te staan, zeg je, sta verkeerd toe naar Microsoft.com of sta Windows Update verkeerd toe.
+
+00:09:21.340 --> 00:09:23.280
+Nu begrijpt de firewall de toepassingslaag.
+
+00:09:23.420 --> 00:09:27.140
+Hij kan blokkeren of toestaan op basis van wat het verkeer werkelijk is, niet alleen waar het heen gaat.
+
+00:09:27.360 --> 00:09:29.480
+Regels worden niet zomaar in een platte lijst gegooid.
+
+00:09:29.640 --> 00:09:32.800
+Ze zijn georganiseerd in regelverzamelingsgroepen en regelverzamelingen.
+
+00:09:32.960 --> 00:09:34.300
+Zie ze als mappen en submappen.
+
+00:09:34.300 --> 00:09:38.860
+Je kunt één groep hebben voor ouder systemen, een andere voor financiën, elk met een eigen prioriteit.
+
+00:09:39.060 --> 00:09:41.980
+Dat houdt de boel georganiseerd wanneer je tientallen of honderden regels hebt.
+
+00:09:42.160 --> 00:09:43.620
+De volgorde is erg belangrijk.
+
+00:09:43.820 --> 00:09:46.340
+De firewall verwerkt regels in een specifieke volgorde.
+
+00:09:46.580 --> 00:09:49.560
+Eerst nat regels, dan netwerkregels, dan toepassingsregels.
+
+00:09:49.800 --> 00:09:52.180
+Binnen elk type worden regels verwerkt op prioriteit.
+
+00:09:52.440 --> 00:09:54.380
+Lagere nummers worden als eerste geëvalueerd.
+
+00:09:54.620 --> 00:09:58.320
+Dit is belangrijk omdat brede netwerkregels die al het verkeer toestaan als eerste worden geraakt.
+
+00:09:58.480 --> 00:10:03.120
+Als een netwerkregel alles toestaat, worden de toepassingsregels verderop wellicht nooit geëvalueerd.
+
+00:10:03.120 --> 00:10:06.220
+Al je zorgvuldig opgestelde toepassingsregels worden nutteloos.
+
+00:10:06.360 --> 00:10:08.940
+IP-groepen zijn een ander hulpmiddel dat de moeite waard is om te kennen.
+
+00:10:09.120 --> 00:10:13.080
+Je maakt een groep IP-adressen aan, geeft deze een naam en verwijst daarnaar in meerdere regels.
+
+00:10:13.320 --> 00:10:17.080
+Wijzig één IP-groep en elke regel die deze gebruikt, wordt automatisch bijgewerkt.
+
+00:10:17.280 --> 00:10:22.980
+Dat bespaart tijd en vermindert fouten, vooral handig wanneer dezelfde set IP's in meerdere regels voorkomt.
+
+00:10:23.380 --> 00:10:25.020
+Geavanceerde beveiligingsfuncties.
+
+00:10:25.260 --> 00:10:28.660
+Regels regelen de basis, maar Azure Firewall Premium gaat veel dieper.
+
+00:10:28.900 --> 00:10:30.480
+Laten we beginnen met Threat Intelligence.
+
+00:10:30.480 --> 00:10:35.920
+Dit is een constant bijgewerkte feed van Microsoft met bekende schadelijke IP's, domeinen en URL's.
+
+00:10:36.080 --> 00:10:39.160
+Elke verbinding die je firewall verwerkt, wordt getoetst aan deze feed.
+
+00:10:39.300 --> 00:10:42.220
+Wanneer er een overeenkomst wordt gevonden, kan hij je waarschuwen of automatisch blokkeren.
+
+00:10:42.420 --> 00:10:44.920
+Geen handmatige regels om te schrijven, geen lijsten om te onderhouden.
+
+00:10:45.080 --> 00:10:47.760
+Het wereldwijde beveiligingsteam van Microsoft doet dat werk voor je.
+
+00:10:47.940 --> 00:10:50.900
+Dan is er nog IDPS, het systeem voor inbraakdetectie en preventie.
+
+00:10:51.100 --> 00:10:55.260
+Dat zijn meer dan 67.000 handtekeningen die elk pakket controleren op bekende aanvalspatronen.
+
+00:10:55.260 --> 00:11:00.140
+Dingen zoals SQL-injectiepogingen waarbij iemand probeert kwaadaardige database-commando's te injecteren via een webformulier.
+
+00:11:00.260 --> 00:11:03.140
+Port scanning waarbij aanvallers uw netwerk onderzoeken op open deuren.
+
+00:11:03.340 --> 00:11:07.280
+Malware callbacks waarbij geïnfecteerde systemen proberen verbinding te maken met een commando-server.
+
+00:11:07.460 --> 00:11:10.960
+De firewall herkent het patroon en blokkeert het verkeer voordat het zijn doel bereikt.
+
+00:11:11.200 --> 00:11:13.320
+Deze handtekeningen worden in real-time bijgewerkt.
+
+00:11:13.540 --> 00:11:17.540
+Wanneer beveiligingsteams van Microsoft een nieuw aanvalspatroon identificeren, wordt dit aan de feed toegevoegd.
+
+00:11:17.660 --> 00:11:19.560
+Uw firewall begint het onmiddellijk te blokkeren.
+
+00:11:19.560 --> 00:11:21.160
+U hoeft niet te wachten op Patch Tuesday.
+
+00:11:21.440 --> 00:11:22.680
+Nu, TLS-inspectie.
+
+00:11:22.860 --> 00:11:24.900
+Dit is erg belangrijk voor gereguleerde omgevingen.
+
+00:11:25.040 --> 00:11:28.720
+Versleuteld verkeer is geweldig voor privacy, maar ook uitstekend om schadelijke gegevens te verbergen.
+
+00:11:28.980 --> 00:11:29.860
+Aanvallers weten dit.
+
+00:11:30.000 --> 00:11:34.140
+Ze verpakken hun payloads in HTTPS-verbindingen omdat de meeste firewalls hier niet in kunnen kijken.
+
+00:11:34.340 --> 00:11:35.300
+Premium kan dat wel.
+
+00:11:35.500 --> 00:11:38.800
+Het ontsleutelt het verkeer, inspecteert de payload, versleutelt het opnieuw en verstuurt het verder.
+
+00:11:38.980 --> 00:11:40.900
+Het hele proces duurt slechts milliseconden.
+
+00:11:41.100 --> 00:11:43.620
+Zonder dit passeren versleutelde aanvallen onopgemerkt.
+
+00:11:43.780 --> 00:11:45.860
+URL-filtering gaat verder dan domeinnamen.
+
+00:11:45.860 --> 00:11:48.660
+U kunt specifieke paden op een website toestaan of blokkeren.
+
+00:11:48.820 --> 00:11:52.020
+Misschien wilt u toegang tot Microsoft toestaan, maar de downloadpagina blokkeren,
+
+00:11:52.240 --> 00:11:55.640
+of een specifiek API-eindpunt toestaan terwijl al het andere op dat domein wordt geblokkeerd.
+
+00:11:55.820 --> 00:11:56.880
+Dit alles werkt samen.
+
+00:11:57.060 --> 00:11:59.200
+Threat Intelligence detecteert bekende kwaadwillende.
+
+00:11:59.380 --> 00:12:01.180
+IDPS detecteert aanvalspatronen.
+
+00:12:01.320 --> 00:12:03.300
+TLS-inspectie ontdekt verborgen payloads.
+
+00:12:03.400 --> 00:12:05.340
+Meerdere verdedigingslagen werken als één systeem.
+
+00:12:05.460 --> 00:12:08.120
+Hoe alles met elkaar verbonden is, plus praktische inzichten.
+
+00:12:08.380 --> 00:12:10.040
+Dus, dit is hoe alles samenkomt.
+
+00:12:10.140 --> 00:12:12.580
+Azure Firewall is niet zomaar één enkele service.
+
+00:12:12.580 --> 00:12:15.380
+Het is een systeem van componenten die als team samenwerken.
+
+00:12:15.380 --> 00:12:17.980
+De architectuur leidt al het verkeer door één centraal punt.
+
+00:12:18.200 --> 00:12:23.080
+Vervolgens bepalen regels wat is toegestaan, terwijl Threat Intelligence en IDPS alles wat verdacht is opvangen,
+
+00:12:23.340 --> 00:12:26.300
+en TLS-inspectie onthult wat er verborgen zit in versleutelde verbindingen.
+
+00:12:26.420 --> 00:12:30.340
+Elke laag voegt een extra controle toe, en dat is defense-indaped in de praktijk.
+
+00:12:30.480 --> 00:12:35.040
+Als u meerdere firewalls in verschillende regio's beheert, is Azure Firewall Manager uw hulpmiddel.
+
+00:12:35.220 --> 00:12:38.720
+Het is gratis, u maakt beleidsregels één keer aan en past ze overal toe.
+
+00:12:38.880 --> 00:12:41.600
+U kunt wereldwijd beleid instellen dat geldt voor alle firewalls,
+
+00:12:41.720 --> 00:12:44.000
+en vervolgens lokaal beleid aanpassen per team of regio.
+
+00:12:44.000 --> 00:12:46.500
+Een tool om uw gehele firewall-omgeving te beheren.
+
+00:12:46.640 --> 00:12:50.640
+Laten we het nu over kosten hebben, want firewalls draaien 24 zevende en verwerken veel data.
+
+00:12:50.820 --> 00:12:55.580
+Een eenvoudige manier om kosten te besparen is het gebruik van het basic tabelplan van Log Analytics voor uw firewall logs.
+
+00:12:55.760 --> 00:12:58.080
+U kunt tot 80% besparen op opnamekosten.
+
+00:12:58.340 --> 00:13:01.220
+Dat is het verschil tussen een redelijke rekening en een verrassende rekening.
+
+00:13:01.400 --> 00:13:06.900
+Gebruik voor niet-productieomgevingen Azure Automation om de firewall buiten kantooruren te stoppen en ochtends weer te starten.
+
+00:13:07.080 --> 00:13:11.700
+Dev- en testomgevingen hebben om twee uur s'nachts geen bescherming nodig, dus dat is op termijn een flinke besparing.
+
+00:13:11.700 --> 00:13:17.320
+Controleer uw routering om dataconsumptiekosten te verlagen en zorg dat alleen noodzakelijk verkeer door de firewall gaat.
+
+00:13:17.480 --> 00:13:24.560
+Gebruik waar mogelijk private endpoints voor Azure services, zodat vertrouwde services direct kunnen communiceren in plaats van alles via inspectie te routeren.
+
+00:13:24.920 --> 00:13:30.640
+De meest impactvolle stap die je vandaag kunt zetten, is beginnen met een standaard SKU in een hap- en spookarchitectuur.
+
+00:13:30.640 --> 00:13:35.840
+Schakel gestructureerde laks in met het basis-tabelplan en stel eerst Threat Intelligence in de waarschuwingsmodus in.
+
+00:13:35.980 --> 00:13:39.240
+Kijk wat je netwerk bereikt voordat je overgaat op volledige preventie.
+
+00:13:39.460 --> 00:13:41.320
+Dat geeft je overzicht zonder verrassingen.
+
+00:13:41.620 --> 00:13:48.960
+Dat is dus Azure Firewall, een cloud-native beveiligingsservice die verkeer inspecteert, dreigingen blokkeert en meeschalt met je netwerk zonder dat je één server hoeft te beheren.
+
+00:13:49.140 --> 00:13:51.400
+Begin met de standaardoptie in een hap- en spookopstelling.
+
+00:13:51.640 --> 00:13:53.380
+Dat is vandaag je meest impactvolle stap.
+
+00:13:53.380 --> 00:13:57.920
+Abonneer je op je favoriete podcastplatform en deel dit met iemand die aan zijn Azure-reis begint.

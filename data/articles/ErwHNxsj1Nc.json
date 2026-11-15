@@ -1,0 +1,139 @@
+{
+ "de": {
+  "html": "<p>Ihre SharePoint-Berechtigungen sind vermutlich unübersichtlicher, als Sie denken. Das liegt selten an mangelnder Pflege. Bei Tausenden täglich wechselnden Seiten kann schlicht niemand mehr Schritt halten. Viele Organisationen besitzen nicht einen einzigen Bericht, der zeigt, wer auf was Zugriff hat.</p>\n<p>Dieser Artikel zeigt, wie Sie Websites, Bibliotheken und Benutzer automatisiert scannen, ohne eine Seite manuell anzufassen. Dazu kombinieren Sie PnP PowerShell, Microsoft Graph und Azure Automation. Aus einer Arbeit, die sonst Wochen dauert, wird ein regelmäßiger, nachvollziehbarer Bericht.</p>\n\n<h2>Warum klassische SharePoint-Berechtigungsprüfungen im Unternehmensmaßstab scheitern</h2>\n<p>Die jährliche Berechtigungsprüfung kennt jeder: Eine Tabelle wird verschickt, Website-Besitzer gehen ihre Listen durch, Manager geben frei. Für etwa einen Tag fühlt sich alles unter Kontrolle an. Schon in der Folgewoche wird ein Ordner mit einem neuen Auftragnehmer geteilt oder unbemerkt eine Projektseite angelegt, und der archivierte Datensatz weicht von der Realität ab.</p>\n\n<h3>Kleine Umgebung: manuell machbar</h3>\n<p>Bei einer überschaubaren Sammlung funktioniert die manuelle Prüfung noch. Sie ziehen die Mitgliederliste, kontrollieren ein paar Gruppen und bestätigen, dass niemand unbefugt zugreift. Der Berechtigungsbaum passt auf einen Bildschirm, und die Zahl der Personen, die Änderungen vornehmen, ist klein.</p>\n\n<h3>Unternehmensumgebung: ein bewegliches Ziel</h3>\n<p>Im Unternehmensmaßstab stehen Sie vor vielleicht 10.000 Seiten über Abteilungen, Regionen und Geschäftsbereiche hinweg. Teams erstellen täglich neue Seiten, archivierte Projekte verschwinden nie ganz, und laufende Inhaltsänderungen verschieben ständig die Berechtigungen. Zwischen Prüfung und nächster relevanter Änderung liegen manchmal nur wenige Stunden.</p>\n<p>Dazu kommt, dass SharePoint mit bloßem Auge schwer zu durchschauen ist. Berechtigungen können von der übergeordneten Website geerbt, auf Bibliotheksebene überschrieben, in einem Ordner angepasst und bei einer einzelnen Datei erneut geändert werden. Der Zugriff eines Benutzers läuft oft über verschachtelte Gruppen, etwa eine aus Azure AD synchronisierte Sicherheitsgruppe, die selbst weitere Gruppen enthält.</p>\n\n<h3>Ein Beispiel aus der Praxis</h3>\n<p>Eine Organisation investierte über 80 Admin-Stunden in eine einzige vierteljährliche Überprüfung. Sie teilte die Arbeit auf, erstellte Mitgliedschaftsberichte und hatte einen formellen Prozess. Die Abschlussdatei wirkte gründlich. Zwei Wochen später fand ein Penetrationstest Gäste mit Bearbeitungszugriff auf vertrauliche Ordner. Der Zugriff lief über eine verschachtelte Gruppe, die im manuellen Bericht nie aufgetaucht war.</p>\n<p>Das Modell der jährlichen Momentaufnahme ist also nicht fehlerhaft, weil Menschen nachlässig wären. Es versagt, weil sich das System ständig verändert. Berechtigungen sind lebendige Daten, und eine statische Liste bildet immer nur die Vergangenheit ab. Die Lösung liegt nicht in mehr Prüfpersonal, sondern darin, die Daten automatisch abzufragen und zu konsolidieren.</p>\n\n<h2>Die Grundlage: SharePoint-Sites mit PnP PowerShell erfassen</h2>\n<p>PnP PowerShell ist die Brücke zwischen SharePoint Online und Ihrer Automatisierungsumgebung. Es verpackt die Microsoft-APIs in benutzerfreundlichere Befehle und gibt zugleich Zugriff auf erweiterte Funktionen. Mit einem Befehl verbinden Sie sich, ohne durch Browser-Tabs und Website-Sammlungen zu klicken.</p>\n\n<h3>Von interaktiv zu App-only</h3>\n<p>Für kleine Ad-hoc-Skripte reicht eine interaktive Verbindung mit Connect-PnPOnline. In großen Umgebungen wird sie zum Problem. Geplante Prozesse können nicht darauf warten, dass jemand ein Passwort eingibt. Naive Skripte scheitern zudem aus mehreren Gründen:</p>\n<ul>\n<li>Das Token läuft mitten in der Site-Auflistung ab.</li>\n<li>Der Dienst wird zu schnell belastet, und Drosselungsgrenzen greifen.</li>\n<li>Nicht jede Site hat dieselbe Struktur: Moderne Teamvorlagen stehen neben klassischen Sammlungen mit ungewöhnlichen Berechtigungen.</li>\n</ul>\n<p>Besser ist eine App-only-Verbindung. Dafür erstellen Sie eine Azure-AD-App-Registrierung, erteilen ihr die nötigen SharePoint- und Graph-Berechtigungen und authentifizieren sich mit einem Zertifikat statt mit einem Benutzerkonto. Das ist für unbeaufsichtigte Prozesse deutlich stabiler, und PnP PowerShell unterstützt es von Haus aus. Das Zertifikat sollte sicher gespeichert sein, vorzugsweise in Azure Key Vault. Dann gibt es weder Abfragen noch abgelaufene Passwörter.</p>\n\n<h3>Sites dynamisch ermitteln</h3>\n<p>Eine hartcodierte Site-Liste lässt sich auf Tenant-Ebene nicht pflegen. Stattdessen können Sie die suchbasierte Site-Enumeration von Connect-PnPOnline nutzen oder über Microsoft Graph jede Site-Collection-URL dynamisch abrufen. Graph ist meist konsistenter, der PnP-Suchansatz kann in kleineren Tenants schnelle Erfolge liefern. Entscheidend ist, dass die Enumeration vollständig automatisiert abläuft und nichts manuell kuratiert wird.</p>\n\n<h3>Rücksichtsvoll mit dem Dienst umgehen</h3>\n<p>Bündeln Sie Ihre Anfragen und bauen Sie Pausen oder Drosselungsmechanismen ein. Es geht nicht nur darum, 429-Fehler zu vermeiden, sondern darum, dass der Prozess in realistischer Zeit abschließt. Strukturieren Sie Ihre Schleifen so, dass sie jeweils eine überschaubare Teilmenge von Sites verarbeiten, Zwischenergebnisse schreiben und nach einem Abbruch sauber fortfahren.</p>\n<p>Ein sicheres Muster ist ein PowerShell-Runbook, das das Zertifikat zur Laufzeit aus Azure Key Vault holt und alle Website-URLs über Graph abfragt. Danach durchläuft es sie in kontrollierten Chargen, ohne Anmeldeaufforderung und ohne festkodierte Anmeldedaten. Es ist vollständig wiederholbar: heute auf Abruf, morgen nach Zeitplan.</p>\n\n<h2>Berechtigungsdaten mit der Microsoft Graph API auslesen</h2>\n<p>PnP PowerShell liefert die Schlüssel zu jeder Website. Microsoft Graph zeigt dann die vollständige Gästeliste: Wer wurde direkt eingeladen, wer ist Teil einer Gruppe, und wer kommt durch eine vererbte Tür herein, die niemand bemerkt hat? Graph ist das Rückgrat vieler Microsoft-365-Dienste und erlaubt konsistente Abfragen für SharePoint, OneDrive und Teams. Sie erhalten Website-Objekte, Listen, Bibliotheken, Dateien und die zugehörigen Berechtigungsobjekte.</p>\n\n<h3>Mehrere Ebenen, mehrere Abfragen</h3>\n<p>In SharePoint liegt nichts ordentlich an einem Ort. Direkte Zuweisungen existieren neben Gruppenmitgliedschaften, die in Azure-AD-Gruppen mit eigenen verschachtelten Gruppen liegen können. Berechtigungen auf Website-, Listen- und Datei- oder Elementebene brauchen jeweils eigene Graph-Aufrufe. Erst wenn Sie die Ergebnisse zusammenführen und Gruppen-IDs über die Gruppenmitgliedschaften zu echten Benutzerobjekten auflösen, wissen Sie, wer tatsächlich was darf.</p>\n\n<h3>Vererbung sichtbar machen</h3>\n<p>Hat eine Datei keine eindeutigen Berechtigungen, heißt das: eine Ebene höher suchen. Wer dort aufhört, übersieht ganze Kategorien von Zugriffen. Ihre Logik muss deshalb die Kette von Datei über Ordner und Bibliothek bis zur Website durchlaufen, jede Ebene prüfen und die Daten zusammenführen, bis der gesamte Vererbungspfad sichtbar ist.</p>\n\n<h3>Paginierung und Drosselung</h3>\n<p>Graph-Antworten brechen oft nach 200 Elementen ab. Sie müssen dem OData-Next-Link-Token folgen, um den Rest abzurufen. Im großen Maßstab brauchen Sie Anforderungsschleifen, die Tausende Antworten ohne Zeitüberschreitung oder Kontextverlust verarbeiten. Die Drosselung meldet Graph über 429-Antworten mit einem vorgeschlagenen Wartezeitwert, den Ihr Code berücksichtigen muss.</p>\n\n<h3>Datenerfassung in zwei Durchgängen</h3>\n<ol>\n<li><strong>Ressourcen auflisten:</strong> Websites, Listen und kritische Bibliotheken oder Dokumentensätze.</li>\n<li><strong>Berechtigungen abfragen:</strong> Für jede Ressource die direkten Berechtigungen holen, die Hierarchie nach oben durchlaufen und vererbte Einträge erfassen. Gefundene Gruppen-IDs werden über die Gruppenmitgliedschafts-Endpunkte in echte Benutzer- und Gastkonten aufgelöst.</li>\n</ol>\n<p>Das Ziel ist ein flacher, normalisierter Datensatz. Jede Zeile zeigt die Ressource, den aufgelösten Benutzer und die effektive Zugriffsebene, egal wie sie gewährt wurde. Sie können nach Benutzern sortieren und sehen jede erreichbare Ressource, oder nach Ressourcen sortieren und sehen jedes Konto mit Zugriff. Filter für Gäste und externe Benutzer liefern sofort Antworten, ohne dass ein neuer Bericht entsteht.</p>\n\n<h2>Audits automatisieren mit Azure Automation</h2>\n<p>Azure Automation ist der Zeitplaner und die Ausführungsengine für Ihre PnP-PowerShell- und Graph-Skripte. Die Runbooks laufen in der Cloud statt auf einem Server, den jemand neu starten oder auf den jemand den Zugriff verlieren könnte. Der verwaltete Dienst führt aus, protokolliert und startet nach Zeitplan. So liegt morgens ein aktueller Berechtigungsbericht im Posteingang, ohne nächtliche Skripte, Fernzugriff oder manuelle Exporte.</p>\n\n<h3>Authentifizierung absichern</h3>\n<p>Anmeldeinformationen im Skript sind ein sicherer Weg, ein Sicherheitsteam zu verärgern. Speichern Sie Zertifikat oder Clientgeheimnis in Azure Key Vault und lassen Sie das Runbook es zur Laufzeit abrufen. Key Vault hält die Daten verschlüsselt, und rollenbasierte Zugriffskontrolle stellt sicher, dass nur Ihr Automatisierungskonto darauf zugreifen kann. Läuft das Zertifikat ab, erneuern Sie es an einer Stelle, ohne Skripte zu ändern.</p>\n\n<h3>Zeitplanung und Ressourcen</h3>\n<p>Tägliche Durchläufe liefern ein nahezu aktuelles Bild. Ändert sich Ihre Umgebung langsamer, kann ein wöchentlicher Rhythmus genügen. Sie können exakte Zeiten festlegen, Randzeiten wählen, um den Tenant zu entlasten, und Läufe sogar durch Ereignisse statt nur nach der Uhr starten. Braucht ein Auftrag mehr Ressourcen als die Azure-Sandbox, etwa bei extrem großen Tenants mit sehr langen Aufzählungen, führen Hybrid Runbook Worker die Skripte vor Ort oder auf einer dedizierten VM aus. Verwaltet werden sie weiterhin über Azure Automation.</p>\n\n<h3>Protokollierung und Ablage</h3>\n<p>Ohne Protokolle wird die Fehlersuche zum Raten. Azure Automation erfasst Standardausgabe und Fehlerstreams in Auftragsprotokollen. Sie können sie im Portal prüfen oder für die Langzeitspeicherung exportieren. So lässt sich belegen, dass die Prüfung zu einem bestimmten Zeitpunkt lief, und nachvollziehen, was bei einem Abbruch geschah. Für die Compliance ist dieser Prüfpfad so wertvoll wie der Bericht selbst.</p>\n<p>Für die Ergebnisse (CSV oder JSON) gibt es mehrere Ziele:</p>\n<ul>\n<li><strong>SharePoint-Dokumentbibliothek:</strong> gut für den Teamzugriff.</li>\n<li><strong>Azure-Blob-Speicher:</strong> geeignet für sehr große Dateien.</li>\n<li><strong>E-Mail per SMTP-Relay oder Logic App:</strong> sofort verfügbar, bei sensiblen Datensätzen aber weniger sicher.</li>\n</ul>\n\n<h3>Änderungen erkennen</h3>\n<p>Eine weitere Ebene ist eine einfache Änderungserkennung. Sie vergleichen den heutigen Datensatz mit dem von gestern und senden eine Nachricht, wenn zum Beispiel ein neuer Gastbenutzer auf einer sensiblen Website auftaucht. So lenken Sie die Aufmerksamkeit dorthin, wo sie wirklich nötig ist.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Nur direkte Berechtigungen sammeln:</strong> Das ergibt einen sauber aussehenden, aber gefährlich unvollständigen Datensatz. Vererbung und Gruppenmitgliedschaften gehören dazu.</li>\n<li><strong>Verschachtelte Gruppen übersehen:</strong> Zugriffe über synchronisierte Azure-AD-Gruppen mit weiteren Untergruppen fehlen sonst im Bericht.</li>\n<li><strong>Interaktive Anmeldung in geplanten Prozessen:</strong> Abgelaufene Tokens und Passwortabfragen unterbrechen die Läufe.</li>\n<li><strong>Drosselung ignorieren:</strong> Ohne Rücksicht auf 429-Antworten und Wartezeiten kommt der Prozess nicht zum Ende.</li>\n<li><strong>Paginierung vergessen:</strong> Wer dem Next-Link nicht folgt, bekommt nur einen Teil der Daten.</li>\n<li><strong>Zugangsdaten im Skript:</strong> Sie gehören in Azure Key Vault, nicht in den Code.</li>\n<li><strong>Stilles Scheitern:</strong> Abgelaufene Zertifikate oder Timeouts liefern sonst unvollständige Berichte, die auf den ersten Blick korrekt aussehen.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Behandeln Sie Berechtigungen als lebendige Daten und ersetzen Sie die jährliche Momentaufnahme durch regelmäßige, automatische Abfragen.</li>\n<li>Nutzen Sie App-only-Authentifizierung mit Zertifikat über eine Azure-AD-App-Registrierung statt Benutzerkonten.</li>\n<li>Speichern Sie Zertifikate oder Geheimnisse in Azure Key Vault und rufen Sie sie erst zur Laufzeit ab.</li>\n<li>Ermitteln Sie Sites dynamisch, bevorzugt über Microsoft Graph, und verarbeiten Sie sie in Chargen mit Zwischenergebnissen.</li>\n<li>Folgen Sie der Vererbung von Datei über Ordner und Bibliothek bis zur Website und lösen Sie Gruppen-IDs zu Benutzern auf.</li>\n<li>Planen Sie Paginierung und Drosselung (429) von Anfang an ein.</li>\n<li>Erzeugen Sie einen flachen, normalisierten Datensatz aus Ressource, Benutzer und effektiver Zugriffsebene.</li>\n<li>Führen Sie die Skripte als Azure-Automation-Runbooks aus, protokollieren Sie die Läufe und wählen Sie eine passende Ablage für die Berichte.</li>\n<li>Vergleichen Sie Tagesstände und alarmieren Sie bei kritischen Änderungen wie neuen Gästen auf sensiblen Websites.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Manuelle Berechtigungsprüfungen scheitern im Unternehmensmaßstab nicht an den Menschen, sondern an einem System, das sich ständig verändert. PnP PowerShell verbindet Sie mit jeder Website, Microsoft Graph deckt Vererbung und verschachtelte Gruppen auf, und Azure Automation führt beides zuverlässig nach Zeitplan aus. So entsteht aus einem wochenlangen Kraftakt ein wiederholbarer, nachvollziehbarer Prozess mit aktuellen Berichten. Sie wissen jederzeit, wer worauf Zugriff hat, und können Compliance-Fragen mit belastbaren Nachweisen beantworten.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "SharePoint-Berechtigungen automatisiert prüfen",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Sicher verbinden",
+     "text": "PnP PowerShell mit App-only-Authentifizierung und Zertifikat nutzen, Zertifikat in Azure Key Vault ablegen."
+    },
+    {
+     "kopf": "Sites ermitteln",
+     "text": "Alle Site-URLs dynamisch über Microsoft Graph abrufen und in kontrollierten Chargen verarbeiten."
+    },
+    {
+     "kopf": "Berechtigungen auslesen",
+     "text": "Direkte und vererbte Zugriffe abfragen, Gruppen-IDs zu Benutzern auflösen, Paginierung und Drosselung beachten."
+    },
+    {
+     "kopf": "Daten normalisieren",
+     "text": "Flacher Datensatz: Ressource, aufgelöster Benutzer und effektive Zugriffsebene pro Zeile."
+    },
+    {
+     "kopf": "Mit Azure Automation planen",
+     "text": "Runbooks laufen zeitgesteuert, protokollieren Aufträge und liefern Berichte per SharePoint, Blob-Speicher oder E-Mail."
+    },
+    {
+     "kopf": "Änderungen melden",
+     "text": "Tagesstände vergleichen und bei neuen Gästen auf sensiblen Websites benachrichtigen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Warum scheitern manuelle SharePoint-Berechtigungsprüfungen in großen Unternehmen?",
+    "a": "Bei etwa 10.000 Seiten ändern sich Berechtigungen ständig, sodass eine jährliche Momentaufnahme schon nach wenigen Stunden oder Tagen veraltet. Hinzu kommen Vererbung und verschachtelte Gruppen, die manuell kaum zu durchschauen sind. Das Problem liegt im System, nicht in nachlässigen Menschen."
+   },
+   {
+    "q": "Wie kann man SharePoint-Berechtigungen automatisiert auslesen?",
+    "a": "Kombinieren Sie PnP PowerShell, Microsoft Graph und Azure Automation. PnP PowerShell verbindet sich mit den Sites, Graph liefert Berechtigungen, Vererbung und Gruppenmitglieder, und Azure Automation führt die Skripte als Runbooks nach Zeitplan aus. Das Ergebnis ist ein regelmäßiger, nachvollziehbarer Bericht."
+   },
+   {
+    "q": "Wie authentifiziere ich ein geplantes SharePoint-Audit-Skript sicher?",
+    "a": "Nutzen Sie App-only-Authentifizierung über eine Azure-AD-App-Registrierung mit Zertifikat statt eines Benutzerkontos. Speichern Sie das Zertifikat in Azure Key Vault und lassen Sie das Runbook es zur Laufzeit abrufen. So gibt es keine Passwortabfragen, abgelaufenen Tokens oder Zugangsdaten im Skript."
+   },
+   {
+    "q": "Welche typischen Fehler passieren bei der automatischen Berechtigungsprüfung?",
+    "a": "Häufig werden nur direkte Berechtigungen erfasst und verschachtelte Gruppen sowie Vererbung übersehen. Weitere Fehler sind interaktive Anmeldung, ignorierte Drosselung (429), vergessene Paginierung über den Next-Link, Zugangsdaten im Skript und stilles Scheitern, das unvollständige, aber korrekt wirkende Berichte liefert."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Manuelle Prüfung vs. automatisierte Abfrage",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Jährliche Momentaufnahme",
+     "punkte": [
+      "Tabelle wird verschickt, Besitzer gehen Listen durch",
+      "Datensatz weicht schon in der Folgewoche von der Realität ab",
+      "Verschachtelte Gruppen tauchen im Bericht nie auf",
+      "Über 80 Admin-Stunden für eine einzige Überprüfung",
+      "Statische Liste bildet immer nur die Vergangenheit ab"
+     ]
+    },
+    "rechts": {
+     "titel": "Automatisierte Abfrage",
+     "punkte": [
+      "Daten werden automatisch abgefragt und konsolidiert",
+      "Täglicher oder wöchentlicher Lauf liefert aktuelles Bild",
+      "Vererbung und verschachtelte Gruppen werden aufgelöst",
+      "Aus wochenlanger Arbeit wird ein wiederholbarer Bericht",
+      "Prüfpfad belegt, wann die Prüfung lief"
+     ]
+    }
+   },
+   {
+    "titel": "Häufige Stolpersteine bei der Berechtigungsprüfung",
+    "typ": "checkliste",
+    "punkte": [
+     "Neben direkten auch vererbte Berechtigungen und Gruppenmitgliedschaften erfassen",
+     "Verschachtelte Azure-AD-Gruppen zu echten Benutzern auflösen",
+     "Geplante Prozesse mit App-only-Zertifikat statt interaktiver Anmeldung betreiben",
+     "429-Antworten und vorgeschlagene Wartezeiten im Code berücksichtigen",
+     "Dem OData-Next-Link folgen, um alle Daten zu erhalten",
+     "Zugangsdaten in Azure Key Vault statt im Skript speichern",
+     "Stilles Scheitern durch Protokolle und Fehlerprüfung verhindern"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Warum scheiterte die vierteljährliche manuelle Überprüfung im geschilderten Praxisbeispiel?",
+    "opts": [
+     "Die Admins hatten die Arbeit nicht auf mehrere Personen verteilt.",
+     "Gäste hatten über eine verschachtelte Gruppe Zugriff, die im Bericht fehlte.",
+     "Der Prüfprozess war nicht formell geregelt und blieb unvollständig.",
+     "Der Penetrationstest fand nur Zugriffe, die direkt vergeben worden waren."
+    ],
+    "a": 1,
+    "why": "Der Zugriff lief über eine verschachtelte Gruppe, die im manuellen Bericht nie auftauchte, obwohl 80 Admin-Stunden investiert wurden."
+   },
+   {
+    "q": "Welche Authentifizierung eignet sich laut Artikel für unbeaufsichtigte, geplante Prozesse am besten?",
+    "opts": [
+     "Interaktive Anmeldung mit Connect-PnPOnline und dem Konto eines Administrators",
+     "App-only-Verbindung über eine Azure-AD-App-Registrierung mit Zertifikat",
+     "Benutzerkonto mit Passwort, das fest im Skript hinterlegt ist",
+     "Gemeinsames Dienstkonto mit regelmäßig manuell erneuertem Passwort"
+    ],
+    "a": 1,
+    "why": "App-only mit Zertifikat ist für unbeaufsichtigte Prozesse deutlich stabiler; das Zertifikat liegt idealerweise in Azure Key Vault."
+   },
+   {
+    "q": "Was muss Ihr Code tun, wenn Graph-Antworten nach 200 Elementen abbrechen?",
+    "opts": [
+     "Die Abfrage mit kleinerer Seitengröße komplett neu starten",
+     "Dem OData-Next-Link-Token folgen, um die restlichen Daten abzurufen",
+     "Auf die 429-Antwort warten und das Ergebnis verwerfen",
+     "Die unvollständigen Daten als vollständigen Bericht speichern"
+    ],
+    "a": 1,
+    "why": "Wer dem OData-Next-Link nicht folgt, erhält nur einen Teil der Daten. Paginierung gehört von Anfang an eingeplant."
+   },
+   {
+    "q": "Wann kommen laut Artikel Hybrid Runbook Worker zum Einsatz?",
+    "opts": [
+     "Wenn Berichte per E-Mail an Teams verschickt werden sollen",
+     "Wenn Zertifikate nicht in Azure Key Vault gespeichert werden dürfen",
+     "Wenn ein Auftrag mehr Ressourcen braucht, als die Azure-Sandbox bietet",
+     "Wenn nur ein wöchentlicher Rhythmus statt täglicher Läufe gewünscht ist"
+    ],
+    "a": 2,
+    "why": "Bei extrem großen Tenants mit sehr langen Aufzählungen führen Hybrid Runbook Worker die Skripte vor Ort oder auf einer dedizierten VM aus."
+   }
+  ]
+ }
+}

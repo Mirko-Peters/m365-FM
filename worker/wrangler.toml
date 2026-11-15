@@ -11,14 +11,54 @@ database_name = "m365-dub"
 database_id = "REPLACE_WITH_D1_ID"   # wird vom Workflow (worker.yml) automatisch eingetragen
 migrations_dir = "migrations"   # versioniertes Schema: wrangler d1 migrations apply
 
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "VEC"
+index_name = "m365-search"
+
 [triggers]
-crons = ["0 6 * * *", "*/30 * * * *"]   # Digest 06:00 UTC; Feeds der Creator alle 30 Minuten
+crons = ["0 6 * * *", "*/30 * * * *", "*/15 * * * *"]   # Push taeglich, Wochenmail plus Nachlauf und Feeds alle 30 Minuten, Themen-Benachrichtigungen und Session-Erinnerungen alle 15 Minuten
 
 [vars]
 SITE = "https://www.m365.fm"
 API = "https://api-dub.m365.fm"
 MAIL_FROM = "M365.FM <system@m365.fm>"
 VAPID_SUBJECT = "mailto:system@m365.fm"
+AI_GATEWAY_ID = "m365fm"
+HAIKU_USD_PER_MTOK_IN = "0.10"
+HAIKU_USD_PER_MTOK_OUT = "0.50"
+AI_DAILY_EUR_HAIKU = "100"
+USD_PER_EUR = "1.08"
+SEARCH_GAP_THRESHOLD = "0.35"
+SEARCH_VECTOR_MIN_SCORE = "0.4"
+SEARCH_DEMAND_MIN = "3"   # #156: so viele Suchen (an mindestens 2 Tagen) braucht ein Begriff, bevor er eine Uebersetzung ausloest oder in /api/search/gaps erscheint
+# #281 Werbeplaetze: PayPal-Umgebung (sandbox | live). Bis Mirko umstellt: sandbox (api-m.sandbox.paypal.com).
+# Sandbox nutzt PAYPAL_SANDBOX_CLIENT_ID/_SECRET/_WEBHOOK_ID, falls gesetzt, sonst PAYPAL_CLIENT_ID/_SECRET/_WEBHOOK_ID.
+PAYPAL_ENV = "sandbox"
+# Schalter Werbeplaetze/Bestellungen (#281): "0" = nur eigene Werbung (Hausanzeigen), Buchung/Zahlung/Leads/Sponsoring-Bestellung antworten 503.
+# Erst nach dem PayPal-Sandbox-Test auf "1" setzen, zusammen mit "booking": true in data/ad_slots.json (Seite).
+ADS_BOOKING = "0"
+# Cloudflare Turnstile fuer das Lead-Formular: TURNSTILE_SITE_KEY und TURNSTILE_SECRET als Worker-Secrets (Dashboard, Typ "Secret",
+# damit ein Deploy sie nicht loescht). Ohne TURNSTILE_SECRET nimmt der Worker keine Leads an (fail closed).
+# Blog auf der eigenen Domain (BLOG_OWN_DOMAIN.md): "1" schaltet Domain-Verwaltung und Auslieferung ein, Standard "0" = aus.
+BYOD = "0"
+# Blog-Import per Feed (BLOG_OWN_DOMAIN.md, Teil 3): "1" schaltet /api/byod/import/* und die Oberflaeche ein, Standard "0" = aus. Unabhaengig von BYOD.
+BYOD_IMPORT = "0"
+# BYOD_CNAME_TARGET = "blogs.example.net"   # CNAME-Ziel, auf das Mitglieder zeigen (Zone der Blog-Domains, Cloudflare for SaaS); Mirko setzt es nach dem Anlegen der Zone
+# BYOD_CANONICAL = "platform"               # "platform" (Standard: Canonical auf m365.fm) oder "own" (Canonical auf die eigene Domain), Entscheidung Mirko
+# BYOD_INDEX_VOTES = "10"                   # Upvotes, ab denen ein Beitrag der eigenen Domain indexierbar ist (wie INDEX_VOTES der Plattform)
+# Worker-Secrets (nie hier): CF_API_TOKEN, CF_ZONE_ID (Cloudflare for SaaS, Custom Hostnames). Ohne sie ruft der Code Cloudflare nie auf.
+SPREAKER_SHOW_IDS = "6704921,7393187,7393248,7393223,7393231,7393243,7393222,7393242,7393230,7393247,7393254,7393221,7393227,7393228,7393232,7393236,7393238,7393244,7393250,7393253"
+
+[[send_email]]
+name = "EMAIL"
+
+# Seiten und Exporte des Seitenbaus (nur lesen): Rueckfall fuer Dateien, die nicht in GitHub Pages liegen (siteFetch in src/util.js)
+[[r2_buckets]]
+binding = "PAGES"
+bucket_name = "m365-fm"
 
 [observability]
 enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)

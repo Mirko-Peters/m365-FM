@@ -1,0 +1,820 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.080
+Je hostet op één plek, laten we zeggen een datacenter in Virginia.
+
+00:00:03.300 --> 00:00:08.340
+Dat werkt prima voor klanten in New York of Chicago, maar wat als iemand in Tokyo, London of Sydney zit.
+
+00:00:08.520 --> 00:00:14.100
+Elke keer dat die persoon je site bezoekt, moet een verzoek oceanen en continenten oversteken om je server te bereiken.
+
+00:00:14.300 --> 00:00:20.000
+Elke afbeelding, elke pagina die laat, elke API aanroep maakt diezelfde lange reis en die vertraging loopt snel op.
+
+00:00:20.140 --> 00:00:26.620
+Sterker nog, uit onderzoek blijkt dat zelfs één seconde vertraging in de laat tijd je conversies kan kosten en gefrustreerde bezoekers wegjaagt.
+
+00:00:26.620 --> 00:00:30.620
+Maar hier is het punt, wat gebeurt er als je site viral gaat of een botnet besluit aan te vallen?
+
+00:00:30.780 --> 00:00:35.020
+Je enige server in Virginia wordt platgelegd. Hij wordt traag en kan zelfs volledig crashen.
+
+00:00:35.160 --> 00:00:41.620
+Je zit vast zonder back-up plan. Je kunt het beschikbaarheidsprobleem oplossen door kopieën van je site te maken in verschillende regio's, zoals Tokio, Londen of Sao Paulo.
+
+00:00:41.860 --> 00:00:46.200
+Dat helpt, maar nu heb je een nieuw probleem. Hoe stuur je elke bezoeker naar de juiste locatie?
+
+00:00:46.380 --> 00:00:49.540
+Je wilt niet dat iemand in Japan per ongeluk op je Amerikaanse server terechtkomt.
+
+00:00:49.640 --> 00:00:53.720
+Je hebt een slimme manier nodig om verkeer te roteren en dat is precies waar Azure Front door in beeld komt.
+
+00:00:53.720 --> 00:00:56.920
+Maak kennis met de globale verkeersagent, oftewel Azure Front door.
+
+00:00:57.140 --> 00:01:03.580
+Zie Azure Front door als een wereldwijde verkeersagent, niet slechts één op een kruispunt, maar duizenden die op belangrijke kruispunten over de hele wereld staan.
+
+00:01:03.760 --> 00:01:07.780
+Elke keer dat iemand je website bezoekt, komt de dichtstbijzijnde agent tussen beiden en zegt, je bent in Tokio.
+
+00:01:07.960 --> 00:01:10.640
+De snelste winkel voor jou staat in Singapore. Ik breng je erheen.
+
+00:01:11.240 --> 00:01:13.780
+Aanhalingsteken. Dus, hoe verschilt dit van een gewone loadbalancer?
+
+00:01:14.000 --> 00:01:18.420
+De meeste loadbalancers werken op laag 4 en kijken naar IP-adressen en porten om verkeer te roteren.
+
+00:01:18.420 --> 00:01:25.300
+Dat is prima voor basisbehoeften, maar Azure Front door werkt op laag 7, wat betekent dat het HTTP en HTTPS verkeer begrijpt.
+
+00:01:25.460 --> 00:01:33.440
+Het kan naar de ingevoerde URL kijken, de browser headers controleren, zien wat voor soort inhoud wordt gevraagd en op basis daarvan slimme routeringsbeslissingen nemen.
+
+00:01:33.620 --> 00:01:44.640
+In plaats van alleen te zeggen, dit IP-adres gaat naar die server, kan Front door zeggen, dit verzoek voor API-gebruikers gaat naar je Amerikaanse backend, maar dit verzoek voor afbeeldingen gaat naar de gekachte kopie in Tokio.
+
+00:01:44.640 --> 00:01:55.860
+Nu, dit is wat dit achter de schermen mogelijk maakt. Azure Front doordraait op het wereldwijde netwerk van Microsoft met meer dan 210 aanwezigheidspunten verspreid over meer dan 130 metrolocaties wereldwijd.
+
+00:01:56.100 --> 00:02:02.440
+Zie elk aanwezigheidspunt als een klein verkeershokje, een lokaal kantoor in elke grote stad dat het initiële verzoek snel kan afhandelen.
+
+00:02:02.680 --> 00:02:08.260
+Wanneer een gebruiker je site bezoekt, maakt deze verbinding met het dichtstbijzijnde punt in plaats van helemaal naar je bronserver in Virginia te reizen.
+
+00:02:08.480 --> 00:02:12.400
+Dat punt stuurt hun verzoek vervolgens via het private netwerk van Microsoft door naar je backend.
+
+00:02:12.400 --> 00:02:15.580
+Dit is belangrijk omdat het openbare internet onvoorspelbaar is.
+
+00:02:15.760 --> 00:02:21.260
+Je verkeer kan wel twaalf hops door verschillende netwerken maken, waarbij elk punt vertraging een potentieel pakketverlies toevoegt.
+
+00:02:21.460 --> 00:02:27.040
+De backbone van Microsoft daarentegen is een privaat hogesnelheidsnetwerk dat hun datacenters rechtstreeks met elkaar verbindt.
+
+00:02:27.120 --> 00:02:32.620
+Dus zodra je verzoek dat dichtstbijzijnde punt bereikt, verloopt de rest van de reis via een snelle, betrouwbare snelweg.
+
+00:02:32.780 --> 00:02:39.780
+Je krijgt snellere laadtijden, lagere latentie en een betere ervaring voor gebruikers overal, of ze nu in Tokio, Londen of Sao Paulo zijn.
+
+00:02:39.780 --> 00:02:43.860
+En dit alles gebeurt automatisch, zonder dat je bezoekers ooit weten dat het er is.
+
+00:02:44.100 --> 00:02:47.140
+Drie lagen van veerkracht, hoe afdeling in de lucht blijft.
+
+00:02:47.280 --> 00:02:53.120
+Je denkt misschien, dit hele idee van een wereldwijde verkeersregelaar klinkt geweldig, maar wat gebeurt er als de regelaar zelf crash?
+
+00:02:53.240 --> 00:02:58.120
+Als Azure Frontdoor het enige toegangspunt is voor je hele app, is dat een behoorlijk groot enkelvoudig storingspunt, toch?
+
+00:02:58.360 --> 00:02:59.920
+Microsoft heeft daarover nagedacht.
+
+00:03:00.080 --> 00:03:03.520
+Ze hebben drie lagen van veerkracht in Frontdoor ingebouwd, zodat het bijna nooit uitvalt.
+
+00:03:03.680 --> 00:03:04.820
+Ik zal ze met je doornemen.
+
+00:03:04.820 --> 00:03:06.500
+Eerste laag, de front-end.
+
+00:03:06.680 --> 00:03:10.000
+Herinner je je die 210-plus aanwezigheidspunten waar ik het over had?
+
+00:03:10.140 --> 00:03:12.580
+Elk punt is een volledig onafhankelijk verkeersstation.
+
+00:03:12.900 --> 00:03:19.760
+Deze POP's bevinden zich op meer dan 130 locaties wereldwijd, draaiend in Microsoft datacenters en colocatiefaciliteiten van partners.
+
+00:03:19.980 --> 00:03:25.360
+Elke POP bevat meerdere serverracks met edgecontrollers aan de bovenkant die fungeren als ingebouwde loadbalancer.
+
+00:03:25.620 --> 00:03:31.360
+Als één server binnen een POP uitvalt, leidt de edgecontroller het verkeer om naar een gezonde server binnen diezelfde POP.
+
+00:03:31.360 --> 00:03:34.980
+En als een hele POP uitvalt, komt Anycast IP-adressering in actie.
+
+00:03:35.140 --> 00:03:38.760
+Het verzoek van je bezoeker wordt automatisch doorgestuurd naar de dichtstbijzijnde volgende POP.
+
+00:03:38.880 --> 00:03:41.780
+Geen verstoring en geen handmatige tussenkomst, het gebeurt gewoon.
+
+00:03:41.960 --> 00:03:43.260
+Tweede laag, de fallback.
+
+00:03:43.420 --> 00:03:44.860
+Maar wat als een POP overbelast raakt?
+
+00:03:45.100 --> 00:03:48.640
+Stel dat er een enorme verkeerspiek is of dat meerdere POP's in een regio tegelijkertijd uitvallen.
+
+00:03:48.820 --> 00:03:51.400
+De overblijvende POP's kunnen de belasting dan mogelijk niet aan.
+
+00:03:51.580 --> 00:03:53.200
+Dat is wanneer de fallback laag inspringt.
+
+00:03:53.200 --> 00:03:57.980
+Dit is een aparte set POP's, tientallen in plaats van honderden, die exact dezelfde software en architectuur draaien.
+
+00:03:58.140 --> 00:04:01.300
+Ze bevinden zich alleen in Microsoft Datacenters, niet in partnerfaciliteiten.
+
+00:04:01.520 --> 00:04:05.240
+Wanneer een front-end-pop verkeer moet afstoten, verschuift het verzoeken naar deze fallback laag.
+
+00:04:05.380 --> 00:04:07.940
+Dezelfde caching, dezelfde routing, dezelfde beveiliging.
+
+00:04:08.060 --> 00:04:09.560
+Je bezoekers merken nooit het verschil.
+
+00:04:09.760 --> 00:04:12.660
+Ze krijgen hun inhoud misschien iets langzamer, maar ze krijgen het nog steeds.
+
+00:04:12.940 --> 00:04:14.380
+Derde laag, het verkeersschild.
+
+00:04:14.580 --> 00:04:15.640
+Dit is de toezichthouder.
+
+00:04:15.880 --> 00:04:19.500
+Zie het als een wereldwijd commandocentrum dat het gehele front door netwerk in de gaten houdt.
+
+00:04:19.500 --> 00:04:23.180
+Het monitort verkeerspatronen, belastingniveaus en de status van alle POP's.
+
+00:04:23.180 --> 00:04:28.180
+Wanneer het detecteert dat bepaalde POP's overbelast raken, wacht het niet simpelweg tot de fallback laag in werking treedt.
+
+00:04:28.260 --> 00:04:32.340
+Het verplaatst verkeer proactief door bij te werken hoe DNS jouw front door eindpunt omzet.
+
+00:04:32.500 --> 00:04:38.000
+Het kan overschakelen van een wereldwijd Anycast IP naar een regionaal IP, waardoor clients volledig naar andere sets POP's worden verplaatst.
+
+00:04:38.160 --> 00:04:40.360
+Het kan indien nodig zelfs continenten overbruggen.
+
+00:04:40.520 --> 00:04:42.920
+Het verkeersschild is wat front door bijna magisch maakt.
+
+00:04:43.120 --> 00:04:47.360
+Het optimaliseert constant op de achtergrond en past routes aan voordat er ooit problemen ontstaan.
+
+00:04:47.360 --> 00:04:48.880
+Nu moet ik hier iets over vermelden.
+
+00:04:49.040 --> 00:04:52.500
+In oktober 2025 had Azure Front door te kampen met een aanzienlijke storing.
+
+00:04:52.720 --> 00:04:59.540
+Een configuratiewijziging sloeg de veiligheidsvalidaties over en veroorzaakte wij het verspreiden problemen bij Microsoft 365, Xbox Live en duizenden klantwebsites.
+
+00:04:59.780 --> 00:05:01.160
+Microsoft heeft ervan geleerd.
+
+00:05:01.380 --> 00:05:04.360
+Ze hebben alle asynchrone verwerking uit de configuratiepijplijn verwijderd.
+
+00:05:05.020 --> 00:05:07.100
+Nu wordt elk codepad getest tijdens de uitrol.
+
+00:05:07.300 --> 00:05:12.360
+Ze hebben de terugdraaitijd verkort van 4 uur naar 1 uur en ze streven naar 10 minuten tegen maart 2026.
+
+00:05:12.360 --> 00:05:17.920
+Ze introduceren ook microcell segmentatie om toekomstige impact te beperken tot minder dan 1% van de tenants.
+
+00:05:18.120 --> 00:05:25.980
+Het punt is, geen enkel systeem is perfect, maar de drielaagse architectuur van front door is ontworpen om regionale storingen, verkeerspieken en zelfs sommige configuratiefouten te overleven.
+
+00:05:26.160 --> 00:05:28.200
+Voor de meeste toepassingen is dat ruim voldoende.
+
+00:05:28.460 --> 00:05:35.600
+Voor echt bedrijfskritieke systemen kun je Azure Traffic Manager voor front door plaatsen als noodoplossing, maar dat is een geavanceerd onderwerp voor een andere dag.
+
+00:05:35.760 --> 00:05:38.200
+Hoe het verkeer stuurt, routing en origin groepen.
+
+00:05:38.200 --> 00:05:45.140
+We hebben dus deze wereldwijde verkeersregelaar met meer dan 210 posten en 3 back-uplagen, maar hoe beslist het eigenlijk waar elke bezoeker naartoe wordt gestuurd?
+
+00:05:45.360 --> 00:05:47.340
+Daar komen origin groepen om de hoek kijken.
+
+00:05:47.540 --> 00:05:50.660
+Een origin groep is in feite een verzameling van jouw back-end surfers.
+
+00:05:50.880 --> 00:05:54.820
+Zie het als je lijst met winkels, de daadwerkelijke plekken waar je website of app draait.
+
+00:05:54.980 --> 00:05:58.280
+Je kunt één surfer in Noord-Amerika hebben, één in Europa en één in Azië.
+
+00:05:58.460 --> 00:06:00.380
+Ze vallen allemaal onder dezelfde origin groep.
+
+00:06:00.520 --> 00:06:02.900
+Front door stuurt het verkeer nu niet zomaar blindelings naar allemaal.
+
+00:06:03.120 --> 00:06:05.160
+Het controleert constant of ze nog in de lucht zijn.
+
+00:06:05.160 --> 00:06:11.300
+Dat heet een heldprobe. Elke paar seconden pinkt elke front door pop je surfers door een specifiek pad aan te roepen,
+
+00:06:11.460 --> 00:06:14.880
+meestal de route van je site of een speciaal held-eindpunt zoals held.
+
+00:06:15.120 --> 00:06:21.180
+Als een surfer niet reageert of een foutcode geeft, markeert front door deze als ongezond en stopt het met het sturen van verkeer daarheen.
+
+00:06:21.360 --> 00:06:25.900
+Het is als een verkeersregelaar die controleert of een winkel wel echt open is voordat hij klanten naar binnen stuurt.
+
+00:06:26.080 --> 00:06:30.400
+Maar zodra je meerdere gezonde surfers hebt, is de vraag welke moeten bezoeken ontvangen.
+
+00:06:30.400 --> 00:06:34.900
+Front door gebruikt drie factoren om dit te bepalen, prioriteit, latentie en gewicht.
+
+00:06:34.900 --> 00:06:37.280
+En deze werken samen in een specifieke volgorde.
+
+00:06:37.480 --> 00:06:38.800
+De eerste is prioriteit.
+
+00:06:39.020 --> 00:06:41.780
+Je kunt de ene server aanwijzen als primair en de andere als backup.
+
+00:06:42.000 --> 00:06:44.900
+Stel de primaire in op prioriteit 1, de backup op prioriteit 2.
+
+00:06:45.120 --> 00:06:47.600
+Onder normale omstandigheden gaat al het verkeer naar de primaire server.
+
+00:06:47.820 --> 00:06:50.420
+Dus als de primaire server uitvalt, verschuift het verkeer naar de backup.
+
+00:06:50.620 --> 00:06:51.320
+Simpel, toch?
+
+00:06:51.500 --> 00:06:55.840
+Dit is ideaal voor active-passive opstellingen waarbij je één regio alles wilt laten afhandelen, tenzij deze faalt.
+
+00:06:56.000 --> 00:06:57.760
+Maar wat als je beide surfers actief wilt hebben?
+
+00:06:57.760 --> 00:06:59.480
+Daar komt latentie om de hoek kijken.
+
+00:06:59.480 --> 00:07:06.360
+Als meerdere surfers dezelfde prioriteit hebben, stuurt Front door verkeer naar degene met de laagste latentie de snelste responstijd vanaf de locatie van de bezoeker.
+
+00:07:06.520 --> 00:07:11.620
+Dus een gebruiker in Londen wordt naar je Europese server geleid, terwijl een gebruiker in Tokio naar de Aziatische gaat.
+
+00:07:11.780 --> 00:07:15.180
+Er is ook een gevoeligheidsinstelling, standaard op 50 milliseconden.
+
+00:07:15.340 --> 00:07:19.840
+Als twee surfers binnen 50 milliseconden van elkaar zitten, beschouwt Front door ze als even snel.
+
+00:07:20.080 --> 00:07:23.780
+Dat voorkomt constant schakelen tussen surfers die in principe dezelfde snelheid hebben.
+
+00:07:23.940 --> 00:07:26.360
+En wanneer de latentie gelijk is, komt gewicht in het spel.
+
+00:07:26.360 --> 00:07:29.400
+Je kunt gewichten toewijzen om verkeerd te verdelen over surfers.
+
+00:07:29.560 --> 00:07:31.640
+Stel dat je een nieuwe versie van je app wilt testen.
+
+00:07:31.780 --> 00:07:35.160
+Je zou je huidige server een gewicht van 90 kunnen geven en de nieuwe een gewicht van 10.
+
+00:07:35.340 --> 00:07:39.480
+Dat betekent dat grofweg 9 van de 10 bezoekers naar de oude versie gaan en 1 van de 10 naar de nieuwe.
+
+00:07:39.700 --> 00:07:45.240
+Dit is perfect voor geleidelijke uitrol, app testen of simpelweg het balanceren van belasting over surfers met verschillende capaciteiten.
+
+00:07:45.440 --> 00:07:46.720
+Dit is het belangrijkste punt.
+
+00:07:46.980 --> 00:07:48.540
+Dit alles gebeurt automatisch.
+
+00:07:48.740 --> 00:07:51.880
+Je configureert de Origin Group één keer en Front door doet de rest.
+
+00:07:51.880 --> 00:07:57.080
+Het controleert je servers, meet latentie, respecteert prioriteiten en verdeelt verkeer op basis van gewicht.
+
+00:07:57.220 --> 00:08:00.700
+En het doet dit allemaal aan de rand, voordat het verzoek zelfs maar je bekend bereikt.
+
+00:08:00.920 --> 00:08:04.860
+Dat betekent dat je servers niet hoeven uit te zoeken waar verkeer vandaan komt of hoe het gerouteerd moet worden.
+
+00:08:05.100 --> 00:08:08.820
+Zij leveren alleen de content, beveiliging aan de rand, de WAF en daarbuiten.
+
+00:08:09.080 --> 00:08:10.540
+Laten we het nu over beveiliging hebben.
+
+00:08:10.720 --> 00:08:16.800
+Omdat Front door zich aan de uiterste rand van het netwerk van Microsoft bevindt, is het de perfecte plek om aanvallen te stoppen voordat ze je servers bereiken.
+
+00:08:17.020 --> 00:08:19.840
+Zie het als een beveiligingscontrole bij de ingang van een gebouw.
+
+00:08:19.840 --> 00:08:22.080
+Iedereen die naar binnen wil, moet er eerst doorheen.
+
+00:08:22.300 --> 00:08:28.200
+Dat controlepunt heet de Web Application Firewall, of WAF, en is ingebouwd in zowel Front door Standard als Premium.
+
+00:08:28.480 --> 00:08:31.040
+Het blokkeert automatisch veel voorkomende bebaanvallen.
+
+00:08:31.280 --> 00:08:36.320
+Denk aan SQL-injectie, waarbij een aanvaller kwaadaardige databasecommando's in een formulierveld probeert te smoekkelen,
+
+00:08:36.480 --> 00:08:39.720
+of cross-site scripting, waarbij scripts in uw pagina's worden geïnjecteerd,
+
+00:08:39.840 --> 00:08:42.940
+of dedels aanvallen, waarbij men uw servers met verkeer probeert te overspoelen.
+
+00:08:43.120 --> 00:08:47.260
+De WAF vangt dit alles op aan de edge en blokkeert het voordat uw origin er ook maar iets van merkt.
+
+00:08:47.260 --> 00:08:50.460
+Naast automatische beveiliging kunt u ook aangepaste regels maken.
+
+00:08:50.620 --> 00:08:55.700
+Als uw site bijvoorbeeld alleen bedoeld is voor klanten in Europa, kunt u verkeer uit andere regio's volledig blokkeren.
+
+00:08:55.860 --> 00:09:00.380
+Of misschien is u een specifiek IP-bereik opgevallen dat uw site voortdurend scant, dat kunt u ook blokkeren.
+
+00:09:00.540 --> 00:09:04.800
+U kunt ook filteren op basis van request headers, URL-patronen of zelfs de browser die iemand gebruikt.
+
+00:09:04.940 --> 00:09:08.240
+De WAF geeft u zeer specifieke controle over wie er toegang krijgt en wie niet.
+
+00:09:08.420 --> 00:09:10.100
+Dit is waar de prijsniveaus een rol spelen.
+
+00:09:10.360 --> 00:09:14.520
+Standard biedt aangepaste WAF regels waarbij u zelf definieert wat u wilt blokkeren en toestaan.
+
+00:09:14.520 --> 00:09:19.480
+Premium gaat verder door beheerde regelsets toe te voegen die worden aangestuurd door Microsoft dreigingsinformatie,
+
+00:09:19.660 --> 00:09:24.320
+die constant worden bijgewerkt op basis van echte aanvalspatronen die Microsoft over zijn gehele netwerk ziet.
+
+00:09:24.480 --> 00:09:30.060
+Premium bevat ook botbeveiliging die geautomatiseerde scrapers, credentialstuffers en andere bots automatisch blokkeert.
+
+00:09:30.220 --> 00:09:35.840
+En het voegt ondersteuning voor private link toe, waarmee u verbinding kunt maken met uw origins via een privé-netwerkverbinding in plaats van het openbare internet.
+
+00:09:36.060 --> 00:09:39.680
+Dit betekent dat uw bekend servers volledig verborgen kunnen zijn voor de buitenwereld.
+
+00:09:39.860 --> 00:09:41.220
+Alleen Frontor kan ze bereiken.
+
+00:09:41.220 --> 00:09:45.720
+Dit is erg belangrijk voor de beveiliging. Veel aanvallen richten zich niet op de voordeur, Frontdoor.
+
+00:09:45.900 --> 00:09:47.460
+Ze proberen de achterdeur te vinden.
+
+00:09:47.700 --> 00:09:53.720
+Als uw origin server een openbaar IP-adres heeft, kunnen aanvallers deze direct scannen en al uw Frontdoor beveiligingen omzeilen.
+
+00:09:53.940 --> 00:09:59.060
+Met private link is dat niet mogelijk, omdat de origin geen openbaar eindpunt heeft en alleen toegankelijk is via Frontdoor.
+
+00:09:59.260 --> 00:10:02.360
+Dus zelfs als iemand het IP-adres van uw server ontdekt, kunnen ze deze niet bereiken.
+
+00:10:02.540 --> 00:10:04.220
+Het resultaat is een gelaagde verdediging.
+
+00:10:04.400 --> 00:10:06.420
+De WAF blokkeert aanvallen op applicatieniveau.
+
+00:10:06.420 --> 00:10:08.680
+Aangepaste regels handelen uw specifieke vereisten af.
+
+00:10:08.920 --> 00:10:10.900
+Bobbeveiliging stopt geautomatiseerde dreigingen.
+
+00:10:11.080 --> 00:10:13.020
+En private link houdt uw origins onzichtbaar.
+
+00:10:13.240 --> 00:10:16.160
+Dit alles gebeurt aan de edge voordat het verkeer überhaupt uw infrastructuur bereikt,
+
+00:10:16.360 --> 00:10:20.080
+zodat uw servers zich kunnen concentreren op het leveren van content in plaats van op het afslaan van aanvallen.
+
+00:10:20.240 --> 00:10:20.560
+Caching.
+
+00:10:20.820 --> 00:10:22.200
+Om alles nog sneller te maken.
+
+00:10:22.420 --> 00:10:26.860
+We hebben routing en beveiliging behandeld, maar er is nog een functie die Frontdoor erg nuttig maakt.
+
+00:10:27.060 --> 00:10:27.380
+Caching.
+
+00:10:27.700 --> 00:10:28.380
+Dit is het idee.
+
+00:10:28.380 --> 00:10:30.940
+Veel van uw website-inhoud verandert niet zo vaak.
+
+00:10:31.120 --> 00:10:36.780
+Afbeeldingen, CSS-bestanden, JavaScript-bibliotheken, productfoto's, misschien zelfs sommige HTML-pagina's.
+
+00:10:36.900 --> 00:10:41.420
+Als elke bezoeker die moet ophalen vanaf je bronserver, verspil je tijd en bandbreedte
+
+00:10:41.420 --> 00:10:46.500
+omdat de server telkens hetzelfde verzoek moet verwerken en dezelfde bytes over het internet moet sturen.
+
+00:10:46.700 --> 00:10:50.260
+Caching lost dit op door een kopie van statische inhoud bij de Edgepop te bewaren.
+
+00:10:50.400 --> 00:10:55.180
+De volgende keer dat iemand datzelfde bestand opvraagt, serveert de poppet direct zonder ooit contact op te nemen met je bron.
+
+00:10:55.180 --> 00:10:58.100
+Het is alsof je een klein magazijn naast elk tolhuisje hebt.
+
+00:10:58.100 --> 00:11:02.480
+In plaats van elke klant terug naar de hoofdfabriek te sturen, geef je ze gewoon wat er al op de plank ligt.
+
+00:11:02.640 --> 00:11:04.220
+Het prestatieverschil is enorm.
+
+00:11:04.460 --> 00:11:08.420
+In plaats van een heen-en-weer reis over de oceaan, komt de reactie van een server in dezelfde stad.
+
+00:11:08.820 --> 00:11:10.280
+Milliseconden in plaats van seconden.
+
+00:11:10.420 --> 00:11:16.120
+En je bronserver krijgt rust omdat deze minder verzoeken afhandelt en zich kan richten op dynamische zaken die echt verwerking nodig hebben.
+
+00:11:16.300 --> 00:11:18.220
+Caching is niet voor alles automatisch.
+
+00:11:18.480 --> 00:11:20.720
+Jij bepaalt wat er gecachet wordt en voor hoe lang.
+
+00:11:21.360 --> 00:11:25.940
+Frontdoor respecteert standaard cache-control headers van je bron, zoals Max-Age of S-Max-Age.
+
+00:11:25.940 --> 00:11:30.620
+En je kunt ook direct cache-regels configureren om de headers van je bron indien nodig te overschrijven.
+
+00:11:30.820 --> 00:11:35.900
+Wanneer je inhoud bijwerkt, kun je de cache legen en Frontdoor opdracht geven de oude kopieën weg te gooien en nieuwe op te halen.
+
+00:11:36.080 --> 00:11:40.720
+Dat is belangrijk voor zaken als productlanceringen of prijswijzigingen waar de nieuwe versie direct zichtbaar moet zijn.
+
+00:11:40.960 --> 00:11:41.620
+Dit is het punt.
+
+00:11:41.880 --> 00:11:43.980
+Frontdoor is er niet alleen voor statische inhoud.
+
+00:11:44.240 --> 00:11:49.940
+Zelfs voor dynamische inhoud zoals APIs, gepersonaliseerde pagina's of winkelwagentjes wordt de levering versneld...
+
+00:11:49.940 --> 00:11:55.400
+...omdat het verzoek via het privé-netwerk van Microsoft naar je bron reist in plaats van via het openbare internet.
+
+00:11:55.620 --> 00:11:58.640
+Dat privé-netwerk is sneller en betrouwbaarder dan het open web.
+
+00:11:58.820 --> 00:12:01.620
+Dus zelfs niet-gecachette verzoeken krijgen een snelheidsboost.
+
+00:12:01.820 --> 00:12:05.180
+Dit is een van de belangrijkste verschillen tussen Frontdoor en een traditioneel CDN.
+
+00:12:05.340 --> 00:12:08.120
+Een CDN-caché statische inhoud en dat is het wel zo'n beetje.
+
+00:12:08.360 --> 00:12:11.320
+Frontdoor-caché statische inhoud en versnelt al het overige.
+
+00:12:11.520 --> 00:12:12.960
+Het is een 2 voor 1 deal.
+
+00:12:13.480 --> 00:12:14.880
+Prijsniveaus, welke moet je kiezen?
+
+00:12:15.060 --> 00:12:18.100
+Goed, laten we over geld praten, want dat is de grote vraag.
+
+00:12:18.100 --> 00:12:20.420
+Wat kost dit en welk niveau moet je eigenlijk kiezen?
+
+00:12:20.560 --> 00:12:23.320
+Voordat we naar de cijfers kijken, is dit waarom het belangrijk is.
+
+00:12:23.520 --> 00:12:29.360
+Het niveau dat je kiest beïnvloedt niet alleen de prijs, maar bepaalt ook de beveiliging en functies die beschikbaar zijn om je applicatie te beschermen.
+
+00:12:29.500 --> 00:12:31.200
+Azure Frontdoor komt in drie versies.
+
+00:12:31.420 --> 00:12:32.720
+Classic is de oude versie.
+
+00:12:32.900 --> 00:12:36.400
+Het werkt nog steeds, maar Microsoft raadt af om het voor nieuwe projecten te gebruiken.
+
+00:12:36.580 --> 00:12:37.980
+Classic is op weg naar de uitgang.
+
+00:12:38.220 --> 00:12:42.740
+Geen nieuwe resources na 2025 en volledige uitfasering tegen 2027.
+
+00:12:43.180 --> 00:12:45.880
+Dus, als je opnieuw begint, kijk je naar standard of premium.
+
+00:12:45.880 --> 00:12:47.860
+Hier is het eenvoudigste overzicht.
+
+00:12:47.860 --> 00:12:50.900
+Standard kost 35 dollar per maand als basistarief.
+
+00:12:51.040 --> 00:12:53.320
+Premium kost 330 dollar per maand.
+
+00:12:53.520 --> 00:12:55.880
+Dat is een flinke sprong, maar dit is het interessante deel.
+
+00:12:56.060 --> 00:12:59.540
+De data transfer tarieven per gigabyte zijn identiek voor beide niveaus.
+
+00:12:59.720 --> 00:13:04.800
+In Noord-Amerika en Europa kost uitgaand verkeer ongeveer 8,25 cent per gigabyte voor de eerste 10 terabytes.
+
+00:13:05.040 --> 00:13:07.900
+Transfer van Edge naar Origin is ongeveer 2 cent per gigabyte.
+
+00:13:08.140 --> 00:13:09.180
+Zelfde prijs voor beide.
+
+00:13:09.440 --> 00:13:11.680
+Dus, wat krijg je voor die extra 300 dollar?
+
+00:13:12.000 --> 00:13:12.480
+Functies.
+
+00:13:12.480 --> 00:13:19.480
+Premium voegt beheerde WAF regels toe op basis van Microsoft Threat Intelligence, regels die automatisch updaten op basis van werkelijke aanvalspatronen.
+
+00:13:20.240 --> 00:13:26.600
+Je krijgt ook botbescherming, ondersteuning voor PrivateLink zodat je Origin verborgen blijft voor het openbare internet en diepere beveiligingsanalyse.
+
+00:13:26.820 --> 00:13:31.760
+Standard biedt je wereldwijde load balancing, caching, dynamische versnelling en aangepaste WAF regels.
+
+00:13:31.940 --> 00:13:34.800
+Je kunt IP bereiken, landen of aanvraagpatronen blokkeren.
+
+00:13:35.000 --> 00:13:37.340
+Je krijgt alleen niet de beheerde regelsets of PrivateLink.
+
+00:13:37.340 --> 00:13:39.300
+De kosten per aanvraag zijn ook anders.
+
+00:13:39.540 --> 00:13:43.240
+Standard kost ongeveer 9 cent per 10.000 aanvragen voor de eerste 250 miljoen.
+
+00:13:43.380 --> 00:13:45.520
+Premium kost ongeveer 15 cent per 10.000.
+
+00:13:45.700 --> 00:13:47.420
+Bij grootschalig gebruik loopt dat verschil op.
+
+00:13:47.500 --> 00:13:48.560
+Dus, hoe maak je een keuze?
+
+00:13:48.760 --> 00:13:49.840
+Dit is mijn vuistregel.
+
+00:13:50.020 --> 00:13:55.040
+Als je een standaard website of API draait iets dat wereldwijde prestaties en basisbeveiliging nodig heeft, begin dan met Standard.
+
+00:13:55.220 --> 00:14:00.340
+Het basistarief van 35 dollar is betaalbaar en de aangepaste WAF regels pakken de meeste veelvoorkomende dreigingen aan.
+
+00:14:00.480 --> 00:14:03.280
+Je kunt altijd later upgraden als je beveiligingsbehoeften toenemen.
+
+00:14:03.280 --> 00:14:10.560
+Als je in een gereguleerde sector werkt, zoals de zorg, financiën, overheid of als je gevoelige klantgegevens verwerkt, dan is premium de extra kosten waard.
+
+00:14:10.700 --> 00:14:14.380
+De beheerde WAF regels vangen dreigingen op waar je zelf misschien niet aan denkt om te blokkeren.
+
+00:14:14.540 --> 00:14:19.420
+PrivateLink houdt je Origins onzichtbaar en botbescherming stopt geautomatiseerde aanvallen die Standard niet zou opvangen.
+
+00:14:19.620 --> 00:14:25.640
+Nog één ding, als je alleen statische content serveert en geen routing of beveiligingsfuncties nodig hebt, is een traditionele CDN wellicht goedkoper.
+
+00:14:25.840 --> 00:14:30.920
+Azure CDN van Microsoft bestaat nog steeds en voor puur statische levering is het vaak kosteneffectiever.
+
+00:14:30.920 --> 00:14:38.180
+Maar voor de meeste praktijktoepassingen, waar je routing, beveiliging, caching en versnelling nodig hebt, is Frontdoor Standard de ideale keuze.
+
+00:14:38.640 --> 00:14:39.920
+Alles op een rij, een praktijkvoorbeeld.
+
+00:14:40.880 --> 00:14:45.300
+Laat me je door een praktijkscenario leiden zodat je precies kunt zien hoe al deze onderdelen samenwerken.
+
+00:14:45.520 --> 00:14:47.440
+Stel je voor dat je een e-commerce website runt.
+
+00:14:47.620 --> 00:14:50.640
+Je hebt servers in drie regio's, Noord-Amerika, Europa en Azië.
+
+00:14:50.800 --> 00:14:53.920
+Je klanten zitten overal, van Japan tot Brazilië en Zuid-Afrika.
+
+00:14:54.220 --> 00:14:57.940
+Zonder Frontdoor maakt een klant in Tokio direct verbinding met je Amerikaanse server.
+
+00:14:57.940 --> 00:15:02.020
+Elke afbeelding, productpagina en check-out aanvraag moet de stille oceaan oversteken.
+
+00:15:02.240 --> 00:15:02.960
+Dat is traag.
+
+00:15:03.100 --> 00:15:06.060
+En als je Amerikaanse server uitvalt, ziet die klant alleen een foutmelding.
+
+00:15:06.280 --> 00:15:07.240
+Voeg nu Frontdoor toe.
+
+00:15:07.420 --> 00:15:09.060
+De klant in Tokio opent je site.
+
+00:15:09.240 --> 00:15:12.420
+Hun browser bereikt de dichtstbijzijnde Azure locatie, laten we die Tokio noemen.
+
+00:15:12.600 --> 00:15:15.640
+Die locatie controleert de gezondheid van je drie servers, ze zijn allemaal in orde.
+
+00:15:15.800 --> 00:15:16.760
+Het meet de latentie.
+
+00:15:16.960 --> 00:15:21.380
+De Aziatische server reageert het snelst, dus stuurt het verzoek daarheen via het privé netwerk van Microsoft.
+
+00:15:21.640 --> 00:15:23.880
+De pagina laat in minder dan een seconde in plaats van drie.
+
+00:15:23.880 --> 00:15:27.200
+Stel je nu voor dat de Aziatische server overbelast raakt tijdens een flitsverkoop.
+
+00:15:27.300 --> 00:15:30.160
+De gezondheidschecks van Frontdoor detecteren de verhoogde latentie.
+
+00:15:30.320 --> 00:15:34.060
+Het begint verkeerd te verschuiven naar de Europese server, de op-en-na beste optie.
+
+00:15:34.200 --> 00:15:39.600
+Klanten krijgen nog steeds een snelle ervaring, misschien niet zo snel als bij de Aziatische server, maar nog steeds sneller dan de hele weg naar de VS.
+
+00:15:40.180 --> 00:15:43.580
+De hele veelover gebeurt automatisch zonder dat iemand de configuratie hoeft aan te passen.
+
+00:15:43.740 --> 00:15:45.560
+Ondertussen draait de WAF aan de edge.
+
+00:15:45.760 --> 00:15:49.180
+Het blokkeert een SQL-injectiepoging van een botnet dat je betaalformuliers scant.
+
+00:15:49.180 --> 00:15:55.520
+Het blokkeert verkeer van bekende schadelijke IP-bereiken en het beperkt de frequentie van verzoeken van een IP dat je productcatalogus aan het scrapen is.
+
+00:15:55.720 --> 00:15:58.080
+Geen van deze aanvallen bereikt ooit je Origin-survers.
+
+00:15:58.280 --> 00:15:59.940
+Je backend-team merkt er niet eens iets van.
+
+00:16:00.100 --> 00:16:06.200
+En de statische inhoud, productafbeeldingen, CSS-bestanden, JavaScript-bibliotheken, die worden gecashet op de locatie in Tokio.
+
+00:16:06.380 --> 00:16:08.740
+De eerste bezoeker laat ze vanaf de Aziatische bron.
+
+00:16:08.940 --> 00:16:11.360
+De tweede bezoeker krijgt ze direct uit de edge-cache.
+
+00:16:11.360 --> 00:16:17.620
+Terugkerende bezoekers zien bijna onmiddellijke laadtijden omdat alles wat ze nodig hebben al klaarstaat op de edge-locatie bij hen in de buurt.
+
+00:16:17.840 --> 00:16:23.400
+Dit alles, snellere routering, automatische failover, edge-beveiliging en gekachte inhoud werkt naadloos samen.
+
+00:16:23.580 --> 00:16:25.060
+Je klanten merken nooit dat het er is.
+
+00:16:25.280 --> 00:16:27.280
+Ze zien gewoon een snelle, betrouwbare site.
+
+00:16:27.520 --> 00:16:28.620
+Dit is wat je moet onthouden.
+
+00:16:28.840 --> 00:16:32.680
+Azure Frontdoor fungeert als een wereldwijde verkeersagent die gebruikers naar de snelste server leidt,
+
+00:16:32.740 --> 00:16:35.300
+inhoud aan de edge-caché en aanvallen blokkeert voordat ze je bereiken.
+
+00:16:35.300 --> 00:16:39.980
+Het is gebouwd op drie lagen van veerkracht, dus zelfs als een regio uitvalt, blijft je site online.
+
+00:16:39.980 --> 00:16:45.660
+Voor de meeste projecten is de standaardlaag van slechts 35 dollar per maand het ideale evenwicht tussen prestaties en kosten.
+
+00:16:45.940 --> 00:16:49.520
+Upgrade naar premium wanneer je geavanceerde beveiliging of private link nodig hebt.
+
+00:16:49.760 --> 00:16:52.040
+Begin klein met één bron en groei vanaf daar verder.
+
+00:16:52.300 --> 00:16:53.520
+Frontdoor groeit met je mee.
+
+00:16:53.740 --> 00:16:57.980
+Als je webapp-gebruikers heeft verspreid over verschillende regio's, stel dan vandaag nog een Frontdoor profiel in.
+
+00:16:58.180 --> 00:17:01.660
+Zelfs een enkele server krijgt wereldwijde versnellings- en beveiligingsvoordelen.
+
+00:17:01.880 --> 00:17:06.260
+Abonneer je op je favoriete podcast-platform en deel dit met iemand die aan zijn cloudreis begint.

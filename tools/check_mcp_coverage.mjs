@@ -33,7 +33,8 @@ if (process.env.MCP_URL) {
   try {
     const r = await fetch(process.env.MCP_URL, { method: "POST", headers: { "content-type": "application/json", accept: "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/list" }) });
     const liveNames = new Set((await r.json()).result.tools.map((t) => t.name));
-    const missing = [...names].filter((n) => !liveNames.has(n)), extra = [...liveNames].filter((n) => !names.has(n));
+    const conditional = new Set(TOOLS.filter((t) => t.program).map((t) => t.name));   // Programm-Tools sieht der anonyme Abruf nicht
+    const missing = [...names].filter((n) => !liveNames.has(n) && !conditional.has(n)), extra = [...liveNames].filter((n) => !names.has(n));
     if (missing.length) problems.push(`Live-Server (${process.env.MCP_URL}) kennt noch nicht: ${missing.join(", ")} - Worker-Deploy prüfen.`);
     if (extra.length) notes.push(`Live-Server hat zusätzliche Tools: ${extra.join(", ")}.`);
   } catch (e) { notes.push(`Live-Server nicht erreichbar: ${e.message}`); }

@@ -1,0 +1,2533 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.320
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget.
+
+00:00:02.500 --> 00:00:04.000
+Nazywam się Miro Peters i będę Waszym prowadzącym.
+
+00:00:04.620 --> 00:00:05.500
+Oto scenariusz.
+
+00:00:05.640 --> 00:00:08.640
+Pracujesz w Biznes Central i potrzebujesz jednej małej zmiany.
+
+00:00:08.880 --> 00:00:10.900
+Może to dodatkowe pole w kartotece klienta,
+
+00:00:11.040 --> 00:00:14.000
+inny krok zatwierdzania lub reguła sprawdzająca zamówienie przed zaksięgowaniem.
+
+00:00:14.860 --> 00:00:18.680
+Wtedy ktoś wspomina o rozszerzeniach AL, tabelach, stronach i kodeuntach
+
+00:00:18.680 --> 00:00:21.620
+i nagle ta mała prośba brzmi jak zupełnie nowy język.
+
+00:00:21.700 --> 00:00:24.420
+To rzeczywiście język, ale nie musi wydawać się tajemniczy.
+
+00:00:24.660 --> 00:00:27.020
+Wyobraź sobie Biznes Central jako budynek biurowy.
+
+00:00:27.020 --> 00:00:31.200
+AL daje programistom instrukcję jak dodać pokój, formularz lub nową zasadę
+
+00:00:31.200 --> 00:00:32.860
+nie wybijając dziur w samym budynku.
+
+00:00:33.020 --> 00:00:35.140
+To jest właśnie nasza dzisiejsza porcja wiedzy.
+
+00:00:35.320 --> 00:00:38.060
+Pod koniec tego odcinka dowiesz się czym jest programowanie w AL,
+
+00:00:38.180 --> 00:00:41.800
+dlaczego istnieją rozszerzenia i jak własne rozwiązania pasują do Biznes Central.
+
+00:00:42.100 --> 00:00:44.120
+Dlaczego firmy dostosowują Biznes Central?
+
+00:00:44.360 --> 00:00:46.220
+Biznes Central obsługuje już wiele codziennych zadań,
+
+00:00:46.320 --> 00:00:48.540
+finanse klientów, zamówienia sprzedaży, faktury magazynowe,
+
+00:00:48.620 --> 00:00:51.220
+wszystko w jednym połączonym systemie zamiast sterty arkuszy kalkulacyjnych
+
+00:00:51.220 --> 00:00:52.040
+i oddzielnych narzędzi.
+
+00:00:52.240 --> 00:00:55.300
+Dla wielu firm ta standardowa konfiguracja wystarcza do większości zadań,
+
+00:00:55.300 --> 00:00:56.540
+ale jest pewien haczyk.
+
+00:00:56.540 --> 00:00:58.480
+Żadne dwie firmy nie pracują w ten sam sposób.
+
+00:00:58.720 --> 00:01:01.060
+Weźmy dystrybutora żywności, który potrzebuje szczegółów partii towaru,
+
+00:01:01.140 --> 00:01:02.320
+których inna firma nigdy nie używa.
+
+00:01:02.500 --> 00:01:05.820
+Firma usługowa wymagająca specjalnego procesu zatwierdzania przed wystawieniem faktury.
+
+00:01:06.040 --> 00:01:08.880
+Sprzedawca detaliczny chcący wprowadzić poziomy nagród dla zniżek.
+
+00:01:09.040 --> 00:01:12.040
+Albo ktoś inny, kto potrzebuje formularza z własnymi polami tekstowymi
+
+00:01:12.040 --> 00:01:13.120
+i wewnętrznymi regułami.
+
+00:01:13.320 --> 00:01:16.520
+Firma nie zmieni swojego sposobu działania z powodu jednego brakującego pola
+
+00:01:16.520 --> 00:01:19.140
+i z pewnością nie chcesz, aby każda drobna prośba zamieniała się
+
+00:01:19.140 --> 00:01:20.700
+w ryzykowną zmianę całego systemu.
+
+00:01:20.820 --> 00:01:22.140
+Kiedyś był to większy problem.
+
+00:01:22.140 --> 00:01:26.220
+W starszych systemach programiści otwierali oryginalny kod i edytowali go bezpośrednio.
+
+00:01:26.400 --> 00:01:28.880
+Działało to do momentu pojawienia się kolejnej aktualizacji.
+
+00:01:29.120 --> 00:01:31.940
+Wtedy firma miała nową wersję od Microsoftu z jednej strony
+
+00:01:31.940 --> 00:01:34.820
+i własne zmiany z drugiej, a ktoś musiał to wszystko pogodzić,
+
+00:01:34.900 --> 00:01:36.700
+zanim aktualizacja mogła ruszyć dalej.
+
+00:01:36.960 --> 00:01:40.020
+Wyobraź sobie biuro, w którym każdy najemca przeciąga nowe kable
+
+00:01:40.020 --> 00:01:41.640
+przez ściany bez żadnego planu.
+
+00:01:41.800 --> 00:01:44.240
+Przez chwilę działa, ale gdy budynek wymaga napraw,
+
+00:01:44.400 --> 00:01:46.300
+nikt nie wie, który kabel do kogo należy.
+
+00:01:46.620 --> 00:01:48.540
+Biznes Central wybiera inną drogę.
+
+00:01:48.540 --> 00:01:50.540
+Zamiast przepisywać standardową aplikację,
+
+00:01:50.640 --> 00:01:52.980
+programiści tworzą oddzielny dodatek, który się z nią łączy,
+
+00:01:53.080 --> 00:01:54.980
+pozostawiając część standardową na miejscu,
+
+00:01:55.040 --> 00:01:57.240
+podczas gdy własne zmiany firmy współistnieją obok niej
+
+00:01:57.240 --> 00:01:59.140
+i działają poprzez wspierane punkty w systemie.
+
+00:01:59.260 --> 00:02:01.020
+To rozdzielenie ma znaczenie przy aktualizacjach,
+
+00:02:01.120 --> 00:02:03.380
+ponieważ Microsoft aktualizuje swoją część budynku,
+
+00:02:03.460 --> 00:02:05.840
+podczas gdy własne rozwiązania pozostają w swojej przestrzeni.
+
+00:02:06.060 --> 00:02:07.660
+Nadal potrzebne są testy i poprawki,
+
+00:02:07.740 --> 00:02:09.240
+w końcu to zmiany w oprogramowaniu,
+
+00:02:09.360 --> 00:02:11.260
+ale od programisty nie oczekuje się kopiowania
+
+00:02:11.260 --> 00:02:13.540
+i przerabiania każdej zmiany w oryginalnym kodzie Microsoftu.
+
+00:02:14.280 --> 00:02:15.900
+Co tak naprawdę dostosowuje firma?
+
+00:02:15.900 --> 00:02:17.480
+Do stosowania dodają dane.
+
+00:02:17.720 --> 00:02:19.620
+Standardowy system nie przechowuje na przykład
+
+00:02:19.620 --> 00:02:21.820
+instrukcji dostawy, wewnętrznej oceny ryzyka,
+
+00:02:21.960 --> 00:02:24.040
+poziomu członkostwa czy linku do systemu zewnętrznego.
+
+00:02:24.280 --> 00:02:26.160
+Dodają też ekrany, które prowadzą pracowników
+
+00:02:26.160 --> 00:02:27.580
+przez zadanie we właściwej kolejności.
+
+00:02:27.840 --> 00:02:30.000
+Wymuszają również zasady, takie jak wstrzymanie zamówienia
+
+00:02:30.000 --> 00:02:31.580
+w przypadku braku wymaganego dokumentu.
+
+00:02:31.740 --> 00:02:34.400
+Prace dostosowawcze pomagają również unikać ręcznych czynności.
+
+00:02:34.660 --> 00:02:36.060
+Wyobraźmy sobie pracowników co piątek
+
+00:02:36.060 --> 00:02:38.480
+kopiujących dane klientów z Biznes Central do innego narzędzia,
+
+00:02:38.580 --> 00:02:39.660
+ręcznie sprawdzających warunki,
+
+00:02:39.760 --> 00:02:41.460
+a następnie wysyłających raport do menedżera.
+
+00:02:41.460 --> 00:02:43.720
+Dobrze wykonana modyfikacja utrzymuje te informacje
+
+00:02:43.720 --> 00:02:45.700
+w Biznes Central, konsekwentnie stosuje reguły
+
+00:02:45.700 --> 00:02:47.320
+i daje pracownikom przycisk lub stronę
+
+00:02:47.320 --> 00:02:48.740
+dopasowaną do ich codziennej pracy.
+
+00:02:48.920 --> 00:02:49.880
+Obalmy pewien mit.
+
+00:02:50.080 --> 00:02:51.600
+Nie chcesz dostosowywać wszystkiego.
+
+00:02:51.860 --> 00:02:54.600
+Standardowy Biznes Central ma już wbudowanych wiele procesów.
+
+00:02:54.760 --> 00:02:56.440
+Zmienianie czegoś tylko dlatego, że wygląda inaczej
+
+00:02:56.440 --> 00:02:58.460
+niż w starym systemie, tworzy później dodatkową pracę.
+
+00:02:58.640 --> 00:03:00.420
+Dobre prace dostosowawcze zaczynają się od wyraźnego
+
+00:03:00.420 --> 00:03:01.380
+uzasadnienia biznesowego.
+
+00:03:01.580 --> 00:03:02.960
+Z jakim problemem mierzą się ludzie?
+
+00:03:03.160 --> 00:03:04.620
+Co powinno się dziać zamiast tego?
+
+00:03:04.800 --> 00:03:06.840
+Czy standardowy produkt potrafi już to zrobić?
+
+00:03:06.840 --> 00:03:09.240
+Kiedy standardowy produkt nie spełnia tej potrzeby,
+
+00:03:09.360 --> 00:03:10.620
+do gry wchodzi język Aleja.
+
+00:03:10.820 --> 00:03:12.500
+AL koncentruje się na samym Biznes Central,
+
+00:03:12.600 --> 00:03:14.300
+odczytując, dodając i zmieniając rekordy
+
+00:03:14.300 --> 00:03:16.400
+na poziomie bazy danych, kontrolując jednocześnie to,
+
+00:03:16.480 --> 00:03:17.740
+co dzieje się na stronach, raportach
+
+00:03:17.740 --> 00:03:19.020
+i w innych częściach aplikacji.
+
+00:03:19.180 --> 00:03:22.000
+Oblicza wartości, przenosi dane i wyświetla komunikaty,
+
+00:03:22.140 --> 00:03:24.300
+gdy reguły nie są spełnione podczas procesów.
+
+00:03:24.420 --> 00:03:25.900
+To dużo pracy jak na jeden język,
+
+00:03:25.980 --> 00:03:27.620
+ale AL nie jest uniwersalnym narzędziem
+
+00:03:27.620 --> 00:03:28.860
+do każdego typu oprogramowania
+
+00:03:28.860 --> 00:03:30.700
+i nie wybralibyśmy go do budowy publicznego
+
+00:03:30.700 --> 00:03:32.400
+sklepu internetowego, gry mobilnej
+
+00:03:32.400 --> 00:03:34.180
+czy samodzielnej aplikacji desktopowej.
+
+00:03:34.180 --> 00:03:36.960
+AL istnieje w jednym, konkretnym celu kształtowania danych
+
+00:03:36.960 --> 00:03:38.580
+i zachowania wewnątrz Biznes Central,
+
+00:03:38.780 --> 00:03:40.960
+aby system odpowiadał sposobowi działania firmy.
+
+00:03:41.100 --> 00:03:43.220
+I właśnie temu przyjrzymy się w dalszej części.
+
+00:03:43.460 --> 00:03:45.880
+AL i rozszerzenia bezpieczny model dodatków.
+
+00:03:46.340 --> 00:03:49.100
+AL oznacza Application Language, język aplikacji.
+
+00:03:49.300 --> 00:03:51.620
+To język programowania Microsoftu dla Biznes Central,
+
+00:03:51.820 --> 00:03:53.720
+który daje programistom ustrukturyzowany sposób
+
+00:03:53.720 --> 00:03:55.240
+tworzenia nowych funkcji biznesowych
+
+00:03:55.240 --> 00:03:57.840
+lub zmiany sposobu działania istniejących części systemu.
+
+00:03:57.920 --> 00:04:00.460
+Ale słowo rozszerzenie jest równie ważne co Aleja.
+
+00:04:00.660 --> 00:04:02.040
+Rozszerzenie to oddzielna aplikacja,
+
+00:04:02.040 --> 00:04:03.760
+którą można zainstalować w Biznes Central.
+
+00:04:03.760 --> 00:04:05.560
+Przechowuje ona prace dostosowawcze firmy,
+
+00:04:05.660 --> 00:04:07.580
+podczas gdy standardowa aplikacja Biznes Central
+
+00:04:07.580 --> 00:04:08.520
+pozostaje nietknięta.
+
+00:04:08.740 --> 00:04:10.420
+Myśl o tym nie jak o przepisywaniu podręcznika,
+
+00:04:10.580 --> 00:04:12.240
+ale jak o dodawaniu do niego zatwierdzonych stron.
+
+00:04:12.420 --> 00:04:14.400
+Och, stron, które przestrzegają oryginalnych zasad,
+
+00:04:14.520 --> 00:04:15.200
+nie usuwając ich.
+
+00:04:15.380 --> 00:04:16.580
+Może to brzmieć jak techniczny szczegół,
+
+00:04:16.680 --> 00:04:18.180
+ale zmienia sposób, w jaki praca dostosowawcza
+
+00:04:18.180 --> 00:04:19.040
+funkcjonuje z biegiem czasu.
+
+00:04:19.280 --> 00:04:20.540
+Wyobraź sobie, że firma potrzebuje
+
+00:04:20.540 --> 00:04:22.380
+nowego pomieszczenia biurowego dla specjalnego zespołu.
+
+00:04:22.560 --> 00:04:24.420
+Stare podejście oznaczało wyburzanie ściany
+
+00:04:24.420 --> 00:04:26.440
+w głównym budynku i zmianę samej konstrukcji.
+
+00:04:26.440 --> 00:04:28.440
+Może to rozwiązać bieżące potrzeby,
+
+00:04:28.580 --> 00:04:30.480
+ale przyszłe naprawy stają się koszmarem,
+
+00:04:30.520 --> 00:04:32.580
+ponieważ budynek nie zgadza się już z planami.
+
+00:04:32.820 --> 00:04:34.140
+Rozszerzenie działa inaczej.
+
+00:04:34.380 --> 00:04:36.460
+Budynek ma już drzwi, gniazdka elektryczne
+
+00:04:36.460 --> 00:04:37.960
+i zasady dodawania przestrzeni.
+
+00:04:38.200 --> 00:04:40.420
+Budujesz nowy pokój przez te zatwierdzone połączenia.
+
+00:04:40.660 --> 00:04:42.300
+Pokój należy do firmy, ale główny budynek
+
+00:04:42.300 --> 00:04:44.020
+wciąż może być serwisowany bez rozbierania
+
+00:04:44.020 --> 00:04:45.220
+każdej niestandardowej ściany.
+
+00:04:45.460 --> 00:04:47.580
+Dokładnie tak działają rozszerzenia w Biznes Central.
+
+00:04:47.840 --> 00:04:49.880
+Aplikacja bazowa zawiera standardowe rozwiązanie
+
+00:04:49.880 --> 00:04:50.940
+dostarczone przez Microsoft.
+
+00:04:51.260 --> 00:04:52.820
+Rozszerzenie może dodawać własne pola,
+
+00:04:52.820 --> 00:04:54.680
+ekrany, przyciski, reguły, raporty,
+
+00:04:54.740 --> 00:04:56.180
+a nawet łącza do innych systemów.
+
+00:04:56.360 --> 00:04:58.420
+Może reagować na określone działania biznesowe,
+
+00:04:58.560 --> 00:05:00.420
+ale robi to poprzez wspierane metody łączenia
+
+00:05:00.420 --> 00:05:01.740
+ze standardową aplikacją.
+
+00:05:01.960 --> 00:05:03.420
+Więc granice są wbudowane.
+
+00:05:03.600 --> 00:05:04.360
+To dobra rzecz.
+
+00:05:04.580 --> 00:05:06.260
+Bez granic małe, niestandardowe żądanie
+
+00:05:06.260 --> 00:05:07.560
+może sięgnąć głęboko w obszary,
+
+00:05:07.680 --> 00:05:08.780
+których nie powinno dotykać.
+
+00:05:08.960 --> 00:05:10.540
+Dzięki rozszerzeniom programista pracuje
+
+00:05:10.540 --> 00:05:11.740
+na jasnych typach obiektów
+
+00:05:11.740 --> 00:05:13.340
+i zdefiniowanych punktach połączeń,
+
+00:05:13.440 --> 00:05:14.620
+co ułatwia zrozumienie kodu,
+
+00:05:14.760 --> 00:05:16.540
+gdy ktoś inny musi go później przeczytać.
+
+00:05:16.700 --> 00:05:18.420
+To podejście idealnie pasuje również
+
+00:05:18.420 --> 00:05:20.080
+do chmurowej wersji Biznes Central.
+
+00:05:20.320 --> 00:05:22.460
+Microsoft regularnie aktualizuje usługę.
+
+00:05:22.640 --> 00:05:23.840
+Firma nadal musi przetestować
+
+00:05:23.840 --> 00:05:25.000
+swoje rozszerzenie po zmianach,
+
+00:05:25.120 --> 00:05:26.200
+zwłaszcza jeśli zależy ono
+
+00:05:26.200 --> 00:05:27.920
+od części produktu, które uległy zmianie.
+
+00:05:28.120 --> 00:05:29.520
+Oprogramowanie nigdy nie eliminuje
+
+00:05:29.520 --> 00:05:30.600
+potrzeby dbania o system,
+
+00:05:30.800 --> 00:05:31.960
+ale trzymanie własnego kodu
+
+00:05:31.960 --> 00:05:33.180
+oddzielnie zmniejsza szansę,
+
+00:05:33.300 --> 00:05:34.680
+że każda aktualizacja zmieni się
+
+00:05:34.680 --> 00:05:36.460
+w gruntowną przebudowę starych modyfikacji.
+
+00:05:36.700 --> 00:05:38.640
+Możesz usłyszeć, jak ludzie wspominają o CAL,
+
+00:05:38.760 --> 00:05:40.800
+gdy mówią o starszych systemach Dynamics NAW.
+
+00:05:40.940 --> 00:05:43.140
+CAL wywodzi się z wcześniejszego modelu programowania,
+
+00:05:43.300 --> 00:05:44.800
+w którym deweloperzy często zmieniali
+
+00:05:44.800 --> 00:05:46.720
+oryginalne obiekty aplikacji bezpośrednio.
+
+00:05:46.940 --> 00:05:47.840
+Wiele firm z powodzeniem
+
+00:05:47.840 --> 00:05:49.260
+używało takich systemów przez lata,
+
+00:05:49.400 --> 00:05:50.760
+ale wiązało to prace niestandardowe
+
+00:05:50.760 --> 00:05:52.340
+znacznie ściślej ze standardowym kodem,
+
+00:05:52.400 --> 00:05:53.980
+a aktualizacje wymagały mnóstwa pracy
+
+00:05:53.980 --> 00:05:55.200
+przy porównywaniu i naprawianiu.
+
+00:05:55.360 --> 00:05:56.520
+AL przesunął Biznes Central
+
+00:05:56.520 --> 00:05:58.300
+w stronę rozwoju opartego na aplikacjach.
+
+00:05:58.480 --> 00:06:00.000
+Nie oznacza to, że każde rozszerzenie
+
+00:06:00.000 --> 00:06:01.240
+jest duże lub skomplikowane.
+
+00:06:01.480 --> 00:06:03.100
+Jedno rozszerzenie może tylko dodać pole
+
+00:06:03.100 --> 00:06:03.960
+do rekordu klienta
+
+00:06:03.960 --> 00:06:05.480
+i wyświetlić je na znanym ekranie.
+
+00:06:05.680 --> 00:06:07.340
+Inne może zawierać pełne rozwiązanie
+
+00:06:07.340 --> 00:06:08.800
+dla określonego typu działalności
+
+00:06:14.800 --> 00:06:16.220
+Aplikacja żyje obok Biznes Central
+
+00:06:16.220 --> 00:06:17.740
+zamiast być ukrytą jego przeróbką.
+
+00:06:18.000 --> 00:06:19.120
+Możesz również zainstalować
+
+00:06:19.120 --> 00:06:20.500
+więcej niż jedno rozszerzenie.
+
+00:06:20.740 --> 00:06:22.260
+Firma może korzystać z rozszerzenia
+
+00:06:22.260 --> 00:06:23.740
+partnera oprogramowania do płac,
+
+00:06:23.860 --> 00:06:24.680
+innego do wysyłki
+
+00:06:24.680 --> 00:06:26.420
+oraz małego wewnętrznego rozszerzenia
+
+00:06:26.420 --> 00:06:27.920
+do reguł ważnych tylko dla niej.
+
+00:06:28.120 --> 00:06:30.320
+Biznes Central łączy je w jeden działający system,
+
+00:06:30.440 --> 00:06:32.260
+o ile przestrzegają one zasad platformy
+
+00:06:32.260 --> 00:06:33.740
+i nie wchodzą ze sobą w konflikt.
+
+00:06:33.920 --> 00:06:36.000
+Więc AL to nie tylko sposób na pisanie kodu.
+
+00:06:36.180 --> 00:06:37.760
+To język, którego programiści używają
+
+00:06:37.760 --> 00:06:39.280
+do tworzenia tych aplikacji dodatkowych,
+
+00:06:39.400 --> 00:06:40.560
+a rozszerzenia są kontenerem,
+
+00:06:40.720 --> 00:06:42.360
+który przenosi te zmiany do Biznes Central.
+
+00:06:42.360 --> 00:06:44.160
+Ten model pozwala firmie dostosować system,
+
+00:06:44.240 --> 00:06:45.700
+zachowując jednocześnie standardowy produkt
+
+00:06:45.700 --> 00:06:47.460
+w rozpoznawalnej i łatwiejszej w utrzymaniu formie.
+
+00:06:47.600 --> 00:06:49.040
+Otwórzmy teraz jedno z tych rozszerzeń
+
+00:06:49.040 --> 00:06:50.220
+i przyjrzyjmy się zawartym w nim
+
+00:06:50.220 --> 00:06:51.300
+elementom konstrukcyjnym.
+
+00:06:51.500 --> 00:06:52.920
+Główne elementy konstrukcyjne
+
+00:06:52.920 --> 00:06:54.400
+AL wewnątrz rozszerzenia aleja.
+
+00:06:54.620 --> 00:06:56.240
+Programiści pracują z obiektami.
+
+00:06:56.420 --> 00:06:57.780
+Obiekt to nazwana część aplikacji
+
+00:06:57.780 --> 00:06:58.820
+z jasno określonym zadaniem,
+
+00:06:58.940 --> 00:07:00.180
+takim jak przechowywanie informacji,
+
+00:07:00.320 --> 00:07:01.080
+wyświetlanie ekranu,
+
+00:07:01.140 --> 00:07:02.900
+uruchamianie reguły lub tworzenie dokumentu.
+
+00:07:03.060 --> 00:07:04.660
+Gdy zaczniesz postrzegać te zadania osobno,
+
+00:07:04.660 --> 00:07:06.760
+AL przestanie wyglądać jak jedna wielka ściana kodu.
+
+00:07:06.980 --> 00:07:07.840
+Zacznijmy od miejsca,
+
+00:07:07.940 --> 00:07:09.760
+w którym przechowywane są informacje biznesowe.
+
+00:07:09.940 --> 00:07:11.800
+Tabele przechowują dane w Biznes Central.
+
+00:07:12.000 --> 00:07:13.860
+Pomyśl o tabeli jak o cyfrowej kartotece
+
+00:07:13.860 --> 00:07:15.040
+dla jednego typu rekordów.
+
+00:07:15.220 --> 00:07:16.860
+Jedna szuflada może zawierać klientów,
+
+00:07:16.960 --> 00:07:17.480
+inna towary,
+
+00:07:17.580 --> 00:07:19.140
+a jeszcze inna zamówienia sprzedaży.
+
+00:07:19.340 --> 00:07:21.660
+Każdy rekord to jeden plik wewnątrz tej kartoteki.
+
+00:07:21.880 --> 00:07:23.580
+Tabela klientów zawiera jeden rekord
+
+00:07:23.580 --> 00:07:24.600
+dla każdego klienta.
+
+00:07:24.780 --> 00:07:26.460
+Tabela towarów zawiera jeden rekord
+
+00:07:26.460 --> 00:07:27.540
+dla każdego produktu.
+
+00:07:27.740 --> 00:07:29.320
+Jeśli firma potrzebuje informacji,
+
+00:07:29.460 --> 00:07:31.580
+których standardowy Biznes Central nie przechowuje,
+
+00:07:31.580 --> 00:07:33.620
+rozszerzenie może utworzyć własną tabelę,
+
+00:07:33.720 --> 00:07:34.900
+być może dla poziomów nagród,
+
+00:07:35.020 --> 00:07:37.080
+inspekcji sprzętu lub zatwierdzeń projektów.
+
+00:07:37.240 --> 00:07:38.620
+Pola to etykietołej miejsca
+
+00:07:38.620 --> 00:07:39.840
+wewnątrz każdego rekordu.
+
+00:07:40.100 --> 00:07:41.860
+Rekord klienta może zawierać nazwę,
+
+00:07:41.980 --> 00:07:44.180
+adres, warunki płatności i numer telefonu,
+
+00:07:44.240 --> 00:07:45.460
+ponieważ tabela klientów
+
+00:07:45.460 --> 00:07:46.980
+posiada pola dla tych szczegółów.
+
+00:07:47.140 --> 00:07:49.060
+Pola mogą zawierać tekst, daty, kwoty,
+
+00:07:49.180 --> 00:07:51.520
+odpowiedzi tak, nie lub wybór ze stałej listy.
+
+00:07:51.720 --> 00:07:53.840
+Pole może również wskazywać na inny rekord.
+
+00:07:54.040 --> 00:07:55.460
+Na przykład klient może zawierać
+
+00:07:55.460 --> 00:07:56.700
+pole identyfikatora nagrody.
+
+00:07:56.920 --> 00:07:58.440
+Zamiast wpisywać przypadkowy tekst,
+
+00:07:58.440 --> 00:07:59.960
+pracownicy wybierają poziom nagrody
+
+00:07:59.960 --> 00:08:01.000
+z oddzielnej tabeli nagród.
+
+00:08:01.120 --> 00:08:02.620
+To powiązanie utrzymuje dane w czystości,
+
+00:08:02.740 --> 00:08:03.620
+ponieważ wszyscy wybierają
+
+00:08:03.620 --> 00:08:04.680
+z tej samej znanej listy.
+
+00:08:04.860 --> 00:08:06.280
+Zatem tabele przechowują fakty.
+
+00:08:06.460 --> 00:08:07.520
+Ale jak ludzie widzą te fakty
+
+00:08:07.520 --> 00:08:08.380
+i jak z nimi pracują?
+
+00:08:08.640 --> 00:08:09.060
+Strony.
+
+00:08:09.280 --> 00:08:09.920
+Strona to ekran,
+
+00:08:10.040 --> 00:08:11.240
+który otwierasz w biznes central.
+
+00:08:11.440 --> 00:08:12.780
+Karta klienta jest stroną.
+
+00:08:13.000 --> 00:08:14.600
+Lista zamówień sprzedaży jest stroną.
+
+00:08:14.840 --> 00:08:15.360
+Strona kontroluje,
+
+00:08:15.460 --> 00:08:16.520
+co użytkownicy mogą przeglądać,
+
+00:08:16.580 --> 00:08:17.380
+wprowadzać, wyszukiwać
+
+00:08:17.380 --> 00:08:18.180
+i na czym mogą działać.
+
+00:08:18.320 --> 00:08:20.000
+Różne strony pasują do różnych zadań.
+
+00:08:20.200 --> 00:08:21.220
+Strona karty koncentruje się
+
+00:08:21.220 --> 00:08:22.120
+na jednym rekordzie naraz,
+
+00:08:22.120 --> 00:08:23.300
+np. na jednym kliencie
+
+00:08:23.300 --> 00:08:24.040
+lub jednym towarze.
+
+00:08:24.260 --> 00:08:25.800
+Strona listy pokazuje wiele rekordów
+
+00:08:25.800 --> 00:08:26.300
+w wierszach,
+
+00:08:26.380 --> 00:08:26.960
+co sprawdza się,
+
+00:08:27.080 --> 00:08:28.300
+gdy trzeba coś szybko przejrzeć,
+
+00:08:28.380 --> 00:08:29.580
+przefiltrować lub znaleźć.
+
+00:08:29.760 --> 00:08:31.060
+Strona arkusza wspiera pracę,
+
+00:08:31.140 --> 00:08:32.200
+w której ludzie wprowadzają
+
+00:08:32.200 --> 00:08:32.920
+lub przetwarzają
+
+00:08:32.920 --> 00:08:34.560
+kilka wierszy informacji jednocześnie.
+
+00:08:34.760 --> 00:08:36.320
+Tabela przechowuje informacje.
+
+00:08:36.620 --> 00:08:38.340
+Strona prezentuje je użytkownikowi.
+
+00:08:38.500 --> 00:08:39.640
+To rozdzielenie jest pomocne,
+
+00:08:39.700 --> 00:08:40.920
+ponieważ można zmieniać ekran
+
+00:08:40.920 --> 00:08:42.520
+bez zmiany miejsca przechowywania danych
+
+00:08:42.520 --> 00:08:43.620
+lub ponownie wykorzystać
+
+00:08:43.620 --> 00:08:45.000
+tę samą tabelę na wielu stronach,
+
+00:08:45.120 --> 00:08:45.840
+gdy różne zespoły
+
+00:08:45.840 --> 00:08:47.000
+potrzebują różnych widoków
+
+00:08:47.000 --> 00:08:47.880
+tych samych rekordów.
+
+00:08:47.880 --> 00:08:49.700
+A co, jeśli dane powinny się już znajdować
+
+00:08:49.700 --> 00:08:51.280
+w standardowym rekordzie Biznes Central?
+
+00:08:51.500 --> 00:08:52.320
+Zazwyczaj nie tworzy się
+
+00:08:52.320 --> 00:08:53.120
+nowej tabeli klientów
+
+00:08:53.120 --> 00:08:53.620
+tylko dlatego,
+
+00:08:53.780 --> 00:08:55.080
+że potrzebne jest jedno dodatkowe pole.
+
+00:08:55.260 --> 00:08:56.780
+Używa się wtedy rozszerzenia tabeli.
+
+00:08:57.000 --> 00:08:57.800
+Rozszerzenie tabeli
+
+00:08:57.800 --> 00:08:58.600
+dodaje Twoje pole
+
+00:08:58.600 --> 00:09:00.140
+do istniejącej tabeli klientów.
+
+00:09:00.340 --> 00:09:01.580
+Standardowy rekord klienta
+
+00:09:01.580 --> 00:09:02.900
+pozostaje na swoim miejscu,
+
+00:09:02.960 --> 00:09:03.800
+a Twoje rozszerzenie
+
+00:09:03.800 --> 00:09:04.860
+dodaje szczegóły firmy
+
+00:09:04.860 --> 00:09:05.920
+obok standardowych pól.
+
+00:09:06.140 --> 00:09:07.480
+Może to być identyfikator nagrody,
+
+00:09:07.600 --> 00:09:08.580
+uwaga dotycząca dostawy
+
+00:09:08.580 --> 00:09:09.420
+opiekun klienta
+
+00:09:09.420 --> 00:09:11.140
+lub pole łączące z inną częścią firmy.
+
+00:09:11.320 --> 00:09:12.520
+Jednak dodanie pola do tabeli
+
+00:09:12.520 --> 00:09:13.800
+nie powoduje jego automatycznego
+
+00:09:17.880 --> 00:09:18.840
+pole, grupę lub akcję
+
+00:09:18.840 --> 00:09:19.820
+do istniejącej strony.
+
+00:09:20.040 --> 00:09:20.820
+Jeśli firma wymaga,
+
+00:09:20.960 --> 00:09:21.780
+aby pracownicy wybierali
+
+00:09:21.780 --> 00:09:22.300
+poziom nagrody
+
+00:09:22.300 --> 00:09:23.380
+podczas przeglądania klienta,
+
+00:09:23.480 --> 00:09:24.060
+rozszerzenie strony
+
+00:09:24.060 --> 00:09:24.800
+może umieścić pole
+
+00:09:24.800 --> 00:09:25.640
+identyfikatora nagrody
+
+00:09:25.640 --> 00:09:26.360
+na karcie klienta,
+
+00:09:26.420 --> 00:09:27.600
+tam gdzie pracownicy już pracują.
+
+00:09:27.880 --> 00:09:29.060
+Dzięki temu środowisko pracy
+
+00:09:29.060 --> 00:09:29.900
+pozostaje znajome.
+
+00:09:30.160 --> 00:09:31.340
+Zamiast wysyłać użytkowników
+
+00:09:31.340 --> 00:09:31.840
+do osobnego,
+
+00:09:31.960 --> 00:09:32.900
+niestandardowego ekranu
+
+00:09:32.900 --> 00:09:33.720
+dla prostego szczegółu,
+
+00:09:33.800 --> 00:09:34.580
+rozszerzenie dodaje go
+
+00:09:34.580 --> 00:09:35.760
+do strony, którą już znają.
+
+00:09:35.980 --> 00:09:36.760
+Rozszerzenie strony
+
+00:09:36.760 --> 00:09:37.980
+może również dodać akcję,
+
+00:09:37.980 --> 00:09:39.620
+czyli przycisk lub polecenie menu
+
+00:09:39.620 --> 00:09:40.740
+uruchamiające zadanie.
+
+00:09:40.960 --> 00:09:42.120
+Na przykład karta klienta
+
+00:09:42.120 --> 00:09:43.500
+mogłaby zawierać akcję nagród,
+
+00:09:43.640 --> 00:09:44.780
+która otwiera listę nagród.
+
+00:09:44.960 --> 00:09:46.280
+W tle potrzebne jest miejsce
+
+00:09:46.280 --> 00:09:47.300
+na reguły biznesowe.
+
+00:09:47.520 --> 00:09:48.640
+Tym miejscem jest często
+
+00:09:48.640 --> 00:09:49.540
+obiekt CodeUnit.
+
+00:09:49.680 --> 00:09:50.400
+Obiekt CodeUnit
+
+00:09:50.400 --> 00:09:51.300
+zawiera procedury AL,
+
+00:09:51.400 --> 00:09:52.480
+czyli nazwane fragmenty kodu
+
+00:09:52.480 --> 00:09:53.760
+wykonujące określone zadanie.
+
+00:09:53.960 --> 00:09:54.480
+Pomyśl o tym,
+
+00:09:54.560 --> 00:09:55.500
+jak o zespole zaplecza,
+
+00:09:55.660 --> 00:09:56.640
+który wykonuje zadanie,
+
+00:09:56.760 --> 00:09:57.580
+gdy strona, raport
+
+00:09:57.580 --> 00:09:59.060
+lub inny proces prosi o pomoc.
+
+00:09:59.300 --> 00:10:00.500
+Załóżmy, że poziom nagrody
+
+00:10:00.500 --> 00:10:01.180
+decyduje o tym,
+
+00:10:01.320 --> 00:10:02.780
+jaki rabat przysługuje klientowi.
+
+00:10:02.940 --> 00:10:03.720
+Obliczenie rabatu
+
+00:10:03.720 --> 00:10:04.760
+powinno znajdować się
+
+00:10:04.760 --> 00:10:05.740
+w obiekcie CodeUnit,
+
+00:10:05.740 --> 00:10:07.500
+a nie na samej stronie karty klienta.
+
+00:10:07.680 --> 00:10:08.740
+Wtedy proces sprzedaży,
+
+00:10:08.860 --> 00:10:10.060
+raport lub przyszła strona
+
+00:10:10.060 --> 00:10:11.460
+mogą użyć tej samej reguły
+
+00:10:11.460 --> 00:10:12.340
+bez kopiowania jej
+
+00:10:12.340 --> 00:10:13.100
+w kilka miejsc.
+
+00:10:13.340 --> 00:10:13.960
+Jedna reguła,
+
+00:10:14.100 --> 00:10:15.400
+jedno miejsce do jej utrzymania.
+
+00:10:15.660 --> 00:10:16.280
+Biznes Central
+
+00:10:16.280 --> 00:10:17.480
+zawiera również inne typy
+
+00:10:17.480 --> 00:10:18.600
+obiektów do różnych zadań.
+
+00:10:18.760 --> 00:10:19.660
+Raporty zbierają dane
+
+00:10:19.660 --> 00:10:20.760
+i prezentują je w dokumencie
+
+00:10:20.760 --> 00:10:21.280
+lub układzie,
+
+00:10:21.400 --> 00:10:22.020
+takim jak faktura
+
+00:10:22.020 --> 00:10:22.880
+lub raport sprzedaży.
+
+00:10:23.080 --> 00:10:23.880
+Zapytania Quiris
+
+00:10:23.880 --> 00:10:25.060
+zadają ukierunkowane pytania
+
+00:10:25.060 --> 00:10:25.700
+dotyczące danych,
+
+00:10:25.820 --> 00:10:26.120
+na przykład,
+
+00:10:26.340 --> 00:10:27.360
+którzy klienci zamówili
+
+00:10:27.360 --> 00:10:28.780
+określony towar w danym okresie.
+
+00:10:28.940 --> 00:10:29.800
+Na przykład Amlporty
+
+00:10:29.800 --> 00:10:30.780
+pomagają wprowadzać dane
+
+00:10:30.780 --> 00:10:31.380
+lub wysyłać je
+
+00:10:31.380 --> 00:10:32.560
+w ustrukturyzowanym formacie,
+
+00:10:32.700 --> 00:10:33.660
+często gdy inny system
+
+00:10:33.660 --> 00:10:34.740
+musi wymienić informacje
+
+00:10:34.740 --> 00:10:35.480
+z Biznes Central.
+
+00:10:35.720 --> 00:10:36.660
+Złóż te elementy razem,
+
+00:10:36.660 --> 00:10:37.220
+a zobaczysz,
+
+00:10:37.320 --> 00:10:38.400
+jak wygląda małe rozszerzenie
+
+00:10:38.400 --> 00:10:39.320
+nagród dla klientów.
+
+00:10:39.440 --> 00:10:40.040
+Tabela nagród
+
+00:10:40.040 --> 00:10:41.140
+przechowuje każdy poziom
+
+00:10:41.140 --> 00:10:42.160
+i jego procent rabatu.
+
+00:10:42.440 --> 00:10:42.940
+Strony nagród
+
+00:10:42.940 --> 00:10:43.880
+pozwalają personelowi
+
+00:10:43.880 --> 00:10:44.940
+zarządzać tymi poziomami.
+
+00:10:45.140 --> 00:10:46.260
+Rozszerzenie tabeli klienta
+
+00:10:46.260 --> 00:10:47.460
+dodaje identyfikator nagrody
+
+00:10:47.460 --> 00:10:48.340
+do każdego klienta,
+
+00:10:48.400 --> 00:10:49.820
+a rozszerzenie strony karty klienta
+
+00:10:49.820 --> 00:10:50.320
+go wyświetla.
+
+00:10:50.500 --> 00:10:51.180
+Akcja strony
+
+00:10:51.180 --> 00:10:52.220
+otwiera listę nagród,
+
+00:10:52.320 --> 00:10:52.960
+a CodeUnit
+
+00:10:52.960 --> 00:10:54.160
+oblicza regułę rabatu.
+
+00:10:54.380 --> 00:10:54.980
+Każdy obiekt
+
+00:10:54.980 --> 00:10:56.640
+obsługuje jedną część zadania.
+
+00:10:56.900 --> 00:10:57.280
+Dzięki temu
+
+00:10:57.280 --> 00:10:58.400
+rozszerzenie jest łatwiejsze
+
+00:10:58.400 --> 00:10:58.900
+do odczytania,
+
+00:10:59.020 --> 00:11:00.020
+przetestowania i zmiany,
+
+00:11:00.020 --> 00:11:00.960
+gdy zasada biznesowa
+
+00:11:00.960 --> 00:11:01.840
+zmieni się za pół roku.
+
+00:11:02.040 --> 00:11:02.940
+Jednak reguła biznesowa
+
+00:11:02.940 --> 00:11:03.980
+często musi zostać uruchomiona
+
+00:11:03.980 --> 00:11:04.740
+w odpowiednim momencie,
+
+00:11:04.900 --> 00:11:06.200
+np. podczas księgowania zamówienia.
+
+00:11:06.440 --> 00:11:07.120
+Właśnie tutaj wkraczają
+
+00:11:07.120 --> 00:11:07.480
+wyzwalacze,
+
+00:11:07.580 --> 00:11:08.220
+triggery i zdarzenia,
+
+00:11:08.340 --> 00:11:08.620
+eventy.
+
+00:11:08.740 --> 00:11:09.660
+Zdarzenia, wyzwalacze
+
+00:11:09.660 --> 00:11:10.480
+i reguły biznesowe.
+
+00:11:10.660 --> 00:11:11.220
+Więc dodałeś
+
+00:11:11.220 --> 00:11:12.200
+pole nagrody klienta.
+
+00:11:12.400 --> 00:11:13.880
+Dobrze, oto właściwe pytanie.
+
+00:11:14.100 --> 00:11:14.820
+Kiedy Biznes Central
+
+00:11:14.820 --> 00:11:16.180
+powinno faktycznie użyć tego pola?
+
+00:11:16.320 --> 00:11:16.800
+Wyobraź sobie,
+
+00:11:16.920 --> 00:11:17.640
+że zamierzasz zaksięgować
+
+00:11:17.640 --> 00:11:18.360
+zamówienie sprzedaży.
+
+00:11:18.560 --> 00:11:19.300
+Zanim system utworzy
+
+00:11:19.300 --> 00:11:19.920
+ostateczne wpisy,
+
+00:11:20.020 --> 00:11:20.540
+chcesz przeprowadzić
+
+00:11:20.540 --> 00:11:21.620
+jedną dodatkową weryfikację.
+
+00:11:21.840 --> 00:11:22.780
+Może klient musi mieć
+
+00:11:22.780 --> 00:11:23.880
+zatwierdzony poziom nagród,
+
+00:11:24.000 --> 00:11:24.940
+zanim naliczy się rabat.
+
+00:11:25.120 --> 00:11:26.240
+Lub może wymagany dokument
+
+00:11:26.240 --> 00:11:27.340
+dostawy musi istnieć,
+
+00:11:27.420 --> 00:11:28.080
+zanim zamówienie
+
+00:11:28.080 --> 00:11:29.240
+będzie mogło przejść dalej.
+
+00:11:29.500 --> 00:11:30.500
+Chcesz wykonać to sprawdzenie
+
+00:11:30.500 --> 00:11:31.300
+w odpowiednim momencie,
+
+00:11:31.440 --> 00:11:32.140
+ale nie chcesz kopiować
+
+00:11:32.140 --> 00:11:33.540
+całego procesu księgowania sprzedaży
+
+00:11:33.540 --> 00:11:34.380
+do swojego rozszerzenia,
+
+00:11:34.480 --> 00:11:34.880
+tylko po to,
+
+00:11:34.960 --> 00:11:35.820
+by dodać jedną regułę.
+
+00:11:35.960 --> 00:11:37.260
+Ten proces już obsługuje
+
+00:11:37.260 --> 00:11:38.020
+wiele rzeczy w tle.
+
+00:11:38.260 --> 00:11:39.020
+Jeśli go skopiujesz,
+
+00:11:39.020 --> 00:11:39.760
+twoje rozszerzenie
+
+00:11:39.760 --> 00:11:40.760
+będzie musiało utrzymywać
+
+00:11:40.760 --> 00:11:41.900
+wszystkie te przyszłe zmiany.
+
+00:11:42.060 --> 00:11:42.900
+Niezbyt idealnie,
+
+00:11:43.080 --> 00:11:43.720
+dlatego język AL
+
+00:11:43.720 --> 00:11:44.340
+daje programistom
+
+00:11:44.340 --> 00:11:45.580
+kilka sposobów na uruchamianie kodu.
+
+00:11:45.760 --> 00:11:46.540
+To, który wybierzesz,
+
+00:11:46.660 --> 00:11:47.220
+zależy od tego,
+
+00:11:47.340 --> 00:11:48.000
+co musi się stać.
+
+00:11:48.140 --> 00:11:49.340
+Na początek wyzwalacze.
+
+00:11:49.560 --> 00:11:50.600
+Wyzwalacz to nazwane miejsce
+
+00:11:50.600 --> 00:11:51.460
+wewnątrz obiektu AL,
+
+00:11:51.540 --> 00:11:52.320
+w którym może zostać
+
+00:11:52.320 --> 00:11:52.980
+uruchomiony kod.
+
+00:11:53.160 --> 00:11:54.220
+Gdy ktoś zmienia wartość
+
+00:11:54.220 --> 00:11:54.840
+w polu tabeli,
+
+00:11:55.000 --> 00:11:56.000
+wyzwalacz uruchamia kod.
+
+00:11:56.160 --> 00:11:57.100
+Gdy strona otwiera się
+
+00:11:57.100 --> 00:11:57.640
+lub zamyka,
+
+00:11:57.760 --> 00:11:58.780
+wyzwalacz uruchamia kod.
+
+00:11:58.920 --> 00:11:59.700
+Raporty, zapytania,
+
+00:11:59.700 --> 00:12:01.040
+amlporty, tabele rozszerzenia,
+
+00:12:01.160 --> 00:12:02.440
+obiekty wszystkie mają takie miejsca,
+
+00:12:02.540 --> 00:12:03.220
+w których programista
+
+00:12:03.220 --> 00:12:04.000
+może dodać reguły.
+
+00:12:04.180 --> 00:12:05.860
+Weźmy pole ID nagrody u klienta.
+
+00:12:06.040 --> 00:12:07.480
+Gdy użytkownik wybierze poziom nagrody,
+
+00:12:07.600 --> 00:12:08.260
+może uruchomić się
+
+00:12:08.260 --> 00:12:09.060
+wyzwalacz walidacji.
+
+00:12:09.260 --> 00:12:09.820
+Kod sprawdza,
+
+00:12:09.920 --> 00:12:11.140
+czy klient jest zablokowany,
+
+00:12:11.320 --> 00:12:12.540
+czy poziom nagrody istnieje,
+
+00:12:12.700 --> 00:12:14.360
+czy inne pole wymaga aktualizacji.
+
+00:12:14.600 --> 00:12:15.380
+Sprawdzenie następuje
+
+00:12:15.380 --> 00:12:16.760
+dokładnie w momencie zmiany wartości,
+
+00:12:16.860 --> 00:12:17.280
+a nie później,
+
+00:12:17.420 --> 00:12:18.400
+gdy ktoś odkryje błąd.
+
+00:12:18.460 --> 00:12:19.540
+Wyzwalacze sprawdzają się dobrze,
+
+00:12:19.540 --> 00:12:20.900
+gdy reguła jest ściśle związana
+
+00:12:20.900 --> 00:12:21.480
+z tym obiektem.
+
+00:12:21.600 --> 00:12:22.520
+Ale Biznes Central
+
+00:12:22.520 --> 00:12:23.560
+używa również zdarzeń.
+
+00:12:23.760 --> 00:12:25.260
+Zdarzenie jest jak powiadomienie.
+
+00:12:25.520 --> 00:12:27.280
+Jedna część aplikacji wysyła je,
+
+00:12:27.420 --> 00:12:28.320
+gdy coś się wydarzy.
+
+00:12:28.580 --> 00:12:29.520
+Może ono ogłosić,
+
+00:12:29.720 --> 00:12:31.200
+że rekord ma zostać wstawiony,
+
+00:12:31.360 --> 00:12:32.520
+dokument zaksięgowany
+
+00:12:32.520 --> 00:12:33.740
+lub proces zakończony.
+
+00:12:33.980 --> 00:12:34.680
+Twoje rozszerzenie
+
+00:12:34.680 --> 00:12:36.260
+może nasłuchiwać tego powiadomienia.
+
+00:12:36.480 --> 00:12:37.360
+Kod, który nasłuchuje,
+
+00:12:37.500 --> 00:12:38.920
+nazywa się subskrybentem zdarzeń.
+
+00:12:39.100 --> 00:12:40.020
+Czeka on na określone,
+
+00:12:40.160 --> 00:12:40.860
+nazwane zdarzenie.
+
+00:12:41.100 --> 00:12:42.620
+Gdy Biznes Central wywoła to zdarzenie,
+
+00:12:42.780 --> 00:12:44.380
+subskrybent uruchamia własną procedurę.
+
+00:12:44.560 --> 00:12:46.440
+Standardowy proces pozostaje pod kontrolą.
+
+00:12:46.640 --> 00:12:47.760
+Na przykład, gdy Biznes Central
+
+00:12:47.760 --> 00:12:49.240
+zaczyna księgować zamówienie sprzedaży,
+
+00:12:49.240 --> 00:12:50.740
+wywołuje zdarzenie przed kontynuacją.
+
+00:12:50.940 --> 00:12:51.880
+Twoje rozszerzenie nagród
+
+00:12:51.880 --> 00:12:52.960
+otrzymuje to powiadomienie.
+
+00:12:53.220 --> 00:12:54.900
+Sprawdza ono identyfikator nagrody klienta
+
+00:12:54.900 --> 00:12:55.700
+i regułę rabatową.
+
+00:12:55.960 --> 00:12:57.860
+Następnie pozwala na kontynuację procesu
+
+00:12:57.860 --> 00:12:59.440
+lub przerywa go czytelnym komunikatem.
+
+00:12:59.700 --> 00:13:01.080
+Standardowy proces księgowania
+
+00:13:01.080 --> 00:13:02.620
+nadal należy do Biznes Central.
+
+00:13:02.880 --> 00:13:04.220
+Twoje rozszerzenie dodaje jedynie
+
+00:13:04.220 --> 00:13:05.380
+specyficzną regułę firmy
+
+00:13:05.380 --> 00:13:06.360
+w tym punkcie połączenia.
+
+00:13:06.620 --> 00:13:08.100
+Często będziesz słyszeć nazwy zdarzeń,
+
+00:13:08.240 --> 00:13:09.780
+takie jak on before lub on after.
+
+00:13:09.980 --> 00:13:10.800
+On before oznacza,
+
+00:13:10.960 --> 00:13:11.780
+że twój kod uruchamia się
+
+00:13:11.780 --> 00:13:12.700
+przed zakończeniem akcji.
+
+00:13:12.700 --> 00:13:14.300
+Jest to idealne rozwiązanie dla sprawdzeń,
+
+00:13:14.400 --> 00:13:15.500
+które mogą powstrzymać kolejny krok.
+
+00:13:15.640 --> 00:13:17.300
+Och, na przykład zatrzymanie zamówienia sprzedaży,
+
+00:13:17.400 --> 00:13:18.540
+jeśli warunek nie został spełniony.
+
+00:13:18.720 --> 00:13:20.640
+After oznacza, że akcja już się wydarzyła.
+
+00:13:20.860 --> 00:13:21.920
+Możesz wtedy zareagować,
+
+00:13:22.080 --> 00:13:23.060
+utworzyć powiązany rekord,
+
+00:13:23.160 --> 00:13:24.060
+zaktualizować notatkę
+
+00:13:24.060 --> 00:13:25.180
+lub rozpocząć inną pracę.
+
+00:13:25.360 --> 00:13:26.400
+Nazwy wskazują na czas,
+
+00:13:26.500 --> 00:13:27.260
+a czas ma znaczenie.
+
+00:13:27.500 --> 00:13:29.120
+Reguła, która uruchamia się po księgowaniu,
+
+00:13:29.220 --> 00:13:29.960
+nie może mu zapobiec.
+
+00:13:30.180 --> 00:13:31.500
+Reguła uruchomiona zbyt wcześnie
+
+00:13:31.500 --> 00:13:32.660
+może nie mieć potrzebnych danych,
+
+00:13:32.860 --> 00:13:34.040
+dlatego programiści wybierają zdarzenie
+
+00:13:34.040 --> 00:13:34.740
+w zależności od tego,
+
+00:13:34.740 --> 00:13:36.060
+co i kiedy ma zrobić reguła biznesowa.
+
+00:13:36.260 --> 00:13:37.380
+Kod może również uruchamiać się
+
+00:13:37.380 --> 00:13:38.120
+za pomocą akcji.
+
+00:13:38.320 --> 00:13:39.500
+Użytkownik klika przycisk,
+
+00:13:39.600 --> 00:13:41.260
+na przykład sprawdź status nagrody,
+
+00:13:41.340 --> 00:13:42.800
+a ta akcja wywołuje procedurę.
+
+00:13:42.920 --> 00:13:43.780
+Kod może też działać,
+
+00:13:43.840 --> 00:13:45.900
+gdy jeden obiekt wywołuje drugi przez zmienną.
+
+00:13:46.160 --> 00:13:47.060
+Brzmi to technicznie,
+
+00:13:47.200 --> 00:13:47.920
+ale jest proste.
+
+00:13:48.120 --> 00:13:49.160
+Jedna część rozszerzenia
+
+00:13:49.160 --> 00:13:50.620
+prosi drugą o wykonanie zadania.
+
+00:13:50.840 --> 00:13:52.340
+Zmienne pomagają w tym procesie.
+
+00:13:52.560 --> 00:13:53.700
+Zmienna to nazwane miejsce,
+
+00:13:53.880 --> 00:13:54.840
+które przechowuje wartość
+
+00:13:54.840 --> 00:13:55.720
+podczas działania kodu.
+
+00:13:55.720 --> 00:13:57.520
+Może to być liczba, tekst, data,
+
+00:13:57.700 --> 00:13:59.000
+a nawet rekord biznes central,
+
+00:13:59.160 --> 00:14:00.000
+jak bieżący klient.
+
+00:14:00.180 --> 00:14:01.480
+W języku AL deklarujesz je
+
+00:14:01.480 --> 00:14:02.260
+za pomocą VAR.
+
+00:14:02.420 --> 00:14:03.540
+Na przykład procedura nagród
+
+00:14:03.540 --> 00:14:04.860
+może użyć zmiennej o nazwie
+
+00:14:04.860 --> 00:14:06.060
+Customer, aby przechować
+
+00:14:06.060 --> 00:14:07.360
+rekord bieżącego klienta.
+
+00:14:07.560 --> 00:14:09.180
+Inna zmienna, Discount Percent,
+
+00:14:09.340 --> 00:14:10.560
+przechowuje wartość rabatu.
+
+00:14:10.740 --> 00:14:11.940
+To nie są trwałe rekordy,
+
+00:14:12.080 --> 00:14:13.180
+to tylko wartości robocze
+
+00:14:13.180 --> 00:14:14.120
+dla danej części kodu.
+
+00:14:14.320 --> 00:14:15.040
+Oto kwestia tego,
+
+00:14:15.160 --> 00:14:16.160
+gdzie przechowywany jest kod.
+
+00:14:16.320 --> 00:14:17.520
+Jeśli reguła może być używana
+
+00:14:17.520 --> 00:14:18.700
+w więcej niż jednym miejscu,
+
+00:14:18.760 --> 00:14:19.620
+umieść ją w kodeumcie.
+
+00:14:19.820 --> 00:14:21.240
+W ten sposób karta klienta,
+
+00:14:21.240 --> 00:14:22.580
+proces sprzedaży i raport
+
+00:14:22.580 --> 00:14:24.800
+mogą wywoływać tę samą procedurę rabatową,
+
+00:14:24.920 --> 00:14:26.380
+zamiast posiadać własne wersje.
+
+00:14:26.560 --> 00:14:28.520
+Pozwala to uniknąć znanego problemu.
+
+00:14:28.700 --> 00:14:30.960
+Jeden ekran stosuje 10% rabatu,
+
+00:14:31.120 --> 00:14:32.740
+inny 5% i nikt nie wie,
+
+00:14:32.900 --> 00:14:33.900
+której regule ufać.
+
+00:14:34.060 --> 00:14:35.860
+Utrzymywanie wspólnych reguł biznesowych
+
+00:14:35.860 --> 00:14:36.740
+w jednym kodeumcie
+
+00:14:36.740 --> 00:14:38.500
+daje rozszerzeniu jedno źródło prawdy.
+
+00:14:38.720 --> 00:14:39.860
+Zatem wyzwalacze Triggers
+
+00:14:39.860 --> 00:14:41.540
+obsługują reguły bliskie obiektom.
+
+00:14:41.720 --> 00:14:42.960
+Zdarzenia pozwalają rozszerzeniu
+
+00:14:42.960 --> 00:14:44.720
+reagować na procesy samego Biznes Central.
+
+00:14:44.940 --> 00:14:45.880
+Code Unity utrzymują
+
+00:14:45.880 --> 00:14:47.380
+wspólną logikę w jednym miejscu.
+
+00:14:47.560 --> 00:14:49.080
+Gdy te elementy zostaną połączone,
+
+00:14:49.080 --> 00:14:50.040
+kolejne pytanie brzmi,
+
+00:14:50.160 --> 00:14:51.080
+gdzie programiści piszą,
+
+00:14:51.200 --> 00:14:52.880
+testują i sprawdzają cały ten kod AL.
+
+00:14:53.040 --> 00:14:53.900
+Programowanie w AL
+
+00:14:53.900 --> 00:14:56.000
+zazwyczaj odbywa się w Visual Studio Code,
+
+00:14:56.160 --> 00:14:57.600
+często nazywanym VS Code.
+
+00:14:57.780 --> 00:14:58.740
+To Twoje miejsce pracy
+
+00:14:58.740 --> 00:14:59.940
+do tworzenia plików Aleja.
+
+00:15:00.140 --> 00:15:01.860
+Pozwala zachować porządek w rozszerzeniu.
+
+00:15:02.100 --> 00:15:03.080
+Pomaga znajdować problemy
+
+00:15:03.080 --> 00:15:04.240
+i wysyła gotową aplikację
+
+00:15:04.240 --> 00:15:05.440
+do środowiska Biznes Central
+
+00:15:05.440 --> 00:15:06.300
+w celu przetestowania.
+
+00:15:06.580 --> 00:15:07.720
+Jednak samo VS Code
+
+00:15:07.720 --> 00:15:09.120
+to jedynie ogólny edytor kodu.
+
+00:15:09.400 --> 00:15:10.780
+Wymaga rozszerzenia języka AL
+
+00:15:10.780 --> 00:15:11.640
+od firmy Microsoft.
+
+00:15:11.920 --> 00:15:13.340
+To rozszerzenie uczy VS Code,
+
+00:15:13.520 --> 00:15:14.580
+jak działa Biznes Central.
+
+00:15:14.820 --> 00:15:16.200
+Potrafi sugerować nazwy obiektów
+
+00:15:16.200 --> 00:15:16.880
+podczas pisania.
+
+00:15:16.880 --> 00:15:17.820
+Wskazuje błędy,
+
+00:15:17.980 --> 00:15:18.980
+zanim opublikujesz kod.
+
+00:15:19.080 --> 00:15:20.800
+Pomaga przeglądać pola i procedury.
+
+00:15:20.800 --> 00:15:21.980
+Łączy też Twój projekt
+
+00:15:21.980 --> 00:15:23.380
+ze środowiskiem Biznes Central.
+
+00:15:23.600 --> 00:15:25.180
+To oszczędza mnóstwo domysłów.
+
+00:15:25.360 --> 00:15:26.740
+Gdy rozpoczynasz nowy projekt AL
+
+00:15:26.740 --> 00:15:28.260
+możesz uruchomić w VS Code
+
+00:15:28.260 --> 00:15:29.160
+polecenie ALGO.
+
+00:15:29.400 --> 00:15:31.120
+Tworzy ono podstawowy folder projektu
+
+00:15:31.120 --> 00:15:31.920
+i pliki ustawień,
+
+00:15:32.040 --> 00:15:33.020
+w tym nazwę rozszerzenia,
+
+00:15:33.180 --> 00:15:33.980
+wydawcę, wersję
+
+00:15:33.980 --> 00:15:35.840
+oraz wybrane środowisko Biznes Central.
+
+00:15:36.060 --> 00:15:37.360
+Traktuj ten folder projektu
+
+00:15:37.360 --> 00:15:38.440
+jako warsztat rozszerzenia.
+
+00:15:38.680 --> 00:15:40.420
+Każdy plik AL powinien się tam znaleźć.
+
+00:15:40.600 --> 00:15:41.860
+Jeden plik może zawierać tabelę,
+
+00:15:41.980 --> 00:15:42.860
+inny rozszerzenie strony,
+
+00:15:42.860 --> 00:15:44.520
+a CodeUnit może mieć własny plik.
+
+00:15:44.700 --> 00:15:46.320
+Dzięki temu, gdy ktoś otworzy projekt,
+
+00:15:46.460 --> 00:15:47.500
+znajdzie właściwą część
+
+00:15:47.500 --> 00:15:49.240
+bez przewijania ogromnego dokumentu.
+
+00:15:49.420 --> 00:15:51.360
+Gdy kod jest gotowy do testów VS Code,
+
+00:15:51.460 --> 00:15:52.960
+kompiluję go do pakietu aplikacji.
+
+00:15:53.120 --> 00:15:55.140
+To wersja rozszerzenia gotowa do instalacji.
+
+00:15:55.420 --> 00:15:57.040
+Biznes Central odczytuje ten pakiet
+
+00:15:57.040 --> 00:15:58.580
+i dodaje rozszerzenie do środowiska.
+
+00:15:58.840 --> 00:15:59.660
+Jeśli brakuje pola,
+
+00:15:59.760 --> 00:16:00.780
+wystąpił błąd pisowni
+
+00:16:00.780 --> 00:16:01.940
+lub inny problem blokujący
+
+00:16:01.940 --> 00:16:03.300
+budowanie aplikacji VS Code,
+
+00:16:03.420 --> 00:16:03.920
+powiadomi Cię,
+
+00:16:04.040 --> 00:16:05.560
+zanim pakiet trafi do Biznes Central.
+
+00:16:05.780 --> 00:16:06.920
+Testowanie powinno odbywać się
+
+00:16:06.920 --> 00:16:08.280
+najpierw w środowisku typu Sandbox.
+
+00:16:08.500 --> 00:16:09.900
+Sandbox to oddzielne środowisko
+
+00:16:09.900 --> 00:16:10.560
+Biznes Central,
+
+00:16:10.700 --> 00:16:11.960
+w którym możesz wypróbować zmiany
+
+00:16:11.960 --> 00:16:13.040
+bez ryzyka dla pracy firmy.
+
+00:16:13.180 --> 00:16:14.080
+Publikujesz rozszerzenie,
+
+00:16:14.080 --> 00:16:14.760
+otwierasz strony,
+
+00:16:14.900 --> 00:16:15.300
+zmieniasz je,
+
+00:16:15.400 --> 00:16:16.440
+wprowadzasz rekordy testowe
+
+00:16:16.440 --> 00:16:17.000
+i sprawdzasz,
+
+00:16:17.100 --> 00:16:17.760
+czy reguły działają
+
+00:16:17.760 --> 00:16:18.780
+zgodnie z oczekiwaniami.
+
+00:16:18.940 --> 00:16:20.140
+Ta separacja jest ważna.
+
+00:16:20.360 --> 00:16:20.920
+Nie chcesz odkryć,
+
+00:16:21.020 --> 00:16:21.840
+że nowa reguła walidacji
+
+00:16:21.840 --> 00:16:22.920
+blokuje zamówienia sprzedaży,
+
+00:16:23.000 --> 00:16:23.780
+podczas gdy pracownicy
+
+00:16:23.780 --> 00:16:25.060
+próbują wykonywać swoją pracę.
+
+00:16:25.200 --> 00:16:26.800
+W Sandboxie możesz popełniać błędy,
+
+00:16:26.900 --> 00:16:27.780
+usuwać dane testowe,
+
+00:16:27.880 --> 00:16:28.420
+zmieniać kod
+
+00:16:28.420 --> 00:16:29.460
+i publikować go ponownie
+
+00:16:29.460 --> 00:16:30.920
+bez wpływu na rzeczywiste rekordy.
+
+00:16:31.100 --> 00:16:31.800
+Czasami kod działa,
+
+00:16:31.960 --> 00:16:33.640
+ale wynik wciąż wygląda na błędny.
+
+00:16:33.840 --> 00:16:34.540
+Wtedy z pomocą
+
+00:16:34.540 --> 00:16:35.500
+przychodzi debugowanie.
+
+00:16:35.720 --> 00:16:36.860
+Umieszczasz punkt przerwania
+
+00:16:36.860 --> 00:16:37.220
+w kodzie,
+
+00:16:37.320 --> 00:16:38.100
+uruchamiasz proces,
+
+00:16:38.260 --> 00:16:39.460
+a rozszerzenie wstrzymuje się
+
+00:16:39.460 --> 00:16:40.240
+w trakcie działania.
+
+00:16:40.460 --> 00:16:41.280
+W trakcie tej pauzy
+
+00:16:41.280 --> 00:16:42.560
+możesz sprawdzić wartości,
+
+00:16:42.700 --> 00:16:43.880
+takie jak bieżący klient,
+
+00:16:44.040 --> 00:16:45.060
+wybrany poziom nagrody
+
+00:16:45.060 --> 00:16:46.020
+lub procent rabatu
+
+00:16:46.020 --> 00:16:47.340
+obliczony przez procedurę.
+
+00:16:47.540 --> 00:16:48.300
+Zamiast zgadywać,
+
+00:16:48.400 --> 00:16:49.420
+dlaczego reguła zawiodła,
+
+00:16:49.540 --> 00:16:50.560
+możesz dokładnie zobaczyć,
+
+00:16:50.620 --> 00:16:51.320
+co otrzymał kod.
+
+00:16:51.500 --> 00:16:52.400
+Zespoły programistyczne
+
+00:16:52.400 --> 00:16:53.260
+używają również Git,
+
+00:16:53.340 --> 00:16:53.940
+aby przechowywać
+
+00:16:53.940 --> 00:16:54.900
+historię swojej pracy.
+
+00:16:55.160 --> 00:16:56.160
+Git rejestruje zmiany
+
+00:16:56.160 --> 00:16:57.300
+w plikach projektu w czasie.
+
+00:16:57.620 --> 00:16:58.740
+Jeśli ktoś zmieni regułę
+
+00:16:58.740 --> 00:16:59.600
+i spowoduje problem,
+
+00:16:59.600 --> 00:17:00.980
+zespół może porównać wersje,
+
+00:17:01.140 --> 00:17:01.880
+sprawdzić zmiany
+
+00:17:01.880 --> 00:17:03.240
+i w razie potrzeby je wycofać.
+
+00:17:03.340 --> 00:17:04.000
+Pomaga to również,
+
+00:17:04.140 --> 00:17:05.320
+gdy nad tym samym rozszerzeniem
+
+00:17:05.320 --> 00:17:06.940
+pracuje więcej niż jeden programista.
+
+00:17:07.200 --> 00:17:08.000
+Dla początkującego
+
+00:17:08.000 --> 00:17:08.720
+najlepszą drogą
+
+00:17:08.720 --> 00:17:10.020
+jest zaczynanie od małych rzeczy.
+
+00:17:10.280 --> 00:17:11.320
+Najpierw poznaj środowisko
+
+00:17:11.320 --> 00:17:12.000
+Biznes Central,
+
+00:17:12.140 --> 00:17:13.540
+a następnie utwórz jedną tabelę
+
+00:17:13.540 --> 00:17:14.280
+i jedną stronę.
+
+00:17:14.480 --> 00:17:15.160
+Następnie rozszerz
+
+00:17:15.160 --> 00:17:16.000
+standardową stronę,
+
+00:17:16.120 --> 00:17:17.400
+dodaj prostą regułę biznesową
+
+00:17:17.400 --> 00:17:17.980
+i dowiedz się,
+
+00:17:18.100 --> 00:17:18.560
+jak zdarzenia
+
+00:17:18.560 --> 00:17:19.640
+oraz dane instalacyjne
+
+00:17:19.640 --> 00:17:20.540
+pasują do projektu.
+
+00:17:20.720 --> 00:17:21.640
+Następnie połączmy
+
+00:17:21.640 --> 00:17:22.240
+te elementy
+
+00:17:22.240 --> 00:17:23.300
+w jeden mały dodatek,
+
+00:17:23.420 --> 00:17:24.300
+który firma mogłaby
+
+00:17:24.300 --> 00:17:25.520
+faktycznie wykorzystać.
+
+00:17:26.540 --> 00:17:27.360
+Prosty przykład
+
+00:17:27.360 --> 00:17:28.400
+Budowanie dodatku
+
+00:17:28.400 --> 00:17:29.600
+nagród dla klientów
+
+00:17:29.600 --> 00:17:31.180
+Jak właściwie wygląda
+
+00:17:31.180 --> 00:17:32.460
+prawdziwe rozszerzenie AL?
+
+00:17:32.620 --> 00:17:33.240
+Zanurzmy się
+
+00:17:33.240 --> 00:17:34.160
+w prosty przykład.
+
+00:17:34.360 --> 00:17:34.960
+Wyobraź sobie,
+
+00:17:35.120 --> 00:17:35.680
+że Twoja firma
+
+00:17:35.680 --> 00:17:36.260
+chce wprowadzić
+
+00:17:36.260 --> 00:17:37.440
+poziomy nagród dla klientów,
+
+00:17:37.520 --> 00:17:38.780
+z których każdy ma własny rabat.
+
+00:17:39.000 --> 00:17:39.900
+Zaczynasz od utworzenia
+
+00:17:39.900 --> 00:17:40.620
+tabeli nagród.
+
+00:17:40.800 --> 00:17:41.400
+Potraktuj to jak
+
+00:17:41.400 --> 00:17:42.600
+cyfrową szafkę na dokumenty,
+
+00:17:42.720 --> 00:17:43.260
+gdzie każdy plik
+
+00:17:43.260 --> 00:17:44.160
+zawiera identyfikator,
+
+00:17:44.300 --> 00:17:44.940
+opis i wartość
+
+00:17:44.940 --> 00:17:45.780
+procentową rabatu.
+
+00:17:46.000 --> 00:17:46.900
+Na przykład poziom złoty
+
+00:17:46.900 --> 00:17:48.220
+otrzymuje 10% zniżki.
+
+00:17:48.420 --> 00:17:48.920
+Twój personel
+
+00:17:48.920 --> 00:17:50.040
+musi zarządzać tymi poziomami
+
+00:17:50.040 --> 00:17:51.300
+bez używania narzędzi technicznych.
+
+00:17:51.300 --> 00:17:52.360
+Dodajesz więc dwie strony,
+
+00:17:52.480 --> 00:17:53.140
+stronę listy nagród,
+
+00:17:53.240 --> 00:17:54.240
+aby zobaczyć wszystkie poziomy
+
+00:17:54.240 --> 00:17:55.300
+oraz stronę karty nagrody,
+
+00:17:55.400 --> 00:17:56.660
+aby edytować lub utworzyć nową.
+
+00:17:56.860 --> 00:17:58.080
+Mogą oni dodać nowy poziom,
+
+00:17:58.220 --> 00:17:58.860
+zmienić procent
+
+00:17:58.860 --> 00:17:59.960
+lub przejrzeć zawartość
+
+00:17:59.960 --> 00:18:01.060
+bez otwierania środowiska
+
+00:18:01.060 --> 00:18:01.880
+programistycznego.
+
+00:18:02.140 --> 00:18:03.000
+Następnie rozszerzasz
+
+00:18:03.000 --> 00:18:03.740
+tabelę klientów
+
+00:18:03.740 --> 00:18:04.260
+o nowe pole
+
+00:18:04.260 --> 00:18:05.440
+o nazwie ID nagrody.
+
+00:18:05.620 --> 00:18:06.160
+To pole łączy
+
+00:18:06.160 --> 00:18:06.960
+każdego klienta
+
+00:18:06.960 --> 00:18:08.080
+z jednym rekordem nagrody,
+
+00:18:08.140 --> 00:18:08.940
+a Ty umieszczasz je
+
+00:18:08.940 --> 00:18:09.920
+bezpośrednio na stronie
+
+00:18:09.920 --> 00:18:10.700
+karty klienta,
+
+00:18:10.800 --> 00:18:12.060
+gdzie personel zarządza danymi.
+
+00:18:12.260 --> 00:18:13.100
+Następnie dodajesz
+
+00:18:13.100 --> 00:18:13.700
+akcję nagród,
+
+00:18:13.820 --> 00:18:14.620
+aby mogli otwierać
+
+00:18:14.620 --> 00:18:15.180
+listę nagród
+
+00:18:15.180 --> 00:18:16.600
+bezpośrednio z tej samej karty.
+
+00:18:16.840 --> 00:18:17.760
+Sama reguła rabatu
+
+00:18:17.760 --> 00:18:18.720
+znajduje się wewnątrz
+
+00:18:18.720 --> 00:18:19.340
+szkodeunita.
+
+00:18:19.620 --> 00:18:20.320
+Gdy inny proces
+
+00:18:20.320 --> 00:18:21.700
+potrzebuje rabatu klienta,
+
+00:18:21.820 --> 00:18:22.900
+wywołuje ten CodeUnit
+
+00:18:22.900 --> 00:18:23.820
+zamiast obliczać go
+
+00:18:23.820 --> 00:18:25.140
+wielokrotnie na każdej stronie.
+
+00:18:25.340 --> 00:18:26.460
+To wydajne rozwiązanie.
+
+00:18:26.640 --> 00:18:27.700
+CodeUnit instalacyjny
+
+00:18:27.700 --> 00:18:28.740
+dodaje początkowe poziomy
+
+00:18:28.740 --> 00:18:29.540
+nagród przy pierwszej
+
+00:18:29.540 --> 00:18:30.460
+instalacji rozszerzenia,
+
+00:18:30.640 --> 00:18:31.600
+a subskrybent zdarzeń
+
+00:18:31.600 --> 00:18:32.860
+sprawdza wybrany poziom nagrody
+
+00:18:32.860 --> 00:18:33.960
+podczas procesu sprzedaży,
+
+00:18:34.120 --> 00:18:35.360
+stosując regułę Twojej firmy
+
+00:18:35.360 --> 00:18:36.640
+w dokładnie odpowiednim momencie.
+
+00:18:36.880 --> 00:18:38.020
+To tylko małe rozszerzenie,
+
+00:18:38.220 --> 00:18:38.720
+ale zauważ,
+
+00:18:38.840 --> 00:18:39.340
+co zawiera
+
+00:18:39.340 --> 00:18:39.960
+tabele danych,
+
+00:18:40.060 --> 00:18:40.780
+ekrany użytkownika,
+
+00:18:40.940 --> 00:18:41.600
+akcje nawigacyjne,
+
+00:18:41.720 --> 00:18:42.320
+logikę ustawień
+
+00:18:42.320 --> 00:18:43.100
+i reguły biznesowe.
+
+00:18:43.300 --> 00:18:44.660
+Wszystko to współpracuje ze sobą.
+
+00:18:44.840 --> 00:18:45.420
+Na tym polega
+
+00:18:45.420 --> 00:18:46.280
+prawdziwa moc Aleja.
+
+00:18:46.460 --> 00:18:47.060
+W porządku.
+
+00:18:47.220 --> 00:18:47.680
+Podsumowanie.
+
+00:18:47.800 --> 00:18:48.500
+Twój punkt wyjścia
+
+00:18:48.500 --> 00:18:49.480
+w programowaniu w Aleja.
+
+00:18:49.620 --> 00:18:50.840
+Oto najważniejsze wnioski.
+
+00:18:51.040 --> 00:18:51.760
+Programowanie w Al
+
+00:18:51.760 --> 00:18:52.500
+pozwala dodawać
+
+00:18:52.500 --> 00:18:53.300
+do Biznes Central
+
+00:18:53.300 --> 00:18:54.220
+specyficzne funkcje
+
+00:18:54.220 --> 00:18:55.240
+potrzebne Twojej firmie
+
+00:18:55.240 --> 00:18:55.900
+bez ingerencji
+
+00:18:55.900 --> 00:18:56.860
+w główną aplikację.
+
+00:18:57.020 --> 00:18:57.880
+I nie musisz budować
+
+00:18:57.880 --> 00:18:58.740
+wszystkiego naraz.
+
+00:18:58.980 --> 00:18:59.980
+Zacznij od jednego pola,
+
+00:19:00.100 --> 00:19:01.140
+jednego rozszerzenia strony
+
+00:19:01.140 --> 00:19:02.240
+i jednej jasnej reguły.
+
+00:19:02.240 --> 00:19:04.100
+To Twój pierwszy element konstrukcyjny.
+
+00:19:04.260 --> 00:19:05.040
+Jeśli ta porcja wiedzy
+
+00:19:05.040 --> 00:19:05.760
+okazała się pomocna,
+
+00:19:05.860 --> 00:19:06.460
+zasubskrybuj nas
+
+00:19:06.460 --> 00:19:07.220
+na swojej ulubionej
+
+00:19:07.220 --> 00:19:08.040
+platformie podcastowej
+
+00:19:08.040 --> 00:19:09.080
+i udostępnij ją komuś,
+
+00:19:09.160 --> 00:19:09.740
+kto dopiero zaczyna
+
+00:19:09.740 --> 00:19:10.620
+pracę z Biznes Central.
+
+00:19:10.880 --> 00:19:12.040
+Dołącz do nas następnym razem,
+
+00:19:12.180 --> 00:19:12.960
+gdy dołożymy kolejny
+
+00:19:12.960 --> 00:19:13.740
+element układanki.
+
+00:19:14.000 --> 00:19:15.100
+Nazywam się Merko Peters,
+
+00:19:15.260 --> 00:19:16.320
+a to był kolejny odcinek
+
+00:19:16.320 --> 00:19:17.540
+Microsoft Knowledge Nugget
+
+00:19:17.540 --> 00:19:19.320
+w M365FM.

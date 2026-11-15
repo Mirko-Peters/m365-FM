@@ -6,8 +6,8 @@ Alle Inhalte stammen aus vorhandenen Daten, es wird nichts dazuerfunden."""
 import hashlib
 from html import escape as esc
 
-HUE = {"product": 210, "platform": 265, "concept": 150, "org": 30, "person": 330, "cert": 45, "event": 0, "media": 185, "category": 100}
-ICON = {"product": "◆", "platform": "▣", "concept": "✦", "org": "▲", "person": "●", "cert": "★", "event": "◉", "media": "▶", "category": "■"}
+HUE = {"product": 210, "platform": 265, "concept": 150, "org": 30, "person": 330, "cert": 45, "event": 0, "media": 185, "category": 100, "industry": 20, "job": 290}
+ICON = {"product": "◆", "platform": "▣", "concept": "✦", "org": "▲", "person": "●", "cert": "★", "event": "◉", "media": "▶", "category": "■", "industry": "⚙", "job": "☻"}
 
 
 def _clip(s, n):

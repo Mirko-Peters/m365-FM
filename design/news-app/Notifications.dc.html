@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Alerts and push settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+body{margin:0;background:#f3f3f2}
+a{color:#3b6391}a:hover{color:#2c4b70}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #3b6391;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; display: flex; flex-direction: column; background: #f3f3f2; color: #17191c; font-family: Barlow, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.45">
+
+  <header style="flex: 0 0 auto; padding: 18px 20px 10px; display: grid; gap: 2px">
+    <h1 style="margin: 0; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 36px; line-height: 1">Alerts</h1>
+    <span style="font-size: 14px; color: #5d6470">Push only for what you choose. Never more than one per topic and day.</span>
+  </header>
+
+  <div style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 0 20px 16px; display: flex; flex-direction: column; gap: 16px">
+
+    <div style="padding: 12px 14px; border-radius: 16px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); box-shadow: 0 4px 14px rgba(23,25,28,.08); display: grid; gap: 2px">
+      <span style="display: flex; justify-content: space-between; font-size: 12px; color: #5d6470"><b style="letter-spacing: .08em; text-transform: uppercase">M365.FM News</b><span>now</span></span>
+      <b>Copilot · action needed by [DATE]</b>
+      <span style="font-size: 14px">New admin setting for sharing agents. Tap for the checklist.</span>
+    </div>
+    <span style="font-size: 13px; color: #5d6470; margin-top: -8px">Example of a push message</span>
+
+    <div style="padding: 12px 14px; border-radius: 16px; background: #ffffff; border: 1px solid rgba(23,25,28,.14); box-shadow: 0 4px 14px rgba(23,25,28,.08); display: grid; gap: 2px">
+      <span style="display: flex; justify-content: space-between; font-size: 12px; color: #5d6470"><b style="letter-spacing: .08em; text-transform: uppercase">M365.FM News</b><span>07:00</span></span>
+      <b>Your briefing: 2 deadlines, 1 new episode</b>
+      <span style="font-size: 14px">Copilot agent sharing, Teams meeting policy, governance episode. Tap to listen.</span>
+      <span style="font-size: 12px; color: #5d6470">Presented by [SPONSOR] · Ad</span>
+    </div>
+    <span style="font-size: 13px; color: #5d6470; margin-top: -8px">Daily summary with sponsor note, only if switched on below</span>
+
+    <div style="display: grid; gap: 8px">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Push per topic</span>
+      <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+        <sc-for list="{{topics}}" as="t" hint-placeholder-count="5">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 14px; border-bottom: 1px solid rgba(23,25,28,.1)">
+            <span style="display: grid"><b style="font-weight: 600">{{t.label}}</b><span style="font-size: 13px; color: #5d6470">{{t.modeText}}</span></span>
+            <button type="button" role="switch" aria-checked="{{t.on}}" aria-label="{{t.aria}}" onClick="{{t.toggle}}" style="{{t.trackStyle}}"><span aria-hidden="true" style="{{t.knobStyle}}"></span></button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: grid; gap: 8px">
+      <span style="font-size: 13px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #5d6470">Calm</span>
+      <div style="background: #ffffff; border: 1px solid rgba(23,25,28,.14)">
+        <sc-for list="{{calm}}" as="c" hint-placeholder-count="3">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 14px; border-bottom: 1px solid rgba(23,25,28,.1)">
+            <span style="display: grid"><b style="font-weight: 600">{{c.label}}</b><span style="font-size: 13px; color: #5d6470">{{c.sub}}</span></span>
+            <button type="button" role="switch" aria-checked="{{c.on}}" aria-label="{{c.label}}" onClick="{{c.toggle}}" style="{{c.trackStyle}}"><span aria-hidden="true" style="{{c.knobStyle}}"></span></button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <a href="Main.dc.html" style="min-height: 44px; display: flex; align-items: center; font-weight: 600">Change topics and language →</a>
+  </div>
+
+  <nav aria-label="App" style="flex: 0 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid rgba(23,25,28,.14); background: #ffffff; padding-bottom: 10px">
+    <a href="Feed.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="16" height="15"></rect><path d="M3 9h16M8 2v4M14 2v4"></path></svg>Today</a>
+    <a href="Player.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 14v-3a7 7 0 0 1 14 0v3"></path><rect x="3" y="13" width="4" height="6"></rect><rect x="15" y="13" width="4" height="6"></rect></svg>Listen</a>
+    <a href="Ask.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 4h16v11H9l-4 4v-4H3z"></path></svg>Ask</a>
+    <a href="Saved.dc.html" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; color: #5d6470; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 3h12v16l-6-4-6 4z"></path></svg>Saved</a>
+    <a href="Notifications.dc.html" aria-current="page" style="display: grid; justify-items: center; gap: 2px; padding: 8px 0; min-height: 52px; font-size: 12px; font-weight: 600; color: #3b6391; text-decoration: none"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 16V10a6 6 0 0 1 12 0v6l2 2H3z"></path><path d="M9 20h4"></path></svg>Alerts</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.on || { Copilot: true, Teams: true, Purview: true, quiet: true, weekly: true };
+    const sw = (v) => ({
+      trackStyle: 'flex: 0 0 auto; width: 52px; height: 32px; padding: 3px; border-radius: 16px; border: 0; cursor: pointer; display: flex; ' + (v ? 'background: #3b6391; justify-content: flex-end;' : 'background: #c9ccd1; justify-content: flex-start;'),
+      knobStyle: 'width: 26px; height: 26px; border-radius: 50%; background: #ffffff; display: block'
+    });
+    const flip = (k) => () => this.setState({ on: Object.assign({}, on, { [k]: !on[k] }) });
+    const topics = ['Copilot', 'Teams', 'SharePoint', 'Purview', 'Copilot Studio'].map((label) => Object.assign({
+      label, on: !!on[label], aria: 'Push for ' + label,
+      modeText: on[label] ? 'Action needed and new episodes' : 'Off · still in your feed',
+      toggle: flip(label)
+    }, sw(!!on[label])));
+    const calm = [
+      ['quiet', 'Quiet hours', '20:00–07:00 and weekends'],
+      ['weekly', 'Weekly summary', 'Monday morning, everything else'],
+      ['brief', 'Daily briefing summary', '07:00 · includes a short sponsor note']
+    ].map(([k, label, sub]) => Object.assign({ label, sub, on: !!on[k], toggle: flip(k) }, sw(!!on[k])));
+    return { topics, calm };
+  }
+}
+</script>
+</body>
+</html>

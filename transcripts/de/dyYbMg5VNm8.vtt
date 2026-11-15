@@ -1,0 +1,1042 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.120
+Wenn ein Kunde auf ihrer Website aufkaufen klickt, kann sich der gewünschte Artikel in einem Lager, einer Filiale, in der Stadt oder bei einem Versandpartner befinden.
+
+00:00:06.820 --> 00:00:08.760
+Alles, was der Kunde wirklich erwartet, sind jedoch zwei Dinge.
+
+00:00:09.160 --> 00:00:10.980
+Ein klares Versprechen und ein Paket an seiner Tür.
+
+00:00:11.420 --> 00:00:14.840
+Willkommen zu einer weiteren Folge der Microsoft Knowledge Nuggets auf M365FM.
+
+00:00:15.240 --> 00:00:19.740
+Demo Peters und heute schauen wir uns Dynamics 365 Intelligent Order Management in einfachem Deutsch an.
+
+00:00:20.120 --> 00:00:23.700
+Wir verfolgen die Bestellung vom Klick an der Kasse bis hin zur Arbeit, die für die tatsächliche Zustellung sorgt.
+
+00:00:24.120 --> 00:00:26.960
+Stellen Sie es sich wie eine Zentralleitstelle in einem belebten Bürogebäude vor.
+
+00:00:26.980 --> 00:00:29.320
+Das ist kein weiterer Online-Shop und es packt auch keine Kartons.
+
+00:00:29.320 --> 00:00:33.160
+Es leitet lediglich die richtigen Leute in den Systemen an, damit die Arbeit am richtigen Ort erledigt wird.
+
+00:00:34.780 --> 00:00:36.240
+Warum werden Bestellungen kompliziert?
+
+00:00:37.600 --> 00:00:42.900
+Stellen Sie sich vor, Sie verkaufen dieselben Kopfhörer über Ihre Website, Ihre Ladengeschäfte, einen Online-Marktplatz und ein Callcenter.
+
+00:00:43.520 --> 00:00:46.060
+Für den Kunden sind das alles nur verschiedene Wege, um Kopfhörer zu kaufen.
+
+00:00:46.500 --> 00:00:49.700
+Doch hinter den Kulissen sendet jeder Kanal Bestelldetails in ein völlig anderes System.
+
+00:00:50.460 --> 00:00:55.280
+Ihre Website führt einen Datensatz, das Kassensystem im Laden einen anderen, ein Marktplatz sendet sein eigenes Format
+
+00:00:55.280 --> 00:00:58.180
+und ein Callcenter-Mitarbeiter erstellt eine Bestellung ganz woanders.
+
+00:00:58.180 --> 00:01:03.140
+Ein einfaches Kundenversprechen wird in verschiedene Einzelteile zerlegt, die nicht miteinander kommunizieren.
+
+00:01:03.460 --> 00:01:05.380
+Und der Lagerbestand fügt eine weitere Ebene der Komplexität in.
+
+00:01:05.680 --> 00:01:07.380
+Das Hauptlager hat vielleicht 20 Paare vorrätig.
+
+00:01:07.700 --> 00:01:10.800
+Eine Filiale in der Stadt hat 5 und ein anderes Lager hat ebenfalls Bestand.
+
+00:01:11.160 --> 00:01:13.160
+Dieser ist jedoch weiter entfernt und mit höheren Versandkonten.
+
+00:01:13.600 --> 00:01:16.960
+Ein Teil des Bestands ist bereits für andere Bestellungen und Rücksendungen oder Kunden vor Ort reserviert.
+
+00:01:17.580 --> 00:01:20.140
+Eine Zahl neben einem Produkt zu sehen, löst also noch nicht das Problem.
+
+00:01:20.140 --> 00:01:22.460
+Dann müssen Sie entscheiden, wie geliefert werden soll.
+
+00:01:22.860 --> 00:01:23.640
+Soll das Lager es versenden?
+
+00:01:24.040 --> 00:01:24.860
+Soll es eine Filiale versenden?
+
+00:01:25.260 --> 00:01:26.400
+Oder kann der Kunde es lokal abholen?
+
+00:01:26.960 --> 00:01:29.540
+Und wenn jemand zwei Artikel kauft und kein Standort beide vorwärtig hat,
+
+00:01:29.600 --> 00:01:32.820
+teilen Sie die Bestellung in zwei Pakete auf oder warten Sie, bis alles zusammen versendet werden kann.
+
+00:01:33.020 --> 00:01:36.640
+Jede Entscheidung beeinflusst die Kosten, die Lieferzeit und das Versprechen, das Sie dem Kunden gegeben haben.
+
+00:01:36.840 --> 00:01:40.360
+Vor zwei Jahrzehnten führten Unternehmen diese Aufgaben in getrennten Systeme und separaten Teams aus.
+
+00:01:40.480 --> 00:01:41.320
+Der Vertrieb nahm die Bestellungen.
+
+00:01:41.600 --> 00:01:42.140
+Jemand prüfte den Lagerbestand.
+
+00:01:42.140 --> 00:01:43.980
+Das Lager erhielt eine Anforderung.
+
+00:01:44.240 --> 00:01:45.780
+Ein Versandpartner erhielt eine weitere Anfrage.
+
+00:01:46.060 --> 00:01:47.460
+Die Buchhaltung erledigte ihren Teil später.
+
+00:01:47.820 --> 00:01:50.420
+Das funktionierte gut, als Bestellungen einfach waren und das Volumen gering blieben.
+
+00:01:50.680 --> 00:01:51.280
+Aber hier ist der Punkt.
+
+00:01:51.700 --> 00:01:54.900
+Wenn Updates nur langsam zwischen Systemen übertragen werden, beginnen Menschen, die Lücken zu füllen.
+
+00:01:55.200 --> 00:01:59.500
+Ein Kundendienstmitarbeiter prüft einen Bildschirm, schreibt eine E-Mail an ein Lagerteam, ruft dann einen Spediteur an
+
+00:01:59.500 --> 00:02:03.600
+und währenddessen kann sich ein Produkt über einen anderen Kanal verkaufen, bevor das Bestandsupdate die Website erreicht.
+
+00:02:04.100 --> 00:02:06.080
+Jetzt haben Sie eine Bestellung für etwas, das Sie nicht versenden können.
+
+00:02:06.400 --> 00:02:07.400
+So kommt es zum Überverkauf.
+
+00:02:07.780 --> 00:02:09.140
+Und so dauern Lieferentscheidungen zu lange.
+
+00:02:09.140 --> 00:02:14.140
+Teams kopieren ständig Details von einem Ort zum anderen und Kunden erhalten vage Updates statt verbindliche Antworten.
+
+00:02:14.800 --> 00:02:18.480
+Aus Kundensicht spielt diese Komplexität keine Rolle, denn sie stellen nur eine Frage.
+
+00:02:19.120 --> 00:02:19.980
+Wo bleibt meine Bestellung?
+
+00:02:20.420 --> 00:02:25.180
+Was ein Unternehmen wirklich braucht, ist eine zentrale Stelle, die den gesamten Bestellverlauf über alle vernetzten Business-Apps hinweg sieht,
+
+00:02:25.340 --> 00:02:27.140
+während jede App weiterhin ihre Stärken ausspielt.
+
+00:02:27.680 --> 00:02:28.760
+Der Vertrieb erfasst den Verkauf.
+
+00:02:29.080 --> 00:02:30.900
+Das Lager verwaltet die Kommissionierung und Verpackung.
+
+00:02:31.200 --> 00:02:32.180
+Der Versand kümmert die Auslieferung.
+
+00:02:32.460 --> 00:02:33.520
+Die Buchhaltung regelt die Finanzen.
+
+00:02:33.780 --> 00:02:35.260
+Niemand muss seine Systeme komplett austauschen.
+
+00:02:35.600 --> 00:02:37.000
+Was fehlt, ist der Koordinator dazwischen.
+
+00:02:37.220 --> 00:02:37.860
+Ein Ort.
+
+00:02:37.860 --> 00:02:43.820
+Ein Ort, der eine Bestellung entgegnen, den nächsten Schritt erkennen und die Arbeit steuern kann, ohne auf manuelle Übergaben angewiesen zu sein.
+
+00:02:44.460 --> 00:02:45.160
+Genau das ist das Problem.
+
+00:02:45.580 --> 00:02:50.260
+Dynamics 365 Intelligent Order Management erfüllt diese einfache Definition.
+
+00:02:50.820 --> 00:02:54.340
+Was also genau ist Dynamics 365 Intelligent Order Management Management?
+
+00:02:54.800 --> 00:02:57.760
+Wir schlüsseln es heute ganz einfach für Sie auf...
+
+00:02:58.800 --> 00:02:59.940
+Hier ist die einfachste Definition.
+
+00:02:59.940 --> 00:03:05.740
+Es ist eine Cloud-App, die eine Bestellung entgegennimmt und sie durch alle bereits vorhandenen Unternehmenssysteme führt,
+
+00:03:05.860 --> 00:03:09.100
+vor dem Bestelleingang bis zur Erfüllung und Abrechnung.
+
+00:03:09.820 --> 00:03:11.080
+Denken Sie an einen belebten Bahnhof.
+
+00:03:11.640 --> 00:03:13.160
+Züge kommen aus verschiedenen Richtungen an.
+
+00:03:13.580 --> 00:03:15.120
+Passagiere benötigen unterschiedliche Bahnsteine.
+
+00:03:15.320 --> 00:03:16.940
+Manche Anschlüsse sind schnell, andere müssen warten.
+
+00:03:17.400 --> 00:03:19.980
+Intelligent Order Management fungiert wie der Kontrollraum des Bahnhofs.
+
+00:03:19.980 --> 00:03:22.120
+Es steuert weder den Zug, mal verkauft es das Ticket.
+
+00:03:22.260 --> 00:03:25.260
+Aber es überblickt die gesamte Strecke und weist jedem System die nächste Aufgabe zu.
+
+00:03:25.660 --> 00:03:28.040
+Microsoft hat Intelligent Order Management auf Dataverse aufgebaut.
+
+00:03:28.740 --> 00:03:33.120
+Dataverse ist die gemeinsame Datengrundlage für viele Dynamics 365 und Power-Plattform-Apps.
+
+00:03:33.880 --> 00:03:38.760
+Einfach ausgedrückt, es bietet Business-Apps einen gemeinsamen Speicherort und ein einheitliches Format für Informationen.
+
+00:03:39.340 --> 00:03:42.460
+Das bedeutet, dass eine Bestellung nicht in jedem Bildschirm und System etwas völlig anderes bedeutet.
+
+00:03:43.300 --> 00:03:47.340
+Diese gemeinsame Basis ist hilfreich, aber Sie müssen nicht jede andere Dynamics 365 App kaufen,
+
+00:03:47.440 --> 00:03:48.780
+um Intelligent Order Management zu nutzen.
+
+00:03:48.780 --> 00:03:52.380
+Ein Unternehmen nutzt vielleicht Dynamics 365 Finance oder Supply Chain Management.
+
+00:03:53.000 --> 00:03:58.060
+Ein anderes verwendet ein anderes Lagersystem, einen anderen Online-Shop oder einen Versanddienst eines anderen Anbieters.
+
+00:03:58.700 --> 00:04:01.780
+Diese App funktioniert sowohl mit Microsoft als auch mit Drittanbieter-Business-Apps.
+
+00:04:02.080 --> 00:04:03.400
+Diese Verbindungspunkte nennen wir Provider.
+
+00:04:03.900 --> 00:04:08.800
+Ein Provider überträgt Bestelle und Erfüllungsinformationen zwischen Intelligent Order Management und einem anderen System.
+
+00:04:09.120 --> 00:04:10.860
+Stellen Sie sich ein Provider wie ein Übersetzer an der Tür vor.
+
+00:04:11.180 --> 00:04:12.940
+Ein System sendet eine Bestellung in seinem eigenen Format.
+
+00:04:13.220 --> 00:04:17.200
+Der Provider versteht dieses Format, leitet die Informationen an Intelligent Order Management weiter
+
+00:04:17.200 --> 00:04:20.820
+und kann die nächste Anfrage in einem Format zurücksenden, das das andere System versteht.
+
+00:04:21.200 --> 00:04:24.500
+Die App führt also Bestellinformationen zusammen, selbst wenn die Bestellung anderswo begann.
+
+00:04:25.060 --> 00:04:26.920
+Ein Kunde kauft vielleicht über eine AOCommerce-Seite ein.
+
+00:04:27.460 --> 00:04:29.920
+Ein anderer gibt seine Bestellung möglicherweise über ein Kassensystem auf.
+
+00:04:30.320 --> 00:04:33.720
+Ein Geschäftskunde könnte einen elektronischen Auftrag über einen B2B-Prozess senden.
+
+00:04:34.240 --> 00:04:36.720
+Intelligent Order Management bietet dem Unternehmen einen zentralen Ort,
+
+00:04:36.800 --> 00:04:39.300
+um diese Bestellungen einzusehen und den Erfüllungsstatus zu prüfen.
+
+00:04:39.300 --> 00:04:41.340
+Nicht jede Bestellung folgt dem gleichen Weg.
+
+00:04:41.740 --> 00:04:42.860
+Eine muss vielleicht auf Lagerbestände warten.
+
+00:04:43.160 --> 00:04:44.620
+Eine andere liegt eventuell schon im Lagerbereich.
+
+00:04:44.980 --> 00:04:47.060
+Eine dritte benötigt möglicherweise einen Abrechnungsschritt nach der Lager.
+
+00:04:47.360 --> 00:04:50.680
+Die App verfolgt diesen Status, sodass das Team mehr sieht als nur Bestellung eingegangen.
+
+00:04:51.480 --> 00:04:53.620
+Sie sehen genau, wo sich die Bestellung auf ihrem Weg befindet.
+
+00:04:54.140 --> 00:04:55.400
+Hier ist der Teil, den manche manchmal übersehen.
+
+00:04:56.400 --> 00:04:58.480
+Intelligent Order Management übernimmt nicht jede Aufgabe.
+
+00:04:59.300 --> 00:05:01.360
+Es ersetzt nicht plötzlich den Kommissionierbildschirm im Lager,
+
+00:05:01.480 --> 00:05:04.920
+das Liefernetzwerk des Frachtführers oder das Abrechnungssystem der Finanzabteilung.
+
+00:05:05.500 --> 00:05:07.600
+Diese verbundenen Apps verrichten weiterhin ihre fachspezifische Arbeit.
+
+00:05:07.600 --> 00:05:10.460
+Intelligent Order Management steuert die Übergaben zwischen Ihnen.
+
+00:05:11.080 --> 00:05:15.240
+Es empfängt die Anfrage, prüft den Weg, leitet die Arbeit weiter und wartet dann auf das nächste Update.
+
+00:05:16.260 --> 00:05:18.060
+Verfolgen wir nun eine Bestellung auf diesem Weg,
+
+00:05:18.240 --> 00:05:20.760
+denn die Bestellreise macht das Konzept viel leichter verständlich.
+
+00:05:21.880 --> 00:05:24.300
+Die Regeln der Bestellreise steuern die Arbeitsabläufe.
+
+00:05:25.020 --> 00:05:28.520
+Stellen Sie sich vor, ein Kunde bestellt spät am Nachmittag zwei Artikel auf Ihrer Website
+
+00:05:28.520 --> 00:05:30.400
+und möchte beide morgen geliefert bekommen.
+
+00:05:31.260 --> 00:05:33.940
+Der Online-Shop erfasst die Bestellung mit Kundennamen, Lieferadresse,
+
+00:05:33.940 --> 00:05:36.940
+den beiden Bestellpositionen und der Lieferoption und der Lieferoption.
+
+00:05:36.940 --> 00:05:40.980
+Ein Provider überträgt diese Bestellung in das Intelligent Order Management und die Bestellreise kann beginnen.
+
+00:05:41.380 --> 00:05:44.200
+Bevor jemand mit der Erfüllung beginnt, validiert das System die Bestellung,
+
+00:05:44.280 --> 00:05:46.880
+um sicherzustellen, dass alle für die Reise notwendigen Informationen vorhanden sind
+
+00:05:46.880 --> 00:05:48.300
+und die Unternehmensregeln eingehalten werden.
+
+00:05:49.020 --> 00:05:51.280
+Es prüft den Kopfbereich der Bestellung auf Kunden- und Lieferdetails.
+
+00:05:51.700 --> 00:05:53.460
+Es kontrolliert jede Position auf Produkt und Menge.
+
+00:05:53.860 --> 00:05:56.440
+Es bestätigt, dass die Adresse ausreichende Informationen für die Lieferung enthält
+
+00:05:56.440 --> 00:05:58.940
+und stellt sicher, dass die Bestellung die Regeln des jeweiligen Vertriebskanals erfüllt.
+
+00:05:59.120 --> 00:06:02.340
+Diese erste Prüfung verhindert, dass fehlerhafte Informationen weitergegeben werden,
+
+00:06:02.420 --> 00:06:03.520
+bevor Sie Probleme verursachen.
+
+00:06:04.080 --> 00:06:05.920
+Stellen Sie sich eine Bestellung vor, bei der die Wohnungsnummer fehlt.
+
+00:06:05.920 --> 00:06:08.300
+Geht Sie direkt in ein Lager und dann an einen Spediteur,
+
+00:06:08.500 --> 00:06:11.200
+bemerkt vielleicht erst jemand das Problem, wenn das Paket nicht zugestellt werden kann.
+
+00:06:11.780 --> 00:06:13.580
+Ein Validierungsschritt erkennt das Problem früher,
+
+00:06:13.880 --> 00:06:16.880
+solange noch Zeit bleibt, den Kunden zu kontaktieren oder die Bestellung aufzuhalten.
+
+00:06:17.300 --> 00:06:19.660
+Die Grundlage für diese Arbeit liegt in einem Orchestrierungsflow.
+
+00:06:20.120 --> 00:06:21.700
+Dieser Begriff klingt technisch, ist aber einfach.
+
+00:06:22.260 --> 00:06:25.800
+Ein Orchestrierungsflow ist eine visuelle Karte, die dem Intelligent Order Management vorgibt,
+
+00:06:25.800 --> 00:06:29.980
+was zu tun ist, wenn Bestelldaten eintreffen und Ereignisse von verbundenen Systemen zurückgemeldet werden.
+
+00:06:30.360 --> 00:06:32.680
+Sie erstellen diese Karte auf Basis Ihrer eigenen Geschäftsprozessen.
+
+00:06:32.920 --> 00:06:35.460
+Ein grundlegender Bestellablauf könnte beginnen, sobald eine neue Bestellung ein.
+
+00:06:35.460 --> 00:06:36.860
+Es validiert den Header und die Position.
+
+00:06:37.320 --> 00:06:39.080
+Es sendet den Auftrag zur Erfüllungsentscheidung.
+
+00:06:39.440 --> 00:06:42.280
+Danach sendet es den Erfüllungsauftrag an das richtige angebundene System.
+
+00:06:42.680 --> 00:06:44.140
+Sobald die Arbeit das richtige Stadium erreicht,
+
+00:06:44.420 --> 00:06:46.520
+können Auftragsdaten an einen Abrechnungsanbieter gesendet werden.
+
+00:06:46.780 --> 00:06:47.880
+Jede Aktion hatte klare Aufgaben.
+
+00:06:48.320 --> 00:06:50.660
+Auftragsheader validieren, prüft die wichtigsten Bestelldaten.
+
+00:06:51.340 --> 00:06:53.860
+Auftragsposition validieren, prüft die einzelnen Produkte und Mengen.
+
+00:06:54.080 --> 00:06:58.160
+An Erfüllung senden, leitet den Erfüllungsauftrag an den zuständigen Anbieter weiter.
+
+00:06:58.720 --> 00:07:01.480
+An Rechnung senden, leitet die Auftragsdaten an den Abrechnungsanbieter weiter.
+
+00:07:01.480 --> 00:07:04.940
+Die Namen klingen wie Beschriftungen auf einem Fabrikbedienfeld, was nützlich ist,
+
+00:07:05.040 --> 00:07:07.660
+da jedes Etikett genau zeigt, was an diesem Punkt im Ablauf geschieht.
+
+00:07:08.360 --> 00:07:11.440
+Doch ein reales Unternehmen benötigt oft mehr als nur eine gerade Linie.
+
+00:07:11.880 --> 00:07:15.760
+Vielleicht folgen Bestellungen von der Website einem Pfad, während Geschäftskunden einen anderen nehmen.
+
+00:07:16.300 --> 00:07:18.240
+Vielleicht benötigt eine bestimmte Produktart ein spezielles Ding.
+
+00:07:18.480 --> 00:07:20.940
+Vielleicht kann ein Auftrag nur fortfahren, wenn der erste Schritt erfolgreich war.
+
+00:07:21.440 --> 00:07:24.220
+Intelligentes Auftragsmanagement bietet Bedingungen für solche Entscheidungen.
+
+00:07:24.220 --> 00:07:26.540
+Eine Bedingung erstellt ein Ja-Pfad und ein Nein-Pfad.
+
+00:07:26.960 --> 00:07:30.300
+Wenn die vorherige Aktion erfolgreich ist, kann der Auftrag über den Ja-Pfad fortfahren.
+
+00:07:30.840 --> 00:07:33.360
+Wenn sie fehlsteht, kann der Ablauf den Auftrag auf einen anderen Pfad leiten.
+
+00:07:33.880 --> 00:07:37.780
+Das löst zwar nicht jedes Problem von selbst, gibt dem Prozess aber eine geplante Reaktion,
+
+00:07:38.000 --> 00:07:39.640
+anstatt Fehler dem Zufall zu überlassen.
+
+00:07:40.920 --> 00:07:41.660
+Es gibt auch Splitter.
+
+00:07:42.280 --> 00:07:45.360
+Ein Splitter sendet den Ablauf basierend auf Ihren Regeln in mehr als einem Pfad.
+
+00:07:45.800 --> 00:07:48.920
+Sie können ihn nutzen, wenn Bestellungen aus verschiedenen Quellen unterschiedliche Prüfungen erfordern
+
+00:07:48.920 --> 00:07:51.240
+oder verschiedene Arbeitsschritte eigene Routen benötigen, benötigen.
+
+00:07:51.240 --> 00:07:55.060
+Einige geteilte Pfade können später wieder zusammenführen, während andere eigenständig weiterlaufen.
+
+00:07:55.440 --> 00:07:57.740
+Benutzer-definierte Aktionen decken unternehmensspezifische Aufgaben ab.
+
+00:07:58.200 --> 00:08:01.020
+Vielleicht hat ein Unternehmen ein eigenes Fertigungssystem oder ein Partnersystem,
+
+00:08:01.140 --> 00:08:02.560
+das keine Standardaktion abdeckt.
+
+00:08:03.220 --> 00:08:06.340
+Eine benutzerdefinierte Aktion kann diesen Schritt in den Auftragsfluss einbinden,
+
+00:08:06.440 --> 00:08:09.700
+sodass der Pfad den vollständigen Prozess zeigt, anstatt teilen E-Mails oder manueller Arbeit zu verstecken.
+
+00:08:09.920 --> 00:08:11.440
+Kehren wir zu unserer Bestellung mit zwei Artikel zu.
+
+00:08:11.800 --> 00:08:15.760
+Das System empfängt Sie von der Website und prüft Kundendaten, Adresse und Produktpositionen.
+
+00:08:15.760 --> 00:08:18.080
+Der Auftrag erreicht dann den Schritt zur Erfüllungsentscheidung.
+
+00:08:18.080 --> 00:08:23.560
+Wenn beide Artikel dieselbe Route nehmen können, sendet der Ablauf die Erfüllungsanfrage als eine Einheit weiter.
+
+00:08:24.260 --> 00:08:27.400
+Erfordern die Unternehmensregeln ein anderes Ergebnis, kann der Auftrag einen anderen Pfad nehmen.
+
+00:08:27.940 --> 00:08:30.280
+Vielleicht benötigen die zwei Artikel separate Erfüllungsanfragen.
+
+00:08:30.640 --> 00:08:32.340
+Vielleicht braucht der Auftrag eine andere Lieferoption.
+
+00:08:32.580 --> 00:08:33.340
+Der Ablauf rät nicht.
+
+00:08:33.840 --> 00:08:37.620
+Den vom Unternehmen erstellten Regeln und den Ereignissen, die von den Ereignissen, die von den angebundenen Systemen zurückgemittelt.
+
+00:08:37.920 --> 00:08:38.860
+Dieser letzte Teil ist wichtig.
+
+00:08:39.380 --> 00:08:41.300
+Intelligentes Auftragsmanagement kann die Arbeit steuern,
+
+00:08:41.300 --> 00:08:44.120
+aber die angebundenen Systeme melden den Status zurück, während die Arbeit voranschreitet.
+
+00:08:44.460 --> 00:08:46.380
+Ein Fulfillment-Dienstleister kann die Anfrage empfangen.
+
+00:08:46.380 --> 00:08:48.960
+Ein Abrechnungsdienstleister kann die Bestelldaten erhalten.
+
+00:08:49.700 --> 00:08:51.720
+Diese Ereignisse halten den Bestellvorgang im Fluss.
+
+00:08:52.500 --> 00:08:54.340
+Die App ist also kein riesiges Ersatzsystem.
+
+00:08:54.920 --> 00:08:59.320
+Es ist ein Regelwerk, das Spezialisten verbindet und jedem System zur richtigen Zeit die nötige Arbeit zuweist.
+
+00:08:59.700 --> 00:09:01.100
+Der Online-Shop erfasst die Bestellung.
+
+00:09:01.440 --> 00:09:03.200
+Das Fulfillment-System kümmert sich um die Ausführung.
+
+00:09:03.440 --> 00:09:05.020
+Das Abrechnungssystem übernimmt die Rechnungsstelle.
+
+00:09:05.360 --> 00:09:07.840
+Intelligentes Order-Management steuert den Weg zwischen diesen Aufgaben.
+
+00:09:07.840 --> 00:09:12.040
+Die für den Bestellprozess Verantwortlichen können diese Abläufe direkt in der App gestalten.
+
+00:09:12.380 --> 00:09:14.640
+Sie müssen nicht jeden Pfad als herkömmlichen Code schreiben
+
+00:09:14.640 --> 00:09:18.940
+und keinen IT-Administrator bitten, jede Geschäftsregel zu ändern, jede Geschäftsregel zu ändern.
+
+00:09:19.060 --> 00:09:22.240
+Das gibt dem Supply-Chain-Team die Möglichkeit, den Prozess so zu modellieren, wie er tatsächlich benötigt wird.
+
+00:09:22.540 --> 00:09:23.900
+Dennoch erfordern diese Änderungen sorgfalt.
+
+00:09:24.160 --> 00:09:27.320
+Ein Orchestrierungsflow bleibt unveröffentlicht, während Sie ihn erstellen und testen.
+
+00:09:27.680 --> 00:09:30.360
+In dieser Phase fließen keine eingehenden Daten durch den Prozess.
+
+00:09:30.820 --> 00:09:34.920
+Sobald Sie ihn veröffentlichen, werden der Flow und seine Aktionen ausgeführt, wenn Daten in das System gelandet.
+
+00:09:34.920 --> 00:09:37.480
+Nach der Veröffentlichung können Sie diesen Flow nicht mehr direkt bearbeiten.
+
+00:09:37.900 --> 00:09:40.960
+Wenn das Geschäft eine Änderung erfordert, kann das Team den veröffentlichten Flow stoppen,
+
+00:09:41.080 --> 00:09:43.000
+wodurch er wieder in den unveröffentlichten Status zurückkehrt.
+
+00:09:43.220 --> 00:09:45.900
+Sie können den Flow bearbeiten und dann die neue Version veröffentlichen, sobald sie fertig ist.
+
+00:09:46.140 --> 00:09:49.620
+Dieser Aufbau zwingt Teams dazu, den Weg zu testen, bevor Live-Bestellungen ihn durchlaufen.
+
+00:09:50.000 --> 00:09:52.760
+Ein Weg funktioniert nur, wenn er weiß, welche Bestände tatsächlich verfügbar sind.
+
+00:09:53.200 --> 00:09:56.440
+Das führt uns zu den Live-Bestandsinformationen hinter jeder Fulfillment-Entscheidung.
+
+00:09:58.440 --> 00:10:00.840
+Bestandstransparenz. Zu sehen, was man tatsächlich verkaufen kann.
+
+00:10:01.620 --> 00:10:02.700
+Hier ist eine einfache Wahrheit.
+
+00:10:02.700 --> 00:10:05.460
+Man kann keine Bestellung erfüllen, wenn man nicht weiß, dass man den Bestand.
+
+00:10:05.860 --> 00:10:09.340
+Das klingt offensichtlich, aber Waren können sich in einem Lager einer Filiale bei einem Partner
+
+00:10:09.340 --> 00:10:11.820
+oder über verschiedene Rechtseinheiten desselben Unternehmens verteilen.
+
+00:10:12.220 --> 00:10:15.600
+Wenn jeder Standort seine eigene Zählung führt, lässt sich die grundlegende Frage nicht beantworten.
+
+00:10:15.680 --> 00:10:17.080
+Was kann ich diesem Kunden jetzt versprechen?
+
+00:10:17.920 --> 00:10:22.120
+Bestandstransparenz bietet dem intelligenten Order-Management eine Live-Ansicht aller Bestände im gesamten Liefernetzwerk.
+
+00:10:22.520 --> 00:10:24.640
+Stellen Sie es sich wie eine Bestandstafel in einem Verteilzentrum.
+
+00:10:25.060 --> 00:10:27.800
+Anstatt jedes Regal abzuklappern und jemanden zum Nachsehen zu bitten,
+
+00:10:27.800 --> 00:10:30.760
+nutzt der Bestellprozess eine gemeinsame Ansicht, in die alle Systeme einspeisen.
+
+00:10:30.760 --> 00:10:35.000
+Nur weil ein Artikel irgendwo als Bestand aufgeführt ist, heißt das nicht, dass er jede Bestellung erfüllen kann.
+
+00:10:35.600 --> 00:10:37.800
+Ein Produkt liegt vielleicht im Lager, ist aber bereits reserviert
+
+00:10:37.800 --> 00:10:41.000
+oder es befindet sich in einer Filiale, die vor Ort verkaufen kann, aber nicht versendet.
+
+00:10:41.260 --> 00:10:44.020
+Oder es ist schlicht so weit weg, um das vom Kunden gewählte Lieferversprechen einzuhalten.
+
+00:10:44.600 --> 00:10:46.860
+Es gibt einen großen Unterschied zwischen Bestand, der irgendwo existiert,
+
+00:10:47.000 --> 00:10:49.120
+und Bestand, der diese Bestellung jetzt erfüllen kann.
+
+00:10:49.680 --> 00:10:52.480
+Stellen Sie sich vor, ein Kunde kauft online eine Jacke und möchte sie morgen haben.
+
+00:10:52.880 --> 00:10:54.240
+Ihr Hauptlager hat keine mehr Vorräte.
+
+00:10:54.480 --> 00:10:58.700
+Ohne aktuelle Bestandsdaten akzeptiert Ihre Website die Bestellung womöglich auf Basis veralteter Zahlen.
+
+00:10:58.700 --> 00:11:01.900
+Das Lager erhält dann eine Anfrage für etwas, das es nicht versenden kann,
+
+00:11:02.220 --> 00:11:04.060
+und der Kunde erfährt es erst nach dem Kaufabschluss.
+
+00:11:04.640 --> 00:11:05.880
+Das bedeutet Arbeit für alle Beteiligten.
+
+00:11:06.260 --> 00:11:09.740
+Mit vernetzten Bestandsinformationen erkennt eine intelligente Auftragsverwaltung,
+
+00:11:09.860 --> 00:11:11.780
+dass das Hauptlager die Jacke nicht hat, ein Geschäft.
+
+00:11:12.240 --> 00:11:13.120
+In der Nähe aber schon.
+
+00:11:13.520 --> 00:11:15.800
+Wenn dieses Geschäft den Versand unterstützt, kann es die Bestellung ausführen.
+
+00:11:16.140 --> 00:11:19.120
+Wählte der Kunde eine Abholung, wird dasselbe Geschäft zum Abholort.
+
+00:11:19.520 --> 00:11:21.700
+Die Entscheidung beginnt mit einem besseren Überblick über den Bestand.
+
+00:11:22.100 --> 00:11:25.940
+Für ein Unternehmen mit mehreren Rechtsträgern deckt dieser Überblick den Bestand aller Einheiten ab.
+
+00:11:25.940 --> 00:11:29.600
+Das ist wichtig, wenn Sie in mehreren Ländern, Regionen oder Geschäftsbereichen tätig sind
+
+00:11:29.600 --> 00:11:31.720
+und der Bestand nicht nur in einem einzigen Datensatz erfasst ist.
+
+00:11:32.160 --> 00:11:35.820
+Der Auftragsprozess nutzt Bestandsdaten in Echtzeit, um den weiteren Weg zu bestimmen.
+
+00:11:36.400 --> 00:11:40.400
+Ein Lager, ein Geschäft oder eine andere Bestandsquelle verwaltet weiterhin seine eigenen Lagerdaten.
+
+00:11:41.500 --> 00:11:44.500
+Bestandstransparenz bringt aktuelle Zahlen in den umfassenderen Auftragsprozess,
+
+00:11:44.700 --> 00:11:46.100
+wo die Erfüllungsregeln Sie nutzen können.
+
+00:11:46.780 --> 00:11:49.600
+Das hilft Ihnen, Versprechen auf Basis veralteter Daten zu vermeiden
+
+00:11:49.600 --> 00:11:53.580
+und gibt dem Kunden Service klare Antworten, wenn jemand fragt, ob ein Artikel noch pünktlich ankommt.
+
+00:11:53.580 --> 00:11:57.460
+Anstatt mehrere Systeme zu durchsuchen und auf übereinstimmende Informationen zu hoffen,
+
+00:11:57.560 --> 00:12:00.240
+sieht das Auftragsteam den Bestandsstatus, der die Wahl der Erfüllung bestimmt hat.
+
+00:12:00.600 --> 00:12:03.480
+Natürlich beantwortet die Sichtbarkeit aller möglichen Standorte nicht jede Frage.
+
+00:12:04.120 --> 00:12:06.000
+Vielleicht finden Sie den Artikel an fünf Standorten.
+
+00:12:06.340 --> 00:12:08.380
+Einer ist nah am Kunden, ein anderer hat mehr Bestand.
+
+00:12:08.460 --> 00:12:11.040
+Ein dritter erlaubt den Versand beider Produkte zusammen.
+
+00:12:11.620 --> 00:12:13.080
+Jemand oder etwas muss sich dennoch entscheiden.
+
+00:12:13.640 --> 00:12:15.820
+Diese Aufgabe übernimmt die Erfüllungsoptimierung.
+
+00:12:15.820 --> 00:12:27.440
+Die Optimierung vergleicht die möglichen Standorte für eine Bestellung
+
+00:12:27.440 --> 00:12:29.560
+und wählt eine basierend auf den Regeln Ihres Unternehmens aus.
+
+00:12:30.340 --> 00:12:33.060
+Einfach ausgedrückt beantwortet sie die Frage, woher soll diese Bestellung kommen.
+
+00:12:33.680 --> 00:12:35.120
+Das Beste ist nicht immer das Nächste gelegen.
+
+00:12:35.580 --> 00:12:38.660
+Das nächste Geschäft hat den Artikel zwar, aber der Versand von dort könnte teurer sein.
+
+00:12:38.800 --> 00:12:42.640
+Ein weiter entferntes Lager hat eventuell beide Artikel bereits zum gemeinsamen Verpacken bereit
+
+00:12:42.640 --> 00:12:45.960
+und ein anderer Standort hat zwar Bestand, kann aber das vom Kunden gewählte Lieferdatum nicht einhalten.
+
+00:12:45.960 --> 00:12:48.660
+Jedes Unternehmen muss entscheiden, was die Regeln bevorzugen sollen.
+
+00:12:49.180 --> 00:12:51.080
+Manche Unternehmen stellen die Liefergeschwindigkeit am erste Stück.
+
+00:12:51.400 --> 00:12:52.880
+Andere möchten die Versandkosten niedrig halten.
+
+00:12:53.360 --> 00:12:56.040
+Ein Unternehmen möchte vielleicht auch den Ladenbestand für Laufkundschaft schützen
+
+00:12:56.040 --> 00:12:59.900
+oder verhindern, dass eine Bestellung in mehrere Pakete aufgeteilt wird, es sei denn, es gibt keine andere Wahl.
+
+00:13:00.680 --> 00:13:04.400
+Intelligente Auftragsverwaltung nutzt Erfüllungsstrategien, die diese Entscheidungen widerspiegeln.
+
+00:13:04.840 --> 00:13:06.840
+Stellen Sie es sich wie die Routenplanung für einen Lieferwagen vor.
+
+00:13:07.220 --> 00:13:11.480
+Der kürzeste Weg ist nicht immer der schnellste, da Staus, Baustellen oder längere Stops dazwischen kommen können.
+
+00:13:11.480 --> 00:13:15.820
+Genauso liefert der nächstgelegene Standort nicht zwingend das beste Fulfillment-Ergebnis,
+
+00:13:15.920 --> 00:13:19.280
+wenn man Lagerkosten, Lieferversprechen und Versandoptionen einbezieht.
+
+00:13:19.920 --> 00:13:22.260
+Kehren wir zu dem Kunden zurück, der zwei Artikel online bestellt hat.
+
+00:13:22.600 --> 00:13:24.820
+Ein Geschäft, das nur zehn Minuten entfernt ist, hat den ersten Artikel vorgehalten.
+
+00:13:25.180 --> 00:13:27.580
+Das Lager führt beide Artikel, ist jedoch weiter entfernt.
+
+00:13:28.980 --> 00:13:31.440
+Versendet das Geschäft den ersten und das Lager den zweiten Artikel,
+
+00:13:31.540 --> 00:13:35.300
+erhält der Kunde zwar zwei Pakete rechtzeitig zum Liefertermin, die Versandkosten steigen jedoch.
+
+00:13:35.300 --> 00:13:38.400
+Das Lager kann möglicherweise beide Artikel zusammen verschicken.
+
+00:13:38.820 --> 00:13:40.860
+Wenn das versprochene Lieferdatum damit eingehalten werden kann,
+
+00:13:40.940 --> 00:13:43.140
+ist ein einzelnes Paket von diesem Standort oft die bessere Wahl.
+
+00:13:43.560 --> 00:13:46.080
+Die Regel kann weniger Sendungen und geringere Versandkosten bevorzugen.
+
+00:13:46.640 --> 00:13:49.540
+Wenn jedoch die Lieferung am nächsten Tag wichtiger ist als der gemeinsame Versand,
+
+00:13:49.720 --> 00:13:52.360
+wählt das System für einen Artikel das Geschäft und für den anderen das Lager.
+
+00:13:52.480 --> 00:13:53.560
+Das ist eine geteilte Bestellung.
+
+00:13:54.220 --> 00:13:56.440
+Eine geteilte Bestellung bedeutet nicht, dass das System versandt.
+
+00:13:56.440 --> 00:14:00.320
+Sie kann die geplante Lösung sein, wenn kein einzelner Standort den gesamten Auftrag optimal abwickeln kann.
+
+00:14:01.020 --> 00:14:04.640
+Das Unternehmen entscheidet anhand seiner Fulfillment-Strategie, wann eine Aufteilung sinnvoll ist.
+
+00:14:04.640 --> 00:14:07.500
+Dieselbe Logik liegt auch Online-Kaufen aus dem Geschäft Versendens.
+
+00:14:07.920 --> 00:14:12.100
+Ein Kunde bestellt über eine Website, aber ein Geschäft in der Nähe hat die Ware vorrätig und kann sie schnell versenden.
+
+00:14:12.820 --> 00:14:16.000
+Somit wird dieses Geschäft zur Fulfillment-Quelle, obwohl der Kunde es nie besucht hat.
+
+00:14:16.620 --> 00:14:19.060
+Dies unterstützt auch Online-Kaufen im Geschäft Abholen.
+
+00:14:19.960 --> 00:14:24.100
+Das System nutzt Bestands- und Standortdaten, um ein Geschäft für die Abholung zu finden.
+
+00:14:24.100 --> 00:14:28.940
+Der Kunde erhält eine lokale Option, während das Unternehmen den Auftrag dorthin leitet.
+
+00:14:30.400 --> 00:14:34.120
+Diese Entscheidungen müssen nicht isoliert in jedem Verkaufskanal getroffen werden.
+
+00:14:34.120 --> 00:14:40.500
+Ohne einen zentralen Entscheidungsprozess bräuchten Website, Marktplatz und Callcenter jeweils eigene Routing-Regeln jegeln.
+
+00:14:41.180 --> 00:14:46.800
+Wenn das Unternehmen seine Versandrichtlinien ändert oder Filialen für das Fulfillment nutzt, müssen die Teams mehrere Systeme aktualisieren.
+
+00:14:47.580 --> 00:14:51.120
+Fulfillment-Optimierung bündet diesen Entscheidungsprozess an einer Stelle innerhalb der Auftragsabwicklung.
+
+00:14:51.120 --> 00:14:55.760
+Die Website nimmt weiterhin Bestellung entgegen, der Marktplatz ebenfalls und das Geschäft verkauft weiterhin Produkte.
+
+00:14:56.800 --> 00:15:01.660
+Das Unternehmen kann jedoch die Auswahl der Fulfillment-Standorte ändern, ohne die Regeln in jedem Kanal neu zu erstellen,
+
+00:15:01.860 --> 00:15:06.300
+was mehr Kontrolle bei Bestandsbewegungen, geänderten Lieferzusagen oder neuen Optionen bietet.
+
+00:15:07.460 --> 00:15:13.060
+Dennoch kann die Fulfillment-Strategie Standorte nur vergleichen, wenn die benötigten Daten aus den jeweiligen Quellsystemen eintreffen.
+
+00:15:13.060 --> 00:15:19.500
+Bestellungen müssen eingehen, Bestandsaktualisierungen übermittelt werden und Fulfillment-Partner ihre Aufgaben erhalten sowie Fortschritte zurückmelden.
+
+00:15:19.900 --> 00:15:21.640
+Diese Verbindungsarbeit hängt von Anbietern ab.
+
+00:15:23.340 --> 00:15:25.920
+Anbieter und Verbindungen sind wie Türen in das Gebäude.
+
+00:15:26.560 --> 00:15:30.740
+Damit intelligentes Auftragsmanagement funktioniert, muss es zuverlässig mit seiner Umgebung kommunizieren können.
+
+00:15:31.360 --> 00:15:32.580
+Anbieter sind das, was dies ermöglicht.
+
+00:15:32.580 --> 00:15:38.980
+Ein Anbieter ist im Grunde eine Verbindung, die Bestelldetails und Erfüllungsupdates zwischen dem intelligenten Auftragsmanagement und einem anderen System austauscht.
+
+00:15:39.740 --> 00:15:42.700
+Informationen fließen in beide Richtungen, sodass niemand etwas manuell kopieren muss.
+
+00:15:43.360 --> 00:15:44.840
+Stellen Sie sich ein Gebäude mit vielen Lieferanten ein.
+
+00:15:45.100 --> 00:15:47.500
+Eine Tür empfängt Bestellungen aus Ihrem Online-Shop.
+
+00:15:47.900 --> 00:15:49.540
+Eine weitere ist mit Ihrem Bestandssystem verbunden.
+
+00:15:49.960 --> 00:15:52.580
+Eine dritte sendet Arbeitsaufträge an ein Lager oder ein Logistikpartner.
+
+00:15:52.980 --> 00:15:56.880
+Jede Tür hat einen klaren Zweck und Anbieter steuern die Informationen, die jeweils hindurchfließen.
+
+00:15:57.620 --> 00:15:59.700
+Microsoft erstellt einige dieser Konnektoren selbst.
+
+00:15:59.840 --> 00:16:01.640
+Sie nennen sie First-Party-Anbieter.
+
+00:16:02.060 --> 00:16:09.520
+Sie verbinden das intelligente Auftragsmanagement mit Apps wie Dynamics 365 Supply Chain Management, Dynamics 365 Commerce oder Dynamics 365 Finance.
+
+00:16:09.520 --> 00:16:15.180
+Die Bestands- und Erfüllungsdienste innerhalb des intelligenten Auftragsmanagements nutzen diese Anbieter ebenfalls für den Datenaustausch.
+
+00:16:16.020 --> 00:16:17.700
+Nun haben Sie wahrscheinlich bereits andere Systeme im Einsatz.
+
+00:16:18.100 --> 00:16:19.260
+Hier kommen Drittanbieter ins Spiel.
+
+00:16:19.900 --> 00:16:21.700
+Sie verbinden Dienste, die nicht von Microsoft entwickelt wurden.
+
+00:16:22.040 --> 00:16:26.120
+Vielleicht Ihre bestehende E-Commerce-Plattform, ein Marktplatz, ein Logistikunternehmen oder ein Lagersystem.
+
+00:16:26.620 --> 00:16:28.620
+Es geht nicht darum, Sie zu einer bestimmten Gruppe von Apps zu zwingen.
+
+00:16:28.620 --> 00:16:32.040
+Es geht darum, dass Sie die Systeme verbinden können, die bereits zu Ihrem Unternehmen passen.
+
+00:16:32.340 --> 00:16:35.160
+Im Hintergrund nutzen diese Anbieter Power-Automate-Konnektoren.
+
+00:16:35.860 --> 00:16:40.180
+Die Power-Plattform verfügt über mehr als 200 vorgefertigte Konnektoren, sodass Sie viele Ausgangspunkte haben.
+
+00:16:40.720 --> 00:16:43.820
+Und wenn davon keiner passt, können Sie oder Ihr Partner einen eigenen Anbieter erstellen.
+
+00:16:44.300 --> 00:16:45.900
+Jede verbundene App erledigt weiterhin Ihre Aufgabe.
+
+00:16:46.320 --> 00:16:47.800
+Ihr Online-Shop erfasst den Kauf.
+
+00:16:48.240 --> 00:16:49.780
+Das Bestandssystem verfolgt den Lagerbestand.
+
+00:16:50.160 --> 00:16:52.180
+Ein Fulfillment-Partner verpackt und liefert die Bestellung aus.
+
+00:16:52.460 --> 00:16:54.140
+Ein Abrechnungssystem kümmert sich um die Finanzen.
+
+00:16:54.140 --> 00:16:58.100
+Das intelligente Auftragsmanagement koordiniert die Nachrichten und nächsten Schritte zwischen allen Beteiligten.
+
+00:16:58.440 --> 00:17:02.680
+Sobald diese Systeme Updates teilen, kann Ihr Unternehmen sehen, was während des gesamten Bestellprozesses geschieht.
+
+00:17:03.040 --> 00:17:05.140
+Kein Suchen von Informationen mehr über verschiedene Bildschirme.
+
+00:17:06.920 --> 00:17:08.420
+Erkenntnisse und den großen Überblick.
+
+00:17:09.380 --> 00:17:12.520
+Diese geteilten Informationen geben Ihnen ein viel klares Bild Ihrer Auftragsabwicklung.
+
+00:17:12.900 --> 00:17:17.900
+Das intelligente Auftragsmanagement enthält Power BI-Dashboards, die Auftrags- und Erfüllungskennzahlen an einem Ort zusammenführen.
+
+00:17:18.340 --> 00:17:20.700
+Der Kundenservice kann Bestellungen finden, deren Bearbeitung gestoppt wird.
+
+00:17:20.700 --> 00:17:23.640
+Der Betrieb kann blockierte Routen oder Verzögerungen bei der Erfüllung erkennen.
+
+00:17:24.100 --> 00:17:26.340
+Und Führungskräfte können nach Mustern im gesamten Prozess suchen.
+
+00:17:26.340 --> 00:17:30.140
+Ohne diese Sichtweise mag eine Verzögerung wie ein isoliertes Problem erscheinen.
+
+00:17:30.460 --> 00:17:35.960
+Aber wenn die Daten zusammengeführt sind, erkennt Ihr Team vielleicht, dass viele Bestellungen bei einem bestimmten Fulfillmentpartner langsamer bearbeitet werden.
+
+00:17:36.140 --> 00:17:38.740
+Oder eine Lieferoption mehr Ausnahmen verursacht als erwartet.
+
+00:17:38.740 --> 00:17:43.400
+Das Dashboard behebt das Problem zwar nicht von selbst, hilft den Mitarbeitern aber genau zu wissen, wo sie suchen müssen.
+
+00:17:43.820 --> 00:17:45.160
+Denken Sie noch einmal an das Bürogebäude.
+
+00:17:45.520 --> 00:17:55.400
+Intelligent Order Management vereint den Empfang, der Anfragen entgegennimmt, das Lagerboard, das die Verfügbarkeit anzeigt, den Routenplaner für den Erfüllungsort und das Berichtszentrum, wo Teams den gesamten Ablauf verfolgen können.
+
+00:17:55.740 --> 00:17:56.140
+Wo Teams.
+
+00:17:56.700 --> 00:17:59.280
+Jeder Teil hat eine eigene Aufgabe, aber der Auftrag verbindet sie alle.
+
+00:18:01.570 --> 00:18:01.930
+Fazit.
+
+00:18:02.010 --> 00:18:02.510
+Ein Auftrag.
+
+00:18:02.610 --> 00:18:03.610
+Ein koordinierter Prozess.
+
+00:18:03.610 --> 00:18:06.510
+Danke, dass Sie bei diesem Wissenshäppchen dabei waren.
+
+00:18:06.970 --> 00:18:10.710
+Intelligent Order Management bildet einen einzigen direkten Weg durch Ihren gesamten Prozess ab.
+
+00:18:10.910 --> 00:18:12.450
+Von der ersten Erfassung bis zur finalen Abbrechen.
+
+00:18:12.790 --> 00:18:15.590
+Abonnieren Sie den Podcast auf Ihrer bevorzugten Plattform und schauen Sie sich die nächste Folge.
+
+00:18:15.850 --> 00:18:19.590
+Sie werden genau sehen, wie Dynamics 365 und die Power-Plattform die Arbeit hinter den Kulissen erledigen.
