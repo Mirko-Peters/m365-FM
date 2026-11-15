@@ -1,0 +1,943 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.820
+Wanneer een klant op je website op kopen klikt, kan het gewenste artikel in een magazijn liggen,
+
+00:00:03.980 --> 00:00:06.700
+in een winkel aan de andere kant van de stad, of bij een bezorgpartner.
+
+00:00:06.880 --> 00:00:08.920
+De klant verwacht echter eigenlijk maar twee dingen.
+
+00:00:09.120 --> 00:00:11.200
+Een duidelijke belofte en een pakket bij de deur.
+
+00:00:11.420 --> 00:00:15.280
+Welkom bij weer een aflevering van Microsoft Knowledge Nuggets op M365FM.
+
+00:00:15.420 --> 00:00:20.000
+Ik ben Mo Peters en vandaag kijken we naar Dynamics 365 Intelligent Order Management in begrijpelijke taal.
+
+00:00:20.160 --> 00:00:24.100
+We volgen die bestelling vanaf de klik bij het afrekenen tot aan het werk dat de daadwerkelijke bezorging regelt.
+
+00:00:24.340 --> 00:00:27.100
+Zie het als de centrale dispatchbalie in een druk kantoorpand.
+
+00:00:27.260 --> 00:00:29.780
+Het is geen andere webshop en het pakt de doos niet in.
+
+00:00:29.780 --> 00:00:34.040
+Het stuurt enkel de juiste mensen en systemen aan zodat het werk op de juiste plek gebeurt.
+
+00:00:35.000 --> 00:00:36.680
+Waarom worden bestellingen een puinhoop?
+
+00:00:37.180 --> 00:00:43.200
+Stel je voor dat je dezelfde koptelefoon verkoopt via je website, je fysieke winkels, een online marktplaats en een callcenter.
+
+00:00:43.440 --> 00:00:46.440
+Voor de klant zijn dat allemaal slechts manieren om een koptelefoon te kopen.
+
+00:00:46.640 --> 00:00:50.560
+Maar achter de schermen stuurt elk kanaal ordergegevens naar een compleet ander systeem.
+
+00:00:50.720 --> 00:00:55.960
+Je website heeft één registratie, de kassa in de winkel een andere, een marktplaats stuurt zijn eigen formaat
+
+00:00:55.960 --> 00:00:58.620
+en een callcenter medewerker maakt de order ergens anders aan.
+
+00:00:58.620 --> 00:01:02.620
+Een simpele klantbelofte wordt opgesplitst in verschillende bewegende delen die niet met elkaar communiceren.
+
+00:01:03.420 --> 00:01:05.520
+En voorraad voegt nog een laag complexiteit toe.
+
+00:01:05.680 --> 00:01:07.700
+Het hoofdmagazijn heeft misschien twintig paar.
+
+00:01:07.880 --> 00:01:11.120
+Een winkel in de stad heeft er vijf en een ander magazijn heeft ook voorraad.
+
+00:01:11.240 --> 00:01:12.620
+Maar dat is verder weg met hogere verzendkosten.
+
+00:01:13.560 --> 00:01:17.640
+Sommige voorraad is al gereserveerd voor andere bestellingen, retourartikelen of klanten in de winkel.
+
+00:01:17.840 --> 00:01:20.800
+Dus een getal naast een product zien lost het probleem niet echt op.
+
+00:01:20.900 --> 00:01:22.540
+Dan moet je beslissen hoe je gaat bezorgen.
+
+00:01:22.540 --> 00:01:27.020
+Moet het magazijn het verzenden, moet een winkel het verzenden of kan de klant het lokaal ophalen?
+
+00:01:27.180 --> 00:01:32.940
+En als iemand twee items koopt en geen enkele locatie heeft beide, splits je de order dan in twee pakketten of wacht je tot alles samen verzonden kan worden.
+
+00:01:33.140 --> 00:01:36.520
+Elke keuze beïnvloedt de kosten, levertijd en de beloften die je aan de klant deed.
+
+00:01:36.660 --> 00:01:40.000
+Twintig jaar geleden draaiden bedrijven deze taken in aparte systemen met aparte teams.
+
+00:01:40.220 --> 00:01:41.360
+Verkoop nam de bestelling aan.
+
+00:01:41.540 --> 00:01:42.820
+Iemand controleerde de voorraad.
+
+00:01:42.960 --> 00:01:44.220
+Het magazijn kreeg een verzoek.
+
+00:01:44.360 --> 00:01:45.960
+Een verzendpartner kreeg een ander verzoek.
+
+00:01:46.120 --> 00:01:47.920
+Facturaat die handelde later zijn eigen deel af.
+
+00:01:48.080 --> 00:01:50.700
+Dat werkte prima toen bestellingen simpel waren en volumes laag bleven.
+
+00:01:50.840 --> 00:01:51.760
+Maar hier komt het punt.
+
+00:01:52.040 --> 00:01:55.220
+Wanneer updates traag tussen systemen bewegen, gaan mensen de gaten opvullen.
+
+00:01:55.420 --> 00:01:59.880
+Een klantenservice medewerker checkt één scherm, mailt een magazijn team, belt vervolgens een vervoerder...
+
+00:01:59.880 --> 00:02:03.860
+...en ondertussen kan een product via een ander kanaal verkopen voordat de voorraad update de website bereikt.
+
+00:02:04.040 --> 00:02:06.220
+Nu heb je een bestelling voor iets dat je niet kunt verzenden.
+
+00:02:06.480 --> 00:02:07.720
+Zo ontstaat oververkoop.
+
+00:02:07.840 --> 00:02:09.680
+En zo duren leveringskeuzes ook te lang.
+
+00:02:09.680 --> 00:02:15.040
+Teams blijven gegevens van de ene naar de andere plek kopiëren en klanten krijgen vage updates in plaats van duidelijke antwoorden.
+
+00:02:15.040 --> 00:02:18.920
+Voor de klant doet al die complexiteit er niet toe, want zij stellen maar één vraag.
+
+00:02:19.140 --> 00:02:20.080
+Waar is mijn bestelling?
+
+00:02:20.320 --> 00:02:25.400
+Wat een bedrijf echt nodig heeft, is één plek die de reis van de bestelling in alle verbonden bedrijfsapps kan zien...
+
+00:02:25.400 --> 00:02:27.280
+...terwijl elke app blijft doen waar hij goed in is.
+
+00:02:27.500 --> 00:02:28.720
+Sales legt de verkoop vast.
+
+00:02:28.940 --> 00:02:30.740
+Het magazijn beheert het pikken en inpakken.
+
+00:02:30.900 --> 00:02:32.400
+De verzendafdeling regelt de levering.
+
+00:02:32.540 --> 00:02:33.840
+De facturering regelt het geld.
+
+00:02:34.060 --> 00:02:35.620
+Niemand hoeft alle systemen weg te gooien.
+
+00:02:35.800 --> 00:02:37.660
+Wat ontbreekt, is de coördinator daartussen.
+
+00:02:37.660 --> 00:02:41.840
+Oei, een plek die een bestelling kan ontvangen, ziet wat er daarna moet gebeuren en het werk aanstuurt...
+
+00:02:41.840 --> 00:02:44.440
+...zonder afhankelijk te zijn van een keten van handmatige overdrachten.
+
+00:02:45.040 --> 00:02:50.740
+Probleem, Dynamics 365 Intelligent Order Management pakt dit in duidelijke taal aan.
+
+00:02:50.900 --> 00:02:55.020
+Dus, wat is Dynamics 365 Intelligent Order Management precies?
+
+00:02:55.560 --> 00:02:58.180
+Vandaag gaan we dit in begrijpelijke taal uitleggen.
+
+00:02:58.520 --> 00:03:00.300
+Dit is de eenvoudigste definitie.
+
+00:03:00.500 --> 00:03:05.620
+Het is een cloud-app die een bestelling aanneemt en deze door alle systemen leidt die een bedrijf al gebruikt...
+
+00:03:05.620 --> 00:03:09.420
+...vanaf het moment dat de bestelling binnenkomt tot aan de afhandeling en facturering.
+
+00:03:09.680 --> 00:03:11.120
+Denk aan een druk treinstation.
+
+00:03:11.360 --> 00:03:13.120
+Treinen komen uit verschillende richtingen.
+
+00:03:13.120 --> 00:03:15.120
+Passagiers hebben verschillende perrons nodig.
+
+00:03:15.380 --> 00:03:17.400
+Sommige verbindingen zijn snel, anderen moeten wachten.
+
+00:03:17.660 --> 00:03:20.400
+Intelligent Order Management werkt als de controlekamer van het station.
+
+00:03:20.640 --> 00:03:25.300
+Het bestuurt de trein niet en verkoopt geen kaartjes, maar ziet de hele route en vertelt elk systeem wat het vervolgens moet doen.
+
+00:03:25.500 --> 00:03:28.660
+Microsoft heeft Intelligent Order Management gebouwd op basis van dataverse.
+
+00:03:29.040 --> 00:03:33.660
+Dataverse is de gedeelde gegevensbasis achter Phil Dynamics 365 en Power Platform apps.
+
+00:03:33.660 --> 00:03:39.160
+In begrijpelijke taal geeft het bedrijfsapps één gemeenschappelijke plek en één gemeenschappelijk formaat voor het opslaan van informatie.
+
+00:03:39.380 --> 00:03:43.220
+Dat betekent dat een bestelling niet in elk scherm en systeem iets compleet anders betekent.
+
+00:03:43.400 --> 00:03:49.040
+Die gedeelde basis helpt, maar je hoeft niet alle andere Dynamics 365 apps aan te schaffen om intelligent Order Management te gebruiken.
+
+00:03:49.180 --> 00:03:52.980
+Een bedrijf gebruikt misschien Dynamics 365 Finance of Supply Chain Management.
+
+00:03:53.220 --> 00:03:58.400
+Een ander gebruikt wellicht een ander magazijnsysteem, een andere webshop of een verzendservice van een andere leverancier.
+
+00:03:58.400 --> 00:04:01.940
+Deze app kan werken met zowel Microsoft als niet-Microsoft bedrijfsapps.
+
+00:04:02.040 --> 00:04:04.060
+De verbindingspunten worden providers genoemd.
+
+00:04:04.200 --> 00:04:08.900
+Een provider verplaatst bestel- en afhandelingsinformatie tussen intelligent Order Management en een ander systeem.
+
+00:04:09.100 --> 00:04:10.920
+Denk aan een provider als een tolk bij de deur.
+
+00:04:11.100 --> 00:04:13.540
+Eén systeem verstuurt een bestelling in zijn eigen formaat.
+
+00:04:13.660 --> 00:04:20.880
+De provider begrijpt dat formaat, geeft de informatie door aan intelligent Order Management en kan het volgende verzoek terugsturen in een formaat dat het andere systeem begrijpt.
+
+00:04:21.040 --> 00:04:24.920
+De app brengt bestelinformatie samen, zelfs wanneer de bestelling ergens anders is begonnen.
+
+00:04:25.100 --> 00:04:27.380
+Een klant kan kopen via een IOCommerce site.
+
+00:04:27.380 --> 00:04:30.200
+Een ander kan een bestelling plaatsen via een kassasysteem.
+
+00:04:30.340 --> 00:04:34.140
+Een zakelijke klant kan een elektronische bestelling sturen via een B2B-proces.
+
+00:04:34.440 --> 00:04:39.400
+Intelligent Order Management geeft het bedrijf één plek om die bestellingen te bekijken en te zien waar elk zich bevindt in de afhandeling.
+
+00:04:39.640 --> 00:04:41.420
+Niet elke bestelling volgt hetzelfde pad.
+
+00:04:41.600 --> 00:04:43.180
+De ene moet wellicht wachten op voorraad.
+
+00:04:43.320 --> 00:04:44.920
+Een andere ligt misschien al bij een magazijn.
+
+00:04:45.100 --> 00:04:47.580
+Een derde heeft mogelijk een facturatiestap nodig na bezorging.
+
+00:04:47.760 --> 00:04:51.160
+De app volgt die status zodat een team meer ziet dan alleen bestelling ontvangen.
+
+00:04:51.400 --> 00:04:54.120
+Ze kunnen precies zien waar de bestelling zich in het traject bevindt.
+
+00:04:54.260 --> 00:04:56.080
+Dit is het onderdeel dat mensen soms missen.
+
+00:04:56.080 --> 00:04:58.900
+Intelligent Order Management neemt niet elk werk over.
+
+00:04:58.900 --> 00:05:05.340
+Het wordt niet plotseling het verzamelscherm van magazijnmedewerkers, het bezorgnetwerk van de vervoerder of het facturatiesysteem van het financiële team.
+
+00:05:05.500 --> 00:05:07.820
+Die verbonden apps doen nog steeds hun specialistische werk.
+
+00:05:08.060 --> 00:05:11.300
+Intelligent Order Management stuurt de overdrachten tussen deze systemen aan.
+
+00:05:11.460 --> 00:05:16.100
+Het ontvangt het verzoek, controleert de route, geeft het werk door en wacht vervolgens op de volgende update.
+
+00:05:16.360 --> 00:05:21.480
+Laten we nu één bestelling door dat proces volgen, want het ordertraject maakt het hele idee veel duidelijker.
+
+00:05:21.480 --> 00:05:24.660
+De regels van het ordertraject sturen het werk aan.
+
+00:05:25.020 --> 00:05:30.960
+Stel je voor dat een klant laat in de middag twee artikelen besteld via je website en beide artikelen morgen bezorgd wil hebben.
+
+00:05:31.140 --> 00:05:36.900
+De online winkel legt de bestelling vast, klantnaam, afleveradres, de twee bestelregels en de bezorgkeuze.
+
+00:05:37.100 --> 00:05:41.260
+Een provider brengt die bestelling in Intelligent Order Management en het ordertraject kan beginnen.
+
+00:05:41.260 --> 00:05:48.680
+Voordat iemand probeert het uit te voeren, valideert het systeem de bestelling om er zeker van te zijn dat alle benodigde informatie voor het traject aanwezig is en de bedrijfsregels volgt.
+
+00:05:48.820 --> 00:05:51.460
+Het controleert de bestelkop op klant en bezorggegevens.
+
+00:05:51.680 --> 00:05:53.860
+Het controleert elke regel op product en aantal.
+
+00:05:54.080 --> 00:05:59.280
+Het bevestigt of het adres voldoende informatie heeft voor bezorging en zorgt dat de bestelling voldoet aan de regels voor dat verkoopkanaal.
+
+00:05:59.420 --> 00:06:03.780
+Die eerste controle voorkomt dat foutieve informatiestroom afwaarts gaat voordat het problemen veroorzaakt.
+
+00:06:04.000 --> 00:06:06.420
+Stel je een bestelling voor waarbij het appartementnummer ontbreekt.
+
+00:06:06.420 --> 00:06:11.800
+Als dit direct naar een magazijn gaat en dan naar een vervoerder, ziet iemand het probleem misschien pas nadat een pakket niet bezorgd kan worden.
+
+00:06:11.960 --> 00:06:17.300
+Een validatiestap vangt het probleem eerder op terwijl er nog tijd is om contact op te nemen met de klant of de bestelling vast te houden.
+
+00:06:17.460 --> 00:06:19.880
+De basis voor dit werk ligt in een orchestratief flow.
+
+00:06:20.060 --> 00:06:22.280
+Die term klinkt technisch, maar is eenvoudig.
+
+00:06:22.400 --> 00:06:30.220
+Een orchestratief flow is een visuele kaart die Intelligent Order Management vertelt wat er moet gebeuren zodra bestelinformatie binnenkomt en gebeurtenissen terugkomen vanuit verbonden systemen.
+
+00:06:30.340 --> 00:06:32.520
+Je creëert die kaart rondom je eigen bedrijfsproces.
+
+00:06:32.740 --> 00:06:35.500
+Een basisbestelflow kan beginnen wanneer er een nieuwe bestelling binnenkomt.
+
+00:06:35.500 --> 00:06:37.260
+Het valideert de header en de regels.
+
+00:06:37.400 --> 00:06:39.500
+Het verstuurt de order voor afhandelingsbeslissingen.
+
+00:06:39.700 --> 00:06:42.540
+Daarna verstuurt het de afhandelingsorder naar het juiste verbonden systeem.
+
+00:06:42.700 --> 00:06:46.520
+Zodra het werk de juiste fase bereikt, kan het order informatie naar een facturatie provider sturen.
+
+00:06:46.680 --> 00:06:48.220
+Elke actie heeft een duidelijke taak.
+
+00:06:48.360 --> 00:06:51.020
+Order header valideren controleert de belangrijkste ordergegevens.
+
+00:06:51.240 --> 00:06:54.360
+Order regel valideren controleert de individuele producten en aantallen.
+
+00:06:54.580 --> 00:06:58.420
+Versturen naar afhandeling geeft de afhandelingsorder door aan de provider die dat werk afhandelt.
+
+00:06:58.640 --> 00:07:01.900
+Versturen naar factuur geeft order informatie door aan de facturatie provider.
+
+00:07:01.900 --> 00:07:08.580
+De namen klinken als labels op een bedieningspaneel in een fabriek en dat is handig omdat elk label precies aangeeft wat er op dat punt in de stroom gebeurt.
+
+00:07:08.760 --> 00:07:11.580
+Maar een echt bedrijf heeft vaak meer nodig dan één rechte lijn.
+
+00:07:11.760 --> 00:07:15.860
+Misschien volgen orders van de website het ene pad, terwijl zakelijke klanten een ander pad volgen.
+
+00:07:16.040 --> 00:07:18.560
+Misschien heeft een bepaald type product een speciale goedkeuring nodig.
+
+00:07:18.800 --> 00:07:21.400
+Misschien kan een order alleen verder gaan als de eerste stap slaagt.
+
+00:07:21.660 --> 00:07:24.520
+Intelligent orderbeheer bevat voorwaarden voor dat soort keuzes.
+
+00:07:24.680 --> 00:07:27.000
+Een voorwaarde creëert een ja-pad en een nee-pad.
+
+00:07:27.000 --> 00:07:30.600
+Als de eerdere actie slaagt, kan de order verder gaan via het ja-pad.
+
+00:07:30.760 --> 00:07:33.860
+Als deze faalt, kan de stroom de order naar een ander pad leiden.
+
+00:07:34.080 --> 00:07:40.600
+Dat lost niet elk probleem uit zichzelf op, maar het geeft het proces een geplande reactie in plaats van dat een team bij toeval een fout ontdekt.
+
+00:07:40.760 --> 00:07:41.920
+Er zijn ook splitters.
+
+00:07:42.120 --> 00:07:45.720
+Een splitter stuurt de stroom naar meer dan één pad op basis van regels die je definieert.
+
+00:07:45.900 --> 00:07:51.500
+Je kunt er een gebruiken wanneer orders uit verschillende bronnen andere controles vereisen of wanneer verschillende onderdelen van het werk andere routes nodig hebben.
+
+00:07:51.720 --> 00:07:55.380
+Sommige gesplitste paden kunnen later weer samenkomen, terwijl anderen hun eigen weg vervolgen.
+
+00:07:55.380 --> 00:07:58.340
+Aangepaste acties dekken de taken die uniek zijn voor een bedrijf.
+
+00:07:58.440 --> 00:08:03.060
+Misschien heeft een bedrijf zijn eigen productiesysteem of een partnersysteem dat niet wordt gedekt door een standaardactie.
+
+00:08:03.200 --> 00:08:09.480
+Een aangepaste actie kan die stap verbinden met de orderstroom, zodat de route het volledige proces toont in plaats van een deel te verbergen in e-mails of handmatig werk.
+
+00:08:09.660 --> 00:08:11.760
+Laten we terugkeren naar onze order met twee items.
+
+00:08:11.980 --> 00:08:16.000
+Het systeem ontvangt deze van de website en controleert de klantgegevens, het adres en de productregels.
+
+00:08:16.180 --> 00:08:18.760
+De order bereikt vervolgens de beslissingsstap voor afhandeling.
+
+00:08:18.760 --> 00:08:23.860
+Als beide items dezelfde route kunnen volgen, kan de stroom het afhandelingsverzoek als één geheel doorsturen.
+
+00:08:23.860 --> 00:08:27.800
+Als de regels van het bedrijf een ander resultaat vereisen, kan de order een ander pad nemen.
+
+00:08:27.960 --> 00:08:32.500
+Misschien hebben de twee items afzonderlijke afhandelingsverzoeken nodig, misschien heeft de order een andere bezorgkeuze nodig.
+
+00:08:32.660 --> 00:08:33.620
+De stroom raadt niet.
+
+00:08:33.800 --> 00:08:37.740
+Het volgt de regels die het bedrijf heeft gemaakt en de gebeurtenissen die verbonden systemen terugkoppelen.
+
+00:08:37.940 --> 00:08:39.400
+Dat laatste onderdeel is van belang.
+
+00:08:39.660 --> 00:08:44.320
+Intelligent orderbeheer kan werk aansturen, maar de verbonden systemen rapporteren terug naarmate het werk vordert.
+
+00:08:44.440 --> 00:08:46.660
+Een fulfillment aanbieder kan de aanvraag ontvangen.
+
+00:08:46.860 --> 00:08:49.380
+Een facturatie aanbieder kan de ordergegevens ontvangen.
+
+00:08:49.600 --> 00:08:52.480
+Die gebeurtenissen houden het ordertraject in beweging door het proces.
+
+00:08:52.480 --> 00:08:54.880
+De app is dus geen gigantisch vervangend systeem.
+
+00:08:55.000 --> 00:08:59.340
+Het is een set regels die specialisten verbindt en elk systeem op het juiste moment het nodige werk geeft.
+
+00:08:59.520 --> 00:09:01.120
+De online winkel legt de order vast.
+
+00:09:01.340 --> 00:09:03.260
+Het fulfillment systeem regelt de afhandeling.
+
+00:09:03.460 --> 00:09:05.600
+Het facturatie systeem regelt de facturatie.
+
+00:09:05.920 --> 00:09:08.200
+Intelligent orderbeheer beheert de route tussen die taken.
+
+00:09:08.480 --> 00:09:12.480
+Mensen die verantwoordelijk zijn voor het orderproces kunnen deze stromen direct in de app ontwerpen.
+
+00:09:12.680 --> 00:09:18.460
+Ze hoeven niet elk pad als traditionele code te schrijven en hoeven een IT-beheerder niet te vragen elke bedrijfsregel te wijzigen.
+
+00:09:18.460 --> 00:09:22.240
+Dat geeft het supply chain team een manier om het proces te modelleren dat ze daadwerkelijk nodig hebben.
+
+00:09:22.380 --> 00:09:24.300
+Toch vereisen die wijzigingen zorgvuldigheid.
+
+00:09:24.460 --> 00:09:27.720
+Een orchestratie flow blijft ongepubliceerd terwijl je deze bouwt en test.
+
+00:09:27.900 --> 00:09:30.460
+Tijdens die fase loopt inkomende data niet door de flow.
+
+00:09:30.700 --> 00:09:34.920
+Zodra je het publiceert worden de flow en de acties uitgevoerd wanneer data het systeem binnenkomt.
+
+00:09:35.040 --> 00:09:37.880
+Na publicatie kun je die gepubliceerde flow niet direct bewerken.
+
+00:09:38.080 --> 00:09:42.800
+Als het bedrijf een wijziging nodig heeft kan het team de gepubliceerde flow stoppen waardoor deze weer ongepubliceerd wordt.
+
+00:09:43.020 --> 00:09:46.280
+Ze kunnen de flow bewerken en vervolgens de nieuwe versie publiceren wanneer deze klaar is.
+
+00:09:46.280 --> 00:09:49.800
+Die opzet dwingt teams om de route te testen voordat live orders er doorheen reizen.
+
+00:09:49.980 --> 00:09:53.260
+Een route werkt alleen als bekend is welke voorraad daadwerkelijk beschikbaar is.
+
+00:09:53.460 --> 00:09:57.440
+Dat brengt ons bij de live voorraadinformatie achter elke fulfillment beslissing.
+
+00:09:58.440 --> 00:09:58.880
+Voorraadinzicht.
+
+00:09:59.120 --> 00:10:00.940
+Zien wat je daadwerkelijk kunt verkopen.
+
+00:10:01.360 --> 00:10:02.820
+Hier is een simpele waarheid.
+
+00:10:03.000 --> 00:10:05.740
+Je kunt een order niet afhandelen als je niet weet of je de voorraad hebt.
+
+00:10:05.940 --> 00:10:08.820
+Klinkt voor de hand liggend maar voorraad kan verborgen zijn in een magazijn, een winkel,
+
+00:10:08.980 --> 00:10:12.280
+op een partnerlocatie of verspreid over verschillende juridische entiteiten binnen hetzelfde bedrijf.
+
+00:10:12.280 --> 00:10:17.580
+Wanneer elke locatie zijn eigen telling bijhoudt kun je de basisvraag niet beantwoorden wat kan ik deze klant nu beloven.
+
+00:10:18.060 --> 00:10:22.380
+Voorraadinzicht geeft intelligent orderbeheer een live overzicht van al die voorraad in je leveringsnetwerk.
+
+00:10:22.620 --> 00:10:24.820
+Zie het als een voorraadboord in een distributiecentrum.
+
+00:10:25.020 --> 00:10:27.780
+In plaats van elke plank af te gaan en iemand te vragen het te controleren,
+
+00:10:27.940 --> 00:10:31.240
+kijkt het orderproces naar één gedeeld overzicht waar al je systemen informatie in voeren.
+
+00:10:31.440 --> 00:10:35.600
+Niet omdat een item ergens als voorraad verschijnt, betekent het dat het elke order kan afhandelen.
+
+00:10:35.600 --> 00:10:41.160
+Een product kan in een magazijn liggen maar al gereserveerd zijn, of het ligt in een winkel die lokaal kan verkopen maar niet kan verzenden,
+
+00:10:41.340 --> 00:10:44.500
+of het is simpelweg te ver weg om de leveringsbelofte van de klant na te komen.
+
+00:10:44.680 --> 00:10:49.160
+Er is een groot verschil tussen voorraad die ergens bestaat en voorraad die deze order nu kan afhandelen.
+
+00:10:49.400 --> 00:10:52.740
+Stel je voor dat een klant online een jas koopt en deze morgen in huis wil hebben.
+
+00:10:52.900 --> 00:10:54.940
+Je hoofdmagazijn heeft er geen meer op voorraad.
+
+00:10:55.140 --> 00:10:59.620
+Zonder actuele voorraadgegevens kan je website de bestelling nog accepteren op basis van verouderde cijfers,
+
+00:10:59.820 --> 00:11:02.520
+waarna het magazijn een aanvraag krijgt voor iets wat het niet kan versturen,
+
+00:11:02.720 --> 00:11:04.420
+waardoor de klant er pas naar de kassa achterkomt.
+
+00:11:04.420 --> 00:11:06.380
+Dat levert voor iedereen extra werk op.
+
+00:11:06.500 --> 00:11:11.720
+Met gekoppelde voorraadinformatie ziet intelligent orderbeheer dat het hoofdmagazijn geen jas heeft voor deze bestelling,
+
+00:11:11.960 --> 00:11:13.060
+maar een winkel in de buurt wel.
+
+00:11:13.240 --> 00:11:16.080
+Als die winkel verzending ondersteunt, kan deze de bestelling afhandelen.
+
+00:11:16.260 --> 00:11:19.540
+Als de klant voor afhalen koos, wordt diezelfde winkel de ophaallocatie.
+
+00:11:19.700 --> 00:11:21.980
+De beslissing begint met beter zicht op de voorraad.
+
+00:11:22.120 --> 00:11:26.340
+Voor een bedrijf met meerdere juridische entiteiten ontvat dit overzicht de voorraad van al die entiteiten.
+
+00:11:26.540 --> 00:11:31.940
+Dat is belangrijk wanneer je in meer dan één land, regio of bedrijfsonderdeel actief bent en de voorraad niet in één set gegevens staat.
+
+00:11:31.940 --> 00:11:36.400
+Het orderproces gebruikt real-time voorraadgegevens om te bepalen welke route moet worden gevolgd.
+
+00:11:36.520 --> 00:11:41.020
+Een magazijn, winkel of andere voorraadbron beheert nog steeds zijn eigen voorraadadministratie.
+
+00:11:41.500 --> 00:11:46.520
+Voorraadinzicht brengt de actuele cijfers in het bredere orderproces waar de afhandelingsregels ze kunnen gebruiken.
+
+00:11:46.740 --> 00:11:53.980
+Dat helpt je om beloftes op basis van verouderde data te voorkomen en geeft de klantenservice een duidelijk antwoord als iemand vraagt of een artikel nog op tijd kan arriveren.
+
+00:11:53.980 --> 00:12:00.260
+In plaats van meerdere systemen te doorzoeken en te hopen dat de informatie klopt, ziet het orderteam de voorraadpositie die de keuze voor afhandeling bepaalde.
+
+00:12:00.460 --> 00:12:03.980
+Natuurlijk beantwoordt het in kaart brengen van alle mogelijke locaties niet elke vraag.
+
+00:12:04.180 --> 00:12:06.280
+Je vindt het artikel misschien op vijf locaties.
+
+00:12:06.480 --> 00:12:11.560
+De ene het dichtst bij de klant, de andere met meer voorraad, een derde waarmee je beide producten samen kunt verzenden.
+
+00:12:11.780 --> 00:12:13.720
+Iemand of iets moet nog steeds de keuze maken.
+
+00:12:13.980 --> 00:12:16.460
+Die taak hoort bij afhandelingsoptimalisatie.
+
+00:12:18.800 --> 00:12:19.160
+Afhandeling
+
+00:12:19.160 --> 00:12:21.280
+Optimalisatie
+
+00:12:21.280 --> 00:12:23.620
+De beste plek kiezen om vanuit te verzenden
+
+00:12:23.620 --> 00:12:29.900
+Optimalisatie vergelijkt de mogelijke locaties voor een bestelling en selecteert er een op basis van door jouw bedrijf ingestelde regels.
+
+00:12:30.120 --> 00:12:33.480
+In begrijpelijke taal beantwoordt het de vraag, waar moet deze bestelling vandaan komen?
+
+00:12:33.720 --> 00:12:35.440
+Beste betekent niet altijd dichtst bijzijnde.
+
+00:12:35.660 --> 00:12:39.160
+De dichtst bijzijnde winkel heeft het artikel misschien wel, maar verzending vanaf daar kan duurder zijn.
+
+00:12:39.160 --> 00:12:46.140
+Een magazijn dat verder weg ligt, heeft misschien beide artikelen al klaarstaan om samen te verpakken en een andere locatie heeft wel voorraad, maar kan de gekozen bezorgdatum niet halen.
+
+00:12:46.280 --> 00:12:49.020
+Elk bedrijf moet beslissen waar de regels de voorkeur aan moeten geven.
+
+00:12:49.260 --> 00:12:53.360
+Sommige bedrijven stellen bezorgsnelheid voorop, anderen willen de verzendkosten laag houden.
+
+00:12:53.560 --> 00:13:00.540
+Een bedrijf wil misschien ook de winkelvoorraad beschermen voor inloopklanten of voorkomen dat een bestelling in meerdere pakketten wordt gesplitst, tenzij er geen andere keuze is.
+
+00:13:00.900 --> 00:13:04.720
+Intelligent orderbeheer gebruikt afhandelingsstrategieën die die keuzes weerspiegelen.
+
+00:13:04.720 --> 00:13:07.040
+Zie het als het kiezen van een route voor een bestelwagen.
+
+00:13:07.240 --> 00:13:12.180
+De kortste weg is niet altijd de snelste, vanwege mogelijk verkeer, wegwerkzaamheden of een langdurige stop.
+
+00:13:12.180 --> 00:13:19.480
+Op dezelfde manier levert het dichtstbijzijnde gebouw niet altijd het beste resultaat, zodra voorraadkosten, servicebieloftes en bezorgopties meespelen.
+
+00:13:19.680 --> 00:13:22.600
+Laten we teruggaan naar de klant die twee artikelen online heeft gekocht.
+
+00:13:22.780 --> 00:13:25.100
+Een winkel op 10 minuten afstand heeft het eerste artikel.
+
+00:13:25.280 --> 00:13:28.280
+Het magazijn heeft beide artikelen, maar bevindt zich verder weg.
+
+00:13:28.280 --> 00:13:35.280
+Als de winkel het eerste artikel verstuurt en het magazijn het tweede, ontvangt de klant wellicht twee pakketten op de bezorgdatum, maar dit verhoogt ook de verzendkosten.
+
+00:13:36.020 --> 00:13:38.680
+Het magazijn kan wellicht beide artikelen tegelijk versturen.
+
+00:13:38.880 --> 00:13:43.400
+Als de beloofde bezorgdatum daarmee nog steeds wordt gehaald, is een enkel pakket vanaf die locatie wellicht de betere keuze.
+
+00:13:43.560 --> 00:13:46.580
+De regel kan de voorkeur geven aan minder zendingen en lagere verzendkosten.
+
+00:13:46.760 --> 00:13:53.760
+Maar als levering morgen belangrijker is dan beide artikelen samen versturen, kiest het systeem wellicht voor de winkel voor één artikel en het magazijn voor het andere, dat is een gesplitste bestelling.
+
+00:13:53.760 --> 00:13:56.560
+Een gesplitste bestelling betekent niet dat het systeem heeft gefaald.
+
+00:13:56.560 --> 00:14:00.800
+Het kan de bewuste keuze zijn wanneer geen enkele locatie de hele bestelling op de juiste manier kan afhandelen.
+
+00:14:00.980 --> 00:14:04.820
+Het bedrijf bepaalt wanneer splitsen zinvol is via de fulfillment-strategie die het vaststelt.
+
+00:14:05.000 --> 00:14:08.040
+Hetzelfde principe ondersteunt online kopen en vanuit de winkel versturen.
+
+00:14:08.220 --> 00:14:12.700
+Een klant plaatst een bestelling op een website, maar een winkel in de buurt heeft de juiste voorraad en kan snel verzenden.
+
+00:14:12.900 --> 00:14:16.520
+Dus die winkel wordt de bron voor fulfillment, zelfs als de klant er nooit is geweest.
+
+00:14:16.680 --> 00:14:19.660
+Het ondersteunt ook online kopen en in de winkel ophalen.
+
+00:14:19.660 --> 00:14:25.060
+Het systeem gebruikt voorraad- en locatiegegevens om een winkel te vinden die de bestelling kan klaarmaken,
+
+00:14:25.060 --> 00:14:29.940
+waardoor de klant een lokale ophouwoptie krijgt en het bedrijf de bestelling naar de juiste plek stuurt.
+
+00:14:30.760 --> 00:14:34.240
+Deze keuzes hoeven niet afzonderlijk in elk verkoopkanaal te staan.
+
+00:14:34.560 --> 00:14:40.860
+Zonder een gedeeld fulfillment besluitvormingsproces hebben een website, marktplaats en callcenter elk hun eigen roteringsregels nodig.
+
+00:14:41.180 --> 00:14:44.620
+Wanneer het bedrijf het verzendbeleid wijzigt of winkels gaat gebruiken voor fulfillment,
+
+00:14:44.940 --> 00:14:47.180
+moeten teams mogelijk meerdere systemen bijwerken.
+
+00:14:47.380 --> 00:14:51.560
+Fulfillment optimalisatie plaatst dat besluitvormingsproces op één plek binnen de besteltrajecten.
+
+00:14:51.560 --> 00:14:56.680
+De website blijft bestellingen aannemen, de marktplaats blijft bestellingen aannemen en de winkel blijft producten verkopen.
+
+00:14:56.840 --> 00:15:01.800
+Maar het bedrijf kan de keuze voor een fulfillment locatie wijzigen zonder in elk kanaal regels opnieuw op te bouwen,
+
+00:15:01.980 --> 00:15:07.180
+wat meer controle geeft wanneer voorraad beweegt, bezorgbeloftes wijzigen of nieuwe fulfillment opties beschikbaar komen.
+
+00:15:07.340 --> 00:15:13.320
+Toch kan de fulfillment strategie locaties alleen vergelijken als de benodigde informatie binnenkomt vanuit de beherende systemen.
+
+00:15:13.480 --> 00:15:19.880
+Bestellingen moeten binnenkomen, voorraad updates moeten arriveren en fulfillment partners moeten hun opdrachten ontvangen en voortgang terugkoppelen.
+
+00:15:19.880 --> 00:15:22.200
+Dat verbindingswerk hangt af van providers.
+
+00:15:23.320 --> 00:15:25.900
+Providers en verbindingen, de deuren naar het gebouw.
+
+00:15:26.080 --> 00:15:31.020
+Om intelligent orderbeheer zijn werk te laten doen, is een betrouwbare manier nodig om met alles eromheen te communiceren.
+
+00:15:31.260 --> 00:15:33.040
+Providers zorgen ervoor dat dat gebeurt.
+
+00:15:33.220 --> 00:15:39.300
+Een provider is in feite een verbinding die ordergegevens en fulfillment updates uitwisselt tussen intelligent orderbeheer en een ander systeem.
+
+00:15:39.560 --> 00:15:43.040
+Informatie stroomt beide kanten op, zodat niemand handmatig iets hoeft te kopiëren.
+
+00:15:43.260 --> 00:15:45.360
+Stel je een gebouw voor met veel leveringsdeuren.
+
+00:15:45.360 --> 00:15:49.360
+Eén deur ontvangt orders van je online winkel. Een andere maakt verbinding met je voorraadsysteem.
+
+00:15:50.080 --> 00:15:52.360
+Een derde stuurt werk naar een magazijn of een bezorgpartner.
+
+00:15:53.080 --> 00:15:57.340
+Elke deur heeft een duidelijk doel en providers beheren de informatie die door elke deur gaat.
+
+00:15:57.560 --> 00:16:00.000
+Microsoft bouwt sommige van deze connectors zelf.
+
+00:16:00.260 --> 00:16:01.360
+Zij noemen ze first-party providers.
+
+00:16:02.260 --> 00:16:09.360
+Ze verbinden intelligent orderbeheer met apps zoals Dynamics 365 Supply Chain Management, Dynamics 365 Commerce of Dynamics 365 Finance.
+
+00:16:09.360 --> 00:16:15.740
+De voorraad en fulfillment services binnen intelligent orderbeheer gebruiken deze providers ook om gegevens uit te wisselen.
+
+00:16:15.900 --> 00:16:17.600
+Nu heb je waarschijnlijk al andere systemen.
+
+00:16:17.820 --> 00:16:19.960
+Dat is waar third-party providers om de hoek komen kijken.
+
+00:16:20.200 --> 00:16:22.100
+Ze verbinden services die Microsoft niet bouwt.
+
+00:16:22.260 --> 00:16:26.120
+Misschien is het je bestaande e-commerce platform, een marktplaats, een logistiek bedrijf of een magazijn systeem.
+
+00:16:26.240 --> 00:16:27.960
+Het is niet de bedoeling om je te dwingen tot één set-apps.
+
+00:16:28.060 --> 00:16:30.240
+Het is om je de mogelijkheid te geven de systemen te verbinden die al bij je bedrijf passen.
+
+00:16:30.360 --> 00:16:32.780
+Het is om je de mogelijkheid te geven de systemen te verbinden die al bij je bedrijf passen.
+
+00:16:32.780 --> 00:16:35.920
+Achter de schermen gebruiken deze providers Power Automate Connectors.
+
+00:16:36.040 --> 00:16:40.400
+Power Platform heeft meer dan 200 vooraf gebouwde connectors, dus je hebt genoeg startpunten.
+
+00:16:40.560 --> 00:16:44.040
+En als er geen enkele past, kun je zelf of via je partner je eigen provider bouwen.
+
+00:16:44.220 --> 00:16:46.220
+Elke verbonden app doet nog steeds zijn eigen werk.
+
+00:16:46.400 --> 00:16:48.080
+Je online winkel legt de aankoop vast.
+
+00:16:48.280 --> 00:16:49.980
+Het voorraadsysteem houdt de voorraad bij.
+
+00:16:50.180 --> 00:16:52.340
+Een fulfillment partner verpakt en bezorgt de order.
+
+00:16:52.540 --> 00:16:54.640
+Een facturatisch systeem regelt de financiën.
+
+00:16:54.840 --> 00:16:58.520
+Intelligent orderbeheer coördineert de berichten en vervolgstappen tussen al deze systemen.
+
+00:16:58.520 --> 00:17:02.940
+Zodra die systemen updates delen, kan je bedrijf zien wat er gebeurt in het volledige orderproces.
+
+00:17:03.140 --> 00:17:08.740
+Geen informatie meer achterna zitten via aparte schermen, inzichten en het grotere geheel.
+
+00:17:08.960 --> 00:17:12.700
+Die gedeelde informatie geeft je een veel duidelijker beeld van je orderwerkzaamheden.
+
+00:17:12.940 --> 00:17:18.100
+Intelligent orderbeheer bevat Power BI dashboards die order en fulfillment statistieken op één plek samenbrengen.
+
+00:17:18.260 --> 00:17:20.780
+De klantenservice kan orders vinden die niet meer worden verwerkt.
+
+00:17:20.960 --> 00:17:24.160
+Operations kan geblokkeerde routes of vertragingen bij fulfillment signaleren.
+
+00:17:24.360 --> 00:17:27.060
+En bedrijfsleiders kunnen patronen zoeken in het gehele proces.
+
+00:17:27.060 --> 00:17:30.520
+Zonder dat overzicht lijkt een vertraging misschien een op zichzelf staand probleem.
+
+00:17:30.660 --> 00:17:39.180
+Maar wanneer de gegevens worden gecombineerd, merk je team misschien dat veel orders vertragen bij een specifieke fulfillment partner of dat een bepaalde bezorgoptie meer uitzonderingen veroorzaakt dan verwacht.
+
+00:17:39.320 --> 00:17:43.560
+Het dashboard lost het probleem niet zelf op, maar het helpt mensen precies te weten waar ze moeten kijken.
+
+00:17:43.820 --> 00:17:45.540
+Denk nog eens terug aan het kantoorpand.
+
+00:17:45.880 --> 00:17:47.960
+Intelligent ordermanagement brengt alles samen.
+
+00:17:48.120 --> 00:17:49.780
+De receptie die aanvragen ontvangt.
+
+00:17:49.960 --> 00:17:51.900
+Het voorraadbord dat laat zien wat beschikbaar is.
+
+00:17:52.140 --> 00:17:56.460
+De routeplanner die de afleverlocatie kiest en de rapportagekamer waar teams zien hoe alles verloopt.
+
+00:17:56.460 --> 00:17:59.940
+Elk onderdeel heeft een andere taak, maar de order verbindt ze allemaal.
+
+00:18:01.700 --> 00:18:04.440
+Conclusie 1 order, 1 gecoördineerde reis.
+
+00:18:04.660 --> 00:18:06.680
+Bedankt dat je erbij was voor dit brokje kennis.
+
+00:18:06.980 --> 00:18:12.460
+Intelligent ordermanagement brengt een directe route in kaart door je hele proces, van de eerste vastlegging tot de uiteindelijke facturatie.
+
+00:18:12.680 --> 00:18:15.780
+Abonneer je op je favoriete podcastplatform en bekijk de volgende aflevering.
+
+00:18:15.940 --> 00:18:19.940
+Je zult precies zien hoe Dynamics 365 en Power Platform het werk achter de schermen afhandelen.
+
+00:18:19.940 --> 00:18:20.940
+888
+
+00:18:20.940 --> 00:18:21.240
+1088
+
+00:18:21.240 --> 00:18:22.300
+1088
+
+00:18:22.300 --> 00:18:36.160
+118
+
+00:18:36.160 --> 00:18:36.580
+41
+
+00:18:36.580 --> 00:18:37.020
+33
+
+00:18:37.020 --> 00:18:37.420
+33
+
+00:18:37.420 --> 00:18:37.580
+49
+
+00:18:37.580 --> 00:18:37.760
+41
+
+00:18:37.760 --> 00:18:37.880
+44
+
+00:18:37.880 --> 00:18:49.940
+55

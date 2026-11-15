@@ -117,7 +117,7 @@ class SponsorshipTests(unittest.TestCase):
     # --- Index und Laufzeit ---
     def test_entity_banner_only_while_running_content_label_permanent(self):
         r = rec(entities=["acme-backup"], topics=["entra-id"], episodes=["backup-done-right"], posts=["/community/u/mirko-p/blog/acme-pr/"], start="2026-11-01", end="2026-11-30")
-        for today, running in (("2026-10-31", False), ("2026-11-01", True), ("2026-11-30", True), ("2026-12-01", False)):
+        for today, running in (("2026-10-31", False), ("2026-11-01", True), ("2026-11-30", True), ("2026-12-01", True), ("2027-05-31", True), ("2027-06-01", False)):   # Karenzzeit: end + 182 Tage
             SPM.reset(); self.init([r], today=today)
             self.assertEqual(bool(SPM.entity("acme-backup")), running, today)
             self.assertEqual(bool(SPM.entity("entra-id")), running, today)

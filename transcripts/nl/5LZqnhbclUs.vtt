@@ -1,0 +1,796 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.940
+Welkom bij weer een nieuwe aflevering van Microsoft Knowledge Nuggets op M365FM.
+
+00:00:04.100 --> 00:00:07.280
+Ik ben Mirko Peters en vandaag behandelen we Microsoft Defender XDR.
+
+00:00:07.580 --> 00:00:09.880
+Stel je voor, je zit op dinsdagochtend aan je bureau.
+
+00:00:10.140 --> 00:00:12.140
+Je telefoon trilt, een beveiligingswaarschuwing.
+
+00:00:12.340 --> 00:00:13.720
+Is het echt of is het slechts ruis?
+
+00:00:13.920 --> 00:00:15.460
+Dan nog een melding over een verdachte e-mail,
+
+00:00:15.640 --> 00:00:18.000
+weer een over een vreemde inlogpoging vanaf een onbekende locatie.
+
+00:00:18.220 --> 00:00:19.300
+Zijn ze met elkaar verbonden?
+
+00:00:19.500 --> 00:00:20.680
+Misschien wel, misschien niet.
+
+00:00:20.860 --> 00:00:23.180
+Dat is het probleem waar de meeste bedrijven vandaag de dag voor staan.
+
+00:00:23.420 --> 00:00:25.620
+Vandaag kijken we naar wat Defender XDR nu eigenlijk is,
+
+00:00:25.760 --> 00:00:27.740
+waarom Microsoft het heeft gebouwd en waarom het belangrijk is
+
+00:00:27.740 --> 00:00:30.360
+voor elke organisatie die Microsoft 365 gebruikt.
+
+00:00:30.500 --> 00:00:32.060
+Dit is het punt met moderne aanvallen.
+
+00:00:32.340 --> 00:00:34.000
+Aanvallers vallen niet slechts één ding aan.
+
+00:00:34.220 --> 00:00:35.140
+Ze gaan snel te werk.
+
+00:00:35.340 --> 00:00:38.000
+E-mail, apparaten, identiteiten, ze vallen ze allemaal aan.
+
+00:00:38.180 --> 00:00:40.060
+Jouw beveiligingsstools moeten dit kunnen bijhouden.
+
+00:00:40.240 --> 00:00:42.880
+We nemen de vijf bouwstenen van Defender XDR onder de loep
+
+00:00:42.880 --> 00:00:45.440
+en laten zien hoe ze samen één uniforme beveiligingslaag vormen.
+
+00:00:45.580 --> 00:00:47.880
+Maar eerst moeten we het hebben over het probleem dat het oplost.
+
+00:00:48.060 --> 00:00:50.240
+Het probleem, gefragmenteerde beveiliging.
+
+00:00:50.400 --> 00:00:52.360
+Twintig jaar geleden was beveiliging simpel.
+
+00:00:52.560 --> 00:00:55.440
+Je kocht antivirus voor je pc's, een spamfilter voor e-mail,
+
+00:00:55.440 --> 00:00:56.760
+een firewall voor je netwerk.
+
+00:00:56.760 --> 00:00:59.540
+Elke tool deed één ding en ze communiceerden nooit met elkaar.
+
+00:00:59.760 --> 00:01:02.540
+Dat werkte destijds prima, omdat aanvallen ook eenvoudiger waren.
+
+00:01:02.720 --> 00:01:04.180
+Maar dit is wat er vandaag de dag gebeurt.
+
+00:01:04.340 --> 00:01:06.040
+Een aanvaller verstuurt een phishing-e-mail.
+
+00:01:06.240 --> 00:01:07.100
+Iemand klikt erop.
+
+00:01:07.300 --> 00:01:08.560
+Malware belandt op een apparaat.
+
+00:01:08.720 --> 00:01:10.120
+De malware stilt een wachtwoord.
+
+00:01:10.320 --> 00:01:12.040
+Nu dringt de aanvaller door tot je cloudapps,
+
+00:01:12.140 --> 00:01:13.800
+je bestandsopslag, je klantgegevens.
+
+00:01:14.000 --> 00:01:15.580
+Het is één keten van gebeurtenissen.
+
+00:01:15.800 --> 00:01:17.640
+Maar je tools zien het als vijf losse problemen.
+
+00:01:17.800 --> 00:01:19.340
+Het e-mailfilter ziet een bericht.
+
+00:01:19.520 --> 00:01:20.860
+De antivirus ziet een bestand.
+
+00:01:21.040 --> 00:01:22.620
+Het identiteitssysteem ziet een login.
+
+00:01:22.620 --> 00:01:24.840
+Geen van hen beseft dat ze naar dezelfde aanval kijken.
+
+00:01:24.840 --> 00:01:26.700
+Zie het als een gebouw met drie beveiligers.
+
+00:01:26.920 --> 00:01:29.560
+Eén bij de voordeur, één op de parkeerplaats, één in de postkamer.
+
+00:01:29.780 --> 00:01:30.980
+Ze delen nooit informatie.
+
+00:01:31.160 --> 00:01:33.260
+Een dief loopt de voordeur binnen en de beveiliger in de postkamer
+
+00:01:33.260 --> 00:01:34.400
+heeft geen idee dat hij eraan komt.
+
+00:01:34.620 --> 00:01:36.460
+Zo werken de meeste beveiligingstoels tegenwoordig.
+
+00:01:36.640 --> 00:01:38.640
+Ze zitten in hetzelfde gebouw, maar praten niet met elkaar.
+
+00:01:38.820 --> 00:01:41.500
+Het resultaat, je team krijgt vijf meldingen in plaats van één verhaal.
+
+00:01:41.660 --> 00:01:43.420
+Ze verspillen tijd aan het najagen van loos alarm.
+
+00:01:43.620 --> 00:01:45.280
+De echte dreiging gaat verloren in de ruis.
+
+00:01:45.480 --> 00:01:47.840
+Tegen de tijd dat iemand de verbanden legt, heeft de aanvaller al gewonnen.
+
+00:01:47.840 --> 00:01:50.680
+Wat je echt nodig hebt, is een systeem dat over al die domeinen heen kijkt en zegt,
+
+00:01:50.800 --> 00:01:51.900
+deze meldingen horen bij elkaar.
+
+00:01:52.100 --> 00:01:53.140
+Dit is het volledige beeld.
+
+00:01:53.360 --> 00:01:54.080
+Dit is wat je moet doen.
+
+00:01:54.720 --> 00:01:58.140
+Aanhalingsteken, dat is precies waarvoor Microsoft Defender XDR is gebouwd.
+
+00:01:58.320 --> 00:01:59.380
+Wat is Defender XDR?
+
+00:01:59.600 --> 00:02:00.280
+De paraplu.
+
+00:02:00.500 --> 00:02:02.380
+Laten we dus definiëren wat dit nu eigenlijk is.
+
+00:02:02.680 --> 00:02:06.280
+Microsoft Defender XDR is een zogeheten Extended Detection and Response platform.
+
+00:02:06.540 --> 00:02:09.500
+Dat zijn veel lettergrepen, dat begrijp ik, maar de kern is heel simpel.
+
+00:02:09.740 --> 00:02:14.640
+Dit systeem haalt signalen uit heel Microsoft 365, je eindpunten, je e-mail,
+
+00:02:14.640 --> 00:02:18.260
+je gebruikersaccounts en je cloud-apps en voegt die samen in één overzicht.
+
+00:02:18.520 --> 00:02:23.340
+XDR staat voor Extended Detection and Response en het belangrijkste woord daarvan is extended,
+
+00:02:23.620 --> 00:02:25.440
+want het gaat niet meer alleen over computers.
+
+00:02:25.740 --> 00:02:29.060
+Het beslaat e-mail, identiteiten, cloud-applicaties en meer.
+
+00:02:29.260 --> 00:02:34.060
+Het verschil is als kijken naar één beveiligingscamera of naar elke camera in een gebouw vanaf één scherm.
+
+00:02:34.240 --> 00:02:37.040
+Je krijgt het volledige plaatje in plaats van slechts een klein stukje.
+
+00:02:37.240 --> 00:02:38.760
+Dit is wat de meeste mensen verrast.
+
+00:02:38.980 --> 00:02:41.880
+Defender XDR is geen gloednieuw product dat je moet gaan kopen.
+
+00:02:41.880 --> 00:02:45.900
+Het is eerder een verbindende laag die bovenop de beveiligingstools ligt die je misschien al hebt.
+
+00:02:46.080 --> 00:02:48.200
+Zie het als het commando centrum dat ik eerder noemde.
+
+00:02:48.380 --> 00:02:53.560
+De individuele Defender producten, Defender 4 at Point, Defender 4 Office 365,
+
+00:02:53.920 --> 00:02:58.140
+Defender 4 Identity, Defender 4 Cloud Apps en de Vulnerability Management Tools
+
+00:02:58.140 --> 00:03:00.900
+zijn als beveiligingscamera's die verschillende ruimtes bewaken.
+
+00:03:01.120 --> 00:03:05.900
+Defender XDR is de operator die achter het hoofdscherm zit en de verbanden tussen al die beelden legt.
+
+00:03:06.040 --> 00:03:06.960
+Wat doet het dan eigenlijk?
+
+00:03:07.200 --> 00:03:10.360
+Het verzamelt automatisch waarschuwingen van al die individuele Defenders.
+
+00:03:10.360 --> 00:03:13.920
+Vervolgens groepeert het gerelateerde waarschuwingen in iets wat een incident wordt genoemd.
+
+00:03:14.020 --> 00:03:18.580
+Dus in plaats van tien afzonderlijke alarmen die bij elkaar horen, krijg je één incident dat het hele verhaal vertelt.
+
+00:03:18.760 --> 00:03:22.940
+De e-mail waarmee de aanval begon, het apparaat dat besmet raakte, het account dat gecompromitteerd werd,
+
+00:03:23.060 --> 00:03:24.240
+alles op één plek voor je neus.
+
+00:03:24.380 --> 00:03:26.260
+En dit deel komt voor veel mensen onverwacht.
+
+00:03:26.440 --> 00:03:28.820
+Je koopt Defender XDR niet als een apart product.
+
+00:03:29.020 --> 00:03:34.100
+Het is inbegrepen bij Microsoft 365 E5 en maakt ook deel uit van de E5-beveiliging sat-on.
+
+00:03:34.100 --> 00:03:41.680
+Als je Microsoft 365 Business Premium of E3 hebt met bepaalde add-ons, heb je mogelijk al toegang tot sommige functies zonder dat je het weet.
+
+00:03:41.840 --> 00:03:44.980
+We praten later verder over licenties, maar de kernboodschap is simpel.
+
+00:03:45.180 --> 00:03:50.200
+Als je al betaalt voor Microsoft 365, ben je misschien veel dichter bij deze beveiliging dan je denkt.
+
+00:03:50.380 --> 00:03:51.480
+De vijf onderdelen.
+
+00:03:51.740 --> 00:03:57.980
+Laten we de vijf componenten bekijken die het systeem vormen, want Defender XDR klinkt abstract totdat je begrijpt wat erin gevoerd wordt.
+
+00:03:58.160 --> 00:03:59.960
+Als eerste Defender for a Point.
+
+00:03:59.960 --> 00:04:03.960
+Deze beschermt apparaten, Windows, Mac, Linux en zelfs mobiele telefoons.
+
+00:04:04.140 --> 00:04:07.400
+Het is de moderne versie van antivirus, maar dan veel uitgebreider.
+
+00:04:07.580 --> 00:04:11.460
+In plaats van alleen te scannen op bekende schadelijke bestanden, let het op verdacht gedrag.
+
+00:04:11.640 --> 00:04:18.440
+Als een programma vreemd begint te doen, bestanden versleutelt, verbinding maakt met onbekende servers of systeeminstellingen wijzigt, markeert Defender for a Point.
+
+00:04:18.500 --> 00:04:22.780
+Het kan automatisch onderzoek doen en indien nodig dat apparaat volledig isoleren van het netwerk.
+
+00:04:22.980 --> 00:04:25.140
+Met één klik wordt die machine afgesloten van alles.
+
+00:04:25.340 --> 00:04:27.440
+De volgende is Defender for Office 365.
+
+00:04:27.440 --> 00:04:30.240
+Dit beschermt uw e-mail en samenwerkingsstools.
+
+00:04:30.420 --> 00:04:39.840
+Het blokkeert phishing, e-mails, schadelijke bijlagen en onveilige links voordat ze uw inbox bereiken, maar scant ook Teams berichten, SharePoint bestanden en OneDrive opslag op bedreigingen.
+
+00:04:40.040 --> 00:04:43.560
+Dus als iemand een gevaarlijk bestand deelt in een teamchat, vangt dit systeem het op.
+
+00:04:43.680 --> 00:04:45.180
+Dan hebben we Defender for Identity.
+
+00:04:45.440 --> 00:04:47.940
+Deze houdt uw identiteitsinfrastructuur in de gaten.
+
+00:04:47.940 --> 00:04:56.360
+Als u een on-premises Active Directory heeft, het systeem dat gebruikersaccounts en wachtwoorden op kantoor beheert, controleert Defender for Identity dit op verdachte activiteiten.
+
+00:04:56.540 --> 00:05:00.900
+Het detecteert diefstal van inloggegevens waarbij een aanvaller een wachtwoord stilt en dit elders probeert te gebruiken.
+
+00:05:01.080 --> 00:05:08.420
+Het ziet laterale bewegingen waarbij iemand van het ene naar het andere account springt en markeert privilege escalatie waarbij een gewone gebruiker plotseling beheerdersrechten probeert te krijgen.
+
+00:05:08.660 --> 00:05:12.240
+Dit zijn precies de technieken die aanvallers gebruiken zodra ze in uw netwerk zitten.
+
+00:05:12.240 --> 00:05:14.700
+Het vierde onderdeel is Defender for Cloud Apps.
+
+00:05:14.920 --> 00:05:20.260
+Dit geeft u inzicht in alle cloud-applicaties die uw medewerkers gebruiken, zowel de goedgekeurde als de niet-goedgekeurde.
+
+00:05:20.420 --> 00:05:24.400
+Het ontdekt Shadow IT, oftewel diensten waar uw team zich voor heeft aangemeld zonder dit te melden.
+
+00:05:24.560 --> 00:05:31.940
+Het detecteert ongebruikelijk gedrag, zoals een gebruiker die om twee uur s'nachts duizenden bestanden downloadt en het kan risicovolle apps blokkeren of bepalen welke gegevens er worden gedeeld.
+
+00:05:32.100 --> 00:05:34.000
+Als laatste is er Vulnerability Management.
+
+00:05:34.360 --> 00:05:37.900
+Dit is eigenlijk ingebouwd in Defender for AdPoint, maar verdient een aparte vermelding.
+
+00:05:37.900 --> 00:05:42.920
+Het scant continu uw apparaten op ontbrekende beveiligingspatches, zwakke configuraties en andere kwetsbaarheden.
+
+00:05:43.100 --> 00:05:46.240
+Vervolgens krijgt u een prioriteitenlijst van wat als eerste moet worden opgelost.
+
+00:05:46.400 --> 00:05:51.900
+Dus in plaats van gokken welke updates het belangrijkst zijn, vertelt het u precies welke kwetsbaarheden het meest waarschijnlijk worden misbruikt.
+
+00:05:52.100 --> 00:05:53.600
+Nu komt het belangrijkste inzicht.
+
+00:05:53.820 --> 00:05:57.280
+Elk van deze producten bestond al op zichzelf voordat Defender XDR er was.
+
+00:05:57.540 --> 00:06:01.440
+Microsoft heeft ze in de loop per jaren afzonderlijk gebouwd en toen stelde iemand een slimme vraag.
+
+00:06:01.620 --> 00:06:02.980
+Wat als ze allemaal samenwerken?
+
+00:06:03.180 --> 00:06:05.580
+Dat is precies wat Defender XDR mogelijk maakt.
+
+00:06:05.580 --> 00:06:08.940
+Het is de lijn die vijf goede producten verandert in één krachtig systeem.
+
+00:06:09.080 --> 00:06:10.100
+Hoe ze samenwerken?
+
+00:06:10.300 --> 00:06:13.360
+Laat me u meenemen door een echt scenario zodat u ziet hoe dit in de praktijk werkt.
+
+00:06:13.500 --> 00:06:15.520
+Een van uw medewerkers ontvangt een phishing-email.
+
+00:06:15.700 --> 00:06:18.420
+Het lijkt alsof het van hun baas komt met het verzoek een document te beoordelen.
+
+00:06:18.620 --> 00:06:22.140
+Defender for Office 365 markeert dit misschien niet omdat de link legitiem lijkt.
+
+00:06:22.300 --> 00:06:26.180
+De werknemer klikt dus en voert het wachtwoord in op wat lijkt op een echte Microsoft-inlogpagina,
+
+00:06:26.360 --> 00:06:28.120
+waardoor de aanvaller nu de inloggegevens heeft.
+
+00:06:28.340 --> 00:06:33.060
+Binnen enkele minuten ziet Defender for Identity dat dezelfde gebruiker inlogt vanuit een land waar diegene nog nooit is geweest.
+
+00:06:33.060 --> 00:06:38.080
+Terwijl Defender for het Point een verdacht proces op de laptop detecteert dat probeert verbinding te maken met een externe server.
+
+00:06:38.320 --> 00:06:40.300
+Denk nu eens na over wat er gebeurt zonder XDR.
+
+00:06:40.540 --> 00:06:42.140
+Je krijgt drie afzonderlijke meldingen.
+
+00:06:42.300 --> 00:06:45.960
+Eén van e-mailbeveiliging, één van identiteitsbewaking en één van het Point beveiliging.
+
+00:06:46.120 --> 00:06:48.340
+Elk in een aparte console met een andere inloggegevens.
+
+00:06:48.540 --> 00:06:51.400
+Je beveiligingsteam probeert handmatig uit te zoeken of ze met elkaar verbonden zijn.
+
+00:06:51.580 --> 00:06:54.760
+Hoe dan ook, de aanvaller dringt tijdens die zoektocht steeds dieper je netwerk binnen.
+
+00:06:54.960 --> 00:06:57.060
+Met Defender XDR verloopt dat hele proces automatisch.
+
+00:06:57.780 --> 00:06:59.200
+Het platform legt de verbanden.
+
+00:06:59.200 --> 00:07:04.060
+Het herkent dat de e-mail, de vreemde inlogpoging en het vreemde proces allemaal onderdeel zijn van één aanvalsketen.
+
+00:07:04.160 --> 00:07:06.220
+Het bouwt één enkel incident op met een tijdlijn.
+
+00:07:06.360 --> 00:07:08.040
+Je opent het en ziet het volledige verhaal.
+
+00:07:08.180 --> 00:07:10.840
+De inlogpoging, de apparaatactiviteit, alleskeurig op volgorde.
+
+00:07:11.000 --> 00:07:12.540
+En het vertelt je niet alleen wat er is gebeurd.
+
+00:07:12.720 --> 00:07:14.520
+Defender XDR kan ook actie ondernemen.
+
+00:07:14.720 --> 00:07:18.400
+Afhankelijk van je instellingen kan het automatisch het gecompromitteerde apparaat isoleren van het netwerk.
+
+00:07:18.560 --> 00:07:21.780
+Het wachtwoord van de gebruiker resetten of inlogpogingen vanaf die verdachte locatie blokkeren.
+
+00:07:21.960 --> 00:07:25.260
+Dit alles binnen enkele minuten, zonder dat iemand een ticket hoeft aan te maken of hoeft te bellen.
+
+00:07:25.260 --> 00:07:31.340
+Zie het als een team van specialisten, een brandweerman, een ambulanceverpleegkundige, een politieagent, die allemaal rapporteren aan één coördinator.
+
+00:07:31.520 --> 00:07:37.140
+De coördinator hoort van iedereen, ziet het patroon en zet de juiste reactie in voordat iemand anders zelfs maar doorheeft dat er een probleem is.
+
+00:07:37.340 --> 00:07:39.600
+Dit gaat niet om gemak. Het gaat om snelheid.
+
+00:07:39.860 --> 00:07:42.820
+Aanvallers kunnen dagenlang in een netwerk rondspoken voordat iemand het opmerkt.
+
+00:07:43.000 --> 00:07:45.580
+Met XDR krimpt dat venster tot uren of zelfs minuten.
+
+00:07:45.780 --> 00:07:48.700
+En bij beveiliging is tijd het enige wat je nooit meer terugkrijgt.
+
+00:07:48.880 --> 00:07:50.080
+Wat het concreet voor je doet.
+
+00:07:50.300 --> 00:07:52.140
+Dus, wat betekent dit alles voor je bedrijf?
+
+00:07:52.140 --> 00:07:53.460
+Laten we het concreet maken.
+
+00:07:53.460 --> 00:07:55.380
+Ten eerste, minder meldingen om op te volgen.
+
+00:07:55.580 --> 00:07:59.580
+Wanneer de Vender XDR gerelateerde meldingen groepeert in incidenten, ziet je team niet elke dag onder aparte alarmen.
+
+00:07:59.760 --> 00:08:03.420
+Ze krijgen misschien tien heldere verhalen, elk met context, bewijs en een aanbevolen volgende stap.
+
+00:08:03.580 --> 00:08:06.340
+Ze werken aan echte bedreigingen in plaats van achterspoken aan te jagen.
+
+00:08:06.560 --> 00:08:07.460
+Dan is er nog sneller onderzoek.
+
+00:08:08.140 --> 00:08:11.200
+Vanuit het incidentoverzicht zie je de volledige aanval als een tijdlijn.
+
+00:08:11.420 --> 00:08:16.060
+Klik op elk onderdeel, het apparaat, het gebruikersaccount, de e-mail en krijg meer details zonder het scherm te verlaten.
+
+00:08:16.240 --> 00:08:17.900
+Alles wat je nodig hebt, staat daar direct.
+
+00:08:18.100 --> 00:08:20.620
+Niet meer schakelen tussen consoles, niet meer kopiëren en plakken.
+
+00:08:20.620 --> 00:08:23.360
+En de grootste winst is misschien wel de geautomatiseerde opschoning.
+
+00:08:23.540 --> 00:08:27.320
+Als de dreiging duidelijk is, handelt de Vender XDR de oplossing zelfstandig af.
+
+00:08:27.440 --> 00:08:35.200
+Het verwijdert de kwaadaardige e-mail uit ieders inbox, verwijdert het geïnfecteerde bestand van het apparaat en draait zelfs wijzigingen in het register terug die de aanvaller heeft aangebracht.
+
+00:08:35.420 --> 00:08:37.460
+Zie het als een zelfreinigend beveiligingssysteem.
+
+00:08:37.620 --> 00:08:40.860
+Je hoeft er niet iemand met een dweil op af te sturen, het systeemruimte rommelt zelf op.
+
+00:08:40.920 --> 00:08:44.000
+En dan is er nog proactieve beveiliging, hier schittert vulnerability management.
+
+00:08:44.240 --> 00:08:47.540
+In plaats van alleen te reageren, helpt de Vender XDR je om aanvallen te voorkomen.
+
+00:08:47.540 --> 00:08:52.000
+Het scant continue apparaten op ontbrekende patches, zwakke wachtwoorden en onjuiste configuraties.
+
+00:08:52.160 --> 00:08:57.120
+Je krijgt een prioriteitenlijst van wat je eerst moet aanpakken, gebaseerd op welke kwetsbaarheden het meest waarschijnlijk worden misbruikt.
+
+00:08:57.340 --> 00:08:59.220
+Geen gegok meer, gewoon een duidelijk actieplan.
+
+00:08:59.400 --> 00:09:01.200
+En hier is iets wat veel mensen over het hoofd zien.
+
+00:09:01.380 --> 00:09:03.820
+De Vender XDR werkt op verschillende platforms, niet alleen op Windows.
+
+00:09:04.000 --> 00:09:06.140
+Het dekt ook Mac, Linux, iOS en Android.
+
+00:09:06.300 --> 00:09:09.040
+Als je bedrijf een mix van apparaten gebruikt, ben je nog steeds beschermd.
+
+00:09:09.160 --> 00:09:10.360
+Hier is een praktijk geval.
+
+00:09:10.540 --> 00:09:13.660
+We werkten samen met een partner die de beveiliging beheerde voor een middelgroot bedrijf.
+
+00:09:13.660 --> 00:09:17.060
+Voor XDR bedroeg hun responstijd bij incidenten gemiddeld ongeveer 4 uur.
+
+00:09:17.200 --> 00:09:21.880
+Nadat ze het hadden ingeschakeld en geautomatiseerde responsregels hadden geconfigureerd, daalde dat naar ongeveer 20 minuten.
+
+00:09:22.020 --> 00:09:26.420
+Het verschil was niet een groter team of betere training, het was het systeem dat de verbanden voor hen legden.
+
+00:09:26.620 --> 00:09:27.980
+Dat is dus de praktische impact.
+
+00:09:28.240 --> 00:09:32.780
+Minder meldingen, sneller onderzoek, geautomatiseerde opschoning en proactieve preventie.
+
+00:09:32.940 --> 00:09:38.800
+Het gaat niet alleen om betere tools, maar om tools die samenwerken zodat je team zich kan richten op wat echt belangrijk is.
+
+00:09:38.800 --> 00:09:41.480
+Verbinding, de echte kracht zit in integratie.
+
+00:09:41.660 --> 00:09:47.380
+We hebben de vijf componenten behandeld, maar de kern is, de echte waarde zit niet in één enkel onderdeel, maar in hoe ze integreren.
+
+00:09:47.640 --> 00:09:50.240
+Wanneer de Vendor for at Point ziet dat een bestand wordt gedownload,
+
+00:09:50.440 --> 00:09:54.380
+de Vendor for Identity een wachtwoordwijziging vanaf een ongebruikelijke locatie detecteert
+
+00:09:54.380 --> 00:09:58.540
+en de Vendor for Cloud Apps opmerkt dat gegevens naar een persoonlijke opslagdienst worden geüpload.
+
+00:09:58.540 --> 00:10:02.000
+Op zichzelf is elke datapunt een signaal op een dashboard.
+
+00:10:02.480 --> 00:10:05.400
+Maar samen vertellen ze een verhaal en dat verhaal is duidelijk.
+
+00:10:05.400 --> 00:10:09.000
+Iemand's account is gecompromitteerd en er verlaten gegevens je organisatie.
+
+00:10:09.200 --> 00:10:13.500
+De meeste mensen denken dat beveiliging betekent de beste antivirus of het beste e-mailfilter kopen.
+
+00:10:13.760 --> 00:10:15.880
+Dat is wat de industrie ons al decennia leert.
+
+00:10:16.080 --> 00:10:19.240
+Maar de realiteit is, beveiliging draait niet om één enkel product.
+
+00:10:19.480 --> 00:10:22.840
+Het gaat om het leggen van verbanden tussen alles wat er in je omgeving gebeurt.
+
+00:10:22.840 --> 00:10:27.800
+De Vendor XDR legt die verbanden automatisch, zodat je team niet alles handmatig aan elkaar hoeft te knopen.
+
+00:10:28.000 --> 00:10:30.780
+Er is hier een vermenigvuldigingseffect dat makkelijk over het hoofd wordt gezien.
+
+00:10:31.000 --> 00:10:34.960
+Wanneer één Defender-component iets nieuws detecteert, wordt die intelligentie gedeeld met alle anderen.
+
+00:10:34.960 --> 00:10:36.760
+Laat me je een concreet voorbeeld geven.
+
+00:10:37.000 --> 00:10:40.580
+Stel dat Defender-forwardpoint een nieuwe variant van malware ontdekt op een van je apparaten.
+
+00:10:40.760 --> 00:10:42.540
+Die informatie blijft niet zomaar liggen.
+
+00:10:42.740 --> 00:10:47.220
+Defender-for-Office 365 begint direct met het scannen van inkommende e-mails op diezelfde malware...
+
+00:10:47.220 --> 00:10:50.120
+...en Defender-for-identity houdt toezicht op tekenen van inloggegevensdiefstal.
+
+00:10:50.280 --> 00:10:52.840
+De detectie op één plek versterkt de beveiliging overal.
+
+00:10:53.040 --> 00:10:57.400
+Dat is een niveau van coördinatie dat je simpelweg niet kunt bereiken door losse tools van verschillende leveranciers te kopen.
+
+00:10:57.600 --> 00:11:00.680
+Je zou een toegewijd team nodig hebben om de integraties werkend te houden.
+
+00:11:00.680 --> 00:11:06.000
+Dit is waarom Microsoft kan concurreren met bedrijven als CrowdStrike en Palo Alto in de XDR-markt.
+
+00:11:06.220 --> 00:11:10.180
+Niet omdat een individuele Defender-component aanzienlijk beter is dan die van de concurrentie...
+
+00:11:10.180 --> 00:11:13.480
+...maar omdat de integratie binnen Microsoft 365 native is.
+
+00:11:13.660 --> 00:11:15.320
+Het is direct ingebouwd in het platform.
+
+00:11:15.560 --> 00:11:17.800
+Andere leveranciers kunnen hun producten ook integreren...
+
+00:11:17.800 --> 00:11:21.420
+...maar het is nooit zo naadloos als wanneer alles van hetzelfde bedrijf komt en hetzelfde datamodel deelt.
+
+00:11:21.600 --> 00:11:23.160
+Dus, wie profiteert hier het meest van?
+
+00:11:23.340 --> 00:11:27.560
+Als je bedrijf Microsoft 365 gebruikt, heb je al een deel van deze infrastructuur in huis.
+
+00:11:27.560 --> 00:11:32.900
+Over stappen op E5 of het toevoegen van de E5-beveiligings-sat-an ontgrendelt de volledige Defender XDR-ervaring.
+
+00:11:33.100 --> 00:11:37.940
+Voor kleinere bedrijven biedt Microsoft 365 Business Premium een solide subset van deze mogelijkheden.
+
+00:11:38.100 --> 00:11:40.880
+Het punt is dat je misschien helemaal geen nieuwe beveiligingstack hoeft te kopen.
+
+00:11:41.040 --> 00:11:43.160
+Je hoeft misschien alleen maar in te schakelen wat je al hebt.
+
+00:11:43.620 --> 00:11:44.960
+Belangrijkste punten, wat moet je doen?
+
+00:11:45.140 --> 00:11:48.340
+Laten we afsluiten met drie concrete stappen die je vanaf vandaag kunt zetten.
+
+00:11:48.580 --> 00:11:50.460
+Stap 1. Controleer je licenties.
+
+00:11:50.680 --> 00:11:52.160
+Dit is het makkelijkste wat je kunt doen.
+
+00:11:52.360 --> 00:11:56.920
+Ga naar het Microsoft 365 Beheer Centrum, bekijk je abonnementen en zie waar je voor betaalt.
+
+00:11:56.920 --> 00:12:00.280
+Heb je E5, E3 met de beveiligings-sat-an of Business Premium.
+
+00:12:00.520 --> 00:12:05.360
+Dat vertelt je tot welke Defender-mogelijkheden je al toegang hebt en je zult misschien verrast zijn door wat er is inbegrepen.
+
+00:12:05.600 --> 00:12:09.160
+Stap 2. Als je de juiste licenties hebt, schakel dan Defender XDR in.
+
+00:12:09.300 --> 00:12:10.880
+Het staat niet altijd standaard aan.
+
+00:12:11.080 --> 00:12:16.060
+Ga naar security.microsoft.com, zoek de instellingensectie en schakel de verenigde incidentervaring in.
+
+00:12:16.220 --> 00:12:19.340
+De documentatie van Microsoft zegt dat het ongeveer 10 minuten duurt.
+
+00:12:19.500 --> 00:12:21.500
+Je hoeft niet alles tegelijk te configureren.
+
+00:12:21.720 --> 00:12:25.580
+Alleen al het inschakelen van de correlatie-engine geeft je direct beter inzicht.
+
+00:12:25.580 --> 00:12:27.880
+Stap 3. Begin met het laaghangende fruit.
+
+00:12:28.260 --> 00:12:31.360
+Implementeer Defender Forward Point op al je apparaten als je dat nog niet hebt gedaan.
+
+00:12:31.540 --> 00:12:33.500
+Als je in Toon gebruikt, is dit heel eenvoudig.
+
+00:12:33.660 --> 00:12:37.160
+Schakel de vooraf ingestelde beveiligingsbeleidsregels van Defender for Office 365 in.
+
+00:12:37.300 --> 00:12:42.400
+Er is een standaardbeleid en een strikt beleid en beide blokkeren direct het merendeel van de veelvoorkomende emailbedreigingen.
+
+00:12:42.620 --> 00:12:44.920
+Bekijk daarna het dashboard voor kwetsbaarheidsbeheer.
+
+00:12:45.100 --> 00:12:49.040
+Het laat je de meest kritieke risico's zien en vertelt je precies wat je als eerste moet oplossen.
+
+00:12:49.240 --> 00:12:51.860
+Een waarschuwing vooraf. Probeer niet alles tegelijk te doen.
+
+00:12:52.080 --> 00:12:54.960
+Elk onderdeel voegt bescherming toe, maar ook complexiteit.
+
+00:12:54.960 --> 00:12:58.840
+Begin met één onderdeel, raak vertrouwd met de werking en voeg dan de rest toe.
+
+00:12:59.040 --> 00:13:02.260
+Proberen om alles op de eerste dag in te schakelen is vragen om frustratie.
+
+00:13:02.400 --> 00:13:06.700
+Als je slechts één ding doet, kies dan voor de vooraf ingestelde Defender for Office 365 beleidsregels.
+
+00:13:06.880 --> 00:13:10.200
+Email is nog steeds de voornaamste manier waarop aanvallers organisaties binnendringen.
+
+00:13:10.340 --> 00:13:13.740
+Die bedreigingen blokkeren bij de gateway is de meest effectieve stap die je kunt zetten.
+
+00:13:13.900 --> 00:13:18.460
+En zodra je aan de slag bent, kun je het Microsoft Secure Score dashboard gebruiken om je voortgang te volgen.
+
+00:13:18.640 --> 00:13:23.320
+Het geeft je een actuele lijst met aanbevolen acties en laat zien hoe elke actie je beveiliging verbetert.
+
+00:13:23.320 --> 00:13:25.940
+Het is als een takenlijst die zichzelf prioriteert.
+
+00:13:26.080 --> 00:13:30.920
+Als je niet zeker weet wat je hebt of waar je moet beginnen, neem dan contact op met je IT-leverancier of Microsoft Partner.
+
+00:13:31.200 --> 00:13:37.140
+Zij kunnen je licenties controleren, helpen bij het instellen van de juiste beveiliging en zorgen dat je geen geld of veiligheid laat liggen.
+
+00:13:37.340 --> 00:13:39.660
+Dat is dus wat Microsoft Defender XDR is.
+
+00:13:39.840 --> 00:13:42.200
+Het is geen enkel product dat je zo uit de winkel koopt.
+
+00:13:42.400 --> 00:13:46.920
+Het is een uniforme beveiligingslaag die je bestaande bescherming verbindt tot één intelligent systeem.
+
+00:13:47.040 --> 00:13:50.020
+De werkelijke waarde zit in de manier waarop deze componenten samenwerken.
+
+00:13:50.020 --> 00:13:54.520
+Ze communiceren met elkaar, automatiseren reacties en beperken de tijd die aanvallers hebben om schade aan te richten.
+
+00:13:54.660 --> 00:13:57.120
+Begin met een licentie-added en schakel daarna de basis in.
+
+00:13:57.240 --> 00:13:59.400
+Je hebt al meer bescherming tot je beschikking dan je denkt.
+
+00:13:59.640 --> 00:14:00.660
+Bedankt voor het luisteren.
+
+00:14:00.800 --> 00:14:04.240
+Als dit geholpen heeft, deel het dan met iemand die probeert wegwijs te worden in Microsoft Beveiliging.
+
+00:14:04.360 --> 00:14:05.260
+Tot de volgende keer.

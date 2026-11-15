@@ -1,0 +1,811 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.820
+Cześć wszystkim i witam w kolejnym odcinku pigułek wiedzy o Microsoft na kanale M365FM.
+
+00:00:05.000 --> 00:00:06.980
+Nazywam się Mirko Peters i jestem Waszym gospodarzem.
+
+00:00:07.180 --> 00:00:10.260
+Dzisiejszy temat to coś, o czym prawie każdy słyszał, ale mało kto naprawdę rozumie.
+
+00:00:10.460 --> 00:00:11.760
+Microsoft Power Platform.
+
+00:00:12.060 --> 00:00:13.000
+Wyobraźcie to sobie.
+
+00:00:13.240 --> 00:00:18.500
+Siedzicie przy biurku, mając otwarte cztery karty w przeglądarce arkusz Excela aktualizowany ręcznie każdego ranka Outlooka
+
+00:00:18.500 --> 00:00:22.720
+z rosnącą stertą wniosków o zatwierdzenie listę SharePoint sprzed trzech lat, której nikt nie ufa
+
+00:00:22.720 --> 00:00:27.040
+i gdzieś w tym bałaganie kopiujecie dane z systemu do systemu, modląc się, by nie zrobić literówki.
+
+00:00:27.040 --> 00:00:29.820
+Brzmi znajomo? Tak działają niemal wszystkie firmy.
+
+00:00:30.000 --> 00:00:34.740
+Zbieranina narzędzi, które ze sobą nie współpracują, połączona ludźmi wykonującymi powtarzalną pracę.
+
+00:00:34.860 --> 00:00:38.740
+A gdyby tak można było połączyć to wszystko w jeden system bez pisania ani jednej linijki kodu?
+
+00:00:38.920 --> 00:00:40.900
+Tym właśnie jest Microsoft Power Platform.
+
+00:00:41.120 --> 00:00:42.460
+Oto najprostsza definicja.
+
+00:00:42.620 --> 00:00:47.480
+To warstwa łącząca Wasze obecne narzędzia Microsoft 365 e-mail Teams SharePoint,
+
+00:00:47.660 --> 00:00:52.900
+która pozwala każdemu w firmie tworzyć aplikacje, automatyzować procesy i analizować dane bez udziału programisty.
+
+00:00:52.900 --> 00:00:57.740
+Pod koniec tego odcinka zrozumiecie, co robi każdy z elementów i jak wszystkie do siebie pasują.
+
+00:00:58.000 --> 00:00:59.520
+Chwyćcie kawę i zaczynajmy.
+
+00:00:59.520 --> 00:01:02.040
+Problem, czyli dlaczego powstało Power Platform.
+
+00:01:02.380 --> 00:01:03.180
+Oto w czym rzecz.
+
+00:01:03.360 --> 00:01:07.900
+Większość organizacji działa w oparciu o zestaw arkuszy Excela, łańcuchy e-maili i papierowe formularze.
+
+00:01:08.100 --> 00:01:13.400
+Ktoś wypełnia dokument Word, wysyła go e-mailem do przełożonego, ten go drukuje, podpisuje, skanuje i odsyła.
+
+00:01:13.560 --> 00:01:14.600
+To nie jest przesada.
+
+00:01:14.800 --> 00:01:16.400
+Tak wciąż pracuje wiele firm.
+
+00:01:16.660 --> 00:01:21.380
+Gotowe oprogramowanie miało to naprawić, ale albo kosztuje fortunę, albo nie pasuje do procesu,
+
+00:01:21.460 --> 00:01:25.440
+więc kończy się na dopasowywaniu przepływu pracy do oprogramowania, zamiast na odwrót.
+
+00:01:25.440 --> 00:01:26.860
+A to nigdy nie działa dobrze.
+
+00:01:27.100 --> 00:01:32.420
+Tradycyjną alternatywą było tworzenie własnego oprogramowania, co oznaczało zatrudnianie programistów na miesiące lub lata,
+
+00:01:32.580 --> 00:01:35.340
+a prosta aplikacja mogła kosztować dziesiątki tysięcy dolarów.
+
+00:01:35.460 --> 00:01:38.840
+A zanim prace dobiegły końca, potrzeby biznesowe zdążyły się już zmienić.
+
+00:01:39.000 --> 00:01:41.360
+W efekcie zostajemy z odizolowanymi siłosami danych.
+
+00:01:41.600 --> 00:01:47.200
+Dane są w SharePoint, zatwierdzenia odbywają się e-mailem, raporty w Power BI są odseparowane i nic ze sobą nie rozmawia.
+
+00:01:47.200 --> 00:01:52.940
+Power Platform rozwiązuje ten problem, dając osobom niebędącym programistami moc budowania, automatyzacji i analizy w jednym miejscu.
+
+00:01:53.120 --> 00:01:56.160
+Większość ludzi myśli, że Power Platform jest tylko dla informatyków.
+
+00:01:56.300 --> 00:01:56.960
+Tak nie jest.
+
+00:01:57.180 --> 00:02:02.500
+Zostało zaprojektowane dla każdego w firmie od sprzedaży przez kadry po operację, aby tworzyć rozwiązania bez pisania kodu.
+
+00:02:02.700 --> 00:02:05.600
+I jest już częścią narzędzi Microsoft, z których korzystacie.
+
+00:02:05.780 --> 00:02:06.440
+Kolejny punkt.
+
+00:02:06.620 --> 00:02:09.240
+Pierwszy fundament, który pomaga ci dostrzec twoje dane.
+
+00:02:09.460 --> 00:02:10.000
+Power BI.
+
+00:02:10.260 --> 00:02:11.260
+Zobacz, co się dzieje.
+
+00:02:11.500 --> 00:02:14.300
+Większość ludzi słyszała o Power BI, ale co on właściwie robi?
+
+00:02:14.300 --> 00:02:20.340
+Mówiąc prościej, bierze surowe dane w wierszach i kolumnach i zamienia je w wykresy oraz pulpity, które zrozumiesz w MIG.
+
+00:02:20.500 --> 00:02:26.280
+Połącz go z Excelem, SQL, Dataverse czy nawet Salesforce'em, a stworzy wizualizacje, które naprawdę coś znaczą.
+
+00:02:26.520 --> 00:02:27.640
+Oto konkretny przykład.
+
+00:02:27.900 --> 00:02:32.160
+Załóżmy, że jesteś menedżerem, który musi wiedzieć, które produkty sprzedają się w tym tygodniu najszybciej.
+
+00:02:32.360 --> 00:02:36.660
+Stara metoda polegała na poproszeniu kogoś o raport, czekaniu dzień, otrzymaniu arkusza i próbie zrozumienia go.
+
+00:02:36.660 --> 00:02:41.320
+Z Power BI ten pulpit aktualizuje się automatycznie, więc kiedy go otwierasz, liczby są już na miejscu.
+
+00:02:41.480 --> 00:02:43.020
+Żadna praca ręczna nie jest wymagana.
+
+00:02:43.020 --> 00:02:46.160
+Ale to nie wszystko. Power BI to coś więcej niż tylko narzędzie do raportowania.
+
+00:02:46.360 --> 00:02:50.480
+To oczy całej platformy. Pokazuje Ci, co dzieje się w całej firmie w czasie rzeczywistym.
+
+00:02:50.660 --> 00:02:53.200
+A te pulpity nie muszą żyć tylko wewnątrz Power BI.
+
+00:02:53.460 --> 00:02:56.360
+Możesz je osadzić w Teams, w Power Apps, a nawet w SharePoint.
+
+00:02:56.560 --> 00:02:59.040
+Twoje dane są widoczne wszędzie tam, gdzie już pracujesz.
+
+00:02:59.260 --> 00:03:01.340
+Dostrzeżenie problemu to dopiero połowa sukcesu.
+
+00:03:01.460 --> 00:03:03.180
+A gdyby tak zautomatyzować rozwiązanie?
+
+00:03:03.180 --> 00:03:04.720
+Tu wkracza kolejne narzędzie.
+
+00:03:04.900 --> 00:03:07.840
+Power Automate. Spraw, by praca działa się automatycznie.
+
+00:03:08.000 --> 00:03:11.880
+Power BI pokazuje, co się dzieje i to jest przydatne, ale nadal pozostawia Cię z faktyczną pracą.
+
+00:03:11.880 --> 00:03:15.380
+Ktoś wciąż musi wysyłać maile, aktualizować arkusze i gonić za zatwierdzeniami.
+
+00:03:15.540 --> 00:03:17.180
+I właśnie tu wkracza Power Automate.
+
+00:03:17.380 --> 00:03:19.780
+Jeśli Power BI to oczy, Power Automate to mięśnie.
+
+00:03:20.020 --> 00:03:22.320
+Wykonuje ciężką pracę za Ciebie, więc Ty nie musisz.
+
+00:03:22.460 --> 00:03:23.280
+Oto jak to działa.
+
+00:03:23.500 --> 00:03:29.140
+Ustawiasz wyzwalacz, czyli coś, co dzieje się w systemie, jak nadejście maila, dodanie wiersza do listy czy nadejście daty.
+
+00:03:29.340 --> 00:03:32.680
+Gdy wyzwalacz zadziała, Power Automate uruchamia serię działań automatycznie.
+
+00:03:32.900 --> 00:03:35.260
+Wszystko metodą przeciągnij i upuść bez konieczności kodowania.
+
+00:03:35.420 --> 00:03:36.560
+Podam Ci konkretny przykład.
+
+00:03:36.560 --> 00:03:39.360
+Załóżmy, że nowy lead sprzedażowy zostaje dodany w Dynamics 365.
+
+00:03:39.960 --> 00:03:45.620
+Dawniej przedstawiciel handlowy musiał zauważyć tego leada, ręcznie stworzyć zadanie, napisać maila i dodać go do kalendarza.
+
+00:03:45.800 --> 00:03:48.000
+Z Power Automate dzieje się to natychmiastowo.
+
+00:03:48.220 --> 00:03:52.680
+Lead się pojawia, zadanie jest tworzone, mail wysyłany, a handlowiec dostaje powiadomienie w Teams.
+
+00:03:52.900 --> 00:03:54.300
+Nikt nie musiał kiwnąć palcem.
+
+00:03:54.520 --> 00:03:56.860
+Oto kolejny przypadek, z którym zmaga się niemal każda firma.
+
+00:03:57.000 --> 00:03:57.860
+Zatwierdzanie wydatków.
+
+00:03:57.860 --> 00:04:01.060
+Pracownik przesyła raport wydatków na kwotę powyżej 500 dolarów.
+
+00:04:01.180 --> 00:04:07.860
+Power Automate wychwytuje to, wysyła e-mail do menedżera z prośbą o zatwierdzenie, a gdy menedżer kliknie, zatwierdź automatycznie aktualizuje arkusz kalkulacyjny.
+
+00:04:08.020 --> 00:04:11.980
+Koniec z wymianą wiadomości, pytaniami, czy widziałeś mój e-mail i bieganiem za ludźmi po korytarzu.
+
+00:04:12.120 --> 00:04:14.260
+I nie ogranicza się to tylko do narzędzi Microsoftu.
+
+00:04:14.400 --> 00:04:17.360
+Power Automate oferuje ponad 1400 gotowych łączników.
+
+00:04:17.580 --> 00:04:22.360
+Outlook, Teams, SharePoint oczywiście, ale także Slack, Twitter, Dropbox, Salesforce i DocuSign.
+
+00:04:22.360 --> 00:04:24.580
+Możesz połączyć właściwie wszystko ze wszystkim.
+
+00:04:24.860 --> 00:04:31.380
+Widzisz już swoje dane i automatyzujesz procesy, ale wciąż brakuje jednego elementu, miejsca, w którym ludzie mogą realnie wejść w interakcję z procesem.
+
+00:04:31.520 --> 00:04:32.640
+I to jest kolejny krok.
+
+00:04:32.860 --> 00:04:33.480
+Power Apps.
+
+00:04:33.760 --> 00:04:34.360
+Budowanie interfejsu.
+
+00:04:35.200 --> 00:04:43.360
+Power BI pokazuje dane, a Power Automate wykonuje pracę, ale ludzie nadal potrzebują sposobu na interakcję z systemem, by coś przesłać, sprawdzić lub zaktualizować.
+
+00:04:44.340 --> 00:04:46.100
+Właśnie do tego stworzono Power Apps.
+
+00:04:46.280 --> 00:04:49.360
+Power Apps to miejsce, w którym tworzysz część rozwiązania widoczną dla użytkownika.
+
+00:04:49.360 --> 00:04:54.540
+Użytkownika. Aplikacje mobilne, webowe, tabletowe, cokolwiek jest potrzebne, tworzysz bez pisania tradycyjnego kodu.
+
+00:04:54.760 --> 00:04:56.060
+Istnieją dwa główne typy.
+
+00:04:56.260 --> 00:04:59.320
+Aplikacje Canvowe, Canvas Apps, dają pełną kontrolę nad projektem.
+
+00:04:59.480 --> 00:05:04.240
+Przeciągasz i upuszczasz przyciski, pola tekstowe, obrazy i pola danych dokładnie tam, gdzie chcesz.
+
+00:05:04.340 --> 00:05:05.680
+To jak projektowanie plakatu.
+
+00:05:05.920 --> 00:05:07.860
+Każdy element ląduje tam, gdzie zdecydujesz.
+
+00:05:08.060 --> 00:05:10.640
+Jeśli chcesz zielony przycisk w prawym górnym rogu, po prostu go tam umieszczasz.
+
+00:05:10.840 --> 00:05:13.040
+Aplikacje oparte na modelu Model Driven Apps działają inaczej.
+
+00:05:13.040 --> 00:05:15.020
+Są budowane wokół struktury Twoich danych.
+
+00:05:15.020 --> 00:05:19.140
+Definiujesz tabele i relacje w Dataverse, a aplikacja automatycznie generuje interfejs.
+
+00:05:19.340 --> 00:05:23.300
+Wizualnie są mniej elastyczne, ale znacznie lepiej sprawdzają się w złożonych operacjach na danych.
+
+00:05:23.500 --> 00:05:26.920
+Takich jak wspomagane wprowadzanie danych, reguły biznesowe i przepływy procesów.
+
+00:05:27.080 --> 00:05:27.960
+Oto przykład z życia.
+
+00:05:28.260 --> 00:05:32.080
+Załóżmy, że masz pracowników terenowych, którzy muszą kontrolować sprzęt ochronny w miejscu pracy.
+
+00:05:32.340 --> 00:05:35.040
+Budujesz prostą aplikację Canvową, która działa na ich telefonie.
+
+00:05:35.180 --> 00:05:39.040
+Otwierają ją, zaznaczają elementy na liście, robią zdjęcie, jeśli coś jest zepsute i wysyłają.
+
+00:05:39.040 --> 00:05:41.140
+Dane trafiają prosto do Twojego systemu.
+
+00:05:41.280 --> 00:05:43.800
+Żadnych papierowych formularzy ani przepisywania notatek pod koniec dnia.
+
+00:05:43.980 --> 00:05:46.240
+Power Apps korzysta z czegoś, co nazywa się Power FX.
+
+00:05:46.440 --> 00:05:48.540
+To język formuł, który bardzo przypomina Excela.
+
+00:05:48.760 --> 00:05:52.160
+Więc jeśli wiesz, jak napisać sumę w arkuszu kalkulacyjnym, masz już dobry start.
+
+00:05:52.380 --> 00:05:54.560
+Możesz go użyć do zbudowania logiki w swojej aplikacji.
+
+00:05:54.760 --> 00:05:56.860
+Pokaż to pole, gdy to pole wyboru zostanie zaznaczone.
+
+00:05:57.040 --> 00:05:58.900
+Oblicz tę sumę na podstawie tych danych wejściowych.
+
+00:05:59.100 --> 00:06:01.480
+Traktuj Power Apps jak budowanie domu z klocków Lego.
+
+00:06:01.740 --> 00:06:05.500
+Łączysz gotowe klocki, przyciski, formularze, galerie i połączenia danych,
+
+00:06:05.620 --> 00:06:07.760
+otrzymując dokładnie to, czego potrzebujesz.
+
+00:06:09.040 --> 00:06:10.620
+Mamy więc już trzy narzędzia.
+
+00:06:10.860 --> 00:06:13.280
+Analiza danych, automatyzacja pracy, budowa interfejsu.
+
+00:06:13.460 --> 00:06:16.800
+Jednak w 2026 roku pojawia się czwarty element, który zmienia wszystko.
+
+00:06:16.980 --> 00:06:18.780
+Copilot Studio, dodaj agentów AI.
+
+00:06:19.100 --> 00:06:21.620
+Porozmawiajmy teraz o nowszym elemencie, Copilot Studio.
+
+00:06:21.880 --> 00:06:24.040
+Wcześniej nazywało się to Power Virtual Agents.
+
+00:06:24.220 --> 00:06:27.220
+To tutaj tworzysz hotboty i agentów opartych na sztucznej inteligencji.
+
+00:06:27.420 --> 00:06:29.240
+Nie tych niezdarnych, którzy znają trzy odpowiedzi,
+
+00:06:29.340 --> 00:06:32.000
+lecz prawdziwych agentów, którzy rozumieją potrzeby, podejmują działania,
+
+00:06:32.060 --> 00:06:33.540
+a nawet rozmawiają z innymi agentami.
+
+00:06:33.700 --> 00:06:37.300
+Ci agenci mogą działać wewnątrz Teams, na Twojej stronie internetowej lub w aplikacji mobilnej.
+
+00:06:37.300 --> 00:06:39.760
+Pracownik zadaje pytanie, a agent na nie odpowiada.
+
+00:06:39.920 --> 00:06:41.040
+Ale to wykracza poza to.
+
+00:06:41.220 --> 00:06:43.240
+Agent może uruchomić przepływ Power Automate.
+
+00:06:43.420 --> 00:06:45.260
+W ten sposób rozmowa zamienia się w działanie.
+
+00:06:45.480 --> 00:06:46.540
+Oto praktyczny przykład.
+
+00:06:46.820 --> 00:06:48.300
+Firma tworzy agenta hrabia.
+
+00:06:48.480 --> 00:06:51.280
+Pracownik pisze w Teams, ile dni chorobowych mi zostało.
+
+00:06:51.480 --> 00:06:55.340
+Agent sprawdza system kadrowy, pobiera dane pracownika i odpowiada natychmiast.
+
+00:06:55.560 --> 00:06:58.700
+Następnie pracownik prosi, chce wziąć wolne w przyszły piątek.
+
+00:06:58.860 --> 00:07:03.180
+Agent tworzy wniosek urlopowy, kieruje go do menedżera do zatwierdzenia i wysyła potwierdzenie.
+
+00:07:03.420 --> 00:07:06.440
+Wszystko w jednej rozmowie, bez formularzy, e-maili i zbędnych pytań.
+
+00:07:06.440 --> 00:07:08.880
+I to jest potężny atut na rok 2026.
+
+00:07:09.080 --> 00:07:10.880
+Agenci potrafią teraz ze sobą rozmawiać.
+
+00:07:11.000 --> 00:07:13.280
+Microsoft nazywa to komunikacją między agentami.
+
+00:07:13.500 --> 00:07:17.700
+Jeden agent zajmuje się sprawami kadrowymi, inny wsparciem i kolejny akceptacją wydatków.
+
+00:07:17.920 --> 00:07:21.960
+Jeśli pracownik zada pytanie wykraczające poza działy, agenci współpracują za kulisami.
+
+00:07:22.160 --> 00:07:23.560
+Użytkownik nie widzi z tego nic.
+
+00:07:23.720 --> 00:07:25.080
+Po prostu otrzymuje odpowiedź.
+
+00:07:25.240 --> 00:07:26.500
+Mamy więc teraz cztery narzędzia.
+
+00:07:26.720 --> 00:07:28.340
+Analiza, automatyzacja, budowa, rozmowa.
+
+00:07:28.540 --> 00:07:30.220
+Wszystkie one potrzebują jednak jednej wspólnej rzeczy.
+
+00:07:30.400 --> 00:07:32.120
+Potrzebują miejsca do przechowywania swoich danych.
+
+00:07:32.320 --> 00:07:34.100
+Dataverse, silnik znajdujący się pod spodem.
+
+00:07:34.100 --> 00:07:35.680
+Omówiliśmy zatem cztery narzędzia.
+
+00:07:35.840 --> 00:07:37.320
+Power BI pokazuje, co się dzieje.
+
+00:07:37.480 --> 00:07:38.900
+Power Automate wykonuje pracę.
+
+00:07:39.040 --> 00:07:41.040
+Power Apps daje ludziom sposób na interakcję.
+
+00:07:41.220 --> 00:07:44.640
+Ako Pilot Studio dodaje agentów AI, którzy mogą rozmawiać i podejmować działania.
+
+00:07:44.820 --> 00:07:47.840
+Ale wszystkie potrzebują jednego miejsca do przechowywania danych.
+
+00:07:48.040 --> 00:07:49.260
+Tutaj wkracza Dataverse.
+
+00:07:49.440 --> 00:07:52.800
+To element, którego większość ludzi nie widzi, ponieważ pracuje cicho w tle.
+
+00:07:53.040 --> 00:07:58.600
+Dataverse to bezpieczna, chmurowa baza danych działająca za Power Apps, Power Automate, a nawet Dynamics 365.
+
+00:07:58.600 --> 00:08:02.460
+Pomyśl o tym, jak o jednym, głównym źródle prawdy dla danych Twojej firmy.
+
+00:08:02.600 --> 00:08:06.620
+Koniec z informacjami rozproszonymi w 20 plikach Excela i 6 listach SharePoint.
+
+00:08:06.860 --> 00:08:10.280
+Wszystko znajduje się w jednym miejscu uporządkowane, bezpieczne i gotowe do użycia.
+
+00:08:10.500 --> 00:08:13.880
+Oto co odróżnia to rozwiązanie od wrzucania wszystkiego do wspólnego arkusza kalkulacyjnego.
+
+00:08:14.120 --> 00:08:15.700
+Dataverse ma wbudowane zabezpieczenia.
+
+00:08:15.940 --> 00:08:18.700
+Dostęp oparty na rolach oznacza, że dokładnie kontrolujesz, kto co widzi.
+
+00:08:18.900 --> 00:08:20.480
+Menedżer może przeglądać dane o płacach.
+
+00:08:20.600 --> 00:08:21.280
+Członek zespołu nie.
+
+00:08:21.520 --> 00:08:24.180
+Jest to obsługiwane na poziomie bazy danych, a nie w kodzie aplikacji.
+
+00:08:24.180 --> 00:08:26.280
+Posiada również wbudowane reguły biznesowe.
+
+00:08:26.500 --> 00:08:30.560
+Możesz określić, jeśli to pole przekracza określoną wartość uczyń, to drugie pole wymaganym.
+
+00:08:30.720 --> 00:08:35.300
+Albo zawsze, gdy tworzone jest nowe zamówienie, automatycznie oblicz sumę na podstawie pozycji.
+
+00:08:35.480 --> 00:08:39.200
+Ta logika znajduje się wewnątrz Dataverse, a nie w każdej aplikacji z osobna.
+
+00:08:39.440 --> 00:08:42.620
+Dzięki temu każda aplikacja korzystająca z tych danych przestrzega tych samych zasad.
+
+00:08:42.900 --> 00:08:44.960
+System obsługuje również relacje między danymi.
+
+00:08:45.100 --> 00:08:47.260
+To właśnie tu współdzielony plik Excela zawodzi.
+
+00:08:47.500 --> 00:08:52.120
+W Excelu masz jeden arkusz dla klientów, a drugi dla zamówień, ale nie ma między nimi prawdziwego połączenia.
+
+00:08:52.120 --> 00:08:54.480
+Ktoś musi ręcznie dbać o ich synchronizację.
+
+00:08:54.700 --> 00:08:56.320
+W Dataverse definiujesz relacje.
+
+00:08:56.560 --> 00:08:57.840
+Klient ma wiele zamówień.
+
+00:08:58.040 --> 00:08:59.700
+Zamówienie należy do jednego klienta.
+
+00:08:59.900 --> 00:09:01.280
+Baza danych wymusza to powiązanie.
+
+00:09:01.500 --> 00:09:05.260
+Jeśli usuniesz klienta, możesz wybrać, czy usunąć również jego zamówienia, czy zablokować usuwanie.
+
+00:09:05.480 --> 00:09:07.120
+Dane pozostają czyste automatycznie.
+
+00:09:07.320 --> 00:09:08.400
+Oto konkretny przykład.
+
+00:09:08.680 --> 00:09:11.720
+Masz tabelę klientów, tabelę zamówień i relacje między nimi.
+
+00:09:11.940 --> 00:09:15.460
+Power Apps odczytuje dane z obu tabel, aby wyświetlić historię zamówień klienta.
+
+00:09:15.620 --> 00:09:18.700
+Power Automate zapisuje dane w tabeli zamówień, gdy pojawi się nowa sprzedaż.
+
+00:09:18.700 --> 00:09:22.320
+Power BI pobiera dane z obu, aby stworzyć raport pokazujący przychody według klientów.
+
+00:09:22.480 --> 00:09:26.040
+Wszyscy korzystają z tych samych danych, w tej samej strukturze i z tymi samymi regułami bezpieczeństwa.
+
+00:09:26.240 --> 00:09:30.000
+Bez kopii, bez problemów z synchronizacją, nikt nie pyta, która wersja arkusza jest właściwa.
+
+00:09:30.140 --> 00:09:31.780
+To jest prawdziwa wartość Dataverse.
+
+00:09:31.960 --> 00:09:34.680
+To sprawia, że cała platforma współpracuje ze sobą płynnie.
+
+00:09:34.940 --> 00:09:36.700
+Bez tego wróciłbyś do tych samych starych problemów.
+
+00:09:37.360 --> 00:09:39.720
+Narzędzi, które nie potrafią się ze sobą komunikować.
+
+00:09:39.940 --> 00:09:44.960
+Teraz złóżmy to wszystko w całość za pomocą rzeczywistego scenariusza, który pokazuje pełny system w działaniu.
+
+00:09:44.960 --> 00:09:47.440
+Jak wszystko się łączy w kompletny system.
+
+00:09:47.640 --> 00:09:56.280
+Przeprowadzę Cię przez jeden pełny proces obieg zatwierdzania wydatków i chcę, żebyś zwrócił uwagę na to, ile narzędzi angażuje ten proces i jak płynnie przekazują sobie zadania.
+
+00:09:56.460 --> 00:09:59.100
+Krok pierwszy. Pracownik jest w podróży służbowej.
+
+00:09:59.300 --> 00:10:01.240
+Płaci za hotel i kolację z klientem.
+
+00:10:01.480 --> 00:10:04.900
+Wyjmuje telefon, otwiera aplikację Power App i przesyła raport wydatków.
+
+00:10:05.140 --> 00:10:08.860
+Robią zdjęcie paragonu, wpisują kwotę, wybierają kategorię i klikają prześlij.
+
+00:10:09.020 --> 00:10:10.720
+Zajęło im to około 30 sekund.
+
+00:10:10.880 --> 00:10:12.780
+Krok drugi. Te dane trafiają do Dataverse.
+
+00:10:12.780 --> 00:10:17.560
+Są uporządkowane i bezpieczne. Pracownik widzi własne zgłoszenia, ale nie zgłoszenia innych osób.
+
+00:10:17.740 --> 00:10:21.640
+Obraz paragonu jest zapisywany, kwota rejestrowana, a status ustawiany na oczekujący.
+
+00:10:21.800 --> 00:10:25.060
+Krok trzeci. Power Automate wykrywa zdarzenie, że dodano nowy wydatek.
+
+00:10:25.260 --> 00:10:27.500
+Sprawdza kwotę. Powyżej 500 dolarów.
+
+00:10:27.680 --> 00:10:30.140
+Wtedy kieruje go do przełożonego pracownika w celu zatwierdzenia.
+
+00:10:30.380 --> 00:10:32.860
+Wysyła kartę adaptacyjną na kanał Teams przełożonego.
+
+00:10:33.060 --> 00:10:36.520
+Karta pokazuje kwotę, kategorię oraz przycisk zatwierdzenia lub odrzucenia.
+
+00:10:36.720 --> 00:10:39.920
+Menedżer nie musi otwierać oddzielnej aplikacji. Wszystko ma w swoim czacie.
+
+00:10:39.920 --> 00:10:42.960
+Krok czwarty. Zanim menedżer podejmie decyzję, potrzebuje kontekstu.
+
+00:10:43.060 --> 00:10:44.640
+Ile ten zespół wydał w tym miesiącu?
+
+00:10:44.820 --> 00:10:47.420
+Otwiera pulpit nawigacyjny Power B osadzony bezpośrednio w Teams.
+
+00:10:47.580 --> 00:10:49.840
+Pokazuje on miesięczne trendy wydatków według działów.
+
+00:10:50.000 --> 00:10:53.140
+Widzi, że zespół mieści się w budżecie, a ten wydatek jest uzasadniony.
+
+00:10:53.320 --> 00:10:55.780
+Ten kontekst pomaga mu podjąć szybszą decyzję.
+
+00:10:56.300 --> 00:10:58.640
+Krok piąty. Tutaj wkracza Copilot Studio.
+
+00:10:58.940 --> 00:11:03.120
+Zamiast po prostu klikać, zatwierdź, menedżer otrzymuje wiadomość od agenta A i w Teams.
+
+00:11:03.340 --> 00:11:03.840
+Agent mówi.
+
+00:11:03.840 --> 00:11:08.000
+Widzę, że masz oczekujące zatwierdzenie wydatku od Sary na kwotę 750 dolarów.
+
+00:11:08.180 --> 00:11:10.140
+Sprawdziłem budżet. Mieścicie się w limitach.
+
+00:11:10.260 --> 00:11:11.580
+Czy chcesz, abym to przetworzył?
+
+00:11:11.740 --> 00:11:14.140
+Menedżer odpowiada tak, a agent zajmuje się resztą.
+
+00:11:14.300 --> 00:11:14.820
+Krok szósty.
+
+00:11:14.940 --> 00:11:17.600
+Po zatwierdzeniu Power Automate uruchamia kolejny przepływ.
+
+00:11:17.780 --> 00:11:19.700
+Aktualizuje status wydatków Dataverse.
+
+00:11:19.960 --> 00:11:22.020
+Wysyła e-mail z potwierdzeniem do pracownika.
+
+00:11:22.260 --> 00:11:25.260
+Przesyła dane do systemu ERP firmy za pomocą łącznika.
+
+00:11:25.460 --> 00:11:27.620
+I rejestruje zatwierdzenie w ścieżce audytu.
+
+00:11:27.620 --> 00:11:32.800
+Jeden ujednolicony proces, sześć kroków, pięć narzędzi, zero ręcznego przekazywania.
+
+00:11:33.040 --> 00:11:38.560
+Nikt nie przesyłał e-maila, nikt nie kopiował danych między systemami, nikt nie pytał, czy już to zatwierdziłeś.
+
+00:11:38.740 --> 00:11:42.780
+Całość odbyła się automatycznie, z odpowiednim nadzorem człowieka w odpowiednim momencie.
+
+00:11:43.080 --> 00:11:46.120
+Magia nie tkwi w żadnym pojedynczym narzędziu, ale w tym, jak do siebie pasują.
+
+00:11:46.320 --> 00:11:47.500
+Power B pokazuje kontekst.
+
+00:11:47.580 --> 00:11:48.980
+Power Automate zajmuje się kierowaniem.
+
+00:11:49.080 --> 00:11:50.680
+Power Apps dostarcza formularz zgłoszeniowy.
+
+00:11:50.780 --> 00:11:52.700
+Kopilot Studio dodaje warstwę konwersacyjną.
+
+00:11:52.780 --> 00:11:54.340
+A Dataverse scala to wszystko w całość.
+
+00:11:54.340 --> 00:11:57.820
+To nie jest teoria. Organizacje na całym świecie już to robią.
+
+00:11:58.100 --> 00:12:05.020
+Singapurska obrona cywilna wykorzystała Power Platform do przekształcenia procesów w zautomatyzowane rozwiązania, oszczędzając miliony dolarów.
+
+00:12:05.200 --> 00:12:10.900
+Deutsche Bahn umożliwiło swoim pracownikom tworzenie aplikacji typu Low Code, przyspieszając innowacje w całej organizacji.
+
+00:12:11.060 --> 00:12:15.540
+To prawdziwe firmy rozwiązujące realne problemy za pomocą tych samych narzędzi, które właśnie omówiliśmy.
+
+00:12:15.780 --> 00:12:17.740
+Praktyczne wskazówki, od czego zacząć.
+
+00:12:17.900 --> 00:12:19.360
+Więc od czego właściwie zacząć?
+
+00:12:19.480 --> 00:12:22.740
+Większość ludzi rzuca się na głęboką wodę i próbuje nauczyć się wszystkich pięciu narzędzi naraz.
+
+00:12:22.740 --> 00:12:26.760
+Nie rób tego. Zamiast tego wybierz jedno narzędzie, które rozwiąże Twój największy dzisiejszy problem.
+
+00:12:26.980 --> 00:12:30.700
+Jeśli największym bólem jest brak wiedzy o tym, co dzieje się w firmie, zacznij od Power BI.
+
+00:12:30.880 --> 00:12:34.100
+Jeśli toniesz w powtarzalnej, ręcznej pracy, zacznij od Power Automate.
+
+00:12:34.260 --> 00:12:37.800
+A jeśli potrzebujesz formularza mobilnego, który zastąpi papier, zacznij od Power Apps.
+
+00:12:38.000 --> 00:12:40.300
+Jedno narzędzie, jeden problem rozwiąż to jako pierwsze.
+
+00:12:40.520 --> 00:12:43.040
+Dobra wiadomość jest taka, że możesz wypróbować to wszystko za darmo.
+
+00:12:43.240 --> 00:12:46.380
+Wejdź na stronę make.powerapps.com i zarejestruj się w planie dla deweloperów.
+
+00:12:46.560 --> 00:12:48.920
+Daje Ci on dostęp do środowiska Dataverse bez żadnych kosztów.
+
+00:12:48.920 --> 00:12:51.540
+Możesz budować, testować i uczyć się, nie wydając ani grosza.
+
+00:12:51.720 --> 00:12:54.160
+Gdy już wybierzesz swoje narzędzie, kolejny krok jest prosty.
+
+00:12:54.340 --> 00:12:56.760
+Wybierz jeden powtarzalny proces w pracy i zautomatyzuj go.
+
+00:12:57.020 --> 00:12:59.520
+Może to być automatyczne zapisywanie załączników z e-maili do SharePoint
+
+00:12:59.520 --> 00:13:02.980
+lub przesyłanie wniosków o akceptację przez Teams zamiast nieskończonych łańcuchów wiadomości.
+
+00:13:03.200 --> 00:13:05.900
+Zacznij od małych rzeczy, odnieś pierwszy sukces i buduj na tym dalej.
+
+00:13:06.120 --> 00:13:11.120
+Jeśli chcesz zgłębić temat, Microsoft Learn oferuje bezpłatną ścieżkę szkoleniową do certyfikatu PL 900.
+
+00:13:11.120 --> 00:13:15.240
+Przeprowadzi Cię ona przez wszystko, co właśnie omówiliśmy lub dołącz do społeczności Power Platform.
+
+00:13:15.520 --> 00:13:19.380
+Tysiące ludzi udostępnia tam szablony, odpowiada na pytania i pomaga sobie nawzajem w tworzeniu.
+
+00:13:19.600 --> 00:13:22.840
+To cały system w pigułce, a oto jedno zdanie, którego podsumowuję.
+
+00:13:23.020 --> 00:13:26.080
+Power Platform to nie cztery osobne aplikacje, lecz jedna połączona warstwa,
+
+00:13:26.220 --> 00:13:29.700
+która pozwala każdemu budować, automatyzować i analizować bez potrzeby bycia programistą.
+
+00:13:29.920 --> 00:13:32.320
+Zacznij od narzędzia, które rozwiązuje Twój największy problem.
+
+00:13:32.320 --> 00:13:36.640
+Gdy zobaczysz, jak dobrze ze sobą współpracują, nigdy nie wrócisz do arkuszy kalkulacyjnych i akceptacji e-mailowych.
+
+00:13:36.640 --> 00:13:40.040
+Zasubskrybuj i udostępnij ten materiał współpracownikowi, który tonie w ręcznej pracy.
+
+00:13:40.300 --> 00:13:42.900
+Zostaw komentarz i napisz, jaki proces chcesz zautomatyzować.
+
+00:13:43.120 --> 00:13:44.580
+Do zobaczenia w kolejnym odcinku.

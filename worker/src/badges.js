@@ -69,7 +69,7 @@ export async function evalBadges(env, uid) {
   const q = {
     founder: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner' AND status='active'", uid),
     team_member: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role<>'owner' AND status='active'", uid),
-    organizer: await n("SELECT COUNT(*) n FROM events WHERE owner_id=?", uid),
+    organizer: await n("SELECT COUNT(*) n FROM events WHERE owner_id=? AND review='approved'", uid),
     speaker: await n("SELECT COUNT(*) n FROM event_sessions WHERE speakers LIKE '%\"s\":\"confirmed\"%' AND speakers LIKE '%\"h\":\"' || COALESCE((SELECT handle FROM profiles WHERE user_id=?),'-') || '\"%'", uid),
     recommender: await n("SELECT COUNT(*) n FROM recommendations WHERE author_id=? AND status='live'", uid),
     recommended: await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND status='live'", uid),
@@ -101,7 +101,7 @@ export async function stats(db, uid) {
   const a = {
     wiki: await n("SELECT COUNT(*) n FROM wiki_rev WHERE user_id=? AND status IN ('live','old')", uid), ent: await n("SELECT COUNT(*) n FROM entity_rev WHERE user_id=? AND status IN ('live','old')", uid),
     orgs_owned: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role='owner' AND status='active'", uid), orgs_joined: await n("SELECT COUNT(*) n FROM org_members WHERE user_id=? AND role<>'owner' AND status='active'", uid),
-    events: await n("SELECT COUNT(*) n FROM events WHERE owner_id=?", uid), rec_w: await n("SELECT COUNT(*) n FROM recommendations WHERE author_id=? AND status='live'", uid), rec_r: await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND status='live'", uid),
+    events: await n("SELECT COUNT(*) n FROM events WHERE owner_id=? AND review='approved'", uid), rec_w: await n("SELECT COUNT(*) n FROM recommendations WHERE author_id=? AND status='live'", uid), rec_r: await n("SELECT COUNT(*) n FROM recommendations WHERE subject_id=? AND status='live'", uid),
     endo_r: await n("SELECT COUNT(*) n FROM endorsements WHERE owner_id=?", uid), endo_g: await n("SELECT COUNT(*) n FROM endorsements WHERE by_id=?", uid),
     speaker: await n("SELECT COUNT(*) n FROM event_sessions WHERE speakers LIKE '%\"s\":\"confirmed\"%' AND speakers LIKE '%\"h\":\"' || COALESCE((SELECT handle FROM profiles WHERE user_id=?),'-') || '\"%'", uid),
     pub: await n("SELECT COUNT(*) n FROM profiles WHERE user_id=? AND public=1", uid),

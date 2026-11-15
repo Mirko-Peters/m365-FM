@@ -1,0 +1,1357 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.560
+Topik hari ini adalah sesuatu yang hampir semua orang yang bekerja dengan data pernah dengar, namun hanya sedikit yang benar-benar memahaminya.
+
+00:00:06.140 --> 00:00:07.080
+Microsoft Fabric One Leg
+
+00:00:07.080 --> 00:00:12.620
+Anda mungkin pernah melihatnya di pemasaran Microsoft atau mendengar seseorang menyebutnya sebagai data leg terpadu untuk seluruh organisasi Anda.
+
+00:00:13.060 --> 00:00:14.200
+Namun, apa sebenarnya artinya itu?
+
+00:00:14.720 --> 00:00:17.500
+Apakah itu hanya sekadar wadah penyimpanan lain atau sesuatu yang benar-benar benar-benar?
+
+00:00:17.720 --> 00:00:19.200
+Berikut adalah definisi paling sederhana.
+
+00:00:19.440 --> 00:00:22.420
+One Leg adalah satu data leg logis yang berada di pusat Microsoft Fabric.
+
+00:00:23.360 --> 00:00:29.180
+Setiap layanan Fabric, Leg House, Warehouse, Event House, Power BI menyimpan datanya di sini, dan aturan utama yang sederhan.
+
+00:00:29.180 --> 00:00:32.320
+Satu salinan visi data yang dapat diakses oleh banyak mesin berbeda.
+
+00:00:32.640 --> 00:00:34.340
+Tidak perlu lagi menyalin data dari satu alat ke alat lain.
+
+00:00:34.660 --> 00:00:36.860
+Tidak perlu lagi bertanya-tanya versi laporan mana yang benar.
+
+00:00:37.200 --> 00:00:44.600
+Di akhir episode ini, Anda akan memahami apa sebenarnya One Leg, bagaimana ia menghilangkan duplikasi data, dan mengapa ia mengubah segalanya bagi Power BI, rekayasa data, dan AI.
+
+00:00:45.180 --> 00:00:48.020
+Jadi, mari kita mulai dengan masalah yang dibangun untuk dipecahkan oleh One Leg.
+
+00:00:49.020 --> 00:00:51.000
+Masalahnya, setiap departemen memiliki leg-nya sendiri.
+
+00:00:51.460 --> 00:00:52.980
+Bayangkan Anda bekerja di perusahaan skala menengah.
+
+00:00:53.240 --> 00:00:55.520
+Tim penjualan Anda menggunakan sistem CRM untuk melacak kesempatan.
+
+00:00:55.520 --> 00:00:58.220
+Tim keuangan Anda menjalankan RP untuk penagihan dan faktur.
+
+00:00:58.740 --> 00:01:01.000
+Tim pemasaran Anda menarik data dari alat kampanye mereka.
+
+00:01:01.480 --> 00:01:04.640
+Dan tim rekayasa data Anda mengelola data warehouse untuk pelaporan.
+
+00:01:05.080 --> 00:01:06.160
+Inilah yang ingin saya pikirkan.
+
+00:01:06.600 --> 00:01:09.140
+Berapa banyak salinan data pelanggan yang sama yang ada di seluruh sistem ini?
+
+00:01:09.800 --> 00:01:11.640
+Di sebagian besar perusahaan, jawabannya adalah empat.
+
+00:01:12.100 --> 00:01:12.820
+CRM menyimpannya.
+
+00:01:13.220 --> 00:01:13.940
+RP menyimpannya.
+
+00:01:14.320 --> 00:01:16.080
+Pemasaran mengekspornya ke alat analitik mereka.
+
+00:01:16.080 --> 00:01:18.920
+Seseorang di bagian keuangan membuat spread dari RP.
+
+00:01:19.500 --> 00:01:23.040
+Dan tim rekayasa datang menyalankannya ke warehouse agar Power BI dapat membacanya.
+
+00:01:23.720 --> 00:01:28.780
+Itu adalah ID pelanggan yang sama, jumlah penjualan yang sama, tanggal faktur yang sama, tanggal faktur yang sama yang disimpan di lima tempat berbeda.
+
+00:01:28.960 --> 00:01:29.920
+Ini bukan karena orang yang ceroboh.
+
+00:01:30.400 --> 00:01:32.020
+Ini karena alat-alat lama tidak sering terhubung.
+
+00:01:32.020 --> 00:01:37.100
+Jika Anda ingin menjalankan laporan yang menggabungkan data penjualan dari CRM dengan data keuangan dari RP,
+
+00:01:37.220 --> 00:01:39.820
+Anda harus menyalin keduanya ke sesuatu yang bisa membacanya bersama-sama.
+
+00:01:40.460 --> 00:01:44.440
+Itu berarti membangun pipeline, menjadwalkan tugas, dan berharap tidak ada yang rusak dalam semangat.
+
+00:01:44.740 --> 00:01:45.900
+Biaya tersembunyi bertambah dengan cepat.
+
+00:01:46.360 --> 00:01:49.040
+Tagihan penyimpanan membengkak karena Anda membayar untuk data yang sama sepanjang lima tempat.
+
+00:01:49.400 --> 00:01:52.220
+Laporan menjadi kedaluar sekena satu salinan diperbarui sementara yang lain tidak.
+
+00:01:52.700 --> 00:01:54.760
+Dan kemudian seseorang mengajukan pertanyaan yang tidak ingin dijawab oleh siapapun.
+
+00:01:55.100 --> 00:01:55.820
+Versi mana yang benar?
+
+00:01:56.240 --> 00:01:58.260
+Kebingungan itu menginggis kepercayaan pada data.
+
+00:01:58.260 --> 00:02:02.380
+Dan begitu kepercayaan hilang, orang akan berhenti menggunakan platform analitik tersebut sama sekali.
+
+00:02:03.040 --> 00:02:05.820
+Jadi, Microsoft melihat kekacauan ini dan mengajukan pertanyaan sederhana.
+
+00:02:06.000 --> 00:02:08.520
+Bagaimana jika Anda bisa memiliki satu salin data yang dapat dibaca oleh siapapun?
+
+00:02:08.800 --> 00:02:11.540
+Tanpa duplikasi, tanpa kebingungan, satu sumber kebenaran.
+
+00:02:12.640 --> 00:02:13.560
+Apa sebenarnya OneLag itu?
+
+00:02:14.200 --> 00:02:16.300
+OneLag adalah jawaban Microsoft untuk pertanyaan tersebut.
+
+00:02:16.520 --> 00:02:18.920
+Ini adalah satu danau data logis untuk seluruh organisasi Anda.
+
+00:02:19.440 --> 00:02:21.180
+Frasa kunci yang perlu diingat adalah ini.
+
+00:02:21.320 --> 00:02:23.280
+Satu danau perpenyewa, bukan satu danau pertim.
+
+00:02:24.040 --> 00:02:26.920
+Di baliknya, OneLag dibangun di atas Azure Data Lake Storage Gen 2.
+
+00:02:26.920 --> 00:02:32.280
+Teknologi yang sama, api yang sama, tetapi Microsoft telah mengumasnya kembali sebagai layanan SaaS yang dikelola sepenuhnya.
+
+00:02:32.480 --> 00:02:36.160
+Anda tidak perlu membuat akun penyimpanan, tidak perlu mengatur kunci akses, Anda tinggal menggunakannya.
+
+00:02:36.560 --> 00:02:37.260
+Tinggal menggunakannya.
+
+00:02:37.400 --> 00:02:39.300
+Anggap saja ini seperti OneDrive untuk data perusahaan Anda.
+
+00:02:39.660 --> 00:02:43.220
+OneDrive memberi Anda satu tempat untuk file, dokumen, foto, dan spreadsheet pribadi Anda.
+
+00:02:43.620 --> 00:02:47.160
+Anda tidak perlu memikirkan di mana mereka disimpan secara fisik. Anda cukup membukanya dan bekerja.
+
+00:02:47.420 --> 00:02:49.880
+OneLag melakukan hal yang sama, tetapi untuk data organisasi Anda.
+
+00:02:50.100 --> 00:02:53.640
+Ini memberi setiap tim, setiap proyek, dan setiap beban kerja satu kumpulan penyimpanan bersama.
+
+00:02:54.220 --> 00:02:55.340
+Nah, inilah perbedaan yang penting.
+
+00:02:56.920 --> 00:03:00.380
+Di baliknya, ia dapat mencakup beberapa akun penyimpanan di berbagai wilayah.
+
+00:03:00.500 --> 00:03:02.600
+Tetapi bagi Anda, itu terlihat seperti satu kumpulan raksas.
+
+00:03:02.820 --> 00:03:05.540
+Anda tidak peduli server-man yang menampung file tersebut, Anda hanya melihat data Anda.
+
+00:03:05.920 --> 00:03:07.520
+Setiap layan Fabric menyimpan datanya di sini.
+
+00:03:08.080 --> 00:03:09.820
+Saat Anda membuat Lakehouse, datanya tersimpan di OneLag.
+
+00:03:10.140 --> 00:03:12.480
+Saat Anda membangun gudang data, tabel-tabel yang tersimpan di OneLag.
+
+00:03:12.540 --> 00:03:16.440
+Saat Anda menjalankan laporan Power BI jika menggunakan mode DirectLag yang membaca langsung dari OneLag.
+
+00:03:16.780 --> 00:03:20.440
+Bahkan Eventhouse, penyimpanan analitik waktu nyata, dapat mengekspos datanya ke OneLag.
+
+00:03:20.440 --> 00:03:24.680
+Semuanya mengarah ke tempat yang sama, dan format data defaultnya adalah Delta Parkway.
+
+00:03:25.020 --> 00:03:26.900
+Itu adalah format terbuka, bukan penguncian ekosistem Microsoft.
+
+00:03:27.300 --> 00:03:29.200
+Data Bricks menggunakannya mesin Spark pembacanya.
+
+00:03:29.540 --> 00:03:31.120
+Alat seperti Panas dan Polar dapat bekerja dengan.
+
+00:03:31.420 --> 00:03:33.260
+Jadi, data Anda tidak terjebak di dalam video Microsoft.
+
+00:03:33.900 --> 00:03:34.920
+Data itu terbuka dan portable.
+
+00:03:35.100 --> 00:03:36.760
+Tetapi keajaiban sebenarnya bukanlah penyimpanannya,
+
+00:03:36.900 --> 00:03:39.640
+melainkan bagaimana OneLag menghilangkan kebutuhan untuk menyalain data sejak awal.
+
+00:03:40.400 --> 00:03:41.440
+Prinsip Satu Salinan
+
+00:03:41.440 --> 00:03:45.020
+Nah, inilah ide utama yang membuat OneLag berbeda dari apapun sebelumnya.
+
+00:03:45.580 --> 00:03:47.380
+Disebut prinsip Satu Salinan, dan sangat sederhana.
+
+00:03:47.780 --> 00:03:50.640
+Satu salinan data fisik dapat diakses oleh banyak mesin berbeda.
+
+00:03:50.960 --> 00:03:52.220
+Izinkan saya menunjukkan apa artinya ini.
+
+00:03:52.640 --> 00:03:54.600
+Katakanlah Anda memiliki tabel data penjualan di OneLag.
+
+00:03:55.000 --> 00:03:57.160
+Seorang insinyur data menjalankan buku catatan Spark untuk membersihkan.
+
+00:03:57.460 --> 00:03:59.980
+Seorang analis bisnis menulis kualitas SKL untuk mengagregasinya.
+
+00:04:00.420 --> 00:04:02.180
+Dan laporan Power BI membacanya untuk dashboard.
+
+00:04:02.600 --> 00:04:03.720
+Ketiganya terjadi pada saling menang.
+
+00:04:04.120 --> 00:04:05.160
+Ketiganya membaca file yang sama.
+
+00:04:05.580 --> 00:04:06.420
+Tidak ada yang menyalin apapun.
+
+00:04:06.940 --> 00:04:08.400
+Dulu hal itu tidak pernah terjadi.
+
+00:04:08.400 --> 00:04:10.820
+Anda menyalin data dari data light ke gudang data.
+
+00:04:11.380 --> 00:04:13.780
+Lalu Anda menyalinnya dari gudang data ke model semantik.
+
+00:04:14.260 --> 00:04:15.400
+Kemudian Anda menyegarkan laporannya.
+
+00:04:15.680 --> 00:04:17.140
+Itu berarti tiga salinan untuk data yang sama.
+
+00:04:17.560 --> 00:04:18.860
+Masih makan waktu dan ruang penyimpanan.
+
+00:04:19.300 --> 00:04:21.060
+Dan jika ada langkah yang gagal, angka Anda menjadi salah.
+
+00:04:21.540 --> 00:04:22.660
+Satu salinan menghilangkan semua itu.
+
+00:04:23.060 --> 00:04:24.100
+Data tersimpan di OneLag hanya sekali.
+
+00:04:24.560 --> 00:04:27.620
+Mesin Spark, SKL, Power BI, semuanya membaca langsung.
+
+00:04:28.140 --> 00:04:28.640
+Tidak berpindahan.
+
+00:04:29.000 --> 00:04:29.680
+Tidak ada duplikasi.
+
+00:04:30.080 --> 00:04:31.080
+Tidak ada masalah sinkronisasi.
+
+00:04:31.460 --> 00:04:32.360
+Penghematan biaya yang sangat nyat.
+
+00:04:32.680 --> 00:04:35.260
+Penyimpanan lebih hemat karena Anda tidak membayar data yang sama lima kali.
+
+00:04:35.260 --> 00:04:39.000
+ETA lebih sedikit karena Anda tidak perlu membuat alur untuk memindahkan data.
+
+00:04:39.840 --> 00:04:42.620
+Lebih sedikit hal untuk dikelola karena tidak ada yang rusak antar salinan.
+
+00:04:43.180 --> 00:04:44.360
+Dan manfaat kebaruannya sangat besar.
+
+00:04:44.940 --> 00:04:46.380
+Satu salinan berarti satu sumber kebenaran.
+
+00:04:46.860 --> 00:04:49.680
+Saat data diperbarui, setiap laporan langsung melihat pembaruannya.
+
+00:04:50.260 --> 00:04:53.380
+Tidak perlu lagi bertanya apakah laporan ini menggunakan data minggu lalu atau minggu ini.
+
+00:04:54.240 --> 00:04:55.420
+Datanya selalu sama dimanapun.
+
+00:04:55.980 --> 00:04:58.500
+Sekarang Anda mungkin berpikir bukankah ini hanya Azure Data Lake Storage.
+
+00:04:58.920 --> 00:04:59.540
+Tidak persis begitu.
+
+00:04:59.800 --> 00:05:00.720
+Adalah layanan PAI.
+
+00:05:01.020 --> 00:05:02.180
+Anda membuat akun penyimpanan.
+
+00:05:02.240 --> 00:05:03.020
+Anda mengelola konten.
+
+00:05:03.020 --> 00:05:04.260
+Anda mengatur kunci akses.
+
+00:05:04.580 --> 00:05:05.960
+Anda memutuskan wilayah mana menyimpan apa.
+
+00:05:06.380 --> 00:05:07.880
+Dan fleksibel tetapi juga memerlukan usaha.
+
+00:05:08.300 --> 00:05:10.980
+One Lake adalah layanan saat Anda tidak perlu membuat akun penyimpanan.
+
+00:05:11.320 --> 00:05:12.320
+Anda tidak perlu mengelola konten.
+
+00:05:12.440 --> 00:05:13.380
+Anda cukup menggunakannya.
+
+00:05:13.740 --> 00:05:15.800
+Infrastruktur dasarnya sudah ditangani untuk Anda.
+
+00:05:16.420 --> 00:05:18.620
+Satu saliran sangat bagus untuk data di dalam fabrik.
+
+00:05:19.100 --> 00:05:20.500
+Tapi bagaimana dengan data yang berada di tempat lain?
+
+00:05:21.160 --> 00:05:21.720
+Pintasan, sob.
+
+00:05:22.060 --> 00:05:23.040
+Biarkan data tetap di tempatnya.
+
+00:05:23.960 --> 00:05:24.760
+Disilah peran pintasan.
+
+00:05:25.220 --> 00:05:26.380
+Pintasan adalah penunjuk virtual.
+
+00:05:27.080 --> 00:05:28.240
+Anggap saja seperti telek Anda.
+
+00:05:28.240 --> 00:05:33.680
+Dan itu memungkinkan Anda mengakses data di luar One Lake tanpa memindahkan atau menyalinnya.
+
+00:05:34.680 --> 00:05:35.300
+Begini cara kerja.
+
+00:05:35.660 --> 00:05:37.840
+Anda membuat pintasan di dalam lake house atau gudang data.
+
+00:05:38.360 --> 00:05:40.740
+Dan pintasan itu mengarah ke file atau folder di tempat lain.
+
+00:05:41.440 --> 00:05:47.020
+Bisa di akun Azure Data Lake Storage, bucket Amazon S3, Google Cloud Storage, atau workspace fabric lainnya.
+
+00:05:47.780 --> 00:05:48.740
+Datanya tetap di sana.
+
+00:05:48.880 --> 00:05:50.940
+Tapi dari dalam fabric terlihat seperti ada di One Lake.
+
+00:05:51.580 --> 00:05:52.920
+Izinkan saya memberikan skenario nyata.
+
+00:05:52.920 --> 00:05:56.760
+Tim penjualan Anda telah menjalankan analitik di AWS selama bertahun-tahun.
+
+00:05:56.860 --> 00:05:58.460
+Jadi semua data mereka tersimpan di bucket S3.
+
+00:05:59.080 --> 00:06:01.340
+Tim keuangan Anda menggunakan fabric dan power BI.
+
+00:06:01.680 --> 00:06:04.180
+Dan mereka perlu menggabungkan data penjualan dengan data keuangan.
+
+00:06:04.820 --> 00:06:07.080
+Di masa lalu, Anda harus mengekspor semuanya dari S3.
+
+00:06:07.280 --> 00:06:07.980
+Mengunggahnya ke Azure.
+
+00:06:08.200 --> 00:06:09.620
+Membangun pipeline agar tetap sinkron.
+
+00:06:09.820 --> 00:06:10.800
+Dan berharap tidak ada yang rusak.
+
+00:06:11.460 --> 00:06:14.420
+Dengan shortcut, Anda membuat pintasan dari lake house Anda ke bucket S3.
+
+00:06:15.060 --> 00:06:15.940
+Datanya tetap di AWS.
+
+00:06:15.940 --> 00:06:19.080
+Tetapi bagian keuangan dapat menanyakannya di power BI seolah-olah data tersebut ada banyak.
+
+00:06:19.480 --> 00:06:20.760
+Tidak perlu ekspor, tidak perlu unggah.
+
+00:06:20.860 --> 00:06:21.980
+Dan tidak ada pipeline yang perlu dihajar.
+
+00:06:21.980 --> 00:06:23.460
+Shortcut juga berfungsi secara internal.
+
+00:06:24.060 --> 00:06:26.500
+Jika satu tim memiliki kumpulan data terkurasi di ruang kerja mereka,
+
+00:06:26.620 --> 00:06:28.260
+tim lain dapat membuat pintasan ke data tersebut.
+
+00:06:28.960 --> 00:06:30.360
+Tidak ada penyalinan, tidak ada duplikasi.
+
+00:06:30.920 --> 00:06:32.520
+Data tetap berada di ruang kerja asli.
+
+00:06:32.700 --> 00:06:34.140
+Dan semua orang hanya mereferensikannya.
+
+00:06:34.640 --> 00:06:35.920
+Ada satu batasan yang perlu Anda pahami.
+
+00:06:36.860 --> 00:06:40.500
+Shortcut tidak menyalin data, jadi kinerja query bergantung pada kecepatan sistem sumber.
+
+00:06:41.220 --> 00:06:43.700
+Jika Anda membuat pintasan ke bucket S3 di belahan dunia lain,
+
+00:06:43.700 --> 00:06:46.120
+query Anda akan lebih lambat daripada jika datanya bersifat log.
+
+00:06:46.440 --> 00:06:47.460
+Untuk data yang sering diakses,
+
+00:06:47.540 --> 00:06:49.400
+seperti bangkan untuk melakukan mirroring sebagai ganti.
+
+00:06:50.060 --> 00:06:51.580
+Dan itu membawa kita ke topik berikutnya.
+
+00:06:51.580 --> 00:06:54.120
+Mirroring secara otomatis memasuk data basisnya.
+
+00:06:54.620 --> 00:06:57.000
+Shortcut menangani penyimpanan file eksternal dengan sangat baik,
+
+00:06:57.160 --> 00:06:58.980
+tetapi bagaimana dengan basis data Anda yang sudah ada?
+
+00:06:59.420 --> 00:07:02.720
+Yang menjalankan ERP, CRM, dan aplikasi operasional Anda.
+
+00:07:03.440 --> 00:07:04.460
+Disitulah mirroring berperan.
+
+00:07:04.900 --> 00:07:07.900
+Mirroring adalah cara untuk mendapatkan data dari basis data ke dalam one leg
+
+00:07:07.900 --> 00:07:09.900
+secara mendekati waktu nyata tanpa membangun satu penpep.
+
+00:07:09.900 --> 00:07:12.420
+Anda mengarahkan fabrik ke basis data Anda,
+
+00:07:12.640 --> 00:07:15.800
+dan ia menangani sisanya dengan membuat salinan incremental otomatis dari data tersebut
+
+00:07:15.800 --> 00:07:17.560
+ke dalam format data parquet di dalam one leg,
+
+00:07:17.780 --> 00:07:19.820
+menjaga salinan itu tetap mutakhir seiring perubahan di sumber.
+
+00:07:19.820 --> 00:07:24.500
+Sumber yang didukung termasuk SCL database, SCL server yang berjalan di lokasi on-premises,
+
+00:07:24.660 --> 00:07:27.460
+Cosmos DB, dan lainnya, serta Microsoft terus menamanya seiring waktu.
+
+00:07:28.060 --> 00:07:30.840
+Namun, skenario yang paling umum adalah basis data kritis bisnis Anda
+
+00:07:30.840 --> 00:07:33.000
+yang menjalankan ERP atau aplikasi lini bisnis Anda.
+
+00:07:33.600 --> 00:07:34.120
+Begini cara kerja.
+
+00:07:34.240 --> 00:07:36.600
+Anda mengaktifkan mirroring pada basis data,
+
+00:07:36.760 --> 00:07:39.440
+dan fabrik membaca feed perubahan penyisipan pembaruan penghapusan
+
+00:07:39.440 --> 00:07:41.240
+dan mereplikasi perubahan tersebut ke dalam one leg.
+
+00:07:41.240 --> 00:07:43.860
+Sinkronisasi pertama menyalin seluruh kumpulan data.
+
+00:07:44.540 --> 00:07:46.020
+Setelah itu, bersifat incremental,
+
+00:07:46.620 --> 00:07:48.040
+hanya memindahkan baris yang berubah.
+
+00:07:48.640 --> 00:07:52.420
+Data tersebut mendarat dalam format delta parquet siap untuk diquery oleh mesin fabrik apapun.
+
+00:07:52.860 --> 00:07:54.120
+Inilah perbedaan utama dari shortcut.
+
+00:07:54.920 --> 00:07:56.880
+Shortcut tidak menyalin data mereka menunjukkan data tersebut.
+
+00:07:57.360 --> 00:07:58.660
+Mirroring benar-benar menyalin data,
+
+00:07:58.920 --> 00:08:00.780
+sehingga data berada di one leg secara fisik,
+
+00:08:00.920 --> 00:08:04.820
+dan kinerja query menjadi cepat terlepas dari seberapa cepat atau lambat basis data sumbernya.
+
+00:08:05.680 --> 00:08:07.420
+Komprominya adalah Anda menyimpan salinan,
+
+00:08:07.540 --> 00:08:09.500
+tetapi keuntungannya adalah akses mendekati waktu nyata
+
+00:08:09.500 --> 00:08:10.580
+tanpa perlu membangun pipeline,
+
+00:08:10.680 --> 00:08:11.300
+tanpa penuh pipeline,
+
+00:08:11.420 --> 00:08:12.280
+tanpa manajemen jadwal,
+
+00:08:12.380 --> 00:08:13.760
+dan tanpa pemeliharaan yang perlu dikhawatirkan.
+
+00:08:13.840 --> 00:08:15.260
+Ijinkan saya memberikan contoh kasus yang nyata.
+
+00:08:15.680 --> 00:08:17.860
+Perusahaan Anda menjalankan ERP di SQL Server
+
+00:08:17.860 --> 00:08:19.480
+yang menampung semua data keuangan,
+
+00:08:19.960 --> 00:08:20.720
+faktur pembayaran,
+
+00:08:21.120 --> 00:08:21.860
+dan buku besar.
+
+00:08:22.560 --> 00:08:25.480
+Di masa lalu, Anda harus membangun tugas ETL yang berjalan setiap malam,
+
+00:08:25.620 --> 00:08:26.200
+mengekstrak data,
+
+00:08:26.320 --> 00:08:26.760
+mengubahnya,
+
+00:08:26.960 --> 00:08:27.960
+dan memuatnya ke gudang data.
+
+00:08:28.420 --> 00:08:29.280
+Tugas itu sering rusak,
+
+00:08:29.380 --> 00:08:30.340
+seseorang harus memperbaikinya,
+
+00:08:30.340 --> 00:08:32.360
+dan datanya selalu tertinggal setidaknya satu hari.
+
+00:08:32.720 --> 00:08:33.280
+Dengan mirroring,
+
+00:08:33.400 --> 00:08:34.600
+Anda cukup mengaktifkannya sekali,
+
+00:08:34.720 --> 00:08:37.080
+dan Fabric akan mereplikasi data ke OneLag secara berkelanjutan.
+
+00:08:37.460 --> 00:08:39.480
+Laporan Power BI Anda membaca langsung dari OneLag
+
+00:08:39.480 --> 00:08:41.220
+dan melihat data yang baru berusia beberapa menit,
+
+00:08:41.340 --> 00:08:42.000
+bukan jam atau hari,
+
+00:08:42.100 --> 00:08:43.000
+tanpa harus menyentuh pipeline.
+
+00:08:43.360 --> 00:08:45.480
+Kini Anda memiliki data di OneLag dari pintasan,
+
+00:08:45.900 --> 00:08:46.500
+dari mirroring,
+
+00:08:46.600 --> 00:08:47.480
+dan dari unggahan langsung.
+
+00:08:47.860 --> 00:08:48.580
+Bagaimana cara benar menggunakan?
+
+00:08:49.080 --> 00:08:50.500
+OneLag dan 3 penyimpanan data.
+
+00:08:51.120 --> 00:08:52.480
+Jadi OneLag adalah lapisan penyimpanan,
+
+00:08:52.620 --> 00:08:53.680
+tempat semua file Anda berada.
+
+00:08:54.260 --> 00:08:55.060
+Namun masalahnya,
+
+00:08:55.160 --> 00:08:56.720
+Anda sebenarnya tidak bekerja langsung dengan OneLag.
+
+00:08:56.940 --> 00:08:57.860
+Sebagai gantinya,
+
+00:09:00.340 --> 00:09:02.560
+DataStore, yaitu antarmuka yang memberi Anda cara berbeda
+
+00:09:02.560 --> 00:09:03.820
+untuk mengolah data dasar yang sama.
+
+00:09:04.660 --> 00:09:06.160
+Ada 3 data store utama di Fabric,
+
+00:09:06.420 --> 00:09:08.100
+yaitu LakeHouse, Warehouse, dan EventHouse.
+
+00:09:08.620 --> 00:09:10.260
+Semuanya menyimpan data di OneLag yang sama,
+
+00:09:10.480 --> 00:09:12.000
+namun masing-masing memiliki tujuan yang berbeda.
+
+00:09:12.620 --> 00:09:13.780
+Mari kita mulai dengan LakeHouse,
+
+00:09:13.880 --> 00:09:14.980
+penyimpanan data fleksibel
+
+00:09:14.980 --> 00:09:17.240
+yang menerima file seperti CSV, JSON, dan gambar,
+
+00:09:17.340 --> 00:09:18.020
+serta tabel Delta.
+
+00:09:18.640 --> 00:09:20.480
+Anda menggunakannya saat melakukan rekayasa data,
+
+00:09:20.580 --> 00:09:21.240
+pembelajaran mesin,
+
+00:09:21.340 --> 00:09:22.840
+atau menampung data mentah dari sistem sumber.
+
+00:09:23.300 --> 00:09:24.920
+Ini adalah wadah kerja tempat Anda membersihkan,
+
+00:09:25.000 --> 00:09:25.900
+mengubah, dan menyiapkan data.
+
+00:09:25.900 --> 00:09:28.040
+Jika Anda sedang membangun arsitektur medali
+
+00:09:28.040 --> 00:09:29.640
+dengan lapisan perunggu, perak, dan emas,
+
+00:09:29.740 --> 00:09:30.720
+LakeHouse adalah tempatnya.
+
+00:09:31.260 --> 00:09:33.080
+Anda dapat mengaksesnya melalui notebook Spark,
+
+00:09:33.500 --> 00:09:36.040
+atau melalui titik akhir analitik SQL untuk query baca saja.
+
+00:09:36.980 --> 00:09:38.920
+Selanjutnya adalah Warehouse, penyimpanan data terstruktur.
+
+00:09:39.460 --> 00:09:41.780
+Ini memberi Anda dukungan baca dan tulis di SQL penuh,
+
+00:09:41.920 --> 00:09:43.420
+sehingga Anda bisa membuat tabel, view,
+
+00:09:43.600 --> 00:09:44.740
+prosedur tersimpan, fungsi,
+
+00:09:44.840 --> 00:09:47.380
+serta menjalankan pernyataan insert, update, dan delete.
+
+00:09:48.420 --> 00:09:50.400
+Rasanya seperti database SQL server tradisional,
+
+00:09:50.540 --> 00:09:52.140
+karena dirancang bagi mereka yang berpikir dalam SQL.
+
+00:09:52.140 --> 00:09:54.480
+Gunakan Warehouse saat Anda membangun laporan BI,
+
+00:09:54.680 --> 00:09:56.000
+menjalankan agregasi kompleks,
+
+00:09:56.120 --> 00:09:57.960
+atau bermigrasi dari gudang data yang sudah ada.
+
+00:09:58.460 --> 00:10:00.480
+Anggap ini sebagai lapisan emas untuk laporan perusahaan.
+
+00:10:00.920 --> 00:10:02.900
+Lalu ada EventHouse, penyimpanan data real-time
+
+00:10:02.900 --> 00:10:04.140
+yang dibangun di atas mesin kustod,
+
+00:10:04.240 --> 00:10:05.920
+teknologi yang sama dibalik Azure Data Explorer.
+
+00:10:06.420 --> 00:10:08.600
+Ini menangani data streaming, log, telemetri IoT,
+
+00:10:08.740 --> 00:10:10.500
+dan klik stream apapun yang masuk dengan cepat
+
+00:10:10.500 --> 00:10:11.560
+dan perlu segera diquery.
+
+00:10:12.220 --> 00:10:14.180
+Anda mengueringnya dengan kaki albasa query kustod.
+
+00:10:14.820 --> 00:10:16.760
+Dan saat Anda mengaktifkan ketersediaan OneLake,
+
+00:10:17.200 --> 00:10:18.760
+data kejen tersebut dapat diakses oleh
+
+00:10:18.760 --> 00:10:20.460
+LakeHouse dan Warehouse sebagai tabel delta.
+
+00:10:20.460 --> 00:10:22.120
+Jadi inilah yang perlu Anda pahami.
+
+00:10:22.640 --> 00:10:24.300
+Ketiganya menyimpan data mereka di OneLake yang sama.
+
+00:10:24.940 --> 00:10:27.420
+Tabel yang dibuat di LakeHouse dapat dibaca oleh Query Warehouse.
+
+00:10:27.940 --> 00:10:30.080
+Tabel di Warehouse dapat diakses dari buku catatan Spark.
+
+00:10:30.720 --> 00:10:32.260
+Data yang dimasukkan ke EventHouse dapat ditampilkan
+
+00:10:32.260 --> 00:10:33.580
+sebagai tabel delta untuk Power BI.
+
+00:10:34.220 --> 00:10:35.800
+Keduanya bukan basis data terpisah,
+
+00:10:35.900 --> 00:10:37.240
+melainkan tampil beda ke data Lake yang sama.
+
+00:10:37.660 --> 00:10:38.520
+Hanya orang salah, amin-amin.
+
+00:10:38.880 --> 00:10:40.720
+Mereka mengira LakeHouse, Warehouse, dan EventHouse
+
+00:10:40.720 --> 00:10:41.600
+adalah produk yang bersaing,
+
+00:10:41.680 --> 00:10:41.960
+padahal bukan.
+
+00:10:42.720 --> 00:10:43.900
+Anda justru menggunakan ketiganya
+
+00:10:43.900 --> 00:10:45.520
+karena masing-masing menyelesaikan masalah yang berbeda.
+
+00:10:45.980 --> 00:10:47.060
+LakeHouse untuk rekayasa data,
+
+00:10:47.060 --> 00:10:48.800
+Warehouse untuk BI, EventHouse untuk waktu nyata,
+
+00:10:48.880 --> 00:10:50.440
+dan semuanya berbagi penyimpanan yang sama.
+
+00:10:51.020 --> 00:10:52.100
+OneLake menangani penyimpanan
+
+00:10:52.100 --> 00:10:54.060
+dan penyimpanan data menangani aksesnya.
+
+00:10:54.700 --> 00:10:55.580
+Namun siapa yang bisa melihat apa?
+
+00:10:56.380 --> 00:10:57.640
+Keamanan dan tata kelola di OneLake.
+
+00:10:58.340 --> 00:10:59.960
+Karena semua data Anda berada di satu tempat,
+
+00:11:00.100 --> 00:11:01.140
+keamanan menjadi lebih sederhana.
+
+00:11:01.800 --> 00:11:03.280
+Anda mengelola akses di satu titik,
+
+00:11:03.400 --> 00:11:04.620
+bukan di 10 sistem yang berbeda.
+
+00:11:05.440 --> 00:11:07.100
+Tidak perlu lagi mengatur izin di CRM,
+
+00:11:07.480 --> 00:11:08.180
+lalu di Warehouse,
+
+00:11:08.280 --> 00:11:09.120
+kemudian di Power BI.
+
+00:11:09.620 --> 00:11:10.460
+OneLake memberikan Anda
+
+00:11:10.460 --> 00:11:11.900
+satu model keamanan untuk segalanya.
+
+00:11:11.900 --> 00:11:13.360
+Pada tingkat atas,
+
+00:11:13.460 --> 00:11:14.580
+Anda memiliki peran ruang kerja,
+
+00:11:14.720 --> 00:11:16.660
+admin, anggota, kontributor, dan penampil.
+
+00:11:17.480 --> 00:11:18.840
+Ini mengontrol siapa yang dapat bekerja tertentu.
+
+00:11:19.500 --> 00:11:20.620
+Jika seseorang adalah penampil,
+
+00:11:20.780 --> 00:11:21.600
+mereka dapat melihat item,
+
+00:11:21.700 --> 00:11:22.560
+tetapi tidak dapat mengubah.
+
+00:11:22.900 --> 00:11:23.740
+Jika mereka adalah admin,
+
+00:11:23.820 --> 00:11:24.600
+mereka mengontrol segala.
+
+00:11:24.880 --> 00:11:25.380
+Bukup sederhana,
+
+00:11:25.740 --> 00:11:26.680
+Anda bisa melangkah lebih cepat.
+
+00:11:27.180 --> 00:11:28.060
+Peran keamanan OneLake
+
+00:11:28.060 --> 00:11:29.340
+memungkinkan Anda mengontrol akses
+
+00:11:29.340 --> 00:11:30.000
+di tingkat folder,
+
+00:11:30.140 --> 00:11:30.620
+tingkat tabel,
+
+00:11:30.680 --> 00:11:31.180
+tingkat kolom,
+
+00:11:31.280 --> 00:11:31.980
+bahkan tingkat kolom,
+
+00:11:31.980 --> 00:11:32.700
+bahkan tingkat baris.
+
+00:11:32.920 --> 00:11:34.180
+Misalnya, keamanan tingkat kolom
+
+00:11:34.180 --> 00:11:35.900
+berarti Anda dapat menyembunyikan informasi gaji
+
+00:11:35.900 --> 00:11:37.180
+dari semua orang kecuali HR.
+
+00:11:37.760 --> 00:11:38.520
+Keamanan tingkat baris
+
+00:11:38.520 --> 00:11:39.700
+berarti manajer penjualan
+
+00:11:39.700 --> 00:11:41.060
+hanya melihat data wilayah mereka sendiri.
+
+00:11:41.360 --> 00:11:42.500
+Dan ini berfungsi dengan cara yang sama
+
+00:11:42.500 --> 00:11:43.440
+di semua penyimpanan data
+
+00:11:43.440 --> 00:11:44.840
+karena semuanya berada di OneLake yang sama.
+
+00:11:45.140 --> 00:11:46.120
+Ada juga katalog OneLake,
+
+00:11:46.240 --> 00:11:47.720
+tampilan terpusat tempat Anda dapat melihat
+
+00:11:47.720 --> 00:11:48.860
+semua data di semua ruang kerja.
+
+00:11:49.260 --> 00:11:50.940
+Anda dapat menemukan set data bersertifikat,
+
+00:11:51.080 --> 00:11:52.000
+memeriksa siapa pemiliknya,
+
+00:11:52.240 --> 00:11:53.660
+dan mengelola tetap kelola dari satu tempat.
+
+00:11:54.300 --> 00:11:55.700
+Ini terintegrasi dengan Microsoft Purview
+
+00:11:55.700 --> 00:11:56.500
+untuk klasifikasi,
+
+00:11:56.680 --> 00:11:57.500
+label sensitivitas,
+
+00:11:57.640 --> 00:11:58.860
+dan penjagaan kehilangan data.
+
+00:11:59.580 --> 00:12:00.960
+Jadi, jika Anda perlu menandai data
+
+00:12:00.960 --> 00:12:01.920
+tertentu sebagai rahasia
+
+00:12:01.920 --> 00:12:02.740
+atau sangat terbatas,
+
+00:12:02.740 --> 00:12:04.020
+Anda dapat melakukannya di tingkat lake
+
+00:12:04.020 --> 00:12:05.520
+dan itu berlaku di mana saja.
+
+00:12:06.200 --> 00:12:07.280
+Dan ada diagnostik OneLake
+
+00:12:07.280 --> 00:12:08.620
+yang mencatat siapa yang mengakses apa
+
+00:12:08.620 --> 00:12:09.120
+dan kapan.
+
+00:12:09.940 --> 00:12:10.880
+Ini berguna untuk audit,
+
+00:12:11.020 --> 00:12:11.760
+pemeriksaan kepatuhan,
+
+00:12:11.880 --> 00:12:12.620
+dan menjawab pertanyaan
+
+00:12:12.620 --> 00:12:14.000
+siapa yang mengakses data ini minggu lalu.
+
+00:12:14.520 --> 00:12:15.860
+Ini mencatat setiap operasi baca
+
+00:12:15.860 --> 00:12:17.360
+dan tulis serta menyimpan log tersebut
+
+00:12:17.360 --> 00:12:18.840
+sebagai file JSON di dalam lake house.
+
+00:12:19.480 --> 00:12:20.380
+Anda dapat menganalisisnya
+
+00:12:20.380 --> 00:12:21.820
+dengan Spark SQL atau Power BI.
+
+00:12:22.400 --> 00:12:23.300
+Gambaran besarnya adalah
+
+00:12:23.300 --> 00:12:24.620
+satu model keamanan
+
+00:12:24.620 --> 00:12:25.600
+untuk semua data Anda
+
+00:12:25.600 --> 00:12:27.400
+alih-alih mengelola aturan terpisah
+
+00:12:27.400 --> 00:12:28.060
+untuk setiap alat.
+
+00:12:28.560 --> 00:12:29.480
+Itu adalah penyederhanaan
+
+00:12:29.480 --> 00:12:31.060
+yang sangat besar bagi organisasi manapun.
+
+00:12:31.060 --> 00:12:32.580
+Poin praktis
+
+00:12:32.580 --> 00:12:33.840
+Sepertinya ini bagi Anda.
+
+00:12:34.280 --> 00:12:35.180
+Jadi apa artinya ini
+
+00:12:35.180 --> 00:12:36.300
+jika Anda memulai perjalanan
+
+00:12:36.300 --> 00:12:37.140
+fabrik Anda hari ini?
+
+00:12:37.620 --> 00:12:38.180
+Mari kita bedah.
+
+00:12:38.600 --> 00:12:39.260
+Jika Anda membangun
+
+00:12:39.260 --> 00:12:40.040
+platform data baru,
+
+00:12:40.360 --> 00:12:41.420
+OneLake menghilangkan kebutuhan
+
+00:12:41.420 --> 00:12:42.960
+untuk merancang perpindahan data yang rumit.
+
+00:12:43.340 --> 00:12:44.440
+Anda tidak perlu merencanakan
+
+00:12:44.440 --> 00:12:45.540
+bagaimana aliran data
+
+00:12:45.540 --> 00:12:46.760
+dari danau ke gudang,
+
+00:12:47.300 --> 00:12:48.580
+lalu ke model semantik.
+
+00:12:49.040 --> 00:12:49.900
+Cukup masukkan ke dalam OneLake
+
+00:12:49.900 --> 00:12:50.880
+dan setiap alat akan membacanya.
+
+00:12:51.200 --> 00:12:52.100
+Satu OneLake, satu salin.
+
+00:12:52.420 --> 00:12:53.280
+Telah keseluruhan setelah.
+
+00:12:53.640 --> 00:12:55.240
+Jika Anda bermigrasi dari sistem lama,
+
+00:12:55.380 --> 00:12:56.240
+pintasan dan pencerminan
+
+00:12:56.240 --> 00:12:56.900
+memungkinkan Anda
+
+00:12:56.900 --> 00:12:58.220
+membiarkan data tetap di tempatnya
+
+00:12:58.220 --> 00:12:59.740
+sambil beralih beban kerja secara bertahap.
+
+00:12:59.900 --> 00:13:01.040
+Tidak perlu migrasi besar-besaran.
+
+00:13:01.580 --> 00:13:02.860
+Arahkan pintasan ke data lag Anda
+
+00:13:02.860 --> 00:13:03.420
+yang sudah ada.
+
+00:13:03.580 --> 00:13:05.260
+Cerminkan basis data SQL Server Anda.
+
+00:13:05.560 --> 00:13:06.280
+Mulai gunakan fabrik
+
+00:13:06.280 --> 00:13:07.240
+sementara sistem lama Anda
+
+00:13:07.240 --> 00:13:07.820
+tetap berjalan.
+
+00:13:08.100 --> 00:13:09.080
+Anda bergerak soal kecepatan Anda.
+
+00:13:09.460 --> 00:13:10.620
+Inilah perubahan pola pikirnya.
+
+00:13:10.980 --> 00:13:12.040
+Berpikir tentang penyimpanan per proyek.
+
+00:13:12.640 --> 00:13:13.780
+Berhentilah membuat data lag baru
+
+00:13:13.780 --> 00:13:14.780
+untuk setiap inisiatif baru.
+
+00:13:15.340 --> 00:13:16.120
+Mulai berpikir tentang
+
+00:13:16.120 --> 00:13:16.960
+satu danau bersama
+
+00:13:16.960 --> 00:13:18.240
+yang diakses oleh setiap proyek.
+
+00:13:18.760 --> 00:13:19.820
+Data tim penjualan Anda,
+
+00:13:20.000 --> 00:13:20.920
+data tim keuangan Anda,
+
+00:13:21.020 --> 00:13:21.720
+data tim teknik Anda.
+
+00:13:22.040 --> 00:13:23.000
+Semuanya ada di tempat yang sama.
+
+00:13:23.400 --> 00:13:24.520
+Mereka hanya melihat bagian yang berbeda.
+
+00:13:24.900 --> 00:13:25.820
+Bagi pengguna Power BI,
+
+00:13:26.040 --> 00:13:27.200
+laporan membaca langsung dari OneLag.
+
+00:13:27.600 --> 00:13:28.420
+Tidak ada impor terpisah,
+
+00:13:28.520 --> 00:13:29.660
+tidak ada model semantik duplikat.
+
+00:13:30.100 --> 00:13:30.760
+Datanya segar
+
+00:13:30.760 --> 00:13:31.860
+karena merupakan data yang sama
+
+00:13:31.860 --> 00:13:32.980
+dengan dikerjakan oleh data engineer.
+
+00:13:33.400 --> 00:13:34.100
+Bagi data engineer,
+
+00:13:34.240 --> 00:13:35.460
+itu berarti lebih sedikit pipeline
+
+00:13:35.460 --> 00:13:36.080
+untuk dibangun,
+
+00:13:36.180 --> 00:13:37.080
+dipelihara, dan diperbaiki.
+
+00:13:37.500 --> 00:13:38.540
+Anda masukkan data satu kali sih.
+
+00:13:38.720 --> 00:13:39.860
+Semua orang hanya mereferensikannya.
+
+00:13:40.200 --> 00:13:40.680
+Intinya adalah,
+
+00:13:40.800 --> 00:13:42.560
+OneLag bukan sekadar data lag biasa.
+
+00:13:43.020 --> 00:13:43.720
+Ini adalah fondasi
+
+00:13:43.720 --> 00:13:44.560
+yang membuat fabrik berbeda
+
+00:13:44.560 --> 00:13:45.380
+dari apapun sebelumnya.
+
+00:13:46.020 --> 00:13:47.060
+Itulah alasan Anda bisa berhenti
+
+00:13:47.060 --> 00:13:48.480
+menyalin data dan mulai mempercayainya.
+
+00:13:49.200 --> 00:13:49.940
+Jadi itulah dia.
+
+00:13:50.320 --> 00:13:51.200
+OneLag adalah data lag
+
+00:13:51.200 --> 00:13:52.180
+tunggal organisasi Anda
+
+00:13:52.180 --> 00:13:52.940
+yang dibangun dengan
+
+00:13:52.940 --> 00:13:54.000
+prinsip satu salinan.
+
+00:13:54.680 --> 00:13:55.440
+Satu salin fisik data
+
+00:13:55.440 --> 00:13:56.700
+yang dapat diakses oleh alat apapun,
+
+00:13:56.800 --> 00:13:57.280
+tim apapun,
+
+00:13:57.400 --> 00:13:58.200
+beban kerja apapun.
+
+00:13:58.700 --> 00:13:59.680
+Tidak ada lagi duplikasi,
+
+00:13:59.800 --> 00:14:00.700
+tidak ada lagi kebingungan
+
+00:14:00.700 --> 00:14:01.740
+tentang versi mana yang benar.
+
+00:14:02.120 --> 00:14:03.140
+Pekerjaan rumah Anda sederhana.
+
+00:14:03.460 --> 00:14:04.360
+Mulailah dengan pintasan
+
+00:14:04.360 --> 00:14:05.260
+dari sumber eksternal
+
+00:14:05.260 --> 00:14:06.340
+atau cerminkan basis data.
+
+00:14:07.100 --> 00:14:08.040
+Lihat betapa sederhananya
+
+00:14:08.040 --> 00:14:08.760
+jika Anda tidak perlu
+
+00:14:08.760 --> 00:14:09.320
+membangun pipeline
+
+00:14:09.320 --> 00:14:10.480
+hanya untuk memindahkan data.
+
+00:14:11.080 --> 00:14:11.880
+Kebanyakan organisasi
+
+00:14:11.880 --> 00:14:13.160
+tidak akan melakukan perubahan ini dengan cepat.
+
+00:14:13.460 --> 00:14:14.180
+Jadi lapih yang melakukan.
+
+00:14:14.180 --> 00:14:15.880
+Jika episode ini membantu Anda
+
+00:14:15.880 --> 00:14:16.700
+memahami OneLag,
+
+00:14:16.980 --> 00:14:18.620
+berlanggananlah Microsoft Knowledge Nuggets
+
+00:14:18.620 --> 00:14:19.800
+untuk konten fabric lainnya
+
+00:14:19.800 --> 00:14:20.740
+dalam bahasa yang sederhana.
+
+00:14:21.300 --> 00:14:22.220
+Dan bagikan ini kepada
+
+00:14:22.220 --> 00:14:23.320
+seseorang yang masih mengelola
+
+00:14:23.320 --> 00:14:23.920
+lima data list.
+
+00:14:24.180 --> 00:14:24.780
+Mereka berima kasih.
+
+00:14:24.780 --> 00:14:54.760
+Seseorang yang masih mengelola

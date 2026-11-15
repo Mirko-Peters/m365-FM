@@ -1,0 +1,119 @@
+name: Sponsor-Reihe Cognillo (schreiben, freigeben, taeglich live)
+# Drei Modi (Beschreibung: SPONSOR_POSTS.md im Hauptordner):
+#  schreiben  - von Hand: Sonnet schreibt die Beitraege (status: review, publish: false) und je 3 LinkedIn-Texte; es geht NICHTS live. Standard dry_run = nur Prompt und Kostenschaetzung.
+#  freigeben  - von Hand: setzt im Plan freigegeben=true fuer die Nummern (nur fuer Entwuerfe). Kein API-Aufruf.
+#  taeglich   - Cron 04:20 UTC: schaltet den fruehesten freigegebenen Entwurf (date <= heute) auf approved/publish true. Normal EIN Beitrag je Lauf, nach einem verpassten Lauf
+#               hoechstens 2 (aelteste zuerst, ::warning:: mit dem Rest). Gesponserte Beitraege kommen zugleich unter "posts" in data/sponsorships.json (dauerhafte Kennzeichnung). Kein API-Aufruf.
+# Kosten: Kostenbuch data/spend.json, Schluessel "sponsor-cognillo"; eigene Gesamtgrenze SPONSOR_POSTS_BUDGET_USD (Repo-Variable, Standard 50), unabhaengig von ARTICLE_BUDGET_USD.
+# Speichern wie articles.yml (Commit, dann pull --rebase und push in einer Schleife; spend.json je Schluessel zusammenfuehren).
+# TODO Staging-Umbau (claude/staging-schritt1/2): der Speichern-Schritt pusht heute auf main und muss spaeter auf den Zweig "staging" umgestellt werden.
+on:
+  schedule:
+    - cron: "20 4 * * *"   # taeglich 04:20 UTC (Modus taeglich); der naechtliche Seitenbau (site.yml 01:07 UTC) nimmt den Beitrag in der Nacht danach auf
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "schreiben = Beitraege und LinkedIn-Texte entwerfen (nichts geht live) | freigeben = Entwuerfe fuer die taegliche Veroeffentlichung freigeben | taeglich = den taeglichen Lauf von Hand ausfuehren"
+        type: choice
+        options: [schreiben, freigeben, taeglich]
+        default: schreiben
+      von: { description: "schreiben: erste Nummer (leer = ab der kleinsten noch nicht geschriebenen)", required: false, default: "" }
+      bis: { description: "schreiben: letzte Nummer (leer = bis zur letzten noch nicht geschriebenen)", required: false, default: "" }
+      nummern: { description: "freigeben: Nummern, z. B. 1-62 oder 1-10,15", required: false, default: "" }
+      date: { description: "taeglich: Zieldatum JJJJ-MM-TT (leer = heute, UTC)", required: false, default: "" }
+      dry_run: { description: "true = nichts aendern und nichts bezahlen (schreiben: nur Prompt und Kostenschaetzung; freigeben/taeglich: nur anzeigen)", type: boolean, default: true }
+permissions:
+  contents: write
+concurrency:
+  group: sponsor-posts
+  cancel-in-progress: false
+jobs:
+  sponsor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350   # schreiben: 62 Beitraege nacheinander, je Beitrag einige Minuten
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      AI_GATEWAY_ID: ${{ vars.AI_GATEWAY_ID || 'm365fm' }}
+      CF_AIG_TOKEN: ${{ secrets.CF_AIG_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Kostenbuch je Schluessel zusammenfuehren (data/spend.json, auch bei pull --rebase; Schluessel anderer Jobs bleiben)
+        run: |
+          cp tools/spend_merge.py "$RUNNER_TEMP/spend_merge.py"; echo 'data/spend.json merge=spendjson' >> .git/info/attributes
+          git config merge.spendjson.driver "python3 $RUNNER_TEMP/spend_merge.py %O %A %B"
+      - name: Ausfuehren und speichern
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}   # derselbe Schluessel wie articles.yml
+          SPONSOR_POSTS_BUDGET_USD: ${{ vars.SPONSOR_POSTS_BUDGET_USD || '50' }}   # harte Gesamtgrenze der Reihe in USD (Sicherung gegen Endlosschleifen), ohne Codeaenderung anpassbar
+          SPONSOR_POSTS_MODEL: ${{ vars.SPONSOR_POSTS_MODEL || 'claude-sonnet-5-5' }}
+          MODE: ${{ inputs.mode || 'taeglich' }}   # Cron hat keine Eingaben: taeglich
+          VON: ${{ inputs.von }}
+          BIS: ${{ inputs.bis }}
+          NUMMERN: ${{ inputs.nummern }}
+          DATE_IN: ${{ inputs.date }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}   # Cron: nie Dry-Run; Handstart: Standard true
+          SPONSOR_COMMIT_MSG_FILE: ${{ runner.temp }}/sponsor_commit_msg.txt
+          SPONSOR_WRITTEN_FILE: ${{ runner.temp }}/sponsor_written.txt
+        run: |
+          git config user.name "m365-site-bot"; git config user.email "actions@users.noreply.github.com"
+          # Speichern wie articles.yml: main bewegt sich oft (Bots), deshalb nachziehen und wiederholen. Ohne -X theirs: eine gleichzeitige Aenderung am Plan
+          # (z. B. von Hand gesetzter Status) ginge sonst still verloren; data/spend.json fuehrt der Treiber spendjson je Schluessel zusammen.
+          # Nur vorhandene Pfade stagen: ein fehlender Pfad (z. B. die LinkedIn-Datei vor dem ersten bestandenen Beitrag) liesse sonst das ganze git add scheitern
+          # und das Kostenbuch bliebe ungespeichert. Fehler von git werden nicht versteckt (Schritt rot, Artefakt sponsor-daten sichert die Daten).
+          save() {
+            for p in imports/blog/en data/sponsor_posts_cognillo.json data/sponsor_posts_linkedin_cognillo.json data/spend.json data/sponsorships.json; do
+              if [ -e "$p" ]; then git add -A -- "$p" || { echo "::error::Sponsor-Reihe: git add $p gescheitert - nichts gespeichert (Artefakt sponsor-daten am Lauf)"; return 1; }; fi
+            done
+            if git diff --cached --quiet; then echo "Sponsor-Reihe: nichts zu speichern"; return 0; fi
+            MSG="$(cat "$SPONSOR_COMMIT_MSG_FILE" 2>/dev/null || true)"; [ -n "$MSG" ] || MSG="Cognillo-Beitraege: Kostenbuch aktualisiert"
+            git commit -q -m "$MSG"
+            for i in 1 2 3 4 5; do
+              git fetch -q origin main
+              if git pull --rebase --autostash -q origin main; then
+                if git push -q origin HEAD:main; then echo "Sponsor-Reihe gespeichert: $MSG" | tee -a "$GITHUB_STEP_SUMMARY"; return 0; fi
+              else
+                git rebase --abort 2>/dev/null || true
+              fi
+              sleep $((i*7))
+            done
+            echo "::error::Sponsor-Reihe: Push abgelehnt - Ergebnisse und Kostenbuch liegen NICHT auf main (Artefakt sponsor-daten am Lauf)"; return 1
+          }
+          DRY=""; [ "$DRY_RUN" = "true" ] && DRY="--dry-run"
+          rc=0
+          case "$MODE" in
+            schreiben)
+              ARGS=""; [ -n "$VON" ] && ARGS="$ARGS --von $VON"; [ -n "$BIS" ] && ARGS="$ARGS --bis $BIS"
+              for round in 1 2 3 4 5 6 7 8; do   # je Runde hoechstens 10 Beitraege, danach wird gespeichert (62 Beitraege = 7 Runden)
+                rm -f "$SPONSOR_WRITTEN_FILE" "$SPONSOR_COMMIT_MSG_FILE"
+                python tools/sponsor_post.py schreiben $ARGS --batch 10 $DRY || rc=$?
+                N="$(cat "$SPONSOR_WRITTEN_FILE" 2>/dev/null || echo 0)"
+                save || rc=1
+                [ "$rc" -ne 0 ] && break
+                [ "$N" -lt 10 ] && break
+              done ;;
+            freigeben)
+              rm -f "$SPONSOR_COMMIT_MSG_FILE"
+              python tools/sponsor_post.py freigeben --nummern "$NUMMERN" $DRY || rc=$?
+              save || rc=1 ;;
+            taeglich)
+              rm -f "$SPONSOR_COMMIT_MSG_FILE"
+              python tools/sponsor_post.py taeglich --date "$DATE_IN" $DRY || rc=$?
+              save || rc=1 ;;
+            *) echo "::error::Unbekannter Modus $MODE"; rc=1 ;;
+          esac
+          exit $rc
+      - name: Daten als Artefakt sichern (nur wenn ein Schritt gescheitert ist - bezahlte Ergebnisse gehen nicht mit dem Runner verloren)
+        if: failure() || cancelled()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sponsor-daten
+          path: |
+            imports/blog/en
+            data/sponsor_posts_cognillo.json
+            data/sponsor_posts_linkedin_cognillo.json
+            data/spend.json
+            data/sponsorships.json
+          if-no-files-found: ignore
+          retention-days: 30

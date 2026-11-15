@@ -1,0 +1,1450 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.900
+Selamat datang di episode lain dari Microsoft Knowledge Nuggets di M365FM.
+
+00:00:04.420 --> 00:00:05.360
+Saya pemandu Anda, Milko Peter.
+
+00:00:05.680 --> 00:00:09.540
+Bagaimana jika saya katakan ada alat yang sudah ada di komputer Anda yang dapat mengotomatiskan hampir segalanya?
+
+00:00:09.920 --> 00:00:10.920
+Pikirkan tentang hari kerja yang biasa.
+
+00:00:11.420 --> 00:00:14.840
+Anda masuk, membuka beberapa aplikasi, mengeklik menu yang sama seperti kemarin,
+
+00:00:14.980 --> 00:00:17.080
+menjalankan laporan yang sama, memeriksa layanan yang sama.
+
+00:00:17.380 --> 00:00:20.960
+Mungkin Anda menghabiskan satu jam untuk melakukan sesuatu yang seharusnya hanya butuh lima menit.
+
+00:00:21.240 --> 00:00:22.580
+Alat yang saya maksud adalah PowerShell.
+
+00:00:23.380 --> 00:00:26.120
+Di akhir episode ini, Anda akan memahami apa sebenarnya PowerShell,
+
+00:00:26.120 --> 00:00:30.640
+bagaimana perintahnya bekerja, dan mengapa ini adalah kekuatan tersembunyi dari ekosistem Microsoft.
+
+00:00:31.380 --> 00:00:34.020
+Kita akan mulai dengan ide dasarnya, membahas blok pembangunnya,
+
+00:00:34.200 --> 00:00:37.100
+dan pada akhirnya Anda akan memiliki otomatisasi nyata yang bisa langsung digunakan hari ini.
+
+00:00:37.720 --> 00:00:39.500
+Gambaran besar, apa sebenarnya PowerShell itu?
+
+00:00:40.200 --> 00:00:41.120
+Dari apa sebenarnya PowerShell itu?
+
+00:00:41.540 --> 00:00:44.020
+Kebanyakan orang mendengar main dan mengira itu hanya komen promo yang canggih.
+
+00:00:44.780 --> 00:00:46.460
+PowerShell adalah platform otomatisasi lengkap.
+
+00:00:46.860 --> 00:00:51.200
+Anggaplah ini sebagai command line shell, bahasa scripting, dan alat manajemen jarak jauh yang menjadi satu.
+
+00:00:51.720 --> 00:00:54.660
+Dalam command line shell, Anda mengetik perintah dan mendapatkan hasil,
+
+00:00:54.660 --> 00:00:58.340
+tetapi ini juga merupakan bahasa scripting yang memungkinkan Anda menulis program yang berjalan sendiri
+
+00:00:58.340 --> 00:01:01.400
+dan alat manajemen jarak jauh yang mengontrol puluhan atau ratusan mesin dari satu jendela.
+
+00:01:02.340 --> 00:01:06.000
+20 tahun lalu, mengotomatiskan sesuatu di Windows berarti menggunakan sekumpulan alat yang berbeda.
+
+00:01:06.640 --> 00:01:10.180
+Anda menggunakan file badge untuk tugas sederhana VBScript untuk yang lebih kompleks,
+
+00:01:10.480 --> 00:01:13.580
+dan konsol admin terpisah untuk exchange, active directory, dan file server.
+
+00:01:14.020 --> 00:01:15.040
+Tidak ada satu pun yang saling teruh.
+
+00:01:15.400 --> 00:01:19.100
+Anda harus menyalin data dari satu alat, menempelkannya ke alat lain, dan berharap tidak ada yang hilang.
+
+00:01:19.740 --> 00:01:20.760
+PowerShell mengubah semua itu.
+
+00:01:20.760 --> 00:01:23.540
+Ini adalah satu alat yang terhubung, Windows itu sendiri.
+
+00:01:23.700 --> 00:01:28.800
+Azure, Microsoft 365, Exchange, Teams, SharePoint, Active Directory, dan bahkan mesin Linux sekarang.
+
+00:01:29.340 --> 00:01:32.500
+Anda menggunakan bahasa yang sama, pola yang sama, perintah yang sama, tidak peduli apa yang Anda target.
+
+00:01:32.940 --> 00:01:33.920
+Dan ini task platform.
+
+00:01:34.280 --> 00:01:36.640
+PowerShell 7 berjalan di Windows, Linux, dan macOS.
+
+00:01:37.160 --> 00:01:38.860
+Jadi, di lingkungan campuran Anda tidak perlu berganti alat.
+
+00:01:39.500 --> 00:01:41.720
+Begini intinya, jika Anda bekerja di bidang PI,
+
+00:01:41.940 --> 00:01:43.900
+PowerShell adalah bahasa ekosistem Microsoft.
+
+00:01:44.380 --> 00:01:47.500
+Ini adalah cara Anda berkomunikasi dengan infrastruktur Anda dan mengotomatiskan hal-hal yang membosankan,
+
+00:01:47.500 --> 00:01:49.760
+sehingga Anda bisa fokus pada masalah yang lebih menarik.
+
+00:01:49.760 --> 00:01:53.020
+Namun, sebelum kita masuk ke apa yang bisa dilakukannya, mari kita lihat bagaimana cara kerjanya.
+
+00:01:53.500 --> 00:01:55.760
+Pola kata kerja kata benda, bagaimana perintah PowerShell bekerja?
+
+00:01:56.240 --> 00:01:59.160
+Setiap perintah PowerShell mengikuti pola sederhana yang disebut kata kerja kata benda,
+
+00:01:59.280 --> 00:02:00.620
+for now, dan persis seperti kedengarnya.
+
+00:02:01.160 --> 00:02:03.040
+Kata kerja memberitahu Anda apa yang ingin dilakukan,
+
+00:02:03.220 --> 00:02:06.100
+get, set, new, remove, start, stop.
+
+00:02:06.720 --> 00:02:08.260
+Dan kata benda memberitahu Anda targetnya,
+
+00:02:08.380 --> 00:02:10.600
+seperti proses, service, user, item, atau mailbox.
+
+00:02:11.180 --> 00:02:13.220
+Jadi, get process menampilkan daftar proses yang sedang bekerja.
+
+00:02:13.580 --> 00:02:15.340
+Get service menampilkan semua layanan di komputer Anda.
+
+00:02:15.760 --> 00:02:17.140
+Set date mengubah waktu sistem.
+
+00:02:17.700 --> 00:02:18.940
+Stop service menghentikan sebuah layanan.
+
+00:02:18.940 --> 00:02:21.520
+Polanya sangat konsisten, sehingga setelah mempelajarinya,
+
+00:02:21.680 --> 00:02:23.840
+Anda bisa menebak perintah yang belum pernah dilihat sebelumnya.
+
+00:02:24.180 --> 00:02:25.840
+Ingin memulai layanan? Ketik start service.
+
+00:02:26.200 --> 00:02:27.880
+Perlu menghapus pengguna? Ketik remove user.
+
+00:02:28.320 --> 00:02:29.000
+Sangat mudah.
+
+00:02:29.940 --> 00:02:31.540
+PowerShell dirancang agar mudah ditemukan,
+
+00:02:31.800 --> 00:02:33.700
+jadi Anda tidak perlu menghafal ratusan perintah.
+
+00:02:34.520 --> 00:02:36.800
+Teman terbaik Anda di sini adalah send in the let get comment.
+
+00:02:37.300 --> 00:02:38.840
+Jalankan get comment, non-service,
+
+00:02:39.300 --> 00:02:41.560
+dan perintah ini menampilkan semua perintah yang bekerja dengan layanan.
+
+00:02:42.240 --> 00:02:45.420
+Get service, start service, stop service, restart service, set service,
+
+00:02:45.420 --> 00:02:46.820
+new service, remove service.
+
+00:02:47.260 --> 00:02:48.860
+Semuanya ada di sana, cukup dengan bertanya.
+
+00:02:49.200 --> 00:02:50.180
+Biar saya beri contoh konkret.
+
+00:02:50.680 --> 00:02:52.580
+Katakanlah Anda ingin tahu perintah apa yang bisa mengelola proses.
+
+00:02:53.000 --> 00:02:54.320
+Anda jalankan get comment, non-process.
+
+00:02:55.080 --> 00:02:56.900
+Anda mendapatkan get process, start process,
+
+00:02:57.020 --> 00:02:58.440
+debug process, wait process.
+
+00:02:59.080 --> 00:02:59.880
+Anda tidak perlu menebak.
+
+00:03:00.300 --> 00:03:01.180
+Alat itu memberitahu Anda.
+
+00:03:01.500 --> 00:03:04.280
+Itulah yang membuat PowerShell berbeda dari alat baris perintah lama
+
+00:03:04.280 --> 00:03:06.240
+di mana Anda harus menghafal setiap flag dan switch.
+
+00:03:06.660 --> 00:03:07.640
+Dan inilah mengapa hal itu penting.
+
+00:03:07.900 --> 00:03:10.060
+Anda tidak mempelajari PowerShell dengan menghafal seribu perintah.
+
+00:03:10.360 --> 00:03:11.280
+Anda mempelajari polanya,
+
+00:03:11.500 --> 00:03:12.620
+dan sisanya bisa dipahami sama diberi.
+
+00:03:12.620 --> 00:03:15.180
+Ini seperti mempelajari bahwa setiap kata kerja dalam bahasa
+
+00:03:15.180 --> 00:03:16.300
+mengikuti konjugasi yang sama.
+
+00:03:16.760 --> 00:03:18.660
+Telah tahu aturannya, Anda bisa menerapkannya di mana saja.
+
+00:03:19.000 --> 00:03:21.160
+Namun disinilah PowerShell benar-benar berbeda dari yang lain.
+
+00:03:22.220 --> 00:03:23.960
+Objek bukan teks, adalah pengubah permainan.
+
+00:03:24.580 --> 00:03:26.220
+Jadi inilah hal yang membuat PowerShell
+
+00:03:26.220 --> 00:03:28.620
+secara mendasar berbeda dari semua alat baris perintah sebelumnya.
+
+00:03:29.160 --> 00:03:30.620
+Baris perintah tradisional menghasilkan output.
+
+00:03:30.880 --> 00:03:33.920
+Anda menjalankan perintah dan mendapatkan baris karakter di layar.
+
+00:03:34.300 --> 00:03:34.600
+Hanya itu.
+
+00:03:34.600 --> 00:03:36.800
+Jika ingin melakukan sesuatu dengan output tersebut,
+
+00:03:36.940 --> 00:03:38.160
+Anda harus mengurainya, memotongnya,
+
+00:03:38.260 --> 00:03:39.500
+dan mengekstrak bagian yang diperlukan
+
+00:03:39.500 --> 00:03:41.140
+menggunakan manipulasi string yang sangat rap.
+
+00:03:41.940 --> 00:03:44.100
+Satu spasi saja bergeser, seluruh skrip Anda rusak.
+
+00:03:44.900 --> 00:03:45.960
+PowerShell tidak bekerja seperti itu.
+
+00:03:46.300 --> 00:03:47.280
+PowerShell memberikan objek,
+
+00:03:47.520 --> 00:03:48.980
+data terstruktur dengan properti dan metode.
+
+00:03:49.360 --> 00:03:50.440
+Saat Anda menjalankan gate proses,
+
+00:03:50.540 --> 00:03:51.340
+Anda tidak mendapatkan tablet.
+
+00:03:51.580 --> 00:03:52.720
+Anda mendapatkan objek proses.
+
+00:03:53.120 --> 00:03:54.520
+Masing-masing memiliki properti seperti nama,
+
+00:03:54.640 --> 00:03:56.140
+ID, CPU, memori, waktu mulai,
+
+00:03:56.480 --> 00:03:57.300
+dan metode seperti kill.
+
+00:03:57.560 --> 00:03:58.740
+Anda bisa menarik properti tersebut,
+
+00:03:58.820 --> 00:04:00.300
+memfilternya, mengurutkannya, dan meng-export.
+
+00:04:00.300 --> 00:04:02.140
+Anda bisa melakukan hal-hal dengan data
+
+00:04:02.140 --> 00:04:03.920
+yang biasanya butuh 20 baris pengurian teks
+
+00:04:03.920 --> 00:04:04.860
+hanya dengan satu perintah.
+
+00:04:05.340 --> 00:04:05.940
+Setelah terobosan.
+
+00:04:06.340 --> 00:04:07.000
+Biar saya tunjukkan.
+
+00:04:07.360 --> 00:04:09.400
+Cara lama menggunakan perintah task list common prompt,
+
+00:04:09.580 --> 00:04:10.660
+Anda mendapat tabel teks.
+
+00:04:11.220 --> 00:04:13.660
+Jika ingin mencari proses yang menggunakan CPU lebih dari 50,
+
+00:04:13.860 --> 00:04:15.400
+Anda harus menulis logika pengurian.
+
+00:04:16.020 --> 00:04:18.560
+Anda harus memperhitungkan lebar, kolom, spasi, dan header.
+
+00:04:19.020 --> 00:04:20.240
+Itu berantakan dan sering rusak.
+
+00:04:20.880 --> 00:04:21.980
+Cara PowerShell terlihat seperti ini.
+
+00:04:22.320 --> 00:04:24.180
+Gate proses disalurkan ke where object dengan kondisi,
+
+00:04:24.280 --> 00:04:25.440
+lalu disalurkan ke eksport CSV.
+
+00:04:26.020 --> 00:04:26.680
+Buhannya satu baris.
+
+00:04:26.680 --> 00:04:28.880
+Saring proses yang menggunakan CPU lebih dari 50,
+
+00:04:29.040 --> 00:04:29.920
+simpan ke file CSV.
+
+00:04:30.980 --> 00:04:33.200
+Yang membuat ini semua berhasil adalah sentiment relate gate member.
+
+00:04:33.560 --> 00:04:35.120
+Anda menyalurkan perintah apapun ke gate member
+
+00:04:35.120 --> 00:04:36.960
+dan ia akan menampilkan setiap properti dan metode objek.
+
+00:04:37.140 --> 00:04:38.440
+Seperti mengintip di balik kapasit.
+
+00:04:38.860 --> 00:04:40.100
+Jalankan gate proses gate member
+
+00:04:40.100 --> 00:04:41.400
+dan seketika Anda melihat semuanya.
+
+00:04:41.960 --> 00:04:44.860
+Nama ID handle, CPU, working set, waktu mulai,
+
+00:04:45.020 --> 00:04:47.280
+dan metode seperti kill, refresh, wait for exit.
+
+00:04:48.000 --> 00:04:49.420
+Anda tidak perlu menempat data yang tersedia.
+
+00:04:49.800 --> 00:04:50.620
+Alatnya memberitahu Anda.
+
+00:04:50.880 --> 00:04:51.640
+Ini skenario dunia nyata.
+
+00:04:52.080 --> 00:04:53.580
+Katakanlah Anda admin 50 server.
+
+00:04:53.700 --> 00:04:56.020
+Anda perlu mencari semua layanan yang berhenti di semuanya.
+
+00:04:56.580 --> 00:04:57.980
+Cara lama Anda masuk ke step server,
+
+00:04:58.120 --> 00:04:59.120
+buka services.msi,
+
+00:04:59.120 --> 00:05:01.100
+di cek manual, catat hasilnya, catat hasil.
+
+00:05:01.300 --> 00:05:02.200
+Itu butuh waktu berjam-jam.
+
+00:05:02.360 --> 00:05:03.940
+Cara power cell Anda cukup menulis satu perintah.
+
+00:05:04.440 --> 00:05:05.540
+Get service di setiap mesin,
+
+00:05:05.700 --> 00:05:06.700
+filter status yang berhenti,
+
+00:05:06.900 --> 00:05:07.700
+ekspor ke CSV.
+
+00:05:08.560 --> 00:05:09.800
+Satu perintah, 50 server,
+
+00:05:10.000 --> 00:05:10.860
+hasil yang sama setiap saat.
+
+00:05:11.320 --> 00:05:12.140
+Tidak perlu klik UI,
+
+00:05:12.320 --> 00:05:13.280
+tidak perlu mencatat manual,
+
+00:05:13.460 --> 00:05:14.980
+tidak ada kesalahan salin data antar jendela.
+
+00:05:15.520 --> 00:05:16.400
+Dan inilah mengapa ini penting.
+
+00:05:16.780 --> 00:05:18.580
+Output objek berarti Anda bisa merangkai perintah.
+
+00:05:19.160 --> 00:05:20.140
+Output dari satu perintah.
+
+00:05:20.800 --> 00:05:22.940
+Langsung masuk ke perintah berikutnya sebagai data terstruktur.
+
+00:05:23.340 --> 00:05:25.300
+Anda tidak menguretex, Anda memanipulasi objek.
+
+00:05:25.300 --> 00:05:28.300
+Ini seperti perbedaan antara memilah tumpukan kertas lepas
+
+00:05:28.300 --> 00:05:31.240
+dan bekerja dengan lemari arsip yang semuanya memiliki label.
+
+00:05:31.980 --> 00:05:33.420
+Jadi sekarang Anda tahu pola dan pipeline-nya.
+
+00:05:33.820 --> 00:05:35.180
+Mari bahas perintah yang akan benar-benar Anda gunakan.
+
+00:05:36.020 --> 00:05:37.260
+Lima kelompok sentilet esensial.
+
+00:05:37.800 --> 00:05:39.520
+Anda tidak perlu mempelajari ratusan sentilet
+
+00:05:39.520 --> 00:05:40.640
+agar produktif dengan power cell.
+
+00:05:40.940 --> 00:05:41.960
+Mulailah dengan lima kelompok,
+
+00:05:42.180 --> 00:05:44.500
+dan Anda akan menguasai sekitar 80% pekerjaan harian Anda.
+
+00:05:45.100 --> 00:05:46.060
+Kelompok pertama adalah penemuan.
+
+00:05:46.480 --> 00:05:47.320
+Ini yang paling penting karena
+
+00:05:47.320 --> 00:05:49.580
+mengajarkan power cell dari dalam program itu sendiri.
+
+00:05:50.040 --> 00:05:52.860
+Get help, get comment, get member ketiganya adalah alat pembelajaran Anda.
+
+00:05:52.860 --> 00:05:55.720
+Anda tidak perlu menghafal apapun karena Anda selalu bisa mencarinya.
+
+00:05:56.400 --> 00:05:58.420
+Get help menunjukkan cara menggunakan perintah apapun,
+
+00:05:58.500 --> 00:06:00.180
+get comment menunjukkan perintah apa saja yang tersedia,
+
+00:06:00.280 --> 00:06:01.540
+dan get member menunjukkan data tersebut,
+
+00:06:01.800 --> 00:06:02.580
+dan get member menunjukkan.
+
+00:06:02.740 --> 00:06:04.320
+Jika Anda tidak mau pelajari hal lain, pelajari ketiga.
+
+00:06:04.820 --> 00:06:06.020
+Grup kedua adalah sistem file
+
+00:06:06.020 --> 00:06:08.160
+yang mencakup tugas file sehari-hari yang sering Anda lakukan.
+
+00:06:09.240 --> 00:06:11.020
+Get celd itu mencantumkan file dan folder,
+
+00:06:11.220 --> 00:06:12.160
+copy item menyalinnya,
+
+00:06:12.300 --> 00:06:13.280
+remove item menghapusnya,
+
+00:06:13.400 --> 00:06:14.820
+dan get content membaca isi file.
+
+00:06:15.440 --> 00:06:17.080
+Anda dapat melakukan dalam satu baris apa yang biasanya,
+
+00:06:17.080 --> 00:06:18.860
+membutuhkan klik, membutuhkan klik melalui beberapa.
+
+00:06:19.040 --> 00:06:20.140
+Grup ketiga adalah sistem
+
+00:06:20.140 --> 00:06:21.740
+untuk mengelola apa yang berjalan di mesinan.
+
+00:06:22.800 --> 00:06:24.400
+Get process menampilkan proses yang berjalan,
+
+00:06:24.500 --> 00:06:25.600
+get service menampilkan layanan,
+
+00:06:25.720 --> 00:06:27.160
+serta start service untuk mengontrolnya.
+
+00:06:28.120 --> 00:06:29.600
+Restart computer melakukan reboot pada mesinan.
+
+00:06:29.980 --> 00:06:32.360
+Jika Anda pernah membuka task manager atau services.msc,
+
+00:06:32.600 --> 00:06:34.500
+perintah-perintah ini menggantikan semua itu dan bisa bekerja.
+
+00:06:35.000 --> 00:06:36.000
+Dari jarak jauh,
+
+00:06:36.080 --> 00:06:38.560
+Anda dapat meriksa layanan di 100 mesin tanpa harus meninggalkan meja.
+
+00:06:38.940 --> 00:06:40.640
+Grup keempat adalah pemfilteran dan pembentukan
+
+00:06:40.640 --> 00:06:41.880
+di mana perbagaimana menunjukkan konggut.
+
+00:06:41.880 --> 00:06:44.980
+Bar objek memfilter data berdasarkan kondisi,
+
+00:06:45.360 --> 00:06:47.740
+serak objek memilih properti yang ingin Anda lihat,
+
+00:06:47.860 --> 00:06:49.060
+short objek mengurutkan hasil,
+
+00:06:49.060 --> 00:06:50.340
+dan grup objek memampokannya.
+
+00:06:50.680 --> 00:06:52.900
+MDLet ini mengubah data mentah menjadi informasi yang berguna.
+
+00:06:53.320 --> 00:06:55.540
+Tanpa sentilet ini, Anda hanya menampilkan data ke layar begitu saja.
+
+00:06:56.180 --> 00:06:58.460
+Dengan sentilet ini, Anda bisa mengajukan pertanyaan spesifik pula.
+
+00:06:58.960 --> 00:07:01.040
+Grup kelima adalah export, cara Anda menyimpan hasil kerjaan.
+
+00:07:01.420 --> 00:07:04.020
+Export CSV, menulis ke file yang bisa dibuka di Excel,
+
+00:07:04.440 --> 00:07:05.700
+outfile menulis ke file text,
+
+00:07:05.940 --> 00:07:08.000
+dan convert to JSON mengubahnya ke format JSON.
+
+00:07:08.640 --> 00:07:10.500
+MDLet ini memungkinkan Anda mengubah perintah
+
+00:07:10.500 --> 00:07:12.060
+menjadi laporan, log, atau file data.
+
+00:07:12.460 --> 00:07:14.080
+Anda menjalankan perintah memfilter hasilnya,
+
+00:07:14.200 --> 00:07:14.560
+lo menyimpan.
+
+00:07:14.780 --> 00:07:16.000
+Itulah laporan, itulah otomatisasi.
+
+00:07:16.000 --> 00:07:17.900
+Berikut adalah contoh singkat untuk step.
+
+00:07:18.320 --> 00:07:20.120
+Dengan penemuan, Anda dapat menjalankan
+
+00:07:20.120 --> 00:07:22.440
+get coming on service untuk melihat setiap perintah terkait layanan.
+
+00:07:23.460 --> 00:07:24.340
+Untuk sistem file,
+
+00:07:24.540 --> 00:07:26.220
+get chill ditem C, all logs recurs,
+
+00:07:27.180 --> 00:07:30.420
+where object lengthed 10B menemukan file log yang besar.
+
+00:07:31.580 --> 00:07:32.560
+Untuk sistem get service,
+
+00:07:33.060 --> 00:07:35.940
+where object status X stop it mencantumkan layanan yang berhenti.
+
+00:07:36.740 --> 00:07:38.020
+Untuk pemfilteran, get process,
+
+00:07:38.680 --> 00:07:39.780
+short object CPU descending,
+
+00:07:40.000 --> 00:07:43.520
+select object first 5 menampilkan 5 pengguna CPU teratas,
+
+00:07:43.520 --> 00:07:44.400
+dan untuk ekspor.
+
+00:07:44.840 --> 00:07:45.400
+Get service,
+
+00:07:45.980 --> 00:07:47.140
+export just pieces to space SP.
+
+00:07:47.580 --> 00:07:48.840
+SP menyimpan semuanya ke dalam satu file.
+
+00:07:49.000 --> 00:07:49.360
+Ini penting.
+
+00:07:50.120 --> 00:07:52.840
+Kelima grup ini mencakup sebagian besar dari apa yang akan Anda lakukan.
+
+00:07:53.500 --> 00:07:56.160
+Anda tidak perlu menjadi ahli PowerShell cukup tahu dari mana harus memulai.
+
+00:07:56.580 --> 00:07:58.940
+Dan tempat terbaik untuk memulai adalah grup yang mengajarkan Anda segala.
+
+00:07:59.420 --> 00:08:00.440
+Hari kita bicara tentang penemuan.
+
+00:08:01.300 --> 00:08:02.080
+Penemuan terlebih dahulu,
+
+00:08:02.340 --> 00:08:02.700
+get help,
+
+00:08:02.900 --> 00:08:03.300
+get comment,
+
+00:08:03.420 --> 00:08:03.820
+get member.
+
+00:08:04.500 --> 00:08:07.500
+Ijinkan saya memberitahu Anda tentang setim Deadlet paling penting yang Anda pelajari,
+
+00:08:07.640 --> 00:08:08.160
+yaitu get help.
+
+00:08:08.460 --> 00:08:09.660
+Ini adalah panduan bawaan PowerShell.
+
+00:08:09.660 --> 00:08:11.200
+Ketik get help,
+
+00:08:11.400 --> 00:08:12.620
+diikuti nama perintah apapun,
+
+00:08:13.020 --> 00:08:14.320
+dan ini akan menampilkan sintaks,
+
+00:08:14.420 --> 00:08:14.760
+parameter,
+
+00:08:15.020 --> 00:08:15.660
+dan yang terpenting,
+
+00:08:15.800 --> 00:08:16.540
+contoh praktisnya.
+
+00:08:17.020 --> 00:08:18.980
+Anda tidak perlu mencari di internet atau menghafal apapun.
+
+00:08:19.620 --> 00:08:21.100
+Dokumentasinya tersedia alat tersebut,
+
+00:08:21.940 --> 00:08:23.640
+katakanlah Anda ingin memahami cara kerja get process.
+
+00:08:24.320 --> 00:08:25.460
+Ketik get help, get process,
+
+00:08:25.740 --> 00:08:26.980
+maka akan muncul sintaksnya,
+
+00:08:27.340 --> 00:08:29.160
+parameter yang diterima dan fungsinya masing-masing,
+
+00:08:29.740 --> 00:08:32.020
+namun bagian terbaiknya daripada contoh-contohnya get help, get process.
+
+00:08:32.480 --> 00:08:35.240
+Contoh-contoh tersebut langsung memberikan kode yang bisa Anda salin dan jalan.
+
+00:08:35.620 --> 00:08:37.680
+Begitulah cara Anda mempelajari PowerShell dari dalam PowerShell.
+
+00:08:37.680 --> 00:08:39.100
+Lalu ada get command.
+
+00:08:39.800 --> 00:08:42.620
+CM delete ini mencantumkan semua yang tersedia dalam sisi Anda.
+
+00:08:42.900 --> 00:08:44.780
+Setiap sentim delete, fungsi, dan skrip.
+
+00:08:45.320 --> 00:08:46.140
+Dan Anda bisa memfilternya.
+
+00:08:46.520 --> 00:08:47.300
+Get command verb get.
+
+00:08:48.600 --> 00:08:49.800
+Get menampilkan setiap perintah get,
+
+00:08:50.120 --> 00:08:50.980
+yang jumlahnya ada ratusan.
+
+00:08:51.880 --> 00:08:53.140
+Get process, get service,
+
+00:08:53.560 --> 00:08:55.640
+get date, get item, get shield item, get content.
+
+00:08:56.760 --> 00:08:57.740
+Semuanya hanya dengan memintai.
+
+00:08:58.160 --> 00:09:00.920
+Get command non-service menampilkan setiap perintah yang bekerja dengan layanan.
+
+00:09:01.680 --> 00:09:03.780
+Get service, start service, stop service,
+
+00:09:03.920 --> 00:09:05.820
+restart service, set service, remove service.
+
+00:09:05.960 --> 00:09:07.580
+Anda tidak perlu menebak apa yang tersedia.
+
+00:09:07.680 --> 00:09:08.860
+Alat itu sendiri yang menutupkan.
+
+00:09:09.060 --> 00:09:09.740
+Lalu ada get member.
+
+00:09:10.640 --> 00:09:11.660
+Satu perintah yang membuka segalanya.
+
+00:09:12.160 --> 00:09:13.500
+Pipa perintah apapun ke get member.
+
+00:09:13.720 --> 00:09:16.780
+Dan ia akan menunjukkan isi objek yang dikembalikan perintah tersebut.
+
+00:09:18.160 --> 00:09:19.800
+Jalankan get process, get member,
+
+00:09:20.200 --> 00:09:22.620
+dan Anda akan melihat setiap properti dan metode dari objek proses.
+
+00:09:23.600 --> 00:09:26.300
+Name, ID, CPU, working set, start time,
+
+00:09:26.720 --> 00:09:29.340
+dan metode seperti kill, refresh, wait for exit.
+
+00:09:29.900 --> 00:09:31.640
+Anda tidak perlu bertanya-tanya data apa yang tersedia.
+
+00:09:31.940 --> 00:09:33.040
+Anda bisa memeriksa ini secara langsung.
+
+00:09:33.400 --> 00:09:34.040
+Mengapa ini penting?
+
+00:09:34.040 --> 00:09:35.820
+Anda tidak perlu menghafal semuanya.
+
+00:09:36.420 --> 00:09:37.420
+Anda bisa belajar sambil berikutnya.
+
+00:09:38.180 --> 00:09:40.100
+GitHub mengajarkan cara menggunakan perintah,
+
+00:09:40.220 --> 00:09:41.580
+gate command menunjukkan perintah yang ada,
+
+00:09:41.720 --> 00:09:43.780
+dan gate member menunjukkan data yang dihasilkan perintah tersebut.
+
+00:09:44.400 --> 00:09:46.100
+Tiga sentimen delete ini adalah alat pembelajaran Anda.
+
+00:09:46.460 --> 00:09:48.100
+Ketikannya membuat PowerShell memiliki dokumentasi.
+
+00:09:48.500 --> 00:09:49.660
+Setelah Anda tahu apa yang tersedia,
+
+00:09:49.960 --> 00:09:52.180
+langkah selanjutnya adalah membentuk data itu menjadi sesuatu yang berguna.
+
+00:09:52.180 --> 00:09:54.440
+Memfilter, membentuk, dan mengekspor.
+
+00:09:54.920 --> 00:09:56.100
+Mengubah perintah menjadi laporan.
+
+00:09:56.660 --> 00:09:57.680
+Inilah hal utama tentang PowerShell.
+
+00:09:58.180 --> 00:09:59.620
+Kekuatannya bukan pada satu perintah saja,
+
+00:09:59.740 --> 00:10:01.340
+melainkan cara Anda menggabukannya melalui pipeline.
+
+00:10:01.920 --> 00:10:03.560
+Anda mengambil output dari satu sentimen delete,
+
+00:10:03.720 --> 00:10:04.940
+menyalurkannya ke sentimen delete lain,
+
+00:10:05.100 --> 00:10:07.280
+dan membangun operasi kompleks dari blok dasar yang sederhana.
+
+00:10:08.320 --> 00:10:11.780
+Wear object adalah filter Anda yang hanya meneruskan objek yang sesuai dengan kondisi Anda.
+
+00:10:12.580 --> 00:10:13.220
+Jadi gate service.
+
+00:10:13.640 --> 00:10:17.200
+Wear object status X running hanya memberikan layanan yang sedang berjalan.
+
+00:10:17.740 --> 00:10:19.500
+Tidak perlu lagi menggulir daftar ratusan layan.
+
+00:10:19.500 --> 00:10:21.540
+Perintah tersebut melakukan penyaringan untukan.
+
+00:10:21.900 --> 00:10:23.880
+Select object memilih properti mana yang ingin Anda lihat.
+
+00:10:25.200 --> 00:10:26.480
+Gate process select object name.
+
+00:10:27.440 --> 00:10:29.700
+CPU working set hanya menampilkan data yang Anda perlukan.
+
+00:10:30.660 --> 00:10:33.340
+Perintah ini mempunyai handle, memory page, dan ID sesi,
+
+00:10:33.560 --> 00:10:35.100
+sehingga hanya menyesalkan kolom yang Anda minta.
+
+00:10:35.920 --> 00:10:38.740
+Begitulah cara mengubah tumpukan data menjadi tabel yang bersih dan mudah dibaca.
+
+00:10:39.520 --> 00:10:40.680
+Sort object mengatur ulitam silang.
+
+00:10:41.140 --> 00:10:43.640
+Gate process sort object CPU descending menampilkan
+
+00:10:43.640 --> 00:10:46.120
+proses yang paling banyak memakan CPU terlebih dahulu,
+
+00:10:46.300 --> 00:10:48.420
+jadi Anda bisa langsung menemukan masalahnya
+
+00:10:48.420 --> 00:10:50.100
+daripada memindai daftar yang tidak beraturan.
+
+00:10:51.280 --> 00:10:54.220
+Export CSV menyimpan semuanya ke dalam file yang bisa Anda buka di Excel.
+
+00:10:54.580 --> 00:10:55.560
+Di sinilah kajiban 3D.
+
+00:10:55.940 --> 00:10:58.300
+Anda menjalankan perintah membentuknya, lalu menyimpannya.
+
+00:10:58.680 --> 00:11:00.020
+Itulah laporan dan itulah otomatisasi.
+
+00:11:00.480 --> 00:11:01.720
+Berikut adalah pola lengkapnya jika di setiap.
+
+00:11:02.420 --> 00:11:04.740
+Gate service where object status X stop it.
+
+00:11:05.200 --> 00:11:07.840
+Select object name display name export CSV.
+
+00:11:08.340 --> 00:11:09.420
+Stop it services.sv.
+
+00:11:09.420 --> 00:11:12.320
+Ini adalah satu perintah yang mengambil semua layanan,
+
+00:11:12.440 --> 00:11:13.360
+memfilter hanya berhenti,
+
+00:11:13.780 --> 00:11:14.960
+memilih nama dan nama tampilan,
+
+00:11:15.140 --> 00:11:16.480
+lalu menyimpan hasilnya ke file CSV.
+
+00:11:17.160 --> 00:11:19.060
+Anda bisa menjalankannya di satu mesin atau 100
+
+00:11:19.060 --> 00:11:20.160
+dan hasilnya akan selalu sama.
+
+00:11:20.560 --> 00:11:22.700
+Inilah yang menggantikan berjam-jam waktu Anda mengklik GUI
+
+00:11:22.700 --> 00:11:23.760
+dan melakukan salientable menu.
+
+00:11:24.480 --> 00:11:26.940
+Daripada membuka services.pnc di setiap server,
+
+00:11:27.100 --> 00:11:28.620
+menggulir daftar, mencatat apa yang berhenti,
+
+00:11:28.760 --> 00:11:29.720
+dan mengetiknya ke spreadsheet,
+
+00:11:29.900 --> 00:11:31.420
+Anda cukup menjalankan satu perintah.
+
+00:11:31.420 --> 00:11:33.680
+Nah, prosesnya hanya butuh beberapa detik akurat.
+
+00:11:34.780 --> 00:11:35.280
+Mengapa ini penting?
+
+00:11:35.740 --> 00:11:37.420
+Anda berubah dari aktif menjadi proaktif.
+
+00:11:37.980 --> 00:11:39.180
+Anda bisa menjalankan laporan ini saja.
+
+00:11:39.620 --> 00:11:41.520
+Setiap pagi, sebuah skrip meriksa layanan Anda,
+
+00:11:41.820 --> 00:11:43.700
+mengekspor hasilnya dan mengirimkannya malah kepada Anda.
+
+00:11:44.100 --> 00:11:45.920
+Anda mendeteksi masalah sebelum menjadi darurat
+
+00:11:45.920 --> 00:11:47.160
+karena Anda tahu apa yang berjalan,
+
+00:11:47.260 --> 00:11:48.500
+apa yang berhenti, dan apa yang butuh perhatian.
+
+00:11:48.840 --> 00:11:50.000
+Daripada menunggu sesuatu rusak,
+
+00:11:50.260 --> 00:11:51.220
+Anda bisa mengantisipasinya.
+
+00:11:52.000 --> 00:11:54.160
+Jadi, sekarang Anda memiliki komponennya
+
+00:11:54.160 --> 00:11:55.920
+alat penemuan untuk mengetahui apa yang tersedia,
+
+00:11:55.920 --> 00:11:57.460
+alat filter untuk menemukan yang penting,
+
+00:11:57.540 --> 00:11:58.920
+dan alat ekspor untuk menyimpan hasil Anda.
+
+00:11:58.920 --> 00:12:01.660
+Mari kita lihat bagaimana semua itu menyatu menjadi satu sistem.
+
+00:12:03.060 --> 00:12:04.300
+Bagaimana semuanya terhubung,
+
+00:12:04.480 --> 00:12:05.260
+lalu pipa dalam tindak.
+
+00:12:05.740 --> 00:12:07.440
+Pipa pipeline adalah jantung dari power cell,
+
+00:12:07.580 --> 00:12:08.100
+bukan skadavitu.
+
+00:12:08.580 --> 00:12:10.080
+Setiap sentimen dilet menghasilkan objek,
+
+00:12:10.320 --> 00:12:11.520
+dan pipa mengirimkan objek tersebut
+
+00:12:11.520 --> 00:12:12.920
+langsung ke sentimen dilet berikutnya.
+
+00:12:13.340 --> 00:12:15.900
+Ide sederhana itulah yang membuat power cell begitu kuat.
+
+00:12:16.400 --> 00:12:17.600
+Anda membangun operasi kompleks
+
+00:12:17.600 --> 00:12:19.400
+dari blok penyusun sederhana satu pipa dalam satu waktu.
+
+00:12:19.840 --> 00:12:20.800
+Ijinkan saya merikas kenaranya.
+
+00:12:21.260 --> 00:12:23.440
+Katakanlah seorang pengguna menelpon karena akunnya terkunci.
+
+00:12:23.440 --> 00:12:24.740
+Hal ini sering sekali terjadi.
+
+00:12:25.180 --> 00:12:26.980
+Seseorang salah mengetik kata sandi berkali-kali,
+
+00:12:26.980 --> 00:12:28.580
+dan tiba-tiba mereka tidak bisa masuk.
+
+00:12:29.040 --> 00:12:30.400
+Cara lama menanganinya sangat merepot.
+
+00:12:31.180 --> 00:12:33.360
+Anda membuka Active Directory Usage on Computers.
+
+00:12:33.620 --> 00:12:34.320
+Menggulir daftar,
+
+00:12:34.680 --> 00:12:35.300
+mencari pengguna,
+
+00:12:35.460 --> 00:12:35.980
+klik kanan,
+
+00:12:36.340 --> 00:12:36.900
+periksa akun,
+
+00:12:37.000 --> 00:12:37.440
+membukanya,
+
+00:12:37.620 --> 00:12:40.100
+lalu buka event viewer untuk mencari peristiwa penguncian,
+
+00:12:40.220 --> 00:12:42.520
+lalu mencatat waktu dan sumbernya secara manual.
+
+00:12:43.460 --> 00:12:45.820
+Seluruh proses itu memakan waktu 5 hingga 10 menit pengguna.
+
+00:12:46.240 --> 00:12:47.600
+Dan jika ada banyak pengguna yang melepon,
+
+00:12:47.680 --> 00:12:49.520
+Anda menghabiskan seluruh pagi Anda hanya untuk hal ini.
+
+00:12:50.300 --> 00:12:51.760
+Cara power cell benar-benar berbeda.
+
+00:12:52.380 --> 00:12:53.200
+Satu perintah,
+
+00:12:53.280 --> 00:12:53.780
+get a dozer,
+
+00:12:54.040 --> 00:12:54.320
+filter,
+
+00:12:54.660 --> 00:12:54.980
+lock down,
+
+00:12:54.980 --> 00:12:57.360
+menemukan setiap akun yang terkunci di domain Anda.
+
+00:12:58.200 --> 00:13:00.280
+Lalu Anda menyalurkannya ke unlock ad account dan selesai.
+
+00:13:00.680 --> 00:13:02.600
+Skrip tersebut menemukan akun yang terkunci dan membukanya,
+
+00:13:02.720 --> 00:13:04.600
+lalu Anda menyalurkan hasilnya ke fungsi pencatatan
+
+00:13:04.600 --> 00:13:05.780
+atau mengekspornya menjadi laporan.
+
+00:13:06.240 --> 00:13:07.920
+Anda memiliki catatan tentang apa yang terjadi,
+
+00:13:08.060 --> 00:13:08.720
+kapan itu terjadi,
+
+00:13:08.800 --> 00:13:09.780
+dan akun mana yang terdampak,
+
+00:13:09.920 --> 00:13:10.760
+semuanya dari satu baris kode.
+
+00:13:11.160 --> 00:13:11.920
+Dan inilah poinnya,
+
+00:13:12.000 --> 00:13:13.260
+pola yang sama berfungsi di mana saja.
+
+00:13:14.200 --> 00:13:15.120
+Kotak surat exchange,
+
+00:13:15.480 --> 00:13:15.980
+saluran tim,
+
+00:13:16.100 --> 00:13:16.760
+situs share point,
+
+00:13:16.920 --> 00:13:17.540
+sumber daya azure,
+
+00:13:17.660 --> 00:13:18.480
+sentiment delete-nya berubah,
+
+00:13:18.580 --> 00:13:19.680
+tetapi pipeline-nya tetap sama.
+
+00:13:19.980 --> 00:13:21.180
+Anda mengambil sesuatu,
+
+00:13:21.180 --> 00:13:21.700
+tumpam filter-nya,
+
+00:13:21.780 --> 00:13:22.580
+melakukan sesuatu padanya,
+
+00:13:22.720 --> 00:13:23.040
+dan menyebar.
+
+00:13:23.280 --> 00:13:23.720
+Misalnya,
+
+00:13:23.940 --> 00:13:24.300
+get mailbox,
+
+00:13:24.680 --> 00:13:25.960
+filter berdasarkan kondisi tertentu,
+
+00:13:26.080 --> 00:13:26.600
+atur properti,
+
+00:13:26.700 --> 00:13:27.360
+ekspor ke CSV,
+
+00:13:27.560 --> 00:13:29.440
+atau getting filter berdasarkan keanggotaan,
+
+00:13:29.500 --> 00:13:30.880
+tambahkan anggota catat perubahannya.
+
+00:13:31.660 --> 00:13:32.620
+Polanya identik setiap saat.
+
+00:13:33.160 --> 00:13:33.820
+Mengapa ini penting?
+
+00:13:34.300 --> 00:13:35.420
+Setelah Anda memahami pipelinenya,
+
+00:13:35.680 --> 00:13:37.100
+Anda bisa mengotomatiskan hampir semua hal.
+
+00:13:37.460 --> 00:13:38.940
+Polanya sama baik saat Anda mengelola
+
+00:13:38.940 --> 00:13:39.980
+satu pengguna atau seribu,
+
+00:13:40.160 --> 00:13:41.280
+satu server atau seratus.
+
+00:13:41.820 --> 00:13:42.900
+Anda mempelajari polanya sekali,
+
+00:13:43.280 --> 00:13:44.180
+dan menerapkannya di mana saja.
+
+00:13:44.800 --> 00:13:46.520
+Baiklah Anda telah melihat apa itu dan cara kerjanya.
+
+00:13:46.820 --> 00:13:47.820
+Sekarang mari kita bicara tentang
+
+00:13:47.820 --> 00:13:49.220
+apa yang harus Anda lakukan selanjutnya.
+
+00:13:49.500 --> 00:13:50.820
+Langkah pertama Anda menuju otomatisasi.
+
+00:13:51.140 --> 00:13:51.800
+Di mana Anda memulai?
+
+00:13:52.340 --> 00:13:53.740
+Buka PowerShell dan jalankan GetHelp
+
+00:13:53.740 --> 00:13:54.580
+untuk mulai menjelajah.
+
+00:13:55.400 --> 00:13:56.320
+Ketik GetHelp GetProses
+
+00:13:56.320 --> 00:13:57.740
+dan lihat apa yang ditunjukkannya kepada Anda.
+
+00:13:58.280 --> 00:13:59.960
+Lalu ketik GetHelp GetServiceExamples
+
+00:13:59.960 --> 00:14:01.400
+dan lihat contoh-contoh yang berfungsi.
+
+00:14:01.960 --> 00:14:03.140
+Beginilah cara Anda mempelajari alat
+
+00:14:03.140 --> 00:14:03.880
+dari dalam alat itu saja.
+
+00:14:04.500 --> 00:14:05.660
+Tidak perlu mencari di internet
+
+00:14:05.660 --> 00:14:06.560
+atau menonton tutorial.
+
+00:14:07.280 --> 00:14:08.200
+Dokumentasinya ada tepat di sana.
+
+00:14:08.720 --> 00:14:09.060
+Selanjutnya,
+
+00:14:09.140 --> 00:14:10.280
+pilih satu tugas yang Anda lakukan saja.
+
+00:14:10.620 --> 00:14:11.660
+Mungkin memeriksa layanan mana
+
+00:14:11.660 --> 00:14:12.420
+yang berjalan di server,
+
+00:14:12.620 --> 00:14:13.860
+membuat daftar file dalam folder,
+
+00:14:13.860 --> 00:14:15.060
+atau mengeksplor laporan.
+
+00:14:15.600 --> 00:14:16.620
+Tulis satu baris perintah untuk itu
+
+00:14:16.620 --> 00:14:17.280
+dan mulailah di aset.
+
+00:14:17.740 --> 00:14:18.900
+Sesuatu seperti GetService,
+
+00:14:19.200 --> 00:14:20.480
+Where Object Status EQ Running.
+
+00:14:21.060 --> 00:14:21.720
+Berhasil baris perintah.
+
+00:14:22.080 --> 00:14:23.240
+Jalankan dengan outputnya dan zip.
+
+00:14:23.460 --> 00:14:25.120
+Anda baru saja mengotomatiskan secara manual.
+
+00:14:26.040 --> 00:14:27.420
+Lalu gunakan GetCommand dan GetMember
+
+00:14:27.420 --> 00:14:28.460
+untuk mengetahui apa saja yang mungkin.
+
+00:14:28.800 --> 00:14:30.320
+Anda tidak perlu mengetahui segalanya di awal,
+
+00:14:30.440 --> 00:14:31.720
+cukup tahu cara menemukan apa yang Anda butuh.
+
+00:14:32.760 --> 00:14:34.260
+GetCommand Non-Service menampilkan
+
+00:14:34.260 --> 00:14:35.340
+setiap perintah terkait layanan
+
+00:14:35.340 --> 00:14:36.800
+dan GetProcess GetMember.
+
+00:14:37.500 --> 00:14:39.460
+Menunjukkan setiap property object process.
+
+00:14:40.260 --> 00:14:40.920
+Alat ini memberitahu
+
+00:14:40.920 --> 00:14:42.180
+apa yang bisa dilakukannya Anda hanya perlu.
+
+00:14:42.180 --> 00:14:43.860
+Langkah pertama yang terbaik itu sederhana.
+
+00:14:44.260 --> 00:14:45.720
+Otomatiskan tugas yang paling sering Anda lakukan.
+
+00:14:46.340 --> 00:14:47.600
+Bahkan perintah satu baris sederhana pun
+
+00:14:47.600 --> 00:14:48.200
+menghemat waktu Anda.
+
+00:14:48.620 --> 00:14:50.080
+Jika Anda memeriksa layanan setiap pagi
+
+00:14:50.080 --> 00:14:51.620
+buat satu baris perintah yang meriksanya untuk Anda.
+
+00:14:52.180 --> 00:14:53.840
+Jika Anda membersihkan file sementara setiap minggu
+
+00:14:53.840 --> 00:14:54.940
+buat satu baris perintah melakukannya.
+
+00:14:55.440 --> 00:14:56.440
+Mulai langit dan kemakan dari sana.
+
+00:14:57.060 --> 00:14:58.360
+Sekarang kemana Anda harus melangkah?
+
+00:14:58.840 --> 00:15:00.420
+Microsoft Learn memiliki jalur pembelajaran
+
+00:15:00.420 --> 00:15:01.140
+PowerShell gratis.
+
+00:15:01.420 --> 00:15:02.780
+Jalurnya terstruktur, praktis,
+
+00:15:03.020 --> 00:15:03.860
+dan sepenuhnya gratis.
+
+00:15:04.320 --> 00:15:06.400
+PowerShell Gallery memiliki ribuan modul komunitas
+
+00:15:06.400 --> 00:15:08.240
+jadi mungkin sudah ada orang yang menulis modul
+
+00:15:08.240 --> 00:15:09.560
+untuk apapun yang ingin Anda lakukan.
+
+00:15:10.140 --> 00:15:11.160
+Anda tidak perlu menciptakan kembali.
+
+00:15:11.460 --> 00:15:13.340
+PowerShell adalah sebuah keterampilan bukan sekadar awam.
+
+00:15:13.680 --> 00:15:14.620
+Semakin sering Anda menggunakannya,
+
+00:15:14.680 --> 00:15:15.280
+semakin Anda memahami.
+
+00:15:15.520 --> 00:15:16.580
+Anda tidak perlu menjadi seorang pengam.
+
+00:15:17.040 --> 00:15:17.820
+Anda hanya perlu memulai.
+
+00:15:18.360 --> 00:15:19.900
+Sepuluh menit sehari sudah cukup untuk membangun.
+
+00:15:20.540 --> 00:15:21.760
+Jalankan satu perintah hari ini,
+
+00:15:21.900 --> 00:15:22.660
+jalankan dua besok,
+
+00:15:22.780 --> 00:15:23.520
+dan sebelum Anda sadari,
+
+00:15:23.620 --> 00:15:25.160
+Anda mengotomatiskan hal-hal yang tidak pernah dipayang.
+
+00:15:25.900 --> 00:15:26.740
+Itulah PowerShell,
+
+00:15:27.180 --> 00:15:29.040
+bahasa yang menghubungkan seluruh ekosistem Microsoft.
+
+00:15:29.880 --> 00:15:31.360
+Buka aplikasinya dan jalankan get process
+
+00:15:31.360 --> 00:15:32.220
+untuk melihat tampilannya.
+
+00:15:32.600 --> 00:15:34.340
+Lalu berlanggananlah untuk tips pengetahuan lainnya,
+
+00:15:38.240 --> 00:15:39.060
+beritahu saya.
+
+00:15:39.420 --> 00:15:40.860
+Saya mungkin akan membahasnya di episode mendatang.

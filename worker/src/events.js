@@ -9,6 +9,7 @@ import { recordInvite } from "./inviter.js";
 import { ensureDirectoryCols, geocodeAddress, recordGeocodeStatus } from "./directory.js";
 import { adoptUnclaimedForEntity } from "./orgpair.js";
 import { gate, inScope, logEdit } from "./perm.js";
+import { memberReview, reviewOf } from "./eventreview.js";
 import { eventKeys, KEYS_V, markEdited, normSessionTitle, eventDeleteOps, sessionDeleteOps, forgetImporter, dedupeEventSessions } from "./eventmerge.js";
 
 const FREE_ASKS = 2, ASK_COST = 1000;
@@ -176,7 +177,7 @@ async function evViews(db, evs, withPending) {
     for (const ev of part) {
       const org = ev.org_id ? orgs.get(ev.org_id) : null, ow = owners.get(ev.owner_id);
       out.push({ handle: ev.handle, title: ev.title, summary: ev.summary, about: ev.about, start: ev.start, end: ev.end, tz: ev.tz, mode: ev.mode, location: ev.location, country: ev.country, url: ev.url, tickets_url: ev.tickets_url,
-        free: ev.free < 0 ? null : !!ev.free, lang: ev.lang, linkedin_url: li.get(ev.id) || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public,   // free null = unbekannt (Import ohne Preisangabe)
+        free: ev.free < 0 ? null : !!ev.free, lang: ev.lang, linkedin_url: li.get(ev.id) || "", topics: parse(ev.topics, []), seeking_sponsor: !!ev.seeking_sponsor, public: !!ev.public, review: withPending ? reviewOf(ev) : undefined,   // free null = unbekannt (Import ohne Preisangabe)
         partners: (partners.get(ev.id) || []).map((x) => ({ kind: x.kind, level: x.level, name: x.name, handle: x.public ? x.handle : "" })),
         asked: asked ? (asked.get(ev.id) || []).map((x) => x.handle) : undefined,
         organizer: org ? { kind: "o", handle: org.public ? org.handle : "", name: org.name } : { kind: "u", handle: ow?.handle || "", name: ow?.name || ev.organizer_name || "" }, unclaimed: !!ev.unclaimed, source: ev.source || "", retired: !!ev.retired,
@@ -346,11 +347,13 @@ export async function handleEvents(env, request, url, path, user, J) {
     }
     const ex = await db.prepare("SELECT * FROM events WHERE handle=?").bind(handle).first();
     if (ex && (ex.merged_into || !(await canManage(db, user, ex)))) return J({ error: "handle_taken" }, 409);   // in einem anderen Event aufgegangene Zeile: nicht ueber das Formular wiederbeleben (Zuruecknehmen ist Sache der Admins)
+    // Neues Event eines noch nicht bestaetigten Mitglieds: wartet auf die Pruefung durch einen Admin und ist bis dahin nicht oeffentlich (eventreview.js memberReview)
+    const rv = await memberReview(db, user, ex, b.public !== false);
     const tz = timezone(String(b.tz || ex?.tz || "Europe/Berlin")); if (!tz) return J({ error: "bad_timezone" }, 400);
-    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : b.free === true || !ex ? 1 : ex.free, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, b.public === false ? 0 : 1, now()];
+    const vals = [title, txt(b.summary, 200), long(b.about, 3000), b.start, end, tz, mode, txt(b.location, 120), txt(b.country, 60), eu, tu, b.free === false ? 0 : b.free === true || !ex ? 1 : ex.free, txt(b.lang, 10), JSON.stringify(tp), b.seeking_sponsor ? 1 : 0, rv.public, now()];
     let eventId = ex?.id;
-    if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,tz=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, ex.id).run();
-    else eventId = (await db.prepare("INSERT INTO events(title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now()).run()).meta.last_row_id;
+    if (ex) await db.prepare("UPDATE events SET title=?,summary=?,about=?,start=?,end=?,tz=?,mode=?,location=?,country=?,url=?,tickets_url=?,free=?,lang=?,topics=?,seeking_sponsor=?,public=?,updated=?,org_id=?,review=? WHERE id=?").bind(...vals, b.org === undefined ? ex.org_id : orgId, rv.review, ex.id).run();
+    else eventId = (await db.prepare("INSERT INTO events(title,summary,about,start,end,tz,mode,location,country,url,tickets_url,free,lang,topics,seeking_sponsor,public,updated,handle,owner_id,org_id,created,review) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)").bind(...vals, handle, user.id, orgId, now(), rv.review).run()).meta.last_row_id;
     const address = mode === "online" || b.public === false ? "" : [txt(b.location, 120), txt(b.country, 60)].filter(Boolean).join(", ");
     const geo = address ? await geocodeAddress(env, address, ex || {}, "address") : { lat: null, lng: null, geo_precision: "", geo_address: "", geo_at: 0 };
     await recordGeocodeStatus(db, geo, address);
@@ -359,8 +362,8 @@ export async function handleEvents(env, request, url, path, user, J) {
     const keys = eventKeys({ title, url: eu, city, location: txt(b.location, 120), mode });
     await db.prepare("UPDATE events SET lat=?,lng=?,geo_precision=?,geo_address=?,geo_at=?,city=?,name_key=?,url_key=?,city_key=?,keys_v=?,edited_at=? WHERE id=?")
       .bind(geo.lat, geo.lng, geo.geo_precision, geo.geo_address, geo.geo_at, city, keys.name_key, keys.url_key, keys.city_key, KEYS_V, now(), eventId).run();
-    if (b.public !== false) await ownedEntity(env, user, { eid: handle, type: "event", name: title, en: `${title} is an event in the Microsoft community, starting ${b.start}.`, de: `${title} ist eine Veranstaltung der Microsoft-Community, Beginn ${b.start}.`, web: String(b.url || "").startsWith("https://") ? b.url : "" });
-    return J({ ok: true });
+    if (rv.review === "approved" && rv.public) await ownedEntity(env, user, { eid: handle, type: "event", name: title, en: `${title} is an event in the Microsoft community, starting ${b.start}.`, de: `${title} ist eine Veranstaltung der Microsoft-Community, Beginn ${b.start}.`, web: String(b.url || "").startsWith("https://") ? b.url : "" });
+    return J({ ok: true, review: rv.review, public: !!rv.public });   // review pending = wartet auf die Pruefung, draft = Entwurf eines noch nicht bestaetigten Mitglieds
   }
   if ((m = path.match(/^\/api\/event\/([a-z0-9-]{3,40})$/)) && method === "DELETE") {
     if (need()) return need();
@@ -585,7 +588,7 @@ export async function handleEvents(env, request, url, path, user, J) {
   if (path === "/api/speaker/requests" && method === "GET") {
     if (need()) return need();
     const pr = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first(); if (!pr?.handle) return J({ items: [] });
-    const rows = (await db.prepare("SELECT s.id,s.title,e.title ev,e.handle eh,s.speakers FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.merged_into=0 AND s.speakers LIKE ?").bind(`%"h":"${pr.handle}"%`).all()).results || [];
+    const rows = (await db.prepare("SELECT s.id,s.title,e.title ev,e.handle eh,s.speakers FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.merged_into=0 AND e.public=1 AND s.speakers LIKE ?").bind(`%"h":"${pr.handle}"%`).all()).results || [];
     return J({ items: rows.filter((r) => parse(r.speakers, []).some((x) => x.h === pr.handle && x.s === "invited")).map((r) => ({ id: r.id, title: r.title, event: r.ev, eh: r.eh })) });
   }
   if (path === "/api/speaker/respond" && method === "POST") {
@@ -627,11 +630,12 @@ export async function handleEvents(env, request, url, path, user, J) {
   }
   if (path === "/api/entity/claim/mine" && method === "GET") {
     if (need()) return need();
-    return J({ claims: (await db.prepare("SELECT eid,status,fwd_mask,verified_via,verified_domain FROM entity_claims WHERE user_id=?").bind(user.id).all()).results || [] });
+    // evidence: Adress-Nachweis eingereicht (0046) - die Oberflaeche zeigt offene Beanspruchungen im Reiter "Firmen" auch ohne eigene Firma
+    return J({ claims: (await db.prepare("SELECT c.eid,c.status,c.fwd_mask,c.verified_via,c.verified_domain,(ev.eid IS NOT NULL) evidence FROM entity_claims c LEFT JOIN entity_claim_evidence ev ON ev.eid=c.eid AND ev.user_id=c.user_id WHERE c.user_id=?").bind(user.id).all()).results || [] });
   }
   if (path === "/api/admin/entity/claims" && method === "GET") {
     const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())
-    const rows = (await db.prepare("SELECT c.eid,c.user_id,c.via,c.status,c.fwd_mask,c.verified_domain,u.name,u.provider,p.handle,up.real_name,cr.picture FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id LEFT JOIN user_prefs up ON up.user_id=c.user_id LEFT JOIN entity_claim_review cr ON cr.eid=c.eid WHERE c.status IN ('pending','email_sent','forwarded')").all()).results || [];
+    const rows = (await db.prepare("SELECT c.eid,c.user_id,c.via,c.status,c.fwd_mask,c.verified_domain,u.name,u.provider,p.handle,up.real_name,cr.picture,ev.street ev_street,ev.zip ev_zip,ev.city ev_city,ev.country ev_country,ev.note ev_note,ev.link ev_link,ev.addr_match ev_match FROM entity_claims c JOIN users u ON u.id=c.user_id LEFT JOIN profiles p ON p.user_id=c.user_id LEFT JOIN user_prefs up ON up.user_id=c.user_id LEFT JOIN entity_claim_review cr ON cr.eid=c.eid LEFT JOIN entity_claim_evidence ev ON ev.eid=c.eid AND ev.user_id=c.user_id WHERE c.status IN ('pending','email_sent','forwarded')").all()).results || [];
     const entities = await entityMap(env);
     const dv = (await db.prepare("SELECT c.eid,c.verified_domain domain,u.name FROM entity_claims c JOIN users u ON u.id=c.user_id WHERE c.status='verified' AND c.verified_via='domain_email' ORDER BY c.created DESC LIMIT 20").all()).results || [];
     return J({ domain_verified: dv.filter((r) => inScope(g.actor, { topics: [r.eid] })), claims: rows.filter((r) => inScope(g.actor, { topics: [r.eid] })).map((r) => {
@@ -639,7 +643,9 @@ export async function handleEvents(env, request, url, path, user, J) {
       const linkedin = r.via === "linkedin" && r.provider === "linkedin";
       const link = linkedin ? (Array.isArray(entity.same_as) ? entity.same_as : []).find(linkedinProfile) || "" : "";
       const name_match = norm(name).join(" ") === norm(entityName).join(" ") ? "equal" : similarName(name, entityName) ? "similar" : "different";
-      return { eid: r.eid, user_id: r.user_id, name, handle: r.handle, via: r.via, status: r.status, fwd_mask: r.fwd_mask, proof_domain: r.via === "domain_email" ? r.verified_domain : "", entity_name: entityName, linkedin_url: link, name_match: linkedin ? name_match : "", picture: linkedin ? r.picture : "" };
+      return { eid: r.eid, user_id: r.user_id, name, handle: r.handle, via: r.via, status: r.status, fwd_mask: r.fwd_mask, proof_domain: r.via === "domain_email" ? r.verified_domain : "", entity_name: entityName, linkedin_url: link, name_match: linkedin ? name_match : "", picture: linkedin ? r.picture : "",
+        // Adress-Nachweis (0046): nur hier fuer die Redaktion sichtbar; address_match yes | no | unknown (keine Firmenadresse hinterlegt)
+        address: r.ev_street ? { street: r.ev_street, zip: r.ev_zip, city: r.ev_city, country: r.ev_country, note: r.ev_note, link: r.ev_link } : null, address_match: r.ev_street ? r.ev_match : "" };
     }) });
   }
   if (path === "/api/admin/entity/claim" && method === "POST") {
@@ -658,6 +664,7 @@ export async function handleEvents(env, request, url, path, user, J) {
         db.prepare("UPDATE entity_claims SET status='rejected',verified_via='revoked',fwd_mask='' WHERE eid=? AND status='verified' AND verified_via='domain_email'").bind(eid),
         db.prepare("UPDATE org_entity SET confirmed=0 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, c.user_id),
         db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid),
+        db.prepare("DELETE FROM entity_claim_evidence WHERE eid=?").bind(eid),
       ]);
       // per Uebernahme erhaltene Paar-Firma (#311, adoptOrg) wieder unbeansprucht machen, wenn der Widerrufene ihr einziges Mitglied ist
       const o = await db.prepare("SELECT o.id FROM org_entity e JOIN orgs o ON o.id=e.org_id WHERE e.eid=? AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=? AND m.role='owner' AND m.status='active') AND (SELECT COUNT(*) FROM org_members m WHERE m.org_id=o.id AND m.status='active')=1").bind(eid, c.user_id).first();
@@ -686,6 +693,7 @@ export async function handleEvents(env, request, url, path, user, J) {
     if (!Number(updated.meta?.changes || 0)) return J({ error: "not_found" }, 404);
     await logEdit(db, g.actor, "claim.decide", "claim", eid, { reason: b.ok ? "Übernahme bestätigt" : "Übernahme abgelehnt", before: { status: claim.status }, after: { status } });
     await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(eid).run();
+    await db.prepare("DELETE FROM entity_claim_evidence WHERE eid=?").bind(eid).run();   // Adress-Nachweis nur bis zur Entscheidung (wie entity_claim_review); die Geschaeftsadresse im Profil bleibt
     if (b.ok) { await db.prepare("UPDATE org_entity SET confirmed=1 WHERE eid=? AND org_id IN (SELECT org_id FROM org_members WHERE user_id=? AND status='active' AND role IN ('owner','admin'))").bind(eid, claim.user_id).run(); await adoptUnclaimedForEntity(db, claim.user_id, eid); }
     if (linkedIn) {
       const entity = (await entityMap(env)).get(eid), page = `${env.SITE}/entity/${eid}/`;
@@ -751,6 +759,8 @@ export async function purgeEntityClaimReview(db) {
   const cutoff = now() - 30 * 86400;
   const result = await db.prepare("UPDATE entity_claim_review SET email='',picture='' WHERE created<? AND (email<>'' OR picture<>'')").bind(cutoff).run();
   await db.prepare("DELETE FROM entity_claim_mail WHERE expires<?").bind(now() - 7 * 86400).run().catch(() => 0);
+  // Adress-Nachweise ohne offene Beanspruchung derselben Person (anders entschieden, zurueckgezogen) entfallen
+  await db.prepare("DELETE FROM entity_claim_evidence WHERE NOT EXISTS (SELECT 1 FROM entity_claims c WHERE c.eid=entity_claim_evidence.eid AND c.user_id=entity_claim_evidence.user_id AND c.status IN ('pending','email_sent','forwarded'))").run().catch(() => 0);
   return { cleared: Number(result.meta?.changes || 0) };
 }
 

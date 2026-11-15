@@ -10,6 +10,8 @@ import site_ads as ADS   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (d
 import json
 import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partner, Positionen ...)
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
+import site_listen as LST   # Anhoeren-Karten (kompakte Variante unter den Beitraegen einer Entitaet)
+import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht (reine Funktionen)
 import re
 from datetime import date
 from urllib.parse import quote, urlsplit
@@ -616,15 +618,18 @@ def articles_block(BASE, e, lang, posts, T_):
         return "", []
     def purl(p):
         return f"{BASE}{pfx(p['lang']) if p['lang'] in ('de',) else ''}/community/u/{p['handle']}/blog/{p['slug']}/"
+    lc = LST.apply_entities(BASE, posts[:100], lang, ENTS)   # kompakte "Anhoeren"-Karte je Beitrag mit guter Folge, dieselbe Folge nur beim ersten Beitrag
     def item(p):
         sm = (p.get("summary") or "")[:180]
         return (f'<li class="en-art"><a href="{purl(p)}"><b>{esc(p["title"])}</b></a><br><span class="mut"><time datetime="{_iso(p.get("published"))}">{_iso(p.get("published"))}</time> · {esc(p.get("name") or p["handle"])}</span>'
-                + (f'<br>{esc(sm)}' if sm else "") + "</li>")
+                + (f'<br>{esc(sm)}' if sm else "") + lc.get((p.get("handle"), p["slug"], p.get("lang")), "") + "</li>")
     head, rest = posts[:20], posts[20:100]
     h = f'<section class="en-arts"><h2>{esc(T_("Articles about {t}", "Artikel zu {t}").format(t=e["name"]))} <span class="mut">({len(posts)})</span></h2><ul class="en-artl">' + "".join(item(p) for p in head) + "</ul>"
     if rest:
-        h += f'<details><summary>{esc(T_("{n} more articles", "{n} weitere Artikel").format(n=len(posts) - 20))}</summary><ul class="en-artl">' + "".join(f'<li><a href="{purl(p)}">{esc(p["title"])}</a> <span class="mut">· {_iso(p.get("published"))}</span></li>' for p in rest) + "</ul></details>"
+        h += f'<details><summary>{esc(T_("{n} more articles", "{n} weitere Artikel").format(n=len(posts) - 20))}</summary><ul class="en-artl">' + "".join(f'<li><a href="{purl(p)}">{esc(p["title"])}</a> <span class="mut">· {_iso(p.get("published"))}</span>{lc.get((p.get("handle"), p["slug"], p.get("lang")), "")}</li>' for p in rest) + "</ul></details>"
     h += "</section>"
+    if lc:
+        h = LST.page_assets(BASE) + h   # Stil und Skript der Karten einmal je Seite
     return h, [purl(p) for p in head + rest]
 
 
@@ -660,6 +665,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": entity_graph}, ensure_ascii=False))
 
     cfg_t = lambda lang: S[lang]
+    _nf = MM.name_flags(recs)   # gleicher Name unter zwei Kennungen: Titel braucht die Kennung (site_meta_entities)
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0
         stat = fetch_wiki(api, lang)
@@ -686,7 +692,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                "hasDefinedTerm": [{"@id": eid_of(BASE, e["id"])} for e in _terms]},
               {"@context": "https://schema.org", "@type": "CollectionPage", "name": s["entities"], "url": root, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(recs), "itemListElement":
                [{"@type": "ListItem", "position": i + 1, "item": {"@id": eid_of(BASE, e["id"])}} for i, e in enumerate(sorted(recs, key=lambda x: x["name"].lower()))]}}]
-        (write if lang in ("en", "de") else (g.get("write_r2") or write))(f"{rel}/index.html", page(lang, f'{s["entities"]} – M365.FM', s["intro"], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
+        _hm = MM.entities_hub_meta(lang, len(recs)) or (f'{s["entities"]} – M365.FM', s["intro"])   # en/de: Inhalt + Nutzen; andere Sprachen (noindex) bisheriger Text
+        (write if lang in ("en", "de") else (g.get("write_r2") or write))(f"{rel}/index.html", page(lang, _hm[0], _hm[1], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
         if lang in ("en", "de"): sitemap.append((root, TODAY, None))
 
         # Einzelseiten
@@ -709,7 +716,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             rb += MEN.section_html(lang, e["id"])   # sichtbare Erwaehnungen (nur iFAKT und Polaris, nur geprueft eingetragene)
             if e["type"] == "org":   # Gegenrichtung Firma -> Personen: Entitaeten (Feld company) plus Community-Mitglieder der verknuepften Firma (team_of)
                 rb += team_html(BASE, lang, e["id"], root, api)
-            _spr, _spown = SPM.entity(e["id"]), SPM.entity_own(e["id"])   # T37 Sponsor: laufende Sponsorings dieser Entitaet
+            _spr, _spown = SPM.entity(e["id"]), SPM.entity_own(e["id"])   # T37 Sponsor: laufende Sponsorings dieser Entitaet (inkl. 182 Tage Karenzzeit nach "end")
             facts = [(s["type"], esc(tlab(lang, e["type"])))]
             _aka = aka_fact(e, lang, person_aka)
             if _aka:
@@ -870,7 +877,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
             _dt = disclosure_of(e, lang)   # Transparenzhinweis (z. B. Arbeitgeber des Hosts), kein Sponsoring: keine rel=sponsored-Links
             _disc = f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(_dt)}</p>' if _dt else ""
-            _lead = ADS.sponsor_lead(BASE, lang, e["id"], e["name"]) if any(o["id"] == e["id"] for o in SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)) else ""   # Lead-Formular nur bei laufendem Sponsoring der Firma
+            _lo = SPM.lead_org_of(e["id"]) or (dict(org=e["id"], name=e["name"]) if any(o["id"] == e["id"] for o in SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)) else None)
+            _lead = ADS.sponsor_lead(BASE, lang, _lo["org"], _lo["name"]) if _lo else ""   # Lead-Formular bei laufendem Sponsoring (inkl. Karenzzeit): auf der Firmenseite und auf den Seiten ihrer Produkte (z. B. Polaris und Module)
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
@@ -937,7 +945,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _w = g.get("write_r2") or write   # Entitaetsseiten ALLER Sprachen liegen im R2-Bucket, nicht in GitHub Pages (Site-Worker liefert sie unter derselben Adresse). Englisch (~114 MB) seit 9.11.2026: docs/ lag mit 982 MB ueber der Grenze von 980 MB, jeder Seitenbau brach ab; de seit #310, die anderen 13 Sprachen von Anfang an
             ld = ld + _qld   # Quotation-Knoten der Person
             _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=[x for v in groups.values() for x in v], exclude=(e["id"],)) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten; Themen = verwandte Entitaeten
-            _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {tlab(lang, e["type"])} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
+            _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
+            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 

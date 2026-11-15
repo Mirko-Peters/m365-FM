@@ -7,6 +7,7 @@ from datetime import datetime
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_entities import eurl, eid_of
 import site_event_link as EVL   # Event <-> Event-Entitaet (Reihe): Link auf der Event-Seite, superEvent im Schema
+import site_meta_community as PM   # Titel/Description (Suchabsicht)
 
 S = {"en": dict(events="Events", intro="Conferences, webinars and meetups of the Microsoft community – with their sessions and speakers.", upcoming="Upcoming", past="Past", none="No events yet.",
                 organizer="Organizer", when="When", where="Where", online="Online", onsite="On site", hybrid="Hybrid", free="Free", paid="Paid", topics="Topics", sessions="Sessions", speakers="Speakers", website="Website", tickets="Tickets / register",
@@ -183,7 +184,8 @@ CLAIMT = {
     "en": {"sent": "✓ Request sent. We check it and then make you the organizer.", "prof": "Create a public profile first.", "limit": "Too many requests – please try again later.", "gone": "This event already has an organizer.", "err": "That did not work – please try again."},
     "de": {"sent": "✓ Anfrage gesendet. Wir prüfen sie und tragen dich dann als Veranstalter ein.", "prof": "Lege zuerst ein öffentliches Profil an.", "limit": "Zu viele Anfragen – bitte später erneut.", "gone": "Dieses Event hat bereits einen Veranstalter.", "err": "Das hat nicht geklappt – bitte erneut versuchen."},
 }
-EVLIVE = r'''(function(){fetch("%API%/api/events/export").then(function(r){return r.json()}).then(function(j){var have={};[].forEach.call(document.querySelectorAll(".ev-list a[href]"),function(a){have[a.getAttribute("href")]=1});var T=new Date().toISOString().slice(0,10),ups=document.querySelector(".ev-list");(j.events||[]).forEach(function(e){var u="%BASE%"+e.handle+"/";if(have[u])return;if((e.end||e.start).slice(0,10)<T)return;var ul=document.querySelector(".ev-list");if(!ul){ul=document.createElement("ul");ul.className="ev-list";document.querySelector("h1").parentNode.appendChild(ul)}var li=document.createElement("li");li.className="ev-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=e.title;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" · "+e.start.slice(0,10);li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
+# Die Event-Liste zeigt nur Events mit eigener Seite (kein Nachladen aus der Datenbank): ein neu angelegtes oder importiertes Event erscheint mit
+# dem naechsten Seitenbau, vorher fuehrte ein Link auf die noch fehlende Seite ins 404 (Wunsch Mirko, 11.11.2026).
 
 
 def build(g, events, people, orgs):
@@ -240,7 +242,7 @@ def build(g, events, people, orgs):
                       + f'<p><a class="btn" href="{u}event.ics" download>{T(lang, "Add to calendar (.ics)", "Zum Kalender hinzufügen (.ics)")}</a></p>' + f'<h2>{esc(s["sessions"])}</h2>' + ("".join(ss) or f'<p class="mut">{esc(s["nosess"])}</p>')
                       + pt + reg + f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>' + css)
             ld = [{"@context": "https://schema.org", **event_ld(BASE, ev, pb, ob)}]
-            write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155], u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, ev["title"] + " " + (ev.get("about") or "")[:1500], ids=ev.get("topics", []), exclude=(ev["handle"],)) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/events/{ev['handle']}/index.html", page(lang, *(PM.event_meta(lang, ev, bool(ev.get("sessions"))) or (f'{ev["title"]} – {s["events"]} | M365.FM', (ev.get("summary") or ev.get("about") or "")[:155])), u, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, ev["title"] + " " + (ev.get("about") or "")[:1500], ids=ev.get("topics", []), exclude=(ev["handle"],)) if g.get("side") else "")))
             write(f"{pfx2(lang)}community/events/{ev['handle']}/event.ics", ics_for(ev, BASE))   # in jeder Sprache neben der Eventseite (deren Link verweist auf <Seite>/event.ics)
             if not noidx:
                 sitemap.append((u, TODAY, None))
@@ -249,10 +251,10 @@ def build(g, events, people, orgs):
         li = lambda lst: "".join(f'<li class="ev-card"><a href="{eurl_(BASE, lang, e["handle"])}"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(span(e, lang))} · {esc({"online": s["online"], "onsite": s["onsite"], "hybrid": s["hybrid"]}[e["mode"]])}</span>{(' <a class="ev-tag" href="' + eurl(BASE, lang, EVL.series_of(e)) + '">' + esc(ENTS[EVL.series_of(e)]["name"]) + '</a>') if EVL.series_of(e) else ""}<br>{esc(e.get("summary", ""))}</li>' for e in lst)
         ru = f"{croot}events/"
         b = shell(lang, f'<h1>{esc(s["events"])}</h1><p class="mut">{esc(s["intro"])}</p><p><a class="btn main" href="{croot}#c-events">{esc(s["create"])}</a></p>'
-                  + (f'<h2>{esc(s["upcoming"])}</h2><ul class="ev-list">{li(up)}</ul>' if up else "") + (f'<details class="ev-past"><summary><h2 style="display:inline">{esc(s["past"])} ({len(pa)})</h2></summary><ul class="ev-list">{li(pa)}</ul></details>' if pa else "") + ("" if events else f'<p class="mut">{esc(s["none"])}</p>') + "<script>" + EVLIVE.replace("%API%", api).replace("%BASE%", eurl_(BASE, lang, "")) + "</script>" + css)
+                  + (f'<h2>{esc(s["upcoming"])}</h2><ul class="ev-list">{li(up)}</ul>' if up else "") + (f'<details class="ev-past"><summary><h2 style="display:inline">{esc(s["past"])} ({len(pa)})</h2></summary><ul class="ev-list">{li(pa)}</ul></details>' if pa else "") + ("" if events else f'<p class="mut">{esc(s["none"])}</p>') + css)
         ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": s["events"], "url": ru, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(events),
               "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": {"@id": eurl_(BASE, "en", e["handle"]) + "#event"}} for i, e in enumerate(up + pa)]}}]
-        write(f"{pfx2(lang)}community/events/index.html", page(lang, f'{s["events"]} – M365.FM', s["intro"], ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+        write(f"{pfx2(lang)}community/events/index.html", page(lang, *(PM.hub_meta("events", lang) or (f'{s["events"]} – M365.FM', s["intro"])), ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
         if not noidx:
             sitemap.append((ru, TODAY, None))
 

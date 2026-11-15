@@ -1,0 +1,850 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.420
+Wat als jouw contactcenter een gefrustreerde klant zou herkennen nog voordat deze een woord heeft gezegd?
+
+00:00:04.580 --> 00:00:09.820
+Dat is geen science fiction, dat is sentimentanalyse in de praktijk binnen Dynamics 365 Contact Center.
+
+00:00:10.060 --> 00:00:15.860
+Voordat we aan de slag gaan met de update van vandaag, abonneer je even zodat deze briefings automatisch in je wachtrij verschijnen in plaats van dat je in de wacht staat.
+
+00:00:16.040 --> 00:00:16.920
+Dit is hoe het werkt.
+
+00:00:17.160 --> 00:00:23.340
+Jouw AI-agent scant de toon, woordkeuze en het tempo en stuurt de case vervolgens naar de juiste persoon voordat de gemoederen hoog oplopen.
+
+00:00:23.340 --> 00:00:30.120
+In deze walkthrough analyseren we sentiment routing en laten we zien hoe co-pilot agents het repetitieve werk doen terwijl Jouting de echte uitdagingen aanpakt.
+
+00:00:30.300 --> 00:00:36.680
+En om te begrijpen waarom die verschuiving ertoe doet, moet je eerst begrijpen hoe het leven in een traditioneel center aanvoelt als je constant brandjes moet blussen.
+
+00:00:36.960 --> 00:00:43.520
+Waarom ouderwetse contactcenters aanvoelen als permanent brandjes blussen in een ouderwets contactcenter is de standaardmodus geen ondersteuning, maar overleving.
+
+00:00:43.680 --> 00:00:48.480
+Je klokt in in de wetenschap dat de dag een lange sprint wordt door tickets die al achterlopen nog voordat je bent ingelogd.
+
+00:00:48.620 --> 00:00:52.400
+De tools helpen je niet om te anticiperen, ze gooien alleen maar de volgende case op de stapel.
+
+00:00:52.400 --> 00:00:57.080
+Daarom voelt de hele operatie minder als consistente service en meer als een noodhulpdienst die in een lus blijft draaien.
+
+00:00:57.220 --> 00:01:00.400
+Je begint aan je dienst, headset op en de wachtrijen staan al helemaal vol.
+
+00:01:00.640 --> 00:01:03.900
+Telefoons die overgaan, chatvensters die piepen, e-mails die rood knipperen.
+
+00:01:04.080 --> 00:01:07.200
+Het echte probleem is niet de vloed aan kanalen, maar de stilte daartussen.
+
+00:01:07.540 --> 00:01:16.260
+Natuurlijk zie je de naam van een klant en een nieuw case-idee, maar de context, de e-mail die ze al stuurden, het chat-transcript van 10 minuten geleden, de frustratie die oploopt, dat blijft verborgen.
+
+00:01:16.260 --> 00:01:21.620
+Het is alsof je midden in een game stapt zonder plattegrond of karakterbladen, terwijl de monster zal op je afkomen.
+
+00:01:21.620 --> 00:01:23.840
+Dat gebrek aan context zorgt voor herhaling.
+
+00:01:24.040 --> 00:01:30.080
+Je vraagt om details die de klant al gaf, je verifieert de bestelling opnieuw, je typnotices die in één systeem blijven staan, maar nooit het volgende bereiken.
+
+00:01:30.280 --> 00:01:31.620
+De klant is geëxplodeerd van frustratie.
+
+00:01:32.340 --> 00:01:35.580
+Ze hebben gisteren hetzelfde verhaal verteld en nu zitten ze vast aan het opnieuw vertellen ervan.
+
+00:01:35.840 --> 00:01:39.780
+Zonder omni-channel integratie verschijnen die gesprekken vaak niet direct in andere kanalen.
+
+00:01:39.940 --> 00:01:42.600
+Dus voelt elke interactie alsof je weer op level 1 moet beginnen.
+
+00:01:42.800 --> 00:01:44.340
+De vicieuze cirkel is duidelijk.
+
+00:01:44.480 --> 00:01:47.640
+De klant wordt ongeduldig en vraagt zich af waarom het bedrijf zo vergeetachtig lijkt.
+
+00:01:47.640 --> 00:01:50.980
+Jij wordt moe van het zussen van dezelfde irritatie, gesprek na gesprek.
+
+00:01:51.100 --> 00:01:54.140
+De frustratie stapelt zich op en beide partijen eindigen ontevreden.
+
+00:01:54.300 --> 00:02:00.940
+Industrie, onderzoeken en studies linken dit patroon herhaling, lange wachttijden, gebrek aan context aan een hoger verloop bij zowel klanten als agents.
+
+00:02:01.140 --> 00:02:04.520
+Elk extra, ik zoek het even voor je op, moment kost loyaliteit en moreel.
+
+00:02:04.700 --> 00:02:07.520
+En het moreel op de werkvloer van het contactcenter is al broos genoeg.
+
+00:02:07.640 --> 00:02:11.920
+In plaats van problemen op te lossen, ben je meestal bezig met het jongleren van scripts en copypaste rituelen.
+
+00:02:11.920 --> 00:02:16.080
+Het voelt niet langer als spelen op basis van vaardigheid, maar als een tutorial die nooit eindigt.
+
+00:02:16.380 --> 00:02:22.420
+Medewerkers raken snel opgebrand omdat er weinig vooruitgang is, geen ruimte voor creatieve oplossingen, alleen een rij nieuwe brandjes om te blussen.
+
+00:02:22.960 --> 00:02:25.200
+Supervisors houden zich ondertussen niet bezig met strategie.
+
+00:02:25.380 --> 00:02:26.600
+Ze zijn gaten aan het dichten.
+
+00:02:26.860 --> 00:02:29.020
+Ze konden besparen op gesprekstijden of begroetingsteksten.
+
+00:02:29.140 --> 00:02:32.540
+Aanpassen wordt de oplossing, terwijl de echte bottleneck het gefragmenteerde systeem zelf is.
+
+00:02:32.680 --> 00:02:36.400
+Je kunt de randen de hele dag optimaliseren, maar een lekke emmer houdt nooit watervast.
+
+00:02:36.640 --> 00:02:40.600
+Zonder uniform inzicht rent iedereen rond, maar voelt de operatie niet efficiënt.
+
+00:02:40.600 --> 00:02:49.360
+Het gevolg, klanten verliezen hun geduld door gedwongen herhalingen, medewerkers verliezen motivatie door eindeloze restarts en managers verliezen stabiliteit door het verloop dat volgt.
+
+00:02:49.720 --> 00:02:55.980
+Kosten stijgen omdat je vast zit aan het werven, trainen en omscholen van personeel om de basisdienstverlening te behouden.
+
+00:02:56.180 --> 00:02:59.920
+Het is een cyclus die iedereen straft terwijl de hoofdoorzaak ongemoeid blijft.
+
+00:03:00.100 --> 00:03:04.200
+Dus, wanneer mensen het leven in een contactcenter als brandbestrijding ontschrijven, overdrijven ze niet.
+
+00:03:04.340 --> 00:03:06.620
+Je bent niet aan het plannen, je houdt het tempo nauwelijks bij.
+
+00:03:06.620 --> 00:03:11.360
+De systemen praten niet met elkaar, de geschiedenis volgt de klant niet en dezelfde branden la je keer op keer op.
+
+00:03:11.480 --> 00:03:17.200
+Zowel klanten als medewerkers weten het en beide partijen voelen zich gevangen in een kerker waar de eindbaas frustratie zelf is.
+
+00:03:17.420 --> 00:03:21.980
+Wat de echte vraag oproept, wat als we de smeulende resten konden spotten voordat het rookalarm afgaat.
+
+00:03:22.220 --> 00:03:25.140
+Hoe AI leert om frustratie te herkennen voordat jij dat kunt.
+
+00:03:25.380 --> 00:03:29.780
+Heb je ooit gemerkt dat sommige systemen iemands stemming sneller opvangen dan dat jij de woorden kunt verwerken?
+
+00:03:30.020 --> 00:03:33.740
+Dat is wat sentiment AI binnen Dynamics 365 Copilot doet.
+
+00:03:33.740 --> 00:03:39.540
+Het raadt niet op basis van lichaamstaal, het analyseert, toon, woordkeuze, tempo en het emotionele gewicht achter elke regel.
+
+00:03:39.760 --> 00:03:44.060
+Waar jij vermoeid kunt raken na een volledige dag aan de telefoon of chat, raakt het algoritme niet vermoeid.
+
+00:03:44.200 --> 00:03:46.680
+Het blijft gedurende het hele proces signalen verzamelen.
+
+00:03:46.860 --> 00:03:52.560
+Aan de oppervlakte lijkt het mechanisme simpel, maar onder de motorkap is het natuurlijke taalverwerking gecombineerd met sentimentanalyse.
+
+00:03:52.880 --> 00:03:59.300
+Gesprekken, of ze nu gesproken of getypt zijn, worden afgebroken en beoordeeld, niet alleen op betekenis maar ook op emotionele context.
+
+00:03:59.300 --> 00:04:03.360
+Ik heb hulp nodig, wordt anders geregistreerd dan, waarom moet ik hier altijd over bellen?
+
+00:04:03.500 --> 00:04:06.900
+De eerste is neutraal, de tweede bevat ingebedde frustratie.
+
+00:04:07.100 --> 00:04:09.500
+Die lagen zijn precies wat het systeem leert lezen.
+
+00:04:09.800 --> 00:04:11.840
+Stel je nu voor dat je acht uur in je dienst zit.
+
+00:04:12.000 --> 00:04:18.340
+Je hebt facturering afgehandeld, een hardwarewissel gedaan, een wachtwoord reset die misging en een klant die de stappen weigert die je al had gemaild.
+
+00:04:18.480 --> 00:04:19.880
+Op dat moment verslapt je focus.
+
+00:04:20.160 --> 00:04:23.040
+Je scant te snel, je mist die lichte stijging in spanning tijdens een gesprek.
+
+00:04:23.180 --> 00:04:25.560
+De AI heeft ondertussen geen last van dergelijke blinde vlekken.
+
+00:04:25.560 --> 00:04:30.160
+Het ziet de chat in hoofdletters met drie maal onacceptabel en herkent dat het een risico op klantverloop is.
+
+00:04:30.320 --> 00:04:34.280
+In plaats van te wachten tot je er toevallig op stuit, duwt het platform die zaak hoger in de wachtrij.
+
+00:04:34.480 --> 00:04:36.180
+Dat is waar routering het spel verandert.
+
+00:04:36.600 --> 00:04:38.640
+Traditioneel is het wie het eerst komt, die het eerst maalt.
+
+00:04:38.880 --> 00:04:41.540
+Degene die aan de beurt is, krijgt antwoord, ongeacht de urgentie.
+
+00:04:41.740 --> 00:04:44.060
+Met actieve sentimentmodellen verschuift die volgorde.
+
+00:04:44.300 --> 00:04:49.100
+Dringende of emotionele zaken komen eerder naar boven en belanden bij de medewerkers die het best zijn toegerust om de situatie te sussen.
+
+00:04:49.100 --> 00:04:53.120
+Als je een visueel beeld wilt, stel je dan voor dat het systeem een lichtgevende markering op het bord plaatst.
+
+00:04:53.260 --> 00:04:56.660
+De boodschap dat dit een ontmoeting op baasniveau is, niet zomaar een achtergrondgevecht.
+
+00:04:56.820 --> 00:04:59.720
+Het principe is niet mystiek, het is toegepaste patroonherkenning.
+
+00:05:00.480 --> 00:05:07.100
+365 verwerkt tekst en spraak via NLP en sentimentanalyse, waarbij woorden, zinsbouw en zelfs pauzes worden omgezet in bruikbare signalen.
+
+00:05:07.280 --> 00:05:09.400
+Deze signalen sturen vervolgens de routering aan.
+
+00:05:09.640 --> 00:05:14.540
+Boze klant noemt op zeggen, escaleren, account met hoge waarde wordt ongeduldig, prioriteren.
+
+00:05:14.680 --> 00:05:16.720
+En supervisors staan niet buitenspel in dit proces.
+
+00:05:16.720 --> 00:05:22.820
+Zij kunnen die regels aanpassen. Sommige teams wegen klanten met een hoge waarde het zwaarst, anderen geven prioriteit aan opzegdreigingen.
+
+00:05:23.000 --> 00:05:26.280
+Het is gewoon configuratie, geen black box, die uit zichzelf raadt.
+
+00:05:26.420 --> 00:05:30.480
+En hoewel de opvallende zaken vaak focussen op trefwoorden, stem- en transcriptieanalyses,
+
+00:05:30.660 --> 00:05:34.060
+kan het ook zaken als lange pauzes of herhaalde groepen verhitte termen naar boven halen.
+
+00:05:34.240 --> 00:05:38.620
+Dit zijn niet altijd hardgecodeerde rode vlaggen, maar het zijn extra signalen waar het model rekening mee houdt.
+
+00:05:38.740 --> 00:05:41.060
+Waar jij een pauze misschien toeschrijft aan achtergrondgeluid,
+
+00:05:41.200 --> 00:05:44.380
+markeert het systeem het tenminste als iets dat het vermelde waard is in de context van de rest.
+
+00:05:44.380 --> 00:05:47.440
+Dus, wanneer je die inbox of wachtrij opent, begin je niet blind.
+
+00:05:47.620 --> 00:05:53.040
+Er is al een sentimentindicator aanwezig, een snelle lezing of de persoon kalm, geïrriteerd of klaar voor escalatie is.
+
+00:05:53.200 --> 00:05:56.200
+Het praat niet voor je, maar vertelt je wel dat deze situatie verhit raakt.
+
+00:05:56.420 --> 00:05:59.740
+Sla misschien de standaardtekst over en ga direct door naar het oplossen van het probleem.
+
+00:05:59.940 --> 00:06:04.760
+Dat vroege signaal voorkomt extra rondes van herhaling en bespaart beide partijen een nieuwe cyclus van frustratie.
+
+00:06:04.940 --> 00:06:08.360
+Het klinkt misschien als een kleine optimalisatie, maar op schaal verandert alles.
+
+00:06:08.360 --> 00:06:14.360
+Bij duizenden contacten verkoort AI-gestuurde triage de wachttijden, komen risicovolle zaken bij senior medewerkers terecht
+
+00:06:14.360 --> 00:06:17.620
+en wordt stress verlaagd omdat je niet constant hoeft te raden waar je je eerst op moet richten.
+
+00:06:17.800 --> 00:06:19.040
+Domme wachtrijen verdwijnen.
+
+00:06:19.220 --> 00:06:23.960
+In plaats daarvan worden ze vervangen door intentiegestuurde wachtrijen waar de moeilijkste uitdagingen precies terechtkomen waar ze horen.
+
+00:06:24.140 --> 00:06:27.320
+En zodra die emotionele heatmap draait, verschuift je perspectief.
+
+00:06:27.980 --> 00:06:30.280
+Sentimentdetectie draait niet alleen om het signaleren van problemen.
+
+00:06:30.420 --> 00:06:32.940
+Het draait erom dat je vrij bent om strategisch te handelen.
+
+00:06:33.140 --> 00:06:36.960
+Want wanneer AI kan waken over frustratie pieken, is de voor de hand liggende volgende stap.
+
+00:06:36.960 --> 00:06:38.340
+Wat kan het nog meer uit handen nemen?
+
+00:06:38.560 --> 00:06:42.660
+Zou het gegevens kunnen kopiëren, details kunnen loggen en de eindeloze ticketformulieren kunnen verwerken?
+
+00:06:42.880 --> 00:06:46.440
+Dat is het volgende deel van het verhaal, waarin deze systemen niet langer alleen stemmingen peilen,
+
+00:06:46.600 --> 00:06:50.520
+maar gaan fungeren als onvermoeibare stagiaires die het papierwerk doen, zodat je team dat niet hoeft te doen.
+
+00:06:50.740 --> 00:06:53.880
+Autonome agents, je nieuwe support stagiaires die nooit iets vergeten.
+
+00:06:54.080 --> 00:06:55.040
+Denk er eens zo over.
+
+00:06:55.760 --> 00:06:58.020
+Sentimentanalyse vertelt je welke cases escaleren.
+
+00:06:58.220 --> 00:07:00.820
+Maar wat gebeurt er zodra die cases in je wachtrij verschijnen?
+
+00:07:01.020 --> 00:07:02.760
+Dat is waar autonome agents inspringen.
+
+00:07:02.960 --> 00:07:06.860
+Digitale stagiaires binnen Dynamics 365 die repetitief casewerk afhandelen.
+
+00:07:06.960 --> 00:07:09.160
+Zodat jij de administratieve kant niet hoeft te micromanagen.
+
+00:07:09.360 --> 00:07:12.080
+Ze nemen niet de leiding, maar houden de boel georganiseerd en consistent,
+
+00:07:12.360 --> 00:07:14.400
+waardoor je team wordt ontlast van het dagelijkse sleurwerk.
+
+00:07:14.640 --> 00:07:17.720
+Microsoft verdeelt ze in drie hoofdtypen, de case management agent,
+
+00:07:17.960 --> 00:07:20.860
+de customer intent agent en de customer knowledge management agent.
+
+00:07:21.020 --> 00:07:23.920
+Case management richt zich op het aanmaken en bijwerken van tickets.
+
+00:07:24.200 --> 00:07:27.800
+Customer intent bouwt een intentiebibliotheek op basis van eerdere gesprekken,
+
+00:07:28.020 --> 00:07:31.040
+zodat het systeem beter kan voorspellen wat een klant echt nodig heeft.
+
+00:07:31.040 --> 00:07:36.020
+Knowledge management genereert en onderhoudt ondertussen de artikelen waar je team dagelijks op vertrouwt.
+
+00:07:36.020 --> 00:07:39.460
+Elk type automatiseert een specifiek onderdeel van de service-cyclus.
+
+00:07:39.680 --> 00:07:40.880
+Neem eerst case management.
+
+00:07:41.240 --> 00:07:43.920
+Normaal gesproken moet je bij elk ticket klantgegevens typen,
+
+00:07:44.200 --> 00:07:46.040
+categorieën instellen en tijdstippen matchen.
+
+00:07:46.240 --> 00:07:50.620
+De AI analyseert de tekst, vult velden in en ordent invoeren onder de juiste labels.
+
+00:07:50.960 --> 00:07:56.000
+Wanneer je regels instelt, kan het vervolgacties activeren of zelfs eenvoudige scenario's automatisch oplossen,
+
+00:07:56.280 --> 00:07:59.020
+zoals het sluiten van een case zodra een klant de levering bevestigt.
+
+00:07:59.020 --> 00:08:00.420
+Maar hier is een kanttekening.
+
+00:08:00.620 --> 00:08:04.080
+Tijdens de uithol houden de meeste teams deze stappen in de assistentmodus.
+
+00:08:04.320 --> 00:08:07.260
+Dat betekent dat de agent de updates opstelt en een mensen bevestigt.
+
+00:08:07.480 --> 00:08:09.680
+Volledige autonomie is geen kwestie van alles of niets.
+
+00:08:09.860 --> 00:08:12.660
+Je vergroot het vertrouwen naarmate je ziet dat het systeem correct functioneert.
+
+00:08:12.840 --> 00:08:14.680
+Vervolgens de knowledge management agent.
+
+00:08:14.920 --> 00:08:16.820
+Kennisbanken veranderen vaak in een chaos.
+
+00:08:17.280 --> 00:08:21.340
+Duplicaten, half afgemaakte concepten en verouderde content overal verspreid.
+
+00:08:21.340 --> 00:08:28.560
+De AI controleert de context, markeert dubbele invoeren en leidt content automatisch door als interne richtlijn of publieke FAQ.
+
+00:08:28.820 --> 00:08:30.500
+Beheerders kunnen waarborgen instellen.
+
+00:08:30.700 --> 00:08:34.480
+Een AI concept kan bijvoorbeeld niet extern worden gepubliceerd totdat een beoordelaar dit goedkeurt.
+
+00:08:34.680 --> 00:08:35.580
+Begin voorzichtig.
+
+00:08:35.820 --> 00:08:40.560
+Laat de agent concepten opstellen en rommel opruimen terwijl je team beslist of een nieuw artikel klaar is voor het publiek.
+
+00:08:40.620 --> 00:08:45.380
+Zodra je je er prettig bij voelt, kun je die beperkingen versoepelen zonder dat de opschoning verandert in een commissiebeoordeling van twee weken.
+
+00:08:45.600 --> 00:08:46.920
+Dan is er nog customer intent.
+
+00:08:47.160 --> 00:08:50.660
+Dit gaat over het catalogiseren van wat klanten in de loop der tijd echt vragen.
+
+00:08:50.660 --> 00:08:58.440
+In plaats van door transcripten te worstelen om de intentie te raden facturatie versus garantie versus wachtwoordreset bouwt de AI een intentiebibliotheek over alle kanalen heen.
+
+00:08:58.640 --> 00:09:03.460
+Wanneer een nieuwe case overeenkomt met een bekend patroon, kan het vervolgstap een aanbevelen of waarschijnlijke oplossingen alvast invullen.
+
+00:09:03.720 --> 00:09:05.720
+Nogmaals, vertrouwen komt voort uit verificatie.
+
+00:09:05.920 --> 00:09:08.540
+Hou het in de conceptmodus zodat je de acties kunt bevestigen.
+
+00:09:08.740 --> 00:09:13.280
+Naarmate de nauwkeurigheid toeneemt, kun je sneller reageren zonder de kwaliteit uit het oog te verliezen.
+
+00:09:13.460 --> 00:09:15.780
+Het resultaat is bij alle drie de agents vergelijkbaar.
+
+00:09:16.000 --> 00:09:18.800
+Minder tijd kwijt aanwisselen tussen schermen, meer tijd voor echt contact.
+
+00:09:18.800 --> 00:09:23.280
+De AI regelt op de achtergrond de logboekregistraties, intentieherkenning en het onderhoud van de kennisbank.
+
+00:09:23.480 --> 00:09:27.900
+Jij doet de menselijke kant, luisteren, inleven en beslissen hoe het probleem wordt opgelost.
+
+00:09:28.140 --> 00:09:31.620
+Deze overdracht is belangrijk omdat het elke interactie met minuten verkort.
+
+00:09:32.080 --> 00:09:37.640
+Vermenigvuldigt dat met honderden zaken en de werkdruk voelt ineens minder als gehaastge klik en meer als gerichte strategie.
+
+00:09:37.840 --> 00:09:40.020
+Governance is natuurlijk geen optie, maar een vereiste.
+
+00:09:40.280 --> 00:09:43.340
+Behandel de uitrol van agents zoals je een nieuwe junior medewerker zou behandelen.
+
+00:09:43.500 --> 00:09:46.820
+Je zou een nieuwe collega op de eerste dag ook geen globale beheerdersrechten geven.
+
+00:09:46.820 --> 00:09:49.500
+Hetzelfde geldt hier. Schakel auditverijsten in.
+
+00:09:49.640 --> 00:09:55.400
+Hou automatische sluitingen achtergoedkeuringsdrempels totdat je het systeem vertrouwt en monitor de prestaties tijdens de eerste weken.
+
+00:09:55.620 --> 00:09:59.500
+Door toezicht in te bouwen, zorg je dat de AI het team ondersteunt in plaats van verrast.
+
+00:09:59.700 --> 00:10:06.420
+Bij goed gebruik ondersteunen deze digitale helpers de rommelige kanten van service, gemiste terugbelverzoeken, ongetekte categorieën, tickets die in het niets verdwijnen.
+
+00:10:06.580 --> 00:10:09.140
+Ze houden het register accuraat en de kennisbank overzichtelijk.
+
+00:10:09.340 --> 00:10:11.940
+Maar ze zijn er niet om oordeelsvermogen of empathie te vervangen.
+
+00:10:11.940 --> 00:10:16.740
+Ze maken het speelveld vrij zodat mensen hun energie kunnen steken in wat echt resultaat oplevert.
+
+00:10:17.000 --> 00:10:22.440
+Dat is allemaal nuttig, maar alleen als je direct in een klantinteractie kunt stappen met de juiste achtergrondinformatie bij de hand.
+
+00:10:22.620 --> 00:10:28.520
+Het aanmaken van een zaak is één ding, maar je hebt direct relevante context nodig zodra het gesprek of de chat begint.
+
+00:10:28.740 --> 00:10:31.020
+Anders vraag je de klant om weer bij nul te beginnen.
+
+00:10:31.260 --> 00:10:36.320
+En weinig dingen putten het geduld sneller uit dan vijf keer hetzelfde verhaal vertellen aan vijf verschillende mensen.
+
+00:10:36.580 --> 00:10:39.260
+Met gesprek superkrachten vraag je nooit, kunt u dat herhalen?
+
+00:10:39.260 --> 00:10:43.140
+Nogmaals, wanneer agents een halve puzzel krijgen, vertraagt de vooruitgang.
+
+00:10:43.380 --> 00:10:50.560
+Daarom rust Copilot je uit met wat ik gesprek superkrachten noem, tools ontworpen om de context te behouden en te voorkomen dat je tijdens een gesprek moet stressen.
+
+00:10:50.700 --> 00:10:55.400
+In plaats van door ingewikkelde laks te scrollen, stelt Copilot gestructureerde gespreksamenvattingen samen.
+
+00:10:55.400 --> 00:11:03.380
+Elk zaakformulier bevat de essentie, klantgegevens, het betreffende product, relevante geschiedenis en of de sfeer kalm, gespannen of explosief is.
+
+00:11:03.580 --> 00:11:08.300
+Voor chats en getranscribeerde telefoongesprekken besparen deze samenvattingen minuten aan terugzoeken.
+
+00:11:08.300 --> 00:11:10.660
+Operationeel gezien is dat erg belangrijk.
+
+00:11:10.920 --> 00:11:14.840
+Minder zoeken, minder controlevragen en sneller naar de daadwerkelijke oplossing.
+
+00:11:15.160 --> 00:11:18.800
+Zie het als een nieuwe sessie binnenstappen terwijl het campagnejournaal al klaar ligt.
+
+00:11:19.000 --> 00:11:22.840
+Je hoeft niet door verspreide notices te bladeren om uit te zoeken wat er twee missies geleden misging.
+
+00:11:22.840 --> 00:11:26.900
+Je hebt de belangrijkste gebeurtenissen, uitkomsten en stemming in één oogopslag in beeld.
+
+00:11:27.060 --> 00:11:33.900
+Wanneer een gefrustreerde klant belt, kun je de beleefde vragen overslaan zoals, hebben wij elkaar eerder gesproken, en in plaats daarvan direct naar de oplossing gaan.
+
+00:11:33.900 --> 00:11:36.400
+Maar de samenvattingen zijn slechts de helft van het verhaal.
+
+00:11:36.540 --> 00:11:39.620
+Copilot biedt ook, stel een vraag, wat precies is wat het zegt.
+
+00:11:39.860 --> 00:11:44.520
+Geen rigide boeliaanse zoekopdrachten, geen gegok naar exacte bewoordingen uit stoffige documentatie.
+
+00:11:44.680 --> 00:11:48.520
+Je stelt de vraag op een natuurlijke manier, precies zoals je een collega zou aanspreken.
+
+00:11:48.760 --> 00:11:52.700
+Wat is het garantiebeleid voor dit model, of hoe escaleer ik een klacht over de verzending?
+
+00:11:52.700 --> 00:11:59.320
+De tool antwoordt door informatie uit interne kennisbanken te halen en, indien geconfigureerd, uit maximaal vijf vertrouwde externe domeinen.
+
+00:11:59.540 --> 00:12:03.300
+Dat betekent dat je direct antwoorden krijgt, zelfs terwijl de klant nog praat.
+
+00:12:03.520 --> 00:12:08.020
+Stiltes worden korter en de ondersteuning loopt niet vast terwijl jij in verouderde handleidingen zoekt.
+
+00:12:08.200 --> 00:12:12.920
+In het beste geval geeft het systeem jezelfs een kant-en-klaar artikel dat je direct met de klant kunt delen.
+
+00:12:13.100 --> 00:12:16.420
+Branding intact, beleid accuraat, geen noodzaak om het te herschrijven.
+
+00:12:16.560 --> 00:12:17.580
+En daar houdt het niet op.
+
+00:12:17.740 --> 00:12:21.020
+Om het tempo in het gesprek te houden, stelt Copilot ook antwoorden op.
+
+00:12:21.020 --> 00:12:25.920
+Je kunt typen, een vraag stellen in natuurlijke taal, vervolgvragen stellen en het antwoord verfijnen.
+
+00:12:26.120 --> 00:12:31.060
+Laat Copilot chats of e-mails opstellen met de context erin verwerkt en bewerk ze daarna voor verzending.
+
+00:12:31.340 --> 00:12:35.540
+Bekijk bronnen naast het antwoord, zodat jij en de klant weten waar de informatie vandaan komt.
+
+00:12:35.740 --> 00:12:41.180
+Die korte antwoorden klinken misschien niet flitsend, maar ze maken het verschil tussen ongemakkelijke stiltes en een soepele afhandeling.
+
+00:12:41.680 --> 00:12:46.140
+Transparantie groeit om dat klant te zien dat je put uit getoetste regels in plaats van vaag taalgebruik...
+
+00:12:46.140 --> 00:12:49.760
+...en je hoeft niet meer te grogelen met copypasten tussen zes wikis om voorbereid te lijken.
+
+00:12:49.760 --> 00:12:51.820
+Natuurlijk verdwijnt governance niet.
+
+00:12:52.000 --> 00:12:56.840
+De AI stelt antwoorden op basis van wat het weet, maar je moet ze altijd controleren voordat je ze verstuurt.
+
+00:12:57.060 --> 00:13:02.580
+Dat is zowel gezond verstand als best practice, zoals elke systeembeheerder leert, vertrouw, maar verifieer.
+
+00:13:02.800 --> 00:13:08.160
+Laat de machine het voorbereidende werk doen, maar maak zelf de uiteindelijke beslissing voordat het in de inbox van de klant belandt.
+
+00:13:08.160 --> 00:13:15.600
+Het resultaat? Medewerkers blijven in de flow van het gesprek, klanten voelen zich gehoord zonder vertraging en tickets duren niet langer eindeloos met even geduld.
+
+00:13:15.760 --> 00:13:20.020
+Ik zoek het uit. Je hoeft niet te schakelen tussen vensters of je te verontschuldigen voor ontbrekende context.
+
+00:13:20.240 --> 00:13:24.500
+Je luistert, reageert en beweegt het ticket richting een oplossing met de juiste informatie bij de hand.
+
+00:13:24.680 --> 00:13:27.900
+Voor de klant ziet het er naadloos uit, alsof je de regels al uit je hoofd kende.
+
+00:13:28.100 --> 00:13:30.400
+Die verandering verbetert de dienstverlening op grote schaal.
+
+00:13:30.400 --> 00:13:33.000
+Elk contact verloopt soepel in plaats van met horten en stoten.
+
+00:13:33.180 --> 00:13:37.340
+Je team behoudt focus omdat het saaie werk van data verzamelen en onthouden wordt overgenomen.
+
+00:13:37.520 --> 00:13:42.280
+Klanten genieten van continuïteit omdat je niet onderbreekt met herhalingen of vertraagt met lange stiltes.
+
+00:13:42.500 --> 00:13:45.140
+En de gevreesde vervolgvraag kunt u uw probleem herhalen.
+
+00:13:45.460 --> 00:13:49.400
+Verdwijnt. Die vraag verdwijnt in de geschiedenis, net als back-up tapes en kiestonen.
+
+00:13:49.600 --> 00:13:55.800
+Dat is de echte kracht van conversationele superkrachten, niet alleen herhaling elimineren, maar iedereen in realtime op één lijn houden.
+
+00:13:55.800 --> 00:14:00.020
+En zodra de dialoog zo soepel verloopt, kun je gaan nadenken over de grotere transitie.
+
+00:14:00.020 --> 00:14:05.600
+Hoe zou het er uitzien als het hele contactcenter niet langer in wachtrijen staat, maar daadwerkelijk voorspelt wie als eerste hulp nodig heeft?
+
+00:14:05.820 --> 00:14:08.100
+Van wachtrijen naar proactieve betrokkenheids-engines.
+
+00:14:08.400 --> 00:14:09.600
+Stel je het oude model voor.
+
+00:14:09.820 --> 00:14:12.620
+Wachtrijen werken als een rij bij de bar, wie het eerst komt, wie het eerst maalt.
+
+00:14:12.800 --> 00:14:16.220
+Of het nu om een eenvoudige vraag ging of een op handen zijnde crisis, iedereen wachtte even lang.
+
+00:14:16.560 --> 00:14:19.180
+Medewerkers pakten het volgende nummer en bereiden zich voor op de impact.
+
+00:14:19.400 --> 00:14:22.220
+Dat was service zonder context en iedereen betaalde daarvoor de prijs.
+
+00:14:22.220 --> 00:14:26.320
+De moderne aanpak gooit het roer om met sentiment gebaseerde routering, voorspellende analyses,
+
+00:14:26.640 --> 00:14:29.360
+omni-channel-orchestratie en voorspellende dashboards voor supervisors.
+
+00:14:29.360 --> 00:14:32.680
+Je schuift niet langer alleen met tickets, je bouwt in real-time een strijdplan.
+
+00:14:32.860 --> 00:14:37.840
+In plaats van blind orders aannemen, fungeert het platform als een sorteermachine die urgentie, emotie en waarde labelt,
+
+00:14:37.980 --> 00:14:40.200
+zodat de juiste zaken bij de juiste medewerkers terechtkomen.
+
+00:14:40.400 --> 00:14:41.980
+Neem sentimentgebaseerde routering.
+
+00:14:42.200 --> 00:14:46.180
+Als het systeem frustratie signaleert, springt die zaak naar voren voor een medewerker die getraind is in escalaties.
+
+00:14:46.340 --> 00:14:48.560
+Een klant met een hoge waarde die verontrustende taal gebruikt.
+
+00:14:48.780 --> 00:14:52.380
+Zij worden voorrang gegeven boven minder dringende vragen, zodat hun geduld niet opraakt.
+
+00:14:52.720 --> 00:14:53.860
+Medewerkers hoeven niet te gissen.
+
+00:14:54.100 --> 00:14:57.620
+Ze staan in een positie waarin ze situaties kunnen sussen voordat iemand boos afhaakt.
+
+00:14:59.360 --> 00:15:04.660
+Door live verkeer en historische patronen te analyseren, brengt het platform risico's in kaart voordat ze uit de hand lopen.
+
+00:15:04.820 --> 00:15:10.560
+Als een product defect leidt tot telefoontjes in een hele regio, verschijnen er waarschuwingen voor klantverloop zonder te wachten op een wekelijksrapport.
+
+00:15:10.700 --> 00:15:14.140
+En dezelfde berekeningen kunnen kansen identificeren, niet alleen bedreigingen.
+
+00:15:14.320 --> 00:15:17.000
+Iemand die belt met interesse in een accessoire of dienst.
+
+00:15:17.160 --> 00:15:21.140
+Het systeem kan het gesprek op precies het juiste moment richting een appseil sturen.
+
+00:15:21.820 --> 00:15:24.260
+Supervisors krijgen iets dat nog waardevoller is, tijd.
+
+00:15:24.600 --> 00:15:28.040
+Voorspellende dashboards laten zien wanneer er zich waarschijnlijk achterstanden opstapelen.
+
+00:15:28.040 --> 00:15:33.200
+In plaats van de chaos pas uren te laten ontdekken, zien leidinggevende de curve van het inkomende werkruim van tevoren.
+
+00:15:33.380 --> 00:15:37.400
+Als de bezetting over drie uur krap wordt, kunnen roosters worden aangepast voordat de wachtrij bezwijkt.
+
+00:15:37.580 --> 00:15:39.700
+Dit is meer dan een arbeidsvoorwaarde voor de werksfeer.
+
+00:15:39.880 --> 00:15:44.180
+Het is operationele verzekering die voorkomt dat het moreel en de serviceniveaus instorten bij plotselingen pieken.
+
+00:15:44.380 --> 00:15:46.480
+Omni-channel orchestratie brengt alles samen.
+
+00:15:46.660 --> 00:15:48.120
+Klanten denken niet in silo's.
+
+00:15:48.300 --> 00:15:52.860
+Ze schakelen van SMS naar chat naar spraak zonder zich zorgen te maken over welk back-end systeem je gebruikt.
+
+00:15:52.860 --> 00:16:00.060
+Dynamics 365 Contact Center integreert die paden, zodat medewerkers een consistent dossier erven in plaats van gefragmenteerde flarden.
+
+00:16:00.220 --> 00:16:02.360
+Een chatgesprek gaat naadloos over in bellen.
+
+00:16:02.540 --> 00:16:05.940
+Een escalatie via e-mail neemt de historie mee naar de live-agent.
+
+00:16:06.120 --> 00:16:10.720
+Het is het verschil tussen elke keer op level 1 beginnen en aankomen met de hele kerkerkaart in de hand.
+
+00:16:10.980 --> 00:16:12.460
+Zet die stukjes nu eens bij elkaar.
+
+00:16:12.640 --> 00:16:14.780
+Een VIP-logt herhaalde klachten via de chat.
+
+00:16:15.020 --> 00:16:17.380
+Sentiment-routering labelt de toon als dringend.
+
+00:16:17.380 --> 00:16:26.440
+Voorspellende analyses weten dat deze klant een geschiedenis van hoge uitgaven heeft en omni-channel orchestratie zorgt ervoor dat de volgende beschikbare telefonische agent elke eerdere contactpoging ziet.
+
+00:16:26.580 --> 00:16:32.680
+Het dashboard voor supervisors waarschuwt ondertussen voor stijgende volumes in dat accountsegment, dus wordt er proactief extra personeel ingezet.
+
+00:16:32.820 --> 00:16:37.640
+In plaats van weer een verloren account, heb je een situatie die gered kan worden door de best geplaatste agent.
+
+00:16:37.840 --> 00:16:39.980
+En deze verandering is niet slechts theoretisch.
+
+00:16:40.160 --> 00:16:46.000
+Bedrijven die Dynamics 365 Customer Service gebruiken, rapporteren enorme dalingen in achterstanden en kortere afhandeld eiden.
+
+00:16:46.000 --> 00:16:53.060
+Een voorbeeld dat Microsoft uitlicht is Lexmark, dat klantbetrokkenheid veranderde van een reactief karwei in een proactief voordeel met deze tools.
+
+00:16:53.260 --> 00:16:58.980
+Het integreren van AI-agents en voorspellende dashboards leverde hen zowel efficiëntiewinst als scherpere inzichten op.
+
+00:16:59.060 --> 00:17:03.480
+Het bewijst dat dit geen abstracte routekaart is, maar een aanpak die al resultaten boekt in de praktijk.
+
+00:17:03.680 --> 00:17:06.460
+De cultuur verandert wanneer systemen je niet langer in de steek laten.
+
+00:17:06.700 --> 00:17:11.540
+Agents voelen zich minder als ticketmedewerkers en meer als probleemoplossers, omdat ze prioriteitswerk krijgen dat ertoe doet.
+
+00:17:11.960 --> 00:17:14.840
+Supervisors stoppen met pleisters plakken en beginnen de strategie te verfijnen.
+
+00:17:14.840 --> 00:17:18.800
+Klanten voelen zich erkend omdat hun urgentie wordt weerspiegeld in hoe snel ze worden geholpen.
+
+00:17:18.960 --> 00:17:24.440
+Een wachtrijsysteem dat voorheen ieders geduld op de proef stelde, evolueert tot een motor gericht op waarde en loyaliteit.
+
+00:17:24.660 --> 00:17:27.820
+Dus als je nu aan wachtrijen denkt, beeld je dan niet langer een rij in de kroeg in.
+
+00:17:28.020 --> 00:17:32.940
+Beeld je een vertakkende stroom in die zich in realtime aanpast, geleid door sentiment, urgentie en voorspellend inzicht.
+
+00:17:33.120 --> 00:17:36.860
+Het platform handelt niet alleen tickets sneller af, het herrijkt hele interacties,
+
+00:17:37.120 --> 00:17:40.140
+zodat elke speler aan tafel zijn rol kent voordat de dobbelstenen rollen.
+
+00:17:40.140 --> 00:17:42.400
+En die wachtrij leidt naar de uiteindelijke conclusie.
+
+00:17:42.580 --> 00:17:46.080
+AI in Dynamics 365 is er niet om iemand aan de tafel te vervangen.
+
+00:17:46.240 --> 00:17:48.580
+Het is er om te veranderen hoe jouw team het spel speelt.
+
+00:17:48.780 --> 00:17:54.060
+AI in Dynamics 365 Customer Service is er niet om voor je agents te dobbelen, maar om ze een BAF te geven.
+
+00:17:54.240 --> 00:17:58.440
+Het automatiseren van het routine werk verschuift hun focus van afingrituelen naar echte strategie.
+
+00:17:58.980 --> 00:18:02.520
+Sentimentdetectie signaleert problemen vroegtijdig en stuurt de juiste zaken naar de juiste handen.
+
+00:18:02.680 --> 00:18:04.140
+Agents worden tactici, geen ticketmedewerkers.
+
+00:18:04.140 --> 00:18:07.700
+Maar onthoud, zelfs versterkte stagiairs hebben van rails nodig.
+
+00:18:07.860 --> 00:18:10.340
+In productie heb je beleid, governance en toezicht nodig.
+
+00:18:10.540 --> 00:18:13.580
+Als je een leider bent die de volgende stappen plant, is het pad eenvoudig.
+
+00:18:13.780 --> 00:18:15.600
+Beoordeel bedrijfsbehoeften en pijnpunten.
+
+00:18:15.840 --> 00:18:17.740
+Bereid je data en infrastructuur voor.
+
+00:18:17.960 --> 00:18:21.760
+Test co-pilot agents in een gecontroleerde omgeving met governance, meet en itereer.
+
+00:18:21.940 --> 00:18:24.120
+Eindbaas verslagen, blauw scherm verleden tijd.
+
+00:18:24.340 --> 00:18:27.020
+Als de run van vandaag je ideeën gaf voor een pilot, abonneer je dan.
+
+00:18:27.220 --> 00:18:29.260
+Deel dit met je party voordat de CFO weer agro wordt.
+
+00:18:29.260 --> 00:18:31.300
+Je zult dat voordeel nodig hebben bij de volgende encounter.

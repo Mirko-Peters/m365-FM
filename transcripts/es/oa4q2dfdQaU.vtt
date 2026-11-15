@@ -1,0 +1,1189 @@
+WEBVTT
+
+00:00:00.460 --> 00:00:06.800
+Listo para 10 días de Microsoft 365, Copilot, EA, Azure y las personas que están dando forma al futuro del trabajo,
+
+00:00:07.800 --> 00:00:12.340
+este enero vuelve M365 con más fuerza y venimos con más fuerza.
+
+00:00:12.840 --> 00:00:18.200
+Únete a nosotros para sesiones en vivo, demostraciones reales y conocimientos prácticos de MVPs y expertos de la industria de todo el mundo.
+
+00:00:18.840 --> 00:00:21.220
+Nada de diapositivas genéricas, nada de tecnicismos interminables.
+
+00:00:21.980 --> 00:00:23.340
+Abordamos los desafíos reales.
+
+00:00:23.740 --> 00:00:28.700
+Copilot Studio, agentes de IA, Fabric, seguridad, gobernanza y automatización.
+
+00:00:28.700 --> 00:00:34.380
+Ya seas un profesional de TI, desarrollador o líder empresarial, hay sesiones diseñadas para ti.
+
+00:00:35.520 --> 00:00:40.000
+Con 10 días completos, puedes explorar múltiples tecnologías y conectar con una comunidad global.
+
+00:00:40.940 --> 00:00:44.180
+Míralo en vivo y lleva ideas prácticas de vuelta a tu organización.
+
+00:00:45.140 --> 00:00:48.900
+Enero de 2027, 10 días, una sola comunidad Microsoft.
+
+00:00:49.420 --> 00:00:50.560
+Las inscripciones ya están abiertas.
+
+00:00:51.820 --> 00:00:52.860
+Reserva tu lugar hoy mismo.
+
+00:00:54.220 --> 00:00:58.140
+Eso es m365.net.
+
+00:01:00.020 --> 00:01:04.500
+Únete ahora en m365.net y nos vemos en vivo en enero.
+
+00:01:05.140 --> 00:01:07.620
+Una vez te has preguntado a quién puede ver realmente tus datos en Power BI.
+
+00:01:07.940 --> 00:01:11.660
+Alerta de spoiler, no es tan privado como crees a menos que domines la seguridad a nivel de fila.
+
+00:01:12.820 --> 00:01:20.360
+En este episodio, no solo marcamos la casilla de RLS, desglosamos las partes móviles desde las definiciones de roles hasta las expresiones DAX que deciden silenciosamente quién ve qué.
+
+00:01:20.360 --> 00:01:29.140
+La mayoría se detiene en la configuración, pero te mostraremos cómo cada decisión se conecta, para que tus datos no solo estén bloqueados, sino diseñados para la seguridad.
+
+00:01:29.140 --> 00:01:32.980
+¿Por qué la seguridad a nivel de fila es un sistema, no una casilla de verificación?
+
+00:01:32.980 --> 00:01:41.220
+Si estás acostumbrado a proteger una hoja de cálculo confidencial poniéndole una contraseña, ya sabes que hay una brecha entre lo que intentas y lo que realmente protege tus datos.
+
+00:01:42.900 --> 00:01:45.960
+Power BI con seguridad a nivel de fila puede sentirse exactamente igual.
+
+00:01:46.540 --> 00:01:50.160
+Actives el interruptor de RLS, asignas un par de roles y piensas que estamos cubiertos.
+
+00:01:50.160 --> 00:01:57.640
+Pero la realidad es diferente. Los datos confidenciales se encuentran en una salida cuando esas conexiones entre roles, filtros y usuarios no están bien mapeadas.
+
+00:01:58.560 --> 00:02:05.080
+La gente a la vez habla de las veces que alguien del equipo de ventas abrió un panel y terminó viendo números que nunca debió haber visto.
+
+00:02:06.280 --> 00:02:11.700
+Pero sucede, y casi siempre comienza con la suposición de que RLS es solo una casilla más para marcar durante la configuración.
+
+00:02:12.600 --> 00:02:17.220
+Pongámonos en los zapatos de alguien que ha dado acceso a un panel pensando que solo está empoderando a un colega.
+
+00:02:17.220 --> 00:02:23.280
+Parece inofensivo, pero en demasiadas organizaciones, el acceso a un panel es acceso a todo lo que hay detrás.
+
+00:02:24.200 --> 00:02:29.920
+He visto entornos donde un único rol de gerente global permitió accidentalmente que usuarios junior navegaran por datos confidenciales de RR.
+
+00:02:30.620 --> 00:02:32.680
+Solo porque el nombre no coincidía con la realidad.
+
+00:02:33.200 --> 00:02:34.660
+Esto tampoco es un caso raro y aislado.
+
+00:02:34.980 --> 00:02:39.560
+Es más cercano a la regla que a la excepción, especialmente cuando una empresa crece y los paneles se multiplican.
+
+00:02:40.300 --> 00:02:46.360
+Todos quieren avanzar rápido, pero al moverse sin estructuras se dejan pequeños agujeros que pueden convertirse en brechas enormes durante una auditoría.
+
+00:02:47.220 --> 00:02:49.420
+En teoría la RLS no podría sonar más sencilla.
+
+00:02:50.160 --> 00:02:56.140
+Crea un rol, llámalo ventas, añade un filtro como región igual a EEE y asigna usuarios a él.
+
+00:02:56.760 --> 00:03:02.060
+Pero detrás de cada menudo desplegable y casilla de verificación en Power BI hay un sistema decidiendo qué datos viajan a dónde.
+
+00:03:02.820 --> 00:03:07.360
+Si pasas por alto una relación en un filtro no captura una nueva fuente de datos, no es solo un error técnico.
+
+00:03:07.360 --> 00:03:10.200
+Es un incidente de seguridad a punto de ocurrir.
+
+00:03:10.860 --> 00:03:15.260
+No te enterarás hasta que alguien tropiece con datos que no debería haber y a veces, ni siquiera entonces.
+
+00:03:15.880 --> 00:03:18.640
+Y, eh, eso es lo que hace que sus pequeños fallos sean tan difíciles de detectar.
+
+00:03:18.860 --> 00:03:23.660
+No vienen con alarmas y las auditorías estándar a menudo no profundizan lo suficiente para anotarlos.
+
+00:03:23.880 --> 00:03:28.960
+Lo que se pasa por alto es cuán estrechamente conectados están los componentes de la RLS.
+
+00:03:29.640 --> 00:03:34.300
+La mayoría de los tutoriales pasan rápido por la configuración guiándote en la creación de roles y conceptos básicos de filtros.
+
+00:03:35.060 --> 00:03:37.440
+Demuestran cómo asignar usuarios y marcar una casilla de vista previa,
+
+00:03:37.820 --> 00:03:43.120
+pero casi nadie se tiene a analizar cómo un filtro en la tabla de ventas afecta, por ejemplo, a una tabla de territorios relacionada.
+
+00:03:44.120 --> 00:03:46.860
+Cada parte de la lógica en la RLS repercute en las demás.
+
+00:03:47.380 --> 00:03:50.680
+Las asignaciones, las expresiones DAX e incluso los nombres de los roles mismos.
+
+00:03:51.300 --> 00:03:55.840
+Trata esas elecciones como pasos aislados y estarás confiando en que el sistema no tiene cabos sueltos.
+
+00:03:55.840 --> 00:04:00.520
+Pero un filtro olvidado y de repente tu cuidadosa configuración de roles es como un colador.
+
+00:04:01.740 --> 00:04:07.960
+Esta es una de esas áreas donde la analogía correcta no es una puerta cerrada, es una red de hilos.
+
+00:04:08.960 --> 00:04:11.480
+Cambias una parte y todo el conjunto puede desplazarse de repente.
+
+00:04:12.120 --> 00:04:15.540
+Pasas por alto un hilo, has creado una fuga que ni siquiera es obvia hasta que alguien la explota.
+
+00:04:16.000 --> 00:04:18.000
+Los incidentes reales muestran cómo sucede esto.
+
+00:04:18.500 --> 00:04:21.980
+Historias internas de equipos de análisis cuentan el momento en que el jefe de ventas de Europa
+
+00:04:21.980 --> 00:04:24.820
+se topó con datos del flujo de trabajo de Norteamérica.
+
+00:04:25.940 --> 00:04:28.340
+Eso no fue alguien entrando por la fuerza, fue un filtro mal aplicado,
+
+00:04:28.560 --> 00:04:31.460
+un valor predeterminado involuntario o un rol que nadie pensó en verificar.
+
+00:04:32.180 --> 00:04:34.100
+No se trata solo de historias de terror en el mundo real.
+
+00:04:34.900 --> 00:04:39.480
+Los propios informes de vulnerabilidad de Microsoft catalogan la seguridad a nivel de fila mal configurada
+
+00:04:39.480 --> 00:04:43.440
+como una de las principales causas de vergonzosas exposiciones de datos públicos en grandes organizaciones.
+
+00:04:43.440 --> 00:04:48.000
+Por cada titular de noticias sobre una gran brecha hay docenas que no se denuncian
+
+00:04:48.000 --> 00:04:50.100
+pero que tienen consecuencias duraderas tras bambalinas.
+
+00:04:51.160 --> 00:04:55.420
+Lo que une a estos problemas es la falsa sensación de seguridad que ofrece la RLS
+
+00:04:55.420 --> 00:04:59.080
+cuando la tratas como un simple elemento para marcar en una lista de tareas.
+
+00:05:00.340 --> 00:05:04.380
+Los estudios de los equipos de seguridad de Microsoft subrayan que superponer filtros,
+
+00:05:04.480 --> 00:05:09.900
+apilarlos entre tablas, aplicar expresiones DAX adicionales o usar combinaciones de lógica estática y dinámica
+
+00:05:09.900 --> 00:05:12.300
+aumenta tanto la protección como la complejidad.
+
+00:05:13.500 --> 00:05:15.980
+Cada capa que añades no solo aumenta la seguridad,
+
+00:05:16.180 --> 00:05:19.980
+sino que multiplica los puntos donde puede ocurrir un error de configuración.
+
+00:05:21.380 --> 00:05:24.300
+En lugar de un simple portero en la puerta, tienes una red compleja
+
+00:05:24.300 --> 00:05:27.920
+donde un nodo olvidado puede arruinar meses de planificación de seguridad.
+
+00:05:29.340 --> 00:05:31.540
+Tampoco ignoremos las realidades prácticas.
+
+00:05:32.540 --> 00:05:34.720
+Un sistema puede funcionar bien en pruebas,
+
+00:05:34.980 --> 00:05:37.740
+pero al llevarlo a producción con usuarios, departamentos y equipos
+
+00:05:37.740 --> 00:05:42.700
+que cambian constantemente, surgen situaciones donde alguien que cambió de equipo el trimestre pasado
+
+00:05:42.700 --> 00:05:45.740
+sigue teniendo acceso a los números financieros trimestrales.
+
+00:05:47.740 --> 00:05:50.220
+Nombres y asignaciones que tenían sentido al principio
+
+00:05:50.220 --> 00:05:52.560
+se convierten en misteriosos artefactos heredados.
+
+00:05:53.260 --> 00:05:55.800
+Nadie quiere tocarlos por si acaso se siguen utilizando.
+
+00:05:56.360 --> 00:05:59.140
+Si solo activas RLS durante la configuración y luego te olvidas,
+
+00:05:59.260 --> 00:06:00.340
+no estás protegiendo tus datos.
+
+00:06:00.800 --> 00:06:03.020
+Estás esperando que nadie toque la puerta equivocada,
+
+00:06:03.100 --> 00:06:05.480
+ya sea por curiosidad o por error.
+
+00:06:05.480 --> 00:06:07.900
+Todo esto nos lleva a una verdad fundamental.
+
+00:06:08.400 --> 00:06:09.840
+La seguridad a nivel de fila está viva.
+
+00:06:10.300 --> 00:06:11.280
+Cambia la parte de tu organización.
+
+00:06:11.880 --> 00:06:13.940
+Cada rol que creas, cada filtro DAX que aplicas,
+
+00:06:14.060 --> 00:06:16.200
+cada grupo que asignas, no son decisiones menores.
+
+00:06:17.280 --> 00:06:19.960
+Fluyen juntos para crear un sistema de protección vivo y dinámico
+
+00:06:19.960 --> 00:06:21.940
+o si se ignoran, una malla llena de agujeros.
+
+00:06:22.580 --> 00:06:24.940
+Así que antes de pasar al siguiente panel o entregar un modelo,
+
+00:06:25.140 --> 00:06:26.660
+detente y pregúntate realmente.
+
+00:06:27.080 --> 00:06:30.260
+¿Estoy gestionando un sistema de seguridad o solo espero que el interruptor sea suficiente?
+
+00:06:30.260 --> 00:06:34.260
+La siguiente parte de esta historia comienza con la pieza central,
+
+00:06:34.580 --> 00:06:35.840
+la lógica del filtro en sí,
+
+00:06:36.380 --> 00:06:39.440
+y cómo guía todas las demás decisiones que tomas.
+
+00:06:40.780 --> 00:06:43.360
+Pues una base segura filtrado de datos y diseño de roles.
+
+00:06:44.140 --> 00:06:46.200
+Si alguna vez configuraste la seguridad a nivel de fila
+
+00:06:46.200 --> 00:06:48.200
+pensando que solo se trataba de ocultar ciertas filas,
+
+00:06:48.340 --> 00:06:48.880
+no eres el único.
+
+00:06:49.720 --> 00:06:52.260
+La razón principal por la que la RLS se vuelve un desastre son simplemente...
+
+00:06:52.260 --> 00:06:54.200
+No se trata solo de lo que es visible,
+
+00:06:54.320 --> 00:06:56.640
+sino de dar forma a toda la experiencia del usuario.
+
+00:06:58.910 --> 00:06:59.750
+Un paso en falso,
+
+00:06:59.870 --> 00:07:03.410
+y de repente esa tabla confidencial de bonos o la cifra de salario ejecutivo
+
+00:07:03.410 --> 00:07:05.070
+se filtra en el panel de alguien.
+
+00:07:06.250 --> 00:07:09.130
+Pero la gente descubre estas fugas cuando los informes ya están en circulación
+
+00:07:09.130 --> 00:07:11.770
+y para entonces corregir el error puede ser incómodo.
+
+00:07:12.310 --> 00:07:14.570
+Lo incómodo es que estos fallos rarales parecen dramáticos.
+
+00:07:15.170 --> 00:07:16.030
+Suele ser un caso aislado.
+
+00:07:16.150 --> 00:07:17.210
+Un gerente de...
+
+00:07:17.210 --> 00:07:19.590
+Inicia sesión y ve lo que debe ver.
+
+00:07:19.590 --> 00:07:21.330
+Pero un colega de Londres abre el mismo modelo
+
+00:07:21.330 --> 00:07:24.570
+y sin que nadie se dé cuenta, encuentra los números de Nueva York ahí mismo.
+
+00:07:26.010 --> 00:07:28.670
+Piensa en iniciar un modelo de Fabric para ventas globales.
+
+00:07:29.570 --> 00:07:32.230
+Quieres que los gerentes en diferentes regiones vean solo sus propios datos.
+
+00:07:33.190 --> 00:07:35.370
+El reflejo es añadir un filtro, algo sencillo.
+
+00:07:35.850 --> 00:07:38.850
+Región igual a E, U, o país igual a Reino Unido.
+
+00:07:39.890 --> 00:07:40.630
+Pero aquí está el problema.
+
+00:07:41.590 --> 00:07:44.110
+La forma en que escribes ese filtro y lo integras en tu modelo
+
+00:07:44.110 --> 00:07:46.670
+determina si tu sistema se mantiene firme o se desmorona
+
+00:07:46.670 --> 00:07:48.110
+en cuanto las cosas se complican.
+
+00:07:49.070 --> 00:07:50.870
+Muchos suponen que es algo sumamente sencillo.
+
+00:07:50.870 --> 00:07:52.730
+Un filtro DAX de una línea y siguen adelante.
+
+00:07:53.970 --> 00:07:55.690
+Pero no todo DAX se comporta de la misma manera.
+
+00:07:56.790 --> 00:07:59.030
+De hecho, esos matices suelen causar problemas más tarde,
+
+00:07:59.150 --> 00:08:01.390
+especialmente al pasar de Power BI Desktop a Fabric,
+
+00:08:01.530 --> 00:08:03.270
+donde surgen particularidades de la nube.
+
+00:08:04.610 --> 00:08:07.450
+La seguridad a nivel de fila RSS se complica rápidamente cuando entras en detalles.
+
+00:08:08.290 --> 00:08:12.070
+La gente suele confiar en funciones como Username o User Principal Name,
+
+00:08:12.190 --> 00:08:15.770
+creyendo que hacen lo mismo o simplemente usando la que vieron en algún blog.
+
+00:08:15.770 --> 00:08:20.030
+Pero al cambiar Username, que obtiene tu nombre de Windows en Desktop,
+
+00:08:20.470 --> 00:08:23.110
+por User Principal Name, que toma tu correo en Fabric,
+
+00:08:23.190 --> 00:08:25.170
+tu lógica de filtrado empieza a fallar.
+
+00:08:26.210 --> 00:08:29.010
+Si alguna vez una prueba funcionó en Desktop pero falló al publicar en Fabric,
+
+00:08:29.210 --> 00:08:30.690
+probablemente esta sea la razón.
+
+00:08:31.050 --> 00:08:31.390
+La razón.
+
+00:08:32.070 --> 00:08:34.050
+Y elegir mal es lo que abrecha silenciosas,
+
+00:08:34.110 --> 00:08:37.290
+permitiendo que las personas equivocadas vean datos que nunca deberían tocar.
+
+00:08:37.990 --> 00:08:38.770
+Seamos específicos.
+
+00:08:39.470 --> 00:08:42.070
+Para escenarios básicos, ¿una comprobación fija funciona?
+
+00:08:42.890 --> 00:08:43.710
+¿Región igual a E?
+
+00:08:44.610 --> 00:08:47.770
+Significa que solo aparecen las filas donde la región es EE.
+
+00:08:48.510 --> 00:08:49.790
+Eso es el regreso estático del texto.
+
+00:08:50.210 --> 00:08:51.850
+Es rápido, simple y para divisiones fijas,
+
+00:08:51.910 --> 00:08:53.570
+como un informe solo para gerentes de EE.
+
+00:08:54.450 --> 00:08:55.050
+Cumple su función.
+
+00:08:55.750 --> 00:08:57.910
+Pero en cuanto alguien pide seguridad dinámica, todo cambia.
+
+00:08:58.770 --> 00:09:01.650
+Puede que necesites determinar el acceso no solo según quien ve el informe,
+
+00:09:01.710 --> 00:09:03.330
+sino basándote en relaciones en otra tabla,
+
+00:09:03.330 --> 00:09:06.550
+como una tabla de acceso de usuarios que indique qué regiones puede ver cada uno.
+
+00:09:07.290 --> 00:09:09.710
+Ahora, tu filtro RLS no es solo un valor fijo.
+
+00:09:10.370 --> 00:09:14.210
+Es una fórmula que busca en tiempo real a qué regiones debe acceder cada persona.
+
+00:09:15.230 --> 00:09:17.110
+Aquí es donde DAX puede engañarte si no tienes cuidado.
+
+00:09:17.870 --> 00:09:22.050
+Podrías usar algo como User Principal Name e intentar unirlo con tu tabla de acceso.
+
+00:09:23.710 --> 00:09:26.550
+Pero si tu DAX depende de columnas calculadas o usa una lógica
+
+00:09:26.550 --> 00:09:29.150
+que no responde al contexto del usuario al momento de la visualización,
+
+00:09:29.590 --> 00:09:31.570
+podrías romper el filtro dinámico accidentalmente.
+
+00:09:32.270 --> 00:09:33.490
+Un ejemplo real.
+
+00:09:33.750 --> 00:09:37.010
+Una empresa configura un filtro dinámico basado en una columna
+
+00:09:37.010 --> 00:09:41.390
+calculada en su tabla de hecho, solo para notar después que las columnas calculadas
+
+00:09:41.390 --> 00:09:46.050
+se evalúan al cargar los datos, no al visualizarlos, no al visualizarlos.
+
+00:09:46.510 --> 00:09:49.030
+Esto significa que los usuarios no ven sus filas personalizadas,
+
+00:09:49.150 --> 00:09:50.290
+o peor aún, ven demasiado.
+
+00:09:50.930 --> 00:09:53.990
+No te das cuenta hasta que un usuario te pregunta por qué un informe se ve diferente
+
+00:09:53.990 --> 00:09:56.390
+para él que para alguien más del mismo equipo.
+
+00:09:56.890 --> 00:10:01.150
+La documentación de Microsoft y un sinfín de publicaciones de MVP advierten constantemente.
+
+00:10:01.150 --> 00:10:04.530
+No confíes en las columnas calculadas para el RLS.
+
+00:10:05.050 --> 00:10:06.790
+Las columnas calculadas se bloquean al actualizar.
+
+00:10:07.330 --> 00:10:08.310
+No cambien según el usuario.
+
+00:10:09.790 --> 00:10:14.430
+Para que la RLS responda al espectador, tu lógica de filtro debe crearse como una expresión DAX
+
+00:10:14.430 --> 00:10:16.810
+en tablas que se actualizan en el contexto del informe.
+
+00:10:17.930 --> 00:10:20.210
+Ignora esto y tus doblos te traicionarán silenciosamente,
+
+00:10:20.330 --> 00:10:22.870
+mostrando las mismas filas sin importar quién ha iniciado sesión.
+
+00:10:23.650 --> 00:10:27.050
+La RLS estática frente a la dinámica no es solo una distinción técnica.
+
+00:10:27.050 --> 00:10:29.650
+Se trata de cuándo y cómo se filtran los datos.
+
+00:10:30.930 --> 00:10:33.710
+Una RLS estática es rápida y rígida,
+
+00:10:33.930 --> 00:10:37.210
+ideal cuando sabes de antemano exactamente qué rol necesita qué datos.
+
+00:10:38.270 --> 00:10:41.130
+Si lanzas un informe solo para un grupo de finanzas o ventas,
+
+00:10:41.310 --> 00:10:43.090
+esto funciona, esto funciona.
+
+00:10:44.090 --> 00:10:47.090
+Pero al usar la dinámica, cada sesión de acceso ocurre al instante,
+
+00:10:47.230 --> 00:10:51.010
+usualmente comparando la identidad del usuario con una entrada en una tabla de permisos.
+
+00:10:51.950 --> 00:10:56.430
+La flexibilidad es poderosa, especialmente para grandes organizaciones o despliegue multiusuario,
+
+00:10:56.430 --> 00:10:59.210
+pero cada paso en flexibilidad añade complejidad,
+
+00:10:59.410 --> 00:11:02.190
+y la complejidad siempre conlleva riesgos ocultos.
+
+00:11:02.890 --> 00:11:06.450
+Incluso los administradores avanzados tropiezan al creer que los filtros son siempre directos.
+
+00:11:07.210 --> 00:11:09.890
+La estructura real de tu organización cambia constantemente
+
+00:11:09.890 --> 00:11:11.790
+y tus filtros DAX deben seguir al ritmo.
+
+00:11:12.990 --> 00:11:16.090
+Muchos fallan porque no comprenden cómo se aplica la lógica RLS,
+
+00:11:16.290 --> 00:11:20.270
+no al cargar datos, sino cada vez que un usuario interactúa con el informe.
+
+00:11:21.190 --> 00:11:25.610
+Olvía eso y podrías abrir o bloquear accidentalmente secciones enteras de tu modelo de datos
+
+00:11:25.610 --> 00:11:26.490
+sin darte cuenta.
+
+00:11:27.430 --> 00:11:29.470
+En conclusión, si los cimientos están mal,
+
+00:11:29.690 --> 00:11:33.110
+nada más de lo que construyas con RLS importará.
+
+00:11:34.150 --> 00:11:37.610
+La forma en que escribes tu DAX, el tipo de filtros que usas y donde los aplicas,
+
+00:11:37.810 --> 00:11:39.910
+se combinan para definir tu postura de seguridad real.
+
+00:11:41.390 --> 00:11:44.270
+Ignora los matices y terminarás con una configuración que funciona en teoría,
+
+00:11:44.390 --> 00:11:45.110
+pero falla en la práctica.
+
+00:11:45.810 --> 00:11:47.990
+Todo esto sucede antes de asignar usuarios a roles,
+
+00:11:48.110 --> 00:11:50.610
+que resulta ser el siguiente lugar donde las cosas se tuercen silenciosamente.
+
+00:11:50.610 --> 00:11:54.810
+Asignar roles a usuarios, la trampa de la asignación.
+
+00:11:55.230 --> 00:11:59.770
+Entonces, has configurado tus roles, creado los filtros y todo parece sólido en el modelo.
+
+00:12:00.750 --> 00:12:01.970
+El siguiente paso, asignar usuarios.
+
+00:12:02.110 --> 00:12:06.150
+Parece sencillo, pero aquí es donde la mayoría de los planes de seguridad a nivel de rol comienzan a gritarse.
+
+00:12:07.150 --> 00:12:09.150
+Esta es la encrucijada del pensamiento informático.
+
+00:12:09.150 --> 00:12:14.050
+La lógica técnica está lista, pero ahora apuestas a que la capa humana,
+
+00:12:14.130 --> 00:12:18.170
+tus asignaciones de usuarios y grupos, realmente coincide con la realidad operativa de tu empresa.
+
+00:12:18.950 --> 00:12:21.250
+Parece simple porque hay un campo de grupo y una lista de roles,
+
+00:12:21.410 --> 00:12:24.110
+pero la experiencia dicta que aquí es donde los errores se esconden.
+
+00:12:25.090 --> 00:12:25.490
+Mi maestro.
+
+00:12:25.990 --> 00:12:27.170
+¿Has creado un rol de gerente?
+
+00:12:27.390 --> 00:12:29.590
+¿Le has aplicado tu filtro cuidadosamente diseñado?
+
+00:12:29.810 --> 00:12:35.150
+¿Y has asignado el rol en Power BI o Fabric a un grupo de Azure AD llamado Gerentes?
+
+00:12:35.150 --> 00:12:36.950
+¿Lo revisas dos veces?
+
+00:12:37.030 --> 00:12:39.570
+¿Tal vez pides una segunda opinión y lo implementas en la organización?
+
+00:12:40.250 --> 00:12:41.950
+Al principio parece sencillo.
+
+00:12:42.450 --> 00:12:45.330
+Ese es el problema porque la lógica de grupos, especialmente en organizaciones grandes,
+
+00:12:45.470 --> 00:12:47.230
+rara vez permanece simple por mucho tiempo.
+
+00:12:47.990 --> 00:12:50.910
+Los equipos cambian, los departamentos se reorganizan, los roles evolucionan,
+
+00:12:50.950 --> 00:12:52.370
+la gente deja proyectos y se une a otros.
+
+00:12:53.170 --> 00:12:57.230
+¿Qué sucede si alguien pasa de ventas a operaciones y nadie elimina sus antiguas membresías de grupo?
+
+00:12:57.970 --> 00:13:02.250
+De repente, tu esquema hermético de RS tiene a un usuario en dos lugares a la vez.
+
+00:13:02.250 --> 00:13:06.510
+¿Y existe un riesgo real de que acceda a datos que ya no le corresponden?
+
+00:13:07.230 --> 00:13:11.110
+Es fácil asumir que todos en un grupo específico de Azure AD deben tener el mismo acceso.
+
+00:13:11.730 --> 00:13:14.010
+Pero en realidad las membresías de los grupos pueden quedar obsoletas.
+
+00:13:14.550 --> 00:13:16.350
+Alguien puede transferirse a una región diferente,
+
+00:13:16.550 --> 00:13:18.830
+pero su nombre nunca sale de la lista original del equipo.
+
+00:13:20.330 --> 00:13:23.330
+Incluso si tú como administrador eres muy disciplinado con la limpieza,
+
+00:13:23.430 --> 00:13:26.330
+los propietarios de los grupos rara vez siguen el ritmo de cada cambio,
+
+00:13:26.510 --> 00:13:28.250
+especialmente en trimestres ocupados.
+
+00:13:28.250 --> 00:13:33.530
+Y recuerda que la sincronización entre Azure AD, Power BI o Fabric no siempre es instantánea.
+
+00:13:34.190 --> 00:13:36.490
+A veces hay horas de retraso y eso es tiempo más que suficiente
+
+00:13:36.490 --> 00:13:38.590
+para que alguien vea algo que no debería tras un cambio.
+
+00:13:39.950 --> 00:13:42.610
+Pero un proceso nocturno y un empleado que se marcha
+
+00:13:42.610 --> 00:13:45.270
+puede irse con mucha más información de la que pretendías.
+
+00:13:46.290 --> 00:13:49.070
+Las asignaciones Fantasma pueden sonar dramáticas, pero son casi rutinarias.
+
+00:13:50.130 --> 00:13:51.470
+En la mayoría de los entornos reales,
+
+00:13:51.510 --> 00:13:54.010
+un solo usuario puede terminar fácilmente en múltiples grupos,
+
+00:13:54.010 --> 00:13:56.390
+cada uno asignado diferentes roles de RLS.
+
+00:13:57.030 --> 00:13:59.310
+El diseño pretende ser flexible, lo cual está bien en teoría.
+
+00:14:00.250 --> 00:14:03.410
+En la práctica, significa hacer malabares con una red de permisos heredados.
+
+00:14:03.490 --> 00:14:06.710
+Y no siempre está claro quién puede ver qué, a menos que lo rastrees manualmente.
+
+00:14:07.730 --> 00:14:12.030
+Por ejemplo, si Sara de Finanzas se mueve a RR.chechi y nadie la saca del grupo de finanzas,
+
+00:14:12.210 --> 00:14:14.370
+ahora tiene dos roles, uno actual y otro obsoleto.
+
+00:14:14.370 --> 00:14:20.330
+La mayoría ni siquiera lo nota hasta que la misma Sara intenta acceder a un informe de finanzas
+
+00:14:20.330 --> 00:14:23.770
+y sigue entrando mucho después de haberse ido a otro departamento.
+
+00:14:24.550 --> 00:14:28.290
+Los propios equipos de seguridad de Microsoft señalan los errores de asignación de roles
+
+00:14:28.290 --> 00:14:31.690
+como la causa número uno de exposición accidental de datos en entornos de análisis.
+
+00:14:32.210 --> 00:14:32.370
+La matemáticésima.
+
+00:14:33.710 --> 00:14:36.170
+Cuantos más grupos y más usuarios en movimiento haya,
+
+00:14:36.370 --> 00:14:40.150
+más fácil es pasar por alto quien está realmente asignado a cada rol.
+
+00:14:40.910 --> 00:14:43.370
+Lo que lo hace más difícil de detectar es la falta de retroalimentación y vida.
+
+00:14:43.370 --> 00:14:45.510
+A diferencia de otros errores de seguridad,
+
+00:14:45.750 --> 00:14:47.970
+no recibe su mensaje de error ni una falla en la interfaz.
+
+00:14:49.050 --> 00:14:51.910
+Normalmente no hay advertencias automáticas ni revisiones forzadas
+
+00:14:51.910 --> 00:14:54.550
+y una asignación incorrecta puede permanecer oculta por meses,
+
+00:14:54.670 --> 00:14:58.310
+surgiendo solo en una auditoría o cuando alguien descubre datos que no debía tocar.
+
+00:14:59.590 --> 00:15:02.590
+Hasta las mejores intenciones se desvanecen con las realidades del día a día.
+
+00:15:03.610 --> 00:15:06.370
+Revisar las membresías de grupos es una mejor práctica que todos recomiendan,
+
+00:15:07.190 --> 00:15:08.810
+pero pocos equipos siguen con rigor.
+
+00:15:09.770 --> 00:15:11.810
+Desde el punto de vista administrativo, es un trabajo tedioso.
+
+00:15:11.810 --> 00:15:15.170
+Las revisiones manuales de grupos no son una prioridad inmediata,
+
+00:15:15.390 --> 00:15:18.050
+especialmente si el equipo de análisis está resolviendo otros problemas.
+
+00:15:18.990 --> 00:15:22.270
+En la mayoría de las organizaciones no existe un proceso de auditorías periódicas
+
+00:15:22.270 --> 00:15:26.190
+pues se asume que los cambios en RR se reflejarán automáticamente.
+
+00:15:26.570 --> 00:15:29.170
+Pero estas suposiciones son las que permiten la deriva de permisos
+
+00:15:29.170 --> 00:15:30.810
+y la persistencia de accesos ocultos.
+
+00:15:31.670 --> 00:15:35.010
+El resultado con el tiempo es que su RLS, por preciso que sea en papel,
+
+00:15:35.470 --> 00:15:37.970
+pierde sincronía con quién debería ver qué.
+
+00:15:37.970 --> 00:15:42.790
+Las herramientas de auditoría automatizada ayudan a detectar estas asignaciones persistentes,
+
+00:15:43.190 --> 00:15:44.730
+pero implementarlas requiere esfuerzo.
+
+00:15:45.730 --> 00:15:49.690
+Deben conectarse a su Azure AD, marcar cambios y quizás activar un flujo de trabajo
+
+00:15:49.690 --> 00:15:52.530
+cuando las membresías de grupo de alguien ya no coinciden con su unidad de negocio.
+
+00:15:52.530 --> 00:15:56.130
+No todos los entornos de Power BI tienen esos controles,
+
+00:15:56.210 --> 00:15:58.870
+especialmente en empresas pequeñas o proyectos con plazos ajustados.
+
+00:15:59.730 --> 00:16:01.630
+Por lo tanto, la proliferación de grupos se vuelve inevitable.
+
+00:16:02.450 --> 00:16:04.210
+Cuanto más tiempo pase su sistema RLS,
+
+00:16:04.330 --> 00:16:07.010
+más probable es que los permisos caduquen o, peor aún, que se propaguen
+
+00:16:07.010 --> 00:16:09.250
+a capas que ni siquiera está rastreando.
+
+00:16:10.390 --> 00:16:13.890
+Lo que realmente toma la gente por sorpresa es que las asignaciones no son solo una marca de verificación.
+
+00:16:14.570 --> 00:16:18.010
+Son el vínculo continuo que une su lógica de seguridad a personas reales.
+
+00:16:18.670 --> 00:16:21.550
+Si los deja la deriva, ni los DAC más inteligentes del mundo los salvarán.
+
+00:16:21.550 --> 00:16:25.450
+La higiene de las asignaciones es un proceso activo, no una configuración de una sola...
+
+00:16:25.450 --> 00:16:29.330
+Los sistemas evolucionan, los usuarios se mueven, su modelo debe seguir esos cambios.
+
+00:16:29.550 --> 00:16:32.090
+O dependerá de la suerte, la suerte no es una estrategia de seguridad.
+
+00:16:33.630 --> 00:16:36.190
+Ahora bien, incluso con los procesos de asignación más estrictos,
+
+00:16:36.370 --> 00:16:41.490
+surge un gran inconveniente al llevar su solución desde Power BI Desktop al entorno real de Fabric.
+
+00:16:42.670 --> 00:16:46.790
+Hasta este punto, la mayoría de los equipos prueban en un entorno local en su propia máquina
+
+00:16:46.790 --> 00:16:48.450
+solo con cuentas de prueba.
+
+00:16:48.450 --> 00:16:53.650
+Todo parece predecible, pero al pasar a Fabric, comienzan a aparecer diferencias sutiles en
+
+00:16:53.650 --> 00:16:57.090
+el contexto del usuario, la resolución de grupos y los tiempos de autenticación.
+
+00:16:58.110 --> 00:17:01.670
+Ahí es donde encontramos las peculiaridades que nadie espera, y por qué las asignaciones
+
+00:17:01.670 --> 00:17:04.770
+que parecen perfectas en teoría pueden fallar espectacularmente en producción.
+
+00:17:05.830 --> 00:17:07.410
+De Desktop a Fabric, los cambios ocultos.
+
+00:17:07.510 --> 00:17:08.710
+En el comportamiento de RLS.
+
+00:17:09.590 --> 00:17:14.270
+Si alguna vez estuvo convencido de que tenía la seguridad a nivel de fila bajo control en Power BI Desktop,
+
+00:17:14.270 --> 00:17:18.570
+pero vio cómo todo se desmoronaba al publicar en Fabric, está en territorio conocido.
+
+00:17:19.530 --> 00:17:21.870
+Esta es la parte que nadie le cuenta en los tutoriales de RLS,
+
+00:17:22.410 --> 00:17:26.730
+el momento en que toda esa lógica impecable de roles y filtros choca de frente con la realidad de la nube.
+
+00:17:27.550 --> 00:17:30.250
+Ha verificado cada filtro, mapeado cuidadosamente cada grupo,
+
+00:17:30.570 --> 00:17:32.890
+e incluso ordenado esas asignaciones de casos excepcionales.
+
+00:17:32.890 --> 00:17:37.070
+Pero en cuanto te pasas al servicio Fabric, las cosas cambian de una forma que toma por sorpresa
+
+00:17:37.070 --> 00:17:38.890
+incluso los administradores experimentados.
+
+00:17:39.790 --> 00:17:41.130
+Comencemos con lo que ves en Desktop.
+
+00:17:41.930 --> 00:17:43.590
+La vista previa funciona exactamente como esperaría.
+
+00:17:44.010 --> 00:17:46.350
+Pruebas los roles de usuario y alternas entre identidades de muestra.
+
+00:17:47.310 --> 00:17:49.670
+Todo encaja a la perfección, los números coinciden,
+
+00:17:49.870 --> 00:17:52.770
+y por un momento parece que dominas un proceso sencillo.
+
+00:17:53.430 --> 00:17:57.630
+Pero tan pronto como tus compañeros abren ese mismo archivo de Power BI en la nube,
+
+00:17:57.830 --> 00:17:58.410
+empiezan a llegar.
+
+00:17:58.730 --> 00:17:59.230
+¿Los problemas?
+
+00:17:59.230 --> 00:18:02.230
+¿Alguien reporta ver números fuera de su región?
+
+00:18:02.390 --> 00:18:06.570
+O peor aún, ¿alguien no puede acceder a un conjunto de datos que necesita para trabajar?
+
+00:18:07.090 --> 00:18:11.050
+La frustración crees al darte cuenta de que la misma configuración de RLS que era infalible en tu equipo
+
+00:18:11.050 --> 00:18:13.050
+ahora parece más una sugerencia que una regla.
+
+00:18:13.290 --> 00:18:13.450
+¡Au!
+
+00:18:14.090 --> 00:18:17.830
+Pero esa confusión se debe a diferencias que no puedes ver realmente hasta que publicas.
+
+00:18:18.650 --> 00:18:21.830
+El entorno en la nube de Fabric opera en un mundo distinto en cuanto a seguridad,
+
+00:18:22.130 --> 00:18:23.730
+identidad y contexto de datos.
+
+00:18:24.770 --> 00:18:27.930
+Una trampa clásica golpea justo en el corazón de los patrones de RLS dinámico.
+
+00:18:27.930 --> 00:18:33.030
+En escritorio, una función DAX como Username extrae tu inicio de sesión local de Windows.
+
+00:18:33.870 --> 00:18:36.670
+Simple, predecible y dentro de tu entorno tranquilizadoramente estable.
+
+00:18:37.430 --> 00:18:40.870
+Pero en Fabric, esa misma llamada Username captura tu dirección de correo electrónico completa.
+
+00:18:41.690 --> 00:18:45.010
+Parece menor, pero si tu filtro o búsqueda hace referencia a nombres de dominio,
+
+00:18:45.130 --> 00:18:48.450
+o si tu tabla de seguridad usa formatos cortos en lugar de correos completos,
+
+00:18:48.830 --> 00:18:51.170
+todo el sistema falla en cuanto los usuarios llegan a la nube.
+
+00:18:51.170 --> 00:18:54.430
+Inevitablemente empiezan a llegar las quejas.
+
+00:18:55.070 --> 00:18:56.630
+Esto es lo que sucede en entornos reales.
+
+00:18:57.430 --> 00:19:00.430
+Un informe muestra un desglose por país en escritorio, pero tras publicar,
+
+00:19:01.250 --> 00:19:02.910
+los usuarios ven números globales.
+
+00:19:03.530 --> 00:19:05.690
+Quizás tu modelo dependía del nombre principal de usuario,
+
+00:19:05.790 --> 00:19:08.270
+porque todas tus claves de acceso son direcciones de correo.
+
+00:19:09.110 --> 00:19:10.370
+Es una buena práctica para la nube.
+
+00:19:10.510 --> 00:19:13.170
+Pero si empezaste en escritorio y no sabías que este cambio ocurre,
+
+00:19:13.410 --> 00:19:16.590
+estás depurando un problema que no existe localmente, pero explota a escala.
+
+00:19:16.590 --> 00:19:21.970
+La verdad es que lo que funciona en tu portátil es más un prototipo decente que una solución terminada.
+
+00:19:22.810 --> 00:19:27.690
+La lógica local puede ocultar una mina terrestre, que es solo la autenticación en la nube activa.
+
+00:19:28.550 --> 00:19:31.230
+También hay algunas palancas invisibles que Fabric mueve sin previo aviso.
+
+00:19:32.150 --> 00:19:35.350
+Las actualizaciones de datos, por ejemplo, pueden ejecutarse con diferentes credenciales
+
+00:19:35.350 --> 00:19:37.390
+o recaer en un propietario de modelo distinto al esperado.
+
+00:19:38.310 --> 00:19:41.110
+Si el propietario del conjunto de datos publicado no está en el grupo correcto,
+
+00:19:41.230 --> 00:19:44.730
+puede terminar sin ver datos o accediendo a todo por accidente.
+
+00:19:44.730 --> 00:19:47.990
+Cambiar la propiedad de la nube no solo afecta a los permisos.
+
+00:19:48.610 --> 00:19:50.530
+Puede romper las conexiones a las puertas de enlace
+
+00:19:50.530 --> 00:19:53.370
+o cambiar cómo se evalúan las credenciales frente a los sistemas de origen.
+
+00:19:54.470 --> 00:19:57.030
+A veces la configuración del inquilino oculta comportamientos heredados
+
+00:19:57.030 --> 00:19:58.890
+o aplica opciones predeterminadas que anulan,
+
+00:19:59.190 --> 00:20:01.190
+lo que configuraste durante las pruebas en el escritorio.
+
+00:20:02.370 --> 00:20:04.530
+Para organizaciones con políticas de inquilino por capas,
+
+00:20:04.530 --> 00:20:06.630
+algo tan pequeño como cambiar el uso compartido externo
+
+00:20:06.630 --> 00:20:09.250
+puede alterar la lógica de quién ve qué de la noche a la mañana.
+
+00:20:10.070 --> 00:20:12.030
+Lo que confunde a la gente es lo sutiles que son estos cambios.
+
+00:20:12.770 --> 00:20:14.510
+No gritan, oye, tu barrera se está rota ahora.
+
+00:20:15.590 --> 00:20:17.430
+En cambio, las cosas funcionan más silenciosamente.
+
+00:20:17.890 --> 00:20:19.310
+Un pequeño cambio en la autenticación
+
+00:20:19.310 --> 00:20:21.390
+o en la forma en que un modelo resuelve la pertenencia a grupos
+
+00:20:21.390 --> 00:20:22.490
+durante el inicio de sesión
+
+00:20:22.490 --> 00:20:24.530
+muta el contexto de seguridad por completo.
+
+00:20:25.690 --> 00:20:28.190
+Los foros de soporte de Microsoft están llenos de administradores
+
+00:20:28.190 --> 00:20:29.870
+compartiendo historias de terror sobre informes
+
+00:20:29.870 --> 00:20:32.610
+que pasaron todas las pruebas de escritorio solo para desmoronarse.
+
+00:20:32.870 --> 00:20:35.870
+Cuando los usuarios empezaron a acceder a ellos en la nube.
+
+00:20:37.430 --> 00:20:38.990
+Bécilos donde, tras un despliegue,
+
+00:20:39.090 --> 00:20:42.610
+los equipos luchan por parchear o rediseñar todas sus funciones de RS,
+
+00:20:42.610 --> 00:20:45.550
+no porque la lógica fuera mala, sino porque el traslado a Fabric
+
+00:20:45.550 --> 00:20:50.050
+cambió el contexto de identidad lo suficiente como para hacer todo poco fiable.
+
+00:20:51.030 --> 00:20:53.990
+Incluso las actualizaciones en la nube o las actualizaciones de todo el inquilino
+
+00:20:53.990 --> 00:20:55.370
+pueden empujar la seguridad en nuevas direcciones.
+
+00:20:55.370 --> 00:20:59.710
+A veces, tras una actualización, las asignaciones de grupos gestionadas por Azure AD
+
+00:20:59.710 --> 00:21:01.930
+se sincronizan de forma un poco diferente a la anterior,
+
+00:21:02.350 --> 00:21:04.750
+por lo que las asignaciones fantasma de repente tienen más prioridad
+
+00:21:04.750 --> 00:21:08.130
+o ciertas búsquedas dinámicas se encuentran nulos donde esperabas una coincidencia.
+
+00:21:08.990 --> 00:21:09.810
+Los pequeños se acumulan.
+
+00:21:10.270 --> 00:21:13.170
+Un ajuste en una parte de la pila se propaga por toda la red de seguridad
+
+00:21:13.170 --> 00:21:16.750
+y tu patrón más fiable del trimestre pasado simplemente no se sostiene hoy.
+
+00:21:17.750 --> 00:21:20.450
+Es por eso que los equipos del mundo real han comenzado a tratar las pruebas de RS
+
+00:21:20.450 --> 00:21:22.870
+como un trabajo de producción, no solo como una verificación local.
+
+00:21:23.650 --> 00:21:26.190
+No basta con hacer clic en las funciones desde tu propio portátil.
+
+00:21:26.910 --> 00:21:29.330
+Necesitas preparar realmente el modelo en Fabric,
+
+00:21:29.490 --> 00:21:34.350
+traer cuentas de usuarios reales y recorrer el flujo de permisos de extremo a extremo.
+
+00:21:36.050 --> 00:21:39.330
+Solo entonces detectarás errores de autenticación sutiles o desalineaciones
+
+00:21:39.330 --> 00:21:43.190
+entre las asignaciones de grupo y lo que Power BI considera actual en Azure AD.
+
+00:21:44.110 --> 00:21:47.650
+Algunas organizaciones incluso programan auditorías de RS periódicas en la nube
+
+00:21:47.650 --> 00:21:50.990
+solo para comprobar si hay desviaciones entre la lógica del modelo de asignación
+
+00:21:50.990 --> 00:21:52.510
+y lo que Fabric aplica realmente.
+
+00:21:53.330 --> 00:21:54.010
+No hay atajos aquí.
+
+00:21:54.650 --> 00:21:58.690
+Si no estás realizando pruebas con personas reales en el entorno donde reside realmente tu informe,
+
+00:21:58.810 --> 00:22:01.030
+tu RLS básicamente funciona por esperanza.
+
+00:22:02.430 --> 00:22:03.710
+La nube es el juez final.
+
+00:22:04.270 --> 00:22:07.850
+Y la única forma de ver cómo los filtros y roles interactúan con las identidades a escala
+
+00:22:07.850 --> 00:22:11.290
+es construir tu RLS pensando en la producción desde el principio.
+
+00:22:11.290 --> 00:22:16.650
+Si dejas estas pruebas para después, vas a ciegas y las consecuencias, datos expuestos,
+
+00:22:16.790 --> 00:22:20.790
+equipos frustrados o un trabajo de seguridad cuidadoso deshecho por un interruptor oculto
+
+00:22:20.790 --> 00:22:23.690
+terminan costando mucho más arreglarlas una vez que el informe está en uso.
+
+00:22:24.830 --> 00:22:29.810
+Ahora, frente a este panorama, la gran pregunta no es solo sobre parchear tu RLS cada vez que algo cambia.
+
+00:22:31.070 --> 00:22:34.450
+Se trata de si tienes un plan que funciona a medida que tu configuración de Fabric se vuelve más compleja,
+
+00:22:34.610 --> 00:22:36.610
+tus datos crecen y el modelo de negocio.

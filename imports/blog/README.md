@@ -15,6 +15,10 @@ publish: false                                   # false = wartet in der Verwalt
 author: mirko-p                                  # Profil-Handle, Standard mirko-p
 date: 2026-11-01
 topics: [microsoft-365-copilot, copilot-studio]  # Entitäts-IDs (müssen existieren)
+keypoints:                                       # optional, 3–8 Punkte je 10–200 Zeichen: erscheinen als Abschnitt „Key points“ nach dem ersten Absatz (und in allen Sprachfassungen)
+  - Lizenzen nach Rollen planen, nicht nach Köpfen
+  - Pilotgruppe vor dem Rollout
+  - Nutzung nach 90 Tagen prüfen
 faq:
   - q: Brauche ich für jeden Nutzer eine Lizenz?
     a: Nein …

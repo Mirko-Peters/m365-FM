@@ -1,0 +1,970 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.940
+Welkom bij weer een aflevering van Microsoft Knowledge Nuggets op M365FM.
+
+00:00:04.080 --> 00:00:05.680
+Ik ben je gastheer, Mirko Peters.
+
+00:00:05.920 --> 00:00:08.380
+Het onderwerp van vandaag is er een waar bijna iedereen van heeft gehoord,
+
+00:00:08.580 --> 00:00:10.560
+maar weinig een echt begrijpen, platform engineering.
+
+00:00:10.800 --> 00:00:12.380
+Je hebt waarschijnlijk wel gehoord van DevOps,
+
+00:00:12.560 --> 00:00:15.220
+het idee dat ontwikkelaars en operatieteams naadloos samenwerken,
+
+00:00:15.400 --> 00:00:17.420
+maar ergens onderweg raakte die belofte verstrikt.
+
+00:00:17.820 --> 00:00:20.260
+Ontwikkelaars gingen ops werk doen, dat systeem werkte niet.
+
+00:00:20.460 --> 00:00:23.700
+Aan het einde van deze aflevering begrijp je wat er misging met DevOps,
+
+00:00:23.880 --> 00:00:26.100
+wat een intern ontwikkelaarsplatform eigenlijk is,
+
+00:00:26.100 --> 00:00:30.960
+hoe Golden Pets teams een duidelijk pad bieden en waarom de slimste engineering teams er al aan bouwen.
+
+00:00:31.140 --> 00:00:34.400
+De puinhoop die DevOps achterliet, laten we teruggaan naar waar het begon.
+
+00:00:34.620 --> 00:00:36.480
+DevOps was een geweldig idee met een simpel doel,
+
+00:00:36.620 --> 00:00:38.740
+de muren tussen ontwikkelaars en operaties afbreken.
+
+00:00:38.940 --> 00:00:41.280
+Geen code meer over de schutting gooien en hopen op het beste.
+
+00:00:41.540 --> 00:00:45.080
+Shift-Left verplaatst testen, beveiliging en operaties naar een eerder stadium in het proces.
+
+00:00:45.340 --> 00:00:48.060
+Snellere oplevering, minder overdrachten, meer eigenaarschap.
+
+00:00:48.200 --> 00:00:49.780
+Op papier zag het er perfect uit.
+
+00:00:49.960 --> 00:00:51.460
+In de praktijk ging er iets mis.
+
+00:00:51.700 --> 00:00:55.400
+Shift-Left verplaatste niet alleen verantwoordelijkheden, het stapelde ze op.
+
+00:00:55.400 --> 00:00:58.060
+De ontwikkelaar die vroeger code schreef en een ticket indiende,
+
+00:00:58.320 --> 00:01:03.240
+beheert nu infrastructuur, beveiliging, monitoring, Kubernetes, CI, CD pipelines,
+
+00:01:03.500 --> 00:01:06.640
+geheime beheer en zo'n 15 clouddiensten waar ze nog nooit van hadden gehoord.
+
+00:01:06.820 --> 00:01:10.400
+Eén persoon regelt dat allemaal terwijl diegene ook nog het eigenlijke product moet bouwen.
+
+00:01:10.620 --> 00:01:12.100
+Dit is hoe dat er in het echt uitziet.
+
+00:01:12.260 --> 00:01:15.140
+Een team wil een nieuwe omgeving opzetten om een functie te testen.
+
+00:01:15.340 --> 00:01:17.600
+Voor DevOps dienden ze een ticket in en wachten ze af.
+
+00:01:17.760 --> 00:01:20.720
+Na DevOps zijn ze zelfverantwoordelijk, wat in theorie geweldig klinkt,
+
+00:01:20.720 --> 00:01:24.080
+maar nu moeten ze Terraform modules schrijven, een Kubernetes cluster configureren,
+
+00:01:24.280 --> 00:01:27.360
+netwerkregels opzetten, monitoring koppelen, geheime beheer uitzoeken
+
+00:01:27.360 --> 00:01:29.220
+en zorgen dat beveiligingsbeleid wordt toegepast.
+
+00:01:29.420 --> 00:01:31.760
+Wat vroeger een ticket was dat iemand anders een uur kostte,
+
+00:01:31.940 --> 00:01:34.060
+kost nu drie dagen van de tijd van een ontwikkelaar.
+
+00:01:34.240 --> 00:01:36.300
+Drie dagen waarin ze geen productcode schrijven.
+
+00:01:36.500 --> 00:01:38.600
+Ze zijn aan het vechten met Griekse Y-AML bestanden
+
+00:01:38.600 --> 00:01:40.940
+en aan het debuggen waarom de loadbalancer het verkeer niet correct routeert.
+
+00:01:41.100 --> 00:01:42.660
+De mentale belasting is hier enorm.
+
+00:01:42.900 --> 00:01:46.620
+Elk team bouwt uiteindelijk zijn eigen pipelines, deployment scripts en monitoring dashboards.
+
+00:01:46.620 --> 00:01:49.260
+En omdat iedereen overbelast is, worden er steken laten vallen.
+
+00:01:49.580 --> 00:01:51.960
+Beveiliging wordt overgeslagen omdat de deadline vrijdag is.
+
+00:01:52.100 --> 00:01:54.000
+Cloud-rekeningen verdubbelen zonder dat iemand het merkt
+
+00:01:54.000 --> 00:01:56.160
+omdat niemand eraan dacht de testomgeving af te sluiten.
+
+00:01:56.340 --> 00:01:58.020
+En als er om twee uur s'nachts iets kapot gaat,
+
+00:01:58.280 --> 00:02:00.620
+is de ontwikkelaar die het gebouwd heeft de enige die het kan repareren.
+
+00:02:00.860 --> 00:02:03.480
+Dit is niet houdbaar en hier is waarom het belangrijker is dan ooit.
+
+00:02:03.660 --> 00:02:05.600
+De complexiteit van de cloud blijft groeien.
+
+00:02:05.800 --> 00:02:08.820
+Elk jaar zijn er meer diensten, meer tools en meer beslissingen om te nemen.
+
+00:02:09.000 --> 00:02:12.520
+En nu stellen AI Codeert tools ontwikkelaars in staat om sneller dan ooit code op te leveren,
+
+00:02:12.680 --> 00:02:14.940
+10, 20, zelfs 30 keer meer code per dag.
+
+00:02:14.940 --> 00:02:18.340
+Maar al die code heeft nog steeds infrastructuur, beveiliging en monitoring nodig.
+
+00:02:18.540 --> 00:02:21.440
+Meer code zonder een beter systeem betekent alleen maar snellere chaos.
+
+00:02:21.660 --> 00:02:25.120
+Als je het gevoel hebt dat je verdrinkt in Griekse Y, AML en Terraform, ben je niet alleen.
+
+00:02:25.320 --> 00:02:27.760
+Dit is geen persoonlijk falen, het is systemisch.
+
+00:02:27.940 --> 00:02:30.740
+Het model heeft aangetast wat platform engineering eigenlijk is.
+
+00:02:30.940 --> 00:02:31.940
+Dus, wat is de oplossing?
+
+00:02:32.220 --> 00:02:35.600
+Dat heet platform engineering en dit is de eenvoudigste manier om erover na te denken.
+
+00:02:35.860 --> 00:02:39.440
+Deze discipline creëert een interne laag die complexiteit absorbeert voor ontwikkelaars.
+
+00:02:39.680 --> 00:02:41.720
+Stel je voor dat je een groot kantoorpand binnenloopt.
+
+00:02:41.720 --> 00:02:46.720
+Je hoeft je geen zorgen te maken over wie toegang heeft tot welke verdieping, welke beveiligingspas werkt of waar de nooduitgangen zijn.
+
+00:02:46.880 --> 00:02:50.260
+De receptie regelt dat allemaal voor je en jij loopt gewoon naar binnen om aan het werk te gaan.
+
+00:02:50.460 --> 00:02:53.220
+Dat is precies wat platform engineering voor jouw ontwikkelaars doet.
+
+00:02:53.400 --> 00:03:01.940
+In plaats van dat elke ontwikkelaar een expert moet worden in Kubernetes, Terraform, netwerken en beveiliging, creëert een centraal platform team een laag die al die complexiteit beheert.
+
+00:03:02.100 --> 00:03:08.180
+De ontwikkelaar krijgt een eenvoudige interface, klik op een knop, voer een commando uit, vul een formulier in en het platform regelt de rest.
+
+00:03:08.180 --> 00:03:15.760
+Maar dit is belangrijk, dit is niet hetzelfde als DevOps. DevOps vertelde elk team dat ze hun eigen infrastructuur moesten beheren, maar platform engineering zegt dat dit een recept voor een burn-out is.
+
+00:03:15.900 --> 00:03:21.300
+In plaats daarvan biedt het platform team gebaande paden, standaard, geteste en veilige manieren om algemene taken af te handelen.
+
+00:03:21.500 --> 00:03:24.840
+Zij bouwen en onderhouden de weg, terwijl productteams er gewoon overheen rijden.
+
+00:03:25.000 --> 00:03:30.240
+Het belangrijkste resultaat van platform engineering is een internal developer platform of kortweg IDP.
+
+00:03:30.240 --> 00:03:34.060
+Zie het als een self-service systeem dat al dat repetitieve werk automatiseert.
+
+00:03:34.960 --> 00:03:40.520
+Infrastructuurvoorzieningen, CI, CD pipelines, beveiligingschecks, monitoring, allemaal ingebouwd en gestandardiseerd.
+
+00:03:40.680 --> 00:03:42.020
+Hier is een concreet voorbeeld.
+
+00:03:42.300 --> 00:03:49.000
+Wanneer een ontwikkelaar een nieuwe service wil implementeren zonder platform, is hij dagen bezig met het opzetten van infrastructuur, het schrijven van pipelines en het configureren van monitoring.
+
+00:03:49.240 --> 00:03:58.460
+Met een IDP klikken ze op deploy in een UI of voeren ze één commando uit en het platform regelt alles, provisioning, tests, monitoring, deployment, allemaal in minuten in plaats van dagen.
+
+00:03:58.460 --> 00:04:04.260
+Dus, wat betekent dit voor jou? Je stopt met het zijn van een alleskunner in infrastructuur en wordt weer een specialist in je eigen product.
+
+00:04:04.460 --> 00:04:09.920
+Je werk gaat weer over het bouwen van functies die belangrijk zijn voor je klanten, in plaats van debuggen waarom je Terraform staten file corrupt is.
+
+00:04:10.120 --> 00:04:13.580
+Dat is het hele punt. Het internal developer platform in begrijpelijke taal.
+
+00:04:13.740 --> 00:04:16.520
+Dus, laten we eens kijken wat een internal developer platform nu eigenlijk is.
+
+00:04:16.700 --> 00:04:18.980
+Het is de motor die alles combineert in één systeem.
+
+00:04:19.140 --> 00:04:23.620
+Je CI, CD pipelines, infrastructuurschablonen, beveiligingsbeleid, monitoring en logging.
+
+00:04:23.880 --> 00:04:26.300
+In plaats van zes losse tools die je aan elkaar moet knopen.
+
+00:04:26.300 --> 00:04:30.520
+Hier is een vergelijking. Zie het als koken vanaf nul versus een automaat gebruiken.
+
+00:04:30.680 --> 00:04:35.580
+Koken vanaf nul betekent ingrediënten kopen, groenten snijden, kruiden afmeten, het voor nuis in de gaten houden.
+
+00:04:35.780 --> 00:04:38.600
+Veel beslissingen, veel stappen, veel manieren om fouten te maken.
+
+00:04:38.820 --> 00:04:41.220
+Een automaat geeft je resultaat met één druk op de knop.
+
+00:04:41.380 --> 00:04:44.340
+Minder beslissingen, sneller resultaat, consistente kwaliteit.
+
+00:04:44.520 --> 00:04:46.060
+Een IDP is die automaat.
+
+00:04:46.260 --> 00:04:50.380
+De ontwikkelaar hoeft niet te weten hoe infrastructuur wordt opgezet of waar geheimen worden opgeslagen.
+
+00:04:50.640 --> 00:04:51.880
+Ze drukken gewoon op de knop.
+
+00:04:52.080 --> 00:04:53.300
+Wat zit er in die automaat?
+
+00:04:53.300 --> 00:04:55.520
+De kerncomponenten zijn vrij standaard.
+
+00:04:55.700 --> 00:05:00.460
+CI, CD-schablonen voor consistente beelds, infrastructuurvoorzieningen voor automatische omgevingen,
+
+00:05:00.660 --> 00:05:04.200
+geheime beheer zodat inloggegevens niet rondslingeren in configuratiebestanden,
+
+00:05:04.440 --> 00:05:07.680
+en logging met ingebouwde observability zodat je kunt troubleshooten zonder paniek.
+
+00:05:07.840 --> 00:05:11.220
+Alles vooraf geconfigureerd, getest en onderhouden door het platformteam.
+
+00:05:11.360 --> 00:05:12.720
+Hier is een concreet voorbeeld.
+
+00:05:12.940 --> 00:05:17.480
+Een ontwikkelaar typt Create new service in de command line of klikt op een knop in een portaal.
+
+00:05:17.660 --> 00:05:21.280
+Achter de schermen start het IDP een nieuwe repository met de juiste structuur,
+
+00:05:21.280 --> 00:05:26.000
+zet een build pipeline op die automatisch test draait, de deployt de service naar een ontwikkelomgeving
+
+00:05:26.000 --> 00:05:27.940
+en voegt health check-end points met logging toe.
+
+00:05:28.160 --> 00:05:29.940
+Dat gebeurt allemaal binnen enkele minuten.
+
+00:05:30.120 --> 00:05:33.860
+De ontwikkelaar heeft nooit een terraformbestand aangeraakt of een Kubernetes manifest geconfigureerd.
+
+00:05:34.020 --> 00:05:36.220
+Gewoon een commando getypt en een draaiende service gekregen.
+
+00:05:36.440 --> 00:05:37.260
+Waarom is dit belangrijk?
+
+00:05:37.760 --> 00:05:39.300
+Consistentie is de belangrijkste reden.
+
+00:05:39.300 --> 00:05:44.700
+Wanneer elk team zijn eigen pipelines bouwt en eigen deploymentscript schrijft, eindig je met unieke, snowflake, configuraties.
+
+00:05:44.900 --> 00:05:47.900
+50 verschillende services, 50 verschillende manieren van werken.
+
+00:05:48.080 --> 00:05:51.340
+Als er iets kapot gaat, kan niemand het debuwen behalve degene die het gebouwd heeft.
+
+00:05:51.520 --> 00:05:53.920
+En als die persoon het bedrijf heeft verlaten, veel succes.
+
+00:05:54.120 --> 00:05:57.120
+Een IDP elimineert dat door elke service dezelfde patronen te laten volgen,
+
+00:05:57.300 --> 00:06:00.800
+elke deployment dezelfde pipeline te laten gebruiken en elk team dezelfde standaardwaarde te geven.
+
+00:06:01.040 --> 00:06:04.220
+Wanneer er iets kapot gaat, zijn de patronen bekend en is de oplossing gedocumenteerd.
+
+00:06:04.380 --> 00:06:05.880
+Dus dit is wat dit voor jou betekent.
+
+00:06:05.880 --> 00:06:10.080
+Als jouw organisatie 50 teams heeft die op 50 verschillende manieren deployen, dan is een IDP de oplossing.
+
+00:06:10.280 --> 00:06:12.220
+Het betekent niet dat teams hun autonomie verliezen.
+
+00:06:12.380 --> 00:06:15.480
+Het betekent dat de saaie, repetitieve, foutgevoelige delen worden gestandardiseerd,
+
+00:06:15.640 --> 00:06:17.700
+zodat het interessante, creatieve werk kan variëren.
+
+00:06:17.900 --> 00:06:19.500
+Dat is een afweging die het waard is.
+
+00:06:19.720 --> 00:06:21.460
+Golden Pets, de weg, geen kooi.
+
+00:06:21.680 --> 00:06:23.080
+Laten we het over Golden Pets hebben.
+
+00:06:23.260 --> 00:06:25.880
+Je hebt de term waarschijnlijk al eens gehoord, maar het idee is simpel.
+
+00:06:26.060 --> 00:06:30.620
+Een Golden Pet is een aanbevolen, voorafgebouwde workflow die de juiste manier de makkelijkste manier maakt.
+
+00:06:30.760 --> 00:06:33.700
+Je platform Team zegt, dit is hoe we voorstellen dat je dit aanpakt.
+
+00:06:33.700 --> 00:06:36.760
+We hebben het getest, het werkt en we ondersteunen je als er iets misgaat.
+
+00:06:37.260 --> 00:06:39.520
+Aanhaling steken, let op het woord voorstellen.
+
+00:06:39.740 --> 00:06:41.240
+Gouden paden zijn niet verplicht.
+
+00:06:41.620 --> 00:06:45.500
+Ontwikkelaars kunnen van het pad afwijken als dat nodig is, maar het pad is de snelle en veilige standaard.
+
+00:06:45.640 --> 00:06:48.020
+Het draait al, wordt ondersteund en is gedocumenteerd.
+
+00:06:48.180 --> 00:06:50.020
+Je hoeft niet alles vanaf nul uit te zoeken.
+
+00:06:50.260 --> 00:06:52.420
+Zie het als spoorrails in plaats van vangrails.
+
+00:06:52.740 --> 00:06:54.200
+Vangrails vangen je op als je crash.
+
+00:06:54.400 --> 00:06:58.120
+Ze reageren, ze voorkomen dat je van een klif rijdt, maar ze helpen je niet bij het sturen.
+
+00:06:58.440 --> 00:07:02.240
+Spoorrails leiden je soepel langs de route, zodat je niet zelf hoeft te beslissen waar je afslaat.
+
+00:07:03.700 --> 00:07:06.760
+Ze helpen je vooruit, in plaats van je alleen op te vangen als je faalt.
+
+00:07:06.920 --> 00:07:08.360
+Hier gaan veel teams de mist in.
+
+00:07:08.540 --> 00:07:11.500
+Ze bouwen gouden paden voor het platformteam, niet voor de ontwikkelaars.
+
+00:07:11.680 --> 00:07:17.300
+Ze optimaliseren voor architecturale zuiverheid, beveiligingscompliance of interne regels die niemand buiten het platformteam begrijpt.
+
+00:07:17.460 --> 00:07:20.780
+Het resultaat ziet er geweldig uit op een whiteboard, maar werkt vreselijk in de praktijk.
+
+00:07:21.000 --> 00:07:25.800
+Ontwikkelaars zoeken stilletjes naar omwegen, de adoptie daalt en het platformteam vraagt zich af waarom niemand hun inspanningen waardeert.
+
+00:07:25.980 --> 00:07:27.980
+De oplossing is simpel, maar lastig uit te voeren.
+
+00:07:28.120 --> 00:07:29.440
+Je hebt ontsnappingsroutes nodig.
+
+00:07:29.660 --> 00:07:32.660
+Als het pad niet past bij de use case van een ontwikkelaar, hebben ze een uitweg nodig.
+
+00:07:32.660 --> 00:07:37.240
+Een manier om een standaardinstelling te overschrijven, een eigen pipeline mee te brengen of het platform volledig te verlaten.
+
+00:07:37.400 --> 00:07:38.720
+En dit is het belangrijkste deel.
+
+00:07:38.920 --> 00:07:41.420
+Wanneer ze van het pad afwijken, is dat geen falen, maar feedback.
+
+00:07:41.620 --> 00:07:44.660
+Elke keer dat een ontwikkelaar het gouden pad verlaat, vertelt het je iets concreets.
+
+00:07:44.840 --> 00:07:48.820
+Of het pad mist een functie die het zou moeten hebben, of de use case hoort er simpelweg niet thuis.
+
+00:07:49.080 --> 00:07:50.540
+Beide signalen zijn waardevol.
+
+00:07:50.740 --> 00:07:52.860
+Een goed gouden pad in de praktijk ziet er zo uit.
+
+00:07:53.040 --> 00:07:55.180
+Een team wil een nieuwe back-end service uitrollen.
+
+00:07:55.320 --> 00:07:56.320
+Ze gebruiken het pad.
+
+00:07:56.320 --> 00:08:05.200
+Het geeft ze een template repository met de juiste structuur, een standaard CI-CD pipeline die al getest is, ingebouwde logging en monitoring, en een one-click rowback voor als er iets misgaat.
+
+00:08:05.320 --> 00:08:10.880
+Het hele proces duurt minuten in plaats van dagen, en omdat het platform team het pad beheert, lossen zij het op als er iets kapot gaat.
+
+00:08:11.080 --> 00:08:13.920
+De ontwikkelaar hoeft geen expert te worden in het debuggen van pipelines.
+
+00:08:14.180 --> 00:08:15.320
+Wat dit voor jou betekent?
+
+00:08:15.480 --> 00:08:16.200
+Minder verrassingen.
+
+00:08:16.400 --> 00:08:18.180
+Je levert sneller omdat het pad getest is.
+
+00:08:18.360 --> 00:08:21.100
+Je levert veiliger omdat beveiliging en monitoring zijn ingebouwd.
+
+00:08:21.260 --> 00:08:23.940
+Je levert met vertrouwen omdat terugdraaien met één klik gebeurt.
+
+00:08:23.940 --> 00:08:26.580
+Het pad is er om je te helpen, niet om je tegen te houden.
+
+00:08:26.880 --> 00:08:27.440
+Gebruik het.
+
+00:08:27.580 --> 00:08:29.420
+Het verminderen van de cognitieve belasting.
+
+00:08:29.700 --> 00:08:30.980
+Dat is waar de echte winst zit.
+
+00:08:31.180 --> 00:08:34.860
+Wanneer een platform het zware werk opknapt, kunnen ontwikkelaars zich eindelijk op de code concentreren.
+
+00:08:35.080 --> 00:08:37.360
+Ze hoeven niet te weten welke Kubernetes-versie er draait.
+
+00:08:37.540 --> 00:08:41.120
+Ze hoeven geen Terraform-modules bij te werken telkens als een cloud provider een API wijzigt.
+
+00:08:41.320 --> 00:08:42.520
+Zij schrijven gewoon features.
+
+00:08:42.780 --> 00:08:44.760
+Platform-engineers vangen die complexiteit op.
+
+00:08:44.880 --> 00:08:47.120
+Zij bepalen wat ontwikkelaars moeten zien en wat verborgen moet blijven.
+
+00:08:47.320 --> 00:08:49.580
+Dat is een bewuste ontwerpkeuze, niet zomaar een technische.
+
+00:08:49.580 --> 00:08:54.260
+Het gaat erom te bepalen welke details ertoe doen voor de gebruiker van het platform en welke alleen maar ruis toevoegen.
+
+00:08:54.420 --> 00:08:55.800
+Hier is een concreet voorbeeld.
+
+00:08:56.020 --> 00:09:01.720
+Een ontwikkelaar die een nieuwe service uitrolt, geeft niet om cluster-nood-groottes, instancetypen of autoscilling-drempels.
+
+00:09:01.940 --> 00:09:05.080
+Ze geven erom of hun service draait en hoe snel deze reageert.
+
+00:09:05.280 --> 00:09:08.140
+De spray configureert het platform dat alles op basis van de app tier.
+
+00:09:08.300 --> 00:09:10.200
+Kleine service, hier is de juiste instelling.
+
+00:09:10.460 --> 00:09:12.740
+Drukbezochte service, hier is een andere configuratie.
+
+00:09:12.920 --> 00:09:15.340
+De ontwikkelaar maakt die keuzes niet, omdat dat niet nodig is.
+
+00:09:15.580 --> 00:09:16.420
+Waarom is dit belangrijk?
+
+00:09:16.420 --> 00:09:20.880
+Omdat een burn-out minder snel optreedt wanneer ontwikkelaars niet met 15 verschillende zaken tegelijk jongleren.
+
+00:09:21.060 --> 00:09:24.380
+Sommige volwassen platformteams hebben de cognitieve belasting met bijna de helft verminderd.
+
+00:09:24.520 --> 00:09:26.700
+40 tot 50 procent minder mentale overhead.
+
+00:09:26.900 --> 00:09:28.160
+Dat is een enorme verschuiving.
+
+00:09:28.380 --> 00:09:33.360
+Het is het verschil tussen met energie naar huis gaan en om 10 uur s'avonds naar een terminal staren, afvragend waarom je pipeline faalde.
+
+00:09:33.520 --> 00:09:34.620
+Maar hier is de waarschuwing.
+
+00:09:34.840 --> 00:09:35.980
+Creëer geen illusies.
+
+00:09:36.240 --> 00:09:38.320
+Sommige platformteams trappen in een valkuil.
+
+00:09:38.540 --> 00:09:42.520
+Ze verbergen instellingen zonder ontwikkelaars inzicht te geven in wat er onder de motorkap gebeurt.
+
+00:09:42.520 --> 00:09:46.740
+Dat is geen abstractie, dat is misleiding en het keert zich tegen je zodra er iets misgaat.
+
+00:09:47.000 --> 00:09:51.380
+Ontwikkelaars lopen tegen een muur waar ze niet doorheen kunnen kijken en plotseling voelt het platform als een blackbox die hen tegenwerkt.
+
+00:09:51.540 --> 00:09:53.280
+De term hiervoor is een leaky abstraction.
+
+00:09:53.580 --> 00:09:56.440
+Je verbergt complexiteit, maar uiteindelijk lekt die complexiteit er toch uit.
+
+00:09:56.600 --> 00:10:00.640
+Een database wordt traag, een deployment faalt, een beveiligingsbeleid blokkeert iets onverwachts.
+
+00:10:00.840 --> 00:10:04.680
+En de ontwikkelaar heeft geen mentaal model van wat er gebeurt, omdat het platform er nooit een heeft aangereikt.
+
+00:10:05.240 --> 00:10:06.200
+Transparantie is belangrijk.
+
+00:10:06.440 --> 00:10:09.200
+Laat ontwikkelaars zien wat ze moeten weten, op het moment dat ze het moeten weten.
+
+00:10:09.200 --> 00:10:11.180
+Verberg niet alles en hoop er maar het beste van.
+
+00:10:11.380 --> 00:10:14.560
+Wat dit voor jou betekent, minder contextwisselingen en meer flowstaten.
+
+00:10:14.740 --> 00:10:17.820
+Je begint je ochtend niet met de vraag of het Kubernetes cluster een update nodig heeft.
+
+00:10:18.040 --> 00:10:20.600
+Je begint je ochtend met het werken aan de feature die volgende week af moet.
+
+00:10:20.740 --> 00:10:22.360
+Je baan wordt weer je eigenlijke werk.
+
+00:10:22.660 --> 00:10:24.600
+Het platform behandelen als een product.
+
+00:10:24.860 --> 00:10:28.340
+Vandaag praten we over iets dat de werking van interne tools volledig verandert.
+
+00:10:28.540 --> 00:10:31.600
+De meeste mensen denken dat een platformteam gewoon een infrastructuurteam is.
+
+00:10:31.800 --> 00:10:32.400
+Dat is het niet.
+
+00:10:32.580 --> 00:10:37.460
+Een platformteam is een productteam en de ontwikkelaars die dat platform gebruiken zijn hun klanten, geen mensen die tickets indienen.
+
+00:10:37.460 --> 00:10:38.620
+Dat verandert alles.
+
+00:10:38.820 --> 00:10:47.900
+Een productteam praat met zijn klanten, ontdekt wat echt vervelend is, prioriteert functies op basis van werkelijke behoeften, meet de adoptie, bouwt niet zomaar iets om daarna te vertrekken, maar blijft itereren.
+
+00:10:48.060 --> 00:10:50.200
+Dus, hoe ziet een productteamer in de praktijk uit?
+
+00:10:50.420 --> 00:10:51.920
+Ze werken niet als een helpdesk.
+
+00:10:52.100 --> 00:10:55.440
+Een ontwikkelaar opent een ticket en het platformteam voert het handmatig uit.
+
+00:10:55.640 --> 00:10:59.220
+Dat is geen platformengineering, dat is gewoon gecentraliseerde operatie met een nieuwe naam.
+
+00:10:59.340 --> 00:11:03.340
+Het schaalt niet, het vermindert de cognitieve belasting niet, het verplaatst de bottleneck alleen maar van het ene team naar het andere.
+
+00:11:03.540 --> 00:11:04.920
+Dit is wat ze in plaats daarvan doen.
+
+00:11:04.920 --> 00:11:10.900
+Ze meten de juiste dingen, tijd tot eerste deplooi, onboardingssnelheid voor nieuwe teamleden, tevredeheidsscores van ontwikkelaars.
+
+00:11:11.100 --> 00:11:15.700
+Dit zijn de statistieken die je vertellen of het platform mensen echt helpt of gewoon een extra laag complexiteit toevoegt.
+
+00:11:15.920 --> 00:11:17.360
+Spotify is een goed voorbeeld.
+
+00:11:17.560 --> 00:11:20.060
+Hun platformteam draait als een echte productorganisatie.
+
+00:11:20.280 --> 00:11:24.560
+Ze hebben roadmaps, ze hebben OKR's, ze praten met ontwikkelaars over wat wel en niet werkt.
+
+00:11:24.780 --> 00:11:29.500
+Ze behandelen het platform als iets dat elke dag opnieuw zijn adoptie moet verdienen en dat is het kernidee.
+
+00:11:29.680 --> 00:11:31.940
+Een platform dat niemand gebruikt is slechts een project.
+
+00:11:32.260 --> 00:11:33.860
+Het staat stof te verzamelen in een hoek.
+
+00:11:33.860 --> 00:11:35.800
+Adoptie is de ultieme validatie.
+
+00:11:35.800 --> 00:11:40.020
+Als ontwikkelaars voor jouw platform kiezen in plaats van hun eigen tools te bouwen, dan ben je geslaagd.
+
+00:11:40.120 --> 00:11:43.480
+Als ze het vermijden, kan geen enkele hoeveelheid technische uitmuntendheid dat repareren.
+
+00:11:43.680 --> 00:11:44.760
+Wat betekent dit voor jou?
+
+00:11:44.940 --> 00:11:50.580
+Het betekent dat als je een platform bouwt, begin niet met architectuurdiagrammen, begin niet met Kubernetes clusters of Terraform modules.
+
+00:11:50.840 --> 00:11:54.060
+Begin met gebruikersinterviews, praat met de ontwikkelaars die je platform gaan gebruiken.
+
+00:11:54.240 --> 00:11:55.560
+Ontdek wat echt pijnlijk is.
+
+00:11:55.840 --> 00:11:58.580
+Bouw één ding dat een echt probleem oplost en itereer daarna.
+
+00:11:58.820 --> 00:12:01.280
+Dat is hoe je iets bouwt dat mensen ook echt willen gebruiken.
+
+00:12:01.280 --> 00:12:03.420
+Waarom juist nu de AI-golf?
+
+00:12:03.600 --> 00:12:05.080
+Dus waarom praten we hier nu over?
+
+00:12:05.300 --> 00:12:06.460
+Waarom niet vijf jaar geleden?
+
+00:12:06.640 --> 00:12:07.700
+Het antwoord is AI.
+
+00:12:07.860 --> 00:12:12.860
+AI-codeertools zoals GitHub Copilot laten ontwikkelaars code opleveren in een tempo dat we nog nooit eerder hebben gezien.
+
+00:12:13.020 --> 00:12:16.360
+Tien keer, twintig keer meer code per dag dan wat een paar jaar geleden mogelijk was.
+
+00:12:16.600 --> 00:12:18.240
+Dat klinkt geweldig en dat is het ook.
+
+00:12:18.380 --> 00:12:19.760
+Maar dit is het addertje onder het gras.
+
+00:12:19.940 --> 00:12:21.580
+Al die code heeft nog steeds infrastructuur nodig.
+
+00:12:21.760 --> 00:12:23.100
+Het heeft nog steeds beveiliging nodig.
+
+00:12:23.300 --> 00:12:25.560
+Het moet nog steeds worden uitgerold, getest en beheerd.
+
+00:12:25.560 --> 00:12:27.880
+Meer code zonder een beter systeem maakt je niet sneller.
+
+00:12:27.880 --> 00:12:30.060
+Het zorgt er alleen maar voor dat de chaos sneller gaat.
+
+00:12:30.220 --> 00:12:34.160
+Als je ontwikkelaars al verdrinken in Griekse Y, AML en Terraform, lost AI dat niet op.
+
+00:12:34.240 --> 00:12:37.900
+Het betekent alleen dat ze sneller verdrinken terwijl ze meer code produceren die ondersteund moet worden.
+
+00:12:38.080 --> 00:12:43.060
+Op dit moment heeft ongeveer 55% van de organisatie's platform engineering al in enige vorm geadopteerd.
+
+00:12:43.260 --> 00:12:46.820
+Bartner voorspelt dat dit aantal eind 2026 de 80% zal bereiken.
+
+00:12:47.060 --> 00:12:48.300
+Dat is geen langzame trend.
+
+00:12:48.560 --> 00:12:50.120
+Dat is een verschuiving die nu gaande is.
+
+00:12:50.380 --> 00:12:54.020
+Bedrijven realiseren zich dat ze hun engineering teams niet kunnen schalen zonder een platformlaag.
+
+00:12:54.020 --> 00:12:58.400
+De oude aanpak waarbij elk team alles zelf doet, werkt gewoon niet als je code verstuurt op AI-snelheid.
+
+00:12:58.620 --> 00:13:00.160
+Dit is wat veel mensen over het hoofd zien.
+
+00:13:00.360 --> 00:13:02.440
+AI creëert niet alleen de behoefte aan platforms.
+
+00:13:02.680 --> 00:13:03.740
+Het helpt ze ook bouwen.
+
+00:13:04.100 --> 00:13:09.300
+Platformteams gebruiken AI om Terraform modules te genereren, documentatie te schrijven en pipelines te debuggen.
+
+00:13:09.500 --> 00:13:13.220
+Dezelfde technologie die de urgentie creëert, biedt ook de tools om het op te lossen.
+
+00:13:13.440 --> 00:13:14.800
+Nu, een woord van waarschuwing.
+
+00:13:15.040 --> 00:13:16.500
+AI versterkt wat je al hebt.
+
+00:13:16.740 --> 00:13:23.060
+Als je fundamenten solide zijn, zoals een goede architectuur en een goed ontworpen platform, maakt AI je twee tot drie keer productiever.
+
+00:13:23.060 --> 00:13:26.960
+Maar als je fundamenten zwak zijn, helpt AI je alleen maar om sneller grotere fouten te maken.
+
+00:13:27.180 --> 00:13:31.580
+Slechte configuraties, beveiligingslekken, kapotte infrastructuur, allemaal naar productie verstuurd voordat iemand het merkt.
+
+00:13:31.720 --> 00:13:33.400
+AI lost slechte fundamenten niet op.
+
+00:13:33.580 --> 00:13:34.460
+Het legt ze bloot.
+
+00:13:34.640 --> 00:13:35.780
+Hier is een echt voorbeeld.
+
+00:13:36.000 --> 00:13:40.480
+Een bedrijf met een goed intern ontwikkelaarsplatform kan een niet-engineer veilig AI-tools laten implementeren.
+
+00:13:40.660 --> 00:13:42.040
+Het platform biedt vangrails.
+
+00:13:42.260 --> 00:13:43.880
+Het dwingt beveiligingsbeleid af.
+
+00:13:44.040 --> 00:13:45.520
+Het beheert de infrastructuur.
+
+00:13:45.760 --> 00:13:51.100
+Zo kan een productmanager een AI-gestuurd prototype opzetten zonder Kubernetes of cloudnetwerken te hoeven begrijpen.
+
+00:13:51.100 --> 00:13:57.460
+Dat is krachtig. Dat is het soort ding dat teams die klaar zijn voor het AI-tijdperk onderscheidt van teams die achterblijven.
+
+00:13:57.640 --> 00:13:58.860
+Wat betekent dit voor jou?
+
+00:13:59.020 --> 00:14:01.340
+Het venster om een platform te bouwen sluit zich.
+
+00:14:01.540 --> 00:14:07.480
+Niet omdat de technologie verdwijnt, maar omdat de kloof tussen teams met platforms en teams zonder platforms snel groter wordt.
+
+00:14:07.680 --> 00:14:11.180
+Elke maand dat je wacht, lopen de teams die al platforms hebben verder uit.
+
+00:14:11.420 --> 00:14:15.280
+Ze leveren sneller, raken minder opgebrand en passen zich sneller aan nieuwe tools aan.
+
+00:14:15.440 --> 00:14:18.000
+De teams zonder platforms raken steeds verder achterop.
+
+00:14:18.000 --> 00:14:20.880
+De keuze is aan jou. Begin met één golden pet.
+
+00:14:21.100 --> 00:14:22.420
+Dus, waar begin je eigenlijk?
+
+00:14:22.620 --> 00:14:26.640
+Als je denkt dat je vanaf nul een heel intern ontwikkelaarsplatform moet bouwen, stop dan.
+
+00:14:26.860 --> 00:14:29.780
+Dat is de snelste manier om je projectennek om te draaien voordat het begint.
+
+00:14:29.920 --> 00:14:32.900
+De grootste fout die teams maken, is proberen alles tegelijk te bouwen.
+
+00:14:33.080 --> 00:14:37.160
+Ze besteden maanden aan het ontwerpen van het perfecte platform, volgepropt met elke functie die ze kunnen bedenken.
+
+00:14:37.340 --> 00:14:39.060
+Dan lanceren ze het en horen ze niets.
+
+00:14:39.280 --> 00:14:40.260
+Niemand gebruikt het.
+
+00:14:40.260 --> 00:14:45.020
+Waarom? Omdat het probleem een oplost waar niemand om vroeg en je voor de start al een handleiding moet lezen.
+
+00:14:45.200 --> 00:14:46.560
+Hier is het punt. Doe dat niet.
+
+00:14:46.800 --> 00:14:48.100
+Begin in plaats daarvan klein.
+
+00:14:48.300 --> 00:14:52.080
+Praat echt met developers, niet met de architecten, niet met de managers, niet met je eigen aannames.
+
+00:14:52.360 --> 00:14:54.280
+Zoek de mensen die elke dag aan functies werken.
+
+00:14:54.500 --> 00:14:55.560
+Vraag hen waar het knelt.
+
+00:14:55.840 --> 00:15:00.380
+Zoek de workflow die het langs duurt, de meeste mensen frustreert of vaker wordt overgeslagen dan zou moeten.
+
+00:15:00.660 --> 00:15:03.420
+Bouw vervolgens precies één golden pad, van begin tot eind.
+
+00:15:03.640 --> 00:15:06.100
+Misschien is het het maken en uitrollen van een nieuwe microservice.
+
+00:15:06.400 --> 00:15:08.960
+Misschien is het het vanaf nul opzetten van een ontwikkelomgeving.
+
+00:15:09.200 --> 00:15:12.380
+Misschien is het het uitrollen van een hotfix naar productie zonder iets te breken.
+
+00:15:12.600 --> 00:15:15.920
+Kies degene die het meest pijn doet en bouw een pad dat die pijn wegneemt.
+
+00:15:16.120 --> 00:15:19.540
+Bouw het, test het met echte gebruikers, verzamel feedback, itereer.
+
+00:15:19.540 --> 00:15:21.740
+Voeg daarna een ander pad toe en daarna weer een.
+
+00:15:21.860 --> 00:15:23.880
+Probeer niet elk probleem tegelijk op te lossen.
+
+00:15:24.080 --> 00:15:26.920
+Los één probleem echt goed op en laat het momentum je vooruit helpen.
+
+00:15:27.080 --> 00:15:28.180
+Hoe weet je of het werkt?
+
+00:15:28.380 --> 00:15:29.340
+Meet de juiste dingen.
+
+00:15:29.340 --> 00:15:30.840
+Tijd van idee tot eerste deploy.
+
+00:15:31.020 --> 00:15:34.500
+Het aantal handmatige stappen dat je hebt geëlimineerd en vrijwillige adoptiecijfers.
+
+00:15:34.700 --> 00:15:38.020
+Als developers jouw pad kiezen in plaats van hun eigen oplossing, dan win je.
+
+00:15:38.200 --> 00:15:40.560
+Als ze het vermijden, luister dan en verander van koers.
+
+00:15:40.740 --> 00:15:42.240
+Dit is de valkuil die je moet vermijden.
+
+00:15:42.480 --> 00:15:43.780
+Maak het platform niet verplicht.
+
+00:15:44.040 --> 00:15:46.140
+Dwing developers op jouw pad en ze zullen het gaan haten.
+
+00:15:46.300 --> 00:15:47.920
+Ze zullen manieren vinden om eromheen te werken.
+
+00:15:48.100 --> 00:15:50.140
+Ze zullen hun eigen scripts bouwen en deze voor je verbergen.
+
+00:15:50.340 --> 00:15:51.800
+Maak het pad in plaats daarvan gemakkelijk.
+
+00:15:52.040 --> 00:15:53.500
+Maak het sneller dan het alternatief.
+
+00:15:53.700 --> 00:15:56.160
+Maak het de voor de hand liggende keuze, maar nooit de enige.
+
+00:15:56.160 --> 00:15:58.260
+Het eerste pad is altijd het moeilijkst.
+
+00:15:58.380 --> 00:16:00.120
+Het leert je alles over productdenken.
+
+00:16:00.320 --> 00:16:06.560
+Je leert praten met gebruikers, prioriteiten stellen en dat iets bouwen waar mensen echt op zitten te wachten veel moeilijker is dan iets bouwen dat gewoon werkt.
+
+00:16:06.720 --> 00:16:10.520
+Maar zodra je het één keer hebt gedaan, wordt het tweede pad makkelijker en het derde nog makkelijker.
+
+00:16:10.700 --> 00:16:12.420
+Je bouwt een platform niet in één keer.
+
+00:16:12.600 --> 00:16:13.980
+Je bouwt het één pad per keer.
+
+00:16:14.260 --> 00:16:15.200
+Dat is dus het systeem.
+
+00:16:15.360 --> 00:16:20.780
+Platform Engineering draait om de geplavijden wegbouwen, zodat developers zich kunnen concentreren op het rijden in plaats van op het repareren van gaten in de weg.
+
+00:16:20.780 --> 00:16:25.800
+Als je het zat bent om te vechten met infrastructuur, begin dan met het vinden van één golden pad binnen je team, slechts één.
+
+00:16:26.020 --> 00:16:29.620
+Deel dit met iemand die dit moet horen en abonneer je voor meer analyses zoals deze.

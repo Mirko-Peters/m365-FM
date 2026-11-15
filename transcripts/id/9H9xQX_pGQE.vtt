@@ -1,0 +1,1093 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.460
+Anda menghabiskan separuh hari menunggu persetujuan.
+
+00:00:02.700 --> 00:00:05.040
+Seseorang sedang berlibur, orang lain tidak melihat email,
+
+00:00:05.340 --> 00:00:06.680
+dan saat keputusan akhirnya tiba,
+
+00:00:06.980 --> 00:00:09.100
+konteks yang membenarkan permintaan tersebut telah kedaluarsa.
+
+00:00:09.320 --> 00:00:12.820
+Api penyucian perusahaan, kemajuan terhenti oleh orang-orang yang bersumpah bahwa mereka sibuk.
+
+00:00:12.980 --> 00:00:15.360
+Sekarang, bayangkan sebuah sistem yang tidak bisa menunggu.
+
+00:00:15.560 --> 00:00:18.100
+Alur kerja yang bergerak maju begitu kondisi terpenuhi.
+
+00:00:18.300 --> 00:00:20.400
+Hadirkan agen Flows dari Microsoft Copilot Studio,
+
+00:00:20.600 --> 00:00:22.560
+pembunuh birokrasi yang menyamar sebagai otomatisasi.
+
+00:00:22.780 --> 00:00:25.000
+Di sini, AI menjadi pemberi persetujuan pertama Anda.
+
+00:00:25.200 --> 00:00:27.760
+AI membaca data, mengevaluasinya terhadap kebijakan,
+
+00:00:27.760 --> 00:00:31.100
+dan memberikan persetujuan atau penolakan yang tepat sebelum manusia berkedip.
+
+00:00:31.220 --> 00:00:34.200
+Hanya kasus-kasus yang berada di ambang batas yang pernah mencapai kotak masuk manajer,
+
+00:00:34.460 --> 00:00:36.380
+yang berarti kecepatan tanpa mengorbankan pengawasan.
+
+00:00:36.580 --> 00:00:38.480
+Dan tidak seperti alur persetujuan lama yang runtuh,
+
+00:00:38.620 --> 00:00:39.740
+karena kompleksitas bersyarat,
+
+00:00:39.940 --> 00:00:41.920
+alur persetujuan yang digerakkan oleh AI ini berskala,
+
+00:00:42.100 --> 00:00:45.160
+bercabang, menvalidasi, dan mengaudit diri mereka sendiri di sepanjang jalan.
+
+00:00:45.400 --> 00:00:47.540
+Dalam panduan ini, saya akan menunjukkan kepada Anda
+
+00:00:47.540 --> 00:00:49.680
+cara membangun sistem persetujuan bersyarat multitahap
+
+00:00:49.680 --> 00:00:52.800
+yang memutuskan lebih cepat daripada rekan kerja Anda dapat menemukan tombol balas semua.
+
+00:00:52.800 --> 00:00:56.500
+Anda akan mempelajari cara menyiapkan tahap AI dengan logika persetujuan khusus,
+
+00:00:56.760 --> 00:00:58.820
+menambahkan tinjauan manusia yang ditargetkan,
+
+00:00:59.080 --> 00:01:01.600
+merancang kondisi dinamis yang merutekan ulang secara cerdas,
+
+00:01:01.800 --> 00:01:04.340
+dan mengintegrasikan validasi dokumen nyata untuk kepatuhan.
+
+00:01:04.560 --> 00:01:06.780
+Pada akhirnya, Anda akan memiliki proses otomatis yang tahu
+
+00:01:06.780 --> 00:01:09.620
+kapan harus berpikir seperti mesin dan kapan harus tunduk pada penilaian manusia.
+
+00:01:09.800 --> 00:01:13.020
+Berhenti mengikuti antrean, mulailah membiarkan logika memimpin.
+
+00:01:13.260 --> 00:01:15.080
+Masalah dengan persetujuan tradisional,
+
+00:01:15.340 --> 00:01:19.020
+rantai persetujuan tradisional adalah campuran tragis dari inefisiensi yang sama.
+
+00:01:19.020 --> 00:01:22.780
+Seseorang mengirimkan formulir, email beterbangan, spreadsheet tidak sinkron,
+
+00:01:23.000 --> 00:01:25.860
+dan di antara putaran penerusan, tidak ada yang ingat versi mana yang final.
+
+00:01:26.160 --> 00:01:28.620
+Setiap peserta menambahkan penundaan, bukan nilai.
+
+00:01:28.820 --> 00:01:31.800
+Proses tidak mengelola pekerjaan, tetapi menghasilkan latensi.
+
+00:01:32.020 --> 00:01:34.780
+Alur persetujuan power otomat yang umum mencoba menyelesaikan ini,
+
+00:01:35.100 --> 00:01:37.240
+tetapi terhenti setelah Anda memperkenalkan nuansa.
+
+00:01:37.560 --> 00:01:41.300
+Jalur persetujuan tunggal berfungsi dengan baik jika Anda hanya memerlukan satu ya atau tidak.
+
+00:01:41.560 --> 00:01:43.240
+Saat Anda menambahkan lapisan manajemen,
+
+00:01:43.460 --> 00:01:46.540
+ambang batas pengeluaran, atau aturan khusus, desain mulai terpecah.
+
+00:01:46.540 --> 00:01:51.700
+Anda akhirnya menyusun kondisi seperti boneka Rusia, tidak elegan, rapuh, dan tidak mungkin didibak 6 bulan kemudian.
+
+00:01:51.960 --> 00:01:55.140
+Satu konektor rusak dan seluruh sistem akan gagal secara diam-diam.
+
+00:01:55.380 --> 00:01:58.800
+Manusia menjadi penghambat, atau lebih tepatnya, simpul latensi.
+
+00:01:59.100 --> 00:02:02.440
+Setiap pesan yang mereka terima menjadi perjalanan pulang-pergi asinkron lainnya.
+
+00:02:02.620 --> 00:02:06.420
+Email sebagai mekanisme persetujuan seperti menggunakan merpati pos di dunia serat optik.
+
+00:02:06.580 --> 00:02:08.800
+Secara teknis berfungsi, tetapi seharusnya tidak.
+
+00:02:09.040 --> 00:02:10.680
+Hadirlah Microsoft Copilot Studio.
+
+00:02:10.920 --> 00:02:13.480
+Ini bukan sekadar versi power otomat yang bertahap.
+
+00:02:13.480 --> 00:02:17.000
+Ini memperkenalkan alur agen, sistem persetujuan yang didukung oleh AI,
+
+00:02:17.280 --> 00:02:21.760
+namun terintegrasi penuh ke dalam sumber data, peran, dan struktur logika organisasi Anda.
+
+00:02:21.960 --> 00:02:25.980
+Ini menjembatani penegakan kebijakan deterministik dengan pengambilan keputusan adaptif.
+
+00:02:26.180 --> 00:02:28.600
+Kecemerlangannya terletak pada cara memisahkan tahapan.
+
+00:02:28.860 --> 00:02:32.800
+Otomatisasi saat Anda menginginkan kecepatan, manusia saat Anda masih memerlukan validasi.
+
+00:02:33.000 --> 00:02:35.380
+Anggap saja ini sebagai hirarki yang direkayasa ulang.
+
+00:02:35.380 --> 00:02:41.100
+Tahap AI mengevaluasi aturan tetap, batas jumlah, jenis kategori, rentang tanggal dengan efisiensi klinis.
+
+00:02:41.260 --> 00:02:43.760
+Kemudian, jika keputusan berada di ambang ambiguitas,
+
+00:02:44.020 --> 00:02:47.440
+proses meningkat ke pengawasan manusia tanpa memaksa setiap kasus sepele untuk mengantre.
+
+00:02:47.620 --> 00:02:49.800
+Ini saja menghilangkan penundaan eksponensial.
+
+00:02:50.020 --> 00:02:51.980
+Halih-halih 10 orang melakukan tinjauan serial,
+
+00:02:52.320 --> 00:02:55.520
+AI menangani 80% secara instan, hanya merutekan outlier.
+
+00:02:55.800 --> 00:02:59.400
+Dan ya, Copilot Studio melacak semuanya melalui tulang punggung dataverse-nya,
+
+00:02:59.720 --> 00:03:03.560
+menghasilkan log yang dapat diverifikasi tanpa tim Anda perlu menggali arsip kotak surat.
+
+00:03:03.560 --> 00:03:05.820
+Alur kerja sebelumnya dibuat untuk manusia.
+
+00:03:06.040 --> 00:03:07.220
+Alur agen dibuat di sekitarnya,
+
+00:03:07.500 --> 00:03:11.160
+membuat orang tetap mengikuti perkembangan hanya ketika interpretasi, bukan pengulangan, diperlukan.
+
+00:03:11.400 --> 00:03:13.400
+Setelah Anda melihat bagaimana arsitektur ini berfungsi,
+
+00:03:13.520 --> 00:03:15.120
+persetujuan tradisional akan terasa primitif,
+
+00:03:15.320 --> 00:03:16.880
+seperti menyeimbangkan buku cek dengan cahaya lilin.
+
+00:03:17.040 --> 00:03:20.260
+Taruhannya sederhana, kepatuhan, konsistensi, dan skala.
+
+00:03:20.460 --> 00:03:22.860
+Operasi modern tenggelam tanpa validasi otomatis,
+
+00:03:23.100 --> 00:03:25.800
+dan logika yang dibantu AI kini menjadi dasar dan keandalan.
+
+00:03:26.140 --> 00:03:29.620
+Saat Anda bermigrasi dari alur statis ke alur agen yang dapat diaudit bersyarat,
+
+00:03:29.620 --> 00:03:31.940
+Anda berhenti mengelola persetujuan secara reaktif
+
+00:03:31.940 --> 00:03:33.980
+dan mulai memperlakukannya sebagai sistem yang hidup.
+
+00:03:34.100 --> 00:03:37.360
+Perbedaannya bukan hanya kecepatan, tetapi kewarasan struktural.
+
+00:03:37.600 --> 00:03:40.480
+Membangun tahap AI, mengajar pemberi persetujuan pertama.
+
+00:03:40.800 --> 00:03:44.240
+Sekarang tiba bagian yang menarik, melatih birokrat digital pertama Anda.
+
+00:03:44.440 --> 00:03:47.600
+Tahap AI adalah penjaga gerbang logis dari proses persetujuan Anda.
+
+00:03:47.820 --> 00:03:49.520
+Tugasnya bukanlah berpikir seperti manusia,
+
+00:03:49.800 --> 00:03:52.620
+tetapi melakukan penalaran terstruktur dengan konsistensi supermanusia.
+
+00:03:52.860 --> 00:03:54.980
+Ia membaca instruksi, memeriksanya terhadap masukan,
+
+00:03:55.220 --> 00:03:57.900
+dan mengeluarkan salah satu dari dua putusan, disetujui atau ditolak.
+
+00:03:57.900 --> 00:03:59.740
+Tidak ada politik, tidak ada rehat kopi.
+
+00:03:59.740 --> 00:04:02.000
+Anda mulai dengan mendefinisikan alur agen baru.
+
+00:04:02.240 --> 00:04:04.560
+Saat pembuatan, tahap AI berada di depan dan di tengah
+
+00:04:04.560 --> 00:04:06.800
+seperti kertas ujian kosong yang menunggu kunci pertanyaannya.
+
+00:04:07.020 --> 00:04:08.520
+Pemicunya biasanya berasal dari data first,
+
+00:04:08.740 --> 00:04:11.620
+catatan yang ditambahkan atau dimodifikasi dalam tabel klaim atau pengeluaran Anda.
+
+00:04:11.860 --> 00:04:13.560
+Setelah klaim dibuat, tahap ini aktif,
+
+00:04:13.780 --> 00:04:16.160
+mengevaluasi data, dan memutuskan sesuai dengan itu.
+
+00:04:16.400 --> 00:04:20.380
+Di dalam tahap tersebut, bidang yang paling penting adalah perintah instruksi otak dari operasi.
+
+00:04:20.640 --> 00:04:24.180
+Disinilah Anda menjelaskan logika persetujuan dalam bahasa yang sederhana, tetapi ketat.
+
+00:04:24.180 --> 00:04:27.800
+Tulislah seolah-olah Anda sedang menginstruksikan seorang pengacara yang tidak pernah berimprovisasi.
+
+00:04:27.960 --> 00:04:30.800
+Misalnya, setujui klaim jika jumlahnya kurang dari 500,
+
+00:04:31.220 --> 00:04:33.220
+deskripsi mendukung kesehatan fisik atau mental,
+
+00:04:33.500 --> 00:04:35.980
+dan tanggal pembelian dalam waktu 30 hari sejak pengajuan.
+
+00:04:36.200 --> 00:04:39.760
+Tolak jika ada aturan yang gagal, itu saja, kejelasan binar.
+
+00:04:40.060 --> 00:04:42.000
+Selanjutnya, tentukan masukan dinamis Anda.
+
+00:04:42.240 --> 00:04:45.160
+Anggap saja itu sebagai variable yang memasukkan data nyata ke dalam logika Anda.
+
+00:04:45.340 --> 00:04:48.800
+Anda kemungkinan besar akan menyertakan jumlah, deskripsi, dan tanggal pembelian.
+
+00:04:48.800 --> 00:04:54.580
+Masing-masing ditambahkan sebagai konten, teks, atau masukan angka yang akan diteruskan AI saat membuat keputusan.
+
+00:04:54.780 --> 00:04:59.760
+Copilot Studio mengklasifikasikan masukan ini berdasarkan jenis, teks, angka, atau dokumen gambar.
+
+00:04:59.960 --> 00:05:03.880
+Pilih dengan benar karena mencampur jenis, misalnya, angka yang disimpan sebagai teks,
+
+00:05:04.040 --> 00:05:05.400
+membingungkan manusia dan mesin.
+
+00:05:05.640 --> 00:05:08.360
+Di bawah setiap masukan, berikan contoh data untuk pengujian.
+
+00:05:08.600 --> 00:05:11.220
+Ini berfungsi sebagai perancas saat Anda mengkalibrasi logika.
+
+00:05:11.420 --> 00:05:17.300
+Misalnya, masukkan contoh klaim seperti matras yoga kebugaran, jumlah 300, tanggal pembelian tanggal 22 Agustus.
+
+00:05:17.300 --> 00:05:24.760
+Saat Anda menekan uji, Copilot Studio menjalankan model penalaran berbasis GPT di balik layar dan mengeluarkan keputusan plus penjelasan.
+
+00:05:24.980 --> 00:05:27.440
+Jika hasilnya sesuai dengan harapan Anda, bagus.
+
+00:05:27.860 --> 00:05:30.360
+Jika tidak, instruksi Anda kurang determinisme.
+
+00:05:30.620 --> 00:05:32.300
+Dan disitulah sebagian besar pemula mengacaukannya.
+
+00:05:33.120 --> 00:05:37.800
+Frasa yang luas atau ambigu, pengeluaran yang wajar, pembelian terkini, adalah racun AI.
+
+00:05:38.040 --> 00:05:41.700
+Sistem tidak dapat membaca suasana hati perusahaan, ia membutuhkan definisi matematis.
+
+00:05:41.920 --> 00:05:45.220
+Jadi, sempurnakan instruksi Anda tanpa henti hingga hasil pengujian konsisten.
+
+00:05:45.220 --> 00:05:49.120
+Setiap kali Anda mengubah kata-kata, Anda menyetel mesin penilaian untuk reproduksibilitas.
+
+00:05:49.280 --> 00:05:53.140
+Pola yang Anda inginkan adalah masukkan identik yang menghasilkan keluaran identik setiap saat.
+
+00:05:53.320 --> 00:05:55.060
+Logika mesin, bukan gosip kantor.
+
+00:05:55.300 --> 00:05:58.240
+Setelah perintah Anda menghasilkan keputusan yang andal di beberapa kasus pengujian,
+
+00:05:58.500 --> 00:06:00.860
+Anda telah melatih pemberi persetujuan AI Anda secara efektif.
+
+00:06:01.020 --> 00:06:04.380
+Sekarang, masukkan data dinamis nyata menggunakan token yang diambil dari data FAS,
+
+00:06:04.640 --> 00:06:06.780
+detail jumlah klaim, tanggal pembelian atau pengiriman.
+
+00:06:07.020 --> 00:06:09.700
+Ini menggantikan nilai pengujian Anda selama pengujian langsung.
+
+00:06:09.700 --> 00:06:12.840
+Sejak saat itu, AI mengevaluasi setiap klaim dalam konteks,
+
+00:06:13.120 --> 00:06:15.680
+mengembalikan putusan persetujuan saat data baru muncul.
+
+00:06:15.900 --> 00:06:18.400
+Sebelum menyatakan kemenangan, jalankan pengujian berulang.
+
+00:06:18.600 --> 00:06:20.820
+Ubah jumlahnya menjadi 600? Apakah ditolak?
+
+00:06:20.920 --> 00:06:23.600
+Ubah tanggal menjadi 3 bulan yang lalu? Apakah ditandai sebagai tidak valid?
+
+00:06:23.720 --> 00:06:25.640
+Tambahkan klaim yang tidak masuk akal seperti pembelian iPad?
+
+00:06:25.880 --> 00:06:27.060
+Apakah mendeteksi ketidakcocokan?
+
+00:06:27.260 --> 00:06:29.980
+Setiap pengujian harus menunjukkan sebab dan akibat yang konsisten.
+
+00:06:30.240 --> 00:06:34.100
+Jika respons berfluktuasi, masalahnya adalah kejelasan perintah Anda, bukan model AI.
+
+00:06:34.300 --> 00:06:35.760
+Saat pola yang konsisten muncul,
+
+00:06:35.760 --> 00:06:38.400
+buat konvensi penamaan untuk variable konten Anda.
+
+00:06:38.560 --> 00:06:43.140
+Awalan seperti bintang untuk jumlah klaim untuk string atau num tanggal pembelian untuk nilai numeri.
+
+00:06:43.300 --> 00:06:47.740
+Disiplin kecil ini mencegah kekacauan saat Anda memperluasnya nanti ke logika multi cabang.
+
+00:06:47.940 --> 00:06:53.260
+Pada tahap ini, pemberi persetujuan otomatis Anda kini dapat membuat keputusan independen berdasarkan kebijakan tanpa pengawasan.
+
+00:06:53.480 --> 00:06:56.380
+Namun, otomatisasi bukanlah kediktatoran, melainkan pendelegasian.
+
+00:06:56.600 --> 00:06:59.100
+Mesin menangani kecepatan dan presisi, bukan penilaian.
+
+00:06:59.300 --> 00:07:05.120
+Untuk skenario batas, Anda memerlukan eskalasi manusia dalam lingkaran untuk meninjau apa yang ditolak atau dianggap tidak pasti oleh AI.
+
+00:07:05.120 --> 00:07:10.080
+Disitulah tahap berikutnya berperan, dan begitulah cara otoritas dibagi antara silikon dan sebagainya.
+
+00:07:10.260 --> 00:07:13.560
+Menambahkan pengawasan manusia, logika multi tahap dan kondisional.
+
+00:07:13.880 --> 00:07:19.380
+Setelah AI Anda menilai klaim dengan percaya diri, Anda dapat menambahkan apa yang ironisnya disebut birokrasi sebagai sentuhan manusia.
+
+00:07:19.600 --> 00:07:24.880
+Di Copilot Studio, itu berarti tahap manual, titik pemeriksaan tempat orang sungguhan dapat menjalankan kebijaksanaan.
+
+00:07:25.080 --> 00:07:26.900
+Anggap saja itu sebagai katup pengaman Anda.
+
+00:07:27.240 --> 00:07:29.880
+Segala sesuatu yang dapat diprediksi mengalir secara otomatis.
+
+00:07:30.140 --> 00:07:32.620
+Segala sesuatu yang bernuansa akan sampai ke meja manajar.
+
+00:07:32.620 --> 00:07:36.260
+Anda mulai diperancang persetujuan dengan menambahkan tahap manual tepat setelah tahap AI.
+
+00:07:36.440 --> 00:07:38.740
+Hal ini menciptakan gerbang kedua dalam alur agen Anda.
+
+00:07:38.980 --> 00:07:40.480
+Serah terima bersifat kondisional.
+
+00:07:40.780 --> 00:07:44.200
+Hanya jika putusan AI sama dengan disetujui, kita melanjutkan ke tahap manusia.
+
+00:07:44.440 --> 00:07:46.800
+Jika AI mengatakan ditolak, proses berakhir di sana.
+
+00:07:47.060 --> 00:07:50.720
+Mengapa membuang waktu meminta manajar untuk mengonfirmasi kebijakan apa yang telah didiskualifikasi?
+
+00:07:50.940 --> 00:07:53.740
+Efisiensi adalah perhatian selektif yang dikemas sebagai otomatisasi.
+
+00:07:53.980 --> 00:07:55.240
+Mari kita buat contoh skenario.
+
+00:07:55.580 --> 00:07:58.760
+Misalkan seorang karyawan mengajukan plan biaya untuk keanggotaan pusat kebugaran.
+
+00:07:58.760 --> 00:08:01.860
+AI menyetujuinya karena semua kriteria sesuai dengan kebijakan.
+
+00:08:02.100 --> 00:08:06.340
+Sekarang, keputusan tersebut memicu tahap manual tingkat manajar yang disebut persetujuan manajar.
+
+00:08:06.500 --> 00:08:11.900
+Di balik layar, Anda mengonfigurasi tahap ini dengan judul seperti permintaan persetujuan klaim dari pengirim klaim.
+
+00:08:12.120 --> 00:08:15.100
+Variable tersebut menarik data secara dinamis dari Dataverse.
+
+00:08:15.360 --> 00:08:20.200
+Bidang tetapkan ke adalah tempat Anda menentukan siapa yang menerima tugas, biasanya manajar penggugat.
+
+00:08:20.200 --> 00:08:25.520
+Untuk mengotomatiskan perutean ini, Copilot Studio memungkinkan Anda mengintegrasikan konektor pengguna Office 365.
+
+00:08:26.060 --> 00:08:31.740
+Pertama, ambil catatan pengguna siapapun yang membuat klaim menggunakan tindakan dapatkan baris berdasarkan ide pada tabel pengguna di Dataverse.
+
+00:08:31.920 --> 00:08:33.900
+Tindakan tersebut mengambil informasi pengirim.
+
+00:08:34.180 --> 00:08:38.120
+Berikutnya, tindakan dapatkan manajar mengambil manajar pengguna tersebut melalui email utama mereka.
+
+00:08:38.380 --> 00:08:42.240
+Berikan hasil tersebut kembali ke tahap manual Anda sebagai variable seperti email manajar STR.
+
+00:08:42.480 --> 00:08:45.180
+Hasilnya, tidak ada pengkodean keras, tidak ada hirarki yang basi.
+
+00:08:45.400 --> 00:08:47.840
+Manajar berubah, hirarki menyegarkan dirinya sendiri.
+
+00:08:47.840 --> 00:08:51.940
+Sekarang muncul percabangan bersyarat, alasan sebenarnya adanya persetujuan multitahap.
+
+00:08:52.040 --> 00:08:54.620
+Anda dapat memperkenalkan logika langsung di dalam alur agen.
+
+00:08:54.860 --> 00:08:59.580
+Jika jumlah klaim lebih besar dari atau sama dengan 150, tambahkan tahap tambahan untuk persetujuan admin.
+
+00:08:59.840 --> 00:09:01.520
+Jika tidak, akhiri prosesnya.
+
+00:09:01.780 --> 00:09:06.540
+Ini mengubah rutinitas dua langkah sederhana menjadi pohon keputusan multitingkat yang beradaptasi dengan konteks.
+
+00:09:06.700 --> 00:09:08.680
+Klaim bernilai rendah mendapatkan satu orang.
+
+00:09:08.960 --> 00:09:12.080
+Klaim bernilai lebih tinggi atau berisiko meningkat untuk mendapatkan perhatian tambahan.
+
+00:09:12.320 --> 00:09:15.260
+Di desainer, masukkan tindakan kondisi sebelum menutup alur.
+
+00:09:15.260 --> 00:09:18.240
+Rujuk variabel numerik Anda, mungkin jumlah klaim num.
+
+00:09:18.420 --> 00:09:22.860
+Pilih operator lebih besar dari atau sama dengan, dan tetapkan ambang batas seperti 150.
+
+00:09:23.760 --> 00:09:27.240
+Di cabang if true, tambahkan tahap manual lain bernama persetujuan admin.
+
+00:09:27.500 --> 00:09:30.560
+Tetapkan ke pemberi persetujuan tetap seperti administrator kepatuhan.
+
+00:09:30.800 --> 00:09:33.060
+Di cabang if false, akhiri sebagai disetujui.
+
+00:09:33.300 --> 00:09:37.760
+Efeknya, alur kerja berperilaku seperti organisasi yang rasional, bukan hambatan universal.
+
+00:09:38.160 --> 00:09:39.820
+Sedikit humor praktis berlaku di sini.
+
+00:09:39.820 --> 00:09:43.400
+Ya, pendelegasian tetap membutuhkan kepercayaan, bukan keinginan untuk mengakar.
+
+00:09:43.600 --> 00:09:46.380
+Jangan tetapkan peran keamanan yang luas yang dapat menyetujui segalanya.
+
+00:09:46.600 --> 00:09:50.520
+Batasi izin untuk pengguna atau grup yang relevan melalui kontrol akses berbasis peran datafes.
+
+00:09:50.740 --> 00:09:52.880
+Jika tidak, Anda telah mengotomatiskan anarki.
+
+00:09:53.020 --> 00:09:55.960
+Pengujian struktur menunjukkan seberapa lancar setiap bagian cocok.
+
+00:09:56.120 --> 00:10:00.960
+Ketika klaim di bawah 150 dolar lolos tinjauan AI, alur berakhir setelah persetujuan manajer.
+
+00:10:01.160 --> 00:10:05.860
+Ketika lebih dari 150 dolar, sistem dengan sopan mengantrekannya untuk tinjauan admin sebelum diselesaikan.
+
+00:10:05.860 --> 00:10:11.560
+Setiap jalur meninggalkan jejak audit, log penalaran AI, persetujuan yang diberi kep waktu, dan hasil yang direkam yang disimpan di datafes.
+
+00:10:11.720 --> 00:10:14.240
+Tidak seorang pun dapat kemudian mengklaim, saya tidak pernah melihatnya.
+
+00:10:14.420 --> 00:10:15.940
+Basis data mengatakan sebaliknya.
+
+00:10:16.180 --> 00:10:19.040
+Saat Anda menyempurnakan, jaga agar konvensi penamaan tetap disiplin.
+
+00:10:19.220 --> 00:10:24.540
+Awali tahapan manusia dengan jelas, disetujui manusia, disetujui admin, sehingga Anda dapat melacak cabang secara visual.
+
+00:10:24.800 --> 00:10:27.800
+Diagram alur harus dibaca seperti logika, bukan seni misteri.
+
+00:10:28.040 --> 00:10:30.620
+Setelah puas, terbitkan dan uji dengan skenario nyata.
+
+00:10:30.880 --> 00:10:32.140
+Saksikan rantai terungkap.
+
+00:10:32.140 --> 00:10:33.980
+AI mengevaluasi secara instan.
+
+00:10:33.980 --> 00:10:36.420
+Manager mendapat tugas persetujuan yang ditargetkan.
+
+00:10:36.620 --> 00:10:38.940
+Admin bergabung hanya jika kondisi mengharuskan.
+
+00:10:39.160 --> 00:10:45.120
+Hasilnya terasa kurang seperti otomatisasi yang melakukan segalanya dan lebih seperti hirarki transparan yang menangani dirinya sendiri.
+
+00:10:45.380 --> 00:10:49.060
+Orkestrasi berlapis ini juga mengungkap batas baru, validasi dokumen.
+
+00:10:49.240 --> 00:10:52.400
+Karena terkadang bidang formulir terletak, tetapi tanda terima tidak.
+
+00:10:52.680 --> 00:10:56.820
+Langkah berikutnya adalah membuat AI memeriksa bukti fisik sebelum mencapai kotak masuk Anda.
+
+00:10:57.060 --> 00:10:58.840
+Disinilah validasi tanda terima berperan.
+
+00:10:59.100 --> 00:11:01.480
+Mengubah birokrasi menjadi sains yang dapat diverifikasi.
+
+00:11:01.480 --> 00:11:03.540
+Input dinamis dan validasi dokumen.
+
+00:11:03.540 --> 00:11:09.960
+Mari kita bahas tanda terima, potongan kertas kecil kusut yang secara misterius menjadi bukti penting begitu seseorang menginginkan penggantian biaya.
+
+00:11:10.200 --> 00:11:13.600
+Dalam proses persetujuan manual, manusia memverifikasinya dengan melihat.
+
+00:11:13.760 --> 00:11:16.580
+Ya, itu terlihat seperti matras yoga, bukan kapal pesiar.
+
+00:11:16.800 --> 00:11:20.980
+Dalam proses otomatis, kami membuat AI melakukan pemeriksaan yang sama tanpa kelelahan penilaian.
+
+00:11:21.240 --> 00:11:25.540
+Dalam alur agen Copilot Studio, validasi dokumen menjadi nyata melalui input konten dinamis,
+
+00:11:25.860 --> 00:11:29.300
+khususnya kemampuan untuk meneruskan gambar atau file ke dalam logika persetujuan Anda.
+
+00:11:29.300 --> 00:11:32.800
+Ini menambahkan indra ketiga ke pemberi persetujuan AI Anda, yaitu penglihatan.
+
+00:11:32.800 --> 00:11:38.080
+Daripada hanya mengandalkan kolom teks, model membaca dokumen dan membandingkan apa yang tertulis dengan apa yang diunggah.
+
+00:11:38.260 --> 00:11:39.300
+Berikut strukturnya.
+
+00:11:39.480 --> 00:11:43.600
+Di dalam tahap AI Anda, Anda menambahkan tipe input baru yang disebut gambar atau dokumen.
+
+00:11:43.880 --> 00:11:46.440
+Beri label dengan jelas, seperti berkas tanda terima dokumen.
+
+00:11:46.640 --> 00:11:48.320
+Unggah contoh tanda terima untuk pengujian.
+
+00:11:48.580 --> 00:11:51.120
+Ini tidak ditayangkan, ini hanya melatih tata letak logika.
+
+00:11:51.380 --> 00:11:54.840
+Sekarang, sesuaikan perintah instruksi Anda untuk menyertakan validasi silang dokumen.
+
+00:11:55.000 --> 00:11:56.800
+Anda memperluas logika Anda sebelumnya.
+
+00:11:56.800 --> 00:12:06.000
+Setujui klaim jika semua hal berikut ini benar, jumlah 500, detail klaim mendukung kesehatan fisik atau mental, tanggal pembelian dalam 30 hari, dan dokumen tanda terima cocok dengan barang, jumlah, dan tanggal yang dinyatakan.
+
+00:12:06.200 --> 00:12:11.220
+Kondisi keempat ini mengubah pemberi persetujuan AI Anda dari penegak kebijakan menjadi akuntan forensik.
+
+00:12:11.400 --> 00:12:17.800
+Saat pengujian berjalan, model mengekstrak teks yang dapat dibaca dari dokumen dan memverifikasi konsistensi dengan input terstruktur Anda.
+
+00:12:17.800 --> 00:12:24.800
+Jika tanda terima mencantumkan matras kebugaran 300 dolar, tanggal 22 Agustus dan klaim Anda menyebutkan hal lain, putusan berubah menjadi ditolak.
+
+00:12:24.920 --> 00:12:28.920
+Sekarang, untuk implementasi sebelum persetujuan berjalan, Anda perlu mengambil dokumen tersebut.
+
+00:12:29.100 --> 00:12:31.680
+Gunakan tindakan unduh file atau gambar dari dataverse.
+
+00:12:31.860 --> 00:12:35.440
+Targetkan tabel yang sama dengan tempat catatan klaim berada, kemungkinan klaim.
+
+00:12:35.660 --> 00:12:39.880
+Di bawah kolom file, pilih bidang lampiran yang sering diberi nama seperti tanda terima.
+
+00:12:40.160 --> 00:12:44.460
+Lalu, tentukan ide baris secara dinamis dari pemicu, pengenal klaim unik.
+
+00:12:44.460 --> 00:12:49.040
+Tindakan ini mengembalikan metadata dan konten file, tetapi inilah jebakan yang tersembunyi.
+
+00:12:49.240 --> 00:12:53.320
+Output konten memerlukan sedikit pembedahan agar AI dapat menafsirkannya dengan benar.
+
+00:12:53.480 --> 00:13:00.060
+Saat memetakan konten file ke dalam input file tanda terima dokumen Anda, buka editor ekspresi dan tambahkan konten ke referensi isi.
+
+00:13:00.240 --> 00:13:04.180
+Perubahan terakhir tersebut memberikan byte file yang sebenarnya bukan pembungkus metadata.
+
+00:13:04.520 --> 00:13:08.000
+Lewati saja dan AI Anda akan dengan antusias menyetujui tanda terima kosong.
+
+00:13:08.220 --> 00:13:11.300
+Mari kita bahas sinkronisasi, kelemahan alur kerja dokumen.
+
+00:13:11.300 --> 00:13:15.660
+Sebagian besar tabel Dataverse tidak menyimpan lampiran hingga setelah catatan pertama kali disimpan,
+
+00:13:15.940 --> 00:13:20.820
+yang berarti jika alur Anda terpicu saat pembuatan catatan, alur tersebut dapat diaktifkan sebelum file tersebut ada.
+
+00:13:21.040 --> 00:13:23.660
+Gejala, alur gagal atau konten tanda terima 0.
+
+00:13:23.960 --> 00:13:25.200
+Solusinya elegan.
+
+00:13:25.460 --> 00:13:31.220
+Ubah kondisi pemicu menjadi pada modifikasi item, tetapi batasi agar hanya aktif saat kolom tanda terima berubah.
+
+00:13:31.440 --> 00:13:35.880
+Dengan begitu, saat seseorang mengunggah atau mengganti file, validasi akan dimulai.
+
+00:13:35.880 --> 00:13:42.060
+Untuk mengonfigurasi ini, buka pengaturan pemicu, pilih kolom yang dimodifikasi, dan tempel nama logis kolom tanda terima Anda,
+
+00:13:42.340 --> 00:13:45.420
+yang dapat diambil dari detail kolom Dataverse di bawah alat lanjutan.
+
+00:13:45.700 --> 00:13:47.420
+Setelah ditetapkan, publikasikan.
+
+00:13:47.840 --> 00:13:50.000
+Sekarang otomatisasi Anda berperilaku dengan baik.
+
+00:13:50.180 --> 00:13:52.860
+Otomatisasi menunggu hingga benar-benar ada sesuatu untuk divalidasi.
+
+00:13:53.080 --> 00:13:55.940
+Saat klaim diperbarui dengan tanda terima baru, alur dimulai ulang.
+
+00:13:56.240 --> 00:14:00.760
+Otomatisasi mengunduh file, memasukkannya ke tahap AI, dan memeriksa silang semua masukan.
+
+00:14:00.760 --> 00:14:08.100
+Jika terdapat ketidaksesuaian, jumlah tidak cocok, tanggal kedalu warsa, deskripsi tidak konsisten, AI menolak dengan menyertakan penjelasan.
+
+00:14:08.260 --> 00:14:13.060
+Log penalaran mungkin berbunyi, jumlah yang diklaim 305 dolar berbeda dari total dokumen 300 dolar.
+
+00:14:13.280 --> 00:14:14.820
+Itulah kepatuhan tanpa keluhan.
+
+00:14:15.100 --> 00:14:18.100
+Dampak praktisnya, setiap pengiriman menjadi audit mandiri.
+
+00:14:18.320 --> 00:14:22.280
+Karyawan tidak dapat lagi lolos melalui tanda terima yang meragukan atau deskripsi yang tidak jelas.
+
+00:14:22.460 --> 00:14:27.200
+AI memberikan penilaian, datafers memberikan bukti, dan keduanya tidak mengambil jeda istirahat.
+
+00:14:27.200 --> 00:14:29.860
+Jadi, tidak, validasi dokumen tidak berlebihan.
+
+00:14:30.060 --> 00:14:32.760
+Validasi dokumen adalah memori kebal untuk alur kerja Anda.
+
+00:14:32.940 --> 00:14:36.540
+Outlier tertangkap di tingkat molekuler, karakter yang tercetak pada tanda terima sebenarnya,
+
+00:14:36.840 --> 00:14:40.200
+dan peninjau manusia dipromosikan dari pemeriksa manual menjadi penangan pengecualian.
+
+00:14:40.420 --> 00:14:40.800
+Selamat.
+
+00:14:41.140 --> 00:14:43.560
+Anda sekarang telah mengotomatiskan kejujuran itu sendiri.
+
+00:14:43.820 --> 00:14:47.240
+Membangun keandalan, pengujian, pembuatan versi, dan penerbitan.
+
+00:14:47.480 --> 00:14:50.260
+Otomatisasi apapun dapat terlihat sempurna hingga dijalankan.
+
+00:14:50.460 --> 00:14:53.460
+Itulah sebabnya keandalan bukanlah sebuah fase, melainkan sebuah disiplin.
+
+00:14:53.460 --> 00:14:59.740
+Copilot Studio membuat disiplin itu secara mengejutkan melalui pembuatan versi, pengujian, dan kontrol penerbitan yang disematkan langsung ke dalam alur agen.
+
+00:14:59.940 --> 00:15:01.440
+Mulailah dengan pengujian berulang.
+
+00:15:01.740 --> 00:15:06.460
+Setiap alur persetujuan adalah ekosistem mini, bahkan satu nama variable yang salah dapat menimbulkan kekacauan.
+
+00:15:07.280 --> 00:15:09.840
+Jadi, perlakukan pengujian sebagai proses ilmiah.
+
+00:15:10.020 --> 00:15:12.820
+Pisahkan perubahan, terapkan data, amati keluaran.
+
+00:15:13.100 --> 00:15:18.240
+Di editor alur, Copilot Studio memungkinkan Anda mensimulasikan data sampel tanpa menggunakan pemicu produksi.
+
+00:15:18.240 --> 00:15:25.120
+Masukkan skenario varian, jumlah yang terlalu besar, tanggal yang kedalu warsa, nama item yang tidak relevan, dan pastikan masing-masing menghasilkan keputusan yang benar.
+
+00:15:25.220 --> 00:15:26.800
+Kemudian beralih ke konvensi penamaan.
+
+00:15:27.340 --> 00:15:30.640
+Membosankan, benar sekali, penting, lebih dari sekadar udara.
+
+00:15:30.900 --> 00:15:32.760
+Beri awalan pada setiap variable secara sistematis.
+
+00:15:32.920 --> 00:15:35.140
+STR untuk string, num untuk numerik, doc untuk file.
+
+00:15:35.340 --> 00:15:37.560
+Demikian pula, beri label tindakan secara eksplisit.
+
+00:15:37.680 --> 00:15:40.980
+Unduh file tanda terima, periksa manajer yang disetujui, perbarui klaim yang disetujui.
+
+00:15:40.980 --> 00:15:46.740
+Karena dalam tiga bulan, ketika seseorang bertanya mengapa tindakan tujuh rusak, Anda akan menghargai bahwa remah roti lebih ramah daripada arkeologi.
+
+00:15:46.920 --> 00:15:50.260
+Setelah pengujian individual berhasil, perluas kevalidasi skenario tepi.
+
+00:15:50.480 --> 00:15:52.560
+Berpura-pura menjadi pengguna yang tidak kompeten.
+
+00:15:52.780 --> 00:15:56.940
+Tidak mengunggah tanda terima, mengubah tanggal menjadi tahun depan, mengetik 500 alih-alih 500.
+
+00:15:57.880 --> 00:16:00.360
+Konfirmasikan bahwa AI menjelaskan dan menolak tanpa mogok.
+
+00:16:00.480 --> 00:16:03.400
+Ini bukan kesalahan hipotetis, ini adalah latihan realitas.
+
+00:16:03.400 --> 00:16:09.940
+Semakin banyak kasus kegagalan yang Anda netralkan di awal, semakin sedikit pesan dalam sepukul 2 pagi yang akan Anda terima nanti yang mengatakan bahwa alur berhenti lagi.
+
+00:16:10.160 --> 00:16:12.020
+Penerbitan memperkenalkan tata kelola.
+
+00:16:12.280 --> 00:16:17.900
+Setiap kali Anda menyimpan perubahan besar, co-pilot studio di yang dia membuat versi baru, Anda dapat mengembalikannya kapan saja.
+
+00:16:18.160 --> 00:16:19.780
+Tidak ada kecemasan untuk mengesampingkan.
+
+00:16:20.040 --> 00:16:23.240
+Gunakan ini untuk memisahkan kotak pasir logika eksperimental dari produksi.
+
+00:16:23.500 --> 00:16:26.780
+Satu alur bernama claim approval def, alur lainnya claim approval prone.
+
+00:16:26.960 --> 00:16:29.460
+Uji dalam pengembangan, publikasikan hanya jika stabil.
+
+00:16:29.460 --> 00:16:34.280
+Ingat, keandalan bukan hanya tentang kebenaran, tetapi tentang kontrol saat terjadi perubahan.
+
+00:16:34.560 --> 00:16:37.060
+Setelah penerbitan, manfaatkan log aktivitas.
+
+00:16:37.260 --> 00:16:41.380
+Log ini bukan sekadar hiasan, melainkan catatan tingkat hukum tentang interaksi AI dan manusia.
+
+00:16:41.600 --> 00:16:44.540
+Stempel waktu, identitas pemberi persetujuan, ringkasan penalaran.
+
+00:16:44.700 --> 00:16:46.220
+Tinjau log ini secara berkala.
+
+00:16:46.440 --> 00:16:48.060
+Pola akan terungkap dengan sendirinya.
+
+00:16:48.280 --> 00:16:53.660
+Aturan mana yang memicu penolakan paling banyak, manajer mana yang mengesampingkan AI, seberapa sering langkah kepatuhan terlibat.
+
+00:16:53.800 --> 00:16:56.360
+Wawasan tersebut menyempurnakan kebijakan dan desain.
+
+00:16:56.360 --> 00:17:02.040
+Praktik terbaik lainnya yang halus, mengotomatiskan pembaruan status kembali ke dalam catatan data fast di akhir setiap cabang.
+
+00:17:02.260 --> 00:17:07.100
+Tindakan memperbarui baris harus menetapkan bidang yang jelas seperti status claim sama dengan disetujui atau ditolak.
+
+00:17:07.220 --> 00:17:09.440
+Titik akhir yang terlihat ini memperkuat kepercayaan.
+
+00:17:09.620 --> 00:17:12.020
+Pengguna melihat keputusan di dalam tampilan tabel mereka sendiri.
+
+00:17:12.280 --> 00:17:14.960
+Tidak ada spreadsheet pelacakan terpisah, tidak ada persetujuan semu.
+
+00:17:15.160 --> 00:17:18.600
+Setelah sistem Anda lulus semua pengujian, klik publikasikan dengan percaya diri.
+
+00:17:18.600 --> 00:17:27.080
+Tidak seperti alur power otomat generasi sebelumnya, alur agen mempertahankan metadata kontekstual, skema keputusan AI, pengikatan konten dinamis, dan tech versi.
+
+00:17:27.280 --> 00:17:32.440
+Hasilnya bukan sekadar proses yang berjalan, tetapi artefak yang dapat direproduksi, otomatisasi yang dapat diaudit.
+
+00:17:32.520 --> 00:17:34.580
+Pemeriksaan keandalan akhir bersifat mental.
+
+00:17:34.840 --> 00:17:36.200
+Hindari rekayasa berlebihan.
+
+00:17:36.400 --> 00:17:39.660
+Terkadang alur yang gagal mengungkap aturan yang terlalu rumit, bukan bug teknis.
+
+00:17:39.860 --> 00:17:41.720
+Sederhanakan logika jika memungkinkan.
+
+00:17:41.940 --> 00:17:45.280
+Tahapan yang lebih sedikit, instruksi yang lebih jelas, ambiguitas yang minimal.
+
+00:17:45.280 --> 00:17:49.040
+Otomatisasi bukanlah keacakan, melainkan kepintaran yang tidak perlu.
+
+00:17:49.300 --> 00:17:55.920
+Saat Anda menyelesaikan tahapan tersebut, sistem persetujuan Anda mencapai kematangan operasional, teruji, memiliki versi, ramah rollback, dan dapat diverifikasi.
+
+00:17:56.180 --> 00:18:01.100
+Setiap hasil, mulai dari penilaian AI hingga persetujuan admin, meninggalkan jejak digital yang tahan terhadap pengawasan.
+
+00:18:01.280 --> 00:18:08.920
+Keandalan itu terukur, bukan sekadar getaran, bukan keberuntungan, hanya penalaran terstruktur, yang dicatat dengan akurat oleh alat yang Anda buat untuk berpikir saat Anda tidur.
+
+00:18:09.120 --> 00:18:10.320
+Hasil dan hasil nyata.
+
+00:18:10.320 --> 00:18:13.380
+Apa yang terjadi saat Anda menyerahkan birokrasi kepada matematika?
+
+00:18:13.560 --> 00:18:14.860
+Persetujuan berhenti menunggu.
+
+00:18:14.860 --> 00:18:21.740
+Alur agen multitahap yang digerakkan oleh AI memangkas waktu penyelesaian dari hitungan hari menjadi hitungan menit karena keputusan tidak lagi bergantung pada ketersediaan kalender.
+
+00:18:22.000 --> 00:18:25.300
+Setiap klaim yang memenuhi kebijakan objektif disetujui secara instan.
+
+00:18:25.540 --> 00:18:29.720
+Setiap kasus khusus akan langsung masuk ke antrean manajer dengan konteks yang sudah dilampirkan.
+
+00:18:29.940 --> 00:18:32.780
+Manusia membuat penilaian nilai, bukan konfirmasi klerikal.
+
+00:18:33.060 --> 00:18:35.340
+Dampaknya pertama kali muncul sebagai kompresi waktu.
+
+00:18:35.600 --> 00:18:39.920
+Penggantian biaya yang sebelumnya memerlukan 4 email dan 2 pengingat kini diselesaikan sebelum makan siang.
+
+00:18:39.920 --> 00:18:46.140
+Departemen mengalami siklus pemrosesan yang lebih pendek, status menganggur yang lebih sedikit, dan alur penalaran yang dicatat dengan sempurna.
+
+00:18:46.340 --> 00:18:50.420
+Mekanisme persetujuan tidak lagi menjadi gangguan, ia menjadi infrastruktur.
+
+00:18:50.620 --> 00:18:52.480
+Kemudian muncul pengurangan kesalahan.
+
+00:18:52.720 --> 00:18:57.680
+Dengan menegakkan aturan deterministik melalui AI, Anda menghilangkan penyimpangan subjektif, kutukan persetujuan manual.
+
+00:18:57.940 --> 00:19:00.980
+Tidak lagi, saya pikir ini termasuk kesehatan dan kesejahteraan.
+
+00:19:01.180 --> 00:19:03.820
+AI menafsirkan kriteria dengan cara yang sama setiap saat.
+
+00:19:03.820 --> 00:19:07.400
+Konsistensi lebih baik daripada belaskasi dalam logika administratif.
+
+00:19:07.540 --> 00:19:13.920
+Manager hanya menangani anomali, dan bahkan anomali tersebut disertai dengan jejak audit A-input data, riwayat keputusan, penjelasan model.
+
+00:19:14.160 --> 00:19:17.120
+Audit berubah dari latihan panik menjadi verifikasi yang sopan.
+
+00:19:17.360 --> 00:19:20.760
+Di tingkat organisasi, ini tidak hanya lebih cepat, tetapi juga lebih aman.
+
+00:19:21.040 --> 00:19:23.480
+Kepatuhan tidak bergantung pada memori atau suasana hati.
+
+00:19:23.640 --> 00:19:24.700
+Kepatuhan tertanam.
+
+00:19:24.940 --> 00:19:27.880
+Log data first menunjukkan siapa yang menyetujui, kapan, dan mengapa.
+
+00:19:27.880 --> 00:19:32.880
+Transparansi tersebut mencegah budaya jalan pintas karena setiap keputusan kini hidup dalam keabadian yang dapat dicari.
+
+00:19:33.100 --> 00:19:38.480
+Dan secara filosofis, alur kerja beralih dari manusia terlebih dahulu dengan bantuan AI menjadi AI terlebih dahulu dengan koreksi manusia.
+
+00:19:38.660 --> 00:19:40.740
+Tata kelola yang praktis, bukan fiksi ilmiah.
+
+00:19:40.920 --> 00:19:43.520
+AI menangani penegakan aturan, manusia menangani penilaian.
+
+00:19:43.720 --> 00:19:47.400
+Bibrida menghasilkan sistem yang lebih adil, lebih cepat, dan pada akhirnya lebih dapat dipercaya.
+
+00:19:47.620 --> 00:19:49.260
+Bayangkan menjelaskannya kepada auditor.
+
+00:19:49.560 --> 00:19:52.160
+Senyum yang muncul setelahnya sepadan dengan otomatisasi itu sendiri.
+
+00:19:52.160 --> 00:19:56.500
+Jadi, begitulah Microsoft Copilot Studio bukan sekadar alat otomatisasi lainnya.
+
+00:19:56.500 --> 00:19:59.800
+Ini adalah tempat di mana keraguan-raguan organisasi Anda akhirnya hilang.
+
+00:19:59.860 --> 00:20:02.200
+Anda membangun mesin persetujuan yang dapat berpikir dalam kondisi tertentu,
+
+00:20:02.420 --> 00:20:03.540
+meningkatkan secara bertanggung jawab,
+
+00:20:03.680 --> 00:20:04.960
+menvalidasi tanda terima terhadap kenyataan,
+
+00:20:05.040 --> 00:20:06.700
+dan mendokumentasikan setiap gerakan yang dilakukannya.
+
+00:20:06.880 --> 00:20:09.060
+Itu bukan alur, itu adalah model tata kelola.
+
+00:20:09.300 --> 00:20:11.420
+Jika Anda tidak mengingat hal lain, ingatlah ini.
+
+00:20:11.640 --> 00:20:14.920
+AI harus membuat keputusan dapat diprediksi dan manusia menjadi luar biasa.
+
+00:20:15.120 --> 00:20:17.820
+Berhentilah mengarahkan segala sesuatu melalui orang-orang karena kebiasaan.
+
+00:20:17.820 --> 00:20:21.220
+Biarkan logika menangani rutinitas sehingga manajer dapat menangani pengecualian.
+
+00:20:21.220 --> 00:20:25.220
+Sekarang, jika panduan ini menyelamatkan Anda dari seminggu lagi tinjauan manajer yang tertunda,
+
+00:20:25.460 --> 00:20:26.580
+pertimbangkan untuk berlangganan.
+
+00:20:26.760 --> 00:20:30.500
+Tutorial berikutnya membahas lebih dalam tentang otomatisasi co-pilot studio tingkat lanjut.
+
+00:20:30.760 --> 00:20:34.280
+Tempat alur agen ini terhubung dengan analitik power platform dan kebijakan adaptif.
+
+00:20:34.420 --> 00:20:36.880
+Kunci jalur peningkatan Anda, berlangganan, aktifkan peringatan,
+
+00:20:37.080 --> 00:20:39.040
+dan biarkan episode baru disebarkan secara otomatis.
+
+00:20:39.220 --> 00:20:41.080
+Tidak ada pemeriksaan manual, tidak ada rilis yang terlewat,
+
+00:20:41.080 --> 00:20:43.280
+hanya penyampaian pengetahuan yang bermanfaat secara berkelanjutan.
+
+00:20:43.480 --> 00:20:44.040
+Lanjutkan.

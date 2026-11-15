@@ -1,0 +1,1120 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:03.480
+Bienvenue dans un nouvel épisode des pépites de connaissances Microsoft, je suis Mirko Peters.
+
+00:00:03.760 --> 00:00:05.060
+Le sujet d'aujourd'hui, Azure Logic Apps.
+
+00:00:05.780 --> 00:00:06.380
+Voici la question.
+
+00:00:06.940 --> 00:00:09.840
+Si vous pouviez connecter vos applications sans écrire une seule ligne de code,
+
+00:00:10.220 --> 00:00:11.940
+je ne parle pas de choses simples comme envoyer un email.
+
+00:00:12.600 --> 00:00:14.720
+Je parle de connecter des systèmes qui ne communiquent pas entre eux.
+
+00:00:15.360 --> 00:00:18.120
+Vos emails, votre stockage de fichiers, votre base de données, vos dossiers clients,
+
+00:00:18.460 --> 00:00:20.160
+et les faire fonctionner ensemble automatiquement.
+
+00:00:20.960 --> 00:00:22.020
+C'est ce que fait Azure Logic Apps.
+
+00:00:22.320 --> 00:00:25.460
+Dans cet épisode, j'expliquerai ce que c'est, réellement, comment ça fonctionne,
+
+00:00:25.880 --> 00:00:28.940
+et pourquoi c'est important pour quiconque utilise les outils Microsoft au travail.
+
+00:00:28.940 --> 00:00:33.700
+A la fin, vous comprendrez la vue d'ensemble et saurez exactement où Logic Apps s'intègre dans votre univers.
+
+00:00:34.560 --> 00:00:37.400
+Le problème ? Pourquoi l'automatisation a besoin d'un lien ?
+
+00:00:37.400 --> 00:00:39.040
+Commençons par un scénario que la plupart des gens connaissent.
+
+00:00:39.800 --> 00:00:43.240
+Un fichier est déposé dans un dossier SharePoint et quelqu'un doit en être informé via Teams.
+
+00:00:43.760 --> 00:00:45.400
+Peut-être qu'une base de données doit aussi être mise à jour.
+
+00:00:46.060 --> 00:00:48.220
+Trois systèmes distincts sans aucune connexion entre eux.
+
+00:00:48.620 --> 00:00:49.660
+Alors que se passe-t-il ?
+
+00:00:49.660 --> 00:00:51.940
+Quelqu'un vérifie manuellement le dossier, copie les informations,
+
+00:00:52.320 --> 00:00:55.500
+les colle dans Teams puis ouvre la base de données et effectue la mise à jour à chaque fois.
+
+00:00:56.220 --> 00:00:58.160
+C'est lent, fastidieux et propice aux erreurs.
+
+00:00:58.160 --> 00:01:01.360
+L'ancienne façon de gérer, cela consistait à faire écrire du code personnalisé par quelqu'un.
+
+00:01:01.800 --> 00:01:03.940
+Cela signifie trouver un développeur, expliquer vos besoins,
+
+00:01:04.100 --> 00:01:06.960
+attendre des semaines qu'ils le construisent, puis attendre encore quand quelque chose casse.
+
+00:01:07.320 --> 00:01:09.980
+Pour la plupart des équipes, ce n'est pas viable car le département informatique est surchargé
+
+00:01:09.980 --> 00:01:12.600
+et les équipes métiers ont des problèmes à résoudre immédiatement.
+
+00:01:13.220 --> 00:01:14.040
+Le travail reste manuel.
+
+00:01:14.520 --> 00:01:16.060
+Le problème n'est pas que les gens ne veulent pas automatiser.
+
+00:01:16.500 --> 00:01:18.000
+C'est que connecter différents systèmes est difficile.
+
+00:01:18.560 --> 00:01:22.460
+Chaque système a sa propre façon de gérer l'authentification, son propre format de données, ses propres règles.
+
+00:01:22.980 --> 00:01:25.540
+Écrire du code pour combler tout cela demande du temps et de l'expertise
+
+00:01:25.540 --> 00:01:27.960
+et la plupart des entreprises n'ont pas assez de développeurs disponibles.
+
+00:01:28.580 --> 00:01:31.540
+Alors et s'il existait une plateforme qui faisait toute cette connexion pour vous ?
+
+00:01:31.540 --> 00:01:35.620
+Une plateforme qui sait déjà communiquer avec SharePoint, Teams, Outlook, des bases de données
+
+00:01:35.620 --> 00:01:37.880
+et des centaines d'autres services où vous dites simplement
+
+00:01:37.880 --> 00:01:40.620
+« quand ceci arrive, fais cela et elle s'occupe du reste ».
+
+00:01:40.620 --> 00:01:42.180
+C'est exactement ce qu'est Azure Logic Apps.
+
+00:01:42.880 --> 00:01:44.100
+Ce qu'est réellement Logic Apps.
+
+00:01:44.100 --> 00:01:46.860
+Bienvenue dans un nouvel épisode des pépites de connaissances Microsoft.
+
+00:01:47.400 --> 00:01:50.560
+Je suis Mirko Peters et aujourd'hui nous parlons d'Azure Logic Apps en termes simples.
+
+00:01:51.020 --> 00:01:52.140
+Alors qu'est-ce que c'est exactement ?
+
+00:01:52.140 --> 00:01:52.760
+Analysons cela.
+
+00:01:53.100 --> 00:01:55.840
+Azure Logic Apps est un service de flux de travail basé sur le cloud de Microsoft.
+
+00:01:56.380 --> 00:02:00.300
+Il s'exécute sur Azure, ce qui signifie que Microsoft gère les serveurs, la mise à l'échelle, la disponibilité.
+
+00:02:00.640 --> 00:02:01.880
+Vous n'avez pas à vous soucier de tout cela.
+
+00:02:02.300 --> 00:02:03.780
+Vous créez simplement votre workflow et s'exécute.
+
+00:02:04.160 --> 00:02:05.500
+Voici la façon la plus simple d'y penser.
+
+00:02:06.000 --> 00:02:07.520
+Imaginez que votre entreprise est un immeuble de peau.
+
+00:02:07.740 --> 00:02:09.040
+Chaque département est une salle séparée.
+
+00:02:09.360 --> 00:02:10.140
+SharePoint est une salle.
+
+00:02:10.540 --> 00:02:11.120
+Teams en est une autre.
+
+00:02:11.120 --> 00:02:12.720
+Votre base de données se trouve au bout du coulou.
+
+00:02:12.960 --> 00:02:15.060
+Normalement, si vous devez déplacer quelque chose d'une salle à une autre,
+
+00:02:15.160 --> 00:02:16.520
+quelqu'un doit le transporter physiquement.
+
+00:02:17.040 --> 00:02:18.620
+Logic Apps est la salle de courrier automatisée.
+
+00:02:19.060 --> 00:02:22.840
+Elle est située au centre, c'est où tout doit aller et achemine les messages entre les services automatiquement.
+
+00:02:23.620 --> 00:02:25.500
+Vous n'avez pas besoin de construire de nouvelles portes entre chaque salle.
+
+00:02:25.940 --> 00:02:27.440
+Il suffit de dire à la salle de courrier ce qu'elle doit faire.
+
+00:02:27.800 --> 00:02:29.600
+Maintenant, vous avez peut-être entendu parler de Power Automate.
+
+00:02:29.900 --> 00:02:31.320
+Et vous vous demandez si ce n'est pas la même chose.
+
+00:02:31.840 --> 00:02:32.280
+Ah exactement.
+
+00:02:32.800 --> 00:02:34.540
+Power Automate est conçu pour les utilisateurs métiers.
+
+00:02:34.860 --> 00:02:36.820
+Il est pensé pour des workflows personnels simples, comme
+
+00:02:36.820 --> 00:02:39.000
+m'envoyer un email quand je reçois un message TeamSingle.
+
+00:02:39.000 --> 00:02:41.840
+Logic Apps est conçu pour les équipes informatiques et les développeurs.
+
+00:02:42.640 --> 00:02:43.740
+Il gère des scénarios plus complexes,
+
+00:02:43.860 --> 00:02:45.440
+des volumes plus importants et des besoins d'entreprise
+
+00:02:45.440 --> 00:02:47.060
+comme la sécurité et la conformité.
+
+00:02:48.080 --> 00:02:49.400
+Considéré Power Automate comme un vélo,
+
+00:02:49.800 --> 00:02:50.960
+idéal pour se déplacer dans les bureaux.
+
+00:02:51.640 --> 00:02:52.800
+Logic Apps est un camion de livraison,
+
+00:02:53.100 --> 00:02:55.200
+conçu pour des charges plus lourdes et des trajets plus longs.
+
+00:02:55.460 --> 00:02:56.600
+Logic Apps est aussi serverless.
+
+00:02:57.020 --> 00:02:59.120
+C'est un terme technique, mais qui signifie quelque chose de simple.
+
+00:02:59.500 --> 00:03:01.360
+Vous ne payez que lorsque vos workflows s'exécutent réellement.
+
+00:03:01.680 --> 00:03:03.180
+Si rien ne se passe de la journée, vous ne payez rien.
+
+00:03:03.620 --> 00:03:05.000
+Si 1000 fichiers sont chargés en même temps,
+
+00:03:05.000 --> 00:03:07.400
+la plateforme s'adapte automatiquement et vous payez pour ce que vous avez.
+
+00:03:07.400 --> 00:03:11.500
+Aucun serveur à gérer, aucune planification de capacité,
+
+00:03:11.600 --> 00:03:13.480
+pas d'argent gaspillé dans du matériel inutilisé.
+
+00:03:14.420 --> 00:03:16.220
+Les blocs de construction, déclencheurs et actions.
+
+00:03:16.920 --> 00:03:18.300
+Chaque Logic Apps commence de la même manière,
+
+00:03:18.460 --> 00:03:19.480
+avec un déclencheur.
+
+00:03:20.000 --> 00:03:21.800
+Un déclencheur est simplement ce qui lance votre workflow.
+
+00:03:22.240 --> 00:03:23.360
+Voyez cela comme un détecteur de mouvement.
+
+00:03:23.840 --> 00:03:24.940
+Quand le capteur détecte un mouvement,
+
+00:03:25.420 --> 00:03:25.980
+les lumières s'allument.
+
+00:03:26.360 --> 00:03:27.800
+Dans Logic Apps, quand le déclencheur s'active,
+
+00:03:27.900 --> 00:03:29.100
+votre workflow commence à s'exécuter.
+
+00:03:29.440 --> 00:03:30.700
+Il existe deux types principaux de déclencheurs.
+
+00:03:31.140 --> 00:03:32.300
+Les déclencheurs basés sur des événements
+
+00:03:32.300 --> 00:03:33.100
+attendent qu'il se passe quelque chose.
+
+00:03:33.480 --> 00:03:34.600
+Un fichier est chargé dans SharePoint.
+
+00:03:35.220 --> 00:03:36.300
+Un email arrive dans Outlook.
+
+00:03:37.400 --> 00:03:38.440
+Paré dans une table de base de données.
+
+00:03:39.140 --> 00:03:41.240
+Déclencheur basé sur un calendrier s'exécute sur une minuterie
+
+00:03:41.240 --> 00:03:43.060
+chaque heure, chaque jour, à 9h0 chaque lundi matin.
+
+00:03:43.600 --> 00:03:45.160
+Vous choisissez ce qui est le plus logique pour votre scénario.
+
+00:03:45.520 --> 00:03:46.940
+Une fois le déclencheur activé, vous ajoutez des actions.
+
+00:03:47.420 --> 00:03:49.040
+Les actions sont les étapes que votre workflow effectue.
+
+00:03:49.360 --> 00:03:50.200
+Envoyez un message dans Teams.
+
+00:03:50.660 --> 00:03:51.740
+Créer un enregistrement dans Salesforce.
+
+00:03:52.200 --> 00:03:53.480
+Mettre à jour une ligne dans SQL Server.
+
+00:03:53.580 --> 00:03:54.500
+Appeler une API externe.
+
+00:03:54.980 --> 00:03:57.060
+Chaque action est un bloc de construction que vous pouvez assembler.
+
+00:03:57.420 --> 00:03:58.560
+Laissez-moi vous donner un exemple concret.
+
+00:03:58.920 --> 00:04:00.640
+Disons que vous avez une bibliothèque de documents SharePoint
+
+00:04:00.640 --> 00:04:02.140
+où votre équipe télécharge des propositions.
+
+00:04:02.760 --> 00:04:03.840
+Lorsqu'une nouvelle proposition arrive,
+
+00:04:03.840 --> 00:04:05.300
+vous voulez que l'équipe en soit informée dans Teams.
+
+00:04:06.060 --> 00:04:07.900
+Votre déclencheur est la création d'un fichier dans SharePoint.
+
+00:04:08.800 --> 00:04:10.720
+Votre action est de publier un message dans un canal Teams.
+
+00:04:11.500 --> 00:04:11.860
+Deux blocs.
+
+00:04:12.340 --> 00:04:12.600
+C'est tout.
+
+00:04:13.000 --> 00:04:14.360
+Le flux de travail s'exécute automatiquement
+
+00:04:14.360 --> 00:04:15.620
+à chaque fois que quelqu'un téléverse un fichier.
+
+00:04:16.060 --> 00:04:17.760
+Personne n'a besoin de penser à envoyer la notification.
+
+00:04:18.460 --> 00:04:19.080
+Cela se fait tout seul.
+
+00:04:19.540 --> 00:04:21.500
+Le concepteur visuel est l'endroit où vous créez ces flux de travail.
+
+00:04:21.920 --> 00:04:23.740
+C'est une interface en glissé déposé dans le portail Azure.
+
+00:04:24.260 --> 00:04:25.800
+Vous choisissez votre déclencheur dans une liste,
+
+00:04:25.860 --> 00:04:26.680
+le déposez sur le canvas,
+
+00:04:26.820 --> 00:04:27.820
+puis ajoutez des actions en dessous.
+
+00:04:28.800 --> 00:04:30.420
+Chaque action se connecte à la précédente.
+
+00:04:30.420 --> 00:04:32.120
+Vous pouvez ajouter des conditions.
+
+00:04:32.640 --> 00:04:34.080
+Si le fichier fait plus d'un mot haut,
+
+00:04:34.480 --> 00:04:35.660
+envoyez-le à l'équipe de révision,
+
+00:04:35.860 --> 00:04:36.980
+sinon archivez-le.
+
+00:04:37.500 --> 00:04:38.340
+Vous pouvez ajouter des boucles.
+
+00:04:38.700 --> 00:04:39.880
+Vous pouvez ajouter des branches parallèles.
+
+00:04:40.780 --> 00:04:42.140
+Le concepteur affiche tout le flux visuellement
+
+00:04:42.140 --> 00:04:44.440
+pour que vous voyiez exactement ce qui se passera à chaque étape.
+
+00:04:45.300 --> 00:04:45.880
+Et le point important,
+
+00:04:45.960 --> 00:04:47.320
+c'est que vous n'avez pas besoin d'être développeur pour l'utiliser.
+
+00:04:47.840 --> 00:04:48.960
+Si vous savez dessiner un organigramme,
+
+00:04:49.020 --> 00:04:49.820
+vous pouvez créer une logic app.
+
+00:04:50.300 --> 00:04:52.440
+La plateforme gère toute la tuyauterie technique en arrière-plan.
+
+00:04:52.920 --> 00:04:54.300
+L'authentification, la gestion des erreurs
+
+00:04:54.300 --> 00:04:55.480
+et les nouvelles tentatives sont intégrées.
+
+00:04:55.780 --> 00:04:57.640
+Mais la vraie puissance ne réside pas seulement dans le flux de travail,
+
+00:04:57.640 --> 00:04:58.800
+c'est ce à quoi vous pouvez vous connecter.
+
+00:04:59.460 --> 00:05:00.500
+Cela nous amène aux connecteurs.
+
+00:05:01.220 --> 00:05:02.660
+Les connecteurs, le véritable superpouvoir.
+
+00:05:03.620 --> 00:05:06.520
+Logic Apps est fourni avec plus de 1400 connecteurs prédéfinis.
+
+00:05:07.420 --> 00:05:08.220
+Ce chiffre est impressionnant,
+
+00:05:08.460 --> 00:05:09.680
+mais laissez-moi vous expliquer ce qu'il signifie.
+
+00:05:10.060 --> 00:05:11.680
+Un connecteur est un pont prêt à l'emploi
+
+00:05:11.680 --> 00:05:13.620
+entre Logic Apps et un autre service.
+
+00:05:14.280 --> 00:05:16.480
+Microsoft a déjà fait le gros du travail concernant l'authentification,
+
+00:05:16.920 --> 00:05:18.000
+les erreurs et les tentatives,
+
+00:05:18.100 --> 00:05:19.860
+donc vous choisissez simplement le service voulu, ça fonctionne.
+
+00:05:20.400 --> 00:05:21.820
+Vous voulez extraire des données de Salesforce ?
+
+00:05:21.820 --> 00:05:22.500
+Il y a un connecteur pour ça.
+
+00:05:22.700 --> 00:05:24.440
+Besoin de mettre à jour un enregistrement dans SAP ?
+
+00:05:24.440 --> 00:05:25.600
+Un connecteur existe aussi pour ça.
+
+00:05:25.600 --> 00:05:28.180
+Et si vous devez envoyer un message dans une file d'attente ServiceNow,
+
+00:05:28.340 --> 00:05:29.280
+un connecteur est prêt à l'emploi.
+
+00:05:29.560 --> 00:05:32.940
+Les services Microsoft 365 comme SharePoint, Teams, Outlook et OneDrive
+
+00:05:32.940 --> 00:05:33.840
+ont tous des connecteurs.
+
+00:05:34.500 --> 00:05:37.880
+Les services Azure comme SQL Database, Blob Storage et Event Grid sont tous couverts.
+
+00:05:38.620 --> 00:05:40.900
+Des services tiers comme Dropbox, GitHub, Twitter et Slack,
+
+00:05:40.960 --> 00:05:42.660
+il y a des connecteurs pour chacun d'eux.
+
+00:05:43.460 --> 00:05:45.240
+Chaque connecteur vous offre un ensemble de déclencheurs
+
+00:05:45.240 --> 00:05:46.980
+et d'actions spécifiques à ce service.
+
+00:05:47.600 --> 00:05:49.380
+Le connecteur SharePoint détecte les nouveaux fichiers,
+
+00:05:49.380 --> 00:05:50.840
+le connecteur Outlook envoie des emails
+
+00:05:50.840 --> 00:05:53.340
+et le connecteur SQL exécute des requêtes et procédures stockées.
+
+00:05:53.340 --> 00:05:55.880
+Vous n'avez pas besoin d'apprendre l'API de chaque service.
+
+00:05:56.400 --> 00:05:57.980
+Le connecteur abstrait toute cette complexité.
+
+00:05:58.680 --> 00:06:00.720
+Maintenant, deux types de connecteurs que vous devez connaître.
+
+00:06:01.260 --> 00:06:04.020
+Les connecteurs intégrés s'exécutent au sein même du moteur d'exécution de LogiCaps.
+
+00:06:04.440 --> 00:06:07.360
+Ils sont plus rapides et moins chers car il n'y a pas d'appel externe vers un service hébergé.
+
+00:06:08.060 --> 00:06:12.320
+Les connecteurs intégrés incluent HTTP, Service Bus, Azure Functions et certains services Azure.
+
+00:06:13.400 --> 00:06:16.320
+Connecteurs gérés sont hébergés par Microsoft et couvrent un écosystème plus large.
+
+00:06:16.320 --> 00:06:20.460
+Des centaines de services provenant de Microsoft et de tiers coûtent un peu plus par appel,
+
+00:06:20.460 --> 00:06:21.780
+mais couvrent beaucoup plus de besoins.
+
+00:06:21.780 --> 00:06:24.720
+Si aucun connecteur n'existe pour le service souhaité, vous n'êtes pas bloqué.
+
+00:06:24.720 --> 00:06:28.800
+LogiCaps inclut une action HTTP générique qui permet d'appeler directement tout API REST.
+
+00:06:28.800 --> 00:06:32.100
+Il suffit de fournir l'URL, la méthode, les entêtes et le corps de la requête.
+
+00:06:32.100 --> 00:06:34.920
+Cela fonctionne comme un connecteur sans la facilité de la solution préconçue.
+
+00:06:34.920 --> 00:06:39.540
+Vous gérez vous-même l'authentification, mais bénéficiez toujours des mécanismes de ré-essai et de gestion d'erreur de LogiCaps.
+
+00:06:39.540 --> 00:06:44.160
+Les 1400 connecteurs sont essentiels car ils éliminent le principal obstacle à l'automatisation, le travail d'intégration.
+
+00:06:44.160 --> 00:06:47.760
+Chaque connecteur que vous n'avez pas créé vous-même représente des semaines de développement économisé.
+
+00:06:47.760 --> 00:06:55.740
+Et en combinant connecteurs, déclencheurs et actions, vous pouvez créer des flux couvrant toute votre pile technologique sans écrire une ligne de code d'intégration.
+
+00:06:55.740 --> 00:06:59.400
+Consommation ou standard, quel modèle vous correspond ?
+
+00:06:59.400 --> 00:07:03.360
+Vous comprenez maintenant ce qu'est LogiCaps, comment fonctionnent les déclencheurs et actions et la puissance des connecteurs.
+
+00:07:03.360 --> 00:07:06.360
+Mais vous devez prendre une autre décision qui influencera votre coût.
+
+00:07:06.360 --> 00:07:12.480
+LogiCaps existe en deux versions, Consommation et Standard, qui diffèrent, un mauvais choix peut vous coûter cher.
+
+00:07:12.480 --> 00:07:16.080
+Le modèle Consommation repose sur le paiement et l'exécution.
+
+00:07:16.080 --> 00:07:18.600
+Vous créez votre flux et ne payez que lorsqu'il s'exécute.
+
+00:07:18.600 --> 00:07:21.360
+S'il reste inactif toute la journée, vous ne payez rien.
+
+00:07:21.360 --> 00:07:24.360
+S'il s'exécute 100 fois, vous payez pour 100 exécutions.
+
+00:07:24.360 --> 00:07:29.040
+Les 4000 premières actions chaque mois sont gratuites, puis chaque action coûte une fraction de centime.
+
+00:07:29.040 --> 00:07:32.340
+Les appels de connecteurs coûtent un peu plus, mais restent très abordables.
+
+00:07:32.340 --> 00:07:34.640
+Pour la plupart des débutants, c'est le point de départ idéal.
+
+00:07:34.640 --> 00:07:36.240
+Voyez le modèle Consommation comme un taxi.
+
+00:07:36.240 --> 00:07:37.800
+Payez pour la course que vous effectuez.
+
+00:07:37.800 --> 00:07:39.720
+Si vous ne vous déplacez pas, vous ne payez rien.
+
+00:07:39.720 --> 00:07:42.720
+Si vous faites un court trajet, cela coûte peu.
+
+00:07:42.720 --> 00:07:44.720
+Si vous faites un long trajet, cela coûte plus cher.
+
+00:07:44.720 --> 00:07:46.720
+Le prix correspond exactement à votre utilisation.
+
+00:07:46.720 --> 00:07:47.720
+Le modèle standard est différent.
+
+00:07:47.720 --> 00:07:51.720
+Il s'exécute sur une puissance de calcul dédiée, comme votre propre serveur, mais géré par Microsoft.
+
+00:07:51.720 --> 00:07:54.720
+Vous payez un coût mensuel fixe, basé sur la puissance de calcul réservé.
+
+00:07:54.720 --> 00:08:01.720
+Le plus petit plan standard commence autour de 175 dollars par mois et offre un CPU virtuel avec 3,5 gigas de mémoire.
+
+00:08:01.720 --> 00:08:04.720
+Vous pouvez exécuter autant de flux que vous le souhaitez avec ce plan.
+
+00:08:04.720 --> 00:08:07.720
+Et le prix ne change pas selon le nombre d'exécutions.
+
+00:08:07.720 --> 00:08:09.720
+Le modèle standard est comme un crédit automobile.
+
+00:08:09.720 --> 00:08:12.720
+Vous payez le même montant chaque mois que vous conduisez une fois par jour ou une fois par an.
+
+00:08:12.720 --> 00:08:16.720
+Si vous conduisez beaucoup, ce coût fixe peut s'avérer moins cher par trajet que de prendre le taxi partout.
+
+00:08:16.720 --> 00:08:19.720
+Mais si vous conduisez à peine, vous payez pour une capacité que vous n'utilisez pas.
+
+00:08:19.720 --> 00:08:20.720
+Alors qu'en choisir l'un ou l'autre ?
+
+00:08:20.720 --> 00:08:23.720
+Le mode consommation est idéal pour les charges de travail irrégulières ou à faible vœu.
+
+00:08:23.720 --> 00:08:26.720
+Prenez un flux qui s'exécute quelques fois par jour lorsqu'un fichier est chargé.
+
+00:08:26.720 --> 00:08:28.720
+Cela ne coûte que quelques centimes par mois en consommation.
+
+00:08:28.720 --> 00:08:30.720
+Donc l'utiliser avec le plan standard serait un gaspillage.
+
+00:08:30.720 --> 00:08:34.720
+Mais si vous avez un flux qui s'exécute des milliers de fois par heure pour traiter des commandes,
+
+00:08:34.720 --> 00:08:37.720
+gérer des données en temps réel ou orchestrer des intégrations complexes,
+
+00:08:37.720 --> 00:08:40.720
+les coûts par exécution du mode consommation grimpent vite.
+
+00:08:40.720 --> 00:08:44.720
+A ce stade, le prix fixe mensuel du plan standard devient l'option la plus économique.
+
+00:08:44.720 --> 00:08:46.720
+Il existe une autre différence importante quand même.
+
+00:08:46.720 --> 00:08:48.720
+Le plan standard vous offre davantage de contrôle.
+
+00:08:48.720 --> 00:08:50.720
+Vous bénéficiez de meilleures performances car l'ordinateur vous est dédié,
+
+00:08:50.720 --> 00:08:54.720
+avec en plus la prise en charge de réseaux virtuels pour des exigences de sécurité strictes.
+
+00:08:54.720 --> 00:08:57.720
+Et vous pouvez même exécuter des flux standards localement sur votre propre matériel.
+
+00:08:57.720 --> 00:09:00.720
+Le mode consommation ne fonctionne que dans le cloud Microsoft sur une infrastructure partagée.
+
+00:09:00.720 --> 00:09:02.720
+Vous n'avez donc pas le même niveau de contrôle.
+
+00:09:02.720 --> 00:09:04.720
+Mais vous n'avez rien à gérer, mais gérer.
+
+00:09:04.720 --> 00:09:06.720
+Pour la plupart des débutants, la réponse est ça.
+
+00:09:06.720 --> 00:09:09.720
+Commencez par le mode consommation. Cela ne coûte pratiquement rien d'essayer.
+
+00:09:09.720 --> 00:09:11.720
+Créez votre premier flux, voyez comment il fonctionne,
+
+00:09:11.720 --> 00:09:14.720
+et ne vous souciez du plan standard que si votre volume augmente au point
+
+00:09:14.720 --> 00:09:16.720
+que la consommation devienne plus chère que le forfait fixe.
+
+00:09:16.720 --> 00:09:18.720
+Vous pourrez toujours migrer plus tard.
+
+00:09:18.720 --> 00:09:20.720
+Des exemples concrets en action.
+
+00:09:20.720 --> 00:09:22.720
+Laissez-moi vous montrer à quoi cela ressemble pour de vraies entreprises.
+
+00:09:22.720 --> 00:09:25.720
+Ce ne sont pas juste des idées, ce sont des flux réels utilisés aujourd'hui.
+
+00:09:25.720 --> 00:09:27.720
+Le premier exemple est le plus simple.
+
+00:09:27.720 --> 00:09:29.720
+Un fichier arrive dans une bibliothèque de documents SharePoint
+
+00:09:29.720 --> 00:09:30.720
+et cela déclenche le processus.
+
+00:09:30.720 --> 00:09:33.720
+L'action envoie une notification vers un canal Microsoft Teams,
+
+00:09:33.720 --> 00:09:36.720
+le nom du fichier, l'auteur du chargement et un lien pour l'ouvrir.
+
+00:09:36.720 --> 00:09:38.720
+La configuration prend des rentrements.
+
+00:09:38.720 --> 00:09:41.720
+Le résultat ? Plus personne n'a besoin de vérifier manuellement le dossier.
+
+00:09:41.720 --> 00:09:43.720
+Chaque membre de l'équipe voit la notification instantanément.
+
+00:09:43.720 --> 00:09:45.720
+Sur une année, ce seul flux permet d'économiser des heures de vérification,
+
+00:09:45.720 --> 00:09:47.720
+de transfert de fichiers et ces fameux messages.
+
+00:09:47.720 --> 00:09:49.720
+Tu as vu le nouveau fichier, tu as vu le nouveau fichier.
+
+00:09:49.720 --> 00:09:51.720
+C'est un détail mais cela s'accumule rapidement.
+
+00:09:51.720 --> 00:09:53.720
+Le deuxième exemple est plus complexe.
+
+00:09:53.720 --> 00:09:57.720
+Un client passe une commande sur un site web et cette commande atteint une base de données SQL.
+
+00:09:57.720 --> 00:10:02.720
+Une Logic App la récupère, valide les stocks dans une autre base de données, envoie un email de confirmation via Outlook,
+
+00:10:02.720 --> 00:10:06.720
+crée un enregistrement dans Salesforce et poste une notification à l'équipe de l'entrepôt dans Teams.
+
+00:10:06.720 --> 00:10:09.720
+Cela représente 5 systèmes différents connectés en un seul flux.
+
+00:10:09.720 --> 00:10:12.720
+Avant Logic Apps, quelqu'un devait vérifier cette base de données manuellement,
+
+00:10:12.720 --> 00:10:15.720
+envoyer l'email, ouvrir Salesforce et se rendre à l'entrepôt.
+
+00:10:15.720 --> 00:10:18.720
+Désormais cela se fait automatiquement en quelques secondes, sans aucune intervention humaine.
+
+00:10:18.720 --> 00:10:21.720
+C'est le genre d'intégration qui sauve des services entiers.
+
+00:10:21.720 --> 00:10:23.720
+Le troisième exemple provient du secteur de la santé.
+
+00:10:23.720 --> 00:10:27.720
+Une étude de cas a documenté un workflow Logic Apps pour l'intégration des patients.
+
+00:10:27.720 --> 00:10:31.720
+Lorsqu'un nouveau patient était enregistré dans leur système de dossier médical électronique,
+
+00:10:31.720 --> 00:10:34.720
+la Logic App créait des comptes dans Microsoft 365,
+
+00:10:34.720 --> 00:10:38.720
+envoyait les documents d'accueil, planifiait le premier rendez-vous et avertissait l'équipe soignante.
+
+00:10:38.720 --> 00:10:40.720
+Les chiffres étaient impressionnants.
+
+00:10:40.720 --> 00:10:44.720
+Les erreurs manuelles ont chuté de 75% la vitesse d'intégration, s'est améliorée de 40%.
+
+00:10:44.720 --> 00:10:47.720
+Ce n'est pas seulement plus rapide, c'est aussi une meilleure prise en charge des patients,
+
+00:10:47.720 --> 00:10:50.720
+car le travail administratif ne passe plus à travers l'émail du filet.
+
+00:10:50.720 --> 00:10:52.720
+Concernant la réponse aux incidents informatiques.
+
+00:10:52.720 --> 00:10:55.720
+Une alerte Azure Monitor se déclenche lorsqu'un serveur tombant.
+
+00:10:55.720 --> 00:10:56.720
+Cette alerte déclenche alors une Logic App.
+
+00:10:56.720 --> 00:10:58.720
+Le workflow crée un ticket dans ServiceNow,
+
+00:10:58.720 --> 00:11:02.720
+publie un message dans un canal Teams avec les détails de l'incident et lance un minuteur.
+
+00:11:02.720 --> 00:11:04.720
+Si personne ne prend en compte l'incident dans les 15 minutes,
+
+00:11:04.720 --> 00:11:06.720
+la Logic App procède à une escalade.
+
+00:11:06.720 --> 00:11:10.720
+Elle envoie un SMS à l'ingénieur de garde, puis au chef d'équipe, puis au manager.
+
+00:11:10.720 --> 00:11:12.720
+Elle continue ainsi jusqu'à ce que Kanye répond.
+
+00:11:12.720 --> 00:11:14.720
+Auparavant, les équipes informatiques dépendaient d'alertes par email
+
+00:11:14.720 --> 00:11:16.720
+qui finissaient enterrées dans les boîtes de réception.
+
+00:11:16.720 --> 00:11:20.720
+Désormais, les incidents sont traités plus rapidement car l'escalade est automatique.
+
+00:11:20.720 --> 00:11:22.720
+Le point commun entre tous ces exemples est le même.
+
+00:11:22.720 --> 00:11:25.720
+Logic Apps connecte des systèmes qui ne communiquent pas naturellement entre eux.
+
+00:11:25.720 --> 00:11:28.720
+SharePoint ne connaît pas Teams. Votre base de données ne connaît pas Salesforce.
+
+00:11:28.720 --> 00:11:31.720
+Vos outils de surveillance ne connaissent pas votre système de tickets.
+
+00:11:31.720 --> 00:11:35.720
+Logic Apps se place au milieu, écoute les événements et achemine les informations là où elles doivent aller.
+
+00:11:35.720 --> 00:11:38.720
+C'est le Simon qui assure la cohésion de votre automatisation.
+
+00:11:38.720 --> 00:11:40.720
+Vers quoi se dirige Logic Apps ?
+
+00:11:40.720 --> 00:11:41.720
+L'automatisation agentique.
+
+00:11:41.720 --> 00:11:44.720
+Voilà où en est Logic Apps aujourd'hui, mais la plateforme évolue rapidement
+
+00:11:44.720 --> 00:11:47.720
+et le changement majeur est quelque chose que vous devez connaître.
+
+00:11:47.720 --> 00:11:51.720
+Cela s'appelle l'automatisation agentique et cela redéfinit les possibilités des workflows.
+
+00:11:51.720 --> 00:11:54.720
+Microsoft a annoncé l'automatisation Logic Apps hors de la conférence Build 26.
+
+00:11:54.720 --> 00:11:56.720
+La fonctionnalité phare est simple mais puissante.
+
+00:11:56.720 --> 00:11:59.720
+Vous pouvez désormais décrire ce que vous souhaitez en langage naturel.
+
+00:11:59.720 --> 00:12:01.720
+Et la plateforme construit le workflow pour vous.
+
+00:12:01.720 --> 00:12:04.720
+Au lieu de glisser-déposer chaque déclencheur et actions, vous tapez quelque chose comme
+
+00:12:04.720 --> 00:12:07.720
+Lorsqu'un ticket de support arrive, vérifie l'historique du client.
+
+00:12:07.720 --> 00:12:11.720
+Et s'il s'agit d'un client premium, assigne-le à l'équipe senior et senior.
+
+00:12:11.720 --> 00:12:14.720
+Logic Apps analyse votre requête, sélectionne les bons connecteurs,
+
+00:12:14.720 --> 00:12:17.720
+configure les paramètres et échafaudent l'intégralité du workflow.
+
+00:12:17.720 --> 00:12:20.720
+Vous pouvez ensuite l'ajuster dans le concepteur visuel, mais le plus gros du travail est déjà fait.
+
+00:12:20.720 --> 00:12:22.720
+Rien que cela représente un grand changement.
+
+00:12:22.720 --> 00:12:24.720
+Mais la nouveauté majeure concerne les agents IA.
+
+00:12:24.720 --> 00:12:28.720
+Logic Apps vous permet désormais d'intégrer des agents IA directement dans vos flux de travail.
+
+00:12:28.720 --> 00:12:31.720
+Ces agents ne se contentent pas d'appeler une API pour envoyer un résultat.
+
+00:12:31.720 --> 00:12:33.720
+Ils raisonnent. Ils utilisent des outils.
+
+00:12:33.720 --> 00:12:38.720
+Vous définissez un objectif pour l'agent, lui fournissez des outils et des instructions sur son comportement.
+
+00:12:38.720 --> 00:12:42.720
+L'agent détermine alors la meilleure façon d'atteindre cet objectif en appelant des connecteurs,
+
+00:12:42.720 --> 00:12:45.720
+en interrogeant des bases de données et même en demandant une approbation humaine si nécessaire.
+
+00:12:45.720 --> 00:12:48.720
+Réfléchissez à ce que cela implique pour les exemples que nous abordons.
+
+00:12:48.720 --> 00:12:52.720
+La notification de SharePoint vers Teams est simple, mais qu'en est-il du flux de commandes client ?
+
+00:12:52.720 --> 00:12:55.720
+Au lieu de coder chaque étape, vous pourriez avoir un agent qui gère les exceptions.
+
+00:12:55.720 --> 00:12:59.720
+Une commande arrive avec une adresse client qui ne correspond pas à la base de données.
+
+00:12:59.720 --> 00:13:01.720
+Au lieu que le flux échoue, l'agent peut vérifier l'historique du client,
+
+00:13:01.720 --> 00:13:05.720
+chercher des adresses alternatives et décider de traiter la commande ou de la signaler pour examen.
+
+00:13:05.720 --> 00:13:08.720
+S'adapte à des situations que le concepteur du flux n'avait pas anticipées.
+
+00:13:08.720 --> 00:13:12.720
+L'idée clé ici est que Logic Apps ne sert plus seulement à connecter des applications.
+
+00:13:12.720 --> 00:13:14.720
+Il devient la couche d'orchestration pour l'IA.
+
+00:13:14.720 --> 00:13:17.720
+Les connecteurs gèrent l'infrastructure, les flux gèrent la logique
+
+00:13:17.720 --> 00:13:21.720
+et les agents gèrent les décisions qui nécessitaient auparavant une intervention humaine.
+
+00:13:21.720 --> 00:13:24.720
+C'est une manière fondamentalement différente de concevoir l'automatisation.
+
+00:13:24.720 --> 00:13:26.720
+Démarrer avec Logic Apps ?
+
+00:13:26.720 --> 00:13:29.720
+Ces mois vous expliquer exactement comment débuter si vous souhaitez essayer parfois.
+
+00:13:29.720 --> 00:13:31.720
+Vous n'avez pas besoin de grand chose. Il vous faudra un abonnement Azure.
+
+00:13:31.720 --> 00:13:35.720
+Si vous n'en avez pas, Microsoft vous offre 200 dollars de crédit gratuit pour le premier mois.
+
+00:13:35.720 --> 00:13:39.720
+C'est largement suffisant pour créer et tester plusieurs flux sans dépenser un centime.
+
+00:13:39.720 --> 00:13:41.720
+Et vous aurez besoin d'un compte professionnel ou scolaire.
+
+00:13:41.720 --> 00:13:43.720
+Un compte Hotmail personnel fonctionne pour certaines choses.
+
+00:13:43.720 --> 00:13:46.720
+Mais pour une expérience complète, utilisez un compte lié à votre organisation.
+
+00:13:46.720 --> 00:13:50.720
+Commencez avec le plan de consommation. C'est le moyen le plus économique pour apprendre.
+
+00:13:50.720 --> 00:13:53.720
+Vous pouvez créer votre premier flux sans vous engager sur des coûts mensuels.
+
+00:13:53.720 --> 00:13:56.720
+Si votre flux s'exécute une fois par jour, vous ne paierez que quelques centimes par mois.
+
+00:13:56.720 --> 00:13:57.720
+Il n'y a aucun risque.
+
+00:13:57.720 --> 00:13:59.720
+Choisissez un scénario que vous effectuez déjà manuellement.
+
+00:13:59.720 --> 00:14:02.720
+N'essayez pas d'automatiser tout votre service dès le premier jour.
+
+00:14:02.720 --> 00:14:03.720
+Concentrez-vous sur le seul chose.
+
+00:14:03.720 --> 00:14:06.720
+Peut-être recevoir une notification lorsqu'un fichier arrive dans un dossier spécifique.
+
+00:14:06.720 --> 00:14:09.720
+Ou enregistrer automatiquement les pièces jointes des emails sur OneDrive.
+
+00:14:09.720 --> 00:14:13.720
+Ou publier un message dans Teams lorsqu'un nouvel élément apparaît dans une list SharePoint.
+
+00:14:13.720 --> 00:14:18.720
+Plus le scénario est simple, plus vous le mettrez en place rapidement et plus vous vous sentirez confiant pour le suivant pour le suivant.
+
+00:14:18.720 --> 00:14:20.720
+Le portail Azure dispose d'un concepteur visuel.
+
+00:14:20.720 --> 00:14:23.720
+Ouvrez-le, choisissez un déclencheur dans la liste, ajoutez une action et testez-le.
+
+00:14:23.720 --> 00:14:25.720
+Vous n'avez pas besoin d'écrire de code.
+
+00:14:25.720 --> 00:14:28.720
+Le concepteur vous montre tout le flux et vous pouvez l'exécuter immédiatement pour voir s'il fonctionne.
+
+00:14:28.720 --> 00:14:31.720
+Microsoft fournit également des modèles pour les scénarios courants.
+
+00:14:31.720 --> 00:14:35.720
+Ouvrez le concepteur Logic Apps et vous verrez une galerie de modèles prédéfinie.
+
+00:14:35.720 --> 00:14:39.720
+Notifications de téléchargement de fichiers, alerte par email vers Teams, exportation de données planifiées.
+
+00:14:39.720 --> 00:14:43.720
+Vous pouvez utiliser un modèle comme point de départ et le personnaliser selon vos besoins.
+
+00:14:43.720 --> 00:14:45.720
+C'est le moyen le plus rapide de mettre quelque chose en service.
+
+00:14:45.720 --> 00:14:46.720
+Commencez des autres.
+
+00:14:46.720 --> 00:14:49.720
+Choisissez une tâche répétitive que vous effectuez entre des applications et automatisme.
+
+00:14:49.720 --> 00:14:52.720
+Même si cela vous fait gagner 5 minutes par jour, ce sont 5 minutes de récupérer.
+
+00:14:52.720 --> 00:14:55.720
+Une fois que vous verrez à quel point c'est facile, vous en trouverez d'autres.
+
+00:14:55.720 --> 00:14:57.720
+Voici donc ce que vous devez retenir.
+
+00:14:57.720 --> 00:14:59.720
+Logic Apps est la colle d'automatisation de Microsoft.
+
+00:14:59.720 --> 00:15:02.720
+Il connecte des systèmes qui ne communiquent pas naturellement entre eux.
+
+00:15:02.720 --> 00:15:08.720
+Il gère la plomberie, l'authentification, les nouvelles tentatives, la gestion des erreurs et la mise à l'échelle pour que vous n'ayez rien à gérer.
+
+00:15:08.720 --> 00:15:10.720
+Et ils s'exécutent sans que vous ayez à vous soucier des serveurs.
+
+00:15:10.720 --> 00:15:12.720
+Le point clé est celui-ci.
+
+00:15:12.720 --> 00:15:16.720
+Vous n'avez pas besoin d'être un développeur pour créer des automatisations, ni un professionnel de l'informatique pour les exécuter.
+
+00:15:16.720 --> 00:15:20.720
+Le concepteur visuel, les connecteurs prédéfinis et les modèles sont tous conçus pour réduire les obstacles.
+
+00:15:20.720 --> 00:15:23.720
+Si vous pouvez décrire un processus, vous pouvez l'automatiser.
+
+00:15:23.720 --> 00:15:25.720
+Votre devoir est simple.
+
+00:15:25.720 --> 00:15:27.720
+Pensez à une tâche répétitive que vous effectuez entre des applications.
+
+00:15:27.720 --> 00:15:30.720
+Une chose qui implique de déplacer des informations d'un système à un autre.
+
+00:15:30.720 --> 00:15:32.720
+Ensuite, essayez de l'automatiser avec Logic Apps.
+
+00:15:32.720 --> 00:15:34.720
+Commencez avec le plan de consommation.
+
+00:15:34.720 --> 00:15:36.720
+Utilisez un modèle si l'on existe un.
+
+00:15:36.720 --> 00:15:37.720
+Et jusqu'où vous pouvez aller.
+
+00:15:37.720 --> 00:15:39.720
+C'est tout pour cet épisode de Microsoft Knowledge Nuggets.
+
+00:15:39.720 --> 00:15:45.720
+Si cela vous a aidé à mieux comprendre Logic Apps, partagez-le avec quelqu'un qui commence son parcours dans l'automatisation Microsoft.
+
+00:15:45.720 --> 00:15:49.720
+Et abonnez-vous sur votre plateforme de podcast préférée pour ne pas manquer le prochain épisode.
+
+00:15:49.720 --> 00:15:51.720
+Je suis Merco Peters et merci de votre écoute.
+
+00:15:51.720 --> 00:15:53.720
+Sous-titrage Société Radio-Canada

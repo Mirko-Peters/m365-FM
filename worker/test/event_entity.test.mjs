@@ -1,4 +1,4 @@
-// Event <-> Event-Entitaet (Migration 0046, evententity.js): Namensvergleich, Vorschlaege per Cron, Zuordnung durch Veranstalter und Admin, oeffentlich nur bestaetigt.
+// Event <-> Event-Entitaet (Migration 0048, evententity.js): Namensvergleich, Vorschlaege per Cron, Zuordnung durch Veranstalter und Admin, oeffentlich nur bestaetigt.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";

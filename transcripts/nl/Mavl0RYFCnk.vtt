@@ -1,0 +1,844 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.960
+Het onderwerp van vandaag is iets waar bijna iedereen van gehoord heeft, maar bijna niemand kan uitleggen.
+
+00:00:04.400 --> 00:00:08.640
+Serverless. Wat is het precies? Is het echt alleen code die nergens op draait of is het iets veel groters?
+
+00:00:08.860 --> 00:00:12.180
+Laten we één ding duidelijk stellen. Serverless betekent niet geen servers.
+
+00:00:12.440 --> 00:00:16.400
+Het betekent dat je er niet aan hoeft te denken en dat verschil verandert alles in hoe je software bouwt.
+
+00:00:16.520 --> 00:00:21.840
+Aan het einde van deze aflevering begrijp je wat Azure Functions werkelijk zijn, hoe de prijsstelling echt werkt en wanneer je ze moet gebruiken.
+
+00:00:22.000 --> 00:00:24.900
+We breken dit op in de bouwstenen, te beginnen met de grootste mythe.
+
+00:00:25.140 --> 00:00:26.920
+Wat serverless eigenlijk betekent?
+
+00:00:26.920 --> 00:00:28.980
+Laten we direct een paar mythes uit de weg ruimen.
+
+00:00:28.980 --> 00:00:32.380
+De naam serverless is de slechtste marketingterm die Microsoft ooit heeft bedacht.
+
+00:00:32.540 --> 00:00:34.920
+Het laat mensen denken dat er letterlijk geen server bij betrokken is.
+
+00:00:35.140 --> 00:00:37.500
+Dat is niet waar. Er zijn servers, heel veel zelfs.
+
+00:00:37.600 --> 00:00:38.920
+Je hoeft ze alleen nooit aan te raken.
+
+00:00:39.100 --> 00:00:42.780
+Twintig jaar geleden, als je een stuk code op internet wilde draaien, moest je veel werk verzetten.
+
+00:00:42.940 --> 00:00:47.780
+Je huurde een virtuele machine, installeerde een besturingssysteem, configureerde een webserver en zette je applicatie klaar.
+
+00:00:47.940 --> 00:00:52.460
+Vervolgens bracht je elk weekend door met het installeren van beveiligingsupdates en ervoor zorgen dat de boel niet om drie uur s'nachts crashte.
+
+00:00:52.640 --> 00:00:53.500
+En dit is het punt.
+
+00:00:53.500 --> 00:00:56.340
+Je betaalde voor die server of je code nu draaide of niet.
+
+00:00:56.340 --> 00:00:59.260
+Hij stond daar maar te zoomen en geld te kosten terwijl jij sliep.
+
+00:00:59.400 --> 00:01:01.620
+Serverless zet dit hele model volledig op zijn kop.
+
+00:01:01.780 --> 00:01:05.020
+Je schrijft je code, upload deze en het platform regelt de rest.
+
+00:01:05.220 --> 00:01:08.700
+Het besturingssysteem, beveiligingspatches, schalen en beschikbaarheid.
+
+00:01:08.920 --> 00:01:11.440
+Jouw taak is alleen het schrijven van de logica die ertoe doet.
+
+00:01:11.680 --> 00:01:15.360
+Zie het als het verschil tussen een restaurant, keuken runnen en een automaat gebruiken.
+
+00:01:15.540 --> 00:01:19.280
+Een restaurant, keuken heeft personeel, constante voorraad en onderhoud nodig.
+
+00:01:19.280 --> 00:01:22.720
+Het kost elke dag geld, zelfs als er niemand naar binnen loopt.
+
+00:01:23.120 --> 00:01:26.640
+Een automaat staat in een hoekje niets te doen totdat iemand op een knop drukt.
+
+00:01:26.900 --> 00:01:29.620
+Dan komt hij tot leven, doet zijn werk en gaat weer in de slaapstand.
+
+00:01:29.800 --> 00:01:32.320
+Je betaalt alleen voor de elektriciteit wanneer hij daadwerkelijk werkt.
+
+00:01:32.520 --> 00:01:33.900
+Dat is serverless in een notendop.
+
+00:01:34.020 --> 00:01:36.120
+Azure Functions is de versie van Microsoft hiervan.
+
+00:01:36.260 --> 00:01:38.720
+Het draait kleine stukjes code als reactie op gebeurtenissen.
+
+00:01:38.900 --> 00:01:40.760
+Je code is inactief totdat iets hem wakker maakt.
+
+00:01:40.880 --> 00:01:43.140
+Dan draait hij, voltooit zijn taak en gaat weer slapen.
+
+00:01:43.300 --> 00:01:45.040
+Dus hoe ziet die code er eigenlijk uit?
+
+00:01:45.040 --> 00:01:46.540
+Wat Azure Functions zijn.
+
+00:01:46.700 --> 00:01:49.760
+Een functie is een enkel stukje code dat één specifieke taak uitvoert.
+
+00:01:49.960 --> 00:01:50.600
+Dat is alles.
+
+00:01:50.820 --> 00:01:54.620
+Het is geen complete applicatie met een inlogpagina, een database en twintig schermen.
+
+00:01:54.740 --> 00:01:56.040
+Het is één gerichte taak.
+
+00:01:56.280 --> 00:02:01.040
+Denk erover als een lichtschakelaar in huis ofwel uit ofwel aan om werk te verrichten en dan weer uit.
+
+00:02:01.200 --> 00:02:05.580
+Een traditionele webserver is het tegenovergestelde, alsof je elk licht in huis 24 uur per dag,
+
+00:02:05.760 --> 00:02:08.260
+zeven dagen per week laat branden, zelfs als er niemand thuis is.
+
+00:02:08.420 --> 00:02:11.280
+Azure Functions ondersteunen een heleboel verschillende programmeertalen.
+
+00:02:11.280 --> 00:02:15.620
+Je kunt gebruiken waar je je prettig bij voelt, Javascript, Python, C Sharp, Java, PowerShell.
+
+00:02:15.740 --> 00:02:17.220
+Er is hier geen enkel goed antwoord.
+
+00:02:17.380 --> 00:02:18.520
+Kies de taal die je al kent.
+
+00:02:18.760 --> 00:02:20.960
+Laten we nu een veel voorkomend misverstand ophelderen.
+
+00:02:21.060 --> 00:02:23.100
+Een Function App is niet hetzelfde als een Function.
+
+00:02:23.320 --> 00:02:24.780
+De Function App is de container.
+
+00:02:25.080 --> 00:02:26.440
+Zie het als een gereedschapskist.
+
+00:02:26.600 --> 00:02:29.900
+Je maakt één Function App aan en in die gereedschapskist voeg je meerdere Functions toe.
+
+00:02:30.060 --> 00:02:32.860
+Elke Function is een apart stuk gereedschap dat zijn eigen taak uitvoert.
+
+00:02:33.000 --> 00:02:35.420
+Je hebt misschien één Function die gebruikersregistraties afhandelt,
+
+00:02:35.580 --> 00:02:38.480
+een andere die geüploaden afbeeldingen verwerkt en een derde die nachtelijke rapporten verstuurt.
+
+00:02:38.480 --> 00:02:41.600
+Ze zitten allemaal in dezelfde gereedschapskist, maar werken onafhankelijk van elkaar.
+
+00:02:41.780 --> 00:02:44.320
+Nog één ding over Functions, ze zijn van nature stateles.
+
+00:02:44.540 --> 00:02:46.820
+Dat betekent dat ze niets onthouden tussen verschillende runs door.
+
+00:02:46.980 --> 00:02:49.560
+Als je Function een bestand verwerkt en klaar is, dan is dat het.
+
+00:02:49.680 --> 00:02:52.800
+De volgende keer dat hij draait, begint hij opnieuw zonder enige herinnering aan de vorige keer.
+
+00:02:53.000 --> 00:02:56.140
+Dat klinkt als een beperking, maar het is juist de eigenschap die ze zo krachtig maakt.
+
+00:02:56.300 --> 00:02:58.380
+Omdat Functions geen geheugen of status vasthouden,
+
+00:02:58.540 --> 00:03:01.620
+kan Azure direct 100 kopieën van je Function opstarten bij pieken in het verkeer,
+
+00:03:01.800 --> 00:03:03.940
+en ze net zo snel weer afsluiten als het verkeer afneemt.
+
+00:03:03.940 --> 00:03:06.940
+Zo krijg je schaalbaarheid zonder te betalen voor inactieve servers.
+
+00:03:07.180 --> 00:03:10.420
+Hier is de vraag, als een Function daar maar wat zit te wachten tot iets hem wakker maakt,
+
+00:03:10.560 --> 00:03:11.840
+wat maakt hem dan eigenlijk wakker?
+
+00:03:12.060 --> 00:03:13.800
+Dat is waar triggers om de hoek komen kijken.
+
+00:03:14.000 --> 00:03:15.140
+Triggers, het wanneer.
+
+00:03:15.300 --> 00:03:18.320
+Elke Function moet precies één trigger hebben, en dat is niet optioneel.
+
+00:03:18.480 --> 00:03:20.760
+De trigger is de gebeurtenis die je Function wakker maakt.
+
+00:03:21.020 --> 00:03:23.660
+Zonder die trigger zit je code daar maar te wachten en doet helemaal niets.
+
+00:03:23.900 --> 00:03:25.100
+Zie triggers als een deurbel.
+
+00:03:25.280 --> 00:03:27.120
+Je Function is binnen in het huis aan het wachten.
+
+00:03:27.340 --> 00:03:28.600
+Hij zou eeuwig kunnen wachten.
+
+00:03:28.840 --> 00:03:30.620
+Er gebeurt niets totdat iemand aanbelt.
+
+00:03:30.620 --> 00:03:34.860
+Dan komt de Function in actie, doet open, voert zijn taak uit en gaat weer terug naar het wachten.
+
+00:03:35.060 --> 00:03:37.560
+Er zijn vier triggers die beginners het vaakst tegenkomen.
+
+00:03:37.760 --> 00:03:40.600
+De HTTP trigger is het meest gebruikelijke startpunt.
+
+00:03:40.800 --> 00:03:44.320
+Iemand bezoekt een URL of doet een API aanroep, en je Function wordt geactiveerd.
+
+00:03:44.540 --> 00:03:48.020
+Zo bouw je lichtgewicht API zonder dat je een volledige webserver hoeft op te zetten.
+
+00:03:48.240 --> 00:03:50.900
+Dan is er nog de timer trigger, die volgens een planning draait.
+
+00:03:51.080 --> 00:03:55.120
+Je stelt een Cron Expressie in, zoals elk uur uitvoeren of elke nacht om middernacht,
+
+00:03:55.400 --> 00:03:57.760
+en je functie wordt op die exacte tijden geactiveerd.
+
+00:03:57.760 --> 00:04:01.880
+Perfect voor onderhoudstaken, opschoonklussen of het genereren van nachtelijke rapporten.
+
+00:04:02.000 --> 00:04:05.300
+De blob trigger wordt geactiveerd wanneer een bestand wordt geüpload naar Azure Opslag.
+
+00:04:05.520 --> 00:04:08.000
+Stel dat iemand een PDF uploadt naar een specifieke map.
+
+00:04:08.140 --> 00:04:11.300
+De blob trigger detecteert die upload en voert je functie automatisch uit.
+
+00:04:11.500 --> 00:04:14.880
+Dit is geweldig voor beeldverwerking, documentconversie en bestandsvalidatie.
+
+00:04:15.060 --> 00:04:17.980
+En de Q-trigger wordt geactiveerd wanneer er een bericht in een wachtrij verschijnt.
+
+00:04:18.140 --> 00:04:20.900
+Wachtrijen zijn een manier om verschillende onderdelen van je systeem te ontkoppelen.
+
+00:04:21.100 --> 00:04:22.960
+De ene service plaatst een bericht in een wachtrij,
+
+00:04:23.160 --> 00:04:25.580
+en je functie pakt het op en verwerkt het zodra deze klaar is.
+
+00:04:25.580 --> 00:04:28.220
+Dat voorkomt dat een trage service alles blokkeert.
+
+00:04:28.440 --> 00:04:29.700
+Dit is het belangrijkste punt.
+
+00:04:29.940 --> 00:04:33.640
+Wanneer een trigger wordt geactiveerd, worden de gegevens automatisch doorgegeven aan je functie.
+
+00:04:33.800 --> 00:04:36.180
+Je hoeft niet te pollen of te controleren of er iets is gebeurd.
+
+00:04:36.380 --> 00:04:39.580
+De trigger geeft je alles wat je nodig hebt, en je functie verwerkt het vervolgens.
+
+00:04:39.780 --> 00:04:42.460
+Een functie zonder trigger is slechts code die niet staat te doen.
+
+00:04:42.660 --> 00:04:44.160
+De trigger is wat het een doel geeft.
+
+00:04:44.360 --> 00:04:46.700
+Dus, de trigger vertelt je functie wanneer deze moet draaien.
+
+00:04:46.860 --> 00:04:48.980
+Maar waar komen de gegevens vandaan en waar gaan ze heen?
+
+00:04:49.100 --> 00:04:50.820
+Dat is waar bindings om de hoek komen kijken.
+
+00:04:51.080 --> 00:04:53.020
+Bindings, data erin, data eruit.
+
+00:04:53.020 --> 00:04:58.520
+Bindings zijn een manier om je functie te vertellen welke data gelezen moet worden en waar resultaten heen moeten zonder extra code te schrijven.
+
+00:04:58.700 --> 00:05:00.680
+Dat is een mondvol, dus laat ik het vereenvoudigen.
+
+00:05:00.840 --> 00:05:01.880
+Er bestaan twee typen.
+
+00:05:02.040 --> 00:05:04.040
+Input bindings halen gegevens naar je functie toe.
+
+00:05:04.220 --> 00:05:06.180
+Output bindings sturen gegevens naar buiten.
+
+00:05:06.480 --> 00:05:11.660
+Zonder bindings zou je telkens SDK code moeten schrijven als je met een opslagaccount, database of wachtrij wilt communiceren.
+
+00:05:11.860 --> 00:05:16.740
+Je zou verbindingsreeksen beheren, pogingen opnieuw uitvoeren, gegevens serialiseren en antwoorden deserialiseren.
+
+00:05:16.940 --> 00:05:19.200
+Dat is een hoop boilerplate code alleen om een bestand te lezen.
+
+00:05:19.200 --> 00:05:21.360
+Met bindings declareer je gewoon wat je nodig hebt.
+
+00:05:21.520 --> 00:05:23.620
+Je zegt, ik wil lezen uit deze blobcontainer.
+
+00:05:23.740 --> 00:05:25.400
+Of, ik wil schrijven naar deze wachtrij.
+
+00:05:25.560 --> 00:05:27.060
+De runtime zorgt voor de rest.
+
+00:05:27.260 --> 00:05:31.060
+Hij opent de verbinding, leest de gegevens en geeft deze als parameter door aan je functie.
+
+00:05:31.260 --> 00:05:35.600
+Wanneer je functie klaar is, neemt hij de retourwaarde en schrijft deze naar de door jou opgegeven locatie.
+
+00:05:35.840 --> 00:05:37.100
+Zie bindings als leidingen.
+
+00:05:37.260 --> 00:05:40.620
+Je verbindt je functie met een opslagaccount, een database of een wachtrij.
+
+00:05:40.800 --> 00:05:43.040
+De gegevens stromen automatisch door die leidingen.
+
+00:05:43.180 --> 00:05:45.280
+Je functie hoeft niet te weten hoe de leidingen werken.
+
+00:05:45.480 --> 00:05:48.100
+Hij ontvangt alleen wat er doorheen komt en verstuurt wat eruit moet.
+
+00:05:48.100 --> 00:05:49.620
+Hier is een concreet voorbeeld.
+
+00:05:49.900 --> 00:05:51.440
+Stel dat je een blobinputbinding hebt.
+
+00:05:51.680 --> 00:05:55.560
+Wanneer je functie start, leest deze automatisch een bestand uit de blobopslag en geeft dit aan je door als parameter.
+
+00:05:55.780 --> 00:05:57.760
+Je hoeft geen storage SDK code te schrijven.
+
+00:05:57.920 --> 00:05:59.780
+Je ontvangt simpelweg de data en verwerkt deze.
+
+00:05:59.960 --> 00:06:01.760
+Een ander voorbeeld is een queue outputbinding.
+
+00:06:02.000 --> 00:06:04.560
+Je functie verwerkt iets en aan het einde retourneer je een waarde.
+
+00:06:04.740 --> 00:06:07.940
+De runtime neemt die waarde, serialiseert deze en plaatst hem in de wachtrij.
+
+00:06:08.100 --> 00:06:09.620
+Je hoeft geen wachtrijcode te schrijven.
+
+00:06:09.800 --> 00:06:11.280
+Je hoeft alleen een waarde te retourneren.
+
+00:06:11.460 --> 00:06:12.520
+Bindings zijn optioneel.
+
+00:06:12.680 --> 00:06:14.220
+Je kunt er 0, 1 of vele hebben.
+
+00:06:14.220 --> 00:06:17.340
+Sommige functies hebben alleen een trigger nodig zonder enige binding.
+
+00:06:17.560 --> 00:06:20.420
+Anderen hebben misschien 3 of 4 verbindingen met verschillende services.
+
+00:06:20.740 --> 00:06:24.060
+De combinatie van triggers en bindings maakt Azure Functions zo krachtig.
+
+00:06:24.240 --> 00:06:27.240
+Jij schrijft de bedrijfslogica, de daadwerkelijke besluitvormingscode.
+
+00:06:27.440 --> 00:06:29.700
+Het platform regelt de volledige integratie.
+
+00:06:29.920 --> 00:06:32.860
+Je functie blijft klein, gefocust en makkelijk te begrijpen.
+
+00:06:33.460 --> 00:06:34.780
+Het verhaal over de prijzen.
+
+00:06:35.000 --> 00:06:37.100
+De prijsstelling is wat de meeste beginners verrast.
+
+00:06:37.320 --> 00:06:42.000
+Voor de meeste mensen is het consumptieplan de standaard keuze en je zou er 90% van de tijd mee moeten beginnen.
+
+00:06:42.000 --> 00:06:45.320
+Zo werkt het. Je betaalt alleen wanneer je functie daadwerkelijk draait.
+
+00:06:45.500 --> 00:06:47.440
+Wanneer deze inactief is, betaal je niets.
+
+00:06:47.620 --> 00:06:48.640
+0, geen cent.
+
+00:06:48.860 --> 00:06:50.680
+Twee componenten bepalen de rekening.
+
+00:06:50.840 --> 00:06:53.980
+Ten eerste het aantal executies, hoe vaak je functie wordt geactiveerd.
+
+00:06:54.140 --> 00:06:57.680
+Ten tweede de uitvoeringstijd, gemeten in iets dat gb seconde wordt genoemd.
+
+00:06:57.820 --> 00:07:01.260
+Dat is in feite hoe lang je functie draaide vermenigvuldigd met hoeveel geheugen deze gebruikte.
+
+00:07:01.440 --> 00:07:02.960
+De gratis toelage is genereus.
+
+00:07:03.160 --> 00:07:07.440
+Je krijgt 1 miljoen executies per maand en 400.000 gigabyte seconde volledig gratis.
+
+00:07:07.640 --> 00:07:11.380
+Voor de meeste kleine projecten, hobbyapps en prototypes betaal je nooit een cent.
+
+00:07:11.600 --> 00:07:11.960
+Nooit.
+
+00:07:12.140 --> 00:07:15.160
+Als je boven de gratis toelage uitkomt, zijn de tarieven nog steeds ongelooflijk goedkoop.
+
+00:07:15.240 --> 00:07:16.780
+20 cent per miljoen executies.
+
+00:07:17.020 --> 00:07:17.920
+Dat is geen typfout.
+
+00:07:18.060 --> 00:07:19.520
+20 cent voor een miljoen runs.
+
+00:07:19.760 --> 00:07:22.600
+Zie het als betalen voor elektriciteit, alleen als je de schakelaar omzet.
+
+00:07:22.760 --> 00:07:25.240
+Er is geen maandelijkse basistarief voor de bedrading in je muren.
+
+00:07:25.400 --> 00:07:27.600
+Je betaalt alleen voor de stroom die je daadwerkelijk verbruikt.
+
+00:07:27.820 --> 00:07:28.980
+Nu zijn er ook andere plannen.
+
+00:07:29.200 --> 00:07:31.980
+Flex Consumption is nieuwer en biedt ondersteuning voor virtuele netwerken.
+
+00:07:32.120 --> 00:07:35.260
+Premium houdt je functies altijd warm, dus er is geen vertraging door een koude start.
+
+00:07:35.620 --> 00:07:38.640
+Dedicated geeft je vaste capaciteit op een traditioneel app-serviceplan.
+
+00:07:38.820 --> 00:07:41.540
+Maar om te beginnen is Consumption bijna altijd de juiste keuze.
+
+00:07:41.700 --> 00:07:42.700
+Toch één waarschuwing.
+
+00:07:42.880 --> 00:07:46.260
+De gratis toelage wordt gedeeld over al je functie-apps binnen hetzelfde abonnement.
+
+00:07:46.440 --> 00:07:50.180
+Als je 10 functie-apps hebt, putten ze allemaal uit dezelfde 1 miljoen gratis executies.
+
+00:07:50.380 --> 00:07:52.660
+Houd dat dus in de gaten als je er meer dan een paar gaat bouwen.
+
+00:07:52.820 --> 00:07:54.220
+De prijsstelling is geweldig.
+
+00:07:54.380 --> 00:07:56.420
+Maar laten we dit concreet maken met een voorbeeld.
+
+00:07:56.600 --> 00:07:58.020
+Een scenario uit de praktijk.
+
+00:07:58.020 --> 00:08:01.220
+Stel je voor dat je een website beheert waar gebruikers profielfoto's uploaden.
+
+00:08:01.360 --> 00:08:03.900
+Die afbeeldingen zijn enorm, wel 10 megabyte per stuk.
+
+00:08:04.060 --> 00:08:05.820
+En dat zorgt voor een paar echte problemen.
+
+00:08:06.020 --> 00:08:07.880
+Grote bestanden kosten meer opslagruimte.
+
+00:08:08.120 --> 00:08:11.820
+Ze vertragen je website telkens wanneer iemand een pagina laat en ze frustreren je gebruikers
+
+00:08:11.820 --> 00:08:12.780
+die op foto's moeten wachten.
+
+00:08:12.980 --> 00:08:16.020
+Dus heb je een manier nodig om die afbeeldingen automatisch te verkleinen.
+
+00:08:16.280 --> 00:08:19.620
+Zonder Azure Functions zou je vanaf nul een achtergrondproces moeten bouwen.
+
+00:08:19.860 --> 00:08:24.020
+Dat betekent een aparte server regelen, een wachtrij opzetten om de werklast te beheren en code
+
+00:08:24.020 --> 00:08:25.700
+schrijven om alle onderdelen aan te sturen.
+
+00:08:25.700 --> 00:08:29.840
+Dat is een hoop onnodige complexiteit voor zoiets eenvoudigs als het verkleinen van een afbeelding.
+
+00:08:30.020 --> 00:08:33.460
+Met Azure Functions heb je alleen één blob trigger en één functie nodig.
+
+00:08:33.700 --> 00:08:34.980
+Geen zorgen over servers.
+
+00:08:35.300 --> 00:08:36.660
+Laat me uitleggen hoe het werkt.
+
+00:08:36.840 --> 00:08:40.780
+Een gebruiker uploadt een foto via je website en dat bestand belandt in Azure Blob Storage.
+
+00:08:41.020 --> 00:08:43.840
+Zodra het aankomt, wordt er automatisch een blob trigger geactiveerd.
+
+00:08:44.000 --> 00:08:48.260
+Je functie wordt geactiveerd, voert de compressiecode uit en slaat de kleinere versie weer op in de opslag.
+
+00:08:48.420 --> 00:08:50.260
+Dit alles gebeurt binnen enkele seconden.
+
+00:08:50.400 --> 00:08:54.700
+De gebruiker hoeft nooit te wachten omdat het hele proces achter de schermen draait, volledig onzichtbaar.
+
+00:08:54.700 --> 00:08:59.020
+Hier is nog een alledaags voorbeeld, het sturen van een welkomstmail wanneer iemand zich aanmeldt voor je dienst.
+
+00:08:59.160 --> 00:09:02.220
+Een HTTP trigger vangt het aanmeldingsverzoek van je website op.
+
+00:09:02.360 --> 00:09:06.980
+Je functie start, haalt het e-mailadres van de gebruiker op, verstuurt een welkomstbericht via SendGit en is dan klaar.
+
+00:09:07.120 --> 00:09:09.220
+De gebruiker ontvangt de e-mail vrijwel direct.
+
+00:09:09.460 --> 00:09:13.940
+Geen e-mail server om in te stellen, geen wachtrij om te beheren, gewoon één functie, één taak, klaar.
+
+00:09:14.100 --> 00:09:16.780
+Dit zijn precies de taken waarvoor Azure Functions is ontworpen.
+
+00:09:16.920 --> 00:09:18.880
+Kleine, gerichte, event-driven taken.
+
+00:09:18.880 --> 00:09:24.740
+Geen enorme applicaties, geen complexe workflows, maar gewoon één ding goed gedaan, geactiveerd door iets wat ergens anders gebeurt.
+
+00:09:24.940 --> 00:09:26.500
+Wanneer gebruik je Azure Functions?
+
+00:09:26.760 --> 00:09:29.720
+Dus, wanneer kies je voor een functie en wanneer gebruik je iets anders?
+
+00:09:29.960 --> 00:09:31.700
+Hier is een snelle manier om te beslissen.
+
+00:09:31.940 --> 00:09:35.780
+Vraag jezelf af of de taak kort is, event-driven is en of deze stateles is.
+
+00:09:35.980 --> 00:09:39.860
+Als je alle drie met ja hebt beantwoord, is Azure Functions waarschijnlijk de juiste tool.
+
+00:09:40.080 --> 00:09:41.820
+Laten we beginnen met de goede use cases.
+
+00:09:42.100 --> 00:09:44.020
+API's en webhooks zijn een perfecte match.
+
+00:09:44.020 --> 00:09:51.820
+Je hebt een lichtgewicht eindpunt nodig dat reageert op een HTTP-verzoek, één ding doet en een resultaat teruggeeft, en dat is precies waar HTTP-triggers voor zijn gemaakt.
+
+00:09:52.040 --> 00:09:54.400
+Bestands- en beeldverwerking is een ander groot voorbeeld.
+
+00:09:54.580 --> 00:09:59.600
+Een bestand belandt in de opslag, je functie start, transformeert het en slaat het resultaat op, allemaal zonder server.
+
+00:09:59.800 --> 00:10:04.540
+Geplande taken zoals nachtelijke opschoonacties of het genereren van rapporten werken uitstekend met timer-triggers.
+
+00:10:05.260 --> 00:10:13.120
+Datatransformatie voor ETL-pipelines komt ook veel voor, en functies vormen de perfecte integratielijn om twee services te verbinden die normaal gesproken niet met elkaar communiceren.
+
+00:10:13.120 --> 00:10:15.800
+Laten we nu bespreken wanneer functies minder geschikt zijn.
+
+00:10:16.100 --> 00:10:23.120
+Langlopende processen vormen een probleem omdat functies op het verbruiksabonnement standaard een time-out-limit van 5 minuten hebben, tot maximaal 10 minuten indien geconfigureerd.
+
+00:10:23.920 --> 00:10:26.420
+Als je taak langer duurt dan dat, heb je iets anders nodig.
+
+00:10:26.680 --> 00:10:28.720
+Stateful applicaties zijn ook niet geschikt.
+
+00:10:28.940 --> 00:10:31.080
+Functies onthouden niets tussen uitvoeringen door.
+
+00:10:31.280 --> 00:10:35.520
+Als je sessiestatus moet behouden of de voortgang over stappen heen wilt bijhouden, werk je het ontwerp tegen.
+
+00:10:35.780 --> 00:10:37.940
+Zware rekenwerklasten zijn ook niet de juiste keuze.
+
+00:10:37.940 --> 00:10:42.720
+Als je langdurig CPU-kracht nodig hebt gedurende minuten of uren, is een virtuele machine of container een betere optie.
+
+00:10:42.720 --> 00:10:48.200
+En complexe workflows, waarbij de ene taak afhankelijk is van de andere, kunnen beter worden afgehandeld door Durable Functions of Logic Apps.
+
+00:10:48.360 --> 00:10:50.320
+Hier is een kort overzicht van de alternatieven.
+
+00:10:50.500 --> 00:10:53.280
+Azure Logic Apps is de no-code optie voor het verbinden van services.
+
+00:10:53.580 --> 00:10:57.460
+Als je geen aangepaste code hoeft te schrijven, kunnen Logic Apps de klus klaren met een visuele ontwerper.
+
+00:10:57.640 --> 00:11:01.180
+Azure App Service is bedoeld voor volledige webapplicaties die 24 zevende draaien.
+
+00:11:01.360 --> 00:11:04.820
+Als je een complete website of API nodig hebt die altijd aanstaat, is dat jouw tool.
+
+00:11:05.000 --> 00:11:08.640
+Azure Container Apps biedt je gecontaineriseerde microservices met meer controle over de runtime.
+
+00:11:08.640 --> 00:11:12.820
+En Azure Virtual Machines geeft je volledige controle over het besturingssysteem als je dat nodig hebt.
+
+00:11:12.980 --> 00:11:14.580
+Hier is een eenvoudige vuistregel.
+
+00:11:14.760 --> 00:11:18.920
+Als je de taak in één zin kunt omschrijven, is het waarschijnlijk een goede kandidaat voor een functie.
+
+00:11:19.180 --> 00:11:21.280
+Comprimeer afbeeldingen wanneer ze worden geüpload.
+
+00:11:21.440 --> 00:11:23.800
+Verstuur een welkomstmail wanneer iemand zich aanmeldt.
+
+00:11:23.940 --> 00:11:26.260
+Voer elke nacht om middernacht een opschoon taak uit.
+
+00:11:26.500 --> 00:11:28.220
+Eén zin, één taak, één functie.
+
+00:11:28.620 --> 00:11:30.580
+Veelgemaakte beginnersfouten om te vermijden.
+
+00:11:30.800 --> 00:11:33.040
+Laten we nu een paar dingen bespreken waar je op moet letten.
+
+00:11:33.280 --> 00:11:35.800
+Dit zijn de fouten waar bijna iedereen in trapt als ze beginnen.
+
+00:11:35.800 --> 00:11:39.320
+Een veelgemaakte beginnersfout is denken dat functies altijd gratis zijn.
+
+00:11:39.500 --> 00:11:41.240
+De gratis toekenning is ruimhartig.
+
+00:11:41.360 --> 00:11:47.520
+Ik weet dat een miljoen uitvoeringen veel klinkt, maar als je functie viraal gaat of wordt bestookt door een bot, lopen die uitvoeringen snel op.
+
+00:11:47.640 --> 00:11:52.460
+Hou dus je verbruik in de gaten, stel een budgetwaarschuwing in Azure in en voorkom een verassingsrekening aan het eind van de maand.
+
+00:11:52.620 --> 00:11:54.620
+Een andere fout is het negeren van cold starts.
+
+00:11:54.860 --> 00:11:58.020
+De eerste keer dat je functie draait nadat deze inactief is geweest, duurt het langer.
+
+00:11:58.160 --> 00:12:00.360
+Op het verbruiksabonnement kan dat enkele seconden duren.
+
+00:12:00.580 --> 00:12:02.180
+Voor de meeste use cases is dat prima.
+
+00:12:02.180 --> 00:12:08.900
+Maar als je een latencygevoelige API bouwt waarbij elke milliseconde telt, overweeg dan het premium abonnement of schakel Always Ready instances in.
+
+00:12:09.020 --> 00:12:11.460
+En dan is er nog het schrijven van functies die te lang draaien.
+
+00:12:11.660 --> 00:12:15.480
+Het verbruiksabonnement heeft een timeout 5 minuten standaard, 10 minuten maximaal.
+
+00:12:15.660 --> 00:12:20.180
+Als je functie 15 minuten nodig heeft om een bestand te verwerken, wordt deze halverwege beëindigd.
+
+00:12:20.260 --> 00:12:23.320
+Deel die taak op in kleinere stukken of gebruik een ander hostingabonnement.
+
+00:12:23.560 --> 00:12:27.000
+Nog iets dat je makkelijk vergeet is het niet gebruiken van run from package deployment.
+
+00:12:27.280 --> 00:12:31.480
+Het is een simpele configuratiewijziging die cold starts verbetert en deployments betrouwbaarder maakt.
+
+00:12:31.480 --> 00:12:35.040
+In plaats van losse bestanden te kopiëren, implementeer je een zip-pakket.
+
+00:12:35.180 --> 00:12:37.260
+Het is één vinkje in de portal, doe het gewoon.
+
+00:12:37.480 --> 00:12:40.800
+HTTP-eindpunten blootstellen zonder authenticatie is een andere valkuil.
+
+00:12:40.980 --> 00:12:44.640
+Het is makkelijk om een functie op anoniem te laten staan tijdens het testen en hem daarna niet te beveiligen.
+
+00:12:44.880 --> 00:12:47.000
+Stel het autorisatieniveau vanaf het begin correct in.
+
+00:12:47.180 --> 00:12:48.740
+Gebruik functie- of beheerdersleutels.
+
+00:12:48.960 --> 00:12:50.080
+Laat de deur niet openstaan.
+
+00:12:50.260 --> 00:12:53.040
+Storage-accounts hergebruiken voor meerdere functie-apps is ook een probleem.
+
+00:12:53.200 --> 00:12:54.700
+Tijdens de ontwikkeling is delen prima.
+
+00:12:54.940 --> 00:12:57.800
+In productie moet elke functie-app een eigen storage-account hebben.
+
+00:12:57.800 --> 00:13:02.060
+Anders krijg je problemen met lawaaierige buren waarbij het verkeer van de ene functie de andere vertraagt.
+
+00:13:02.200 --> 00:13:04.480
+En tot slot application insights niet inschakelen.
+
+00:13:04.700 --> 00:13:05.780
+Zonder dat vlieg je blind.
+
+00:13:05.980 --> 00:13:08.640
+Je ziet geen fouten, storingen of prestatieproblemen.
+
+00:13:08.780 --> 00:13:11.360
+Je weet niet of je functie te lang draait of stilletjes faalt.
+
+00:13:11.580 --> 00:13:12.960
+Schakel het vanaf dag 1 in.
+
+00:13:13.140 --> 00:13:15.640
+Het kost 30 seconden en bespaart uren aan debuggen.
+
+00:13:15.820 --> 00:13:19.700
+De gouden regel voor dit alles is hou je functies klein, gericht en stateles.
+
+00:13:19.940 --> 00:13:21.620
+Eén taak per functie, niets meer.
+
+00:13:21.840 --> 00:13:22.820
+Dat is dus het systeem.
+
+00:13:23.000 --> 00:13:27.140
+Azure Functions is serverless compute die kleine stukjes code uitvoert als reactie op gebeurtenissen.
+
+00:13:27.140 --> 00:13:29.120
+Je betaalt alleen wanneer je code draait.
+
+00:13:29.280 --> 00:13:31.300
+Triggers vertellen je functie wanneer hij moet ontwaken.
+
+00:13:31.540 --> 00:13:36.020
+Bindings verbinden hem met de benodigde data en het verbruiksabonnement houdt het bijna gratis voor kleine projecten.
+
+00:13:36.160 --> 00:13:40.660
+Je beste set op dit moment is het maken van een simpele HTTP-getriggerde functie in de Azure Portal.
+
+00:13:40.900 --> 00:13:42.820
+Het kost 5 minuten en is gratis.
+
+00:13:43.020 --> 00:13:46.780
+Abonneer je op Microsoft Knowledge Nuggets voor meer uitleg in begrijpelijke taal...
+
+00:13:46.780 --> 00:13:49.260
+...en deel dit met iemand die steeds vraagt wat serverless betekent.
+
+00:13:49.460 --> 00:13:49.880
+Vrouw.

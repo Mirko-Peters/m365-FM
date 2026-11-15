@@ -1,0 +1,1582 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.640
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget tutaj w M365FM.
+
+00:00:03.760 --> 00:00:05.860
+Nazywam się Mirko Peters i jestem Waszym gospodarzem.
+
+00:00:06.080 --> 00:00:06.840
+Mam do Was pytanie.
+
+00:00:07.100 --> 00:00:10.040
+Co by było, gdyby kopilot mógł przeszukiwać całą Waszą firmę,
+
+00:00:10.160 --> 00:00:12.840
+nie tylko maile i pliki w SharePoint, ale także CRM,
+
+00:00:13.020 --> 00:00:15.460
+system zgłoszeniowy, bazy HR czy wiki projektowe?
+
+00:00:15.640 --> 00:00:18.400
+Co by było, gdybyście mogli zadać jedno pytanie i otrzymać odpowiedź
+
+00:00:18.400 --> 00:00:21.400
+ze wszystkich tych systemów naraz, bez opuszczania Microsoft 365?
+
+00:00:21.960 --> 00:00:24.100
+Takie jest założenie, ale oto rzeczywistość.
+
+00:00:24.300 --> 00:00:27.160
+Microsoft 365, kopilot w standardowej konfiguracji,
+
+00:00:27.160 --> 00:00:29.700
+widzi tylko treści przechowywane w SharePoint Online i OnDrive.
+
+00:00:29.700 --> 00:00:32.740
+To wszystko. Wasze e-maile, wiadomości na Teams, dokumenty,
+
+00:00:32.780 --> 00:00:33.860
+to wszystko jest dostępne.
+
+00:00:34.020 --> 00:00:36.580
+Jednak zdecydowana większość ważnych danych biznesowych firmy
+
+00:00:36.580 --> 00:00:37.580
+znajduje się gdzie indziej.
+
+00:00:37.760 --> 00:00:40.800
+Pomyślcie o CRM jak Salesforce, systemie zgłoszeniowym jak ServiceNow,
+
+00:00:40.920 --> 00:00:42.880
+wiki jak Confluence, a może nawet Google Drive,
+
+00:00:43.040 --> 00:00:44.160
+którego jeszcze nie przenieśliście.
+
+00:00:44.340 --> 00:00:46.780
+Kopilot nie widzi nic z tych rzeczy, przynajmniej domyślnie.
+
+00:00:46.920 --> 00:00:49.860
+To ogromna luka, a właśnie po to stworzono konektory Kopilot.
+
+00:00:50.060 --> 00:00:53.040
+Pod koniec tego odcinka zrozumiecie, czym są konektory grafowe.
+
+00:00:53.260 --> 00:00:55.900
+Nawiasem mówiąc, nazywają się teraz konektorami Kopilot.
+
+00:00:55.900 --> 00:00:59.880
+Poznacie też dwa różne typy i dowiecie się, którego użyć w danej sytuacji.
+
+00:01:00.220 --> 00:01:01.640
+Złapcie kawę i zaczynajmy.
+
+00:01:02.180 --> 00:01:04.140
+Problem. Wasze dane są wszędzie.
+
+00:01:04.420 --> 00:01:08.640
+Rzecz w tym, większość firm nie przechowuje wszystkiego wewnątrz Microsoft 365.
+
+00:01:09.320 --> 00:01:12.420
+Możecie mieć CRM typu Salesforce dla danych klientów,
+
+00:01:12.620 --> 00:01:15.140
+system zgłoszeniowy jak ServiceNow dla wsparcia,
+
+00:01:15.140 --> 00:01:17.560
+IT, wiki jak Confluence dla dokumentacji,
+
+00:01:17.660 --> 00:01:19.440
+a nawet Google Drive czy Dropbox,
+
+00:01:19.580 --> 00:01:21.240
+z których zespół zaczął korzystać,
+
+00:01:21.300 --> 00:01:22.960
+zanim firma przeszła na Microsoft.
+
+00:01:23.260 --> 00:01:25.420
+Więc kiedy zadajecie Kopilotowi pytanie w stylu,
+
+00:01:25.560 --> 00:01:27.160
+jaki jest status umowy z Contoso?
+
+00:01:27.360 --> 00:01:30.020
+Albo, pokaż mi ostatnie zgłoszenie od tego klienta.
+
+00:01:30.160 --> 00:01:31.520
+Kopilot nie zna odpowiedzi.
+
+00:01:31.740 --> 00:01:32.600
+Nie widzi tych danych.
+
+00:01:32.780 --> 00:01:34.180
+To jak posiadanie karty bibliotecznej,
+
+00:01:34.280 --> 00:01:36.660
+która działa tylko na jedną półkę w budynku z 50 pokojami.
+
+00:01:36.880 --> 00:01:38.320
+Macie dostęp do książek przed Wami,
+
+00:01:38.420 --> 00:01:40.000
+ale reszta mogłaby w ogóle nie istnieć.
+
+00:01:40.000 --> 00:01:42.480
+Bez Kopilota musicie przełączać się między kontekstami.
+
+00:01:42.660 --> 00:01:44.320
+Wyobraźcie sobie szukanie klienta w Salesforce
+
+00:01:44.320 --> 00:01:45.720
+i kopiowanie szczegółów konta.
+
+00:01:45.900 --> 00:01:47.100
+Następnie otwieracie ServiceNow,
+
+00:01:47.200 --> 00:01:48.880
+szukacie zgłoszenia i też je kopiujecie.
+
+00:01:49.040 --> 00:01:50.300
+Potem przechodzicie do Confluence,
+
+00:01:50.480 --> 00:01:51.900
+żeby znaleźć notatki z projektu.
+
+00:01:52.040 --> 00:01:53.760
+Na koniec wklejacie to wszystko do e-maila
+
+00:01:53.760 --> 00:01:54.760
+lub wiadomości na Teams.
+
+00:01:54.980 --> 00:01:56.860
+Skaczecie między pięcioma kartami w przeglądarce,
+
+00:01:56.940 --> 00:01:58.580
+logując się do każdego systemu osobno
+
+00:01:58.580 --> 00:02:00.340
+i ręcznie składając informacje w całość.
+
+00:02:00.520 --> 00:02:01.840
+To strata czasu, przerywa pracę
+
+00:02:01.840 --> 00:02:03.620
+i jest dokładnie tym rodzajem żmudnych zadań,
+
+00:02:03.720 --> 00:02:05.060
+które Kopilot miał wyeliminować.
+
+00:02:05.260 --> 00:02:07.380
+Jednak prawdziwy koszt to nie tylko stracony czas.
+
+00:02:07.380 --> 00:02:09.220
+Gdy Kopilot nie potrafi połączyć faktów
+
+00:02:09.220 --> 00:02:10.240
+ze wszystkich Twoich danych,
+
+00:02:14.320 --> 00:02:15.800
+nie zdając sobie sprawy,
+
+00:02:15.900 --> 00:02:17.540
+że kluczowe dane znajdują się w systemie,
+
+00:02:17.640 --> 00:02:18.660
+którego Kopilot nie widzi.
+
+00:02:18.820 --> 00:02:20.380
+Tą pominiętą informacją może być
+
+00:02:20.380 --> 00:02:22.060
+skarga klienta zapisana w CRM,
+
+00:02:22.180 --> 00:02:23.480
+która nigdy nie trafiła do e-maila
+
+00:02:23.480 --> 00:02:25.500
+lub data odnowienia umowy w systemie ERP,
+
+00:02:25.680 --> 00:02:26.640
+której nie ma w kalendarzu.
+
+00:02:26.820 --> 00:02:27.640
+Takie luki się sumują
+
+00:02:27.640 --> 00:02:29.540
+i mogą prowadzić do realnych konsekwencji.
+
+00:02:29.760 --> 00:02:31.580
+Dlatego firma Microsoft zbudowała pomost.
+
+00:02:31.740 --> 00:02:33.740
+Przyjrzyjmy się, czym właściwie jest ten pomost.
+
+00:02:33.900 --> 00:02:35.080
+Czym jest łącznik grafu?
+
+00:02:35.280 --> 00:02:36.900
+Łącznik grafu to oprogramowanie,
+
+00:02:36.900 --> 00:02:39.380
+które wprowadza zewnętrzne dane do Microsoft Graph.
+
+00:02:39.520 --> 00:02:41.120
+Microsoft Graph to ten sam indeks,
+
+00:02:41.280 --> 00:02:43.460
+który obsługuje Microsoft Search, SharePoint Search,
+
+00:02:43.460 --> 00:02:44.620
+a teraz także Kopilota.
+
+00:02:44.800 --> 00:02:47.680
+Pomyśl o nim jak o centralnym układzie nerwowym Microsoft 365.
+
+00:02:48.160 --> 00:02:49.520
+To miejsce, w którym gromadzą się
+
+00:02:49.520 --> 00:02:50.740
+i łączą wszystkie Twoje dane.
+
+00:02:50.980 --> 00:02:52.460
+Łącznik grafu działa więc jak taśmociąg.
+
+00:02:53.140 --> 00:02:55.200
+Wczytujesz dane z zewnętrznego systemu na taśmę,
+
+00:02:55.260 --> 00:02:57.660
+a one trafiają do indeksu Microsoft 365.
+
+00:02:58.260 --> 00:02:59.000
+Gdy dane już tam są,
+
+00:02:59.100 --> 00:03:00.700
+Kopilot może je przeszukiwać, podsumowywać
+
+00:03:00.700 --> 00:03:02.060
+i odpowiadać na pytania na ich temat,
+
+00:03:02.180 --> 00:03:04.040
+tak samo jak robi to z Twoimi e-mailami i plikami.
+
+00:03:04.040 --> 00:03:05.440
+Rekord klienta w Salesforce?
+
+00:03:05.640 --> 00:03:07.100
+Kopilot może go teraz znaleźć.
+
+00:03:07.220 --> 00:03:08.200
+Zgłoszenie w ServiceNow?
+
+00:03:08.380 --> 00:03:09.640
+Kopilot może je podsumować.
+
+00:03:09.880 --> 00:03:10.760
+Strona w Confluence?
+
+00:03:10.760 --> 00:03:12.980
+Kopilot może odpowiedzieć na pytania z nią związane.
+
+00:03:13.100 --> 00:03:14.480
+Oto coś, co może Cię zaskoczyć.
+
+00:03:14.680 --> 00:03:16.140
+Łączniki grafu nie są nowością.
+
+00:03:16.340 --> 00:03:18.460
+Istnieją od lat, zasilając wyszukiwarkę SharePoint.
+
+00:03:18.700 --> 00:03:20.800
+Być może używałeś ich, nawet o tym nie wiedząc.
+
+00:03:20.940 --> 00:03:22.760
+Jeśli kiedykolwiek wyszukiwałeś coś w SharePoint
+
+00:03:22.760 --> 00:03:25.340
+i widziałeś wyniki z zewnętrznego systemu w oddzielnej sekcji,
+
+00:03:25.460 --> 00:03:27.020
+to właśnie był łącznik grafu w akcji.
+
+00:03:27.260 --> 00:03:29.460
+Nowością jest to, że korzysta z nich teraz Kopilot,
+
+00:03:29.580 --> 00:03:30.420
+a to zmienia wszystko,
+
+00:03:30.540 --> 00:03:32.160
+ponieważ Kopilot nie tylko znajduje dane,
+
+00:03:32.320 --> 00:03:33.760
+ale także je analizuje, podsumowuje
+
+00:03:33.760 --> 00:03:35.580
+i odpowiada na pytania naturalnym językiem.
+
+00:03:35.800 --> 00:03:36.760
+Jest jednak haczyk.
+
+00:03:36.900 --> 00:03:38.280
+Microsoft oferuje w rzeczywistości
+
+00:03:38.280 --> 00:03:39.520
+dwa bardzo różne typy łączników.
+
+00:03:39.760 --> 00:03:41.500
+Działają one w fundamentalnie odmienny sposób.
+
+00:03:41.720 --> 00:03:42.980
+Pozwól, że wyjaśnię różnicę.
+
+00:03:43.180 --> 00:03:45.160
+Dwa modele, synchronizowany kontrafederacyjny.
+
+00:03:45.280 --> 00:03:46.820
+I tu zaczyna się to, co najciekawsze.
+
+00:03:47.060 --> 00:03:49.040
+Microsoft daje Ci dwa zupełnie różne sposoby
+
+00:03:49.040 --> 00:03:50.900
+na wprowadzenie zewnętrznych danych do Kopilota.
+
+00:03:51.160 --> 00:03:53.760
+Wybór między nimi sprowadza się do jednego podstawowego pytania.
+
+00:03:53.940 --> 00:03:54.940
+Czy chcesz kopiować dane,
+
+00:03:55.060 --> 00:03:56.500
+czy wolisz odpytywać je na żywo?
+
+00:03:56.660 --> 00:03:59.340
+Pierwszy model nazywany jest łącznikiem synchronizowanym.
+
+00:03:59.520 --> 00:04:01.820
+W tym podejściu kopiujesz dane z systemu zewnętrznego
+
+00:04:01.820 --> 00:04:02.740
+do Microsoft Graph.
+
+00:04:02.960 --> 00:04:04.500
+Są one indeksowane, przechowywane
+
+00:04:04.500 --> 00:04:05.720
+i semantycznie przetwarzane.
+
+00:04:05.720 --> 00:04:07.680
+Wyobraź sobie, że przenosisz szafkę na dokumenty
+
+00:04:07.680 --> 00:04:09.660
+do tego samego budynku, w którym jest Twoje biurko.
+
+00:04:09.840 --> 00:04:11.620
+Zamiast chodzić do innego pokoju za każdym razem,
+
+00:04:11.740 --> 00:04:12.540
+gdy potrzebujesz pliku,
+
+00:04:12.660 --> 00:04:14.120
+szafka jest pod ręką uporządkowana,
+
+00:04:14.240 --> 00:04:15.560
+przeszukiwalna i gotowa do użycia.
+
+00:04:15.780 --> 00:04:17.860
+Dane stają się stałym elementem Twojego dzierżawcy
+
+00:04:17.860 --> 00:04:19.000
+Microsoft 365.
+
+00:04:19.580 --> 00:04:21.680
+Drugi model nazywa się konektorem federacyjnym.
+
+00:04:21.920 --> 00:04:23.120
+Działa on zupełnie inaczej.
+
+00:04:23.300 --> 00:04:24.260
+Nie kopiujesz niczego.
+
+00:04:24.520 --> 00:04:25.780
+Gdy użytkownik zadaje pytanie,
+
+00:04:25.900 --> 00:04:27.560
+Kopilot łączy się z systemem zewnętrznym
+
+00:04:27.560 --> 00:04:28.380
+w czasie rzeczywistym,
+
+00:04:28.500 --> 00:04:30.740
+prosi o odpowiednie informacje i zwraca odpowiedź.
+
+00:04:30.740 --> 00:04:33.140
+Żadne dane nie są przechowywane w Microsoft 365.
+
+00:04:33.740 --> 00:04:35.640
+To jak prośba do bibliotekarza w innym budynku,
+
+00:04:35.720 --> 00:04:36.900
+by czegoś dla Ciebie poszukał.
+
+00:04:36.960 --> 00:04:38.600
+Znajduje książkę, odczytuje odpowiedź,
+
+00:04:38.660 --> 00:04:40.100
+a książka zostaje na jego półce.
+
+00:04:40.320 --> 00:04:41.820
+Nigdy nie przejmujesz jej na własność.
+
+00:04:42.040 --> 00:04:43.680
+Dlaczego Microsoft oferuje dwa modele?
+
+00:04:43.820 --> 00:04:45.600
+Ponieważ różne dane mają różne potrzeby.
+
+00:04:45.840 --> 00:04:47.120
+Niektóre dane zmieniają się rzadko.
+
+00:04:47.320 --> 00:04:48.920
+Pomyśl o politykach HR, wiki projektowych
+
+00:04:48.920 --> 00:04:49.900
+czy zarchiwizowanych umowach.
+
+00:04:50.060 --> 00:04:51.600
+Takie dane można bez problemu kopiować.
+
+00:04:51.880 --> 00:04:52.620
+Indeksujesz je raz,
+
+00:04:52.720 --> 00:04:54.140
+może odświeżasz codziennie i gotowe.
+
+00:04:54.300 --> 00:04:55.580
+Ale inne dane są żywe.
+
+00:04:55.740 --> 00:04:56.300
+Poziomy zapasów,
+
+00:04:56.300 --> 00:04:57.860
+aktualny status zgłoszeń do pomocy technicznej,
+
+00:04:57.940 --> 00:04:58.740
+ceny w czasie rzeczywistym.
+
+00:04:58.860 --> 00:04:59.800
+Jeśli skopiujesz takie dane,
+
+00:04:59.920 --> 00:05:01.500
+stają się nieaktualne w momencie ich zapisania.
+
+00:05:01.680 --> 00:05:03.760
+Potrzebujesz najświeższej odpowiedzi za każdym razem.
+
+00:05:04.000 --> 00:05:05.420
+Jest jeszcze jedna kluczowa różnica.
+
+00:05:05.660 --> 00:05:07.260
+Konektory zsynchronizowane są konfigurowane
+
+00:05:07.260 --> 00:05:08.920
+przez administratora dla całej organizacji.
+
+00:05:09.160 --> 00:05:10.560
+Jedna osoba konfiguruje połączenie,
+
+00:05:10.700 --> 00:05:11.740
+a każdy, kto ma uprawnienia,
+
+00:05:11.880 --> 00:05:12.720
+może z niego korzystać.
+
+00:05:12.840 --> 00:05:14.220
+Konektory federacyjne wymagają,
+
+00:05:14.360 --> 00:05:16.560
+aby każdy użytkownik uwierzytelnił się indywidualnie.
+
+00:05:16.740 --> 00:05:18.180
+Więc jeśli łączysz się z Salesforce,
+
+00:05:18.360 --> 00:05:20.140
+każda osoba, która chce zapytać kopilota
+
+00:05:20.140 --> 00:05:20.940
+o dane z Salesforce,
+
+00:05:20.940 --> 00:05:22.680
+musi sama zalogować się do Salesforce.
+
+00:05:22.860 --> 00:05:24.700
+To więcej konfiguracji dla każdego użytkownika,
+
+00:05:24.840 --> 00:05:26.320
+ale oznacza też, że każdy widzi tylko to,
+
+00:05:26.380 --> 00:05:27.180
+do czego ma uprawnienia.
+
+00:05:27.400 --> 00:05:28.460
+Zagłębmy się w każdy model,
+
+00:05:28.600 --> 00:05:30.600
+abyś wiedział, który pasuje do Twojej sytuacji.
+
+00:05:30.780 --> 00:05:33.000
+Konektory zsynchronizowane szczegółowa analiza.
+
+00:05:33.260 --> 00:05:35.020
+Zacznijmy od konektorów zsynchronizowanych,
+
+00:05:35.100 --> 00:05:36.820
+ponieważ są bardziej rozpowszechnionym modelem
+
+00:05:36.820 --> 00:05:38.540
+i prawdopodobnie napotkasz je jako pierwsze.
+
+00:05:38.740 --> 00:05:39.560
+Oto jak to działa.
+
+00:05:39.860 --> 00:05:42.780
+Administrator wchodzi do Centrum Administracyjnego Microsoft 365,
+
+00:05:43.220 --> 00:05:44.840
+przechodzi do sekcji wyszukiwania i analizy
+
+00:05:44.840 --> 00:05:45.760
+Search i Intelligence
+
+00:05:45.760 --> 00:05:46.800
+i otwiera źródła danych.
+
+00:05:46.800 --> 00:05:49.320
+Zobaczysz galerię ponad 100 gotowych konektorów.
+
+00:05:49.500 --> 00:05:51.080
+Wybierasz ten, którego potrzebujesz,
+
+00:05:51.180 --> 00:05:51.580
+na przykład
+
+00:05:51.580 --> 00:05:53.380
+Service Enow, Ira lub Confluence
+
+00:05:53.380 --> 00:05:55.660
+i uwierzytelniasz się przy użyciu OAuth 2.0,
+
+00:05:55.780 --> 00:05:57.960
+co oznacza brak przechowywania haseł czystym tekstem.
+
+00:05:58.200 --> 00:05:59.960
+Następnie konfigurujesz, jakie dane pobierać,
+
+00:06:00.040 --> 00:06:01.060
+jak często synchronizować
+
+00:06:01.060 --> 00:06:02.040
+i które pola mapować.
+
+00:06:02.260 --> 00:06:02.880
+Gdy to gotowe,
+
+00:06:03.020 --> 00:06:05.340
+konektor zaczyna pobierać dane do Microsoft Graph
+
+00:06:05.340 --> 00:06:07.460
+i właśnie to czyni kopilota tak potężnym.
+
+00:06:07.720 --> 00:06:09.600
+Dane otrzymują indeks semantyczny.
+
+00:06:09.800 --> 00:06:12.560
+Oznacza to, że kopilot nie tylko dopasowuje słowa kluczowe,
+
+00:06:12.720 --> 00:06:14.360
+ale rozumie znaczenie Twojego pytania.
+
+00:06:14.360 --> 00:06:16.480
+Jeśli więc szukasz budżetu na trzeci kwartał,
+
+00:06:16.560 --> 00:06:18.160
+kopilot znajdzie dokument zatytułowany
+
+00:06:18.160 --> 00:06:19.800
+Przegląd Finansowy 2025,
+
+00:06:20.280 --> 00:06:22.140
+ponieważ rozumie powiązania między pojęciami.
+
+00:06:22.320 --> 00:06:24.620
+To ogromny krok naprzód względem tradycyjnego wyszukiwania,
+
+00:06:24.760 --> 00:06:26.860
+gdzie wymagany był dokładny tytuł lub słowo kluczowe.
+
+00:06:27.180 --> 00:06:29.580
+Bezpieczeństwo jest wpisane w ten model od samych podstaw.
+
+00:06:29.820 --> 00:06:32.480
+Każdy zaindeksowany element zawiera listę kontroli dostępu ACL,
+
+00:06:32.720 --> 00:06:34.500
+która informuje Microsoft 365,
+
+00:06:34.840 --> 00:06:35.640
+kto może go zobaczyć.
+
+00:06:35.800 --> 00:06:38.100
+Jeśli użytkownik nie ma uprawnień w systemie źródłowym,
+
+00:06:38.200 --> 00:06:39.600
+nie zobaczy tego również w kopilocie.
+
+00:06:39.780 --> 00:06:41.340
+Uprawnienia podążają za danymi.
+
+00:06:41.340 --> 00:06:44.080
+Jeśli więc Twoje konto Salesforce pozwala zespołowi sprzedaży
+
+00:06:44.080 --> 00:06:45.360
+widzieć tylko niektóre rekordy,
+
+00:06:45.420 --> 00:06:47.640
+te same ograniczenia obowiązują wewnątrz kopilota.
+
+00:06:47.860 --> 00:06:50.140
+Istnieją pewne ograniczenia, o których warto wiedzieć.
+
+00:06:50.360 --> 00:06:52.080
+Każdy element może mieć do 4 MB,
+
+00:06:52.320 --> 00:06:54.700
+a łącznik może obsłużyć do 25 operacji
+
+00:06:54.700 --> 00:06:56.040
+jednocześnie na jednym połączeniu.
+
+00:06:56.260 --> 00:06:57.940
+Jeśli Twoje dane znajdują się lokalnie,
+
+00:06:58.060 --> 00:06:59.260
+na przykład na serwerze plików
+
+00:06:59.260 --> 00:07:01.840
+lub w bazie danych SQL w Twoim własnym centrum danych,
+
+00:07:01.980 --> 00:07:04.340
+musisz zainstalować agenta łącznika Microsoft Graph.
+
+00:07:04.480 --> 00:07:05.920
+Ten agent odczytuje lokalne dane
+
+00:07:05.920 --> 00:07:07.960
+i przesyła do chmury tylko tekst i metadane,
+
+00:07:07.960 --> 00:07:10.900
+podczas gdy właściwe pliki pozostają w Twojej infrastrukturze.
+
+00:07:10.900 --> 00:07:12.640
+Dobra wiadomość jest jednak taka,
+
+00:07:12.820 --> 00:07:14.320
+że nie musisz budować tego od zera.
+
+00:07:14.560 --> 00:07:17.220
+Microsoft i jego partnerzy oferują ponad 100 gotowych łączników
+
+00:07:17.220 --> 00:07:19.320
+dla Salesforce, ServiceNow, ERA, Confluence,
+
+00:07:19.480 --> 00:07:21.840
+Google Drive, GitHub, Box, Dropbox i wielu innych.
+
+00:07:22.060 --> 00:07:24.400
+Jeśli Twoja firma korzysta z popularnej aplikacji biznesowej,
+
+00:07:24.520 --> 00:07:26.060
+prawdopodobnie istnieje już dla niej łącznik.
+
+00:07:26.220 --> 00:07:28.340
+Ale co, jeśli potrzebujesz danych w czasie rzeczywistym?
+
+00:07:28.540 --> 00:07:30.060
+Właśnie tutaj wkracza drugi model.
+
+00:07:30.300 --> 00:07:32.420
+Łączniki federacyjne szczegółowe omówienie.
+
+00:07:32.620 --> 00:07:34.820
+Omówmy teraz drugi model, ponieważ jest on nowszy
+
+00:07:34.820 --> 00:07:36.020
+i działa zupełnie inaczej.
+
+00:07:36.020 --> 00:07:37.620
+W przypadku łącznika federacyjnego
+
+00:07:37.620 --> 00:07:40.020
+żadne dane nie są przechowywane w Microsoft 365.
+
+00:07:40.020 --> 00:07:42.380
+Gdy użytkownik zadaje kopilotowi pytanie,
+
+00:07:42.520 --> 00:07:44.480
+kopilot wysyła żądanie do systemu zewnętrznego
+
+00:07:44.480 --> 00:07:46.560
+za pomocą protokołu kontekstu modelu MCP.
+
+00:07:46.700 --> 00:07:48.840
+Pomyśl o tym jako o standardowym sposobie kopilota
+
+00:07:48.840 --> 00:07:51.140
+na powiedzenie, hej, potrzebuje informacji na ten temat.
+
+00:07:51.320 --> 00:07:52.900
+Oraz o sposobie systemu zewnętrznego
+
+00:07:52.900 --> 00:07:54.140
+na odpowiedź tym, co posiada.
+
+00:07:54.380 --> 00:07:55.940
+System zewnętrzny wykonuje wyszukiwanie,
+
+00:07:56.080 --> 00:07:57.700
+znajduje odpowiednie wyniki i odsyła je,
+
+00:07:57.800 --> 00:07:59.600
+a kopilot prezentuje odpowiedź użytkownikowi.
+
+00:07:59.800 --> 00:08:02.060
+Oryginalne dane nigdy nie opuszczają systemu źródłowego.
+
+00:08:02.060 --> 00:08:04.560
+Ten model świetnie sprawdza się w przypadku danych na żywo.
+
+00:08:04.560 --> 00:08:06.940
+Mam na myśli poziomy zapasów zmieniające się co minutę,
+
+00:08:07.080 --> 00:08:08.440
+statusy zgłoszeń pomocy technicznej
+
+00:08:08.440 --> 00:08:09.880
+aktualizowane przy każdej edycji
+
+00:08:09.880 --> 00:08:11.160
+oraz ceny w czasie rzeczywistym,
+
+00:08:11.300 --> 00:08:12.280
+które ulegają wahaniom.
+
+00:08:12.460 --> 00:08:13.580
+Jeśli synchronizujesz takie dane,
+
+00:08:13.700 --> 00:08:14.660
+stają się one nieaktualne,
+
+00:08:14.740 --> 00:08:15.620
+zanim trafią do indeksu,
+
+00:08:15.720 --> 00:08:16.980
+ale dzięki łącznikowi federacyjnemu
+
+00:08:16.980 --> 00:08:18.460
+zawsze otrzymujesz najświeższe odpowiedzi,
+
+00:08:18.540 --> 00:08:20.400
+ponieważ każde zapytanie trafia bezpośrednio do źródła.
+
+00:08:20.560 --> 00:08:22.020
+Istnieje jednak pewien kompromis.
+
+00:08:22.260 --> 00:08:24.080
+Uwierzytelnianie użytkowników działa tu inaczej.
+
+00:08:24.300 --> 00:08:25.580
+W przypadku łącznika synchronizowanego
+
+00:08:25.580 --> 00:08:26.780
+administrator konfiguruje go raz,
+
+00:08:26.860 --> 00:08:27.640
+a korzystać mogą wszyscy.
+
+00:08:27.860 --> 00:08:28.920
+Przy łączniku federacyjnym
+
+00:08:34.560 --> 00:08:35.940
+najpierw uwierzytelnić się w Salesforce.
+
+00:08:36.180 --> 00:08:37.940
+Copilot respektuje wtedy wszelkie uprawnienia,
+
+00:08:38.120 --> 00:08:39.380
+jakie posiadasz w danym systemie.
+
+00:08:39.580 --> 00:08:41.540
+Jeśli w Salesforce widzisz tylko własne konta,
+
+00:08:41.620 --> 00:08:43.440
+Copilot zwróci wyniki tylko dla tych kont.
+
+00:08:43.660 --> 00:08:45.720
+Działa to w przeliczeniu na użytkownika i sesje.
+
+00:08:45.940 --> 00:08:48.480
+Łączniki federacyjne są obecnie w fazie wdrażania.
+
+00:08:48.740 --> 00:08:50.980
+Na razie ograniczają się do funkcji badawczych
+
+00:08:50.980 --> 00:08:51.780
+w czacie Copilot,
+
+00:08:51.980 --> 00:08:53.900
+gdzie można zadawać pogłębione pytania,
+
+00:08:54.060 --> 00:08:56.300
+a Copilot szuka odpowiedzi w wielu źródłach.
+
+00:08:56.880 --> 00:08:58.900
+Nie są one jeszcze dostępne wszędzie w Copilocie.
+
+00:08:59.040 --> 00:09:00.140
+Nie ma ich w Teams, Outlooku,
+
+00:09:00.200 --> 00:09:01.920
+ani w panelu bocznym Worda czy Excela.
+
+00:09:01.920 --> 00:09:03.780
+Firma Microsoft jednak się rozwija.
+
+00:09:03.960 --> 00:09:05.680
+Katalog łączników rośnie i oczekuje się,
+
+00:09:05.840 --> 00:09:07.260
+że z czasem łączniki federacyjne
+
+00:09:07.260 --> 00:09:09.460
+będą dostępne w większej liczbie funkcji Copilota.
+
+00:09:09.700 --> 00:09:10.720
+Warto wiedzieć jeszcze jedno,
+
+00:09:10.820 --> 00:09:13.140
+łączniki federacyjne są domyślnie tylko do odczytu.
+
+00:09:13.280 --> 00:09:14.860
+Copilot może wyszukiwać i pobierać dane,
+
+00:09:15.040 --> 00:09:16.900
+ale nie może zapisywać ich w systemie zewnętrznym.
+
+00:09:17.100 --> 00:09:18.820
+Nie może utworzyć nowego zgłoszenia w ServiceNow,
+
+00:09:18.920 --> 00:09:20.660
+ani zaktualizować rekordu kontaktów Salesforce.
+
+00:09:20.920 --> 00:09:23.060
+Jest to zamierzone działanie dla zapewnienia bezpieczeństwa.
+
+00:09:23.260 --> 00:09:24.960
+Jeśli potrzebujesz, aby Copilot podejmował działania,
+
+00:09:25.080 --> 00:09:26.980
+służy do tego inny model rozszerzalności zwanych wtyczkami.
+
+00:09:26.980 --> 00:09:28.900
+Jednak w przypadku wyszukiwania i pobierania danych
+
+00:09:28.900 --> 00:09:30.740
+łączniki federacyjne sprawdzają się idealnie.
+
+00:09:30.920 --> 00:09:31.860
+Którego więc użyć?
+
+00:09:31.960 --> 00:09:33.580
+To zależy od Twojego scenariusza.
+
+00:09:33.760 --> 00:09:35.900
+Z jakiego modelu łącznika powinieneś skorzystać?
+
+00:09:36.060 --> 00:09:37.780
+Więc który model łącznika wybrać?
+
+00:09:37.920 --> 00:09:39.020
+Przejdźmy do praktyki.
+
+00:09:39.200 --> 00:09:40.860
+Łącznik synchronizowany warto wybrać,
+
+00:09:40.940 --> 00:09:42.200
+gdy dane nie zmieniają się często.
+
+00:09:42.400 --> 00:09:44.440
+Pomyśl o politykach kadrowych aktualizowanych
+
+00:09:44.440 --> 00:09:45.860
+raz na kwartał wiki projektowych
+
+00:09:45.860 --> 00:09:47.920
+ze stabilną treścią lub zarchiwizowanych umowach,
+
+00:09:48.000 --> 00:09:49.900
+do których zaglądasz, ale rzadko je zmieniasz.
+
+00:09:50.040 --> 00:09:52.680
+Łączniki synchronizowane zapewniają wyszukiwanie semantyczne.
+
+00:09:52.680 --> 00:09:54.540
+Kopilot rozumie znaczenie Twojego pytania,
+
+00:09:54.740 --> 00:09:55.780
+a nie tylko słowa kluczowe.
+
+00:09:55.980 --> 00:09:58.440
+Dane stają się dostępne w całym Microsoft 365,
+
+00:09:58.840 --> 00:10:01.220
+wyszukiwarce, kopilocie, sharepointcie na całej platformie.
+
+00:10:01.460 --> 00:10:03.700
+Indeksujesz raz i jest to dostępne dla każdego.
+
+00:10:03.920 --> 00:10:05.500
+Łącznika federacyjnego używaj,
+
+00:10:05.620 --> 00:10:07.120
+gdy dane zmieniają się nieustannie,
+
+00:10:07.240 --> 00:10:09.700
+a Ty za każdym razem potrzebujesz najnowszej odpowiedzi.
+
+00:10:09.900 --> 00:10:11.220
+Bieżące zgłoszenia serwisowe,
+
+00:10:11.340 --> 00:10:13.740
+których status może się zmienić w trakcie zadawania pytania,
+
+00:10:13.940 --> 00:10:15.900
+stany magazynowe zmieniające się w ciągu dnia,
+
+00:10:16.080 --> 00:10:18.800
+aktualny status projektu aktualizowany w czasie rzeczywistym.
+
+00:10:19.000 --> 00:10:21.100
+Dzięki łącznikom federacyjnym nie przechowujesz kopii,
+
+00:10:21.100 --> 00:10:23.280
+więc nigdy nie musisz martwić się o nieaktualne dane.
+
+00:10:23.480 --> 00:10:25.820
+Otrzymujesz najświeższe odpowiedzi prosto ze źródła.
+
+00:10:26.000 --> 00:10:28.560
+Ale rzecz w tym, że nie musisz wybierać tylko jednego rozwiązania.
+
+00:10:28.780 --> 00:10:30.340
+Wiele organizacji korzysta z obu.
+
+00:10:30.540 --> 00:10:32.960
+Używają łączników synchronizowanych do statycznej bazy wiedzy,
+
+00:10:33.060 --> 00:10:36.000
+polityk HR, dokumentów wdrożeniowych i materiałów referencyjnych,
+
+00:10:36.100 --> 00:10:38.300
+a federacyjnych do dynamicznych danych operacyjnych.
+
+00:10:38.460 --> 00:10:40.320
+Bieżące zgłoszenia, aktualny stan magazynowy,
+
+00:10:40.480 --> 00:10:41.760
+status projektu w czasie rzeczywistym.
+
+00:10:41.900 --> 00:10:43.220
+To nie jest decyzja typu albo albo,
+
+00:10:43.300 --> 00:10:44.440
+to strategia jedno i drugie.
+
+00:10:44.580 --> 00:10:45.940
+Teraz porozmawiajmy o kosztach.
+
+00:10:46.080 --> 00:10:47.580
+Łączniki synchronizowane wykorzystują pamięć
+
+00:10:47.580 --> 00:10:49.340
+i moc obliczeniową wewnątrz Microsoft 365.
+
+00:10:49.760 --> 00:10:51.500
+Każdy indeksowany element zajmuje miejsce
+
+00:10:51.500 --> 00:10:53.300
+i jest przetwarzany przez indeks semantyczny.
+
+00:10:53.500 --> 00:10:54.660
+Jest to zawarte w licencji,
+
+00:10:54.840 --> 00:10:56.900
+ale istnieją limity zależne od wybranego planu.
+
+00:10:57.060 --> 00:11:00.000
+Łączniki federacyjne nie przechowują danych w Microsoft 365,
+
+00:11:00.580 --> 00:11:01.840
+więc nie zużywają tej pamięci.
+
+00:11:02.080 --> 00:11:03.840
+Wymagają jednak, aby system zewnętrzny
+
+00:11:03.840 --> 00:11:05.900
+obsługiwał każde zapytanie w czasie rzeczywistym.
+
+00:11:06.080 --> 00:11:09.080
+Jeśli Twoja instancja Salesforce ma już problemy z wydajnością,
+
+00:11:09.220 --> 00:11:11.880
+dodanie setek zapytań kopilota może spowodować problemy.
+
+00:11:12.020 --> 00:11:13.800
+Pamiętaj o tym na etapie planowania.
+
+00:11:14.380 --> 00:11:15.520
+Bezpieczeństwo i zgodność.
+
+00:11:15.780 --> 00:11:17.140
+Zanim cokolwiek skonfigurujesz,
+
+00:11:17.280 --> 00:11:19.160
+jest jedna rzecz, którą musisz dopracować.
+
+00:11:19.540 --> 00:11:19.980
+Bezpieczeństwo.
+
+00:11:20.200 --> 00:11:22.080
+Każdy pojedynczy element przechodzący przez łącznik
+
+00:11:22.080 --> 00:11:23.820
+wymaga dołączonej listy kontroli dostępu.
+
+00:11:23.960 --> 00:11:25.080
+To tak zwana lista ACL.
+
+00:11:25.360 --> 00:11:26.820
+Informuje ona Microsoft 365,
+
+00:11:27.100 --> 00:11:28.260
+kto może widzieć dany fragment danych.
+
+00:11:28.460 --> 00:11:29.520
+Jeśli zapomnisz ją dołączyć,
+
+00:11:29.640 --> 00:11:30.520
+mogą stać się dwie rzeczy.
+
+00:11:30.760 --> 00:11:32.920
+Dane mogą stać się widoczne dla wszystkich w organizacji
+
+00:11:32.920 --> 00:11:34.380
+lub stać się niewidoczne dla każdego.
+
+00:11:34.600 --> 00:11:36.100
+Żadne z tych rozwiązań nie jest dobre.
+
+00:11:36.320 --> 00:11:37.760
+Dlatego podczas konfigurowania łącznika
+
+00:11:37.760 --> 00:11:38.900
+zwróć szczególną uwagę na to,
+
+00:11:38.900 --> 00:11:40.880
+jak uprawnienia są mapoweń z systemu źródłowego.
+
+00:11:41.100 --> 00:11:43.920
+Wszystkie łączniki używają OAuth 2.0 do uwierzytelniania.
+
+00:11:44.040 --> 00:11:45.040
+To nowoczesny standard.
+
+00:11:45.360 --> 00:11:47.020
+Żadnych haseł przechowywanych w czystym tekście,
+
+00:11:47.160 --> 00:11:48.540
+żadnych współdzielonych kont usługowych
+
+00:11:48.540 --> 00:11:49.600
+ze słabymi danymi logowania.
+
+00:11:49.800 --> 00:11:50.680
+To ten sam protokół,
+
+00:11:50.840 --> 00:11:52.440
+którego używasz logując się do witryn
+
+00:11:52.440 --> 00:11:53.780
+kontem Google lub Microsoft.
+
+00:11:54.060 --> 00:11:55.620
+Łącznik uwierzytelnia się bezpiecznie,
+
+00:11:55.720 --> 00:11:58.120
+a następnie pobiera dane w oparciu o przyznane uprawnienia.
+
+00:11:58.380 --> 00:11:59.820
+Dane przesyłane są szyfrowane.
+
+00:12:00.040 --> 00:12:01.480
+Kiedy łącznik przenosi dane z Salesforce
+
+00:12:01.480 --> 00:12:03.400
+lub ServiceNow do Microsoft 365,
+
+00:12:03.980 --> 00:12:04.820
+ten ruch jest chroniony.
+
+00:12:04.820 --> 00:12:06.540
+W przypadku łączników synchronizowanych
+
+00:12:06.540 --> 00:12:08.300
+dane spoczywające w Microsoft 365
+
+00:12:08.300 --> 00:12:09.580
+również są szyfrowane.
+
+00:12:09.740 --> 00:12:12.160
+Więc nawet jeśli ktoś uzyskałby dostęp do warstwy,
+
+00:12:12.280 --> 00:12:14.440
+nie mógłby odczytać danych bez kluczy szyfrujących.
+
+00:12:14.620 --> 00:12:16.400
+A co z danymi przechowywanymi lokalnie?
+
+00:12:16.640 --> 00:12:18.060
+Może masz serwer plików w biurze
+
+00:12:18.060 --> 00:12:20.960
+lub bazę danych SQL działającą we własnym centrum danych?
+
+00:12:21.180 --> 00:12:22.780
+Nie chcesz przenosić tych danych do chmury
+
+00:12:22.780 --> 00:12:23.800
+i nie musisz tego robić.
+
+00:12:24.040 --> 00:12:26.020
+Instalujesz agenta łącznika Microsoft Graph
+
+00:12:26.020 --> 00:12:27.540
+na maszynie wewnątrz swojej sieci.
+
+00:12:27.720 --> 00:12:29.400
+Ten agent odczytuje Twoje lokalne dane
+
+00:12:29.400 --> 00:12:31.480
+i przesyła do chmury tylko tekst oraz metadane.
+
+00:12:31.480 --> 00:12:33.280
+Twoje właściwe pliki z danymi pozostają
+
+00:12:33.280 --> 00:12:34.720
+w Twojej lokalnej infrastrukturze.
+
+00:12:34.860 --> 00:12:36.920
+Przez Internet przesyłana jest tylko zawartość
+
+00:12:36.920 --> 00:12:38.160
+wymagająca indeksowania,
+
+00:12:38.360 --> 00:12:39.500
+a nie same oryginalne pliki.
+
+00:12:39.700 --> 00:12:40.800
+A oto coś, co ma znaczenie,
+
+00:12:40.980 --> 00:12:42.980
+jeśli działasz w branży podlegającej regulacjom.
+
+00:12:43.140 --> 00:12:45.300
+Łączniki Microsoft Graph dziedziczą certyfikaty
+
+00:12:45.300 --> 00:12:47.160
+zgodności Microsoft 365,
+
+00:12:47.540 --> 00:12:49.000
+ISO 27001,
+
+00:12:49.120 --> 00:12:49.780
+SOC2,
+
+00:12:49.940 --> 00:12:50.620
+HIPAA,
+
+00:12:50.800 --> 00:12:51.280
+FedRAMP.
+
+00:12:51.320 --> 00:12:54.260
+Jeśli Twoja organizacja korzysta już z Microsoft 365
+
+00:12:54.260 --> 00:12:55.940
+do zadań wymagających zgodności,
+
+00:12:56.060 --> 00:12:57.660
+te same certyfikaty obejmują dane
+
+00:12:57.660 --> 00:12:58.800
+wprowadzane przez łączniki.
+
+00:12:58.800 --> 00:13:00.660
+Nie potrzebujesz oddzielnych audytów
+
+00:13:00.660 --> 00:13:02.180
+ani dodatkowych certyfikatów
+
+00:13:02.180 --> 00:13:03.340
+dla warstwy łączników.
+
+00:13:03.560 --> 00:13:04.400
+Chcesz spróbować?
+
+00:13:04.700 --> 00:13:05.640
+Oto jak zacząć.
+
+00:13:05.880 --> 00:13:06.780
+Rozpoczęcie pracy.
+
+00:13:07.020 --> 00:13:08.420
+Od czego więc zacząć w praktyce?
+
+00:13:08.600 --> 00:13:09.380
+Pierwszym miejscem jest
+
+00:13:09.380 --> 00:13:11.180
+Centrum Administracyjne Microsoft 365.
+
+00:13:11.640 --> 00:13:13.160
+Przejdź do sekcji wyszukiwania i analizy,
+
+00:13:13.220 --> 00:13:14.420
+a następnie otwórz źródła danych.
+
+00:13:14.560 --> 00:13:16.080
+To tam znajdziesz galerię łączników.
+
+00:13:16.280 --> 00:13:18.500
+To lista ponad 100 gotowych do użycia łączników.
+
+00:13:18.780 --> 00:13:19.680
+Wybierz jeden z nich.
+
+00:13:19.920 --> 00:13:21.080
+Załóżmy, że ServiceNow.
+
+00:13:21.300 --> 00:13:21.780
+Kliknij go,
+
+00:13:21.880 --> 00:13:24.020
+a kreator konfiguracji przeprowadzi Cię przez cały proces.
+
+00:13:24.320 --> 00:13:25.460
+Uwierzytelniasz się w ServiceNow
+
+00:13:25.460 --> 00:13:26.720
+za pomocą OAuth 2.0.
+
+00:13:26.920 --> 00:13:28.780
+Następnie wybierasz dane do synchronizacji.
+
+00:13:29.020 --> 00:13:30.860
+Może tylko incydenty i artykuły bazy wiedzy
+
+00:13:30.860 --> 00:13:31.960
+zamiast całej bazy danych.
+
+00:13:32.200 --> 00:13:33.420
+Mapujesz pola z ServiceNow
+
+00:13:33.420 --> 00:13:34.740
+na schemat Microsoft Graph
+
+00:13:34.740 --> 00:13:36.140
+i konfigurujesz listy ACL,
+
+00:13:36.300 --> 00:13:37.980
+aby uprawnienia zostały poprawnie przeniesione.
+
+00:13:38.220 --> 00:13:39.400
+W przypadku prostej konfiguracji
+
+00:13:39.400 --> 00:13:41.080
+cały proces zajmuje około 30 minut.
+
+00:13:41.260 --> 00:13:42.540
+A co, jeśli Twoje źródło danych
+
+00:13:42.540 --> 00:13:43.580
+nie ma gotowego łącznika?
+
+00:13:43.840 --> 00:13:44.920
+Możesz zbudować własny.
+
+00:13:44.920 --> 00:13:46.900
+Użyj interfejsu API łączników Microsoft Graph
+
+00:13:46.900 --> 00:13:49.000
+lub zestawu narzędzi agenta Microsoft 365.
+
+00:13:49.480 --> 00:13:50.960
+Musisz utworzyć trzy elementy.
+
+00:13:51.120 --> 00:13:51.900
+Po pierwsze, połączenie,
+
+00:13:52.060 --> 00:13:53.620
+które wskaże Microsoft 365,
+
+00:13:53.960 --> 00:13:54.680
+gdzie znajdują się dane.
+
+00:13:54.680 --> 00:13:55.700
+Po drugie, schemat,
+
+00:13:55.880 --> 00:13:57.460
+który określa, jakie pola istnieją
+
+00:13:57.460 --> 00:13:58.460
+i jak są MapoWayne.
+
+00:13:58.540 --> 00:13:59.980
+Po trzecie, sposób zarządzania
+
+00:13:59.980 --> 00:14:01.160
+elementami zewnętrznymi.
+
+00:14:01.460 --> 00:14:03.460
+Dodawanie, aktualizowanie i usuwanie ich,
+
+00:14:03.580 --> 00:14:05.120
+gdy zmieniają się w systemie źródłowym.
+
+00:14:05.300 --> 00:14:06.020
+To więcej pracy,
+
+00:14:06.180 --> 00:14:07.540
+ale daje pełną kontrolę nad tym,
+
+00:14:07.640 --> 00:14:08.760
+co i jak jest indeksowane.
+
+00:14:09.020 --> 00:14:10.180
+Gdy łącznik jest gotowy,
+
+00:14:10.280 --> 00:14:10.900
+przetestuj go.
+
+00:14:11.160 --> 00:14:12.180
+Zadaj kopilotowi pytanie,
+
+00:14:12.180 --> 00:14:14.180
+które powinno pobrać dane z nowego źródła.
+
+00:14:14.380 --> 00:14:16.680
+Na przykład, pokaż mi otwarte incydenty z ServiceNow
+
+00:14:16.680 --> 00:14:18.620
+lub jaka jest najnowsza umowa w Salesforce.
+
+00:14:19.000 --> 00:14:20.480
+Sprawdź, czy wyniki się pojawiają.
+
+00:14:20.760 --> 00:14:21.440
+Następnie sprawdź,
+
+00:14:21.440 --> 00:14:22.680
+czy tylko uprawnieni użytkownicy
+
+00:14:22.680 --> 00:14:23.600
+widzą właściwe wyniki.
+
+00:14:23.860 --> 00:14:24.900
+Jeśli ktoś z działu marketingu
+
+00:14:24.900 --> 00:14:25.880
+zapyta o konto sprzedażowe,
+
+00:14:25.960 --> 00:14:26.640
+nie powinien go widzieć.
+
+00:14:26.860 --> 00:14:27.640
+Jeśli jednak je widzi,
+
+00:14:27.740 --> 00:14:29.200
+twoje listy ACL wymagają poprawy.
+
+00:14:29.360 --> 00:14:30.820
+Podsumujmy to w szerszej perspektywie.
+
+00:14:31.040 --> 00:14:31.720
+Teraz już wiesz,
+
+00:14:31.860 --> 00:14:32.880
+czym są łączniki graf.
+
+00:14:33.000 --> 00:14:33.980
+Pozwalają one wprowadzać
+
+00:14:33.980 --> 00:14:35.820
+zewnętrzne dane do Microsoft 365.
+
+00:14:36.380 --> 00:14:38.300
+Dane, których kopilot nie widzi samodzielnie.
+
+00:14:38.300 --> 00:14:39.740
+Masz do wyboru dwa modele.
+
+00:14:40.020 --> 00:14:41.340
+Zsynchronizowane łączniki kopiują
+
+00:14:41.340 --> 00:14:42.160
+i indeksują dane,
+
+00:14:42.280 --> 00:14:43.740
+zapewniając wyszukiwanie semantyczne
+
+00:14:43.740 --> 00:14:44.760
+i szeroką dostępność.
+
+00:14:44.940 --> 00:14:46.000
+Łączniki federacyjne
+
+00:14:46.000 --> 00:14:47.620
+odpytują źródło w czasie rzeczywistym,
+
+00:14:47.740 --> 00:14:48.920
+dając aktualne odpowiedzi
+
+00:14:48.920 --> 00:14:49.980
+bez przechowywania kopii.
+
+00:14:50.140 --> 00:14:51.200
+Oto dlaczego to ważne.
+
+00:14:51.440 --> 00:14:53.160
+Kopilot staje się naprawdę użyteczny,
+
+00:14:53.320 --> 00:14:54.740
+gdy widzi wszystkie dane firmowe,
+
+00:14:54.880 --> 00:14:56.620
+a nie tylko te z SharePointa i OnDrive.
+
+00:14:56.820 --> 00:14:57.900
+Kopilot, który zna tylko
+
+00:14:57.900 --> 00:14:59.300
+twoje e-maile i dokumenty,
+
+00:14:59.420 --> 00:15:00.740
+jest ograniczonym asystentem.
+
+00:15:00.920 --> 00:15:02.060
+Kopilot, który zna też
+
+00:15:02.060 --> 00:15:03.980
+twój CRM, system zgłoszeniowy,
+
+00:15:04.140 --> 00:15:05.740
+bazę HR i wiki projektowe,
+
+00:15:05.840 --> 00:15:07.400
+to kopilot, który może zmienić
+
+00:15:07.400 --> 00:15:08.540
+sposób twojej pracy.
+
+00:15:08.800 --> 00:15:10.220
+Twój kolejny krok jest prosty.
+
+00:15:10.400 --> 00:15:11.500
+Wybierz jeden zewnętrzny system,
+
+00:15:11.620 --> 00:15:12.460
+który zawiera kluczowe dane
+
+00:15:12.460 --> 00:15:13.240
+dla twojego zespołu.
+
+00:15:13.240 --> 00:15:14.540
+Skonfiguruj dla niego łącznik
+
+00:15:14.540 --> 00:15:15.140
+w tym tygodniu.
+
+00:15:15.320 --> 00:15:16.480
+Zobacz, jak zmienia to działanie
+
+00:15:16.480 --> 00:15:17.220
+twojego kopilota.
+
+00:15:17.460 --> 00:15:18.260
+Możesz być zaskoczony,
+
+00:15:18.380 --> 00:15:19.180
+jak bardziej użyteczny
+
+00:15:19.180 --> 00:15:19.860
+staje się kopilot,
+
+00:15:19.980 --> 00:15:20.840
+gdy ma dostęp do danych,
+
+00:15:20.980 --> 00:15:21.920
+które faktycznie napędzają
+
+00:15:21.920 --> 00:15:22.440
+twój biznes.
+
+00:15:22.600 --> 00:15:23.600
+To był kolejny odcinek
+
+00:15:23.600 --> 00:15:24.800
+Microsoft Knowledge Nugget
+
+00:15:24.800 --> 00:15:26.840
+tutaj w M365FM.
+
+00:15:27.040 --> 00:15:28.280
+Nazywam się Mirko Peters.
+
+00:15:28.540 --> 00:15:29.580
+Jeśli pomogło ci to lepiej
+
+00:15:29.580 --> 00:15:30.740
+zrozumieć łączniki grafu,
+
+00:15:30.840 --> 00:15:32.000
+zasubskrybuj nas na swojej
+
+00:15:32.000 --> 00:15:33.420
+ulubionej platformie podcastowej
+
+00:15:33.420 --> 00:15:35.040
+i udostępnij ten odcinek koledze,
+
+00:15:35.180 --> 00:15:35.920
+który zastanawia się,
+
+00:15:36.040 --> 00:15:37.060
+dlaczego kopilot nie widzi
+
+00:15:37.060 --> 00:15:37.960
+jego danych z Salesforce.
+
+00:15:37.960 --> 00:15:39.900
+Do usłyszenia następnym razem.
+
+00:15:41.380 --> 00:15:41.940
+Powodzenia!

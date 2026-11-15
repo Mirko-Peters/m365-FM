@@ -1,4 +1,4 @@
-// Event <-> Event-Entitaet (Migration 0046): ein Event der Events-Liste gehoert zu einer Entitaet vom Typ event ("Microsoft Ignite 2026" -> microsoft-ignite).
+// Event <-> Event-Entitaet (Migration 0048): ein Event der Events-Liste gehoert zu einer Entitaet vom Typ event ("Microsoft Ignite 2026" -> microsoft-ignite).
 // Die Entitaet haelt die Beschreibung, die Events liefern Termine, Sessions und Speaker. Zwei Spalten am Event: entity (ID) und entity_state:
 //   ''          noch nicht entschieden - der Cron darf einen Vorschlag eintragen        suggested  automatischer Vorschlag (Namensvergleich), NICHT oeffentlich
 //   proposed    vom Veranstalter im Event-Formular gewaehlt, NICHT oeffentlich            confirmed  vom Admin bestaetigt oder gesetzt: nur das erscheint oeffentlich

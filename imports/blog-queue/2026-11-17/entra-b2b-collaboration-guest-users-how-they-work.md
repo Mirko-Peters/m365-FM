@@ -1,0 +1,127 @@
+---
+title: "Entra B2B Collaboration and Guest Users: How They Work and How to Manage Them"
+summary: "What Microsoft Entra B2B collaboration is, how guests are invited and redeem access, what a guest user object looks like, which settings control who can invite whom, and how guests are billed."
+status: review
+publish: false
+author: mirko-p
+date: 2026-11-17
+topics: [b2b-collaboration, guest-access, entra-external-id, cross-tenant-access-settings]
+keypoints:
+  - "B2B collaboration lets partners sign in with their own identities. You do not manage their passwords or account lifecycle."
+  - "Invite a guest in the Microsoft Entra admin center under Entra ID > Users > Invite external user. The guest is created with UserType Guest and shows Pending acceptance until redemption."
+  - "A guest UPN contains #EXT#. By default guests have restricted directory permissions."
+  - "Cross-tenant access settings and external collaboration settings both apply. The most restrictive one wins."
+  - "Billing uses monthly active users (MAU) of external guests. The page read here does not state the free allowance or prices."
+faq:
+  - q: "What is Microsoft Entra B2B collaboration?"
+    a: "According to Microsoft Learn, B2B collaboration is a feature of Microsoft Entra External ID that lets your workforce share applications and services with business partners and guests while keeping control of corporate data. Partners use their own identities and do not need Microsoft Entra ID or an IT department."
+  - q: "How do I invite a guest user?"
+    a: "Microsoft Learn describes signing in to the Microsoft Entra admin center as at least a User Administrator, going to Entra ID > Users, selecting Invite external user, entering the email and display name, and selecting Review and invite and then Invite. The guest receives an email with an invitation link."
+  - q: "What does a guest account look like in the directory?"
+    a: "Microsoft Learn says the guest appears as a user object with UserType Guest and a user principal name that contains #EXT#. For john@contoso.com in the fabrikam directory, the example is john_contoso.com#EXT#@fabrikam.onmicrosoft.com. Before redemption the invitation state is Pending acceptance."
+  - q: "What can guests see in my directory?"
+    a: "Microsoft Learn states that guests have default restricted directory permissions. They can manage their own profile and retrieve some information about other users, groups and apps, but they cannot read all directory information. Admins can relax these restrictions deliberately under External users in user settings."
+  - q: "What is the difference between a B2B guest and a member?"
+    a: "According to Microsoft Learn, UserType is Guest by default for invited B2B users, while Member means an employee of the host organization. UserType does not say how the user signs in or what directory role they have. A guest UPN contains #EXT#."
+  - q: "How are B2B guests billed?"
+    a: "Microsoft Learn describes a monthly active users model for external guests with UserType Guest, with a free tier and pay-for-what-you-use pricing. The billing page read for this article does not give the free threshold or per-user prices and points to the External ID pricing page for current figures."
+---
+
+Microsoft Entra B2B collaboration lets people from other organizations sign in to your apps with their own identities. You invite these external users, they appear in your Microsoft Entra ID tenant as guest users, and you control what they can reach with groups, apps, Conditional Access policies and cross-tenant access settings. You do not manage their passwords or account lifecycle.
+
+## What B2B collaboration is
+
+Microsoft Learn describes B2B collaboration as part of Microsoft Entra External ID. It is meant for workforce tenants. Your workforce shares applications and services with external partners and guests while keeping control of corporate data. Partners do not need Microsoft Entra ID or their own IT department.
+
+Guests can sign in with work, school or social identities. Microsoft lists providers such as Microsoft accounts, Google and Facebook, plus enterprise identity providers through federation. Email one-time passcode is on by default for new tenants and for existing tenants that have not turned it off. If it is off, the fallback is to ask invitees to create a Microsoft account.
+
+## Four ways guests get in
+
+Per Microsoft Learn:
+
+1. **Admin invitation.** In the Microsoft Entra admin center you create a guest and send an invitation email with a redemption link or a direct link to an app.
+2. **Self-service sign-up.** A user flow lets guests sign up for apps or resources themselves. API connectors can add approval workflows or identity verification.
+3. **Delegated invitation.** App and group owners add guests from the Access Panel at myapps.microsoft.com once an admin sets up self-service app and group management.
+4. **Developer APIs.** The B2B invitation APIs let you customize invitations or build sign-up portals.
+
+## How to invite a guest in the admin center
+
+1. Sign in to the Microsoft Entra admin center at entra.microsoft.com as at least a User Administrator. The quickstart's prerequisites also mention a role that can create users, such as at least Guest Inviter, so the page is not fully consistent on the minimum role.
+2. Browse to **Entra ID** > **Users**.
+3. Select **Invite external user**.
+4. On the **Basics** tab, enter the **Email** and **Display name**. An invitation message is optional.
+5. Select **Review and invite**, check the details and select **Invite**.
+
+An email goes out and the guest account is added to the directory. Invitation alone does not give access to apps. To make an app appear in the guest's My Apps page, add the guest to the app. Invitation emails from the default onmicrosoft.com domain are subject to Exchange Online sending limits, and Microsoft suggests a custom domain for higher limits.
+
+### The guest sign-in experience
+
+The guest then opens the email from Microsoft Invitations, selects **Accept invitation**, accepts the **Permission requested by** page and lands on My Apps.
+
+## What the guest object looks like
+
+According to Microsoft Learn's page on guest user properties:
+
+- **UserType** is `Guest` by default for invited B2B users. `Member` means an employee of the host organization. UserType says nothing about how the user signs in or their directory role.
+- **User principal name** contains `#EXT#`.
+- **Identities** shows the sign-in provider, for example `ExternalAzureAD`, `Microsoft account`, `google.com` or `mail` for email one-time passcode. It is independent of UserType.
+- **Before redemption**, the account has no credentials, the invitation state is **Pending acceptance** and the inviter is set as the default **Sponsor**.
+
+Microsoft says phone sign-in is not supported for external users. If a guest changes their email address after accepting, the new address does not sync automatically to the guest object, so the `mail` property must be updated.
+
+## Guest versus member
+
+A guest and a member differ in the **UserType** property. Per Microsoft Learn, `Guest` is the default for invited B2B users and `Member` means an employee of the host organization. The property does not describe how the user signs in or which directory role they hold, so a guest is identified by UserType and the `#EXT#` marker in the user principal name rather than by how they authenticate.
+
+## Default permissions
+
+Guests have restricted directory permissions by default. They can manage their own profile and password and retrieve some information about other users, groups and apps, but they cannot read all directory information. Guests are hidden from the Exchange Global Address List by default. Microsoft's page on guest properties also says guests are not supported in Teams shared channels and points to B2B direct connect for that scenario.
+
+You can relax the restrictions under the **External users** option in user settings, but Microsoft frames this as a deliberate choice.
+
+## The two settings that decide who can collaborate
+
+**Cross-tenant access settings** control whether users can authenticate with other Microsoft Entra organizations, inbound and outbound. B2B collaboration with other Microsoft Entra tenants is enabled by default. You can scope by users, groups and applications, set a default for all organizations and add organization-specific settings. You can also trust MFA and device claims from other Entra organizations.
+
+**External collaboration settings** control who in your organization can send invitations. By default all users, including guests, can invite external users. You can switch invitations off, limit them to roles, allow or block domains, and restrict guest access to the directory.
+
+When both apply, the most restrictive setting wins. Microsoft's example: if a domain is on the blocked list in external collaboration settings, users cannot invite it even if cross-tenant access allows all Entra organizations. Existing guests from a blocked domain keep access.
+
+## Managing guests over time
+
+Microsoft Learn names these controls:
+
+- **Conditional Access**, for example multifactor authentication, at tenant, application or guest level. Together with the option to trust MFA claims from a partner's Entra organization in cross-tenant access settings, this decides how guests authenticate.
+- **Entitlement management**, to manage external user access.
+
+
+The guest properties page does not describe removing guests. For a test guest, the quickstart says to select the user and choose **Delete user**.
+
+## Securing external collaboration: a checklist
+
+This checklist only restates settings described above, so confirm the details in Microsoft Learn before you change a production tenant.
+
+1. **Decide who may invite.** In external collaboration settings, keep the default of all users, limit invitations to roles, or switch them off.
+2. **Limit which external partners can be invited.** Use the allow or block list for domains, and remember that existing guests from a blocked domain keep access.
+3. **Set cross-tenant access settings** per organization when the default for all organizations is too broad, scoped by users, groups and applications.
+4. **Require authentication that fits the risk.** Use Conditional Access for guests, and trust MFA claims from a partner tenant only when you choose to.
+5. **Keep directory permissions restricted.** Relax the External users option only as a deliberate decision.
+6. **Add guests only to the apps they need**, because an invitation alone does not give access to apps.
+
+## Licensing and billing
+
+Microsoft Learn describes billing by monthly active users (MAU): unique external users who authenticate within a calendar month. It applies to external guests in workforce tenants with UserType `Guest`, and members from within your own organization do not count. There is a free tier. The pages read here do not give the threshold or prices, so check the External ID pricing page. A workforce tenant must be linked to a subscription for billing, under **Entra ID** > **External Identities** > **Overview** > **Subscriptions** > **Linked subscriptions**.
+
+## Related
+
+- [B2B collaboration](https://www.m365.fm/entity/b2b-collaboration/)
+- [Guest access](https://www.m365.fm/entity/guest-access/)
+- [Cross-tenant access settings](https://www.m365.fm/entity/cross-tenant-access-settings/)
+- [Entra External ID](https://www.m365.fm/entity/entra-external-id/)
+
+## Sources
+
+- [Microsoft Learn: B2B collaboration overview](https://learn.microsoft.com/en-us/entra/external-id/what-is-b2b)
+- [Microsoft Learn: Properties of a B2B guest user](https://learn.microsoft.com/en-us/entra/external-id/user-properties)
+- [Microsoft Learn: Quickstart, add guest users in the portal](https://learn.microsoft.com/en-us/entra/external-id/b2b-quickstart-add-guest-users-portal)
+- [Microsoft Learn: Billing model for Microsoft Entra External ID](https://learn.microsoft.com/en-us/entra/external-id/external-identities-pricing)
