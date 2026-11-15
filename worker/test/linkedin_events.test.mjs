@@ -1,4 +1,4 @@
-// LinkedIn-Events: nur Fixtures, kein Netz. HeySummit nur als Zusatzinfo (echte Feldnamen; seit der Pruefliste 0045 keine Voraussetzung mehr), Reservierung vor dem LinkedIn-Aufruf, Nutzlast nach Event,
+// LinkedIn-Events: nur Fixtures, kein Netz. HeySummit nur als Zusatzinfo (echte Feldnamen; seit der Pruefliste 0047 keine Voraussetzung mehr), Reservierung vor dem LinkedIn-Aufruf, Nutzlast nach Event,
 // Regeln je Aktion auf dem Server, verwaiste LinkedIn-Events, Routen und Deploy-Abgleich, Konto loeschen/zusammenfuehren, OAuth-State, Token-Verschluesselung.
 // Zweite Runde (R2-1 bis R2-5): Wartezeit ab der Reservierung, Vorauswahl nach HeySummit-Zeitraum vor dem LIMIT, HeySummit-Entwuerfe, auf LinkedIn geloeschte
 // Events, sofortiges Nachtragen nach store_failed.
@@ -155,7 +155,7 @@ test("323-1 Regel: Verknuepfung allein genuegt nie, es zaehlt die Ueberschneidun
   assert.equal(matchHeySummit(EV, hs, {}, Date.UTC(2027, 1, 1)).reason, "past");
 });
 
-test("323-1 Server (Pruefliste 0045): HeySummit ist keine Voraussetzung mehr - jedes uebernommene, kommende Event mit Uhrzeit ist ein Kandidat, ein passendes HeySummit-Event nur Zusatzinfo", async () => {
+test("323-1 Server (Pruefliste 0047): HeySummit ist keine Voraussetzung mehr - jedes uebernommene, kommende Event mit Uhrzeit ist ein Kandidat, ein passendes HeySummit-Event nur Zusatzinfo", async () => {
   const { raw, env } = await setup(); await connected(env);
   addEv(raw); addEv(raw, { id: 2, handle: "spaeter", title: "Gleicher Host, anderer Termin", start: "2027-06-15T10:00", end: "" }); addEv(raw, { id: 3, handle: "alt-dach", title: "Vorbei", url: "https://de.m365con.net/", start: "2027-06-16T10:00", end: "" });
   addEv(raw, { id: 4, handle: "stream", title: "Stream zur Keynote", url: "", start: "2027-01-11T08:30", end: "" });
@@ -444,7 +444,7 @@ test("323-8 Vorschlagsliste: Datumsfilter in SQL (nicht die 300 aeltesten), naec
   addEv(raw, { id: 1001, handle: "tag-2", title: "Tag 2", start: "2027-01-12T09:00", end: "2027-01-12T17:00" }); addEv(raw, { id: 1002 });
   addEv(raw, { id: 1003, handle: "letzter-tag", title: "Letzter Tag", start: "2027-01-22T09:00", end: "" }); addEv(raw, { id: 1004, handle: "kein-treffer", title: "Anderer Termin", start: "2027-03-01T09:00", end: "" });
   const f = mockFetch([]), p = await proposals(env, f, NOW);
-  assert.deepEqual(p.items.map((x) => x.handle), ["m365con-day1", "tag-2", "letzter-tag", "kein-treffer"]);   // auch ohne gleichzeitiges HeySummit-Event (Pruefliste 0045)
+  assert.deepEqual(p.items.map((x) => x.handle), ["m365con-day1", "tag-2", "letzter-tag", "kein-treffer"]);   // auch ohne gleichzeitiges HeySummit-Event (Pruefliste 0047)
   assert.ok(p.items.every((x) => x.state === "proposal" && x.can.join() === "publish"));
   // veroeffentlichte stehen weiter in der Liste (mit Knoepfen), auch hinter vielen vergangenen Events
   assert.equal((await act(env, ADMIN, "publish", "tag-2", true, f, NOW)).ok, true);

@@ -39,12 +39,15 @@ def blog_done():
     return out
 
 
-def build(write, TODAY, ents, legacy_posts, episodes):
-    """legacy_posts: [{slug,title}], episodes: [{slug,title}] der Hauptshow."""
+def build(write, TODAY, ents, legacy_posts, episodes, content_posts=()):
+    """legacy_posts: [{slug,title}] alle frueheren Beitraege (auch die, die schon in der Datenbank stehen), episodes: [{slug,title}] der Hauptshow,
+    content_posts: [{slug,title}] freigegebene Content-Pakete (Schluessel content/<slug>, wie in data/blog_i18n)."""
     rows = []
     done = blog_done()
     by_slug = {l: set(v) for l, v in done.items()}
     for p in legacy_posts:
+        rows.append({"k": "lblog", "id": p["slug"], "t": p["title"][:120], "lang": "en", "langs": [l for l in LANGS if p["slug"] in by_slug.get(l, ())]})
+    for p in content_posts:
         rows.append({"k": "lblog", "id": p["slug"], "t": p["title"][:120], "lang": "en", "langs": [l for l in LANGS if p["slug"] in by_slug.get(l, ())]})
     notes = {}
     for l in LANGS:
@@ -62,4 +65,4 @@ def build(write, TODAY, ents, legacy_posts, episodes):
         rows.append({"k": "entity", "id": e["id"], "t": e["name"][:120], "lang": src, "langs": (["de"] if has_de and src == "en" else [])})
     write("translation-status.json", json.dumps({"generated": TODAY, "langs": LANGS, "rows": rows}, ensure_ascii=False))
     n = {k: sum(1 for r in rows if r["k"] == k) for k in ("lblog", "notes", "entity")}
-    print(f"Uebersetzungsstatus: {n['lblog']} fruehere Beitraege, {n['notes']} Show Notes, {n['entity']} Entitaeten; de: {len(done.get('de', []))} Beitraege uebersetzt")
+    print(f"Uebersetzungsstatus: {n['lblog']} Beitraege (fruehere und Content-Pakete), {n['notes']} Show Notes, {n['entity']} Entitaeten; de: {len(done.get('de', []))} Beitraege uebersetzt")

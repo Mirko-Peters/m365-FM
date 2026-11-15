@@ -5,6 +5,8 @@ import unicodedata
 from pathlib import Path
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from site_learn import esc, LCSS, ENTS
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
+import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht
 
 ROOT = Path(__file__).parent
 
@@ -109,6 +111,8 @@ def _similarity(left, right):
 def _indexable(items, kind="hub", intro="", detail="", parent=""):
     minimum = 5 if kind == "topic" else 3
     own_text = f"{intro} {detail}".strip()
+    if kind != "hub" and items and IR.long_enough(own_text) and _similarity(own_text, parent) < 0.5:
+        return True   # 13.11.2026: eigener Text >= 2500 Zeichen (Sprache der Seite; die Aufrufer uebergeben nur uebersetzte Texte): index, auch mit weniger Eintraegen/Woertern; ein Duplikat des Elterntexts bleibt noindex
     return (len(items) >= minimum if kind != "hub" else len(items) >= minimum) and \
         (kind == "hub" or (bool(parent) and len(_words(own_text)) >= 150 and _similarity(own_text, parent) < 0.5))
 
@@ -206,7 +210,8 @@ def build(g):
                 f'{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
         hub_indexable = lang in hub_alternates
         alternates = hub_alternates if hub_indexable else None
-        write(f"{pfx2(lang)}directory/index.html", page(lang, s["title"], s["intro"], canonical, body, alternates, hub_schema, xdefault=alternates.get("en") if alternates else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not hub_indexable))
+        _hm = MM.directory_hub_meta(lang, *(sum(i.get("type") == k for i in items) for k in ("expert", "company", "event"))) or (s["title"], s["intro"])   # en/de: Inhalt + Zahlen aus den Eintraegen
+        write(f"{pfx2(lang)}directory/index.html", page(lang, _hm[0], _hm[1], canonical, body, alternates, hub_schema, xdefault=alternates.get("en") if alternates else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not hub_indexable))
         if hub_indexable:
             g["sitemap"].append((canonical, today, None))
 
@@ -301,6 +306,9 @@ def build(g):
                     f'{sections}{neighbors}<section><h2>{esc(s["directory"])}: {len(entries)} {esc(s["result"])}</h2>{_list(entries, lang, s)}</section></main>{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
             own_indexable = data["indexable"]
             alts = page_alternates if own_indexable else None
-            write(f"{pfx2(lang)}{rel}index.html", page(lang, title, intro or title, canonical, body, alts, structured, xdefault=alts.get("en") if alts else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not own_indexable))
+            _cx, _cc, _ce = (sum(i.get("type") == k for i in entries) for k in ("expert", "company", "event"))
+            _mt = MM.directory_place_title(lang, kind, label, place, _cx, _cc) or title   # en/de: Suchabsicht + Zahlen; andere Sprachen bisheriger Titel
+            _md = MM.directory_place_desc(lang, kind, label, place, _cx, _cc, _ce, intro) or intro or title
+            write(f"{pfx2(lang)}{rel}index.html", page(lang, _mt, _md, canonical, body, alts, structured, xdefault=alts.get("en") if alts else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not own_indexable))
             if own_indexable:
                 g["sitemap"].append((canonical, today, None))

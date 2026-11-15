@@ -1,0 +1,826 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.880 --> 00:00:12.420
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.420 --> 00:00:18.540
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.760 --> 00:00:21.700
+Geen algemene dia's, geen eindeloze modewoorden.
+
+00:00:21.940 --> 00:00:29.120
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.120 --> 00:00:34.880
+Of je nu IT professional, ontwikkelaar of business leader bent, er zijn sessies voor jou ontworpen.
+
+00:00:34.880 --> 00:00:40.520
+Met 10 volledige dagen kun je meerdere technologieën verkennen en verbinding maken met een wereldwijde community.
+
+00:00:40.860 --> 00:00:44.600
+Kijk live en neem praktische inzichten mee terug naar jouw organisatie.
+
+00:00:44.900 --> 00:00:49.160
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.420 --> 00:00:51.160
+De registratie is nu geopend.
+
+00:00:51.860 --> 00:00:55.920
+Ga naar m365.com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.700 --> 00:00:58.960
+Dat is m365.com.net.
+
+00:01:00.020 --> 00:01:04.420
+Meld je nu aan op m365.com.net en we zien je live in januari.
+
+00:01:04.680 --> 00:01:07.400
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets.
+
+00:01:07.580 --> 00:01:09.080
+Ik ben je gastheer Milko Peters.
+
+00:01:09.360 --> 00:01:13.160
+Wat als je je eigen cloudapps opzettelijk en gecontroleerd zou kunnen verbreken om ze sterker te maken?
+
+00:01:13.340 --> 00:01:17.280
+Klinkt tegenstrijdig, maar het is dezelfde logica die brandweerlieden gebruiken bij gecontroleerd afbranden.
+
+00:01:17.440 --> 00:01:22.460
+Ze steken bewust kleine brandjes aan om droog struikgewas te verwijderen, zodat er bij een echte bosbrand niets meer is om te branden.
+
+00:01:22.660 --> 00:01:25.120
+Dat is wat Azure Chaos Studio voor jouw cloudapps doet.
+
+00:01:25.120 --> 00:01:32.640
+Aan het eind van deze aflevering begrijp je wat de service is, waarom je het zou willen gebruiken en hoe het je helpt systemen te bouwen die niet bezwijken als er iets misgaat.
+
+00:01:32.780 --> 00:01:35.260
+Dus pak je koffie en laten we beginnen met het probleem.
+
+00:01:35.600 --> 00:01:38.640
+Het probleem waarom traditioneel testen niet genoeg is.
+
+00:01:38.900 --> 00:01:40.640
+Dit is het punt met traditioneel testen.
+
+00:01:40.820 --> 00:01:44.280
+Het controleert of je software werkt zoals ontworpen onder normale omstandigheden.
+
+00:01:44.280 --> 00:01:48.080
+Je schrijft een test, voert deze uit, en als de uitvoer overeenkomt, ben je geslaagd.
+
+00:01:48.180 --> 00:01:57.000
+Geweldig voor het vinden van bugs, maar het mist hoe je systeem zich gedraagt als iets onverwachts faalt, zoals een netwerk timeout, een virtuele machine die crash, of een volledige beschikbaarheidszone die uitvalt.
+
+00:01:57.240 --> 00:01:58.980
+Moderne cloudapps zijn niet simpel meer.
+
+00:01:59.180 --> 00:02:06.280
+Het zijn gedistribueerde systemen die communiceren met databases, caches, identiteitsdiensten, externe APIs en andere microservices en al die onderdelen hebben verborgen afhankelijkheden.
+
+00:02:06.980 --> 00:02:09.380
+Een kleine fout kan door het hele systeem kaskaderen.
+
+00:02:09.380 --> 00:02:17.040
+Een database wordt traag, de app krijgt een timeout, de loadbalancer markeert deze als ongezond, verkeer wordt omgeleid, andere instanties raken overbelast en plotseling ligt je hele applicatie plat.
+
+00:02:17.420 --> 00:02:24.760
+Traditioneel testen vangt dat niet op, omdat het test onder perfecte omstandigheden met alles beschikbaar, nul netwerklatentie en niemand die VM's afsluit tijdens je te stram.
+
+00:02:24.960 --> 00:02:28.600
+Dus je implementeert in productie vol vertrouwen en dan slaat de realiteit toe.
+
+00:02:28.740 --> 00:02:33.840
+En dat vals vertrouwen is gevaarlijk, want het is het verschil tussen weten dat je systeem werkt en weten dat het overleeft.
+
+00:02:34.000 --> 00:02:36.160
+En daar komt chaos engineering om de hoek kijken.
+
+00:02:36.400 --> 00:02:37.820
+Wat is chaos engineering eigenlijk?
+
+00:02:37.820 --> 00:02:40.060
+Chaos engineering is een praktische methode.
+
+00:02:40.280 --> 00:02:43.900
+Je injecteert echte, gecontroleerde fouten in je systeem en observeert hoe het reageert.
+
+00:02:44.120 --> 00:02:45.880
+Dit gebeurt niet in een lab of een simulatie.
+
+00:02:46.080 --> 00:02:47.680
+Het gebeurt op je werkelijke resources.
+
+00:02:48.020 --> 00:02:49.000
+Het idee is simpel.
+
+00:02:49.220 --> 00:02:50.220
+Je begint met een hypothese.
+
+00:02:50.420 --> 00:02:55.040
+Bijvoorbeeld, als we één virtuele machine verliezen, moet de loadbalancer het verkeer naar de overige instanties blijven leiden.
+
+00:02:55.240 --> 00:02:56.540
+Dan voer je een experiment uit.
+
+00:02:56.720 --> 00:02:58.600
+Je sluit die VM af en kijkt wat er gebeurt.
+
+00:02:58.820 --> 00:03:00.080
+Doet de loadbalancer zijn werk?
+
+00:03:00.320 --> 00:03:01.320
+Blijft de app in de lucht?
+
+00:03:01.560 --> 00:03:02.780
+Werken je waarschuwingen correct?
+
+00:03:02.780 --> 00:03:05.680
+Je meet alles en repareert vervolgens wat kapot gaat.
+
+00:03:05.940 --> 00:03:06.660
+Dit is het punt.
+
+00:03:06.660 --> 00:03:09.180
+Chaos engineering is geen willekeurige vernietiging.
+
+00:03:09.340 --> 00:03:12.580
+Het is niet een ontwikkelaar die de surferruimte inloopt en voor de lolkabels lostrekt.
+
+00:03:12.740 --> 00:03:15.140
+Het is wetenschappelijk, herhaalbaar en veiligheidsgebonden.
+
+00:03:15.360 --> 00:03:19.160
+Je bepaalt de actieradius en controleert precies wat er faalt, wanneer en voor hoe lang.
+
+00:03:19.340 --> 00:03:21.080
+En het belangrijkste is dat je ervan leert.
+
+00:03:21.280 --> 00:03:23.020
+Elk experiment levert bewijs op.
+
+00:03:23.120 --> 00:03:27.980
+Of je hypothese was juist en je systeem is veerkrachtig, of het was onjuist en je hebt een zwakpunt gevonden om te herstellen.
+
+00:03:28.160 --> 00:03:29.280
+Hoe dan ook, je wint.
+
+00:03:29.280 --> 00:03:32.780
+De uitdaging is dat het bouwen van je eigen chaos engineering tools lastig is.
+
+00:03:32.920 --> 00:03:39.200
+Je moet scripts schrijven om VM's af te sluiten, CPU druk te injecteren, netwerkverkeer te blokkeren en dat alles veilig en herhaalbaar orkestreren.
+
+00:03:39.380 --> 00:03:43.100
+Dat is veel werk en dat is precies waarom Azure een beheerde service heeft gebouwd om dit af te handelen.
+
+00:03:43.360 --> 00:03:44.880
+Maak kennis met Azure Chaos Studio.
+
+00:03:45.160 --> 00:03:50.080
+Azure Chaos Studio is een volledig beheerde service voor het uitvoeren van chaos experimenten direct op je Azure resources.
+
+00:03:50.420 --> 00:03:54.600
+Geen aangepaste scripts, geen tools van derden, geen eigen platform voor fout injectie bouwen.
+
+00:03:54.600 --> 00:03:57.320
+Het zit allemaal in de Azure portal, klaar voor gebruik.
+
+00:03:57.460 --> 00:03:58.100
+Zo werkt het.
+
+00:03:58.260 --> 00:04:00.720
+Chaos Studio geeft je twee manieren om fouten te injecteren.
+
+00:04:00.940 --> 00:04:03.860
+Service directe fouten verlopen via het Azure besturingsvlak zelf.
+
+00:04:04.040 --> 00:04:07.700
+Je vertelt Chaos Studio om een VM af te sluiten en het doet dit via Azure's eigen APIs.
+
+00:04:07.980 --> 00:04:08.860
+Geen agent nodig.
+
+00:04:09.140 --> 00:04:12.480
+Agent gebaseerde fouten installeren een kleine agent in je virtuele machine.
+
+00:04:12.760 --> 00:04:17.380
+Daarna kan deze de CPU naar 100% jagen, het geheugen vullen of een specifiek proces beëindigen.
+
+00:04:17.580 --> 00:04:21.860
+Hiermee kun je problemen simuleren die zich in het besturingssysteem voordoen, niet alleen op resource niveau.
+
+00:04:22.120 --> 00:04:23.020
+Dit is een analogie.
+
+00:04:23.020 --> 00:04:25.160
+Stel je voor dat je een groot kantoorpand bezit.
+
+00:04:25.300 --> 00:04:27.260
+Je wilt weten of je nooduitgangen echt werken.
+
+00:04:27.460 --> 00:04:29.300
+Wachten op een echte brand is een vreselijk idee.
+
+00:04:29.500 --> 00:04:31.520
+Dus huur je een gespecialiseerd calamiteite team in.
+
+00:04:31.660 --> 00:04:35.560
+Ze komen binnen, blokkeren een trappenhuis, simuleren rook op de derde verdieping en kijken hoe mensen reageren.
+
+00:04:35.740 --> 00:04:36.620
+Dat is Chaos Studio.
+
+00:04:36.980 --> 00:04:38.320
+Het is je calamiteite team.
+
+00:04:38.480 --> 00:04:39.120
+Je roept ze op.
+
+00:04:39.340 --> 00:04:43.720
+Ze voeren de oefening uit en je leert of je gebouw veilig is voordat de echte noodsituatie zich voordoet.
+
+00:04:43.920 --> 00:04:49.500
+Chaos Studio ondersteunt een breed scala aan Azure resources, virtuele machines, VM schaalzets,
+
+00:04:49.500 --> 00:04:55.940
+Azure Kubernetes, Service Clusters, Azure Cosmos DB, Azure Cache for Redis, netwerkbeveiligingsgroepen en meer.
+
+00:04:56.140 --> 00:04:57.960
+De bibliotheek met fouten blijft groeien.
+
+00:04:58.160 --> 00:05:03.200
+Dus of je nu een eenvoudige tweelaagse app draait of een complexe microservices architectuur op AXE, je kunt het testen.
+
+00:05:03.360 --> 00:05:04.340
+Dit is het goede nieuws.
+
+00:05:04.540 --> 00:05:06.320
+Je hoeft geen aangepaste tools te bouwen.
+
+00:05:06.520 --> 00:05:10.840
+Alles is beschikbaar via de Azure portal, de CLI, REST APIs, ARM schablonen of BICEP.
+
+00:05:11.040 --> 00:05:14.580
+Je kunt je experimenten als code definiëren en integreren in je implementatiepijplijnen.
+
+00:05:14.580 --> 00:05:16.340
+Maar laten we niet op de zaken vooruitlopen.
+
+00:05:16.540 --> 00:05:19.360
+Laten we eerst eens kijken hoe deze experimenten feitelijk zijn gestructureerd.
+
+00:05:19.520 --> 00:05:22.200
+De bouwstenen, targets, stappen, vertakkingen en acties.
+
+00:05:22.400 --> 00:05:24.440
+Elk chaos-experiment begint met targets.
+
+00:05:24.700 --> 00:05:25.400
+Wat is een target?
+
+00:05:25.660 --> 00:05:28.480
+Het is simpelweg een Azure resource waarop je fouten wilt testen.
+
+00:05:28.620 --> 00:05:33.800
+Je opent chaos-studio, vindt je resource, zoals een VM, een schaalzet of een AXE-cluster, en je voegt deze toe.
+
+00:05:34.000 --> 00:05:37.960
+Dat betekent dat je tegen chaos-studio zegt, deze resource is beschikbaar voor experimenten.
+
+00:05:38.120 --> 00:05:39.020
+Dit is essentieel.
+
+00:05:39.260 --> 00:05:42.780
+Wanneer je een target toevoegt, kies je ook welke fouten je wilt toestaan op die resource.
+
+00:05:42.780 --> 00:05:44.180
+Je schakelt niet alles in.
+
+00:05:44.340 --> 00:05:45.100
+Je kiest zelf.
+
+00:05:45.320 --> 00:05:45.980
+CPU-druk?
+
+00:05:46.180 --> 00:05:46.400
+Ja.
+
+00:05:46.640 --> 00:05:47.760
+Volledige VM-afsluiting?
+
+00:05:47.960 --> 00:05:48.980
+Misschien niet voor productie.
+
+00:05:49.160 --> 00:05:49.780
+Jij beslist.
+
+00:05:50.020 --> 00:05:52.380
+Zodra je targets zijn toegevoegd, maak je een experiment aan.
+
+00:05:52.560 --> 00:05:54.040
+Zie een experiment als een blauwdruk.
+
+00:05:54.200 --> 00:05:58.600
+Het beschrijft precies welke fouten er worden geïnjecteerd, in welke volgorde, op welke targets en voor hoe lang.
+
+00:05:58.780 --> 00:06:00.440
+Je zegt niet zomaar, maak iets kapot.
+
+00:06:00.620 --> 00:06:02.500
+Je definieert het hele scenario vooraf.
+
+00:06:02.840 --> 00:06:05.700
+Experimenten hebben een eenvoudige structuur, stappen, vertakkingen en acties.
+
+00:06:05.940 --> 00:06:07.420
+Stappen worden naar elkaar uitgevoerd.
+
+00:06:07.640 --> 00:06:10.120
+Stap 1 eindigt, dan begint stap 2 en daarna stap 3.
+
+00:06:10.120 --> 00:06:11.560
+Zo modelleer je een tijdlijn.
+
+00:06:11.760 --> 00:06:15.140
+Eerst het netwerk vertragen, dan de CPU belasten en daarna een VM afsluiten.
+
+00:06:15.340 --> 00:06:16.980
+Elke stap is een fase in je scenario.
+
+00:06:17.380 --> 00:06:19.640
+Binnen elke stap kun je één of meer vertakkingen hebben.
+
+00:06:19.820 --> 00:06:20.820
+Hier wordt het interessant.
+
+00:06:21.140 --> 00:06:22.820
+Vertakkingen worden parallel uitgevoerd.
+
+00:06:23.020 --> 00:06:28.460
+Dus binnen stap 1 kun je vertakking A hebben die latentie toevoegt aan je database en vertakking B die de CPU op je webserver zwaar belast.
+
+00:06:28.620 --> 00:06:29.400
+Beide tegelijkertijd.
+
+00:06:29.620 --> 00:06:33.720
+Hiermee kun je complexe scenario's met meerdere fouten simuleren die echte incidenten nabootsen.
+
+00:06:33.860 --> 00:06:34.940
+En dan heb je acties.
+
+00:06:34.940 --> 00:06:36.600
+Acties zijn de eigenlijke fouten.
+
+00:06:36.800 --> 00:06:41.940
+CPU druk, geheugenuitpoeting, VM afsluiting, netwerkvertraging, DNS blokkade, procesbeëindiging.
+
+00:06:42.060 --> 00:06:44.920
+Elke actie richt zich op een specifiek resource of een groep resources.
+
+00:06:45.200 --> 00:06:48.420
+En nogmaals, je kunt alleen acties gebruiken die je op dat doel hebt ingeschakeld.
+
+00:06:48.620 --> 00:06:49.400
+Dat is je vangnet.
+
+00:06:49.580 --> 00:06:53.380
+Als je VM afsluiting niet op een doel hebt ingeschakeld, zal het experiment die actie simpelweg niet uitvoeren.
+
+00:06:53.560 --> 00:06:55.080
+Dus, de workflow ziet er zo uit.
+
+00:06:55.280 --> 00:06:56.060
+Onboard je doelen.
+
+00:06:56.280 --> 00:06:58.160
+Schakel de fouten in waar je je prettig bij voelt.
+
+00:06:58.380 --> 00:07:01.400
+Maak een experiment met stappen, vertakkingen en acties en voer het vervolgens uit.
+
+00:07:01.400 --> 00:07:04.420
+Maar voordat we beginnen met het uitvoeren ervan, is er iets belangrijks om te begrijpen.
+
+00:07:04.580 --> 00:07:07.160
+Wanneer Chaos Studio een experiment uitvoert, simuleert het niets.
+
+00:07:07.320 --> 00:07:09.100
+Het doet deze dingen daadwerkelijk met je resources.
+
+00:07:09.460 --> 00:07:11.060
+CPU druk is echte CPU druk.
+
+00:07:11.200 --> 00:07:12.880
+Een VM afsluiting is een echte afsluiting.
+
+00:07:13.100 --> 00:07:14.060
+Dat is precies het punt.
+
+00:07:14.240 --> 00:07:16.760
+Je test hoe je systeem zich gedraagt onder werkelijke storingsomstandigheden.
+
+00:07:16.900 --> 00:07:18.440
+En dat betekent dat je voorzichtig moet zijn.
+
+00:07:18.620 --> 00:07:21.340
+Dus, laten we een echt experiment doorlopen en zien hoe alles samenkomt.
+
+00:07:21.420 --> 00:07:23.260
+Het uitvoeren van je eerste Chaos experiment.
+
+00:07:23.640 --> 00:07:24.640
+Laten we dit echt maken.
+
+00:07:24.900 --> 00:07:29.320
+Stel je voor dat je een webapplicatie hebt die draait op drie virtuele machines binnen een virtuele machineschaal zet.
+
+00:07:29.320 --> 00:07:31.940
+Elke VM bevindt zich in een andere beschikbaarheidszone.
+
+00:07:32.140 --> 00:07:35.300
+Je hebt een load balancer aan de voorkant die het verkeer over alle drie verdeelt.
+
+00:07:35.480 --> 00:07:36.720
+De hypothese is simpel.
+
+00:07:36.960 --> 00:07:44.020
+Als we een volledige beschikbaarheidszone verliezen, moet de load balancer het verkeer omleiden naar de overige twee VM's en blijft de applicatie beschikbaar.
+
+00:07:44.240 --> 00:07:46.380
+Dus ontwerp je een experiment met twee stappen.
+
+00:07:46.580 --> 00:07:51.100
+Stap 1. Belast twee van de drie VM's met 95% CPU gedurende vijf minuten.
+
+00:07:51.340 --> 00:07:54.740
+Dat simuleert een scenario met een noisy neighbor of een op hol geslagen proces.
+
+00:07:55.080 --> 00:07:58.060
+Stap 2. Sluit abrupt alle VM's in zone 2 af.
+
+00:07:58.060 --> 00:07:59.940
+Dat simuleert een echte zonestoring.
+
+00:08:00.180 --> 00:08:02.660
+Je voert het experiment uit en kijkt vervolgens wat er gebeurt.
+
+00:08:02.880 --> 00:08:03.880
+Dit is wat je zou zien.
+
+00:08:04.060 --> 00:08:07.480
+In de eerste vijf minuten schieten twee VM's naar 100% CPU.
+
+00:08:07.700 --> 00:08:09.960
+De derde blijft normaal omdat je die niet hebt aangewezen.
+
+00:08:10.160 --> 00:08:12.420
+Je monitoring dashboards lichten op, waarschuwingen gaan af.
+
+00:08:12.580 --> 00:08:17.760
+De load balancer merkt dat die twee VM's het zwaar hebben, maar omdat ze technisch gezien nog draaien, blijft hij verkeer naar ze sturen.
+
+00:08:17.940 --> 00:08:19.600
+Je app wordt trager maar gaat niet offline.
+
+00:08:19.880 --> 00:08:20.740
+Dat is interessant.
+
+00:08:20.960 --> 00:08:21.860
+Je leert nu al iets.
+
+00:08:22.120 --> 00:08:23.440
+Dan treedt stap 2 in werking.
+
+00:08:23.620 --> 00:08:26.880
+De VM's in zone 2 worden abrupt afgesloten, niet netjes, zonder waarschuwing.
+
+00:08:26.880 --> 00:08:28.000
+Ze verdwijnen gewoon.
+
+00:08:28.180 --> 00:08:31.140
+Een van die twee zwaar belaste VM's bevond zich in die zone, dus die is weg.
+
+00:08:31.280 --> 00:08:36.660
+De load balancer ziet de gezondheidscheck falen, verwijdert deze uit de back-end pool en routeert al het verkeer naar de overige gezonde VM's.
+
+00:08:36.800 --> 00:08:37.880
+Je app blijft in de lucht.
+
+00:08:38.060 --> 00:08:39.100
+De hypothese klopt.
+
+00:08:39.300 --> 00:08:40.860
+Maar dit is wat je wellicht niet verwacht.
+
+00:08:41.040 --> 00:08:43.980
+De overgebleven VM's moeten nu 100% van het verkeer afhandelen.
+
+00:08:44.180 --> 00:08:47.500
+Als je niet genoeg capaciteit hebt om die last op te vangen, zie je de latentie pieken.
+
+00:08:47.720 --> 00:08:50.660
+Misschien blijft de app technisch online, maar de gebruikers ervaren hinder.
+
+00:08:50.880 --> 00:08:51.720
+Dat is een bevinding.
+
+00:08:51.720 --> 00:08:54.880
+Je weet nu dat je meer reserve of snellere autoscaling nodig hebt.
+
+00:08:55.060 --> 00:08:56.720
+En onthoud, dit is geen simulatie.
+
+00:08:56.960 --> 00:09:01.220
+Wanneer Garel Studio dit experiment uitvoert, bereiken die VM's echt 95% CPU.
+
+00:09:01.460 --> 00:09:03.600
+Die afsluiting van zone 2 is een echte afsluiting.
+
+00:09:03.800 --> 00:09:07.360
+De VM stopt, de load balancer herverdeelt en je applicatie overleeft het of niet.
+
+00:09:07.520 --> 00:09:08.620
+Dat is precies het punt.
+
+00:09:08.840 --> 00:09:09.880
+Je bent niet aan het gokken.
+
+00:09:10.040 --> 00:09:12.700
+Je observeert echt gedrag onder echte storingsomstandigheden.
+
+00:09:12.880 --> 00:09:15.060
+Je leert of je app in de lucht blijft of onderuit gaat.
+
+00:09:15.240 --> 00:09:18.140
+En als hij onderuit gaat, herstel je het voordat je klanten het ooit merken.
+
+00:09:18.140 --> 00:09:20.580
+Maar deze kracht brengt verantwoordelijkheid met zich mee.
+
+00:09:20.760 --> 00:09:21.800
+Je moet voorzichtig zijn.
+
+00:09:22.080 --> 00:09:24.640
+Veiligheid eerst om ongeplande uitval te voorkomen.
+
+00:09:24.860 --> 00:09:27.140
+Garel Studio heeft meerdere ingebouwde veiligheidsmechanismen.
+
+00:09:27.840 --> 00:09:31.140
+En voordat je je eerste experiment uitvoert, moet je ze allemaal begrijpen.
+
+00:09:31.320 --> 00:09:33.720
+De eerste veiligheidslaag is identiteit en rechten.
+
+00:09:33.960 --> 00:09:37.720
+Elk experiment dat je aanmaakt krijgt een eigen door het systeem toegewezen beheerde identiteit.
+
+00:09:37.920 --> 00:09:40.380
+Maar die identiteit begint standaard met nul rechten.
+
+00:09:40.620 --> 00:09:45.340
+Je moet expliciet toegang verlenen tot de benodigde bronnen met de minimaal vereiste rechten.
+
+00:09:45.340 --> 00:09:53.020
+Als een experiment alleen de CPU van twee VM's moet belasten, beperk je de rechten in plaats van alles in de resource groep te laten afsluiten.
+
+00:09:53.260 --> 00:09:55.780
+Dan is er nog de foutinschakeling die ik eerder noemde.
+
+00:09:55.980 --> 00:09:59.400
+Wanneer je een doel toevoegt, kies je precies welke fouten je wilt toestaan.
+
+00:09:59.560 --> 00:10:06.740
+Als je VM-afsluiting nooit inschakelt op een productieschaal zet, kan geen enkel experiment die VM's afsluiten, zelfs niet als iemand dat probeert.
+
+00:10:06.920 --> 00:10:10.320
+Het is een harde blokkade waarvoor je bewust moet kiezen voor elk fouttype.
+
+00:10:10.320 --> 00:10:15.340
+Nu, waar te beginnen? En het antwoord is simpel. Begin klein en begin in een niet-productieomgeving.
+
+00:10:15.600 --> 00:10:17.940
+Voer je eerste experimenten uit in Dev of Staging.
+
+00:10:18.180 --> 00:10:25.360
+Test met één VM en één fout en valideer of je monitoring werkt, je waarschuwingen afgaan en je het experiment kunt annuleren als er iets misgaat.
+
+00:10:25.500 --> 00:10:30.520
+Pas nadat je dat vertrouwen hebt opgebouwd in een veilige omgeving, moet je overwegen om productie aan te raken.
+
+00:10:30.840 --> 00:10:33.500
+Microsoft heeft hier een waarschuwing over die ik direct wil delen.
+
+00:10:33.680 --> 00:10:35.880
+Ze noemen het een CV-genererend evenement.
+
+00:10:35.880 --> 00:10:42.700
+Als je een chaos-experiment uitvoert in productie zonder juiste waarborgen en het haalt je hele applicatie onderuit, is dat het soort fout waarvoor je ontslagen kunt worden.
+
+00:10:42.900 --> 00:10:44.040
+Dat is geen overdrijving.
+
+00:10:44.260 --> 00:10:49.080
+Chaos Studio is krachtig omdat het echt dingen doet met je bronnen, dus gebruik die kracht verstandig.
+
+00:10:49.200 --> 00:10:51.640
+Het laatste van het is monitoring en annulering.
+
+00:10:51.880 --> 00:10:55.140
+Terwijl een experiment loopt, kun je de voortgang in real-time volgen.
+
+00:10:55.320 --> 00:11:00.020
+Je ziet welke stappen zijn voltooid, welke vertakkingen actief zijn en welke acties worden uitgevoerd.
+
+00:11:00.180 --> 00:11:03.660
+Als er iets mislijkt, druk je op annuleren en stopt het experiment direct.
+
+00:11:03.660 --> 00:11:08.100
+De getroffen resources blijven in hun huidige staat, maar er worden geen nieuwe fouten geïnjecteerd.
+
+00:11:08.240 --> 00:11:11.060
+Hou dus je dashboards open en je vinger bij de annuleerknop.
+
+00:11:11.140 --> 00:11:13.980
+Begin klein, werk doelbewust en respecteer de kracht van de tool.
+
+00:11:14.180 --> 00:11:18.780
+Nu je weet hoe je veilig kunt blijven, is de vraag waar moet je deze experimenten eigenlijk uitvoeren.
+
+00:11:19.000 --> 00:11:20.800
+Shifting left versus shifting right.
+
+00:11:21.020 --> 00:11:23.340
+Dus, waar voer je deze experimenten eigenlijk uit?
+
+00:11:23.520 --> 00:11:26.680
+Er zijn twee hoofdbenaderingen en de meeste teams gebruiken beide.
+
+00:11:26.900 --> 00:11:28.300
+De eerste is shifting left.
+
+00:11:28.540 --> 00:11:31.560
+Je voert chaos-experimenten vroeg uit in je ontwikkelingscyclus.
+
+00:11:31.560 --> 00:11:37.860
+Zodra code wordt uitgerold naar een testomgeving, bestook je deze met fouten en maak je er onderdeel van je CI-CD pipeline van.
+
+00:11:38.040 --> 00:11:44.700
+De pipeline installeert de app, voert een chaos-experiment uit om deze te belasten, controleert of het systeem standhoudt en pas dan gaat de beeld naar de volgende fase.
+
+00:11:44.960 --> 00:11:48.540
+Zie het als een kwaliteitscontrole, net als unit-tests of beveiligingsscans.
+
+00:11:48.740 --> 00:11:52.960
+Als de app in de staging-omgeving een VM-afsluiting niet kan opvangen, gaat hij niet naar productie.
+
+00:11:52.960 --> 00:11:57.020
+De tweede benadering is shifting right, wat betekent dat je experimenten uitvoert in productie.
+
+00:11:57.160 --> 00:11:59.400
+En ja, dat klinkt doodeng, maar luister naar me.
+
+00:11:59.540 --> 00:12:00.520
+Je begint daar niet mee.
+
+00:12:00.680 --> 00:12:04.100
+Je gaat pas naar rechts als je vertrouwen hebt opgebouwd in niet-productie-omgevingen.
+
+00:12:04.220 --> 00:12:06.420
+Je begint met kleine, beperkte experimenten.
+
+00:12:06.640 --> 00:12:10.020
+Misschien belast je de CPU op één instance tijdens een periode met weinig verkeer.
+
+00:12:10.200 --> 00:12:12.820
+Je kijkt nauwlettend toe, je leert ervan en dan breed je uit.
+
+00:12:12.820 --> 00:12:22.020
+Misschien sluit je tijdens kantooruren een enkele VM af in productie en valideer je of je loadbalancer het verkeer correct omleidt, of je gebruikers niets merken en of je monitoring alles opvangt.
+
+00:12:22.160 --> 00:12:25.040
+Na verloop van tijd bouw je op naar agressievere experimenten.
+
+00:12:25.200 --> 00:12:27.780
+Er is een derde benadering die ertussenin zit, game days.
+
+00:12:27.780 --> 00:12:35.140
+Een game day is een geplande chaos oefening waarbij je je development team, operatiesteam, beveiligingsteam en iedereen die bij een echt incident betrokken zou zijn, samenbrengt.
+
+00:12:35.200 --> 00:12:37.860
+Je voert een chaos experiment uit en oefent je incidentresponse.
+
+00:12:38.060 --> 00:12:38.980
+Wie ontvangt het alarm?
+
+00:12:39.200 --> 00:12:40.480
+Wie neemt het besluit om op te schalen?
+
+00:12:40.680 --> 00:12:41.920
+Wat is de communicatieketen?
+
+00:12:41.920 --> 00:12:43.760
+Hoe snel kun je het probleem diagnostiseren?
+
+00:12:44.000 --> 00:12:47.940
+Game days testen de technologie, maar nog belangrijker, ze testen de mensen en processen eromheen.
+
+00:12:48.120 --> 00:12:51.940
+De kern van alle drie de benaderingen is dat chaos engineering geen eenmalige test is.
+
+00:12:52.120 --> 00:12:55.460
+Je voert niet één experiment uit, verklaart je systeem veerkrachtig en gaat weer verder.
+
+00:12:55.700 --> 00:12:59.340
+Systemen veranderen, code verandert, configuraties veranderen, afhankelijkheden veranderen.
+
+00:12:59.500 --> 00:13:02.140
+Wat vorige maand veerkrachtig was, kan vandaag kwetsbaar zijn.
+
+00:13:02.320 --> 00:13:04.760
+Het doel is continu validatie van veerkracht.
+
+00:13:04.940 --> 00:13:10.620
+Je voert regelmatig experimenten uit, integreert ze in je release proces en maakt ze onderdeel van je operationele ritme.
+
+00:13:10.620 --> 00:13:12.940
+Dus, wat is de echte waarde van al deze inspanning?
+
+00:13:13.120 --> 00:13:15.040
+De echte waarde is het opbouwen van vertrouwen.
+
+00:13:15.260 --> 00:13:17.220
+Chaos engineering doet meer dan alleen baks vinden.
+
+00:13:17.420 --> 00:13:19.700
+Het bouwt vertrouwen op en dat is iets compleet anders.
+
+00:13:19.900 --> 00:13:21.300
+Een bak is een specifiek defect.
+
+00:13:21.520 --> 00:13:22.800
+Je lost het op en gaat verder.
+
+00:13:22.980 --> 00:13:24.240
+Maar vertrouwen is een gevoel.
+
+00:13:24.420 --> 00:13:26.900
+Het is weten dat je systeem het onverwachte kan overleven.
+
+00:13:27.200 --> 00:13:29.760
+En dat krijg je niet alleen met unit- of integratietests.
+
+00:13:30.020 --> 00:13:33.540
+Dat krijg je door te zien hoe je systeem een echte storing opvangt en weerherstelt.
+
+00:13:33.780 --> 00:13:37.060
+Dit proces dwingt je om zaken te verbeteren die je anders misschien zou negeren.
+
+00:13:37.060 --> 00:13:38.460
+Je monitoring, bijvoorbeeld.
+
+00:13:38.840 --> 00:13:43.520
+Wanneer je een chaos-experiment uitvoert, ontdek je snel of je dashboards de juiste statistieken tonen,
+
+00:13:43.660 --> 00:13:47.880
+of je waarschuwingen bij de juiste drempels afgaan en of je on-call-team tijdig wordt geïnformeerd.
+
+00:13:48.020 --> 00:13:50.820
+Als je de storing niet ziet gebeuren, kun je er niet op reageren.
+
+00:13:50.980 --> 00:13:52.980
+Chaos-experimenten leggen die hiaten bloot.
+
+00:13:53.160 --> 00:13:54.760
+Ze onthullen ook verborgen aannames.
+
+00:13:55.020 --> 00:13:56.840
+Elke architect heeft wel eens zoiets gezegd.
+
+00:13:56.920 --> 00:14:00.560
+Als de database uitvalt, moet de app de laatste bekende data cachen en blijven draaien.
+
+00:14:00.760 --> 00:14:03.060
+Dat klinkt goed op een whiteboard, maar werkt het ook echt?
+
+00:14:03.060 --> 00:14:04.340
+Heb je het ooit getest?
+
+00:14:04.520 --> 00:14:07.140
+Chaos-experimenten beantwoorden die vraag met echt bewijs.
+
+00:14:07.280 --> 00:14:09.300
+Je sluit de database af en kijkt wat er gebeurt.
+
+00:14:09.500 --> 00:14:10.880
+Misschien vangt de app het netjes op.
+
+00:14:11.040 --> 00:14:11.920
+Misschien crash hij.

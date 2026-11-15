@@ -34,6 +34,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
+      - name: Kostenbuch je Schluessel zusammenfuehren (data/spend.json, auch bei pull --rebase -X theirs; Schluessel anderer Jobs wie "articles_tr" bleiben)
+        run: |
+          cp tools/spend_merge.py "$RUNNER_TEMP/spend_merge.py"; echo 'data/spend.json merge=spendjson' >> .git/info/attributes
+          git config merge.spendjson.driver "python3 $RUNNER_TEMP/spend_merge.py %O %A %B"
       - name: Notes neu schreiben (Batch absenden, bis ca. 4 h abwarten, einsammeln)
         env:
           SHOWNOTES_MODEL: ${{ vars.SHOWNOTES_MODEL || 'claude-sonnet-5-5' }}

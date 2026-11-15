@@ -1,4 +1,4 @@
-// Event-Pruefliste (Migration 0045): neue Events des Scrapers und von noch nicht bestaetigten Mitgliedern warten auf die Entscheidung eines Admins und sind bis dahin
+// Event-Pruefliste (Migration 0047): neue Events des Scrapers und von noch nicht bestaetigten Mitgliedern warten auf die Entscheidung eines Admins und sind bis dahin
 // nirgends oeffentlich; Events bestaetigter Mitglieder sind sofort sichtbar; "Uebernehmen" macht ein Event oeffentlich und zum LinkedIn-Vorschlag (ohne HeySummit),
 // "Ablehnen" merkt es sich, damit der Import es nicht noch einmal anlegt. Nur Fixtures, kein Netz.
 import { test } from "node:test";
@@ -42,11 +42,11 @@ const NOW = Date.UTC(2026, 10, 9, 12);
 const noNet = async () => new Response("", { status: 404 });
 const MEMBER_EV = { handle: "pp-abend-wien", title: "Power Platform Abend Wien", start: "2027-03-20T18:00", mode: "onsite", location: "Wien", url: "https://example.org/pp-wien" };
 
-test("Migration 0045: bestehende Events bleiben freigegeben und oeffentlich, keine neue Tabelle", async () => {
-  const sql = readFileSync(new URL("../migrations/0045_event_review.sql", import.meta.url), "utf8");
+test("Migration 0047: bestehende Events bleiben freigegeben und oeffentlich, keine neue Tabelle", async () => {
+  const sql = readFileSync(new URL("../migrations/0047_event_review.sql", import.meta.url), "utf8");
   assert.ok(!/CREATE TABLE/i.test(sql), "keine neue Tabelle: nichts mit Nutzerbezug in mergeStatements/deleteAccount noetig");
   const { DatabaseSync } = await import("node:sqlite"), raw = new DatabaseSync(":memory:"), dir = new URL("../migrations/", import.meta.url);
-  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql") && f < "0045").sort()) raw.exec(readFileSync(new URL(f, dir), "utf8"));
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql") && f < "0047").sort()) raw.exec(readFileSync(new URL(f, dir), "utf8"));
   raw.exec("INSERT INTO events(handle,owner_id,title,start,mode,created,updated,public) VALUES('alt',1,'Altes Event','2026-12-01','online',1,1,1)");
   raw.exec(sql);
   assert.deepEqual({ ...raw.prepare("SELECT review,review_at,public FROM events").get() }, { review: "approved", review_at: 0, public: 1 });
@@ -178,7 +178,7 @@ test("LinkedIn-Vorschlag: uebernommenes Scraper-Event ohne HeySummit; Event zur 
   await cdRun(s, [cdEvent()]);
   const handles = async () => (await proposals(env, noNet, NOW)).items.filter((x) => x.state === "proposal").map((x) => x.title);
   assert.deepEqual(await handles(), [], "zur Pruefung: kein Vorschlag");
-  // altes, nie geprueftes Import-Event (Bestand aus der Zeit vor 0045): bleibt oeffentlich, aber kein Vorschlag
+  // altes, nie geprueftes Import-Event (Bestand aus der Zeit vor 0047): bleibt oeffentlich, aber kein Vorschlag
   raw.prepare("INSERT INTO events(handle,owner_id,title,start,mode,created,updated,public,unclaimed,source) VALUES('legacy',0,'Altbestand Import','2027-04-01T10:00','online',1,1,1,1,'communitydays')").run();
   assert.deepEqual(await handles(), []);
   // Anna (unbestaetigt): wartet auf Pruefung, kein Vorschlag

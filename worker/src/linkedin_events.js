@@ -28,7 +28,7 @@ export const LI = {
 // Versatz daneben (date_timezone_offset "+0000"). Antwortform des REST-Endpunkts (Seiten mit results/next) vor der ersten Veroeffentlichung einmal mit dem Schluessel pruefen:
 // passt sie nicht, meldet die Liste "hs_format" bzw. "0 mit Termin" und schlaegt nichts vor (nie umgekehrt).
 // Nicht veroeffentlichte HeySummit-Events (is_live false, z. B. die Kopie 229209 "M365 Con (copy)") und archivierte zaehlen nie als "laeuft gleichzeitig".
-// Seit der Pruefliste (Migration 0045) ist HeySummit keine Voraussetzung mehr: ist es nicht lesbar, gibt es keine Zusatzinfo und keinen Anmeldelink von dort - sonst aendert sich nichts.
+// Seit der Pruefliste (Migration 0047) ist HeySummit keine Voraussetzung mehr: ist es nicht lesbar, gibt es keine Zusatzinfo und keinen Anmeldelink von dort - sonst aendert sich nichts.
 export const HS = {
   api: "https://api.heysummit.com/api",
   events: "/events/", talks: "/talks/",

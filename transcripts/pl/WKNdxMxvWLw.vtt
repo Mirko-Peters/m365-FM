@@ -1,0 +1,736 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.200
+Dzisiejszy temat to coś, o czym prawdopodobnie słyszałeś, ale może nie w pełni rozumiesz.
+
+00:00:03.400 --> 00:00:06.300
+Model Context, protokol dla systemu ERP Dynamics 365.
+
+00:00:06.740 --> 00:00:10.600
+Widziałeś skrót MCP w ogłoszeniach Microsoftu na webinarach partnerskich i wpisach społeczności,
+
+00:00:10.720 --> 00:00:14.060
+ale co to oznacza dla kogoś, kto pracuje z Dynamics 365 na co dzień?
+
+00:00:14.220 --> 00:00:17.540
+O co tutaj chodzi? Twój system ERP przechowuje najważniejsze dane.
+
+00:00:17.800 --> 00:00:22.380
+Zapisy finansowe, transakcje łańcucha dostaw, stany magazynowe, informacje o dostawcach, historię klientów.
+
+00:00:22.500 --> 00:00:27.020
+To dzięki nim funkcjonuje Twoja firma, ale przeniesienie tych danych do narzędzi, a i zawsze było problematyczne.
+
+00:00:27.020 --> 00:00:30.380
+Potrzebne były niestandardowe API, specjalne łączniki i obejścia zabezpieczeń.
+
+00:00:30.520 --> 00:00:34.580
+Za każdym razem, gdy chciałeś podłączyć asystenta AI do swojego ERP, musiałeś zaczynać od zera.
+
+00:00:34.780 --> 00:00:40.320
+Pod koniec tego odcinka zrozumiesz, czym jest serwer MCP, dlaczego Microsoft go stworzył i jak przekształca on Twój ERP w system,
+
+00:00:40.440 --> 00:00:42.720
+z którym agenci AI mogą komunikować się bezpośrednio.
+
+00:00:42.920 --> 00:00:46.380
+Bez konieczności pisania własnego kodu, więc weź kawę i zaczynajmy.
+
+00:00:46.560 --> 00:00:48.300
+Czym jest model Context Protocol?
+
+00:00:48.580 --> 00:00:49.960
+Oto najprostsza definicja.
+
+00:00:50.140 --> 00:00:55.560
+MCP to otwarty standard, który pozwala aplikacjom AI odkrywać i wywoływać narzędzia oraz źródła danych w ustrukturyzowany sposób.
+
+00:00:55.560 --> 00:00:57.740
+Pomyśl o tym jak o uniwersalnym pilocie.
+
+00:00:57.940 --> 00:01:02.100
+Bez MCP każdy agent AI potrzebuje własnego, niestandardowego połączenia z każdym systemem.
+
+00:01:02.300 --> 00:01:05.840
+Jeden kabel do CRM, kolejny do ERP, jeszcze inny do magazynu danych.
+
+00:01:06.080 --> 00:01:08.900
+Za każdym razem, gdy dodajesz nowy system, musisz podłączać kolejny kabel.
+
+00:01:09.140 --> 00:01:11.700
+Dzięki MCP podłączasz się raz i zyskujesz dostęp do wszystkiego.
+
+00:01:11.920 --> 00:01:14.260
+Jedno połączenie, jeden protokół, jeden sposób pracy.
+
+00:01:14.500 --> 00:01:18.320
+Zanim powstał MCP, połączenie asystenta AI z ERP było poważnym projektem.
+
+00:01:18.500 --> 00:01:23.880
+Trzeba było budować niestandardowe API, utrzymywać łączniki, radzić sobie z problemami z bezpieczeństwem i aktualizować wszystko przy każdej zmianie w ERP.
+
+00:01:23.880 --> 00:01:25.820
+Było to drogie, powolne i nietrwałe.
+
+00:01:25.980 --> 00:01:27.260
+MCP zmienia to wszystko.
+
+00:01:27.540 --> 00:01:32.640
+Zamiast budować za każdym razem niestandardowy most, otrzymujesz standardowy interfejs, z którego może korzystać każde narzędzie kompatybilne z MCP.
+
+00:01:32.800 --> 00:01:35.080
+Część dotycząca kontekstu modelu również jest ważna.
+
+00:01:35.260 --> 00:01:37.180
+Agent AI nie otrzymuje tylko surowych danych.
+
+00:01:37.380 --> 00:01:41.740
+Otrzymuje szczegółowe informacje o tym, jakie narzędzia istnieją, co robią, jak ich używać i jakie dane są dostępne.
+
+00:01:41.900 --> 00:01:46.960
+Więc kiedy agent musi coś zrobić, może przejrzeć narzędzia, zrozumieć, które pasuje do zadania i poprawnie je wywołać.
+
+00:01:46.960 --> 00:01:50.020
+W ten sposób podejmuje mądre decyzje, ponieważ rozumie cały system.
+
+00:01:50.220 --> 00:01:52.820
+Dlaczego więc ma to znaczenie konkretnie dla Dynamics 365?
+
+00:01:53.400 --> 00:02:02.660
+Microsoft stworzył serwer MCP dla aplikacji Finance & Operations, co oznacza, że setki tysięcy funkcji ERP stają się narzędziami, które agenci AI mogą odkryć i wykorzystać.
+
+00:02:02.760 --> 00:02:09.460
+Od tworzenia zamówienia zakupu przez księgowanie wpisów, aż po generowanie raportów finansowych, każda funkcja jest dostępna przez jeden zarządzany interfejs.
+
+00:02:09.460 --> 00:02:10.500
+Oto główna idea.
+
+00:02:10.740 --> 00:02:14.160
+Czym jednak dokładnie jest ten serwer MCP wewnątrz Dynamics 365?
+
+00:02:15.040 --> 00:02:15.680
+Przeanalizujmy to.
+
+00:02:15.940 --> 00:02:18.080
+Dwa oblicza MCP dla systemów ERP.
+
+00:02:18.280 --> 00:02:22.240
+Kiedy Microsoft po raz pierwszy udostępnił serwer MCP dla ERP, nie miał jeszcze pełnej wizji.
+
+00:02:22.420 --> 00:02:24.960
+Początkowa wersja oferowała stały zestaw 13 narzędzi.
+
+00:02:25.160 --> 00:02:28.820
+Można było wykonywać określone czynności, jak znajdowanie zatwierdzonych dostawców, czy zwalnianie linii zapotrzebowań zakupowych.
+
+00:02:29.020 --> 00:02:30.520
+Było to przydatne, ale też ograniczone.
+
+00:02:30.720 --> 00:02:32.340
+Pomyśl o tym, jak o automacie sprzedającym.
+
+00:02:32.480 --> 00:02:34.180
+Można było wybrać tylko to, co było w ofercie.
+
+00:02:34.180 --> 00:02:36.460
+Jeśli chciałeś czegoś, czego nie było w menu, miałeś pecha.
+
+00:02:36.580 --> 00:02:38.400
+Potem Microsoft rozwinął to rozwiązanie.
+
+00:02:38.560 --> 00:02:42.800
+Nowy dynamiczny serwer MCP, dostępny już w publicznej wersji zapoznawczej, to zupełnie inna jakość.
+
+00:02:43.000 --> 00:02:47.720
+Zamiast stałej listy narzędzi, pozwala on agentom nawigować po formularzach ERP tak, jak robił by to człowiek.
+
+00:02:47.840 --> 00:02:51.500
+Agent może otwierać formularze, ustawiać wartości pól, klikać przyciski i uruchamiać akcje.
+
+00:02:51.740 --> 00:02:55.760
+Działa to zgodnie z tą samą logiką biznesową i regułami walidacji, które obowiązują przy ręcznej pracy.
+
+00:02:55.980 --> 00:02:56.440
+Różnica?
+
+00:02:56.680 --> 00:02:57.160
+Ogromna.
+
+00:02:57.380 --> 00:02:58.940
+Statyczny serwer był automatem.
+
+00:02:58.940 --> 00:03:01.020
+Dynamiczny serwer to pełnowymiarowy supermarket.
+
+00:03:01.260 --> 00:03:04.200
+Możesz przeglądać każdą alejkę i wybrać wszystko, na co pozwalają Twoje uprawnienia.
+
+00:03:04.380 --> 00:03:05.760
+Mam na myśli absolutnie wszystko.
+
+00:03:06.060 --> 00:03:09.720
+Mówimy o setkach tysięcy funkcji ERP w ramach dziesiątek tysięcy formularzy.
+
+00:03:09.920 --> 00:03:12.980
+Finanse, łańcuch dostaw, zasoby ludzkie, operacje projektowe.
+
+00:03:13.200 --> 00:03:17.640
+Każdy formularz, każda akcja i każdy przycisk dostępny dla użytkownika staje się dostępny dla agenta.
+
+00:03:17.840 --> 00:03:21.960
+Oto część, która jest naprawdę ważna dla organizacji posiadających własne modyfikacje systemu ERP.
+
+00:03:22.180 --> 00:03:25.700
+Dostosowania i rozszerzenia ISV stają się automatycznie widoczne dla agenta.
+
+00:03:25.700 --> 00:03:29.940
+Nie musisz pisać specjalnego kodu, aby udostępnić swoje pola lub niestandardowe procesy.
+
+00:03:30.120 --> 00:03:33.900
+Jeśli coś jest w ERP i użytkownik może z tym współdziałać, serwer MCP to obsłuży.
+
+00:03:34.120 --> 00:03:35.720
+Bez konieczności dodatkowego programowania.
+
+00:03:35.920 --> 00:03:39.480
+MCP to jednak nie tylko podejmowanie działań, to również rozumienie Twoich danych.
+
+00:03:39.740 --> 00:03:40.700
+Serwer MCP do analityki.
+
+00:03:41.460 --> 00:03:44.680
+Mamy więc dynamiczny serwer, który może działać wewnątrz Twojego systemu ERP.
+
+00:03:44.880 --> 00:03:46.360
+Lecz działania bez danych są ślepe.
+
+00:03:46.600 --> 00:03:49.060
+Musisz wiedzieć, co się dzieje, zanim zdecydujesz, co zrobić.
+
+00:03:49.260 --> 00:03:50.940
+W tym miejscu pojawia się drugi element.
+
+00:03:51.180 --> 00:03:53.880
+Microsoft zapowiedział również oddzielny serwer analityczny MCP.
+
+00:03:53.880 --> 00:03:57.060
+Wszedł on w fazę publicznej wersji zapoznawczej w grudniu 2025 roku.
+
+00:03:57.240 --> 00:04:00.620
+Ten serwer łączy się z rozwiązaniem o nazwie Business Performance Analytics, czyli BPA.
+
+00:04:00.820 --> 00:04:04.080
+Traktuj BPA jako analityczny magazyn danych dla swojego systemu ERP.
+
+00:04:04.320 --> 00:04:07.740
+Zbiera on dane ze wszystkich instancji ERP w jeden ujednolicony schemat,
+
+00:04:07.900 --> 00:04:09.860
+oferując gotowe raporty i modele wymiarowe.
+
+00:04:10.100 --> 00:04:12.740
+Zamiast samodzielnie pobierać dane z pięciu różnych środowisk
+
+00:04:12.740 --> 00:04:16.100
+i zastanawiać się, jak je połączyć, BPA wykonuje tę pracę za Ciebie.
+
+00:04:16.340 --> 00:04:19.880
+Warstwa MCP na wierzchu daje agentom, a i sposób na odpytywanie tych danych.
+
+00:04:20.040 --> 00:04:21.720
+I to jest właśnie najbardziej eleganckie.
+
+00:04:21.720 --> 00:04:23.200
+Potrzebuję tylko dwóch narzędzi.
+
+00:04:23.340 --> 00:04:25.580
+Pobranie schematu zbioru danych i wykonanie zapytania DAX.
+
+00:04:25.720 --> 00:04:26.220
+To wszystko.
+
+00:04:26.460 --> 00:04:28.960
+Agent najpierw prosi o schemat, aby zrozumieć, jakie dane są dostępne,
+
+00:04:29.040 --> 00:04:30.840
+jakie tabele istnieją i jakie miary są zdefiniowane.
+
+00:04:31.080 --> 00:04:33.960
+Następnie pisze zapytanie DAX, aby uzyskać dokładnie te dane, których potrzebuje.
+
+00:04:34.100 --> 00:04:35.040
+Dlaczego to jest ważne?
+
+00:04:35.240 --> 00:04:38.660
+Ponieważ zamiast budować złożone pulpity nawigacyjne Power BI i czekać, aż ktoś je odświeży,
+
+00:04:38.760 --> 00:04:41.520
+możesz zadawać pytania w języku naturalnym i natychmiast otrzymywać odpowiedzi.
+
+00:04:41.660 --> 00:04:43.680
+Jacy są moi główni dostawcy podwyższonego ryzyka?
+
+00:04:43.680 --> 00:04:46.360
+Pokaż mi wzrost kosztu własnego sprzedaży w podziale na kwartały.
+
+00:04:46.500 --> 00:04:48.860
+Którzy klienci mają najwyższe nieuregulowane salda?
+
+00:04:49.020 --> 00:04:52.080
+Agent analizuje schemat, tworzy zapytanie i zwraca odpowiedź.
+
+00:04:52.200 --> 00:04:53.680
+Bez konieczności budowania pulpitów nawigacyjnych.
+
+00:04:54.480 --> 00:04:57.060
+Jednak prawdziwa magia dzieje się, gdy połączysz oba serwery.
+
+00:04:57.220 --> 00:05:00.460
+Wyobraź sobie agenta, który używa analitycznego MCP do zidentyfikowania dostawcy
+
+00:05:00.460 --> 00:05:02.100
+z ponad pięcioma przeterminowanymi fakturami.
+
+00:05:02.300 --> 00:05:04.100
+Oznacza tego dostawcę jako wysokiego ryzyka.
+
+00:05:04.380 --> 00:05:08.120
+Następnie używa MCP akcji, aby automatycznie wstrzymać obsługę tego dostawcy w Twoim systemie ERP.
+
+00:05:08.120 --> 00:05:11.920
+Bez udziału człowieka, wnioski prowadzą do działań w jednym, ciągłym przepływie.
+
+00:05:12.060 --> 00:05:13.900
+To jest wizja, do której dąży Microsoft.
+
+00:05:14.180 --> 00:05:15.400
+Jak to wygląda w praktyce?
+
+00:05:15.600 --> 00:05:17.420
+Przyjrzyjmy się kilku rzeczywistym przykładom.
+
+00:05:17.640 --> 00:05:19.040
+Zastosowania w świecie rzeczywistym.
+
+00:05:19.240 --> 00:05:22.340
+Zacznijmy od prawdziwego dema, które Microsoft pokazał podczas swojej prelekcji technicznej.
+
+00:05:22.500 --> 00:05:24.140
+Agent zarządzania ryzykiem dostawców.
+
+00:05:24.300 --> 00:05:26.880
+To narzędzie monitoruje otwarte faktury w Twoim systemie.
+
+00:05:27.000 --> 00:05:30.000
+A gdy wykryje dostawcę z ponad pięcioma przeterminowanymi fakturami,
+
+00:05:30.140 --> 00:05:32.180
+automatycznie wstrzymuje go w systemie ERP.
+
+00:05:32.400 --> 00:05:33.820
+Nikt nie musi kiwnąć palcem.
+
+00:05:33.820 --> 00:05:38.000
+Agent sprawdza dane, podejmuje decyzje, blokuje nowe zamówienia zakupu u tego dostawcy,
+
+00:05:38.080 --> 00:05:41.960
+a następnie wysyła e-mail do działu zobowiązań, wyjaśniając, co i dlaczego się stało.
+
+00:05:42.160 --> 00:05:44.660
+Wszystko to odbywa się bez żadnej ingerencji człowieka.
+
+00:05:44.840 --> 00:05:49.420
+Kolejnym przykładem jest automatyzacja faktur przedpłatowych od Teda Olsona z Capgemini.
+
+00:05:49.600 --> 00:05:54.140
+Użytkownik prosi agenta o stworzenie propozycji przedpłaty dla konkretnego zamówienia sprzedaży,
+
+00:05:54.240 --> 00:05:56.780
+a agent samodzielnie nawiguje po formularzach ERP.
+
+00:05:56.780 --> 00:06:01.700
+Ustawia typ przedpłaty na procentowy, wartość na 50%, potwierdza zamówienie sprzedaży,
+
+00:06:01.840 --> 00:06:03.980
+tworzy fakturę przedpłatową i księguje ją.
+
+00:06:04.160 --> 00:06:06.840
+To wiele kroków w różnych formularzach obsłużonych przez agenta,
+
+00:06:07.020 --> 00:06:09.840
+który przechodzi przez interfejs tak samo, jak zrobiłby to człowiek.
+
+00:06:09.960 --> 00:06:13.700
+Użytkownik jedynie opisał swoje potrzeby prostym językiem, a agent zajął się resztą.
+
+00:06:13.880 --> 00:06:15.620
+A teraz czas na coś naprawdę szalonego.
+
+00:06:15.860 --> 00:06:19.360
+Scott Gens, architekt rozwiązań, stworzył w VS Code zespół agentów AI,
+
+00:06:19.520 --> 00:06:21.500
+którzy konfigurują całe środowisko ERP.
+
+00:06:21.680 --> 00:06:25.400
+Przygotował agenta kierownika projektu, który koordynuje pracę agenta architekta rozwiązań
+
+00:06:25.400 --> 00:06:29.300
+i sprawdzającego wymagania oraz agenta konsultanta, który przeprowadza właściwą konfigurację,
+
+00:06:29.440 --> 00:06:32.060
+tworząc podmioty prawne, plany kont i kalendarze obrachunkowe,
+
+00:06:32.220 --> 00:06:35.140
+oraz agenta migracji danych, który przesyła dane podstawowe.
+
+00:06:35.320 --> 00:06:37.420
+Agenci ci przekazują sobie nawzajem zadania.
+
+00:06:37.600 --> 00:06:41.580
+Kierownik projektu przekazuje pracę konsultantowi, konsultant konfiguruje system ERP,
+
+00:06:41.700 --> 00:06:43.600
+a agent migracji danych wczytuje konta.
+
+00:06:43.740 --> 00:06:48.240
+Pełne wdrożenie systemu ERP, częściowo zautomatyzowane przez współpracujący zespół agentów AI.
+
+00:06:48.440 --> 00:06:50.520
+To nie są tylko koncepcje z prezentacji PowerPoint.
+
+00:06:50.520 --> 00:06:55.440
+To rzeczywiste dema od prawdziwych partnerów Capgemini, Scotta Gaines'a, Avantico oraz samego Microsoftu.
+
+00:06:55.580 --> 00:06:57.460
+MCP nie jest rozwiązaniem teoretycznym.
+
+00:06:57.700 --> 00:06:59.660
+Działa już dziś w środowiskach testowych Preview.
+
+00:06:59.840 --> 00:07:01.200
+Kluczowy wniosek jest prosty.
+
+00:07:01.360 --> 00:07:04.140
+MCP przekłada język naturalny na działania w systemie ERP.
+
+00:07:04.340 --> 00:07:06.600
+Nie musisz zapamiętywać ścieżek w menu ani pisać kodu.
+
+00:07:06.800 --> 00:07:09.720
+Opisujesz, czego potrzebujesz, a agent znajduje sposób, by to wykonać.
+
+00:07:09.820 --> 00:07:11.380
+Ale jak właściwie to skonfigurować?
+
+00:07:11.560 --> 00:07:12.840
+Przejdźmy przez podstawy.
+
+00:07:13.000 --> 00:07:13.700
+Jak zacząć?
+
+00:07:13.880 --> 00:07:17.680
+Jesteś zainteresowany wypróbowaniem tego, czego tak naprawdę potrzebujesz, aby zacząć?
+
+00:07:17.680 --> 00:07:19.120
+Najpierw wymagania wstępne.
+
+00:07:19.240 --> 00:07:24.240
+Potrzebujesz środowiska Dynamics 365 Finance & Operations w wersji 10.0.38 lub wyższej.
+
+00:07:24.400 --> 00:07:29.540
+Jeśli korzystasz z MCP dla analityki, potrzebujesz również zainstalowanego modułu Business Performance Analytics w wersji 2.5 lub nowszej.
+
+00:07:29.680 --> 00:07:32.500
+Potrzebujesz także klienta zgodnego z MCP, aby komunikować się z serwerem.
+
+00:07:32.640 --> 00:07:33.160
+To wszystko.
+
+00:07:33.400 --> 00:07:33.980
+Trzy rzeczy.
+
+00:07:34.280 --> 00:07:36.040
+Masz teraz dwie główne opcje połączenia.
+
+00:07:36.320 --> 00:07:38.180
+Najłatwiejszą ścieżką jest Copilot Studio.
+
+00:07:38.440 --> 00:07:40.860
+Wchodzisz tam, tworzysz nowego agenta i dodajesz narzędzie.
+
+00:07:41.100 --> 00:07:46.240
+Wyszukujesz Dynamics 365 ERP MCP, łączysz się ze swoim środowiskiem i możesz zacząć wpisywać polecenia.
+
+00:07:46.240 --> 00:07:47.780
+To rozwiązanie typu Low Code.
+
+00:07:48.000 --> 00:07:49.060
+Nie wymaga programowania.
+
+00:07:49.300 --> 00:07:51.860
+Wystarczy skonfigurować i zacząć rozmawiać ze swoim systemem ERP.
+
+00:07:52.040 --> 00:07:53.940
+Drugą opcją jest Visual Studio Code.
+
+00:07:54.100 --> 00:07:57.600
+Jeśli jesteś bardziej techniczny lub chcesz testować rzeczy bezpośrednio, daje to większą kontrolę.
+
+00:07:57.740 --> 00:08:03.600
+Używasz klienta MCP w VS Code, wklejasz adres URL punktu końcowego ERP MCP, podajesz poświadczenia i jesteś połączony.
+
+00:08:03.760 --> 00:08:06.940
+To o kilka kroków więcej niż w Copilot Studio, ale nadal jest to proste.
+
+00:08:07.140 --> 00:08:10.820
+Microsoft udostępnia dokumentację, która prowadzi przez dokładny format adresu URL.
+
+00:08:11.060 --> 00:08:13.420
+Oto coś ważnego do zrozumienia na temat bezpieczeństwa.
+
+00:08:13.420 --> 00:08:16.860
+Agent korzysta z uprawnień zabezpieczeń tożsamości użytkownika, który jest połączony.
+
+00:08:17.020 --> 00:08:21.540
+Zatem wszelkie kontrolne mechanizmy dostępu oparte na rolach, które skonfigurowałeś w Dynamics 365, mają automatyczne zastosowanie.
+
+00:08:21.760 --> 00:08:25.320
+Jeśli użytkownik widzi tylko swój podmiot prawny, agent widzi tylko ten podmiot prawny.
+
+00:08:25.480 --> 00:08:28.520
+Jeśli użytkownik nie może księgować dzienników, agent również nie może ich księgować.
+
+00:08:28.700 --> 00:08:31.480
+Twój obecny model zabezpieczeń staje się modelem zabezpieczeń agenta.
+
+00:08:31.680 --> 00:08:33.520
+Nie jest wymagana oddzielna konfiguracja.
+
+00:08:33.760 --> 00:08:35.960
+Kilka wskazówek dotyczących tworzenia dobrych promptów.
+
+00:08:36.140 --> 00:08:38.200
+Zawsze określaj podmiot prawny, w którym pracujesz.
+
+00:08:38.200 --> 00:08:39.700
+Agent nie dokonuje założeń.
+
+00:08:39.820 --> 00:08:42.020
+Jeśli mu o tym nie powiesz, może wybrać niewłaściwą firmę.
+
+00:08:42.160 --> 00:08:43.800
+Używaj jasnego, naturalnego języka.
+
+00:08:44.040 --> 00:08:45.900
+Nie musisz posługiwać się terminami technicznymi.
+
+00:08:46.160 --> 00:08:47.960
+Dziel złożone zadania na mniejsze etapy.
+
+00:08:48.160 --> 00:08:51.620
+Zamiast prosić o proces dziesięćetapowy w jednym promptzie, proś o jeden krok na raz.
+
+00:08:51.780 --> 00:08:54.880
+Agent jest inteligentny, ale działa bardziej niezawodnie, gdy zachowujesz koncentrację.
+
+00:08:55.060 --> 00:08:56.660
+Jedna szczera uwaga na temat ograniczeń.
+
+00:08:56.780 --> 00:08:58.820
+To rozwiązanie jest wciąż w publicznej wersji zapoznawczej.
+
+00:08:58.960 --> 00:09:02.480
+Limit czasu wykonania wynosi 120 sekund, więc długotrwałe operacje mogą zakończyć się niepowodzeniem.
+
+00:09:02.480 --> 00:09:07.960
+Każde zapytanie może zwrócić około 10 megabajtów danych, co wystarcza do większości pytań, ale nie do ogromnych zrzutów danych.
+
+00:09:08.160 --> 00:09:10.500
+Sztuczna inteligencja nie jest jeszcze w pełni spójna.
+
+00:09:10.720 --> 00:09:14.460
+Może poradzić sobie z zadaniem idealnie jednego dnia, a następnego mieć z nim trudności.
+
+00:09:14.680 --> 00:09:17.040
+Testuj dokładnie, zanim powierzysz jej coś ważnego.
+
+00:09:17.220 --> 00:09:18.360
+Co nas czeka w przyszłości?
+
+00:09:18.600 --> 00:09:20.820
+Microsoft ma jasną mapę drogową dla MCP.
+
+00:09:21.000 --> 00:09:22.500
+Mapa drogowa i kierunki rozwoju.
+
+00:09:22.720 --> 00:09:24.540
+Dokąd zmierza Microsoft z tym rozwiązaniem?
+
+00:09:24.720 --> 00:09:26.100
+Stawiają wszystko na MCP.
+
+00:09:26.280 --> 00:09:31.320
+Wszystkie nowe agenty ERP będą na nim budowane, a istniejące zostaną przeniesione do grudnia 2025 roku.
+
+00:09:31.320 --> 00:09:33.040
+To nie jest poboczny eksperyment.
+
+00:09:33.180 --> 00:09:35.460
+To strategiczny kierunek dla całej platformy.
+
+00:09:35.680 --> 00:09:38.800
+Dla samego analitycznego MCP planowanych jest kilka nowych funkcji.
+
+00:09:39.020 --> 00:09:44.440
+W drodze jest szczegółowe pobieranie schematów, dzięki czemu agent będzie mógł żądać mniejszych fragmentów modelu danych, zamiast pobierać wszystko na raz.
+
+00:09:44.620 --> 00:09:47.760
+Jest to lepsze dla wydajności i zarządzania oknem kontekstowym modeli AI.
+
+00:09:47.960 --> 00:09:53.140
+Agenty będą również mogły tworzyć i aktualizować pulpity nawigacyjne oraz miary bezpośrednio, nie tylko odpytywać istniejące.
+
+00:09:53.140 --> 00:09:59.660
+Natywna integracja z Copilotem i Teams znajduje się w planach, dzięki czemu możesz zadawać pytania dotyczące danych ERP bez opuszczania swoich codziennych narzędzi.
+
+00:09:59.800 --> 00:10:02.000
+Oto jak Microsoft widzi przyszłość tego rozwiązania.
+
+00:10:02.200 --> 00:10:06.740
+Wyobraź sobie, że dyrektor finansowy otwiera pulpit w narzędziu Business Performance Analytics i klika przycisk analizy.
+
+00:10:06.880 --> 00:10:11.200
+Agent natychmiast skanuje dane, znajduje skok kosztów sprzedanych produktów i oznacza go.
+
+00:10:11.200 --> 00:10:23.040
+Zagłębia się w wydatki na dostawców, identyfikuje dostawcę powodującego wzrost, pobiera dane zewnętrzne, takie jak zmiany taryf i wiadomości, tworzy prezentację wyjaśniającą przyczynę źródłową i oznacza zadania dla zespołu.
+
+00:10:23.440 --> 00:10:29.540
+Wszystko to dzieje się w kilka sekund od kliknięcia w pulpicie po pełną analizę z rekomendacjami bez pisania ani jednego zapytania.
+
+00:10:29.760 --> 00:10:34.660
+MCP rozszerza się również poza finanse i operacje na handel, biznes central oraz obsługę klienta.
+
+00:10:34.660 --> 00:10:39.080
+Tworzy to ujednoliconą warstwę agentów, a i w całym ekosystemie Dynamics 365.
+
+00:10:39.080 --> 00:10:46.080
+Agent, który współpracuje z Twoim systemem ERP może również komunikować się z systemem handlowym i platformą obsługi klienta za pomocą tego samego protokołu.
+
+00:10:46.240 --> 00:10:54.720
+Ekosystem partnerów szybko się rozwija RSM, HSO, Fellow Mind, KPMG, Crow i inni już tworzą agentów opartych na MCP dla konkretnych potrzeb branżowych.
+
+00:10:54.900 --> 00:11:04.080
+Pomyśl o automatyzacji hali produkcyjnej, agentach do płatności faktur w dziale księgowości, przetwarzaniu ładunków przychodzących w logistyce czy agentach wycofujących produkty ze względu na jakość.
+
+00:11:04.080 --> 00:11:10.500
+Każdy z nich korzysta z tej samej podstawy MCP. W dłuższej perspektywie MCP stanie się standardowym sposobem integracji systemów ERP.
+
+00:11:10.680 --> 00:11:18.740
+Usłyszysz określenie Headless ERP w połączeniu z agentowymi przepływami pracy, co oznacza, że ERP działa w tle jako system rejestru, a agenci, a i obsługują interakcje.
+
+00:11:18.960 --> 00:11:22.980
+Zamiast klikać w formularzach opisujesz swoje potrzeby, a agenci realizują je za Ciebie.
+
+00:11:22.980 --> 00:11:24.980
+Podsumujmy, co to dla Ciebie oznacza.
+
+00:11:24.980 --> 00:11:26.300
+Co to dla Ciebie oznacza?
+
+00:11:26.500 --> 00:11:29.660
+Jeśli korzystasz z Dynamics 365, oto co się zmienia.
+
+00:11:29.840 --> 00:11:37.320
+Wkrótce będziesz delegować rutynowe zadania, takie jak księgowanie dzienników, tworzenie zamówień zakupu, uzgadnianie kont czy sprawdzanie salt dostawców, po prostu opisując swoje potrzeby.
+
+00:11:37.520 --> 00:11:41.400
+Zamiast nawigować po menu, wydajesz polecenie agentowi, a on zajmuje się kolejnymi krokami.
+
+00:11:41.600 --> 00:11:44.220
+Twoja rola zmienia się z wykonywania pracy na jej nadzorowanie.
+
+00:11:44.480 --> 00:11:47.220
+Jeśli jesteś specjalistą i MCP uprości Twoje życie.
+
+00:11:47.460 --> 00:11:51.560
+Koniec z niestandardowymi API dla każdej integracji, a i osobnymi łącznikami dla każdego narzędzia.
+
+00:11:51.560 --> 00:11:56.540
+Twój obecny model zabezpieczeń stosuje się automatycznie, więc agent dziedziczy uprawnienia, które już skonfigurowałeś.
+
+00:11:56.680 --> 00:12:01.360
+Oznacza to mniej niestandardowego kodu, mniej problemów z utrzymaniem i szybsze wdrażanie nowych funkcjonalności.
+
+00:12:01.620 --> 00:12:05.060
+Jeśli jesteś partnerem lub ISV, MCP otwiera przed Tobą nowe możliwości.
+
+00:12:05.360 --> 00:12:08.600
+Możesz budować agentów wielokrotnego użytku, którzy działają w wielu środowiskach.
+
+00:12:08.780 --> 00:12:13.300
+Twoje dostosowania stają się gotowe do współpracy z agentami domyślnie, bez potrzeby tworzenia specjalnych warstw udostępniania.
+
+00:12:13.500 --> 00:12:16.320
+Jeśli działa to w interfejsie ERP, działa to również przez MCP.
+
+00:12:16.460 --> 00:12:17.640
+Oto szersza perspektywa.
+
+00:12:17.820 --> 00:12:20.180
+To nie tylko nowa funkcja, to zmiana strukturalna.
+
+00:12:21.560 --> 00:12:30.520
+Zamiast przechowywać informacje i czekać na reakcje ludzi ERP staje się platformą, której agenci AI używają do bezpośredniego wykonywania procesów biznesowych.
+
+00:12:30.760 --> 00:12:33.460
+Dane nadal tam są, ale teraz są połączone z działaniem.
+
+00:12:33.720 --> 00:12:36.220
+Jedna uwaga, ład i nadzór nadal mają znaczenie.
+
+00:12:36.480 --> 00:12:42.580
+Zaplanuj udział człowieka w procesie przy działaniach wysokiego ryzyka, takich jak księgowanie dużych transakcji finansowych czy zmiana warunków dostawców.
+
+00:12:42.800 --> 00:12:45.240
+Monitoruj zachowanie agentów i prowadź ścieżki audytu.
+
+00:12:45.380 --> 00:12:48.240
+Ta technologia jest potężna, ale wymaga odpowiedzialnego nadzoru.
+
+00:12:48.240 --> 00:12:52.160
+Zacznij od zadań niskiego ryzyka, buduj pewność i rozszerzaj działania w miarę postępów.
+
+00:12:52.260 --> 00:12:55.080
+To by było na tyle, jeśli chodzi o serwer MCP wyjaśniony w prosty sposób.
+
+00:12:55.320 --> 00:12:58.380
+Daje on agentom, a i nadzorowany sposób komunikacji z Twoim systemem ERP.
+
+00:12:58.520 --> 00:13:02.900
+To trochę tak, jakby zamienić Dynamics 365 w zestaw narzędzi, z którego może skorzystać każdy inteligentny asystent.
+
+00:13:03.040 --> 00:13:04.220
+Oto praca domowa dla Ciebie.
+
+00:13:04.440 --> 00:13:06.920
+Jeśli używasz wspieranej wersji, wypróbuj publiczną wersję zapoznawczą.
+
+00:13:07.140 --> 00:13:10.480
+Stwórz prostego agenta w Kopilot Studio, który odczyta pięć Twoich najważniejszych otwartych faktur.
+
+00:13:10.480 --> 00:13:12.380
+Przekonaj się, jakie to w rzeczywistości proste.
+
+00:13:12.520 --> 00:13:15.000
+Nazywam się Mirko Peters, a to była pigułka wiedzy o Microsoft.
+
+00:13:15.260 --> 00:13:19.020
+Subskrybuj na swojej ulubionej platformie podcastowej, by słuchać kolejnych wyjaśnień prostym językiem.
+
+00:13:19.240 --> 00:13:22.220
+Następnym razem przyjrzymy się, jak MCP współpracuje z agentami Power Platform.
+
+00:13:22.440 --> 00:13:25.380
+Udostępnij ten odcinek komuś, kto zgłębia temat AI w systemach ERP.

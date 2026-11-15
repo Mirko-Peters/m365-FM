@@ -325,7 +325,7 @@ const setCols = (db, table, id, cols, extra = [], extraSql = "") => db.prepare(`
 // Technische Adresse einer Zeile, die gleich beim Anlegen in einem anderen Event aufgeht: "~" kommt in keiner echten Adresse vor (Formular und Routen
 // erlauben nur a-z, 0-9, -). Eine nie sichtbare Zeile belegt so keine Adresse, die ein Mitglied vergeben moechte; wird sie zurueckgenommen, bekommt sie eine echte.
 const HIDDEN = "~";
-// review: Zustand des neuen Events (Migration 0045). Ein neu entdecktes Event kommt zur Pruefung (pending, nicht oeffentlich); die ausgeblendete Zeile einer
+// review: Zustand des neuen Events (Migration 0047). Ein neu entdecktes Event kommt zur Pruefung (pending, nicht oeffentlich); die ausgeblendete Zeile einer
 // Zusammenfuehrung erbt den Zustand des Ziel-Events, damit ein Zuruecknehmen nichts ungeprueft veroeffentlicht.
 async function insertEvent(db, c, t, mergedInto = 0, review = "pending") {
   const handle = mergedInto ? HIDDEN + rndToken().slice(0, 30) : await freeHandle(db, c.title, c.year);

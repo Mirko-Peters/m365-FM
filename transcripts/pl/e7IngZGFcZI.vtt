@@ -1,0 +1,832 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.000
+Co się dzieje, gdy Biznes Central obsługuje większość Twojej pracy, ale jeden element biznesu nadal nie do końca do niego pasuje?
+
+00:00:06.200 --> 00:00:14.720
+Może potrzebujesz specjalnego procesu wysyłki, dział finansowy, wymaga lokalnego raportu albo pracownicy ciągle wpisują te same dane do dwóch systemów, które nie chcą ze sobą współpracować?
+
+00:00:14.940 --> 00:00:16.980
+Biznes Central obejmuje już bardzo wiele.
+
+00:00:17.220 --> 00:00:22.060
+Pomaga zarządzać finansami, sprzedażą, zapasami, projektami i pracą w jednym miejscu.
+
+00:00:22.180 --> 00:00:25.780
+Ale rzecz w tym, że żadne dwie firmy nie działają w dokładnie taki sam sposób.
+
+00:00:25.780 --> 00:00:33.640
+Pomyśl o swoim telefonie. Dostajesz go z funkcją połączeń, wiadomościami, aparatem i podstawowymi narzędziami, a następnie instalujesz aplikacje dopasowane do Twojego życia, nie rozbierając telefonu na części.
+
+00:00:33.900 --> 00:00:36.300
+Rozszerzenia Biznes Central działają w ten sam sposób.
+
+00:00:36.520 --> 00:00:41.280
+Pod koniec tego materiału dowiesz się, czym one są, gdzie pasują i co sprawdzić przed ich dodaniem.
+
+00:00:41.900 --> 00:00:43.500
+Czym właściwie jest rozszerzenie?
+
+00:00:44.000 --> 00:00:54.520
+Rozszerzenie to pakiet dla Dynamics 365 Biznes Central, który dodaje funkcjonalność, której nie masz w standardowej konfiguracji lub zmienia sposób działania standardowego elementu w Twojej firmie.
+
+00:00:54.520 --> 00:01:01.440
+Może być to drobiazg, jak dodanie wymaganego pola do karty klienta, aby nikt nie mógł utworzyć klienta bez podania preferencji dostawy.
+
+00:01:01.680 --> 00:01:03.880
+Może też obejmować cały proces biznesowy.
+
+00:01:04.120 --> 00:01:09.400
+Rozszerzenie do wysyłki może tworzyć etykiety przewozowe, przesyłać szczegóły paczki do kuriera i pobierać dane śledzenia,
+
+00:01:09.580 --> 00:01:14.320
+podczas gdy rozszerzenie bankowe może pobierać wyciągi i ułatwiać dopasowanie ich do zaksięgowanych płatności.
+
+00:01:14.560 --> 00:01:17.560
+Nie musisz być programistą, aby zrozumieć podstawową ideę.
+
+00:01:17.560 --> 00:01:24.920
+Wyobraź sobie Biznes Central jako biurowiec, w którym standardowa aplikacja daje Ci główne pomieszczenia, finanse, sprzedaż, zakupy, zapasy, projekty i inne.
+
+00:01:25.120 --> 00:01:28.660
+Czy masz już na miejscu drzwi, ściany, okablowanie i usługi wspólne?
+
+00:01:28.860 --> 00:01:32.760
+Rozszerzenie dodaje coś wokół tego budynku, nie ingerując w jego główną strukturę.
+
+00:01:32.960 --> 00:01:37.360
+Może dodać nowy pokój lub postawić dodatkowe narzędzie na biurku, z którego już korzystasz.
+
+00:01:37.500 --> 00:01:43.580
+Nowy przycisk w zamówieniu sprzedaży, nową kolumnę na liście, inny układ faktury lub połączenie z zewnętrzną usługą.
+
+00:01:43.580 --> 00:01:49.500
+W tle rozszerzenie może dodawać pola, strony, raporty, akcje, zasady i logikę biznesową.
+
+00:01:49.720 --> 00:01:53.300
+To ostatnie sformułowanie brzmi technicznie, więc wyjaśnijmy to prościej.
+
+00:01:53.460 --> 00:01:56.940
+Logika biznesowa to zasady, które mówią systemowi Biznes Central, co ma robić.
+
+00:01:57.160 --> 00:02:01.880
+Na przykład zasada może blokować zwolnienie zamówienia do realizacji, dopóki ktoś nie wprowadzi numeru zamówienia zakupu.
+
+00:02:02.060 --> 00:02:06.120
+Inna zasada może wysyłać dokument do zatwierdzenia, gdy jego kwota przekroczy określony limit.
+
+00:02:06.360 --> 00:02:10.640
+Rozszerzenie zajmuje się tą zasadą, więc Twój zespół nie musi o tym pamiętać za każdym razem.
+
+00:02:10.640 --> 00:02:17.020
+Dawniej, zanim aplikacje chmurowe i rozszerzenia stały się normą, firmy często zmieniały bezpośrednio oryginalny kod Biznes Central.
+
+00:02:17.280 --> 00:02:20.880
+Wyobraź sobie, że to jak zmienianie ścian i instalacji wewnątrz budynku biurowego.
+
+00:02:21.120 --> 00:02:22.760
+Na początku może to rozwiązać problem.
+
+00:02:23.000 --> 00:02:28.780
+Jednak gdy Microsoft wysyła aktualizację, oczekuje ona, że standardowy budynek wygląda w określony sposób, a Twoje zmiany mogą z nim kolidować.
+
+00:02:28.980 --> 00:02:34.500
+Wtedy ktoś musi sprawdzić te zmiany, naprawić konflikty i przetestować system, zanim aktualizacja będzie mogła bezpiecznie przebiec.
+
+00:02:34.500 --> 00:02:40.720
+Ta praca kosztuje czas. Rozszerzenia pozwalają uniknąć większości tych problemów, ponieważ ich kod pozostaje oddzielony od kodu standardowej aplikacji,
+
+00:02:40.940 --> 00:02:44.480
+więc zamiast przebudowywać budynek, dołącza się do niego starannie przygotowany dodatek.
+
+00:02:44.640 --> 00:02:49.320
+Microsoft może aktualizować główną aplikację, podczas gdy rozszerzenie pozostaje w swoim własnym pakiecie.
+
+00:02:49.500 --> 00:02:53.040
+To nie oznacza, że każda aktualizacja nie wymaga żadnej uwagi.
+
+00:02:53.660 --> 00:03:00.620
+Rozszerzenie może zależeć od innego rozszerzenia, a jego wydawca może być zmuszony do wydania nowej wersji, gdy Biznes Central się zmienia.
+
+00:03:00.620 --> 00:03:05.760
+Jednak oddzielenie rozszerzenia od standardowego kodu daje wszystkim znacznie czystszy punkt wyjścia.
+
+00:03:06.020 --> 00:03:09.360
+Możesz o tym myśleć jak o trzymaniu narzędzia w jego własnej walizce.
+
+00:03:09.600 --> 00:03:13.620
+Narzędzie podłącza się do warsztatu, gdy go potrzebujesz, ale nie wymaga przebudowy warsztatu,
+
+00:03:14.280 --> 00:03:18.940
+a jeśli już go nie potrzebujesz, możesz usunąć dodatek zamiast rozbierać cały budynek.
+
+00:03:19.080 --> 00:03:22.840
+To zmienia podejście z pytania, jak możemy przepisać Biznes Central dla nas,
+
+00:03:23.000 --> 00:03:25.600
+na pytanie, jak możemy bezpiecznie dodać brakujący element.
+
+00:03:25.600 --> 00:03:30.480
+Jest to ważne, ponieważ standardowy Biznes Central już obsługuje ogromną ilość typowej pracy biznesowej.
+
+00:03:30.620 --> 00:03:35.140
+Zatem rozszerzenia powinny wypełniać realną lukę, a nie stawać się wymówką do przebudowy każdego ekranu tylko dlatego,
+
+00:03:35.320 --> 00:03:36.600
+że stary system wyglądał inaczej.
+
+00:03:36.820 --> 00:03:39.620
+Czasami najlepsze rozszerzenie dodaje tylko jedno pole i jedną kontrolę.
+
+00:03:39.820 --> 00:03:42.920
+Czasami łączy Biznes Central z usługą, od której Twoja firma już zależy.
+
+00:03:43.160 --> 00:03:45.000
+Tak czy inaczej, cel pozostaje prosty.
+
+00:03:45.160 --> 00:03:48.860
+Utrzymuj standardową podstawę stabilną, dodając jednocześnie narzędzia, których potrzebują Twoi ludzie.
+
+00:03:49.060 --> 00:03:54.180
+Teraz musimy przyjrzeć się, kto tworzy te dodatki, ponieważ nie każde rozszerzenie pochodzi z tego samego źródła.
+
+00:03:54.180 --> 00:03:56.480
+Główne typy rozszerzeń.
+
+00:03:56.700 --> 00:03:58.720
+Skąd więc właściwie biorą się rozszerzenia?
+
+00:03:59.220 --> 00:04:03.980
+Nie pochodzą z jednego miejsca, a zrozumienie różnicy pomoże Ci wybrać odpowiednie dla Twojej firmy.
+
+00:04:04.160 --> 00:04:06.520
+Pierwszy typ nazywany jest rozszerzeniem typu aplikacja.
+
+00:04:06.740 --> 00:04:10.420
+Pomyśl o tym jak o gotowym dodatku, który zajmuje się konkretnym zadaniem wewnątrz Biznes Central.
+
+00:04:10.640 --> 00:04:13.520
+Na przykład aplikacja do wysyłki może połączyć Twoje zamówienia z przewoźnikiem.
+
+00:04:13.520 --> 00:04:16.900
+Aplikacja płatnicza może obsługiwać płatności kartą lub przesyłać dane do serwisu płatności.
+
+00:04:17.060 --> 00:04:20.420
+Aplikacja do raportowania może dodać raporty, których Twój zespół potrzebuje co miesiąc.
+
+00:04:20.420 --> 00:04:24.540
+Rozszerzenie aplikacji jest jak zakup gotowego narzędzia do pracy, którą musisz wykonać.
+
+00:04:24.700 --> 00:04:29.940
+Instalujesz je, konfigurujesz dla swojej firmy, a użytkownicy widzą nową funkcję bezpośrednio w Biznes Central.
+
+00:04:30.220 --> 00:04:37.560
+Może ono dodawać własne strony i pola lub umieszczać opcje na stronach, które ludzie już znają, takich jak zamówienia sprzedaży, zakupu czy karty klientów.
+
+00:04:37.560 --> 00:04:40.680
+Niektóre rozszerzenia aplikacji pochodzą bezpośrednio od firmy Microsoft.
+
+00:04:40.980 --> 00:04:44.560
+Dostarczają one dodatki dla potrzeb, które nie dotyczą każdej firmy ani każdego kraju.
+
+00:04:44.760 --> 00:04:47.120
+Dobrym przykładem jest pakiet lokalnych raportów prawnych.
+
+00:04:47.120 --> 00:04:51.000
+Zasady podatkowe, faktury, płatności i dokumenty urzędowe różnią się w zależności od miejsca.
+
+00:04:51.220 --> 00:04:54.020
+Dlatego jeden kraj może potrzebować funkcji, których inny nigdy nie używa.
+
+00:04:54.160 --> 00:04:58.840
+To rozdzielenie pozwala zachować skupienie na standardowym produkcie, jednocześnie dając firmom sposób na spełnienie lokalnych wymogów.
+
+00:04:59.020 --> 00:05:00.520
+Następnie mamy rozszerzenia ISV.
+
+00:05:00.680 --> 00:05:03.480
+ISV oznacza niezależnego dostawcę oprogramowania, independent software vendor.
+
+00:05:03.700 --> 00:05:09.500
+Brzmi to jak skomplikowane techniczne określenie, ale oznacza po prostu firmę programistyczną tworzącą aplikację dla wielu klientów Biznes Central.
+
+00:05:09.500 --> 00:05:17.940
+Firma ISV może skupić się na pracy magazynowej, handlu detalicznym, produkcji, obsłudze dokumentów, integracji płac, fakturach elektronicznych czy raportowaniu branżowym.
+
+00:05:18.180 --> 00:05:24.240
+Zamiast budować tę samą funkcję od podstaw dla każdego klienta, tworzą jedną aplikację, którą wiele firm może kupić lub zasubskrybować.
+
+00:05:24.420 --> 00:05:28.880
+Aplikacje te zazwyczaj pojawiają się w Microsoft AppSource, internetowym sklepie z aplikacjami biznesowymi Microsoft.
+
+00:05:29.120 --> 00:05:31.760
+AppSource jest przydatny, gdy Twoja potrzeba jest powszechna.
+
+00:05:31.940 --> 00:05:36.700
+Być może wiele firm chce połączyć Biznes Central z tą samą firmą przewozową, bankiem lub dostawcą płatności.
+
+00:05:36.700 --> 00:05:44.120
+Zamiast płacić komuś za zbudowanie takiego połączenia tylko dla Ciebie, możesz znaleźć gotową aplikację ze wsparciem, instrukcją konfiguracji i regularnymi aktualizacjami od twórcy.
+
+00:05:44.320 --> 00:05:45.800
+Może to zaoszczędzić mnóstwo pracy.
+
+00:05:46.040 --> 00:05:49.620
+Mimo to, aplikacja z AppSource nie jest automatycznie właściwym wyborem tylko dlatego, że istnieje.
+
+00:05:49.800 --> 00:05:53.800
+Musisz sprawdzić, czy pasuje ona do Twojego procesu, Twojego kraju i Twojej wersji Biznes Central.
+
+00:05:54.080 --> 00:05:59.300
+Dobra aplikacja rozwiązuje konkretny problem, nie zmuszając zespołu do zmiany każdego elementu ich codziennej pracy pod tę aplikację.
+
+00:05:59.480 --> 00:06:03.300
+Kolejnym typem jest rozszerzenie dla dzierżawcy Pertinent Extension, często skracane do PTE.
+
+00:06:03.300 --> 00:06:06.640
+Dzierżawca Pertinent to własne środowisko Biznes Central Twojej firmy.
+
+00:06:06.820 --> 00:06:12.400
+Zatem rozszerzenie dla dzierżawcy to aplikacja stworzona wyłącznie dla Twojej firmy, a nie publikowana dla wszystkich klientów Biznes Central.
+
+00:06:12.660 --> 00:06:16.480
+Wyobraź sobie dystrybutora żywności ze specyficznym sposobem obliczania kosztów dostawy.
+
+00:06:16.680 --> 00:06:22.300
+Ceny mogą zależeć od transportu w kontrolowanej temperaturze, stref dostaw, zwrotnych skrzyń i umów z klientami wypracowanych przez lata.
+
+00:06:22.560 --> 00:06:26.080
+Taki proces jest prawdopodobnie zbyt nietypowy dla standardowej aplikacji wysyłkowej.
+
+00:06:26.260 --> 00:06:30.900
+Partner lub programista Biznes Central może więc stworzyć rozszerzenie Pertinent wokół tego procesu.
+
+00:06:30.900 --> 00:06:36.080
+Aplikacja pozostaje wewnątrz środowiska Biznes Central danej firmy i może być dostosowana do jej sposobu działania.
+
+00:06:36.320 --> 00:06:41.980
+Może zawierać jednorazowe łącze do starszego systemu, specjalny proces zatwierdzania lub ekran stworzony dla zadań wykonywanych tylko przez tę firmę.
+
+00:06:42.140 --> 00:06:43.980
+Jednak własne nie zawsze znaczy lepsze.
+
+00:06:44.200 --> 00:06:48.440
+Rozszerzenie Pertinent zapewnia ścisłe dopasowanie, ale ktoś musi wziąć za nie odpowiedzialność.
+
+00:06:48.620 --> 00:06:54.000
+Oznacza to prowadzenie dokumentacji, testowanie zmian i organizowanie wsparcia, gdy firma zmienia proces lub aktualizowany jest Biznes Central.
+
+00:06:54.000 --> 00:06:59.260
+Jeśli inna firma mogłaby skorzystać z tej samej funkcji, gotowa aplikacja ISV może wymagać mniej pracy w długim terminie.
+
+00:06:59.440 --> 00:07:00.580
+Jak więc dokonać wyboru?
+
+00:07:00.780 --> 00:07:03.300
+Zacznij od potrzeby biznesowej, a nie od rodzaju rozszerzenia.
+
+00:07:03.520 --> 00:07:09.100
+Jeśli Twoja potrzeba jest typowa, jak import wyciągów bankowych, etykiety paczek, faktury, elektroniczne czy lokalny raport,
+
+00:07:09.300 --> 00:07:11.920
+najpierw szukaj aplikacji od Microsoft lub partnera ISV.
+
+00:07:12.160 --> 00:07:14.660
+Możesz znaleźć dojrzałą aplikację, która już pasuje do Twoich potrzeb.
+
+00:07:14.900 --> 00:07:19.160
+Jeśli potrzeba wynika z procesu unikalnego dla Twojej firmy, rozszerzenie Pertinent może mieć więcej sensu.
+
+00:07:19.160 --> 00:07:25.040
+Istnieją również proste rozszerzenia obejmujące wąską regułę, jak wymaganie wypełnienia określonych pól przed zapisaniem klienta lub dostawcy.
+
+00:07:25.260 --> 00:07:29.120
+Mogą być niewielkie, ale zapobiegają problemom wynikającym z braku informacji w przyszłości.
+
+00:07:29.340 --> 00:07:32.560
+To, kto stworzył aplikację, wskazuje, gdzie szukać wsparcia i aktualizacji.
+
+00:07:32.740 --> 00:07:36.420
+To, co zmienia aplikacja, mówi Ci, co użytkownicy będą dostrzegać każdego dnia.
+
+00:07:36.640 --> 00:07:38.920
+Jak rozszerzenia zmieniają codzienną pracę.
+
+00:07:39.660 --> 00:07:41.660
+Gdzie więc faktycznie zauważasz rozszerzenie?
+
+00:07:41.660 --> 00:07:47.180
+Zazwyczaj zauważasz je na stronie, której już używasz, jak karta klienta, zamówienie sprzedaży, karta towaru lub zaksięgowana faktura.
+
+00:07:47.380 --> 00:07:49.380
+Często jest to rozszerzenie strony, page extension.
+
+00:07:49.700 --> 00:07:52.180
+Zmienia ono ekran, nie zastępując przy tym dobrze znanej strony.
+
+00:07:52.420 --> 00:07:57.000
+Twój zespół pracuje tam, gdzie pracował dotychczas, a rozszerzenie dodaje informacje lub akcje niezbędne w procesie.
+
+00:07:57.180 --> 00:08:00.700
+Wyobraź sobie, że Twój zespół sprzedaży potrzebuje okna czasowego dostawy dla każdego klienta.
+
+00:08:00.880 --> 00:08:05.740
+Rozszerzenie strony może dodać pole czasu dostawy do karty klienta, a następnie pokazać ten szczegół na zamówieniu sprzedaży.
+
+00:08:05.740 --> 00:08:09.060
+Nikt nie potrzebuje osobnego arkusza kalkulacyjnego ani notatki ukrytej w mailu.
+
+00:08:09.180 --> 00:08:12.560
+Osoba wprowadzająca zamówienie widzi zasadę dostawy dokładnie tam, gdzie jest to istotne.
+
+00:08:12.720 --> 00:08:14.380
+Czasami zmiana jest jeszcze prostsza.
+
+00:08:14.620 --> 00:08:21.160
+Możesz zobaczyć nowy przycisk, który wysyła przypomnienie o płatności, tworzy etykietę wysyłkową, otwiera powiązany dokument lub uruchamia wniosek o zatwierdzenie.
+
+00:08:21.400 --> 00:08:25.720
+Strona nadal wygląda jak biznes central, ale teraz wspiera pracę, którą Twój zespół musi wykonać.
+
+00:08:25.900 --> 00:08:27.900
+Dzięki temu praca pozostaje blisko rekordu.
+
+00:08:27.900 --> 00:08:36.860
+Zamiast wymagać od użytkowników pamiętania o pięciu krokach w różnych narzędziach, rozszerzenie może umieścić kolejne działanie bezpośrednio przy kliencie, fakturze, zamówieniu lub pozycji, którą aktualnie przeglądają.
+
+00:08:37.120 --> 00:08:40.000
+Mniej przekazywania zadań zazwyczaj oznacza mniej pominiętych kroków.
+
+00:08:40.200 --> 00:08:41.880
+Raporty zmieniają się w podobny sposób.
+
+00:08:42.160 --> 00:08:50.380
+Biznes central zawiera standardowe raporty, ale firma może potrzebować, aby faktura zawierała specjalny numer referencyjny, dodatkowy tekst prawny, inne logo lub informacje, których oczekuje klient.
+
+00:08:50.560 --> 00:08:55.260
+Rozszerzenie raportu może dodać te dane lub zapewnić inny układ, pozostawiając oryginalny raport bez zmian.
+
+00:08:55.260 --> 00:09:01.300
+Pomyśl o fakturze sprzedaży. Twój zespół finansowy może potrzebować jednego układu dla klientów lokalnych, a drugiego dla klientów zagranicznych.
+
+00:09:01.460 --> 00:09:06.120
+Pierwszy może pokazywać lokalne szczegóły podatkowe, podczas gdy drugi wymaga innego sformułowania i odniesienia celnego.
+
+00:09:06.340 --> 00:09:10.440
+Rozszerzenie raportu może dodać te układy i pobrać pola, których potrzebuje każdy dokument.
+
+00:09:10.720 --> 00:09:16.440
+Standardowy raport nie znika. Ma to znaczenie, ponieważ nie zastępujesz dobrze znanego raportu czymś zupełnie odrębnym.
+
+00:09:16.700 --> 00:09:20.340
+Dodajesz to, czego potrzebuje Twoja firma, zachowując standardowy raport jako bazę.
+
+00:09:20.540 --> 00:09:23.280
+Raporty służą nie tylko do dokumentów wysyłanych poza firmę.
+
+00:09:23.280 --> 00:09:31.020
+Rozszerzenie może dodawać kolumny do wewnętrznego raportu finansowego, pokazywać dodatkowe szczegóły pozycji do planowania zapasów lub uwzględniać pole specyficzne dla firmy w raporcie zarządczym.
+
+00:09:31.160 --> 00:09:35.380
+Jeśli dane istnieją w Biznes Central, raport może je wprowadzić do widoku, którego ludzie używają do podejmowania decyzji.
+
+00:09:35.540 --> 00:09:37.760
+Kolejną kwestią są rozszerzenia zestawów uprawnień.
+
+00:09:37.880 --> 00:09:41.800
+Uprawnienia decydują o tym, co każda osoba może zobaczyć, zmienić, zaksięgować lub usunąć.
+
+00:09:42.020 --> 00:09:45.460
+Dla początkujących można je porównać do kart dostępu do różnych pomieszczeń w firmie.
+
+00:09:45.460 --> 00:09:48.460
+Użytkownik finansowy może potrzebować dostępu do nowego ekranu płatności.
+
+00:09:48.660 --> 00:09:52.640
+Użytkownik magazynu może potrzebować dostępu do funkcji wysyłki, ale nie do powiązanych z nią danych bankowych.
+
+00:09:52.860 --> 00:09:57.680
+Gdy rozszerzenie dodaje nową stronę lub proces, może również dodać uprawnienia, których użytkownicy potrzebują do tej nowej pracy.
+
+00:09:57.920 --> 00:09:59.600
+Pozwala to uniknąć częstego problemu.
+
+00:09:59.780 --> 00:10:05.100
+Aplikacja jest instalowana, ludzie widzą jej nowy przycisk, ale nie mogą go użyć, ponieważ nie mają dostępu do powiązanych z nim rekordów.
+
+00:10:05.280 --> 00:10:08.600
+Rozszerzenie zestawu uprawnień pomaga połączyć nową funkcję z odpowiednimi rolami.
+
+00:10:08.600 --> 00:10:11.460
+Dzięki temu dostęp jest zgodny z zadaniami, które ludzie faktycznie wykonują.
+
+00:10:11.700 --> 00:10:14.080
+Nadal musisz zdecydować, kto powinien otrzymać taki dostęp.
+
+00:10:14.320 --> 00:10:19.140
+Rozszerzenie może dostarczyć zestawy uprawnień, ale to Twoja firma wybiera, które osoby lub grupy powinny z nich korzystać.
+
+00:10:19.300 --> 00:10:23.320
+Nowe narzędzie nie powinno po cichu dawać każdemu użytkownikowi większego dostępu niż wymaga tego jego rola.
+
+00:10:23.540 --> 00:10:26.640
+Wiele rozszerzeń łączy również Biznes Central z innymi usługami online.
+
+00:10:26.920 --> 00:10:28.360
+Są to aplikacje integracyjne.
+
+00:10:28.540 --> 00:10:34.600
+Przesyłają one informacje między Biznes Central a bankiem, firmą spedycyjną, usługą płatniczą, sklepem internetowym lub innym systemem biznesowym.
+
+00:10:34.600 --> 00:10:38.140
+Weźmy pod uwagę zespół finansowy, który codziennie otrzymuje wyciągi bankowe.
+
+00:10:38.360 --> 00:10:45.180
+Bez połączenia ktoś musiałby pobrać plik z banku, wczytać go ręcznie, porównać każdy wiersz wyciągu z płatnościami i wyjaśniać niezgodne wpisy.
+
+00:10:45.440 --> 00:10:51.920
+Dzięki rozszerzeniu bankowości wyciąg może trafić prosto do Biznes Central i pomóc zespołowi dopasować przychodzące i wychodzące płatności do istniejących rekordów.
+
+00:10:52.040 --> 00:10:55.700
+Pracownik nadal sprawdza wyjątki, ale rutynowe dopasowania wymagają mniej ręcznej pracy.
+
+00:10:55.960 --> 00:10:59.340
+Zespół finansowy może skupić się na wpisach, które wymagają weryfikacji przez człowieka.
+
+00:10:59.340 --> 00:11:04.220
+To praktyczne zastosowanie rozszerzenia. Nie eliminuje ono potrzeby osądu. Eliminuje za to powtarzalne czynności.
+
+00:11:04.440 --> 00:11:09.180
+Aplikacje do obsługi wysyłek działają podobnie. Zamówienie sprzedaży może wysłać szczegóły adresu i przesyłki do firmy kurierskiej.
+
+00:11:09.360 --> 00:11:11.560
+Przewoźnik może odesłać etykietę i numer śledzenia.
+
+00:11:11.820 --> 00:11:16.300
+Zamiast kopiować ten sam adres do innej strony, Twój zespół rozpoczyna proces wysyłki bezpośrednio z poziomu zamówienia.
+
+00:11:16.560 --> 00:11:18.520
+Możesz dodawać te funkcje, gdy będą potrzebne.
+
+00:11:18.720 --> 00:11:24.220
+Jeśli firma przestaje korzystać z usług przewoźnika, zmienia dostawcę płatności lub rezygnuje z procesu, może już nie potrzebować danego rozszerzenia.
+
+00:11:24.220 --> 00:11:29.080
+Takie podejście modułowe daje większą kontrolę niż budowanie każdego zewnętrznego połączenia w standardowej aplikacji.
+
+00:11:29.260 --> 00:11:32.040
+Mimo to, każda dodana aplikacja staje się częścią codziennej pracy.
+
+00:11:32.240 --> 00:11:36.740
+Kolejnym krokiem jest dokładne sprawdzenie rozszerzenia, zanim zostanie wdrożone w procesach, od których zależą pracownicy.
+
+00:11:36.960 --> 00:11:38.220
+Znajdowanie i instalowanie aplikacji.
+
+00:11:39.000 --> 00:11:40.960
+Wiesz już, że dany proces wymaga wsparcia.
+
+00:11:41.200 --> 00:11:42.340
+Gdzie szukać rozwiązań?
+
+00:11:42.380 --> 00:11:46.380
+Większość osób zaczyna od Microsoft AppSource lub strony zarządzania rozszerzeniami wewnątrz Biznes Central.
+
+00:11:46.580 --> 00:11:50.740
+AppSource to platforma, na której można przeglądać aplikacje od firmy Microsoft i innych dostawców oprogramowania.
+
+00:11:50.740 --> 00:11:55.160
+Zarządzanie rozszerzeniami to miejsce, w którym przeglądasz i obsługujesz aplikacje połączone już z Twoim środowiskiem Biznes Central.
+
+00:11:55.340 --> 00:11:56.340
+Oto kluczowa kwestia.
+
+00:11:56.560 --> 00:11:58.660
+Zacznij od problemu, a nie od nazwy aplikacji.
+
+00:11:58.880 --> 00:12:00.760
+Szukaj słów, których używa Twój zespół.
+
+00:12:00.960 --> 00:12:07.060
+Wypróbuj frazy, wysyłka, import bankowy, zatwierdzenia, faktury, elektroniczne, skanowanie magazynowe, przypomnienia o płatnościach lub raporty lokalne.
+
+00:12:07.260 --> 00:12:12.280
+Zwykłe wyszukiwanie daje większą szansę na znalezienie kilku opcji, zamiast wybierania pierwszej aplikacji, o której ktoś wspomniał.
+
+00:12:12.280 --> 00:12:17.740
+Wyobraź sobie, że Twój zespół magazynowy spędza część każdego popołudnia na kopiowaniu szczegółów zamówień na stronę przewoźnika.
+
+00:12:17.960 --> 00:12:19.980
+Nie zaczynaj od szukania konkretnego dostawcy.
+
+00:12:20.240 --> 00:12:24.300
+Zamiast tego szukaj fraz, przewoźnik, wysyłka paczek, drukowanie etykiet lub śledzenie przesyłek.
+
+00:12:24.480 --> 00:12:28.200
+Następnie porównaj znalezione aplikacje z konkretnym zadaniem, które Twój zespół musi wykonać.
+
+00:12:28.320 --> 00:12:30.000
+Teraz przeczytaj opis na spokojnie.
+
+00:12:30.220 --> 00:12:34.920
+Najpierw sprawdź wydawcę, kto stworzył tę aplikację i gdzie znajdziesz informacje o pomocy technicznej.
+
+00:12:34.920 --> 00:12:43.140
+Aplikacja może wyglądać idealnie w krótkim opisie, ale musisz wiedzieć, kto udzieli odpowiedzi, gdy etykieta wysyłkowa się nie wydrukuje lub aktualizacja zmieni proces, z którego zespół korzysta codziennie.
+
+00:12:43.300 --> 00:12:46.480
+Na koniec sprawdź, które wersje Business Central obsługuje dana aplikacja.
+
+00:12:46.680 --> 00:12:51.160
+Twoja firma może korzystać z wersji Business Central Online lub uruchamiać wersję przechowywaną na własnych serwerach.
+
+00:12:51.320 --> 00:12:53.420
+Aplikacja musi obsługiwać Twoją konfigurację.
+
+00:12:53.680 --> 00:12:58.040
+Sprawdź opis aplikacji i dokumentację wydawcy, zamiast zakładać, że każda aplikacja działa wszędzie.
+
+00:12:58.220 --> 00:13:00.160
+Ceny również wymagają dokładnego przyjrzenia się.
+
+00:13:00.160 --> 00:13:05.800
+Niektóre aplikacje pobierają opłaty za użytkownika, inne naliczają opłaty za firmę, za transakcję lub w formie miesięcznej subskrypcji.
+
+00:13:06.040 --> 00:13:09.320
+Jeszcze inne są darmowe w instalacji, ale łączą się z płatną usługą zewnętrzną.
+
+00:13:09.540 --> 00:13:13.840
+Na przykład łącznik bankowy może wiązać się z opłatami ze strony wydawcy aplikacji, banku lub obu podmiotów.
+
+00:13:14.000 --> 00:13:16.220
+Darmowy nie oznacza, że można pominąć weryfikację.
+
+00:13:16.440 --> 00:13:18.980
+Darmowa aplikacja może bardzo dobrze rozwiązywać określony problem.
+
+00:13:19.240 --> 00:13:23.460
+Może jednak wiązać się z mniejszą liczbą opcji wsparcia, uboższą dokumentacją lub ograniczonym zestawem funkcji.
+
+00:13:23.460 --> 00:13:28.860
+Sprawdź, co zawiera aplikacja, czego nie zawiera i czy wydawca wyjaśnia zasady aktualizacji oraz wsparcia.
+
+00:13:29.080 --> 00:13:30.960
+Szukaj dokumentacji przed instalacją.
+
+00:13:31.220 --> 00:13:37.860
+Dobra dokumentacja powinna wyjaśniać, co robi aplikacja, czego potrzebujesz przed konfiguracją, które strony Biznes Central zmienia i jak użytkownicy z nią pracują.
+
+00:13:38.080 --> 00:13:39.460
+Nie musi być napisana jak podręcznik.
+
+00:13:40.180 --> 00:13:47.440
+Jeśli jednak znajdziesz jasne notatki dotyczące konfiguracji procesu biznesowego wpływającego na zamówienia, faktury lub płatności, zatrzymaj się tam.
+
+00:13:47.620 --> 00:13:49.840
+Opinie mogą pomóc, ale czytaj je ostrożnie.
+
+00:13:49.840 --> 00:13:55.680
+Pięciogwiazdkowa recenzja od firmy z innego kraju może nie informować, czy aplikacja współpracuje z Twoimi lokalnymi przepisami dotyczącymi raportowania.
+
+00:13:55.920 --> 00:13:58.760
+Niska ocena może opisywać problem, który wydawca już naprawił.
+
+00:13:58.900 --> 00:14:02.220
+Traktuj opinię jako pytania do sprawdzenia, a nie jako ostateczną odpowiedź.
+
+00:14:02.360 --> 00:14:05.420
+Gdy zawęzisz listę, przetestuj aplikację w środowisku Piaskownicy – Sandbox.
+
+00:14:05.600 --> 00:14:08.680
+Piaskownica to oddzielne środowisko Biznes Central przeznaczone do testów.
+
+00:14:08.880 --> 00:14:15.440
+Daje ono zespołowi bezpieczne miejsce na zainstalowanie aplikacji, wypróbowanie jej ustawień i uruchomienie typowych przykładów biznesowych bez zmieniania rekordów używanych w realnej pracy.
+
+00:14:15.440 --> 00:14:22.500
+Używaj rzeczywistych przypadków testowych. Utwórz przykładowe zamówienie z rodzajem klienta, produktu, zasady podatkowej i metody dostawy, które zwykle sprawiają problemy.
+
+00:14:22.620 --> 00:14:25.280
+Poproś osoby, które wykonują tę pracę o wypróbowanie aplikacji.
+
+00:14:25.500 --> 00:14:31.020
+Menedżer może zatwierdzić aplikację na papierze, ale osoba wprowadzająca zamówienia może w kilka minut zauważyć brakujące pole lub dodatkowy krok.
+
+00:14:31.160 --> 00:14:32.600
+Testuj również trudne przypadki.
+
+00:14:32.780 --> 00:14:34.540
+Co się dzieje, gdy adres jest niekompletny?
+
+00:14:34.660 --> 00:14:36.280
+Co się dzieje, gdy płatność nie powiedzie się?
+
+00:14:36.420 --> 00:14:38.780
+Czy użytkownik może poprawić błąd bez dzwonienia do programisty?
+
+00:14:38.940 --> 00:14:42.240
+Czy aplikacja generuje właściwy raport, gdy klient potrzebuje kopii w przyszłym miesiącu?
+
+00:14:42.240 --> 00:14:45.220
+Te pytania mówią znacznie więcej niż dopracowana strona produktu.
+
+00:14:45.360 --> 00:14:48.540
+Zanim aplikacja trafi do codziennego użytku, ustal kto odpowiada za wsparcie.
+
+00:14:48.720 --> 00:14:51.120
+Twój wewnętrzny zespół IT może obsługiwać pierwsze zgłoszenia.
+
+00:14:51.340 --> 00:14:54.100
+Twój partner Biznes Central może odpowiadać za konfigurację i poprawki.
+
+00:14:54.320 --> 00:14:57.100
+Wydawca aplikacji może zajmować się problemami w swoim własnym kodzie.
+
+00:14:57.320 --> 00:15:00.300
+Zapisz to wraz z kontaktem do wsparcia i przeznaczeniem aplikacji.
+
+00:15:00.640 --> 00:15:03.480
+Zainstalowana aplikacja staje się częścią procesu biznesowego.
+
+00:15:03.740 --> 00:15:11.040
+Oznacza to, że kolejne pytania dotyczą informacji, do których ma dostęp ich przesyłania oraz tego, co dzieje się po aktualizacji Biznes Central lub aplikacji.
+
+00:15:11.040 --> 00:15:13.040
+Kwestie bezpieczeństwa, danych i aktualizacji.
+
+00:15:13.940 --> 00:15:16.460
+Zanim zatwierdzisz rozszerzenie, zadaj proste pytanie.
+
+00:15:16.740 --> 00:15:20.000
+Jakie informacje ta aplikacja może widzieć, zmieniać lub przesyłać dalej?
+
+00:15:20.160 --> 00:15:26.320
+To pytanie jest ważne, ponieważ rozszerzenie może być częścią pracy zespołu przy obsłudze klientów, zamówień, faktur, płatności i zapasów.
+
+00:15:26.500 --> 00:15:28.740
+Niektóre aplikacje dodają tylko pole lub raport.
+
+00:15:28.960 --> 00:15:33.320
+Inne łączą Biznes Central z zewnętrzną usługą i wymieniają dane biznesowe w ramach pracy.
+
+00:15:33.540 --> 00:15:37.860
+Nie każda aplikacja spełnia te same standardy testowania, zgodności czy bezpieczeństwa, co Biznes Central.
+
+00:15:37.860 --> 00:15:41.360
+Dokumentacja Microsoft wyraźnie to określa w przypadku aplikacji od innych dostawców.
+
+00:15:41.520 --> 00:15:43.900
+Aplikacja może łączyć się z innymi usługami online.
+
+00:15:44.160 --> 00:15:49.900
+Może przetwarzać lub przechowywać dane poza organizacją lub wybranym regionem geograficznym i granicami zgodności.
+
+00:15:50.220 --> 00:15:56.560
+Może udostępniać dane innej firmie, zawierać funkcje, a i lub wyświetlać treści niezgodne z polityką Twojej firmy.
+
+00:15:56.800 --> 00:15:59.780
+Dlatego nie traktuj przycisku instalacji jak błahej decyzji.
+
+00:15:59.980 --> 00:16:01.120
+Oto konkretny przykład.
+
+00:16:01.120 --> 00:16:05.960
+Wyobraź sobie aplikację wysyłającą dane faktur do zewnętrznego serwisu dokumentów.
+
+00:16:06.120 --> 00:16:11.280
+Do działania może potrzebować nazw klientów, adresów, szczegółów towarów, cen, danych podatkowych i numerów dokumentów.
+
+00:16:11.480 --> 00:16:14.980
+Może to idealnie pasować do procesu, ale dział finansowy, zespół IT i osoba do spraw.
+
+00:16:15.140 --> 00:16:17.960
+Prywatności powinni wiedzieć, dokąd trafiają dane i kto je obsługuje.
+
+00:16:18.140 --> 00:16:20.600
+Poproś wydawcę o wyjaśnienie ścieżki danych prostym językiem.
+
+00:16:20.820 --> 00:16:22.380
+Jakie dane opuszczają Biznes Central?
+
+00:16:22.640 --> 00:16:23.500
+Dokąd one trafiają?
+
+00:16:23.680 --> 00:16:25.300
+W jakim kraju lub regionie są przechowywane?
+
+00:16:25.300 --> 00:16:27.100
+Czy aplikacja przechowuje kopię i jak długo?
+
+00:16:27.280 --> 00:16:29.520
+Czy wydawca lub inny dostawca usług ma do nich dostęp?
+
+00:16:29.760 --> 00:16:32.880
+Jeśli aplikacja korzysta z AI, jakie informacje trafiają do usługi AI?
+
+00:16:33.100 --> 00:16:34.860
+I co dzieje się z tymi informacjami później?
+
+00:16:35.100 --> 00:16:37.780
+Przed instalacją zapoznaj się ze szczegółami prywatności i warunkami.
+
+00:16:37.980 --> 00:16:42.040
+Nie musisz być prawnikiem, ale potrzebujesz jasnych odpowiedzi dotyczących danych przetwarzanych przez firmę.
+
+00:16:42.240 --> 00:16:46.080
+Jeśli dostawca nie potrafi wyjaśnić, co aplikacja robi z Twoimi informacjami,
+
+00:16:46.220 --> 00:16:49.560
+nie używaj jej w procesach obsługujących dane klientów lub finanse.
+
+00:16:49.780 --> 00:16:51.760
+Uprawnienia wymagają takiej samej uwagi.
+
+00:16:51.760 --> 00:16:57.220
+Aplikacja może potrzebować uprawnień do odczytu zamówień sprzedaży, tworzenia wysyłek, księgowania, płatności lub dostępu do rekordów nowej funkcji.
+
+00:16:57.400 --> 00:16:59.820
+Przyznaj jej tylko taki dostęp, jaki jest niezbędny do pracy.
+
+00:17:00.060 --> 00:17:02.780
+Następnie sprawdź, którzy użytkownicy otrzymują uprawnienia do aplikacji,
+
+00:17:02.860 --> 00:17:07.400
+ponieważ pomocna nowa funkcja może stworzyć problem z bezpieczeństwem, jeśli trafi do osób, które nie powinny z niej korzystać.
+
+00:17:07.480 --> 00:17:09.400
+Pamiętaj o własnym procesie zatwierdzania.
+
+00:17:09.640 --> 00:17:12.820
+Dział może zauważyć przydatną aplikację i chcieć uruchomić ją natychmiast.
+
+00:17:12.820 --> 00:17:18.540
+Jeśli aplikacja obsługuje wrażliwe dane, niech najpierw sprawdzą ją osoby odpowiedzialne za IT, finanse, bezpieczeństwo i zgodność z przepisami.
+
+00:17:18.680 --> 00:17:23.780
+Na początku może to wydawać się powolne, ale jest lepsze niż późniejsze odkrycie, że dane klientów trafiły tam, gdzie nikt tego nie zatwierdził.
+
+00:17:24.040 --> 00:17:25.720
+Aktualizacje również wymagają uwagi.
+
+00:17:25.960 --> 00:17:29.400
+Rozszerzenia oddzielają własny kod od standardowej aplikacji Business Central,
+
+00:17:29.580 --> 00:17:32.440
+co ogranicza naprawy wymagane przy bezpośrednich zmianach w kodzie,
+
+00:17:32.560 --> 00:17:37.320
+ale rozszerzenie wciąż może zależeć od funkcji Business Central, innej aplikacji lub zewnętrznej usługi.
+
+00:17:37.320 --> 00:17:40.560
+Jeśli jeden z elementów się zmieni, połączenie może wymagać przetestowania.
+
+00:17:40.740 --> 00:17:43.320
+Prowadź krótką dokumentację dla każdego zainstalowanego rozszerzenia.
+
+00:17:43.560 --> 00:17:49.480
+Zapisz jego nazwę, wydawcę, cel, właściciela, wsparcie, kontakt, uprawnienia, zewnętrzne usługi oraz wszelkie inne aplikacje, od których zależy.
+
+00:17:49.740 --> 00:17:55.080
+Gdy zbliża się aktualizacja, ta lista podpowie, co testować, zamiast pozostawiać zespół w niepewności, który proces może ulec awarii.
+
+00:17:55.240 --> 00:17:56.420
+Mniej często znaczy lepiej.
+
+00:17:56.660 --> 00:18:00.640
+Długa lista aplikacji może tworzyć nakładające się funkcje, niejasną odpowiedzialność i więcej elementów do testowania.
+
+00:18:00.640 --> 00:18:03.500
+Zachowaj rozszerzenie, gdy rozwiązuje ono rzeczywistą potrzebę biznesową.
+
+00:18:03.640 --> 00:18:07.440
+Usuń je lub wycofaj, gdy potrzeba ta znika i udokumentuj zmiany przed podjęciem działania.
+
+00:18:07.640 --> 00:18:09.280
+Celem nie jest unikanie rozszerzeń.
+
+00:18:09.460 --> 00:18:13.800
+Celem jest dokładna wiedza, co robi każde rozszerzenie, zanim stanie się częścią Twojej firmy.
+
+00:18:14.040 --> 00:18:15.800
+Hej, TM, to codzienna praca.
+
+00:18:17.080 --> 00:18:18.640
+Wniosek, wybierz odpowiedni dodatek.
+
+00:18:19.780 --> 00:18:20.800
+Oto prosta zasada.
+
+00:18:21.040 --> 00:18:25.560
+Rozszerzenie Business Central powinno rozwiązywać jeden konkretny problem bez ingerencji w podstawowy kod.
+
+00:18:25.760 --> 00:18:28.200
+Zacznij od rzeczywistego problemu, z którym mierzy się Twój zespół.
+
+00:18:28.200 --> 00:18:30.220
+Przetestuj dodatek w realnych warunkach pracy.
+
+00:18:30.460 --> 00:18:34.360
+Sprawdź, kto go stworzył, gdzie trafiają Twoje dane i upewnij się, że ktoś zapewni wsparcie po instalacji.
+
+00:18:34.580 --> 00:18:39.720
+Subskrybuj i udostępnij te porcje wiedzy każdemu, kto wciąż wierzy, że trzeba akceptować każdy domyślny ekran.

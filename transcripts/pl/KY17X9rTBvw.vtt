@@ -1,0 +1,1012 @@
+WEBVTT
+
+00:00:00.060 --> 00:00:01.780
+Witajcie w kolejnej pigułce wiedzy.
+
+00:00:02.000 --> 00:00:05.060
+Wyobraź sobie, że prowadzisz firmę i zatrudniasz zespół genialnych specjalistów
+
+00:00:05.060 --> 00:00:08.840
+światowej klasy organizatora podróży, eksperta od wdrażania pracowników oraz informatyka.
+
+00:00:08.960 --> 00:00:10.640
+Ale żaden z nich ze sobą nie rozmawia.
+
+00:00:10.860 --> 00:00:12.920
+Za każdym razem, gdy zadanie wymaga współpracy dwóch z nich,
+
+00:00:13.060 --> 00:00:15.400
+musisz biegać między biurkami i osobiście przekazywać informacje.
+
+00:00:15.640 --> 00:00:17.880
+Dokładnie tak działają obecnie większość agentów AI.
+
+00:00:18.160 --> 00:00:21.160
+Działają w izolacji, nawet gdy problem wyraźnie wymaga pracy zespołowej.
+
+00:00:21.360 --> 00:00:23.700
+Dlatego dzisiaj porozmawiamy o tym, jak agenci mogą się komunikować,
+
+00:00:23.800 --> 00:00:25.700
+przekazywać sobie pracę i działać jak prawdziwe zespoły.
+
+00:00:25.900 --> 00:00:27.020
+Nazywam się Mirko Peters.
+
+00:00:27.020 --> 00:00:28.780
+To nie jest futurystyczna koncepcja.
+
+00:00:29.080 --> 00:00:31.080
+Orkiestracja wielu agentów dzieje się już teraz.
+
+00:00:31.260 --> 00:00:33.400
+I napędza ją protokół o nazwie A2A.
+
+00:00:33.620 --> 00:00:34.520
+Zaczniemy od problemu.
+
+00:00:34.620 --> 00:00:36.840
+Rozłożymy ten protokół na czynniki pierwsze i zobaczymy,
+
+00:00:36.960 --> 00:00:39.800
+jak Microsoft wykorzystuje go w Copilot Studio i Azure AI.
+
+00:00:40.000 --> 00:00:41.280
+Chwyć kawę i zaczynajmy.
+
+00:00:41.480 --> 00:00:42.780
+Więc na czym polega problem?
+
+00:00:43.040 --> 00:00:46.240
+Dzisiejsi agenci AI są dokładnie jak ci odizolowani specjaliści.
+
+00:00:46.480 --> 00:00:48.480
+Każdy ma własną wiedzę, narzędzia i cele.
+
+00:00:48.740 --> 00:00:50.120
+Agent pogodowy zna prognozę.
+
+00:00:50.320 --> 00:00:53.560
+Agent hotelowy zna dostępność pokoi, ale nie wymieniają się żadnymi informacjami.
+
+00:00:53.560 --> 00:00:57.800
+Teraz wyobraź sobie użytkownika prosząsego o wyjazd do Seattle w przyszłym tygodniu z hotelem blisko biura.
+
+00:00:57.940 --> 00:01:02.200
+Pojedynczy agent musiałby być jednocześnie ekspertem od pogody, podróży i lokalnego biznesu.
+
+00:01:02.320 --> 00:01:06.800
+To oznacza gigantyczne, przeładowane prompti, które upychają każdą możliwą funkcję w jednym systemie,
+
+00:01:06.880 --> 00:01:08.280
+a takie prompti ciągle się psują.
+
+00:01:08.540 --> 00:01:10.380
+Starym rozwiązaniem był własny kod.
+
+00:01:10.380 --> 00:01:17.220
+Pisałbyś most między agentem pogodowym a hotelowym, potem kolejny między hotelowym a lotniczym i jeszcze jeden dla agenta kalendarza.
+
+00:01:17.400 --> 00:01:21.280
+Na początku to działa, ale przy dodaniu każdego nowego agenta budujesz kolejną integrację.
+
+00:01:21.520 --> 00:01:25.180
+Wkrótce masz koszmarny gąszcz połączeń punkt-punkt, gdzie jedna zmiana psuje wszystko.
+
+00:01:25.440 --> 00:01:29.420
+Zyski w produktywności, które miała przynieść sztuczna inteligencja, są zjadane przez pracę przy utrzymaniu systemu.
+
+00:01:29.560 --> 00:01:31.420
+Przyjrzyjmy się rzeczywistym problemom biznesowym.
+
+00:01:31.620 --> 00:01:34.280
+Twoja organizacja ma już procesy wymagające przekazywania zadań.
+
+00:01:34.400 --> 00:01:37.700
+Zgłoszenie jest tworzone, ktoś je segreguje, ktoś rozwiązuje, ktoś rejestruje.
+
+00:01:37.700 --> 00:01:43.700
+Każdy etap to przekazanie zadania. W starym świecie automatyzujesz każdy krok osobnym agentem, a potem tygodniami łączysz je ze sobą.
+
+00:01:43.860 --> 00:01:49.120
+Ale co, gdyby istniał protokół, który pozwala agentom odkrywać się nawzajem i współpracować bez żadnych dedykowanych mostów?
+
+00:01:49.260 --> 00:01:50.580
+To właśnie robi A2A.
+
+00:01:50.840 --> 00:01:56.440
+Mówiąc prościej, A2A to standardowy sposób, w jaki agenci mogą ze sobą rozmawiać, przekazywać sobie pracę i działać zespołowo.
+
+00:01:56.620 --> 00:01:57.560
+Czym jest A2A?
+
+00:01:57.720 --> 00:02:01.280
+Prosta definicja. A2A oznacza agent to agent, czyli od agenta do agenta.
+
+00:02:01.440 --> 00:02:05.460
+To otwarty protokół, który pozwala agentom a i rozmawiać bezpośrednio ze sobą, niezależnie od tego, kto je stworzył.
+
+00:02:05.460 --> 00:02:07.760
+Można myśleć o nim jak o HTTP dla agentów.
+
+00:02:07.900 --> 00:02:13.100
+HTTP to język, którego przeglądarki i serwery używają do komunikacji, a A2A robi to samo dla agentów.
+
+00:02:13.240 --> 00:02:20.740
+Agent zbudowany przez Twój zespół IT w Microsoft Copilot Studio może rozmawiać z agentem innej firmy w Google Cloud, jeśli oba znają A2A.
+
+00:02:20.900 --> 00:02:22.700
+To nie jest też żaden mały projekt.
+
+00:02:22.900 --> 00:02:30.460
+A2A jest sponsorowane przez 8 dużych firm, w tym Google, Microsoft, Cisco, Salesforce, SAP i inne, a gospodarzem jest Linux Foundation.
+
+00:02:30.460 --> 00:02:37.020
+Wersja 1.0 jest stabilna i gotowa do użycia, co oznacza, że żaden pojedynczy dostawca nie kontroluje protokołu.
+
+00:02:37.140 --> 00:02:39.200
+To nie jest produkt Google ani Microsoftu.
+
+00:02:39.320 --> 00:02:40.560
+To inicjatywa branżowa.
+
+00:02:40.740 --> 00:02:42.180
+Projekt jest celowo prosty.
+
+00:02:42.320 --> 00:02:47.740
+A2A opiera się na istniejących standardach sieciowych, takich jak HTTP i JSO, NRPC, które zna każdy programista.
+
+00:02:47.960 --> 00:02:49.460
+Nie ma w tym nic egzotycznego ani zastrzeżonego.
+
+00:02:50.300 --> 00:02:54.560
+Dzięki temu przedsiębiorstwa mogą go łatwo wdrożyć bez konieczności wymiany dotychczasowej infrastruktury.
+
+00:02:54.560 --> 00:02:58.880
+Być może słyszałeś o innym protokole o nazwie MCP, czyli model Context Protocol.
+
+00:02:59.100 --> 00:02:59.820
+Oto różnica.
+
+00:03:00.040 --> 00:03:04.580
+MCP to relacja agent-narzędzie, co oznacza, że łączy agenta z zewnętrznymi źródłami danych i API.
+
+00:03:04.820 --> 00:03:08.060
+A2A to relacja agent-agent, łącząca agentów bezpośrednio ze sobą.
+
+00:03:08.260 --> 00:03:10.820
+Nie są to konkurenci, lecz rozwiązania uzupełniające.
+
+00:03:10.960 --> 00:03:18.140
+Pomyśl o MCP jako o pionowym połączeniu agenta z jego narzędziami, a o A2A jako o poziomym połączeniu między agentami.
+
+00:03:18.380 --> 00:03:19.840
+Jeszcze jeden wybór projektowy.
+
+00:03:20.020 --> 00:03:22.420
+A2A traktuje agentów jako czarne skrzynki.
+
+00:03:22.420 --> 00:03:27.420
+Kiedy jeden agent rozmawia z drugim, nie widzi jego wewnętrznego rozumowania, narzędzi ani prywatnych danych.
+
+00:03:27.680 --> 00:03:29.960
+Widzi tylko wysłane zadanie i otrzymany wynik.
+
+00:03:30.100 --> 00:03:32.600
+To chroni prywatność oraz własność intelektualną.
+
+00:03:32.820 --> 00:03:36.020
+Agent pogodowy nie musi wiedzieć, jak agent hotelowy rezerwuje pokoje.
+
+00:03:36.180 --> 00:03:37.540
+Musi tylko przekazać prognozę.
+
+00:03:37.700 --> 00:03:40.880
+Teraz spójrzmy na pierwszy element układanki – kartę agenta.
+
+00:03:41.160 --> 00:03:43.080
+Karta agenta, czyli jego życiorys.
+
+00:03:43.300 --> 00:03:47.060
+Każdy agent zgodny z A2A publikuje coś, co nazywamy kartą agenta.
+
+00:03:47.060 --> 00:03:55.460
+Ta karta to czytelny dla maszyny dokument dostępny pod standardowym adresem URL w domenie agenta, konkretnie w ścieżce well-known-agent-card.json.
+
+00:03:55.720 --> 00:04:00.400
+Jeśli wiesz, gdzie znajduje się agent, możesz pobrać jego kartę i dowiedzieć się wszystkiego, co potrzebne do współpracy z nim.
+
+00:04:00.560 --> 00:04:03.040
+Pomyśl o karcie agenta jak o życiorysie lub wizytówce.
+
+00:04:03.320 --> 00:04:06.140
+Mówi ona innym agentom, kim jesteś i co potrafisz zrobić.
+
+00:04:06.140 --> 00:04:12.640
+Karta zawiera nazwę agenta, tekstowy opis jego możliwości oraz tagi umiejętności ułatwiające wyszukiwanie.
+
+00:04:12.920 --> 00:04:19.920
+Wymienia również adres URL punktu końcowego, pod którym przyjmuje żądania, wymagania dotyczące uwierzytelniania oraz akceptowane formaty wejściowe i wyjściowe.
+
+00:04:20.080 --> 00:04:21.120
+Oto konkretny przykład.
+
+00:04:21.400 --> 00:04:23.660
+Załóżmy, że masz agenta specjalizującego się w pogodzie.
+
+00:04:23.860 --> 00:04:27.880
+Jego karta agenta mówi – mogę podać aktualną pogodę i 5-dniową prognozę dla każdego miasta.
+
+00:04:28.120 --> 00:04:33.920
+Wymienia swoje punkty końcowe API, przyjmując nazwę miasta i zwracając temperaturę oraz warunki w formacie JSON.
+
+00:04:33.920 --> 00:04:39.440
+To wszystko to po prostu jasna deklaracja możliwości bez ujawniania sekretów czy logiki wewnętrznej.
+
+00:04:39.660 --> 00:04:41.060
+Wykrywanie działa w ten sposób.
+
+00:04:41.280 --> 00:04:45.900
+Agent orkiestrator posiada listę znanych adresów URL agentów lub możesz ją samodzielnie skonfigurować.
+
+00:04:46.120 --> 00:04:51.500
+Gdy pojawia się zadanie, orkiestrator pobiera karty agentów, czyta opisy i decyduje, który agent najlepiej pasuje.
+
+00:04:51.700 --> 00:04:54.680
+Karta pogodowa wspomina o pogodzie, więc zadania pogodowe trafiają tam.
+
+00:04:54.840 --> 00:04:57.680
+Karta hotelowa wspomina o hotelach, więc zadania hotelowe trafiają tam.
+
+00:04:57.880 --> 00:05:00.240
+Zauważ, że nie jest wymagany żaden centralny rejestr.
+
+00:05:00.240 --> 00:05:02.660
+Agenci nie muszą rejestrować się w globalnym katalogu.
+
+00:05:02.820 --> 00:05:07.580
+Po prostu publikują swoją kartę w znanej lokalizacji, a każdy inny agent znający adres URL może ich znaleźć.
+
+00:05:07.680 --> 00:05:11.160
+To celowy wybór projektowy, który utrzymuje system zdecentralizowanym i elastycznym.
+
+00:05:11.400 --> 00:05:16.200
+Możesz dodać nowego specjalistę do swojej sieci, podając orkiestratorowi jego adres URL, a wykrywanie następuje automatycznie.
+
+00:05:16.340 --> 00:05:18.240
+Więc orkiestrator wie, kto jest dostępny.
+
+00:05:18.400 --> 00:05:20.300
+Ale jak właściwie przekazują sobie pracę?
+
+00:05:20.500 --> 00:05:22.260
+Jak działa komunikacja A2A?
+
+00:05:22.460 --> 00:05:25.960
+Więc orkiestrator wie, którzy agenci są dostępni dzięki karcie agenta.
+
+00:05:26.140 --> 00:05:28.720
+Ale jak ci agenci faktycznie przekazują sobie zadania?
+
+00:05:28.720 --> 00:05:30.020
+Odpowiedź jest prosta.
+
+00:05:30.220 --> 00:05:36.580
+Cała komunikacja odbywa się przez HTTP przy użyciu komunikatów JSO-NRPC, tego samego protokołu, który zasila większość dzisiejszych usług internetowych.
+
+00:05:36.800 --> 00:05:40.740
+Nic niestandardowego ani skomplikowanego, po prostu standardowy ruch sieciowy płynący między dwoma agentami.
+
+00:05:40.960 --> 00:05:43.180
+Rzecz w tym, nie wszystkie zadania są takie same.
+
+00:05:43.380 --> 00:05:46.840
+A2A obsługuje trzy różne wzorce interakcji w zależności od tego, czego potrzebujesz.
+
+00:05:47.060 --> 00:05:51.000
+Natychmiastowa odpowiedź obsługuje szybkie zapytania, na które zdalny agent może odpowiedzieć od razu.
+
+00:05:51.220 --> 00:05:53.600
+Wysyłasz żądanie, on od razu odpowiada i gotowe.
+
+00:05:53.600 --> 00:05:58.700
+Pytanie agenta pogodowego o dzisiejszą prognozę działa właśnie tak, a synchroniczna odpowiedź szybko i sprawnie.
+
+00:05:59.080 --> 00:06:00.960
+Strumieniowanie obsługuje dłuższe zadania.
+
+00:06:01.200 --> 00:06:05.300
+Może agent specjalista musi przeszukać wiele baz danych lub przeprowadzić złożoną analizę.
+
+00:06:05.500 --> 00:06:10.660
+Zamiast kazać czekać na jedną odpowiedź, agent wysyła aktualizację statusu w trakcie pracy przy użyciu zdarzeń wysyłanych przez serwer.
+
+00:06:10.820 --> 00:06:13.920
+Otrzymujesz raporty z postępów po drodze, a na końcu dociera wynik końcowy.
+
+00:06:14.120 --> 00:06:16.200
+Śledzenie dostawy przesyłki działa w ten sam sposób.
+
+00:06:16.480 --> 00:06:18.220
+Widzisz każdy krok w miarę jego wykonywania.
+
+00:06:18.220 --> 00:06:23.400
+Powiadomienie asynchroniczne obsługuje długotrwałe zadania, w których zdalny agent może potrzebować minut, godzin, a nawet dni.
+
+00:06:23.640 --> 00:06:25.740
+Dobrym przykładem jest wdrażanie nowego pracownika.
+
+00:06:26.000 --> 00:06:30.340
+Jeden specjalista tworzy konta IT, podczas gdy inny zajmuje się rejestracją świadczeń przez kilka dni.
+
+00:06:30.560 --> 00:06:34.640
+Agent kliencki przesyła żądanie, otrzymuje identyfikator zadania i przechodzi do dalszej pracy.
+
+00:06:34.880 --> 00:06:37.480
+Później zdalny agent przesyła wynik za pomocą WebHOC-a.
+
+00:06:37.640 --> 00:06:41.000
+Klient może również w każdej chwili sprawdzić postęp, odpytując ten identyfikator zadania.
+
+00:06:41.000 --> 00:06:44.280
+Każda interakcja ma tę samą strukturę, wszystko jest zorganizowane jako zadanie.
+
+00:06:44.280 --> 00:06:48.300
+Gdy klient wysyła żądanie, zdalny agent tworzy zadanie i zwraca identyfikator zadania.
+
+00:06:48.500 --> 00:06:51.880
+Identyfikator ten staje się uchwytem śledzącym dla wszystkiego, co następuje później.
+
+00:06:52.140 --> 00:06:57.320
+Wiadomości wewnątrz tego zadania mają rolę określającą nadawcę oraz części, które mogą być zwykłym tekstem,
+
+00:06:57.460 --> 00:07:03.860
+danymi binarnymi jak obrazy lub dokumenty, ładunkami JSON lub adresami URL wskazującymi na pliki przechowywane gdzie indziej.
+
+00:07:04.420 --> 00:07:09.440
+Uwierzytelnianie odbywa się zgodnie ze standardowymi konwencjami sieciowymi OAuth, klucze API, tokeny typu Bearer.
+
+00:07:09.440 --> 00:07:11.820
+Znani podejrzani, nie ma tu nic nowego do nauki.
+
+00:07:11.820 --> 00:07:17.640
+Karta agenta informuje klienta, której metody uwierzytelniania użyć, a klient obsługuje to w taki sam sposób, jak w przypadku każdego innego wywołania API.
+
+00:07:17.840 --> 00:07:19.160
+Oto jak to wygląda w praktyce.
+
+00:07:19.360 --> 00:07:21.600
+Załóżmy, że orkiestrator potrzebuje danych pogodowych dla podróży.
+
+00:07:21.800 --> 00:07:23.220
+Wysyła zadanie do specjalisty do spraw.
+
+00:07:23.380 --> 00:07:23.780
+Pogody.
+
+00:07:24.060 --> 00:07:25.000
+Specjalista do spraw.
+
+00:07:25.180 --> 00:07:28.620
+Pogody potwierdza żądanie, rozpoczyna przetwarzanie i przesyła aktualizację postępu.
+
+00:07:28.740 --> 00:07:29.640
+Pobieranie danych.
+
+00:07:29.960 --> 00:07:31.080
+Analizowanie wyników.
+
+00:07:31.260 --> 00:07:31.700
+Gotowe.
+
+00:07:31.940 --> 00:07:33.980
+Następnie przesyła ostateczną prognozę.
+
+00:07:33.980 --> 00:07:39.000
+Orkiestrator nigdy nie widzi wewnętrznych narzędzi agenta pogodowego, jego kluczy API, ani procesu wnioskowania.
+
+00:07:39.280 --> 00:07:40.500
+Widzi tylko wynik końcowy.
+
+00:07:40.680 --> 00:07:44.880
+To kluczowa zasada projektowania, czyste granice między agentami i brak wycieku stanu wewnętrznego.
+
+00:07:45.100 --> 00:07:47.060
+Jednak sama komunikacja agent-agent to za mało.
+
+00:07:47.220 --> 00:07:50.020
+Potrzebujesz inteligentnego szefa, który skoordynuje wszystkich tych specjalistów.
+
+00:07:50.140 --> 00:07:52.420
+To prowadzi nas do wzorca Orkiestrator Specjalista.
+
+00:07:52.660 --> 00:07:54.280
+Wzorzec Orkiestrator Specjalista.
+
+00:07:54.460 --> 00:07:55.660
+Tutaj wszystko się łączy.
+
+00:07:55.660 --> 00:08:00.540
+Wzorzec Orkiestrator Specjalista jest obecnie najczęstszą architekturą w produkcyjnych systemach wieloagentowych.
+
+00:08:00.540 --> 00:08:05.380
+Pomyśl o tym, jak o firmie z działami IT, HR, Finanse, z których każdy zajmuje się swoim obszarem.
+
+00:08:05.640 --> 00:08:11.400
+Masz centralnego decydenta, który kieruje pracę do wyspecjalizowanych zespołów, a każdy zespół skupia się na tym, co robi najlepiej.
+
+00:08:11.700 --> 00:08:13.480
+Orkiestrator ma pełny obraz sytuacji.
+
+00:08:13.660 --> 00:08:18.740
+Otrzymuje żądanie użytkownika, ustala, co musi się stać i decyduje, który specjalista może zająć się poszczególnymi elementami.
+
+00:08:18.940 --> 00:08:22.080
+Jeśli użytkownik zapyta, zaplanuj wycieczkę do Seattle w przyszłym tygodniu.
+
+00:08:22.300 --> 00:08:24.860
+Orkiestrator nie rezerwuje samodzielnie lotów ani hoteli.
+
+00:08:25.040 --> 00:08:28.980
+Wie, że istnieje specjalista od lotów, specjalista od hoteli i specjalista od pogody.
+
+00:08:28.980 --> 00:08:31.760
+Dzieli żądanie na te części i deleguje każdą z nich.
+
+00:08:31.920 --> 00:08:33.820
+Każdy specjalista ma wąskie pole działania.
+
+00:08:34.080 --> 00:08:38.160
+Jeden agent obsługuje rezerwację lotów, inny wyszukiwanie hoteli, a trzeci segregację zgłoszeń.
+
+00:08:38.360 --> 00:08:39.980
+Nie muszą znać swoich domen działania.
+
+00:08:40.320 --> 00:08:41.260
+Specjalista do spraw.
+
+00:08:41.500 --> 00:08:43.420
+Lotów zna linie lotnicze, trasy i ceny.
+
+00:08:43.560 --> 00:08:47.020
+Nie musi wiedzieć nic o typach pokoi hotelowych czy zasadach odwoływania rezerwacji.
+
+00:08:47.180 --> 00:08:51.280
+To wąskie skupienie sprawia, że każdy agent jest prosty, łatwy w utrzymaniu i testowaniu.
+
+00:08:51.480 --> 00:08:52.720
+Oto najważniejsza część.
+
+00:08:53.100 --> 00:08:54.620
+Orkiestrator nie wykonuje zadań.
+
+00:08:54.780 --> 00:08:56.380
+Kieruje pracą i scala wyniki.
+
+00:08:56.380 --> 00:08:57.780
+To jego jedyne zadanie.
+
+00:08:58.020 --> 00:09:02.220
+Rola orkiestratora to bycie inteligentnym dyspozytorem, a nie superagentem, który próbuje robić wszystko.
+
+00:09:02.480 --> 00:09:06.380
+Gdy pozwolisz orkiestratorowi przejąć pracę specjalistów, tracisz wszystkie korzyści tego wzorca.
+
+00:09:06.600 --> 00:09:08.380
+Znów staje się to monolitycznym chaosem.
+
+00:09:08.580 --> 00:09:09.820
+Uważaj na częsty błąd.
+
+00:09:09.940 --> 00:09:12.560
+Niektóre zespoły tworzą nakładające się domeny specjalistów.
+
+00:09:12.760 --> 00:09:17.740
+Dwóch agentów twierdzi, że obsługuje wsparcie klienta lub wyszukiwanie danych, co powoduje zamieszanie w routingu.
+
+00:09:17.960 --> 00:09:21.660
+Orkiestrator nie wie, którego wybrać, a użytkownicy otrzymują niespójne wyniki.
+
+00:09:21.660 --> 00:09:23.220
+Rozwiązanie jest proste.
+
+00:09:23.380 --> 00:09:26.700
+Każdy specjalista posiada ściśle określony zakres domeny bez nakładania się.
+
+00:09:26.900 --> 00:09:30.260
+Jeśli dwaj agenci robią to samo, połącz ich lub czyściej rozdziel domeny.
+
+00:09:30.480 --> 00:09:33.160
+Microsoft Copilot Studio używa tego wzorca natywnie.
+
+00:09:33.420 --> 00:09:37.980
+Twój główny Copilot działa jako orkiestrator, a agenci podrzędni i połączeni jako specjaliści.
+
+00:09:38.240 --> 00:09:44.060
+Gdy użytkownik pyta o coś z wielu dziedzin, główny Copilot deleguje zadania do odpowiednich specjalistów przez A2A.
+
+00:09:44.060 --> 00:09:48.280
+Jest to wbudowane w platformę, więc nie musisz pisać logiki orkiestracji od zera.
+
+00:09:48.520 --> 00:09:50.440
+Wielką korzyścią jest tu modułowość.
+
+00:09:50.640 --> 00:09:52.480
+Musisz zmienić dostawcę rezerwacji hoteli?
+
+00:09:52.640 --> 00:09:56.180
+Wymień specjalistę hotelowego bez dotykania orkiestratora ani żadnego innego agenta.
+
+00:09:56.420 --> 00:09:57.560
+Dodajesz nowe możliwości?
+
+00:09:57.820 --> 00:10:00.840
+Stwórz nowego specjalistę, zarejestruj go w orkiestratorze i gotowe.
+
+00:10:01.000 --> 00:10:04.520
+Każdy agent pozostaje mały, łatwy w zarządzaniu i gotowy do niezależnego wdrożenia.
+
+00:10:04.780 --> 00:10:08.240
+O to właśnie chodzi w przejściu od monolitycznych agentów do systemu wieloagentowego.
+
+00:10:08.480 --> 00:10:10.700
+Mamy więc protokół, karty agentów i wzorzec.
+
+00:10:10.700 --> 00:10:13.080
+Zobaczmy to w działaniu na rzeczywistych przykładach.
+
+00:10:13.200 --> 00:10:15.140
+Prawdziwe przykłady A2A w akcji.
+
+00:10:15.380 --> 00:10:17.660
+Jak więc A2A wygląda w świecie rzeczywistym?
+
+00:10:17.900 --> 00:10:19.580
+Zacznijmy od prostego przykładu.
+
+00:10:19.780 --> 00:10:23.660
+Mówisz swojemu asystentowi, a zaplanuj wycieczkę do Seattle w przyszłym tygodniu.
+
+00:10:23.860 --> 00:10:29.560
+W starym modelu ten jeden asystent musiałby wiedzieć wszystko pogodę, loty, hotele, restauracje naraz.
+
+00:10:29.700 --> 00:10:31.680
+To zbyt wiele wymagań od jednego polecenia.
+
+00:10:31.920 --> 00:10:33.960
+Dzięki A2A orkiestrator rozwija to na części.
+
+00:10:34.280 --> 00:10:35.920
+Wysyła zadanie do specjalisty do spraw.
+
+00:10:36.100 --> 00:10:38.000
+Pogody z pytaniem o prognozę na konkretne dni.
+
+00:10:38.000 --> 00:10:40.160
+W tym samym czasie prosi specjalistę do spraw.
+
+00:10:40.160 --> 00:10:44.520
+Lotów o znalezienie przelotów z przylotem we wtorek rano i powrotem w czwartek wieczorem, a specjalistę do spraw.
+
+00:10:44.720 --> 00:10:47.860
+Hoteli o znalezienie miejsc w pobliżu centrum Seattle na trzy noce.
+
+00:10:48.080 --> 00:10:55.180
+Każdy specjalista pracuje niezależnie i nie musi komunikować się z innymi agentami, ponieważ każdy z nich ma własne źródła danych, narzędzia i wiedzę.
+
+00:10:55.480 --> 00:10:58.840
+Orkiestrator zbiera wszystkie wyniki i scala je w jedną odpowiedź.
+
+00:10:59.260 --> 00:11:01.040
+Użytkownik widzi jedną odpowiedź.
+
+00:11:01.180 --> 00:11:01.980
+Oto prognoza.
+
+00:11:02.180 --> 00:11:05.080
+Oto dostępne opcje lotów, a tu trzy hotele w pobliżu biura.
+
+00:11:05.080 --> 00:11:10.020
+Za kulisami trzy niezależne agenty współpracowały ze sobą bez żadnego niestandardowego kodu integracyjnego.
+
+00:11:10.160 --> 00:11:11.080
+Teraz scenariusz biznesowy.
+
+00:11:11.840 --> 00:11:13.220
+Załóżmy, że wpływa zgłoszenie.
+
+00:11:13.360 --> 00:11:14.720
+Mój laptop nie łączy się z VPN.
+
+00:11:15.060 --> 00:11:17.420
+Orkiestrator rozpoznaje, że jest to problem sieciowy.
+
+00:11:17.640 --> 00:11:19.640
+Przekazuje zgłoszenie specjaliście do spraw.
+
+00:11:19.820 --> 00:11:21.700
+Procedur, który zna standardowe kroki.
+
+00:11:21.960 --> 00:11:23.680
+Sprawdzenie statusu klienta VPN.
+
+00:11:23.880 --> 00:11:25.100
+Weryfikacja danych sieciowych.
+
+00:11:25.300 --> 00:11:26.060
+Restart usługi.
+
+00:11:26.240 --> 00:11:28.080
+Ten specjalista zwraca listę kroków.
+
+00:11:28.280 --> 00:11:30.820
+Następnie orkiestrator przekazuje wynik do specjalisty do spraw.
+
+00:11:30.960 --> 00:11:33.540
+Obsługi zgłoszeń, który rejestruje rozwiązanie w systemie.
+
+00:11:33.540 --> 00:11:39.960
+Wszystko to dzieje się w kilka sekund bez udziału człowieka, a zespół IT angażuje się tylko wtedy, gdy zautomatyzowane kroki nie rozwiążą problemu.
+
+00:11:40.100 --> 00:11:44.060
+Wdrażanie nowego pracownika to kolejny przykład, ale ten proces trwa dni, a nie sekundy.
+
+00:11:44.300 --> 00:11:45.900
+Nowy pracownik dołącza do firmy.
+
+00:11:46.120 --> 00:11:51.080
+Orkiestrator uruchamia specjalistę IT w celu utworzenia kont i przydzielenia sprzętu, co może potrwać kilka godzin.
+
+00:11:51.300 --> 00:11:53.180
+Jednocześnie uruchamia specjalistę do spraw.
+
+00:11:53.400 --> 00:11:56.380
+Benefitów HR w celu wypełnienia formularzy, a później specjalistę do spraw.
+
+00:11:56.540 --> 00:11:58.460
+Obiektów w sprawie dostępu do biurka i karty.
+
+00:11:58.460 --> 00:12:04.800
+Każdy specjalista wykonuje swoje długotrwałe zadanie niezależnie, a orkiestrator śledzi postępy za pomocą identyfikatorów zadań, o których wspominaliśmy wcześniej.
+
+00:12:05.080 --> 00:12:08.580
+Jeśli specjalista IT zakończy pracę, orkiestrator o tym wie, a jeśli specjalista do spraw.
+
+00:12:08.780 --> 00:12:10.840
+Obiektu ma opóźnienie, może podjąć działania.
+
+00:12:11.040 --> 00:12:15.960
+Użytkownik widzi płynny proces wdrażania, ale za kulisami to skoordynowany zespół pracujący przez kilka dni.
+
+00:12:16.140 --> 00:12:17.420
+I to nie jest tylko teoria.
+
+00:12:17.700 --> 00:12:24.060
+Firma Coca-Cola Beveridge z Afrika już korzysta z agentów co pilot studio w Dynamics 365, aby automatyzować cykle planowania.
+
+00:12:24.060 --> 00:12:27.820
+Ich planiści tracili kiedyś nawet półtorej godziny dziennie na powtarzalne zadania.
+
+00:12:28.040 --> 00:12:30.860
+Dzięki orkiestracji wielu agentów cykle te działają samoczynnie.
+
+00:12:31.040 --> 00:12:35.900
+Orkiestrator deleguje zadania specjalistom, którzy zajmują się różnymi etapami procesu planowania łańcucha dostaw.
+
+00:12:36.100 --> 00:12:43.280
+Rezultatem jest ponad godzina oszczędności na osobę dziennie, dzięki temu, że agenty komunikują się ze sobą, zamiast zmuszać ludzi do przenoszenia informacji między systemami.
+
+00:12:43.500 --> 00:12:45.820
+Wzór we wszystkich tych przykładach jest więc taki sam.
+
+00:12:46.020 --> 00:12:52.360
+Każdy agent jest samodzielnym ekspertem, który zna swoją dziedzinę i dysponuje własnymi narzędziami, nie musząc wiedzieć niczego o pozostałych agentach.
+
+00:12:52.360 --> 00:12:57.320
+A2A zapewnia prostą warstwę komunikacyjną, dzięki której agenty mogą współpracować bez pisania niestandardowego kodu.
+
+00:12:57.500 --> 00:13:03.180
+Otrzymujesz standardowy protokół i inteligentny orkiestrator bez mostów, integracji punkt-punkt i problemów z utrzymaniem.
+
+00:13:03.380 --> 00:13:05.580
+Firma Microsoft w pełni się w to zaangażowała.
+
+00:13:05.760 --> 00:13:08.340
+Zobaczmy, gdzie pasują Copilot Studio i Azure AI.
+
+00:13:08.540 --> 00:13:11.460
+Ekosystem Microsoft, Copilot Studio i Azure AI.
+
+00:13:11.720 --> 00:13:13.640
+Gdzie więc w tym wszystkim znajduje się Microsoft?
+
+00:13:13.920 --> 00:13:15.080
+Dokładnie w samym centrum.
+
+00:13:15.260 --> 00:13:20.120
+Copilot Studio wspiera teraz A2, a natywnie i jest ogólnie dostępne od kwietnia 2026 roku.
+
+00:13:20.120 --> 00:13:25.360
+To nie jest wersja zapoznawcza ani beta. Rozwiązanie jest gotowe do produkcji i każdy uprawniony klient może z niego korzystać już dziś.
+
+00:13:25.480 --> 00:13:26.180
+Oto w czym rzecz.
+
+00:13:26.380 --> 00:13:29.500
+Możesz podłączyć zewnętrzne agenty do swojego orkiestratora w Copilot Studio.
+
+00:13:29.720 --> 00:13:32.320
+Kiedy mówię zewnętrzne, mam na myśli naprawdę zewnętrzne.
+
+00:13:32.500 --> 00:13:37.280
+Agenty zbudowane w Google Cloud, AWS lub na każdej innej platformie wspierającej protokół A2A.
+
+00:13:37.560 --> 00:13:40.940
+Orkiestratora nie obchodzi, gdzie agent się znajduje, ani w jakim frameworku został zbudowany.
+
+00:13:41.160 --> 00:13:43.680
+Dopóki posługuje się językiem A2A, może dołączyć do zespołu.
+
+00:13:43.680 --> 00:13:48.180
+Konfiguracja jest prosta. W Copilot Studio tworzysz coś, co nazywamy połączonym agentem.
+
+00:13:48.380 --> 00:13:50.660
+Wklejasz adres URL punktu końcowego agenta.
+
+00:13:50.840 --> 00:13:56.980
+Copilot Studio automatycznie pobiera kartę agenta z tego adresu URL, czyli wspomniany wcześniej plik JSON karty agenta.
+
+00:13:57.220 --> 00:14:01.980
+Odczytuje możliwości agenta, wymagania uwierzytelniania oraz formaty danych wejściowych i wyjściowych.
+
+00:14:02.240 --> 00:14:06.940
+Następnie w tle tworzy niestandardowy łącznik, a Twój orkiestrator może od razu delegować zadania.
+
+00:14:06.940 --> 00:14:09.620
+Nie potrzebujesz ręcznej integracji ani własnego kodu.
+
+00:14:09.880 --> 00:14:11.860
+Wystarczy wkleić adres URL i gotowe.
+
+00:14:12.020 --> 00:14:15.640
+Po stronie Azure usługa Azure, a i Foundry Agent Service również wspiera A2A.
+
+00:14:15.800 --> 00:14:19.660
+Posiada dedykowany punkt końcowy API A2A, który pozwala orkiestratorom typu open source,
+
+00:14:19.800 --> 00:14:22.940
+takim jak Autogen, Langchain i Semantic Kernel, wywoływać agenty Foundry.
+
+00:14:23.120 --> 00:14:28.660
+Jeśli więc zbudowałeś agenty przy użyciu tych frameworków, możesz podłączyć je do ekosystemu Microsoft bez przepisywania czegokolwiek.
+
+00:14:28.800 --> 00:14:29.840
+To działa w obie strony.
+
+00:14:30.120 --> 00:14:33.680
+Microsoft stosuje ten sam model orkiestratora specjalisty, który opisaliśmy.
+
+00:14:33.680 --> 00:14:39.080
+Główny agent w Copilot Studio pełni rolę orkiestratora, podczas gdy agenty podrzędne i połączone są specjalistami.
+
+00:14:39.280 --> 00:14:42.640
+Każdy zajmuje się swoją domeną, a orkiestrator kieruje ruchem i łączy wyniki.
+
+00:14:42.860 --> 00:14:46.120
+To ta sama architektura, działająca po prostu na platformie Microsoftu.
+
+00:14:46.240 --> 00:14:48.480
+Ale trzeba pamiętać o pewnych ograniczeniach.
+
+00:14:48.600 --> 00:14:51.780
+Po pierwsze, każdy dodatkowy przeskok orkiestracji zwiększa opóźnienia.
+
+00:14:52.020 --> 00:14:57.400
+Jeśli Twój główny agent wywołuje połączonego agenta, a ten wywołuje kolejnego specjalistę, każdy przeskok dodaje czas sieciowy.
+
+00:14:57.400 --> 00:15:01.640
+W przypadku konwersacji w czasie rzeczywistym zbyt wiele przeskoków może sprawić, że interakcja będzie powolna.
+
+00:15:01.640 --> 00:15:04.200
+Po drugie, nadmierna delegacja tworzy chaos w routingu.
+
+00:15:04.420 --> 00:15:09.820
+Jeśli masz zbyt wielu specjalistów z nakładającymi się domenami, orkiestrator zaczyna podejmować błędne decyzje dotyczące kierowania zadań.
+
+00:15:09.900 --> 00:15:13.520
+Dbaj więc, aby liczba specjalistów była rozsądna, a domeny wyraźnie oddzielone.
+
+00:15:13.680 --> 00:15:16.880
+Po trzecie, istnieje konkretne ograniczenie dotyczące agentów danych fabrik.
+
+00:15:17.060 --> 00:15:20.700
+Nie działają one, gdy główny agent jest wdrożony w Microsoft 365 Copilot.
+
+00:15:20.920 --> 00:15:23.940
+Jeśli Twoje wdrożenie obejmuje M365, zaplanuj to odpowiednio.
+
+00:15:24.100 --> 00:15:26.580
+Te ograniczenia są realne, ale można sobie z nimi poradzić.
+
+00:15:26.580 --> 00:15:31.720
+Platforma jest wystarczająco dojrzała do użytku produkcyjnego, a Microsoft aktywnie pracuje nad wyeliminowaniem tych luk.
+
+00:15:31.840 --> 00:15:33.980
+Teraz połączmy kropki i spójrzmy na całość.
+
+00:15:34.220 --> 00:15:36.640
+Sekcja połączeń, czyli jak to wszystko do siebie pasuje.
+
+00:15:36.860 --> 00:15:39.140
+Cofnijmy się i zobaczmy, jak te elementy się łączą.
+
+00:15:39.300 --> 00:15:42.220
+A2, a to system telefoniczny, którego agenci używają do dzwonienia do siebie.
+
+00:15:42.440 --> 00:15:44.200
+Karty agenta to Twoja książka telefoniczna.
+
+00:15:44.400 --> 00:15:46.580
+Pokazują, do kogo dzwonić i czym zajmuje się każdy agent.
+
+00:15:46.780 --> 00:15:49.500
+Orkiestrator to recepcjonista, który kieruje każde połączenie do właściwego działu.
+
+00:15:49.640 --> 00:15:51.180
+Żaden z tych elementów nie działa samodzielnie.
+
+00:15:51.400 --> 00:15:52.480
+Potrzebujesz wszystkich trzech.
+
+00:15:52.480 --> 00:15:54.840
+Bez książki telefonicznej nie wiesz, do kogo zadzwonić.
+
+00:15:55.020 --> 00:15:57.000
+Bez recepcjonisty nikt nie kieruje ruchem.
+
+00:15:57.140 --> 00:16:00.120
+A bez systemu telefonicznego recepcjonista nikogo nie połączy.
+
+00:16:00.360 --> 00:16:01.620
+Działają tylko jako zespół.
+
+00:16:01.880 --> 00:16:03.460
+Właśnie tutaj wkracza modułowość.
+
+00:16:03.660 --> 00:16:07.440
+Gdy Twoi specjaliści są modułowi, możesz dodawać nowe funkcje bez psucia tego, co już działa.
+
+00:16:07.660 --> 00:16:10.520
+Załóżmy, że chcesz dodać specjalistę od wynajmu aut do swojego asystenta podróży.
+
+00:16:10.620 --> 00:16:13.640
+Budujesz go, publikujesz kartę agenta i podajesz orkiestratorowi jego adres URL.
+
+00:16:13.940 --> 00:16:14.320
+Gotowe.
+
+00:16:14.560 --> 00:16:17.620
+Specjalista od lotów i specjalista od hoteli pozostają dokładnie tacy sami.
+
+00:16:17.620 --> 00:16:19.220
+Orkiestrator również się nie zmienia.
+
+00:16:19.220 --> 00:16:22.120
+Po prostu podłączasz nowy element, a system się dostosowuje.
+
+00:16:22.260 --> 00:16:25.500
+Ponieważ protokół jest otwarty, nigdy nie utkniesz u jednego dostawcy.
+
+00:16:25.700 --> 00:16:32.840
+Twój orkiestrator może działać w Copilot Studio, agent pogodowy w Google Cloud, agent hotelowy w AWS, a systemy wewnętrzne na Azure.
+
+00:16:33.100 --> 00:16:34.720
+Wszyscy mówią tym samym językiem.
+
+00:16:34.960 --> 00:16:36.900
+Na tym polega piękno otwartego standardu.
+
+00:16:37.080 --> 00:16:40.220
+Zapobiega uzależnieniu od dostawcy i pozwala wybrać najlepsze narzędzie do każdego zadania.
+
+00:16:40.380 --> 00:16:43.440
+W A2, a nie chodzi o stworzenie jednego superinteligentnego agenta, który wie wszystko.
+
+00:16:43.680 --> 00:16:47.080
+Chodzi o zbudowanie elastycznej grupy specjalistów, których możesz zmieniać w miarę zmiany potrzeb.
+
+00:16:47.080 --> 00:16:49.080
+Nie zastępujesz swoich agentów, tylko ich przestawiasz.
+
+00:16:49.760 --> 00:16:51.760
+Dodajesz nowych, wymieniasz starych.
+
+00:16:51.940 --> 00:16:54.560
+System rośnie razem z Tobą, zamiast stać się wąskim gardłem.
+
+00:16:54.740 --> 00:16:56.700
+Co więc możesz zrobić z tą wiedzą już dziś?
+
+00:16:56.840 --> 00:16:57.820
+Praktyczne wnioski.
+
+00:16:58.100 --> 00:16:59.260
+Zacznij od małych kroków.
+
+00:16:59.460 --> 00:17:03.280
+Wybierz jeden powtarzalny proces w swojej organizacji, który angażuje wiele systemów.
+
+00:17:03.360 --> 00:17:06.840
+Na przykład obsługę zgłoszeń, wdrażanie pracowników lub raportowanie wydatków.
+
+00:17:07.020 --> 00:17:09.200
+Coś z wyraźnym przekazywaniem zadań między etapami.
+
+00:17:09.420 --> 00:17:12.140
+Następnie zbuduj prototyp z jednym orkiestratorem i dwoma specjalistami.
+
+00:17:12.320 --> 00:17:13.800
+Nie potrzebujesz wielkiej architektury.
+
+00:17:13.800 --> 00:17:16.300
+Potrzebujesz tylko działającego przykładu, na którym możesz się uczyć.
+
+00:17:16.440 --> 00:17:18.420
+Korzystaj z narzędzi, które już to obsługują.
+
+00:17:18.620 --> 00:17:22.060
+Co pilot studio ma wbudowaną obsługę A2A, Azure, a i Foundry również.
+
+00:17:22.280 --> 00:17:25.480
+Nie musisz budować protokołu od zera, ani pisać własnego kodu integracyjnego.
+
+00:17:25.720 --> 00:17:28.900
+Wklej adres URL, skonfiguruj agentów i zacznij delegować zadania.
+
+00:17:29.100 --> 00:17:30.300
+Uważaj na typowe pułapki.
+
+00:17:30.520 --> 00:17:32.740
+Nie pozwól, aby specjalistyczne domeny nakładały się na siebie.
+
+00:17:33.000 --> 00:17:35.980
+Jeśli dwóch agentów potrafi zrobić to samo, połącz ich lub wyraźniej rozdziel domeny.
+
+00:17:36.200 --> 00:17:38.560
+Niech orkiestrator zajmuje się kierowaniem zadań, a nie ich wykonywaniem.
+
+00:17:38.560 --> 00:17:41.060
+Uważaj też na opóźnienia wynikające z przeskoków w orkiestracji.
+
+00:17:41.220 --> 00:17:44.220
+Jeśli czas reakcji zaczyna rosnąć, być może masz zbyt wiele warstw delegacji.
+
+00:17:44.460 --> 00:17:45.900
+Najlepszy pierwszy krok jest prosty.
+
+00:17:46.060 --> 00:17:48.440
+Odwzoruj przekazywanie zadań w swoim obecnym przepływie pracy.
+
+00:17:48.700 --> 00:17:51.000
+Gdzie informacje są przekazywane między ludźmi lub systemami?
+
+00:17:51.140 --> 00:17:53.700
+To właśnie te miejsca, w których agenci mogą przejąć kontrolę.
+
+00:17:53.860 --> 00:17:55.460
+Każde przekazanie zadań to szansa.
+
+00:17:55.660 --> 00:17:57.260
+To w skrócie system A2A.
+
+00:17:57.440 --> 00:17:59.660
+Trzy proste elementy współpracujące ze sobą.
+
+00:17:59.860 --> 00:18:02.780
+Agenci przestają działać w izolacji i zaczynają tworzyć zgrany zespół.
+
+00:18:02.780 --> 00:18:05.700
+Wybierz jeden przepływ pracy z jasnym podziałem zadań i buduj w oparciu o niego.
+
+00:18:05.940 --> 00:18:09.440
+Subskrybuj, aby otrzymywać więcej prostych wyjaśnień i daj znać w komentarzu, jeśli coś cię zainspirowało.

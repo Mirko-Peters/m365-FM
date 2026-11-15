@@ -5,7 +5,8 @@ import { cleanText, rateLimit } from "./util.js";
 import { entityTranslations } from "./autotr.js";
 import { stats, evalBadges } from "./badges.js";
 import { findDuplicate } from "./kinds.js";
-import { pairNewOrgEntity } from "./orgpair.js";
+import { pairNewOrgEntity, pairExisting } from "./orgpair.js";
+import { AI_PREFIX, aiFieldValues, aiFieldsOf, aiUserId, humanEdited, ownedEntities, revSource, stateHash } from "./entfill.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
 export const TYPES = ["product", "platform", "concept", "org", "person", "cert", "event", "media", "category", "industry", "job"];
@@ -51,7 +52,8 @@ export async function importEntitiesFromSite(env) {
   for (let i = 0; i < todo.length; i += 50)
     await db.batch(todo.slice(i, i + 50).map((e) => { const { id, ...data } = e; return db.prepare("INSERT INTO entity_rev(eid,data,summary,user_id,status,created) VALUES(?,?,?,0,'live',?)").bind(id, JSON.stringify(data), "Übernahme aus entities.json", t); }));
   const synced = await syncEntitiesFromSite(env).catch((e) => ({ error: String(e).slice(0, 120) }));
-  return { imported: todo.length, db: have.size + todo.length, file: list.length, synced };
+  const paired = await pairExisting(env, { dry: false, limit: 50 }).catch((e) => ({ error: String(e).slice(0, 120) }));   // neue Firmen-Entitaeten aus dem Repo bekommen ihre Paar-Firma automatisch (idempotent)
+  return { imported: todo.length, db: have.size + todo.length, file: list.length, synced, paired };
 }
 
 // T30: Abgleich JSON -> D1 fuer Entitaeten, die schon in der Datenbank sind. Grundlage ist /entities-src.json (Repo-Fassung ohne
@@ -68,20 +70,24 @@ const put = (d, p, v) => { if (p.length === 2) d[p[0]] = { ...(isObj(d[p[0]]) ? 
 
 // Maschine = user_id 0 UND eine Maschinen-Zusammenfassung. user_id 0 allein reicht nicht: beim Loeschen eines Kontos setzt
 // profiles.js die Revisionen des Menschen auf user_id 0 ("geloeschtes Konto"), das bleibt eine Menschen-Aenderung.
+// KI-Entwurf (entfill.js: Systemnutzer sysId, Zusammenfassung "KI-Entwurf: ...") ist ebenfalls keine Menschen-Aenderung.
 const MACHINE = /^(Übernahme aus entities\.json|Abgleich mit entities\.json|Auto-Übersetzung)/;
-export const isMachine = (r) => !r.user_id && MACHINE.test(r.summary || "");
+export const isAiDraft = (r, sysId) => !!sysId && r.user_id === sysId && String(r.summary || "").startsWith(AI_PREFIX);
+export const isMachine = (r, sysId) => (!r.user_id && MACHINE.test(r.summary || "")) || isAiDraft(r, sysId);
 
 // Felder, die validate() bei jeder Bearbeitung ausgibt (long, desc.en/de nur mit Wert): fehlen sie in einer Menschen-Fassung, hat der
 // Mensch sie geleert. Alle anderen (image, same_as, guest, desc.<weitere Sprachen> ...) zeigt das Formular nicht -> "nicht gesehen".
 const FORM_KEYS = new Set(["name", "type", "aliases", "web", "docs", "wikipedia", "wikidata", "rel", "logo", "version", "released", "license", "level", "valid_months", "exam", "outdated", "replaced_by"]);
 const FORM_SUB = new Set(["desc.en", "desc.de", "long.en", "long.de"]);
 
-export function mergeFromJson(json, revs) {
+export function mergeFromJson(json, revs, sysId) {
   // revs: Historie (live und old) [{id, data, user_id, summary, status}], die live-Fassung als LETZTER Eintrag.
   // Ein Feld gehoert einem Menschen, wenn eine Menschen-Fassung genau den aktuellen live-Wert enthaelt UND ihn gegenueber ihrer
   // Vorgaengerin (hoechste kleinere id = Stand beim Einreichen) geaendert hat. Keine Annahme ueber die Reihenfolge, in der Fassungen
   // live waren (freigegebene Vorschlaege behalten ihre aeltere id). Leere Werte (fehlt, '', [], {}) zaehlen als ein Wert; eine
   // Menschen-Fassung ohne das Feld hat es nicht gesehen (validate() laesst es weg). Uebernommen wird nur, was keinem Menschen gehoert.
+  // KI-Entwurf (sysId): sein Wert bleibt, solange die JSON noch genau den Wert hat, den der Entwurf ersetzt hat (sonst wuerde jeder Abgleich ihn zuruecksetzen);
+  // hat die Redaktion das Feld in der JSON seitdem geaendert, gewinnt die JSON.
   const liveRev = revs[revs.length - 1], live = liveRev?.data || {}, data = JSON.parse(JSON.stringify(live)), fields = [], kept = [];
   const val = (d, p) => { const v = at(d, p); return blank(v) ? "" : canon(v); };
   const has = (d, p) => (p.length === 2 ? FORM_SUB.has(p.join(".")) || (isObj(d?.[p[0]]) && p[1] in d[p[0]]) : FORM_KEYS.has(p[0]) || (!!d && p[0] in d));
@@ -90,8 +96,11 @@ export function mergeFromJson(json, revs) {
   for (const p of paths(json)) {
     const jv = at(json, p); if (blank(jv)) continue;
     const lv = val(live, p); if (lv === canon(jv)) continue;
-    const human = revs.some((r) => !isMachine(r) && has(r.data, p) && val(r.data, p) === lv && val(r.data, p) !== (pred(r) ? val(pred(r).data, p) : ""));
-    if (human) kept.push(p.join(".")); else { put(data, p, jv); fields.push(p.join(".")); }
+    const setBy = (r) => has(r.data, p) && val(r.data, p) === lv && val(r.data, p) !== (pred(r) ? val(pred(r).data, p) : "");
+    const human = revs.some((r) => !isMachine(r, sysId) && setBy(r));
+    if (human) { kept.push(p.join(".")); continue; }
+    if (revs.some((r) => isAiDraft(r, sysId) && setBy(r) && (pred(r) ? val(pred(r).data, p) : "") === canon(jv))) continue;   // JSON unveraendert seit dem KI-Entwurf
+    put(data, p, jv); fields.push(p.join("."));
   }
   return { data, fields, kept };
 }
@@ -106,7 +115,7 @@ export async function syncEntitiesFromSite(env, opts = {}) {
   if (last && list.length < last * 0.8) return { skipped: `entities-src.json unvollstaendig (${list.length} statt ${last})` };   // Schutz vor einem halben Seitenbau
   await db.prepare("INSERT INTO meta(k,v) VALUES('ent_src_n',?) ON CONFLICT(k) DO UPDATE SET v=excluded.v").bind(String(list.length)).run();
   const live = new Map(((await db.prepare("SELECT eid,data FROM entity_rev WHERE status='live'").all()).results || []).map((r) => [r.eid, r.data]));
-  const owned = new Set(((await db.prepare("SELECT DISTINCT eid FROM entity_claims WHERE status='verified'").all().catch(() => ({ results: [] }))).results || []).map((r) => r.eid));   // selbst verwaltet: nie abgleichen
+  const owned = await ownedEntities(db), sys = await aiUserId(db, false);   // selbst verwaltet: nie abgleichen; sys = Systemnutzer der KI-Entwuerfe
   const cand = [];
   for (const e of list) {   // Vorauswahl ohne Historie: nur Eintraege, deren JSON-Felder nicht schon so in D1 stehen
     if (!e?.id || !live.has(e.id) || owned.has(e.id)) continue;
@@ -127,7 +136,7 @@ export async function syncEntitiesFromSite(env, opts = {}) {
     const stmts = [];
     for (const e of part) {
       const revs = by.get(e.id); if (!revs?.length || revs[revs.length - 1].status !== "live") continue;
-      const { id, ...j } = e, m = mergeFromJson(j, revs);
+      const { id, ...j } = e, m = mergeFromJson(j, revs, sys);
       kept += m.kept.length;
       if (!m.fields.length) continue;
       // nur schreiben, wenn die gelesene live-Fassung noch live ist (sonst hat jemand dazwischen gespeichert -> naechster Lauf)
@@ -253,8 +262,12 @@ export async function handleEntity(env, request, url, path, user, J) {
   }
   if (path === "/api/entity/tr" && method === "GET") return J({ items: await entityTranslations(env.DB) }, 200, { "cache-control": "public, max-age=300" });   // automatische Uebersetzungen (autotr.js)
   if (path === "/api/entity/export" && method === "GET") {
-    const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id FROM entity_rev r WHERE r.status='live'").all()).results || [];
-    return J({ items: rows.map((r) => ({ id: r.eid, data: JSON.parse(r.data), created: r.created, uid: r.user_id })) }, 200, { "cache-control": "public, max-age=300" });
+    // src: Herkunft der live-Fassung (seed = Uebernahme aus entities.json, ai = KI-Entwurf, human = von einem Menschen veraendert, owned = selbst verwaltet); h: Hash von desc/long/faq (Schutz in /api/internal/entity-fill)
+    // aif: Felder (desc.en, long.de ...), deren Wert noch genau der eines KI-Entwurfs ist - der Seitenbau kennzeichnet sie als KI-Text
+    const rows = (await db.prepare("SELECT r.eid,r.data,r.created,r.user_id,r.summary FROM entity_rev r WHERE r.status='live'").all()).results || [], sys = await aiUserId(db, false), human = await humanEdited(db, sys), owned = await ownedEntities(db), aiv = await aiFieldValues(db, sys);
+    const items = [];
+    for (const r of rows) { const data = JSON.parse(r.data), aif = aiFieldsOf(data, aiv.get(r.eid)); items.push({ id: r.eid, data, created: r.created, uid: r.user_id, src: revSource(r, sys, human, owned), h: await stateHash(data), aif }); }
+    return J({ items }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path.startsWith("/api/admin/entity")) {
     const g = await gate(db, user, "queue.review"); if (!g.ok) return J({ error: "forbidden" }, 403);   // Editoren und Admin (perm.js can())

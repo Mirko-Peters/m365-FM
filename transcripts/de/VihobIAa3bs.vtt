@@ -1,0 +1,2008 @@
+WEBVTT
+
+00:00:05.000 --> 00:00:07.460
+Willkommen bei den Microsoft Knowledge Nuggets. Ich bin Mirko Peters.
+
+00:00:08.140 --> 00:00:09.980
+Das heutige Thema sorgt oft für Verwirrung.
+
+00:00:11.360 --> 00:00:12.280
+Was genau ist Dataverse?
+
+00:00:13.020 --> 00:00:16.360
+Ist es eine Datenbank, eine App oder ein versteckter Dynamics 365 Dienst,
+
+00:00:16.440 --> 00:00:17.780
+den nur IT-Mitarbeiter verstehen müssen?
+
+00:00:18.440 --> 00:00:19.580
+Hier ist die einfachste Definition.
+
+00:00:20.000 --> 00:00:24.360
+Dataverse ist die gemeinsame Datengrundlage hinter vielen Dynamics 365 Funktionen,
+
+00:00:24.420 --> 00:00:26.180
+denn sie ist Dynamics 365 im Bürogebäude.
+
+00:00:26.640 --> 00:00:31.240
+Vertrieb, Kundendienst und andere Apps sind die Räume, in denen die Mitarbeiter arbeiten,
+
+00:00:31.340 --> 00:00:33.820
+während sich hinter den Wänden das Ablagesystem und die Regeln befinden.
+
+00:00:33.820 --> 00:00:37.160
+Am Ende dieser Folge wissen Sie, wo Dynamics Daten gespeichert sind
+
+00:00:37.160 --> 00:00:40.960
+und wie sich ein Kundenupdate in der Vertriebsarbeit, in der Automatisierung und in der Berichterstellung auswirken kann.
+
+00:00:41.460 --> 00:00:44.920
+Bevor wir uns jedoch mit Produktnamen befassen, beginnen wir mit dem geschäftlichen Chaos, das dies löst.
+
+00:00:46.280 --> 00:00:47.040
+Ein gemeinsamer Ort.
+
+00:00:48.020 --> 00:00:49.040
+Anstelle separater Kopie.
+
+00:00:49.800 --> 00:00:52.940
+Stellen Sie sich ein Unternehmen mit einem Vertriebsteam, einem Support-Team und einem Finanzteam vor.
+
+00:00:53.420 --> 00:00:54.820
+Der Vertrieb speichert Kundendaten in einer Tabellenkalkulation.
+
+00:00:55.760 --> 00:00:57.220
+Der Support arbeitet in einem separaten Volltuch.
+
+00:00:57.660 --> 00:00:59.600
+Die Finanzabteilung hat Kundennamen in einem eigenen System.
+
+00:01:00.020 --> 00:01:02.720
+Jemand anderes speichert E-Mail-Threads in einem freigegebenen Postfach,
+
+00:01:02.720 --> 00:01:05.580
+während eine andere Person Notizen in einem Ordner aufbewahrt, den niemand sonst finden kann.
+
+00:01:06.180 --> 00:01:07.760
+Derselbe Kunde ist jetzt an fünf Orten vorhanden.
+
+00:01:08.160 --> 00:01:11.820
+Diese Situation fühlt sich zunächst normal an, da jedes Team nur den Teil der Arbeit sieht, der vor ihm liegt.
+
+00:01:12.460 --> 00:01:13.140
+Aber hier ist der Clou.
+
+00:01:13.360 --> 00:01:17.840
+Sobald ein Kunde seine Telefonnummer, Adresse, seinen Firmennamen oder seinen Hauptansprechpartner ändert, fangen die Probleme an.
+
+00:01:18.120 --> 00:01:19.300
+Der Vertrieb aktualisiert die Tabelle.
+
+00:01:19.400 --> 00:01:20.260
+Der Support sieht sie nicht.
+
+00:01:20.340 --> 00:01:22.560
+Die Finanzabteilung sendet Dokumente weiterhin an die alte Adresse.
+
+00:01:22.960 --> 00:01:26.380
+Dann exportiert jemand eine Liste, bereinigt sie manuell, schickt sie per E-Mail herum
+
+00:01:26.380 --> 00:01:29.000
+und plötzlich glauben drei Personen, dass ihre Kopie die richtige ist.
+
+00:01:29.720 --> 00:01:30.640
+Welcher Liste können sie vertrauen?
+
+00:01:31.160 --> 00:01:32.760
+Diese Frage verschwendet mehr Zeit, als sie vielleicht denken.
+
+00:01:33.300 --> 00:01:34.880
+Mitarbeiter halten, um Datensätze zu vergleichen.
+
+00:01:35.100 --> 00:01:37.660
+Manager fragen, warum ein Bericht nicht mit dem Vertriebssystem übereinstimmt.
+
+00:01:38.040 --> 00:01:42.060
+Ein Support-Mitarbeiter eröffnet einen Fall für einen Kunden, dessen Daten bereits an einer anderen Stelle gespeichert sind.
+
+00:01:42.160 --> 00:01:42.880
+Nur geringfügig haben wir es.
+
+00:01:43.020 --> 00:01:44.220
+Niemand versucht, ein Chaos zu verursachen.
+
+00:01:44.600 --> 00:01:45.500
+Das Chaos entsteht durch Kopie.
+
+00:01:45.500 --> 00:01:50.940
+Vor 20 Jahren bedeuteten separate Systeme, separate Server, separate Datenbanken und separate Teams, die ihre eigenen Informationen aufbewahren.
+
+00:01:51.260 --> 00:01:54.780
+Das Verbinden erforderte individuelle Arbeit, geplante Importe und viele manuelle Überprüfen.
+
+00:01:55.320 --> 00:01:58.540
+Eine Änderung an einer Stelle könnte morgen, nächste Woche oder nie anderes System erreichen.
+
+00:01:59.440 --> 00:02:02.360
+Dataverse bietet Geschäftsanwendungen, einen gemeinsamen Ort für diese Art von Informationen.
+
+00:02:02.980 --> 00:02:07.060
+Einfach ausgedrückt ist Dataverse die Cloud-Datenplattform von Microsoft für Geschäftsinformationen.
+
+00:02:07.720 --> 00:02:11.420
+Sie speichert diese Informationen in strukturierten Tabellen, sodass die Daten eine klare Form haben
+
+00:02:11.420 --> 00:02:15.460
+und nicht als zufällige notizenlose Dateien und unzusammenhängende Tabellen Kalkulationsregisterkarten vorliegen.
+
+00:02:15.880 --> 00:02:20.520
+Sie können sich das wie den Aktenschrank des Unternehmens vorstellen, den jedoch mehrere genehmigte Tools gleichzeitig verwenden können.
+
+00:02:20.780 --> 00:02:22.220
+Ein Kunde wird einmal in Dataverse angezeigt.
+
+00:02:22.640 --> 00:02:26.720
+Dieser Kunde kann in Dynamics 365 Sales angezeigt werden, wenn ein Vertriebsmitarbeiter an einem Geschäft arbeitet.
+
+00:02:26.720 --> 00:02:32.500
+Dieselben Kundendetails können in Dynamics 365 Customer Service angezeigt werden, wenn ein Agent eine Support-Anfrage bearbeitet.
+
+00:02:32.980 --> 00:02:37.240
+Eine Power-App kann dieselben Kundeninformationen für einen Außendienstmitarbeiter oder Kundenbetreuer verwenden,
+
+00:02:37.340 --> 00:02:39.400
+ohne dass jemand die Daten zuerst in eine neue App kopieren muss.
+
+00:02:39.780 --> 00:02:41.680
+Eine Kundenzeile, ein gemeinsamer Bezugspunkt.
+
+00:02:42.160 --> 00:02:44.020
+Das bedeutet nicht, dass jedes Team plötzlich alles zieht.
+
+00:02:44.600 --> 00:02:46.860
+Für den Zugriff sind nach wie vor Regeln erforderlich, aber dazu kommen wir gleich.
+
+00:02:47.060 --> 00:02:50.460
+Das bedeutet, dass genehmigte Apps mit denselben Geschäftsinformationen arbeiten können,
+
+00:02:50.540 --> 00:02:52.660
+anstatt eine eigene konkurrierende Version davon zu erstellen.
+
+00:02:52.660 --> 00:02:56.000
+Aus diesem Grund passen Dynamics 365 und Dataverse so natürlich zusammen.
+
+00:02:56.520 --> 00:03:01.460
+Dynamics 365 Apps wie Vertrieb und Kundendienst verwenden Dataverse, um die Daten, mit denen sie arbeiten, zu speichern und zu sichern.
+
+00:03:01.840 --> 00:03:02.640
+Aber hier ist der Clou.
+
+00:03:02.860 --> 00:03:06.060
+Wenn jemand über die Integration von Dynamics 365 mit Dataverse spricht,
+
+00:03:06.340 --> 00:03:09.300
+stellt er sich oft zwei separate Produkte vor, die eine Verbindung zwischen sich benötigen.
+
+00:03:09.820 --> 00:03:12.180
+Bei vielen Dynamics 365 Apps ist das nicht der Fall.
+
+00:03:12.560 --> 00:03:13.900
+Die Daten befinden sich bereits in Dataverse.
+
+00:03:14.700 --> 00:03:20.280
+Sie ziehen keine Kundenliste aus Dynamics 365, kopieren sie in eine andere Datenbank und hoffen, dass beide Seiten aktuell bleiben.
+
+00:03:20.280 --> 00:03:26.160
+Sie können auf derselben Grundlage aufbauen und dieselben Geschäftsinformationen verwenden, die Dynamics 365 bereits verwendet.
+
+00:03:26.540 --> 00:03:27.600
+Das verändert die Konversation.
+
+00:03:28.180 --> 00:03:31.880
+Anstatt zu fragen, wie synchronisieren wir diese beiden Kundenlisten, können Sie fragen,
+
+00:03:32.000 --> 00:03:36.020
+welche Personen und Apps müssen mit diesem Kundendatensatz arbeiten und was sollte jede von Ihnen tun dürfen?
+
+00:03:37.220 --> 00:03:39.500
+Dataverse ersetzt nicht jedes System, das ein Unternehmen besitzt.
+
+00:03:40.260 --> 00:03:46.600
+Ein Unternehmen verwendet möglicherweise weiterhin Finanzsoftware, Branchentools, Lagersysteme, Websites oder ältere Anwendungen, die ihre eigenen Daten enthalten.
+
+00:03:46.600 --> 00:03:50.560
+Daten. Dataverse ist kein Wundermittel, das alle externen Systeme über Nacht entfernt.
+
+00:03:51.360 --> 00:03:55.060
+Es bietet Ihnen vielmehr einen gemeinsamen Ort für die Geschäftsdaten, die verbundene Apps gemeinsam nutzen müssen.
+
+00:03:56.980 --> 00:03:59.800
+Kundendetails, Vertriebsarbeit, Supportarbeit, Aufgaben und Nachverfolgung.
+
+00:04:00.400 --> 00:04:04.060
+Diese Datensätze können in einer Quelle zusammenleben, die von genehmigten Tools gelesen und aktualisiert werden kann.
+
+00:04:04.420 --> 00:04:05.660
+Öffnen Sie mit mir diesen Aktenschrank.
+
+00:04:06.180 --> 00:04:09.600
+Wenn Sie erst einmal gesehen haben, wie Dataverse die darin enthaltene Informationen organisiert wird,
+
+00:04:09.600 --> 00:04:12.200
+wird die gesamte Dynamics 365-Verbindung viel einfacher zu verstehen.
+
+00:04:12.200 --> 00:04:18.300
+Öffnen wir diesen Aktenschrank.
+
+00:04:18.840 --> 00:04:20.720
+In Dataverse befinden sich die Informationen in Tabellen.
+
+00:04:20.940 --> 00:04:23.200
+Stellen Sie sich, dass Sie einen echten Schrank mit separaten Schubladen vorhaben.
+
+00:04:23.480 --> 00:04:27.560
+In einer Schublade befinden sich die Unternehmen, in einer anderen die Person und in einer dritten die Supportanfrage.
+
+00:04:28.020 --> 00:04:31.560
+Sie werfen nicht alle Papiere in eine riesige Schublade und hoffen, dass sie später jemand sortiert.
+
+00:04:32.120 --> 00:04:33.140
+Jede Schublade eine Aufgabe.
+
+00:04:33.540 --> 00:04:35.700
+In Dataverse enthält eine Tabelle also eine Art von Geschäftsinformation.
+
+00:04:35.700 --> 00:04:38.360
+Eine Kontottabelle enthält in der Regel die Unternehmen, mit denen Sie zusammenhaben.
+
+00:04:38.660 --> 00:04:40.440
+Eine Kontakttabelle enthält Einzelpersonen.
+
+00:04:40.660 --> 00:04:43.520
+Eine Lead-Tabelle enthält potenzielle Kunden, bevor Sie zu echten Kunden werden.
+
+00:04:44.140 --> 00:04:50.360
+Eine Falltabelle enthält Supportanfragen, während eine Aktivitätstabelle Aufgaben wie Anrufe, E-Mails, Termine und Aufgaben nachverfolgen kann.
+
+00:04:50.900 --> 00:04:51.740
+Das sind Standardtabellen?
+
+00:04:52.120 --> 00:04:56.500
+Microsoft integriert sie, da die meisten Unternehmen Kunden, Personen, Arbeit und Unterhaltungen nachverfolgen müssen.
+
+00:04:56.560 --> 00:05:01.300
+Sie müssen nicht erst eine neue Tabelle für etwas Allgemeines erfinden, wenn eine Standardtabelle bereits ausreicht.
+
+00:05:01.620 --> 00:05:03.100
+Allerdings hat jedes Unternehmen aus seiner eigenen Arm.
+
+00:05:03.100 --> 00:05:06.160
+Ein Schulungsunternehmen muss möglicherweise Kurse und Zertifikate nachverfolgen.
+
+00:05:06.440 --> 00:05:09.400
+Ein Immobilienunternehmen benötigt möglicherweise Gebäude, Einheiten und Inspektionen.
+
+00:05:09.860 --> 00:05:12.480
+Ein Hersteller verfolgt möglicherweise Geräte, Prüfungen oder Servicebesuche nach.
+
+00:05:12.920 --> 00:05:16.980
+In diesen Fällen können Sie benutzerdefinierte Tabellen erstellen, die der Arbeit Ihres Unternehmens entsprechen.
+
+00:05:17.440 --> 00:05:21.020
+Stellen Sie sich eine benutzerdefinierte Tabelle so vor, als würden Sie einem Schrank an dem Schrank eine neue Schublade hinzufügen,
+
+00:05:21.100 --> 00:05:21.940
+die Sie dann eindeutig beschriften.
+
+00:05:22.060 --> 00:05:23.040
+Jede Tabelle enthält Zeilen.
+
+00:05:23.460 --> 00:05:24.960
+Eine Zeile ist ein Element in dieser Schublade.
+
+00:05:25.380 --> 00:05:26.000
+Eine Zeile.
+
+00:05:26.100 --> 00:05:30.140
+In der Kontakttabelle könnte beispielsweise Maria Gomez darstellen, eine Person in einem Kundenunternehmen.
+
+00:05:30.140 --> 00:05:34.240
+Ihre Zeile enthält ihre eigenen Details, getrennt von denen alle anderen Kontakte im System.
+
+00:05:34.680 --> 00:05:36.980
+Balten beschreiben die Details, die Sie für jede Zeile aufbewahren möchten.
+
+00:05:37.480 --> 00:05:43.900
+Marias Kontaktzeile kann Spalten für Vorname, Nachname, E-Mail-Adresse, Telefonnummer, Stellenbezeichnung, Unternehmen, Datensatzinhaber und Status enthalten.
+
+00:05:44.940 --> 00:05:47.160
+Ein A legt fest, welche Art von Informationen an diese Stelle gehören.
+
+00:05:47.560 --> 00:05:51.760
+Eine E-Mail-Spalte erwartet also eine E-Mail-Adresse und eine Status-Spalte kann die genehmigten Status-Optionen enthalten.
+
+00:05:51.760 --> 00:05:54.200
+So erhalten Geschäftsinformationen eine zuverlässige Form.
+
+00:05:54.640 --> 00:05:57.960
+Ohne Spalten könnte eine Person eine Telefonnummer in ein Notizfeld eingeben,
+
+00:05:58.520 --> 00:06:02.020
+eine andere sie in ein Namensfeld eintragen und eine dritte Person sie möglicherweise gar nicht eintragen.
+
+00:06:02.840 --> 00:06:06.240
+Mit einer übersichtlichen Kontakttabelle arbeiten alle mit denselben Details an denselben Stellen.
+
+00:06:06.860 --> 00:06:08.560
+Diese Struktur hilft Apps auch, die Daten zu verstehen.
+
+00:06:09.440 --> 00:06:12.920
+Ein Formular kann die richtigen Felder anzeigen, ein Bericht kann Kontakte nach Status kopieren
+
+00:06:12.920 --> 00:06:15.140
+und eine Automatisierung kann reagieren, wenn Sie Ihren Inhaber ändern.
+
+00:06:15.560 --> 00:06:18.620
+Die Informationen werden nicht einfach nur gespeichert, sondern verfügen auch über Bezeichnungen,
+
+00:06:18.700 --> 00:06:20.560
+die verbundenen Tools mitteilen, was die einzelnen Teile bedeuten.
+
+00:06:20.560 --> 00:06:23.340
+Beginnen Sie mit den Standardtabellen, wenn Sie Ihren Geschäftsanforderungen entsprechen.
+
+00:06:23.840 --> 00:06:27.000
+Wenn Sie ein Unternehmen verkaufen, beschreiben Konten und Kontakte bereits ein Muster,
+
+00:06:27.100 --> 00:06:28.140
+das die meisten Menschen verstehen.
+
+00:06:28.760 --> 00:06:31.420
+Wenn Sie mit Kundensupport arbeiten, bieten Ihnen Vorgänge einen Ausgangspunkt.
+
+00:06:31.880 --> 00:06:33.860
+Fügen Sie dann nur dort benutzerdefinierte Tabellen hinzu,
+
+00:06:33.920 --> 00:06:36.560
+wo Ihr Unternehmen über Informationen verfügt, die nicht zu den integrierten Mustern passen.
+
+00:06:37.100 --> 00:06:38.620
+Dadurch wird ein häufiges Problem vermieden,
+
+00:06:38.700 --> 00:06:41.140
+bei dem fünf verschiedene Tabellen erstellt werden, die alle Kunde bedeuten.
+
+00:06:41.780 --> 00:06:44.720
+Ein Team nennt sie Kunde, ein anderes Kundenstamm und ein drittes,
+
+00:06:44.980 --> 00:06:46.400
+Partnerkontakt e-slash-a-i.
+
+00:06:46.660 --> 00:06:49.120
+Bald wissen die Leute nicht mehr, welche Tabelle sie verwenden sollen.
+
+00:06:49.600 --> 00:06:52.300
+Klare Standardtabellen und sorgfältig benannte benutzerdefinierte Tabellen
+
+00:06:52.300 --> 00:06:54.480
+sorgen dafür, dass der Schrank verständlich bleibt, wenn mehr Leute ihn erweitern.
+
+00:06:55.200 --> 00:06:57.160
+Im nächsten Schritt beginnen diese Schubladen zusammenzuarbeiten.
+
+00:06:57.800 --> 00:06:59.020
+Ein Kontakt gehört zu einem Konto.
+
+00:06:59.820 --> 00:07:01.380
+Maria arbeitet für Contoso Ltd.
+
+00:07:01.500 --> 00:07:04.260
+Anstatt die Adresse, die Haupttelefonnummer und die Unternehmensdetails von Contoso
+
+00:07:04.260 --> 00:07:05.580
+erneut in Marias Zeile einzugeben,
+
+00:07:05.640 --> 00:07:08.660
+kann Dataverse eine Beziehung zwischen der Kontakttabelle und der Kontotabelle herstellen.
+
+00:07:09.300 --> 00:07:11.600
+Maria ist mit Contoso verknüpft und diese Verknüpfung ist wichtig,
+
+00:07:11.680 --> 00:07:13.400
+da die Unternehmensinformationen im Unternehmen verbleiben.
+
+00:07:13.400 --> 00:07:16.660
+Wenn Contoso die Büroadresse ändert und jemand die Kontozeile einmal aktualisiert,
+
+00:07:16.660 --> 00:07:19.180
+kann jeder verknüpfte Kontakt weiterhin auf dasselbe Unternehmen verweisen,
+
+00:07:19.260 --> 00:07:20.680
+ohne seine eigene alte Kopie mit sich zu führen.
+
+00:07:21.260 --> 00:07:24.020
+Beziehungen verknüpfen auch einen Supportfall mit dem Kunden, der ihn gemeldet hat.
+
+00:07:24.720 --> 00:07:27.880
+Sie können eine Verkaufschance mit den Anrufen, E-Mails, Besprechungen und Aufgaben
+
+00:07:27.880 --> 00:07:29.040
+rund um diesen Deal verknüpfen.
+
+00:07:29.580 --> 00:07:31.640
+Wenn ein Vertriebsmitarbeiter eine Verkaufschance öffnet,
+
+00:07:31.720 --> 00:07:33.300
+kann er die damit verbundene Aktivität sehen,
+
+00:07:33.400 --> 00:07:35.540
+anstatt in nicht zusammenhängenden Notizen und Kalendern zu suchen.
+
+00:07:36.400 --> 00:07:37.420
+Die Informationen haben einen Kontext.
+
+00:07:37.640 --> 00:07:41.100
+Sie sehen nicht nur eine Fallnummer, sondern auch, zu welchem Kunden sie gehört.
+
+00:07:41.740 --> 00:07:43.440
+Sie sehen nicht nur eine Kontaktverkaufschance,
+
+00:07:43.440 --> 00:07:45.520
+sondern auch das mit dieser Person verbundene Unternehmen.
+
+00:07:46.200 --> 00:07:47.760
+Diese Verknüpfungen halten die Daten nützlich,
+
+00:07:47.840 --> 00:07:50.420
+ohne dass sie immer wieder dieselben Fakten an verschiedenen Stellen eingeben müssen.
+
+00:07:50.920 --> 00:07:52.020
+Ein kleiner Hinweis zur Benennung,
+
+00:07:52.300 --> 00:07:54.560
+bevor Sie ältere Anleitungen lesen oder ältere Videos ansehen.
+
+00:07:55.060 --> 00:07:57.000
+Möglicherweise hören Sie die Wörter Entität, Feld und Datensatz.
+
+00:07:57.340 --> 00:07:58.480
+Dies sind ältere Dataverse-Begriffe.
+
+00:07:59.200 --> 00:08:01.180
+Microsoft verwendet jetzt Tabelle anstelle von Entität,
+
+00:08:01.360 --> 00:08:03.460
+Spalte anstelle von Feld und Zeile anstelle von Datensatz.
+
+00:08:04.080 --> 00:08:05.160
+Die Bedeutung hat sich nicht geändert.
+
+00:08:05.940 --> 00:08:08.840
+In einer älteren Anleitung, in der Sie zum Erstellen einer Entität aufgefordert werden,
+
+00:08:08.920 --> 00:08:10.040
+geht es um das Erstellen einer Tabelle.
+
+00:08:10.040 --> 00:08:12.300
+Ein Feld ist eine Spalte und ein Datensatz ist eine Zeile.
+
+00:08:12.300 --> 00:08:16.820
+Wenn Sie beide Begriffsgruppen kennen, denken Sie nicht, Sie hätten ein anderes Produkt gefunden.
+
+00:08:17.360 --> 00:08:20.140
+Tabellen organisieren also die Informationen und Beziehungen verbinden Sie.
+
+00:08:20.580 --> 00:08:22.760
+Ein gut organisierter Schrank benötigt jedoch immer noch Kontrollen.
+
+00:08:23.160 --> 00:08:26.280
+Jemand muss entscheiden, was Personen eingeben, ändern und sicher abrufen können.
+
+00:08:27.620 --> 00:08:28.700
+Die Regeln und der Empfangsdrehen
+
+00:08:28.700 --> 00:08:32.800
+Daten im Dataverse funktionieren nur dann, wenn die richtigen Personen sicher damit arbeiten können.
+
+00:08:33.080 --> 00:08:34.940
+Ein Vertriebsmitarbeiter benötigt Kundendaten,
+
+00:08:35.040 --> 00:08:36.420
+ein Supportmitarbeiter den Fallverlauf,
+
+00:08:36.500 --> 00:08:37.860
+ein Manager einen umfassenderen Überblick
+
+00:08:37.860 --> 00:08:41.060
+und ein externer Partner benötigt möglicherweise nur Zugriff auf einen kleinen Teil des Prozesses.
+
+00:08:41.060 --> 00:08:43.060
+Sie sollten nicht alle dieselben Informationen sehen.
+
+00:08:43.260 --> 00:08:46.080
+Denken Sie an einen Kundendatensatz mit einer privaten Kontaktnotiz,
+
+00:08:46.220 --> 00:08:48.480
+einem ausgehandelten Preis und einem offenen Supportfall.
+
+00:08:49.000 --> 00:08:51.480
+Wenn Sie jedem Benutzer vollen Zugriff gewähren, entsteht schnell ein Risiko.
+
+00:08:51.780 --> 00:08:54.260
+Wenn Sie alle so stark einschränken, dass Sie Ihre Arbeit nicht erledigen können,
+
+00:08:54.400 --> 00:08:55.240
+entsteht ein anderes Problem.
+
+00:08:55.640 --> 00:08:56.940
+Dataverse bietet Ihnen hierfür Kontrollen.
+
+00:08:57.180 --> 00:08:58.800
+Und die erste Kontrolle beginnt mit der Identität.
+
+00:08:59.200 --> 00:09:00.760
+Wenn Sie sich mit Ihrem Unternehmenskonto anmelden,
+
+00:09:00.840 --> 00:09:02.880
+werden Sie mit der Microsoft Entrer-ID identifiziert.
+
+00:09:03.520 --> 00:09:05.940
+Dellen Sie sich die Entrer-ID als den Empfangstresen am Büroeingang vor.
+
+00:09:06.340 --> 00:09:07.680
+Sie kommen an, zeigen Ihren Ausweis vor
+
+00:09:07.680 --> 00:09:10.140
+und der Empfangsmitarbeiter überprüft, wer Sie sind, bevor Sie eintreten können.
+
+00:09:11.060 --> 00:09:13.700
+Sie verwendet diese Identität, um zu wissen, welcher Benutzer mit den Daten arbeitet.
+
+00:09:14.000 --> 00:09:16.020
+Es belässt es nicht bei der Frage, darf diese Person eintreten?
+
+00:09:16.420 --> 00:09:19.300
+Sondern fragt auch, was darf diese Person tun, nachdem sie eingetreten ist?
+
+00:09:20.000 --> 00:09:21.200
+Hier kommen Sicherheitsrollen ins Spiel.
+
+00:09:21.840 --> 00:09:23.540
+Eine Sicherheitsrolle ist eine Reihe von Berechtigungen,
+
+00:09:23.780 --> 00:09:25.640
+die mit einer Aufgabe oder Zuständigkeit verknüpft sind.
+
+00:09:26.160 --> 00:09:27.600
+Sie können eine Rolle für Vertriebsmitarbeiter,
+
+00:09:27.700 --> 00:09:30.240
+eine weitere für Kundendienstmitarbeiter und eine weitere für Manager erstellen.
+
+00:09:30.700 --> 00:09:32.460
+Jede Rolle kann den Zugriff auf eine Tabelle steuern.
+
+00:09:32.980 --> 00:09:34.800
+Beispielsweise kann ein Vertriebsmitarbeiter berechtigt sein,
+
+00:09:34.900 --> 00:09:37.780
+Konten, Kontakte, Leads und Verkaufschancen zu lesen, zu erstellen und zu aktualisieren.
+
+00:09:37.780 --> 00:09:40.260
+Er darf möglicherweise keine wichtigen Kundeninformationen löschen.
+
+00:09:40.820 --> 00:09:43.300
+Ein Support-Mitarbeiter kann Anfragen erstellen und aktualisieren,
+
+00:09:43.380 --> 00:09:44.540
+jedoch keine Verkaufschance ändern.
+
+00:09:45.060 --> 00:09:48.160
+Die Berechtigungen können das Lesen, Erstellen, Ändern und Löschen von Zeilen umfassen.
+
+00:09:48.620 --> 00:09:50.160
+Das bedeutet, dass der Zugriff nicht davon abhängt,
+
+00:09:50.240 --> 00:09:52.700
+dass sich jemand daran erinnert, welche Schaltflächen in jeder App ausgeblendet werden sollen.
+
+00:09:52.800 --> 00:09:54.360
+Die Berechtigungen befinden sich bei den Datenseiten.
+
+00:09:54.700 --> 00:09:57.720
+Daher gelten dieselben Schutzmaßnahmen überall dort, wo Dataverse-Daten angezeigt werden.
+
+00:09:58.060 --> 00:09:59.460
+Dann können Sie den Zugriff noch weiter einschränken.
+
+00:09:59.860 --> 00:10:01.120
+Die Sicherheit auf Zeilenebene entscheidet,
+
+00:10:01.160 --> 00:10:03.200
+mit welchen einzelnen Zeilen eine Person arbeiten kann.
+
+00:10:03.200 --> 00:10:05.920
+Ein Vertriebsmitarbeiter kann nur den Kunden sehen, den er besitzt,
+
+00:10:05.980 --> 00:10:07.880
+während ein Vertriebsleiter die Kundenzeilen sehen kann,
+
+00:10:07.940 --> 00:10:09.380
+die allen Mitgliedern seines Teams gehören.
+
+00:10:09.660 --> 00:10:11.200
+Beide Personen verwenden dieselbe Kontotabelle.
+
+00:10:11.480 --> 00:10:12.860
+Sie sehen nur nicht denselben Ausschnitt davon.
+
+00:10:13.260 --> 00:10:15.660
+Dieses Setup hilft Mitarbeitern, sich auf ihre eigene Arbeit zu konzentrieren,
+
+00:10:15.740 --> 00:10:17.500
+während Managern die benötigte Ansicht zur Verfügung gestellt wird.
+
+00:10:17.620 --> 00:10:19.000
+Außerdem verringert sich die Wahrscheinlichkeit,
+
+00:10:19.060 --> 00:10:20.480
+dass jemand Informationen über einen Kunden öffnet,
+
+00:10:20.520 --> 00:10:21.680
+auf den er eigentlich gar nicht zugreifen muss.
+
+00:10:22.020 --> 00:10:23.780
+Manche Informationen benötigen sogar noch strengeren Schutz.
+
+00:10:24.360 --> 00:10:27.240
+Die Sicherheit auf Spaltenebene kann einzelne Spalten in einer Tabelle schützen.
+
+00:10:27.440 --> 00:10:29.800
+Ein Benutzer kann beispielsweise eine Kundenzeile öffnen,
+
+00:10:29.800 --> 00:10:33.460
+sollte aber keine persönliche Kennung, Gehaltszahlung, Bankverbindung oder private Finanznotiz sehen.
+
+00:10:34.180 --> 00:10:36.420
+Die Kundenzeile bleibt für die erforderliche Arbeit verfügbar.
+
+00:10:37.020 --> 00:10:38.480
+Die geschützte Spalte bleibt eingeschränkt.
+
+00:10:39.120 --> 00:10:42.800
+Bei größeren Unternehmen können Geschäftsbereiche Grenzen zwischen Teilen der Organisation schaffen.
+
+00:10:43.480 --> 00:10:46.120
+Ein Unternehmen kann Regionen, Abteilungen oder Tochtergesellschaften trennen,
+
+00:10:46.160 --> 00:10:47.620
+die mit unterschiedlichen Kundengruppen arbeiten.
+
+00:10:48.320 --> 00:10:51.120
+Geschäftsbereiche gestalten mit, wie der Zugriff über diese Grenzen hinweg funktioniert.
+
+00:10:51.480 --> 00:10:54.120
+Das bedeutet nicht, dass jedes Unternehmen eine komplizierte Sicherheitskarte benötigt.
+
+00:10:54.520 --> 00:10:56.360
+Ein kleines Team benötigt möglicherweise nur ein paar Tage, oder?
+
+00:10:56.660 --> 00:10:58.900
+Ein größeres Unternehmen benötigt möglicherweise mehr Ebenen,
+
+00:10:58.900 --> 00:11:01.000
+da sich seine Teams, Regionen und Verantwortlichkeiten unterscheiden.
+
+00:11:01.120 --> 00:11:04.120
+Der Punkt ist, dass Dataverse den Zugriff an die tatsächliche Funktionsweise des Unternehmens anpassen.
+
+00:11:04.520 --> 00:11:06.700
+Die Zugriffskontrolle schützt, wer auf die Daten zugreifen kann,
+
+00:11:06.760 --> 00:11:08.680
+aber Regeln schützen auch die Qualität der Daten selbst.
+
+00:11:09.400 --> 00:11:11.900
+Eine Geschäftsregel kann erfordern, dass jemand eine Telefonnummer eingebt,
+
+00:11:11.940 --> 00:11:13.040
+bevor er einen neuen Kontakt speichert.
+
+00:11:13.440 --> 00:11:14.520
+Sie kann eine Bedingung überprüfen,
+
+00:11:14.940 --> 00:11:16.840
+behe die Anforderung eines Grundes, wenn ein Fall geschossen wird.
+
+00:11:17.100 --> 00:11:19.980
+Sie kann auch ändern, was Benutzer basierend auf den eingegebenen Informationen sehen.
+
+00:11:20.420 --> 00:11:22.560
+Dieselbe Regel gilt für alle Apps, die diese Tabelle verwenden.
+
+00:11:23.280 --> 00:11:26.400
+Dies ist wichtig, da Sie nicht möchten, dass eine App unvollständige Daten akzeptiert,
+
+00:11:26.400 --> 00:11:27.520
+während eine andere App Sie ablehnen.
+
+00:11:27.860 --> 00:11:29.540
+Die Regel gehört zu den Geschäftsinformationen,
+
+00:11:29.580 --> 00:11:31.140
+nicht zu einem Bildschirm, der Sie zufällig anzeigt.
+
+00:11:31.880 --> 00:11:33.640
+Dataverse kann auch Logik im Hintergrund ausführen,
+
+00:11:33.740 --> 00:11:35.760
+um die Konsistenz der Geschäftsprozesse zu gewährleisten.
+
+00:11:36.180 --> 00:11:37.680
+Das Detail, das Sie sich merken müssen, ist einfach.
+
+00:11:38.360 --> 00:11:40.440
+Die Daten werden mit Regeln geliefert, nicht nur mit Speicher.
+
+00:11:41.160 --> 00:11:42.960
+Die Grundlage umfasst also die Informationen,
+
+00:11:43.220 --> 00:11:44.520
+die Personen, die damit arbeiten dürfen,
+
+00:11:44.800 --> 00:11:46.160
+und die Regeln, die sie nutzbar halten.
+
+00:11:46.800 --> 00:11:49.400
+Wenn Dynamics 365 auf derselben Grundlage arbeitet,
+
+00:11:49.880 --> 00:11:51.140
+benötigt es keine herkömmliche Brücke,
+
+00:11:51.220 --> 00:11:52.660
+um auf seine eigenen Geschäftsarten zuzugreifen.
+
+00:11:53.140 --> 00:11:55.840
+Was Dynamics 365-Integration eigentlich bedeutet,
+
+00:11:55.840 --> 00:11:59.300
+die meisten Leute hören Dynamics 365-Integration mit Dataverse
+
+00:11:59.300 --> 00:12:01.020
+und stellen sich zwei separate Systeme vor,
+
+00:12:01.100 --> 00:12:02.260
+die durch einen Connector verbunden sind.
+
+00:12:02.580 --> 00:12:03.920
+Ein System enthält die Kundendaten,
+
+00:12:04.000 --> 00:12:05.660
+ein anderes System benötigt eine Kopie.
+
+00:12:06.180 --> 00:12:07.840
+Also richtet jemand eine Synchronisierung ein,
+
+00:12:07.960 --> 00:12:09.300
+wartet, bis sie ausgeführt wird und hofft,
+
+00:12:09.360 --> 00:12:10.160
+dass dabei nichts schief geht.
+
+00:12:11.040 --> 00:12:12.700
+Dieses Bild ergibt für viele Geschäftstools Sinn.
+
+00:12:13.640 --> 00:12:17.280
+Aber hier, bei DMS, dem System für Dynamics 365 Sales
+
+00:12:17.280 --> 00:12:19.220
+und Dynamics 365 Customer Service,
+
+00:12:19.300 --> 00:12:20.340
+ist die Verbindung viel enger.
+
+00:12:21.080 --> 00:12:23.400
+Diese Apps verwenden Dataverse als gemeinsame Datengründer.
+
+00:12:23.400 --> 00:12:25.880
+Es handelt sich nicht um zwei separate Datenbanken,
+
+00:12:25.980 --> 00:12:27.060
+die Kundenzeilen hin- und herschicken,
+
+00:12:27.160 --> 00:12:28.300
+nur um sich gegenseitig zu verstehen.
+
+00:12:28.900 --> 00:12:31.320
+Sie arbeiten von Anfang an mit denselben Geschäftsinformationen.
+
+00:12:31.820 --> 00:12:32.720
+Machen wir das konkret.
+
+00:12:34.120 --> 00:12:35.680
+Stellen Sie sich vor, Sie sind ein Vertriebsmitarbeiter
+
+00:12:35.680 --> 00:12:39.060
+und erstellen ein neues Unternehmen in Dynamics 365 Sales.
+
+00:12:39.580 --> 00:12:40.700
+Sie fügen den Hauptkontakt hinzu
+
+00:12:40.700 --> 00:12:42.140
+und beginnen mit der Arbeit einer möglichen Geschäfte.
+
+00:12:42.580 --> 00:12:44.720
+Diese Details werden sofort Teil der freigegebenen Daten,
+
+00:12:44.800 --> 00:12:45.400
+die die App verwendet.
+
+00:12:46.060 --> 00:12:47.960
+Später kontaktiert dieser Kunde den Support.
+
+00:12:48.440 --> 00:12:50.420
+Der Support-Mitarbeiter kann mit genau demselben Unternehmen
+
+00:12:50.420 --> 00:12:51.340
+und denselben Kontaktdaten.
+
+00:12:52.020 --> 00:12:53.880
+Niemand muss eine Liste aus dem Vertrieb exportieren
+
+00:12:53.880 --> 00:12:56.180
+oder den Kunden erneut in einem separaten Support-Tool anlegen.
+
+00:12:56.840 --> 00:12:58.800
+Der Agent verknüpft den Support-Fall einfach mit dem Kunden
+
+00:12:58.800 --> 00:13:00.480
+und sieht den Verlauf, der ihm hilft, zu verstehen,
+
+00:13:00.560 --> 00:13:01.700
+was mit den TMS los ist.
+
+00:13:02.620 --> 00:13:04.520
+Der Vertrieb sieht den Deal, der Support sieht den Fall
+
+00:13:04.520 --> 00:13:06.100
+und beide Teams arbeiten mit demselben Kunden.
+
+00:13:06.960 --> 00:13:08.040
+Das bedeutet nicht automatisch,
+
+00:13:08.100 --> 00:13:09.360
+dass jeder Bildschirm identisch aussieht
+
+00:13:09.360 --> 00:13:11.100
+oder jedes Team demselben Prozess folgt.
+
+00:13:11.880 --> 00:13:12.920
+Der Vertrieb benötigt Leads,
+
+00:13:13.080 --> 00:13:14.560
+Verkaufschancen, Anrufe und Besprechungen.
+
+00:13:14.880 --> 00:13:16.100
+Der Kundendienst benötigt Fälle,
+
+00:13:16.300 --> 00:13:17.560
+Warteschlangen und den Serviceverlauf.
+
+00:13:17.560 --> 00:13:20.260
+Die Dynamics 365 App bietet Mitarbeitern Tools,
+
+00:13:20.360 --> 00:13:21.320
+die für ihre Arbeit entwickelt wurden.
+
+00:13:22.020 --> 00:13:23.560
+Die zugrunde liegenden Geschäftsinformationen
+
+00:13:23.560 --> 00:13:25.040
+können zwar überall dort verknüpft werden,
+
+00:13:25.180 --> 00:13:25.860
+wo sie benötigt werden,
+
+00:13:25.940 --> 00:13:27.400
+aber diese gemeinsame Grundlage ist oft das,
+
+00:13:27.440 --> 00:13:27.980
+was die Leute meinen,
+
+00:13:28.040 --> 00:13:29.760
+wenn sie über die Integration von Dynamics 365
+
+00:13:29.760 --> 00:13:30.400
+und Delvers sprechen.
+
+00:13:30.720 --> 00:13:31.900
+Es geht nicht in erster Linie darum,
+
+00:13:32.000 --> 00:13:33.580
+Daten von Punkt A nach Punkt B zu verschieben.
+
+00:13:34.300 --> 00:13:35.680
+Es geht darum, dass Apps von Anfang an
+
+00:13:35.680 --> 00:13:36.980
+mit denselben Zeilen, Beziehungen,
+
+00:13:37.120 --> 00:13:38.640
+Regeln und Zugriffskontrollen arbeiten.
+
+00:13:40.040 --> 00:13:41.960
+Lassen Sie uns eine einfache Vertriebsreise durchgehen.
+
+00:13:42.160 --> 00:13:44.280
+Ein Lead kommt von einer Website oder einem Event.
+
+00:13:44.280 --> 00:13:47.040
+Ein Vertriebsmitarbeiter arbeitet mit diesem Lead,
+
+00:13:47.120 --> 00:13:48.060
+erfährt mehr über die Person
+
+00:13:48.060 --> 00:13:49.800
+und wandelt den Lead in eine Kundenbeziehung
+
+00:13:49.800 --> 00:13:50.900
+und eine Verkaufschance um.
+
+00:13:51.640 --> 00:13:53.140
+Anrufe, E-Mails, Termine und Aufgaben
+
+00:13:53.140 --> 00:13:54.620
+können alle mit dieser Arbeit verknüpft werden.
+
+00:13:55.080 --> 00:13:57.000
+Das Team muss also nicht in verschiedenen Tools suchen,
+
+00:13:57.080 --> 00:13:58.340
+um die Geschichte zusammenzusetzen.
+
+00:13:59.000 --> 00:14:00.420
+Wenn der Kunde später Hilfe benötigt,
+
+00:14:00.580 --> 00:14:02.620
+kann ein Support-Fall mit demselben Kunden verknüpft werden.
+
+00:14:03.340 --> 00:14:04.980
+Der Support-Mitarbeiter sieht nicht nur einen Namen
+
+00:14:04.980 --> 00:14:05.800
+und eine E-Mail-Adresse.
+
+00:14:06.280 --> 00:14:09.800
+Er kann im Kontext der bereits identifizierten Kundenbeziehung arbeiten.
+
+00:14:09.800 --> 00:14:12.360
+In der Zwischenzeit kann das Vertriebsteam sehen,
+
+00:14:12.440 --> 00:14:14.040
+dass der Kunde ein offenes Service-Problem hat
+
+00:14:14.040 --> 00:14:15.940
+und vermeiden, in ein Verlängerungsgespräch zu geraten
+
+00:14:15.940 --> 00:14:17.180
+und zu wissen, dass ein Problem vorliegt.
+
+00:14:17.700 --> 00:14:20.020
+Eine Kundenbeziehung kann verschiedene Arten von Arbeit unterstützen,
+
+00:14:20.160 --> 00:14:21.000
+was viel nützlicher ist,
+
+00:14:21.040 --> 00:14:22.600
+als einfach nur einen übereinstimmenden Kundennamen
+
+00:14:22.600 --> 00:14:23.520
+in zwei Systemen zu pflegen.
+
+00:14:24.060 --> 00:14:25.160
+Sie hören möglicherweise auch den Begriff
+
+00:14:25.160 --> 00:14:25.900
+Common-Data-Modell,
+
+00:14:26.000 --> 00:14:27.380
+manchmal abgekürzt als TDM,
+
+00:14:27.540 --> 00:14:27.720
+manchmal.
+
+00:14:28.320 --> 00:14:30.180
+Lassen Sie sich durch den Namen nicht mysteriöser erscheinen,
+
+00:14:30.300 --> 00:14:30.720
+als er ist.
+
+00:14:31.620 --> 00:14:32.300
+Er bedeutet einfach,
+
+00:14:32.380 --> 00:14:33.980
+dass Microsoft allgemeine Geschäftsabellenmuster
+
+00:14:33.980 --> 00:14:34.760
+für Dinge bereitstellt,
+
+00:14:34.820 --> 00:14:35.940
+die viele Unternehmen nachverfolgen.
+
+00:14:35.940 --> 00:14:40.960
+Diese Muster verleihen Dynamics 365
+
+00:14:40.960 --> 00:14:42.100
+und Dataverse-basierten Apps
+
+00:14:42.100 --> 00:14:43.180
+eine gemeinsame Ausgangssprache.
+
+00:14:43.540 --> 00:14:44.540
+Eine Firma steht für ein Unternehmen.
+
+00:14:44.920 --> 00:14:45.940
+Ein Kontakt steht für eine Person.
+
+00:14:46.420 --> 00:14:47.620
+Eine Aktivität verfolgt die Arbeit
+
+00:14:47.620 --> 00:14:48.680
+rund um eine Geschäftsbeziehung.
+
+00:14:49.060 --> 00:14:50.900
+Sie können die Einrichtung für Ihr Unternehmen anpassen
+
+00:14:50.900 --> 00:14:52.800
+und bei Bedarf eigene Tabellen hinzufügen,
+
+00:14:52.880 --> 00:14:54.660
+aber Sie beginnen nicht jedes Mal mit einem leeren Blatt.
+
+00:14:55.520 --> 00:14:57.140
+Wenn eine App eine Kontotabelle versteht
+
+00:14:57.140 --> 00:14:58.920
+und eine andere App dieselbe Tabelle verwendet,
+
+00:14:59.000 --> 00:15:01.620
+verweisen beide Apps auf denselben Typ von Geschäftsinformationen.
+
+00:15:02.080 --> 00:15:02.780
+Dadurch ändert sich auch,
+
+00:15:02.840 --> 00:15:03.440
+was Sie erstellen können.
+
+00:15:03.440 --> 00:15:05.980
+Angenommen, Ihr Außendienst-Team benötigt eine einfache App,
+
+00:15:06.020 --> 00:15:06.940
+um einen Kunden nachzuschlagen,
+
+00:15:07.000 --> 00:15:07.780
+einen Besuch zu bestätigen
+
+00:15:07.780 --> 00:15:09.140
+und nach dem Termin eine Notiz hinzuzufügen.
+
+00:15:09.500 --> 00:15:10.680
+Sie können eine Power-App erstellen,
+
+00:15:10.780 --> 00:15:12.160
+die mit denselben Dataverse-Tabellen funktioniert,
+
+00:15:12.260 --> 00:15:14.040
+die bereits von Dynamics 365 verwendet werden.
+
+00:15:14.380 --> 00:15:15.460
+Es besteht keine Notwendigkeit,
+
+00:15:15.520 --> 00:15:16.360
+die Kunden nur für diese App
+
+00:15:16.360 --> 00:15:17.500
+in eine neue Liste zu exportieren.
+
+00:15:18.220 --> 00:15:19.560
+Der Außendienstmitarbeiter öffnet die App,
+
+00:15:19.660 --> 00:15:20.100
+sucht den Kunden
+
+00:15:20.100 --> 00:15:21.540
+und aktualisiert die Besuchsinformationen.
+
+00:15:21.980 --> 00:15:23.760
+Die Daten bleiben mit der Kundenbeziehung verknüpft,
+
+00:15:23.800 --> 00:15:25.520
+wie der Vertrieb oder Kundendienst bereits verwendet,
+
+00:15:25.580 --> 00:15:26.820
+vorbehaltlich der Sicherheitsregeln,
+
+00:15:27.080 --> 00:15:28.260
+die wir zuvor behandelt haben,
+
+00:15:28.520 --> 00:15:29.460
+die wir zuvor behandelt haben.
+
+00:15:29.460 --> 00:15:30.880
+Für strukturiertere Geschäftsarbeiten
+
+00:15:30.880 --> 00:15:32.300
+können Sie eine modellgestützte App erstellen.
+
+00:15:32.580 --> 00:15:34.520
+Eine modellgestützte App beginnt mit einem Datenmodell.
+
+00:15:34.840 --> 00:15:36.160
+Sie wählen die Dataverse-Tabellen aus,
+
+00:15:36.260 --> 00:15:37.140
+definieren Ihre Beziehungen,
+
+00:15:37.440 --> 00:15:38.840
+richten Formulare und Ansichten ein
+
+00:15:38.840 --> 00:15:39.900
+und wenden Sicherheitsrollen an.
+
+00:15:40.160 --> 00:15:41.700
+Power-Apps verwendet dann diese Struktur,
+
+00:15:41.820 --> 00:15:43.700
+um eine funktionierende Geschäfts-App-Erfahrung zu erstellen.
+
+00:15:43.980 --> 00:15:44.720
+Stellen Sie sich das so vor,
+
+00:15:44.760 --> 00:15:45.420
+als würden Sie eine Werkbank
+
+00:15:45.420 --> 00:15:46.860
+um die Werkzeuge und Materialien herum anordnen
+
+00:15:46.860 --> 00:15:47.640
+und Ihr Team tatsächlich verwenden.
+
+00:15:47.940 --> 00:15:49.080
+Die Tabellen beschreiben die Arbeit,
+
+00:15:49.220 --> 00:15:50.520
+Beziehungen verbinden die Einzelteile.
+
+00:15:51.060 --> 00:15:51.940
+Formulare ermöglichen es,
+
+00:15:51.980 --> 00:15:53.360
+Personendetails einzugeben und zu überprüfen.
+
+00:15:53.820 --> 00:15:55.040
+Ansichten helfen Ihnen, die Zeilen zu finden,
+
+00:15:55.040 --> 00:15:55.900
+die Aufmerksamkeit erfordern.
+
+00:15:56.440 --> 00:15:57.240
+Die Sicherheit entscheidet,
+
+00:15:57.300 --> 00:15:58.700
+was jede Person öffnen oder ändern kann.
+
+00:15:59.160 --> 00:16:00.460
+Eine modellbasierte App kann parallel
+
+00:16:00.460 --> 00:16:02.400
+zu Dynamics 365 eingesetzt werden,
+
+00:16:02.480 --> 00:16:03.340
+dabei mit Dataverse-Funktion.
+
+00:16:03.780 --> 00:16:05.820
+Möglicherweise wickelt Dynamics 365 Sales
+
+00:16:05.820 --> 00:16:07.000
+den gesamten Vertriebsprozess ab,
+
+00:16:07.020 --> 00:16:08.860
+während eine kleinere modellbasierte App-Vertragsmanager
+
+00:16:08.860 --> 00:16:10.300
+einen fokussierten Ort zur Nachverfolgung
+
+00:16:10.300 --> 00:16:11.300
+von Kundenvereinbarungen bietet.
+
+00:16:12.140 --> 00:16:13.800
+Beide können mit zugehörigen Kundendaten arbeiten,
+
+00:16:13.920 --> 00:16:15.160
+ohne dass eine zweite Kundendatenbank
+
+00:16:15.160 --> 00:16:15.780
+erstellt werden muss.
+
+00:16:16.040 --> 00:16:16.900
+Natürlich muss dieser Zugriff
+
+00:16:16.900 --> 00:16:18.200
+weiterhin sorgfältig erfolgen.
+
+00:16:18.280 --> 00:16:20.440
+Nur weil eine App mit einer Dataverse-Tabelle arbeiten kann,
+
+00:16:20.540 --> 00:16:21.540
+bedeutet TMNT nicht,
+
+00:16:21.540 --> 00:16:23.500
+dass jeder Benutzer jede Zeile bearbeiten
+
+00:16:23.500 --> 00:16:24.740
+oder jede Spalte sehen sollte.
+
+00:16:25.400 --> 00:16:26.400
+Die Rolle der Zeilen Zugriff
+
+00:16:26.400 --> 00:16:27.300
+und die Geschäftsregeln steuern
+
+00:16:27.300 --> 00:16:28.040
+weiterhin, was passiert.
+
+00:16:28.460 --> 00:16:29.700
+Eine Außendienst-App kann jemandem
+
+00:16:29.700 --> 00:16:31.340
+genau die Kundendetails und Aktionen bereitstellen,
+
+00:16:31.400 --> 00:16:31.960
+die er benötigt,
+
+00:16:32.040 --> 00:16:33.100
+ohne dass der Rest des Unternehmens
+
+00:16:33.100 --> 00:16:34.760
+oder die Daten von TMNT preisgegeben werden.
+
+00:16:35.420 --> 00:16:37.840
+Die Dynamics 365-Integration mit Dataverse
+
+00:16:37.840 --> 00:16:39.140
+ist jetzt also TMNT-Kabel,
+
+00:16:39.240 --> 00:16:40.580
+das zwei entfernte Räume verbindet.
+
+00:16:41.320 --> 00:16:43.860
+Dynamics 365 Apps und Geschäftsprozesse
+
+00:16:43.860 --> 00:16:44.640
+können alle auf derselben
+
+00:16:44.640 --> 00:16:45.840
+gemeinsamen Grundlage arbeiten.
+
+00:16:46.560 --> 00:16:47.320
+Wenn Sie das verstehen,
+
+00:16:47.400 --> 00:16:48.400
+wird die nächste Frage klar.
+
+00:16:49.360 --> 00:16:50.940
+Wofür können Sie dasselbe Kunden-Update
+
+00:16:50.940 --> 00:16:52.440
+noch auf der gesamten verbundenen Plattform
+
+00:16:52.440 --> 00:16:54.120
+von Microsoft oder TMNT verwenden?
+
+00:16:55.200 --> 00:16:56.700
+So funktioniert die verbundene Plattform
+
+00:16:56.700 --> 00:16:57.180
+in der Praxis.
+
+00:16:58.060 --> 00:16:59.320
+Ein freigegebenes Kunden-Update
+
+00:16:59.320 --> 00:16:59.780
+wird nützlich,
+
+00:16:59.860 --> 00:17:01.140
+wenn die zugehörigen Tools reagieren können.
+
+00:17:01.880 --> 00:17:03.420
+Power Automate übernimmt die Folgearbeiten,
+
+00:17:03.540 --> 00:17:04.280
+indem es auf Änderungen
+
+00:17:04.280 --> 00:17:05.540
+in einer Dataverse-Zeile achtet
+
+00:17:05.540 --> 00:17:06.420
+und eine Aktion startet,
+
+00:17:06.460 --> 00:17:07.320
+wenn diese Änderung eintritt.
+
+00:17:07.760 --> 00:17:08.980
+Beispielsweise wird ein neuer Lead
+
+00:17:08.980 --> 00:17:10.620
+in Dynamics 365 Sales eingegeben.
+
+00:17:11.180 --> 00:17:12.280
+Ein Flow kann den zugewiesenen
+
+00:17:12.280 --> 00:17:13.620
+Vertriebsmitarbeiter benachrichtigen,
+
+00:17:13.720 --> 00:17:14.860
+eine Nachricht in Teams posten
+
+00:17:14.860 --> 00:17:16.060
+oder eine Folgeaufgabe erstellen.
+
+00:17:16.660 --> 00:17:17.520
+Niemand muss den ganzen Tag
+
+00:17:17.520 --> 00:17:18.240
+ein Freigegebe überwachen.
+
+00:17:18.800 --> 00:17:19.540
+Der Lead ändert sich
+
+00:17:19.540 --> 00:17:20.300
+und der nächste Schritt
+
+00:17:20.300 --> 00:17:21.420
+wird automatisch gestartet.
+
+00:17:22.420 --> 00:17:23.620
+Power Automate benötigt jetzt
+
+00:17:23.620 --> 00:17:25.000
+keine separate Kopie des Leads,
+
+00:17:25.120 --> 00:17:26.140
+um diese Arbeit zu erledigen.
+
+00:17:27.100 --> 00:17:27.820
+Es kann auf die Zeile
+
+00:17:27.820 --> 00:17:28.700
+in Dataverse reagieren,
+
+00:17:28.900 --> 00:17:29.700
+indem es dieselben Kunden-
+
+00:17:29.700 --> 00:17:30.680
+und Besitzdetails verwendet,
+
+00:17:30.740 --> 00:17:31.700
+die die Vertriebs-App verwendet.
+
+00:17:32.080 --> 00:17:33.160
+Dadurch bleibt die Automatisierung
+
+00:17:33.160 --> 00:17:34.160
+nah am Geschäftsprozess,
+
+00:17:34.540 --> 00:17:35.540
+anstatt sich darauf zu verlassen,
+
+00:17:35.620 --> 00:17:36.780
+dass jemand eine Datei exportiert
+
+00:17:36.780 --> 00:17:37.920
+und eine manuelle E-Mail-Kette startet.
+
+00:17:38.320 --> 00:17:39.200
+Dann gibt es noch Power BI.
+
+00:17:39.740 --> 00:17:40.480
+Ein Vertriebsleiter möchte
+
+00:17:40.480 --> 00:17:41.560
+möglicherweise die aktuelle Pipeline.
+
+00:17:42.240 --> 00:17:43.100
+Ein Kundendienstleiter
+
+00:17:43.100 --> 00:17:44.120
+muss möglicherweise einsehen,
+
+00:17:44.320 --> 00:17:45.060
+wie viele Fälle diese Woche
+
+00:17:45.060 --> 00:17:45.680
+eingegangen sind,
+
+00:17:46.020 --> 00:17:46.840
+welche Fälle noch offen sind
+
+00:17:46.840 --> 00:17:47.860
+oder welche Kunden am häufigsten
+
+00:17:47.860 --> 00:17:48.780
+den Support kontaktieren.
+
+00:17:48.780 --> 00:17:51.020
+Power BI kann Berichte
+
+00:17:51.020 --> 00:17:52.480
+zu Dataverse-Geschäftsdaten erstellen,
+
+00:17:52.640 --> 00:17:53.280
+sodass diese Teams
+
+00:17:53.280 --> 00:17:54.500
+die laufenden Arbeiten einsehen können,
+
+00:17:54.580 --> 00:17:55.640
+ohne jeden Freitagnachmittag
+
+00:17:55.640 --> 00:17:56.980
+neue Tabellen-Kalkulationsexporte
+
+00:17:56.980 --> 00:17:57.580
+erstellen zu müssen.
+
+00:17:58.100 --> 00:17:59.540
+Der Bericht basiert auf den Geschäftsdaten,
+
+00:17:59.580 --> 00:18:00.500
+die die Mitarbeiter bereits verwenden.
+
+00:18:00.960 --> 00:18:01.380
+Das bedeutet,
+
+00:18:01.500 --> 00:18:02.760
+dass sich ein Pipeline-Diagramm ändern kann,
+
+00:18:02.820 --> 00:18:03.740
+wenn sie Chancen weiterentwickeln.
+
+00:18:04.080 --> 00:18:05.320
+Ein Voll-Dashboard kann die aktuelle
+
+00:18:05.320 --> 00:18:06.220
+Arbeitslast anzeigen,
+
+00:18:06.300 --> 00:18:07.340
+wenn Agentenfälle aktualisieren.
+
+00:18:07.900 --> 00:18:08.680
+Der Punkt ist jetzt,
+
+00:18:08.760 --> 00:18:09.960
+dass ein Dashboard die Überprüfung
+
+00:18:09.960 --> 00:18:11.540
+von Details durch Mitarbeiter ersetzt,
+
+00:18:11.780 --> 00:18:13.420
+bietet Ihnen einen besseren Überblick
+
+00:18:13.420 --> 00:18:13.900
+über die Arbeit,
+
+00:18:13.980 --> 00:18:14.500
+bevor Sie entscheiden,
+
+00:18:14.560 --> 00:18:15.780
+was Ihre Aufmerksamkeit erfordert.
+
+00:18:15.780 --> 00:18:18.060
+Power Apps fügt einen weiteren Pfad
+
+00:18:18.060 --> 00:18:18.920
+in denselben Prozess an.
+
+00:18:19.440 --> 00:18:19.960
+Stellen Sie sich einen
+
+00:18:19.960 --> 00:18:20.900
+Außendienstmitarbeiter vor,
+
+00:18:20.960 --> 00:18:21.700
+der bei einem Kunden eintritt.
+
+00:18:22.480 --> 00:18:23.580
+Er benötigt nicht die gesamte
+
+00:18:23.580 --> 00:18:25.540
+Dynamics 365 Sales-Erfahrung.
+
+00:18:26.340 --> 00:18:27.140
+Er muss möglicherweise
+
+00:18:27.140 --> 00:18:27.920
+nur den Kunden finden,
+
+00:18:27.980 --> 00:18:29.020
+die Besuchsdetails überprüfen,
+
+00:18:29.120 --> 00:18:30.000
+bestätigen, was passiert ist
+
+00:18:30.000 --> 00:18:31.580
+und eine Notiz oder ein Foto hinzufügen.
+
+00:18:32.360 --> 00:18:33.480
+Eine fokussierte Power App
+
+00:18:33.480 --> 00:18:35.000
+kann ihm diese kleinere Erfahrung bieten.
+
+00:18:35.700 --> 00:18:36.500
+Benötigt möglicherweise
+
+00:18:36.500 --> 00:18:37.340
+eine App zum Überprüfen
+
+00:18:37.340 --> 00:18:38.200
+von Kundenvereinbarungen.
+
+00:18:38.740 --> 00:18:39.540
+Benötigt möglicherweise
+
+00:18:39.540 --> 00:18:40.160
+eine einfache App
+
+00:18:40.160 --> 00:18:41.000
+zum Genehmigen an Anfragen.
+
+00:18:41.600 --> 00:18:42.220
+Jede App kann sich
+
+00:18:42.220 --> 00:18:43.200
+auf eine Aufgabe konzentrieren
+
+00:18:43.200 --> 00:18:43.880
+und dabei im Hintergrund
+
+00:18:43.880 --> 00:18:44.660
+mit denselben kontrollierten
+
+00:18:44.660 --> 00:18:45.740
+Dataverse-Informationen arbeiten.
+
+00:18:46.680 --> 00:18:47.420
+Die Person sieht das Tool,
+
+00:18:47.500 --> 00:18:48.160
+das zu ihrem Tag passt.
+
+00:18:48.620 --> 00:18:49.300
+Das Unternehmen behält
+
+00:18:49.300 --> 00:18:50.140
+die verknüpften Informationen.
+
+00:18:50.740 --> 00:18:51.960
+Manchmal entstehen diese Informationen
+
+00:18:51.960 --> 00:18:52.920
+außerhalb von Dataverse.
+
+00:18:53.360 --> 00:18:54.160
+Ein Unternehmen verfügt
+
+00:18:54.160 --> 00:18:55.120
+möglicherweise über eine Liste
+
+00:18:55.120 --> 00:18:55.860
+aus einer Online-Quelle,
+
+00:18:55.980 --> 00:18:56.980
+die Teil seiner Geschäftslandwerke.
+
+00:18:57.500 --> 00:18:58.580
+Power Query kann Daten
+
+00:18:58.580 --> 00:18:59.780
+aus unterstützten Online-Quellen
+
+00:18:59.780 --> 00:19:00.280
+importieren,
+
+00:19:00.400 --> 00:19:02.040
+sie während des Imports bereinigen
+
+00:19:02.040 --> 00:19:03.140
+und in die richtige
+
+00:19:03.140 --> 00:19:04.360
+Dataverse-Tabelle laden.
+
+00:19:04.980 --> 00:19:05.640
+Dies ist nützlich,
+
+00:19:05.740 --> 00:19:06.600
+wenn eine externe Quelle
+
+00:19:06.600 --> 00:19:07.540
+Informationen enthält,
+
+00:19:07.660 --> 00:19:08.340
+die Ihre Dynamics-
+
+00:19:08.340 --> 00:19:09.240
+und Power-Plattform-Tools
+
+00:19:09.240 --> 00:19:09.800
+verwenden müssen.
+
+00:19:10.180 --> 00:19:11.200
+Sie müssen weiterhin entscheiden,
+
+00:19:11.300 --> 00:19:12.280
+was in Dataverse gehört
+
+00:19:12.280 --> 00:19:13.260
+und wie es mit den vorhandenen
+
+00:19:13.260 --> 00:19:14.120
+Tabellen verbunden wird.
+
+00:19:14.120 --> 00:19:15.120
+Wenn Sie Daten
+
+00:19:15.120 --> 00:19:16.300
+ohne diesen Gedanken importieren,
+
+00:19:16.400 --> 00:19:16.920
+wird die Verwirrung
+
+00:19:16.920 --> 00:19:18.220
+einfach an einen neuen Ort verlagert.
+
+00:19:19.120 --> 00:19:19.840
+Lassen Sie Ortem
+
+00:19:19.840 --> 00:19:20.480
+die Einzelteile
+
+00:19:20.480 --> 00:19:21.620
+in einen alltäglichen Ablauf einfügen.
+
+00:19:21.900 --> 00:19:22.440
+Ein neuer Lead
+
+00:19:22.440 --> 00:19:24.300
+wird in Dynamics 365 eingegeben
+
+00:19:24.300 --> 00:19:25.180
+und die Zuweisungsregel
+
+00:19:25.180 --> 00:19:25.600
+überprüft,
+
+00:19:25.640 --> 00:19:26.100
+wer für diesen Lead
+
+00:19:26.100 --> 00:19:26.840
+zuständig sein soll,
+
+00:19:26.920 --> 00:19:27.620
+möglicherweise basierend
+
+00:19:27.620 --> 00:19:28.300
+auf Region oder Produkt.
+
+00:19:28.420 --> 00:19:28.980
+Der Besitzer hält
+
+00:19:28.980 --> 00:19:29.700
+eine Teams-Nachricht
+
+00:19:29.700 --> 00:19:30.760
+über einen Power Automate-Flow,
+
+00:19:30.960 --> 00:19:31.400
+damit er weiß,
+
+00:19:31.440 --> 00:19:32.000
+dass Arbeit wartet.
+
+00:19:32.520 --> 00:19:33.460
+Wenn der Vertriebsmitarbeiter
+
+00:19:33.460 --> 00:19:34.440
+den Lead aktualisiert
+
+00:19:34.440 --> 00:19:35.440
+und durch den Vertriebsprozess
+
+00:19:35.440 --> 00:19:35.840
+verschiebt,
+
+00:19:35.940 --> 00:19:37.240
+ändert sich das Power BI-Dashboard,
+
+00:19:37.340 --> 00:19:38.140
+um dem Team anzuzeigen,
+
+00:19:38.220 --> 00:19:38.980
+wie die aktuelle Pipeline
+
+00:19:38.980 --> 00:19:39.620
+von Team Automist.
+
+00:19:39.960 --> 00:19:40.640
+Ein Update beginnt
+
+00:19:40.640 --> 00:19:41.180
+an mehreren Stellen
+
+00:19:41.180 --> 00:19:41.920
+mit nützlicher Arbeit.
+
+00:19:42.660 --> 00:19:43.220
+Power Automate
+
+00:19:43.220 --> 00:19:43.780
+verschiebt die Arbeit
+
+00:19:43.780 --> 00:19:44.600
+von einem Schritt zum nächsten.
+
+00:19:45.180 --> 00:19:46.180
+Power BI hilft den Leuten,
+
+00:19:46.280 --> 00:19:46.800
+die Arbeit zu sehen.
+
+00:19:47.180 --> 00:19:48.400
+Power Apps bieten bestimmten Teams
+
+00:19:48.400 --> 00:19:49.280
+eine gezielte Möglichkeit
+
+00:19:49.280 --> 00:19:49.840
+zur Teilnahme.
+
+00:19:50.260 --> 00:19:51.120
+Dataverse sorgt dafür,
+
+00:19:51.200 --> 00:19:52.120
+dass die Geschäftsinformationen
+
+00:19:52.120 --> 00:19:53.080
+organisiert und sicher sind,
+
+00:19:53.240 --> 00:19:53.860
+während diese Tools
+
+00:19:53.860 --> 00:19:54.600
+ihre Arbeit erledigen.
+
+00:19:55.100 --> 00:19:55.940
+Dieser Unterschied ist wichtig.
+
+00:19:56.560 --> 00:19:57.200
+Automatisierung ist nicht
+
+00:19:57.200 --> 00:19:58.360
+dasselbe wie das Ablagesystem
+
+00:19:58.360 --> 00:19:59.040
+und ein Dashboard
+
+00:19:59.040 --> 00:19:59.600
+ist nicht dasselbe
+
+00:19:59.600 --> 00:20:00.480
+wie die Kundendatenbank.
+
+00:20:01.040 --> 00:20:02.320
+Jedes Tool hat eine eigene Aufgabe,
+
+00:20:02.500 --> 00:20:02.920
+aber alle können
+
+00:20:02.920 --> 00:20:03.700
+mit der selben Quelle arbeiten.
+
+00:20:04.000 --> 00:20:04.660
+Wenn Sie das wissen,
+
+00:20:04.740 --> 00:20:05.940
+können Sie das richtige Tool auswählen,
+
+00:20:05.940 --> 00:20:07.180
+anstatt jede Tabellenkalkulation
+
+00:20:07.180 --> 00:20:07.860
+oder einfache Liste
+
+00:20:07.860 --> 00:20:08.420
+so zu behandeln,
+
+00:20:08.460 --> 00:20:08.920
+als ob Sie den ganzen
+
+00:20:08.920 --> 00:20:09.920
+Geschäftsprozess ausführen sollen.
+
+00:20:12.060 --> 00:20:12.900
+Wann Dataverse passt
+
+00:20:12.900 --> 00:20:13.700
+und was es nicht ersetzt.
+
+00:20:14.700 --> 00:20:15.420
+Hier ist der Clou.
+
+00:20:16.140 --> 00:20:16.980
+Wählen Sie Dataverse,
+
+00:20:17.080 --> 00:20:17.820
+wenn mehrere Personen
+
+00:20:17.820 --> 00:20:18.640
+und Apps mit verbundenen
+
+00:20:18.640 --> 00:20:19.580
+Geschäftsdaten arbeiten müssen.
+
+00:20:19.840 --> 00:20:21.180
+Sie benötigen klare Zugriffsregeln
+
+00:20:21.180 --> 00:20:21.980
+und wiederholbare Prozesse.
+
+00:20:22.500 --> 00:20:23.460
+Dataverse übernimmt das,
+
+00:20:23.740 --> 00:20:24.800
+ersetzt aber nicht alles andere.
+
+00:20:25.360 --> 00:20:26.100
+Excel ist nach wie vor
+
+00:20:26.100 --> 00:20:26.740
+jede Anlaufstelle
+
+00:20:26.740 --> 00:20:27.680
+für persönliche Analysen
+
+00:20:27.680 --> 00:20:28.180
+und schnelle Listen.
+
+00:20:28.660 --> 00:20:29.220
+SharePoint-Listen
+
+00:20:29.220 --> 00:20:29.800
+eignen sich gut
+
+00:20:29.800 --> 00:20:30.960
+für die einfache Teamverfolgung.
+
+00:20:31.440 --> 00:20:32.320
+Und wenn Sie ein Entwickler sind,
+
+00:20:32.360 --> 00:20:33.400
+der umfassende Kontrolle benötigt,
+
+00:20:33.480 --> 00:20:34.320
+ist SQL nach wie vor
+
+00:20:34.320 --> 00:20:34.900
+eine gute Wahl.
+
+00:20:35.660 --> 00:20:36.280
+Wann passt Dataverse
+
+00:20:36.280 --> 00:20:36.640
+also wirklich?
+
+00:20:37.140 --> 00:20:37.740
+Wenn Ihre Daten
+
+00:20:37.740 --> 00:20:39.400
+über Dynamics 365 Apps
+
+00:20:39.400 --> 00:20:40.080
+mit Automatisierung
+
+00:20:40.080 --> 00:20:40.720
+und Berichte hinweg
+
+00:20:40.720 --> 00:20:41.400
+verknüpft werden müssen,
+
+00:20:41.680 --> 00:20:42.520
+ohne dass eine weitere Kopie
+
+00:20:42.520 --> 00:20:43.060
+erstellt werden muss,
+
+00:20:43.120 --> 00:20:43.620
+dann ist das die Stärke
+
+00:20:43.620 --> 00:20:44.080
+von Dataverse.
+
+00:20:44.280 --> 00:20:44.880
+Aber Fazit,
+
+00:20:45.680 --> 00:20:46.300
+eine Grundlage
+
+00:20:46.300 --> 00:20:47.040
+für viele Business Tools.
+
+00:20:48.480 --> 00:20:49.280
+Das ist also das Fazit.
+
+00:20:49.700 --> 00:20:51.260
+Dynamics 365 und Dataverse
+
+00:20:51.260 --> 00:20:51.960
+funktionieren am besten,
+
+00:20:52.040 --> 00:20:52.700
+wenn alle Ihre Daten,
+
+00:20:52.820 --> 00:20:53.740
+Regeln, Sicherheitsmaßnahmen,
+
+00:20:53.880 --> 00:20:54.640
+Apps, Automatisierung
+
+00:20:54.640 --> 00:20:55.080
+und Berichte
+
+00:20:55.080 --> 00:20:56.300
+eine gemeinsame Grundlage haben.
+
+00:20:56.760 --> 00:20:57.200
+Abonnieren Sie
+
+00:20:57.200 --> 00:20:58.140
+Microsoft Knowledge Nuggets
+
+00:20:58.140 --> 00:20:59.720
+auf m365.fm,
+
+00:20:59.780 --> 00:21:00.580
+um weitere Anleitungen
+
+00:21:00.580 --> 00:21:01.340
+in einfachem Englisch
+
+00:21:01.340 --> 00:21:03.040
+zu Dynamics 365 zu erhalten.
+
+00:21:03.040 --> 00:21:03.760
+Power Platform
+
+00:21:03.760 --> 00:21:05.180
+und Microsoft 365 zu erhalten.
+
+00:21:05.280 --> 00:21:05.780
+Drehen Sie sich dann
+
+00:21:05.780 --> 00:21:06.240
+unsere Folge
+
+00:21:06.240 --> 00:21:07.320
+über modellbasierte Apps an,
+
+00:21:07.360 --> 00:21:07.740
+um zu erfahren,
+
+00:21:07.840 --> 00:21:08.480
+wie Dataverse Tabellen
+
+00:21:08.480 --> 00:21:09.140
+in eine funktionierende
+
+00:21:09.140 --> 00:21:09.980
+Business App verwandelt werden.

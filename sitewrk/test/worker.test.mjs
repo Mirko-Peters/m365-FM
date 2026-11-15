@@ -16,6 +16,7 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/callback") return new Response(null, { status: 301, headers: { location: "https://www.m365.fm/callback/" } });
   if (u.pathname === "/og/alt.png") return new Response("PNG", { headers: { "content-type": "image/png" } });
   if (u.pathname === "/community/feed/101-copilot-explained/") return new Response("<html>feed</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
+  if (u.pathname === "/community/events/gebautes-event/") return new Response("<html>event</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
   if (u.pathname === "/einladung/gebaut/") return new Response("<html>einladung</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
@@ -172,6 +173,20 @@ test("Alter R2-Rueckfall (nach 404) liefert keine Spiegel-Objekte von GitHub Pag
   const a = await W.fetch(req("/gonepage/", "US"), e5, { waitUntil: () => {} }); assert.equal(a.status, 404);
   const b = await W.fetch(req("/thin/", "US"), e5, { waitUntil: () => {} }); assert.equal(b.status, 200); assert.equal(await b.text(), "<html>thin</html>");
 });
+test("R2-Rueckfall (R2_PRIMARY=0, Sprachseiten nur im Bucket): Unicode-Pfade, /index.html und Verzeichnis ohne Schrägstrich wie bei GitHub Pages", async () => {
+  store.clear(); const keys = [];
+  const e7 = { ...env, R2_PRIMARY: "0", PAGES: { get: async (k) => { keys.push(k); return k === "pages/ru/tag/облако/index.html" || k === "pages/fr/tag/x/index.html" ? { ...obj2("<html>r2 " + k + "</html>", "text/html"), customMetadata: {} } : null; } } };
+  const go = async (r) => { const w = []; const res = await W.fetch(r, e7, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
+  const ru = await go(req("/ru/tag/" + encodeURIComponent("облако") + "/", "RU"));
+  assert.equal(ru.status, 200); assert.equal(await ru.text(), "<html>r2 pages/ru/tag/облако/index.html</html>"); assert.ok(keys.includes("pages/ru/tag/облако/index.html"), "Bucket-Schluessel dekodiert (UTF-8)");
+  assert.equal(ru.headers.get("cache-control"), HTML_CC); assert.equal(ru.headers.get("strict-transport-security"), "max-age=31536000; includeSubDomains"); assert.equal(ru.headers.get("x-content-type-options"), "nosniff");
+  assert.ok(store.has("https://www.m365.fm/__r2c/ru/tag/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE/"), "Cache-Schluessel kodiert wie die Purge-Adressen");
+  const hit = await go(req("/ru/tag/" + encodeURIComponent("облако") + "/", "US")); assert.equal(hit.headers.get("x-m365-cache"), "HIT");
+  const ix = await go(req("/fr/tag/x/index.html", "FR")); assert.equal(ix.status, 200); assert.equal(await ix.text(), "<html>r2 pages/fr/tag/x/index.html</html>");
+  const ns = await go(req("/fr/tag/x?utm_source=a", "FR")); assert.equal(ns.status, 301); assert.equal(ns.headers.get("location"), "https://www.m365.fm/fr/tag/x/?utm_source=a");
+  const bad = await go(req("/ru/tag/%E0%A4%A/", "RU")); assert.equal(bad.status, 404, "ungueltige Kodierung: kein Absturz");
+  const miss = await go(req("/fr/tag/fehlt", "FR")); assert.equal(miss.status, 404, "ohne Seite im Bucket kein 301");
+});
 test("R2 zuerst: haengende Pruefung der Bau-Kennung blockiert keine Anfrage", async () => {
   store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
   const e6 = { ...env2, PAGES: { get: (k) => (k === "pages/r2-build.txt" ? new Promise(() => {}) : Promise.resolve(B2[k] || null)) } };
@@ -230,4 +245,15 @@ test("Einladungslink (#320): gebaute Seite bleibt 200; fehlt sie (noch nicht geb
   for (const path of ["/einladung/", "/einladung/Gross/", "/einladung/a/", "/einladung/" + "a".repeat(40) + "/", "/einladung/max-m/x/", "/einladung/%3Cscript%3E/", "/de/einladung/max-m/"])
     assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Kuerzel, nur genau diese Adresse
   assert.equal((await run(req("/einladung/neu-dabei/", "DE", {}, "POST"))).status, 404);
+});
+test("Event-, Profil- oder Firmenseite noch nicht gebaut (neu, importiert): 302 zur Liste statt 404; gebaute bleibt 200", async () => {
+  const ok = await run(req("/community/events/gebautes-event/", "DE")); assert.equal(ok.status, 200); assert.equal(await ok.text(), "<html>event</html>");
+  for (const [path, to] of [["/community/events/community-days-2026-guadalajara/", "/community/events/"], ["/community/events/abc", "/community/events/"], ["/de/community/events/azure-day-bonn/?utm_source=x", "/de/community/events/"], ["/community/u/neu-dabei/", "/community/members/"], ["/de/community/c/contoso/", "/de/community/companies/"]]) {
+    const r = await run(req(path, "DE")); assert.equal(r.status, 302, path); assert.equal(r.headers.get("location"), "https://www.m365.fm" + to, path);
+    assert.equal(r.headers.get("cache-control"), "no-store"); assert.equal(r.headers.get("x-robots-tag"), "noindex");
+  }
+  assert.equal((await run(req("/community/events/neu-event/", "DE", {}, "HEAD"))).status, 302);
+  for (const path of ["/community/events/", "/community/events/ab/", "/community/events/Gross/", "/community/events/x/y/", "/community/events/" + "a".repeat(41) + "/", "/community/events/%3Cscript%3E/", "/community/events/feed.xml", "/community/u/max-m/blog/x/", "/community/u/a/", "/community/x/max-m/"])
+    assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Event-Kuerzel, nur genau diese Adresse
+  assert.equal((await run(req("/community/events/neu-event/", "DE", {}, "POST"))).status, 404);
 });

@@ -1,0 +1,892 @@
+WEBVTT
+
+00:00:03.340 --> 00:00:07.280
+Hoy hablaremos de una función de Azure de la que probablemente hayas oído hablar, pero que quizá no entiendas del todo.
+
+00:00:07.740 --> 00:00:11.140
+Azure Policy es una de las herramientas de gobernanza más potentes de toda la plataforma,
+
+00:00:11.680 --> 00:00:14.600
+pero la mayoría de las personas la ignoran o creen que es solo para administradores de TI.
+
+00:00:15.600 --> 00:00:18.480
+Al final de este episodio, sabrás qué es Azure Policy en realidad,
+
+00:00:19.020 --> 00:00:24.680
+cómo funciona como un libro de reglas invisible y por qué es esencial para mantener tu entorno de Azure seguro y bajo control.
+
+00:00:25.700 --> 00:00:28.540
+Lo desglosaremos en bloques de construcción claros, empezando por el problema que resuelve.
+
+00:00:28.800 --> 00:00:30.200
+Toma tu café y vamos a sumérginos en él.
+
+00:00:30.200 --> 00:00:31.540
+El problema
+
+00:00:31.540 --> 00:00:33.360
+Porque la nube necesita barandillas.
+
+00:00:33.980 --> 00:00:35.300
+Piensa en la antigua forma de hacer las cosas.
+
+00:00:36.140 --> 00:00:39.980
+En las instalaciones, cuando necesitabas un servidor, enviabas una solicitud al equipo de operación.
+
+00:00:41.000 --> 00:00:44.240
+Ellos realizaban las reglas, las directivas de la empresa, los estándares de seguridad,
+
+00:00:44.460 --> 00:00:47.420
+tal vez algunos requisitos normativos y a continuación te aprovisionaban el servidor.
+
+00:00:47.880 --> 00:00:50.020
+Un guardián humano se interponía entre tú y la infraestructura.
+
+00:00:50.520 --> 00:00:52.880
+Esa persona conocía las reglas y se aseguraba de que no se escapara nada.
+
+00:00:53.100 --> 00:00:54.160
+La nube cambió eso por completo.
+
+00:00:54.760 --> 00:00:57.380
+Ahora el dueño de la app tiene acceso directo sin nadie de por medio.
+
+00:00:57.380 --> 00:01:00.520
+Haz clic en crear en Azure Portal y se realizará al instante.
+
+00:01:01.420 --> 00:01:05.640
+También puedes usar la línea de comandos, una API o herramientas de infraestructura como código como Terraform.
+
+00:01:06.220 --> 00:01:08.920
+El problema es que nadie comprueba tu trabajo antes de que seque el recurso.
+
+00:01:09.360 --> 00:01:10.320
+Y ahí es donde empieza el problema.
+
+00:01:10.820 --> 00:01:12.200
+Muchos dueños de apps desconocen esta regla.
+
+00:01:12.560 --> 00:01:15.800
+Quizá no se dan cuenta de que la política de la empresa exige que todos los datos sigan en Europa.
+
+00:01:16.400 --> 00:01:18.440
+O que las cuentas de almacenamiento deben bloquear el acceso público.
+
+00:01:18.440 --> 00:01:21.900
+O que determinados tamaños de máquina virtual son cares, son cares en producción,
+
+00:01:22.340 --> 00:01:24.900
+sin que siguen adelante y crean recursos y a veces se producen errores.
+
+00:01:25.580 --> 00:01:28.640
+Una máquina virtual se implementa con una IP pública y puertos abiertos a internet.
+
+00:01:29.180 --> 00:01:33.060
+Una cuenta de almacenamiento se crea con acceso público a blobs, lo que expone datos confidenciales.
+
+00:01:33.580 --> 00:01:37.360
+Alguien pone en marcha una costosa instancia de GPU para una prueba rápida y se olvida de eliminarla.
+
+00:01:37.840 --> 00:01:38.960
+Estas cosas pasan todo el tiempo.
+
+00:01:38.960 --> 00:01:42.200
+Lo que necesitamos es un sistema de cumplimiento automático que funcione siempre,
+
+00:01:42.320 --> 00:01:44.280
+sin importar quién cree el recurso o cómo lo haga.
+
+00:01:45.420 --> 00:01:48.960
+Ya sea el portal, la CLI, una llamada a la API o una implementación de Terraform en las reglas,
+
+00:01:49.220 --> 00:01:50.740
+deben comprobarse automáticamente.
+
+00:01:51.480 --> 00:01:53.340
+Y eso es exactamente para lo que se creó Azure Policy.
+
+00:01:54.180 --> 00:01:56.380
+¿Qué es Azure Policy? El libro de reglas invisible.
+
+00:01:56.880 --> 00:01:58.980
+Entonces, ¿qué es Azure Policy? Es la definición más simple.
+
+00:01:59.500 --> 00:02:04.000
+Azure Policy es un servicio que te permite definir reglas para tus recursos de Azure y las aplica automáticamente.
+
+00:02:04.480 --> 00:02:06.240
+Piense en ello como el libro de reglas de un juego de mesa.
+
+00:02:06.240 --> 00:02:10.300
+El juego tiene muchos movimientos posibles, pero el libro de reglas dice cuáles están realmente permitidos.
+
+00:02:10.760 --> 00:02:12.400
+No puedes mover tu pieza donde quieras.
+
+00:02:13.000 --> 00:02:14.640
+Las reglas te dicen qué es legal y qué no.
+
+00:02:15.080 --> 00:02:16.380
+Ahora bien, aquí hay una distinción fundamental.
+
+00:02:16.660 --> 00:02:19.400
+Azure Policy no es lo mismo que un control de acceso basa en roles o R-Bass.
+
+00:02:19.740 --> 00:02:21.020
+R-Bass controla quién puede hacer algo.
+
+00:02:21.660 --> 00:02:24.880
+Responde a la pregunta de quién tiene permiso para crear recursos en esta suscripción.
+
+00:02:25.420 --> 00:02:29.400
+Azure Policy controla lo que se puede hacer o, más precisamente, qué configuración están permitidas.
+
+00:02:29.820 --> 00:02:32.920
+Responde a la pregunta de qué tipo de recursos se pueden crear y cómo se deben configurar.
+
+00:02:32.920 --> 00:02:36.920
+Así que R-Bass indica que Mirko puede crear cuentas de almacenamiento.
+
+00:02:37.020 --> 00:02:39.960
+Y Azure Policy exige que éstas tengan HTTPS habilitado.
+
+00:02:40.360 --> 00:02:41.520
+Dos cosas diferentes y necesitas algo.
+
+00:02:42.060 --> 00:02:42.640
+Esta es la clave.
+
+00:02:43.100 --> 00:02:45.120
+Azure Policy siempre está activa y siempre se aplica.
+
+00:02:45.800 --> 00:02:50.900
+Cada solicitud para crear, actualizar o eliminar un recurso pasa por Azure Policy y no hay forma de evitarla.
+
+00:02:51.300 --> 00:02:54.760
+E. Se encuentra entre usted y Azure Resource Manager, el plano de control de Azure.
+
+00:02:55.420 --> 00:02:56.640
+Imagínese que es un filtro automático.
+
+00:02:57.140 --> 00:03:01.260
+Cada solicitud pasa por este filtro y si no coincide con las reglas, la solicitud se bloquea o marca.
+
+00:03:01.580 --> 00:03:03.080
+Y no funciona solo con recursos nuevos.
+
+00:03:03.860 --> 00:03:08.640
+Azure Policy también evalúa los recursos existentes, por lo que detecta desviaciones de la configuración con el tiempo.
+
+00:03:09.320 --> 00:03:14.760
+Si alguien cambia una configuración en un recurso que ya ha implementado y ese cambio infringe una directiva, Azure Policy lo marcará.
+
+00:03:15.700 --> 00:03:16.940
+Entonces, ¿cómo se escriben realmente estas reglas?
+
+00:03:17.260 --> 00:03:18.660
+Ahí intervienen las definiciones de directivas.
+
+00:03:19.520 --> 00:03:20.520
+Definiciones de directivas.
+
+00:03:20.740 --> 00:03:21.600
+Redactar las reglas.
+
+00:03:22.040 --> 00:03:23.540
+Entonces, ¿cómo se escriben realmente estas reglas?
+
+00:03:23.820 --> 00:03:25.360
+Ahí es donde entran en juego las definiciones de directivas.
+
+00:03:25.720 --> 00:03:28.800
+Una definición de directiva es la regla en sí misma y se escribe como un documento JSON.
+
+00:03:29.280 --> 00:03:31.940
+JSON puede sonar técnico, pero la estructura es bastante simple.
+
+00:03:32.560 --> 00:03:33.340
+Sigue un patrón básico.
+
+00:03:33.980 --> 00:03:36.240
+Si esta condición es verdadera, entonces se aplica este efecto.
+
+00:03:36.920 --> 00:03:37.800
+Permítame darle un ejemplo.
+
+00:03:38.140 --> 00:03:42.400
+Hay una política integrada que dice que si una cuenta de almacenamiento no tiene HTTPS habilitado, deniguela.
+
+00:03:43.080 --> 00:03:43.460
+Eso es todo.
+
+00:03:43.920 --> 00:03:46.780
+Cuando la condición es verdadera, el efecto entra en acción y bloquea la implementación.
+
+00:03:46.780 --> 00:03:48.940
+Cada definición de política tiene tres partes claras.
+
+00:03:49.360 --> 00:03:50.200
+Primero, las condiciones.
+
+00:03:50.700 --> 00:03:51.280
+Esa es la parte IF.
+
+00:03:51.680 --> 00:03:52.520
+Estás comprobando.
+
+00:03:52.780 --> 00:03:55.020
+El tipo de recurso, la ubicación, una configuración específica.
+
+00:03:55.360 --> 00:03:56.120
+Segundo, los efectos.
+
+00:03:56.560 --> 00:03:57.320
+Esa es la parte DEN.
+
+00:03:57.760 --> 00:03:59.020
+¿Qué sucede cuando se cumple la condición?
+
+00:03:59.400 --> 00:04:00.820
+Bloqueas la implementación no solo una marca.
+
+00:04:01.500 --> 00:04:02.260
+Tercero, los parámetros.
+
+00:04:02.800 --> 00:04:05.160
+Estos son los espacios en blanco que hacen que la política sea reutilizada.
+
+00:04:05.800 --> 00:04:07.660
+Los parámetros son donde entra en juego el verdadero poder.
+
+00:04:08.240 --> 00:04:12.060
+Imagina que quieres escribir una política que solo permita recursos en ciertas regiones.
+
+00:04:12.420 --> 00:04:15.620
+No quieres escribir una política diferente para cada combinación posible de regiones.
+
+00:04:15.620 --> 00:04:18.680
+Su lugar escribe es una definición llamada ubicaciones permitidas,
+
+00:04:19.080 --> 00:04:20.960
+que agregas un parámetro para las regiones permitidas.
+
+00:04:21.380 --> 00:04:23.280
+Cuando asignas la política, rellenas el espacio en blanco.
+
+00:04:23.540 --> 00:04:26.940
+Quizá dices Europa Occidental y Europa del Norte para una suscripción y este de E, E, U,
+
+00:04:27.260 --> 00:04:28.780
+y oeste de U para otra.
+
+00:04:29.060 --> 00:04:30.300
+Misma definición, parámetros diferentes.
+
+00:04:30.560 --> 00:04:31.780
+Así es como se mantienen las cosas en un día.
+
+00:04:32.020 --> 00:04:32.580
+Aquí tiene el laboratorio.
+
+00:04:32.940 --> 00:04:34.400
+No tienes que escribir todo esto desde cero.
+
+00:04:34.780 --> 00:04:38.620
+Microsoft proporciona cientos de definiciones de directivas integradas que puedes empezar a usar de inmediato.
+
+00:04:38.620 --> 00:04:43.680
+Abarcan categorías como proceso, almacenamiento, redes, centro de seguridad, etiquetado, administración de costos y más.
+
+00:04:44.340 --> 00:04:47.520
+Puedes encontrarlas en Azure Portal, buscar lo que necesitas y asignarlas de inmediato.
+
+00:04:48.480 --> 00:04:50.240
+No se requiere JSON si no quieres escribirlo.
+
+00:04:50.660 --> 00:04:52.480
+Pero una definición en un archivo no hace nada.
+
+00:04:53.060 --> 00:04:54.240
+Tienes que asignarla para que funcione.
+
+00:04:54.960 --> 00:04:55.920
+Asignaciones de directivas.
+
+00:04:56.080 --> 00:04:56.720
+Poner reglas en función.
+
+00:04:57.260 --> 00:05:00.840
+Una asignación de directivas cuando tomas tu definición y la diriges a un ámbito específico.
+
+00:05:01.140 --> 00:05:02.780
+Un ámbito es solo el límite donde se aplica esa regla.
+
+00:05:03.460 --> 00:05:05.660
+Tienes tres opciones, de la más amplia a la más string.
+
+00:05:06.140 --> 00:05:09.480
+Asignarla en el nivel del grupo de administración y cubrirá todo un conjunto de suscripciones.
+
+00:05:10.000 --> 00:05:13.060
+Suéltala en el nivel de suscripción y cubrirá todo lo que hay dentro de esa suscripción.
+
+00:05:13.540 --> 00:05:17.140
+O asignarla en el nivel del grupo de recursos y solo cubrirá los recursos dentro de ese grupo.
+
+00:05:17.840 --> 00:05:18.800
+Ahora, hablemos de la herencia.
+
+00:05:19.140 --> 00:05:19.980
+Este es un concepto clave.
+
+00:05:20.380 --> 00:05:22.840
+Cuando asignas una política en el nivel del grupo de administración,
+
+00:05:23.120 --> 00:05:26.680
+ésta se transmite automáticamente a cada suscripción y grupo de recursos subyacente.
+
+00:05:26.680 --> 00:05:28.200
+No necesitas asignarla una y otra vez.
+
+00:05:28.480 --> 00:05:31.960
+Es como publicar una regla en el tablón de anuncios principal de la entrada de un edificio de oficina.
+
+00:05:32.400 --> 00:05:34.080
+Todos los que pasan por allí deben seguirla.
+
+00:05:34.340 --> 00:05:36.160
+¿No publicarías la misma regla en todas las plantas?
+
+00:05:36.840 --> 00:05:37.700
+Eso sería una fuerza de experiencia.
+
+00:05:38.060 --> 00:05:38.860
+La regla es simplemente simplemente.
+
+00:05:39.140 --> 00:05:40.820
+¿Pero qué ocurre cuando necesitas una excepción?
+
+00:05:41.180 --> 00:05:43.600
+Puede que tu empresa diga que todos los datos deben permanecer en Europa,
+
+00:05:43.840 --> 00:05:46.420
+pero un proyecto tiene una razón legítima para usar un centro de datos en Asia.
+
+00:05:46.900 --> 00:05:49.600
+No quieres eliminar toda la política porque eso dejaría todo expuesto.
+
+00:05:50.160 --> 00:05:51.160
+Por lo tanto, creas una exención.
+
+00:05:51.580 --> 00:05:55.160
+Las exenciones te permiten hacer excepciones para recursos o grupos de recursos específicos
+
+00:05:55.160 --> 00:05:56.580
+sin anular la política en el resto.
+
+00:05:57.180 --> 00:05:58.680
+Es una forma sencilla de gestión de casos externos.
+
+00:05:59.000 --> 00:05:59.920
+Aquí tienes una guía práctica.
+
+00:05:59.920 --> 00:06:04.460
+Asigne tus políticas fundamentales generales en el nivel del grupo de administración.
+
+00:06:04.920 --> 00:06:08.220
+Cosas como ubicaciones permitidas o etiquetas obligatorias deberían aplicarse a todo.
+
+00:06:08.620 --> 00:06:11.580
+Luego asigna políticas más específicas en el de suscripción o grupo de recursos.
+
+00:06:12.120 --> 00:06:15.380
+Puede que tu suscripción de desarrollo tenga reglas más flexibles que tu suscripción de producción.
+
+00:06:15.680 --> 00:06:16.540
+Eso está perfectamente bien.
+
+00:06:16.540 --> 00:06:18.700
+Las políticas específicas se suman a las generales.
+
+00:06:19.180 --> 00:06:21.460
+Ahora, hablemos de lo que realmente ocurre cuando alguien incumple una regla.
+
+00:06:21.860 --> 00:06:22.620
+Ahí es donde entran juegos.
+
+00:06:23.960 --> 00:06:24.360
+Efectos.
+
+00:06:24.420 --> 00:06:25.760
+¿Qué ocurre cuando se incumple la regla?
+
+00:06:26.300 --> 00:06:27.860
+Por lo tanto, he escrito una regla y la asignado.
+
+00:06:28.120 --> 00:06:29.320
+¿Qué ocurre cuando alguien la incumple?
+
+00:06:29.620 --> 00:06:30.320
+Ahí es donde entran juegos.
+
+00:06:30.740 --> 00:06:32.600
+Los efectos son la parte de la política.
+
+00:06:33.860 --> 00:06:36.420
+Deciden qué ocurre cuando un recurso no coincide con la regla.
+
+00:06:36.860 --> 00:06:37.860
+Hay cuatro principales que verá.
+
+00:06:38.340 --> 00:06:39.240
+En primer lugar, denegar.
+
+00:06:39.800 --> 00:06:41.540
+Es el efecto más común para las reglas críticas.
+
+00:06:42.380 --> 00:06:45.420
+Cuando se activa una política de denegación, la implementación se bloquea por completo.
+
+00:06:45.720 --> 00:06:50.280
+El usuario recibe un mensaje de error claro que indica que la validación ha fallado y explica que política lo detuvo.
+
+00:06:51.000 --> 00:06:52.020
+No se crea ningún recurso.
+
+00:06:52.100 --> 00:06:52.480
+No hay daño.
+
+00:06:53.240 --> 00:06:54.960
+Utilice esto para reglas que nunca se deben incumplir.
+
+00:06:55.340 --> 00:07:00.020
+Como el acceso público a blobs en cuentas de almacenamiento o despliegues fuera de regiones aprobadas.
+
+00:07:01.080 --> 00:07:02.140
+En segundo lugar, la auditoría.
+
+00:07:02.440 --> 00:07:03.320
+Esto funciona de forma diferente.
+
+00:07:03.320 --> 00:07:07.660
+La implementación se realiza, pero el recurso se marca como no conforme en el panel de cumplimiento.
+
+00:07:08.240 --> 00:07:12.040
+La auditoría es increíblemente útil cuando no estás seguro de cómo afectará una nueva regla a tu entorno.
+
+00:07:12.360 --> 00:07:16.440
+Puedes ver lo que está pasando sin romper nada, como tomar una medida antes de aplicar un cambio.
+
+00:07:17.780 --> 00:07:19.100
+Tercero, modifica y anexa.
+
+00:07:19.580 --> 00:07:22.380
+Estos efectos corrigen el problema automáticamente en lugar de bloquearlo.
+
+00:07:22.900 --> 00:07:25.240
+Modifica la configuración existente durante la implementación.
+
+00:07:25.440 --> 00:07:26.800
+Anexa añade algo a un campo existente.
+
+00:07:27.460 --> 00:07:31.480
+Por ejemplo, busque una política que añada automáticamente una etiqueta obligatoria con un valor predeterminado.
+
+00:07:31.480 --> 00:07:38.640
+Si alguien olvida añadir una etiqueta de centro de coste, la política la añade por ellos, la implementación se realiza y el recurso es compatible sin trabajo adicional.
+
+00:07:39.740 --> 00:07:40.900
+Cuarto, implementa si no existe.
+
+00:07:41.700 --> 00:07:43.980
+Esta gestiona situaciones en las que falta un recurso de apoyo.
+
+00:07:44.500 --> 00:07:47.180
+Supongamos que quieres habilitar el registro de diagnóstico en cada cuenta de almacenamiento.
+
+00:07:47.560 --> 00:07:53.660
+Si alguien quiere una cuenta de almacenamiento sin configuración de diagnóstico, implementa si no existe y automáticamente implementa la configuración que falta.
+
+00:07:53.660 --> 00:07:55.780
+Es como tener un ayudante que la impie detrás de ti.
+
+00:07:56.160 --> 00:07:57.060
+Esta es la mejor práctica.
+
+00:07:57.380 --> 00:07:58.020
+Piensa con el auditorio.
+
+00:07:58.420 --> 00:08:00.160
+Primero, observa lo que realmente está pasando en tu entorno.
+
+00:08:00.620 --> 00:08:03.040
+Descubre cuántos recursos se verían afectados por una nueva regla.
+
+00:08:03.440 --> 00:08:07.620
+Luego, pasa de negar una vez que esté seguro de que la regla es correcta y no interrumpirá las implementaciones legítimas.
+
+00:08:08.100 --> 00:08:09.320
+Administrar una política es sencillo.
+
+00:08:09.740 --> 00:08:12.800
+¿Pero qué pasa si necesitas 50, todas relacionadas con la seguridad de cumplimiento?
+
+00:08:13.180 --> 00:08:14.280
+Ahí es donde entra en juego la ciencia.
+
+00:08:15.340 --> 00:08:16.660
+Iniciativas que agrupan reglas.
+
+00:08:17.240 --> 00:08:18.060
+Entonces, ¿qué es una iniciativa?
+
+00:08:18.500 --> 00:08:21.660
+Piensa en ella como una colección de políticas agrupadas en torno a un objetivo común.
+
+00:08:21.660 --> 00:08:27.080
+En lugar de asignar 50 políticas individuales una por una, asignas una única iniciativa que las contiene todas.
+
+00:08:28.240 --> 00:08:30.520
+Es como un kit de herramientas, pero empaquetado por un trabajo especial.
+
+00:08:31.080 --> 00:08:33.240
+No coges un martirio, un destornillador y una llave inglesa por separado.
+
+00:08:33.500 --> 00:08:34.720
+Simplemente coges todo el kit de herramientas.
+
+00:08:34.920 --> 00:08:36.220
+Todo lo que necesitas está en un solo lugar.
+
+00:08:36.460 --> 00:08:38.160
+La ventaja aquí es la generación de informes de cumplimiento.
+
+00:08:38.400 --> 00:08:41.560
+Cuando asignas una iniciativa, obtienes una única vista de cumplimiento para todo el grupo.
+
+00:08:42.140 --> 00:08:45.020
+Puedes ver de un vistazo si tu entorno cumple con el estándar general.
+
+00:08:45.740 --> 00:08:49.500
+Si algo no cumple, puedes profundizar directamente en la política específica que está fallando.
+
+00:08:49.500 --> 00:08:52.180
+Es mucho más limpio que seguir 50 políticas por separado.
+
+00:08:52.740 --> 00:08:56.120
+Microsoft proporciona iniciativas integradas que cubren los principales marcos de cumplimiento.
+
+00:08:56.700 --> 00:09:02.880
+Cosas como Azure Security Benchmark, CS, NIST, PCI, DSS, IPA, ISO, 2701 y más.
+
+00:09:03.760 --> 00:09:05.440
+Estas ya están creadas y listas para asignar.
+
+00:09:06.000 --> 00:09:09.380
+No tiene que averiguar qué directivas se asignan a qué requisito de cumplimiento.
+
+00:09:09.880 --> 00:09:10.840
+Microsoft es de trabajo por usted.
+
+00:09:11.300 --> 00:09:13.920
+Algunas de estas iniciativas contienen cientos de directivas individuales.
+
+00:09:14.120 --> 00:09:15.760
+Imagina intentar asignarlas todas una por una.
+
+00:09:16.700 --> 00:09:17.660
+Utilizar iniciativa.
+
+00:09:18.040 --> 00:09:20.320
+También puede crear iniciativas personalizadas para sus propios estandos.
+
+00:09:20.740 --> 00:09:25.560
+Quizás tenga una línea base de producción que incluya directivas para cifrado, registro y seguridad de red.
+
+00:09:26.000 --> 00:09:30.440
+O una iniciativa de estándares de control de costes que limite los tamaños de las máquinas virtuales y requiere etiquetas de centro de costes.
+
+00:09:30.860 --> 00:09:31.160
+Dame idea.
+
+00:09:31.700 --> 00:09:34.860
+Agrupe las directivas, asigne el paquete y controle su cumplimiento con una sola unidad.
+
+00:09:35.520 --> 00:09:38.900
+Hagamos que esto sea concreto con ejemplos del mundo real de cómo las personas usan Azure Policy.
+
+00:09:39.820 --> 00:09:40.820
+Ejemplos del mundo real.
+
+00:09:41.460 --> 00:09:42.100
+Directiva en acción.
+
+00:09:42.540 --> 00:09:43.140
+Hagamos la realidad.
+
+00:09:43.140 --> 00:09:47.140
+Aquí hay cinco escenarios comunes en los que Azure Policy resuelve problemas reales.
+
+00:09:47.660 --> 00:09:49.840
+Primero, restricciones regionales para el cumplimiento de datos.
+
+00:09:50.200 --> 00:09:53.620
+Imagina que tu empresa tiene la política de que los datos de los clientes permanezcan en Europa.
+
+00:09:54.560 --> 00:09:58.820
+Puedes asignar la política integrada de ubicaciones permitidas en el nivel del grupo de administración RAIS
+
+00:09:58.820 --> 00:10:01.720
+y permitir solo regiones de la UE como Europa Occidental y Europa del Norte.
+
+00:10:02.020 --> 00:10:05.080
+Ahora, cuando alguien crea una nueva suscripción, esta hereda automáticamente esa regla.
+
+00:10:05.660 --> 00:10:08.660
+No puede implementar recursos en U o Asia, aunque lo intente.
+
+00:10:08.940 --> 00:10:09.860
+La política lo bloquea.
+
+00:10:10.160 --> 00:10:11.980
+Sin comprobaciones manuales ni solicitudes de permiso.
+
+00:10:11.980 --> 00:10:13.260
+La regla simplemente se aplica.
+
+00:10:13.500 --> 00:10:15.120
+Segundo, la aplicación de etiquetas para coste.
+
+00:10:15.480 --> 00:10:18.660
+Tu equipo de finanzas necesita realizar un seguimiento del gasto por departamento,
+
+00:10:18.960 --> 00:10:21.480
+pero no pueden hacerlo si los recursos no tienen las etiquetas adecuadas.
+
+00:10:21.880 --> 00:10:26.280
+Por lo tanto, creas una política que requiere una etiqueta de centro de costes y una etiqueta de entorno en cada recurso.
+
+00:10:27.460 --> 00:10:28.320
+Pero aquí está la parte inteligente.
+
+00:10:28.560 --> 00:10:29.520
+Te necesita el efecto de modificación.
+
+00:10:30.020 --> 00:10:33.620
+Si alguien olvida agregar la etiqueta, la política la agrega automáticamente con un valor predeterminado.
+
+00:10:33.620 --> 00:10:36.000
+La implementación se realiza y el recurso cumple con él.
+
+00:10:36.540 --> 00:10:39.820
+Y Nancy recibe datos de costes precisos y los desarrolladores no se bloquean por una etiqueta oscente.
+
+00:10:40.120 --> 00:10:41.580
+Tercero, el control de costes en desarrollo.
+
+00:10:42.120 --> 00:10:45.240
+A los equipos de desarrollo les encanta experimentar, pero los experimentos pueden salir caros.
+
+00:10:45.640 --> 00:10:49.240
+Alguien podría poner en marcha una instancia de GPU con 24 núcleos solo para probar una exhibición.
+
+00:10:49.500 --> 00:10:53.460
+Si crea una política que restrinja el tamaño de las máquinas virtuales en suscripciones de Debev, es cos menor.
+
+00:10:53.940 --> 00:10:56.020
+Cosas como la serie B o la serie D con núcleos limitados.
+
+00:10:56.580 --> 00:10:59.940
+Si alguien intenta implementar una GPU costosa o una máquina virtual con mucha memoria,
+
+00:11:00.240 --> 00:11:01.900
+el efecto de negación se activa y la bloquea.
+
+00:11:02.280 --> 00:11:04.860
+Los desarrolladores aún pueden experimentar, pero no pueden exceder el presupuesto.
+
+00:11:05.300 --> 00:11:06.720
+Cuarto, la línea base de seguridad de almacenamiento.
+
+00:11:07.220 --> 00:11:10.800
+Las cuentas de almacenamiento son uno de los lugares más comunes donde se producen errores de seguridad.
+
+00:11:11.200 --> 00:11:13.780
+Alguien crea una cuenta de almacenamiento con acceso público a Blobs
+
+00:11:13.780 --> 00:11:16.120
+y de repente los datos confidenciales quedan expuestos a Internet.
+
+00:11:16.400 --> 00:11:20.640
+Por lo tanto, crea una política que requiere tráfico HTTPS únicamente y bloquea el acceso público a Blobs.
+
+00:11:21.340 --> 00:11:25.080
+Y utiliza Deploy If Not Exist para habilitar automáticamente el registro de diagnóstico
+
+00:11:25.080 --> 00:11:26.900
+en cada cuenta de almacenamiento que no lo tenga.
+
+00:11:27.500 --> 00:11:29.460
+La política soluciona el problema antes de que este ocurra.
+
+00:11:30.140 --> 00:11:31.360
+Quinto lugar, convenciones de NomeCloud.
+
+00:11:32.220 --> 00:11:34.780
+Su equipo quiere que todos los recursos comiencen con Prod o Dev
+
+00:11:34.780 --> 00:11:37.260
+para que puedan saber fácilmente a qué entorno pertenece algo.
+
+00:11:39.020 --> 00:11:41.180
+Creas una directiva que coteja el nombre del recurso con el patrón,
+
+00:11:41.300 --> 00:11:45.400
+pero en lugar de bloquear la implementación, usas el efecto de auditoría, usas el efecto de auditoría.
+
+00:11:45.400 --> 00:11:47.620
+El recurso se crea, pero se marca como no conforme.
+
+00:11:47.980 --> 00:11:51.000
+Luego ejecutas un informe de cumplimiento mensual y pides al equipo que correga NomeCloud.
+
+00:11:51.160 --> 00:11:53.840
+Es una forma suave de aplicar estándares sin interrumpir los flujos de trabajo.
+
+00:11:53.840 --> 00:11:56.380
+Cada uno de estos ejemplos sigue el mismo patrón.
+
+00:11:57.080 --> 00:11:57.920
+Identifique el problema.
+
+00:11:58.360 --> 00:11:59.560
+Elige o crea la directiva.
+
+00:11:59.960 --> 00:12:00.560
+Decide el efecto.
+
+00:12:00.860 --> 00:12:02.780
+Asigna el ámbito correcto y supervise el cumplimiento.
+
+00:12:03.340 --> 00:12:03.860
+Ese es el manual.
+
+00:12:04.480 --> 00:12:08.300
+Ahora alejémonos y veamos cómo encajan todas estas piezas en el panorama general de la gobernanza de Azure.
+
+00:12:08.800 --> 00:12:09.920
+El panorama general.
+
+00:12:10.100 --> 00:12:10.920
+Cómo se conecta todo.
+
+00:12:11.640 --> 00:12:13.520
+¿Dónde encaja Azure Policy en el panorama general?
+
+00:12:13.900 --> 00:12:14.780
+Empecemos de esta manera.
+
+00:12:15.580 --> 00:12:19.800
+Azure Policy funciona en el nivel del plano de control justo encima de Azure Resource Manager
+
+00:12:19.800 --> 00:12:22.120
+y evalúa cada solicitud que llega.
+
+00:12:22.120 --> 00:12:27.100
+Cada vez que alguien crea, actualiza o elimina un recurso a Azure Policy, comprueba las reglas.
+
+00:12:27.560 --> 00:12:28.800
+Es el guardián de la puerta principal.
+
+00:12:30.160 --> 00:12:31.720
+No es la única herramienta en la caja de gobernanza.
+
+00:12:32.200 --> 00:12:34.220
+Azure Policy es solo una parte de un sistema más grande.
+
+00:12:34.760 --> 00:12:38.920
+Los grupos de administración proporcionan la jerarquía para organizar tus suscripciones y aplicar reglas a escala.
+
+00:12:39.700 --> 00:12:42.260
+El control de acceso basado en roles decide quién tiene acceso a qué,
+
+00:12:42.600 --> 00:12:45.160
+mientras que Azure Policy controla qué configuraciones están permitidas.
+
+00:12:45.820 --> 00:12:47.640
+Juntos forman la base de la gobernanza de la nube.
+
+00:12:47.640 --> 00:12:49.040
+Ahora bien, aquí está la cuestión.
+
+00:12:49.300 --> 00:12:52.140
+Azure Policy también es el motor detrás de otros servicios que quizás ya uses.
+
+00:12:52.880 --> 00:12:56.740
+Microsoft Defender para la nube usa Azure Policy para generar sus recomendaciones de cumplimiento.
+
+00:12:57.440 --> 00:13:01.500
+Cuando Defender te indica que una cuenta de almacenamiento no cumple, está ejecutando una evaluación de directivas.
+
+00:13:02.100 --> 00:13:07.140
+Azure Advisor extrae muchas de sus recomendaciones de costo y confiabilidad de las mismas evaluaciones de directivas.
+
+00:13:07.140 --> 00:13:10.900
+Y el panel de cumplimiento en Azure Portal, todo creado a partir de datos de directivas.
+
+00:13:11.520 --> 00:13:15.300
+Por lo tanto, incluso si nunca has creado una directiva tú mismo, es probable que las hayas estado usando sin saberlo.
+
+00:13:15.900 --> 00:13:17.820
+Existe otra práctica denominada directiva como código.
+
+00:13:18.060 --> 00:13:22.320
+En lugar de crear directivas, a través del portal las almacenas como archivos JSON en un repositorio de Git
+
+00:13:22.320 --> 00:13:26.140
+y las implementas a través de canalizaciones de C y C y C como si fuera código de aplicación.
+
+00:13:26.680 --> 00:13:30.520
+Eso te proporciona control de versiones, revisiones de código y pruebas automatizadas para tus reglas de gobernanza.
+
+00:13:30.960 --> 00:13:34.020
+Es una forma más escalable de administrar directivas en grandes organizaciones.
+
+00:13:34.600 --> 00:13:35.880
+Esto es lo más importante que hay que recordar.
+
+00:13:35.880 --> 00:13:39.720
+Al configurar Azure Policy correctamente, se ejecuta de forma silenciosa de fondo.
+
+00:13:40.220 --> 00:13:43.160
+Es la barrera de protección automática que evita los problemas antes de que ocurran.
+
+00:13:43.900 --> 00:13:47.480
+Puede que los usuarios nunca sepan que está ahí, pero se benefician de ella cada vez que implementan un recurso.
+
+00:13:48.000 --> 00:13:53.120
+Obtienes una aplicación coherente en todo momento, sin comprobaciones manuales, tickets de aprobación ni errores humanos.
+
+00:13:53.820 --> 00:13:55.780
+Así es Azure Policy en un lenguaje sencillo.
+
+00:13:56.440 --> 00:14:01.020
+Es un libro de reglas invisible que aplica los estándares de tu organización en cada recurso en todo momento.
+
+00:14:01.920 --> 00:14:04.120
+Si quieres una sola acción de este episodio, aquí la tienes.
+
+00:14:04.120 --> 00:14:10.240
+Vea el Azure Portal, busca la directiva y asigna la directiva de ubicaciones permitidas integrada a una suscripción de prueba.
+
+00:14:11.080 --> 00:14:12.380
+Empiece con la auditoría y observa que ocurre.
+
+00:14:12.860 --> 00:14:14.660
+Es la forma más rápida de entender cómo funciona.
+
+00:14:15.060 --> 00:14:19.380
+Suscríbete para obtener más conocimientos básicos de Microsoft y compártelos con alguien que esté empezando su recorrido con él.
+
+00:14:19.780 --> 00:14:21.700
+Deja un comentario con lo que te gustaría explicar a continuación.

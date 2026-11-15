@@ -1,0 +1,841 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:12.600
+Gotowi na 10 dni z Microsoft 365, Copilot, iAzure i ludźmi, którzy kształtują przyszłość pracy? W styczniu powraca M365Con i tym razem działamy z jeszcze większym rozmachem.
+
+00:00:12.600 --> 00:00:21.760
+Dołącz do nas na sesję na żywo praktyczne dema i wiedzę od MVP oraz ekspertów z całego świata. Żadnych ogólnych slajdów, żadnego natłoku korpomowy.
+
+00:00:22.260 --> 00:00:28.940
+Zajmujemy się prawdziwymi wyzwaniami Copilot Studio agentami, a i Fabrik, bezpieczeństwem, ładem i automatyzacją.
+
+00:00:28.940 --> 00:00:35.080
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesowym, mamy sesje stworzone dla Ciebie.
+
+00:00:35.080 --> 00:00:40.080
+Podczas 10 pełnych dni możesz zgłębiać różne technologie i nawiązać kontakt z globalną społecznością.
+
+00:00:40.840 --> 00:00:44.080
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.880 --> 00:00:51.120
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.700 --> 00:00:56.140
+Wejdź na m365con.net i zarezerwuj swoje miejsce już dziś.
+
+00:00:56.140 --> 00:00:58.860
+To m365con.net
+
+00:00:58.860 --> 00:01:04.520
+Dołącz teraz na m365con.net. Widzimy się na żywo w styczniu.
+
+00:01:04.700 --> 00:01:08.100
+Wyobraź sobie, że kupujesz nowego laptopa dla osoby dołączającej do Twojej firmy.
+
+00:01:08.280 --> 00:01:12.460
+Potrzebuje ona poczty, plików współdzielonych, Wi-Fi w biurze i może VPN do pracy z domu.
+
+00:01:12.720 --> 00:01:16.000
+Każde połączenie zadaje to samo ciche pytanie, czy ten laptop tu pasuje?
+
+00:01:16.240 --> 00:01:21.380
+W wielu małych firmach odpowiedzią wciąż jest hasło, wspólny kod Wi-Fi, login VPN wysłany w wiadomości,
+
+00:01:21.380 --> 00:01:25.300
+a potem ręczna naprawa, gdy ktoś zmienia hasło, wymienia laptopa lub odchodzi z pracy.
+
+00:01:25.560 --> 00:01:27.460
+Może się to wydawać problemem małego biura?
+
+00:01:27.640 --> 00:01:28.320
+Tak nie jest.
+
+00:01:28.480 --> 00:01:32.080
+To samo pytanie pojawia się zarówno w firmie 10-osobowej, jak i 10-tysięcznej.
+
+00:01:32.260 --> 00:01:36.900
+Potrzebujesz sposobu, by urządzenie udowodniło swoją przynależność bez zmuszania użytkownika do ciągłego wpisywania haseł.
+
+00:01:37.100 --> 00:01:44.740
+Nazywam się Melko Peters z M365FM, a ta porcja wiedzy wyjaśni, czym są certyfikaty Microsoft Cloud PK i jak Intune obsługuje to uwierzytelnianie w tle.
+
+00:01:44.960 --> 00:01:47.720
+Niewielki plik cyfrowy może zastąpić hasło przy wejściu do biura.
+
+00:01:47.720 --> 00:01:50.220
+Najpierw sprawdźmy, dlaczego ten plik w ogóle istnieje.
+
+00:01:50.420 --> 00:01:51.840
+Dlaczego istnieją certyfikaty?
+
+00:01:52.020 --> 00:01:54.160
+Otwórz bezpieczną stronę internetową w przeglądarce.
+
+00:01:54.380 --> 00:01:56.980
+Zanim przeczytasz stronę, twoja przeglądarka sprawdza coś w tle.
+
+00:01:57.200 --> 00:01:58.680
+Weryfikuje certyfikat cyfrowy.
+
+00:01:58.860 --> 00:02:03.400
+Certyfikat ten pomaga przeglądarce potwierdzić, że trafiła na właściwą stronę i może ustanowić chronione połączenie.
+
+00:02:03.640 --> 00:02:06.600
+Większość ludzi nigdy nie widzi tego sprawdzenia, ale polegasz na nim każdego dnia.
+
+00:02:06.840 --> 00:02:09.060
+Certyfikat działa trochę jak firmowy identyfikator.
+
+00:02:09.260 --> 00:02:11.920
+Identyfikator zawiera imię, nazwisko i dane osoby, do której należy.
+
+00:02:11.920 --> 00:02:14.880
+Zawiera również potwierdzenie od zaufanego wystawcy identyfikatorów.
+
+00:02:15.000 --> 00:02:17.840
+Certyfikat cyfrowy zawiera nazwę lub tożsamość oraz klucz publiczny.
+
+00:02:18.000 --> 00:02:21.140
+Pomyśl o kluczu publicznym jak o informacji, którą inni mogą podejrzeć.
+
+00:02:21.320 --> 00:02:27.760
+Certyfikat zawiera również zaufany podpis cyfrowy, który mówi, to biuro przepustek sprawdziło tożsamość i zatwierdziło tę odznakę.
+
+00:02:27.980 --> 00:02:31.340
+Daje to strażnikowi coś do sprawdzenia, ale sama odznaka nie wystarczy.
+
+00:02:31.560 --> 00:02:34.000
+Ktoś mógłby podnieść wydrukowaną odznakę z biurka.
+
+00:02:34.220 --> 00:02:37.200
+Certyfikaty cyfrowe rozwiązują ten problem za pomocą klucza prywatnego.
+
+00:02:37.200 --> 00:02:41.540
+Klucz prywatny to sekret posiadacza. Pozostaje on na laptopie, telefonie lub u użytkownika.
+
+00:02:41.740 --> 00:02:47.460
+Urządzenie używa go, aby udowodnić, że faktycznie posiada certyfikat, ale nie przekazuje tego sekretu sieci Wi-Fi, VPN ani aplikacji sprawdzającej odznakę.
+
+00:02:47.580 --> 00:02:52.460
+Pomyśl o tym jak o strażniku, który prosi Cię o odblokowanie własnego etui na odznakę, zamiast prosić o ujawnienie szyfru.
+
+00:02:52.660 --> 00:02:55.560
+Udowadniasz, że potrafisz je otworzyć, ale strażnik nigdy nie poznaje szyfru.
+
+00:02:55.720 --> 00:02:58.360
+Dlatego certyfikaty mogą być bezpieczniejsze niż współdzielone hasło.
+
+00:02:58.560 --> 00:03:00.580
+Współdzielone hasło do Wi-Fi może krążyć między ludźmi.
+
+00:03:00.580 --> 00:03:04.640
+Ktoś może je zapisać, przesłać dalej, użyć ponownie na urządzeniu osobistym lub zatrzymać po odejściu z firmy.
+
+00:03:04.800 --> 00:03:08.960
+Certyfikat urządzenia zapewnia natomiast każdemu zarządzanemu laptopowi lub telefonowi własny dowód tożsamości.
+
+00:03:09.160 --> 00:03:11.420
+Kto zatem tworzy te cyfrowe odznaki i zarządza nimi?
+
+00:03:11.620 --> 00:03:14.600
+To zadanie należy do PKI, czyli Infrastruktury Klucza Publicznego.
+
+00:03:14.860 --> 00:03:16.820
+Nazwa brzmi poważnie, ale idea jest prosta.
+
+00:03:17.000 --> 00:03:19.760
+PKI to biuro przepustek dla Twojego cyfrowego miejsca pracy.
+
+00:03:19.980 --> 00:03:26.260
+Tworzy certyfikaty, wysyła je do odpowiednich osób lub urządzeń, odnawia przed wygaśnięciem i unieważnia, gdy nie powinny już działać.
+
+00:03:26.260 --> 00:03:29.920
+Wewnątrz tego biura znajduje się urząd certyfikacji, w skrócie CA.
+
+00:03:30.660 --> 00:03:32.500
+CA to zaufany wystawca odznak.
+
+00:03:32.700 --> 00:03:39.780
+Kiedy sieć Wi-Fi, usługa VPN lub wewnętrzna aplikacja widzi certyfikat, zadaje jedno pytanie, czy ufam wystawcy, który to zatwierdził?
+
+00:03:39.920 --> 00:03:43.900
+Jeśli odpowiedź brzmi tak, może sprawdzić certyfikat i zdecydować, czy wpuścić urządzenie.
+
+00:03:44.140 --> 00:03:45.560
+Zazwyczaj istnieją dwie warstwy.
+
+00:03:45.760 --> 00:03:47.800
+Na szczycie znajduje się główny urząd certyfikacji, RUT-CA.
+
+00:03:48.000 --> 00:03:50.240
+Pomyśl o tym, jak o centrali firmy zatwierdzającej cały system przepustek.
+
+00:03:50.380 --> 00:03:52.360
+Nie musi on drukować każdej odznaki dla każdego laptopa.
+
+00:03:52.360 --> 00:03:54.700
+Poniżej znajduje się podrzędny urząd certyfikacji i Schewing CA.
+
+00:03:54.860 --> 00:03:56.680
+To biurko, które zajmuje się codzienną pracą.
+
+00:03:56.900 --> 00:04:01.240
+Wydaje on certyfikaty dla urządzeń i użytkowników, podczas gdy jego uprawnienia wywodzą się z głównego urzędu.
+
+00:04:01.460 --> 00:04:07.140
+Gdy usługa sprawdza łańcuch, może prześledzić certyfikat od laptopa do podrzędnego urzędu, a potem do głównego urzędu, któremu ufa.
+
+00:04:07.300 --> 00:04:09.320
+Ten łańcuch nadaje procesowi strukturę.
+
+00:04:09.560 --> 00:04:13.780
+Możesz użyć tego do zabezpieczenia Wi-Fi, gdzie laptop uwierzytelnia się przed dołączeniem do sieci.
+
+00:04:13.780 --> 00:04:18.740
+Możesz użyć tego do VPN, gdzie laptop potwierdza swoją przynależność przed uzyskaniem dostępu do zasobów firmy z domu.
+
+00:04:18.980 --> 00:04:23.320
+Możesz również użyć tego do wewnętrznej aplikacji, która powinna akceptować tylko zarządzane urządzenia firmowe.
+
+00:04:23.480 --> 00:04:25.560
+Pracownik nie musi tego wszystkiego rozumieć.
+
+00:04:25.700 --> 00:04:28.380
+Otwiera laptopa, wybiera firmowe Wi-Fi i łączy się.
+
+00:04:28.580 --> 00:04:29.500
+O to właśnie chodzi.
+
+00:04:29.720 --> 00:04:33.200
+Trudności zaczynają się, gdy biuro przepustek mieści się w serwerowni.
+
+00:04:33.560 --> 00:04:36.600
+Dlaczego tradycyjne PCI staje się ciężarem dla małej firmy?
+
+00:04:36.820 --> 00:04:40.340
+Przez wiele lat ten system oznaczał budowę i obsługę własnego sprzętu.
+
+00:04:40.340 --> 00:04:45.380
+Trzeba było zainstalować Windows Server, a następnie dodać Active Directory Certificate Services, ADCS,
+
+00:04:45.580 --> 00:04:48.140
+które obsługuje urząd certyfikacji wewnątrz firmowej sieci.
+
+00:04:48.280 --> 00:04:49.820
+Ale sam serwer to nie wszystko.
+
+00:04:50.140 --> 00:04:56.260
+Jeśli używasz urządzeń zarządzanych przez Intune, potrzebują one sposobu, by poprosić lokalny urząd certyfikacji o certyfikat.
+
+00:04:56.400 --> 00:05:00.960
+Oznacza to konfigurację Intune Certificate Connector, serwera NDES do obsługi żądań,
+
+00:05:01.040 --> 00:05:05.800
+odwrotnego proxy do bezpiecznego dostępu z zewnątrz i reguł firewalla przepuszczających odpowiedni ruch.
+
+00:05:05.960 --> 00:05:07.520
+Każdy element ma swoje zadanie.
+
+00:05:07.520 --> 00:05:11.720
+Razem potrafią zmienić prosty cel jak Wi-Fi bez haseł w pełnowymiarowy projekt serwerowy.
+
+00:05:11.900 --> 00:05:12.660
+Oto analogia.
+
+00:05:12.820 --> 00:05:15.360
+Wyobraź sobie, że chcesz drukować karty dostępu dla personelu we własnym biurze.
+
+00:05:15.520 --> 00:05:16.800
+Nie kupujesz tylko drukarki do kart.
+
+00:05:17.000 --> 00:05:18.400
+Budujesz dla niej zamknięte pomieszczenie.
+
+00:05:18.640 --> 00:05:20.640
+Dodajesz zamykane szafki na czyste karty i dokumentacje.
+
+00:05:20.860 --> 00:05:22.280
+Instalujesz zasilanie awaryjne.
+
+00:05:22.480 --> 00:05:23.660
+Ustalasz zasady wstępu.
+
+00:05:23.840 --> 00:05:27.580
+Potem potrzebujesz kogoś, kto wie, który przełącznik nacisnąć, gdy drukarka przestanie działać.
+
+00:05:27.680 --> 00:05:30.480
+To bliższe tradycyjnemu PK niż mogłoby się wydawać.
+
+00:05:30.480 --> 00:05:35.300
+Mała firma może chcieć tylko, aby laptopy łączyły się z Wi-Fi bez używania jednego wspólnego hasła dla wszystkich.
+
+00:05:35.560 --> 00:05:40.440
+Albo może chcieć VPN-a, który rozpozna zarządzany laptop, zanim poprosi pracownika o zalogowanie.
+
+00:05:40.760 --> 00:05:41.520
+Rozsądne cele.
+
+00:05:41.900 --> 00:05:49.640
+Jednak stara ścieżka wymaga serwerów reguł sieciowych, planowania dostępu publicznego i wiedzy, na którą wiele małych zespołów IT po prostu nie ma czasu.
+
+00:05:49.640 --> 00:05:51.560
+Praca nie kończy się po instalacji.
+
+00:05:51.800 --> 00:05:57.780
+Serwery wymagają aktualizacji, sprzęt się starzeje, kopie zapasowe trzeba testować, a nie tylko patrzeć na zielony haczyk w narzędziu.
+
+00:05:57.980 --> 00:06:02.000
+Certyfikaty mają daty ważności, a system musi je odnawiać, zanim te daty miną.
+
+00:06:02.220 --> 00:06:07.880
+Gdy odnowienie zawiedzie, pierwszym sygnałem może być pracownik, który nie może połączyć się z Wi-Fi w pracowity poniedziałkowy poranek.
+
+00:06:08.060 --> 00:06:10.180
+Hasło pracownika może działać bez zarzutu.
+
+00:06:10.400 --> 00:06:16.960
+Laptop może otwierać Worda i e-maile przez połączenie mobilne, ale certyfikat, dzięki któremu sieć rozpoznaje ten laptop, mógł wygasnąć.
+
+00:06:16.960 --> 00:06:20.840
+VPN go odrzuci, wewnętrzna aplikacja go odrzuci, Wi-Fi go odrzuci.
+
+00:06:21.000 --> 00:06:23.960
+To zamienia się w zgłoszenie do wsparcia, które początkowo brzmi dziwnie.
+
+00:06:24.200 --> 00:06:26.480
+Moje hasło działa, ale nie mogę połączyć się z siecią.
+
+00:06:26.720 --> 00:06:33.660
+Wtedy ktoś musi ustalić, czy problem leży w urządzeniu, profilu certyfikatu, usłudze sieciowej, lokalnym urzędzie certyfikacji, łączniku czy zaporze sieciowej.
+
+00:06:33.900 --> 00:06:36.880
+Mały zespół IT może stracić pół dnia, podążając tym tropem.
+
+00:06:37.020 --> 00:06:39.220
+Praca zdalna dodaje kolejną warstwę trudności.
+
+00:06:39.220 --> 00:06:46.940
+Laptop w biurze łatwiej łączy się z lokalnymi usługami certyfikatów, ale laptop na kuchennym stole nadal potrzebuje bezpiecznej drogi do pobrania certyfikatu lub jego odnowienia.
+
+00:06:47.200 --> 00:06:51.540
+Można ostrożnie udostępnić część tego procesu poprzez odwrotne proxy i reguły zapory sieciowej.
+
+00:06:51.800 --> 00:06:58.500
+Działa to, gdy jest dobrze zaplanowane i utrzymywane, ale dodaje więcej ruchomych elementów, ustawień i miejsc, gdzie mały błąd może przerwać dostęp.
+
+00:06:58.740 --> 00:07:04.920
+Koszt to nie tylko licencja serwera, to czas poświęcony na aktualizację, specjalistyczna wiedza i dokumentacja, która musi być zawsze aktualna.
+
+00:07:04.920 --> 00:07:10.140
+To również ryzyko, że jedna osoba rozumie system certyfikatów, a potem odchodzi z firmy, zabierając tę wiedzę ze sobą.
+
+00:07:10.380 --> 00:07:13.600
+Sama infrastruktura klucza publicznego, PKI, nie jest zarezerwowana tylko dla dużych firm.
+
+00:07:13.800 --> 00:07:17.640
+Mała firma może korzystać z tego samego rodzaju weryfikacji urządzeń, co duża korporacja.
+
+00:07:17.860 --> 00:07:22.500
+Problem w tym, że prowadzenie tradycyjnej PKI może wymagać wysiłku znacznie większego działu IT.
+
+00:07:22.700 --> 00:07:28.820
+Microsoft Cloud PKI zachowuje proces certyfikacji, ale przenosi większość tej mechaniki z Twojej serwerowni do chmury Microsoft.
+
+00:07:29.100 --> 00:07:31.360
+Czym właściwie jest Microsoft Cloud PKI?
+
+00:07:31.360 --> 00:07:35.960
+Microsoft Cloud PKI to zarządzana przez Microsoft usługa urzędu certyfikacji wewnątrz Intune.
+
+00:07:36.140 --> 00:07:37.720
+To definicja w prostych słowach.
+
+00:07:37.840 --> 00:07:41.560
+Tworzy ona i zarządza certyfikatami dla urządzeń i użytkowników obsługiwanych przez Intune.
+
+00:07:41.800 --> 00:07:47.360
+Zamiast prowadzić system identyfikatorów na lokalnych serwerach, Microsoft obsługuje usługę urzędu certyfikacji w chmurze.
+
+00:07:47.540 --> 00:07:54.020
+Twoi pracownicy nie będą otwierać aplikacji o nazwie Cloud PKI, klikać przycisku prośby o certyfikat, zapisywać plików, ani pamiętać kolejnego hasła.
+
+00:07:54.180 --> 00:07:55.560
+Cloud PKI działa w tle.
+
+00:07:55.560 --> 00:08:02.360
+Może wystawić certyfikat, gdy zarządzane urządzenie go potrzebuje, odnowić go przed wygaśnięciem i unieważnić, gdy certyfikat nie powinien już działać.
+
+00:08:02.460 --> 00:08:04.200
+Użyjmy ponownie analogii biurowca.
+
+00:08:04.400 --> 00:08:06.160
+Entra ID znajduje się w recepcji.
+
+00:08:06.420 --> 00:08:09.100
+Wie, kim są ludzie i kontroluje ich tożsamość logowania.
+
+00:08:09.300 --> 00:08:11.040
+Intune działa jak zarządca budynku.
+
+00:08:11.300 --> 00:08:15.680
+Wie, które laptopy i telefony należą do firmy oraz wysyła im ustawienia, aplikacje i zasady.
+
+00:08:15.880 --> 00:08:18.960
+Cloud PKI to bezpieczne biuro wydawania przepustek wewnątrz tego budynku.
+
+00:08:19.140 --> 00:08:22.540
+Intune informuje biuro przepustek, które zarządzane urządzenia potrzebują dostępu.
+
+00:08:22.540 --> 00:08:24.200
+Cloud PKI tworzy certyfikat.
+
+00:08:24.320 --> 00:08:28.540
+Następnie urządzenie może użyć tego certyfikatu, łącząc się z usługami, które Twoja firma skonfigurowała tak, aby mu ufały.
+
+00:08:28.660 --> 00:08:30.380
+Każda usługa ma jasno określoną rolę.
+
+00:08:30.560 --> 00:08:33.620
+Nie potrzebujesz lokalnego serwera Windows z uruchomionym głównym urzędem certyfikacji.
+
+00:08:33.800 --> 00:08:37.260
+Nie potrzebujesz kolejnego lokalnego serwera pełniącego funkcję urzędu certyfikacji wydającego certyfikaty.
+
+00:08:37.420 --> 00:08:43.380
+Firma Microsoft może hostować obie części w środowisku chmurowym z głównym urzędem certyfikacji oraz urzędem wystawiającym, który obsługuje certyfikaty używane przez Twoje urządzenia.
+
+00:08:43.380 --> 00:08:46.060
+To eliminuje konieczność posiadania wielu elementów sprzętowych w planie.
+
+00:08:46.240 --> 00:08:49.160
+Zmienia to również podmiot odpowiedzialny za podstawową usługę certyfikacji.
+
+00:08:49.360 --> 00:08:55.980
+W licencjonowanym środowisku produkcyjnym Microsoft chroni klucze urzędu certyfikacji za pomocą sprzętowych modułów bezpieczeństwa, nazywanych zazwyczaj HSM.
+
+00:08:56.220 --> 00:09:00.660
+Moduł HSM to zabezpieczony sejf sprzętowy stworzony do ochrony wysoce poufnych kluczy kryptograficznych.
+
+00:09:00.840 --> 00:09:04.160
+Nie musisz samodzielnie kupować, montować, aktualizować ani pilnować tego sprzętu.
+
+00:09:04.360 --> 00:09:06.240
+Microsoft zarządza nim w ramach usługi.
+
+00:09:06.240 --> 00:09:12.420
+Twoja rola ogranicza się do decyzji biznesowych, które urządzenia powinny otrzymać certyfikaty i do czego mają one zapewniać dostęp.
+
+00:09:12.740 --> 00:09:15.220
+Warto tutaj poznać jeden krótki skrót SCEP.
+
+00:09:15.420 --> 00:09:18.080
+Oznacza on protokół Simple Certificate Enrollment Protocol.
+
+00:09:18.300 --> 00:09:20.460
+Po tym odcinku nie musisz pamiętać pełnej nazwy.
+
+00:09:20.700 --> 00:09:25.180
+Wyobraź sobie SCEP jako zabezpieczony kanał komunikacji między zarządzanym urządzeniem a punktem wydawania przepustek.
+
+00:09:25.360 --> 00:09:27.240
+Laptop używa tego kanału, aby zażądać certyfikatu.
+
+00:09:27.980 --> 00:09:33.420
+Usługa CloudPacka i weryfikuje żądanie za pośrednictwem Intune i odsyła podpisany certyfikat, gdy weryfikacja przebiegnie pomyślnie.
+
+00:09:33.420 --> 00:09:36.200
+Urządzenie nie wysyła swojego prywatnego klucza przez ten kanał.
+
+00:09:36.300 --> 00:09:37.560
+Ten szczegół jest istotny.
+
+00:09:37.720 --> 00:09:40.460
+Urządzenie tworzy swój klucz prywatny lokalnie i przechowuje go u siebie.
+
+00:09:40.680 --> 00:09:46.000
+CloudPacka i otrzymuje żądanie zawierające informacje publiczne niezbędne do wydania certyfikatu, a nie klucz prywatny urządzenia.
+
+00:09:46.180 --> 00:09:49.740
+CloudPacka i obsługuje rodziny urządzeń, z których większość małych firm już korzysta.
+
+00:09:49.940 --> 00:09:54.220
+Obejmuje to laptopy z systemem Windows, komputery Mac, iPhony i Pady oraz urządzenia z systemem Android.
+
+00:09:54.480 --> 00:09:55.560
+Warunek jest prosty.
+
+00:09:55.720 --> 00:10:01.320
+Urządzenie musi być zarejestrowane i zarządzane przez Intune, a jego platforma musi obsługiwać profil certyfikatu Intune.
+
+00:10:01.320 --> 00:10:05.220
+Prywatny laptop, który nie jest zarządzany przez Intune, nie pasuje do tego modelu.
+
+00:10:05.340 --> 00:10:06.580
+Ta granica jest celowa.
+
+00:10:06.780 --> 00:10:14.080
+CloudPacka i wykorzystuje informacje Intune o urządzeniu w ramach procesu, dlatego działa najlepiej tam, gdzie firma kontroluje konfigurację i może stosować swoje zasady bezpieczeństwa.
+
+00:10:14.280 --> 00:10:16.760
+Zanim zaplanujesz wdrożenie, sprawdź kwestie licencyjne.
+
+00:10:16.920 --> 00:10:20.200
+CloudPacka i wymaga odpowiedniej licencji Microsoft obok usługi Intune.
+
+00:10:20.420 --> 00:10:26.920
+Microsoft z czasem zmienia szczegóły planów, więc sprawdź swoje obecne uprawnienia i potwierdź, kto potrzebuje licencji, zanim zaprojektujesz usługę.
+
+00:10:26.920 --> 00:10:32.340
+Urząd certyfikacji może teraz znajdować się w chmurze, ale certyfikat nadal musi bezpiecznie dotrzeć do odpowiedniego laptopa.
+
+00:10:32.460 --> 00:10:36.100
+Ta droga wyjaśnia, dlaczego CloudPacka i tak dobrze sprawdza się w nowoczesnej pracy.
+
+00:10:36.360 --> 00:10:42.880
+Wyobraź sobie nowego pracownika, który otwiera swój zarządzany przez Intune laptop po raz pierwszy i musi połączyć się z bezpieczną siecią Wi-Fi lub użyć VPN.
+
+00:10:43.160 --> 00:10:45.600
+Co się dzieje, gdy urządzenie potrzebuje certyfikatu?
+
+00:10:45.820 --> 00:10:49.760
+Wyobraź sobie nowego pracownika siadającego do swojego firmowego laptopa pierwszego ranka w domu.
+
+00:10:49.960 --> 00:10:52.320
+Ten laptop jest już zarejestrowany w usłudze Intune.
+
+00:10:52.320 --> 00:11:00.380
+Po przyjściu do biura będą potrzebować Wi-Fi, a w domu zapewne VPN, by połączyć się z systemami wewnętrznymi, ale nie powinni szukać haseł ani dzwonić do IT po certyfikat.
+
+00:11:00.560 --> 00:11:05.580
+Zanim laptop poprosi o własny certyfikat, Intune przesyła certyfikaty, którym urządzenie musi zaufać.
+
+00:11:05.740 --> 00:11:09.680
+Obejmuje to certyfikat główny oraz certyfikat wystawiający z Twojej konfiguracji CloudPKI.
+
+00:11:09.940 --> 00:11:11.240
+Brzmi jak drobny szczegół, prawda?
+
+00:11:11.520 --> 00:11:13.060
+W rzeczywistości to cały fundament.
+
+00:11:13.440 --> 00:11:16.680
+Mówi laptopowi, to jest urząd certyfikacji, któremu możesz ufać.
+
+00:11:16.680 --> 00:11:22.540
+Bez tego zaufania laptop nie wie, czy certyfikat pochodzi z autoryzowanej usługi firmowej, czy z przypadkowego miejsca.
+
+00:11:22.760 --> 00:11:25.260
+Następnie laptop generuje swój własny klucz prywatny.
+
+00:11:25.500 --> 00:11:28.860
+Dzieje się to bezpośrednio na urządzeniu i ten klucz prywatny nigdy go nie opuszcza.
+
+00:11:29.080 --> 00:11:33.200
+Nie jest kopiowany do Intune, wysyłany do CloudPK i ani przekazywany do usługi Wi-Fi.
+
+00:11:33.400 --> 00:11:35.540
+To oddzielenie jest gwarancją bezpieczeństwa.
+
+00:11:35.740 --> 00:11:38.080
+Potem laptop przygotowuje żądanie certyfikatu.
+
+00:11:38.300 --> 00:11:43.680
+Żądanie to zawiera informacje publiczne niezbędne do wystawienia certyfikatu oraz dowód kontroli nad kluczem prywatnym.
+
+00:11:43.680 --> 00:11:47.720
+Wysyła żądanie przez SHP, czyli chronioną ścieżkę, o której wspominaliśmy wcześniej.
+
+00:11:48.040 --> 00:11:49.740
+Wędruje tylko żądanie, a nie klucz.
+
+00:11:49.840 --> 00:11:51.920
+Teraz Intune bierze aktywny udział w weryfikacji.
+
+00:11:52.100 --> 00:11:55.720
+Potwierdza, że żądanie pochodzi z urządzenia zarejestrowanego i zarządzanego przez Twoją firmę.
+
+00:11:55.900 --> 00:12:00.620
+Chroni również żądanie, aby usługa CloudPK i mogła zweryfikować, czy nie zostało ono zmodyfikowane po drodze.
+
+00:12:00.840 --> 00:12:04.460
+Jeśli żądanie nie zgadza się z oczekiwaniami Intune, certyfikat nie zostanie wydany.
+
+00:12:04.640 --> 00:12:08.100
+To uniemożliwia nieznanemu laptopowi po prostu poproszenie o certyfikat i jego otrzymanie.
+
+00:12:08.100 --> 00:12:12.560
+Gdy wszystkie kontrole przejdą pomyślnie, CloudPK i przesyła żądanie do urzędu wystawiającego certyfikaty.
+
+00:12:12.780 --> 00:12:17.660
+Wystawca podpisuje certyfikat dla tożsamości tego urządzenia, a Intune dostarcza go z powrotem na laptopa.
+
+00:12:17.820 --> 00:12:19.680
+Pracownik nie widzi nic z tego procesu.
+
+00:12:19.840 --> 00:12:24.260
+Po prostu otwiera laptopa, a po przyjściu do biura sieć Wi-Fi może poprosić go o dowód tożsamości.
+
+00:12:24.520 --> 00:12:27.820
+Zamiast wpisywać wspólne hasło, laptop przedstawia swój certyfikat.
+
+00:12:27.980 --> 00:12:30.120
+Sieć następnie sprawdza łańcuch certyfikatów.
+
+00:12:30.240 --> 00:12:32.980
+Czy ten certyfikat został wydany przez zaufany urząd wystawiający?
+
+00:12:32.980 --> 00:12:35.780
+Oraz czy ten urząd wystawiający łączy się z zaufanym urzędem głównym?
+
+00:12:35.940 --> 00:12:38.380
+Jeśli kontrole zakończą się powodzeniem, laptop nawiązuje połączenie.
+
+00:12:38.560 --> 00:12:40.400
+Ten sam schemat działa w przypadku VPN.
+
+00:12:40.660 --> 00:12:45.920
+Usługa VPN może sprawdzić, czy certyfikat urządzenia należy do zarządzanego laptopa firmowego, zanim pozwoli na połączenie.
+
+00:12:46.140 --> 00:12:51.800
+Aplikacja wewnętrzna może zrobić to samo, akceptując tylko urządzenia z certyfikatem od Twojego zatwierdzonego urzędu certyfikacji.
+
+00:12:52.020 --> 00:12:57.300
+Certyfikat nie zastępuje każdego monitu logowania, ale daje usłudze kolejny silny sposób na identyfikację urządzenia.
+
+00:12:57.560 --> 00:13:01.680
+Porozmawiajmy teraz o części, którą zauważamy zwykle dopiero wtedy, gdy przestaje działać po wygaśnięciu.
+
+00:13:01.940 --> 00:13:04.380
+Certyfikaty nie trwają wiecznie i jest to celowe działanie.
+
+00:13:04.560 --> 00:13:09.220
+Certyfikat musi mieć datę końcową, aby stare poświadczenie urządzenia nie mogło działać w nieskończoność bez ponownej weryfikacji.
+
+00:13:09.380 --> 00:13:13.900
+CloudPK i Intune mogą rozpocząć odnawianie przed tą datą, gdy tylko zarządzane urządzenie się zgłosi.
+
+00:13:14.120 --> 00:13:18.880
+Laptop wysyła żądanie o nowy certyfikat, a cały proces przebiega tą samą zabezpieczoną ścieżką.
+
+00:13:18.880 --> 00:13:20.740
+Dla pracownika nic się nie zmienia.
+
+00:13:21.000 --> 00:13:28.360
+Łączy się z Wi-Fi, korzysta z VPN, a certyfikat odnawia się w tle, zamiast stawać się nagłym zgłoszeniem do pomocy technicznej w dniu wygaśnięcia.
+
+00:13:28.520 --> 00:13:30.620
+Zagubiony laptop wymaga innej reakcji.
+
+00:13:30.880 --> 00:13:36.400
+Jeśli urządzenie zniknie, pracownik odejdzie z firmy lub podejrzewasz, że certyfikat nie powinien być już zaufany.
+
+00:13:36.700 --> 00:13:38.640
+Administrator może go unieważnić w Intune.
+
+00:13:38.840 --> 00:13:44.280
+CloudPK i publikuje tę zmianę, dzięki czemu usługi sprawdzające status certyfikatu mogą odrzucić ten stary.
+
+00:13:44.280 --> 00:13:48.280
+Urządzenie może fizycznie nadal istnieć, ale jego cyfrowy dowód przestaje działać.
+
+00:13:48.360 --> 00:13:55.080
+To znacznie lepsza sytuacja niż zmiana wspólnego hasła do Wi-Fi z nadzieją, że każdy były pracownik, stary laptop czy prywatny telefon już go nie mają.
+
+00:13:55.320 --> 00:14:00.660
+Mimo to automatyczne dostarczanie certyfikatów nie oznacza, że CloudPK i obsługuje każde zadanie certyfikatowe w Twojej firmie.
+
+00:14:00.900 --> 00:14:03.180
+Sprawdza się bardzo dobrze w określonym zestawie zadań.
+
+00:14:03.360 --> 00:14:08.860
+Inne zadania wymagają innego systemu certyfikatów, a poznanie tej granicy pozwoli zaoszczędzić czas przed rozpoczęciem wdrażania.
+
+00:14:08.860 --> 00:14:10.940
+Gdzie CloudPK i pasuje, a gdzie nie?
+
+00:14:10.940 --> 00:14:15.620
+CloudPK i sprawdza się najlepiej, gdy zarządzane urządzenie firmowe musi uwierzytelnić się przed uzyskaniem dostępu.
+
+00:14:15.800 --> 00:14:17.440
+Bezpieczne Wi-Fi to klasyczny przykład.
+
+00:14:17.700 --> 00:14:20.840
+Zamiast podawać każdemu nowemu pracownikowi to samo hasło bezprzewodowe,
+
+00:14:20.940 --> 00:14:24.900
+Intune może umieścić certyfikat na jego laptopie lub telefonie, a sieć go zaakceptuje.
+
+00:14:25.140 --> 00:14:27.360
+Dostęp VPN to kolejne świetne zastosowanie.
+
+00:14:27.620 --> 00:14:31.900
+Zarządzany laptop może przedstawić swój certyfikat podczas łączenia, eliminując powtarzające się monity o hasło
+
+00:14:31.900 --> 00:14:35.320
+i dając VPNowi dodatkowy sposób weryfikacji urządzenia przed przyznaniem dostępu.
+
+00:14:35.320 --> 00:14:40.140
+Niektóre aplikacje wewnętrzne mogą stosować to samo podejście, gdy muszą akceptować tylko urządzenia zarządzane przez firmę.
+
+00:14:40.340 --> 00:14:45.320
+Działa to na zarządzanych laptopach z systemem Windows, komputerach Mac, iPhone'ach, iPad'ach i urządzeniach z systemem Android.
+
+00:14:45.560 --> 00:14:47.800
+W przypadku małej firmy zmienia to znany problem.
+
+00:14:48.060 --> 00:14:50.780
+Wspólne hasło do Wi-Fi ma tendencję do rozprzestrzeniania się.
+
+00:14:51.000 --> 00:14:54.860
+Pojawia się w mailach po witalnych wiadomościach na czacie, notatnikach i starych telefonach.
+
+00:14:55.040 --> 00:15:00.500
+Gdy ktoś odchodzi, zmiana hasła może oznaczać konieczność ponownego łączenia każdej drukarki, laptopa, tabletu i urządzenia w sali spotkań.
+
+00:15:00.500 --> 00:15:04.140
+Dzięki certyfikatom każde zarządzane urządzenie posiada własny dowód dostępu.
+
+00:15:04.300 --> 00:15:06.800
+Decyzja o dostępie staje się również bardziej precyzyjna.
+
+00:15:07.000 --> 00:15:09.160
+Hasło dowodzi jedynie tego, że ktoś je zna.
+
+00:15:09.380 --> 00:15:14.240
+Certyfikat wydany przez CloudPK i łączy dostęp z urządzeniem, które Intune zna i którym zarządza.
+
+00:15:14.440 --> 00:15:16.760
+Wspiera to ideę stojącą za modelem Zero Trust.
+
+00:15:16.960 --> 00:15:19.900
+Nie przyznawaj dostępu tylko dlatego, że coś znajduje się w sieci biurowej.
+
+00:15:20.120 --> 00:15:23.080
+Weryfikuj urządzenie i jego certyfikat za każdym razem, gdy usługa o to prosi.
+
+00:15:23.240 --> 00:15:25.220
+Istnieją dwa typowe sposoby rozpoczęcia pracy.
+
+00:15:25.220 --> 00:15:31.860
+Jeśli Twoja firma działa głównie w chmurze i nie posiada istniejącego systemu certyfikatów, możesz utworzyć główny i wystawiający urząd certyfikacji w CloudPK i.
+
+00:15:32.000 --> 00:15:37.540
+Następnie konfigurujesz obsługę Wi-Fi, bramę VPN lub wybrane aplikacje na zarządzanych urządzeniach, aby ufały temu łańcuchowi certyfikatów.
+
+00:15:37.640 --> 00:15:39.080
+To ścieżka czystego startu.
+
+00:15:39.280 --> 00:15:42.820
+Jeśli już korzystasz z własnego urzędu certyfikacji, nie zawsze musisz go porzucać.
+
+00:15:42.820 --> 00:15:50.680
+CloudPK i może użyć wystawiającego urzędu certyfikacji, który łączy się z istniejącym głównym urzędem, dzięki czemu nowe urządzenia zarządzane przez Intune wpiszą się w używane już zasady zaufania.
+
+00:15:50.920 --> 00:15:55.460
+Właściwa ścieżka zależy od tego, czemu Twoja sieć już ufa, ale CloudPK i ma wyraźne granice.
+
+00:15:55.740 --> 00:15:58.260
+Skupia się na urządzeniach zarejestrowanych w usłudze Intune.
+
+00:15:58.460 --> 00:16:02.360
+Nie wydaje każdego typu certyfikatu dla każdej maszyny czy usługi posiadanej przez firmę.
+
+00:16:02.540 --> 00:16:08.720
+Na przykład nie stanowi ogólnego zamiennika certyfikatów dla serwerów www, bram VPN, równoważników obciążenia czy innych serwerów.
+
+00:16:08.720 --> 00:16:16.340
+Nie rozwiązuje też problemów z certyfikatami dla komputerów niezarządzanych, systemów izolowanych, bez połączenia z chmurą czy urządzeń z systemem Linux poza wsparciem Intune.
+
+00:16:16.540 --> 00:16:20.780
+Nie umniejsza to jego użyteczności. Oznacza to po prostu, że należy dopasować narzędzie do zadania.
+
+00:16:20.940 --> 00:16:24.080
+CloudPK i obsługuje certyfikaty dla Twoich zarządzanych urządzeń użytkowników.
+
+00:16:24.260 --> 00:16:27.740
+Inna usługa może wciąż obsługiwać certyfikaty dla systemów, z którymi łączą się te urządzenia.
+
+00:16:27.940 --> 00:16:31.520
+Twój kontroler Wi-Fi, brama VPN lub aplikacja wewnętrzna również wymagają konfiguracji.
+
+00:16:31.520 --> 00:16:35.460
+Muszą one ufać głównemu i wystawiającemu łańcuchowi certyfikatów używanemu przez CloudPKi.
+
+00:16:35.600 --> 00:16:40.000
+Jeśli usługa nie rozpoznaje Twojego urzędu certyfikacji, odrzuci w pełni poprawny certyfikat urządzenia.
+
+00:16:40.240 --> 00:16:42.460
+Strona urządzenia i strona usługi muszą się zgadzać.
+
+00:16:42.680 --> 00:16:45.080
+Jeden punkt planowania może zaoszczędzić frustracji w przyszłości.
+
+00:16:45.300 --> 00:16:48.460
+Podczas tworzenia urzędu certyfikacji wybierasz, do czego służą jego certyfikaty.
+
+00:16:48.700 --> 00:16:54.240
+Wybory te muszą odpowiadać planowanemu zastosowaniu, np. uwierzytelnianie klienta dla dostępu do sieci Wi-Fi lub VPN.
+
+00:16:54.580 --> 00:16:57.740
+Jeśli wybierzesz zbyt wąski zakres, a później będziesz potrzebować innego zastosowania,
+
+00:16:57.740 --> 00:17:00.760
+być może trzeba będzie utworzyć nowy urząd certyfikacji i przenieść urządzenia.
+
+00:17:00.920 --> 00:17:03.520
+Zdecyduj o pierwszym zastosowaniu, zanim cokolwiek utworzysz.
+
+00:17:03.640 --> 00:17:06.980
+To sprowadza nas z powrotem z technicznego diagramu do prostego wyboru biznesowego.
+
+00:17:07.240 --> 00:17:10.940
+Gdzie certyfikat urządzenia wyeliminowałby realny problem z dostępem dla Twoich pracowników?
+
+00:17:11.120 --> 00:17:13.100
+Rozsądny punkt wyjścia dla małej firmy.
+
+00:17:13.300 --> 00:17:15.300
+Od czego więc mała firma powinna zacząć?
+
+00:17:15.460 --> 00:17:18.160
+Zacznij od jednego problemu, a nie od wdrożenia w całej firmie.
+
+00:17:18.400 --> 00:17:21.080
+Może Twoje Wi-Fi dla personelu nadal używa jednego współdzielonego hasła,
+
+00:17:21.180 --> 00:17:23.040
+albo VPN zmusza ludzi do ciągłego logowania.
+
+00:17:23.040 --> 00:17:26.560
+Być może masz wewnętrzną aplikację, która powinna otwierać się tylko na zarządzanych laptopach firmowych.
+
+00:17:26.760 --> 00:17:27.600
+Wybierz jeden problem.
+
+00:17:27.860 --> 00:17:29.820
+Następnie upewnij się, że podstawy są już wdrożone.
+
+00:17:29.980 --> 00:17:31.920
+Czy te urządzenia są zarejestrowane w usłudze Intune?
+
+00:17:32.060 --> 00:17:33.980
+Czy użytkownicy logują się za pomocą EntraID?
+
+00:17:34.180 --> 00:17:36.860
+Czy Twoja licencja Microsoft obejmuje wymagania Cloud PKI?
+
+00:17:37.060 --> 00:17:40.300
+Przeprowadź mały pilotaż, aby odpowiedzieć na te pytania bez wpływu na wszystkich.
+
+00:17:40.560 --> 00:17:43.080
+Wybierz ograniczoną grupę urządzeń, zbuduj łańcuch zaufania,
+
+00:17:43.220 --> 00:17:47.240
+profil certyfikatu oraz pasującą zasady Wi-Fi lub VPN jako jedno powiązane zadanie.
+
+00:17:47.240 --> 00:17:51.960
+Nie traktuj certyfikatu oddzielnie, ponieważ usługa sieciowa musi wiedzieć, który łańcuch certyfikatów zaakceptować.
+
+00:17:52.160 --> 00:17:54.060
+Zaangażuj osobę, która odpowiada za tę sieć.

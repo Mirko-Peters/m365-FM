@@ -22,6 +22,7 @@ import site_shownotes_seo as SSEO
 from tm_hash import fields_hash
 from translate_show import call, NAMES, OUT, MODEL, cost, guard, text_of, load_hashes, save_hashes, sync_hashes, update_stale, plan, notes_source, notes_original, notes_hash, NOTES_MAXC, STALE_MAX, unknown_lock, halt
 import i18n_overrides as OV
+import search_demand as DM
 from ai_gateway import anthropic_request, check_budget, estimated_eur, remaining_eur, report_usage, urlopen
 
 TOP = int(os.environ.get("NOTES_TOP", "150")); MAXC = NOTES_MAXC
@@ -106,6 +107,7 @@ def main():
     have = {l: (json.loads((OUT / f"notes_{l}.json").read_text("utf-8")) if (OUT / f"notes_{l}.json").exists() else {}) for l in langs}
     known = top + [e for e in allep if e["slug"] in rw and e["slug"] not in tslugs]
     known += [e for e in allep if e["slug"] not in tops and e["slug"] not in wait_rw and any(e["slug"] in have[l] for l in langs)]   # auch Folgen ausserhalb der beiden Gruppen mit vorhandener Fassung pruefen
+    known = DM.order_any(known, DM.load(), "episode", langs, lambda e: e["slug"])   # Suchnachfrage (#156): nur Reihenfolge (Budget-Schnitt); Top-Grenze und Regeln bleiben
     order = {e["slug"]: k for k, e in enumerate(known)}
     hashes = load_hashes("notes_", langs); eh = {e["slug"]: notes_hash(e) for e in known}
     oh = {e["slug"]: fields_hash(notes_original(e)) for e in known}   # Altbestand wurde aus den bisherigen Show Notes uebersetzt, nie aus einer Neufassung

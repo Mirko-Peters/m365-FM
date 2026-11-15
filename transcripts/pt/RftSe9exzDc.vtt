@@ -1,0 +1,646 @@
+WEBVTT
+
+00:00:00.560 --> 00:00:06.500
+Preparado para 10 dias de Microsoft 365, Copilot, IA, Azure e as pessoas que estão moldando o futuro do trabalho,
+
+00:00:06.800 --> 00:00:12.000
+em janeiro, a M365 Coin está de volta, e desta vez em uma escala maior.
+
+00:00:12.860 --> 00:00:18.180
+Junte-se a nós para sessões ao vivo, demonstrações reais e conhecimento prático de MVPs e especialistas do setor em todo o mundo.
+
+00:00:18.760 --> 00:00:21.280
+Nada de slide genérico, nada de termos da moda interminável.
+
+00:00:22.080 --> 00:00:28.560
+Estamos enfrentando desafios reais, Copilot Studio, agentes de IA, fábrica, segurança, governança e automação.
+
+00:00:28.560 --> 00:00:34.320
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões projetadas para você.
+
+00:00:35.500 --> 00:00:39.980
+Com 10 dias completos, você pode explorar várias tecnologias e se conectar a uma comunidade global.
+
+00:00:40.940 --> 00:00:44.100
+Assista ao vivo e leve insights práticos para a sua organização.
+
+00:00:45.140 --> 00:00:48.380
+De 20 a 27 de janeiro, 10 dias. Uma única comunidade. Microsoft.
+
+00:00:49.320 --> 00:00:50.460
+As inscrições já estão abertas.
+
+00:00:51.820 --> 00:00:55.460
+Acesse m3m5.net e garanta sua vaga hoje mesmo.
+
+00:00:55.460 --> 00:00:58.620
+É m3m5.com.net
+
+00:00:58.620 --> 00:01:04.580
+Inscreva-se agora em m3m5.com.net e nos vemos ao vivo em janeiro.
+
+00:01:05.220 --> 00:01:09.620
+Já tentou treinar um modelo de IA no seu notebook e viu o processo levar horas ou travar completamente?
+
+00:01:10.500 --> 00:01:11.660
+Tch, não está sozinho.
+
+00:01:12.280 --> 00:01:15.420
+A maioria dos conjuntos de dados empresariais superou a capacidade do nosso hardware local.
+
+00:01:16.200 --> 00:01:20.580
+Mas e se todo o seu conjunto de dados de vários terabytes estivesse instantaneamente acessível no seu notebook de treinamento?
+
+00:01:21.020 --> 00:01:22.580
+Sem extrações, sem o caso de arquivos CSV?
+
+00:01:22.580 --> 00:01:29.780
+Hoje vamos explorar os notebooks integrados do Microsoft Fabric, onde o treinamento do seu modelo acontece ao lado dos dados do seu lake house.
+
+00:01:30.560 --> 00:01:37.500
+Vamos detalhar exatamente como essa configuração pode economizar dias de tempo de processamento, permitindo que você trabalhe em Python ou R sem compromissos.
+
+00:01:37.500 --> 00:01:46.440
+Quando os grandes dados superam seu laptop, imagine o cooler girando tão alto que abafa sua reunião enquanto você trabalha em uma planilha.
+
+00:01:47.380 --> 00:01:54.080
+Agora, substitua essa planilha por 12 terabytes de transações brutas de clientes, espalhadas por anos de atividade com dezenas de campos por registro.
+
+00:01:54.900 --> 00:01:57.440
+Antes mesmo de clicar em executar, você já sabe que isso vai ser difícil.
+
+00:01:57.440 --> 00:02:00.480
+É exatamente essa a situação em que muitas equipes de marketing se encontram.
+
+00:02:01.000 --> 00:02:05.300
+Elas possuem um banco de dados transacional que poderia facilmente ser a base de um projeto avançado de IA.
+
+00:02:06.840 --> 00:02:15.160
+Prever rotatividade, segmentar públicos, personalizar campanhas em tempo quase real, mas suas ferramentas ainda estão presas aos desktops.
+
+00:02:15.160 --> 00:02:28.500
+Elas abrem arquivos no Excel ou em um Jupyter Notebook local, fatiando e filtrando em pedaços minúsculos apenas para evitar que a máquina congele, esperando que tudo se mantenha estável o suficiente para obter resultados úteis.
+
+00:02:29.460 --> 00:02:32.160
+Quando as equipes tentam fazer isso localmente, os problemas aparecem rápida.
+
+00:02:32.920 --> 00:02:38.700
+O processamento fica extremamente lento e os elementos da interface demoram a responder aos cliques e scripts de exportação que levavam minutos agora rodam por horas.
+
+00:02:39.380 --> 00:02:41.860
+Pior ainda, cargas de trabalho maiores não apenas ficam lentas, elas param.
+
+00:02:41.860 --> 00:02:48.020
+Erros de memória, sobrecarga do disco rígido ou reincializações de kernel significam que os treinamentos não apenas levam mais tempo e eles muitas vezes nunca terminam.
+
+00:02:49.080 --> 00:02:54.400
+E quando você fala em treinar um modelo de IA, isso significa desperdício de computação, de tempo e de oportunidade.
+
+00:02:55.500 --> 00:03:00.320
+Uma tentativa de previsão de churn que vi foi planejada para rodar durante a noite em um ambiente Python local.
+
+00:03:01.140 --> 00:03:01.240
+Ah.
+
+00:03:02.180 --> 00:03:06.160
+Vinte horas depois, o processo falhou porque a última parte do conjunto de dados excedeu.
+
+00:03:06.500 --> 00:03:07.800
+O limite da memória RAM.
+
+00:03:08.060 --> 00:03:11.840
+A equipe perdeu um dia inteiro sem sequer obter um conjunto de métricos de treinamento.
+
+00:03:12.320 --> 00:03:14.160
+Se isso parece extremo, está se tornando cada vez mais comum.
+
+00:03:14.960 --> 00:03:24.620
+Os conjuntos de dados de marketing corporativo têm crescido ano após ano impulsionados por rastreamento mais rico, experiências omnichannel e pelo aumento do registro baseado em eventos e...
+
+00:03:24.620 --> 00:03:31.160
+Mesmo uma configuração padrão, registros de desempenho de campanha, análise web e dados de CRM podem facilmente chegar a centenas de gigabytes.
+
+00:03:32.100 --> 00:03:35.360
+Grandes contas com várias linhas de produtos frequentemente chegam a faixa de múltiplos terabytes.
+
+00:03:35.980 --> 00:03:37.100
+O problema é apenas a capacitamento.
+
+00:03:37.740 --> 00:03:41.060
+Cargas de treinamento de grandes modelos sobrecarregam todas as limitações de uma máquina local.
+
+00:03:41.860 --> 00:03:48.880
+CPUs ficam em 100% por longos períodos e até GPUs de alto desempenho ficam ociosas, enquanto os dados chegam lentamente.
+
+00:03:49.780 --> 00:03:56.660
+A entrada e saída de disco tornam-se um gargalo constante, especialmente se o conjunto de dados estiver em uma unidade externa ou compartilhamento de rede.
+
+00:03:57.600 --> 00:03:58.700
+E então há a camada de software.
+
+00:03:58.700 --> 00:04:03.940
+Quando os arquivos ficam grandes demais, até algo versátil como um Jupyter Notebook começa a atingir seus limites.
+
+00:04:04.780 --> 00:04:08.780
+Você não pode simplesmente carregar um CSV na memória quando ele é maior que o seu SSD, velho.
+
+00:04:09.320 --> 00:04:15.840
+É por isso que muitas equipes tentam dividir arquivos, fazer a amostragem de dados ou criar substitutos leves para os dados reais de produção.
+
+00:04:16.560 --> 00:04:23.660
+É um compromisso que mantém seu laptop funcionando, mas ao custo de perder insights, a amostragem pode descartar padrões sutis que teriam melhorado o desempenho do modelo.
+
+00:04:23.660 --> 00:04:30.040
+Dividir arquivos, introduz todo tipo de inconsistências e torna o retreinamento mais penoso do que deveria ser.
+
+00:04:31.100 --> 00:04:34.120
+Existe uma maneira mais inteligente de pular todo esse ciclo de download e importação.
+
+00:04:34.840 --> 00:04:38.140
+O Microsoft Fabric transfere o trabalho pesado para fora do seu ambiente local completamente.
+
+00:04:38.960 --> 00:04:44.040
+O treinamento vai para a nuvem, onde os recursos computacionais ficam ao lado dos dados armazenados no Lake House.
+
+00:04:44.940 --> 00:04:49.780
+Você não fica transferindo terabytes para lá e para cá, você leva seu código para onde os dados já residem.
+
+00:04:49.780 --> 00:04:56.860
+Em vez de se preocupar com qual parte do histórico do cliente caberá na RAM, você pode focar na estrutura e lógica do seu treinamento.
+
+00:04:57.240 --> 00:04:57.560
+The Lake
+
+00:04:57.560 --> 00:05:00.920
+E aqui está a parte que a maioria das equipes ignora.
+
+00:05:01.520 --> 00:05:04.860
+A verdadeira vantagem não é apenas a potência extra da computação em nuvem.
+
+00:05:05.420 --> 00:05:07.720
+É o fato de que você não precisa mais mover os dados de forma alguma.
+
+00:05:09.000 --> 00:05:11.100
+Acesso direto ao Lake House chega de caos com arquivo CSV.
+
+00:05:11.100 --> 00:05:17.460
+E se o seu notebook pudesse puxar terabytes de dados instantaneamente, sem nunca exibir uma barra de progresso de download?
+
+00:05:18.560 --> 00:05:22.180
+Sem exportar para CSV, sem ficar olhando aquele ícone de carregamento girando na tela.
+
+00:05:22.860 --> 00:05:26.660
+Basta digitar consulta, executá-la e começar a trabalhar com os resultados ali mesmo.
+
+00:05:27.380 --> 00:05:32.780
+Essa é a diferença quando a camada de dados não é uma etapa externa, mas sim integrada ao ambiente onde você já programa.
+
+00:05:32.780 --> 00:05:39.140
+No Fabric, o Lake House não é apenas um bucket de armazenamento separado ao qual você se conecta de vez em quando.
+
+00:05:40.220 --> 00:05:42.160
+Ele é a camada de dados nativa para notebooks.
+
+00:05:43.040 --> 00:05:46.900
+Isso significa que seu código roda no mesmo ambiente onde os dados estão fisicamente armazenados.
+
+00:05:47.900 --> 00:05:50.560
+Você não está enviando milhões de linhas pela rede para a sua sessão.
+
+00:05:51.460 --> 00:05:53.940
+Você está enviando instruções para os dados em sua localização original.
+
+00:05:54.620 --> 00:05:57.700
+O pipeline de entrada do modelo não é um malabarismo de exportações e importações.
+
+00:05:58.300 --> 00:06:02.000
+É uma linha direta do armazenamento para o Spark e para qualquer lógica em Python ou R que você esteja escrevendo.
+
+00:06:02.000 --> 00:06:05.940
+Se você já trabalhou em um fluxo tradicional, conhece bem os pontos problemáticos habituais.
+
+00:06:06.560 --> 00:06:11.860
+Alguém cria uma extração do Data Warehouse, salve um CSV e entrega para a equipe de ciência de dados.
+
+00:06:12.580 --> 00:06:14.140
+Agora o esquema está congelado no tempo.
+
+00:06:14.680 --> 00:06:17.780
+Na semana seguinte, os dados de origem mudam e a extração já está obsoleta.
+
+00:06:18.340 --> 00:06:22.400
+Em alguns casos, você tem até duas equipes diferentes criando suas próprias exportações ligeiramente diferentes.
+
+00:06:23.180 --> 00:06:25.860
+E agora você tem armazenamento duplicado com definições incompatíveis.
+
+00:06:26.500 --> 00:06:27.800
+No melhor cenário, isso é apenas ineficiência.
+
+00:06:27.800 --> 00:06:33.080
+No pior, é a razão pela qual dois modelos treinados com os mesmos dados fornecem previsões contraditórias.
+
+00:06:33.500 --> 00:06:38.160
+Uma equipe com a qual trabalhei precisava de um conjunto filtrado de registros de atividade do cliente para um novo modelo de churn.
+
+00:06:38.880 --> 00:06:45.540
+Eles puxaram tudo do Warehouse para um banco de dados SQL local, filtraram e exportaram o resultado para um CSV para o ambiente de treinamento.
+
+00:06:46.360 --> 00:06:48.340
+Só isso levou quase um dia inteiro na rede deles.
+
+00:06:48.340 --> 00:06:53.820
+Quando novos registros de atividade foram carregados na semana seguinte, eles tiveram que repetir todo o processo do zero.
+
+00:06:54.300 --> 00:06:58.200
+Quando puderam começar o treinamento, de fato, tinham passado mais tempo manipulando arquivos do que escrevendo código.
+
+00:06:58.520 --> 00:06:59.140
+Do que escrevendo código.
+
+00:06:59.580 --> 00:07:02.500
+O impacto no desempenho não se resume apenas ao tempo de transferência.
+
+00:07:03.580 --> 00:07:08.600
+Pesquisas em diversas empresas mostram ganhos consistentes quando as transformações rodam onde os dados estão armazenados.
+
+00:07:08.600 --> 00:07:16.680
+Ao realizar joins, filtros e agregações no local, em vez de posteriormente, você elimina sobrecargas, saltos de rede e leituras redundantes.
+
+00:07:17.680 --> 00:07:20.680
+Os notebooks do fábrico utilizam o Spark internamente para tornar isso possível.
+
+00:07:21.500 --> 00:07:30.600
+Então, em vez de puxar 400 milhões de linhas para a sua sessão de notebook, o Spark executa essa agregação dentro do ambiente do Lake House e retorna apenas os resultados que seu modelo precisa.
+
+00:07:32.260 --> 00:07:35.060
+Se você trabalha em Python, o R também não começa do zero.
+
+00:07:35.060 --> 00:07:43.870
+O fábrico já vem com uma pilha de bibliotecas integradas para trabalho em larga escala para Spark, Bandazón Spark, Sparkler e outras.
+
+00:07:45.110 --> 00:07:48.390
+Portanto, o processamento atribuído é uma opção desde o momento em que você abre um novo notebook.
+
+00:07:49.770 --> 00:07:53.790
+Isso importa quando você está unindo tabelas de fatos e dimensões de centenas de gigabytes,
+
+00:07:54.050 --> 00:07:58.930
+ou quando precisa calcular janelas deslizantes ao longo de vários anos de histórico de clientes.
+
+00:07:59.930 --> 00:08:05.910
+Assim que a consulta é concluída, o conjunto de dados limpo e agregado está pronto para seguir diretamente para o seu processo de engenharia de atributos.
+
+00:08:06.370 --> 00:08:12.030
+Não há fase intermediária de salvar em disco, verificar esquema e reimportar para o notebook de treinamento local.
+
+00:08:12.750 --> 00:08:14.010
+Você pula uma etapa inteira de preparação.
+
+00:08:14.430 --> 00:08:18.670
+As equipes costumavam passar dias apenas alinhando colunas e executando filtros novamente quando os dados de origem mudaram.
+
+00:08:19.070 --> 00:08:25.130
+Com esta configuração, eles podem explorar combinações de atributos para o modelo, na mesma hora em que os dados brutos foram atualizados.
+
+00:08:25.930 --> 00:08:32.450
+E é aí que fica interessante, porque uma vez que você tem conjuntos de dados limpos e massivos fluindo diretamente para a sua sessão de notebook,
+
+00:08:32.450 --> 00:08:35.450
+a maneira como você pensa em construir atributos começa a mudar.
+
+00:08:36.710 --> 00:08:38.790
+Engenharia de atributos e seleção de modelos em escala.
+
+00:08:39.310 --> 00:08:42.670
+Seu conjunto de dados pode ser grande o suficiente para prever praticamente qualquer coisa,
+
+00:08:42.810 --> 00:08:45.190
+mas isso não significa que cada coluna dele pertence ao seu modelo.
+
+00:08:46.250 --> 00:08:52.910
+A diferença entre um modelo que produz previsões significativas e um que gera ruído geralmente se resume a como você seleciona e molda seus atributos.
+
+00:08:52.910 --> 00:08:56.470
+A escala lhe dá possibilidades, mas também amplia erros.
+
+00:08:57.310 --> 00:09:04.270
+Com conjuntos de dados massivos, jogar todos os campos brutos no seu algoritmo não é apenas confuso, pode prejudicar ativamente o desempenho.
+
+00:09:05.070 --> 00:09:14.050
+Mais colunas significam mais parâmetros para estimar e mais oportunidades para seu modelo se ajustar a peculiaridades nos dados de treinamento que não se generalizam.
+
+00:09:14.470 --> 00:09:14.830
+Elasão.
+
+00:09:15.330 --> 00:09:18.710
+Overfitting sobre ajustes torna-se mais fácil e não mais difícil quando o conjunto de atributos está inchado.
+
+00:09:19.170 --> 00:09:21.830
+Além disso, cada variável extra significa mais computação.
+
+00:09:21.830 --> 00:09:27.610
+Mesmo em um ambiente de nuvem bem provisionado, 500 atributos brutos reduzirão a velocidade do treinamento,
+
+00:09:27.750 --> 00:09:33.650
+aumentarão o uso de memória e complicarão cada etapa subsequente em comparação ao conjunto enxuto de 50 atributos bem elaborados.
+
+00:09:34.690 --> 00:09:36.570
+Custo oculto nem sempre é óbvio pelo relógio.
+
+00:09:37.170 --> 00:09:43.770
+Essa execução com 500 atributos pode terminar sem erros, mas pode resultar em um modelo marginalmente mais preciso nos dados de treinamento,
+
+00:09:43.870 --> 00:09:45.910
+e notavelmente pior em novos dados.
+
+00:09:45.910 --> 00:09:49.950
+Quando você reduz e refina esses atributos,
+
+00:09:50.250 --> 00:09:51.630
+mesclando variáveis relacionadas,
+
+00:09:51.730 --> 00:09:53.970
+codificando categorias com mais eficiência,
+
+00:09:54.190 --> 00:09:57.170
+ou criando agregados que capturam padrões em vez de valores brutos,
+
+00:09:57.270 --> 00:10:00.050
+você reduz o tempo de computação,
+
+00:10:00.310 --> 00:10:02.610
+enquanto melhora a capacidade do modelo de prever o futuro.
+
+00:10:04.250 --> 00:10:05.910
+Certos formatos de dados tornam isso mais difícil.
+
+00:10:05.910 --> 00:10:08.070
+Atributos de alta cardinalidade,
+
+00:10:08.370 --> 00:10:11.250
+como esse que a use de produtos exclusivos ou AGs de clientes,
+
+00:10:11.770 --> 00:10:15.530
+podem explodir em milhares de colunas codificadas se tratados de forma ingênua.
+
+00:10:16.570 --> 00:10:19.910
+Dados esparços onde a maioria dos campos está vazia na maioria dos registros
+
+00:10:19.910 --> 00:10:25.070
+podem esconder sinais úteis, mas consomem recursos armazenando e processando valores majoritariamente ausentes.
+
+00:10:25.790 --> 00:10:28.750
+Em algo como a previsão de rotatividade de clientes churn,
+
+00:10:28.890 --> 00:10:31.730
+você também pode ter padrões temporais, ciclo de compra,
+
+00:10:31.730 --> 00:10:36.630
+atividade sazonal e fases de integração que não aparecem em campos estáticos comuns.
+
+00:10:38.170 --> 00:10:42.410
+A engenharia de atributos nesta escala significa projetar transformações que condensam
+
+00:10:42.410 --> 00:10:45.110
+e revelam padrões sem inundar o conjunto de dados com ruído.
+
+00:10:46.030 --> 00:10:49.310
+É aí que as ferramentas de automação e processamento distribuído começam a valer a pena.
+
+00:10:50.030 --> 00:10:53.850
+Bibliotecas como a Feature Tools podem automatizar a geração de agregados e atributos móveis
+
+00:10:53.850 --> 00:10:55.590
+em grandes conjuntos de dados relacionais.
+
+00:10:56.550 --> 00:10:58.850
+No Fabc, essas transformações podem rodar no Spark,
+
+00:10:58.850 --> 00:11:01.770
+permitindo escalar a criação de centenas de atributos candidatos,
+
+00:11:01.830 --> 00:11:04.190
+sem carregar tudo na memória de uma única máquina.
+
+00:11:05.930 --> 00:11:10.210
+Agrupamentos baseados em tempo, agregados por cliente, proporções entre métricas relacionadas,
+
+00:11:10.370 --> 00:11:14.150
+tudo isso pode ser criado e testado interativamente, sem interromper seu fluxo de trabalho.
+
+00:11:15.170 --> 00:11:19.510
+Depois de selecionar seu conjunto de atributos, a escolha do modelo se torna um exercício de equilíbrio.
+
+00:11:20.230 --> 00:11:22.950
+Algoritmos diferentes interagem com dados em larga escala de maneiras diferentes.
+
+00:11:22.950 --> 00:11:29.130
+Frameworks de Gradient Boosting como o XGBoost ou o LightGBM lidam bem com grandes conjuntos de dados tabulares,
+
+00:11:29.290 --> 00:11:32.410
+mas ainda tem um custo por atributo em memória e tempo de iteração.
+
+00:11:33.630 --> 00:11:36.230
+A regressão logística escala bem e treina rápido,
+
+00:11:36.710 --> 00:11:41.570
+mas não captura relações não lineares complexas a menos que você as incorpore nos atributos.
+
+00:11:42.910 --> 00:11:45.570
+Modelos de Deep Learning podem, em teoria, descobrir padrões mais ricos,
+
+00:11:45.690 --> 00:11:48.170
+mas também exigem mais ajuste, mais ajuste e mais processamento.
+
+00:11:48.170 --> 00:11:53.130
+No ambiente do Fabric, você pode provisionar isso, mas precisará avaliar se os ganhos justificam o custo do treinamento.
+
+00:11:53.850 --> 00:11:57.510
+A boa notícia é que, com os notebooks do Fabric conectados diretamente ao seu Lakehouse,
+
+00:11:57.590 --> 00:12:00.310
+você pode testar essas estratégias sem os gargalos tradicionais.
+
+00:12:01.310 --> 00:12:05.770
+Você pode iniciar várias execuções de treinamento com diferentes conjuntos de atributos e algoritmos,
+
+00:12:06.170 --> 00:12:09.570
+usando os mesmos dados sem precisar recarregá-los ou remodelá-los.
+
+00:12:10.810 --> 00:12:15.670
+Essa capacidade de iterar rapidamente significa que você não fica limitado a suposições sobre qual abordagem funcionará melhor.
+
+00:12:16.210 --> 00:12:17.170
+Você pode medir e decidir.
+
+00:12:17.630 --> 00:12:20.510
+Atributos bem projetados, combinados com a arquitetura de modelo certa,
+
+00:12:20.630 --> 00:12:22.650
+podem reduzir significativamente os tempos de execução,
+
+00:12:22.810 --> 00:12:25.730
+diminuir o uso de memória e aumentar a precisão em dados novos.
+
+00:12:26.710 --> 00:12:30.470
+Você obtém ciclos de experimentação mais rápidos, resultados mais confiáveis
+
+00:12:30.470 --> 00:12:33.850
+e investe seu orçamento de computação no treinamento que realmente importa,
+
+00:12:33.950 --> 00:12:35.910
+em vez de processar dados inúteis.
+
+00:12:37.030 --> 00:12:40.210
+O próximo passo para manter essas execuções de larga escala produtivas
+
+00:12:40.210 --> 00:12:42.230
+é monitorar e avaliar em tempo real,
+
+00:12:42.230 --> 00:12:45.570
+para saber exatamente o que acontece enquanto o modelo treina na nuvem.
+
+00:12:47.170 --> 00:12:49.430
+Treinamento, monitoramento e avaliação em escala de nuvem.
+
+00:12:49.930 --> 00:12:52.030
+Treinar com gigabytes de dados parece um sonho,
+
+00:12:52.110 --> 00:12:56.550
+até você ficar ali se perguntando se o trabalho ainda estava dando ou se morreu silenciosamente uma hora atrás.
+
+00:12:58.070 --> 00:13:03.470
+Quando tudo acontece na nuvem, você perde o feedback instantâneo de ver os logs passando em um terminal local.
+
+00:13:04.310 --> 00:13:05.650
+Tudo bem se o trabalho terminar em minutos?
+
+00:13:06.650 --> 00:13:10.030
+É um problema quando o relógio marca horas e você não tem ideia se está progredindo.
+
+00:13:10.030 --> 00:13:15.010
+Executar o treinamento em um ambiente remoto muda a forma como você pensa sobre visibilidade.
+
+00:13:15.890 --> 00:13:17.990
+Em uma sessão local, você identifica problemas imediatamente.
+
+00:13:18.770 --> 00:13:22.650
+Valores ausentes em um campo, uma incompatibilidade de tipos de dados ou uma falha na importação.
+
+00:13:23.670 --> 00:13:28.730
+Em um cluster na nuvem, esse mesmo erro pode ficar enterrado em um arquivo de log que você só verifica muito depois.
+
+00:13:28.730 --> 00:13:34.330
+Como os recursos são provisionados e construídos enquanto o processo está tecnicamente em execução a cada minuto,
+
+00:13:34.670 --> 00:13:36.910
+de uma execução com falha ainda é dinheiro gasto.
+
+00:13:37.470 --> 00:13:39.910
+O custo de detectar um problema tarde demais aumenta rapidamente.
+
+00:13:40.650 --> 00:13:44.870
+Já vi um trabalho de previsão de churn que foi iniciado em uma sexta-feira à noite com uma estimativa de oito horas.
+
+00:13:46.170 --> 00:13:50.210
+Na segunda-feira de manhã, a equipe percebeu que ele havia falhado antes mesmo da primeira época começar,
+
+00:13:50.590 --> 00:13:53.110
+porque uma coluna que deveria ser numérica foi carregada como texto.
+
+00:13:54.050 --> 00:13:54.610
+O tempo é a descrição.
+
+00:13:55.010 --> 00:13:57.790
+Dez minutos desperdiçados no início, oito horas cobradas no medidor.
+
+00:13:58.730 --> 00:14:03.150
+Esse é o tipo de erro que corrói a confiança no processo e reduz os ciclos de iteração a um ritmo muito lento.
+
+00:14:04.330 --> 00:14:06.470
+Fabric resolve isso com monitoramento de trabalho.
+
+00:14:07.050 --> 00:14:09.310
+Em tempo real, que você pode abrir ao lado do seu notebook.
+
+00:14:10.350 --> 00:14:16.030
+Você obtém métricas ao vivo sobre o consumo de memória, uso de CPU e progresso ao longo das épocas de treinamento.
+
+00:14:17.430 --> 00:14:20.130
+Os logs são transmitidos conforme o trabalho é executado,
+
+00:14:20.130 --> 00:14:24.110
+para que você possa identificar avisos ou erros antes que se tornem falhas completas.
+
+00:14:24.110 --> 00:14:28.990
+Se algo parecer errado, você pode interromper a execução ali mesmo em vez de aprender da maneira mais difícil depois.
+
+00:14:29.710 --> 00:14:30.990
+Não se trata apenas de observável, então.
+
+00:14:31.470 --> 00:14:35.230
+Você pode configurar pontos de verificação durante o treinamento para que o estado do modelo seja salvo periódico.
+
+00:14:35.790 --> 00:14:39.690
+Se o trabalho parar, seja por um erro, limite de recurso ou interrupção intencional,
+
+00:14:39.810 --> 00:14:43.610
+você pode reiniciar a partir do último ponto de verificação em vez de começar do zero.
+
+00:14:43.610 --> 00:14:45.730
+O versionamento desempenha um papel aqui.
+
+00:14:46.450 --> 00:14:50.310
+Ao salvar versões de modelos treinados com seus parâmetros e divisões de dados associadas,
+
+00:14:50.450 --> 00:14:55.850
+você pode revisitar uma configuração passada sem precisar recriar todo o ambiente que a... produziu.
+
+00:14:56.970 --> 00:14:59.530
+Salvamentos intermediários não são apenas uma boa salvaguarda.
+
+00:14:59.730 --> 00:15:02.150
+Eles são o que torna a experimentação em larga escala viável.
+
+00:15:02.730 --> 00:15:07.170
+Você pode ramificar a partir de um ponto de verificação promissor e testar diferentes hiperparâmetros
+
+00:15:07.170 --> 00:15:10.150
+sem pagar o custo de tempo de recarregar e treinar novamente o modelo básico.
+
+00:15:10.150 --> 00:15:15.830
+Com conjuntos de dados de vários gigabytes, pode significar a diferença entre executar três experimentos em um dia ou apenas um.
+
+00:15:16.310 --> 00:15:20.290
+Quando o modelo termina, a avaliação nessa escala traz seu próprio conjunto de desafios.
+
+00:15:21.390 --> 00:15:25.810
+Nem sempre você consegue pontuar contra o conjunto de teste completo em uma única passagem sem tornar tudo extremamente lento.
+
+00:15:26.850 --> 00:15:32.110
+A amostragem balanceada ajuda aqui, mantendo as proporções de classe enquanto corta o conjunto de dados para um tamanho que avalia mais rapidamente.
+
+00:15:32.530 --> 00:15:37.290
+Para maior precisão, a avaliação distribuída permite dividir a tarefa de pontuação em todo o cluster,
+
+00:15:37.430 --> 00:15:39.450
+com resultados agregados automaticamente.
+
+00:15:40.150 --> 00:15:46.390
+O Fabric oferece suporte a bibliotecas Python como MLib e fluxos de trabalho distribuídos do Scikit-Learn para tornar isso possível.
+
+00:15:47.230 --> 00:15:51.210
+Em vez de esperar que uma única máquina processe métricas de centenas de milhões de registros,
+
+00:15:51.670 --> 00:15:57.750
+você pode distribuir a tarefa e obter a acurácia, precisão, recall ou pontuações F1 consolidadas em uma fração do tempo.
+
+00:15:58.750 --> 00:16:03.270
+Os dados nunca saem do Lakehouse, portanto você não precisa lidar com exportações de conjuntos de teste ou mesclagens manuais.
+
+00:16:03.270 --> 00:16:08.390
+E aí
+
+00:16:08.390 --> 00:16:10.430
+E aí

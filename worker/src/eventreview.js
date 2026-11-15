@@ -1,4 +1,4 @@
-// Pruefliste fuer neue Events (Migration 0045): Zustand events.review = approved | pending | rejected | draft.
+// Pruefliste fuer neue Events (Migration 0047): Zustand events.review = approved | pending | rejected | draft.
 // Ein Event zur Pruefung (pending) hat public=0 und erscheint deshalb in keiner oeffentlichen Abfrage (Seite, Export, Sitemap, Suche, Erinnerungen, MCP-Listen).
 // Neu zur Pruefung kommen: Events des Scrapers (Community Days, Sessionize-Import: eventmerge.js insertEvent) und Events von Mitgliedern, die noch nicht
 // "bestaetigt" sind (memberReview, aufgerufen von events.js). Ein Admin uebernimmt oder lehnt ab (decideReview, Route /api/admin/events/review).
