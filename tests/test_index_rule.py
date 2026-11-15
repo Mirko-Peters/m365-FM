@@ -182,6 +182,10 @@ class BlogPageTests(unittest.TestCase):
         tr = [blog_post("t", "fr", html="<p>x</p>", votes=4, tr_of="en", tr_index=True, legacy=True)]
         h2 = BLG.top_block("fr", tr, f"{BASE}/fr/community/", "https://api.example.test")
         self.assertIn("Titel t", h2); self.assertIn('data-lang=""', h2)
+        # Live-Tabs dort: Sprachfassung nur fuer die uebersetzten Beitraege (data-tr), sonst das Original unter dessen Sprache (data-oroot)
+        self.assertIn('data-tr="[&quot;anna/t&quot;]"', h2); self.assertIn(f'data-oroot="{BASE}/"', h2)
+        self.assertNotIn("data-tr=", html); self.assertIn(f'data-oroot="{BASE}/"', html)
+        self.assertIn(f'data-oroot="{BASE}/"', BLG.top_block("en", [blog_post("e", "en", votes=1)], f"{BASE}/community/", "https://api.example.test"))
 
     def test_top_block_only_on_first_directory_page(self):
         files = {}

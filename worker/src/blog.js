@@ -76,16 +76,16 @@ export async function handleBlog(env, request, url, path, user, J) {
     const rows = (await db.prepare("SELECT b.id,b.html FROM blog_posts b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0 WHERE b.status='live' AND b.html<>'' ORDER BY b.id LIMIT ? OFFSET ?").bind(lim, off).all()).results || [];
     return J({ items: rows }, 200, { "cache-control": "public, max-age=300" });
   }
-  if (path === "/api/blog/top" && method === "GET") {   // Top-Listen nach Upvotes: Tag, Woche, Monat, Jahr (Stimmen im Zeitraum) und evergreen (alle Stimmen). Hat mit dem Index nichts zu tun: alle Beitraege stehen auf index
+  if (path === "/api/blog/top" && method === "GET") {   // Top-Listen nach Upvotes: Tag, Woche, Monat, Jahr (Stimmen im Zeitraum) und evergreen (alle Stimmen). Sprachfilter mit okLang (auch "en", sonst kaeme die englische Liste ungefiltert). Hat mit dem Index nichts zu tun: alle Beitraege stehen auf index
     const per = String(url.searchParams.get("period") || "week"), span = TOP_SPANS[per];
     if (span === undefined) return J({ error: "period" }, 400);
-    const lang = url.searchParams.get("lang") || "", lim = Math.min(Math.max(+url.searchParams.get("limit") || 10, 1), 30);
+    const ql = url.searchParams.get("lang") || "", lang = okLang(ql) ? ql : "", lim = Math.min(Math.max(+url.searchParams.get("limit") || 10, 1), 30);
     const since = span ? now() - span : 0;
     const rows = (await db.prepare(
       `SELECT b.slug,b.title,b.summary,b.lang,b.published,p.handle,u.name,COUNT(v.user_id) votes
        FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id AND b.status='live'
        JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
-       WHERE v.created>=? AND (?='' OR b.lang=?) GROUP BY b.id ORDER BY votes DESC, b.published DESC LIMIT ?`).bind(since, isLang(lang) ? lang : "", isLang(lang) ? lang : "", lim).all()).results || [];
+       WHERE v.created>=? AND (?='' OR b.lang=?) GROUP BY b.id ORDER BY votes DESC, b.published DESC LIMIT ?`).bind(since, lang, lang, lim).all()).results || [];
     return J({ period: per, items: rows }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/blog/followers" && method === "GET") {   // Anzahl Abonnenten eines Blogs (oeffentlich)

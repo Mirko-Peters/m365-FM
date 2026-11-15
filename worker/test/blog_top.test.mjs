@@ -33,6 +33,8 @@ test("Top-Listen: Stimmen im Zeitraum, evergreen zaehlt alle, Sprache filtert", 
   assert.deepEqual(slugs(await top(env, "period=year")), ["alt-hit", "neu-hit", "de-post"]);
   assert.deepEqual(slugs(await top(env, "period=evergreen")), ["alt-hit", "neu-hit", "de-post"]);
   assert.deepEqual(slugs(await top(env, "period=evergreen&lang=de")), ["de-post"]);
+  assert.deepEqual(slugs(await top(env, "period=evergreen&lang=en")), ["alt-hit", "neu-hit"]);   // "en" filtert auch (okLang; util.js LANGS hat kein en)
+  assert.deepEqual(slugs(await top(env, "period=evergreen&lang=xx")), ["alt-hit", "neu-hit", "de-post"]);   // unbekannte Sprache: kein Filter
   assert.equal((await top(env, "period=evergreen&limit=1")).j.items.length, 1);
   assert.equal((await top(env, "period=quatsch")).s, 400);
   assert.equal((await top(env, "period=day")).j.items[0].handle, "autor");

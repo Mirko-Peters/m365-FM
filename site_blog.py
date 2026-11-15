@@ -64,8 +64,8 @@ def _author_node(BASE, a, au):
     return {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}
 
 
-TOPJS = ('(function(){var r=document.querySelector(".bl-top");if(!r)return;var A=r.dataset.api,L=r.dataset.lang,C=r.dataset.croot,ol=r.querySelector("ol"),em=r.querySelector(".bl-top-empty"),bs=[].slice.call(r.querySelectorAll("button"));'
-         'function show(it){ol.textContent="";em.hidden=it.length>0;it.forEach(function(x){var li=document.createElement("li"),a=document.createElement("a");a.href=C+"u/"+x.handle+"/blog/"+x.slug+"/";a.textContent=x.title;li.appendChild(a);'
+TOPJS = ('(function(){var r=document.querySelector(".bl-top");if(!r)return;var A=r.dataset.api,L=r.dataset.lang,C=r.dataset.croot,O=r.dataset.oroot,K=JSON.parse(r.dataset.tr||"[]"),ol=r.querySelector("ol"),em=r.querySelector(".bl-top-empty"),bs=[].slice.call(r.querySelectorAll("button"));'
+         'function show(it){ol.textContent="";em.hidden=it.length>0;it.forEach(function(x){var li=document.createElement("li"),a=document.createElement("a");var k=x.handle+"/blog/"+x.slug+"/";a.href=(L||K.indexOf(x.handle+"/"+x.slug)>-1?C:O+(x.lang==="en"?"":x.lang+"/")+"community/")+"u/"+k;a.textContent=x.title;li.appendChild(a);'
          'var s=document.createElement("span");s.className="mut";s.textContent=" \u00b7 \u25b2 "+x.votes;li.appendChild(s);ol.appendChild(li)})}'
          'bs.forEach(function(b){b.addEventListener("click",function(){bs.forEach(function(o){o.setAttribute("aria-pressed",o===b?"true":"false")});'
          'fetch(A+"/api/blog/top?period="+b.dataset.p+"&lang="+L+"&limit=10").then(function(q){return q.json()}).then(function(d){show(d.items||[])}).catch(function(){})})})})();')
@@ -80,8 +80,12 @@ def top_block(lang, items, croot, api):
     pool = orig or items   # Sprache mit eigenen Originalen: nur diese (API filtert nach Sprache); reine Uebersetzungssprache: Stimmen des Originals, die API ohne Sprachfilter
     ev = sorted([p for p in pool if p.get("votes", 0) > 0], key=lambda p: (-p["votes"], -p["published"]))[:10]
     li = "".join(f'<li><a href="{croot}u/{p["handle"]}/blog/{p["slug"]}/">{esc(p["title"])}</a> <span class="mut">· ▲ {p["votes"]}</span></li>' for p in ev)
+    # reine Uebersetzungssprache: die API liefert Originale aller Sprachen; eine Sprachfassung hier gibt es nur fuer die Beitraege in data-tr
+    # (alle uebersetzten mit Stimmen, Stand Seitenbau), sonst verlinkt das Skript das Original unter dessen Sprache (data-oroot) statt einer 404
+    trk = [] if orig else sorted({f'{p["handle"]}/{p["slug"]}' for p in items if p.get("votes", 0) > 0})
+    base = croot[:len(croot) - len(f"{pfx(lang)}/community/")] if croot.endswith(f"{pfx(lang)}/community/") else croot
     tabs = "".join(f'<button type="button" data-p="{k}" aria-pressed="{"true" if k == "evergreen" else "false"}">{esc(T(lang, en, de))}</button>' for k, en, de in TOP_PERIODS)
-    return (f'{TOPCSS}<section class="bl-top" data-api="{esc(api)}" data-lang="{lang if orig else ""}" data-croot="{croot}"><h2>{esc(T(lang, "Most upvoted posts", "Meistgelobte Beiträge"))}</h2>'
+    return (f'{TOPCSS}<section class="bl-top" data-api="{esc(api)}" data-lang="{lang if orig else ""}" data-croot="{croot}" data-oroot="{esc(base)}/"{(" data-tr=" + chr(34) + esc(json.dumps(trk, separators=(",", ":"))) + chr(34)) if trk else ""}><h2>{esc(T(lang, "Most upvoted posts", "Meistgelobte Beiträge"))}</h2>'
             f'<div class="tabs" role="group" aria-label="{esc(T(lang, "Time range", "Zeitraum"))}">{tabs}</div><ol>{li}</ol>'
             f'<p class="bl-top-empty mut"{"" if not ev else " hidden"}>{esc(T(lang, "No upvotes in this period yet.", "In diesem Zeitraum gibt es noch keine Upvotes."))}</p><script>{TOPJS}</script></section>')
 
