@@ -364,6 +364,13 @@ def long_index_langs(e):
     return r
 
 
+def index_langs(lx, has_de, thin):
+    """Sprachen, in denen die Entitaetsseite auf index steht (und damit im hreflang-Cluster): en, wenn nicht duenn; de, wenn echter deutscher Text und nicht duenn;
+    dazu jede Sprache mit langem eigenem Text (lx, long_index_langs) - auch bei duenner Entitaet. Reihenfolge: en, de, dann lx."""
+    r = ([] if thin else ["en"] + (["de"] if has_de else []))
+    return r + [l for l in lx if l not in r]
+
+
 def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     """Schema.org-Knoten einer Entitaet (sprachneutrale @id)."""
     person_aka = person_aka or {}
@@ -942,12 +949,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 _app = max(len(ep_find(e, "en")), len(ep_find(e, "de"))) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])   # T42: gleiche Entscheidung fuer en und de (sonst verweist en per hreflang auf ein noindex-de)
                 _real = (len(FD.desc_en(e)) > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en")) or bool(FD.long_text(e, "en"))
                 _thin = not _real and _app < 2 and not SQ.BY_PERSON.get(e["id"])   # eigene Zitate sind echter Inhalt
-            _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
-            _lx = long_index_langs(e)   # Sprachen mit Beschreibung > 2500 Zeichen (jede Sprache): index + hreflang
-            _xl = [l for l in _lx if l not in ("en", "de")]
-            if _xl:
-                _alts = {**(_alts or {"en": eurl(BASE, "en", e["id"])}), **{l: eurl(BASE, l, e["id"]) for l in _xl}}
-            _noidx = False if lang in _lx else (lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin)
+            _lx = long_index_langs(e)   # Sprachen mit Beschreibung ab 2500 Zeichen (jede Sprache): index + hreflang
+            _il = index_langs(_lx, _has_de, _thin)   # alle indexierbaren Sprachen; hreflang nur unter ihnen (kein Verweis auf ein noindex-en bei duenner Entitaet)
+            _alts = {l: eurl(BASE, l, e["id"]) for l in _il} if len(_il) > 1 else None
+            _noidx = lang not in _il
             _feedu = f"{BASE}/entity/{e['id']}/feed.xml"
             if lang == "en" and (_arts or eps):   # Themen-Feed: neueste Artikel und Folgen zu dieser Entitaet (fuer Leser und Agenten)
                 from xml.sax.saxutils import escape as _x
@@ -965,7 +970,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             ld = ld + _qld   # Quotation-Knoten der Person
             _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=[x for v in groups.values() for x in v], exclude=(e["id"],)) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten; Themen = verwandte Entitaeten
             _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
-            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (lang in ("en", "de") or lang in _xl) else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
+            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (_alts and lang in _alts) else None, ld, xdefault=(_alts or {}).get("en"), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 

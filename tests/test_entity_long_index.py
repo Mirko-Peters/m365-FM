@@ -52,5 +52,26 @@ class LongIndex(unittest.TestCase):
             self.assertEqual(SE.long_index_langs(ent("t-f", en=text(500))), [])
 
 
+class IndexLangs(unittest.TestCase):
+    """hreflang-Cluster = genau die indexierbaren Sprachen (kein Verweis auf ein noindex-en, kein fehlendes de)."""
+
+    def test_wie_bisher_ohne_langtext(self):
+        self.assertEqual(SE.index_langs([], True, False), ["en", "de"])
+        self.assertEqual(SE.index_langs([], False, False), ["en"])
+        self.assertEqual(SE.index_langs([], True, True), [])
+
+    def test_duenn_ohne_en(self):
+        # duenne Entitaet: en ist noindex und darf nicht im Cluster der indexierten fr/ja-Seiten stehen
+        self.assertEqual(SE.index_langs(["fr", "ja"], True, True), ["fr", "ja"])
+
+    def test_duenn_de_ueber_langtext(self):
+        # de qualifiziert ueber den Langtext, obwohl die Entitaet duenn ist: de gehoert in den Cluster
+        self.assertEqual(SE.index_langs(["de", "fr"], True, True), ["de", "fr"])
+
+    def test_keine_dubletten(self):
+        self.assertEqual(SE.index_langs(["en", "de", "pt"], True, False), ["en", "de", "pt"])
+        self.assertEqual(SE.index_langs(["de"], False, False), ["en", "de"])
+
+
 if __name__ == "__main__":
     unittest.main()
