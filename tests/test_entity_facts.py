@@ -2,6 +2,7 @@
 import json
 import sys
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -118,7 +119,9 @@ class Logo(unittest.TestCase):
 
 class Schema(unittest.TestCase):
     def test_org(self):
-        n = E.ent_ld(BASE, dict(RAW["ifakt"]), "en", set(), {})   # Repo-Stand (data/entities.json): ENTS mischt in CI den Live-Stand der Datenbank dazu
+        # Repo-Stand (data/entities.json): ENTS mischt in CI den Live-Stand der Datenbank dazu; industries_of() liest ENTS, daher hier ebenfalls Repo-Stand
+        with mock.patch.dict(E.ENTS, RAW):
+            n = E.ent_ld(BASE, dict(RAW["ifakt"]), "en", set(), {})
         self.assertEqual(n["legalName"], "iFAKT GmbH")
         self.assertEqual(n["identifier"]["value"], "HRB 22661, Amtsgericht Stuttgart")
         self.assertEqual(n["numberOfEmployees"]["@type"], "QuantitativeValue"); self.assertEqual(n["numberOfEmployees"]["value"], 25)
