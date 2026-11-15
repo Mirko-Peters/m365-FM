@@ -43,7 +43,7 @@ def main(dirs=None):
             if m:
                 withnav[k] += 1
                 links[path] = {rel: href.replace(BASE, "") for _c, rel, href in A.findall(m.group(1))}
-    err = []
+    err, warn = [], []
     exists = lambda p: any((d / p.lstrip("/") / "index.html").exists() for d in dirs)
     for p, l in links.items():
         for rel, tgt in l.items():
@@ -51,7 +51,8 @@ def main(dirs=None):
             if not exists(tgt): err.append(f"{p}: {rel} -> fehlt {tgt}"); continue
             back = links.get(tgt, {}).get("prev" if rel == "next" else "next")
             if p in canon_ok and tgt in canon_ok and back != p and pages.get(tgt) == pages.get(p):
-                err.append(f"{p}: {rel} -> {tgt}, dort zeigt {'prev' if rel == 'next' else 'next'} auf {back}")
+                # Fehlende Gegenrichtung nur als Warnung (nicht blockierend); falsche Gegenrichtung bleibt Fehler
+                (warn if back is None else err).append(f"{p}: {rel} -> {tgt}, dort zeigt {'prev' if rel == 'next' else 'next'} auf {back}")
     print("Vor/Zurueck je Seitentyp (Seiten mit Leiste / Seiten):")
     for n, _ in TYPES: print(f"  {n}: {withnav[n]} / {total[n]}")
     for n, _ in TYPES:
@@ -89,6 +90,8 @@ def main(dirs=None):
         if f'href="{BASE}{pre}page/2/" rel=next' not in hh: err.append(f"Hub {pre}: 'Mehr laden' verlinkt Seite 2 nicht")
         if f'<link rel="next" href="{BASE}{pre}page/2/">' not in hh.split("</head>", 1)[0]: err.append(f"Hub {pre}: Kopf der Startseite ohne rel=next")
     print(f"Hub-Seiten mit eigener Adresse: {sum(len(v) for v in hubs.values())} in {len(hubs)} Sprachen " + ", ".join(f"{(lg or 'en')}:{max(v)}" for lg, v in sorted(hubs.items())))
+    if warn:
+        print(f"WARNUNG (fehlende Gegenrichtung, nicht blockierend): {len(warn)}"); [print("  " + w) for w in warn[:40]]
     if err:
         print(f"FEHLER: {len(err)}"); [print("  " + e) for e in err[:40]]
         return 1

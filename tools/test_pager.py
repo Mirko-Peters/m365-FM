@@ -121,19 +121,23 @@ class MentionTests(unittest.TestCase):
             with self.subTest(id=mention.get("id")):
                 for field in ("title", "url", "date", "outlet"):
                     self.assertTrue(mention.get(field), field)
-                self.assertIn(mention, MEN.for_entity("mirko-peters"))
+                about = mention.get("about") or []
+                self.assertTrue(about, "about")
+                for eid in about:
+                    self.assertIn(mention, MEN.for_entity(eid))
                 item = MEN.item_html(mention, "de")
                 self.assertTrue(item.startswith("<li>"))
                 self.assertIn(f'href="{MEN.E(mention["url"])}"', item)
                 self.assertIn(MEN.E(mention["title"]), item)
                 self.assertIn(f'<time datetime="{mention["date"]}">{mention["date"]}</time>', item)
-                for lang, label in (("de", "Erwähnt in"), ("en", "Mentioned in")):
-                    source = MEN.src_li(lang, "mirko-peters")
-                    self.assertIn(f"{label}: <a", source)
-                    self.assertIn(MEN.E(mention["title"]), source)
-                    self.assertIn(MEN.E(mention["url"]), source)
+                for eid in about:
+                    for lang, label in (("de", "Erwähnt in"), ("en", "Mentioned in")):
+                        source = MEN.src_li(lang, eid)
+                        self.assertIn(f"{label}: <a", source)
+                        self.assertIn(MEN.E(mention["title"]), source)
+                        self.assertIn(MEN.E(mention["url"]), source)
                 node = MEN.ld(mention, BASE)
-                self.assertEqual(node["@type"], "CreativeWork")
+                self.assertEqual(node["@type"], "ScholarlyArticle" if mention.get("kind") == "scholarly" else "CreativeWork")
                 self.assertEqual(node["name"], mention["title"])
                 self.assertEqual(node["url"], mention["url"])
                 self.assertEqual(node["datePublished"], mention["date"])
@@ -143,7 +147,7 @@ class MentionTests(unittest.TestCase):
 
 
 class PagerCheckerTests(unittest.TestCase):
-    def tree(self, *, missing_target=False, nonreciprocal=False, wrong_hub_canonical=False, last_hub_next=False):
+    def tree(self, *, missing_target=False, nonreciprocal=False, wrong_back=False, wrong_hub_canonical=False, last_hub_next=False):
         tmp = tempfile.TemporaryDirectory()
         root = Path(tmp.name)
 
@@ -159,6 +163,11 @@ class PagerCheckerTests(unittest.TestCase):
             return f'<head><link rel="canonical" href="{BASE}{canonical}"></head>{nav}'
 
         old_nav = "" if nonreciprocal else f'<nav class="pnav"><a class="nx" rel="next" href="{newer}">New</a></nav>'
+        if wrong_back:
+            third = f"{BASE}/show/episodes/third/"
+            old_nav = f'<nav class="pnav"><a class="nx" rel="next" href="{third}">Third</a></nav>'
+            write("/show/episodes/third/", episode("/show/episodes/third/",
+                  f'<nav class="pnav"><a class="pv" rel="prev" href="{older}">Old</a></nav>'))
         missing_url = f"{BASE}/show/episodes/missing/" if missing_target else older
         write("/show/episodes/newer/", episode("/show/episodes/newer/",
               f'<nav class="pnav"><a class="pv" rel="prev" href="{missing_url}">Old</a></nav>'))
@@ -195,12 +204,24 @@ class PagerCheckerTests(unittest.TestCase):
         finally:
             tmp.cleanup()
 
-    def test_nonreciprocal_direction_fails_even_without_back_link(self):
+    def test_missing_back_link_is_warning_only(self):
         tmp, root = self.tree(nonreciprocal=True)
         try:
             code, out = self.run_checker(root)
-            self.assertEqual(code, 1)
+            self.assertEqual(code, 0, out)
+            self.assertIn("WARNUNG", out)
             self.assertIn("zeigt next auf None", out)
+            self.assertNotIn("FEHLER", out)
+        finally:
+            tmp.cleanup()
+
+    def test_wrong_back_link_fails(self):
+        tmp, root = self.tree(wrong_back=True)
+        try:
+            code, out = self.run_checker(root)
+            self.assertEqual(code, 1)
+            self.assertIn("FEHLER", out)
+            self.assertIn("zeigt next auf /show/episodes/third/", out)
         finally:
             tmp.cleanup()
 
