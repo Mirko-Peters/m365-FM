@@ -47,6 +47,11 @@ class PlatformSyncTests(unittest.TestCase):
              patch.object(S, "get_text", return_value="<rss><channel><title>Show</title></channel></rss>"), \
              patch.object(S, "get", return_value=response):
             self.assertEqual(S.apple_show_id("en", {}), "2")
+            self.assertEqual(S.apple_show_id("de", {}), "2")   # Sprach-Shows (seit 11.11.2026 bei Apple eingetragen): gleiche Regel, exakter Feed
+        with patch.object(S, "show_feed_url", return_value=feed), \
+             patch.object(S, "get_text", return_value="<rss><channel><title>Show</title></channel></rss>"), \
+             patch.object(S, "get", return_value={"results": [{"feedUrl": "https://wrong.example/feed", "collectionId": 1}]}):
+            self.assertEqual(S.apple_show_id("fr", {}), "")   # noch nicht freigegeben bzw. anderer Feed: keine ID
 
     def test_legacy_keys_migrate_and_manual_link_wins(self):
         links = {"123:en": {

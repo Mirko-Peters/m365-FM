@@ -1,0 +1,835 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.520
+Co się dzieje, gdy ktoś w pracy potrzebuje nowego laptopa, surowców do produkcji lub usług sprzątania?
+
+00:00:04.700 --> 00:00:10.560
+W wielu firmach dawniej oznaczało to e-maile, arkusze kalkulacyjne, papierowe formularze i kogoś, kto tygodnie później próbuje odnaleźć fakturę.
+
+00:00:10.720 --> 00:00:14.660
+Witamy w kolejnym odcinku Pigułek Wiedzy Microsoft w M365FM.
+
+00:00:14.840 --> 00:00:21.760
+Nazywam się Mirko Peters i dzisiaj przyjrzymy się modułowi Procurement and Sourcing, czyli połączonemu procesowi, którego firma używa do zakupu towarów i usług od dostawców.
+
+00:00:21.920 --> 00:00:24.400
+Pomyśl o tym jak o jednej recepcji w budynku biurowym.
+
+00:00:24.400 --> 00:00:29.480
+Każde żądanie, zatwierdzenie, zamówienie, dostawa, faktura i płatność przechodzą przez to samo miejsce.
+
+00:00:30.000 --> 00:00:34.540
+Zadzimy jeden zakup od pierwszego żądania, aż po mechanizmy kontrolne działające za kulisami.
+
+00:00:34.720 --> 00:00:38.160
+Po pierwsze, co tak naprawdę obejmuje proces zaopatrzenia i zakupów.
+
+00:00:38.300 --> 00:00:44.560
+Procurement and Sourcing może brzmieć jak długa nazwa na kupowanie rzeczy i owszem, chodzi o kupowanie, ale te dwa słowa opisują różne zadania.
+
+00:00:44.800 --> 00:00:47.920
+Sourcing to praca polegająca na znalezieniu i wybraniu odpowiedniego dostawcy.
+
+00:00:48.100 --> 00:00:52.140
+Pomyśl o firmie, która potrzebuje rękawic, kasków, znaków bezpieczeństwa i okularów ochronnych.
+
+00:00:52.140 --> 00:00:59.680
+Zanim ktokolwiek złoży zamówienie, ktoś musi zdecydować, kto dostarczy odpowiednie produkty w akceptowalnej cenie w wymaganym terminie i na warunkach akceptowanych przez firmę.
+
+00:00:59.680 --> 00:01:01.060
+To jest właśnie sourcing.
+
+00:01:01.260 --> 00:01:04.460
+Procurement rozpoczyna się, gdy firma musi zarządzać samym zakupem.
+
+00:01:04.640 --> 00:01:08.980
+Obejmuje on zapytanie, zatwierdzenia, zamówienie zakupu, dostawę, fakturę i płatność.
+
+00:01:09.240 --> 00:01:11.600
+Razem ten proces nazywany jest Source to Pay.
+
+00:01:11.840 --> 00:01:13.620
+Nazwa ta opisuje pełną ścieżkę.
+
+00:01:13.860 --> 00:01:21.840
+Firma identyfikuje potrzebę, wybiera dostawcę, wysyła zamówienie, otrzymuje towar lub usługę, dostaje fakturę od sprzedawcy, a następnie dział finansowy opłaca ją.
+
+00:01:21.840 --> 00:01:23.640
+Każdy krok łączy się z kolejnym.
+
+00:01:23.860 --> 00:01:28.280
+Można by pomyśleć, że to oczywiste, ale wiele firm wciąż realizuje te kroki w oddzielnych systemach.
+
+00:01:28.280 --> 00:01:38.620
+Pracownik wysyła prośbę e-mailem, menedżer zatwierdza ją na czacie, kupiec trzyma szczegóły w arkuszu, magazyn sprawdza papierowy dokument dostawy, a dział księgowości otrzymuje fakturę bez powiązania z zamówieniem.
+
+00:01:38.860 --> 00:01:42.120
+Ludzie nadal mogą w ten sposób kupować, ale tracą kontrolę nad całością.
+
+00:01:42.260 --> 00:01:45.240
+Kupiec nie może wiedzieć, że magazyn otrzymał już część zamówienia.
+
+00:01:45.480 --> 00:01:49.440
+Dział finansowy może zapłacić tę samą fakturę dwukrotnie, jeśli dotrze ona dwiema różnymi drogami.
+
+00:01:49.660 --> 00:01:53.280
+Menedżerowie dowiadują się o kosztach dopiero wtedy, gdy pieniądze opuściły już firmę.
+
+00:01:53.280 --> 00:01:57.940
+Gdy ktoś pyta, kto to zatwierdził, odpowiedź oznacza długie przeszukiwanie skrzynek odbiorczych.
+
+00:01:58.100 --> 00:02:01.580
+Dynamics 365 umieszcza ten ślad w jednej połączonej platformie.
+
+00:02:01.780 --> 00:02:08.340
+Zaopatrzenie i zakupy w Dynamics 365 Supply Chain Management to obszar, w którym firma zarządza przepływem i dostępnością towarów,
+
+00:02:08.440 --> 00:02:14.220
+łącząc się z modułami finansów i rozrachunków z dostawcami w celu księgowania faktur, śledzenia zobowiązań oraz przetwarzania płatności.
+
+00:02:14.500 --> 00:02:17.020
+Dzięki temu dział zakupów nie funkcjonuje w odosobnieniu.
+
+00:02:17.020 --> 00:02:25.980
+Magazyn może odnotować przyjęcie towarów, dział finansowy widzi fakturę powiązaną z zakupem, a dział rozrachunków może sprawdzić zgodność zamówienia z dostawą i rachunkiem od dostawcy.
+
+00:02:26.200 --> 00:02:30.800
+Każdy zespół widzi tylko to, czego potrzebuje, podczas gdy cały zakup pozostaje jednym spójnym zapisem.
+
+00:02:31.040 --> 00:02:32.580
+Wyróżniamy dwa rodzaje zakupów.
+
+00:02:32.740 --> 00:02:36.900
+Zakupy bezpośrednie obejmują towary lub usługi powiązane z tym, co firma produkuje lub sprzedaje.
+
+00:02:37.080 --> 00:02:40.840
+Producent mebli, kupujący drewno, śruby i tkaniny nabywa materiały bezpośrednie.
+
+00:02:41.080 --> 00:02:44.020
+Bez tych materiałów nie byłby w stanie wytworzyć produktu, który sprzedaje.
+
+00:02:44.020 --> 00:02:52.920
+Zakupy pośrednie obejmują rzeczy, które utrzymują działalność firmy, ale nie stają się częścią sprzedawanego produktu, jak laptopy, meble biurowe, szkolenia, naprawy, sprzątanie, oprogramowanie czy porady prawne.
+
+00:02:53.060 --> 00:02:55.740
+Oba rodzaje są ważne, ale często rozpoczynają się w różny sposób.
+
+00:02:55.960 --> 00:02:58.760
+Zapotrzebowanie produkcyjne może wskazać firmie potrzeby zamówienia większej ilości części.
+
+00:02:58.960 --> 00:03:01.080
+Pracownik może zgłosić zapotrzebowanie na nowy monitor.
+
+00:03:01.280 --> 00:03:03.420
+Kierownik obiektu może potrzebować usługi naprawy.
+
+00:03:03.580 --> 00:03:07.660
+Dynamics 365 obsługuje wszystkie te różne potrzeby, zachowując przejrzystą ścieżkę zakupową.
+
+00:03:07.820 --> 00:03:10.020
+Posłużmy się jednym prostym przykładem w tym odcinku.
+
+00:03:10.020 --> 00:03:14.040
+Wyobraźmy sobie, że kierownik magazynu zauważa, iż zespół potrzebuje nowego sprzętu ochronnego.
+
+00:03:14.220 --> 00:03:17.220
+Niektóre kaski są uszkodzone, a zapas rękawic ochronnych jest niski.
+
+00:03:17.380 --> 00:03:22.080
+Kierownik potrzebuje odpowiedniego wyposażenia dla zespołu, a firma wymaga jasnej dokumentacji, zanim wyda jakiekolwiek pieniądze.
+
+00:03:22.280 --> 00:03:26.600
+Zakup zaczyna się od potrzeby, a każdy kontrolowany zakup zaczyna się od tego, że ktoś o coś prosi.
+
+00:03:26.840 --> 00:03:29.020
+Dwa od wniosku wewnętrznego do właściwego dostawcy.
+
+00:03:29.920 --> 00:03:32.140
+Oto jak rozpoczyna się cały proces zakupu.
+
+00:03:32.140 --> 00:03:38.800
+Twój kierownik magazynu zauważa potrzebę zakupu sprzętu ochronnego, a pierwszym rekordem utworzonym w Dynamics 365 jest zapotrzebowanie zakupu.
+
+00:03:38.980 --> 00:03:41.800
+Zapotrzebowanie zakupu to wewnętrzny wniosek o nabycie czegoś.
+
+00:03:41.960 --> 00:03:46.320
+Informuje on firmę, czego dana osoba potrzebuje, w jakiej ilości i często, gdzie towar ma trafić.
+
+00:03:46.560 --> 00:03:49.620
+Zauważ, że ten wniosek nie składa jeszcze żadnej obietnicy dostawcy.
+
+00:03:49.800 --> 00:03:53.500
+To rozróżnienie sprawia, że wczesny etap zakupu pozostaje pod kontrolą Twojej firmy.
+
+00:03:53.500 --> 00:04:00.520
+Kierownik magazynu może zamówić 20 kasków i kilka pudełek rękawic, ale żaden dostawca nie otrzyma zamówienia, dopóki odpowiednie osoby go nie zatwierdzą.
+
+00:04:00.740 --> 00:04:03.860
+W przypadku typowych zakupów wniosek może rozpocząć się w katalogu produktów.
+
+00:04:04.020 --> 00:04:06.960
+Pomyśl o katalogu jak o zatwierdzonej półce sklepowej Twojej firmy.
+
+00:04:07.180 --> 00:04:14.440
+Zamiast wpisywać ogólne zapotrzebowanie, jak rękawice ochronne, pracownik może wybrać zatwierdzony produkt ze znanym opisem wybranym dostawcą i przypisaną ceną.
+
+00:04:14.620 --> 00:04:19.400
+Oszczędza to czas, ale także zapobiega kupowaniu przez pracowników przypadkowych produktów, które nie spełniają zasad firmy.
+
+00:04:19.400 --> 00:04:21.760
+Jednak nie każde zapotrzebowanie pasuje do katalogu.
+
+00:04:23.500 --> 00:04:26.560
+Szkolenia konsultanta lub usługi, która nie jest przechowywana jako produkt fizyczny.
+
+00:04:26.720 --> 00:04:29.940
+W takim przypadku Dynamics 365 może wykorzystać kategorię zaopatrzenia.
+
+00:04:30.160 --> 00:04:32.560
+Kategoria zaopatrzenia grupuje wydatki według ich rodzaju.
+
+00:04:32.780 --> 00:04:37.840
+Firma może używać np. kategorii takich jak artykuły BHP, naprawy budowlane, usługi prawne czy sprzęt komputerowy.
+
+00:04:38.040 --> 00:04:43.540
+Osoba składająca wniosek może opisać swoje potrzeby i przypisać je do odpowiedniej kategorii, nawet jeśli nie ma konkretnego numeru towaru w magazynie.
+
+00:04:43.720 --> 00:04:47.420
+Wniosek nie powinien jednak automatycznie stawać się zamówieniem tylko dlatego, że ktoś kliknął, wyślij.
+
+00:04:47.420 --> 00:04:51.000
+Firma może ustawić limity wydatków, kontrole budżetowe oraz procesy zatwierdzania.
+
+00:04:51.180 --> 00:04:54.020
+Małe zamówienie na rękawice może trafić do kierownika magazynu.
+
+00:04:54.180 --> 00:04:59.020
+Większe zamówienie na sprzęt ochronny może wymagać zatwierdzenia przez właściciela budżetu działu lub zespół zakupowy.
+
+00:04:59.280 --> 00:05:04.120
+Ścieżka zatwierdzenia może się różnić w zależności od kwoty, działu lub zasad zakupowych powiązanych z danym rodzajem wydatku.
+
+00:05:04.320 --> 00:05:07.820
+Oznacza to, że pracownicy nie muszą pamiętać wszystkich zasad zatwierdzania.
+
+00:05:08.080 --> 00:05:13.980
+Dynamics 365 kieruje wniosek odpowiednią ścieżką, a cała historia wniosku jest przechowywana w systemie.
+
+00:05:13.980 --> 00:05:19.480
+Załóżmy, że menedżer zamawia dużą ilość sprzętu, a firma nie wie jeszcze, który dostawca powinien otrzymać zlecenie.
+
+00:05:19.680 --> 00:05:23.020
+Dział zakupów może utworzyć zapytanie ofertowe, często nazywane RFQ.
+
+00:05:23.220 --> 00:05:26.500
+Zapytanie RFQ prosi kilku dostawców o złożenie ofert na tę samą potrzebę.
+
+00:05:26.660 --> 00:05:31.100
+Kupujący wysyła wymagania, takie jak typ kasku, rozmiar rękawic, ilości oraz oczekiwaną datę dostawy.
+
+00:05:31.320 --> 00:05:33.500
+Każdy dostawca może przedstawić swoją cenę i warunki.
+
+00:05:33.500 --> 00:05:36.540
+Być może jeden dostawca jest tańszy, ale nie może dostarczyć towaru przez trzy tygodnie.
+
+00:05:36.720 --> 00:05:39.340
+Inny kosztuje nieco więcej, ale może dostarczyć wszystko w najbliższy wtorek.
+
+00:05:39.340 --> 00:05:41.680
+Kupujący może porównać te odpowiedzi przed dokonaniem wyboru.
+
+00:05:41.820 --> 00:05:43.860
+Cena ma znaczenie, ale nie jest jedynym czynnikiem.
+
+00:05:44.080 --> 00:05:49.140
+Daty dostaw, szczegóły produktu, rabaty i zdolność dostawcy do realizacji zamówienia wpływają na decyzję.
+
+00:05:49.380 --> 00:05:54.280
+System utrzymuje oferty powiązane z wnioskiem, zamiast zostawiać porównania ukryte w wątkach e-mailowych.
+
+00:05:54.280 --> 00:05:59.280
+Zanim kupujący dokona wyboru, Dynamics 365 przechowuje również rejestry dostawców.
+
+00:05:59.500 --> 00:06:06.320
+Rejestr dostawcy zawiera dane firmy potrzebne do zakupów, takie jak nazwa dostawcy i informacje niezbędne do relacji biznesowej.
+
+00:06:06.320 --> 00:06:13.040
+Katalogi dostawców mogą prezentować oferowane przez nich produkty, a dostawcy mogą publikować te katalogi, aby dane były aktualne.
+
+00:06:13.260 --> 00:06:16.460
+Dla ściślejszej kontroli produkt może mieć listę zatwierdzonych dostawców.
+
+00:06:16.620 --> 00:06:20.260
+Informuje ona kupującego, których dostawców firma zatwierdziła dla danego produktu.
+
+00:06:20.260 --> 00:06:24.880
+Kieruje to wyborem i zapobiega wybraniu przez pracownika dostawcy, z którym firma nie zamierzała współpracować.
+
+00:06:25.040 --> 00:06:28.540
+Niektóre relacje z dostawcami obejmują również warunki wynegocjowane z wyprzedzeniem.
+
+00:06:28.700 --> 00:06:31.980
+Umowa zakupu dokumentuje długoterminową współpracę między firmą a dostawcą.
+
+00:06:31.980 --> 00:06:37.900
+Firma może zobowiązać się do zakupu określonej ilości lub wydania określonej kwoty w danym czasie, a dostawca akceptuje powiązane warunki.
+
+00:06:38.100 --> 00:06:42.380
+Umowy handlowe rejestrują ceny lub rabaty dostawcy, które obowiązują w określonych terminach.
+
+00:06:42.380 --> 00:06:51.300
+Jeśli więc dostawca sprzętu ochronnego zgodził się obniżyć cenę rękawic na kolejne 6 miesięcy, Dynamics 365 może zapisać to ustalenie, zamiast wymagać od każdego kupca pamiętania o nim.
+
+00:06:51.740 --> 00:06:58.060
+Umowy rabatowe mogą również śledzić przypadki, w których dostawca zwraca pieniądze po osiągnięciu przez firmę określonej kwoty lub wolumenu zakupów.
+
+00:06:58.060 --> 00:07:02.640
+Na tym etapie firma wie już, czego potrzebuje, kto może to dostarczyć i jakie warunki mają zastosowanie.
+
+00:07:02.820 --> 00:07:06.520
+Poszukiwania dobiegły końca, ale dostawca nadal potrzebuje formalnego zamówienia.
+
+00:07:06.920 --> 00:07:09.740
+3. Zamówienie zakupu – pisemna obietnica firmy.
+
+00:07:09.960 --> 00:07:12.320
+Kupiec wybrał już dostawcę sprzętu ochronnego.
+
+00:07:12.560 --> 00:07:15.500
+Teraz firma potrzebuje zamówienia zakupu, zazwyczaj nazywanego PO.
+
+00:07:15.760 --> 00:07:20.280
+Zamówienie zakupu to formalny dokument, który precyzyjnie informuje dostawcę, co firma zamierza kupić.
+
+00:07:20.480 --> 00:07:26.500
+Wskazuje dostawcę, wymienia towary lub usługi, pokazuje ilość i uzgodnioną cenę oraz zawiera datę dostawy i warunki płatności.
+
+00:07:26.500 --> 00:07:32.060
+Dla naszego magazynu zamówienie może obejmować 20 kasków, 10 pudełek rękawic i datę dostawy na przyszły wtorek.
+
+00:07:32.220 --> 00:07:35.940
+Zmienia ono decyzję zakupową w jasny rejestr, na podstawie którego obie strony mogą pracować.
+
+00:07:36.140 --> 00:07:41.860
+Nikt nie musi zgadywać, o jaki typ rękawic prosiła firma, ile jednostek oczekuje, ani na jaką cenę kupiec umówił się z dostawcą.
+
+00:07:42.100 --> 00:07:44.420
+Zamówienie zakupu może powstać na kilka sposobów.
+
+00:07:44.640 --> 00:07:47.120
+Najczęściej wynika ono z zatwierdzonego wniosku zakupowego.
+
+00:07:47.340 --> 00:07:52.640
+Kierownik magazynu poprosił o sprzęt ochronny, odpowiednie osoby zatwierdziły ten wniosek, a dział zakupów zamienia go w zamówienie.
+
+00:07:52.640 --> 00:07:54.860
+Może ono również pochodzić z umowy zakupu.
+
+00:07:54.980 --> 00:08:02.100
+Jeśli firma ustaliła już długoterminową umowę z dostawcą, kupiec może utworzyć zamówienie zwolnienia do tej umowy, zamiast tworzyć każdy szczegół od podstaw.
+
+00:08:02.320 --> 00:08:03.960
+Czasami to popyt tworzy zamówienie.
+
+00:08:04.180 --> 00:08:11.300
+Firma może planować zakup materiałów, przewidując przyszłe potrzeby produkcyjne, a Dynamics 365 może tworzyć planowane zamówienia zakupu na podstawie tego popytu.
+
+00:08:11.460 --> 00:08:14.940
+Gdy firma zwalnia planowane zamówienie, staje się ono właściwym zamówieniem zakupu.
+
+00:08:15.100 --> 00:08:16.760
+Istnieją też zakupy bezpośrednie.
+
+00:08:16.940 --> 00:08:22.040
+Kupiec może utworzyć zamówienie ręcznie, gdy nie ma za nim wcześniejszego wniosku, umowy ani planowanego popytu.
+
+00:08:22.040 --> 00:08:26.540
+Może się to zdarzyć, gdy kupiec już wie, czego firma potrzebuje i który dostawca to dostarczy.
+
+00:08:26.720 --> 00:08:28.660
+Różne punkty startowe, ten sam cel.
+
+00:08:28.900 --> 00:08:32.400
+Zanim zamówienie zakupu przejdzie dalej, firma może wymagać jego zatwierdzenia.
+
+00:08:32.580 --> 00:08:38.940
+Kupujący przygotowuje zamówienie, ale może ono wymagać wewnętrznego zatwierdzenia zgodnie z firmowymi zasadami dotyczącymi kwot, zanim trafi do dostawcy.
+
+00:08:39.100 --> 00:08:40.320
+To rozdziela dwie decyzje.
+
+00:08:40.560 --> 00:08:46.920
+Najpierw firma zatwierdza własne zobowiązanie, a następnie potwierdza zamówienie u dostawcy, co oznacza, że obie strony uzgodniły warunki współpracy.
+
+00:08:47.100 --> 00:08:49.960
+Potwierdzone zamówienie zakupu to coś więcej niż notatka wewnętrzna.
+
+00:08:49.960 --> 00:08:54.440
+Rejestruje ono fakt, że zamówienie dotarło do dostawcy i że istnieje porozumienie w sprawie zakupu.
+
+00:08:54.620 --> 00:09:00.580
+Dynamics 365 oszczędza również kupującym konieczności ponownego wpisywania tych samych informacji przy każdym zamówieniu uznanego dostawcy.
+
+00:09:00.780 --> 00:09:05.620
+Rekord dostawcy może automatycznie uzupełnić szczegóły, takie jak dane dostawy, warunki płatności i inne typowe ustawienia.
+
+00:09:05.840 --> 00:09:11.420
+Kupujący nadal sprawdza zamówienie i może zmienić szczegóły, jeśli sytuacja tego wymaga, ale standardowe dane znajdują się od razu we właściwym miejscu.
+
+00:09:11.620 --> 00:09:15.000
+Zmniejsza to liczbę wpisywanych danych i zapewnia większą spójność powtarzanych zamówień.
+
+00:09:15.000 --> 00:09:21.280
+Dostawa nie zawsze odbywa się w jednej paczce i w jednym dniu. Wyobraźmy sobie, że dostawca ma już wszystkie rękawice, ale gotowa jest tylko połowa kasków.
+
+00:09:21.440 --> 00:09:25.840
+Harmonogram dostaw pozwala firmie podzielić jedno zamówienie zakupu na zaplanowane dostawy w różnych terminach.
+
+00:09:26.020 --> 00:09:32.100
+W zamówieniu można wskazać, że 10 kasków dotrze w przyszły wtorek, kolejne 10 tydzień później, a rękawice przyjadą z pierwszą dostawą.
+
+00:09:32.320 --> 00:09:36.820
+Jedno zamówienie pozostaje powiązane, podczas gdy plan dostaw odzwierciedla to, co faktycznie może się wydarzyć.
+
+00:09:36.820 --> 00:09:39.200
+Niektóre zakupy w ogóle nie docierają do firmy.
+
+00:09:39.560 --> 00:09:44.300
+Dostawa bezpośrednia oznacza, że dostawca wysyła produkt prosto do klienta końcowego.
+
+00:09:44.540 --> 00:09:48.820
+Przykładowo firma sprzedaje specjalistyczny towar, ale nie przechowuje go we własnym magazynie.
+
+00:09:49.040 --> 00:09:53.020
+Może utworzyć zamówienie sprzedaży dla klienta i powiązane zamówienie zakupu dla dostawcy.
+
+00:09:53.260 --> 00:09:59.740
+Dostawca wysyła towar bezpośrednio do klienta, podczas gdy Dynamics 365 łączy powiązane etapy sprzedaży i zakupu w tle.
+
+00:09:59.740 --> 00:10:08.920
+Pozwala to uniknąć niepotrzebnego postoju w magazynie firmy i utrzymuje powiązanie między zamówieniem klienta a zamówieniem u dostawcy, umożliwiając śledzenie tego samego towaru po obu stronach transakcji.
+
+00:10:09.140 --> 00:10:11.740
+Zamówienie zakupu może obejmować więcej niż tylko główny przedmiot.
+
+00:10:11.940 --> 00:10:14.000
+Niektóre produkty wymagają powiązanych artykułów.
+
+00:10:14.180 --> 00:10:18.140
+Gdy firma zamawia kaski, może również potrzebować wymiennych wizjerów lub części montażowych.
+
+00:10:18.360 --> 00:10:24.860
+Dynamics 365 może zaproponować artykuły uzupełniające, które mogą być wymagane, opcjonalne lub zawarte w cenie bez dodatkowych kosztów.
+
+00:10:24.860 --> 00:10:29.960
+Kupujący widzi powiązane zapotrzebowanie już podczas tworzenia zamówienia, zamiast odkrywać je po przybyciu głównej dostawy.
+
+00:10:30.200 --> 00:10:31.240
+Następnie są opłaty.
+
+00:10:31.460 --> 00:10:35.100
+Koszty transportu, obsługi i podobne opłaty również mogą być uwzględnione w zamówieniu zakupu.
+
+00:10:35.260 --> 00:10:39.940
+Opłata może dotyczyć całego zamówienia lub konkretnej pozycji zamówienia, w zależności od tego, jak firma musi ją zaksięgować.
+
+00:10:40.140 --> 00:10:45.080
+Ma to znaczenie, ponieważ niska cena produktu nie odzwierciedla pełnego kosztu, jeśli dostawa wiąże się z wysoką opłatą.
+
+00:10:45.280 --> 00:10:50.540
+Rejestrowanie opłaty wraz z zamówieniem pozwala powiązać ten koszt z zakupem, zamiast pozostawiać go w oddzielnej notatce.
+
+00:10:50.540 --> 00:10:55.100
+Dostawca ma teraz potwierdzone zamówienie z określonymi pozycjami, cenami, terminami i warunkami.
+
+00:10:55.240 --> 00:10:58.540
+Potwierdzone zamówienie rejestruje jednak tylko to, co firma przewiduje.
+
+00:10:58.800 --> 00:11:03.520
+Dynamics 365 nadal potrzebuje potwierdzenia, gdy towary lub usługi faktycznie dotrą.
+
+00:11:04.420 --> 00:11:07.260
+Punkt czwarty – odbiór towarów i weryfikacja faktury.
+
+00:11:07.520 --> 00:11:10.380
+Ciężarówka podjeżdża do magazynu z kaskami i rękawicami.
+
+00:11:10.660 --> 00:11:15.380
+Zanim ktokolwiek oznaczy zamówienie jako zrealizowane, zespół magazynowy musi sprawdzić, co faktycznie dotarło.
+
+00:11:15.600 --> 00:11:20.700
+Rejestrują przyjazd, porównują dostawę z zamówieniem zakupu i księgują przyjęcie produktu względem tego zamówienia.
+
+00:11:20.900 --> 00:11:24.780
+Przyjęcie produktu to po prostu sposób systemu na odnotowanie, że towary się pojawiły.
+
+00:11:24.940 --> 00:11:25.860
+Oto 10 sztuk.
+
+00:11:26.060 --> 00:11:32.080
+Zamówienie zakupu obejmuje 20 kasków i 10 pudełek rękawic, ale kierowca dostarcza tylko 10 kasków i wszystkie 10 pudełek rękawic.
+
+00:11:32.260 --> 00:11:35.740
+Magazyn księguje to, co faktycznie otrzymał, a nie to, co firma miała nadzieję otrzymać.
+
+00:11:35.880 --> 00:11:40.460
+Pozostałe 10 kasków pozostaje otwarte w zamówieniu zakupu, dopóki dostawca ich nie dostarczy lub kupujący nie zmieni zamówienia.
+
+00:11:40.460 --> 00:11:45.500
+Dzięki temu ewidencja pozostaje rzetelna. Gdy przyjęcie produktu zostanie zaksięgowane, zamówienie zakupu ulega zmianie.
+
+00:11:45.700 --> 00:11:52.400
+System rozdziela teraz ilość zamówioną od otrzymanej, więc kupujący, magazynierzy i dział finansowy widzą status zamówienia bezwzajemnego telefonowania.
+
+00:11:52.620 --> 00:11:55.840
+W przypadku towarów magazynowych odbiór aktualizuje również stany zapasów.
+
+00:11:56.000 --> 00:11:59.820
+Rękawice pojawiają się jako dostępne zapasy, gotowe do użycia przez zespół magazynowy.
+
+00:12:00.020 --> 00:12:08.040
+Jeśli przedmioty przypisane są do konkretnego projektu, środka trwałego lub dostawy bezpośredniej, Dynamics 365 może zaksięgować zakup pod tym przeznaczeniem.
+
+00:12:08.040 --> 00:12:14.720
+Firma wie więcej niż tylko to, jak kupiliśmy rękawice. Wie, czy rękawice dotarły, ile ich dotarło i gdzie powinny trafić.
+
+00:12:15.000 --> 00:12:17.460
+Nie każdy zakup dociera jednak do rampy załadunkowej.
+
+00:12:17.700 --> 00:12:23.400
+Wyobraźmy sobie, że firma zatrudnia trenera BHP na jeden dzień, płaci za dostęp do oprogramowania lub sprowadza zewnętrzny serwis naprawczy.
+
+00:12:23.600 --> 00:12:27.240
+Nie ma tu żadnych produktów fizycznych, palet do przeliczenia ani przyjęcia do magazynu.
+
+00:12:27.420 --> 00:12:31.500
+W przypadku usług i innych zakupów niebędących towarami firma może wybrać prostszą ścieżkę.
+
+00:12:31.500 --> 00:12:38.780
+W zależności od konfiguracji zakupu może zarejestrować odbiór w zamówieniu bez etapu magazynowego lub przejść od razu do faktury od dostawcy.
+
+00:12:38.960 --> 00:12:40.900
+To samo pytanie pozostaje aktualne.
+
+00:12:41.060 --> 00:12:43.480
+Czy firma otrzymała to, co uzgodniła przy zakupie?
+
+00:12:43.660 --> 00:12:47.000
+W przypadku usługi szkoleniowej odpowiedzią może być fakt, że szkolenie się odbyło.
+
+00:12:47.220 --> 00:12:49.840
+W przypadku naprawy ktoś potwierdza, że praca została zakończona.
+
+00:12:50.080 --> 00:12:53.480
+Zapis nie potrzebuje pudełka ani kodu kreskowego, aby dowieść, że firma coś otrzymała.
+
+00:12:53.660 --> 00:12:55.480
+Następnie przychodzi faktura od dostawcy.
+
+00:12:55.480 --> 00:13:02.400
+Faktura trafia do modułu zobowiązań, części Dynamics 365, która ewidencjonuje długi firmy wobec dostawców i przygotowuje płatności.
+
+00:13:02.600 --> 00:13:07.920
+Faktura jest powiązana z zamówieniem zakupu, więc moduł zobowiązań nie traktuje jej jak izolowanego rachunku bez historii.
+
+00:13:08.060 --> 00:13:10.900
+To właśnie tutaj prosta kontrola pozwala uniknąć wielu problemów.
+
+00:13:11.100 --> 00:13:15.960
+Dynamics 365 porównuje trzy rzeczy, co firma zamówiła, co otrzymała i co zafakturował dostawca.
+
+00:13:16.180 --> 00:13:17.580
+Ludzie nazywają to uzgadnianiem.
+
+00:13:17.820 --> 00:13:19.880
+Mówiąc prościej, czy rachunek zgadza się z ustaleniami?
+
+00:13:20.060 --> 00:13:22.840
+Zamówienie zakupu może wskazywać 20 hełmów w uzgodnionej cenie.
+
+00:13:22.840 --> 00:13:26.040
+Dokument przyjęcia może wskazywać, że dotarło na razie tylko 10 hełmów.
+
+00:13:26.180 --> 00:13:30.660
+Jeśli dostawca wyśle fakturę na 20 sztuk, system może pokazać różnicę, zanim firma dokona płatności.
+
+00:13:30.840 --> 00:13:32.840
+To automatyzuje uzgadnianie trójstronne.
+
+00:13:33.000 --> 00:13:36.700
+Tymi trzema dokumentami są zamówienie zakupu, dokument przyjęcia towaru i faktura.
+
+00:13:36.960 --> 00:13:40.100
+Kiedy są zgodne, dział zobowiązań ma jasną drogę do dalszego procedowania.
+
+00:13:40.380 --> 00:13:44.900
+Gdy cena się różni, ilość na fakturze przewyższa ilość na przyjęciu lub pojawia się pozycja, której nikt nie zamawiał.
+
+00:13:45.020 --> 00:13:46.920
+Firma może wstrzymać proces i sprawdzić sprawę.
+
+00:13:47.120 --> 00:13:48.980
+Może dostawca wysłał fakturę zbyt wcześnie.
+
+00:13:48.980 --> 00:13:52.380
+Może fracht pojawił się jako oddzielna kwota, którą nabywca musi zweryfikować.
+
+00:13:52.600 --> 00:13:54.760
+Może dostawca po prostu wpisał błędną ilość.
+
+00:13:54.940 --> 00:13:56.680
+Nie chodzi o zakładanie złych intencji.
+
+00:13:57.020 --> 00:14:03.160
+Automatyzacja służy wyłapaniu różnicy, gdy firma może jeszcze zadać konkretne pytanie, zamiast robić to po opuszczeniu środków z banku.
+
+00:14:03.340 --> 00:14:07.320
+Każda faktura wymaga również miejsca w automatycznych zapisach finansowych firmy.
+
+00:14:07.500 --> 00:14:09.780
+To automatyzuje zadanie dystrybucji księgowych.
+
+00:14:10.040 --> 00:14:13.160
+Mówią one systemowi Dynamics 365, jak zaksięgować koszt.
+
+00:14:13.160 --> 00:14:16.140
+Rękawice ochronne mogą należeć do kosztów operacyjnych magazynu.
+
+00:14:16.300 --> 00:14:18.980
+Nowy wózek widłowy może należeć do konta środków trwałych.
+
+00:14:19.180 --> 00:14:22.540
+Zakup projektowy może wymagać zapisania kosztów w odniesieniu do danego projektu.
+
+00:14:22.720 --> 00:14:25.300
+Jedną fakturę można nawet rozdzielić na kilka miejsc.
+
+00:14:25.560 --> 00:14:31.100
+Na przykład, jeśli dwa zespoły magazynowe dzielą zamówienie na rękawice, firma może podzielić koszt między ich działy.
+
+00:14:31.340 --> 00:14:36.620
+Dział finansowy widzi wtedy, dokąd trafiły pieniądze, bez próby rekonstrukcji tego później z niejasnego opisu na fakturze.
+
+00:14:36.760 --> 00:14:40.740
+Po uzgodnieniu faktury i zakończeniu niezbędnych kontroli może ona przejść przez proces zatwierdzania.
+
+00:14:40.740 --> 00:14:44.380
+Zaksięgowanie faktury zapisuje kwotę, którą firma jest winna dostawcy w module zobowiązań.
+
+00:14:44.520 --> 00:14:46.340
+Rachunek staje się teraz zobowiązaniem płatniczym.
+
+00:14:46.540 --> 00:14:48.780
+Warunki płatności pomagają określić termin wymagalności.
+
+00:14:49.040 --> 00:14:56.160
+Dział zobowiązań może przygotować wymagalne faktury do płatności, a gdy firma przetworzy płatność, Dynamics 365 rozliczy saldo dostawcy dla tej faktury.
+
+00:14:56.380 --> 00:15:00.580
+Zamówienie przeszło teraz drogę od oczekiwanej dostawy do zarejestrowanego kosztu i zrealizowanej płatności.
+
+00:15:00.800 --> 00:15:03.180
+Ale ten ślad to coś więcej niż tylko opłacenie jednego rachunku.
+
+00:15:03.180 --> 00:15:07.240
+Daje to firmie użyteczny rejestr każdej decyzji i każdego przekazania powiązanego z danym zakupem.
+
+00:15:07.380 --> 00:15:10.380
+5. Kontrola widoczności i lepsze decyzje dotyczące dostawców.
+
+00:15:10.520 --> 00:15:14.960
+Połączony rejestr zakupów pozwala również firmie kontrolować wydatki, zanim problem dotrze do działu finansowego.
+
+00:15:15.160 --> 00:15:17.380
+Polityki zakupowe ustalają podstawowe zasady.
+
+00:15:17.600 --> 00:15:23.380
+Wskazują one, o co pracownicy mogą wnioskować, z jakich dostawców korzystać i kiedy zakup wymaga zatwierdzenia, zanim ktokolwiek wyda firmowe pieniądze.
+
+00:15:23.540 --> 00:15:25.280
+Pomyśl o wniosku na sprzęt ochronny.
+
+00:15:25.280 --> 00:15:31.040
+Firma może wymagać, aby pracownicy magazynu wybierali zatwierdzone produkty ochronne, podczas gdy tylko zespół zakupowy może wybrać nowego dostawcę.
+
+00:15:31.220 --> 00:15:38.240
+Małe zamówienie uzupełniające może wymagać jednego zatwierdzenia, ale duże zamówienie dla całego nowego zespołu może wymagać zgody właściciela budżetu i kierownika działu zakupów.
+
+00:15:38.400 --> 00:15:39.980
+Zasady są wbudowane w proces.
+
+00:15:40.220 --> 00:15:46.560
+Pracownicy nie muszą szukać dokumentu z zasadami, zgadywać, kto powinien coś zatwierdzić, ani przesyłać e-maili dalej, czekając na odpowiedź.
+
+00:15:46.720 --> 00:15:53.040
+Dynamics 365 może kierować wniosek w oparciu o dział, kwotę, typ zakupu lub przypisaną do niego politykę.
+
+00:15:53.040 --> 00:15:55.320
+Ta ścieżka nazywana jest przepływem pracy.
+
+00:15:55.540 --> 00:16:00.360
+Przepływ pracy wyznacza wnioskom, zamówieniom i fakturom jasną ścieżkę od jednej osoby do drugiej.
+
+00:16:00.640 --> 00:16:05.940
+Każda osoba może zatwierdzić, odrzucić lub odesłać rekord do poprawek, a system rejestruje to działanie.
+
+00:16:06.140 --> 00:16:09.640
+Koniec z zastanawianiem się, czy zatwierdzenie nastąpiło w długim łańcuchu e-maili.
+
+00:16:09.780 --> 00:16:11.800
+Pomaga to również, gdy ktoś jest nieobecny.
+
+00:16:11.980 --> 00:16:16.320
+Praca nie znika w skrzynce odbiorczej Outlooka tej osoby bez śladu, na jakim etapie się zatrzymała.
+
+00:16:16.520 --> 00:16:18.880
+Firma widzi bieżący etap i może podjąć działania.
+
+00:16:18.880 --> 00:16:22.480
+Dostawcy również mogą brać w tym udział, gdy firma korzysta z portalu dostawców.
+
+00:16:22.620 --> 00:16:27.480
+Portal dostawców daje sprzedawcy miejsce do przeglądania zapytań ofertowych lub udostępnionych im zamówień zakupu.
+
+00:16:27.680 --> 00:16:33.220
+Mogą oni odpowiedzieć na zapytanie ofertowe i bezpośrednio potwierdzić zamówienie, gdy firma wyśle prośbę o potwierdzenie.
+
+00:16:33.480 --> 00:16:36.080
+Dzięki temu obie strony pracują na tym samym dokumencie.
+
+00:16:36.360 --> 00:16:41.000
+Zamiast wysyłania przez kupującego pliku PDF czekania na odpowiedź i ponownego wpisywania jej do systemu,
+
+00:16:41.060 --> 00:16:43.540
+dostawca może potwierdzić szczegóły w połączonym procesie.
+
+00:16:43.540 --> 00:16:46.980
+Kupujący widzi odpowiedź bez konieczności ręcznego odtwarzania rekordu.
+
+00:16:47.200 --> 00:16:52.580
+Gdy zakupy przechodzą przez system, firma gromadzi przydatne informacje bez tworzenia kolejnego arkusza kalkulacyjnego.
+
+00:16:52.820 --> 00:16:56.280
+Analiza wydatków odpowiada na proste pytanie, dokąd trafiają pieniądze?
+
+00:16:56.460 --> 00:17:01.200
+Kierownik zakupów może przeglądać wydatki według dostawcy produktu, kategorii zakupowej lub działu.
+
+00:17:01.380 --> 00:17:07.260
+Może firma myśli, że kupuje rękawice od jednego dostawcy, ale rejestry pokazują, że kilka zespołów kupuje podobne rękawice od różnych sprzedawców.
+
+00:17:07.480 --> 00:17:10.480
+Być może jakiś dział wydaje więcej na naprawy zewnętrzne niż oczekiwano.
+
+00:17:10.480 --> 00:17:14.340
+Te szczegóły dają firmie powód do zadawania lepszych pytań przed dokonaniem kolejnego zakupu.
+
+00:17:14.460 --> 00:17:17.800
+Analiza wyników dostawcy pozwala spojrzeć na tę samą historię z jego perspektywy.
+
+00:17:17.980 --> 00:17:22.220
+Kupujący mogą porównać wyniki zakupów i dostaw, decydując o tym, kto powinien otrzymać kolejne zamówienia.
+
+00:17:22.460 --> 00:17:28.940
+Niska cena na papierze może nie być tak atrakcyjna, jeśli dostawca notorycznie spóźnia się z dostawami, wysyła niekompletne zamówienia lub nie dotrzymuje ustalonych warunków.
+
+00:17:29.140 --> 00:17:32.760
+Firma może wykorzystać własne rejestry zakupów podczas weryfikacji relacji z danym dostawcą.
+
+00:17:32.960 --> 00:17:34.660
+Kolejną kwestią jest ścieżka audytu.
+
+00:17:34.660 --> 00:17:37.440
+Ścieżka audytu pozwala prześledzić zakup w całej jego historii.
+
+00:17:37.640 --> 00:17:44.260
+Można zacząć od oryginalnego wniosku, sprawdzić kto go zatwierdził, przejrzeć zamówienie zakupu, zweryfikować potwierdzenie odbioru, odnaleźć fakturę i zobaczyć płatność, która ją zamknęła.
+
+00:17:44.380 --> 00:17:49.100
+Ten zapis pomaga działom finansowym i audytowym, ale ułatwia też zwykłym pracownikom uzyskanie odpowiedzi na codzienne pytania.
+
+00:17:49.300 --> 00:17:50.200
+Dlaczego to kupiliśmy?
+
+00:17:50.440 --> 00:17:51.580
+Kto wybrał tego dostawcę?
+
+00:17:51.740 --> 00:17:52.540
+Czy towar dotarł?
+
+00:17:52.700 --> 00:17:54.160
+Czy faktura została już opłacona?
+
+00:17:54.360 --> 00:17:56.260
+Odpowiedź znajduje się w rejestrze zakupu.
+
+00:17:56.440 --> 00:17:58.160
+Wróćmy do budynku biurowego z początku.
+
+00:17:58.160 --> 00:18:07.120
+Dział zakupów, dział przyjęć i dział finansowy mają różne zadania, ale wszyscy patrzą na elementy tego samego zakupu, zamiast przekazywać sobie luźne kartki między oddzielnymi pokojami.
+
+00:18:08.060 --> 00:18:12.880
+Nasz kierownik magazynu, nasz wniosek TMS o kaski i rękawice ma teraz pełną historię.
+
+00:18:13.120 --> 00:18:15.020
+Wniosek był zgodny z polityką firmy.
+
+00:18:15.240 --> 00:18:16.820
+Odpowiednie osoby go zatwierdziły.
+
+00:18:17.040 --> 00:18:18.440
+Dostawca dostarczył sprzęt.
+
+00:18:18.580 --> 00:18:20.540
+Personel magazynu zarejestrował dostawę.
+
+00:18:20.740 --> 00:18:23.040
+Dział zobowiązań dopasował fakturę i ją opłacił.
+
+00:18:23.240 --> 00:18:26.580
+Jedno proste rozróżnienie pozwala zachować przejrzystość wszystkich tych elementów.
+
+00:18:26.580 --> 00:18:32.800
+Sourcing pomaga firmie wybrać od kogo kupować, podczas gdy zaopatrzenie zarządza tym, co dzieje się po podjęciu decyzji o zakupie.
+
+00:18:33.100 --> 00:18:33.620
+Wniosek.
+
+00:18:33.800 --> 00:18:36.140
+Jeden połączony zapis od zapotrzebowania do płatności.
+
+00:18:36.400 --> 00:18:37.500
+Oto szersza perspektywa.
+
+00:18:37.740 --> 00:18:42.120
+Zaopatrzenie i sourcing zbierają wszystkie te rozproszone etapy i przekształcają je w jeden monitorowany proces firmowy.
+
+00:18:42.340 --> 00:18:43.860
+Wniosek nie ginie w skrzynce odbiorczej.
+
+00:18:43.960 --> 00:18:49.060
+Zatwierdzenie nie istnieje tylko w czyjejś pamięci, a faktura nie pojawia się bez wyraźnego powiązania z decyzją, która za nią stoi.
+
+00:18:49.060 --> 00:18:53.040
+Zamiast tego firma dysponuje jednym połączonym zapisem, który śledzi zakup na każdym jego etapie.
+
+00:18:53.240 --> 00:18:54.980
+Daje to jasną odpowiedź w razie potrzeby.
+
+00:18:55.200 --> 00:19:02.860
+Jako kupujący widzisz zamówienie, magazyn widzi, czego należy się spodziewać, dział finansowy wie, jakie są zobowiązania firmy, a menedżerowie dokładnie widzą, na co wydawane są pieniądze.
+
+00:19:03.080 --> 00:19:06.080
+Zakupy nadal angażują ludzi, dostawców, towary, usługi i decyzje.
+
+00:19:06.300 --> 00:19:08.720
+Dynamics 365 nie eliminuje tych elementów.
+
+00:19:08.880 --> 00:19:12.780
+Utrzymuje ich zapisy w jednym miejscu, dzięki czemu możesz kupować z mniejszą liczbą niejasności i niespodzianek.
+
+00:19:12.780 --> 00:19:19.120
+Zasubskrybuj na swojej ulubionej platformie podcastowej i podziel się tą porcją wiedzy z kimś, kto zaczyna naukę Dynamics 365 Procurement & Sourcing.

@@ -11,9 +11,10 @@ import { cleanKeypoints, cleanFaq, jsonList, ensureSectionCols } from "./section
 
 const TRUST_POINTS = 25, MAX_POSTS_DAY = 5;
 const now = () => Math.floor(Date.now() / 1000);
+const TOP_SPANS = { day: 86400, week: 7 * 86400, month: 30 * 86400, year: 365 * 86400, evergreen: 0 };   // Sekunden; 0 = alle Stimmen
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const okLang = (l) => l === "en" || isLang(l);
-const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+export const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
 const parse = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
 const FIELDS = "id,slug,title,summary,body,lang,status,topics,keypoints,faq,note,created,updated,published";
 
@@ -74,6 +75,18 @@ export async function handleBlog(env, request, url, path, user, J) {
     const off = Math.max(0, +url.searchParams.get("offset") || 0), lim = Math.min(Math.max(+url.searchParams.get("limit") || 40, 1), 60);
     const rows = (await db.prepare("SELECT b.id,b.html FROM blog_posts b JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0 WHERE b.status='live' AND b.html<>'' ORDER BY b.id LIMIT ? OFFSET ?").bind(lim, off).all()).results || [];
     return J({ items: rows }, 200, { "cache-control": "public, max-age=300" });
+  }
+  if (path === "/api/blog/top" && method === "GET") {   // Top-Listen nach Upvotes: Tag, Woche, Monat, Jahr (Stimmen im Zeitraum) und evergreen (alle Stimmen). Sprachfilter mit okLang (auch "en", sonst kaeme die englische Liste ungefiltert). Hat mit dem Index nichts zu tun: alle Beitraege stehen auf index
+    const per = String(url.searchParams.get("period") || "week"), span = TOP_SPANS[per];
+    if (span === undefined) return J({ error: "period" }, 400);
+    const ql = url.searchParams.get("lang") || "", lang = okLang(ql) ? ql : "", lim = Math.min(Math.max(+url.searchParams.get("limit") || 10, 1), 30);
+    const since = span ? now() - span : 0;
+    const rows = (await db.prepare(
+      `SELECT b.slug,b.title,b.summary,b.lang,b.published,p.handle,u.name,COUNT(v.user_id) votes
+       FROM blog_votes v JOIN blog_posts b ON b.id=v.post_id AND b.status='live'
+       JOIN profiles p ON p.user_id=b.user_id AND p.public=1 AND p.handle IS NOT NULL JOIN users u ON u.id=b.user_id AND u.banned=0
+       WHERE v.created>=? AND (?='' OR b.lang=?) GROUP BY b.id ORDER BY votes DESC, b.published DESC LIMIT ?`).bind(since, lang, lang, lim).all()).results || [];
+    return J({ period: per, items: rows }, 200, { "cache-control": "public, max-age=300" });
   }
   if (path === "/api/blog/followers" && method === "GET") {   // Anzahl Abonnenten eines Blogs (oeffentlich)
     const n = (await db.prepare("SELECT COUNT(*) n FROM blog_follows WHERE handle=?").bind(url.searchParams.get("handle") || "").first()).n;

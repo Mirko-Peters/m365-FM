@@ -9,6 +9,7 @@ from datetime import date, datetime, timezone
 
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import esc
+import site_meta_community as PM   # Titel/Description (Suchabsicht)
 
 AUTHOR = "mirko-p"
 TOPIC = "m365fm"   # Entitaet M365.FM: jede Wochenzusammenfassung traegt dieses Thema (einheitlich auffindbar, Entitaetsseite)
@@ -139,7 +140,7 @@ def build(g, posts):
         u = page_url(BASE, lang)
         noidx = not _indexable(posts, lang)
         b = f'{header(lang, "")}<main class="wrap" style="max-width:48em">{body(lang, BASE, items)}</main>{footer(lang)}'
-        write(f"{pfx2(lang)}updates/index.html", page(lang, f"{title(lang)} – M365.FM", desc(lang), u, b, None, jsonld(lang, BASE, items, TODAY), og_type="website", noindex=noidx))
+        write(f"{pfx2(lang)}updates/index.html", page(lang, *(PM.hub_meta("updates", lang) or (f"{title(lang)} – M365.FM", desc(lang))), u, b, None, jsonld(lang, BASE, items, TODAY), og_type="website", noindex=noidx))
         if not noidx:
             sitemap.append((u, jsonld(lang, BASE, items, TODAY)[0]["dateModified"], None))   # hreflang zwischen den Sprachfassungen: finish_hreflang (gleicher Pfad)
         out[lang] = len(items)

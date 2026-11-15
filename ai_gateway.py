@@ -26,6 +26,17 @@ def gateway_base_url():
     return f"https://gateway.ai.cloudflare.com/v1/{urllib.parse.quote(account, safe='')}/{urllib.parse.quote(gateway, safe='')}/anthropic"
 
 
+def thinking_off(model):
+    """Feld, das das Denken fuer dieses Modell abschaltet (Anthropic-Modellreferenz, Stand 3.11.2026; nie blind "disabled"; genutzt von rewrite_shownotes.py
+    und fill_entities.py): Haiku nimmt {"type": "disabled"}; Claude Sonnet 5.5 weist das mit HTTP 400 ab und nimmt stattdessen {"type": "between_tools"} (ohne weiteres Feld,
+    nur dieses Modell); bei allen anderen bleibt das Feld weg - dort denkt das Modell und der Aufrufer muss max_tokens um einen Denk-Zuschlag erhoehen
+    (die Kostenobergrenze rechnet mit max_tokens). Beide Werte gelten nur bis Aufwand high; die Aufrufer setzen keinen hoeheren."""
+    m = str(model).lower()
+    if "haiku" in m: return {"thinking": {"type": "disabled"}}
+    if m.startswith("claude-sonnet-5-5"): return {"thinking": {"type": "between_tools"}}
+    return {}
+
+
 def anthropic_request(path, data=None, headers=None, *, job, lang="", model="", cache_ttl=None, api_key=None):
     if path.startswith(ANTHROPIC_API):
         path = path[len(ANTHROPIC_API):]
@@ -48,6 +59,17 @@ def anthropic_request(path, data=None, headers=None, *, job, lang="", model="", 
     h.update(headers or {})
     payload = json.dumps(data).encode() if data is not None and not isinstance(data, bytes) else data
     return urllib.request.Request(gateway_base_url() + path, payload, h)
+
+
+def thinking_off(model):
+    """Feld fuer den Anfragekoerper, das das Denken fuer dieses Modell abschaltet (Anthropic-Modellreferenz, Stand 3.11.2026; wie rewrite_shownotes.thinking_off):
+    Haiku nimmt {"type": "disabled"} (Claude Haiku 5.5 denkt ohne das Feld adaptiv, das kostet Ausgabe-Token und frisst max_tokens); Claude Sonnet 5.5 weist
+    "disabled" mit HTTP 400 ab und nimmt stattdessen {"type": "between_tools"} (ohne weiteres Feld, nur bis effort high - ohne effort gilt high); bei allen anderen
+    Modellen bleibt das Feld weg (dort laesst sich das Denken nicht sicher abschalten)."""
+    m = str(model).lower()
+    if "haiku" in m: return {"thinking": {"type": "disabled"}}
+    if m.startswith("claude-sonnet-5-5"): return {"thinking": {"type": "between_tools"}}
+    return {}
 
 
 def urlopen(request, timeout):

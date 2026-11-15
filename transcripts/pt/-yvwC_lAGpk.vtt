@@ -1,0 +1,1012 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.440
+Bem-vindos a mais um episódio do Microsoft Knowledge Nugget.
+
+00:00:02.700 --> 00:00:03.800
+Eu sou seu apresentador, Mirko Pito.
+
+00:00:04.060 --> 00:00:06.040
+O tópico de hoje é algo que quase todo mundo já ouviu falar,
+
+00:00:06.200 --> 00:00:07.480
+mas poucos entendem de verdade.
+
+00:00:07.880 --> 00:00:08.160
+APIs.
+
+00:00:08.660 --> 00:00:10.380
+Você provavelmente ouve esse termo sendo usado por aí.
+
+00:00:10.780 --> 00:00:13.040
+É uma daquelas palavras da tecnologia que as pessoas usam
+
+00:00:13.040 --> 00:00:14.420
+para parecer que sabem do que estão falando.
+
+00:00:14.960 --> 00:00:15.740
+Mas aqui está o ponto.
+
+00:00:15.820 --> 00:00:16.860
+APIs são, na verdade, simples.
+
+00:00:17.620 --> 00:00:19.900
+Elas são apenas uma forma de um software conversar com o outro.
+
+00:00:20.440 --> 00:00:21.660
+Seu celular solicita dados a um servidor.
+
+00:00:22.040 --> 00:00:22.880
+Servidores envia de volta.
+
+00:00:23.100 --> 00:00:23.660
+Isso é uma chamada API.
+
+00:00:24.060 --> 00:00:26.260
+Agora, imagine que você tenha 20 APIs, ou 50, ou 100.
+
+00:00:26.660 --> 00:00:28.440
+Cada uma pode usar uma autenticação diferente.
+
+00:00:28.440 --> 00:00:31.080
+Limites de taxa distintos e documentações variadas testes.
+
+00:00:31.140 --> 00:00:31.540
+É que existe.
+
+00:00:32.060 --> 00:00:34.160
+De repente, o que começou como uma conversa simples
+
+00:00:34.160 --> 00:00:35.880
+entre dois aplicativos vira um caos completo.
+
+00:00:36.560 --> 00:00:39.080
+Sem um gerenciador central, cada equipe acaba reinventando a roda.
+
+00:00:39.580 --> 00:00:41.260
+Uma equipe cria seu próprio sistema de autenticação.
+
+00:00:41.420 --> 00:00:42.540
+Outra cria seu próprio sistema de logs.
+
+00:00:42.940 --> 00:00:44.180
+Brechas de segurança aparecem por toda parte.
+
+00:00:45.100 --> 00:00:47.200
+Desenvolvedores ficam confusos sobre o que cada API faz.
+
+00:00:47.420 --> 00:00:50.080
+E você não tem uma visão única do que está acontecendo em todo o seu sistema.
+
+00:00:50.640 --> 00:00:52.040
+O Azure API Management resolve isso.
+
+00:00:52.480 --> 00:00:53.760
+Prefere ser você uma central de controle.
+
+00:00:54.440 --> 00:00:57.260
+Pense nele como uma torre de controle de tráfego aéreo para suas APIs.
+
+00:00:57.260 --> 00:01:00.200
+Ao final deste episódio, você entenderá o que ele realmente é.
+
+00:01:00.320 --> 00:01:02.740
+Por que é importante e como todas as peças se encaixam.
+
+00:01:03.580 --> 00:01:05.080
+Pegue seu café e vamos mergulhar no assunto.
+
+00:01:06.400 --> 00:01:07.880
+Problema, muitas APIs, nenhum controle.
+
+00:01:08.740 --> 00:01:10.120
+Aqui está a realidade do software moderno.
+
+00:01:10.580 --> 00:01:13.300
+Dez anos atrás, você provavelmente tinha um grande aplicativo, um monólito.
+
+00:01:13.680 --> 00:01:14.400
+Um banco de dados, uma API.
+
+00:01:14.540 --> 00:01:15.060
+Era simples.
+
+00:01:16.720 --> 00:01:19.740
+Hoje, esse mesmo aplicativo pode estar dividido em dezenas de microserviços.
+
+00:01:20.360 --> 00:01:21.620
+Cada serviço cuida de uma coisa.
+
+00:01:21.820 --> 00:01:24.000
+Contas de usuário, pagamentos, estoque, notificações.
+
+00:01:24.120 --> 00:01:25.460
+E cada um expõe sua própria API.
+
+00:01:25.460 --> 00:01:28.940
+De repente, você tem 10, 50, 100 pontos de entrada diferentes no seu sistema.
+
+00:01:29.420 --> 00:01:32.280
+Agora, imagine que você é um desenvolvedor tentando criar algo que usa essas APIs.
+
+00:01:32.900 --> 00:01:35.420
+Você precisa encontrar cada um e descobrir a autenticação para todas elas.
+
+00:01:35.880 --> 00:01:38.600
+Algumas usam chaves de API, outras usam o Alt, algumas não usam nada.
+
+00:01:39.020 --> 00:01:41.720
+Você precisa gerenciar o limite de taxa manualmente e ocorre o risco de ser bloqueado.
+
+00:01:42.240 --> 00:01:44.000
+Você precisa entender o formato de dados que cada um espera.
+
+00:01:44.580 --> 00:01:45.180
+É exaustivo.
+
+00:01:45.880 --> 00:01:47.240
+E fica pior do ponto de vista operacional.
+
+00:01:47.760 --> 00:01:51.660
+Sem um gateway central, cada equipe precisa adicionar segurança e logs manualmente ao seu próprio serviço.
+
+00:01:51.660 --> 00:01:54.180
+Algumas equipes fazem bem, outras esquecem de registrar erros.
+
+00:01:54.500 --> 00:01:55.880
+Algumas nem validam os dados de entrada.
+
+00:01:56.520 --> 00:01:57.620
+Inconsistente e sujeito a erros.
+
+00:01:57.700 --> 00:01:59.360
+Um pesadelo de segurança prestes a acontecer.
+
+00:01:59.800 --> 00:02:01.220
+A conformidade torna-se quase impossível.
+
+00:02:01.720 --> 00:02:03.180
+Você provar quem acessou o que e quando.
+
+00:02:03.760 --> 00:02:07.520
+Boa sorte tentando extrair trilhas de auditoria de 20 serviços diferentes, cada um com seu próprio formato de log.
+
+00:02:07.880 --> 00:02:10.400
+Precisa ver quantas chamadas de API seu sistema processou no mês passado.
+
+00:02:11.220 --> 00:02:13.600
+Você acaba compilando métricas de uma dúzia de painéis diferentes.
+
+00:02:13.600 --> 00:02:14.740
+O problema é o seguinte.
+
+00:02:15.120 --> 00:02:16.780
+À medida que você escala, isso não apenas atrapalha.
+
+00:02:17.080 --> 00:02:17.380
+Isso o quê?
+
+00:02:17.820 --> 00:02:21.240
+Você não pode adicionar mais desenvolvedores, serviços ou clientes sem um ponto central de controle.
+
+00:02:21.540 --> 00:02:22.600
+Pense nisso como um prédio.
+
+00:02:22.860 --> 00:02:24.380
+Imagine que cada sala tem uma fechadura diferente.
+
+00:02:24.720 --> 00:02:25.960
+Não há recepção ou diretório.
+
+00:02:26.560 --> 00:02:30.400
+Os visitantes vagam tentando encontrar a porta certa, ficam frustrados e acabam desistindo.
+
+00:02:31.160 --> 00:02:31.620
+Caos total.
+
+00:02:32.460 --> 00:02:34.640
+Esse é o problema que o gerenciamento de API foi projetado para resolver.
+
+00:02:35.520 --> 00:02:36.620
+O que é o Azure API Management?
+
+00:02:37.180 --> 00:02:37.840
+Atoio de controle.
+
+00:02:38.440 --> 00:02:40.200
+Então o que exatamente é o Azure API Management?
+
+00:02:40.840 --> 00:02:41.820
+Aqui está a definição mais simples.
+
+00:02:41.820 --> 00:02:47.820
+É um serviço gerenciado que fica entre suas APIs de back-end e os aplicativos, sites, dispositivos e parceiros que as consomem.
+
+00:02:48.560 --> 00:02:50.080
+Mas veja bem, não é apenas um proxy.
+
+00:02:50.620 --> 00:02:51.780
+Um proxy é apenas em caminho ao tráfego.
+
+00:02:52.100 --> 00:02:54.980
+O Azure API Management cobre todo o ciclo de vida das suas APIs.
+
+00:02:55.620 --> 00:02:57.980
+Publica e proteja, monitore e eventualmente desative-as.
+
+00:02:58.540 --> 00:02:59.520
+É um centro de controle completo.
+
+00:02:59.940 --> 00:03:01.440
+Vamos dividir em três componentes principais.
+
+00:03:01.960 --> 00:03:02.620
+Primeiro é o gateway.
+
+00:03:03.060 --> 00:03:03.840
+Esta é a porta de entrar.
+
+00:03:04.140 --> 00:03:08.200
+Cada solicitação vinda de um aplicativo ou site chega primeiro ao gateway, nunca diretamente ao seu back-end.
+
+00:03:08.200 --> 00:03:11.240
+O gateway processa a solicitação, aplica as políticas que você configurou,
+
+00:03:11.240 --> 00:03:14.000
+ou coleta métricas e as encaminha para o serviço de back-end correto.
+
+00:03:14.860 --> 00:03:16.000
+Pense nele como um guarda de trânsito.
+
+00:03:16.520 --> 00:03:17.620
+O próximo é o plano de gerenciamento.
+
+00:03:18.260 --> 00:03:19.440
+É aqui que você define tudo.
+
+00:03:20.040 --> 00:03:22.280
+Suas APIs, suas políticas, seus produtos, suas assinaturas.
+
+00:03:23.000 --> 00:03:25.320
+Você faz isso pelo portal do Azure, pela linha de comando,
+
+00:03:25.500 --> 00:03:27.680
+ou por infraestrutura como código, como Bicep ou Terraform.
+
+00:03:28.280 --> 00:03:30.460
+É a sala de controle onde você configura como tudo funciona.
+
+00:03:31.020 --> 00:03:32.080
+Então o portal do desenvolvedor.
+
+00:03:32.080 --> 00:03:35.920
+Este é um site de autoatendimento, onde desenvolvedores, internos ou externos,
+
+00:03:36.020 --> 00:03:39.140
+podem descobrir suas APIs, ler documentação, obter chaves de assinatura
+
+00:03:39.140 --> 00:03:41.200
+e até testar chamadas de API direto no navegador.
+
+00:03:41.920 --> 00:03:44.740
+Chega de enviar PDFs por e-mail para lá e para cá, que vai uma analogia que ajuda.
+
+00:03:45.060 --> 00:03:46.020
+Pense em um aeroporto moderno.
+
+00:03:46.380 --> 00:03:47.260
+Gateway é a pista de pouso.
+
+00:03:47.760 --> 00:03:48.840
+Todo avião pousa lá primeiro.
+
+00:03:49.380 --> 00:03:50.880
+O plano de gerenciamento é ator e controle.
+
+00:03:51.500 --> 00:03:53.840
+Ele direciona o tráfego, estabelece regras e monitora tudo.
+
+00:03:53.840 --> 00:03:56.060
+E o portal do desenvolvedor é o painel de informações.
+
+00:03:56.680 --> 00:03:59.840
+Antipilotos o consultam antes de voar e encontram todas as informações necessárias
+
+00:03:59.840 --> 00:04:00.640
+sem precisar falar com ninguém.
+
+00:04:01.000 --> 00:04:02.040
+Agora, vamos focar no Gateway.
+
+00:04:02.500 --> 00:04:05.460
+Essa é a parte com a qual seus aplicativos realmente interagem e onde a mágica acontece.
+
+00:04:07.140 --> 00:04:08.600
+Gateway, a porta de entrada da sua API.
+
+00:04:09.200 --> 00:04:12.640
+Vamos falar sobre o Gateway, porque essa é a parte com a qual seus aplicativos realmente interagem.
+
+00:04:13.140 --> 00:04:15.520
+Toda solicitação de um aplicativo móvel, site ou dispositivo,
+
+00:04:15.580 --> 00:04:16.500
+eu atinge o Gateway primeiro.
+
+00:04:16.640 --> 00:04:17.940
+Nunca seu back-end diretamente.
+
+00:04:18.640 --> 00:04:19.380
+Esse é o ponto principal.
+
+00:04:19.780 --> 00:04:22.120
+O Gateway fica na frente e atua como um ponto de entrada único.
+
+00:04:22.320 --> 00:04:25.140
+O Gateway pode aplicar políticas antes de encaminhar a solicitação.
+
+00:04:25.560 --> 00:04:27.880
+Políticas são regras que você escreve em XML ou JSON
+
+00:04:27.880 --> 00:04:31.440
+como limite de taxa, filtragem de IP, reescrita de cabeçalho e verificações de autenticação.
+
+00:04:32.780 --> 00:04:34.660
+Tudo isso não se alterar uma única linha do código do seu back-end.
+
+00:04:35.060 --> 00:04:35.920
+Este é um exemplo concreto.
+
+00:04:36.440 --> 00:04:38.600
+Digamos que você tenha um nível gratuito e um nível premium para a sua API.
+
+00:04:39.180 --> 00:04:42.260
+Com a política, você pode limitar usuários gratuitos a 5 solicitações por minuto,
+
+00:04:42.420 --> 00:04:43.720
+enquanto usuários premium recebem 100.
+
+00:04:44.120 --> 00:04:45.460
+Seu back-end nunca percebe a diferença.
+
+00:04:45.820 --> 00:04:46.700
+Ele apenas processa ações.
+
+00:04:47.260 --> 00:04:48.380
+O Gateway cuida da execução.
+
+00:04:48.860 --> 00:04:50.200
+O Gateway também cuida do cache.
+
+00:04:50.800 --> 00:04:54.220
+Se dados são solicitados repetidamente com uma lista de produtos que raramente mudam,
+
+00:04:54.220 --> 00:04:57.100
+o Gateway pode armazenar resposta e servi-la diretamente.
+
+00:04:57.100 --> 00:04:59.480
+Não há necessidade de incomodar seu back-end,
+
+00:04:59.560 --> 00:05:02.100
+o que significa respostas mais rápidas e menos carga em seus servidores.
+
+00:05:02.580 --> 00:05:03.720
+Ele também pode transformar dados.
+
+00:05:04.260 --> 00:05:07.300
+Seu back-end pode retornar a XML, mas seu aplicativo móvel espera JSON.
+
+00:05:07.720 --> 00:05:09.040
+Gateway pode converter isso instantaneamente.
+
+00:05:09.680 --> 00:05:12.020
+Seu back-end não precisa mudar e seu aplicativo também não precisa,
+
+00:05:13.020 --> 00:05:14.080
+o Gateway cuida da tradução.
+
+00:05:14.740 --> 00:05:17.600
+E ele registra cada chamada, cada solicitação, cada resposta, cada erro.
+
+00:05:18.020 --> 00:05:21.100
+Você obtém um rastro de auditoria completo de quem chamou o que, quando e o que aconteceu.
+
+00:05:21.580 --> 00:05:23.840
+Só isso já vale o investimento para fins de conformidade.
+
+00:05:23.840 --> 00:05:27.160
+Se você tem um público global, pode implantar o Gateway em várias regiões.
+
+00:05:28.300 --> 00:05:32.420
+O tráfego é roteado automaticamente para mais próximo, o que proporciona menor latência e melhor.
+
+00:05:33.460 --> 00:05:35.840
+Mais uma coisa, o Gateway oculta o URL real do seu back-end.
+
+00:05:36.280 --> 00:05:37.460
+Os clientes veem apenas o Gateway.
+
+00:05:38.000 --> 00:05:39.840
+Seus servidores de back-end permanecem ocultos da internet.
+
+00:05:40.220 --> 00:05:41.860
+Isso é uma grande vitória de segurança para uso.
+
+00:05:41.860 --> 00:05:44.900
+Políticas, o motor que controla tudo.
+
+00:05:45.640 --> 00:05:46.940
+Então, e sobre essas políticas que menciono?
+
+00:05:47.360 --> 00:05:49.500
+Elas são o motor que tornam o API verdadeiramente poderoso.
+
+00:05:50.000 --> 00:05:53.900
+Uma política modifica o comportamento de solicitação ou resposta sem você nunca tocar no código do seu back-end.
+
+00:05:54.460 --> 00:05:56.120
+Pense nisso como um invólucro em torno da sua API.
+
+00:05:56.760 --> 00:06:00.180
+À medida que o tráfego flui, ele pode adicionar, remover ou alterar coisas automaticamente.
+
+00:06:00.900 --> 00:06:03.500
+Políticas podem ser executadas em quatro pontos do ciclo de vida da solicitação.
+
+00:06:03.880 --> 00:06:04.280
+Inbound.
+
+00:06:04.660 --> 00:06:06.860
+Na entrada, antes da solicitação chegar ao seu back-end.
+
+00:06:07.580 --> 00:06:08.020
+Outbound.
+
+00:06:08.120 --> 00:06:10.200
+Na saída, antes da resposta chegar ao cliente.
+
+00:06:10.200 --> 00:06:12.940
+Back-end, logo antes da solicitação atingir seu serviço.
+
+00:06:13.280 --> 00:06:14.920
+E em caso de erro, quando algo falha.
+
+00:06:15.700 --> 00:06:19.320
+Entradas comuns incluem validar tokens JWT para verificar a identidade do chamador.
+
+00:06:19.800 --> 00:06:22.780
+Conferir chaves de API, reescrever o URL e se restringir por endereço IP.
+
+00:06:23.420 --> 00:06:25.780
+Tudo isso acontece antes que o seu back-end veja uma única requisição.
+
+00:06:26.160 --> 00:06:27.940
+Para saídas, você pode transformar o corpo da resposta.
+
+00:06:28.580 --> 00:06:29.800
+Localizar e substituir texto.
+
+00:06:29.960 --> 00:06:31.740
+Remover campos sensíveis e alterar formatos.
+
+00:06:32.140 --> 00:06:35.320
+Você pode armazenar respostas em cache para que solicitações repetidas não atinjam seu back-end.
+
+00:06:35.320 --> 00:06:38.020
+Você pode até remover cabeçalhos que vazem informações inteiras.
+
+00:06:38.340 --> 00:06:39.320
+Aqui está um exemplo concreto.
+
+00:06:39.320 --> 00:06:42.740
+Digamos que sua API retorne em descrições de produtos com a palavra azul por toda parte.
+
+00:06:43.380 --> 00:06:44.780
+Quer mudar a marca ou usar amarelo em vez disso?
+
+00:06:45.880 --> 00:06:48.880
+Em vez de alterar seu código de back-end, você adiciona uma política de saída.
+
+00:06:49.880 --> 00:06:52.340
+Localizar azul, substituir por amarelo e pronto.
+
+00:06:52.840 --> 00:06:53.780
+Seu back-end nunca muda.
+
+00:06:54.380 --> 00:06:56.880
+Políticas de limitação de taxa e cota protegem seu back-end contra abuso.
+
+00:06:57.260 --> 00:07:01.380
+Se o aplicativo de alguém agir de forma descontrolada e começar a martelar sua API 10 mil vezes por segundo,
+
+00:07:01.440 --> 00:07:02.820
+a política entra em ação e diz devagar.
+
+00:07:02.820 --> 00:07:04.920
+Seu back-end permanece saudável.
+
+00:07:05.320 --> 00:07:06.080
+Isso é de lógica avançada.
+
+00:07:06.080 --> 00:07:08.680
+Você pode escrever expressões se acharem que é personalizadas dentro das políticas.
+
+00:07:09.000 --> 00:07:10.460
+Elas são compiladas para desempenho.
+
+00:07:10.600 --> 00:07:11.700
+Tanto não há custo de tempo de execução.
+
+00:07:12.040 --> 00:07:14.820
+Você pode consolidar funções de usuário, calcular limites de taxa dinâmicos,
+
+00:07:15.020 --> 00:07:17.720
+ou transformar respostas condicionalmente com base nos cabeçalhos da solicitação.
+
+00:07:18.060 --> 00:07:19.040
+A principal conclusão é esta.
+
+00:07:19.500 --> 00:07:23.580
+As políticas permitem que você controle como suas APIs se comportam sem tocar no código que as executa.
+
+00:07:23.920 --> 00:07:26.620
+Isso significa mudanças mais rápidas, menos implantações e menos risco.
+
+00:07:27.720 --> 00:07:28.680
+Produtos e assinaturas.
+
+00:07:29.220 --> 00:07:30.500
+Empacotando APIs para consumidores.
+
+00:07:30.500 --> 00:07:34.720
+Agora suas APIs estão definidas, as políticas estão em vigor e o Gateway está funcionando perfeitamente.
+
+00:07:35.280 --> 00:07:37.820
+Mas como você dá a clientes diferentes acesso a coisas diferentes?
+
+00:07:38.820 --> 00:07:40.180
+É aí que nos produtos e as assinaturas.
+
+00:07:40.880 --> 00:07:43.380
+No Appim você agrupa APIs em algo chamado produto.
+
+00:07:44.220 --> 00:07:45.060
+Pense nisso com um pacote.
+
+00:07:45.680 --> 00:07:48.600
+Você pode ter um produto de nível gratuito que inclui apenas suas APIs básicas.
+
+00:07:49.420 --> 00:07:52.820
+Talvez apenas acesso de leitura, depois um produto premium que inclui tudo,
+
+00:07:52.940 --> 00:07:55.140
+incluindo operações de escrita e endpoints de administração.
+
+00:07:55.140 --> 00:07:58.980
+Os desenvolvedores não assinam APIs individuais, eles assinam um produto.
+
+00:07:59.540 --> 00:08:01.260
+Quando eles assinam, recebem uma chave de assinatura.
+
+00:08:01.720 --> 00:08:04.360
+Na verdade, duas chaves, para que você possa rotacionar uma sem tempo de inatividade.
+
+00:08:04.900 --> 00:08:07.340
+Essa chave é o passe deles para usar qualquer API naquele produto.
+
+00:08:07.840 --> 00:08:09.260
+Você controla como as assinaturas funcionam.
+
+00:08:09.840 --> 00:08:10.900
+Os produtos podem exigir aprovação.
+
+00:08:11.780 --> 00:08:14.680
+Você aceita manualmente cada assinante, ou eles podem ser abertos para alto atendimento.
+
+00:08:15.260 --> 00:08:17.020
+Qualquer pessoa se inscreve e obtém acesso imediato.
+
+00:08:17.740 --> 00:08:20.680
+Você também pode incluir termos legais que os usuários devem aceitar antes de assinar.
+
+00:08:21.160 --> 00:08:23.080
+Isso é importante se suas APIs lidam com dados sensíveis.
+
+00:08:23.080 --> 00:08:24.740
+É assim que você monetiza APIs.
+
+00:08:25.180 --> 00:08:27.760
+Um produto gratuito com limites de taxa abaixo, 5 chamadas por minuto.
+
+00:08:28.300 --> 00:08:30.420
+Um produto pago com limites maiores ou mais endpoints.
+
+00:08:30.760 --> 00:08:33.080
+100 chamadas por minuto, além de acesso a recursos premium.
+
+00:08:33.660 --> 00:08:34.180
+Sabe o que importa?
+
+00:08:34.680 --> 00:08:37.580
+O Gateway impõe os limites com base no produto ao qual o chamador se inscreveu.
+
+00:08:38.060 --> 00:08:38.900
+E aqui está um exemplo real.
+
+00:08:39.160 --> 00:08:40.760
+Imagine que você está criando um aplicativo de conferência.
+
+00:08:41.060 --> 00:08:43.720
+Você cria um produto para participantes com APIs para a programação das sessões,
+
+00:08:43.840 --> 00:08:45.240
+biografias dos palestrantes e mapa do local.
+
+00:08:46.000 --> 00:08:48.840
+Depois, um produto para patrocinadores que também inclui APIs de geração de leitos.
+
+00:08:48.840 --> 00:08:52.200
+E os patrocinadores podem escanear os crachados dos participantes e obter informações de contato.
+
+00:08:52.200 --> 00:08:54.520
+Mesmo back-end, produtos diferentes, níveis de acesso diferentes.
+
+00:08:54.840 --> 00:08:57.000
+Essas duas chaves de assinatura são projetadas para a rotação.
+
+00:08:57.900 --> 00:09:00.080
+Se uma chave for comprometida, você gera uma nova.
+
+00:09:00.580 --> 00:09:02.900
+A segunda chave permite que você faça a troca sem interromper o serviço.
+
+00:09:03.520 --> 00:09:06.340
+Gere uma nova chave, atualize seu aplicativo e revogue a antiga.
+
+00:09:07.040 --> 00:09:07.540
+Sem interrupção.
+
+00:09:07.880 --> 00:09:08.780
+Portal do desenvolvedor.
+
+00:09:09.160 --> 00:09:10.360
+Autoatendimento para consumidores de AP.
+
+00:09:11.000 --> 00:09:12.340
+Então você configura os seus produtos de AP.
+
+00:09:12.760 --> 00:09:13.880
+Agora os desenvolvedores precisam de mim.
+
+00:09:14.180 --> 00:09:15.460
+Esse é o trabalho do Portal do Desenvolvedor.
+
+00:09:15.460 --> 00:09:18.620
+O Portal do Desenvolvedor é um site integrado a cada instância de APIN.
+
+00:09:18.620 --> 00:09:22.780
+Os desenvolvedores o usam para navegar pelas suas APIs, ler a documentação e testar
+
+00:09:22.780 --> 00:09:24.680
+endpoints interativamente direto no navegador.
+
+00:09:25.340 --> 00:09:27.060
+Sem necessidade de configuração e sem troca de meios.
+
+00:09:27.560 --> 00:09:29.300
+Mas um detalhe, ele não é publicado por padrão.
+
+00:09:30.020 --> 00:09:33.380
+Ao criar sua instância de APIN, o Portal existe, mas ninguém pode vê-lo.
+
+00:09:33.960 --> 00:09:35.580
+Você precisa personalizá-lo e publicá-lo primeiro.
+
+00:09:35.920 --> 00:09:36.420
+Isso é intencional.
+
+00:09:36.820 --> 00:09:38.780
+Você não quer mostrar um portal inacabado para o mundo.
+
+00:09:39.260 --> 00:09:42.520
+Você pode personalizar cores da marca, logotipos e até incorporar conteúdo do WordPress
+
+00:09:42.520 --> 00:09:44.000
+para um blog junto às suas documentações de APIN.
+
+00:09:44.380 --> 00:09:46.980
+Ele é totalmente personalizável para combinar com a identidade visual da sua empresa.
+
+00:09:46.980 --> 00:09:48.600
+O valor real é o autoatendimento.
+
+00:09:49.040 --> 00:09:52.080
+Os desenvolvedores se cadastram, obtêm suas chaves de assinatura automaticamente
+
+00:09:52.080 --> 00:09:53.920
+e começam a chamar as APIs imediatamente.
+
+00:09:54.760 --> 00:09:58.660
+Sem e-mails manuais, sem espera por aprovação, sem tiques de suporte perguntando como obter uma chave.
+
+00:09:59.200 --> 00:10:01.980
+Eles fazem tudo sozinhos, o que reduz significativamente sua cara de suporte.
+
+00:10:02.560 --> 00:10:04.280
+Você também pode publicar logs de alterações de versão.
+
+00:10:04.940 --> 00:10:08.340
+Quando você atualiza uma API, os desenvolvedores vêm no Portal sem surpresas.
+
+00:10:09.080 --> 00:10:11.480
+O acesso pode ser público para qualquer pessoa com a URL.
+
+00:10:11.480 --> 00:10:16.600
+Ou você pode restringi-lo a usuários do seu tenant do EntraID para que apenas pessoas da sua organização naveguem.
+
+00:10:17.440 --> 00:10:19.480
+Ambas as opções existem para diferentes casos de uso.
+
+00:10:19.900 --> 00:10:22.880
+O Portal do Desenvolvedor é o que torna o seu gerenciamento de IP em uma plataforma real.
+
+00:10:23.260 --> 00:10:24.620
+Pense nele com uma vitrine para suas APIs.
+
+00:10:25.180 --> 00:10:28.020
+Sem ele, os desenvolvedores precisam procurar em documentos e perguntar por aí.
+
+00:10:28.500 --> 00:10:30.900
+Com ele, eles encontram o que precisam e começam a desenvolver.
+
+00:10:32.160 --> 00:10:34.780
+Segurança, autenticação, autorização e segredos.
+
+00:10:35.940 --> 00:10:38.600
+Todo esse poder é inútil se a segurança não estiver garantida.
+
+00:10:38.600 --> 00:10:41.920
+Então, vamos falar sobre como o API lida com identidade, acessos e segredos.
+
+00:10:42.440 --> 00:10:44.320
+O API suporta múltiplos métodos de autenticação.
+
+00:10:44.840 --> 00:10:47.280
+Mais simples são as chaves de assinatura sobre as quais falamos anterior.
+
+00:10:47.860 --> 00:10:52.340
+Mas, para sistemas em produção, você deseja algo mais forte, como o OAuth 2.0, o token JWT,
+
+00:10:52.500 --> 00:10:54.100
+certificados de cliente ou filtragem de IP.
+
+00:10:54.640 --> 00:10:56.900
+Você cria camadas com base no nível de sensibilidade da sua API.
+
+00:10:57.380 --> 00:11:00.240
+Para a produção, a melhor prática é usar o OAuth 2.0 com o EntraID.
+
+00:11:00.920 --> 00:11:01.620
+Veja como isso funciona.
+
+00:11:02.100 --> 00:11:05.580
+O aplicativo cliente obtém um token do EntraID e o envia na solicitação da API.
+
+00:11:05.580 --> 00:11:10.340
+O APIN valida o token verificando a assinatura, o emissor, o público e a expiração.
+
+00:11:10.800 --> 00:11:14.040
+Se for válido, o APIN encaminha a solicitação para seu back-end, incluindo o token.
+
+00:11:14.800 --> 00:11:18.560
+Seu back-end confia nele, porque o APIN já o verificou, então não precisa revalidar.
+
+00:11:19.520 --> 00:11:21.640
+Isso é menos uma coisa para cada serviço lidar.
+
+00:11:22.400 --> 00:11:23.360
+Agora, vamos falar sobre segredos.
+
+00:11:23.880 --> 00:11:25.580
+Chaves de API, strings de conexão, certificados.
+
+00:11:26.320 --> 00:11:28.680
+Você não quer isso codificado em arquivos de política ou controle de origem.
+
+00:11:28.960 --> 00:11:30.720
+O APIN possui um recurso chamado valores nomeados.
+
+00:11:31.280 --> 00:11:35.040
+E você armazena segredos centralmente no APIN e os referencia pelo nome em suas políticas.
+
+00:11:35.040 --> 00:11:37.500
+O valor real nunca aparece no código da sua política.
+
+00:11:38.160 --> 00:11:40.740
+Melhor ainda, você pode conectar valores nomeados ao Azure Key Vault.
+
+00:11:41.140 --> 00:11:44.340
+E os segredos permanecem criptografados no Key Vault e o APIN os busca em tempo de execução.
+
+00:11:44.600 --> 00:11:47.420
+Ninguém, nem mesmo sua equipe de DevOps vê o valor real do segredo.
+
+00:11:47.700 --> 00:11:52.400
+Quando precisar rotacionar uma chave, atualize no Key Vault e o APIN detecta mudança automaticamente.
+
+00:11:53.120 --> 00:11:55.040
+O APIN também oferece suporte à identidade gerenciada.
+
+00:11:55.680 --> 00:11:58.200
+Isso permite que o APIN autentique em outros serviços do Azure,
+
+00:11:58.300 --> 00:12:01.820
+como Key Vault, ou uma Key Vault, ou uma Page Backend, sem armazenar credenciais.
+
+00:12:02.040 --> 00:12:04.540
+O Azure gerencia a identidade, então você apenas concede as permissões.
+
+00:12:04.980 --> 00:12:08.220
+E para isolamento de rede, você pode implantar o APIN dentro de uma rede virtual.
+
+00:12:08.700 --> 00:12:09.340
+Esse é o nível premium.
+
+00:12:10.560 --> 00:12:12.400
+Ou, coloque o Azure Front Door.
+
+00:12:12.560 --> 00:12:16.720
+O ponto é que seus serviços de back-end nunca precisam ser expostos diretamente à internet.
+
+00:12:17.760 --> 00:12:19.720
+O APIN é a única coisa que o mundo exterior vê.
+
+00:12:20.440 --> 00:12:22.480
+Essa abordagem em camadas constrói uma defesa em profundidade.
+
+00:12:22.960 --> 00:12:27.040
+Autenticação no Gateway, segredos em um cofre, isolamento de rede em torno dos seus back-ends.
+
+00:12:27.680 --> 00:12:28.880
+Cada camada fortalece a próxima.
+
+00:12:30.380 --> 00:12:31.940
+Níveis de preço, qual se encaixa melhor para você?
+
+00:12:31.940 --> 00:12:33.280
+Então, quanto custa?
+
+00:12:33.620 --> 00:12:34.380
+Vamos percorrer os níveis.
+
+00:12:34.940 --> 00:12:35.520
+Nível de consumo.
+
+00:12:36.140 --> 00:12:38.080
+Pague por chamada de API sem custo mensal fixo.
+
+00:12:38.680 --> 00:12:42.180
+Perfeito para baixo volume ou cargas de trabalho variáveis, como quando você está apenas prototipado.
+
+00:12:42.500 --> 00:12:44.220
+Você ainda não tem certeza do que precisa, comece por aqui.
+
+00:12:44.700 --> 00:12:48.080
+O nível de desenvolvedor oferece um custo mensal fixo baixo em torno de 50 dólares.
+
+00:12:48.520 --> 00:12:49.640
+Conjunto completo de recursos, uma SLA.
+
+00:12:50.160 --> 00:12:51.580
+Ideal para ambientes de desenvolvimento dele.
+
+00:12:51.780 --> 00:12:53.900
+Você tem tudo o que o premium oferece, mas não pode usar em produção.
+
+00:12:54.480 --> 00:12:55.960
+Nível básico ou nível de entrada para produção?
+
+00:12:55.960 --> 00:12:59.800
+Menor rendimento, sem suporte à rede virtual, mas você obtém um SLA real.
+
+00:13:00.300 --> 00:13:03.820
+Bom, para ferramentas internas ou pequenos projetos, onde rede privada não é crítica.
+
+00:13:04.580 --> 00:13:06.280
+A maioria das empresas escolhe o nível estando.
+
+00:13:06.800 --> 00:13:10.860
+Inclui suporte à rede virtual, SLA de 99,95% e bom throughput.
+
+00:13:11.860 --> 00:13:14.860
+Se você executa APIs essenciais ao negócio, é aqui que provavelmente ficará.
+
+00:13:15.500 --> 00:13:19.280
+O nível premium é para empresas globais que precisam de máxima confiabilidade e rede privada.
+
+00:13:19.280 --> 00:13:25.380
+Implantação multiregional, gateway auto-hospedado, SLA de 99,99% virtual e gestão total em rede virtual.
+
+00:13:25.960 --> 00:13:28.060
+Começa em torno de 2.700 por mês por unidade.
+
+00:13:28.740 --> 00:13:32.780
+A Microsoft também introduziu os níveis V2, Basic V2, Standard V2 e Premium V2.
+
+00:13:33.400 --> 00:13:36.300
+Eles simplificam a precificação com cotas de requisição inclusas e cobrança branding.
+
+00:13:36.940 --> 00:13:41.840
+Em vez de monitorar vários medidores, você tem um volume claro de requisições e paga pelo uso extra em incrementos simples.
+
+00:13:42.520 --> 00:13:43.060
+Veja como escolher.
+
+00:13:43.500 --> 00:13:44.720
+Comece com o developer para testes.
+
+00:13:45.300 --> 00:13:46.260
+Mude para o Standard para a produção.
+
+00:13:46.260 --> 00:13:49.520
+Vá para o Premium se precisar de escala global ou rede privada.
+
+00:13:50.140 --> 00:13:52.080
+E lembre-se, você sempre pode migrar de nível mais tarde.
+
+00:13:52.620 --> 00:13:54.280
+Comece pequeno e cresça conforme suas necessidades.
+
+00:13:54.800 --> 00:13:55.540
+Aqui cobrimos.
+
+00:13:56.120 --> 00:14:02.160
+O gerenciamento de API organiza o caos de muitas APIs em uma central de controle para gateway política, segurança e experiência do desenvolvedor.
+
+00:14:02.600 --> 00:14:04.360
+O ponto principal é que ele é mais do que um proxy.
+
+00:14:04.960 --> 00:14:07.500
+Pense nele como o cérebro e o sistema nervoso do seu ecossistema de APIs.
+
+00:14:08.000 --> 00:14:10.680
+Sem ele, cada equipe cria a sua própria autenticação, logo em limite de taxa.
+
+00:14:11.080 --> 00:14:14.500
+Você acaba com inconsistência, falhas de segurança e nenhuma visão única do que está acontecendo.
+
+00:14:14.500 --> 00:14:21.160
+Com ele, você obtém consistência, segurança e escalabilidade, sem reinventar a roda, para cada serviço, alas.
+
+00:14:21.900 --> 00:14:22.880
+Questão, exercício simples.
+
+00:14:23.380 --> 00:14:25.520
+Pense em uma API que você expõe diretamente no momento.
+
+00:14:26.080 --> 00:14:27.920
+Talvez um endpoint de função ou um serviço de aplicativo.
+
+00:14:28.520 --> 00:14:32.960
+Como colocar o gerenciamento de API na frente mudaria sua postura de segurança e sua capacidade de monitorar o uso.
+
+00:14:33.480 --> 00:14:35.580
+Só de pensar nesse exercício, você já verá o valor.
+
+00:14:36.100 --> 00:14:37.220
+Próximo passo, inscreva-se no canal.
+
+00:14:37.220 --> 00:14:43.580
+Em episódios futuros, mostraremos como importar uma API, aplicar sua primeira política e monitorar o uso em tempo real.
+
+00:14:43.900 --> 00:14:45.120
+Você passará da teoria para a prática.
+
+00:14:45.600 --> 00:14:48.080
+E se você achou útil, compartilhe com alguém que esteja criando um aplicativo.
+
+00:14:48.520 --> 00:14:49.980
+Isso economizará meses de dor de cabeça para ele.
+
+00:14:50.260 --> 00:14:50.900
+Obrigado por assistir.

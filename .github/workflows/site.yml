@@ -49,6 +49,8 @@ jobs:
         run: node --test tests/sponsor_calc.test.mjs
       - name: Player nach Klick (kein iframe im ersten HTML, feste Masse) und Ladezeit-Regeln pruefen (blockierend)
         run: node --test tests/player_facade.test.mjs && python3 -m unittest discover -s tests -p test_player_facade.py
+      - name: Anhören-Karten (Zuordnung, Platzierung, Rückfall ohne R2-Grafik, Geräte-Skript) prüfen (blockierend)
+        run: pip install -q pillow && node --test tests/listen.test.mjs && python3 -m unittest discover -s tests -p test_listen.py
       - name: Interne Links ohne Umweg - Python-Nachbau der Site-Worker-Weiterleitungen, jede alte Adresse in einem Schritt, Sprachwahl auf / (blockierend)
         run: python3 -m unittest discover -s tests -p test_site_links.py && python3 -m unittest discover -s tests -p test_redirect_hops.py && (cd sitewrk && node --test test/legacy.test.mjs test/lang.test.mjs)
       - name: Zusatz-Weiterleitungen (data/redirects_extra.json) gegen den Datenstand pruefen (nicht blockierend)
@@ -230,8 +232,9 @@ jobs:
           path: data/cache/r2_pages.json
           key: r2pages-${{ github.run_id }}
           restore-keys: r2pages-
-      - name: Seiten in den R2-Bucket laden (duenne Sprachfassungen; GitHub Pages bleibt klein, nichts wird geloescht)
-        continue-on-error: true
+      # Blockierend (11.11.2026): alle Sprachseiten ausser en/de liegen nur im Bucket. tools/r2_pages_upload.py endet nur dann mit 1, wenn eine Seite
+      # dort noch ganz fehlt (sonst 404 nach dem Deploy); einzelne Fehler bei schon vorhandenen Seiten und bei Export-Dateien bleiben Warnungen.
+      - name: Seiten in den R2-Bucket laden (Sprachseiten ausser en/de, Sprachfassungen, Exporte; GitHub Pages bleibt klein, nichts wird geloescht)
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
@@ -319,7 +322,7 @@ jobs:
           pip install -q boto3
           python tools/r2_og_upload.py r2img
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
-        run: python tools/page_hashes.py docs page-hashes.json content-hashes.json
+        run: python tools/page_hashes.py docs page-hashes.json content-hashes.json r2out
       # R2 als Ursprung: Bau-Kennung fuer den Spiegel im Deploy-Job (tools/r2_site_sync.py). Der Site-Worker liest R2 nur, wenn pages/r2-build.txt
       # im Bucket mit /r2-build.txt auf GitHub Pages uebereinstimmt - also erst, wenn dieser Bau vollstaendig und fehlerfrei gespiegelt ist.
       - name: Bau-Kennung fuer den R2-Spiegel
@@ -344,12 +347,21 @@ jobs:
       cancel-in-progress: false
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment2.outputs.page_url || steps.deployment3.outputs.page_url }}
     steps:
+      # deploy-pages@v4 wartet hoechstens 10 min (MAX_TIMEOUT = 600000 im Code der Action, ein groesserer timeout wird ignoriert). GitHub Pages
+      # haengt bei unserer Groesse ab und zu laenger in "syncing_files"/"updating_pages" (Laeufe 529, 616, 627): dann bis zu zwei weitere Versuche
+      # mit demselben Artefakt. Erst wenn auch der dritte scheitert, schlaegt der Job fehl (die folgenden Schritte laufen nur nach einem Erfolg).
       - id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          timeout: 1800000   # 30 min statt 10: GitHub Pages hing am 4.11. laenger als 10 min in "updating_pages" (Lauf 529), der Deploy brach ab
+        continue-on-error: true
+      - id: deployment2
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - id: deployment3
+        if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
+        uses: actions/deploy-pages@v4
       - uses: actions/checkout@v4
       - name: Letzter Seiten-Stand (Hashes des vorigen Deploys)
         uses: actions/cache/restore@v4
@@ -368,6 +380,7 @@ jobs:
           BASE: https://www.m365.fm
           OLD_CONTENT: .pagehashes/content-hashes.json
           NEW_CONTENT: .newhashes/content-hashes.json
+          R2_KEYS: .newhashes/r2-keys.json
         run: |
           mkdir -p .pagehashes
           python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json

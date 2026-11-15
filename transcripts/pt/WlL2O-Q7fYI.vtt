@@ -1,0 +1,1114 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.040
+Bem-vindos a mais um episódio das Pílulas de Conhecimento Microsoft no M35FM.
+
+00:00:04.380 --> 00:00:05.360
+Eu sou seu anfitrião, meu cupido.
+
+00:00:05.680 --> 00:00:09.400
+E se eu te dissesse que existe uma ferramenta já instalada no seu computador que pode automatizar quase tudo,
+
+00:00:09.840 --> 00:00:11.040
+pense no seu dia de trabalho típico.
+
+00:00:11.480 --> 00:00:14.280
+Você faz login e abre alguns aplicativos, clica nos mesmos menus de ontem,
+
+00:00:14.400 --> 00:00:16.800
+executa os mesmos relatórios, verifica os mesmos serviços.
+
+00:00:17.360 --> 00:00:20.500
+Talvez você passe uma hora fazendo algo que parece que deveria levar 5 minutos.
+
+00:00:21.120 --> 00:00:22.720
+Essa é a ferramenta da qual estou falando, PowerShell.
+
+00:00:23.140 --> 00:00:26.120
+Ao final deste episódio, você entenderá o que o PowerShell realmente é,
+
+00:00:26.120 --> 00:00:30.400
+como seus comandos funcionam e porque ele é o superpoder oculto do ecossistema Microsoft.
+
+00:00:31.920 --> 00:00:34.260
+Começaremos com a ideia básica, percorreremos os blocos fundamentais
+
+00:00:34.260 --> 00:00:36.780
+e no final você terá uma automação real que pode usar hoje mesmo.
+
+00:00:37.780 --> 00:00:39.500
+Panorama geral, o que o PowerShell realmente é?
+
+00:00:40.120 --> 00:00:41.180
+Então o que exatamente é o PowerShell?
+
+00:00:41.500 --> 00:00:43.740
+A maioria das pessoas ouvem o nome e pensam que é apenas um prompt de comandos.
+
+00:00:44.640 --> 00:00:46.360
+O PowerShell é uma plataforma completa de automação.
+
+00:00:46.880 --> 00:00:49.120
+Pense nele como um shell de linha de comando, uma linguagem de script
+
+00:00:49.120 --> 00:00:51.240
+e uma ferramenta de gerenciamento remoto, tudo em um só lugar.
+
+00:00:51.880 --> 00:00:53.960
+No shell de linha de comando, você digita comandos.
+
+00:00:53.960 --> 00:00:56.240
+E obtém resultados, mas também é uma linguagem de script
+
+00:00:56.240 --> 00:00:59.080
+que permite escrever programas autônomos e uma ferramenta de gerenciamento remoto
+
+00:00:59.080 --> 00:01:01.500
+que controla dezenas ou centenas de máquinas a partir de uma única janela.
+
+00:01:02.340 --> 00:01:06.040
+Há 20 anos, automatizar algo no Windows significava usar uma infinidade de ferramentas diferentes.
+
+00:01:06.680 --> 00:01:08.520
+Você usava arquivos em lote para tarefas simples,
+
+00:01:08.600 --> 00:01:10.660
+VBScript para as complexas e consoles administrativos
+
+00:01:10.660 --> 00:01:13.400
+separados para Exchange, Active Directory e servidores de arquivos.
+
+00:01:14.060 --> 00:01:15.180
+Nenhum deles se comunicava entre si.
+
+00:01:15.540 --> 00:01:18.860
+Você copiava dados de uma ferramenta, colava em outra e torcia para que nada fosse perdido.
+
+00:01:19.740 --> 00:01:20.760
+O PowerShell mudou tudo isso.
+
+00:01:20.760 --> 00:01:26.040
+A única ferramenta que se comunica é o próprio Windows, Azure, Microsoft 365, Exchange, Teams,
+
+00:01:26.360 --> 00:01:28.980
+SharePoint, Active Directory e até máquinas Linux agora.
+
+00:01:29.320 --> 00:01:32.620
+Você usa o mesmo idioma, os mesmos padrões, os mesmos comandos, não importa o que esteja acessando.
+
+00:01:33.180 --> 00:01:34.020
+E a multiplataforma.
+
+00:01:34.260 --> 00:01:38.000
+PowerShell 7 roda no Windows, Linux e Mac OS, portanto em um ambiente misto,
+
+00:01:38.060 --> 00:01:39.020
+você não precisa trocar de ferramenta.
+
+00:01:39.440 --> 00:01:39.960
+O ponto é o seguinte.
+
+00:01:40.520 --> 00:01:43.860
+Se você trabalha com TI, o PowerShell é o idioma do ecossistema Microsoft.
+
+00:01:44.540 --> 00:01:47.500
+É como você conversa com sua infraestrutura e automatiza as tarefas repetitivas
+
+00:01:47.500 --> 00:01:49.000
+para que possa focar nos problemas interessantes.
+
+00:01:49.000 --> 00:01:52.480
+Mas antes de entrarmos no que ele pode fazer, vamos ver como ele realmente funciona.
+
+00:01:53.440 --> 00:01:55.740
+Padrão Verbo Substantivo com os comandos do PowerShell funciona.
+
+00:01:56.180 --> 00:01:59.500
+Todo comando do PowerShell segue um padrão simples chamado Verbo Substantivo
+
+00:01:59.500 --> 00:02:00.700
+e é exatamente o que parece ser.
+
+00:02:01.180 --> 00:02:02.480
+O verbo diz o que você quer fazer.
+
+00:02:02.920 --> 00:02:03.900
+Get, set, new.
+
+00:02:04.300 --> 00:02:05.760
+Remove, start, stop.
+
+00:02:06.640 --> 00:02:10.600
+E o substantivo diz o que você está avisando, como Process, Service, User, Item ou Mailbox.
+
+00:02:11.120 --> 00:02:13.000
+Portanto, GetProcess traz uma lista dos processos.
+
+00:02:13.500 --> 00:02:15.400
+GetService mostra todos os serviços na sua marca.
+
+00:02:16.120 --> 00:02:17.320
+SetDate altera a hora do sistema.
+
+00:02:17.320 --> 00:02:18.740
+Stop, Service, Interviço.
+
+00:02:19.180 --> 00:02:23.300
+O padrão é tão consistente que, uma vez aprendido, você pode adivinhar comandos que nunca viu antes.
+
+00:02:23.960 --> 00:02:24.720
+Quer iniciar um serviço?
+
+00:02:25.180 --> 00:02:25.900
+Digite Start Server.
+
+00:02:26.220 --> 00:02:26.840
+Você removeu um usuário?
+
+00:02:27.280 --> 00:02:28.000
+Digite Renovuser.
+
+00:02:28.320 --> 00:02:29.220
+É simples assim.
+
+00:02:29.960 --> 00:02:31.700
+O PowerShell foi projetado para ser intuitivo.
+
+00:02:31.800 --> 00:02:33.720
+Então, você não precisa memorizar centenas de comandos.
+
+00:02:34.560 --> 00:02:35.940
+Seu melhor amigo aqui é o semidlet.
+
+00:02:36.040 --> 00:02:36.720
+GetCommand.
+
+00:02:37.380 --> 00:02:38.980
+Execute GetCommand on Service.
+
+00:02:39.500 --> 00:02:41.520
+E ele mostrará cada comando que funciona com serviços.
+
+00:02:42.240 --> 00:02:45.020
+GetService, StartService, StopService, RestartService.
+
+00:02:45.020 --> 00:02:46.880
+SetService, NewService, RemoveService.
+
+00:02:47.380 --> 00:02:48.680
+Todos eles bem ali, apenas perguntam.
+
+00:02:49.080 --> 00:02:50.240
+Deixe-me dar um exemplo concreto.
+
+00:02:50.720 --> 00:02:52.700
+Digamos que você queira saber quais comandos podem gerenciar para você.
+
+00:02:53.080 --> 00:02:54.480
+Você executa GetCommandOnProcess.
+
+00:02:55.060 --> 00:02:58.440
+Você recebe de volta GetProcess, StartProcess, DebugProcess, WaitProcess.
+
+00:02:59.160 --> 00:02:59.860
+Você não precisa adivinhar.
+
+00:03:00.240 --> 00:03:01.020
+A ferramenta lhe diz.
+
+00:03:01.520 --> 00:03:04.380
+É isso que torna o PowerShell tão diferente das ferramentas de linha de comando antigas,
+
+00:03:04.400 --> 00:03:06.140
+onde você tinha que memorizar cada flag e switch.
+
+00:03:06.700 --> 00:03:07.280
+E isso é importante.
+
+00:03:07.820 --> 00:03:09.840
+Você não aprende o PowerShell memorizando mil comandos.
+
+00:03:10.260 --> 00:03:12.500
+Você aprende o padrão e pode descobrir o resto conforme avança.
+
+00:03:12.500 --> 00:03:16.080
+É como aprender que todo verbo em um idioma segue a mesma conjugação.
+
+00:03:16.620 --> 00:03:18.580
+Uma vez que você conhece a regra, pode aplicá-la em qualquer lugar.
+
+00:03:18.900 --> 00:03:21.380
+Mas é aqui que o PowerShell realmente se diferencia de todo o resto.
+
+00:03:22.540 --> 00:03:23.320
+Objetos, não texto.
+
+00:03:23.400 --> 00:03:24.040
+O divisor de águas.
+
+00:03:24.540 --> 00:03:27.580
+Então aqui está o que torna o PowerShell fundamentalmente diferente de todas as ferramentas
+
+00:03:27.580 --> 00:03:28.640
+de linha de comando que vieram antes de ter.
+
+00:03:29.140 --> 00:03:30.720
+Linhas de comando tradicionais exibem texto.
+
+00:03:31.280 --> 00:03:33.700
+Executa um comando e obtém linhas de caracteres na tela.
+
+00:03:34.040 --> 00:03:34.500
+E é só isso.
+
+00:03:34.500 --> 00:03:38.500
+Se você quiser fazer algo com essa saída, precisa analisá-la, cortá-la, extrair as
+
+00:03:38.500 --> 00:03:41.000
+partes necessárias usando manipulação de string, e é frágil.
+
+00:03:41.980 --> 00:03:44.080
+Um espaço fora do lugar e todo o seu script quebra.
+
+00:03:44.920 --> 00:03:45.940
+PowerShell não funciona assim.
+
+00:03:47.220 --> 00:03:47.920
+Ele dá objetos.
+
+00:03:49.100 --> 00:03:51.380
+Quando você executa a getProcess, não recebe uma tabela de texto.
+
+00:03:51.620 --> 00:03:52.700
+Você recebe objetos de processo.
+
+00:03:53.140 --> 00:03:56.860
+Cada um tem propriedades como nome, id, cpu, memória, hora de início, e métodos como
+
+00:03:56.860 --> 00:03:57.100
+kill.
+
+00:03:57.480 --> 00:04:00.300
+Você pode extrair essas propriedades, filtrá-las, classificá-las e exportá-las.
+
+00:04:00.300 --> 00:04:04.080
+Você pode fazer coisas com os dados que levariam 20 linhas de análise de texto em
+
+00:04:04.080 --> 00:04:04.660
+um único comando.
+
+00:04:05.320 --> 00:04:06.000
+Isso é o que muda o jogo.
+
+00:04:06.400 --> 00:04:06.860
+Deixe-me mostrar.
+
+00:04:07.320 --> 00:04:10.780
+Do jeito antigo, usando o comando tasklist do prompt, você recebe uma tabela de texto.
+
+00:04:11.240 --> 00:04:14.820
+Se quiser encontrar processos usando mais de 50 de cpu ou precisa escrever uma lógica
+
+00:04:14.820 --> 00:04:18.640
+de análise, você precisa considerar larguras de colunas, espaçamentos e cabeçalhos.
+
+00:04:19.020 --> 00:04:20.320
+É confuso e quebra constantemente.
+
+00:04:20.820 --> 00:04:21.900
+O jeito PowerShell funciona assim.
+
+00:04:22.320 --> 00:04:25.600
+GetProcess direcionado para o AirObject com uma condição direcionada para export CSV.
+
+00:04:26.040 --> 00:04:26.500
+Isso é uma linha.
+
+00:04:26.780 --> 00:04:30.180
+Filtre apenas processos usando mais de 50 de cpu, salve um arquivo CSV.
+
+00:04:31.000 --> 00:04:33.020
+O que faz tudo isso funcionar é o sempre-let-get-member.
+
+00:04:33.540 --> 00:04:36.600
+Você direciona qualquer comando para a getmember e ele mostra todas as propriedades e métodos
+
+00:04:36.600 --> 00:04:36.880
+possuem.
+
+00:04:37.240 --> 00:04:38.280
+É como olhar debaixo do capô.
+
+00:04:38.920 --> 00:04:41.400
+Execute getProcess getmember e de repente você vê tudo.
+
+00:04:41.960 --> 00:04:47.140
+Nome, ID, handle, cpu, working set, hora de início e métodos como o Q, refresh, wait
+
+00:04:47.140 --> 00:04:47.600
+for exit.
+
+00:04:47.980 --> 00:04:49.440
+Você não precisa adivinhar quais dados estão disponíveis.
+
+00:04:49.760 --> 00:04:50.580
+Própria ferramenta de dizem.
+
+00:04:50.840 --> 00:04:51.840
+E que está um cenário do mundo real.
+
+00:04:52.100 --> 00:04:53.480
+Digamos que você administra servidores.
+
+00:04:53.480 --> 00:04:56.060
+Você precisa encontrar todos os serviços parados em todos eles.
+
+00:04:56.620 --> 00:04:58.660
+Do jeito antigo, você acessaria remotamente cada servidor.
+
+00:04:58.660 --> 00:05:00.960
+abrindo services.msc, checaria manualmente e anotaria.
+
+00:05:01.320 --> 00:05:01.900
+Isso leva horas.
+
+00:05:02.480 --> 00:05:03.720
+Do jeito PowerShell, você escreve um comando.
+
+00:05:04.380 --> 00:05:05.540
+GetService em cada máquina.
+
+00:05:05.660 --> 00:05:06.740
+Filtrar onde o status é parado.
+
+00:05:06.820 --> 00:05:07.680
+Exportar para um CSV.
+
+00:05:08.520 --> 00:05:09.800
+Um comando, 50 servidores.
+
+00:05:10.020 --> 00:05:10.800
+O mesmo resultado sempre.
+
+00:05:11.280 --> 00:05:12.340
+Nada de clicar em interface.
+
+00:05:12.500 --> 00:05:13.520
+Nada de anotações manuais.
+
+00:05:13.640 --> 00:05:15.100
+Nada de erros ao copiar dados entre janelas.
+
+00:05:15.560 --> 00:05:16.260
+É por isso que isso importa.
+
+00:05:16.840 --> 00:05:18.880
+Saída de objetos significa que você pode encadear comandos.
+
+00:05:18.960 --> 00:05:22.980
+A saída de um comando alimenta diretamente o próximo como dados estruturados.
+
+00:05:23.460 --> 00:05:24.380
+Você não está analisando textos.
+
+00:05:24.460 --> 00:05:25.260
+Está manipulando objetos.
+
+00:05:25.260 --> 00:05:29.500
+É a diferença entre organizar uma pilha de papéis soltos e trabalhar com um arquivo
+
+00:05:29.500 --> 00:05:31.100
+onde tudo tem uma etiqueta.
+
+00:05:31.920 --> 00:05:33.380
+Então agora você conhece o padrão do Pipeline.
+
+00:05:33.800 --> 00:05:35.320
+Vou falar sobre os comandos que você realmente vai usar.
+
+00:05:36.000 --> 00:05:37.380
+Os 5 grupos essenciais de 100 midlets.
+
+00:05:37.760 --> 00:05:40.580
+Você não precisa aprender centenas de 100 midlets para ser produtivo com PowerShell.
+
+00:05:40.940 --> 00:05:44.420
+Comece com 5 grupos e você cobrirá cerca de 80% que fará no dia a dia.
+
+00:05:45.200 --> 00:05:46.000
+O primeiro grupo é descobrir.
+
+00:05:46.460 --> 00:05:49.360
+É o mais importante porque ensina o PowerShell a partir de dentro dele mesmo.
+
+00:05:50.120 --> 00:05:51.440
+GetHelp, GetCommand, GetMember.
+
+00:05:51.520 --> 00:05:52.960
+Esses três são suas ferramentas de aprendizado.
+
+00:05:52.960 --> 00:05:55.640
+Você não precisa memorizar nada porque sempre pode consultar.
+
+00:05:56.280 --> 00:05:58.380
+O GetHelp mostra como usar qualquer comando.
+
+00:05:58.460 --> 00:05:59.940
+O GetCommand mostra quais comandos existem.
+
+00:06:00.040 --> 00:06:02.100
+O GetMember mostra quais dados esses comandos geram.
+
+00:06:02.760 --> 00:06:04.300
+Se não aprender mais nada, aprenda esses três.
+
+00:06:04.720 --> 00:06:07.620
+O segundo grupo é o sistema de arquivos, cobrindo as tarefas diárias de arquivos que
+
+00:06:07.620 --> 00:06:08.380
+você faz constantemente.
+
+00:06:09.100 --> 00:06:10.940
+O GetShieldItem lista arquivos e pastas.
+
+00:06:11.020 --> 00:06:12.000
+O CopyItem os copia.
+
+00:06:12.100 --> 00:06:13.140
+O RemoveItem os exclui.
+
+00:06:13.260 --> 00:06:15.000
+E o GetContent lê o conteúdo dos arquivos.
+
+00:06:15.620 --> 00:06:18.520
+Você pode fazer em uma linha, o que levaria vários cliques em janelas de pastas.
+
+00:06:19.180 --> 00:06:21.640
+O terceiro grupo é o sistema, gerenciando o que está em execução na sua máquina.
+
+00:06:21.640 --> 00:06:24.540
+O GetProcess mostra processos em execução.
+
+00:06:24.740 --> 00:06:25.960
+O GetService mostra serviços.
+
+00:06:26.060 --> 00:06:29.540
+Se o StartService os controla, o RestartComputer reinicia uma máquina.
+
+00:06:29.980 --> 00:06:32.640
+Se você já abriu o Gerenciador de Tarefas ou o Services.msc,
+
+00:06:32.740 --> 00:06:35.540
+esses comandos substituem tudo isso e funcionam remotamente.
+
+00:06:36.100 --> 00:06:38.480
+Você pode verificar serviços em 100 máquinas sem sair da sua mesa.
+
+00:06:39.000 --> 00:06:41.680
+O quarto grupo é a filtragem e formatação onde o Pipeline realmente brilha.
+
+00:06:42.300 --> 00:06:44.080
+O WearObject filtra dados com base em condições.
+
+00:06:44.400 --> 00:06:46.600
+O SelectObject escolhe quais propriedades você quer ver.
+
+00:06:46.600 --> 00:06:50.000
+O SortObject ordena seus resultados e o GroupObject os agrega.
+
+00:06:50.540 --> 00:06:52.980
+Esses CMDlets transformam dados brutos em informações úteis.
+
+00:06:53.440 --> 00:06:55.420
+Sem eles, você está apenas despejando dados na tela.
+
+00:06:55.960 --> 00:06:58.700
+Com eles, você pode fazer perguntas específicas e obter respostas específicas.
+
+00:06:59.040 --> 00:07:00.800
+Com o grupo é exportação, como se salva seu trabalho.
+
+00:07:01.320 --> 00:07:04.100
+O ExportCSV grava em um arquivo que você pode abrir no Excel.
+
+00:07:04.320 --> 00:07:05.760
+O AltFile grava em um arquivo de texto.
+
+00:07:05.940 --> 00:07:08.040
+E o ConvertToJSON converte para o formato JSON.
+
+00:07:08.520 --> 00:07:12.140
+Esses CMDlets permitem que você transforme seus comandos em relatórios, logs ou arquivos de dados.
+
+00:07:12.560 --> 00:07:14.300
+Você executa um comando, filtra os resultados e são.
+
+00:07:14.300 --> 00:07:15.880
+Isso é um relatório, isso é automação.
+
+00:07:16.560 --> 00:07:17.860
+Aqui está um exemplo rápido para cada gol.
+
+00:07:18.260 --> 00:07:22.520
+Com o descoberto, você executaria GetCommandNonService para ver todos os comandos relacionados a serviço.
+
+00:07:23.420 --> 00:07:26.620
+No sistema de arquivos, GetShieldItemC, LogsRecursive,
+
+00:07:27.140 --> 00:07:30.680
+WhereObjectLengthGT10MBB encontra arquivos de log grandes.
+
+00:07:31.540 --> 00:07:32.600
+Para sistema GetService,
+
+00:07:33.160 --> 00:07:35.880
+WhereObjectStatusXToppied lista serviços parados.
+
+00:07:36.600 --> 00:07:37.960
+Para filtragem, GetProcess,
+
+00:07:38.520 --> 00:07:39.800
+SortObjectCPUDescending,
+
+00:07:40.340 --> 00:07:43.520
+SelectFirst, 5 mostros, 5 maiores consumidores de CPU.
+
+00:07:43.520 --> 00:07:44.400
+E para exportação,
+
+00:07:45.040 --> 00:07:45.660
+GetService,
+
+00:07:46.220 --> 00:07:47.200
+ExportCSVSus.
+
+00:07:47.520 --> 00:07:48.600
+CSV salva tudo em um arquivo.
+
+00:07:48.960 --> 00:07:49.640
+Por isso que isso importa.
+
+00:07:50.180 --> 00:07:52.900
+Esses 5 grupos cobrem a vasta maioria do que você fará.
+
+00:07:53.560 --> 00:07:56.080
+Você não precisa ser um especialista em PowerShell, apenas saiba por onde começar.
+
+00:07:56.620 --> 00:07:58.900
+E o melhor lugar para começar é o grupo que te ensina tudo o resto.
+
+00:07:59.500 --> 00:08:00.440
+Vamos falar sobre o Descoberto.
+
+00:08:01.320 --> 00:08:02.040
+Descoberto é primeiro.
+
+00:08:02.300 --> 00:08:03.840
+GetHelp, GetCommand, GetMember.
+
+00:08:04.600 --> 00:08:07.200
+Deixe-me falar sobre o sempre let mais importante que você aprenderá.
+
+00:08:07.360 --> 00:08:09.600
+O GetHelp é um manual integrado do PowerShell.
+
+00:08:09.600 --> 00:08:13.060
+Digite GetHelp seguido de qualquer nome de comando
+
+00:08:13.060 --> 00:08:16.580
+e ele mostrará a sintaxe, parâmetros e, o mais importante, exemplos práticos.
+
+00:08:17.060 --> 00:08:18.820
+Você não precisa pesquisar na internet ou memorizar nada.
+
+00:08:19.540 --> 00:08:21.200
+A documentação está ali mesmo, dentro da ferramenta.
+
+00:08:21.940 --> 00:08:23.500
+Digamos que você queira entender como GetProcess.
+
+00:08:24.120 --> 00:08:25.660
+Digite GetHelp, GetProcess,
+
+00:08:25.980 --> 00:08:29.180
+e ele mostrará a sintaxe, quais parâmetros aceita e o que cada um faz.
+
+00:08:29.700 --> 00:08:31.920
+Mas o verdadeiro ouro está nos exemplos GetHelp, GetProcess.
+
+00:08:31.920 --> 00:08:35.200
+Os exemplos vão direto ao ponto com códigos que você pode copiar.
+
+00:08:35.720 --> 00:08:37.640
+É assim que você aprende o PowerShell dentro do PowerShell.
+
+00:08:38.380 --> 00:08:39.320
+Depois temos o GetCommand.
+
+00:08:39.820 --> 00:08:42.640
+Este semidlet lista tudo o que está disponível na sua sessão.
+
+00:08:42.860 --> 00:08:44.660
+Cada semidlet função e script.
+
+00:08:45.240 --> 00:08:46.100
+E você pode filtrar aí.
+
+00:08:46.500 --> 00:08:47.300
+GetCommandVerb.
+
+00:08:48.300 --> 00:08:51.000
+O Get mostra todos os comandos Get, dos quais existem sem tempo.
+
+00:08:51.640 --> 00:08:55.400
+GetProcess, GetService, GetDate, GetItem, GetShutItem, GetContent.
+
+00:08:56.400 --> 00:08:57.680
+Todos eles apenas perguntam.
+
+00:08:58.340 --> 00:09:00.980
+GetCommandNowService mostra todos os comandos que funcionam com o serviço.
+
+00:09:00.980 --> 00:09:05.980
+GetService, StartService, JustStartService, SetService, NewService, NewService, RemoveService.
+
+00:09:06.360 --> 00:09:07.600
+Você não precisa adivinhar o que está disponível.
+
+00:09:08.000 --> 00:09:08.640
+A ferramenta ele diz.
+
+00:09:09.040 --> 00:09:09.900
+Então temos o GetMember.
+
+00:09:10.680 --> 00:09:11.520
+Em que ele desbloqueia tudo.
+
+00:09:12.160 --> 00:09:14.020
+Use o pipe de qualquer comando para o GetMember.
+
+00:09:14.220 --> 00:09:16.820
+E ele mostrará o que há dentro dos objetos que aquele comando retorna.
+
+00:09:18.260 --> 00:09:18.940
+Elis a GetProcess.
+
+00:09:19.400 --> 00:09:19.840
+GetMember.
+
+00:09:20.340 --> 00:09:22.600
+E você verá todas as propriedades e métodos dos objetos de processo.
+
+00:09:23.440 --> 00:09:26.120
+Nome, ID, CPU, conjunto de trabalho.
+
+00:09:26.620 --> 00:09:29.360
+Hora de início e métodos como Q, Refresh, WaitForExit.
+
+00:09:29.360 --> 00:09:31.620
+Você não precisa se perguntar quais dados estão disponíveis.
+
+00:09:31.940 --> 00:09:33.000
+Você pode inspecioná-los diretamente.
+
+00:09:33.400 --> 00:09:34.040
+Por que isso importa?
+
+00:09:34.640 --> 00:09:35.720
+Você nunca precisa memorizar tudo.
+
+00:09:36.380 --> 00:09:37.320
+Você pode aprender conforme a vã.
+
+00:09:38.380 --> 00:09:39.780
+GetHelp ensina como usar comandos.
+
+00:09:39.860 --> 00:09:41.420
+GetCommand mostra quais comandos existem.
+
+00:09:41.520 --> 00:09:43.600
+GetMember mostra quais dados esses comandos retornam.
+
+00:09:44.400 --> 00:09:46.080
+Estes três semidlets são seus ferramenizados.
+
+00:09:46.500 --> 00:09:47.360
+Eles tornam o PowerShell autodocumentado.
+
+00:09:48.580 --> 00:09:52.160
+Uma vez que você saiba que está disponível, o próximo passo é moldar esses dados em algo útil.
+
+00:09:53.140 --> 00:09:55.360
+Filtrar, moldar e exportar, transformando comandos em relatórios.
+
+00:09:56.580 --> 00:09:57.700
+Aqui está o ponto sobre o PowerShell.
+
+00:09:57.700 --> 00:09:59.580
+O poder não está em nenhum comando único.
+
+00:09:59.680 --> 00:10:01.260
+Está em como você os combina através da pipeline.
+
+00:10:01.920 --> 00:10:06.740
+Você pega a saída de um centímetro let, envia para outro e constrói operações complexas a partir de blocos simples.
+
+00:10:08.440 --> 00:10:11.440
+WearObject é seu filtro que só passa objetos que correspondam à sua condição.
+
+00:10:12.580 --> 00:10:13.280
+Então, GetService.
+
+00:10:13.860 --> 00:10:15.180
+WearObjectStatusEcRunning.
+
+00:10:15.600 --> 00:10:17.220
+Lhe dá apenas os serviços em execução.
+
+00:10:17.800 --> 00:10:19.640
+Nada de rolar por uma lista de 100 serviços.
+
+00:10:20.100 --> 00:10:21.280
+O comando faz a filtragem para você.
+
+00:10:21.760 --> 00:10:22.340
+SelectObject.
+
+00:10:22.460 --> 00:10:23.920
+Cole quais propriedades você deseja ver.
+
+00:10:25.280 --> 00:10:26.540
+GetProcessSelectObjectName.
+
+00:10:26.540 --> 00:10:29.780
+CPUWorkingSet retorna apenas os dados que lhe interessam.
+
+00:10:30.660 --> 00:10:35.280
+Ele remove handles, memória paginada e IDs de sessão, deixando apenas as colunas que você solicitou.
+
+00:10:35.940 --> 00:10:38.680
+É assim que você transforma uma parede de dados em uma tabela limpa e elegível.
+
+00:10:39.580 --> 00:10:40.760
+SortObject organiza esse resultado.
+
+00:10:41.520 --> 00:10:42.420
+GetProcessSortObjectCPU.
+
+00:10:42.420 --> 00:10:50.580
+ObjectCPU Descending mostra primeiro os processos que mais consomem CPU, para que você encontre o problema imediatamente, em vez de procurar em uma lista desordenada.
+
+00:10:51.360 --> 00:10:53.980
+ExportCSV salva tudo em um arquivo que você pode abrir no Excel.
+
+00:10:54.580 --> 00:10:55.580
+É aqui que a mágica acontece.
+
+00:10:56.100 --> 00:10:58.080
+Você executa um comando, filtra, formate e salva.
+
+00:10:58.660 --> 00:10:59.880
+Isso é um relatório, isso é automação.
+
+00:11:00.480 --> 00:11:01.560
+Aqui está o padrão completo, mundo.
+
+00:11:01.560 --> 00:11:16.580
+É um comando que obtém todos os serviços, filtra apenas os interrompidos, escolhe apenas o nome e o nome de exibição, e salva o resultado em um arquivo CSV.
+
+00:11:17.200 --> 00:11:19.980
+Você pode executar isso em uma máquina ou em 100, e obtém o mesmo resultado sempre.
+
+00:11:20.540 --> 00:11:23.680
+Isso substitui horas de cliques em interfaces gráficas e copiar e colar manualmente.
+
+00:11:23.680 --> 00:11:31.180
+Em vez de abrir o services.mc, em cada servidor, rolar a lista, anotar o que está parado e digitar em uma planilha, você executa um único comando.
+
+00:11:32.140 --> 00:11:33.780
+Leva segundos, é preciso e é repetível.
+
+00:11:34.740 --> 00:11:35.160
+Isso é importante.
+
+00:11:35.740 --> 00:11:37.340
+Você deixa de ser reativo para ser proativo.
+
+00:11:37.900 --> 00:11:39.460
+Você pode executar esse relatório de forma agendária.
+
+00:11:39.880 --> 00:11:43.580
+Toda manhã, um script verifica seu serviço, exporta os resultados e envia por e-mail para você.
+
+00:11:44.260 --> 00:11:48.020
+Você identifica problemas nas questões de emergência, porque sabe o que está rodando, o que está parado e o que precisa de atenção.
+
+00:11:48.760 --> 00:11:51.260
+Em vez de esperar algo quebrar, você se antecipa.
+
+00:11:51.260 --> 00:11:55.100
+Então, agora você tem as peças, as ferramentas de descoberta para saber o que está disponível,
+
+00:11:55.220 --> 00:11:58.720
+as de filtragem para encontrar o que importa e as de exportação para salvar seus resultados.
+
+00:11:59.560 --> 00:12:01.460
+Vamos ver como tudo se encaixa em um sistema único.
+
+00:12:03.040 --> 00:12:05.200
+Como tudo se conecta, o pipeline é em ação.
+
+00:12:05.760 --> 00:12:08.040
+O pipeline é o coração do PowerShell, não apenas um recurso.
+
+00:12:08.560 --> 00:12:12.880
+Cada semidlet gera objetos e o pipeline envia esses objetos diretamente para o próximo semidlet.
+
+00:12:13.300 --> 00:12:15.800
+Essa ideia simples é o que torna o PowerShell tão poderoso.
+
+00:12:16.220 --> 00:12:19.420
+Você constrói operações complexas a partir de blocos simples, um pipe por vez.
+
+00:12:19.880 --> 00:12:20.900
+Deixe-me dar um cenário real.
+
+00:12:21.500 --> 00:12:23.460
+Digamos que um usuário ligue porque sua conta foi bloqueada.
+
+00:12:23.860 --> 00:12:24.740
+Isso acontece o tempo todo.
+
+00:12:25.180 --> 00:12:28.480
+Alguém digita a senha corretamente várias vezes e, de repente, não consegue mais fazer login.
+
+00:12:29.000 --> 00:12:30.600
+A maneira antiga de lidar com isso é um encontro.
+
+00:12:31.260 --> 00:12:33.320
+Você abre o Active Directory Users and Computers.
+
+00:12:33.580 --> 00:12:36.460
+Percorre a lista, encontra o usuário, clica com o botão direito.
+
+00:12:36.580 --> 00:12:40.620
+Verifica a conta, desbloqueia, abre o visualizador de eventos para encontrar o evento de bloqueio
+
+00:12:40.620 --> 00:12:42.440
+e anota manualmente a hora e a origem.
+
+00:12:42.440 --> 00:12:46.400
+Todo esse processo leva de 5 a 10 minutos por usuário.
+
+00:12:46.520 --> 00:12:49.060
+E se vários usuários ligarem, você gasta a manhã inteira nisso.
+
+00:12:50.240 --> 00:12:51.720
+O modo PowerShell é completamente diferente.
+
+00:12:52.600 --> 00:12:57.520
+Um comando, Get a Dozer, com filtro Lockdown Check True, encontra todas as contas bloqueadas no seu domínio.
+
+00:12:58.420 --> 00:13:00.200
+Então você envia o resultado para o Lockdown Account e é só isso.
+
+00:13:00.620 --> 00:13:03.020
+O script encontra as contas bloqueadas e as desbloqueia.
+
+00:13:03.100 --> 00:13:05.840
+Então você envia o resultado para uma função de log e o exporta para um relatório.
+
+00:13:06.280 --> 00:13:09.240
+Tem um registro do que aconteceu, quando aconteceu e quais contas foram afetadas.
+
+00:13:09.360 --> 00:13:10.520
+Tudo em uma linha de código.
+
+00:13:11.120 --> 00:13:11.800
+E aqui está o detalhe.
+
+00:13:11.880 --> 00:13:13.240
+O mesmo padrão funciona em todos os lugares.
+
+00:13:14.080 --> 00:13:17.520
+Caixas de correio do Exchange, canais do Teams, sites do SharePoint, recursos do Azure,
+
+00:13:17.520 --> 00:13:19.720
+semidlets mudam, mas o pipeline permanece o mesmo.
+
+00:13:20.400 --> 00:13:22.700
+Você obtém algo, filtra, executa uma ação e salva o resultado.
+
+00:13:23.160 --> 00:13:24.280
+Por exemplo, Get Mailbox.
+
+00:13:24.280 --> 00:13:27.880
+Filtrar por uma condição, definir uma propriedade, exportar para CSV ou obter equipe.
+
+00:13:27.980 --> 00:13:30.960
+Filtrar por membros, adicionar um membro e registrar a alteração.
+
+00:13:31.580 --> 00:13:32.840
+O padrão é idêntico todas as vezes.
+
+00:13:33.220 --> 00:13:33.860
+Por que isso importa?
+
+00:13:34.280 --> 00:13:36.860
+Depois que você entende o pipeline, pode automatizar quase tudo.
+
+00:13:37.400 --> 00:13:41.220
+O padrão ou mesmo esteja você gerenciando um usuário ou mil, um servidor ou sem.
+
+00:13:41.780 --> 00:13:44.020
+Você aprende o padrão uma vez e o aplica em todos os lugares.
+
+00:13:44.740 --> 00:13:46.400
+Muito bem, você viu o que é e como funciona.
+
+00:13:46.860 --> 00:13:48.460
+Agora vamos falar sobre o que você deve fazer a seguir.
+
+00:13:49.500 --> 00:13:50.660
+Seus primeiros passos na automação.
+
+00:13:51.180 --> 00:13:51.840
+Então por onde começar?
+
+00:13:51.840 --> 00:13:54.560
+Abra o PowerShell Execute Get Help para começar a explorar.
+
+00:13:55.480 --> 00:13:57.580
+Digite Get Help Get Process e veja o que ele mostra.
+
+00:13:58.260 --> 00:14:01.520
+Depois, digite Get Help Get Service Exemplos e veja os exemplos práticos.
+
+00:14:01.940 --> 00:14:03.760
+É assim que você aprende a ferramenta dentro da própria ferramenta.
+
+00:14:04.560 --> 00:14:06.780
+Sem precisar pesquisar na internet ou assistir a tutoriais.
+
+00:14:07.360 --> 00:14:08.160
+Documentação está bem ali.
+
+00:14:08.680 --> 00:14:10.240
+Em seguida, escolha uma tarefa que você faz toda semana.
+
+00:14:10.600 --> 00:14:12.800
+Talvez seja verificar quais serviços estão rodando em um servidor,
+
+00:14:12.940 --> 00:14:15.040
+listar arquivos em uma pasta ou exportar um relatório.
+
+00:14:15.640 --> 00:14:17.060
+Escreva uma linha de comando para isso e comece.
+
+00:14:17.620 --> 00:14:18.480
+Algo como Get Service.
+
+00:14:18.480 --> 00:14:20.440
+Where Object Status Exeg Running.
+
+00:14:21.020 --> 00:14:21.640
+Isso é uma linha de comando.
+
+00:14:22.160 --> 00:14:23.240
+Execute e veja sair de sal.
+
+00:14:23.660 --> 00:14:25.580
+Isso acabou de automatizar algo que costumava fazer a manuíra.
+
+00:14:26.060 --> 00:14:28.360
+Depois, use Get Command e Get Member para descobrir o que é possível.
+
+00:14:28.860 --> 00:14:31.520
+Você não precisa saber tudo de antemão, apenas como encontrar o que precisa.
+
+00:14:32.640 --> 00:14:35.560
+Get Command da Non-Service mostra todos os comandos relacionados a serviços
+
+00:14:35.560 --> 00:14:39.560
+e Get Process e Get Member mostra todas as propriedades dos objetos de processo.
+
+00:14:40.360 --> 00:14:42.160
+A ferramenta diz o que pode fazer, você só precisa perguntar.
+
+00:14:42.160 --> 00:14:43.660
+O melhor primeiro passo é assim.
+
+00:14:44.260 --> 00:14:45.860
+Automatize a tarefa que você faz com mais frequência.
+
+00:14:45.860 --> 00:14:48.140
+Mesmo um comando simples de uma linha economiza seu tempo.
+
+00:14:48.620 --> 00:14:51.620
+Se você verifica serviços toda manhã, escreva uma linha de comando que os verifique para você.
+
+00:14:52.140 --> 00:14:55.120
+Se você limpa arquivos temporários toda semana, escreva uma linha de comando que faça isso.
+
+00:14:55.480 --> 00:14:56.600
+Comece pequeno e evolua a partir daí.
+
+00:14:57.120 --> 00:14:58.220
+Agora, por onde seguir daqui?
+
+00:14:58.780 --> 00:15:01.160
+O Microsoft Learn tem caminhos de aprendizado gratuitos sobre...
+
+00:15:01.160 --> 00:15:03.760
+Eles são estruturados, práticos e totalmente gratuitos.
+
+00:15:04.400 --> 00:15:06.540
+PowerShell Gallery tem milhares de módulos da comunidade,
+
+00:15:06.660 --> 00:15:09.660
+então alguém provavelmente já criou um módulo para o que você está tentando fazer.
+
+00:15:09.660 --> 00:15:11.120
+Você não precisa reinventar a roda.
+
+00:15:11.560 --> 00:15:13.240
+PowerShell é uma habilidade, não apenas uma ferramenta.
+
+00:15:13.240 --> 00:15:15.080
+Quanto mais você usa, mais as coisas fazem sentido.
+
+00:15:15.480 --> 00:15:16.460
+Você não precisa ser um desenvolvedor.
+
+00:15:17.000 --> 00:15:17.760
+Você só precisa começar.
+
+00:15:18.360 --> 00:15:20.340
+Dez minutos por dia são suficientes para construir uma capacidade.
+
+00:15:20.740 --> 00:15:22.560
+Execute um comando hoje, execute dois amanhã,
+
+00:15:22.800 --> 00:15:25.120
+e antes que perceba estará automatizando coisas que nunca imaginou ser capaz.
+
+00:15:25.640 --> 00:15:29.120
+Então esse é o PowerShell, a linguagem que conecta todo o ecossistema Microsoft.
+
+00:15:29.840 --> 00:15:32.040
+Abra o E-Execute Get Process para ver como funciona.
+
+00:15:32.640 --> 00:15:34.380
+Depois inscreva-se para mais pílulas de conhecimento
+
+00:15:34.380 --> 00:15:36.300
+e deixe um comentário sobre o que você deseja automatizar.
+
+00:15:36.300 --> 00:15:38.180
+Qual é uma tarefa que você gostaria de automatizar?
+
+00:15:38.640 --> 00:15:38.860
+E como?
+
+00:15:39.280 --> 00:15:40.640
+Posso abordar isso em um futuro episódio.

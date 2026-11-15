@@ -1,0 +1,2461 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:06.580
+Pronto para 10 dias de Microsoft 365, Copilot e Azure e as pessoas que estão moldando o futuro do trabalho.
+
+00:00:07.480 --> 00:00:12.020
+Em janeiro, a M3 Agente C5.com está de volta e vamos fazer algo ainda maior.
+
+00:00:12.860 --> 00:00:18.100
+Junte-se a nós para sessões ao vivo, demonstrações reais e conhecimento prático de MVPs e especialistas do setor em todo o mundo.
+
+00:00:18.840 --> 00:00:21.200
+Nada de slide genérico, nada de termos técnicos em nada.
+
+00:00:21.900 --> 00:00:23.480
+Estamos enfrentando os desafios reais.
+
+00:00:23.620 --> 00:00:28.940
+Copilot Studio, agentes de A, fábrica, segurança, governança e automação e automação.
+
+00:00:28.940 --> 00:00:34.300
+Seja você um profissional de TI, desenvolvedor ou líder de negócios, há sessões criadas para você.
+
+00:00:35.520 --> 00:00:39.960
+Com 10 dias completos, você pode explorar várias tecnologias e se conectar com uma comunidade global.
+
+00:00:40.960 --> 00:00:44.160
+Assista ao vivo e leve insights práticos de volta para a sua organização.
+
+00:00:45.140 --> 00:00:48.880
+Janeiro de 2027, 10 dias, uma única comunidade Microsoft.
+
+00:00:49.380 --> 00:00:50.480
+As inscrições já estão abertas.
+
+00:00:51.920 --> 00:00:54.720
+Garanta sua vaga hoje mesmo.
+
+00:00:54.720 --> 00:00:58.380
+Acesse m3m5.com.net
+
+00:00:58.380 --> 00:01:04.560
+Inscreva-se agora em m3m5.com.net e nos vemos ao vivo em janeiro.
+
+00:01:05.300 --> 00:01:07.260
+O contrato assinado desaparece em uma pasta compartilhada.
+
+00:01:07.880 --> 00:01:11.380
+Ninguém sabe quem removeu, se deveria existir ou se uma cópia está em outro lugar.
+
+00:01:12.380 --> 00:01:14.200
+Com registros em papel, o processo era mais direto.
+
+00:01:14.920 --> 00:01:20.100
+Você tinha um arquivo, uma gaveta trancada e um cronograma de retenção que dizia exatamente quanto tempo manter cada caixa.
+
+00:01:20.100 --> 00:01:23.220
+Então, em uma data planejada, alguém aprovava destruição.
+
+00:01:23.940 --> 00:01:25.220
+O trabalho não acontece mais desse jeito.
+
+00:01:25.580 --> 00:01:27.160
+Um contrato pode estar no SharePoint.
+
+00:01:27.380 --> 00:01:30.000
+O e-mail de aprovação no Exchange Online e a discussão no Teams.
+
+00:01:30.360 --> 00:01:32.320
+Enquanto alguém tem uma cópia no OneDrive.
+
+00:01:32.920 --> 00:01:34.620
+Então, o que exatamente mantém tudo isso sob controle?
+
+00:01:35.140 --> 00:01:38.980
+O gerenciamento de registros do Microsoft Purview é a parte do Microsoft Purview
+
+00:01:38.980 --> 00:01:43.020
+que ajuda a sua organização a manter registros oficiais protegidos pelo tempo necessário
+
+00:01:43.020 --> 00:01:45.600
+e depois descartá-los de forma controlada.
+
+00:01:46.800 --> 00:01:49.060
+Isso parece simples, mas o risco de errar é sério.
+
+00:01:49.060 --> 00:01:52.700
+Se alguém perguntar por que você manteve um documento, o alterou ou excluiu,
+
+00:01:53.140 --> 00:01:54.780
+achamos que foi isso que aconteceu, não é uma boa resposta.
+
+00:01:55.160 --> 00:01:58.420
+Você precisa de uma regra clara, um processo claro e histórico do que as pessoas fizeram.
+
+00:01:58.620 --> 00:02:00.940
+Pense no Microsoft 365 como um prédio de escritórios humanos.
+
+00:02:01.420 --> 00:02:04.960
+SharePoint, OneDrive, Exchange Online e Teams são as salas onde o trabalho acontece.
+
+00:02:05.540 --> 00:02:07.860
+O gerenciamento de registros do Purview trabalha nos bastidores.
+
+00:02:08.260 --> 00:02:10.260
+Não é outro aplicativo onde a maioria dos funcionários passa o dia.
+
+00:02:10.940 --> 00:02:12.900
+É mais como um escritório de registros no subsolo,
+
+00:02:12.900 --> 00:02:15.100
+definindo regras sobre quais documentos se tornam oficiais,
+
+00:02:15.160 --> 00:02:16.860
+quanto tempo ficam e quando podem sair do prédio.
+
+00:02:16.860 --> 00:02:21.020
+Nesta pílula de conhecimento, primeiro separaremos um arquivo comum de um registro oficial.
+
+00:02:21.280 --> 00:02:24.160
+Depois veremos a regra aplicada a esse registro, os controles que o protegem,
+
+00:02:24.220 --> 00:02:27.600
+a revisão antes da exclusão e o histórico de auditoria que ajuda a mostrar o que aconteceu.
+
+00:02:28.220 --> 00:02:30.760
+Primeiro precisamos responder a pergunta por trás de toda a regra de registro,
+
+00:02:31.240 --> 00:02:32.460
+que realmente conta como um registro.
+
+00:02:33.220 --> 00:02:34.620
+Um registro é mais do que apenas um arquivo.
+
+00:02:35.140 --> 00:02:37.780
+Um registro é a prova oficial de que sua organização fez algo,
+
+00:02:37.860 --> 00:02:40.000
+decidiu algo, aprovou algo ou concordou com algo.
+
+00:02:40.000 --> 00:02:43.200
+Isso pode ser um contrato assinado, um relatório financeiro final,
+
+00:02:43.620 --> 00:02:45.700
+um registro funcionário ou uma política aprovada da empresa.
+
+00:02:46.360 --> 00:02:47.540
+A palavra oficial é importante aqui.
+
+00:02:47.980 --> 00:02:51.900
+Sua equipe pode criar 10 rascunhos de uma política antes que a liderança aprove a versão final.
+
+00:02:52.860 --> 00:02:54.440
+Esses rascunhos fazem parte do trabalho,
+
+00:02:54.780 --> 00:02:58.180
+mas não tem o mesmo peso da política aprovada que orienta o que as pessoas devem fazer.
+
+00:02:59.040 --> 00:02:59.720
+Pense em um contrato.
+
+00:02:59.980 --> 00:03:03.040
+Enquanto as pessoas negociam, você tem documentos do Word com alterações rastreadas,
+
+00:03:03.120 --> 00:03:06.560
+comentários e nomes como Contrato Final V3 ou Contrato Final V3 Realmente Final.
+
+00:03:06.560 --> 00:03:09.300
+Esses são arquivos de trabalho que as pessoas esperam que mudam.
+
+00:03:10.180 --> 00:03:11.160
+Então, o acordo é assinado,
+
+00:03:11.200 --> 00:03:13.980
+e essa cópia assinada se torna a prova do que ambos os lados concordaram.
+
+00:03:14.500 --> 00:03:16.900
+O e-mail que confirma a aprovação final também pode ser importante.
+
+00:03:17.480 --> 00:03:19.000
+E esses itens precisam de mais cuidado,
+
+00:03:19.120 --> 00:03:20.620
+pois podem responder a uma pergunta a nós depois.
+
+00:03:21.280 --> 00:03:21.640
+Concordamos.
+
+00:03:22.040 --> 00:03:22.640
+Quem aprovou isso?
+
+00:03:22.920 --> 00:03:23.740
+Quando o acordo terminou,
+
+00:03:24.020 --> 00:03:25.980
+é por isso que nem todo arquivo deve receber o mesmo tratamento.
+
+00:03:26.500 --> 00:03:28.040
+Se você tratar cada rascunho em chat,
+
+00:03:28.180 --> 00:03:29.720
+nota e download como um registro formal,
+
+00:03:29.940 --> 00:03:32.140
+criará uma enorme pilha de conteúdo difícil de gerenciar.
+
+00:03:32.820 --> 00:03:34.520
+Você também retém mais informações do que realmente precisa.
+
+00:03:34.520 --> 00:03:36.740
+Mas, se você não proteger os itens oficiais,
+
+00:03:36.840 --> 00:03:39.060
+pode perder as evidências nas quais sua organização confia.
+
+00:03:39.460 --> 00:03:41.040
+O gerenciamento de registros ajuda você a traçar.
+
+00:03:41.380 --> 00:03:42.580
+Para cada tipo de registro,
+
+00:03:42.660 --> 00:03:44.600
+sua organização precisa de uma regra simples com três partes.
+
+00:03:45.000 --> 00:03:46.160
+Primeiro, o gatilho de retenção.
+
+00:03:47.120 --> 00:03:47.740
+O que inicia a contar?
+
+00:03:48.500 --> 00:03:49.380
+Às vezes é simples.
+
+00:03:49.740 --> 00:03:51.020
+Você pode reter um relatório final
+
+00:03:51.020 --> 00:03:53.260
+por um número definido de anos após a criação do arquivo.
+
+00:03:53.800 --> 00:03:55.680
+Outros registros seguem o evento de negócio.
+
+00:03:56.160 --> 00:03:57.600
+Um contrato pode precisar ser mantido
+
+00:03:57.600 --> 00:03:59.000
+por alguns anos após o término do contrato.
+
+00:03:59.540 --> 00:04:01.300
+Um arquivo de funcionário pode precisar ser mantido
+
+00:04:01.300 --> 00:04:02.580
+por um período após a saída do colaborador.
+
+00:04:02.580 --> 00:04:05.080
+Em ambos os casos, a data de criação do arquivo
+
+00:04:05.080 --> 00:04:05.880
+não é a data principal.
+
+00:04:06.360 --> 00:04:07.240
+O evento de negócio é o que importa.
+
+00:04:08.440 --> 00:04:09.480
+Segundo, o período de retenção.
+
+00:04:09.560 --> 00:04:10.680
+Por quanto tempo você o mantém?
+
+00:04:11.220 --> 00:04:12.520
+Sua organização decide isso com base
+
+00:04:12.520 --> 00:04:14.020
+em suas próprias necessidades de negócios,
+
+00:04:14.120 --> 00:04:15.060
+jurídicas e de conformidade.
+
+00:04:15.680 --> 00:04:17.000
+Por vir ou não decide se um contrato
+
+00:04:17.000 --> 00:04:18.780
+deve ser mantido por cinco ou sete anos.
+
+00:04:19.520 --> 00:04:21.260
+As pessoas responsáveis pelo processo de negócio,
+
+00:04:21.380 --> 00:04:23.160
+juntamente com as equipes jurídicas ou de conformidade,
+
+00:04:23.300 --> 00:04:23.920
+decidem essa regra.
+
+00:04:24.660 --> 00:04:26.240
+Terceiro, o que acontece quando o prazo termina?
+
+00:04:26.240 --> 00:04:28.300
+Talvez o registro possa ser excluído.
+
+00:04:28.500 --> 00:04:29.900
+Talvez alguém precise revisá-lo antes.
+
+00:04:30.060 --> 00:04:31.740
+Ou talvez outro processo de negócio precise ocorrer
+
+00:04:31.740 --> 00:04:32.400
+antes do descarte.
+
+00:04:32.960 --> 00:04:34.700
+O segredo é que a ação final deve ser planejada
+
+00:04:34.700 --> 00:04:36.500
+desde o início e não adivinhada anos depois,
+
+00:04:36.620 --> 00:04:37.880
+quando as pastas já estão cheias.
+
+00:04:38.760 --> 00:04:39.700
+Voltar aquele contrato assinado.
+
+00:04:40.100 --> 00:04:41.260
+A regra poderia ser assim.
+
+00:04:41.720 --> 00:04:43.320
+Mantenha o contrato assinado por sete anos
+
+00:04:43.320 --> 00:04:44.660
+após o vencimento e, em seguida,
+
+00:04:45.080 --> 00:04:46.500
+envia para a revisão antes da exclusão.
+
+00:04:47.220 --> 00:04:48.880
+Essa única frase fornece o gatilho,
+
+00:04:49.040 --> 00:04:49.820
+período e ação final.
+
+00:04:50.240 --> 00:04:52.020
+É assim que um cronograma de retenção em papel
+
+00:04:52.020 --> 00:04:54.160
+se torna algo que o Microsoft 365 pode seguir.
+
+00:04:54.160 --> 00:04:56.920
+A equipe de negócios sabe o que o registro significa
+
+00:04:56.920 --> 00:04:57.940
+e, quando o contrato termina,
+
+00:04:58.280 --> 00:04:59.860
+as equipes de conformidade ajudam a encontrar
+
+00:04:59.860 --> 00:05:00.660
+a regra necessária
+
+00:05:00.660 --> 00:05:02.620
+e os administradores do Microsoft 365
+
+00:05:02.620 --> 00:05:03.940
+transformam essa regra aprovada
+
+00:05:03.940 --> 00:05:05.760
+em um controle que funciona onde quer que o conteúdo resida.
+
+00:05:06.500 --> 00:05:08.160
+Portanto, você não começa pela tecnologia,
+
+00:05:08.320 --> 00:05:10.240
+você começa decidindo quais arquivos contam
+
+00:05:10.240 --> 00:05:11.120
+como evidência oficial,
+
+00:05:11.240 --> 00:05:12.260
+quando o prazo deve começar,
+
+00:05:12.400 --> 00:05:13.640
+quanto tempo devem permanecer
+
+00:05:13.640 --> 00:05:14.840
+e o que deve acontecer ao final.
+
+00:05:15.680 --> 00:05:16.880
+Assim que você tiver essa resposta,
+
+00:05:16.980 --> 00:05:18.440
+o Purview pode anexar a regra correta
+
+00:05:18.440 --> 00:05:19.240
+diretamente ao item.
+
+00:05:20.180 --> 00:05:21.600
+Os rótulos de retenção são livre de regra.
+
+00:05:22.100 --> 00:05:23.200
+Então, quando você sabe que um item
+
+00:05:23.200 --> 00:05:24.020
+precisa de uma regra,
+
+00:05:24.020 --> 00:05:25.500
+o Purview usa um rótulo de retenção
+
+00:05:25.500 --> 00:05:26.740
+para anexar essa regra ao item.
+
+00:05:27.520 --> 00:05:28.720
+Pense em um rótulo de retenção
+
+00:05:28.720 --> 00:05:29.820
+como um cartão de regra edital
+
+00:05:29.820 --> 00:05:30.780
+anexado a um documento,
+
+00:05:30.840 --> 00:05:32.180
+um e-mail ou qualquer tipo de conteúdo.
+
+00:05:32.800 --> 00:05:34.360
+O rótulo diz ao Microsoft 365
+
+00:05:34.360 --> 00:05:35.560
+quando começar a contagem
+
+00:05:35.560 --> 00:05:36.600
+por quanto tempo manter o item
+
+00:05:36.600 --> 00:05:38.120
+e o que deve acontecer quando esse tempo acabar.
+
+00:05:38.740 --> 00:05:39.940
+E isso é importante porque um contrato
+
+00:05:39.940 --> 00:05:41.380
+nem sempre permanece em uma pasta organizada.
+
+00:05:41.840 --> 00:05:42.580
+Alguém pode movê-lo,
+
+00:05:42.900 --> 00:05:44.780
+uma equipe pode reorganizar um site do SharePoint
+
+00:05:44.780 --> 00:05:47.060
+ou a empresa pode trabalhar com o arquivo pelo Teams
+
+00:05:47.060 --> 00:05:49.300
+enquanto o arquivo original continua no SharePoint.
+
+00:05:50.100 --> 00:05:51.780
+O rótulo permanece focado no item,
+
+00:05:51.900 --> 00:05:53.740
+portanto, a regra de retenção permanece conectada
+
+00:05:53.740 --> 00:05:54.340
+ao conteúdo que precisa.
+
+00:05:54.880 --> 00:05:55.940
+Para um registro formal,
+
+00:05:56.280 --> 00:05:57.440
+esse controle no nível do item
+
+00:05:57.440 --> 00:05:58.820
+oferece muito mais precisão
+
+00:05:58.820 --> 00:06:00.680
+do que uma regra ampla aplicada a um local inteiro.
+
+00:06:01.120 --> 00:06:02.020
+Vamos a um exemplo simples.
+
+00:06:02.460 --> 00:06:03.800
+Você cria um rótulo de retenção
+
+00:06:03.800 --> 00:06:05.780
+chamado contrato sete anos após o vencimento
+
+00:06:05.780 --> 00:06:07.120
+seguido de revisão de disposição.
+
+00:06:07.980 --> 00:06:09.360
+Mesmo sem ver a tela de administração,
+
+00:06:09.460 --> 00:06:10.420
+você consegue entender a intenção.
+
+00:06:10.420 --> 00:06:11.540
+O cronômetro não começa
+
+00:06:11.540 --> 00:06:12.980
+quando alguém salva o contrato pela primeira vez.
+
+00:06:13.480 --> 00:06:14.760
+Ele começa quando o contrato expira,
+
+00:06:14.860 --> 00:06:16.720
+então o preview mantém o registro por sete anos.
+
+00:06:17.420 --> 00:06:18.620
+Quando esses sete anos terminam,
+
+00:06:18.700 --> 00:06:19.680
+o preview não trata o item
+
+00:06:19.680 --> 00:06:21.500
+apenas como um arquivo antigo em uma pasta,
+
+00:06:21.580 --> 00:06:23.320
+mas envia o registro para o processo de revisão
+
+00:06:23.320 --> 00:06:24.460
+definido pela sua organização.
+
+00:06:24.800 --> 00:06:25.440
+Essa é o livro de regras.
+
+00:06:25.820 --> 00:06:28.180
+Um rótulo de retenção já traz três perguntas incorporadas.
+
+00:06:28.480 --> 00:06:29.280
+Quando começa a contagem?
+
+00:06:29.680 --> 00:06:30.660
+Quanto tempo o registro permanece?
+
+00:06:30.980 --> 00:06:31.620
+Acontece no final.
+
+00:06:32.320 --> 00:06:33.840
+A primeira pergunta é mais importante do que parece.
+
+00:06:34.300 --> 00:06:35.180
+Para um documento simples,
+
+00:06:35.180 --> 00:06:36.960
+o cronômetro pode começar quando o item é criado,
+
+00:06:37.100 --> 00:06:38.960
+alterado pela última vez ou quando o rótulo é aplicado.
+
+00:06:38.960 --> 00:06:40.700
+Mas muitos registros comerciais
+
+00:06:40.700 --> 00:06:42.320
+seguem um evento fora do próprio arquivo,
+
+00:06:42.600 --> 00:06:43.520
+como o fim de um contrato,
+
+00:06:43.580 --> 00:06:44.500
+a saída de um funcionário
+
+00:06:44.500 --> 00:06:45.660
+ou o encerramento de um projeto.
+
+00:06:46.540 --> 00:06:47.060
+Nesses casos,
+
+00:06:47.160 --> 00:06:48.120
+o registro precisa de uma regra
+
+00:06:48.120 --> 00:06:49.100
+que siga o evento comercial,
+
+00:06:49.280 --> 00:06:50.820
+não apenas o dia em que alguém carregou um PDF.
+
+00:06:51.420 --> 00:06:52.800
+O que os iniciantes costumam confundir
+
+00:06:52.800 --> 00:06:54.340
+rótulos de retenção com políticas de retenção?
+
+00:06:54.860 --> 00:06:55.720
+Eles parecem semelhantes
+
+00:06:55.720 --> 00:06:56.520
+porque ambos podem dizer
+
+00:06:56.520 --> 00:06:58.660
+Microsoft 365 para manter ou excluir conteúdo
+
+00:06:58.660 --> 00:06:59.200
+ao longo do tempo,
+
+00:06:59.260 --> 00:07:00.360
+mas funcionam em níveis diferentes.
+
+00:07:01.140 --> 00:07:02.120
+Uma política de retenção
+
+00:07:02.120 --> 00:07:03.900
+é como aplicar uma regra geral a toda uma área.
+
+00:07:04.480 --> 00:07:05.380
+Por exemplo, você pode aplicar
+
+00:07:05.380 --> 00:07:06.320
+uma política abrangente
+
+00:07:06.320 --> 00:07:07.800
+a uma caixa de correio do Exchange Online,
+
+00:07:07.800 --> 00:07:08.700
+um site do SharePoint
+
+00:07:08.700 --> 00:07:09.560
+ou mensagem do Teams.
+
+00:07:10.240 --> 00:07:11.660
+Isso faz sentido para conteúdo geral,
+
+00:07:11.820 --> 00:07:12.860
+onde uma regra consistente
+
+00:07:12.860 --> 00:07:13.920
+cobre muitas informações.
+
+00:07:14.560 --> 00:07:15.500
+Talvez sua organização
+
+00:07:15.500 --> 00:07:16.860
+mantenha mensagens gerais do Teams
+
+00:07:16.860 --> 00:07:17.780
+por um tempo determinado
+
+00:07:17.780 --> 00:07:18.660
+ou talvez todo o conteúdo
+
+00:07:18.660 --> 00:07:19.500
+de um site comercial
+
+00:07:19.500 --> 00:07:21.040
+precise de um período de retenção básico.
+
+00:07:21.240 --> 00:07:22.460
+Um rótulo de retenção mais focado.
+
+00:07:22.840 --> 00:07:23.640
+Ele diz ao Purview,
+
+00:07:23.820 --> 00:07:24.800
+este item específico
+
+00:07:24.800 --> 00:07:26.200
+pertence a esta categoria de registro,
+
+00:07:26.300 --> 00:07:27.740
+portanto aplica esta regra específica.
+
+00:07:27.780 --> 00:07:29.300
+Isso torna os rótulos mais adequados
+
+00:07:29.300 --> 00:07:30.260
+para documentos oficiais
+
+00:07:30.260 --> 00:07:32.000
+que precisam de seu próprio caminho de retenção,
+
+00:07:32.140 --> 00:07:33.140
+especialmente quando o cronômetro
+
+00:07:33.140 --> 00:07:34.220
+começa com um evento comercial
+
+00:07:34.220 --> 00:07:35.180
+ou quando o item precisará
+
+00:07:35.180 --> 00:07:36.260
+de uma decisão de controle ao final.
+
+00:07:36.260 --> 00:07:37.780
+Você pode usar ambas as abordagens
+
+00:07:37.780 --> 00:07:38.980
+na mesma plataforma conectada,
+
+00:07:39.060 --> 00:07:40.160
+mas elas resolvem problemas diferentes.
+
+00:07:40.660 --> 00:07:42.400
+As políticas lidam com cobertura abrangente,
+
+00:07:42.480 --> 00:07:43.800
+enquanto os rótulos lidam com registros
+
+00:07:43.800 --> 00:07:45.000
+que precisam de tratamento individual.
+
+00:07:45.400 --> 00:07:46.260
+A próxima pergunta é
+
+00:07:46.260 --> 00:07:47.420
+quem coloca o rótulo no item?
+
+00:07:47.820 --> 00:07:48.420
+Em alguns casos,
+
+00:07:48.580 --> 00:07:49.820
+uma pessoa aplica manualmente
+
+00:07:49.820 --> 00:07:50.440
+o que funciona
+
+00:07:50.440 --> 00:07:51.780
+quando alguém tem conhecimento comercial
+
+00:07:51.780 --> 00:07:53.000
+para reconhecer um registro oficial
+
+00:07:53.000 --> 00:07:53.560
+no momento certo,
+
+00:07:53.660 --> 00:07:54.820
+como quando o contrato final chega
+
+00:07:54.820 --> 00:07:56.200
+ou uma política recebe aprovação.
+
+00:07:56.500 --> 00:07:57.820
+Ou uma política recebe aprovação.
+
+00:07:57.960 --> 00:07:58.840
+Mas confiar nas pessoas
+
+00:07:58.840 --> 00:07:59.980
+para se lembrar de cada rótulo
+
+00:07:59.980 --> 00:08:01.020
+todas as vezes pode ser difícil.
+
+00:08:01.400 --> 00:08:02.960
+O Purview também pode aplicar rótulos
+
+00:08:02.960 --> 00:08:04.420
+automaticamente quando sua organização
+
+00:08:04.420 --> 00:08:05.460
+define condições claras
+
+00:08:05.460 --> 00:08:06.780
+para corresponder ao conteúdo correto,
+
+00:08:06.860 --> 00:08:07.760
+usando sinais conhecidos,
+
+00:08:07.920 --> 00:08:08.720
+propriedades definidas
+
+00:08:08.720 --> 00:08:09.340
+ou outras condições
+
+00:08:09.340 --> 00:08:10.320
+que identifiquem o tipo de item.
+
+00:08:11.440 --> 00:08:12.560
+Em vez de seguir os usuários
+
+00:08:12.560 --> 00:08:14.020
+e pedir que escolham em uma longa lista,
+
+00:08:14.640 --> 00:08:16.180
+a organização cria a regra e o Purview,
+
+00:08:16.360 --> 00:08:17.500
+a aplica em segundo plano.
+
+00:08:18.440 --> 00:08:19.240
+A abordagem inteligente
+
+00:08:19.240 --> 00:08:20.300
+depende do tipo de registro.
+
+00:08:20.840 --> 00:08:22.080
+Se uma pessoa precisa fazer um julgamento,
+
+00:08:22.160 --> 00:08:23.360
+a rotulagem manual pode ser adequada.
+
+00:08:23.860 --> 00:08:25.460
+Mas se um registro segue um padrão claro,
+
+00:08:25.700 --> 00:08:26.440
+a rotulagem automática
+
+00:08:26.440 --> 00:08:27.420
+traz mais consistência.
+
+00:08:27.920 --> 00:08:28.540
+De qualquer forma,
+
+00:08:28.580 --> 00:08:29.800
+o rótulo transforma um cronograma
+
+00:08:29.800 --> 00:08:30.800
+de retenção escrito em algo
+
+00:08:30.800 --> 00:08:32.500
+sobre o qual o Microsoft 305 pode agir.
+
+00:08:32.780 --> 00:08:33.160
+Para você,
+
+00:08:33.220 --> 00:08:34.200
+o passo prático é simples.
+
+00:08:34.840 --> 00:08:35.800
+Pegue uma regra escrita
+
+00:08:35.800 --> 00:08:37.040
+e certifique-se de que ela responda
+
+00:08:37.040 --> 00:08:38.060
+a essas três perguntas claramente.
+
+00:08:38.460 --> 00:08:39.180
+O que inicia o cronograma?
+
+00:08:39.520 --> 00:08:40.700
+Quanto tempo o item deve permanecer?
+
+00:08:41.040 --> 00:08:41.980
+O que acontece quando o tempo acaba?
+
+00:08:42.220 --> 00:08:43.540
+Um rótulo pode dizer ao Purview
+
+00:08:43.540 --> 00:08:44.240
+para manter um item,
+
+00:08:44.320 --> 00:08:45.560
+mas o próximo bloco de construção
+
+00:08:45.560 --> 00:08:46.760
+adiciona um controle mais rígido
+
+00:08:46.760 --> 00:08:48.120
+tratando esse item como prova oficial
+
+00:08:48.120 --> 00:08:49.280
+em vez de conteúdo de trabalho comum.
+
+00:08:50.280 --> 00:08:52.240
+A declaração de registro bloqueia a prova.
+
+00:08:52.800 --> 00:08:53.800
+Um rótulo de retenção
+
+00:08:53.800 --> 00:08:54.540
+informa ao Purview
+
+00:08:54.540 --> 00:08:55.500
+por quanto tempo um item
+
+00:08:55.500 --> 00:08:56.380
+precisa ser mantido
+
+00:08:56.380 --> 00:08:57.400
+e a declaração de registro
+
+00:08:57.400 --> 00:08:58.140
+dá o próximo passo
+
+00:08:58.140 --> 00:08:59.760
+a marcar esse item como registro oficial
+
+00:08:59.760 --> 00:09:01.820
+e aplicar controles mais rigorosos a ele.
+
+00:09:02.800 --> 00:09:04.100
+Pense em um arquivo de trabalho comum
+
+00:09:04.100 --> 00:09:05.540
+como documento sobre a mesa de alguém,
+
+00:09:05.760 --> 00:09:06.900
+onde as pessoas podem atualizá-lo,
+
+00:09:07.020 --> 00:09:07.680
+adicionar comentários
+
+00:09:07.680 --> 00:09:08.260
+e substituí-lo
+
+00:09:08.260 --> 00:09:09.340
+enquanto o trabalho ainda está em andamento.
+
+00:09:09.920 --> 00:09:10.860
+Um registro declarado
+
+00:09:10.860 --> 00:09:12.060
+é o documento final assinado,
+
+00:09:12.140 --> 00:09:13.760
+movido para uma sala de arquivo trancada.
+
+00:09:14.340 --> 00:09:15.660
+O trabalho pode continuar ao redor dele,
+
+00:09:15.940 --> 00:09:17.560
+uma nova versão da política pode ser escrita
+
+00:09:17.560 --> 00:09:18.780
+ou um contrato pode ser renovado,
+
+00:09:18.980 --> 00:09:19.940
+mas o registro declarado
+
+00:09:19.940 --> 00:09:21.340
+preserva a versão oficial
+
+00:09:21.340 --> 00:09:22.400
+que existia naquele momento.
+
+00:09:22.980 --> 00:09:23.900
+Então, por que esse bloqueio é importante?
+
+00:09:24.180 --> 00:09:25.040
+Porque registros oficiais
+
+00:09:25.040 --> 00:09:25.820
+podem se tornar provas.
+
+00:09:25.820 --> 00:09:27.320
+Um auditor pode precisar ver
+
+00:09:27.320 --> 00:09:28.640
+o relatório financeiro aprovado
+
+00:09:28.640 --> 00:09:29.500
+de um determinado ano.
+
+00:09:29.860 --> 00:09:30.580
+Uma equipe jurídica
+
+00:09:30.580 --> 00:09:32.240
+pode precisar encontrar o contrato assinado
+
+00:09:32.240 --> 00:09:33.220
+que cobriu uma disputa.
+
+00:09:33.440 --> 00:09:34.420
+Ou uma investigação interna
+
+00:09:34.420 --> 00:09:35.260
+pode precisar confirmar
+
+00:09:35.260 --> 00:09:36.300
+qual política se aplicava
+
+00:09:36.300 --> 00:09:37.360
+quando uma decisão foi tomada.
+
+00:09:38.440 --> 00:09:39.200
+Em cada caso,
+
+00:09:39.280 --> 00:09:40.100
+a questão não é apenas
+
+00:09:40.100 --> 00:09:41.440
+se podemos encontrar um arquivo,
+
+00:09:41.540 --> 00:09:42.600
+mas também se podemos confiar
+
+00:09:42.600 --> 00:09:43.480
+que este é o arquivo
+
+00:09:43.480 --> 00:09:44.540
+que existia na época.
+
+00:09:45.280 --> 00:09:46.320
+É isso que a declaração de registro
+
+00:09:46.320 --> 00:09:47.260
+foi projetada para apoiar.
+
+00:09:47.700 --> 00:09:49.040
+Considere uma política final da empresa.
+
+00:09:49.560 --> 00:09:50.700
+Durante o processo de redação,
+
+00:09:50.920 --> 00:09:52.320
+diferentes pessoas podem editar a política,
+
+00:09:52.420 --> 00:09:53.040
+adicionar notas
+
+00:09:53.040 --> 00:09:53.820
+ou pedir alterações,
+
+00:09:53.900 --> 00:09:55.460
+mas assim que a política recebe a aprovação,
+
+00:09:55.820 --> 00:09:56.660
+essa versão aprovada
+
+00:09:56.660 --> 00:09:57.660
+pode se tornar um registro
+
+00:09:57.660 --> 00:09:59.600
+e declará-la como um registro
+
+00:09:59.600 --> 00:10:00.880
+ajuda a proteger essa versão
+
+00:10:00.880 --> 00:10:01.900
+pelo tempo necessário.
+
+00:10:02.780 --> 00:10:03.240
+A mesma ideia
+
+00:10:03.240 --> 00:10:04.240
+se aplica a um contrato assinado.
+
+00:10:04.700 --> 00:10:06.460
+Você não quer que a cópia oficial assinada
+
+00:10:06.460 --> 00:10:07.100
+seja tratada
+
+00:10:07.100 --> 00:10:07.960
+como um rascunho comum
+
+00:10:07.960 --> 00:10:09.320
+que alguém possa silenciosamente
+
+00:10:09.320 --> 00:10:10.760
+substituir, editar ou remover
+
+00:10:10.760 --> 00:10:11.640
+ou limpar uma pasta.
+
+00:10:12.300 --> 00:10:13.580
+Um registro de funcionário concluído
+
+00:10:13.580 --> 00:10:14.520
+pode funcionar da mesma maneira.
+
+00:10:15.100 --> 00:10:15.740
+Uma vez que se torna
+
+00:10:15.740 --> 00:10:16.800
+a prova comercial oficial,
+
+00:10:17.300 --> 00:10:18.340
+a organização pode aplicar
+
+00:10:18.340 --> 00:10:19.200
+um rótulo de registro
+
+00:10:19.200 --> 00:10:20.080
+para mantê-lo protegido
+
+00:10:20.080 --> 00:10:21.120
+durante o período de retenção.
+
+00:10:21.540 --> 00:10:22.180
+É um ponto importante
+
+00:10:22.180 --> 00:10:22.600
+para a Inicência.
+
+00:10:22.600 --> 00:10:24.420
+O gerenciamento de registros
+
+00:10:24.420 --> 00:10:25.320
+controla a retenção
+
+00:10:25.320 --> 00:10:25.960
+ao longo do tempo,
+
+00:10:26.040 --> 00:10:27.000
+garantindo que um item oficial
+
+00:10:27.000 --> 00:10:27.760
+permaneça disponível
+
+00:10:27.760 --> 00:10:28.960
+pelo tempo exigido pela regra,
+
+00:10:29.060 --> 00:10:29.600
+mesmo que alguém tenha
+
+00:10:29.600 --> 00:10:30.700
+descuído antes do fim desse período.
+
+00:10:31.360 --> 00:10:32.100
+E também adiciona
+
+00:10:32.100 --> 00:10:32.980
+controles de registro
+
+00:10:32.980 --> 00:10:33.660
+que ajudam a preservar
+
+00:10:33.660 --> 00:10:34.300
+o item como pronto.
+
+00:10:34.980 --> 00:10:36.180
+Mas o gerenciamento de registro
+
+00:10:36.180 --> 00:10:37.000
+não realiza todas as formas
+
+00:10:37.000 --> 00:10:37.840
+de proteção do Microsoft.
+
+00:10:38.260 --> 00:10:39.620
+Ele não criptografa um documento,
+
+00:10:39.700 --> 00:10:40.680
+decide quem pode abri-lo
+
+00:10:40.680 --> 00:10:41.620
+ou impede que alguém envie
+
+00:10:41.620 --> 00:10:42.680
+informações confidenciais
+
+00:10:42.680 --> 00:10:43.300
+para o lugar errado.
+
+00:10:43.860 --> 00:10:44.800
+Essas são tarefas diferentes.
+
+00:10:45.140 --> 00:10:46.320
+Um rótulo de confidencialidade
+
+00:10:46.320 --> 00:10:47.140
+protege o acesso
+
+00:10:47.140 --> 00:10:47.840
+e o compartilhamento
+
+00:10:47.840 --> 00:10:48.480
+e você pode usá-lo
+
+00:10:48.480 --> 00:10:49.360
+para aplicar a criptografia
+
+00:10:49.360 --> 00:10:50.500
+ou limitar quem pode abrir um arquivo.
+
+00:10:50.800 --> 00:10:52.220
+A prevenção contra a perda de dados
+
+00:10:52.220 --> 00:10:53.040
+ou DLP
+
+00:10:53.040 --> 00:10:54.580
+monitora movimentações arriscadas
+
+00:10:54.580 --> 00:10:55.720
+de informações confidenciais
+
+00:10:55.720 --> 00:10:56.580
+e ajuda a detectar
+
+00:10:56.580 --> 00:10:57.200
+ou bloquear ações
+
+00:10:57.200 --> 00:10:58.020
+como o compartilhamento
+
+00:10:58.020 --> 00:10:58.760
+de dados protegidos
+
+00:10:58.760 --> 00:10:59.660
+de formas que sua organização
+
+00:10:59.660 --> 00:11:00.080
+não permite.
+
+00:11:01.000 --> 00:11:02.100
+O gerenciamento de registros
+
+00:11:02.100 --> 00:11:02.760
+responde a uma pergunta.
+
+00:11:03.340 --> 00:11:03.800
+Em quanto tempo
+
+00:11:03.800 --> 00:11:04.440
+essa evidência oficial
+
+00:11:04.440 --> 00:11:05.040
+deve permanecer
+
+00:11:05.040 --> 00:11:05.540
+e quais controles
+
+00:11:05.540 --> 00:11:06.220
+devem ser aplicados
+
+00:11:06.220 --> 00:11:06.860
+enquanto ela estiver lá?
+
+00:11:07.300 --> 00:11:08.440
+Imagine um contrato assinado
+
+00:11:08.440 --> 00:11:09.660
+que contenha termos confidenciais.
+
+00:11:10.060 --> 00:11:11.460
+Um rótulo de confidencialidade
+
+00:11:11.460 --> 00:11:12.020
+pode controlar
+
+00:11:12.020 --> 00:11:12.980
+quem tem acesso a ele
+
+00:11:12.980 --> 00:11:14.200
+e o DLP pode monitorar
+
+00:11:14.200 --> 00:11:15.220
+compartilhamento de risco
+
+00:11:15.220 --> 00:11:16.200
+e um rótulo de retenção
+
+00:11:16.200 --> 00:11:17.180
+que o declara como um registro
+
+00:11:17.180 --> 00:11:18.220
+controla sua vida
+
+00:11:18.220 --> 00:11:18.720
+como evidência
+
+00:11:18.720 --> 00:11:19.620
+impedindo que o contrato
+
+00:11:19.620 --> 00:11:20.400
+desapareça antes do fim
+
+00:11:20.400 --> 00:11:21.480
+do período de retenção necessário.
+
+00:11:21.600 --> 00:11:22.180
+Essas ferramentas
+
+00:11:22.180 --> 00:11:23.040
+podem funcionar juntas
+
+00:11:23.040 --> 00:11:24.060
+mas não devem ser confundida.
+
+00:11:24.140 --> 00:11:25.180
+Uma protege o documento
+
+00:11:25.180 --> 00:11:26.380
+enquanto as pessoas o utilizam
+
+00:11:26.380 --> 00:11:27.240
+e a outra protege
+
+00:11:27.240 --> 00:11:28.020
+a obrigação comercial
+
+00:11:28.020 --> 00:11:28.580
+ao longo do tempo.
+
+00:11:29.040 --> 00:11:29.900
+Essa diferença ajuda
+
+00:11:29.900 --> 00:11:30.740
+a evitar um erro comum
+
+00:11:30.740 --> 00:11:31.980
+tratar um rótulo de registro
+
+00:11:31.980 --> 00:11:32.700
+como uma configuração
+
+00:11:32.700 --> 00:11:33.360
+de segurança geral.
+
+00:11:34.180 --> 00:11:35.320
+Um rótulo de registro
+
+00:11:35.320 --> 00:11:35.920
+é a regra que diz
+
+00:11:35.920 --> 00:11:36.940
+ao Microsoft 365
+
+00:11:36.940 --> 00:11:38.520
+este item é uma evidência oficial.
+
+00:11:39.040 --> 00:11:39.760
+Mantenha-o de acordo
+
+00:11:39.760 --> 00:11:40.540
+com este cronograma
+
+00:11:40.540 --> 00:11:41.340
+e aplique os controles
+
+00:11:41.340 --> 00:11:42.220
+de registro mais rígidos
+
+00:11:42.220 --> 00:11:42.620
+que escolher.
+
+00:11:42.620 --> 00:11:43.860
+Isso também significa
+
+00:11:43.860 --> 00:11:44.940
+que você precisa ser criterioso
+
+00:11:44.940 --> 00:11:45.560
+antes de declarar
+
+00:11:45.560 --> 00:11:46.320
+algo como um registro.
+
+00:11:46.980 --> 00:11:48.120
+Ao bloquear cada rascunho
+
+00:11:48.120 --> 00:11:48.700
+em duplicato
+
+00:11:48.700 --> 00:11:49.340
+e nota informal
+
+00:11:49.340 --> 00:11:50.520
+você torna o trabalho
+
+00:11:50.520 --> 00:11:51.620
+normal muito mais difícil
+
+00:11:51.620 --> 00:11:52.160
+porque o objetivo
+
+00:11:52.160 --> 00:11:53.600
+é proteger a evidência oficial final
+
+00:11:53.600 --> 00:11:54.220
+no congelar
+
+00:11:54.220 --> 00:11:55.560
+cada pedaço de conteúdo
+
+00:11:55.560 --> 00:11:56.780
+no momento em que ele surge.
+
+00:11:57.980 --> 00:11:58.600
+Manter um registro
+
+00:11:58.600 --> 00:11:59.740
+porém é apenas metade do trabalho.
+
+00:12:00.220 --> 00:12:01.120
+Toda regra de retenção
+
+00:12:01.120 --> 00:12:01.780
+eventualmente chega
+
+00:12:01.780 --> 00:12:02.500
+a uma questão mais difícil.
+
+00:12:03.080 --> 00:12:04.160
+Um tempo necessário termina
+
+00:12:04.160 --> 00:12:04.600
+quem decide
+
+00:12:04.600 --> 00:12:05.080
+que o registro
+
+00:12:05.080 --> 00:12:06.180
+pode finalmente ser removido.
+
+00:12:06.880 --> 00:12:07.680
+A revisão de exposição
+
+00:12:07.680 --> 00:12:08.640
+é o portal antes da exclusão.
+
+00:12:09.380 --> 00:12:10.040
+Manter um registro
+
+00:12:10.040 --> 00:12:10.740
+pelo tempo correto
+
+00:12:10.740 --> 00:12:11.960
+é apenas metade da história.
+
+00:12:11.960 --> 00:12:13.020
+A outra metade
+
+00:12:13.020 --> 00:12:13.480
+é o que acontece
+
+00:12:13.480 --> 00:12:14.160
+quando esse tempo acaba.
+
+00:12:14.600 --> 00:12:15.100
+Essa decisão
+
+00:12:15.100 --> 00:12:15.980
+é chamada de exposição
+
+00:12:15.980 --> 00:12:16.680
+e exige cuidado.
+
+00:12:17.220 --> 00:12:17.900
+Exclua um registro
+
+00:12:17.900 --> 00:12:18.440
+cedo demais
+
+00:12:18.440 --> 00:12:19.340
+e sua organização
+
+00:12:19.340 --> 00:12:20.340
+poderá perder evidências
+
+00:12:20.340 --> 00:12:21.000
+que ainda precisa
+
+00:12:21.000 --> 00:12:21.800
+para um processo legal
+
+00:12:21.800 --> 00:12:22.380
+uma auditoria
+
+00:12:22.380 --> 00:12:23.180
+ou uma disputa comercial.
+
+00:12:23.620 --> 00:12:24.480
+Mantenha cada registro
+
+00:12:24.480 --> 00:12:25.320
+inspirado para sempre
+
+00:12:25.320 --> 00:12:25.900
+e você acabará
+
+00:12:25.900 --> 00:12:26.760
+com uma pilha crescente
+
+00:12:26.760 --> 00:12:27.560
+de conteúdo antigo
+
+00:12:27.560 --> 00:12:29.100
+mais informações para proteger
+
+00:12:29.100 --> 00:12:29.840
+e mais material
+
+00:12:29.840 --> 00:12:30.820
+que poderia ser solicitado
+
+00:12:30.820 --> 00:12:31.500
+em um processo judicial.
+
+00:12:31.960 --> 00:12:33.100
+O gerenciamento de registros
+
+00:12:33.100 --> 00:12:33.460
+do porvir
+
+00:12:33.460 --> 00:12:34.200
+oferece um filtro
+
+00:12:34.200 --> 00:12:34.980
+entre esses dois riscos
+
+00:12:34.980 --> 00:12:36.500
+chamado de revisão de exposição.
+
+00:12:36.960 --> 00:12:37.700
+Pense por um segundo
+
+00:12:37.700 --> 00:12:38.700
+no antigo processo em pacote.
+
+00:12:39.340 --> 00:12:40.160
+Uma caixa atinge
+
+00:12:40.160 --> 00:12:41.120
+sua data de destruição
+
+00:12:41.960 --> 00:12:42.600
+deve enviá-la direto
+
+00:12:42.600 --> 00:12:43.220
+para o triturador
+
+00:12:43.220 --> 00:12:44.280
+sem verificá-la antes.
+
+00:12:45.320 --> 00:12:46.140
+Alguém responsável
+
+00:12:46.140 --> 00:12:46.820
+pelos registros
+
+00:12:46.820 --> 00:12:47.500
+analisa a caixa
+
+00:12:47.500 --> 00:12:48.440
+e confirma que nada mudou
+
+00:12:48.440 --> 00:12:49.220
+então aprova
+
+00:12:49.220 --> 00:12:50.020
+o que acontece a seguir.
+
+00:12:50.700 --> 00:12:51.520
+A revisão de exposição
+
+00:12:51.520 --> 00:12:52.500
+traz essa mesma decisão
+
+00:12:52.500 --> 00:12:53.680
+para dentro do Microsoft 305.
+
+00:12:54.360 --> 00:12:54.940
+Quando um registro
+
+00:12:54.940 --> 00:12:55.440
+atinge o fim
+
+00:12:55.440 --> 00:12:56.480
+do seu período de retenção
+
+00:12:56.480 --> 00:12:57.620
+o porvir pode enviá-lo
+
+00:12:57.620 --> 00:12:58.600
+a revisores designados
+
+00:12:58.600 --> 00:12:59.640
+em vez de excluí-lo imediatamente.
+
+00:13:00.220 --> 00:13:01.120
+O revisor abre o item
+
+00:13:01.120 --> 00:13:01.960
+no portal do porvir
+
+00:13:01.960 --> 00:13:03.280
+e decide se o registro
+
+00:13:03.280 --> 00:13:03.920
+pode ser excluído
+
+00:13:03.920 --> 00:13:04.660
+permanentemente.
+
+00:13:05.360 --> 00:13:05.940
+Essa revisão
+
+00:13:05.940 --> 00:13:06.840
+dá à sua organização
+
+00:13:06.840 --> 00:13:07.540
+uma última chance
+
+00:13:07.540 --> 00:13:08.540
+de fazer uma pergunta prática.
+
+00:13:09.320 --> 00:13:09.920
+Existe algum motivo
+
+00:13:09.920 --> 00:13:10.840
+pelo qual ainda precisamos ir?
+
+00:13:11.140 --> 00:13:12.060
+Veja o nosso exemplo de contrato.
+
+00:13:12.400 --> 00:13:13.220
+O contrato terminou
+
+00:13:13.220 --> 00:13:14.220
+e seu período de retenção
+
+00:13:14.220 --> 00:13:15.200
+de 7 anos agora acabou.
+
+00:13:15.680 --> 00:13:16.220
+Nesse ponto
+
+00:13:16.220 --> 00:13:16.980
+o contrato chega
+
+00:13:16.980 --> 00:13:17.720
+à fila de revisão
+
+00:13:17.720 --> 00:13:18.440
+de disposição.
+
+00:13:19.140 --> 00:13:19.840
+O revisor verifica
+
+00:13:19.840 --> 00:13:20.820
+se há uma disputa em curso
+
+00:13:20.820 --> 00:13:21.760
+uma solicitação legal
+
+00:13:21.760 --> 00:13:22.680
+ou outro motivo comercial
+
+00:13:22.680 --> 00:13:23.100
+para manter.
+
+00:13:23.560 --> 00:13:24.820
+Se nada exigir o contrato
+
+00:13:24.820 --> 00:13:26.000
+o revisor pode aprovar
+
+00:13:26.000 --> 00:13:26.640
+o descarte.
+
+00:13:27.640 --> 00:13:28.320
+Se o contrato ainda
+
+00:13:28.320 --> 00:13:28.900
+for relevante
+
+00:13:28.900 --> 00:13:29.860
+o revisor pode pausar
+
+00:13:29.860 --> 00:13:30.540
+o processo em vez
+
+00:13:30.540 --> 00:13:31.440
+de deixá-lo desaparecer
+
+00:13:31.440 --> 00:13:32.360
+só porque uma data chegou.
+
+00:13:33.160 --> 00:13:33.660
+Esse é um processo
+
+00:13:33.660 --> 00:13:34.280
+muito mais seguro
+
+00:13:34.280 --> 00:13:35.140
+do que um lembrete de calendário
+
+00:13:35.140 --> 00:13:35.880
+que alguém pode ignorar.
+
+00:13:36.600 --> 00:13:37.680
+Um tipo de registro simples
+
+00:13:37.680 --> 00:13:38.560
+pode precisar de revisão.
+
+00:13:38.560 --> 00:13:39.400
+Por exemplo
+
+00:13:39.400 --> 00:13:40.300
+uma equipe de registros
+
+00:13:40.300 --> 00:13:40.980
+poderia revisar
+
+00:13:40.980 --> 00:13:41.820
+contratos de rotina
+
+00:13:41.820 --> 00:13:42.920
+que atingiram sua data final.
+
+00:13:43.600 --> 00:13:44.740
+Um grupo verifica a fila
+
+00:13:44.740 --> 00:13:45.460
+toma a decisão
+
+00:13:45.460 --> 00:13:46.400
+e conclui o processo.
+
+00:13:47.100 --> 00:13:47.820
+Outros tipos de registro
+
+00:13:47.820 --> 00:13:48.380
+podem precisar
+
+00:13:48.380 --> 00:13:48.980
+de mais de um estágio.
+
+00:13:49.340 --> 00:13:50.600
+Um registro financeiro sensível
+
+00:13:50.600 --> 00:13:51.160
+pode precisar
+
+00:13:51.160 --> 00:13:51.720
+que um proprietário
+
+00:13:51.720 --> 00:13:52.440
+da empresa confirme
+
+00:13:52.440 --> 00:13:53.460
+que não é mais necessário
+
+00:13:53.460 --> 00:13:54.360
+seguido por uma revisão
+
+00:13:54.360 --> 00:13:55.040
+de conformidade
+
+00:13:55.040 --> 00:13:56.080
+ou da equipe de registros
+
+00:13:56.080 --> 00:13:56.800
+antes da ação final.
+
+00:13:57.320 --> 00:13:58.200
+O Purview pode oferecer
+
+00:13:58.200 --> 00:13:59.280
+suporte a esse tipo de revisão
+
+00:13:59.280 --> 00:14:00.080
+de vários estágios
+
+00:14:00.080 --> 00:14:00.660
+onde o registro
+
+00:14:00.660 --> 00:14:01.440
+passa por mais de uma etapa
+
+00:14:01.440 --> 00:14:01.900
+de aprovação.
+
+00:14:02.200 --> 00:14:02.720
+Mais estágios
+
+00:14:02.720 --> 00:14:03.540
+trazem mais controle
+
+00:14:03.540 --> 00:14:04.700
+mas também criam mais trabalho.
+
+00:14:05.140 --> 00:14:05.960
+Tanto você deve adaptar
+
+00:14:05.960 --> 00:14:07.220
+o processo ao risco do registro.
+
+00:14:07.780 --> 00:14:08.840
+Não criem uma longa cadeia
+
+00:14:08.840 --> 00:14:09.400
+de aprovação
+
+00:14:09.400 --> 00:14:10.240
+para cada item comum.
+
+00:14:10.680 --> 00:14:11.300
+Ao mesmo tempo
+
+00:14:11.300 --> 00:14:12.240
+não dê a uma única pessoa
+
+00:14:12.240 --> 00:14:12.840
+decisão final
+
+00:14:12.840 --> 00:14:13.400
+sobre registros
+
+00:14:13.400 --> 00:14:14.220
+que precisam de contribuição
+
+00:14:14.220 --> 00:14:15.100
+jurídica, financeira
+
+00:14:15.100 --> 00:14:15.740
+ou de conformidade.
+
+00:14:16.300 --> 00:14:16.760
+Há uma escolha
+
+00:14:16.760 --> 00:14:17.660
+de configuração prática
+
+00:14:17.660 --> 00:14:18.660
+que evita problemas mais tarde.
+
+00:14:19.240 --> 00:14:19.960
+Atribua revisores
+
+00:14:19.960 --> 00:14:20.680
+por meio de um grupo
+
+00:14:20.680 --> 00:14:21.740
+mantido sempre que puder
+
+00:14:21.740 --> 00:14:22.340
+em vez de nomear
+
+00:14:22.340 --> 00:14:22.920
+apenas uma pessoa.
+
+00:14:23.320 --> 00:14:24.240
+Pessoas mudam de emprego
+
+00:14:24.240 --> 00:14:25.020
+tiram licenças
+
+00:14:25.020 --> 00:14:25.680
+deixam a empresa.
+
+00:14:26.400 --> 00:14:27.360
+Um grupo pode continuar
+
+00:14:27.360 --> 00:14:28.140
+a realizar o trabalho
+
+00:14:28.140 --> 00:14:28.560
+de revisão
+
+00:14:28.560 --> 00:14:29.720
+à medida que seus membros mudam
+
+00:14:29.720 --> 00:14:30.140
+o que significa
+
+00:14:30.140 --> 00:14:30.780
+que os registros
+
+00:14:30.780 --> 00:14:31.480
+não ficam na fila
+
+00:14:31.480 --> 00:14:32.080
+esperando por alguém
+
+00:14:32.080 --> 00:14:32.920
+que não trabalha mais lá.
+
+00:14:33.540 --> 00:14:34.220
+E também precisa planejar
+
+00:14:34.220 --> 00:14:34.680
+as permissões.
+
+00:14:35.280 --> 00:14:36.140
+Ser um administrador geral
+
+00:14:36.140 --> 00:14:37.200
+do Microsoft 365
+
+00:14:37.200 --> 00:14:38.480
+não significa automaticamente
+
+00:14:38.480 --> 00:14:39.020
+que alguém possa
+
+00:14:39.020 --> 00:14:39.840
+revisar registros
+
+00:14:39.840 --> 00:14:40.780
+aguardando exposição.
+
+00:14:41.240 --> 00:14:42.020
+As pessoas que precisam
+
+00:14:42.020 --> 00:14:42.820
+visualizar e agir
+
+00:14:42.820 --> 00:14:43.440
+sobre esses itens
+
+00:14:43.440 --> 00:14:44.200
+exigem as permissões
+
+00:14:44.200 --> 00:14:45.100
+corretas de gerenciamento
+
+00:14:45.100 --> 00:14:45.500
+de registro.
+
+00:14:46.020 --> 00:14:47.020
+Vale a pena verificar isso
+
+00:14:47.020 --> 00:14:47.980
+antes de ativar um rótulo
+
+00:14:47.980 --> 00:14:48.960
+que envia grandes quantidades
+
+00:14:48.960 --> 00:14:49.920
+de conteúdo para revisão.
+
+00:14:50.600 --> 00:14:50.940
+Para você,
+
+00:14:51.020 --> 00:14:51.700
+o ponto de partida
+
+00:14:51.700 --> 00:14:52.540
+não é a tela do porvio.
+
+00:14:53.120 --> 00:14:53.720
+Anote quem detém
+
+00:14:53.720 --> 00:14:54.360
+a decisão final
+
+00:14:54.360 --> 00:14:55.400
+para cada tipo de registro.
+
+00:14:56.160 --> 00:14:57.480
+Pergunte quem pode confirmar
+
+00:14:57.480 --> 00:14:57.960
+que o registro
+
+00:14:57.960 --> 00:14:58.860
+não é mais necessário
+
+00:14:58.860 --> 00:15:00.020
+quem precisa aprovar o descarte
+
+00:15:00.020 --> 00:15:00.740
+e o que deve acontecer
+
+00:15:02.080 --> 00:15:03.200
+ao comercial para mantê-lo.
+
+00:15:04.160 --> 00:15:05.180
+Uma vez que essas respostas
+
+00:15:05.180 --> 00:15:05.880
+estejam claras,
+
+00:15:05.920 --> 00:15:06.740
+o porvio pode encaminhar
+
+00:15:06.740 --> 00:15:07.360
+o registro por meio
+
+00:15:07.360 --> 00:15:08.140
+de um processo repetido.
+
+00:15:08.460 --> 00:15:09.220
+Depois que um registro
+
+00:15:09.220 --> 00:15:10.220
+foi mantido, revisado
+
+00:15:10.220 --> 00:15:10.840
+e descartado,
+
+00:15:11.020 --> 00:15:11.840
+resta mais uma pergunta.
+
+00:15:12.280 --> 00:15:12.780
+Você consegue mostrar
+
+00:15:12.780 --> 00:15:13.120
+o que aconteceu?
+
+00:15:13.840 --> 00:15:14.680
+O histórico de auditoria
+
+00:15:14.680 --> 00:15:15.160
+fornece algo.
+
+00:15:15.560 --> 00:15:16.380
+A gestão de registros
+
+00:15:16.380 --> 00:15:17.080
+não se trata apenas
+
+00:15:17.080 --> 00:15:17.880
+de definir uma regra,
+
+00:15:18.000 --> 00:15:19.000
+mas também de conseguir mostrar
+
+00:15:19.000 --> 00:15:20.080
+que as pessoas a seguiram.
+
+00:15:20.720 --> 00:15:21.100
+É aí que entra
+
+00:15:21.100 --> 00:15:21.940
+o histórico de auditoria.
+
+00:15:22.260 --> 00:15:23.600
+A auditoria do Microsoft Pervil
+
+00:15:23.600 --> 00:15:24.880
+mantém o histórico centralizado
+
+00:15:24.880 --> 00:15:25.260
+e atividades
+
+00:15:25.260 --> 00:15:26.300
+no Microsoft 365.
+
+00:15:27.160 --> 00:15:28.020
+Dependendo da atividade
+
+00:15:28.020 --> 00:15:28.960
+da sua configuração
+
+00:15:28.960 --> 00:15:29.500
+de auditoria,
+
+00:15:29.600 --> 00:15:30.600
+ele pode ajudar a investigar
+
+00:15:30.600 --> 00:15:31.840
+quem agiu, o que fez
+
+00:15:31.840 --> 00:15:32.820
+e quando fez.
+
+00:15:33.340 --> 00:15:34.380
+Para o trabalho com registros,
+
+00:15:34.460 --> 00:15:34.880
+isso importa
+
+00:15:34.880 --> 00:15:35.860
+quando alguém faz perguntas
+
+00:15:35.860 --> 00:15:36.500
+após o fato.
+
+00:15:37.000 --> 00:15:37.600
+Imagine que um auditor
+
+00:15:37.600 --> 00:15:38.100
+pergunte por que
+
+00:15:38.100 --> 00:15:38.800
+um contrato assinado
+
+00:15:38.800 --> 00:15:39.500
+não existe mais.
+
+00:15:40.020 --> 00:15:40.660
+Você precisa de mais
+
+00:15:40.660 --> 00:15:41.460
+do que uma pasta vazia
+
+00:15:41.460 --> 00:15:42.060
+e da memória de alguém.
+
+00:15:42.660 --> 00:15:43.760
+Sua organização deve ser capaz
+
+00:15:43.760 --> 00:15:44.420
+de conectar os pontos.
+
+00:15:44.900 --> 00:15:45.620
+O contrato tinha um rótulo
+
+00:15:45.620 --> 00:15:46.080
+de retenção.
+
+00:15:46.520 --> 00:15:47.220
+O período de retenção
+
+00:15:47.220 --> 00:15:47.700
+chegou ao fim.
+
+00:15:48.400 --> 00:15:49.120
+O revisor correto
+
+00:15:49.120 --> 00:15:50.580
+aprovou a decisão de disposição
+
+00:15:50.580 --> 00:15:51.940
+e a atividade foi registrada.
+
+00:15:52.540 --> 00:15:53.120
+Isso que é um rastro
+
+00:15:53.120 --> 00:15:53.720
+que você pode examinar.
+
+00:15:54.140 --> 00:15:54.640
+Talvez a pergunta
+
+00:15:54.640 --> 00:15:55.120
+seja ferida.
+
+00:15:55.540 --> 00:15:56.380
+Quem aplicou o rótulo
+
+00:15:56.380 --> 00:15:56.780
+a este item?
+
+00:15:57.240 --> 00:15:58.140
+Alguém tentou excluí-lo
+
+00:15:58.140 --> 00:15:58.640
+antes do período
+
+00:15:58.640 --> 00:15:59.460
+de retenção terminar?
+
+00:15:59.940 --> 00:16:00.520
+Quando o revisor
+
+00:16:00.520 --> 00:16:01.480
+aprovou seu descarte?
+
+00:16:02.000 --> 00:16:02.900
+O histórico de auditoria
+
+00:16:02.900 --> 00:16:03.720
+pode ajudar a responder
+
+00:16:03.720 --> 00:16:04.380
+a essas perguntas
+
+00:16:04.380 --> 00:16:05.120
+fornecendo atividades
+
+00:16:05.120 --> 00:16:06.000
+registradas em toda
+
+00:16:06.000 --> 00:16:07.560
+a plataforma Microsoft 365.
+
+00:16:08.060 --> 00:16:08.780
+Existe uma distinção
+
+00:16:08.780 --> 00:16:09.200
+que geralmente
+
+00:16:09.200 --> 00:16:10.180
+surpreende os iniciantes.
+
+00:16:10.840 --> 00:16:11.680
+O histórico de auditoria
+
+00:16:11.680 --> 00:16:12.300
+não reside dentro
+
+00:16:12.300 --> 00:16:12.980
+do próprio documento.
+
+00:16:13.320 --> 00:16:13.920
+Você não abrirá
+
+00:16:13.920 --> 00:16:14.580
+um arquivo do Word
+
+00:16:14.580 --> 00:16:15.420
+e encontrará seu rastro
+
+00:16:15.420 --> 00:16:16.120
+de auditoria completo
+
+00:16:16.120 --> 00:16:16.760
+armazenado aqui.
+
+00:16:17.160 --> 00:16:17.980
+O preview armazena
+
+00:16:17.980 --> 00:16:18.420
+essa atividade
+
+00:16:18.420 --> 00:16:19.920
+no log de auditoria unificado,
+
+00:16:20.020 --> 00:16:20.700
+que é o local central
+
+00:16:20.700 --> 00:16:21.720
+para registro de auditoria
+
+00:16:21.720 --> 00:16:22.300
+em serviços como
+
+00:16:22.300 --> 00:16:23.400
+SharePoint, OneDrive,
+
+00:16:23.620 --> 00:16:24.720
+Exchange Online, Teams
+
+00:16:24.720 --> 00:16:25.460
+e entra ID.
+
+00:16:26.040 --> 00:16:26.520
+Pense nisso
+
+00:16:26.520 --> 00:16:27.520
+como registro de visitantes
+
+00:16:27.520 --> 00:16:28.260
+e atividades do prédio
+
+00:16:28.260 --> 00:16:28.680
+e do prédio,
+
+00:16:28.760 --> 00:16:29.560
+não como uma nota presa
+
+00:16:29.560 --> 00:16:30.480
+dentro de cada folha de papel.
+
+00:16:30.620 --> 00:16:31.180
+Isso significa que você
+
+00:16:31.180 --> 00:16:32.040
+precisa pensar na retenção
+
+00:16:32.040 --> 00:16:32.480
+de auditoria
+
+00:16:32.480 --> 00:16:33.080
+separadamente
+
+00:16:33.080 --> 00:16:34.240
+da retenção de registros.
+
+00:16:34.660 --> 00:16:35.500
+Um registro pode precisar
+
+00:16:35.500 --> 00:16:36.480
+ser mantido por muitos anos.
+
+00:16:36.900 --> 00:16:38.020
+As informações de auditoria
+
+00:16:38.020 --> 00:16:38.800
+disponíveis para você
+
+00:16:38.800 --> 00:16:39.480
+dependem de como
+
+00:16:39.480 --> 00:16:40.080
+sua organização
+
+00:16:40.080 --> 00:16:40.920
+configurou a auditoria
+
+00:16:40.920 --> 00:16:41.320
+do preview
+
+00:16:41.320 --> 00:16:42.180
+e qual licenciamento
+
+00:16:42.180 --> 00:16:42.800
+ela possui.
+
+00:16:43.260 --> 00:16:43.920
+Se você precisa
+
+00:16:43.920 --> 00:16:44.680
+de um longo histórico
+
+00:16:44.680 --> 00:16:45.180
+de atividades
+
+00:16:45.180 --> 00:16:46.220
+relacionadas a registros,
+
+00:16:46.340 --> 00:16:47.320
+confirme se sua configuração
+
+00:16:47.320 --> 00:16:47.800
+de auditoria
+
+00:16:47.800 --> 00:16:48.540
+mantém esse histórico
+
+00:16:48.540 --> 00:16:48.920
+pelo período
+
+00:16:48.920 --> 00:16:49.560
+que sua organização é.
+
+00:16:49.760 --> 00:16:50.380
+Caso contrário,
+
+00:16:50.380 --> 00:16:51.660
+você ainda pode ter o registro,
+
+00:16:51.800 --> 00:16:52.540
+mas perdeu acesso
+
+00:16:52.540 --> 00:16:53.420
+a detalhes e atividades
+
+00:16:53.420 --> 00:16:54.380
+antigas que ajudariam
+
+00:16:54.380 --> 00:16:55.280
+a explicar sua jornada.
+
+00:16:55.860 --> 00:16:56.560
+Por isso que as decisões
+
+00:16:56.560 --> 00:16:57.160
+sobre registros
+
+00:16:57.160 --> 00:16:58.020
+não podem ficar apenas
+
+00:16:58.020 --> 00:16:58.520
+com uma equipe.
+
+00:16:59.120 --> 00:17:00.060
+Os proprietários de negócios
+
+00:17:00.060 --> 00:17:00.820
+entendem os registros
+
+00:17:00.820 --> 00:17:01.460
+que suas equipes têm.
+
+00:17:01.840 --> 00:17:02.860
+As equipes de conformidade
+
+00:17:02.860 --> 00:17:03.980
+jurídica definem as regras
+
+00:17:03.980 --> 00:17:04.820
+e a prova de que precisam.
+
+00:17:05.360 --> 00:17:06.040
+Os administradores
+
+00:17:06.040 --> 00:17:07.180
+do Microsoft 365
+
+00:17:07.180 --> 00:17:08.080
+configuram os rótulos,
+
+00:17:08.220 --> 00:17:08.800
+revisam permissões
+
+00:17:08.800 --> 00:17:09.680
+e definições de auditoria
+
+00:17:09.680 --> 00:17:10.700
+que fazem essas regras funcionarem.
+
+00:17:11.000 --> 00:17:11.400
+Cada grupo
+
+00:17:11.400 --> 00:17:12.260
+detém parte da resposta.
+
+00:17:12.620 --> 00:17:13.320
+Rótulo de retenção
+
+00:17:13.320 --> 00:17:13.840
+define a regra.
+
+00:17:14.440 --> 00:17:15.500
+A declaração de registro
+
+00:17:15.500 --> 00:17:16.480
+protege a evidência oficial.
+
+00:17:17.180 --> 00:17:18.160
+A revisão de exposição
+
+00:17:18.160 --> 00:17:19.180
+controla a decisão final.
+
+00:17:19.700 --> 00:17:20.400
+O histórico da editoria
+
+00:17:20.400 --> 00:17:21.140
+documenta o racho
+
+00:17:21.140 --> 00:17:21.700
+dessas ações.
+
+00:17:22.240 --> 00:17:22.560
+Para você,
+
+00:17:22.620 --> 00:17:23.680
+a questão prática é simples.
+
+00:17:24.460 --> 00:17:25.220
+Se alguém questionasse
+
+00:17:25.220 --> 00:17:26.180
+uma exclusão daqui a anos,
+
+00:17:26.280 --> 00:17:26.920
+sua organização
+
+00:17:26.920 --> 00:17:28.020
+conseguiria mostrar a regra,
+
+00:17:28.160 --> 00:17:28.740
+a aprovação
+
+00:17:28.740 --> 00:17:29.780
+e a atividade registrada
+
+00:17:29.780 --> 00:17:30.380
+que a levou a isso.
+
+00:17:30.900 --> 00:17:31.540
+Senão, o registro
+
+00:17:31.540 --> 00:17:32.400
+pode estar protegido,
+
+00:17:32.480 --> 00:17:33.480
+mas o processo ainda tem
+
+00:17:33.480 --> 00:17:34.760
+lacunas no ciclo de vida
+
+00:17:34.760 --> 00:17:36.200
+dos registros digitais.
+
+00:17:36.740 --> 00:17:37.060
+Portanto,
+
+00:17:37.160 --> 00:17:37.820
+junte as peças
+
+00:17:37.820 --> 00:17:38.700
+e o gerenciamento
+
+00:17:38.700 --> 00:17:39.600
+de registros do Purview
+
+00:17:39.600 --> 00:17:40.620
+dará ao conteúdo oficial
+
+00:17:40.620 --> 00:17:41.420
+um caminho controlado
+
+00:17:41.420 --> 00:17:42.280
+durante sua vida útil.
+
+00:17:42.880 --> 00:17:43.160
+Primeiro,
+
+00:17:43.240 --> 00:17:44.160
+sua organização identifica
+
+00:17:44.160 --> 00:17:45.160
+o que conta como evidência.
+
+00:17:45.600 --> 00:17:45.820
+Depois,
+
+00:17:45.900 --> 00:17:46.720
+o rótulo de retenção corre.

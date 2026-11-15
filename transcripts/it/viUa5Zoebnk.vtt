@@ -1,0 +1,799 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.080
+Il problema del tuo Copilot non riguarda in realtà le funzionalità, è un problema di fiducia nel modello che ne ha la base.
+
+00:00:04.500 --> 00:00:08.760
+La maggior parte dei team pensa ancora che la sicurezza risieda in prompt e autorizzazione in pochi filtri perimetrali.
+
+00:00:08.960 --> 00:00:14.200
+Ma ecco il punto, gli aggressori non devono superare il tuo prompt, devono solo avvelenare il contesto circostante ed è lì che tutto si rompe.
+
+00:00:14.560 --> 00:00:19.980
+I filtri di base possono intercettare la spazzatura ovvia, ma si perdono il payload nascosto in un email, in un file SharePoint e in un campo di un modulo.
+
+00:00:20.240 --> 00:00:25.380
+Questo contenuto recuperato resta lì in attesa, finché Copilot non lo richiama trattandolo come un'istruzione diretta.
+
+00:00:25.380 --> 00:00:30.480
+Abbiamo già visto segnali d'allarme con la fuga di dati ecco in Microsoft 365, Copilot e ShareLink in Copilot Studio,
+
+00:00:30.920 --> 00:00:33.060
+e la realtà è che le patch non hanno posto fine a questo schema.
+
+00:00:33.640 --> 00:00:40.520
+Poiché Copilot può cercare, riassumere e agire in tutto l'ambiente Microsoft 365, un percorso di istruzioni errato può diffondersi rapidamente.
+
+00:00:40.960 --> 00:00:48.860
+Quindi non si tratta di aggiungere un altro dashboard al tuo stack, ma di inserire Azure Logic Apps nel percorso per ispezionare, valutare e bloccare i payload dannosi prima che Copilot venga eseguito.
+
+00:00:49.440 --> 00:00:51.240
+Il vero pericolo è l'architettura, non il prompt.
+
+00:00:51.240 --> 00:00:55.280
+Il vecchio modello presuppone che si possa mantenere il sistema sicuro scrivendo istruzioni migliori attorno a modello.
+
+00:00:55.700 --> 00:00:59.780
+Gli dai un solido prompt di sistema, aggiungi delimitatori e dici agli utenti cosa non devono fare.
+
+00:01:00.280 --> 00:01:05.860
+Sembra sensato sulla carta, ma in realtà il modello non applica confini di fiducia come farebbe un sistema di sicurezza,
+
+00:01:06.200 --> 00:01:10.160
+perché legge e linguaggio in un unico canale condiviso dove istruzioni e dati competono per l'attenzione.
+
+00:01:10.740 --> 00:01:11.820
+Questo presupposto è il difetto.
+
+00:01:12.300 --> 00:01:18.660
+Se un modello non riesce a distinguere in modo affidabile tra un utente che chiede aiuto e un documento che gli dice silenziosamente di ignorare le istruzioni precedenti,
+
+00:01:18.660 --> 00:01:21.340
+allora il punto di controllo non può risiedere solo nel layer del prompt.
+
+00:01:21.340 --> 00:01:26.960
+Stai cercando di proteggere il comportamento al perimetro, mentre il rischio reale risiede nel flusso di contesto che entra nel modello.
+
+00:01:27.520 --> 00:01:31.120
+Questo è stato chiaro a molti team quando sono apparsi carichi di lavoro di Copilot basati sul recupero massivo.
+
+00:01:31.360 --> 00:01:37.080
+Nel momento in cui Copilot inizia a estrarre mail, file e cronologia chat da Microsoft Graph, la superficie di attacco cambia completamente.
+
+00:01:37.080 --> 00:01:41.800
+Non stai più solo proteggendo una conversazione, stai proteggendo un flusso live di input a fiducia mista.
+
+00:01:42.520 --> 00:01:44.480
+È a un livello più profondo, Copilot aumenta la portata.
+
+00:01:45.040 --> 00:01:48.200
+Non risponde solo alle domande, recupera, riassume, segue i riferimenti.
+
+00:01:49.020 --> 00:01:51.400
+In alcune configurazioni può persino attivare strumenti o flussi di lavoro.
+
+00:01:51.980 --> 00:01:56.800
+Quindi quando contenuti non attendibili entrano in quella catena, il modello può trascinare quell'influenza verso azioni sensibili.
+
+00:01:57.300 --> 00:01:59.140
+Ecco perché l'iniezione indiretta di prompt è in questo momento.
+
+00:01:59.840 --> 00:02:04.300
+Nei sistemi di produzione, l'attacco comune non è sempre un utente che digita e ignora le tue regole nella chat.
+
+00:02:04.300 --> 00:02:09.980
+La versione più pericolosa si nasconde nel contenuto recuperato, spesso a settimane, prima che qualcuno si accorga della sua presenza.
+
+00:02:10.640 --> 00:02:17.240
+Un documento alterato, un'email manipolata o la compilazione di un modulo possono sembrare innocui per gli umani ma contengono istruzioni dirette al modello.
+
+00:02:18.140 --> 00:02:23.900
+In seguito Copilot recupera quel contenuto come contesto pertinente, lo unisce a materiale affidabile e il modello finisce per seguire la direttiva sbagliata.
+
+00:02:24.260 --> 00:02:26.840
+La catena d'attacco è semplice ed è proprio questo a renderla pericolosa.
+
+00:02:27.460 --> 00:02:32.960
+Innanzitutto l'attaccante inserisce un contenuto dove Copilot potrà accedervi in seguito, poi il recupero lo porta nella sessione
+
+00:02:32.960 --> 00:02:35.600
+e il modello tratta il piloto come un'istruzione anziché come dati.
+
+00:02:36.480 --> 00:02:43.660
+Dopodiché puoi iniziare a preparare informazioni sensibili, manipolare le risposte o spingere i dati verso un percorso di sfiltrazione tramite link o strumenti.
+
+00:02:44.220 --> 00:02:48.700
+Quindi per i leader non si tratta solo di gire dell'IA ma di controllo in runtime legato direttamente alla governance degli accessi.
+
+00:02:49.340 --> 00:02:54.460
+Se Copilot ha un ampio raggio d'azione nel tenant e il modello elabora contesti di attendibilità mista senza una netta separazione,
+
+00:02:54.960 --> 00:02:58.400
+il tuo modello di sicurezza deve monitorare ciò che entra nel flusso prima dell'esecuzione.
+
+00:02:58.400 --> 00:03:00.400
+Una volta compreso questo cambia anche la soluzione.
+
+00:03:00.780 --> 00:03:05.540
+Smetti di ossessionarti per i prompt perfetti e inizia a implementare i controlli dove si muove il contesto.
+
+00:03:05.540 --> 00:03:07.160
+Perché le difese di base falliscono in produzione.
+
+00:03:07.760 --> 00:03:10.140
+La maggior parte dei team commette un errore fondamentale fino all'inizio.
+
+00:03:10.620 --> 00:03:15.020
+Presumono che i controlli di sicurezza usati da anni nello sviluppo di app funzionino altrettanto bene per Copilot.
+
+00:03:15.480 --> 00:03:21.500
+Scrivono un prompt di sistema più forte, racchiudono l'input dell'utente tra caratteri speciali e pubblicano linee guida per i dipendenti sentendosi poi al sicuro.
+
+00:03:21.880 --> 00:03:26.380
+Questi passaggi non sono negativi e non direi di smettere di seguirli ma non creano un vero confine di sicurezza.
+
+00:03:26.380 --> 00:03:28.900
+Cercano solo di convincere il modello a comportarsi bene.
+
+00:03:29.020 --> 00:03:31.500
+Nella sicurezza la persuasione non equivale all'applicazione forzata del re.
+
+00:03:31.620 --> 00:03:32.520
+È lì che risiede la lacuna.
+
+00:03:33.080 --> 00:03:40.620
+Un prompt di sistema indica al modello cosa preferiresti facesse ma non può impedire a un file dannoso di competere per l'attenzione del modello una volta introdotto nell'area di lavoro.
+
+00:03:41.220 --> 00:03:46.000
+L'uso di delimitatori può aiutare a strutturare il testo ma non offre al modello un modo per verificare l'autorizzazione di sicurezza.
+
+00:03:46.220 --> 00:03:52.960
+Le linee guida per i dipendenti sono ottime per evitare errori in buona fede ma non servono a nulla contro un documento alterato o un payload nascosto nei dati recuperati.
+
+00:03:52.960 --> 00:03:57.440
+Il controllo esiste come suggerimento non come una regola rigida che entra in funzione al momento dell'esecuzione.
+
+00:03:57.760 --> 00:04:01.760
+Le espressioni regolari sono veloci ed economiche quindi vale la pena usarle come primo controllora.
+
+00:04:02.440 --> 00:04:07.120
+Se un utente digita e ignora tutte le istruzioni precedenti il sistema dovrebbe rilevarlo in pochi millisecondi.
+
+00:04:07.240 --> 00:04:12.120
+Puoi usarle anche per segnalare ovvie frasi di bypass della privacy o caratteri in stile SQL nei argomenti dei tuoi strumenti.
+
+00:04:12.600 --> 00:04:20.900
+Quella parte funziona bene ma le regex riconoscono solo pattern predefiniti quindi falliscono quando la formulazione cambia leggermente o quando l'attacco si basa sul significato anziché su parole specifiche.
+
+00:04:20.900 --> 00:04:22.640
+Ecco perché servono a livelli di classificazione.
+
+00:04:22.920 --> 00:04:27.460
+Azure AI Content Safety dispone di scudi per i prompt in grado di rilevare attacchi di iniezione sia diretti che indiretti.
+
+00:04:27.940 --> 00:04:34.160
+In una logic app puoi chiamare un API per controllare il prompt prima che il modello lo veda cambiando poi il percorso del flusso di lavoro se viene rilevato un attacco.
+
+00:04:35.260 --> 00:04:41.280
+Si tratta di un controllo molto più solido della semplice corrispondenza di string poiché analizza l'intento dietro le parole considerando il prompt e i documenti insieme.
+
+00:04:41.820 --> 00:04:46.560
+Tuttavia il rilevamento da solo non basta perché vedere un rischio è inutile se non si ha un modo per fermarlo.
+
+00:04:46.560 --> 00:04:50.280
+I team di sicurezza sottovalutano spesso questa parte specifica del processo.
+
+00:04:51.160 --> 00:04:55.540
+Un avviso in un file di log non è contenimento e nemmeno un bel riquadro in una dashboard lo è.
+
+00:04:56.580 --> 00:05:02.480
+Anche un avviso ad alta priorità nel CM fallisce se il payload è già passato attraverso Copilot e ha attivato un'azione in un sistema valle.
+
+00:05:03.620 --> 00:05:08.320
+Esaminare l'accaduto a posteriori è utile per un'indagine ma non è sufficiente quando un attacco avviene in pochi secondi.
+
+00:05:09.180 --> 00:05:12.800
+Hai a che fare con un modello che può agire all'interno di sistemi già ritenuti affidabili dalla tua organizzazione.
+
+00:05:12.800 --> 00:05:16.540
+C'è anche un problema di falsi negativi che la maggior parte del marketing di prodotto ignora.
+
+00:05:17.240 --> 00:05:25.040
+Gli attacchi indiretti causano gran parte dei mancati rilevamenti nel mondo reale perché l'istruzione pericolosa sembra normale finché il modello non la unisce al resto della conversazione.
+
+00:05:26.140 --> 00:05:30.720
+Quando un umano esamina l'output e si accorge che qualcosa non va, l'input malevolo ha già completato il suo lavoro.
+
+00:05:31.080 --> 00:05:32.440
+L'errore pratico in questo caso è molto semplice.
+
+00:05:32.820 --> 00:05:37.620
+I team passano tutto il tempo a osservare ciò che dice Copilot ma non controllano ciò che vi entra con lo stesso livello di rigore.
+
+00:05:37.620 --> 00:05:42.440
+Ispezionano la risposta dopo che è stata generata lasciando che il materiale non attendibile entri prima che il lavoro inizi.
+
+00:05:42.920 --> 00:05:44.300
+Questo ordine è completamente sbagliato.
+
+00:05:44.600 --> 00:05:48.400
+Una volta riconosciuta questa falla, l'intero obiettivo della tua strategia di sicurezza cambia.
+
+00:05:49.060 --> 00:05:53.800
+Smetti di chiederti come scrivere un prompt più sicuro e inizi a chiederti dove puoi intercettare i dati prima che il modello li esecua.
+
+00:05:54.360 --> 00:05:55.340
+Modello Logic App Firewall
+
+00:05:55.720 --> 00:05:59.800
+Se l'obiettivo è l'intercettazione dobbiamo esaminare come appare concretamente questo controllo anapratico.
+
+00:06:00.200 --> 00:06:04.020
+Dovresti usare Azure Logic Apps come livello di policy posto davanti alla fase di esecuzione.
+
+00:06:04.020 --> 00:06:07.620
+Non dovrebbe essere uno strumento passivo che invia un report dopo che il danno è stato fatto.
+
+00:06:08.200 --> 00:06:13.760
+Devi inserirlo direttamente nel percorso in cui risiedono l'input dell'utente ai dati recuperati così che possano essere ispezionati prima che il modello si metta logo.
+
+00:06:14.380 --> 00:06:17.440
+Questo cambiamento è potente perché le Logic Apps sono progettate per l'orchestrazione.
+
+00:06:18.020 --> 00:06:23.220
+Può attivarsi su eventi specifici, richiamare altre API e prendere decisioni basate su condizioni complesse.
+
+00:06:23.620 --> 00:06:31.160
+Può instradare i dati, inviare avvisi a Microsoft Sentinel e arricchire il processo con informazioni esterne senza costruire un gateway di sicurezza personalizzato da zero.
+
+00:06:31.160 --> 00:06:36.900
+Non stai cercando di sostituire a Copilot. Stai solo inserendo un livello di controllo nel flusso che lo circonda.
+
+00:06:37.400 --> 00:06:39.240
+La logica dietro questo modello è semplice di proposito.
+
+00:06:39.680 --> 00:06:41.800
+Per prima cosa attivi il processo, poi normalizzi i dati.
+
+00:06:42.340 --> 00:06:45.960
+Ispezioni, valuti il rischio, prendi una decisione, infine, in stradi o registri il risultato.
+
+00:06:46.400 --> 00:06:47.180
+Questo è l'intero schema.
+
+00:06:47.680 --> 00:06:52.700
+Quando una richiesta o un contenuto entra nel flusso di lavoro, la Logic App acquisisce quel payload e lo standardizza.
+
+00:06:53.100 --> 00:06:57.060
+Gli input non elaborati sono solitamente disordinati perché i vari connettori gestiscono i dati in modi diversi.
+
+00:06:57.060 --> 00:07:02.840
+Un'email ha un aspetto diverso da una voce di modulo e il contenuto di file o gli argomenti degli strumenti presentano metadati e campi differenti.
+
+00:07:03.240 --> 00:07:08.200
+Se provi a eseguire un'ispezione prima di normalizzare i dati, il tuo sistema di rilevamento sarà incredibilmente rumoroso.
+
+00:07:08.720 --> 00:07:11.840
+Una volta che il pilote è appiattito in un formato coerente, inizia la prima fase di ispezione.
+
+00:07:12.540 --> 00:07:14.500
+Che la tua regia è espersonalizzata, ancora un lavoro da svu.
+
+00:07:15.000 --> 00:07:19.180
+Non è giudice finale né una soluzione magica, ma funziona come un filtro molto veloce ai margini del tuo sistema.
+
+00:07:19.180 --> 00:07:26.540
+Puoi scansionare rapidamente per individuare linguaggi di override noti, suggerimenti di codifica o modelli sospetti nei parametri degli strumenti per ottenere un triage immediato.
+
+00:07:27.060 --> 00:07:30.560
+Poi passi alla seconda fase di ispezione che approfondisce molto di più il contenuto.
+
+00:07:31.200 --> 00:07:33.760
+È qui che richiami gli scudi per i prompt di Azure AI Content Safety.
+
+00:07:34.520 --> 00:07:40.420
+La Logic App invia il prompt dell'utente e tutti i documenti recuperati all'AP per poi diramarsi in base al rilevamento o meno di un attacco.
+
+00:07:41.040 --> 00:07:44.760
+Questo è importante perché le inizioni di prompt non sembrano sempre un ovvio codice informatico.
+
+00:07:45.220 --> 00:07:49.680
+A volte il pericolo diventa chiaro solo quando il prompt e il documento vengono valutati come un'unica unità.
+
+00:07:50.140 --> 00:07:55.460
+C'è un ulteriore livello che trasforma tutto questo da un semplice filtro a un vero controllo di sicurezza, ed è la Threat Intelligence.
+
+00:07:55.460 --> 00:08:01.440
+Se un contenuto fa riferimento a un domino dannoso noto o a un URL sospetto che il tuo team ha già visto in passato, questo dovrebbe cambiare la tua decisione.
+
+00:08:01.760 --> 00:08:07.500
+Le Logic App possono controllare l'evento rispetto alla Threat Intelligence di Defender o ad altri feed di terze parti per raggiungere un punteggio di confidenza.
+
+00:08:07.640 --> 00:08:11.460
+Ciò significa che un modello strano proveniente da una fonte attendibile potrebbe essere lasciato passare
+
+00:08:11.460 --> 00:08:14.560
+mentre lo stesso modello abbinato a un punteggio di reputazione ostile viene bloccato immediatamente.
+
+00:08:15.820 --> 00:08:19.400
+Questo trasforma il tuo albero decisionale in qualcosa di più di una semplice scelta sì o no.
+
+00:08:19.400 --> 00:08:25.080
+Puoi consentire la richiesta se il punteggio di rischio è basso, oppure puoi sanificarla rimuovendo i frammenti non sicuri.
+
+00:08:25.600 --> 00:08:28.360
+Potresti scegliere di mettere in quarantena i dati se la fonte richiede una revisione o no.
+
+00:08:28.880 --> 00:08:33.020
+Se l'azione coinvolge dati sensibili puoi persino richiedere l'approvazione umana prima che proceda.
+
+00:08:33.520 --> 00:08:37.080
+Naturalmente se il segnale è abbastanza forte, blocchi semplicemente la richiesta e fesca tornaviso.
+
+00:08:37.340 --> 00:08:40.260
+Questa gamma di opzioni è ciò che rende questo modello realmente efficace per un'azienda.
+
+00:08:40.820 --> 00:08:44.760
+I team di sicurezza spesso ostacolano l'adozione negando ogni caso che appare leggermente incerto
+
+00:08:44.760 --> 00:08:47.940
+e quando i controlli sono troppo rigidi le persone trovano il modo di aggirarli.
+
+00:08:48.820 --> 00:08:52.660
+Un flusso di lavoro basato su punteggi che offre lo spazio per reagire in base al rischio reale anziché al panno.
+
+00:08:53.000 --> 00:08:56.720
+Questo è esattamente il motivo per cui Logic Apps è una soluzione migliore rispetto a una raccolta di strumenti semplici.
+
+00:08:57.120 --> 00:09:00.940
+Si connette già al resto dell'ecosistema Microsoft e funziona perfettamente con i playbook di Sentinel.
+
+00:09:01.680 --> 00:09:06.040
+Puoi richiedere un controllo di sicurezza dei contenuti, cercare dati sulle minacce, inviare eventi di Audi, tutto in unico posto.
+
+00:09:06.500 --> 00:09:10.000
+Non hai bisogno di un lungo ciclo di sviluppo ogni volta che un attaccante cambia la propria frasiologia
+
+00:09:10.000 --> 00:09:11.480
+o appare un nuovo modo di accedere al sistema.
+
+00:09:11.480 --> 00:09:13.960
+La regola che fa funzionare tutto questo è molto semplice.
+
+00:09:14.600 --> 00:09:18.220
+Devi trattare ogni singolo elemento di contesto come non attendibile finché non è stato valutato.
+
+00:09:18.960 --> 00:09:23.940
+Ciò non significa solo il prompt dell'utente ma anche il corpo dell'email, il file caricato e il campo del modulo SharePoint.
+
+00:09:24.380 --> 00:09:28.860
+Include il payload del connettore, i frammenti di documenti recuperati e persino gli argomenti degli strumenti.
+
+00:09:29.000 --> 00:09:29.960
+Tu devi essere controllato.
+
+00:09:30.240 --> 00:09:35.040
+Nel momento in cui presumigando di queste fonti si assicura per impostazione predefinita hai creato una nuova falla da sfruttare per un attaccante.
+
+00:09:35.040 --> 00:09:41.800
+Una volta che il tuo flusso di lavoro applica questa regola in modo coerente non devi più affidarti a Copilot per separare i dati buoni da quelli cattivi autonomamente.
+
+00:09:42.300 --> 00:09:44.120
+Il processo diventa un sistema di ingresso controllato.
+
+00:09:44.700 --> 00:09:51.580
+Sulla carta sembra un'ottima teoria ma ciò che interessa davvero le persone è cosa succede quando un payload pericoloso colpisce realmente il flusso di lavoro nel mondo reale.
+
+00:09:52.200 --> 00:09:58.080
+Ciò che il flusso di lavoro fa effettivamente durante l'esecuzione e quando il sistema entra in funzione non è solo scansionare il test alla ricerca di parole proibite
+
+00:09:58.080 --> 00:10:01.720
+ma costruire un quadro completo della richiesta prima che venga presa a qualsiasi decisione.
+
+00:10:01.800 --> 00:10:07.580
+Un evento raggiunge il tuo punto di ingresso, magari l'invio di un modulo, flusso di mail o un caricamento di documenti legato a un processo Copilot
+
+00:10:07.580 --> 00:10:10.180
+e Logic Apps avvolge immediatamente quell'evento con dei metadati.
+
+00:10:11.040 --> 00:10:16.100
+Traccia chi ha inviato la richiesta, quale app l'ha toccata, da dove proviene il file e cosa sta per fare il sistema subito dopo.
+
+00:10:16.520 --> 00:10:21.620
+Questo contesto aggiuntivo è fondamentale perché la stessa frase può significare qualcosa di completamente diverso a seconda della provenienza.
+
+00:10:22.020 --> 00:10:25.300
+Una volta acquisiti i dati il payload viene suddiviso in zone di attendibilità specifiche.
+
+00:10:25.300 --> 00:10:27.080
+È necessario mantenere la separazione breve.
+
+00:10:27.080 --> 00:10:33.740
+Il prompt dell'utente va in un contenitore, i documenti recuperati in un altro, mentre la cronologia della conversazione e i parametri degli strumenti hanno lo spazio dedicato.
+
+00:10:33.840 --> 00:10:41.460
+Se si unisce tutto troppo presto si perde la capacità di capire dove sia nata una istruzione rischiosa e il processo di revisione diventa un'ipotesi totale.
+
+00:10:42.380 --> 00:10:47.920
+Molti team saltano questo passaggio perché combinare tutto sembra più veloce, ma in realtà occulta il percorso da seguire.
+
+00:10:48.820 --> 00:10:50.700
+Successivamente il flusso di lavoro passa all'anonizzazione.
+
+00:10:50.700 --> 00:10:54.500
+È la parte noiosa del lavoro, ma anche ciò che rende effettivamente utilizzabile il rilevamento.
+
+00:10:54.500 --> 00:11:02.700
+È necessario rimuovere il markup che crea rumore, decodificare tracce URL o base 64 oppi appiattire i campi inedificati affinché l'ispezione avvenga su una struttura stabile.
+
+00:11:03.420 --> 00:11:10.020
+Se un connettore invia testo RTF e un altro frammenti JSON è necessario ridurli tutti in campi leggibili in modo coerente dai propri controlli.
+
+00:11:10.740 --> 00:11:14.760
+Senza questo la logica perde più tempo a combattere le divergenze di formato che a trovare attacchi reali.
+
+00:11:14.760 --> 00:11:18.180
+Una volta che i dati sono puliti viene eseguito per primo il controllo rapido dei pad.
+
+00:11:18.500 --> 00:11:20.220
+Deve essere un'operazione economica diretta e veloce.
+
+00:11:20.600 --> 00:11:27.260
+Si cercano frasi che tentano di ignorare il comportamento del sistema, come varianti di ignora tutte le istruzioni precedenti o overrido di sistema.
+
+00:11:27.800 --> 00:11:33.900
+Si cerca anche un linguaggio di estrazione dove qualcuno chiede di rivelare materiale riservato, scaricare i segreti o bypassare le impostazioni sulla privacy.
+
+00:11:33.900 --> 00:11:41.380
+Nelle app di logica i team gestiscono solitamente questo aspetto tramite espressioni e passaggi di composizione che impostano flag invece di bloccare subito la richiesta da ogni singolo risconto.
+
+00:11:41.460 --> 00:11:45.500
+Tale segnalazione è importante perché una singola frase non significa sempre che qualcuno stia abusando del sistema.
+
+00:11:45.960 --> 00:11:50.740
+Una persona che lavora in un flusso di sicurezza valido potrebbe dover chiedere informazioni sulla gestione di contenuti riservati.
+
+00:11:51.360 --> 00:11:56.580
+Per risolvere il problema il flusso invia il pilote più ricco agli Azure AI Content Safety Prompt Shields per un'analisi più approfondita.
+
+00:11:56.760 --> 00:12:03.480
+La chiamata AI include sia il prompt dell'utente che i documenti recuperati, poiché il problema reale si nasconde solitamente nella relazione tra loro.
+
+00:12:04.640 --> 00:12:10.420
+Il servizio restituisce un segnale semplice e se viene rilevato un attacco il flusso di lavoro modifica il percorso prima ancora che venga la chiamata al modello.
+
+00:12:10.920 --> 00:12:12.480
+Successivamente è necessario aggiungere il contesto.
+
+00:12:12.760 --> 00:12:15.780
+Le ricerche di intelligence sulle minacce offrono al flusso di lavoro una prospettiva giunta.
+
+00:12:16.100 --> 00:12:23.220
+È possibile interrogare Microsoft Defender Threat Intelligence o qualsiasi fonte tax attendibile per verificare domini, URL o indicatori di origine associati ad abusi.
+
+00:12:23.620 --> 00:12:30.060
+È opportuno includere i punteggi di confidenza o i disponibili, poiché la reputazione di una fonte dovrebbe influenzare il punteggio finale, non sostituirlo del tutto.
+
+00:12:30.060 --> 00:12:36.060
+Un payload debole da una fonte rischiosa dovrebbe sempre avere una priorità maggiore rispetto allo stesso payload proveniente da un processo interno noto.
+
+00:12:36.900 --> 00:12:38.520
+Infine il sistema genera un punteggio composito.
+
+00:12:38.900 --> 00:12:44.120
+Analizza la forza del pattern rilevato e il risultato dei prompt shield la reputazione della fonte e la sensibilità dell'azione richiesta.
+
+00:12:44.120 --> 00:12:50.040
+Una richiesta a basso rischio per riassumere un articolo pubblico non ha lo stesso peso di una richiesta che potrebbe esporre file protetti.
+
+00:12:50.720 --> 00:12:52.400
+Questo punteggio combinato determina la mischiazza.
+
+00:12:52.680 --> 00:12:54.180
+Gli eventi puliti proseguono come previsto.
+
+00:12:54.640 --> 00:12:57.720
+I casi a rischio medio vengono sanificati o rindirizzati verso un percorso sicuro.
+
+00:12:58.380 --> 00:13:00.980
+E i casi ad alto rischio vengono bloccati prima ancora che il copilot venga eseguito.
+
+00:13:01.640 --> 00:13:04.680
+Tutto viene registrato in una traccia di audit preservando il percorso decisionale.
+
+00:13:04.680 --> 00:13:09.160
+Questi eventi bloccati ti indicano dove si accumula la pressione e quali fonti continuano a causare problemi.
+
+00:13:09.420 --> 00:13:15.340
+Quando vedi quali pattern si infiltrano nei tuoi flussi di lavoro ottieni finalmente i dati necessari per ottimizzare il sistema per il round successivo.
+
+00:13:16.460 --> 00:13:18.340
+Come ottimizzare per ridurre il rumore e favorire l'uso aziendale.
+
+00:13:18.800 --> 00:13:21.180
+Una volta che il sistema è attivo la natura del lavoro cambia.
+
+00:13:21.520 --> 00:13:23.200
+Costruire il flusso è in realtà la parte facile.
+
+00:13:23.760 --> 00:13:30.120
+Ottimizzarlo affinché le persone si fidino e non cerchino scorciatoie ciò che decide se diventerà un vero controllo di sicurezza o solo un altro esperimento fallito.
+
+00:13:30.660 --> 00:13:34.260
+Se il sistema crea troppa frizione gli utenti troveranno semplicemente un modo per aggirarlo
+
+00:13:34.260 --> 00:13:35.600
+rendendo l'intero progetto inutile.
+
+00:13:36.120 --> 00:13:37.380
+Dovresti iniziare in modo circoscritto.
+
+00:13:37.460 --> 00:13:40.100
+Non cercare di monitorare ogni singolo punto di contatto di Copilot Finder Premium.
+
+00:13:40.520 --> 00:13:43.680
+Scegli invece i punti in cui il rischio è maggiore e il percorso è chiaro, come le azioni,
+
+00:13:44.040 --> 00:13:46.260
+abilitate dagli strumenti o le fonti di dati di alto valore.
+
+00:13:46.820 --> 00:13:51.580
+Potresti iniziare con un processo basato su SharePoint o un flusso di lavoro specifico per ottenere un segnale che puoi realmente interpretare.
+
+00:13:52.000 --> 00:13:54.780
+Un ambito limitato ti dà lo spazio per imparare senza negare nei dati.
+
+00:13:55.440 --> 00:13:56.780
+Quando configuri i controlli iniziali,
+
+00:13:57.320 --> 00:13:59.780
+imposta i rifiuti puntando al richiamo piuttosto che all'assoluta certezza.
+
+00:13:59.780 --> 00:14:05.000
+Il primo passaggio deve intercettare tempestivamente il linguaggio sospetto e non dimostrare l'intento malevolo oltre ogni ragionevole dubbi.
+
+00:14:05.400 --> 00:14:09.780
+Se forzi i tuoi pattern alla perfezione, diventeranno fragili e inizieranno a perdere proprio ciò che ti interessa.
+
+00:14:10.260 --> 00:14:15.640
+È meglio lasciare che il sistema segnali un po' troppo all'inizio e permettere ai controlli successivi di aggiungere contesto per ridurre il rumore.
+
+00:14:16.120 --> 00:14:18.100
+Ecco perché il punteggio conta più delle singole elevazioni.
+
+00:14:18.700 --> 00:14:21.680
+La corrispondenza di una frase da sola non dovrebbe sempre bloccare una richiesta,
+
+00:14:21.780 --> 00:14:25.780
+ma quando unisci quella corrispondenza a un flag di Prompt Shield e a una fonte rischiosa, la situazione cambia.
+
+00:14:25.780 --> 00:14:30.660
+Segnali deboli dovrebbero accumularsi l'uno sull'altro, mentre quelli forti dovrebbero accelerare il bloc.
+
+00:14:31.000 --> 00:14:36.120
+Questa è la differenza fondamentale tra un filtro rigido e fastidioso e un modello di policy che funziona davvero per un'azienda.
+
+00:14:36.700 --> 00:14:38.760
+Devi anche stabilire un limite massimo per i falsi positivi.
+
+00:14:39.120 --> 00:14:44.040
+Cerca di mantenerlo sotto il 2% perché una volta che le persone sentono che il controllo blocca il loro lavoro abituale smetteranno di fidare al sistema.
+
+00:14:44.340 --> 00:14:45.500
+È lì che iniziano le soluzioni alternative.
+
+00:14:45.500 --> 00:14:51.400
+Gli utenti copieranno testi e strumenti non gestiti, i team creano flussi ombra e gli amministratori inizieranno a chiedere esclusioni generalizzate.
+
+00:14:51.400 --> 00:14:56.720
+Il controllo crollerà dall'interno, non perché il rilevamento ha fallito ma perché l'attrito è diventato troppo difficile da gestire.
+
+00:14:57.480 --> 00:14:59.180
+Per evitarlo devi monitorare le metriche giuste.
+
+00:14:59.900 --> 00:15:02.440
+Dimentica le dashboard di facciate concentrati sul tempo medio di rilevamento.
+
+00:15:02.900 --> 00:15:05.960
+Vuoi mantenerlo sotto i 15 minuti per tutto ciò che richiede una revisione manuale.
+
+00:15:06.340 --> 00:15:11.060
+Dovresti anche monitorare il tempo di contenimento automatico e puntare a meno di 5 minuti laddove il blocco può essere eseguito in sicuro.
+
+00:15:11.140 --> 00:15:15.680
+Se il flusso di lavoro si attiva costantemente ma non influenza mai davvero una decisione, è solo rumore.
+
+00:15:16.140 --> 00:15:18.180
+Il costo è un altro fattore che richiede una costante ottimizzazione.
+
+00:15:18.180 --> 00:15:23.960
+Le logiche basate sul consumo sono ottime per carichi di lavoro irregolari o piccoli progetti pilota perché paghi solo per ciò che esegui.
+
+00:15:24.500 --> 00:15:30.300
+Tuttavia il piano standard ha più senso una volta che il volume di eventi è prevedibile e sufficientemente alto da rendere anerosi i costi per singole esecuzioni.
+
+00:15:30.740 --> 00:15:31.300
+Non era tentativo.
+
+00:15:31.760 --> 00:15:35.760
+Misura il numero effettivo di trigger e le dimensioni del payload prima di scegliere un modello di prezzo.
+
+00:15:35.920 --> 00:15:37.200
+Attenzione a come gestisci l'archiviazione.
+
+00:15:37.580 --> 00:15:43.420
+Ti serve abbastanza cronologia di esecuzione per la revisione degli incidenti e le prove di governance ma non un database enorme pieno di contenuti sensibili.
+
+00:15:43.420 --> 00:15:48.420
+Mantieni solo i campi specifici che spiegano perché è stata presa una decisione ed elimina il superfluo che crea rischi di conservazione.
+
+00:15:48.880 --> 00:15:53.600
+Archiviare troppi dati può trasformare il tuo strumento di sicurezza nella responsabilità per la privacy e non presti attenzione.
+
+00:15:53.860 --> 00:15:56.620
+Infine collega tutto questo lavoro di ottimizzazione alla tua governance più ampia.
+
+00:15:56.780 --> 00:16:02.440
+Mappa il flusso di lavoro sulle funzioni in ISTE e ARMF come misurazione e gestione e collegalo alle etichette di sensibilità dei dati in preview.
+
+00:16:02.800 --> 00:16:08.580
+A volte la soluzione è migliore, non è un rilevatore più intelligente ma semplicemente rimuovere l'accesso non necessario dal flusso prima che diventi un problema.
+
+00:16:08.580 --> 00:16:17.500
+Quando raggiungi quel punto non stai più solo discutendo di sicurezza dell'IA in astratto, stai gestendo un vero modello operativo con soie e compromessi che un'azienda può effettivamente controllare.
+
+00:16:18.380 --> 00:16:20.080
+Cosa cambia questo per leader e architetti?
+
+00:16:20.600 --> 00:16:25.820
+Una volta implementato tutto ciò Copilot smette di agire come un sistema di fiducia cieca ed è qui che avviene il vero cambiamento.
+
+00:16:26.180 --> 00:16:31.880
+Prima di questo cambiamento il modello riceveva solo un insieme disordinato di contesti misti mentre il tuo team sperava che l'istruzione giusta prevalesse.
+
+00:16:32.100 --> 00:16:36.760
+Ora quel contesto viene filtrato, valutato e instradato prima ancora che il modello abbia la possibilità di toccarlo.
+
+00:16:36.760 --> 00:16:40.780
+Il risultato di sicurezza non è più solo una politica astratta perché ora funziona come un'esecuzione controllata.
+
+00:16:41.240 --> 00:16:44.220
+Per gli architetti questo sposta il punto in cui la sicurezza risiede effettivamente nel proprio design.
+
+00:16:45.040 --> 00:16:51.160
+Non risiede più soltanto nelle impostazioni del tenant, nelle autorizzazioni o nei modelli di prompt, ma si colloca direttamente nel percorso della transazione.
+
+00:16:51.980 --> 00:16:57.260
+Ogni richiesta rilevante ottiene un punto di intercettazione e ogni azione sensibile segue uno specifico percorso decisionale.
+
+00:16:57.400 --> 00:17:03.580
+Ciò significa che ogni nuovo connettore, agente o plugin diventa qualcosa da valutare come un percorso di input anziché una semplice funzionalità di produttività.
+
+00:17:03.580 --> 00:17:07.560
+Questo è fondamentale perché la deriva dell'architettura è solitamente il motivo per cui questi programmi falliscono.
+
+00:17:07.820 --> 00:17:14.900
+Un team implementa Copilot per un singolo caso d'uso, poi un altro team collega un modulo e alla fine qualcuno aggiunge un flusso di lavoro o fornisce a un agente l'accesso agli strumenti.
+
+00:17:15.420 --> 00:17:20.900
+Ognuno di questi cambiamenti sembra piccolo di per sé, ma insieme creano un percorso di attacco molto più ampio di quanto chiunque avesse mai previsto.
+
+00:17:21.440 --> 00:17:26.800
+Se non integri l'intercettazione nel tuo modello operativo, l'ambiente si espanderà molto più velocemente di quanto i tuoi controlli possano gestire.
+
+00:17:27.020 --> 00:17:32.140
+Per i responsabili della sicurezza, questo approccio risolve finalmente un confuso problema di titolarità che affligge la maggior parte delle organizzazioni.
+
+00:17:32.140 --> 00:17:35.660
+Attualmente il rischio legato a Copilot ricade solitamente nelle lacune tra i diversi T.
+
+00:17:36.080 --> 00:17:42.320
+Il SOC vede gli avvisi, gli amministratori di Microsoft 365 vedono la configurazione e il responsabile dell'IA si preoccupa solo dell'adozione.
+
+00:17:42.960 --> 00:17:48.000
+Quando utilizzi un percorso di controllo tramite Logic Apps, tutti questi gruppi possono finalmente lavorare partendo da un unico modello di risposta.
+
+00:17:48.240 --> 00:17:52.480
+Utilizzano la stessa traccia degli eventi, la stessa logica di punteggio e la stessa cronologia delle diramazioni,
+
+00:17:52.480 --> 00:17:56.800
+il che riduce la confusione totale quando un prompt rischioso o un documento compromesso appaiono in un flusso di lavoro a T.
+
+00:17:57.000 --> 00:17:59.720
+L'aspetto commerciale di tutto ciò è molto più diretto di quanto la gente si aspetta.
+
+00:17:59.720 --> 00:18:02.940
+Bloccare una minaccia tempestivamente è sempre meno costoso che cercare di porvi rimedio.
+
+00:18:03.140 --> 00:18:06.700
+La bonifica comporta indagini e revisioni legali e interruzioni per gli utenti,
+
+00:18:06.900 --> 00:18:11.380
+e di solito termina con una spiacevole serie di revisioni degli accessi che avrebbero dovuto essere effettuate prima del deployment.
+
+00:18:11.960 --> 00:18:14.920
+Ai leader non serve una lunga lezione sull'etica dell'IA per capirlo.
+
+00:18:15.120 --> 00:18:21.220
+Devono solo vedere che il controllo in runtime costa meno che lasciare che il rischio non gestito si diffonda attraverso i sistemi usati quotidianamente dallo staff.
+
+00:18:21.220 --> 00:18:24.980
+Per i dirigenti questo solleva un punto scomodo su dove risiede il rischio.
+
+00:18:25.880 --> 00:18:29.100
+Il rischio legato all'IA non si trova più in una sandbox o in un progetto pilota di laboratorio,
+
+00:18:29.180 --> 00:18:31.200
+ma ora risiede in Word Outlook, SharePoint e Teams.
+
+00:18:31.940 --> 00:18:35.360
+Le persone danno già per scontato che questi luoghi siano abbastanza sicuri da muoversi velocemente
+
+00:18:35.360 --> 00:18:38.040
+e che sta fiducia a me riposta è esattamente ciò che alza la posta in gioco per esempio.
+
+00:18:38.500 --> 00:18:41.560
+Un flusso di lavoro erato in un'app sperimentale è un problema contenuto,
+
+00:18:41.680 --> 00:18:46.260
+ma un flusso di lavoro erato all'interno del tuo stack di produttività quotidiana è una storia completamente diversa.
+
+00:18:46.260 --> 00:18:49.160
+Il tuo percorso di implementazione dovrebbe rimanere piccolo e molto di libero.
+
+00:18:49.260 --> 00:18:51.860
+Inizia con un caso d'uso, un trigger e un modello di punteggio.
+
+00:18:52.160 --> 00:18:55.960
+Scegli un percorso in cui i dati contano davvero e il comportamento sia facile da osservare per te.
+
+00:18:56.320 --> 00:19:00.160
+Devi dimostrare che il flusso di lavoro intercetta gli input rischiosi in strada a quelli sicuri,
+
+00:19:00.260 --> 00:19:02.520
+fornendo agli umani qualcosa di utile a quando serve una revisione.
+
+00:19:03.020 --> 00:19:05.200
+Una volta dimostrato che funziona, puoi iniziare a espanderti.
+
+00:19:05.740 --> 00:19:09.040
+In seguito puoi aggiungere rilevamento di anomalie o controlli di output dove è appropriato.
+
+00:19:09.380 --> 00:19:12.260
+Puoi persino aggiungere un monitoraggio più approfondito sull'uso in proprio degli strumenti,
+
+00:19:12.260 --> 00:19:15.240
+ma devi mantenere il primo cancello proprio dove il contesto non attendibile entra nel sistema.
+
+00:19:15.720 --> 00:19:18.300
+Se quel primo cancello rimane debole, ogni controllo aggiunto in seguito
+
+00:19:18.300 --> 00:19:20.360
+cercherà solo di compensare un punto di partenza errato.
+
+00:19:21.000 --> 00:19:22.360
+Il cambiamento qui è in realtà molto semplice.
+
+00:19:22.780 --> 00:19:26.060
+Smetti di trattare l'innozione di prompt come un semplice problema di formulazione
+
+00:19:26.060 --> 00:19:30.000
+e inizi a considerarlo come un controllo runtime sul contesto non attendibile che attraversa Copilot.
+
+00:19:30.640 --> 00:19:33.660
+Tora il tempo questa settimana per mappare un flusso di lavoro di Copilot all'inizio alla fine.
+
+00:19:34.000 --> 00:19:36.860
+Individua l'ultimo punto di intercettazione sicuro prima dell'esecuzione
+
+00:19:36.860 --> 00:19:39.860
+e crea una logic app che valuti, blocchi e registri quel percorso specifico.
+
+00:19:40.780 --> 00:19:43.860
+Se vuoi saperne di più sulla sicurezza di Copilot senza fronzoli, iscriviti e lascia una recensione.
+
+00:19:44.840 --> 00:19:49.080
+Puoi anche connetterti con me, Mirko Pita, su LinkedIn per parlarmi dello scenario tenant specifico
+
+00:19:49.080 --> 00:19:50.240
+che stai cercando di proteggere.

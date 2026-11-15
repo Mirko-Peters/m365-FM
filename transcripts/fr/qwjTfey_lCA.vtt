@@ -1,0 +1,2239 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:07.210
+Prêt pour 10 jours consacrés à Microsoft 365, Copilot, l'IA, Azure et aux personnes qui façonnent l'avenir du travail et accès.
+
+00:00:07.930 --> 00:00:11.990
+En janvier prochain, la M365 Con est de retour et nous voyons plus grand.
+
+00:00:12.950 --> 00:00:18.150
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des conseils pratiques d'experts et de MVP du monde entier.
+
+00:00:18.870 --> 00:00:21.110
+Pas de diapositives génériques, pas de jargon interminable.
+
+00:00:22.070 --> 00:00:23.190
+Nous abordons les vrais défis.
+
+00:00:23.770 --> 00:00:28.570
+Copilot Studio, les agents, IAA, Fabric, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.570 --> 00:00:34.290
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.490 --> 00:00:40.090
+Avec 10 jours complets, vous pourrez explorer de nombreuses technologies et échanger avec une communauté mondiale.
+
+00:00:40.970 --> 00:00:44.270
+Suivez le direct et rapportez des idées pratiques dans votre entreprise.
+
+00:00:45.210 --> 00:00:48.630
+Janvier 2027, dès 10 jours, une seule communauté, Microsoft.
+
+00:00:49.390 --> 00:00:50.630
+Les inscriptions sont ouvertes dès maintenant.
+
+00:00:52.830 --> 00:00:54.850
+Réservez votre place aujourd'hui.
+
+00:00:54.850 --> 00:00:58.850
+Rendez-vous sur m365con.net à...
+
+00:00:59.890 --> 00:01:04.650
+Inscrivez-vous sur m365con.net et nous nous retrouverons en direct en janvier.
+
+00:01:04.650 --> 00:01:07.430
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets.
+
+00:01:07.750 --> 00:01:08.490
+Je suis Mirko Peters.
+
+00:01:08.830 --> 00:01:12.390
+Le sujet d'aujourd'hui est celui auquel presque tous les apprenants en sciences des données ou en machine learning sont confrontés.
+
+00:01:12.810 --> 00:01:16.650
+Vous avez suivi quelques tutoriels, maîtrisé les bases, mais un obstacle vous bloque systématiquement.
+
+00:01:17.330 --> 00:01:19.390
+Vous n'avez pas de données intéressantes pour vous entraîner.
+
+00:01:20.190 --> 00:01:22.970
+Vous commencez à chercher des jeux de données publiques, et c'est là que les ennuis commencent.
+
+00:01:23.510 --> 00:01:25.870
+Vous trouvez un site gouvernemental avec des données météo, ce qui est génial,
+
+00:01:25.970 --> 00:01:28.290
+mais les fichiers sont dans un format étrange que vous n'avez jamais vu.
+
+00:01:29.070 --> 00:01:31.610
+Les noms des colonnes ne veulent rien dire, et la moitié des valeurs sont manquantes.
+
+00:01:31.610 --> 00:01:37.010
+Vous passez des heures à essayer d'ouvrir le fichier, et une fois nettoyé pour être utilisable, votre enthousiasme a disparu.
+
+00:01:37.450 --> 00:01:38.730
+Je suis passé par là, et c'est frustrant.
+
+00:01:39.110 --> 00:01:40.750
+L'épisode d'aujourd'hui élimine complètement ce problème.
+
+00:01:41.610 --> 00:01:44.330
+A la fin de cet épisode, vous saurez ce qu'est Azure Open Datasets,
+
+00:01:44.430 --> 00:01:47.210
+et comment obtenir gratuitement des données prêtes à l'emploi en quelques minutes,
+
+00:01:47.350 --> 00:01:49.690
+sans scrapping, ni nettoyage, ni casse-tête.
+
+00:01:50.230 --> 00:01:51.010
+Entrons dans le vif du sujet.
+
+00:01:51.390 --> 00:01:54.110
+Qu'est-ce qu'Azure Open Datasets, exactement ?
+
+00:01:54.110 --> 00:01:56.230
+Alors, qu'est-ce qu'Azure Open Datasets ?
+
+00:01:56.230 --> 00:01:57.350
+C'est la définition la plus simple.
+
+00:01:57.350 --> 00:02:01.310
+C'est une bibliothèque gratuite de jeux de données publics que Microsoft a déjà nettoyé et hébergé sur Azure.
+
+00:02:02.050 --> 00:02:04.410
+Imaginez une bibliothèque où quelqu'un a déjà vérifié chaque livre,
+
+00:02:04.610 --> 00:02:07.170
+corrigé les erreurs, et tout classé, par ordre alphabétique.
+
+00:02:07.730 --> 00:02:10.570
+Vous n'avez plus qu'à entrer, et apprendre ce dont vous avez besoin.
+
+00:02:11.530 --> 00:02:12.350
+C'est un point important.
+
+00:02:12.790 --> 00:02:15.830
+Ce n'est pas un service payant séparé auquel vous devez souscrire, ou un module complémentaire premium.
+
+00:02:16.270 --> 00:02:18.590
+Il s'agit simplement de données stockées sur Azure auxquelles vous pouvez accéder.
+
+00:02:18.590 --> 00:02:23.030
+Microsoft a récupéré des jeux de données publics, auprès d'organismes comme l'ANOA,
+
+00:02:23.150 --> 00:02:25.810
+le Bureau du Recensement des Etats-Unis et des administrations municipales,
+
+00:02:25.890 --> 00:02:28.070
+et a effectué tout le travail fastidieux de normalisation des schémas,
+
+00:02:28.350 --> 00:02:32.590
+de correction des incohérences et de planification des mises à jour pour que les données restent actuelles.
+
+00:02:32.930 --> 00:02:34.530
+Comparez cela à l'ancienne méthode de travail.
+
+00:02:35.530 --> 00:02:37.450
+Vous trouviez un jeu de données sur un site gouvernemental,
+
+00:02:37.770 --> 00:02:40.970
+téléchargez un fichier zip rempli de fichiers CSV au format disparate,
+
+00:02:41.250 --> 00:02:43.730
+pour finalement découvrir des valeurs manquantes, des formats de date étrange,
+
+00:02:43.730 --> 00:02:45.610
+et des colonnes qui ne correspondent pas d'un fichier à l'autre.
+
+00:02:45.610 --> 00:02:49.790
+Ensuite vous passiez des heures, parfois des jours, à écrire du code pour tout nettoyer.
+
+00:02:50.490 --> 00:02:52.890
+Une fois terminé, vous n'étiez même pas certain d'avoir bien fait le travail.
+
+00:02:53.550 --> 00:02:54.550
+Microsoft occupe de tout cela.
+
+00:02:55.370 --> 00:02:57.210
+Il normalise les données dans des schémas cohérents,
+
+00:02:57.310 --> 00:02:59.190
+comble les lacunes et les stock au format parquet,
+
+00:02:59.330 --> 00:03:02.250
+un format de stockage en colonne qui rend les requêtes ultra rapides.
+
+00:03:03.250 --> 00:03:06.850
+Si vous avez déjà essayé d'interroger un fichier CSV géant en attendant indéfiniment son chargement,
+
+00:03:07.090 --> 00:03:08.130
+vous apprécierez ce que fait parquet.
+
+00:03:08.570 --> 00:03:09.730
+Il est optimisé pour l'analytique,
+
+00:03:09.730 --> 00:03:12.430
+si bien que vos requêtes s'exécutent beaucoup plus rapidement que sur des fichiers textes classiques.
+
+00:03:12.770 --> 00:03:13.490
+Voici le point essentiel.
+
+00:03:13.490 --> 00:03:16.870
+Les données en elles-mêmes sont gratuites et Microsoft prend toujours en charge le coût de stockage.
+
+00:03:17.290 --> 00:03:19.850
+Vous ne payez pour le calcul que si vous traitez les données, et nous en reparlerons plus tard.
+
+00:03:20.550 --> 00:03:22.230
+Mais les données stockées dans Azure ne vous coûtent rien.
+
+00:03:22.950 --> 00:03:24.490
+Laissez-moi vous donner une analogie pour rendre cela concret.
+
+00:03:25.190 --> 00:03:26.830
+Imaginez que vous emménagez dans un nouvel immeuble de bureau.
+
+00:03:27.410 --> 00:03:29.890
+Dans l'ancienne méthode, vous recevriez un tas de bois, des cloisons sèches,
+
+00:03:30.150 --> 00:03:31.470
+des câbles et des installations de plomberie,
+
+00:03:31.610 --> 00:03:34.730
+et vous devriez construire chaque pièce vous-même à partir de zéro.
+
+00:03:35.370 --> 00:03:37.530
+C'est ce que l'on ressent en travaillant avec des données publiques brutes.
+
+00:03:38.250 --> 00:03:39.830
+Azure Open Data Set, c'est tout l'inverse.
+
+00:03:39.830 --> 00:03:42.430
+Ce sont des pièces de données préconstruites dans lesquelles vous pouvez entrer.
+
+00:03:43.010 --> 00:03:46.450
+La salle météo est déjà meublée, la salle du recensement a tout étiqueté et organisé.
+
+00:03:47.050 --> 00:03:47.970
+Vous n'avez rien à assembler.
+
+00:03:48.490 --> 00:03:50.070
+Vous entrez simplement et vous commencez à travailler.
+
+00:03:51.050 --> 00:03:52.330
+Le problème résolu par Open Data Set.
+
+00:03:52.630 --> 00:03:54.270
+Alors pourquoi Microsoft a-t-il créé ça ?
+
+00:03:54.270 --> 00:03:55.890
+Quel problème cherchait-il à résoudre ?
+
+00:03:55.890 --> 00:03:56.430
+Analysons cela.
+
+00:03:56.750 --> 00:03:57.850
+La découverte est le premier problème.
+
+00:03:58.310 --> 00:04:00.630
+Vous avez besoin de données publiques fiables, mais les trouver prend du temps.
+
+00:04:01.010 --> 00:04:02.650
+Il existe des centaines de sites web gouvernementaux,
+
+00:04:02.750 --> 00:04:04.290
+de dépôts académiques et de portails de données.
+
+00:04:04.930 --> 00:04:06.770
+Certains sont bien entretenus, d'autres sont à l'abandon,
+
+00:04:07.090 --> 00:04:08.530
+et certains vous obligent à remplir des formulaires
+
+00:04:08.530 --> 00:04:10.650
+ou à accepter des licences avant de pouvoir télécharger quoi que ce soit.
+
+00:04:11.170 --> 00:04:13.190
+Le simple fait de trouver un jeu de données propre et utilisable
+
+00:04:13.190 --> 00:04:14.430
+peut dévorer des jours de recherche.
+
+00:04:14.930 --> 00:04:15.990
+Ensuite, il y a le problème de la préparation.
+
+00:04:16.390 --> 00:04:18.690
+Les données brutes provenant de sources gouvernementales sont désordonnées,
+
+00:04:18.870 --> 00:04:19.930
+incohérentes et pleines de lacus.
+
+00:04:20.250 --> 00:04:21.650
+Prenez les données météorologiques de la NOAA.
+
+00:04:21.990 --> 00:04:24.330
+Cela provient de milliers de stations météorologiques à travers le monde,
+
+00:04:24.570 --> 00:04:26.370
+chacune utilisant des formats légèrement différents.
+
+00:04:26.910 --> 00:04:28.810
+Certaines stations indiquent la température en degrés Celsius,
+
+00:04:29.130 --> 00:04:29.770
+d'autres en Fahrenheit,
+
+00:04:29.970 --> 00:04:31.690
+certaines enregistrent les précipitations, d'autres non,
+
+00:04:31.690 --> 00:04:33.510
+et certaines disposent d'années de données propres,
+
+00:04:33.590 --> 00:04:36.150
+tandis que d'autres présentent d'énormes lacunes dues à des capteurs défectueux.
+
+00:04:36.430 --> 00:04:38.190
+Nettoyer tout cela manuellement est un travail fastidieux.
+
+00:04:38.470 --> 00:04:39.330
+L'échelle est un autre problème.
+
+00:04:39.830 --> 00:04:41.190
+Certains de ces ensembles de données sont énormes.
+
+00:04:41.490 --> 00:04:42.790
+Les données météorologiques couvrent des décennies.
+
+00:04:43.090 --> 00:04:45.030
+Les données des taxis New York ont des centaines de millions de trajets.
+
+00:04:45.590 --> 00:04:47.010
+L'imagerie satellite se contemple à octets.
+
+00:04:47.910 --> 00:04:50.890
+Transférer autant de données vers votre environnement de calcul est lent et coûteux.
+
+00:04:51.330 --> 00:04:54.070
+Si vous exécutez un modèle d'apprentissage automatique sur une machine virtuelle cloud,
+
+00:04:54.150 --> 00:04:55.610
+vous ne voulez pas passer des heures à télécharger des données
+
+00:04:55.610 --> 00:04:56.810
+avant même de pouvoir commencer l'entraînement.
+
+00:04:56.810 --> 00:04:58.970
+Et enfin, la reproductibilité est essentielle.
+
+00:04:59.510 --> 00:05:02.430
+Lorsque vous menez des expériences, vous avez besoin que vos données soient cohérentes.
+
+00:05:02.950 --> 00:05:04.350
+Si vous téléchargez un ensemble de données aujourd'hui
+
+00:05:04.350 --> 00:05:05.830
+et que votre collègue le télécharge la semaine prochaine,
+
+00:05:05.910 --> 00:05:06.790
+vous avez besoin d'avoir la même chose.
+
+00:05:07.390 --> 00:05:09.890
+Des ensembles de données documentées et organisées dans les expériences reproductibles.
+
+00:05:10.410 --> 00:05:11.550
+Vous pouvez publier vos résultats
+
+00:05:11.550 --> 00:05:14.070
+et quelqu'un d'autre peut les vérifier en utilisant exactement les mêmes données.
+
+00:05:14.730 --> 00:05:15.650
+Maintenant, dissipons un mythe.
+
+00:05:16.210 --> 00:05:18.710
+La plupart des gens pensent que l'apprentissage automatique ne concerne que l'algorithme.
+
+00:05:18.710 --> 00:05:19.970
+Mais la vraie découverte de Microsoft
+
+00:05:19.970 --> 00:05:21.650
+est que la plupart des problèmes d'apprentissage automatique
+
+00:05:21.650 --> 00:05:22.930
+sont influencés par des facteurs réels.
+
+00:05:22.930 --> 00:05:25.810
+Météo, jour férié, démographie, conditions économiques.
+
+00:05:26.490 --> 00:05:27.550
+Si vous essayez de prédire des ventes,
+
+00:05:27.630 --> 00:05:29.430
+savoir s'il s'agit d'un jour férié ou d'un mardi pluvieux
+
+00:05:29.430 --> 00:05:30.370
+fait une énorme différence.
+
+00:05:31.170 --> 00:05:32.530
+Si vous prévoyez la consommation d'énergie,
+
+00:05:32.630 --> 00:05:33.870
+la température et l'heure de la journée, n'importe.
+
+00:05:34.430 --> 00:05:35.870
+Si vous modélisez un risque d'assurance,
+
+00:05:35.990 --> 00:05:37.830
+la démographie du quartier est cruciale.
+
+00:05:37.910 --> 00:05:40.210
+Sans ces signaux externes, votre modèle manque de contexte.
+
+00:05:40.610 --> 00:05:41.990
+C'est comme essayer de prédire la circulation
+
+00:05:41.990 --> 00:05:43.530
+sans savoir quelle heure il est.
+
+00:05:44.130 --> 00:05:45.190
+Vous pourriez identifier certains modèles,
+
+00:05:45.190 --> 00:05:46.550
+mais vous passerez à côté de la situation globale.
+
+00:05:47.010 --> 00:05:48.650
+Et c'est là le cœur du problème du délai d'accès aux données.
+
+00:05:48.650 --> 00:05:50.090
+Il peut falloir des semaines de travail
+
+00:05:50.090 --> 00:05:51.410
+juste pour obtenir des données utilisables.
+
+00:05:52.050 --> 00:05:53.430
+Des semaines de recherche, de téléchargement,
+
+00:05:53.490 --> 00:05:54.310
+de nettoyage et de validation.
+
+00:05:54.710 --> 00:05:55.690
+Au moment où les données sont prêtes,
+
+00:05:55.830 --> 00:05:57.150
+la question commerciale peut avoir changé.
+
+00:05:57.870 --> 00:05:59.270
+The European Dataset réduit ce délai
+
+00:05:59.270 --> 00:06:00.590
+de quelques semaines à quelques minutes.
+
+00:06:01.650 --> 00:06:02.730
+Qu'y a-t-il dans le catalogue ?
+
+00:06:02.730 --> 00:06:03.650
+La météo et les jours fériés.
+
+00:06:03.950 --> 00:06:05.590
+Plongeons dans ce que contient réellement ce catalogue.
+
+00:06:05.990 --> 00:06:06.870
+Le premier ensemble de données
+
+00:06:06.870 --> 00:06:07.950
+que presque tout le monde trouve utile
+
+00:06:07.950 --> 00:06:08.690
+est celui sur la météo.
+
+00:06:09.230 --> 00:06:10.150
+Microsoft héberge l'ensemble
+
+00:06:10.150 --> 00:06:11.190
+de données météorologiques de la Nantes.
+
+00:06:11.530 --> 00:06:12.610
+Il vous fournit des relevés historiques
+
+00:06:12.610 --> 00:06:13.310
+et en tant qu'Asie réelle
+
+00:06:13.310 --> 00:06:14.950
+provenant de stations météorologiques du monde entier.
+
+00:06:14.950 --> 00:06:16.450
+Et nous parlons de température,
+
+00:06:16.570 --> 00:06:18.010
+de précipitation, de vitesse du vent,
+
+00:06:18.130 --> 00:06:18.850
+de pression barométrique.
+
+00:06:19.190 --> 00:06:20.330
+Le type de données qui influence tout
+
+00:06:20.330 --> 00:06:21.230
+depuis ce que les gens achètent
+
+00:06:21.230 --> 00:06:22.730
+jusqu'à la quantité d'énergie qu'ils consomment.
+
+00:06:23.030 --> 00:06:24.050
+Et ils couvrent des décennies de données
+
+00:06:24.050 --> 00:06:25.490
+mises à jour régulièrement.
+
+00:06:25.990 --> 00:06:26.890
+Donc si vous souhaitez examiner
+
+00:06:26.890 --> 00:06:28.770
+les conditions météorologiques des années 1990
+
+00:06:28.770 --> 00:06:30.230
+ou obtenir les relevés de la semaine dernière,
+
+00:06:30.650 --> 00:06:30.950
+tout y est.
+
+00:06:31.310 --> 00:06:32.570
+Les données météorologiques sont formidables.
+
+00:06:32.910 --> 00:06:33.550
+Mais voici le point important.
+
+00:06:33.830 --> 00:06:34.890
+Il existe un autre ensemble de données
+
+00:06:34.890 --> 00:06:35.690
+qui s'y associe parfaitement.
+
+00:06:35.910 --> 00:06:36.430
+Les jours fériés.
+
+00:06:36.790 --> 00:06:38.170
+Microsoft propose un ensemble de données
+
+00:06:38.170 --> 00:06:38.850
+sur les jours fériés
+
+00:06:38.850 --> 00:06:41.410
+couvrant 38 pays de 1970 jusqu'en 2099.
+
+00:06:41.410 --> 00:06:42.910
+Ainsi, vous pouvez regarder en arrière
+
+00:06:42.910 --> 00:06:43.810
+pour une analyse historique
+
+00:06:43.810 --> 00:06:44.710
+ou vers l'avenir pour planifier.
+
+00:06:45.230 --> 00:06:46.150
+Vous fourniez des indicateurs
+
+00:06:46.150 --> 00:06:47.090
+de jours fériés spécifiques
+
+00:06:47.090 --> 00:06:48.170
+à chaque pays pour toute plage de date.
+
+00:06:48.570 --> 00:06:49.630
+Besoin de savoir si un mardi donné
+
+00:06:49.630 --> 00:06:51.630
+est un jour férié au Japon ?
+
+00:06:51.630 --> 00:06:51.950
+T'inclue.
+
+00:06:52.290 --> 00:06:53.550
+Vous voulez vérifier si ce lundi d'août
+
+00:06:53.550 --> 00:06:55.410
+est un jour férié au Royaume-Uni ?
+
+00:06:55.410 --> 00:06:56.410
+Une seule requête et vous l'obtenez.
+
+00:06:56.910 --> 00:06:57.930
+Pourquoi ces deux ensembles de données
+
+00:06:57.930 --> 00:06:59.270
+sont-ils si puissants ensemble ?
+
+00:06:59.270 --> 00:07:00.130
+La météo et les jours fériés
+
+00:07:00.130 --> 00:07:00.890
+améliorent considérablement
+
+00:07:00.890 --> 00:07:02.030
+les prédictions de séries temporelles.
+
+00:07:02.490 --> 00:07:04.010
+Pensez aux prévisions des ventes au détail.
+
+00:07:04.430 --> 00:07:05.210
+Si vous essayez de prédire
+
+00:07:05.210 --> 00:07:06.230
+le nombre d'unités d'un produit
+
+00:07:06.230 --> 00:07:07.190
+que vous vendrez la semaine prochaine,
+
+00:07:07.450 --> 00:07:08.350
+savoir que c'est un jour férié
+
+00:07:08.350 --> 00:07:09.030
+et qu'il va pleuvoir
+
+00:07:09.030 --> 00:07:09.950
+peut réduire votre erreur
+
+00:07:09.950 --> 00:07:11.610
+de prédiction de deux chiffres.
+
+00:07:12.110 --> 00:07:13.190
+Ce n'est pas une petite amélioration.
+
+00:07:13.810 --> 00:07:14.370
+C'est la différence
+
+00:07:14.370 --> 00:07:16.030
+entre avoir trop de stock dans un entrepôt
+
+00:07:16.030 --> 00:07:17.250
+et être en rupture de stock
+
+00:07:17.250 --> 00:07:18.370
+sur votre meilleur produit.
+
+00:07:19.210 --> 00:07:19.890
+Et voici le fait.
+
+00:07:20.330 --> 00:07:21.270
+La plupart des entreprises
+
+00:07:21.270 --> 00:07:22.510
+n'ont pas ces données en interne.
+
+00:07:23.190 --> 00:07:24.450
+Elles ont leurs données de vente, bien sûr,
+
+00:07:24.890 --> 00:07:25.750
+mais n'ont pas de source propre
+
+00:07:25.750 --> 00:07:26.710
+et fiable d'historique météo
+
+00:07:26.710 --> 00:07:27.870
+ou de calendrier de jours fériés.
+
+00:07:28.990 --> 00:07:30.130
+Elles doivent donc soit les créer elles-mêmes,
+
+00:07:30.210 --> 00:07:30.770
+ce qui prend du temps,
+
+00:07:30.890 --> 00:07:31.390
+soit s'en passer,
+
+00:07:31.390 --> 00:07:32.790
+ce qui nuise à leurs prédictions.
+
+00:07:33.470 --> 00:07:34.150
+Les European Datasets
+
+00:07:34.150 --> 00:07:35.890
+leur fournit cette pièce manquante instantanément.
+
+00:07:36.470 --> 00:07:37.490
+Mais la météo et les jours fériés
+
+00:07:37.490 --> 00:07:38.090
+ne sont qu'un début.
+
+00:07:39.630 --> 00:07:40.530
+Qu'y a-t-il le catalogue ?
+
+00:07:40.530 --> 00:07:41.210
+Données de recensement,
+
+00:07:41.330 --> 00:07:42.670
+démographiques et socio-économiques.
+
+00:07:43.470 --> 00:07:44.490
+La catégorie suivante compte
+
+00:07:44.490 --> 00:07:45.450
+si vous construisez des modèles
+
+00:07:45.450 --> 00:07:46.510
+prédisant quelque chose sur les gens.
+
+00:07:47.130 --> 00:07:47.650
+Il s'agit des données
+
+00:07:47.650 --> 00:07:48.550
+de recensement et démographie.
+
+00:07:48.970 --> 00:07:49.850
+Microsoft héberge
+
+00:07:49.850 --> 00:07:51.030
+des données de recensement américains
+
+00:07:51.030 --> 00:07:51.830
+couvrant la population,
+
+00:07:52.130 --> 00:07:52.470
+le revenu,
+
+00:07:52.690 --> 00:07:53.430
+les niveaux d'éducation
+
+00:07:53.430 --> 00:07:54.590
+et la répartition par âge.
+
+00:07:55.390 --> 00:07:55.950
+Et c'est disponible
+
+00:07:55.950 --> 00:07:57.090
+à différents niveaux géographiques,
+
+00:07:57.090 --> 00:07:57.950
+de l'État au comté,
+
+00:07:58.110 --> 00:07:59.190
+voire au secteur de recensement.
+
+00:07:59.650 --> 00:08:00.410
+Vous pouvez ainsi obtenir
+
+00:08:00.410 --> 00:08:01.410
+le revenu médian des ménages
+
+00:08:01.410 --> 00:08:02.310
+pour un quartier spécifique
+
+00:08:02.310 --> 00:08:03.610
+ou la répartition de la population
+
+00:08:03.610 --> 00:08:04.250
+par groupe d'âge
+
+00:08:04.250 --> 00:08:04.890
+pour tout un État.
+
+00:08:05.510 --> 00:08:07.110
+Il y a aussi l'ensemble de données
+
+00:08:07.110 --> 00:08:07.750
+sur les statistiques
+
+00:08:07.750 --> 00:08:08.970
+de la population active américaine
+
+00:08:08.970 --> 00:08:09.930
+qui vous donnent les taux d'emploi,
+
+00:08:10.070 --> 00:08:11.130
+les chiffres de participation au travail,
+
+00:08:11.230 --> 00:08:12.050
+les chiffres de participation au travail
+
+00:08:12.050 --> 00:08:12.890
+et la répartition par secteur.
+
+00:08:13.050 --> 00:08:13.510
+Vous pouvez voir
+
+00:08:13.510 --> 00:08:14.390
+combien de personnes travaillent
+
+00:08:14.390 --> 00:08:14.850
+dans l'industrie
+
+00:08:14.850 --> 00:08:15.750
+par rapport aux services
+
+00:08:15.750 --> 00:08:16.630
+dans une région donnée
+
+00:08:16.630 --> 00:08:17.770
+ou comment le chômage
+
+00:08:17.770 --> 00:08:18.690
+a évolué au fil du temps.
+
+00:08:19.250 --> 00:08:19.890
+Pourquoi est-ce important
+
+00:08:19.890 --> 00:08:21.430
+pour les débutants ?
+
+00:08:21.430 --> 00:08:22.230
+Parce que si vous voulez construire
+
+00:08:22.230 --> 00:08:23.370
+un modèle qui prédit quelque chose
+
+00:08:23.370 --> 00:08:23.770
+sur les gens,
+
+00:08:23.890 --> 00:08:25.110
+c'est l'endroit idéal pour commencer.
+
+00:08:25.690 --> 00:08:26.550
+Voici un exemple concret.
+
+00:08:27.170 --> 00:08:28.010
+Imaginez que vous construisez
+
+00:08:28.010 --> 00:08:29.190
+un modèle pour une compagnie d'assurance.
+
+00:08:29.630 --> 00:08:30.650
+Vous avez des données de sinistres,
+
+00:08:30.750 --> 00:08:31.530
+des âges, des montants.
+
+00:08:31.810 --> 00:08:32.830
+Mais votre modèle n'est pas précis
+
+00:08:32.830 --> 00:08:33.830
+car il vous manque le contexte
+
+00:08:33.830 --> 00:08:35.390
+selon l'endroit où vivent ces personnes.
+
+00:08:35.910 --> 00:08:36.870
+Vous enrichissez donc ces données
+
+00:08:36.870 --> 00:08:38.070
+avec des statistiques de recensement
+
+00:08:38.070 --> 00:08:39.050
+sur les revenus et l'éducation.
+
+00:08:39.690 --> 00:08:40.610
+Soudain, le modèle identifie
+
+00:08:40.610 --> 00:08:41.730
+des modèles qui lui échappaient auparavant.
+
+00:08:42.290 --> 00:08:43.690
+Les habitants des zones à faible revenu
+
+00:08:43.690 --> 00:08:44.850
+déposent des dossiers différents
+
+00:08:44.850 --> 00:08:46.050
+et le niveau d'éducation
+
+00:08:46.050 --> 00:08:47.130
+modifie les profils de risque.
+
+00:08:47.590 --> 00:08:48.330
+Le modèle s'améliore
+
+00:08:52.230 --> 00:08:53.170
+précieux pour les débutants.
+
+00:08:53.570 --> 00:08:54.010
+Vous n'avez pas besoin
+
+00:08:54.010 --> 00:08:54.790
+d'être ingénieur en données
+
+00:08:54.790 --> 00:08:55.570
+pour intégrer des données
+
+00:08:55.570 --> 00:08:56.410
+de recensement à votre projet.
+
+00:08:56.790 --> 00:08:57.570
+Elles sont déjà nettoyées
+
+00:08:57.570 --> 00:08:58.050
+près à l'emploi.
+
+00:08:58.350 --> 00:08:59.410
+Associez-les à vos propres données
+
+00:08:59.410 --> 00:09:01.290
+et votre analyse gagne en profondeur.
+
+00:09:02.270 --> 00:09:03.590
+Que contient le catalogue ?
+
+00:09:03.590 --> 00:09:05.470
+Mobilité, sécurité publique et santé.
+
+00:09:06.190 --> 00:09:07.370
+Le favori classique des débutants
+
+00:09:07.370 --> 00:09:08.010
+est le jeu de données
+
+00:09:08.010 --> 00:09:09.170
+des trajets en taxi de New York.
+
+00:09:09.630 --> 00:09:10.330
+C'est l'un des jeux de données
+
+00:09:10.330 --> 00:09:11.090
+publics les plus connus
+
+00:09:11.090 --> 00:09:12.270
+avec des millions d'enregistrements
+
+00:09:12.270 --> 00:09:13.430
+de trajets incluant les horaires,
+
+00:09:13.630 --> 00:09:14.710
+les lieux et les tarifs.
+
+00:09:15.530 --> 00:09:16.610
+Chaque trajet en taxi jaune
+
+00:09:16.610 --> 00:09:18.030
+à New York génère un enregistrement.
+
+00:09:18.590 --> 00:09:19.410
+Lieu de prise en charge,
+
+00:09:19.410 --> 00:09:21.310
+lieu de dépose, coût et durée du trajet.
+
+00:09:21.770 --> 00:09:22.650
+C'est un excellent jeu de données
+
+00:09:22.650 --> 00:09:23.730
+pour apprendre l'analyse de données.
+
+00:09:24.050 --> 00:09:25.310
+Quoi, les débutants l'aiment-ils ?
+
+00:09:25.310 --> 00:09:26.350
+Parce qu'il est intéressant et visuel.
+
+00:09:26.890 --> 00:09:27.850
+Chargez-le dans Power BI
+
+00:09:27.850 --> 00:09:28.950
+et commencez à cartographier
+
+00:09:28.950 --> 00:09:30.010
+les déplacements les plus fréquents.
+
+00:09:30.470 --> 00:09:31.250
+Observez comment les tarifs
+
+00:09:31.250 --> 00:09:32.010
+évoluent au cours de la journée.
+
+00:09:32.350 --> 00:09:33.050
+Repérez les tendances.
+
+00:09:33.410 --> 00:09:34.370
+Quels quartiers sont les plus fréquentés
+
+00:09:34.370 --> 00:09:35.290
+aux heures de point ?
+
+00:09:35.290 --> 00:09:37.350
+Quels aéroports génèrent le plus de trajets ?
+
+00:09:37.350 --> 00:09:38.110
+Comment la météo influe-t-elle
+
+00:09:38.110 --> 00:09:39.110
+sur le volume de trajets ?
+
+00:09:39.110 --> 00:09:39.990
+Cela raconte une histoire.
+
+00:09:40.270 --> 00:09:41.150
+L'apprentissage devient donc
+
+00:09:41.150 --> 00:09:41.850
+un puzzle à résoudre,
+
+00:09:41.930 --> 00:09:42.590
+pas un devoir à faire.
+
+00:09:42.970 --> 00:09:43.330
+Viennent ensuite
+
+00:09:43.330 --> 00:09:44.330
+les données de sécurité publique.
+
+00:09:44.610 --> 00:09:45.370
+Microsoft héberge
+
+00:09:45.370 --> 00:09:46.750
+les données de sécurité de San Francisco
+
+00:09:46.750 --> 00:09:48.250
+qui enregistrent les incidents criminels
+
+00:09:48.250 --> 00:09:49.770
+avec leur type, lieu et au redatage.
+
+00:09:50.070 --> 00:09:50.770
+Parfait pour les débutants
+
+00:09:50.770 --> 00:09:52.390
+car les données sont immédiatement compréhensibles.
+
+00:09:53.050 --> 00:09:54.070
+Créer des cartes de zones critiques
+
+00:09:54.070 --> 00:09:54.830
+et analyser les tendances
+
+00:09:54.830 --> 00:09:55.590
+de criminalité par un.
+
+00:09:56.030 --> 00:09:57.390
+Cela montre comment les données ouvertes
+
+00:09:57.390 --> 00:09:58.530
+soutiennent de vrais projets civiques.
+
+00:09:59.170 --> 00:10:00.070
+Les urbanistes et la police
+
+00:10:00.070 --> 00:10:00.990
+les utilisent pour décider
+
+00:10:00.990 --> 00:10:01.950
+où déployer leurs ressources.
+
+00:10:02.750 --> 00:10:03.170
+Il y a ensuite
+
+00:10:03.170 --> 00:10:04.530
+le lac de données Covid-19
+
+00:10:04.530 --> 00:10:05.810
+mais pas juste un seul jeu de données.
+
+00:10:06.050 --> 00:10:07.030
+Il combine plusieurs sources,
+
+00:10:07.190 --> 00:10:07.910
+résultats des patients,
+
+00:10:08.170 --> 00:10:09.310
+tests, capacités hospitalières,
+
+00:10:09.450 --> 00:10:10.650
+politiques, mobilités.
+
+00:10:11.550 --> 00:10:12.190
+Pendant la pandémie,
+
+00:10:12.270 --> 00:10:13.030
+les chercheurs l'ont utilisé
+
+00:10:13.030 --> 00:10:13.750
+pour suivre le virus,
+
+00:10:13.910 --> 00:10:14.790
+modéliser sa propagation
+
+00:10:14.790 --> 00:10:16.110
+et évaluer les interventions.
+
+00:10:16.730 --> 00:10:17.890
+Cela montre l'impact réel
+
+00:10:17.890 --> 00:10:18.710
+des jeux de données ouverts
+
+00:10:18.710 --> 00:10:19.690
+lorsqu'ils sont accessibles.
+
+00:10:20.210 --> 00:10:20.830
+Ces trois jeux de données,
+
+00:10:21.090 --> 00:10:22.310
+taxi, sécurité publique
+
+00:10:22.310 --> 00:10:22.890
+et Covid-19
+
+00:10:22.890 --> 00:10:24.050
+ont un point commun important.
+
+00:10:24.450 --> 00:10:24.810
+Important.
+
+00:10:25.150 --> 00:10:25.750
+Ils ne sont pas abstraits.
+
+00:10:26.030 --> 00:10:26.490
+Vous n'avez pas besoin
+
+00:10:26.490 --> 00:10:27.490
+d'être un expert pour les comprendre.
+
+00:10:27.910 --> 00:10:28.550
+Les données concernent
+
+00:10:28.550 --> 00:10:29.230
+des personnes, des lieux
+
+00:10:29.230 --> 00:10:30.030
+et des événements réels.
+
+00:10:30.610 --> 00:10:31.610
+Cela facilite l'apprentissage.
+
+00:10:32.150 --> 00:10:32.670
+Il existe aussi
+
+00:10:32.670 --> 00:10:33.430
+des jeux de données de référence
+
+00:10:33.430 --> 00:10:33.990
+pour ceux qui apprennent
+
+00:10:33.990 --> 00:10:34.950
+spécifiquement le machine learning.
+
+00:10:35.750 --> 00:10:36.790
+Que contient le catalogue ?
+
+00:10:36.790 --> 00:10:37.470
+Des jeux de données de référence
+
+00:10:37.470 --> 00:10:37.990
+pour le machine learning.
+
+00:10:38.490 --> 00:10:39.110
+Vous disposez donc
+
+00:10:39.110 --> 00:10:39.910
+de toutes ces données réelles
+
+00:10:39.910 --> 00:10:40.830
+issues de la section précédente.
+
+00:10:41.430 --> 00:10:41.830
+Mais que faire
+
+00:10:41.830 --> 00:10:42.690
+si vous suivez un tutoriel
+
+00:10:42.690 --> 00:10:43.430
+et avez juste besoin
+
+00:10:43.430 --> 00:10:44.470
+d'un jeu de données simple et propre
+
+00:10:44.470 --> 00:10:46.550
+pour pratiquer une technique spécifique ?
+
+00:10:46.550 --> 00:10:47.550
+Les Azure Open Datasets
+
+00:10:47.550 --> 00:10:48.370
+sont là aussi pour vous aider.
+
+00:10:48.670 --> 00:10:48.810
+Vous voyez,
+
+00:10:48.870 --> 00:10:49.570
+c'est là comme une boîte à outils.
+
+00:10:49.930 --> 00:10:50.750
+Vous avez vos outils électriques
+
+00:10:50.750 --> 00:10:51.310
+pour les gros travaux
+
+00:10:51.310 --> 00:10:52.150
+mais parfois vous avez juste besoin
+
+00:10:52.150 --> 00:10:52.830
+d'un simple marteau
+
+00:10:52.830 --> 00:10:53.550
+pour apprendre les bases.
+
+00:10:53.910 --> 00:10:54.610
+C'est à cela que servent
+
+00:10:54.610 --> 00:10:55.490
+ces jeux de données de référence.
+
+00:10:56.210 --> 00:10:56.830
+Prenons le jeu de données
+
+00:10:56.830 --> 00:10:57.350
+sur le diabète
+
+00:10:57.350 --> 00:10:58.950
+avec ses 442 échantillons
+
+00:10:58.950 --> 00:10:59.750
+et 10 caractéristiques.
+
+00:11:00.270 --> 00:11:00.730
+C'est un problème
+
+00:11:00.730 --> 00:11:01.630
+de régression classique
+
+00:11:01.630 --> 00:11:02.530
+que l'on retrouve tout le temps
+
+00:11:02.530 --> 00:11:03.410
+dans les manuels
+
+00:11:03.410 --> 00:11:04.570
+disponibles dans les
+
+00:11:04.570 --> 00:11:05.630
+Azure Open Datasets
+
+00:11:05.630 --> 00:11:06.570
+est prêt à être rechargé
+
+00:11:06.570 --> 00:11:08.070
+dans Azure ML.
+
+00:11:08.870 --> 00:11:09.370
+Si vous apprenez
+
+00:11:09.370 --> 00:11:10.190
+le ML automatisé,
+
+00:11:10.350 --> 00:11:11.030
+c'est un excellent jeu
+
+00:11:11.030 --> 00:11:11.770
+de données pour commencer.
+
+00:11:12.630 --> 00:11:13.690
+C'est petit pour itérer rapidement
+
+00:11:13.690 --> 00:11:14.230
+mais assez réel
+
+00:11:14.230 --> 00:11:14.750
+pour vous enseigner
+
+00:11:14.750 --> 00:11:15.430
+le flux de travail.
+
+00:11:17.070 --> 00:11:17.430
+Il y a aussi
+
+00:11:17.430 --> 00:11:17.890
+le jeu de données
+
+00:11:17.890 --> 00:11:18.570
+Microsoft News
+
+00:11:18.570 --> 00:11:19.530
+appelé Mind
+
+00:11:19.530 --> 00:11:20.410
+pour ceux qui s'intéressent
+
+00:11:20.410 --> 00:11:21.510
+au système de recommandation.
+
+00:11:22.730 --> 00:11:23.270
+C'est une référence
+
+00:11:23.270 --> 00:11:23.830
+à grande échelle
+
+00:11:23.830 --> 00:11:25.270
+avec des interactions utilisateurs
+
+00:11:25.270 --> 00:11:26.150
+du contenu d'actualité
+
+00:11:26.150 --> 00:11:26.710
+et des métadonnées.
+
+00:11:27.530 --> 00:11:28.150
+Si vous souhaitez créer
+
+00:11:28.150 --> 00:11:29.050
+un moteur de recommandation
+
+00:11:29.050 --> 00:11:29.570
+d'actualité
+
+00:11:29.570 --> 00:11:30.310
+du type de ceux
+
+00:11:30.310 --> 00:11:31.350
+qui alimentent la section recommandée
+
+00:11:31.350 --> 00:11:32.510
+pour vous sur les sites d'info
+
+00:11:32.510 --> 00:11:33.270
+sur les sites d'infos,
+
+00:11:33.270 --> 00:11:34.530
+c'est le jeu de données idéal
+
+00:11:34.530 --> 00:11:35.030
+pour vous entraîner.
+
+00:11:35.710 --> 00:11:36.490
+C'est le même type de données
+
+00:11:36.490 --> 00:11:37.470
+utilisé par les systèmes
+
+00:11:37.470 --> 00:11:38.330
+de recommandation réels
+
+00:11:38.330 --> 00:11:39.370
+et il existe même
+
+00:11:39.370 --> 00:11:40.170
+un jeu de données simulé
+
+00:11:40.170 --> 00:11:40.930
+de vente de jus d'orange
+
+00:11:40.930 --> 00:11:41.590
+pour montrer comment
+
+00:11:41.590 --> 00:11:42.630
+Azure ML évolue.
+
+00:11:43.690 --> 00:11:44.190
+Vous pouvez entraîner
+
+00:11:44.190 --> 00:11:44.850
+des milliers de modèles
+
+00:11:44.850 --> 00:11:45.950
+simultanément sur ces données
+
+00:11:45.950 --> 00:11:46.790
+ce qui est un excellent moyen
+
+00:11:46.790 --> 00:11:48.050
+de comprendre le traitement parallèle
+
+00:11:48.050 --> 00:11:49.470
+et le réglage des hyperparamètres.
+
+00:11:50.410 --> 00:11:51.010
+C'est le point important.
+
+00:11:51.390 --> 00:11:52.770
+Si vous suivez un tutoriel Azure ML
+
+00:11:52.770 --> 00:11:53.710
+et avez besoin de données,
+
+00:11:53.850 --> 00:11:54.730
+elle se trouve probablement
+
+00:11:54.730 --> 00:11:55.770
+déjà dans ce catalogue.
+
+00:11:56.850 --> 00:11:57.830
+Microsoft a veillé
+
+00:11:57.830 --> 00:11:58.990
+à ce que les jeux de données
+
+00:11:58.990 --> 00:12:00.330
+utilisées dans leur documentation
+
+00:12:00.330 --> 00:12:01.250
+soient disponibles
+
+00:12:01.250 --> 00:12:02.610
+via Open Datasets
+
+00:12:02.610 --> 00:12:03.850
+pour vous éviter
+
+00:12:03.850 --> 00:12:05.210
+de chercher le fichier exact
+
+00:12:05.210 --> 00:12:05.890
+du tutoriel.
+
+00:12:06.730 --> 00:12:08.610
+Il est déjà là ?
+
+00:12:08.610 --> 00:12:09.710
+Mais avoir un super catalogue
+
+00:12:09.710 --> 00:12:10.150
+est inutile
+
+00:12:10.150 --> 00:12:10.750
+si vous ne pouvez pas
+
+00:12:10.750 --> 00:12:11.290
+accéder aux données.
+
+00:12:12.550 --> 00:12:13.030
+Comment accéder
+
+00:12:13.030 --> 00:12:13.850
+aux jeux de données ouverts ?
+
+00:12:13.850 --> 00:12:15.030
+Python, Power BI
+
+00:12:15.030 --> 00:12:16.870
+et Azure ML ?
+
+00:12:16.870 --> 00:12:17.310
+Vous avez vu
+
+00:12:17.310 --> 00:12:18.290
+ce que contient le catalogue
+
+00:12:18.290 --> 00:12:19.270
+mais la vraie question est
+
+00:12:19.270 --> 00:12:20.650
+comment obtenir concrètement
+
+00:12:20.650 --> 00:12:22.150
+ces données ?
+
+00:12:22.150 --> 00:12:23.030
+La réponse dépend
+
+00:12:23.030 --> 00:12:24.090
+de l'outil que vous utilisez
+
+00:12:24.090 --> 00:12:25.090
+mais il existe plusieurs voies
+
+00:12:25.090 --> 00:12:26.690
+dont certaines ne nécessitent
+
+00:12:26.690 --> 00:12:27.570
+même pas de compte Azure.
+
+00:12:28.190 --> 00:12:28.690
+Analysons cela.
+
+00:12:29.010 --> 00:12:29.750
+L'option la plus simple,
+
+00:12:30.070 --> 00:12:30.250
+Python.
+
+00:12:30.250 --> 00:12:31.590
+Depuis n'importe quel environnement
+
+00:12:31.590 --> 00:12:32.490
+Python, aucun compte Azure
+
+00:12:32.490 --> 00:12:32.930
+n'est nécessaire.
+
+00:12:33.310 --> 00:12:34.530
+Microsoft publie un paquet Python
+
+00:12:34.530 --> 00:12:36.250
+appelé Azure ML Open Datasets.
+
+00:12:36.750 --> 00:12:37.430
+Vous l'installez avec Pi
+
+00:12:37.430 --> 00:12:37.970
+puis vous importez
+
+00:12:37.970 --> 00:12:38.470
+n'importe quel jeu
+
+00:12:38.470 --> 00:12:39.170
+de données directement.
+
+00:12:39.750 --> 00:12:40.190
+Par exemple,
+
+00:12:40.350 --> 00:12:41.090
+from Azure ML,
+
+00:12:41.670 --> 00:12:42.530
+Open Datasets,
+
+00:12:42.890 --> 00:12:43.270
+Import,
+
+00:12:43.430 --> 00:12:43.830
+NoAA,
+
+00:12:44.190 --> 00:12:44.530
+Weather.
+
+00:12:45.530 --> 00:12:46.070
+Vous spécifiez
+
+00:12:46.070 --> 00:12:46.850
+une date de début
+
+00:12:46.850 --> 00:12:47.530
+et une date de fin
+
+00:12:47.530 --> 00:12:48.890
+et le paquet s'occupe du reste.
+
+00:12:49.590 --> 00:12:50.390
+Il télécharge des fichiers
+
+00:12:50.390 --> 00:12:51.730
+pertinents depuis le stockage Azure,
+
+00:12:51.970 --> 00:12:52.310
+les traite
+
+00:12:52.310 --> 00:12:52.770
+et vous renvoie
+
+00:12:52.770 --> 00:12:53.470
+un DataFrame,
+
+00:12:53.710 --> 00:12:54.150
+Pandas,
+
+00:12:55.090 --> 00:12:55.370
+c'est tout.
+
+00:12:55.810 --> 00:12:56.490
+Trois lignes de code
+
+00:12:56.490 --> 00:12:57.250
+et vous avez des décennies
+
+00:12:57.250 --> 00:12:58.050
+de données météo prêtes
+
+00:12:58.050 --> 00:12:58.630
+à être analysées.
+
+00:12:59.330 --> 00:13:00.070
+Cela fonctionne depuis
+
+00:13:00.070 --> 00:13:00.870
+Jupyter Notebook,
+
+00:13:00.950 --> 00:13:01.350
+VS Code
+
+00:13:01.350 --> 00:13:02.450
+ou n'importe quel environnement
+
+00:13:02.450 --> 00:13:03.230
+Python que vous préférez.
+
+00:13:03.770 --> 00:13:04.730
+Dans Azure Machine Learning,
+
+00:13:04.830 --> 00:13:06.170
+le processus est encore plus fluide.
+
+00:13:06.750 --> 00:13:07.750
+Vous ouvrez votre espace de travail,
+
+00:13:07.890 --> 00:13:08.650
+allez dans la section données,
+
+00:13:08.910 --> 00:13:09.590
+cliquez sur Créer,
+
+00:13:09.850 --> 00:13:10.290
+puis choisissez
+
+00:13:10.290 --> 00:13:10.950
+parmi les jeux de données
+
+00:13:10.950 --> 00:13:11.710
+ouverts Azure.
+
+00:13:13.170 --> 00:13:14.050
+Un catalogue s'affiche,
+
+00:13:14.130 --> 00:13:15.130
+vous montrant tout ce qui est disponible.
+
+00:13:15.510 --> 00:13:16.030
+Vous parcourez,
+
+00:13:16.130 --> 00:13:17.150
+choisissez le jeu de données souhaité,
+
+00:13:17.190 --> 00:13:18.170
+le filtré par plage de date
+
+00:13:18.170 --> 00:13:18.850
+ou zone géographique
+
+00:13:18.850 --> 00:13:19.850
+et dans votre espace de travail
+
+00:13:19.850 --> 00:13:20.750
+et l'enregistré
+
+00:13:20.750 --> 00:13:21.530
+dans votre espace de travail.
+
+00:13:21.530 --> 00:13:22.390
+Une fois enregistré,
+
+00:13:22.710 --> 00:13:23.950
+Azure ML génère automatiquement
+
+00:13:23.950 --> 00:13:24.530
+un extrait de code
+
+00:13:24.530 --> 00:13:25.270
+que vous pouvez utiliser
+
+00:13:25.270 --> 00:13:26.430
+dans n'importe quelle pipeline
+
+00:13:26.430 --> 00:13:26.950
+ou expérience
+
+00:13:26.950 --> 00:13:27.690
+sans avoir à retenir
+
+00:13:27.690 --> 00:13:28.410
+les chemins de stockage
+
+00:13:28.410 --> 00:13:29.450
+ou la syntaxe d'importation.
+
+00:13:29.830 --> 00:13:30.950
+Tout est géré pour vous.
+
+00:13:31.390 --> 00:13:32.490
+Qu'en est-il de Power BI ?
+
+00:13:32.490 --> 00:13:33.050
+C'est là que les choses
+
+00:13:33.050 --> 00:13:33.850
+deviennent intéressantes
+
+00:13:33.850 --> 00:13:34.470
+pour les analystes
+
+00:13:34.470 --> 00:13:34.970
+qui ne codent pas.
+
+00:13:35.390 --> 00:13:35.910
+Vous pouvez utiliser
+
+00:13:35.910 --> 00:13:37.230
+le connecteur Stockage Blob Azure
+
+00:13:37.230 --> 00:13:37.770
+dans Power BI
+
+00:13:37.770 --> 00:13:39.110
+et le pointeur vers les URL
+
+00:13:39.110 --> 00:13:39.790
+de stockage public
+
+00:13:39.790 --> 00:13:40.690
+documenté par Microsoft
+
+00:13:40.690 --> 00:13:41.310
+pour chaque jeu de données.
+
+00:13:41.970 --> 00:13:42.190
+Ainsi,
+
+00:13:42.310 --> 00:13:43.030
+si vous voulez intégrer
+
+00:13:43.030 --> 00:13:43.750
+les données des taxis
+
+00:13:43.750 --> 00:13:44.070
+New Yorkais
+
+00:13:44.070 --> 00:13:44.790
+dans un tableau de bord,
+
+00:13:44.870 --> 00:13:46.030
+vous trouvez l'URL de stockage
+
+00:13:46.030 --> 00:13:47.130
+sur la page de présentation
+
+00:13:47.130 --> 00:13:47.690
+où vous l'insérez
+
+00:13:47.690 --> 00:13:48.330
+dans Power BI
+
+00:13:48.330 --> 00:13:49.110
+et commencez à créer
+
+00:13:49.110 --> 00:13:49.910
+vos visualisations.
+
+00:13:50.790 --> 00:13:51.370
+Données météo,
+
+00:13:51.550 --> 00:13:52.190
+trajet en taxi,
+
+00:13:52.750 --> 00:13:53.810
+incident de sécurité publique,
+
+00:13:54.030 --> 00:13:54.670
+tout est disponible
+
+00:13:54.670 --> 00:13:55.670
+directement dans vos rapports
+
+00:13:55.670 --> 00:13:56.450
+sans aucune ingénierie
+
+00:13:56.450 --> 00:13:57.450
+de données intermédiaires.
+
+00:13:58.190 --> 00:13:58.950
+Pour les adeptes de SQL
+
+00:13:58.950 --> 00:13:59.670
+et Azure Synapse,
+
+00:14:00.450 --> 00:14:01.130
+vous pouvez interroger
+
+00:14:01.130 --> 00:14:01.930
+les jeux de données ouverts
+
+00:14:01.930 --> 00:14:02.710
+en utilisant la fonction
+
+00:14:02.710 --> 00:14:03.250
+Open Reset
+
+00:14:03.250 --> 00:14:04.790
+sur les chemins blocs publics.
+
+00:14:04.850 --> 00:14:06.270
+Il s'agit de SQL sans serveur,
+
+00:14:06.350 --> 00:14:06.750
+ce qui signifie
+
+00:14:06.750 --> 00:14:07.390
+que vous n'avez pas besoin
+
+00:14:07.390 --> 00:14:08.190
+de provisionner de stockage
+
+00:14:08.190 --> 00:14:08.570
+au préalable.
+
+00:14:09.010 --> 00:14:09.710
+Vous écrivez simplement
+
+00:14:09.710 --> 00:14:10.130
+une requête
+
+00:14:10.130 --> 00:14:11.010
+et Synapse lit les données
+
+00:14:11.010 --> 00:14:12.330
+directement là où elles se trouvent.
+
+00:14:13.050 --> 00:14:13.510
+Vous voulez savoir
+
+00:14:13.510 --> 00:14:14.490
+combien de trajets en taxi
+
+00:14:14.490 --> 00:14:15.230
+ont eu lieu jour de Noël
+
+00:14:15.230 --> 00:14:16.610
+en 2019 ?
+
+00:14:16.610 --> 00:14:17.770
+Vous écrivez une seule requête SQL
+
+00:14:17.770 --> 00:14:18.610
+et vous obtenez la réponse
+
+00:14:18.610 --> 00:14:19.230
+en quelques secondes.
+
+00:14:19.830 --> 00:14:20.550
+Et si vous utilisez
+
+00:14:20.550 --> 00:14:21.270
+Azure Databricks,
+
+00:14:21.450 --> 00:14:22.330
+le même SD Capitone
+
+00:14:22.330 --> 00:14:23.510
+fonctionne dans les notebooks
+
+00:14:23.510 --> 00:14:24.170
+Databricks,
+
+00:14:24.570 --> 00:14:25.210
+mais vous pouvez utiliser
+
+00:14:25.210 --> 00:14:26.070
+des dataframes Spark
+
+00:14:26.070 --> 00:14:26.830
+au lieu de Pandas,
+
+00:14:26.950 --> 00:14:27.370
+ce qui est important
+
+00:14:27.370 --> 00:14:27.910
+pour les jeux de données
+
+00:14:27.910 --> 00:14:28.530
+plus volumineux.
+
+00:14:29.890 --> 00:14:31.130
+Les données des taxis newyorkais
+
+00:14:31.130 --> 00:14:31.670
+contiennent des millions
+
+00:14:31.670 --> 00:14:32.190
+d'enregistrements.
+
+00:14:32.750 --> 00:14:33.550
+Pandas peut les gérer,
+
+00:14:33.850 --> 00:14:34.710
+mais Spark les gère mieux.
+
+00:14:35.410 --> 00:14:35.990
+Même importation,
+
+00:14:36.070 --> 00:14:36.630
+même syntaxe,
+
+00:14:36.690 --> 00:14:37.330
+simplement avec Spark
+
+00:14:37.330 --> 00:14:37.850
+en arrière-plan.
+
+00:14:38.610 --> 00:14:39.450
+Voici le point commun
+
+00:14:39.450 --> 00:14:40.430
+entre toutes ces méthodes.
+
+00:14:41.150 --> 00:14:42.370
+Microsoft publie les URL
+
+00:14:42.370 --> 00:14:43.150
+des comptes de stockage
+
+00:14:43.510 --> 00:14:43.870
+jeux de données.
+
+00:14:44.210 --> 00:14:45.250
+Et ces URL sont publiques.
+
+00:14:45.690 --> 00:14:46.410
+Tout le monde peut y accéder
+
+00:14:46.410 --> 00:14:47.170
+depuis n'importe quel outil.
+
+00:14:47.530 --> 00:14:48.930
+Le SDK Azure Open Datasets
+
+00:14:48.930 --> 00:14:49.470
+n'est qu'une couche
+
+00:14:49.470 --> 00:14:50.450
+de commodité supplémentaire.
+
+00:14:50.750 --> 00:14:51.170
+Si vous le vouliez,
+
+00:14:51.250 --> 00:14:51.730
+vous pourriez écrire
+
+00:14:51.730 --> 00:14:52.450
+votre propre code
+
+00:14:52.450 --> 00:14:53.010
+pour lire les fichiers
+
+00:14:53.010 --> 00:14:53.430
+par cas bruts
+
+00:14:53.430 --> 00:14:54.050
+directement depuis
+
+00:14:54.050 --> 00:14:54.890
+ces URL de stockage.
+
+00:14:55.390 --> 00:14:56.530
+Le SDK facilite simplement
+
+00:14:56.530 --> 00:14:57.150
+les choses en gérant
+
+00:14:57.150 --> 00:14:57.890
+le filtrage des dates
+
+00:14:57.890 --> 00:14:58.790
+et la conversion pour vous.
+
+00:14:59.710 --> 00:15:00.450
+La question du coup,
+
+00:15:00.830 --> 00:15:02.390
+est-ce vraiment gratuit ?
+
+00:15:02.390 --> 00:15:02.850
+C'est la question
+
+00:15:02.850 --> 00:15:03.530
+que tout le monde se pose.
+
+00:15:03.950 --> 00:15:05.030
+Est-ce vraiment gratuit ?
+
+00:15:05.030 --> 00:15:05.970
+La réponse courte est oui,
+
+00:15:06.170 --> 00:15:06.590
+et aussi non.
+
+00:15:07.110 --> 00:15:07.910
+Voici pourquoi c'est le cas.
+
+00:15:08.450 --> 00:15:08.670
+En réalité,
+
+00:15:08.770 --> 00:15:09.270
+les données elles-mêmes
+
+00:15:09.270 --> 00:15:10.130
+sont totalement gratuites.
+
+00:15:10.510 --> 00:15:11.330
+Microsoft paye toujours
+
+00:15:11.330 --> 00:15:11.930
+le stockage,
+
+00:15:12.390 --> 00:15:13.110
+mais pas une promotion
+
+00:15:13.110 --> 00:15:13.850
+ou une offre limitée.
+
+00:15:14.130 --> 00:15:14.810
+C'est intégré
+
+00:15:14.810 --> 00:15:15.410
+à la conception même
+
+00:15:15.410 --> 00:15:15.790
+du service,
+
+00:15:16.210 --> 00:15:16.830
+il les héberge,
+
+00:15:16.990 --> 00:15:17.670
+il paie les factures
+
+00:15:17.670 --> 00:15:18.410
+et vous y accédez
+
+00:15:18.410 --> 00:15:19.290
+sans dépenser un centime
+
+00:15:19.290 --> 00:15:19.770
+pour les données.
+
+00:15:20.630 --> 00:15:21.230
+Mais voici où les coûts
+
+00:15:21.230 --> 00:15:21.570
+interviennent.
+
+00:15:22.030 --> 00:15:22.710
+Vous payez pour le calcul.
+
+00:15:23.190 --> 00:15:23.770
+Cela signifie que
+
+00:15:23.770 --> 00:15:24.470
+si vous lancez une machine
+
+00:15:24.470 --> 00:15:25.150
+virtuelle pour traiter
+
+00:15:25.150 --> 00:15:25.470
+les données,
+
+00:15:25.570 --> 00:15:26.330
+vous payez cette VM,
+
+00:15:26.670 --> 00:15:27.190
+vous payez cette VM.
+
+00:15:27.370 --> 00:15:28.230
+Pour un cluster Databricks
+
+00:15:28.230 --> 00:15:28.930
+analysant des millions
+
+00:15:28.930 --> 00:15:29.490
+de trajets en taxi,
+
+00:15:29.570 --> 00:15:30.270
+vous payez ce cluster.
+
+00:15:30.810 --> 00:15:31.470
+Si vous utilisez
+
+00:15:31.470 --> 00:15:32.530
+Synapse SQL sans serveur,
+
+00:15:32.670 --> 00:15:33.530
+vous payez pour les requêtes
+
+00:15:33.530 --> 00:15:34.330
+que vous exécutez.
+
+00:15:34.330 --> 00:15:35.790
+Ce sont des coûts Azure standard.
+
+00:15:36.230 --> 00:15:37.070
+Ils ne sont pas spécifiques
+
+00:15:37.070 --> 00:15:37.710
+aux jeux de données ouverts.
+
+00:15:38.090 --> 00:15:38.270
+Ensuite,
+
+00:15:38.310 --> 00:15:38.790
+il y a la sortie de données.
+
+00:15:39.230 --> 00:15:39.790
+Cela peut vous prendre
+
+00:15:39.790 --> 00:15:40.230
+au dépourvu.
+
+00:15:40.810 --> 00:15:42.050
+Si vous déplacez des données
+
+00:15:42.050 --> 00:15:43.450
+entre des régions Azure
+
+00:15:43.450 --> 00:15:44.130
+ou hors d'Azure,
+
+00:15:44.230 --> 00:15:45.610
+vous payez des frais de sortie.
+
+00:15:46.290 --> 00:15:47.150
+La tarification typique
+
+00:15:47.150 --> 00:15:48.230
+est d'environ 8 à 9 centimes
+
+00:15:48.230 --> 00:15:48.750
+par gigaoctet.
+
+00:15:49.390 --> 00:15:50.010
+Ça n'a l'air de rien
+
+00:15:50.010 --> 00:15:50.970
+jusqu'à ce que vous déplaciez
+
+00:15:50.970 --> 00:15:51.590
+des teraoctets.
+
+00:15:52.530 --> 00:15:53.390
+Certains de ces jeux de données
+
+00:15:53.390 --> 00:15:53.990
+sont immenses.
+
+00:15:54.410 --> 00:15:55.150
+Les données météorologiques
+
+00:15:55.150 --> 00:15:55.770
+couvrent à elles seules
+
+00:15:55.770 --> 00:15:56.970
+des décennies et de multiples stations.
+
+00:15:57.570 --> 00:15:58.690
+Les lire depuis une région différente
+
+00:15:58.690 --> 00:15:59.630
+fait grimper la facture rapide.
+
+00:15:59.990 --> 00:16:00.490
+Il y a aussi le coût
+
+00:16:04.330 --> 00:16:04.570
+qui les copie,
+
+00:16:04.690 --> 00:16:05.890
+les transforme ou les transforme.
+
+00:16:05.970 --> 00:16:06.950
+Vous payez pour ce stockage
+
+00:16:06.950 --> 00:16:08.230
+au tarif Azure standard.
+
+00:16:08.650 --> 00:16:09.830
+Microsoft est transparent à ce jeu.
+
+00:16:10.250 --> 00:16:10.790
+Si un jeu de données
+
+00:16:10.790 --> 00:16:11.770
+entraîne des frais de sortie,
+
+00:16:11.870 --> 00:16:12.550
+vous trouverez l'information
+
+00:16:12.550 --> 00:16:13.630
+sur la page de présentation.
+
+00:16:14.070 --> 00:16:14.750
+Pas de facture surprise.
+
+00:16:15.290 --> 00:16:15.990
+Mais vous devez vérifier
+
+00:16:15.990 --> 00:16:16.690
+avant de transférer
+
+00:16:16.690 --> 00:16:17.550
+de grandes quantités de données
+
+00:16:17.550 --> 00:16:18.090
+entre régions.
+
+00:16:18.690 --> 00:16:19.390
+Voici le conseil clé
+
+00:16:19.390 --> 00:16:19.910
+pour les débutants.
+
+00:16:20.250 --> 00:16:21.150
+Gardez vos ressources de calcul
+
+00:16:21.150 --> 00:16:21.670
+dans la même région
+
+00:16:21.670 --> 00:16:22.130
+que le jeu de données.
+
+00:16:22.510 --> 00:16:23.130
+Chaque jeu de données
+
+00:16:23.130 --> 00:16:24.150
+a une région spécifiée
+
+00:16:24.150 --> 00:16:24.750
+où il est hébergé.
+
+00:16:25.030 --> 00:16:26.110
+Si votre VM ou votre cluster
+
+00:16:26.110 --> 00:16:27.350
+Databricks est dans cette même région,
+
+00:16:27.570 --> 00:16:28.270
+vous évitez totalement
+
+00:16:28.270 --> 00:16:28.850
+les frais de sortie.
+
+00:16:29.230 --> 00:16:29.990
+Les données restent locales,
+
+00:16:29.990 --> 00:16:30.870
+les requêtes sont plus rapides
+
+00:16:30.870 --> 00:16:31.850
+et votre facture reste basse.
+
+00:16:32.510 --> 00:16:33.570
+Examinons deux scénarios réels
+
+00:16:33.570 --> 00:16:34.330
+pour rendre cela concret.
+
+00:16:35.070 --> 00:16:35.570
+Scénario 1,
+
+00:16:35.830 --> 00:16:36.470
+vous êtes débutant
+
+00:16:36.470 --> 00:16:37.150
+et vous importez
+
+00:16:37.150 --> 00:16:38.290
+un petit échantillon de données météo
+
+00:16:38.290 --> 00:16:39.330
+dans un tableau de bord Power BI.
+
+00:16:39.510 --> 00:16:40.070
+Quelques millétings,
+
+00:16:40.130 --> 00:16:41.050
+peut-être quelques mégaoctets.
+
+00:16:41.530 --> 00:16:42.330
+Votre coût de calcul est nul
+
+00:16:42.330 --> 00:16:43.990
+car Power BI le prend en charge.
+
+00:16:44.390 --> 00:16:45.350
+Vos frais de sortie sont nuls
+
+00:16:45.350 --> 00:16:46.310
+car vous ne transférez pas grand-chose.
+
+00:16:46.450 --> 00:16:47.850
+Cela ne vous coûte rien en dehors de...

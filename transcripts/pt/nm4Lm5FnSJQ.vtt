@@ -1,0 +1,1270 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.180
+Bem-vindos a mais um episódio do Microsoft Knowledge Nugget.
+
+00:00:02.500 --> 00:00:03.700
+Eu sou seu apresentador, Mirio Peter.
+
+00:00:04.120 --> 00:00:05.100
+Então, aqui está o cenário.
+
+00:00:05.540 --> 00:00:08.280
+Você está trabalhando no Business Center e precisa de uma pequena mudança.
+
+00:00:08.660 --> 00:00:11.760
+Talvez um campo extra, um registro de cliente, uma etapa de aprovação diferente,
+
+00:00:11.860 --> 00:00:14.180
+ou uma regra que verifica um pedido antes de alguém publicá-lo.
+
+00:00:14.600 --> 00:00:18.180
+Então, alguém menciona extensões, AL, tabelas, páginas e code units,
+
+00:00:18.240 --> 00:00:21.520
+e, de repente, esse pequeno pedido soa como um idioma totalmente novo.
+
+00:00:22.060 --> 00:00:24.080
+É um idioma, claro, mas não precisa parecer misterioso.
+
+00:00:24.740 --> 00:00:26.300
+Pense no Business Center como um prédio comercial.
+
+00:00:26.480 --> 00:00:29.860
+O AL dá aos desenvolvedores as instruções para adicionar uma sala,
+
+00:00:30.000 --> 00:00:32.960
+um formulário ou uma nova regra sem precisar quebrar paredes do prédio.
+
+00:00:33.340 --> 00:00:34.640
+Esse é o nosso Knowledge Nugget de hoje.
+
+00:00:35.140 --> 00:00:37.980
+Ao final deste episódio, você saberá o que significa o desenvolvimento em AL
+
+00:00:37.980 --> 00:00:39.180
+e por que as extensões existem,
+
+00:00:39.320 --> 00:00:41.460
+e como o trabalho personalizado se encaixa no Business Center.
+
+00:00:42.320 --> 00:00:43.860
+Por que as empresas personalizam o Business Center?
+
+00:00:44.140 --> 00:00:46.660
+O Business Center já lida com muitas tarefas diárias de finanças,
+
+00:00:46.780 --> 00:00:48.340
+clientes, pedidos de venda e faturas de estoque,
+
+00:00:48.440 --> 00:00:51.440
+tudo em um sistema conectado em vez de uma pilha de planilhas e ferramentas separadas.
+
+00:00:52.380 --> 00:00:55.000
+Para muitas empresas, essa configuração padrão cobre a maior parte do trabalho.
+
+00:00:55.460 --> 00:00:56.160
+Mas aqui está a questão.
+
+00:00:56.720 --> 00:00:58.140
+Nenhuma empresa trabalha da mesma maneira.
+
+00:00:58.140 --> 00:01:01.800
+Veja um distribuidor de alimentos que precisa de detalhes de lote que a outra empresa nunca usa,
+
+00:01:02.300 --> 00:01:05.400
+uma empresa de serviços que exige um processo de aprovação especial antes do faturamento,
+
+00:01:06.060 --> 00:01:08.460
+um varejista que deseja níveis de recompensa para descontos,
+
+00:01:08.820 --> 00:01:12.540
+e outra pessoa precisando de um formulário com seus próprios campos de texto e regras internas.
+
+00:01:13.820 --> 00:01:16.160
+A empresa não mudará seus métodos por causa de um campo ausente.
+
+00:01:16.520 --> 00:01:20.380
+E você também não quer que cada pequeno pedido se transforme em uma mudança arriscada em todo o sistema.
+
+00:01:20.880 --> 00:01:21.740
+Isso costumava ser um problema.
+
+00:01:21.740 --> 00:01:26.280
+Em sistemas mais antigos, os desenvolvedores abriam o código original e o editavam diretamente.
+
+00:01:26.580 --> 00:01:28.260
+E funcionava até a chegada da próxima atualização.
+
+00:01:28.620 --> 00:01:31.520
+Então, a empresa tinha a nova versão da Microsoft de um lado,
+
+00:01:31.580 --> 00:01:32.780
+suas próprias mudanças do outro,
+
+00:01:33.120 --> 00:01:36.200
+e alguém precisava reconciliar tudo antes que a atualização pudesse prosseguir.
+
+00:01:37.200 --> 00:01:40.820
+Imagine um escritor onde cada inquilino passa novos cabos pelas paredes sem um plano.
+
+00:01:41.780 --> 00:01:44.400
+Funciona por um tempo, mas quando o prédio precisa de reparos,
+
+00:01:44.460 --> 00:01:46.040
+ninguém sabe qual cabo pertence a quem.
+
+00:01:46.880 --> 00:01:48.300
+Business Central segue um caminho diferente.
+
+00:01:48.300 --> 00:01:50.480
+Em vez de reescrever o aplicativo padrão,
+
+00:01:50.600 --> 00:01:53.460
+os desenvolvedores criam um complemento separado que se conecta a ele,
+
+00:01:53.540 --> 00:01:54.820
+mantendo a parte padrão no lugar,
+
+00:01:54.920 --> 00:01:56.700
+enquanto as mudanças da empresa ficam ao lado
+
+00:01:56.700 --> 00:01:58.800
+e operam por meio de pontos suportados no sistema.
+
+00:01:59.420 --> 00:02:01.640
+Essa separação é importante quando as atualizações chegam,
+
+00:02:01.700 --> 00:02:03.440
+porque a Microsoft atualiza sua parte do prédio
+
+00:02:03.440 --> 00:02:05.500
+enquanto o trabalho personalizado permanece em seu próprio espaço.
+
+00:02:06.020 --> 00:02:08.640
+Ainda há testes e correções, afinal são mudanças de software,
+
+00:02:08.740 --> 00:02:11.700
+mas não se espera que o desenvolvedor copie e refaça cada alteração
+
+00:02:11.700 --> 00:02:13.380
+dentro do código original da Microsoft.
+
+00:02:14.280 --> 00:02:15.800
+Então, o que uma empresa realmente personaliza?
+
+00:02:16.220 --> 00:02:17.400
+As personalizações adicionam nada.
+
+00:02:17.400 --> 00:02:20.700
+O sistema padrão não armazena itens como instruções de entrega,
+
+00:02:20.760 --> 00:02:23.780
+pontuação de risco interna, nível de associação ou links para sistemas externos.
+
+00:02:24.440 --> 00:02:27.100
+E elas adicionam telas que guiam a equipe para uma tarefa na ordem correta.
+
+00:02:27.760 --> 00:02:29.760
+Elas também impõem regras, como interromper um pedido
+
+00:02:29.760 --> 00:02:31.320
+quando um documento obrigatório está faltando.
+
+00:02:31.740 --> 00:02:34.100
+Trabalho personalizado também ajuda as pessoas a evitarem etapas manual.
+
+00:02:34.500 --> 00:02:36.740
+Imagine a equipe copiando dados de clientes do Business Central
+
+00:02:36.740 --> 00:02:38.260
+para outra ferramenta toda sexta-feira,
+
+00:02:38.340 --> 00:02:40.840
+verificando condições manualmente, enviando um relatório ao gerente.
+
+00:02:41.580 --> 00:02:44.300
+Uma mudança bem feita mantém essas informações no Business Central,
+
+00:02:44.300 --> 00:02:47.280
+aplica a regra de forma consistente e oferece à equipe um botão ou página
+
+00:02:47.280 --> 00:02:48.460
+que se ajusta ao trabalho diário.
+
+00:02:48.800 --> 00:02:49.680
+Vamos esclarecer um mito.
+
+00:02:50.180 --> 00:02:51.540
+Você não deve personalizar tudo.
+
+00:02:51.980 --> 00:02:54.280
+O Business Central padrão já possui muitos processos integrados.
+
+00:02:54.920 --> 00:02:56.060
+Mudar algo só porque parece diferente,
+
+00:02:56.140 --> 00:02:58.140
+e um sistema antigo cria trabalho extra mais tarde,
+
+00:02:58.700 --> 00:03:00.840
+tanto um bom trabalho personalizado começa com uma razão de negócio.
+
+00:03:01.480 --> 00:03:02.580
+Qual problema as pessoas estão enfrentando?
+
+00:03:03.160 --> 00:03:04.280
+O que deveria acontecer em vez disso?
+
+00:03:04.600 --> 00:03:06.160
+E o produto padrão já consegue fazer isso?
+
+00:03:06.160 --> 00:03:09.220
+Quando o produto padrão não atende a essa necessidade,
+
+00:03:09.320 --> 00:03:10.160
+o AL entra em cena.
+
+00:03:10.800 --> 00:03:12.500
+O AL foca no próprio Business Central,
+
+00:03:12.620 --> 00:03:15.180
+lendo, adicionando e alterando registros no nível do banco de dados,
+
+00:03:15.260 --> 00:03:18.580
+enquanto controla o que acontece em páginas, relatórios e outras partes do aplicativo.
+
+00:03:19.060 --> 00:03:20.920
+E ele calcula valores, move dados,
+
+00:03:21.220 --> 00:03:23.900
+e exibe mensagens quando as regras falham durante os processos.
+
+00:03:24.420 --> 00:03:25.960
+É muito trabalho para uma única linguagem,
+
+00:03:26.040 --> 00:03:28.780
+mas o AL não é uma ferramenta geral para qualquer tipo de software,
+
+00:03:28.780 --> 00:03:31.220
+e você não escolheria para criar um site público de compras,
+
+00:03:31.320 --> 00:03:33.580
+um jogo móvel ou um aplicativo desktop independente.
+
+00:03:33.580 --> 00:03:36.420
+O AL existe para uma tarefa focada,
+
+00:03:36.620 --> 00:03:38.880
+moldar os dados e o comportamento dentro do Business Central
+
+00:03:38.880 --> 00:03:40.920
+para que o sistema corresponda à forma como a empresa opera.
+
+00:03:41.220 --> 00:03:42.520
+E é exatamente isso que viremos a seguir.
+
+00:03:43.300 --> 00:03:45.580
+AL Extensões, o modelo de complemento seguro.
+
+00:03:46.820 --> 00:03:48.880
+AL significa aplicação language, linguagem de aplicação.
+
+00:03:49.280 --> 00:03:51.880
+É a linguagem de programação da Microsoft para o Business Central,
+
+00:03:52.000 --> 00:03:54.060
+que oferece aos desenvolvedores uma forma estruturada
+
+00:03:54.060 --> 00:03:55.380
+de criar novas funções de negócio
+
+00:03:55.380 --> 00:03:57.700
+ou alterar o comportamento de partes existentes do sistema.
+
+00:03:58.120 --> 00:04:00.260
+Mas a palavra extensão é tão importante quanto o AL.
+
+00:04:00.980 --> 00:04:03.280
+Uma extensão é um aplicativo separado que o Business Central pode instalar.
+
+00:04:03.580 --> 00:04:05.500
+Ela contém o trabalho personalizado da empresa,
+
+00:04:05.620 --> 00:04:08.240
+enquanto o aplicativo padrão do Business Central permanece intocado.
+
+00:04:08.780 --> 00:04:10.280
+Pense nisso menos como reescrever o manual
+
+00:04:10.280 --> 00:04:12.000
+e mais como adicionar páginas aprovadas a ele.
+
+00:04:12.620 --> 00:04:14.880
+Páginas que seguem as regras originais sem apagá-las.
+
+00:04:15.420 --> 00:04:16.700
+Isso pode parecer um detalhe técnico,
+
+00:04:16.780 --> 00:04:18.960
+mas muda a forma como o trabalho personalizado se mantém ao longo do tempo.
+
+00:04:19.260 --> 00:04:21.840
+Imagine que uma empresa precise de uma nova sala de escritório para uma equipe especial.
+
+00:04:22.140 --> 00:04:24.640
+A abordagem antiga significava derrubar uma parede no prédio principal
+
+00:04:24.640 --> 00:04:25.680
+e alterar a estrutura em si.
+
+00:04:26.340 --> 00:04:27.900
+Pode resolver a necessidade de hoje.
+
+00:04:27.900 --> 00:04:29.720
+Mas repara os futuros se tornam um pesadelo,
+
+00:04:29.980 --> 00:04:32.140
+porque o edifício original já não corresponde à planta.
+
+00:04:32.920 --> 00:04:34.080
+Uma extensão funciona de forma diferente.
+
+00:04:34.520 --> 00:04:37.740
+O edifício já possui portas, pontos de energia e regras para adição de espaço.
+
+00:04:38.220 --> 00:04:40.360
+Você constrói um novo cômodo através dessas conexões aprovadas.
+
+00:04:40.640 --> 00:04:41.640
+O cômodo pertence à empresa,
+
+00:04:41.820 --> 00:04:43.680
+mas o edifício principal ainda pode receber manutenção
+
+00:04:43.680 --> 00:04:45.320
+sem precisar derrubar todas as paredes personalizadas.
+
+00:04:45.440 --> 00:04:47.500
+É exatamente assim que as extensões do Business Central funcionam.
+
+00:04:47.780 --> 00:04:50.640
+O aplicativo base contém o trabalho padrão fornecido pela Microsoft.
+
+00:04:51.140 --> 00:04:53.060
+Uma extensão pode adicionar seus próprios campos,
+
+00:04:53.160 --> 00:04:55.720
+telas, botões, regras, relatórios e até links para outros sistemas.
+
+00:04:55.720 --> 00:04:58.420
+Ela pode reagir quando certas ações de negócio ocorrem,
+
+00:04:58.540 --> 00:05:01.640
+mas faz isso por meio de formas suportadas de conexão ao aplicativo padrão.
+
+00:05:02.220 --> 00:05:03.160
+Tantos limites são integrados.
+
+00:05:03.560 --> 00:05:04.160
+Isso é algo bom.
+
+00:05:04.660 --> 00:05:06.660
+Sem limite, uma pequena solicitação personalizada
+
+00:05:06.660 --> 00:05:08.000
+pode atingir áreas que não deveria tocar.
+
+00:05:08.520 --> 00:05:11.480
+Com extensões, o desenvolvedor trabalha com tipos de objetos claros
+
+00:05:11.480 --> 00:05:12.840
+e pontos de conexão definidos,
+
+00:05:12.960 --> 00:05:14.560
+o que torna o código mais fácil de entender
+
+00:05:14.560 --> 00:05:16.360
+quando outra pessoa precisar lê-lo depois.
+
+00:05:16.920 --> 00:05:18.640
+Essa abordagem também se encaixa perfeitamente
+
+00:05:18.640 --> 00:05:19.940
+na versão em nuvem do Business Central.
+
+00:05:20.280 --> 00:05:22.080
+A Microsoft atualiza o serviço regularmente.
+
+00:05:22.520 --> 00:05:25.340
+Uma empresa ainda precisa testar sua extensão após as alterações,
+
+00:05:25.340 --> 00:05:28.100
+especialmente se a depender de partes do produto que foram modificadas.
+
+00:05:28.360 --> 00:05:30.000
+O software nunca elimina a necessidade de cuidados.
+
+00:05:30.480 --> 00:05:32.500
+Mas manter o código personalizado separado
+
+00:05:32.500 --> 00:05:34.060
+diminui a chance de que cada atualização
+
+00:05:34.060 --> 00:05:36.440
+se transforme em uma grande reconstrução de modificações antigas.
+
+00:05:36.680 --> 00:05:38.200
+Você pode ouvir pessoas mencionarem CL
+
+00:05:38.200 --> 00:05:40.440
+ao falarem sobre os sistemas Dynamics Neve mais antigos.
+
+00:05:40.840 --> 00:05:42.720
+O CL veio de um modelo de desenvolvimento anterior,
+
+00:05:43.000 --> 00:05:44.600
+onde os desenvolvedores costumavam alterar
+
+00:05:44.600 --> 00:05:46.360
+os objetos originais do aplicativo diretamente.
+
+00:05:46.840 --> 00:05:49.820
+Muitas empresas mantiveram sistemas bem-sucedidos dessa forma por anos,
+
+00:05:49.920 --> 00:05:51.560
+mas isso vinculava o trabalho personalizado
+
+00:05:51.560 --> 00:05:53.120
+muito mais estreitamente ao código padrão
+
+00:05:53.120 --> 00:05:55.480
+e as atualizações exigiam muito trabalho de comparação e reparo.
+
+00:05:55.760 --> 00:05:58.220
+O IL moveu o Business Central para um desenvolvimento baseado em aplicativos.
+
+00:05:58.480 --> 00:06:00.760
+Isso não significa que toda extensão seja grande ou complicada.
+
+00:06:01.180 --> 00:06:03.940
+Uma extensão pode apenas adicionar um campo a um registro de cliente
+
+00:06:03.940 --> 00:06:05.120
+e exibi-lo em uma tela familiar.
+
+00:06:05.640 --> 00:06:08.560
+Outra pode conter uma solução completa para um tipo de negócio específico
+
+00:06:08.560 --> 00:06:11.300
+com seus próprios registros, processos, páginas e relatórios.
+
+00:06:12.100 --> 00:06:13.620
+Ambas seguem a mesma ideia básica.
+
+00:06:14.260 --> 00:06:16.300
+O aplicativo personalizado vive ao lado do Business Central
+
+00:06:16.300 --> 00:06:17.540
+em vez de esconder uma reescrita dele.
+
+00:06:18.080 --> 00:06:19.680
+Você também pode instalar mais de uma extensão.
+
+00:06:19.680 --> 00:06:23.660
+Uma empresa pode usar uma extensão de um parceiro de software para folha de pagamento,
+
+00:06:23.820 --> 00:06:24.420
+outra para envio,
+
+00:06:24.580 --> 00:06:27.580
+uma pequena extensão interna para regras que importam apenas para aquela empresa.
+
+00:06:28.300 --> 00:06:30.240
+O Business Central as reúne em sistema operacional
+
+00:06:30.240 --> 00:06:33.460
+desde que sigam as regras da plataforma e não entrem em conflito.
+
+00:06:34.020 --> 00:06:35.640
+Tanto a IL não é apenas uma maneira de escrever código.
+
+00:06:36.080 --> 00:06:39.280
+É a linguagem que os desenvolvedores usam para criar esses aplicativos complementares
+
+00:06:39.280 --> 00:06:42.240
+e as extensões são o container que leva essas mudanças para o Business Central.
+
+00:06:42.720 --> 00:06:44.840
+Esse modelo permite que uma empresa personalize o sistema
+
+00:06:44.840 --> 00:06:47.120
+mantendo o produto padrão reconhecível mais fácil de manter.
+
+00:06:47.120 --> 00:06:50.300
+Agora vamos abrir uma dessas extensões e examinar os blocos de construção.
+
+00:06:51.660 --> 00:06:54.160
+Principais blocos de construção AL dentro de uma extensão AL
+
+00:06:54.160 --> 00:06:55.900
+os desenvolvedores trabalham com objetos.
+
+00:06:56.360 --> 00:06:58.940
+Um objeto é uma parte nomeada do aplicativo com uma função clara,
+
+00:06:59.040 --> 00:07:02.540
+como armazenar informações, exibir uma tela, executar uma regra ou produzir um documento.
+
+00:07:03.260 --> 00:07:04.780
+Quando você vê essas funções separadamente,
+
+00:07:04.900 --> 00:07:06.620
+o AL parece muito menos uma parede de código.
+
+00:07:07.260 --> 00:07:09.120
+Vamos começar pelo local onde as informações comerciais residem.
+
+00:07:09.880 --> 00:07:11.280
+As tabelas armazenam o Business Central.
+
+00:07:11.840 --> 00:07:14.640
+Pense em uma tabela como um arquivo digital para um tipo de registro.
+
+00:07:14.640 --> 00:07:18.560
+Um arquivo pode conter clientes, outro contém itens e outro contém pedidos de venda.
+
+00:07:19.360 --> 00:07:21.240
+Cada registro é um arquivo dentro desse gabinete.
+
+00:07:21.780 --> 00:07:24.140
+Uma tabela de clientes contém um registro para cada cliente.
+
+00:07:24.580 --> 00:07:26.920
+Uma tabela de itens contém um registro para cada produto.
+
+00:07:27.720 --> 00:07:30.920
+Se sua empresa precisa de informações que o Business Central padrão não armazena,
+
+00:07:31.220 --> 00:07:32.860
+uma extensão pode criar sua própria tabela,
+
+00:07:33.100 --> 00:07:36.560
+talvez para níveis de recompensa, inspeções de equipamentos ou aprovações de projetos.
+
+00:07:37.420 --> 00:07:39.440
+Campos são os espaços rotulados dentro de cada registro.
+
+00:07:39.440 --> 00:07:43.860
+Um registro de cliente pode incluir um nome, um endereço, um termo de pagamento e um número de telefone,
+
+00:07:43.960 --> 00:07:46.320
+porque a tabela de clientes contém campos para esses detalhes.
+
+00:07:47.100 --> 00:07:50.220
+Os campos podem conter texto, datas, valores, respostas sim ou não,
+
+00:07:50.280 --> 00:07:51.540
+ou uma escolha de uma lista fixa.
+
+00:07:52.040 --> 00:07:53.620
+Um campo também pode apontar para outro registro.
+
+00:07:54.020 --> 00:07:56.260
+Por exemplo, um cliente poderia conter um campo de ID e recompensa.
+
+00:07:56.680 --> 00:07:58.300
+Em vez de digitar qualquer texto aleatório,
+
+00:07:58.460 --> 00:08:01.120
+a equipe seleciona o nível de recompensa de uma tabela de recompensa separada.
+
+00:08:01.380 --> 00:08:04.740
+Esse link mantém os dados limpos porque todos escolhem a partir da mesma lista conhecida.
+
+00:08:05.060 --> 00:08:06.240
+Tanto as tabelas contêm os fatos.
+
+00:08:06.240 --> 00:08:08.260
+Mas como as pessoas veem e trabalham com esses fatos?
+
+00:08:08.260 --> 00:08:09.040
+Páginas.
+
+00:08:09.200 --> 00:08:11.020
+Uma página é a tela que você abre no Business Center.
+
+00:08:11.340 --> 00:08:12.340
+O cadastro de cliente é uma página.
+
+00:08:12.840 --> 00:08:14.300
+Uma lista de pedidos de venda é uma página.
+
+00:08:14.740 --> 00:08:17.840
+Uma página controla o que os usuários podem visualizar, inserir, pesquisar e processar.
+
+00:08:18.160 --> 00:08:19.600
+Páginas diferentes atendem a tarefas diferentes.
+
+00:08:20.060 --> 00:08:23.220
+Uma página de cartão foca em um registro por vez, como um cliente ou um item.
+
+00:08:23.920 --> 00:08:26.040
+Uma página de lista mostra muitos registros em linhas,
+
+00:08:26.120 --> 00:08:29.140
+o que funciona bem quando você precisa escanear, filtrar ou encontrar algo rapidamente.
+
+00:08:29.680 --> 00:08:32.560
+Uma página de planilha oferece suporte ao trabalho em que as pessoas inserem
+
+00:08:32.560 --> 00:08:34.460
+ou processam várias linhas de informações juntas.
+
+00:08:34.460 --> 00:08:35.980
+A tabela armazena as informações.
+
+00:08:36.520 --> 00:08:38.020
+A página te coloca à disposição do usuário.
+
+00:08:38.500 --> 00:08:42.320
+Essa separação é útil porque você pode alterar a tela sem alterar onde os dados residem
+
+00:08:42.320 --> 00:08:44.400
+ou reutilizar a mesma tabela em mais de uma página
+
+00:08:44.400 --> 00:08:47.640
+quando equipes diferentes precisam de visões diferentes dos mesmos registros.
+
+00:08:48.340 --> 00:08:51.080
+Agora, e se os dados já pertencerem a um registro padrão do Business Central?
+
+00:08:51.600 --> 00:08:54.920
+Geralmente, você não cria uma tabela de clientes substituta só porque precisa de um campo extra.
+
+00:08:55.380 --> 00:08:56.380
+Você usa uma extensão de tabela.
+
+00:08:56.740 --> 00:08:59.600
+Uma extensão de tabela adiciona seu campo à tabela de clientes existente.
+
+00:09:00.040 --> 00:09:02.120
+O registro padrão do cliente permanece onde deveria,
+
+00:09:02.120 --> 00:09:05.560
+enquanto sua extensão adiciona o detalhe específico da empresa ao lado dos campos padrão.
+
+00:09:05.560 --> 00:09:10.060
+Um ID de recompensa, uma nota de entrega, um gerente de conta ou um campo que se conecta
+
+00:09:10.060 --> 00:09:10.960
+à outra parte do negócio.
+
+00:09:11.540 --> 00:09:14.380
+Mas adicionar o campo à tabela não o coloca automaticamente na tela.
+
+00:09:14.880 --> 00:09:16.100
+Para isso, eu uso uma extensão de página.
+
+00:09:16.440 --> 00:09:19.580
+Uma extensão de página adiciona um campo, grupo ou ação a uma página existente.
+
+00:09:19.580 --> 00:09:23.120
+Se a empresa precisa que a equipe escolha um nível de recompensa ao visualizar um cliente,
+
+00:09:23.280 --> 00:09:26.340
+a extensão de página pode colocar o campo de ID de recompensa no cartão do cliente
+
+00:09:26.340 --> 00:09:27.560
+exatamente onde a equipe já trabalha.
+
+00:09:28.160 --> 00:09:29.300
+Isso mantém a experiência familiar.
+
+00:09:29.900 --> 00:09:33.040
+Em vez de enviar os usuários para uma tela personalizada separada por um detalhe simples,
+
+00:09:33.100 --> 00:09:35.220
+a extensão adiciona o detalhe à página que eles já conhecem.
+
+00:09:35.860 --> 00:09:39.500
+Uma extensão de página também pode adicionar ações, um botão ou comando de menu que
+
+00:09:39.500 --> 00:09:40.260
+inicia uma tarefa.
+
+00:09:40.860 --> 00:09:43.960
+Por exemplo, um cartão de cliente poderia incluir uma ação de recompensas que abre a lista
+
+00:09:43.960 --> 00:09:44.700
+de recompensas.
+
+00:09:45.160 --> 00:09:47.320
+Por trás da tela, você precisa de um lugar para as regras de negócio.
+
+00:09:47.320 --> 00:09:49.380
+Esse lugar costuma ser um codinit.
+
+00:09:49.380 --> 00:09:52.740
+Uma codinit contém procedimentos aérea, que são partes de código nomeadas que realizam
+
+00:09:52.740 --> 00:09:53.700
+uma tarefa específica.
+
+00:09:53.860 --> 00:09:56.800
+Pense nisso com uma equipe de back-office que lida com uma tarefa quando uma página,
+
+00:09:56.920 --> 00:09:58.680
+relatório ou outro processo pede ajuda.
+
+00:09:59.380 --> 00:10:02.480
+Suponha que o nível de recompensa decida qual desconto se aplica um cliente.
+
+00:10:02.980 --> 00:10:06.820
+O cálculo do desconto pertence a uma codinit, não a página do cartão do cliente em si.
+
+00:10:07.500 --> 00:10:11.540
+Assim, um processo de vendas, um relatório ou uma página futura podem usar a mesma regra
+
+00:10:11.540 --> 00:10:13.020
+sem copiá-la em vários lugares.
+
+00:10:13.640 --> 00:10:15.020
+Uma regra é um lugar para mantê-la.
+
+00:10:15.020 --> 00:10:18.240
+O Business Central também inclui outros tipos de objetos para diferentes tarefas.
+
+00:10:18.680 --> 00:10:21.900
+Relatórios coletam dados e os apresentam em um documento ou layout, como uma fatura
+
+00:10:21.900 --> 00:10:22.800
+ou um relatório de vendas.
+
+00:10:23.480 --> 00:10:27.180
+Consultas Queries fazem perguntas focadas nos dados, como quais clientes solicitaram um
+
+00:10:27.180 --> 00:10:28.300
+determinado item durante o período.
+
+00:10:28.520 --> 00:10:32.280
+Por exemplo, os XML ports ajudam a trazer dados ou enviá-los em um formato estruturado
+
+00:10:32.280 --> 00:10:35.200
+frequentemente quando outro sistema precisa trocar informações com o Business Central.
+
+00:10:35.780 --> 00:10:39.000
+Junte essas peças e você poderá imaginar uma pequena extensão de recompensas para
+
+00:10:39.000 --> 00:10:39.200
+o cliente.
+
+00:10:39.440 --> 00:10:42.140
+Uma tabela de recompensas armazena cada nível e sua porcentagem de conta.
+
+00:10:42.140 --> 00:10:44.460
+Páginas de recompensas permitem que a equipe gêne esses níveis.
+
+00:10:44.900 --> 00:10:48.240
+Uma extensão de tabela de clientes adiciona um ID de recompensa a cada cliente, enquanto
+
+00:10:48.240 --> 00:10:49.900
+uma extensão de página de cartão de cliente o exibe.
+
+00:10:50.320 --> 00:10:53.820
+Uma ação de página abre a lista de recompensas e a Codionit calcula a regra de desconto.
+
+00:10:54.620 --> 00:10:56.300
+Cada objeto lida com uma parte do trabalho.
+
+00:10:57.000 --> 00:11:00.480
+Torna a extensão mais fácil de ler, testar e alterar quando a regra de negócio mudar
+
+00:11:00.480 --> 00:11:01.480
+seis meses depois.
+
+00:11:01.480 --> 00:11:05.240
+Mas uma regra de negócio geralmente precisa ser executada no momento exato, como quando
+
+00:11:05.240 --> 00:11:06.160
+alguém lança um pedido.
+
+00:11:06.920 --> 00:11:08.200
+É aí que entram os gatilhos e eventos.
+
+00:11:08.540 --> 00:11:09.960
+Eventos, gatilhos e regras de negócio.
+
+00:11:10.360 --> 00:11:11.920
+Então você adiciona um campo de recompensa ao cliente.
+
+00:11:12.300 --> 00:11:12.620
+Ótimo.
+
+00:11:12.980 --> 00:11:13.820
+Aqui está a pergunta real.
+
+00:11:14.180 --> 00:11:16.040
+Quando o Business Central deve realmente usar esse campo?
+
+00:11:16.320 --> 00:11:18.160
+Imagine que você está prestes a lançar um pedido de venda.
+
+00:11:18.340 --> 00:11:21.120
+Antes que o sistema crie os lançamentos finais, você quer uma verificação extra.
+
+00:11:21.480 --> 00:11:24.680
+Talvez o cliente precise de um nível de recompensa aprovado antes que um desconto seja aplicado.
+
+00:11:24.980 --> 00:11:28.800
+Ou talvez um documento de entrega obrigatório precise existir antes que o pedido possa prosseguir.
+
+00:11:28.800 --> 00:11:33.300
+Você quer essa verificação no momento certo, mas não quer copiar todo o processo de lançamento
+
+00:11:33.300 --> 00:11:35.480
+de vendas para a sua própria extensão apenas para adicionar uma regra.
+
+00:11:36.000 --> 00:11:37.840
+Esse processo já lida com muita coisa nos bastidores.
+
+00:11:38.300 --> 00:11:41.820
+Se você copiá-lo, sua extensão ficará presa mantendo todas essas futuras alterações.
+
+00:11:42.320 --> 00:11:42.640
+Nada ideal.
+
+00:11:43.060 --> 00:11:45.400
+Portanto, o AL oferece aos desenvolvedores algumas maneiras de executar como.
+
+00:11:45.620 --> 00:11:47.760
+A opção que você escolher depende do que precisa acontecer.
+
+00:11:48.160 --> 00:11:48.860
+Primeiro, os gatilhos.
+
+00:11:49.320 --> 00:11:52.580
+Um gatilho é um ponto nomeado dentro de um objeto AL onde o código pode ser executado.
+
+00:11:52.860 --> 00:11:55.840
+Quando alguém altera um valor em um campo de tabela, o gatilho dispara o código.
+
+00:11:55.960 --> 00:11:58.400
+Quando uma página abre ou fecha, o gatilho dispara o código.
+
+00:11:58.800 --> 00:12:02.280
+Relatórios, consultas, XML ports, tabelas, extensões e objetos de aplicação.
+
+00:12:02.440 --> 00:12:04.160
+Todos têm esses pontos onde um desenvolvedor pode adicionar regra.
+
+00:12:04.220 --> 00:12:05.760
+Pegue o campo de ID e recompensa um cliente.
+
+00:12:06.020 --> 00:12:09.100
+Quando um usuário escolhe o nível de recompensa, um gatilho de validação pode ser executado.
+
+00:12:09.260 --> 00:12:10.880
+O código verifica. O cliente está bloqueado.
+
+00:12:11.240 --> 00:12:12.320
+O nível de recompensa existe.
+
+00:12:12.800 --> 00:12:13.940
+Outro campo precisa de uma atualização.
+
+00:12:14.420 --> 00:12:18.380
+A verificação acontece exatamente quando o valor muda, não depois, quando alguém descobre um erro.
+
+00:12:18.680 --> 00:12:21.360
+Gatilhos funcionam bem quando a regra pertence estritamente a esse objeto.
+
+00:12:21.660 --> 00:12:23.200
+Mas o Business Center também usa eventos.
+
+00:12:23.620 --> 00:12:24.460
+Um evento é com um aviso.
+
+00:12:24.460 --> 00:12:27.860
+Uma parte da aplicação envia esse aviso quando algo acontece.
+
+00:12:28.240 --> 00:12:30.580
+Ele pode anunciar que um registro está prestes a ser inserido,
+
+00:12:30.940 --> 00:12:32.580
+ou que um documento está prestes a ser lançado,
+
+00:12:32.920 --> 00:12:34.100
+ou que um processo terminou.
+
+00:12:34.600 --> 00:12:35.980
+Sua extensão pode ouvir esse aviso.
+
+00:12:36.460 --> 00:12:38.720
+O código que houve é chamado de assinante evento evento subscriber.
+
+00:12:39.140 --> 00:12:40.700
+Ele espera por um evento nomeado específico.
+
+00:12:41.020 --> 00:12:44.240
+Quando o Business Center aciona esse evento, o assinante executa seu próprio procedimento.
+
+00:12:44.680 --> 00:12:45.960
+O processo padrão permanece no comando.
+
+00:12:46.540 --> 00:12:48.940
+Por exemplo, quando o Business Center começa a lançar um pedido de venda,
+
+00:12:49.040 --> 00:12:50.400
+ele aciona um evento antes de continuar.
+
+00:12:51.040 --> 00:12:52.860
+Sua extensão de recompensas recebe esse aviso.
+
+00:12:52.860 --> 00:12:55.640
+Ela verifica o ID de recompensa e a regra de desconto do cliente.
+
+00:12:55.720 --> 00:12:58.760
+Então, ela permite que o processo continue ou interrompe com uma mensagem clara.
+
+00:12:59.540 --> 00:13:02.440
+O processo de lançamento padrão ainda pertence ao Business Center.
+
+00:13:02.920 --> 00:13:06.240
+Sua extensão apenas adiciona a regra específica da empresa nesse ponto de conexão.
+
+00:13:06.680 --> 00:13:09.600
+Você ouvirá frequentemente nomes de eventos, como on before ou on after.
+
+00:13:10.160 --> 00:13:12.760
+On before significa que seu código é executado antes de uma ação terminar.
+
+00:13:13.160 --> 00:13:15.020
+Isso é perfeito para uma verificação que pode impedir a próxima etapa.
+
+00:13:15.660 --> 00:13:18.040
+Como parar um pedido de venda se uma condição falhar.
+
+00:13:18.960 --> 00:13:20.460
+After significa que a ação já ocorreu.
+
+00:13:20.460 --> 00:13:24.760
+Você pode reagir, criar um registro relacionado, atualizar uma nota ou iniciar outro trabalho.
+
+00:13:25.180 --> 00:13:27.080
+Os nomes indicam o momento, e o momento é importante.
+
+00:13:27.560 --> 00:13:29.460
+Uma regra executada após o lançamento não pode impedir.
+
+00:13:29.900 --> 00:13:32.660
+Uma regra executada muito cedo pode não ter os dados que precisa.
+
+00:13:33.000 --> 00:13:36.080
+Portanto, os desenvolvedores escolhem um evento com base no que a regra de negócio deve fazer com ela.
+
+00:13:36.420 --> 00:13:37.900
+O código também pode ser iniciado a partir de uma ação.
+
+00:13:38.300 --> 00:13:42.320
+Um usuário clica em um botão como Verificar status de recompensa e essa ação chama um procedimento.
+
+00:13:42.980 --> 00:13:45.880
+O código também pode ser executado quando um objeto chama outro por meio de uma variável.
+
+00:13:46.240 --> 00:13:47.660
+Isso parece técnico, mas é simples.
+
+00:13:47.660 --> 00:13:50.460
+Uma parte da extensão pede a outra para realizar uma tarefa.
+
+00:13:50.880 --> 00:13:51.960
+As variáveis ajudam com ela.
+
+00:13:52.240 --> 00:13:55.440
+Uma variável é um local nomeado que mantém um valor enquanto o código é executado.
+
+00:13:55.880 --> 00:13:59.620
+Pode ser um número, texto, uma data ou até um registro do Business Central como cliente atual.
+
+00:14:00.200 --> 00:14:01.760
+Em AL você os declara com VAR.
+
+00:14:02.420 --> 00:14:07.000
+Por exemplo, um procedimento de recompensa pode usar uma variável chamada cliente para manter o registro do cliente atual.
+
+00:14:07.520 --> 00:14:10.640
+Outra variável chamada percentual de desconto mantém os valores com desconto.
+
+00:14:10.980 --> 00:14:11.920
+Esses não são registros permanentes.
+
+00:14:12.180 --> 00:14:13.980
+São apenas valores de trabalho para aquela parte do código.
+
+00:14:14.300 --> 00:14:15.860
+Aqui está a questão sobre onde o código reside.
+
+00:14:15.860 --> 00:14:18.960
+Se uma regra puder ser usada em mais de um lugar, coloque uma codinit.
+
+00:14:19.280 --> 00:14:25.840
+Dessa forma, o cartão de cliente, um processo de vendas e um relatório podem chamar o mesmo procedimento de desconto em vez de cada um ter sua própria versão.
+
+00:14:26.860 --> 00:14:27.960
+Isso evita um problema comum.
+
+00:14:28.700 --> 00:14:33.320
+Uma tela aplica 10% de desconto, outra aplica 5% e ninguém sabe em qual regra confiar.
+
+00:14:34.320 --> 00:14:38.660
+Manter regras de negócios compartilhadas em uma única codinit dá à extensão uma única fonte para essa decisão.
+
+00:14:39.080 --> 00:14:41.120
+Portanto, os gatilhos lidam com regras próximas a um objetivo.
+
+00:14:41.640 --> 00:14:44.500
+Eventos permitem que uma extensão reaja aos próprios processos do Business Central.
+
+00:14:44.500 --> 00:14:46.820
+O Code Units mantém a lógica compartilhada reunida.
+
+00:14:47.180 --> 00:14:52.300
+Uma vez que essas partes se conectam, a próxima pergunta é onde os desenvolvedores escrevem, testam e inspecionam todo esse código AL.
+
+00:14:52.920 --> 00:14:57.820
+Onde o desenvolvimento AL acontece, o desenvolvimento AL geralmente ocorre no Visual Studio Code, também conhecido como VS Code.
+
+00:14:58.160 --> 00:14:59.800
+É o seu espaço de trabalho para escrever arquivos AL.
+
+00:15:00.200 --> 00:15:01.480
+Ele mantém sua extensão organizada.
+
+00:15:01.900 --> 00:15:02.920
+Ajuda a encontrar problemas.
+
+00:15:03.360 --> 00:15:06.180
+Envia o aplicativo finalizado para o ambiente do Business Central para teste.
+
+00:15:06.600 --> 00:15:08.960
+Mas o VS Code por si só é apenas um editor de código geral.
+
+00:15:09.360 --> 00:15:11.320
+Ele precisa da extensão de linguagem AL da Microsoft.
+
+00:15:11.320 --> 00:15:14.560
+Essa extensão ensina ao VS Code como o Business Central funciona.
+
+00:15:14.980 --> 00:15:16.800
+Ela pode sugerir nomes de objetos conforme você digita.
+
+00:15:17.060 --> 00:15:18.580
+Ela aponta erros antes de você publicar.
+
+00:15:18.960 --> 00:15:20.700
+Ela ajuda você a navegar por campos e procedimentos.
+
+00:15:21.020 --> 00:15:23.100
+Conecta seu projeto ao ambiente do Business Central.
+
+00:15:23.580 --> 00:15:24.740
+Isso economiza muito trabalho de vença.
+
+00:15:25.060 --> 00:15:28.860
+Ao iniciar um novo projeto AL, você pode executar o comando ALGO dentro do VS Code.
+
+00:15:29.360 --> 00:15:35.040
+Ele cria a pasta básica do projeto e os arquivos de configuração com o nome da extensão, editor, versão e qual ambiente do Business Central usar.
+
+00:15:35.400 --> 00:15:35.740
+Usar.
+
+00:15:36.320 --> 00:15:38.480
+Pense nessa pasta de projeto com a bancada de trabalho da extensão.
+
+00:15:38.480 --> 00:15:39.960
+Cada arquivo AL pertencer.
+
+00:15:40.280 --> 00:15:42.660
+Um arquivo pode contar uma tabela, outro uma extensão de página.
+
+00:15:42.760 --> 00:15:44.080
+Um Codenit pode ter seu próprio arquivo.
+
+00:15:44.460 --> 00:15:48.680
+Quando alguém abre o projeto, pode encontrar a parte certa sem enrolar um documento enorme.
+
+00:15:49.420 --> 00:15:52.740
+Quando o código está pronto para teste, o VS Code compila em um pacote de aplicativo.
+
+00:15:53.180 --> 00:15:54.780
+Essa é a versão instalável da extensão.
+
+00:15:55.300 --> 00:15:58.060
+O Business Central lê esse pacote e adiciona a extensão ao ambiente.
+
+00:15:58.060 --> 00:16:05.620
+Se houver um campo faltando, um erro de digitação ou qualquer problema que impeça a criação do aplicativo, o VS Code avisa antes que o pacote chegue ao Business Central.
+
+00:16:06.160 --> 00:16:07.160
+Os testes devem ocorrer primeiro.
+
+00:16:07.240 --> 00:16:07.740
+Um ambiente...
+
+00:16:07.740 --> 00:16:12.960
+Um sandbox é um ambiente separado do Business Central, onde você pode testar alterações sem arriscar o trabalho real da empresa.
+
+00:16:13.200 --> 00:16:18.540
+Você publica a extensão, abre as páginas, faz alterações, insere registro de teste e vê se as regras funcionam como esperado.
+
+00:16:18.980 --> 00:16:19.900
+Essa separação é importante.
+
+00:16:20.340 --> 00:16:24.700
+Você não quer descobrir que uma nova regra de validação bloqueia pedidos de venda enquanto a equipe tenta realizar seu trabalho.
+
+00:16:24.700 --> 00:16:30.500
+Em um sandbox, você pode cometer erros, remover dados de teste, alterar o código e publicar novamente sem afetar os registros reais.
+
+00:16:31.160 --> 00:16:33.500
+Às vezes o código é executado, mas o resultado ainda parece incorreto.
+
+00:16:33.980 --> 00:16:34.900
+É aí que a depuração ajuda.
+
+00:16:35.400 --> 00:16:39.580
+Você coloca um ponto de interrupção no código, inicia o processo e a extensão pausa durante a execução.
+
+00:16:40.240 --> 00:16:47.140
+Nessa pausa, você pode inspecionar valores como o cliente atual, o nível de recompensa selecionado ou a porcentagem de desconto que o procedimento calculou.
+
+00:16:47.820 --> 00:16:51.340
+Em vez de adivinhar por que uma regra falhou, você pode ver exatamente o que o código recebeu.
+
+00:16:51.340 --> 00:16:54.280
+Para em desenvolvimento, também usa o Git para manter o histórico do seu trabalho.
+
+00:16:54.700 --> 00:16:57.300
+O Git registra as alterações nos arquivos do projeto ao longo do tempo.
+
+00:16:57.560 --> 00:17:03.180
+Se alguém alterar uma regra e causar um problema, a equipe pode comparar versões, ver o que mudou e reverter, se necessário.
+
+00:17:03.640 --> 00:17:06.680
+Isso também ajuda quando mais de um desenvolvedor trabalha na mesma extensão.
+
+00:17:07.140 --> 00:17:09.240
+Para um iniciante, o melhor caminho é começar pequeno.
+
+00:17:10.600 --> 00:17:13.500
+Aprenda a navegar no Business Central primeiro, depois crie uma tabela e uma página.
+
+00:17:14.460 --> 00:17:19.660
+Depois disso, estenda uma página padrão, adicione uma regra de negócio simples e aprenda como eventos e dados de instalação se encaixam no projeto.
+
+00:17:19.660 --> 00:17:24.700
+Em seguida, vamos conectar essas peças por meio de um pequeno complemento que uma empresa realmente poderia usar.
+
+00:17:26.340 --> 00:17:29.260
+Um exemplo simples, criar um complemento de recompensas para o cliente.
+
+00:17:30.020 --> 00:17:34.140
+Como é uma extensão AL real, vamos mergulhar em um exemplo simples.
+
+00:17:35.140 --> 00:17:38.480
+Imagine que sua empresa queira níveis de recompensa para clientes, cada um com seu próprio desconto.
+
+00:17:38.840 --> 00:17:40.240
+Você começa criando uma tabela de recompensa.
+
+00:17:40.240 --> 00:17:46.160
+Pense nela como um arquivo digital, onde cada pasta contém um ID, uma descrição e um percentual de desconto.
+
+00:17:46.460 --> 00:17:47.860
+O nível ouro recebe 10% de desconto.
+
+00:17:48.260 --> 00:17:50.820
+Sua equipe precisa gerenciar esses níveis sem tocar em ferramentas técnicas.
+
+00:17:51.180 --> 00:17:56.080
+Então, se adiciona em duas páginas, uma página de lista de recompensas para ver todos os níveis e uma página de cartão de recompensa para editar o que não.
+
+00:17:56.640 --> 00:18:01.700
+Eles podem adicionar um novo nível, ajustar um percentual ou revisar o que existe sem abrir em nenhum ambiente de desenvolvimento.
+
+00:18:02.220 --> 00:18:05.020
+A seguir, você estende a tabela de clientes com um novo campo chamado Recompensa.
+
+00:18:05.020 --> 00:18:07.760
+Esse campo vincula cada cliente a um registro de recompensa.
+
+00:18:07.960 --> 00:18:11.820
+E você coloca esse campo diretamente na página do cartão do cliente, onde a equipe já gerencia os detalhes do cliente.
+
+00:18:12.280 --> 00:18:16.360
+Então, você adiciona uma ação de recompensas para que eles possam abrir a lista de recompensas diretamente nesse mesmo cartão.
+
+00:18:16.720 --> 00:18:19.000
+A regra de desconto em si vive dentro de uma code unit.
+
+00:18:19.460 --> 00:18:25.220
+Quando outro processo precisa do desconto de um cliente, ele chama essa code unit em vez de calculá-lo repetidamente em cada página.
+
+00:18:25.660 --> 00:18:26.020
+Isso é oficiente.
+
+00:18:26.560 --> 00:18:30.280
+Uma code unit de instalação adiciona níveis de recompensa iniciais na primeira vez que sua extensão instala.
+
+00:18:30.280 --> 00:18:34.400
+E um assinante de evento verifica o nível de recompensa escolhido durante um processo de vendas,
+
+00:18:34.400 --> 00:18:36.300
+aplicando a regra da sua empresa no momento exato.
+
+00:18:36.900 --> 00:18:39.360
+Essa é uma pequena extensão, mas observe o que ela contém.
+
+00:18:39.920 --> 00:18:43.720
+Tabelas de dados, telas de usuário, ações de navegação, lógica de configuração e regras de negócio.
+
+00:18:44.040 --> 00:18:44.760
+Tudo trabalhando junto.
+
+00:18:45.100 --> 00:18:46.020
+Esse é o verdadeiro poder da AER.
+
+00:18:46.980 --> 00:18:48.880
+Conclusão, seu ponto de partida no desenvolvimento em AER.
+
+00:18:49.240 --> 00:18:50.160
+Então, aqui está a levar em conta.
+
+00:18:50.600 --> 00:18:55.420
+O desenvolvimento em AER permite que você adicione ao Business Central os recursos específicos de que sua empresa precisa
+
+00:18:55.420 --> 00:18:56.820
+sem tocar no aplicativo principal.
+
+00:18:57.160 --> 00:18:58.600
+E você não precisa construir tudo de uma vez.
+
+00:18:59.000 --> 00:19:01.980
+Comece com um campo, uma extensão de página e uma regra clara.
+
+00:19:02.500 --> 00:19:03.700
+Esse é o seu primeiro bloco de construção.
+
+00:19:03.700 --> 00:19:07.960
+Se você achou esta pílula de conhecimento útil, inscreva-se na sua plataforma de podcast favorita
+
+00:19:07.960 --> 00:19:10.760
+e compartilhe com alguém que está começando no desenvolvimento do Business Central.
+
+00:19:11.020 --> 00:19:13.060
+Junte-se a nós na próxima vez, onde adicionaremos mais uma peça.
+
+00:19:13.400 --> 00:19:18.120
+Eu sou Marco Peters, e este foi mais um episódio de Pílulas de Conhecimento Microsoft no M305FM.

@@ -1,0 +1,2422 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:07.300
+Prêt pour 10 jours consacrés à Microsoft 365, copilote l'IA Azure et aux personnes qui façonnent l'avenir du travail, Echo.
+
+00:00:07.960 --> 00:00:12.160
+En janvier prochain, la M365Con est de retour et nous voyons encore plus grand.
+
+00:00:12.940 --> 00:00:18.080
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et les connaissances pratiques de MVP et d'experts du secteur du monde entier.
+
+00:00:18.820 --> 00:00:21.340
+Fini les présentations génériques, fini les mots à la mode interminable.
+
+00:00:22.000 --> 00:00:23.180
+Nous nous attaquons aux vrais défis.
+
+00:00:23.760 --> 00:00:28.820
+Copilot Studio, les agents IA, Fabrique, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.820 --> 00:00:34.460
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant d'entreprise, il existe des sessions conçues pour vous.
+
+00:00:35.600 --> 00:00:40.000
+Avec 10 jours complets, vous pouvez explorer de multiples technologies et entrer en contact avec une communauté mondiale.
+
+00:00:41.060 --> 00:00:44.140
+Suivez le direct et ramenez des informations pratiques à votre organisation.
+
+00:00:45.200 --> 00:00:48.960
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.440 --> 00:00:50.640
+Les inscriptions sont ouvertes dès maintenant.
+
+00:00:51.920 --> 00:00:55.600
+Rendez-vous sur M365Con.net pour réserver votre place dès aujourd'hui.
+
+00:00:55.600 --> 00:00:58.360
+C'est M365Con.net.
+
+00:01:00.300 --> 00:01:04.640
+Scrivez-vous sur M365Con.net et nous vous attendons en direct en janvier.
+
+00:01:04.640 --> 00:01:09.120
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets sur M365FM.
+
+00:01:09.820 --> 00:01:10.820
+Je suis votre haut de Mircobita.
+
+00:01:11.080 --> 00:01:15.600
+Le sujet d'aujourd'hui est connu de presque tout le monde, mais la plupart des gens espèrent ne jamais avoir à l'utiliser.
+
+00:01:16.480 --> 00:01:16.840
+Imaginez.
+
+00:01:17.080 --> 00:01:19.120
+Un email sensible arrive dans la mauvaise boîte de réception.
+
+00:01:19.680 --> 00:01:20.880
+Un employé dépose une plainte.
+
+00:01:21.180 --> 00:01:22.440
+Un régulateur demande des documents.
+
+00:01:22.680 --> 00:01:25.140
+Ou quelqu'un pense que des données ont quitté l'entreprise.
+
+00:01:26.100 --> 00:01:27.300
+Quand cela arrive, c'est la panique.
+
+00:01:27.940 --> 00:01:29.020
+Certains veulent supprimer l'email.
+
+00:01:29.180 --> 00:01:31.860
+D'autres commencent à fouiller manuellement dans les boîtes de réception.
+
+00:01:31.860 --> 00:01:33.780
+Les managers interrogent les employés.
+
+00:01:33.960 --> 00:01:36.500
+Les fichiers se déplacent et reconstituer l'histoire devient un casse-tête.
+
+00:01:37.500 --> 00:01:40.100
+C'est exactement là qu'intervient Microsoft Purview e-Discovery.
+
+00:01:40.720 --> 00:01:46.840
+A la fin de ce Knowledge Nugget, vous saurez comment trouver, protéger, examiner et transmettre les bonnes données Microsoft 365
+
+00:01:46.840 --> 00:01:49.300
+sans transformer votre équipe informatique en équipe juridique.
+
+00:01:50.280 --> 00:01:56.100
+En termes simples, Microsoft Purview e-Discovery est un outil basé sur les dossiers pour trouver, préserver, examiner et exporter des données professionnelles.
+
+00:01:56.340 --> 00:01:58.140
+Considérez Microsoft 365 comme un immeuble du bureau.
+
+00:01:58.140 --> 00:02:02.860
+Exchange Online, Teams, SharePoint et OneDrive sont les différentes salles où les gens travaillent chaque jour.
+
+00:02:03.460 --> 00:02:04.320
+Les emails sont dans une salle.
+
+00:02:04.680 --> 00:02:05.660
+Les fichiers d'équipe sont dans une autre.
+
+00:02:06.100 --> 00:02:07.560
+Les chats et les documents partagés sont ailleurs.
+
+00:02:08.380 --> 00:02:12.260
+Purview e-Discovery est comme la salle des archives verrouillées de cet immeuble avec un bureau de recherche à l'extérieur.
+
+00:02:12.920 --> 00:02:14.560
+Vous ne parcourez pas chaque pièce sans un plan.
+
+00:02:15.180 --> 00:02:18.520
+Vous ouvrez un dossier, décidez quelles salles sont pertinentes, protégez les documents, recherchez ce qui convient
+
+00:02:18.520 --> 00:02:20.100
+et préparez les éléments pour ceux qui en ont besoin.
+
+00:02:20.460 --> 00:02:21.040
+Et prépare l'ont besoin.
+
+00:02:21.040 --> 00:02:22.440
+Analysons cela étape par étape.
+
+00:02:22.840 --> 00:02:24.100
+D'abord, pourquoi les discoveries existent.
+
+00:02:24.220 --> 00:02:25.400
+Ensuite, le dossier et les sources de données.
+
+00:02:25.520 --> 00:02:28.800
+Après cela, la conservation légale, la recherche, l'examen et l'exportation.
+
+00:02:29.520 --> 00:02:31.020
+Commençons par la raison d'être de cet outil.
+
+00:02:31.460 --> 00:02:33.700
+Car une recherche n'est utile que si les données existent toujours.
+
+00:02:35.500 --> 00:02:37.960
+Premier élément fondamental, pourquoi les discoveries existent.
+
+00:02:38.500 --> 00:02:40.640
+Il y a 20 ans, les données de travail étaient souvent dispersées.
+
+00:02:41.640 --> 00:02:42.760
+Les emails pouvaient être dans une archive.
+
+00:02:43.300 --> 00:02:44.760
+Les fichiers pouvaient être stockés sur un partage réseau.
+
+00:02:44.760 --> 00:02:47.240
+Les conversations d'équipe pouvaient avoir lieu dans un autre outil.
+
+00:02:47.840 --> 00:02:50.960
+Si quelqu'un devait enquêter le service informatique cherché partout séparément,
+
+00:02:51.200 --> 00:02:55.240
+copier les éléments dans des dossiers, en espérant que le contexte soit suffisant,
+
+00:02:56.060 --> 00:02:56.980
+cette approche crée des lacunes.
+
+00:02:57.560 --> 00:02:59.700
+Un message pouvait renvoyer à un fichier que personne n'avait collecté.
+
+00:03:00.180 --> 00:03:02.520
+Un fichier avait pu être modifié depuis la discussion initiale.
+
+00:03:02.660 --> 00:03:05.080
+Quelqu'un pouvait se souvenir de l'événement différemment de ce que montraient les archers.
+
+00:03:05.620 --> 00:03:07.700
+Le travail a évolué, mais le problème persiste.
+
+00:03:08.740 --> 00:03:12.460
+Aujourd'hui, votre travail est réparti entre Exchange Online pour les emails,
+
+00:03:12.460 --> 00:03:15.280
+Teams pour les échanges, SharePoint pour les documents,
+
+00:03:15.800 --> 00:03:21.100
+OneDrive pour vos fichiers, les groupes Microsoft 365 et Viva Engage.
+
+00:03:22.400 --> 00:03:25.140
+Une seule décision peut laisser des traces à travers plusieurs de ces espaces.
+
+00:03:26.620 --> 00:03:31.340
+Ces traces comptent lors d'une requête juridique, d'une affaire RH, d'un audit, d'un rapport interne
+
+00:03:31.340 --> 00:03:35.060
+ou de l'enquête sur un incident de sécurité ou une fuite de données.
+
+00:03:36.400 --> 00:03:38.820
+Imaginez qu'un ancien employé affirme avoir été traité injustement.
+
+00:03:39.060 --> 00:03:42.360
+Les RH et le service juridique pourraient avoir besoin des échanges entre cet employé et son manager.
+
+00:03:42.900 --> 00:03:44.580
+pourraient avoir besoin de fichiers relatifs à un projet spécifique.
+
+00:03:44.880 --> 00:03:46.580
+Ils pourraient avoir besoin d'archives sur une période définie
+
+00:03:46.580 --> 00:03:48.520
+et non de chaque email ou document jamais créé par l'entreprise.
+
+00:03:48.940 --> 00:03:50.680
+Le but n'est pas de prouver qu'une faute a été commise.
+
+00:03:52.020 --> 00:03:54.480
+Purview et Discovery permettent de trouver et de préserver des preuves potentielles.
+
+00:03:54.980 --> 00:03:57.420
+Les responsables juridiques RH, conformité, sécurité et métiers
+
+00:03:57.420 --> 00:03:59.340
+décident de la signification des preuves et de la suite à données.
+
+00:03:59.740 --> 00:04:01.040
+Cela ne remplace pas non plus un conseil juridique.
+
+00:04:01.480 --> 00:04:04.080
+Cela offre aux bonnes personnes un moyen à contrôler d'accéder aux données nécessaires.
+
+00:04:04.240 --> 00:04:07.380
+Alors pourquoi ne pas simplement utiliser la recherche Microsoft 365 classique ?
+
+00:04:07.380 --> 00:04:08.880
+La recherche classique vous a de trouver votre propre.
+
+00:04:09.300 --> 00:04:10.560
+Elle est conçue pour les tâches quotidiennes,
+
+00:04:10.560 --> 00:04:13.480
+comme localiser un document de la semaine dernière ou retrouver un email client.
+
+00:04:14.000 --> 00:04:15.320
+Une enquête exige davantage de contrôle.
+
+00:04:15.680 --> 00:04:17.780
+Vous devez limiter l'accès aux résultats sensibles.
+
+00:04:18.360 --> 00:04:20.140
+Vous avez besoin d'un historique clair des recherches effectuées.
+
+00:04:20.600 --> 00:04:22.760
+Vous devez parfois préserver du contenu avant qu'il ne soit supprimé.
+
+00:04:23.440 --> 00:04:25.720
+Et vous devez éviter de collecter une masse de données sans rapport
+
+00:04:25.720 --> 00:04:27.960
+simplement parce qu'une recherche était trop large.
+
+00:04:28.360 --> 00:04:30.220
+C'est là que les Discovery transforment le processus.
+
+00:04:30.820 --> 00:04:33.400
+Au lieu de dire « Cherchez partout et envoyez-moi ce que vous trouvez vu »,
+
+00:04:33.400 --> 00:04:34.960
+l'équipe commence par définir un dossier précis.
+
+00:04:35.560 --> 00:04:38.220
+Elle détermine ce qu'elle cherche, où cela peut se trouver et qui doit y avoir accès.
+
+00:04:38.220 --> 00:04:40.280
+Pour vous, la conclusion pratique est simple.
+
+00:04:40.760 --> 00:04:43.200
+Apprenez ce processus avant qu'une demande urgente n'arrive au service informatique.
+
+00:04:43.740 --> 00:04:45.680
+Dans une situation réelle, les gens ont besoin de réponses rapides,
+
+00:04:45.840 --> 00:04:47.140
+mais rapidité ne signifie pas négligence.
+
+00:04:47.760 --> 00:04:50.500
+Une petite préparation aide votre organisation à protéger les bonnes données
+
+00:04:50.500 --> 00:04:52.040
+tout en gardant le travail ciblé et privé.
+
+00:04:52.620 --> 00:04:55.720
+Chaque enquête nécessite un emplacement clair avant que quiconque ne commence ses recherches.
+
+00:04:56.360 --> 00:04:58.620
+Deuxième bloc de construction, le dossier et les sources de données.
+
+00:04:59.060 --> 00:05:00.720
+Vous avez donc une raison d'enquêter sur quelque chose.
+
+00:05:01.340 --> 00:05:04.040
+Avant même de taper un seul mot de recherche, vous avez besoin d'un dossier.
+
+00:05:04.480 --> 00:05:07.260
+Considérez un dossier comme un classeur numérique sécurisé pour une affaire spécifique.
+
+00:05:07.260 --> 00:05:09.160
+Il contient tout.
+
+00:05:09.620 --> 00:05:12.480
+Les personnes impliquées, les sources de données, les recherches, les mises en conservation,
+
+00:05:12.700 --> 00:05:14.500
+le travail de révision et les exportations, le tout au même endroit.
+
+00:05:15.160 --> 00:05:19.060
+Imaginez un classeur étiqueté, par un qui dirait « Orc, à tout ce qui s'est passé cette année-là. »
+
+00:05:19.060 --> 00:05:20.980
+Plutôt préoccupation des employés de mars à juin à bug.
+
+00:05:21.700 --> 00:05:22.660
+Examen du projet Redwood.
+
+00:05:23.400 --> 00:05:25.980
+Ce nom est important, car il indique à chacun sur quoi il travaille.
+
+00:05:26.680 --> 00:05:29.020
+Et, tout aussi important, sur quoi il ne travaille pas.
+
+00:05:29.600 --> 00:05:32.060
+Les dossiers permettent de rester organisés, mais ils contrôlent aussi les accès.
+
+00:05:32.060 --> 00:05:35.180
+Tout le monde au service informatique ne devrait pas pouvoir ouvrir un dossier RH sensible
+
+00:05:35.180 --> 00:05:38.280
+et chaque enquêteur RH ne devrait pas avoir une affaire juridique, ne devrait pas rude.
+
+00:05:38.920 --> 00:05:41.700
+Dans Plurview, vous affectez les personnes au dossier en fonction de ce qu'elles doivent faire.
+
+00:05:42.560 --> 00:05:45.560
+Un lecteur peut consulter le dossier, un gestionnaire peut créer et gérer des dossiers,
+
+00:05:45.740 --> 00:05:48.840
+et un administrateur gère les paramètres globaux et contrôle les accès dans eDiscovery.
+
+00:05:49.580 --> 00:05:52.240
+Les noms exacts des rôles peuvent changer lors des mises à jour du service par Microsoft,
+
+00:05:52.460 --> 00:05:53.600
+mais l'idée reste la même.
+
+00:05:54.240 --> 00:05:56.600
+Certains ont besoin de consulter, d'autres d'effectuer le travail,
+
+00:05:56.600 --> 00:05:59.020
+et un groupe restreint décide qui obtient ses accès.
+
+00:05:59.820 --> 00:06:01.420
+Cette séparation protège l'enquête.
+
+00:06:02.020 --> 00:06:04.300
+Elle donne également à votre organisation un historique plus clair de ce qui s'est passé.
+
+00:06:04.760 --> 00:06:06.360
+Vous pouvez voir quel dossier contenait la recherche,
+
+00:06:06.480 --> 00:06:08.660
+qui a travaillé et pourquoi ces emplacements ont été inclus.
+
+00:06:09.160 --> 00:06:12.320
+Quand quelqu'un demande « Pourquoi avez-vous effectué des recherches sur ces personnes et pas sur les autres ? »
+
+00:06:12.320 --> 00:06:13.760
+Il existe un endroit pour expliquer la décision.
+
+00:06:14.560 --> 00:06:15.800
+Ensuite, vous choisissez les sources de données.
+
+00:06:16.160 --> 00:06:18.800
+Une source de données est simplement un endroit où eDiscovery recherche du contenu.
+
+00:06:19.100 --> 00:06:22.760
+Vous pouvez ajouter des personnes, des groupes, des sites ou même des emplacements organisationnels plus larges,
+
+00:06:22.860 --> 00:06:24.220
+selon la question à laquelle vous tentez de répondre.
+
+00:06:24.220 --> 00:06:28.420
+Pour bien faire, vous avez besoin d'une carte de base de l'emplacement de stockage du travail dans Microsoft 365.
+
+00:06:29.140 --> 00:06:31.100
+Les emails et calendriers professionnels se trouvent dans Exchange Online.
+
+00:06:31.540 --> 00:06:33.480
+Vos fichiers de travail personnel se trouvent généralement dans OneDrive.
+
+00:06:33.940 --> 00:06:35.400
+Considérez-le comme votre propre classeur numérique.
+
+00:06:35.940 --> 00:06:37.440
+Les fichiers d'équipe se trouvent généralement dans SharePoint.
+
+00:06:37.760 --> 00:06:39.580
+Cela inclut de nombreux fichiers que vous ouvrez via Teams,
+
+00:06:40.000 --> 00:06:42.460
+même si vous ne verrez peut-être jamais le site SharePoint en arrière-plan.
+
+00:06:42.780 --> 00:06:44.040
+Teams en lui-même peut porter à confusion.
+
+00:06:44.460 --> 00:06:46.840
+Une discussion Teams ne se limite pas à l'application Teams.
+
+00:06:47.760 --> 00:06:51.700
+Les messages de discussion individuelle et de groupe sont en fait liés aux boîtes aux lettres Exchange Online des participants,
+
+00:06:51.700 --> 00:06:54.680
+et les fichiers partagés dans ces discussions sont généralement stockés dans OneDrive.
+
+00:06:55.280 --> 00:06:57.580
+Ainsi, si vous ne recherchez que les emails en ignorant OneDrive,
+
+00:06:58.020 --> 00:06:59.900
+vous pourriez manquer un fichier à envoyer lors d'une discussion.
+
+00:07:00.840 --> 00:07:03.240
+Imaginons que les RH doivent examiner les échanges entre deux employés.
+
+00:07:03.880 --> 00:07:05.600
+Vous ne commencerez pas par fouiller chaque boîte aux lettres,
+
+00:07:05.740 --> 00:07:07.860
+chaque espace OneDrive et chaque site SharePoint de l'entreprise.
+
+00:07:08.540 --> 00:07:10.260
+Vous commencerez par les boîtes aux lettres des deux employés
+
+00:07:10.260 --> 00:07:11.560
+et les emplacements de fichiers qui leur sont mis.
+
+00:07:11.560 --> 00:07:13.720
+Ensuite, vous pourriez définir une période autour de l'événement
+
+00:07:13.720 --> 00:07:15.660
+et utiliser le projet ou le sujet connu comme guide.
+
+00:07:16.560 --> 00:07:17.700
+C'est un point de départ ciblé.
+
+00:07:18.160 --> 00:07:19.900
+Si les résultats orientent vers un site de projet partagé
+
+00:07:19.900 --> 00:07:20.680
+ou une conversation de groupe,
+
+00:07:20.780 --> 00:07:22.540
+vous pouvez alors élargir le périmètre avec une justification.
+
+00:07:23.260 --> 00:07:24.780
+Vous laissez les preuves guider votre prochain étape.
+
+00:07:25.080 --> 00:07:26.360
+C'est important car une recherche plus large
+
+00:07:26.360 --> 00:07:27.860
+ne signifie pas automatiquement une meilleure recherche.
+
+00:07:28.260 --> 00:07:29.380
+Un volume de résultats trop important
+
+00:07:29.380 --> 00:07:30.900
+peut enterrer les quelques éléments qui comptent vraiment.
+
+00:07:31.620 --> 00:07:33.740
+Cela peut aussi faire remonter des documents privés non pertinents
+
+00:07:33.740 --> 00:07:34.760
+que personne n'a besoin d'examiner.
+
+00:07:35.300 --> 00:07:36.620
+Plus de données signifient plus de temps,
+
+00:07:36.800 --> 00:07:37.420
+plus de vigilance
+
+00:07:37.420 --> 00:07:39.320
+et plus de risque de perdre le fil de l'enquête.
+
+00:07:39.320 --> 00:07:42.400
+Commencez donc par les personnes, les dates et les lieux connus.
+
+00:07:43.040 --> 00:07:44.060
+Ensuite, n'élargissez vos recherches
+
+00:07:44.060 --> 00:07:45.320
+que lorsque les résultats vous indiquent vous chercher.
+
+00:07:45.820 --> 00:07:47.040
+Pour vous, la leçon principale est de savoir
+
+00:07:47.040 --> 00:07:49.700
+où Microsoft 365 stocke réellement les données de travail.
+
+00:07:50.540 --> 00:07:51.880
+Une fois que vous maîtrisez la cartographie,
+
+00:07:51.980 --> 00:07:53.500
+vous risquez moins de manquer du contenu
+
+00:07:53.500 --> 00:07:56.980
+et beaucoup moins de créer une montagne de résultats inexploitables.
+
+00:07:58.180 --> 00:08:00.580
+Puis, une fois que l'affaire pointe vers les bons endroits,
+
+00:08:00.860 --> 00:08:02.800
+vous devez protéger l'épreuve avant qu'elle ne change.
+
+00:08:04.280 --> 00:08:05.980
+Troisième pilier, la conservation légale,
+
+00:08:05.980 --> 00:08:07.080
+le bouton pause pour l'épreuve.
+
+00:08:07.600 --> 00:08:09.160
+Une conservation est une règle de préservation.
+
+00:08:09.700 --> 00:08:11.240
+Elle maintient le contenu pertinent disponible
+
+00:08:11.240 --> 00:08:12.200
+tant qu'une affaire est active,
+
+00:08:12.500 --> 00:08:13.860
+même si quelqu'un tente plus tard de supprimer
+
+00:08:13.860 --> 00:08:14.780
+ou de modifier ce contenu.
+
+00:08:15.240 --> 00:08:17.300
+Imaginez un classeur avec une étiquette claire sur un tiroir.
+
+00:08:18.140 --> 00:08:18.780
+Ne pas détruire.
+
+00:08:19.900 --> 00:08:21.980
+Quelqu'un peut toujours essayer de jeter un document de ce tiroir,
+
+00:08:22.180 --> 00:08:23.560
+mais l'organisation conserve la copie
+
+00:08:23.560 --> 00:08:24.800
+qui peut être importante pour l'affaire.
+
+00:08:25.800 --> 00:08:26.920
+C'est le rôle de la conservation légale.
+
+00:08:27.340 --> 00:08:28.740
+Les gens nettoient constamment leur boîte de réception.
+
+00:08:29.300 --> 00:08:30.120
+Ils suppriment des messages,
+
+00:08:30.240 --> 00:08:31.660
+remplacent un fichier par une version plus récente
+
+00:08:31.660 --> 00:08:32.880
+où quelqu'un peut quitter l'entreprise
+
+00:08:32.880 --> 00:08:34.560
+et son compte passe par un processus de départ.
+
+00:08:35.800 --> 00:08:37.460
+Aucune de ces actions ne signifie automatiquement
+
+00:08:37.460 --> 00:08:38.580
+que quelqu'un a fait quelque chose de mal.
+
+00:08:39.320 --> 00:08:40.860
+Mais dès qu'une affaire nécessite une préservation,
+
+00:08:41.100 --> 00:08:43.020
+le nettoyage quotidien habituel peut devenir un réel problème.
+
+00:08:43.460 --> 00:08:44.760
+Le message ou le document dont vous avez besoin
+
+00:08:44.760 --> 00:08:46.820
+pourrait disparaître avant que quiconque ait la chance de le trouver.
+
+00:08:47.380 --> 00:08:48.460
+C'est pourquoi une mesure de conservation
+
+00:08:48.460 --> 00:08:49.960
+précède souvent une recherche approfondie.
+
+00:08:50.380 --> 00:08:52.240
+Vous en savez peut-être assez pour identifier les personnes
+
+00:08:52.240 --> 00:08:53.500
+et les lieux liés à l'affaire,
+
+00:08:53.800 --> 00:08:54.860
+même avant de savoir précisément
+
+00:08:54.860 --> 00:08:56.320
+quels messages ou fichiers seront importants.
+
+00:08:57.300 --> 00:08:59.140
+Une mesure de conservation garde ses éléments disponibles
+
+00:08:59.140 --> 00:09:00.760
+pendant que l'équipe définit la recherche appropriée.
+
+00:09:01.500 --> 00:09:03.260
+La conservation légale et la rétention sont liées,
+
+00:09:03.480 --> 00:09:04.220
+mais ce n'est pas la même chose.
+
+00:09:04.940 --> 00:09:06.420
+Une stratégie de rétention suit les règles habituelles
+
+00:09:06.420 --> 00:09:07.740
+de votre organisation en matière d'archivage.
+
+00:09:07.740 --> 00:09:09.880
+Par exemple, elle peut conserver certains documents commerciaux
+
+00:09:09.880 --> 00:09:10.840
+pendant une période définie,
+
+00:09:10.920 --> 00:09:12.480
+puis les supprimer une fois cette période terminée.
+
+00:09:12.920 --> 00:09:14.680
+Une conservation légale répond à une affaire spécifique.
+
+00:09:15.040 --> 00:09:15.860
+La rétention pose la question,
+
+00:09:15.980 --> 00:09:17.980
+combien de temps devons-nous normalement conserver ce type de travail ?
+
+00:09:17.980 --> 00:09:19.040
+La conservation légale demande,
+
+00:09:19.280 --> 00:09:21.600
+ce contenu pourrait-il être important pour cette affaire en ce moment ?
+
+00:09:21.600 --> 00:09:23.100
+Les deux peuvent affecter ce qui reste disponible,
+
+00:09:23.440 --> 00:09:24.600
+mais ils partent de raisons différentes.
+
+00:09:26.080 --> 00:09:28.700
+Imaginez qu'un employé apprenne que les RH enquêtent sur une plainte.
+
+00:09:29.560 --> 00:09:31.420
+Cet employé pourrait supprimer une discussion Teams
+
+00:09:31.420 --> 00:09:32.620
+ou un email de sa boîte aux lettres.
+
+00:09:33.340 --> 00:09:34.440
+Peut-être pense-t-il que ce n'est pas pertinent,
+
+00:09:34.780 --> 00:09:36.140
+peut-être fait-il simplement du nettoyage.
+
+00:09:36.140 --> 00:09:38.420
+Si les emplacements concernés sont soumis à une conservation,
+
+00:09:38.600 --> 00:09:40.520
+Peurview peut garder la copie nécessaire disponible pour l'affaire.
+
+00:09:41.240 --> 00:09:43.220
+L'utilisateur ne voit peut-être plus l'élément supprimé
+
+00:09:43.220 --> 00:09:44.220
+à son emplacement habituel,
+
+00:09:44.480 --> 00:09:46.960
+mais la copie préservée reste accessible aux membres autorisés du dossier.
+
+00:09:47.520 --> 00:09:48.660
+C'est pourquoi une conservation a du poids.
+
+00:09:48.920 --> 00:09:50.860
+Ce n'est pas un commutateur de routine que l'informatique active
+
+00:09:50.860 --> 00:09:52.160
+dès que quelqu'un veut une réponse rapide.
+
+00:09:52.540 --> 00:09:54.800
+Une vérification rapide des faits peut ne nécessiter qu'une recherche restreinte.
+
+00:09:55.260 --> 00:09:57.200
+Une conservation est nécessaire lorsque le service juridique,
+
+00:09:57.280 --> 00:09:58.700
+les RH, la conformité ou une équipe d'enquête
+
+00:09:58.700 --> 00:10:00.100
+indiquent que le contenu doit rester disponible.
+
+00:10:00.800 --> 00:10:02.620
+La décision doit émaner des responsables de l'affaire,
+
+00:10:02.620 --> 00:10:04.600
+l'informatique, aidant à l'appliquer correctement.
+
+00:10:05.220 --> 00:10:06.660
+Il y a un autre détail qui piège souvent les gens.
+
+00:10:07.060 --> 00:10:07.960
+Le statut de l'affaire est important.
+
+00:10:08.280 --> 00:10:09.220
+Si vous clôturez une affaire,
+
+00:10:09.460 --> 00:10:11.560
+les conservations liées à celle-ci peuvent être levées.
+
+00:10:11.960 --> 00:10:13.820
+Clôturer une affaire n'est donc pas qu'une simple tâche administrative.
+
+00:10:14.360 --> 00:10:16.380
+C'est une décision qui a des conséquences sur le contenu préservé.
+
+00:10:17.320 --> 00:10:18.320
+Avant de fermer quoi que ce soit,
+
+00:10:18.680 --> 00:10:19.860
+les responsables de l'affaire doivent savoir
+
+00:10:19.860 --> 00:10:21.220
+si la conservation doit prendre fin.
+
+00:10:21.720 --> 00:10:23.280
+Pour vous, traitez une mesure de conservation avec son.
+
+00:10:23.520 --> 00:10:25.100
+Elle modifie les données qui doivent rester disponibles.
+
+00:10:25.580 --> 00:10:26.620
+Elle peut affecter les boîtes aux lettres,
+
+00:10:26.700 --> 00:10:28.540
+les fichiers, les chats et les sites liés à l'affaire.
+
+00:10:29.400 --> 00:10:30.400
+Assurez-vous que la portée est claire,
+
+00:10:32.620 --> 00:10:35.380
+est responsable de la décision d'appliquer, de la modifier ou de la lever.
+
+00:10:36.260 --> 00:10:37.260
+Une fois les preuves préservées,
+
+00:10:37.420 --> 00:10:39.020
+le processus de recherche dispose d'une base fiable.
+
+00:10:40.300 --> 00:10:41.620
+Quatrième bloc constitutif recherché
+
+00:10:41.620 --> 00:10:42.840
+sans être submergé par les données.
+
+00:10:43.540 --> 00:10:45.480
+Ainsi, avec les bons emplacements protégés,
+
+00:10:45.860 --> 00:10:46.840
+vous pouvez commencer la recherche.
+
+00:10:47.300 --> 00:10:48.980
+Une recherche demande à PureView de trouver le contenu
+
+00:10:48.980 --> 00:10:50.360
+qui correspond à vos conditions parmi les sources
+
+00:10:50.360 --> 00:10:51.520
+que vous avez sélectionnées pour la faire.
+
+00:10:52.060 --> 00:10:53.860
+Vous ne demandez pas « Montrez-moi tout ».
+
+00:10:53.860 --> 00:10:55.860
+Vous posez une question précise, comme qu'ont discuté
+
+00:10:55.860 --> 00:10:57.360
+ces deux personnes à propos de ce projet
+
+00:10:57.360 --> 00:10:58.320
+durant cette période.
+
+00:10:59.580 --> 00:11:01.020
+PureView vous offre plusieurs moyens simples
+
+00:11:01.020 --> 00:11:01.920
+pour affiner cette question.
+
+00:11:02.620 --> 00:11:05.460
+Vous pouvez rechercher un mot ou une expression exacte,
+
+00:11:05.580 --> 00:11:06.340
+définir une plage de date,
+
+00:11:06.420 --> 00:11:08.060
+vous concentrer sur un expéditeur ou un destinataire,
+
+00:11:08.140 --> 00:11:09.200
+ou effectuer une recherche par objet,
+
+00:11:09.340 --> 00:11:10.380
+type de fichier ou type de message.
+
+00:11:11.240 --> 00:11:12.520
+Chaque condition élimine le contenu
+
+00:11:12.520 --> 00:11:14.140
+qui n'a probablement aucun rapport avec le sujet.
+
+00:11:15.100 --> 00:11:16.380
+Commencez par le générateur de conditions de guide.
+
+00:11:16.720 --> 00:11:17.900
+Il vous fournit des champs clairs à remplir,
+
+00:11:17.980 --> 00:11:19.340
+ce qui est généralement le point de départ idéal
+
+00:11:19.340 --> 00:11:19.940
+pour les débutants.
+
+00:11:20.480 --> 00:11:21.780
+Vous choisissez les personnes, les dates,
+
+00:11:22.000 --> 00:11:22.740
+saisissez une expression
+
+00:11:22.740 --> 00:11:24.340
+et sélectionnez les emplacements nécessaires.
+
+00:11:24.820 --> 00:11:25.480
+Certaines personnes ont besoin
+
+00:11:25.480 --> 00:11:26.380
+d'une logique de recherche plus d'aider.
+
+00:11:26.440 --> 00:11:28.000
+Pour cela, PureView prend en charge
+
+00:11:28.000 --> 00:11:29.980
+le langage KQL, Keyword Query Language.
+
+00:11:29.980 --> 00:11:31.740
+Le KQL vous permet d'écrire des règles
+
+00:11:31.740 --> 00:11:32.500
+de recherche plus précises.
+
+00:11:32.840 --> 00:11:33.700
+Il n'est pas nécessaire de l'apprendre
+
+00:11:33.700 --> 00:11:34.280
+dès le premier jour,
+
+00:11:34.660 --> 00:11:35.300
+mais il devient utile
+
+00:11:35.300 --> 00:11:36.640
+lorsqu'une simple recherche par expression
+
+00:11:36.640 --> 00:11:37.300
+génère trop de bruit
+
+00:11:37.300 --> 00:11:38.480
+ou manque un modèle très spécifique.
+
+00:11:39.080 --> 00:11:39.740
+Les personnes et les lieux
+
+00:11:39.740 --> 00:11:40.500
+que vous recherchez comptent
+
+00:11:40.500 --> 00:11:41.260
+tout autant que les mots.
+
+00:11:42.140 --> 00:11:42.740
+Vous pouvez rechercher
+
+00:11:42.740 --> 00:11:44.020
+des boîtes aux lettres Exchange Online,
+
+00:11:44.300 --> 00:11:44.560
+nommées,
+
+00:11:44.740 --> 00:11:45.920
+des comptes OneDrive individuels,
+
+00:11:46.100 --> 00:11:47.000
+un site SharePoint connu,
+
+00:11:47.160 --> 00:11:48.700
+du contenu Teams lié à ses emplacements
+
+00:11:48.700 --> 00:11:50.620
+ou, lorsque l'affaire l'exige vraiment,
+
+00:11:50.800 --> 00:11:52.460
+des sources organisationnelles plus larges.
+
+00:11:53.980 --> 00:11:55.620
+Imaginez une enquête impliquant deux employés
+
+00:11:55.620 --> 00:11:56.440
+et un projet appelé
+
+00:11:56.440 --> 00:11:57.740
+Cap Project Redwood Hooker.
+
+00:11:57.740 --> 00:11:59.480
+Une première recherche judicieuse
+
+00:11:59.480 --> 00:12:00.880
+pourrait couvrir les 90 derniers jours,
+
+00:12:01.000 --> 00:12:02.000
+leurs sources de données sélectionnées
+
+00:12:02.000 --> 00:12:02.520
+et les expressions
+
+00:12:02.520 --> 00:12:04.440
+Project Redwood aka Settlement aka.
+
+00:12:05.260 --> 00:12:05.960
+Ce premier résultat
+
+00:12:05.960 --> 00:12:07.020
+n'est pas votre réponse définitive.
+
+00:12:07.400 --> 00:12:08.040
+Vous l'exécutez
+
+00:12:08.040 --> 00:12:09.060
+et vérifiez les statistiques
+
+00:12:09.060 --> 00:12:09.960
+ainsi que les résultats échantillés.
+
+00:12:10.360 --> 00:12:11.260
+Les statistiques vous montrent
+
+00:12:11.260 --> 00:12:12.380
+la configuration des résultats
+
+00:12:12.380 --> 00:12:13.640
+et un échantillon vous permet
+
+00:12:13.640 --> 00:12:14.540
+de voir si Purview a trouvé
+
+00:12:14.540 --> 00:12:15.200
+le type de messages
+
+00:12:15.200 --> 00:12:16.060
+et de fichiers attendus.
+
+00:12:16.920 --> 00:12:18.000
+Peut-être que l'expression Settlement
+
+00:12:18.000 --> 00:12:19.500
+renvoie des emails de vente sans rapport,
+
+00:12:19.580 --> 00:12:20.860
+vous ajustez donc la recherche.
+
+00:12:21.820 --> 00:12:22.660
+Ou peut-être que l'échantillon
+
+00:12:22.660 --> 00:12:23.540
+révèle un code de projet
+
+00:12:23.540 --> 00:12:24.620
+dont personne n'a parlé au départ,
+
+00:12:24.780 --> 00:12:25.660
+vous ajoutez alors ce terme
+
+00:12:25.660 --> 00:12:26.520
+et relancez une recherche.
+
+00:12:27.000 --> 00:12:27.540
+C'est tout très normal.
+
+00:12:27.960 --> 00:12:28.940
+Une bonne recherche est une boucle.
+
+00:12:29.540 --> 00:12:30.500
+Posez une question précise,
+
+00:12:30.720 --> 00:12:31.540
+vérifiez les résultats,
+
+00:12:31.760 --> 00:12:32.480
+en tirer des enseignements
+
+00:12:32.480 --> 00:12:33.380
+et affinez la question.
+
+00:12:34.120 --> 00:12:34.700
+Vous pouvez également
+
+00:12:34.700 --> 00:12:35.660
+créer plusieurs recherches
+
+00:12:35.660 --> 00:12:36.640
+au sein d'un même dossier.
+
+00:12:37.360 --> 00:12:38.400
+Une recherche peut se concentrer
+
+00:12:38.400 --> 00:12:38.860
+sur les messages
+
+00:12:38.860 --> 00:12:39.720
+entre les deux employés,
+
+00:12:40.020 --> 00:12:40.680
+une autre uniquement
+
+00:12:40.680 --> 00:12:41.260
+sur les documents
+
+00:12:41.260 --> 00:12:42.680
+et une troisième peut restreindre
+
+00:12:42.680 --> 00:12:43.680
+la plage de dates à la semaine
+
+00:12:43.680 --> 00:12:45.000
+autour d'une réunion particulière.
+
+00:12:46.020 --> 00:12:46.780
+Séparer ces recherches
+
+00:12:46.780 --> 00:12:48.060
+rend le travail plus facile à suivre
+
+00:12:48.060 --> 00:12:49.520
+et évite que des résultats disparates
+
+00:12:49.520 --> 00:12:50.800
+ne forment un ensemble confus.
+
+00:12:51.500 --> 00:12:52.320
+Beaucoup pensent que la mesure
+
+00:12:52.320 --> 00:12:53.380
+la plus sûre consiste à rechercher
+
+00:12:53.380 --> 00:12:54.360
+d'abord dans toute l'organisation,
+
+00:12:54.360 --> 00:12:55.660
+mais ce n'est généralement pas le cas.
+
+00:12:56.360 --> 00:12:57.080
+Une recherche couvrant
+
+00:12:57.080 --> 00:12:57.820
+chaque boîte aux lettres,
+
+00:12:58.020 --> 00:12:58.560
+sites et fichiers
+
+00:12:58.560 --> 00:12:59.520
+peut générer trop d'éléments
+
+00:12:59.520 --> 00:13:00.140
+non pertinents,
+
+00:13:00.300 --> 00:13:01.100
+ralentir les personnes
+
+00:13:01.100 --> 00:13:01.940
+chargées de l'examen
+
+00:13:01.940 --> 00:13:03.180
+et exposer des travaux privés
+
+00:13:03.180 --> 00:13:04.340
+sans lien avec le dossier,
+
+00:13:04.740 --> 00:13:05.540
+sans lien avec le dossier.
+
+00:13:05.820 --> 00:13:06.760
+Commencez par une recherche ciblée
+
+00:13:06.760 --> 00:13:07.560
+puis élargissez l'application.
+
+00:13:08.100 --> 00:13:08.720
+Il existe également
+
+00:13:08.720 --> 00:13:09.480
+la recherche de contenu
+
+00:13:09.480 --> 00:13:09.900
+dans Purview
+
+00:13:09.900 --> 00:13:11.280
+qui permet de vérifier rapidement
+
+00:13:11.280 --> 00:13:12.080
+si un terme apparaît
+
+00:13:12.080 --> 00:13:13.300
+ou de recueillir des informations
+
+00:13:13.300 --> 00:13:13.960
+avant l'ouverture
+
+00:13:13.960 --> 00:13:14.840
+d'un dossier officiel.
+
+00:13:16.040 --> 00:13:16.720
+Mais lorsque le travail
+
+00:13:16.720 --> 00:13:17.400
+devient une enquête
+
+00:13:17.400 --> 00:13:18.600
+nécessitant un accès contrôlé
+
+00:13:18.600 --> 00:13:19.560
+et un emplacement dédié,
+
+00:13:19.560 --> 00:13:20.440
+un cas e-discovery
+
+00:13:20.440 --> 00:13:21.140
+donne à la recherche
+
+00:13:21.140 --> 00:13:22.200
+une structure appropriée.
+
+00:13:23.340 --> 00:13:23.820
+Pour vous,
+
+00:13:23.840 --> 00:13:24.660
+la leçon est simple.
+
+00:13:25.460 --> 00:13:26.320
+Bonne stratégie e-discovery
+
+00:13:26.320 --> 00:13:27.100
+commence par une question,
+
+00:13:27.220 --> 00:13:28.200
+pas par une vaste zone de recherche.
+
+00:13:28.800 --> 00:13:29.780
+Une fois les résultats obtenus,
+
+00:13:29.820 --> 00:13:30.280
+le travaillez-vous.
+
+00:13:30.680 --> 00:13:31.380
+Vous ne vous contentez plus
+
+00:13:31.380 --> 00:13:32.100
+de trouver du contenu,
+
+00:13:32.180 --> 00:13:32.720
+vous devez décider
+
+00:13:32.720 --> 00:13:33.700
+ce qui appartient réellement
+
+00:13:33.700 --> 00:13:34.240
+au dossier.
+
+00:13:35.380 --> 00:13:36.360
+Cinquième bloc de construction,
+
+00:13:36.600 --> 00:13:37.020
+jeu de révision,
+
+00:13:37.260 --> 00:13:38.340
+balise, exportation finale.
+
+00:13:38.800 --> 00:13:39.400
+Une recherche vous donne
+
+00:13:39.400 --> 00:13:40.240
+des correspondances possibles.
+
+00:13:40.900 --> 00:13:41.880
+J'ai dit correspondances possibles,
+
+00:13:41.980 --> 00:13:42.600
+la caspe Purview
+
+00:13:42.600 --> 00:13:43.380
+peut trouver un document
+
+00:13:43.380 --> 00:13:44.220
+contenant votre expression,
+
+00:13:44.360 --> 00:13:45.400
+mais le logiciel
+
+00:13:45.400 --> 00:13:46.000
+ne peut pas décider
+
+00:13:46.000 --> 00:13:46.800
+s'il est réellement pertinent
+
+00:13:46.800 --> 00:13:47.280
+pour le dossier.
+
+00:13:47.960 --> 00:13:48.700
+Une personne disposant
+
+00:13:48.700 --> 00:13:49.520
+du contexte approprié
+
+00:13:49.520 --> 00:13:50.320
+doit prendre sa décision.
+
+00:13:50.660 --> 00:13:51.420
+C'est ici qu'intervient
+
+00:13:51.420 --> 00:13:52.020
+le jeu de révision.
+
+00:13:52.460 --> 00:13:53.020
+Un jeu de révision
+
+00:13:53.020 --> 00:13:53.860
+est une table de travail
+
+00:13:53.860 --> 00:13:54.780
+où les résultats collectés
+
+00:13:54.780 --> 00:13:55.660
+peuvent être examinés
+
+00:13:55.660 --> 00:13:56.300
+plus en détail.
+
+00:13:57.260 --> 00:13:57.880
+Au lieu de consulter
+
+00:13:57.880 --> 00:13:58.900
+une longue liste de résultats,
+
+00:13:59.200 --> 00:14:00.180
+les examinateurs autorisés
+
+00:14:00.180 --> 00:14:00.720
+peuvent parcourir
+
+00:14:00.720 --> 00:14:01.360
+un groupe de contenus
+
+00:14:01.360 --> 00:14:02.520
+sélectionnés et déterminés,
+
+00:14:02.740 --> 00:14:03.380
+ce que chaque élément
+
+00:14:03.380 --> 00:14:04.480
+signifie pour le dossier.
+
+00:14:05.180 --> 00:14:05.680
+Considérez cela
+
+00:14:05.680 --> 00:14:06.260
+comme le transfert
+
+00:14:06.260 --> 00:14:06.960
+de preuves potentielles
+
+00:14:06.960 --> 00:14:07.600
+sur une table d'examen.
+
+00:14:08.140 --> 00:14:09.000
+Les éléments y figurent
+
+00:14:09.000 --> 00:14:09.560
+parce qu'ils correspondent
+
+00:14:09.560 --> 00:14:10.080
+à la recherche
+
+00:14:10.080 --> 00:14:10.920
+et désormais quelqu'un
+
+00:14:10.920 --> 00:14:11.360
+doit les lire,
+
+00:14:11.500 --> 00:14:12.240
+comprendre le contexte
+
+00:14:12.240 --> 00:14:12.740
+et les classer
+
+00:14:12.740 --> 00:14:13.780
+en groupes utiles.
+
+00:14:14.820 --> 00:14:15.400
+Les jeux de révision
+
+00:14:15.400 --> 00:14:16.300
+et les outils d'examen
+
+00:14:16.300 --> 00:14:17.040
+avancés dépendent
+
+00:14:17.040 --> 00:14:17.640
+de votre licence.
+
+00:14:18.820 --> 00:14:19.380
+Les flux de travail
+
+00:14:19.380 --> 00:14:20.040
+Discovery Standard
+
+00:14:20.040 --> 00:14:21.080
+se concentrent sur le dossier,
+
+00:14:21.160 --> 00:14:21.560
+la conservation,
+
+00:14:21.740 --> 00:14:22.600
+la recherche et l'exportation,
+
+00:14:22.880 --> 00:14:23.440
+ce qui peut suffire
+
+00:14:23.440 --> 00:14:24.140
+pour de nombreuses affaires
+
+00:14:24.140 --> 00:14:24.780
+de moindre envergure.
+
+00:14:25.340 --> 00:14:26.080
+Les Discovery Premium
+
+00:14:26.080 --> 00:14:26.680
+permettent d'ajouter
+
+00:14:26.680 --> 00:14:27.260
+des jeux de révision
+
+00:14:27.260 --> 00:14:28.260
+et des moyens supplémentaires
+
+00:14:28.260 --> 00:14:28.980
+d'analyser des ensembles
+
+00:14:28.980 --> 00:14:29.780
+de résultats plus vastes
+
+00:14:29.780 --> 00:14:30.160
+ou complexes.
+
+00:14:30.660 --> 00:14:31.620
+Ne partez donc pas du principe
+
+00:14:31.620 --> 00:14:32.460
+que chaque tenant Purview
+
+00:14:32.460 --> 00:14:33.320
+affichera les mêmes boutons.
+
+00:14:33.900 --> 00:14:34.840
+Vérifiez ce que votre licence
+
+00:14:34.840 --> 00:14:35.580
+inclut avant le début
+
+00:14:35.580 --> 00:14:36.060
+d'un carréel,
+
+00:14:36.140 --> 00:14:36.960
+afin que personne ne planifie
+
+00:14:36.960 --> 00:14:37.780
+un processus de révision
+
+00:14:37.780 --> 00:14:38.540
+autour d'une fonctionnalité
+
+00:14:38.540 --> 00:14:39.040
+inutilisable.
+
+00:14:39.600 --> 00:14:40.440
+L'objectif de la révision
+
+00:14:40.440 --> 00:14:40.860
+reste le même
+
+00:14:40.860 --> 00:14:41.460
+quel que soit le cas.
+
+00:14:42.080 --> 00:14:42.580
+La recherche trouve
+
+00:14:42.580 --> 00:14:43.260
+des mots correspondants
+
+00:14:43.260 --> 00:14:43.960
+et ce sont les personnes
+
+00:14:43.960 --> 00:14:44.720
+qui déterminent la partie.
+
+00:14:45.180 --> 00:14:45.960
+Un document Word
+
+00:14:45.960 --> 00:14:46.880
+peut contenir l'expression
+
+00:14:46.880 --> 00:14:47.980
+projet Redwood et Q,
+
+00:14:48.220 --> 00:14:48.960
+mais cela n'en fait pas
+
+00:14:48.960 --> 00:14:49.620
+une preuve en soi.
+
+00:14:50.480 --> 00:14:51.000
+Il peut s'agir
+
+00:14:51.000 --> 00:14:51.740
+d'un ordre du jour
+
+00:14:51.740 --> 00:14:52.540
+sans détail utile,
+
+00:14:52.720 --> 00:14:53.400
+d'un projet de contrat
+
+00:14:53.400 --> 00:14:54.400
+directement lié au dossier
+
+00:14:54.400 --> 00:14:55.280
+ou d'un document
+
+00:14:55.280 --> 00:14:56.720
+nécessitant une révision juridique
+
+00:14:56.720 --> 00:14:58.000
+avant toute diffusion externe.
+
+00:14:59.380 --> 00:14:59.840
+Les balises aident
+
+00:14:59.840 --> 00:15:00.400
+les examinateurs
+
+00:15:00.400 --> 00:15:01.240
+à enregistrer ces décisions.
+
+00:15:01.640 --> 00:15:02.320
+Une balise est simplement
+
+00:15:02.320 --> 00:15:03.260
+une étiquette que vous appliquez
+
+00:15:06.960 --> 00:15:07.600
+pertinent examiné,
+
+00:15:07.700 --> 00:15:08.660
+confidentiel interne au public.
+
+00:15:09.160 --> 00:15:10.020
+Votre organisation utilise
+
+00:15:10.020 --> 00:15:11.020
+peut-être des libellés différents,
+
+00:15:11.220 --> 00:15:12.020
+mais l'objectif reste le même.
+
+00:15:12.520 --> 00:15:13.420
+Offrir à l'équipe juridique
+
+00:15:13.420 --> 00:15:14.720
+un moyen clair de trier le contenu
+
+00:15:14.720 --> 00:15:15.880
+et d'expliquer ses décisions.
+
+00:15:16.400 --> 00:15:17.440
+Imaginez qu'un document Word
+
+00:15:17.440 --> 00:15:18.360
+apparaisse dans une recherche.
+
+00:15:18.800 --> 00:15:19.520
+Un relecteur le lit
+
+00:15:19.520 --> 00:15:20.340
+et y trouve des détails
+
+00:15:20.340 --> 00:15:21.380
+directement liés au problème.
+
+00:15:21.980 --> 00:15:22.480
+Il le marque donc
+
+00:15:22.480 --> 00:15:22.960
+comme pertinent.
+
+00:15:23.480 --> 00:15:24.340
+Le document contient également
+
+00:15:24.340 --> 00:15:25.000
+des conseils juridiques,
+
+00:15:25.100 --> 00:15:25.640
+il y applique donc aussi
+
+00:15:25.640 --> 00:15:26.880
+une étiquette de confidentialité.
+
+00:15:28.060 --> 00:15:28.540
+Désormais, l'aimant
+
+00:15:28.540 --> 00:15:29.060
+n'est plus qu'une simple
+
+00:15:29.060 --> 00:15:29.720
+correspondance de mots-clés.
+
+00:15:30.240 --> 00:15:31.400
+Il a été examiné, classé
+
+00:15:31.400 --> 00:15:32.140
+et contextualisé
+
+00:15:32.140 --> 00:15:32.900
+pour les personnes en charge
+
+00:15:32.900 --> 00:15:33.320
+du dossier.
+
+00:15:34.360 --> 00:15:35.300
+Les outils de révision avancée
+
+00:15:35.300 --> 00:15:35.800
+peuvent être utiles
+
+00:15:35.800 --> 00:15:36.920
+lorsque le volume de résultats augmente.
+
+00:15:37.920 --> 00:15:38.420
+Ils peuvent trouver
+
+00:15:38.420 --> 00:15:39.340
+des fichiers identiques
+
+00:15:39.340 --> 00:15:40.120
+ou quasi identiques,
+
+00:15:40.240 --> 00:15:41.380
+regrouper le contenu associé
+
+00:15:41.380 --> 00:15:42.660
+et lier les fils de discussion
+
+00:15:42.660 --> 00:15:43.580
+et dans le relecteur.
+
+00:15:43.820 --> 00:15:44.540
+Avoir un échange
+
+00:15:44.540 --> 00:15:45.320
+dans sa globalité
+
+00:15:45.320 --> 00:15:47.000
+plutôt que des messages isolés.
+
+00:15:48.140 --> 00:15:48.860
+Ces outils ne remplacent
+
+00:15:48.860 --> 00:15:49.360
+pas le jugement humain.
+
+00:15:49.620 --> 00:15:50.260
+Ils aident le relecteur
+
+00:15:50.260 --> 00:15:51.120
+à consacrer plus de temps
+
+00:15:51.120 --> 00:15:51.960
+au contenu nécessitant
+
+00:15:51.960 --> 00:15:52.780
+une décision humaine.
+
+00:15:53.640 --> 00:15:54.100
+Une fois que l'équipe
+
+00:15:54.100 --> 00:15:55.040
+a sélectionné les bons éléments,
+
+00:15:55.140 --> 00:15:55.840
+elle peut les exporter.
+
+00:15:56.460 --> 00:15:57.300
+Une exportation regroupe
+
+00:15:57.300 --> 00:15:58.160
+le contenu sélectionné
+
+00:15:58.160 --> 00:15:59.140
+et les détails associés
+
+00:15:59.140 --> 00:15:59.880
+pour le service juridique,
+
+00:15:59.960 --> 00:16:00.780
+la RH, la conformité
+
+00:16:00.780 --> 00:16:01.680
+ou une équipe d'examen externe.
+
+00:16:01.980 --> 00:16:02.680
+C'est l'étape de transfert
+
+00:16:02.680 --> 00:16:03.460
+où le travail effectué
+
+00:16:03.460 --> 00:16:03.920
+dans Purview
+
+00:16:03.920 --> 00:16:05.180
+devient un document exploitable
+
+00:16:05.180 --> 00:16:06.300
+par une autre personne autorisée.
+
+00:16:06.800 --> 00:16:08.020
+Il existe deux approches principales.
+
+00:16:08.380 --> 00:16:08.580
+Parfois,
+
+00:16:08.640 --> 00:16:09.300
+une recherche terminée
+
+00:16:09.300 --> 00:16:10.380
+nécessite un transfert rapide
+
+00:16:10.380 --> 00:16:11.640
+et l'équipe peut exporter
+
+00:16:11.640 --> 00:16:12.880
+directement depuis les résultats.
+
+00:16:13.700 --> 00:16:14.160
+D'autres fois,
+
+00:16:14.260 --> 00:16:15.040
+le dossier nécessite
+
+00:16:15.040 --> 00:16:15.980
+une analyse approfondie
+
+00:16:15.980 --> 00:16:16.780
+pour que l'équipe puisse
+
+00:16:16.780 --> 00:16:17.680
+examiner le contenu,
+
+00:16:17.860 --> 00:16:18.680
+appliquer des étiquettes,
+
+00:16:18.800 --> 00:16:19.400
+filtrer l'inutile
+
+00:16:19.400 --> 00:16:20.480
+et n'exporter que les éléments
+
+00:16:20.480 --> 00:16:21.320
+sélectionnés.
+
+00:16:22.140 --> 00:16:22.940
+La seconde approche
+
+00:16:22.940 --> 00:16:23.880
+offre plus de contrôle
+
+00:16:23.880 --> 00:16:24.800
+car au lieu d'envoyer
+
+00:16:24.800 --> 00:16:25.600
+tous ceux qui correspondent
+
+00:16:25.600 --> 00:16:26.140
+à un mot,
+
+00:16:26.660 --> 00:16:27.580
+vous envoyez uniquement
+
+00:16:27.580 --> 00:16:28.580
+les éléments vérifiés
+
+00:16:28.580 --> 00:16:30.180
+et marqués à bon escient.
+
+00:16:30.980 --> 00:16:32.600
+L'accès reste une préoccupation constante.
+
+00:16:33.080 --> 00:16:33.700
+Seuls les membres désignés
+
+00:16:33.700 --> 00:16:34.660
+du dossier doivent intervenir
+
+00:16:34.660 --> 00:16:35.340
+y compris lors des phases
+
+00:16:35.340 --> 00:16:36.480
+de révision et d'exportation.
+
+00:16:37.200 --> 00:16:37.740
+Les autorisations
+
+00:16:37.740 --> 00:16:38.400
+ne sont pas un détail
+
+00:16:38.400 --> 00:16:39.020
+à régler à la fin.
+
+00:16:39.840 --> 00:16:40.500
+Elles doivent être en place
+
+00:16:40.500 --> 00:16:41.400
+avant la première recherche
+
+00:16:41.400 --> 00:16:42.360
+car des contenus sensibles
+
+00:16:42.360 --> 00:16:43.560
+peuvent apparaître immédiatement
+
+00:16:43.560 --> 00:16:44.300
+dans les résultats.
+
+00:16:45.280 --> 00:16:45.540
+Pour vous,
+
+00:16:45.580 --> 00:16:46.340
+une exportation n'est pas
+
+00:16:46.340 --> 00:16:47.580
+un simple bouton de téléchargement
+
+00:16:47.580 --> 00:16:48.260
+pour tous les résultats.
+
+00:16:48.780 --> 00:16:49.360
+C'est l'étape finale
+
+00:16:49.360 --> 00:16:50.640
+d'une chaîne de décisions minutieuses.
+
+00:16:51.060 --> 00:16:52.060
+Quelqu'un a défini le dossier,
+
+00:16:52.060 --> 00:16:53.020
+sélectionné les sources,
+
+00:16:53.200 --> 00:16:53.760
+protégé le contenu,
+
+00:16:53.860 --> 00:16:54.740
+cherché, examiné
+
+00:16:54.740 --> 00:16:55.400
+et trié les données.
+
+00:16:55.860 --> 00:16:56.360
+Ce n'est qu'ensuite
+
+00:16:56.360 --> 00:16:56.940
+que le bon ensemble
+
+00:16:56.940 --> 00:16:57.920
+est transmis aux bonnes personnes.
+
+00:16:58.560 --> 00:16:59.040
+Cela nous amène
+
+00:16:59.040 --> 00:16:59.880
+à une vision plus globale.
+
+00:17:00.200 --> 00:17:01.480
+Comment tout s'articule ?
+
+00:17:01.480 --> 00:17:02.220
+Les données éparcent
+
+00:17:02.220 --> 00:17:03.420
+à un processus défendable.
+
+00:17:04.220 --> 00:17:04.760
+Voilà donc ce qu'est
+
+00:17:04.760 --> 00:17:05.260
+l'E-Discovery.
+
+00:17:06.180 --> 00:17:06.680
+Ce n'est pas juste
+
+00:17:06.680 --> 00:17:07.580
+un gros bouton de recherche.
+
+00:17:08.260 --> 00:17:08.920
+C'est un processus,
+
+00:17:08.960 --> 00:17:09.980
+un processus qui donne
+
+00:17:09.980 --> 00:17:10.560
+à chaque recherche
+
+00:17:10.560 --> 00:17:11.340
+un but et un historique
+
+00:17:11.340 --> 00:17:11.980
+de ce qui s'est passé.
+
+00:17:12.880 --> 00:17:13.280
+Décomposons-le.
+
+00:17:13.560 --> 00:17:14.200
+Le dossier définit
+
+00:17:14.200 --> 00:17:14.900
+la portée de l'affaire.
+
+00:17:15.600 --> 00:17:15.840
+Ensuite,
+
+00:17:15.920 --> 00:17:16.440
+les sources de données
+
+00:17:16.440 --> 00:17:17.160
+vous indiquent où chercher.
+
+00:17:17.660 --> 00:17:18.580
+La conservation garantit
+
+00:17:18.580 --> 00:17:19.380
+que le contenu est préservé
+
+00:17:19.380 --> 00:17:20.240
+tant que le dossier est actif.
+
+00:17:20.820 --> 00:17:21.400
+La recherche réduit
+
+00:17:21.400 --> 00:17:22.040
+le champ d'investigation.
+
+00:17:22.580 --> 00:17:23.120
+Le travail de révision
+
+00:17:23.120 --> 00:17:23.920
+sépare ce qui est pertinent
+
+00:17:23.920 --> 00:17:24.500
+de ce qui ne l'est pas.
+
+00:17:25.240 --> 00:17:25.540
+Et enfin,
+
+00:17:25.600 --> 00:17:26.400
+l'exportation transmet
+
+00:17:26.400 --> 00:17:27.340
+les résultats sélectionnés
+
+00:17:27.340 --> 00:17:28.400
+aux personnes qui en ont besoin.
+
+00:17:29.160 --> 00:17:29.620
+L'ordre con.
+
+00:17:30.140 --> 00:17:31.040
+Chercher avant de définir
+
+00:17:31.040 --> 00:17:31.440
+la portée,
+
+00:17:31.540 --> 00:17:32.320
+c'est s'exposer au bruit.
+
+00:17:32.980 --> 00:17:33.960
+Exporter avant toute révision,
+
+00:17:34.080 --> 00:17:34.720
+c'est risquer de partager
+
+00:17:34.720 --> 00:17:35.620
+bien plus que nécessaire.
+
+00:17:36.520 --> 00:17:37.180
+Oublier la conservation
+
+00:17:37.180 --> 00:17:38.000
+quand elle est requise,
+
+00:17:38.260 --> 00:17:39.200
+c'est laisser le contenu changer
+
+00:17:39.200 --> 00:17:39.860
+ou disparaître
+
+00:17:39.860 --> 00:17:40.680
+avant toute évaluation.
+
+00:17:41.720 --> 00:17:42.420
+Revenons à l'analogie
+
+00:17:42.420 --> 00:17:43.220
+de l'immeuble de bureau.
+
+00:17:43.220 --> 00:17:44.260
+Entre ID
+
+00:17:44.260 --> 00:17:44.860
+et la réception
+
+00:17:44.860 --> 00:17:45.980
+qui contrôle les accès.
+
+00:17:46.420 --> 00:17:47.860
+Les applications Microsoft 365
+
+00:17:47.860 --> 00:17:48.380
+sont les pièces
+
+00:17:48.380 --> 00:17:49.400
+où se déroule le travail quotidien.
+
+00:17:49.900 --> 00:17:50.620
+Purview et Discovery
+
+00:17:50.620 --> 00:17:51.380
+est comme une clé
+
+00:17:51.380 --> 00:17:52.320
+qui n'ouvre que les pièces
+
+00:17:52.320 --> 00:17:52.960
+liées à l'affaire
+
+00:17:52.960 --> 00:17:53.740
+et il enregistre
+
+00:17:53.740 --> 00:17:55.140
+chaque étape effectuée
+
+00:17:55.140 --> 00:17:55.780
+par l'équipe
+
+00:17:55.780 --> 00:17:56.780
+dans ses pièces.
+
+00:17:57.240 --> 00:17:57.940
+Pourquoi cet historique
+
+00:17:57.940 --> 00:17:58.740
+est-il important ?
+
+00:17:58.740 --> 00:17:59.320
+Parce que les enquêtes
+
+00:17:59.320 --> 00:17:59.960
+impliquent bien plus
+
+00:17:59.960 --> 00:18:00.640
+que la technologie.
+
+00:18:01.200 --> 00:18:02.340
+L'informatique gère la plateforme
+
+00:18:02.340 --> 00:18:03.280
+et assure le bon déroulement
+
+00:18:03.280 --> 00:18:04.660
+mais les services juridiques,
+
+00:18:04.740 --> 00:18:06.140
+RH, conformité, sécurité
+
+00:18:06.140 --> 00:18:07.280
+et les responsables métiers
+
+00:18:07.280 --> 00:18:08.280
+apportent la question réelle,
+
+00:18:08.580 --> 00:18:09.240
+le contexte
+
+00:18:09.240 --> 00:18:10.560
+et les décisions sur la suite.
+
+00:18:11.560 --> 00:18:12.060
+Aucun groupe
+
+00:18:12.060 --> 00:18:12.600
+ne devrait essayer
+
+00:18:12.600 --> 00:18:13.240
+de tout faire seul.
+
+00:18:13.620 --> 00:18:14.200
+C'est la recette parfaite
+
+00:18:14.200 --> 00:18:14.680
+pour faire des erreurs.
+
+00:18:15.200 --> 00:18:15.780
+Travail moderne
+
+00:18:15.780 --> 00:18:16.460
+laisse aussi des traces
+
+00:18:16.460 --> 00:18:17.140
+connectées partout.
+
+00:18:17.600 --> 00:18:18.340
+Un email peut renvoyer
+
+00:18:18.340 --> 00:18:18.900
+à un fichier cloud.
+
+00:18:19.420 --> 00:18:20.340
+Une discussion peut impliquer
+
+00:18:20.340 --> 00:18:21.600
+un document stocké ailleurs.
+
+00:18:22.440 --> 00:18:23.140
+Une discussion d'équipe
+
+00:18:23.140 --> 00:18:23.780
+peut mener vers un autre
+
+00:18:23.780 --> 00:18:24.500
+emplacement partagé.
+
+00:18:24.920 --> 00:18:25.820
+C'est pourquoi votre cartographie
+
+00:18:25.820 --> 00:18:26.320
+des sources compte
+
+00:18:26.320 --> 00:18:27.080
+tout autant que vos mots-clés.
+
+00:18:28.080 --> 00:18:28.980
+Une fois que votre organisation
+
+00:18:28.980 --> 00:18:29.840
+comprend ce cheminement,
+
+00:18:29.980 --> 00:18:30.780
+vous pouvez vous préparer
+
+00:18:30.780 --> 00:18:31.840
+avant la prochaine demande.
+
+00:18:32.700 --> 00:18:33.600
+C'est là le véritable avantage.
+
+00:18:34.280 --> 00:18:34.980
+Conseil pratique,
+
+00:18:35.520 --> 00:18:36.360
+soyez prêt avant l'arrivée
+
+00:18:36.360 --> 00:18:36.880
+de la demande.
+
+00:18:37.600 --> 00:18:38.700
+Commencez par une cartographie des données.
+
+00:18:39.380 --> 00:18:40.280
+Notez où votre organisation
+
+00:18:40.280 --> 00:18:40.980
+travaille réellement
+
+00:18:40.980 --> 00:18:42.000
+et non là où les gens pensent
+
+00:18:42.000 --> 00:18:42.460
+qu'elle travaille.
+
+00:18:43.180 --> 00:18:44.100
+Incluez Exchange Online
+
+00:18:44.100 --> 00:18:44.660
+pour les emails,
+
+00:18:45.100 --> 00:18:46.480
+OneDrive pour les fichiers personnels,
+
+00:18:46.960 --> 00:18:48.120
+SharePoint pour les sites partagés,
+
+00:18:48.620 --> 00:18:49.240
+ainsi que Teams,
+
+00:18:49.600 --> 00:18:50.780
+les groupes Microsoft 365
+
+00:18:50.780 --> 00:18:51.640
+et Viva Engage
+
+00:18:51.640 --> 00:18:52.820
+si vous les utilisez.
+
+00:18:53.540 --> 00:18:54.280
+Regardez une cartographie simple.
+
+00:18:55.740 --> 00:18:57.160
+L'objectif est d'aider le juridique,
+
+00:18:57.300 --> 00:18:58.380
+les RH, la conformité,
+
+00:18:58.580 --> 00:18:59.620
+la sécurité et l'informatique
+
+00:18:59.620 --> 00:19:00.300
+à répondre rapidement
+
+00:19:00.300 --> 00:19:01.040
+à une question simple.
+
+00:19:01.300 --> 00:19:01.880
+Où pourraient se trouver
+
+00:19:01.880 --> 00:19:03.980
+les enregistrements de cette affaire ?
+
+00:19:04.620 --> 00:19:05.280
+Ensuite, vérifiez
+
+00:19:05.280 --> 00:19:05.860
+vos autorisations
+
+00:19:05.860 --> 00:19:06.720
+per view e-discovery.
+
+00:19:07.580 --> 00:19:08.040
+Seules les personnes
+
+00:19:08.040 --> 00:19:08.500
+devant traiter
+
+00:19:08.500 --> 00:19:09.200
+des dossiers sensibles
+
+00:19:09.200 --> 00:19:10.200
+doivent avoir accès aux dossiers,
+
+00:19:10.200 --> 00:19:11.260
+aux résultats de recherche
+
+00:19:11.260 --> 00:19:12.320
+et aux exportations.
+
+00:19:13.080 --> 00:19:13.640
+Passez en revue
+
+00:19:13.640 --> 00:19:14.360
+les rôles attribués
+
+00:19:14.360 --> 00:19:15.520
+et supprimez tout accès
+
+00:19:15.520 --> 00:19:16.560
+sans raison claire.
+
+00:19:17.420 --> 00:19:18.020
+C'est le moment idéal
+
+00:19:18.020 --> 00:19:18.940
+pour définir qui fait quoi.
+
+00:19:19.260 --> 00:19:20.320
+Qui peut ouvrir un dossier ?
+
+00:19:20.320 --> 00:19:21.460
+Qui peut lancer une recherche ?
+
+00:19:21.460 --> 00:19:22.920
+Qui peut approuver une exportation ?
+
+00:19:22.920 --> 00:19:24.040
+Ces décisions sont bien plus faciles
+
+00:19:24.040 --> 00:19:25.080
+lorsqu'aucune demande urgente
+
+00:19:25.080 --> 00:19:26.300
+n'attend dans une boîte de réception.
+
+00:19:27.300 --> 00:19:27.840
+Ensuite, convenez
+
+00:19:27.840 --> 00:19:28.440
+d'un modèle simple
+
+00:19:28.440 --> 00:19:29.120
+de nommage des dossiers
+
+00:19:29.120 --> 00:19:29.760
+et d'une procédure
+
+00:19:29.760 --> 00:19:30.700
+pour signaler une affaire.
+
+00:19:31.440 --> 00:19:32.020
+Un nom de dossier
+
+00:19:32.020 --> 00:19:33.100
+pourrait inclure le type d'affaire,
+
+00:19:33.380 --> 00:19:33.880
+un court objet
+
+00:19:33.880 --> 00:19:34.480
+et une date.
+
+00:19:35.260 --> 00:19:35.680
+Faites en sorte
+
+00:19:35.680 --> 00:19:36.580
+qu'il soit assez clair
+
+00:19:36.580 --> 00:19:37.520
+pour que l'équipe autorisée
+
+00:19:40.200 --> 00:19:40.640
+convenez également
+
+00:19:40.640 --> 00:19:41.520
+du premier interlocuteur à compte.
+
+00:19:41.860 --> 00:19:42.600
+Si les RH reçoivent
+
+00:19:42.600 --> 00:19:43.280
+une plainte d'un employé
+
+00:19:43.280 --> 00:19:44.240
+qui contacte l'informatique,
+
+00:19:44.820 --> 00:19:45.720
+si la sécurité découvre
+
+00:19:45.720 --> 00:19:46.680
+une possible exposition de données
+
+00:19:46.680 --> 00:19:47.620
+quand le service juridique interviendra,
+
+00:19:48.140 --> 00:19:49.360
+si la conformité reçoit
+
+00:19:49.360 --> 00:19:50.200
+une demande d'un régulateur
+
+00:19:50.200 --> 00:19:50.560
+qui décide
+
+00:19:50.560 --> 00:19:51.600
+si une conservation est nécessaire.
+
+00:19:52.240 --> 00:19:52.740
+Vous n'avez pas besoin
+
+00:19:52.740 --> 00:19:54.060
+d'un énorme document de politique
+
+00:19:54.060 --> 00:19:54.660
+avant de commencer.
+
+00:19:55.060 --> 00:19:55.940
+Il vous suffit d'un chemin clair
+
+00:19:55.940 --> 00:19:56.600
+que les gens peuvent suivre.
+
+00:19:57.160 --> 00:19:57.840
+Ensuite, exercez-vous
+
+00:19:57.840 --> 00:19:58.460
+avec un petit dossier.
+
+00:19:59.160 --> 00:19:59.740
+Utilisez une source
+
+00:19:59.740 --> 00:20:00.720
+de données de tests limitées
+
+00:20:00.720 --> 00:20:01.360
+et une plage de dates.
+
+00:20:01.980 --> 00:20:03.180
+Évitez les affaires réelles sensibles,
+
+00:20:03.280 --> 00:20:03.780
+créez le dossier,
+
+00:20:03.960 --> 00:20:04.840
+vérifiez que les bonnes personnes
+
+00:20:04.840 --> 00:20:05.280
+n'y ont accès,
+
+00:20:05.420 --> 00:20:06.300
+lancez une recherche ciblée,
+
+00:20:06.400 --> 00:20:07.420
+voyez comment les résultats
+
+00:20:07.420 --> 00:20:08.720
+circulent dans votre processus.
+
+00:20:09.340 --> 00:20:09.820
+Un essai permet
+
+00:20:09.820 --> 00:20:10.840
+de détecter les confusions très tôt.
+
+00:20:11.280 --> 00:20:12.120
+Peut-être que les mauvaises personnes
+
+00:20:12.120 --> 00:20:12.840
+ont des autorisations
+
+00:20:12.840 --> 00:20:13.660
+qu'une équipe ne sait pas
+
+00:20:13.660 --> 00:20:14.360
+où sont ces fichiers
+
+00:20:14.360 --> 00:20:15.160
+ou que le nom du dossier
+
+00:20:15.160 --> 00:20:16.040
+n'est pas assez explicite.
+
+00:20:16.700 --> 00:20:17.640
+Mieux vaut trouver ces problèmes
+
+00:20:17.640 --> 00:20:18.180
+lors d'un test
+
+00:20:18.180 --> 00:20:19.360
+que pendant une enquête réelle.
+
+00:20:20.080 --> 00:20:20.820
+Vérifiez les licences
+
+00:20:20.820 --> 00:20:21.380
+avant d'avoir besoin
+
+00:20:21.380 --> 00:20:22.000
+d'options avancées.
+
+00:20:22.400 --> 00:20:23.080
+La recherche de contenu
+
+00:20:23.080 --> 00:20:23.900
+et l'e-discovery standard
+
+00:20:23.900 --> 00:20:24.960
+sont généralement incluses
+
+00:20:24.960 --> 00:20:26.000
+dans les licences de niveau E3.
+
+00:20:26.760 --> 00:20:27.380
+Les options d'examen
+
+00:20:27.380 --> 00:20:28.140
+et d'analyse premium
+
+00:20:28.140 --> 00:20:29.060
+nécessitent généralement
+
+00:20:29.060 --> 00:20:30.200
+une licence E5 ou un complément.
+
+00:20:30.520 --> 00:20:31.340
+Votre configuration exacte
+
+00:20:31.340 --> 00:20:32.040
+peut varier, alors veuillez.

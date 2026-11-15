@@ -13,7 +13,7 @@ from pathlib import Path
 
 import site_podpage as P
 import site_shownotes_seo as S
-from ai_gateway import anthropic_request, urlopen
+from ai_gateway import anthropic_request, thinking_off, urlopen
 from generate_articles import cost_usd
 
 ROOT = Path(__file__).resolve().parent
@@ -167,6 +167,14 @@ def _strings(n):
     for x in n.get("faq", []): yield x["q"]; yield x["a"]
 
 
+def fit_meta(m):
+    """Meta-Beschreibung knapp ueber 160 Zeichen (bis 200) an einer Wortgrenze kuerzen statt den bezahlten Text zu verwerfen (Testlauf 10.11.:
+    11 von 39 Fehlversuchen hatten 161-164 Zeichen). Ohne Wortgrenze ab Zeichen 100 oder ueber 200 Zeichen bleibt es beim Fehler."""
+    if len(m) <= 160 or len(m) > 200 or " " not in m[100:159]: return m
+    cut = m[:159].rsplit(" ", 1)[0].rstrip(" ,;:-\u2013\u2014")
+    return cut + "\u2026" if len(cut) >= 100 else m
+
+
 def validate(obj, ep, timed=None):
     """-> (notes | None, fehler[]). Streng: ungueltiges JSON, URLs/HTML, Laengen, veraenderte Produktnamen. Unbekannte Entitaets-ids und Kapitel ohne Zeitmarken werden verworfen."""
     err = []
@@ -180,7 +188,7 @@ def validate(obj, ep, timed=None):
     if not isinstance(obj, dict):
         return None, ["kein JSON-Objekt"]
     s = lambda k: obj.get(k).strip() if isinstance(obj.get(k), str) else ""
-    n = {"meta": s("meta"), "summary": s("summary")}
+    n = {"meta": fit_meta(s("meta")), "summary": s("summary")}
     if not n["meta"] or len(n["meta"]) > 160: err.append(f"meta Laenge {len(n['meta'])}")
     if not (120 <= len(n["summary"]) <= 700): err.append(f"summary Laenge {len(n['summary'])}")
     kp = obj.get("key_points")
@@ -318,16 +326,6 @@ def overview(eps, store, tries):
         if rec and rec.get("h_src") == h and rec.get("v") == VERSION and rec.get("notes"): done += 1
         elif t.get("h") == h and t.get("n", 0) >= MAX_TRIES: locked += 1
     return {**c, "done": done, "locked": locked, "open": c["thin"] - done - locked}
-
-
-def thinking_off(model):
-    """Feld, das das Denken fuer dieses Modell abschaltet (Anthropic-Modellreferenz, Stand 3.11.2026; wie generate_covers.py und tools/translate_*.py nie blind
-    "disabled"): Haiku nimmt {"type": "disabled"}; Claude Sonnet 5.5 weist das mit HTTP 400 ab und nimmt stattdessen {"type": "between_tools"} (ohne weiteres Feld,
-    nur dieses Modell); bei allen anderen bleibt das Feld weg - dort denkt das Modell und max_tokens bekommt den Zuschlag THINK_TOKENS (max_tokens_for)."""
-    m = str(model).lower()
-    if "haiku" in m: return {"thinking": {"type": "disabled"}}
-    if m.startswith("claude-sonnet-5-5"): return {"thinking": {"type": "between_tools"}}
-    return {}
 
 
 def max_tokens_for(model):

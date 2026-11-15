@@ -1,0 +1,1597 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.940
+Selamat datang di episode lain Microsoft Knowledge Nuggets di M365.
+
+00:00:03.140 --> 00:00:04.600
+FM, saya pemandu wajar Anda, Mirko Peters.
+
+00:00:04.960 --> 00:00:06.980
+Topik hari ini adalah topik yang hampir semua orang pernah dengar,
+
+00:00:07.160 --> 00:00:08.400
+namun hanya sedikit yang bisa menjelaskan.
+
+00:00:08.780 --> 00:00:09.740
+Apa sebenarnya Azure DevOps itu?
+
+00:00:10.080 --> 00:00:12.420
+Apakah itu hanya alat untuk pengembang atau sesuatu yang jauh lebih?
+
+00:00:12.720 --> 00:00:13.720
+Jadi, ini membangun perangkat lho.
+
+00:00:14.040 --> 00:00:15.980
+Mungkin sebuah situs web, mungkin aplikasi seluler,
+
+00:00:16.360 --> 00:00:18.260
+mungkin sesuatu yang membantu perusahaan Anda berjalan lebih baik.
+
+00:00:18.620 --> 00:00:19.760
+Lalu Anda duduk untuk merencanakan.
+
+00:00:20.120 --> 00:00:22.760
+Anda butuh melacak tugas, tempat untuk menyimpan kode,
+
+00:00:23.020 --> 00:00:24.360
+cara untuk menguji pekerjaan Anda,
+
+00:00:24.560 --> 00:00:26.300
+dan cara untuk merilisnya ke pengguna.
+
+00:00:26.300 --> 00:00:30.240
+Tanpa disadari, Anda harus mengelola lima alat berbeda dari lima perusahaan berbeda.
+
+00:00:30.880 --> 00:00:31.940
+Satu untuk manajemen tugas,
+
+00:00:32.220 --> 00:00:32.860
+satu untuk kode,
+
+00:00:33.120 --> 00:00:33.880
+satu untuk pengujian,
+
+00:00:34.040 --> 00:00:34.820
+satu untuk penyebaran,
+
+00:00:35.300 --> 00:00:36.700
+dan semuanya tidak saling terhubung.
+
+00:00:36.800 --> 00:00:37.180
+Berantak.
+
+00:00:37.920 --> 00:00:40.480
+Microsoft melihat kekacauan itu dan membangun sesuatu untuk memperbaikin.
+
+00:00:40.800 --> 00:00:41.580
+Namanya Azure DevOps,
+
+00:00:41.940 --> 00:00:43.780
+dan ini bukan sekadar alat tambahan untuk koleksi Anda.
+
+00:00:44.280 --> 00:00:45.740
+Ini adalah satu platform terhubung
+
+00:00:45.740 --> 00:00:48.040
+yang menangani seluruh siklus hidup pengembangan perangkat lunak,
+
+00:00:48.460 --> 00:00:50.100
+mulai dari perencanaan pengodean, pengujian,
+
+00:00:50.200 --> 00:00:51.600
+hingga penyebaran di satu tempat.
+
+00:00:52.320 --> 00:00:53.880
+Di akhir episode ini, Anda akan memahami
+
+00:00:53.880 --> 00:00:55.280
+apa sebenarnya Azure DevOps itu
+
+00:00:55.280 --> 00:00:57.500
+dan bagaimana lima bagian intinya saling berkaitan.
+
+00:00:58.340 --> 00:00:59.560
+Bayangkan ini seperti gedung kantor modern.
+
+00:01:00.280 --> 00:01:02.300
+Word dan Excel adalah ruangan individu tempat Anda bekerja.
+
+00:01:02.840 --> 00:01:04.740
+Microsoft 365 adalah keseluruhan gedung
+
+00:01:04.740 --> 00:01:06.220
+dengan sistem keamanan dan pengarsipannya.
+
+00:01:06.780 --> 00:01:08.020
+Azure DevOps memiliki konsep yang sama.
+
+00:01:08.600 --> 00:01:10.600
+Ini adalah keseluruhan gedung untuk pengembangan perangkat lunak,
+
+00:01:10.720 --> 00:01:11.400
+bukan sekadar satu ruang.
+
+00:01:11.860 --> 00:01:13.260
+Jadi apa sebenarnya Azure DevOps itu?
+
+00:01:14.100 --> 00:01:15.360
+Berikut ada definisi paling sederhananya.
+
+00:01:15.720 --> 00:01:17.300
+Azure DevOps adalah platform terhubung
+
+00:01:17.300 --> 00:01:19.280
+untuk seluruh siklus hidup pengembangan perangkat lunak.
+
+00:01:19.580 --> 00:01:20.800
+Cukup panjang, jadi mari kita uraikan.
+
+00:01:21.220 --> 00:01:22.060
+20 tahun lalu,
+
+00:01:22.060 --> 00:01:23.400
+jika ingin membangun perangkat lunak,
+
+00:01:23.400 --> 00:01:25.080
+Anda harus membeli produk terpisah untuk semuanya.
+
+00:01:25.420 --> 00:01:26.500
+Satu alat untuk melacak bug,
+
+00:01:26.900 --> 00:01:28.160
+satu untuk mengelola kode sumber,
+
+00:01:28.600 --> 00:01:29.700
+satu untuk otomatisasi build,
+
+00:01:30.140 --> 00:01:30.960
+satu untuk pengujian,
+
+00:01:31.120 --> 00:01:31.880
+satu untuk penyebaran,
+
+00:01:31.940 --> 00:01:33.060
+dan Anda menghabiskan setengah waktu
+
+00:01:33.060 --> 00:01:35.000
+hanya untuk membuat mereka berbagi data satu sama lain.
+
+00:01:35.560 --> 00:01:37.540
+Microsoft melihat kompleksitas ini dan berpikir,
+
+00:01:37.760 --> 00:01:38.860
+bagaimana jika semua layanan ini
+
+00:01:38.860 --> 00:01:40.040
+bekerja bersama di bawah satu atas?
+
+00:01:40.380 --> 00:01:41.280
+Mata membangun Azure DevOps.
+
+00:01:41.600 --> 00:01:42.320
+Ini bukan satu alat,
+
+00:01:42.400 --> 00:01:43.740
+melainkan lima layanan yang bekerja bersama.
+
+00:01:44.140 --> 00:01:45.200
+Azure Boards untuk perencanaan,
+
+00:01:45.280 --> 00:01:46.240
+Azure Repos untuk kode,
+
+00:01:46.360 --> 00:01:47.660
+Azure Pipelines untuk otomatisasi,
+
+00:01:47.660 --> 00:01:48.900
+Azure Test Plans untuk kualitas,
+
+00:01:48.900 --> 00:01:50.480
+Azure Artifacts untuk berbagi paket,
+
+00:01:51.120 --> 00:01:52.240
+masing-masing melakukan tugasnya sendiri,
+
+00:01:52.360 --> 00:01:53.020
+namun semuanya saling teruk.
+
+00:01:53.340 --> 00:01:54.820
+Mari kembali ke analogi gedung kantor.
+
+00:01:55.500 --> 00:01:56.900
+Meja resepsionis mengelola siapa saja yang masuk.
+
+00:01:57.360 --> 00:01:58.500
+Itu adalah layanan identitas Anda.
+
+00:01:58.920 --> 00:02:00.140
+Kantor adalah tempat orang bekerja.
+
+00:02:00.720 --> 00:02:01.480
+Itu adalah boards dan drivers.
+
+00:02:02.200 --> 00:02:03.200
+Ruang surat menangani paket.
+
+00:02:03.780 --> 00:02:04.440
+Itu adalah artifacts.
+
+00:02:04.900 --> 00:02:06.020
+Tim keamanan melindungi gedung.
+
+00:02:06.620 --> 00:02:08.080
+Itu adalah kontrol akses dan kebijakan Anda.
+
+00:02:08.720 --> 00:02:09.500
+Masih-masih punya tugas,
+
+00:02:09.600 --> 00:02:10.400
+tapi semua dalam satu atap.
+
+00:02:10.840 --> 00:02:11.660
+Mereka berbagi informasi.
+
+00:02:12.060 --> 00:02:12.760
+Mereka berjabat bersama.
+
+00:02:12.760 --> 00:02:13.760
+Itu poin utamanya.
+
+00:02:14.120 --> 00:02:15.280
+Dan ini bagian terbaik bagi pemula.
+
+00:02:15.280 --> 00:02:17.040
+Azure DevOps memiliki tingkat gratis.
+
+00:02:17.380 --> 00:02:18.200
+Anda bisa buat akun,
+
+00:02:18.400 --> 00:02:18.920
+mulai proyek,
+
+00:02:19.040 --> 00:02:20.800
+dan gunakan fitur utama tanpa biaya.
+
+00:02:21.340 --> 00:02:22.580
+Lima pengguna gratis dapat akses penuh.
+
+00:02:23.000 --> 00:02:25.060
+Takeholder tak terbatas dapat akses terbatas gratis.
+
+00:02:25.620 --> 00:02:27.160
+Jadi Anda bisa mulai hari ini tanpa biaya
+
+00:02:27.160 --> 00:02:28.420
+dan melihat apakah ini cocok.
+
+00:02:29.140 --> 00:02:29.920
+Tidak perlu kartu kredit.
+
+00:02:30.420 --> 00:02:31.080
+Tidak teman penjualan.
+
+00:02:31.380 --> 00:02:33.300
+Cukup ke dev.azure.com dan buat akun.
+
+00:02:33.820 --> 00:02:35.000
+Mari kita bahas lima.
+
+00:02:35.280 --> 00:02:35.880
+Layanan satu.
+
+00:02:36.320 --> 00:02:38.440
+Persatu mulai dari tempat pekerjaan Anda dimulai.
+
+00:02:39.060 --> 00:02:41.460
+Azure Boards, pusat komando proyek Anda.
+
+00:02:42.000 --> 00:02:44.540
+Jadi Azure Boards adalah tempat merencanakan dan melacak pekerjaan.
+
+00:02:44.540 --> 00:02:46.480
+Anggap sebagai pusat komando proyek Anda.
+
+00:02:47.040 --> 00:02:49.040
+Jika pernah memakai catatan tempel di dinding,
+
+00:02:49.320 --> 00:02:50.940
+Anda sudah paham konsep dasarnya.
+
+00:02:52.000 --> 00:02:53.740
+Tapi alih-alih catatan fisik yang jatuh,
+
+00:02:53.880 --> 00:02:56.180
+Boards memberi papan kanban digital yang bisa dilihat
+
+00:02:56.180 --> 00:02:58.060
+dan diperbarui tim secara waktu nyata.
+
+00:02:58.900 --> 00:02:59.400
+Mari kita bedah.
+
+00:02:59.900 --> 00:03:01.020
+Anda mulai dengan membuat work item.
+
+00:03:01.780 --> 00:03:03.300
+Work item adalah apapun yang perlu dilacak.
+
+00:03:03.960 --> 00:03:07.240
+User story, fitur, epic, tugas, atau bug.
+
+00:03:08.280 --> 00:03:09.720
+Setiap item punya kolom deskripsi,
+
+00:03:09.860 --> 00:03:11.620
+prioritas, status, dan penanggung jawab.
+
+00:03:11.900 --> 00:03:18.670
+Anda bisa mengelompokannya ke dalam hirak.
+
+00:03:18.670 --> 00:03:21.550
+Epic di atas, fitur di bawahnya, user story di bawahnya,
+
+00:03:21.630 --> 00:03:22.610
+dan tugas di bawah cerita.
+
+00:03:23.290 --> 00:03:25.730
+Itu memberi gambaran jelas tentang apa yang dibangun dan alasannya.
+
+00:03:26.530 --> 00:03:27.270
+Lalu merencanakan sprint.
+
+00:03:27.690 --> 00:03:30.010
+Sprint adalah periode tetap, biasanya dua minggu,
+
+00:03:30.530 --> 00:03:32.670
+di mana tim berkomitmen menyelesaikan tugas.
+
+00:03:33.690 --> 00:03:36.410
+Anda serat item dari backlog ke sprint dan jadilah sebuah rencana.
+
+00:03:37.550 --> 00:03:39.430
+Semua tahu apa yang dikerjakan dan kapan tegat waktunya.
+
+00:03:39.930 --> 00:03:40.590
+Anda juga punya query.
+
+00:03:41.050 --> 00:03:42.710
+Query memungkinkan Anda mencari dan memfilter.
+
+00:03:42.710 --> 00:03:45.730
+Tunjukkan semua bug yang ditugaskan ke Sarah dengan prioritas.
+
+00:03:46.170 --> 00:03:48.650
+Tunjukkan semua user story di sprint saat ini yang masih aktif.
+
+00:03:49.170 --> 00:03:51.450
+Query sangat hebat karena mengubah data menjadi jawaban.
+
+00:03:52.050 --> 00:03:54.530
+Anda bisa menyimpannya, membagikannya, dan menggunakannya untuk membuat dashboard.
+
+00:03:54.910 --> 00:03:56.310
+Dan dashboard adalah tempat semuanya menyatu.
+
+00:03:56.730 --> 00:03:59.630
+Anda dapat membuat dashboard custom dengan widget yang menampilkan diagram burn down,
+
+00:03:59.730 --> 00:04:01.330
+kecepatan jumlah item kerja, dan lainnya.
+
+00:04:01.690 --> 00:04:05.310
+Tim Anda mendapatkan tampilan langsung perkembangan proyek tanpa harus menulis laporan status.
+
+00:04:05.310 --> 00:04:08.770
+Injungkan suatu singkat, bayangkan sebuah tim kecil sedang membangun situs web.
+
+00:04:09.250 --> 00:04:11.490
+Product owner membuat epic bernama portal pelanggan.
+
+00:04:12.710 --> 00:04:15.990
+Di bawahnya, mereka membuat fitur seperti pendaftaran pengguna dari white pesanan.
+
+00:04:17.070 --> 00:04:20.170
+Di bawah pendaftaran pengguna, mereka membuat user story seperti sebagai
+
+00:04:20.170 --> 00:04:22.470
+Pelanggan saya ingin membuat akun dengan email saya.
+
+00:04:23.090 --> 00:04:25.770
+Di bawah story tersebut, pengembang membuat tugas.
+
+00:04:26.510 --> 00:04:30.670
+Membangun formulir pendaftaran, menyiapkan verifikasi email, menulis unit tes.
+
+00:04:31.430 --> 00:04:32.790
+Setiap tugas diberikan kepada seseorang.
+
+00:04:33.370 --> 00:04:34.730
+Tim melacak kemajuan di papan kanan.
+
+00:04:35.310 --> 00:04:38.310
+Semua orang dapat melihat apa yang sudah selesai, apa yang sedang dikerjakan, dan apa yang kemudian.
+
+00:04:38.830 --> 00:04:40.970
+Sekarang bandingkan itu dengan menggunakan Excel atau papan tulis.
+
+00:04:41.310 --> 00:04:42.130
+Excel bersifat setis.
+
+00:04:42.430 --> 00:04:45.270
+Anda mengirim spreadsheet melalui email, seseorang memperbaruinya.
+
+00:04:45.430 --> 00:04:47.290
+Mengirimnya kembali dan saat Anda menerimanya itu sudah usang.
+
+00:04:47.650 --> 00:04:50.390
+Papan tulis lebih baik untuk bertukar pikiran, tetapi tidak dapat dicari.
+
+00:04:50.750 --> 00:04:54.630
+Papan tulis tidak terhubung ke apapun, dan jika seseorang menghapus sesuatu, data itu bersifat langsung live.
+
+00:04:54.870 --> 00:04:55.390
+Word dapat dicari.
+
+00:04:55.750 --> 00:04:57.510
+Force terhubung ke kode, pengujian, dan deployment.
+
+00:04:57.950 --> 00:05:00.330
+Ketika seseorang memperbarui item kerja, semua orang langsung melihat.
+
+00:05:00.330 --> 00:05:05.450
+Jadi Anda telah merencanakan pekerjaan Anda, Anda tahu apa yang perlu dibangun, tetapi Anda butuh tempat untuk menyimpan kodenya.
+
+00:05:05.510 --> 00:05:06.670
+Disitulah Azure Repos berperan.
+
+00:05:07.050 --> 00:05:08.950
+Azure Repos, rumah permanen bagi kode Anda.
+
+00:05:09.170 --> 00:05:13.830
+Jadi Anda telah merencanakan pekerjaan Anda, Anda tahu apa yang perlu dibangun, tetapi Anda butuh tempat untuk menyimpan.
+
+00:05:13.970 --> 00:05:15.010
+Disitulah Azure Repos berperan.
+
+00:05:15.490 --> 00:05:18.070
+Azure Repos adalah kontrol versi untuk kode Anda menggunakan Git.
+
+00:05:18.410 --> 00:05:21.310
+Git adalah standar industri, dan kebanyakan pengembang sudah menggunakannya.
+
+00:05:21.830 --> 00:05:25.530
+Repos memberi Anda tempat untuk menghost repository Git Anda langsung di dalam Azure DevOps.
+
+00:05:25.930 --> 00:05:27.150
+Berikut adalah analogi penulisan buku.
+
+00:05:27.150 --> 00:05:29.310
+Bayangkan Anda sedang menulis buku dengan tim penulis.
+
+00:05:29.850 --> 00:05:31.330
+Anda bisa mengirim bug melalui email bolak-parli.
+
+00:05:31.630 --> 00:05:34.690
+Seseorang mengedit bab 3, mengirim email, orang lain mengeditnya lagi,
+
+00:05:35.030 --> 00:05:39.750
+dan tak lama kemudian Anda memiliki file bernama finalbab3v2kirimaktual.docx,
+
+00:05:40.090 --> 00:05:42.750
+dan tidak ada yang tahu versi mana yang asli.
+
+00:05:43.310 --> 00:05:45.810
+Seperti itulah pengembangan perangkat lunak sebelum adanya kontrol versi.
+
+00:05:46.150 --> 00:05:49.630
+Dengan Git di Azure Repos, semua orang bekerja dari repository pusat yang sama.
+
+00:05:50.290 --> 00:05:50.930
+Anda membuat branch.
+
+00:05:51.150 --> 00:05:55.090
+Anggap itu sebagai salinan buku Anda sendiri di mana Anda bisa membuat perubahan tanpa mengaruhi orang.
+
+00:05:55.090 --> 00:05:58.830
+Anda menulis sebab Anda, mengujinya, dan ketika Anda siap Anda mengubah pull request.
+
+00:05:59.030 --> 00:06:01.710
+Itu adalah permintaan untuk menggabungkan perubahan Anda kembali ke buku utama.
+
+00:06:02.410 --> 00:06:04.530
+Penulis lain meninjau perubahan Anda, meninggalkan komentar.
+
+00:06:05.390 --> 00:06:09.010
+Setelah semua setuju, perubahan Anda digabungkan, dan seluruh riwayat dilacak.
+
+00:06:09.370 --> 00:06:11.450
+Anda bisa melihat dengan tepat siapa mengubah apa, kapan, dan mengapa.
+
+00:06:11.890 --> 00:06:13.170
+Inilah alasan mengapa pemula harus berdua.
+
+00:06:13.430 --> 00:06:16.550
+Tidak ada lagi nama file yang berantakan atau bingung apakah Anda mengerjakan versi terbaru.
+
+00:06:16.950 --> 00:06:19.030
+Tidak ada lagi ketidaksengajaan menimpa pekerjaan orang lain.
+
+00:06:19.030 --> 00:06:20.250
+Git memberi Anda cari pengamah.
+
+00:06:20.250 --> 00:06:23.670
+Anda bisa bereksperimen membuat kesalahan dan kembali ke versi sebelumnya jika ada yang rusak.
+
+00:06:23.770 --> 00:06:25.950
+Ini seperti memiliki tombol undo untuk seluruh proyek Anda.
+
+00:06:26.410 --> 00:06:27.930
+Dan disinilah koneksi ke boards berperan.
+
+00:06:28.650 --> 00:06:31.270
+Anda bisa menautkan komit dan pull request Anda langsung ke item kerja.
+
+00:06:32.010 --> 00:06:35.330
+Saat pengembang memperbaiki bug, mereka menyertakan ID bug di pesan komit,
+
+00:06:35.450 --> 00:06:37.290
+dan komit itu tertaut ke item kerja di boards.
+
+00:06:38.010 --> 00:06:39.290
+Tiba-tiba Anda memiliki keterlacakan perubahan.
+
+00:06:39.630 --> 00:06:42.930
+Anda bisa melihat dengan tepat perubahan kode apa yang dibuat untuk setiap fitur atau perbaikan.
+
+00:06:43.410 --> 00:06:46.570
+Manager produk bisa mengklik item kerja dan melihat kode aktual yang ditulis.
+
+00:06:46.570 --> 00:06:49.730
+Pengembang bisa melihat komit dan mengetahui cerita pengguna mana yang terkait.
+
+00:06:50.250 --> 00:06:51.050
+Semuanya terhubung.
+
+00:06:51.430 --> 00:06:52.850
+Jadi sekarang kode Anda tersimpan dan terlacak.
+
+00:06:53.250 --> 00:06:53.750
+Kode itu aman.
+
+00:06:54.050 --> 00:06:54.850
+Kode itu memiliki versi.
+
+00:06:55.090 --> 00:06:55.990
+Namun kode itu hanya tersimpan.
+
+00:06:56.310 --> 00:06:57.310
+Bagaimana cara menjalankannya?
+
+00:06:57.830 --> 00:07:00.790
+Bagaimana Anda mengubah kode itu menjadi aplikasi yang bisa digunakan orang lain?
+
+00:07:01.110 --> 00:07:02.350
+Disitulah Azure Pipelines berperan.
+
+00:07:03.170 --> 00:07:04.690
+Azure Pipelines, mesin otomatisasi.
+
+00:07:05.190 --> 00:07:07.390
+Azure Pipelines adalah mesin otomatisasi yang membangun,
+
+00:07:07.710 --> 00:07:09.330
+mengujil dan menyebarkan kode Anda secara otomatis.
+
+00:07:09.330 --> 00:07:14.030
+Dalam bahasa sederhana, ini mengambil kode Anda dan menjadikannya aplikasi yang berjalan tanpa perlu melakukannya secara manual.
+
+00:07:14.330 --> 00:07:15.370
+Bayangkan ini seperti toko roti.
+
+00:07:15.710 --> 00:07:19.550
+Bayangkan Anda menjelangkan toko roti dan memanggang setiap roti dengan tangan untuk setiap pesanan pelanggan.
+
+00:07:19.910 --> 00:07:21.310
+Seperti itulah tampilan penyebaran manual.
+
+00:07:21.730 --> 00:07:24.130
+Seseorang menulis kode, Anda menyalahnya secara manual ke server,
+
+00:07:24.370 --> 00:07:26.410
+menjalankan build manual, dan memeriksa fungsinya manual.
+
+00:07:26.590 --> 00:07:30.110
+Itu lambat, rawan kesalahan, dan jika banyak pesanan, Anda tidak akan mampu mengejar.
+
+00:07:30.550 --> 00:07:31.770
+Disitulah Azure Pipelines berperan.
+
+00:07:32.330 --> 00:07:33.790
+Anda mengotomatiskan seluruh prosesnya.
+
+00:07:33.790 --> 00:07:37.470
+Anda mengaturnya sekali, dan ia berjalan otomatis setiap kali ada perubahan pada kode.
+
+00:07:38.270 --> 00:07:41.670
+Ini disebut CIPRCD, integrasi berkelanjutan, dan pengiriman berkelanjutan.
+
+00:07:42.470 --> 00:07:44.030
+Berikut adalah arti dari integrasi berkelanjutan.
+
+00:07:44.490 --> 00:07:46.810
+Setiap kali pengembang mendorong kode ke repository,
+
+00:07:47.170 --> 00:07:50.170
+pipeline secara otomatis membangun aplikasi dan menjalankan pengujian.
+
+00:07:50.650 --> 00:07:52.110
+Jika ada yang rusak, Anda langsung tahu.
+
+00:07:52.250 --> 00:07:54.910
+Bukan dua minggu kemudian saat ada yang mencoba menyebarkan, tapi segera.
+
+00:07:55.450 --> 00:07:58.210
+Pengembang akan diberitahu, mereka memperbaikinya, dan mendorong kodenya kembali.
+
+00:07:58.810 --> 00:08:01.910
+Buka akan terdeteksi lebih awal saat biaya perbaikannya murah, bukan terlambat saat biaya mahal.
+
+00:08:01.910 --> 00:08:06.570
+Pengiriman berkelanjutan berarti kode yang telah dibuat dan diuji akan otomatis diterapkan ke lingkungan Anda.
+
+00:08:07.150 --> 00:08:09.710
+Pertama, ke lingkungan pengujian untuk verifikasi QA,
+
+00:08:09.950 --> 00:08:13.730
+lalu ke staging untuk pemeriksaan akhir, kemudian ke produksi untuk dilihat pengguna.
+
+00:08:14.410 --> 00:08:16.170
+Setiap tahapan dapat memiliki fitur persetujuan.
+
+00:08:16.570 --> 00:08:18.910
+Seorang manajer mungkin perlu menyetujui penerapan ke produksi.
+
+00:08:19.210 --> 00:08:20.790
+Seorang ketua QA mungkin perlu menandatangannya.
+
+00:08:21.130 --> 00:08:22.590
+Pipeline menangani semua itu.
+
+00:08:23.130 --> 00:08:24.130
+Rikta berada fitur-fitur utama.
+
+00:08:24.490 --> 00:08:26.590
+Anda memiliki file YAML, tahapan, persetujuan, dan agen.
+
+00:08:27.090 --> 00:08:29.650
+YAML adalah file teks sederhana tempat Anda menentukan pipeline Anda.
+
+00:08:29.650 --> 00:08:32.130
+File ini tersimpan di repository bersama kode Anda,
+
+00:08:32.350 --> 00:08:34.610
+yang berarti pipeline Anda memiliki versi seperti kode Anda.
+
+00:08:35.150 --> 00:08:37.090
+Anda bisa melihat siapa yang mengubahnya, kapan, dan mengapa.
+
+00:08:37.510 --> 00:08:39.870
+Tahapan memungkinkan Anda mencapai pipeline menjadi bagian-bagian.
+
+00:08:40.470 --> 00:08:41.550
+Build, pengujian, penerapan.
+
+00:08:42.210 --> 00:08:43.970
+Persetujuan memungkinkan Anda membatasi penerapan
+
+00:08:43.970 --> 00:08:45.650
+agar hanya orang berunai yang bisa merilis ke produksi.
+
+00:08:46.290 --> 00:08:47.990
+Akin adalah mesin yang benar-benar menjalankan build-an.
+
+00:08:48.550 --> 00:08:51.310
+Microsoft menyediakan agent terhost atau Anda bisa menjalankan milik Anda sendiri.
+
+00:08:51.790 --> 00:08:52.830
+Mengapa ini penting bagi pemula?
+
+00:08:53.350 --> 00:08:56.110
+Karena penerapan manual adalah sumber utama insiden produksi.
+
+00:08:56.110 --> 00:08:57.910
+Seseorang lupa satu langkah,
+
+00:08:58.050 --> 00:08:59.110
+seseorang menyalankan file yang salah,
+
+00:08:59.270 --> 00:09:00.550
+seseorang menerapkan kelingkungan yang salah.
+
+00:09:00.930 --> 00:09:02.110
+Pipeline menghilangkan semua hal tersebut.
+
+00:09:02.410 --> 00:09:03.930
+Pipeline berjalan dengan cara yang sama setiap saat,
+
+00:09:04.310 --> 00:09:05.850
+tanpa kesalahan manusia, tanpa langkah yang terlupa,
+
+00:09:05.950 --> 00:09:06.550
+dan prosesnya cepat.
+
+00:09:06.870 --> 00:09:09.210
+Sebuah tim yang saya baca berhasil mengurangi waktu penerapan manual mereka
+
+00:09:09.210 --> 00:09:10.570
+dari beberapa jam menjadi beberapa jam,
+
+00:09:10.670 --> 00:09:12.770
+jadi hanya 10 atau 15 menit setelah menggunakan Azure Pipeline.
+
+00:09:12.970 --> 00:09:13.890
+Itu bukan peningkatan gejit.
+
+00:09:14.390 --> 00:09:15.290
+Itu adalah sebuah transformasi.
+
+00:09:15.590 --> 00:09:17.550
+Jadi kode Anda telah dibuat, diuji, dan diterapkan.
+
+00:09:17.830 --> 00:09:19.090
+Namun sebelum mengirimkannya ke pelanggan,
+
+00:09:19.090 --> 00:09:20.610
+Anda harus memastikan kode itu benar-benar benar.
+
+00:09:20.850 --> 00:09:21.790
+Bukan hanya bisa dikompilasi,
+
+00:09:21.890 --> 00:09:23.390
+tetapi memang melakukan apa yang seharusnya dilakukan.
+
+00:09:23.730 --> 00:09:24.870
+Disitulah peran Azure Test Plan.
+
+00:09:25.610 --> 00:09:27.870
+Azure Test Plan, kualitas tanpa perlu melebak-nebak.
+
+00:09:28.210 --> 00:09:29.950
+Jadi kode Anda berhasil dibuat dan diterapkan,
+
+00:09:30.050 --> 00:09:30.810
+tetapi apakah benar-benar benar?
+
+00:09:31.150 --> 00:09:32.070
+Bukan hanya di komputer Anda,
+
+00:09:32.170 --> 00:09:33.070
+bukan hanya dalam kondisi normal.
+
+00:09:33.710 --> 00:09:35.790
+Apakah berfungsi saat seseorang mengetik input yang salah
+
+00:09:35.790 --> 00:09:36.590
+saat jaringan lambat,
+
+00:09:36.710 --> 00:09:38.510
+atau saat ribuan orang menggunakannya sekaligus?
+
+00:09:39.490 --> 00:09:40.670
+Disitulah peran Azure Test Plan.
+
+00:09:41.270 --> 00:09:42.730
+Test Plan adalah pengujian terstruktur
+
+00:09:42.730 --> 00:09:44.530
+untuk pengujian manual dan eksploratif.
+
+00:09:44.530 --> 00:09:46.730
+Anggaplah ini seperti daftar periksa peraturan seorang pilot.
+
+00:09:47.070 --> 00:09:47.910
+Pilot tidak hanya naik ke pesawat,
+
+00:09:47.990 --> 00:09:48.990
+lo berharap semuanya baik-baik saja.
+
+00:09:49.450 --> 00:09:50.410
+Mereka memiliki daftar periksa.
+
+00:09:50.650 --> 00:09:51.210
+Memeriksa flap,
+
+00:09:51.450 --> 00:09:52.250
+memeriksa bahan bakar,
+
+00:09:52.350 --> 00:09:53.030
+memeriksa instrumen.
+
+00:09:53.170 --> 00:09:54.950
+Setiap saat karena melewatkan satu hal saja
+
+00:09:54.950 --> 00:09:56.370
+bisa berakibat perangkat lunak pun sama.
+
+00:09:56.890 --> 00:09:58.490
+Bug dalam produksi bisa merugikan uang,
+
+00:09:58.590 --> 00:09:59.530
+pelanggan, reputasi Anda.
+
+00:10:00.170 --> 00:10:01.510
+Test Plan memberi Anda daftar periksa.
+
+00:10:01.790 --> 00:10:02.370
+Begini cara.
+
+00:10:02.770 --> 00:10:03.690
+Anda membuat kasus uji.
+
+00:10:04.250 --> 00:10:06.470
+Setiap kasus uji menjelaskan hal spesifik untuk diuji.
+
+00:10:07.110 --> 00:10:08.710
+Masuk dengan nama pengguna dan kata sana yang valid.
+
+00:10:08.710 --> 00:10:10.990
+Coba masuk dengan kata sana yang tidak valid.
+
+00:10:11.910 --> 00:10:14.090
+Coba kirim formulir tanpa mengisi kolom yang wajib.
+
+00:10:14.910 --> 00:10:16.690
+Setiap kasus uji memiliki langkah untuk diikuti
+
+00:10:16.690 --> 00:10:17.430
+dan hasil yang diharap.
+
+00:10:17.970 --> 00:10:20.330
+Penguji Anda menjalankan kasus ini selangkah demi selangkah
+
+00:10:20.330 --> 00:10:21.610
+dan menandai lulus atau gagal.
+
+00:10:22.190 --> 00:10:22.790
+Jika uji gagal,
+
+00:10:22.890 --> 00:10:24.830
+mereka bisa mencatat balik langsung dari kasus uji tersebut.
+
+00:10:25.570 --> 00:10:27.190
+Bug itu dibuat sebagai item kerja di boards,
+
+00:10:27.310 --> 00:10:28.630
+ditugaskan ke pengembangan yang tepat,
+
+00:10:28.810 --> 00:10:31.010
+dan ditautkan kembali ke uji untuk keterlacakan penuh.
+
+00:10:31.670 --> 00:10:33.590
+Anda bisa mengompokkan kasus uji ke dalam rangkaian uji.
+
+00:10:34.010 --> 00:10:36.430
+Mungkin Anda punya rangkaian uji untuk proses check-out,
+
+00:10:36.430 --> 00:10:38.750
+lainnya untuk pendaftaran pengguna atau panel admin.
+
+00:10:39.370 --> 00:10:41.350
+Lalu Anda mengatur rangkaian tersebut ke dalam rencana uji
+
+00:10:41.350 --> 00:10:42.490
+untuk rilis atau sprint yang berbeda.
+
+00:10:42.850 --> 00:10:44.870
+Anda bisa melihat dengan tepat apa yang telah diuji,
+
+00:10:45.010 --> 00:10:46.590
+yang lulus, yang gagal, dan yang belum diuji.
+
+00:10:47.010 --> 00:10:48.510
+Koneksi ke boards adalah bagian yang membuatnya hebat.
+
+00:10:49.270 --> 00:10:51.650
+Saat uji gagal, itu membuat bug langsung di boards.
+
+00:10:52.230 --> 00:10:53.510
+Pengembang melihatnya memperbaikinya,
+
+00:10:53.690 --> 00:10:54.270
+mengirim perbaikan,
+
+00:10:54.550 --> 00:10:56.030
+pipeline membangun, dan menyebarkan versi baru.
+
+00:10:56.650 --> 00:10:57.330
+Penguji sekali lagi.
+
+00:10:57.990 --> 00:10:58.450
+Uji lulus.
+
+00:10:58.810 --> 00:10:59.290
+Bug ditutup.
+
+00:10:59.870 --> 00:11:01.070
+Semua itu terjadi dalam satu platform.
+
+00:11:01.390 --> 00:11:02.530
+Tidak perlu kirim email spreadsheet,
+
+00:11:02.710 --> 00:11:04.070
+tidak perlu menyalin laporan bug antarsis.
+
+00:11:04.070 --> 00:11:05.010
+Semuanya terhubung.
+
+00:11:05.590 --> 00:11:06.230
+Saya akan dicurut kepada.
+
+00:11:06.610 --> 00:11:08.090
+Pemula sering melewatkan test plans.
+
+00:11:08.530 --> 00:11:09.950
+Pengujian terasa seperti pekerjaan tangga.
+
+00:11:10.350 --> 00:11:11.290
+Anda hanya ingin menggunakan kode Anda.
+
+00:11:11.870 --> 00:11:12.750
+Anda ingin melihatnya, sayang.
+
+00:11:13.090 --> 00:11:13.810
+Tapi masalahnya begini.
+
+00:11:14.130 --> 00:11:15.210
+Setiap pengembang yang saya ajak,
+
+00:11:15.290 --> 00:11:17.450
+bicara punya cerita tentang bug yang masuk ke produksi
+
+00:11:17.450 --> 00:11:18.630
+dan menyebabkan bencana.
+
+00:11:19.450 --> 00:11:21.110
+Sistem pembayaran yang menagi pelanggan dua kali.
+
+00:11:21.870 --> 00:11:23.370
+Halaman masuk yang macet saat dibebani.
+
+00:11:23.750 --> 00:11:25.490
+Fitur yang menghapus data alih-alih menyimpannya.
+
+00:11:26.130 --> 00:11:27.510
+Bug tersebut selalu bisa ditangkap
+
+00:11:27.510 --> 00:11:28.710
+dengan pengujian sederhana.
+
+00:11:29.430 --> 00:11:30.530
+Test plans ada asuransi yang murah.
+
+00:11:30.950 --> 00:11:32.190
+Membutuhkan sedikit waktu di awal,
+
+00:11:32.190 --> 00:11:33.490
+tetapi menghemat banyak kesulitan nanti.
+
+00:11:34.250 --> 00:11:35.150
+Seiring berkembangnya tim,
+
+00:11:35.230 --> 00:11:36.270
+Anda akan menemui masalah lain.
+
+00:11:36.910 --> 00:11:38.450
+Anda akan mulai menulis kode yang sama berulang hati.
+
+00:11:38.990 --> 00:11:40.330
+Fungsi utilitas, komponen logging,
+
+00:11:40.430 --> 00:11:40.970
+pemungkus api.
+
+00:11:41.430 --> 00:11:43.370
+Anda akan menyalin dan menempel kode antar proyek
+
+00:11:43.370 --> 00:11:45.310
+dan tak lama kemudian Anda punya lima versi berbeda
+
+00:11:45.310 --> 00:11:46.670
+dari hal yang sama sedikit berbeda
+
+00:11:46.670 --> 00:11:47.710
+dan berpotensi bug.
+
+00:11:48.390 --> 00:11:49.550
+Disitulah artifacts berperan.
+
+00:11:50.190 --> 00:11:51.750
+Azure Artifacts membaikkan blok bangunan Anda.
+
+00:11:52.450 --> 00:11:54.070
+Azure Artifacts adalah manajer paket
+
+00:11:54.070 --> 00:11:55.030
+untuk ustaka kode Anda
+
+00:11:55.030 --> 00:11:56.350
+dan cara termudah untuk memahaminya
+
+00:11:56.350 --> 00:11:57.250
+adalah seperti balok lid.
+
+00:11:57.910 --> 00:11:59.430
+Alih-alih membangun setiap bagian dari nol
+
+00:11:59.430 --> 00:12:01.430
+setiap saat Anda cukup mengambil balok yang sudah jadi
+
+00:12:01.430 --> 00:12:01.930
+dan menyatukan.
+
+00:12:02.470 --> 00:12:03.550
+Ketika seseorang di tim Anda
+
+00:12:03.550 --> 00:12:04.710
+membuat pustaka pencatatan,
+
+00:12:04.830 --> 00:12:05.910
+mereka menembitkannya ke Artifacts,
+
+00:12:06.010 --> 00:12:07.510
+lalu semua orang bisa menariknya ke proyek mereka
+
+00:12:07.510 --> 00:12:08.410
+hanya dengan satu baris kode.
+
+00:12:09.150 --> 00:12:10.190
+Tidak perlu menyalin file,
+
+00:12:10.330 --> 00:12:11.390
+mengirim email rsip zip
+
+00:12:11.390 --> 00:12:12.830
+atau bingung versi mana yang terbaru.
+
+00:12:13.310 --> 00:12:15.070
+Berikut adalah analogi Lego secara lebih rinci.
+
+00:12:15.450 --> 00:12:16.770
+Bayangkan Anda sedang membangun sebuah kastil.
+
+00:12:17.090 --> 00:12:18.730
+Anda bisa memat setiap batu bata dengan tangan
+
+00:12:18.730 --> 00:12:20.070
+yang berarti menulis semuanya dari awal.
+
+00:12:20.510 --> 00:12:22.110
+Atau Anda bisa mengambil batu bata siap pakai
+
+00:12:22.110 --> 00:12:23.470
+dan fokus pada bagian unikastil Anda
+
+00:12:23.470 --> 00:12:24.730
+dan fokus pada bagian unikastil Anda
+
+00:12:24.730 --> 00:12:25.770
+dan itulah penggunaan Artifacts.
+
+00:12:25.910 --> 00:12:27.330
+Batu bata adalah pustaka bersama Anda.
+
+00:12:27.410 --> 00:12:28.370
+Kastil adalah aplikasi Anda
+
+00:12:28.370 --> 00:12:29.890
+dan Anda tetap perlu membangun bagian unik
+
+00:12:29.890 --> 00:12:31.870
+namun Anda tidak perlu menciptakan kembali roda
+
+00:12:31.870 --> 00:12:32.330
+setiap saat.
+
+00:12:33.170 --> 00:12:34.910
+Artifacts mendukung berbagai jenis paket.
+
+00:12:35.450 --> 00:12:36.330
+Nuget untuk .NET,
+
+00:12:36.750 --> 00:12:37.690
+NPM untuk JavaScript,
+
+00:12:38.270 --> 00:12:39.090
+Maven untuk Java,
+
+00:12:39.390 --> 00:12:39.930
+paket Python,
+
+00:12:40.530 --> 00:12:41.970
+dan paket universal untuk lainnya.
+
+00:12:42.490 --> 00:12:43.190
+Anda membuat feed,
+
+00:12:43.410 --> 00:12:44.770
+yaitu repository paket pribadi Anda
+
+00:12:44.770 --> 00:12:46.430
+dan Anda menerbitkan paket ke sana.
+
+00:12:47.110 --> 00:12:48.270
+Anda mengatur sumber hulu upstream
+
+00:12:48.270 --> 00:12:49.690
+sehingga Anda juga bisa menarik paket publik
+
+00:12:49.690 --> 00:12:51.750
+dari org atau npmgs.com
+
+00:12:51.750 --> 00:12:52.570
+melalui feed yang sama.
+
+00:12:52.570 --> 00:12:53.710
+Semuanya satu tempat.
+
+00:12:53.990 --> 00:12:54.530
+Mengapa ini penting?
+
+00:12:55.010 --> 00:12:55.690
+Ini menghemat waktu,
+
+00:12:55.830 --> 00:12:56.790
+memastikan konsistensi,
+
+00:12:56.890 --> 00:12:57.630
+dan mengelola versi.
+
+00:12:58.170 --> 00:12:59.670
+Ketika Anda memperbarui pustaka bersama,
+
+00:13:00.030 --> 00:13:01.090
+Anda menerbitkan versi baru
+
+00:13:01.090 --> 00:13:02.250
+dan proyek yang menggunakannya
+
+00:13:02.250 --> 00:13:03.570
+bisa melakukan upgrade saat mereka siap.
+
+00:13:03.910 --> 00:13:05.370
+Mereka tidak dipaksa untuk memperbarui
+
+00:13:05.370 --> 00:13:06.650
+dan tidak terjebak pada versi lama
+
+00:13:06.650 --> 00:13:07.830
+karena tidak ada yang tahu sana terbuat.
+
+00:13:07.970 --> 00:13:08.990
+Ini terkontrol dan terorganisir.
+
+00:13:09.370 --> 00:13:10.730
+Dan ini terhubung langsung ke pipeline.
+
+00:13:11.090 --> 00:13:13.310
+Pipeline build Anda dapat menerbitkan paket ke Artifacts
+
+00:13:13.310 --> 00:13:14.010
+secara otomatis
+
+00:13:14.010 --> 00:13:16.850
+dan pipeline deployment Anda dapat menggunakan paket dari Artifacts
+
+00:13:16.850 --> 00:13:18.470
+sehingga seluruh alurnya terotomatisasi.
+
+00:13:18.670 --> 00:13:19.190
+Kode dibangun,
+
+00:13:19.190 --> 00:13:20.530
+diuji, dipaketkan,
+
+00:13:20.710 --> 00:13:21.210
+diterbitkan,
+
+00:13:21.350 --> 00:13:21.910
+dan dikonsumsi
+
+00:13:21.910 --> 00:13:24.110
+semua tanpa perlu menyalin file secara manual.
+
+00:13:24.910 --> 00:13:26.470
+Jadi sekarang Anda telah melihat kelima layanan.
+
+00:13:26.990 --> 00:13:28.030
+Boards untuk perencanaan,
+
+00:13:28.210 --> 00:13:28.890
+repos untuk kode,
+
+00:13:29.110 --> 00:13:30.250
+pipelines untuk otomatisasi,
+
+00:13:30.450 --> 00:13:31.250
+test plans untuk kualitas,
+
+00:13:31.350 --> 00:13:32.250
+dan Artifacts untuk berbagi.
+
+00:13:32.490 --> 00:13:34.630
+Namun keajaiban sebenarnya bukanlah pada satu layanan saja.
+
+00:13:35.290 --> 00:13:36.650
+Melainkan bagaimana semuanya bekerja bersama.
+
+00:13:37.130 --> 00:13:38.830
+Ijinkan saya menunjukkan seperti apa itu dalam praktik.
+
+00:13:39.570 --> 00:13:41.270
+Gambaran besarnya bagaimana saling terhubung.
+
+00:13:42.050 --> 00:13:44.170
+Ijinkan saya menunjukkan seperti apa ini dalam praktiknya
+
+00:13:44.170 --> 00:13:44.950
+dengan skenario nyata
+
+00:13:44.950 --> 00:13:46.650
+di mana sebuah tim sedang membangun fitur baru.
+
+00:13:46.650 --> 00:13:48.410
+Langkah pertama,
+
+00:13:48.690 --> 00:13:50.110
+pemilik produk membuka Azure Boards
+
+00:13:50.110 --> 00:13:51.570
+dan membuat cerita pengguna seperti
+
+00:13:51.570 --> 00:13:54.070
+sebagai pelanggan saya ingin mengatur ulang kata sandi saya.
+
+00:13:54.830 --> 00:13:56.050
+Tambahkan kriteria penerimaan,
+
+00:13:56.210 --> 00:13:57.210
+tetapkan ke sprint saat ini,
+
+00:13:57.410 --> 00:13:58.170
+atur prioritasnya,
+
+00:13:58.630 --> 00:14:00.350
+dan item kerja tersebut kini ada di dalam sistem.
+
+00:14:00.690 --> 00:14:01.290
+Langkah kedua,
+
+00:14:01.590 --> 00:14:02.750
+pengembang membuka Azure Repos,
+
+00:14:02.870 --> 00:14:03.910
+menarik kode terbaru,
+
+00:14:04.070 --> 00:14:05.850
+dan membuat cabang baru dari item kerja tersebut.
+
+00:14:06.430 --> 00:14:08.310
+Boards bahkan memungkinkan Anda melakukannya langsung dari cerita tersebut.
+
+00:14:08.710 --> 00:14:11.290
+Nama cabang secara otomatis menyertakan ID item kerja.
+
+00:14:11.790 --> 00:14:12.630
+Mereka menulis kodenya,
+
+00:14:12.630 --> 00:14:13.390
+melakukan commit,
+
+00:14:13.490 --> 00:14:14.230
+dan dalam pesan commit,
+
+00:14:14.370 --> 00:14:16.050
+mereka menyertakan fixes nomor 150.
+
+00:14:16.050 --> 00:14:17.390
+Itu adalah nomor item kerjanya.
+
+00:14:17.890 --> 00:14:19.730
+Commit tersebut kini tertaut ke user story di Boards.
+
+00:14:20.330 --> 00:14:20.990
+Langkah ketiga,
+
+00:14:21.130 --> 00:14:23.050
+commit tersebut memicu Azure Pipeline secara otomatis.
+
+00:14:23.710 --> 00:14:24.710
+Pipeline mengambil kode,
+
+00:14:24.850 --> 00:14:25.830
+memulihkan dependensi,
+
+00:14:25.950 --> 00:14:26.510
+menjalankan build,
+
+00:14:26.590 --> 00:14:27.570
+dan menjalankan pengujian unit.
+
+00:14:28.170 --> 00:14:29.250
+Jika ada pengujian yang gagal,
+
+00:14:29.470 --> 00:14:30.030
+pipeline berhenti,
+
+00:14:30.210 --> 00:14:31.590
+dan pengembang akan diberi notifikasi.
+
+00:14:32.090 --> 00:14:33.010
+Jika semuanya berhasil,
+
+00:14:33.150 --> 00:14:34.970
+pipeline melakukan deployment ke lingkungan pengujian,
+
+00:14:35.190 --> 00:14:37.210
+dan pengembang dapat melihat kode mereka berjalan secara langsung
+
+00:14:37.210 --> 00:14:38.250
+sebelum orang lain menyentuhnya.
+
+00:14:39.270 --> 00:14:40.150
+Langkah keempat,
+
+00:14:40.150 --> 00:14:42.090
+teknisi GUA membuka Azure Test Plans,
+
+00:14:42.270 --> 00:14:43.090
+menemukan rangkaian,
+
+00:14:43.090 --> 00:14:45.010
+pengujian untuk pengaturan ulang kata Sandi,
+
+00:14:45.130 --> 00:14:46.270
+menjalankan kasus uji manual,
+
+00:14:46.730 --> 00:14:47.530
+mengikuti langkah-langkahnya,
+
+00:14:47.710 --> 00:14:49.290
+dan meverifikasi fitur tersebut berfungsi.
+
+00:14:49.850 --> 00:14:50.750
+Namun mereka menemukan bug.
+
+00:14:51.510 --> 00:14:52.630
+Pesan kesalahannya salah ketika.
+
+00:14:52.970 --> 00:14:54.990
+Mereka mengklik buat bug langsung dari kasus uji,
+
+00:14:55.170 --> 00:14:56.590
+dan item kerja baru muncul di boards
+
+00:14:56.590 --> 00:14:58.150
+yang tertaut ke user story asli.
+
+00:14:58.650 --> 00:14:59.490
+Pengembang melihatnya,
+
+00:14:59.710 --> 00:15:00.210
+memperbaikinya,
+
+00:15:00.390 --> 00:15:00.990
+melakukan push,
+
+00:15:01.150 --> 00:15:01.930
+pipeline berjalan lagi,
+
+00:15:02.050 --> 00:15:03.230
+penguji menjalankan ulang pengujian,
+
+00:15:03.310 --> 00:15:04.070
+dan pengujian pun berhasil.
+
+00:15:04.470 --> 00:15:05.150
+Langkah kelima,
+
+00:15:05.150 --> 00:15:05.950
+fitur selesai,
+
+00:15:06.090 --> 00:15:09.250
+dan tim memublikasikan pustaka autentikasi bersama ke Azure Artifacts.
+
+00:15:09.250 --> 00:15:11.310
+Kini tim lain dapat menggunakannya di proyek mereka.
+
+00:15:11.890 --> 00:15:14.190
+Komponen pengaturan ulang kata Sandi tersedia sebagai paket,
+
+00:15:14.290 --> 00:15:15.630
+sehingga tim manapun yang membangun fitur baru
+
+00:15:15.630 --> 00:15:17.930
+yang memerlukan autentikasi dapat menariknya dengan satu baris kode.
+
+00:15:18.230 --> 00:15:18.990
+Tanpa menilis ulang,
+
+00:15:19.090 --> 00:15:20.150
+tanpa menyalin cukup dengan event.
+
+00:15:20.430 --> 00:15:21.750
+Itulah bangunan yang terhubung dengan tindak.
+
+00:15:22.210 --> 00:15:23.170
+Setiap pelayanan adalah sebuah ruangan.
+
+00:15:23.830 --> 00:15:25.130
+Board adalah ruang perencanaan,
+
+00:15:25.250 --> 00:15:26.530
+repos adalah perpustakaan kode,
+
+00:15:26.910 --> 00:15:28.530
+pipelines adalah lantai pabrik,
+
+00:15:28.830 --> 00:15:30.550
+test plans adalah stasiun inspeksi kualitas,
+
+00:15:30.550 --> 00:15:32.270
+dan artifacts adalah udangnya.
+
+00:15:33.070 --> 00:15:34.970
+Namun kekuatan sebenarnya bukan pada satu ruangan saja.
+
+00:15:34.970 --> 00:15:36.690
+Melainkan koridor yang menghubungkan semuanya.
+
+00:15:37.410 --> 00:15:38.550
+Item kerja tertaut ke kode,
+
+00:15:38.870 --> 00:15:39.550
+kode mencu pipeline,
+
+00:15:39.630 --> 00:15:41.170
+pipeline melakukan deployment ke pengujian.
+
+00:15:41.270 --> 00:15:42.490
+Pengujian membuat bug kembali di boards,
+
+00:15:42.590 --> 00:15:43.930
+paket yang sudah jadi masuk ke artifacts.
+
+00:15:44.630 --> 00:15:45.730
+Semuanya saling terhubung satu sama.
+
+00:15:45.970 --> 00:15:47.070
+Dan inilah bagian yang menarik.
+
+00:15:47.430 --> 00:15:48.750
+AI akan hadir di Azure DevOps.
+
+00:15:49.210 --> 00:15:50.890
+Microsoft sudah meluncurkan integrasi Copilot
+
+00:15:50.890 --> 00:15:51.970
+seperti bantuan item kerja
+
+00:15:51.970 --> 00:15:54.330
+yang membantu Anda menulis user story yang lebih baik,
+
+00:15:54.590 --> 00:15:56.550
+AI yang dapat merangkum utas diskusi yang panjang,
+
+00:15:56.550 --> 00:15:59.890
+dan tinjauan kode Copilot yang meninjau pull request secara otomatis.
+
+00:16:00.670 --> 00:16:02.190
+Ini masih tahap awal, tetapi aranya sudah jelas.
+
+00:16:03.010 --> 00:16:04.830
+Azure DevOps kini menjadi platform yang cerdas
+
+00:16:04.830 --> 00:16:05.990
+bukan sekadar kumpulan alat.
+
+00:16:06.510 --> 00:16:07.670
+Jadi apa cara terbaik untuk memulai?
+
+00:16:08.070 --> 00:16:10.010
+Anda tidak perlu langsung menggunakan kelima lainnya sekaligus.
+
+00:16:10.350 --> 00:16:10.850
+Pilih salah satu.
+
+00:16:11.590 --> 00:16:12.390
+Mulailah dengan boards.
+
+00:16:12.650 --> 00:16:15.650
+Buat proyek, lecak beberapa tugas, dan rasakan pengalamannya.
+
+00:16:16.930 --> 00:16:18.210
+Lalu tambahkan reposat Anda siap,
+
+00:16:18.310 --> 00:16:19.670
+kemudian pipeline selangkah demi selangkah.
+
+00:16:20.270 --> 00:16:20.870
+Langkah pertama Anda.
+
+00:16:21.170 --> 00:16:22.130
+Jadi inilah gagasan utamanya.
+
+00:16:22.650 --> 00:16:24.370
+Azure DevOps bukanlah lima alat terpisah,
+
+00:16:24.370 --> 00:16:25.750
+melainkan satu platform yang terhubung.
+
+00:16:26.350 --> 00:16:28.710
+Boards, repos, pipelines, test plans, dan artifacts
+
+00:16:28.710 --> 00:16:29.730
+semuanya bekerja bersama.
+
+00:16:30.050 --> 00:16:31.170
+Nilainya bukan pada setiap bagiannya,
+
+00:16:31.290 --> 00:16:32.190
+melainkan bagaimana semestering.
+
+00:16:32.490 --> 00:16:33.350
+Inilah langkah pertama Anda.
+
+00:16:33.350 --> 00:16:36.310
+Kunjungi dev.azure.com dan buat akun gratis,
+
+00:16:36.690 --> 00:16:37.590
+lalu mulai proyek baru.
+
+00:16:38.010 --> 00:16:38.570
+Jelajahi boards.
+
+00:16:38.890 --> 00:16:39.490
+Buat user story.
+
+00:16:39.810 --> 00:16:40.630
+Geser di papan kanban.
+
+00:16:41.050 --> 00:16:42.010
+Lihat bagaimana cara kerjanya.
+
+00:16:42.430 --> 00:16:43.150
+Inilah tantangan untuk Anda.
+
+00:16:43.590 --> 00:16:44.510
+Pilih satu proyek kecil.
+
+00:16:44.770 --> 00:16:45.230
+Apa saja bisa.
+
+00:16:45.730 --> 00:16:46.850
+Lacak di boards selama seminggu.
+
+00:16:46.970 --> 00:16:47.610
+Tambahkan tugas.
+
+00:16:47.730 --> 00:16:48.350
+Perbarui status.
+
+00:16:48.510 --> 00:16:50.850
+Dan rasakan bagaimana pekerjaan Anda jadi terlihat dan teratur.
+
+00:16:50.970 --> 00:16:53.210
+Di episode berikutnya, kita akan membahas Azure Pipeline.
+
+00:16:53.570 --> 00:16:56.510
+Kita akan membangun pipeline CIPSID pertama Anda langkah demi langkah.
+
+00:16:56.710 --> 00:16:59.330
+Dan Anda akan melihat cara mengotomatiskan build dan deployment dari awal.
+
+00:16:59.710 --> 00:17:01.450
+Perlanggananlah di platform podcast favorit Anda.
+
+00:17:01.450 --> 00:17:03.590
+dan bagikan episode ini kepada seseorang yang pada episode mereka.

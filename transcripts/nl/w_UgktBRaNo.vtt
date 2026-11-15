@@ -1,0 +1,853 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.960 --> 00:00:12.380
+Deze januari is M365, kom terug en pakken we groter uit.
+
+00:00:12.820 --> 00:00:18.440
+Doe mee voor live sessies, praktijkdemo's en praktische kennis van MVP's en experts wereldwijd.
+
+00:00:18.720 --> 00:00:21.600
+Geen algemene sliedes, geen eindeloze modewoorden.
+
+00:00:21.940 --> 00:00:29.100
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.100 --> 00:00:35.020
+Of je nu een IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies voor jou ontworpen.
+
+00:00:35.240 --> 00:00:40.500
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.900 --> 00:00:44.560
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.920 --> 00:00:51.180
+Januari 2027, 10 dagen, 1 Microsoft Community. De registratie is nu geopend.
+
+00:00:51.940 --> 00:00:57.660
+Claim vandaag nog je plek. Dat is m365.com.net.
+
+00:00:57.660 --> 00:01:04.790
+Meld je aan op m365.com.net en we zien je live in januari.
+
+00:01:05.070 --> 00:01:07.510
+Stel je voor dat je een bericht naar een collega moet sturen.
+
+00:01:07.750 --> 00:01:11.070
+Je loopt erheen, geeft een briefje en wacht tot ze het lezen en reageren.
+
+00:01:11.270 --> 00:01:13.190
+Dat werkt prima als jullie er allebei zijn.
+
+00:01:13.370 --> 00:01:16.350
+Maar wat als ze in een vergadering zitten, lunchen of een week op vakantie zijn?
+
+00:01:16.550 --> 00:01:19.370
+Dan loop je vast. Je kunt niet verder met je werk tot ze antwoorden.
+
+00:01:19.610 --> 00:01:22.330
+Dat is precies wat er gebeurt wanneer twee apps direct met elkaar praten.
+
+00:01:22.550 --> 00:01:24.230
+De ene app stuurt een verzoek en wacht.
+
+00:01:24.230 --> 00:01:27.930
+Als de andere app traag of bezet is of gecrashed is, loopt de eerste app vast.
+
+00:01:28.310 --> 00:01:29.790
+Ontwikkelaars noemen dit nauwe koppeling.
+
+00:01:29.990 --> 00:01:31.550
+De twee apps zitten aan elkaar vast.
+
+00:01:31.750 --> 00:01:33.630
+Als de een faalt, faalt de ander ook.
+
+00:01:33.770 --> 00:01:36.050
+In een systeem met tientallen services is dat een ramp.
+
+00:01:36.250 --> 00:01:38.130
+De oplossing zet een tussenpersoon tussen hen in.
+
+00:01:38.270 --> 00:01:42.630
+Een digitale buffer die berichten accepteert wanneer de verzender er klaar voor is en ze vasthoudt tot de ontvanger ze kan verwerken.
+
+00:01:42.790 --> 00:01:44.750
+Die tussenpersoon wordt een message broker genoemd.
+
+00:01:44.890 --> 00:01:47.890
+Een Azure Service Bus is Microsoft's versie van die tussenpersoon.
+
+00:01:48.070 --> 00:01:49.530
+Wat is eigenlijk een message broker?
+
+00:01:49.790 --> 00:01:51.570
+Dus, wat is een message broker nu echt?
+
+00:01:51.570 --> 00:01:54.970
+Het is software die tussen apps in staat en het doorgeven van berichten afhandelt.
+
+00:01:55.130 --> 00:01:57.650
+De verzender stuurt een bericht naar de broker en gaat weer door.
+
+00:01:57.890 --> 00:01:58.370
+Niet wachten.
+
+00:01:58.630 --> 00:02:00.750
+De ontvanger haalt het bericht op wanneer die er klaar voor is.
+
+00:02:00.910 --> 00:02:02.810
+De twee partijen praten nooit direct met elkaar.
+
+00:02:03.010 --> 00:02:04.230
+Ze praten alleen met de broker.
+
+00:02:04.630 --> 00:02:06.670
+Ontwikkelaars noemen dit ontkoppeling en dat is precies het punt.
+
+00:02:06.930 --> 00:02:09.410
+Wanneer twee apps ontkoppeld zijn, kunnen ze onafhankelijk falen.
+
+00:02:09.570 --> 00:02:11.770
+Als de ontvanger crash, merkt de verzender daar niets van.
+
+00:02:11.970 --> 00:02:13.730
+Het bericht blijft gewoon in de broker wachten.
+
+00:02:14.010 --> 00:02:16.550
+Wanneer de ontvanger weer online komt, gaat deze verder waar hij was gebleven.
+
+00:02:16.770 --> 00:02:18.690
+Geen dataverlies, geen fouten om af te handelen.
+
+00:02:18.690 --> 00:02:20.330
+Ze kunnen ook onafhankelijk schalen.
+
+00:02:21.570 --> 00:02:24.350
+Of aan verkeer krijgt, kan deze berichten blijven versturen zo snel als gewenst.
+
+00:02:24.510 --> 00:02:25.710
+De broker vangt de piek op.
+
+00:02:25.890 --> 00:02:27.890
+De ontvanger verwerkt deze in zijn eigen tempo.
+
+00:02:28.130 --> 00:02:29.910
+Tien berichten per minuut of tienduizend.
+
+00:02:30.090 --> 00:02:33.410
+En als je één app moet bijwerken, kun je dat doen zonder het hele systeem plat te leggen.
+
+00:02:33.550 --> 00:02:34.990
+De andere kant merkt er niets van.
+
+00:02:35.170 --> 00:02:37.110
+Hier is een eenvoudige manier om erover na te denken.
+
+00:02:37.310 --> 00:02:40.210
+Je bent in een kantoorpand en moet een document aan iemand op de derde verdieping geven,
+
+00:02:40.430 --> 00:02:41.510
+maar diegene is in vergadering.
+
+00:02:41.690 --> 00:02:45.810
+Je zou buiten de vergaderruimte kunnen wachten of het document bij de receptie kunnen achterlaten.
+
+00:02:45.810 --> 00:02:47.170
+De receptionist neemt het aan.
+
+00:02:47.170 --> 00:02:50.650
+Jij gaat terug naar je bureau en het document wordt bezorgd wanneer de persoon vrij is.
+
+00:02:50.830 --> 00:02:52.410
+De receptie is je message broker.
+
+00:02:52.750 --> 00:02:56.910
+Deze accepteert het bericht, bewaart het veilig en bezorgt het wanneer de ontvanger klaar is.
+
+00:02:57.090 --> 00:03:00.930
+Azure Surface Bus is de volledig beheerde versie van Microsoft van deze receptie.
+
+00:03:01.130 --> 00:03:04.210
+Volledig beheerd betekent dat je je geen zorgen hoeft te maken over de infrastructuur.
+
+00:03:04.410 --> 00:03:07.530
+Geen servers om te patchen, geen harde schijven om te vervangen, geen backups om in te plannen.
+
+00:03:07.750 --> 00:03:09.030
+Microsoft regelt dat allemaal.
+
+00:03:09.030 --> 00:03:12.870
+Je maakt gewoon een namespace aan, zet je queues en topics op en begint berichten te versturen.
+
+00:03:13.030 --> 00:03:14.290
+Het is serverless messaging.
+
+00:03:14.570 --> 00:03:17.250
+Je betaalt voor wat je gebruikt en denkt nooit na over de hardware eronder.
+
+00:03:17.490 --> 00:03:19.570
+Dus, hoe organiseert deze tussenpersoon de berichten?
+
+00:03:19.770 --> 00:03:22.030
+Het gebruikt twee hoofdstructuren, queues en topics.
+
+00:03:22.310 --> 00:03:23.850
+Laten we beginnen met de eenvoudigste.
+
+00:03:24.170 --> 00:03:25.270
+Anatomie van een bericht.
+
+00:03:25.470 --> 00:03:26.930
+We hebben de structuren behandeld.
+
+00:03:27.170 --> 00:03:29.750
+Laten we het nu hebben over wat er daadwerkelijk doorheen reist.
+
+00:03:29.970 --> 00:03:30.770
+Het bericht zelf.
+
+00:03:31.910 --> 00:03:36.070
+Zie een bericht in Azure Surface Bus als een container met twee hoofdonderdelen.
+
+00:03:36.070 --> 00:03:37.410
+De body en de metadata.
+
+00:03:37.410 --> 00:03:40.970
+De body is je eigenlijke data, hetgeen wat je probeert te versturen.
+
+00:03:41.210 --> 00:03:43.590
+Dit is meestal geformateerd als JSON of XML.
+
+00:03:43.950 --> 00:03:45.050
+Platte tekst werkt ook.
+
+00:03:45.190 --> 00:03:48.870
+En binaire data wordt ondersteund, maar in de praktijk is JSON het meest gangbare formaat.
+
+00:03:49.010 --> 00:03:52.790
+Het is leesbaar voor mensen, gemakkelijk om mee te werken en elke programmeertal kan ermee overweg.
+
+00:03:52.910 --> 00:03:54.750
+De metadata is waar het interessant wordt.
+
+00:03:54.970 --> 00:03:58.810
+Elk bericht bevat een set systeem eigenschappen die Surface Bus automatisch toelijst.
+
+00:03:59.030 --> 00:04:03.270
+Dingen zoals een uniek bericht idee, een tijdstempel die aangeeft wanneer het bericht in de wachtrij is geplaatst
+
+00:04:03.270 --> 00:04:05.490
+en een volgnummer dat de positie in de wachtrij aangeeft.
+
+00:04:05.490 --> 00:04:07.210
+Deze worden door het systeem beheerd.
+
+00:04:07.430 --> 00:04:09.130
+Jij stelt ze niet in, ze zijn er gewoon.
+
+00:04:09.310 --> 00:04:11.690
+Maar je kunt ook je eigen aangepaste eigenschappen toevoegen.
+
+00:04:11.910 --> 00:04:15.970
+Dit zijn sleutelwaardeparen die je zelf definieert, zoals klantregio met een waarde van Europa
+
+00:04:15.970 --> 00:04:21.410
+of order totaal met een waarde van 29.999 of prioriteit met een waarde van hoog.
+
+00:04:21.570 --> 00:04:24.770
+Deze aangepaste eigenschappen zijn cruciaal voor het filteren in onderwerpen.
+
+00:04:24.970 --> 00:04:27.270
+Herinner je je die abonnementsfilters nog waar we het over hadden?
+
+00:04:27.430 --> 00:04:29.730
+Ze werken door deze aangepaste eigenschappen te matchen.
+
+00:04:29.910 --> 00:04:34.150
+Je stelt het filter in dat zegt, ontvang alleen berichten waarbij de klantregio gelijk is aan Europa.
+
+00:04:34.150 --> 00:04:38.430
+En het abonnement gebruikt de aangepaste eigenschap om te beslissen of het bericht wordt geaccepteerd.
+
+00:04:38.570 --> 00:04:40.230
+Er gelden limieten voor de berichtgrootte.
+
+00:04:40.430 --> 00:04:43.930
+In de standaardlaag kan een bericht maximaal 256 kilobyte groot zijn.
+
+00:04:44.150 --> 00:04:45.710
+Dat is voldoende voor de meeste bedrijfsgegevens.
+
+00:04:45.850 --> 00:04:49.370
+Een orderrecord, een klantprofiel, een betalingsbevestiging, allemaal ruim onder die limiet.
+
+00:04:49.490 --> 00:04:52.730
+Als je meer nodig hebt, ondersteunt de premiumlaag berichten tot 1 megabyte.
+
+00:04:52.910 --> 00:04:57.050
+Maar als je regelmatig gegevens verstuurt die groter zijn dan dat, moet je ze waarschijnlijk niet in een bericht stoppen.
+
+00:04:57.050 --> 00:05:00.110
+Sla de grote gegevens ergens anders op en zet een verwijzing in het bericht.
+
+00:05:00.270 --> 00:05:01.570
+Dat is het gangbare patroon.
+
+00:05:01.770 --> 00:05:03.510
+Geplande bezorging is een nuttige functie.
+
+00:05:03.670 --> 00:05:07.870
+Je verstuurt nu een bericht, maar vertelt Servicebus om het pas op een specifiek tijdstip in de toekomst zichtbaar te maken.
+
+00:05:08.130 --> 00:05:10.910
+Stel je voor dat je over 24 uur een herinneringsmail wilt sturen.
+
+00:05:11.090 --> 00:05:14.170
+Je verstuurt het bericht nu met een geplande wachtrijtijd ingesteld op morgen.
+
+00:05:14.550 --> 00:05:17.370
+Servicebus houdt het vast, het blijft onzichtbaar, niemand kan het lezen.
+
+00:05:17.590 --> 00:05:21.370
+Vervolgens verschijnt het op het exacte geplande tijdstip in de wachtrij alsof het zojuist is verzonden.
+
+00:05:21.370 --> 00:05:25.270
+Dit is perfect voor tijdsgebonden workflows, herinneringen, timeouts en vertraagde verwerking.
+
+00:05:25.450 --> 00:05:27.410
+De levenscyclus van een bericht verloopt als volgt.
+
+00:05:27.550 --> 00:05:29.510
+Eerst wordt het naar de wachtrij of het onderwerp verzonden.
+
+00:05:29.750 --> 00:05:32.570
+Servicebus slaat het duurzaam op, geschreven naar drievoudig redundant de opslag.
+
+00:05:32.750 --> 00:05:34.370
+Vervolgens vraagt een ontvanger om een bericht.
+
+00:05:34.590 --> 00:05:37.290
+Servicebus vergrendelt het, zodat geen enkele andere ontvanger het kan pakken.
+
+00:05:37.450 --> 00:05:38.850
+De ontvanger verwerkt het bericht.
+
+00:05:39.050 --> 00:05:41.670
+Als alles goed gaat, roept de ontvanger, complete, aan.
+
+00:05:42.030 --> 00:05:43.390
+Servicebus verwijdert het bericht.
+
+00:05:43.590 --> 00:05:46.150
+Als er iets misgaat, kan de ontvanger, abandon, aanroepen.
+
+00:05:46.150 --> 00:05:49.550
+De vergrendeling wordt vrijgegeven en het bericht gaat terug naar de wachtrij voor een nieuwe poging.
+
+00:05:49.690 --> 00:05:53.030
+Als het bericht blijft falen, wordt het uiteindelijk verplaatst naar de deadletter wachtrij.
+
+00:05:53.250 --> 00:05:54.370
+Daar gaan we het nu over hebben.
+
+00:05:54.570 --> 00:05:56.490
+Het belangrijkste is, berichten zijn duurzaam.
+
+00:05:56.670 --> 00:05:58.270
+Ze verdwijnen niet als een ontvanger crash.
+
+00:05:58.470 --> 00:06:00.230
+Ze gaan niet verloren als het netwerk uitvalt.
+
+00:06:00.450 --> 00:06:02.310
+Ze blijven in servicebus, veilig opgeslagen,
+
+00:06:02.550 --> 00:06:05.690
+totdat ze succesvol zijn verwerkt of expliciet zijn verplaatst naar de deadletter wachtrij.
+
+00:06:05.850 --> 00:06:09.490
+Die betrouwbaarheid is precies de reden om überhaupt een messagebroker te gebruiken.
+
+00:06:10.070 --> 00:06:11.770
+Geavanceerde functies die het verschil maken.
+
+00:06:11.770 --> 00:06:16.450
+Laten we nu praten over de functies die van een eenvoudige berichtenwachtrij een platform maken waar je op kunt vertrouwen.
+
+00:06:16.650 --> 00:06:18.190
+Te beginnen met de deadletter wachtrij.
+
+00:06:18.350 --> 00:06:22.590
+We noemden eerder al dat berichten die blijven falen uiteindelijk ergens anders naartoe worden verplaatst.
+
+00:06:22.770 --> 00:06:24.510
+Die andere plek is de deadletter queue.
+
+00:06:24.730 --> 00:06:25.870
+Zie het als een wachtruimte.
+
+00:06:26.130 --> 00:06:31.510
+Wanneer een bericht het maximaal aantal bezorgpogingen overschrijdt of verloopt omdat de time to live is verstreken, verdwijnt het niet zomaar.
+
+00:06:31.630 --> 00:06:35.430
+Het wordt verplaatst naar een aparte subwachtrij binnen dezelfde wachtrij of hetzelfde abonnement.
+
+00:06:35.590 --> 00:06:39.090
+Je kunt die berichten inspecteren, achterhalen wat er misging en beslissen wat je doet.
+
+00:06:39.190 --> 00:06:41.590
+Misschien was de data onjuist en moet je dit corrigeren.
+
+00:06:41.770 --> 00:06:43.590
+Misschien bevat de verwerkingslogica een fout.
+
+00:06:43.830 --> 00:06:46.590
+Misschien was het downstream systeem offline en wil je het later opnieuw proberen.
+
+00:06:46.730 --> 00:06:48.390
+De deadletter queue biedt je een back-up plan.
+
+00:06:48.630 --> 00:06:49.890
+Niets gaat stilletjes verloren.
+
+00:06:50.190 --> 00:06:53.010
+Laten we nu een veel voorkomend misverstand over sessies ophelderen.
+
+00:06:53.190 --> 00:06:57.090
+Standaard garandeert Azure Service Bus niet dat berichten in volgorde worden verwerkt.
+
+00:06:57.230 --> 00:07:03.710
+Ik weet dat we zeiden dat wachtrijen vivo zijn, first in first out, en dat klopt voor hoe berichten aankomen, maar de verwerkingsvolgorde is een ander verhaal.
+
+00:07:03.710 --> 00:07:10.770
+Als je meerdere consumenten hebt die uit dezelfde wachtrij trekken en het ene bericht kost meer tijd om te verwerken dan het andere, kan het tweede bericht eerder klaar zijn dan het eerste.
+
+00:07:10.770 --> 00:07:12.270
+De volgorde gaat verloren.
+
+00:07:12.550 --> 00:07:13.490
+Sessies lossen dit op.
+
+00:07:13.630 --> 00:07:15.910
+Een sessie groepeert gerelateerde berichten bij elkaar.
+
+00:07:16.090 --> 00:07:20.510
+Je wijst een sessie-id toe aan elk bericht, zoals een klantordernummer of een workflow-instantie-id.
+
+00:07:20.750 --> 00:07:25.390
+Alle berichten met dezelfde sessie-id worden door dezelfde consument verwerkt, één voor één, op volgorde.
+
+00:07:25.610 --> 00:07:27.670
+Geen enkele andere consument kan ze aanraken.
+
+00:07:27.910 --> 00:07:30.190
+Dit geeft je strikte vivo-verwerking binnen die sessie.
+
+00:07:30.350 --> 00:07:33.830
+Verschillende sessies kunnen nog steeds parallel door verschillende consumenten worden verwerkt.
+
+00:07:34.030 --> 00:07:36.990
+Zo behoud je je doorvoert terwijl de volgorde gewaarborg blijft waar dat nodig is.
+
+00:07:36.990 --> 00:07:39.270
+Dubbele detectie is een andere geweldige functie.
+
+00:07:39.490 --> 00:07:40.610
+Soms hapert het netwerk.
+
+00:07:40.810 --> 00:07:43.510
+Je applicatie verstuurt een bericht, maar het antwoord gaat verloren.
+
+00:07:43.750 --> 00:07:46.910
+Dus stuurt je app het opnieuw in de veronderstelling dat het eerste nooit is aangekomen.
+
+00:07:47.170 --> 00:07:49.770
+Zonder dubbele detectie wordt dat bericht twee keer verwerkt.
+
+00:07:49.970 --> 00:07:55.270
+Met deze functie onthoudt servicebus de bericht-id gedurende een configureerbaar venster, meestal tot 30 dagen.
+
+00:07:55.510 --> 00:07:59.190
+Als het dezelfde bericht-id opnieuw ziet, wordt de dubbele invoer stilletjes verwijderd.
+
+00:07:59.330 --> 00:08:01.170
+De ontvanger weet nooit dat er een herhaling was.
+
+00:08:01.370 --> 00:08:04.570
+Met transacties kun je meerdere operaties groeperen tot één atomische eenheid.
+
+00:08:04.570 --> 00:08:08.690
+Misschien moet je een bericht uit een wachtrij halen, verwerken en het resultaat naar een andere wachtrij sturen.
+
+00:08:08.850 --> 00:08:11.110
+Als een stap mislukt, wil je dat alles terugdraait.
+
+00:08:11.270 --> 00:08:13.070
+Het bericht gaat terug naar de eerste wachtrij.
+
+00:08:13.250 --> 00:08:14.770
+Het resultaat wordt nooit verzonden.
+
+00:08:14.970 --> 00:08:15.950
+Alles blijft consistent.
+
+00:08:16.330 --> 00:08:20.250
+Dit is cruciaal voor financiële systemen waar gedeeltelijke verwerking erger is dan helemaal geen verwerking.
+
+00:08:20.430 --> 00:08:22.730
+Met automatisch doorsturen kun je wachtrijen aan elkaar koppelen.
+
+00:08:22.950 --> 00:08:26.050
+Berichten komen aan in de ene wachtrij en worden automatisch doorgestuurd naar een andere.
+
+00:08:26.270 --> 00:08:28.290
+Dit is handig voor het bouwen van verwerkingspijplijnen.
+
+00:08:28.290 --> 00:08:32.410
+Een onbewerkt bericht komt binnen, wordt gevalideerd en vervolgens doorgestuurd naar een andere wachtrij voor het eigenlijke werk.
+
+00:08:32.410 --> 00:08:35.830
+De eerste wachtrij blijft schoon. De tweede wachtrij verwerkt het zware werk.
+
+00:08:36.030 --> 00:08:38.350
+Een uitstel stelt je in staat een bericht tijdelijk over te slaan.
+
+00:08:38.550 --> 00:08:41.490
+Misschien ontvang je een bericht, maar zijn de gegevens waarnaar het verwijst nog niet klaar.
+
+00:08:41.610 --> 00:08:44.850
+Je kunt het uitstellen. Het blijft in de wachtrij staan, maar is onzichtbaar.
+
+00:08:45.090 --> 00:08:48.430
+Later kun je het met het volgnummer ophalen en verwerken wanneer de tijdrijp is.
+
+00:08:48.670 --> 00:08:52.810
+Deze functies onderscheiden een eenvoudige wachtrij van een systeem waarop je je bedrijf kunt bouwen.
+
+00:08:53.150 --> 00:08:54.410
+Servicebus vergeleken met de alternatieven.
+
+00:08:55.130 --> 00:08:57.650
+Dus, wanneer kies je voor servicebus in plaats van iets anders?
+
+00:08:57.650 --> 00:09:03.490
+Ik zal het uiteenzetten. Azure Storage Cues zijn de eenvoudigste optie, goedkoop, snel en makkelijk in te stellen.
+
+00:09:03.690 --> 00:09:10.750
+Maar ze zijn beperkt. Berichten hebben een limiet van 64 kilobyte en je hebt geen topics, sessies, dead lettering of transacties.
+
+00:09:10.970 --> 00:09:14.650
+Ze zijn geweldig voor eenvoudige achtergrondtaken waarbij je werk wilt ontlasten,
+
+00:09:14.810 --> 00:09:18.670
+maar als je een van de geavanceerde functies nodig hebt die we bespraken, ontgroeien ze snel.
+
+00:09:18.930 --> 00:09:22.950
+Event Hubs is gebouwd voor iets heel anders, event streaming met een hoge doorvoer.
+
+00:09:23.210 --> 00:09:26.650
+Denk aan miljoenen gebeurtenissen per seconde van IoT-apparaten of applicatielogs.
+
+00:09:26.650 --> 00:09:30.210
+Het is geen message broker, het is een data-inname-pijplijn.
+
+00:09:30.370 --> 00:09:32.730
+Je zou het dus niet gebruiken voor transactionele workflows.
+
+00:09:32.950 --> 00:09:36.190
+Je gebruikt het wanneer je enorme datastromen moet vastleggen en verwerken.
+
+00:09:36.730 --> 00:09:40.690
+EventGrid is de lichtgewicht optie, een pub-sup-systeem voor event-driven triggers.
+
+00:09:40.990 --> 00:09:44.850
+Wanneer een blob wordt geüpload naar opslag, kan EventGrid een Azure function activeren.
+
+00:09:45.070 --> 00:09:48.150
+Wanneer een resource wordt aangemaakt, kan het andere services op de hoogte stellen.
+
+00:09:48.350 --> 00:09:51.690
+Het is snel, goedkoop en perfect voor reactieve scenario's, maar het is geen wachtrij.
+
+00:09:51.870 --> 00:09:56.150
+Het bewaart geen berichten voor latere verwerking, dus als de ontvanger offline is, gaat de gebeurtenis verloren.
+
+00:09:56.150 --> 00:09:58.370
+Nu, SurfaceBus zit daar precies tussenin.
+
+00:09:58.510 --> 00:10:02.610
+Het heeft de rijke functies van een enterprise broker zonder de complexiteit van het beheer ervan.
+
+00:10:02.790 --> 00:10:08.990
+Als je deadletter wachtrijen, sessies, transacties, topics met filters of gegarandeerde aflevering nodig hebt, is SurfaceBus de juiste keuze.
+
+00:10:09.130 --> 00:10:10.010
+Hoe zit het met Kafka?
+
+00:10:10.290 --> 00:10:11.690
+Dat is een heel ander gesprek.
+
+00:10:11.990 --> 00:10:16.750
+SurfaceBus is voor commando's en bedrijfsworkflows, terwijl Kafka voor event-streaming en analytics is.
+
+00:10:16.990 --> 00:10:18.610
+Veel grote systemen gebruiken beide.
+
+00:10:18.890 --> 00:10:22.330
+SurfaceBus regelt de operationele berichtgeving, Kafka regelt de datapijplijn.
+
+00:10:22.330 --> 00:10:24.370
+Ze zijn complementair, niet concurrerend.
+
+00:10:24.510 --> 00:10:26.150
+Hier is een eenvoudige vuistregel.
+
+00:10:26.330 --> 00:10:28.510
+Als je vraagt, is dit bericht correct verwerkt?
+
+00:10:28.710 --> 00:10:29.950
+Gebruik dan SurfaceBus.
+
+00:10:30.130 --> 00:10:33.150
+Als je vraagt, kan ik de stroomgebeurtenissen van vorige week opnieuw afspelen?
+
+00:10:33.330 --> 00:10:35.970
+Gebruik dan Kafka, verschillende tools voor verschillende taken.
+
+00:10:36.230 --> 00:10:37.630
+Gebruik scenario's uit de praktijk.
+
+00:10:37.830 --> 00:10:39.490
+Laten we dit concreet maken met wat voorbeelden.
+
+00:10:39.690 --> 00:10:41.490
+Zo werkt SurfaceBus in de productieomgeving.
+
+00:10:41.730 --> 00:10:42.750
+Beginnen bij e-commerce.
+
+00:10:43.010 --> 00:10:45.010
+Een klant plaatst een bestelling op een website.
+
+00:10:45.010 --> 00:10:51.950
+De webserver neemt de bestelling aan, plaatst direct één bericht in een SurfaceBus wachtrij en zegt tegen de klant, bedankt, uw bestelling is bevestigd.
+
+00:10:52.050 --> 00:10:54.090
+De klant krijgt snel antwoord zonder te wachten.
+
+00:10:54.350 --> 00:10:57.490
+Op de achtergrond haalt een groep werk-services berichten uit die wachtrij.
+
+00:10:57.710 --> 00:11:02.230
+De ene verwerkt de betaling, de andere controleert de voorraad en weer een andere maakt het verzendlabel aan.
+
+00:11:02.430 --> 00:11:05.430
+Elke worker pakt het volgende bericht, doet zijn werk en gaat door.
+
+00:11:05.630 --> 00:11:07.150
+De klant ziet daar helemaal niets van.
+
+00:11:07.370 --> 00:11:08.690
+Zij zien alleen de bevestiging.
+
+00:11:08.930 --> 00:11:11.290
+Dat is het klassieke asingrone verwerkingspatroon.
+
+00:11:11.390 --> 00:11:14.110
+Directe feedback voor de gebruiker, zwaar werk op de achtergrond.
+
+00:11:14.110 --> 00:11:16.150
+Financiële systemen gaan nog een stap verder.
+
+00:11:16.850 --> 00:11:18.650
+Betalingsverwerking vereist gegarandeerde aflevering.
+
+00:11:18.810 --> 00:11:20.890
+Je mag geen transactie verliezen of dubbel verwerken.
+
+00:11:21.050 --> 00:11:22.950
+Je hebt volgordelijkheid en transacties nodig.
+
+00:11:23.330 --> 00:11:24.450
+SurfaceBus biedt je dat allemaal.
+
+00:11:24.750 --> 00:11:28.290
+Een betaling komt binnen, wordt verwerkt en het resultaat gaat naar een andere wachtrij.
+
+00:11:28.470 --> 00:11:32.350
+Als er iets misgaat, wordt alles teruggedraaid, zodat geld nooit onterecht verplaatst wordt.
+
+00:11:32.570 --> 00:11:34.250
+Dit is waar SurfaceBus uitblinkt.
+
+00:11:34.390 --> 00:11:36.510
+Niet alleen data verplaatsen, maar het veilig doen.
+
+00:11:36.750 --> 00:11:38.410
+Denk nu eens aan Multiservice Fanout.
+
+00:11:38.630 --> 00:11:40.410
+Een nieuwe klant registreert zich op je platform.
+
+00:11:40.410 --> 00:11:45.210
+Je wilt dat het CRM-systeem het weet, het marketing-systeem een welkomstmail stuurt en het supportteam een ticket aanmaakt.
+
+00:11:45.350 --> 00:11:50.110
+In plaats van drie verschillende services aan te roepen, plaats je één bericht op een onderwerp genaamd klant geregistreerd.
+
+00:11:50.310 --> 00:11:52.150
+Elke service heeft zijn eigen abonnement.
+
+00:11:52.350 --> 00:11:54.430
+Het CRM-abonnement ontvangt elk bericht.
+
+00:11:54.650 --> 00:11:57.010
+Het marketing-abonnement filtert alleen op nieuwe klanten.
+
+00:11:57.190 --> 00:11:59.450
+Het support-abonnement filtert alleen op premium klanten.
+
+00:11:59.630 --> 00:12:01.010
+Eén bericht, drie reacties.
+
+00:12:01.210 --> 00:12:04.370
+En als je later een vierde service toevoegt, maak je gewoon een nieuw abonnement aan.
+
+00:12:04.530 --> 00:12:05.770
+De afzender verandert nooit.
+
+00:12:05.770 --> 00:12:08.170
+Logistieke bedrijven gebruiken dit op enorme schaal.
+
+00:12:08.390 --> 00:12:13.290
+Stel je een pakketvolgsysteem voor waar honderdduizenden bezorgwagens elke paar seconden locatie updates sturen.
+
+00:12:13.490 --> 00:12:17.330
+Elke update is een bericht en de updates van elk pakket moeten op volgorde worden verwerkt.
+
+00:12:17.470 --> 00:12:20.930
+Je kunt de bezorgd update niet verwerken voor de onderweg update.
+
+00:12:21.190 --> 00:12:22.150
+Sessies regelen dit.
+
+00:12:22.330 --> 00:12:27.410
+Elk pakket krijgt een eigen sessie-idee en alle updates voor dat pakket verlopen in volgorde via dezelfde sessie.
+
+00:12:27.610 --> 00:12:30.170
+Verschillende pakketten kunnen nog steeds parallel worden verwerkt.
+
+00:12:30.170 --> 00:12:33.610
+Miljoenen pakketten, miljarden updates, allemaal betrouwbaar afgehandeld.
+
+00:12:33.610 --> 00:12:37.750
+Microservices-architecturen gebruiken servicebus als hun communicatieruggegraad.
+
+00:12:37.910 --> 00:12:39.970
+Services roepen elkaar niet rechtstreeks aan.
+
+00:12:40.210 --> 00:12:41.410
+Ze wisselen berichten uit.
+
+00:12:41.670 --> 00:12:43.670
+Service A stuurt een opdracht naar een wachtrij.
+
+00:12:43.950 --> 00:12:46.010
+Service B pakt deze op en voert het werk uit.
+
+00:12:46.250 --> 00:12:50.870
+Service C publiceert een event naar een topic en services D en reageren elk op hun eigen manier.
+
+00:12:51.110 --> 00:12:53.130
+Geen directe aanroepen, geen sterke koppeling.
+
+00:12:53.370 --> 00:12:56.710
+Elke service kan worden bijgewerkt, geschaald of vervangen zonder de andere te beïnvloeden.
+
+00:12:56.890 --> 00:12:58.990
+En hier is een patroon dat je bij oudere bedrijven ziet.
+
+00:12:58.990 --> 00:13:03.890
+Ze hebben een legacy-systeem on-premises draaien dat niet makkelijk te vervangen is, maar ze willen moderne cloud-services gebruiken.
+
+00:13:04.050 --> 00:13:05.990
+Dus overbruggen ze de kloof met servicebus.
+
+00:13:06.210 --> 00:13:10.050
+Het legacy-systeem stuurt berichten naar een wachtrij en cloud-applicaties verwerken deze.
+
+00:13:10.230 --> 00:13:14.690
+Het oude systeem weet nooit dat het met de cloud praat en de cloud weet nooit dat hij met een oud systeem praat.
+
+00:13:15.050 --> 00:13:17.290
+Servicebus zit in het midden te vertalen en door te sturen.
+
+00:13:17.490 --> 00:13:19.790
+Geplande aflevering regelt de tijdsgebonden taken.
+
+00:13:20.090 --> 00:13:22.130
+Stuur een herinneringsmail over 24 uur.
+
+00:13:22.330 --> 00:13:25.410
+Laat deze reservering over 30 minuten verlopen als deze niet is bevestigd.
+
+00:13:25.610 --> 00:13:28.090
+Genereer elke maandag om 8 uur ochtends een weekrapport.
+
+00:13:28.090 --> 00:13:33.350
+Je verstuurt het bericht nu met een toekomstige bezorgdheid en servicebus houdt het vast en geeft het precies op het juiste moment vrij.
+
+00:13:33.590 --> 00:13:36.850
+Geen cronchops, geen achtergrondtimers, alleen een bericht met een timer.
+
+00:13:37.110 --> 00:13:39.530
+De rode draad in al deze voorbeelden is hetzelfde.
+
+00:13:39.730 --> 00:13:44.210
+De zender wacht niet op de ontvanger en de ontvanger hoeft niet online te zijn wanneer het bericht wordt verstuurd.
+
+00:13:44.410 --> 00:13:49.530
+Ze zijn ontkoppeld en die ontkoppeling maakt het hele systeem veerkrachtiger, schaalbaarder en makkelijker aan te passen.
+
+00:13:49.650 --> 00:13:52.210
+Het grote plaatje waarom het allemaal samenkomt.
+
+00:13:52.330 --> 00:13:53.870
+Dus, wat is servicebus precies?
+
+00:13:53.870 --> 00:13:58.730
+Het is de ruggegraad die onafhankelijke services betrouwbaar laat communiceren zonder van elkaar afhankelijk te zijn.
+
+00:13:58.970 --> 00:14:01.910
+Drie woorden vatten het samen ontkoppelen, bufferen en routeren.
+
+00:14:02.130 --> 00:14:04.890
+Ontkoppelen betekent dat services niet van elkaar hoeven te weten.
+
+00:14:05.150 --> 00:14:06.990
+Ze weten alleen van de wachtrij of het tappuk.
+
+00:14:07.190 --> 00:14:14.270
+Dat betekent dat je één service kunt wijzigen zonder de andere te breken, één kunt schalen zonder de rest te beïnvloeden en updates kunt implementeren terwijl de rest blijft draaien.
+
+00:14:14.510 --> 00:14:17.650
+Bufferen betekent dat de wachtrij de belasting opvangt bij piekverkeer.
+
+00:14:17.650 --> 00:14:25.870
+De zender blijft op volle snelheid sturen terwijl de ontvanger op eigen tempo verwerkt, dus niemand crash of raakt overbelast en de buffer vlak de pieken af en vult te dalen.
+
+00:14:26.070 --> 00:14:36.310
+Routeren betekent dat wachtrijen berichten naar één ontvanger sturen terwijl tappuks naar velen uitzenden en filters zorgen dat elke ontvanger alleen krijgt wat nodig is, zodat het bericht automatisch de juiste plek vindt.
+
+00:14:36.310 --> 00:14:41.310
+Wachtrijen regelen de verdeling van werk van punt naar punt en tappuks regelen de uitzending naar vele ontvangers.
+
+00:14:41.670 --> 00:14:44.110
+Geavanceerde functies behandelen de uitzonderingsgevallen.
+
+00:14:44.330 --> 00:14:51.310
+Fouten gaan naar de deadletter wachtrij, gebruikersessies ordenen, duplicaten worden gedetecteerd, transacties houden alles consistent en...

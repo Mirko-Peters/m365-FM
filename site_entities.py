@@ -4,11 +4,14 @@ from site_i18n import T
 import site_updates as SU
 import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
+import site_event_link as EVL   # Event <-> Event-Entitaet: Termine, Sessions und Speaker auf der Seite der Entitaet
 import site_sponsorships as SPM
 import site_ads as ADS   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (data/sponsorships.json)
 import json
 import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partner, Positionen ...)
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
+import site_listen as LST   # Anhoeren-Karten (kompakte Variante unter den Beitraegen einer Entitaet)
+import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht (reine Funktionen)
 import re
 from datetime import date
 from urllib.parse import quote, urlsplit
@@ -38,6 +41,7 @@ S = {"en": dict(entities="Microsoft ecosystem entity database", intro="Products,
 
 
 SPEAKERS = {}   # Entitaets-ID -> zusammengefuehrter Speaker (data/speakers.json) mit Events und Sessions
+import entity_fill_data as FD
 GENTEXT = {}   # Entitaet -> {en, de}: Ueberblickstexte aus data/entity_texts/part-*.json (aus Folgen und Fakten geschrieben, tools/entity_text_tasks.py)
 for _f in sorted((Path(__file__).parent / "data" / "entity_texts").glob("part-*.json")) if (Path(__file__).parent / "data" / "entity_texts").exists() else []:
     try: GENTEXT.update(json.loads(_f.read_text("utf-8")))
@@ -326,10 +330,52 @@ def musicgroup_ld(BASE):
             "founder": person, "member": [person]}
 
 
+def long_for(e, lang):
+    """Langtext der Seite -> (text, KI-Text ja/nein). Redaktionell vorn (auch der Event-Text). Ein KI-Text aus data/entity_fill, der per push in der D1-Fassung
+    steht (FD.is_ai), ist KEIN redaktioneller Text: er bekommt den KI-Hinweis, und auf anderen Sprachseiten gilt die (bezahlte) Uebersetzung statt des
+    englischen KI-Texts. Bei Sponsoren erscheint ein KI-Langtext nie. Sonst Ueberblick aus den Folgen und Fakten (data/entity_texts, data/entity_fill)."""
+    L = e.get("long") or {}; own = lambda k: "" if FD.is_ai(e, "long", k) else (L.get(k) or "")
+    ail = L.get("en") if FD.is_ai(e, "long", "en") and not FD.is_sponsored(e["id"]) else ""   # Sponsor (auch nach dem push geworden): kein KI-Langtext
+    lt = own(lang) or own("en") or own("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
+    if lt.strip():
+        return lt, False
+    g = GENTEXT.get(e["id"]) or {}
+    lt = g.get(lang) or FD.long_text(e, lang) or g.get("en") or FD.long_text(e, "en") or ail or ""
+    return lt, bool(lt.strip())
+
+
+LONG_INDEX_MIN = 2500   # Mirko 13.11.2026: hat die Beschreibung (Langtext) in DIESER Sprache 2500 Zeichen oder mehr (ab 2500), steht die Seite auf index, egal welche Sprache
+_LONG_IDX = {}
+
+
+def native_long(e, lang):
+    """Langtext genau in lang (ohne Rueckfall auf Englisch/Deutsch, ohne Event-Text): redaktionell, sonst Ueberblick aus data/entity_texts, sonst KI-Uebersetzung."""
+    L = e.get("long") or {}
+    own = "" if FD.is_ai(e, "long", lang) else (L.get(lang) or "")
+    return own or (GENTEXT.get(e["id"]) or {}).get(lang) or FD.long_text(e, lang) or ""
+
+
+def long_index_langs(e):
+    """Sprachen, in denen die Seite wegen eines langen eigenen Textes (>= LONG_INDEX_MIN Zeichen) indexiert wird. Der angezeigte Text muss der eigene Text der Sprache sein
+    (kein Englisch-Rueckfall auf einer fr-Seite), sonst gaebe es ein Duplikat in falscher Sprache."""
+    r = _LONG_IDX.get(e["id"])
+    if r is None:
+        r = _LONG_IDX[e["id"]] = [l for l in COMM_LANGS
+                                  if len(native_long(e, l).strip()) >= LONG_INDEX_MIN and long_for(e, l)[0].strip() == native_long(e, l).strip()]
+    return r
+
+
+def index_langs(lx, has_de, thin):
+    """Sprachen, in denen die Entitaetsseite auf index steht (und damit im hreflang-Cluster): en, wenn nicht duenn; de, wenn echter deutscher Text und nicht duenn;
+    dazu jede Sprache mit langem eigenem Text (lx, long_index_langs) - auch bei duenner Entitaet. Reihenfolge: en, de, dann lx."""
+    r = ([] if thin else ["en"] + (["de"] if has_de else []))
+    return r + [l for l in lx if l not in r]
+
+
 def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     """Schema.org-Knoten einer Entitaet (sprachneutrale @id)."""
     person_aka = person_aka or {}
-    t = e["type"]; i = e["id"]; d = e["desc"].get(lang) or e["desc"].get("en") or e["desc"].get("de") or ""
+    t = e["type"]; i = e["id"]; d = FD.desc(e, lang)
     ref = lambda x: {"@id": eid_of(BASE, x)}
     rel = {}
     _inv = inverse_index()
@@ -450,6 +496,8 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
             n["@type"] = "EventSeries"
         if rel.get("organized_by"):
             n["organizer"] = [ref(x) for x in rel["organized_by"]]
+        if n["@type"] == "EventSeries" and EVL.for_entity(i):   # bestaetigte, oeffentliche Termine als subEvent (Event.superEvent auf den Event-Seiten zeigt zurueck)
+            n["subEvent"] = EVL.ld_nodes(BASE, i)
     elif t == "media":
         if rel.get("created_by"):
             n["creator"] = [ref(x) for x in rel["created_by"]]; n["author"] = [ref(x) for x in rel["created_by"]]
@@ -598,15 +646,18 @@ def articles_block(BASE, e, lang, posts, T_):
         return "", []
     def purl(p):
         return f"{BASE}{pfx(p['lang']) if p['lang'] in ('de',) else ''}/community/u/{p['handle']}/blog/{p['slug']}/"
+    lc = LST.apply_entities(BASE, posts[:100], lang, ENTS)   # kompakte "Anhoeren"-Karte je Beitrag mit guter Folge, dieselbe Folge nur beim ersten Beitrag
     def item(p):
         sm = (p.get("summary") or "")[:180]
         return (f'<li class="en-art"><a href="{purl(p)}"><b>{esc(p["title"])}</b></a><br><span class="mut"><time datetime="{_iso(p.get("published"))}">{_iso(p.get("published"))}</time> · {esc(p.get("name") or p["handle"])}</span>'
-                + (f'<br>{esc(sm)}' if sm else "") + "</li>")
+                + (f'<br>{esc(sm)}' if sm else "") + lc.get((p.get("handle"), p["slug"], p.get("lang")), "") + "</li>")
     head, rest = posts[:20], posts[20:100]
     h = f'<section class="en-arts"><h2>{esc(T_("Articles about {t}", "Artikel zu {t}").format(t=e["name"]))} <span class="mut">({len(posts)})</span></h2><ul class="en-artl">' + "".join(item(p) for p in head) + "</ul>"
     if rest:
-        h += f'<details><summary>{esc(T_("{n} more articles", "{n} weitere Artikel").format(n=len(posts) - 20))}</summary><ul class="en-artl">' + "".join(f'<li><a href="{purl(p)}">{esc(p["title"])}</a> <span class="mut">· {_iso(p.get("published"))}</span></li>' for p in rest) + "</ul></details>"
+        h += f'<details><summary>{esc(T_("{n} more articles", "{n} weitere Artikel").format(n=len(posts) - 20))}</summary><ul class="en-artl">' + "".join(f'<li><a href="{purl(p)}">{esc(p["title"])}</a> <span class="mut">· {_iso(p.get("published"))}</span>{lc.get((p.get("handle"), p["slug"], p.get("lang")), "")}</li>' for p in rest) + "</ul></details>"
     h += "</section>"
+    if lc:
+        h = LST.page_assets(BASE) + h   # Stil und Skript der Karten einmal je Seite
     return h, [purl(p) for p in head + rest]
 
 
@@ -642,6 +693,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": entity_graph}, ensure_ascii=False))
 
     cfg_t = lambda lang: S[lang]
+    _nf = MM.name_flags(recs)   # gleicher Name unter zwei Kennungen: Titel braucht die Kennung (site_meta_entities)
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0
         stat = fetch_wiki(api, lang)
@@ -650,7 +702,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
         rel = f"{pfx2(lang)}entity"
         # Index mit Typ-Filter
         def card(e):
-            d = (e["desc"].get(lang) or e["desc"].get("en") or "")[:140]
+            d = (FD.desc(e, lang) or "")[:140]
             old = is_old(e, TODAY)
             _spb = SPM.badge(lang, SPM.entity(e["id"]))   # T37 Sponsor: Badge auch in der Liste (Teaser)
             return (f'<li class="en-i" data-t="{e["type"]}"{" data-old=1 hidden" if old else ""}><a href="{root}{e["id"]}/"><b>{esc(e["name"])}</b></a> <span class="mut">· {esc(tlab(lang, e["type"]))}{(" · " + OLD[lang][0]) if old else ""}{(" · <strong>" + esc(_spb) + "</strong>") if _spb else ""}</span><br><span class="mut">{esc(d)}</span></li>')
@@ -668,12 +720,13 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                "hasDefinedTerm": [{"@id": eid_of(BASE, e["id"])} for e in _terms]},
               {"@context": "https://schema.org", "@type": "CollectionPage", "name": s["entities"], "url": root, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(recs), "itemListElement":
                [{"@type": "ListItem", "position": i + 1, "item": {"@id": eid_of(BASE, e["id"])}} for i, e in enumerate(sorted(recs, key=lambda x: x["name"].lower()))]}}]
-        (write if lang in ("en", "de") else (g.get("write_r2") or write))(f"{rel}/index.html", page(lang, f'{s["entities"]} – M365.FM', s["intro"], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
+        _hm = MM.entities_hub_meta(lang, len(recs)) or (f'{s["entities"]} – M365.FM', s["intro"])   # en/de: Inhalt + Nutzen; andere Sprachen (noindex) bisheriger Text
+        (write if lang in ("en", "de") else (g.get("write_r2") or write))(f"{rel}/index.html", page(lang, _hm[0], _hm[1], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
         if lang in ("en", "de"): sitemap.append((root, TODAY, None))
 
         # Einzelseiten
         for e in recs:
-            u = f"{root}{e['id']}/"; d = e["desc"].get(lang) or e["desc"].get("en") or e["desc"].get("de") or ""
+            u = f"{root}{e['id']}/"; d = FD.desc(e, lang)
             groups = {}
             for p, to in e.get("rel", []):
                 if to in ENTS:
@@ -691,7 +744,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             rb += MEN.section_html(lang, e["id"])   # sichtbare Erwaehnungen (nur iFAKT und Polaris, nur geprueft eingetragene)
             if e["type"] == "org":   # Gegenrichtung Firma -> Personen: Entitaeten (Feld company) plus Community-Mitglieder der verknuepften Firma (team_of)
                 rb += team_html(BASE, lang, e["id"], root, api)
-            _spr, _spown = SPM.entity(e["id"]), SPM.entity_own(e["id"])   # T37 Sponsor: laufende Sponsorings dieser Entitaet
+            _spr, _spown = SPM.entity(e["id"]), SPM.entity_own(e["id"])   # T37 Sponsor: laufende Sponsorings dieser Entitaet (inkl. 182 Tage Karenzzeit nach "end")
             facts = [(s["type"], esc(tlab(lang, e["type"])))]
             _aka = aka_fact(e, lang, person_aka)
             if _aka:
@@ -723,8 +776,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append((T(lang, "Date", "Datum"), esc(e["start"] + (" – " + e["end"] if e.get("end") else ""))))
             ft = '<table class="en-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>"
             evl = ""
-            if e["id"] in EVENTS:
-                ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{T(lang, "Go to the event", "Zum Event")}: {esc(ev_["title"])}</a></p>'
+            _lk = EVL.for_entity(e["id"])   # bestaetigt zugeordnete Events (Termine, Sessions, Speaker); sonst bleibt es beim bisherigen Block ueber die Themen des Events
+            if _lk:
+                evl += EVL.html(BASE, lang, e["id"], TODAY)
+            if e["id"] in EVENTS and EVENTS[e["id"]]["handle"] not in {_x["handle"] for _x in _lk}:
+                ev_ = EVENTS[e["id"]]; evl += f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{T(lang, "Go to the event", "Zum Event")}: {esc(ev_["title"])}</a></p>'
                 _ses = ev_.get("sessions", []); _spk = {}
                 for _se in _ses:
                     for _x in _se.get("speakers", []):
@@ -800,16 +856,17 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             if is_old(e, TODAY):
                 rp = ENTS.get(e.get("replaced_by") or "")
                 oldbanner = f'<p class="en-old" role="note"><b>{esc(OLD[lang][2])}</b>' + (f' {esc(OLD[lang][3])} <a href="{root}{rp["id"]}/">{esc(rp["name"])}</a>.' if rp else "") + "</p>"
-            _lt = (e.get("long") or {}).get(lang) or (e.get("long") or {}).get("en") or (e.get("long") or {}).get("de") or (EVENTS[e["id"]].get("about") if e["id"] in EVENTS else "") or ""
+            _lt, _isgen = long_for(e, lang)
             _gen = ""
-            if not _lt.strip() and e["id"] in GENTEXT:   # Ueberblick aus den Folgen der Show und den Fakten der Seite (data/entity_texts), solange es keinen redaktionellen Langtext gibt
-                _lt = GENTEXT[e["id"]].get(lang) or GENTEXT[e["id"]].get("en") or ""
+            if _isgen:
                 _gen = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Overview compiled with AI from M365.FM episodes and the facts on this page. You can improve it with the edit button below.", "Überblick, mit KI aus M365.FM-Folgen und den Fakten dieser Seite zusammengestellt. Du kannst ihn unten über „Bearbeiten“ verbessern."))}</p>' if _lt.strip() else ""
             longbox = ("<h2>" + (T(lang, "Description", "Beschreibung")) + "</h2>" + "".join(f"<p>{esc(par).replace(chr(10), '<br>')}</p>" for par in _lt.split("\n\n") if par.strip()) + _gen) if _lt.strip() else ""
+            # KI-Kurzbeschreibung (data/entity_fill, auch nach push in D1) immer sichtbar kennzeichnen; steht schon der Ueberblick-Hinweis, reicht der
+            _dnote = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Short description written with AI from the facts on this page. You can improve it with the edit button below.", "Kurzbeschreibung, mit KI aus den Fakten dieser Seite geschrieben. Du kannst sie unten über „Bearbeiten“ verbessern."))}</p>' if not _gen and FD.desc_is_ai(e, lang, d) else ""
             w = WT.get(lang, WT["en"])
             data_attr = esc(json.dumps({k: e.get(k) for k in ("id", "name", "type", "aliases", "desc", "web", "docs", "wikipedia", "wikidata", "rel", "outdated", "replaced_by", "start", "end", "long", "logo", "version", "released", "license", "level", "exam", "valid_months")}, ensure_ascii=False))
             edit = f'<div id="en-edit" data-e="{data_attr}"></div>'
-            _fq = [x for x in FAQ.get(e["id"], []) if x.get("lang", "en") == lang][:8]
+            _fq = ([x for x in FAQ.get(e["id"], []) if x.get("lang", "en") == lang] + FD.faq(e, lang))[:8]
             kpbox, _efq = "", []
             if lang == "en" and eps:   # Kernpunkte und FAQ der Folgen, die den Namen nennen (nur englisch: keine gemischtsprachigen Seiten)
                 _nrx = [re.compile(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", re.I) for n in ent_names(e) if len(n) > 1]
@@ -825,8 +882,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                         if q["q"].strip().lower() not in _seenq and (_hit(q["q"]) or _hit(q["a"])):
                             _seenq.add(q["q"].strip().lower()); _efq.append({"q": q["q"], "a": q["a"], "src": x})
             _allq = _fq + _efq
-            faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + "".join(
-                f'<details><summary>{esc(x["q"])}</summary><p>{esc(x["a"])}' + (f' <span class="mut">· <a href="{_epu(x["src"])}">{esc(T(lang, "From the episode", "Aus der Folge"))}: {esc(g["anchor_title"](x["src"]["e"]["title"], 48))}</a></span>' if x.get("src") else "") + "</p></details>" for x in _allq) + "</section>") if _allq else ""
+            _aitag = f' <span class="mut">({T(lang, "AI", "KI")})</span>'
+            _faqai = f'<p class="mut" style="font-size:.85em">{esc(T(lang, "Questions marked with AI were written with AI from the facts on this page.", "Mit KI markierte Fragen wurden mit KI aus den Fakten dieser Seite geschrieben."))}</p>' if any(x.get("ai") for x in _allq) else ""
+            faqbox = (f'<section class="en-faq"><h2>{T(lang, "Frequently asked questions", "Häufige Fragen")}</h2>' + _faqai + "".join(
+                f'<details><summary>{esc(x["q"])}{_aitag if x.get("ai") else ""}</summary><p>{esc(x["a"])}' + (f' <span class="mut">· <a href="{_epu(x["src"])}">{esc(T(lang, "From the episode", "Aus der Folge"))}: {esc(g["anchor_title"](x["src"]["e"]["title"], 48))}</a></span>' if x.get("src") else "") + "</p></details>" for x in _allq) + "</section>") if _allq else ""
             faqbox += f'<div id="en-qa" data-eid="{e["id"]}"></div>'
             _epq = g.get("ep_by_spreaker") or {}
             _qurl = lambda q: _epq.get(str(q.get("episode_id")), (None, None))
@@ -835,7 +894,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _arts = topic_posts(posts_by_topic, e["id"], lang)
             artbox, arturls = articles_block(BASE, e, lang, _arts, lambda a, b_: T(lang, a, b_))
             # echtes Aenderungsdatum: Entitaet selbst (Hash), Community-Bearbeitung, juengster Artikel, juengste Folge, juengste Frage
-            _mod = max([MOD.get(e["id"], TODAY), str(e.get("edited") or "")[:10], *[_iso(p.get("published")) for p in _arts[:1]], *[max((str(x.get("date", ""))[:10] for x in eps), default="")],
+            _mod = max([MOD.get(e["id"], TODAY), str(e.get("edited") or e.get("dbrev") or "")[:10], *[_iso(p.get("published")) for p in _arts[:1]], *[max((str(x.get("date", ""))[:10] for x in eps), default="")],
                         *[_iso(x.get("created")) for x in _fq[:1]]] + [""])
             _mod = _mod if len(_mod) == 10 and _mod <= TODAY else TODAY
             _src = [(T(lang, "Official website", "Offizielle Website"), e.get("web")), (T(lang, "Documentation", "Dokumentation"), e.get("docs")), ("Wikipedia", e.get("wikipedia")),
@@ -846,13 +905,14 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                       + (f'<li>{esc(T(lang, "M365.FM episodes on this topic", "M365.FM-Folgen zum Thema"))}: {len(eps)}</li>' if eps else "") + (f'<li>{esc(T(lang, "Articles on this topic", "Artikel zum Thema"))}: {len(_arts)}</li>' if _arts else "") + MEN.src_li(lang, e["id"]) + "</ul></section>") if (_src or eps or _arts or MEN.for_entity(e["id"])) else ""
             _dt = disclosure_of(e, lang)   # Transparenzhinweis (z. B. Arbeitgeber des Hosts), kein Sponsoring: keine rel=sponsored-Links
             _disc = f'<p class="en-disc" role="note" style="{SPM.NOTE_STYLE}">{esc(_dt)}</p>' if _dt else ""
-            _lead = ADS.sponsor_lead(BASE, lang, e["id"], e["name"]) if any(o["id"] == e["id"] for o in SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)) else ""   # Lead-Formular nur bei laufendem Sponsoring der Firma
+            _lo = SPM.lead_org_of(e["id"]) or (dict(org=e["id"], name=e["name"]) if any(o["id"] == e["id"] for o in SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)) else None)
+            _lead = ADS.sponsor_lead(BASE, lang, _lo["org"], _lo["name"]) if _lo else ""   # Lead-Formular bei laufendem Sponsoring (inkl. Karenzzeit): auf der Firmenseite und auf den Seiten ihrer Produkte (z. B. Polaris und Module)
             _au = ENTS.get(AUTHOR_EID)
             updline = (f'<p class="mut en-upd">' + (f'{esc(T(lang, "Maintained by", "Gepflegt von"))} <a href="{root}{AUTHOR_EID}/">{esc(_au["name"])}</a> (Microsoft MVP) · ' if _au and e["id"] != AUTHOR_EID else "")
                        + f'{esc(T(lang, "Last updated", "Zuletzt aktualisiert"))}: <time datetime="{_mod}">{_mod}</time></p>')
             # entity.js (Fragen und Antworten #en-qa) laedt, sobald der Bereich 2500 px vor dem Bildschirm ist (vorher 600 px): auf dem Handy setzte
             # das Skript Ueberschrift und Fragen erst ein, wenn der Bereich schon sichtbar war, und schob den Rest der Seite weg (CLS ~0,18 im Labor beim Scrollen)
-            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
+            b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{root}">{esc(s["entities"])}</a></nav><h1>{esc(e["name"])}</h1><button type="button" class="btn" data-topic-follow data-topic-kind="entity" data-topic-id="{esc(e["id"])}" data-topic-label="{esc(T(lang, "Follow", "Folgen"))}">🔔 {T(lang, "Follow", "Folgen")}</button>{SPM.note(lang, _spr, "entity")}{_disc}{_lead}<p class="mut">{esc(tlab(lang, e["type"]))}</p><p class="en-def" style="font-size:1.1em">{esc(d)}</p>{_dnote}{oldbanner}{claim_html(e["id"], lang, e, api)}{FX.logo_html(lang, e)}{hero}{longbox}{ft}{FX.sections(lang, e, root, ENTS)}{evl}{kpbox}{eb}{tline}{artbox}'
                           f'{qbox}{faqbox}{relmap}{relx}<div class="en-rel">{rb}</div>{gloss}{SU.block(lang, e["id"])}{wb}{("<h2>" + esc(s["experts"]) + "</h2>" + ehtml) if ehtml else ""}{srcbox}{updline}{edit}'
                           f'<script>window.M365E={{api:"{api}",lang:"{lang}",base:"{BASE}",s:{json.dumps({k: s[k] for k in ("edit_e",)}, ensure_ascii=False)}}};window.M365TopicConfig={{api:{json.dumps(api)},lang:{json.dumps(lang)}}};'
                           f'(function(){{var d=0,u="{BASE}/assets/entity.js";function go(){{if(d)return;d=1;var s=document.createElement("script");s.src=u;document.body.appendChild(s)}}'
@@ -889,14 +949,16 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 if _epids:
                     node["subjectOf"] = (node.get("subjectOf") or []) + _epids
             # hreflang en/de nur bei echtem deutschem Text (Gast-Entitaeten haben de == en: dann ist /de/ ein Duplikat und bleibt ohne Index)
-            _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de"))
+            _has_de = bool(e["desc"].get("de")) and e["desc"].get("de") != e["desc"].get("en") or bool((e.get("long") or {}).get("de")) or bool(GENTEXT.get(e["id"], {}).get("de")) or FD.has_text(e, "de")
             _thin = False
             if e["type"] == "person" and e["id"] != AUTHOR_EID:   # Personen: nur mit echter Beschreibung (nicht der Speaker-Schablone) oder mehreren Auftritten in den Index
                 _app = max(len(ep_find(e, "en")), len(ep_find(e, "de"))) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])   # T42: gleiche Entscheidung fuer en und de (sonst verweist en per hreflang auf ein noindex-de)
-                _real = (len(e["desc"].get("en") or "") > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en"))
+                _real = (len(FD.desc_en(e)) > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en")) or bool(FD.long_text(e, "en"))
                 _thin = not _real and _app < 2 and not SQ.BY_PERSON.get(e["id"])   # eigene Zitate sind echter Inhalt
-            _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
-            _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin
+            _lx = long_index_langs(e)   # Sprachen mit Beschreibung ab 2500 Zeichen (jede Sprache): index + hreflang
+            _il = index_langs(_lx, _has_de, _thin)   # alle indexierbaren Sprachen; hreflang nur unter ihnen (kein Verweis auf ein noindex-en bei duenner Entitaet)
+            _alts = {l: eurl(BASE, l, e["id"]) for l in _il} if len(_il) > 1 else None
+            _noidx = lang not in _il
             _feedu = f"{BASE}/entity/{e['id']}/feed.xml"
             if lang == "en" and (_arts or eps):   # Themen-Feed: neueste Artikel und Folgen zu dieser Entitaet (fuer Leser und Agenten)
                 from xml.sax.saxutils import escape as _x
@@ -913,7 +975,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _w = g.get("write_r2") or write   # Entitaetsseiten ALLER Sprachen liegen im R2-Bucket, nicht in GitHub Pages (Site-Worker liefert sie unter derselben Adresse). Englisch (~114 MB) seit 9.11.2026: docs/ lag mit 982 MB ueber der Grenze von 980 MB, jeder Seitenbau brach ab; de seit #310, die anderen 13 Sprachen von Anfang an
             ld = ld + _qld   # Quotation-Knoten der Person
             _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=[x for v in groups.values() for x in v], exclude=(e["id"],)) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten; Themen = verwandte Entitaeten
-            _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {tlab(lang, e["type"])} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
+            _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
+            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (_alts and lang in _alts) else None, ld, xdefault=(_alts or {}).get("en"), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 

@@ -12,6 +12,7 @@ import json, os, sys, time, urllib.request, urllib.error
 from site_text import bad as bad_text
 from tm_hash import fields_hash
 import i18n_overrides as OV
+import search_demand as DM
 from pathlib import Path
 import site_podpage as P
 import site_shownotes_seo as SSEO
@@ -219,6 +220,7 @@ def main():
         if wish is not None: OV.wishes_done("episode", [(l, s) for l in langs if l not in held for s in wish.get(l, {}) if (l, s) not in open_])
 
     send, stale = scan()
+    send = DM.order(send, DM.load(), "episode", lambda x: x[0], lambda x: x[1]["slug"])   # Suchnachfrage (#156): nur die Reihenfolge; was gesendet wird, entscheidet plan()
     if stale_mode and not slugs and wish is None and len(send) > STALE_MAX:
         print(f"--stale ohne --slugs: {len(send)} veraltete Fassungen, dieser Lauf sendet die ersten {STALE_MAX} (STALE_MAX)"); send = send[:STALE_MAX]
     shash = {}; reqs = []

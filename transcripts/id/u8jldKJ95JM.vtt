@@ -1,0 +1,1168 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.920
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, iAzure, dan para penggerak masa depan dunia kerja.
+
+00:00:07.860 --> 00:00:12.080
+Januari ini, M365-Con kembali hadir dengan skala yang lebih besar.
+
+00:00:12.860 --> 00:00:18.020
+Bergabunglah dalam sesi langsung, demo nyata dan ilmu praktis dari MVP serta pakar industri di seluruh dunia.
+
+00:00:18.860 --> 00:00:21.240
+Tanpa slide yang umum, tanpa istilah teknis yang bertadete.
+
+00:00:22.260 --> 00:00:28.380
+Kami membahas tantangan nyata, Copilot Studio, agen iE Fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.380 --> 00:00:34.400
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.460 --> 00:00:40.080
+Selama 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.920 --> 00:00:44.320
+Tonton secara langsung, dan bawa wasam praktis kembali ke organisasi Anda.
+
+00:00:45.200 --> 00:00:48.820
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.400 --> 00:00:50.520
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.840 --> 00:00:55.480
+Kunjungi M365-Con.net dan amankan tempat Anda hari ini.
+
+00:00:55.480 --> 00:00:58.560
+Itu M365-Con.net
+
+00:00:58.560 --> 00:01:04.680
+Bergabunglah sekarang di M365-Con.net dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.180 --> 00:01:08.940
+Jika Anda pernah mengalami server file rusak di Jumat sore, Anda pasti tahu kepanikannya.
+
+00:01:09.260 --> 00:01:10.180
+Panggilan teleponnya mendesak.
+
+00:01:10.320 --> 00:01:11.740
+Pertanyaan, apakah cadangannya berfungsi?
+
+00:01:12.300 --> 00:01:16.140
+Yang tidak ingin dijawab siapapun, dan berjalan ke kantor hanya untuk memeriksa kotak yang berkedip.
+
+00:01:16.140 --> 00:01:20.060
+Saya Mirko Peters, dan hari ini kita akan melihat cara yang lebih baik, yaitu Azure Files.
+
+00:01:20.620 --> 00:01:22.300
+Beginilah kenyataan tentang server file terjun.
+
+00:01:22.640 --> 00:01:28.380
+Server tersebut berbentuk fisik, yang berarti perlu pemeliharaan, pembaruan keamanan, manajemen cadangan, dan seseorang untuk mengganti hard di saat rusak.
+
+00:01:28.600 --> 00:01:29.880
+Bagi tim kecil itu beban yang sangat berat.
+
+00:01:30.200 --> 00:01:31.260
+Anda bukan sedang menjalankan pusatnya.
+
+00:01:31.520 --> 00:01:32.740
+Anda nyami coba menyelesaikan pekerjaan.
+
+00:01:33.120 --> 00:01:38.280
+Di akhir episode ini, Anda akan memahami apa itu Azure Files, mengapa sumber daya berbagi file baru membuat pengaturan lebih sederhana,
+
+00:01:38.480 --> 00:01:40.060
+dan kapan itu menjadi pilihan tepat bagi tim Anda.
+
+00:01:40.060 --> 00:01:41.760
+Siapkan kopi Anda, dan mari kita mulai.
+
+00:01:42.340 --> 00:01:43.100
+Apa itu Azure Files?
+
+00:01:43.580 --> 00:01:44.800
+Jadi, apa sebenarnya Azure Files itu?
+
+00:01:45.240 --> 00:01:46.520
+Berikut adalah definisi paling sederhana.
+
+00:01:46.800 --> 00:01:51.800
+Azure Files adalah berbagi file berbasis cloud yang dapat Anda pasang seperti drive jaringan tanpa server untuk dikelola,
+
+00:01:51.920 --> 00:01:56.560
+tanpa perangkat keras, tanpa perangkat keras, tanpa pembaruan sistem operasi, tanpa jadwal cadangan yang membuat kurang tidur.
+
+00:01:56.960 --> 00:01:58.320
+Dengan server file tradisional, Anda adalah admin.
+
+00:01:58.980 --> 00:02:00.700
+Dengan Azure Files, Microsoft yang menjadi admin.
+
+00:02:01.340 --> 00:02:05.140
+Anggap saja seperti lemari R-SIP yang berada di pusat data Microsoft, bukan di bawah meja Anda.
+
+00:02:05.440 --> 00:02:07.380
+Anda tetap membuka laci dan mengambil file.
+
+00:02:07.380 --> 00:02:11.540
+Tetapi lemari itu sendiri, kuncinya, perlindungan apinya, pemeliharaannya, semua ditangani untuk Anda.
+
+00:02:12.200 --> 00:02:14.640
+Perbedaannya adalah Anda tidak perlu khawatir lemari, itu akan rusak.
+
+00:02:15.020 --> 00:02:17.000
+Azure Files berfungsi dengan Windows, Linux, dan admin.
+
+00:02:17.500 --> 00:02:24.040
+Perangkat apapun yang mendukung SMB, yaitu bahasa berbagi file standar Windows atau NFS, standar untuk Linux, dapat terhubung.
+
+00:02:24.680 --> 00:02:29.260
+Anda mengaksesnya melalui internet atau jaringan pribadi jika ingin menjaga lalu lintas data jauh dari web publik.
+
+00:02:29.720 --> 00:02:30.380
+Dan ini dikelas menung.
+
+00:02:30.380 --> 00:02:35.160
+Microsoft menangani perangkat keras, pembaruan perangkat lunak, cadangan, dan ketersediaan tinggi.
+
+00:02:35.820 --> 00:02:38.760
+Jika sebuah disrusa di pusat data mereka, mereka akan melihatnya tanpa Anda sadari.
+
+00:02:39.000 --> 00:02:41.740
+Kebanyakan pengguna tidak menyadari keberadaannya, tetapi ini adalah layanan inti.
+
+00:02:42.200 --> 00:02:44.060
+Tidak perlu lagi pergi ke kantor secara mendadak di malam hari.
+
+00:02:44.400 --> 00:02:47.240
+Nah, untuk memahami mengapa Anda menginginkan ini, mari kita lihat cara lama terlebih.
+
+00:02:47.900 --> 00:02:49.180
+Penderitaan akibat server file jenok.
+
+00:02:49.740 --> 00:02:52.420
+Jadi, bayangkan Anda menjalankan bisnis kecil dengan 15 karyawan.
+
+00:02:53.080 --> 00:02:55.100
+Di suatu tempat di lemari kantor, terdapat sebuah server misi.
+
+00:02:55.600 --> 00:02:57.660
+Mungkin itu komputer desktop lama yang digunakan kembali,
+
+00:02:57.660 --> 00:03:00.660
+atau mungkin server sungguhan yang harganya beberapa ribu dolar beberapa tahun lalu.
+
+00:03:00.660 --> 00:03:04.500
+Bagaimanapun, server itu menjalankan Windows Server dan melayani berbagi file untuk semua orang di perusahaan.
+
+00:03:04.660 --> 00:03:05.860
+Masalahnya adalah hard disk bisa rusak.
+
+00:03:06.360 --> 00:03:09.400
+Itu pasti terjadi, dan saat drive itu mati, akses berbagi file pun terbut.
+
+00:03:09.760 --> 00:03:11.060
+Mungkin Anda punya cadangan, mungkin juga tidak.
+
+00:03:11.460 --> 00:03:13.520
+Mungkin cadangan tersebut diam-diam gagal selama 6 bulan.
+
+00:03:13.920 --> 00:03:15.380
+Itu adalah percakapan yang tidak diinginkan siapapun.
+
+00:03:15.740 --> 00:03:16.680
+Kemudian ada masalah kapasitas.
+
+00:03:17.020 --> 00:03:18.040
+Berperfile cepat sekali, kemudian.
+
+00:03:18.480 --> 00:03:21.000
+Seseorang memasukkan 15 GB foto liburan ke drive bersama.
+
+00:03:21.560 --> 00:03:24.500
+Departemen lain menimbun file proyek lama dari 3 tahun lalu.
+
+00:03:24.980 --> 00:03:27.320
+Untuk menambah penyimpanan, Anda harus membeli perangkat keras lagi,
+
+00:03:27.320 --> 00:03:29.220
+atau menghabiskan waktu berjam-jam mengonfigurasi ulangnya.
+
+00:03:29.380 --> 00:03:30.520
+Kedua pikiran itu tidak menyenangkan.
+
+00:03:30.600 --> 00:03:31.140
+Lalu pembaruan sistem.
+
+00:03:31.580 --> 00:03:34.400
+Windows Server memerlukan pembaruan keamanan rutin, yang berarti ada waktu henti.
+
+00:03:34.900 --> 00:03:39.640
+Seseorang harus masuk di akhir pekan, menerapkan pembaruan, berdoa, dan berharap server bisa menyala kembali.
+
+00:03:40.140 --> 00:03:42.540
+Jika tidak, Anda akan menghabiskan minggu sore untuk mencari masak.
+
+00:03:42.900 --> 00:03:44.040
+Transumber adalah kekhawatiran lain.
+
+00:03:44.480 --> 00:03:47.640
+Satu klik pada lampiran email yang salah dan server file Anda ter-enkripsi.
+
+00:03:48.160 --> 00:03:48.680
+Tidak file terkunci.
+
+00:03:49.180 --> 00:03:52.380
+Proses pemulihan nyakitkan, dan itu mengasumsikan cadangan Anda benar-benar berfungsi.
+
+00:03:52.780 --> 00:03:55.440
+Jika kantor Anda memiliki banyak lokasi, keadaannya menjadi lebih.
+
+00:03:57.320 --> 00:03:59.100
+Hati harus mengatur VPN atau replikasi yang lambat.
+
+00:03:59.460 --> 00:04:01.760
+Pantar jarak jauh mendapatkan kecepatan yang jauh lebih rendah daripada kantor.
+
+00:04:01.980 --> 00:04:03.900
+Orang-orang mengeluh, Anda menghabiskan waktu koneksi.
+
+00:04:04.460 --> 00:04:05.040
+Ini contoh nyata.
+
+00:04:05.540 --> 00:04:08.380
+Sebuah perusahaan konstruksi kecil yang saya kenal memiliki 15 karyawan,
+
+00:04:08.580 --> 00:04:10.740
+dan server tua yang diletakkan di sudut ruang istirahat.
+
+00:04:11.540 --> 00:04:15.740
+Setiap kali seseorang berkata, server filenya lambat, pemiliknya merasa cemas di dalam hati.
+
+00:04:16.260 --> 00:04:17.040
+Apakah server itu sekarang?
+
+00:04:17.280 --> 00:04:19.520
+Apakah sudah saatnya mengeluarkan 5 ribu rupiah lagi untuk perangkat keras?
+
+00:04:19.860 --> 00:04:22.060
+Haruskah dia mempekerjakan teknisi IT hanya untuk mengelola satu kotak?
+
+00:04:22.060 --> 00:04:27.040
+Setelah itu, kekhawatiran konstan terhadap satu perangkat keras itulah yang justru dihilangkan oleh Azure Files.
+
+00:04:27.580 --> 00:04:30.640
+Ini bukan sekadar tentang fitur, tetapi tentang tidak perlu memikirkannya sama sekali.
+
+00:04:30.940 --> 00:04:32.620
+Azure Files menghilangkan semua beban kerja tersebut.
+
+00:04:33.000 --> 00:04:33.900
+Mari kita lihat bagaimana cara kerjanya.
+
+00:04:34.880 --> 00:04:37.940
+Cara kerja Azure Files, SMB, NFS, dan proses mounting.
+
+00:04:38.600 --> 00:04:40.140
+Azure Files menggunakan protokol standar.
+
+00:04:40.560 --> 00:04:41.600
+Apa artinya itu dalam bahasa yang sederhana?
+
+00:04:42.020 --> 00:04:44.760
+Artinya Anda tidak memerlukan perangkat unak khusus atau alat kustom untuk teruk.
+
+00:04:45.160 --> 00:04:48.520
+Jika komputer Anda bisa terhubung ke draft jaringan, komputer itu bisa terhubung ke Azure Files.
+
+00:04:48.520 --> 00:04:51.880
+Untuk mesin Windows, itu adalah SMB, Server Message Block.
+
+00:04:52.560 --> 00:04:54.800
+Itu adalah protokol yang sama yang digunakan server file Anda saat ini.
+
+00:04:55.240 --> 00:04:57.600
+Untuk sistem Linux, itu adalah NFS, Network File System.
+
+00:04:58.020 --> 00:05:00.220
+Keduanya adalah standar industri yang telah ada selama beberapa dekade.
+
+00:05:00.740 --> 00:05:02.640
+Azure Files menguasai kedua bahasa tersebut dengan lancar.
+
+00:05:03.020 --> 00:05:04.060
+Jadi bagaimana cara Anda menggunakannya?
+
+00:05:04.580 --> 00:05:05.040
+Anda mounting.
+
+00:05:05.560 --> 00:05:07.420
+Di Windows, Anda menggunakannya sebagai huruf drive.
+
+00:05:07.700 --> 00:05:09.680
+Z atau S atau huruf apapun yang Anda inginkan.
+
+00:05:10.320 --> 00:05:11.860
+Di Linux, Anda melakukan mounting ke jalur folder.
+
+00:05:12.400 --> 00:05:14.400
+Bagaimanapun, tampilannya terasa seperti penyimpanan lokal.
+
+00:05:14.700 --> 00:05:15.980
+Buka file explorer dan semuanya ada di sana.
+
+00:05:15.980 --> 00:05:19.100
+Tarih dan lepas file seperti yang Anda lakukan ke folder di hard drive Anda sendiri.
+
+00:05:19.520 --> 00:05:20.600
+Bila bagian yang mewujudkan orang.
+
+00:05:21.340 --> 00:05:24.880
+Data dikirim secara ter-enkripsi secara default saat menggunakan SMB 3.0
+
+00:05:24.880 --> 00:05:27.300
+atau lebih tinggi yang didukung sistem Windows dan macOS modern.
+
+00:05:27.640 --> 00:05:30.460
+Koneksi antara komputer Anda dan Azure Files di-enkripsi dalam perjalanan.
+
+00:05:31.000 --> 00:05:33.280
+Tidak ada orang di jaringan yang bisa mengintip file Anda saat berpindah.
+
+00:05:33.460 --> 00:05:34.560
+Itu adalah hal besar untuk keamanan.
+
+00:05:34.940 --> 00:05:36.020
+Dan fitur ini aktif secara default.
+
+00:05:36.340 --> 00:05:38.680
+Anda bisa melakukan mounting berbagi file Azure dari mana saja.
+
+00:05:39.340 --> 00:05:41.260
+Dari mesin virtual yang berjalan di Azure pastinya.
+
+00:05:41.980 --> 00:05:44.720
+Dari server on-premises yang terhubung melalui VPN atau ExpressRoute.
+
+00:05:44.720 --> 00:05:47.700
+Bahkan dari laptop Anda melalui internet jika Anda mengaturnya dengan benar.
+
+00:05:47.920 --> 00:05:49.820
+Berbagi file tersebut berada di cloud tetapi terasa tertentu.
+
+00:05:50.160 --> 00:05:51.400
+Ijinkan saya memberi Anda contoh ongk.
+
+00:05:51.720 --> 00:05:54.340
+Katakanlah tim akutansi Anda perlu mengakses kumpulan spreadsheet yang sama.
+
+00:05:55.020 --> 00:05:56.700
+Dulu Anda harus menyiapkan server file,
+
+00:05:56.940 --> 00:05:58.940
+mengonfigurasi izin, dan berharap jaringan tidak mati.
+
+00:05:59.520 --> 00:06:01.440
+Dengan Azure Files, Anda membuat satu berbagi file,
+
+00:06:01.560 --> 00:06:03.700
+memetakkan S sebagai drive set di setiap mesin akutansi,
+
+00:06:03.800 --> 00:06:05.080
+dan selesai, dan selesai.
+
+00:06:05.520 --> 00:06:06.780
+Mereka tidak akan pernah tahu itu di cloud.
+
+00:06:06.880 --> 00:06:08.260
+Mereka hanya melihat huruf drive akan berfungsi.
+
+00:06:08.500 --> 00:06:09.960
+Autentikasi ditangani melalui identitas.
+
+00:06:09.960 --> 00:06:12.180
+Alih-alih mengelola kunci akun penyimpanan,
+
+00:06:12.320 --> 00:06:14.620
+rangkaian karakter panjang yang tampak seperti kata Sandy Super Unit,
+
+00:06:14.740 --> 00:06:17.560
+Anda menggunakan Azure Active Directory atau Active Directory On-Prentice 1.
+
+00:06:17.880 --> 00:06:19.380
+Pengguna masuk dengan kredensial normal mereka.
+
+00:06:19.900 --> 00:06:22.120
+Nama pengguna dan kata Sandy yang sama yang mereka gunakan untuk email.
+
+00:06:22.460 --> 00:06:24.780
+Tidak perlu menyimpan kunci tambahan, tidak perlu mengganti rahasia bersama.
+
+00:06:25.040 --> 00:06:27.400
+Nah, cara pengaturan Azure Files yang asli memiliki keunikan,
+
+00:06:27.520 --> 00:06:28.600
+disitulah perubahan baru dimulai.
+
+00:06:29.720 --> 00:06:30.160
+Cara lama.
+
+00:06:30.880 --> 00:06:31.400
+Akun penyimpan.
+
+00:06:31.400 --> 00:06:33.380
+Di sini hal-hal menjadi sedikit teknis.
+
+00:06:33.660 --> 00:06:34.980
+Tetapi percayalah, tetaplah menyimpan.
+
+00:06:35.780 --> 00:06:38.060
+Jadi pada awalnya, berbagi berkas bukanlah entitas tersendiri.
+
+00:06:38.480 --> 00:06:40.400
+Semuanya berada di dalam sesuatu yang disebut akun penyimpanan.
+
+00:06:40.640 --> 00:06:42.140
+Bayangkan akun penyimpanan sebagai wadah yang besar.
+
+00:06:42.900 --> 00:06:45.420
+Dalam arah itu, Anda bisa menaruh blop untuk data terstruktur,
+
+00:06:45.620 --> 00:06:47.380
+antara untuk pesan, tabel untuk data terstruktur,
+
+00:06:47.660 --> 00:06:49.780
+dan ya, Anda juga bisa membuat berbagi berkas.
+
+00:06:50.780 --> 00:06:53.420
+Namun, masalahnya adalah akun penyimpanan itu memiliki batasan,
+
+00:06:53.420 --> 00:06:55.860
+batasan IOPS, batasan throughput, batasan kapasitas,
+
+00:06:56.200 --> 00:06:58.680
+dan setiap berbagi berkas di dalamnya harus berbagi batasan tersebut.
+
+00:06:58.680 --> 00:07:02.200
+Jadi, jika Anda memiliki lima berbagi berkas dalam satu akun penyimpanan,
+
+00:07:02.300 --> 00:07:03.720
+semuanya berebut kumpulan performa yang sama.
+
+00:07:04.360 --> 00:07:06.320
+Satu berbagi yang sibuk bisa memperlambat yang lainnya.
+
+00:07:06.860 --> 00:07:08.180
+Pengaturan jaringan juga bekerja yang sama.
+
+00:07:08.840 --> 00:07:10.640
+Aturan firewall, titik akhir privat,
+
+00:07:10.900 --> 00:07:12.600
+semuanya berlaku untuk seluruh akun penyimpanan.
+
+00:07:12.940 --> 00:07:14.700
+Anda tidak bisa menentukan bahwa berbagi berkas ini
+
+00:07:14.700 --> 00:07:16.700
+hanya dapat diakses dari jaringan Departemen Keuangan
+
+00:07:16.700 --> 00:07:18.240
+dan berbagi berkas itu terbuka untuk semua.
+
+00:07:19.120 --> 00:07:20.860
+Aturan jaringan bersifat mutlak atau tidak sama.
+
+00:07:20.960 --> 00:07:22.620
+Lalu ada kunci akun penyimpanan.
+
+00:07:23.340 --> 00:07:25.900
+Setiap akun penyimpanan memiliki dua kunci akses,
+
+00:07:25.900 --> 00:07:28.340
+dan kunci itu memberikan akses penuh ke segalanya setiap blok,
+
+00:07:28.620 --> 00:07:30.980
+setiap antrean, setiap tabel, setiap berbagi berkas.
+
+00:07:31.560 --> 00:07:34.000
+Jika Anda hanya butuh akses ke satu berbagi berkas sayangnya,
+
+00:07:34.100 --> 00:07:35.100
+kunci itu membuka segalanya.
+
+00:07:35.500 --> 00:07:36.640
+Penagihannya adalah masalah lain,
+
+00:07:36.760 --> 00:07:38.460
+semua biaya muncul di tingkat akun penyimpanan.
+
+00:07:38.960 --> 00:07:41.280
+Jadi, jika Anda ingin mebebankan biaya ke Departemen yang berbeda,
+
+00:07:41.420 --> 00:07:42.680
+Anda harus melakukan perhitungan menuang.
+
+00:07:43.540 --> 00:07:46.200
+Misalnya, bagian pemasaran menggunakan sekitar 30% dari penyimpanan,
+
+00:07:46.280 --> 00:07:47.980
+jadi mereka harus membayar 30% dari tagihan.
+
+00:07:48.240 --> 00:07:49.560
+Itu sangat melelahkan.
+
+00:07:50.120 --> 00:07:50.860
+Berikut analoginya.
+
+00:07:51.160 --> 00:07:52.340
+Bayangkan Anda menyewa sebuah gudang.
+
+00:07:52.340 --> 00:07:54.740
+Di dalam gudang itu, Anda punya beberapa ruangan.
+
+00:07:55.020 --> 00:07:56.860
+Tetapi gudang tersebut memiliki satu pintu masuk,
+
+00:07:56.980 --> 00:07:57.780
+satu penjaga keamanan,
+
+00:07:57.900 --> 00:07:58.860
+dan satu meteran listrik.
+
+00:07:59.480 --> 00:08:00.800
+Setiap ruangan berbagi daya yang sama,
+
+00:08:00.920 --> 00:08:01.760
+aturan akses yang sama,
+
+00:08:01.840 --> 00:08:02.540
+dan tagihan yang sama.
+
+00:08:03.060 --> 00:08:04.700
+Jika satu ruangan menyalakan AC dengan kencang,
+
+00:08:04.760 --> 00:08:05.840
+ruangan lainnya menjadi lebih panas.
+
+00:08:06.400 --> 00:08:08.480
+Jika Anda ingin mengamankan satu ruangan secara terpisah
+
+00:08:08.480 --> 00:08:09.760
+karena hanya ada satu pintu,
+
+00:08:10.720 --> 00:08:12.300
+begitulah rasa yang model akun penyimpanan yang lalu.
+
+00:08:13.080 --> 00:08:14.600
+Satu wadah besar dengan batasan bersama,
+
+00:08:14.740 --> 00:08:15.340
+keamanan bersama,
+
+00:08:15.420 --> 00:08:16.060
+dan penagihannya bersama.
+
+00:08:16.060 --> 00:08:17.880
+Itu berhasil, tetapi tidak efisien.
+
+00:08:17.880 --> 00:08:20.180
+Terutama jika yang Anda inginkan hanyalah berbagi berkas sederhana.
+
+00:08:20.480 --> 00:08:21.740
+Namun, Microsoft mendengar masukan tersebut
+
+00:08:21.740 --> 00:08:22.640
+dan membangun sesuatu yang lebih.
+
+00:08:23.220 --> 00:08:24.320
+Sumber daya berbagi berkas yang baru.
+
+00:08:25.060 --> 00:08:26.180
+Sumber daya berbagi berkas yang baru.
+
+00:08:26.560 --> 00:08:27.300
+Jadi inilah yang berubah.
+
+00:08:27.780 --> 00:08:29.720
+Microsoft telah membuat sumber daya tingkat atas yang benar baru.
+
+00:08:30.120 --> 00:08:31.820
+Sekarang Anda membuat berbagi berkas secara langsung
+
+00:08:31.820 --> 00:08:32.560
+tanpa akun penyimpanan.
+
+00:08:32.840 --> 00:08:33.480
+Ini adalah yang bisa.
+
+00:08:33.780 --> 00:08:34.740
+Bayangkan seperti disk terkelola.
+
+00:08:35.260 --> 00:08:36.400
+Ingat bagaimana cara kerjanya dulu.
+
+00:08:36.540 --> 00:08:37.160
+Dengan mesin virtual,
+
+00:08:37.600 --> 00:08:38.960
+Anda harus membuat akun penyimpanan,
+
+00:08:39.040 --> 00:08:40.260
+lalu membuat page blob di dalamnya,
+
+00:08:40.260 --> 00:08:41.980
+lalu melampirkan blob itu ke VM Anda.
+
+00:08:41.980 --> 00:08:43.380
+Itu adalah proses yang panjang.
+
+00:08:43.700 --> 00:08:45.120
+Lalu Microsoft memperkenalkan disk terkelola.
+
+00:08:45.700 --> 00:08:46.420
+Anda cukup membuat disk.
+
+00:08:47.060 --> 00:08:48.300
+Tanpa akun penyimpanan,
+
+00:08:48.400 --> 00:08:49.020
+tanpa page blob,
+
+00:08:49.120 --> 00:08:49.680
+tanpa repot.
+
+00:08:50.100 --> 00:08:52.000
+Sumber daya berbagi berkas yang baru bekerja dengan cara yang sama.
+
+00:08:52.260 --> 00:08:55.000
+Di balik layar ada penyedia sumber daya baru bernama Microsoft.
+
+00:08:55.440 --> 00:08:56.020
+Berbagi berkas.
+
+00:08:56.300 --> 00:08:57.140
+Ini independen berdiri sendiri.
+
+00:08:57.600 --> 00:08:59.020
+Saat Anda membuat berbagi berkas sekarang,
+
+00:08:59.160 --> 00:09:00.760
+Anda tidak membuat anak dari sesuatu yang lain.
+
+00:09:01.020 --> 00:09:02.280
+Anda membuat sumber dayanya itu sendiri.
+
+00:09:02.820 --> 00:09:04.160
+Jadi apa sebenarnya keuntungan yang Anda dapatkan?
+
+00:09:04.160 --> 00:09:05.380
+Jadi saya jelaskan manfaat.
+
+00:09:05.960 --> 00:09:07.960
+Pertama, setiap berbagi memiliki batasnya sendiri.
+
+00:09:08.180 --> 00:09:09.300
+IOPS, throughput, kapasitas.
+
+00:09:09.300 --> 00:09:10.420
+Semua yang sekarang berbagi.
+
+00:09:10.920 --> 00:09:12.900
+Tidak ada lagi berbagi pool dengan berbagi berkas lainnya.
+
+00:09:13.280 --> 00:09:14.900
+Satu berbagi yang sibuk tidak bisa memperlambat yang lain.
+
+00:09:15.480 --> 00:09:18.400
+Jika tim teknik Anda membebani berbagi mereka dengan artefak bill,
+
+00:09:18.760 --> 00:09:20.520
+berbagi departemen HR tetap berjalan lancar.
+
+00:09:20.940 --> 00:09:22.780
+Kedua, konfigurasi jaringan bersifat berberbagi.
+
+00:09:23.400 --> 00:09:25.460
+Titik akhir privat, aturan firewall Anda mengaturnya.
+
+00:09:25.560 --> 00:09:26.820
+Pada berbagi berkas individu,
+
+00:09:27.280 --> 00:09:30.420
+ingin satu berbagi hanya dapat diakses dari jaringan virtual departemen keuangan
+
+00:09:30.420 --> 00:09:32.140
+dan yang lain terbuka untuk seluruh perusahaan.
+
+00:09:32.480 --> 00:09:32.840
+Tidak masalah.
+
+00:09:33.220 --> 00:09:33.780
+Keduanya independen.
+
+00:09:34.280 --> 00:09:36.000
+Ketiga, tidak ada kunci akun penyimpanan.
+
+00:09:36.000 --> 00:09:38.960
+Ingat kunci yang sangat kuat yang memberikan akses ke segalanya itu,
+
+00:09:39.420 --> 00:09:39.800
+sudah hilang.
+
+00:09:40.460 --> 00:09:42.740
+Autentikasi berbasis identitas atau melalui aturan jaringan.
+
+00:09:43.280 --> 00:09:44.840
+Pengguna masuk dengan kredensial normal mereka.
+
+00:09:45.240 --> 00:09:46.720
+Tidak ada rahasia bersama untuk dikelola.
+
+00:09:46.860 --> 00:09:47.980
+Tidak ada kunci untuk dirotasi.
+
+00:09:48.120 --> 00:09:50.460
+Tidak ada risiko kunci bocor yang mengekspos semua berbagi berkas Anda.
+
+00:09:51.580 --> 00:09:52.740
+Keempat, penegang bersifat berbuka.
+
+00:09:53.420 --> 00:09:56.000
+Di manajemen biaya Azure, Anda melihat dengan tepat berapa biaya berkas.
+
+00:09:56.600 --> 00:09:58.760
+Jika Anda perlu menaiki kembali ke departemen, semuanya ada di sana.
+
+00:09:59.220 --> 00:10:01.420
+Tidak ada perhitungan manual, tidak ada spreci, tidak ada tebak-tebak.
+
+00:10:01.800 --> 00:10:03.740
+Kelima, kontrol plane memiliki kuotanya sendiri.
+
+00:10:03.740 --> 00:10:07.540
+Kontrol plane adalah lapisan yang menangani operasi seperti membuat berbagi,
+
+00:10:07.600 --> 00:10:09.140
+memodifikasinya, mengambil snapshot.
+
+00:10:09.920 --> 00:10:13.160
+Dalam mode lama, banyak administrator yang mengerjakan banyak berbagi berkas
+
+00:10:13.160 --> 00:10:15.500
+di dalam satu akun penyimpanan bisa mencapai batas manajemen.
+
+00:10:16.060 --> 00:10:18.560
+Sekarang, setiap berbagi memiliki kuota sendiri untuk operasi tersebut,
+
+00:10:18.680 --> 00:10:19.480
+jauh lebih sulit mengembali.
+
+00:10:19.940 --> 00:10:20.560
+Ada satu kendala.
+
+00:10:20.980 --> 00:10:25.300
+Pada ketersediaan umum, sumber daya baru ini saat ini terbatas pada tingkat SSD dan protokol NFS.
+
+00:10:25.700 --> 00:10:26.840
+Itu adalah kasus penggunaan khusus.
+
+00:10:27.160 --> 00:10:28.640
+Berbagi berkas Linux berkinerja tinggi,
+
+00:10:28.640 --> 00:10:30.840
+tetapi dukungan SMB dan tingkat HDD akan segera hadir.
+
+00:10:30.940 --> 00:10:32.740
+Microsoft telah memberikan kejelasan tentang patah jalan tersebut.
+
+00:10:33.740 --> 00:10:36.220
+Anda mengelola bakat besar dengan banyak share yang berbagi batas,
+
+00:10:36.300 --> 00:10:39.000
+aturan jaringan, kunci, dan tagihan yang sama.
+
+00:10:39.380 --> 00:10:41.740
+Sekarang, setiap share menjadi bakat kecilnya sendiri dengan kunci Linux.
+
+00:10:42.960 --> 00:10:45.280
+Jadi, kapan sebenarnya saat yang tepat untuk menggunakan Azure Files?
+
+00:10:45.860 --> 00:10:46.900
+Kapan menggunakan Azure Files?
+
+00:10:47.280 --> 00:10:48.580
+Jadi, kapan Azure Files benar masuk akal?
+
+00:10:49.080 --> 00:10:50.200
+Mari saya jelaskan skenario-skenario.
+
+00:10:50.640 --> 00:10:51.640
+Pertama adalah Live and Sit.
+
+00:10:51.960 --> 00:10:54.220
+Anda memiliki aplikasi lama yang bergantung berbagai berkas file share.
+
+00:10:54.480 --> 00:10:56.660
+Mungkin itu aplikasi bisnis warisan atau alat custom
+
+00:10:56.660 --> 00:10:58.080
+yang dibuat tim Anda bertahun-tahun lalu.
+
+00:10:58.900 --> 00:11:01.560
+Biasanya, memindahkannya ke cloud berarti menulis ulang kode,
+
+00:11:01.560 --> 00:11:04.240
+mengubah konfigurasi, dan memikirkan ulang akses data.
+
+00:11:04.980 --> 00:11:07.260
+Namun, dengan Azure Files, Anda tidak perlu mengubah satu baris kode.
+
+00:11:07.820 --> 00:11:09.180
+Aplikasi hanya melihat drive jaringan.
+
+00:11:09.560 --> 00:11:11.620
+Ia tidak peduli apakah drive itu ada di lemari kantor Anda
+
+00:11:11.620 --> 00:11:12.740
+atau di pusat data Microsoft.
+
+00:11:13.380 --> 00:11:14.500
+Protokol sama, perilaku sama.
+
+00:11:15.100 --> 00:11:15.560
+Itulah intinya.
+
+00:11:16.060 --> 00:11:17.380
+Kasus penggunaan besar lainnya adalah
+
+00:11:17.380 --> 00:11:19.640
+berbagi file konfigurasi, log, atau data
+
+00:11:19.640 --> 00:11:20.740
+di beberapa mesin virtual.
+
+00:11:21.140 --> 00:11:22.340
+Katakanlah Anda memiliki kluster server.
+
+00:11:22.680 --> 00:11:24.100
+Semuanya memerlukan konfigurasi yang sama.
+
+00:11:24.440 --> 00:11:25.820
+Alih-alih menyalin file ke setiap VM
+
+00:11:25.820 --> 00:11:27.220
+dan berharap semuanya tetap sinkron,
+
+00:11:27.440 --> 00:11:29.460
+Anda cukup mount satu Azure File Share di setiap server.
+
+00:11:29.460 --> 00:11:31.560
+Umbah satu file, setiap server akan langsung melihat.
+
+00:11:31.920 --> 00:11:33.560
+Tidak perlu lagi pusing dengan versi yang tidak cocok.
+
+00:11:33.860 --> 00:11:35.240
+Tim pengembangan dan pengujian juga menyukai.
+
+00:11:35.820 --> 00:11:37.360
+Anda bisa membuat file share dalam hitungan menit,
+
+00:11:37.440 --> 00:11:38.380
+menggunakannya selama seminggu,
+
+00:11:38.560 --> 00:11:39.340
+lalu menghapusnya setelah.
+
+00:11:40.020 --> 00:11:41.280
+Tidak perlu membeli perangkat keras,
+
+00:11:41.380 --> 00:11:42.220
+tidak perlu menangkirkan server.
+
+00:11:42.760 --> 00:11:44.740
+Bagi siapapun yang butuh penyimpanan bersama sementara,
+
+00:11:44.840 --> 00:11:45.720
+ini sangat menghemat waktu.
+
+00:11:46.380 --> 00:11:47.580
+Lalu ada skenario hybrid cloud.
+
+00:11:48.240 --> 00:11:50.380
+Azure File Sync memungkinkan Anda menyimpan catch file
+
+00:11:50.380 --> 00:11:52.080
+di server lokal sembari menjaga Azure File
+
+00:11:52.080 --> 00:11:52.860
+sebagai sumber utama.
+
+00:11:53.480 --> 00:11:55.380
+Pengguna di lokasi Anda mendapatkan performa lokal
+
+00:11:55.380 --> 00:11:56.560
+untuk file yang paling sering diakses.
+
+00:11:57.160 --> 00:11:59.580
+Sementara itu, salinan di cloud akan terus diperbarui secara otomatis.
+
+00:11:59.840 --> 00:12:01.880
+Antara cabang menyukai ini, tim jarak jauh pun menyukai.
+
+00:12:02.080 --> 00:12:04.060
+Ini memberikan yang terbaik dari kedua dunia tanpa buat pusing.
+
+00:12:04.440 --> 00:12:06.220
+Namun Azure File bukan jawaban untuk segalanya.
+
+00:12:06.780 --> 00:12:08.240
+Jangan gunakan untuk database begini setinggi.
+
+00:12:08.680 --> 00:12:10.280
+Jika Anda butuh kecepatan level database,
+
+00:12:10.380 --> 00:12:11.600
+gunakan Azure SQL atau Managed.
+
+00:12:11.940 --> 00:12:14.140
+Azure File adalah berbagi perkas, bukan mesin database.
+
+00:12:15.040 --> 00:12:16.420
+Ia dioptimalkan untuk pola akses file,
+
+00:12:16.520 --> 00:12:17.600
+bukan beban kerja transaksional.
+
+00:12:18.160 --> 00:12:19.860
+Keduanya adalah alat berbeda untuk pekerjaan yang berbeda.
+
+00:12:19.860 --> 00:12:22.060
+Jangan gunakan jika SharePoint atau Microsoft Teams
+
+00:12:22.060 --> 00:12:23.260
+sudah memenuhi kebutuhan tersebut.
+
+00:12:23.600 --> 00:12:25.920
+Jika Anda berbagi dokumen yang diedit bersama secara real-time,
+
+00:12:26.000 --> 00:12:27.240
+SharePoint adalah pilihan yang lebih tepat.
+
+00:12:27.700 --> 00:12:29.680
+Anda mendapatkan riwayat versi, co-authoring,
+
+00:12:30.000 --> 00:12:32.620
+dan integrasi mendalam dengan Microsoft 365 lain.
+
+00:12:33.460 --> 00:12:34.760
+Azure File ditujukan untuk skenario
+
+00:12:34.760 --> 00:12:36.180
+di mana SharePoint kurang tepat digunakan.
+
+00:12:36.700 --> 00:12:38.360
+Dan jangan gunakan ini untuk aplikasi
+
+00:12:38.360 --> 00:12:39.980
+yang memerlukan fitur sistem file khusus,
+
+00:12:40.120 --> 00:12:42.400
+beritautan simbolik, tautan keras, atau atribut tambahan.
+
+00:12:43.240 --> 00:12:45.660
+Azure File menangani perilaku sistem file standar dengan baik,
+
+00:12:45.760 --> 00:12:47.500
+tetapi tidak mendukung setiap kasus khusus.
+
+00:12:48.140 --> 00:12:49.440
+Pahami kebutuhan Anda sebelum memutuskan.
+
+00:12:49.860 --> 00:12:51.040
+Disinkan saya memberikan contoh dunia nyata.
+
+00:12:51.400 --> 00:12:53.680
+Sebuah perusahaan konstruksi memiliki kantor lapangan di tiga kota.
+
+00:12:54.300 --> 00:12:56.500
+Setiap kantor membutuhkan akses ke kumpulan cetak biru,
+
+00:12:56.640 --> 00:12:58.200
+kontrak, dan laporan inspeksi yang sama.
+
+00:12:58.940 --> 00:13:01.380
+Dalam pengaturan lama, mereka memiliki server di kantor pusat
+
+00:13:01.380 --> 00:13:03.700
+dan pekerja jarak jauh terhubung melalui VPN yang lambat.
+
+00:13:04.260 --> 00:13:05.880
+Membuka cetak biru bisa memakan waktu berminat.
+
+00:13:06.200 --> 00:13:08.240
+Dengan Azure File, mereka membuat satu share di cloud.
+
+00:13:08.760 --> 00:13:10.740
+Setiap kantor masang, cetak biru terlalu menunggu detik.
+
+00:13:11.180 --> 00:13:12.360
+Kontrak selalu dalam versi terbaru.
+
+00:13:12.880 --> 00:13:14.760
+Tidak perlu VPN, tidak perlu melihara server.
+
+00:13:15.220 --> 00:13:16.020
+Semuanya langsung berjalan.
+
+00:13:16.020 --> 00:13:19.480
+Namun kinerja dan keamanan juga penting, jadi mari kita bahas hal tersebut.
+
+00:13:20.560 --> 00:13:22.920
+Kinerja, keamanan, dan biaya secara sekilas.
+
+00:13:23.500 --> 00:13:24.200
+Mari kita mulai kinerja.
+
+00:13:25.140 --> 00:13:26.360
+Jika Anda membutuhkan kecepatan,
+
+00:13:26.460 --> 00:13:29.320
+tingkat premium berjalan pada SSD dan memberikan latensi di bawah 1 mili detik.
+
+00:13:29.840 --> 00:13:34.020
+Kita berbicara hingga 122.400 IOPES per share dengan model V2 yang disediakan.
+
+00:13:34.560 --> 00:13:36.200
+Itu adalah throughput yang serius untuk beban kerja.
+
+00:13:36.600 --> 00:13:38.340
+Tingkat standar menggunakan hard drive biasa.
+
+00:13:38.980 --> 00:13:40.140
+Lebih lambat tetapi jauh lebih mudah.
+
+00:13:40.140 --> 00:13:44.020
+Sempurna untuk penyimpan RSHIP atau berbagi file umum di mana kecepatan tidak terlalu kritis.
+
+00:13:44.880 --> 00:13:47.480
+Microsoft baru saja menambahkan cacing metadata untuk share SSD.
+
+00:13:48.200 --> 00:13:52.220
+Ini memangkas latensi hingga 55% saat Anda mencantumkan directory atau melusuri folder.
+
+00:13:52.880 --> 00:13:56.360
+Jika alur kerja Anda melibatkan banyak file kecil dan navigasi folder yang sering,
+
+00:13:56.480 --> 00:13:58.040
+ini memberikan perbedaan yang nyata.
+
+00:13:58.720 --> 00:13:59.320
+Aram keamanan.
+
+00:13:59.320 --> 00:14:02.320
+Azure Files memiliki enkripsi saat istirahatnya yang diaktifkan secara default.
+
+00:14:02.600 --> 00:14:04.880
+Setiap byte yang Anda tulis akan dienkripsi sebelum mencapai disk.
+
+00:14:05.200 --> 00:14:06.420
+Anda tidak perlu menonfigurasi apapun.
+
+00:14:06.680 --> 00:14:10.880
+Beraktif, enkripsi saat transit juga aktif secara default untuk SMB 3.0 ke atas.
+
+00:14:11.240 --> 00:14:14.280
+Data Anda tetap terenkripsi saat berpindah antara komputer Anda dan komputer.
+
+00:14:14.380 --> 00:14:15.680
+Tidak ada seorang pun di jaringin dapat membaca.
+
+00:14:15.920 --> 00:14:19.560
+Microsoft merekomendasikan penggunaan akses berbasis identitas alih-alih kunci akun penyimpanan.
+
+00:14:19.940 --> 00:14:22.280
+Itu berarti pengguna Anda masuk dengan kredensial kerja normal mereka,
+
+00:14:22.580 --> 00:14:24.420
+yang sama dengan yang mereka gunakan untuk email dan text.
+
+00:14:24.420 --> 00:14:27.020
+Tidak ada kunci bersama untuk dikelola, tidak ada siku kunci bocok.
+
+00:14:27.260 --> 00:14:28.720
+Untuk isolasi jaringan, Anda memiliki beberapa.
+
+00:14:29.180 --> 00:14:33.300
+Private Endpoint memberikan share file Anda alamat IP pribadi di dalam jaringan virtual Anda sendiri.
+
+00:14:33.600 --> 00:14:36.060
+Service Endpoint menjaga lalu lintas tetap berada di jaringan tulang pengguna.
+
+00:14:36.600 --> 00:14:39.560
+Aturan firewall memungkinkan Anda membatasi akses ke rentang IP tertentu.
+
+00:14:40.300 --> 00:14:43.140
+Anda dapat melapisinya sesuai keinginan dan ada Microsoft Defender untuk storage.
+
+00:14:43.880 --> 00:14:45.940
+Layanan ini memantau share file Anda untuk aktivitas mencurigakan.
+
+00:14:46.420 --> 00:14:49.280
+Jika seseorang mengunggah malware melalui REST API, Defender dapat mendeteksinya.
+
+00:14:49.920 --> 00:14:52.440
+Ini adalah lapisan pelindungan tambahan untuk lingkungan yang sensitif.
+
+00:14:52.440 --> 00:14:55.600
+Dari segi biaya, tingkat premium menggunakan harga yang dipesan.
+
+00:14:56.020 --> 00:15:00.420
+Anda memesan jumlah kapasitas, IOPS, dan topu tertentu, dan membayar apa yang Anda pesan.
+
+00:15:00.780 --> 00:15:04.280
+Setelah menggunakan sit-membayar, Anda hanya membayar penyimpanan yang benar-benar Anda gunakan.
+
+00:15:04.700 --> 00:15:08.920
+Jika beban kerja Anda dapat diprediksi, reservasi Azure Files dapat menghemat hingga 36%.
+
+00:15:08.920 --> 00:15:12.320
+Berkomitmenlah selama satu atau tiga tahun dan Microsoft akan berdekat.
+
+00:15:12.660 --> 00:15:14.380
+Tidak dampak pada performa, hanya tagian yang lebih.
+
+00:15:14.980 --> 00:15:18.620
+Satu tips praktis, simpan komputasi dan penyimpanan Anda di wilayah Azure yang sama.
+
+00:15:18.620 --> 00:15:20.980
+Biaya transfer data lintas wilayah akan membengkak dengan cepat.
+
+00:15:20.980 --> 00:15:24.740
+Tempatkan VM dan berbagi file Anda bersamaan dan Anda terhindar dari biaya keluar tersebut semenu.
+
+00:15:25.040 --> 00:15:26.940
+Informasi yang sangat banyak, izinkan saya menyimpulkan.
+
+00:15:27.640 --> 00:15:28.880
+Gambaran besarnya mengapa ini penting.
+
+00:15:29.440 --> 00:15:30.340
+Inilah gagasan utamanya.
+
+00:15:30.880 --> 00:15:35.680
+Model akun penyimpanan lama mengharuskan Anda mengelola kerumitan itu meski Anda hanya butuh berbagi file sederhana.
+
+00:15:36.440 --> 00:15:41.780
+Anda perlu memahami akun penyimpanan, batas berbagi, aturan jaringan untuk semuanya, dan tagihan yang digabungkan.
+
+00:15:42.220 --> 00:15:44.420
+Itu seperti menyewa seluruh gedung hanya untuk menggunakan satu ruang.
+
+00:15:44.420 --> 00:15:46.520
+Sumber daya fasas yang baru memperbaiki hal tersebut.
+
+00:15:46.760 --> 00:15:47.360
+Karena Anda menyewa.

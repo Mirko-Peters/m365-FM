@@ -1,0 +1,910 @@
+WEBVTT
+
+00:00:00.060 --> 00:00:02.320
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget.
+
+00:00:02.460 --> 00:00:04.360
+Nazywam się Mirko Peters i będę Waszym gospodarzem.
+
+00:00:04.500 --> 00:00:07.040
+Tematem dzisiejszego odcinka jest coś, o czym prawie każdy słyszał,
+
+00:00:07.120 --> 00:00:08.300
+ale niewielu naprawdę rozumie API.
+
+00:00:08.600 --> 00:00:10.740
+Prawdopodobnie słyszeliście to określenie wielokrotnie.
+
+00:00:10.900 --> 00:00:12.860
+To jedno z tych technicznych słów, których ludzie używają,
+
+00:00:12.960 --> 00:00:14.660
+gdy chcą brzmieć, jakby wiedzieli, o czym mówią.
+
+00:00:14.860 --> 00:00:17.340
+Ale prawda jest taka, że API są w rzeczywistości proste.
+
+00:00:17.420 --> 00:00:20.100
+To po prostu sposób na komunikację między jednym a drugim programem.
+
+00:00:20.260 --> 00:00:21.740
+Twój telefon prosi serwer o dane.
+
+00:00:22.000 --> 00:00:22.900
+Serwer je odsyła.
+
+00:00:23.040 --> 00:00:24.160
+To właśnie wywołanie API.
+
+00:00:24.400 --> 00:00:26.940
+Wyobraź sobie teraz, że masz 20 API, 50 albo 100.
+
+00:00:26.940 --> 00:00:29.800
+Każde może używać innej autoryzacji, innych limitów szybkości,
+
+00:00:29.920 --> 00:00:31.740
+innej dokumentacji, jeśli w ogóle ją posiada.
+
+00:00:31.980 --> 00:00:34.880
+Nagle to, co zaczęło się jako prosta rozmowa między dwiema aplikacjami,
+
+00:00:35.020 --> 00:00:36.180
+zamienia się w kompletny chaos.
+
+00:00:36.420 --> 00:00:39.200
+Bez centralnego menedżera każdy zespół wyważa otwarte drzwi.
+
+00:00:39.440 --> 00:00:41.380
+Jeden zespół buduje własny system autoryzacji,
+
+00:00:41.540 --> 00:00:42.740
+inny tworzy własne logowanie.
+
+00:00:42.980 --> 00:00:44.860
+Luki w zabezpieczeniach pojawiają się wszędzie.
+
+00:00:45.080 --> 00:00:47.080
+Programiści gubią się w tym, co robi dane API,
+
+00:00:47.220 --> 00:00:50.220
+a Ty nie masz jednolitego wglądu w to, co dzieje się w całym systemie.
+
+00:00:50.380 --> 00:00:52.440
+Azure API Management rozwiązuje ten problem.
+
+00:00:52.720 --> 00:00:54.320
+Daje Ci jedno centrum sterowania.
+
+00:00:54.320 --> 00:00:57.440
+Pomyśl o tym, jak owierzy kontroli lotów dla Twoich API.
+
+00:00:57.660 --> 00:01:00.560
+Pod koniec tego odcinka zrozumiesz, czym to faktycznie jest,
+
+00:01:00.720 --> 00:01:03.380
+dlaczego jest ważne i jak to wszystko do siebie pasuje.
+
+00:01:03.620 --> 00:01:05.580
+Chwyć kawę i przejdźmy do konkretów.
+
+00:01:06.000 --> 00:01:08.080
+Problem za dużo API, brak kontroli.
+
+00:01:08.300 --> 00:01:10.480
+Oto rzeczywistość nowoczesnego oprogramowania.
+
+00:01:10.760 --> 00:01:14.020
+10 lat temu prawdopodobnie miałeś jedną dużą aplikację, monolit,
+
+00:01:14.160 --> 00:01:16.140
+jedną bazę danych, jedno API, proste.
+
+00:01:16.560 --> 00:01:19.840
+Dziś ta sama aplikacja może być podzielona na dziesiątki mikrousług.
+
+00:01:19.840 --> 00:01:24.300
+Każda usługa obsługuje jedną rzecz, konta użytkowników, płatności, zapasy, powiadomienia
+
+00:01:24.300 --> 00:01:25.700
+i każda wystawia własne API.
+
+00:01:25.940 --> 00:01:29.160
+Nagle masz 10, 50, 100 różnych punktów wejścia do swojego systemu.
+
+00:01:29.320 --> 00:01:32.640
+Wyobraź sobie teraz, że jesteś programistą próbującym zbudować coś, co korzysta z tych API.
+
+00:01:32.880 --> 00:01:35.740
+Musisz znaleźć każde z nich i zrozumieć sposób autoryzacji dla każdego z osobna.
+
+00:01:35.920 --> 00:01:38.840
+Niektóre używają kluczy API, inne OAuth, a jeszcze inne nie używają niczego.
+
+00:01:39.080 --> 00:01:41.820
+Musisz ręcznie zarządzać limitami zapytań, inaczej ryzykujesz zablokowanie.
+
+00:01:42.080 --> 00:01:44.480
+Musisz zrozumieć format danych, którego oczekuje każde z nich.
+
+00:01:44.480 --> 00:01:47.780
+To wyczerpujące, a z perspektywy operacyjnej jest jeszcze gorzej.
+
+00:01:47.960 --> 00:01:51.600
+Bez centralnej bramy każdy zespół musi ręcznie dodawać zabezpieczenia i logowanie do swojej usługi.
+
+00:01:51.800 --> 00:01:54.260
+Niektóre zespoły robią to dobrze, inne zapominają o logowaniu błędów.
+
+00:01:54.400 --> 00:01:56.340
+Niektóre w ogóle nie sprawdzają poprawności danych wejściowych.
+
+00:01:56.520 --> 00:01:59.480
+Niespójne i podatne na błędy koszmar bezpieczeństwa, który tylko czeka, by się wydarzyć.
+
+00:01:59.660 --> 00:02:01.540
+Zgodność z przepisami staje się niemal niemożliwa.
+
+00:02:01.740 --> 00:02:03.820
+Musisz udowodnić, kto uzyskał dostęp do czego i kiedy.
+
+00:02:04.000 --> 00:02:07.700
+Powodzenia w wyciąganiu ścieżek audytu z 20 różnych usług, z których każda ma własny format logowania.
+
+00:02:07.700 --> 00:02:10.980
+Musisz sprawdzić, ile wywołań API obsłużył twój system w zeszłym miesiącu.
+
+00:02:11.160 --> 00:02:14.020
+Łączysz wskaźniki z kilkunastu różnych pulpitów nawigacyjnych.
+
+00:02:14.160 --> 00:02:14.880
+Oto w czym rzecz.
+
+00:02:15.060 --> 00:02:16.780
+W miarę skalowania to nie tylko boli.
+
+00:02:16.900 --> 00:02:17.820
+To po prostu nie działa.
+
+00:02:18.040 --> 00:02:21.240
+Nie możesz dodawać więcej programistów, usług i klientów bez centralnego punktu kontroli.
+
+00:02:21.380 --> 00:02:22.600
+Pomyśl o tym jak o budynku.
+
+00:02:22.820 --> 00:02:24.880
+Wyobraź sobie, że każde pomieszczenie ma inny zamek.
+
+00:02:25.020 --> 00:02:26.700
+Nie ma recepcji ani spisu pomieszczeń.
+
+00:02:26.880 --> 00:02:31.040
+Goście błąkają się, próbując znaleźć właściwe drzwi, frustrują się i ostatecznie rezygnują.
+
+00:02:31.300 --> 00:02:32.180
+Totalny chaos.
+
+00:02:32.380 --> 00:02:34.920
+To problem, który ma rozwiązywać zarządzanie API.
+
+00:02:34.920 --> 00:02:36.840
+Czym jest Azure API Management?
+
+00:02:37.200 --> 00:02:38.100
+Wieża kontrolna.
+
+00:02:38.260 --> 00:02:40.280
+Czym dokładnie jest Azure API Management?
+
+00:02:40.600 --> 00:02:41.980
+Oto najprostsza definicja.
+
+00:02:42.160 --> 00:02:48.120
+To usługa zarządzana, która znajduje się między twoimi API zaplecza, a aplikacjami, stronami, urządzeniami i partnerami, którzy z nich korzystają.
+
+00:02:48.300 --> 00:02:50.160
+Ale pamiętaj, to nie jest tylko proxy.
+
+00:02:50.360 --> 00:02:52.260
+Proxy jedynie przekazuje ruch i to wszystko.
+
+00:02:52.520 --> 00:02:55.240
+Azure API Management obejmuje pełny cykl życia twoich API.
+
+00:02:55.400 --> 00:02:58.280
+Publikuj, zabezpieczaj, monitoruj i ostatecznie wycofuj je z użycia.
+
+00:02:58.440 --> 00:02:59.760
+To kompletne centrum sterowania.
+
+00:03:00.000 --> 00:03:01.600
+Podzielmy to na trzy główne komponenty.
+
+00:03:01.800 --> 00:03:03.080
+Pierwszym jest brama, gateway.
+
+00:03:03.080 --> 00:03:04.200
+To główne wejście.
+
+00:03:04.200 --> 00:03:08.420
+Każde przychodzące żądanie z aplikacji lub strony trafia najpierw do bramy, nigdy bezpośrednio do zaplecza.
+
+00:03:08.620 --> 00:03:14.080
+Brama przetwarza żądanie, wymusza skonfigurowane zasady, zbiera metryki, a następnie przekazuje je do odpowiedniej usługi zaplecza.
+
+00:03:14.240 --> 00:03:16.380
+Pomyśl o tym jak o policjancie kierującym ruchem.
+
+00:03:16.580 --> 00:03:18.300
+Następny jest płaszczyzna zarządzania.
+
+00:03:18.460 --> 00:03:19.880
+To tutaj definiujesz wszystko.
+
+00:03:20.180 --> 00:03:22.700
+Swoje API, zasady, produkty, subskrypcje.
+
+00:03:22.960 --> 00:03:27.860
+Robisz to przez portal Azure, wiersz poleceń lub infrastrukturę jako kod, taką jak Bicep czy Terraform.
+
+00:03:28.040 --> 00:03:30.860
+To sterownia, w której konfigurujesz działanie całego systemu.
+
+00:03:30.860 --> 00:03:32.360
+I na koniec portal programisty.
+
+00:03:32.580 --> 00:03:41.120
+To samoobsługowa strona, na której programiści, zarówno wewnętrzni, jak i zewnętrzni, mogą odkrywać Twoje API, czytać dokumentację, pobierać klucze subskrypcji, a nawet testować wywołania API bezpośrednio w przeglądarce.
+
+00:03:41.240 --> 00:03:43.460
+Koniec z przesyłaniem plików PDF-T i z powrotem.
+
+00:03:43.580 --> 00:03:44.680
+Oto pomocna analogia.
+
+00:03:44.860 --> 00:03:46.200
+Pomyśl o nowoczesnym lotnisku.
+
+00:03:46.420 --> 00:03:47.480
+Brama to pas startowy.
+
+00:03:47.680 --> 00:03:49.460
+Każdy samolot ląduje tam w pierwszej kolejności.
+
+00:03:49.460 --> 00:03:51.620
+Płaszczyzna zarządzania to wieża kontroli lotów.
+
+00:03:51.740 --> 00:03:54.160
+Kieruje ruchem, ustala zasady i monitoruje wszystko.
+
+00:03:54.380 --> 00:03:56.520
+A portal programisty to tablica informacyjna.
+
+00:03:56.660 --> 00:04:00.740
+Piloci sprawdzają ją przed lotem i znajdują wszystkie potrzebne informacje bez rozmawiania z nikim.
+
+00:04:00.900 --> 00:04:02.540
+Teraz przyjrzyjmy się bliżej bramie.
+
+00:04:02.680 --> 00:04:06.460
+To część, z którą komunikują się Twoje aplikacje i gdzie dzieje się prawdziwa magia.
+
+00:04:06.680 --> 00:04:08.660
+Brama, czyli frontowe drzwi Twojego API.
+
+00:04:08.900 --> 00:04:13.080
+Porozmawiajmy o bramie, ponieważ to właśnie ta część, z którą Twoje aplikacje faktycznie się komunikują.
+
+00:04:13.080 --> 00:04:18.500
+Każde żądanie z aplikacji mobilnej, strony W czy urządzenia I od trafia najpierw do bramy, nigdy bezpośrednio do back-endu.
+
+00:04:18.620 --> 00:04:19.460
+O to właśnie chodzi.
+
+00:04:19.720 --> 00:04:22.540
+Brama znajduje się z przodu i działa jako pojedynczy punkt wejścia.
+
+00:04:22.760 --> 00:04:25.460
+Brama może stosować polityki przed przekazaniem żądania dalej.
+
+00:04:25.660 --> 00:04:32.120
+Polityki to reguły zapisane w XML lub JSON, takie jak limitowanie zapytań, filtrowanie IP, nadpisywanie nagłówków czy weryfikacja uwierzytelnienia.
+
+00:04:32.340 --> 00:04:34.840
+Wszystko to bez zmiany choćby jednej linii kodu back-endu.
+
+00:04:34.980 --> 00:04:36.060
+Oto konkretny przykład.
+
+00:04:36.320 --> 00:04:39.100
+Załóżmy, że masz darmowy i płatny poziom dostępu do swojego API.
+
+00:04:39.100 --> 00:04:43.580
+Dzięki polityce możesz ograniczyć darmowym użytkownikom liczbę żądań do 5 na minutę, a płatnym do 100.
+
+00:04:43.760 --> 00:04:45.520
+Twój back-end nawet nie dostrzega różnicy.
+
+00:04:45.720 --> 00:04:46.980
+Po prostu przetwarza żądania.
+
+00:04:47.220 --> 00:04:48.800
+Brama zajmuje się egzekwowaniem zasad.
+
+00:04:49.040 --> 00:04:50.660
+Brama obsługuje również buforowanie.
+
+00:04:50.920 --> 00:04:54.820
+Jeśli dane są żądane wielokrotnie, jak na przykład lista produktów, która rzadko się zmienia,
+
+00:04:54.940 --> 00:04:57.700
+brama może zapisać odpowiedź w cash i serwować ją bezpośrednio.
+
+00:04:57.920 --> 00:05:02.260
+Nie trzeba w ogóle angażować back-endu, co oznacza szybsze odpowiedzi i mniejsze obciążenie serwerów.
+
+00:05:02.460 --> 00:05:03.880
+Może również przekształcać dane.
+
+00:05:04.100 --> 00:05:07.320
+Twój back-end może zwracać XML, ale aplikacja mobilna oczekuje JSON.
+
+00:05:07.320 --> 00:05:09.580
+Brama potrafi skonwertować je w locie.
+
+00:05:09.780 --> 00:05:12.400
+Twój back-end nie musi się zmieniać, aplikacja również nie.
+
+00:05:12.640 --> 00:05:14.460
+Brama zajmuje się tłumaczeniem formatu.
+
+00:05:14.660 --> 00:05:18.120
+Rejestruje także każde wywołanie, każde żądanie, każdą odpowiedź i każdy błąd.
+
+00:05:18.220 --> 00:05:21.240
+Otrzymujesz pełny dziennik audytu, kto, co wywołał, kiedy i co się wydarzyło.
+
+00:05:21.460 --> 00:05:24.620
+Samo to jest wystarczającym powodem, by stosować bramę dla zapewnienia zgodności z wymogami.
+
+00:05:24.840 --> 00:05:27.940
+Jeśli masz globalnych odbiorców, możesz wdrożyć bramę w wielu regionach.
+
+00:05:28.100 --> 00:05:32.900
+Ruch jest automatycznie kierowany do najbliższego punktu, co zapewnia niższe opóźnienia i lepsze doświadczenie.
+
+00:05:32.900 --> 00:05:36.020
+Jeszcze jedno, brama ukrywa prawdziwy adres URL twojego back-endu.
+
+00:05:36.180 --> 00:05:37.720
+Klienci widzą tylko adres bramy.
+
+00:05:37.920 --> 00:05:40.260
+Twoje serwery back-endowe pozostają ukryte przed internetem.
+
+00:05:40.360 --> 00:05:42.640
+To ogromna korzyść dla bezpieczeństwa już na starcie.
+
+00:05:42.860 --> 00:05:45.060
+Polityki to silnik, który kontroluje wszystko.
+
+00:05:45.280 --> 00:05:47.300
+Co więc z tymi politykami, o których wspomniałem?
+
+00:05:47.480 --> 00:05:50.080
+To one sprawiają, że API M jest naprawdę potężny.
+
+00:05:50.280 --> 00:05:54.160
+Polityka modyfikuje zachowanie żądania lub odpowiedzi bez ingerencji w kod back-endu.
+
+00:05:54.300 --> 00:05:56.380
+Potraktuj to jak otoczkę wokół swojego API.
+
+00:05:56.680 --> 00:06:00.780
+Gdy ruch przepływa przez bramę, może ona automatycznie dodawać, usuwać lub zmieniać elementy.
+
+00:06:00.780 --> 00:06:03.840
+Polityki mogą działać w czterech punktach cyklu życia żądania.
+
+00:06:04.040 --> 00:06:07.260
+Inbound – przychodzące, zanim żądanie dotrze do twojego back-endu.
+
+00:06:07.420 --> 00:06:10.320
+Outbound – wychodzące, zanim odpowiedź dotrze do klienta.
+
+00:06:10.520 --> 00:06:13.220
+Back-end – tuż przed tym, jak żądanie trafi do twojej usługi.
+
+00:06:13.420 --> 00:06:15.340
+Oraz przy błędzie, gdy coś pójdzie nie tak.
+
+00:06:15.480 --> 00:06:18.980
+Typowe operacje przychodzące obejmują walidację tokenów JWT w celu sprawdzenia tożsamości,
+
+00:06:19.100 --> 00:06:22.840
+weryfikację kluczy API, nadpisywanie adresów URL oraz ograniczenie dostępu według adresu IP.
+
+00:06:23.100 --> 00:06:25.820
+Wszystko to dzieje się, zanim twój back-end otrzyma choćby jedno żądanie.
+
+00:06:25.820 --> 00:06:31.840
+W przypadku ruchu wychodzącego możesz przekształcać treść odpowiedzi, wyszukiwać i zamieniać tekst, usuwać poufne pola, zmieniać formaty.
+
+00:06:32.020 --> 00:06:35.320
+Możesz buforować odpowiedzi, aby powtarzające się żądania nie obciążały twojego back-endu.
+
+00:06:35.520 --> 00:06:38.260
+Możesz nawet usuwać nagłówki, które ujawniają informacje wewnętrzne.
+
+00:06:38.420 --> 00:06:39.420
+Oto konkretny przykład.
+
+00:06:39.680 --> 00:06:43.260
+Załóżmy, że twoje API zwraca opisy produktów, w których wszędzie widnieje słowo niebieski.
+
+00:06:43.460 --> 00:06:45.620
+Chcesz zmienić branding i używać słowa żółty.
+
+00:06:45.860 --> 00:06:49.440
+Zamiast zmieniać kod back-endu, dodajesz jedną zasadę dla ruchu wychodzącego.
+
+00:06:49.660 --> 00:06:51.720
+Znajdź niebieski, zamień na żółty.
+
+00:06:51.880 --> 00:06:52.440
+I gotowe.
+
+00:06:52.440 --> 00:06:54.260
+Twój back-end pozostaje bez zmian.
+
+00:06:54.480 --> 00:06:57.480
+Zasady limitowania szybkości i kwot chronią twój back-end przed nadużyciami.
+
+00:06:57.720 --> 00:07:03.000
+Jeśli czyjaś aplikacja zacznie wysyłać 10 tysięcy zapytań na sekundę, zasada wkroczy do akcji i powie, zwolnij.
+
+00:07:03.140 --> 00:07:04.760
+Twój back-end pozostaje stabilny.
+
+00:07:04.940 --> 00:07:06.380
+Potrzebujesz zaawansowanej logiki?
+
+00:07:06.600 --> 00:07:08.700
+Wewnątrz zasad możesz pisać własne wyrażenia w C-kratka.
+
+00:07:08.940 --> 00:07:12.440
+Są one kompilowane dla zapewnienia wydajności, więc nie ma narzutu w czasie wykonywania.
+
+00:07:12.700 --> 00:07:17.840
+Możesz sprawdzać rolę użytkowników, obliczać dynamiczne limity lub warunkowo przekształcać odpowiedzi na podstawie nagłówków.
+
+00:07:17.840 --> 00:07:23.820
+Kluczowy wniosek jest taki. Zasady pozwalają kontrolować zachowanie API bez dotykania kodu, który je obsługuje.
+
+00:07:24.020 --> 00:07:27.220
+Oznacza to szybsze zmiany, mniej wdrożeń i mniejsze ryzyko.
+
+00:07:27.580 --> 00:07:30.780
+Produkty i subskrypcje, czyli pakowanie API dla odbiorców.
+
+00:07:30.980 --> 00:07:35.140
+Twoje API są zdefiniowane, zasady ustalone, a bramka działa bez zarzutu.
+
+00:07:35.280 --> 00:07:38.220
+Ale jak dać różnym klientom dostęp do różnych zasobów?
+
+00:07:38.440 --> 00:07:40.700
+Właśnie do tego służą produkty i subskrypcje.
+
+00:07:40.700 --> 00:07:43.920
+W API i M grupujesz API w coś, co nazywamy produktem.
+
+00:07:44.080 --> 00:07:45.540
+Pomyśl o tym jak o pakiecie.
+
+00:07:45.820 --> 00:07:48.860
+Możesz mieć darmowy produkt zawierający tylko podstawowe API.
+
+00:07:49.160 --> 00:07:55.620
+Może to być dostęp tylko do odczytu, a potem produkt premium ze wszystkim, w tym operacjami zapisu i punktami końcowymi dla administratorów.
+
+00:07:55.860 --> 00:07:58.880
+Deweloperzy nie subskrybują pojedynczych API, subskrybują produkt.
+
+00:07:59.140 --> 00:08:01.700
+Gdy dokonają subskrypcji, otrzymują klucz subskrypcyjny.
+
+00:08:01.880 --> 00:08:04.700
+Właściwie dwa klucze, dzięki czemu możesz zmieniać jeden bez przestojów.
+
+00:08:04.820 --> 00:08:07.600
+Ten klucz to ich przepustka do używania każdego API w ramach produktu.
+
+00:08:07.600 --> 00:08:09.580
+Ty kontrolujesz, jak działają subskrypcje.
+
+00:08:09.740 --> 00:08:11.380
+Produkty mogą wymagać zatwierdzenia.
+
+00:08:11.620 --> 00:08:15.000
+Możesz ręcznie akceptować każdego subskrybenta lub udostępnić je w trybie samoobsługowym.
+
+00:08:15.160 --> 00:08:17.380
+Każdy może się zapisać i uzyskać natychmiastowy dostęp.
+
+00:08:17.680 --> 00:08:20.940
+Możesz również dołączyć regulamin, który użytkownicy muszą zaakceptować przed subskrypcją.
+
+00:08:21.160 --> 00:08:23.520
+Jest to ważne, jeśli Twoje API obsługują poufne dane.
+
+00:08:23.740 --> 00:08:25.160
+W ten sposób zarabiasz na API.
+
+00:08:25.400 --> 00:08:27.980
+Darmowy produkt z niskim limitem 5 wywołań na minutę.
+
+00:08:28.120 --> 00:08:32.880
+Płatny produkt z wyższymi limitami lub większą liczbą punktów końcowych 100 wywołań na minutę oraz dostępem do funkcji premium.
+
+00:08:32.880 --> 00:08:34.640
+Twój backend nawet tego nie zauważy.
+
+00:08:34.840 --> 00:08:37.860
+Brama wymusza limity w oparciu o to, do którego produktu zapisał się użytkownik.
+
+00:08:38.020 --> 00:08:38.960
+Oto prawdziwy przykład.
+
+00:08:39.200 --> 00:08:41.300
+Wyobraź sobie, że tworzysz aplikację konferencyjną.
+
+00:08:41.480 --> 00:08:45.700
+Tworzysz produkt dla uczestników z interfejsami API do harmonogramu sesji, biogramów, prelegentów i mapy obiektu.
+
+00:08:45.840 --> 00:08:49.060
+Następnie produkt dla sponsorów, który zawiera również interfejsy API do generowania leadów.
+
+00:08:49.240 --> 00:08:52.160
+Sponsorzy mogą skanować identyfikatory uczestników i uzyskiwać dane kontaktowe.
+
+00:08:52.320 --> 00:08:54.800
+Ten sam backend, różne produkty, różne poziomy dostępu.
+
+00:08:54.900 --> 00:08:57.720
+Te dwa klucze subskrypcji są zaprojektowane z myślą o rotacji.
+
+00:08:57.720 --> 00:09:00.280
+Jeśli klucz zostanie przejęty, generujesz nowy.
+
+00:09:00.440 --> 00:09:03.380
+Drugi klucz pozwala na przełączenie bez przerywania działania usługi.
+
+00:09:03.600 --> 00:09:06.780
+Generujesz nowy klucz, aktualizujesz aplikację, odwołujesz stary.
+
+00:09:06.960 --> 00:09:07.440
+Płynnie.
+
+00:09:07.640 --> 00:09:08.660
+Portal dla programistów.
+
+00:09:08.840 --> 00:09:10.400
+Samoobsługa dla konsumentów API.
+
+00:09:10.860 --> 00:09:12.440
+Skonfigurowałeś już swoje produkty API.
+
+00:09:12.660 --> 00:09:14.280
+Teraz programiści muszą je znaleźć.
+
+00:09:14.380 --> 00:09:15.940
+To zadanie portalu dla programistów.
+
+00:09:16.100 --> 00:09:19.160
+Portal dla programistów to witryna wbudowana w każdą instancję API i M.
+
+00:09:19.320 --> 00:09:24.640
+Programiści używają go do przeglądania Twoich API, czytania dokumentacji i testowania punktów końcowych interaktywnie w przeglądarce.
+
+00:09:24.640 --> 00:09:27.320
+Bez konfiguracji i bez wysyłania e-maili w te i z powrotem.
+
+00:09:27.500 --> 00:09:30.000
+Jest jednak pewien szczegół, domyślnie jest nieopublikowany.
+
+00:09:30.240 --> 00:09:33.640
+Gdy tworzysz instancję API i M, portal już istnieje, ale nikt go nie widzi.
+
+00:09:33.860 --> 00:09:35.900
+Musisz go najpierw dostosować i opublikować.
+
+00:09:36.040 --> 00:09:36.680
+To zamierzone.
+
+00:09:36.940 --> 00:09:39.140
+Nie chcesz pokazywać światu niedokończonego portalu.
+
+00:09:39.420 --> 00:09:44.120
+Możesz dostosować kolory marki, logotypy, a nawet osadzić treści z Wordpressa jako blok obok dokumentacji API.
+
+00:09:44.400 --> 00:09:47.120
+Można go w pełni dostosować do wyglądu i stylu Twojej firmy.
+
+00:09:47.320 --> 00:09:48.640
+Prawdziwą wartością jest samoobsługa.
+
+00:09:48.640 --> 00:09:49.200
+Samoobsługa.
+
+00:09:49.360 --> 00:09:54.300
+Programiści rejestrują się, automatycznie otrzymują klucze subskrypcji i od razu zaczynają korzystać z API.
+
+00:09:54.560 --> 00:09:58.760
+Bez ręcznych e-maili, czekania na akceptację, czy zgłoszeń do wsparcia z pytaniami o klucz.
+
+00:09:58.920 --> 00:10:02.100
+Robią to samodzielnie, co znacznie zmniejsza obciążenie Twojego wsparcia.
+
+00:10:02.340 --> 00:10:05.100
+Możesz również publikować dzienniki zmian i informacje o wydaniach.
+
+00:10:05.280 --> 00:10:08.900
+Gdy aktualizujesz API, programiści widzą to w portalu bez żadnych niespodzianek.
+
+00:10:08.900 --> 00:10:17.020
+Dostęp może być publiczny dla każdego z adresem URL lub ograniczony do użytkowników Twojego dzierżawy EntraID, aby tylko osoby z organizacji mogły go przeglądać.
+
+00:10:17.140 --> 00:10:19.500
+Obie opcje istnieją dla różnych przypadków użycia.
+
+00:10:19.680 --> 00:10:22.920
+Portal dla programistów sprawia, że zarządzanie API staje się prawdziwą platformą.
+
+00:10:23.100 --> 00:10:25.280
+Pomyśl o nim jak o witrynie sklepowej dla Twoich API.
+
+00:10:25.520 --> 00:10:28.380
+Bez niego programiści muszą przeszukiwać dokumenty i pytać innych.
+
+00:10:28.640 --> 00:10:31.660
+Dzięki niemu znajdują to, czego potrzebują i zaczynają budować.
+
+00:10:32.120 --> 00:10:35.140
+Bezpieczeństwo, uwierzytelnianie, autoryzacja i wpisy tajne.
+
+00:10:35.140 --> 00:10:38.680
+Cała ta moc jest bezużyteczna, jeśli bezpieczeństwo nie jest zapewnione.
+
+00:10:38.820 --> 00:10:42.280
+Porozmawiajmy więc o tym, jak APIM radzi sobie z tożsamością, dostępem i wpisami tajnymi.
+
+00:10:42.460 --> 00:10:44.700
+APIM obsługuje wiele metod uwierzytelniania.
+
+00:10:44.900 --> 00:10:47.800
+Najprostszą z nich są klucze subskrypcji, o których wspomnieliśmy wcześniej.
+
+00:10:48.060 --> 00:10:54.060
+Jednak w systemach produkcyjnych potrzebujesz czegoś silniejszego jak OAuth 2.0, tokeny JWT, certyfikaty klientów czy filtrowanie IP.
+
+00:10:54.320 --> 00:10:57.140
+Nakładasz te warstwy w zależności od tego, jak wrażliwe jest Twoje API.
+
+00:10:57.340 --> 00:11:00.840
+W środowisku produkcyjnym najlepszą praktyką jest użycie OAuth 2.0 z EntraID.
+
+00:11:00.840 --> 00:11:01.880
+Oto jak to działa.
+
+00:11:02.100 --> 00:11:05.800
+Aplikacja kliencka pobiera token z EntraID i przesyła go wraz z żądaniem do API.
+
+00:11:05.800 --> 00:11:10.580
+APIM sprawdza poprawność tokenu, weryfikując podpis, wystawcę, odbiorcę i datę wygaśnięcia.
+
+00:11:10.800 --> 00:11:14.640
+Jeśli jest ważny, APIM przekazuje żądanie do Twojego backendu, dołączając token.
+
+00:11:14.860 --> 00:11:19.160
+Twój backend ufa mu, ponieważ APIM już go zweryfikował, więc nie musi robić tego ponownie.
+
+00:11:19.300 --> 00:11:22.040
+To o jedną rzecz mniej, którą musi obsługiwać każda usługa.
+
+00:11:22.200 --> 00:11:23.880
+Teraz porozmawiajmy o wpisach tajnych.
+
+00:11:24.040 --> 00:11:28.500
+Klucze API, parametry połączeń, certyfikaty nie chcesz, aby były wpisane na sztywno w plikach zasad lub kontroli źródła.
+
+00:11:28.660 --> 00:11:31.340
+APIM posiada funkcję o nazwie, nazwane wartości, named values.
+
+00:11:31.340 --> 00:11:35.320
+Przechowujesz wpisy tajne centralnie w APIM i odwołujesz się do nich po nazwie w swoich zasadach.
+
+00:11:35.480 --> 00:11:37.860
+Rzeczywista wartość nigdy nie pojawia się w kodzie Twoich zasad.
+
+00:11:38.060 --> 00:11:41.000
+Co więcej, możesz połączyć nazwane wartości z usługą Azure Key Vault.
+
+00:11:41.200 --> 00:11:44.480
+Wpisy tajne pozostają zaszyfrowane w Key Vault, a APIM pobiera je w czasie wykonywania.
+
+00:11:44.700 --> 00:11:47.840
+Nikt, nawet Twój zespół DevOps, nie widzi rzeczywistej wartości wpisu tajnego.
+
+00:11:48.080 --> 00:11:52.420
+Gdy musisz zmienić klucz, aktualizujesz go w Key Vault, a APIM automatycznie pobiera tę zmianę.
+
+00:11:52.620 --> 00:11:55.720
+APIM obsługuje również tożsamości zarządzane, managed identities.
+
+00:11:55.720 --> 00:12:01.940
+Pozwala to APIM uwierzytelniać się w innych usługach Azure, takich jak Key Vault czy backendowe API, bez przechowywania żadnych poświadczeń.
+
+00:12:02.060 --> 00:12:04.740
+Azure zarządza tożsamością, więc Ty tylko nadajesz uprawnienia.
+
+00:12:04.960 --> 00:12:08.640
+Jeśli chodzi o izolację sieciową, możesz wdrożyć APIM wewnątrz sieci wirtualnej.
+
+00:12:08.780 --> 00:12:10.620
+To opcja dostępna w warstwie premium.
+
+00:12:11.140 --> 00:12:16.720
+Chodzi o to, że Twoje usługi backendowe nigdy nie muszą być bezpośrednio wystawione na działanie internetu.
+
+00:12:17.120 --> 00:12:20.240
+APIM jest jedynym elementem, który widzi świat zewnętrzny.
+
+00:12:20.240 --> 00:12:22.880
+To warstwowe podejście buduje głęboką obronę.
+
+00:12:22.880 --> 00:12:27.440
+Uwierzytelnianie w bramie, wpisy tajne w skarbcu, izolacja sieciowa wokół Twoich backendów.
+
+00:12:27.620 --> 00:12:29.440
+Każda warstwa wzmacnia poprzednią.
+
+00:12:29.660 --> 00:12:32.120
+Warstwy cenowe, która z nich jest dla Ciebie odpowiednia?
+
+00:12:32.300 --> 00:12:33.020
+Ile to kosztuje?
+
+00:12:33.220 --> 00:12:34.700
+Przejdźmy przez poszczególne warstwy.
+
+00:12:34.920 --> 00:12:36.260
+Warstwa consumption, zużycie.
+
+00:12:36.460 --> 00:12:38.700
+Płacisz za wywołanie API bez stałych kosztów miesięcznych.
+
+00:12:38.880 --> 00:12:42.100
+Idealna dla małego ruchu lub nagłych skoków obciążenia, np. podczas prototypowania.
+
+00:12:42.340 --> 00:12:44.640
+Jeśli nie jesteś jeszcze pewien, czego potrzebujesz, zacznij tutaj.
+
+00:12:44.640 --> 00:12:47.880
+Warstwa developer zapewnia stały niski koszt miesięczny, około 50$.
+
+00:12:47.880 --> 00:12:49.880
+Pełen zestaw funkcji, ale bez gwarancji SLA.
+
+00:12:50.060 --> 00:12:51.820
+Idealna dla środowisk deweloperskich i testowych.
+
+00:12:51.980 --> 00:12:54.400
+Otrzymujesz wszystko, co ma wersja premium, ale nie możesz jej używać w produkcji.
+
+00:12:54.600 --> 00:12:56.720
+Warstwa basic to podstawowe rozwiązanie produkcyjne.
+
+00:12:56.900 --> 00:13:00.340
+Mniejsza przepustowość, brak wsparcia dla sieci wirtualnej, ale otrzymujesz prawdziwe SLA.
+
+00:13:00.600 --> 00:13:04.300
+Dobra dla narzędzi wewnętrznych lub małych projektów, gdzie sieć prywatna nie jest krytyczna.
+
+00:13:04.520 --> 00:13:06.360
+Większość firm wybiera poziom standardowy.
+
+00:13:06.360 --> 00:13:11.660
+Obejmuje obsługę sieci wirtualnej, gwarancję SLA na poziomie 99,95% i dobrą przepustowość.
+
+00:13:11.660 --> 00:13:15.260
+Jeśli obsługujesz kluczowe dla biznesu interfejsy API, prawdopodobnie na tym poprzestaniesz.
+
+00:13:15.420 --> 00:13:20.020
+Poziom premium jest przeznaczony dla globalnych przedsiębiorstw wymagających maksymalnej niezawodności i sieci prywatnych.
+
+00:13:20.200 --> 00:13:25.580
+Wdrożenie wieloregionalne, własna brama SLA 99,99% i pełna integracja z siecią wirtualną.
+
+00:13:25.740 --> 00:13:28.600
+Ceny zaczynają się od około 2700 miesięcznie za jednostkę.
+
+00:13:28.600 --> 00:13:33.160
+Firma Microsoft wprowadziła również poziomy V2, Basic V2, Standard V2 oraz Premium V2.
+
+00:13:33.320 --> 00:13:36.880
+Upraszczają one cennik dzięki wliczonym limitom żądań i opłatom za milion przekroczeń.
+
+00:13:36.880 --> 00:13:41.880
+Zamiast śledzić wiele liczników, otrzymujesz jasną pulę żądań i płacisz za dodatkowe użycie w prostych transzach.
+
+00:13:42.000 --> 00:13:43.140
+Oto jak dokonać wyboru.
+
+00:13:43.320 --> 00:13:45.060
+Zacznij od poziomu deweloperskiego do testów.
+
+00:13:45.240 --> 00:13:47.040
+Przejdź na standardowy w środowisku produkcyjnym.
+
+00:13:47.240 --> 00:13:49.920
+Wybierz premium, jeśli potrzebujesz globalnej skali lub sieci prywatnej.
+
+00:13:50.060 --> 00:13:52.440
+Pamiętaj, że zawsze możesz później zmienić poziom na inny.
+
+00:13:52.640 --> 00:13:54.920
+Zacznij od małych rzeczy i rozwijaj się w miarę zmiany potrzeb.
+
+00:13:55.120 --> 00:13:56.000
+Oto co omówiliśmy.
+
+00:13:56.280 --> 00:14:02.200
+Zarządzanie API porządkuje chaos wielu interfejsów, skupiając je w jednym centrum sterowania bramą, politykami, bezpieczeństwem i doświadczeniem programistów.
+
+00:14:02.200 --> 00:14:04.820
+Kluczowy wniosek jest taki, że to coś więcej niż tylko proxy.
+
+00:14:05.000 --> 00:14:07.720
+Pomyśl o tym jak o mózgu i układzie nerwowym swojego ekosystemu API.
+
+00:14:07.980 --> 00:14:11.200
+Bez tego każdy zespół buduje własne uwierzytelnianie, logowanie i limity szybkości.
+
+00:14:11.380 --> 00:14:15.320
+Kończy się to niespójnością, lukami w zabezpieczeniach i brakiem pełnego wglądu w sytuację.
+
+00:14:15.580 --> 00:14:21.440
+Dzięki temu zyskujesz spójność, bezpieczeństwo i skalowalność bez wyważania otwartych drzwi dla każdej usługi.
+
+00:14:21.660 --> 00:14:22.740
+Oto proste ćwiczenie.
+
+00:14:22.960 --> 00:14:25.880
+Pomyśl o jednym API, które obecnie udostępniasz bezpośrednio.
+
+00:14:26.100 --> 00:14:28.500
+Może to być punkt końcowy funkcji lub usługa aplikacji.
+
+00:14:28.500 --> 00:14:33.180
+Jak umieszczenie zarządzania API przed nimi zmieniłoby stan bezpieczeństwa i możliwość monitorowania użycia?
+
+00:14:33.400 --> 00:14:35.960
+Samo przemyślenie tego ćwiczenia pokaże Ci jego wartość.
+
+00:14:36.100 --> 00:14:37.880
+Kolejny krok – zasubskrybuj kanał.
+
+00:14:38.060 --> 00:14:43.480
+W przyszłych odcinkach pokażemy, jak zaimportować API, zastosować pierwszą politykę i monitorować użycie w czasie rzeczywistym.
+
+00:14:43.660 --> 00:14:45.160
+Przejdziesz od teorii do praktyki.
+
+00:14:45.300 --> 00:14:48.340
+A jeśli uznałeś to za pomocne, udostępnij materiał komuś, kto tworzy aplikację.
+
+00:14:48.500 --> 00:14:50.020
+Oszczędzi im to miesięcy bólów głowy.
+
+00:14:50.240 --> 00:14:51.060
+Dziękuję za uwagę.
