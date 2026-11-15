@@ -9,6 +9,7 @@ import site_topics as TOP
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
 import site_listen as LST   # Anhoeren-Karten (Stoerer) in den Beitraegen
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_milestones as MST   # Wochenzusammenfassungen: eigene Vor/Zurueck-Reihe, darunter nur weitere Zusammenfassungen statt Inhaltslisten
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
@@ -114,6 +115,7 @@ def build(g, posts, people, api):
         w = WT.get(lang, WT["en"]); croot = f"{BASE}{pfx(lang)}/community/"
         links_l = {i: [e["name"], f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/"] for i, e in ENTS.items()}
         title_blog = T(lang, "Blog", "Blog")
+        _idx_keys = set(); _lifted = 0   # (handle, slug) der indexierbaren Beitraege dieser Sprache: Grundlage der Verzeichnisse; _lifted: nur wegen der Laenge auf index
         _seq = {}   # Beitraege je Autor in dieser Sprache, neueste zuerst: Vor/Zurueck blaettert durch den Blog der Autorin bzw. des Autors
         _sk = lambda q: (q["handle"], MST.is_milestone(q))   # Wochenzusammenfassungen blaettern nur untereinander, die uebrigen Beitraege ohne sie
         for q in sorted(mine, key=lambda q: (q.get("published") or 0, q["slug"]), reverse=True): _seq.setdefault(_sk(q), []).append(q)
@@ -130,6 +132,7 @@ def build(g, posts, people, api):
             if not p.get("legacy"):
                 body_html = IMG.enhance(body_html)
             body_html = IMG.eager_first(body_html)   # erstes Bild oben im Beitrag (oft das LCP-Element) nicht lazy laden
+            _own_txt = IR.plain_text(body_html)   # Haupttext vor den Anhoeren-Karten (die zeigen Folgentitel, keinen Beitragstext)
             _ms = MST.is_milestone(p)
             if not _ms: body_html = LST.apply(BASE, body_html, p, lang, ENTS)   # "Anhoeren"-Karten (site_listen): 1-2 passende Folgen und "Show folgen", nur bei guter Uebereinstimmung
             _rel = [] if _ms else TOP.related(_content, p, k=6)
@@ -168,7 +171,11 @@ def build(g, posts, people, api):
             b = SPM.mark(b, _spr + [r for r in _running if r not in _spr], "post")   # Links zur Website eines laufenden Sponsors tragen rel="sponsored", auch ohne Eintrag unter "posts" (Cognillo-Reihe); ohne Sponsoring unveraendert
             noidx = False if p.get("html") else p.get("votes", 0) < INDEX_VOTES   # fruehere Blogbeitraege bleiben fuer Google sichtbar
             if p.get("tr_of"):
-                noidx = not p.get("tr_index")   # Sprachfassungen: nur nach Freigabe je Sprache (data/blog_tr.json "index") indexierbar - an genau einer Stelle entschieden
+                noidx = not p.get("tr_index")   # Sprachfassungen: nur nach Freigabe je Sprache (data/blog_tr.json "index") oder ab 2500 Zeichen (site_index_rule, im Uebersetzungsschritt) indexierbar - an genau einer Stelle entschieden
+            elif noidx and IR.long_enough(p.get("summary"), _own_txt, _kp, _fq):
+                noidx = False   # 13.11.2026: Beitrag in der Sprache der Seite mit >= 2500 Zeichen Text steht auf index, auch ohne 10 Upvotes (Stimmen sind der einzige andere Grund)
+                _lifted += 1
+            if not noidx: _idx_keys.add((p["handle"], p["slug"]))
             _alt = None
             if p.get("html") and (p["slug"], p["handle"]) in tr_langs:   # hreflang nur zwischen indexierbaren Fassungen (Original + freigegebene Sprachen)
                 _alt = {"en": f"{BASE}/community/u/{p['handle']}/blog/{p['slug']}/", **{l: f"{BASE}{pfx(l)}/community/u/{p['handle']}/blog/{p['slug']}/" for l in tr_langs[(p["slug"], p["handle"])]}}
@@ -177,12 +184,13 @@ def build(g, posts, people, api):
             (g.get("write_r2") if (p.get("tr_of") and g.get("write_r2")) else write)(f"{pfx2(lang)}community/u/{p['handle']}/blog/{p['slug']}/index.html", page(lang, f'{p["title"]} – {a["name"]} | M365.FM', (p.get("summary") or "")[:155], u, b, _alt, ld, xdefault=(_alt or {}).get("en"), og_type="article", extra_head=LCSS, noindex=noidx, og_of=_og, side=(g["side"](lang, p["title"] + " " + (p.get("summary") or ""), ids=topics) if g.get("side") else "")))   # Sprachfassungen liegen im R2-Bucket
             if not noidx:
                 sitemap.append((u, iso(p.get("updated") or p["published"]), _alt))
+        if _lifted: print(f"Blog {lang}: {_lifted} Beitraege ab {IR.MIN_CHARS} Zeichen Text auf index (sonst zu wenig Stimmen)")
         # Verzeichnisse: je Autor und gesamt
         def lst(items):
             return '<ul class="bl-list">' + "".join(f'<li><a href="{croot}u/{p["handle"]}/blog/{p["slug"]}/"><b>{esc(p["title"])}</b></a> <span class="mut">· {esc(pb[p["handle"]]["name"])} · {iso(p["published"])}</span>'
                                                    f'{("<br>" + esc(p["summary"])) if p.get("summary") else ""}</li>' for p in items) + "</ul>"
         is_by = lambda p, h: p["handle"] == h or any(c.get("handle") == h for c in (p.get("coauthors") or []))   # Co-Autoren: der Beitrag steht auch in ihrer Blogliste
-        _pub = lambda p: (p.get("tr_index") if p.get("tr_of") else (p.get("html") or p.get("votes", 0) >= INDEX_VOTES))   # zaehlt fuer den Index der Verzeichnisse: freigegebene Sprachfassungen, fruehere Beitraege, Beitraege mit Stimmen
+        _pub = lambda p: (p["handle"], p["slug"]) in _idx_keys   # zaehlt fuer den Index der Verzeichnisse: genau die Beitraege, die oben auf index stehen (freigegebene Sprachfassungen, fruehere Beitraege, Beitraege mit Stimmen, Beitraege ab 2500 Zeichen)
         PER = 100   # T6: Verzeichnisse seitenweise (vorher alle ~2.300 Beitraege in einer Liste, ca. 1 MB)
         def paged(items, ru, rel, head_html, title, desc, noidx, ld=None):
             npg = max(1, (len(items) + PER - 1) // PER)

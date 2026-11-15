@@ -25,35 +25,35 @@ In automation, a simulation is a model that mimics how a system behaves, often f
 
 ## Simulation vs emulation: the short answer
 
-The terms overlap, and the literature admits it. Emulation and simulation both create a virtual environment in which you can debug and test before touching physical hardware. A field report on industrial network simulation by Duque Anton and co-authors, available on [arXiv](https://arxiv.org/pdf/1905.11751), says that simulation aims at mimicking the states of a system and emulation aims at reproducing its behaviour. The authors note that the two words are often used interchangeably, and that they use "simulation" in general because many tools can do both.
+The terms overlap, and the literature admits it. Emulation and simulation both create a virtual environment in which you can debug and test before touching physical hardware. A field report on industrial network simulation by Duque Anton and co-authors, available on [arXiv](https://arxiv.org/abs/1905.11751), analyses both simulation and emulation tools for industrial communication networks. Its abstract does not define the difference, and we could not check the full text for this article. A common reading is that simulation mimics the states of a system and emulation reproduces its behaviour, and the two words are often used interchangeably.
 
-A more practical definition comes from Ian McGregor in a paper for the [2002 Winter Simulation Conference](https://www.informs-sim.org/wsc02papers/230.pdf). He defines an emulation model as one where some functional part of the model is carried out by a part of the real system, and the reverse also holds: part of the real system is replaced by a model. McGregor worked for a company that sells emulation tools, so read his claims with that in mind. The definition itself is easy to check against any project.
+A more practical angle comes from Ian McGregor's paper "The Relationship between Simulation and Emulation" at the [2002 Winter Simulation Conference](https://www.informs-sim.org/wsc02papers/abstracts02/FS.htm). According to its abstract, the paper defines emulation in the context of feeding model results back to industrial controllers to check their logic before commissioning, and contrasts it with simulation. The usual form of the definition is that part of the model is carried out by a part of the real system, or that part of the real system is replaced by a model. We could only read the abstract, so we don't quote the paper's exact wording. McGregor's affiliation was Brooks-PRI Automation, an automation company, so read vendor-side claims in this field with that in mind. The definition itself is easy to check against any project.
 
 In plain terms, the working distinction in automation is this:
 
 - **Simulation** is a model of the whole system that you run on its own. You change inputs and see what happens, and you can run it fast. You can simulate demand, stops and staffing, and you can build a prototype of a layout in the model before anything is built.
 - **Emulation** connects something real to a model. The real thing might be a control program, a controller or an operator panel, and the model plays the machine or plant around it. Because something real is involved, the run takes real time.
 
-The same difference shows in the tools, where the difference between emulator and simulator is a matter of what they replicate. A simulator can simulate the plant or the controller's program logic in a model. An emulator tries to emulate the functionality of the real controller, down to its CPU behaviour and communication, so that the real code can run on it and reproduce what it would do on the target hardware. In practice, vendors often call a PLC emulator and simulator by either name, so check what is behind the label. Simulators and emulators for the same controller can differ a lot in how well they reproduce the target system.
+The same difference shows in the tools, where the difference between emulator and simulator is a matter of what they replicate. The following is a general description, not taken from the sources above. A simulator can simulate the plant or the controller's program logic in a model. An emulator tries to emulate the functionality of the real controller, down to its CPU behaviour and communication, so that the real code can run on it and reproduce what it would do on the target hardware. In practice, vendors often call a PLC emulator and simulator by either name, so check what is behind the label. Simulators and emulators for the same controller can differ a lot in how well they reproduce the target system.
 
 ## Use cases: what each is used for in automation
 
-McGregor describes the typical use cases. Simulation models are used to test and develop different solutions in order to find the best one. They explore design options, layout, operating limits and control strategy. They run fast, often faster than real time, and they are repeatable when the parameters do not change. That makes them suitable for many experiments and for automated optimisation.
+The typical use cases look like this. The summary draws on a 2017 article about [industrial software for simulation and emulation](https://manufacturingtomorrow.com/article/2017/07/industrial-software-for-simulation-and-emulation/9982) by Emulate3D, a vendor of such tools, and on McGregor's abstract. Simulation models are used to test overall business logic and to compare layout alternatives, and in general to explore design options, operating limits and control strategy. They run fast, often faster than real time, and they are repeatable when the parameters do not change. That makes them suitable for many experiments and for automated optimisation.
 
-Emulation models are used to test control-system logic under different loading conditions, to verify control behaviour before commissioning, and to train operators and maintenance staff. They run in real time with the control system connected from the outside.
+Emulation models are used to test control-system logic, to verify control behaviour before commissioning, and to train operators and maintenance staff. The vendor article says an emulation model is controlled by an external control system, that logic testing can then run in parallel with the project build, and that operators can be trained on the real HMI screens connected to the control system. They run in real time.
 
-McGregor also lists the limits. Emulation models are poorly suited to experiments because they often run only in real time. Running them faster than real time causes errors, because control-system timers cannot adapt. The results are also less repeatable, since the communication between the model and the controller is asynchronous and depends on the network and the operating system.
+The limits follow from the same set-up. The vendor article says emulation models cannot run faster than real time if they are connected to a control system containing timers, so they are poorly suited to running many experiments. Running them faster than real time would produce errors, because control-system timers cannot adapt. Results can also be less repeatable, because the communication between the model and the controller depends on the network and the operating system. That last point is our own addition and is not checked against a source.
 
-Duque Anton and co-authors make a similar point from the other side. Simulation is cost-, resource- and time-efficient, but every physical characteristic has to be modelled, which sometimes needs a lot of effort. Emulation is by design as accurate as the productive system where the environment is real, but it needs more devices and more space, and it costs more. Their conclusion is that there is no general solution meeting all requirements.
+There is a trade-off on the other side as well. Simulation is cost-, resource- and time-efficient, but every physical characteristic has to be modelled, which sometimes needs a lot of effort. Emulation with real devices can be as accurate as the productive system, but it needs more devices and more space, and it costs more. This is general practice, and we could not confirm it against the full text of the field report, so treat it as a rule of thumb. In practice there is no single solution that meets all requirements.
 
 ## Software in the loop, hardware in the loop and the digital twin
 
 In automation projects, the two ideas meet in the "in the loop" tests. The vendor page of [realvirtual](https://realvirtual.io/en/virtuelle-inbetriebnahme/) describes them:
 
-- **Software in the loop:** the control program runs as software on a PC, for example in a PLC emulator, and works with the machine model. No hardware is needed.
+- **Software in the loop:** the control program runs as software on the same PC, for example in Siemens PLCSim Advanced or TwinCAT, and works with the machine model. No hardware is needed.
 - **Hardware in the loop:** a real PLC connects to the machine model over a network. The real hardware drives a virtual machine.
 
-Both are emulations in McGregor's sense, because a real part, the control code or the controller, works with a model of the rest. They are the core of virtual commissioning. The page is a vendor source, and its descriptions are consistent with the academic definitions above.
+Both fit the definition of emulation used here, because a real part, the control code or the controller, works with a model of the rest. They are the core of virtual commissioning. The page is a vendor source, and it calls the software-in-the-loop controller a "software simulation", which shows how loosely the two words are used.
 
 A production flow model is a different case. [Factory simulation](https://www.m365.fm/entity/factory-simulation/) is a controlled model of how work moves through part of a factory, using current operating rules, resources, orders and normal variation, so a change such as an extra shift, a new machine or a smaller buffer can be tested before it is made. No controller is in the loop. It is a simulation in the pure sense, and it runs far faster than real time.
 
@@ -65,7 +65,7 @@ Use this as a quick guide. It is our own summary, not a standard.
 
 - **How much capacity do we need, and where is the bottleneck?** Simulation. You want many scenarios, fast.
 - **Does the control program handle a jam, a missing part or a sensor fault?** Emulation, in software first.
-- **Does the real controller meet its timing and interface requirements?** Hardware in the loop, or a test on the real equipment. Duque Anton and co-authors say real hardware gives the most realistic results but is the hardest to set up.
+- **Does the real controller meet its timing and interface requirements?** Hardware in the loop, or a test on the real equipment. Real hardware gives the most realistic results but is the hardest to set up.
 - **Can we train operators before start-up?** Emulation. A model connected to the real control panel behaves as the machine would.
 - **Which of two layouts is better?** Simulation.
 
@@ -97,3 +97,10 @@ Tools for both purposes exist. Production flow models run in simulation software
 ## Next step
 
 For your next automation project, write down each test you want as a question, and mark each one as "many scenarios, fast" or "real control, real time". Then use that list to decide on simulation vs emulation before you ask for quotes.
+
+## Sources
+
+- Duque Anton, S., Fraunholz, D., Krummacker, D., Fischer, C., Karrenbauer, M., Schotten, H. D.: The Dos and Don'ts of Industrial Network Simulation: A Field Report, arXiv:1905.11751 (abstract only; full text could not be retrieved) - https://arxiv.org/abs/1905.11751
+- McGregor, I.: The Relationship between Simulation and Emulation, Winter Simulation Conference 2002 (abstract only; full text could not be retrieved) - https://www.informs-sim.org/wsc02papers/abstracts02/FS.htm
+- Emulate3D: Industrial Software for Simulation and Emulation, Manufacturing Tomorrow, 2017 (vendor article) - https://manufacturingtomorrow.com/article/2017/07/industrial-software-for-simulation-and-emulation/9982
+- realvirtual: Virtual commissioning (vendor page) - https://realvirtual.io/en/virtuelle-inbetriebnahme/

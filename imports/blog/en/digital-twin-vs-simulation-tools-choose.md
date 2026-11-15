@@ -29,7 +29,7 @@ Start with the definitions, because vendors stretch both words.
 
 NIST, the US standards institute, describes a [digital twin](https://www.nist.gov/digital-twins/essential-elements) as a dynamic, data-driven virtual representation that has to closely replicate its physical counterpart and stay synchronized with it. NIST states that a successful twin is not a static model. It names three essential elements: high-frequency sensing, reliable industrial IoT connectivity and simulation models for predictive analysis.
 
-Notice the third element. Simulation sits inside the twin. A NIST paper on [simulation and digital twins](https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=932374) records how experts see the relationship. One panelist described simulation as a model of manufacturing operations that is often used on its own and not connected to the real system, while a twin also synchronizes with the physical side and can cover the whole lifecycle. Another panelist saw no fundamental difference and called "digital twin" a new name for something simulation people have done for decades. The paper says the debate is still open.
+Notice the third element. Simulation sits inside the twin. A [panel paper in the Winter Simulation Conference proceedings, hosted by NIST](https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=932374), records how experts see the relationship. One panelist described a digital twin as synchronized with the physical system and saw simulation as one possible component of it. Another panelist saw no fundamental difference between the two. The paper carries a note that the panelists may not agree with each other, so treat it as a collection of views and not as a standard.
 
 So here is a practical reading. If a tool only runs when a person starts it with chosen inputs, treat it as a simulation. If it keeps receiving data from the plant and changes with it, treat it as a twin. Many products sit between the two, and the label on the brochure won't tell you where.
 
@@ -108,11 +108,11 @@ Ask for a pilot on your own data. A demo on the vendor's sample factory proves l
 
 Simulation is good for testing options safely, especially where you have little live data. It is often quicker to set up for one standalone question. Its limit is that it is a snapshot: when conditions move, you must update and rerun it, and its answers are only as good as the assumptions you built in.
 
-A twin gives you a current view and can support prediction. The cost is the integration work, the data management and the people who keep it running. It also makes assumptions, since every twin is a simplified view of the plant. The NIST paper makes the same point from the critical side: a twin has to be validated, is always simplified, and cannot fully capture how people decide.
+A twin gives you a current view and can support prediction. The cost is the integration work, the data management and the people who keep it running. It also makes assumptions, since every twin is a simplified view of the plant. A twin also has to be validated, is always simplified, and in my experience cannot fully capture how people decide.
 
 ## Can the two work together?
 
-Yes, and that is the direction many plants end up taking. A simulation model can be fed with current data and used to test options against the real state of the plant. A twin can call a simulation model to look ahead from where the floor is right now. NIST's panel description points to the same pattern: closed-loop approaches where production data flows into a simulation, and simulation supports online decisions.
+Yes, and that is the direction many plants end up taking. A simulation model can be fed with current data and used to test options against the real state of the plant. A twin can call a simulation model to look ahead from where the floor is right now.
 
 The hard part isn't the idea. It's that the pieces rarely come from one source. Machine data, ERP data and the simulation model all have their own formats and owners. Plan time for data mapping and for agreeing on who owns which part. Standards such as ISO 23247, the digital twin framework for manufacturing, were written to provide common terms and guidelines, and [ISO lists it](https://www.iso.org/standard/75066.html) as a multi-part series with an overview and general principles in part 1. Reading it won't build your twin, but it gives your team and your vendors a shared vocabulary.
 
@@ -140,3 +140,10 @@ If your question starts with a what-if, iFAKT Polaris is one option to look at. 
 ## Next step
 
 The digital twin vs simulation tools question is easiest to settle with one written decision. Write down the next decision you have to make in your plant, note whether it is about a change or about today's run, and take that sentence into your next vendor conversation.
+
+## Sources
+
+- [Essential Elements (digital twins) - NIST](https://www.nist.gov/digital-twins/essential-elements)
+- [Using Simulation and Digital Twins to Innovate: Are We Getting Smarter? (panel paper) - NIST](https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=932374)
+- [What is Azure Digital Twins? - Microsoft Learn](https://learn.microsoft.com/en-us/azure/digital-twins/overview)
+- [ISO 23247-1:2021 Digital twin framework for manufacturing, Part 1 - ISO](https://www.iso.org/standard/75066.html)

@@ -98,3 +98,8 @@ Data can help you decide where a short walk is most useful and whether the walks
 ## Next step
 
 Choose one cadence for one level of leaders, write it into their leader standard work and review the gemba walk frequency after four weeks. Link the results to your [continuous improvement](https://www.m365.fm/entity/continuous-improvement/) routine so management sees what the walks produce.
+
+## Sources
+
+- [Standard Work for Lean Leaders: One of the Keys to Sustaining Performance Gains - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/standard-work-for-lean-leaders-one-of-the-keys-to-sustaining-performance-gains/)
+- [Leader Standard Work - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/leader-standard-work/)

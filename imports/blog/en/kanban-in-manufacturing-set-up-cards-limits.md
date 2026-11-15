@@ -121,3 +121,9 @@ Kanban handles replenishment, but the line still follows a production plan, and 
 ## Next step
 
 Choose one part family with steady demand, measure the replenishment time and consumption rate, and set the first card count with a safety margin of one. Review the loop in four weeks and lower the limit if kanban in manufacturing is working without stockouts.
+
+## Sources
+
+- [Kanban - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/kanban/)
+- [Pull Production - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/pull-production/)
+- [What is kanban? Principles, metrics, and implementation - Kaizen Institute](https://kaizen.com/insights/what-is-kanban/)

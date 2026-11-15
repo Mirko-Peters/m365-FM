@@ -27,7 +27,7 @@ A report is only meaningful if you know what you are looking at. [SharePoint per
 - **Communication sites** are not connected to a Microsoft 365 group. They use the standard SharePoint groups Owners, Members and Visitors.
 - **Private and shared channel sites** have their permissions managed in Teams.
 
-On a team site, the three groups map to the permission levels Full Control (Owners), Edit (Members) and Read (Visitors). A Microsoft 365 group has no view-only access, so people who should only read must be added directly to the Visitors group. Microsoft recommends managing permissions through the Microsoft 365 group or the team where possible, and advises against nested security groups because they can cause performance problems.
+On a team site, the three groups map to the permission levels Full Control (Owners), Edit (Members) and Read (Visitors). A Microsoft 365 group has no view-only access, so people who should only read must be added directly to the Visitors group. Microsoft says permissions for team sites are best managed through the Microsoft 365 group or the team, and recommends against managing them separately with SharePoint groups. Nested security groups are described as not recommended because they can cause performance issues.
 
 Permissions on a site, group or team give access to all content in it. For single files and folders, SharePoint offers sharing links of three types: Anyone, People in your organization and Specific people. External sharing on a site is only possible if it is allowed at organization level first.
 
@@ -37,11 +37,11 @@ Why does this matter for reporting? Because the same question, "who has access?"
 
 Before writing anything, look at what Microsoft provides. [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/) offers two kinds of built-in reports for permissions and sharing, according to Microsoft Learn.
 
-**Data access governance reports** live in the SharePoint admin center under Reports, Data access governance. They need SharePoint Advanced Management and the SharePoint administrator role.
+**Data access governance reports** live in the SharePoint admin center under Reports, Data access governance. They need the SharePoint administrator role plus the licensing from the SharePoint Advanced Management prerequisites.
 
 - Snapshot reports show data as of the day they were created. The page names site permissions across the organization and sensitivity labels applied to files.
 - Activity reports cover the last 28 days. The page names sharing links and content shared with "Everyone except external users".
-- Microsoft recommends snapshot reports quarterly and activity reports monthly. Data collection pauses if no report is generated for three months.
+- Microsoft recommends snapshot reports quarterly and activity reports monthly. For organizations without SharePoint Advanced Management, activity reports need data collection to be enabled, and it pauses if no report is generated for three months.
 
 **A report for a single site** is a CSV file that a site admin can create. It lists every unique file, user, permission and link on a SharePoint site or OneDrive, and the file is saved on the site. It has limits:
 
@@ -54,7 +54,7 @@ Details and current requirements are on [Microsoft Learn](https://learn.microsof
 
 ## Where PnP PowerShell fits
 
-PnP PowerShell is an open-source PowerShell module maintained by the community. It is designed for managing SharePoint, Teams and Microsoft 365 through Microsoft Graph and CSOM. It is maintained by the community, so treat it as a community tool and read its documentation and release notes before relying on it.
+PnP PowerShell is an open-source PowerShell module with over 700 cmdlets for Microsoft 365 environments such as SharePoint Online, Teams and Microsoft Entra ID. Microsoft Learn states that it is community-provided and not a Microsoft-provided module, with no SLA or direct support from Microsoft. Treat it as a community tool and read its documentation and release notes before relying on it.
 
 When does a script make sense? Imagine you want a list of all team sites in a defined set, showing the members of each SharePoint group and any item with unique permissions. The built-in reports may give you part of that, but not in the exact shape you need. A script lets you define the scope, the columns and the output format, and run the same query again next month for comparison.
 
@@ -97,9 +97,17 @@ A clean habit is to run the report, review the results with the site owner, agre
 ## Practical takeaways
 
 - Learn the permission model first: Microsoft 365 group, Owners/Members/Visitors, and sharing links are different layers.
-- Check the built-in reports before scripting. Data access governance reports need SharePoint Advanced Management and the SharePoint administrator role; the single-site CSV does not show Anyone links, unclicked e-mailed links or the people inside groups.
+- Check the built-in reports before scripting. Data access governance reports need the SharePoint administrator role plus the licensing from the SharePoint Advanced Management prerequisites; the single-site CSV does not show Anyone links, unclicked e-mailed links or the people inside groups.
 - Use PnP PowerShell when you need a custom, repeatable view, and treat it as a community tool that you maintain.
 - Start read-only, on one pilot site, and keep the output in a restricted location.
 - Get current syntax and sign-in guidance from the official documentation, not from copied snippets.
 - Never mix reporting and fixing. Any change to permissions needs testing first and a way back.
 - Re-run reports on a schedule, for example in the rhythm Microsoft suggests for its own reports, so you can compare results over time.
+
+## Sources
+
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Data access governance reports for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)
+- [Report on file and folder sharing in a SharePoint site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharing-reports)
+- [Prerequisites for SharePoint Advanced Management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharepoint-advanced-management-prerequisites)
+- [PnP PowerShell Overview (Microsoft Learn)](https://learn.microsoft.com/powershell/sharepoint/sharepoint-pnp/sharepoint-pnp-cmdlets)

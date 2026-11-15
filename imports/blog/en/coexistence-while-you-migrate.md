@@ -10,9 +10,9 @@ faq:
   - q: "What is migration coexistence?"
     a: "Migration coexistence is a phase in which the old and new environments, for example two Microsoft 365 tenants, run side by side and are linked. Mail and collaboration keep working while users move in batches, so the business does not have to switch everyone on a single day."
   - q: "Does a SharePoint migration delete the source files?"
-    a: "No. Microsoft Learn describes SharePoint migration as copying content into SharePoint and OneDrive in Microsoft 365 and states that your source files are not deleted. That means the source stays available during a coexistence phase, but you still need a plan for which copy is authoritative."
+    a: "Not with the tools Microsoft Learn describes for migrating into SharePoint and OneDrive: it states that you are copying the files and that your source files are not deleted. That means the source stays available during a coexistence phase, but you still need a plan for which copy is authoritative. Cross-tenant SharePoint site migration is different: Microsoft documents it as a move that leaves a redirect at the source."
   - q: "Which Microsoft tools support SharePoint migration?"
-    a: "Microsoft Learn names Migration Manager in the SharePoint admin center for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares, and the SharePoint Migration Tool (SPMT) for SharePoint Server 2010, 2013 and 2016. Third-party tools exist too. Check Microsoft Learn for current details."
+    a: "Microsoft Learn names Migration Manager in the SharePoint admin center for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares, and the SharePoint Migration Tool (SPMT) for SharePoint Server 2010, 2013 and 2016 environments. Third-party tools exist too. Check Microsoft Learn for current details."
 ---
 
 A migration to Microsoft 365 is rarely a single event. Users, mailboxes and content move in stages, and for a while some people work in the new environment while others still work in the old one. That in-between period needs deliberate planning.
@@ -49,7 +49,7 @@ The answers differ by scenario, so treat the list as a starting point. For the t
 
 ## Where SharePoint migration fits in
 
-Content is often the part users notice most. [SharePoint migration](https://www.m365.fm/entity/sharepoint-migration/) means moving content from file shares, other cloud services or older SharePoint Server versions into SharePoint and OneDrive in Microsoft 365. Microsoft Learn is explicit about one point: migrating copies the files, and your source files are not deleted.
+Content is often the part users notice most. [SharePoint migration](https://www.m365.fm/entity/sharepoint-migration/) means moving content from file shares, other cloud services or older SharePoint Server versions into SharePoint and OneDrive in Microsoft 365. Microsoft Learn is explicit about one point: when you migrate content to Microsoft 365 you are copying the files, and your source files are not deleted. The exception is cross-tenant SharePoint site migration, which moves the content and leaves a redirect behind.
 
 That has a direct consequence for coexistence. As long as the source stays in place, there are two copies. If users keep editing in the old location after the copy was made, the new location is already out of date. If they start editing in the new location while others still use the old one, the two diverge.
 
@@ -66,14 +66,14 @@ Setting a source to read-only or restricting access changes who can do what, so 
 Microsoft Learn names several options for moving content into Microsoft 365:
 
 - **Migration Manager** in the SharePoint admin center, for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares.
-- **SharePoint Migration Tool (SPMT)**, for SharePoint Server 2010, 2013 and 2016, including classic workflows and classic pages.
+- **SharePoint Migration Tool (SPMT)**, for SharePoint Server 2010, 2013 and 2016 environments only. For classic SharePoint Server workflows, Microsoft says SPMT can migrate SharePoint Server 2010 out-of-the-box approval and collect feedback workflows to Power Automate; classic pages are covered by a separate page transformation guide.
 - **Azure Data Box**, named for large amounts of data over a limited network connection.
 
-The same page notes that the Mover tool is retired for admin-led migrations. Third-party tools exist as well, for example ShareGate. Tool capabilities and availability change, so confirm the current state on [Microsoft Learn](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) before you choose.
+The same page notes that the Mover tool is retired for all admin-led migrations. Third-party tools exist as well, for example ShareGate. Tool capabilities and availability change, so confirm the current state on [Microsoft Learn](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) before you choose.
 
-Two further points from the documentation are relevant for planning. Classic SharePoint Server workflows should be rebuilt as Power Automate flows rather than expected to carry over as they are. And a role called Migration Administrator lets a migration team work without full SharePoint admin access, which helps keep permissions narrow during the project.
+Two further points from the documentation are relevant for planning. Microsoft recommends moving classic SharePoint Server workflows to Power Automate flows rather than expecting them to carry over as they are. And a role called Migration Administrator lets a migration team work without full SharePoint admin access, which helps keep permissions narrow during the project.
 
-A note on scope: moving between two Microsoft 365 tenants is a separate topic from the scenarios above. According to the SharePoint migration page on Microsoft Learn, moving OneDrive content between tenants was possible with PowerShell at the time of checking, and a cross-tenant SharePoint solution was in private preview. Any PowerShell that moves content should be tested first in a test tenant or pilot, with a backup or way back in place. Because this changes over time, verify the current status before you rely on it.
+A note on scope: moving between two Microsoft 365 tenants is a separate topic from the scenarios above. According to the migration overview page on Microsoft Learn, moving OneDrive content between tenants is possible with PowerShell. For SharePoint sites, a dedicated Learn page describes a cross-tenant SharePoint site migration feature that uses SharePoint Online PowerShell and is currently available only to Enterprise Agreement customers with Cross-Tenant Shared Data Migration licenses; it does not support incremental passes (the overview page still mentions a private preview). Any PowerShell that moves content should be tested first in a test tenant or pilot, with a backup or way back in place. Because this changes over time, verify the current status before you rely on it.
 
 ## Communication and ownership
 
@@ -91,8 +91,13 @@ Also decide who owns decisions during the phase. Someone should be able to say w
 
 - Treat coexistence as a planned phase with a start, an end and clear rules, not as a side effect of migrating.
 - Define what "keeps working" means for mail, calendars, people lookup, files and access before the first batch.
-- Remember that SharePoint migration copies content and, per Microsoft Learn, does not delete the source. Decide which copy is authoritative and from when.
+- Remember that, per Microsoft Learn, migrating into Microsoft 365 copies content and does not delete the source (cross-tenant SharePoint site migration is the exception). Decide which copy is authoritative and from when.
 - Start with a small pilot group and use what you learn for later batches.
 - Test any change to access or any bulk action, such as making a source read-only, on a pilot area first, and keep a backup or another way back.
 - Check the current Microsoft Learn documentation for your scenario and your tooling, since capabilities and previews change.
 - Name an owner for go, pause and rollback decisions, and give every batch clear, early communication.
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)
+- [Cross-tenant SharePoint site migration overview (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/migration/cross-tenant-sharepoint-migration)

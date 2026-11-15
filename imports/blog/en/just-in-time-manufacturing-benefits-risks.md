@@ -46,7 +46,7 @@ The last two benefits are the reason JIT is a management tool, not only an inven
 
 ## Supply chain risks of JIT manufacturing
 
-The main risk of JIT manufacturing is a supply disruption. With low stock, a late delivery stops production quickly. Toyota itself shows both sides. After the 2011 earthquake, tsunami and nuclear crisis in Japan, a TechXplore report says Toyota took six months to return to normal production. Toyota then reviewed all its suppliers, including indirect ones, to see its supply chain more clearly. When it saw the first signs of the later chip shortage, the report says, it moved from pure JIT to a hybrid model and kept more stock of critical components such as semiconductors. The [TechXplore article](https://techxplore.com/news/2021-05-lessons-disaster-toyota-chip-shortage.pdf) says other carmakers announced they would also build reserves.
+The main risk of JIT manufacturing is a supply disruption. With low stock, a late delivery stops production quickly. Toyota itself shows both sides. After the 2011 earthquake, tsunami and nuclear crisis in Japan, a TechXplore report says Toyota took six months to return to normal production. Toyota then reviewed all its suppliers, including indirect ones, to see its supply chain more clearly. When it saw the first signs of the later chip shortage, the report says, it moved from pure JIT to a hybrid model and kept more stock of critical components such as semiconductors. The [TechXplore article](https://techxplore.com/news/2021-05-lessons-disaster-toyota-chip-shortage.pdf) says other carmakers announced they would also build reserves. We could not re-open that report for this review, so these supply chain details are as it reports them.
 
 Other risks are closer to home:
 
@@ -101,3 +101,8 @@ An enterprise resource planning (ERP) system holds stock levels, lead times and 
 ## Next step
 
 Choose five parts with high stock value and look at the causes of their buffers: breakdowns, changeovers, supplier delays or demand swings. Then cut one stock in a small step and watch what happens. That is a safe way to apply just in time manufacturing where it pays.
+
+## Sources
+
+- Toyota Motor Corporation: Toyota Production System - https://global.toyota/en/company/vision-and-philosophy/production-system/
+- TechXplore: Lessons from a disaster, Toyota and the chip shortage (2021; could not be re-opened for this review) - https://techxplore.com/news/2021-05-lessons-disaster-toyota-chip-shortage.pdf

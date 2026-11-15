@@ -26,7 +26,7 @@ A word of caution first, in Microsoft's own wording: review, edit and verify any
 
 ## What you need before Copilot appears
 
-Copilot is not part of every Microsoft 365 subscription. Microsoft's page [Get started with Copilot in Excel](https://support.microsoft.com/en-us/excel/copilot/get-started-with-copilot-in-excel) says that if you don't see it, it may not be included in your subscription, or your organization's settings may restrict it. Microsoft's page on the Copilot button adds that the button only appears for people with Copilot access. That comes from a Microsoft 365 Personal, Family or Premium subscription, or a Microsoft Copilot license. Without that access it doesn't show.
+Copilot is not part of every Microsoft 365 subscription. Microsoft's page [Get started with Copilot in Excel](https://support.microsoft.com/excel/copilot/get-started-with-copilot-in-excel) says that if you don't see it, it may not be included in your subscription, or your organization's settings may restrict it. Microsoft's page on the [Copilot Dynamic Action Button](https://support.microsoft.com/office/foundations-experiences/copilot-dab/the-copilot-dynamic-action-button-in-word-excel-and-powerpoint) adds that the button only appears for people with Copilot access. That comes from a Microsoft 365 Personal, Family or Premium subscription, or a Microsoft Copilot license. Without that access it doesn't show.
 
 The platforms listed on the Get started page are Excel for Microsoft 365, Excel for Microsoft 365 for Mac, Excel for iPad and Excel Web App. What you can do depends on the platform, and the page lists it as follows at the time of writing:
 
@@ -35,7 +35,7 @@ The platforms listed on the Get started page are Excel for Microsoft 365, Excel 
 - **iPhone.** Chat. Edit is described as rolling out.
 - **Android.** Chat only.
 
-Microsoft doesn't give numeric limits on that page, such as a maximum number of rows or a file size cap. It also links to a separate page for supported languages, which I didn't open. If you work in a language other than English, check that page before you plan a rollout.
+Microsoft doesn't give numeric limits on that page, such as a maximum number of rows or a file size cap. It also links to a separate page for supported languages. If you work in a language other than English, check that page before you plan a rollout.
 
 Note that I'm describing Microsoft's pages as I read them. Copilot changes fast, and the details of licensing and rollout are the part most likely to be out of date by the time you read this.
 
@@ -45,9 +45,9 @@ Note that I'm describing Microsoft's pages as I read them. Copilot changes fast,
 2. **Select the Copilot icon** in the lower-right corner. Microsoft calls this the Copilot Dynamic Action Button, and it opens the Excel agent in a chat pane on the right. You can dock it to the side or move it to the ribbon. Keyboard shortcuts: **Alt+C** on Windows, **Cmd+Control+I** on Mac, and **F6** on all platforms.
 3. **Choose a mode** (see below).
 4. **Type your request** in the chat input field. Describe the outcome, name the columns you care about and say what form you want, such as a chart or a PivotTable.
-5. **Watch and review.** In edit mode, Copilot builds a step-by-step plan, works in the workbook, checks the results against your request, and you can see its steps in the pane and the changes appearing live.
+5. **Watch and review.** In edit mode, Copilot works in the workbook and checks its results against your request, and you can watch its steps in the pane and the changes appearing live.
 6. **Stop it if needed.** The **Stop** button on the right of the chat input field pauses or stops the work.
-7. **Refine.** If the result isn't what you wanted, add more detail and ask again. Microsoft says Copilot may not get it right the first time.
+7. **Refine.** If the result isn't what you wanted, add more detail and ask again. Microsoft's visualization page says the more detail you include, the more useful the result.
 
 ### The three modes
 
@@ -59,7 +59,7 @@ For a shared file or a workbook with formulas other people depend on, I'd start 
 
 ## Ask for insights: summaries, trends and outliers
 
-Microsoft's page on [data insights with Copilot in Excel](https://support.microsoft.com/en-us/excel/copilot/data-insights-with-copilot-in-excel) says you can ask a question in your own words to surface summaries, trends and outliers. The answer can come as a chart, a PivotTable or a text summary. If you want a specific format, say so in the prompt.
+Microsoft's page on [data insights with Copilot in Excel](https://support.microsoft.com/excel/copilot/data-insights-with-copilot-in-excel) says you can ask a question in your own words to surface summaries, trends and outliers. The answer can come as a chart, a PivotTable or a text summary. If you want a specific format, say so in the prompt.
 
 What makes a prompt work, based on that page:
 
@@ -96,7 +96,7 @@ If you've never used XLOOKUP, learn it first so you can judge what Copilot gives
 
 ## Charts and PivotTables
 
-Per Microsoft's page on [visualizing your data with Copilot in Excel](https://support.microsoft.com/en-us/excel/copilot/visualize-your-data-with-copilot-in-excel), you describe the chart you want and Copilot generates it. The examples include a chart with vendor budget on the X axis and headcount on the Y axis, and a line chart with data labels and gridlines. For a PivotTable, you can specify the layout, such as month in rows and category in columns with the sum of sales. If the result doesn't match, add more detail and ask again.
+Per Microsoft's page on [visualizing your data with Copilot in Excel](https://support.microsoft.com/excel/copilot/visualize-your-data-with-copilot-in-excel), you describe the chart you want and Copilot generates it. The examples include a chart with vendor budget on the X axis and headcount on the Y axis, and a line chart with data labels and gridlines. For a PivotTable, you can specify the layout, such as month in rows and category in columns with the sum of sales. If the result doesn't match, add more detail and ask again.
 
 The page doesn't state data requirements. In practice, a clean list with one header row and no blank rows gives better results, because Copilot has to find the data. That advice is mine and not from Microsoft's page, but it follows from how any tool reads a range. If your data is messy, clean it first or ask Copilot to help reshape it in edit mode.
 
@@ -118,7 +118,7 @@ What the pages don't say matters too. Nothing there describes Copilot watching a
 
 ## Copilot in Excel not showing: a checklist
 
-Microsoft's page [How to find and enable missing Copilot button](https://support.microsoft.com/en-us/office/how-to-find-and-enable-missing-copilot-button-in-microsoft-365-apps-c8482b93-4b96-4bb8-8ec9-5148f4d42441) gives the order. Work through it from the top.
+Microsoft's page [How to find and enable missing Copilot button](https://support.microsoft.com/office/how-to-find-and-enable-missing-copilot-button-in-microsoft-365-apps-c8482b93-4b96-4bb8-8ec9-5148f4d42441) gives the order. Work through it from the top.
 
 1. **Look in the right place.** By default the button is in the lower-right corner of the workbook, and it can be moved next to the ribbon.
 2. **Confirm your license.** Copilot may not be in your subscription or may be restricted by your organization. Your admin can verify which license you have.
@@ -151,3 +151,11 @@ For admins: the Dynamic Action Button page states that the rollout of the new bu
 ## Next step
 
 Open a copy of a real workbook, switch Copilot to Chat only and ask for a summary that names two columns. Then switch to Plan mode and ask for a PivotTable. That is the safest way to learn how to use Copilot in Excel before you let it edit a file you care about.
+
+## Sources
+
+- [Get started with Copilot in Excel (Microsoft Support)](https://support.microsoft.com/excel/copilot/get-started-with-copilot-in-excel)
+- [Data insights with Copilot in Excel (Microsoft Support)](https://support.microsoft.com/excel/copilot/data-insights-with-copilot-in-excel)
+- [Visualize your data with Copilot in Excel (Microsoft Support)](https://support.microsoft.com/excel/copilot/visualize-your-data-with-copilot-in-excel)
+- [The Copilot Dynamic Action Button in Word, Excel and PowerPoint (Microsoft Support)](https://support.microsoft.com/office/foundations-experiences/copilot-dab/the-copilot-dynamic-action-button-in-word-excel-and-powerpoint)
+- [How to find and enable the missing Copilot button in Microsoft 365 apps (Microsoft Support)](https://support.microsoft.com/office/how-to-find-and-enable-missing-copilot-button-in-microsoft-365-apps-c8482b93-4b96-4bb8-8ec9-5148f4d42441)

@@ -38,7 +38,7 @@ This is the route most people need, and it's the safest one because it leaves yo
 2. Select **Enable Content**.
 3. If Excel shows a Security Warning dialog, choose **Yes** to trust the document.
 
-Microsoft's page on [enabling or disabling macros in Microsoft 365 files](https://support.microsoft.com/en-us/office/enable-or-disable-macros-in-microsoft-365-files-12b036fd-d140-4e74-b45e-16fed1a7e5c6) describes this as marking the document as trusted. That wording matters. Many guides claim that macros are switched off again as soon as you close the file. Microsoft's description is different: once you've trusted a document, Excel stops asking about it. Microsoft adds that you can't revoke trust for a single file. To take it back you clear all trusted documents in the Trust Center, and then every file asks again.
+Microsoft's page on [enabling or disabling macros in Microsoft 365 files](https://support.microsoft.com/office/enable-or-disable-macros-in-microsoft-365-files-12b036fd-d140-4e74-b45e-16fed1a7e5c6) describes this as marking the document as trusted. That wording matters. Many guides claim that macros are switched off again as soon as you close the file. Microsoft's description is different: once you've trusted a document, Excel stops asking about it. Microsoft adds that you can't revoke trust for a single file. To take it back you clear all trusted documents in the Trust Center, and then every file asks again.
 
 If you only want to run a macro once and not trust the file for good, there's no good middle path in the banner. In that case open the file, check what the macro does if you can read VBA, and decide.
 
@@ -46,7 +46,7 @@ If you only want to run a macro once and not trust the file for good, there's no
 
 Since 2022, Office on Windows has blocked macros in files that come from the internet. You'll see it with email attachments and browser downloads. The banner says **Security Risk**, mentions that Microsoft blocked the macros because the source of the file is untrusted, and has a **Learn More** button. There's no **Enable Content** button. You can click around the banner all day and nothing will happen.
 
-What's going on: Windows tags files from untrusted places with a hidden marker called the Mark of the Web. Office looks for that marker, and when it finds one, it blocks macros before any of your own settings come into play. Microsoft's article on [macros from the internet being blocked by default](https://learn.microsoft.com/en-us/microsoft-365-apps/security/internet-macros-blocked) lists the order Office uses to decide, and the block is the last step, reached only when nothing earlier allows the macro.
+What's going on: Windows tags files from untrusted places with a hidden marker called the Mark of the Web. Office looks for that marker, and when it finds one, it blocks macros before any of your own settings come into play. Microsoft's article on [macros from the internet being blocked by default](https://learn.microsoft.com/microsoft-365-apps/security/internet-macros-blocked) lists the order Office uses to decide, and the block is the last step, reached only when nothing earlier allows the macro.
 
 To unblock a file you trust:
 
@@ -90,21 +90,21 @@ For most people the best setting is the default, **Disable all macros with notif
 
 If you work with the same macro files every day, say a team template on a shared drive, trusting each file gets old. Trusted locations are the alternative.
 
-To add one, go to **File** > **Options** > **Trust Center** > **Trust Center Settings** > **Trusted Locations**, select **Add new location**, select **Browse**, pick the folder and select **OK** until the dialogs close. The same page has **Modify** and **Remove** for changing or deleting a location. Microsoft's article on [adding, removing or changing a trusted location](https://support.microsoft.com/en-us/office/security-privacy/add-remove-or-change-a-trusted-location-in-microsoft-office) explains that files in these folders are considered safe and skip some security checks. That includes the internet block: a file saved from the internet into a trusted location opens with macros enabled.
+To add one, go to **File** > **Options** > **Trust Center** > **Trust Center Settings** > **Trusted Locations**, select **Add new location**, select **Browse**, pick the folder and select **OK** until the dialogs close. The same page has **Modify** and **Remove** for changing or deleting a location. Microsoft's article on [adding, removing or changing a trusted location](https://support.microsoft.com/office/security-privacy/add-remove-or-change-a-trusted-location-in-microsoft-office) explains that files in these folders are considered safe by the system and bypass some of the security checks. In the decision order on Microsoft's internet-macros page, the trusted location check comes before the block, so a file from the internet that sits in a trusted location is not blocked.
 
-So pick the folder carefully. A folder only you can write to is fine. A shared folder where many people drop files is a risk, and a folder like Downloads is a bad idea because it takes everything. Microsoft also says network locations can be trusted but advises against it.
+So pick the folder carefully. A folder only you can write to is fine. A shared folder where many people drop files is a risk, and a folder like Downloads is a bad idea because it takes everything.
 
-The other option is a trusted publisher. A developer signs the macro with a code-signing certificate, and your device trusts that certificate. With the setting **Disable all macros except digitally signed macros**, signed macros from trusted publishers then run without a prompt. Microsoft points out two catches: everything signed with the same certificate is trusted, and trusted publishers are a Windows-wide setting. For companies, the recommended way is to deploy the publisher's certificate through policy and stop users from adding publishers on their own.
+The other option is a trusted publisher. A developer signs the macro with a code-signing certificate, and your device trusts that certificate. With the setting **Disable all macros except digitally signed macros**, signed macros from trusted publishers then run without a prompt. A signed macro is only as trustworthy as the certificate holder, so for companies the cleaner way is to deploy the publisher's certificate through policy and stop users from adding publishers on their own. That is general advice, not a statement from Microsoft's pages cited here.
 
 ## Mac, Excel for the web and mobile
 
-**Excel for Mac.** The red internet-macro block doesn't apply on Mac. To show the Developer tab, go to **Excel** > **Preferences** > **Ribbon & Toolbar**, select **Main Tabs** and tick **Developer**. I couldn't confirm the exact Mac menu path for macro security on a Microsoft page, so I won't give click-by-click steps for it here. Look in the Excel preferences for the security options, and test with a copy of the file. Also remember that VBA written for Windows can use features that don't exist on Mac, so a macro may fail on Mac for reasons that have nothing to do with security settings.
+**Excel for Mac.** The red internet-macro block doesn't apply on Mac. The Microsoft pages cited here give no Mac menu path for macro security or the Developer tab, so this article doesn't give click-by-click steps for it. Look in the Excel preferences for the security options, and test with a copy of the file. Also remember that VBA written for Windows can use features that don't exist on Mac, so a macro may fail on Mac for reasons that have nothing to do with security settings.
 
-**Excel for the web.** Here the answer is no, with a twist. Microsoft's page on [VBA macros in Excel for the web](https://support.microsoft.com/en-us/office/work-with-vba-macros-in-excel-for-the-web-98784ad0-898c-43aa-a1da-4f0fb5014343) says you can open and edit a workbook that contains macros, and you won't see any messages about them, but you can't create, run or edit VBA macros. Removing macros has to be done in the desktop app too. If you need a macro to run, select **Open in Desktop App** above the ribbon.
+**Excel for the web.** Here the answer is no, with a twist. Microsoft's page on [VBA macros in Excel for the web](https://support.microsoft.com/office/work-with-vba-macros-in-excel-for-the-web-98784ad0-898c-43aa-a1da-4f0fb5014343) says you can open and edit a workbook that contains macros, and you won't see any messages about them, but you can't create, run or edit VBA macros. Removing macros has to be done in the desktop app too. If you need a macro to run, select **Open in Desktop App** above the ribbon.
 
-**Mobile.** Microsoft's pages I read don't describe macro behavior on phones, so I'm not making a claim here. Plan on using the desktop app for anything that depends on a macro.
+**Mobile.** The Microsoft pages cited here don't describe macro behavior on phones, so this article makes no claim about it. The internet block page only says Office on Android and iOS isn't affected by the block. Plan on using the desktop app for anything that depends on a macro.
 
-**If you want automation that works in the browser.** Office Scripts is a separate Microsoft feature. Microsoft's platform requirements for Office Scripts list Excel on the web, Excel for Windows (version 2210 or higher) and Excel for Mac, with the workbook stored in OneDrive for Business and a supported business or education license. It's not a way to run your old VBA. It's a different system, so an existing macro would have to be rebuilt. If you're curious, start with the [Office Scripts](https://www.m365.fm/entity/office-scripts/) page.
+**If you want automation that works in the browser.** Office Scripts is a separate Microsoft feature. Microsoft's [platform requirements for Office Scripts](https://learn.microsoft.com/office/dev/scripts/testing/platform-limits) list Excel on the web, Excel for Windows (version 2210 or higher) and Excel for Mac, OneDrive for Business and one of several listed Microsoft 365 business or education licenses. It's not a way to run your old VBA. It's a different system, so an existing macro would have to be rebuilt. If you're curious, start with the [Office Scripts](https://www.m365.fm/entity/office-scripts/) page.
 
 ## Why macros still don't run after you enabled them
 
@@ -139,3 +139,11 @@ After the settings are right, run a macro from the Developer tab: select **Macro
 ## Next step
 
 Open the file that gave you trouble and look at the banner color. Yellow means select Enable Content, red means unblock the file in Properties first. If you need to enable macros in Excel for many people, set it up with a trusted location or signed macros and let your IT team deploy it, instead of asking everyone to lower their security level.
+
+## Sources
+
+- [Enable or disable macros in Microsoft 365 files (Microsoft Support)](https://support.microsoft.com/office/enable-or-disable-macros-in-microsoft-365-files-12b036fd-d140-4e74-b45e-16fed1a7e5c6)
+- [Macros from the internet are blocked by default in Office (Microsoft Learn)](https://learn.microsoft.com/microsoft-365-apps/security/internet-macros-blocked)
+- [Add, remove or change a trusted location in Microsoft Office (Microsoft Support)](https://support.microsoft.com/office/security-privacy/add-remove-or-change-a-trusted-location-in-microsoft-office)
+- [Work with VBA macros in Excel for the web (Microsoft Support)](https://support.microsoft.com/office/work-with-vba-macros-in-excel-for-the-web-98784ad0-898c-43aa-a1da-4f0fb5014343)
+- [Platform limits and requirements with Office Scripts (Microsoft Learn)](https://learn.microsoft.com/office/dev/scripts/testing/platform-limits)

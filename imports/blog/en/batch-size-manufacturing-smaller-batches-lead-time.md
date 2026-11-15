@@ -41,15 +41,15 @@ The effect is simple. If you halve the batch, each part waits for half as many o
 
 Stahl describes the same direction in his article. Under just-in-time flow, he writes, batch sizes shrink and queues disappear. He also quotes Burbidge's fourth rule, which asks for the smallest run quantity that can be managed efficiently. Stahl argues that managers often do the opposite when things go wrong: they respond to breakdowns by increasing batch sizes and lead times, which in his view makes the system more unstable.
 
-A second effect is learning. In an LEI article on [one-piece flow](https://www.lean.org/the-lean-post/articles/why-does-one-piece-flow-matter/), Michael Ballé describes asking operators to hold to single-piece flow for half an hour. Afterwards, all the waste that was previously hidden in the cell suddenly appeared, and the line was ripe with kaizen opportunities. With small batches, a defect is found after a few parts, not after a thousand. The feedback loop is shorter, so quality problems cost less.
+A second effect is learning. With small batches, a defect is found after a few parts, not after a thousand. The feedback loop is shorter, so quality problems cost less. Lean practitioners also report that waste that was hidden in a cell becomes visible quickly once the cell runs close to single-piece flow, which gives the team more to improve. This is a common observation, and we give no measured figure for it.
 
-Ballé is also honest about the limits: in many areas, usually upstream, the nature of the process forces production in batches. A furnace, a paint bath or a heat treatment step cannot be run one part at a time. The aim is not one piece everywhere. It is the smallest batch that each step can run sensibly.
+There are limits as well: in many areas, usually upstream, the nature of the process forces production in batches. A furnace, a paint bath or a heat treatment step cannot be run one part at a time. The aim is not one piece everywhere. It is the smallest batch that each step can run sensibly.
 
 ## Setup time and the cost side of the trade-off
 
 Smaller batches have a price. Every extra changeover in the production process adds setup costs: it uses machine time, labour and often some scrap during start-up. That is the [setup time](https://www.m365.fm/entity/setup-time/) that large batches were meant to avoid. On the other side stand the holding costs of stock: capital, space, handling and risk. Plants that want to minimize total inventory costs have to weigh the two sides.
 
-The classic way to balance the two is the economic order quantity (EOQ), also used for production lot sizes. The software vendor Unleashed explains it in its article on the [economic order quantity](https://www.unleashedsoftware.com/blog/economic-order-quantity-explained-formulas-how-to-use-them/), which is a vendor source. It gives the formula EOQ = √(2DK/H), where D is annual demand, K is the cost per order or setup, and H is the annual holding cost per unit. The same source says the model assumes that demand, costs and lead times stay constant over the year, and it warns that the results are only as good as the input data.
+The classic way to balance the two is the economic order quantity (EOQ), also used for production lot sizes. An open supply chain management textbook explains it in its section on the [economic order quantity](https://pressbooks.pub/supplychainmanagement3005/?p=135). The formula is EOQ = √(2DK/H), where D is annual demand, K is the cost per order or setup, and H is the annual holding cost per unit. The textbook writes the cost terms as Co and Ch. It lists the model's assumptions: demand is known and constant, ordering and holding costs are constant, and replenishment is instantaneous. Results are only as good as the input data, which is our own caution.
 
 The formula has one lesson that matters for lean. The optimal batch grows with the square root of the setup cost. If you cut the setup cost to a quarter, the cost-optimal batch is halved. So the way to smaller batches runs through shorter changeovers. The formula does not include lead time, quality feedback, machine utilization or flexibility, so treat its result as a cost floor, not as the target.
 
@@ -103,3 +103,8 @@ An ERP system can hold lot sizes, setup times and demand per product, and it can
 ## Next step
 
 Pick one machine with a long queue, time its changeover, and calculate the cost per changeover. Then test a batch that is a third smaller, and watch the effect of batch size in manufacturing on your lead time.
+
+## Sources
+
+- Stahl, F.: Which Will Prevail: Batch Thinking or Worker Leadership? (Lean Enterprise Institute) - https://www.lean.org/the-lean-post/articles/which-will-prevail-batch-thinking-or-worker-leadership/
+- Supply chain management open textbook: 8.3 Economic Order Quantity (EOQ) - https://pressbooks.pub/supplychainmanagement3005/?p=135

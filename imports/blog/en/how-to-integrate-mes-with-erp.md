@@ -127,3 +127,10 @@ If your problem is the loop between the ERP plan and the floor, iFAKT Polaris is
 ## Next step
 
 Take one product family and write down, in a table, every object that must move between your MES and your ERP, with sender, receiver and owner. If you want to integrate MES with ERP without surprises, bring that table to the first meeting with IT and your vendor.
+
+## Sources
+
+- [Manufacturing execution systems integration - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/production-control/mes-integration)
+- [ISA-95 Standard: Enterprise-Control System Integration - ISA](https://www.isa.org/standards-and-publications/isa-standards/isa-95-standard)
+- [MESA Announces Version 7 Release of B2MML-BatchML Specifications - MESA International](https://members.mesa.org/news/Details/press-release-mesa-announces-version-7-release-of-b2mml-batchml-specifications-55273)
+- [ISA-95 Implementation Best Practices: Production Models and Segments - Automation World](https://www.automationworld.com/products/control/news/13301218/isa-95-implementation-best-practices-production-models-and-segments)

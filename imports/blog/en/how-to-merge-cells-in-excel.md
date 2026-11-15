@@ -22,7 +22,7 @@ faq:
 ---
 To merge cells in Excel, select the cells you want to join, go to the **Home** tab and choose **Merge & Center** > **Merge Cells**. The cells become one, and only the content of the upper-left cell stays. Everything else in the range is deleted. This article is for Excel users who format reports, headers and forms and want to merge without wrecking their data. You'll learn the merge options, what happens to your data, how to unmerge, why merged cells break sorting, and what to do instead when you only need text from several cells in one place.
 
-Merging is a layout tool, not a data tool. Keep that in mind and most of the trouble goes away. Microsoft's page on how to [merge and unmerge cells](https://support.microsoft.com/en-us/excel/get-started/merge-and-unmerge-cells-in-excel) covers [Excel](https://www.m365.fm/entity/excel/) for Microsoft 365, 2024, 2021, 2019, 2016 and Excel for the web.
+Merging is a layout tool, not a data tool. Keep that in mind and most of the trouble goes away. Microsoft's page on how to [merge and unmerge cells](https://support.microsoft.com/excel/get-started/merge-and-unmerge-cells-in-excel) covers [Excel](https://www.m365.fm/entity/excel/) for Microsoft 365, 2024, 2021, 2019, 2016 and Excel for the web.
 
 ## Merge cells step by step
 
@@ -31,9 +31,9 @@ Merging is a layout tool, not a data tool. Keep that in mind and most of the tro
 3. **Open the Home tab.** Find the **Merge & Center** button in the Alignment group.
 4. **Choose Merge Cells.** Select **Merge & Center**, then **Merge Cells**, as Microsoft describes it. The cells become one cell.
 
-In Microsoft's words, the contents of the other merged cells are deleted. When the range holds several values, Excel normally asks you to confirm that only the upper-left value will be kept. Don't click OK out of habit.
+Microsoft's page says the contents of the other merged cells are deleted. In our experience Excel also shows a warning when the range holds several values, but the Microsoft page doesn't mention one, so don't rely on it. If a warning appears, don't click OK out of habit.
 
-Formatting also follows the top-left cell. If that cell has a fill color or a border, the merged cell inherits it.
+In our experience, formatting also follows the top-left cell: if that cell has a fill color or a border, the merged cell inherits it. This isn't covered on the Microsoft page.
 
 ### Which merge option to pick
 
@@ -60,13 +60,13 @@ Two related points from Microsoft's page. You can't split a single, unmerged cel
 
 ### Find merged cells
 
-Merged cells are easy to miss in a sheet you didn't build. Microsoft's page says to use the **Find** command to locate them. In the Find and Replace dialog, you can search by format, and "Merge cells" is one of the alignment options. Do this before you sort or filter a sheet you've inherited.
+Merged cells are easy to miss in a sheet you didn't build. Microsoft's page says to use the **Find** command to locate merged cells quickly, but it doesn't list the steps. One way is to open Find and Replace, select **Format**, and set **Merge cells** on the **Alignment** tab (our own tip, not from Microsoft). Do this before you sort or filter a sheet you've inherited.
 
 ## Why merged cells cause trouble
 
 The honest advice is to merge only where nothing will sort, filter or calculate on that range. Here is what goes wrong.
 
-**Sorting fails.** Microsoft documents [an error when you sort a range that contains merged cells](https://learn.microsoft.com/en-us/troubleshoot/microsoft-365-apps/excel/error-sort-a-range-merged-cell). The message reads: "This operation requires the merged cells to be identically sized." It happens when you merged some but not all of the cells in the range, or when you merged all of them but the merged cells differ in size. The workaround is to unmerge the cells or make every merged cell the same size. The general fix is:
+**Sorting fails.** Microsoft documents [an error when you sort a range that contains merged cells](https://learn.microsoft.com/troubleshoot/microsoft-365-apps/excel/error-sort-a-range-merged-cell). The message reads: "This operation requires the merged cells to be identically sized." It happens when you merged some but not all of the cells in the range, or when you merged all of them but the merged cells differ in size. The workaround is to unmerge the cells or make every merged cell the same size. The general fix is:
 
 1. Select the whole range you want to sort.
 2. On the **Home** tab, open the **Alignment** dialog box launcher in the Alignment group.
@@ -77,7 +77,7 @@ Microsoft notes that this can change the layout of the data in the range.
 
 **Only one cell holds a value.** A merged block has one value, in the upper-left position. The other cells in the block are empty. A formula that reads across that block, such as a lookup over the whole range, runs into empty cells. Keep merged cells out of the data region and use them only for titles above it.
 
-**Tables.** Merging inside an Excel Table isn't allowed in practice. The Merge command is greyed out, and a table needs one value per cell to keep its columns consistent. If you want a title above a table, put it in the rows above the table, not in the table itself.
+**Tables.** In our experience, the Merge command is greyed out inside an Excel Table, and a table needs one value per cell to keep its columns consistent. The Microsoft merge page doesn't address tables. If you want a title above a table, put it in the rows above the table, not in the table itself.
 
 ## A worked example: a report header and a name column
 
@@ -106,7 +106,7 @@ A lot of people search for "merge cells" when what they want is to put the conte
 
 **CONCAT.** `=CONCAT(A2," ",B2)` joins a first name, a space and a last name. Microsoft describes CONCAT as the replacement for CONCATENATE, which stays in Excel for compatibility. CONCAT also accepts ranges. It has no delimiter argument, and Microsoft suggests TEXTJOIN when you need separators or want to skip empty cells.
 
-**TEXTJOIN.** Microsoft's [TEXTJOIN page](https://support.microsoft.com/en-us/excel/functions/textjoin-function) gives the syntax as `=TEXTJOIN(delimiter, ignore_empty, text1, [text2], …)`. For example, `=TEXTJOIN(", ", TRUE, A2:C2)` joins three cells with a comma and a space. With `ignore_empty` set to TRUE, empty cells are skipped, so you don't get stray commas. Set it to FALSE and blank cells appear as consecutive delimiters. Microsoft lists TEXTJOIN for Excel 2019, 2021, 2024 and Microsoft 365, and for Microsoft365.com. If the result is longer than 32,767 characters, it returns #VALUE!.
+**TEXTJOIN.** Microsoft's [TEXTJOIN page](https://support.microsoft.com/excel/functions/textjoin-function) gives the syntax as `=TEXTJOIN(delimiter, ignore_empty, text1, [text2], …)`. For example, `=TEXTJOIN(", ", TRUE, A2:C2)` joins three cells with a comma and a space. With `ignore_empty` set to TRUE, empty cells are skipped, so you don't get stray commas. Set it to FALSE and blank cells appear as consecutive delimiters. Microsoft lists TEXTJOIN for Excel 2019, 2021, 2024 and Microsoft 365, and for Microsoft365.com. If the result is longer than 32,767 characters, it returns #VALUE!.
 
 If you really need a merged cell that contains both values, do it in this order:
 
@@ -140,3 +140,10 @@ If you only want a title to appear centered over several columns, there's an ali
 ## Next step
 
 When you next need to merge cells in Excel, ask whether it's for layout or for data. For layout above a data range, merge or use Center Across Selection. For data, combine the text with TEXTJOIN in a new cell and leave the source cells alone.
+
+## Sources
+
+- [Merge and unmerge cells (Microsoft Support)](https://support.microsoft.com/excel/get-started/merge-and-unmerge-cells-in-excel)
+- [Error when you sort a range that contains merged cells (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/microsoft-365-apps/excel/error-sort-a-range-merged-cell)
+- [TEXTJOIN function (Microsoft Support)](https://support.microsoft.com/excel/functions/textjoin-function)
+- [CONCAT function (Microsoft Support)](https://support.microsoft.com/excel/functions/concat-function)

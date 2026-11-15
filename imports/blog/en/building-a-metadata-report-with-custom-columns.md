@@ -12,7 +12,7 @@ faq:
   - q: "Should I use managed metadata columns or plain choice columns for reporting?"
     a: "It depends on how much consistency you need. Managed metadata columns use centrally managed term sets from the term store, which helps keep values uniform across sites. Choice columns are simpler but defined per list or site. For reports that span many sites, shared term sets usually reduce messy, inconsistent values. Check Microsoft Learn for current options."
   - q: "Can I export a SharePoint metadata report to Excel?"
-    a: "A list or library view can typically be exported to Excel from the SharePoint interface; exact options, limits and the way it works can change, so check Microsoft Learn before relying on it. According to its vendor, the SharePoint Essentials Toolkit (a sponsored product of Cognillo, an M365.FM sponsor) lists scheduled exports to Excel or CSV; this was not tested by M365.FM."
+    a: "Microsoft Support documents that the items in the current view of a list can be exported from the command bar with Export, then Export to Excel or Export to CSV. For CSV it names a limit of 30,000 rows and says the option is not available for document libraries. Options and limits can change, so check Microsoft Support before relying on it. According to its vendor, the SharePoint Essentials Toolkit (a sponsored product of Cognillo, an M365.FM sponsor) lists scheduled exports to Excel or CSV; this was not tested by M365.FM."
 ---
 
 A SharePoint report is only as good as the data behind it. If libraries hold files with no consistent properties, any report will show you names, dates and sizes, and little else. Custom columns are what turn a file list into something you can actually analyze.
@@ -77,13 +77,13 @@ Once the columns exist and are filled, views do most of the reporting work. A we
 
 Save separate views for separate audiences, and keep the default view simple. A view with a dozen columns and nested grouping is hard to read and slower to load.
 
-For sharing results, SharePoint lists and libraries can typically be exported to Excel, where you can build pivot tables and charts. Other options, such as Power BI or Microsoft Graph based approaches, exist for wider analysis; check Microsoft Learn for what fits your scenario and licensing. If a report must be refreshed regularly, think about who triggers the export and where the file is stored, and restrict the location to the people who should see the data, since metadata can itself be sensitive.
+For sharing results, Microsoft Support documents exporting the items in the current view of a list to Excel from the command bar (Export, then Export to Excel or Export to CSV). The Excel workbook export creates a one-way connection to the list that you can refresh, and the CSV export is capped at 30,000 rows and is currently not available for document libraries. In Excel you can build pivot tables and charts. Other options, such as Power BI or Microsoft Graph based approaches, exist for wider analysis; check Microsoft Learn for what fits your scenario and licensing. If a report must be refreshed regularly, think about who triggers the export and where the file is stored, and restrict the location to the people who should see the data, since metadata can itself be sensitive.
 
 ## Where built-in reports end, and where other tools may fit
 
 It helps to separate two kinds of reports. A metadata report describes content using properties you define. Microsoft's built-in reports mainly describe access and sharing.
 
-Microsoft Learn documents two such options. Data access governance reports in the SharePoint admin center require SharePoint Advanced Management and the SharePoint administrator role. Snapshot reports show data as of the day they were created, and activity reports cover the last 28 days, including sharing links and content shared with "Everyone except external users". For a single site, a site admin can create a CSV file listing unique files, users, permissions and links. That file does not include Anyone links or links that were e-mailed but not clicked, and it shows SharePoint groups but not the individual people inside them. The details are on the [data access governance reports](https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports) page.
+Microsoft Learn documents two such options. Data access governance reports in the SharePoint admin center require the SharePoint administrator role and the licensing described in the SharePoint Advanced Management prerequisites. Snapshot reports show data as of the day they were created, and activity reports cover the last 28 days, including sharing links and content shared with "Everyone except external users". For a single site, a site admin can create a CSV file listing unique files, users, permissions and links. That file does not include Anyone links or links that were e-mailed but not clicked, and it shows SharePoint groups but not the individual people inside them. The details are on the [data access governance reports](https://learn.microsoft.com/en-us/sharepoint/data-access-governance-reports) page.
 
 Neither of these is a general metadata report for your own business columns. For that, views and exports remain the native route, and the access reports are a complement, not a replacement.
 
@@ -101,3 +101,11 @@ Third-party tools are one option for broader reporting. One example is the [Shar
 - Test column, term set and view changes on a pilot site first, and keep a way back before touching production libraries.
 - Treat Microsoft's access and sharing reports as a complement to metadata reports, not a substitute, and check Microsoft Learn for current requirements and limits.
 - If you consider a third-party tool, compare it against what the native features already deliver, and test it first.
+
+## Sources
+
+- [Introduction to managed metadata (Microsoft Learn)](https://learn.microsoft.com/sharepoint/managed-metadata)
+- [Data access governance reports for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)
+- [Prerequisites for SharePoint Advanced Management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharepoint-advanced-management-prerequisites)
+- [Report on file and folder sharing in a SharePoint site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharing-reports)
+- [Export to Excel from SharePoint or Lists (Microsoft Support)](https://support.microsoft.com/topic/bfb2ea48-6118-4fa9-abb6-cced9424e5d9)

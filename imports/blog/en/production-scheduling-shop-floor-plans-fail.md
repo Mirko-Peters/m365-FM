@@ -33,7 +33,7 @@ Many plants build the schedule in a spreadsheet or in the planning module of an 
 
 ## Why do plans fail so early in the shift?
 
-Research on dynamic scheduling treats disruption as normal. A survey in the [Journal of Scheduling](https://iaorifors.com/paper/65484) notes that unexpected disruptions in manufacturing are usually inevitable, which is why static schedules fall short. In practice, the causes are familiar:
+In my experience, unexpected disruptions in manufacturing are usually inevitable, which is why static schedules fall short. In practice, the causes are familiar:
 
 - **Optimistic capacity.** The production schedule assumes nominal run times. It ignores downtime, changeovers and slow starts. The overview above warns that if real OEE (overall equipment effectiveness) is lower than the plan assumes, jobs run longer and the schedule can unravel within hours.
 - **Material that is not there.** A sequence is worthless if components are missing. The job is skipped, and everything behind it moves.
@@ -104,3 +104,7 @@ A spreadsheet cannot recalculate a sequence quickly when a machine stops. Softwa
 ## Next step
 
 For one week, record the planned and actual start of each job on one machine, and the reason for every deviation. Use that data to rebuild your production scheduling rules around real run times and the three largest causes of delay.
+
+## Sources
+
+- [What Is a Production Schedule? A Plain-English Guide - Fabrico](https://www.fabrico.io/blog/what-is-a-production-schedule/)

@@ -31,14 +31,14 @@ Imagine a team site whose home page has a List web part and a News web part that
 
 ## Know your source before you move anything
 
-Before choosing a tool, take stock of what you actually have. Microsoft names different tools for different sources: the Migration Manager in the SharePoint admin center for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares, and the SharePoint Migration Tool (SPMT) for SharePoint Server 2010, 2013 and 2016, including classic workflows and classic pages. The Microsoft Learn page also says that the Mover tool is retired for admin-led migrations. Check [Microsoft Learn on migrating to SharePoint](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) for the current state, because tools and supported scenarios change.
+Before choosing a tool, take stock of what you actually have. Microsoft names different tools for different sources: the Migration Manager in the SharePoint admin center for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares, and the SharePoint Migration Tool (SPMT) for SharePoint Server 2010, 2013 and 2016 environments only. SPMT can migrate certain SharePoint Server 2010 workflows to Power Automate, and classic pages are covered by a separate guide on transforming them to modern pages. The Microsoft Learn page also says that the Mover tool is retired for admin-led migrations. Check [Microsoft Learn on migrating to SharePoint](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) for the current state, because tools and supported scenarios change.
 
 A practical inventory for lists and libraries could cover:
 
 - **Internal links:** links between documents, pages and lists in the same site or collection
 - **Embedded URLs:** web parts, navigation, quick links and page content that contain absolute addresses
 - **Links in Office documents:** references to other files, often forgotten
-- **Workflows and forms:** classic SharePoint Server workflows should be rebuilt as Power Automate flows, according to Microsoft
+- **Workflows and forms:** Microsoft recommends moving classic SharePoint Server workflows to Power Automate flows
 - **External references:** bookmarks, emails and other systems that point at the old location
 
 Write down which of these are in scope. Links in other systems are outside the scope of what the Microsoft documentation used here describes, so plan separately for them, for example with a communication plan.
@@ -49,7 +49,7 @@ Links can break when the structure changes: new site names, flattened folder tre
 
 For address changes inside Microsoft 365, rely on the documented redirect behaviour, but treat it as a bridge, not a permanent solution. Microsoft Learn describes how [changing a site address](https://learn.microsoft.com/en-us/sharepoint/change-site-address) works and how [site redirects](https://learn.microsoft.com/en-us/sharepoint/manage-site-redirects) behave, including the point that a redirect remains until someone deletes it. Note that a site cannot be renamed this way if it is a hub site. Plan the fixing of embedded URLs while the redirect is still in place, so that you can delete the redirect later without side effects.
 
-For large data volumes over a limited network connection, Microsoft names Azure Data Box as an option. For migration teams that should not have full SharePoint admin access, Microsoft describes a Migration Administrator role.
+To avoid depending on the WAN link for large data volumes, Microsoft names Azure Data Box as an option: the data is copied to a device, shipped to Microsoft and lands in Azure, and you then use SPMT to migrate it to SharePoint. For migration teams that should not have the full SharePoint administrator role, Microsoft describes a Migration Administrator role that gives access to Migration Manager in the Microsoft 365 admin center.
 
 ## Run a pilot and test with real content
 
@@ -83,3 +83,9 @@ Whatever you use, apply the same rule. Run the link check before the migration t
 - Run a pilot on a test site or tenant, and keep the source and a way back until everything is verified.
 - Check links before and after the move, manually or with a tool, and compare the results.
 - Check Microsoft Learn for the current tools and supported scenarios before you plan.
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)
+- [Change a site address (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-site-address)
+- [Manage site redirects (Microsoft Learn)](https://learn.microsoft.com/sharepoint/manage-site-redirects)

@@ -9,7 +9,7 @@ topics: [polaris-operator, continuous-improvement, gemba-walk]
 keypoints:
   - "A gemba walk checklist is a short list of open questions that keeps a walk focused on facts. It is a prompt for conversation, not a form to fill in."
   - "The 25 questions here fall into five groups: purpose, flow, quality and standard work, people and safety, and follow-up."
-  - "The first five questions follow the big-picture questions that Jim Womack of the Lean Enterprise Institute recommends for a first walk."
+  - "Q1 and Q3 to Q5 follow the big-picture questions that Jim Womack of LEI lists for a first walk. Q2 on the customer is an addition."
   - "Pick five to eight questions for each walk. Asking all 25 at one station turns a conversation into an audit."
   - "Write each answer as a fact with a number, assign an owner and a date, and review the action list at the start of the next walk."
 faq:
@@ -28,7 +28,7 @@ A checklist solves one problem: you forget what to ask when you stand in front o
 
 Jim Womack of the Lean Enterprise Institute is cautious about checklists. In his article [Gemba walk checklist](https://www.lean.org/the-lean-post/articles/gemba-walk-checklist/) he says that on a first walk in a new organisation he uses no detailed checklist and follows each question where it leads. He sees more use for a checklist of detailed questions on a technical walk with less experienced managers. His advice: if you need a checklist, develop one, and make its development a shared task.
 
-That is a good rule. Treat the list below as a menu, not a script. The first five questions follow the big-picture questions Womack recommends. The other 20 are practical questions assembled by the author from common lean practice. They are not a published standard.
+That is a good rule. Treat the list below as a menu, not a script. Q1 and Q3 to Q5 follow the big-picture questions Womack lists: the purpose of the process, who is responsible, whether it achieves its purpose and what causes the failures. Q2 on the customer is an addition. His fifth question, how the people who touch the process are involved in improving it, is not on this list. The other 21 are practical questions assembled by the author from common lean practice. They are not a published standard.
 
 ## 25 questions to ask on the shop floor
 
@@ -132,3 +132,8 @@ A paper form works for the list itself. Software helps with what comes after: ke
 ## Next step
 
 Print a checklist with five of the 25 questions, choose one station and walk it this week with a supervisor. Afterwards, log each answer that exposed a problem as a [continuous improvement](https://www.m365.fm/entity/continuous-improvement/) action with an owner and a date.
+
+## Sources
+
+- [Gemba Walk Checklist - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/gemba-walk-checklist/)
+- [How to Go to the Gemba: Go See, Ask Why, Show Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/)

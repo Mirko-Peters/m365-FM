@@ -33,7 +33,7 @@ LEI notes that in a lean conversion the process may start top-down. Once the maj
 
 ## The X-matrix: strategy on one page
 
-The X-matrix, also called the hoshin kanri matrix, is a one-page template. Gemba Academy describes it as a spreadsheet that lays out cascading goals, priorities and projects. Another guide, from the vendor [Teamguru](https://www.teamguru.com/guides/x-matrix), describes the four lists around the centre this way:
+The X-matrix, also called the hoshin kanri matrix, is a one-page template. Gemba Academy describes it as a spreadsheet that lays out cascading goals, priorities and projects. Another guide, from the vendor [Teamguru](https://www.teamguru.com/guides/x-matrix), describes the four lists around the centre this way (we could not re-open the Gemba Academy and Teamguru pages for this review, so treat their details as the vendors' own descriptions):
 
 - **Breakthrough objectives** for the next three to five years.
 - **Annual objectives**, meaning what will be achieved this year.
@@ -96,3 +96,7 @@ Software can hold the X-matrix, link each initiative to its metric and owner, an
 ## Next step
 
 Write down your plant's one to three annual objectives on a single page, and check that each has a metric and a named owner. Then hold your first catchball round with your area leaders. That is how a plant starts with hoshin kanri.
+
+## Sources
+
+- Lean Enterprise Institute: Strategy Deployment (Lean Lexicon) - https://www.lean.org/lexicon-terms/strategy-deployment/

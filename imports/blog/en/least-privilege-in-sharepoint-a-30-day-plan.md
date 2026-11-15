@@ -10,7 +10,7 @@ faq:
   - q: "Does least privilege in SharePoint mean everyone gets Read access only?"
     a: "No. It means each person gets the smallest role at the smallest scope for the time they need it. Someone who edits documents daily still needs Edit through the Members group. The goal is to avoid Full Control and broad access where the work does not require it."
   - q: "Where should I manage permissions on a team site?"
-    a: "Microsoft recommends managing permissions through the Microsoft 365 group or the team where possible, rather than adding many individual users or nested security groups directly in SharePoint. Because a Microsoft 365 group has no view-only access, people who should only read are added to the Visitors group."
+    a: "Microsoft Learn says permissions for team sites are best managed through the Microsoft 365 group or the team, and recommends against managing them separately with SharePoint groups. Nested security groups can cause performance issues and are not recommended. Because a Microsoft 365 group has no view-only access, people who should only read are added to the Visitors group."
   - q: "Can access reviews remove people from SharePoint sites automatically?"
     a: "Microsoft Entra access reviews can ask reviewers to confirm access to groups, applications, access packages or privileged roles, and can optionally apply removals automatically. For team sites connected to a Microsoft 365 group, that group can be reviewed. Test the configuration on a pilot group first."
 ---
@@ -56,8 +56,8 @@ Now apply the principle to roles. Imagine a team site for a product launch with 
 
 A few points from Microsoft's guidance help here:
 
-- **Manage access through the Microsoft 365 group or the team where possible.** Microsoft recommends this over many individual entries managed directly in SharePoint.
-- **Avoid nested security groups.** Microsoft advises against them because they can cause performance problems.
+- **Manage access through the Microsoft 365 group or the team where possible.** Microsoft says permissions for team sites are best managed there and recommends against managing them separately with SharePoint groups. Where a team is connected to the site, Microsoft recommends doing all permission management through Teams.
+- **Avoid nested security groups.** Microsoft describes them as not recommended because they can cause performance issues.
 - **Use Visitors for read-only access.** A Microsoft 365 group has no view-only access, so people who should only read must be added directly to the Visitors group.
 
 Changing roles changes what people can do. Removing a person from a group or lowering a role can lock them out of work they still need, and restoring access later may take time. Always test on the pilot sites first, tell the affected people in advance, and write down the previous membership so you have a way back. If you are unsure how a change behaves, check the current documentation on Microsoft Learn before applying it more widely.
@@ -108,3 +108,9 @@ Also keep in mind what access reviews cover: they review identities and their me
 - Pilot first. Test every change to roles, groups and links on a small set of sites, inform affected people, and record the previous state so you can go back.
 - Use recurring Microsoft Entra access reviews to deal with the time dimension, and check Microsoft Learn for current requirements.
 - Repeat the cycle on a schedule. Least privilege is a routine, not a one-time project.
+
+## Sources
+
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Default SharePoint groups (Microsoft Learn)](https://learn.microsoft.com/sharepoint/default-sharepoint-groups)
+- [What are access reviews? (Microsoft Learn)](https://learn.microsoft.com/entra/id-governance/access-reviews-overview)

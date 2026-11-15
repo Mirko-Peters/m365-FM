@@ -26,7 +26,7 @@ To prepare your team for a gemba walk, tell people why you are coming, what you 
 
 A [gemba walk](https://www.m365.fm/entity/gemba-walk/) only works if people show you the normal work. If they fear the walk, they show you a cleaned-up version of a real place. Direct observation, the "go and see" of lean management, needs real work in front of you. With a staged area you learn little, and you also teach them that your visits are something to survive.
 
-Flávio Battaglia of Lean Institute Brasil makes the same point in the Planet Lean article [Gemba walks and manager behaviour](https://planet-lean.com/articles/gemba-walks-manager-behavior): a well-intentioned but poorly structured trip to the gemba can do serious damage. He advises leaders to be clear about the purpose before they go, and to tell people why they are coming.
+In my experience, a well-intentioned but poorly structured trip to the gemba can do harm. My advice: be clear about the purpose before you go, and tell people why you are coming.
 
 There is a second reason. The Toyota phrase "go see, ask why, show respect", which the Lean Enterprise Institute [attributes to chairman Fujio Cho](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/), puts respect in the same sentence as observation. Preparation is where respect starts. A team that was told the purpose, the time and the plan has been treated as partners. A team that was not told has been treated as an object of study. Trust also underpins continuous improvement, because people only suggest changes to a manager they trust.
 
@@ -46,17 +46,17 @@ One more habit helps: tell people what you will not do. You will not take photos
 
 ## How to prepare yourself
 
-Your own preparation matters as much as the team's. Battaglia lists practices that fit here:
+Your own preparation matters as much as the team's. These practices fit here, in my experience:
 
-- **Define a purpose.** Write one sentence for what you want to learn. A shared purpose, he writes, enables communication.
-- **Understand the context.** Learn the basics of the area before you go: the products, the flow and the main measures. Visiting without this knowledge, he warns, can distort the problems you identify.
+- **Define a purpose.** Write one sentence for what you want to learn. A shared purpose makes communication easier.
+- **Understand the context.** Learn the basics of the area before you go: the products, the flow and the main measures. Visiting without this knowledge makes it easier to misjudge what you see.
 - **Calibrate your mindset.** Be present and look past the surface. Look at your own communication and style too.
 
 Prepare a short checklist of three to five open questions for the factory floor, and share the questions with the team leaders. Include one about standard work, the agreed best-known way of doing a task: "Can you show me how this step is done?" If practice and standard differ, that is an improvement opportunity and a reason to look for the root cause, not a mistake by the operator.
 
 Add two practical steps. First, check your calendar. A walk that you cancel twice teaches the team that it does not matter. Second, decide beforehand what you will do with what you learn, and who you will speak to if you find a safety issue.
 
-Mike Orzen's Lean Enterprise Institute article [How to lead with respect](https://www.lean.org/the-lean-post/articles/how-to-lead-with-respect/) lists gemba observation, active listening and learning as a leader among seven practices of leading with respect. Use that list as a self-check. If you plan to talk more than listen, change the plan.
+Doug Bartholomew's Lean Enterprise Institute article [How to lead with respect](https://www.lean.org/the-lean-post/articles/how-to-lead-with-respect/) lists Go and See, Effective Listening and Learning as a Leader among seven practices of leading with respect. Use that list as a self-check. If you plan to talk more than listen, change the plan.
 
 ## How to engage the shop floor in the walk
 
@@ -103,3 +103,8 @@ Preparation needs facts: where flow is slow, which orders are late and which are
 ## Next step
 
 Write your five-point message for one area today and deliver it at the next shift start meeting. After the first walk, report back within a week on what you learned and what will change, because that report is the best gemba walk preparation for the next one.
+
+## Sources
+
+- [How to Go to the Gemba: Go See, Ask Why, Show Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/)
+- [How to Lead with Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-lead-with-respect/)

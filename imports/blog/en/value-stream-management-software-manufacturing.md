@@ -29,7 +29,7 @@ The method comes first, and the software second. A value stream management platf
 
 Software adds three things. It stores the map in a model that several people can edit. It connects the model to data, so lead times, inventory and cycle times come from systems and not from a walk with a stopwatch. And it keeps the map current, so that it does not age on a wall.
 
-A warning about names. Many products sold as value stream management tools serve software delivery. They follow work items from idea to release across development and operations. A [Planview page](https://www.planview.com/?p=30248), from a vendor in that field, describes the idea in those terms. Such tools can be good at their job, but they are a different category from a tool for a plant with routings, batches and machines. Ask every vendor how the product handles queues between machines, changeovers and takt time, the pace set by customer demand.
+A warning about names. Many products sold as value stream management tools serve software delivery. They follow work items from idea to release across development and operations. A [Planview page](https://www.planview.com/products-solutions/solutions/value-stream-management/), from a vendor in that field, describes value stream management as measuring and managing software development efficiency and aligning software delivery with strategy. Such tools can be good at their job, but they are a different category from a tool for a plant with routings, batches and machines. Ask every vendor how the product handles queues between machines, changeovers and takt time, the pace set by customer demand.
 
 ## How does it differ from software delivery platforms?
 
@@ -100,3 +100,9 @@ Software helps most when you have many product families or sites, data in severa
 ## Next step
 
 Choosing value stream management software starts with your own criteria, not with a vendor demo. This week, write your ten criteria with weights, pick one product family for a pilot and ask each shortlisted supplier to show your data in their tool.
+
+## Sources
+
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Value Stream Management Software - Planview](https://www.planview.com/products-solutions/solutions/value-stream-management/)
+- [ISA-95: How Plant Systems Talk to Business Systems - Fabrico](https://www.fabrico.io/blog/isa-95/)

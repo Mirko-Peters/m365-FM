@@ -65,11 +65,12 @@ The check step of the PDCA cycle is built for this. The American Society for Qua
 
 ## How do you turn the impact into savings?
 
-Finance needs a clear classification. A guide on [hard and soft savings from Airacad](https://airacad.com/calculating-the-roi-hard-vs-soft-savings/) describes three levels:
+Finance needs a clear classification. A guide on [hard and soft savings from Airacad](https://airacad.com/calculating-the-roi-hard-vs-soft-savings/) sorts savings into two categories, and its metrics table adds a mixed case:
 
-- **Hard savings** reduce actual spend and can be verified in accounting records. Finance usually gives full credit.
-- **Soft savings** are efficiency or productivity gains that do not immediately show as cash. Finance often gives partial credit or waits for conversion.
-- **Cost avoidance** is spend that does not happen, such as not needing extra space.
+- **Hard savings** reduce actual spend and can be verified in accounting records.
+- **Soft savings** are efficiency or productivity gains that do not immediately show as cash.
+
+Cost avoidance, spend that does not happen, such as not needing extra space, is often listed as a third class. That split is my own addition, not Airacad's, so agree it with finance. In my experience, finance gives full credit to hard savings and partial credit to soft ones, or waits until they show up in the accounts.
 
 The same guide advises agreeing the classification and conversion rules with finance before approval and avoiding double counting across overlapping initiatives. The Kaizen Institute makes the same point for improvement events: gains should be quantified, with validation by the finance department. See its article on the [rapid improvement event](https://kaizen.com/insights/rapid-improvement-event-continuous-improvement/).
 
@@ -121,3 +122,10 @@ Measuring the overall performance of an improvement plan needs reliable data, an
 ## Next step
 
 For your next improvement, write the KPI definition and the baseline on the tracking sheet before the first change, and book the 30, 60 and 90 day checks. That is the simplest way to make continuous improvement KPIs credible.
+
+## Sources
+
+- [It's Not All About the Cash: How to Help Leadership Understand Lean's Financial Benefits - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/its-not-all-about-the-cash-how-to-help-leadership-understand-leans-financial-benefits/)
+- [PDCA Cycle - What is the Plan-Do-Check-Act Cycle? - ASQ](https://asq.org/quality-resources/pdca-cycle)
+- [Continuous Improvement ROI: Hard vs. Soft Savings - Airacad](https://airacad.com/calculating-the-roi-hard-vs-soft-savings/)
+- [Rapid Improvement Event: An essential element of continuous improvement - Kaizen Institute](https://kaizen.com/insights/rapid-improvement-event-continuous-improvement/)

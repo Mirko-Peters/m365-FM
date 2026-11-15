@@ -116,3 +116,10 @@ Spreadsheets work for one product. They become hard to keep current when you hav
 ## Next step
 
 Pick one product family and write down its lead time vs cycle time: the total days from start to finish, and the seconds of work per unit. Then calculate takt time for the same family and compare all three numbers.
+
+## Sources
+
+- [Cycle Time - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/cycle-time/)
+- [How to Determine Cycle Time, Takt Time, Lead Time - Gemba Academy](https://blog.gembaacademy.com/?p=2210)
+- [Key Definitions: Cycle Time, Lead Time, Takt Time - Lean Construction Institute](https://leanconstruction.org/blog/key-definitions-cycle-time-lead-time-takt-time/)
+- [Takt Time vs. Cycle Time vs. Lead Time - SixSigma.us](https://www.6sigma.us/six-sigma-in-focus/takt-time-vs-cycle-time-vs-lead-time/)

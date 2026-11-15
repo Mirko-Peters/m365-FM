@@ -33,7 +33,7 @@ Four things stand out.
 
 **Delivery can be tight in time and in order.** Odette lists call-off, kanban and synchronized delivery messages for just-in-time and just-in-sequence processes. You'll meet these in many customer agreements.
 
-**Quality systems are part of the plan.** [IATF 16949:2016](https://www.iso.org/es/contents/news/2016/08/Ref2109.html) replaced ISO/TS 16949 and is used alongside ISO 9001:2015 as a supplement, according to ISO. If you read older material that cites ISO/TS 16949, check which standard your customers require today. For planning, this means time for validation runs, inspection and traceability must be in the routing, not added later.
+**Quality systems are part of the plan.** IATF 16949:2016 replaced ISO/TS 16949, which [ISO lists as withdrawn](https://www.iso.org/standard/52844.html); the replacement is published by the International Automotive Task Force. If you read older material that cites ISO/TS 16949, check which standard your customers require today. For planning, this means time for validation runs, inspection and traceability must be in the routing, not added later.
 
 ## How do you build an automotive production planning process step by step?
 
@@ -119,3 +119,10 @@ If your hardest problems are feasible plans under constraints and fast reaction 
 ## Next step
 
 Take your next customer schedule and mark which part is firm and which part is forecast. Then check the first firm week against the bottleneck's detailed schedule, not only the weekly load, and write down where automotive production planning in your plant still depends on guesses.
+
+## Sources
+
+- [Ordering - Odette International](https://www.odette.org/process/ordering)
+- [ISO/TS 16949:2009 (withdrawn) - ISO](https://www.iso.org/standard/52844.html)
+- [Heijunka - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/heijunka/)
+- [Just in Sequence Part 1 - AllAboutLean.com](https://www.allaboutlean.com/just-in-sequence-definition/)

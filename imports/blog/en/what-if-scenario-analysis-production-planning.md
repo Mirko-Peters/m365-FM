@@ -117,7 +117,7 @@ Live data helps once the basics work. If actual progress flows back into the pla
 
 ## Where Polaris fits
 
-If your what-if questions involve shared machines, shifts and changing product mixes, a simulation of the production system can answer them faster than a spreadsheet. [iFAKT](https://www.m365.fm/entity/ifakt/) describes Polaris as AI plus a digital twin for production, working with ERP data. The [Polaris Simulator](https://www.m365.fm/entity/polaris-simulator/) module tests the production system virtually before real decisions, including capacity, staffing and buffer scenarios, and shows bottlenecks and utilization imbalances. The [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) module creates an optimized plan under constraints and analyzes the impact of disruptions. Try it on one real decision first, and check the results against a spreadsheet calculation you trust.
+If your what-if questions involve shared machines, shifts and changing product mixes, a simulation of the production system is typically the better tool, because a spreadsheet struggles to represent shared resources. [iFAKT](https://www.m365.fm/entity/ifakt/) describes Polaris as AI plus a digital twin for production, working with ERP data. The [Polaris Simulator](https://www.m365.fm/entity/polaris-simulator/) module tests the production system virtually before real decisions, including capacity, staffing and buffer scenarios, and shows bottlenecks and utilization imbalances. The [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) module creates an optimized plan under constraints and analyzes the impact of disruptions. Try it on one real decision first, and check the results against a spreadsheet calculation you trust.
 
 ## Related topics to explore
 
@@ -130,3 +130,9 @@ If your what-if questions involve shared machines, shifts and changing product m
 ## Next step
 
 Take the next decision on your desk and write it as one sentence. Then save your current plan as the baseline and run three scenarios on it, changing one lever at a time. That small round of what-if scenario analysis in production planning will show you whether the method earns a place in your weekly meeting.
+
+## Sources
+
+- [Master plans - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/master-planning/master-plans)
+- [Create and use what-if parameters in Power BI Desktop - Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-what-if)
+- [Use of the Interval Statistical Procedure for Simulation Model Validation (Sargent, Goldsman, Yaacoub, WSC 2015)](https://www.informs-sim.org/wsc15papers/005.pdf)

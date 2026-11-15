@@ -112,3 +112,10 @@ iFAKT's [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) is a module of iF
 ## Next step
 
 A value stream management roadmap starts small: one stream, one owner, one baseline and a 90-day schedule. This week, pick the family with the most revenue, write down its baseline measures and book the two days for the first map.
+
+## Sources
+
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Apples to Oranges: Value Stream Mapping in a Low-Volume, High-Mix Environment - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/apples-oranges-value-stream-mapping-in-a-low-volume-high-mix-environment/)
+- [Insights on Why, When, and How Value-Stream Mapping is a Vital Part (eBook) - Lean Enterprise Institute](https://email.lean.org/hubfs/ebook%20files/eBook-Top5-VSM-final.pdf)
+- [The Mythical Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-mythical-value-stream-manager)

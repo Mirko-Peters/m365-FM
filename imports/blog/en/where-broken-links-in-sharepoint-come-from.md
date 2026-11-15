@@ -10,7 +10,7 @@ faq:
   - q: "Why do links break after a SharePoint site address change?"
     a: "SharePoint creates a redirect at the old address, so favorites, selected links to the site and sharing links are forwarded. Embedded URLs, for example in web parts such as News or List, are not updated according to Microsoft Learn and may break. Custom solutions also keep their old address dependencies."
   - q: "Do SharePoint redirects stay forever?"
-    a: "A redirect stays until someone deletes it. After deletion, requests to the old address are no longer forwarded, and bookmarks, links and Shared With Me references stop working. Check the redirect documentation on Microsoft Learn before removing any redirect, and test the effect first."
+    a: "Microsoft Learn describes a redirect as a site that SharePoint creates at the old address, and an admin removes it by deleting it, for example to reuse the old address. The pages I checked do not describe an automatic expiry. After deletion, requests to the old address are no longer forwarded, and bookmarks, links and Shared With Me references are not routed to the new address. Check the redirect documentation on Microsoft Learn before removing any redirect, and test the effect first."
   - q: "Does Microsoft provide a tool to find all broken links in SharePoint Online?"
     a: "The Microsoft Learn pages on changing site addresses and managing redirects explain how addresses change and when links break, but they do not describe a general tool for finding broken links in SharePoint Online. Vendors such as Cognillo offer their own tools for that purpose."
 ---
@@ -44,17 +44,18 @@ The Microsoft Learn page on changing a site address lists further effects of a c
 - Custom solutions keep their old address dependencies.
 - Power Apps custom forms must be recreated.
 - SharePoint 2013 workflows must be republished.
-- A site must be connected to its hub site again.
+- A site that is associated with a hub must be reassociated after the change.
+- Page thumbnail images in news posts on the site are among the embedded URLs that are not updated.
 
 These are not broken links in the narrow sense, but they show the same pattern: an address change reaches some things automatically and others only when someone acts. Before you change an address, read the current documentation on [Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/change-site-address) and check whether any of these apply to your site.
 
-Also note a documented restriction: a site cannot be renamed this way if it is a hub site.
+Also note documented restrictions: the address of a hub site cannot be changed this way, and neither can the address of sites that are locked or on hold, Project Web App sites or sites with BCS connections.
 
 ## Redirects only help while they exist
 
-A redirect stays until someone deletes it. That sentence from the documentation matters more than it looks.
+According to Microsoft Learn, the redirect is a site with a special template at the old address, and you delete it to free up the old address. The documentation describes no automatic expiry, so the redirect usually disappears only when someone deletes it. That matters more than it looks.
 
-While the redirect exists, old links to the site keep working. Once it is deleted, requests to the old address are no longer forwarded. Bookmarks, links and "Shared With Me" references stop working. Links that were quietly being rescued by the redirect now fail all at once.
+While the redirect exists, old links to the site keep working. Microsoft Learn notes that after you delete a redirect, any request to that address is not redirected, so bookmarks, links and "Shared With Me" references are not routed to the new address. Links that were quietly being rescued by the redirect now fail all at once.
 
 Imagine an admin who tidies up old redirects after a reorganisation, because the list looks cluttered. If nobody checked which links still depend on those redirects, the clean-up can produce a wave of "page not found" messages weeks after the rename, when nobody connects the two events.
 
@@ -88,8 +89,13 @@ A manual check is realistic for small, important areas, such as the start page o
 ## Practical takeaways
 
 - **Know what the redirect covers.** Favorites, selected site links and sharing links are forwarded after an address change. Embedded URLs in web parts such as News or List are not updated.
-- **Do not delete redirects casually.** A redirect stays until deleted, and after deletion old links, bookmarks and "Shared With Me" references stop working. Test first on a pilot site or in a test tenant, and keep a record so you have a way back.
-- **Check the follow-up work for an address change.** Custom solutions, Power Apps custom forms, SharePoint 2013 workflows and hub site connections can need attention. A hub site cannot be renamed this way at all.
+- **Do not delete redirects casually.** Per Microsoft Learn, after a redirect is deleted, old links, bookmarks and "Shared With Me" references are no longer routed to the new address. Test first on a pilot site or in a test tenant, and keep a record so you have a way back.
+- **Check the follow-up work for an address change.** Custom solutions, Power Apps custom forms, SharePoint 2013 workflows and hub site connections can need attention. The address of a hub site cannot be changed this way at all.
 - **List high-value pages before a change.** Home pages, hub navigation and pages with News or List web parts are good candidates for a manual link check after a rename.
 - **Check how the features you use store links,** and read Microsoft Learn for the behaviour of the specific feature before you rely on it.
 - **Decide how you will find broken links.** Microsoft Learn does not describe a general tool for SharePoint Online, so choose a manual, scripted or vendor approach on purpose, and pilot it first.
+
+## Sources
+
+- [Change a site address (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-site-address)
+- [Manage site redirects (Microsoft Learn)](https://learn.microsoft.com/sharepoint/manage-site-redirects)

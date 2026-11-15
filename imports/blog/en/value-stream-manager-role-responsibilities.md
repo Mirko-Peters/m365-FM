@@ -128,3 +128,9 @@ The role works without software, but data makes the weekly review easier. The ma
 ## Next step
 
 A good value stream manager gives one product family one owner, a mandate and a weekly rhythm. This week, choose one product family, name a candidate for the value stream manager role and agree a 90-day pilot with measures.
+
+## Sources
+
+- [Value Stream Manager - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/value-stream-manager/)
+- [The Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-value-stream-manager)
+- [The Mythical Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-mythical-value-stream-manager)

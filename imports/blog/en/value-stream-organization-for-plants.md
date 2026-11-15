@@ -72,7 +72,7 @@ Check three signs after the first three months. First, people from different fun
 
 Software companies also organize around value streams. In agile software development, cross-functional teams own a product, and the aim is smooth value delivery to the customer through the delivery process. The logic is the same as in a plant: give one team the end-to-end flow so that it can deliver value to customers without waiting for handoffs.
 
-One software author, Mik Kersten, describes software value streams as networks, not linear pipelines: several streams share platforms and services. A plant has the same pattern when streams share a furnace. In both fields, you manage the flow of work to create business value and customer value along the value chain, and you watch how fast value reaches customers. Value stream management in software uses tickets and pipelines to see the flow of work. The software delivery process leaves traces in tools; a plant leaves them in orders, routings and machines.
+In software, value streams are sometimes described as networks, not linear pipelines: several streams share platforms and services. A plant has the same pattern when streams share a furnace. In both fields, you manage the flow of work to create business value and customer value along the value chain, and you watch how fast value reaches customers. Value stream management in software uses tickets and pipelines to see the flow of work. The software delivery process leaves traces in tools; a plant leaves them in orders, routings and machines.
 
 The difference is that a plant has machines, stock and shared equipment, as the next example shows. Organizational design for a plant therefore needs its own rules, even though the idea behind value stream management implementation is shared. Done well, the change improves organizational performance because every function sees the same flow of work.
 
@@ -104,3 +104,10 @@ iFAKT's [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) is a module of iF
 ## Next step
 
 Value stream organization works best as a series of small, reversible steps. This week, list your products by routing, pick the family with the most revenue and name one owner for a pilot.
+
+## Sources
+
+- [The Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-value-stream-manager)
+- [The Mythical Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-mythical-value-stream-manager)
+- [Ask Art: What sets lean accounting apart from traditional accounting? - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/ask-art-what-sets-lean-accounting-apart-from-traditional-accounting)
+- [Apples to Oranges: Value Stream Mapping in a Low-Volume, High-Mix Environment - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/apples-oranges-value-stream-mapping-in-a-low-volume-high-mix-environment/)

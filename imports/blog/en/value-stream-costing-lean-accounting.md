@@ -113,3 +113,9 @@ iFAKT's [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/) is a mo
 ## Next step
 
 Value stream costing starts with one product family and one page of figures that production and finance both understand. This month, ask your finance partner to build a value stream P&L for your pilot stream and run it beside the standard report.
+
+## Sources
+
+- [Ask Art: What sets lean accounting apart from traditional accounting? - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/ask-art-what-sets-lean-accounting-apart-from-traditional-accounting)
+- [Ask Art: What Happens When Standard Cost Accounting Meets Takt Time? - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/ask-art-what-happens-when-standard-cost-accounting-meets-takt-time/)
+- [Dealing with Standard Costing in Lean Organizations - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/dealing-with-standard-costing-in-lean-organizations/)

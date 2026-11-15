@@ -115,3 +115,8 @@ Lean runs on people and routines, and software only supports it. It can show the
 ## Next step
 
 Choose one value stream, measure its lead time from release to shipment and set up a board with a short daily meeting at the area. That is the smallest start for lean management that you can run next week.
+
+## Sources
+
+- [Toyota Production System - Toyota Motor Corporation (global site)](https://global.toyota/en/company/vision-and-philosophy/production-system/index.html)
+- [Lean Thinking And Practice - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/lean-thinking-and-practice/)

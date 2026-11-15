@@ -21,7 +21,7 @@ This roadmap is for 2027 planning. It does not assume a big project. It suggests
 
 ## Start with what governance actually is
 
-[SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) is the set of policies, roles, responsibilities and processes that control how an organization uses SharePoint: who owns sites, how sites are created and shared, and how content is reviewed. Microsoft defines governance in general as the set of policies, roles, responsibilities and processes that control how an organization's business divisions and IT teams work together to achieve its goals. That sentence comes from the SharePoint Server documentation, which says it does not cover SharePoint in Microsoft 365. The idea still carries over, and the guidance for Microsoft 365 is on [Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/intranet-governance).
+[SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) is the set of policies, roles, responsibilities and processes that control how an organization uses SharePoint: who owns sites, how sites are created and shared, and how content is reviewed. The SharePoint governance overview on Microsoft Learn defines governance as the set of policies, roles, responsibilities and processes that control how an organization's business divisions and IT teams work together to achieve its goals, and recommends having a governance plan in place early. The [intranet governance guide](https://learn.microsoft.com/en-us/sharepoint/intranet-governance) on Microsoft Learn adds practical guidance for SharePoint in Microsoft 365.
 
 Three points from that guidance are worth taking into any plan:
 
@@ -33,7 +33,7 @@ If your current "governance" is a document nobody has opened since the rollout, 
 
 ## Q1: Decide ownership and the rulebook
 
-Begin with ownership. Microsoft suggests defining site ownership, for example with a primary and a secondary contact per site. This sounds small, but it is the basis for every later step. A notification about an inactive site, a request to confirm that a site is still needed, a question about an external guest: all of them need a person to receive them.
+Begin with ownership. The Microsoft intranet governance guide gives site ownership as an example policy: every SharePoint site has a primary and a secondary contact responsible for it. This sounds small, but it is the basis for every later step. A notification about an inactive site, a request to confirm that a site is still needed, a question about an external guest: all of them need a person to receive them.
 
 Next, separate **policies** from **guidelines**. Microsoft Learn describes policies as requirements and guidelines as recommendations. Mixing them up causes trouble in both directions. If everything is a "policy", nobody follows the list. If everything is a "guideline", nothing is enforced.
 
@@ -108,3 +108,11 @@ Imagine a department site that was shared broadly for a project and never narrow
 - Review oversharing and sprawl as a regular task, not a one-time cleanup.
 - Fold Copilot into existing reviews instead of creating a separate track, and check Microsoft Learn for current controls.
 - Schedule a review of the governance plan itself, because Microsoft's guidance is clear that it should be revisited regularly.
+
+## Sources
+
+- [SharePoint governance overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/governance-overview)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [SharePoint site lifecycle management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/site-lifecycle-management)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)
+- [Data, Privacy, and Security for Microsoft Copilot (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)
