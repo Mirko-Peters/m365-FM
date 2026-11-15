@@ -107,3 +107,8 @@ Software does not shorten a setup on the machine, but it helps around it. A plan
 ## Next step
 
 Pick one machine with frequent changeovers, film the next changeover and list every element as internal or external. That list is the start of your SMED project, and the first external elements you move outside the stop will pay for the time.
+
+## Sources
+
+- [Single-Minute Exchange of Die - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/single-minute-exchange-of-die/)
+- [SMED (Single-Minute Exchange of Die) - LeanProduction.com](https://leanproduction.com/smed)

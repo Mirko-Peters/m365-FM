@@ -118,3 +118,9 @@ iFAKT's [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/) is a mo
 ## Next step
 
 On-time delivery in manufacturing gets better when you measure it per value stream and sort late orders by cause. This week, write down your definition of on time, calculate the last month's on-time delivery and OTIF for one stream, and list its late orders by cause.
+
+## Sources
+
+- [OTIF: an essential supply chain performance indicator - Kaizen Institute](https://kaizen.com/insights/otif-supply-chain-indicator/)
+- [The Mythical Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-mythical-value-stream-manager)
+- [Schedule Attainment vs Production Adherence: Formulas - Fabrico](https://www.fabrico.io/blog/schedule-attainment-vs-production-adherence/)

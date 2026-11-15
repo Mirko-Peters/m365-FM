@@ -11,14 +11,14 @@ keypoints:
   - "A product-process matrix of work centers against products shows which products share a routing and can be mapped as one family."
   - "Size each flow with volume, takt time and the capacity it needs, and start with the streams that carry the most revenue."
   - "Shared machines connect value streams. Check the load on a shared resource before you plan improvements for one family."
-  - "When one map per family is not enough, a value network map shows several linked streams, but it is one author's approach and not a standard."
+  - "When one map per family is not enough, a value network map shows several linked streams, but it is a proposed approach and not a standard."
 faq:
   - q: "Can you use value stream mapping in high-mix low-volume production?"
     a: "Yes, if you map families and not single products. Group products by the sequence of operations they use, then map one family at a time. The classic map breaks down when you try to draw every product. In a plant with thousands of products, start with the flows that carry the most revenue."
   - q: "How do you group products into families when routings differ?"
     a: "Build a matrix with work centers on one side and products on the other, and mark which product uses which step. Products with the same or very similar routing form a family. Treat each clearly different routing as its own value stream, and check the families against what customers buy."
   - q: "What is a value network map?"
-    a: "A value network map is a view that shows many interconnected value streams on one map. Shahrukh Irani proposes it for job shops, where products share machines and a single-family map is too narrow. It draws on ERP data and Gantt charts. It is one author's method, not a lean standard."
+    a: "A value network map is a view that shows many interconnected value streams on one map. It has been proposed for job shops, where products share machines and a single-family map is too narrow. It is a proposed method, not a lean standard."
 ---
 Value stream mapping for high mix low volume production works when you map families of products and not single products. You group products by the sequence of operations they use, size each flow and map one stream at a time. This guide is for production managers in job shops and make-to-order plants, where hundreds of products share the same machines and the classic one-family map seems too small. It explains why the method gets hard, how to adapt it, how routings fit in and what a worked example looks like.
 
@@ -28,7 +28,7 @@ Value stream mapping for high mix low volume production works when you map famil
 
 Aaron Hunt describes the scale in his Lean Enterprise Institute article [Apples & Oranges: Value-Stream Mapping in a Low-Volume/High-Mix Environment](https://www.lean.org/the-lean-post/articles/apples-oranges-value-stream-mapping-in-a-low-volume-high-mix-environment/). One facility he writes about had up to 4,000 products, and some were made only once a year in batches as small as five, not counting custom orders and prototypes. Nobody can draw 4,000 value stream maps, and nobody could use them.
 
-Shahrukh Irani raises a second problem in his article in *The Fabricator*, [Lean manufacturing in the job shop: 5 steps to building a value network map](https://www.thefabricator.com/article/shopmanagement/lean-manufacturing-in-the-job-shop-5-steps-to-building-a-value-network-map). He argues that a value stream map cannot handle dozens of different work centers or complex multilevel bills of materials. He also notes that the map gives a single day's snapshot of part flow, and that it relies on takt time and a pacemaker process for level loading. Those ideas fit a steady flow better than a job shop with sporadic orders.
+A second problem is the job shop with dozens of different work centers, complex multilevel bills of materials and sporadic orders. In my experience, a value stream map gives a snapshot of part flow, and it relies on takt time and a pacemaker process for level loading. Those ideas fit a steady flow better than a job shop.
 
 None of this makes the method useless. It means you must change the unit of mapping from the product to the flow. A large mix also hides waste. Large batches that avoid frequent changeovers can lead to overproduction and long queues, and defects and rework add more waiting. This is where VSM helps. A good map shows where the process flow stops, helps you identify waste such as queues, rework and changeovers, and shows the total lead time of each family. You can then streamline the flow step by step as part of continuous improvement.
 
@@ -58,7 +58,7 @@ Three rules help in practice:
 - **Treat clearly different routings as separate streams.** Hunt's answer to products with different routings is to treat each distinct flow as its own value stream. The streams in his example ranged from about 300 products to just one or two.
 - **Mark shared resources.** A machine that serves two families links their value streams. A press brake used by two cells, for example, is a point where one family's change affects the other.
 
-Irani proposes one more step for plants with many shared machines. His *value network map* shows many interconnected value streams on one map, uses ERP data and Gantt charts and schedules with finite capacity or drum-buffer-rope methods. It is one author's approach for job shops, and it is not part of the standard value stream mapping workbook. Consider it when one value stream map per family hides too much of the interaction.
+A further step is proposed for plants with many shared machines. A *value network map* shows many interconnected value streams on one map. It is a proposed approach for job shops, and it is not part of the standard value stream mapping workbook. Consider it when one value stream map per family hides too much of the interaction.
 
 ## Example: three families that share one machine
 
@@ -94,3 +94,9 @@ In a high-mix plant, the routings, orders and stock change every week, so a map 
 ## Next step
 
 Export the routings of your active products and build a product-process matrix for one area of the plant. Then choose the biggest family and map it as the first step to implement value stream mapping for high mix low volume production.
+
+## Sources
+
+- [Apples to Oranges: Value Stream Mapping in a Low-Volume, High-Mix Environment - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/apples-oranges-value-stream-mapping-in-a-low-volume-high-mix-environment/)
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Value Stream Mapping in a Make-to-Order Environment - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/value-stream-mapping-in-a-make-to-order-environment/)

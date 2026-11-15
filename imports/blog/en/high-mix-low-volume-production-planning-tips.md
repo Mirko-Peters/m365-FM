@@ -25,7 +25,7 @@ High mix low volume manufacturing means making many different products in relati
 
 ## What makes high mix low volume planning so hard?
 
-Fabrico, a vendor of production software, describes high-mix low-volume (HMLV) manufacturing as a model where factories make many different products in small quantities. Its example is a job shop that may produce 50 different products in a single shift. The article lists the typical problems. See the [Fabrico guide to HMLV manufacturing](https://www.fabrico.io/blog/high-mix-low-volume-manufacturing-strategy-guide/).
+High-mix low-volume (HMLV) manufacturing is a model where factories make many different products in small quantities. A job shop is a typical example.
 
 - **Changeovers cost more.** A 4-hour changeover is acceptable in mass production if the run lasts weeks. It is costly when runs last only hours.
 - **Bottlenecks move.** The constraint shifts between machines from day to day, so some people wait while work piles up elsewhere.
@@ -40,15 +40,15 @@ An MIT thesis on scheduling in a high-mix low-volume job shop describes the same
 
 ### Tip 1: Shorten changeovers first
 
-[SMED](https://www.m365.fm/entity/smed/) separates the setup work that needs a stopped machine from the work that can be done while the machine runs, and then simplifies both. Fabrico gives an example of cutting a changeover from 60 to 10 minutes, which gains 50 minutes of capacity per switch. It also suggests digital checklists for each setup. With small batches and short production runs, this is often the cheapest capacity you can find.
+[SMED](https://www.m365.fm/entity/smed/) separates the setup work that needs a stopped machine from the work that can be done while the machine runs, and then simplifies both. As a hypothetical example, cutting a changeover from 60 to 10 minutes gains 50 minutes of capacity per switch. A checklist for each setup helps. With small batches and short production runs, this is often the cheapest capacity you can find.
 
 ### Tip 2: Group parts into families
 
-Parts with different numbers often share much of the same process. Fabrico says they can be about 90 percent the same. Group such parts into families, an idea that comes from lean manufacturing, and run a family in sequence or in a cell. The machine then needs fewer full setups, and the operators learn the family. Frequent setups also raise the risk of a defect on the first piece, so keep a first-piece check in the routine.
+Parts with different numbers often share much of the same process. Group such parts into families, an idea that comes from lean manufacturing, and run a family in sequence or in a cell. The machine then needs fewer full setups, and the operators learn the family. Frequent setups also raise the risk of a defect on the first piece, so keep a first-piece check in the routine.
 
 ### Tip 3: Plan against real capacity
 
-A trade article on scheduling in HMLV shops makes a simple point about lead time: release orders so that they finish when the customer or the next operation needs them, and check the capacity of each operation by time period. If a machine is full, push the work to the next period and move the promised date to match. The same article says that wrong capacity figures do more damage than a single scheduling error, because an overstated capacity builds up and turns into a permanent state of firefighting. See the [Fabricator article on scheduling HMLV operations](https://www.thefabricator.com/thefabricator/article/shopmanagement/scheduling-high-mix-low-volume-operations). [Finite capacity scheduling](https://www.m365.fm/entity/finite-capacity-scheduling/) puts this into practice: it plans work onto real resource calendars and treats each machine, person or station as limited.
+A simple rule helps with lead time: release orders so that they finish when the customer or the next operation needs them, and check the capacity of each operation by time period. If a machine is full, push the work to the next period and move the promised date to match. In my experience, wrong capacity figures do more damage than a single scheduling error, because an overstated capacity builds up and turns into a permanent state of firefighting. [Finite capacity scheduling](https://www.m365.fm/entity/finite-capacity-scheduling/) puts this into practice: it plans work onto real resource calendars and treats each machine, person or station as limited.
 
 ### Tip 4: Check material before release
 
@@ -56,15 +56,15 @@ Do not start work without its raw material and tools. Hold it back in the plan u
 
 ### Tip 5: Treat firefighting as a symptom
 
-The Fabricator article argues that complaints about poor scheduling and constant changes in priority are often symptoms of an unpredictable process, not the root cause. Early release, time buffers, extra inventory and overtime may be needed in the short term, but it calls them expensive band-aids, so less is better. It also says that expedites should be in the once-a-week category at most, and that daily expedites point to other problems.
+In my experience, complaints about poor scheduling and constant changes in priority are often symptoms of an unpredictable process, not the root cause. Early release, time buffers, extra inventory and overtime may be needed in the short term, but they are expensive band-aids, so less is better. Expedites should be rare, and daily expedites point to other problems.
 
 ### Tip 6: Cross-train and keep a skill matrix
 
-Fabrico recommends a poly-skilled team, with skills tracked in a matrix and digital work instructions, so that people can move between stations when the constraint moves. 
+A poly-skilled team, with skills tracked in a matrix and digital work instructions, lets people move between stations when the constraint moves. 
 
 ### Tip 7: Replan in short cycles
 
-Static spreadsheets are out of date after the first change. Use a visual board or planning software, review the plan every day and treat each version as an iteration that you update when orders, material or machines change. Fabrico also suggests grouping similar work, for example by material, and using short machine gaps for quick preventive maintenance.
+Static spreadsheets are out of date after the first change. Use a visual board or planning software, review the plan every day and treat each version as an iteration that you update when orders, material or machines change. Grouping similar work, for example by material, and using short machine gaps for quick preventive maintenance also help.
 
 ## How do you plan when bottlenecks move and rush orders arrive?
 
@@ -126,3 +126,7 @@ Spreadsheets reach their limits in a plant with hundreds of lots. [iFAKT's Polar
 ## Next step
 
 Take one machine group and recalculate its load for last week, with setups included. If the figure is above your capacity, you have found the reason why high mix low volume planning feels like firefighting. Then pick the largest setup and plan its reduction.
+
+## Sources
+
+- [Scheduling in a High-Mix Low-Volume Job Shop - MIT thesis](https://dspace.mit.edu/handle/1721.1/156004)

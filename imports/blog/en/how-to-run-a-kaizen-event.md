@@ -119,3 +119,9 @@ Before the trials on day 3, you can test options on paper. [iFAKT's Polaris Simu
 ## Next step
 
 Choose one specific problem this month and write the one-page charter for your next kaizen event: the problem, the scope, the baseline and the target. Then book the team for five days and name the follow-up owner.
+
+## Sources
+
+- [Kaizen Workshop - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/kaizen-workshop/)
+- [Rapid Improvement Event: An essential element of continuous improvement - Kaizen Institute](https://kaizen.com/insights/rapid-improvement-event-continuous-improvement/)
+- [Kaizen - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/kaizen/)

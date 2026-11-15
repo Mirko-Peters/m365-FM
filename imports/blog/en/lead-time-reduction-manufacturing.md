@@ -98,8 +98,14 @@ Supply chain thinking also shows a limit. If you cut your own lead time to six d
 
 Finding the constraint and the queues needs data on orders, steps and times. Tools can help streamline the analysis and automate the data collection, but automation of a poor flow only speeds up the inefficiency. Planning rules also decide how much work waits: a schedule that ignores capacity creates the queues you want to remove.
 
-iFAKT's [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) is a module of iFAKT Polaris for data-based value stream mapping. It models material and information flows collaboratively and makes waste and bottlenecks visible, so you can reduce costs from waiting where they arise. iFAKT's [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) automatically generates optimized production plans under constraints such as resources, shifts, zones, qualifications and capacities.
+iFAKT's [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) is a module of iFAKT Polaris for data-based value stream mapping. It models material and information flows collaboratively and makes waste and bottlenecks visible. iFAKT's [Polaris Optimizer](https://www.m365.fm/entity/polaris-optimizer/) automatically generates optimized production plans under constraints such as resources, shifts, zones, qualifications and capacities.
 
 ## Next step
 
 Lead time reduction starts with one product family and one honest number: the lead time from order to delivery. This week, measure it, compare it with the value-creating time, and pick the first lever from the list above.
+
+## Sources
+
+- [Reduce WIP and manufacturing lead time - Kaizen Institute](https://kaizen.com/insights/reduce-wip-manufacturing-lead-time/)
+- [Little's Law Explained: The Formula For Reducing Lead Time - Learn Lean Sigma](https://www.learnleansigma.com/lean-manufacturing/littles-law-explained-formula/)
+- [Insights on Why, When, and How Value-Stream Mapping is a Vital Part (eBook) - Lean Enterprise Institute](https://email.lean.org/hubfs/ebook%20files/eBook-Top5-VSM-final.pdf)

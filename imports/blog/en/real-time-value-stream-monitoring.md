@@ -111,3 +111,9 @@ Live maps need a model of the stream and a connection to ERP and MES data. Build
 ## Next step
 
 A real-time value stream starts with trustworthy timestamps for one product family. This week, compare ten orders in your ERP or MES with what happened on the floor, and note the biggest gaps before you build anything.
+
+## Sources
+
+- [Value Stream Mapping - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/value-stream-mapping/)
+- [MES vs ERP: What is the Difference, and Which One Do You Need? - ReliaMag](https://reliamag.com/guides/mes-vs-erp/)
+- [ISA-95: How Plant Systems Talk to Business Systems - Fabrico](https://www.fabrico.io/blog/isa-95/)

@@ -27,7 +27,7 @@ To do a gemba walk, pick one product flow, tell the team what you will do, walk 
 The Lean Enterprise Institute describes the habit behind a walk as "go see, ask why, show respect". Lean writers also use the plain form "go and see". The eight steps below turn that phrase into a plan. This is the [gemba walk](https://www.m365.fm/entity/gemba-walk/) process in short form.
 
 1. **Set the purpose.** Write one sentence: "I want to understand why orders for product family X ship late." A walk without a purpose becomes a tour.
-2. **Choose the flow.** Pick one product family, one line or one customer-facing process. Jim Womack, who wrote *Gemba Walks* (see his [introduction to the book](https://www.lean.org/wp-content/uploads/2021/01/gemba-walks-introduction.pdf)), follows a single product family or process from start to finish and looks at each station through the eyes of the customer and of the people creating the value.
+2. **Choose the flow.** Pick one product family, one line or one customer-facing process. Follow a single product family or process from start to finish, and look at each station through the eyes of the customer and of the people creating the value.
 3. **Brief the people.** Tell the team leaders the day before. Say what you will look at and that you will not judge individuals.
 4. **Walk the flow.** Start at the first step and follow the work in the order the product moves. Stay at each station long enough to see several cycles.
 5. **Ask questions.** Ask what is happening, then why, then what would happen if something changed. Listen more than you talk.
@@ -61,7 +61,7 @@ At each station, look at three things:
 - **The flow around it.** Where does material wait? Where does the operator wait? What arrives late? Waiting, searching and extra walking are typical inefficiency, and removing them raises productivity without extra people.
 - **The people.** Do they have what they need? Who do they ask when something goes wrong?
 
-Womack also asks how more value can be created with less *muda* (waste), *mura* (unevenness or variation) and *muri* (overburden). Use these three words as a lens to identify waste, and note an example of each.
+Lean practice also asks how more value can be created with less *muda* (waste), *mura* (unevenness or variation) and *muri* (overburden). Use these three words as a lens to identify waste, and note an example of each.
 
 Keep your questions open. Start with "what", for example "What happens when this part is missing?" Then ask "why". Later, ask "what if". The Lean Enterprise Institute notes that asking why too early skips the work of understanding the situation. You may also ask whether corrective actions from earlier walks are visible at the station. Ask the team leaders what they think is the root cause of a problem, not only what the symptom is.
 
@@ -97,3 +97,8 @@ Notes from a walk often end up on paper and get lost. A simple action list with 
 ## Next step
 
 Choose one product flow today, write your one-sentence purpose and book 45 minutes for the first of your eight steps. After the walk, use the same agenda again next week, because how to do a gemba walk well is something you learn by repeating it.
+
+## Sources
+
+- [How to Go to the Gemba: Go See, Ask Why, Show Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/)
+- [Gemba Walk Checklist - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/gemba-walk-checklist/)

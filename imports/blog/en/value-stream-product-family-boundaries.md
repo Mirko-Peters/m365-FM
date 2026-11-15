@@ -113,3 +113,9 @@ iFAKT's [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) is a module of iF
 ## Next step
 
 Defining each value stream product family from routing, at the customer end and with a written boundary, makes every later map clearer. This week, list your finished part numbers, mark their process steps and circle the largest block of similar routings.
+
+## Sources
+
+- [Product Family - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/product-family/)
+- [Apples to Oranges: Value Stream Mapping in a Low-Volume, High-Mix Environment - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/apples-oranges-value-stream-mapping-in-a-low-volume-high-mix-environment/)
+- [Value Stream - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/value-stream/)

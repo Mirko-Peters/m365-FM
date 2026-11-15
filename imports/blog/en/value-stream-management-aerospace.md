@@ -126,3 +126,9 @@ In a plant with many part numbers and several external processes, drawing and up
 ## Next step
 
 Value stream management in aerospace starts with one part family and one honest map of its waiting time. This week, list the routings of your most important parts, group them into a family, and measure the days each part waits between steps and at your external processors.
+
+## Sources
+
+- [The Backbone of Lean in the Back Shops - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-backbone-of-lean-in-the-back-shops/)
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Launching a Lean Transformation: An Aerospace Manufacturer's Journey with Purpose, Process and People - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/launching-a-lean-transformation-an-aerospace-manufacturers-journey-with-purpose-process-and-people/)

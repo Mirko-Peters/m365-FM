@@ -122,3 +122,10 @@ iFAKT's [Polaris VSM](https://www.m365.fm/entity/polaris-vsm/) is a module of iF
 ## Next step
 
 Value stream management vs value stream mapping is not a choice between two options: you need the map to start and the routine to finish. Pick one map that already exists in your plant, name its owner and book the first 30-minute review in the calendar this week.
+
+## Sources
+
+- [Value Stream Mapping - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/value-stream-mapping/)
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Learning to See, Introduction (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-introduction.pdf)
+- [The Mythical Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-mythical-value-stream-manager)

@@ -25,7 +25,7 @@ faq:
 
 ## Virtual commissioning: what it is and how it works
 
-In traditional commissioning, the control software meets the machine for the first time on site. Errors in logic, signals and sequences then cost time on the floor, where every hour of delay is expensive. Virtual commissioning moves that first meeting to a desk, into a virtual environment where the model can simulate sensors, drives and parts. For an automation project, that means troubleshooting at an early stage, when a fix is cheap. A paper by Matthias Schamp and colleagues at Ghent University and Flanders Make, published in [Procedia Manufacturing](https://core.ac.uk/download/275704512.pdf) in 2019, describes it as replicating the behaviour of hardware in a software environment, in order to validate the control logic before real implementation. The virtual components need a mechanical model, with geometry and kinematics, and an electrical model that covers the interaction with the PLC.
+In traditional commissioning, the control software meets the machine for the first time on site. Errors in logic, signals and sequences then cost time on the floor, where every hour of delay is expensive. Virtual commissioning moves that first meeting to a desk, into a virtual environment where the model can simulate sensors, drives and parts. For an automation project, that means troubleshooting at an early stage, when a fix is cheap. In short, it replicates the behaviour of hardware in a software environment, in order to validate the control logic before real implementation. The virtual components need a mechanical model, with geometry and kinematics, and an electrical model that covers the interaction with the PLC.
 
 In practice, the steps look like this:
 
@@ -35,7 +35,7 @@ In practice, the steps look like this:
 4. **Test sequences and faults.** Run normal cycles, then trigger faults such as a missing part, a sensor failure or a jam, which are risky or slow to test on real equipment.
 5. **Fix the errors at the desk,** and carry the corrected program to the site.
 
-The quality of the result depends on how closely the model matches the real behaviour. The Schamp paper says the digital model should behave like the real production system, and it lists the modelling effort and the dependence on expertise as open challenges.
+The quality of the result depends on how closely the model matches the real behaviour. The digital model should behave like the real production system. In my experience, the modelling effort and the dependence on expertise are the usual challenges.
 
 ## Three test levels: model, software and hardware in the loop
 
@@ -51,7 +51,6 @@ A [blog post by Siemens](https://blogs.sw.siemens.com/tecnomatix/how-to-reduce-w
 
 The reported savings are large, but the quality of the evidence varies, so read the numbers with care.
 
-- The Schamp paper cites an earlier small-scale experiment that reported a 73 per cent reduction in real commissioning time and a 31 per cent improvement in the requirements fulfilled before real commissioning with a digital-model approach. The authors note that comparing approaches is hard, because a commissioning can only happen once.
 - The realvirtual page says on-site commissioning time can be up to 75 per cent shorter and the share of control functions that worked on the first attempt rose from 37 to 84 per cent, citing a field study of the Technical University of Munich. It also says the 75 per cent is not a guaranteed result for every project. That is a vendor source quoting a third party.
 - The Siemens blog post claims large savings as well, but it gives few figures that can be checked.
 
@@ -107,3 +106,8 @@ Simulation software for this work ranges from plant simulation suites to game-en
 ## Next step
 
 List your next three investment projects, estimate the cost of a day of start-up delay for each, and compare it with the cost of a model. Pick the project where virtual commissioning has the highest chance to pay back as the pilot.
+
+## Sources
+
+- [Virtual Commissioning Software - realvirtual.io](https://realvirtual.io/en/virtuelle-inbetriebnahme/)
+- [How to reduce week-long commissioning times - Siemens Tecnomatix blog](https://blogs.sw.siemens.com/tecnomatix/how-to-reduce-week-long-commissioning-times/)

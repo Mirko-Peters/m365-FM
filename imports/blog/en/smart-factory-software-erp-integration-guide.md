@@ -128,7 +128,7 @@ Keep it small and measurable.
 
 ## Where Polaris fits
 
-If your main gap is between the ERP plan and what happens on the floor, iFAKT Polaris is one option to look at. [iFAKT](https://www.m365.fm/entity/ifakt/) describes Polaris as AI plus a digital twin for production, with data from ERP, Excel and shop floor sources. The [Polaris Designer](https://www.m365.fm/entity/polaris-designer/) module turns ERP data, bills of materials, process times and resource structures into a product-process-resource knowledge graph. The [Polaris Operator](https://www.m365.fm/entity/polaris-operator/) module brings optimized plans to the floor as time-based tasks and feeds progress, delays and disruptions back into planning. Test any such tool against your own order flow before you decide.
+If your main gap is between the ERP plan and what happens on the floor, iFAKT Polaris is one option to look at. [iFAKT](https://www.m365.fm/entity/ifakt/) describes Polaris as AI plus a digital twin for production, with data from ERP and feedback from the shop floor. The [Polaris Designer](https://www.m365.fm/entity/polaris-designer/) module turns ERP data, bills of materials, process times and resource structures into a product-process-resource knowledge graph. The [Polaris Operator](https://www.m365.fm/entity/polaris-operator/) module brings optimized plans to the floor as time-based tasks and feeds progress, delays and disruptions back into planning. Test any such tool against your own order flow before you decide.
 
 ## Related topics to explore
 
@@ -141,3 +141,10 @@ If your main gap is between the ERP plan and what happens on the floor, iFAKT Po
 ## Next step
 
 Smart factory software ERP integration gets easier once the data agreement is on paper. Take one production line this week, fill in the table of objects, senders, receivers and owners, and bring it to your next meeting with IT.
+
+## Sources
+
+- [ISA-95 Standard: Enterprise-Control System Integration - ISA](https://www.isa.org/standards-and-publications/isa-standards/isa-95-standard)
+- [OPC UA Common Object Model: ISA-95, section 4.2.3 ISA-95 - OPC Foundation](https://reference.opcfoundation.org/specs/OPC-10030/4.2.3)
+- [Manufacturing execution systems integration - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/production-control/mes-integration)
+- [Guide to Operational Technology (OT) Security (SP 800-82 Rev. 3) - NIST](https://www.nist.gov/publications/guide-operational-technology-ot-security)

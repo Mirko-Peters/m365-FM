@@ -31,7 +31,7 @@ Microsoft's documentation for Dynamics 365 Supply Chain Management shows what th
 
 Scheduling comes next. The same documentation separates [operations scheduling from job scheduling](https://learn.microsoft.com/en-us/dynamics365/supply-chain/production-control/operations-scheduling). Operations scheduling gives a general estimate of the production process over time and doesn't break the route into jobs. Job scheduling is used for individual jobs on the shop floor over an immediate or short-term horizon. With finite capacity, the schedule depends on the availability of the resources that the order needs.
 
-Control is what happens after release. In the [production process overview](https://learn.microsoft.com/en-us/dynamics365/supply-chain/production-control/production-process-overview), an order is released once scheduling is finished and material can be picked. Then progress and consumption are reported, finished goods are received and the order is ended. Researchers at the [FIR institute at RWTH Aachen](https://www.fir.rwth-aachen.de/en/research/production-management/production-planning) describe the same idea as a permanent feedback loop: order status and resource use go back to the ERP system, and planning data is checked against actual data all the time.
+Control is what happens after release. In the [production process overview](https://learn.microsoft.com/en-us/dynamics365/supply-chain/production-control/production-process-overview), an order is released once scheduling is finished and material can be picked. Then progress and consumption are reported, finished goods are received and the order is ended. Researchers at the [FIR institute at RWTH Aachen](https://www.fir.rwth-aachen.de/en/research/production-management/production-control) describe a similar idea for production control: continuous evaluation and monitoring of the actual state against the target state.
 
 The point is that the loop has to close. A tool that only produces a plan is a planning tool. A tool that also sees what happened and reacts is production planning and control.
 
@@ -129,3 +129,10 @@ If your gap sits between the ERP plan and a feasible schedule, iFAKT Polaris is 
 ## Next step
 
 Before you shop for production planning and control software, choose the one resource that decides your output and write down the three constraints that make its schedule hard. Take that list, and a month of order data, into your next conversation with a vendor or with your ERP team.
+
+## Sources
+
+- [Production planning with Planning Optimization - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/master-planning/planning-optimization/production-planning)
+- [Operations scheduling and job scheduling - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/production-control/operations-scheduling)
+- [Production process overview - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/production-control/production-process-overview)
+- [Production Control - FIR at RWTH Aachen](https://www.fir.rwth-aachen.de/en/research/production-management/production-control)
