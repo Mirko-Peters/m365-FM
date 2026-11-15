@@ -1,0 +1,52 @@
+name: Staging - Community-API (Cloudflare Worker) einrichten und veröffentlichen
+# Testumgebung api-staging.m365.fm (Staging Schritt 2, siehe STAGING.md). Läuft NUR bei Push auf den Zweig `staging` oder von Hand,
+# in der GitHub-Umgebung `staging`. Fasst ausschließlich Staging-Ressourcen an: Worker m365-dub-community-staging, D1 m365-dub-staging.
+# Nie: Live-Worker, Live-Datenbank m365-dub, Live-Domain api-dub.m365.fm, Live-Secrets. tools/check_staging_isolation.py (Teil von staging-checks) prüft das.
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency: { group: worker-staging, cancel-in-progress: true }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q pyyaml
+      - name: Trennung von Live prüfen (rot = kein Deploy)
+        run: python3 tools/check_staging_isolation.py
+      - name: Tests (Syntax, node --test) - rot heißt kein Deploy
+        working-directory: worker
+        run: |
+          npm ci --no-audit --no-fund
+          for f in src/*.js setup-staging.mjs; do node --check "$f"; done
+          node --test
+      - name: Zugangsdaten prüfen
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID fehlen (GitHub-Secrets) - Staging-Worker wird nicht veröffentlicht. Siehe STAGING.md."; exit 1
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Staging-D1 anlegen, Migrationen anwenden, Worker veröffentlichen (wrangler ... --env staging)
+        working-directory: worker
+        run: node setup-staging.mjs
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Optional, nur für Anmeldung in der Testumgebung (liest nur eine Identität). Eigene Staging-Anmelde-Apps, nie die Live-Schlüssel.
+          STAGING_GOOGLE_CLIENT_ID: ${{ secrets.STAGING_GOOGLE_CLIENT_ID }}
+          STAGING_GOOGLE_CLIENT_SECRET: ${{ secrets.STAGING_GOOGLE_CLIENT_SECRET }}
+          STAGING_MS_CLIENT_ID: ${{ secrets.STAGING_MS_CLIENT_ID }}
+          STAGING_MS_CLIENT_SECRET: ${{ secrets.STAGING_MS_CLIENT_SECRET }}
+          STAGING_GH_OAUTH_CLIENT_ID: ${{ secrets.STAGING_GH_OAUTH_CLIENT_ID }}
+          STAGING_GH_OAUTH_CLIENT_SECRET: ${{ secrets.STAGING_GH_OAUTH_CLIENT_SECRET }}
