@@ -1,0 +1,1960 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.380
+Estás creando agentes de AIA personalizados para Microsoft 365 de la manera difícil.
+
+00:00:03.840 --> 00:00:06.640
+Por eso se rompen, se bloquean y fallan en la revisión de seguridad.
+
+00:00:06.920 --> 00:00:09.440
+En cuanto llega a un usuario real, la verdad.
+
+00:00:09.980 --> 00:00:14.480
+El SDK de agentes de Microsoft 365 no es opcional si buscas escala, seguridad y no alcanza multicanal real.
+
+00:00:14.920 --> 00:00:19.500
+Aprenderás por qué los parches caseros fallan, qué te ofrece el SDK desde el inicio y cómo implementarlo hoy.
+
+00:00:20.140 --> 00:00:22.960
+Hay una capacidad que acaba silenciosamente con la mayoría de los agentes hechos a mano.
+
+00:00:23.360 --> 00:00:24.440
+La revelaré antes de terminar.
+
+00:00:24.980 --> 00:00:25.700
+Resultado inmediato.
+
+00:00:26.080 --> 00:00:28.580
+Te llevarás un plan desplegable que podrás defender ante seguridad.
+
+00:00:28.580 --> 00:00:30.300
+Enviar equipos y conectar a Copilot.
+
+00:00:31.020 --> 00:00:33.480
+Ahora desmontemos rápidamente el enfoque común de Aldo tú mismo.
+
+00:00:34.240 --> 00:00:37.380
+¿Por qué los agentes caseros fallan en los ecosistemas de M365?
+
+00:00:37.880 --> 00:00:41.260
+Tratar la identidad como un simple trámite, actuando como una aplicación,
+
+00:00:41.680 --> 00:00:44.340
+cuando debe ser común usuario, destruye la fidelidad de los permisos,
+
+00:00:44.720 --> 00:00:47.940
+anula los registros de auditoría y garantiza un fallo en la revisión.
+
+00:00:48.620 --> 00:00:51.080
+En M365 el acceso está vinculado a la identidad.
+
+00:00:51.560 --> 00:00:52.920
+Archivos, chats, calendarios, correo.
+
+00:00:53.420 --> 00:00:57.660
+Si tu agente usa una identidad de servicio genérica, termina con exceso de privilegios o bloqueado.
+
+00:00:57.660 --> 00:01:00.980
+Y cuando los auditores preguntan quién accedió a este archivo de Shopping y por qué,
+
+00:01:01.760 --> 00:01:02.520
+tu registro en que es.
+
+00:01:02.920 --> 00:01:04.320
+Eso no es gobernanza, eso es adivinanza.
+
+00:01:04.800 --> 00:01:06.080
+Ahora aquí es donde la mayoría se equivoca.
+
+00:01:06.400 --> 00:01:06.760
+El estado.
+
+00:01:07.760 --> 00:01:12.520
+Prototipas en una laptop funcionan una vez, luego escalas a varios nodos y tu lógica de múltiples turnos colapsa.
+
+00:01:13.560 --> 00:01:16.760
+Sin un estado de conversación compartido entre instancias, las aclaraciones desaparecen,
+
+00:01:16.820 --> 00:01:19.860
+las salidas de herramientas fallan y el agente se repite como un pez con amnesia.
+
+00:01:19.860 --> 00:01:27.160
+Bajo carga, los parches sin estado se vuelven errores visibles, falta de contexto, respuestas contradictorias y un
+
+00:01:27.160 --> 00:01:28.860
+disculpa de que hablábamos.
+
+00:01:29.380 --> 00:01:30.500
+Luego viene el caos de los canales.
+
+00:01:31.220 --> 00:01:34.980
+Teams, chat web, Slack, Outlook, cada uno habla un dialecto diferente.
+
+00:01:35.560 --> 00:01:39.140
+Indicadores de escritura, archivos adjuntos, tarjetas, streaming, nada es consistente.
+
+00:01:39.920 --> 00:01:41.560
+Creas adaptadores manualmente, funciona.
+
+00:01:42.120 --> 00:01:46.800
+Hasta que Teams exige semánticas de protocolo que tu adaptador desconoce el resultado.
+
+00:01:46.800 --> 00:01:51.460
+Mensaje roto, sin streaming, un desesperado y un comportamiento inconsistente que parece de mala calidad.
+
+00:01:52.120 --> 00:01:53.480
+A los usuarios no les importa tu adaptador.
+
+00:01:53.820 --> 00:01:56.280
+Les importa que la gente se comporte como un ciudadano nativo en todas partes.
+
+00:01:56.920 --> 00:01:57.800
+Abismo de gobernanza.
+
+00:01:58.040 --> 00:02:03.020
+Los bots personalizados ignoran señales de preview, omiten políticas de DLP y generan respuestas que nadie puede auditar.
+
+00:02:03.580 --> 00:02:05.100
+Seguridad dice que no porque es su obligación.
+
+00:02:05.640 --> 00:02:09.660
+Si tu agente no respeta etiquetas de sensibilidad, retención y retención legal, está muerto desde el inicio.
+
+00:02:10.520 --> 00:02:15.240
+Lo que la mayoría ignora es que la gobernanza no es una característica que añades después, es el suelo sobre el que te paras.
+
+00:02:15.240 --> 00:02:17.040
+Si construyes sin él, el piso cede.
+
+00:02:17.620 --> 00:02:19.540
+La proliferación de orquestadores añade entropía.
+
+00:02:19.860 --> 00:02:24.040
+Un poco de lanchine aquí, algo de semantiquerno en la llama, herramientas a medida pegadas con cintas llamadas HTTP.
+
+00:02:24.740 --> 00:02:27.280
+Sin un plan de ejecución estándar, sin reintentos uniformes.
+
+00:02:27.660 --> 00:02:30.840
+La observabilidad se convierte en un misterio con demasiado sospechosos y sin cronología.
+
+00:02:31.380 --> 00:02:34.580
+Si cambias un modelo o un planificador, reescríbes el agente, no intercambias una pieza.
+
+00:02:35.020 --> 00:02:36.560
+Eso es fragilidad disfrazada de flexibilidad.
+
+00:02:37.760 --> 00:02:42.120
+Las brechas de cumplimiento, la residencia de datos, las políticas de retención y el airbag no se alinean por arte de magia.
+
+00:02:42.120 --> 00:02:46.000
+Los chats externos pueden filtrarse internamente si tu enrutamiento ignora el inquilino.
+
+00:02:46.540 --> 00:02:48.480
+Escenarios entre inquilinos, disfruta del campo de minas.
+
+00:02:49.080 --> 00:02:53.780
+Si tu agente no hereda la postura de cumplimiento de la organización, estás inventando un universo paralelo con leyes incompatibles.
+
+00:02:54.400 --> 00:02:56.640
+Poilers y universo nunca recibe la aprobación para producción.
+
+00:02:57.240 --> 00:02:59.340
+La desesperación al depurar es el resultado de todo eso.
+
+00:02:59.920 --> 00:03:03.440
+Sin un túnel de desarrollo consistente haces malabarismos con enlaces en grog y proxys y mirotos.
+
+00:03:04.200 --> 00:03:06.920
+Sin rastros de extremo a extremo, cada fallo parece un fantasma.
+
+00:03:06.920 --> 00:03:16.620
+Y sobre el streaming, según el canal, si no detectas la capacidad o simulas streaming donde no existe o se lo negas a los usuarios donde sí existe, ambos se sienten mal, ambos minan la confianza.
+
+00:03:16.960 --> 00:03:21.060
+La verdad es que hacerlo tú mismo en M365 suele significar reconstruir tuberías con mongueras de jardín.
+
+00:03:21.780 --> 00:03:24.520
+Estás ocupado luchando contra la presión del agua cuando deberías estar diseñándose.
+
+00:03:25.420 --> 00:03:31.300
+Aquí llega el Microsoft 365 Agent SDK, las arterias estandarizadas que mantienen vivo el sistema para que te centres en la cognición.
+
+00:03:31.300 --> 00:03:39.460
+Gestiona la identidad correctamente, persiste el estado entre nodos, habla del protocolo de actividad con adaptadores reales y respeta la gobernanza por defecto.
+
+00:03:40.280 --> 00:03:43.680
+Sí, es independiente del modelo, por lo que el drama de tu orquestador deja de ser problema de los demás.
+
+00:03:44.180 --> 00:03:46.100
+Una vez que consolidas la base, todo lo más encaja.
+
+00:03:46.900 --> 00:03:51.320
+Lo que ofrece realmente el Microsoft 365 Agent SDK, un núcleo independiente del modelo.
+
+00:03:52.140 --> 00:03:53.420
+La autenticación viene hecha desde el principio.
+
+00:03:53.840 --> 00:04:00.100
+El SDK integra la identidad en el flujo de actividad para que tu agente pueda actuar como el usuario cuando deba y usar credenciales de servicio cuando sea necesario.
+
+00:04:00.100 --> 00:04:10.540
+Obtienes controladores de inicio de sesión que presentan un momento de consentimiento claro, intercambian códigos por tokens, hidratan el turno con acceso a nivel de usuario, graph, sharepoint y outlook vinculados a la persona real.
+
+00:04:11.280 --> 00:04:16.120
+El beneficio es obvio, fidelidad de permisos, pistas de auditoría reales y el principio de privilegio mínimo por defecto.
+
+00:04:16.600 --> 00:04:22.720
+Lo que la mayoría pasa por altos como esto, desbloquea aprobaciones y acciones que una aplicación sin rostro, una aplicación sin rostro no puede realizar sin otorgar privilegios excesivos.
+
+00:04:22.800 --> 00:04:25.000
+No es solo autenticación, es autorización con conciencia.
+
+00:04:25.380 --> 00:04:26.580
+A continuación de la gestión de conversación.
+
+00:04:26.580 --> 00:04:31.120
+El SDK te proporciona un estado de sesión y de hilo duradero que sobrevive entre nodos en clúster.
+
+00:04:31.920 --> 00:04:38.980
+El estado de turno, los patrones de almacenamiento compartido y los IDs de correlación consistente significan que los múltiples turnos no se desmoronan cuando un balance se desmoronan cuando un balance se da instante.
+
+00:04:39.380 --> 00:04:44.900
+Las aclaraciones, los resultados de herramientas y la memoria a corto plazo persisten sin que tengas que inventar tu propio voodoo de sesiones fijas.
+
+00:04:44.900 --> 00:04:49.020
+La razón por la que esto funciona es que el marco de trabajo trata la conversación como un recurso de primera clase.
+
+00:04:49.860 --> 00:04:54.900
+Tu agente deja de repetirse y comienza a comportarse como si te conociera porque lo hace a través de turnos, canales y máquinas.
+
+00:04:55.360 --> 00:04:57.000
+Y Mac, presentamos el protocolo de actividad.
+
+00:04:57.480 --> 00:04:59.380
+Piénsalo como el lenguaje común para los agentes.
+
+00:04:59.880 --> 00:05:03.200
+Tipos para mensajes, eventos, escritura, archivos adjuntos y tarjetas adaptables.
+
+00:05:03.660 --> 00:05:06.140
+Para que tu lógica no dependa de las peculiaridades de un solo canal.
+
+00:05:07.240 --> 00:05:13.840
+El SDK incluye adaptadores para Teams, Chatweb, Slack y Copilot Studio, traduciendo sus dialectos al modelo de actividad y viceversa.
+
+00:05:13.840 --> 00:05:17.520
+Compáralo con adaptadores personalizados que siempre pasan por alto en un caso excepción.
+
+00:05:17.820 --> 00:05:20.540
+Menciona entidades, flujos de consentimiento de archivos y tarjetas en vivo.
+
+00:05:21.160 --> 00:05:25.100
+Aquí, esas semánticas están estandarizadas para que tu agente se sienta nativo en cada espacio al que entra.
+
+00:05:25.840 --> 00:05:28.040
+La neutralidad del orquestador es algo del futuro, agradecerá.
+
+00:05:28.720 --> 00:05:33.780
+Conecta Semantic Kernel como tus planificadores de EA, OpenAI o tu propia infraestructura detrás de una interfaz limpia.
+
+00:05:34.420 --> 00:05:37.700
+Los prompts y las herramientas residen en unidades modulares, no dispersos en manejadores.
+
+00:05:38.420 --> 00:05:41.760
+Cambia un modelo o sustituye un planificador o haz pruebas a vez sin que tu agente colapse.
+
+00:05:41.760 --> 00:05:45.140
+El SDK no elige ganadores y impone estructuras para que tú lo hagas.
+
+00:05:45.920 --> 00:05:50.300
+Si no recuerdas nada más, aísla la cognición de la comunicación y deja que las actualizaciones dejen de ser reescrituras.
+
+00:05:51.060 --> 00:05:53.860
+La conciencia de streaming importa porque la experiencia del usuario es confianza.
+
+00:05:54.400 --> 00:05:56.640
+El SDK detecta automáticamente las capacidades del canal.
+
+00:05:57.240 --> 00:06:03.280
+Si el cliente admite streaming de tokens, transmites comentarios rápidos iniciales, razonamiento parcial y finalización de tarjetas adaptables.
+
+00:06:03.280 --> 00:06:07.020
+Si no recuerdas de forma elegante indicadores de escritura y mensajes fragmentados.
+
+00:06:07.620 --> 00:06:09.940
+Sin trucos de streaming falsos, sin ansiedad por silencio prolongado.
+
+00:06:10.320 --> 00:06:17.400
+Y si la misma lógica cubre adjuntos tarjetas y acciones sugeridas según la capacidad del canal, sin condiciones de copiar y pegar por todo tu código, sin negar por todo tu código.
+
+00:06:17.520 --> 00:06:20.320
+La integración con el kit de herramientas es esa productividad que realmente necesita.
+
+00:06:20.320 --> 00:06:24.400
+La estructura de Visual Studio, UBS Code, crea un agente con un tono de mercado de eco funcional.
+
+00:06:25.320 --> 00:06:28.380
+Los túneles de desarrollo lo exponen de forma segura para pruebas reales en canales.
+
+00:06:28.600 --> 00:06:34.000
+Y los diagnósticos te ofrecen seguimientos completos, encabezados de solicitud, tokens presentes o ausentes y actividades de entrada y salida.
+
+00:06:34.720 --> 00:06:38.800
+El entorno de prueba simula múltiples canales para que vean las diferencias de capacidad sin ejecutar 6 aplicaciones.
+
+00:06:39.520 --> 00:06:45.720
+Los ganchos de telemetría emiten IDs de correlación y tiempos para que detectes la latencia en herramientas frente a llamadas de modelos frente a la SS del canal.
+
+00:06:46.240 --> 00:06:48.320
+Si es como depuras en horas, no basándote en suposiciones.
+
+00:06:48.320 --> 00:06:50.840
+Y como estás a punto de preguntar, es de código abierto y gratuito.
+
+00:06:51.400 --> 00:06:55.700
+Los costos del SDK son los que pagas por los servicios intermedios, los modelos, la búsqueda de almacenamiento que tú eliges.
+
+00:06:56.240 --> 00:06:59.500
+Eso significa que heredas una infraestructura empresarial sin renunciar al control de tu stack.
+
+00:07:00.120 --> 00:07:01.980
+¿Prefieres Python este mes y C++ para producción?
+
+00:07:02.540 --> 00:07:03.220
+Es compatible.
+
+00:07:03.700 --> 00:07:08.540
+¿Quieres probar OpenAI y luego estandarizar en Azure AI Foundry con evaluaciones de seguridad y cumplimiento de tareas?
+
+00:07:09.260 --> 00:07:10.660
+Cambia el orquestador, consuelva a la gente.
+
+00:07:11.940 --> 00:07:17.340
+El SDK estandariza la identidad, el estado, el protocolo y la entrega para que tu código pueda centrarse en el razonamiento y las herramientas.
+
+00:07:17.340 --> 00:07:21.780
+Es agnóstico al modelo por diseño, consciente del canal, por defecto y compatible con la gobernanza desde el primer mundo.
+
+00:07:22.100 --> 00:07:24.320
+Las funciones geniales son bonitas, estos son rasgos de supervivencia.
+
+00:07:24.700 --> 00:07:29.900
+Ahora que sabes lo que obtienes, hablemos de cómo conectarlo todo para que se lance y sobreviva el primer contacto con usuarios reales.
+
+00:07:30.800 --> 00:07:32.120
+Plan de implementación de cero.
+
+00:07:32.640 --> 00:07:33.960
+Agente multicanal.
+
+00:07:34.340 --> 00:07:35.200
+Piensa con la estructura básica.
+
+00:07:35.800 --> 00:07:38.540
+Crea un nuevo proyecto de agente de Microsoft 365 con la plantilla hecho.
+
+00:07:38.540 --> 00:07:43.600
+Ese es tu señal de tono, una garantía de que la conexión del canal y el flujo de actividad están activos.
+
+00:07:44.160 --> 00:07:45.600
+Ejecuta localmente y abre el entorno de pronto.
+
+00:07:45.940 --> 00:07:46.600
+Envíe un mensaje.
+
+00:07:46.700 --> 00:07:47.880
+Si no obtienes respuesta aquí, detente.
+
+00:07:48.360 --> 00:07:51.840
+Correge variables de entorno, puertos y credenciales antes de añadir cualquier inteligencia.
+
+00:07:52.420 --> 00:07:54.620
+Los usuarios promedios exaltan esto y luego ocultan al modelo.
+
+00:07:54.880 --> 00:07:55.400
+No se adprome.
+
+00:07:55.840 --> 00:08:00.140
+Para los controladores, añade un controlador de unión para saludar a los usuarios y uno de mensajes para procesar la entrada.
+
+00:08:00.440 --> 00:08:05.280
+Filtra primero por tipo de actividad, mensaje, conversación y actualización de invocación y solo después por contenido.
+
+00:08:05.640 --> 00:08:07.300
+Mantén los filtros declarativos y específicos.
+
+00:08:07.300 --> 00:08:09.340
+También conectarás un controlador de inicio de sesión.
+
+00:08:09.480 --> 00:08:15.320
+Ahí es donde el SDK muestra el consentimiento, intercambia códigos por tokens y te entrega un token de acceso con alcance de usuario en el turno.
+
+00:08:15.500 --> 00:08:16.040
+El beneficio.
+
+00:08:16.640 --> 00:08:21.080
+Puedes llamar a Microsoft Graph como el usuario sin convertir tu bot en un principal de servicio con privilegios excesivos.
+
+00:08:21.640 --> 00:08:22.300
+Esa es la forma profesional.
+
+00:08:22.860 --> 00:08:24.060
+A continuación, el plugin de orquestador.
+
+00:08:24.500 --> 00:08:29.920
+Registra tu orquestador, Semantic Kernel, Azure AI Foundry y OpenAI a través de la colección de servicios del SDK.
+
+00:08:30.680 --> 00:08:32.400
+Separa los prompts y herramientas de los controladores.
+
+00:08:32.400 --> 00:08:36.680
+Los prompts residen en archivos, las herramientas como funciones con entradas y salidas explícitas.
+
+00:08:36.680 --> 00:08:38.420
+Y ambos son testeables sin canales.
+
+00:08:39.140 --> 00:08:41.820
+El atajo que nadie enseña envuelve las llamadas al modelo detrás de la mitad.
+
+00:08:42.420 --> 00:08:43.640
+Hoy es una finalización de chat.
+
+00:08:43.960 --> 00:08:44.660
+Mañana es un break-up.
+
+00:08:45.040 --> 00:08:45.980
+A la gente no verá importar.
+
+00:08:46.280 --> 00:08:47.700
+Tus futuras migraciones te lo agradecerán.
+
+00:08:48.120 --> 00:08:50.080
+La gestión de estado es donde el juguete se convierte en un sistema.
+
+00:08:50.740 --> 00:08:56.920
+Usa el estado de turno para persistir el historial de chat, salidas de herramientas y cualquier memoria a corto plazo para la lógica multironda.
+
+00:08:57.480 --> 00:09:00.600
+Almacén IDs de correlación para poder rastrear el viaje de un usuario a través de nodos.
+
+00:09:00.600 --> 00:09:04.100
+Lo que la mayoría pasa por alto es la resiliencia entre nodos.
+
+00:09:04.780 --> 00:09:07.160
+Tu balanceador de carga moverá una conversación a mitad de camino.
+
+00:09:07.560 --> 00:09:10.740
+Sin un estado compartido, las aclaraciones se evaporan y tu agente tartamudea.
+
+00:09:11.280 --> 00:09:13.100
+Con los patrones de estado del SDK no sucede.
+
+00:09:13.640 --> 00:09:16.100
+El registro de canales es donde dejas de ser un proyecto de laboratorio.
+
+00:09:16.820 --> 00:09:19.620
+Registra a tu agente con Azure Bot Service como el intermediario persistente.
+
+00:09:20.460 --> 00:09:24.040
+ABS termina los protocolos de canal y reenvía las actividades a tu punto de conexión único.
+
+00:09:24.560 --> 00:09:27.540
+Apunta a Teams, el chat web y Copilot Studio a ese punto de conexión de ABS.
+
+00:09:27.540 --> 00:09:30.500
+Un punto de conexión, muchos canales, semántica consistente.
+
+00:09:31.200 --> 00:09:36.120
+Compara eso con sockets personalizados por canal, frágiles, inobservables y destinados a fallar en pruebas de escala.
+
+00:09:36.700 --> 00:09:37.860
+Activa el interruptor de streaming.
+
+00:09:38.140 --> 00:09:39.820
+Habilita las respuestas en streaming en el SDK.
+
+00:09:40.240 --> 00:09:42.220
+El agente detectará automáticamente la capacidad de cambiar.
+
+00:09:42.660 --> 00:09:46.920
+Si el streaming es compatible con el área de pruebas de Teams, transmitirás tokens y darás feedback instantáneo.
+
+00:09:47.320 --> 00:09:50.720
+Si no, en algunos clientes web verás indicadores de escritura y envíos por fragmentos.
+
+00:09:51.260 --> 00:09:54.000
+No necesitas ramificar tu código por canal, el adaptador hace lo correcto.
+
+00:09:54.600 --> 00:09:56.680
+Un primer feedback rápido reduce el abandono.
+
+00:09:56.680 --> 00:09:59.340
+Así puedes finalizar con una tarjeta adaptable sin simular nada.
+
+00:09:59.780 --> 00:10:01.040
+Los diagnósticos no son opcionales.
+
+00:10:01.140 --> 00:10:03.980
+Usa el área de pruebas para simular canales múltiples e inspeccionar encabezados.
+
+00:10:04.400 --> 00:10:06.500
+Confirmar que los tokens estén presentes al actor como usuario.
+
+00:10:06.620 --> 00:10:08.520
+Rastrear actividades de extremo a extremo.
+
+00:10:08.940 --> 00:10:09.740
+Activa la telemetría.
+
+00:10:09.920 --> 00:10:13.780
+Emite identificadores de correlación desde la recepción del mensaje hasta la llamada al modelo o la invocación de herramientas del error.
+
+00:10:13.960 --> 00:10:15.440
+La verdad es que sin correlación estás adivinando.
+
+00:10:15.960 --> 00:10:19.120
+Con ella puedes demostrar si el retraso está en el modelo, en tu herramienta o en la red.
+
+00:10:19.120 --> 00:10:21.900
+Es hora de conectar una capacidad simple, extremo a extremo.
+
+00:10:22.160 --> 00:10:24.200
+En tu controlador de mensajes pasa la intención de forma erigente.
+
+00:10:24.480 --> 00:10:26.100
+Sin heroísmo, solo lo suficiente para enrutar.
+
+00:10:26.360 --> 00:10:30.740
+Llama a tu orquestador con prompt del sistema que establezca restricciones y un mensaje de usuario que incluya el estado del turno anterior.
+
+00:10:31.500 --> 00:10:39.060
+Si el modelo planec llamara a una herramienta, ejecútala con tokens de alcance de usuario si la acción depende de graph o con credenciales de servicio, si es externa y segura.
+
+00:10:39.980 --> 00:10:41.720
+Escribe el resultado de la herramienta en el estado del turno.
+
+00:10:41.920 --> 00:10:43.180
+Tramite texto parcial si compatible.
+
+00:10:43.180 --> 00:10:46.740
+Al completar, renderiza una tarjeta adaptable final con la salida estructurada.
+
+00:10:47.520 --> 00:10:48.340
+Añade barreras de grid.
+
+00:10:49.060 --> 00:10:50.900
+Limita las herramientas por rol y sensibilidad de datos.
+
+00:10:51.640 --> 00:10:53.200
+Un planificador puede poner llamadas.
+
+00:10:53.540 --> 00:10:54.520
+Tu agente las autoriza.
+
+00:10:55.360 --> 00:10:58.580
+Eso significa verificar la audiencia, las etiquetas y los límites de acción antes de la ejecución.
+
+00:10:59.100 --> 00:11:02.080
+Si una herramienta quiere enviar un correo, requiere confirmación explícita del usuario.
+
+00:11:02.660 --> 00:11:06.260
+Si una herramienta quiere datos de SharePoint, revisa las etiquetas de sensibilidad y respeta la DLP.
+
+00:11:06.860 --> 00:11:07.560
+No eres un genio.
+
+00:11:07.920 --> 00:11:08.880
+Eres un agente con límites.
+
+00:11:09.560 --> 00:11:10.540
+Incrementa una porción mínima.
+
+00:11:10.960 --> 00:11:11.540
+El eco funciona.
+
+00:11:12.220 --> 00:11:13.160
+Añade una herramienta de imprompo.
+
+00:11:13.720 --> 00:11:16.100
+Prueba a lunaria de pruebas, chat web y Teams mediante ABS.
+
+00:11:16.980 --> 00:11:18.260
+Verifica el streaming donde sea compatible.
+
+00:11:18.760 --> 00:11:21.220
+Verifica los flujos de actuar como usuario y las entradas de auditoría.
+
+00:11:21.520 --> 00:11:23.520
+Incorpora estas comprobaciones en tu definición de finalizar.
+
+00:11:24.300 --> 00:11:27.020
+Solo entonces añade más herramientas, más prompts y un razonamiento más rico.
+
+00:11:27.260 --> 00:11:28.540
+Finalmente, empaqueta la repetibilidad.
+
+00:11:29.160 --> 00:11:34.280
+Crea scripts que provisionen el recurso ABS, registren canales, configuren IDs de aplicación y establezcan variables de entorno.
+
+00:11:35.140 --> 00:11:37.840
+Confirma tus archivos de prompt, esquema de estado e interfaces de herramientas.
+
+00:11:37.840 --> 00:11:39.300
+El resultado es simple.
+
+00:11:39.300 --> 00:11:43.400
+Un agente multicanal con estado de identidad correcta que se depura limpiamente y sobrevive a la carga.
+
+00:11:43.400 --> 00:11:47.320
+Ahora podemos hablar de puertas de seguridad porque esa es la puerta que realmente debes abrir.
+
+00:11:48.220 --> 00:11:51.180
+Seguridad, cumplimiento y gobernanza. Por eso el SDK no es opcional.
+
+00:11:52.200 --> 00:11:53.860
+No pasas las puertas empresariales por intuición.
+
+00:11:54.360 --> 00:11:56.940
+Las pasas con identidad, auditabilidad y políticas ejecutables.
+
+00:11:57.360 --> 00:12:02.040
+El SDK integra esto en tu agente para que dejes de negociar con seguridad y empieces a heredar sus controles.
+
+00:12:02.640 --> 00:12:03.960
+Empiece con la identidad de entreparagente.
+
+00:12:03.960 --> 00:12:05.880
+No se trata de un simple registro de aplicación.
+
+00:12:06.320 --> 00:12:14.320
+Es un modelo de identidad unificado donde la gente tiene su propia personalidad, puede actuar como usuario con consentimiento explícito y deja una pista de auditoría que vincula a cada acción a un responsable.
+
+00:12:15.540 --> 00:12:17.700
+Actuar como el usuario significa fidelidad en los permisos.
+
+00:12:18.440 --> 00:12:20.100
+Correo, calendario, SharePoint, Teams.
+
+00:12:20.320 --> 00:12:21.700
+Exactamente lo que ese humano puede hacer.
+
+00:12:21.940 --> 00:12:22.320
+Nada más.
+
+00:12:22.840 --> 00:12:23.100
+Nada más.
+
+00:12:23.500 --> 00:12:25.100
+El principio de menor privilegio no es un esloganico.
+
+00:12:25.660 --> 00:12:27.660
+Es como se crean y delimitan los tokens en cada paso.
+
+00:12:28.820 --> 00:12:32.580
+Cuando cumplimiento normativo pregunta a quién accedió a este archivo, bajo qué autoridad y cuándo.
+
+00:12:32.580 --> 00:12:37.520
+Tienes una respuesta determinista porque el SDK entrelaza esa identidad a través del flujo de actividad.
+
+00:12:38.220 --> 00:12:39.340
+Ahora la integración con Purview.
+
+00:12:39.440 --> 00:12:41.280
+Aquí es donde la mayoría de los desarrollos propios fracasan.
+
+00:12:41.740 --> 00:12:43.040
+Los prompts y las respuestas son contenido.
+
+00:12:43.440 --> 00:12:45.680
+El contenido tiene etiquetas, retención y obligaciones legales.
+
+00:12:46.280 --> 00:12:51.240
+La clasificación y DLP aplicadas por Purview pueden evaluar las entradas y salidas de la IA en tiempo real,
+
+00:12:51.860 --> 00:12:56.960
+bloqueando filtraciones sensibles, respetando las etiquetas de sensibilidad y asegurando que el texto generado no infrinja políticas.
+
+00:12:57.640 --> 00:13:01.500
+La alineación con eDiscovery significa que las conversaciones y los artefactos de tu agente
+
+00:13:01.500 --> 00:13:06.160
+pueden ser descubiertos, puestos bajo retención legal y exportados bajo los mismos controles que el correo y los documentos.
+
+00:13:06.840 --> 00:13:09.120
+Lo que la mayoría pasa por alto es que Purview no es un complemento opcional.
+
+00:13:09.480 --> 00:13:10.920
+En el entorno a Microsoft es el sistema nervioso.
+
+00:13:11.580 --> 00:13:15.860
+El SDK enruta las señales, por lo que las etiquetas, la retención y las decisiones de acceso se aplican
+
+00:13:15.860 --> 00:13:19.060
+sin necesidad de escribir filtros regex a medida que fallan al segundo día.
+
+00:13:19.960 --> 00:13:22.360
+¿Entra a Defender for Cloud con detecciones adaptadas a la IA?
+
+00:13:22.360 --> 00:13:27.460
+Si los jailbreaks, las inyecciones de prompts y la exfiltración de datos no son hipotéticos, no en pan de cada día.
+
+00:13:27.820 --> 00:13:32.000
+Defender proporciona recomendaciones de postura y alertas en tiempo de ejecución diseñadas para sistemas de agentes.
+
+00:13:32.640 --> 00:13:36.460
+Eso significa obtener telemetría que reconoce patrones sospechosos de invocación de herramientas,
+
+00:13:36.540 --> 00:13:38.540
+picos de salida anómalos y mal uso de tokens,
+
+00:13:38.900 --> 00:13:41.580
+respaldado por inteligencia de amenazas que nunca replicarías internamente.
+
+00:13:42.120 --> 00:13:44.640
+La ingeniería de seguridad propia pretende poder vigilarlo todo.
+
+00:13:45.020 --> 00:13:48.700
+El SDK utiliza las torres de vigilancia existentes que ya monitorean tu inquilino.
+
+00:13:48.700 --> 00:13:52.680
+La confianza cero para agentes no es una diapresentación, es el modo de operación.
+
+00:13:53.300 --> 00:13:54.680
+Las acciones vinculadas a la identidad,
+
+00:13:54.880 --> 00:13:58.060
+limitadas a las herramientas y verificaciones de cumplimiento de tareas en Azure AI Foundry,
+
+00:13:58.240 --> 00:13:59.420
+restringen el comportamiento de la agente.
+
+00:14:00.020 --> 00:14:01.280
+Un planificador puede sugerir una acción.
+
+00:14:02.020 --> 00:14:05.780
+Tu política decide si el agente puede ejecutarla, para quién y con qué token.
+
+00:14:06.800 --> 00:14:08.940
+Las herramientas operan dentro de envoltorios de permisos,
+
+00:14:09.000 --> 00:14:10.380
+de solo lectura cuando es necesario,
+
+00:14:10.700 --> 00:14:12.700
+con confirmación explícita para operaciones riesgosas
+
+00:14:12.700 --> 00:14:14.940
+y bloqueos estrictos contra el cruce de inquilinos o etiquetas.
+
+00:14:15.580 --> 00:14:16.780
+La razón por la que esto funciona es simple.
+
+00:14:16.780 --> 00:14:18.240
+Los tokens son la autoridad.
+
+00:14:18.700 --> 00:14:21.320
+Y el SDK controla cuándo y cómo se emiten y utilizan
+
+00:14:21.320 --> 00:14:24.000
+la automatización del cumplimiento es donde ahorras trimestres de trabajo.
+
+00:14:24.660 --> 00:14:26.480
+Las políticas de retención se aplican a conversación.
+
+00:14:27.200 --> 00:14:29.800
+Los registros de auditoría capturan quién hizo qué, cuándo y a través de qué canal.
+
+00:14:30.100 --> 00:14:32.460
+La retención legal puede congelar interacciones relevantes
+
+00:14:32.460 --> 00:14:33.920
+sin que tengas que inventar un archivo paralelo.
+
+00:14:34.260 --> 00:14:36.260
+No estás reconstruyendo controles, los estás heredando.
+
+00:14:36.920 --> 00:14:39.480
+Compar eso con agentes personalizados que vuelcan registros en una tabla
+
+00:14:39.480 --> 00:14:40.340
+y lo llaman cumplimiento.
+
+00:14:41.020 --> 00:14:42.620
+A sus auditores no les encantará el JSON.
+
+00:14:43.180 --> 00:14:45.040
+A diferencia de riesgo frente a lo personalizado no es útil.
+
+00:14:45.040 --> 00:14:47.860
+Hacer lo mismo implica meses diseñando flujos de identidad,
+
+00:14:48.080 --> 00:14:50.800
+escribiendo intercambiadores de tokens, añadiendo escaneo de contenido,
+
+00:14:51.100 --> 00:14:53.900
+inventando reglas de redacción y tratando de mapear salidas para eDiscovery.
+
+00:14:54.960 --> 00:14:57.900
+Luego pasas meses más probando anteseguridad que funciona bajo carga
+
+00:14:57.900 --> 00:14:59.880
+en todos los canales y en escenarios adversos.
+
+00:15:00.540 --> 00:15:02.520
+Con el SDK comienzas con valores predeterminados
+
+00:15:02.520 --> 00:15:05.080
+que reflejan la postura de seguridad de ese Microsoft 365 que ya utilizas.
+
+00:15:05.720 --> 00:15:08.180
+Desde el primer día tienes trazabilidad, cumplimiento de políticas
+
+00:15:08.180 --> 00:15:10.720
+y semántica de actividad consciente del canal que pasa la primera prueba.
+
+00:15:10.720 --> 00:15:12.460
+La diferencia es el modelo de herencia.
+
+00:15:13.100 --> 00:15:14.880
+Tu agente vive dentro de las barandillas de la empresa
+
+00:15:14.880 --> 00:15:16.680
+en lugar de oscilar justo fuera de ellas.
+
+00:15:17.180 --> 00:15:20.120
+La gobernanza escala es donde los proyectos se convierten en plataformas o mueren.
+
+00:15:20.940 --> 00:15:22.720
+El control administrativo centralizado date
+
+00:15:22.720 --> 00:15:25.180
+y un lugar único para ver agentes, gestionar identidades,
+
+00:15:25.280 --> 00:15:26.640
+rotar secretos y aplicar políticas.
+
+00:15:27.180 --> 00:15:29.880
+Los flujos de aprobación pueden controlar nuevas herramientas, nuevos canales y nuevos.
+
+00:15:30.420 --> 00:15:33.020
+La herencia de políticas significa que si tu organización endurece la DLP
+
+00:15:33.020 --> 00:15:35.440
+o revisa la retención, tu agente se adapta sin refactorizar.
+
+00:15:36.020 --> 00:15:38.720
+La visibilidad en toda la organización a través de Teams, web y Copilot
+
+00:15:38.720 --> 00:15:41.560
+te permite responder la única pregunta que le importa a los ejecutivos.
+
+00:15:41.860 --> 00:15:43.420
+¿Qué están haciendo estos agentes en nuestro inquilino?
+
+00:15:43.820 --> 00:15:46.320
+Con la telemetría del SDK puedes correlacionar eventos de canal,
+
+00:15:46.520 --> 00:15:48.460
+pasos de la gente y llamadas al modelo bajo un mismo techo
+
+00:15:48.460 --> 00:15:51.320
+y puedes redactar seguimientos sensibles antes de que los registros salgan del enclave.
+
+00:15:52.000 --> 00:15:54.500
+Antes de continuar necesitas entender la realidad política.
+
+00:15:55.140 --> 00:15:57.160
+Seguridad nunca dice sí a sistemas de IA
+
+00:15:57.160 --> 00:15:58.860
+a medida que no pueden probar la fidelidad de identidad,
+
+00:15:59.040 --> 00:16:01.820
+la gobernanza de contenido y la observabilidad operativa desde el primer día.
+
+00:16:02.220 --> 00:16:02.860
+Desde el primer día.
+
+00:16:03.100 --> 00:16:04.180
+Te detendrán y tendrán razón.
+
+00:16:04.720 --> 00:16:07.720
+El SDK no es opcional porque convierte sus debates en configuración.
+
+00:16:08.720 --> 00:16:11.300
+Conectas controladores de inicio de sesión y le das el privilegio mínimo.
+
+00:16:12.120 --> 00:16:13.820
+Te registras a través de Azure Bot Service.
+
+00:16:14.120 --> 00:16:15.040
+Heredas controles de canal.
+
+00:16:15.740 --> 00:16:17.560
+Presentas contenido a través del protocolo de actividad.
+
+00:16:17.780 --> 00:16:20.300
+Por view y DLP pueden verlo y actuar sobre él.
+
+00:16:20.960 --> 00:16:21.860
+No defiendes tu caso.
+
+00:16:22.160 --> 00:16:22.740
+Lo demuestras.
+
+00:16:23.420 --> 00:16:24.380
+Si no recuerdas nada más,
+
+00:16:24.600 --> 00:16:25.940
+la identidad, la protección de contenido
+
+00:16:25.940 --> 00:16:28.700
+y el monitoreo de amenazas deben ser ciudadanos de primera clase en tu agente.
+
+00:16:29.400 --> 00:16:30.740
+El SDK los hace automáticos.
+
+00:16:31.500 --> 00:16:34.300
+Tu código personalizado debería centrarse en el razonamiento y las herramientas,
+
+00:16:34.440 --> 00:16:35.440
+no en reinventar el cumplimiento.
+
+00:16:35.440 --> 00:16:39.120
+Ahora, hablemos de las formas en que los equipos aún se sabotean a sí mismos
+
+00:16:39.120 --> 00:16:41.260
+y cómo evitar ese desastre en cámara lenta.
+
+00:16:42.300 --> 00:16:43.600
+Errores comunes y cómo evitarlos.
+
+00:16:44.460 --> 00:16:45.980
+Construir tus propios adaptadores de canal
+
+00:16:45.980 --> 00:16:48.660
+es la forma más rápida de reinventar la rueda como un triángulo.
+
+00:16:49.160 --> 00:16:50.820
+El protocolo de actividad ya define mensajes,
+
+00:16:50.980 --> 00:16:53.080
+eventos, escritura, archivos adjuntos y tarjetas.
+
+00:16:54.160 --> 00:16:56.980
+Usa los adaptadores del SDK para Teams, Chatweb, Slack y CopaLut.
+
+00:16:57.420 --> 00:16:58.900
+Obtendrás una semántica consistente,
+
+00:16:59.000 --> 00:17:01.080
+flujos de consentimiento de archivos y detección de capacidades
+
+00:17:01.080 --> 00:17:03.800
+sin un registro interminable de causas excepcionales que nunca terminarás.
+
+00:17:04.240 --> 00:17:06.480
+Tratar a los agentes como apátridas es sabotaje de alto nivel.
+
+00:17:06.800 --> 00:17:07.960
+Los turnos múltiples requieren memoria.
+
+00:17:08.340 --> 00:17:10.240
+Persiste los hilos de conversación y el estado del turno
+
+00:17:10.240 --> 00:17:12.060
+usando patrones del SDK para que las aclaraciones,
+
+00:17:12.160 --> 00:17:14.420
+los resultados de las herramientas y las herramientas y los hay de correlación
+
+00:17:14.420 --> 00:17:16.040
+sobrevivan a la conmutación por error y a decadir.
+
+00:17:16.100 --> 00:17:16.380
+La verdad.
+
+00:17:17.180 --> 00:17:18.120
+Sin un estado compartido,
+
+00:17:18.200 --> 00:17:20.200
+tu agente inteligente desarrolla amnesia retrograda
+
+00:17:20.200 --> 00:17:21.420
+cada vez que el tráfico aumenta.
+
+00:17:22.100 --> 00:17:23.880
+Modificar la lógica del modelo en los controladores
+
+00:17:23.880 --> 00:17:24.980
+une la condición del transporte.
+
+00:17:24.980 --> 00:17:27.300
+Aísla las instrucciones, prompts y las herramientas
+
+00:17:27.300 --> 00:17:28.820
+de las interfaces que les indica por registro.
+
+00:17:29.000 --> 00:17:30.500
+De esa manera, puedes cambiar Semantic Kernel
+
+00:17:30.500 --> 00:17:31.960
+por planificadores de Azure e Foundry,
+
+00:17:32.040 --> 00:17:33.280
+probar OpenAI frente a tu proveedor
+
+00:17:33.280 --> 00:17:34.460
+o hacer pruebas a otro proveedor
+
+00:17:34.460 --> 00:17:35.720
+o hacer pruebas de sistemas sin desistemas
+
+00:17:35.720 --> 00:17:37.060
+sin deshacer tu código en rotamente estado.
+
+00:17:37.240 --> 00:17:39.440
+Las actualizaciones deben sentirse como cambiar una cuchilla
+
+00:17:39.440 --> 00:17:40.940
+y no como desmantelar el avión en pleno vuelo.
+
+00:17:41.620 --> 00:17:42.920
+Emitir la autenticación del usuario
+
+00:17:42.920 --> 00:17:44.600
+y ejecutar todo como una entidad de servicio
+
+00:17:44.600 --> 00:17:47.000
+o plan a los permisos y eliminar la auditabilidad.
+
+00:17:47.840 --> 00:17:49.280
+Plamenta controladores de inicio de sesión
+
+00:17:49.280 --> 00:17:50.680
+para que tu agente pueda actuar como usuario
+
+00:17:50.680 --> 00:17:52.120
+al tocar recursos vinculados a Graph.
+
+00:17:52.280 --> 00:17:53.380
+Recurra a tokens de aplicación
+
+00:17:53.380 --> 00:17:54.900
+solo para operaciones que no requieran usuario.
+
+00:17:55.180 --> 00:17:56.960
+Pasarás las comprobaciones de privilegios mínimos
+
+00:17:56.960 --> 00:17:58.420
+y finalmente responderás quién hizo qué,
+
+00:17:58.580 --> 00:17:59.500
+cuándo y bajo qué autoridad.
+
+00:18:00.060 --> 00:18:01.320
+Ignorar la semántica de transmisión
+
+00:18:01.320 --> 00:18:02.460
+produce una interfaz de usuario
+
+00:18:02.460 --> 00:18:03.780
+que se siente lenta y poco profesional.
+
+00:18:04.260 --> 00:18:05.680
+Habilita la transmisión en el SDK
+
+00:18:05.680 --> 00:18:07.060
+para que los canales que la admiten
+
+00:18:07.060 --> 00:18:08.280
+muestren el progreso en tiempo real
+
+00:18:08.280 --> 00:18:09.600
+y los que no muestran elegantemente
+
+00:18:09.600 --> 00:18:11.600
+indicadores de escritura, de escritura y envíos por frangano.
+
+00:18:11.960 --> 00:18:12.680
+No fije la transmisión.
+
+00:18:13.060 --> 00:18:14.720
+Los usuarios lo notan y la confianza se evapora.
+
+00:18:15.160 --> 00:18:16.200
+Omitir Azure Bot Service
+
+00:18:16.200 --> 00:18:17.940
+para conectar sockets directos por canal
+
+00:18:17.940 --> 00:18:19.260
+multiplica los modos de falla.
+
+00:18:19.940 --> 00:18:21.640
+ABS es el intermediario persistente
+
+00:18:21.640 --> 00:18:22.700
+que termina protocolos,
+
+00:18:22.700 --> 00:18:23.720
+normaliza actividades
+
+00:18:23.720 --> 00:18:24.840
+y apunta a muchos canales
+
+00:18:24.840 --> 00:18:26.060
+a un solo punto de conexión.
+
+00:18:26.620 --> 00:18:26.860
+Úsalo.
+
+00:18:27.260 --> 00:18:28.760
+Tu equipo de operaciones te lo agradecerá
+
+00:18:28.760 --> 00:18:29.700
+cuando los mensajes se enruten
+
+00:18:29.700 --> 00:18:30.360
+de forma confiable
+
+00:18:30.360 --> 00:18:31.320
+durante las pruebas de escala
+
+00:18:31.320 --> 00:18:32.040
+en lugar de desaparecer
+
+00:18:32.040 --> 00:18:33.160
+en purgatoria de sockets personales.
+
+00:18:33.400 --> 00:18:34.480
+No tener una estrategia de gobernanza
+
+00:18:34.480 --> 00:18:35.300
+equivale a agentes en la zona.
+
+00:18:35.800 --> 00:18:36.600
+Registra identidades,
+
+00:18:36.780 --> 00:18:38.140
+aplica políticas de por un IDLP
+
+00:18:38.140 --> 00:18:39.380
+y activa los registros de auditoría
+
+00:18:39.380 --> 00:18:39.880
+del primer día.
+
+00:18:40.540 --> 00:18:41.480
+Si tu equipo de cumplimiento
+
+00:18:41.480 --> 00:18:43.200
+no puede realizar e-discovery de conversaciones
+
+00:18:43.200 --> 00:18:44.220
+o ver la aplicación de etiquetas
+
+00:18:44.220 --> 00:18:44.780
+en los resultados,
+
+00:18:44.920 --> 00:18:45.960
+tu implementación ya terminó.
+
+00:18:46.700 --> 00:18:47.420
+Lo que cambia el juego
+
+00:18:47.420 --> 00:18:48.200
+y de lo que nadie habla
+
+00:18:48.200 --> 00:18:48.820
+es que la gobernanza
+
+00:18:48.820 --> 00:18:49.460
+no es para después.
+
+00:18:50.140 --> 00:18:50.920
+Es la puerta a la producción.
+
+00:18:51.440 --> 00:18:51.560
+Ahora,
+
+00:18:51.640 --> 00:18:52.520
+aquí está la lista de verificación
+
+00:18:52.520 --> 00:18:53.320
+que realmente hace que pueda.
+
+00:18:53.960 --> 00:18:55.160
+Usa adaptadores de SDK,
+
+00:18:55.460 --> 00:18:56.240
+persiste el estado,
+
+00:18:56.680 --> 00:18:57.600
+abstrae la cognición,
+
+00:18:58.320 --> 00:18:59.440
+implementa el inicio de sesión,
+
+00:18:59.940 --> 00:19:00.820
+habilita la transmisión,
+
+00:19:01.020 --> 00:19:01.920
+regístrate a través de ABS
+
+00:19:01.920 --> 00:19:03.020
+y conecta por ViuDRP.
+
+00:19:03.480 --> 00:19:04.660
+Haz eso y las trampas comunes
+
+00:19:04.660 --> 00:19:05.760
+dejarán de ser tus trampas.
+
+00:19:06.580 --> 00:19:07.440
+Patrones avanzados,
+
+00:19:07.740 --> 00:19:08.680
+escala, extensibilidad
+
+00:19:08.680 --> 00:19:10.180
+y uso empresarial real.
+
+00:19:10.760 --> 00:19:11.680
+Los catálogos de herramientas
+
+00:19:11.680 --> 00:19:12.660
+son cómo mantienes el poder
+
+00:19:12.660 --> 00:19:13.120
+sin el cabo.
+
+00:19:13.520 --> 00:19:14.220
+Defina herramientas
+
+00:19:14.220 --> 00:19:14.780
+con alcance,
+
+00:19:14.900 --> 00:19:15.980
+roles y niveles de sensibilidad
+
+00:19:15.980 --> 00:19:16.340
+de datos.
+
+00:19:17.080 --> 00:19:18.160
+Un planificador propone
+
+00:19:18.160 --> 00:19:18.940
+tu política prueba
+
+00:19:18.940 --> 00:19:20.060
+según la etiqueta de audiencia
+
+00:19:20.060 --> 00:19:20.600
+y la acción.
+
+00:19:21.320 --> 00:19:22.240
+Hacina lectura de calendarios
+
+00:19:22.240 --> 00:19:23.240
+usuarios, envío de correo
+
+00:19:23.240 --> 00:19:24.800
+a propietarios con confirmación explícita
+
+00:19:24.800 --> 00:19:25.720
+y exportación de registros
+
+00:19:25.720 --> 00:19:26.660
+solo a administradores
+
+00:19:26.660 --> 00:19:27.680
+y exportación de registros.
+
+00:19:27.800 --> 00:19:28.220
+Las herramientas
+
+00:19:28.220 --> 00:19:28.920
+viven en un registro.
+
+00:19:29.120 --> 00:19:29.780
+El agente nunca perca
+
+00:19:29.780 --> 00:19:30.320
+sin restricciones.
+
+00:19:30.760 --> 00:19:31.660
+La composición de habilidades
+
+00:19:31.660 --> 00:19:32.120
+te lleva más allá
+
+00:19:32.120 --> 00:19:33.160
+de los trucos de un solo turno.
+
+00:19:33.160 --> 00:19:34.400
+Usa secuencias guiadas
+
+00:19:34.400 --> 00:19:35.220
+por el planificador
+
+00:19:35.220 --> 00:19:35.940
+con reintentos
+
+00:19:35.940 --> 00:19:36.460
+y disyuntores
+
+00:19:36.460 --> 00:19:37.540
+en el límite del requestador.
+
+00:19:38.220 --> 00:19:39.020
+Las herramientas externas
+
+00:19:39.020 --> 00:19:40.020
+fallan su pasatía.
+
+00:19:40.380 --> 00:19:41.180
+Vuelvelas con diseños
+
+00:19:41.180 --> 00:19:41.800
+idempotentes
+
+00:19:41.800 --> 00:19:42.860
+y retroceso exponencial.
+
+00:19:43.420 --> 00:19:43.880
+Ante privada
+
+00:19:43.880 --> 00:19:44.620
+la cadena de pensamiento.
+
+00:19:45.220 --> 00:19:46.540
+Devuelve un razonamiento resumido
+
+00:19:46.540 --> 00:19:47.420
+no un razonamiento bruto.
+
+00:19:47.960 --> 00:19:48.700
+Buscas transparencia
+
+00:19:48.700 --> 00:19:49.160
+no terapia
+
+00:19:49.160 --> 00:19:49.760
+para fugas de pronto.
+
+00:19:50.320 --> 00:19:51.060
+La exposición
+
+00:19:51.060 --> 00:19:51.720
+entre inquilinos
+
+00:19:51.720 --> 00:19:52.540
+exige paranoia
+
+00:19:52.540 --> 00:19:53.400
+con instrumentación.
+
+00:19:54.240 --> 00:19:54.740
+Para escenarios
+
+00:19:54.740 --> 00:19:55.440
+no autenticados
+
+00:19:55.440 --> 00:19:55.940
+o B2B
+
+00:19:55.940 --> 00:19:57.620
+ejecuta sesiones monitoreadas
+
+00:19:57.620 --> 00:19:58.520
+con límites de tasa,
+
+00:19:58.620 --> 00:19:59.500
+clasificación de contenido
+
+00:19:59.500 --> 00:20:00.520
+y supervisión de cumplimiento
+
+00:20:00.520 --> 00:20:01.440
+en entradas y salidas.
+
+00:20:02.180 --> 00:20:02.960
+La identidad
+
+00:20:02.960 --> 00:20:03.780
+restringe la sección.
+
+00:20:04.220 --> 00:20:04.980
+Sesiones anónimas
+
+00:20:04.980 --> 00:20:06.040
+leen documentos públicos,
+
+00:20:06.120 --> 00:20:06.740
+no correos privados.
+
+00:20:07.280 --> 00:20:08.000
+Cada turno externo
+
+00:20:08.000 --> 00:20:09.060
+emite eventos auditables
+
+00:20:09.060 --> 00:20:09.940
+o no se publica.
+
+00:20:10.300 --> 00:20:10.880
+La observabilidad
+
+00:20:10.880 --> 00:20:11.500
+no es negociable.
+
+00:20:12.380 --> 00:20:12.780
+Correlación
+
+00:20:12.780 --> 00:20:13.440
+en eventos de canal
+
+00:20:13.440 --> 00:20:14.180
+pasos de la gente,
+
+00:20:14.400 --> 00:20:14.980
+llamadas al modelo
+
+00:20:14.980 --> 00:20:16.000
+e invocaciones de herramientas
+
+00:20:16.000 --> 00:20:17.020
+con un único ID de rastreo.
+
+00:20:17.560 --> 00:20:18.620
+Redacta fragmentos sensibles
+
+00:20:18.620 --> 00:20:19.080
+en el borde
+
+00:20:19.080 --> 00:20:20.040
+antes de que los registros
+
+00:20:20.040 --> 00:20:20.760
+salgan del enclave.
+
+00:20:21.320 --> 00:20:21.860
+Dos paneles
+
+00:20:21.860 --> 00:20:22.460
+deben responder
+
+00:20:22.460 --> 00:20:23.600
+tres preguntas al instante.
+
+00:20:23.960 --> 00:20:24.700
+¿Dónde se fue el tiempo?
+
+00:20:24.980 --> 00:20:26.040
+¿Dónde se originaron los errores?
+
+00:20:26.060 --> 00:20:27.260
+¿Y quién estaba autorizado para qué?
+
+00:20:27.820 --> 00:20:28.500
+Si no puedes verlo,
+
+00:20:28.500 --> 00:20:29.080
+no puedes escalar.
+
+00:20:29.740 --> 00:20:30.880
+¿Migración desde Teams FX?
+
+00:20:31.180 --> 00:20:31.740
+¿Hay un camino?
+
+00:20:32.500 --> 00:20:33.260
+Comienza colocando
+
+00:20:33.260 --> 00:20:33.840
+tu bot actual
+
+00:20:33.840 --> 00:20:34.420
+frente a ABS
+
+00:20:34.420 --> 00:20:35.080
+si aún no lo está.
+
+00:20:35.900 --> 00:20:36.780
+Reemplaza gradualmente
+
+00:20:36.780 --> 00:20:37.380
+los adaptadores
+
+00:20:37.380 --> 00:20:38.020
+personalizados
+
+00:20:38.020 --> 00:20:39.060
+para adaptadores del SDK.
+
+00:20:39.340 --> 00:20:39.740
+Mueve listado
+
+00:20:39.740 --> 00:20:40.160
+a los patrones
+
+00:20:40.160 --> 00:20:40.660
+de estado de turno
+
+00:20:40.660 --> 00:20:41.040
+de SDK
+
+00:20:41.040 --> 00:20:41.900
+a isla tras interfaces.
+
+00:20:43.020 --> 00:20:44.100
+Usa plantillas del SDK
+
+00:20:44.100 --> 00:20:45.280
+para crear rutas paralelas
+
+00:20:45.280 --> 00:20:46.540
+y cambiar el tráfico gradualmente.
+
+00:20:47.240 --> 00:20:48.180
+El reloj de la obsolescencia
+
+00:20:48.180 --> 00:20:48.540
+no espera.
+
+00:20:49.120 --> 00:20:49.900
+Tu plan de refactorización
+
+00:20:49.900 --> 00:20:50.540
+tampoco debería ser.
+
+00:20:51.220 --> 00:20:51.920
+La gestión de costo
+
+00:20:51.920 --> 00:20:53.160
+importa cuando tu director financiero
+
+00:20:53.160 --> 00:20:53.780
+descubre la cuesta
+
+00:20:53.780 --> 00:20:54.280
+la ventana de con.
+
+00:20:54.720 --> 00:20:55.580
+Almacena incrustaciones
+
+00:20:55.580 --> 00:20:56.000
+en caché,
+
+00:20:56.080 --> 00:20:56.660
+elimina duplicados
+
+00:20:56.660 --> 00:20:57.220
+en la recuperación
+
+00:20:57.220 --> 00:20:57.960
+y reutiliza el contexto
+
+00:20:57.960 --> 00:20:58.860
+a corto plazo entre turnos.
+
+00:20:59.480 --> 00:21:00.140
+Regula las llamadas
+
+00:21:00.140 --> 00:21:01.240
+herramientas con retroceso
+
+00:21:01.240 --> 00:21:02.000
+y limita las generaciones
+
+00:21:02.000 --> 00:21:02.640
+con presupuestos
+
+00:21:02.640 --> 00:21:03.420
+de tokens sensatos
+
+00:21:03.420 --> 00:21:03.960
+por intención.
+
+00:21:04.660 --> 00:21:05.440
+El atajo que necesite.
+
+00:21:06.360 --> 00:21:07.260
+Clasifica las solicitudes
+
+00:21:07.260 --> 00:21:07.620
+pronto
+
+00:21:07.620 --> 00:21:08.480
+y dirige los prompts
+
+00:21:08.480 --> 00:21:09.040
+a nivel FACO
+
+00:21:09.040 --> 00:21:09.760
+a modelos más baratos
+
+00:21:09.760 --> 00:21:10.960
+sin tocar planificadores premium.
+
+00:21:11.820 --> 00:21:12.780
+La resiliencia bajo carga
+
+00:21:12.780 --> 00:21:13.180
+es diseño,
+
+00:21:13.260 --> 00:21:13.620
+no suerte.
+
+00:21:14.400 --> 00:21:15.560
+Usa la persistencia de sesión
+
+00:21:15.560 --> 00:21:16.380
+donde esté disponible,
+
+00:21:16.680 --> 00:21:17.460
+pero asume que cambiarás
+
+00:21:17.460 --> 00:21:18.500
+de nodo a mitad del turno.
+
+00:21:19.080 --> 00:21:19.700
+Por eso el estado
+
+00:21:19.700 --> 00:21:20.740
+vive fuera del proceso.
+
+00:21:21.480 --> 00:21:22.160
+Haz que las herramientas
+
+00:21:22.160 --> 00:21:22.700
+sean impotentes
+
+00:21:22.700 --> 00:21:23.420
+con la idea de solicitud
+
+00:21:23.420 --> 00:21:24.080
+para que los reintentos
+
+00:21:24.080 --> 00:21:24.740
+no cubren dos veces
+
+00:21:24.740 --> 00:21:25.120
+tarjetas
+
+00:21:25.120 --> 00:21:25.980
+ni reenvíen correos.
+
+00:21:26.600 --> 00:21:27.640
+Los protectores de concurrencia
+
+00:21:27.640 --> 00:21:28.320
+impiden que dos turnos
+
+00:21:28.320 --> 00:21:29.380
+interfieran con el mismo recurso.
+
+00:21:30.000 --> 00:21:30.460
+Las pruebas
+
+00:21:30.460 --> 00:21:31.880
+deben simular tráfico rafagado,
+
+00:21:32.000 --> 00:21:32.820
+interrupciones parciales
+
+00:21:32.820 --> 00:21:33.660
+y dependencias lentas,
+
+00:21:33.960 --> 00:21:34.840
+porque la producción lo hará.
+
+00:21:35.380 --> 00:21:36.040
+Una vez que domines
+
+00:21:36.040 --> 00:21:36.580
+catálogos,
+
+00:21:36.680 --> 00:21:37.240
+composición,
+
+00:21:37.520 --> 00:21:38.480
+controles entre inquilinos,
+
+00:21:38.600 --> 00:21:39.220
+observabilidad,
+
+00:21:39.380 --> 00:21:40.080
+higiene de migración,
+
+00:21:40.220 --> 00:21:40.900
+palancas de costos
+
+00:21:40.900 --> 00:21:41.500
+y resiliencia,
+
+00:21:41.640 --> 00:21:42.680
+tu agente deja de ser una demo
+
+00:21:42.680 --> 00:21:44.040
+y se convierte en infraestructura.
+
+00:21:45.540 --> 00:21:45.800
+Y sí,
+
+00:21:45.880 --> 00:21:46.460
+aquí es exactamente
+
+00:21:46.460 --> 00:21:47.220
+donde el SDK
+
+00:21:47.220 --> 00:21:48.180
+justifica su valor.
+
+00:21:48.820 --> 00:21:49.220
+Identidad,
+
+00:21:49.400 --> 00:21:49.700
+estado,
+
+00:21:50.060 --> 00:21:50.760
+protocolo y semántica
+
+00:21:50.760 --> 00:21:51.760
+de canales estandarizados
+
+00:21:51.760 --> 00:21:52.860
+para que tus patrones avanzados
+
+00:21:52.860 --> 00:21:53.940
+se sienten sobre una base sólida
+
+00:21:53.940 --> 00:21:54.500
+no encorazonada.
+
+00:21:55.300 --> 00:21:56.200
+El asesino es silencioso,
+
+00:21:56.300 --> 00:21:56.600
+el estado,
+
+00:21:56.700 --> 00:21:57.120
+la identidad
+
+00:21:57.120 --> 00:21:58.020
+y la semántica de canales.
+
+00:21:58.480 --> 00:21:59.260
+Puede falsificar porn.
+
+00:21:59.680 --> 00:22:00.380
+No puede falsificar
+
+00:22:00.380 --> 00:22:01.040
+acciones vinculadas
+
+00:22:01.040 --> 00:22:01.460
+a la identidad
+
+00:22:01.460 --> 00:22:02.300
+bajo carga entre canales.
+
+00:22:03.340 --> 00:22:03.840
+Sin tokens
+
+00:22:03.840 --> 00:22:04.840
+con alcance de usuario,
+
+00:22:04.920 --> 00:22:05.900
+tu agente se extralimita
+
+00:22:05.900 --> 00:22:06.480
+o es bloqueado
+
+00:22:06.480 --> 00:22:07.520
+y tu pista de auditoría
+
+00:22:07.520 --> 00:22:08.120
+queda ciega.
+
+00:22:08.580 --> 00:22:08.980
+Sin un estado
+
+00:22:08.980 --> 00:22:10.160
+de conversación compartido,
+
+00:22:10.280 --> 00:22:11.080
+la lógica multiturno
+
+00:22:11.080 --> 00:22:11.860
+se fractura en el momento
+
+00:22:11.860 --> 00:22:12.540
+en que un equilibrador
+
+00:22:12.540 --> 00:22:13.320
+de cargas es su trabajo.
+
+00:22:13.740 --> 00:22:14.300
+Sin una entrega
+
+00:22:14.300 --> 00:22:15.020
+adaptada al canal,
+
+00:22:15.280 --> 00:22:15.660
+el streaming,
+
+00:22:15.800 --> 00:22:16.260
+las tarjetas
+
+00:22:16.260 --> 00:22:17.120
+y la semántica de escritura
+
+00:22:17.120 --> 00:22:17.580
+se degradan
+
+00:22:17.580 --> 00:22:18.560
+en un comportamiento aleatorio.
+
+00:22:19.100 --> 00:22:19.660
+El SDK
+
+00:22:19.660 --> 00:22:20.960
+resuelve estas tres limitaciones
+
+00:22:20.960 --> 00:22:21.540
+por diseño,
+
+00:22:21.660 --> 00:22:22.300
+actúa como usuario
+
+00:22:22.300 --> 00:22:23.060
+con auditabilidad,
+
+00:22:23.220 --> 00:22:24.140
+persiste turnos múltiples
+
+00:22:24.140 --> 00:22:24.660
+entre nodos
+
+00:22:24.660 --> 00:22:25.780
+y se adapta automáticamente
+
+00:22:25.780 --> 00:22:27.000
+a las capacidades del canal.
+
+00:22:27.520 --> 00:22:27.900
+Esta es la pieza
+
+00:22:27.900 --> 00:22:28.660
+que todos pasan por alto
+
+00:22:28.660 --> 00:22:29.500
+al programar manualmente
+
+00:22:29.500 --> 00:22:30.200
+las llamadas a LM.
+
+00:22:30.660 --> 00:22:31.440
+Implementa cognición
+
+00:22:31.440 --> 00:22:32.540
+sobre fundamentos sólidos,
+
+00:22:32.660 --> 00:22:33.300
+no sobre intuiciones
+
+00:22:33.300 --> 00:22:33.860
+o la producción
+
+00:22:33.860 --> 00:22:34.860
+te dará una lección muy costosa.
+
+00:22:35.680 --> 00:22:36.280
+Conclusión clave
+
+00:22:36.280 --> 00:22:37.440
+En M305
+
+00:22:37.440 --> 00:22:37.960
+la seguridad,
+
+00:22:38.200 --> 00:22:38.580
+la fidelidad,
+
+00:22:38.720 --> 00:22:39.040
+identidad
+
+00:22:39.040 --> 00:22:40.200
+y el comportamiento multicanal
+
+00:22:40.200 --> 00:22:41.440
+no son funciones adicionales.
+
+00:22:41.820 --> 00:22:42.780
+Son los requisitos mínimos
+
+00:22:42.780 --> 00:22:43.580
+que el SDK de agentes
+
+00:22:43.580 --> 00:22:44.440
+ofrece por defecto.
+
+00:22:45.040 --> 00:22:45.780
+El siguiente paso
+
+00:22:47.580 --> 00:22:48.740
+controladores de inicio de sesión
+
+00:22:48.740 --> 00:22:49.620
+para actuar como usuario
+
+00:22:49.620 --> 00:22:50.780
+regístrate en el robot service
+
+00:22:50.780 --> 00:22:51.820
+y activa Teams y Copilot
+
+00:22:51.820 --> 00:22:52.740
+con streaming habilitado
+
+00:22:52.740 --> 00:22:53.580
+y estado persistente.
+
+00:22:54.040 --> 00:22:54.860
+Si esto te hizo más rápido
+
+00:22:54.860 --> 00:22:55.200
+y seguro,
+
+00:22:55.320 --> 00:22:55.660
+suscríbete.
+
+00:22:56.280 --> 00:22:57.320
+Escucha el próximo podcast
+
+00:22:57.320 --> 00:22:58.200
+sobre barreras de IA
+
+00:22:58.200 --> 00:22:59.020
+aplicadas por Purview
+
+00:22:59.020 --> 00:22:59.720
+para que tus resultados
+
+00:22:59.720 --> 00:23:00.620
+respeten etiquetas
+
+00:23:00.620 --> 00:23:01.560
+de LP y Discovery
+
+00:23:01.560 --> 00:23:02.460
+desde el primer día.
+
+00:23:02.980 --> 00:23:03.700
+Tu equipo de cumplimiento
+
+00:23:03.700 --> 00:23:04.040
+no te lo...

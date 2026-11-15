@@ -1,0 +1,805 @@
+WEBVTT
+
+00:00:00.210 --> 00:00:07.490
+Gotowy na 10 dni z Microsoft 365, Copilot, AI Azure i ludźmi kształtującymi przyszłość pracy?
+
+00:00:08.250 --> 00:00:11.950
+W styczniu M365.com powraca i będzie większy.
+
+00:00:12.190 --> 00:00:18.750
+Dołącz do nas i skorzystaj z sesji na żywo, demonstracji w warunkach rzeczywistych oraz praktycznej wiedzy od MVP i ekspertów branżowych z całego świata.
+
+00:00:18.970 --> 00:00:21.890
+Bez generycznych slajdów, bez niekończących się sloganów.
+
+00:00:22.270 --> 00:00:28.970
+Stawiamy czoła prawdziwym wyzwaniom Copilot Studio, agenci, AI Fabrik, bezpieczeństwo, zarządzanie i automatyzacja.
+
+00:00:28.970 --> 00:00:35.110
+Niezależnie od tego, czy jesteś specjalistą i programistą, czy liderem biznesowym, mamy sesje zaprojektowane dla Ciebie.
+
+00:00:35.330 --> 00:00:40.570
+Przez 10 pełnych dni możesz zapoznać się z wieloma technologiami i nawiązać kontakt z globalną społecznością.
+
+00:00:40.790 --> 00:00:44.710
+Oglądaj na żywo i wykorzystaj praktyczne spostrzeżenia w swojej organizacji.
+
+00:00:44.710 --> 00:00:51.170
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.730 --> 00:00:56.110
+Wejdź na m365.com.net i zarezerwuj sobie miejsce już dziś.
+
+00:00:56.110 --> 00:00:58.990
+To jest m365.com.net.
+
+00:01:00.090 --> 00:01:04.770
+Dołącz teraz na m365.com.net, a do zobaczenia na żywo w styczniu.
+
+00:01:04.970 --> 00:01:07.510
+Witamy w kolejnym odcinku Microsoft Knowledge Nugget.
+
+00:01:07.730 --> 00:01:09.570
+Jestem Waszym gospodarzem, Milko Peters.
+
+00:01:09.770 --> 00:01:11.490
+Temat na dziś Azure Traffic Manager.
+
+00:01:11.750 --> 00:01:15.390
+Wyobraź sobie, że stworzyłeś aplikację internetową, z której chcą korzystać ludzie na całym świecie.
+
+00:01:15.570 --> 00:01:19.570
+Użytkownicy w Tokio, Londynie, Sao Paulo, wszyscy próbują połączyć się z Twoją aplikacją w tym samym czasie.
+
+00:01:19.770 --> 00:01:20.910
+Ale tu pojawia się problem.
+
+00:01:21.170 --> 00:01:24.910
+Każdy z tych użytkowników trafia do serwera w jednym regionie, powiedzmy w Wirginii.
+
+00:01:24.910 --> 00:01:30.530
+Użytkownik w Tokio czeka ponad 200 milisekund na żądanie, a użytkownik w Sao Paulo ma jeszcze gorsze doświadczenia.
+
+00:01:30.710 --> 00:01:37.050
+A jeśli to centrum danych w Wirginii ulegnie awarii, nastąpi awaria zasilania, przerwa w sieci, coś nieoczekiwanego, cała Twoja aplikacja przejdzie w tryb offline.
+
+00:01:37.250 --> 00:01:40.330
+Każdy użytkownik, wszędzie, to pojedynczy punkt awarii i poważny problem.
+
+00:01:40.550 --> 00:01:45.070
+A co, gdybyś mógł automatycznie kierować każdego użytkownika do najbliższego, najszybszego i najsprawniejsego serwera?
+
+00:01:45.210 --> 00:01:48.430
+Co, gdyby użytkownik w Tokio był obsługiwany przez centrum danych w Japonii?
+
+00:01:48.430 --> 00:01:54.390
+A użytkownik w Londynie z Irlandii, gdyby jeden region uległ awarii, ruch zostałby po prostu przeniesiony gdzie indziej, bez Twojej interwencji?
+
+00:01:54.590 --> 00:01:59.990
+Dokładnie to robi Azure Traffic Manager i robi to na poziomie DNS, co oznacza, że jest to prostsze niż myślisz.
+
+00:02:00.130 --> 00:02:06.510
+Pod koniec tego odcinka zrozumiesz, czym właściwie jest Traffic Manager, jak działa jego sześć metod routingu i kiedy używać każdej z nich.
+
+00:02:06.750 --> 00:02:08.190
+Weź kawę i zanurzmy się w temat.
+
+00:02:08.450 --> 00:02:10.450
+Dlaczego globalne routing ruchu ma znaczenie?
+
+00:02:10.450 --> 00:02:11.290
+Omówmy to.
+
+00:02:11.470 --> 00:02:17.090
+Większość ludzi słyszy o równoważeniu obciążenia i myśli o pojedynczym serwerze dystrybuującym ruch na kilka maszyn w jednym centrum danych.
+
+00:02:17.230 --> 00:02:20.250
+To właśnie Azure Load Balancer, który świetnie sprawdza się w jednym regionie.
+
+00:02:20.410 --> 00:02:23.490
+Ale co się stanie, gdy użytkownicy będą rozproszeni po różnych kontynentach?
+
+00:02:23.650 --> 00:02:27.870
+Użytkownik z Japonii, który trafi na serwer w Wirginii, nigdy nie otrzyma szybkiej odpowiedzi.
+
+00:02:28.090 --> 00:02:30.330
+Fizyka internetu po prostu na to nie pozwala.
+
+00:02:30.570 --> 00:02:34.650
+Światło porusza się ze stałą prędkością, a każdy przeskok sieciowy dodaje opóźnienie.
+
+00:02:34.650 --> 00:02:37.430
+Nie da się tego naprawić lepszym kodem ani szybszą usługą.
+
+00:02:37.430 --> 00:02:40.050
+Rzecz w tym, że powolne aplikacje tracą użytkowników.
+
+00:02:40.290 --> 00:02:46.550
+Jednosekundowe opóźnienie zmniejsza konwersję o 7%, a awaria regionalna nie tylko spowalnia działanie aplikacji, ale także powoduje jej wyłączenie.
+
+00:02:46.770 --> 00:02:50.750
+Użytkownicy nie mogą się z Tobą skontaktować, Twoje przychody spadają, a reputacja ucierpiała.
+
+00:02:50.970 --> 00:02:56.650
+20 lat temu stare podejście polegało na budowaniu serwerów w każdym regionie i ręcznym kierowaniu użytkowników do właściwego serwera.
+
+00:02:56.650 --> 00:03:03.250
+Ręcznie aktualizowano rekordy DNS, tworzono arkusze kalkulacyjne z informacjami o tym, gdzie trafili użytkownicy i modlono się, aby nie popełnić błędu podczas przełączania awaryjnego.
+
+00:03:03.410 --> 00:03:07.630
+Takie podejście jest niepraktyczne i kruche, ponieważ nie jest skalowalne i ulega awarii pod presją.
+
+00:03:07.870 --> 00:03:13.450
+Nowe podejście to pojedynczy kontroler ruchu oparty na systemie DNS, który wybiera najlepszy punkt końcowy dla każdego użytkownika na żądanie.
+
+00:03:13.630 --> 00:03:16.670
+Nie wymaga on ręcznych aktualizacji ani niestabilnych arkuszy kalkulacyjnych.
+
+00:03:16.890 --> 00:03:21.550
+Zamiast tego analizuje lokalizację użytkownika, sprawdza, które punkty końcowe są sprawne i zwraca najlepszy.
+
+00:03:21.550 --> 00:03:29.910
+Można to porównać do globalnego systemu kontroli ruchu lotniczego, w którym każde centrum danych jest lotniskiem, a Traffic Manager jest wieżą kontrolną kierującą każdego użytkownika do najbliższego dostępnego serwera.
+
+00:03:30.010 --> 00:03:31.630
+Tu właśnie pojawia się Traffic Manager.
+
+00:03:31.890 --> 00:03:35.210
+Porozmawiajmy więc o tym, czym on właściwie jest, czym właściwie jest Traffic Manager.
+
+00:03:35.430 --> 00:03:36.690
+Oto najprostsza definicja.
+
+00:03:36.870 --> 00:03:40.770
+Traffic Manager to oparty na DNS moduł równoważenia obciążenia działający w skali globalnej.
+
+00:03:40.990 --> 00:03:44.450
+Wyobraź sobie to jak inteligentną recepcję przy wejściu do globalnego biurowca.
+
+00:03:44.670 --> 00:03:48.550
+Kiedy wchodzisz, recepcjonista nie odbiera Twoich połączeń telefonicznych ani nie przetwarza Twoich dokumentów.
+
+00:03:48.550 --> 00:03:51.890
+Po prostu wskazuje Ci właściwe piętro. To wszystko, co robi Traffic Manager.
+
+00:03:52.110 --> 00:03:54.070
+Kieruje użytkowników do właściwego serwera.
+
+00:03:54.210 --> 00:03:55.250
+Oto kluczowa różnica.
+
+00:03:55.510 --> 00:03:58.210
+Traffic Manager nigdy nie widzi Twojego faktycznego ruchu.
+
+00:03:58.410 --> 00:04:01.690
+Nie pośredniczy w żądaniach, nie sprawdza pakietów ani nie buforuje zawartości.
+
+00:04:01.910 --> 00:04:05.850
+Kiedy użytkownik wpisze nazwę Twojej domeny w przeglądarce, wysyłane jest zapytanie DNS.
+
+00:04:06.050 --> 00:04:12.550
+Traffic Manager odpowiada na to zapytanie adresem IP najlepszego punktu końcowego, najbliższego, najsprawniejsego tego, który skonfigurowałeś jako priorytetowy.
+
+00:04:13.310 --> 00:04:18.010
+Następnie użytkownik łączy się bezpośrednio z tym punktem końcowym, a Traffic Manager całkowicie znika z drogi.
+
+00:04:18.190 --> 00:04:23.790
+Oznacza to, że nie powoduje opóźnień w ścieżce ruchu, ponieważ nie znajduje się ona w środku przepływu danych i nie może go spowolnić.
+
+00:04:23.990 --> 00:04:30.510
+Działa również z dowolnym punktem końcowym skierowanym do internetu usługami platformy Azure, serwerami w innej chmurze, a nawet z lokalnym centrum danych.
+
+00:04:30.510 --> 00:04:38.990
+O ile punkt końcowy ma publiczny adres IP lub nazwę domeny, Traffic Manager może do niego kierować ruch, ponieważ jest to usługa globalna, jest odporna na awarie regionalne.
+
+00:04:39.190 --> 00:04:45.270
+Jeśli cały region platformy Azure ulegnie awarii, Traffic Manager nadal działa i kieruje użytkowników do sprawnych punktów końcowych w innych miejscach.
+
+00:04:45.450 --> 00:04:48.170
+Skąd więc Traffic Manager wie, które punkty końcowe są sprawne?
+
+00:04:48.370 --> 00:04:54.590
+Domyślnie sąduje je co 30 sekund, wysyłając żądanie HTTP lub HTTPS do określonej ścieżki w każdym punkcie końcowym.
+
+00:04:54.590 --> 00:04:58.770
+Jeśli punkt końcowy odpowie kodem stanu 200 w ciągu limitu czasu, jest sprawny.
+
+00:04:58.950 --> 00:05:04.470
+Jeśli nie odpowie kilka razy z rzędu, Traffic Manager oznacza go jako zdegradowany i przestaje kierować użytkowników do niego.
+
+00:05:04.750 --> 00:05:09.110
+Gdy punkt końcowy odzyska sprawność, Traffic Manager również to wykryje i przywróci go do rotacji.
+
+00:05:09.270 --> 00:05:12.370
+To monitorowanie stanu umożliwia automatyczne przełączanie awaryjne.
+
+00:05:12.550 --> 00:05:17.670
+Przyjrzyjmy się teraz różnym sposobom, w jakie Traffic Manager decyduje, do którego punktu końcowego kierować użytkowników.
+
+00:05:17.790 --> 00:05:19.710
+Tu właśnie pojawiają się metody routingu.
+
+00:05:20.250 --> 00:05:23.030
+Routing priorytetowy – proste odzyskiwanie po awarii.
+
+00:05:23.030 --> 00:05:25.570
+Routing priorytetowy to najprostsza do zrozumienia metoda.
+
+00:05:25.750 --> 00:05:28.310
+Klasyfikujesz swoje punkty końcowe od jednego do tylu, ile masz.
+
+00:05:28.370 --> 00:05:28.870
+To wszystko.
+
+00:05:29.130 --> 00:05:31.050
+Cały ruch trafia do punktu o priorytecie pierwszym.
+
+00:05:31.190 --> 00:05:34.930
+Jeśli ten punkt końcowy ulegnie awarii, ruch przechodzi do punktu o priorytecie drugim, trzecim i tak dalej.
+
+00:05:35.110 --> 00:05:36.630
+To konfiguracja aktywna-pasywna.
+
+00:05:36.870 --> 00:05:39.930
+Jeden punkt końcowy obsługuje wszystko, a pozostałe czekają w kolejce.
+
+00:05:40.110 --> 00:05:41.370
+Oto przykład z życia wzięty.
+
+00:05:41.590 --> 00:05:45.690
+Załóżmy, że Twoje serwery główne działają we wschodnich Stanach Zjednoczonych, a serwer zapasowy w Europie Zachodniej.
+
+00:05:45.690 --> 00:05:49.190
+Ustawiasz wschodnie Stany Zjednoczone jako priorytet pierwszy, zachodnią Europę jako priorytet drugi.
+
+00:05:49.310 --> 00:05:57.810
+Normalnie każdy użytkownik trafia do wschodnich Stanów Zjednoczonych, ale gdy wschodnie Stany Zjednoczone mają awarię, na przykład awarię zasilania lub problem z siecią, Traffic Manager wykrywa to w ciągu kilku sekund.
+
+00:05:57.970 --> 00:06:01.930
+Przestaje kierować nowych użytkowników do wschodnich Stanów Zjednoczonych i zaczyna ich przekierowywać do Europy Zachodniej.
+
+00:06:02.110 --> 00:06:05.610
+Twoja aplikacja pozostaje online, a użytkownicy mogą nawet nie zauważyć, że coś się stało.
+
+00:06:05.750 --> 00:06:06.690
+Oto ważny szczegół.
+
+00:06:06.890 --> 00:06:09.190
+Obecni użytkownicy zachowują swoje obecne połączenie.
+
+00:06:09.190 --> 00:06:11.890
+Routing oparty na DNS wpływa tylko na nowe wyszukiwania DNS.
+
+00:06:12.090 --> 00:06:18.390
+Jeśli więc ktoś już załadował Twoją aplikację i ma aktywną sesję, sesja ta będzie kontynuowana do oryginalnego punktu końcowego, aż do jej zakończenia lub wygaśnięcia pamięci podręcznej DNS.
+
+00:06:18.630 --> 00:06:20.730
+Dlatego należy ustawić niski TTL DNS.
+
+00:06:20.930 --> 00:06:23.050
+Optymalny czas to 30 do 60 sekund.
+
+00:06:23.250 --> 00:06:26.710
+Niski TTL oznacza, że rezolfery DNS częściej sprawdzają dostępność aktualizacji.
+
+00:06:26.950 --> 00:06:30.190
+Dzięki temu, gdy Traffic Manager przełącza punkty końcowe, zmiana rozprzestrzenia się szybciej.
+
+00:06:30.330 --> 00:06:33.150
+Częstym błędem jest zapominanie o przetestowaniu przełączania awaryjnego.
+
+00:06:33.150 --> 00:06:37.130
+Ustawiasz priorytetowy routing, wdrażasz region zapasowy i po prostu zakładasz, że wszystko działa.
+
+00:06:37.310 --> 00:06:38.490
+Ale jest pewien haczyk.
+
+00:06:38.650 --> 00:06:41.050
+Region zapasowy musi obsłużyć pełne obciążenie.
+
+00:06:41.310 --> 00:06:50.130
+Jeśli Twój serwer główny obsługuje milion użytkowników dziennie, a serwer zapasowy obsługuje tylko 100 tysięcy, podczas normalnego działania może on przestać działać, gdy cały ruch nagle zostanie na niego przeniesiony.
+
+00:06:50.310 --> 00:06:51.890
+Przetestuj przełączanie awaryjne.
+
+00:06:52.110 --> 00:06:53.850
+Zasymuluj awarię i zobacz, co się stanie.
+
+00:06:54.070 --> 00:06:55.970
+Tylko w ten sposób można się upewnić, że to działa.
+
+00:06:56.130 --> 00:06:58.770
+Priorytet ma na celu utrzymanie działania aplikacji podczas awarii.
+
+00:06:58.870 --> 00:07:00.890
+Ale co z zapewnieniem jej szybkości dla wszystkich?
+
+00:07:00.890 --> 00:07:03.470
+Routing wydajnościowy. Prędkość ponad wszystko.
+
+00:07:03.710 --> 00:07:06.270
+Routing wydajnościowy działa inaczej niż routing priorytetowy.
+
+00:07:06.490 --> 00:07:11.950
+Zamiast zawsze używaj najpierw tego punktu końcowego, mówi wyślij każdego użytkownika do punktu końcowego, który zapewnia mu najszybsze połączenie.
+
+00:07:12.130 --> 00:07:14.370
+Użytkownik w Tokio jest kierowany do serwera w Japonii.
+
+00:07:14.530 --> 00:07:16.510
+Użytkownik w Londynie jest kierowany do Irlandii.
+
+00:07:16.650 --> 00:07:18.710
+Użytkownik w Sao Paulo jest kierowany do Brazylii.
+
+00:07:18.870 --> 00:07:22.010
+Każdy użytkownik otrzymuje najszybsze możliwe połączenie, niezależnie od tego, gdzie się znajduje.
+
+00:07:22.230 --> 00:07:24.790
+Skąd traffic manager wie, który punkt końcowy jest najszybszy?
+
+00:07:24.790 --> 00:07:27.370
+Używa czegoś, co nazywa się tabelą opóźnień internetowych.
+
+00:07:27.570 --> 00:07:30.170
+Można to sobie wyobrazić jako mapę, którą Azur aktualizuje.
+
+00:07:30.390 --> 00:07:34.590
+Śledzi rzeczywiste opóźnienie sieciowe między różnymi częściami świata i każdym regionem Azur.
+
+00:07:34.810 --> 00:07:39.490
+Gdy nadchodzi zapytanie DNS, traffic manager sprawdza lokalizację rezolfera DNS użytkownika,
+
+00:07:39.670 --> 00:07:44.550
+wyszukuje w tabeli opóźnień i zwraca punkt końcowy, który zapewnia użytkownikowi najniższe opóźnienie.
+
+00:07:44.730 --> 00:07:46.430
+A oto coś, co może Cię zaskoczyć.
+
+00:07:46.630 --> 00:07:48.310
+Nie opiera się na odległości fizycznej.
+
+00:07:48.310 --> 00:07:53.110
+Użytkownik w Indiach może faktycznie uzyskać niższe opóźnienie do wschodnich Stanów Zjednoczonych niż do Azji Południowo-Wschodniej,
+
+00:07:53.230 --> 00:07:56.710
+w zależności od tego, jak podmorskie kable i punkty wymiany ruchu kierują ruchem w danym momencie.
+
+00:07:56.910 --> 00:08:01.170
+Tabela opóźnień odzwierciedla rzeczywiste warunki sieciowe, a nie tylko odległość w linii prostej.
+
+00:08:01.350 --> 00:08:04.670
+Zatem najbliższy punkt końcowy nie zawsze jest najbliższy geograficznie.
+
+00:08:04.850 --> 00:08:09.770
+Routing wydajnościowy doskonale nadaje się do aplikacji globalnych, w których doświadczenie użytkownika zależy od szybkości.
+
+00:08:09.770 --> 00:08:15.310
+Witryny e-commerce, strumieniowanie wideo, narzędzia do współpracy w czasie rzeczywistym, wszystko, gdzie powolna reakcja oznacza utratę użytkownika.
+
+00:08:15.530 --> 00:08:16.770
+Jest jednak pewien haczyk.
+
+00:08:16.910 --> 00:08:19.870
+Nie bierze pod uwagę, jakie obciążenie obsługuje już każdy punkt końcowy.
+
+00:08:20.110 --> 00:08:23.770
+Jeśli region wschodnich Stanów Zjednoczonych wykorzystuje 95% przepustowości, a region Europy Zachodniej 20%,
+
+00:08:24.350 --> 00:08:28.710
+routing wydajnościowy może nadal kierować nowych użytkowników do wschodnich Stanów Zjednoczonych, ponieważ jest to dla nich najniższe opóźnienie.
+
+00:08:28.930 --> 00:08:30.330
+Nie wie o obciążeniu serwera.
+
+00:08:30.530 --> 00:08:34.670
+Zazwyczaj łączy się routing wydajnościowy z innymi modułami równoważenia obciążenia w każdym regionie,
+
+00:08:34.670 --> 00:08:41.490
+Azure Load Balancer lub Application Gateway, aby obsługiwać rzeczywistą dystrybucję ruchu między serwerami po dotarciu użytkownika do odpowiedniego regionu.
+
+00:08:41.650 --> 00:08:47.710
+Routing wydajnościowy optymalizuje szybkość, ale co, jeśli trzeba kontrolować, ile ruchu otrzymuje każdy punkt końcowy?
+
+00:08:47.910 --> 00:08:50.870
+Routing ważony i geograficzny – kontrola i zgodność.
+
+00:08:51.090 --> 00:08:56.570
+Routing wydajnościowy dotyczy szybkości, ale co, jeśli chcesz kontrolować dokładnie, ile ruchu otrzymuje każdy punkt końcowy?
+
+00:08:56.730 --> 00:08:59.350
+Lub kierować użytkowników na podstawie ich lokalizacji na świecie?
+
+00:08:59.550 --> 00:09:01.950
+Właśnie tutaj pojawia się routing ważony i geograficzny.
+
+00:09:02.150 --> 00:09:03.650
+Zacznijmy od routingu ważonego.
+
+00:09:03.650 --> 00:09:05.590
+Ten jest dokładnie tym, na co wygląda.
+
+00:09:05.830 --> 00:09:09.330
+Każdemu punktowi końcowemu przypisuje się wagę liczbę od 1 do 1000 roku.
+
+00:09:09.970 --> 00:09:13.150
+Traffic Manager następnie dystrybuuje ruch proporcjonalnie na podstawie tych wag.
+
+00:09:13.290 --> 00:09:17.410
+Tak więc, jeśli masz punkt końcowy A o wadze 80 i punkt końcowy B o wadze 20,
+
+00:09:17.610 --> 00:09:22.430
+około 80% użytkowników jest kierowanych do A, a 20% do B – prosta matematyka.
+
+00:09:22.650 --> 00:09:23.790
+Dlaczego miałbyś to zrobić?
+
+00:09:23.990 --> 00:09:25.470
+Pomyśl o wersji kanarkowej.
+
+00:09:25.670 --> 00:09:29.150
+Zbudowałeś nową wersję swojej aplikacji i chcesz ją przetestować z prawdziwymi użytkownikami?
+
+00:09:29.150 --> 00:09:30.450
+Zanim udostępnisz ją wszystkim.
+
+00:09:30.450 --> 00:09:33.670
+Konfigurujesz drugi punkt końcowy z nową wersją, nadajesz mu wagę 5,
+
+00:09:33.830 --> 00:09:38.990
+a obecnemu punktowi końcowemu produkcyjnemu wagę 95% użytkowników korzysta z nowej wersji.
+
+00:09:39.170 --> 00:09:41.990
+Obserwujesz błędy, monitorujesz wydajność i jeśli wszystko wygląda dobrze,
+
+00:09:42.130 --> 00:09:46.450
+powoli zwiększasz wagę nowej wersji, może o 20% w następnym tygodniu, potem o 50, a potem o 100.
+
+00:09:46.970 --> 00:09:50.110
+Jeśli coś pójdzie nie tak, zmniejszasz wagę z powrotem do zera i problem jest opanowany.
+
+00:09:50.330 --> 00:09:54.210
+Bez wdrażania na dużą skalę, bez wycofywania zepsutej wersji na oczach wszystkich użytkowników.
+
+00:09:54.210 --> 00:09:56.210
+Ta sama idea dotyczy testów A, B.
+
+00:09:56.410 --> 00:09:58.710
+Chcesz sprawdzić, czy nowa funkcja poprawia zaangażowanie?
+
+00:09:58.970 --> 00:10:02.430
+Wyślij połowę użytkowników do wersji A, a połowę do wersji B używając równych wag.
+
+00:10:02.550 --> 00:10:06.130
+Porównaj wyniki lub migrujesz użytkowników z jednego regionu do drugiego.
+
+00:10:06.390 --> 00:10:09.730
+Stopniowo przenieś wagę ze starego regionu do nowego w ciągu kilku tygodni.
+
+00:10:09.930 --> 00:10:11.450
+Oto ważna rzecz do zrozumienia.
+
+00:10:11.670 --> 00:10:13.690
+Routing ważony nie jest metodą round robin.
+
+00:10:13.830 --> 00:10:16.470
+Nie zmienia on adresów punktów końcowych po jednym żądaniu na raz.
+
+00:10:16.590 --> 00:10:17.790
+To rozkład statystyczny.
+
+00:10:17.990 --> 00:10:20.830
+Przy dużej liczbie żądań ruch jest dzielony zgodnie z wagami.
+
+00:10:20.830 --> 00:10:25.230
+Jednak pojedynczy użytkownik wysyłający wiele żądań może nadal trafiać do tego samego punktu końcowego,
+
+00:10:25.350 --> 00:10:27.350
+ponieważ jego resolver DNS buforuje wynik.
+
+00:10:27.530 --> 00:10:29.990
+Nie należy więc myśleć o tym jako o idealnym równoważeniu obciążenia.
+
+00:10:30.250 --> 00:10:33.010
+Należy to raczej postrzegać jako kontrolowanie ogólnego udziału ruchu w czasie.
+
+00:10:33.270 --> 00:10:35.130
+Porozmawiajmy teraz o routingu geograficznym.
+
+00:10:35.290 --> 00:10:38.790
+Ten routing kieruje użytkowników na podstawie miejsca, z którego pochodzi ich zapytanie DNS.
+
+00:10:38.970 --> 00:10:40.670
+Kraj, kontynent lub konkretny region.
+
+00:10:40.930 --> 00:10:43.930
+Użytkownik z Niemiec jest kierowany do punktu końcowego we Frankfurcie.
+
+00:10:44.130 --> 00:10:46.950
+Użytkownik z Brazylii jest kierowany do punktu końcowego w Sao Paulo.
+
+00:10:46.950 --> 00:10:48.390
+Taki poziom szczegółowości.
+
+00:10:48.630 --> 00:10:49.710
+Dlaczego warto go używać?
+
+00:10:49.890 --> 00:10:51.450
+Suwerenność danych ma ogromne znaczenie.
+
+00:10:51.630 --> 00:10:54.650
+Przepisy Unii Europejskiej mogą wymagać, aby dane użytkowników pozostawały w Europie.
+
+00:10:54.830 --> 00:10:57.350
+Routing geograficzny pozwala to wyegzekwować na poziomie DNS.
+
+00:10:57.550 --> 00:10:59.290
+Użytkownik z Francji rozwiązuje Twoją domenę,
+
+00:10:59.350 --> 00:11:02.290
+a menedżer ruchu zwraca adres IP Twojego europejskiego punktu końcowego.
+
+00:11:02.530 --> 00:11:04.350
+Jego dane nigdy nie opuszczają kontynentu.
+
+00:11:04.470 --> 00:11:06.210
+To samo dotyczy treści zlokalizowanych.
+
+00:11:06.350 --> 00:11:09.170
+Jeśli chcesz, aby użytkownicy w Japonii widzieli japońską wersję Twojej witryny,
+
+00:11:09.170 --> 00:11:12.090
+routing geograficzny kieruje ich do punktu końcowego, który obsługuje tę treść.
+
+00:11:12.270 --> 00:11:14.270
+Jest jedna kluczowa zasada, którą musisz znać.
+
+00:11:14.410 --> 00:11:17.350
+Każdy region geograficzny musi być mapowany na dokładnie jeden punkt końcowy.
+
+00:11:17.550 --> 00:11:19.790
+Nie można podzielić jednego kraju na dwa punkty końcowe.
+
+00:11:20.010 --> 00:11:23.130
+Jeśli więc masz użytkowników w Niemczech i chcesz, aby 50% z nich kierowało się do Frankfurtu,
+
+00:11:23.170 --> 00:11:26.110
+a 50% do Berlina, nie możesz tego zrobić za pomocą samego routingu geograficznego.
+
+00:11:26.330 --> 00:11:28.350
+Zamiast tego musisz użyć profilu zagnieżdżonego.
+
+00:11:28.510 --> 00:11:30.830
+Profile zagnieżdżone są dokładnie tym, na co wyglądają.
+
+00:11:31.050 --> 00:11:33.090
+Umieszczasz jeden profil menedżera ruchu w drugim.
+
+00:11:33.090 --> 00:11:35.150
+Na najwyższym poziomie używasz routingu geograficznego,
+
+00:11:35.250 --> 00:11:37.190
+aby kierować użytkowników z Europy do jednego profilu,
+
+00:11:37.270 --> 00:11:39.230
+użytkowników z Ameryki Północnej do innego itd.
+
+00:11:39.530 --> 00:11:41.970
+Następnie w każdym z tych profili używasz routingu ważonego,
+
+00:11:42.070 --> 00:11:44.270
+aby podzielić ruch między punkty końcowe w danym regionie.
+
+00:11:44.510 --> 00:11:47.550
+Geograficznie na górze dla zgodności, ważony wewnątrz dla kontroli.
+
+00:11:47.670 --> 00:11:48.770
+To potężne połączenie.
+
+00:11:49.070 --> 00:11:51.790
+Dwie kolejne metody routingu obsługują bardziej szczegółowe scenariusze.
+
+00:11:51.990 --> 00:11:53.070
+Przyjrzyjmy się imionom.
+
+00:11:53.290 --> 00:11:56.170
+Routing wielowartościowy i podsieciowy dla precyzyjnej kontroli.
+
+00:11:56.170 --> 00:11:58.930
+Routing wielowartościowy to prosty, ale przydatny trik.
+
+00:11:59.070 --> 00:12:02.050
+Zamiast zwracać tylko jeden punkt końcowy w odpowiedzi DNS,
+
+00:12:02.250 --> 00:12:05.150
+menedżer ruchu odsyła jednocześnie wiele sprawnych adresów IP.
+
+00:12:05.430 --> 00:12:07.470
+Przeglądarka lub aplikacja wybiera pierwszy z listy,
+
+00:12:07.550 --> 00:12:11.430
+co rozkłada obciążenie bez konieczności podejmowania przez menedżera ruchu decyzji przy każdym żądaniu.
+
+00:12:11.650 --> 00:12:12.910
+Jest jednak pewien haczyk.
+
+00:12:13.050 --> 00:12:16.370
+Routing wielowartościowy działa tylko z punktami końcowymi IPv4 i IPv6,
+
+00:12:16.490 --> 00:12:18.990
+więc nie można go używać z usługami aplikacji usługami w chmurze,
+
+00:12:19.070 --> 00:12:21.910
+ani żadnym punktem końcowym, który używa nazwy domeny zamiast adresu IP.
+
+00:12:21.910 --> 00:12:24.830
+Jest on przeznaczony wyłącznie dla punktów końcowych opartych na adresie IP.
+
+00:12:25.010 --> 00:12:27.030
+Posiadanie takich punktów zwiększa jednak odporność systemu,
+
+00:12:27.090 --> 00:12:29.990
+ponieważ w przypadku awarii jednego adresu IP klient może wypróbować inny z listy
+
+00:12:29.990 --> 00:12:31.490
+bez konieczności ponownego wyszukiwania DNS.
+
+00:12:31.730 --> 00:12:34.230
+Oznacza to szybsze przełączanie awaryjne po stronie klienta.
+
+00:12:34.390 --> 00:12:37.430
+Routing podsieciowy jest jeszcze bardziej niszowy, ale skuteczny w razie potrzeby.
+
+00:12:37.610 --> 00:12:41.330
+Kieruje użytkowników na podstawie źródłowej podsieci IP, z której pochodzi ich zapytanie DNS.
+
+00:12:41.590 --> 00:12:44.970
+Możesz więc zmapować zakres adresów IP biura swojej firmy na punkt końcowy przejściowy,
+
+00:12:45.030 --> 00:12:46.990
+a wszyscy inni otrzymają wersję produkcyjną.
+
+00:12:46.990 --> 00:12:51.790
+Możesz też kierować użytkowników z określonej podsieci VPN do dedykowanego zaplecza w celu testowania.
+
+00:12:52.070 --> 00:12:56.170
+Wyobraź sobie scenariusz testów wewnętrznych, w którym zespół programistów pracuje w biurze.
+
+00:12:56.390 --> 00:12:58.990
+Ich zapytania DNS pochodzą z firmowego zakresu adresów IP,
+
+00:12:59.150 --> 00:13:02.990
+a ty mapujesz ten zakres na środowisko przejściowe, w którym mogą testować najnowszą kompilację.
+
+00:13:03.210 --> 00:13:06.030
+Wszyscy inni użytkownicy internetu otrzymują wersję produkcyjną.
+
+00:13:06.230 --> 00:13:11.150
+Bez specjalnych adresów URL, bez konfiguracji VPN, tylko transparentny routing oparty na źródle żądania.
+
+00:13:11.330 --> 00:13:12.610
+Obie te metody są niszowe.
+
+00:13:12.610 --> 00:13:17.430
+Większość użytkowników używa priorytetyzacji wydajności routingu ważonego lub geograficznego do zarządzania ruchem.
+
+00:13:17.570 --> 00:13:22.330
+Jednak wielowartościowość i routing podsieci są dostępne, gdy są potrzebne i rozwiązują problemy, których nie potrafią rozwiązać inne metody.
+
+00:13:22.530 --> 00:13:24.730
+Monitorowanie stanu i przełączanie awaryjne w praktyce.
+
+00:13:24.930 --> 00:13:29.130
+Wszystkie te metody routingu opierają się na jednej rzeczy, wiedzy o tym, które punkty końcowe są rzeczywiście sprawne.
+
+00:13:29.290 --> 00:13:31.770
+Kierowanie ruchu do uszkodzonego serwera nikomu nie pomaga.
+
+00:13:32.070 --> 00:13:34.950
+Porozmawiajmy więc o tym, jak monitorowanie stanu działa w praktyce.
+
+00:13:34.950 --> 00:13:43.510
+Traffic Manager wysyła sondę stanu do każdego punktu końcowego domyślnie co 30 sekund, a ta sonda jest żądaniem HTTP lub HTTPS do określonej ścieżki w punkcie końcowym.
+
+00:13:43.750 --> 00:13:48.410
+Oczekuje odpowiedzi z kodem stanu od 200 do 299 w określonym przedziale czasu.
+
+00:13:48.690 --> 00:13:51.190
+Jeśli punkt końcowy odpowie poprawnie, jest sprawny.
+
+00:13:51.410 --> 00:13:53.550
+Jeśli nie, Traffic Manager próbuje ponownie.
+
+00:13:53.690 --> 00:14:01.430
+Po skonfigurowanej liczbie awarii, domyślnie 3, Traffic Manager oznacza dany punkt końcowy jako zdegradowany i wyklucza go z routingu do momentu ponownego rozpoczęcia sprawdzania stanu.
+
+00:14:01.430 --> 00:14:04.050
+Możesz skonfigurować interwał sondowania i limit czasu.
+
+00:14:04.290 --> 00:14:06.610
+Szybsze sondy oznaczają szybsze przełączanie awaryjne.
+
+00:14:06.790 --> 00:14:12.710
+Jeśli ustawisz interwał na 10 sekund zamiast 30, Traffic Manager wykrywa awarię szybciej i przekierowuje ruch szybciej.
+
+00:14:12.870 --> 00:14:18.010
+Jednak szybsze sondy obciążają punkty końcowe, ponieważ każda sonda jest żądaniem, które musi obsłużyć serwer.
+
+00:14:18.190 --> 00:14:22.030
+Tak więc, jeśli masz tysiące punktów końcowych i sądujesz co 10 sekund, żądania się sumują.
+
+00:14:22.310 --> 00:14:24.870
+Musisz więc znaleźć równowagę między szybkością a obciążeniem.
+
+00:14:24.870 --> 00:14:31.330
+Prawdziwy wpływ prawidłowej konfiguracji kontroli stanu to różnica między płynnym przełączeniem awaryjnym a fałszywym alarmem, który przerywa routing.
+
+00:14:31.530 --> 00:14:36.730
+Jeśli sonda jest zbyt czuła, możesz oznaczyć punkt końcowy jako zdegradowany, podczas gdy w rzeczywistości działa prawidłowo.
+
+00:14:36.890 --> 00:14:43.170
+Tymczasowy skok opóźnienia, krótka awaria sieci, powolne zapytanie do bazy danych, każde z tych zdarzeń może wywołać fałszywie dodatni wynik.
+
+00:14:43.370 --> 00:14:48.610
+Gdy Traffic Manager przestanie kierować użytkowników do tego punktu końcowego, właśnie spowodowałeś awarię, która nie była konieczna.
+
+00:14:48.610 --> 00:14:54.030
+Oto częsta pułapka. Użytkownicy ustawiają ścieżkę sondy na katalog główny swojej aplikacji, po prostu ukośnik.
+
+00:14:54.190 --> 00:15:03.030
+To dobre rozwiązanie w przypadku podstawowej kontroli stanu, ale nie jest idealne, ponieważ strona główna może ładować się wolno, jeśli renderuje całą stronę z zapytaniami do bazy danych, obrazami i JavaScriptem.
+
+00:15:03.250 --> 00:15:11.350
+Lepszym rozwiązaniem jest utworzenie dedykowanego punktu końcowego kontroli stanu, czegoś lekkiego, prostego punktu końcowego, który szybko zwraca kod stanu 200 i potwierdza, że aplikacja działa.
+
+00:15:11.590 --> 00:15:14.810
+Bez zapytań do bazy danych, bez intensywnego przetwarzania, tylko puls.
+
+00:15:14.810 --> 00:15:19.050
+W ten sposób Twoje sondy są szybkie, niezawodne i mniej podatne na fałszywe alarmy.
+
+00:15:19.210 --> 00:15:25.650
+Podsumuję, kiedy faktycznie powinieneś używać Traffic Managera, a kiedy innych opcji, wnioski i wskazówki dotyczące decyzji.
+
+00:15:25.810 --> 00:15:27.010
+Oto krótkie podsumowanie.
+
+00:15:27.190 --> 00:15:31.130
+Traffic Manager to globalny kontroler ruchu oparty na DNS z sześcioma metodami routingu.
+
+00:15:31.330 --> 00:15:36.610
+Tak naprawdę nie obsługuje Twojego ruchu. Po prostu kieruje użytkowników we właściwe miejsce na podstawie wybranej metody.
+
+00:15:36.830 --> 00:15:39.150
+Routing priorytetowy służy do odzyskiwania po awarii.
+
+00:15:39.290 --> 00:15:42.330
+Utrzymuje działanie aplikacji nawet w przypadku awarii całego regionu.
+
+00:15:42.330 --> 00:15:44.650
+Routing wydajnościowy opiera się na szybkości.
+
+00:15:44.810 --> 00:15:48.310
+Kieruje każdego użytkownika do punktu końcowego z najniższym opóźnieniem.
+
+00:15:48.530 --> 00:15:52.790
+Routing ważony umożliwia kontrolowane wdrożenia, takie jak wersje kanarkowe lub testy AB.
+
+00:15:53.070 --> 00:15:55.090
+Routing geograficzny zapewnia zgodność.
+
+00:15:55.310 --> 00:15:59.030
+Dane są przechowywane we właściwym regionie w zależności od lokalizacji użytkowników.
+
+00:15:59.230 --> 00:16:02.610
+MultiValue służy do prostej dystrybucji na poziomie IP na wiele adresów.
+
+00:16:02.790 --> 00:16:06.470
+Trasy routingu podsieci są również oparte na źródłowym adresie IP zapytania DNS.
+
+00:16:06.650 --> 00:16:09.690
+Porozmawiajmy teraz o tym, gdzie Traffic Manager wpisuje się w rzeczywistą architekturę.
+
+00:16:09.690 --> 00:16:10.510
+Pomyśl o tym.

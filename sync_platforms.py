@@ -83,9 +83,8 @@ def show_feed_url(lang):
 
 
 def apple_show_id(lang, ids):
-    """Findet eine Apple-Show nur bei exakter Uebereinstimmung des Spreaker-Feeds."""
-    if lang != "en":
-        return ""
+    """Findet eine Apple-Show nur bei exakter Uebereinstimmung des Spreaker-Feeds. Alle Sprachen: Mirko hat am 11.11.2026 die Sprach-Shows bei
+    Apple Podcasts eingetragen; sobald Apple eine Show freigibt, findet der naechtliche Lauf sie hier und speichert die ID in data/platforms.json."""
     feed_url = show_feed_url(lang)
     if not feed_url:
         return ""
@@ -107,8 +106,6 @@ def apple_show_id(lang, ids):
 
 def apple_candidates(lang, ids, ctx):
     if not ids.get("apple_id"):
-        if lang != "en":
-            return []
         ids["apple_id"] = apple_show_id(lang, ids)
         if not ids["apple_id"]:
             print(f"Apple {lang}: keine Show mit passender Spreaker-Feed-URL gefunden")

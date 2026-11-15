@@ -1,14 +1,16 @@
 // Blog-Import (BLOG_OWN_DOMAIN.md): RSS- oder Atom-Feed einer bestehenden Seite einlesen -> ENTWUERFE im Blog des Mitglieds. Nie automatisch veroeffentlicht.
 // Regeln: Quelle immer als {{ref|...}} im Text; Bilder werden nie kopiert (nur gezaehlt, Hinweis im Entwurf); Volltext nur mit der ausdruecklichen Bestaetigung
-// "Ich habe die Rechte an diesen Texten" (Standard: nur Titel, Kurzfassung und Quelle). Hinter dem Schalter BYOD (Standard aus).
+// "Ich habe die Rechte an diesen Texten" (Standard: nur Titel, Kurzfassung und Quelle). Hinter dem eigenen Schalter BYOD_IMPORT (Standard "0" = aus),
+// unabhaengig von BYOD (Domain-Verwaltung): die Entwuerfe landen im Blog auf m365.fm, eine eigene Domain ist dafuer nicht noetig.
 import { cleanText, BOT_UA, rateLimit, audit, isLang } from "./util.js";
-import { byodOn, normHost, isOwnHost } from "./byod_rules.js";
+import { normHost, isOwnHost } from "./byod_rules.js";
 import { sanitize, MAX_BODY } from "./wiki.js";
 import { slugify } from "./blog.js";
 import { ensureSectionCols } from "./sections.js";
 
 const MAX_ITEMS = 30, MAX_PICK = 20, MAX_FEED = 800000, MAX_HTML = 60000, DAY_CAP = 60;
 const now = () => Math.floor(Date.now() / 1000);
+export const importOn = (env) => env?.BYOD_IMPORT === "1";   // eigener Schalter, Standard aus (worker/wrangler.toml)
 const okLang = (l) => l === "en" || isLang(l);
 const dec = (s) => String(s).replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1").replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Math.min(+n, 0x10ffff))).replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(Math.min(parseInt(n, 16), 0x10ffff)))
   .replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&");
@@ -100,10 +102,16 @@ export function buildDraft(item, { mode, lang }) {
   return { title: item.title.slice(0, 140), summary: item.summary.slice(0, 300), body: sb.body, note, excerptOnly, images, truncated };
 }
 
+// Konto loeschen (index.js deleteAccount): Herkunftsnachweise des Kontos (Migration 0050). Die Entwuerfe selbst entfernt deleteUserBlog mit blog_posts.
+export async function deleteUserBlogImport(db, uid) {
+  await db.prepare("DELETE FROM blog_import_items WHERE user_id=?").bind(uid).run();
+}
+
 export async function handleBlogImport(env, request, url, path, user, J) {
+  if (path === "/api/byod/import/status") return request.method === "GET" ? J({ enabled: importOn(env) }) : J({ error: "method_not_allowed" }, 405);   // Oberflaeche versteckt sich bei aus
   if (path !== "/api/byod/import/preview" && path !== "/api/byod/import/save") return null;
   if (request.method !== "POST") return J({ error: "method_not_allowed" }, 405);
-  if (!byodOn(env)) return J({ error: "disabled" }, 404);
+  if (!importOn(env)) return J({ error: "disabled" }, 404);
   if (!user) return J({ error: "login" }, 401);
   const db = env.DB, b = await request.json().catch(() => ({}));
   const known = async (keys) => new Set(((await db.prepare(`SELECT item_key FROM blog_import_items WHERE user_id=? AND item_key IN (${keys.map(() => "?").join(",") || "''"})`).bind(user.id, ...keys).all()).results || []).map((r) => r.item_key));

@@ -1,0 +1,1021 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:03.360
+Bienvenue dans ce nouvel épisode de Microsoft Knowledge Nuggets, je suis Marco Peters.
+
+00:00:03.600 --> 00:00:05.640
+Le sujet d'aujourd'hui est quelque chose dont vous avez sûrement entendu parler,
+
+00:00:05.780 --> 00:00:06.700
+mais que vous ne comprenez peut-être pas tout.
+
+00:00:06.880 --> 00:00:07.840
+Les compétences qu'il donne copier.
+
+00:00:08.060 --> 00:00:08.880
+Vous avez déjà entendu ce terme.
+
+00:00:09.160 --> 00:00:11.440
+Peut-être avez-vous vu un bouton intitulé « Compétences UGGER »
+
+00:00:11.440 --> 00:00:14.540
+ou « Créer une compétence UGGER » dans un menu et vous vous êtes demandé ce que cela signifiait vraiment.
+
+00:00:14.980 --> 00:00:17.260
+C'est un chatbot, un modèle, une sorte d'outil d'automatisation.
+
+00:00:17.600 --> 00:00:18.060
+Voici le problème.
+
+00:00:18.360 --> 00:00:21.860
+Microsoft utilise des noms différents pour désigner la même idée, selon le produit que vous utilisez.
+
+00:00:22.180 --> 00:00:23.840
+Dans Copilot Chat, on les appelle « agences UGGER »,
+
+00:00:23.840 --> 00:00:28.680
+dans Cowork, « Compétences QB », dans Copilot Studio, aussi « Compétences QB » mais avec une signification légèrement différente.
+
+00:00:29.320 --> 00:00:30.880
+C'est confusant et honnêtement cela ne devrait pas l'être.
+
+00:00:31.520 --> 00:00:34.660
+A la fin de cet épisode, vous comprendrez exactement ce qu'est une compétence copilote,
+
+00:00:34.900 --> 00:00:38.440
+où elle se trouve et comment créer la vôtre, le, tout simplement, expliquer,
+
+00:00:39.500 --> 00:00:41.080
+ce qu'est réellement une compétence copilote.
+
+00:00:41.900 --> 00:00:43.900
+Décomposons cela avec la définition la plus simple possible.
+
+00:00:44.440 --> 00:00:46.920
+Une compétence copilote est un ensemble d'instructions réutilisables pour lire.
+
+00:00:47.580 --> 00:00:50.080
+Voyez cela comme la rédaction d'une fiche de poste pour un travailleur temporaire.
+
+00:00:50.640 --> 00:00:52.400
+Vous ne diriez pas simplement « Fais un peu de travail ».
+
+00:00:52.400 --> 00:00:56.120
+Vous lui donneriez la tâche, le planning, le résultat attendu et les règles à suivre.
+
+00:00:57.020 --> 00:00:57.460
+Même chose ici.
+
+00:00:58.420 --> 00:01:00.540
+Lorsque vous créez une compétence, vous donnez trois choses à copilote.
+
+00:01:01.060 --> 00:01:02.260
+D'abord, le nom de la compétence.
+
+00:01:02.900 --> 00:01:06.040
+Ensuite, une description qui indique à copilote qu'en activé, par exemple,
+
+00:01:06.380 --> 00:01:07.740
+cette tâche correspond à cette compétence.
+
+00:01:09.160 --> 00:01:12.820
+Fin, les instructions elles-mêmes, le processus étape par étape que l'IA doit suivre.
+
+00:01:13.360 --> 00:01:14.640
+Ah, voici la partie importante.
+
+00:01:14.960 --> 00:01:17.140
+Une compétence n'est pas un chatbot avec lequel vous discutez.
+
+00:01:17.600 --> 00:01:19.240
+C'est un spécialiste qui ne s'active qu'en cas de besoin.
+
+00:01:19.800 --> 00:01:21.180
+Il n'est pas besoin de l'activer ou de le désactiver même.
+
+00:01:21.180 --> 00:01:24.880
+Copilote analyse votre demande, vérifie s'il existe une compétence correspondante
+
+00:01:24.880 --> 00:01:26.560
+et l'exécute automatiquement si c'est le cas.
+
+00:01:27.320 --> 00:01:29.000
+La meilleure analogie que j'ai trouvée est celle d'une fiche recette.
+
+00:01:29.580 --> 00:01:31.620
+Vous utilisez les mêmes ingrédients et les mêmes étapes à chaque fois
+
+00:01:31.620 --> 00:01:32.740
+et vous obtenez le même résultat.
+
+00:01:33.280 --> 00:01:33.920
+C'est ça, une compétence.
+
+00:01:34.440 --> 00:01:37.740
+Rédigez les instructions une fois et chaque fois que copilote exécute cette compétence,
+
+00:01:37.840 --> 00:01:41.500
+vous obtenez le même résultat structuré, cohérent et répétable, sans devinette.
+
+00:01:42.500 --> 00:01:43.600
+C'est là que la confusion commence.
+
+00:01:44.280 --> 00:01:46.300
+Microsoft a placé les compétences dans trois foyers différents.
+
+00:01:47.180 --> 00:01:48.340
+Où vivent les compétences ?
+
+00:01:48.340 --> 00:01:50.280
+Alors où résident réellement les compétences ?
+
+00:01:50.280 --> 00:01:52.340
+C'est une question importante, car le foyer que vous choisissez
+
+00:01:52.340 --> 00:01:54.880
+détermine votre niveau de contrôle et la simplicité de la configuration.
+
+00:01:55.720 --> 00:01:57.760
+Copilote vous offre trois endroits différents
+
+00:01:57.760 --> 00:02:00.920
+pour créer et gérer des compétences, chacun ayant un objectif spécifique.
+
+00:02:01.540 --> 00:02:03.400
+Le premier est Copilote Chat, et plus précisément,
+
+00:02:03.760 --> 00:02:05.220
+l'outil de création d'agents intégrés.
+
+00:02:05.780 --> 00:02:06.620
+C'est le chemin le plus simple.
+
+00:02:07.040 --> 00:02:08.600
+Vous décrivez simplement ce que vous voulez en langage court.
+
+00:02:09.060 --> 00:02:10.880
+Le nom, la description, les instructions, tout.
+
+00:02:11.720 --> 00:02:14.140
+Écopilote crée la compétence pour vous sans aucun code ni markdown.
+
+00:02:14.140 --> 00:02:17.080
+Vous n'écrivez rien, vous ne touchez à rien, vous parlez simplement, et il le crée.
+
+00:02:18.000 --> 00:02:22.040
+Second foyer est Copilote Studio, la plateforme de création quand vous avez besoin de plus de contrôle.
+
+00:02:22.780 --> 00:02:24.480
+Les compétences y vivent sous forme de fichiers MD,
+
+00:02:24.640 --> 00:02:28.180
+qui sont simplement des fichiers texte avec un formatage simple stocké avec des instructions et des workflows.
+
+00:02:29.120 --> 00:02:30.520
+Vous pouvez les ouvrir, les modifier directement,
+
+00:02:30.700 --> 00:02:32.560
+et même ajouter des scripts pitants si c'est votre truc.
+
+00:02:33.240 --> 00:02:35.140
+C'est plus puissant, mais c'est aussi plus complexe.
+
+00:02:35.640 --> 00:02:38.420
+Maintenant, le troisième foyer est Copilote Cowork, qui fonctionne un peu différemment.
+
+00:02:38.420 --> 00:02:40.820
+Les compétences Cowork sont aussi des fichiers MD,
+
+00:02:41.120 --> 00:02:43.580
+mais ils résident dans votre OneDrive sous une structure de dossiers spécifiques,
+
+00:02:43.820 --> 00:02:45.180
+documents, puis Cowork, puis skills.
+
+00:02:45.780 --> 00:02:47.780
+Vous pouvez écrire une compétence en texte brut et la télécharger,
+
+00:02:47.960 --> 00:02:49.620
+ou utiliser les outils intégrés de Cowork pour créer une.
+
+00:02:50.420 --> 00:02:54.380
+Cowork effectue même un contrôle qualité après la création pour tester si vos instructions sont assez claires.
+
+00:02:55.120 --> 00:02:55.720
+Voici le point important.
+
+00:02:56.000 --> 00:02:57.520
+Les trois foyers suivent le même concept central,
+
+00:02:57.940 --> 00:02:59.960
+des instructions, un déclencheur et un format de sortie.
+
+00:03:00.840 --> 00:03:02.760
+Le contenant change, mais l'idée reste la même.
+
+00:03:03.240 --> 00:03:04.400
+Laissez-moi vous donner une comparaison rapide.
+
+00:03:04.700 --> 00:03:06.280
+Copilote Chat, c'est qu'est décrire et lancer bas.
+
+00:03:06.780 --> 00:03:08.100
+Simple, rapide, sans configuration.
+
+00:03:08.500 --> 00:03:10.060
+Copilote Studio, c'est pas qu'elle a contrôlé avec vous.
+
+00:03:10.600 --> 00:03:11.860
+Plus de fonctionnalité, plus de complexité.
+
+00:03:12.480 --> 00:03:15.160
+Et Copilote Cowork, c'est comme former un collègue pour gérer une tâche à votre place.
+
+00:03:15.720 --> 00:03:18.920
+Vous décrivez le processus une fois, il l'exécute de manière répétée, en arrière-plan.
+
+00:03:20.180 --> 00:03:21.060
+Commençons par le plus simple,
+
+00:03:21.580 --> 00:03:23.360
+créer une compétence directement dans Copilote Chat.
+
+00:03:24.220 --> 00:03:26.120
+Créez votre première compétence, l'agent builder.
+
+00:03:26.520 --> 00:03:27.500
+Donc vous êtes dans Copilote Chat.
+
+00:03:28.080 --> 00:03:29.320
+La première chose à trouver est l'agent builder.
+
+00:03:30.020 --> 00:03:32.600
+Selon votre interface, il peut se trouver sous un onglet appelé Agent,
+
+00:03:32.600 --> 00:03:34.300
+ou un bouton intitulé Créer.
+
+00:03:35.020 --> 00:03:36.500
+Microsoft déplace parfois les choses,
+
+00:03:36.500 --> 00:03:39.020
+et cherchez l'option qui vous permet de décrire ce que vous voulez.
+
+00:03:39.420 --> 00:03:40.180
+C'est votre point d'entrée.
+
+00:03:40.720 --> 00:03:42.080
+Laissez-moi vous guider à travers un exemple concret.
+
+00:03:42.420 --> 00:03:43.780
+Disons que vous prenez des notes de réunion, toutes les gens.
+
+00:03:44.100 --> 00:03:44.680
+Vous connaissez la chance.
+
+00:03:45.020 --> 00:03:45.700
+Des puces brouillonnes,
+
+00:03:46.460 --> 00:03:47.220
+des phrases inachevées,
+
+00:03:47.420 --> 00:03:49.360
+des points d'action enfouis dans des paragraphes.
+
+00:03:49.960 --> 00:03:53.140
+Vous voulez que Copilote transforme cela en résumé structuré et propre ?
+
+00:03:53.140 --> 00:03:54.140
+A vous taper quelque chose comme ceci.
+
+00:03:54.980 --> 00:03:56.220
+Créez une compétence de notes de réunion
+
+00:03:56.220 --> 00:03:57.520
+qui prend des transcriptions brouillonnes
+
+00:03:57.520 --> 00:04:00.740
+et les transforme en résumé structuré avec des points d'action et des décisions.
+
+00:04:01.660 --> 00:04:02.100
+Une seule phrase.
+
+00:04:02.440 --> 00:04:03.280
+Aucune instruction à rédiger.
+
+00:04:03.680 --> 00:04:04.600
+Aucun format de sortie à définir.
+
+00:04:05.020 --> 00:04:06.000
+Vous décrivez simplement la tâche.
+
+00:04:06.320 --> 00:04:08.420
+Copilote prend cette description et écrit la compétence pour vous.
+
+00:04:08.800 --> 00:04:10.340
+Il écrit le nom, la description qui lui indique
+
+00:04:10.340 --> 00:04:13.020
+quand utiliser la compétence et les instructions étape par étape.
+
+00:04:13.720 --> 00:04:15.100
+Ensuite, il présente le tout pour votre examen.
+
+00:04:15.720 --> 00:04:18.080
+Vous relisez, faites des ajustements si vous le souhaitez et vous testez.
+
+00:04:18.500 --> 00:04:19.660
+Voici le processus en quatre étapes.
+
+00:04:20.100 --> 00:04:21.020
+Vous décrivez ce que vous voulez.
+
+00:04:21.440 --> 00:04:22.340
+Copilote génère la compétence.
+
+00:04:22.800 --> 00:04:23.580
+Vous examinez et ajustez.
+
+00:04:23.900 --> 00:04:25.040
+Ensuite, vous testez avec des données réelles.
+
+00:04:25.040 --> 00:04:26.980
+Lors du test, vous verrez le résultat.
+
+00:04:27.060 --> 00:04:29.200
+Un résumé structuré avec des sections pour le titre de la réunion.
+
+00:04:29.540 --> 00:04:32.400
+La date, les participants, les décisions clés, les actions,
+
+00:04:32.620 --> 00:04:34.720
+les sujets de discussion et les questions en suspens.
+
+00:04:35.500 --> 00:04:37.340
+Tout est organisé exactement comme vous l'avez demandé.
+
+00:04:38.000 --> 00:04:40.420
+Sans formatage, sans markdown et sans code de votre part.
+
+00:04:41.220 --> 00:04:42.040
+Mais voici l'information claire.
+
+00:04:42.320 --> 00:04:44.540
+Vous n'avez pas besoin d'écrire une seule ligne de code ou de markdown.
+
+00:04:45.120 --> 00:04:46.820
+Vous n'avez même pas besoin de savoir ce qu'est un fichier markdown.
+
+00:04:47.180 --> 00:04:49.580
+Vous décrivez simplement la tâche et Copilote s'occupe du reste.
+
+00:04:49.960 --> 00:04:51.380
+C'est le moyen le plus rapide de créer une compétence
+
+00:04:51.380 --> 00:04:53.320
+et pour la plupart des débutants, c'est tout ce dont vous aurez besoin.
+
+00:04:53.320 --> 00:04:55.360
+Maintenant, si vous avez besoin de plus de contrôle,
+
+00:04:55.660 --> 00:04:58.240
+peut-être voulez-vous ajouter un script à Python ou un flux de travail personnalisé.
+
+00:04:58.820 --> 00:05:00.340
+C'est là que vous passez à Copilote Studio.
+
+00:05:01.600 --> 00:05:03.100
+Création de compétences dans Copilote Studio
+
+00:05:03.100 --> 00:05:04.980
+Copilote Studio est une approche différente.
+
+00:05:05.700 --> 00:05:07.280
+Il est conçu pour ceux qui veulent aller sous le capot.
+
+00:05:07.580 --> 00:05:08.980
+Il comporte trois couches à connaître.
+
+00:05:09.600 --> 00:05:10.660
+Les instructions sont toujours actives.
+
+00:05:11.020 --> 00:05:12.920
+Elles façonnent la façon dont votre agent réfléchit et répond,
+
+00:05:13.320 --> 00:05:15.440
+son ton, son rôle et son comportement par défaut.
+
+00:05:15.880 --> 00:05:17.040
+Elles s'exécutent derrière chaque conversation.
+
+00:05:17.480 --> 00:05:18.520
+Les compétences sont appelées à la demande.
+
+00:05:19.100 --> 00:05:21.440
+Ce sont des connaissances expertes pour des tâches spécifiques et répétables
+
+00:05:21.440 --> 00:05:23.360
+qui ne s'activent que lorsque le déclencheur correspond.
+
+00:05:23.960 --> 00:05:25.780
+Les flux de travail sont des processus étape par étape
+
+00:05:25.780 --> 00:05:26.960
+avec des approbations et des conditions.
+
+00:05:27.560 --> 00:05:28.780
+Si vous avez besoin d'un résultat garanti,
+
+00:05:28.860 --> 00:05:30.940
+comment envoyer quelque chose à un responsable pour approbation avant l'envoi ?
+
+00:05:30.940 --> 00:05:31.740
+C'est un flux de travail.
+
+00:05:32.700 --> 00:05:35.280
+Les compétences dans Studio sont packagées sous forme de fichiers MD ou Markdown,
+
+00:05:35.440 --> 00:05:36.720
+mais ce sont plus que de simples textes.
+
+00:05:37.220 --> 00:05:40.160
+Une compétence peut inclure des scripts, des modèles et des exemples tous regroupés.
+
+00:05:40.760 --> 00:05:43.020
+Vous pouvez joindre un script Python pour les calculs, un modèle Word.
+
+00:05:43.300 --> 00:05:46.620
+Pour la sortie et des documents de référence, le tout dans un seul package.
+
+00:05:47.300 --> 00:05:48.980
+Voici l'anatomie d'un fichier MD de compétences.
+
+00:05:49.640 --> 00:05:52.660
+En haut, le nom, quelque chose de clair et précis comme calculateur de dépenses EQA.
+
+00:05:53.720 --> 00:05:55.880
+Ensuite, une description qui indique quand cette compétence doit se déclencher.
+
+00:05:56.840 --> 00:06:00.240
+Utilisez ceci lorsqu'un utilisateur doit calculer le total des dépenses à partir des données de reçus.
+
+00:06:01.160 --> 00:06:02.540
+Puis une section pour savoir quand l'utiliser,
+
+00:06:02.720 --> 00:06:03.860
+et une autre pour savoir quand ne pas l'utiliser.
+
+00:06:04.160 --> 00:06:06.380
+Cela évite que la compétence ne s'active dans le mauvais contexte.
+
+00:06:06.700 --> 00:06:07.680
+Les instructions étape par étape.
+
+00:06:08.040 --> 00:06:08.880
+Voici un exemple concret.
+
+00:06:09.180 --> 00:06:11.200
+Disons que vous voulez une compétence qui exécute un script Python
+
+00:06:11.200 --> 00:06:13.400
+pour calculer les dépenses à partir de reçus téléchargés.
+
+00:06:13.400 --> 00:06:16.460
+Dans Copilot Studio, vous créez le fichier MD de la compétence
+
+00:06:16.460 --> 00:06:18.400
+et packagez le script Python directement avec.
+
+00:06:19.140 --> 00:06:20.340
+Lorsque la compétence est déclenchée,
+
+00:06:20.440 --> 00:06:22.540
+elle exécute le script, traite les données et renvoie le résultat.
+
+00:06:23.060 --> 00:06:24.520
+La compétence et le code se déplacent ensemble.
+
+00:06:25.120 --> 00:06:27.220
+Utilisez les compétences pour une expertise reproductible,
+
+00:06:27.460 --> 00:06:28.900
+des tâches où l'IA doit réfléchir et s'adapter.
+
+00:06:29.620 --> 00:06:31.860
+Utilisez les workflows pour un ordre strict et des approbations.
+
+00:06:32.500 --> 00:06:34.340
+Des tâches où vous ne pouvez pas vous permettre de variations.
+
+00:06:35.300 --> 00:06:36.120
+Les compétences sont flexibles.
+
+00:06:36.120 --> 00:06:37.180
+Les workflows sont rigides.
+
+00:06:37.500 --> 00:06:38.180
+Choisissez le bon outil.
+
+00:06:38.460 --> 00:06:40.340
+Il existe un autre endroit où les compétences résident,
+
+00:06:40.500 --> 00:06:42.480
+dans Copilot Cowork, et l'expérience est différente.
+
+00:06:43.400 --> 00:06:45.000
+Créer des compétences dans Copilot Cowork.
+
+00:06:45.420 --> 00:06:47.520
+Les compétences Cowork se trouvent ailleurs que ce que vous pourriez imaginer.
+
+00:06:47.960 --> 00:06:50.220
+Elles sont stockées en tant que fichier MD dans votre OneDrive,
+
+00:06:50.680 --> 00:06:52.600
+sous documents, puis dans un dossier nommé Cowork,
+
+00:06:53.240 --> 00:06:54.700
+et à l'intérieur, un dossier nommé Skills.
+
+00:06:55.560 --> 00:06:57.180
+C'est là que vivent toutes vos compétences personnalisées.
+
+00:06:57.380 --> 00:07:00.100
+Vous pouvez ouvrir ce dossier pour voir chaque compétence sous forme de texte brut.
+
+00:07:00.720 --> 00:07:02.340
+Il y a deux façons de créer une compétence dans Cowork.
+
+00:07:02.820 --> 00:07:05.600
+Vous pouvez l'écrire en texte brut et l'importer directement dans ce dossier,
+
+00:07:05.820 --> 00:07:08.740
+ou utiliser l'outil de gestion intégrée de Cowork dans l'interface de chat.
+
+00:07:09.920 --> 00:07:12.220
+Vous décrivez ce que vous souhaitez, Cowork crée le fichier MD,
+
+00:07:12.480 --> 00:07:14.100
+et l'enregistre automatiquement dans ce dossier.
+
+00:07:14.940 --> 00:07:17.160
+Une fois la compétence créée, Cowork effectue un contrôle qualité.
+
+00:07:17.560 --> 00:07:18.800
+Il teste la couverture des déclencheurs,
+
+00:07:19.040 --> 00:07:20.620
+pour voir si votre compétence s'active quand elle le devrait.
+
+00:07:20.980 --> 00:07:23.600
+Il teste la clarté des instructions, pour voir si vos étapes sont assez précises.
+
+00:07:24.220 --> 00:07:27.120
+Et il teste la robustesse, pour voir si la compétence gère des cas limites.
+
+00:07:27.540 --> 00:07:28.760
+Vous recevez un rapport avec les résultats.
+
+00:07:29.140 --> 00:07:30.920
+Si un point est faible, vous savez où apporter des améliorations.
+
+00:07:31.140 --> 00:07:31.860
+Voici un exemple concret.
+
+00:07:32.240 --> 00:07:33.340
+Imaginons que vous soyez agent immobilier.
+
+00:07:33.800 --> 00:07:35.620
+Après chaque appel de qualification avec un acheteur,
+
+00:07:35.620 --> 00:07:37.660
+vous devez transformer vos notes en une fiche structurée.
+
+00:07:38.560 --> 00:07:41.680
+Courchette budgétaire, critères indispensables, points bloquants, étape suivante.
+
+00:07:42.280 --> 00:07:43.080
+Vous faites cela à chaque fois.
+
+00:07:43.820 --> 00:07:46.120
+Vous créez donc une compétence appelée assistant profil acheteur Kegi.
+
+00:07:46.700 --> 00:07:48.100
+Vous lui donnez des phrases déclencheurs,
+
+00:07:48.240 --> 00:07:49.900
+comme créer un profil acheteur Ruka Mokamokaba.
+
+00:07:50.360 --> 00:07:51.120
+Vous résumez l'appel client.
+
+00:07:51.500 --> 00:07:52.800
+Vous lui demandez de lire la transcription,
+
+00:07:53.020 --> 00:07:54.760
+d'extraire les informations clés et de remplir un modèle.
+
+00:07:55.480 --> 00:07:56.800
+Vous joignez votre modèle de fiche,
+
+00:07:56.980 --> 00:07:59.320
+afin que le résultat corresponde exactement à vos besoins.
+
+00:07:59.900 --> 00:08:01.780
+Ensuite, vous le testez, vous téléchargez une transcription d'appel
+
+00:08:01.780 --> 00:08:03.480
+et dites exécute l'assistant profil acheteur Kegi.
+
+00:08:04.080 --> 00:08:06.340
+Cowork active la compétence, lit la transcription
+
+00:08:06.340 --> 00:08:08.060
+et produit un résumé dans le chat.
+
+00:08:08.580 --> 00:08:10.220
+Puis vous lui demandez de préparer le document web.
+
+00:08:10.220 --> 00:08:12.640
+Il récupère votre modèle, chaque section, budget,
+
+00:08:13.080 --> 00:08:14.920
+indispensable, point bloquant, étape suivante,
+
+00:08:15.380 --> 00:08:16.780
+et vous fournit un document fini.
+
+00:08:17.580 --> 00:08:18.500
+Le même format à chaque fois,
+
+00:08:18.860 --> 00:08:20.280
+sans mise en forme manuelle ni copier-coller.
+
+00:08:20.820 --> 00:08:22.720
+Les compétences Cowork sont conçues pour une délégation en arrière.
+
+00:08:22.820 --> 00:08:24.580
+Vous n'êtes pas là à discuter avec l'IA en permanence.
+
+00:08:25.040 --> 00:08:26.220
+Vous décrivez le processus une fois,
+
+00:08:26.500 --> 00:08:27.820
+joignez les modèles, définissez les règles
+
+00:08:27.820 --> 00:08:29.440
+et Cowork l'exécute de manière répétée.
+
+00:08:29.820 --> 00:08:31.620
+Vous fournissez simplement les entrées et récupérez les sorties.
+
+00:08:32.620 --> 00:08:33.420
+Ces mêmes règles s'appliquent.
+
+00:08:33.420 --> 00:08:36.320
+Qu'est-ce qui fait une bonne compétence ?
+
+00:08:36.320 --> 00:08:37.660
+Commençons par le nom même de votre compétence.
+
+00:08:38.340 --> 00:08:40.640
+Il doit être lisible, pour deux publics totalement différents,
+
+00:08:40.980 --> 00:08:41.780
+les humains et l'IA.
+
+00:08:42.460 --> 00:08:44.380
+Les humains doivent comprendre ce que fait la compétence en un coup d'œil.
+
+00:08:45.140 --> 00:08:47.240
+L'IA doit trouver la bonne compétence lorsqu'une tâche correspond.
+
+00:08:48.120 --> 00:08:49.780
+Optez donc pour des noms précis et descriptifs.
+
+00:08:50.360 --> 00:08:52.480
+Résumeur de notes de réunion que surpasse preneur de notes que fois.
+
+00:08:53.540 --> 00:08:55.920
+Assistant de profil d'acheteur Ugo fonctionne mieux que Ed, client, Ugo.
+
+00:08:56.900 --> 00:08:58.460
+Les noms trop originaux ne font qu'embrouiller tout le monde.
+
+00:08:58.880 --> 00:08:59.940
+Ensuite, les phrases de déclenchement.
+
+00:09:00.360 --> 00:09:02.220
+C'est ainsi que Copilot s'équentive à votre compétence.
+
+00:09:02.680 --> 00:09:03.520
+Soyez spécifique à sujet.
+
+00:09:03.760 --> 00:09:05.240
+Ne dites pas, utilisez ceci pour les réunions Ugo.
+
+00:09:05.640 --> 00:09:08.040
+Utilisez ceci lorsqu'un utilisateur télécharge la transcription d'une réunion
+
+00:09:08.040 --> 00:09:08.920
+et demande un résumé Ugo.
+
+00:09:09.480 --> 00:09:10.660
+Plus votre déclencheur est précis,
+
+00:09:11.100 --> 00:09:13.320
+moins la compétence risque de s'activer dans un mauvais contexte.
+
+00:09:13.700 --> 00:09:15.360
+Si une compétence se déclenche quand elle ne devrait pas,
+
+00:09:15.660 --> 00:09:16.800
+le résultat devient vite inutile.
+
+00:09:17.240 --> 00:09:18.240
+Parlons maintenant des instructions.
+
+00:09:18.940 --> 00:09:20.060
+Voici ce que la plupart des gens font mal.
+
+00:09:20.400 --> 00:09:21.360
+Les compétences sont appelées à la demande.
+
+00:09:21.700 --> 00:09:22.520
+Elles ne sont pas toujours actives.
+
+00:09:22.520 --> 00:09:24.100
+Chaque fois que la compétence s'exécute,
+
+00:09:24.240 --> 00:09:25.400
+elles consomment de la puissance de calcul IA.
+
+00:09:25.740 --> 00:09:27.280
+Gardez donc vos instructions courtes et ciblées.
+
+00:09:28.120 --> 00:09:30.040
+N'y déversez pas toute votre politique d'entreprise.
+
+00:09:30.800 --> 00:09:32.620
+Juste les étapes nécessaires pour cette tâche spécifique.
+
+00:09:33.220 --> 00:09:35.180
+Des instructions courtes signifient une exécution plus rapide
+
+00:09:35.180 --> 00:09:36.320
+et une consommation globale réduite.
+
+00:09:37.080 --> 00:09:38.020
+Le format de sortie compte aussi.
+
+00:09:38.620 --> 00:09:40.620
+Devez dire à la compétence exactement comment structurer ce résultat.
+
+00:09:41.160 --> 00:09:42.300
+Donnez-moi un résumé avec ces sections.
+
+00:09:42.600 --> 00:09:44.600
+Titres de la réunion, date, participant, décision clé,
+
+00:09:44.700 --> 00:09:45.940
+actions à entreprendre, questions en suspens.
+
+00:09:46.520 --> 00:09:49.100
+Si vous avez un modèle, un document Word ou un fichier Excel,
+
+00:09:49.100 --> 00:09:49.640
+incluez-le.
+
+00:09:49.960 --> 00:09:51.800
+La compétence peut utiliser ce modèle comme référence
+
+00:09:51.800 --> 00:09:53.420
+et correspondre exactement à votre format existant.
+
+00:09:54.180 --> 00:09:56.880
+Les règles et les exceptions distinguent les bonnes compétences des mauvaises.
+
+00:09:57.340 --> 00:09:58.100
+Pensez au cas particulier.
+
+00:09:58.860 --> 00:10:00.060
+Signalez toujours les éléments peu clairs.
+
+00:10:00.540 --> 00:10:01.620
+Ne supprimez jamais les noms des personnes.
+
+00:10:02.380 --> 00:10:04.300
+Si la transcription est trop courte, demandez plus d'informations.
+
+00:10:04.820 --> 00:10:06.860
+Ces règles empêchent la compétence de faire de mauvaises suppositions.
+
+00:10:07.340 --> 00:10:09.580
+Ils agissent comme des garde-fous qui assurent la fiabilité du résultat.
+
+00:10:10.220 --> 00:10:11.420
+Évitez l'ambiguïté à tout prix.
+
+00:10:11.900 --> 00:10:13.640
+Ne créez pas deux compétences avec des noms similaires
+
+00:10:13.640 --> 00:10:14.820
+ou des déclencheurs qui se chevauchent.
+
+00:10:15.140 --> 00:10:17.000
+Si vous avez une compétence de note de réunion
+
+00:10:17.000 --> 00:10:19.100
+et une de résumé de réunion côte à côte copilote
+
+00:10:19.100 --> 00:10:20.780
+ne sera pas laquelle utiliser,
+
+00:10:20.780 --> 00:10:23.300
+l'IA devinera et parfois elle se trompera.
+
+00:10:23.800 --> 00:10:25.780
+Si deux compétences se chevauchent, fusionnez-les en une seule.
+
+00:10:26.120 --> 00:10:27.100
+Gardez votre bibliothèque de compétences.
+
+00:10:27.360 --> 00:10:28.580
+Et enfin, testez et itérées.
+
+00:10:28.940 --> 00:10:30.460
+Exécutez des exemples d'entrées via votre compétence.
+
+00:10:30.660 --> 00:10:31.380
+Vérifiez le résultat.
+
+00:10:31.700 --> 00:10:32.720
+Correspondez-il à ce que vous attendiez.
+
+00:10:33.100 --> 00:10:35.260
+Sinon, affinez les instructions, ajoutez une règle.
+
+00:10:35.580 --> 00:10:37.160
+Clarifiez le déclencheur, puis testez à nouveau.
+
+00:10:37.660 --> 00:10:39.040
+Les compétences s'améliorent par l'itération,
+
+00:10:39.220 --> 00:10:40.760
+pas en obtenant la perfection dès le premier essai.
+
+00:10:41.540 --> 00:10:43.080
+Les compétences sont les travailleurs spécialisés,
+
+00:10:43.400 --> 00:10:44.720
+les instructions sont la politique de fond
+
+00:10:44.720 --> 00:10:47.260
+et les flux de travail sont les processus stricts.
+
+00:10:47.260 --> 00:10:48.960
+Comment s'articule-t-il ?
+
+00:10:48.960 --> 00:10:49.580
+La vue d'ensemble.
+
+00:10:50.400 --> 00:10:52.100
+Compétences, instructions et flux de travail.
+
+00:10:52.780 --> 00:10:54.060
+Très bien, lions tout cela ensemble,
+
+00:10:54.300 --> 00:10:55.540
+car c'est là que les gens se trompent souvent.
+
+00:10:56.040 --> 00:10:57.760
+Les instructions, les compétences et les flux de travail
+
+00:10:57.760 --> 00:10:58.920
+ne sont pas des idées concurrentes.
+
+00:10:59.640 --> 00:11:00.840
+Ce sont trois couches qui fonctionnent ensemble.
+
+00:11:01.380 --> 00:11:03.000
+Et chacune gère une partie différente du travail.
+
+00:11:03.480 --> 00:11:04.440
+Les instructions sont toujours actives.
+
+00:11:04.880 --> 00:11:06.540
+Elles façonnent la façon dont votre agent pense et réun.
+
+00:11:07.020 --> 00:11:08.220
+Le tombe, le rôle, les paramètres par défaut
+
+00:11:08.220 --> 00:11:08.920
+tout cela des instructions.
+
+00:11:09.320 --> 00:11:11.060
+Voyez cela comme la personnalité et les règles de base.
+
+00:11:12.240 --> 00:11:13.680
+Soyez utile, utilisez un langage simple,
+
+00:11:13.840 --> 00:11:14.500
+n'inventez jamais de fait.
+
+00:11:14.500 --> 00:11:17.340
+Cela s'exécute en arrière-plan de chaque interaction,
+
+00:11:17.460 --> 00:11:18.600
+qu'une compétence soit active ou non.
+
+00:11:18.960 --> 00:11:20.640
+Les compétences regroupent une expertise réutilisable.
+
+00:11:21.760 --> 00:11:24.040
+Elles sont appelées à la demande pour des tâches spécifiques et répétables.
+
+00:11:25.020 --> 00:11:26.260
+Les instructions disent soyez utiles.
+
+00:11:27.060 --> 00:11:27.700
+Une compétence dit,
+
+00:11:27.940 --> 00:11:29.340
+quand quelqu'un télécharge une transcription de réunion,
+
+00:11:29.560 --> 00:11:30.700
+effectuez cette série d'étapes précises.
+
+00:11:31.360 --> 00:11:32.460
+Les instructions sont la politique.
+
+00:11:32.860 --> 00:11:33.760
+Les compétences sont le manuel.
+
+00:11:34.080 --> 00:11:35.860
+Les flux de travail imposent des processus déterministes.
+
+00:11:36.200 --> 00:11:37.140
+C'est la partie la plus stricte.
+
+00:11:37.600 --> 00:11:39.140
+Approbation, conditions, résultats garantis.
+
+00:11:39.220 --> 00:11:41.760
+Si vous avez besoin qu'une chose se produise dans un ordre précis à chaque fois,
+
+00:11:41.900 --> 00:11:42.920
+comme l'étape 1, extraire les données,
+
+00:11:42.920 --> 00:11:44.640
+l'étape 2, transmettre aux responsables.
+
+00:11:45.020 --> 00:11:46.780
+L'étape 3, attendre l'approbation avant l'envoi.
+
+00:11:46.960 --> 00:11:47.680
+C'est un flux de travail.
+
+00:11:48.180 --> 00:11:51.880
+Aucune variation, aucune improvisation de l'IA, juste l'exécution.
+
+00:11:52.620 --> 00:11:53.480
+Voici un exemple concret.
+
+00:11:53.920 --> 00:11:55.060
+Vous créez un agent pour votre équipe.
+
+00:11:55.740 --> 00:11:56.960
+Les instructions définissent le ton.
+
+00:11:57.160 --> 00:11:58.660
+Utile, professionnel, concis.
+
+00:11:59.040 --> 00:12:00.240
+Une compétence gère les notes de réunion.
+
+00:12:00.900 --> 00:12:02.900
+Elle prend des transcriptions des ordonnées et produit des résumés clairs.
+
+00:12:03.560 --> 00:12:06.100
+Et un flux de travail transmet ce résumé au chef d'équipe pour approbation
+
+00:12:06.100 --> 00:12:07.100
+avant qu'il ne soit enregistré.
+
+00:12:07.640 --> 00:12:08.940
+Les instructions façonnent le comportement,
+
+00:12:09.020 --> 00:12:09.920
+les compétences font le travail
+
+00:12:09.920 --> 00:12:11.480
+et les flux de travail imposent le processus.
+
+00:12:11.480 --> 00:12:13.800
+Voici ce qui compte pour vous en tant que débutant.
+
+00:12:14.260 --> 00:12:15.500
+La plupart des gens n'ont besoin que des compétents.
+
+00:12:16.020 --> 00:12:18.080
+Les instructions sont intégrées à tout agent que vous créez.

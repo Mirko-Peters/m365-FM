@@ -1,0 +1,772 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.920
+Hallo allemaal en welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:00:05.040 --> 00:00:06.580
+Ik ben jullie host Mirko Peters.
+
+00:00:06.820 --> 00:00:10.680
+Het onderwerp van vandaag is er een waar bijna iedereen van gehoord heeft, maar weinig een echt begrijpen.
+
+00:00:10.860 --> 00:00:11.740
+Vector databases.
+
+00:00:12.060 --> 00:00:16.720
+Je hebt die term waarschijnlijk voorbij zien komen in artikelen over AI of gehoord in gesprekken over Copilot en ChatGPT.
+
+00:00:16.880 --> 00:00:18.500
+Maar wat is een vector database nu eigenlijk?
+
+00:00:18.720 --> 00:00:21.000
+Is het gewoon een normale database met een chiquer naam?
+
+00:00:21.120 --> 00:00:22.540
+Of is het iets compleet anders?
+
+00:00:22.860 --> 00:00:28.400
+Stel je voor dat je op een webshop zoekt naar rode jas en resultaten krijgt met carmozijnrode mantel en bordeauxrode bovenkleding.
+
+00:00:28.400 --> 00:00:30.480
+Hoe weet de computer dat dat hetzelfde is?
+
+00:00:30.660 --> 00:00:31.980
+Het matcht geen trefwoorden.
+
+00:00:32.440 --> 00:00:34.720
+Carmozijn is geen rode mantel is geen jas.
+
+00:00:34.900 --> 00:00:39.200
+Toch begrijpt de zoekmachine op de een of andere manier dat ze verwant zijn en dat is vector zoeken in actie.
+
+00:00:39.380 --> 00:00:46.600
+Aan het eind van deze aflevering begrijp je wat vector databases echt zijn, waarom ze AI zoekopdrachten en Copilot aandrijven en hoe ze in de cloud van Microsoft passen.
+
+00:00:46.760 --> 00:00:48.360
+We houden het in begrijpelijke taal.
+
+00:00:48.560 --> 00:00:51.580
+Geen wiskunde, geen jargon, alleen duidelijke bouwstenen.
+
+00:00:51.780 --> 00:00:52.880
+Wat is eigenlijk een vector?
+
+00:00:53.200 --> 00:00:55.000
+Laten we beginnen bij de kernvraag.
+
+00:00:55.160 --> 00:00:56.340
+Wat is nu precies een vector?
+
+00:00:56.340 --> 00:01:01.400
+Als de meeste mensen het woord vector horen, denken ze aan een pijl uit de natuurkundeles, richting een grootte.
+
+00:01:01.560 --> 00:01:03.480
+In de informatica is het veel eenvoudiger.
+
+00:01:03.680 --> 00:01:05.660
+Een vector is eigenlijk gewoon een lijst met getallen.
+
+00:01:05.840 --> 00:01:09.320
+Een eendimensionale array die iets vertegenwoordigt in een formaat waar de computer mee kan werken.
+
+00:01:09.480 --> 00:01:11.260
+Hier is een praktische manier om het voor je te zien.
+
+00:01:11.440 --> 00:01:16.560
+Als ik zou zeggen dat je me moet ontmoeten op de derde verdieping in vleugel B, kamer 12, dan zijn dat drie getallen die een specifieke locatie beschrijven.
+
+00:01:16.720 --> 00:01:20.160
+Dat is een driedimensionale vector die je precies vertelt waar iets zich in een gebouw bevindt.
+
+00:01:20.160 --> 00:01:25.080
+Stel je nu voor dat ik meer details toevoeg. Kleur van de deur, grootte van de kamer, prijs per vierkante meter.
+
+00:01:25.300 --> 00:01:27.000
+Elk nieuw detail wordt een nieuwe dimensie.
+
+00:01:27.220 --> 00:01:30.820
+Dus hoe meer dimensies je opbouwt, hoe meer informatie je over dat ding kunt vastleggen.
+
+00:01:30.960 --> 00:01:34.880
+Een auto zou beschreven kunnen worden door snelheid, kilometerstand, prijs, gewicht en veiligheidsclassificatie.
+
+00:01:35.100 --> 00:01:36.580
+Dat is een vijfdimensionale vector.
+
+00:01:36.860 --> 00:01:40.680
+Een product kan beschreven worden door honderden kenmerken, wat je een hoogdimensionale vector geeft.
+
+00:01:40.900 --> 00:01:41.520
+Dit is het punt.
+
+00:01:41.520 --> 00:01:44.480
+Met factoren kunnen we dingen omzetten in getallen die computers kunnen vergelijken.
+
+00:01:44.640 --> 00:01:47.980
+Woorden, afbeeldingen, geluiden, documenten, alles kan een lijst met getallen worden.
+
+00:01:48.200 --> 00:01:51.360
+Zodra alles getallen zijn, kun je gaan meten hoe vergelijkbaar twee dingen echt zijn.
+
+00:01:51.540 --> 00:01:55.560
+Twee kamers op dezelfde verdieping met vergelijkbare deurkleuren komen dicht bij elkaar in de vectorruimte te staan.
+
+00:01:55.740 --> 00:01:58.600
+En twee producten met vergelijkbare kenmerken groeperen zich ook samen.
+
+00:01:58.840 --> 00:02:01.760
+Dat eenvoudige idee is wat moderne AI-zoekopdrachten mogelijk maakt.
+
+00:02:01.960 --> 00:02:04.920
+Van factoren tot embeddings, niet alle factoren zijn hetzelfde.
+
+00:02:05.080 --> 00:02:08.280
+Er is een speciaal soort genaamd een embedding, en daar schuilt de echte kracht in.
+
+00:02:08.280 --> 00:02:09.820
+Dus, wat is een embedding precies?
+
+00:02:09.820 --> 00:02:12.480
+Een embedding is een vector die betekenis vertegenwoordigt.
+
+00:02:12.620 --> 00:02:15.780
+Een machine learning model zoals Azure Open AI's Text Embedding 3
+
+00:02:15.780 --> 00:02:18.620
+smal leest tekst en plaatst deze in een hoogdimensionale ruimte.
+
+00:02:18.800 --> 00:02:22.960
+Het model heeft geleerd van miljarden voorbeelden, waardoor het begrijpt hoe woorden met elkaar samenhangen.
+
+00:02:23.140 --> 00:02:26.780
+Koning en koningin komen dicht bij elkaar te staan omdat ze een vergelijkbare context delen.
+
+00:02:26.920 --> 00:02:29.620
+Koning en koffie komen ver uit elkaar te staan omdat ze dat niet doen.
+
+00:02:29.860 --> 00:02:31.980
+Dit is wat dat in eenvoudige bewoordingen betekent.
+
+00:02:32.180 --> 00:02:35.420
+Wanneer je zoekt op rode jas, vindt het systeem carmozijnrode mantel.
+
+00:02:35.420 --> 00:02:41.500
+Het embeddingmodel herkent dat rood en carmozijnrood dicht bij elkaar liggen qua betekenis, en dat jas en mantel dat ook zijn.
+
+00:02:41.680 --> 00:02:44.920
+De embeddings voor die twee zinsneden worden buren in de vectorruimte.
+
+00:02:45.100 --> 00:02:46.860
+De computer matcht niet langer letters.
+
+00:02:47.140 --> 00:02:48.280
+Hij matcht betekenis.
+
+00:02:48.620 --> 00:02:50.480
+Laat me je nu een klassiek voorbeeld geven.
+
+00:02:50.720 --> 00:02:55.340
+Neem de vector voor koning, trek de vector voor man ervan af en tel de vector voor vrouw erbij op.
+
+00:02:55.420 --> 00:02:58.000
+Het resultaat ligt heel dicht bij de vector voor koningin.
+
+00:02:58.180 --> 00:03:00.500
+Koning min man plus vrouw is gelijk aan koningin.
+
+00:03:00.700 --> 00:03:04.780
+Dat klinkt misschien als magie, maar het is eigenlijk hoe het model relaties vastlegt in getallen.
+
+00:03:04.780 --> 00:03:12.080
+Het heeft geleerd dat koning en koningin een vergelijkbare relatie delen als man en vrouw, en die relatie is gecodeerd in de coördinaten.
+
+00:03:12.320 --> 00:03:19.800
+Dus, embeddingmodellen nemen je ruwe data, of het nu tekst, afbeeldingen of audio is, en zetten die om in een lijst getallen die de betekenis vertegenwoordigen.
+
+00:03:19.980 --> 00:03:22.880
+Die getallen worden coördinaten in een hoogdimensionale ruimte.
+
+00:03:23.120 --> 00:03:26.600
+Wanneer je vervolgens zoekt, wordt je zoekopdracht omgezet in hetzelfde soort coördinaten.
+
+00:03:26.780 --> 00:03:29.200
+Het enige wat je doet, is de afstand tussen die coördinaten meten.
+
+00:03:29.200 --> 00:03:32.400
+Dat is het kernidee. Waarom traditionele databases tekortschieten?
+
+00:03:32.580 --> 00:03:35.760
+Als embeddings zo krachtig zijn, waarom kunnen we dan niet gewoon een standaard database gebruiken?
+
+00:03:35.980 --> 00:03:37.040
+Laten we dat beantwoorden.
+
+00:03:37.420 --> 00:03:40.560
+Traditionele SQL databases zijn gebouwd voor exacte overeenkomsten.
+
+00:03:40.740 --> 00:03:45.500
+Je schrijft waar kleur gelijk is aan rood, en het vindt elke rij waar de kolom kleur letterlijk rood bevat.
+
+00:03:45.680 --> 00:03:52.360
+Dat werkt prima voor gestructureerde data zoals klantnamen, orderdatums of productprijzen, maar het faalt volledig als je vage betekenissen nodig hebt.
+
+00:03:52.360 --> 00:03:57.820
+Probeer maar eens een SQL query te schrijven die carmozijnrode mantel vindt als je data alleen bordeauxrode jas bevat.
+
+00:03:58.060 --> 00:04:00.540
+Dat kan niet, want SQL begrijpt geen concepten.
+
+00:04:00.860 --> 00:04:03.800
+Traditionele databases slaan gegevens op in rijen en kolommen.
+
+00:04:04.040 --> 00:04:07.780
+Ze zijn geoptimaliseerd voor joins, aggregaties en exacte zoekopdrachten.
+
+00:04:08.040 --> 00:04:10.280
+Ze weten niet dat auto en wagen hetzelfde zijn.
+
+00:04:10.520 --> 00:04:13.560
+Ze weten niet dat enthousiast en opgewonden vergelijkbare emoties zijn.
+
+00:04:13.760 --> 00:04:15.420
+Ze vergelijken alleen maar tekstreeksen.
+
+00:04:15.420 --> 00:04:23.720
+En als je data ongestructureerd is, zoals pdf's, afbeeldingen, audioopnames of lange documenten, kunnen traditionele databases dit wel als blop opslaan, maar ze kunnen de inhoud niet echt doorzoeken.
+
+00:04:23.880 --> 00:04:27.200
+Je hebt fulltekstse arg nodig, maar dat is nog steeds afhankelijk van trefwoorden.
+
+00:04:27.400 --> 00:04:33.180
+Als de gebruiker budgetrapport typt, maar het document spreekt van financieel overzicht, dan mist trefwoordzoekopdracht het volledig.
+
+00:04:33.320 --> 00:04:34.200
+Bekijk het eens zo.
+
+00:04:34.360 --> 00:04:36.340
+Een gewone database is als een archiefkast.
+
+00:04:36.520 --> 00:04:39.140
+Je moet de exacte bestandsnaam weten om te vinden wat je zoekt.
+
+00:04:39.300 --> 00:04:42.320
+Een vector database is als een bibliothecaris die begrijpt wat je bedoelt.
+
+00:04:42.320 --> 00:04:45.780
+Je kunt zeggen, ik heb dat document over de uitgaven van het vorige kwartaal nodig.
+
+00:04:45.940 --> 00:04:50.920
+En de bibliothecaris weet precies welke map hij moet pakken, ook al staat er, financieel overzicht Q3, op.
+
+00:04:51.020 --> 00:04:53.820
+De bibliothecaris begrijpt de intentie, niet alleen de labels.
+
+00:04:54.140 --> 00:04:55.780
+Daarom bestaan er vector databases.
+
+00:04:56.160 --> 00:05:01.300
+Ze slaan embeddings op, die betekenis vangende factoren, en indexeren ze voor snelle gelijkeniszoekopdrachten.
+
+00:05:01.540 --> 00:05:03.600
+Ze vervangen traditionele databases niet.
+
+00:05:03.820 --> 00:05:06.900
+Ze voegen een laag van begrip toe, en die laag verandert alles.
+
+00:05:07.120 --> 00:05:10.200
+Ze voegen een laag van begrip toe, en die laag verandert alles.
+
+00:05:10.200 --> 00:05:12.040
+Hoe vector databases werken.
+
+00:05:12.040 --> 00:05:14.160
+Dus, hoe werkt dit allemaal achter de schermen?
+
+00:05:14.280 --> 00:05:17.260
+Laten we de twee belangrijkste fasen doorlopen, opname en query.
+
+00:05:17.460 --> 00:05:19.180
+Opname is de voorbereidingsfase.
+
+00:05:19.400 --> 00:05:27.200
+Je neemt je ruwe data, productbeschrijvingen, support tickets, interne documenten, wat je ook hebt, en haalt elk stuk door een embeddingmodel.
+
+00:05:27.440 --> 00:05:32.200
+Dat model zet tekst om in een vector, wat in feite een lijst met getallen is die de betekenis vastlegt.
+
+00:05:32.540 --> 00:05:38.940
+Vervolgens sla je die vector op in de database met metadata, de oorspronkelijke tekst, een tijdstempel, misschien een categorie of een bron URL.
+
+00:05:39.220 --> 00:05:40.640
+En hier komt het slimme gedeelte.
+
+00:05:40.840 --> 00:05:44.580
+Als je een miljoen documenten had, zou het eeuwig duren om elke vector één voor één te controleren.
+
+00:05:44.780 --> 00:05:47.480
+Daarom gebruiken vector databases iets dat indexering heet.
+
+00:05:47.480 --> 00:05:51.680
+Zie indexering als het maken van een kaart van de vectorruimte in plaats van bij elke deur aan te kloppen.
+
+00:05:51.680 --> 00:05:54.440
+Twee veelgebruikte methoden zijn IVF en HNSW.
+
+00:05:54.700 --> 00:05:56.480
+IVF staat voor Unverted File Index.
+
+00:05:56.680 --> 00:05:59.120
+Het werkt door vergelijkbare factoren in clusters te groeperen.
+
+00:05:59.360 --> 00:06:03.220
+Wanneer je zoekt, controleer je alleen de meest veelbelovende clusters in plaats van alle miljoen factoren te scannen.
+
+00:06:03.380 --> 00:06:05.340
+Het is als het zoeken naar een boek in een bibliotheek.
+
+00:06:05.400 --> 00:06:08.120
+Je gaat direct naar de juiste sectie in plaats van elke plank te scannen.
+
+00:06:08.520 --> 00:06:11.060
+HNSW staat voor Hierarchical Navigable Small World.
+
+00:06:11.240 --> 00:06:12.580
+Het idee is behoorlijk elegant.
+
+00:06:12.960 --> 00:06:14.880
+Het bouwt een meerlaagse kaart van je factoren.
+
+00:06:15.100 --> 00:06:19.380
+De bovenste laag bevat enkele representatieve factoren die een globaal beeld geven van waar dingen zich bevinden.
+
+00:06:19.580 --> 00:06:21.400
+Elke laag daaronder wordt gedetailleerder.
+
+00:06:21.400 --> 00:06:27.120
+Bij het zoeken begin je bovenaan, vind je de algemene omgeving en graaf je laag voor laag door tot je de exacte match vindt.
+
+00:06:27.180 --> 00:06:31.100
+Het is alsof je eerst een stadsplattegrond gebruikt, dan een wijkaart en daarna een stratenplan.
+
+00:06:31.320 --> 00:06:32.680
+Elke stap brengt je dichterbij.
+
+00:06:32.900 --> 00:06:36.040
+Het resultaat is dat je miljoenen factoren in milliseconden kunt doorzoeken.
+
+00:06:36.260 --> 00:06:38.480
+Dat is wat Realtime AI-functies mogelijk maakt.
+
+00:06:38.680 --> 00:06:41.480
+Wanneer je een vraag typt in een kopiloot en binnen seconden antwoord krijgt,
+
+00:06:41.580 --> 00:06:45.800
+heeft een vector database ergens een gelijkeniszoekopdracht uitgevoerd in duizenden of miljoenen documenten.
+
+00:06:45.920 --> 00:06:48.400
+De queryfase werkt in omgekeerde richting hetzelfde.
+
+00:06:48.400 --> 00:06:52.840
+Je typt je vraag. Die vraag wordt omgezet in een vector met exact hetzelfde embeddingmodel.
+
+00:06:53.020 --> 00:06:56.620
+Vervolgens vindt de database de dichtstbijzijnde buren van je queryfactor met behulp van de index.
+
+00:06:56.820 --> 00:06:59.880
+Het geeft de meest vergelijkbare resultaten terug, gerangschikt op afstand.
+
+00:07:00.060 --> 00:07:02.920
+Hoe dichter de factoren bij elkaar liggen, hoe relevanter het resultaat.
+
+00:07:03.080 --> 00:07:05.460
+Het Microsoft-ecosysteem waar factoren wonen.
+
+00:07:05.660 --> 00:07:07.840
+Dus, waar bevindt dit alles zich in de wereld van Microsoft?
+
+00:07:08.120 --> 00:07:09.640
+Het korte antwoord is, overal.
+
+00:07:09.640 --> 00:07:15.640
+Microsoft voegt factormogelijkheden toe aan de data-platforms die je al gebruikt, in plaats van je naar een aparte gespecialiseerde database te dwingen.
+
+00:07:15.780 --> 00:07:17.380
+Laten we de belangrijkste doornemen.
+
+00:07:17.620 --> 00:07:21.240
+Azure ISARG is de meest gebruikte vectoropslag voor zakelijke rag.
+
+00:07:21.420 --> 00:07:23.700
+Dat staat voor Retrieval Augmented Generation.
+
+00:07:23.960 --> 00:07:29.060
+Het ondersteunt hybride zoeken, wat betekent dat de traditionele trefwoordmatching combineert met vectorgelijkenis.
+
+00:07:29.260 --> 00:07:30.160
+Waarom is dat belangrijk?
+
+00:07:30.460 --> 00:07:36.380
+Omdat sommige zoekopdrachten het beste werken met trefwoorden, exacte productcodes, namen of datums, terwijl andere semantisch begrip vereisen.
+
+00:07:36.580 --> 00:07:37.740
+Hybride zoeken biedt beide.
+
+00:07:37.740 --> 00:07:47.120
+Azure ISARG bevat ook geïntegreerde vectorisatie, zodat je een pipeline kunt opzetten die documenten automatisch opbeeld, embeddings genereert en indexeert zonder aangepaste code te schrijven.
+
+00:07:47.280 --> 00:07:50.800
+Cosmos DB heeft nu native vector zoekopdrachten met disk-an-indexering.
+
+00:07:51.020 --> 00:07:57.100
+Disk-an staat voor Disk Based Approximate Nearest Neighbor en is gebouwd voor een latentie van minder dan 20 milliseconden, zelfs op enorme schaal.
+
+00:07:57.340 --> 00:08:00.860
+Dat is geweldig voor operationele gegevens die al in Cosmos DB staan.
+
+00:08:01.140 --> 00:08:04.180
+Stel dat je een e-commerce app bouwt met Cosmos DB als backend.
+
+00:08:04.180 --> 00:08:09.480
+Je kunt nu direct vector zoeken toevoegen aan je productcatalogus zonder gegevens naar een aparte service te verplaatsen.
+
+00:08:09.620 --> 00:08:15.980
+Een klant zoekt naar lichtgewicht zomerschoenen en je app vindt producten met vergelijkbare beschrijvingen, allemaal binnen je bestaande database.
+
+00:08:16.200 --> 00:08:20.520
+Azure SQL Server 2025 en Azure SQL Database doen nu ook mee.
+
+00:08:20.760 --> 00:08:23.980
+Ze bevatten nu een native vector data type en functies zoals vector zoeken.
+
+00:08:24.200 --> 00:08:27.700
+Dat betekent dat je embeddings direct naast je relationele gegevens kunt opslaan.
+
+00:08:27.700 --> 00:08:35.160
+Klant records met vector representaties van hun voorkeuren, voorraad items met vector beschrijvingen, support tickets met vector embeddings van hun inhoud.
+
+00:08:35.360 --> 00:08:37.280
+Je hebt geen aparte vector database nodig.
+
+00:08:37.480 --> 00:08:39.800
+Je bestaande SQL vaardigheden zijn nog steeds van toepassing.
+
+00:08:40.020 --> 00:08:43.580
+Voeg gewoon een vector kolom toe, maak een index en begin met zoeken op basis van gelijkenis.
+
+00:08:43.740 --> 00:08:46.120
+Hier zie je hoe Copilot dit achter de schermen gebruikt.
+
+00:08:46.340 --> 00:08:52.700
+Wanneer je vraagt, laat me het Q3 verkooprapport van vorig jaar zien, zoekt Copilot niet naar de exacte zin Q3 verkooprapport.
+
+00:08:52.700 --> 00:09:02.660
+Het zet je vraag om in een vector, doorzoekt index documenten, e-mails, SharePoint bestanden, OneDrive documenten en Teams chats en vindt het document waarvan de embedding het dichtst bij je zoekopdracht ligt.
+
+00:09:02.840 --> 00:09:09.100
+Het kan een bestand vinden met de naam Financieel Overzicht Q3 2024 omdat de betekenis overeenkomt, ook al zijn de exacte woorden dat niet.
+
+00:09:09.300 --> 00:09:10.760
+Dat is vector zoeken in de praktijk.
+
+00:09:10.940 --> 00:09:13.200
+Het belangrijkste inzicht hier is de strategie van Microsoft.
+
+00:09:13.480 --> 00:09:18.540
+In plaats van te zeggen, koop een gespecialiseerde vector database, voegen ze vector mogelijkheden toe aan de tools die je al gebruikt.
+
+00:09:18.540 --> 00:09:22.720
+Azure Ice Arch, Cosmos DB, SQL Server, ze ondersteunen allemaal vectoren.
+
+00:09:22.900 --> 00:09:24.440
+Je hoeft geen nieuw systeem te leren.
+
+00:09:24.660 --> 00:09:28.320
+Je hoeft alleen het concept te begrijpen en Microsoft doet het zware werk.
+
+00:09:28.640 --> 00:09:30.200
+Praktische toepassingen in AI.
+
+00:09:30.520 --> 00:09:33.760
+Dus, waar zie je vector databases vandaag de dag eigenlijk aan het werk?
+
+00:09:33.960 --> 00:09:35.500
+Dit is hoe het in de wereld werkt.
+
+00:09:35.680 --> 00:09:36.900
+RAG is de belangrijkste.
+
+00:09:37.120 --> 00:09:41.240
+Dat staat voor Retrieval Augmented Generation en zo werken de meeste bedrijfs-AIs nu.
+
+00:09:41.440 --> 00:09:44.980
+Wanneer je een chatbot een vraag stelt, raad deze niet op basis van trainingsdata.
+
+00:09:44.980 --> 00:09:51.500
+In plaats daarvan doorzoekt het een vector database naar relevante documenten, pakt de beste matches en geeft deze als context aan het taalmodel.
+
+00:09:51.660 --> 00:09:54.800
+Het model bouwt vervolgens een antwoord op basis van die daadwerkelijke documenten.
+
+00:09:54.980 --> 00:09:58.600
+Dat betekent nauwkeurige antwoorden over het beleid, de producten of de gegevens van je eigen bedrijf.
+
+00:09:58.740 --> 00:10:01.940
+Zonder vector databases zouden AI gokken op basis van algemene internetkennis.
+
+00:10:02.180 --> 00:10:04.820
+Met deze databases haalt het informatie rechtstreeks uit je eigen bestanden.
+
+00:10:05.420 --> 00:10:07.140
+Aanbevelingsengines zijn een andere enorme toepassing.
+
+00:10:07.340 --> 00:10:10.100
+Netflix, Amazon, YouTube, ze werken allemaal op dezelfde manier.
+
+00:10:10.280 --> 00:10:14.420
+Ze veranderen gebruikers in factoren op basis van gedrag, wat je kijkt, koopt of aanklikt.
+
+00:10:14.420 --> 00:10:18.160
+En ze veranderen items in factoren op basis van beschrijvingen, recensies en kenmerken.
+
+00:10:18.340 --> 00:10:20.340
+Daarna zoeken ze simpelweg naar de dichtstbijzijnde buren.
+
+00:10:20.540 --> 00:10:23.360
+Als jouw vector dichtbij die van een film ligt, raden ze die film aan.
+
+00:10:23.560 --> 00:10:28.600
+Dat is gelijkenis zoeken op enorme schaal, honderden keren per seconde uitgevoerd voor elke individuele gebruiker.
+
+00:10:28.840 --> 00:10:30.860
+Semantisch zoeken is de derde grote toepassing.
+
+00:10:31.140 --> 00:10:33.420
+Dit is zoeken op betekenis, niet op trefwoorden.
+
+00:10:33.620 --> 00:10:37.060
+Een supportmedewerker typt klant kan niet inloggen na wachtwoord reset.
+
+00:10:37.240 --> 00:10:41.520
+En vindt een artikel genaamd problemen oplossen bij authenticatiefouten na bijwerken van inloggegevens.
+
+00:10:41.520 --> 00:10:43.860
+De woorden komen niet overeen, maar de betekenis wel.
+
+00:10:44.080 --> 00:10:45.720
+Dat is wat vectorzoeken mogelijk maakt.
+
+00:10:45.880 --> 00:10:49.480
+Voor een team dat honderden tickets per dag afhandelt, verkort dit de oplostijd aanzienlijk.
+
+00:10:49.680 --> 00:10:51.160
+Dan is er nog anomaliedetectie.
+
+00:10:51.360 --> 00:10:53.060
+Minder voor de hand liggend, maar krachtig.
+
+00:10:53.200 --> 00:10:58.540
+Je zet normaal gedrag, typische transactiepatronen, gebruikelijke systeemstatistieken en standaardgebruikersacties om in embeddings.
+
+00:10:58.760 --> 00:11:02.020
+Sla die vectoren op en markeer vervolgens alles wat ver buiten het cluster valt.
+
+00:11:02.180 --> 00:11:04.720
+Een transactie die er totaal niet normaal uitziet, dat is fraude.
+
+00:11:04.860 --> 00:11:08.020
+Een servermetriek ver buiten het normale bereik, dat is een incident in de maak.
+
+00:11:08.020 --> 00:11:10.940
+Vector databases maken dit snel genoeg om in realtime te kunnen draaien.
+
+00:11:11.100 --> 00:11:13.400
+In de wereld van Microsoft kom je dit overal tegen.
+
+00:11:13.580 --> 00:11:17.180
+Power Apps gebruikt vectorzoekopdrachten voor AI-suggesties bij het bouwen van formulieren.
+
+00:11:17.400 --> 00:11:20.960
+Dynamics 365 gebruikt het voor intelligent zoeken in klantgegevens.
+
+00:11:21.240 --> 00:11:25.860
+Transcripten van Teams vergaderingen worden omgezet in vectoren, zodat je kunt zoeken wat hebben we besloten over het budget.
+
+00:11:26.040 --> 00:11:28.240
+En het exacte moment in een opname kunt vinden.
+
+00:11:28.440 --> 00:11:34.780
+Copilot voor Microsoft 365 is in feite een gigantisch rachtsysteem dat op je persoonlijke en bedrijfsgegevens draait,
+
+00:11:34.980 --> 00:11:36.980
+volledig aangedreven door vectorzoekopdrachten.
+
+00:11:36.980 --> 00:11:39.360
+Alles synchroon houden, vector ETL.
+
+00:11:39.560 --> 00:11:41.140
+Nu, dit is de praktische uitdaging.
+
+00:11:41.360 --> 00:11:45.980
+Gegevens veranderen, documenten worden bijgewerkt, nieuwe producten worden toegevoegd, oude beleidsregels worden gearchiveerd.
+
+00:11:46.100 --> 00:11:48.820
+Telkens wanneer je brongegevens veranderen, moeten je vectoren ook veranderen.
+
+00:11:48.980 --> 00:11:50.680
+Dat is waar vector ETL om de hoek komt kijken.
+
+00:11:50.880 --> 00:11:53.420
+ETL staat voor extract, transform, load, extraheren, transformeren, laden.
+
+00:11:53.560 --> 00:11:55.740
+Voor vector databases verloopt het proces als volgt.
+
+00:11:55.900 --> 00:12:00.020
+Eerst extraheer je nieuwe of gewijzigde documenten uit je bron, bijvoorbeeld een blobopslagcontainer,
+
+00:12:00.160 --> 00:12:02.280
+een SharePoint bibliotheek of een SQL database.
+
+00:12:02.860 --> 00:12:07.980
+Vervolgens transformeer je ze door de tekst op te splitsen in hanteerbare stukken en elk stuk door je embedding model te halen.
+
+00:12:08.080 --> 00:12:15.740
+Tot slot laat je de resulterende factoren in je vector store, samen met metadata zoals de oorspronkelijke bron URL, een tijdstempel en de gebruikte modelversie.
+
+00:12:15.900 --> 00:12:18.080
+De best practice hier is, verwerk incrementeel.
+
+00:12:18.240 --> 00:12:21.060
+Ga niet je hele corpus opnieuw embedden telkens als er iets verandert.
+
+00:12:21.260 --> 00:12:23.740
+Verwerk alleen de documenten die daadwerkelijk zijn gewijzigd.
+
+00:12:23.740 --> 00:12:26.100
+Hou bij welke modelversie elke embedding heeft gegenereerd.
+
+00:12:26.200 --> 00:12:29.260
+Als je je model upgradet, worden de oude factoren inconsistent met de nieuwe.
+
+00:12:29.420 --> 00:12:30.760
+En hou je kosten in de gaten.
+
+00:12:31.020 --> 00:12:34.960
+Embedding APIs rekenen per token, dus miljoenen documenten verwerken loopt snel in de papieren.
+
+00:12:35.160 --> 00:12:37.360
+In Azure is een typische workflow eenvoudig.
+
+00:12:37.500 --> 00:12:39.300
+Plaats je documenten in blobopslag.
+
+00:12:39.560 --> 00:12:45.540
+Stel vervolgens een Azure Isearch indexer in met een geïntegreerde skillset die chunking en embedding automatisch afhandelt.
+
+00:12:45.780 --> 00:12:51.620
+Microsoft biedt de TextSplit, Skill for Chunking en de Azure Open AI Embedding model Skill for Vector Generatie.
+
+00:12:51.620 --> 00:12:56.700
+De indexer draait volgens een schema, pikt nieuwe bestanden op, verwerkt ze en abzert de factoren in de index.
+
+00:12:56.900 --> 00:12:58.760
+Geen aangepaste pipeline code nodig.
+
+00:12:58.980 --> 00:13:01.360
+Hier is een veelgemaakte fout, metadata negeren.
+
+00:13:01.520 --> 00:13:06.060
+Elke factor heeft zijn bronreferentie, de naam en versie van het embedding model en een aanmaaktijdstempel nodig.
+
+00:13:06.300 --> 00:13:11.980
+Zonder dat kun je niet achterhalen waar een resultaat vandaan kwam, kun je niet opnieuw embedden als modellen veranderen en krijg je problemen bij compliance audits.
+
+00:13:12.200 --> 00:13:15.960
+Behandel je factoren zoals alle andere bedrijfsgegevens, hou de herkomst ervan bij.
+
+00:13:16.140 --> 00:13:17.060
+Je volgende stappen.
+
+00:13:17.280 --> 00:13:19.180
+Dus, ben je klaar om dit zelf te proberen?
+
+00:13:19.180 --> 00:13:20.140
+Begin simpel.
+
+00:13:20.140 --> 00:13:23.100
+Open de Azure Portal en maak een Azure ICARG resource aan.
+
+00:13:23.240 --> 00:13:25.820
+Schakel vervolgens Vector zoekopdrachten in op een bestaande index.
+
+00:13:26.000 --> 00:13:29.520
+Upload een paar documenten, kies een embedding model en voer een gelijkeniszoekopdracht uit.
+
+00:13:29.660 --> 00:13:31.280
+Je zult zien dat het binnen een uur werkt.
+
+00:13:31.480 --> 00:13:40.260
+Voor ontwikkelaars, pak de Python SDK, embed een handvol documenten met Azure Open AI, sla ze op in Cosmos DB's Vector's ARG en schrijf een query die de beste match vindt.
+
+00:13:40.420 --> 00:13:43.840
+Microsoft biedt duidelijke code voorbeelden en documentatie om je hierbij te helpen.
+
+00:13:43.980 --> 00:13:46.940
+Je hoeft geen data scientist te worden om Vector databases te gebruiken.
+
+00:13:46.940 --> 00:13:51.340
+De tools van Microsoft regelen het genereren van embeddings, de indexering en de query logica.
+
+00:13:51.560 --> 00:13:55.060
+Jouw enige taak is om het concept te begrijpen en de tools te koppelen aan je eigen data.
+
+00:13:55.280 --> 00:13:56.280
+Hier is een uitdaging.
+
+00:13:56.540 --> 00:13:58.800
+Denk aan het zoekprobleem waar je vandaag de dag mee te maken hebt.
+
+00:13:59.000 --> 00:14:03.900
+Misschien is het het vinden van interne documenten, het doorzoeken van een productcatalogus of het beantwoorden van klantvragen uit een kennisbank.
+
+00:14:04.120 --> 00:14:07.020
+Zou Vector's ARG beter kunnen presteren dan trefwoord overeenkomsten?
+
+00:14:07.220 --> 00:14:11.020
+Kies een kleine dataset, zelfs 100 documenten en probeer het eens.
+
+00:14:11.200 --> 00:14:12.840
+Je zult het verschil direct merken.
+
+00:14:13.460 --> 00:14:16.080
+Dus, nu begrijp je wat Vector databases eigenlijk zijn.
+
+00:14:16.260 --> 00:14:22.120
+Het is geen mysterieuze AI-technologie, het is gewoon een manier om de betekenis van je data op te slaan en te doorzoeken in plaats van alleen de exacte woorden.
+
+00:14:22.360 --> 00:14:27.200
+Ze drijven de slimme zoek- en AI-functies aan in Microsoft 365, Azure en Copilot.
+
+00:14:27.400 --> 00:14:32.980
+Elke keer als je een vraag stelt en een relevant antwoord krijgt, heeft ergens een Vector database de beste match bij je query gevonden.
+
+00:14:32.980 --> 00:14:38.680
+Je gestructureerde feiten, klantnamen, orderbedragen, voorraadtellingen, die staan nog steeds in traditionele databases.
+
+00:14:38.940 --> 00:14:41.280
+Vector databases voegen daar een laag van begrip aan toe.
+
+00:14:41.460 --> 00:14:44.700
+Ze laten je applicatie zoeken op betekenis, op intentie, op context.
+
+00:14:44.960 --> 00:14:46.020
+Dat is het grote geheel.
+
+00:14:46.220 --> 00:14:49.240
+Abonneer je voor meer begrijpelijke uitleg over Microsoft technologie.
+
+00:14:49.420 --> 00:14:53.480
+De volgende keer kijken we naar hoe Ragh Pipelines daadwerkelijk werken en hoe je er in een middag aan kunt bouwen.
+
+00:14:53.660 --> 00:14:54.740
+Bedankt voor het luisteren.

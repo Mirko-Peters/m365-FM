@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { handleByodApi, checkDomain, runByodChecks, domainView } from "../src/byod.js";
+import { handleByodApi, checkDomain, runByodChecks, domainView, deleteUserByod, BYOD_PENDING_TTL } from "../src/byod.js";
 import { serveBlog } from "../src/byod_site.js";
 import { cfOn, checkDns } from "../src/byod_cf.js";
 
@@ -228,4 +228,40 @@ test("Cron: nur mit Schalter und CNAME-Ziel, hoechstens 20 je Lauf, nur Domains,
 test("domainView zeigt ohne CNAME-Ziel keinen DNS-Eintrag", () => {
   const v = domainView({}, { id: 1, domain: "blog.anna.de", status: "pending", token: "abc", imprint_url: "", privacy_url: "", error: "", cf_status: "", cf_ssl: "", checked: 0, created: 1, activated_at: 0 });
   assert.equal(v.dns, null); assert.equal(v.url, ""); assert.ok(!("token" in v));
+});
+
+test("Besetzen: nie nachgewiesene Eintraege geben die Domain nach 7 Tagen frei (beim Eintragen und im Cron), nachgewiesene und gesperrte nicht", async () => {
+  const { env, raw } = await makeDb(); const m = mocks();
+  try {
+    const old = Math.floor(Date.now() / 1000) - BYOD_PENDING_TTL - 60;
+    raw.exec(`INSERT INTO blog_domains(user_id,domain,token,created,updated) VALUES(1,'blog.ben.de','t1',${old},${old})`);   // Anna hat Bens Domain vor 8 Tagen eingetragen und nie eingerichtet
+    const r = await body(call(env, "/api/byod/add", "POST", { domain: "blog.ben.de" }, { id: 2 })); assert.equal(r.ok, true); assert.equal(r.domain.status, "pending");
+    assert.equal(raw.prepare("SELECT user_id FROM blog_domains WHERE domain='blog.ben.de'").get().user_id, 2);
+    const fresh = Math.floor(Date.now() / 1000) - 3600;
+    raw.exec(`INSERT INTO blog_domains(user_id,domain,token,created,updated) VALUES(3,'neu.x.de','t2',${fresh},${fresh})`);
+    assert.equal((await call(env, "/api/byod/add", "POST", { domain: "neu.x.de" })).status, 409, "juenger als 7 Tage: bleibt belegt");
+    raw.exec(`INSERT INTO blog_domains(user_id,domain,token,created,updated,cf_id) VALUES(3,'alt1.x.de','t3',${old},${old},'abc12345-0001')`);
+    raw.exec(`INSERT INTO blog_domains(user_id,domain,token,created,updated,verified_at) VALUES(3,'alt2.x.de','t4',${old},${old},${old})`);   // war schon nachgewiesen
+    raw.exec(`INSERT INTO blog_domains(user_id,domain,token,status,created,updated) VALUES(3,'alt3.x.de','t5','blocked',${old},${old})`);
+    const res = await runByodChecks({ ...env, ...CFENV });
+    assert.equal(res.released, 1);
+    assert.deepEqual(raw.prepare("SELECT domain FROM blog_domains ORDER BY domain").all().map((x) => x.domain), ["alt2.x.de", "alt3.x.de", "blog.ben.de", "neu.x.de"]);
+    assert.ok(cfCalls(m).some((c) => c.method === "DELETE" && c.url.endsWith("/custom_hostnames/abc12345-0001")), "Hostname bei Cloudflare mit entfernt");
+  } finally { m.done(); }
+});
+
+test("Kontoloeschung: Domains des Kontos weg, Hostname bei Cloudflare nur mit Secrets geloescht; Zusammenfuehren nimmt die Domains mit", async () => {
+  const { env, raw } = await makeDb(); const m = mocks();
+  try {
+    raw.exec("INSERT INTO blog_domains(user_id,domain,token,status,cf_id,created,updated) VALUES(1,'blog.anna.de','t1','active','abc12345-0002',1,1),(2,'blog.ben.de','t2','pending','',1,1)");
+    await deleteUserByod(env, 1);   // ohne Secrets: kein Aufruf
+    assert.equal(cfCalls(m).length, 0); assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_domains WHERE user_id=1").get().n, 0);
+    raw.exec("INSERT INTO blog_domains(user_id,domain,token,status,cf_id,created,updated) VALUES(1,'blog.anna.de','t1','active','abc12345-0002',1,1)");
+    await deleteUserByod({ ...env, ...CFENV }, 1);
+    assert.deepEqual(cfCalls(m).map((c) => c.method + " " + c.url.split("/").pop()), ["DELETE abc12345-0002"]);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_domains").get().n, 1, "die Domain eines anderen Kontos bleibt");
+    const idx = readFileSync(new URL("../src/index.js", import.meta.url), "utf-8"), del = idx.slice(idx.indexOf("async function deleteAccount("), idx.indexOf("const me = memberOf"));
+    assert.match(del, /deleteUserByod\(env, id\)/);
+    assert.match(readFileSync(new URL("../src/identities.js", import.meta.url), "utf-8"), /simple\("blog_domains"\)/);
+  } finally { m.done(); }
 });

@@ -35,6 +35,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
         certs: await n(db, "SELECT COUNT(*) n FROM cert_check WHERE status='pending'"),
         reports: await n(db, "SELECT COUNT(*) n FROM reports"),
         expert_request_reports: await n(db, "SELECT COUNT(*) n FROM expert_request_reports r JOIN expert_requests e ON e.id=r.request_id WHERE e.status='open'"),
+        events_review: await n(db, "SELECT COUNT(*) n FROM events WHERE review='pending' AND merged_into=0"),   // neue Events zur Pruefung (Reiter Freigaben, eventreview.js)
         sponsor: await n(db, "SELECT COUNT(*) n FROM sponsor_requests WHERE status='new'"),   // T37: neue Sponsor-Anfragen (Reiter Sponsor-Anfragen)
       },
       db: {
@@ -96,7 +97,7 @@ export async function handleAdminPanel(env, request, url, path, user, J) {
 
   if (path === "/api/admin/panel/translations" && request.method === "GET") {   // Uebersicht: jeder Inhalt mit vorhandenen Sprachfassungen; Grundlage aus dem Seitenbau (translation-status.json) plus Datenbank
     let site = { rows: [], langs: [] }; try { site = await (await fetch(env.SITE + "/translation-status.json", { cf: { cacheTtl: 300 } })).json(); } catch { /* Seite nicht erreichbar: nur Datenbank */ }
-    const rows = (site.rows || []).map((r) => ({ k: r.k, id: r.id, t: r.t, lang: r.lang || "en", langs: r.langs || [] }));
+    const rows = (site.rows || []).map((r) => ({ k: r.k, id: r.id, t: r.t, lang: r.lang || "en", langs: [...(r.langs || [])], ...(r.fl && r.fl.length ? { fl: r.fl } : {}) }));   // fl: gesperrte Sprachen (Video-Artikel)
     const byKey = new Map(rows.map((r) => [r.k + "|" + r.id, r]));
     const ent = (await db.prepare("SELECT eid,lang,COUNT(*) n FROM ent_tr GROUP BY eid,lang").all().catch(() => ({ results: [] }))).results || [];
     for (const e of ent) { const r = byKey.get("entity|" + e.eid); if (r && !r.langs.includes(e.lang)) r.langs.push(e.lang); }

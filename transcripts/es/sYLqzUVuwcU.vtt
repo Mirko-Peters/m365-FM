@@ -1,0 +1,2989 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.200
+Si quieres tener ventaja en gobernanza, suscríbete.
+
+00:00:02.560 --> 00:00:04.420
+Es el potenciador que mantiene tu castillo en pie.
+
+00:00:05.140 --> 00:00:07.700
+Ahora, imagina darle a Copilot las llaves del contenido a tu empresa,
+
+00:00:08.220 --> 00:00:09.380
+pero olvidando cerrar las puertas.
+
+00:00:10.000 --> 00:00:13.460
+Eso es lo que sucede cuando una AI avanzada opera bajo una estructura de gobernanza débil.
+
+00:00:14.180 --> 00:00:16.460
+SharePoint Premium no solo aumenta la productividad con IA,
+
+00:00:16.840 --> 00:00:19.080
+incluye SharePoint Advanced Management o SAM,
+
+00:00:19.180 --> 00:00:21.220
+que añade muros como control de acceso restringido,
+
+00:00:21.460 --> 00:00:24.000
+gobernanza de acceso a datos y herramientas de ciclo de vida del sitio.
+
+00:00:24.980 --> 00:00:27.520
+SAM ayuda a reducir el uso compartido excesivo y a gestionar acceso,
+
+00:00:27.520 --> 00:00:29.560
+pero aún así necesitas políticas y propietarios que actúen.
+
+00:00:29.560 --> 00:00:32.460
+En esta sesión verás cómo detectar sitios compartidos en exceso,
+
+00:00:32.540 --> 00:00:35.460
+aplicar control de acceso restringido y realizar revisiones de acceso
+
+00:00:35.460 --> 00:00:37.000
+para que tus muros no estén vigilados por pato.
+
+00:00:37.780 --> 00:00:40.620
+Lo que nos lleva a la pregunta, ¿realmente te mantiene a salvo un foso?
+
+00:00:41.500 --> 00:00:43.120
+¿Por qué tu castillo necesita más que un foso?
+
+00:00:43.640 --> 00:00:45.720
+Los permisos básicos dan tranquilidad hasta que te das cuenta
+
+00:00:45.720 --> 00:00:47.340
+de que no escalan con la forma en que funciona la IA.
+
+00:00:47.920 --> 00:00:50.820
+Copilot puede leer, comprender y mostrar contenido de SharePoint y OneDrive
+
+00:00:50.820 --> 00:00:51.860
+a una velocidad increíble.
+
+00:00:52.320 --> 00:00:54.220
+Eso es genial para la productividad, pero también significa
+
+00:00:54.220 --> 00:00:56.560
+que cualquier cosa compartida de forma muy amplia más fácil descubra.
+
+00:00:56.560 --> 00:00:59.240
+El control de acceso basado en roles por sí solo no detecta esto.
+
+00:00:59.480 --> 00:01:02.160
+Es la ilusión de seguridad, fuerte en teoría, pero superficial
+
+00:01:02.160 --> 00:01:05.160
+cuando un enlace descuidado amplía el acceso más de lo previsto.
+
+00:01:05.900 --> 00:01:08.600
+El verdadero problema no es que Copilot filtre datos por sí mismo,
+
+00:01:08.700 --> 00:01:11.120
+sino que compartir archivos mal configurados ampliar la superficie
+
+00:01:11.120 --> 00:01:12.340
+para que Copilot muestre información.
+
+00:01:13.240 --> 00:01:16.400
+Una biblioteca de contratos olvidada con enlaces abiertos parece inofensiva,
+
+00:01:16.980 --> 00:01:19.560
+hasta que el sistema indexe alegremente los archivos y los hace buscables.
+
+00:01:20.560 --> 00:01:22.040
+De repente, lo que estaba guardado en un rincón
+
+00:01:22.040 --> 00:01:23.800
+se convierte en parte de la infraestructura de conocimiento.
+
+00:01:24.280 --> 00:01:25.880
+Compartir en ese eso no siempre es dramático,
+
+00:01:25.980 --> 00:01:27.500
+a menudo es invisible y ese es el mayor riesgo.
+
+00:01:27.500 --> 00:01:29.400
+Aquí es donde entra SharePoint Advanced Management.
+
+00:01:30.300 --> 00:01:31.800
+El control de acceso básico es tu foso,
+
+00:01:31.920 --> 00:01:33.480
+pero se amaña de muros y torres de vigilancia.
+
+00:01:33.740 --> 00:01:35.880
+Los muros son las políticas de cumplimiento que configuras
+
+00:01:35.880 --> 00:01:38.300
+y las torres son tus vistas de gobernanza de acceso a datos.
+
+00:01:39.160 --> 00:01:41.160
+Los informes de DAC ofrecen a los administradores
+
+00:01:41.160 --> 00:01:43.720
+visibilidad de sitios potencialmente compartidos en exceso,
+
+00:01:43.920 --> 00:01:45.120
+que se comparte externamente,
+
+00:01:45.300 --> 00:01:46.980
+cuántos archivos tienen etiquetas de sensibilidad
+
+00:01:46.980 --> 00:01:48.400
+o que sitios usan grupos amplios como
+
+00:01:48.400 --> 00:01:49.980
+Todos excepto usuarios externos.
+
+00:01:49.980 --> 00:01:52.800
+Con estas vistas, no solo das vueltas en círculos
+
+00:01:52.800 --> 00:01:54.140
+diciéndote que todo está bloqueado.
+
+00:01:54.680 --> 00:01:56.800
+Puedes realmente detectar el fuego humeante en el horizonte.
+
+00:01:57.400 --> 00:01:59.280
+DAC no es una análisis forense elemento por elemento,
+
+00:01:59.400 --> 00:02:00.320
+es inteligencia a nivel de sitio.
+
+00:02:00.880 --> 00:02:02.900
+Ves dónde es más probable el uso compartido excesivo,
+
+00:02:03.100 --> 00:02:04.220
+quién es el administrador principal
+
+00:02:04.220 --> 00:02:06.620
+y cómo podría propagarse el contenido sensivo.
+
+00:02:07.120 --> 00:02:09.580
+Eso suele ser suficiente para iniciar una revisión significativa,
+
+00:02:09.680 --> 00:02:11.100
+porque ahora TI y los propietarios del contenido
+
+00:02:11.100 --> 00:02:12.500
+saben dónde buscar en lugar de adivinar.
+
+00:02:13.160 --> 00:02:14.820
+Piénsalo como una torre alta con un telescopio.
+
+00:02:14.820 --> 00:02:16.280
+No ves cada flecha en vuelo,
+
+00:02:16.360 --> 00:02:18.380
+pero notas que puertas están sin vigilancia.
+
+00:02:18.800 --> 00:02:20.400
+Como cualquier herramienta, DAC tiene sus límites.
+
+00:02:20.960 --> 00:02:23.220
+Algunos informes muestran solo los 100 sitios principales
+
+00:02:23.220 --> 00:02:25.580
+en el centro de administración durante los últimos 30 días,
+
+00:02:25.840 --> 00:02:27.680
+con exportaciones SV de hasta 10.000 filas
+
+00:02:27.680 --> 00:02:29.060
+y en algunos casos hasta un millón.
+
+00:02:30.080 --> 00:02:31.800
+Los informes pueden tardar horas en generar
+
+00:02:31.800 --> 00:02:33.040
+si solo se pueden ejecutar una vez al día.
+
+00:02:33.400 --> 00:02:35.360
+Eso significa que no aspiras a una vigilancia constante.
+
+00:02:35.900 --> 00:02:38.360
+En cambio, DAC te ofrece inteligencia recurrente de alto nivel
+
+00:02:38.360 --> 00:02:39.480
+sobre la cual aún debes actuar.
+
+00:02:40.000 --> 00:02:41.120
+Sin la intervención de las personas,
+
+00:02:41.260 --> 00:02:43.080
+un informe es solo un pergamino colgado en la pared.
+
+00:02:43.080 --> 00:02:44.760
+Entonces, ¿qué sucede cuando actúas al respecto?
+
+00:02:45.100 --> 00:02:46.600
+Volvamos al ejemplo de la biblioteca de contrato.
+
+00:02:47.100 --> 00:02:49.640
+Realizar auditorías manualmente en cada sitio es imposible,
+
+00:02:49.760 --> 00:02:50.920
+pero gracias a ese informe de DAC
+
+00:02:50.920 --> 00:02:52.980
+podrías identificar el sitio con enlaces externos
+
+00:02:52.980 --> 00:02:54.560
+aún activos de un proyecto finalizado.
+
+00:02:54.960 --> 00:02:56.460
+No es un problema evidente hasta que lo ves,
+
+00:02:56.560 --> 00:02:57.880
+pero esa única puerta podría permitir
+
+00:02:57.880 --> 00:02:59.580
+que la persona equivocada alude a tus defensas.
+
+00:03:00.240 --> 00:03:02.020
+Ahora, en lugar de revisar miles de sitios,
+
+00:03:02.240 --> 00:03:03.740
+te enfocas en el que realmente importa.
+
+00:03:04.600 --> 00:03:05.300
+Aquí está la recompensa.
+
+00:03:05.560 --> 00:03:07.080
+Usar DAC no solo te muestra un problema,
+
+00:03:07.200 --> 00:03:08.900
+te muestra problemas desconocidos.
+
+00:03:09.460 --> 00:03:11.460
+Cambia la postura de asumir que todo está bien
+
+00:03:11.460 --> 00:03:13.260
+a demostrar que todo está en orden
+
+00:03:13.260 --> 00:03:16.460
+es mejor que correr con una antorcha esperando ver algo
+
+00:03:16.460 --> 00:03:18.540
+porque la vista desde la torre evita que pierdas horas
+
+00:03:18.540 --> 00:03:19.640
+en patrullas a ciegas.
+
+00:03:20.560 --> 00:03:21.220
+Pero aquí está el detalle.
+
+00:03:21.600 --> 00:03:23.060
+Detectar el riesgo es solo a mitad de la batalla.
+
+00:03:23.620 --> 00:03:25.140
+Necesitas que las personas dentro del castillo
+
+00:03:25.140 --> 00:03:26.180
+se preocupen lo suficiente por eso.
+
+00:03:26.340 --> 00:03:27.720
+Un foso y una torre no sirven de nada
+
+00:03:27.720 --> 00:03:29.580
+si los encargados de las puertas los dejan abiertas.
+
+00:03:29.920 --> 00:03:31.060
+Ahí es donde miramos a continuación
+
+00:03:31.060 --> 00:03:32.240
+porque en este sistema de defensa,
+
+00:03:32.540 --> 00:03:34.120
+los propietarios de los sitios no son solo habitantes,
+
+00:03:34.200 --> 00:03:35.380
+se supone que deben ser los guardias.
+
+00:03:35.380 --> 00:03:37.740
+Convertir a los propietarios del castillo
+
+00:03:37.740 --> 00:03:40.060
+En la práctica, muchas brechas de gobierno
+
+00:03:40.060 --> 00:03:41.860
+surgen de cómo se dividen las responsabilidades.
+
+00:03:42.420 --> 00:03:43.500
+TI construye los sistemas,
+
+00:03:43.680 --> 00:03:45.280
+pero las personas más cercanas al contenido,
+
+00:03:45.400 --> 00:03:46.380
+los propietarios de los sitios,
+
+00:03:46.460 --> 00:03:47.840
+saben quién necesita estar dentro.
+
+00:03:48.460 --> 00:03:49.620
+Ellos tienen el contexto local,
+
+00:03:49.700 --> 00:03:50.820
+lo que significa que son los únicos
+
+00:03:50.820 --> 00:03:52.620
+que pueden detectar cuando una cuenta de invitado
+
+00:03:52.620 --> 00:03:54.420
+o un antiguo miembro del equipo ya no debe estar ahí.
+
+00:03:54.820 --> 00:03:56.500
+Es por eso que la gestión avanzada de SharePoint
+
+00:03:56.500 --> 00:03:58.020
+incluye una función creada para ellos,
+
+00:03:58.100 --> 00:03:59.060
+las revisiones de acceso al sitio.
+
+00:03:59.360 --> 00:04:00.520
+La mayoría de las funciones de SAM
+
+00:04:00.520 --> 00:04:01.680
+están en manos de los administradores
+
+00:04:01.680 --> 00:04:03.220
+a través del centro de administración de SharePoint,
+
+00:04:03.220 --> 00:04:05.060
+pero las revisiones de acceso al sitio son diferentes.
+
+00:04:05.500 --> 00:04:07.040
+Involucran directamente a los propietarios de los sitios.
+
+00:04:07.560 --> 00:04:09.640
+En lugar de que TI persiga cada permiso obsoleto
+
+00:04:09.640 --> 00:04:10.220
+en cada sitio,
+
+00:04:10.380 --> 00:04:12.180
+la función envía un aviso al propietario.
+
+00:04:12.740 --> 00:04:14.000
+Esta es tu lista de quién tiene acceso.
+
+00:04:14.380 --> 00:04:15.460
+Ahora confirma quién debe permanecer.
+
+00:04:15.940 --> 00:04:17.420
+Es una lista de verificación sencilla,
+
+00:04:17.540 --> 00:04:19.300
+pero traslada a la tarea de los administradores centrales
+
+00:04:19.300 --> 00:04:20.180
+sobrecargados a las personas
+
+00:04:20.180 --> 00:04:21.760
+que realmente entienden la historia del proyecto.
+
+00:04:22.420 --> 00:04:23.740
+La diferencia puede no parecer mucha,
+
+00:04:23.840 --> 00:04:25.560
+pero cambia por completo el modelo de gobernanza.
+
+00:04:26.140 --> 00:04:27.400
+Sin esto, TI intenta gestionar
+
+00:04:27.400 --> 00:04:28.760
+cientos o miles de sitios a ciegas,
+
+00:04:28.860 --> 00:04:30.320
+confiando a menudo en organigramas obsoletos
+
+00:04:30.320 --> 00:04:31.180
+o un trabajo de investigación
+
+00:04:31.180 --> 00:04:32.440
+a través de registros de auditoría.
+
+00:04:32.820 --> 00:04:34.560
+Con las revisiones de acceso a sitios,
+
+00:04:34.680 --> 00:04:36.500
+TI delega la verificación a los propietarios
+
+00:04:36.500 --> 00:04:38.360
+quienes saben quién terminó el proyecto hace seis meses
+
+00:04:38.360 --> 00:04:39.980
+y qué externos debieron ser eliminados.
+
+00:04:40.800 --> 00:04:42.700
+Sin hojas de cálculo ni colas de tickets interminables,
+
+00:04:42.800 --> 00:04:43.800
+solo una solicitud estructurada
+
+00:04:43.800 --> 00:04:44.640
+que seque la responsabilidad.
+
+00:04:45.120 --> 00:04:46.140
+Tomemos un ejemplo común,
+
+00:04:46.260 --> 00:04:47.400
+un sitio de proyecto inactivo,
+
+00:04:48.000 --> 00:04:50.000
+donde el uso compartido externo nunca se restringió
+
+00:04:50.000 --> 00:04:51.340
+y una cuenta de invitados sigue activa
+
+00:04:51.340 --> 00:04:52.600
+meses después de la última entrega.
+
+00:04:53.120 --> 00:04:53.820
+Sin esta función,
+
+00:04:53.940 --> 00:04:55.300
+TI tiene que buscar adivinar.
+
+00:04:56.380 --> 00:04:57.980
+Con las revisiones de acceso a sitios,
+
+00:04:58.100 --> 00:04:59.140
+el propietario recibe un aviso
+
+00:04:59.140 --> 00:05:00.700
+y puede finalizar ese acceso en segundo.
+
+00:05:00.700 --> 00:05:02.540
+No es algo llamativo,
+
+00:05:02.640 --> 00:05:03.640
+es mantenimiento programado,
+
+00:05:03.780 --> 00:05:04.980
+pero evita los riesgos silenciosos
+
+00:05:04.980 --> 00:05:06.100
+que suelen convertirse en titulares
+
+00:05:06.100 --> 00:05:06.920
+de brechas de seguridad.
+
+00:05:07.440 --> 00:05:09.120
+Otro beneficio es cómo se conecta el sistema.
+
+00:05:09.660 --> 00:05:10.800
+Los informes de gobernanza
+
+00:05:10.800 --> 00:05:12.000
+y acceso a datos destacan
+
+00:05:12.000 --> 00:05:12.680
+donde es más probable
+
+00:05:12.680 --> 00:05:13.960
+que haya uso compartido excesivo,
+
+00:05:14.080 --> 00:05:15.200
+como sitios con grupos amplios
+
+00:05:15.200 --> 00:05:16.000
+o enlaces externos.
+
+00:05:16.000 --> 00:05:17.720
+Desde ahí puede iniciar revisiones
+
+00:05:17.720 --> 00:05:18.360
+de acceso a sitios
+
+00:05:18.360 --> 00:05:19.380
+como una medida correctiva.
+
+00:05:19.880 --> 00:05:20.620
+Mientras una herramienta
+
+00:05:20.620 --> 00:05:21.700
+detecta las puertas abiertas,
+
+00:05:21.780 --> 00:05:22.600
+la otra devuelve las llaves
+
+00:05:22.600 --> 00:05:24.000
+a las personas que gestionan esa área.
+
+00:05:24.420 --> 00:05:25.320
+Si gestiona a gran escala,
+
+00:05:25.420 --> 00:05:26.660
+existe soporte para la automatización.
+
+00:05:27.060 --> 00:05:28.260
+Si ejecuta salidas de DAC
+
+00:05:28.260 --> 00:05:29.580
+y usa el soporte de PowerShell,
+
+00:05:29.660 --> 00:05:30.520
+puede programar acciones
+
+00:05:30.520 --> 00:05:31.980
+o integrarse con flujos de trabajo
+
+00:05:31.980 --> 00:05:32.920
+más amplios.
+
+00:05:33.540 --> 00:05:33.960
+Por lo tanto,
+
+00:05:34.060 --> 00:05:35.040
+esto no es solo un ciclo manual,
+
+00:05:35.160 --> 00:05:35.620
+sino que escala
+
+00:05:35.620 --> 00:05:36.600
+con el tamaño de su inquilino.
+
+00:05:37.060 --> 00:05:38.240
+La respuesta de las unidades de negocio
+
+00:05:38.240 --> 00:05:38.780
+suele ser mejor
+
+00:05:38.780 --> 00:05:39.600
+de la de los administradores.
+
+00:05:39.940 --> 00:05:40.760
+A primera vista,
+
+00:05:40.820 --> 00:05:41.560
+un propietario de sitio
+
+00:05:41.560 --> 00:05:42.780
+podría verlo como trabajo extra,
+
+00:05:42.880 --> 00:05:43.480
+pero en la práctica
+
+00:05:46.000 --> 00:05:47.180
+porque TI revocó un permiso
+
+00:05:47.180 --> 00:05:48.160
+sin previo aviso,
+
+00:05:48.340 --> 00:05:48.900
+sin previo aviso.
+
+00:05:49.180 --> 00:05:50.340
+Ellos son quienes toman la decisión
+
+00:05:50.340 --> 00:05:51.520
+respaldados por datos claros.
+
+00:05:52.060 --> 00:05:53.120
+La gobernanza deja de sentirse
+
+00:05:53.120 --> 00:05:54.080
+como una imposición jerárquica
+
+00:05:54.080 --> 00:05:54.680
+y empieza a sentirse
+
+00:05:54.680 --> 00:05:55.580
+como una gestión compartida.
+
+00:05:55.920 --> 00:05:57.020
+Y para TI es tu gran alivio.
+
+00:05:57.660 --> 00:05:58.940
+En lugar de ser el cuello de botella
+
+00:05:58.940 --> 00:06:00.200
+que maneja cada solicitud,
+
+00:06:00.360 --> 00:06:01.260
+establecen las políticas,
+
+00:06:01.460 --> 00:06:02.320
+generan informes de DAC
+
+00:06:02.320 --> 00:06:03.640
+y revisan el cumplimiento general.
+
+00:06:04.300 --> 00:06:05.400
+Supervisan los muros del castillo,
+
+00:06:05.460 --> 00:06:06.320
+pero no tienen que patrullar
+
+00:06:06.320 --> 00:06:06.940
+cada pasillo.
+
+00:06:07.820 --> 00:06:09.120
+Los propietarios hacen su parte.
+
+00:06:09.300 --> 00:06:10.760
+La IAPorta Inteligencia y TI
+
+00:06:10.760 --> 00:06:12.340
+se enfocan en una estrategia mayor
+
+00:06:12.340 --> 00:06:13.680
+en lugar de microgestionar.
+
+00:06:14.600 --> 00:06:15.360
+El sistema funciona
+
+00:06:15.360 --> 00:06:17.000
+porque los roles están divididos claramente.
+
+00:06:17.680 --> 00:06:18.200
+En el día a día,
+
+00:06:18.400 --> 00:06:19.540
+esto evita que la deriva de acceso
+
+00:06:19.540 --> 00:06:20.560
+se acumule sin control.
+
+00:06:21.100 --> 00:06:21.920
+Las cuentas de invitados
+
+00:06:21.920 --> 00:06:22.760
+no permanecen por años
+
+00:06:22.760 --> 00:06:23.360
+porque se recuerda
+
+00:06:23.360 --> 00:06:24.440
+a los propietarios eliminarlas.
+
+00:06:25.260 --> 00:06:26.320
+Sitios con acceso excesivo
+
+00:06:26.320 --> 00:06:27.420
+se revisan a intervalos regular.
+
+00:06:28.080 --> 00:06:28.580
+Sus administradores
+
+00:06:28.580 --> 00:06:29.240
+siguen gestionando
+
+00:06:29.240 --> 00:06:29.820
+el marco de trabajo,
+
+00:06:29.960 --> 00:06:30.820
+pero el mantenimiento continuo
+
+00:06:30.820 --> 00:06:31.400
+está distribuido.
+
+00:06:31.820 --> 00:06:32.720
+Ese es un modelo más sólido
+
+00:06:32.720 --> 00:06:33.640
+que apagar incendios sin fin.
+
+00:06:34.080 --> 00:06:34.820
+Vistos en conjunto,
+
+00:06:34.980 --> 00:06:36.200
+las revisiones de acceso al sitio
+
+00:06:36.200 --> 00:06:37.100
+con informes de DAC
+
+00:06:37.100 --> 00:06:38.640
+se enfocan menos en el control y mando,
+
+00:06:38.720 --> 00:06:39.920
+y más en mantener el orden
+
+00:06:39.920 --> 00:06:40.580
+para que Copilot
+
+00:06:40.580 --> 00:06:41.680
+y otras herramientas de IA
+
+00:06:41.680 --> 00:06:42.520
+no muestren contenido
+
+00:06:42.520 --> 00:06:43.600
+que nunca debió estar visible.
+
+00:06:44.220 --> 00:06:44.720
+Es proactivo,
+
+00:06:44.800 --> 00:06:45.280
+no reactivo.
+
+00:06:45.940 --> 00:06:46.980
+Obtienes menos sorpresas,
+
+00:06:47.060 --> 00:06:47.820
+menos puntos ciegos
+
+00:06:47.820 --> 00:06:48.800
+y mucho menos estrés
+
+00:06:48.800 --> 00:06:49.520
+cuando los auditores
+
+00:06:49.520 --> 00:06:50.680
+hacen preguntas difíciles.
+
+00:06:51.000 --> 00:06:51.380
+Por supuesto,
+
+00:06:51.500 --> 00:06:51.920
+no todo problema
+
+00:06:51.920 --> 00:06:52.460
+se trata de quién
+
+00:06:52.460 --> 00:06:53.400
+debería estar dentro del castillo.
+
+00:06:53.660 --> 00:06:53.900
+A veces,
+
+00:06:53.980 --> 00:06:54.820
+la pregunta más importante
+
+00:06:54.820 --> 00:06:55.640
+es qué tipo de cerradura
+
+00:06:55.640 --> 00:06:56.320
+pones en cada puerta.
+
+00:06:57.040 --> 00:06:57.480
+Porque incluso
+
+00:06:57.480 --> 00:06:58.080
+si los propietarios
+
+00:06:58.080 --> 00:06:58.860
+hacen sus revisiones,
+
+00:06:58.920 --> 00:06:59.780
+no todas las habitaciones
+
+00:06:59.780 --> 00:07:00.280
+de tu propiedad
+
+00:07:00.280 --> 00:07:01.380
+necesitan las mismas defensas.
+
+00:07:02.400 --> 00:07:02.880
+Es la diferencia
+
+00:07:02.880 --> 00:07:03.540
+entre poner un cerrojo
+
+00:07:03.540 --> 00:07:03.860
+en la puerta
+
+00:07:03.860 --> 00:07:04.380
+y cerrar la caja.
+
+00:07:04.840 --> 00:07:05.360
+A veces,
+
+00:07:05.480 --> 00:07:06.040
+el verdadero reto
+
+00:07:06.040 --> 00:07:06.860
+no es convencer a la gente
+
+00:07:06.860 --> 00:07:07.900
+de que se preocupe por el acceso
+
+00:07:07.900 --> 00:07:08.880
+sino elegir la cerradura
+
+00:07:08.880 --> 00:07:09.280
+adecuada
+
+00:07:09.280 --> 00:07:10.120
+una vez que lo hacen.
+
+00:07:11.420 --> 00:07:12.000
+En SharePoint,
+
+00:07:12.180 --> 00:07:12.580
+esa elección
+
+00:07:12.580 --> 00:07:13.280
+suele reducirse
+
+00:07:13.280 --> 00:07:13.900
+a dos herramientas
+
+00:07:13.900 --> 00:07:14.460
+muy diferentes,
+
+00:07:14.820 --> 00:07:15.500
+bloquear descarga
+
+00:07:15.500 --> 00:07:16.840
+y control de acceso restringido.
+
+00:07:17.420 --> 00:07:18.060
+Ambas protegen
+
+00:07:18.060 --> 00:07:19.080
+contenido confidencial
+
+00:07:19.080 --> 00:07:19.660
+pero funcionan
+
+00:07:19.660 --> 00:07:20.480
+de formas distintas
+
+00:07:20.480 --> 00:07:21.500
+y conocer la diferencia
+
+00:07:21.500 --> 00:07:22.300
+te evita limitar
+
+00:07:22.300 --> 00:07:22.900
+la productividad
+
+00:07:22.900 --> 00:07:23.700
+o dejar brechas
+
+00:07:23.700 --> 00:07:24.320
+más grandes
+
+00:07:24.320 --> 00:07:25.340
+de lo que crees.
+
+00:07:25.860 --> 00:07:26.440
+Bloquear descarga
+
+00:07:26.440 --> 00:07:27.100
+es la opción más ligera.
+
+00:07:27.440 --> 00:07:28.120
+Permite a los usuarios
+
+00:07:28.120 --> 00:07:29.180
+ver archivos en el navegador
+
+00:07:29.180 --> 00:07:30.160
+pero impide descargarlos,
+
+00:07:30.260 --> 00:07:30.680
+imprimirlos
+
+00:07:30.680 --> 00:07:31.400
+o sincronizarlos.
+
+00:07:32.060 --> 00:07:32.760
+Eso también significa
+
+00:07:32.760 --> 00:07:33.520
+que no se puede extraer
+
+00:07:33.520 --> 00:07:33.900
+el contenido
+
+00:07:33.900 --> 00:07:34.380
+a aplicaciones
+
+00:07:34.380 --> 00:07:35.080
+de escritorio de Office
+
+00:07:35.080 --> 00:07:36.060
+ni a programas de terceros.
+
+00:07:36.540 --> 00:07:37.400
+Los datos permanecen
+
+00:07:37.400 --> 00:07:38.020
+dentro de tu sesión
+
+00:07:38.020 --> 00:07:38.640
+web controlada.
+
+00:07:38.960 --> 00:07:39.660
+Es un modelo de ver
+
+00:07:39.660 --> 00:07:40.240
+pero no llevar.
+
+00:07:40.900 --> 00:07:41.680
+Los administradores
+
+00:07:41.680 --> 00:07:42.520
+pueden configurarlo
+
+00:07:42.520 --> 00:07:43.160
+a nivel de sitio
+
+00:07:43.160 --> 00:07:44.160
+o incluso vincularlo
+
+00:07:44.160 --> 00:07:45.340
+a etiquetas de confidencialidad
+
+00:07:45.340 --> 00:07:46.300
+para que solo el contenido
+
+00:07:46.300 --> 00:07:47.100
+marcado reciba
+
+00:07:47.100 --> 00:07:48.000
+esa protección adicional.
+
+00:07:48.920 --> 00:07:49.880
+Algunas configuraciones
+
+00:07:49.880 --> 00:07:50.600
+como aplicarlo
+
+00:07:50.600 --> 00:07:51.560
+para grabaciones de Teams
+
+00:07:51.560 --> 00:07:52.380
+requieren PowerShell
+
+00:07:52.380 --> 00:07:53.420
+por lo que conviene recordar
+
+00:07:53.420 --> 00:07:54.360
+que no siempre es un interruptor
+
+00:07:54.360 --> 00:07:54.820
+en la interfaz.
+
+00:07:55.520 --> 00:07:56.880
+El control de acceso restringido
+
+00:07:56.880 --> 00:07:57.320
+o RAC
+
+00:07:57.320 --> 00:07:58.440
+opera a un nivel más estricto.
+
+00:07:58.760 --> 00:07:59.340
+En lugar de controlar
+
+00:07:59.340 --> 00:08:00.400
+qué sucede una vez dentro
+
+00:08:00.400 --> 00:08:01.300
+establece quién puede
+
+00:08:01.300 --> 00:08:02.380
+siquiera cruzar la puerta
+
+00:08:02.380 --> 00:08:03.040
+en primer lugar.
+
+00:08:03.480 --> 00:08:03.960
+Con RAC
+
+00:08:03.960 --> 00:08:04.740
+solo los miembros
+
+00:08:04.740 --> 00:08:05.660
+de un grupo específico
+
+00:08:05.660 --> 00:08:06.820
+de Microsoft 365
+
+00:08:06.820 --> 00:08:07.980
+o de seguridad de entrada
+
+00:08:07.980 --> 00:08:09.080
+pueden ver o descubrir
+
+00:08:09.080 --> 00:08:11.040
+el sitio PowerShell.
+
+00:08:11.240 --> 00:08:12.140
+Si no estás en ese grupo
+
+00:08:12.140 --> 00:08:12.780
+ni siquiera sabrás
+
+00:08:12.780 --> 00:08:13.420
+que el sitio existe.
+
+00:08:14.080 --> 00:08:14.920
+Aquí está el punto crítico.
+
+00:08:15.380 --> 00:08:15.860
+Esto se aplica
+
+00:08:15.860 --> 00:08:16.620
+en el momento del acceso.
+
+00:08:17.300 --> 00:08:18.120
+Un enlace compartido
+
+00:08:18.120 --> 00:08:18.480
+o filtrado
+
+00:08:18.480 --> 00:08:18.960
+no permitirá
+
+00:08:18.960 --> 00:08:19.380
+que un extraño
+
+00:08:19.380 --> 00:08:19.860
+pase la puerta
+
+00:08:19.860 --> 00:08:20.480
+si no está en el grupo
+
+00:08:20.480 --> 00:08:20.860
+permitido
+
+00:08:20.860 --> 00:08:21.580
+o se les deniegue el acceso.
+
+00:08:21.880 --> 00:08:22.500
+Imagínalo esta manera.
+
+00:08:23.240 --> 00:08:24.160
+Compartes informes financieros
+
+00:08:24.160 --> 00:08:24.680
+con auditores.
+
+00:08:24.940 --> 00:08:26.140
+Ellos necesitan ver y comentar
+
+00:08:26.140 --> 00:08:26.620
+pero no quieres
+
+00:08:26.620 --> 00:08:27.220
+que los borradores
+
+00:08:27.220 --> 00:08:28.700
+escapen a unidades personales.
+
+00:08:29.360 --> 00:08:29.920
+Bloquear descarga
+
+00:08:29.920 --> 00:08:30.680
+encaja perfectamente.
+
+00:08:31.000 --> 00:08:31.660
+Ellos trabajan dentro
+
+00:08:31.660 --> 00:08:32.100
+del navegador
+
+00:08:32.100 --> 00:08:32.580
+dan su opinión
+
+00:08:32.580 --> 00:08:32.940
+y se van
+
+00:08:32.940 --> 00:08:33.540
+sin que nada
+
+00:08:33.540 --> 00:08:34.440
+se guarde localmente.
+
+00:08:34.860 --> 00:08:35.280
+Por otro lado
+
+00:08:35.280 --> 00:08:35.920
+piensa una bóveda
+
+00:08:35.920 --> 00:08:36.360
+de investigación
+
+00:08:36.360 --> 00:08:37.500
+con diseños confidenciales.
+
+00:08:37.900 --> 00:08:38.860
+No quieres que personas ajenas
+
+00:08:38.860 --> 00:08:39.820
+siquiera se tropiecen con ellos.
+
+00:08:40.220 --> 00:08:40.980
+Ese es un caso para RAC.
+
+00:08:41.240 --> 00:08:42.060
+Solo los investigadores
+
+00:08:42.060 --> 00:08:43.120
+aprobados pueden ver la bóveda.
+
+00:08:43.400 --> 00:08:44.320
+Es una exclusión estricta
+
+00:08:44.320 --> 00:08:45.020
+en un acceso con diseños.
+
+00:08:45.360 --> 00:08:46.420
+Esta distinción es importante
+
+00:08:46.420 --> 00:08:46.880
+porque cada una
+
+00:08:46.880 --> 00:08:47.540
+resuelve problemas distintos.
+
+00:08:48.080 --> 00:08:48.920
+El bloqueo de descarga
+
+00:08:48.920 --> 00:08:49.740
+es ideal para situaciones
+
+00:08:49.740 --> 00:08:50.800
+donde se requiere visibilidad
+
+00:08:50.800 --> 00:08:51.780
+pero se debe evitar
+
+00:08:51.780 --> 00:08:52.440
+la exfiltración.
+
+00:08:53.560 --> 00:08:54.100
+RAC es mejor
+
+00:08:54.100 --> 00:08:54.820
+cuando la visibilidad
+
+00:08:54.820 --> 00:08:55.460
+es la amenaza
+
+00:08:55.460 --> 00:08:56.360
+y la ruta más segura.
+
+00:08:56.700 --> 00:08:57.460
+Es hacer que la puerta
+
+00:08:57.460 --> 00:08:58.540
+sea invisible para todos
+
+00:08:58.540 --> 00:08:59.340
+excepto para un grupo
+
+00:08:59.340 --> 00:09:00.020
+de confianza.
+
+00:09:00.920 --> 00:09:02.080
+Si los usan distintamente
+
+00:09:02.080 --> 00:09:03.080
+bloqueará la colaboración
+
+00:09:03.080 --> 00:09:03.520
+legítima
+
+00:09:03.520 --> 00:09:04.320
+o pasará por alto
+
+00:09:04.320 --> 00:09:04.980
+una brecha mayor
+
+00:09:04.980 --> 00:09:05.820
+de lo que pensaba.
+
+00:09:06.500 --> 00:09:07.340
+También hay que considerar
+
+00:09:07.340 --> 00:09:08.000
+el ángulo de la guía.
+
+00:09:08.860 --> 00:09:09.200
+Copilot
+
+00:09:09.200 --> 00:09:10.160
+o cualquier asistente
+
+00:09:10.160 --> 00:09:10.920
+que indexe contenido
+
+00:09:10.920 --> 00:09:11.440
+de SharePoint
+
+00:09:11.440 --> 00:09:12.460
+puede leer y mostrar
+
+00:09:12.460 --> 00:09:13.200
+datos protegidos
+
+00:09:13.200 --> 00:09:13.980
+solo por el bloqueo
+
+00:09:13.980 --> 00:09:14.560
+de descarga.
+
+00:09:15.020 --> 00:09:16.060
+El archivo no se puede descargar
+
+00:09:16.060 --> 00:09:16.560
+pero su texto
+
+00:09:16.560 --> 00:09:17.240
+sigue siendo visible
+
+00:09:17.240 --> 00:09:18.060
+para cualquiera que Copilot
+
+00:09:18.060 --> 00:09:18.940
+considere que tiene acceso.
+
+00:09:19.420 --> 00:09:20.200
+RAC cierre ese camino
+
+00:09:20.200 --> 00:09:20.740
+por completo.
+
+00:09:21.240 --> 00:09:21.700
+Si un usuario
+
+00:09:21.700 --> 00:09:22.800
+no está en el grupo autorizado
+
+00:09:22.800 --> 00:09:24.040
+el asistente nunca toca
+
+00:09:24.040 --> 00:09:24.380
+los datos
+
+00:09:24.380 --> 00:09:25.220
+por lo que no hay información
+
+00:09:25.220 --> 00:09:25.780
+fragmentos
+
+00:09:25.780 --> 00:09:26.320
+ni filtraciones
+
+00:09:26.320 --> 00:09:26.940
+por inferencia.
+
+00:09:27.520 --> 00:09:28.020
+En la práctica
+
+00:09:28.020 --> 00:09:28.920
+esto significa que RAC
+
+00:09:28.920 --> 00:09:29.420
+es el control
+
+00:09:29.420 --> 00:09:30.000
+en el que confía
+
+00:09:30.000 --> 00:09:30.500
+cuando se debe
+
+00:09:30.500 --> 00:09:31.180
+de unirar el acceso
+
+00:09:31.180 --> 00:09:31.720
+tanto a humanos
+
+00:09:31.720 --> 00:09:32.380
+como a máquinas.
+
+00:09:32.720 --> 00:09:33.220
+Y no es una opción
+
+00:09:33.220 --> 00:09:33.580
+excluida.
+
+00:09:33.820 --> 00:09:34.360
+Estas políticas
+
+00:09:34.360 --> 00:09:35.320
+a menudo se complementan
+
+00:09:35.320 --> 00:09:35.640
+entre sí.
+
+00:09:35.820 --> 00:09:36.800
+El bloqueo de descarga
+
+00:09:36.800 --> 00:09:37.800
+le permite colaborar
+
+00:09:37.800 --> 00:09:38.920
+con revisores externos
+
+00:09:38.920 --> 00:09:39.840
+sin miedo a que los archivos
+
+00:09:39.840 --> 00:09:40.240
+salgan
+
+00:09:40.240 --> 00:09:41.060
+mientras que RAC
+
+00:09:41.060 --> 00:09:42.360
+bloquea sus archivos críticos
+
+00:09:42.360 --> 00:09:43.180
+para que solo un grupo
+
+00:09:43.180 --> 00:09:43.820
+muy reducido
+
+00:09:43.820 --> 00:09:44.560
+pueda verlos,
+
+00:09:44.700 --> 00:09:45.200
+pueda verlos.
+
+00:09:45.680 --> 00:09:46.280
+Si los aplica
+
+00:09:46.280 --> 00:09:47.180
+de forma inteligente
+
+00:09:47.180 --> 00:09:48.340
+evitará reglas genéricas
+
+00:09:48.340 --> 00:09:49.420
+que frustran a los usuarios
+
+00:09:49.420 --> 00:09:50.460
+o generan tickets
+
+00:09:50.460 --> 00:09:51.360
+innecesarios.
+
+00:09:51.920 --> 00:09:52.680
+Si lo piensa de nuevo
+
+00:09:52.680 --> 00:09:53.620
+en términos de un castillo
+
+00:09:53.620 --> 00:09:54.600
+el bloqueo de descarga
+
+00:09:54.600 --> 00:09:55.120
+es una ventana
+
+00:09:55.120 --> 00:09:55.660
+por la que permite
+
+00:09:55.660 --> 00:09:56.480
+mirar los externos.
+
+00:09:57.080 --> 00:09:57.720
+RAC es la puerta
+
+00:09:57.720 --> 00:09:58.160
+de la bóveda
+
+00:09:58.160 --> 00:09:58.800
+que solo se abre
+
+00:09:58.800 --> 00:09:59.800
+con el sello correcto.
+
+00:10:00.440 --> 00:10:00.980
+Ambos evitan
+
+00:10:00.980 --> 00:10:01.420
+que el tesoro
+
+00:10:01.420 --> 00:10:02.000
+se extravíe
+
+00:10:02.000 --> 00:10:02.820
+pero están construidos
+
+00:10:02.820 --> 00:10:03.620
+para alas completamente
+
+00:10:03.620 --> 00:10:04.720
+diferentes de la fortaleza.
+
+00:10:05.080 --> 00:10:05.380
+Ahora bien,
+
+00:10:05.460 --> 00:10:06.180
+este es el punto principal.
+
+00:10:06.640 --> 00:10:07.500
+Las defensas fuertes
+
+00:10:07.500 --> 00:10:08.160
+de hoy no bastan
+
+00:10:08.160 --> 00:10:09.080
+si espera que aparezcan
+
+00:10:09.080 --> 00:10:10.480
+grietas para reforzarlas.
+
+00:10:10.940 --> 00:10:11.480
+Necesita una forma
+
+00:10:11.480 --> 00:10:12.180
+de saber qué partes
+
+00:10:12.180 --> 00:10:12.540
+del muro
+
+00:10:12.540 --> 00:10:13.080
+podrían ceder
+
+00:10:13.080 --> 00:10:14.120
+antes de que todo se derrumbe.
+
+00:10:14.480 --> 00:10:15.360
+Y ahí es donde interviene
+
+00:10:15.360 --> 00:10:16.400
+otra capa de inteligencia
+
+00:10:16.400 --> 00:10:17.200
+no como un candado
+
+00:10:17.200 --> 00:10:17.840
+o un guardia
+
+00:10:17.840 --> 00:10:18.680
+sino como un asesor
+
+00:10:18.680 --> 00:10:19.180
+que susurra
+
+00:10:19.180 --> 00:10:19.640
+como mantener
+
+00:10:19.640 --> 00:10:20.360
+el castillo en pie.
+
+00:10:21.040 --> 00:10:22.360
+Como su asesor estratégico
+
+00:10:22.360 --> 00:10:23.240
+SharePoint Advanced,
+
+00:10:23.420 --> 00:10:24.100
+management no solo
+
+00:10:24.100 --> 00:10:24.760
+le da herramientas
+
+00:10:24.760 --> 00:10:25.680
+incluye perspectivas
+
+00:10:25.680 --> 00:10:26.100
+de IA
+
+00:10:26.100 --> 00:10:26.640
+que analizan
+
+00:10:26.640 --> 00:10:27.280
+sus informes
+
+00:10:27.280 --> 00:10:28.480
+y recomiendan acciones.
+
+00:10:30.480 --> 00:10:31.040
+Piénselo menos
+
+00:10:31.040 --> 00:10:31.520
+como un guardia
+
+00:10:31.520 --> 00:10:31.880
+en la puerta
+
+00:10:31.880 --> 00:10:32.300
+y más
+
+00:10:32.300 --> 00:10:33.660
+como un asesor estratégico
+
+00:10:33.660 --> 00:10:34.300
+que le ayuda a ver
+
+00:10:34.300 --> 00:10:35.420
+qué partes de la fortaleza
+
+00:10:35.420 --> 00:10:36.320
+necesitan refuerzo
+
+00:10:36.320 --> 00:10:37.320
+antes de que los muros
+
+00:10:37.320 --> 00:10:38.100
+se agrieten.
+
+00:10:39.060 --> 00:10:39.800
+La forma en que funciona
+
+00:10:39.800 --> 00:10:40.160
+es sencilla.
+
+00:10:40.520 --> 00:10:41.080
+Dentro del centro
+
+00:10:41.080 --> 00:10:41.600
+de administración
+
+00:10:41.600 --> 00:10:41.980
+de SharePoint
+
+00:10:41.980 --> 00:10:42.960
+la mayoría de los informes
+
+00:10:42.960 --> 00:10:43.640
+ahora tiene un botón
+
+00:10:43.640 --> 00:10:44.720
+de obtener perspectivas de IA.
+
+00:10:45.260 --> 00:10:45.700
+Haga clic
+
+00:10:45.700 --> 00:10:46.560
+y en lugar de revisar
+
+00:10:46.560 --> 00:10:47.420
+tablas interminables
+
+00:10:47.420 --> 00:10:48.020
+el sistema extra
+
+00:10:48.020 --> 00:10:48.800
+de patrones destaca
+
+00:10:48.800 --> 00:10:49.720
+donde ocurre la desviación
+
+00:10:49.720 --> 00:10:50.180
+de políticas
+
+00:10:50.180 --> 00:10:51.340
+y sugiere pasos prácticos
+
+00:10:51.340 --> 00:10:52.200
+para corregirlos.
+
+00:10:53.080 --> 00:10:53.660
+Puede señalar
+
+00:10:53.660 --> 00:10:55.060
+que el uso compartido externo
+
+00:10:55.060 --> 00:10:55.820
+en un sitio
+
+00:10:55.820 --> 00:10:56.720
+es menos estricto
+
+00:10:56.720 --> 00:10:57.300
+que su estándar
+
+00:10:57.300 --> 00:10:58.500
+o que falta una clasificación
+
+00:10:58.500 --> 00:10:59.360
+en una biblioteca
+
+00:10:59.360 --> 00:11:00.640
+con archivos confidenciales.
+
+00:11:01.560 --> 00:11:02.380
+En lugar de arrojarle
+
+00:11:02.380 --> 00:11:03.260
+datos sin procesar
+
+00:11:03.260 --> 00:11:04.200
+le entrega una lista breve
+
+00:11:04.200 --> 00:11:04.840
+de prioridades.
+
+00:11:05.400 --> 00:11:06.000
+Aquí es donde también
+
+00:11:06.000 --> 00:11:06.420
+entra en juego
+
+00:11:06.420 --> 00:11:07.140
+el papel de Copilot.
+
+00:11:07.700 --> 00:11:08.460
+Dentro del mismo centro
+
+00:11:08.460 --> 00:11:09.020
+de administración
+
+00:11:09.020 --> 00:11:10.020
+puede usar Copilot
+
+00:11:10.020 --> 00:11:11.040
+para identificar sitios
+
+00:11:11.040 --> 00:11:12.220
+con uso compartido excesivo,
+
+00:11:12.380 --> 00:11:13.060
+falta de clasificación
+
+00:11:13.060 --> 00:11:14.040
+o en actividad prolongada
+
+00:11:14.040 --> 00:11:14.980
+y luego usarlo para ayudar
+
+00:11:14.980 --> 00:11:15.540
+a crear políticas
+
+00:11:15.540 --> 00:11:16.520
+que aborden esos hallazgos.
+
+00:11:16.520 --> 00:11:18.060
+Lo importante es recordar
+
+00:11:18.060 --> 00:11:18.680
+que es un asesor
+
+00:11:18.680 --> 00:11:19.720
+no un piloto automático.
+
+00:11:20.260 --> 00:11:21.100
+No cambia configuraciones
+
+00:11:21.100 --> 00:11:21.400
+sin usted.
+
+00:11:21.860 --> 00:11:22.820
+Simplemente marca problemas
+
+00:11:22.820 --> 00:11:24.140
+que quizá nunca habría detectado
+
+00:11:24.140 --> 00:11:25.060
+y luego le da la sintaxis
+
+00:11:25.060 --> 00:11:25.640
+y la estructura
+
+00:11:25.640 --> 00:11:26.620
+para ajustar la configuración
+
+00:11:26.620 --> 00:11:27.160
+con intención.
+
+00:11:27.660 --> 00:11:28.260
+Sin esta guía
+
+00:11:28.260 --> 00:11:29.700
+el ciclo suele ser reactivo.
+
+00:11:30.300 --> 00:11:31.080
+Un archivo se filtra,
+
+00:11:31.180 --> 00:11:31.940
+un enlace externo
+
+00:11:31.940 --> 00:11:32.800
+se propaga demasiado
+
+00:11:32.800 --> 00:11:33.760
+o un auditor detecta
+
+00:11:33.760 --> 00:11:34.500
+un control faltante.
+
+00:11:35.360 --> 00:11:36.260
+Solo después de los hechos
+
+00:11:36.260 --> 00:11:37.020
+los administradores
+
+00:11:37.020 --> 00:11:37.740
+se apresuran a cambiar
+
+00:11:37.740 --> 00:11:38.340
+la configuración
+
+00:11:38.340 --> 00:11:39.180
+o buscar a los propietarios
+
+00:11:39.180 --> 00:11:39.580
+del sitio
+
+00:11:39.580 --> 00:11:40.360
+para arreglar lo que se pasó.
+
+00:11:40.640 --> 00:11:41.140
+Las perspectivas
+
+00:11:41.140 --> 00:11:41.500
+de la IR
+
+00:11:41.500 --> 00:11:42.020
+son que necesitan.
+
+00:11:42.240 --> 00:11:42.780
+Sacan a la luz
+
+00:11:42.780 --> 00:11:43.380
+puntos débiles
+
+00:11:43.380 --> 00:11:44.000
+antes de que cause
+
+00:11:44.000 --> 00:11:44.660
+una avalancha de tipo.
+
+00:11:44.860 --> 00:11:45.420
+Ya no está atrapado
+
+00:11:45.420 --> 00:11:46.160
+esperando una brecha.
+
+00:11:46.500 --> 00:11:47.440
+Puede reforzar las defensas
+
+00:11:47.440 --> 00:11:48.240
+según su propio cronólogo.
+
+00:11:48.760 --> 00:11:49.460
+Imagine que el estándar
+
+00:11:49.460 --> 00:11:50.120
+de su empresa dice
+
+00:11:50.120 --> 00:11:51.220
+que el uso compartido externo
+
+00:11:51.220 --> 00:11:51.980
+siempre debe requerir
+
+00:11:51.980 --> 00:11:52.500
+una invitación.
+
+00:11:52.920 --> 00:11:53.520
+Esa es su línea base.
+
+00:11:54.080 --> 00:11:54.860
+Pero un equipo de proyecto
+
+00:11:54.860 --> 00:11:55.740
+crea un sitio bajo presión
+
+00:11:55.740 --> 00:11:56.480
+y deja el uso compartido
+
+00:11:56.480 --> 00:11:57.480
+de enlaces completamente abierto.
+
+00:11:58.200 --> 00:11:58.560
+Normalmente
+
+00:11:58.560 --> 00:11:59.460
+esa mala configuración
+
+00:11:59.460 --> 00:12:00.380
+pasaría desapercibida
+
+00:12:00.380 --> 00:12:01.140
+a veces durante meses.
+
+00:12:01.780 --> 00:12:02.500
+Con las perspectivas
+
+00:12:02.500 --> 00:12:02.940
+de la IA
+
+00:12:02.940 --> 00:12:03.720
+la discrepancia
+
+00:12:03.720 --> 00:12:04.780
+aparece en sus recomendaciones.
+
+00:12:05.560 --> 00:12:06.080
+La advertencia
+
+00:12:06.080 --> 00:12:06.600
+no está enterrada
+
+00:12:06.600 --> 00:12:07.140
+en la exportación
+
+00:12:07.140 --> 00:12:07.600
+de mil filas.
+
+00:12:08.060 --> 00:12:08.740
+Muestra claramente
+
+00:12:08.740 --> 00:12:09.280
+que esta puerta
+
+00:12:09.280 --> 00:12:10.320
+no coincide con las demás.
+
+00:12:10.980 --> 00:12:11.720
+Eso cambia el juego
+
+00:12:11.720 --> 00:12:12.740
+de una limpieza reactiva
+
+00:12:12.740 --> 00:12:13.600
+a una estrategia guiada.
+
+00:12:14.060 --> 00:12:14.240
+La IA
+
+00:12:14.240 --> 00:12:15.240
+la empuja hacia la alineación
+
+00:12:15.240 --> 00:12:15.720
+pero la elección
+
+00:12:15.720 --> 00:12:16.520
+sigue siendo suya.
+
+00:12:17.020 --> 00:12:17.480
+Puede evaluar
+
+00:12:17.480 --> 00:12:18.060
+si flexibilizar
+
+00:12:18.060 --> 00:12:18.660
+la configuración
+
+00:12:18.660 --> 00:12:19.100
+de ese sitio
+
+00:12:19.100 --> 00:12:19.720
+fue intencional
+
+00:12:19.720 --> 00:12:20.720
+para acelerar la colaboración
+
+00:12:20.720 --> 00:12:21.320
+o si es un error
+
+00:12:21.320 --> 00:12:22.380
+que vale la pena corregir.
+
+00:12:22.880 --> 00:12:23.800
+El asesor no impone
+
+00:12:23.800 --> 00:12:24.700
+informa.
+
+00:12:25.220 --> 00:12:25.620
+Eso significa
+
+00:12:25.620 --> 00:12:26.260
+que deja de adivinar
+
+00:12:26.260 --> 00:12:27.280
+las compensaciones invisibles
+
+00:12:27.280 --> 00:12:27.820
+y comienza a tomar
+
+00:12:27.820 --> 00:12:28.320
+decisiones de libre.
+
+00:12:28.460 --> 00:12:28.900
+En el tiempo
+
+00:12:28.900 --> 00:12:29.640
+el efecto se acumula.
+
+00:12:30.080 --> 00:12:30.580
+Cada ajuste
+
+00:12:30.580 --> 00:12:31.480
+basado en una perspectiva
+
+00:12:31.480 --> 00:12:31.980
+fortalece
+
+00:12:31.980 --> 00:12:32.820
+su entorno en general.
+
+00:12:33.600 --> 00:12:34.120
+La desviación
+
+00:12:34.120 --> 00:12:34.680
+de la política
+
+00:12:34.680 --> 00:12:35.140
+se reduce
+
+00:12:35.140 --> 00:12:35.840
+porque la detecta
+
+00:12:35.840 --> 00:12:36.340
+continuamente
+
+00:12:36.340 --> 00:12:36.940
+en lugar de una vez
+
+00:12:36.940 --> 00:12:37.600
+al trimestre.
+
+00:12:38.540 --> 00:12:39.200
+La IA recuerda
+
+00:12:39.200 --> 00:12:39.620
+patrones
+
+00:12:39.620 --> 00:12:40.060
+que normalmente
+
+00:12:40.060 --> 00:12:40.960
+pasaría por alto
+
+00:12:40.960 --> 00:12:41.660
+exponiéndolos
+
+00:12:41.660 --> 00:12:42.600
+cada vez que se repiten.
+
+00:12:43.160 --> 00:12:43.500
+No depende
+
+00:12:43.500 --> 00:12:44.500
+de conocimientos internos
+
+00:12:44.500 --> 00:12:45.480
+o de administradores heroicos.
+
+00:12:45.960 --> 00:12:46.400
+Deja que el sistema
+
+00:12:46.400 --> 00:12:46.960
+siga vigilando
+
+00:12:46.960 --> 00:12:47.500
+en segundo plano
+
+00:12:47.500 --> 00:12:47.840
+y le avise
+
+00:12:47.840 --> 00:12:48.600
+cuando sea importante.
+
+00:12:48.920 --> 00:12:49.620
+Aquí está la conclusión.
+
+00:12:50.060 --> 00:12:50.320
+La IA
+
+00:12:50.320 --> 00:12:51.360
+no reemplazará su criterio.
+
+00:12:51.840 --> 00:12:52.200
+Le entregará
+
+00:12:52.200 --> 00:12:53.040
+una lista priorizada
+
+00:12:53.040 --> 00:12:53.380
+de áreas
+
+00:12:53.380 --> 00:12:53.940
+que necesitan
+
+00:12:53.940 --> 00:12:54.760
+una inspección inmediata.
+
+00:12:55.280 --> 00:12:55.720
+Eso elimina
+
+00:12:55.720 --> 00:12:56.240
+la peor parte
+
+00:12:56.240 --> 00:12:56.800
+de la gobernanza
+
+00:12:56.800 --> 00:12:57.220
+que es mirar
+
+00:12:57.220 --> 00:12:58.220
+grandes conjuntos de datos
+
+00:12:58.220 --> 00:12:58.980
+e intentar adivinar
+
+00:12:58.980 --> 00:12:59.720
+dónde podrían estar
+
+00:12:59.720 --> 00:13:00.560
+arriendo los incendios.
+
+00:13:01.340 --> 00:13:01.660
+El asesor
+
+00:13:01.660 --> 00:13:02.280
+simplemente señala
+
+00:13:02.280 --> 00:13:02.480
+y dice
+
+00:13:02.480 --> 00:13:02.980
+revise equipo.
+
+00:13:03.600 --> 00:13:04.580
+Para cualquier administrador
+
+00:13:04.580 --> 00:13:05.060
+que gestiona
+
+00:13:05.060 --> 00:13:05.880
+decenas de tareas
+
+00:13:05.880 --> 00:13:06.580
+esa es la diferencia
+
+00:13:06.580 --> 00:13:07.500
+entre ahogarse en alertas
+
+00:13:07.500 --> 00:13:08.180
+y realmente mejorar
+
+00:13:08.180 --> 00:13:09.140
+la postura de defensa.
+
+00:13:09.800 --> 00:13:10.260
+Sin embajia.
+
+00:13:10.860 --> 00:13:11.700
+Estas son recomendaciones
+
+00:13:11.700 --> 00:13:12.860
+no aplicaciones automatizadas.
+
+00:13:13.260 --> 00:13:13.800
+Los administradores
+
+00:13:13.800 --> 00:13:14.580
+aún deben revisar
+
+00:13:14.580 --> 00:13:15.020
+confirmar
+
+00:13:15.020 --> 00:13:15.840
+y decidir si actuar.
+
+00:13:16.200 --> 00:13:16.780
+La salvaguarda
+
+00:13:16.780 --> 00:13:17.340
+es intencional
+
+00:13:17.340 --> 00:13:18.140
+porque cada entorno
+
+00:13:18.140 --> 00:13:19.180
+tiene casos excepcionales
+
+00:13:19.180 --> 00:13:19.900
+donde la configuración
+
+00:13:19.900 --> 00:13:20.720
+estándar no encaja.
+
+00:13:21.180 --> 00:13:21.820
+La IA proporciona
+
+00:13:21.820 --> 00:13:22.640
+confianza y enfoque
+
+00:13:22.640 --> 00:13:23.320
+pero no te encierra
+
+00:13:23.320 --> 00:13:23.960
+en un camino único.
+
+00:13:24.360 --> 00:13:25.080
+Piénsalo como jugar
+
+00:13:25.080 --> 00:13:25.540
+con ventaja.
+
+00:13:25.980 --> 00:13:26.740
+Tú sí haciéndola tirada.
+
+00:13:27.420 --> 00:13:27.720
+Con esto
+
+00:13:27.720 --> 00:13:28.300
+la gobernanza
+
+00:13:28.300 --> 00:13:28.800
+deja de ser
+
+00:13:28.800 --> 00:13:29.640
+sobre apagar fuegos
+
+00:13:29.640 --> 00:13:30.240
+y se vuelve más
+
+00:13:30.240 --> 00:13:30.860
+sobre dar forma
+
+00:13:30.860 --> 00:13:31.740
+proactiva y constante
+
+00:13:31.740 --> 00:13:32.260
+a tu entorno.
+
+00:13:32.620 --> 00:13:33.820
+Ya no silas violentamente
+
+00:13:33.820 --> 00:13:35.100
+entre el intercambio abierto
+
+00:13:35.100 --> 00:13:36.080
+y el bloqueo estricto
+
+00:13:36.080 --> 00:13:37.200
+tras cada susto.
+
+00:13:37.800 --> 00:13:38.860
+Te calibras con orientación
+
+00:13:38.860 --> 00:13:39.700
+manteniendo el equilibrio
+
+00:13:39.700 --> 00:13:40.320
+entre productividad
+
+00:13:40.320 --> 00:13:40.840
+y seguridad.
+
+00:13:41.380 --> 00:13:42.080
+En tus mejores días
+
+00:13:42.080 --> 00:13:43.020
+te salva de un desastre.
+
+00:13:43.580 --> 00:13:44.020
+En los peores
+
+00:13:44.020 --> 00:13:44.960
+te ofrece una hoja de ruta
+
+00:13:44.960 --> 00:13:46.000
+para volver a terreno estable.
+
+00:13:46.740 --> 00:13:46.940
+Pero
+
+00:13:46.940 --> 00:13:48.320
+ni el asesor más inteligente
+
+00:13:48.320 --> 00:13:49.060
+arreglará lo que cuestan
+
+00:13:49.060 --> 00:13:49.500
+las tropas.
+
+00:13:50.060 --> 00:13:50.780
+Una vez que confías
+
+00:13:50.780 --> 00:13:51.860
+en que las puertas son fuertes
+
+00:13:51.860 --> 00:13:52.940
+y las políticas están guiadas
+
+00:13:52.940 --> 00:13:53.760
+la siguiente pregunta
+
+00:13:53.760 --> 00:13:54.540
+no es que muro parche
+
+00:13:54.540 --> 00:13:55.380
+sino cómo evitar
+
+00:13:55.380 --> 00:13:56.360
+que el presupuesto de defensa
+
+00:13:56.360 --> 00:13:57.240
+agote tu tesorería.
+
+00:13:58.180 --> 00:13:58.800
+Ahí es cuando empiezas
+
+00:13:58.800 --> 00:13:59.760
+a pensar en qué financiar
+
+00:13:59.760 --> 00:14:00.380
+a tiempo completo
+
+00:14:00.380 --> 00:14:01.200
+y dónde los mercenarios
+
+00:14:01.200 --> 00:14:01.780
+tienen más sentido
+
+00:14:01.780 --> 00:14:02.380
+que los caballeros
+
+00:14:02.380 --> 00:14:03.080
+de pago por uso.
+
+00:14:03.920 --> 00:14:04.620
+Presupuesto inteligente
+
+00:14:04.620 --> 00:14:05.000
+para el red.
+
+00:14:05.560 --> 00:14:06.780
+Gestionar defensas inteligentes
+
+00:14:06.780 --> 00:14:07.300
+no es solo cuestión
+
+00:14:07.300 --> 00:14:07.780
+de cerraduras
+
+00:14:07.780 --> 00:14:08.420
+es cómo financias
+
+00:14:08.420 --> 00:14:08.920
+a los guardias.
+
+00:14:09.300 --> 00:14:09.880
+Ahí es donde entra
+
+00:14:09.880 --> 00:14:10.600
+el modelo de licencias
+
+00:14:10.600 --> 00:14:11.300
+de SharePoint Premium
+
+00:14:11.300 --> 00:14:12.260
+que se divide en dos vías
+
+00:14:12.260 --> 00:14:13.060
+que debes equilibrar.
+
+00:14:13.560 --> 00:14:14.520
+La gobernanza está cubierta
+
+00:14:14.520 --> 00:14:15.020
+por SharePoint
+
+00:14:15.020 --> 00:14:15.780
+Advanced Management
+
+00:14:15.780 --> 00:14:16.320
+por usuario
+
+00:14:16.320 --> 00:14:17.260
+mientras que las funciones
+
+00:14:17.260 --> 00:14:18.680
+de procesamiento de contenido
+
+00:14:18.680 --> 00:14:19.500
+como OCR
+
+00:14:19.500 --> 00:14:20.360
+firmas electrónicas
+
+00:14:20.360 --> 00:14:20.900
+y traducción
+
+00:14:20.900 --> 00:14:22.180
+funcionan bajo pago por uso
+
+00:14:22.180 --> 00:14:23.380
+funcionan bajo pago por uso.
+
+00:14:23.540 --> 00:14:24.060
+Una es tu armadura
+
+00:14:24.060 --> 00:14:24.680
+siempre equipada
+
+00:14:24.680 --> 00:14:25.380
+para los responsables
+
+00:14:25.380 --> 00:14:26.080
+de la toma de decisión.
+
+00:14:26.400 --> 00:14:27.060
+La otra es más
+
+00:14:27.060 --> 00:14:28.100
+como comprar refuerzos
+
+00:14:28.100 --> 00:14:29.540
+solo cuando surge una batalla.
+
+00:14:30.480 --> 00:14:31.320
+Aquí está la diferencia básica.
+
+00:14:31.800 --> 00:14:32.520
+SAM es una protección
+
+00:14:32.520 --> 00:14:33.380
+constante y predecible.
+
+00:14:33.700 --> 00:14:34.280
+Cada administrador
+
+00:14:34.280 --> 00:14:34.980
+y propietario de sitio
+
+00:14:34.980 --> 00:14:35.540
+que ayuda a proteger
+
+00:14:35.540 --> 00:14:35.900
+las puertas
+
+00:14:35.900 --> 00:14:36.480
+necesita una lista.
+
+00:14:36.820 --> 00:14:37.780
+A tres dólares por usuario
+
+00:14:37.780 --> 00:14:38.080
+al mes
+
+00:14:38.080 --> 00:14:39.140
+para clientes comerciales.
+
+00:14:39.360 --> 00:14:39.980
+También necesitarás
+
+00:14:39.980 --> 00:14:40.480
+que los usuarios
+
+00:14:40.480 --> 00:14:41.380
+tengan una licencia
+
+00:14:41.380 --> 00:14:42.820
+SharePoint K1 o P2
+
+00:14:42.820 --> 00:14:43.580
+o un plan calificado
+
+00:14:43.580 --> 00:14:44.680
+de Microsoft 365.
+
+00:14:45.500 --> 00:14:46.440
+Esa tarifa mantiene activos
+
+00:14:46.440 --> 00:14:47.480
+los controles de ciclo de vida,
+
+00:14:47.580 --> 00:14:48.240
+revisiones de acceso
+
+00:14:48.240 --> 00:14:49.460
+y restricciones todos los días.
+
+00:14:50.000 --> 00:14:50.820
+Tu base innegociable.
+
+00:14:50.820 --> 00:14:52.100
+El procesamiento de contenidos
+
+00:14:52.100 --> 00:14:52.660
+es la parte flexible.
+
+00:14:53.120 --> 00:14:54.100
+En lugar de pagar todo el año
+
+00:14:54.100 --> 00:14:55.220
+por recursos que apenas tocas,
+
+00:14:55.340 --> 00:14:56.400
+compras solo cuando los necesitas.
+
+00:14:56.860 --> 00:14:57.660
+Durante periodos pico,
+
+00:14:57.740 --> 00:14:58.640
+cuando aumentan los contratos
+
+00:14:58.640 --> 00:14:59.360
+de fin de trimestre,
+
+00:14:59.460 --> 00:15:00.520
+se ejecutan o sea remasivos
+
+00:15:00.520 --> 00:15:01.040
+o sube el uso.
+
+00:15:01.140 --> 00:15:01.940
+Los costos aumentan.
+
+00:15:02.200 --> 00:15:02.820
+Cuando pasa la ola,
+
+00:15:02.920 --> 00:15:03.660
+también lo hacen las facturas.
+
+00:15:04.080 --> 00:15:04.660
+Está diseñado
+
+00:15:04.660 --> 00:15:05.500
+para cargas de trabajo
+
+00:15:05.500 --> 00:15:06.320
+episodicas en lugar
+
+00:15:06.320 --> 00:15:07.140
+de operaciones diarias,
+
+00:15:07.240 --> 00:15:08.400
+lo que lo hace mucho menos arriesgado
+
+00:15:08.400 --> 00:15:09.200
+que las historias de terror
+
+00:15:09.200 --> 00:15:10.020
+sobre gastos en la nube
+
+00:15:10.020 --> 00:15:10.420
+sin control
+
+00:15:10.420 --> 00:15:11.240
+que también los administradores.
+
+00:15:11.560 --> 00:15:12.320
+Incluso puedes limitar
+
+00:15:12.320 --> 00:15:13.240
+el procesamiento de contenido
+
+00:15:13.240 --> 00:15:13.940
+a sitios seleccionados
+
+00:15:13.940 --> 00:15:14.380
+al principio,
+
+00:15:14.520 --> 00:15:15.200
+evitando que los costos
+
+00:15:15.200 --> 00:15:15.560
+se disparen
+
+00:15:15.560 --> 00:15:16.160
+hasta que los resultados
+
+00:15:16.160 --> 00:15:16.720
+sean claros.
+
+00:15:17.260 --> 00:15:17.460
+Entonces,
+
+00:15:17.540 --> 00:15:18.260
+¿cuál es el orden correcto?
+
+00:15:18.660 --> 00:15:19.000
+Primero,
+
+00:15:19.040 --> 00:15:19.820
+la aduananza siempre.
+
+00:15:20.220 --> 00:15:20.800
+Implementa SAM
+
+00:15:20.800 --> 00:15:21.820
+para saber quién puede entrar,
+
+00:15:21.940 --> 00:15:22.640
+qué muros existen
+
+00:15:22.640 --> 00:15:23.820
+y cómo detectar desviaciones.
+
+00:15:24.380 --> 00:15:25.400
+Una vez establecida esa base,
+
+00:15:25.500 --> 00:15:26.260
+activa la I-contenido
+
+00:15:26.260 --> 00:15:26.980
+para departamentos
+
+00:15:26.980 --> 00:15:27.700
+o proyectos clave
+
+00:15:27.700 --> 00:15:28.460
+donde el beneficio
+
+00:15:28.460 --> 00:15:29.240
+sea evidente.
+
+00:15:29.660 --> 00:15:30.560
+Empieza poco a poco,
+
+00:15:30.760 --> 00:15:31.220
+observa el uso
+
+00:15:31.220 --> 00:15:32.120
+y confirma que el ahorro
+
+00:15:32.120 --> 00:15:33.300
+de trabajo supera el costo.
+
+00:15:33.880 --> 00:15:34.680
+Si el retorno es real,
+
+00:15:34.860 --> 00:15:35.600
+amplía su alcance.
+
+00:15:36.080 --> 00:15:36.300
+Así,
+
+00:15:36.620 --> 00:15:37.660
+evitarás el error clásico
+
+00:15:37.660 --> 00:15:38.620
+de agotar el presupuesto
+
+00:15:38.620 --> 00:15:40.020
+antes de establecer límites.
+
+00:15:40.820 --> 00:15:41.600
+Un ejemplo práctico
+
+00:15:41.600 --> 00:15:42.160
+aclara la diferencia.
+
+00:15:42.780 --> 00:15:43.500
+Imagina la temporada
+
+00:15:43.500 --> 00:15:44.340
+auditoría con montones
+
+00:15:44.340 --> 00:15:45.240
+de contratos escaneados.
+
+00:15:45.720 --> 00:15:46.980
+Necesitas OCR etiquetado
+
+00:15:46.980 --> 00:15:47.900
+y quizás hasta ensamblaje
+
+00:15:47.900 --> 00:15:48.920
+de documentos con plantillas.
+
+00:15:49.400 --> 00:15:50.280
+Ese flujo de contenido
+
+00:15:50.280 --> 00:15:51.360
+pasa por servicios de pago
+
+00:15:51.360 --> 00:15:52.340
+por uso durante esos meses.
+
+00:15:52.800 --> 00:15:53.540
+Cuando termina la temporada
+
+00:15:53.540 --> 00:15:54.320
+también termina el gasto.
+
+00:15:54.580 --> 00:15:55.420
+Compáralo con tus políticas
+
+00:15:55.420 --> 00:15:56.360
+de acceso y revisiones
+
+00:15:56.360 --> 00:15:57.320
+del ciclo de vida del sitio.
+
+00:15:57.660 --> 00:15:58.460
+Eso nunca desaparece,
+
+00:15:58.500 --> 00:15:59.020
+así que se mantiene
+
+00:15:59.020 --> 00:15:59.840
+bajo el modelo por usuario
+
+00:15:59.840 --> 00:16:00.560
+como protección contente.
+
+00:16:01.140 --> 00:16:01.980
+Uno se adapta al proyecto,
+
+00:16:02.060 --> 00:16:03.480
+el otro protege constantemente.
+
+00:16:04.620 --> 00:16:05.580
+Un presupuesto inteligente
+
+00:16:05.580 --> 00:16:06.240
+también implica saber
+
+00:16:06.240 --> 00:16:06.920
+lo que ya posees.
+
+00:16:07.980 --> 00:16:08.880
+Algunas partes de SAM
+
+00:16:08.880 --> 00:16:09.580
+están incluidas
+
+00:16:09.580 --> 00:16:10.960
+en Microsoft 365 E5
+
+00:16:10.960 --> 00:16:12.280
+y ciertas licencias de Copilot
+
+00:16:12.280 --> 00:16:12.820
+ya incluyen
+
+00:16:12.820 --> 00:16:13.680
+funciones de gobernanza
+
+00:16:13.680 --> 00:16:15.220
+para mantener a Copilot seguro.
+
+00:16:16.340 --> 00:16:17.180
+Esa superposición
+
+00:16:17.180 --> 00:16:18.240
+evita que pagues dos veces
+
+00:16:18.240 --> 00:16:18.800
+si tu inquilino
+
+00:16:18.800 --> 00:16:19.680
+ya opera con esos planes.
+
+00:16:20.340 --> 00:16:21.000
+El rompecabezas
+
+00:16:21.000 --> 00:16:21.620
+de las licencias
+
+00:16:21.620 --> 00:16:22.540
+no se trata de comprar
+
+00:16:22.540 --> 00:16:23.200
+todo lo nuevo,
+
+00:16:23.300 --> 00:16:23.880
+sino de verificar
+
+00:16:23.880 --> 00:16:24.880
+quién tiene ya protección
+
+00:16:24.880 --> 00:16:26.040
+y cubrir las brechas reales.
+
+00:16:26.640 --> 00:16:27.700
+También hay un programa actual
+
+00:16:27.700 --> 00:16:28.400
+donde Microsoft
+
+00:16:28.400 --> 00:16:30.100
+cubre cierta capacidad inicial
+
+00:16:30.100 --> 00:16:30.920
+para el procesamiento
+
+00:16:30.920 --> 00:16:32.280
+de contenido sin costo.
+
+00:16:33.000 --> 00:16:33.660
+Eso te permite realizar
+
+00:16:33.660 --> 00:16:34.140
+algunas pruebas
+
+00:16:34.140 --> 00:16:35.220
+con funciones de pago por uso
+
+00:16:35.220 --> 00:16:36.200
+antes de que empiece el contador.
+
+00:16:36.920 --> 00:16:38.000
+Es una forma de bajo riesgo
+
+00:16:38.000 --> 00:16:38.980
+para generar confianza
+
+00:16:38.980 --> 00:16:39.600
+y demostrar valor
+
+00:16:39.600 --> 00:16:40.520
+a los equipos financieros
+
+00:16:40.520 --> 00:16:41.200
+que quieren números,
+
+00:16:41.440 --> 00:16:41.960
+no promesas.
+
+00:16:41.960 --> 00:16:42.960
+La conclusión aquí
+
+00:16:42.960 --> 00:16:43.960
+es la simplicidad táctica.
+
+00:16:44.780 --> 00:16:45.540
+La cobertura de gobernanza
+
+00:16:45.540 --> 00:16:45.820
+con SAM
+
+00:16:45.820 --> 00:16:46.660
+es fija y predecible.
+
+00:16:47.100 --> 00:16:47.660
+El procesamiento
+
+00:16:47.660 --> 00:16:48.680
+de contenido es flexible,
+
+00:16:48.880 --> 00:16:49.540
+útil para picos
+
+00:16:49.540 --> 00:16:50.320
+y cargas de trabajo
+
+00:16:50.320 --> 00:16:50.860
+episodicas.
+
+00:16:51.540 --> 00:16:52.180
+Empieza con SAM,
+
+00:16:52.300 --> 00:16:52.880
+asigna protección
+
+00:16:52.880 --> 00:16:53.840
+a las personas adecuadas
+
+00:16:53.840 --> 00:16:54.560
+y luego incorpora
+
+00:16:54.560 --> 00:16:54.980
+con cuidado
+
+00:16:54.980 --> 00:16:55.720
+la idea de contenido
+
+00:16:55.720 --> 00:16:56.380
+donde sea rentable.
+
+00:16:57.200 --> 00:16:57.820
+Y antes de añadir
+
+00:16:57.820 --> 00:16:58.420
+nuevos costos,
+
+00:16:58.640 --> 00:16:59.660
+revisa tus licencias actuales.
+
+00:16:59.860 --> 00:17:00.100
+A veces,
+
+00:17:00.280 --> 00:17:00.980
+parte de tu ejército
+
+00:17:00.980 --> 00:17:01.920
+ya está siendo guardia.
+
+00:17:02.320 --> 00:17:03.400
+Una vez que equilibras
+
+00:17:03.400 --> 00:17:04.140
+ambos modelos,
+
+00:17:04.280 --> 00:17:05.080
+dejas de ver la seguridad
+
+00:17:05.080 --> 00:17:05.980
+y la productividad
+
+00:17:05.980 --> 00:17:06.900
+como un compromiso.
+
+00:17:07.360 --> 00:17:08.600
+Protege ese núcleo con SAM
+
+00:17:08.600 --> 00:17:09.300
+mientras obtienes
+
+00:17:09.300 --> 00:17:09.720
+la libertad
+
+00:17:09.720 --> 00:17:10.180
+de implementar
+
+00:17:10.180 --> 00:17:11.120
+potencia de procesamiento
+
+00:17:11.120 --> 00:17:11.860
+solo cuando aporta
+
+00:17:11.860 --> 00:17:12.620
+valor real.
+
+00:17:13.140 --> 00:17:14.180
+La fortaleza sigue en pie
+
+00:17:14.180 --> 00:17:14.920
+pero ahora el tesoro
+
+00:17:14.920 --> 00:17:15.720
+no gasta monedas
+
+00:17:15.720 --> 00:17:16.360
+en alimentar
+
+00:17:16.360 --> 00:17:17.460
+tropas inactivas.
+
+00:17:18.340 --> 00:17:18.760
+Eso nos lleva
+
+00:17:18.760 --> 00:17:19.580
+a la verdad fundamental.
+
+00:17:20.120 --> 00:17:21.180
+Financiar bien el castillo
+
+00:17:21.180 --> 00:17:21.720
+no importará
+
+00:17:21.720 --> 00:17:22.960
+si los muros son débiles.
+
+00:17:23.740 --> 00:17:24.620
+La IA puede captar
+
+00:17:24.620 --> 00:17:25.120
+la tensión,
+
+00:17:25.400 --> 00:17:25.860
+pero la solidez
+
+00:17:25.860 --> 00:17:26.540
+de tus defensas
+
+00:17:26.540 --> 00:17:27.360
+decide si ese poder
+
+00:17:27.360 --> 00:17:28.380
+ayuda o daña.
+
+00:17:29.520 --> 00:17:29.720
+Entonces,
+
+00:17:29.760 --> 00:17:30.220
+¿cómo conviertes
+
+00:17:30.220 --> 00:17:30.520
+todo esto
+
+00:17:30.520 --> 00:17:31.260
+en algo práctico?
+
+00:17:31.980 --> 00:17:32.340
+Fácil.
+
+00:17:32.680 --> 00:17:33.400
+Tres movimientos
+
+00:17:33.400 --> 00:17:34.700
+repetibles y claros.
+
+00:17:34.800 --> 00:17:35.420
+Ejecuta informes
+
+00:17:35.420 --> 00:17:35.760
+de gobierno
+
+00:17:35.760 --> 00:17:36.360
+de acceso a datos
+
+00:17:36.360 --> 00:17:37.060
+para detectar sitios
+
+00:17:37.060 --> 00:17:37.780
+con exceso de permiso.
+
+00:17:38.040 --> 00:17:38.600
+Activa el control
+
+00:17:38.600 --> 00:17:39.440
+de acceso restringido
+
+00:17:39.440 --> 00:17:40.060
+para tus bóvedas
+
+00:17:40.060 --> 00:17:40.520
+de alto valor.
+
+00:17:40.920 --> 00:17:41.600
+Programa revisiones
+
+00:17:41.600 --> 00:17:42.280
+de acceso a sitios
+
+00:17:42.280 --> 00:17:42.940
+para que los propietarios
+
+00:17:42.940 --> 00:17:43.740
+corrijan la desviación.
+
+00:17:44.020 --> 00:17:44.660
+Usa los conocimientos
+
+00:17:44.660 --> 00:17:45.460
+DEA para identificar
+
+00:17:45.460 --> 00:17:46.120
+puntos débiles
+
+00:17:46.120 --> 00:17:46.780
+y priorizar solución.
+
+00:17:47.020 --> 00:17:47.780
+Ese es el manual básico.
+
+00:17:48.160 --> 00:17:48.980
+Simple, sostenible
+
+00:17:48.980 --> 00:17:49.440
+y eficaz.
+
+00:17:49.720 --> 00:17:50.680
+Construye primero los muros
+
+00:17:50.680 --> 00:17:51.540
+y luego deja que Copilot
+
+00:17:51.540 --> 00:17:52.400
+dispare la catapulta.
+
+00:17:52.900 --> 00:17:53.520
+Si esto te ayudó
+
+00:17:53.520 --> 00:17:54.140
+a evitar el próximo
+
+00:17:54.140 --> 00:17:54.760
+desastre de datos,
+
+00:17:54.900 --> 00:17:55.760
+suscríbete y compártelo
+
+00:17:55.760 --> 00:17:56.140
+con tu equipo
+
+00:17:56.140 --> 00:17:57.100
+de propietarios de sitios.

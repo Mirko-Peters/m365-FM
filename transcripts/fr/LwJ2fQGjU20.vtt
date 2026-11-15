@@ -1,0 +1,1666 @@
+WEBVTT
+
+00:00:03.470 --> 00:00:07.210
+Aujourd'hui, nous parlons d'une fonctionnalité Azure dont vous avez probablement entendu parler mais que vous n'êtes pas entièrement.
+
+00:00:07.890 --> 00:00:14.470
+Azure Policy est l'un des outils de gouvernance les plus puissants de toute la plateforme, pourtant la plupart des gens l'ignorent ou pensent qu'il est réservé aux administrateurs informatiques.
+
+00:00:15.730 --> 00:00:20.850
+A la fin de cet épisode, vous saurez ce qu'est réellement Azure Policy, comment il fonctionne comme un livre de règles invisibles,
+
+00:00:21.250 --> 00:00:24.570
+et pourquoi il est essentiel pour maintenir votre environnement Azure, sûr et sous contrôle.
+
+00:00:25.630 --> 00:00:30.110
+Nous allons le diviser en blocs logiques en commençant par le problème qu'il résout. Prenez votre effet et plongeons dans le sujet.
+
+00:00:30.110 --> 00:00:33.950
+Le problème, pourquoi le cloud a besoin de garde-fou ?
+
+00:00:33.950 --> 00:00:35.430
+Pensez à l'ancienne façon de faire les choses.
+
+00:00:36.270 --> 00:00:40.010
+Sur site, lorsque vous aviez besoin d'un serveur, vous soumettiez une demande à l'équipe opérationnelle.
+
+00:00:40.990 --> 00:00:47.490
+Il vérifiait les règles, les politiques de l'entreprise, les normes de sécurité, peut-être certaines exigences réglementaires, puis approvisionnait le serveur pour vous.
+
+00:00:47.910 --> 00:00:50.110
+Un gardien humain se tenait entre vous et l'infrastructure.
+
+00:00:50.590 --> 00:00:52.930
+Cette personne connaissait les règles et s'assurait que rien ne passait à travers les mails du filet.
+
+00:00:53.170 --> 00:00:54.310
+Le cloud change complètement la donne.
+
+00:00:54.750 --> 00:00:57.510
+Désormais, le propriétaire de l'application a un accès direct sans intermédiaire humain.
+
+00:00:57.510 --> 00:01:00.530
+Cliquez sur Créer dans le portail Azure et cela se fait instantanément.
+
+00:01:01.530 --> 00:01:05.710
+Vous pouvez également utiliser la ligne de commande, une API ou des outils d'infrastructure en tant que code comme Terraform.
+
+00:01:06.230 --> 00:01:09.190
+Le fait est que personne ne vérifie votre travail avant que la ressource ne soit créée.
+
+00:01:09.330 --> 00:01:10.290
+Et c'est là que le problème commence.
+
+00:01:10.630 --> 00:01:12.490
+La plupart des propriétaires d'applications ne connaissent pas toutes les règles.
+
+00:01:12.750 --> 00:01:16.030
+Peut-être ne réalise-t-il pas que la politique de l'entreprise exige que toutes les données restent en Europe.
+
+00:01:16.530 --> 00:01:18.230
+Ou que les comptes de stockage doivent bloquer l'accès public.
+
+00:01:18.490 --> 00:01:21.990
+Ou que certaines tailles de machines virtuelles sont coûteuses et ne devraient être utilisées qu'en production.
+
+00:01:22.450 --> 00:01:24.590
+Ils créent donc des ressources et des erreurs surviennent parfois.
+
+00:01:24.590 --> 00:01:28.670
+Une machine virtuelle est déployée avec une adresse IP publique et des ports ouverts sur Internet.
+
+00:01:29.290 --> 00:01:32.950
+Un compte de stockage est créé avec un accès blob public exposant des données sensibles.
+
+00:01:33.630 --> 00:01:37.090
+Quelqu'un lance une instance GPU coûteuse pour un test rapide et oublie de la supprimer.
+
+00:01:37.750 --> 00:01:39.010
+Ces choses arrivent tout le temps.
+
+00:01:39.610 --> 00:01:42.630
+Ce dont nous avons besoin, c'est d'un système d'application automatique qui fonctionne à chaque fois.
+
+00:01:42.830 --> 00:01:44.490
+Peu importe qui crée la ressource ou comment il le fait.
+
+00:01:45.490 --> 00:01:48.810
+Que ce soit via le portail, l'interface CLI, un appel API ou un déploiement Terraform,
+
+00:01:48.890 --> 00:01:50.690
+les règles doivent être vérifiées automatiquement.
+
+00:01:51.590 --> 00:01:53.570
+C'est exactement ce qu'Azure Policier a été conçu pour fournir.
+
+00:01:53.570 --> 00:01:56.890
+Qu'est-ce qu'Azure Policier, ce livre de règles invisibles ?
+
+00:01:56.890 --> 00:01:58.090
+Alors qu'est-ce qu'Azure Policier ?
+
+00:01:58.090 --> 00:01:59.210
+Voici la définition la plus simple.
+
+00:01:59.470 --> 00:02:02.870
+Azure Policier est un service qui vous permet de définir des règles pour vos ressources Azure
+
+00:02:02.870 --> 00:02:04.210
+et de les appliquer automatiquement.
+
+00:02:04.670 --> 00:02:06.290
+Considérez cela comme le livre de règles d'un jeu de société.
+
+00:02:06.630 --> 00:02:08.270
+Le jeu offre de nombreuses possibilités de mouvements,
+
+00:02:08.350 --> 00:02:10.410
+mais le livre de règles indique ceux qui sont réellement autorisés.
+
+00:02:10.730 --> 00:02:12.630
+Vous ne pouvez pas simplement déplacer votre pion où vous le souhaitez.
+
+00:02:13.010 --> 00:02:14.670
+Les règles vous indiquent ce qui est autorisé et ce qui ne l'est pas.
+
+00:02:15.170 --> 00:02:16.370
+Voici maintenant une distinction capitale.
+
+00:02:16.650 --> 00:02:19.430
+Azure Policier n'est pas la même chose que le contrôle d'accès basé sur les rôles, ou Airbac.
+
+00:02:23.570 --> 00:02:36.430
+Ainsi, le Airbac dit que Mirko peut créer des comptes de stockage,
+
+00:02:36.790 --> 00:02:40.050
+et Azure Policier dit que les comptes de stockage doivent avoir HTTPS activé.
+
+00:02:40.450 --> 00:02:41.810
+Ce sont deux choses différentes et vous avez besoin des deux.
+
+00:02:42.010 --> 00:02:42.810
+Voici le point essentiel.
+
+00:02:43.110 --> 00:02:45.010
+Azure Policier est toujours actif et toujours appliqué.
+
+00:02:45.850 --> 00:02:49.570
+Chaque demande de création, de mise à jour ou de suppression d'une ressource passe par Azure Policier,
+
+00:02:49.790 --> 00:02:51.050
+et il est impossible de le contourner.
+
+00:02:51.050 --> 00:02:54.850
+Il se situe entre vous et Azure Resource Manager, le plan de contrôle d'Azure.
+
+00:02:55.510 --> 00:02:56.670
+Voyez cela comme un filtre automatique.
+
+00:02:57.210 --> 00:02:59.570
+Chaque requête passe par ce filtre et si elle ne correspond pas aux règles,
+
+00:02:59.770 --> 00:03:03.230
+la requête est bloquée ou signalée, et cela ne fonctionne pas uniquement pour les nouvelles ressources.
+
+00:03:03.970 --> 00:03:06.090
+Azure Policier évalue également les ressources existantes,
+
+00:03:06.170 --> 00:03:08.590
+ce qui permet de détecter la dérive de configuration au fil du temps.
+
+00:03:09.370 --> 00:03:11.890
+Si quelqu'un modifie un paramètre sur une ressource déjà déployée
+
+00:03:11.890 --> 00:03:15.050
+et que cette modification en fera une politique, Azure Policier le signalera.
+
+00:03:15.650 --> 00:03:17.370
+Alors comment rédige-t-on réellement ces règles ?
+
+00:03:17.370 --> 00:03:18.930
+C'est là qu'interviennent les définitions de stratégie.
+
+00:03:18.930 --> 00:03:21.610
+Définition de stratégie, rédaction des règles.
+
+00:03:22.130 --> 00:03:23.950
+Alors comment rédige-t-on réellement ces règles ?
+
+00:03:23.950 --> 00:03:25.290
+C'est là qu'interviennent les définitions de stratégie.
+
+00:03:25.690 --> 00:03:28.750
+Une définition de stratégie est la règle elle-même, écrite sous forme de document JSON.
+
+00:03:29.290 --> 00:03:32.030
+JSON peut sembler technique, mais la structure est en réalité assez simple.
+
+00:03:32.490 --> 00:03:33.330
+Elle suit un modèle de base.
+
+00:03:34.070 --> 00:03:36.230
+Si cette condition est vraie, alors appliquez cet effet.
+
+00:03:36.890 --> 00:03:37.990
+Laissez-moi vous donner un exemple concret.
+
+00:03:38.350 --> 00:03:39.930
+Il existe une stratégie intégrée qui stipule,
+
+00:03:40.010 --> 00:03:42.870
+si un compte de stockage n'a pas HTTPS activé, refusez-le, refusez-le.
+
+00:03:43.210 --> 00:03:43.470
+C'est tout.
+
+00:03:43.470 --> 00:03:46.630
+Lorsque la condition est remplie, l'effet s'active et bloque le déploiement.
+
+00:03:47.270 --> 00:03:48.910
+Chaque définition de stratégie comporte trois parties.
+
+00:03:49.430 --> 00:03:50.370
+Premièrement, les conditions.
+
+00:03:50.830 --> 00:03:52.790
+C'est la partie que, que vérifiez-vous ?
+
+00:03:52.790 --> 00:03:54.850
+Le type de ressources, l'emplacement, un paramètre spécifique.
+
+00:03:55.550 --> 00:03:56.230
+Deuxièmement, les effets.
+
+00:03:56.630 --> 00:03:57.410
+C'est la partie à l'horrique.
+
+00:03:57.790 --> 00:03:59.410
+Que se passe-t-il lorsque la condition est remplie ?
+
+00:03:59.410 --> 00:04:01.550
+Bloquez-vous le déploiement ou vous contentez-vous de le signaler ?
+
+00:04:01.550 --> 00:04:02.350
+Troisièmement, les paramètres.
+
+00:04:02.870 --> 00:04:05.810
+Ce sont les champs à remplir qui rendent la stratégie réutilisable ?
+
+00:04:05.810 --> 00:04:07.670
+C'est dans les paramètres que réside la véritable puissance.
+
+00:04:08.330 --> 00:04:12.290
+Imaginez que vous vouliez écrire une stratégie qui n'autorise les ressources que dans certaines régions.
+
+00:04:12.750 --> 00:04:15.590
+Vous ne voulez pas écrire une stratégie distincte pour chaque combinaison possible de régions.
+
+00:04:16.230 --> 00:04:18.670
+Au lieu de cela, vous écrivez une définition appelée emplacements autorisés.
+
+00:04:19.170 --> 00:04:20.890
+Et vous ajoutez un paramètre pour les régions autorisées.
+
+00:04:21.470 --> 00:04:23.430
+Lorsque vous attribuez la stratégie, vous remplissez le champ vide.
+
+00:04:23.750 --> 00:04:26.050
+Vous pouvez choisir Europe Ouest et Europe Nord pour un abonnement,
+
+00:04:26.210 --> 00:04:28.130
+et Etats-Unis Est et Ouest pour un autre.
+
+00:04:28.630 --> 00:04:29.790
+Même définition, paramètres différents.
+
+00:04:30.290 --> 00:04:31.510
+C'est ainsi que vous gardez les choses gérables.
+
+00:04:31.890 --> 00:04:32.490
+Voici la bonne nouvelle.
+
+00:04:32.490 --> 00:04:34.410
+Vous n'avez pas besoin de tout écrire à partir de zéro.
+
+00:04:34.410 --> 00:04:37.290
+Microsoft propose des centaines de définitions de stratégies intégrées
+
+00:04:37.290 --> 00:04:38.630
+que vous pouvez utiliser immédiatement.
+
+00:04:39.350 --> 00:04:41.430
+Elles couvrent des domaines comme le calcul, le stockage, le réseau,
+
+00:04:41.490 --> 00:04:43.830
+le centre de sécurité, le marquage, la gestion des coûts, etc.
+
+00:04:43.990 --> 00:04:45.010
+Vous pouvez les trouver dans le portail Azure.
+
+00:04:45.090 --> 00:04:45.990
+Recherchez sur le portail Azure.
+
+00:04:46.110 --> 00:04:47.850
+Recherchez ce dont vous avez besoin et les attribuer aussitôt.
+
+00:04:48.490 --> 00:04:50.010
+Pas besoin de JSON si vous ne voulez pas en écrire.
+
+00:04:50.750 --> 00:04:52.550
+Mais une définition qui reste dans un fichier ne fait rien.
+
+00:04:52.970 --> 00:04:54.190
+Vous devez l'attribuer pour qu'elle fonctionne.
+
+00:04:54.990 --> 00:04:56.670
+Les attributions de stratégie pour mettre les règles en pratique.
+
+00:04:57.350 --> 00:04:59.390
+Une attribution de stratégie consiste à prendre votre définition
+
+00:04:59.390 --> 00:05:00.750
+et à l'orienter vers une portée spécifique.
+
+00:05:00.750 --> 00:05:03.030
+Une portée est simplement la limite où cette règle s'applique.
+
+00:05:03.550 --> 00:05:05.490
+Vous avez trois choix, du plus large au plus restreint.
+
+00:05:06.270 --> 00:05:07.670
+Attribuer au niveau du groupe d'administration.
+
+00:05:07.810 --> 00:05:09.610
+Et cela couvre tout un ensemble d'abonnements.
+
+00:05:10.030 --> 00:05:11.230
+Appliquez-la au niveau de l'abonnement
+
+00:05:11.230 --> 00:05:12.830
+et cela couvre tout ce qui se trouve à l'intérieur.
+
+00:05:13.550 --> 00:05:15.310
+Ou attribuer au niveau du groupe de ressources
+
+00:05:15.310 --> 00:05:17.130
+pour ne couvrir que les ressources de ce groupe.
+
+00:05:17.910 --> 00:05:18.850
+Maintenant, parlons de l'héritage.
+
+00:05:19.270 --> 00:05:20.030
+C'est un concept clé.
+
+00:05:20.450 --> 00:05:22.690
+Lorsque vous attribuez une stratégie au niveau du groupe d'administration,
+
+00:05:23.010 --> 00:05:24.690
+elle s'applique automatiquement à chaque abonnement
+
+00:05:24.690 --> 00:05:26.390
+et groupe de ressources en dessous.
+
+00:05:26.830 --> 00:05:28.090
+Vous n'avez pas besoin de l'attribuer encore et encore.
+
+00:05:28.090 --> 00:05:30.470
+C'est comme afficher une règle sur le tableau d'affichage principal
+
+00:05:30.470 --> 00:05:31.590
+à l'entrée d'un immeuble de bureau.
+
+00:05:32.430 --> 00:05:34.050
+Tous ceux qui passent par là doivent la respecter.
+
+00:05:34.410 --> 00:05:36.050
+Vous n'afficheriez pas la même règle à chaque étage.
+
+00:05:36.910 --> 00:05:37.730
+Ce serait un effort inutile.
+
+00:05:38.070 --> 00:05:39.110
+La règle se transmet simplement vers l'eau.
+
+00:05:39.390 --> 00:05:41.290
+Mais que se passe-t-il lorsque vous avez besoin d'une exception ?
+
+00:05:41.290 --> 00:05:43.550
+Peut-être que votre entreprise exige que toutes les données restent en Europe,
+
+00:05:43.750 --> 00:05:46.310
+mais qu'un projet a une raison légitime d'utiliser un centre de données en Asie.
+
+00:05:46.950 --> 00:05:48.510
+Vous ne voulez pas supprimer toute la stratégie,
+
+00:05:48.590 --> 00:05:49.590
+cela laisserait tout exposer.
+
+00:05:50.210 --> 00:05:51.010
+Alors vous créez une exemption.
+
+00:05:51.750 --> 00:05:53.490
+Les exemptions vous permettent de créer des exceptions
+
+00:05:53.490 --> 00:05:56.450
+pour des ressources spécifiques sans supprimer la stratégie ailleurs.
+
+00:05:57.150 --> 00:05:58.630
+C'est une manière propre de gérer les cas particuliers.
+
+00:05:59.030 --> 00:05:59.950
+Voici quelques conseils pratiques.
+
+00:06:01.570 --> 00:06:04.330
+Attribuez vos stratégies fondamentales générales au niveau du groupe d'administration.
+
+00:06:05.030 --> 00:06:06.530
+Des éléments comme les emplacements autorisés
+
+00:06:06.530 --> 00:06:08.150
+ou les balises requises devraient s'appliquer à tout.
+
+00:06:08.650 --> 00:06:10.190
+Attribuez ensuite des stratégies plus spécifiques
+
+00:06:10.190 --> 00:06:11.690
+au niveau de l'abonnement ou du groupe de ressources.
+
+00:06:12.170 --> 00:06:13.390
+Peut-être que votre abonnement de développement
+
+00:06:13.390 --> 00:06:15.430
+a des règles plus souples que votre abonnement de production.
+
+00:06:15.770 --> 00:06:16.570
+C'est tout à fait acceptable.
+
+00:06:16.890 --> 00:06:18.910
+Les stratégies spécifiques viennent s'ajouter aux stratégies générales.
+
+00:06:19.190 --> 00:06:20.370
+Parlons maintenant de ce qui se passe réellement
+
+00:06:20.370 --> 00:06:21.350
+lorsque quelqu'un en fera une règle.
+
+00:06:21.350 --> 00:06:22.910
+C'est là qu'interviennent les effets.
+
+00:06:23.790 --> 00:06:25.790
+Les effets, ce qui se passe lorsque les règles sont enfreintes.
+
+00:06:26.390 --> 00:06:27.750
+Vous avez donc écrit une règle et vous l'avez assis.
+
+00:06:28.230 --> 00:06:29.690
+Que se passe-t-il si quelqu'un l'enfreint ?
+
+00:06:29.690 --> 00:06:30.570
+C'est là qu'interviennent les effets.
+
+00:06:30.990 --> 00:06:32.970
+Les effets constituent la partie alors que de la stratégie.
+
+00:06:33.790 --> 00:06:34.630
+Ils déterminent ce qui arrive
+
+00:06:34.630 --> 00:06:36.450
+lorsqu'une ressource ne respecte pas la règle.
+
+00:06:36.810 --> 00:06:38.110
+Il en existe quatre principaux que vous rencontrez.
+
+00:06:38.370 --> 00:06:39.310
+Tout d'abord, le refus de nid.
+
+00:06:39.890 --> 00:06:41.530
+C'est l'effet le plus courant pour les règles critiques.
+
+00:06:42.510 --> 00:06:43.930
+Lorsqu'une stratégie de refus est déclenchée,
+
+00:06:43.990 --> 00:06:45.210
+le déploiement est totalement bloqué.
+
+00:06:45.210 --> 00:06:47.290
+L'utilisateur reçoit un message d'erreur clair
+
+00:06:47.290 --> 00:06:48.670
+indiquant que la validation a échoué
+
+00:06:48.670 --> 00:06:50.230
+et précisant quelle stratégie l'a bloqué.
+
+00:06:51.030 --> 00:06:52.670
+Aucune ressource n'est créée, aucun dommage n'est causé.
+
+00:06:53.270 --> 00:06:55.170
+Utilisez ceci pour les règles qui ne doivent jamais être enfreintes.
+
+00:06:55.690 --> 00:06:57.270
+Comme l'interdiction d'accès public au blob
+
+00:06:57.270 --> 00:06:58.230
+sur les comptes de stockage
+
+00:06:58.230 --> 00:06:59.990
+ou les déploiements hors des régions approuvées.
+
+00:07:01.270 --> 00:07:01.870
+Ensuite, l'audit.
+
+00:07:02.450 --> 00:07:03.450
+Celui-ci fonctionne différemment.
+
+00:07:03.950 --> 00:07:04.850
+Le déploiement est effectué,
+
+00:07:04.930 --> 00:07:06.450
+mais la ressource est marquée comme non conforme
+
+00:07:06.450 --> 00:07:07.710
+dans le tableau de bord de conformité.
+
+00:07:08.350 --> 00:07:09.370
+L'audit est extrêmement utile
+
+00:07:09.370 --> 00:07:11.010
+lorsque vous n'êtes pas sûr de l'impact d'une nouvelle règle
+
+00:07:11.010 --> 00:07:11.770
+sur votre environnement.
+
+00:07:12.370 --> 00:07:13.810
+Vous pouvez voir ce qui se passe sans rien bloquer.
+
+00:07:14.510 --> 00:07:15.710
+C'est comme effectuer une mesure
+
+00:07:15.710 --> 00:07:16.750
+avant d'appliquer un changement.
+
+00:07:17.670 --> 00:07:19.270
+Troisièmement, la modification et l'ajout modifable.
+
+00:07:19.710 --> 00:07:21.410
+Ces effets corrigent automatiquement le problème
+
+00:07:21.410 --> 00:07:22.190
+au lieu de le bloquer.
+
+00:07:22.870 --> 00:07:24.550
+La modification change les paramètres existants
+
+00:07:24.550 --> 00:07:25.070
+lors du déploiement.
+
+00:07:25.470 --> 00:07:26.990
+L'ajout complète un champ existant avec une valeur.
+
+00:07:27.490 --> 00:07:28.730
+Par exemple, vous pouvez créer une stratégie
+
+00:07:28.730 --> 00:07:30.350
+qui ajoute automatiquement une étiquette requise
+
+00:07:30.350 --> 00:07:31.350
+avec une valeur par défaut.
+
+00:07:32.050 --> 00:07:33.450
+Si quelqu'un oublie d'ajouter une étiquette
+
+00:07:33.450 --> 00:07:34.030
+de centre de coût,
+
+00:07:34.410 --> 00:07:35.430
+la stratégie l'ajoute pour lui,
+
+00:07:35.650 --> 00:07:36.370
+le déploiement réussi
+
+00:07:36.370 --> 00:07:37.390
+et la ressource est conforme
+
+00:07:37.390 --> 00:07:38.470
+sans effort supplémentaire.
+
+00:07:38.470 --> 00:07:40.430
+Quatrièmement, le déploiement
+
+00:07:40.430 --> 00:07:41.610
+si il n'existe pas un deploy if not existant.
+
+00:07:41.770 --> 00:07:42.670
+Celui-ci gère les situations
+
+00:07:42.670 --> 00:07:44.070
+où une ressource de support est manquante.
+
+00:07:44.570 --> 00:07:45.210
+Disons que vous voulez activer
+
+00:07:45.210 --> 00:07:46.090
+la journalisation de diagnostic
+
+00:07:46.090 --> 00:07:47.070
+sur chaque compte de stockage.
+
+00:07:47.630 --> 00:07:48.830
+Si quelqu'un crée un compte de stockage
+
+00:07:48.830 --> 00:07:49.870
+sans paramètre de diagnostic,
+
+00:07:50.190 --> 00:07:51.690
+le déploiement si inexistant se déclenche
+
+00:07:51.690 --> 00:07:52.470
+et déploie automatiquement
+
+00:07:52.470 --> 00:07:53.470
+la configuration manquante.
+
+00:07:54.170 --> 00:07:55.050
+C'est comme avoir un assistant
+
+00:07:55.050 --> 00:07:55.850
+qui nettoie derrière vous.
+
+00:07:56.190 --> 00:07:57.150
+Voici la meilleure pratique à suivre.
+
+00:07:57.430 --> 00:07:58.090
+Commencez par l'audit.
+
+00:07:58.430 --> 00:07:59.390
+Voyez d'abord ce qui se passe réellement
+
+00:07:59.390 --> 00:08:00.050
+dans votre environnement.
+
+00:08:00.650 --> 00:08:01.590
+Découvrez combien de ressources
+
+00:08:01.590 --> 00:08:02.870
+seraient affectées par une nouvelle règle.
+
+00:08:03.510 --> 00:08:04.190
+Passez ensuite au refus
+
+00:08:04.190 --> 00:08:04.850
+une fois que vous êtes certain
+
+00:08:04.850 --> 00:08:05.650
+que la règle est correcte
+
+00:08:05.650 --> 00:08:06.330
+et qu'elle ne bloquera pas
+
+00:08:06.330 --> 00:08:07.210
+les déploiements légitimes.
+
+00:08:08.170 --> 00:08:09.350
+Gérer une seule stratégie est simple.
+
+00:08:09.790 --> 00:08:11.110
+Mais que faire si vous en avez besoin de 5 ans
+
+00:08:11.110 --> 00:08:11.930
+toutes liées à la sécurité
+
+00:08:11.930 --> 00:08:13.330
+ou à la conformité ?
+
+00:08:13.330 --> 00:08:14.290
+C'est là qu'interviennent les initiatives.
+
+00:08:15.130 --> 00:08:16.750
+Les initiatives regroupent les règles entre elles.
+
+00:08:17.250 --> 00:08:18.550
+Alors, qu'est-ce qu'une initiative ?
+
+00:08:18.550 --> 00:08:20.290
+Considérez-la comme un ensemble de stratégies
+
+00:08:20.290 --> 00:08:21.550
+regroupées autour d'un objectif commun.
+
+00:08:21.930 --> 00:08:23.730
+Au lieu d'assigner 50 stratégies individuelles
+
+00:08:23.730 --> 00:08:24.230
+une par une,
+
+00:08:24.370 --> 00:08:25.830
+vous assignez une seule initiative
+
+00:08:25.830 --> 00:08:27.030
+qui les contient toutes.
+
+00:08:27.470 --> 00:08:29.070
+C'est comme une boîte à outils
+
+00:08:29.070 --> 00:08:30.430
+pré-remplie pour une tâche spécifique.
+
+00:08:30.430 --> 00:08:32.330
+Vous ne prenez pas séparément un marteau,
+
+00:08:32.390 --> 00:08:33.110
+un tournevis et une clé.
+
+00:08:33.470 --> 00:08:34.550
+Prenez simplement toute la boîte à outils.
+
+00:08:34.910 --> 00:08:35.670
+Tout ce dont vous avez besoin
+
+00:08:35.670 --> 00:08:36.270
+se trouve au même endroit.
+
+00:08:36.510 --> 00:08:37.430
+Le véritable avantage ici,
+
+00:08:37.510 --> 00:08:38.210
+c'est le rapport de conformité.
+
+00:08:38.470 --> 00:08:39.650
+Lorsque vous affectez une initiative,
+
+00:08:39.910 --> 00:08:41.110
+vous obtenez une vue de conformité unique
+
+00:08:41.110 --> 00:08:41.610
+pour tout le groupe.
+
+00:08:42.170 --> 00:08:43.110
+Vous pouvez voir d'un coup d'œil
+
+00:08:43.110 --> 00:08:44.910
+si votre environnement respecte la norme globale.
+
+00:08:45.790 --> 00:08:46.730
+Si un élément n'est pas conforme,
+
+00:08:46.810 --> 00:08:47.850
+vous pouvez examiner directement
+
+00:08:47.850 --> 00:08:49.410
+la politique spécifique qui fait défaut.
+
+00:08:50.150 --> 00:08:50.750
+C'est beaucoup plus propre
+
+00:08:50.750 --> 00:08:52.050
+que de suivre 50 politiques distantes.
+
+00:08:52.890 --> 00:08:54.470
+Microsoft fournit des initiatives intégrées
+
+00:08:54.470 --> 00:08:55.970
+couvrant les principaux cadres de conformité.
+
+00:08:56.630 --> 00:08:58.010
+Comme Azure Security Benchmark,
+
+00:08:58.010 --> 00:09:01.190
+CIS-NIST, PCI-DSS, IPA-A, ISO 27001,
+
+00:09:01.490 --> 00:09:03.110
+et plus encore, et plus encore.
+
+00:09:03.830 --> 00:09:05.430
+Elles sont déjà créées et prêtes à être affectées.
+
+00:09:05.950 --> 00:09:06.890
+Vous n'avez pas besoin de déterminer
+
+00:09:06.890 --> 00:09:07.870
+quelles politiques correspondent
+
+00:09:07.870 --> 00:09:09.130
+à quelles exigences de conformité.
+
+00:09:09.670 --> 00:09:10.850
+Microsoft a fait ce travail pour vous.
+
+00:09:11.310 --> 00:09:12.190
+Certaines de ces initiatives
+
+00:09:12.190 --> 00:09:13.870
+contiennent des centaines de politiques individuelles.
+
+00:09:14.090 --> 00:09:14.990
+Imaginez, c'est de les affecter
+
+00:09:14.990 --> 00:09:15.590
+toutes une par une.
+
+00:09:16.090 --> 00:09:16.630
+Vous ne le feriez pas.
+
+00:09:16.910 --> 00:09:17.910
+Vous utiliseriez l'initiative.
+
+00:09:18.170 --> 00:09:18.910
+Vous pouvez également créer
+
+00:09:18.910 --> 00:09:19.890
+des initiatives personnalisées
+
+00:09:19.890 --> 00:09:20.450
+pour vos propres ordres.
+
+00:09:20.770 --> 00:09:21.670
+Peut-être avez-vous une base
+
+00:09:21.670 --> 00:09:22.570
+de référence de production
+
+00:09:22.570 --> 00:09:23.790
+incluant des politiques de chiffrement,
+
+00:09:24.210 --> 00:09:25.610
+de journalisation et de sécurité réseau.
+
+00:09:25.610 --> 00:09:27.570
+Ou une initiative de contrôle des coûts
+
+00:09:27.570 --> 00:09:28.510
+qui limite les tailles de VM
+
+00:09:28.510 --> 00:09:30.090
+et impose des balises de centres de coûts.
+
+00:09:30.890 --> 00:09:31.230
+Même idée.
+
+00:09:31.790 --> 00:09:32.630
+Regrouper les politiques,
+
+00:09:32.750 --> 00:09:33.250
+affecter le groupe
+
+00:09:33.250 --> 00:09:34.010
+et suivre la conformité
+
+00:09:34.010 --> 00:09:34.810
+comme une unité unique.
+
+00:09:35.370 --> 00:09:36.010
+Concrétisons cela
+
+00:09:36.010 --> 00:09:37.030
+avec des exemples concrets
+
+00:09:37.030 --> 00:09:37.770
+de la façon dont les gens
+
+00:09:37.770 --> 00:09:38.890
+utilisent réellement Azure Policy.
+
+00:09:39.810 --> 00:09:40.710
+Des exemples concrets.
+
+00:09:41.390 --> 00:09:42.170
+La politique en action.
+
+00:09:42.590 --> 00:09:43.310
+Rendons cela réel.
+
+00:09:44.010 --> 00:09:45.130
+Voici cinq scénarios courants
+
+00:09:45.130 --> 00:09:45.850
+où Azure Policy
+
+00:09:45.850 --> 00:09:46.950
+résout des problèmes réels.
+
+00:09:47.670 --> 00:09:48.030
+Premièrement,
+
+00:09:48.090 --> 00:09:48.970
+les restrictions régionales
+
+00:09:48.970 --> 00:09:49.830
+pour la conformité des données.
+
+00:09:50.210 --> 00:09:51.210
+Imaginez que votre entreprise
+
+00:09:51.210 --> 00:09:52.190
+est une politique stipulant
+
+00:09:52.190 --> 00:09:52.950
+que toutes les données clients
+
+00:09:52.950 --> 00:09:53.750
+doivent rester en Europe.
+
+00:09:53.750 --> 00:09:56.190
+Vous pouvez affecter la politique intégrée,
+
+00:09:56.310 --> 00:09:57.270
+des emplacements autorisés
+
+00:09:57.270 --> 00:09:58.710
+au niveau du groupe d'administration racine
+
+00:09:58.710 --> 00:10:00.450
+et ne permettre que les régions européennes
+
+00:10:00.450 --> 00:10:01.650
+comme Europe Ouest et Europe Nord.
+
+00:10:02.170 --> 00:10:02.490
+Désormais,
+
+00:10:02.590 --> 00:10:03.330
+lorsqu'une personne crée
+
+00:10:03.330 --> 00:10:03.890
+un nouvel abonnement,
+
+00:10:03.990 --> 00:10:04.730
+il hérite automatiquement
+
+00:10:04.730 --> 00:10:05.210
+de cette règle.
+
+00:10:05.930 --> 00:10:06.650
+Elle ne pourra pas déployer
+
+00:10:06.650 --> 00:10:07.510
+des ressources aux Etats-Unis
+
+00:10:07.510 --> 00:10:07.990
+ou en Asie,
+
+00:10:08.050 --> 00:10:08.530
+même si elle essaie.
+
+00:10:08.930 --> 00:10:09.730
+La politique le bloque.
+
+00:10:10.030 --> 00:10:10.910
+Pas de vérification manuelle,
+
+00:10:11.010 --> 00:10:11.710
+pas de demande d'autorisation.
+
+00:10:12.110 --> 00:10:13.170
+La règle est simplement appliquée.
+
+00:10:13.530 --> 00:10:13.830
+Deuxièmement,
+
+00:10:13.870 --> 00:10:14.590
+l'application des balises
+
+00:10:14.590 --> 00:10:15.050
+pour la location.
+
+00:10:15.610 --> 00:10:16.530
+Votre équipe financière
+
+00:10:16.530 --> 00:10:17.330
+doit suivre les dépenses
+
+00:10:17.330 --> 00:10:17.970
+par département,
+
+00:10:18.330 --> 00:10:19.230
+mais elle ne peut pas le faire
+
+00:10:23.750 --> 00:10:24.810
+de coût et une balise d'environnement
+
+00:10:24.810 --> 00:10:26.030
+sur chaque ressource.
+
+00:10:27.310 --> 00:10:28.210
+Voici l'aspect intelligent.
+
+00:10:28.610 --> 00:10:29.670
+Vous utilisez l'effet de modification.
+
+00:10:30.070 --> 00:10:30.650
+Si quelqu'un oublie
+
+00:10:30.650 --> 00:10:31.390
+d'ajouter la balise,
+
+00:10:31.570 --> 00:10:32.750
+la politique l'ajoute automatiquement
+
+00:10:32.750 --> 00:10:33.710
+avec une valeur par défaut.
+
+00:10:33.970 --> 00:10:34.810
+Le déploiement aboutit
+
+00:10:34.810 --> 00:10:36.110
+et la ressource est conforme.
+
+00:10:36.530 --> 00:10:37.130
+La finance obtient
+
+00:10:37.130 --> 00:10:37.970
+des données de coût précises
+
+00:10:37.970 --> 00:10:38.450
+et les développeurs
+
+00:10:38.450 --> 00:10:38.990
+ne sont pas bloqués
+
+00:10:38.990 --> 00:10:39.750
+par une balise manquante.
+
+00:10:40.250 --> 00:10:40.610
+Troisièmement,
+
+00:10:40.750 --> 00:10:41.390
+le contrôle des coûts
+
+00:10:41.390 --> 00:10:41.830
+dans le développement.
+
+00:10:42.170 --> 00:10:42.850
+Les équipes de développement
+
+00:10:42.850 --> 00:10:43.750
+adorent expérimenter,
+
+00:10:43.930 --> 00:10:44.490
+mais les expériences
+
+00:10:44.490 --> 00:10:45.250
+peuvent vite coûter cher.
+
+00:10:45.810 --> 00:10:46.370
+Quelqu'un pourrait lancer
+
+00:10:46.370 --> 00:10:47.710
+une instance GPU avec 24 cœurs
+
+00:10:47.710 --> 00:10:48.910
+juste pour tester un script simple.
+
+00:10:48.910 --> 00:10:50.370
+Vous créez donc une stratégie
+
+00:10:50.370 --> 00:10:51.310
+qui limite les tailles de VM
+
+00:10:51.310 --> 00:10:52.250
+dans les abonnements de développement
+
+00:10:52.250 --> 00:10:53.230
+aux références plus petites.
+
+00:10:53.950 --> 00:10:54.750
+Des choses comme la série B
+
+00:10:54.750 --> 00:10:55.230
+ou la série D
+
+00:10:55.230 --> 00:10:56.130
+avec un nombre limité de cœur.
+
+00:10:56.690 --> 00:10:57.250
+Si quelqu'un tente
+
+00:10:57.250 --> 00:10:58.350
+de déployer une VM coûteuse
+
+00:10:58.350 --> 00:10:59.830
+avec GPU ou mémoire élevée,
+
+00:11:00.050 --> 00:11:01.010
+l'effet de refus s'active
+
+00:11:01.010 --> 00:11:01.850
+et le bloque.
+
+00:11:02.310 --> 00:11:02.910
+Les développeurs peuvent
+
+00:11:02.910 --> 00:11:03.690
+toujours expérimenter,
+
+00:11:03.810 --> 00:11:04.170
+mais ils ne peuvent pas
+
+00:11:04.170 --> 00:11:04.710
+dépasser le budget.
+
+00:11:05.290 --> 00:11:05.610
+Quatrièmement,
+
+00:11:05.670 --> 00:11:06.510
+une base de référence de sécurité
+
+00:11:06.510 --> 00:11:06.990
+pour le stockage.
+
+00:11:07.330 --> 00:11:08.070
+Les comptes de stockage
+
+00:11:08.070 --> 00:11:08.650
+sont l'un des endroits
+
+00:11:08.650 --> 00:11:09.190
+les plus courants
+
+00:11:09.190 --> 00:11:10.610
+où les erreurs de sécurité surviennent.
+
+00:11:11.370 --> 00:11:12.010
+Quelqu'un crée un compte
+
+00:11:12.010 --> 00:11:13.130
+de stockage avec accès public
+
+00:11:13.130 --> 00:11:14.050
+au blog et soudain,
+
+00:11:14.230 --> 00:11:14.850
+des données sensibles
+
+00:11:14.850 --> 00:11:15.930
+sont exposées sur Internet.
+
+00:11:16.830 --> 00:11:17.810
+Vous créez donc une stratégie
+
+00:11:17.810 --> 00:11:18.530
+qui exige un trafic
+
+00:11:18.530 --> 00:11:19.470
+uniquement en HTTPS
+
+00:11:19.470 --> 00:11:20.650
+et bloque l'accès public au blog.
+
+00:11:21.350 --> 00:11:22.010
+Et vous utilisez
+
+00:11:22.010 --> 00:11:23.270
+CAC déployé si inexistante
+
+00:11:23.270 --> 00:11:24.490
+Agme pour activer automatiquement
+
+00:11:24.490 --> 00:11:25.630
+la journalisation des diagnostics
+
+00:11:25.630 --> 00:11:26.570
+sur chaque compte de stockage
+
+00:11:26.570 --> 00:11:26.970
+qui ne l'a pas.
+
+00:11:27.550 --> 00:11:28.650
+La stratégie corrige le problème
+
+00:11:28.650 --> 00:11:29.570
+avant qu'il ne devienne un problème.
+
+00:11:30.270 --> 00:11:30.630
+Cinquièmement,
+
+00:11:30.690 --> 00:11:31.450
+les conventions de nommage.
+
+00:11:32.590 --> 00:11:33.250
+Votre équipe veut que
+
+00:11:33.250 --> 00:11:33.890
+toutes les ressources
+
+00:11:33.890 --> 00:11:34.970
+commencent par prodgum
+
+00:11:34.970 --> 00:11:35.610
+ou devgum
+
+00:11:35.610 --> 00:11:36.710
+pour identifier facilement
+
+00:11:36.710 --> 00:11:37.170
+l'environnement.
+
+00:11:39.800 --> 00:11:40.540
+Vous créez une stratégie
+
+00:11:40.540 --> 00:11:41.540
+qui vérifie le nom de la ressource
+
+00:11:41.540 --> 00:11:42.200
+par rapport au modèle,
+
+00:11:42.200 --> 00:11:43.400
+mais au lieu de bloquer le déploiement,
+
+00:11:43.480 --> 00:11:44.360
+vous utilisez l'effet d'audit.
+
+00:11:45.180 --> 00:11:46.140
+La ressource est créée
+
+00:11:46.140 --> 00:11:46.760
+mais elle est signalée
+
+00:11:46.760 --> 00:11:47.920
+comme non conforme
+
+00:11:47.920 --> 00:11:48.700
+et d'où générer un rapport
+
+00:11:48.700 --> 00:11:49.560
+de conformité mensuelle
+
+00:11:49.560 --> 00:11:50.220
+et demander à l'équipe
+
+00:11:50.220 --> 00:11:50.840
+de corriger l'hommage.
+
+00:11:51.220 --> 00:11:51.980
+C'est un moyen en douceur
+
+00:11:51.980 --> 00:11:52.680
+d'imposer des normes
+
+00:11:52.680 --> 00:11:53.720
+sans interrompre les flux de travail.
+
+00:11:54.420 --> 00:11:55.340
+Chacun de ces exemples
+
+00:11:55.340 --> 00:11:56.360
+suit le même modèle.
+
+00:11:57.040 --> 00:11:57.760
+Identifier le problème.
+
+00:11:58.200 --> 00:11:59.480
+Choisir où créer la stratégie.
+
+00:11:59.940 --> 00:12:00.560
+Décider de l'effet.
+
+00:12:00.800 --> 00:12:01.680
+Assigner au bon périmètre.
+
+00:12:02.060 --> 00:12:02.860
+Surveiller la conformité.
+
+00:12:03.340 --> 00:12:04.180
+C'est ça le manuel de procédure.
+
+00:12:04.580 --> 00:12:05.440
+Prenons maintenant du recul
+
+00:12:05.440 --> 00:12:06.260
+pour voir comment ces éléments
+
+00:12:06.260 --> 00:12:07.280
+s'intègrent dans la vue d'ensemble
+
+00:12:07.280 --> 00:12:08.160
+de la gouvernance Azure.
+
+00:12:08.900 --> 00:12:09.740
+La vue d'ensemble.
+
+00:12:10.140 --> 00:12:11.640
+Comment tout cela est connecté ?
+
+00:12:11.640 --> 00:12:12.500
+Alors, où Azure Policy
+
+00:12:12.500 --> 00:12:14.040
+s'intègre-t-il dans cette vue d'ensemble ?
+
+00:12:14.040 --> 00:12:14.940
+Voyons les choses sous cet angle.
+
+00:12:15.720 --> 00:12:16.740
+Azure Policy fonctionne
+
+00:12:16.740 --> 00:12:17.840
+au niveau du plan de contrôle
+
+00:12:17.840 --> 00:12:18.680
+directement au-dessus
+
+00:12:18.680 --> 00:12:19.720
+d'Azure Resource Manager
+
+00:12:19.720 --> 00:12:21.240
+et évalue chaque requête
+
+00:12:21.240 --> 00:12:21.920
+qui transite.
+
+00:12:23.340 --> 00:12:24.160
+Chaque fois que quelqu'un crée,
+
+00:12:24.240 --> 00:12:24.940
+met à jour ou supprime
+
+00:12:24.940 --> 00:12:25.420
+une ressource,
+
+00:12:25.520 --> 00:12:27.060
+Azure Policy vérifie les règles.
+
+00:12:27.620 --> 00:12:28.860
+C'est le gardien à l'entrée.
+
+00:12:29.480 --> 00:12:30.300
+Ce n'est pas le seul outil
+
+00:12:30.300 --> 00:12:31.480
+dans la boîte à outils de gouvernance.
+
+00:12:32.280 --> 00:12:33.260
+Azure Policy n'est qu'une pièce
+
+00:12:33.260 --> 00:12:34.300
+d'un système plus vaste.
+
+00:12:34.300 --> 00:12:35.540
+Les groupes d'administration
+
+00:12:35.540 --> 00:12:36.340
+fournissent la hiérarchie
+
+00:12:36.340 --> 00:12:37.300
+pour organiser vos abonnements
+
+00:12:37.300 --> 00:12:38.460
+et appliquer des règles
+
+00:12:38.460 --> 00:12:38.960
+à grande échelle.
+
+00:12:39.920 --> 00:12:40.540
+Le contrôle d'accès
+
+00:12:40.540 --> 00:12:41.180
+basé sur les rôles
+
+00:12:41.180 --> 00:12:42.120
+décide qui a accès à quoi,
+
+00:12:42.260 --> 00:12:43.400
+tandis qu'Azure Policy contrôle
+
+00:12:43.400 --> 00:12:44.200
+quelles configurations
+
+00:12:44.200 --> 00:12:45.000
+sont autorisées.
+
+00:12:45.840 --> 00:12:46.160
+Ensemble,
+
+00:12:46.260 --> 00:12:46.880
+ils forment le fondement
+
+00:12:46.880 --> 00:12:47.720
+de la gouvernance du cloud.
+
+00:12:48.260 --> 00:12:48.940
+Voici le point important.
+
+00:12:49.360 --> 00:12:50.560
+Azure Policy est également le moteur
+
+00:12:50.560 --> 00:12:51.180
+derrière d'autres services
+
+00:12:51.180 --> 00:12:52.100
+que vous utilisez peut-être déjà.
+
+00:12:52.860 --> 00:12:53.540
+Microsoft Defender
+
+00:12:53.540 --> 00:12:54.000
+pour le cloud
+
+00:12:54.000 --> 00:12:55.100
+utilise Azure Policy
+
+00:12:55.100 --> 00:12:55.560
+pour générer
+
+00:12:55.560 --> 00:12:56.760
+ses recommandations de conformité.
+
+00:12:57.480 --> 00:12:58.040
+Quand Defender
+
+00:12:58.040 --> 00:12:58.780
+vous signale qu'un compte
+
+00:12:58.780 --> 00:12:59.720
+de stockage n'est pas conforme,
+
+00:12:59.780 --> 00:13:00.480
+il exécute en réalité
+
+00:13:00.480 --> 00:13:01.520
+et une évaluation de stratégie.
+
+00:13:02.360 --> 00:13:02.880
+Azure Advisor
+
+00:13:02.880 --> 00:13:03.480
+tire bon nombre
+
+00:13:03.480 --> 00:13:04.300
+de ses recommandations
+
+00:13:04.300 --> 00:13:04.960
+en matière de coût
+
+00:13:04.960 --> 00:13:05.560
+et de fiabilité
+
+00:13:05.560 --> 00:13:06.960
+de ces mêmes évaluations.
+
+00:13:07.880 --> 00:13:08.400
+Et le tableau de bord
+
+00:13:08.400 --> 00:13:09.400
+de conformité du portail Azure
+
+00:13:09.400 --> 00:13:10.200
+est entièrement basé
+
+00:13:10.200 --> 00:13:11.020
+sur ces données stratégies.
+
+00:13:11.580 --> 00:13:12.340
+Même si vous n'avez jamais
+
+00:13:12.340 --> 00:13:13.320
+créé de stratégies vous-même,
+
+00:13:13.440 --> 00:13:14.020
+vous les utilisez
+
+00:13:14.020 --> 00:13:15.100
+probablement sans le savoir.
+
+00:13:15.960 --> 00:13:16.880
+Il existe une autre pratique
+
+00:13:16.880 --> 00:13:17.380
+applicative.
+
+00:13:18.060 --> 00:13:18.780
+Au lieu de créer
+
+00:13:18.780 --> 00:13:19.880
+des stratégies via le portail,
+
+00:13:20.040 --> 00:13:20.560
+vous les stockez
+
+00:13:20.560 --> 00:13:21.520
+en tant que fichiers JSON
+
+00:13:21.520 --> 00:13:22.560
+dans un dépôt Git
+
+00:13:22.560 --> 00:13:23.320
+et les déployez
+
+00:13:23.320 --> 00:13:24.520
+via des pipelines CICZ
+
+00:13:24.520 --> 00:13:25.720
+comme du code applicatif.
+
+00:13:26.720 --> 00:13:27.160
+Cela vous offre
+
+00:13:27.160 --> 00:13:27.900
+le contrôle de version,
+
+00:13:28.040 --> 00:13:28.560
+les revues de code
+
+00:13:28.560 --> 00:13:29.500
+et les tests automatisés
+
+00:13:29.500 --> 00:13:30.420
+pour vos règles de gouvernance.
+
+00:13:31.000 --> 00:13:31.420
+C'est un moyen
+
+00:13:31.420 --> 00:13:32.080
+plus évolutif
+
+00:13:32.080 --> 00:13:32.900
+de gérer les stratégies
+
+00:13:32.900 --> 00:13:34.000
+au sein de grandes organisations.
+
+00:13:34.660 --> 00:13:35.820
+Voici l'essentiel à retenir.
+
+00:13:36.520 --> 00:13:37.280
+Une fois qu'Azure Policy
+
+00:13:37.280 --> 00:13:38.280
+est correctement configuré,
+
+00:13:38.360 --> 00:13:39.300
+il s'exécute silencieusement
+
+00:13:39.300 --> 00:13:39.760
+en arrière-plan.
+
+00:13:40.300 --> 00:13:41.340
+C'est le garde-fou automatique
+
+00:13:41.340 --> 00:13:42.180
+qui prévient les problèmes
+
+00:13:42.180 --> 00:13:43.040
+avant qu'il ne survienne.
+
+00:13:43.960 --> 00:13:44.480
+Les utilisateurs
+
+00:13:44.480 --> 00:13:45.160
+ne savent peut-être pas
+
+00:13:45.160 --> 00:13:45.480
+qu'il est là,
+
+00:13:45.600 --> 00:13:46.240
+mais ils en bénéficient
+
+00:13:46.240 --> 00:13:47.380
+à chaque déploiement de ressources.
+
+00:13:48.040 --> 00:13:48.480
+Vous obtenez
+
+00:13:48.480 --> 00:13:49.500
+une application cohérente
+
+00:13:49.500 --> 00:13:49.940
+à chaque fois,
+
+00:13:50.200 --> 00:13:50.940
+sans contrôle manuel,
+
+00:13:51.220 --> 00:13:51.960
+ticket d'approbation
+
+00:13:51.960 --> 00:13:52.900
+ou erreur humaine.
+
+00:13:53.860 --> 00:13:54.780
+Voilà, donc Azure Policy
+
+00:13:54.780 --> 00:13:55.700
+est expliqué simplement.
+
+00:13:56.320 --> 00:13:57.420
+C'est un règlement invisible
+
+00:13:57.420 --> 00:13:58.380
+qui impose les normes
+
+00:13:58.380 --> 00:13:59.180
+de votre organisation
+
+00:13:59.180 --> 00:14:00.060
+à chaque ressource
+
+00:14:00.060 --> 00:14:00.840
+systématiquement.
+
+00:14:01.240 --> 00:14:02.560
+Hum, si vous ne devez retenir
+
+00:14:02.560 --> 00:14:03.060
+qu'une seule action
+
+00:14:03.060 --> 00:14:03.640
+de cet épisode,
+
+00:14:03.960 --> 00:14:04.320
+la voici.
+
+00:14:05.300 --> 00:14:06.200
+Allez dans le portail Azure,
+
+00:14:06.320 --> 00:14:07.080
+cherchez Policy Hangover
+
+00:14:07.080 --> 00:14:08.000
+à effecter la stratégie
+
+00:14:08.000 --> 00:14:08.820
+intégrée d'emplacement
+
+00:14:08.820 --> 00:14:09.820
+autorisé à un abonnement
+
+00:14:09.820 --> 00:14:10.200
+de test.
+
+00:14:11.040 --> 00:14:11.700
+Commencez par l'audit
+
+00:14:11.700 --> 00:14:12.440
+pour observer les résultats.
+
+00:14:12.900 --> 00:14:13.620
+C'est le moyen le plus rapide
+
+00:14:13.620 --> 00:14:13.980
+de comprendre
+
+00:14:13.980 --> 00:14:14.640
+comment cela fonctionne.
+
+00:14:15.260 --> 00:14:16.340
+Abonnez-vous pour plus d'astuces
+
+00:14:16.340 --> 00:14:16.800
+sur Microsoft
+
+00:14:16.800 --> 00:14:17.720
+et partagez ceci
+
+00:14:17.720 --> 00:14:18.180
+avec quelqu'un
+
+00:14:18.180 --> 00:14:19.180
+qui débute sur Azure.
+
+00:14:19.860 --> 00:14:20.440
+Laissez un commentaire
+
+00:14:20.440 --> 00:14:21.140
+sur le sujet que vous aimeriez
+
+00:14:21.140 --> 00:14:21.720
+que j'explique ensuite.

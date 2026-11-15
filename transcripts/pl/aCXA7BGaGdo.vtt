@@ -1,0 +1,847 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:06.120
+Witajcie w kolejnym odcinku. Dzisiejszy temat to coś, o czym prawdopodobnie słyszeliście na spotkaniach lub w artykułach technicznych Microsoft Fabric.
+
+00:00:06.280 --> 00:00:09.780
+Jeśli jednak jesteście, jak większość ludzi, nie jesteście do końca pewni, czym on właściwie jest.
+
+00:00:09.920 --> 00:00:14.000
+Czy to tylko kolejny produkt Microsoftu, zmiana nazwy czegoś starego, czy może coś zupełnie nowego?
+
+00:00:14.180 --> 00:00:15.640
+Pozwólcie, że odpowiem krótko.
+
+00:00:15.860 --> 00:00:18.240
+Microsoft Fabric to nie jest po prostu kolejny produkt.
+
+00:00:18.400 --> 00:00:25.140
+To kompletna platforma danych, jedno miejsce, w którym wykonasz całą pracę z danymi, przechowywanie, przekształcanie, analizy i raportowanie.
+
+00:00:25.140 --> 00:00:31.340
+Pod koniec tego odcinka zrozumiesz, czym jest Fabric, dlaczego Microsoft go stworzył i jak główne elementy do siebie pasują.
+
+00:00:31.640 --> 00:00:32.980
+Złap kawę i zaczynajmy.
+
+00:00:33.240 --> 00:00:36.000
+Stare podejście, czyli dlaczego dane były rozproszone.
+
+00:00:36.240 --> 00:00:40.580
+Aby zrozumieć, dlaczego Fabric istnieje, musisz zrozumieć problem, który rozwiązuje.
+
+00:00:40.780 --> 00:00:48.140
+20 lat temu, prowadząc firmę, kupowałeś serwer do przechowywania danych, oddzielne narzędzie do raportów i kolejny produkt do analizy w czasie rzeczywistym.
+
+00:00:48.500 --> 00:00:55.120
+Zanim się obejrzałeś, miałeś pięć różnych systemów, każdy z własnym logowaniem, sposobem pracy i własnym zespołem zarządzającym.
+
+00:00:55.280 --> 00:00:57.300
+Przez długi czas dane żyły w siłosach.
+
+00:00:57.520 --> 00:01:02.500
+Dane sprzedażowe były w jednym systemie, dane klientów w innym, a dane finansowe jeszcze gdzie indziej.
+
+00:01:02.740 --> 00:01:08.800
+Jeśli chciałeś zadać pytanie obejmujące te systemy, na przykład, którzy klienci kupują najbardziej dochodowe produkty, musiałeś przenosić dane.
+
+00:01:09.020 --> 00:01:13.500
+Eksportować z jednego systemu, przekształcać, ładować do innego, a potem robić to ponownie, gdy dane się zmieniły.
+
+00:01:13.680 --> 00:01:17.280
+Więcej czasu spędzało się na przenoszeniu danych między systemami niż na ich faktycznej analizie.
+
+00:01:17.460 --> 00:01:20.460
+Integracja danych stała się pełnoetatowym zajęciem dla całych zespołów.
+
+00:01:20.460 --> 00:01:28.280
+Najgorsze było to, że za każdym razem, gdy przenosiłeś dane, tworzyłeś kolejną kopię, kolejną wersję prawdy i szybko nikt nie wiedział, która kopia jest właściwa.
+
+00:01:28.480 --> 00:01:31.340
+Microsoft przyjrzał się tej fragmentacji i zadał proste pytanie.
+
+00:01:31.560 --> 00:01:33.780
+A co jeśli wszystkie te usługi mogłyby współpracować?
+
+00:01:33.920 --> 00:01:37.480
+Co jeśli zamiast łączyć oddzielne produkty miałbyś jedną platformę, która robi wszystko?
+
+00:01:37.480 --> 00:01:40.180
+To pytanie doprowadziło do powstania Microsoft Fabric.
+
+00:01:40.360 --> 00:01:42.360
+Czym właściwie jest Microsoft Fabric?
+
+00:01:42.560 --> 00:01:43.640
+Więc czym jest Fabric?
+
+00:01:43.800 --> 00:01:45.140
+Oto najprostsza definicja.
+
+00:01:45.360 --> 00:01:48.180
+Microsoft Fabric to ujednolicona platforma danych i analizy.
+
+00:01:48.360 --> 00:01:50.240
+Jedno miejsce dla całej twojej pracy z danymi.
+
+00:01:50.420 --> 00:01:52.100
+Pomyśl o tym jak o nowoczesnym biurowcu.
+
+00:01:52.340 --> 00:01:55.540
+Każde narzędzie, jak Power BI czy Azure Synapse, to pokój wewnątrz tego budynku.
+
+00:01:55.780 --> 00:01:58.900
+Mają swoje przeznaczenie, meble i narzędzia, ale wszystkie są częścią tej samej struktury.
+
+00:01:59.080 --> 00:02:01.540
+Nie musisz wychodzić na zewnątrz, aby przejść z jednego pokoju do drugiego.
+
+00:02:01.740 --> 00:02:02.740
+Wszystkie są połączone.
+
+00:02:02.960 --> 00:02:03.960
+Właśnie to robi Fabric.
+
+00:02:03.960 --> 00:02:09.880
+Łączy inżynierię danych, integrację danych, hurtownię danych, analitykę w czasie rzeczywistym i analitykę biznesową na jednej platformie.
+
+00:02:10.080 --> 00:02:16.300
+Wszystko działa w ramach jednej platformy SaaS, co oznacza brak konieczności zarządzania infrastrukturą, udostępniania serwerów czy konfiguracji sieci.
+
+00:02:16.500 --> 00:02:18.440
+Microsoft zajmuje się tym wszystkim za Ciebie.
+
+00:02:18.600 --> 00:02:23.280
+Od momentu premiery w 2023 roku Fabric stał się najszybciej rozwijającym się produktem danych w historii Microsoftu.
+
+00:02:23.480 --> 00:02:27.560
+Dziś korzysta z niego ponad 25 tysięcy klientów, w tym 80% firm z listy Fortune 500.
+
+00:02:27.780 --> 00:02:29.600
+To ogromna adopcja w bardzo krótkim czasie.
+
+00:02:29.600 --> 00:02:34.620
+Kluczowa różnica polega na tym, w dawnym modelu kupowało się oddzielne produkty i próbowało sprawić, by ze sobą współpracowały.
+
+00:02:34.800 --> 00:02:37.400
+Dzięki Fabric nie trzeba już łączyć różnych usług ze sobą.
+
+00:02:37.540 --> 00:02:41.380
+To jedno środowisko, jedno logowanie, jeden sposób pracy, co zmienia wszystko.
+
+00:02:41.620 --> 00:02:42.660
+Onelejk Fundament.
+
+00:02:42.820 --> 00:02:45.780
+Teraz porozmawiajmy o fundamencie, dzięki któremu to wszystko działa.
+
+00:02:46.060 --> 00:02:48.820
+Sercem platformy Fabric jest coś, co nazywamy Onelejk.
+
+00:02:48.960 --> 00:02:52.100
+Najłatwiej myśleć o Onelejk jak o usłudze OnDrive dla Twoich danych.
+
+00:02:52.360 --> 00:02:57.840
+Wiesz, jak OnDrive daje Ci jedno miejsce do przechowywania plików osobistyk, do których dostęp ma każda aplikacja na komputerze?
+
+00:02:57.840 --> 00:03:01.040
+Onelejk robi dokładnie to samo, tyle że dla danych Twojej organizacji.
+
+00:03:01.220 --> 00:03:02.960
+Oto co czyni go potężnym narzędziem.
+
+00:03:03.080 --> 00:03:09.060
+Każde obciążenie w Fabric, czy to Lake House, hurtownia danych, czy zadania analityczne w czasie rzeczywistym automatycznie zapisuje dane w Onelejk.
+
+00:03:09.180 --> 00:03:12.120
+Nie musisz ręcznie kopiować plików, ani konfigurować połączeń.
+
+00:03:12.220 --> 00:03:13.160
+To dzieje się samo.
+
+00:03:13.420 --> 00:03:16.840
+Istnieje tylko jeden Onelejk na tenanta, jedno źródło prawdy dla całej organizacji.
+
+00:03:17.660 --> 00:03:20.440
+Możesz się teraz zastanawiać, co jeśli później będę chciał zmienić platformę?
+
+00:03:20.580 --> 00:03:22.240
+Czy jestem na stałe związany z Microsoftem?
+
+00:03:22.400 --> 00:03:23.420
+Odpowiedź brzmi nie.
+
+00:03:23.420 --> 00:03:28.860
+Onelejk przechowuje dane w otwartych formatach, takich jak Delta Park, standardzie branżowym używanym przez Databricks i Apache Spark.
+
+00:03:29.060 --> 00:03:31.120
+Nigdy nie jesteś zamknięty w ekosystemie Microsoftu.
+
+00:03:31.300 --> 00:03:33.720
+Jeśli chcesz przenieść swoje dane gdzie indziej, możesz to zrobić.
+
+00:03:33.860 --> 00:03:37.800
+To Twoje dane, ale tutaj Onelejk staje się naprawdę interesujący dzięki skrótom.
+
+00:03:38.000 --> 00:03:40.920
+Skrót to wirtualny wskaźnik do danych, które znajdują się gdzie indziej.
+
+00:03:41.180 --> 00:03:47.880
+Możesz utworzyć skrót do danych przechowywanych w AWSS3, Google Cloud, czy nawet lokalnie, a pojawią się one w Onelejk, jakby tam właśnie były.
+
+00:03:48.140 --> 00:03:50.520
+Bez konieczności przenoszenia, czy powielania danych.
+
+00:03:50.520 --> 00:03:52.980
+Po prostu wskazujesz na nie i już się pojawiają.
+
+00:03:53.220 --> 00:04:00.820
+Onelejk bazuje na Azure Data Lake Storage chmurowej pamięci klasy korporacyjnej, ale nie zarządzasz tą infrastrukturą, gdyż wszystko jest obsługiwane jako usługa SAS.
+
+00:04:00.980 --> 00:04:04.520
+Nie musisz udostępniać serwerów, ani konfigurować sieci, po prostu z tego korzystasz.
+
+00:04:04.660 --> 00:04:05.800
+Co to dla Ciebie oznacza?
+
+00:04:05.980 --> 00:04:13.500
+Oznacza to, że możesz mieć dane z wielu źródeł, chmury, lokalnych baz danych, czy platform zewnętrznych, widoczne w jednym miejscu bez powielania.
+
+00:04:13.700 --> 00:04:14.540
+A prawdziwa moc?
+
+00:04:14.740 --> 00:04:18.820
+Każde dane zapisane w Onelejk mogą być natychmiast wykorzystane przez dowolne obciążenie w fabrik.
+
+00:04:18.820 --> 00:04:21.700
+Zapisujesz raz, a każde narzędzie w fabrik może je zobaczyć.
+
+00:04:21.840 --> 00:04:23.240
+Na tym polega magia Onelejk.
+
+00:04:23.400 --> 00:04:25.180
+Lakehouse Centrum Inżynierii Danych.
+
+00:04:25.440 --> 00:04:26.880
+Masz już swoje dane w Onelejk.
+
+00:04:27.000 --> 00:04:28.360
+Teraz musisz na nich popracować.
+
+00:04:28.520 --> 00:04:30.000
+I tu z pomocą przychodzi Lakehouse.
+
+00:04:30.180 --> 00:04:31.500
+Oto najprostsza definicja.
+
+00:04:31.740 --> 00:04:36.120
+Lakehouse to magazyn danych łączący elastyczność jeziora danych ze strukturą bazy danych.
+
+00:04:36.120 --> 00:04:45.080
+W tradycyjnym jeziorze danych przechowasz wszystko, pliki CSV, dokumenty JSON, obrazy czy wideo, ale panuje tam bałagan bez struktury, więc trudno je odpytywać.
+
+00:04:45.260 --> 00:04:50.180
+W tradycyjnej bazie danych wszystko jest ustrukturyzowane i gotowe do zapytań, ale możesz przechowywać tylko określone typy danych.
+
+00:04:50.420 --> 00:04:51.860
+Lakehouse daje Ci jedno i drugie.
+
+00:04:52.060 --> 00:04:55.920
+W Lakehouse możesz przechowywać surowe pliki jak CSV, JSON czy nawet obrazy.
+
+00:04:56.160 --> 00:04:59.300
+Możesz także przechowywać ustrukturyzowane tabele, które odpytasz za pomocą SQL.
+
+00:04:59.300 --> 00:05:01.400
+Oba typy znajdują się w tym samym miejscu.
+
+00:05:01.500 --> 00:05:08.060
+Tabele te korzystają z formatu Delta Parkę, tego samego szybkiego, otwartego formatu, którego używa Databricks i inne platformy do obsługi ogromnych ilości danych.
+
+00:05:08.280 --> 00:05:09.960
+Lakehouse obsługuje wiele narzędzi.
+
+00:05:10.200 --> 00:05:12.560
+Możesz użyć Sparka do przetwarzania danych na dużą skalę.
+
+00:05:12.740 --> 00:05:14.500
+Możesz użyć Pythona do uczenia maszynowego.
+
+00:05:14.760 --> 00:05:16.580
+Możesz użyć SQL do prostych zapytań.
+
+00:05:16.740 --> 00:05:19.320
+Niezależnie od preferowanego narzędzia, Lakehouse sobie z nim poradzi.
+
+00:05:19.480 --> 00:05:22.600
+Pomyśl o Lakehouse jak o swoim środowisku pracy do budowania potoków danych.
+
+00:05:22.840 --> 00:05:26.280
+Wprowadzasz surowe dane, przekształcasz je, czyścisz i przygotowujesz do analizy.
+
+00:05:26.280 --> 00:05:28.500
+Możesz na nich uruchamiać modele uczenia maszynowego.
+
+00:05:28.720 --> 00:05:31.200
+Możesz tworzyć zestawy danych treningowych, wszystko w jednym miejscu.
+
+00:05:31.380 --> 00:05:35.160
+Dla inżynierów danych preferujących środowisko przyjazne kodowaniu, Lakehouse obsługuje notatniki.
+
+00:05:35.360 --> 00:05:40.300
+To interaktywne dokumenty, w których piszesz kod, widzisz wyniki i dokumentujesz pracę jak laboratoryjny notes dla danych.
+
+00:05:40.540 --> 00:05:45.400
+Możesz napisać kod Spark w jednej komórce, zobaczyć wynik w kolejnej, a potem wyjaśnić swoje działania w następnej.
+
+00:05:45.560 --> 00:05:49.180
+Lakehouse to punkt wejścia dla większości inżynierów danych pracujących w fabrik.
+
+00:05:49.180 --> 00:05:59.260
+To tutaj wykonuje się najcięższą pracę, a ponieważ wszystko zapisywane jest w jednym jeziorze, każda dana w Lakehouse jest natychmiast dostępna dla innych obciążeń fabrik w magazynach danych, czyli silniku analitycznym SQL.
+
+00:05:59.600 --> 00:06:05.560
+Jeśli więc Lakehouse to centrum inżynierii danych, traktuj magazyn danych jako silnik analityczny SQL stworzony dla innego typu użytkownika.
+
+00:06:05.780 --> 00:06:09.480
+Magazyn danych w usłudze fabrik to w pełni zarządzana baza danych analitycznych SQL.
+
+00:06:09.740 --> 00:06:13.720
+Jeśli jesteś administratorem baz danych lub programistą SQL, poczujesz się tutaj jak w domu.
+
+00:06:13.980 --> 00:06:18.420
+Możesz pisać zapytania TSQL, tworzyć widoki, procedury składowane oraz polityki bezpieczeństwa.
+
+00:06:18.420 --> 00:06:21.840
+Wygląda i działa jak tradycyjny magazyn danych, ale oto co go wyróżnia.
+
+00:06:22.000 --> 00:06:25.960
+W przeciwieństwie do tradycyjnych magazynów, magazyn w fabrik przechowuje dane bezpośrednio w OneLake.
+
+00:06:26.100 --> 00:06:29.500
+Nie ma oddzielnej warstwy pamięci masowej, ani dodatkowej infrastruktury do zarządzania.
+
+00:06:29.740 --> 00:06:33.720
+Dane znajdują się w OneLake, a magazyn jest tylko interfejsem służącym do ich odpytywania.
+
+00:06:33.960 --> 00:06:38.440
+Ma to znaczenie, ponieważ magazyn i Lakehouse współdzielą te same dane, więc niczego nie duplikujesz.
+
+00:06:38.640 --> 00:06:43.380
+Jeśli inżynier danych załaduje dane do Lakehouse, programista SQL może od razu odpytać je z magazynu.
+
+00:06:43.380 --> 00:06:48.140
+Bez kopiowania, bez przenoszenia. To te same dane, do których dostęp uzyskuje się za pomocą różnych narzędzi.
+
+00:06:48.340 --> 00:06:50.840
+Magazyn został stworzony do analityki na dużą skalę.
+
+00:06:51.000 --> 00:06:54.740
+Pod maską wykorzystuje masowe przetwarzanie równoległe do obsługi ogromnych zbiorów danych.
+
+00:06:54.960 --> 00:06:57.400
+Firma Microsoft intensywnie inwestuje w wydajność.
+
+00:06:57.620 --> 00:07:01.360
+Tylko w ciągu ostatnich 6 miesięcy wydajność wzrosła o 36%.
+
+00:07:01.360 --> 00:07:03.100
+To ogromna poprawa w krótkim czasie.
+
+00:07:03.400 --> 00:07:08.400
+Jeśli migrujesz z innej platformy, fabrik oferuje asystenta migracji, który ułatwia przejście ze Snowflake lub Synapse.
+
+00:07:08.400 --> 00:07:11.400
+Analizuje on twoją dotychczasową konfigurację i prowadzi przez cały proces.
+
+00:07:11.600 --> 00:07:14.100
+Celem jest uczynienie migracji tak bezbolesną, jak to tylko możliwe.
+
+00:07:14.220 --> 00:07:16.140
+Czym więc różni się Lakehouse od magazynu danych?
+
+00:07:16.340 --> 00:07:17.740
+Wszystko sprowadza się do interfejsu.
+
+00:07:17.940 --> 00:07:19.800
+Magazyny stawiają na pierwszym miejscu SQL.
+
+00:07:20.080 --> 00:07:23.180
+Są stworzone dla osób myślących kategoriami tabel, zapytań i procedur składowanych.
+
+00:07:23.340 --> 00:07:25.380
+Lakehouse stawiają na pierwszym miejscu programistów.
+
+00:07:25.580 --> 00:07:28.380
+Są stworzone dla osób, które chcą używać Sparka, Pythona i notatników.
+
+00:07:28.580 --> 00:07:31.040
+Ale pod spodem oba rozwiązania przechowują dane w OneLake.
+
+00:07:31.160 --> 00:07:33.160
+To dwa sposoby pracy z tymi samymi danymi.
+
+00:07:33.160 --> 00:07:36.160
+Pozyskiwanie danych, Data Factory, Mirroring i skróty.
+
+00:07:36.380 --> 00:07:40.680
+Masz więc jeden magazyn danych, Lakehouse do transformacji i magazyn SQL do odpytywania,
+
+00:07:40.860 --> 00:07:42.640
+ale jak dane faktycznie trafiają do środka?
+
+00:07:42.780 --> 00:07:43.980
+Tu wkracza Data Factory.
+
+00:07:44.240 --> 00:07:46.880
+Data Factory to wbudowana usługa integracji danych w Fabrik,
+
+00:07:47.040 --> 00:07:49.740
+oferująca ponad 200 łączników do pobierania danych z baz danych,
+
+00:07:49.860 --> 00:07:51.720
+pamięci w chmurze, aplikacji SAS i innych.
+
+00:07:51.900 --> 00:07:55.240
+To najczęściej używane narzędzie do integracji danych na świecie i nie bez powodu.
+
+00:07:55.480 --> 00:07:57.860
+Wewnątrz Data Factory znajdziesz Dataflow z GEN2,
+
+00:07:57.860 --> 00:08:00.900
+które umożliwiają transformację danych bez kodowania za pomocą Power Query.
+
+00:08:00.900 --> 00:08:03.740
+Jeśli kiedykolwiek używałeś Power Query w Excelu lub Power BI,
+
+00:08:03.840 --> 00:08:04.800
+znasz już ten mechanizm.
+
+00:08:04.920 --> 00:08:07.880
+Klikasz w wizualnym interfejsie, aby czyścić, przekształcać i łączyć dane.
+
+00:08:08.060 --> 00:08:10.700
+Kodowanie nie jest wymagane, a rozwiązanie jest klasy korporacyjnej,
+
+00:08:10.800 --> 00:08:12.400
+skalowalne do obsługi ogromnych zbiorów danych.
+
+00:08:12.580 --> 00:08:15.820
+Ponad 22 miliardy operacji uruchamianych w Data Factory każdego miesiąca
+
+00:08:15.820 --> 00:08:17.880
+oznacza miliardy automatycznych transferów danych,
+
+00:08:18.020 --> 00:08:20.400
+co czyni to rozwiązanie kluczowym elementem infrastruktury.
+
+00:08:20.620 --> 00:08:24.280
+Istnieje jednak jeszcze prostszy sposób na przeniesienie danych do Onelejk – Mirroring.
+
+00:08:24.360 --> 00:08:28.960
+Mirroring kopiuje dane z zewnętrznych baz takich jak Azure SQL, Oracle czy Google BigQuery
+
+00:08:28.960 --> 00:08:32.260
+do Onelejk niemal w czasie rzeczywistym, a co najlepsze, jest to darmowe,
+
+00:08:32.400 --> 00:08:34.940
+wliczone w cenę usługi, bez żadnych dodatkowych kosztów.
+
+00:08:35.160 --> 00:08:38.040
+Wskazujesz tylko bazę źródłową, a resztą zajmuje się Fabrik.
+
+00:08:38.240 --> 00:08:41.980
+Są też skróty, o których wspominaliśmy wcześniej, ale zasługują one na większą uwagę.
+
+00:08:42.280 --> 00:08:44.880
+Skróty to wirtualne wskaźniki do danych przechowywanych gdzie indziej,
+
+00:08:45.000 --> 00:08:46.440
+które nie wymagają przenoszenia plików.
+
+00:08:46.580 --> 00:08:49.640
+Tworzysz skrót do zasobnika AWSS3, a on pojawia się w Onelejk,
+
+00:08:49.720 --> 00:08:52.600
+jakby był tam przechowywany, podczas gdy dane pozostają na swoim miejscu.
+
+00:08:52.720 --> 00:08:54.000
+Po prostu wskazujesz na nie.
+
+00:08:54.000 --> 00:08:56.720
+A teraz skróty potrafią coś więcej niż tylko wskazywać.
+
+00:08:56.860 --> 00:08:59.260
+Transformacje skrótów pozwalają na stosowanie przekształceń
+
+00:08:59.260 --> 00:09:00.920
+opartych na sztucznej inteligencji w locie.
+
+00:09:01.160 --> 00:09:03.760
+Możesz przeprowadzić analizę sentymentu danych tekstowych,
+
+00:09:03.900 --> 00:09:06.200
+przetłumaczyć treść lub wykryć dane osobowe,
+
+00:09:06.280 --> 00:09:08.540
+nie przenosząc danych ani nie budując potoków.
+
+00:09:08.720 --> 00:09:11.640
+Transformacja następuje w momencie uzyskiwania dostępu do danych.
+
+00:09:11.860 --> 00:09:13.760
+Cel tych wszystkich narzędzi jest prosty –
+
+00:09:13.760 --> 00:09:16.880
+zgromadzić wszystkie dane w Onelejk bez budowania złożonych potoków.
+
+00:09:17.060 --> 00:09:20.160
+Niezależnie od tego, czy używasz Data Factory do tradycyjnego ETL,
+
+00:09:20.160 --> 00:09:22.000
+mirroringu do replikacji w czasie rzeczywistym,
+
+00:09:22.000 --> 00:09:24.620
+czy skrótów do wirtualnego dostępu, wynik jest ten sam.
+
+00:09:24.760 --> 00:09:28.380
+Twoje dane trafiają do Onelejk, gotowe do użycia w każdym zadaniu Fabrik.
+
+00:09:28.560 --> 00:09:31.080
+Analiza w czasie rzeczywistym, bazy danych i AI.
+
+00:09:31.320 --> 00:09:33.600
+Do tej pory mówiliśmy o przenoszeniu i przechowywaniu danych,
+
+00:09:33.780 --> 00:09:35.640
+ale co z danymi, które nieustannie napływają?
+
+00:09:35.940 --> 00:09:38.640
+Strumieniowanie danych z czujników i od kliknięć na stronach w W,
+
+00:09:38.760 --> 00:09:39.820
+telemetria z urządzeń.
+
+00:09:40.020 --> 00:09:42.140
+Wtedy do gry wchodzi analiza w czasie rzeczywistym.
+
+00:09:42.360 --> 00:09:44.880
+Fabrik obsługuje strumienie danych za pomocą tak zwanej
+
+00:09:44.880 --> 00:09:47.660
+Event House, który przechowuje i przeszukuje ogromne ilości danych
+
+00:09:47.660 --> 00:09:50.380
+szeregów czasowych przy użyciu KQL, czyli Kusto Query Language.
+
+00:09:50.380 --> 00:09:52.620
+To ten sam silnik, który napędza Azure Data Explorer,
+
+00:09:52.760 --> 00:09:54.960
+stworzony z myślą o szybkości, dzięki czemu możesz przetwarzać
+
+00:09:54.960 --> 00:09:57.340
+miliony zdarzeń na sekundę i przeszukiwać je w milisekundach.
+
+00:09:57.420 --> 00:09:58.860
+To ma znaczenie, a oto dlaczego.
+
+00:09:59.120 --> 00:10:02.640
+46% klientów Fabrik już korzysta z analityki w czasie rzeczywistym.
+
+00:10:02.800 --> 00:10:03.620
+To niemal połowa.
+
+00:10:04.040 --> 00:10:05.200
+Zastosowania są wszędzie.
+
+00:10:05.460 --> 00:10:07.400
+Firma logistyczna śledząca ciężarówki,
+
+00:10:07.560 --> 00:10:09.460
+sprzedawca monitorujący ruch w sklepie,
+
+00:10:09.660 --> 00:10:12.040
+producent obserwujący dane z czujników w fabryce,
+
+00:10:12.140 --> 00:10:13.760
+wszystko dzieje się w czasie rzeczywistym.
+
+00:10:13.920 --> 00:10:15.740
+Ale Fabrik to nie tylko analityka.
+
+00:10:15.960 --> 00:10:17.640
+Obejmuje również operacyjne bazy danych,
+
+00:10:17.640 --> 00:10:21.180
+takie jak SQL dla danych relacyjnych i Cosmos DB dla obciążeń NoSQL.
+
+00:10:21.400 --> 00:10:24.380
+To te same bazy, których użyłbyś do obsługi swoich aplikacji.
+
+00:10:24.560 --> 00:10:26.220
+A ponieważ są one wbudowane w Fabrik,
+
+00:10:26.320 --> 00:10:28.420
+automatycznie przechowują swoje dane w OneLake.
+
+00:10:28.600 --> 00:10:30.700
+Bez dodatkowych potoków, bez ręcznego kopiowania.
+
+00:10:30.960 --> 00:10:34.040
+Twoje dane transakcyjne i analityczne znajdują się w tym samym miejscu.
+
+00:10:34.180 --> 00:10:35.840
+Porozmawiajmy teraz o sztucznej inteligencji,
+
+00:10:35.940 --> 00:10:37.860
+bo to tutaj Fabrik staje się naprawdę interesujący.
+
+00:10:38.100 --> 00:10:40.280
+Integracja AI jest głęboko osadzona w platformie,
+
+00:10:40.380 --> 00:10:42.200
+oferując gotowe modele do analizy tekstu,
+
+00:10:42.300 --> 00:10:43.680
+tłumaczeń i analizy wydźwięku.
+
+00:10:43.680 --> 00:10:46.840
+Możesz używać ich bezpośrednio w przepływach danych bez pisania kodu.
+
+00:10:47.100 --> 00:10:49.360
+Wystarczy wskazać dane, wybrać model i gotowe.
+
+00:10:49.600 --> 00:10:52.380
+Jest też Copilot, który został wbudowany w cały system Fabrik.
+
+00:10:52.520 --> 00:10:55.460
+Pomaga w pisaniu zapytań, tworzeniu raportów i budowaniu potoków danych.
+
+00:10:55.680 --> 00:10:57.900
+Opisujesz po prostu, czego potrzebujesz prostym językiem,
+
+00:10:58.020 --> 00:10:59.040
+a Copilot generuje kod.
+
+00:10:59.160 --> 00:11:01.420
+To tak, jakby obok Ciebie siedział młodszy inżynier danych,
+
+00:11:01.560 --> 00:11:02.720
+gotowy pomóc w każdej chwili.
+
+00:11:02.980 --> 00:11:03.940
+Wizja jest prosta,
+
+00:11:04.140 --> 00:11:06.680
+AI pracuje na Twoich danych bez przenoszenia ich gdziekolwiek indziej.
+
+00:11:06.880 --> 00:11:08.200
+Twoje dane pozostają w OneLake,
+
+00:11:08.300 --> 00:11:09.700
+a modele AI przychodzą do danych.
+
+00:11:09.700 --> 00:11:12.900
+Bez kopiowania, bez eksportowania, bez zagrożeń bezpieczeństwa.
+
+00:11:13.100 --> 00:11:15.780
+Dane nigdy nie opuszczają Twojego zarządzanego środowiska.
+
+00:11:16.000 --> 00:11:18.580
+Power BI, ład korporacyjny i wartość biznesowa.
+
+00:11:18.780 --> 00:11:19.780
+Przejdźmy teraz do części,
+
+00:11:19.980 --> 00:11:21.860
+którą większość ludzi widzi w pierwszej kolejności,
+
+00:11:22.040 --> 00:11:23.260
+czyli bramy do wglądu w Power BI.
+
+00:11:23.440 --> 00:11:26.020
+Korzysta z niego 550 tysięcy organizacji
+
+00:11:26.020 --> 00:11:28.480
+i 34 miliony użytkowników miesięcznie,
+
+00:11:28.640 --> 00:11:31.340
+co czyni go najczęściej używanym narzędziem BI na świecie.
+
+00:11:31.500 --> 00:11:34.120
+A w ramach Fabrik staje się on jeszcze potężniejszy.
+
+00:11:34.300 --> 00:11:34.940
+Oto klucz.
+
+00:11:34.940 --> 00:11:39.740
+W systemie Fabrik Power BI łączy się bezpośrednio z OneLake za pomocą trybu DirectLake.
+
+00:11:39.940 --> 00:11:41.820
+Różni się to od tradycyjnego trybu importu,
+
+00:11:41.900 --> 00:11:44.360
+w którym kopiujesz dane do wewnętrznej pamięci Power BI.
+
+00:11:44.580 --> 00:11:47.400
+Zamiast tego DirectLake odpytuje dane w miejscu ich przechowywania,
+
+00:11:47.500 --> 00:11:51.860
+w OneLake bez konieczności odświeżania czy duplikacji dane są zawsze aktualne i działają błyskawicznie.
+
+00:11:52.020 --> 00:11:55.040
+Pod każdym raportem Power BI znajduje się model semantyczny,
+
+00:11:55.140 --> 00:11:58.820
+czyli mózg raportu, gdzie definiujesz logikę biznesową, miary i relacje.
+
+00:11:59.060 --> 00:12:02.260
+Teraz możesz tworzyć te modele w całości w przeglądarce internetowej.
+
+00:12:02.260 --> 00:12:05.680
+Modelowanie w przeglądarce jest powszechnie dostępne, więc możesz tworzyć modele semantyczne,
+
+00:12:05.760 --> 00:12:08.980
+budować relacje i pisać miary DAX bezpośrednio w przeglądarce, nawet na komputerze Mac.
+
+00:12:09.140 --> 00:12:11.040
+Żadna aplikacja komputerowa nie jest wymagana.
+
+00:12:11.240 --> 00:12:13.780
+Jednak cała ta potęga danych nic nie znaczy bez odpowiedniego zarządzania,
+
+00:12:13.900 --> 00:12:15.580
+dlatego Fabrik ma je budowane od samego początku.
+
+00:12:15.860 --> 00:12:19.560
+Microsoft Perview zapewnia etykiety poufności, które podążają za Twoimi danymi wszędzie.
+
+00:12:19.780 --> 00:12:24.020
+Jeśli raport zawiera wrażliwe informacje, etykieta pozostaje z nim nawet po wyeksportowaniu.
+
+00:12:24.260 --> 00:12:27.680
+Zasady zapobiegania utracie danych automatycznie wykrywają poufne informacje
+
+00:12:27.680 --> 00:12:31.120
+i blokują nieautoryzowane udostępnianie, a kontrola dostępu zapewnia,
+
+00:12:31.280 --> 00:12:33.440
+że tylko odpowiednie osoby widzą odpowiednie dane.
+
+00:12:33.680 --> 00:12:36.020
+Domeny pomagają organizować dane według obszarów biznesowych
+
+00:12:36.020 --> 00:12:38.480
+z oddzielnymi regułami zarządzania, dzięki czemu dane finansowe
+
+00:12:38.480 --> 00:12:40.700
+mogą podlegać surowszej kontroli niż dane marketingowe.
+
+00:12:40.860 --> 00:12:43.820
+Każdą domeną może zarządzać osobny zespół, co pozwala na sprawowanie nadzoru,
+
+00:12:43.940 --> 00:12:45.500
+który skaluje się wraz z Twoją organizacją.
+
+00:12:45.680 --> 00:12:47.560
+Teraz porozmawiajmy o prawdziwych wynikach.
+
+00:12:47.680 --> 00:12:48.800
+To nie jest tylko teoria.
+
+00:12:49.100 --> 00:12:52.680
+Firma Eastman Chemical wykorzystała Fabrik, aby skrócić czas przygotowania sprzedaży o 83%.
+
+00:12:52.680 --> 00:12:56.360
+To, co kiedyś zajmowało 4 godziny, teraz trwa około 40 minut.
+
+00:12:56.540 --> 00:12:59.180
+Eaton Solutions ograniczyło pracę ręczną o 75%,
+
+00:12:59.180 --> 00:13:02.600
+a procesy wymagające wcześniej od 10 do 15 kroków teraz wymagają dwóch.
+
+00:13:02.740 --> 00:13:06.440
+Z kolei Sonata Software zaoszczędziła rocznie 30 tysięcy godzin ręcznych uzgodnień,
+
+00:13:06.540 --> 00:13:09.000
+kierując ten potencjał ludzki do pracy o wyższej wartości.
+
+00:13:09.240 --> 00:13:10.560
+Model kosztów jest prosty.
+
+00:13:10.720 --> 00:13:14.040
+Płacisz za wydajność, czyli moc obliczeniową, która obsługuje Twoje obciążenia.
+
+00:13:14.260 --> 00:13:17.740
+Microsoft posiada wbudowane mechanizmy wygładzania i ochrony przed nagłymi skokami obciążenia.
+
+00:13:17.880 --> 00:13:20.640
+Wygładzanie rozkłada koszty operacji w tle na 24 godziny,
+
+00:13:20.640 --> 00:13:23.900
+więc nie zaskoczą Cię nagłe piki, a ochrona przed skokami ogranicza zadania
+
+00:13:23.900 --> 00:13:26.640
+w tle w okresach wzmożonego ruchu, aby utrzymać stabilność interaktywną.
+
+00:13:27.360 --> 00:13:30.600
+Płacisz za to, z czego korzystasz, dzięki czemu unikasz niespodzianek.
+
+00:13:30.900 --> 00:13:31.880
+Podsumujmy to wszystko.
+
+00:13:32.140 --> 00:13:34.440
+Fabrik to nie tylko kolejny produkt Microsoftu.
+
+00:13:34.580 --> 00:13:37.320
+To całkowite przemyślenie na nowo sposobu działania platform danych.
+
+00:13:37.540 --> 00:13:40.820
+Jedna platforma, jedno jezioro danych, onelej, jedna kopia danych i nieskończone możliwości.
+
+00:13:41.100 --> 00:13:43.900
+Dzięki budowanej sztucznej inteligencji i kopilotowi jest on dostępny dla każdego.
+
+00:13:44.060 --> 00:13:45.940
+Nie tylko dla specjalistów od danych, ale też analityków biznesowych,
+
+00:13:45.940 --> 00:13:48.660
+zespołów sprzedaży, menedżerów operacyjnych, każdego, kto potrzebuje odpowiedzi płynących z danych.
+
+00:13:48.780 --> 00:13:49.880
+Oto Twoje zadanie domowe.
+
+00:13:50.100 --> 00:13:54.320
+Wejdź na fabric.microsoft.com, uruchom bezpłatną wersję próbną i stwórz swój pierwszy obszar roboczy.
+
+00:13:54.460 --> 00:13:55.340
+Po prostu wypróbuj.
+
+00:13:55.540 --> 00:13:59.200
+Zobaczysz, jak elementy do siebie pasują w sposób, którego nie zastąpi żadna ilość czytania.
+
+00:13:59.400 --> 00:14:01.140
+Jeśli ten odcinek pomógł Ci lepiej zrozumieć Fabrik,
+
+00:14:01.220 --> 00:14:03.240
+zasubskrybuj nas na swojej ulubionej platformie podcastowej
+
+00:14:03.240 --> 00:14:05.380
+i udostępnij go komuś, kto rozpoczyna swoją przygodę z danymi.
+
+00:14:05.600 --> 00:14:06.500
+Będzie Ci wdzięczny.
+
+00:14:06.500 --> 00:14:10.380
+Następnym razem wyjaśnimy, czym są skróty One Lake używając prostego języka.
+
+00:14:10.660 --> 00:14:14.380
+Jak działają, dlaczego są ważne i jak z nich korzystać bez przenoszenia danych.
+
+00:14:14.620 --> 00:14:15.820
+Tego nie możesz przegapić.
+
+00:14:16.040 --> 00:14:17.400
+Do tego czasu ucz się dalej.

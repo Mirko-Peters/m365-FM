@@ -1,5 +1,5 @@
 /* Blog-Import (BLOG_OWN_DOMAIN.md): Beiträge aus dem RSS- oder Atom-Feed einer bestehenden Seite als ENTWÜRFE übernehmen.
-   Erscheint nur, wenn der Schalter BYOD im Worker an ist (/api/byod/mine antwortet sonst mit enabled:false) und man angemeldet ist.
+   Erscheint nur, wenn der Schalter BYOD_IMPORT im Worker an ist (/api/byod/import/status antwortet sonst mit enabled:false) und man angemeldet ist.
    Nie automatisch veröffentlichen, immer mit Quelle; Bilder werden nie kopiert; Volltext nur nach Bestätigung der Rechte. Texte nur per textContent, Oberflächentexte über M365L (en/de). */
 (function () {
   var M365L = window.M365L || function (de, k, a, b) { return de ? a : b; };
@@ -82,6 +82,6 @@
   }
   api("/api/me").then(function (r) {
     if (!(r.j && r.j.user)) return;
-    return api("/api/byod/mine").then(function (m) { if (m.s === 200 && m.j && m.j.enabled) build(); });   // Funktion aus: nichts anzeigen
+    return api("/api/byod/import/status").then(function (m) { if (m.s === 200 && m.j && m.j.enabled) build(); });   // Funktion aus: nichts anzeigen
   }).catch(function () {});
 })();

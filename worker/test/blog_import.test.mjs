@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { feedUrl, fetchFeed, parseImportFeed, htmlToWiki, buildDraft, handleBlogImport } from "../src/blog_import.js";
+import { feedUrl, fetchFeed, parseImportFeed, htmlToWiki, buildDraft, handleBlogImport, deleteUserBlogImport } from "../src/blog_import.js";
 import { serveBlog } from "../src/byod_site.js";
 
 async function makeDb() {
@@ -13,7 +13,7 @@ async function makeDb() {
     run: async () => { const r = st.run(...args); return { meta: { changes: Number(r.changes), last_row_id: Number(r.lastInsertRowid) } }; } }; return o; }, async batch(stmts) { for (const st of stmts) await st.run(); } };
   raw.exec("INSERT INTO users(id,provider,sub,name,created) VALUES(1,'g','1','Anna',1),(2,'g','2','Ben',1)");
   raw.exec("INSERT INTO profiles(user_id,public,handle,updated) VALUES(1,1,'anna',1),(2,1,'ben',1)");
-  return { db, raw, env: { DB: db, SITE: "https://www.m365.fm", BYOD: "1" } };
+  return { db, raw, env: { DB: db, SITE: "https://www.m365.fm", BYOD_IMPORT: "1" } };
 }
 const J = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json" } });
 const call = (env, path, data, user = { id: 1 }, method = "POST") => { const url = new URL("https://x" + path); return handleBlogImport(env, new Request(url, { method, headers: { "content-type": "application/json" }, ...(data === undefined ? {} : { body: JSON.stringify(data) }) }), url, url.pathname, user, J); };
@@ -85,7 +85,12 @@ test("buildDraft: Standard = Titel, Kurzfassung und Quelle; Volltext nur im Modu
 
 test("API: Schalter aus, Anmeldung, Methode", async () => {
   const { env } = await makeDb();
-  assert.equal((await call({ ...env, BYOD: "0" }, "/api/byod/import/preview", { feed_url: FEED })).status, 404);
+  assert.equal((await call({ ...env, BYOD_IMPORT: "0" }, "/api/byod/import/preview", { feed_url: FEED })).status, 404);
+  const { BYOD_IMPORT, ...noSwitch } = env;   // eigener Schalter: BYOD allein schaltet den Import nicht ein
+  assert.equal((await call({ ...noSwitch, BYOD: "1" }, "/api/byod/import/save", { feed_url: FEED, keys: ["post-1"] })).status, 404);
+  assert.deepEqual(await body(call({ ...noSwitch, BYOD: "1" }, "/api/byod/import/status", undefined, null, "GET")), { enabled: false });
+  assert.deepEqual(await body(call(env, "/api/byod/import/status", undefined, null, "GET")), { enabled: true });
+  assert.equal((await call(env, "/api/byod/import/status", {})).status, 405);
   assert.equal((await call(env, "/api/byod/import/preview", { feed_url: FEED }, null)).status, 401);
   assert.equal((await call(env, "/api/byod/import/preview", undefined, { id: 1 }, "GET")).status, 405);
   assert.equal(await call(env, "/api/byod/mine", {}), null);
@@ -158,4 +163,12 @@ test("Entwuerfe erscheinen nicht auf einer Blog-Domain (status draft) und die Ta
   const h = await (await serveBlog(env, "blog.anna.de", "/")).text(); assert.ok(!h.includes("Copilot im Alltag nutzen"));
   assert.equal((await serveBlog(env, "blog.anna.de", "/copilot-im-alltag-nutzen/")).status, 404);
   assert.throws(() => raw.exec("INSERT INTO blog_import_items(user_id,item_key,source_url,feed_url,post_id,mode,rights,imported) VALUES(1,'x','u','f',1,'full',0,1)"));
+});
+
+test("Konto loeschen: Herkunftsnachweise des Kontos gehen mit, andere bleiben", async () => {
+  const { db, raw } = await makeDb();
+  raw.exec("INSERT INTO blog_import_items(user_id,item_key,source_url,feed_url,post_id,mode,rights,imported) VALUES(1,'a','https://a.example.org/a','https://a.example.org/f',1,'excerpt',0,1),(2,'b','https://b.example.org/b','https://b.example.org/f',2,'excerpt',0,1)");
+  await deleteUserBlogImport(db, 1);
+  assert.deepEqual(raw.prepare("SELECT user_id FROM blog_import_items ORDER BY user_id").all().map((r) => r.user_id), [2]);
+  assert.match(readFileSync(new URL("../src/index.js", import.meta.url), "utf8"), /await deleteUserBlogImport\(db, id\)/);
 });

@@ -30,12 +30,13 @@ import { handleClaimVerify } from "./claimverify.js";
 import { handleOrgPair } from "./orgpair.js";
 import { handleEntFill } from "./entfill.js";
 import { handleEventImport, IMPORT_ROUTE, runEventImport } from "./eventimport.js";
+import { handleEventEntity, ENTITY_ROUTE, suggestEventEntities } from "./evententity.js";
 import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
-import { handleByodServe, handleByodApi, runByodChecks } from "./byod.js";
-import { handleBlogImport } from "./blog_import.js";
+import { handleByodServe, handleByodApi, runByodChecks, deleteUserByod } from "./byod.js";
+import { handleBlogImport, deleteUserBlogImport } from "./blog_import.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
@@ -231,6 +232,7 @@ async function deleteAccount(env, id) {
   await db.batch([
     db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
     db.prepare("DELETE FROM entity_claim_mail WHERE claim_user=?").bind(id),
+    db.prepare("DELETE FROM entity_claim_evidence WHERE user_id=?").bind(id),   // Adress-Nachweis (0046): Geschaeftsadresse, Notiz, Beleg-Link
     db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
     db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
     db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
@@ -242,6 +244,8 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
   ]);
   await deleteUserEvents(db, id);
+  await deleteUserByod(env, id);   // Blog auf der eigenen Domain (0049): Domains des Kontos samt Hostname bei Cloudflare (nur mit Secrets)
+  await deleteUserBlogImport(db, id);   // Blog-Import (0050): Herkunftsnachweise der importierten Entwuerfe
   await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserSearchDemand(db, id);   // Nachfrage zu eigenen Inhalten und zum Profil (#156): braucht Handle und Inhalte, also vor deleteUserBlog/deleteUserData
@@ -419,7 +423,8 @@ async function api(env, request, url, path, asUser, ctx) {
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/admin/org-pair") { const q = await handleOrgPair(env, request, url, path, user, J); if (q) return q; }
-  if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
+  if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm|evidence)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
+  if (ENTITY_ROUTE.test(path)) { const p = await handleEventEntity(env, request, url, path, user, J); if (p) return p; }   // Event <-> Event-Entitaet (evententity.js)
   if (IMPORT_ROUTE.test(path)) { const p = await handleEventImport(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/ui-i18n" && request.method === "GET") return J(await uiI18nExport(env), 200, { "cache-control": "public, max-age=300" });
@@ -447,7 +452,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
-  if (path === "/api/byod/import/preview" || path === "/api/byod/import/save") { const q = await handleBlogImport(env, request, url, path, user, J); if (q) return q; }   // Blog-Import per Feed (Schalter BYOD)
+  if (path === "/api/byod/import/status" || path === "/api/byod/import/preview" || path === "/api/byod/import/save") { const q = await handleBlogImport(env, request, url, path, user, J); if (q) return q; }   // Blog-Import per Feed (eigener Schalter BYOD_IMPORT)
   if (path.startsWith("/api/byod/") || path === "/api/admin/byod" || path === "/api/admin/byod/block") { const q = await handleByodApi(env, request, url, path, user, J); if (q) return q; }   // Blog auf der eigenen Domain (Schalter BYOD)
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/notes/")) { const q = await handleNotes(env, request, url, path, user, J); if (q) return q; }
@@ -627,6 +632,8 @@ export default {
       // Event-Import (Community Days, Sessionize) zur Minute 15 und 45: in diesem Aufruf, also nie im Aufruf der Digests (0 6 und */30) und der uebrigen
       // Aufgaben, und erst NACH den Benachrichtigungen (sie bekommen ihr Kontingent zuerst). Jeder Lauf ist hart gedeckelt (eventimport.js CAP:
       // rund 100 D1-Aufrufe und 12 Abrufe); was nicht hineinpasst, folgt im naechsten.
+      // Event <-> Event-Entitaet: Namensvergleich fuer neue Events (evententity.js suggestEventEntities, wenige D1-Aufrufe); eigene Aufgabe, damit die Zeile des Event-Imports unveraendert bleibt
+      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventEntity", () => suggestEventEntities(env))));
       if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventImport", () => runEventImport(env))));
       return;
     }

@@ -1,0 +1,2317 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:06.920
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI, Azure, dan para penggerak masa depan dunia kerja.
+
+00:00:07.700 --> 00:00:11.980
+Januari ini, M365 John kembali hadir dan kami akan tampil lebih besar.
+
+00:00:12.760 --> 00:00:18.360
+Bergabunglah dengan kami untuk sesi langsung, demo dunia nyata, dan pengetahuan praktis dari MVP serta pakar industri di seluruh dunia.
+
+00:00:18.800 --> 00:00:21.060
+Tanpa slide umum, tanpa jargon yang tiada habisnya.
+
+00:00:22.040 --> 00:00:28.460
+Kami akan membahas tantangan nyata, Copilot Studio, agen AI, fabrik, keamanan, tata kelola, dan otomatisasi.
+
+00:00:28.460 --> 00:00:34.500
+Baik Anda seorang profesional TI, pengembang, maupun pemimpin bisnis, ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.440 --> 00:00:40.000
+Selama 10 hari penuh, Anda dapat mengeksplorasi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.880 --> 00:00:44.280
+Tonton secara langsung, dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.180 --> 00:00:48.900
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.420 --> 00:00:50.540
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.760 --> 00:00:52.880
+Dapatkan tempat Anda hari ini.
+
+00:00:54.500 --> 00:00:58.200
+Kunjungi M365 John.net
+
+00:00:58.200 --> 00:01:04.700
+Bergabunglah sekarang di M355 John.net, dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.380 --> 00:01:07.380
+Semua orang mengira Power Automate adalah mesintegrasi.
+
+00:01:07.780 --> 00:01:08.040
+Bukan.
+
+00:01:08.560 --> 00:01:10.960
+Itu adalah pabrik praktis untuk otomatisasi yang biasa-biasa saja.
+
+00:01:11.440 --> 00:01:14.040
+Bagus untuk pengingat, tapi buruk untuk sistem skala bisnis.
+
+00:01:14.440 --> 00:01:18.240
+Namun, entah bagaimana para profesional terus membangun alur kerja yang sangat penting di dalamnya,
+
+00:01:18.300 --> 00:01:20.640
+seolah-olah itu adalah Azure Logic Apps dengan lapisan chat berubah.
+
+00:01:20.640 --> 00:01:21.820
+Peringatan bocoran bukan begitu.
+
+00:01:22.340 --> 00:01:24.980
+Orang menganggap pen skalaan berarti cukup menambahkan konektor lain,
+
+00:01:25.460 --> 00:01:28.940
+seolah-olah Microsoft menyelipkan penyeimbang beban otomatis ke dalam UI langganan.
+
+00:01:28.940 --> 00:01:32.340
+Kenyataannya, Power Automate brilian untuk produktivitas pribadi,
+
+00:01:32.500 --> 00:01:34.480
+tetapi alergi terhadap pemrosesan skala industri.
+
+00:01:35.260 --> 00:01:37.040
+Beri 10.000 data, maka ia akan panik.
+
+00:01:37.520 --> 00:01:40.300
+Di akhir pembahasan ini, Anda akan benar-benar memahami di mana ia gagal,
+
+00:01:40.400 --> 00:01:43.040
+mengapa ia gagal, dan apa yang digunakan para profesional sebagai gantinya.
+
+00:01:43.560 --> 00:01:44.960
+Anggap ini bukan sebagai tutorial,
+
+00:01:45.140 --> 00:01:47.040
+melainkan misi penyelamatan bagi kewarasan Anda,
+
+00:01:47.040 --> 00:01:51.360
+batas layanan Anda, dan anak magang malang yang harus mendebak alur persetujuan Anda di tengah malam.
+
+00:01:52.620 --> 00:01:53.660
+Mitos pengembang warga Citizen
+
+00:01:53.660 --> 00:01:57.520
+Power Automate dirancang untuk apa yang oleh Microsoft disebut sebagai pengembang warga.
+
+00:01:57.520 --> 00:02:01.280
+Artinya, pengguna cerdas non-teknis yang mengotomatiskan tugas berulang
+
+00:02:01.280 --> 00:02:02.720
+tanpa harus memohon bantuan TI.
+
+00:02:03.720 --> 00:02:06.540
+Sistem ini tidak pernah dimaksudkan untuk menjadi tulang punggung otomatisasi perusahaan.
+
+00:02:06.760 --> 00:02:09.540
+Target utamanya adalah pengguna tingkat PowerPoint yang ingin pesan tim
+
+00:02:09.540 --> 00:02:10.920
+saat seseorang memperbarui daftar,
+
+00:02:11.060 --> 00:02:13.380
+bukan departemen operasional yang menyingkongkan ribuan faktur
+
+00:02:13.380 --> 00:02:14.740
+antara SAP dan Dataverse.
+
+00:02:15.600 --> 00:02:17.760
+Namun, design itu sendiri menimbulkan ilusi yang memikat.
+
+00:02:18.480 --> 00:02:20.540
+Anda menarik kotak, mukumat pemicu, dan semuanya berjalan.
+
+00:02:21.440 --> 00:02:21.620
+Kali.
+
+00:02:22.120 --> 00:02:24.200
+Lalu seseorang berkatama dan luncurkan ini ke seluruh perusahaan.
+
+00:02:24.200 --> 00:02:26.980
+Saat itulah protipi ciri Anda bermutasi menjadi monster.
+
+00:02:27.840 --> 00:02:29.760
+Sesuatu yang menghantui AP SharePoint pada jam 2 pagi.
+
+00:02:30.060 --> 00:02:31.240
+Kemudian pengguna menutupi kerapuhan.
+
+00:02:31.760 --> 00:02:33.660
+Antar mukanya menyembunyikan batasan teknis
+
+00:02:33.660 --> 00:02:35.460
+di balik lapisan ikon biru yang ramah.
+
+00:02:35.900 --> 00:02:37.560
+Anda mengira konektor ini ada pipa tambah batuk?
+
+00:02:38.060 --> 00:02:39.160
+Kenyataannya itu menyelesaikan minit.
+
+00:02:39.880 --> 00:02:41.580
+Masing-masing dibatasi, diatur waktunya,
+
+00:02:41.760 --> 00:02:44.000
+dan sangat sensitif terhadap perulangan yang berlangsung lebih dari 8.
+
+00:02:44.480 --> 00:02:46.840
+Pengguna rata-rata membangun alur dengan asumsi terputar terbat.
+
+00:02:47.200 --> 00:02:48.720
+Lalu mereka terbentur batasan konkurrensi,
+
+00:02:48.720 --> 00:02:50.580
+batas jublah langkah, dan pesan kesalahan
+
+00:02:50.580 --> 00:02:52.180
+rate limit exited yang menyitahirpkan.
+
+00:02:54.200 --> 00:02:55.660
+Yang dirancang untuk 10 karyawan per bulan.
+
+00:02:56.120 --> 00:02:57.440
+Alur itu berjalan sempurna saat pengujian.
+
+00:02:57.740 --> 00:02:59.700
+Sekarang perusahaan berkembang menjadi seribu rekrutan,
+
+00:02:59.800 --> 00:03:01.600
+mengunggah dokumen massal, membuat ID,
+
+00:03:01.840 --> 00:03:03.380
+menyediakan akun semuanya sekaligus.
+
+00:03:04.200 --> 00:03:05.960
+Tiba-tiba alur terhenti di tengah jalan
+
+00:03:05.960 --> 00:03:08.080
+karena melebih batas 5.000 tindakan per hari.
+
+00:03:09.200 --> 00:03:11.060
+Selamat sistem otomatis Anda baru saja berubah
+
+00:03:11.060 --> 00:03:12.240
+menjadi rencana pemulihan manual.
+
+00:03:12.920 --> 00:03:14.540
+Masalahnya bukan pada desain yang buruk,
+
+00:03:14.620 --> 00:03:15.680
+melainkan ketidakselarasan itu.
+
+00:03:16.100 --> 00:03:17.440
+Microsoft membangun power automate
+
+00:03:17.440 --> 00:03:18.880
+untuk mendemokrasikan otomatisasi,
+
+00:03:19.000 --> 00:03:20.380
+bukan menggantikan insinyur integrasi.
+
+00:03:21.060 --> 00:03:23.080
+Namun pemilik bisnis menyukai tenaga kerja gratis,
+
+00:03:23.080 --> 00:03:24.580
+dan ketika karyawan non-teknis memberikan
+
+00:03:24.580 --> 00:03:25.740
+satu prototipe yang berfungsi,
+
+00:03:25.840 --> 00:03:27.840
+eksekutif berasumsi itu bisa menangani permintaan produksi.
+
+00:03:28.660 --> 00:03:30.080
+Jadi, mereka terus menumpuk langkah,
+
+00:03:30.260 --> 00:03:32.000
+persetujuan, email, pembaruan database,
+
+00:03:32.120 --> 00:03:32.720
+cobang kondisi,
+
+00:03:33.260 --> 00:03:34.980
+hingga suatu hari platform dengan sopan menolak.
+
+00:03:35.400 --> 00:03:36.500
+Ini yang terlewatkan oleh kebanyakan orang.
+
+00:03:36.860 --> 00:03:37.900
+Ini bukan kesalahan power automate.
+
+00:03:38.480 --> 00:03:40.700
+Anda minta alat hobi untuk melakukan beban kerja maraton.
+
+00:03:41.020 --> 00:03:42.240
+Ini seperti menarik trailer dengan skuter.
+
+00:03:42.960 --> 00:03:44.020
+Heroi untuk 200 meter,
+
+00:03:44.240 --> 00:03:45.880
+katastropik di kecepatan jalan raya.
+
+00:03:46.380 --> 00:03:47.940
+Pelajaran yang didapat sederhana-kesederhanaan
+
+00:03:47.940 --> 00:03:48.760
+tidak sama dengan skala build.
+
+00:03:49.180 --> 00:03:50.100
+Logika tarik dan lepas
+
+00:03:50.100 --> 00:03:51.420
+tidak bisa menggantikan teknik terput.
+
+00:03:52.220 --> 00:03:53.300
+Namun kantor di mana-mana
+
+00:03:53.300 --> 00:03:54.780
+ditopang oleh alur power automate
+
+00:03:54.780 --> 00:03:56.740
+yang disatukan dengan percobaan ulang dan optimisme.
+
+00:03:57.660 --> 00:03:58.060
+Tapi ingat,
+
+00:03:58.180 --> 00:03:59.860
+masalahnya bukan karena power automate itu buruk.
+
+00:04:00.440 --> 00:04:01.780
+Masalahnya Anda memaksanya melakukan
+
+00:04:01.780 --> 00:04:03.060
+apa yang tidak pernah diancang untuk itu.
+
+00:04:03.540 --> 00:04:04.500
+Profesional sejati tahu
+
+00:04:04.500 --> 00:04:05.460
+kapan harus bermigrasi
+
+00:04:05.460 --> 00:04:06.720
+karena dalam skala perusahaan,
+
+00:04:06.800 --> 00:04:07.800
+kenyamanan menjadi benturan,
+
+00:04:08.020 --> 00:04:09.580
+dan benturan itu disertai tagihan.
+
+00:04:10.940 --> 00:04:12.040
+Dua titik kegagalan yang tak terlihat.
+
+00:04:12.580 --> 00:04:13.940
+Sekarang kita sampai pada pembunuh senyap
+
+00:04:13.940 --> 00:04:14.980
+otomatisasi perusahaan.
+
+00:04:15.460 --> 00:04:16.840
+Dua titik kegagalan tak terlihat
+
+00:04:16.840 --> 00:04:18.140
+yang mengintai dibalik setiap alur
+
+00:04:18.140 --> 00:04:18.940
+yang beroperasi penuh.
+
+00:04:19.380 --> 00:04:20.300
+Pertama adalah throttling,
+
+00:04:20.420 --> 00:04:20.800
+pembatasan.
+
+00:04:20.940 --> 00:04:21.600
+Kedua adalah lisensi.
+
+00:04:22.000 --> 00:04:22.920
+Keduanya bertanggung jawab
+
+00:04:22.920 --> 00:04:24.220
+atas banyak kerusakan misterius
+
+00:04:24.220 --> 00:04:25.180
+yang disalah artikan orang
+
+00:04:25.180 --> 00:04:26.300
+sebagai keanehan Microsoft.
+
+00:04:27.180 --> 00:04:28.760
+Tidak, Microsoft sedang bersikap presisi
+
+00:04:28.760 --> 00:04:30.100
+sementara Anda bersikap optimis.
+
+00:04:30.780 --> 00:04:31.880
+Mari kita mulai dengan throttling
+
+00:04:31.880 --> 00:04:32.900
+karena disitulah impian pergi
+
+00:04:32.900 --> 00:04:34.320
+untuk melakukan buffer tanpa batas.
+
+00:04:35.020 --> 00:04:36.340
+Setiap konektor di power automate,
+
+00:04:36.440 --> 00:04:36.840
+sharepoint,
+
+00:04:37.180 --> 00:04:37.960
+outlook, dataverse,
+
+00:04:38.060 --> 00:04:38.500
+sebut saja,
+
+00:04:38.680 --> 00:04:39.620
+memiliki batasan ketat.
+
+00:04:40.320 --> 00:04:41.120
+Permintaan per menit,
+
+00:04:41.220 --> 00:04:41.840
+panggilan per hari,
+
+00:04:41.960 --> 00:04:43.000
+batasan eksekusi paralel.
+
+00:04:43.680 --> 00:04:45.000
+Saat alur Anda melebihi
+
+00:04:45.000 --> 00:04:45.940
+ambang batas tersebut,
+
+00:04:45.940 --> 00:04:46.760
+ya tidak melambat.
+
+00:04:47.280 --> 00:04:47.780
+Ya begitu saja.
+
+00:04:48.380 --> 00:04:49.400
+Bayangkan oksigen terputus
+
+00:04:49.400 --> 00:04:49.960
+di tengah kalimat.
+
+00:04:50.620 --> 00:04:51.360
+Alur tersengal-sengal
+
+00:04:51.360 --> 00:04:52.400
+mencoba ulang setengah hati
+
+00:04:52.400 --> 00:04:53.140
+lalu mati diam-diam
+
+00:04:53.140 --> 00:04:54.000
+dalam riwayat eksekusi
+
+00:04:54.000 --> 00:04:54.920
+yang tak diperiksa siapapun
+
+00:04:54.920 --> 00:04:55.480
+sampai hari Senin.
+
+00:04:55.940 --> 00:04:56.960
+Inilah saat seorang pahlawan
+
+00:04:56.960 --> 00:04:58.240
+memutuskan untuk memperbaikinya
+
+00:04:58.240 --> 00:04:59.320
+dengan meningkatkan frekuensi
+
+00:04:59.320 --> 00:05:00.300
+pemicu tanpa sadar bahwa
+
+00:05:00.300 --> 00:05:00.920
+mereka memperparah
+
+00:05:00.920 --> 00:05:01.660
+penyumbatan tersebut.
+
+00:05:02.180 --> 00:05:02.820
+Ini seperti menaikkan
+
+00:05:02.820 --> 00:05:03.520
+kecepatan treadmill
+
+00:05:03.520 --> 00:05:04.640
+saat Anda sudah kebisa nafas.
+
+00:05:05.320 --> 00:05:06.480
+Konektor dibatasi lajunya
+
+00:05:06.480 --> 00:05:07.100
+karena suatu alasan.
+
+00:05:07.640 --> 00:05:08.080
+Cloud Microsoft
+
+00:05:08.080 --> 00:05:08.760
+tidak menginginkan
+
+00:05:08.760 --> 00:05:09.500
+loop persetujuan Anda
+
+00:05:09.500 --> 00:05:10.140
+yang tidak optimal
+
+00:05:10.140 --> 00:05:11.420
+memonopoli bandwidth regional
+
+00:05:11.420 --> 00:05:12.220
+pada pukul 4 pagi.
+
+00:05:12.540 --> 00:05:13.300
+Dan ya itu termasuk
+
+00:05:13.300 --> 00:05:14.100
+kerjaan batch faktur
+
+00:05:14.100 --> 00:05:14.800
+pukul 4 pagi
+
+00:05:14.800 --> 00:05:15.380
+yang harus ada
+
+00:05:15.380 --> 00:05:16.000
+di bagian akutansi
+
+00:05:16.000 --> 00:05:16.720
+sebelum matahari terbit.
+
+00:05:17.260 --> 00:05:18.060
+Itu akan gagal
+
+00:05:18.060 --> 00:05:18.700
+dan akan gagal
+
+00:05:18.700 --> 00:05:19.560
+secara spektakuler,
+
+00:05:19.740 --> 00:05:20.300
+senyap, elegan,
+
+00:05:20.380 --> 00:05:21.060
+dan sangat berusaha.
+
+00:05:21.420 --> 00:05:22.580
+Sekarang alihkan fokus ke lisensi,
+
+00:05:22.860 --> 00:05:23.420
+kembaran finansial
+
+00:05:23.420 --> 00:05:23.940
+dari pelambatan.
+
+00:05:24.740 --> 00:05:25.860
+Jika pelambatan menceki performa,
+
+00:05:25.960 --> 00:05:27.080
+lisensi menceki anggaran Anda.
+
+00:05:27.940 --> 00:05:28.620
+Power Automate
+
+00:05:28.620 --> 00:05:29.920
+memiliki beberapa model lisensi
+
+00:05:29.920 --> 00:05:30.700
+berpengguna,
+
+00:05:30.860 --> 00:05:31.420
+beralur, flow,
+
+00:05:31.520 --> 00:05:32.600
+dan kategori konektor premium
+
+00:05:32.600 --> 00:05:33.320
+yang menakutkan.
+
+00:05:33.900 --> 00:05:34.600
+Semuanya tampak mudah
+
+00:05:34.600 --> 00:05:35.660
+dikelola dalam skala kecil,
+
+00:05:35.800 --> 00:05:36.440
+tetapi saat Anda
+
+00:05:36.440 --> 00:05:37.500
+memperluas satu prototipe
+
+00:05:37.500 --> 00:05:38.320
+ke berbagai departemen,
+
+00:05:38.440 --> 00:05:39.020
+tim keuangan Anda
+
+00:05:39.020 --> 00:05:39.920
+tiba-tiba harus berjuang
+
+00:05:39.920 --> 00:05:40.540
+dengan kalkulator
+
+00:05:40.540 --> 00:05:41.980
+di tengah temukan pengali tersembunyi.
+
+00:05:42.440 --> 00:05:42.800
+Nila trik.
+
+00:05:43.300 --> 00:05:44.140
+Setiap instans alur,
+
+00:05:44.300 --> 00:05:45.140
+penggunaan konektor,
+
+00:05:45.340 --> 00:05:46.140
+dan batas lingkungan
+
+00:05:46.140 --> 00:05:47.180
+memicu implikasi biaya.
+
+00:05:48.040 --> 00:05:49.080
+Dalamkan alur yang sama
+
+00:05:49.080 --> 00:05:49.980
+di bawah pengguna yang berbeda
+
+00:05:49.980 --> 00:05:50.500
+dan semua orang
+
+00:05:50.500 --> 00:05:51.540
+memerlukan cakupan lisensi.
+
+00:05:52.000 --> 00:05:52.880
+Otomatisasi departemen
+
+00:05:52.880 --> 00:05:53.780
+yang tadinya gratis kini
+
+00:05:53.780 --> 00:05:54.800
+memakan biaya per bulan
+
+00:05:54.800 --> 00:05:55.320
+lebih mahal
+
+00:05:55.320 --> 00:05:56.120
+daripada seluruh
+
+00:05:56.120 --> 00:05:56.820
+langganan Azure.
+
+00:05:56.820 --> 00:05:58.420
+Ini adalah versi cetakan
+
+00:05:58.420 --> 00:05:59.340
+kecil dalam otomatisasi.
+
+00:05:59.700 --> 00:06:00.460
+Tidak ada yang membacanya
+
+00:06:00.460 --> 00:06:01.700
+sampai laporan keuangan menjerit.
+
+00:06:01.980 --> 00:06:02.580
+Bayangkan sistem ini
+
+00:06:02.580 --> 00:06:03.320
+seperti sepasang perupang.
+
+00:06:04.000 --> 00:06:04.820
+Pelambatan membatasi
+
+00:06:04.820 --> 00:06:05.540
+asupan oksigen.
+
+00:06:06.020 --> 00:06:06.620
+Lisensi menjual
+
+00:06:06.620 --> 00:06:07.200
+tangki oksigen
+
+00:06:07.200 --> 00:06:08.000
+yang mahal kepada Anda.
+
+00:06:08.700 --> 00:06:09.480
+Anda bisa bernapas
+
+00:06:09.480 --> 00:06:10.020
+dengan hati-hati
+
+00:06:10.020 --> 00:06:10.580
+dan bertahan hidup
+
+00:06:10.580 --> 00:06:11.120
+atau menghirupnya
+
+00:06:11.120 --> 00:06:11.860
+dengan ceropan yang pingsan.
+
+00:06:12.520 --> 00:06:13.360
+Perusahaan menemukan
+
+00:06:13.360 --> 00:06:14.100
+titik impas ini
+
+00:06:14.100 --> 00:06:15.180
+dengan cara yang sulit.
+
+00:06:15.980 --> 00:06:16.620
+Detik yang tepat
+
+00:06:16.620 --> 00:06:17.420
+ketika Logic Apps
+
+00:06:17.420 --> 00:06:18.260
+atau Azure Functions
+
+00:06:18.260 --> 00:06:19.160
+harusnya lebih murah,
+
+00:06:19.300 --> 00:06:19.720
+lebih cepat,
+
+00:06:19.780 --> 00:06:20.620
+dan jauh lebih andal.
+
+00:06:21.120 --> 00:06:21.780
+Ijinkan saya memberikan
+
+00:06:21.780 --> 00:06:22.700
+contoh yang sangat tragis.
+
+00:06:23.460 --> 00:06:24.600
+Sebuah perusahaan menengah
+
+00:06:24.600 --> 00:06:25.940
+membangun alur power automate
+
+00:06:25.940 --> 00:06:26.520
+untuk menangani
+
+00:06:26.520 --> 00:06:27.340
+onboarding SDM,
+
+00:06:27.600 --> 00:06:28.140
+enggak dokumen,
+
+00:06:28.380 --> 00:06:29.540
+pembuatan folder SharePoint,
+
+00:06:29.760 --> 00:06:30.360
+penyediaan email,
+
+00:06:30.560 --> 00:06:31.260
+dan undangan Teams.
+
+00:06:31.940 --> 00:06:32.780
+Itu berjalan dengan indah
+
+00:06:32.780 --> 00:06:33.440
+selama bulan pertama.
+
+00:06:33.900 --> 00:06:34.600
+Kemudian perekrutan
+
+00:06:34.600 --> 00:06:35.320
+triwulana meningkat
+
+00:06:35.320 --> 00:06:36.440
+mendorong ratusan eksekusi
+
+00:06:36.440 --> 00:06:37.040
+setiap harinya.
+
+00:06:37.720 --> 00:06:38.560
+Pelambatan terjadi,
+
+00:06:38.680 --> 00:06:39.400
+persetujuan terhenti,
+
+00:06:39.500 --> 00:06:40.560
+dan akses karyawan tidak terbuka.
+
+00:06:41.040 --> 00:06:41.840
+Staf SDM menghabiskan
+
+00:06:41.840 --> 00:06:42.540
+dua hari untuk membuat
+
+00:06:42.540 --> 00:06:43.460
+aturan secara manis.
+
+00:06:43.460 --> 00:06:44.200
+Auditor menyebutnya
+
+00:06:44.200 --> 00:06:44.840
+sebagai kegagalan
+
+00:06:44.840 --> 00:06:45.460
+kontrol proses.
+
+00:06:45.920 --> 00:06:46.400
+Saya menyebutnya
+
+00:06:46.400 --> 00:06:47.380
+kelalaian yang dapat diprediksi
+
+00:06:47.380 --> 00:06:48.520
+namun disamarkan sebagai inovasi.
+
+00:06:49.020 --> 00:06:49.660
+Dan sebelum Anda
+
+00:06:49.660 --> 00:06:51.120
+terburu-buru menyalahkan platformnya,
+
+00:06:51.280 --> 00:06:51.800
+ingatlah bahwa
+
+00:06:51.800 --> 00:06:52.780
+power automate transparan
+
+00:06:52.780 --> 00:06:53.460
+soal batasannya
+
+00:06:53.460 --> 00:06:54.360
+jika Anda benar-benar
+
+00:06:54.360 --> 00:06:55.220
+membaca dokumentasi
+
+00:06:55.220 --> 00:06:56.280
+yang terkumpul 5 klik di dalam.
+
+00:06:56.940 --> 00:06:57.640
+Masalahnya adalah
+
+00:06:57.640 --> 00:06:58.840
+sebagian besar pengembang warga,
+
+00:06:58.960 --> 00:06:59.660
+citizen developers,
+
+00:06:59.800 --> 00:07:00.660
+berasumsi cloud berjalan
+
+00:07:00.660 --> 00:07:01.500
+atas dasar niat baik,
+
+00:07:01.660 --> 00:07:02.080
+bukan kuota.
+
+00:07:02.720 --> 00:07:03.720
+Spoiler, tidak.
+
+00:07:04.320 --> 00:07:05.000
+Ini adalah titik
+
+00:07:05.000 --> 00:07:06.220
+di mana insinyur yang bijak berhenti
+
+00:07:06.220 --> 00:07:06.980
+berpura-pura bahwa
+
+00:07:06.980 --> 00:07:07.780
+power automate adalah
+
+00:07:07.780 --> 00:07:08.520
+keajaiban serverless
+
+00:07:08.520 --> 00:07:09.040
+tanpa batas.
+
+00:07:09.340 --> 00:07:10.140
+Mereka berhenti melakukan
+
+00:07:10.140 --> 00:07:10.880
+perbaikan darurat
+
+00:07:10.880 --> 00:07:11.660
+dan mulai menjelajahi
+
+00:07:11.660 --> 00:07:12.400
+platform yang dibangun
+
+00:07:12.400 --> 00:07:12.780
+untuk beta.
+
+00:07:13.580 --> 00:07:14.380
+Karena power automate
+
+00:07:14.380 --> 00:07:15.280
+tidak pernah dimaksudkan
+
+00:07:15.280 --> 00:07:16.440
+untuk memproses badai data.
+
+00:07:17.200 --> 00:07:17.660
+Itu dirancang
+
+00:07:17.660 --> 00:07:18.400
+untuk mengirim payung
+
+00:07:18.400 --> 00:07:18.940
+saat gerimis.
+
+00:07:19.400 --> 00:07:19.980
+Untuk badai petir,
+
+00:07:20.100 --> 00:07:20.600
+Anda memerlukan
+
+00:07:20.600 --> 00:07:21.840
+otomatisasi tingkat industri,
+
+00:07:22.320 --> 00:07:22.820
+tempat di mana
+
+00:07:22.820 --> 00:07:23.400
+alur tidak perlu
+
+00:07:23.400 --> 00:07:23.900
+menguang ambun
+
+00:07:23.900 --> 00:07:24.500
+saat dalam skala.
+
+00:07:24.860 --> 00:07:25.700
+Dan hal itulah yang membawa
+
+00:07:25.700 --> 00:07:26.520
+kita langsung ke jawaban
+
+00:07:26.520 --> 00:07:27.280
+profesional atas
+
+00:07:27.280 --> 00:07:27.960
+semua kekacauan ini.
+
+00:07:28.320 --> 00:07:28.840
+Alat yang lahir
+
+00:07:28.840 --> 00:07:29.820
+dari arsitektur yang sama,
+
+00:07:29.820 --> 00:07:31.160
+namun tanpa roda bantu.
+
+00:07:32.100 --> 00:07:33.100
+Ketika Anda sudah cukup
+
+00:07:33.100 --> 00:07:33.880
+menghirup kesalahan
+
+00:07:33.880 --> 00:07:35.300
+pelambatan dan biaya lisensi,
+
+00:07:35.740 --> 00:07:36.680
+saatnya untuk lulus.
+
+00:07:36.680 --> 00:07:38.300
+Hadirilah Logic Apps,
+
+00:07:38.480 --> 00:07:39.200
+tempat otomatisasi
+
+00:07:39.200 --> 00:07:40.000
+akhirnya berperilaku
+
+00:07:40.000 --> 00:07:40.800
+seperti infrastruktur,
+
+00:07:40.940 --> 00:07:41.780
+bukan seperti anak magang
+
+00:07:41.780 --> 00:07:42.240
+yang kelelahan
+
+00:07:42.240 --> 00:07:42.820
+dengan terlalu banyak
+
+00:07:42.820 --> 00:07:43.760
+konektor dan ruang napas
+
+00:07:43.760 --> 00:07:44.060
+yang minim.
+
+00:07:45.980 --> 00:07:46.960
+Hadirilah Logic Apps,
+
+00:07:47.100 --> 00:07:48.420
+alternatif profesionalnya.
+
+00:07:49.000 --> 00:07:49.640
+Mari kita bahas
+
+00:07:49.640 --> 00:07:50.200
+versi dewasa
+
+00:07:50.200 --> 00:07:50.940
+dari power automate,
+
+00:07:51.080 --> 00:07:52.140
+yaitu Azure Logic Apps,
+
+00:07:52.620 --> 00:07:53.560
+materi genetik yang sama
+
+00:07:53.560 --> 00:07:54.040
+kayak hidup
+
+00:07:54.040 --> 00:07:54.800
+yang benar-benar berbeda.
+
+00:07:55.220 --> 00:07:56.040
+Power Automate adalah
+
+00:07:56.040 --> 00:07:56.740
+makanan pendamping
+
+00:07:56.740 --> 00:07:57.580
+bagi pengembang awam
+
+00:07:57.580 --> 00:07:58.140
+Citizen Devon.
+
+00:07:58.400 --> 00:07:59.040
+Logic Apps adalah
+
+00:07:59.040 --> 00:07:59.560
+asupan protein
+
+00:07:59.560 --> 00:08:00.420
+bagi barang senior semua.
+
+00:08:01.120 --> 00:08:01.900
+Desainer dan mesin
+
+00:08:01.900 --> 00:08:02.740
+alur kerjanya sama,
+
+00:08:02.920 --> 00:08:03.500
+tetapi alih-alih
+
+00:08:03.500 --> 00:08:04.560
+menyembunyikan kompleksitas
+
+00:08:04.560 --> 00:08:05.460
+dibalik ikon ramah,
+
+00:08:05.580 --> 00:08:06.240
+ia menyerahkan setir
+
+00:08:06.240 --> 00:08:06.660
+kepada Anda
+
+00:08:06.660 --> 00:08:07.080
+dan bertanya
+
+00:08:07.080 --> 00:08:07.740
+apakah Anda benar
+
+00:08:07.740 --> 00:08:08.360
+bisa mengemudi
+
+00:08:08.360 --> 00:08:09.840
+di konteksnya.
+
+00:08:10.260 --> 00:08:11.060
+Kedua layanan tersebut
+
+00:08:11.060 --> 00:08:11.680
+dibangun di atas
+
+00:08:11.680 --> 00:08:12.580
+mesin alur kerja Azure.
+
+00:08:12.880 --> 00:08:13.580
+Perbedaannya terletak
+
+00:08:13.580 --> 00:08:14.160
+pada pengemasan.
+
+00:08:14.540 --> 00:08:15.460
+Power Automate berjalan
+
+00:08:15.460 --> 00:08:16.680
+di lingkungan terkelola Microsoft
+
+00:08:16.680 --> 00:08:17.820
+yang memberikan
+
+00:08:17.820 --> 00:08:18.600
+kendali terbatas,
+
+00:08:18.880 --> 00:08:19.580
+pembatasan tetap,
+
+00:08:19.660 --> 00:08:20.600
+dan antarmuka yang penuh warna.
+
+00:08:21.080 --> 00:08:22.000
+Logic Apps menanggalkan
+
+00:08:22.000 --> 00:08:22.600
+mainan tersebut
+
+00:08:22.600 --> 00:08:23.740
+dan membuka rantai mentahnya.
+
+00:08:24.400 --> 00:08:25.140
+Anda dapat menentukan
+
+00:08:25.140 --> 00:08:26.060
+pemicu, parameter,
+
+00:08:26.200 --> 00:08:26.760
+percobaan ulang,
+
+00:08:26.860 --> 00:08:27.660
+penanganan kesalahan,
+
+00:08:27.700 --> 00:08:28.320
+dan pemantauan
+
+00:08:28.320 --> 00:08:28.800
+semuanya dengan
+
+00:08:28.800 --> 00:08:29.400
+prosesi bedah.
+
+00:08:29.880 --> 00:08:30.680
+Ini seperti menyadari
+
+00:08:30.680 --> 00:08:31.800
+bahwa sandbox Power Automate
+
+00:08:31.800 --> 00:08:32.640
+ternyata hanyalah sudut
+
+00:08:32.640 --> 00:08:33.560
+yang dipadari dari Azure
+
+00:08:33.560 --> 00:08:34.000
+selama ini.
+
+00:08:34.460 --> 00:08:35.280
+Di Power Automate,
+
+00:08:35.400 --> 00:08:36.260
+alur kerja Anda hidup
+
+00:08:36.260 --> 00:08:37.000
+dan mati di dalam
+
+00:08:37.000 --> 00:08:37.700
+wadah yang buram.
+
+00:08:38.200 --> 00:08:38.920
+Anda tidak bisa melihat
+
+00:08:38.920 --> 00:08:39.340
+apa yang terjadi
+
+00:08:39.340 --> 00:08:39.860
+di balik layar,
+
+00:08:39.940 --> 00:08:40.560
+kecuali melalui layar
+
+00:08:40.560 --> 00:08:41.440
+riwayat eksekusi yang canggung
+
+00:08:41.440 --> 00:08:42.020
+yang diperbarui dengan
+
+00:08:42.020 --> 00:08:42.680
+keterlambatan 5 menit
+
+00:08:42.680 --> 00:08:43.080
+dan menawarkan
+
+00:08:43.080 --> 00:08:44.040
+kedalaman investigasi layaknya
+
+00:08:44.040 --> 00:08:46.660
+ramalan di kue keberuntungan.
+
+00:08:46.780 --> 00:08:47.260
+Sebaliknya,
+
+00:08:47.460 --> 00:08:48.200
+Logic Apps memberikan
+
+00:08:48.200 --> 00:08:49.100
+application insights,
+
+00:08:49.320 --> 00:08:50.340
+sebuah teleskop diagnostik
+
+00:08:50.340 --> 00:08:51.440
+dengan log yang bisa diquery,
+
+00:08:51.700 --> 00:08:52.300
+metrik kinerja,
+
+00:08:52.300 --> 00:08:53.520
+dan aturan peringatan.
+
+00:08:53.960 --> 00:08:54.220
+Ini adalah
+
+00:08:54.220 --> 00:08:55.080
+observabilitas untuk orang.
+
+00:08:55.480 --> 00:08:56.000
+Paralelisme,
+
+00:08:56.260 --> 00:08:57.160
+Logic Apps menanggapnya
+
+00:08:57.160 --> 00:08:57.980
+sebagai hak fundamental.
+
+00:08:58.440 --> 00:08:59.580
+Anda dapat menyebarkan cabang,
+
+00:08:59.700 --> 00:09:00.340
+menjalankan skala
+
+00:09:00.340 --> 00:09:01.060
+secara independen
+
+00:09:01.060 --> 00:09:01.760
+dan menyusun pola
+
+00:09:01.760 --> 00:09:02.780
+orkestrasi yang kompleks
+
+00:09:02.780 --> 00:09:03.380
+tanpa terhambat
+
+00:09:03.380 --> 00:09:04.580
+batasan alur yang sewenang-wenang.
+
+00:09:05.320 --> 00:09:06.040
+Di Power Automate,
+
+00:09:06.480 --> 00:09:07.040
+konkurensi terasa
+
+00:09:07.040 --> 00:09:08.040
+seperti barang selundupan.
+
+00:09:08.440 --> 00:09:09.140
+Jenis fitur yang hanya
+
+00:09:09.140 --> 00:09:09.800
+bisa dibuka setelah
+
+00:09:09.800 --> 00:09:10.640
+tiga kali negosiasi,
+
+00:09:10.700 --> 00:09:11.440
+lisensi, dan doa.
+
+00:09:12.360 --> 00:09:12.700
+Dan ya,
+
+00:09:12.800 --> 00:09:13.740
+Logic Apps terintegrasi
+
+00:09:13.740 --> 00:09:14.660
+dengan konektor yang sama,
+
+00:09:14.860 --> 00:09:15.620
+SharePoint, Outlook,
+
+00:09:15.720 --> 00:09:16.620
+Dataverse, bahkan API,
+
+00:09:16.740 --> 00:09:17.420
+custom tetapi
+
+00:09:17.420 --> 00:09:18.780
+tanpa lapisan pengasuh
+
+00:09:22.300 --> 00:09:22.800
+mencoba ulang
+
+00:09:22.800 --> 00:09:23.720
+untuk melindungi dia sendiri.
+
+00:09:23.840 --> 00:09:24.480
+Logic Apps justru
+
+00:09:24.480 --> 00:09:25.160
+mengeksekusi tepat
+
+00:09:25.160 --> 00:09:25.980
+seperti yang Anda perintah.
+
+00:09:26.340 --> 00:09:26.920
+Jika gagal,
+
+00:09:27.040 --> 00:09:27.800
+Anda dapat mengarahkan
+
+00:09:27.800 --> 00:09:28.580
+kegagalan tersebut,
+
+00:09:28.700 --> 00:09:29.060
+menanganinya,
+
+00:09:29.160 --> 00:09:29.640
+atau mengirimnya
+
+00:09:29.640 --> 00:09:30.380
+ke tempat yang produktif
+
+00:09:30.380 --> 00:09:31.000
+daripada terjebak
+
+00:09:31.000 --> 00:09:31.820
+dalam ambiguitas yang sulit.
+
+00:09:31.920 --> 00:09:32.900
+Berikut metafora teknik,
+
+00:09:33.120 --> 00:09:33.780
+karena itu tampaknya
+
+00:09:33.780 --> 00:09:34.780
+membantu audiens tertentu.
+
+00:09:35.300 --> 00:09:36.100
+Power Automate adalah
+
+00:09:36.100 --> 00:09:37.280
+versi IKEA dari integrasi.
+
+00:09:37.840 --> 00:09:38.860
+Ramah, mudah didekati,
+
+00:09:38.960 --> 00:09:39.720
+dan hanya membutuhkan
+
+00:09:39.720 --> 00:09:40.440
+sedikit umpatan
+
+00:09:40.440 --> 00:09:41.120
+untuk merakitnya.
+
+00:09:41.820 --> 00:09:42.560
+Logic Apps ibarat
+
+00:09:42.560 --> 00:09:43.480
+melugaskan seorang tukang kaya.
+
+00:09:43.880 --> 00:09:44.980
+Anda tetap mendapatkan meja,
+
+00:09:45.100 --> 00:09:45.880
+tetapi Anda yang menentukan
+
+00:09:45.880 --> 00:09:46.360
+jenis kayu,
+
+00:09:46.440 --> 00:09:46.820
+ketebalan,
+
+00:09:46.920 --> 00:09:47.320
+sentuhan akhir,
+
+00:09:47.380 --> 00:09:48.140
+dan geometri kakinya.
+
+00:09:48.800 --> 00:09:49.660
+Satu hal yang Anda banggakan
+
+00:09:49.660 --> 00:09:50.600
+karena berhasil merakitnya
+
+00:09:50.600 --> 00:09:51.040
+yang lain menjadi
+
+00:09:51.040 --> 00:09:51.840
+funitur yang tahan lama.
+
+00:09:52.580 --> 00:09:53.120
+Nah, beberapa orang
+
+00:09:53.120 --> 00:09:53.680
+khawatir Azure
+
+00:09:53.680 --> 00:09:54.760
+berarti lebih membingungkan.
+
+00:09:55.680 --> 00:09:56.100
+Tidak juga,
+
+00:09:56.400 --> 00:09:57.220
+asalkan Anda bisa tahan
+
+00:09:57.220 --> 00:09:57.860
+dengan antarmokap
+
+00:09:57.860 --> 00:09:58.740
+pengguna MNM emoji.
+
+00:09:59.940 --> 00:10:00.740
+Desainer Logic Apps
+
+00:10:00.740 --> 00:10:01.300
+terbuka langsung
+
+00:10:01.300 --> 00:10:02.100
+di portal Azure
+
+00:10:02.100 --> 00:10:03.300
+dan terlihat sangat familiar.
+
+00:10:04.240 --> 00:10:04.880
+Bentuk yang sama,
+
+00:10:05.040 --> 00:10:05.480
+garis yang sama
+
+00:10:05.480 --> 00:10:06.320
+menghubungkan tindakan.
+
+00:10:07.120 --> 00:10:07.960
+Perbedaannya adalah
+
+00:10:07.960 --> 00:10:09.040
+setiap properti,
+
+00:10:09.280 --> 00:10:10.120
+setiap opsi eksekusi,
+
+00:10:10.300 --> 00:10:11.240
+setiap pengaturan terbuka
+
+00:10:11.240 --> 00:10:12.000
+untuk diperiksa.
+
+00:10:12.000 --> 00:10:14.480
+Anda dapat membuat versinya
+
+00:10:14.480 --> 00:10:15.440
+dengan kontrol sumber,
+
+00:10:15.540 --> 00:10:16.520
+menerapkan melalui pipeline,
+
+00:10:16.640 --> 00:10:17.380
+dan melakukan rollback
+
+00:10:17.380 --> 00:10:18.320
+layaknya profesional berada.
+
+00:10:18.720 --> 00:10:19.920
+Biaya adalah pengungkapan ajaib lainnya.
+
+00:10:20.320 --> 00:10:20.920
+Power Automate
+
+00:10:20.920 --> 00:10:21.640
+mengenakan biaya
+
+00:10:21.640 --> 00:10:22.800
+per pengguna atau per alur
+
+00:10:22.800 --> 00:10:23.720
+artinya Anda menyewa
+
+00:10:23.720 --> 00:10:24.700
+kenyamanan setiap bulan.
+
+00:10:25.360 --> 00:10:26.080
+Logic Apps berjalan
+
+00:10:26.080 --> 00:10:26.780
+dengan model konsum.
+
+00:10:27.200 --> 00:10:27.800
+Anda membayar
+
+00:10:27.800 --> 00:10:28.600
+hanya saat alur Anda
+
+00:10:28.600 --> 00:10:29.180
+dijarankan
+
+00:10:29.180 --> 00:10:30.080
+dan hanya untuk bagian
+
+00:10:30.080 --> 00:10:30.660
+yang Anda gunakan.
+
+00:10:31.080 --> 00:10:31.900
+Jika tidak ada yang memicu
+
+00:10:31.900 --> 00:10:32.920
+proses pada jam tersebut,
+
+00:10:33.140 --> 00:10:33.720
+biayanya nol.
+
+00:10:34.420 --> 00:10:35.580
+Bayangkan menjelaskan hal itu
+
+00:10:35.580 --> 00:10:36.420
+kepada bagian keuangan
+
+00:10:36.420 --> 00:10:37.560
+dan melihat mata mereka berbinar
+
+00:10:37.560 --> 00:10:38.660
+karena seseorang akhirnya
+
+00:10:38.660 --> 00:10:39.580
+memberikan prediktabilitas
+
+00:10:39.580 --> 00:10:40.800
+pada pengeluaran otomatisasi.
+
+00:10:41.380 --> 00:10:42.140
+Namun manfaat gambaran
+
+00:10:42.140 --> 00:10:42.920
+besarnya bukan awal,
+
+00:10:43.240 --> 00:10:43.840
+melainkan tata kelola.
+
+00:10:44.240 --> 00:10:45.320
+Dalam lingkungan perusahaan,
+
+00:10:45.380 --> 00:10:45.800
+tim kepatuhan
+
+00:10:45.800 --> 00:10:46.840
+menginginkan visibilitas.
+
+00:10:47.180 --> 00:10:47.920
+Siapa yang menerapkan apa?
+
+00:10:48.340 --> 00:10:49.100
+Kemana data mengalir
+
+00:10:49.100 --> 00:10:50.400
+bagaimana kegagalan dimunculkan?
+
+00:10:51.400 --> 00:10:52.100
+Power Automate
+
+00:10:52.100 --> 00:10:53.120
+menyembunyikan dunia itu
+
+00:10:53.120 --> 00:10:53.860
+dibalik hyperlink
+
+00:10:53.860 --> 00:10:55.340
+berlabel detail aktivitas.
+
+00:10:56.500 --> 00:10:56.960
+Logic Apps
+
+00:10:56.960 --> 00:10:57.820
+selaras dengan standar
+
+00:10:57.820 --> 00:10:58.880
+arsitektur perusahaan,
+
+00:10:59.100 --> 00:10:59.700
+grup sumber daya,
+
+00:10:59.820 --> 00:11:00.520
+identitas terkelola,
+
+00:11:00.620 --> 00:11:01.240
+isolasi jaringan,
+
+00:11:01.340 --> 00:11:02.540
+kontrol akses berbasis peran.
+
+00:11:03.100 --> 00:11:03.580
+Terjemahannya,
+
+00:11:03.740 --> 00:11:04.480
+tim IT yang sesungguhnya
+
+00:11:04.480 --> 00:11:05.000
+dapat memantau
+
+00:11:05.000 --> 00:11:05.680
+tanpa perlu menempat.
+
+00:11:05.680 --> 00:11:06.880
+Jika Anda bertanya
+
+00:11:06.880 --> 00:11:07.580
+kapan harus beralih,
+
+00:11:07.700 --> 00:11:08.660
+inilah daftar beriksa diknya.
+
+00:11:09.480 --> 00:11:10.280
+Ketika suatu alur
+
+00:11:10.280 --> 00:11:11.360
+melebihi 20 kondisi,
+
+00:11:11.560 --> 00:11:12.660
+pemicu dari berbagai sumber,
+
+00:11:13.020 --> 00:11:13.640
+mengelola panggilan
+
+00:11:13.640 --> 00:11:14.420
+pelayanan eksternal,
+
+00:11:14.540 --> 00:11:15.440
+atau menyentuh repository
+
+00:11:15.440 --> 00:11:16.180
+data sensitif,
+
+00:11:16.340 --> 00:11:17.020
+Anda sudah melewati
+
+00:11:17.020 --> 00:11:17.580
+fase hobi.
+
+00:11:18.280 --> 00:11:18.900
+Segera migrasi.
+
+00:11:19.820 --> 00:11:20.660
+Ekspor definisi dari
+
+00:11:20.660 --> 00:11:21.340
+Power Automate,
+
+00:11:21.440 --> 00:11:22.040
+import Logic Apps,
+
+00:11:22.120 --> 00:11:22.760
+dan biarkan Azure
+
+00:11:22.760 --> 00:11:23.500
+menangani skalanya.
+
+00:11:24.540 --> 00:11:25.760
+Tambahkan application insights
+
+00:11:25.760 --> 00:11:26.460
+untuk pemantauan,
+
+00:11:26.660 --> 00:11:27.260
+dan tiba-tiba Anda
+
+00:11:27.260 --> 00:11:28.100
+memiliki sistem yang dapat
+
+00:11:28.100 --> 00:11:29.140
+diaudit dan dipelihara,
+
+00:11:29.280 --> 00:11:29.820
+bukan eksperimen
+
+00:11:29.820 --> 00:11:30.720
+yang tidak dapat diprediksi.
+
+00:11:31.380 --> 00:11:32.360
+Sekilas gambaran dunia nyata.
+
+00:11:32.360 --> 00:11:33.880
+Satu perusahaan jasa keuangan
+
+00:11:33.880 --> 00:11:34.880
+memindahkan pemrosesan
+
+00:11:34.880 --> 00:11:36.060
+batch transaksi malam harinya
+
+00:11:36.060 --> 00:11:36.840
+yang awalnya goyah
+
+00:11:36.840 --> 00:11:37.520
+di Power Automate
+
+00:11:37.520 --> 00:11:38.180
+ke Logic Apps.
+
+00:11:38.800 --> 00:11:39.460
+Logika yang sama,
+
+00:11:39.560 --> 00:11:40.620
+namun sekarang diorkestrasi
+
+00:11:40.620 --> 00:11:41.500
+melalui pipeline paralel
+
+00:11:41.500 --> 00:11:42.120
+dengan kebijakan.
+
+00:11:42.920 --> 00:11:43.860
+Waktu pemrosesan turun
+
+00:11:43.860 --> 00:11:44.600
+dari 90 menit
+
+00:11:44.600 --> 00:11:45.640
+menjadi di bawah 10 menit
+
+00:11:45.640 --> 00:11:46.360
+dan biaya turun
+
+00:11:46.360 --> 00:11:47.200
+sebesar 30 persen.
+
+00:11:47.820 --> 00:11:48.720
+Insinyur yang bertanggung jawab
+
+00:11:48.720 --> 00:11:49.080
+berkata,
+
+00:11:49.460 --> 00:11:50.520
+rasanya seperti Power Automate
+
+00:11:50.520 --> 00:11:51.480
+akhirnya mencapai kedewasaan.
+
+00:11:52.060 --> 00:11:52.260
+Jadi,
+
+00:11:52.660 --> 00:11:52.800
+ya,
+
+00:11:52.880 --> 00:11:53.820
+Logic Apps pada dasarnya
+
+00:11:53.820 --> 00:11:54.720
+adalah Power Automate
+
+00:11:54.720 --> 00:11:55.420
+yang sudah dewasa
+
+00:11:55.420 --> 00:11:56.180
+mendapatkan pekerjaan
+
+00:11:56.180 --> 00:11:57.180
+tetap belajar risipin fiskal
+
+00:11:57.180 --> 00:11:58.040
+dan berhenti mengalami kris
+
+00:11:58.040 --> 00:11:58.660
+selama jam sibuk.
+
+00:11:59.220 --> 00:11:59.740
+Ini dibangun
+
+00:11:59.740 --> 00:12:00.880
+untuk beban kerja berkelanjutan
+
+00:12:00.880 --> 00:12:02.120
+eksekusi yang dapat diandalkan
+
+00:12:02.120 --> 00:12:03.140
+dan penegian yang transparan.
+
+00:12:03.600 --> 00:12:04.720
+Setelah Anda merasakan kendali itu,
+
+00:12:04.820 --> 00:12:05.620
+kembali ke Power Automate
+
+00:12:05.620 --> 00:12:06.720
+terasa seperti mencoret-coret
+
+00:12:06.720 --> 00:12:07.200
+dengan krayon.
+
+00:12:07.480 --> 00:12:08.460
+Tentu saja tidak semua orang
+
+00:12:08.460 --> 00:12:09.400
+ingin meninggalkan lingkungan
+
+00:12:09.400 --> 00:12:10.220
+yang ramai itu sepenuhnya.
+
+00:12:11.120 --> 00:12:11.980
+Beberapa alur kerja
+
+00:12:11.980 --> 00:12:12.940
+masih mendapat manfaat
+
+00:12:12.940 --> 00:12:14.100
+dari tawaran Power Automate
+
+00:12:14.100 --> 00:12:15.180
+terutama ketika pengguna
+
+00:12:15.180 --> 00:12:16.120
+perlu memicu tindakan
+
+00:12:16.120 --> 00:12:17.260
+langsung dari Microsoft Teams
+
+00:12:17.260 --> 00:12:18.020
+atau SharePoint.
+
+00:12:18.720 --> 00:12:19.200
+Tidak masalah.
+
+00:12:19.900 --> 00:12:20.620
+Pendekatan yang matang
+
+00:12:20.620 --> 00:12:21.440
+bukanlah pengasingan,
+
+00:12:21.440 --> 00:12:22.600
+melainkan pembagian kerja.
+
+00:12:23.280 --> 00:12:24.240
+Gunakan Power Automate
+
+00:12:24.240 --> 00:12:25.500
+untuk titik interaksi manusia
+
+00:12:25.500 --> 00:12:26.500
+dan Logic Apps
+
+00:12:26.500 --> 00:12:27.960
+untuk pekerjaan berat yang sebenarnya.
+
+00:12:28.700 --> 00:12:29.240
+Dengan kata lain,
+
+00:12:29.520 --> 00:12:30.620
+gunakan yang sederhana untuk tombol
+
+00:12:30.620 --> 00:12:31.440
+dan gunakan yang canggih
+
+00:12:31.440 --> 00:12:32.020
+untuk sistemnya.
+
+00:12:32.500 --> 00:12:33.740
+Dan itulah tujuan kita selanjutnya.
+
+00:12:34.180 --> 00:12:35.260
+Pola hibrida memungkinkan Anda
+
+00:12:35.260 --> 00:12:36.160
+tetap nyaman sekaligus
+
+00:12:36.160 --> 00:12:37.320
+mencapai skala yang diinginkan.
+
+00:12:38.200 --> 00:12:39.260
+Karena profesional sejati tahu
+
+00:12:39.260 --> 00:12:39.880
+bahwa Anda tidak bisa
+
+00:12:39.880 --> 00:12:40.900
+mengotomatiskan kedewasaan
+
+00:12:40.900 --> 00:12:42.000
+tetapi Anda pasti bisa merancang.
+
+00:12:42.720 --> 00:12:43.960
+Pola pengguna mahir hibrida.
+
+00:12:44.780 --> 00:12:46.040
+Disinilah diplomasi bertemu
+
+00:12:46.040 --> 00:12:47.120
+dengan teknik karena meskipun
+
+00:12:47.120 --> 00:12:48.060
+memuaskan untuk mengatakan
+
+00:12:48.060 --> 00:12:49.260
+mempindahkan semuanya ke Logic Apps.
+
+00:12:49.560 --> 00:12:50.620
+Dunianya terpenuh dengan pengguna
+
+00:12:50.620 --> 00:12:52.320
+yang menyukai alur kerja sederhana mereka.
+
+00:12:52.920 --> 00:12:54.000
+Mereka mengklik tombol di Teams,
+
+00:12:54.360 --> 00:12:55.460
+menyetujui permintaan di ponsel,
+
+00:12:55.640 --> 00:12:56.440
+dan merasa diberdayakan.
+
+00:12:57.000 --> 00:12:58.220
+Anda tidak bisa menghapusnya begitu saja
+
+00:12:58.220 --> 00:12:59.720
+dan semangat menemukan pemerintah.
+
+00:12:59.800 --> 00:13:00.500
+Langkah cerdasnya adalah
+
+00:13:00.500 --> 00:13:01.300
+arsitektur hibrida.
+
+00:13:01.940 --> 00:13:03.120
+Power Automate di sisi depan,
+
+00:13:03.280 --> 00:13:04.580
+Logic Apps sebagai mesin penggerak
+
+00:13:04.580 --> 00:13:05.180
+di baliknya,
+
+00:13:05.720 --> 00:13:06.860
+bayangkan seperti roket dua tahap.
+
+00:13:07.520 --> 00:13:08.880
+Tahap pertama adalah Power Automate,
+
+00:13:09.220 --> 00:13:10.640
+ringan, cepat, dan praktis
+
+00:13:10.640 --> 00:13:11.700
+yang menangkap pemicu,
+
+00:13:11.700 --> 00:13:12.480
+tombol yang ditekan,
+
+00:13:12.680 --> 00:13:13.400
+pengiriman formulir,
+
+00:13:13.580 --> 00:13:14.280
+atau pemberuan data.
+
+00:13:14.280 --> 00:13:17.120
+Lalu, alih-alih menarik semua data
+
+00:13:17.120 --> 00:13:18.180
+melalui labirin konektor
+
+00:13:18.180 --> 00:13:19.340
+yang mengirimkan beban kerja
+
+00:13:19.340 --> 00:13:20.960
+ke Logic Apps melalui panggilan HTTP.
+
+00:13:22.020 --> 00:13:23.100
+Logic Apps mengambil alih,
+
+00:13:23.280 --> 00:13:24.380
+memproses beban kerja berat,
+
+00:13:24.460 --> 00:13:25.040
+dan maapur kembali
+
+00:13:25.040 --> 00:13:25.920
+saat pekerjaan selesai.
+
+00:13:26.500 --> 00:13:27.800
+Pemisahan kepentingan tercapai.
+
+00:13:28.560 --> 00:13:30.000
+Manfaat langsungnya sudah bisa diprediksi.
+
+00:13:30.840 --> 00:13:31.760
+Kenyamanan pengguna bertemu
+
+00:13:31.760 --> 00:13:33.240
+dengan eksekusi yang dapat disekalakan.
+
+00:13:34.660 --> 00:13:36.020
+Karyawan biasa tetap mengeklik
+
+00:13:36.020 --> 00:13:37.800
+alur permintaan akses yang mereka kenal,
+
+00:13:37.800 --> 00:13:39.520
+tanpa sadar bahwa Azure baru saja
+
+00:13:39.520 --> 00:13:41.220
+mengangkat beban seratus kali lipat
+
+00:13:41.220 --> 00:13:42.240
+di balik layar.
+
+00:13:43.040 --> 00:13:43.540
+Sementara itu,
+
+00:13:43.540 --> 00:13:44.760
+tim TIE mendapatkan pemantauan,
+
+00:13:44.880 --> 00:13:45.900
+tata kelola, dan ketenangan.
+
+00:13:46.300 --> 00:13:46.980
+Semua pihak menang,
+
+00:13:47.220 --> 00:13:48.260
+kecuali mereka yang bersikeras,
+
+00:13:48.360 --> 00:13:49.820
+mempertahankan labirin otomatis tunggal
+
+00:13:49.820 --> 00:13:51.280
+yang monolitik karena terlihat rapi.
+
+00:13:52.000 --> 00:13:53.360
+Mari kita bahas pola yang sepenuh.
+
+00:13:54.120 --> 00:13:55.300
+Alur power automate terpicu
+
+00:13:55.300 --> 00:13:56.220
+saat item sharepoint
+
+00:13:56.220 --> 00:13:57.600
+baru ditambahkan untuk persetujuan.
+
+00:13:58.500 --> 00:13:59.540
+Ali-Hali melakukan pengulangan
+
+00:13:59.540 --> 00:14:00.580
+pada setiap file terkait.
+
+00:14:00.720 --> 00:14:01.920
+Ia mengirimkan muatan terstruktur,
+
+00:14:02.260 --> 00:14:03.180
+metadata ID file,
+
+00:14:03.400 --> 00:14:04.200
+dan detail permintaan
+
+00:14:04.200 --> 00:14:05.200
+ke titik akhir Logic Apps
+
+00:14:05.200 --> 00:14:05.960
+yang diamankan dengan
+
+00:14:05.960 --> 00:14:06.820
+Azure Active Directory.
+
+00:14:07.500 --> 00:14:08.620
+Logic Apps mengambil alih,
+
+00:14:08.940 --> 00:14:10.120
+menjalankan cabang paralel,
+
+00:14:10.300 --> 00:14:11.540
+memproses ratusan persetujuan,
+
+00:14:11.540 --> 00:14:12.580
+memperbarui data first,
+
+00:14:12.860 --> 00:14:14.520
+dan mengirim rikasan notifikasi
+
+00:14:14.520 --> 00:14:15.520
+kembali ke power automate
+
+00:14:15.520 --> 00:14:16.560
+untuk pemberitahuan akhir.
+
+00:14:17.300 --> 00:14:18.180
+Pengguna melihat satu pesan
+
+00:14:18.180 --> 00:14:18.920
+penyelesaian yang rapi
+
+00:14:18.920 --> 00:14:20.040
+sementara sistem di balik layar
+
+00:14:20.040 --> 00:14:21.200
+melakukan koreografi industri.
+
+00:14:21.620 --> 00:14:22.280
+Pendekatan ini juga
+
+00:14:22.280 --> 00:14:23.260
+mengurangi drama lisensi.
+
+00:14:23.860 --> 00:14:24.660
+Ingat kekacauan lisensi
+
+00:14:24.660 --> 00:14:25.400
+perpengguna virus perang.
+
+00:14:25.760 --> 00:14:26.900
+Dengan memindahkan komputasi
+
+00:14:26.900 --> 00:14:27.560
+ke Logic Apps,
+
+00:14:27.700 --> 00:14:28.440
+Anda secara efektif
+
+00:14:28.440 --> 00:14:29.580
+mengalihkan biaya pemrosesan
+
+00:14:29.580 --> 00:14:30.660
+ke harga konsumsi Azure.
+
+00:14:31.160 --> 00:14:32.500
+Ini mengubah perhitungan lisensi
+
+00:14:32.500 --> 00:14:33.300
+yang tidak pasti menjadi
+
+00:14:33.300 --> 00:14:34.720
+biaya pereksekusi yang terukur.
+
+00:14:35.940 --> 00:14:36.660
+Bagian keuangan mungkin
+
+00:14:36.660 --> 00:14:37.440
+akan bertepuk tangan
+
+00:14:37.440 --> 00:14:37.940
+meskipun pelan
+
+00:14:41.540 --> 00:14:42.660
+terlihat menarik bagi pengguna.
+
+00:14:42.820 --> 00:14:43.520
+Sementara Logic Apps
+
+00:14:43.520 --> 00:14:44.680
+terhubung ke application insights
+
+00:14:44.680 --> 00:14:45.860
+untuk telemetri operasional.
+
+00:14:46.520 --> 00:14:47.780
+Anda dapat melacak latensi
+
+00:14:47.780 --> 00:14:48.700
+upaya percobaan ulang
+
+00:14:48.700 --> 00:14:49.640
+atau tingkat kegagalan
+
+00:14:49.640 --> 00:14:50.460
+di seluruh lingkungan.
+
+00:14:51.340 --> 00:14:52.580
+Seperti mengintip ke dalam otak
+
+00:14:52.580 --> 00:14:53.360
+bukan sekadar meriksa
+
+00:14:53.360 --> 00:14:54.260
+apakah lampunya menyala.
+
+00:14:55.120 --> 00:14:55.820
+Dari sisi keamanan
+
+00:14:55.820 --> 00:14:56.800
+ada keanggunan dalam misalnya.
+
+00:14:57.540 --> 00:14:58.140
+Power Automate
+
+00:14:58.140 --> 00:14:58.880
+menggunakan konektor
+
+00:14:58.880 --> 00:14:59.900
+berbasis akun pribadi
+
+00:14:59.900 --> 00:15:00.520
+atau layanan
+
+00:15:00.520 --> 00:15:01.860
+yang aman untuk tugas ringan
+
+00:15:01.860 --> 00:15:02.520
+tetapi berisiko
+
+00:15:02.520 --> 00:15:03.640
+untuk operasi tingkat sistem.
+
+00:15:04.580 --> 00:15:05.740
+Logic Apps di sisi lain
+
+00:15:05.740 --> 00:15:07.120
+memanfaatkan identitas terkelola
+
+00:15:07.120 --> 00:15:08.280
+untuk autentikasi secara aman
+
+00:15:08.280 --> 00:15:09.420
+di seluruh layanan Azure.
+
+00:15:11.540 --> 00:15:12.920
+Tidak ada kejutan ketesan di kedaluarsa.
+
+00:15:13.620 --> 00:15:14.900
+Jika dikonfigurasi dengan benar
+
+00:15:14.900 --> 00:15:15.940
+tautan hibrida bertindak
+
+00:15:15.940 --> 00:15:16.900
+sebagai serah terima aman
+
+00:15:16.900 --> 00:15:17.580
+antara kios ramah
+
+00:15:17.580 --> 00:15:18.400
+dan ruang server terkeju.
+
+00:15:18.720 --> 00:15:19.820
+Tentu saja ini menurunkan disiplin.
+
+00:15:20.220 --> 00:15:21.240
+Anda tidak bisa begitu saja
+
+00:15:21.240 --> 00:15:21.980
+memanggil Logic Apps
+
+00:15:21.980 --> 00:15:22.720
+ke dalam alur acak
+
+00:15:22.720 --> 00:15:23.560
+lalu menyatakan sukses.
+
+00:15:24.540 --> 00:15:25.740
+Anda butuh templat standar
+
+00:15:25.740 --> 00:15:26.820
+konvensi penamaan
+
+00:15:26.820 --> 00:15:27.760
+variabel lingkungan
+
+00:15:27.760 --> 00:15:28.680
+dan dokumen arsitektur
+
+00:15:28.680 --> 00:15:29.660
+yang bisa dibaca penerus Anda.
+
+00:15:30.700 --> 00:15:31.460
+Jika tidak
+
+00:15:31.460 --> 00:15:32.640
+Departemen Anda akan berakhir
+
+00:15:32.640 --> 00:15:33.760
+dengan 50 panggilan HTTP
+
+00:15:33.760 --> 00:15:35.000
+yang terdokumentasi setengah-setengah
+
+00:15:35.000 --> 00:15:35.740
+dan melintasi penyewa
+
+00:15:35.740 --> 00:15:36.420
+seperti kabel semrak.
+
+00:15:36.640 --> 00:15:37.860
+Profesional merancang integrasi
+
+00:15:41.540 --> 00:15:42.700
+berhenti menumpuk blok kondisi
+
+00:15:42.700 --> 00:15:43.380
+di Power Automate
+
+00:15:43.380 --> 00:15:44.260
+seperti boneka bersarang.
+
+00:15:44.880 --> 00:15:46.040
+Jika alur Anda memiliki cabang
+
+00:15:46.040 --> 00:15:46.820
+bertingkat lebih dalam
+
+00:15:46.820 --> 00:15:47.780
+dari tinggi monitor Anda
+
+00:15:47.780 --> 00:15:48.540
+Anda sudah kelewatan.
+
+00:15:49.160 --> 00:15:50.000
+Keluarkan logikanya
+
+00:15:50.000 --> 00:15:51.120
+buat kodenya dengan rapi
+
+00:15:51.120 --> 00:15:51.700
+di Logic Apps
+
+00:15:51.700 --> 00:15:52.780
+dan menggunakan Power Automate
+
+00:15:52.780 --> 00:15:53.440
+untuk keahliannya
+
+00:15:53.440 --> 00:15:54.440
+yaitu interaksi manusia.
+
+00:15:54.920 --> 00:15:55.660
+Rekayasa berlebihan
+
+00:15:55.660 --> 00:15:56.860
+di Power Automate itu tidak cerdas
+
+00:15:56.860 --> 00:15:57.820
+malah terkesan menyiksa di sini.
+
+00:15:58.200 --> 00:15:59.120
+Model hibrida
+
+00:15:59.120 --> 00:16:00.540
+adalah kompromi yang dewasa
+
+00:16:00.540 --> 00:16:01.780
+kenyamanan pengguna di depan
+
+00:16:01.780 --> 00:16:03.240
+integritas struktural di balik layar.
+
+00:16:03.680 --> 00:16:05.160
+Jadi lain kali seseorang bersikeras
+
+00:16:05.160 --> 00:16:06.580
+Power Automate bisa menanganinya.
+
+00:16:07.040 --> 00:16:07.460
+Jangan mendebat.
+
+00:16:07.460 --> 00:16:08.980
+Tersenyumlah penuh arti
+
+00:16:08.980 --> 00:16:09.720
+dan kirimkan mereka
+
+00:16:09.720 --> 00:16:10.480
+rencana migrasi.
+
+00:16:11.120 --> 00:16:12.080
+Mereka akan berterima kasih nanti
+
+00:16:12.080 --> 00:16:12.860
+biasanya saat perulangan
+
+00:16:12.860 --> 00:16:14.100
+percobaan ke-10 mereka gagal
+
+00:16:14.100 --> 00:16:14.520
+dan Anda.

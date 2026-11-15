@@ -73,7 +73,7 @@ Leser ──https──> blog.kunde.de ──CNAME──> blogs.<unsere-zone>  (
 - **Besitz**: Eine Domain wird erst **aktiv**, wenn (1) der CNAME auf unser Ziel nachweislich gesetzt ist (DNS-Abfrage über Cloudflare DNS-über-HTTPS), (2) Cloudflare den Hostnamen und das Zertifikat als `active` meldet und (3) das Mitglied einen Impressum-Link eingetragen hat. Bis dahin bleibt es `pending` oder `verified`.
 - **Status**: `pending` (eingetragen, wartet auf DNS), `verified` (CNAME gefunden), `active` (wird ausgeliefert), `blocked` (von uns gesperrt, zum Beispiel bei Missbrauch).
 - **Ohne Cloudflare-Token** (`CF_API_TOKEN` und `CF_ZONE_ID` fehlen) macht der Code **keinen** Aufruf an Cloudflare. Eine Domain bleibt dann nach dem DNS-Test auf `verified`, nie `active`, ohne Fehlermeldung.
-- **Aufräumen**: Findet die Prüfung den CNAME nicht, steht im Feld „Fehler“ der Text „DNS fehlt“ (kein Abbruch, das Mitglied kann es später erneut versuchen). Das Mitglied kann die Domain jederzeit entfernen. Beim Entfernen wird der Hostname bei Cloudflare gelöscht (das spart den Hostnamen-Zähler).
+- **Aufräumen**: Findet die Prüfung den CNAME nicht, steht im Feld „Fehler“ der Text „DNS fehlt“ (kein Abbruch, das Mitglied kann es später erneut versuchen). Das Mitglied kann die Domain jederzeit entfernen. Beim Entfernen wird der Hostname bei Cloudflare gelöscht (das spart den Hostnamen-Zähler). Gegen das Besetzen fremder Domains: Ein Eintrag, der nach 7 Tagen nie nachgewiesen wurde (`pending`, kein CNAME/TXT gefunden), gibt die Domain wieder frei (Cron alle 30 Minuten und beim Eintragen derselben Domain). Bei der Löschung eines Kontos werden seine Domains samt Hostname bei Cloudflare entfernt, beim Zusammenführen zweier Konten gehen sie auf das Zielkonto über.
 
 ### Regeln für Domains (Vorschlag, im Code umgesetzt)
 
@@ -130,7 +130,7 @@ Regeln im Code (Teil 3):
 - **Sichere Umwandlung**: aus dem HTML bleiben nur Überschriften, Absätze, Listen, Zitate, fett und kursiv. Links werden zu Text, Skripte, Formulare, Bilder und Wiki-Bausteine aus dem Fremdtext fallen weg.
 - **Sicherer Abruf des Feeds**: nur `https`, ordentlicher Hostname (keine IP, kein `localhost`, keine Zugangsdaten in der Adresse), nicht m365.fm, Weiterleitungen werden erneut geprüft, höchstens 800 KB, 7 Sekunden. Der Inhalt kommt beim Speichern immer frisch vom Feed, nie vom Browser.
 - **Grenzen**: höchstens 20 Beiträge je Aufruf, 60 je Tag und Mitglied, Vorschau 20 und Speichern 10 Aufrufe je Stunde. Doppelte werden übersprungen (`blog_import_items`). Das Datum des Entwurfs ist das Datum des Originals, damit die Grenze von 5 Beiträgen pro Tag nicht verbraucht wird.
-- Ablauf nur bei eingeschaltetem `BYOD`. Oberfläche: `assets/blogimport.js` im Community-Bereich. MCP: `preview_blog_import` (nur lesen) und `import_blog_feed` (schreibt Entwürfe, setzt `rights:true` nie von selbst).
+- Eigener Schalter `BYOD_IMPORT` in `worker/wrangler.toml` (Standard `"0"` = aus), unabhängig von `BYOD`: die Entwürfe landen im Blog auf m365.fm, eine eigene Domain ist dafür nicht nötig. Bei aus antworten `/api/byod/import/preview` und `/save` mit 404 `disabled`, `/api/byod/import/status` mit `enabled:false`. Beim Löschen des Kontos gehen die Herkunftsnachweise (`blog_import_items`) mit. Oberfläche: `assets/blogimport.js` im Community-Bereich. MCP: `preview_blog_import` (nur lesen) und `import_blog_feed` (schreibt Entwürfe, setzt `rights:true` nie von selbst).
 
 ## 8. Entscheidungen, die Mirko treffen muss
 
@@ -159,14 +159,15 @@ Nichts davon wurde gemacht. Reihenfolge:
 7. Worker-Secrets setzen (nie im Chat oder Code): **Workers & Pages → m365-dub-community → Settings → Variables and Secrets** (<https://dash.cloudflare.com/?to=/:account/workers/services/view/m365-dub-community/production/settings>): `CF_API_TOKEN`, `CF_ZONE_ID`. Der Name des CNAME-Ziels kommt als normale Variable `BYOD_CNAME_TARGET` (zum Beispiel `blogs.m365blogs.net`) in `worker/wrangler.toml`.
 8. In `worker/wrangler.toml` und `sitewrk/wrangler.toml` den Schalter `BYOD = "1"` setzen und mergen. Zurück: `"0"`.
 9. Mit einer eigenen Test-Domain durchspielen (Domain eintragen, CNAME setzen, „Jetzt prüfen“).
+10. Blog-Import (unabhängig von den Schritten oben): in `worker/wrangler.toml` `BYOD_IMPORT = "1"` setzen und mergen, vorher Punkt 11 in Abschnitt 8 entscheiden. Zurück: `"0"`.
 
 ## 10. Stand der Umsetzung
 
 Drei Pull Requests, jeder für sich testbar (alles hinter `BYOD`, aus):
 
-1. **Teil 1** (PR #361): diese Doku, Datenmodell (Migration 0048), Namensregeln, Host-Weiche im Site-Worker, Auslieferung der Blog-Seiten, Erlös-Regel.
+1. **Teil 1** (PR #361): diese Doku, Datenmodell (Migration 0049), Namensregeln, Host-Weiche im Site-Worker, Auslieferung der Blog-Seiten, Erlös-Regel.
 2. **Teil 2**: Verwaltung der Domain (API `/api/byod/*`, Prüfung des DNS-Eintrags, Cloudflare-Anbindung als Code gegen die Custom-Hostnames-API, regelmäßige Prüfung im 30-Minuten-Lauf), Oberfläche im Community-Bereich (`assets/blogdomain.js`, en/de, weitere Sprachen über den Worker) und MCP-Werkzeuge (`list_my_blog_domains`, `add_blog_domain`, `check_blog_domain`, `set_blog_domain_links`, `remove_blog_domain`).
-3. **Teil 3**: Blog-Import per Feed (Migration 0049, `assets/blogimport.js`, MCP-Werkzeuge `preview_blog_import` und `import_blog_feed`).
+3. **Teil 3**: Blog-Import per Feed (Migration 0050, eigener Schalter `BYOD_IMPORT`, `assets/blogimport.js`, MCP-Werkzeuge `preview_blog_import` und `import_blog_feed`).
 
 Nicht prüfbar ohne Cloudflare-Zugang: echter Deploy, DNS, Zertifikat, Worker-Route, Custom-Hostnames-API. Im Test ist Cloudflare nur gemockt, es gibt keinen echten Aufruf.
 

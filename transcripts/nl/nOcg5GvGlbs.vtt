@@ -1,0 +1,751 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.540
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.880 --> 00:00:12.400
+Deze januari is M365, kom terug en we pakken groter uit.
+
+00:00:12.400 --> 00:00:18.360
+Doe mee voor live sessies, praktijkdemos en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.560 --> 00:00:21.680
+Geen algemene presentaties, geen eindeloos jargon.
+
+00:00:21.940 --> 00:00:29.120
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.120 --> 00:00:34.940
+Of je nu een IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.240 --> 00:00:40.520
+Met 10 volledige dagen kun je meerdere technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.840 --> 00:00:44.600
+Kijk live mee en neem praktische inzichten mee terug naar jouw organisatie.
+
+00:00:44.900 --> 00:00:49.160
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.420 --> 00:00:51.160
+De registratie is nu geopend.
+
+00:00:51.880 --> 00:00:55.920
+Ga naar m365com.net en verzeker je vandaag nog van een plek.
+
+00:00:56.260 --> 00:00:58.940
+Dat is m365com.net.
+
+00:01:00.100 --> 00:01:04.840
+Meld je nu aan op m365com.net, dan zien we je live in januari.
+
+00:01:05.020 --> 00:01:09.660
+Het onderwerp van vandaag is er een waar bijna iedereen van heeft gehoord, maar dat de meesten niet volledig begrijpen.
+
+00:01:09.860 --> 00:01:10.920
+Azure Disk Storage.
+
+00:01:11.140 --> 00:01:14.280
+Het is de virtuele harde schijf voor je cloud-VMs en dit is het punt.
+
+00:01:14.460 --> 00:01:16.360
+Elke VM die je maakt heeft opslag nodig.
+
+00:01:16.600 --> 00:01:20.700
+Kies je het verkeerde type, dan betaal je ofwel veel te veel of je krijgt slechte prestaties.
+
+00:01:20.880 --> 00:01:25.580
+Aan het einde van deze aflevering ken je de vier belangrijkste schijftypen en precies wanneer je welke moet gebruiken.
+
+00:01:25.580 --> 00:01:27.280
+Pak je koffie en laten we beginnen.
+
+00:01:27.520 --> 00:01:30.580
+Waarom schijftypen belangrijk is snelheid, capaciteit en kosten.
+
+00:01:30.860 --> 00:01:32.780
+Dus, waarom is het schijftype überhaupt belangrijk?
+
+00:01:33.040 --> 00:01:37.040
+Drie factoren bepalen de prestaties, IOPS, doorvoersnelheid en latentie.
+
+00:01:37.300 --> 00:01:40.300
+IOPS staat voor input-output operaties per seconde.
+
+00:01:40.420 --> 00:01:43.800
+Kortom, hoeveel lees- of schrijfbewerkingen de schijf tegelijkertijd kan verwerken.
+
+00:01:44.160 --> 00:01:47.340
+Doorvoersnelheid is de data-overdracht snelheid, gemeten in megabytes per seconde.
+
+00:01:47.340 --> 00:01:51.360
+Latentie is de vertraging, hoe lang het duurt voordat de eerste byte arriveert nadat je erom hebt gevraagd.
+
+00:01:51.520 --> 00:01:52.740
+Denk erover als voertuigen.
+
+00:01:52.900 --> 00:01:54.700
+Een sedan is prima voor dagelijkse ritjes.
+
+00:01:54.880 --> 00:01:56.580
+Een pick-up truck kan zwaardere ladingen aan.
+
+00:01:56.740 --> 00:01:58.700
+En een racewagen is gebouwd voor pure snelheid.
+
+00:01:58.900 --> 00:02:00.880
+Verschillende schijftypen volgen hetzelfde patroon.
+
+00:02:01.060 --> 00:02:02.240
+Standard SSD is je sedan.
+
+00:02:02.480 --> 00:02:04.100
+Premium SSD is de werkauto.
+
+00:02:04.360 --> 00:02:06.840
+Premium SSD V2 is een sportwagen die je zelf kunt afstellen.
+
+00:02:07.040 --> 00:02:08.900
+En Ultradisc is een Formule 1 racewagen.
+
+00:02:09.120 --> 00:02:09.980
+Dit is de afweging.
+
+00:02:10.200 --> 00:02:11.940
+Hogere prestaties kosten meer geld.
+
+00:02:11.940 --> 00:02:15.060
+De kunst is om de schijf af te stemmen op wat je workload echt nodig heeft,
+
+00:02:15.180 --> 00:02:17.220
+zodat je niet overprovisioneert en geld verspilt.
+
+00:02:17.340 --> 00:02:19.560
+Of onderprovisioneert en trage prestaties krijgt.
+
+00:02:19.720 --> 00:02:23.420
+Dus laten we beginnen met de twee brede categorieën schijven die je aan een VM koppelt.
+
+00:02:23.580 --> 00:02:25.260
+OS schijf versus gegevensschijf.
+
+00:02:25.360 --> 00:02:26.240
+De twee varianten.
+
+00:02:26.440 --> 00:02:29.780
+Wanneer je een VM in Azure maakt, krijgt deze automatisch een OS schijf.
+
+00:02:29.940 --> 00:02:32.320
+Die schijf bevat het besturingssysteem, Windows of Linux.
+
+00:02:32.560 --> 00:02:34.060
+En het is de plek waarvan de VM opstart.
+
+00:02:34.260 --> 00:02:36.380
+De OS schijf heeft een maximum van 4 terabyte.
+
+00:02:36.540 --> 00:02:39.780
+Wat meer dan genoeg is voor het besturingssysteem zelf en een paar eenvoudige toepassingen.
+
+00:02:39.780 --> 00:02:41.020
+Maar dit is het punt.
+
+00:02:41.220 --> 00:02:42.900
+Je kunt ook gegevensschijven toevoegen.
+
+00:02:43.160 --> 00:02:46.480
+Deze zijn optioneel en je koppelt ze apart voor zaken als applicaties,
+
+00:02:46.480 --> 00:02:48.060
+databases of bestandsopslag.
+
+00:02:48.220 --> 00:02:53.300
+Elke gegevensschijf kan tot 64 terabyte gaan en je kunt meerdere schijven aan 1 VM koppelen.
+
+00:02:53.520 --> 00:02:54.400
+Meer opslag nodig?
+
+00:02:54.660 --> 00:02:56.060
+Voeg gewoon een andere schijf toe.
+
+00:02:56.300 --> 00:03:00.440
+Beide OS schijven en gegevensschijven maken gebruik van dezelfde vier prestatieniveaus.
+
+00:03:00.660 --> 00:03:04.840
+Standard SSD, Premium SSD, Premium SSD V2 en UltraDisk.
+
+00:03:04.960 --> 00:03:07.120
+Het verschil zit niet in de snelheid, maar in het doel.
+
+00:03:07.120 --> 00:03:09.140
+Een OS schijf draait het besturingssysteem.
+
+00:03:09.260 --> 00:03:11.000
+Een gegevensschijf draait je applicaties.
+
+00:03:11.180 --> 00:03:13.580
+Maar ze maken beide gebruik van dezelfde onderliggende schijftypes.
+
+00:03:13.780 --> 00:03:14.400
+Nog één ding.
+
+00:03:14.580 --> 00:03:15.940
+Azure schijfopslag is persistent.
+
+00:03:15.940 --> 00:03:19.720
+Dat betekent dat je gegevens behouden blijven, zelfs als de VM wordt gestopt of opnieuw opgestart.
+
+00:03:19.840 --> 00:03:21.780
+Er gaat niets verloren wanneer je s'nachts afsluit.
+
+00:03:21.980 --> 00:03:25.200
+Laten we in de vier niveaus duiken, beginnend met de meest betaalbare.
+
+00:03:25.440 --> 00:03:27.940
+Standard SSD, het budgetvriendelijke werkpaard.
+
+00:03:28.140 --> 00:03:30.720
+Laten we beginnen met de Instapoptie, Standard SSD.
+
+00:03:31.140 --> 00:03:36.040
+Dit zijn de laagste kosten per gigabyte van de SSD-niveaus en het biedt goede prestaties voor basiswerklasten.
+
+00:03:36.280 --> 00:03:41.180
+We hebben het over een maximum van ongeveer 6000 IOPs en een doorvoer tot 600 megabyte per seconde,
+
+00:03:41.320 --> 00:03:42.880
+afhankelijk van de schijfgrote die je kiest.
+
+00:03:42.880 --> 00:03:47.940
+Dus, wanneer zou je het gebruiken? Denk aan ontwikkel- en testomgevingen waar je VM's opstart om te experimenteren.
+
+00:03:48.220 --> 00:03:49.820
+Websurfers die geen zwaar verkeer krijgen.
+
+00:03:50.100 --> 00:03:53.060
+Applicaties met weinig verkeer waarbij een vertraging van enkele seconden geen probleem is.
+
+00:03:53.220 --> 00:03:55.000
+Herinner je je de voortuiganalogie van eerder nog?
+
+00:03:55.180 --> 00:03:56.720
+Standard SSD is je betrouwbare sedan.
+
+00:03:56.940 --> 00:03:58.560
+Het brengt je naar de supermarkt en weer terug.
+
+00:03:58.740 --> 00:04:00.780
+Het is prima geschikt voor het dagelijkse woonwerkverkeer.
+
+00:04:00.920 --> 00:04:03.720
+Maar je zou er geen aanhanger vol hout mee trekken of mee racen op een circuit.
+
+00:04:03.940 --> 00:04:06.660
+Het is gebouwd voor alledaagse taken, niet voor zwaar teelwerk.
+
+00:04:06.660 --> 00:04:08.540
+En hier moet je eerlijk zijn naar jezelf.
+
+00:04:08.740 --> 00:04:14.280
+Als je een productiedatabase draait, zoals SQL Server, Oracle of MySQL, sla dan de Standard SSD over.
+
+00:04:14.480 --> 00:04:20.280
+Hetzelfde geldt voor alles wat gevoelig is voor latentie, zoals realtime applicaties of alles wat een enorme hoeveelheid IO-bewerkingen per seconde vereist.
+
+00:04:20.500 --> 00:04:22.760
+Standard SSD is daar simpelweg niet voor gebouwd.
+
+00:04:22.920 --> 00:04:24.920
+Voor die scenario's heb je een stap omhoog nodig.
+
+00:04:25.120 --> 00:04:25.860
+Premium SSD.
+
+00:04:26.200 --> 00:04:28.300
+Premium SSD, de betrouwbare pro.
+
+00:04:28.520 --> 00:04:31.440
+Premium SSD verwerkt productiewerklasten zonder moeite.
+
+00:04:31.440 --> 00:04:35.420
+Je krijgt consistente lage latentie en veel hogere IOPS dan bij de Standard SSD.
+
+00:04:35.740 --> 00:04:37.600
+Dit is waar echte prestaties zichtbaar worden.
+
+00:04:37.780 --> 00:04:39.260
+Hier is het eenvoudige overzicht.
+
+00:04:39.480 --> 00:04:42.460
+Bij Premium SSD is de prestatie direct gekoppeld aan de schijfgrootte.
+
+00:04:42.680 --> 00:04:45.200
+Kies een schijfgrootte en dat bepaalt hoeveel IOPS je ontgrendelt.
+
+00:04:45.380 --> 00:04:47.920
+Een P30 van 1 TB geeft je 5000 IOPS.
+
+00:04:48.080 --> 00:04:50.820
+Een P60 van 4 TB levert 20.000 IOPS.
+
+00:04:51.000 --> 00:04:52.860
+Een grotere schijf betekent meer prestaties.
+
+00:04:53.060 --> 00:04:54.400
+Dus, wanneer moet je hiervoor kiezen?
+
+00:04:54.600 --> 00:04:57.260
+Zakelijke toepassingen die betrouwbare prestaties vereisen.
+
+00:04:57.260 --> 00:05:01.420
+SQL Server databases die niet enorm zijn, maar wel consistente responstijden vragen.
+
+00:05:01.640 --> 00:05:04.200
+Virtuele desktops waar gebruikers directe feedback verwachten.
+
+00:05:04.340 --> 00:05:06.080
+Premium SSD kan dat allemaal aan.
+
+00:05:06.240 --> 00:05:07.220
+Maar dit is de beperking.
+
+00:05:07.420 --> 00:05:10.820
+Omdat prestaties gekoppeld zijn aan schijfgrootte, zit je vast aan vaste niveaus.
+
+00:05:11.040 --> 00:05:12.000
+Wil je meer IOPS?
+
+00:05:12.240 --> 00:05:15.580
+Dan moet je een grotere schijf kopen, ook al heb je die extra opslagruimte niet nodig.
+
+00:05:15.800 --> 00:05:17.060
+Dat leidt tot overprovisioning.
+
+00:05:17.180 --> 00:05:20.860
+Betalen voor capaciteit die je nooit gebruikt, puur om de prestaties te krijgen die je nodig hebt.
+
+00:05:21.080 --> 00:05:22.840
+Zie het als een betrouwbare werkvrachtwagen.
+
+00:05:23.040 --> 00:05:25.260
+Hij is betrouwbaar, bewezen en hij krijgt het werk gedaan.
+
+00:05:25.260 --> 00:05:29.600
+Maar je betaalt voor de hele vrachtwagen, zelfs als je de extra laadcapaciteit maar één keer per maand nodig hebt.
+
+00:05:29.600 --> 00:05:32.620
+Je kunt niet zomaar de laadbak voor een dag huren en de cabine laten staan.
+
+00:05:32.880 --> 00:05:36.900
+Dat specifieke probleem is precies waarvoor Premium SSD V2 is ontwikkeld.
+
+00:05:37.020 --> 00:05:39.980
+Premium SSD V2, de flexibele krachtpatser.
+
+00:05:40.180 --> 00:05:41.180
+Nu wordt het interessant.
+
+00:05:41.400 --> 00:05:45.060
+Premium SSD V2 lost het grote probleem van gewone Premium SSD op.
+
+00:05:45.160 --> 00:05:48.280
+Gedwongen worden extra capaciteit te kopen om meer prestaties te krijgen.
+
+00:05:48.520 --> 00:05:52.980
+Met Premium SSD V2 kun je capaciteit, IOPS en doorvoor onafhankelijk van elkaar aanpassen.
+
+00:05:53.220 --> 00:05:54.840
+Geen downtime, geen schijfwissels.
+
+00:05:55.080 --> 00:05:56.960
+Verander gewoon de instellingen en het gebeurt.
+
+00:05:56.960 --> 00:06:04.020
+De basislijn is royaal. Je krijgt 3000 IOPS en 125 MB per seconde aan doorvoor inbegrepen zonder extra kosten.
+
+00:06:04.280 --> 00:06:07.540
+Dat is al meer dan wat sommige standaard SSD schijven als maximum kunnen halen.
+
+00:06:07.700 --> 00:06:11.540
+Vanaf daar kun je opschalen naar 80.000 IOPS en 1200 MB per seconde.
+
+00:06:11.720 --> 00:06:14.200
+Ruim voldoende voor de meeste algemene zakelijke workloads.
+
+00:06:14.440 --> 00:06:17.500
+De capaciteit varieert van 1 GB tot 64 TB.
+
+00:06:17.840 --> 00:06:21.600
+Of je nu een kleine schijf nodig hebt voor een lichtgewicht app of een enorme voor een data warehouse,
+
+00:06:21.860 --> 00:06:23.500
+Premium SSD V2 dekt het.
+
+00:06:23.640 --> 00:06:24.420
+En de latentie?
+
+00:06:24.420 --> 00:06:29.460
+Zap milliseconden. Voor veel workloads is het vergelijkbaar met UltraDisk, maar dan zonder het UltraPrijskaartje.
+
+00:06:29.600 --> 00:06:30.700
+Hier zit de echte waarde.
+
+00:06:30.880 --> 00:06:35.160
+Premium SSD V2 is aanzienlijk goedkoper dan UltraDisk voor een vergelijkbaar prestatieniveau.
+
+00:06:35.320 --> 00:06:38.480
+Je betaalt niet extra voor de naam. Je betaalt precies voor wat je nodig hebt.
+
+00:06:38.660 --> 00:06:40.600
+Hoge IOPS nodig, maar geen enorme doorvoer?
+
+00:06:40.800 --> 00:06:41.500
+Stel het zo in.
+
+00:06:41.680 --> 00:06:43.480
+Veel doorvoer nodig, maar bescheiden IOPS?
+
+00:06:43.740 --> 00:06:44.680
+Stel het andersom in.
+
+00:06:44.860 --> 00:06:46.940
+Geen one-size-fits-all pakket dat je wordt opgedrongen.
+
+00:06:47.080 --> 00:06:48.440
+Dus waar is het het meest geschikt voor?
+
+00:06:48.580 --> 00:06:50.540
+Gangbare productiedatabases, bedrijfsapplicaties.
+
+00:06:50.540 --> 00:06:53.780
+Elke werklast die hoge prestaties vereist, maar niet de limieten van UltraDisk nodig heeft.
+
+00:06:53.920 --> 00:06:56.240
+SQL Server, Oracle, MongoDB, Cassandra.
+
+00:06:56.440 --> 00:06:58.200
+De databases die echte bedrijven aandrijven.
+
+00:06:58.340 --> 00:07:00.280
+Premium SSD V2 kan ze allemaal aan.
+
+00:07:00.440 --> 00:07:01.940
+Eén beperking is het vermelden waard.
+
+00:07:02.080 --> 00:07:06.060
+Premium SSD V2 is momenteel alleen beschikbaar met lokaal redundantenopslag of LRS.
+
+00:07:06.320 --> 00:07:09.700
+Dat betekent dat uw gegevens drie keer worden gerepliceerd binnen één enkel datacenter.
+
+00:07:09.900 --> 00:07:11.540
+Het ondersteunt nog geen zone redundantenopslag.
+
+00:07:12.420 --> 00:07:16.740
+Dus, als u uw gegevens verspreid wilt hebben over meerdere beschikbaarheidszones voor hogere veerkracht,
+
+00:07:16.920 --> 00:07:20.080
+heeft u andere opties nodig of moet u redundantie op applicatieniveau toevoegen.
+
+00:07:20.080 --> 00:07:23.940
+Toch is Premium SSD V2 voor de meeste scenario's de ideale keuze.
+
+00:07:24.140 --> 00:07:28.760
+U krijgt de flexibiliteit om opslag op maat te maken, de prestaties voor serieuze werklasten
+
+00:07:28.760 --> 00:07:31.640
+en een kostenstructuur die u niet straft voor betere IOPS.
+
+00:07:31.840 --> 00:07:34.380
+Maar als uw werklast de allerhoogste prestaties vereist,
+
+00:07:34.640 --> 00:07:38.020
+denk aan SAP HANA, elektronische patiëntendossiers of real-time handel.
+
+00:07:38.180 --> 00:07:39.720
+Er is nog één laag te bespreken.
+
+00:07:40.120 --> 00:07:41.400
+UltraDisk, de supercar.
+
+00:07:41.640 --> 00:07:43.240
+Laten we het nu over UltraDisk hebben.
+
+00:07:43.460 --> 00:07:44.580
+Dit is de topcategorie.
+
+00:07:44.580 --> 00:07:52.020
+We hebben het over maximaal 400.000 IOPS per schijf, 10.000 megabyte per seconde doorvoorsnelheid en latentie gemeten in microseconden, niet in milliseconden.
+
+00:07:52.520 --> 00:07:53.000
+Microseconden.
+
+00:07:53.220 --> 00:07:56.760
+UltraDisk is gebouwd voor kritieke werklasten waarbij u zich geen downtime kunt veroorloven.
+
+00:07:56.940 --> 00:07:57.960
+Apps die snel moeten zijn.
+
+00:07:58.200 --> 00:08:00.100
+Enorme in-memory databases zoals SAP HANA.
+
+00:08:00.380 --> 00:08:03.040
+Medische dossiersystemen waar artsen direct informatie nodig hebben.
+
+00:08:03.200 --> 00:08:06.300
+High-frequency handelsplatformen waar microseconden miljoenen kosten.
+
+00:08:06.520 --> 00:08:09.280
+AI en machine learning taken die enorme datasets verwerken.
+
+00:08:09.440 --> 00:08:10.760
+De prijsstelling is ook anders.
+
+00:08:10.760 --> 00:08:12.900
+Prestaties en capaciteit zijn gescheiden.
+
+00:08:13.040 --> 00:08:16.380
+U kiest uw IOPS en doorvoorsnelheid en betaalt daar apart voor, los van de opslag.
+
+00:08:16.520 --> 00:08:19.800
+U kunt dus een kleine schijf met enorme snelheid hebben of een grote schijf met bescheiden snelheid.
+
+00:08:19.960 --> 00:08:22.540
+U hoeft geen extra capaciteit te kopen alleen maar om de IOPS te krijgen.
+
+00:08:22.720 --> 00:08:24.280
+Er is ook zonne-reden dan te opslag.
+
+00:08:24.540 --> 00:08:27.160
+ZRS kopieert uw gegevens over drie zones in dezelfde regio.
+
+00:08:27.360 --> 00:08:29.900
+Dus als één datacenter uitvalt, blijft uw schijf gewoon werken.
+
+00:08:30.100 --> 00:08:32.560
+Dat is belangrijk voor de werklasten die UltraDisk afhandelt.
+
+00:08:32.760 --> 00:08:35.340
+Nu is hier een nieuwere functie, snapshots met directe toegang.
+
+00:08:35.340 --> 00:08:38.560
+Deze is in preview voor UltraDisk en Premium SSDV2.
+
+00:08:38.560 --> 00:08:42.580
+Normaal gesproken kost het aanmaken van een schijf vanuit een snapshot tijd terwijl gegevens worden hersteld.
+
+00:08:42.760 --> 00:08:46.000
+Met directe toegang kunt u een schijf in seconden in plaats van uren aanmaken.
+
+00:08:46.160 --> 00:08:48.680
+En de nieuwe schijf heeft direct bijna volledige prestaties.
+
+00:08:48.860 --> 00:08:50.900
+Voor de zester recovery is dat een groot voordeel.
+
+00:08:51.020 --> 00:08:53.620
+U kunt binnen enkele minuten een volledige kopie van uw database opstarten.
+
+00:08:53.860 --> 00:08:56.860
+Denk bij UltraDisk aan een Formule 1 race auto, ongelooflijke snelheid.
+
+00:08:57.040 --> 00:08:58.220
+Elke milliseconden telt.
+
+00:08:58.460 --> 00:09:00.940
+Maar u rijdt niet in een Formule 1 auto naar de supermarkt.
+
+00:09:01.120 --> 00:09:03.880
+Hij is gebouwd voor één ding, zo snel gaan als fysiek mogelijk is.
+
+00:09:03.880 --> 00:09:05.340
+En je betaalt voor die snelheid.
+
+00:09:05.540 --> 00:09:06.840
+Dus wanneer moet je het niet gebruiken?
+
+00:09:06.840 --> 00:09:09.140
+Voor de meeste workloads is UltraDisk overbodig.
+
+00:09:09.260 --> 00:09:12.840
+Premium SSDV2 dekt 95% van de gevallen voor veel minder geld.
+
+00:09:13.020 --> 00:09:17.260
+Als je geen SAP HANA of een handelsplatform of iets extremes draait, heb je geen UltraDisk nodig.
+
+00:09:17.540 --> 00:09:19.200
+Begin met Premium SSDV2.
+
+00:09:19.420 --> 00:09:21.600
+Stap pas over naar Ultra als je monitoring aangeeft dat het nodig is.
+
+00:09:21.780 --> 00:09:23.240
+Dus, we hebben de vier niveaus besproken.
+
+00:09:23.400 --> 00:09:24.360
+Hoe maak je nu de keuze?
+
+00:09:24.520 --> 00:09:25.680
+Hoe kies je de juiste schijf?
+
+00:09:25.840 --> 00:09:27.120
+Dus, je hebt de vier niveaus.
+
+00:09:27.280 --> 00:09:28.280
+Hoe maak je nu je keuze?
+
+00:09:28.460 --> 00:09:29.460
+Begin met drie vragen.
+
+00:09:29.620 --> 00:09:31.300
+Ten eerste is het productie of devtest.
+
+00:09:31.300 --> 00:09:34.840
+Als het devtest of een webserver met weinig verkeer is, is standaard SSD voldoende.
+
+00:09:35.040 --> 00:09:36.100
+Maak het niet te ingewikkeld.
+
+00:09:36.100 --> 00:09:38.100
+Het bespaart geld en levert goede prestaties.
+
+00:09:38.260 --> 00:09:40.300
+Ten tweede, welke IOPS en latentie heb je nodig?
+
+00:09:40.480 --> 00:09:43.560
+Als je lage latentie en duizenden IOPS nodig hebt, heb je Premium nodig.
+
+00:09:43.740 --> 00:09:45.020
+De vraag is, welk Premium niveau?
+
+00:09:45.300 --> 00:09:47.720
+Als je workload stabiel is, volstaat de reguliere Premium SSD.
+
+00:09:48.100 --> 00:09:52.260
+Als je flexibiliteit wilt om prestaties aan te passen zonder schijven te wisselen, kies dan Premium SSDV2.
+
+00:09:52.460 --> 00:09:53.560
+Ten derde, wat is je budget?
+
+00:09:53.840 --> 00:09:54.920
+Hier wordt het serieus.
+
+00:09:55.080 --> 00:09:59.000
+Premium SSDV2 is in de meeste gevallen goedkoper dan Ultra voor vergelijkbare prestaties.
+
+00:09:59.180 --> 00:10:02.720
+Maar als je SAP HANA of een handelssysteem draait, is snelheid belangrijker dan kosten.
+
+00:10:02.720 --> 00:10:04.360
+Ik geef je een korte handleiding.
+
+00:10:04.600 --> 00:10:06.920
+Dev-test en webservers, standaard SSD.
+
+00:10:07.280 --> 00:10:09.800
+Productie met gemiddelde IOPS, Premium SSD.
+
+00:10:10.180 --> 00:10:14.020
+Productie met hoge IOPS waar je flexibiliteit wilt, Premium SSDV2.
+
+00:10:14.280 --> 00:10:17.960
+Extreme IOPS waarbij SAP milliseconden latentie cruciaal is, UltraDisk.
+
+00:10:18.140 --> 00:10:20.800
+Hier zijn wat tips voor kostenoptimalisatie die echt geld besparen.
+
+00:10:20.980 --> 00:10:22.820
+Kies vanaf het begin de juiste grootte voor je schijf.
+
+00:10:22.960 --> 00:10:25.760
+Koop geen 4TB Premium SSD als je slechts 500GB nodig hebt.
+
+00:10:25.980 --> 00:10:28.560
+Gebruik Premium SSDV2 in plaats van Ultra wanneer dat kan.
+
+00:10:28.560 --> 00:10:30.400
+Het dekt de meeste gevallen voor minder geld.
+
+00:10:30.620 --> 00:10:31.780
+Ruim oude snapshots op.
+
+00:10:31.940 --> 00:10:33.440
+Ze stapelen zich op en kosten je geld.
+
+00:10:33.600 --> 00:10:36.860
+En kies voor LRS in plaats van ZRS als je geen zonneredentantie nodig hebt.
+
+00:10:37.160 --> 00:10:40.320
+LRS is goedkoper en biedt nog steeds drie kopieën binnen één datacenter.
+
+00:10:40.520 --> 00:10:43.000
+Eén ding waar je je geen zorgen over hoeft te maken, is encryptie.
+
+00:10:43.180 --> 00:10:46.060
+Server-site encryptie met 256-bit AES staat altijd aan.
+
+00:10:46.220 --> 00:10:47.960
+Het voldoet aan de Vips 142 norm.
+
+00:10:48.180 --> 00:10:49.780
+Niets in te schakelen, niets te configureren.
+
+00:10:49.940 --> 00:10:51.720
+Je data is standaard versleuteld bij opslag.
+
+00:10:51.860 --> 00:10:54.520
+Als je meer controle nodig hebt, kun je door de klant beheer de sleutels gebruiken.
+
+00:10:54.520 --> 00:10:57.180
+Maar voor de meeste scenario's is de standaard-encryptie voldoende.
+
+00:10:57.360 --> 00:11:01.860
+Voordat we afsluiten, laten we nog een paar functies bespreken die belangrijk zijn voor duurzaamheid en beveiliging.
+
+00:11:02.160 --> 00:11:03.520
+Beveiliging, duurzaamheid en snapshots.
+
+00:11:04.320 --> 00:11:07.740
+Escher schijfopslag mikt op 99,99% beschikbaarheid.
+
+00:11:07.940 --> 00:11:09.060
+Dat zijn vier negens.
+
+00:11:09.240 --> 00:11:10.400
+Hoe krijgen ze dat voor elkaar?
+
+00:11:10.660 --> 00:11:12.960
+Simpel, drie kopieën van elk stukje data.
+
+00:11:13.260 --> 00:11:16.820
+Bij lokaal-redendante opslag blijven die drie kopieën binnen één datacenter.
+
+00:11:17.080 --> 00:11:19.640
+Valt een schijf, dan neemt een andere kopie het direct over.
+
+00:11:19.900 --> 00:11:24.040
+Bij zonneredendante opslag worden kopieën verspreid over drie beschikbaarheidszones in dezelfde regio.
+
+00:11:24.040 --> 00:11:26.860
+Valt een heel datacenter uit, dan blijft uw data veilig.
+
+00:11:27.120 --> 00:11:29.020
+Versleuteling, altijd standaard ingeschakeld.
+
+00:11:29.200 --> 00:11:33.860
+Surfer Site Encryptie gebruikt 256 bit AES en voldoet aan de Vips 142 standaarden.
+
+00:11:34.100 --> 00:11:35.260
+Dat dekt data in rust.
+
+00:11:35.480 --> 00:11:37.120
+Maar misschien heeft u meer controle nodig.
+
+00:11:37.360 --> 00:11:40.260
+Door de klantbeheerde sleutels laten u de encryptiesleutels zelf beheren.
+
+00:11:40.560 --> 00:11:41.980
+Versleuteling op de host gaat verder.
+
+00:11:42.160 --> 00:11:44.780
+Het dekt tijdelijke schijven en schijfcaches, wat de standaard.

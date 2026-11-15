@@ -26,6 +26,11 @@
     "manage_event_duplicates"
    ]
   },
+  "/api/admin/events/review": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
   "/api/admin/events/claims": {
    "tools": [
     "manage_event_duplicates"
@@ -514,6 +519,17 @@
    "tools": [
     "list_events",
     "get_event"
+   ]
+  },
+  "/api/events/entity": {
+   "tools": [
+    "set_event_entity",
+    "search_entities"
+   ]
+  },
+  "/api/admin/events/entity": {
+   "tools": [
+    "manage_event_entity"
    ]
   },
   "/api/events/for-sponsors": {
@@ -1358,11 +1374,20 @@
     "import_blog_feed"
    ]
   },
+  "/api/byod/import/status": {
+   "skip": "Nur fuer die Oberflaeche: meldet, ob der Schalter BYOD_IMPORT an ist; die MCP-Werkzeuge antworten bei aus mit error disabled"
+  },
   "/api/admin/byod": {
    "skip": "Admin-Funktionen (Blog auf der eigenen Domain): Liste aller Domains und Sperre nur im Admin-Bereich der Community, nicht per KI-Token"
   },
   "/api/admin/byod/block": {
    "skip": "Admin-Funktionen (Blog auf der eigenen Domain): Sperren und Freigeben einer Domain nur im Admin-Bereich der Community, nicht per KI-Token"
+  },
+  "/api/entity/claim/evidence": {
+   "skip": "Adress-Nachweis zur Übernahme (Geschäftsadresse, privat): nur angemeldet im Browser, bewusst nicht per KI-Token; die Redaktion entscheidet"
+  },
+  "/api/profile/business": {
+   "skip": "Private Geschäftsadresse je Firma (nie öffentlich): nur angemeldet im Browser, bewusst nicht per KI-Token"
   }
  }
 }

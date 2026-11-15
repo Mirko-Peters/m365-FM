@@ -1,0 +1,2242 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:06.780
+Prêt pour 10 jours consacrés à Microsoft 365, copilote l'IA, Azure et aux acteurs qui façonnent l'avenir du travail.
+
+00:00:07.220 --> 00:00:12.180
+Ah, en janvier prochain, la M365-Con est de retour et nous voyons encore plus grand.
+
+00:00:12.880 --> 00:00:18.040
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des conseils pratiques de MVP et d'experts du secteur du monde entier.
+
+00:00:18.800 --> 00:00:20.960
+Pas de diapositif générique, pas de jargon inutile.
+
+00:00:21.940 --> 00:00:28.860
+Nous abordons les vrais défis, copilote studio, les agents IA, fabrique, la sécurité, la gouvernance et l'automatisation.
+
+00:00:28.860 --> 00:00:34.300
+Que vous soyez professionnel de l'informatique, développeur ou dirigeant, des sessions sont conçues pour vous.
+
+00:00:35.580 --> 00:00:40.040
+Sur 10 jours complets, vous pourrez explorer de nombreuses technologies et échanger avec une communauté internationale.
+
+00:00:40.960 --> 00:00:44.180
+Suivez le direct et rapportez des idées concrètes à votre organisation.
+
+00:00:45.220 --> 00:00:48.260
+Janvier 2027, 10 jours, une seule communauté Microsoft.
+
+00:00:49.200 --> 00:00:50.620
+Les inscriptions sont ouvertes dès maintenant.
+
+00:00:51.800 --> 00:00:53.000
+Réservez votre place dès aujourd'hui.
+
+00:00:54.440 --> 00:00:58.000
+Rendez-vous sur m365.net
+
+00:00:58.000 --> 00:01:03.270
+Inscrivez-vous sur m365.net et nous vous attendons.
+
+00:01:03.750 --> 00:01:04.730
+En janvier pour le direct.
+
+00:01:05.450 --> 00:01:08.070
+Votre formulaire SharePoint sans Power Apps jusqu'au moment où il ne l'est plus.
+
+00:01:08.530 --> 00:01:10.190
+Soudainement, le bouton ne sauvegarde plus correctement.
+
+00:01:10.510 --> 00:01:13.810
+La validation des champs devient étrange et les performances semblent ralentir considérablement.
+
+00:01:14.230 --> 00:01:14.830
+Ah c'est la vérité.
+
+00:01:14.830 --> 00:01:19.430
+Les formulaires Power Apps ont souvent l'air simples mais cachent des pièges qui surprennent la plupart des professionnels.
+
+00:01:21.900 --> 00:01:28.200
+Aujourd'hui, vous verrez précisément où ces pièges apparaissent dans un formulaire réel et les étapes pour passer d'un formulaire esthétique à un outil vraiment fiable.
+
+00:01:30.770 --> 00:01:33.210
+Pourquoi les débuts faciles se transforment en problèmes complexes ?
+
+00:01:33.210 --> 00:01:35.130
+Vous cliquez sur le bouton personnaliser avec Power Apps, c'est mieux.
+
+00:01:35.130 --> 00:01:38.330
+Et en quelques minutes, votre formulaire de liste SharePoint est transformé.
+
+00:01:39.270 --> 00:01:40.910
+Soudain, ce ne sont plus seulement des cases et des étiquettes.
+
+00:01:41.150 --> 00:01:44.190
+C'est une application soignée avec des menus déroulants, des boutons basculent et un design rafraîchi.
+
+00:01:44.710 --> 00:01:46.430
+Vous avez l'impression d'avoir créé une application en un temps record.
+
+00:01:46.850 --> 00:01:47.850
+C'est la partie enthousiasmante.
+
+00:01:48.570 --> 00:01:54.590
+Mais cet enthousiasme retombe vite car ces gains faciles ne survivent pas toujours au passage en production quand les utilisateurs s'en emparent.
+
+00:01:55.830 --> 00:01:59.530
+La raison pour laquelle cela semble si simple au début est que Power Apps encourage une approche visuelle.
+
+00:02:00.790 --> 00:02:04.570
+Vous glissez un contrôle sur l'écran, définissez une propriété avec une formule proche d'Excel
+
+00:02:04.570 --> 00:02:05.730
+et tout réagit comme prévu.
+
+00:02:07.110 --> 00:02:09.710
+En une seule session, vous pouvez masquer des champs, déplacer des éléments
+
+00:02:09.710 --> 00:02:12.970
+et ajouter une logique qui prendrait bien plus de temps dans les paramètres natifs de SharePoint.
+
+00:02:14.130 --> 00:02:15.790
+Cette illusion de progression rapide est tenace.
+
+00:02:16.310 --> 00:02:18.330
+Ce que vous ne voyez pas encore, c'est tout ce qui se passe en coulisses.
+
+00:02:18.750 --> 00:02:21.390
+A quel point cette logique personnalisée est liée aux données SharePoint
+
+00:02:21.390 --> 00:02:25.470
+et combien elle devient fragile une fois sortie de l'environnement sécurisé du mode aperçu ?
+
+00:02:25.470 --> 00:02:26.650
+Nous sommes nombreux à avoir connu cela.
+
+00:02:27.050 --> 00:02:28.790
+Vous testez votre formulaire avec des données d'exemple ?
+
+00:02:28.790 --> 00:02:32.390
+Cliquez sur Enregistrer et voyez l'enregistrement s'ajouter parfaitement à la liste.
+
+00:02:32.390 --> 00:02:35.650
+Ajoutez quelques règles métiers, comme le remplissage automatique du nom du demandeur
+
+00:02:35.650 --> 00:02:38.770
+ou le désactivation du bouton d'envoi tant que les champs obligatoires ne sont pas remplis
+
+00:02:38.770 --> 00:02:39.970
+et tout répond instantanément.
+
+00:02:40.830 --> 00:02:42.470
+A ce stade, on a l'impression d'avoir résolu le problème.
+
+00:02:43.070 --> 00:02:43.910
+Puis vient le déploiement.
+
+00:02:44.350 --> 00:02:46.610
+Quelqu'un signale que son bouton d'enregistrement ne fait rien.
+
+00:02:47.410 --> 00:02:49.450
+Une autre personne remarque que l'indicateur de chargement ne s'arrête jamais
+
+00:02:49.450 --> 00:02:50.370
+quand le formulaire tente de s'afficher.
+
+00:02:50.810 --> 00:02:53.250
+Ou bien les champs se comportent différemment selon le navigateur utilisé.
+
+00:02:53.710 --> 00:02:56.050
+Le même formulaire qui semblait stable lors de quelques tests minutieux
+
+00:02:56.050 --> 00:02:57.010
+paraît désormais imprévisible.
+
+00:02:57.010 --> 00:03:01.010
+J'ai appris cette leçon à mes dépens en créant un formulaire de demande pour une équipe interne.
+
+00:03:01.770 --> 00:03:03.370
+Lors des tests de contrôle, le formulaire semblait parfait.
+
+00:03:03.890 --> 00:03:05.990
+Chaque champ était aligné, le flux de soumission se déclenchait
+
+00:03:05.990 --> 00:03:08.510
+et l'interface semblait plus rapide que l'expérience SharePoint standard.
+
+00:03:09.770 --> 00:03:12.250
+Mais durant la première semaine d'utilisation en production, des problèmes ont fait surface.
+
+00:03:12.650 --> 00:03:14.410
+Certains utilisateurs ne pouvaient tout simplement pas soumettre d'envoi.
+
+00:03:14.590 --> 00:03:16.590
+Pour d'autres, les données s'enregistraient dans la mauvaise colonne
+
+00:03:16.590 --> 00:03:19.370
+car les formules en arrière-plan ne correspondaient pas à la manière dont SharePoint interprète
+
+00:03:19.370 --> 00:03:20.010
+certains types de champs.
+
+00:03:20.010 --> 00:03:24.090
+Une simple colonne que, oui non que, gérée dans PowerApps comme une valeur vraie foyeux
+
+00:03:24.090 --> 00:03:27.830
+ne réagissait pas de la même façon une fois que les utilisateurs interagissaient avec
+
+00:03:27.830 --> 00:03:28.930
+directement depuis SharePoint.
+
+00:03:29.790 --> 00:03:31.990
+Ce décalage a causé des problèmes subtils mais dommageables.
+
+00:03:32.570 --> 00:03:34.990
+Une partie du piège consiste à supposer que ce que vous voyez en aperçu
+
+00:03:34.990 --> 00:03:37.870
+est ce que vos utilisateurs vivront, est ce que vos utilisateurs vivront.
+
+00:03:37.970 --> 00:03:40.030
+Le mode aperçu est essentiellement un environnement de démonstration.
+
+00:03:40.370 --> 00:03:42.750
+Il ne simule pas plusieurs utilisateurs accédant au même formulaire,
+
+00:03:43.010 --> 00:03:44.650
+une liste volumineuse de milliers d'enregistrements
+
+00:03:44.650 --> 00:03:47.130
+ou des conflits en temps arrière-plan avec des flux de travail en arrière.
+
+00:03:47.130 --> 00:03:50.070
+Vous testez dans des conditions idéales, mais l'environnement de production est qu'aujourd'hui.
+
+00:03:50.450 --> 00:03:52.990
+Les gens abordent le formulaire différemment, les colonnes SharePoint imposent des règles
+
+00:03:52.990 --> 00:03:55.810
+que vous n'aviez pas prévues et la logique que vous pensiez infaillible laisse soudain
+
+00:03:55.810 --> 00:03:56.670
+apparaître des failles.
+
+00:03:56.910 --> 00:03:57.770
+Laisse soudain apparaître des failles.
+
+00:03:57.870 --> 00:04:00.230
+C'est un peu comme tester avec un jouet avant de passer à la vraie version,
+
+00:04:00.510 --> 00:04:02.970
+les fissures n'apparaissent qu'une fois que vous montez en charge.
+
+00:04:03.530 --> 00:04:05.850
+Un autre angle mort est la manière dont nous étendons les colonnes SharePoint
+
+00:04:05.850 --> 00:04:07.070
+avec la logique PowerApps.
+
+00:04:07.890 --> 00:04:10.430
+Une colonne de liste déroulante dans SharePoint peut sembler simple,
+
+00:04:10.430 --> 00:04:13.050
+mais dès que vous remplacez son comportement par défaut dans PowerApps,
+
+00:04:13.050 --> 00:04:17.150
+vous substituez essentiellement une partie de la validation native de SharePoint par votre propre code.
+
+00:04:18.410 --> 00:04:21.490
+Ce code ne s'aligne pas toujours avec les restrictions de données qui subsistent dans la liste.
+
+00:04:22.310 --> 00:04:23.890
+Le résultat est une duplication de la logique.
+
+00:04:24.330 --> 00:04:27.510
+SharePoint tente d'appliquer une règle, tandis que PowerApps en applique une autre.
+
+00:04:28.170 --> 00:04:30.830
+Quand elle se chevauche, les utilisateurs reçoivent des messages incohérents,
+
+00:04:30.890 --> 00:04:33.190
+des erreurs d'enregistrement ou des données qui semblent correctes dans le formulaire
+
+00:04:33.190 --> 00:04:34.530
+mais qui corrompent les rapports ultérieurement.
+
+00:04:35.030 --> 00:04:38.370
+La question plus large sous-jacente est de savoir si cette complexité en vaut la peine.
+
+00:04:38.890 --> 00:04:41.250
+Parfois, vous avez seulement besoin d'ajuster l'apparence d'un formulaire.
+
+00:04:41.250 --> 00:04:44.690
+Mais dès que vous l'ouvrez dans PowerApps, vous ouvrez la porte à une personnalisation infinie.
+
+00:04:45.670 --> 00:04:47.770
+Chaque petite amélioration entraîne des conséquences cachées
+
+00:04:47.770 --> 00:04:51.410
+et plus vous avancez, plus il devient difficile de distinguer ce qui est cosmétique de ce qui est structurel.
+
+00:04:52.690 --> 00:04:56.950
+Ce qui semblait être un raccourci efficace finit souvent en un formulaire nécessitant une maintenance constante.
+
+00:04:57.090 --> 00:04:59.250
+Et la vérité est que le défi n'est pas de créer le prototype,
+
+00:04:59.390 --> 00:05:02.630
+mais de le faire fonctionner quand des dizaines ou des centaines d'utilisateurs s'y fient chaque jour,
+
+00:05:02.810 --> 00:05:03.590
+quand des s'y fient chaque jour.
+
+00:05:04.030 --> 00:05:05.790
+C'est pourquoi les problèmes n'apparaissent souvent que plus tard.
+
+00:05:05.790 --> 00:05:10.610
+Un formulaire qui fonctionne parfaitement sous votre contrôle commence à ralentir, à bugger
+
+00:05:10.610 --> 00:05:12.950
+ou à dérouter les utilisateurs qu'il devait aider.
+
+00:05:13.270 --> 00:05:14.290
+Ce qui mène au piège suivant.
+
+00:05:14.850 --> 00:05:18.170
+Des problèmes de performance et d'adoption qui ne se révèlent qu'après le déploiement.
+
+00:05:19.210 --> 00:05:20.350
+Les pièges cachés après le déploiement.
+
+00:05:20.930 --> 00:05:22.710
+Votre formulaire a réussi tous les tests que vous avez fait passer.
+
+00:05:23.350 --> 00:05:25.790
+Puis les premiers vrais utilisateurs sont arrivés, on cliquait sur envoyer.
+
+00:05:25.950 --> 00:05:26.650
+Et tout s'est mis à ramer.
+
+00:05:27.210 --> 00:05:30.270
+Des pages qui se chargeaient instantanément restent désormais bloquées avec des icônes de chargement.
+
+00:05:30.610 --> 00:05:33.110
+Des boutons qui devraient réagir immédiatement prennent plusieurs secondes avant de répondre.
+
+00:05:33.110 --> 00:05:35.690
+Le problème n'est pas que votre formulaire a soudainement empiré.
+
+00:05:36.130 --> 00:05:39.130
+C'est que les données réelles révèlent des faiblesses que les tests ne montrent jamais.
+
+00:05:39.850 --> 00:05:43.510
+Quelques formules choisies et ajustements visuels ne paraissent pas lourds quand vous n'avez qu'une poignée d'enregistrement.
+
+00:05:44.050 --> 00:05:46.130
+Ajoutez des centaines ou des milliers de lignes dans cette même liste
+
+00:05:46.130 --> 00:05:48.890
+et soudain ce qui semblait fluide devient presque inutilisable.
+
+00:05:49.630 --> 00:05:50.850
+La différence réside dans l'échelle.
+
+00:05:51.330 --> 00:05:53.070
+Pendant la conception vous travaillez avec 10 enregistrements.
+
+00:05:53.470 --> 00:05:56.590
+En production les gens travaillent avec des centaines de pièces jointes ou des listes atteignant des milliers d'entrées.
+
+00:05:57.470 --> 00:05:58.550
+C'est là que la latence apparaît.
+
+00:05:58.550 --> 00:06:02.330
+Chaque menu déroulant qui doit extraire des éléments d'une liste liée effectue un appel séparé.
+
+00:06:02.970 --> 00:06:07.310
+Chaque formule conditionnelle qui affiche ou masque des champs s'exécute en temps réel à chaque interaction de l'utilisateur.
+
+00:06:08.530 --> 00:06:12.230
+Les petits coups inaperçus individuellement s'additionnent pour devenir un problème visible par tous.
+
+00:06:13.210 --> 00:06:15.490
+Les utilisateurs métiers attendent d'un formulaire qu'ils réagissent comme une page web.
+
+00:06:15.890 --> 00:06:17.250
+Les développeurs cherchent souvent l'exhaustivité.
+
+00:06:17.690 --> 00:06:18.930
+Ajoutons une logique pour chaque condition.
+
+00:06:19.390 --> 00:06:20.870
+Créons 5 variantes de la même règle.
+
+00:06:21.610 --> 00:06:23.090
+Et ces choix alourdissent la charge sur le serveur.
+
+00:06:23.090 --> 00:06:27.190
+Une histoire marquante concerne un formulaire de demande qui semblait impeccable lors des tests.
+
+00:06:27.690 --> 00:06:29.250
+La logique fonctionnait, le design était soigné.
+
+00:06:29.950 --> 00:06:32.210
+En mode prévisualisation, il mettait moins de 2 secondes à charger complètement.
+
+00:06:32.710 --> 00:06:33.730
+La démonstration impressionnait tout.
+
+00:06:34.190 --> 00:06:37.910
+Mais lors du déploiement, quand un service utilisant une liste contenant déjà 1000 demandes l'a testé,
+
+00:06:38.230 --> 00:06:40.170
+le chargement a dépassé les 15 secondes.
+
+00:06:41.190 --> 00:06:43.690
+Cela ne semble pas terrible avant de le multiplier par l'usage quotidien.
+
+00:06:44.590 --> 00:06:48.110
+Une demi-minute d'attente par demande signifiait des dizaines d'heures perdues pour l'équipe.
+
+00:06:49.450 --> 00:06:51.870
+Une fois que le ralentissement s'installe, les gens ne font plus confiance au système.
+
+00:06:51.870 --> 00:06:55.270
+Ils cliquent sur enregistrer 2 ou 3 fois par panique, ce qui entraîne des doublons,
+
+00:06:55.450 --> 00:06:56.650
+et encore plus de frustrations.
+
+00:06:57.290 --> 00:06:59.270
+Les formulaires avec une logique dynamique peuvent aggraver la situation.
+
+00:06:59.710 --> 00:07:01.570
+Disons que vous définissez des règles de visibilité conditionnelles.
+
+00:07:02.170 --> 00:07:03.830
+Si quelqu'un sélectionne une demande de déplacement,
+
+00:07:04.130 --> 00:07:05.590
+le formulaire s'étend avec des champs de destination.
+
+00:07:06.110 --> 00:07:08.710
+S'ils choisissent une demande de matériel, une section différente apparaît.
+
+00:07:09.550 --> 00:07:11.610
+En théorie, cela rend le formulaire beaucoup plus convivial.
+
+00:07:12.390 --> 00:07:15.030
+En réalité, à chaque fois qu'un utilisateur sélectionne ou modifie un champ,
+
+00:07:15.250 --> 00:07:16.770
+la logique en arrière-plan se recalcule.
+
+00:07:17.510 --> 00:07:20.290
+Ce cycle se répète constamment, créant des hésitations dans l'interface.
+
+00:07:20.290 --> 00:07:23.850
+Les utilisateurs décrivent cela comme un formulaire qui ralentit ou qui se fige.
+
+00:07:24.570 --> 00:07:28.190
+La réalité technique est que le formulaire recalcule des dizaines d'expressions en temps réel.
+
+00:07:29.150 --> 00:07:32.070
+Contrairement aux applications conçues pour mettre en cache des valeurs ou regrouper des requêtes,
+
+00:07:32.190 --> 00:07:33.510
+Power Apps n'optimise pas automatiquement.
+
+00:07:34.190 --> 00:07:37.230
+Chaque élément de logique que vous écrivez est exécuté exactement tel quel à chaque fois.
+
+00:07:37.690 --> 00:07:39.430
+C'est ici que les concepteurs inexpérimentés sont surpris.
+
+00:07:40.390 --> 00:07:42.530
+Vous supposez que la plateforme optimisera en arrière-plan
+
+00:07:42.530 --> 00:07:45.310
+que certains appels seront mis en cache ou combinés en une seule requête.
+
+00:07:45.310 --> 00:07:47.530
+Mais Power Apps ne fait pas cela pour vous.
+
+00:07:47.970 --> 00:07:50.430
+Ils récupèrent les données séparément et recalcule les formules littéralement.
+
+00:07:51.190 --> 00:07:53.750
+Le résultat est une application qui semble fonctionner avec une douzaine d'éléments
+
+00:07:53.750 --> 00:07:55.850
+mais qui ralentit considérablement à l'échelle réelle.
+
+00:07:56.790 --> 00:07:59.610
+Les développeurs expérimentés déplacent souvent la logique lourde hors du formulaire
+
+00:07:59.610 --> 00:08:01.910
+vers des flux Power Automate ou des règles SharePoint.
+
+00:08:02.750 --> 00:08:04.410
+Précisément pour réduire la charge côté client.
+
+00:08:05.590 --> 00:08:07.250
+Le vrai problème n'est pas que ces soucis surviennent,
+
+00:08:07.250 --> 00:08:09.750
+c'est qu'ils arrivent après que votre équipe a investi du temps,
+
+00:08:09.930 --> 00:08:13.210
+adhéré au flux de travail et s'attend à ce que tout fonctionne simplement.
+
+00:08:14.330 --> 00:08:17.090
+Pour un utilisateur métier, un délai de 10 secondes signifie que le système est en place.
+
+00:08:17.570 --> 00:08:19.690
+Pour un développeur, 10 secondes peuvent ne pas sembler dramatiques
+
+00:08:19.690 --> 00:08:22.790
+mais c'est dans le choc de ses attentes que naît la frustration, que naît la frustration.
+
+00:08:23.170 --> 00:08:25.790
+Du point de vue de l'utilisateur, un formulaire lent est une perte de temps.
+
+00:08:26.510 --> 00:08:28.570
+Du point de vue du développeur, réécrire la logique semble coûteur
+
+00:08:28.570 --> 00:08:29.830
+que la fonctionnalité est déjà en place.
+
+00:08:30.470 --> 00:08:32.530
+Les deux parties ont raison et les deux parties ne se comprennent pas.
+
+00:08:33.050 --> 00:08:33.990
+La leçon ici est simple,
+
+00:08:34.630 --> 00:08:36.890
+concevez en pensant à la production, pas aux conditions de démonstration.
+
+00:08:37.250 --> 00:08:40.230
+Si votre liste contient régulièrement des milliers d'éléments, testez avec des milliers.
+
+00:08:40.870 --> 00:08:42.290
+Si votre logique touche plusieurs colonnes,
+
+00:08:42.430 --> 00:08:44.270
+mesurez l'impact sur le temps de chargement à grande échelle.
+
+00:08:45.330 --> 00:08:47.450
+Si votre formulaire nécessite des fonctionnalités ergonomiques
+
+00:08:47.450 --> 00:08:48.430
+comme des sections conditionnées,
+
+00:08:48.610 --> 00:08:51.130
+réfléchissez bien au nombre de règles que vous empilez directement dans le formulaire.
+
+00:08:51.950 --> 00:08:52.730
+Chaque seconde compte,
+
+00:08:53.130 --> 00:08:55.310
+et chaque formule inutile reviendra vous hanter plus tard.
+
+00:08:56.130 --> 00:08:58.390
+Une bonne architecture fait plus de différence que des visuels soignés.
+
+00:08:59.250 --> 00:09:01.090
+La performance n'est pas une fonctionnalité cosmétique,
+
+00:09:01.090 --> 00:09:04.970
+c'est la véritable ossature qui détermine si vos utilisateurs utiliseront le formulaire ou l'abandonneront.
+
+00:09:05.750 --> 00:09:07.050
+Et c'est là que le piège suivant se présente.
+
+00:09:07.250 --> 00:09:07.810
+La validation.
+
+00:09:08.290 --> 00:09:10.430
+Car même si votre formulaire finit par charger assez rapidement,
+
+00:09:10.590 --> 00:09:12.650
+rien ne détruira autant la confiance qu'une sauvegarde qui échoue
+
+00:09:12.650 --> 00:09:14.910
+ou puis une sauvegarde qui accepte silencieusement des données erronées.
+
+00:09:16.030 --> 00:09:17.570
+Des cauchemars de validation que vous ne voyez pas venir.
+
+00:09:18.230 --> 00:09:20.170
+Sur le papier, les règles de validation semblent simples.
+
+00:09:20.610 --> 00:09:21.570
+Vous regardez un champ et vous vous dites
+
+00:09:21.570 --> 00:09:23.710
+si la date de fin précède la date de début, elle fait généra.
+
+00:09:23.990 --> 00:09:25.250
+Quelle difficulté cela pourrait être là ?
+
+00:09:25.790 --> 00:09:29.310
+Le défi, c'est qu'une fois le formulaire déployé hors de votre environnement de test,
+
+00:09:29.470 --> 00:09:32.090
+ces règles simples ne se comportent plus comme prévu.
+
+00:09:33.170 --> 00:09:36.050
+Une vérification qui fonctionnait bien en prévisualisation peut échouer silencieusement en production.
+
+00:09:36.050 --> 00:09:38.110
+Pire, elle se déclenche au mauvais moment
+
+00:09:38.110 --> 00:09:40.330
+et bloque des utilisateurs qui pensent avoir tout fait correctement.
+
+00:09:41.110 --> 00:09:42.710
+C'est là que ce qui devrait être une simple protection
+
+00:09:42.710 --> 00:09:44.870
+donne l'impression que le formulaire travaille contre vous.
+
+00:09:45.410 --> 00:09:46.810
+Prenons ce scénario de date de début et de fin.
+
+00:09:47.250 --> 00:09:49.070
+En test, vous saisissez une date de début au 1er mai
+
+00:09:49.070 --> 00:09:50.350
+et une date de fin au 30 avril
+
+00:09:50.350 --> 00:09:52.030
+et votre règle le signale immédiatement.
+
+00:09:52.830 --> 00:09:53.170
+Parfait.
+
+00:09:53.170 --> 00:09:56.470
+Mais en production, quelqu'un saisit les valeurs dans un ordre différent
+
+00:09:56.470 --> 00:09:58.950
+ou modifie un enregistrement déjà partiellement rempli.
+
+00:09:59.730 --> 00:10:01.610
+Soudain, la validation ne se déclenche qu'à l'enregistrement
+
+00:10:01.610 --> 00:10:03.810
+ou alors avant même que l'utilisateur ait fini de taper.
+
+00:10:04.530 --> 00:10:05.230
+Cela crée de la confusion.
+
+00:10:05.790 --> 00:10:07.450
+Il clique sur Envoyer, voit un message d'erreur,
+
+00:10:07.570 --> 00:10:08.590
+corrige l'erreur, clique à nouveau
+
+00:10:08.590 --> 00:10:10.850
+et le formulaire affiche un message différent pour autre chose.
+
+00:10:11.750 --> 00:10:13.850
+Ces erreurs accumulées semblent aléatoires pour l'utilisateur
+
+00:10:13.850 --> 00:10:16.410
+mais souvent c'est juste l'ordre de déclenchement des règles qui est inattendu.
+
+00:10:17.070 --> 00:10:18.870
+Un autre problème courant survient lorsque les règles se chevauchent.
+
+00:10:18.870 --> 00:10:21.750
+Peut-être avez-vous écrit une formule pour vérifier les champs obligatoires
+
+00:10:21.750 --> 00:10:24.510
+et une autre pour vérifier la cohérence entre les valeurs.
+
+00:10:24.990 --> 00:10:26.050
+Si les deux se déclenchent en même temps,
+
+00:10:26.170 --> 00:10:28.330
+l'utilisateur peut voir deux bannières d'erreur à la fois
+
+00:10:28.330 --> 00:10:31.470
+ou pire encore, un message masse que l'autre.
+
+00:10:32.930 --> 00:10:35.610
+Dans certains cas, des utilisateurs astucieux découvrent vite
+
+00:10:35.610 --> 00:10:37.670
+qu'ils peuvent contourner la validation Power Apps
+
+00:10:37.670 --> 00:10:40.550
+avec des raccourcis Clavier ou SharePoint.
+
+00:10:41.750 --> 00:10:43.350
+Pour eux, le formulaire semble défectueux.
+
+00:10:43.950 --> 00:10:46.930
+Pour vous, concepteur, vous avez l'impression que vos règles ne sont pas respectées.
+
+00:10:46.930 --> 00:10:48.870
+Ces deux frustrations sont bien réelles.
+
+00:10:49.310 --> 00:10:51.250
+SharePoint lui-même ajoute à la complexité.
+
+00:10:51.670 --> 00:10:54.370
+Power Apps ne remplace pas la manière dont SharePoint applique les restrictions de colonne.
+
+00:10:55.350 --> 00:10:56.790
+Si une colonne dans SharePoint est obligatoire,
+
+00:10:56.910 --> 00:10:59.670
+SharePoint imposera cette règle, peu importe la logique, dans Power Apps.
+
+00:11:00.750 --> 00:11:02.990
+Le risque survient quand vos règles de validation diffèrent
+
+00:11:02.990 --> 00:11:05.110
+de l'interprétation de ce même champ par SharePoint.
+
+00:11:05.850 --> 00:11:08.010
+Par exemple, vous autorisez peut-être des chaînes vides dans Power Apps
+
+00:11:08.010 --> 00:11:09.350
+que vous ne vérifiez que les champs visibles.
+
+00:11:10.370 --> 00:11:12.310
+Pendant ce temps, SharePoint refuse l'enregistrement
+
+00:11:12.310 --> 00:11:14.170
+car la colonne est marquée comme obligatoire,
+
+00:11:14.610 --> 00:11:15.950
+même si le champ est masqué.
+
+00:11:15.950 --> 00:11:18.410
+Le résultat est une sécurité qui ne renvoie
+
+00:11:18.410 --> 00:11:20.150
+aucune erreur explicite à l'utilisateur.
+
+00:11:20.730 --> 00:11:21.830
+Il voit juste une icône de chargement
+
+00:11:21.830 --> 00:11:23.790
+ou un message générique indiquant qu'il est impossible d'enregistrer.
+
+00:11:24.710 --> 00:11:26.330
+Cet écart entre les règles Power Apps
+
+00:11:26.330 --> 00:11:28.690
+et l'application par SharePoint est ce qui érode rapidement.
+
+00:11:28.970 --> 00:11:29.570
+La confiance.
+
+00:11:30.330 --> 00:11:31.630
+Les utilisateurs ne se soucient pas de savoir
+
+00:11:31.630 --> 00:11:33.510
+si l'erreur provient de votre formule ou du bacaine de SharePoint.
+
+00:11:34.090 --> 00:11:36.070
+A constat seulement qu'un formulaire en lequel ils avaient confiance
+
+00:11:36.070 --> 00:11:37.170
+a commencé à rejeter leur saisie.
+
+00:11:37.510 --> 00:11:39.670
+C'est comme construire un barrage qui semble solide lors de tests,
+
+00:11:39.670 --> 00:11:41.610
+mais dès qu'on le remplit à grande échelle,
+
+00:11:41.750 --> 00:11:42.830
+de petites fuites apparaissent là,
+
+00:11:42.830 --> 00:11:44.410
+où on ne les attendait pas.
+
+00:11:45.510 --> 00:11:46.990
+Chaque fuite semble gérable isolément,
+
+00:11:47.130 --> 00:11:48.050
+mais l'ensemble envoie un signal,
+
+00:11:48.250 --> 00:11:49.790
+car cette structure n'est pas fiable.
+
+00:11:50.350 --> 00:11:51.970
+Vous pouvez imaginer les conséquences sur l'adoption.
+
+00:11:52.530 --> 00:11:53.690
+Après quelques mauvaises expériences,
+
+00:11:53.810 --> 00:11:54.850
+les gens cessent de saisir des données
+
+00:11:54.850 --> 00:11:56.150
+ou inventent des solutions de contournement
+
+00:11:56.150 --> 00:11:57.190
+pour éviter le formulaire.
+
+00:11:57.870 --> 00:11:59.190
+C'est là que les professionnels passent souvent
+
+00:11:59.190 --> 00:12:00.870
+le plus de temps à résoudre des problèmes.
+
+00:12:02.070 --> 00:12:03.530
+Non pas sur le design ou la mise en page,
+
+00:12:03.610 --> 00:12:05.050
+mais à traquer pourquoi certains cas limites
+
+00:12:05.050 --> 00:12:06.490
+rendent le formulaire imprévisible.
+
+00:12:07.450 --> 00:12:09.650
+Finissez par tester 20 combinaisons d'entrées différentes
+
+00:12:09.650 --> 00:12:11.770
+juste pour comprendre comment les règles se déclenchent.
+
+00:12:12.570 --> 00:12:13.210
+Et plus vous creusez,
+
+00:12:13.250 --> 00:12:14.890
+plus vous réalisez que la validation ne se résume pas
+
+00:12:14.890 --> 00:12:16.290
+à écrire une ou deux formules élégantes.
+
+00:12:17.070 --> 00:12:18.490
+Il s'agit de superposer des contrôles
+
+00:12:18.490 --> 00:12:20.370
+qui tiennent compte du comportement des utilisateurs,
+
+00:12:20.470 --> 00:12:21.410
+des restrictions de SharePoint
+
+00:12:21.410 --> 00:12:23.870
+et de cas imprévisibles avant le déploiement.
+
+00:12:25.070 --> 00:12:27.230
+La meilleure approche consiste à concevoir la validation par couche.
+
+00:12:27.970 --> 00:12:30.070
+Une couche dans Power Apps pour un retour immédiat,
+
+00:12:30.770 --> 00:12:31.610
+une autre dans SharePoint
+
+00:12:31.610 --> 00:12:33.110
+pour garantir l'intégrité des données,
+
+00:12:33.250 --> 00:12:34.350
+puis des tests supplémentaires,
+
+00:12:34.350 --> 00:12:36.150
+non seulement avec des données propres,
+
+00:12:36.230 --> 00:12:37.850
+mais avec la réalité des utilisateurs
+
+00:12:37.850 --> 00:12:39.190
+qui modifient des enregistrements,
+
+00:12:39.390 --> 00:12:40.390
+ignorent des champs
+
+00:12:40.390 --> 00:12:42.190
+ou saisissent des dates aberrantes.
+
+00:12:43.490 --> 00:12:44.470
+Si vous renforcez vos règles
+
+00:12:44.470 --> 00:12:45.810
+avec des paramètres SharePoint
+
+00:12:45.810 --> 00:12:47.210
+et traitez la validation Power Apps
+
+00:12:47.210 --> 00:12:48.350
+comme une première ligne de défense,
+
+00:12:48.450 --> 00:12:49.610
+vous créez des garde-fous
+
+00:12:49.610 --> 00:12:50.770
+plutôt que des barrières fragiles.
+
+00:12:51.250 --> 00:12:51.390
+1.
+
+00:12:52.190 --> 00:12:53.230
+L'essentiel est ceci,
+
+00:12:53.610 --> 00:12:54.470
+la validation n'échoue pas
+
+00:12:54.470 --> 00:12:55.470
+parce que les règles sont mauvaises,
+
+00:12:55.570 --> 00:12:56.650
+mais parce qu'elles ne sont pas alignées
+
+00:12:56.650 --> 00:12:57.850
+entre Power Apps et SharePoint
+
+00:12:57.850 --> 00:12:59.050
+ou parce qu'elles n'ont été testées
+
+00:12:59.050 --> 00:13:00.550
+que dans des conditions idéales.
+
+00:13:01.530 --> 00:13:02.810
+La fiabilité vient de la superposition
+
+00:13:02.810 --> 00:13:03.690
+et de l'anticipation des erreurs,
+
+00:13:03.750 --> 00:13:04.410
+pas seulement du codage
+
+00:13:04.410 --> 00:13:05.190
+pour le scénario idéal.
+
+00:13:05.970 --> 00:13:06.710
+Et c'est précisément là
+
+00:13:06.710 --> 00:13:07.370
+que nous voyons apparaître
+
+00:13:07.370 --> 00:13:08.750
+un écart de fiabilité plus large.
+
+00:13:09.890 --> 00:13:11.350
+Entre les formulaires natifs SharePoint
+
+00:13:11.350 --> 00:13:12.490
+qui imposent simplement des règles
+
+00:13:12.490 --> 00:13:14.130
+et les formulaires Power Apps personnalisés
+
+00:13:14.130 --> 00:13:15.390
+qui jonglent entre flexibilité
+
+00:13:15.390 --> 00:13:16.610
+et imprévisibilité,
+
+00:13:17.990 --> 00:13:19.810
+formulaires natifs contre Power Apps,
+
+00:13:20.370 --> 00:13:21.570
+stabilité contre flexibilité.
+
+00:13:22.270 --> 00:13:23.790
+Si les formulaires intégrés de SharePoint
+
+00:13:23.790 --> 00:13:24.750
+font le travail par défaut,
+
+00:13:24.950 --> 00:13:25.710
+pourquoi prendre la peine
+
+00:13:25.710 --> 00:13:28.090
+de les remplacer par Power Apps ?
+
+00:13:28.090 --> 00:13:29.550
+C'est la question à laquelle nous sommes confrontés
+
+00:13:29.550 --> 00:13:30.250
+une fois que l'excitation
+
+00:13:30.250 --> 00:13:31.450
+de la personnalisation retombe.
+
+00:13:32.370 --> 00:13:33.350
+Les formulaires SharePoint natifs
+
+00:13:33.350 --> 00:13:33.990
+sont peut-être basiques,
+
+00:13:34.090 --> 00:13:35.050
+mais ils ne tombent presque jamais en bas.
+
+00:13:35.430 --> 00:13:36.690
+Vous bénéficiez d'une validation fiable,
+
+00:13:37.010 --> 00:13:38.230
+d'un rendu cohérent sur tous les appareils
+
+00:13:38.230 --> 00:13:39.450
+et d'aucune maintenance supplémentaire.
+
+00:13:40.130 --> 00:13:41.230
+Le compromis est qu'ils sont rigides.
+
+00:13:41.650 --> 00:13:42.690
+Si vous souhaitez qu'un champ n'apparaisse
+
+00:13:42.690 --> 00:13:43.530
+que dans certaines conditions
+
+00:13:43.530 --> 00:13:44.790
+ou si vous avez besoin de sections
+
+00:13:44.790 --> 00:13:45.670
+qui s'adaptent dynamiquement
+
+00:13:45.670 --> 00:13:46.210
+aux règles métiers,
+
+00:13:46.370 --> 00:13:47.670
+l'option par défaut ne suffira pas.
+
+00:13:47.810 --> 00:13:48.310
+Ne suffira pas.
+
+00:13:49.150 --> 00:13:50.710
+Power Apps promet de combler cette lacune
+
+00:13:50.710 --> 00:13:51.530
+en vous offrant un contrôle
+
+00:13:51.530 --> 00:13:52.530
+sur la logique, la mise en page
+
+00:13:52.530 --> 00:13:53.270
+et l'automatisation
+
+00:13:53.270 --> 00:13:54.010
+là où SharePoint seul
+
+00:13:54.010 --> 00:13:54.810
+ne peut intervenir.
+
+00:13:55.430 --> 00:13:56.310
+Le contraste est évident
+
+00:13:56.310 --> 00:13:57.490
+dès que vous les comparez côte à côte.
+
+00:13:58.270 --> 00:13:59.030
+Un formulaire SharePoint
+
+00:13:59.030 --> 00:14:00.170
+par défaut s'ouvre instantanément,
+
+00:14:00.290 --> 00:14:01.310
+ne nécessite aucune configuration
+
+00:14:01.310 --> 00:14:02.150
+et applique des paramètres
+
+00:14:02.150 --> 00:14:02.750
+de liste simple.
+
+00:14:03.410 --> 00:14:04.450
+Mais sa conception est verrouillée.
+
+00:14:04.830 --> 00:14:05.410
+Vous ne pouvez pas dire
+
+00:14:05.410 --> 00:14:06.210
+« N'afficher ce champ
+
+00:14:06.210 --> 00:14:07.990
+que si le demandeur est un manager »
+
+00:14:07.990 --> 00:14:08.810
+ou « Réduire ces champs
+
+00:14:08.810 --> 00:14:11.310
+lorsqu'une certaine réponse est choisie ».
+
+00:14:11.310 --> 00:14:12.250
+Power Apps intervient
+
+00:14:12.250 --> 00:14:13.290
+en offrant cette flexibilité.
+
+00:14:13.770 --> 00:14:14.490
+Vous voulez des menus déroulants
+
+00:14:14.490 --> 00:14:16.130
+en cascade liés à une liste de recherche ?
+
+00:14:16.130 --> 00:14:16.630
+Aucun problème.
+
+00:14:17.170 --> 00:14:17.710
+Vous voulez des sections
+
+00:14:17.710 --> 00:14:18.350
+qui ne se révèlent
+
+00:14:18.350 --> 00:14:20.570
+que lorsque certaines conditions sont remplies ?
+
+00:14:20.570 --> 00:14:21.750
+Il suffit de quelques formules pour y parvenir.
+
+00:14:22.130 --> 00:14:22.670
+C'est stimulant,
+
+00:14:23.050 --> 00:14:24.230
+mais ces libertés s'accompagnent
+
+00:14:24.230 --> 00:14:25.110
+d'une instabilité
+
+00:14:25.110 --> 00:14:26.530
+que l'on ne perçoit que plus tard.
+
+00:14:27.390 --> 00:14:28.310
+C'est là que réside le dilemme.
+
+00:14:28.970 --> 00:14:30.250
+Stabilité ou flexibilité ?
+
+00:14:30.250 --> 00:14:31.110
+Vous pouvez choisir une voie
+
+00:14:31.110 --> 00:14:32.410
+ennuyeuse mais cohérente
+
+00:14:32.410 --> 00:14:33.610
+ou prendre celle qui offre
+
+00:14:33.610 --> 00:14:35.250
+l'expérience utilisateur exacte
+
+00:14:35.250 --> 00:14:35.950
+que vous imaginez
+
+00:14:35.950 --> 00:14:37.530
+mais qui peut vous frustrer plus tard
+
+00:14:37.530 --> 00:14:38.990
+lorsque des problèmes apparaissent.
+
+00:14:40.450 --> 00:14:41.890
+Dans un projet de formulaire de demande,
+
+00:14:42.110 --> 00:14:43.550
+le choix s'est porté sur la flexibilité.
+
+00:14:44.250 --> 00:14:45.670
+L'équipe souhaitait une visibilité conditionnelle.
+
+00:14:46.390 --> 00:14:47.170
+Certains types de demandes
+
+00:14:47.170 --> 00:14:48.910
+nécessitaient un volet d'informations supplémentaires,
+
+00:14:49.130 --> 00:14:49.730
+contrairement à d'autres.
+
+00:14:49.730 --> 00:14:51.150
+Dans SharePoint natif,
+
+00:14:51.210 --> 00:14:51.850
+ce n'était pas possible
+
+00:14:51.850 --> 00:14:53.450
+sans créer des formulaires distincts.
+
+00:14:53.650 --> 00:14:55.050
+PowerApp semblait être la solution évidente.
+
+00:14:56.050 --> 00:14:56.710
+Pendant le développement
+
+00:14:56.710 --> 00:14:57.730
+et les démonstrations initiales,
+
+00:14:57.810 --> 00:14:58.810
+le formulaire fonctionnait à merveille.
+
+00:14:59.630 --> 00:15:00.470
+Sélectionnez Voyage Game,
+
+00:15:00.550 --> 00:15:01.930
+affichez une section pour les détails du vol.
+
+00:15:02.730 --> 00:15:03.350
+Choisir un matériel
+
+00:15:03.350 --> 00:15:04.110
+que remplacait ses champs
+
+00:15:04.110 --> 00:15:05.250
+par des spécifications d'équipement.
+
+00:15:05.890 --> 00:15:07.010
+Il semblait adapté au processus
+
+00:15:07.010 --> 00:15:07.930
+d'une manière que l'option standard
+
+00:15:07.930 --> 00:15:08.890
+ne pourrait jamais offrir.
+
+00:15:09.630 --> 00:15:10.730
+Le problème est apparu lors du déploie.
+
+00:15:11.150 --> 00:15:12.030
+Tout fonctionnait parfaitement
+
+00:15:12.030 --> 00:15:12.890
+sur les navigateurs de bureau,
+
+00:15:13.350 --> 00:15:14.190
+mais dès que les utilisateurs
+
+00:15:14.190 --> 00:15:14.770
+essayaient de soumettre
+
+00:15:14.770 --> 00:15:15.650
+depuis des appareils mobiles,
+
+00:15:15.790 --> 00:15:16.450
+l'illusion s'est brisée.
+
+00:15:16.450 --> 00:15:17.830
+Les sections étaient mal alignées,
+
+00:15:18.010 --> 00:15:18.650
+les boutons passaient
+
+00:15:18.650 --> 00:15:19.430
+sous le bord de l'écran.
+
+00:15:19.990 --> 00:15:20.990
+Certaines logiques conditionnelles
+
+00:15:20.990 --> 00:15:22.110
+se déclenchaient de manière incohérente
+
+00:15:22.110 --> 00:15:22.870
+selon le client mobile.
+
+00:15:23.890 --> 00:15:24.470
+Les fonctionnalités
+
+00:15:24.470 --> 00:15:25.310
+que le formulaire SharePoint
+
+00:15:25.310 --> 00:15:26.470
+par défaut gérait sans problème,
+
+00:15:26.630 --> 00:15:27.370
+comme le rendu cohérent
+
+00:15:27.370 --> 00:15:28.010
+sur tous les formats,
+
+00:15:28.130 --> 00:15:28.890
+sont soudainement devenus
+
+00:15:28.890 --> 00:15:29.590
+des points critiques.
+
+00:15:30.690 --> 00:15:31.570
+Pour corriger ces caprices,
+
+00:15:31.670 --> 00:15:32.330
+nous avons dû repenser
+
+00:15:32.330 --> 00:15:33.390
+certaines parties de la conception
+
+00:15:33.390 --> 00:15:34.870
+testée avec plusieurs applications mobiles
+
+00:15:34.870 --> 00:15:36.410
+et accepter que certains utilisateurs
+
+00:15:36.410 --> 00:15:36.770
+auraient toujours
+
+00:15:36.770 --> 00:15:37.850
+une expérience moins prévisible.
+
+00:15:39.010 --> 00:15:39.710
+C'est un prix que l'équipe
+
+00:15:39.710 --> 00:15:40.310
+n'avait pas envisagé
+
+00:15:40.310 --> 00:15:41.450
+en recherchant la flexibilité.
+
+00:15:42.550 --> 00:15:43.510
+Cela rappelle quelque chose
+
+00:15:43.510 --> 00:15:44.410
+de facile à négliger.
+
+00:15:44.410 --> 00:15:46.310
+La stabilité ne signifie pas
+
+00:15:46.310 --> 00:15:47.170
+seulement l'absence de crash.
+
+00:15:47.930 --> 00:15:49.310
+Cela signifie un comportement cohérent
+
+00:15:49.310 --> 00:15:50.190
+dans tous les scénarios
+
+00:15:50.190 --> 00:15:51.530
+rencontrés par vos utilisateurs.
+
+00:15:52.330 --> 00:15:53.050
+La pression qui pousse
+
+00:15:53.050 --> 00:15:53.870
+les gens vers PowerApps
+
+00:15:53.870 --> 00:15:54.510
+est généralement liée
+
+00:15:54.510 --> 00:15:55.190
+à la logique métier.
+
+00:15:55.810 --> 00:15:56.550
+Les processus réels
+
+00:15:56.550 --> 00:15:57.030
+tiennent rarement
+
+00:15:57.030 --> 00:15:57.930
+dans un formulaire générique.
+
+00:15:58.550 --> 00:15:59.070
+Des éléments comme
+
+00:15:59.070 --> 00:15:59.930
+les exigences conditionnelles,
+
+00:16:00.050 --> 00:16:01.010
+les valeurs par défaut préremplies
+
+00:16:01.010 --> 00:16:01.630
+ou les approbations
+
+00:16:01.630 --> 00:16:02.210
+en plusieurs étapes
+
+00:16:02.210 --> 00:16:02.650
+vous abonnent tous
+
+00:16:02.650 --> 00:16:03.270
+des formulaires natifs.
+
+00:16:03.750 --> 00:16:04.370
+Et les flux de travail
+
+00:16:04.370 --> 00:16:05.370
+intégrés à Power Automate
+
+00:16:05.370 --> 00:16:05.830
+fonctionnent mieux
+
+00:16:05.830 --> 00:16:06.610
+lorsqu'ils sont déclenchés
+
+00:16:06.610 --> 00:16:07.410
+par des champs et règles
+
+00:16:07.410 --> 00:16:07.910
+personnalisés
+
+00:16:07.910 --> 00:16:09.410
+définis via PowerApps.
+
+00:16:09.950 --> 00:16:10.370
+C'est pourquoi,
+
+00:16:10.370 --> 00:16:11.190
+malgré les risques,
+
+00:16:11.670 --> 00:16:12.190
+les organisations
+
+00:16:12.190 --> 00:16:12.990
+continuent de remplacer
+
+00:16:12.990 --> 00:16:14.110
+leurs formulaires ?
+
+00:16:14.110 --> 00:16:14.690
+Ce n'est pas parce que
+
+00:16:14.690 --> 00:16:15.750
+PowerApps est plus esthétique,
+
+00:16:15.890 --> 00:16:16.590
+c'est parce que les formulaires
+
+00:16:16.590 --> 00:16:17.430
+natifs ne peuvent souvent
+
+00:16:17.430 --> 00:16:18.330
+pas gérer les processus
+
+00:16:18.330 --> 00:16:18.970
+métiers réels
+
+00:16:18.970 --> 00:16:19.750
+sans les plier
+
+00:16:19.750 --> 00:16:21.090
+aux limites de la technologie.
+
+00:16:22.010 --> 00:16:22.330
+Pourtant,
+
+00:16:22.530 --> 00:16:23.290
+des voies expérimentées
+
+00:16:23.290 --> 00:16:23.970
+au sein de la communauté
+
+00:16:23.970 --> 00:16:24.830
+soulignent un danger ici.
+
+00:16:25.870 --> 00:16:26.670
+Utiliser PowerApps
+
+00:16:26.670 --> 00:16:27.650
+pour des changements cosmétiques
+
+00:16:27.650 --> 00:16:28.670
+comme réorganiser les champs
+
+00:16:28.670 --> 00:16:29.370
+ou rendre le formulaire
+
+00:16:29.370 --> 00:16:29.790
+plus propre
+
+00:16:29.790 --> 00:16:30.670
+justifie rarement
+
+00:16:30.670 --> 00:16:31.410
+l'échange.
+
+00:16:32.650 --> 00:16:33.590
+Les ajustements cosmétiques
+
+00:16:33.590 --> 00:16:34.550
+sont la raison la moins valable
+
+00:16:34.550 --> 00:16:35.050
+et la plus risquée
+
+00:16:35.050 --> 00:16:35.950
+d'adopter PowerApps.
+
+00:16:36.950 --> 00:16:37.930
+Si votre dossier commercial
+
+00:16:37.930 --> 00:16:38.470
+vit simplement
+
+00:16:38.470 --> 00:16:39.350
+à améliorer l'apparence,
+
+00:16:39.430 --> 00:16:40.130
+vous risquez de sacrifier
+
+00:16:40.130 --> 00:16:40.630
+la cohérence
+
+00:16:40.630 --> 00:16:41.410
+pour un gain durable
+
+00:16:41.410 --> 00:16:42.030
+très faible.
+
+00:16:43.210 --> 00:16:44.050
+Sans une raison solide
+
+00:16:44.050 --> 00:16:45.190
+basée sur la fonctionnalité,
+
+00:16:45.330 --> 00:16:46.150
+la perte de fiabilité
+
+00:16:46.150 --> 00:16:47.070
+peut totalement l'emporter
+
+00:16:47.070 --> 00:16:47.870
+sur les avantages
+
+00:16:47.870 --> 00:16:50.070
+et c'est là la vérité cachée.
+
+00:16:50.390 --> 00:16:51.530
+La fiabilité diminue généralement
+
+00:16:51.530 --> 00:16:52.130
+lorsque vous remplacez
+
+00:16:52.130 --> 00:16:52.770
+une solution native
+
+00:16:52.770 --> 00:16:53.430
+simplement parce que
+
+00:16:53.430 --> 00:16:54.290
+PowerApps est disponible
+
+00:16:54.290 --> 00:16:55.370
+et non parce qu'il est adapté.
+
+00:16:56.570 --> 00:16:57.490
+Vous échangez un formulaire
+
+00:16:57.490 --> 00:16:57.910
+qui fonctionne
+
+00:16:57.910 --> 00:16:58.550
+contre un formulaire
+
+00:16:58.550 --> 00:16:59.030
+qui nécessite
+
+00:16:59.030 --> 00:16:59.830
+une attention constante.
+
+00:17:00.710 --> 00:17:01.310
+Chaque nouveau champ
+
+00:17:01.310 --> 00:17:02.030
+risque de casser
+
+00:17:02.030 --> 00:17:02.910
+une formule.
+
+00:17:03.450 --> 00:17:03.870
+Chaque mise à jour
+
+00:17:03.870 --> 00:17:04.330
+de la plateforme
+
+00:17:04.330 --> 00:17:05.190
+nécessite de nouveaux tests.
+
+00:17:05.490 --> 00:17:06.150
+Le coût n'est pas initial
+
+00:17:06.150 --> 00:17:06.490
+et elle lui réside
+
+00:17:06.490 --> 00:17:07.290
+dans la maintenance à long terme
+
+00:17:07.290 --> 00:17:08.310
+et la frustration des utilisateurs.
+
+00:17:09.190 --> 00:17:09.710
+La clé n'est pas
+
+00:17:09.710 --> 00:17:10.610
+d'éviter PowerApps
+
+00:17:10.610 --> 00:17:11.810
+mais de rester intentionnel.
+
+00:17:12.610 --> 00:17:13.030
+Demandez-vous
+
+00:17:13.030 --> 00:17:13.870
+si la personnalisation
+
+00:17:13.870 --> 00:17:14.490
+apporte une valeur
+
+00:17:14.490 --> 00:17:15.030
+que SharePoint
+
+00:17:15.030 --> 00:17:16.290
+ne peut fournir autrement.
+
+00:17:17.050 --> 00:17:17.450
+Si c'est le cas,
+
+00:17:17.530 --> 00:17:18.550
+la complexité supplémentaire
+
+00:17:18.550 --> 00:17:19.310
+mérite d'être planifiée.
+
+00:17:19.630 --> 00:17:20.790
+Sinon, gardez le formulaire natif.
+
+00:17:21.230 --> 00:17:22.230
+Une solution assez bonne
+
+00:17:22.230 --> 00:17:22.570
+et stable
+
+00:17:22.570 --> 00:17:23.390
+surpasse presque toujours
+
+00:17:23.390 --> 00:17:24.290
+une solution ingénieuse
+
+00:17:24.290 --> 00:17:24.970
+qui s'effondre sous
+
+00:17:24.970 --> 00:17:25.890
+une utilisation quotidienne.
+
+00:17:26.730 --> 00:17:27.370
+La vraie décision
+
+00:17:27.370 --> 00:17:28.090
+n'est donc pas simplement
+
+00:17:28.090 --> 00:17:29.290
+SharePoint contre PowerApps
+
+00:17:29.290 --> 00:17:29.950
+mais de savoir
+
+00:17:29.950 --> 00:17:31.370
+quand rester sur une fiabilité basique
+
+00:17:31.370 --> 00:17:32.050
+et quand accepter
+
+00:17:32.050 --> 00:17:33.150
+des risques du sur-mesure.
+
+00:17:33.970 --> 00:17:34.850
+Car une fois que vous choisissez
+
+00:17:34.850 --> 00:17:35.350
+le sur-mesure,
+
+00:17:35.450 --> 00:17:36.050
+vous relevez des défis
+
+00:17:36.050 --> 00:17:36.790
+impossibles à ignorer
+
+00:17:36.790 --> 00:17:37.790
+et le succès dépend
+
+00:17:37.790 --> 00:17:38.630
+de votre anticipation.
+
+00:17:39.650 --> 00:17:40.430
+Cela nous mène directement
+
+00:17:40.430 --> 00:17:41.130
+à une question plus large.
+
+00:17:41.710 --> 00:17:42.190
+Si vous décidez
+
+00:17:42.190 --> 00:17:43.150
+d'utiliser PowerApps,
+
+00:17:43.710 --> 00:17:44.250
+quelles stratégies
+
+00:17:44.250 --> 00:17:44.770
+peuvent empêcher
+
+00:17:44.770 --> 00:17:45.370
+votre formulaire
+
+00:17:45.370 --> 00:17:46.010
+de devenir fragile
+
+00:17:46.010 --> 00:17:47.690
+avec le temps ?
+
+00:17:47.690 --> 00:17:48.430
+Stratégie pratique
+
+00:17:48.430 --> 00:17:49.130
+pour des formulaires
+
+00:17:49.130 --> 00:17:49.930
+PowerApps durables.
+
+00:17:50.410 --> 00:17:51.070
+Alors si les formulaires
+
+00:17:51.070 --> 00:17:51.830
+PowerApps sont fragiles,
+
+00:17:51.910 --> 00:17:52.490
+que faut-il vraiment
+
+00:17:52.490 --> 00:17:53.810
+pour en construire un qui dure ?
+
+00:17:53.810 --> 00:17:54.690
+C'est la partie
+
+00:17:54.690 --> 00:17:55.430
+que beaucoup de gens ignorent.
+
+00:17:55.910 --> 00:17:56.530
+Ils passent directement
+
+00:17:56.530 --> 00:17:57.050
+de la conception
+
+00:17:57.050 --> 00:17:57.590
+au déploiement
+
+00:17:57.590 --> 00:17:58.650
+en pensant que quelques corrections
+
+00:17:58.650 --> 00:17:59.250
+de bugs suffiront
+
+00:17:59.250 --> 00:18:00.150
+à stabiliser le formulaire.
+
+00:18:01.190 --> 00:18:02.530
+La réalité est que la stabilité
+
+00:18:02.530 --> 00:18:03.090
+ne consiste pas
+
+00:18:03.090 --> 00:18:03.890
+à colmater les fissures
+
+00:18:03.890 --> 00:18:05.070
+mais à façonner les fondations
+
+00:18:05.070 --> 00:18:06.110
+avant même que les fissures
+
+00:18:06.110 --> 00:18:07.290
+n'apparaissent.
+
+00:18:08.150 --> 00:18:08.650
+J'ai appris cela
+
+00:18:08.650 --> 00:18:09.190
+mais dépend avec
+
+00:18:09.190 --> 00:18:09.930
+un formulaire de demande
+
+00:18:09.930 --> 00:18:10.910
+qui ralentissait sans cesse
+
+00:18:10.910 --> 00:18:11.930
+malgré tous mes ajustements.
+
+00:18:12.910 --> 00:18:13.730
+La version qui a finalement
+
+00:18:13.730 --> 00:18:14.210
+tenu le coup
+
+00:18:14.210 --> 00:18:14.830
+était celle construite
+
+00:18:14.830 --> 00:18:15.790
+avec discipline dès le départ
+
+00:18:15.790 --> 00:18:16.810
+plutôt qu'avec des solutions
+
+00:18:16.810 --> 00:18:17.650
+astucieuses à la fin.
+
+00:18:18.430 --> 00:18:19.230
+La première stratégie
+
+00:18:19.230 --> 00:18:20.270
+consiste à alléger la logique.
+
+00:18:20.930 --> 00:18:21.630
+Chaque formule ajoutée
+
+00:18:21.630 --> 00:18:22.150
+dans PowerApp
+
+00:18:22.150 --> 00:18:22.730
+semble anodine,
+
+00:18:22.870 --> 00:18:23.170
+isolément,
+
+00:18:23.290 --> 00:18:24.150
+mais il s'agit d'un processus
+
+00:18:24.150 --> 00:18:24.650
+supplémentaire
+
+00:18:24.650 --> 00:18:25.590
+s'exécutant en temps réel
+
+00:18:25.590 --> 00:18:26.810
+sur l'appareil de l'utilisateur.
+
+00:18:27.890 --> 00:18:28.490
+Accumulez-en trop
+
+00:18:28.490 --> 00:18:29.150
+et votre formulaire
+
+00:18:29.150 --> 00:18:29.670
+deviendra lent.
+
+00:18:30.390 --> 00:18:31.170
+Déléguer certaines tâches
+
+00:18:31.170 --> 00:18:31.770
+peut faire la différence
+
+00:18:31.770 --> 00:18:32.670
+entre une solution durable
+
+00:18:32.670 --> 00:18:33.630
+et une qui s'effondre.
+
+00:18:34.410 --> 00:18:35.070
+Power Automate
+
+00:18:35.070 --> 00:18:35.690
+est plus adapté
+
+00:18:35.690 --> 00:18:36.550
+aux opérations lourdes
+
+00:18:36.550 --> 00:18:37.270
+comme l'envoi d'email,
+
+00:18:37.450 --> 00:18:38.430
+la création d'éléments liés
+
+00:18:38.430 --> 00:18:40.010
+ou le lancement de workflow.
+
+00:18:40.670 --> 00:18:41.410
+Le système peut gérer
+
+00:18:41.410 --> 00:18:42.290
+ses tâches en arrière-plan
+
+00:18:42.290 --> 00:18:43.210
+laissant votre formulaire
+
+00:18:43.210 --> 00:18:44.170
+PowerApp se concentrer
+
+00:18:44.170 --> 00:18:45.310
+sur la saisie et la présentation.
+
+00:18:46.010 --> 00:18:46.390
+Il en va de même
+
+00:18:46.390 --> 00:18:47.090
+pour SharePoint lui-même.
+
+00:18:47.970 --> 00:18:48.730
+Si un champ doit toujours
+
+00:18:48.730 --> 00:18:49.750
+contenir un email valide,
+
+00:18:49.930 --> 00:18:50.430
+laissez SharePoint
+
+00:18:50.430 --> 00:18:51.650
+imposer ce type de colonne.
+
+00:18:51.650 --> 00:18:53.290
+Évitez de dupliquer
+
+00:18:53.290 --> 00:18:54.050
+les règles dans PowerApp
+
+00:18:54.050 --> 00:18:54.770
+sauf si vous avez besoin
+
+00:18:54.770 --> 00:18:55.750
+d'un retour visuel immédiat.
+
+00:18:56.510 --> 00:18:56.830
+Deuxièmement,
+
+00:18:56.910 --> 00:18:57.670
+ne testez pas uniquement
+
+00:18:57.670 --> 00:18:58.670
+avec les 5 enregistrements
+
+00:18:58.670 --> 00:18:59.350
+ajoutés pour le développement.
+
+00:19:00.110 --> 00:19:00.890
+Établissez votre colonne test
+
+00:19:00.890 --> 00:19:01.250
+avec des données
+
+00:19:01.250 --> 00:19:01.910
+à l'échelle de la production.
+
+00:19:02.570 --> 00:19:03.070
+Si vous attendez
+
+00:19:03.070 --> 00:19:03.630
+des milliers de lignes
+
+00:19:03.630 --> 00:19:04.550
+dans la liste sous-jacente,
+
+00:19:04.730 --> 00:19:05.450
+chargez-en des milliers
+
+00:19:05.450 --> 00:19:06.090
+lors des tests.
+
+00:19:07.170 --> 00:19:08.010
+Des formulaires réactifs
+
+00:19:08.010 --> 00:19:08.730
+en prévisualisation
+
+00:19:08.730 --> 00:19:09.870
+peuvent se comporter différemment
+
+00:19:09.870 --> 00:19:10.530
+lorsqu'ils extraient
+
+00:19:10.530 --> 00:19:11.310
+des données d'une liste
+
+00:19:11.310 --> 00:19:12.090
+contenant des mois de requête
+
+00:19:12.090 --> 00:19:12.750
+ou des pièces jointes
+
+00:19:12.750 --> 00:19:13.330
+volumineuses.
+
+00:19:14.410 --> 00:19:15.190
+La baisse de performance
+
+00:19:15.190 --> 00:19:16.370
+ne se voit qu'à grande échelle.
+
+00:19:21.650 --> 00:19:23.690
+Cela semble fastidieux,
+
+00:19:23.910 --> 00:19:24.630
+mais cela révèle souvent
+
+00:19:24.630 --> 00:19:25.430
+les goulots d'étranglement
+
+00:19:25.430 --> 00:19:25.790
+plus tôt,
+
+00:19:25.870 --> 00:19:26.750
+vous permettant de simplifier
+
+00:19:26.750 --> 00:19:27.190
+les calculs
+
+00:19:27.190 --> 00:19:27.850
+ou de réduire le nombre
+
+00:19:27.850 --> 00:19:28.970
+de contrôles sur un écran.
+
+00:19:29.690 --> 00:19:30.270
+Une troisième mesure
+
+00:19:30.270 --> 00:19:31.250
+de protection multicouches.
+
+00:19:32.670 --> 00:19:33.670
+PowerApps doit gérer
+
+00:19:33.670 --> 00:19:34.490
+le côté convivial
+
+00:19:34.490 --> 00:19:35.070
+de la validation
+
+00:19:35.070 --> 00:19:37.030
+en guidant les utilisateurs,
+
+00:19:37.270 --> 00:19:38.370
+mais les restrictions
+
+00:19:38.370 --> 00:19:39.310
+propres à SharePoint
+
+00:19:39.310 --> 00:19:40.550
+doivent servir de guerre de fou.
+
+00:19:41.670 --> 00:19:42.550
+Voyez cela comme deux portes
+
+00:19:42.550 --> 00:19:43.030
+qui doivent débrouiller
+
+00:19:43.030 --> 00:19:43.410
+d'une seule.
+
+00:19:44.630 --> 00:19:45.850
+Si la validation de PowerApps
+
+00:19:45.850 --> 00:19:46.470
+échoue à détecter
+
+00:19:46.470 --> 00:19:47.530
+une mauvaise saisie SharePoint
+
+00:19:47.530 --> 00:19:48.430
+garantit l'intégrité
+
+00:19:48.430 --> 00:19:49.170
+avant l'enregistrement,
+
+00:19:50.090 --> 00:19:51.050
+cette approche multicouche
+
+00:19:51.050 --> 00:19:52.150
+évite le décalage frustrant
+
+00:19:52.150 --> 00:19:53.490
+où PowerApps valide une entrée,
+
+00:19:53.710 --> 00:19:54.470
+alors que SharePoint
+
+00:19:54.470 --> 00:19:55.770
+la rejette silencieusement.
+
+00:19:56.550 --> 00:19:57.250
+Cela assure également
+
+00:19:57.250 --> 00:19:58.290
+la cohérence des rapports,
+
+00:19:58.410 --> 00:19:59.550
+car la qualité de vos données
+
+00:19:59.550 --> 00:20:00.570
+ne dépend pas uniquement
+
+00:20:00.570 --> 00:20:02.270
+de la saisie utilisateur prévue.
+
+00:20:03.410 --> 00:20:03.810
+Quatrièmement,
+
+00:20:03.910 --> 00:20:04.590
+documentez vos formules
+
+00:20:04.590 --> 00:20:05.050
+au fur et à mesure.
+
+00:20:05.530 --> 00:20:06.410
+Cela semble ennuyeux,
+
+00:20:06.470 --> 00:20:07.270
+mais votre futur moi,
+
+00:20:07.410 --> 00:20:07.710
+ou pire,
+
+00:20:07.770 --> 00:20:08.490
+le collègue qui héritera
+
+00:20:08.490 --> 00:20:09.050
+du formulaire,
+
+00:20:09.310 --> 00:20:09.810
+perdra des heures
+
+00:20:09.810 --> 00:20:10.390
+à essayer de comprendre
+
+00:20:10.390 --> 00:20:10.910
+une expression
+
+00:20:10.910 --> 00:20:11.750
+qui semblait évidente
+
+00:20:11.750 --> 00:20:12.230
+sur le moment.
+
+00:20:13.590 --> 00:20:14.230
+Même une courte ligne
+
+00:20:14.230 --> 00:20:14.810
+d'explications
+
+00:20:14.810 --> 00:20:15.770
+au-dessus de formules complexes
+
+00:20:15.770 --> 00:20:16.470
+peut éviter beaucoup
+
+00:20:16.470 --> 00:20:17.430
+de confusion plus tard,
+
+00:20:17.710 --> 00:20:18.090
+plus tard.
+
+00:20:19.130 --> 00:20:19.690
+Commenter le code
+
+00:20:19.690 --> 00:20:20.310
+n'est pas glamour,
+
+00:20:20.370 --> 00:20:21.210
+mais dans PowerApps
+
+00:20:21.210 --> 00:20:22.150
+c'est crucial car les formules
+
+00:20:22.150 --> 00:20:22.810
+se mélangent souvent
+
+00:20:22.810 --> 00:20:23.810
+au sein des propriétés.
+
+00:20:24.770 --> 00:20:25.110
+Sans note,
+
+00:20:25.230 --> 00:20:25.830
+vous oublierez pourquoi
+
+00:20:25.830 --> 00:20:26.530
+vous avez écrit une règle
+
+00:20:26.530 --> 00:20:27.210
+d'une certaine manière
+
+00:20:27.210 --> 00:20:28.230
+et hésiterez à la modifier,
+
+00:20:28.510 --> 00:20:29.150
+même si nécessaire.
+
+00:20:29.890 --> 00:20:30.670
+La documentation permet
+
+00:20:30.670 --> 00:20:31.430
+de maintenir votre formulaire
+
+00:20:31.430 --> 00:20:31.730
+dans le temps.
+
+00:20:32.130 --> 00:20:33.110
+Enfin, résistez à la tentation
+
+00:20:33.110 --> 00:20:34.550
+d'un déploiement massif immédiat
+
+00:20:34.550 --> 00:20:36.110
+déployé par phase gérable.
+
+00:20:36.550 --> 00:20:37.590
+Proposez d'abord le formulaire
+
+00:20:37.590 --> 00:20:38.210
+à un groupe pilote,
+
+00:20:38.350 --> 00:20:38.990
+laissez-les l'utiliser
+
+00:20:38.990 --> 00:20:39.710
+en conditions réelles
+
+00:20:39.710 --> 00:20:40.650
+et soyez très attentifs
+
+00:20:40.650 --> 00:20:41.130
+à leur retour.
+
+00:20:41.970 --> 00:20:43.230
+Vous découvrirez des cas limites,
+
+00:20:43.530 --> 00:20:44.370
+des problèmes de performance
+
+00:20:44.370 --> 00:20:45.610
+et le comportement réel
+
+00:20:45.610 --> 00:20:46.430
+des utilisateurs
+
+00:20:46.430 --> 00:20:47.530
+avant que toute l'organisation
+
+00:20:47.530 --> 00:20:48.070
+n'en dépende.
+
+00:20:49.670 --> 00:20:50.410
+Procédez par étapes
+
+00:20:50.410 --> 00:20:51.210
+renforce la confiance
+
+00:20:51.210 --> 00:20:52.250
+et vous laisse le temps
+
+00:20:52.250 --> 00:20:53.110
+d'ajuster la structure
+
+00:20:53.110 --> 00:20:53.710
+sans la pression
+
+00:20:53.710 --> 00:20:54.910
+d'une fiabilité exigée
+
+00:20:54.910 --> 00:20:55.970
+dès le premier jour.
+
+00:20:57.010 --> 00:20:57.850
+Ce qui lit toutes ces étapes
+
+00:20:57.850 --> 00:20:58.650
+c'est la discipline.
+
+00:20:59.650 --> 00:21:00.050
+Il est impossible
+
+00:21:00.050 --> 00:21:00.710
+d'échapper totalement
+
+00:21:00.710 --> 00:21:01.250
+à la complexité
+
+00:21:01.250 --> 00:21:01.710
+une fois qu'on ouvre
+
+00:21:01.710 --> 00:21:02.090
+un formulaire
+
+00:21:02.090 --> 00:21:02.930
+Sherpa 1 dans PowerApps.

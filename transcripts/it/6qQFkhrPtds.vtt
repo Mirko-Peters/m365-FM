@@ -1,0 +1,1672 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.240
+Shadow IT non è morto, ha imparato ad automatizzare.
+
+00:00:02.440 --> 00:00:06.320
+I vostri utili agenti spostano silenziosamente dati come stagisti con le chiavi del cavo.
+
+00:00:06.440 --> 00:00:08.540
+Pensate che Purview entra a Copilot Studio e vi proteggano?
+
+00:00:09.460 --> 00:00:10.860
+Tanto quanto il cartone bagnato sotto la pia.
+
+00:00:11.300 --> 00:00:12.040
+Analizzo la questione.
+
+00:00:12.600 --> 00:00:15.580
+Agenti come vere vittorie di produttività e agenti come buchinieri per la governance.
+
+00:00:15.820 --> 00:00:19.800
+Poi vi fornirò un'architettura di riferimento, una chiara rubrica di valutazione del rischio da implementare questo mese.
+
+00:00:20.260 --> 00:00:23.600
+Restate fino alla fine per la policy che dimezza il raggio d'azione degli agenti.
+
+00:00:24.520 --> 00:00:26.880
+Definiamo il caos prima di discutere su come sopravvivergli.
+
+00:00:26.880 --> 00:00:31.200
+Il mito, come gli agenti, diventano lo Shadow IT 2.0.
+
+00:00:31.700 --> 00:00:33.440
+Ecco il mito. Velocità senza strutture.
+
+00:00:33.820 --> 00:00:35.380
+Backlog IT che si estendono per trimestri.
+
+00:00:35.600 --> 00:00:38.940
+L'azienda vuole risultati entro venerdì, così le persone creano bot che comunicano con tutti.
+
+00:00:39.020 --> 00:00:40.800
+Non sono malintenzionati. Sono solo stagli.
+
+00:00:41.020 --> 00:00:47.380
+Così collegano bot di Copilot Studio a flussi di Power Automate, distribuiscono generosi permessi graffi e si connettono a 5 origini dati con 3 connettori.
+
+00:00:47.480 --> 00:00:48.160
+E tanta speranza.
+
+00:00:48.500 --> 00:00:49.640
+Ora con cosa abbiamo a che fare davvero?
+
+00:00:49.940 --> 00:00:54.860
+Bot di Copilot Studio che eseguono azioni, scansionano SharePoint, interrogano Dataverse e chiamano API esterne.
+
+00:00:54.860 --> 00:01:01.040
+Flussi di Power Automate che impersonano utenti o eseguono service principal con diritti elevati, temporanei, mai revocati.
+
+00:01:01.860 --> 00:01:05.780
+Permessi delegati di graffi impostati su Read All perché la versione a privilegi minimi richiedeva un'ora in più.
+
+00:01:06.700 --> 00:01:08.780
+Quell'ora viene tagliata e il vostro tenant diventa un buffe.
+
+00:01:09.060 --> 00:01:10.340
+Vettori non gestiti sono ovunque.
+
+00:01:10.720 --> 00:01:12.980
+Strumenti basati su browser in esecuzione su Edge e Chrome.
+
+00:01:13.640 --> 00:01:16.480
+Bridge e MSP che importano agenti di terze parti da Gira o GitHub.
+
+00:01:16.480 --> 00:01:21.540
+Agenti SAS di cui non avete mai sentito parlare perché vivono nelle schede del browser e nella vostra lista di controllo legacy.
+
+00:01:22.000 --> 00:01:23.360
+Controllo tradizionale delle app cerca file.
+
+00:01:23.740 --> 00:01:27.440
+Questi non si installano e sfiltrano dati tramite campi modulo finestre di caricamento.
+
+00:01:27.620 --> 00:01:29.500
+I percorsi di sfiltrazione dei dati sono credibilmente.
+
+00:01:29.880 --> 00:01:31.180
+Copia e colla sull'LLM web.
+
+00:01:31.680 --> 00:01:35.840
+Caricamento file per riassumere documenti insieme a previsioni interne e dati HR allegati.
+
+00:01:36.660 --> 00:01:40.720
+Peggio ancora, gli agenti riassumono shadow data condivisi anni fa in SharePoint e OneDrive.
+
+00:01:40.720 --> 00:01:43.820
+Quelle cartelle condivise con chiunque abbia il link mai ripulite.
+
+00:01:44.200 --> 00:01:46.800
+Copilot è bravissimo a trovare le cose che avete dimenticato di aver esposto.
+
+00:01:47.200 --> 00:01:48.260
+La superficie di attacco mette a spesso.
+
+00:01:48.500 --> 00:01:52.560
+Gli agenti operano con ampi ambiti graph, senza sponsor umano, senza revisioni di accesso, senza ciclo di vita.
+
+00:01:52.740 --> 00:01:56.520
+Non c'è traccia di audit per metà dei passaggi perché i connettori di terze parti mascherano la destinazione.
+
+00:01:57.000 --> 00:02:01.620
+Quando qualcosa va storto inseguita i briciole su cinque sistemi che registrano i log diversamente o per nulla.
+
+00:02:02.280 --> 00:02:02.920
+Li sentite già.
+
+00:02:03.300 --> 00:02:09.480
+Lo shadow IT divora il 30-40% della spesa nelle grandi imprese e le violazioni che coinvolgono shadow data costano di più e richiedono più tempo per essere contenuti.
+
+00:02:09.480 --> 00:02:10.120
+Non è a teoria.
+
+00:02:10.120 --> 00:02:13.540
+Quello che succede quando scoprite il raggio d'azione ed esplosione ed esplosione solo dopo Gavin.
+
+00:02:13.820 --> 00:02:17.860
+Perdi tempo a mappare chi avesse accesso, chi l'abbia concesso e quale agente abbia prelevato cosa e dove.
+
+00:02:18.380 --> 00:02:19.120
+La posta in gioco è semplice.
+
+00:02:19.580 --> 00:02:23.900
+Senza identità, DLP e privilegi minimi, gli agenti diventano tunnel di contrabbando autonomi.
+
+00:02:24.320 --> 00:02:25.400
+Pensi, ma interno?
+
+00:02:26.120 --> 00:02:30.960
+Invece non lo è, non quando una sessione browser invia dati etichettati a un endpoint pubblico senza alcun controllo intermedio.
+
+00:02:31.420 --> 00:02:38.140
+E sì, puoi bloccare l'incolla con preview DLP su endpoint e browser, ma solo se lo attivi davvero e delimiti le policy ai domini AI.
+
+00:02:38.300 --> 00:02:39.540
+La maggior parte di voi non la fai.
+
+00:02:39.540 --> 00:02:40.600
+Facciamo un esempio concreto.
+
+00:02:40.860 --> 00:02:43.140
+Hai un flusso Power Automate creato da un project manager.
+
+00:02:43.680 --> 00:02:47.380
+Usa graph delegato per leggere tutti i calendari utente solo per trovare finestre di riunione.
+
+00:02:47.940 --> 00:02:51.960
+Poi qualcuno aggiunge un passaggio per esportare i risultati a un bot di pianificazione di terze parti via webhook.
+
+00:02:52.280 --> 00:02:53.220
+Logging lato a terze parti?
+
+00:02:53.580 --> 00:02:54.300
+Nessuno che tu possa vedere.
+
+00:02:54.800 --> 00:02:55.480
+Sponsori il flusso.
+
+00:02:55.760 --> 00:02:57.040
+Quel manager se ne ha dato il trimestre scuro.
+
+00:02:57.300 --> 00:02:59.380
+Il flusso continua a girare, a leggere, a pubblicare.
+
+00:03:00.020 --> 00:03:02.720
+Congratulazioni, hai creato un account di servizio fantasma che non dorme mai.
+
+00:03:03.200 --> 00:03:04.300
+Ecco dove molti sbagliano.
+
+00:03:04.300 --> 00:03:07.840
+Pensano che l'accesso condizionale entra per gli umani e qui valga una copertura per gli agenti.
+
+00:03:08.320 --> 00:03:09.960
+A meno che l'agente non abbia la propria identità.
+
+00:03:10.560 --> 00:03:16.040
+Se il bot agisce come un umano, le tue policy penseranno che sia l'inda dell'amministrazione alle due di notte da un dispositivo non gestito in un altro paese.
+
+00:03:16.380 --> 00:03:17.400
+Linda sta sicuramente dormendo.
+
+00:03:17.760 --> 00:03:18.260
+L'agente no.
+
+00:03:18.260 --> 00:03:20.740
+Una volta capito questo, tutto il resto fila.
+
+00:03:20.980 --> 00:03:25.340
+Dai ogni agente e il suo ID agente entra, altrimenti non potrai isolarlo, monitorarlo o bloccarlo velocemente.
+
+00:03:26.200 --> 00:03:30.860
+Etichetta i tuoi dati in SharePoint e OneDrive così per view DLP può riconoscerle negli appunti e nel browser.
+
+00:03:31.580 --> 00:03:35.940
+Usa RoliApp invece di graph delegato e limita l'accesso SharePoint a siti specifici, non al tenant.
+
+00:03:36.580 --> 00:03:37.820
+Se non ricordi altro, ricorda.
+
+00:03:38.020 --> 00:03:39.660
+Identità, etichette, privilegi minimi.
+
+00:03:40.320 --> 00:03:42.120
+Senza questi fai solo teatro della sicurezza.
+
+00:03:42.800 --> 00:03:44.620
+La svolta di cui nessuno parla è la visibilità in runtime.
+
+00:03:44.620 --> 00:03:49.220
+Se non vedi dove l'agente chiama URL, API o server MCP, non puoi fermare la sfiltrazione.
+
+00:03:49.660 --> 00:03:50.920
+Puoi solo scrivere un'analisi post-more.
+
+00:03:51.320 --> 00:03:52.980
+Global Secure Access ti offre quella visibilità.
+
+00:03:53.400 --> 00:03:55.640
+Inizia solo con il logging così non rompi i giocattoli fragili.
+
+00:03:56.400 --> 00:03:58.340
+Poi passa le liste di consenso quando vedi i pattern.
+
+00:03:59.120 --> 00:04:01.340
+Ed ecco, ora hai una mappa invece di una voce di corridoio.
+
+00:04:02.280 --> 00:04:04.360
+Il caso d'uso degli agenti e dove brillano davvero.
+
+00:04:04.660 --> 00:04:05.560
+Bene, il momento del sole.
+
+00:04:05.980 --> 00:04:07.960
+Gli agenti spazzano via la fatica se prepari bene il terreno.
+
+00:04:08.440 --> 00:04:11.180
+Interrogano e riassumono e agiscono senza che un umano debba supervisionare clip.
+
+00:04:11.180 --> 00:04:16.360
+Le operazioni chiudono ticket, le amministrazioni bilanci, le HR gestiscono l'onboarding, il supporto filtra il rumore.
+
+00:04:17.300 --> 00:04:22.360
+Recuperi ore non per magia, ma perché il lavoro ripetitivo di raccordo viene gestito da qualcosa che non va mai a pranzo.
+
+00:04:22.760 --> 00:04:24.400
+Ciò che sfugge alla maggior parte delle persone è l'ambito.
+
+00:04:24.680 --> 00:04:25.500
+Il ristretto bate l'amo.
+
+00:04:25.760 --> 00:04:27.020
+L'evento batte il vagabondaggio.
+
+00:04:27.360 --> 00:04:32.080
+Quando un agente si attiva con un trigger chiaro, tocca dati etichettati a solo i diritti necessari.
+
+00:04:32.840 --> 00:04:34.620
+È veloce e noioso nel senso migliore del...
+
+00:04:34.620 --> 00:04:36.280
+È lì che lo vuoi, prevedibilmente noioso.
+
+00:04:36.700 --> 00:04:38.120
+Work IQ e il grounding aiutano in questo.
+
+00:04:38.120 --> 00:04:42.900
+Mantieni le risposte dentro il perimetro dei permessi dell'utente ancorate ai dati del tenant, non al web aperto.
+
+00:04:43.320 --> 00:04:45.040
+Ora non stai inviando prompt a modelli casuali.
+
+00:04:45.400 --> 00:04:48.140
+Ti stai chiedendosi dentro ciò che mi ha permesso vedere qual è la prossima azione corretta.
+
+00:04:48.380 --> 00:04:51.680
+È più sicuro e più veloce perché non stai trascinando l'intero internet nella stanza.
+
+00:04:52.280 --> 00:04:53.640
+L'ID dell'agente è l'eroe silenzioso.
+
+00:04:54.140 --> 00:04:58.400
+Dai a ogni agente un'identità univoca che ti garantisce accesso condizionato, rilevamento dei rischi e un kill switch.
+
+00:04:58.820 --> 00:04:59.920
+Colleghi l'identità a un modello.
+
+00:05:00.480 --> 00:05:01.920
+Stessa classe di agente, stesse linee guida.
+
+00:05:01.920 --> 00:05:07.200
+Se l'agente di follow-up commerciali inizia a comportarsi come un procione in un data center, la protezione dell'identità lo segnano.
+
+00:05:07.480 --> 00:05:10.060
+Mettere in quarantena quella singola identità senza fermare l'intero team.
+
+00:05:10.800 --> 00:05:11.720
+Preview è il tuo buttafuori.
+
+00:05:11.720 --> 00:05:20.980
+L'etichetta e il DLP swap M365, Endpoint e Browser fanno sì che i dati sensibili restino protetti anche quando qualcuno prova a incollarli in una chat solo per controllare la formulazione.
+
+00:05:21.240 --> 00:05:23.380
+E i messaggi di coaching DLP fanno molto più che bloccare.
+
+00:05:23.660 --> 00:05:25.900
+Insegnano all'utente perché è bloccato e come fare correttamente.
+
+00:05:26.300 --> 00:05:28.020
+Meno gioco del martello, più costruzioni di abitudini.
+
+00:05:28.240 --> 00:05:30.120
+Power Automate non è nemico quando è governato.
+
+00:05:30.660 --> 00:05:33.500
+Usa approvazioni DLP dell'ambiente e connettori a conoscenza della soluzione.
+
+00:05:34.160 --> 00:05:36.740
+Significa che Dev e Prod sono stanze separate con chiavi separate.
+
+00:05:36.740 --> 00:05:42.020
+Lo stesso flusso promosso come soluzione eredita le giuste policy invece di accumulare diritti silenziosamente.
+
+00:05:42.500 --> 00:05:45.100
+Eh, guarda ti mostro esattamente come questo funziona nella pratica.
+
+00:05:45.340 --> 00:05:50.580
+Pregni un agente per la chiusura finanziaria che si attiva quando arriva una fattura etichettata in una fattura etichettata in una libreria SharePoint designata.
+
+00:05:51.120 --> 00:05:51.640
+Cosa serve?
+
+00:05:51.920 --> 00:05:54.840
+Lettura su quel sito, scrittura su un elenco di revisione, posto su un canale Teams.
+
+00:05:55.500 --> 00:05:58.300
+Identità, ID agente, entra sotto il modello di acquisizione finanziaria.
+
+00:05:59.300 --> 00:06:02.360
+Accesso, ruoli dell'app su graph delegato, solo permessi con ambito di sito.
+
+00:06:03.160 --> 00:06:03.680
+Linee guida.
+
+00:06:03.680 --> 00:06:06.800
+Purview, blocchi e caricamenti di dati etichettati verso domini AI.
+
+00:06:07.580 --> 00:06:09.220
+Gli endpoint impongono blocchi di ritmo.
+
+00:06:10.100 --> 00:06:10.320
+Rete.
+
+00:06:10.500 --> 00:06:14.740
+Global Secure Access in modalità logging per una settimana poi consenti solo le poche API che chiamare al mente.
+
+00:06:15.420 --> 00:06:16.480
+Errori comuni da evitare.
+
+00:06:17.060 --> 00:06:20.160
+Lasciare che l'agente usi l'ambito delegato di un umano solo per testare.
+
+00:06:21.580 --> 00:06:23.100
+Saltare le etichette perché le metteremo dopo.
+
+00:06:23.180 --> 00:06:26.260
+Collegare un connettore a un endpoint di terze parti opaco che non puoi controllare.
+
+00:06:26.260 --> 00:06:30.040
+Non lasciare che gli agenti dev vivano per sempre in prod.
+
+00:06:30.440 --> 00:06:33.040
+Promuovi la soluzione, ritira il prototipo o mantieni l'identità.
+
+00:06:33.520 --> 00:06:35.180
+Una vittoria rapida a distribuire questa settimana.
+
+00:06:35.300 --> 00:06:36.180
+Scegli una cosa di supporto.
+
+00:06:36.460 --> 00:06:39.760
+Crea un bot con Copilot Studio che attinga una knowledge base etichettata.
+
+00:06:40.200 --> 00:06:41.520
+Risponde entro i diritti dell'utente.
+
+00:06:42.000 --> 00:06:44.540
+E passi a un flusso Power Automate che registri ogni passaggio.
+
+00:06:44.540 --> 00:06:48.460
+Assegna ogni diagente, applica l'accesso condizionale ai dispositivi conformi
+
+00:06:48.460 --> 00:06:50.620
+e attiva il coaching DLP per i siti di IAA.
+
+00:06:51.200 --> 00:06:54.420
+Ridurrà i tempi di prima risposta e dormirà in meglio perché il raggio d'azione è misurato.
+
+00:06:55.420 --> 00:06:59.960
+In sintesi, gli agenti funzionano quando identità, classificazione dei dati e policy di runtime si muovono insieme.
+
+00:07:00.700 --> 00:07:04.900
+Facendolo smetteranno di sembrare shadow IT e inizieranno a comportarsi come personale junior affidabile
+
+00:07:04.900 --> 00:07:05.920
+solo che non si dimettono.
+
+00:07:06.320 --> 00:07:08.700
+Il caso contro gli agenti dove le cose si rompono nel mondo reale.
+
+00:07:09.160 --> 00:07:11.740
+Ora la tempesta, la dell'identità è il primo fallimento.
+
+00:07:11.740 --> 00:07:15.680
+Qualcuno testa un bot con le proprie credenziali, poi se ne va...
+
+00:07:15.680 --> 00:07:18.280
+Il bot mantiene quei diritti come un procione che accumula oggetti luccicanti.
+
+00:07:18.620 --> 00:07:22.840
+Nessun sponsor, nessuna revisione degli accessi, nessuna rotazione, nessun modo di provare chi ha approvato cosa.
+
+00:07:23.180 --> 00:07:26.000
+Non puoi mettere in quarantena il bot del calendario di Karen quando in persona Karen.
+
+00:07:26.360 --> 00:07:27.260
+E' solo disabilitare Karen.
+
+00:07:27.680 --> 00:07:29.100
+Questo blocca il lavoro, quindi nessuno lo fa.
+
+00:07:29.360 --> 00:07:30.360
+E fantasma continua a vagare.
+
+00:07:31.100 --> 00:07:32.600
+L'estensione dell'ambito è la prossima.
+
+00:07:32.600 --> 00:07:37.040
+Il graph delegato è più facile, quindi la gente concede mail, lettura di file, siti e utenti
+
+00:07:37.040 --> 00:07:38.680
+solo per un connettore si è lamentato una volta.
+
+00:07:38.680 --> 00:07:42.140
+Certo, è come lasciare la porta della sala server aperta con una sedia.
+
+00:07:42.480 --> 00:07:44.280
+I ruoli delle app con ambito di risorse richiedono riflessioni.
+
+00:07:44.620 --> 00:07:46.020
+Il delegato è un click e un'alzata di spalla.
+
+00:07:46.420 --> 00:07:46.980
+Il risultato?
+
+00:07:47.280 --> 00:07:51.200
+Agenti che possono setacciare SharePoint come un rumba con un piede di porco toccando siti di cui non avevano bisogno.
+
+00:07:51.400 --> 00:07:53.340
+I dati ombra trasformano errori lievi in disastri.
+
+00:07:53.880 --> 00:07:55.160
+Cartelle HRHR condivise.
+
+00:07:55.560 --> 00:07:58.580
+Eccessivamente archivi finanziari di una migrazione in cui i permessi non sono mai stati corretti.
+
+00:07:58.840 --> 00:08:02.340
+Copilot fa esattamente ciò che hai chiesto, mostrando utilmente i file rilevanti.
+
+00:08:02.340 --> 00:08:06.340
+Agente generale, riepiloghi che rivelano un contesto che nessuno pensava fosse esposto.
+
+00:08:06.600 --> 00:08:09.980
+Non vedi un download, quindi sfugge agli allarmi, ma i riepiloghi causano lo stesso danno.
+
+00:08:10.080 --> 00:08:11.100
+È una fuga di dati per inferenza.
+
+00:08:11.520 --> 00:08:13.000
+Le lacune DLP sono gli assassini di silenzio.
+
+00:08:13.140 --> 00:08:14.760
+Le etichette non sono applicate o sono incoerenti.
+
+00:08:15.140 --> 00:08:18.320
+Le policy DLP per endpoint browser non sono limitate ai domini di EA.
+
+00:08:18.600 --> 00:08:20.200
+Browser non gestiti bypassano tutto.
+
+00:08:20.520 --> 00:08:24.720
+Gli utenti copiano il testo nel prompt web, vengono bloccati in Edge, poi aprono Chrome personale e riprovano.
+
+00:08:24.720 --> 00:08:26.020
+La policy dice no.
+
+00:08:26.380 --> 00:08:27.140
+Le browser dice c'è.
+
+00:08:27.340 --> 00:08:31.340
+Se i tuoi controlli non incontrano le persone dove lavorano davvero, i tuoi controlli sono solo una messa in scena.
+
+00:08:31.660 --> 00:08:33.160
+I punti ciechi del monitoraggio completano no.
+
+00:08:33.460 --> 00:08:35.280
+I passaggi di terze parti mascherano la destinazione.
+
+00:08:35.560 --> 00:08:36.280
+È tutto ciò che ottieni.
+
+00:08:36.760 --> 00:08:37.440
+Nessuno ha il registro.
+
+00:08:37.800 --> 00:08:40.720
+Il bridge mcp in strada non è chiamato attraverso un server che non è incluso nella lista consente.
+
+00:08:40.920 --> 00:08:43.300
+Nessuna ispezione di rete, quindi sei cieco rispetto all'uscita dei dati.
+
+00:08:43.940 --> 00:08:46.460
+Ti ritrovi a correlare le attività di graph con i timestamp guest,
+
+00:08:46.620 --> 00:08:50.580
+sperando che il tuo CM abbia trovato una traccia non sovrascritta da log prolissi.
+
+00:08:51.580 --> 00:08:53.140
+Il caos del ciclo di vita unisce tutto.
+
+00:08:53.140 --> 00:08:56.180
+Gli agenti di sviluppo vengono copiati in produzione con diritti temporanei elevati.
+
+00:08:56.560 --> 00:08:59.160
+Temporaneo diventa fino a fine trimestre, che poi diventa per sempre.
+
+00:08:59.520 --> 00:09:02.380
+Nessun percorso di deprovisioning, nessun SLD proprietario, nessuna revisione degli accessi.
+
+00:09:02.580 --> 00:09:06.520
+Flussi zombie proseguono alle due del mattino, farlendo in silenzio finché un limite di velocità non scatta,
+
+00:09:06.600 --> 00:09:08.720
+il supporto viene allertato per un mistero non gradadoro.
+
+00:09:08.820 --> 00:09:09.220
+Risultato.
+
+00:09:09.600 --> 00:09:13.400
+Tempi di rilevamento e contenimento più lunghi, violazioni di conformità, costi doppi
+
+00:09:13.400 --> 00:09:15.720
+e una pulizia che sembra ricavolare un rack sotto tensione.
+
+00:09:15.980 --> 00:09:19.800
+BM e altri hanno dimostrato che le violazioni di dati ombra costano di più e durano più a lungo.
+
+00:09:20.080 --> 00:09:20.440
+Raseber.
+
+00:09:20.440 --> 00:09:23.680
+Non puoi riparare ciò che non vedi e non puoi vedere ciò che non hai mai registrato.
+
+00:09:23.880 --> 00:09:27.040
+Un errore comune che vedo ancora è credere che l'accesso condizionale dell'intero tenant
+
+00:09:27.040 --> 00:09:29.020
+protegga silenziosamente gli agenti che operano come uno.
+
+00:09:29.160 --> 00:09:30.460
+Non protegge ciò che non puoi identificare.
+
+00:09:31.000 --> 00:09:32.400
+Un altro, fidarsi delle impostazioni predi.
+
+00:09:32.800 --> 00:09:35.160
+Connettore Enterprise non significa privilegio minimo.
+
+00:09:35.280 --> 00:09:36.340
+Significa pronto all'uso.
+
+00:09:36.880 --> 00:09:38.500
+Pronto all'uso è anche come tutto scappa via.
+
+00:09:38.880 --> 00:09:40.000
+Quindi cosa riduce davvero il dolore?
+
+00:09:40.500 --> 00:09:42.640
+Dai a ogni agente un ID intragente e collegalo a un modello.
+
+00:09:42.740 --> 00:09:43.060
+Blueprint.
+
+00:09:43.700 --> 00:09:47.420
+Questo ti garantisce sponsor, kill switch, revisioni degli accessi e accesso condizionale per tipologia.
+
+00:09:48.040 --> 00:09:49.540
+Sostituisci i graph delegato con i ruoli A.
+
+00:09:49.540 --> 00:09:52.040
+Limita l'accesso a SharePoint a siti specifici.
+
+00:09:52.660 --> 00:09:56.200
+Attiva l'etichettatura automatica per vista così i dati non sono sensibili solo nella testa di qualcuno.
+
+00:09:56.600 --> 00:09:58.700
+Vengono etichettati a riposo e applicati durante l'esecuzione.
+
+00:09:59.080 --> 00:10:02.600
+Spingi la DLP su endpoint e browser con regole di incolla e caricamento per i domini AI.
+
+00:10:02.840 --> 00:10:06.540
+Avvia l'accesso globale sicuro in modalità audit, raccogli una settimana di chiamate URL e API
+
+00:10:06.540 --> 00:10:08.380
+e poi inserisci nella whitelist solo quelle rilevanti.
+
+00:10:08.680 --> 00:10:09.840
+Romperei meno cose e vedrai di più.
+
+00:10:10.380 --> 00:10:11.860
+Lascia che ancori tutto con un piccolo stress.
+
+00:10:12.160 --> 00:10:15.080
+Un agente di triage del supporto ha bisogno di accedere alla casella di post.
+
+00:10:15.080 --> 00:10:17.900
+La lettura delegata delle mail si trasforma in una scansione dell'intero tenant.
+
+00:10:17.900 --> 00:10:21.200
+Invece assegna il ruolo app di lettura mail per una casella condivisa
+
+00:10:21.200 --> 00:10:24.720
+limitata dall'accesso condizionale a dispositivi conformi e registra ogni chiamata gra.
+
+00:10:25.240 --> 00:10:28.660
+Abbinando una policy DLP che blocchi l'uscita di dati etichettati tramite i moduli web.
+
+00:10:29.240 --> 00:10:30.220
+Stesso risultato per il business.
+
+00:10:30.660 --> 00:10:31.800
+Ma sì c'è riduzione della ragionazione.
+
+00:10:32.340 --> 00:10:35.800
+Non perfetto, ma ora puoi dimostrare chi lo ha approvato cosa può toccare con chi comunica.
+
+00:10:36.340 --> 00:10:38.280
+Questa è la differenza tra un incidente e un aneddoto.
+
+00:10:39.360 --> 00:10:42.420
+Architettura di riferimento per agenti governati su Microsoft 365.
+
+00:10:42.740 --> 00:10:44.180
+L'architettura è lo scheletro.
+
+00:10:44.180 --> 00:10:48.040
+Aggiungeremo abbastanza ossa affinché tutto stia in piedi senza nastro adesivo.
+
+00:10:48.660 --> 00:10:49.300
+Prima l'identità.
+
+00:10:49.840 --> 00:10:51.380
+Ogni agente ottiene un ID intragente.
+
+00:10:51.820 --> 00:10:52.700
+Nessuna identità condivisa.
+
+00:10:53.020 --> 00:10:53.980
+Nessuna esecuzione come l'Inda.
+
+00:10:54.360 --> 00:10:55.880
+Crea un blueprint per ogni tipo di agente.
+
+00:10:56.520 --> 00:10:58.900
+Vote di intake, vote di triage, vote di chiusura finanziaria.
+
+00:10:59.440 --> 00:11:02.000
+Il blueprint definisce lo sponsor uguali applicativi richiesti,
+
+00:11:02.060 --> 00:11:04.160
+connettori consentiti, il profilo di rete e la frequenza di revisione.
+
+00:11:04.360 --> 00:11:06.800
+Se non ricordi altro, i blueprint ti garantiscono il controllo totale.
+
+00:11:06.800 --> 00:11:09.820
+Puoi mettere in quarantena una categoria senza inseguire singoli casi isolati.
+
+00:11:10.120 --> 00:11:11.120
+Gli sponsor non ha decorazione.
+
+00:11:11.120 --> 00:11:14.760
+Lo sponsor è responsabile dell'ambito delle revisioni degli accessi e del deprovisioning.
+
+00:11:15.060 --> 00:11:17.420
+Se lo sponsor se ne va, la policy del ciclo di vita disabita la vita.
+
+00:11:17.660 --> 00:11:18.760
+Senza sponsor, niente agente.
+
+00:11:19.080 --> 00:11:20.680
+Questa semplice regola elimina metà dei tuoi zombie.
+
+00:11:20.920 --> 00:11:22.300
+L'accesso condizionale è legato al blueprint.
+
+00:11:22.760 --> 00:11:23.920
+Richiede un runtime conforme.
+
+00:11:24.340 --> 00:11:25.540
+Limita tramite posizioni attendibili.
+
+00:11:25.900 --> 00:11:28.360
+Blocca gli accessi ad alto rischio e impone una frequenza di accesso.
+
+00:11:28.660 --> 00:11:30.800
+Per gli agenti headless usa identità gestite dove possibile.
+
+00:11:30.800 --> 00:11:33.120
+Per tutto ciò che richiede un token esterno ad Azure,
+
+00:11:33.300 --> 00:11:35.660
+usa credenziali federate con fiducia limitata.
+
+00:11:35.660 --> 00:11:39.100
+Se la protezione dell'identità segnala comportamenti rischiosi,
+
+00:11:39.200 --> 00:11:41.520
+metti in quarantena l'identità dell'agente e avvisa lo sponsor.
+
+00:11:42.240 --> 00:11:43.540
+Privilegio minimo non è negoziabile.
+
+00:11:43.920 --> 00:11:46.140
+Preferisci ruoli applicativi graph agli ambiti delegati.
+
+00:11:46.860 --> 00:11:50.480
+Se l'agente necessita di SharePoint, concedi permessi a livello di sito solo per siti specifici.
+
+00:11:51.020 --> 00:11:54.840
+Per Exchange, assegna l'accesso a cassette postali condivise o di risorse specifiche,
+
+00:11:54.980 --> 00:11:56.000
+non la lettura globale.
+
+00:11:56.300 --> 00:11:58.460
+Per Teams, limita esplicitamente i canali.
+
+00:11:59.200 --> 00:12:00.960
+Tratta i permessi tutto come un estintore.
+
+00:12:01.440 --> 00:12:02.960
+Rompi il vetro, documenta, scade.
+
+00:12:02.960 --> 00:12:06.160
+Pacchetti di accesso per connettore controllano il resto della proliferazione.
+
+00:12:06.340 --> 00:12:09.540
+Se Blueprint dice che può chiamare Dataverse a una specifica API esterna, è tutto lì.
+
+00:12:09.800 --> 00:12:11.820
+Qualsiasi altra cosa viene bloccata a livello di policy del connettore.
+
+00:12:11.920 --> 00:12:12.960
+I web copacchi non saranno ammessi.
+
+00:12:13.640 --> 00:12:16.260
+Registri, due rere, dell'AP, destinazione.
+
+00:13:19.380 --> 00:13:23.320
+La felicità non ha solo molti volti, ma anche molte voci, ma anche voci.
+
+00:13:26.900 --> 00:13:28.360
+E che sapore ha la tua felicità?
+
+00:13:28.940 --> 00:13:29.280
+Coprilo.
+
+00:13:43.340 --> 00:13:46.040
+L'etichettatura automatica di Perview viene eseguita su SharePoint o OneDrive,
+
+00:13:46.160 --> 00:13:47.760
+così i file sensibili non sono un gioco d'ipotesi.
+
+00:13:47.760 --> 00:13:51.380
+Le etichette di sensibilità viaggiano con il file e impongono la crittografia dove necessaria.
+
+00:13:51.780 --> 00:13:55.340
+Blocchiamo i caricamenti non etichettati verso endpoint di chat AI a livello di browser ed endpoint.
+
+00:13:55.940 --> 00:13:58.320
+Se non è etichettato, resta dentro finché non viene taggato.
+
+00:13:58.860 --> 00:14:01.280
+Questo sposta il lavoro dove appartiene, vicino ai dati.
+
+00:14:01.820 --> 00:14:03.060
+La DLP, il tuo butta fuori in fase A.
+
+00:14:03.420 --> 00:14:05.260
+Distribuisci la DLP endpoint su Windows e Mac OS.
+
+00:14:05.640 --> 00:14:10.360
+Estendi a Edge e Chrome con regole di incolla e caricamento mirate a domini AI e siti di chat generici.
+
+00:14:11.040 --> 00:14:14.900
+Usa messaggi educativi affinché gli utenti imparino il limite invece di scontrarsi semplicemente con esso.
+
+00:14:15.340 --> 00:14:19.260
+Collega gli incidenti DLP alle policy di rischio interno che rilevano violazioni ripetute
+
+00:14:19.260 --> 00:14:21.220
+o picchi anomali di copia ed esportazione.
+
+00:14:21.460 --> 00:14:23.920
+La progettazione dell'ambiente in Power Platform è fondamentale.
+
+00:14:24.220 --> 00:14:27.040
+Metti lo sviluppo in un ambiente gestito, il test in un altro e la produzione separata.
+
+00:14:27.400 --> 00:14:30.800
+Applica policy di prevenzione della parità di dati affinché i connettori rischiosi non esistano in prodotto.
+
+00:14:31.160 --> 00:14:34.320
+La segmentazione delle soluzioni impone la promozione con revisioni versioni e versioni.
+
+00:14:34.320 --> 00:14:38.760
+Flussi e bot in produzione devono derivare da soluzioni in ondare di lavoro personali casuali.
+
+00:14:39.260 --> 00:14:40.640
+Monitoraggio e l'audit non sono facoltati.
+
+00:14:41.000 --> 00:14:43.280
+Attiva i log di accesso e i log di controllo per l'identità del cliente.
+
+00:14:43.500 --> 00:14:44.300
+Esporta nel tuo CM.
+
+00:14:44.720 --> 00:14:47.020
+Stabilisci le linee guida dei modelli di chiamata graph normali per ogni blu.
+
+00:14:47.240 --> 00:14:50.600
+Imposta avvisi su letture ad alto volume e numerazioni estese e chiamate cross-term.
+
+00:14:50.600 --> 00:14:54.120
+Se non sai descrivere la normalità non noterai le anomalie finché non sarà troppo tardi.
+
+00:14:54.520 --> 00:14:55.660
+I guarderei di rete chiudono i cerchi.
+
+00:14:56.340 --> 00:14:58.200
+Installa dall'agente tramite l'accesso sicuro globale.
+
+00:14:58.660 --> 00:15:00.740
+Inizia con la sola registrazione per mappare URL e AP.
+
+00:15:01.220 --> 00:15:04.600
+Aggiungi whitelist dei server MCP affinché gli agenti comunichino solo con broker approvati.
+
+00:15:05.420 --> 00:15:10.500
+Crea policy che mettono in quarantena quando un agente raggiunge destinazioni ignote o tenta di sfiltrare contenuti etichettati.
+
+00:15:10.920 --> 00:15:12.880
+Ti serve una visione completa dall'identità al pacchetto.
+
+00:15:13.440 --> 00:15:14.200
+Ecco il modello aumentare.
+
+00:15:14.540 --> 00:15:19.100
+L'identità è il chi, i permessi il cosa, per più il tipo, la DLP, come si muove, la rete e il dove.
+
+00:15:19.100 --> 00:15:22.460
+Il blueprint li unisce in un unico tessuto operativo.
+
+00:15:23.380 --> 00:15:26.100
+Lascia che ti mostri un'istanza di riferimento per un agente di triage di supporto.
+
+00:15:27.140 --> 00:15:31.100
+Blueprint di triage support o uno sponsor manager delle operazioni di supporto revisiona trimestralmente.
+
+00:15:32.180 --> 00:15:36.720
+Identità con managed identity e accesso condizionale che richiede runtime conforme e rete affidabile.
+
+00:15:37.660 --> 00:15:38.340
+Permessi graph.
+
+00:15:38.840 --> 00:15:40.840
+Ruoli app per lettura mailbox condivisa.
+
+00:15:41.460 --> 00:15:43.540
+SharePoint con scope su sito, lettura su KB.
+
+00:15:44.280 --> 00:15:46.000
+Invio messaggi su Teams per escalations.
+
+00:15:46.000 --> 00:15:51.060
+Connettori dataverse permessi webbook esterni bloccati a meno che la destinazione non sia registrata e controllata.
+
+00:15:51.480 --> 00:15:52.000
+Livello dati.
+
+00:15:52.060 --> 00:15:53.260
+KB etichettata come interna.
+
+00:15:54.220 --> 00:15:56.000
+Esportazioni in caso etichettate come supporto confidenziale.
+
+00:15:56.980 --> 00:15:58.960
+DLP su endpoint e browser blocca e incolla.
+
+00:15:59.180 --> 00:16:01.520
+E caricamento di dati etichettati verso domini di chat.
+
+00:16:01.660 --> 00:16:01.900
+Ehi.
+
+00:16:03.100 --> 00:16:04.080
+Messaggi di guidabilità.
+
+00:16:04.880 --> 00:16:05.200
+Rete.
+
+00:16:05.820 --> 00:16:07.280
+Log di accesso sicuro globale.
+
+00:16:07.420 --> 00:16:07.960
+Settimana 1.
+
+00:16:08.080 --> 00:16:08.900
+Whitelist per graph.
+
+00:16:09.040 --> 00:16:09.580
+SharePoint.
+
+00:16:10.300 --> 00:16:10.580
+Teams.
+
+00:16:10.660 --> 00:16:11.100
+Dataverse.
+
+00:16:11.240 --> 00:16:11.920
+Server MCP.
+
+00:16:11.920 --> 00:16:12.480
+Registrati.
+
+00:16:12.540 --> 00:16:13.720
+Avvisi su egress sconosciuto.
+
+00:16:14.160 --> 00:16:18.460
+Monitoraggio CM su picchi di lettura mailbox e denumerazioni SharePoint oltre lo scope della KB.
+
+00:16:19.520 --> 00:16:20.140
+Ciclo di vita.
+
+00:16:20.420 --> 00:16:21.860
+Disabilita la partenza dello sponsor.
+
+00:16:22.260 --> 00:16:23.640
+Revisioni accessi ogni trimestre.
+
+00:16:23.760 --> 00:16:24.940
+Gate di promozione e soluzione.
+
+00:16:25.300 --> 00:16:26.440
+Piano di rollback documentato.
+
+00:16:26.780 --> 00:16:30.620
+Ora l'equivalente finanziario sostituisce la posta con libreria e documenti e aggiunge etichette di criptografia obbligato.
+
+00:16:31.100 --> 00:16:31.640
+Stesso schema.
+
+00:16:31.740 --> 00:16:32.460
+Struttura diversa.
+
+00:16:32.760 --> 00:16:34.460
+Insidio comuni da evitare in questa architettura.
+
+00:16:34.460 --> 00:16:36.820
+Lasciare i permessi delegati attivi solo per i test.
+
+00:16:36.960 --> 00:16:39.100
+Dimenticare di registrare destinazioni di terze parti.
+
+00:16:39.280 --> 00:16:42.600
+E saltare l'etichettatura automatica perché la libreria contiene solo fatture.
+
+00:16:44.100 --> 00:16:46.360
+Contiene tutto ciò che è stato migrato l'estate scorsa del mattino.
+
+00:16:46.760 --> 00:16:47.700
+Non serve la perfezione del primo.
+
+00:16:48.200 --> 00:16:50.540
+Crea blueprint per i tuoi tre principali tipi di agenti.
+
+00:16:50.760 --> 00:16:51.400
+Emetti identità.
+
+00:16:51.700 --> 00:16:53.120
+Applica accesso condizionale di base.
+
+00:16:53.240 --> 00:16:55.560
+Attiva l'etichettatura automatica per le librerie più voluminose.
+
+00:16:55.660 --> 00:16:58.560
+Spingi la DLP su endpoint e browser con controlli sui domini IA.
+
+00:16:58.940 --> 00:17:00.100
+Metti la rete in modalità audit.
+
+00:17:00.520 --> 00:17:02.960
+Dopo una settimana avrai segnali sufficienti per restringere in sicurezza.
+
+00:17:02.960 --> 00:17:04.920
+Fallo e gli agenti smetteranno di essere tune.
+
+00:17:05.220 --> 00:17:07.480
+Diventeranno corsie con limiti di velocità, telecamere e freni.
+
+00:17:07.840 --> 00:17:09.060
+Non è affascinante ma dormirei tranquillo.
+
+00:17:09.380 --> 00:17:12.120
+Un playbook operativo, policy, auditing e flusso degli incidenti.
+
+00:17:12.640 --> 00:17:14.280
+Le operazioni mantengono lo scheletro in piedi.
+
+00:17:14.780 --> 00:17:15.700
+Inizia con la scoperta.
+
+00:17:15.880 --> 00:17:19.840
+Usa Defender for Cloud Apps per inventare l'utilizzo degli IA dai log di rete dagli agenti endpoint.
+
+00:17:20.860 --> 00:17:21.940
+Crea un registro semplice.
+
+00:17:22.040 --> 00:17:27.680
+Nome, ID agente, blueprint, sponsor, connettori, ambiti graph, punti di accesso ai dati, profilo di uscita, riconciliazione settimanale.
+
+00:17:28.380 --> 00:17:32.860
+Tutto ciò che non ha un ID agente viene contrassegnato come agente ombre e isolato finché non viene registrato
+
+00:17:32.860 --> 00:17:33.400
+o eliminato.
+
+00:17:33.920 --> 00:17:34.620
+Poi, mappa delle policy.
+
+00:17:35.080 --> 00:17:39.880
+Decidi chi può creare agenti, quali blueprint esistono, quali connettori sono ammessi e quali ambiti graph sono vietati.
+
+00:17:40.780 --> 00:17:41.920
+Pubblicala dove sia visibile a tutti.
+
+00:17:42.420 --> 00:17:46.560
+Se qualcuno necessita di un ambito vietato deve inviare un'eccezione con scadenza e piano di rollback.
+
+00:17:47.100 --> 00:17:50.000
+Certo è fastidioso, ma lo è anche gestire una violazione alle 3 del mattino.
+
+00:17:50.000 --> 00:17:51.820
+Le baseline ordinate non sono negoziabili.
+
+00:17:52.160 --> 00:17:54.540
+Attiva i log di accesso e attività per ogni identità di agente.
+
+00:17:55.100 --> 00:17:56.040
+Esporta nel tuo sistema SIP.
+
+00:17:56.440 --> 00:18:01.780
+Definisci la baseline di chiamate, graph, orarie e medie, siti sharepoint tipici, mailbox attese, server, MCP abituali.
+
+00:18:01.780 --> 00:18:06.760
+Imposta avvisi per volumi di lettura elevati, numerazioni di siti fuori ambito, chiamate cross tenant e destinazioni ignote.
+
+00:18:07.240 --> 00:18:10.200
+Se non definisci la normalità, l'anormalia sembrerà normale finché non farà d'anno.
+
+00:18:10.980 --> 00:18:13.800
+Controllo delle modifiche, revisione paritarie di flussi e bot prima della promozione.
+
+00:18:14.160 --> 00:18:14.940
+Soluzioni in produzione.
+
+00:18:15.320 --> 00:18:17.340
+Etichetta la versione e conserva un artefatto di logo.
+
+00:18:17.340 --> 00:18:18.840
+Vincolo alle promozioni e controlli di blueprint.
+
+00:18:19.220 --> 00:18:20.680
+Permessi sono ancora basati su prevedi giù.
+
+00:18:20.940 --> 00:18:22.340
+Le destinazioni sono ancora in whitelist.
+
+00:18:22.720 --> 00:18:24.580
+Lo sponsor deve approvare, poiché c'è un po' di attrito.
+
+00:18:24.900 --> 00:18:27.160
+Si salva dallo sistemeremo dopo, cosa che non farei mai.
+
+00:18:27.160 --> 00:18:29.160
+Il deprovisioning è un flusso di lavoro, non la speranza.
+
+00:18:29.580 --> 00:18:34.320
+L'automazione del ciclo di vita disabilita gli agenti quando lo sponsor se ne va o al raggiungimento di soglia di inattività.
+
+00:18:34.780 --> 00:18:36.740
+Le revisioni trimestrali degli accessi pongono alla domanda
+
+00:18:36.740 --> 00:18:38.340
+se questo agente ha ancora bisogno di questi diritti.
+
+00:18:38.960 --> 00:18:41.380
+Se la risposta è non sappiamo, l'azione corretta è no.
+
+00:18:42.040 --> 00:18:43.560
+Il percorso di incidenti richiede memoria muscolare.
+
+00:18:43.900 --> 00:18:46.440
+Attivazione di un IT, DLP, anomalia SIM o flag di agente rischio.
+
+00:18:46.980 --> 00:18:49.320
+Prima il triage IRM è uno schema ricorrente o un caso isolato?
+
+00:18:49.640 --> 00:18:50.540
+Per l'agente dell'agente rischioso.
+
+00:18:50.880 --> 00:18:52.020
+Conferma la compromissione o archivia?
+
+00:18:52.020 --> 00:18:56.440
+Se è rischioso, isolalo tramite accesso condizionale, blocca gli accessi o limita una rete di staging.
+
+00:18:57.060 --> 00:18:58.320
+Elimina rimetti le credenziali.
+
+00:18:58.760 --> 00:18:59.380
+Prodata le chiavi.
+
+00:18:59.960 --> 00:19:01.100
+Revoca le concessioni di consenso.
+
+00:19:01.940 --> 00:19:03.760
+Fetto un breve post-mortem entro 48 ore.
+
+00:19:04.240 --> 00:19:06.780
+Causa principale, controlli falliti, modifiche necessarie blueprint.
+
+00:19:07.200 --> 00:19:08.620
+Gli sprint di genere riducono il degrado.
+
+00:19:08.900 --> 00:19:11.360
+Cerca mensilmente i dati Ombra in SharePoint e OneDrive.
+
+00:19:11.920 --> 00:19:16.240
+Corregge le condivisioni eccessive, elimina flussi zombie, ritira agenti duplicati, ricertifica i permessi dei top agent.
+
+00:19:17.240 --> 00:19:17.980
+Si è noioso.
+
+00:19:18.480 --> 00:19:20.220
+Ai miei tempi deframmentavamo i dischi e pregavamo.
+
+00:19:20.600 --> 00:19:21.020
+Questo è meglio.
+
+00:19:21.020 --> 00:19:21.880
+Una breve storia.
+
+00:19:22.440 --> 00:19:26.740
+Lo scorso trimestre un team ha autorizzato temporaneamente un webbook verso un endpoint di terza parte opaco.
+
+00:19:26.840 --> 00:19:27.560
+Nessun log degli URL.
+
+00:19:27.820 --> 00:19:29.700
+Una settimana dopo picchi di lettura e mailbox di notte.
+
+00:19:30.000 --> 00:19:30.720
+Il sistema si è illuminato.
+
+00:19:30.860 --> 00:19:32.300
+Non siamo riusciti a tracciare le uscite a modo qui.
+
+00:19:32.620 --> 00:19:36.740
+Abbiamo rafforzato i connettori, forzato la registrazione delle destinazioni e aggiunto whitelist e MCP.
+
+00:19:36.980 --> 00:19:37.700
+Problema è cessato.
+
+00:19:38.000 --> 00:19:41.100
+Prova che loghi in prima e poi la low list mantengono i sistemi operativi mentre crei una mappa.
+
+00:19:41.920 --> 00:19:43.180
+Lubrica di valutazione del rischio.
+
+00:19:43.280 --> 00:19:44.660
+Stabilisci cosa correggere per primo.
+
+00:19:44.780 --> 00:19:46.440
+Ora ti serve un tabellone, 6 input.
+
+00:19:46.740 --> 00:19:49.320
+Identità, dati, permessi, rete, monitoraggio, ciclo di vita.
+
+00:19:49.320 --> 00:19:50.740
+Da 0 a 5 ciascuno.
+
+00:19:51.020 --> 00:19:51.340
+Sommali.
+
+00:19:51.640 --> 00:19:52.240
+Correggere in base a lui.
+
+00:19:52.600 --> 00:19:52.960
+Identità.
+
+00:19:53.100 --> 00:19:53.720
+Parti da 0.
+
+00:19:53.840 --> 00:19:55.120
+Aggiungi 1 se usa l'ID agente.
+
+00:19:55.300 --> 00:19:55.620
+Entra.
+
+00:19:55.700 --> 00:19:56.360
+1 per un blueprint.
+
+00:19:56.640 --> 00:19:57.820
+1 per l'accesso condizionale.
+
+00:19:58.240 --> 00:19:59.400
+1 per uno sponsor nominato.
+
+00:19:59.520 --> 00:20:01.180
+1 per le revisioni periodiche degli accessi.
+
+00:20:01.180 --> 00:20:03.140
+Credenziali condivisa e esecuzione come umano.
+
+00:20:03.240 --> 00:20:04.420
+Questo vale 0 e scavalca la coda.
+
+00:20:04.900 --> 00:20:05.220
+Dati.
+
+00:20:05.600 --> 00:20:06.280
+Parti da 0.
+
+00:20:06.800 --> 00:20:08.940
+Aggiungi 2 se le fonti sono etichettate con purview.
+
+00:20:09.100 --> 00:20:11.020
+1 se DLP endpoint e browser sono attivi.
+
+00:20:11.160 --> 00:20:13.340
+1 se i caricamenti su domini AI sono bloccati.
+
+00:20:13.500 --> 00:20:16.320
+1 se le barriere di elaborazione copilot sono abilitate.
+
+00:20:16.860 --> 00:20:19.280
+Le fonti non etichettate ti mantengono nell'area di pericolo.
+
+00:20:19.500 --> 00:20:19.860
+Permessi.
+
+00:20:19.960 --> 00:20:20.620
+Parti da 0.
+
+00:20:20.700 --> 00:20:22.520
+Aggiungi 2 se sono usati ruoli app graph.
+
+00:20:22.640 --> 00:20:23.880
+1 per il perimetro delle risorse.
+
+00:20:24.020 --> 00:20:25.660
+1 per il privilegio minimo per connettore.
+
+00:20:25.800 --> 00:20:28.580
+1 per la ricertificazione periodica con scadenza per le eccezioni.
+
+00:20:28.580 --> 00:20:30.400
+Delegato ovunque.
+
+00:20:30.540 --> 00:20:31.200
+Addio weekend.
+
+00:20:32.720 --> 00:20:33.120
+Rete.
+
+00:20:33.420 --> 00:20:34.040
+Parti da 0.
+
+00:20:34.180 --> 00:20:35.760
+Aggiungi 2 se l'accesso globale è sicuro.
+
+00:20:35.860 --> 00:20:36.980
+Governo è il traffico agenti.
+
+00:20:37.040 --> 00:20:38.320
+1 per allow list MCP.
+
+00:20:38.440 --> 00:20:39.540
+1 per audit API URL.
+
+00:20:39.860 --> 00:20:41.320
+1 per alert su anomalie in uscita.
+
+00:20:42.200 --> 00:20:44.140
+Traffico in uscita sconosciuto significa rischio ignoto.
+
+00:20:44.240 --> 00:20:45.080
+Ovvero priorità assoluta.
+
+00:20:45.900 --> 00:20:46.300
+Monitoraggio.
+
+00:20:46.480 --> 00:20:47.160
+Parti da 0.
+
+00:20:47.340 --> 00:20:49.340
+Aggiungi 2 se i log esportano su Siem.
+
+00:20:49.480 --> 00:20:51.320
+1 per la revisione dei report agenti a rischio.
+
+00:20:51.660 --> 00:20:54.000
+1 per policy di rischio interno legate agli eventi AI.
+
+00:20:54.480 --> 00:20:56.860
+1 se il playbook è stato testato nell'ultimo trimestre.
+
+00:20:56.860 --> 00:20:58.800
+Niente log, niente aiuto.
+
+00:20:59.200 --> 00:21:00.480
+Ciclo di vita parti da 0.
+
+00:21:00.620 --> 00:21:02.200
+Aggiungi 1 per controllo di ciclo di vita.
+
+00:21:02.340 --> 00:21:03.420
+1 per SLA sponsor.
+
+00:21:03.560 --> 00:21:06.660
+1 per deprovisioning automatico su inattività o uscita dello sponsor.
+
+00:21:06.780 --> 00:21:07.800
+1 per controllo modifiche.
+
+00:21:08.000 --> 00:21:09.860
+1 per job di rilevamento zombie.
+
+00:21:10.560 --> 00:21:12.320
+Se non spegni le cose si rivolteranno contro di.
+
+00:21:12.320 --> 00:21:13.780
+Fasce di triage.
+
+00:21:13.860 --> 00:21:14.960
+8 rischio alto corregge ora.
+
+00:21:15.040 --> 00:21:15.980
+9-16 medio sprint.
+
+00:21:16.080 --> 00:21:16.620
+30 giorni.
+
+00:21:16.700 --> 00:21:18.340
+17-25 basso trimestrale.
+
+00:21:19.000 --> 00:21:20.140
+26-30 modelli di agenti.
+
+00:21:20.220 --> 00:21:20.720
+Li predefinisco.
+
+00:21:21.200 --> 00:21:23.060
+Eseguilo sui tuoi 10 agenti principali questa settimana.
+
+00:21:23.140 --> 00:21:23.780
+Poi mettilo in pratica.
+
+00:21:24.200 --> 00:21:26.480
+Rendi il punteggio visibile accanto a ogni agente nel registro.
+
+00:21:26.900 --> 00:21:28.480
+Avrei meno discussioni e correzioni più rapide.
+
+00:21:28.480 --> 00:21:31.180
+Certo la gente ama discutere i numeri nelle riunioni.
+
+00:21:31.640 --> 00:21:34.700
+Contro deduzioni e repliche il dibattito che avrai nella stanza.
+
+00:21:35.460 --> 00:21:36.300
+Innoveremo più lentamente.
+
+00:21:36.720 --> 00:21:38.440
+Certo recupererai anche più lentamente da un velozio.
+
+00:21:38.840 --> 00:21:40.140
+Trucco non è rompere, creare corsie.
+
+00:21:40.680 --> 00:21:43.160
+I blueprint e gli ambienti gestiti ti offrono modelli preapprovati.
+
+00:21:43.880 --> 00:21:46.440
+I costruttori scelgono un blueprint, ottengono l'identità corretta,
+
+00:21:46.500 --> 00:21:49.620
+i privilegi minimi, i connettori consentiti e uno sponsor in 10 minuti.
+
+00:21:50.000 --> 00:21:51.840
+È più veloce di un ping pong di ticket con la sicurezza.
+
+00:21:52.440 --> 00:21:56.080
+Se la velocità conta, elimina le revisioni su misure e standardizza le parti noiose.
+
+00:21:56.080 --> 00:21:59.380
+Consegnerai più velocemente perché hai smesso di ridiscutere i principi fondamentali.
+
+00:21:59.620 --> 00:22:02.460
+Le etichette di anteprima rallentano la collaborazione, rallentano le fughe di dati.
+
+00:22:02.540 --> 00:22:04.360
+L'etichettatura automatica fa il lavoro pesante
+
+00:22:04.360 --> 00:22:07.300
+e i messaggi di LP guidati insegnano agli utenti il limite al momento stesso.
+
+00:22:07.640 --> 00:22:11.260
+Le persone imparano più velocemente quando lo strumento indica cosa si può condividere all'interno,
+
+00:22:11.340 --> 00:22:12.920
+non all'esterno, non all'esterno, proprio dove lavora.
+
+00:22:13.080 --> 00:22:15.420
+Ai miei tempi invivamo PDF di policy che nessuno leggeva.
+
+00:22:15.820 --> 00:22:18.480
+Ora la policy appare quando Conte corregge silenziosamente le abitudini.
+
+00:22:19.000 --> 00:22:20.040
+Graph delegato è più semplice.
+
+00:22:20.660 --> 00:22:22.760
+Anche tenere aperta la porta del data center con un cestino lo è.
+
+00:22:22.760 --> 00:22:25.840
+La delega trasforma ogni agente nell'utente che ha preso in prestito.
+
+00:22:26.300 --> 00:22:28.540
+I ruoli dell'app richiedono un momento in più per la configurazione,
+
+00:22:28.620 --> 00:22:30.860
+ma ottieni uno scope comprovabile e un raggio d'azione misurabile.
+
+00:22:31.120 --> 00:22:32.660
+Se la tua eccezione richiede davvero tutto,
+
+00:22:33.040 --> 00:22:34.680
+impostano una scadenza e registra le chiamate.
+
+00:22:34.900 --> 00:22:36.760
+Se permanente non era un'eccezione, era mia pigrizia...
+
+00:22:37.940 --> 00:22:39.420
+L'ispezione di rete rompe gli agenti.
+
+00:22:39.960 --> 00:22:40.940
+Inizia solo con la registrazione.
+
+00:22:41.300 --> 00:22:45.080
+Una settimana di telemetria e di accesso globale sicuro ti fornisce la mappa di URL e API.
+
+00:22:45.500 --> 00:22:48.840
+Poi inserisci nella law list le 5 destinazioni che contano e metti in quarantena le sconosciute.
+
+00:22:48.840 --> 00:22:51.680
+Se un agente si rompe perché necessitava di un traffico in uscita misterioso,
+
+00:22:51.780 --> 00:22:54.780
+non era un agente affidabile, era una macro tenuta insieme con lo scotch e ben pubblicizzato.
+
+00:22:55.060 --> 00:22:56.040
+Non abbiamo personale per questo.
+
+00:22:56.400 --> 00:22:57.780
+Nemmeno per il caos misura.
+
+00:22:58.320 --> 00:23:01.740
+Sposta a sinistra con blueprint di LP ambientale e revisioni periodiche degli accessi.
+
+00:23:02.460 --> 00:23:05.720
+Gli sponsor si occupano della proprietà, la sicurezza fornisce i guardrail, non fa da babysitter.
+
+00:23:06.260 --> 00:23:08.180
+Il registro e i punteggi di rischio riducono il rumore,
+
+00:23:08.260 --> 00:23:10.600
+così il tuo team insegue i punti critici, non le impressioni.
+
+00:23:11.200 --> 00:23:14.200
+È la differenza tra falciare il prato e dare la caccia ai serpenti nell'erba alta.
+
+00:23:14.700 --> 00:23:17.540
+Se gli agenti di terza parte non si integrano, non vengono eseguiti in produzione.
+
+00:23:17.540 --> 00:23:19.340
+Prima, il registro e l'isolamento.
+
+00:23:19.460 --> 00:23:21.180
+Se vogliono accedere ai tuoi dati, devono avere un idea.
+
+00:23:21.300 --> 00:23:25.000
+Gente entra a mostrare destinazioni e accettare le tue regole di LP e di rete.
+
+00:23:25.440 --> 00:23:28.340
+Se non possono farlo, segregari in una sandbox senza fonti sensibili
+
+00:23:28.340 --> 00:23:30.260
+e senza traffico in uscita verso destinazioni ignote.
+
+00:23:30.960 --> 00:23:33.440
+Interoperabilità non significa assenza di regole, significa termini chiari.
+
+00:23:33.840 --> 00:23:35.960
+Il multitenant non lo rende impossibile, lo rende fastidioso.
+
+00:23:36.300 --> 00:23:37.120
+Consoli da dove puoi.
+
+00:23:37.840 --> 00:23:41.660
+Dove non puoi rispecchia i blueprint, centralizza i log e applica confini cross-tenant.
+
+00:23:41.980 --> 00:23:44.820
+La parte difficile è concordare i modelli, non copiarli, incollarli.
+
+00:23:45.300 --> 00:23:46.820
+Un set di template multitenant.
+
+00:23:46.820 --> 00:23:49.060
+È fatto di peggio con le foreste di risorse di exchange.
+
+00:23:49.440 --> 00:23:50.740
+Si tratta solo di JSON e paziente.
+
+00:23:51.160 --> 00:23:54.380
+Gli utenti cercheranno di aggirare i controlli ecco perché la DLP per endpoint e browser
+
+00:23:54.380 --> 00:23:56.680
+deve essere dove lavorano loro, non dove vorresti che fossero.
+
+00:23:57.080 --> 00:23:59.720
+I messaggi educativi riducono le resistenze perché spiegano il perché,
+
+00:23:59.840 --> 00:24:02.440
+offrono un'alternativa e si servono comunque delle conseguenze.
+
+00:24:02.740 --> 00:24:04.700
+Una policy senza applicazione è solo un salva scherzo.
+
+00:24:04.800 --> 00:24:06.280
+Agent 365 risolverà tutto per lui.
+
+00:24:06.800 --> 00:24:07.640
+Utile, non magico.
+
+00:24:08.380 --> 00:24:11.920
+Un piano di controllo senza dati etichettati, senza privilegi minimi e senza segnali di rete
+
+00:24:11.920 --> 00:24:14.160
+è solo una dashboard luccicante e le impostazioni predefinite errate.
+
+00:24:14.580 --> 00:24:18.580
+Usa Agent 365 come pannello di controllo dopo aver impostato etichette di identità e DLP.
+
+00:24:18.800 --> 00:24:21.280
+L'osservabilità senza linee guida rigorose è solo uno specchio.
+
+00:24:21.740 --> 00:24:23.740
+Possiamo fidarci che Copilot rispetti le autorizzazioni.
+
+00:24:24.580 --> 00:24:25.540
+Non fa già, è proprio questo il punto.
+
+00:24:25.920 --> 00:24:27.500
+Il problema non è Copilot che si comporta male,
+
+00:24:27.580 --> 00:24:29.420
+ma i tuoi dati sovraesposti e gli ambiti definiti male.
+
+00:24:29.420 --> 00:24:31.720
+Sistemare le risposte rimarranno entro i margini.
+
+00:24:31.940 --> 00:24:35.100
+Non sistemarli, e Copilot mostrerà fedelmente tutto ciò che hai lasciato in giro.
+
+00:24:35.660 --> 00:24:36.960
+Unica policy è ucciso le piccole vittorie.
+
+00:24:37.640 --> 00:24:40.300
+Non se separi sviluppo e produzione, offre allo sviluppo un percorso delicato.
+
+00:24:40.960 --> 00:24:43.160
+Ambienti gestiti con connettori flessibili in sviluppo,
+
+00:24:43.240 --> 00:24:45.080
+più rigidi in test, bloccati in produzione.
+
+00:24:45.760 --> 00:24:48.740
+La promozione costringe a un confronto prima che il caos raggiunghi i dati reali.
+
+00:24:49.220 --> 00:24:50.460
+Gli sviluppatori continuano a creare,
+
+00:24:50.560 --> 00:24:52.780
+basta evitare che i prototipi diventino produzione per i nerds.
+
+00:24:53.120 --> 00:24:55.980
+Ultima spinta, ogni obiezione si riduce alla paura dell'attrito.
+
+00:24:55.980 --> 00:25:00.080
+Aggiungi attrito intelligente all'inizio, blueprint, etichette, permessi limitati
+
+00:25:00.080 --> 00:25:03.220
+e rimuoverai attriti catastrofici dopo, come incidenti, audite e rifacimenti.
+
+00:25:03.720 --> 00:25:06.260
+Scegli tu dove sentire il dolore, allora scegli quello prevedibile per me.
+
+00:25:06.660 --> 00:25:09.980
+Concetto chiave, gli agenti, non sono la minaccia, l'accesso non tracciato lo è,
+
+00:25:10.120 --> 00:25:14.220
+identità, etichette, privilegi minimi sono i tre bulloni che impediscono alle ruote di staccarsi.
+
+00:25:15.160 --> 00:25:15.680
+Beh, questo adesso.
+
+00:25:16.080 --> 00:25:19.800
+Crea i tuoi primi tre blueprint, implementa la DLP su endpoint e browser
+
+00:25:19.800 --> 00:25:23.240
+ed esegui la valutazione del rischio sui tuoi dieci migliori agenti questa settimana.
+
+00:25:24.100 --> 00:25:25.780
+Vuoi la mappa delle policy e il modello di valutazione?
+
+00:25:26.220 --> 00:25:27.800
+Iscriviti e guarda il prossimo episodio.
+
+00:25:28.120 --> 00:25:30.160
+Smonterò un vero agente e lo ricostruirò nel modo giusto.
