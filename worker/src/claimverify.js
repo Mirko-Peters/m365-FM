@@ -12,6 +12,7 @@ const EID = /^[a-z0-9][a-z0-9-]{1,78}$/;
 const EMAIL = /^[a-z0-9.!#$%&'*+\/=?^_`{|}~-]{1,64}@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.){1,8}[a-z]{2,63}$/i;
 export const TOKEN_TTL = 86400;
 export const OPEN_STATES = ["pending", "email_sent", "forwarded"];
+export const BIZ_MAX = 10;   // Geschaeftsadressen je Konto
 
 export const FREE_MAIL = new Set(["gmail.com", "googlemail.com", "outlook.com", "outlook.de", "hotmail.com", "hotmail.de", "hotmail.co.uk", "live.com", "live.de", "msn.com", "yahoo.com", "yahoo.de", "yahoo.co.uk", "ymail.com", "gmx.de", "gmx.net", "gmx.at", "gmx.ch", "gmx.com", "web.de", "t-online.de", "freenet.de", "icloud.com", "me.com", "mac.com", "proton.me", "protonmail.com", "pm.me", "aol.com", "mail.com", "mail.de", "posteo.de", "mailbox.org", "zoho.com", "yandex.com", "yandex.ru", "mail.ru", "bluewin.ch", "arcor.de", "1und1.de", "outlook.fr", "orange.fr", "free.fr", "libero.it", "qq.com", "163.com"]);
 // Gemeinsame Hosts: keine Firmen-Domain (Profil-/Code-/Social-Seiten)
@@ -95,6 +96,49 @@ export function maskEmail(email) {
   const at = email.lastIndexOf("@");
   return `${email[0] || ""}***${email.slice(at)}`;
 }
+// ---- Geschaeftsadresse (Profil, profile_business) und Adress-Nachweis bei der Uebernahme (entity_claim_evidence, Migration 0046) ----
+// Nur Buchstaben, Ziffern und uebliche Satzzeichen (keine < > " ; Steuerzeichen); PLZ auch fuer UK/NL (SW1A 1AA, 1012 AB)
+const ADDR = /^[\p{L}\p{M}\p{N} .,'’\/()&#+-]+$/u, ZIP = /^[A-Za-z0-9][A-Za-z0-9 -]{1,11}$/;
+const ADDR_LEN = { street: [3, 120], zip: [2, 12], city: [2, 80], country: [2, 60] };
+// { street, zip, city, country } oder { error: "bad_street" | "bad_zip" | "bad_city" | "bad_country" }
+export function cleanAddress(b) {
+  const out = {};
+  for (const [k, [lo, hi]] of Object.entries(ADDR_LEN)) {
+    const v = String(b?.[k] ?? "").normalize("NFC").replace(/\s+/g, " ").trim();
+    if (v.length < lo || v.length > hi || !(k === "zip" ? ZIP : ADDR).test(v)) return { error: "bad_" + k };
+    out[k] = v;
+  }
+  return out;
+}
+// Strasse vergleichbar machen: Gross/Klein, Umlaute, Str./Strasse/Straße, Leerzeichen und Satzzeichen, Hausnummer bleibt ("Curie-Straße 2 a" = "curiestr2a")
+export function normStreet(s) {
+  return String(s || "").normalize("NFKC").toLowerCase().replace(/ß/g, "ss").replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue")
+    .replace(/strasse\b/g, "str").replace(/\bstreet\b/g, "st").replace(/\broad\b/g, "rd").replace(/\bavenue\b/g, "ave").replace(/[^\p{L}\p{N}]/gu, "");
+}
+const normZip = (z) => String(z || "").toUpperCase().replace(/[\s-]/g, "");
+// Firmenadresse aus der Repo-Fassung: Firma selbst, bei Produkten/Plattformen die Entwickler-Firma (wie allowedDomains)
+export function companyAddress(entity, map) {
+  const has = (e) => e && e.type === "org" && e.street && e.zip;
+  if (has(entity)) return { street: String(entity.street), zip: String(entity.zip), city: String(entity.city || "") };
+  if (entity && (entity.type === "product" || entity.type === "platform")) for (const r of Array.isArray(entity.rel) ? entity.rel : []) if (Array.isArray(r) && r[0] === "developed_by" && has(map?.get?.(r[1]))) return companyAddress(map.get(r[1]), map);
+  return null;
+}
+// yes | no | unknown (keine Firmenadresse hinterlegt) - nur Hinweis fuer die Redaktion, nie automatische Bestaetigung (die Adresse steht im Impressum)
+export function addressMatch(addr, co) {
+  if (!co || !normZip(co.zip) || !normStreet(co.street)) return "unknown";
+  return normZip(addr?.zip) === normZip(co.zip) && normStreet(addr?.street) === normStreet(co.street) ? "yes" : "no";
+}
+// Firma, Produkt oder Plattform: Repo-Fassung, sonst die Community-Fassung (von Mitgliedern angelegte Firmen); der Typ entscheidet nichts, er blendet nur den Weg ein
+async function isCompany(env, tmap, eid) {
+  const e = tmap?.get(eid) || (await entityMap(env).catch(() => new Map())).get(eid);
+  return !!e && ["org", "product", "platform"].includes(e.type);
+}
+// optionaler Beleg-Link (Impressum, LinkedIn): nur https, ohne Zugangsdaten; null = ungueltig
+function cleanLink(s) {
+  s = String(s || "").trim(); if (!s) return ""; if (s.length > 300) return null;
+  try { const u = new URL(s); if (u.protocol !== "https:" || u.username || u.password || !u.hostname.includes(".") || /^[\d.]+$/.test(u.hostname) || /\.(local|internal|localhost)$/i.test(u.hostname)) return null; u.hash = ""; return u.href; } catch { return null; }
+}
+
 const tokHash = (t) => sha256hex(String(t || ""));
 const mailHash = (env, e) => sha256hex(`${env.SESSION_SECRET || ""}:claimmail:${e}`);
 
@@ -141,7 +185,11 @@ export async function handleClaimVerify(env, request, url, path, user, J) {
     const domains = allowedDomains(map.get(eid), map);
     const c = await db.prepare("SELECT status,fwd_mask,via,verified_domain FROM entity_claims WHERE eid=? AND user_id=?").bind(eid, user.id).first();
     const review = c?.status === "pending" && c?.via === "domain_email";   // Firmen-E-Mail schon bestaetigt, die Redaktion entscheidet
-    return J({ domains, mail: mailReady(env), status: c?.status || "", fwd_mask: c?.fwd_mask || "", review, review_domain: review ? c.verified_domain : "" });
+    // Adress-Nachweis: eigener offener Nachweis und gespeicherte Geschaeftsadresse (Profil) zum Vorbefuellen - beides nur fuer das eigene Konto
+    const evidence = await db.prepare("SELECT street,zip,city,country,note,link,created FROM entity_claim_evidence WHERE eid=? AND user_id=?").bind(eid, user.id).first();
+    const biz = await db.prepare("SELECT street,zip,city,country FROM profile_business WHERE user_id=? AND eid=?").bind(user.id, eid).first();
+    const company = await isCompany(env, map, eid);   // Adress-Nachweis nur fuer Firmen, Produkte und Plattformen (nicht fuer Personen-Seiten)
+    return J({ domains, mail: mailReady(env), status: c?.status || "", fwd_mask: c?.fwd_mask || "", review, review_domain: review ? c.verified_domain : "", company, evidence: evidence || null, biz: biz || null });
   }
   if ((path === "/api/entity/claim/domain" || path === "/api/entity/claim/forward") && method === "POST") {
     const kind = path.endsWith("/forward") ? "forward" : "verify", b = await body(), eid = String(b.eid || "").toLowerCase();
@@ -160,6 +208,32 @@ export async function handleClaimVerify(env, request, url, path, user, J) {
     if (kind === "verify") await db.prepare("UPDATE entity_claims SET status='email_sent',fwd_mask='' WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(eid, user.id).run();
     else await db.prepare("UPDATE entity_claims SET status='forwarded',fwd_mask=? WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(maskEmail(m.email), eid, user.id).run();
     return J({ ok: true, status: kind === "verify" ? "email_sent" : "forwarded", mask: maskEmail(m.email), domain: m.domain });
+  }
+  // Adress-Nachweis statt Firmen-E-Mail: Geschaeftsadresse (+ Notiz, Beleg-Link) zur offenen Beanspruchung; die Redaktion entscheidet (claim.decide),
+  // der Abgleich mit der Firmenadresse ist nur ein Hinweis. Eine Weitergabe an Kolleg:innen verfaellt (die Anfrage geht an die Redaktion).
+  if (path === "/api/entity/claim/evidence" && method === "POST") {
+    const b = await body(), eid = String(b.eid || "").toLowerCase();
+    if (!EID.test(eid)) return J({ error: "bad_id" }, 400);
+    const claim = await db.prepare("SELECT status FROM entity_claims WHERE eid=? AND user_id=?").bind(eid, user.id).first();
+    if (!claim || !OPEN_STATES.includes(claim.status)) return J({ error: "no_claim" }, 404);
+    const tmap = await trustedEntityMap(env);
+    if (!(await isCompany(env, tmap, eid))) return J({ error: "not_company" }, 409);
+    const a = cleanAddress(b); if (a.error) return J({ error: a.error }, 400);
+    if (String(b.note ?? "").length > 500) return J({ error: "bad_note" }, 400);
+    const note = cleanText(b.note, 500).replace(/[<>]/g, ""), link = cleanLink(b.link); if (link === null) return J({ error: "bad_link" }, 400);
+    if (!(await rateLimit(db, `claimev:u:${user.id}`, 10, 86400))) return J({ error: "rate_limit" }, 429);
+    const match = addressMatch(a, tmap ? companyAddress(tmap.get(eid), tmap) : null);   // Repo-Fassung nicht erreichbar: unknown
+    await db.batch([
+      db.prepare("INSERT INTO entity_claim_evidence(eid,user_id,street,zip,city,country,note,link,addr_match,created) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(eid) DO UPDATE SET user_id=excluded.user_id,street=excluded.street,zip=excluded.zip,city=excluded.city,country=excluded.country,note=excluded.note,link=excluded.link,addr_match=excluded.addr_match,created=excluded.created")
+        .bind(eid, user.id, a.street, a.zip, a.city, a.country, note, link, match, now()),
+      db.prepare("UPDATE entity_claims SET status='pending',fwd_mask='' WHERE eid=? AND user_id=? AND status IN ('pending','email_sent','forwarded')").bind(eid, user.id),
+      db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=? AND claim_user=? AND kind='forward' AND used=0").bind(eid, user.id),
+    ]);
+    const ent = b.save === true ? (await entityMap(env)).get(eid) : null;   // auf Wunsch auch als Geschaeftsadresse im Profil merken (nur Firmen)
+    if (ent?.type === "org" && (await db.prepare("SELECT COUNT(*) n FROM profile_business WHERE user_id=? AND eid<>?").bind(user.id, eid).first()).n < BIZ_MAX)
+      await db.prepare("INSERT INTO profile_business(user_id,eid,company,street,zip,city,country,updated) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(user_id,eid) DO UPDATE SET company=excluded.company,street=excluded.street,zip=excluded.zip,city=excluded.city,country=excluded.country,updated=excluded.updated")
+        .bind(user.id, eid, cleanText(ent.name, 120), a.street, a.zip, a.city, a.country, now()).run();
+    return J({ ok: true, status: "pending" });   // der Abgleich bleibt bei der Redaktion
   }
   if (path === "/api/entity/claim/confirm" && method === "POST") {
     const b = await body(), th = await tokHash(b.t), row = b.t ? await db.prepare("SELECT * FROM entity_claim_mail WHERE token_hash=?").bind(th).first() : null;
@@ -185,6 +259,7 @@ export async function handleClaimVerify(env, request, url, path, user, J) {
     await db.prepare("UPDATE entity_claim_mail SET used=1 WHERE eid=?").bind(row.eid).run();
     if (row.kind === "forward") await recordInvite(env, { inviter: row.claim_user, invitee: user.id, source: "forward", ref: row.eid, since: row.created });   // #309: weitergeleitete Einladung an Kolleg:in
     if (review) return J({ ok: true, review: true, eid: row.eid, domain: row.domain, forwarded: row.kind === "forward" });
+    await db.prepare("DELETE FROM entity_claim_evidence WHERE eid=?").bind(row.eid).run();   // per Firmen-E-Mail bestaetigt: ein Adress-Nachweis wird nicht mehr gebraucht
     await confirmOrgLinks(db, user.id, row.eid);
     return J({ ok: true, eid: row.eid, domain: row.domain, forwarded: row.kind === "forward" });
   }

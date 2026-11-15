@@ -1,0 +1,2743 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:00.900
+Imagina este escenario.
+
+00:00:01.440 --> 00:00:04.120
+Estás creando una aplicación y necesitas una clave de API para conectar a un servicio,
+
+00:00:04.280 --> 00:00:07.180
+una contraseña de base de datos o una clave de cuenta de almacenamiento.
+
+00:00:07.600 --> 00:00:11.020
+Así que la pones directamente en tu código, tal vez en un archivo de configuración o una variable de entorno.
+
+00:00:11.360 --> 00:00:16.080
+Funciona y todo va bien hasta que subes ese código a GitHub o compartes un cuaderno con un compañero con un compañero.
+
+00:00:16.700 --> 00:00:18.800
+Y así de repente, tu secreto ya no es tan secreto.
+
+00:00:19.500 --> 00:00:22.420
+Si ese código cae en las manos equivocadas, todo tu sistema queda expuesto.
+
+00:00:23.160 --> 00:00:25.480
+Azure Key Vault es la herramienta que soluciona ese problema.
+
+00:00:25.900 --> 00:00:29.420
+Te ofrece un lugar seguro para almacenar secretos y que nunca terminen en tu código.
+
+00:00:30.000 --> 00:00:31.640
+Pero aquí está lo que la mayoría hace malo.
+
+00:00:31.760 --> 00:00:34.340
+Solo tener un Key Vault no te hace seguro automáticamente.
+
+00:00:34.880 --> 00:00:38.360
+La forma en que lo configuras, controlas el acceso y asignas permisos importa igual.
+
+00:00:39.040 --> 00:00:42.800
+Al final de este episodio, sabrás qué es realmente Key Vault, qué puedes almacenar,
+
+00:00:43.100 --> 00:00:46.460
+cómo funciona el acceso y el mayor error que podría dejar tus secretos expuestos.
+
+00:00:47.400 --> 00:00:49.620
+Todo en lenguaje sencillo sin tecnicismo son lo que necesitas saber.
+
+00:00:50.180 --> 00:00:51.500
+Entonces, ¿qué es exactamente Azure Key Vault?
+
+00:00:51.960 --> 00:00:52.940
+¿Qué es Azure Key Vault?
+
+00:00:53.300 --> 00:00:54.700
+Aquí tienes la definición más simple.
+
+00:00:55.100 --> 00:00:57.900
+Azure Key Vault es una caja fuerte digital en la nube para tu secreto.
+
+00:00:57.900 --> 00:01:02.220
+Es un servicio administrado de Microsoft para claves de API, contraseñas de bases de datos,
+
+00:01:02.380 --> 00:01:05.260
+cadenas de conexión, claves de cifrado y certificados en un lugar central.
+
+00:01:05.840 --> 00:01:08.600
+No tienes que preocuparte por la infraestructura porque Azure se encarga de las actualizaciones,
+
+00:01:08.720 --> 00:01:09.680
+el tiempo de actividad y la seguridad.
+
+00:01:10.020 --> 00:01:10.680
+Tú solo lo usas.
+
+00:01:11.200 --> 00:01:12.320
+Piénsalo como un edificio de eficiente.
+
+00:01:12.820 --> 00:01:15.140
+Tienes estaciones de trabajo, salas de reuniones y archivadores.
+
+00:01:15.460 --> 00:01:18.380
+Pero en el sótano hay una caja fuerte donde guardas lo importante.
+
+00:01:18.940 --> 00:01:20.780
+Llaves maestras, efectivo, documentos legales.
+
+00:01:21.260 --> 00:01:22.880
+Nadie entra sin permiso de autenticación.
+
+00:01:23.440 --> 00:01:25.340
+Y cada vez que alguien abre la puerta queda registro.
+
+00:01:25.340 --> 00:01:26.000
+Eso es Key Vault.
+
+00:01:26.640 --> 00:01:28.780
+La sala asegura en el sótano de tu arquitectura de Azure.
+
+00:01:30.220 --> 00:01:31.140
+Al contrario, haz eso con la server.
+
+00:01:31.700 --> 00:01:34.480
+Hace 20 años, si necesitabas una contraseña de base de datos,
+
+00:01:34.580 --> 00:01:37.160
+la escribías directamente en un archivo de configuración,
+
+00:01:37.640 --> 00:01:40.380
+una variable de entorno o, peor aún, en texto plano en tu código.
+
+00:01:41.140 --> 00:01:43.040
+Si alguien accedía a ese servidor, lo tenía todo.
+
+00:01:43.660 --> 00:01:46.560
+Y si necesitabas rotar esa contraseña, tenías que actualizarla en todas partes.
+
+00:01:47.320 --> 00:01:50.380
+Cada archivo de configuración, cada entorno, cada despliegue, era una pesadilla.
+
+00:01:50.800 --> 00:01:51.700
+Key Vault cambia todo eso.
+
+00:01:51.700 --> 00:01:54.960
+En lugar de dispersar secretos en tu código y archivos de configuración,
+
+00:01:55.060 --> 00:01:56.400
+los almacenas en un lugar central.
+
+00:01:57.080 --> 00:01:59.940
+Tus aplicaciones lo solicitan durante la ejecución solo cuando los necesite.
+
+00:02:00.300 --> 00:02:03.200
+Y como todo está centralizado, puede rotar un secreto en un solo lugar
+
+00:02:03.200 --> 00:02:06.600
+y cada aplicación que lo utilice obtendrá el nuevo valor automáticamente
+
+00:02:06.600 --> 00:02:08.360
+sin cambios de código ni redistribuciones.
+
+00:02:09.560 --> 00:02:12.300
+El punto es que Key Vault no es solo un administrador de contraseñas para tus aplicaciones.
+
+00:02:12.620 --> 00:02:13.460
+Es un servicio central.
+
+00:02:14.120 --> 00:02:15.840
+Cada servicio de Azure puede integrarse con él.
+
+00:02:15.840 --> 00:02:19.280
+App Service Functions, AKS, Data Factory, Synapse y GAPS
+
+00:02:19.280 --> 00:02:21.940
+y las canalizaciones de DevOps saben cómo comunicarse con Key Vault.
+
+00:02:22.520 --> 00:02:24.840
+Se convierte en la columna vertebral de tu arquitectura de nube de seguro.
+
+00:02:25.120 --> 00:02:26.380
+Y una vez que lo configuras correctamente,
+
+00:02:26.500 --> 00:02:28.600
+dejas de preocuparte por completo sobre la gestión de credenciales.
+
+00:02:29.160 --> 00:02:29.900
+Te puedes almacenar.
+
+00:02:30.880 --> 00:02:31.980
+Ahora que sabes qué es Key Vault,
+
+00:02:32.100 --> 00:02:33.860
+hablemos de lo que realmente puedes guardar dentro.
+
+00:02:34.400 --> 00:02:35.760
+Tienes tres categorías principales.
+
+00:02:36.000 --> 00:02:37.760
+Secretos, claves y certificados.
+
+00:02:38.320 --> 00:02:39.440
+Cada una hace algo diferente.
+
+00:02:39.440 --> 00:02:42.540
+Y entender la diferencia te ayuda a usar Key Vault de la manera correcta.
+
+00:02:42.880 --> 00:02:43.780
+Comencemos con los secretos.
+
+00:02:43.780 --> 00:02:45.560
+Esto es lo que la gente alnacena con más frecuencia.
+
+00:02:46.180 --> 00:02:47.500
+Los secretos son cadenas de conexión,
+
+00:02:47.680 --> 00:02:48.120
+claves de API,
+
+00:02:48.440 --> 00:02:49.420
+contraseñas de bases de datos,
+
+00:02:49.620 --> 00:02:50.620
+claves de cuentas de almacenamiento,
+
+00:02:50.700 --> 00:02:52.180
+básicamente todas las credenciales cotidianas
+
+00:02:52.180 --> 00:02:53.880
+que tus aplicaciones necesitan para hablar con otro servicio.
+
+00:02:54.200 --> 00:02:56.300
+En lugar de incluirlos en tu código archivo de configuración,
+
+00:02:56.400 --> 00:02:57.420
+los colocas en Key Vault.
+
+00:02:58.080 --> 00:02:59.760
+Tu aplicación los obtiene en tiempo de ejecución
+
+00:02:59.760 --> 00:03:01.020
+y nadie los ve nunca en texto plan.
+
+00:03:01.420 --> 00:03:03.840
+Piénsalo como un cajón bajo llave en tu archivador digital.
+
+00:03:04.520 --> 00:03:05.320
+Los siguientes son las claves.
+
+00:03:05.620 --> 00:03:07.300
+Estas son claves de cifrado para datos en report.
+
+00:03:07.380 --> 00:03:09.980
+Si usas claves administradas por el cliente para Azure Storage,
+
+00:03:10.080 --> 00:03:12.820
+bases de datos SQL o para cifrar discos de máquinas virtuales,
+
+00:03:12.820 --> 00:03:14.320
+esas claves pueden residir en Key Vault.
+
+00:03:14.800 --> 00:03:17.560
+Eso te da control total sobre quién puede usarlas y cuándo.
+
+00:03:17.600 --> 00:03:19.920
+Y si necesitas claves respaldadas por hardware para el cumplimiento,
+
+00:03:20.120 --> 00:03:21.940
+el nivel premium te cubre con protección HCM.
+
+00:03:22.460 --> 00:03:23.380
+Luego tenemos los certificados.
+
+00:03:24.020 --> 00:03:26.360
+Certificados TLS y SCL para tus aplicaciones web,
+
+00:03:26.440 --> 00:03:27.500
+API y servicios internos.
+
+00:03:27.880 --> 00:03:28.880
+Key Vault puede almacenarlos,
+
+00:03:28.980 --> 00:03:29.840
+gestionar su ciclo de vida
+
+00:03:29.840 --> 00:03:32.300
+e incluso renovarlos automáticamente cuando están cerca de SPIN.
+
+00:03:32.380 --> 00:03:34.600
+Eso es un salvavidas para cualquiera que haya tenido un certificado
+
+00:03:34.600 --> 00:03:36.700
+que caducó a las 3 AM de un domingo.
+
+00:03:37.160 --> 00:03:37.880
+Aquí hay un ejemplo real.
+
+00:03:38.300 --> 00:03:39.460
+Imagina que tienes una aplicación web
+
+00:03:39.460 --> 00:03:41.220
+que necesita una cadena de conexión a una base de datos
+
+00:03:41.220 --> 00:03:42.860
+y una clave de API para un servicio de terceros.
+
+00:03:43.360 --> 00:03:45.020
+A la antigua pondrías ambos en tu archivo JSON
+
+00:03:45.020 --> 00:03:46.240
+de configuración de la aplicación.
+
+00:03:46.880 --> 00:03:48.800
+Probablemente, si ese archivo termina en tu repositorio,
+
+00:03:48.880 --> 00:03:50.680
+cualquiera con acceso al código puede ver las credenciales
+
+00:03:50.680 --> 00:03:51.420
+de tu base de datos.
+
+00:03:52.440 --> 00:03:54.520
+Con Key Vault almacenas ambos valores como secretos.
+
+00:03:54.880 --> 00:03:56.180
+Tu aplicación los obtiene al inicio
+
+00:03:56.180 --> 00:03:57.660
+y nunca aparecen en tu código fuente.
+
+00:03:58.040 --> 00:03:59.400
+¿Necesitas rotar la contraseña de datos?
+
+00:03:59.960 --> 00:04:00.660
+Actualízala en Key Vault.
+
+00:04:01.080 --> 00:04:03.040
+La aplicación obtiene el nuevo valor automáticamente
+
+00:04:03.040 --> 00:04:03.960
+en el siguiente reinicio,
+
+00:04:04.280 --> 00:04:05.800
+sin cambios de código, sin redespliegue.
+
+00:04:06.080 --> 00:04:07.260
+Algo que toma la gente por sorpresa
+
+00:04:07.260 --> 00:04:08.540
+es que el control de versiones está integrado.
+
+00:04:08.540 --> 00:04:09.740
+Cuando actualizas un secreto,
+
+00:04:10.020 --> 00:04:11.360
+Key Vault no sobreescribe el valor anterior,
+
+00:04:11.640 --> 00:04:12.420
+creado en la diversión.
+
+00:04:12.820 --> 00:04:14.020
+Las versiones antiguas se conservan
+
+00:04:14.020 --> 00:04:15.680
+para que puedas revertir si algo sale mal.
+
+00:04:16.120 --> 00:04:17.840
+Eso es increíblemente útil durante los incidencias.
+
+00:04:18.360 --> 00:04:20.080
+Puedes volver rápidamente a un secreto anterior
+
+00:04:20.080 --> 00:04:22.420
+sin tener que recordar cuál era el valor antiguo.
+
+00:04:23.100 --> 00:04:24.240
+Puedes almacenar los tres tipos,
+
+00:04:24.380 --> 00:04:26.560
+secretos claves y certificados en el mismo almacén.
+
+00:04:27.420 --> 00:04:29.500
+Pero la mejor práctica es separar por entorno.
+
+00:04:30.000 --> 00:04:31.180
+Tener un almacén para desarrollo,
+
+00:04:31.500 --> 00:04:32.880
+uno para pruebas y uno para producción.
+
+00:04:33.740 --> 00:04:35.440
+Esto evita que alguien use accidentalmente
+
+00:04:35.440 --> 00:04:37.340
+un secreto de producción en un entorno de desarrollo
+
+00:04:37.340 --> 00:04:39.700
+y limita el alcance si un almacén se ve comprometido.
+
+00:04:40.800 --> 00:04:42.240
+Pero almacenar secretos es solo la historia.
+
+00:04:42.700 --> 00:04:44.300
+La verdadera pregunta es quién tiene acceso a ellos.
+
+00:04:45.220 --> 00:04:45.980
+¿Cómo funciona el acceso?
+
+00:04:46.720 --> 00:04:47.660
+Hablemos de quién puede entrar.
+
+00:04:48.340 --> 00:04:49.620
+Key Vault tiene dos formas diferentes
+
+00:04:49.620 --> 00:04:51.200
+de controlar el acceso a lo que hay dentro
+
+00:04:51.200 --> 00:04:52.560
+y la que elijas importa mucho.
+
+00:04:53.320 --> 00:04:54.780
+El primer modelo son las políticas de accesorio.
+
+00:04:55.260 --> 00:04:56.260
+De la forma antigua.
+
+00:04:56.720 --> 00:04:58.580
+Creas políticas directamente en el almacén
+
+00:04:58.580 --> 00:04:59.840
+y asignas permisos a usuarios
+
+00:04:59.840 --> 00:05:00.920
+o grupos específicos
+
+00:05:00.920 --> 00:05:04.200
+para tipos de datos, secretos, claves o certificados.
+
+00:05:04.820 --> 00:05:05.760
+El problema es que estas políticas
+
+00:05:05.760 --> 00:05:07.160
+están vinculadas directamente al almacén.
+
+00:05:07.540 --> 00:05:08.540
+Si tienes varios almacenes,
+
+00:05:08.680 --> 00:05:10.500
+debes administrar las políticas en cada uno por separado.
+
+00:05:10.900 --> 00:05:11.420
+No escala bien.
+
+00:05:12.240 --> 00:05:13.900
+Microsoft ahora recomienda no usarlas
+
+00:05:13.900 --> 00:05:15.820
+porque tienen problemas de seguridad conocidos.
+
+00:05:16.600 --> 00:05:18.520
+No admiten la gestión de identidades con privilegios
+
+00:05:18.520 --> 00:05:19.740
+y pueden crear rutas de escalada
+
+00:05:19.740 --> 00:05:20.960
+de privilegios inesperadas.
+
+00:05:21.820 --> 00:05:23.300
+El segundo modelo es Azure Base de Vaxe,
+
+00:05:23.420 --> 00:05:24.480
+control de acceso basado en roles.
+
+00:05:24.980 --> 00:05:25.820
+Esta es la forma moderna.
+
+00:05:26.200 --> 00:05:27.380
+Utiliza identidades de EntraID
+
+00:05:27.380 --> 00:05:28.580
+y es consistente con la forma
+
+00:05:28.580 --> 00:05:30.140
+en que administras permisos en todo Azure.
+
+00:05:30.140 --> 00:05:32.140
+Si ya sabes cómo dar acceso a alguien
+
+00:05:32.140 --> 00:05:33.240
+a una cuenta de almacenamiento
+
+00:05:33.240 --> 00:05:34.040
+o una máquina virtual,
+
+00:05:34.380 --> 00:05:36.120
+ya sabes cómo darle acceso a Key Vault.
+
+00:05:36.800 --> 00:05:38.000
+Mismo sistema, mismo patrón.
+
+00:05:38.480 --> 00:05:39.300
+Aquí está la regla de oro.
+
+00:05:39.540 --> 00:05:40.260
+Privilegios mínimos.
+
+00:05:40.940 --> 00:05:42.560
+Da solo acceso mínimo que alguien necesita.
+
+00:05:43.100 --> 00:05:43.380
+Nada más.
+
+00:05:44.300 --> 00:05:45.660
+Si alguien solo necesita leer secretos,
+
+00:05:45.900 --> 00:05:47.520
+no le des permiso para crearlos o eliminarlos.
+
+00:05:48.180 --> 00:05:50.120
+Si alguien solo necesita administrar certificados,
+
+00:05:50.200 --> 00:05:51.220
+no le des acceso a las claves.
+
+00:05:51.740 --> 00:05:52.920
+Déjeme explicarte los roles clave.
+
+00:05:53.240 --> 00:05:54.140
+Tienes el lector de Key Vault.
+
+00:05:54.740 --> 00:05:56.100
+Esto permite a alguien listar secretos
+
+00:05:56.100 --> 00:05:56.960
+pero no leer sus valores.
+
+00:05:57.540 --> 00:05:58.420
+Usuarios secretos de Key Vault.
+
+00:05:58.420 --> 00:06:00.140
+Esto permite a alguien leer realmente
+
+00:06:00.140 --> 00:06:01.120
+los valores de los secretos.
+
+00:06:01.300 --> 00:06:02.420
+Y el oficial de secretos de Key Vault.
+
+00:06:03.000 --> 00:06:03.940
+Esto permite a alguien crear,
+
+00:06:04.080 --> 00:06:05.340
+actualizar y eliminar secretos.
+
+00:06:05.940 --> 00:06:06.540
+Note el patrón.
+
+00:06:06.960 --> 00:06:08.000
+Cada rol es específico
+
+00:06:08.000 --> 00:06:09.360
+para los datos dentro del almacén,
+
+00:06:09.400 --> 00:06:10.180
+no para el almacén en sí.
+
+00:06:10.680 --> 00:06:12.260
+Ahora, compare eso con los roles generales.
+
+00:06:12.340 --> 00:06:13.420
+Propietario, colaborador y lector.
+
+00:06:13.980 --> 00:06:15.580
+Esto se aplica en el almacén como recurso,
+
+00:06:15.640 --> 00:06:16.600
+no a los datos que contiene.
+
+00:06:16.960 --> 00:06:18.440
+Un propietario puede eliminar todo el almacén.
+
+00:06:18.840 --> 00:06:20.520
+Un colaborador puede modificar la configuración.
+
+00:06:20.900 --> 00:06:22.120
+Pero ninguno de estos roles
+
+00:06:22.120 --> 00:06:24.480
+por sí solo da acceso a los secretos internos.
+
+00:06:25.260 --> 00:06:26.560
+Esa es una capa de permisos distinta
+
+00:06:26.560 --> 00:06:27.640
+y ese es el punto clave.
+
+00:06:27.920 --> 00:06:29.380
+El control de acceso es como un pastel de las capas.
+
+00:06:29.780 --> 00:06:31.160
+Necesita acceso al almacén en sí,
+
+00:06:31.340 --> 00:06:32.140
+esa es la primera capa,
+
+00:06:32.300 --> 00:06:33.340
+y necesita acceso a los datos
+
+00:06:33.340 --> 00:06:34.020
+dentro del almacén,
+
+00:06:34.080 --> 00:06:34.580
+esa es la segunda.
+
+00:06:35.460 --> 00:06:36.700
+Ambos deben concederse por separado.
+
+00:06:37.220 --> 00:06:38.340
+La mayoría de los principiantes
+
+00:06:38.340 --> 00:06:39.520
+solo piensan en la primera capa
+
+00:06:39.520 --> 00:06:40.000
+y en la segunda.
+
+00:06:40.560 --> 00:06:41.460
+Ahí es donde comienzan los problemas.
+
+00:06:42.260 --> 00:06:43.280
+El error de seguridad número uno.
+
+00:06:43.620 --> 00:06:44.100
+Este es el asunto.
+
+00:06:44.460 --> 00:06:45.180
+La mayoría de la gente
+
+00:06:45.180 --> 00:06:46.400
+ve el rol de colaborador de Key Vault
+
+00:06:46.400 --> 00:06:47.000
+y piensa que es seguro.
+
+00:06:47.340 --> 00:06:48.380
+Ven la palabra colaborador
+
+00:06:48.380 --> 00:06:50.320
+y asumen que pueden administrar la configuración
+
+00:06:50.320 --> 00:06:51.540
+pero no tocar los secretos.
+
+00:06:51.540 --> 00:06:53.200
+La propia documentación de Microsoft
+
+00:06:53.200 --> 00:06:54.300
+decía originalmente exactamente
+
+00:06:54.300 --> 00:06:55.940
+este error no le permite acceder
+
+00:06:55.940 --> 00:06:57.680
+a secretos, claves o certificados.
+
+00:06:58.360 --> 00:06:59.380
+Excepto que eso no es de todo cierto.
+
+00:06:59.920 --> 00:07:01.800
+Un usuario con el rol de colaborador de Key Vault
+
+00:07:01.800 --> 00:07:02.880
+puede modificar las políticas
+
+00:07:02.880 --> 00:07:03.880
+de acceso del almacén.
+
+00:07:04.420 --> 00:07:05.660
+Y si ese almacén todavía usa
+
+00:07:05.660 --> 00:07:06.900
+políticas de acceso heredadas,
+
+00:07:07.200 --> 00:07:07.820
+lo cual hace mucho,
+
+00:07:07.960 --> 00:07:09.000
+simplemente pueden otorgarse
+
+00:07:09.000 --> 00:07:10.040
+acceso de lectura total
+
+00:07:10.040 --> 00:07:12.100
+a cada secreto, clave y certificado.
+
+00:07:12.760 --> 00:07:14.220
+No se necesita ninguna explotación especial
+
+00:07:14.220 --> 00:07:14.980
+ni una de que parchear.
+
+00:07:15.360 --> 00:07:16.580
+Es simplemente como funciona el permiso.
+
+00:07:16.960 --> 00:07:18.440
+Los investigadores de seguridad de Datadoc
+
+00:07:18.440 --> 00:07:19.500
+lo demostraron en 2020.
+
+00:07:19.500 --> 00:07:21.040
+Demostraron que un colaborador
+
+00:07:21.040 --> 00:07:22.380
+podía escalar el acceso total
+
+00:07:22.380 --> 00:07:23.760
+a los datos en cualquier almacén
+
+00:07:23.760 --> 00:07:25.240
+que use políticas de acceso heredadas.
+
+00:07:25.840 --> 00:07:26.980
+La respuesta de Microsoft fue interesante.
+
+00:07:27.620 --> 00:07:28.980
+Dijeron que esto no es una vulnerabilidad
+
+00:07:28.980 --> 00:07:29.780
+porque los colaboradores
+
+00:07:29.780 --> 00:07:30.940
+están diseñados para gestionar
+
+00:07:30.940 --> 00:07:31.760
+políticas de acceso,
+
+00:07:31.900 --> 00:07:33.040
+pero actualizaron la documentación
+
+00:07:33.040 --> 00:07:34.260
+para advertir explícitamente
+
+00:07:34.260 --> 00:07:35.240
+que el rol puede otorgarse
+
+00:07:35.240 --> 00:07:36.240
+acceso al plano de datos.
+
+00:07:36.880 --> 00:07:37.260
+Por lo tanto,
+
+00:07:37.360 --> 00:07:38.380
+esto no es un error en Key Vault,
+
+00:07:38.480 --> 00:07:39.560
+es una trampa de configuración.
+
+00:07:40.020 --> 00:07:41.480
+Y atrapa incluso equipos experimentados
+
+00:07:41.480 --> 00:07:42.220
+porque el nombre del rol
+
+00:07:42.220 --> 00:07:42.840
+suena inofensivo.
+
+00:07:43.620 --> 00:07:44.540
+Colaborador no suena como alguien
+
+00:07:44.540 --> 00:07:45.520
+que pueda leer las contraseñas
+
+00:07:45.520 --> 00:07:46.200
+de su base de datos,
+
+00:07:46.340 --> 00:07:47.480
+pero en la práctica pueden hacerlo.
+
+00:07:47.980 --> 00:07:48.640
+Piensa en el riesgo.
+
+00:07:48.640 --> 00:07:50.480
+Si un atacante compromete una cuenta
+
+00:07:50.480 --> 00:07:52.160
+con el rol de colaborador
+
+00:07:52.160 --> 00:07:53.020
+en su almacén de claves,
+
+00:07:53.220 --> 00:07:54.700
+no necesita entrar por la fuerza.
+
+00:07:55.180 --> 00:07:56.360
+No necesita descifrar el cifrado.
+
+00:07:56.720 --> 00:07:58.100
+Solo modifican la política de acceso,
+
+00:07:58.420 --> 00:07:59.500
+se otorgan acceso de lectura
+
+00:07:59.500 --> 00:08:00.780
+y exfiltran silenciosamente
+
+00:08:00.780 --> 00:08:02.140
+todos los secretos almacenados,
+
+00:08:02.220 --> 00:08:02.900
+cadenas de conexión,
+
+00:08:03.020 --> 00:08:04.280
+claves API, certificados,
+
+00:08:04.560 --> 00:08:04.780
+todo.
+
+00:08:05.260 --> 00:08:05.460
+Todo.
+
+00:08:05.760 --> 00:08:06.640
+Y debido a que los cambios
+
+00:08:06.640 --> 00:08:07.560
+en la política de acceso
+
+00:08:07.560 --> 00:08:09.120
+son actividades administrativas normales,
+
+00:08:09.140 --> 00:08:09.920
+es posible que no activen
+
+00:08:09.920 --> 00:08:10.500
+ningún alerta.
+
+00:08:10.740 --> 00:08:11.020
+Entonces, uso.
+
+00:08:11.020 --> 00:08:12.640
+Primero, use RBACC de Azure
+
+00:08:12.640 --> 00:08:13.640
+para el acceso al plano de datos
+
+00:08:13.640 --> 00:08:14.980
+en lugar de políticas de accesoriedad.
+
+00:08:15.460 --> 00:08:16.320
+RBACC para la administración
+
+00:08:16.320 --> 00:08:17.760
+del almacén de los datos que contiene.
+
+00:08:18.640 --> 00:08:18.940
+Segundo,
+
+00:08:19.020 --> 00:08:19.820
+nunca otorgues el rol
+
+00:08:19.820 --> 00:08:20.560
+de colaborador de Key Vault
+
+00:08:20.560 --> 00:08:21.920
+a nadie que no lo necesite absolutamente.
+
+00:08:22.920 --> 00:08:23.320
+Tercero,
+
+00:08:23.360 --> 00:08:24.180
+si ya tienes usuarios
+
+00:08:24.180 --> 00:08:24.740
+con ese rol,
+
+00:08:24.840 --> 00:08:25.780
+auditorialos hoy mismo.
+
+00:08:26.220 --> 00:08:27.040
+Reemplace al colaborador
+
+00:08:27.040 --> 00:08:28.100
+con roles más específicos
+
+00:08:28.100 --> 00:08:29.380
+como usuario de secretos de Key Vault
+
+00:08:29.380 --> 00:08:30.720
+o administrador de secretos de Key Vault.
+
+00:08:31.320 --> 00:08:32.180
+Existe un segundo error
+
+00:08:32.180 --> 00:08:32.800
+que agrava este.
+
+00:08:32.900 --> 00:08:34.100
+Poner todos tus secretos
+
+00:08:34.100 --> 00:08:34.940
+en un solo almacén.
+
+00:08:35.540 --> 00:08:36.640
+Tienes un almacén para todo.
+
+00:08:36.820 --> 00:08:37.760
+Desarrollo, pruebas,
+
+00:08:38.000 --> 00:08:38.880
+preproducción, producción
+
+00:08:38.880 --> 00:08:40.340
+y todas tus aplicaciones
+
+00:08:40.340 --> 00:08:41.840
+y ese almacén se ve comprometido.
+
+00:08:42.180 --> 00:08:43.380
+Todo queda expuesto.
+
+00:08:43.860 --> 00:08:44.700
+Es un punto único de FAI.
+
+00:08:45.140 --> 00:08:45.740
+Hablaremos más
+
+00:08:45.740 --> 00:08:46.280
+sobre la estrategia
+
+00:08:46.280 --> 00:08:47.440
+de almacenes múltiples en un momento,
+
+00:08:47.560 --> 00:08:48.260
+pero el principio es simple.
+
+00:08:48.800 --> 00:08:49.620
+No pongas todos los huevos
+
+00:08:49.620 --> 00:08:50.360
+en la misma canasta,
+
+00:08:50.500 --> 00:08:51.460
+especialmente cuando esa canasta
+
+00:08:51.460 --> 00:08:52.040
+contiene las llaves
+
+00:08:52.040 --> 00:08:53.000
+de toda tu infraestructura.
+
+00:08:54.280 --> 00:08:55.140
+Identidad administrada
+
+00:08:55.140 --> 00:08:55.900
+el estándar de oro.
+
+00:08:56.260 --> 00:08:57.260
+No sé cómo haces esto correctamente.
+
+00:08:57.660 --> 00:08:58.560
+Hablemos de la mejor manera
+
+00:08:58.560 --> 00:08:59.300
+de acceder a Key Vault.
+
+00:08:59.300 --> 00:09:00.480
+Un problema fundamental.
+
+00:09:00.940 --> 00:09:02.300
+Para tener credenciales de Key Vault,
+
+00:09:02.420 --> 00:09:03.800
+tu aplicación necesita autenticarse,
+
+00:09:03.900 --> 00:09:04.780
+pero para autenticarse
+
+00:09:04.780 --> 00:09:06.100
+necesita credenciales
+
+00:09:06.100 --> 00:09:07.900
+donde almacena las credenciales
+
+00:09:07.900 --> 00:09:08.640
+que tu aplicación usa
+
+00:09:08.640 --> 00:09:09.380
+para obtener credenciales.
+
+00:09:09.700 --> 00:09:10.840
+Es el dilema del huevo y la gallina.
+
+00:09:11.280 --> 00:09:11.880
+La vieja respuesta
+
+00:09:11.880 --> 00:09:13.000
+era una entidad de servicio
+
+00:09:13.000 --> 00:09:14.080
+con un secreto de cliente,
+
+00:09:14.480 --> 00:09:15.060
+pero ese secreto
+
+00:09:15.060 --> 00:09:16.080
+debe vivir en alguna parte,
+
+00:09:16.240 --> 00:09:17.560
+tal vez en un archivo de configuración,
+
+00:09:17.680 --> 00:09:18.360
+variables de entorno
+
+00:09:18.360 --> 00:09:19.600
+o un flujo de despliegue.
+
+00:09:20.020 --> 00:09:21.400
+Y ahora vuelves al mismo problema.
+
+00:09:21.820 --> 00:09:22.620
+Solo has movido el secreto
+
+00:09:22.620 --> 00:09:23.020
+a otro lugar.
+
+00:09:23.620 --> 00:09:24.360
+La identidad administrada
+
+00:09:24.360 --> 00:09:25.260
+resuelve esto por completo.
+
+00:09:25.620 --> 00:09:26.260
+Así es como funciona.
+
+00:09:26.500 --> 00:09:27.580
+Cuando habilitas la identidad
+
+00:09:27.580 --> 00:09:29.100
+administrada en un recurso de Azure,
+
+00:09:29.100 --> 00:09:30.180
+como una aplicación web,
+
+00:09:30.380 --> 00:09:31.720
+una función o una máquina virtual,
+
+00:09:32.180 --> 00:09:33.200
+Azure crea automáticamente
+
+00:09:33.200 --> 00:09:33.800
+una identidad
+
+00:09:33.800 --> 00:09:35.180
+para ese recurso en Entry.id.
+
+00:09:35.820 --> 00:09:36.780
+Esa identidad es administrada
+
+00:09:36.780 --> 00:09:37.700
+completamente por Azure,
+
+00:09:38.140 --> 00:09:39.240
+sin credenciales que crear,
+
+00:09:39.360 --> 00:09:40.360
+sin secretos que rotar,
+
+00:09:40.440 --> 00:09:41.260
+nada que almacenar.
+
+00:09:41.920 --> 00:09:42.740
+El recurso simplemente
+
+00:09:42.740 --> 00:09:43.480
+tiene una identidad
+
+00:09:43.480 --> 00:09:44.520
+que Azure reconoce.
+
+00:09:44.980 --> 00:09:45.560
+Existen dos tipos.
+
+00:09:46.080 --> 00:09:46.920
+La identidad administrada
+
+00:09:46.920 --> 00:09:47.720
+asignada por el sistema
+
+00:09:47.720 --> 00:09:48.280
+está vinculada
+
+00:09:48.280 --> 00:09:49.240
+a un recurso específico.
+
+00:09:50.000 --> 00:09:50.800
+Si eliminas el recurso,
+
+00:09:50.860 --> 00:09:51.800
+la identidad también desaparece.
+
+00:09:52.440 --> 00:09:53.500
+Comparten un ciclo de vida,
+
+00:09:53.660 --> 00:09:54.200
+lo que simplifica
+
+00:09:54.200 --> 00:09:54.820
+la administración.
+
+00:09:55.400 --> 00:09:56.520
+La identidad administrada
+
+00:09:56.520 --> 00:09:57.500
+asignada por el usuario
+
+00:09:57.500 --> 00:09:58.740
+es una identidad independiente
+
+00:09:58.740 --> 00:09:59.440
+que puedes asignar
+
+00:09:59.440 --> 00:10:00.200
+a múltiples recursos.
+
+00:10:00.680 --> 00:10:01.680
+No comparte ciclo de vida
+
+00:10:01.680 --> 00:10:02.320
+con ninguno de ellos,
+
+00:10:02.400 --> 00:10:02.920
+por lo que es útil
+
+00:10:02.920 --> 00:10:03.560
+cuando necesitas
+
+00:10:03.560 --> 00:10:04.260
+la misma identidad
+
+00:10:04.260 --> 00:10:05.060
+en varios servicios.
+
+00:10:05.860 --> 00:10:06.480
+Así es como se ve esto
+
+00:10:06.480 --> 00:10:06.920
+en la práctica.
+
+00:10:07.560 --> 00:10:08.380
+Tienes una aplicación web
+
+00:10:08.380 --> 00:10:09.100
+que necesita leer
+
+00:10:09.100 --> 00:10:09.940
+una cadena de conexión
+
+00:10:09.940 --> 00:10:10.600
+de base de datos
+
+00:10:10.600 --> 00:10:11.160
+desde Key Vault.
+
+00:10:11.600 --> 00:10:12.400
+Habilitas la identidad
+
+00:10:12.400 --> 00:10:13.300
+administrada asignada
+
+00:10:13.300 --> 00:10:13.760
+por el sistema
+
+00:10:13.760 --> 00:10:14.400
+en la aplicación web.
+
+00:10:14.940 --> 00:10:15.180
+Luego,
+
+00:10:15.320 --> 00:10:16.300
+otorgas esa identidad,
+
+00:10:16.620 --> 00:10:17.180
+el rol de usuario
+
+00:10:17.180 --> 00:10:18.120
+de secretos de Key Vault
+
+00:10:18.120 --> 00:10:18.800
+en tu almacén.
+
+00:10:19.080 --> 00:10:19.300
+Esa,
+
+00:10:19.680 --> 00:10:20.640
+sin cadenas de conexión
+
+00:10:20.640 --> 00:10:21.040
+en el código,
+
+00:10:21.160 --> 00:10:21.900
+sin secretos de cliente
+
+00:10:21.900 --> 00:10:22.700
+en archivos de configuración.
+
+00:10:22.700 --> 00:10:23.740
+La aplicación web
+
+00:10:23.740 --> 00:10:24.660
+se autentica en Key Vault
+
+00:10:24.660 --> 00:10:26.000
+usando su identidad administrada
+
+00:10:26.000 --> 00:10:26.840
+y Azure maneja
+
+00:10:26.840 --> 00:10:27.420
+toda la gestión
+
+00:10:27.420 --> 00:10:28.020
+de credenciales
+
+00:10:28.020 --> 00:10:28.700
+en segundo plano.
+
+00:10:29.240 --> 00:10:30.100
+Esto es lo más cercano
+
+00:10:30.100 --> 00:10:30.900
+a una autenticación
+
+00:10:30.900 --> 00:10:31.880
+sin credenciales en Azure.
+
+00:10:32.740 --> 00:10:33.500
+Es un cambio radical
+
+00:10:33.500 --> 00:10:34.100
+para la seguridad
+
+00:10:34.100 --> 00:10:35.140
+porque elimina
+
+00:10:35.140 --> 00:10:35.760
+el vector de ataque
+
+00:10:35.760 --> 00:10:36.240
+más común,
+
+00:10:36.500 --> 00:10:37.680
+el robo de credenciales.
+
+00:10:38.180 --> 00:10:39.040
+Si no hay credenciales
+
+00:10:39.040 --> 00:10:39.480
+que robar,
+
+00:10:39.600 --> 00:10:40.200
+no hay nada
+
+00:10:40.200 --> 00:10:40.780
+que un atacante
+
+00:10:40.780 --> 00:10:41.400
+pueda comprometer.
+
+00:10:41.960 --> 00:10:42.580
+Permítame darles
+
+00:10:42.580 --> 00:10:42.940
+un ejemplo
+
+00:10:42.940 --> 00:10:43.380
+en el mundo real.
+
+00:10:43.880 --> 00:10:44.520
+Imagina un proceso
+
+00:10:44.520 --> 00:10:45.280
+de datos en Synapse
+
+00:10:45.280 --> 00:10:46.040
+que necesita acceder
+
+00:10:46.040 --> 00:10:46.440
+a una cuenta
+
+00:10:46.440 --> 00:10:47.100
+de almacenamiento.
+
+00:10:47.600 --> 00:10:47.940
+Igualmente,
+
+00:10:48.020 --> 00:10:48.540
+uno almacenaba
+
+00:10:48.540 --> 00:10:49.320
+la clave de la cuenta
+
+00:10:49.320 --> 00:10:49.940
+de almacenamiento
+
+00:10:49.940 --> 00:10:50.580
+de la configuración
+
+00:10:50.580 --> 00:10:51.060
+del proceso.
+
+00:10:51.680 --> 00:10:52.640
+Si alguien obtenía acceso
+
+00:10:52.640 --> 00:10:53.140
+a ese proceso,
+
+00:10:53.280 --> 00:10:53.740
+tiene la clave.
+
+00:10:54.420 --> 00:10:55.380
+Con la identidad administrada,
+
+00:10:55.440 --> 00:10:56.060
+el espacio de trabajo
+
+00:10:56.060 --> 00:10:57.080
+de Synapse tiene una identidad.
+
+00:10:57.560 --> 00:10:58.060
+A esa identidad
+
+00:10:58.060 --> 00:10:58.760
+se le concede acceso
+
+00:10:58.760 --> 00:10:59.140
+a Key Vault
+
+00:10:59.140 --> 00:10:59.800
+donde se almacena
+
+00:10:59.800 --> 00:11:00.760
+la clave de la cuenta
+
+00:11:00.760 --> 00:11:01.320
+de almacenamiento.
+
+00:11:01.920 --> 00:11:02.520
+El proceso obtiene
+
+00:11:02.520 --> 00:11:03.200
+la clave en tiempo
+
+00:11:03.200 --> 00:11:03.680
+de ejecución,
+
+00:11:03.780 --> 00:11:04.720
+la usa y nunca la almacena
+
+00:11:04.720 --> 00:11:05.340
+en ninguna parte,
+
+00:11:06.100 --> 00:11:07.000
+sin claves en el código,
+
+00:11:07.120 --> 00:11:07.660
+sin secretos
+
+00:11:07.660 --> 00:11:08.300
+en la configuración
+
+00:11:08.300 --> 00:11:08.740
+del proceso.
+
+00:11:09.160 --> 00:11:09.960
+Al combinar la identidad
+
+00:11:09.960 --> 00:11:10.780
+administrada con la RBA
+
+00:11:10.780 --> 00:11:11.480
+a base y al principio
+
+00:11:11.480 --> 00:11:12.200
+de menor privilegio,
+
+00:11:12.300 --> 00:11:13.120
+se obtiene una base segura
+
+00:11:13.120 --> 00:11:13.700
+para cualquier carga
+
+00:11:13.700 --> 00:11:14.340
+de trabajo en Azure.
+
+00:11:14.800 --> 00:11:15.460
+Sus aplicaciones
+
+00:11:15.460 --> 00:11:16.020
+se autentican
+
+00:11:16.020 --> 00:11:16.840
+sin credenciales.
+
+00:11:17.280 --> 00:11:17.780
+Acceden solo
+
+00:11:17.780 --> 00:11:18.480
+a lo que necesitan
+
+00:11:18.480 --> 00:11:19.000
+y cada acceso
+
+00:11:19.000 --> 00:11:19.580
+queda registrado
+
+00:11:19.580 --> 00:11:20.160
+y es auditable.
+
+00:11:20.620 --> 00:11:21.120
+Es el patrón
+
+00:11:21.120 --> 00:11:22.140
+que Microsoft recomienda
+
+00:11:22.140 --> 00:11:23.280
+para casi cualquier escenario.
+
+00:11:24.060 --> 00:11:24.760
+Una vez que comiencen
+
+00:11:24.760 --> 00:11:25.200
+a usarlo,
+
+00:11:25.260 --> 00:11:25.780
+se preguntarán
+
+00:11:25.780 --> 00:11:26.300
+por qué lo hacían
+
+00:11:26.300 --> 00:11:26.840
+de otra manera.
+
+00:11:27.580 --> 00:11:28.240
+Costos y estrategia
+
+00:11:28.240 --> 00:11:28.980
+de múltiples almacenes.
+
+00:11:29.580 --> 00:11:29.760
+Entonces,
+
+00:11:29.860 --> 00:11:30.560
+hablemos de costos.
+
+00:11:31.100 --> 00:11:31.740
+Aquí es donde la mayoría
+
+00:11:31.740 --> 00:11:32.480
+de la gente se sorprende.
+
+00:11:33.000 --> 00:11:33.980
+¿Cuánto cuesta realmente
+
+00:11:33.980 --> 00:11:34.560
+Azure Key Vault?
+
+00:11:35.080 --> 00:11:36.020
+El modo de precios es sencillo.
+
+00:11:36.380 --> 00:11:36.780
+No hay tarifa
+
+00:11:36.780 --> 00:11:37.720
+de almacenamiento por secreto.
+
+00:11:38.020 --> 00:11:39.080
+No paga por cada contraseña
+
+00:11:39.080 --> 00:11:39.880
+o clave API que almacenan.
+
+00:11:40.220 --> 00:11:40.580
+En cambio,
+
+00:11:40.660 --> 00:11:41.260
+paga por operación.
+
+00:11:41.880 --> 00:11:42.720
+Para el nivel estándar,
+
+00:11:42.940 --> 00:11:43.700
+son los 3 centavos
+
+00:11:43.700 --> 00:11:44.800
+por cada 10.000 operaciones.
+
+00:11:45.420 --> 00:11:45.860
+Una llamada
+
+00:11:45.860 --> 00:11:46.640
+para obtener un secreto
+
+00:11:46.640 --> 00:11:47.320
+cuenta como una operación.
+
+00:11:47.720 --> 00:11:48.780
+También lo es crear un secreto
+
+00:11:48.780 --> 00:11:49.480
+o listar lo que hay
+
+00:11:49.480 --> 00:11:49.980
+en el almacén.
+
+00:11:50.440 --> 00:11:51.340
+Para una aplicación típica
+
+00:11:51.340 --> 00:11:52.340
+de tamaño pequeño o mediano,
+
+00:11:52.460 --> 00:11:53.260
+eso suma apenas centavos
+
+00:11:53.260 --> 00:11:53.520
+al mes.
+
+00:11:54.080 --> 00:11:54.820
+Literalmente centavo.
+
+00:11:55.200 --> 00:11:55.700
+Comparen eso
+
+00:11:55.700 --> 00:11:56.980
+con AWS Secrets Manager.
+
+00:11:57.740 --> 00:11:58.600
+Cobran 40 centavos
+
+00:11:58.600 --> 00:11:59.260
+por secreto al mes
+
+00:11:59.260 --> 00:12:00.100
+solo por almacenarlo
+
+00:12:00.100 --> 00:12:01.000
+o más cargos adicionales
+
+00:12:01.000 --> 00:12:01.700
+por llamadas al app.
+
+00:12:02.220 --> 00:12:03.080
+Si tienes 100 secretos,
+
+00:12:03.120 --> 00:12:04.020
+son 40 dólares al mes
+
+00:12:04.020 --> 00:12:04.560
+antes de haber leído
+
+00:12:04.560 --> 00:12:05.240
+siquiera uno de ellos.
+
+00:12:05.520 --> 00:12:06.400
+Con Azure Key Vault,
+
+00:12:06.840 --> 00:12:07.400
+100 secretos
+
+00:12:07.400 --> 00:12:08.160
+con un uso moderado
+
+00:12:08.160 --> 00:12:09.540
+podrían costarle 15 centavos.
+
+00:12:09.900 --> 00:12:10.620
+La diferencia aumenta
+
+00:12:10.620 --> 00:12:11.440
+rápidamente a gran escala.
+
+00:12:11.760 --> 00:12:12.040
+Ahora bien,
+
+00:12:12.120 --> 00:12:12.720
+existe un nivel prim.
+
+00:12:13.000 --> 00:12:13.660
+Este añade claves
+
+00:12:13.660 --> 00:12:14.700
+respaldadas por HCM
+
+00:12:14.700 --> 00:12:15.440
+para cargas de trabajo
+
+00:12:15.440 --> 00:12:16.500
+que necesitan el mayor nivel
+
+00:12:16.500 --> 00:12:17.600
+de garantía criptográfica.
+
+00:12:17.740 --> 00:12:18.940
+Piensa en transacciones financieras,
+
+00:12:19.140 --> 00:12:19.640
+datos de salud
+
+00:12:19.640 --> 00:12:20.700
+o sistemas gubernamentales.
+
+00:12:21.280 --> 00:12:22.200
+El costo por operación
+
+00:12:22.200 --> 00:12:22.700
+es más alto.
+
+00:12:23.040 --> 00:12:24.040
+Alrededor de 15 centavos
+
+00:12:24.040 --> 00:12:24.820
+por 10.000 operaciones
+
+00:12:24.820 --> 00:12:25.940
+para tipos de clavanzados
+
+00:12:25.940 --> 00:12:26.820
+más una tarifa mensual
+
+00:12:26.820 --> 00:12:27.820
+por clave HCM.
+
+00:12:28.640 --> 00:12:29.360
+Pero para la mayoría
+
+00:12:29.360 --> 00:12:30.060
+de las aplicaciones,
+
+00:12:30.300 --> 00:12:30.820
+el nivel estándar
+
+00:12:30.820 --> 00:12:31.520
+es más que suficiente.
+
+00:12:32.200 --> 00:12:32.980
+Aquí está la sorpresa
+
+00:12:32.980 --> 00:12:33.440
+en los costos
+
+00:12:33.440 --> 00:12:34.440
+que toma la gente desprevenida.
+
+00:12:35.040 --> 00:12:35.880
+Para una aplicación web
+
+00:12:35.880 --> 00:12:36.820
+típica con un puñado
+
+00:12:36.820 --> 00:12:37.300
+de secretos
+
+00:12:37.300 --> 00:12:38.200
+y unos miles de operaciones
+
+00:12:38.200 --> 00:12:38.520
+al mes,
+
+00:12:38.660 --> 00:12:39.420
+Key Vault cuesta menos
+
+00:12:39.420 --> 00:12:39.980
+de un dólar.
+
+00:12:40.720 --> 00:12:41.540
+Gastará más en el café
+
+00:12:41.540 --> 00:12:42.780
+que tome mientras lo configura.
+
+00:12:43.420 --> 00:12:44.140
+Pero hay una estrategia
+
+00:12:44.140 --> 00:12:45.080
+que importa más que el costo.
+
+00:12:45.660 --> 00:12:46.560
+¿Cuántas bóvedas utiliza?
+
+00:12:46.960 --> 00:12:47.700
+El enfoque inteligente
+
+00:12:47.700 --> 00:12:48.240
+es una estrategia
+
+00:12:48.240 --> 00:12:48.800
+de múltiples pruebas.
+
+00:12:49.400 --> 00:12:50.240
+Use bóvedas separadas
+
+00:12:50.240 --> 00:12:50.860
+para desarrollo,
+
+00:12:51.020 --> 00:12:51.220
+pruebas,
+
+00:12:51.340 --> 00:12:52.220
+preproducción y producción.
+
+00:12:52.700 --> 00:12:53.540
+Esto evita el accidente
+
+00:12:53.540 --> 00:12:53.940
+más común.
+
+00:12:54.520 --> 00:12:55.160
+Alguien ejecutando
+
+00:12:55.160 --> 00:12:55.800
+un script de prueba
+
+00:12:55.800 --> 00:12:56.720
+que lea accidentalmente
+
+00:12:56.720 --> 00:12:57.280
+una base de datos
+
+00:12:57.280 --> 00:12:57.720
+de producción
+
+00:12:57.720 --> 00:12:58.640
+porque la cadena de conexión
+
+00:12:58.640 --> 00:12:59.500
+estaba en la misma bóveda.
+
+00:13:00.040 --> 00:13:00.720
+Cuando los entornos
+
+00:13:00.720 --> 00:13:01.380
+están separados,
+
+00:13:01.380 --> 00:13:02.440
+ese error se vuelve imposible.
+
+00:13:02.840 --> 00:13:03.620
+También debe separar
+
+00:13:03.620 --> 00:13:04.460
+por unidad de negocio
+
+00:13:04.460 --> 00:13:05.280
+o dominio de cumplimiento.
+
+00:13:05.880 --> 00:13:06.520
+Si maneja datos
+
+00:13:06.520 --> 00:13:07.300
+de tarjetas de pago,
+
+00:13:07.500 --> 00:13:08.240
+coloque esos secretos
+
+00:13:08.240 --> 00:13:08.940
+en su propia bóveda.
+
+00:13:09.440 --> 00:13:10.120
+Las cadenas de trabajo
+
+00:13:10.120 --> 00:13:10.920
+empresariales generales
+
+00:13:10.920 --> 00:13:11.360
+bañan otra
+
+00:13:11.360 --> 00:13:12.180
+y los datos de salud
+
+00:13:12.180 --> 00:13:12.600
+en la tercera.
+
+00:13:12.860 --> 00:13:13.820
+No se trata de ser difícil,
+
+00:13:13.940 --> 00:13:14.520
+se trata de limitar
+
+00:13:14.520 --> 00:13:15.220
+el radio impacto.
+
+00:13:15.940 --> 00:13:17.200
+Si una bóveda se ve comprometida,
+
+00:13:17.400 --> 00:13:17.980
+solo los secretos
+
+00:13:17.980 --> 00:13:18.480
+en esa bóveda
+
+00:13:18.480 --> 00:13:19.140
+quedan expuestos.
+
+00:13:19.520 --> 00:13:20.420
+El resto de su infraestructura
+
+00:13:20.420 --> 00:13:21.100
+permanece seguro.
+
+00:13:21.500 --> 00:13:22.120
+Dos redes de seguridad
+
+00:13:22.120 --> 00:13:22.500
+integradas
+
+00:13:22.500 --> 00:13:23.260
+que siempre debería gritar.
+
+00:13:23.660 --> 00:13:24.480
+La eliminación temporal
+
+00:13:24.480 --> 00:13:25.300
+significa que si alguien
+
+00:13:25.300 --> 00:13:25.840
+borra un secreto
+
+00:13:25.840 --> 00:13:27.000
+no desaparece permanentemente.
+
+00:13:27.500 --> 00:13:28.820
+Entra en un estado recuperable
+
+00:13:28.820 --> 00:13:29.880
+por un periodo de retención
+
+00:13:29.880 --> 00:13:30.520
+que usted elige
+
+00:13:30.520 --> 00:13:31.520
+hasta 90 días.
+
+00:13:32.500 --> 00:13:33.340
+La protección contra pulga
+
+00:13:33.340 --> 00:13:33.900
+un paso más cerca.
+
+00:13:34.540 --> 00:13:35.240
+Nadie puede eliminar
+
+00:13:35.240 --> 00:13:35.900
+permanentemente
+
+00:13:35.900 --> 00:13:36.880
+la bóveda o su contenido
+
+00:13:36.880 --> 00:13:37.440
+hasta que expire
+
+00:13:37.440 --> 00:13:38.320
+ese periodo de retención.
+
+00:13:38.640 --> 00:13:39.040
+Juntos,
+
+00:13:39.340 --> 00:13:40.340
+previenen el tipo de pérdida
+
+00:13:40.340 --> 00:13:41.060
+de datos accidental
+
+00:13:41.060 --> 00:13:41.800
+que quita el sueño
+
+00:13:41.800 --> 00:13:42.780
+a los equipos de seguridad.
+
+00:13:43.600 --> 00:13:44.220
+¿Cómo se conecta todo?
+
+00:13:44.620 --> 00:13:45.580
+Vamos a unir todo esto
+
+00:13:45.580 --> 00:13:46.620
+y ver cómo encajan las piezas.
+
+00:13:47.260 --> 00:13:48.120
+Keyboard no es una isla.
+
+00:13:48.660 --> 00:13:49.860
+Es el sistema nervioso central
+
+00:13:49.860 --> 00:13:50.520
+para los secretos
+
+00:13:50.520 --> 00:13:51.560
+en su arquitectura de Azure.
+
+00:13:52.260 --> 00:13:52.820
+Cuando entiende
+
+00:13:52.820 --> 00:13:53.880
+cómo fluye todo el sistema,
+
+00:13:54.040 --> 00:13:55.180
+todo encaja perfectamente.
+
+00:13:55.660 --> 00:13:56.340
+Esto es lo que sucede
+
+00:13:56.340 --> 00:13:57.040
+cuando una aplicación
+
+00:13:57.040 --> 00:13:57.820
+necesita un secreto.
+
+00:13:58.180 --> 00:13:59.180
+La aplicación lo solicita
+
+00:13:59.180 --> 00:14:00.420
+usando su identidad administrada.
+
+00:14:00.940 --> 00:14:01.460
+Esa identidad
+
+00:14:01.460 --> 00:14:02.220
+ya está registrada
+
+00:14:02.220 --> 00:14:02.820
+en Entra ID.
+
+00:14:03.520 --> 00:14:04.720
+Azure la crea automáticamente
+
+00:14:04.720 --> 00:14:05.320
+cuando habilitó
+
+00:14:05.320 --> 00:14:06.300
+la identidad administrada
+
+00:14:06.300 --> 00:14:06.940
+en el recurso.
+
+00:14:08.160 --> 00:14:08.860
+Entra ID valida
+
+00:14:08.860 --> 00:14:09.980
+que la identidad sea legítima
+
+00:14:09.980 --> 00:14:11.220
+luego pasa la solicitud
+
+00:14:11.220 --> 00:14:11.700
+a Keyboard.
+
+00:14:12.520 --> 00:14:13.300
+Keyboard verifica
+
+00:14:13.300 --> 00:14:14.240
+los permisos de rebaje
+
+00:14:14.240 --> 00:14:14.720
+asignado.
+
+00:14:15.380 --> 00:14:15.760
+Si la identidad
+
+00:14:15.760 --> 00:14:16.520
+tiene el rol correcto,
+
+00:14:16.580 --> 00:14:16.840
+por ejemplo,
+
+00:14:16.940 --> 00:14:18.140
+usuario de secretos de Keyboard,
+
+00:14:18.500 --> 00:14:19.260
+el secreto es devuelto.
+
+00:14:19.700 --> 00:14:20.220
+Todo esto sucede
+
+00:14:20.220 --> 00:14:20.780
+en milisegundos.
+
+00:14:21.240 --> 00:14:22.000
+La aplicación nunca viene
+
+00:14:22.000 --> 00:14:22.500
+a creenciar,
+
+00:14:23.100 --> 00:14:24.060
+nunca más en una contracción.
+
+00:14:24.420 --> 00:14:25.000
+Simplemente obtiene
+
+00:14:25.000 --> 00:14:25.580
+el valor que necesita.
+
+00:14:25.580 --> 00:14:26.240
+Ahora piensa
+
+00:14:26.240 --> 00:14:26.840
+en cuántos servicios
+
+00:14:26.840 --> 00:14:27.740
+de Azure pueden conectarse
+
+00:14:27.740 --> 00:14:28.040
+a esto.
+
+00:14:28.440 --> 00:14:29.360
+App Service Functions,
+
+00:14:29.480 --> 00:14:30.480
+IKS, Data Factory,
+
+00:14:30.620 --> 00:14:31.360
+Synapse, Logic Apps,
+
+00:14:31.500 --> 00:14:32.120
+DevOps, Pipelines,
+
+00:14:32.260 --> 00:14:32.480
+todos.
+
+00:14:33.020 --> 00:14:33.800
+Saben cómo comunicarse
+
+00:14:33.800 --> 00:14:34.180
+con Keyboard.
+
+00:14:34.640 --> 00:14:35.200
+Puede configurar
+
+00:14:35.200 --> 00:14:35.840
+una aplicación web
+
+00:14:35.840 --> 00:14:36.540
+para que haga referencia
+
+00:14:36.540 --> 00:14:37.400
+al secreto directamente
+
+00:14:37.400 --> 00:14:38.060
+en la configuración
+
+00:14:38.060 --> 00:14:38.540
+de la aplicación.
+
+00:14:39.380 --> 00:14:40.000
+Puede configurar
+
+00:14:40.000 --> 00:14:40.620
+una canalización
+
+00:14:40.620 --> 00:14:41.280
+de Data Factory
+
+00:14:41.280 --> 00:14:42.060
+para obtener una clave
+
+00:14:42.060 --> 00:14:42.320
+de cuenta
+
+00:14:42.320 --> 00:14:42.820
+de almacenamiento
+
+00:14:42.820 --> 00:14:43.480
+de Keyboard Keybusy.
+
+00:14:43.920 --> 00:14:44.760
+Puedes configurar
+
+00:14:44.760 --> 00:14:45.580
+un clúster de Kubernetes
+
+00:14:45.580 --> 00:14:46.480
+para obtener secretos
+
+00:14:46.480 --> 00:14:47.260
+usando el controlador
+
+00:14:47.260 --> 00:14:47.920
+CCI de Keyboard.
+
+00:14:48.380 --> 00:14:48.940
+Cada servicio
+
+00:14:48.940 --> 00:14:49.640
+se integra igual
+
+00:14:49.640 --> 00:14:50.980
+usando el mismo sistema
+
+00:14:50.980 --> 00:14:51.460
+de identidad,
+
+00:14:51.740 --> 00:14:52.880
+los mismos roles RBAs
+
+00:14:52.880 --> 00:14:53.700
+y el mismo registro
+
+00:14:53.700 --> 00:14:54.220
+de auditoría.
+
+00:14:54.840 --> 00:14:55.740
+El patrón DCI-CD
+
+00:14:55.740 --> 00:14:56.720
+es especialmente potente.
+
+00:14:57.120 --> 00:14:57.580
+Tus pipelines
+
+00:14:57.580 --> 00:14:58.460
+obtienen los secretos
+
+00:14:58.460 --> 00:14:58.860
+de Keyboard
+
+00:14:58.860 --> 00:14:59.600
+durante el despliegue.
+
+00:15:00.000 --> 00:15:00.780
+Nunca los almacenan
+
+00:15:00.780 --> 00:15:01.660
+en variables de pipeline
+
+00:15:01.660 --> 00:15:02.180
+y en secretos
+
+00:15:02.180 --> 00:15:02.760
+del repositorio.
+
+00:15:03.320 --> 00:15:04.040
+Si necesitas rotar
+
+00:15:04.040 --> 00:15:04.560
+la contraseña
+
+00:15:04.560 --> 00:15:05.240
+de una base de datos,
+
+00:15:05.360 --> 00:15:06.220
+la actualizas en Keyboard.
+
+00:15:06.780 --> 00:15:07.420
+La próxima vez
+
+00:15:07.420 --> 00:15:08.280
+que se ejecute el pipeline
+
+00:15:08.280 --> 00:15:09.000
+tomará el nuevo valor
+
+00:15:09.000 --> 00:15:09.500
+automáticamente.
+
+00:15:10.080 --> 00:15:11.020
+Sin cambios en el pipeline,
+
+00:15:11.140 --> 00:15:11.840
+sin cambios de código,
+
+00:15:11.960 --> 00:15:12.560
+sin redespliegues.
+
+00:15:13.000 --> 00:15:14.140
+Aquí es donde todo cobra sentido.
+
+00:15:14.620 --> 00:15:15.440
+Una vez que configuras
+
+00:15:15.440 --> 00:15:16.360
+Keyboard con identidad
+
+00:15:16.360 --> 00:15:17.840
+administrada y RBA-C,
+
+00:15:17.960 --> 00:15:18.600
+dejas de preocuparte
+
+00:15:18.600 --> 00:15:19.620
+por la gestión de credenciales.
+
+00:15:19.840 --> 00:15:20.380
+Tus aplicaciones
+
+00:15:22.880 --> 00:15:23.260
+lo noten.
+
+00:15:23.640 --> 00:15:24.180
+Los certificados
+
+00:15:24.180 --> 00:15:24.540
+se renuevan
+
+00:15:24.540 --> 00:15:25.400
+sin emergencia a la noche.
+
+00:15:25.920 --> 00:15:26.560
+El sistema maneja
+
+00:15:26.560 --> 00:15:27.200
+todo en segundo plano.
+
+00:15:27.640 --> 00:15:28.200
+Esta es la postura
+
+00:15:28.200 --> 00:15:28.560
+de seguridad
+
+00:15:28.560 --> 00:15:29.280
+que realmente importa.
+
+00:15:29.880 --> 00:15:30.380
+La identidad
+
+00:15:30.380 --> 00:15:31.000
+es el perímetro,
+
+00:15:31.120 --> 00:15:31.460
+no la red.
+
+00:15:31.900 --> 00:15:32.760
+No importa si alguien
+
+00:15:32.760 --> 00:15:33.360
+está dentro
+
+00:15:33.360 --> 00:15:34.540
+o fuera de tu red virtual.
+
+00:15:35.340 --> 00:15:35.800
+Lo que importa
+
+00:15:35.800 --> 00:15:37.180
+es si tienen una identidad válida
+
+00:15:37.180 --> 00:15:38.200
+con los permisos correctos.
+
+00:15:38.780 --> 00:15:39.480
+Keyboard hace cumplir
+
+00:15:39.480 --> 00:15:40.100
+esto por diseño.
+
+00:15:40.820 --> 00:15:41.840
+Cada solicitud de acceso
+
+00:15:41.840 --> 00:15:42.900
+pasa por la autenticación
+
+00:15:42.900 --> 00:15:43.380
+de EntraID
+
+00:15:43.380 --> 00:15:44.760
+y la autorización RBA-C,
+
+00:15:44.840 --> 00:15:45.320
+sin importar
+
+00:15:45.320 --> 00:15:46.260
+de dónde provenga.
+
+00:15:46.760 --> 00:15:47.640
+Y todo queda registrado.
+
+00:15:47.960 --> 00:15:48.740
+Cada lectura de secreto,
+
+00:15:48.800 --> 00:15:49.500
+cada operación de clave,
+
+00:15:49.580 --> 00:15:50.480
+cada recuperación de certificado.
+
+00:15:50.680 --> 00:15:51.380
+Puedes ver quién accedió
+
+00:15:52.880 --> 00:15:54.060
+Tienes los datos
+
+00:15:54.060 --> 00:15:54.820
+para investigar.
+
+00:15:55.280 --> 00:15:55.960
+Esto es crítico
+
+00:15:55.960 --> 00:15:56.640
+para el cumplimiento,
+
+00:15:56.740 --> 00:15:57.640
+la respuesta a incidentes
+
+00:15:57.640 --> 00:15:58.120
+y para saber
+
+00:15:58.120 --> 00:15:59.100
+qué sucede en tu entorno.
+
+00:15:59.780 --> 00:16:00.240
+Esa es la belleza
+
+00:16:00.240 --> 00:16:00.700
+de todo esto.
+
+00:16:01.080 --> 00:16:01.480
+Keyboard,
+
+00:16:01.720 --> 00:16:02.880
+EntraID, RBA-C
+
+00:16:02.880 --> 00:16:03.880
+e Identidad Administrada
+
+00:16:03.880 --> 00:16:04.600
+trabajan juntos
+
+00:16:04.600 --> 00:16:05.120
+como un marco
+
+00:16:05.120 --> 00:16:06.000
+de seguridad unificado.
+
+00:16:06.600 --> 00:16:06.960
+Cada pieza
+
+00:16:06.960 --> 00:16:07.660
+refuerza a las demás.
+
+00:16:08.500 --> 00:16:09.800
+Y cuando están bien configurados,
+
+00:16:09.940 --> 00:16:10.560
+tienes un sistema
+
+00:16:10.560 --> 00:16:11.640
+de gestión de credenciales
+
+00:16:11.640 --> 00:16:12.860
+más seguro y sencillo
+
+00:16:12.860 --> 00:16:13.260
+de operar
+
+00:16:13.260 --> 00:16:13.940
+que cualquier cosa
+
+00:16:13.940 --> 00:16:15.020
+que pudieras construir.
+
+00:16:16.280 --> 00:16:17.080
+Conclusiones prácticas.
+
+00:16:17.540 --> 00:16:17.760
+Entonces,
+
+00:16:17.860 --> 00:16:18.740
+¿qué deberías hacer ahora mismo?
+
+00:16:19.240 --> 00:16:20.260
+Convirtamos este conocimiento
+
+00:16:20.260 --> 00:16:20.680
+en acción.
+
+00:16:21.280 --> 00:16:21.620
+Aquí hay cosas
+
+00:16:21.620 --> 00:16:22.220
+que puedes abordar
+
+00:16:22.220 --> 00:16:22.640
+esta semana.
+
+00:16:23.120 --> 00:16:24.120
+Pies por tu modelo de permiso.
+
+00:16:24.440 --> 00:16:25.020
+Abre tu Keyboard
+
+00:16:25.020 --> 00:16:25.580
+en el portal,
+
+00:16:25.820 --> 00:16:26.420
+ve a la configuración
+
+00:16:26.420 --> 00:16:26.740
+de acceso
+
+00:16:26.740 --> 00:16:27.600
+y revisa lo que dice.
+
+00:16:28.100 --> 00:16:29.040
+Si ves política de acceso
+
+00:16:29.040 --> 00:16:29.480
+al almacén,
+
+00:16:29.540 --> 00:16:30.220
+esa es la forma antigua.
+
+00:16:30.840 --> 00:16:31.240
+Lo que quieres
+
+00:16:31.240 --> 00:16:32.160
+es el control de acceso
+
+00:16:32.160 --> 00:16:33.120
+basado en roles de Azure.
+
+00:16:33.620 --> 00:16:34.180
+La miración sencilla.
+
+00:16:35.200 --> 00:16:36.300
+Cambia el modelo de permisos
+
+00:16:36.300 --> 00:16:37.440
+y asigna roles RBAX
+
+00:16:37.440 --> 00:16:38.260
+a las mismas personas
+
+00:16:38.260 --> 00:16:39.100
+que ya tenían políticas
+
+00:16:39.100 --> 00:16:39.540
+de acceso.
+
+00:16:40.140 --> 00:16:40.540
+Hazlo hoy.
+
+00:16:41.060 --> 00:16:42.100
+Microsoft lo recomienda
+
+00:16:42.100 --> 00:16:42.720
+y la investigación
+
+00:16:42.720 --> 00:16:43.340
+que mencionamos
+
+00:16:43.340 --> 00:16:44.440
+mostró exactamente por qué.
+
+00:16:45.160 --> 00:16:45.540
+Luego audita
+
+00:16:45.540 --> 00:16:46.060
+todas las cuentas
+
+00:16:46.060 --> 00:16:46.640
+que tengan el rol
+
+00:16:46.640 --> 00:16:47.560
+de colaborador de Keyboard.
+
+00:16:48.620 --> 00:16:49.460
+Abre la hoja IAM
+
+00:16:49.460 --> 00:16:50.060
+en tu almacén
+
+00:16:50.060 --> 00:16:50.960
+y mira quién tiene acceso
+
+00:16:50.960 --> 00:16:51.540
+de colaborador.
+
+00:16:51.540 --> 00:16:53.020
+Cada persona con ese rol
+
+00:16:53.020 --> 00:16:53.900
+necesita una buena razón.
+
+00:16:54.160 --> 00:16:54.620
+La mayoría de las veces
+
+00:16:54.620 --> 00:16:55.000
+no es así.
+
+00:16:55.620 --> 00:16:56.440
+Reemplace al colaborador
+
+00:16:56.440 --> 00:16:57.600
+con algo más específico.
+
+00:16:57.920 --> 00:16:58.560
+Si alguien solo necesita
+
+00:16:58.560 --> 00:16:59.200
+leer secretos,
+
+00:16:59.300 --> 00:16:59.920
+asígnele usuario
+
+00:16:59.920 --> 00:17:00.620
+de secretos de Keyboard.
+
+00:17:01.120 --> 00:17:02.660
+Si necesitan administrar secretos,
+
+00:17:02.860 --> 00:17:03.740
+use oficial de secretos
+
+00:17:03.740 --> 00:17:04.040
+de Keyboard.
+
+00:17:04.580 --> 00:17:05.320
+El objetivo es cerrar
+
+00:17:05.320 --> 00:17:06.100
+esa ruta de escalada
+
+00:17:06.100 --> 00:17:06.600
+por completo.
+
+00:17:07.180 --> 00:17:07.700
+Luego aproveche
+
+00:17:07.700 --> 00:17:08.600
+la identidad administrada.
+
+00:17:09.360 --> 00:17:10.240
+Cualquier servicio de Azure
+
+00:17:10.240 --> 00:17:11.440
+que necesite acceso a Keyboard
+
+00:17:11.440 --> 00:17:12.040
+debe usarla.
+
+00:17:12.420 --> 00:17:13.400
+Si tiene una aplicación web,
+
+00:17:13.600 --> 00:17:14.000
+una función,
+
+00:17:14.100 --> 00:17:14.860
+una factoría de datos
+
+00:17:14.860 --> 00:17:15.840
+o una máquina virtual
+
+00:17:15.840 --> 00:17:16.940
+que aún usa una entidad
+
+00:17:16.940 --> 00:17:17.460
+de servicio
+
+00:17:17.460 --> 00:17:18.600
+con un secreto de cliente,
+
+00:17:18.720 --> 00:17:20.180
+cambie a identidad administrada.
+
+00:17:20.180 --> 00:17:21.400
+Es más sencillo,
+
+00:17:21.460 --> 00:17:21.800
+más seguro
+
+00:17:21.800 --> 00:17:22.620
+y resuelve el problema
+
+00:17:22.620 --> 00:17:23.500
+del huevo y la gallina
+
+00:17:23.500 --> 00:17:24.080
+que tratamos.
+
+00:17:24.700 --> 00:17:25.240
+Hazur gestión
+
+00:17:25.240 --> 00:17:25.860
+en las credenciales
+
+00:17:25.860 --> 00:17:26.880
+por usted en segundo plano.
+
+00:17:27.640 --> 00:17:28.180
+Una cosa más.
+
+00:17:28.380 --> 00:17:29.360
+Habilite la eliminación temporal
+
+00:17:29.360 --> 00:17:30.460
+y la protección contra purga
+
+00:17:30.460 --> 00:17:30.860
+en cada bóveda.
+
+00:17:31.160 --> 00:17:31.900
+La eliminación temporal
+
+00:17:31.900 --> 00:17:32.900
+está activada por defecto
+
+00:17:32.900 --> 00:17:33.400
+en bóvedas nuevas,
+
+00:17:33.540 --> 00:17:34.620
+pero la protección contra purga
+
+00:17:34.620 --> 00:17:34.760
+no.
+
+00:17:35.100 --> 00:17:35.340
+Activa.
+
+00:17:35.840 --> 00:17:36.960
+Esa configuración evita
+
+00:17:36.960 --> 00:17:37.640
+que alguien elimine
+
+00:17:37.640 --> 00:17:38.680
+permanentemente una bóveda
+
+00:17:38.680 --> 00:17:39.260
+o su contenido
+
+00:17:39.260 --> 00:17:40.320
+durante el periodo de retención.
+
+00:17:40.860 --> 00:17:41.780
+Ha salvado a más de un equipo
+
+00:17:41.780 --> 00:17:43.020
+de un error desastroso.
+
+00:17:43.500 --> 00:17:44.420
+Y está su llamada a la acción.
+
+00:17:45.080 --> 00:17:45.660
+Analice su enfoque
+
+00:17:45.660 --> 00:17:46.300
+actuales secretos.
+
+00:17:47.040 --> 00:17:47.740
+Encuentre un secreto
+
+00:17:47.740 --> 00:17:48.660
+que aún esté en un archivo
+
+00:17:48.660 --> 00:17:49.380
+de configuración,
+
+00:17:49.480 --> 00:17:50.340
+una variable de entorno
+
+00:17:50.340 --> 00:17:51.180
+codificado en el código.
+
+00:17:51.720 --> 00:17:52.280
+Muévalo a KeyVault
+
+00:17:52.280 --> 00:17:52.720
+esta semana.
+
+00:17:53.040 --> 00:17:53.200
+Solo.
+
+00:17:53.660 --> 00:17:54.340
+Una vez que vea
+
+00:17:54.340 --> 00:17:55.000
+lo simple que es
+
+00:17:55.000 --> 00:17:55.660
+que remueve el resto.
+
+00:17:56.000 --> 00:17:56.680
+La seguridad no es una
+
+00:17:56.680 --> 00:17:57.440
+configuración de una sola.
+
+00:17:57.720 --> 00:17:58.280
+Es una práctica.
+
+00:17:58.660 --> 00:17:59.860
+KeyVault facilita esa práctica,
+
+00:18:00.020 --> 00:18:00.960
+pero solo cuando lo usa
+
+00:18:00.960 --> 00:18:01.540
+correctamente.
+
+00:18:01.840 --> 00:18:02.640
+Las herramientas están ahí.
+
+00:18:02.940 --> 00:18:03.820
+Los patrones están probados.
+
+00:18:04.260 --> 00:18:04.800
+Ahora depende usted
+
+00:18:04.800 --> 00:18:05.360
+implementarlos.
+
+00:18:06.140 --> 00:18:06.800
+Ese es el sistema.
+
+00:18:07.180 --> 00:18:08.280
+KeyVault es su caja fuerte
+
+00:18:08.280 --> 00:18:08.640
+digital,
+
+00:18:08.880 --> 00:18:09.480
+pero es tan segura
+
+00:18:09.480 --> 00:18:10.500
+como los controles de acceso
+
+00:18:10.500 --> 00:18:11.100
+que le ponga.
+
+00:18:11.440 --> 00:18:12.220
+Comience con la auditoría
+
+00:18:12.220 --> 00:18:12.960
+que acabo de escribir.
+
+00:18:12.960 --> 00:18:14.180
+Revise su modelo de permiso,
+
+00:18:14.620 --> 00:18:15.560
+verifique sus asignaciones
+
+00:18:15.560 --> 00:18:16.100
+de colaborador
+
+00:18:16.100 --> 00:18:16.800
+y mueva un secreto
+
+00:18:16.800 --> 00:18:17.600
+a una bóvedad esta semana.
+
+00:18:17.940 --> 00:18:19.000
+Suscríbase para más consejos
+
+00:18:19.000 --> 00:18:19.940
+de seguridad en la nube
+
+00:18:19.940 --> 00:18:20.680
+Lenguaje Sencillo
+
+00:18:20.680 --> 00:18:21.500
+y comparte esto con alguien
+
+00:18:21.500 --> 00:18:22.460
+que aún almacene secretos
+
+00:18:22.460 --> 00:18:23.400
+en archivos de configuración.

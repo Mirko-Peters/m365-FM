@@ -6,8 +6,16 @@ BLOGS = {}   # handle -> Sprachen mit Beiträgen
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay, T
 from datetime import datetime, timezone
 from site_learn import ENTS, esc, _fetch_json, LCSS
+import site_meta_community as PM   # Titel/Description der Profile und Verzeichnisse (Suchabsicht)
+
+
+def _topic_name(eid):
+    """Name einer Themen-Entitaet fuer die Description (Personen, Firmen, Jobs und Events zaehlen nicht als Expertise-Thema)."""
+    e = ENTS.get(eid) or {}
+    return e.get("name") if e.get("type") not in (None, "person", "org", "job", "event", "media") else ""
 from site_entities import TL, eurl, eid_of, tlab
 import site_roles as ROLE
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 
 PROG_FULL = {"gde": "Google Developer Expert (GDE)", "mvp": "Microsoft Most Valuable Professional (MVP)", "mct": "Microsoft Certified Trainer (MCT)", "rd": "Microsoft Regional Director (RD)", "msa": "Microsoft Student Ambassador (MSA)", "ms_employee": "Microsoft employee", "partner": "Microsoft Partner"}
 PROG = {"gde": ("Google Developer Expert", "Google Developer Expert"), "mvp": ("Microsoft MVP", "Microsoft MVP"), "mct": ("Microsoft Certified Trainer (MCT)", "Microsoft Certified Trainer (MCT)"), "rd": ("Microsoft Regional Director", "Microsoft Regional Director"),
@@ -109,7 +117,8 @@ def experts_index(people, orgs):
     return ix
 
 
-LIVEMERGE = r'''(function(){var ul=document.querySelector(".mb-list");if(!ul||!window.M365P)return;fetch(M365P.api+"/api/profiles/export").then(function(r){return r.json()}).then(function(j){var arr=j.%KEY%||[],have={};[].forEach.call(ul.querySelectorAll("a[href]"),function(a){have[a.getAttribute("href")]=1});var base="%BASE%";arr.forEach(function(it){var u=base+it.handle+"/";if(have[u])return;var none=ul.querySelector(".mb-card.mut");if(none)none.remove();var li=document.createElement("li");li.className="mb-card";var a=document.createElement("a");a.href=u;var b=document.createElement("b");b.textContent=it.name;a.appendChild(b);li.appendChild(a);var sp=document.createElement("span");sp.className="mut";sp.textContent=" "+(it.headline||it.tagline||"");li.appendChild(sp);ul.insertBefore(li,ul.firstChild)})}).catch(function(){})})()'''
+# Mitglieder- und Firmenlisten zeigen nur Eintraege mit eigener Seite (kein Nachladen aus /api/profiles/export): ein neues oder gerade oeffentlich
+# geschaltetes Profil erscheint mit dem naechsten Seitenbau, vorher fuehrte der Link auf die noch fehlende Seite ins 404 (Wunsch Mirko, 11.11.2026).
 
 
 def purl(BASE, lang, kind, h):
@@ -317,7 +326,7 @@ def build(g, people, orgs, extra=None):
     topic_js = f'<script>window.M365TopicConfig={{api:{json.dumps(api)},lang:document.documentElement.lang.slice(0,2)}}</script><script defer src="{BASE}/assets/topic-follow.js"></script>'
 
     def partner_block(lang, lst):
-        """Partner/Sponsoren (data/sponsorships.json, laufend) oben im Firmenverzeichnis, als Anzeige gekennzeichnet; Link zur Firmen-Entitaet (mit Lead-Formular)
+        """Partner/Sponsoren (data/sponsorships.json, laufend inkl. 182 Tage Karenzzeit) oben im Firmenverzeichnis, als Anzeige gekennzeichnet; Link zur Firmen-Entitaet (mit Lead-Formular)
         und, wenn es eine passende Community-Firma gibt (gleiche Website), zu deren Profil."""
         import site_sponsorships as SPM
         sp = SPM.active_sponsor_orgs(SPM._state()["today"], ENTS)
@@ -393,6 +402,7 @@ def build(g, people, orgs, extra=None):
         # ---- Personen-Seiten ----
         for p in people:
             _tr = (p.get("i18n") or {}).get(lang) or {}   # Profiltexte in der Sprache der Seite, sonst Original
+            _pnoidx = noidx and not IR.long_enough(_tr.get("about"))   # 13.11.2026: Profiltext in DIESER Sprache (uebersetzt, kein Rueckfall aufs Original) ab 2500 Zeichen: index
             if _tr.get("headline") or _tr.get("about"):
                 p = {**p, "headline": _tr.get("headline") or p.get("headline"), "about": _tr.get("about") or p.get("about")}
             u = purl(BASE, lang, "u", p["handle"])
@@ -434,8 +444,8 @@ def build(g, people, orgs, extra=None):
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "u", p["handle"]) + "#profile", "url": u, "name": p["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": node}]
             ld.extend(mvp_contrib_ld(BASE, p))
             ld.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "M365.FM", "item": f"{BASE}/"}, {"@type": "ListItem", "position": 2, "name": s["members"], "item": f"{BASE}{pfx(lang)}/community/members/"}, {"@type": "ListItem", "position": 3, "name": p["name"], "item": u}]})   # T4
-            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (p.get("headline") or "") + " " + (p.get("about") or "")[:1500], ids=[x["e"] for x in p.get("expertise", []) + p.get("certs", [])], exclude=()) if g.get("side") else "")))
-            if not noidx:
+            write(f"{pfx2(lang)}community/u/{p['handle']}/index.html", page(lang, *(PM.profile_meta(lang, p, s["members"], _topic_name) or (f'{p["name"]} – {p.get("headline") or s["members"]} | M365.FM', (p.get("headline") or p.get("about") or "")[:155])), u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=_pnoidx, side=(g["side"](lang, (p.get("headline") or "") + " " + (p.get("about") or "")[:1500], ids=[x["e"] for x in p.get("expertise", []) + p.get("certs", [])], exclude=()) if g.get("side") else "")))
+            if not _pnoidx:
                 sitemap.append((u, TODAY, None))
         # ---- Firmen-Seiten ----
         for o in orgs:
@@ -456,7 +466,7 @@ def build(g, people, orgs, extra=None):
                           + (f'<h2>{esc(s["expertise"])}</h2>{exp_ul(o, lang, li, s)}' if o.get("expertise") else "") + (f'<h2>{esc(s["team"])}</h2>{mem}' if mem else "")
                           + (f'<h2>{esc(s["latest"])}</h2>{items_ul(o)}' if items_ul(o) else "") + (f'<h2>{esc(s["channels"])}</h2>{chan_ul(o, lang)}' if chan_ul(o, lang) else "") + ((extra or {}).get(lang, {}).get("c", {}).get(o["handle"], "")) + live_js + topic_js + css)
             ld = [{"@context": "https://schema.org", "@type": "ProfilePage", "@id": purl(BASE, "en", "c", o["handle"]) + "#profile", "url": u, "name": o["name"], "inLanguage": lang, "dateModified": TODAY, "mainEntity": org_ld(BASE, o, pb)}]
-            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155], u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
+            write(f"{pfx2(lang)}community/c/{o['handle']}/index.html", page(lang, *(PM.company_meta(lang, o, _topic_name) or (f'{o["name"]} – {o.get("tagline") or s["companies"]} | M365.FM', (o.get("tagline") or o.get("about") or "")[:155])), u, b, None, ld, og_type="profile", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, (o.get("tagline") or "") + " " + (o.get("about") or "")[:1500], ids=[x["e"] for x in o.get("expertise", [])]) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, TODAY, None))
         # ---- Verzeichnisse ----
@@ -467,17 +477,16 @@ def build(g, people, orgs, extra=None):
             cards = "".join(f'<li class="mb-card" data-p="{" ".join(x["p"] for x in it.get("programs", []))}"><a href="{purl(BASE, lang, pk, it["handle"])}"><b>{esc(it["name"])}</b></a>{ROLE.chip(BASE, lang, ROLE.role_of(it), it.get("scope")) if pk == "u" else ""} <span class="mut">{esc(it.get("headline") or it.get("tagline") or "")}</span><br>{tags_of_p(it, li, s)}'
                             + "".join(f'<span class="mb-tag">{esc(ENTS[e["e"]]["name"])}</span>' for e in it.get("expertise", [])[:5] if e["e"] in ENTS) + "</li>" for it in lst) or f'<li class="mb-card mut">{esc(s["none"])}</li>'
             fjs = '<script>(function(){var b=[].slice.call(document.querySelectorAll(".mb-f")),l=[].slice.call(document.querySelectorAll(".mb-card[data-p]"));b.forEach(function(x){x.addEventListener("click",function(){b.forEach(function(y){y.setAttribute("aria-pressed",y===x?"true":"false")});l.forEach(function(i){i.hidden=!!x.dataset.f&&(" "+i.dataset.p+" ").indexOf(" "+x.dataset.f+" ")<0})})})})()</script>'
-            lm = '<script>' + LIVEMERGE.replace("%KEY%", "people" if kind == "members" else "orgs").replace("%BASE%", purl(BASE, lang, pk, "")) + '</script>'
             feed = f'<h2>{esc(s["feed"])}</h2><div id="pf-feed" data-top="{esc(s["feedtop"])}" data-new="{esc(s["feed"])}"></div>' if kind == "members" else ""
             if kind == "companies": partners = partner_block(lang, lst)
             else: partners = ""
             _prec = [o["rec"] for o in __import__("site_sponsorships").active_sponsor_orgs(__import__("site_sponsorships")._state()["today"], ENTS)] if partners else []
-            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{lm}{live_js}{css}')
+            b = shell(lang, f'<h1>{esc(title)}</h1><p class="mut">{esc(intro)}</p>{partners}<p><a class="btn main" href="{croot}">{esc(s["join"])}</a>{(" <a class=\"btn\" href=\"" + croot + "blog/\">Blog</a>") if lang in BLOGLANGS else ""}</p><div role="group" aria-label="{esc(s["filter"])}">{fb}</div><ul class="mb-list">{cards}</ul>{feed}{fjs}{live_js}{css}')
             ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "url": ru, "description": intro, "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst), "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "item": {"@id": f"{purl(BASE, 'en', pk, it['handle'])}#{'person' if pk == 'u' else 'org'}"}} for i, it in enumerate(lst)]}}]
             if _prec:   # Partner-Block ist als Anzeige gekennzeichnet: Sponsor auch im JSON-LD der Seite (check_schema: Kennzeichnung <-> sponsor)
                 ld[0]["sponsor"] = __import__("site_sponsorships").ld(_prec)
-            write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, f'{title} – M365.FM', intro, ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
+            write(f"{pfx2(lang)}community/{kind}/index.html", page(lang, *(PM.hub_meta(kind, lang) or (f'{title} – M365.FM', intro)), ru, b, None, ld, og_type="website", extra_head=LCSS, noindex=noidx))
             if not noidx:
                 sitemap.append((ru, TODAY, None))
 

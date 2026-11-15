@@ -1,0 +1,2683 @@
+WEBVTT
+
+00:00:00.160 --> 00:00:02.000
+Copilot n'est pas confus. Il est obéissant.
+
+00:00:02.400 --> 00:00:05.820
+Ce paragraphe enthousiaste qu'il vient d'écrire sur la croissance exceptionnelle du TK de votre entreprise,
+
+00:00:05.900 --> 00:00:07.580
+qui n'existe pas, n'était pas un bug.
+
+00:00:07.780 --> 00:00:09.860
+C'est la parole d'évangile selon vos propres données mal connectées.
+
+00:00:10.380 --> 00:00:12.700
+C'est l'effet guet déchet en entrée, confiance en sortie becueux.
+
+00:00:13.160 --> 00:00:16.420
+La manière polie pour Microsoft Fabrique de dire que vous avez vous-même formé votre menteur.
+
+00:00:17.280 --> 00:00:21.800
+Copilot hallucine joyeusement des modèles parce que vos tables lui ont murmuré de douces incohérences dans son contexte.
+
+00:00:22.480 --> 00:00:23.120
+Voici ce qui se passe.
+
+00:00:23.460 --> 00:00:25.300
+Vous avez des jointures en double, une sémantique manquante
+
+00:00:25.300 --> 00:00:27.860
+et des couches médaillons comme mal conçues qui se font passer pour la vérité.
+
+00:00:27.860 --> 00:00:29.480
+Puis vous appelez Copilot pour lui demander des analyses.
+
+00:00:29.920 --> 00:00:31.120
+Il ne raisonne pas, il réorganise.
+
+00:00:31.920 --> 00:00:33.840
+Fabrique lui transmet des métadonnées mal formées
+
+00:00:33.840 --> 00:00:36.540
+et Copilot renvoie un rêve lucide déguisé en analyse.
+
+00:00:37.880 --> 00:00:39.400
+Aujourd'hui, je vais vous montrer pourquoi cela arrive,
+
+00:00:39.800 --> 00:00:42.020
+où votre modèle de données vous a trahi et comment le reconstruire
+
+00:00:42.020 --> 00:00:43.700
+pour que Copilot cesse d'inventer des histoires.
+
+00:00:44.380 --> 00:00:48.080
+A la fin, vous aurez une IA précise, explicable et enfin digne de confiance.
+
+00:00:49.380 --> 00:00:50.400
+L'illusion de l'intelligence.
+
+00:00:51.200 --> 00:00:52.580
+Pourquoi Copilot ment ?
+
+00:00:52.580 --> 00:00:54.060
+Les gens s'attendent à ce que Copilot sache des choses.
+
+00:00:54.520 --> 00:00:54.980
+Ce n'est pas le cas.
+
+00:00:55.260 --> 00:00:57.420
+Il effectue des correspondances de modèles à partir de vos métadonnées,
+
+00:00:57.420 --> 00:01:00.100
+de votre contexte et de la vision fragile des relations que vous avez définies dans Fabrique.
+
+00:01:00.660 --> 00:01:03.080
+Vous pensez parler à une intelligence, mais vous parlez en réalité à un reflet.
+
+00:01:03.760 --> 00:01:06.500
+Donnez-lui de l'ambiguïté, et il vous renvoie cette ambiguïté en miroir.
+
+00:01:06.860 --> 00:01:07.360
+Juste plus brillant.
+
+00:01:07.860 --> 00:01:08.500
+Voici le vrai problème.
+
+00:01:08.880 --> 00:01:11.940
+La plupart des implémentations de Fabrique traitent la conception du schéma après coup,
+
+00:01:12.280 --> 00:01:13.580
+table de faits, jointes sur la mauvaise clé,
+
+00:01:13.660 --> 00:01:15.100
+mesures écrites de manière incohérente,
+
+00:01:15.300 --> 00:01:17.780
+descriptions totalement absentes, descriptions totalement absentes.
+
+00:01:18.040 --> 00:01:20.720
+Copilot lit ce chaos comme un enfant lirait une phrase sans ponctuation.
+
+00:01:21.580 --> 00:01:23.040
+Il devine simplement où devrait se situer le sens.
+
+00:01:23.640 --> 00:01:26.080
+Le résultat semble cohérent, mais peut être gravement erroné.
+
+00:01:26.080 --> 00:01:29.280
+Supposons que votre couche Colgold contienne les revenus d'une source
+
+00:01:29.280 --> 00:01:31.540
+et les ventes totales d'une autre, sans aucune normalisation.
+
+00:01:32.320 --> 00:01:36.280
+Copilot voit des noms de colonnes similaires et, dans son infinie politesse, les fusionne.
+
+00:01:36.800 --> 00:01:38.760
+Vous demandez quel était le revenu au dernier trimestre ?
+
+00:01:38.760 --> 00:01:40.820
+Il fusionne des mesures avec des granularités disparates,
+
+00:01:40.920 --> 00:01:42.580
+produit une moyenne sur des échelles incompatibles,
+
+00:01:42.640 --> 00:01:44.620
+et vous présente cela avec une confiance totale.
+
+00:01:45.740 --> 00:01:47.880
+Le graphique semble professionnel, mais les calculs sont de la fiction.
+
+00:01:48.380 --> 00:01:49.360
+L'illusion vient du ton.
+
+00:01:50.000 --> 00:01:51.860
+Le langage naturel donne une impression de compréhension,
+
+00:01:51.980 --> 00:01:54.800
+mais les réponses fluides de Copilot ne font que masquer un mimétisme statistique.
+
+00:01:54.800 --> 00:01:57.420
+Quand vous posez une question, le modèle ne valide pas l'effet.
+
+00:01:58.060 --> 00:02:01.800
+Il récupère des modèles, des jointures probables, des colonnes plausibles et du texte digeste.
+
+00:02:02.500 --> 00:02:04.020
+Sans une traçabilité stricte des données,
+
+00:02:04.160 --> 00:02:06.100
+ou une gouvernance sémantique, il invente ce qu'il ne peut pas déduire.
+
+00:02:06.960 --> 00:02:09.100
+C'est en fait votre schéma, avec une présence scénique.
+
+00:02:09.500 --> 00:02:10.520
+Fabrique accentue cette illusion.
+
+00:02:11.420 --> 00:02:14.180
+Comme les agents de données dans Fabrique transmettent le contexte via les métadonnées,
+
+00:02:14.500 --> 00:02:15.540
+toute lacune dans les relations,
+
+00:02:15.900 --> 00:02:18.100
+clé étrangère manquante, dimension non étiquetée,
+
+00:02:18.200 --> 00:02:20.660
+ou nom de mesure ambiguë est traitée comme une suggestion facultative,
+
+00:02:20.660 --> 00:02:22.380
+plutôt que comme une consigne.
+
+00:02:23.500 --> 00:02:26.040
+Le modèle comble ses vides par une complétion de modèle, pas par la logique.
+
+00:02:26.680 --> 00:02:28.660
+Vous vouliez joindre les ventes par région et par date ?
+
+00:02:29.420 --> 00:02:31.840
+Il pourrait vouloir joindre les ventes à tout ce qui semble géographique.
+
+00:02:32.780 --> 00:02:35.160
+Le code SQL générique opère docilement avec cette absurdité.
+
+00:02:35.700 --> 00:02:38.420
+Les utilisateurs se laissent séduire, car l'interface démocratise la syntaxe des requêtes.
+
+00:02:38.740 --> 00:02:40.220
+Vous tapez une phrase, il vous renvoie un visuel.
+
+00:02:40.940 --> 00:02:43.860
+Vous supposez qu'il comprend, mais le modèle opère dans un brouillard statistique.
+
+00:02:44.580 --> 00:02:47.200
+Moins vous définissez de contraintes, plus ces mensonges deviennent convaincants.
+
+00:02:47.200 --> 00:02:50.480
+Le changement de perspective est crucial, Copilot n'est pas un oracle.
+
+00:02:51.000 --> 00:02:53.040
+Il n'a aucune épistémologie, aucun concept de vérité,
+
+00:02:53.140 --> 00:02:54.540
+juste des miroirs basés sur vos métadonnées.
+
+00:02:55.020 --> 00:02:57.780
+Il convertit votre modèle de données en un espace de probabilité linguistique.
+
+00:02:58.580 --> 00:03:00.880
+Chaque faille structurelle devient une hallucination sémantique.
+
+00:03:01.660 --> 00:03:05.420
+Là où votre schéma est incohérent, l'IA hallucine une cohérence inexistante.
+
+00:03:06.620 --> 00:03:07.760
+Et la tragédie est prévisible.
+
+00:03:08.580 --> 00:03:11.200
+Les dirigeants prennent des décisions basées sur une fiction qui semble validée,
+
+00:03:11.280 --> 00:03:12.700
+car elle provient de Microsoft Fabric.
+
+00:03:12.700 --> 00:03:16.220
+Si votre couche gold que vacille sous des transformations incohérentes,
+
+00:03:16.300 --> 00:03:18.360
+Copilot amplifie ce vaciment en un récit assuré.
+
+00:03:19.320 --> 00:03:21.580
+L'éloquence du modèle dissimule la corruption de votre pipeline.
+
+00:03:22.140 --> 00:03:23.720
+Considérez Copilot comme un moteur de réflexion.
+
+00:03:24.200 --> 00:03:26.380
+Son intelligence commence et s'arrête à la qualité de votre schéma.
+
+00:03:27.400 --> 00:03:30.560
+Si vos jointures sont bancales, votre lignage rompu ou votre sémantique flou,
+
+00:03:30.700 --> 00:03:32.740
+il reflète l'incertitude comme une certitude.
+
+00:03:33.500 --> 00:03:35.580
+C'est pourquoi le remède ne commence pas par le prompt engineering,
+
+00:03:35.720 --> 00:03:37.040
+gagné par l'hygiène architecturale.
+
+00:03:37.440 --> 00:03:39.580
+Alors si Copilot n'est aussi fiable que votre architecture,
+
+00:03:39.820 --> 00:03:41.200
+analysons où commence la défaillance.
+
+00:03:41.200 --> 00:03:44.420
+Le mythe du Bayonke, quand le bronze pollue l'or.
+
+00:03:44.960 --> 00:03:47.960
+Chaque ingénieur de données récite l'architecture médaillonke comme une écriture sacrée.
+
+00:03:48.160 --> 00:03:50.780
+Bronze, argent, or, brut, raffiné, fiable.
+
+00:03:51.660 --> 00:03:54.080
+En théorie, c'est un pèlerinage du chaos vers la clarté,
+
+00:03:54.340 --> 00:03:57.900
+chaque couche nettoyant l'ambiguïté jusqu'à ce que la donnée gagne son halo de vérité.
+
+00:03:59.500 --> 00:04:02.060
+En pratique, la plupart des gens construisent un toboggan,
+
+00:04:02.220 --> 00:04:06.840
+où l'incohérence brute fait un trajet express du bronze vers l'or sans nettoyage intermédiaire.
+
+00:04:07.480 --> 00:04:08.300
+Commençons par la base.
+
+00:04:08.300 --> 00:04:12.300
+Le bronze est votre zone d'atterrissage, fichier parquet, CSV, ingestion IoT,
+
+00:04:12.460 --> 00:04:13.980
+l'enregistrement fossile de votre organisation.
+
+00:04:14.800 --> 00:04:16.820
+Ce n'est pas censé être joli, juste être intégralement capturé.
+
+00:04:17.380 --> 00:04:20.220
+Pourtant, les gens oublient que le bronze est une zone de quarantaine, pas un ingénieur actif.
+
+00:04:20.880 --> 00:04:23.740
+Quand cette boue brute s'infiltre vers le haut, via des raccourcis paresseux,
+
+00:04:23.980 --> 00:04:26.040
+des requêtes directes ou une logique de transformation manquante,
+
+00:04:26.280 --> 00:04:28.300
+vous donnez à Copilot du bruit non traité comme contexte.
+
+00:04:28.960 --> 00:04:29.620
+Oui, il va halluciner.
+
+00:04:30.360 --> 00:04:33.060
+Il a de bonnes raisons, vous lui avez confié un journal de rêve et demandé un audit.
+
+00:04:33.060 --> 00:04:35.240
+L'argent est censé raffiner ces résidus.
+
+00:04:35.820 --> 00:04:38.060
+C'est là que les doublons disparaissent, que les schémas s'alignent,
+
+00:04:38.240 --> 00:04:41.600
+que les types de données correspondent et que les clés universelles définissent enfin ce qu'est un client.
+
+00:04:42.280 --> 00:04:44.300
+Mais examiner la plupart des configurations fabriquent,
+
+00:04:44.460 --> 00:04:45.900
+et l'argent ressemble à une excuse maladroite,
+
+00:04:46.000 --> 00:04:49.460
+jointure rapide, recherche fragile, conversion non documentée.
+
+00:04:50.280 --> 00:04:52.320
+L'excuse est toujours la même, on corrigera ça dans la couchore.
+
+00:04:52.660 --> 00:04:55.240
+C'est comme vouloir corriger la grammaire en publiant le dictionnaire en retard.
+
+00:04:55.900 --> 00:04:58.360
+Au moment d'atteindre le niveau gold, l'illusion de confiance s'installe.
+
+00:04:59.040 --> 00:05:00.400
+Tout dans le niveau gold semble analytique,
+
+00:05:00.480 --> 00:05:03.200
+des tables propres, des non-métiers clairs, des tableaux de bord qui inspirent confiance.
+
+00:05:03.940 --> 00:05:06.220
+Mais dessous, vous avez accumulé des conversions incohérentes,
+
+00:05:06.260 --> 00:05:08.180
+des horodatages désynchronisés et des collisions.
+
+00:05:08.540 --> 00:05:11.100
+Tidy remontant jusqu'au bronze, remontant jusqu'au bon.
+
+00:05:11.300 --> 00:05:13.540
+Les métadonnées de fabrique tracent ces relations automatiquement,
+
+00:05:13.760 --> 00:05:17.120
+et devinez sur quelles relations Copilot s'appuient pour interpréter le langage naturel.
+
+00:05:18.240 --> 00:05:18.720
+Toutes.
+
+00:05:18.720 --> 00:05:20.760
+Alors qu'en l'alignément, le modèle Eric doit s'être tromperie.
+
+00:05:21.500 --> 00:05:22.740
+Voici un scénario bien réel.
+
+00:05:22.740 --> 00:05:25.560
+Vous avez des données transactionnelles provenant de deux systèmes de réservation.
+
+00:05:25.900 --> 00:05:28.200
+Tous deux alimentent le niveau bronze avec des formats de clés légèrement différents.
+
+00:05:28.720 --> 00:05:31.060
+L'un utilise un ID de voyage numérique, l'autre mélange des lettres.
+
+00:05:31.880 --> 00:05:34.340
+Dans le silver, quelqu'un les a fusionnés via une jointure interne
+
+00:05:34.340 --> 00:05:35.940
+sur des sous-chaînes tronquées pour standardiser.
+
+00:05:37.300 --> 00:05:38.740
+Techniquement, vos données sont unifiées,
+
+00:05:38.900 --> 00:05:40.720
+sémantiquement vous avez créé des correspondances fantômes.
+
+00:05:41.640 --> 00:05:44.220
+Maintenant, Copilot calcule avec assurance un revenu moyen par voyage,
+
+00:05:44.540 --> 00:05:46.540
+incluant des transactions issues de contextes totalement différents.
+
+00:05:47.180 --> 00:05:50.380
+C'est une absurdité précise, syntaxe correcte, sémantique fabriquée.
+
+00:05:50.820 --> 00:05:51.660
+C'est le mythe du médaillon.
+
+00:05:51.660 --> 00:05:55.160
+L'idée que posséder des couches garantit automatiquement la pureté, mal à pureté.
+
+00:05:55.600 --> 00:05:57.940
+Les couches ne sont fiables qu'à la mesure de la discipline qui y est appliquée.
+
+00:05:58.320 --> 00:05:59.740
+Le bronze doit exposer l'entropie brute.
+
+00:06:00.180 --> 00:06:01.800
+Le silver doit imposer la décontamination.
+
+00:06:02.360 --> 00:06:04.500
+Le gold doit représenter une logique métier certifiée.
+
+00:06:05.300 --> 00:06:07.420
+Pas de contournement manuel, pas de correctif temporaire.
+
+00:06:08.380 --> 00:06:11.040
+Rompez cette chaîne et vous remplacez l'affinement par une pollution récursive.
+
+00:06:11.660 --> 00:06:12.860
+Copilot bien sûr ne sait rien de tout cela.
+
+00:06:13.400 --> 00:06:16.360
+Il prend tout ce que le modèle fabrique proclame comme ligné et en suppose une causalité.
+
+00:06:16.360 --> 00:06:20.360
+Si une colonne dans le gold référence un hybride de trois sources incohérentes,
+
+00:06:20.500 --> 00:06:22.420
+l'IA voit un concept unique.
+
+00:06:23.140 --> 00:06:25.080
+Demandez, pourquoi les ventes ont-elles grimpé en Mars ?
+
+00:06:25.080 --> 00:06:28.000
+Il génère joyeusement un SQL qui agrège tous les enregistrements étiquetés Mars-Cuba
+
+00:06:28.000 --> 00:06:31.760
+travers les régions, devises et fuse horaires car vous n'avez jamais demandé au silver d'imposer ses limites.
+
+00:06:31.760 --> 00:06:33.940
+L'IA ne ment pas.
+
+00:06:34.600 --> 00:06:36.780
+Elle traduit votre négligence collective en une fiction fluide.
+
+00:06:37.540 --> 00:06:39.480
+C'est pourquoi la promenance des données n'est pas une métadonnée optionnelle,
+
+00:06:39.900 --> 00:06:40.800
+c'est le GPS de copilote.
+
+00:06:41.560 --> 00:06:45.560
+Chaque transformation, chaque jointure, chaque définition de mesure est une piste menant à votre source de vérité.
+
+00:06:46.660 --> 00:06:50.800
+Fabrique suit la lignée visuellement, mais une lignée sans validation ressemble à une carte dessinée au crayon.
+
+00:06:51.800 --> 00:06:53.600
+L'IA allie ses lignes floues comme paroles d'évangile.
+
+00:06:54.140 --> 00:06:55.020
+Alors imposez la validation.
+
+00:06:55.800 --> 00:06:58.360
+Entre le bronze et le silver, exécutez des tests de schéma automatisés.
+
+00:06:58.880 --> 00:07:00.020
+Les IDs sont-ils alignés ?
+
+00:07:00.020 --> 00:07:01.100
+Les valeurs nulles sont à gérer ?
+
+00:07:01.100 --> 00:07:02.300
+Les types sont-ils cohérents ?
+
+00:07:02.300 --> 00:07:04.280
+Entre le silver et le gold, déployez des audits de jointure.
+
+00:07:04.660 --> 00:07:06.040
+Vérifiez les attentes de type 1 pour 1.
+
+00:07:06.840 --> 00:07:10.300
+Surveillez la dérive des agrégations et vérifiez la continuité de la lignée au niveau des colonnes.
+
+00:07:10.740 --> 00:07:11.900
+Ce ne sont pas des rituels bureaucratiques.
+
+00:07:12.240 --> 00:07:13.940
+Ce sont des outils de survie pour la précision de l'IA.
+
+00:07:14.820 --> 00:07:17.120
+Lorsque la requête de copilote traverse des couches que vous avez vérifiées,
+
+00:07:17.200 --> 00:07:18.860
+elle hérite de la discipline plutôt que du désordre.
+
+00:07:19.260 --> 00:07:20.580
+Mais l'ironie est délicieuse.
+
+00:07:21.000 --> 00:07:22.800
+Vous voyez que copilote automatise l'analyse,
+
+00:07:23.080 --> 00:07:25.680
+mais la fondation dont il dépend exige toujours une hygiène à l'ancienne.
+
+00:07:26.300 --> 00:07:27.340
+Données erronées et réponses assurées.
+
+00:07:27.340 --> 00:07:29.920
+Tant que vous ne considérez pas l'architecture comme une philosophie morale
+
+00:07:29.920 --> 00:07:31.040
+et le raffinement comme une obligation,
+
+00:07:31.240 --> 00:07:33.460
+jamais votre IA ne sera sincère, jamais votre raison.
+
+00:07:33.700 --> 00:07:35.540
+Même avec des couches impeccables, copilote peut trébucher,
+
+00:07:35.620 --> 00:07:38.240
+car savoir quelles données existent ne signifie pas en comprendre le sens.
+
+00:07:39.420 --> 00:07:42.200
+Un pipeline parfait peut alimenter un modèle sémantiquement vide.
+
+00:07:42.540 --> 00:07:44.940
+Ce qui nous amène au traducteur manquant entre les chiffres et le sens,
+
+00:07:45.060 --> 00:07:45.800
+la couche sémantique,
+
+00:07:46.180 --> 00:07:48.160
+le cerveau que vos données ont oublié de construire.
+
+00:07:49.460 --> 00:07:50.180
+Le cerveau manquant,
+
+00:07:50.380 --> 00:07:52.100
+les couches sémantiques et le déficit de contexte.
+
+00:07:52.100 --> 00:07:55.660
+C'est là que la plupart des implémentations de fabrique perdent la raison, littéralement.
+
+00:07:56.180 --> 00:07:58.080
+La couche sémantique est le cerveau de votre modèle de données,
+
+00:07:58.180 --> 00:08:00.460
+mais beaucoup d'entreprises la traitent comme un simple élément décoratif.
+
+00:08:01.320 --> 00:08:03.520
+Elles pensent que si les tables existent, le sens en découle automatiquement.
+
+00:08:04.500 --> 00:08:06.420
+Les tables sont la mémoire, la sémantique et la compréhension.
+
+00:08:07.000 --> 00:08:08.920
+Sans cette couche, copilote lit les chiffres comme un touriste
+
+00:08:08.920 --> 00:08:10.920
+lit des panneaux de signalisation dans une langue étrangère,
+
+00:08:11.020 --> 00:08:12.400
+phonétiquement, avec assurance,
+
+00:08:12.400 --> 00:08:14.680
+mais totalement hors contexte, mais totalement hors contexte.
+
+00:08:14.800 --> 00:08:15.600
+Définissons-la correctement.
+
+00:08:16.140 --> 00:08:18.980
+Le modèle sémantique dans fabrique indique à copilote ce que vos données signifient,
+
+00:08:19.180 --> 00:08:20.300
+et pas seulement comment elles sont nommées.
+
+00:08:20.300 --> 00:08:24.100
+C'est le dictionnaire qui traduit les étiquettes de colonnes en logique métier.
+
+00:08:24.920 --> 00:08:27.300
+Chiffre d'affaires cœur devient la somme des ventes hors remboursement.
+
+00:08:28.540 --> 00:08:31.360
+Client de côte devient l'identifiant unique d'acheteur sur les exercices fiscaux.
+
+00:08:32.440 --> 00:08:35.100
+Sans cela, copilote traite ces mots comme de simples jetons de hasard.
+
+00:08:36.020 --> 00:08:38.620
+Vous pourriez demander le total des ventes et obtenir les recettes brutes un jour,
+
+00:08:38.740 --> 00:08:39.960
+le revenu net, le lendemain.
+
+00:08:40.500 --> 00:08:42.720
+Ce n'est pas de l'inconstance, c'est une dérive linguistique.
+
+00:08:43.360 --> 00:08:46.040
+En vérité, un modèle sémantique agit comme un interprète bilingue
+
+00:08:46.040 --> 00:08:48.000
+entre le langage humain et la logique DAX ou SQL.
+
+00:08:48.820 --> 00:08:50.200
+Il a l'inintention avec le calcul.
+
+00:08:50.620 --> 00:08:51.960
+Lorsqu'il manque, copilote voit deviner.
+
+00:08:52.580 --> 00:08:54.780
+Et les grands modèles de langage sont notoirement fiers de leurs suppositions.
+
+00:08:55.300 --> 00:08:57.080
+Ils assemblent des jointures probables plutôt qu'exactes
+
+00:08:57.080 --> 00:08:59.900
+et font bien plus confiance aux noms de colonnes qu'à vos définitions métier.
+
+00:09:00.440 --> 00:09:02.600
+Dans un modèle, la réservation make fait référence aux réservations.
+
+00:09:03.200 --> 00:09:04.620
+Dans un autre, cela compte les trajets effectués.
+
+00:09:04.980 --> 00:09:06.120
+Pour copilote, ce sont des synonymes.
+
+00:09:06.600 --> 00:09:08.120
+Vous venez de demander les réservations par trimestre
+
+00:09:08.120 --> 00:09:10.420
+et ils vous asservent les deux avec une efficacité erronée.
+
+00:09:10.840 --> 00:09:11.740
+Comparons deux architectures.
+
+00:09:12.140 --> 00:09:14.760
+Dans un entrepôt de données brutes, copilote regarde directement dans les tables.
+
+00:09:15.280 --> 00:09:16.740
+Il voit date, queue, montant et queue, type e.
+
+00:09:16.740 --> 00:09:18.800
+Ce sont de jolis noms, mais sans aucun contexte.
+
+00:09:19.020 --> 00:09:20.040
+Procède alors par correspondance de vente.
+
+00:09:20.620 --> 00:09:24.100
+Vente égale, montant par région égale, touchant, évoquant la géographie.
+
+00:09:24.980 --> 00:09:27.220
+Dans un modèle sémantique, en revanche, ces champs ont été civilisés.
+
+00:09:28.180 --> 00:09:30.500
+Le montant des ventes inclut une mesure d'axe définissant la portée,
+
+00:09:30.580 --> 00:09:32.000
+la devise et la logique d'agrégation.
+
+00:09:32.740 --> 00:09:34.740
+La région possède des relations explicitement définies.
+
+00:09:34.740 --> 00:09:38.040
+Ainsi, quand vous posez la même question, copilote ne tâtonne plus dans le noir.
+
+00:09:38.600 --> 00:09:40.100
+Il emprunte un chemin éclairé que vous n'avez pas vu.
+
+00:09:40.440 --> 00:09:42.820
+La boîte à outils 2025 de Fabrique vous donne même les armes pour cela.
+
+00:09:44.180 --> 00:09:46.220
+Direct Lake pour la modélisation à faible latence.
+
+00:09:46.420 --> 00:09:47.520
+DAX pour la logique de mesure.
+
+00:09:47.940 --> 00:09:49.540
+Les synonymes pour la flexibilité linguistique.
+
+00:09:49.660 --> 00:09:51.200
+Et les groupes de calcul pour la cohérence.
+
+00:09:52.440 --> 00:09:54.040
+Voyez les synonymes comme un vocabulaire élastique.
+
+00:09:54.700 --> 00:09:56.080
+Si les utilisateurs disent revenu net,
+
+00:09:56.180 --> 00:09:58.080
+mais que votre mesure et le profit ne renommez pas la colonne,
+
+00:09:58.480 --> 00:09:59.580
+apprenez la traduction à copilote.
+
+00:09:59.580 --> 00:10:01.880
+Les groupes de calcul imposent ensuite une grammaire,
+
+00:10:01.980 --> 00:10:03.960
+garantissant l'application uniforme des fonctions temporelles
+
+00:10:03.960 --> 00:10:04.980
+ou des conversions de devises.
+
+00:10:05.500 --> 00:10:07.620
+Ensemble, ils forment le système d'ancrage du modèle de langage.
+
+00:10:08.320 --> 00:10:10.080
+Pourtant, peu de gens prennent la peine de bien les configurer.
+
+00:10:10.540 --> 00:10:11.660
+Ils déversent des tables dans Fabrique
+
+00:10:11.660 --> 00:10:13.680
+et supposent que l'IA de copilote interprétera les nuances.
+
+00:10:14.320 --> 00:10:15.220
+Spoiler, ce ne sera pas le cas.
+
+00:10:15.700 --> 00:10:18.120
+Le modèle ne déduit pas vos indicateurs clés par conviction morale.
+
+00:10:18.860 --> 00:10:20.400
+Il les déduit à partir des balises de métadonnées.
+
+00:10:21.280 --> 00:10:22.480
+Si vous n'avez pas étiqueté les mesures,
+
+00:10:22.640 --> 00:10:24.500
+décrit les relations ou préciser l'ordre de calcul,
+
+00:10:24.640 --> 00:10:25.700
+copilote improvise.
+
+00:10:26.540 --> 00:10:28.300
+L'improvisation est charmante dans les clubs de jazz,
+
+00:10:28.300 --> 00:10:30.100
+mais désastreuse en analyse d'entreprise.
+
+00:10:30.800 --> 00:10:32.600
+Alors comment imposer une sémantique ?
+
+00:10:32.600 --> 00:10:34.200
+Commencez par auditer le vocabulaire de votre modèle.
+
+00:10:34.640 --> 00:10:36.460
+Chaque mesure nécessite une définition cohérente,
+
+00:10:36.600 --> 00:10:38.420
+stockée centralement et référencée universellement.
+
+00:10:38.840 --> 00:10:40.900
+Résistez à l'envie de renommer les colonnes selon les rapports.
+
+00:10:41.600 --> 00:10:43.300
+Utilisez plutôt des alias dans la couche sémantique.
+
+00:10:43.900 --> 00:10:46.120
+Créez des groupes de calcul pour toute la logique commune,
+
+00:10:46.180 --> 00:10:47.120
+les taux cumulés annuels,
+
+00:10:47.540 --> 00:10:48.200
+les moyennes mobiles
+
+00:10:48.200 --> 00:10:49.380
+et les taux de conversion.
+
+00:10:49.760 --> 00:10:50.740
+Ajoutez ensuite des synonymes
+
+00:10:50.740 --> 00:10:52.420
+pour que le moteur de langage naturel de copilote
+
+00:10:52.420 --> 00:10:53.680
+n'invente pas ses propres corrélations.
+
+00:10:54.220 --> 00:10:55.200
+A présent, reliez la sémantique
+
+00:10:55.200 --> 00:10:56.600
+à l'architecture d'instructions de copilote.
+
+00:10:57.300 --> 00:10:58.680
+Fabrique offre deux niveaux de contrôle,
+
+00:10:58.820 --> 00:10:59.900
+les instructions de sources de données
+
+00:10:59.900 --> 00:11:00.860
+et les instructions d'agents.
+
+00:11:01.560 --> 00:11:03.180
+Les instructions de sources de données clarifient le schéma,
+
+00:11:03.400 --> 00:11:04.600
+les jointures, les références de mesures
+
+00:11:04.600 --> 00:11:05.300
+et les noms préférés,
+
+00:11:05.540 --> 00:11:06.500
+tandis que les instructions d'agents
+
+00:11:06.500 --> 00:11:08.520
+régissent le ton, le format et les contraintes.
+
+00:11:09.200 --> 00:11:10.720
+Ils interagissent via des invites d'ancrage
+
+00:11:10.720 --> 00:11:12.320
+qui dépendent entièrement de l'alignement sémantique.
+
+00:11:12.900 --> 00:11:15.120
+Si votre modèle sémantique définit clairement les ventes totales,
+
+00:11:15.160 --> 00:11:16.220
+les instructions de sources de données
+
+00:11:16.220 --> 00:11:17.420
+peuvent appliquer cette définition
+
+00:11:17.420 --> 00:11:18.780
+lorsque copilote écrit une requête.
+
+00:11:19.020 --> 00:11:20.200
+Lorsque copilote écrit une requête.
+
+00:11:20.320 --> 00:11:21.400
+L'instruction d'agent garantit
+
+00:11:21.400 --> 00:11:23.400
+que la réponse reste concise, tabulaire ou résumée.
+
+00:11:24.020 --> 00:11:26.120
+Combinez-les et vous remplacerez le chaos par un protocole.
+
+00:11:26.920 --> 00:11:27.440
+Sans sémantique,
+
+00:11:27.540 --> 00:11:29.200
+chaque réponse de copilote est une improvisation.
+
+00:11:29.800 --> 00:11:30.440
+Avec la sémantique,
+
+00:11:30.540 --> 00:11:31.660
+chaque réponse devient une preuve.
+
+00:11:32.540 --> 00:11:33.420
+Vous n'ajustez pas les invites,
+
+00:11:33.480 --> 00:11:34.260
+vous enseignez la logique.
+
+00:11:35.240 --> 00:11:37.120
+Une fois que vous offrez un dictionnaire cohérent à copilote,
+
+00:11:37.200 --> 00:11:38.320
+sa précision grimpe en flèche
+
+00:11:38.320 --> 00:11:39.780
+car l'incertitude ne peut plus se cacher.
+
+00:11:40.760 --> 00:11:42.000
+Maintenant que copilote comprend la langue,
+
+00:11:42.100 --> 00:11:43.220
+nous allons lui enseigner la discipline,
+
+00:11:43.460 --> 00:11:44.220
+ses règles de comportement
+
+00:11:44.220 --> 00:11:45.300
+qui garantissent sa fiabilité.
+
+00:11:45.720 --> 00:11:47.100
+De la discipline pour les machines,
+
+00:11:47.300 --> 00:11:48.460
+les données et les instructions d'agents.
+
+00:11:48.920 --> 00:11:50.700
+Copilote comprend peut-être enfin votre vocabulaire,
+
+00:11:50.700 --> 00:11:51.980
+mais il a encore besoin de bonnes manières.
+
+00:11:52.720 --> 00:11:53.780
+La sémantique enseigne le sens,
+
+00:11:53.900 --> 00:11:55.140
+les instructions enseignent le comportement.
+
+00:11:56.080 --> 00:11:57.040
+Et dans Microsoft Fabric,
+
+00:11:57.120 --> 00:11:59.140
+ces comportements sont façonnés par deux l'aise distincte,
+
+00:11:59.180 --> 00:12:00.320
+les instructions de sources de données
+
+00:12:00.320 --> 00:12:01.920
+et les instructions d'agents.
+
+00:12:02.620 --> 00:12:03.380
+L'une structure le chien,
+
+00:12:03.440 --> 00:12:04.960
+l'autre le dresse à ne pas grignoter les meubles.
+
+00:12:05.500 --> 00:12:06.720
+Commencez par les instructions de sources de données
+
+00:12:06.720 --> 00:12:07.860
+et les commandements spécifiques au schéma.
+
+00:12:08.960 --> 00:12:10.020
+Elles sont au plus proche des données
+
+00:12:10.020 --> 00:12:11.240
+et disent exactement copilote
+
+00:12:11.240 --> 00:12:12.640
+comment interpréter votre modèle.
+
+00:12:13.380 --> 00:12:14.340
+Vous souvenez-vous de notre chaos initial
+
+00:12:14.340 --> 00:12:15.460
+avec les jointures météo ?
+
+00:12:15.460 --> 00:12:16.420
+Les instructions de sources de données
+
+00:12:16.420 --> 00:12:17.160
+permettent de corriger ça.
+
+00:12:17.380 --> 00:12:18.680
+Vous spécifiez que les données de température
+
+00:12:18.680 --> 00:12:19.420
+et de précipitation
+
+00:12:19.420 --> 00:12:21.120
+peuvent se rejoindre sur l'identifiant géographique
+
+00:12:21.120 --> 00:12:22.320
+des prises en charge et l'identifiant de données.
+
+00:12:22.940 --> 00:12:24.220
+Cela élimine les suppositions du modèle
+
+00:12:24.220 --> 00:12:25.320
+pour les remplacer par une obligation.
+
+00:12:26.180 --> 00:12:27.180
+Fabric lit ces déclarations
+
+00:12:27.180 --> 00:12:29.260
+à chaque fois que copilote rédige du SQL ou du DAX
+
+00:12:29.260 --> 00:12:32.100
+garantissant que chaque requête utilise les bonnes clés.
+
+00:12:32.760 --> 00:12:34.480
+Considérez-les comme une constitution relationnelle,
+
+00:12:34.640 --> 00:12:35.800
+des textes juridiques immuables
+
+00:12:35.800 --> 00:12:37.780
+définissant comment les entités peuvent se connecter.
+
+00:12:38.620 --> 00:12:39.660
+Ces instructions gèrent également
+
+00:12:39.660 --> 00:12:40.940
+les synonymes et les définitions de mesure.
+
+00:12:41.600 --> 00:12:43.300
+Supposons que vos analystes utilisent indifféremment,
+
+00:12:43.440 --> 00:12:44.200
+Total, des ventes tweek
+
+00:12:44.200 --> 00:12:45.700
+un montant juste que les recettes brutes tweek.
+
+00:12:46.280 --> 00:12:46.760
+Pour les humains,
+
+00:12:46.820 --> 00:12:48.000
+tout cela signifie à peu près la même chose.
+
+00:12:48.000 --> 00:12:49.320
+Pour copilote,
+
+00:12:49.360 --> 00:12:50.840
+ce sont des variables distinctes en concurrence.
+
+00:12:51.860 --> 00:12:53.080
+Dans les instructions de la source de données,
+
+00:12:53.160 --> 00:12:53.700
+vous les harmonisez.
+
+00:12:54.100 --> 00:12:55.500
+Chaque fois que Total des ventes est mentionné,
+
+00:12:55.740 --> 00:12:56.800
+utilisez Montant juste Total.
+
+00:12:57.280 --> 00:12:58.420
+Désormais, votre IA arrête de jouer
+
+00:12:58.420 --> 00:12:59.140
+à la roulette sémantique
+
+00:12:59.140 --> 00:13:00.600
+et commence à répondre de manière cohérente.
+
+00:13:01.440 --> 00:13:02.880
+Ils peuvent même définir une logique de segmentation
+
+00:13:02.880 --> 00:13:03.920
+pour les analyses catégorielles.
+
+00:13:04.900 --> 00:13:06.640
+Lorsqu'un utilisateur demande les ventes par température,
+
+00:13:06.840 --> 00:13:08.040
+vous pouvez prédéfinir des plages.
+
+00:13:08.760 --> 00:13:09.960
+En dessous de 0 degrés Celsius,
+
+00:13:10.120 --> 00:13:11.700
+c'est le gel jusqu'à 12 degrés Celsius froid,
+
+00:13:11.940 --> 00:13:14.000
+de 12 à 22 degrés Celsius doux,
+
+00:13:14.080 --> 00:13:14.500
+et ainsi de suite.
+
+00:13:15.000 --> 00:13:16.480
+Sans cela, copilote renvoie
+
+00:13:16.480 --> 00:13:17.760
+une infinité de valeurs numériques,
+
+00:13:17.880 --> 00:13:19.800
+noyant l'utilisateur sous des détails inutiles.
+
+00:13:20.740 --> 00:13:22.760
+En intégrant ces segments directement dans vos instructions,
+
+00:13:22.920 --> 00:13:24.240
+vous créez une agrégation prévisible
+
+00:13:24.240 --> 00:13:25.500
+et une logique reproductible.
+
+00:13:26.240 --> 00:13:27.140
+Ce que vous faites réellement ici,
+
+00:13:27.220 --> 00:13:28.520
+c'est convertir des métadonnées latentes
+
+00:13:28.520 --> 00:13:29.340
+en règles explicites.
+
+00:13:30.140 --> 00:13:30.900
+L'agent de données de fabrique
+
+00:13:30.900 --> 00:13:32.240
+les transmet avant de construire les requêtes,
+
+00:13:32.360 --> 00:13:34.360
+les traitant comme une vérité absolue immuable.
+
+00:13:34.880 --> 00:13:35.720
+C'est leur absence qui explique
+
+00:13:35.720 --> 00:13:36.700
+pourquoi les requêtes précédentes
+
+00:13:36.700 --> 00:13:37.440
+produisaient des résultats.
+
+00:13:37.760 --> 00:13:39.080
+Ils généraient un SQL parfaitement valide
+
+00:13:39.080 --> 00:13:39.840
+pour la mauvaise question.
+
+00:13:40.480 --> 00:13:42.420
+Avec des instructions de données correctement rédigées,
+
+00:13:42.580 --> 00:13:43.340
+les requêtes de copilote
+
+00:13:43.340 --> 00:13:44.400
+restent ancrées dans les règles métiers
+
+00:13:44.400 --> 00:13:45.920
+plutôt que dans la probabilité linguistique.
+
+00:13:46.640 --> 00:13:47.740
+Passons maintenant au niveau supérieur
+
+00:13:47.740 --> 00:13:48.740
+avec les instructions de l'agent,
+
+00:13:48.860 --> 00:13:49.600
+l'école de savoir-vivre
+
+00:13:49.600 --> 00:13:50.640
+pour le comportement du LLM.
+
+00:13:51.420 --> 00:13:52.760
+Alors que les instructions de sources de données
+
+00:13:52.760 --> 00:13:54.220
+disent à copilote ce que signifient les données,
+
+00:13:54.420 --> 00:13:55.140
+les instructions de l'agent
+
+00:13:55.140 --> 00:13:56.320
+dictent comment il doit répondre.
+
+00:13:56.800 --> 00:13:57.780
+Elles définissent la présentation,
+
+00:13:57.880 --> 00:13:59.020
+le style et la portée analytique.
+
+00:13:59.720 --> 00:14:00.580
+Vous pouvez donner pour instruction
+
+00:14:00.580 --> 00:14:02.120
+résumé toujours avec un tableau concis
+
+00:14:02.120 --> 00:14:04.620
+ou, lorsque plusieurs sources existent,
+
+00:14:04.700 --> 00:14:06.160
+clarifier la provenance avant l'agrégation.
+
+00:14:07.220 --> 00:14:08.520
+Essentiellement, vous transformez copilote
+
+00:14:08.520 --> 00:14:09.420
+d'un stagiaire trop zélé
+
+00:14:09.420 --> 00:14:11.120
+en analyste discipliné.
+
+00:14:11.120 --> 00:14:14.400
+Prenons la règle des cinq premières lignes
+
+00:14:14.400 --> 00:14:15.680
+issues du réglage de l'agent de données.
+
+00:14:16.460 --> 00:14:17.920
+Au lieu de renvoyer des milliers d'enregistrements,
+
+00:14:18.020 --> 00:14:18.760
+vous les dites affichées.
+
+00:14:19.140 --> 00:14:19.940
+Uniquement les cinq premiers,
+
+00:14:20.080 --> 00:14:21.300
+sauf demande contraire de l'utilisateur.
+
+00:14:21.900 --> 00:14:23.120
+L'IA impose la concision,
+
+00:14:23.300 --> 00:14:25.340
+évitant au manager de devoir parcourir
+
+00:14:25.340 --> 00:14:26.460
+un roman de données.
+
+00:14:27.780 --> 00:14:28.740
+Autre directive utile,
+
+00:14:29.600 --> 00:14:30.740
+fournissez toujours un résumé
+
+00:14:30.740 --> 00:14:31.840
+au début de chaque réponse.
+
+00:14:32.580 --> 00:14:34.100
+Cela agit comme un méta-commentaire.
+
+00:14:35.140 --> 00:14:36.300
+Copilote explique ce qu'il montre,
+
+00:14:36.420 --> 00:14:38.040
+permettant aux utilisateurs de vérifier
+
+00:14:38.040 --> 00:14:39.640
+que les mesures, jointure et filtre,
+
+00:14:39.880 --> 00:14:40.680
+correspondent aux attentes.
+
+00:14:41.680 --> 00:14:43.020
+Cela transforme un raisonnement invisible
+
+00:14:43.020 --> 00:14:44.040
+en une confirmation visible
+
+00:14:44.040 --> 00:14:45.040
+cruciale pour la confiance.
+
+00:14:45.940 --> 00:14:46.680
+Observez l'interaction.
+
+00:14:47.200 --> 00:14:48.780
+Les instructions de données définissent les faits,
+
+00:14:48.980 --> 00:14:50.680
+les instructions de l'agent définissent la voie.
+
+00:14:51.500 --> 00:14:53.160
+Ensemble, ils forment le code éthique de copilote.
+
+00:14:53.800 --> 00:14:54.840
+L'agent de données combine le tout
+
+00:14:54.840 --> 00:14:55.640
+dans une invite composite
+
+00:14:55.640 --> 00:14:57.060
+chaque fois qu'il répond à une question.
+
+00:14:57.980 --> 00:14:59.460
+Le modèle linguistique ne fait pas d'improvisation.
+
+00:14:59.940 --> 00:15:01.480
+Il se conditionne lui-même par vos règles.
+
+00:15:02.000 --> 00:15:03.280
+La gouvernance entre maintenant en scène.
+
+00:15:03.660 --> 00:15:04.820
+Ces instructions ne peuvent pas rester
+
+00:15:04.820 --> 00:15:06.220
+dans des copies individuelles anarchiques.
+
+00:15:06.220 --> 00:15:08.020
+Si chaque utilisateur de fabrique
+
+00:15:08.020 --> 00:15:09.440
+personnalise les synonymes selon ses goûts,
+
+00:15:09.600 --> 00:15:10.760
+vous réintroduisez la tour de Babel
+
+00:15:10.760 --> 00:15:12.140
+que vous avez mis des mois à éliminer.
+
+00:15:12.780 --> 00:15:14.260
+Vous obtiendrez 5 définitions du profit
+
+00:15:14.260 --> 00:15:15.140
+et aucun consensus
+
+00:15:15.140 --> 00:15:16.340
+lors des revues trimestrielles.
+
+00:15:17.400 --> 00:15:18.520
+Centralisez les jeux d'instructions.
+
+00:15:18.840 --> 00:15:20.500
+Publiez-les via l'espace de gestion de fabrique.
+
+00:15:20.620 --> 00:15:22.080
+Validez-les par examen collégial
+
+00:15:22.080 --> 00:15:24.040
+et verrouillez-les via le contrôle de version.
+
+00:15:24.620 --> 00:15:26.020
+La flexibilité sans gouvernance
+
+00:15:26.020 --> 00:15:27.400
+est une rébellion déguisée en innovation.
+
+00:15:28.080 --> 00:15:29.780
+Bien sûr, même ces règles s'effrites
+
+00:15:29.780 --> 00:15:30.680
+si vous ne les vérifiez jamais.
+
+00:15:31.400 --> 00:15:32.820
+L'approche intelligente consiste à traiter
+
+00:15:32.820 --> 00:15:33.760
+la qualité des instructions
+
+00:15:33.760 --> 00:15:34.820
+comme la qualité du code.
+
+00:15:35.320 --> 00:15:36.080
+Après chaque modification,
+
+00:15:36.280 --> 00:15:37.240
+testez le comportement de copieur.
+
+00:15:37.560 --> 00:15:38.460
+Posez la même question 2 fois
+
+00:15:38.460 --> 00:15:39.280
+après avoir vidé le cache.
+
+00:15:39.740 --> 00:15:40.940
+Voyez s'il répète le même SQL.
+
+00:15:41.800 --> 00:15:42.840
+Examinez les requêtes générées.
+
+00:15:43.660 --> 00:15:44.400
+Assurez-vous qu'elles reflètent
+
+00:15:44.400 --> 00:15:45.160
+les jointures imposées
+
+00:15:45.160 --> 00:15:45.900
+et les mesures correctes.
+
+00:15:46.440 --> 00:15:47.360
+Si les résultats dérivent,
+
+00:15:47.520 --> 00:15:48.340
+revoyez vos instructions.
+
+00:15:48.960 --> 00:15:49.940
+Même les ingénieurs de Microsoft
+
+00:15:49.940 --> 00:15:50.880
+admettent que ce réglage
+
+00:15:50.880 --> 00:15:52.200
+relève plus de l'art que de la science,
+
+00:15:52.340 --> 00:15:53.160
+une formule flatteuse
+
+00:15:53.160 --> 00:15:54.420
+pour parler d'un débogage constant.
+
+00:15:55.340 --> 00:15:55.980
+C'est là que les exemples
+
+00:15:55.980 --> 00:15:56.700
+de requêtes vous sauvent.
+
+00:15:57.380 --> 00:15:58.300
+Ils sont la réponse de fabrique
+
+00:15:58.300 --> 00:15:59.040
+en matière de garde-fou,
+
+00:15:59.220 --> 00:16:00.080
+vous permettant de coder
+
+00:16:00.080 --> 00:16:01.600
+en dur des fragments SQL canoniques
+
+00:16:03.760 --> 00:16:04.840
+Disons que vous savez
+
+00:16:04.840 --> 00:16:05.640
+que le chiffre d'affaires total
+
+00:16:05.640 --> 00:16:06.500
+par tranche de température
+
+00:16:06.500 --> 00:16:07.220
+doit toujours effectuer
+
+00:16:07.220 --> 00:16:07.860
+une double jointure
+
+00:16:07.860 --> 00:16:08.820
+sur la géographie et la date.
+
+00:16:09.400 --> 00:16:10.000
+Vous enregistrez cela
+
+00:16:10.000 --> 00:16:10.780
+comme un exemple de requête.
+
+00:16:11.420 --> 00:16:12.240
+Lorsque les utilisateurs
+
+00:16:12.240 --> 00:16:13.220
+posent une question similaire,
+
+00:16:13.340 --> 00:16:14.560
+Copilot évite l'improvisation
+
+00:16:14.560 --> 00:16:16.940
+et réutilise votre logique exacte.
+
+00:16:17.260 --> 00:16:18.080
+C'est l'équivalent IA
+
+00:16:18.080 --> 00:16:19.320
+de formulaire préapprouvé,
+
+00:16:19.560 --> 00:16:21.120
+rempli correctement à chaque fois,
+
+00:16:21.500 --> 00:16:23.080
+incapable de sabotage créatif.
+
+00:16:24.040 --> 00:16:24.520
+Au fil du temps,
+
+00:16:24.600 --> 00:16:25.240
+vous pouvez constituer
+
+00:16:25.240 --> 00:16:25.760
+une bibliothèque
+
+00:16:25.760 --> 00:16:26.820
+de ces exemples de requêtes
+
+00:16:26.820 --> 00:16:27.700
+transformant Copilot
+
+00:16:27.700 --> 00:16:29.040
+un généraliste en expert métier.
+
+00:16:29.740 --> 00:16:30.240
+Considérez cela
+
+00:16:30.240 --> 00:16:30.980
+comme une mémoire muscule.
+
+00:16:31.500 --> 00:16:32.500
+L'IA apprend progressivement
+
+00:16:32.500 --> 00:16:33.680
+ce qui est correct par la répétition
+
+00:16:33.680 --> 00:16:34.220
+et la contrainte
+
+00:16:34.220 --> 00:16:36.280
+plutôt que par un génie improvisé.
+
+00:16:36.980 --> 00:16:37.220
+Pourtant,
+
+00:16:37.260 --> 00:16:38.220
+les instructions les plus astucieuses
+
+00:16:38.220 --> 00:16:38.640
+ne peuvent acheter
+
+00:16:38.640 --> 00:16:39.500
+des fautes architecturales.
+
+00:16:39.900 --> 00:16:40.940
+Si votre pipeline de données
+
+00:16:40.940 --> 00:16:41.860
+vacille sous des couches
+
+00:16:41.860 --> 00:16:42.760
+qu'encore incohérentes
+
+00:16:42.760 --> 00:16:43.780
+ou des sémantiques manquantes
+
+00:16:43.780 --> 00:16:44.900
+ou des sémantiques manquantes,
+
+00:16:45.220 --> 00:16:45.880
+tous ces garde-fous
+
+00:16:45.880 --> 00:16:46.920
+ne sont que des discours fermes
+
+00:16:46.920 --> 00:16:47.800
+sur un navire en train de couler.
+
+00:16:48.360 --> 00:16:49.580
+Les instructions contraignent le langage
+
+00:16:49.580 --> 00:16:50.840
+et ne peuvent pas inventer la vérité.
+
+00:16:51.320 --> 00:16:52.040
+C'est pourquoi le réglage
+
+00:16:52.040 --> 00:16:52.820
+est une boucle fermée.
+
+00:16:52.940 --> 00:16:54.180
+L'architecture définit la fiabilité,
+
+00:16:54.280 --> 00:16:55.320
+la sémantique définit le sens
+
+00:16:55.320 --> 00:16:56.940
+et les instructions définissent l'obéissance.
+
+00:16:57.700 --> 00:16:58.620
+Le flux de travail pragmatique
+
+00:16:58.620 --> 00:16:59.020
+en somme aussi.
+
+00:16:59.600 --> 00:17:00.260
+Construisez des couches
+
+00:17:00.260 --> 00:17:01.020
+qu'à médaillon propre,
+
+00:17:01.360 --> 00:17:02.860
+définissez un modèle sémantique précis,
+
+00:17:03.220 --> 00:17:04.040
+encodez ces définitions
+
+00:17:04.040 --> 00:17:04.540
+dans les instructions
+
+00:17:04.540 --> 00:17:05.220
+de sources de données,
+
+00:17:05.700 --> 00:17:06.540
+tempérez la personnalité
+
+00:17:06.540 --> 00:17:07.020
+de copilote
+
+00:17:07.020 --> 00:17:08.000
+via les instructions d'agents
+
+00:17:08.000 --> 00:17:09.420
+et testez sans relâche.
+
+00:17:10.340 --> 00:17:11.500
+Chaque anomalie détectée tôt
+
+00:17:11.500 --> 00:17:12.880
+vous épargne un email colérique
+
+00:17:12.880 --> 00:17:13.980
+d'un dirigeant plus tard.
+
+00:17:14.360 --> 00:17:14.620
+Alors oui,
+
+00:17:14.660 --> 00:17:15.200
+la discipline compte.
+
+00:17:15.660 --> 00:17:16.320
+Ce n'est pas glamour.
+
+00:17:16.700 --> 00:17:17.680
+Ce n'est pas de la magie IA.
+
+00:17:18.340 --> 00:17:19.340
+C'est de l'application de règles,
+
+00:17:19.540 --> 00:17:20.280
+du vidage de cache,
+
+00:17:20.440 --> 00:17:21.240
+des tests de cohérence
+
+00:17:21.240 --> 00:17:22.820
+et un contrôle d'estime de soi occasionnel
+
+00:17:22.820 --> 00:17:23.960
+quand votre IA insiste encore
+
+00:17:23.960 --> 00:17:25.100
+sur le fait que le total des ventes
+
+00:17:25.100 --> 00:17:25.840
+égale le chiffre brut
+
+00:17:25.840 --> 00:17:26.580
+plus les remboursements
+
+00:17:26.580 --> 00:17:27.260
+plus des miracles.
+
+00:17:28.300 --> 00:17:29.340
+Mais une fois que la discipline
+
+00:17:29.340 --> 00:17:29.860
+est intégrée,
+
+00:17:29.940 --> 00:17:31.160
+copilote devient étrangement fiable.
+
+00:17:31.960 --> 00:17:32.980
+Ses hallucinations diminuent,
+
+00:17:33.220 --> 00:17:34.360
+ses jointures se comportent normalement
+
+00:17:34.360 --> 00:17:35.020
+et vos tableaux de bord
+
+00:17:35.020 --> 00:17:35.740
+cessent de vous manipuler.
+
+00:17:36.360 --> 00:17:37.340
+Vous pouvez corriger les règles
+
+00:17:37.340 --> 00:17:37.940
+dans Fabrique,
+
+00:17:38.140 --> 00:17:39.160
+mais l'honnêteté de copilote
+
+00:17:39.160 --> 00:17:40.080
+dépend d'une architecture
+
+00:17:40.080 --> 00:17:40.900
+des passants Fabrique,
+
+00:17:41.220 --> 00:17:42.200
+cette gouvernance systémique
+
+00:17:42.200 --> 00:17:43.160
+qui garantit la vérité
+
+00:17:43.160 --> 00:17:44.700
+sur tout votre patrimoine de données.
+
+00:17:45.420 --> 00:17:46.140
+Et c'est précisément là
+
+00:17:46.140 --> 00:17:46.680
+que nous allons maintenant.
+
+00:17:47.580 --> 00:17:48.280
+Le remède systémique
+
+00:17:48.280 --> 00:17:49.500
+bâtière pour une vérité vérifiable.
+
+00:17:50.120 --> 00:17:50.660
+Prenons un peu de recul.
+
+00:17:50.660 --> 00:17:51.980
+Après tous les réglages
+
+00:17:51.980 --> 00:17:52.960
+synonymes et le dressage
+
+00:17:52.960 --> 00:17:53.780
+à l'obéissance de l'IA,
+
+00:17:53.980 --> 00:17:54.940
+il reste un fait brutal.
+
+00:17:55.920 --> 00:17:56.640
+La vérité de copilote
+
+00:17:56.640 --> 00:17:57.320
+dépend de l'intégrité
+
+00:17:57.320 --> 00:17:58.140
+de votre écosystème.
+
+00:17:58.860 --> 00:17:59.520
+Vous pouvez l'entraîner,
+
+00:17:59.620 --> 00:18:00.940
+le réprimander et le récompenser,
+
+00:18:01.040 --> 00:18:01.820
+mais si l'architecture
+
+00:18:01.820 --> 00:18:02.360
+autour de Fabrique
+
+00:18:02.360 --> 00:18:03.080
+laisse suivre la corruption
+
+00:18:03.080 --> 00:18:03.460
+des données,
+
+00:18:03.640 --> 00:18:05.160
+l'IA continuera de mentir poliment.
+
+00:18:06.400 --> 00:18:06.860
+Ce qu'il vous faut,
+
+00:18:06.920 --> 00:18:07.860
+c'est un remède systémique,
+
+00:18:08.220 --> 00:18:08.760
+une gouvernance,
+
+00:18:09.140 --> 00:18:10.280
+une application de la traçabilité
+
+00:18:10.280 --> 00:18:11.420
+et une discipline architecturale
+
+00:18:11.420 --> 00:18:12.060
+rendant le mensonge
+
+00:18:12.060 --> 00:18:12.800
+physiquement impossible.
+
+00:18:13.740 --> 00:18:14.400
+Au niveau architectural,
+
+00:18:14.980 --> 00:18:15.960
+Fabrique ne réussit que
+
+00:18:15.960 --> 00:18:16.700
+si tout ce qui l'entoure
+
+00:18:16.700 --> 00:18:17.880
+partage la même boussole morale
+
+00:18:17.880 --> 00:18:19.180
+en matière d'hygiène des données.
+
+00:18:19.960 --> 00:18:20.480
+Cela commence par
+
+00:18:20.480 --> 00:18:21.180
+l'application des schémas.
+
+00:18:21.560 --> 00:18:22.160
+Chaque jeu de données
+
+00:18:22.160 --> 00:18:23.080
+dans votre lake house
+
+00:18:23.080 --> 00:18:23.760
+et votre warehouse
+
+00:18:23.760 --> 00:18:24.600
+nécessite des clés,
+
+00:18:24.820 --> 00:18:25.400
+des types de données
+
+00:18:25.400 --> 00:18:26.620
+et des relations définies.
+
+00:18:27.240 --> 00:18:28.020
+Des contrats immuables
+
+00:18:28.020 --> 00:18:29.400
+décrivant l'imbrication des entités.
+
+00:18:30.220 --> 00:18:30.940
+Une dérive dans une table
+
+00:18:30.940 --> 00:18:31.880
+ne devrait pas se répercuter
+
+00:18:31.880 --> 00:18:32.320
+silencieusement
+
+00:18:32.320 --> 00:18:32.960
+jusqu'à votre couche gold.
+
+00:18:33.600 --> 00:18:34.020
+Au contraire,
+
+00:18:34.160 --> 00:18:34.920
+l'application du schéma
+
+00:18:34.920 --> 00:18:36.020
+la détecte comme un intérieur de code
+
+00:18:36.020 --> 00:18:36.720
+arrêtant l'ingestion
+
+00:18:36.720 --> 00:18:37.540
+jusqu'à ce que les définitions
+
+00:18:37.540 --> 00:18:37.960
+correspondent.
+
+00:18:38.700 --> 00:18:39.080
+En pratique,
+
+00:18:39.200 --> 00:18:39.860
+cela ne ralentit pas
+
+00:18:39.860 --> 00:18:40.320
+le développement,
+
+00:18:40.520 --> 00:18:41.940
+cela empêche la corruption silencieuse
+
+00:18:41.940 --> 00:18:43.160
+avant qu'elle ne métastase
+
+00:18:43.160 --> 00:18:44.200
+dans les réponses de copilores.
+
+00:18:44.860 --> 00:18:45.140
+Ensuite,
+
+00:18:45.240 --> 00:18:46.440
+introduisez le versionning sémantique.
+
+00:18:46.960 --> 00:18:47.780
+Traitez vos modèles de données
+
+00:18:47.780 --> 00:18:48.360
+comme des logiciels.
+
+00:18:48.680 --> 00:18:49.480
+Chaque fois que vous modifiez
+
+00:18:49.480 --> 00:18:50.120
+une définition,
+
+00:18:50.680 --> 00:18:51.460
+renommez une colonne,
+
+00:18:51.700 --> 00:18:52.380
+changez une formule
+
+00:18:52.380 --> 00:18:53.220
+ou ajustez une relation,
+
+00:18:53.360 --> 00:18:53.900
+incrémentez-la.
+
+00:18:54.200 --> 00:18:54.620
+La version.
+
+00:18:55.280 --> 00:18:56.240
+Fabrique ne reconnaît pas
+
+00:18:56.240 --> 00:18:56.940
+automatiquement
+
+00:18:56.940 --> 00:18:57.900
+l'impact philosophique
+
+00:18:57.900 --> 00:18:59.000
+d'un revenu passant de cas
+
+00:18:59.000 --> 00:19:00.300
+brut moins remise brut
+
+00:19:00.300 --> 00:19:01.640
+moins remise
+
+00:19:01.640 --> 00:19:02.260
+E-K net
+
+00:19:02.260 --> 00:19:03.280
+après un post-pompon.
+
+00:19:04.000 --> 00:19:04.300
+Les humains,
+
+00:19:04.380 --> 00:19:04.680
+eux, le doivent.
+
+00:19:05.360 --> 00:19:06.120
+Le versionning préserve
+
+00:19:06.120 --> 00:19:07.120
+l'historique de traçabilité
+
+00:19:07.120 --> 00:19:08.020
+vous permettant d'identifier
+
+00:19:08.020 --> 00:19:08.920
+quelle réponse de copilores
+
+00:19:08.920 --> 00:19:10.280
+reposée sur des sémantiques obsolètes.
+
+00:19:10.700 --> 00:19:10.980
+Sans cela,
+
+00:19:11.040 --> 00:19:11.820
+vous ne pourrez jamais auditer
+
+00:19:11.820 --> 00:19:12.480
+quand un mensonge
+
+00:19:12.480 --> 00:19:13.380
+a commencé à circuler.
+
+00:19:14.000 --> 00:19:14.280
+Maintenant,
+
+00:19:14.400 --> 00:19:14.920
+liez l'application
+
+00:19:14.920 --> 00:19:15.520
+à la documentation.
+
+00:19:16.040 --> 00:19:16.780
+Microsoft Purview
+
+00:19:16.780 --> 00:19:17.620
+ou le catalogue de données
+
+00:19:17.620 --> 00:19:17.960
+One Lake
+
+00:19:17.960 --> 00:19:19.080
+ne sont pas de simples décorations.
+
+00:19:19.460 --> 00:19:20.540
+C'est la mémoire institutionnelle
+
+00:19:20.540 --> 00:19:21.400
+qui empêche l'amnésie
+
+00:19:21.400 --> 00:19:21.800
+des schémas.
+
+00:19:23.060 --> 00:19:23.480
+Les jeux de données
+
+00:19:23.480 --> 00:19:24.460
+certifiés dans ces catalogues
+
+00:19:24.460 --> 00:19:25.160
+servent de seules sources
+
+00:19:25.160 --> 00:19:26.060
+autorisées pour copilotes
+
+00:19:26.060 --> 00:19:26.640
+et Power BI.
+
+00:19:28.040 --> 00:19:29.220
+Voyez-les comme des entités notariées,
+
+00:19:29.400 --> 00:19:30.020
+des représentations
+
+00:19:30.020 --> 00:19:31.320
+de la vérité juridiquement contraignantes.
+
+00:19:32.120 --> 00:19:32.600
+Si un jeu de données
+
+00:19:32.600 --> 00:19:33.300
+n'est pas certifié,
+
+00:19:33.380 --> 00:19:34.080
+copilotes ne devraient pas
+
+00:19:34.080 --> 00:19:34.420
+y toucher.
+
+00:19:35.120 --> 00:19:36.360
+En intégrant les métadonnées
+
+00:19:36.360 --> 00:19:36.780
+de Purview
+
+00:19:36.780 --> 00:19:37.900
+aux agents de données de fabrique,
+
+00:19:38.020 --> 00:19:38.520
+vous garantissez
+
+00:19:38.520 --> 00:19:39.540
+que chaque requête de l'IA
+
+00:19:39.540 --> 00:19:40.760
+cite une provenance vérifiable.
+
+00:19:41.720 --> 00:19:42.420
+Quand quelqu'un demande
+
+00:19:42.420 --> 00:19:43.900
+« D'où vient ce chiffre ? »
+
+00:19:43.900 --> 00:19:44.720
+Vous pouvez enfin répondre.
+
+00:19:45.620 --> 00:19:46.620
+Pour une continuité contextuelle
+
+00:19:46.620 --> 00:19:47.260
+entre les systèmes,
+
+00:19:47.440 --> 00:19:48.340
+activez le mirroring
+
+00:19:48.340 --> 00:19:48.960
+et la modélisation
+
+00:19:48.960 --> 00:19:49.520
+de jumeaux numériques.
+
+00:19:50.160 --> 00:19:50.900
+Le mirroring réplique
+
+00:19:50.900 --> 00:19:51.660
+les sources externes
+
+00:19:51.660 --> 00:19:52.660
+comme SQL Server,
+
+00:19:52.780 --> 00:19:53.280
+Cosmos DB
+
+00:19:53.280 --> 00:19:54.200
+ou PostgreSQL
+
+00:19:54.200 --> 00:19:55.280
+vers Fabrique en temps réel
+
+00:19:55.280 --> 00:19:55.940
+préservant schéma
+
+00:19:55.940 --> 00:19:56.840
+et fraîcheur
+
+00:19:56.840 --> 00:19:57.540
+préservant schéma.
+
+00:19:57.780 --> 00:19:58.580
+C'est le système immunitaire
+
+00:19:58.580 --> 00:19:58.920
+de Fabrique
+
+00:19:58.920 --> 00:19:59.520
+contre la latence
+
+00:19:59.520 --> 00:20:00.380
+et les incohérences de données.
+
+00:20:00.380 --> 00:20:01.340
+La modélisation
+
+00:20:01.340 --> 00:20:02.000
+de jumeaux numériques
+
+00:20:02.000 --> 00:20:02.740
+récemment introduite
+
+00:20:02.740 --> 00:20:03.600
+va encore plus loin.
+
+00:20:04.460 --> 00:20:04.940
+Elle construit
+
+00:20:04.940 --> 00:20:05.860
+un contrepoint numérique
+
+00:20:05.860 --> 00:20:06.880
+en direct d'environnements
+
+00:20:06.880 --> 00:20:07.940
+physiques ou commerciaux.
+
+00:20:09.060 --> 00:20:09.820
+Copilot peut alors
+
+00:20:09.820 --> 00:20:10.600
+interroger ses jumeaux
+
+00:20:10.600 --> 00:20:12.040
+en comprenant des relations
+
+00:20:12.040 --> 00:20:12.660
+telles que l'impact
+
+00:20:12.660 --> 00:20:13.660
+de la production industrielle
+
+00:20:13.660 --> 00:20:14.620
+sur les retards de transport.
+
+00:20:15.880 --> 00:20:16.820
+Cela maintient son raisonnement
+
+00:20:16.820 --> 00:20:17.640
+ancré dans une réalité
+
+00:20:17.640 --> 00:20:18.220
+synchronisée
+
+00:20:18.220 --> 00:20:19.460
+et non dans des extraits obsolètes.
+
+00:20:20.000 --> 00:20:20.820
+Et même la meilleure architecture
+
+00:20:20.820 --> 00:20:21.720
+finit par dériver avec l'autre.
+
+00:20:22.260 --> 00:20:23.040
+C'est pourquoi vous effectuez
+
+00:20:23.040 --> 00:20:24.160
+des audits de vérité périodique,
+
+00:20:24.400 --> 00:20:25.020
+des contrôles rituels
+
+00:20:25.020 --> 00:20:25.760
+où les résultats de l'IA
+
+00:20:25.760 --> 00:20:26.260
+sont confrontés
+
+00:20:26.260 --> 00:20:27.700
+à une source de vérité validée.
+
+00:20:28.360 --> 00:20:28.900
+Vous sélectionnez
+
+00:20:30.380 --> 00:20:31.920
+manuellement ou via SQL stocké
+
+00:20:31.920 --> 00:20:33.120
+et comparez les résultats.
+
+00:20:34.040 --> 00:20:34.500
+Toute divergence
+
+00:20:34.500 --> 00:20:35.920
+signale une entropie architecturale,
+
+00:20:36.120 --> 00:20:36.960
+des jonctions corrompues,
+
+00:20:37.040 --> 00:20:37.720
+des mesures dérivées,
+
+00:20:37.920 --> 00:20:38.940
+ou une lignée expirée,
+
+00:20:39.180 --> 00:20:39.900
+ou une lignée expirée.
+
+00:20:40.240 --> 00:20:40.780
+Considérez cela
+
+00:20:40.780 --> 00:20:41.640
+comme un test polygraphique
+
+00:20:41.640 --> 00:20:42.060
+pour copilot.
+
+00:20:42.720 --> 00:20:43.540
+Réalisé trimestriellement,
+
+00:20:43.620 --> 00:20:44.480
+cela permet de recalibrer
+
+00:20:44.480 --> 00:20:45.080
+les jeux d'instructions
+
+00:20:45.080 --> 00:20:45.620
+et la sémantique
+
+00:20:45.620 --> 00:20:46.260
+avant que la méfiance
+
+00:20:46.260 --> 00:20:47.020
+ne devienne un embarras
+
+00:20:47.020 --> 00:20:47.840
+en salle de conseil.
+
+00:20:48.560 --> 00:20:49.300
+Il est crucial
+
+00:20:49.300 --> 00:20:49.920
+que toutes les couches
+
+00:20:49.920 --> 00:20:50.820
+de votre pile analytique
+
+00:20:50.820 --> 00:20:53.380
+puissent dans une source
+
+00:20:53.380 --> 00:20:54.220
+sémantique unique.
+
+00:20:55.060 --> 00:20:55.720
+Les jeux de données
+
+00:20:55.720 --> 00:20:56.520
+fantômeux sont vos amis.
+
+00:20:56.940 --> 00:20:57.680
+Chaque fois qu'un service
+
+00:20:57.680 --> 00:20:58.980
+ambitieux clona un modèle
+
+00:20:58.980 --> 00:20:59.740
+pour aller plus vite
+
+00:20:59.740 --> 00:21:00.540
+et il crée un autre
+
+00:21:00.540 --> 00:21:01.700
+dialecte de vérité.
+
+00:21:02.620 --> 00:21:02.920
+Soudain,
+
+00:21:03.020 --> 00:21:03.960
+Power BI copilote
+
+00:21:03.960 --> 00:21:04.720
+et Excel copilote
+
+00:21:04.720 --> 00:21:05.460
+parlent trois langages
+
+00:21:05.460 --> 00:21:06.220
+légèrement différents
+
+00:21:06.220 --> 00:21:07.340
+pour le même chiffre d'affaires.
+
+00:21:08.400 --> 00:21:09.860
+Le remède est l'unité imposée.
+
+00:21:10.180 --> 00:21:11.100
+Centralisez la sémantique
+
+00:21:11.100 --> 00:21:11.840
+dans un seul modèle,
+
+00:21:12.080 --> 00:21:12.800
+exposez-le en lecture
+
+00:21:12.800 --> 00:21:13.680
+seul au consommateur
+
+00:21:13.680 --> 00:21:14.760
+et liez la conformité
+
+00:21:14.760 --> 00:21:15.980
+à la certification des données.
+
+00:21:17.060 --> 00:21:17.900
+Si Johnny, au ventre,
+
+00:21:17.960 --> 00:21:18.820
+veut une mesure personnalisée,
+
+00:21:19.000 --> 00:21:19.500
+il doit négocier
+
+00:21:19.500 --> 00:21:20.060
+via la gouvernance,
+
+00:21:20.180 --> 00:21:21.000
+pas par des canaux détournés.
+
+00:21:21.580 --> 00:21:21.940
+On va fermer
+
+00:21:21.940 --> 00:21:22.740
+la boucle d'apprentissage.
+
+00:21:23.140 --> 00:21:23.640
+La gouvernance
+
+00:21:23.640 --> 00:21:24.680
+n'est pas une paperasse statique,
+
+00:21:24.680 --> 00:21:25.680
+c'est un dialogue continu
+
+00:21:25.680 --> 00:21:26.460
+entre analyste humain
+
+00:21:26.460 --> 00:21:28.020
+et agent IAgent IA.
+
+00:21:28.620 --> 00:21:29.380
+Les humains ajustent,
+
+00:21:29.440 --> 00:21:30.200
+copilote exécute,
+
+00:21:30.420 --> 00:21:31.120
+les humains vérifient
+
+00:21:31.120 --> 00:21:31.980
+et copilote s'améliore
+
+00:21:31.980 --> 00:21:33.220
+grâce à un contexte mis à jour.
+
+00:21:34.160 --> 00:21:35.380
+Chaque itération apprend au système
+
+00:21:35.380 --> 00:21:35.960
+à quoi ressemble
+
+00:21:35.960 --> 00:21:37.220
+une exécution véridique.
+
+00:21:37.860 --> 00:21:38.240
+Avec le temps,
+
+00:21:38.300 --> 00:21:39.020
+ce retour d'information
+
+00:21:39.020 --> 00:21:40.400
+devient une infrastructure invisible,
+
+00:21:40.600 --> 00:21:41.780
+l'échafaudage de la précision.
+
+00:21:42.220 --> 00:21:42.780
+Lorsque vous atteignez
+
+00:21:42.780 --> 00:21:43.300
+cette maturité,
+
+00:21:43.400 --> 00:21:44.080
+quelque chose d'extraordinaire
+
+00:21:44.080 --> 00:21:44.480
+se produit.
+
+00:21:45.120 --> 00:21:45.920
+Copilote cesse d'être
+
+00:21:45.920 --> 00:21:46.820
+un oracle imprévisible
+
+00:21:46.820 --> 00:21:47.440
+pour se comporter
+
+00:21:47.440 --> 00:21:48.360
+comme un analyste junior,
+
+00:21:48.600 --> 00:21:49.680
+rapide, cohérent
+
+00:21:49.680 --> 00:21:50.900
+et respectueux des règles.
+
+00:21:50.900 --> 00:21:53.260
+Les hallucinations s'évaporent,
+
+00:21:53.340 --> 00:21:53.860
+non parce que l'IA
+
+00:21:53.860 --> 00:21:54.820
+est soudainement devenue honnête,
+
+00:21:54.920 --> 00:21:55.400
+mais parce que
+
+00:21:55.400 --> 00:21:56.160
+la malhonnêteté
+
+00:21:56.160 --> 00:21:57.300
+ne s'intègre plus à la structure.
+
+00:21:58.180 --> 00:21:58.800
+La vérité devient
+
+00:21:58.800 --> 00:21:59.980
+la voie de la moindre résistance,
+
+00:22:00.100 --> 00:22:00.800
+le remède systémique
+
+00:22:00.800 --> 00:22:01.700
+n'est donc pas le prestige,
+
+00:22:01.860 --> 00:22:02.540
+mais la gouvernance.
+
+00:22:03.400 --> 00:22:04.200
+Le respect des schémas
+
+00:22:04.200 --> 00:22:05.040
+maintient la structure,
+
+00:22:05.480 --> 00:22:06.360
+le versionnage sémantique
+
+00:22:06.360 --> 00:22:07.000
+garde l'historique.
+
+00:22:07.460 --> 00:22:08.400
+La certification PureView
+
+00:22:08.400 --> 00:22:09.240
+protège l'intégrité
+
+00:22:09.240 --> 00:22:10.020
+et la sémantique.
+
+00:22:10.340 --> 00:22:10.860
+La source unique
+
+00:22:10.860 --> 00:22:12.140
+préserve la cohérence.
+
+00:22:13.520 --> 00:22:14.060
+Le mirroring
+
+00:22:14.060 --> 00:22:15.160
+lit la réalité à son reflet,
+
+00:22:15.320 --> 00:22:16.040
+les audits de vérité
+
+00:22:16.040 --> 00:22:17.520
+maintiennent les deux synchronisés.
+
+00:22:17.900 --> 00:22:18.340
+Entre les deux,
+
+00:22:18.340 --> 00:22:19.600
+le copilote n'a plus besoin d'inventer,
+
+00:22:19.800 --> 00:22:20.700
+il se contente de rapporter.
+
+00:22:21.500 --> 00:22:22.420
+Une fois que vous avez imposé
+
+00:22:22.420 --> 00:22:23.640
+la vérité structurellement,
+
+00:22:23.720 --> 00:22:24.300
+vous avez gagné le droit
+
+00:22:24.300 --> 00:22:25.260
+d'automatiser vos insights,
+
+00:22:25.360 --> 00:22:25.680
+ce qui nous mène
+
+00:22:25.680 --> 00:22:26.400
+à la dernière leçon,
+
+00:22:26.660 --> 00:22:27.280
+apprendre machine
+
+00:22:27.280 --> 00:22:28.100
+à dire la vérité
+
+00:22:28.100 --> 00:22:28.780
+par conception
+
+00:22:28.780 --> 00:22:30.120
+et non par persuasion.
+
+00:22:30.900 --> 00:22:31.500
+Apprendre un copilote
+
+00:22:31.500 --> 00:22:32.180
+à dire la vérité.
+
+00:22:32.880 --> 00:22:33.620
+Copilot n'a jamais été
+
+00:22:33.620 --> 00:22:34.200
+indigne de confiance,
+
+00:22:34.300 --> 00:22:35.000
+il était obéissant.
+
+00:22:35.900 --> 00:22:36.560
+Il répondait fidèlement
+
+00:22:36.560 --> 00:22:37.280
+à quel que soit le chaos
+
+00:22:37.280 --> 00:22:37.960
+que vous encodiez.
+
+00:22:38.880 --> 00:22:39.480
+Une fois que vous lui offrez
+
+00:22:39.480 --> 00:22:40.520
+une architecture disciplinée,
+
+00:22:40.700 --> 00:22:41.480
+une sémantique cohérente
+
+00:22:41.480 --> 00:22:42.540
+et des instructions explicites,
+
+00:22:42.920 --> 00:22:43.600
+il cesse d'halluciner
+
+00:22:43.600 --> 00:22:44.240
+non par moralité
+
+00:22:44.240 --> 00:22:44.960
+mais par nécessité,
+
+00:22:45.080 --> 00:22:45.700
+mais par nécessité.
+
+00:22:46.100 --> 00:22:47.100
+Voici l'équation durable.
+
+00:22:47.560 --> 00:22:48.620
+Couches médalions comme propres,
+
+00:22:48.720 --> 00:22:49.500
+disciplines sémantiques
+
+00:22:49.500 --> 00:22:50.300
+et instructions gouvernées
+
+00:22:50.300 --> 00:22:50.820
+équivalentes
+
+00:22:50.820 --> 00:22:52.020
+à une vérité IA vérifiable.
+
+00:22:53.080 --> 00:22:54.040
+Éliminez toute ambiguïté
+
+00:22:54.040 --> 00:22:54.460
+à la source,
+
+00:22:54.700 --> 00:22:55.320
+documentez le sens
+
+00:22:55.320 --> 00:22:55.920
+avec précision,
+
+00:22:56.100 --> 00:22:57.120
+testez les sorties régulièrement
+
+00:22:57.120 --> 00:22:58.280
+et copilote deviendra
+
+00:22:58.280 --> 00:22:58.880
+un miroir poli
+
+00:22:58.880 --> 00:22:59.760
+ne reflétant que l'effet.
+
+00:23:00.500 --> 00:23:01.440
+Si votre domaine fabrique
+
+00:23:01.440 --> 00:23:02.060
+chuchote encore
+
+00:23:02.060 --> 00:23:02.780
+des contradictions,
+
+00:23:03.280 --> 00:23:04.140
+c'est le moment de l'auditer.
+
+00:23:04.840 --> 00:23:05.820
+Appliquez des contrats de schéma,
+
+00:23:06.140 --> 00:23:07.000
+certifiez vos jeux de données,
+
+00:23:07.300 --> 00:23:08.240
+versionnez votre sémantique
+
+00:23:08.240 --> 00:23:08.900
+et effectuez des audits
+
+00:23:08.900 --> 00:23:09.760
+de vérité trimestrielle.
+
+00:23:10.660 --> 00:23:11.540
+Observez alors copilote
+
+00:23:11.540 --> 00:23:12.000
+se transformer
+
+00:23:12.000 --> 00:23:13.000
+d'un improvisateur confiant
+
+00:23:13.000 --> 00:23:13.640
+dans un collègue fiable.
+
+00:23:14.560 --> 00:23:15.580
+La précision n'est pas magique,
+
+00:23:15.820 --> 00:23:16.360
+elle s'entretient.
+
+00:23:16.820 --> 00:23:17.520
+Bâtissez une structure
+
+00:23:17.520 --> 00:23:18.080
+si rigoureuse
+
+00:23:18.080 --> 00:23:18.580
+que les mensonges
+
+00:23:18.580 --> 00:23:19.520
+ne puissent physiquement pas passer.
+
+00:23:20.120 --> 00:23:20.480
+Faites cela
+
+00:23:20.480 --> 00:23:21.520
+et chaque future requête
+
+00:23:21.520 --> 00:23:22.480
+produira non pas des histoires
+
+00:23:22.480 --> 00:23:23.200
+mais des faits.
+
+00:23:24.000 --> 00:23:25.140
+Si cela vous a fait gagner des heures
+
+00:23:25.140 --> 00:23:26.080
+ou éviter un embarras,
+
+00:23:26.260 --> 00:23:27.080
+récompensez l'effort,
+
+00:23:27.540 --> 00:23:28.920
+abonnez-vous au M365-Jour.
+
+00:23:29.660 --> 00:23:30.520
+Nous sommes spécialisés
+
+00:23:30.520 --> 00:23:31.460
+dans la fiabilisation concrète
+
+00:23:31.460 --> 00:23:32.120
+de l'IA de Microsoft.
+
+00:23:32.760 --> 00:23:33.460
+Le prochain tutoriel
+
+00:23:33.460 --> 00:23:34.700
+explorera encore plus en profondeur
+
+00:23:34.700 --> 00:23:35.100
+l'ingénierie
+
+00:23:35.100 --> 00:23:35.840
+de la précision de copilote.
+
+00:23:35.840 --> 00:23:36.880
+L'efficacité appartient
+
+00:23:36.880 --> 00:23:37.460
+à ceux qui sont issus.
+
+00:23:37.860 --> 00:23:38.420
+Restez à l'écoute.

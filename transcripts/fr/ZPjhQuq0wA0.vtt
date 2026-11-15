@@ -1,0 +1,1648 @@
+WEBVTT
+
+00:00:00.100 --> 00:00:02.040
+Imaginez qu'un client souhaite 100 vélos le mois prochain.
+
+00:00:02.540 --> 00:00:03.400
+Les cadres arrivent en retard.
+
+00:00:03.760 --> 00:00:05.280
+Les roues sont stockées dans un autre entrepôt.
+
+00:00:05.360 --> 00:00:07.540
+Et votre chaîne de montage est déjà réservée pour les deux prochaines semaines.
+
+00:00:08.000 --> 00:00:10.560
+Alors qu'achetez-vous ? Que construisez-vous ? Que déplacez-vous ?
+
+00:00:10.560 --> 00:00:12.000
+Et quand avez-vous besoin de chaque pièce ?
+
+00:00:12.700 --> 00:00:14.660
+Milko Pétas de M365FM.
+
+00:00:15.620 --> 00:00:18.800
+Cette pépite de connaissances concerne le master planning de Dynamics 365,
+
+00:00:19.800 --> 00:00:23.420
+la partie de la gestion de la chaîne logistique qui résout ces questions en coulisses.
+
+00:00:24.200 --> 00:00:26.840
+Voyez votre entreprise comme un immeuble bureau avec un entrepôt attenant.
+
+00:00:27.460 --> 00:00:28.300
+Les commandes arrivent par une temps.
+
+00:00:28.300 --> 00:00:29.980
+Les stocks reposent sur des étagères.
+
+00:00:30.280 --> 00:00:31.980
+Les fournisseurs apportent les marchandises au quai de chargement.
+
+00:00:32.200 --> 00:00:34.040
+La production transforme les pièces en produits finis.
+
+00:00:34.640 --> 00:00:39.460
+Le master planning examine tout le bâtiment au lieu de laisser chaque équipe avec sa propre liste.
+
+00:00:40.400 --> 00:00:45.220
+Aujourd'hui, nous, Gertmann, allons suivre une commande de vélo de la demande client jusqu'aux actions d'approvisionnement.
+
+00:00:46.160 --> 00:00:50.580
+Dynamics 365 montre pourquoi les entreprises ont besoin d'un plan, pas d'un tableur.
+
+00:00:51.500 --> 00:00:55.460
+Avant l'existence des outils de planification connectés, les entreprises travaillaient avec des informations isolées.
+
+00:00:55.840 --> 00:00:57.280
+Les ventes avaient les commandes clients à un endroit.
+
+00:00:57.280 --> 00:01:00.160
+Les équipes d'entrepôt vérifiaient les stocks dans un autre système.
+
+00:01:00.280 --> 00:01:02.360
+Les achats suivaient les dates fournisseurs par e-mail ou tableur.
+
+00:01:02.760 --> 00:01:05.920
+Et la production tenait ses propres notes sur ce que l'usine pouvait fabriquer cette semaine.
+
+00:01:06.400 --> 00:01:07.660
+Chaque liste semblait correcte prise individuelle.
+
+00:01:08.160 --> 00:01:10.680
+Les problèmes commençaient quand quelqu'un essayait de répondre à une question client.
+
+00:01:11.140 --> 00:01:13.840
+« Oh, pouvons-nous livrer 100 vélos à la date promise ? »
+
+00:01:13.840 --> 00:01:17.140
+Imaginez que l'entrepôt contienne 30 vélos finis aujourd'hui.
+
+00:01:17.680 --> 00:01:21.060
+Cela semble être un bon début, mais il manque encore 70 vélos à la commande.
+
+00:01:21.600 --> 00:01:28.460
+Et ces 70 vélos nécessitent des cadres, des roues, des chaînes, des sièges, des boulons, des emballages, du personnel pour l'assemblage et du temps sur les bonnes machines.
+
+00:01:29.180 --> 00:01:32.100
+Un simple inventaire ne vous dit que ce qui se trouve sur l'étagère en ce moment.
+
+00:01:33.360 --> 00:01:36.520
+Il ne vous dit pas si 70 cadres supplémentaires arriveront avant que la production n'en ait besoin.
+
+00:01:36.520 --> 00:01:39.940
+Il ne vous dit pas si une commande d'achat ouverte couvre déjà les roues.
+
+00:01:40.660 --> 00:01:44.380
+Et il ne vous dit pas si l'usine a assez de temps pour tout assembler avant la date de livraison.
+
+00:01:45.400 --> 00:01:50.280
+C'est ici que la planification devient bien plus qu'un simple comptage et un gère.
+
+00:01:50.960 --> 00:01:53.940
+Quand un client commande 100 vélos, le système analyse la demande pour 100.
+
+00:01:54.500 --> 00:01:56.200
+Il soustrait les 30 vélos déjà disponibles.
+
+00:01:56.840 --> 00:01:58.840
+Ensuite, il retrace ce qui doit se passer pour les 70 restants.
+
+00:01:59.840 --> 00:02:01.380
+Il vérifie les pièces composant le vélo fini.
+
+00:02:01.980 --> 00:02:03.380
+Il vérifie l'approvisionnement déjà en cours.
+
+00:02:03.980 --> 00:02:06.040
+Et il vérifie les dates associées à chaque tâche.
+
+00:02:06.520 --> 00:02:08.180
+Une seule pièce manquante peut changer toute la réponse.
+
+00:02:08.680 --> 00:02:10.020
+Vous pourriez avoir assez de roues et assez de sièges.
+
+00:02:10.880 --> 00:02:12.880
+Mais si les cadres nécessitent deux semaines d'approvisionnement,
+
+00:02:13.160 --> 00:02:15.260
+les acheter la veille de l'assemblage ne servira à rien.
+
+00:02:16.180 --> 00:02:17.860
+Une commande peut sembler réalisable sur un tableur,
+
+00:02:18.160 --> 00:02:20.040
+jusqu'à ce que vous placiez chaque élément sur un calendrier.
+
+00:02:20.540 --> 00:02:21.960
+Ce calendrier change en permanence.
+
+00:02:22.240 --> 00:02:24.000
+Un fournisseur pourrait avancer sa date de livraison.
+
+00:02:24.540 --> 00:02:26.880
+Une autre commande client pourrait absorber du stock que vous pensiez disponible.
+
+00:02:27.200 --> 00:02:28.500
+Une tâche de production pourrait prendre du retard.
+
+00:02:28.900 --> 00:02:30.220
+Lorsque ces détails sont dispersés,
+
+00:02:30.220 --> 00:02:32.120
+les équipes passent leur temps à s'appeler,
+
+00:02:32.280 --> 00:02:35.400
+s'envoyer des e-mails et mettre à jour leur propre version du plan.
+
+00:02:35.400 --> 00:02:36.800
+Dynamics 365
+
+00:02:36.800 --> 00:02:41.200
+Le Master Planning regroupe la demande et l'offre actuelle dans une vue unique.
+
+00:02:41.820 --> 00:02:43.240
+Il analyse conjointement les commandes clients,
+
+00:02:43.340 --> 00:02:44.900
+le stock disponible, les approvisionnements entrants
+
+00:02:44.900 --> 00:02:45.820
+et les informations de production.
+
+00:02:46.400 --> 00:02:49.140
+Il détermine ensuite où l'offre couvre la demande et où subsiste un écart.
+
+00:02:49.600 --> 00:02:51.800
+Au lieu de demander à chaque équipe de faire le lien manuellement,
+
+00:02:52.300 --> 00:02:54.840
+le système propose des actions basées sur les données visibles.
+
+00:02:55.940 --> 00:02:58.440
+Cela ne signifie pas pour autant que le système dirige l'entreprise tout seul.
+
+00:02:58.440 --> 00:03:01.000
+Un planificateur vérifie toujours les suggestions,
+
+00:03:01.340 --> 00:03:02.900
+pose des questions et décide des actions à mener.
+
+00:03:03.560 --> 00:03:06.460
+Mais il part d'une vision globale plutôt que d'une multitude de listes séparées.
+
+00:03:07.220 --> 00:03:08.600
+Considère un tableur comme une photographie.
+
+00:03:09.080 --> 00:03:11.580
+Il capture le stock à un instant T et cela peut être utile.
+
+00:03:12.440 --> 00:03:15.100
+Le Master Planning s'apparente davantage à un calendrier prévisionnel
+
+00:03:15.100 --> 00:03:18.020
+car il relie les quantités aux dates, à l'offre entrante et à la demande future.
+
+00:03:18.740 --> 00:03:21.220
+L'étape suivante consiste à distinguer les différents types de demandes
+
+00:03:21.220 --> 00:03:22.660
+que le processus de planification peut lire.
+
+00:03:22.660 --> 00:03:24.840
+Les 3 modes de planification
+
+00:03:24.840 --> 00:03:28.120
+Voici ce qu'il faut savoir sur Dynamics 365.
+
+00:03:29.500 --> 00:03:31.340
+Il n'y a pas qu'une seule façon de planifier.
+
+00:03:32.080 --> 00:03:35.100
+Le mode de planification utilisé dépend de la question à laquelle votre entreprise doit répondre.
+
+00:03:35.880 --> 00:03:38.260
+Une entreprise gérant les commandes clients de cette semaine
+
+00:03:38.260 --> 00:03:42.040
+a besoin d'une vue différente de celle qui prépare les matériaux pour la saison prochaine.
+
+00:03:42.960 --> 00:03:44.440
+Le premier mode est le Master Planning.
+
+00:03:44.900 --> 00:03:47.640
+C'est votre plan quotidien qui calcule les besoins nets.
+
+00:03:48.280 --> 00:03:50.220
+Cela signifie que le système examine vos besoins
+
+00:03:50.220 --> 00:03:52.960
+et soustrait l'offre que vous avez déjà ou que vous attendez de recevoir.
+
+00:03:53.540 --> 00:03:55.600
+Il lie l'activité réelle comme les commandes clients,
+
+00:03:56.060 --> 00:03:57.520
+les bons de commandes fournisseurs,
+
+00:03:57.720 --> 00:03:59.500
+les ordres de fabrication en cours
+
+00:03:59.500 --> 00:04:02.440
+et le stock en entrepôt et le stock en entrepôt.
+
+00:04:02.720 --> 00:04:04.740
+Imaginez une commande client pour 100 unités d'un produit.
+
+00:04:05.420 --> 00:04:08.220
+Votre entrepôt détient 30 unités que la planification peut affecter à cette commande.
+
+00:04:08.720 --> 00:04:11.020
+Le système ne suggère pas d'acheter ou de fabriquer à nouveau les 100 unités
+
+00:04:11.020 --> 00:04:12.920
+car il identifie ces 30 unités comme de l'offre.
+
+00:04:13.640 --> 00:04:15.540
+Il calcule donc un besoin restant de 70 unités.
+
+00:04:16.060 --> 00:04:17.860
+Ces 70 unités restantes constituent le besoin.
+
+00:04:17.860 --> 00:04:20.520
+Un plan réel peut inclure bien plus que le simple stock en rayon.
+
+00:04:21.160 --> 00:04:23.960
+Peut-être que 20 unités supplémentaires arriveront d'un fournisseur
+
+00:04:23.960 --> 00:04:25.600
+avant la date demandée par le client.
+
+00:04:27.220 --> 00:04:29.660
+Dans ce cas, le système prend également ces 20 unités en compte
+
+00:04:29.660 --> 00:04:31.400
+réduisant encore l'écart à couvrir.
+
+00:04:32.080 --> 00:04:33.120
+Les dates déterminent la réponse.
+
+00:04:33.640 --> 00:04:36.100
+Si ces 20 unités arrivent après la date de livraison prévue par le client,
+
+00:04:36.200 --> 00:04:37.440
+elles ne sont finalement pas d'une grande aide.
+
+00:04:38.120 --> 00:04:38.920
+Vous les recevez physiquement,
+
+00:04:39.140 --> 00:04:40.800
+mais elles arrivent trop tard pour ce besoin précis.
+
+00:04:41.540 --> 00:04:44.020
+La planification principale examine la quantité et le calendrier ensemble.
+
+00:04:44.340 --> 00:04:46.880
+Un simple chiffre de stock total peut vous donner une réponse erronée.
+
+00:04:46.880 --> 00:04:48.840
+Pour de nombreuses entreprises,
+
+00:04:49.000 --> 00:04:50.320
+c'est le plan qu'elles exécutent le plus souvent.
+
+00:04:50.700 --> 00:04:53.040
+Microsoft qualifie la planification principale de processus
+
+00:04:53.040 --> 00:04:54.940
+à court terme couvrant généralement de 1 semaine à 6 mois.
+
+00:04:55.280 --> 00:04:56.860
+La portée exacte dépend du temps nécessaire
+
+00:04:56.860 --> 00:04:58.000
+à l'arrivée des approvisionnements
+
+00:04:58.000 --> 00:04:59.040
+ou à la fin de la production.
+
+00:04:59.460 --> 00:05:00.100
+Ou à la fin de la production.
+
+00:05:00.260 --> 00:05:02.060
+Une entreprise achetant des articles locaux simples
+
+00:05:02.060 --> 00:05:03.560
+peut ne planifier que quelques semaines à l'avance.
+
+00:05:04.380 --> 00:05:06.540
+Mais un fabricant utilisant des pièces nécessitant des mois
+
+00:05:06.540 --> 00:05:07.740
+doit anticiper davantage,
+
+00:05:07.880 --> 00:05:09.300
+souvent jusqu'au délai total le plus long,
+
+00:05:09.480 --> 00:05:10.020
+pour ses produits.
+
+00:05:10.980 --> 00:05:13.680
+Sinon, l'exécution de la planification détecte une pénurie trop tard
+
+00:05:13.680 --> 00:05:14.600
+pour pouvoir l'éviter.
+
+00:05:15.220 --> 00:05:16.900
+Le second mode est la planification par prévision.
+
+00:05:17.500 --> 00:05:19.100
+Au lieu de partir de commandes clients confirmées,
+
+00:05:19.160 --> 00:05:21.420
+la planification par prévision part de la demande attendue.
+
+00:05:22.080 --> 00:05:23.260
+Peut-être que l'équipe commerciale
+
+00:05:23.260 --> 00:05:24.860
+anticipe une hausse des ventes de vélos en été,
+
+00:05:25.220 --> 00:05:26.660
+ou qu'un détaillant prévoit une grande promotion
+
+00:05:26.660 --> 00:05:28.440
+pour générer de la demande plus tard dans l'année.
+
+00:05:29.100 --> 00:05:30.820
+Il s'agit de prévisions basées sur les attentes de l'équipe,
+
+00:05:31.060 --> 00:05:32.120
+et non sur des commandes confirmées.
+
+00:05:32.900 --> 00:05:34.560
+Elles sont utiles, car attendre chaque commande client
+
+00:05:34.560 --> 00:05:35.460
+peut laisser trop peu de temps
+
+00:05:35.460 --> 00:05:36.400
+pour acheter les matières premières,
+
+00:05:36.500 --> 00:05:37.460
+réserver le travail en usine,
+
+00:05:37.680 --> 00:05:39.640
+ou préparer une capacité suffisante.
+
+00:05:39.640 --> 00:05:42.600
+Les articles à long délai nécessitent des décisions plus précoces,
+
+00:05:42.700 --> 00:05:44.700
+même lorsque la commande client finale n'est pas encore arrivée.
+
+00:05:45.160 --> 00:05:47.220
+La planification par prévision calcule les besoins bruts.
+
+00:05:47.580 --> 00:05:50.000
+Cela signifie qu'elle commence par le volume de demandes attendue.
+
+00:05:50.560 --> 00:05:52.500
+Si une prévision attend 500 vélos en juillet,
+
+00:05:52.840 --> 00:05:56.240
+la planification voit d'abord le besoin total de 500 unités
+
+00:05:56.240 --> 00:05:58.260
+et travaille à partir de ce besoin prévu.
+
+00:05:58.720 --> 00:06:00.460
+Considérez cela comme un moyen d'anticiper la charge de travail
+
+00:06:00.460 --> 00:06:01.180
+à venir pour l'entreprise.
+
+00:06:01.180 --> 00:06:02.740
+Vous pouvez alors planifier les matériaux
+
+00:06:02.740 --> 00:06:04.320
+et la capacité autour de ce volume attendu.
+
+00:06:04.920 --> 00:06:06.360
+Vous devrez peut-être parler au fournisseur,
+
+00:06:06.560 --> 00:06:08.020
+rapidement préparer l'espace d'entrepôt,
+
+00:06:08.020 --> 00:06:10.240
+ou vérifier si la production peut gérer la charge prévue.
+
+00:06:10.780 --> 00:06:11.980
+Les prévisions ne sont que des promesses,
+
+00:06:12.100 --> 00:06:12.640
+elles peuvent changer,
+
+00:06:12.960 --> 00:06:14.620
+et les ventes réelles peuvent ne pas correspondre.
+
+00:06:15.380 --> 00:06:16.900
+Pourtant, elles offrent une vision plus large
+
+00:06:16.900 --> 00:06:18.880
+qu'un plan basé uniquement sur les commandes déjà passées.
+
+00:06:19.340 --> 00:06:21.220
+Ensuite, il y a la planification principale inter-société.
+
+00:06:22.040 --> 00:06:23.540
+Cela entre en jeu lorsqu'une entité juridique
+
+00:06:23.540 --> 00:06:24.860
+a besoin d'un approvisionnement auprès d'une autre.
+
+00:06:25.200 --> 00:06:26.780
+Par exemple, une société de votre groupe
+
+00:06:26.780 --> 00:06:27.740
+peut produire un article
+
+00:06:27.740 --> 00:06:29.240
+tandis qu'une autre le vend à des clients
+
+00:06:29.240 --> 00:06:30.360
+dans un pays différent.
+
+00:06:31.060 --> 00:06:32.880
+La société vendeuse perçoit la demande des clients.
+
+00:06:33.420 --> 00:06:35.520
+La société productrice doit avoir le besoin d'approvisionnement
+
+00:06:35.520 --> 00:06:36.400
+que cette demande génère.
+
+00:06:36.400 --> 00:06:38.920
+La planification principale inter-société
+
+00:06:38.920 --> 00:06:40.800
+relie ses besoins au-delà des frontières de l'entreprise,
+
+00:06:40.900 --> 00:06:42.340
+y compris la demande et l'offre planifiée
+
+00:06:42.340 --> 00:06:44.680
+qui ne sont pas encore devenues des commandes fermes.
+
+00:06:44.800 --> 00:06:46.220
+Ainsi, l'entreprise ne planifie pas
+
+00:06:46.220 --> 00:06:47.380
+comme si elle fonctionnait seule.
+
+00:06:48.300 --> 00:06:49.500
+La société commerciale peut prévoir
+
+00:06:49.500 --> 00:06:51.360
+l'approvisionnement auprès de la société de fabrication,
+
+00:06:51.740 --> 00:06:52.940
+tandis que celle-ci voit qu'elle a besoin
+
+00:06:52.940 --> 00:06:54.220
+de matériaux et de capacités
+
+00:06:54.220 --> 00:06:55.620
+pour répondre à cette demande.
+
+00:06:56.280 --> 00:06:58.000
+Le lien transmet le signal de planification
+
+00:06:58.000 --> 00:06:59.200
+d'une entité juridique à l'autre.
+
+00:06:59.660 --> 00:07:00.900
+Chaque mode commence par la demande.
+
+00:07:01.380 --> 00:07:02.660
+Mais la demande n'est que le premier signal,
+
+00:07:02.660 --> 00:07:04.560
+car un produit fini peut générer une chaîne de besoins
+
+00:07:04.560 --> 00:07:06.320
+pour de nombreux composants de niveau inférieur.
+
+00:07:07.600 --> 00:07:09.240
+D'une commande à une chaîne d'approvisionnement,
+
+00:07:09.400 --> 00:07:09.960
+restons sur le vélo,
+
+00:07:10.040 --> 00:07:11.420
+car c'est là que la planification principale
+
+00:07:11.420 --> 00:07:12.700
+commence son véritable travail.
+
+00:07:13.060 --> 00:07:13.940
+Commence son véritable travail.
+
+00:07:14.120 --> 00:07:16.120
+Imaginez qu'un client passe une commande de 70 vélos
+
+00:07:16.120 --> 00:07:18.500
+et demande une livraison à une date précise.
+
+00:07:19.460 --> 00:07:20.620
+Cette date n'est pas seulement une note
+
+00:07:20.620 --> 00:07:21.180
+pour l'équipe commerciale,
+
+00:07:22.060 --> 00:07:24.900
+c'est le point de départ de la planification à rebours
+
+00:07:24.900 --> 00:07:26.640
+en se demandant ce qui doit se passer
+
+00:07:26.640 --> 00:07:28.620
+avant que ces vélos puissent quitter l'entrepôt.
+
+00:07:28.620 --> 00:07:30.940
+Le vélo fini n'est que la première couche.
+
+00:07:31.520 --> 00:07:33.540
+Dynamics 365 vérifie la nomenclature,
+
+00:07:33.660 --> 00:07:34.460
+souvent appelée copybook.
+
+00:07:35.160 --> 00:07:37.000
+Considérez la nomenclature comme la recette d'un vélo.
+
+00:07:37.560 --> 00:07:39.820
+Elle liste le cadre, les roues, la chaîne, la selle,
+
+00:07:40.020 --> 00:07:41.140
+le guidon, les freins, les boulons
+
+00:07:41.140 --> 00:07:42.740
+et chaque autre pièce nécessaire à sa fabrication.
+
+00:07:43.540 --> 00:07:44.960
+Si la commande nécessite 70 vélos,
+
+00:07:45.180 --> 00:07:46.500
+la planification développe cette commande
+
+00:07:46.500 --> 00:07:48.100
+en pièces nécessaires pour les 70 unités.
+
+00:07:48.760 --> 00:07:50.280
+Cela peut rapidement devenir une langue liste.
+
+00:07:50.780 --> 00:07:52.320
+Vous pourriez avoir besoin de 70 cadres,
+
+00:07:52.400 --> 00:07:54.160
+140 roues, 70 chaînes, 70 selles
+
+00:07:54.160 --> 00:07:55.060
+et des centaines de petits boulons.
+
+00:07:55.060 --> 00:07:57.560
+Un planificateur n'a pas à compter chaque pièce à la main.
+
+00:07:57.560 --> 00:08:00.240
+La nomenclature fournie à Dynamics 365
+
+00:08:00.240 --> 00:08:02.260
+la structure permettant au système de tracer la demande
+
+00:08:02.260 --> 00:08:03.860
+du vélo fini jusqu'à chaque composant.
+
+00:08:04.820 --> 00:08:07.040
+Mais les pièces seules ne suffisent pas à produire des vélos.
+
+00:08:07.580 --> 00:08:08.800
+La production nécessite également une gamme opérale.
+
+00:08:09.100 --> 00:08:10.980
+Une gamme décrit les étapes de travail nécessaires
+
+00:08:10.980 --> 00:08:12.100
+à la construction de l'article.
+
+00:08:12.380 --> 00:08:13.960
+Assembler le cadre, monter les roues,
+
+00:08:14.360 --> 00:08:16.620
+vérifier les freins et emballer le vélo fini.
+
+00:08:17.120 --> 00:08:18.460
+Chaque étape peut nécessiter une ressource.
+
+00:08:18.780 --> 00:08:20.280
+Cette ressource peut être une ligne d'assemblage,
+
+00:08:20.420 --> 00:08:22.020
+un établi, une cabine de peinture,
+
+00:08:22.020 --> 00:08:23.740
+une machine ou un groupe de personnes
+
+00:08:23.740 --> 00:08:24.800
+ayant les compétences requises.
+
+00:08:24.800 --> 00:08:26.640
+La planification utilise ces informations
+
+00:08:26.640 --> 00:08:27.700
+pour placer le travail au bon moment.
+
+00:08:28.200 --> 00:08:29.120
+Au lieu de traiter la production
+
+00:08:29.120 --> 00:08:30.260
+comme quelque chose d'instantané,
+
+00:08:30.460 --> 00:08:32.060
+c'est ici que les dates commencent à reculer.
+
+00:08:32.760 --> 00:08:34.260
+Si le client a besoin des vélos vendredi,
+
+00:08:34.560 --> 00:08:36.480
+l'ordre de production fini doit peut-être être terminé jeudi
+
+00:08:36.480 --> 00:08:38.940
+pour que l'entrepôt puisse les emballer et les expédier.
+
+00:08:39.540 --> 00:08:40.980
+L'assemblage devra peut-être commencer mardi.
+
+00:08:41.460 --> 00:08:43.260
+Les cadres et les roues devront peut-être arriver lundi.
+
+00:08:43.720 --> 00:08:45.740
+Si un fournisseur a besoin de 10 jours pour livrer les roues,
+
+00:08:46.200 --> 00:08:48.580
+le bon de commande doit alors quitter votre entreprise encore plus tôt.
+
+00:08:48.580 --> 00:08:50.280
+La date du client crée une chaîne de date.
+
+00:08:51.120 --> 00:08:53.700
+Dynamics 365 travaille à rebours à travers cette chaîne
+
+00:08:53.700 --> 00:08:55.400
+en tenant compte des délais d'approvisionnement.
+
+00:08:56.160 --> 00:08:58.300
+Un délai est simplement le temps nécessaire pour quelque chose,
+
+00:08:58.480 --> 00:09:00.080
+qu'il s'agisse d'un fournisseur livrant une pièce,
+
+00:09:00.160 --> 00:09:01.160
+d'un entrepôt déplaçant,
+
+00:09:01.660 --> 00:09:03.760
+des marchandises ou d'une usine terminant une tâche.
+
+00:09:04.500 --> 00:09:06.020
+Une pièce en retard peut décaler tout le reste.
+
+00:09:06.440 --> 00:09:08.700
+Supposons que le système trouve 70 cadres en stock.
+
+00:09:09.200 --> 00:09:11.620
+Il voit également une commande fournisseur ouverte pour 140 roues
+
+00:09:11.620 --> 00:09:14.060
+avec une livraison prévue avant le début de l'assemblage.
+
+00:09:14.880 --> 00:09:16.500
+Cet approvisionnement couvre le besoin en roues
+
+00:09:16.500 --> 00:09:18.320
+tandis que les cadres couvrent déjà leur partie.
+
+00:09:18.680 --> 00:09:19.580
+Ensuite, il vérifie les chaînes.
+
+00:09:19.980 --> 00:09:21.340
+Peut-être n'y a-t-il que 40 chaînes en stock
+
+00:09:21.340 --> 00:09:23.720
+et aucune commande fournisseur ne permet d'obtenir les 30 autres ?
+
+00:09:23.720 --> 00:09:26.320
+La planification identifie un écart et crée une suggestion pour le combler.
+
+00:09:26.640 --> 00:09:28.240
+La même vérification s'applique au vélo fini,
+
+00:09:28.420 --> 00:09:30.600
+aux composants inférieurs et à tout travail intermédiaire.
+
+00:09:31.000 --> 00:09:32.220
+Une partie de la provisionnement existe déjà.
+
+00:09:32.480 --> 00:09:33.860
+Le stock disponible peut satisfaire un besoin.
+
+00:09:34.220 --> 00:09:35.780
+Une commande fournisseur ouverte peut le satisfaire
+
+00:09:35.780 --> 00:09:36.800
+si les marchandises arrivent à temps.
+
+00:09:37.180 --> 00:09:39.040
+Un ordre de fabrication ouvert peut le satisfaire
+
+00:09:39.040 --> 00:09:40.040
+si l'usine termine à temps.
+
+00:09:40.860 --> 00:09:42.460
+Lorsque aucune de ces sources ne couvre la demande,
+
+00:09:42.460 --> 00:09:43.920
+le plan crée une commande planifiée.
+
+00:09:44.480 --> 00:09:46.560
+Une commande fournisseur planifiée suggère d'acheter quelque chose
+
+00:09:46.560 --> 00:09:47.280
+auprès d'un fournisseur.
+
+00:09:47.640 --> 00:09:49.980
+Un ordre de fabrication planifiée suggère de fabriquer quelque chose
+
+00:09:49.980 --> 00:09:50.640
+au sein de votre entreprise.
+
+00:09:50.980 --> 00:09:53.560
+Un ordre de transfert planifié suggère de déplacer le stock
+
+00:09:53.560 --> 00:09:54.780
+d'un site ou entrepôt à un autre.
+
+00:09:55.300 --> 00:09:56.900
+Ce sont des suggestions, pas des engagements.
+
+00:09:57.720 --> 00:10:00.840
+Dynamics 365 n'envoie pas silencieusement de commandes à un fournisseur
+
+00:10:00.840 --> 00:10:02.440
+et ne lance pas le travail en usine.
+
+00:10:03.500 --> 00:10:05.640
+Il fournit au planificateur une quantité et une date proposées
+
+00:10:05.640 --> 00:10:06.660
+basées sur les données visibles.
+
+00:10:07.540 --> 00:10:09.480
+Une personne vérifie toujours si le fournisseur est le bon,
+
+00:10:09.780 --> 00:10:10.600
+si la date est réaliste
+
+00:10:10.600 --> 00:10:12.260
+et si l'entreprise doit approuver l'action.
+
+00:10:13.460 --> 00:10:15.100
+Imaginons un petit problème avec notre commande de vélo.
+
+00:10:15.600 --> 00:10:16.920
+Tout semble prêt à l'exception d'une roue.
+
+00:10:17.360 --> 00:10:18.960
+L'approvisionnement planifié couvre les cadres,
+
+00:10:19.080 --> 00:10:20.900
+les chaînes, l'aisselle et presque toutes les roues.
+
+00:10:21.360 --> 00:10:23.380
+Mais une roue arrive un jour après que l'assemblage en a besoin.
+
+00:10:24.140 --> 00:10:25.980
+Sans cette roue, un vélo ne pourra être terminé.
+
+00:10:26.520 --> 00:10:28.100
+Bien que l'entrepôt semble rempli de pièces,
+
+00:10:28.460 --> 00:10:30.700
+la planification principale remonte à la source de l'écart.
+
+00:10:31.100 --> 00:10:32.980
+Le planificateur peut voir que la pénurie ne provient pas
+
+00:10:32.980 --> 00:10:34.800
+de la commande client elle-même, elle-même.
+
+00:10:35.380 --> 00:10:37.580
+Elle provient de la date du fournisseur sur la commande d'achat des roues.
+
+00:10:37.580 --> 00:10:40.300
+Cela donne au planificateur un aimant spécifique sur lequel agir.
+
+00:10:40.620 --> 00:10:42.460
+Demander une livraison plus tôt, trouver une autre source
+
+00:10:42.460 --> 00:10:43.720
+ou modifier la date de production.
+
+00:10:44.140 --> 00:10:45.340
+Le plan peut suggérer un approvisionnement.
+
+00:10:45.680 --> 00:10:47.220
+Mais la question suivante est tout aussi utile.
+
+00:10:47.640 --> 00:10:51.240
+Pourquoi Dynamics 365 a-t-il lié cet approvisionnement à cette demande ?
+
+00:10:51.240 --> 00:10:53.640
+Lire les besoins nets, c'est comme lire la conversation de planification.
+
+00:10:54.500 --> 00:10:56.420
+Les planificateurs utilisent donc la page des besoins nets
+
+00:10:56.420 --> 00:10:57.240
+pour approfondir ce lien.
+
+00:10:57.840 --> 00:10:59.820
+Cette page rassemble toute la conversation de planification
+
+00:10:59.820 --> 00:11:01.080
+pour un article en un seul endroit.
+
+00:11:01.320 --> 00:11:03.120
+Il affiche chaque demande nécessitant l'article
+
+00:11:03.120 --> 00:11:04.820
+et chaque source d'approvisionnement pouvant la couvrir,
+
+00:11:04.820 --> 00:11:06.420
+avec les dates indiquées pour chaque ligne.
+
+00:11:07.160 --> 00:11:08.460
+Prenons l'exemple d'une roue de vélo.
+
+00:11:09.180 --> 00:11:10.960
+En haut, vous sélectionnez le site ou l'entrepôt
+
+00:11:10.960 --> 00:11:12.200
+où cette roue est pertinente.
+
+00:11:12.880 --> 00:11:15.700
+Ensuite, Dynamics 365 affiche toutes les transactions associées,
+
+00:11:15.900 --> 00:11:18.860
+vente, achat, stock, production, le tout, dans une seule liste.
+
+00:11:19.540 --> 00:11:20.980
+La demande apparaît comme un nombre négatif
+
+00:11:20.980 --> 00:11:22.260
+par rapport à votre stock disponible.
+
+00:11:22.840 --> 00:11:24.480
+Cette demande peut provenir de nombreuses sources.
+
+00:11:24.940 --> 00:11:26.100
+Une commande client a besoin de roues,
+
+00:11:26.180 --> 00:11:27.320
+car un client a commandé des vélos.
+
+00:11:27.960 --> 00:11:29.980
+Une prévision génère une demande future attendue.
+
+00:11:30.420 --> 00:11:32.600
+Un ordre de fabrication nécessite des roues pour le plan de production.
+
+00:11:32.600 --> 00:11:35.820
+Et un ordre de transfert crée une demande lorsqu'un autre entrepôt réclame du stock.
+
+00:11:36.240 --> 00:11:37.720
+Chaque ligne répond à une question simple.
+
+00:11:38.040 --> 00:11:39.260
+Qui a besoin de cet article ?
+
+00:11:39.260 --> 00:11:40.200
+Combien en faut-il ?
+
+00:11:40.200 --> 00:11:41.100
+Et à quelle date ?
+
+00:11:41.100 --> 00:11:43.080
+Cela semble simple, mais cela évite une erreur courante.
+
+00:11:43.720 --> 00:11:45.540
+Les utilisateurs voient souvent une quantité totale
+
+00:11:45.540 --> 00:11:47.520
+et supposent qu'elle appartient à un seul client au travail
+
+00:11:47.520 --> 00:11:50.260
+alors que le même article peut servir plusieurs commandes à des dates différentes.
+
+00:11:51.720 --> 00:11:53.640
+Côté approvisionnement, vous avez le stock disponible,
+
+00:11:53.720 --> 00:11:54.720
+ou ce qui est déjà en magasin.
+
+00:11:54.720 --> 00:11:57.000
+Puis les commandes fournisseurs,
+
+00:11:57.080 --> 00:11:58.480
+les ordres de fabrication prévus,
+
+00:11:58.580 --> 00:11:59.760
+les transferts entre entrepôts,
+
+00:12:00.060 --> 00:12:02.060
+et les ordres planifiés suggérés par le système,
+
+00:12:02.220 --> 00:12:03.360
+mais non encore créés.
+
+00:12:04.440 --> 00:12:05.440
+La page trie tout par date.
+
+00:12:06.040 --> 00:12:06.920
+Faisant défiler la liste,
+
+00:12:06.980 --> 00:12:08.840
+vous pouvez observer l'évolution de la quantité disponible.
+
+00:12:09.620 --> 00:12:11.520
+Le stock peut sembler suffisant en début de mois,
+
+00:12:11.740 --> 00:12:12.780
+puis chuter avec une production,
+
+00:12:13.200 --> 00:12:15.280
+et remonter à l'arrivée d'une livraison fournisseur.
+
+00:12:16.100 --> 00:12:17.380
+Le timing change le résultat.
+
+00:12:18.120 --> 00:12:19.800
+Supposons que 100 roues soient en stock lundi,
+
+00:12:19.960 --> 00:12:22.300
+qu'un ordre de fabrication en nécessite 80 mardi,
+
+00:12:22.300 --> 00:12:24.760
+et qu'un besoin client de 30 apparaissent mercredi.
+
+00:12:25.480 --> 00:12:26.900
+La demande totale dépasse le stock,
+
+00:12:27.240 --> 00:12:30.200
+même si une commande d'achat de 50 roues arrive vendredi.
+
+00:12:30.760 --> 00:12:32.740
+La livraison de vendredi ne résout pas la pénurie de mercredi.
+
+00:12:33.240 --> 00:12:35.600
+Cette vue date par date explique pourquoi le système fait ses suggestions.
+
+00:12:36.180 --> 00:12:38.940
+Dynamics 365 ne demande pas plus de roues au hasard.
+
+00:12:39.500 --> 00:12:41.580
+Il détecte exactement quand l'approvisionnement disponible
+
+00:12:41.580 --> 00:12:42.880
+tombe sous la demande à couvrir.
+
+00:12:43.640 --> 00:12:45.300
+Maintenant, vous pourriez poser une question plus précise.
+
+00:12:45.620 --> 00:12:47.720
+Quelle ligne d'approvisionnement couvre quelle ligne de demande ?
+
+00:12:47.720 --> 00:12:48.780
+Cette connexion s'appelle le pegging.
+
+00:12:49.060 --> 00:12:51.560
+Le pegging est le lien de planification propre à Dynamics 365
+
+00:12:51.560 --> 00:12:52.540
+entre demande et approvisionnement.
+
+00:12:53.000 --> 00:12:54.900
+Il relie un besoin comme un ordre de fabrication de vélo
+
+00:12:54.900 --> 00:12:56.320
+à la source prévue pour le couvrir,
+
+00:12:56.620 --> 00:12:58.820
+comme une commande ou un ordre d'achat planifié.
+
+00:12:59.600 --> 00:13:02.060
+Le système établit ce lien lors du calcul de planification.
+
+00:13:02.640 --> 00:13:03.460
+Si la demande change,
+
+00:13:03.860 --> 00:13:05.680
+la planification peut recalculer la connexion.
+
+00:13:06.040 --> 00:13:07.760
+Peut-être qu'un client déplace sa date de livraison
+
+00:13:07.760 --> 00:13:09.380
+ou qu'une commande d'achat est décalée.
+
+00:13:10.080 --> 00:13:12.120
+Le pegging peut alors pointer vers une source différente
+
+00:13:12.120 --> 00:13:14.660
+ou créer un nouvel ordre planifié là où l'écart apparaît.
+
+00:13:15.280 --> 00:13:16.500
+Cela vous aide à retracer toute la chaîne.
+
+00:13:16.920 --> 00:13:17.780
+Partez d'une commande client,
+
+00:13:17.880 --> 00:13:19.220
+voyez l'ordre de fabrication associé,
+
+00:13:19.220 --> 00:13:20.640
+suivez-le jusqu'aux pièces nécessaires
+
+00:13:20.640 --> 00:13:22.580
+et trouvez la commande fournisseur correspondante.
+
+00:13:23.120 --> 00:13:24.340
+Parfois vous avez besoin de plus de contrôle.
+
+00:13:24.660 --> 00:13:25.600
+C'est là qu'intervient le marquage.
+
+00:13:25.880 --> 00:13:27.160
+Le marquage est une connexion manuelle
+
+00:13:27.160 --> 00:13:28.640
+entre une transaction d'approvisionnement
+
+00:13:28.640 --> 00:13:29.520
+et une transaction de demande.
+
+00:13:29.860 --> 00:13:31.380
+Il indique au système que cet approvisionnement
+
+00:13:31.380 --> 00:13:32.320
+doit couvrir cette demande
+
+00:13:32.320 --> 00:13:33.660
+plutôt que de laisser la planification
+
+00:13:33.660 --> 00:13:34.720
+l'affecter librement ailleurs.
+
+00:13:35.280 --> 00:13:36.840
+Voyez cela comme la position d'une étiquette
+
+00:13:36.840 --> 00:13:37.920
+sur deux enregistrements liés.
+
+00:13:38.700 --> 00:13:39.900
+Vous pourriez marquer une commande d'achat
+
+00:13:39.900 --> 00:13:40.620
+de roues spécifiques
+
+00:13:40.620 --> 00:13:42.120
+pour un ordre de fabrication précis
+
+00:13:42.120 --> 00:13:44.980
+car ces roues ont été achetées pour ce travail.
+
+00:13:45.660 --> 00:13:47.080
+La planification respecte cette relation
+
+00:13:47.080 --> 00:13:48.520
+plus fermement que son lien de traçage normal.
+
+00:13:49.060 --> 00:13:50.360
+Pourtant, un approvisionnement marqué
+
+00:13:50.360 --> 00:13:51.780
+n'est pas la connexion la plus forte disponible.
+
+00:13:52.120 --> 00:13:53.200
+La réservation est plus forte.
+
+00:13:53.660 --> 00:13:54.600
+Lorsque vous réservez du stock
+
+00:13:54.600 --> 00:13:55.780
+ou un approvisionnement en trempe
+
+00:13:55.780 --> 00:13:56.660
+ou une demande spécifique,
+
+00:13:56.780 --> 00:13:57.580
+vous créez un lien strict.
+
+00:13:58.280 --> 00:13:59.200
+Cette quantité est mise de côté
+
+00:13:59.200 --> 00:13:59.880
+pour la commande client
+
+00:13:59.880 --> 00:14:00.600
+lors de fabrication
+
+00:14:00.600 --> 00:14:01.780
+ou toute autre demande choisie
+
+00:14:01.780 --> 00:14:03.240
+et la planification générale
+
+00:14:03.240 --> 00:14:04.740
+traite la réservation comme une priorité
+
+00:14:04.740 --> 00:14:05.520
+par rapport au traçage
+
+00:14:05.520 --> 00:14:06.260
+et au marquage normaux.
+
+00:14:06.940 --> 00:14:07.920
+Imaginez 10 roues en stock,
+
+00:14:08.300 --> 00:14:09.140
+mais ces roues sont réservées
+
+00:14:09.140 --> 00:14:10.560
+pour un ordre de réparation urgent.
+
+00:14:11.760 --> 00:14:12.840
+Une commande client ultérieure
+
+00:14:12.840 --> 00:14:14.000
+peut également avoir besoin de roues,
+
+00:14:14.200 --> 00:14:15.560
+mais la planification ne peut pas considérer
+
+00:14:15.560 --> 00:14:16.940
+ces 10 roues réservées comme disponibles.
+
+00:14:17.580 --> 00:14:18.760
+Elle doit trouver un autre approvisionnement
+
+00:14:18.760 --> 00:14:19.640
+ou en suggérer un nouveau,
+
+00:14:19.720 --> 00:14:21.340
+car la réservation les a déjà affectées ailleurs.
+
+00:14:21.880 --> 00:14:23.560
+Ainsi, le traçage, le marquage et la réservation
+
+00:14:23.560 --> 00:14:24.660
+vous offrent 3 niveaux de connexion.
+
+00:14:24.980 --> 00:14:26.680
+Le traçage et la correspondance automatique du système.
+
+00:14:27.020 --> 00:14:28.660
+Le marquage est un lien manuel, plus fixe.
+
+00:14:28.920 --> 00:14:30.180
+La réservation verrouille l'approvisionnement
+
+00:14:30.180 --> 00:14:31.020
+sur un besoin spécifique.
+
+00:14:31.300 --> 00:14:32.340
+C'est la plus forte des 3.
+
+00:14:32.860 --> 00:14:33.980
+Une fois que vous savez lire ces liens,
+
+00:14:34.460 --> 00:14:35.200
+les ordres planifiés
+
+00:14:35.200 --> 00:14:37.180
+ne ressemblent plus à des instructions inexpliquées.
+
+00:14:37.560 --> 00:14:38.560
+La question suivante est de savoir
+
+00:14:38.560 --> 00:14:40.280
+à quelle fréquence cette vue de planification change
+
+00:14:40.280 --> 00:14:41.860
+et avec quelle rapidité Dynamics 365
+
+00:14:41.860 --> 00:14:42.640
+peut la calculer.
+
+00:14:42.640 --> 00:14:45.420
+Plan statique dynamique et optimisation de la planification
+
+00:14:45.420 --> 00:14:47.760
+La page des besoins nets affiche un résultat de planification,
+
+00:14:47.920 --> 00:14:49.420
+mais chaque plan ne se met pas à jour de la même manière.
+
+00:14:49.880 --> 00:14:51.340
+Un plan statique ne change que lorsque quelqu'un
+
+00:14:51.340 --> 00:14:52.840
+exécute la tâche de planification générale.
+
+00:14:53.420 --> 00:14:54.940
+Cela offre au planificateur une vue stable
+
+00:14:54.940 --> 00:14:56.280
+qu'ils peuvent consulter pendant la journée
+
+00:14:56.280 --> 00:14:58.380
+sans que chaque nouvelle transaction ne modifie les chiffres.
+
+00:14:58.640 --> 00:14:58.780
+Zer.
+
+00:14:59.140 --> 00:15:01.360
+Imaginez qu'une importante commande client arrive à 11h du matin.
+
+00:15:01.800 --> 00:15:03.420
+Si le plan statique a été exécuté pendant la nuit,
+
+00:15:03.660 --> 00:15:05.360
+cette nouvelle commande n'apparaîtra dans ses suggestions
+
+00:15:05.360 --> 00:15:07.320
+qu'à la prochaine exécution, qu'à la prochaine exécution.
+
+00:15:07.480 --> 00:15:09.260
+Le plan affiche toujours le dernier résultat calculé,
+
+00:15:09.260 --> 00:15:11.980
+ce qui est utile lorsqu'une équipe a besoin d'une vue commune pour la journée.
+
+00:15:12.780 --> 00:15:13.820
+Mais cette stabilité a un coût.
+
+00:15:14.340 --> 00:15:16.020
+Nouvelle demande peut rester en dehors du plan statique
+
+00:15:16.020 --> 00:15:16.800
+pendant un certain temps,
+
+00:15:16.900 --> 00:15:18.640
+surtout si votre entreprise exécute la planification
+
+00:15:18.640 --> 00:15:19.540
+une fois par nuit ou par semaine.
+
+00:15:20.080 --> 00:15:22.040
+Un planificateur peut savoir qu'une commande client existe,
+
+00:15:22.200 --> 00:15:23.740
+mais le plan statique n'a pas encore recalculé
+
+00:15:23.740 --> 00:15:24.780
+la réponse en approvisionnement.
+
+00:15:25.320 --> 00:15:26.520
+C'est là qu'un plan dynamique s'avère utile.
+
+00:15:26.740 --> 00:15:28.860
+Un plan dynamique reflète la demande actuelle en temps réel.
+
+00:15:29.280 --> 00:15:31.280
+Les planificateurs peuvent voir l'effet des nouvelles commandes
+
+00:15:31.280 --> 00:15:31.800
+et de la demande,
+
+00:15:31.900 --> 00:15:33.880
+sans attendre le prochain cycle de planification complet.
+
+00:15:34.360 --> 00:15:35.340
+C'est une vision à plus court terme.
+
+00:15:35.340 --> 00:15:37.160
+Les plans dynamiques ignorent les prévisions
+
+00:15:37.160 --> 00:15:38.600
+et se concentrent sur ce qui se passe maintenant.
+
+00:15:39.460 --> 00:15:41.160
+Supposons qu'un client passe une commande inattendue
+
+00:15:41.160 --> 00:15:42.420
+de 200 vélos cet après-midi.
+
+00:15:43.380 --> 00:15:44.700
+Avant de promettre une date de livraison,
+
+00:15:44.780 --> 00:15:46.640
+le planificateur peut ouvrir le plan dynamique
+
+00:15:46.640 --> 00:15:47.560
+et vérifier l'impact.
+
+00:15:48.220 --> 00:15:50.340
+La nouvelle commande crée-t-elle une pénurie ?
+
+00:15:50.340 --> 00:15:52.600
+Pousse-t-elle un besoin existant à une date ultérieure ?
+
+00:15:52.600 --> 00:15:55.600
+Déclenche-t-elle une nouvelle suggestion d'achat ou de production ?
+
+00:15:55.600 --> 00:15:57.800
+Cela offre à l'équipe une vision pratique de type ASE.
+
+00:15:58.340 --> 00:15:59.920
+Vous ne modifiez pas le plan statique
+
+00:15:59.920 --> 00:16:01.700
+juste pour analyser une seule nouvelle commande.
+
+00:16:02.120 --> 00:16:03.520
+Vous vérifiez d'abord l'impact probable,
+
+00:16:03.520 --> 00:16:05.940
+puis vous décidez si la commande nécessite une attention immédiate
+
+00:16:05.940 --> 00:16:07.740
+ou peut attendre la prochaine exécution planifiée.
+
+00:16:08.580 --> 00:16:10.460
+Les plans statiques et dynamiques répondent à des questions liées,
+
+00:16:10.600 --> 00:16:11.060
+mais différentes.
+
+00:16:11.560 --> 00:16:12.340
+Le plan statique demande
+
+00:16:12.340 --> 00:16:15.520
+« Que nous a dit de faire notre dernier calcul de planification officiel ? »
+
+00:16:15.520 --> 00:16:17.000
+Le plan dynamique demande à quoi ?
+
+00:16:17.000 --> 00:16:18.560
+Ressemble la demande actuelle à cet instant précis.
+
+00:16:20.020 --> 00:16:22.120
+Derrière les deux plans se trouve le moteur de planification.
+
+00:16:22.520 --> 00:16:24.260
+Les environnements Cloud Dynamics 365,
+
+00:16:24.900 --> 00:16:26.140
+l'optimisation de la planification
+
+00:16:26.140 --> 00:16:27.680
+et le moteur moderne utilisé par Microsoft
+
+00:16:27.680 --> 00:16:29.060
+pour exécuter la planification directrice.
+
+00:16:29.280 --> 00:16:31.660
+Il calcule les besoins en dehors de l'application métier principal,
+
+00:16:31.660 --> 00:16:34.860
+ce qui réduit la charge sur le système utilisé au quotidien.
+
+00:16:35.420 --> 00:16:37.140
+Les anciennes exécutions de planification pouvaient pomer.
+
+00:16:37.460 --> 00:16:38.660
+Les rapports d'écrivain et partenaires indiquent
+
+00:16:38.660 --> 00:16:40.280
+que le travail de planification qui prenait des heures
+
+00:16:40.280 --> 00:16:41.180
+se termine en quelques minutes
+
+00:16:41.180 --> 00:16:43.020
+avec l'optimisation de la planification de la planification.
+
+00:16:44.180 --> 00:16:45.640
+Des exécutions plus rapides signifient
+
+00:16:45.640 --> 00:16:47.320
+que les équipes peuvent rafraîchir le plan plus souvent,
+
+00:16:47.480 --> 00:16:49.840
+mais une réponse rapide peut tout de même être une réponse erronée.
+
+00:16:50.900 --> 00:16:53.140
+L'optimisation de la planification peut traiter rapidement
+
+00:16:53.140 --> 00:16:54.720
+une énorme quantité de données liées.
+
+00:16:55.120 --> 00:16:57.440
+Cependant, elle ne fonctionne qu'à partir des enregistrements fournis par votre entreprise.
+
+00:16:57.720 --> 00:16:59.680
+Si le délai d'approvisionnement d'un fournisseur est erroné,
+
+00:16:59.680 --> 00:17:01.100
+la date de commande suggérée peut l'être aussi.
+
+00:17:01.380 --> 00:17:04.020
+Si le système pense que 500 roues sont en stock alors qu'elles ne le sont pas,
+
+00:17:04.340 --> 00:17:06.360
+il peut omettre une suggestion d'achat dont vous avez réellement besoin.
+
+00:17:06.700 --> 00:17:08.160
+Et si la nomenclature oublie une pièce,
+
+00:17:08.300 --> 00:17:10.840
+la planification ne peut pas créer de demande pour cette pièce manquante.
+
+00:17:11.540 --> 00:17:13.040
+Le calcul peut se terminer en quelques minutes,
+
+00:17:13.500 --> 00:17:15.600
+mais l'usine s'arrêtera tout de même si cette pièce est absente.
+
+00:17:16.160 --> 00:17:18.120
+Il y a aussi un changement dans la manière dont la planification s'exécute.
+
+00:17:18.240 --> 00:17:20.200
+Avec l'optimisation de la planification, les plans sont génératifs.
+
+00:17:20.780 --> 00:17:23.480
+Cela signifie que chaque exécution examine à nouveau tous les besoins,
+
+00:17:23.600 --> 00:17:25.680
+au lieu d'utiliser l'ancienne approche par modification nette
+
+00:17:25.680 --> 00:17:27.700
+qui ne mettaient à jour que les articles ayant de nouveaux besoins.
+
+00:17:28.360 --> 00:17:31.520
+Voyez cela comme un recalcul complet de l'image de planification à chaque fois ?
+
+00:17:31.520 --> 00:17:34.520
+Cela supprime l'incertitude quant à savoir si un changement antérieur a échappé au calcul
+
+00:17:34.520 --> 00:17:37.100
+tout en rendant le recalcul complet plus pratique pour de nombreuses entreprises
+
+00:17:37.100 --> 00:17:39.120
+grâce à un moteur plus rapide, grâce à un moteur plus rapide.
+
+00:17:39.280 --> 00:17:42.360
+La rapidité aide, mais ce sont des données propres qui déterminent si le plan est fiable.
+
+00:17:43.060 --> 00:17:44.580
+Une fois que le plan génère ses suggestions,
+
+00:17:45.080 --> 00:17:46.920
+il faut décider lesquelles traiter en priorité,
+
+00:17:47.680 --> 00:17:49.980
+mais ce que fait la planification principale et ce qu'elle ne fait pas.
+
+00:17:49.980 --> 00:17:52.120
+Voici donc la définition la plus simple.
+
+00:17:53.060 --> 00:17:56.040
+La planification principale utilise toutes les données de Dynamics 365
+
+00:17:56.040 --> 00:17:59.340
+pour suggérer quoi acheter, fabriquer ou déplacer avec date et quantité.
+
+00:18:00.340 --> 00:18:02.720
+Un planificateur examine ses ordres prévisionnels avant d'agir.
+
+00:18:03.200 --> 00:18:05.400
+Il vérifie le fournisseur, la date de livraison, la quantité
+
+00:18:05.400 --> 00:18:07.000
+et la capacité de l'usine à gérer la charge.
+
+00:18:07.580 --> 00:18:10.420
+Une fois confirmée, la validation de la suggestion la transforme en bon de commande,
+
+00:18:10.480 --> 00:18:12.480
+ordre de fabrication ou ordre de transfert réel.
+
+00:18:12.880 --> 00:18:14.620
+Mais la planification principale ne peut pas prédire-le.
+
+00:18:14.920 --> 00:18:16.480
+Les prévisions ne sont que des estimations
+
+00:18:16.480 --> 00:18:18.740
+et les commandes clients réelles peuvent changer du jour au lendemain.
+
+00:18:18.740 --> 00:18:21.120
+et elles ne remplacent certainement pas les planificateurs humains.
+
+00:18:21.640 --> 00:18:23.080
+Les humains gèrent toujours le risque lié aux fournisseurs,
+
+00:18:23.360 --> 00:18:24.620
+les promesses faites aux clients et les exceptions.
+
+00:18:25.120 --> 00:18:26.400
+Le système ne peut tout simplement pas juger.
+
+00:18:27.020 --> 00:18:28.140
+Le stock seul ne suffit pas non plus.
+
+00:18:28.680 --> 00:18:31.020
+Cet inventaire peut arriver trop tard, être aux mauvais entrepôts
+
+00:18:31.020 --> 00:18:32.660
+ou déjà réservé pour une autre commande.
+
+00:18:33.560 --> 00:18:34.720
+Pour obtenir de bons résultats,
+
+00:18:34.900 --> 00:18:36.980
+commencez par des données propres, des fiches articles à jour,
+
+00:18:37.180 --> 00:18:39.380
+des délais précis, des nomenclatures correctes,
+
+00:18:39.460 --> 00:18:40.980
+des stocks à jour et une demande réaliste.
+
+00:18:41.900 --> 00:18:42.820
+Pour notre commande de vélo,
+
+00:18:42.820 --> 00:18:44.440
+le stock actuel couvre une partie du besoin.
+
+00:18:44.940 --> 00:18:46.860
+La planification suggère l'approvisionnement pour le reste
+
+00:18:46.860 --> 00:18:48.160
+et le planificateur confirme l'action.
+
+00:18:48.160 --> 00:18:50.780
+Cela nous ramène à la question à laquelle chaque équipe doit répondre.
+
+00:18:51.160 --> 00:18:53.500
+Que doit-il se passer ensuite ?
+
+00:18:53.500 --> 00:18:54.880
+En conclusion, un plan connecté.
+
+00:18:55.760 --> 00:18:57.940
+La planification principale intègre la demande.
+
+00:18:58.340 --> 00:18:59.840
+Les niveaux de stock, les délais des fournisseurs,
+
+00:18:59.920 --> 00:19:00.680
+les plannings de production
+
+00:19:00.680 --> 00:19:04.000
+et la capacité pour créer des actions que votre équipe peut examiner.
+
+00:19:04.860 --> 00:19:06.640
+Les ordres prévisionnels amorcent la décision humaine.
+
+00:19:06.880 --> 00:19:07.500
+Ils ne la terminent pas.
+
+00:19:07.860 --> 00:19:09.220
+C'est pourquoi les planificateurs restent essentiels.
+
+00:19:09.560 --> 00:19:11.100
+Abonnez-vous sur votre plateforme de podcast préférée
+
+00:19:11.100 --> 00:19:12.720
+et partagez cette astuce avec quelqu'un qui apprend
+
+00:19:12.720 --> 00:19:14.720
+la gestion de la chaîne logistique dans TNX365.
+
+00:19:14.720 --> 00:19:16.720
+de la chaîne logistique dans TNX365.
+
+00:19:16.720 --> 00:19:17.720
+Merci.

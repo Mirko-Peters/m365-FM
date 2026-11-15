@@ -1,0 +1,1186 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.980
+Ein Vertriebsmitarbeiter aktualisiert die Adresse eines Kunden.
+
+00:00:02.240 --> 00:00:05.480
+Später eröffnet die Finanzabteilung denselben Datensatz und sieht immer noch die alte Adresse.
+
+00:00:05.880 --> 00:00:06.840
+Welche Adresse ist also die richtige?
+
+00:00:07.260 --> 00:00:10.280
+Jahrelang bedeutet die Korrektur, dass jemand Daten exportieren, eine Tabelle bearbeiten,
+
+00:00:10.380 --> 00:00:13.300
+diese per E-Mail versenden und dieselbe Aktualisierung ein zweites Mal in eine andere App eingeben muss.
+
+00:00:13.460 --> 00:00:15.380
+Dynamics 365 DualWrite ändert das.
+
+00:00:15.800 --> 00:00:18.860
+Es verbindet Finanz- und Betriebs-Apps mit Dataverse-basierten Kunden-Apps,
+
+00:00:18.920 --> 00:00:22.600
+sodass gemeinsame Datensätze wie Kunden und Aufträge automatisch synchron bleiben.
+
+00:00:23.260 --> 00:00:25.860
+Sie sind bei mir. Ich bin Milko Peters von M3355FM.
+
+00:00:26.000 --> 00:00:28.360
+Und dieses Wissenshäppchen erklärt DualWrite in einfacher Sprache.
+
+00:00:28.360 --> 00:00:32.320
+Wir werden behandeln, was übertragen wird, wie es übertragen wird, wo DualWrite passt und wo es nicht passt.
+
+00:00:33.300 --> 00:00:36.460
+Beginnen wir zunächst mit dem geschäftlichen Problem, das den Bedarf dafür geschaffen hat.
+
+00:00:38.440 --> 00:00:39.760
+Das Problem, das DualWrite löst.
+
+00:00:41.360 --> 00:00:43.980
+Stellen Sie sich ein Unternehmen vor, in dem zwei Gruppen am selben Kunden arbeiten,
+
+00:00:44.060 --> 00:00:45.540
+aber täglich völlig unterschiedliche Apps verwenden.
+
+00:00:46.220 --> 00:00:48.340
+Finanz- und Betriebs-Apps übernehmen die Backoffice-Arbeit.
+
+00:00:48.820 --> 00:00:51.760
+Das umfasst Geld, Lagerbestand, Produkte, Aufträge, Einkauf und die Lieferkette.
+
+00:00:52.440 --> 00:00:56.480
+Hier verfolgt ein Unternehmen, was es verkauft, was es liefern kann, was es schuldet und was im Kunde bezahlen muss.
+
+00:00:56.480 --> 00:00:59.520
+Kunden-Apps konzentrieren sich auf die Arbeit in der Nähe am Kunden.
+
+00:01:00.220 --> 00:01:02.220
+Vertriebsteams verfolgen Leads und bauen Geschäftsmöglichkeiten auf.
+
+00:01:02.600 --> 00:01:04.440
+Der Kundenservice kümmert sich um Fragen und Supportfälle.
+
+00:01:04.960 --> 00:01:07.240
+Der Außendienst plant Aufträge und entsendet Mitarbeiter vor Ort.
+
+00:01:07.840 --> 00:01:09.640
+Projektteams verfolgen die dem Kunden versprochene Arbeit.
+
+00:01:10.060 --> 00:01:11.640
+Unterschiedliche Arbeit erfordert unterschiedliche Bildschirme.
+
+00:01:11.940 --> 00:01:14.540
+Ein Vertriebsmitarbeiter sollte sich nicht durch einen Finanzbildschirm wühlen müssen,
+
+00:01:14.620 --> 00:01:16.300
+nur um nach einem Anruf einen Kontakt zu aktualisieren.
+
+00:01:16.700 --> 00:01:18.480
+Aber ein Finanzmitarbeiter benötigt Kunden und Auftragsdetails,
+
+00:01:19.100 --> 00:01:20.360
+die mit denen des Vertriebs übereinstimmen,
+
+00:01:20.480 --> 00:01:23.040
+da Rechnungen und Lieferungen von diesen Informationen abhängen.
+
+00:01:23.040 --> 00:01:26.860
+Ohne eine Verbindung wird ein Kunde still und leise zu zwei Datensätzen.
+
+00:01:27.420 --> 00:01:29.040
+Der Vertrieb listet vielleicht Northwind Bikes,
+
+00:01:29.100 --> 00:01:31.200
+die Finanzabteilung führt vielleicht Northwind Bicycle Company.
+
+00:01:31.940 --> 00:01:33.560
+Oh, ein Datensatz hat die neue Straßenadresse.
+
+00:01:33.880 --> 00:01:35.460
+Der andere sendet Rechnungen noch an das alte Büro.
+
+00:01:36.400 --> 00:01:38.540
+Beide Datensätze sehen für sich genommen plausibel aus,
+
+00:01:38.640 --> 00:01:40.500
+beschreiben aber nicht mehr dieselbe Geschäftsbeziehung.
+
+00:01:40.900 --> 00:01:42.120
+Zuerst tauchen kleine Probleme auf.
+
+00:01:42.520 --> 00:01:45.160
+Jemand findet einen Kunden nicht, weil der Name in einer anderen App anders ist.
+
+00:01:45.640 --> 00:01:47.840
+Ein Vertriebsmitarbeiter verspricht einen Preis oder prüft den Bestand,
+
+00:01:47.920 --> 00:01:49.740
+aber die Informationen stimmen nicht mit der operativen Seite überall.
+
+00:01:49.740 --> 00:01:51.880
+Die Finanzabteilung muss in Auftrag bearbeiten,
+
+00:01:52.000 --> 00:01:54.700
+aber die Kundendetails erfordern eine Prüfung, eine E-Mail und ein weiteres manuelles Update.
+
+00:01:55.020 --> 00:01:56.300
+Dann häufen sich diese kleinen Probleme.
+
+00:01:56.840 --> 00:01:58.720
+Jemand exportiert Kundendaten in eine Tabelle.
+
+00:01:59.260 --> 00:02:01.740
+Eine andere Person korrigiert ein paar Zeilen und importiert sie woanders wieder.
+
+00:02:02.280 --> 00:02:04.440
+Wieder jemand anderes gibt einen neuen Kunden in beiden Apps ein,
+
+00:02:04.520 --> 00:02:06.240
+weil niemand weiß, welcher Datensatz zuerst erscheinen wird.
+
+00:02:06.620 --> 00:02:08.920
+Bald gibt es Duplikate, unterschiedliche Adressen
+
+00:02:08.920 --> 00:02:11.300
+und mehr Zeit wird mit der Datenprüfung verbracht als mit der Nutzung.
+
+00:02:11.620 --> 00:02:13.300
+Nichts davon passiert, weil Menschen unvorsichtig sind.
+
+00:02:13.360 --> 00:02:15.980
+Es passiert, weil die Systeme verlangen, dass Menschen die Verbindung herstellen.
+
+00:02:16.300 --> 00:02:17.000
+Menschen kopieren Daten.
+
+00:02:17.400 --> 00:02:18.900
+Menschen müssen sich merken, welche App zuerst kommt.
+
+00:02:19.020 --> 00:02:21.700
+Menschen bemerken Fehler erst, wenn sie bereits ein anderes Team erreicht haben.
+
+00:02:21.940 --> 00:02:24.180
+Dieser Ansatz funktionierte, als Geschäftssysteme getrennt blieben
+
+00:02:24.180 --> 00:02:25.440
+und Teams Verzögerung akzeptierten.
+
+00:02:25.820 --> 00:02:27.500
+Wenn aber Vertrieb, Service, Finanzen und Betrieb
+
+00:02:27.500 --> 00:02:29.480
+tagsüber dieselben Kundeninformationen benötigen,
+
+00:02:29.560 --> 00:02:31.640
+ist eine Tabelle ein unzureichendes Übergabewerkzeug.
+
+00:02:32.500 --> 00:02:34.200
+Denken Sie an ein einfaches Gespräch über einen Auftrag.
+
+00:02:34.620 --> 00:02:36.080
+Ein Kunde ruft den Vertrieb an und fragt,
+
+00:02:36.080 --> 00:02:37.140
+wie können Sie nächste Woche liefern?
+
+00:02:37.580 --> 00:02:38.120
+Was wird das kosten?
+
+00:02:38.880 --> 00:02:41.860
+Das Vertriebsteam benötigt Produktpreis und Lagerdetails für eine Antwort.
+
+00:02:42.860 --> 00:02:43.900
+Sobald der Kunde zustimmt,
+
+00:02:44.200 --> 00:02:45.920
+benötigen Finanzen und Betrieb die richtigen Kunden
+
+00:02:45.920 --> 00:02:47.980
+und Auftragsinformationen, den Verkauf abzuwickeln.
+
+00:02:47.980 --> 00:02:49.900
+Beide Seiten benötigen dieselben Fakten.
+
+00:02:50.140 --> 00:02:52.680
+Benötigt diese Fakten in der App, mit der die Vertriebsmitarbeiter arbeiten.
+
+00:02:53.400 --> 00:02:55.080
+Finanzen und Betrieb benötigen Sie in der App,
+
+00:02:55.160 --> 00:02:57.060
+mit der Sie Aufträge, Finanzen und Lieferungen verwalten.
+
+00:02:57.860 --> 00:02:58.560
+Das Ziel ist es nicht,
+
+00:02:58.660 --> 00:03:00.840
+jedes Team in einen einzigen riesigen Bildschirm zu zwingen.
+
+00:03:01.300 --> 00:03:02.760
+Das Ziel ist, dass gemeinsame Datensätze
+
+00:03:02.760 --> 00:03:04.140
+einem klaren, vereinbarten Weg folgen.
+
+00:03:04.680 --> 00:03:06.140
+An dieser Stelle kommt DualWrite ins Spiel.
+
+00:03:06.140 --> 00:03:09.420
+Was ist DualWrite eigentlich genau?
+
+00:03:10.460 --> 00:03:11.460
+Hier ist die einfachste Definition.
+
+00:03:12.160 --> 00:03:14.400
+DualWrite ist die integrierte Microsoft-Verbindung,
+
+00:03:14.720 --> 00:03:18.180
+die ausgewählte Daten zwischen Dynamics 365 Finance & Operations Apps
+
+00:03:18.180 --> 00:03:19.220
+und Dataverse synchron hält.
+
+00:03:19.840 --> 00:03:23.180
+Dataverse ist die gemeinsame Datengrundlage hinter vielen Microsoft-Geschäftsanwendungen.
+
+00:03:23.520 --> 00:03:28.240
+Dynamics 365 Sales, Customer Service, Field Service und Teile von Project Operations nutzen Sie alle.
+
+00:03:28.700 --> 00:03:30.380
+Power Apps und Power Automate können Sie ebenfalls nutzen.
+
+00:03:30.380 --> 00:03:33.920
+Sie müssen nicht wissen, wie Dataverse jeden einzelnen Datensatz speichert, um DualWrite zu verstehen.
+
+00:03:34.480 --> 00:03:38.520
+Stellen Sie es sich einfach als den gemeinsamen Datenbereich auf der Kunden-App-Seite von Dynamics 365 vor.
+
+00:03:38.920 --> 00:03:41.440
+Stellen Sie sich ein Bürogebäude mit einem Front-Office und einem Back-Office vor.
+
+00:03:41.840 --> 00:03:43.800
+Das Front-Office wickelt Gespräche mit Kunden ab.
+
+00:03:44.740 --> 00:03:46.580
+Vertriebsmitarbeiter, Service-Mitarbeiter, Ausdienstmitarbeiter.
+
+00:03:48.240 --> 00:03:50.440
+Sie alle benötigen Bildschirme, die Ihnen helfen, mit Menschen zu sprechen,
+
+00:03:50.580 --> 00:03:51.900
+Anfragen zu verfolgen und Arbeit zu verfolgen.
+
+00:03:52.280 --> 00:03:54.480
+Das Back-Office erledigt die Arbeit, die das Unternehmen am Laufen hält.
+
+00:03:54.920 --> 00:03:57.840
+Unsere Finanzunterlagen, Lagerbestände, Aufträge, Einkäufe, Lieferungen.
+
+00:03:58.360 --> 00:04:00.180
+Beide Büros arbeiten für dasselbe Unternehmen.
+
+00:04:00.480 --> 00:04:04.200
+Aber ohne eine richtige Verbindung zwischen ihnen muss jemand Informationen von einer Seite zur anderen tragen.
+
+00:04:04.620 --> 00:04:07.960
+Sie tragen ein gedrucktes Formular, senden eine E-Mail oder kopieren Daten in ein anderes System.
+
+00:04:08.440 --> 00:04:11.700
+Die Arbeit wird zwar erledigt, aber sie dauert länger und Details können sich auf dem Weg ändern.
+
+00:04:12.400 --> 00:04:15.280
+DualWrite ist wie eine besetzte interne Tür zwischen diesen beiden Büros.
+
+00:04:15.900 --> 00:04:17.800
+Wenn sich ein unterstützter Datensatz auf einer Seite ändert,
+
+00:04:17.880 --> 00:04:20.500
+leitet DualWrite die entsprechende Änderung durch diese Tür auf die andere Seite weiter.
+
+00:04:20.920 --> 00:04:22.900
+Es fasst nicht jede App zu einer einzigen riesigen App zusammen.
+
+00:04:23.280 --> 00:04:24.520
+Der Vertrieb kann weiterhin im Vertrieb arbeiten.
+
+00:04:24.520 --> 00:04:26.440
+Das Finanzwesen kann weiterhin im Finanzwesen arbeiten.
+
+00:04:26.700 --> 00:04:28.700
+Jedes Team behält seine spezialisierten Arbeitsbereiche,
+
+00:04:28.700 --> 00:04:31.300
+während ausgewählte gemeinsame Informationen im Hintergrund verbunden bleibt.
+
+00:04:31.420 --> 00:04:32.620
+Das Wort unterstützt ist dabei entscheidend.
+
+00:04:32.940 --> 00:04:35.860
+DualWrite kopiert nicht blindlings jedes Datenelement in beide Systeme.
+
+00:04:36.180 --> 00:04:39.300
+Es funktioniert über definierte Verbindungen zwischen zusammengehörigen Datensätzen.
+
+00:04:39.300 --> 00:04:42.080
+Microsoft nennt diese Verbindungen Tabellenzuordnung und TableMaps.
+
+00:04:42.800 --> 00:04:45.520
+Eine Tabelle ist einfach ein Ort, an dem eine App eine Art von Datensatz speichert.
+
+00:04:45.780 --> 00:04:47.460
+Eine Kundentabelle speichert Kundendatensätze.
+
+00:04:47.760 --> 00:04:49.160
+Eine Produkttabelle speichert Produktdaten.
+
+00:04:49.580 --> 00:04:51.260
+Eine Adresstabelle speichert Adressdetails.
+
+00:04:51.600 --> 00:04:53.320
+Eine Tabellenzuordnung teilt DualWrite mit,
+
+00:04:53.420 --> 00:04:56.420
+welche Tabelle auf der Finanz- und Betriebsseite mit welcher Tabelle in Dataverse verbunden ist.
+
+00:04:56.900 --> 00:04:59.260
+Betrachten Sie eine Tabellenzuordnung als ein vereinbartes Übersetzungsbild.
+
+00:04:59.500 --> 00:05:01.300
+Eine Spalte identifiziert einen Datensatz auf der einen.
+
+00:05:01.660 --> 00:05:04.240
+Eine weitere Spalte identifiziert den entsprechenden Datensatz auf der anderen.
+
+00:05:04.240 --> 00:05:06.920
+Der Rest des Blattes erklärt, welche Felder zusammengehören.
+
+00:05:07.820 --> 00:05:09.660
+Wie Name, Telefonnummer, Adresszeile.
+
+00:05:10.120 --> 00:05:11.700
+Diese Vereinbarung legt die Verbindungsregel fest.
+
+00:05:12.020 --> 00:05:15.540
+Ohne sie könnten zwei Apps unterschiedliche Bezeichnungen verwenden oder dasselbe Detailen speichern.
+
+00:05:15.940 --> 00:05:18.560
+Eine Zuordnung teilt DualWrite mit, wie diese Details zueinander in Beziehung stehen.
+
+00:05:18.860 --> 00:05:20.900
+So müssen die Apps nicht jedes Mal von einer Person interpretiert werden.
+
+00:05:21.300 --> 00:05:23.340
+Oft hören Leute den Namen DualWrite und nehmen an,
+
+00:05:23.820 --> 00:05:26.160
+dass jede Änderung immer in beide Richtungen übertragen wird.
+
+00:05:26.620 --> 00:05:27.360
+Manchmal ist das der Fall.
+
+00:05:27.700 --> 00:05:30.280
+Bei einer unterstützten Zwei-Wege-Zuordnung kann eine Änderung in Dataverse
+
+00:05:30.280 --> 00:05:32.540
+den zugehörigen Datensatz in Finance und Operations atualisieren.
+
+00:05:32.540 --> 00:05:34.740
+Eine unterstützte Änderung in Finance und Operations
+
+00:05:34.740 --> 00:05:36.900
+kann auch den zugehörigen Datensatz in Dataverse aktualisieren.
+
+00:05:37.180 --> 00:05:39.340
+Beide Seiten können an demselben geteilten Datensatz mitwirken.
+
+00:05:39.720 --> 00:05:40.340
+Es ist Dualteil.
+
+00:05:40.840 --> 00:05:42.340
+Die Aktualisierung erfolgt nahezu in Echtzeit.
+
+00:05:42.800 --> 00:05:43.960
+Sie erfolgt schnell während der Arbeit,
+
+00:05:44.060 --> 00:05:46.140
+anstatt auf einen geplanten Job zu warten, der über Nacht läuft.
+
+00:05:47.060 --> 00:05:49.120
+Ein Benutzer aktualisiert einen unterstützten Datensatz
+
+00:05:49.120 --> 00:05:52.020
+und die Verbindung überträgt dieses Update, während die Arbeit noch aktuell ist.
+
+00:05:52.520 --> 00:05:54.480
+Nahezu Echtzeit bedeutet keine Magie oder null Verzögerung.
+
+00:05:54.980 --> 00:05:57.180
+Es bedeutet, dass die Verbindung für die Live-Arbeit konzipiert ist,
+
+00:05:57.260 --> 00:05:58.880
+nicht für einen einmal täglichen Dateiaustausch.
+
+00:05:58.880 --> 00:06:01.600
+Wenn jemand ein Detail ändert, muss das zuständige Team
+
+00:06:01.600 --> 00:06:03.220
+nicht bis zum nächsten Morgen warten, um es zu sehen.
+
+00:06:03.500 --> 00:06:04.740
+Das verändert die Arbeitsweise der Teams.
+
+00:06:05.220 --> 00:06:07.320
+Das Front-Office kann Daten nutzen, die aus dem Back-Office stammen.
+
+00:06:07.720 --> 00:06:09.440
+Das Back-Office kann unterstützte Aktualisierungen
+
+00:06:09.440 --> 00:06:10.560
+von kundenorientierten Apps erhalten.
+
+00:06:11.060 --> 00:06:13.100
+Dataverse wird zur Datengrundlage auf der einen Seite,
+
+00:06:13.220 --> 00:06:15.560
+Finance und Operations bleibt die betriebliche Grundlage auf der anderen
+
+00:06:15.560 --> 00:06:18.040
+und Dual-Ride hält die freigegebenen Datensätze verbunden.
+
+00:06:19.120 --> 00:06:20.880
+Dennoch braucht eine lebendige interne Türregel.
+
+00:06:20.880 --> 00:06:24.100
+Bevor Sie zulassen, dass ein Datensatz in beide Richtungen wandert,
+
+00:06:24.100 --> 00:06:26.280
+müssen Sie wissen, wo er beginnen soll, wer ihn ändern darf
+
+00:06:26.280 --> 00:06:28.920
+und welche Seite Vorhang hat, wenn sich die Apps nicht einig sind.
+
+00:06:30.120 --> 00:06:31.340
+Welche Daten können übertragen werden?
+
+00:06:31.460 --> 00:06:32.420
+Welches System ist der Eigentümer?
+
+00:06:33.220 --> 00:06:35.320
+Welche Datensätze kann Dual-Ride also miteinander verbinden?
+
+00:06:35.660 --> 00:06:37.300
+Gängige Beispiele beginnen mit den Datensätzen,
+
+00:06:37.380 --> 00:06:38.800
+die viele Abteilungen täglich gemeinsam nutzen.
+
+00:06:39.780 --> 00:06:42.860
+Kundendatensätze, Adressen, Kontakte, Produkte, Anbieter,
+
+00:06:43.220 --> 00:06:46.280
+Unternehmensdetails und Referenzinformationen für Finanz- und Steuerzwecke.
+
+00:06:47.140 --> 00:06:48.900
+Denken Sie einen Moment über einen Kundendatensatz nach.
+
+00:06:48.900 --> 00:06:50.700
+Der Vertrieb benötigt den Namen des Kunden,
+
+00:06:50.940 --> 00:06:53.580
+den Hauptansprechpartner, die Telefonnummer und die Lieferadresse.
+
+00:06:54.420 --> 00:06:56.580
+Die Finanzabteilung benötigt den rechtlichen Kundendatensatz,
+
+00:06:56.680 --> 00:06:58.860
+Abrechnungsdetails sowie Informationen für Aufträge und Rechnungen.
+
+00:06:59.260 --> 00:07:01.460
+Wenn jede Abteilung eine eigene, separate Kundenliste führt,
+
+00:07:01.700 --> 00:07:03.760
+verbringt das Unternehmen Zeit mit dem Abgleich von Datensätzen,
+
+00:07:03.840 --> 00:07:04.600
+anstatt den Kunden zu bedienen.
+
+00:07:05.100 --> 00:07:06.500
+Mit den richtigen Dual-Ride-Zuordnungen
+
+00:07:06.500 --> 00:07:08.520
+können diese Teams mit vernetzten Kundendetails arbeiten.
+
+00:07:09.180 --> 00:07:11.600
+Das bedeutet nicht, dass Vertriebsmitarbeiter plötzlich die Finanz-App erlernen müssen.
+
+00:07:12.140 --> 00:07:16.000
+Es bedeutet, dass sie mit Kundeninformationen in Dynamics 365 Sales arbeiten können,
+
+00:07:16.000 --> 00:07:19.060
+während Finanzanwender mit den entsprechenden Kundeninformationen in Finance arbeiten.
+
+00:07:19.900 --> 00:07:22.480
+Der Kunde bleibt in beiden Systemen als derselbe Kunde erkennbar.
+
+00:07:23.600 --> 00:07:24.480
+Auch Adressen sind wichtig.
+
+00:07:24.880 --> 00:07:27.060
+Ein Kunde hat möglicherweise eine Rechnungsadresse, eine Lieferadresse
+
+00:07:27.060 --> 00:07:29.320
+und vielleicht einen Standort, den ein Service-Mitarbeiter aufsuchen muss.
+
+00:07:29.780 --> 00:07:32.140
+Diese Details können nicht einfach als Text in ein Feld kopiert werden,
+
+00:07:32.200 --> 00:07:34.640
+da jede Adresse eine andere Funktion hat, andere Funktionen.
+
+00:07:35.300 --> 00:07:38.240
+Dual-Ride unterstützt die für diese Beziehung erforderliche gemeinsame Datensatzstufe.
+
+00:07:38.560 --> 00:07:39.620
+Bei Kontakt mit demselben Muster.
+
+00:07:40.080 --> 00:07:41.560
+Ein Kundenunternehmen kann einen Einkäufer,
+
+00:07:41.660 --> 00:07:44.160
+einen Ansprechpartner für die Kreditoren, Buchhaltung und einen Service-Manager haben.
+
+00:07:44.160 --> 00:07:46.160
+Der Vertrieb muss wissen, wer Entscheidungen trifft.
+
+00:07:46.580 --> 00:07:48.520
+Die Finanzabteilung muss wissen, an wen Abrechnungsrichtungen sind.
+
+00:07:48.880 --> 00:07:50.600
+Der Service muss wissen, wer vor Ort auf Hilfe wartet.
+
+00:07:51.040 --> 00:07:54.100
+Verbundene Datensätze helfen jedem Team, die mit dem Kunden verbundenen Personen zu sehen,
+
+00:07:54.180 --> 00:07:56.080
+ohne diese Informationen in jeder App neu anlegen zu müssen.
+
+00:07:56.360 --> 00:07:57.620
+Produkte sind ein weiteres Gängig-Spec.
+
+00:07:57.860 --> 00:08:00.200
+Ein Vertriebsmitarbeiter muss wissen, was das Unternehmen verkauft,
+
+00:08:00.280 --> 00:08:02.080
+was das Produkt kostet und ob es auf Lager ist.
+
+00:08:02.240 --> 00:08:03.000
+Und ob es auf Lager ist.
+
+00:08:03.160 --> 00:08:05.480
+Diese Antworten kommen normalerweise aus dem operativen Bereich,
+
+00:08:05.600 --> 00:08:08.300
+da dort Produkte, Lagerbestände, Einkauf und Erfüllung verwaltet werden.
+
+00:08:08.800 --> 00:08:11.460
+Deshalb beginnen Produktinformationen oft in Finance and Operations.
+
+00:08:11.460 --> 00:08:14.440
+Ein Betriebsteam erstellt und bereitet ein Produkt dort vor.
+
+00:08:15.080 --> 00:08:17.340
+Sobald das Produkt für die Kundenansprache bereit ist,
+
+00:08:17.620 --> 00:08:20.720
+kann DualWrite die zugehörigen Produktdetails an Dataverse senden.
+
+00:08:21.740 --> 00:08:24.580
+Vertriebsmitarbeiter können das Produkt dann in ihrer eigenen App auswählen und besprechen,
+
+00:08:24.700 --> 00:08:26.740
+ohne dass jemand die Produktliste ein zweites Mal eingeben muss.
+
+00:08:27.440 --> 00:08:29.360
+Dies trägt dazu bei, das Verkaufsgespräch auf dem basieren,
+
+00:08:29.440 --> 00:08:30.840
+was das Unternehmen tatsächlich anbieten kann.
+
+00:08:31.620 --> 00:08:34.920
+Preis- und Bestandsdetails können den Vertrieb ebenfalls über die verbundenen Apps erreichen.
+
+00:08:34.920 --> 00:08:38.500
+Anstatt zu raten, ob ein Artikel existiert, ob sich der Preis geändert hat
+
+00:08:38.500 --> 00:08:40.580
+oder ob der Lagerbestand ein Versprechen stützen kann,
+
+00:08:40.700 --> 00:08:43.860
+kann das Vertriebsteam mit Informationen arbeiten, die mit dem operativen Bereich verknüpft sind.
+
+00:08:44.180 --> 00:08:46.400
+Das ersetzt nicht die Notwendigkeit für ein gutes Urteilsvermögenvertrieb.
+
+00:08:46.760 --> 00:08:48.180
+Es beseitigt einen vermeidbaren Grund dafür,
+
+00:08:48.240 --> 00:08:50.960
+dass ein Vertriebsmitarbeiter im Lager anruft, nur um grundlegende Details zu bestätigen.
+
+00:08:51.900 --> 00:08:54.560
+Anbieterinformationen können ebenfalls dort verknüpft werden, wo Geschäftsprozesse benötigen.
+
+00:08:55.040 --> 00:08:58.160
+Firmendetails, Organisationsstrukturen, Finanzstammdaten und Steuerstammdaten
+
+00:08:58.160 --> 00:09:01.360
+können sowohl für die Kundenseite als auch für den operativen Bereich von Bedeutung sein.
+
+00:09:01.360 --> 00:09:05.280
+Die genauen Datensätze hängen von den Apps und Prozessen ab, die ein Unternehmen verwendet,
+
+00:09:05.340 --> 00:09:06.280
+aber das Muster bleibt gleich.
+
+00:09:07.220 --> 00:09:09.900
+Geben Sie die Datensätze frei, die an beiden Orten dasselbe bedeuten müssen.
+
+00:09:10.340 --> 00:09:13.100
+Gehen Sie nun nicht davon aus, dass jeder Datensatz in beide Richtungen übertragen werden soll.
+
+00:09:13.400 --> 00:09:15.160
+Einige Apps unterstützen bidirektionale Aktualisierung.
+
+00:09:15.440 --> 00:09:18.400
+Eine Änderung kann in Dataverse beginnen und zu Finance & Operations übertragen werden
+
+00:09:18.400 --> 00:09:20.820
+oder in Finance & Operations beginnen und zu Dataverse übertragen werden.
+
+00:09:21.180 --> 00:09:23.380
+Dieser Ansatz eignet sich für Datensätze, bei denen beide Seiten
+
+00:09:23.380 --> 00:09:25.460
+einen triftigen, geschäftlichen Grund haben, genehmigte Details zu haben.
+
+00:09:25.900 --> 00:09:26.760
+Andere Zuhörungen und Errichtung.
+
+00:09:27.200 --> 00:09:28.460
+Produkte liefern uns ein nützliches Beispiel.
+
+00:09:28.460 --> 00:09:32.060
+In vielen Unternehmen ist Finance & Operations für die Produktanlage zuständig,
+
+00:09:32.340 --> 00:09:35.060
+da der operative Bereich die Produktstammdaten, den Bestand, die Einheiten
+
+00:09:35.060 --> 00:09:37.660
+und andere Details kontrolliert, die für den Verkauf und die Lieferung erforderlich sind.
+
+00:09:38.300 --> 00:09:41.700
+Das Produkt fließt dann in das Dataverse, wo Vertriebs- und Serviceteams es nutzen können.
+
+00:09:42.280 --> 00:09:43.020
+Das sind klare Regeln.
+
+00:09:43.420 --> 00:09:45.800
+Das Produkt benötigt nicht zwei Teams, die konkurrierende Version erstellen.
+
+00:09:46.500 --> 00:09:49.420
+Eine Seite erstellt und verwaltet das Produkt, die andere Seite empfängt
+
+00:09:49.420 --> 00:09:50.800
+und nutzt es als Teil ihrer Arbeit.
+
+00:09:51.240 --> 00:09:53.100
+Jeder gemeinsame Datensatz erfordert eine solche Entscheidung.
+
+00:09:53.480 --> 00:09:54.420
+Wo beginnt dieser Datensatz?
+
+00:09:54.700 --> 00:09:55.360
+Wer kann ihn bearbeiten?
+
+00:09:55.360 --> 00:09:58.500
+Wenn ein Name, eine Adresse, ein Preis oder eine Klassifizierung falsch aussieht,
+
+00:09:58.560 --> 00:09:59.440
+welches Team korrigiert das?
+
+00:10:00.060 --> 00:10:02.260
+Diese Fragen klingen einfach, verhindern aber später viel Verwirrung.
+
+00:10:02.760 --> 00:10:04.660
+Eine Verbindung kann eine Änderung sehr schnell übertragen.
+
+00:10:05.120 --> 00:10:07.120
+Wenn niemand vereinbart hat, wer für diese Änderung verantwortlich ist,
+
+00:10:07.160 --> 00:10:08.100
+kann sie genauso schnell eine Fehler verantworten.
+
+00:10:08.280 --> 00:10:12.540
+Wählen Sie einen Eigentümer für den Datensatz und bei Bedarf für einzelne Details innerhalb dieses Datensatzes.
+
+00:10:12.920 --> 00:10:16.540
+Zum Beispiel könnte der Vertrieb die Beziehungsdetails und primären Kontaktinformationen eines Kunden verwalten.
+
+00:10:17.020 --> 00:10:19.220
+Die Finanzabteilung könnte zahlungsbezogen Details verwalten,
+
+00:10:19.320 --> 00:10:20.880
+der operative Bereich Produkt- und Bestandsdetail.
+
+00:10:20.880 --> 00:10:26.300
+Die genaue Aufteilung hängt von ihrer Arbeitsweise ab, muss aber schriftlich festgehalten und von den Anwendern der Apps verstanden werden.
+
+00:10:26.960 --> 00:10:30.400
+Es gibt auch zwei Begriffe, die Ihnen nach der Erweiterung von Dataverse durch DualWrite begegnen können,
+
+00:10:30.660 --> 00:10:32.080
+Partypartei und Company-Unternehmen.
+
+00:10:32.820 --> 00:10:36.500
+Eine Party ist Microsofts Art, eine Person oder Organisation konsistent zu handhaben.
+
+00:10:37.200 --> 00:10:40.540
+Sie hilft dabei, Personen, Organisationen, Kontakte und Adressen zu verbinden,
+
+00:10:40.960 --> 00:10:43.920
+ohne jede Beziehung als separaten, unabhängigen Datensatz zu behandeln.
+
+00:10:44.660 --> 00:10:47.700
+Ein Company-Objekt hilft Dataverse dabei, den geschäftlichen Unternehmenskontext zu verstehen,
+
+00:10:47.780 --> 00:10:49.080
+der von Finance und Operations verwendet wird.
+
+00:10:49.080 --> 00:10:51.540
+Sie müssen am ersten Tag kein Experte für diese Begriffe werden.
+
+00:10:52.120 --> 00:10:55.520
+Wissen Sie einfach, dass sie existieren, da Finance und Operations Unternehmensstrukturen verwaltet,
+
+00:10:55.620 --> 00:10:58.500
+die Kunden-Apps erkennen müssen, wenn Datensätze zwischen beiden Seiten ausgetauscht werden.
+
+00:10:59.300 --> 00:11:01.560
+Sobald Datensätze in beide Richtungen übertragen werden können,
+
+00:11:01.640 --> 00:11:04.180
+sind die Prozesse um diese Datensätze herum genauso wichtig wie die Daten selbst,
+
+00:11:04.580 --> 00:11:06.320
+wie eine Änderung zwischen den Apps übertragen wird.
+
+00:11:07.280 --> 00:11:10.040
+Verfolgen wir eine Änderung durch das System und sehen wir, was tatsächlich passiert.
+
+00:11:10.620 --> 00:11:13.500
+Ein Vertriebsmitarbeiter telefoniert mit einem Kunden, der gerade in ein neues Büro umgezogen ist.
+
+00:11:14.220 --> 00:11:18.420
+Während dieses Gesprächs öffnet der Mitarbeiter den Kundendatensatz in Dynamics 365 Sales
+
+00:11:18.420 --> 00:11:19.620
+und aktualisiert die Straßenadresse.
+
+00:11:19.960 --> 00:11:20.640
+Ganz einfach, oder?
+
+00:11:21.080 --> 00:11:22.100
+Dann speichert er den Datensatz.
+
+00:11:22.540 --> 00:11:23.660
+Hier beginnt der interessante Teil.
+
+00:11:24.360 --> 00:11:27.920
+Sales speichert diese Änderung in Dataverse, das ist die Datenseite für kundenorientierte Apps.
+
+00:11:28.560 --> 00:11:33.300
+Dann prüft DualWrite die Zuordnung, die Kunden- und Adressinformationen zwischen dieser Seite und Finance und Operations verbindet.
+
+00:11:33.880 --> 00:11:35.780
+Die entsprechende Änderung wird automatisch übertragen.
+
+00:11:36.280 --> 00:11:39.460
+Keine Exportdatei liegt in einem freigegebenen Ordner und wartet darauf, dass jemand abholt.
+
+00:11:39.460 --> 00:11:43.140
+Niemand muss eine E-Mail in die Finanzabteilung senden mit der Bitte, hey, bitte aktualisieren Sie diese Adresse.
+
+00:11:43.620 --> 00:11:49.560
+Die Zuordnung weiß bereits, welche Felder verknüpft sind und sendet die unterstützte Änderung direkt an den zugehörigen Kundendatensatz in Finance und Operations.
+
+00:11:50.280 --> 00:11:56.680
+So kann ein Finanzanwender später diesen Kundendatensatz öffnen, die aktualisierte Adresse sehen und einen Auftrag bearbeiten und eine Rechnung erstellen, ohne Zeit zu verlieren.
+
+00:11:57.020 --> 00:11:58.500
+Das ist das praktische Ergebnis schlicht und ein.
+
+00:11:59.300 --> 00:12:03.260
+Zwei Personen arbeiten in verschiedenen Apps weiter, aber niemand muss dieselben Kundendaten neu eingeben.
+
+00:12:03.820 --> 00:12:06.660
+Der Vertriebsmitarbeiter arbeitet auf einem Bildschirm, der für Kundengespräche optimiert ist.
+
+00:12:06.660 --> 00:12:09.840
+Der Finanzanwender arbeitet auf einem Bildschirm, der für Finanzaufgaben ausgelegt ist.
+
+00:12:10.520 --> 00:12:14.020
+Jede Person sieht die Kundeninformationen, die sie tatsächlich benötigt, genau dort, wo sie gebraucht werden.
+
+00:12:14.660 --> 00:12:16.160
+Und der Weg funktioniert auch in die andere Richtung.
+
+00:12:16.660 --> 00:12:20.040
+Stellen Sie sich vor, die Finanzabteilung aktualisiert unterstützte Kundeninformationen in Finance und Operations.
+
+00:12:20.940 --> 00:12:24.440
+Angenommen, ein Finanzanwender korrigiert ein Detail, das zum operativen Kundendatensatz gehört.
+
+00:12:25.360 --> 00:12:29.240
+DualWrite verwendet die passende Zuordnung in umgekehrter Richtung und sendet dieses Update am Dataverse.
+
+00:12:29.900 --> 00:12:33.420
+Dann können Sales, Customer Service oder jede andere Dataverse-basierte App dies übernehmen.
+
+00:12:33.900 --> 00:12:36.180
+Diese Verbindung ist für die normale tägliche Arbeit synchron.
+
+00:12:36.860 --> 00:12:40.320
+Synchron bedeutet, dass die Apps versuchen, das zugehörige Update im selben Moment abzuschließen,
+
+00:12:40.400 --> 00:12:43.720
+anstatt es in einen Hintergrund Job zu verschieben, der vielleicht erst 20 Minuten später ausgeführt wird.
+
+00:12:44.580 --> 00:12:48.300
+Wenn die Verbindung das Update nicht abschließen kann, erfordert dieses Problem sofortige Aufmerksamkeit
+
+00:12:48.300 --> 00:12:50.840
+und darf sich nicht unbemerkt verstecken, bis jemand eine Abweichung bemerkt.
+
+00:12:51.360 --> 00:12:53.500
+Dieses Verhalten ist bei gemeinsam genutzten Geschäftsdaten sitzend.
+
+00:12:53.900 --> 00:12:57.000
+Sie möchten nicht, dass eine Kundenadresse, ein Produktdetail oder andere gemeinsame Informationen
+
+00:12:57.000 --> 00:12:59.420
+über Stunden hinwegfallender Abweichen, aber ein Badstock noch nicht gestartet wird.
+
+00:12:59.500 --> 00:13:01.980
+Menschen treffen Entscheidungen basierend auf dem, was sie gerade auf ihrem Bildschirm sehen.
+
+00:13:01.980 --> 00:13:05.120
+Die Verbindung hält also beide Seiten eng zusammen, während die Arbeit läuft.
+
+00:13:05.900 --> 00:13:08.220
+Dennoch erfordert laufende Arbeit manchmal eine kontrollierte Pause.
+
+00:13:08.980 --> 00:13:11.260
+Dual Ride umfasst Optionen für Wiedergabe, Pause und Aufhol.
+
+00:13:11.620 --> 00:13:14.560
+Wiedergabe bedeutet, dass die Zuordnung läuft und unterstützte Änderungen normal übertragen.
+
+00:13:14.880 --> 00:13:17.800
+Pause stoppt die Zuordnung vorübergehend, wenn ein Team geplante Arbeiten durchführt,
+
+00:13:17.860 --> 00:13:20.120
+ein Problem untersucht oder eine Änderung sicher verwalten muss.
+
+00:13:20.560 --> 00:13:22.040
+Aber Pause ist kein dauerhafter Parkplan.
+
+00:13:22.740 --> 00:13:26.080
+Während eine Zuordnung pausiert ist, können sich Änderungen für begrenzte Zeit und Kapazität in Warteschlangen.
+
+00:13:26.080 --> 00:13:29.540
+Wenn die Zuordnung fortgesetzt wird, verarbeitet die Aufholfunktion diese wartenden Änderungen.
+
+00:13:29.880 --> 00:13:32.200
+Das hilft Teams, sich nach einer geplanten Unterbrechung wieder zu erholen.
+
+00:13:32.960 --> 00:13:36.400
+Jemand muss jedoch für diese Pause verantwortlich sein und wissen, wann die Zuordnung wieder starten soll.
+
+00:13:37.240 --> 00:13:40.520
+Bevor dies im Arbeitsalltag beginnt, gibt es einen weiteren Schritt, die Erstsynchronisierung.
+
+00:13:40.900 --> 00:13:44.520
+Die Erstsynchronisierung bringt bestehende Datensätze von beiden Seiten auf einen gemeinsamen Startpunkt.
+
+00:13:44.860 --> 00:13:49.080
+Denken Sie an ein Unternehmen, das bereits Kunden in Finance und Operations und Kundendatensätze in Dataverse hat.
+
+00:13:49.480 --> 00:13:51.500
+Die Verbindung kann nicht einfach eingeschaltet werden in der Annahme,
+
+00:13:51.580 --> 00:13:53.300
+dass jeder bestehende Datensatz bereits perfekt übereinstimmt.
+
+00:13:53.620 --> 00:13:54.960
+Es braucht eine Startlinie.
+
+00:13:54.960 --> 00:13:59.360
+Die Erstsynchronisierung hilft dabei, bestehende Daten zu übertragen, bevor man sich auf Live-Updates verlässt.
+
+00:14:00.160 --> 00:14:05.660
+Diese Arbeit erfordert Sorgfalt, da sich doppelte Datensätze und vollständige Adressen und alte Testdaten nicht magisch von selbst bereinigen,
+
+00:14:05.880 --> 00:14:07.220
+nur weil eine Synchronisierung startet.
+
+00:14:07.820 --> 00:14:11.500
+Sie können tatsächlich schneller Probleme verursachen, wenn die Datensätze nicht den vereinbarten Regeln folgen.
+
+00:14:11.740 --> 00:14:15.940
+Sobald die Zuordnungen laufen, benötigen die Verantwortlichen für DualRide einen klaren Ort, um deren Status zu überprüfen.
+
+00:14:16.240 --> 00:14:18.760
+DualRide bietet kombinierte Aktivitäts- und Fehlerprotokolle,
+
+00:14:18.760 --> 00:14:22.300
+damit Administratoren sehen können, was die Verbindung verarbeitet hat und wo Probleme auftraten.
+
+00:14:22.800 --> 00:14:24.540
+Sie können auch Warnungen und Schwellenwerte festlegen.
+
+00:14:25.060 --> 00:14:27.520
+Das bedeutet, dass die zuständigen Personen von Problemen erfahren,
+
+00:14:27.620 --> 00:14:30.060
+bevor Benutzer sie durch ein fehlendes oder fehlgeschlagenes Update bemerken.
+
+00:14:30.760 --> 00:14:33.280
+Diese Support-Ansicht ist wichtig, weil jeder Fehler eine Ursache hat.
+
+00:14:34.080 --> 00:14:35.100
+Vielleicht fehlt ein Pflichtfeld.
+
+00:14:35.540 --> 00:14:37.080
+Vielleicht ist ein verknüpfter Datensatz noch nicht angekommen.
+
+00:14:37.360 --> 00:14:39.500
+Vielleicht hat jemand Datenweise geändert, die nicht zur Zuordnung passt.
+
+00:14:39.960 --> 00:14:44.060
+Ein erneuter Versuch bei einem fehlgeschlagenen Datensatz ohne Behebung der Ursache führt meist nur zum selben Fehler.
+
+00:14:44.060 --> 00:14:52.360
+Eine gut geführte DualRide-Einrichtung überwacht die Verbindung, behebt die Ursachen von Fehlern und konzentriert die Zuordnungen auf Datensätze, die wirklich verbunden bleiben müssen.
+
+00:14:53.160 --> 00:14:54.360
+Wo DualRide am besten passt.
+
+00:14:54.660 --> 00:15:03.500
+DualRide passt am besten, wenn Ihr Unternehmen Dynamics 365 Finance oder Supply Chain Management zusammen mit kundenorientierten Apps wie Sales, Customer Service, Field Service oder Project Operations nutzt.
+
+00:15:03.500 --> 00:15:07.000
+Diese Apps unterstützen verschiedene Teile des selben Geschäftsvorgangs.
+
+00:15:07.700 --> 00:15:08.900
+Ein Team spricht mit den Kunden.
+
+00:15:09.180 --> 00:15:13.140
+Ein anderes Team plant die Lieferung, verwaltet den Bestand, verfolgt Kosten oder versendet die Rechnung.
+
+00:15:14.020 --> 00:15:20.740
+Wenn beide Gruppen tagsüber mit zusammengehörigen Datensätzen arbeiten müssen, kann DualRide diese Arbeit verbinden, ohne alle in dieselbe App zu zwingen.
+
+00:15:21.280 --> 00:15:23.220
+Nehmen wir einen interessenten Zu-Bargeld-Prozess als Beispiel.
+
+00:15:23.680 --> 00:15:26.700
+Ein Vertriebsmitarbeiter arbeitet mit einem potenziellen Kunden Dynamics 365.
+
+00:15:27.100 --> 00:15:31.060
+Er erfasst den Kontakt, bespricht Produkte, erstellt ein Angebot und arbeitet auf einen Auftrag hin.
+
+00:15:31.060 --> 00:15:38.660
+Während dieses Gesprächs benötigt der Vertriebsmitarbeiter Kundendetails, Produktinfos, Preise und Auftragsinformationen, die den Finanzbereich des Unternehmens betreffen.
+
+00:15:39.480 --> 00:15:44.760
+Sobald der Verkauf zustande kommt, benimmt das Finanz- und Supply Chain Management die Arbeit, die auf das Versprechen folgt, folgt.
+
+00:15:45.080 --> 00:15:47.900
+Es kümmert sich um die Auftragsabwicklung, Lagerfakturierung und Finanzunterlagen.
+
+00:15:48.580 --> 00:15:51.040
+DualRide hilft dabei, diese beiden Bereiche miteinander zu verbinden.
+
+00:15:51.880 --> 00:15:57.560
+Vertriebsmitarbeiter können in der für ihre Aufgabe passenden Kunden-App arbeiten, während Finanz und Betrieb die Transaktion in ihrer spezifischen App verwalten.
+
+00:15:57.560 --> 00:16:02.000
+Der Kunde wird so nicht zu zwei getrennten Geschichten einer vom Vertrieb und einer vom Finanzwesen erzählt.
+
+00:16:02.620 --> 00:16:04.160
+FieldService liefert ein weiteres gutes Beispiel.
+
+00:16:04.620 --> 00:16:08.860
+Stellen Sie sich ein Unternehmen vor, das Techniker zur Installation, Reparatur oder Wartung von Geräten bei Kunden vor Ort schickt.
+
+00:16:09.280 --> 00:16:14.900
+Der Außendienstmitarbeiter benötigt Kundendetails, Informationen zur Arbeit und zum Kundenwert des Artikels, den das Unternehmen installiert oder betreut.
+
+00:16:15.660 --> 00:16:20.520
+Hinter den Kulissen muss das Unternehmen zudem Teile, Kosten, Einkauf und die mit dieser Arbeit verbundenen Gelder nachverfolgen.
+
+00:16:21.040 --> 00:16:23.300
+FieldService konzentriert sich auf die Planung und Durchführung des Besuchs.
+
+00:16:23.400 --> 00:16:27.120
+Finanz und Betrieb konzentrieren sich auf die damit verbundenen operativen und finanziellen Aufzeichnungen.
+
+00:16:27.440 --> 00:16:33.740
+Wenn diese Datensätze korrekt verknüpft sind, steht die Arbeit eines Technikers nicht losgelöst von den verwendeten Teilen, den Arbeitskosten oder dem verknüpften Kundendatensatz.
+
+00:16:35.040 --> 00:16:38.980
+Project Operations folgt dem gleichen Muster, insbesondere für Unternehmen, die arbeitprojektbezogen verkaufen.
+
+00:16:39.400 --> 00:16:43.620
+Ein Projektteam verwaltet möglicherweise Kundenarbeit, Zeitaufwand, geplante Kosten und Projektmeilensteine.
+
+00:16:44.300 --> 00:16:47.940
+Das Finanzwesen muss die finanzielle Seite von Einkauf, Kosten, Abrechnung und Berichterstattung sehen.
+
+00:16:47.940 --> 00:16:55.820
+Ohne Verbindung verbringen Projektmanager zu viel Zeit damit, das Finanzwesen auf Updates zu drängen, während dieses auf Bestätigung der Projektteams wartet.
+
+00:16:57.100 --> 00:17:02.460
+Verknüpfte Projektdatensätze bieten beiden Gruppen einen klareren Überblick über die Arbeit, während sie vom Kunden versprechen, die die finanzielle Aktivität übergeht.
+
+00:17:02.460 --> 00:17:10.440
+Es gibt hier auch einen breiteren Nutzen der Power-Plattform, da die Kunden-App Dataverse nutzt und genehmigte Daten in Dataverse Power-Apps und Power Automate unterstützen können.
+
+00:17:10.980 --> 00:17:16.860
+Ein Unternehmen könnte eine kleine App für ein internes Team bauen oder einen Flow erstellen, der reagiert, wenn ein Geschäftsdatensatz einen bestimmten Punkt erreicht.
+
+00:17:17.380 --> 00:17:20.520
+Das bedeutet nicht, dass jeder Finanz- und Betriebsdatensatz plötzlich in jede Power-App gehört.
+
+00:17:20.520 --> 00:17:27.580
+Das bedeutet, dass verbundene Datensätze Teil einer breiteren Palette von Geschäftstools werden können, sofern das Unternehmen diesen Zweck sorgfältig wählt und die Daten ums gemäß schützt.
+
+00:17:28.080 --> 00:17:29.440
+Eine Grenze muss dabei klar bleiben.
+
+00:17:29.940 --> 00:17:32.460
+DualWrite unterstützt kein Dynamics 365 Business Central.
+
+00:17:32.960 --> 00:17:41.600
+Business Central kann zwar über andere Methoden mit Microsoft-Produkten verbunden werden, aber DualWrite ist für den Finest-in-Operations-Teil von Dynamics 365 und Dataverse-basierte Kunden-Apps gedacht.
+
+00:17:42.400 --> 00:17:45.120
+Es ist auch kein Werkzeug, um jede beliebige Tabelle zu kopieren, die man finden kann.
+
+00:17:45.120 --> 00:17:51.160
+Ein Datensatz sollte nur verschoben werden, wenn Anwender denselben operativen Datensatz an beiden Stellen benötigen, nicht, weil sich Datenkopien sichere anfühlen.
+
+00:17:51.460 --> 00:17:57.560
+DualWrite ersetzt auch keinen umfassenderen Integrationsplan, wenn ein Unternehmen Reporting-Feeds, Anbindung an Drittsysteme oder eine große Datenmigration benötigt.
+
+00:17:58.200 --> 00:18:01.420
+Jede Datenverbindung als identische Aufgabe zu behandeln, führt schnell zu Problemen.
+
+00:18:02.720 --> 00:18:05.380
+Grenzen, Vorbereitung und häufige Fehler.
+
+00:18:05.880 --> 00:18:08.720
+Stellen Sie sich DualWrite wie eine per Handschlag besiegelte Vereinbarung zwischen zwei Seiten.
+
+00:18:08.720 --> 00:18:14.440
+Sie vereinbaren, bestimmte gemeinsame Datensätze synchron zu halten, aber es ist keine magische Leitung für jede Tabelle, jeden Bericht oder jedes externe System.
+
+00:18:14.440 --> 00:18:17.640
+Bevor Sie es einrichten, prüfen Sie, welche Integrationen bereits existieren.
+
+00:18:18.120 --> 00:18:22.940
+Wenn eine alte Verbindung und DualWrite gleichzeitig denselben Kundendatensatz aktualisieren, können schnell Konflikte entstehen.
+
+00:18:23.440 --> 00:18:24.540
+Es sind Kopfschmerzen, die Sie nicht haben.
+
+00:18:24.940 --> 00:18:26.200
+Also vereinbaren Sie zuerst die Grundlage.
+
+00:18:26.540 --> 00:18:27.380
+Wie werden Sie Namen eingeben?
+
+00:18:27.700 --> 00:18:29.260
+Welches rechtliche Unternehmen besitzt welchen Datens?
+
+00:18:29.560 --> 00:18:30.440
+Wer darf Änderungen vornehmen?
+
+00:18:30.860 --> 00:18:32.480
+Welche Sicherheitsrollen benötigt jedes Team?
+
+00:18:33.060 --> 00:18:35.500
+Dubletten und unvollständige Datensätze vor der ersten Synchronisierung.
+
+00:18:35.900 --> 00:18:37.500
+Beginnen Sie mit den vorgefertigten Mappings von Microsoft.
+
+00:18:37.500 --> 00:18:38.960
+Diese verbinden bereits gängige Datensätze.
+
+00:18:39.360 --> 00:18:41.600
+Benutzerdefinierte Tabellen und Felder erfordern sorgfältige Tests.
+
+00:18:41.860 --> 00:18:43.900
+Prüfen Sie auch verwandte Tabellen und Mappingabhängigkeiten.
+
+00:18:44.240 --> 00:18:47.500
+Da manchmal ein Datensatz die Existenz eines anderen voraussetzt, bevor er synchronisiert werden kann.
+
+00:18:47.700 --> 00:18:49.840
+Planen Sie Ihre erste Synchronisierung basierend auf der Menge Ihrer Daten.
+
+00:18:50.140 --> 00:18:52.220
+Behandeln Sie es nicht wie ein Lichtschalter, den man mit der Mittagspause umlegt.
+
+00:18:52.540 --> 00:18:53.300
+Das führt zu Problemen.
+
+00:18:53.720 --> 00:18:56.160
+Ein angehaltenes Mapping benötigt dennoch einen Verantwortlichen und einen Neustart.
+
+00:18:56.360 --> 00:18:59.400
+In der Warteschlange befindliche Änderungen und fehlgeschlagene Datensätze bleiben nicht ewig bestehen.
+
+00:18:59.540 --> 00:19:02.260
+Obachten Sie die Aktivitätsprotokolle, Fehler, Warnungen und Schwellenwerte.
+
+00:19:02.260 --> 00:19:06.420
+Wenn etwas fehlschlägt, finden Sie das fehlende Feld, den fehlerhaften Datensatz oder die verletzte Regel dahinter.
+
+00:19:06.760 --> 00:19:08.460
+Wiederholte Versuche beheben keine fehlerhaften Daten.
+
+00:19:08.460 --> 00:19:11.900
+Wenn Sie DualWrite als eine kontrollierte Brücke betrachten, fügt sich alles zusammen.
+
+00:19:13.300 --> 00:19:15.200
+Fazit, ein gemeinsamer geschäftlicher Dialog.
+
+00:19:16.220 --> 00:19:21.280
+DualWrite hält unterstützte gemeinsame Datensätze zwischen Finds & Operations und ihren Dataverse-basierten Kundenapps in Bewegung.
+
+00:19:21.280 --> 00:19:24.400
+Auf diese Weise können Teams mit vernetzten Geschäftsdaten arbeiten.
+
+00:19:25.540 --> 00:19:31.280
+Abonnieren Sie auf Ihrer bevorzugten Podcast-Plattform für weitere Wissenshäppchen mit mir, Mirko Peters, unter M365-WMM.
+
+00:19:31.940 --> 00:19:37.000
+Und teilen Sie diese Folge mit jemandem, der Vertrieb, Service und Finanzen immer noch über eine weitere Tabellenkalkulation verbindet.
+
+00:19:37.000 --> 00:20:06.980
+Und dann, wenn Sie das mit einem neuen Datenkalkulationen haben, können Sie das mit einem neuen Datenkalkulation verbindet.

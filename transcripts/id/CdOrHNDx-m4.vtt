@@ -1,0 +1,772 @@
+WEBVTT
+
+00:00:00.370 --> 00:00:07.090
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI-UR, dan para penggerak masa depan dunia kerja.
+
+00:00:07.970 --> 00:00:12.050
+Januari ini, M365-Chan kembali hadir dengan skala yang lebih besar.
+
+00:00:12.890 --> 00:00:18.090
+Bergabunglah dalam sesi langsung, demo nyata, dan ilmu praktis dari MVP serta pakar industri dunia.
+
+00:00:18.910 --> 00:00:21.150
+Tanpa slide umum, tanpa jargon yang membosankan.
+
+00:00:22.050 --> 00:00:28.850
+Kami membahas tantangan nyata, Copilot Studio, agen AI Fabric, Keamanan, Tata Kelola, dan Otomatisasi AFOT.
+
+00:00:29.530 --> 00:00:34.370
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis ada sesi yang dirancang khusus untuk Anda.
+
+00:00:35.490 --> 00:00:40.110
+Selama 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.930 --> 00:00:44.330
+Taksikan secara langsung, dan pahawasan praktis kembali ke organisasi Anda.
+
+00:00:45.230 --> 00:00:48.870
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.490 --> 00:00:50.530
+Daftaran sudah dibuka sekarang.
+
+00:00:51.890 --> 00:00:54.850
+Kunjungi m365-Chan.net dan amankan tempat Anda.
+
+00:00:54.850 --> 00:00:58.310
+Hari ini, itu m365-Chan.net.
+
+00:00:58.850 --> 00:01:04.790
+Bergabunglah sekarang di m365-Chan.net dan sampai jumpa secara langsung di bulan Januari.
+
+00:01:05.410 --> 00:01:06.970
+Pukul 03.47 cc.
+
+00:01:07.730 --> 00:01:09.250
+Sebagian besar tim TI sedang tidur.
+
+00:01:09.850 --> 00:01:12.250
+Namun di suatu tempat dalam log-log, sebuah pola mulai terbentuk.
+
+00:01:13.030 --> 00:01:17.150
+Dimulai dari hal kecil, tiga daftar sharepoint baru bernama tes dibuat dalam empat menit.
+
+00:01:18.330 --> 00:01:20.710
+Lalu lonjakan perubahan izin secara mendadak tanpa tiket.
+
+00:01:21.590 --> 00:01:24.530
+Terakhir, serangkaian alur power ultimate gagal secara bersamaan.
+
+00:01:24.530 --> 00:01:27.490
+Dan telepon tidak berdering, adalah bagian yang melakukkan.
+
+00:01:27.810 --> 00:01:30.590
+CIO tidak menerima panggilan karena sistem secara teknis tidak mati.
+
+00:01:31.210 --> 00:01:32.050
+Mampus ada warna hijau.
+
+00:01:33.150 --> 00:01:36.950
+Namun jika Anda melihat pola itu lebih dekat, yang Anda lihat bukanlah pemadaman, melainkan entropi.
+
+00:01:37.470 --> 00:01:37.970
+Entropi.
+
+00:01:38.710 --> 00:01:40.570
+Penurunan bertahap menuju ketidakteraturan.
+
+00:01:40.570 --> 00:01:47.070
+Sepertinya kita terlalu fokus pada kegagalan besar, ransomware, serangan di DOS, hingga kita mengabaikan.
+
+00:01:47.750 --> 00:01:48.710
+Pembusukan sunyi ini.
+
+00:01:49.830 --> 00:01:54.630
+Kita sedang membahas kematian akibat seribu luka dalam ekosistem Microsoft 365 hari ini, bukan?
+
+00:01:55.570 --> 00:01:56.130
+What's coming?
+
+00:01:56.610 --> 00:02:00.110
+Kita membahas bagaimana sistem platform gagal secara diam-diam jauh sebelum gagal secara nyata,
+
+00:02:00.210 --> 00:02:03.570
+dan yang lebih penting bagaimana menghentikan pergesaran itu dengan disiplin, bukan kepahlawanan.
+
+00:02:05.050 --> 00:02:07.570
+Karena saat ini sebagian besar organisasi berjalan mengandalkan kepahlawan.
+
+00:02:07.570 --> 00:02:11.730
+Mereka punya satu ahli power platform yang memperbaiki alur saat rusak di tengah malam.
+
+00:02:12.130 --> 00:02:13.630
+Itu bukan strategi, itu adalah liabilitas.
+
+00:02:14.450 --> 00:02:15.850
+Jadi mari kita beda entropi ini.
+
+00:02:16.890 --> 00:02:20.510
+Materi yang kita bahas hari ini menggambarkannya sebagai ketidakstabilan yang terus menung.
+
+00:02:21.190 --> 00:02:22.610
+Semuanya dimulai dari substratnya sendiri.
+
+00:02:23.470 --> 00:02:23.870
+SharePoint.
+
+00:02:25.330 --> 00:02:30.670
+SharePoint, pisau Swiss yang coba digunakan semua orang sebagai palu, kergaji, dan basis data relasional sekaligus.
+
+00:02:31.530 --> 00:02:34.050
+Masalah intinya adalah SharePoint merupakan substrat kolaborasi.
+
+00:02:34.050 --> 00:02:37.770
+Ia dirancang untuk dokumen dan daftar data yang dibaca manusia.
+
+00:02:38.730 --> 00:02:40.470
+Tetapi orang mencoba memperlakukannya seperti SKS.
+
+00:02:40.930 --> 00:02:42.250
+Saya sudah melihat ini ratusan kali.
+
+00:02:43.550 --> 00:02:45.750
+Anda mendapatkan permintaan untuk pelacak sederhana.
+
+00:02:45.990 --> 00:02:49.930
+Dan tiba-tiba Anda memiliki daftar dengan 50 kolom, 5 rantai pencarian berbeda,
+
+00:02:50.050 --> 00:02:52.610
+dan struktur izin yang membutuhkan gelar PHD untuk dipahami.
+
+00:02:53.570 --> 00:02:54.650
+Dan disitulah kebusukan dimulai.
+
+00:02:55.070 --> 00:02:56.430
+Dokumen menyebutnya disiplin skema.
+
+00:02:57.230 --> 00:02:58.590
+Terdengar busan gantap ini krusial.
+
+00:02:59.190 --> 00:03:00.190
+Sebagai contoh penama daftar,
+
+00:03:00.190 --> 00:03:03.650
+Anda melihat daftar bernama pelacak uji coba JEN atau proyek X sementara.
+
+00:03:04.610 --> 00:03:06.790
+Itu oke untuk kotak pasir, tapi untuk produksi tidak.
+
+00:03:07.550 --> 00:03:08.970
+Beri nama daftar berdasarkan kata benda bisnis.
+
+00:03:09.390 --> 00:03:10.730
+Itu insiden, bukan pelacak JEN.
+
+00:03:11.750 --> 00:03:14.270
+Dan utang teknis juga menumpuk di nama kolom, bukan?
+
+00:03:15.170 --> 00:03:16.870
+Anda menamai kolom status hari ini,
+
+00:03:17.250 --> 00:03:19.330
+lalu mengubah nama tampilan menjadi keadaan saat ini,
+
+00:03:19.790 --> 00:03:21.150
+tapi API masih melihat status.
+
+00:03:22.110 --> 00:03:23.970
+Lalu Anda menghapusnya dan membuat status 2.
+
+00:03:24.670 --> 00:03:26.770
+Status 2, status final, status nyata.
+
+00:03:27.610 --> 00:03:30.030
+Ini mimpi buruk bagi siapapun yang mencoba menggunakan aplikasi di atasnya.
+
+00:03:30.570 --> 00:03:32.730
+Aturannya sederhana, nama internal tidak pernah berubah.
+
+00:03:33.410 --> 00:03:35.330
+Label adalah untuk antarmuka pengguna, bukan API.
+
+00:03:36.110 --> 00:03:38.850
+Jika Anda tidak menegakkannya, Anda membangun gedung pencakar langit di atasnya.
+
+00:03:39.330 --> 00:03:40.750
+Dan kemudian ada masalah hubungan.
+
+00:03:41.270 --> 00:03:42.630
+Oh, kolom pencarian yang ditakuti.
+
+00:03:43.210 --> 00:03:43.910
+Pencarian itu menggoda.
+
+00:03:44.390 --> 00:03:47.690
+Terasa seperti relasi join, tapi SharePoint bukan basis data relasional.
+
+00:03:48.470 --> 00:03:49.330
+Panduannya di sini ketat.
+
+00:03:50.290 --> 00:03:53.330
+Satu pencarian pertampilan kritis, mungkin dua, jika Anda beruntung.
+
+00:03:53.330 --> 00:03:56.470
+Jika Anda mencoba, lakukan hubungan multilompatan,
+
+00:03:56.710 --> 00:03:59.570
+seperti memfilter daftar berdasarkan pencarian dan mencari daftar lain,
+
+00:03:59.930 --> 00:04:00.690
+Anda harus berhenti.
+
+00:04:01.190 --> 00:04:01.910
+Jadi kemana Anda harus pergi?
+
+00:04:02.690 --> 00:04:05.630
+Jika SharePoint tidak bisa menangani kompleksitas itu, apakah Anda menyerah begitu saja?
+
+00:04:05.630 --> 00:04:06.930
+Anda memindahkan datanya.
+
+00:04:07.310 --> 00:04:09.190
+Itu pembicaraan tentang data first atau SQL.
+
+00:04:09.870 --> 00:04:12.570
+Jika Anda membutuhkan integritas transaksional dan join yang kompleks,
+
+00:04:12.790 --> 00:04:15.630
+Anda menyalahgunakan SharePoint dan sistem akan menghukum Anda karenanya.
+
+00:04:16.770 --> 00:04:18.810
+Tidak hari ini, mungkin tidak besok, tapi akhirnya,
+
+00:04:19.130 --> 00:04:21.310
+query akan mencapai ambang batas, delegasi akan rusak,
+
+00:04:21.390 --> 00:04:23.270
+dan aplikasi Anda akan menampilkan layar kosong.
+
+00:04:24.350 --> 00:04:26.990
+Berbicara tentang merusak sesuatu, mari bicara tentang izin.
+
+00:04:27.810 --> 00:04:29.430
+Ini adalah poin masalah yang sangat besar.
+
+00:04:29.730 --> 00:04:30.830
+Cebakan izin diingkat item.
+
+00:04:31.490 --> 00:04:35.050
+Ini adalah permintaan klasik saya hanya ingin membuat melihat item mereka sendiri.
+
+00:04:35.570 --> 00:04:38.030
+Terdengar masuk akal, tapi secara teknis ini melelahkan.
+
+00:04:38.950 --> 00:04:42.590
+Jika Anda memutus pewarisan pada setiap item dalam daftar berisi 50 ribu item,
+
+00:04:43.010 --> 00:04:46.130
+server harus memeriksa daftar kontrol akses untuk setiap baris,
+
+00:04:46.210 --> 00:04:47.470
+setiap kali pengguna membuat query.
+
+00:04:48.270 --> 00:04:49.170
+Itu menghancurkan kinerja.
+
+00:04:49.810 --> 00:04:53.250
+Jadi, solusinya adalah memutus pewarisan di tingkat situs, bukan tingkat item.
+
+00:04:53.750 --> 00:04:54.010
+Selalu.
+
+00:04:54.450 --> 00:04:56.170
+Jika Anda perlu mengamankan baris secara berbeda,
+
+00:04:56.250 --> 00:04:58.110
+Anda memerlukan daftar yang berbeda atau sumber data.
+
+00:04:58.110 --> 00:04:59.250
+Dan tolong gunakan group.
+
+00:04:59.650 --> 00:05:01.490
+Jangan pernah memberikan izin kepada individu secara personal.
+
+00:05:01.830 --> 00:05:02.870
+Orang pergi, group tetap ada.
+
+00:05:02.870 --> 00:05:06.090
+Sepertinya temanya adalah berhenti berimprovisasi,
+
+00:05:06.570 --> 00:05:09.170
+yang membawa kita langsung ke pilar kedua, power apps.
+
+00:05:10.250 --> 00:05:12.890
+Teks ini mengambarkan power apps sebagai sesuatu yang deterministik
+
+00:05:12.890 --> 00:05:14.330
+atau kekacauan dengan tombol simpan.
+
+00:05:15.410 --> 00:05:16.570
+Itu dikotong yang sangat tajam.
+
+00:05:16.570 --> 00:05:17.890
+Memang, tapi itu akurat.
+
+00:05:18.350 --> 00:05:19.850
+Kanvas up terasa seperti kanvas kosong.
+
+00:05:20.350 --> 00:05:21.470
+Anda bisa melukis apapun yang Anda ingin.
+
+00:05:21.810 --> 00:05:22.370
+Itulah bahayanya.
+
+00:05:22.750 --> 00:05:24.350
+Aplikasi deterministik berarti Anda,
+
+00:05:24.550 --> 00:05:26.190
+sang pengembang, yang mengandalkan statusnya.
+
+00:05:26.610 --> 00:05:28.190
+Anda tahu persis data apa yang dimuat,
+
+00:05:28.310 --> 00:05:30.450
+kapan dikirimkan, dan apa yang terjadi jika gagal.
+
+00:05:31.490 --> 00:05:33.290
+Berbanding terbalik dengan pendekatan kacau,
+
+00:05:33.410 --> 00:05:35.230
+yang saya asumsikan hanya menaruh kontrol di layar
+
+00:05:35.230 --> 00:05:37.010
+dan berharap fungsi formulir kirim berhasil.
+
+00:05:37.590 --> 00:05:38.030
+Tepat sekali.
+
+00:05:38.790 --> 00:05:40.570
+Kacauan adalah mengandalkan perilaku implisit.
+
+00:05:40.570 --> 00:05:43.650
+Yaitu menaruh logika kompleks di dalam properti onselect
+
+00:05:43.650 --> 00:05:45.890
+tombol yang menambah tiga sumber data mengirim email
+
+00:05:45.890 --> 00:05:50.330
+dan menafigasi ke layar baru semuanya tanpa penanganan kesalahan.
+
+00:05:51.490 --> 00:05:53.490
+Jika koneksi internet terputus di tengah proses itu,
+
+00:05:53.590 --> 00:05:54.330
+data Anda akan rusak.
+
+00:05:54.650 --> 00:05:56.170
+Jadi bagaimana cara membuatnya deterministik?
+
+00:05:56.970 --> 00:05:58.210
+Anda harus merusakkan proses pacanda.
+
+00:05:59.050 --> 00:06:01.330
+Kontrol Anda tidak seharusnya meminta data langsung ke basis data.
+
+00:06:01.890 --> 00:06:04.790
+Kontrol tersebut harus melihat ke koleksi lokal atau variable jika diperlukan.
+
+00:06:04.910 --> 00:06:07.990
+Dan Anda perlu memperlakukan submit form sebagai operasi atomik.
+
+00:06:07.990 --> 00:06:11.010
+Jika Anda menggunakan patch, Anda harus menangani konkurensi.
+
+00:06:11.670 --> 00:06:12.950
+Konkurensi adalah masalah besar.
+
+00:06:13.470 --> 00:06:15.850
+Dua orang mengedit data yang sama pada waktu yang bersamaan.
+
+00:06:16.610 --> 00:06:18.370
+Jika Anda tidak menangani secara eksplisit,
+
+00:06:18.490 --> 00:06:19.850
+orang terakhir yang menyimpan layang menang
+
+00:06:19.850 --> 00:06:21.790
+dan pekerjaan orang lain tertimpa tanpa mereka sadari.
+
+00:06:22.110 --> 00:06:23.390
+Itu adalah kegagalan senyap yang tadi disebut.
+
+00:06:24.190 --> 00:06:25.950
+Sistem tidak rusak, tetapi datanya salah.
+
+00:06:26.610 --> 00:06:28.850
+Teks tersebut juga menyebutkan kedisiplinan operasional
+
+00:06:28.850 --> 00:06:31.190
+dalam aplikasi mencatat apa yang diharapkan,
+
+00:06:31.190 --> 00:06:32.270
+bukan hanya apa yang diharap.
+
+00:06:32.430 --> 00:06:34.010
+Itulah perbedaan antara mainan dan alat kerja.
+
+00:06:34.790 --> 00:06:36.370
+Aplikasi profesional menghasilkan telemetri.
+
+00:06:36.370 --> 00:06:38.870
+Pengguna X menafigasi ke layar Y.
+
+00:06:39.170 --> 00:06:40.630
+Pengguna Z mencoba mengirim formulir.
+
+00:06:40.970 --> 00:06:43.010
+Gagal dengan kode kesalahan 133.
+
+00:06:43.670 --> 00:06:44.990
+Jika Anda tidak memiliki catatan itu,
+
+00:06:45.070 --> 00:06:45.930
+Anda melakukan debak-nebak.
+
+00:06:46.670 --> 00:06:47.930
+Mari beralih ke ruang mesin.
+
+00:06:48.370 --> 00:06:49.070
+Power Automate.
+
+00:06:49.630 --> 00:06:50.810
+Deskripsi di sini sangat jelas.
+
+00:06:51.290 --> 00:06:52.810
+Bum waktu yang dijinakkan dengan protokol.
+
+00:06:53.650 --> 00:06:55.550
+Pro sangat menakutkan karena berjalan di latar belakang.
+
+00:06:55.970 --> 00:06:57.090
+Anda tidak bisa melihat kegagalannya,
+
+00:06:57.190 --> 00:06:58.010
+kecuali Anda mencarinya,
+
+00:06:58.010 --> 00:06:59.550
+dan mereka gagal seperti gedung yang terbakar.
+
+00:06:59.990 --> 00:07:01.410
+Awalnya pelang, lalu tiba-tiba semua yang terbakar.
+
+00:07:02.210 --> 00:07:03.550
+Apa penyebab utama dari kebakaran itu?
+
+00:07:03.550 --> 00:07:06.350
+Kurangnya desain defensif, khususnya pada pemicu trigger.
+
+00:07:07.050 --> 00:07:09.810
+Jika Anda memiliki flow yang dipicu saat item dimodifikasi,
+
+00:07:09.990 --> 00:07:11.650
+dan Anda tidak mengatur kondisi pemicu,
+
+00:07:11.890 --> 00:07:14.370
+flow itu akan berjalan setiap kali seseorang menyentuh item itu,
+
+00:07:14.610 --> 00:07:16.550
+bahkan jika mereka hanya merbaiki salah ketik.
+
+00:07:17.350 --> 00:07:20.770
+Jadi Anda memiliki ribuan proses yang tidak perlu yang menghabiskan batas hapi Anda.
+
+00:07:21.190 --> 00:07:21.590
+Dapat sekali.
+
+00:07:21.890 --> 00:07:22.590
+Anda mendukung pengikut.
+
+00:07:22.590 --> 00:07:25.310
+Jalankan alur ini hanya jika status berubah menjadi disitu.
+
+00:07:25.590 --> 00:07:27.970
+Satu perubahan itu dapat mengurangi beban Anda sebesar 90 persen.
+
+00:07:28.330 --> 00:07:29.230
+Lalu ada konkurensi.
+
+00:07:30.230 --> 00:07:34.230
+Secara default, Power Automate mencoba menjalankan semuanya secara paralel agar memban.
+
+00:07:34.890 --> 00:07:39.070
+Yang mana menjadi bencana jika Anda mencoba memperbarui item daftar yang sama atau menambah penghitung.
+
+00:07:39.410 --> 00:07:40.270
+Anda akan mengalami kondisi balapan.
+
+00:07:40.690 --> 00:07:41.950
+Anda harus menetapkan batas konkurensi.
+
+00:07:42.430 --> 00:07:44.550
+Terkadang Anda perlu memaksa berjalan secara sekuensial,
+
+00:07:44.690 --> 00:07:46.310
+satu persatu untuk memastikan integritas data.
+
+00:07:46.890 --> 00:07:47.830
+Bagaimana dengan penanganan error?
+
+00:07:47.830 --> 00:07:52.750
+Pola try-catch tidak ada secara netif di visual designer seperti halnya dalam kode, bukan?
+
+00:07:53.350 --> 00:07:54.250
+Anda harus membangunnya sendiri.
+
+00:07:54.630 --> 00:07:57.490
+Anda membuat blok lingkup untuk tindakan utama, itu adalah try Anda.
+
+00:07:57.910 --> 00:08:00.950
+Lalu blok paralel yang hanya berjalan jika yang pertama gagal, itu adalah catch Anda.
+
+00:08:01.910 --> 00:08:04.010
+Jika Anda tidak memiliki blok catch yang memberi peringatan,
+
+00:08:04.110 --> 00:08:08.130
+alur bisa gagal selama berminggu-minggu dan Anda tidak akan pernah tahu sampai pengguna bertanya di mana persetujuan saya.
+
+00:08:08.830 --> 00:08:10.090
+Keheningan itu adalah musuhnya.
+
+00:08:10.850 --> 00:08:15.010
+Tampaknya tujuan dari semua protokol ini adalah mengubah kegagalan senyap menjadi kegagalan,
+
+00:08:15.010 --> 00:08:16.410
+yang bising dan terkendali.
+
+00:08:16.410 --> 00:08:21.170
+Ya, saya ingin sistem berdeki saya saat ada yang rusak agar saya bisa segera perbaikinya.
+
+00:08:22.010 --> 00:08:24.730
+Saya tidak ingin sistem berbisik saat merusak database selama 6 bulan.
+
+00:08:25.610 --> 00:08:28.670
+Sekarang kita tidak bisa bicara masa depan platform ini tanpa bicara tentang AI.
+
+00:08:29.850 --> 00:08:31.550
+AI Builder di Copilot.
+
+00:08:32.650 --> 00:08:33.970
+Semua orang ingin mengaktifkannya.
+
+00:08:34.850 --> 00:08:36.150
+Namun teksnya memperingatkan.
+
+00:08:36.410 --> 00:08:37.810
+Lonjakan tidak dimulai dari kode,
+
+00:08:38.470 --> 00:08:39.430
+melainkan dari PDF.
+
+00:08:41.190 --> 00:08:42.790
+AI adalah akselerator utama.
+
+00:08:43.230 --> 00:08:46.170
+Jika tata kelola Anda buruk, AI akan membuatnya memburuk lebih cepat.
+
+00:08:46.830 --> 00:08:51.910
+Bahaya AI, khususnya model bahasa besar atau copilot adalah halusinasi dan akses berlebih.
+
+00:08:53.170 --> 00:08:54.450
+Pustakawan, bukan peramal.
+
+00:08:55.590 --> 00:08:56.430
+Saya suka kalimat itu.
+
+00:08:57.110 --> 00:08:57.970
+Itu analogi yang sempurna.
+
+00:08:58.590 --> 00:08:59.770
+Peramal menciptakan kebenaran.
+
+00:09:00.550 --> 00:09:02.410
+Pustakawan menemukan kebenaran yang sudah ada.
+
+00:09:03.130 --> 00:09:04.850
+Kita ingin AI perusahaan kita menjadi pustakawan.
+
+00:09:05.570 --> 00:09:08.130
+AI hanya boleh menjawab berdasarkan sumber pengetahuan yang sudah parputih.
+
+00:09:08.770 --> 00:09:10.230
+Jika tidak bisa menemukan dokumennya,
+
+00:09:10.390 --> 00:09:10.930
+ia harus berkata,
+
+00:09:11.050 --> 00:09:12.570
+saya tidak tahu bukan menciptakan kebijakan.
+
+00:09:13.150 --> 00:09:14.790
+Dan bagaimana cara kita menegakkannya secara tank?
+
+00:09:15.390 --> 00:09:16.050
+Anda butuh batasan.
+
+00:09:16.650 --> 00:09:18.070
+Untuk AI Builder yang memproses dokumen,
+
+00:09:18.250 --> 00:09:20.430
+Anda butuh manusia dalam prosesnya jika skor kepecahan rendah.
+
+00:09:20.430 --> 00:09:24.290
+Jika AI tidak 90 persen yakin faktur itu bernilai 500 dolar semanusia,
+
+00:09:24.650 --> 00:09:25.350
+perlu meninjaunya.
+
+00:09:25.930 --> 00:09:27.490
+Anda tidak bisa meliarkannya langsung melalui skor kepecahan.
+
+00:09:28.450 --> 00:09:29.310
+Dan untuk chatbot?
+
+00:09:30.710 --> 00:09:31.470
+Citasi adalah wajib.
+
+00:09:32.010 --> 00:09:33.010
+Jika bot memberikan jawaban,
+
+00:09:33.090 --> 00:09:34.230
+ia harus menautkan ke dokumen sebut.
+
+00:09:34.770 --> 00:09:36.070
+Tidak ada citasi, tidak ada output.
+
+00:09:36.610 --> 00:09:38.550
+Dan yang paling kritis, tidak ada mutasi data langsung.
+
+00:09:39.310 --> 00:09:41.870
+Anda tidak membiarkan chatbot mengedit basis data SGA Anda, Sam.
+
+00:09:42.470 --> 00:09:44.470
+Chatbot tersebut harus memicu alur power otomat
+
+00:09:44.470 --> 00:09:46.210
+yang diatur secara ketat untuk melakukan perubahan.
+
+00:09:46.750 --> 00:09:47.850
+Alur tersebut adalah penjaga kebab.
+
+00:09:48.570 --> 00:09:50.050
+Jadi AI hanyalah antarmukanya.
+
+00:09:50.810 --> 00:09:52.850
+Logika tata kelola tetap berada di lapisan kaku
+
+00:09:52.850 --> 00:09:54.670
+dan deterministik yang kita bahas sebelumnya.
+
+00:09:55.650 --> 00:09:58.050
+Tepat sekali, AI adalah ujung depan yang unang dan fleksibel.
+
+00:09:58.670 --> 00:10:00.610
+Bagian belakang harus tetap dingin, keras, dan logis.
+
+00:10:01.250 --> 00:10:05.050
+Kita telah membahas pilar-pilarnya SharePoint, Aplikasi, Automate, AI.
+
+00:10:05.950 --> 00:10:08.610
+Namun semua ini tidak berfungsi tanpa apa yang disebut teks tersebut
+
+00:10:08.610 --> 00:10:09.790
+sebagai turang punggung tata kelola.
+
+00:10:10.610 --> 00:10:11.870
+Kontrol yang tidak pernah berkedip.
+
+00:10:12.670 --> 00:10:14.550
+Ini adalah hal yang membosankan dan menyamankan pekerjaanannya.
+
+00:10:15.290 --> 00:10:18.050
+DLP, Kebijakan Pencegahan Kehilangan Data, Strategi Lingkungan.
+
+00:10:18.050 --> 00:10:21.450
+Anda tidak boleh membiarkan orang membangun aplikasi produksi di lingkungan default.
+
+00:10:21.790 --> 00:10:23.590
+Lingkungan default adalah tempat yang tidak teratu.
+
+00:10:23.930 --> 00:10:24.870
+Disitulah tata kelola, kemarin.
+
+00:10:25.250 --> 00:10:27.110
+Anda memerlukan pemisahan antara pengembangan produksi.
+
+00:10:27.430 --> 00:10:28.270
+Anda merupakan setor kelola.
+
+00:10:28.270 --> 00:10:32.410
+Jika Anda memindahkan file zip mentah dari solusi yang tidak dikelola ke produksi, Anda mencari masalah.
+
+00:10:33.230 --> 00:10:34.030
+Dan prinsipal layanan.
+
+00:10:34.850 --> 00:10:37.130
+Berhenti menjalankan alur perusahaan menggunakan akun Steve.
+
+00:10:37.750 --> 00:10:39.490
+Karena saat Steve menang loter dan keluar,
+
+00:10:40.370 --> 00:10:41.930
+seluruh proses utang usaha akan terhenti.
+
+00:10:42.670 --> 00:10:44.890
+Gunakan prinsipal layanan, identitas memanusia,
+
+00:10:45.150 --> 00:10:47.730
+agar sistem bergantung pada arsitektur bukan daftar karyawan.
+
+00:10:48.490 --> 00:10:50.050
+Semuanya bermuara pada sebuah pilihan, bukan?
+
+00:10:50.690 --> 00:10:51.870
+Kesimpulannya menjabarkan hal itu.
+
+00:10:52.310 --> 00:10:53.510
+Penyelarasan atau entropi.
+
+00:10:53.970 --> 00:10:54.710
+Itu adalah pilihan binat.
+
+00:10:55.050 --> 00:10:55.750
+Tidak ada jalan tengah.
+
+00:10:55.750 --> 00:10:59.950
+Anda menerapkan struktur sejak awal yang terasa membatasi dan memperlambat di awal
+
+00:10:59.950 --> 00:11:02.270
+atau Anda membayar untuk rekonstruksi nantinya.
+
+00:11:02.890 --> 00:11:05.070
+Dan rekonstruksi selalu 10 kali lebih mahal.
+
+00:11:05.570 --> 00:11:06.070
+Itu menarik.
+
+00:11:06.790 --> 00:11:10.670
+Kita mulai dengan berbicara tentang pengaturan teknis, kolom terindek, batas konkurensi.
+
+00:11:11.070 --> 00:11:14.270
+Tetapi ini sebenarnya adalah sikap filosofis tentang bagaimana teknologi harus dikelola.
+
+00:11:14.910 --> 00:11:16.610
+Memang benar. Ini tentang menghargai alat tersebut.
+
+00:11:17.090 --> 00:11:20.330
+Chairpoint, power platform, AI, ini adalah alat yang sangat kuat.
+
+00:11:20.330 --> 00:11:21.330
+Tetapi...
+
+00:11:21.330 --> 00:11:25.530
+Terima kasih telah menonton!

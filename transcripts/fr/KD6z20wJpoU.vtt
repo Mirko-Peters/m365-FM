@@ -1,0 +1,1255 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:10.640
+Un client envoie un e-mail pour une commande défectueuse, appelle le lendemain, puis ouvre un chat car personne ne semble savoir ce qui s'est passé et il répète la même histoire à chaque fois pendant que votre équipe de support fouille dans les boîtes de réception, les notes et des outils séparés.
+
+00:00:11.360 --> 00:00:14.080
+C'est précisément ce que résout la gestion des incidents de Dynamics 365.
+
+00:00:15.200 --> 00:00:22.060
+Imaginez un incident comme un dossier étiqueté dans un immeuble de bureau très fréquenté, où chaque élément d'un problème client est centralisé dans ce dossier et dans ce dossier de la première question à la réponse finale.
+
+00:00:22.060 --> 00:00:31.180
+Vous êtes Mirko Piter de N365FM et dans ce petit module de connaissances, vous verrez comment les incidents, le routage, les délais de réponse, les articles de support et la clôture s'articulent ensemble.
+
+00:00:32.140 --> 00:00:34.440
+Ce qu'est réellement un incident en 20 mots ?
+
+00:00:34.440 --> 00:00:36.280
+Alors qu'est-ce qu'un incident exactement ?
+
+00:00:36.280 --> 00:00:44.760
+Un incident est un enregistrement unique pour un problème client nécessitant une réponse ou une solution, qu'il s'agisse d'un produit endommagé, d'une question de facturation, d'un problème de connexion ou d'une demande d'aide sur un service.
+
+00:00:45.400 --> 00:00:48.600
+Voici le principe, un seul client peut avoir plusieurs incidents en même temps.
+
+00:00:48.600 --> 00:00:54.380
+Un même client pourrait poser une question sur une facture le lundi, signaler une panne d'appareil le mardi et avoir besoin d'aide pour changer d'adresse le vendredi.
+
+00:00:54.980 --> 00:01:01.440
+Ce sont des problèmes distincts, donc Dynamics 365 les conserve dans des enregistrements d'incidents séparés, au lieu d'empiler chaque conversation dans un fil de discussion confus.
+
+00:01:02.260 --> 00:01:04.520
+Lorsqu'un agent crée un incident, il le lit directement au client.
+
+00:01:05.400 --> 00:01:10.020
+Ce client peut être un contact, c'est-à-dire une personne physique, ou un compte, c'est-à-dire l'entreprise pour laquelle il travaille.
+
+00:01:10.780 --> 00:01:15.240
+Ainsi, si Jamie de Northwind Trader signale un problème, l'incident peut pointer à la fois vers Jamie et l'entreprise,
+
+00:01:15.240 --> 00:01:19.380
+et qui concouvre l'enregistrement peut voir qui a besoin d'aide et à quelle organisation le problème appartient.
+
+00:01:20.560 --> 00:01:22.740
+L'incident nécessite également une description claire du problème.
+
+00:01:23.040 --> 00:01:26.780
+Commençant généralement par un titre comme Cam, notre imprimante s'arrête après la mise à jour à Yukaga,
+
+00:01:27.020 --> 00:01:30.180
+où client facturé deux fois pour le forfait annuel à Yukaga,
+
+00:01:30.520 --> 00:01:35.440
+ce qui aide à parcourir une liste d'incidents ouverts sans ouvrir chaque enregistrement, sans ouvrir chaque enregistrement.
+
+00:01:35.900 --> 00:01:37.480
+Sous ce titre, l'agent ajoute les détails.
+
+00:01:37.820 --> 00:01:38.480
+Qu'est-ce qui est passé ?
+
+00:01:38.480 --> 00:01:39.480
+Quand cela a-t-il commencé ?
+
+00:01:39.480 --> 00:01:41.020
+Qu'est-ce que le client a déjà essayé ?
+
+00:01:41.020 --> 00:01:42.200
+Quel produit est concerné ?
+
+00:01:42.200 --> 00:01:44.240
+S'agit-il d'une question, d'une demande ou d'une défaillance ?
+
+00:01:44.240 --> 00:01:48.260
+Ces détails transforment un message vague en une tâche que quelqu'un peut prendre en main et résoudre.
+
+00:01:48.880 --> 00:01:49.960
+Analysons cela plus en détail.
+
+00:01:50.580 --> 00:01:53.360
+Un incident peut comporter un sujet, un produit, une priorité et un type d'incident.
+
+00:01:54.360 --> 00:01:58.580
+L'objet classe le problème dans un domaine comme la facturation ou le support technique que le produit identifie,
+
+00:01:58.580 --> 00:02:02.800
+ce que le client utilise, la priorité, indique à l'équipe la rapidité d'intervention et le type de ticket,
+
+00:02:03.320 --> 00:02:05.820
+offre une autre manière de trier le travail selon le processus de support.
+
+00:02:07.400 --> 00:02:09.560
+Aucun de ces champs ne résout le problème du client à lui seul,
+
+00:02:09.560 --> 00:02:11.740
+mais ils aident l'équipe de support à y voir plus clair,
+
+00:02:11.880 --> 00:02:15.260
+surtout lorsque des centaines de dossiers arrivent de différents clients.
+
+00:02:16.280 --> 00:02:20.880
+Une équipe traitant une panne de service grave ne devrait pas avoir à chercher parmi des questions générales pour la trouver.
+
+00:02:21.520 --> 00:02:24.400
+Un dossier n'est pas juste un formulaire que l'on remplit et que l'on oublie.
+
+00:02:25.140 --> 00:02:27.080
+Il devient le registre de travail pour toute la conversation.
+
+00:02:27.820 --> 00:02:29.120
+Les emails peuvent être liés au dossier.
+
+00:02:29.420 --> 00:02:30.640
+Les appels téléphoniques y figurer,
+
+00:02:30.640 --> 00:02:32.580
+et un agent peut ajouter des notes après un chat,
+
+00:02:32.820 --> 00:02:35.060
+définir une tâche de suivi ou enregistrer un rendez-vous.
+
+00:02:36.080 --> 00:02:38.240
+Chaque activité reste associée au même problème client,
+
+00:02:38.780 --> 00:02:41.640
+afin que la personne suivante n'ait pas à reconstruire l'historique depuis le début.
+
+00:02:42.740 --> 00:02:44.280
+Imaginez qu'un agent commence son travail le matin,
+
+00:02:44.400 --> 00:02:46.460
+puis transmette le dossier à un spécialiste produit après le déjeuner.
+
+00:02:47.500 --> 00:02:50.020
+Sans dossier, le spécialiste pourrait recevoir un court message du type
+
+00:02:50.020 --> 00:02:51.420
+« Oh, peux-tu regarder ça ? »
+
+00:02:51.420 --> 00:02:54.420
+« Oh, ce qui est insuffisant. »
+
+00:02:54.420 --> 00:02:55.940
+Avec le dossier, il peut voir le problème initial,
+
+00:02:56.040 --> 00:02:57.660
+les détails du client, ce qui s'est passé pendant l'appel
+
+00:02:57.660 --> 00:02:59.660
+et ce que le premier agent a déjà vérifié.
+
+00:03:00.540 --> 00:03:01.760
+Cela offre un transfert bien meilleur.
+
+00:03:02.700 --> 00:03:05.100
+Dynamics 365 maintient le dossier dans un état clair
+
+00:03:05.100 --> 00:03:06.760
+à mesure qu'il progresse dans le processus de support.
+
+00:03:07.480 --> 00:03:09.000
+Il peut rester actif pendant que l'équipe enquête,
+
+00:03:09.180 --> 00:03:11.420
+et une fois, le problème résolu ou la réponse finale donnée,
+
+00:03:11.640 --> 00:03:12.740
+l'équipe, le clôture.
+
+00:03:13.640 --> 00:03:15.360
+Si la demande ne nécessite plus de travail, par exemple,
+
+00:03:15.660 --> 00:03:17.480
+s'il s'agit d'une erreur ou si le client sait désister,
+
+00:03:17.680 --> 00:03:19.020
+l'équipe peut l'annuler.
+
+00:03:19.920 --> 00:03:21.200
+Actif, résolu et annulé.
+
+00:03:22.240 --> 00:03:24.480
+Ces trois états donnent à l'équipe une vision commune
+
+00:03:24.480 --> 00:03:25.720
+de l'avancement de chaque problème,
+
+00:03:25.720 --> 00:03:28.780
+évitant ainsi les devinettes sur l'urgence d'un dossier
+
+00:03:28.780 --> 00:03:32.740
+et empêchant les managers de traiter d'anciens travaux
+
+00:03:32.740 --> 00:03:34.300
+comme de nouveaux problèmes clients.
+
+00:03:35.980 --> 00:03:37.620
+Un seul enregistrement vous donne le contrôle
+
+00:03:37.620 --> 00:03:39.700
+et l'historique client complet donne du contexte à l'agent.
+
+00:03:41.000 --> 00:03:42.540
+L'histoire du client derrière le dossier.
+
+00:03:43.540 --> 00:03:44.820
+Un dossier vous indique ce qui doit être épaque.
+
+00:03:45.340 --> 00:03:46.820
+La fiche client vous indique ce qui a mené à ce moment.
+
+00:03:48.180 --> 00:03:51.100
+Lorsqu'un agent ouvre un dossier dans Dynamics 365 Customer Service,
+
+00:03:51.220 --> 00:03:52.880
+il peut regarder au-delà du dernier message.
+
+00:03:52.880 --> 00:03:55.900
+Il voit la situation dans son ensemble, les dossiers précédents,
+
+00:03:56.100 --> 00:03:58.720
+les anciens e-mails, les produits liés au client et son historique de support.
+
+00:03:59.360 --> 00:04:00.680
+Le contexte change la conversation.
+
+00:04:01.640 --> 00:04:03.120
+Pourquoi le contexte est-il important ?
+
+00:04:03.120 --> 00:04:04.800
+Imaginez qu'un client signale une panne d'appareil.
+
+00:04:05.460 --> 00:04:06.840
+Si l'agent ne voit que le message d'aujourd'hui,
+
+00:04:06.920 --> 00:04:08.660
+il risque de poser des questions élémentaires.
+
+00:04:09.620 --> 00:04:10.440
+Quel est le modèle ?
+
+00:04:10.440 --> 00:04:11.360
+Quand cela a-t-il commencé ?
+
+00:04:11.360 --> 00:04:12.840
+L'avez-vous redémarré ?
+
+00:04:12.840 --> 00:04:15.200
+Pourtant, le client a déjà contacté le support deux fois cette semaine.
+
+00:04:15.700 --> 00:04:17.300
+Le premier agent a envoyé des étapes de dépannage,
+
+00:04:17.400 --> 00:04:18.700
+le second a prévu une pièce de rechange.
+
+00:04:18.700 --> 00:04:22.440
+Un troisième agent qui connaît cet historique ne demandera pas au client de tout recommencer.
+
+00:04:22.980 --> 00:04:23.580
+Au lieu de cela, il dira
+
+00:04:23.580 --> 00:04:27.320
+« Je vois que vous avez déjà essayé ces étapes et que la pièce de rechange n'a rien changé. »
+
+00:04:27.320 --> 00:04:28.060
+Passons à l'étape suivante.
+
+00:04:28.420 --> 00:04:31.660
+C'est très différent de « Pouvez-vous m'expliquer à nouveau le problème ? »
+
+00:04:31.660 --> 00:04:33.700
+On appelle souvent cela une vision client à 360 degrés.
+
+00:04:35.260 --> 00:04:36.540
+Le nom semble sophistiqué, mais c'est simple.
+
+00:04:37.020 --> 00:04:39.180
+Cela signifie que l'agent voit le client sous plusieurs angles
+
+00:04:39.180 --> 00:04:40.800
+et non plus via un message isolé.
+
+00:04:41.740 --> 00:04:44.760
+L'agent voit la personne, l'entreprise, les demandes de support antérieures,
+
+00:04:44.900 --> 00:04:47.140
+les conversations précédentes et les produits associés.
+
+00:04:47.140 --> 00:04:50.340
+Pour une équipe de support, cela remplace les suppositions par un point de départ clair.
+
+00:04:51.040 --> 00:04:53.020
+Tous les clients ne bénéficient pas du même type de support.
+
+00:04:53.660 --> 00:04:55.220
+Un client peut avoir souscrit une garantie,
+
+00:04:55.580 --> 00:04:57.880
+son entreprise peut payer un nombre d'heures de support défini,
+
+00:04:58.440 --> 00:05:00.540
+ou il peut avoir un contrat limitant le nombre d'incidents
+
+00:05:00.540 --> 00:05:02.600
+ou un support premium plus rapide.
+
+00:05:03.600 --> 00:05:06.000
+Dynamics 365 suit tout cela grâce au droit de support.
+
+00:05:07.040 --> 00:05:10.160
+Un droit de support est l'accord de service client enregistré dans le système.
+
+00:05:10.960 --> 00:05:12.940
+Considérez cela comme les conditions de service liées à leur compte.
+
+00:05:13.520 --> 00:05:15.400
+Avant qu'un agent ne promette l'intervention d'un ingénieur
+
+00:05:15.400 --> 00:05:18.280
+ou ne commence un travail facturable, il vérifie le support applicable.
+
+00:05:19.280 --> 00:05:20.420
+Cela évite les surprises désagréées.
+
+00:05:20.660 --> 00:05:23.800
+Par exemple, un client peut encore être couvert par une garantie pour un produit défectueur.
+
+00:05:24.180 --> 00:05:25.400
+L'incident peut suivre cette procédure.
+
+00:05:25.920 --> 00:05:27.940
+Un autre client peut avoir épuisé toutes ses heures de support.
+
+00:05:28.400 --> 00:05:30.820
+L'agent le voit avant de s'engager sur un travail hors contrat.
+
+00:05:31.340 --> 00:05:33.600
+Cela aide également l'équipe de support à traiter les clients équitablement.
+
+00:05:33.880 --> 00:05:36.680
+L'agent n'a pas besoin de chercher d'un ancien contrat ou d'interroger un autre service.
+
+00:05:37.180 --> 00:05:40.400
+Les conditions de support sont stockées avec les informations clients là où l'agent peut les trouver.
+
+00:05:40.860 --> 00:05:41.840
+Ensuite, il y a la base de connaissances.
+
+00:05:41.840 --> 00:05:44.200
+Les équipes de support résolvent les mêmes problèmes encore et encore.
+
+00:05:44.980 --> 00:05:46.700
+Réinitialisation de mot de passe, instruction d'installation,
+
+00:05:46.900 --> 00:05:49.680
+erreur connue après mise à jour, question de facturation avec une réponse type
+
+00:05:49.680 --> 00:05:51.960
+Un article de connaissance stocke cette réponse en insolent.
+
+00:05:52.660 --> 00:05:55.760
+Dans l'espace de travail de service, un agent peut rechercher des articles tout en traitant un incident.
+
+00:05:56.500 --> 00:05:58.880
+Un article peut inclure une explication simple, des étapes,
+
+00:05:59.140 --> 00:06:01.620
+une capture d'écran ou les vérifications précises à effectuer.
+
+00:06:02.100 --> 00:06:04.200
+Au lieu que chaque agent rédige sa propre version de mémoire,
+
+00:06:04.380 --> 00:06:06.880
+ils utilisent une réponse partagée et validée par l'équipe.
+
+00:06:07.460 --> 00:06:08.520
+Cela garantit la cohérence du support.
+
+00:06:08.940 --> 00:06:10.140
+Cela aide aussi les agents les plus récents.
+
+00:06:10.140 --> 00:06:13.340
+Ils n'ont pas besoin de plusieurs années d'expérience pour bien gérer les problèmes courants,
+
+00:06:13.680 --> 00:06:16.120
+car les solutions connues de l'équipe sont disponibles quand ils en ont besoin.
+
+00:06:16.620 --> 00:06:18.980
+Les résumés de dossiers de Copilot aident à résoudre un autre problème courant,
+
+00:06:19.080 --> 00:06:19.960
+les historiques de dossiers trop long.
+
+00:06:20.280 --> 00:06:23.040
+Un dossier peut accumuler de nombreux emails, notes et mises à jour au fil du temps.
+
+00:06:23.560 --> 00:06:25.520
+Tout lire prend du temps, surtout après un transfert de dossier.
+
+00:06:26.080 --> 00:06:29.240
+Copilot crée un court résumé qui rassemble le titre, le client, l'objet, le produit,
+
+00:06:29.460 --> 00:06:32.600
+la priorité, le type de dossier, la description et l'activité récente.
+
+00:06:33.540 --> 00:06:35.520
+C'est un résumé rapide avant que l'agent ne commence à travailler.
+
+00:06:36.000 --> 00:06:38.100
+L'agent vérifie toujours l'enregistrement et utilise son jugement.
+
+00:06:38.100 --> 00:06:40.040
+Mais il comprend la situation plus rapidement.
+
+00:06:40.820 --> 00:06:43.860
+Cela aide lorsque le client attend et que le dossier est passé entre plusieurs mains.
+
+00:06:44.900 --> 00:06:48.400
+Une fois que l'agent comprend le client et le problème, le dossier doit atteindre la bonne personne.
+
+00:06:50.950 --> 00:06:52.230
+De la réception à la bonne file d'attente.
+
+00:06:52.810 --> 00:06:54.470
+Un client peut demander de l'aide de nombreuses manières.
+
+00:06:54.770 --> 00:06:57.430
+Email, appel téléphonique, chat, réseaux sociaux, portail libre-service.
+
+00:06:58.130 --> 00:07:01.470
+Le canal change, mais l'équipe de support a toujours besoin d'un lieu unique et clair pour gérer la demande.
+
+00:07:02.330 --> 00:07:04.970
+Dynamics 365 peut créer des dossiers à partir de ces conversations
+
+00:07:04.970 --> 00:07:07.470
+lorsque la configuration inclut des règles de création d'enregistrement.
+
+00:07:08.370 --> 00:07:10.690
+Pensez à un email arrivant à une adresse de support partagée.
+
+00:07:11.330 --> 00:07:13.670
+Au lieu de le laisser dans une boîte de réception jusqu'à ce que quelqu'un le remarque,
+
+00:07:13.790 --> 00:07:15.290
+une règle transforme cet email en dossier.
+
+00:07:15.970 --> 00:07:18.310
+Le message devient le point de départ du travail au sein du service client.
+
+00:07:18.810 --> 00:07:19.950
+Cela réduit le travail de copie manuelle.
+
+00:07:20.570 --> 00:07:22.590
+Le même principe s'applique aux autres canaux connectés.
+
+00:07:23.230 --> 00:07:26.770
+L'équipe choisit quel message crée un nouveau dossier et lesquels appartiennent à un dossier existant.
+
+00:07:27.550 --> 00:07:29.550
+Une réponse à un problème ouvert reste associée à ce problème.
+
+00:07:29.910 --> 00:07:31.310
+Une nouvelle question donne lieu à son propre dossier.
+
+00:07:31.310 --> 00:07:33.710
+Ensuite, le dossier a besoin d'un lieu d'accueil en attendant qu'un responsable le prenne.
+
+00:07:33.910 --> 00:07:35.110
+Ce lieu d'accueil est souvent une file d'attente.
+
+00:07:35.290 --> 00:07:37.190
+Une file d'attente est un espace de travail partagé pour unique.
+
+00:07:37.530 --> 00:07:39.050
+Ce n'est pas la boîte de réception d'un seul agent,
+
+00:07:39.210 --> 00:07:41.130
+et cela n'appartient pas à la personne qui a vu la demande.
+
+00:07:41.530 --> 00:07:44.330
+Au contraire, cela donne à toute l'équipe un endroit pour voir le travail en attente d'attention.
+
+00:07:44.910 --> 00:07:46.670
+Imaginez une entreprise avec une équipe de facturation,
+
+00:07:46.810 --> 00:07:48.430
+une équipe de support technique et une équipe de retour.
+
+00:07:49.070 --> 00:07:50.130
+Chaque équipe a sa propre l'attente.
+
+00:07:50.550 --> 00:07:52.250
+Les questions de facturation, voire la facturation,
+
+00:07:52.370 --> 00:07:53.630
+les défauts de produits au support technique,
+
+00:07:54.310 --> 00:07:56.410
+les demandes de retour aux personnes connaissant le processus.
+
+00:07:56.410 --> 00:07:58.050
+Cela semble simple parce que ça l'est.
+
+00:07:58.750 --> 00:08:01.330
+Un tri clair évite aux personnes de se renvoyer le travail à l'aveugle.
+
+00:08:01.870 --> 00:08:03.150
+Les règles d'acheminement aident à ce tri.
+
+00:08:03.490 --> 00:08:05.330
+Une règle d'acheminement vérifie les détails d'un dossier
+
+00:08:05.330 --> 00:08:07.250
+et l'envoie à la bonne file d'attente ou à la bonne personne.
+
+00:08:08.030 --> 00:08:10.250
+Un dossier sur un produit spécifique va à l'équipe produit.
+
+00:08:10.850 --> 00:08:12.910
+Un dossier provenant d'une certaine région va au support local.
+
+00:08:13.330 --> 00:08:14.990
+Un problème grave va dans une file d'attente urgent.
+
+00:08:15.370 --> 00:08:16.950
+Une question générale attend avec l'équipe standard.
+
+00:08:17.630 --> 00:08:19.790
+Certaines organisations répartissent le travail en fonction des compétences.
+
+00:08:20.110 --> 00:08:22.890
+Par exemple, un client écrivant en français a besoin d'un agent qui parle français.
+
+00:08:23.290 --> 00:08:25.650
+Un problème technique nécessite quelqu'un formé sur un produit spécifique.
+
+00:08:25.650 --> 00:08:28.470
+Le routage rapproche le dossier de la personne capable de le résoudre
+
+00:08:28.470 --> 00:08:30.110
+plutôt que de traiter chaque demande de la même manière.
+
+00:08:30.690 --> 00:08:32.670
+L'automatisation aide, mais les décisions restent humaines.
+
+00:08:33.110 --> 00:08:34.810
+Un chef d'équipe peut examiner un dossier difficile
+
+00:08:34.810 --> 00:08:36.450
+et l'attribuer directement à un agent expérimental.
+
+00:08:36.830 --> 00:08:38.210
+Peut-être que quelqu'un connaît déjà le client.
+
+00:08:38.830 --> 00:08:40.290
+Peut-être que le problème concerne plusieurs produits
+
+00:08:40.290 --> 00:08:42.070
+et nécessite une expérience qu'une règle ne peut évaluer.
+
+00:08:42.690 --> 00:08:45.150
+L'attribution manuelle laisse à l'équipe la place pour ce choix humain.
+
+00:08:45.590 --> 00:08:46.970
+La responsabilité d'un dossier en cours de roue.
+
+00:08:47.370 --> 00:08:48.610
+Un agent peut avoir de plus d'informations
+
+00:08:48.610 --> 00:08:49.870
+et renvoyer le dossier dans une file d'attente.
+
+00:08:50.630 --> 00:08:52.870
+Une équipe peut découvrir que le problème relève d'un autre service.
+
+00:08:52.870 --> 00:08:54.850
+Une demande urgente peut nécessiter une escalade
+
+00:08:54.850 --> 00:08:56.410
+si l'équipe habituelle ne peut pas la résoudre.
+
+00:08:57.550 --> 00:08:59.690
+Dynamics 365 permet de faire avancer le travail
+
+00:08:59.690 --> 00:09:01.090
+au lieu de le laisser bloquer entre les mains de quelqu'un.
+
+00:09:01.770 --> 00:09:04.170
+Parfois, un seul problème crée de nombreux dossiers.
+
+00:09:04.870 --> 00:09:06.850
+Imaginez une panne logicielle affectant des dizaines de clients.
+
+00:09:07.570 --> 00:09:09.050
+Chaque client contacte le support séparément,
+
+00:09:09.250 --> 00:09:10.730
+donc chaque signalement nécessite son propre dossier.
+
+00:09:11.250 --> 00:09:12.870
+Mais tous ces signalements sont liés à un problème plus vaste.
+
+00:09:13.870 --> 00:09:15.390
+Un dossier parent suit ce problème global,
+
+00:09:15.530 --> 00:09:16.650
+tandis que des dossiers enfants suivent
+
+00:09:16.650 --> 00:09:18.250
+les signalements individuels des clients en dessous.
+
+00:09:19.030 --> 00:09:20.730
+Cela donne à l'équipe de support deux visions simultaines.
+
+00:09:20.730 --> 00:09:23.030
+Ils travaillent sur la panne sous-jacente via le dossier parent,
+
+00:09:23.370 --> 00:09:25.510
+tout en informant chaque client via son dossier enfant.
+
+00:09:26.350 --> 00:09:27.210
+Lorsqu'ils trouvent la solution
+
+00:09:27.210 --> 00:09:29.510
+et n'ont pas à étudier la même panne de zéro pour chaque appelant,
+
+00:09:30.170 --> 00:09:32.470
+les dossiers en doublon créent un problème similaire à plus petite échelle.
+
+00:09:33.010 --> 00:09:35.190
+Un client peut envoyer un email et appeler pour le même problème,
+
+00:09:35.490 --> 00:09:37.870
+ou deux agents peuvent ouvrir des dossiers avant de remarquer l'autre.
+
+00:09:38.550 --> 00:09:39.510
+Au lieu de diviser les efforts,
+
+00:09:39.850 --> 00:09:41.330
+l'équipe peut fusionner les dossiers similaires.
+
+00:09:42.070 --> 00:09:43.490
+Un dossier devient l'enregistrement principal
+
+00:09:43.490 --> 00:09:44.650
+et le travail reste centralisé.
+
+00:09:45.110 --> 00:09:46.830
+Personne ne devrait avoir à résoudre le même problème de fois.
+
+00:09:47.330 --> 00:09:48.850
+Transférez un dossier vers la bonne file d'attente
+
+00:09:48.850 --> 00:09:50.050
+et la bonne personne lance le travail.
+
+00:09:50.470 --> 00:09:52.250
+Et le client attend une réponse dans les délais promis.
+
+00:09:53.950 --> 00:09:56.110
+Tenir ses promesses avec les SLA et le travail guidé.
+
+00:09:57.410 --> 00:09:59.410
+Transférer un dossier à la bonne personne n'est que la moitié du travail,
+
+00:09:59.590 --> 00:10:01.350
+car le client attend également de l'aide dans les délais promis.
+
+00:10:02.070 --> 00:10:03.670
+C'est là qu'intervient l'accord de niveau de service,
+
+00:10:03.750 --> 00:10:04.770
+que j'appellerais SLA.
+
+00:10:06.090 --> 00:10:07.990
+Un SLA ajoute un chronomètre au dossier,
+
+00:10:08.150 --> 00:10:09.910
+afin que l'équipe sache exactement combien de temps elle a
+
+00:10:09.910 --> 00:10:10.870
+pour honorer une promesse client,
+
+00:10:11.070 --> 00:10:13.550
+qu'il s'agisse d'une première réponse ou d'une résolution complète.
+
+00:10:14.430 --> 00:10:15.390
+Mais ici l'autonomie est importante.
+
+00:10:16.090 --> 00:10:17.370
+Il ne s'agit pas toujours de la même échéance.
+
+00:10:17.370 --> 00:10:20.130
+Prenez un client qui attend un accusé de réception dans l'heure,
+
+00:10:20.230 --> 00:10:22.010
+même si l'équipe technique a besoin de deux jours ouvrés
+
+00:10:22.010 --> 00:10:23.690
+pour trouver et tester la solution.
+
+00:10:24.730 --> 00:10:27.870
+Dynamics 365 suit séparément l'objectif de première réponse
+
+00:10:27.870 --> 00:10:28.910
+et l'objectif de résolution,
+
+00:10:29.370 --> 00:10:30.710
+afin que l'équipe puisse agir rapidement
+
+00:10:30.710 --> 00:10:32.770
+sans prétendre que tout problème peut être réglé instantanément.
+
+00:10:33.330 --> 00:10:35.170
+Imaginons maintenant un client dont le service ne fonctionne plus.
+
+00:10:35.890 --> 00:10:38.330
+Il ne s'attend pas à une réparation complète en 10 minutes,
+
+00:10:38.450 --> 00:10:40.570
+mais il attend que quelqu'un confirme que le problème est identifié,
+
+00:10:40.850 --> 00:10:42.610
+explique la suite et le tienne informé.
+
+00:10:43.170 --> 00:10:44.950
+L'objectif de première réponse suit ce premier contact,
+
+00:10:44.950 --> 00:10:46.970
+indique que l'objectif de résolution suit tout le processus
+
+00:10:46.970 --> 00:10:48.430
+jusqu'à une réponse ou une réparation.
+
+00:10:48.970 --> 00:10:50.670
+Et différents clients peuvent bénéficier de différents engagements.
+
+00:10:51.190 --> 00:10:52.350
+Une entreprise avec un support premium
+
+00:10:52.350 --> 00:10:54.170
+bénéficie d'objectifs de réponse plus rapides qu'un client
+
+00:10:54.170 --> 00:10:54.910
+avec un forfait standard.
+
+00:10:55.970 --> 00:10:58.770
+Une panne prioritaire a une échéance plus courte
+
+00:10:58.770 --> 00:10:59.710
+une question de routine.
+
+00:11:00.810 --> 00:11:02.570
+Les contrats de support, la priorité et le type de dossier
+
+00:11:02.570 --> 00:11:03.850
+définissent les règles de temps applicables.
+
+00:11:04.310 --> 00:11:05.950
+Cela permet de maintenir des engagements justes et clairs.
+
+00:11:06.290 --> 00:11:08.050
+Sans SLA, un agent pourrait traiter la liste
+
+00:11:08.050 --> 00:11:08.990
+du plus ancien au plus récent
+
+00:11:08.990 --> 00:11:11.350
+alors qu'un dossier urgent dépasse silencieusement son échéance.
+
+00:11:11.350 --> 00:11:14.530
+Avec les SLA, l'écran du dossier affiche des indicateurs temporels
+
+00:11:14.530 --> 00:11:16.950
+qui indiquent à l'agent quel engagement nécessite une attention prioritaire.
+
+00:11:17.590 --> 00:11:18.470
+Ainsi, vous verrez, la pression monte.
+
+00:11:18.950 --> 00:11:20.790
+Un dossier avec beaucoup de temps devant lui demande du travail,
+
+00:11:20.970 --> 00:11:22.410
+mais un dossier proche de son échéance de réponse
+
+00:11:22.410 --> 00:11:23.650
+demande une attention immédiate.
+
+00:11:24.610 --> 00:11:26.230
+Les équipes peuvent également définir des alertes
+
+00:11:26.230 --> 00:11:28.330
+ou des étapes d'escalade lorsqu'une cible est proche ou dépassée
+
+00:11:28.330 --> 00:11:29.830
+afin qu'un superviseur puisse intervenir,
+
+00:11:29.890 --> 00:11:31.630
+puisse intervenir avant que le client ne doive relancer l'équipe.
+
+00:11:32.150 --> 00:11:33.510
+Les objectifs de temps guident l'urgence
+
+00:11:33.510 --> 00:11:35.790
+et les flux de processus métier guident le travail lui-même.
+
+00:11:36.490 --> 00:11:39.330
+Flux de processus métier est un ensemble d'étapes affichées dans le dossier.
+
+00:11:39.330 --> 00:11:41.330
+Il donne à l'agent un chemin clair à suivre,
+
+00:11:41.450 --> 00:11:43.850
+basé sur la manière dont l'organisation souhaite que les dossiers soient traités.
+
+00:11:44.510 --> 00:11:46.330
+Les étapes peuvent aller de la réception à l'investigation,
+
+00:11:46.470 --> 00:11:49.410
+puis à la résolution, avec les bonnes questions et vérifications à chaque point.
+
+00:11:49.810 --> 00:11:52.230
+Voyez cela comme une liste de contrôle avec une place définie dans le processus.
+
+00:11:52.430 --> 00:11:54.670
+Un nouvel agent n'a pas à deviner quels détails sont importants
+
+00:11:54.670 --> 00:11:56.150
+avant d'envoyer un dossier à un spécialiste.
+
+00:11:56.770 --> 00:11:58.970
+Le flux peut demander le produit, le type de problème, l'impact
+
+00:11:58.970 --> 00:12:00.950
+et d'autres informations dont l'équipe suivante a besoin.
+
+00:12:01.650 --> 00:12:03.510
+Un agent plus expérimenté peut avancer plus vite,
+
+00:12:03.510 --> 00:12:06.010
+mais le chemin commun permet à l'équipe de travailler dans la même direction.
+
+00:12:06.590 --> 00:12:07.290
+Voici un scénario.
+
+00:12:07.670 --> 00:12:09.150
+Une panne de service prioritaire survient.
+
+00:12:09.890 --> 00:12:11.450
+Le dossier entre dans la file d'attente urgente
+
+00:12:11.450 --> 00:12:12.750
+et son SLA commence à décompter.
+
+00:12:13.630 --> 00:12:16.110
+L'agent confirme les détails du client, enregistre l'impact
+
+00:12:16.110 --> 00:12:18.670
+et envoie la première réponse avant que l'objectif de réponse n'expire.
+
+00:12:19.910 --> 00:12:22.750
+Ensuite, le flux de processus déplace le dossier vers le diagnostic,
+
+00:12:23.170 --> 00:12:25.630
+où l'équipe rassemble le détail de l'erreur et vérifie les rapports associés.
+
+00:12:26.110 --> 00:12:28.610
+Le dossier passe ensuite à la résolution lorsque l'équipe identifie la cause
+
+00:12:28.610 --> 00:12:30.650
+et prépare une mise à jour pour le client, pour le client.
+
+00:12:30.810 --> 00:12:33.510
+Cette séquence offre également aux responsables une vision plus claire.
+
+00:12:33.930 --> 00:12:35.850
+Ils peuvent voir où le dossier ralentit, que ce soit lors de la réception,
+
+00:12:36.210 --> 00:12:37.830
+du diagnostic ou de la réponse finale au client.
+
+00:12:37.830 --> 00:12:40.090
+Ce flux ne résout pas le problème pour l'équipe,
+
+00:12:40.170 --> 00:12:42.990
+mais il évite que les étapes de base ne passent à la trappe lors d'une journée chargée.
+
+00:12:43.570 --> 00:12:46.030
+Dynamics 365 peut également contrôler les changements de statut
+
+00:12:46.030 --> 00:12:47.710
+que les agents peuvent choisir à différents moments.
+
+00:12:48.370 --> 00:12:50.090
+C'est ce qu'on appelle les transitions de motifs de statut,
+
+00:12:50.330 --> 00:12:50.850
+un terme technique.
+
+00:12:50.850 --> 00:12:52.390
+Mais l'idée est simple.
+
+00:12:53.130 --> 00:12:54.830
+Un dossier doit progresser à travers des étapes logiques.
+
+00:12:55.230 --> 00:12:57.130
+Vous ne voulez pas que quelqu'un marque un dossier comme résolu,
+
+00:12:57.390 --> 00:12:59.130
+alors qu'il attend encore une vérification interne,
+
+00:12:59.430 --> 00:13:02.150
+ou qu'il passe d'un nouveau dossier à annuler, sans motif.
+
+00:13:02.890 --> 00:13:05.090
+Les choix autorisés peuvent évoluer au fur et à mesure que le dossier avance.
+
+00:13:05.730 --> 00:13:07.910
+Par exemple, un dossier en cours d'investigation peut permettre à un agent
+
+00:13:07.910 --> 00:13:09.670
+de le mettre en attente pour obtenir des détails du client.
+
+00:13:10.530 --> 00:13:13.290
+Une fois que le client a répondu, l'agent peut reprendre le travail sur le dossier.
+
+00:13:13.710 --> 00:13:15.910
+Une fois le problème corrigé, le dossier peut passer à l'état résolu.
+
+00:13:16.270 --> 00:13:17.650
+Cela permet d'obtenir un historique de dossier plus.
+
+00:13:17.650 --> 00:13:19.590
+Une simple réponse ne suffit pas à clore le travail.
+
+00:13:19.930 --> 00:13:21.670
+L'équipe doit enregistrer la résolution du problème,
+
+00:13:21.830 --> 00:13:22.910
+puis fermer le dossier correctement.
+
+00:13:24.210 --> 00:13:25.610
+Résolution, apprentissage et meilleur service
+
+00:13:25.610 --> 00:13:28.830
+L'envoi d'une réponse ne ferme pas automatiquement un dossier.
+
+00:13:29.270 --> 00:13:31.850
+L'équipe doit noter la résolution, c'est-à-dire consigner ce qui a permis
+
+00:13:31.850 --> 00:13:33.850
+de régler le problème ou la réponse finale donnée au client.
+
+00:13:34.610 --> 00:13:36.350
+Il peut s'agir de l'envoi d'un appareil de remplacement,
+
+00:13:36.690 --> 00:13:37.790
+du remboursement d'un paiement en double,
+
+00:13:38.130 --> 00:13:39.950
+la modification d'un paramètre bloquant l'accès.
+
+00:13:41.010 --> 00:13:42.570
+Cette note est intégrée au dossier client
+
+00:13:42.570 --> 00:13:44.810
+et offre au prochain agent un point de départ utile
+
+00:13:44.810 --> 00:13:46.710
+si le client recontacte le support
+
+00:13:46.710 --> 00:13:48.050
+quelques mois plus tard.
+
+00:13:48.730 --> 00:13:50.150
+Parfois, la première solution ne fonctionne pas.
+
+00:13:50.410 --> 00:13:52.650
+Le client suit peut-être les instructions, mais l'erreur persiste.
+
+00:13:53.430 --> 00:13:54.510
+Peut-être qu'une pièce de rechange arrive,
+
+00:13:54.550 --> 00:13:55.390
+mais ne résout pas la panne.
+
+00:13:56.250 --> 00:13:58.310
+Dans cette situation, l'équipe peut rouvrir le dossier
+
+00:13:58.310 --> 00:13:59.490
+ou le replacer dans la file d'attente
+
+00:13:59.490 --> 00:14:02.190
+plutôt que de créer un nouvel enregistrement sans historique.
+
+00:14:03.310 --> 00:14:04.790
+Le dossier reprend là où l'équipe s'était arrêtée.
+
+00:14:05.330 --> 00:14:06.670
+C'est important lorsque le responsable du dossier change.
+
+00:14:06.930 --> 00:14:08.710
+Un nouvel agent peut voir ce que le précédent a tenté,
+
+00:14:08.710 --> 00:14:09.650
+ce que le client a confirmé,
+
+00:14:09.910 --> 00:14:11.110
+et ce qu'il reste à vérifier.
+
+00:14:11.970 --> 00:14:13.970
+Le client n'a pas besoin de tout réexpliquer depuis le début
+
+00:14:13.970 --> 00:14:15.890
+simplement parce qu'une nouvelle personne a repris le dossier.
+
+00:14:15.890 --> 00:14:18.850
+Avec le temps, tous ces dossiers révèlent à l'équipe de support
+
+00:14:18.850 --> 00:14:20.750
+ce qui se passe au-delà d'un seul problème client.
+
+00:14:21.550 --> 00:14:23.750
+Les responsables peuvent analyser le temps de résolution
+
+00:14:23.750 --> 00:14:26.330
+qui suit la durée entre l'ouverture et la fermeture des dossiers.
+
+00:14:27.010 --> 00:14:28.170
+Ils peuvent examiner la durée par étapes,
+
+00:14:28.270 --> 00:14:29.550
+ce qui montre où les dossiers passent le plus de temps.
+
+00:14:30.150 --> 00:14:32.150
+Ils peuvent aussi surveiller la résolution au premier contact,
+
+00:14:32.350 --> 00:14:33.890
+c'est-à-dire la fréquence à laquelle la première personne
+
+00:14:33.890 --> 00:14:36.170
+en contact avec le client résout le problème sans transfert.
+
+00:14:36.510 --> 00:14:37.650
+La charge de travail compte aussi.
+
+00:14:38.070 --> 00:14:39.790
+Si une file d'attente se remplit chaque lundi matin,
+
+00:14:39.890 --> 00:14:40.690
+l'équipe peut le constater.
+
+00:14:41.390 --> 00:14:43.790
+Si des dossiers techniques attendent des jours une vérification interne,
+
+00:14:43.950 --> 00:14:45.570
+ce délai apparaît dans les données des dossiers.
+
+00:14:46.250 --> 00:14:47.690
+Si une équipe clôture les dossiers rapidement
+
+00:14:47.690 --> 00:14:49.070
+mais que les clients les rouvrent constamment,
+
+00:14:49.470 --> 00:14:51.930
+l'équipe a une raison d'examiner la qualité de ses premières résolutions.
+
+00:14:52.970 --> 00:14:54.490
+Les chiffres n'expliquent pas tout à eux seuls.
+
+00:14:55.090 --> 00:14:56.930
+Ils indiquent à l'équipe les questions qui méritent d'être posées.
+
+00:14:57.670 --> 00:14:59.570
+Pourquoi les dossiers concernant un produit augmentent-ils ?
+
+00:14:59.570 --> 00:15:02.590
+Pourquoi un certain type de dossier prend-il plus de temps que prévu ?
+
+00:15:02.590 --> 00:15:04.550
+Pourquoi les agents cherchent-ils plusieurs fois la même réponse
+
+00:15:04.550 --> 00:15:07.230
+sans en trouver d'articles de connaissances utiles ?
+
+00:15:07.230 --> 00:15:08.990
+Les modèles transforment le travail de support quotidien
+
+00:15:08.990 --> 00:15:09.710
+en apprentissage pratique.
+
+00:15:10.230 --> 00:15:12.330
+Une hausse de dossiers similaires peut indiquer un défaut du produit.
+
+00:15:12.850 --> 00:15:14.930
+Cela peut montrer qu'une récente mise à jour a déconcerté les clients.
+
+00:15:14.930 --> 00:15:17.730
+Cela peut révéler qu'un guide d'instruction nécessite des étapes plus claires.
+
+00:15:18.330 --> 00:15:19.730
+Au lieu de traiter chaque demande comme isolée,
+
+00:15:19.890 --> 00:15:22.090
+l'équipe peut identifier la cause commune et s'y attaquer.
+
+00:15:22.730 --> 00:15:24.230
+Cela peut réduire le volume futur des dossiers.
+
+00:15:24.510 --> 00:15:25.930
+Les retours des clients font également partie de cette image.
+
+00:15:26.330 --> 00:15:29.010
+Un dossier clos peut montrer que l'équipe a atteint son objectif de réponse,
+
+00:15:29.350 --> 00:15:32.750
+mais le client peut rester frustré s'il a dû contacter le support trois fois fois.
+
+00:15:33.690 --> 00:15:35.310
+Examinez à la fois l'historique du dossier et les retours
+
+00:15:35.310 --> 00:15:37.150
+dans nos gestionnaires une vision plus complète de l'expérience.
+
+00:15:37.870 --> 00:15:39.830
+Certains clients préfèreraient éviter totalement de créer un dossier.
+
+00:15:40.170 --> 00:15:41.530
+C'est là qu'un portail en libre-service peut aider.
+
+00:15:41.530 --> 00:15:44.690
+Via un portail, les clients peuvent créer une demande, vérifier son statut,
+
+00:15:44.870 --> 00:15:47.350
+ajouter des informations ou lire des articles de support approuvés
+
+00:15:47.350 --> 00:15:49.250
+sans appeler l'équipe de support.
+
+00:15:50.030 --> 00:15:52.450
+Pour des questions simples, cela peut faire gagner du temps à tout le monde.
+
+00:15:53.170 --> 00:15:54.730
+Un client peut vérifier le statut d'une livraison
+
+00:15:54.730 --> 00:15:56.650
+ou suivre un guide d'installation quand cela lui convient.
+
+00:15:57.410 --> 00:15:59.170
+Pendant ce temps, les agents peuvent consacrer plus de temps
+
+00:15:59.170 --> 00:16:01.190
+aux problèmes nécessitant une investigation, une explication
+
+00:16:01.190 --> 00:16:02.650
+ou une explication ou une décision humaine.
+
+00:16:02.990 --> 00:16:05.610
+Dynamics 365 Customer Service peut également se connecter
+
+00:16:05.610 --> 00:16:07.750
+aux outils Microsoft familiers tout au long du processus de dossier.
+
+00:16:07.750 --> 00:16:09.930
+Un agent peut travailler avec ses emails via Outlook.
+
+00:16:10.450 --> 00:16:12.330
+Une équipe peut discuter d'un problème complexe dans Teams.
+
+00:16:13.010 --> 00:16:15.110
+Les documents et les informations partagées peuvent être stockés dans SharePoint.
+
+00:16:15.410 --> 00:16:17.970
+Power BI peut transformer les données de dossiers en rapports et tableaux de bord,
+
+00:16:18.110 --> 00:16:20.010
+tandis que les outils Power Platform peuvent prendre en charge
+
+00:16:20.010 --> 00:16:22.350
+des formulaires supplémentaires, des alertes ou des étapes automatisées
+
+00:16:22.350 --> 00:16:23.290
+autour du processus de l'équipe.
+
+00:16:23.830 --> 00:16:24.910
+Chaque outil a sa propre fonction.
+
+00:16:25.390 --> 00:16:27.810
+Le dossier reste l'endroit où le problème de support et son historique demeurent liés,
+
+00:16:27.810 --> 00:16:30.230
+même lorsque les utilisateurs emploient d'autres outils pour communiquer,
+
+00:16:30.350 --> 00:16:31.950
+partager des fichiers ou examiner le travail.
+
+00:16:31.950 --> 00:16:35.050
+La gestion de dossier ne consiste pas simplement à remplir un écran de ticket.
+
+00:16:35.610 --> 00:16:37.430
+Il s'agit d'offrir à chaque problème clé un parcours clair,
+
+00:16:37.510 --> 00:16:39.730
+une réponse enregistrée et une équipe capable d'apprendre de ce qui s'est passé.
+
+00:16:41.070 --> 00:16:41.430
+Conclusion
+
+00:16:41.430 --> 00:16:43.430
+Gardez l'histoire complète du client unifié.
+
+00:16:44.110 --> 00:16:45.250
+Voici donc l'essentiel à retenir.
+
+00:16:45.950 --> 00:16:47.990
+La gestion des dossiers dans Dynamics 365
+
+00:16:47.990 --> 00:16:50.070
+réunit le problème, le travail, les engagements
+
+00:16:50.070 --> 00:16:51.690
+et le résultat dans un seul enregistrement.
+
+00:16:52.130 --> 00:16:54.110
+Fini la perte de contexte ou les corrections répétées.
+
+00:16:54.350 --> 00:16:55.710
+Observez votre propre processus de support.
+
+00:16:56.110 --> 00:16:58.430
+Où disparaissent les informations des clients ?
+
+00:16:58.430 --> 00:17:00.270
+C'est là que tout centralisé change la donne.
+
+00:17:00.270 --> 00:17:02.930
+Abonnez-vous sur votre plateforme de podcast préférée
+
+00:17:02.930 --> 00:17:04.590
+pour plus de conseils Microsoft de ma part,
+
+00:17:04.670 --> 00:17:06.850
+Mirko Peters, sur m365.fm
+
+00:17:06.850 --> 00:17:09.770
+où nous expliquons simplement les outils Microsoft du quotidien.
+
+00:17:09.770 --> 00:17:12.430
+et vous abonnez-vous sur votre plateforme de podcast préférée
+
+00:17:12.430 --> 00:17:14.270
+et vous abonnez-vous sur votre plateforme de podcast préférée.

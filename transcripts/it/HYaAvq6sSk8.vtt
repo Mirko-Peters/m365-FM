@@ -1,0 +1,520 @@
+WEBVTT
+
+00:00:00.530 --> 00:00:06.790
+Pronto per dieci giorni di Microsoft 365, Copilot IA, Azure e le persone che plasmano il futuro del lavoro?
+
+00:00:07.870 --> 00:00:11.350
+Questo gennaio, M365 col ritorno e puntiamo ancora più.
+
+00:00:11.650 --> 00:00:18.090
+In alto, unisciti a noi per sessioni dal vivo, demo reali e conoscenze pratiche da MVP ed esperti del settore in tutto il mondo.
+
+00:00:18.830 --> 00:00:21.230
+Niente slide generiche, niente infiniti gerghi tecno.
+
+00:00:22.110 --> 00:00:23.410
+Affronteremo le sfide reali.
+
+00:00:23.750 --> 00:00:28.370
+Copilot Studio, agenti IA, Fabric, Sicurezza, Governance e Automazione.
+
+00:00:28.370 --> 00:00:34.370
+Che tu sia un professionista IT, uno sviluppatore o un leader aziendale, ci sono sessioni pensate per te.
+
+00:00:35.510 --> 00:00:40.130
+Con dieci giorni interi potrai esplorare molteplici tecnologie e connetterti con una community globale.
+
+00:00:41.050 --> 00:00:44.210
+Segui dal vivo e porta intuizioni pratiche nella tua organizzazione.
+
+00:00:45.170 --> 00:00:48.990
+Gennaio 2027, dieci giorni, unica community Microsoft.
+
+00:00:49.450 --> 00:00:50.530
+Le iscrizioni sono aperte.
+
+00:00:51.830 --> 00:00:55.650
+Vai su m365con.net e assicurati il tuo posto oggi stesso.
+
+00:00:55.650 --> 00:00:58.490
+m365con.net
+
+00:00:58.490 --> 00:01:03.750
+Scriviti ora su m365con.net, ci vediamo dal vivo.
+
+00:01:03.950 --> 00:01:04.530
+A gennaio!
+
+00:01:05.250 --> 00:01:09.650
+E se il motivo per cui la tua app dataversa rallenta drasticamente non fosse la dimensione dei dati, ma...
+
+00:01:10.450 --> 00:01:11.870
+come sono collegate le relazioni?
+
+00:01:12.910 --> 00:01:17.030
+Oggi analizzeremo il legame nascosto tra la progettazione dello schema e la reattività reale
+
+00:01:17.030 --> 00:01:23.530
+è perché molti creatori Power Platform si condannano inconsapevolmente a prestazioni scadenti fin dal primo giorno.
+
+00:01:24.910 --> 00:01:27.270
+Le trappole nascoste per le prestazioni nelle tue tabelle.
+
+00:01:28.030 --> 00:01:31.690
+Sei mai chiesto perché una tabella con poche migliaia di righe sembra più lenta di una con un milione?
+
+00:01:32.050 --> 00:01:32.630
+Con un milione.
+
+00:01:33.470 --> 00:01:38.610
+È uno di quei momenti in cui il tuo istinto ti dice che dovrebbe andare bene, ma dataverse sembra muoversi nel cemento fresco.
+
+00:01:38.610 --> 00:01:45.190
+La sorprendente verità è che non è la dimensione grezza a rallentare la tua app, ma il modo in cui la tabella è stata progettata fin dall'inizio.
+
+00:01:46.490 --> 00:01:51.610
+E quelle decisioni di design iniziano a causare problemi molto prima di raggiungere i limiti reali della piattaforma.
+
+00:01:52.250 --> 00:01:54.110
+Molti creatori danno la colpa a fattori esterni.
+
+00:01:54.290 --> 00:01:59.990
+Presumono che il loro tenant sia limitato la rete instabile, o che ci sia un collo di bottiglia nascosto nell'archiviazione del servizio.
+
+00:01:59.990 --> 00:02:14.190
+Ma in molti casi, quei moduli lenti, le ricerche in ritardo e i flussi Power Automate che vanno in timeout possono essere ricondotti a uno schema che sembrava perfetto nella fase di costruzione, ma era strutturato in modo da rallentare ogni singola query.
+
+00:02:14.990 --> 00:02:22.590
+Se un utente ti ha mai lamentato che dataverse è lento senza aggiungere dettagli, c'è una buona probabilità che il vero colpevole sia il layout della tua tabella.
+
+00:02:23.130 --> 00:02:24.330
+Pensalo come uno schedario.
+
+00:02:24.330 --> 00:02:31.870
+Se ogni cassetto è pieno di foglie e nulla è etichettato, non importa se ci sono solo 50 file all'interno, perderai comunque tempo a cercare.
+
+00:02:33.250 --> 00:02:34.750
+Una tabella dataverse funziona allo stesso modo.
+
+00:02:35.270 --> 00:02:41.330
+Gonfia di campi chiusi raramente, cuscita insieme e correlazioni inutili, può far rallentare anche le operazioni sui dati più semplici.
+
+00:02:42.070 --> 00:02:45.990
+E a differenza di un armadio in disordine, qui il caos non è immediatamente visibile a te o all'utente.
+
+00:02:46.850 --> 00:02:48.970
+L'unico sintomo è un crescente calo delle prestazioni.
+
+00:02:49.150 --> 00:02:54.270
+Ho visto progetti in cui lo schema delle tabelle sembrava una raccolta dei successi di ogni richiesta, di ogni stakeholder.
+
+00:02:55.090 --> 00:02:57.830
+Ah, serve un campo per le note interne in tre formati diversi.
+
+00:02:58.190 --> 00:02:58.450
+Fatto.
+
+00:02:58.930 --> 00:03:01.710
+Una dozzina di varianti della stessa ricerca nel caso servisse in futuro?
+
+00:03:02.510 --> 00:03:02.990
+Aggiungiamola.
+
+00:03:03.350 --> 00:03:05.110
+Nel tempo questi campi diventano solo zavorra.
+
+00:03:05.550 --> 00:03:11.830
+Vengono indicizzati inutilmente, rallentano inserimenti e aggiornamenti e appesantiscono l'interfaccia utente oltre il necessario.
+
+00:03:12.330 --> 00:03:18.590
+Un esempio reale riguardava una tabella clienti con più di 250 campi, la maggior parte dei quali esisteva solo per sicurezza.
+
+00:03:19.490 --> 00:03:23.870
+Il risultato, modulo che impiegava oltre 12 secondi per caricarsi su una connessione ad alta velocità.
+
+00:03:24.330 --> 00:03:26.050
+E questo prima ancora che entrassi in gioco all'automazione.
+
+00:03:26.530 --> 00:03:29.470
+La documentazione di Microsoft stessa chiarisce i compromessi nella normalizzazione.
+
+00:03:30.370 --> 00:03:34.490
+Secondo il manuale, suddivide le dati in molte tabelle correlate e più piccole protegge dalla ridondanza.
+
+00:03:35.530 --> 00:03:41.810
+In pratica, un'eccessiva normalizzazione può danneggiare le prestazioni di Dataverse se le operazioni comuni richiedono troppi join tra le tabelle.
+
+00:03:41.810 --> 00:03:45.010
+Ogni join è lavoro extra per il motore di query.
+
+00:03:46.010 --> 00:03:51.770
+E se hai colonne che cambiano, raramente archiviate in tabelle correlate e separate, paghi un costo di elaborazione senza alcun beneficio reale.
+
+00:03:53.090 --> 00:03:56.250
+Eliminare i campi non critici non è un lavoro entusiasmante, ma ripaga rapidamente.
+
+00:03:57.210 --> 00:04:00.930
+Identifica gli attributi non usati nei report che cambiano raramente o che duplicano informazioni altrove.
+
+00:04:02.630 --> 00:04:05.710
+Conserva solo ciò che serve a un processo attuale, non ciò che potrebbe servire un giorno.
+
+00:04:05.710 --> 00:04:07.570
+Lo stesso vale per la normalizzazione.
+
+00:04:07.890 --> 00:04:11.650
+Ora, vale la pena verificare dove puoi combinare dati correlati ma a bassa attività per ridurre i join.
+
+00:04:12.410 --> 00:04:18.290
+L'obiettivo non è abbandonare i buoni principi design, ma trovare un equilibrio tra teoria e il modo in cui l'app gira sottocarico.
+
+00:04:19.270 --> 00:04:23.330
+La realtà è che le prestazioni scalabili non si ottengono aggiungendo più risorse a Dataverse.
+
+00:04:24.250 --> 00:04:25.930
+Iniziano con uno scamo progettato per uno scopo.
+
+00:04:26.250 --> 00:04:33.130
+Le tabelle snelle vengono eseguite più velocemente, i moduli si caricano in modo prevedibile e l'automazione si attiva puntualmente anche quando l'ambiente cresce.
+
+00:04:33.130 --> 00:04:40.570
+Ogni campo non necessario o scelta di normalizzazione poco oculata aggiunge un po' di attrito a ogni query.
+
+00:04:41.570 --> 00:04:44.430
+Nel tempo quell'attrito si accumula diventando un ritardo evidente.
+
+00:04:44.770 --> 00:04:53.090
+Ora che il fattore disordine è emerso, la sfida successiva si nasconde nel modo in cui le tabelle interagiscono tra loro ed è qui che il design delle relazioni può determinare le prestazioni.
+
+00:04:54.910 --> 00:05:03.550
+Quando le relazioni diventano ostacole, alcune relazioni di Dataverse sono come incroci nell'ora di punta e tutto si blocca in un punto e l'intero flusso rallenta fino a trascinarsi.
+
+00:05:04.410 --> 00:05:12.370
+Sulla carta la struttura dei dati sembra pulita e logica, ma in pratica un singolo punto di join sovraccarico può mettere in ginocchio un'intera app basata su modelli.
+
+00:05:13.350 --> 00:05:17.730
+Non si tratta di dati errati o volumi enormi, ma di come le relazioni sono strutturate internamente.
+
+00:05:17.730 --> 00:05:23.650
+La progettazione delle relazioni può introdurre silenziosamente problemi di prestazioni che emergono solo su scala reale.
+
+00:05:24.090 --> 00:05:26.770
+In ambienti di test più piccoli anche i join efficienti funzionano bene.
+
+00:05:27.390 --> 00:05:32.090
+Estendi lo stesso design a un ambiente aziendale con migliaia di utenti attivi e processi interconnessi.
+
+00:05:32.090 --> 00:05:39.870
+E improvvisamente i moduli impiegano secondi a caricarsi, le griglie vanno in timeout e tutto ciò che tocca a quelle tabelle collegate risulta lento.
+
+00:05:42.040 --> 00:05:50.700
+Non si tratta di misteriosi rallentamenti del cloud, ma del risultato naturale di relazioni progettate per chiarezza, senza considerare come Dataverse esegua effettivamente le query.
+
+00:05:50.700 --> 00:05:57.840
+L'ho visto di persone in un progetto che utilizzava una relazione molti a molti per collegare i contatti appiani di servizio.
+
+00:05:59.080 --> 00:06:01.960
+Nei primi test con poche centinaia di record tutto procedeva senza intoppi.
+
+00:06:03.300 --> 00:06:09.400
+Ma quando il set di dati reale è cresciuto a centinaia di migliaia di record degli utenti interrogavano quei collegamenti quotidianamente,
+
+00:06:09.620 --> 00:06:13.020
+quella tabella, molti a molti, è diventata la parte più lenta del sistema.
+
+00:06:13.020 --> 00:06:21.920
+Ogni caricamento di modulo attivava join complessi su tre tabelle e ogni join aggiungeva ulteriore sovraccarico finché le operazioni di base non richiedevano molto più tempo del previsto.
+
+00:06:22.760 --> 00:06:24.660
+Il costo nascosto non risiede solo nei join stessi.
+
+00:06:25.820 --> 00:06:33.940
+Campi di ricerca in Dataverse possono comportare comportamenti a cascata come riassegnazioni automatiche, eliminazioni e aggiornamenti che vengono eseguiti ogni volta che il record collegato cambia.
+
+00:06:33.940 --> 00:06:43.980
+Sebbene siano ottimi per mantenere i dati sincronizzati, significano anche più elaborazione in background, a ogni aggiornamento, anche per campi non correlati all'operazione principale.
+
+00:06:45.240 --> 00:06:52.700
+Nelle tabelle ad alta attività, quelle cascate possono accumularsi rapidamente, riducendo il throughput e rallentando le interazioni senza un trigger visibile evidente.
+
+00:06:53.640 --> 00:06:57.680
+Le linee guida di Microsoft raccomandano di evitare join complessi non necessari e per una buona ragione.
+
+00:06:57.680 --> 00:07:07.720
+Ogni join aggiuntivo in un aquerico stringe il motore di Dataverse a lavorare di più, elaborare più dati e mantenere più informazioni in memoria mentre valuta le condizioni.
+
+00:07:08.880 --> 00:07:19.020
+Questo è gestibile in piccole dosi, ma una volta che si inizia a sovrapporre più relazioni molti a molti e cascate nello stesso processo, il tempo di esecuzione scala molto più velocemente di quanto ci si aspetterebbe.
+
+00:07:19.600 --> 00:07:26.020
+Un caso particolarmente rivelatore ha comportato la modifica di una relazione da molti a molti a una simula ricerca con un campo di scelta di supporto.
+
+00:07:26.020 --> 00:07:37.400
+La logica di business è stata leggermente rielaborata in modo da non richiedere la risoluzione dinamica di più record collegati e il risultato è stata una riduzione immediata dell'80% al tempo di caricamento del modulo.
+
+00:07:38.720 --> 00:07:42.020
+Quel miglioramento non è avvenuto perché il set di dati si è ridotto, l'hardware è migliorato.
+
+00:07:42.800 --> 00:07:47.600
+È stato interamente merito del fatto di aver dato data verso un percorso più semplice e diretto verso le informazioni di cui aveva bisogno.
+
+00:07:48.020 --> 00:07:51.360
+Anche progetti alternativi come le strutture appiattite possono dare i loro frutti.
+
+00:07:51.980 --> 00:07:55.580
+A volte un dato non ha bisogno di risiedere nella sua tabella dedicata e correlata.
+
+00:07:56.780 --> 00:07:58.780
+Se richiede poca manutenzione cambia raramente.
+
+00:07:59.500 --> 00:08:03.880
+Memorizzarlo direttamente nel record principale come campo di scelta significa un join in meno durante il recupero.
+
+00:08:05.520 --> 00:08:12.940
+Analogamente alcune tabelle di collegamento possono essere sostituite da campi calcolati di riepilogo se sono utilizzate principalmente per visualizzare informazioni riassuntive.
+
+00:08:13.660 --> 00:08:17.280
+E questo mantiene veloce il livello di presentazione evitando pesanti operazioni di query in background.
+
+00:08:17.280 --> 00:08:24.880
+Il punto fondamentale è che la progettazione delle relazioni non riguarda solo la chiarezza logica o il rispetto degli standard di normalizzazione.
+
+00:08:25.840 --> 00:08:27.720
+Si tratta anche di comprendere il costo dell'esecuzione.
+
+00:08:28.620 --> 00:08:33.580
+Ogni tipo di relazione che scegli cambia il modo in cui Dataverse deve recuperare, unire ed elaborare i tuoi dati.
+
+00:08:33.580 --> 00:08:43.700
+Concentrarsi solo sull'aspetto dello schema senza considerare come funziona può lasciarti con una struttura che ha perfettamente senso sulla carta ma che risulta terribilmente lenta in produzione.
+
+00:08:43.700 --> 00:08:55.540
+E mentre la semplificazione delle relazioni rimuove gran parte di quel sovraccarico di elaborazione, c'è ancora un altro fattore che decide quanto velocemente risponde Dataverse alla strategia di indicizzazione che guida quelle query.
+
+00:08:57.140 --> 00:08:59.160
+Indicizzazione e silenzioso moltiplicatore di prestazioni.
+
+00:08:59.680 --> 00:09:04.640
+Le query sono veloci solo quanto i percorsi che possono seguire e in Dataverse l'indicizzazione decide quel percorso.
+
+00:09:04.980 --> 00:09:11.720
+La maggior parte dei creatori è consapevole dell'esistenza degli indici ma in pratica è una delle parti meno comprese dell'ottimizzazione delle prestazioni.
+
+00:09:11.720 --> 00:09:21.540
+Puoi avere una struttura di tabelle pulite e relazioni snelle ma se Dataverse non riesci a trovare rapidamente i record necessari, tutto il resto rallenta per adeguarsi alla ricerca più lenta.
+
+00:09:22.480 --> 00:09:25.160
+Immaginalo come cercare un singolo pacco in un magazzino enorme.
+
+00:09:26.480 --> 00:09:31.340
+Senza alcuna indicizzazione cammini da una corsia all'altra controllando ogni scaffale finché non individui.
+
+00:09:31.640 --> 00:09:32.220
+Quello giusto.
+
+00:09:33.320 --> 00:09:37.880
+Questo funziona quando il magazzino è piccolo ma una volta che si scala a milioni di articoli diventa assurdo.
+
+00:09:37.880 --> 00:09:42.600
+L'indicizzazione equivale ad avere una mappa precisa e un percorso diretto verso lo scaffale esatto.
+
+00:09:43.340 --> 00:09:48.300
+Meno lavoro deve fare Dataverse per individuare un record, più velocemente vengono eseguite ogni vista, filtro e automazione.
+
+00:09:49.680 --> 00:09:52.000
+Dataverse crea automaticamente determinati indici per te.
+
+00:09:53.240 --> 00:09:56.060
+Principalmente su chiavi primari, ricerche e alcune colonne di sistema.
+
+00:09:57.260 --> 00:10:01.880
+Ecco perché i nuovi ambienti spesso funzionano bene senza alcuna indicizzazione manuale ma l'indicizzazione automatica ha dei limiti.
+
+00:10:01.880 --> 00:10:10.560
+Le query complesse con condizioni multiple, specialmente su colonne personalizzate, potrebbero finire per scansionare ampie parti della tabella perché non c'è un indice mirato a guidarle.
+
+00:10:11.100 --> 00:10:11.220
+Ah.
+
+00:10:12.220 --> 00:10:17.440
+È a quel punto che inizia a vedere dashboard lente e ritardi nei report e vista elenco che non si caricano in modo fluido.
+
+00:10:18.060 --> 00:10:20.680
+L'altro estremo, l'eccessiva indicizzazione, può essere tanto dannoso.
+
+00:10:21.220 --> 00:10:25.880
+Ogni volta che inserisci e aggiorni o elimini un record, Dataverse deve mantenere tutti gli indici pertinenti.
+
+00:10:25.880 --> 00:10:31.980
+Troppi indici personalizzati possono aumentare i tempi di scrittura e rallentare gli aggiornamenti in blocco.
+
+00:10:33.100 --> 00:10:38.140
+L'arte qui sta nel sapere quali colonne vale la pena indicizzare e, altrettanto importante, quali non lo sono.
+
+00:10:39.080 --> 00:10:43.940
+Gli indici sono più preziosi sui campi usati frequentemente in filtri, ordinamenti o join, non su quelli che contano.
+
+00:10:44.680 --> 00:10:46.280
+Solo in occasionali viste di modulo.
+
+00:10:47.300 --> 00:10:53.100
+Ad esempio, su una tabella di richieste di servizio ad alto volume, i report impiegavano fino a 6 secondi, solo per istituire un elenco filtrato ai manager.
+
+00:10:53.100 --> 00:10:59.780
+Il problema principale era che il filtraggio avveniva su una colonna personalizzata del tipo di richiesta priva di un indice dedicato.
+
+00:11:00.460 --> 00:11:05.960
+L'aggiunta di un indice non clasterizzato su quella colonna ha ridotto immediatamente il tempo di esecuzione della query, a meno di 200 millisecondi.
+
+00:11:06.280 --> 00:11:07.180
+Non è un miglioramento da poco.
+
+00:11:07.640 --> 00:11:10.460
+Ha cambiato completamente la percezione dell'app per gli utenti quotidiani.
+
+00:11:10.960 --> 00:11:16.140
+E la parte migliore è che non ha richiesto di modificare il modello dati o la logica dell'interfaccia, solo un percorso di recupero più intelligente.
+
+00:11:17.160 --> 00:11:19.220
+Ma ottenere quel vantaggio a posteriori non è l'ideale.
+
+00:11:19.220 --> 00:11:23.380
+L'aggiunta di indici in un sistema attivo comporta dei rischi.
+
+00:11:24.200 --> 00:11:31.800
+È necessario testare gli impatti sulla scrittura, pianificare le modifiche durante le finestre di basso utilizzo e talvolta gestire l'overhead di migrazione, se la tabella è molto grande.
+
+00:11:32.940 --> 00:11:37.680
+Al contrario, pianificare la strategia di indicizzazione prima del lancio rende l'intero sistema più resiliente.
+
+00:11:38.400 --> 00:11:43.740
+Puoi abbinare gli indici alle query più comuni fin da primo giorno, riducendo la necessità di correzioni urgenti delle prestazioni in seguito.
+
+00:11:43.740 --> 00:11:50.160
+Un buon approccio durante la pianificazione dello schema è mappare le query a traffico più elevato e identificare i campi su cui filtrano spesso.
+
+00:11:50.960 --> 00:11:54.320
+Si sa che una vista o una schermata dell'app ordinerà sempre per una determinata colonna.
+
+00:11:54.440 --> 00:11:56.080
+Considera di indicizzarla fin dall'inizio.
+
+00:11:56.860 --> 00:12:00.560
+Lo stesso vale per le condizioni di join e le relazioni che si essere centrali per il flusso di lavoro dell'app.
+
+00:12:01.300 --> 00:12:07.140
+Quindi rivedi periodicamente le statistiche di utilizzo degli indici per trovare quelli da eliminare, perché è raramente utilizzati nelle query reali.
+
+00:12:07.140 --> 00:12:14.140
+L'indicizzazione non è appariscente e non appare nell'interfaccia utente come un nuovo modulo o dashboard, ma è un moltiplicatore silenzioso.
+
+00:12:15.760 --> 00:12:21.620
+Ogni query ottimizzata ne trae vantaggio e ogni query scarsamente indicizzata diventa un freno man mano che il set di dati cresce.
+
+00:12:22.180 --> 00:12:28.940
+Una strategia di indicizzazione efficace garantisce un margine di prestazione e trasforma l'esecuzione delle query da un potenziale collo di bottiglie in un punto di forza affidabile.
+
+00:12:28.940 --> 00:12:31.060
+Ma c'è ancora un'altra leva da azionare.
+
+00:12:31.560 --> 00:12:40.300
+Per mantenere Dataverse davvero veloce e su larga scala, devi passare da risolvere i colli di bottiglia dopo la loro comparsa al progettare i modi che ne impediscono la formazione.
+
+00:12:41.640 --> 00:12:43.600
+Dalle correzioni reattive all'architettura proattiva.
+
+00:12:44.060 --> 00:12:46.820
+La maggior parte delle correzioni di prestazioni in Dataverse sembra un lavoro di spegnimento in C.
+
+00:12:46.980 --> 00:12:52.100
+Un utente segnala moduli lenti, esegui alcuni controlli, apporti modifiche mirate e speri che il problema si risolva.
+
+00:12:52.720 --> 00:12:56.500
+Ma cosa succederebbe se potessi costruire in modo tale da impedire del tutto l'insorgere di tali problemi?
+
+00:12:56.500 --> 00:13:04.600
+La verità silenziosa è che le app Dataverse più veloci e stabili non sono solo ben ottimizzate, sono state progettate fin dal primo giorno pensando alla scalabilità.
+
+00:13:05.320 --> 00:13:09.160
+Una pianificazione architettonica precoce è il miglioramento delle prestazioni più economiche che tu possano implementare.
+
+00:13:10.180 --> 00:13:18.860
+Non si tratta di aggiungere livelli extra in anticipo per sicurezza, ma di riflettere su come tabelle relazioni e indici si comporteranno quando l'app sosterrà il piano carico di produzione.
+
+00:13:20.540 --> 00:13:23.400
+Nella fase di costruzione, modificare ogni decisione è un costo ridotto.
+
+00:13:23.400 --> 00:13:29.300
+Una volta che l'app è attiva, quella stessa modifica potrebbe richiedere il refactoring di decine di flussi, dashboard e model driven.
+
+00:13:30.060 --> 00:13:31.540
+La differenza in termini di sforzo è enorme.
+
+00:13:31.880 --> 00:13:35.220
+Ho lavorato con team che non hanno effettuato test sulle prestazioni fino a poco prima del lancio.
+
+00:13:36.120 --> 00:13:40.900
+Tutto era stato costruito logicamente, appariva pulito nello schema e funzionava bene, nei test di accettazione.
+
+00:13:40.900 --> 00:13:48.780
+Ma poi, i report analitici hanno iniziato a richiedere minuti per caricarsi, i flussi di Power Automate andavano in timeout e alcuni moduli si aprivano solo a metà.
+
+00:13:50.020 --> 00:13:58.200
+In un caso, un'app di pianificazione centrale ha dovuto essere smantellata e ricostruita, perché diverse query chiave dipendevano da campi non indicizzati sepolti in join, molti a molti.
+
+00:13:59.200 --> 00:14:03.340
+La ricostruzione ha posticipato il lancio di tre mesi e ha bruciato settimane di lavoro di sviluppo e test.
+
+00:14:03.340 --> 00:14:09.820
+La chiave per evitare questo scenario è rendere le prestazioni un requisito di progettazione e non ripensamento.
+
+00:14:10.860 --> 00:14:17.840
+Ciò significa pianificare un'indicizzazione contemporaneamente alla progettazione delle tabelle, sapendo quali campi saranno ogni filtro e assicurandosi che siano pronti per ricerche efficienti.
+
+00:14:18.940 --> 00:14:25.720
+Significa resistere la tentazione di aggiungere decine di campi per sicurezza durante la prototipazione, poiché ognuno aggiunge peso a moduli e transazioni.
+
+00:14:26.900 --> 00:14:33.160
+E significa modellare le relazioni in base a come si comporteranno su larga scala, non solo a quanto appaiono ordinate nei diagrammi di una sessione di lavoro.
+
+00:14:34.060 --> 00:14:39.100
+Quando tratti le prestazioni come parte dell'architettura dipendi molto meno dalla risoluzione dei problemi post-distribuzione.
+
+00:14:39.820 --> 00:14:42.780
+Individui potenziali colli di bottiglia quando è ancora facile cambiare direzione.
+
+00:14:43.660 --> 00:14:49.940
+Se un certo modello di relazione rallentasse le join in set di dati di grandi dimensioni, trovi una struttura alternativa prima che alimenti un sistema attivo.
+
+00:14:50.660 --> 00:14:54.640
+Se un indice potesse rendere istantanea una vista ad alto traffico, lo aggiungi prima che la vista diventi fondamentale.
+
+00:14:54.880 --> 00:15:01.820
+È molto più facile che spiegare agli utenti aziendali perché la loro appora funziona diversamente solo perché hai dovuto riparare qualcosa che non sapevano fosse rotto.
+
+00:15:01.820 --> 00:15:07.120
+Esistono strumenti nell'ecosistema Microsoft che rendono questo approccio proattivo molto più facile da applicare.
+
+00:15:08.200 --> 00:15:12.540
+Il controllo soluzioni analizzerà il tuo ambiente e indicherà i pattern che sa poter causare cari di prestazioni.
+
+00:15:12.540 --> 00:15:22.540
+Le analisi delle prestazioni nell'interfaccia di amministrazione di Power Platform possono aiutarti a individuare query lente, tracciare i tempi di caricamento dei moduli e identificare dove il recupero o il rendering subisce rallentamenti.
+
+00:15:23.540 --> 00:15:26.360
+Eseguire questi strumenti durante la costruzione è prima dei rilasci importanti.
+
+00:15:26.440 --> 00:15:31.060
+Quanto di più vicino puoi ottenere un'assicurazione sulle prestazioni, sulle prestazioni, sulle prestazioni, senza che gli utenti attivi dei test.
+
+00:15:31.060 --> 00:15:32.980
+Il vantaggio di lavorare in questo modo è semplice.
+
+00:15:34.000 --> 00:15:38.680
+Le app costruite con un pensiero proattivo alle prestazioni tendono a scalare senza problemi con modifiche minime.
+
+00:15:39.520 --> 00:15:42.580
+Quando il volume dei dati cresce non raggiungono improvvisamente i limiti inaspettati.
+
+00:15:42.580 --> 00:15:47.100
+Quando vengono aggiunte nuove funzionalità nulla si blocca perché il design originale ha lasciato spazio.

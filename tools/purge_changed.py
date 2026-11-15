@@ -8,6 +8,17 @@ old_f, new_f = sys.argv[1], sys.argv[2]
 base = os.environ.get("BASE", "https://www.m365.fm").rstrip("/")
 old = json.load(open(old_f)) if os.path.exists(old_f) else {}
 new = json.load(open(new_f))
+# Seiten nur im R2-Bucket (r2out/) zaehlen seit 11.11.2026 mit (tools/page_hashes.py, Merker /__r2out__). Im ersten Lauf damit gelten die schon vorher
+# nur dort liegenden Seiten (Blog- und Show-Sprachfassungen, Entitaeten ...; alle Seiten aus R2_KEYS = r2-keys.json, ohne Liste alle neuen) als bekannt:
+# kein einmaliger Schwall "neu" an IndexNow und kein Komplett-Purge (einmalig auch nicht fuer die in diesem Lauf neuen r2out-Seiten; neue in docs/ wie bisher).
+# Aus docs/ umgezogene Seiten stehen schon im alten Stand (gleicher Hash = unveraendert, sonst geaendert) und gelten nie als entfallen.
+had_r2, has_r2 = old.pop("/__r2out__", None), new.pop("/__r2out__", None); seed = []
+if old and has_r2 and not had_r2:
+    try: known = {"/" + (k[6:-10] if k.endswith("index.html") else k[6:]) for k in json.load(open(os.environ["R2_KEYS"]))}
+    except Exception: known = None
+    seed = [u for u in new if u not in old and (known is None or u in known)]
+    for u in seed: old[u] = new[u]
+    print(f"erster Lauf mit r2out/: {len(seed)} Seiten als bekannt uebernommen")
 changed = sorted(u for u, h in new.items() if old.get(u) != h)
 gone = sorted(u for u in old if u not in new)
 # T41: optional ab dem 3. Argument - Listen der neu/geaendert nach R2 geladenen Adressen (tools/r2_pages_upload.py fuer r2out/);
@@ -55,7 +66,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from content_hash import indexnow_batches, indexnow_select
 key = os.environ.get("INDEXNOW_KEY", "")
 _j = lambda p: json.load(open(p)) if p and os.path.exists(p) else {}
-sel, st = indexnow_select(old, new, _j(os.environ.get("OLD_CONTENT")), _j(os.environ.get("NEW_CONTENT")))
+old_c, new_c = _j(os.environ.get("OLD_CONTENT")), _j(os.environ.get("NEW_CONTENT"))
+for u in seed:
+    if u in new_c and old_c: old_c.setdefault(u, new_c[u])
+sel, st = indexnow_select(old, new, old_c, new_c)
 print(f"IndexNow: neu {st['new']}, entfallen {st['removed']}, Inhalt geaendert {st['content']}, nur Boilerplate uebersprungen {st['boilerplate']}" + (" (erster Lauf: Inhalts-Hashes gesichert, keine Meldung)" if st["seed"] else ""))
 pages = [base + q(u) for u in sel]
 if key and pages:

@@ -1,0 +1,2974 @@
+WEBVTT
+
+00:00:00.240 --> 00:00:07.140
+Pronto per dieci giorni di Microsoft 365, Copilot, Intelligenza Artificiale, Azure e le persone che stanno plasmando il futuro del lavoro, il lavoro.
+
+00:00:07.920 --> 00:00:12.000
+A gennaio torna M365Con e ci stiamo espandendo.
+
+00:00:12.840 --> 00:00:18.200
+Unisciti a noi per sessioni live, dimostrazioni pratiche e conoscenze pratiche da parte di MVP ed esperti del settore di tutto il mondo.
+
+00:00:18.800 --> 00:00:21.160
+Niente slide generiche, niente parole d'ordine infinite.
+
+00:00:22.020 --> 00:00:23.240
+Stiamo affrontando le vere sfide.
+
+00:00:23.760 --> 00:00:28.660
+Copilot Studio, agenti di Intelligenza Artificiale, Fabric, Sicurezza, Governance e Automazione.
+
+00:00:28.660 --> 00:00:34.280
+Che tu sia un professionista IT, uno sviluppatore o un leader aziendale, ci sono sessioni pensate per te.
+
+00:00:35.540 --> 00:00:39.840
+Con dieci giorni interi puoi esplorare più tecnologie e connetterti con una community globale.
+
+00:00:40.860 --> 00:00:44.240
+Guarda la diretta e porta spunti pratici alla tua organizzazione.
+
+00:00:45.140 --> 00:00:48.880
+Gennaio 2027, dieci giorni, una community Microsoft.
+
+00:00:49.380 --> 00:00:50.480
+Le registrazioni sono aperte ora.
+
+00:00:51.800 --> 00:00:55.580
+Vai su m365con.net e assicurati il tuo posto oggi stesso.
+
+00:00:55.580 --> 00:00:58.400
+Questo è m365con.net
+
+00:00:58.400 --> 00:01:03.940
+Iscriviti ora su m365con.net e ci vediamo dal vivo a gennaio.
+
+00:01:04.140 --> 00:01:04.340
+Ai!
+
+00:01:05.140 --> 00:01:08.940
+Mai avuto la sensazione che distribuire soluzioni Power Platform significa fare un passo avanti e due indietro.
+
+00:01:09.620 --> 00:01:12.980
+Se sei stanco di vedere le modifiche a portata e data verso interrompersi nel controllo qualità
+
+00:01:12.980 --> 00:01:16.160
+o di vedere le dipendenze a compromettere le tue distribuzioni, questo video è proprio per te.
+
+00:01:16.160 --> 00:01:23.620
+Oggi analizzeremo componente per componente la pipeline di Azure DevOps in modo che le tue distribuzioni funzionino come una macchina ben oliata e non come un azzardo.
+
+00:01:24.640 --> 00:01:27.700
+Si è curioso di sapere come funziona davvero il rollback quando l'automazione diventa complicata.
+
+00:01:28.080 --> 00:01:29.680
+Scopriamo cosa non ti dicono mai i documenti.
+
+00:01:30.620 --> 00:01:33.980
+Distribuzioni manuali e pipeline automatizzate è qui che iniziano davvero i problemi.
+
+00:01:33.980 --> 00:01:37.540
+Se lavori con Power Platform probabilmente ti è capitato.
+
+00:01:38.860 --> 00:01:46.620
+Ore di modifica, un'app basata su un modello, perfezionamento di un flusso di Power Automate, ottimizzazione attenta, dei ruoli di sicurezza, l'intera checklist.
+
+00:01:47.320 --> 00:01:52.760
+Hai ricontrollato ogni campo, hai premuto esporta soluzione, hai caricato il tuo file zip, hai incrociato le dita mentre il controllo qualità riceve una nuova build.
+
+00:01:53.560 --> 00:01:58.260
+Poi, proprio mentre tutti si preparano per una demo o per andare in onda, qualcosa non va.
+
+00:01:59.200 --> 00:02:02.420
+Una tabella non viene visualizzata, un flusso si attiva nell'ambiente sbagliato.
+
+00:02:02.420 --> 00:02:08.020
+O peggio ancora, l'importazione non riesce con uno di quei codici di errore criptici che indicano solo che qualcosa da qualche parte non corrisponde.
+
+00:02:08.280 --> 00:02:08.860
+Non corrisponde.
+
+00:02:10.240 --> 00:02:11.480
+La stanza diventa in presenza.
+
+00:02:11.720 --> 00:02:17.500
+Quel familiare nodo allo stomaco si insinua e si torna a cercare di capire cosa non è andato a buon fine, dove e perché.
+
+00:02:18.260 --> 00:02:21.460
+Questa è la realtà quotidiana dei team che si affidano alle distribuzioni manuali in Power Platform.
+
+00:02:22.260 --> 00:02:30.420
+Devi destreggiarti tra esportazioni di soluzioni sul desktop, sposti file zip tra ambienti e a volte utilizzi un vecchio foglio Excel o una chat di Teams per registrare cosa è stato spostato e quando...
+
+00:02:30.420 --> 00:02:38.920
+Se ti perdi una personalizzazione, magari una nuova tabella o un riferimento di connessione per un flusso, la tua distribuzione è a metà ma completamente interrotta.
+
+00:02:39.440 --> 00:02:42.900
+Il classico funziona in fase di sviluppo ma il controllo qualità non ha idea di cosa è appena inviato.
+
+00:02:43.260 --> 00:02:48.980
+Ora tutti sono su Slack o Teams e cercano di capire cosa manca o chi ha esportato per ultimo la versione reale dell'app.
+
+00:02:48.980 --> 00:02:52.680
+Le distribuzioni manuali sono più subdole nella loro fragilità di quanto si aspettano i team.
+
+00:02:53.040 --> 00:02:54.260
+Non si tratta solo di passaggi mancati.
+
+00:02:54.680 --> 00:02:56.640
+Ha a che fare con ambienti che si disanninano silenziosami.
+
+00:02:58.420 --> 00:02:59.560
+Nel corso di settimane modifiche.
+
+00:03:00.560 --> 00:03:04.780
+Lo sviluppatore ottiene un nuovo connettore o un'autorizzazione ma nessuno lo registra per la distribuzione successiva.
+
+00:03:05.180 --> 00:03:08.100
+Forse qualcuno modifica i dettagli di attivazione di un flusso ma solo nello sviluppo.
+
+00:03:08.560 --> 00:03:11.500
+Quando sei in produzione c'è un mosaico di deviazioni di configurazione.
+
+00:03:11.500 --> 00:03:15.180
+Anche se provi a documentare tutto l'errore umano trova sempre un modo.
+
+00:03:15.960 --> 00:03:17.960
+Una modifica tarda notte dopo un'interruzione.
+
+00:03:18.120 --> 00:03:21.080
+Un ruolo di sicurezza trascurato a una variabile di ambiente migrata manualmente.
+
+00:03:21.160 --> 00:03:24.580
+All'improvviso ti ritrovi a inseguire un problema che non era ovvio due giorni fa
+
+00:03:24.580 --> 00:03:29.320
+ma che ora sta bloccando l'adozione da parte degli utenti o sta danneggiando i dati in un'integrazione critica.
+
+00:03:30.500 --> 00:03:32.460
+Ecco una storia che probabilmente ti suona familiare.
+
+00:03:33.200 --> 00:03:37.220
+Un flusso power automate critico per l'azienda stava procedendo senza intoppi nello sviluppo
+
+00:03:37.220 --> 00:03:40.800
+spostando righe tra tabelle e dataverse utilizzando alcuni nuovi riferimenti di connessione.
+
+00:03:41.500 --> 00:03:44.500
+L'esportazione in QI l'importazione sembra corretta ma non si attiva nulla.
+
+00:03:45.100 --> 00:03:47.820
+Dopo ore di analisi dei registri e ricontrollo delle autorizzazioni
+
+00:03:47.820 --> 00:03:51.920
+qualcuno si rende conto che l'ambiente QA non ha mai avuto il riferimento di connessione corretto.
+
+00:03:52.700 --> 00:03:55.720
+Non ci sono avvisi in interfaccia utente e niente è stato segnalato nella fase di importazione.
+
+00:03:56.160 --> 00:04:00.220
+È stato necessario analizzare a fondo i livelli della soluzione e le dipendenze dei componenti
+
+00:04:00.220 --> 00:04:03.300
+e nel frattempo l'azienda ha avuto un processo interrotto per gran parte della settimana.
+
+00:04:04.700 --> 00:04:07.440
+Microsoft sottolinea apertamente questo punto dolente nella propria documentazione
+
+00:04:07.440 --> 00:04:09.780
+il che è quasi rassicurante, il che è quasi rassicurante.
+
+00:04:09.780 --> 00:04:13.160
+Anche gli amministratori esperti e persone che vivono e respirano dataverse
+
+00:04:13.160 --> 00:04:16.680
+perdono di vista le dipendenze nascoste o le sottili differenze ambientali.
+
+00:04:17.780 --> 00:04:19.540
+Ciò che ama la pena viene menzionato nella documentazione
+
+00:04:19.540 --> 00:04:21.840
+è spesso la causa esatta del fallimento di un'implementazione.
+
+00:04:22.440 --> 00:04:23.720
+Questi non sono errori da principianti.
+
+00:04:24.100 --> 00:04:27.000
+Sono le conseguenze di una piattaforma flessibile ma silenziosamente piena
+
+00:04:27.000 --> 00:04:28.660
+di collegamenti incrociati e dipendenze.
+
+00:04:29.340 --> 00:04:31.660
+Quando ti affidi alle persone per ricordare ogni impostazione
+
+00:04:31.660 --> 00:04:33.940
+è solo questione di tempo prima che qualcosa scivoli.
+
+00:04:33.940 --> 00:04:35.760
+Quindi la grande sfida è l'automazione.
+
+00:04:36.380 --> 00:04:38.460
+Azure DevOps si colloca al limite di questo problema
+
+00:04:38.460 --> 00:04:42.000
+promettendo di trasformare quei passaggi manuali soggetti a errori
+
+00:04:42.000 --> 00:04:46.400
+in pipeline ripetibili, tracciabili e si spera a prova di proiettile.
+
+00:04:47.600 --> 00:04:48.740
+L'idea sembra buona sulla carta.
+
+00:04:49.260 --> 00:04:53.280
+Cabli una pipeline, l'alimenti con Power Platform e lasci che si occupi del lavoro pesante.
+
+00:04:53.280 --> 00:04:57.620
+La soluzione viene esportata, importata, le dipendenze vengono controllate
+
+00:04:57.620 --> 00:04:59.740
+e se qualcosa non va, lo rilevi subito.
+
+00:05:00.300 --> 00:05:01.760
+Ottieni registri con timestamp reali.
+
+00:05:02.180 --> 00:05:04.660
+Non dovrai più chiederti se Alice o Bob hanno la copia più recente.
+
+00:05:05.280 --> 00:05:08.780
+Se eseguita correttamente, ogni distribuzione è sottoposta al controllo di versione tracciabile fino alla fine.
+
+00:05:09.420 --> 00:05:11.740
+Niente più dipendenze in continuazione sorprese dell'ultimo minuto.
+
+00:05:12.180 --> 00:05:14.480
+Ed ecco il numero che tutti amano condividere nelle presentazioni.
+
+00:05:14.940 --> 00:05:17.900
+I team che passano dai processi manuali alle pipeline automatizzate
+
+00:05:17.900 --> 00:05:20.260
+vedono cicli di feedback che non solo sono più rapidi
+
+00:05:20.260 --> 00:05:23.460
+ma in realtà chiudono la porta, la maggior parte delle distribuzioni non riuscite.
+
+00:05:24.120 --> 00:05:26.940
+Certo, gli errori si verificano ancora ma vengono individuati in anticipo
+
+00:05:26.940 --> 00:05:29.220
+e non devi passare ore di stricare cosa è andato storto.
+
+00:05:29.640 --> 00:05:31.160
+Ancora più importante, ottieni la verificabilità.
+
+00:05:31.620 --> 00:05:34.540
+Puoi tracciare ogni distribuzione, sapere esattamente chi ha spedito cosa
+
+00:05:34.540 --> 00:05:37.300
+e sì individuare dove come qualcosa non ha funzionato.
+
+00:05:37.980 --> 00:05:40.160
+Ma la realtà è che si tratta di fiducia, non solo di velocità.
+
+00:05:40.980 --> 00:05:43.040
+Se il tuo team non si fida del processo di distribuzione,
+
+00:05:43.140 --> 00:05:44.640
+se ogni release sembra un lancio di dadi,
+
+00:05:45.100 --> 00:05:46.700
+ogni buona funzionalità che crea è rischio.
+
+00:05:47.140 --> 00:05:48.640
+Le parti interessate esitano a rilasciare.
+
+00:05:48.640 --> 00:05:51.560
+Gli utenti si innervosiscono per interruzioni o le funzionalità mancate.
+
+00:05:51.740 --> 00:05:54.420
+La promessa di una rapida innovazione low-code cade nel vuoto
+
+00:05:54.420 --> 00:05:56.520
+quando l'ultimo miglio rimane inaffidabile.
+
+00:05:57.540 --> 00:06:00.000
+L'automazione non serve solo a risparmiare tempo
+
+00:06:00.000 --> 00:06:02.300
+o a impressionare la dirigenza passando a DevOps.
+
+00:06:03.520 --> 00:06:06.280
+È l'unico modo realistico per distribuire soluzioni power platform
+
+00:06:06.280 --> 00:06:09.140
+che funzionino sempre allo stesso modo in ogni ambiente.
+
+00:06:10.220 --> 00:06:12.360
+Quindi con le pipeline automatizzate ottieni prevedibilità.
+
+00:06:13.060 --> 00:06:16.440
+Ottieni un registro affidabile di ogni dipendenza di distribuzione e passaggio eseguito.
+
+00:06:16.440 --> 00:06:19.960
+Diventa possibile un vero CSD per power platform
+
+00:06:19.960 --> 00:06:23.960
+e la risoluzione dei problemi diventa una questione di registri, non di supposizioni.
+
+00:06:24.920 --> 00:06:26.540
+Naturalmente niente di tutto ciò avviene per magia.
+
+00:06:27.020 --> 00:06:30.400
+L'automazione è forte solo quanto i collegamenti tra la tua pipeline e i tuoi ambienti.
+
+00:06:31.300 --> 00:06:32.780
+È lì che le cose possono ancora andare store.
+
+00:06:34.540 --> 00:06:38.060
+Quindi ora parliamo di come collegare Azure DevOps a power platform
+
+00:06:38.060 --> 00:06:42.360
+in modo stabile, sicuro e che non si interrompa alle 3 del mattino.
+
+00:06:43.680 --> 00:06:47.180
+Il collante, le connessioni di servizio e i pool di agenti che non si interrompono.
+
+00:06:48.120 --> 00:06:50.680
+Se hai provato a connettere Azure DevOps a power platform
+
+00:06:50.680 --> 00:06:54.600
+e hai visto la pipeline generare immediatamente un errore di autorizzazione
+
+00:06:54.600 --> 00:06:57.680
+o bloccarsi per quella che sembra un'eternità, sei in buona compagnia.
+
+00:06:58.620 --> 00:07:00.780
+Quasi tutti i team prima o poi si imbattono in questo ostacolo.
+
+00:07:00.780 --> 00:07:03.220
+Potrebbe essere progettata in modo impeccabile.
+
+00:07:03.780 --> 00:07:05.360
+Il tuo YAN potrebbe essere impeccabile.
+
+00:07:05.580 --> 00:07:07.900
+Ma basta una connessione di servizio configurata in modo errato
+
+00:07:07.900 --> 00:07:09.580
+o un'impostazione di agente mancante
+
+00:07:09.580 --> 00:07:12.060
+e ti ritrovi a dover affrontare errori di autenticazione
+
+00:07:12.060 --> 00:07:13.580
+o a chiederti perché non si abbia mai nulla.
+
+00:07:14.140 --> 00:07:16.280
+La realtà è che le distribuzioni di power platform
+
+00:07:16.280 --> 00:07:18.420
+vivono o muoiono in base a ciò che accade dietro le quinte,
+
+00:07:18.500 --> 00:07:20.460
+ciò che mi piace definire l'impianto idraulico invisibile.
+
+00:07:21.160 --> 00:07:23.040
+Stiamo parlando di connessioni di servizio,
+
+00:07:23.300 --> 00:07:24.860
+flussi di autenticazione, pool di agenti
+
+00:07:24.860 --> 00:07:27.240
+e quelle piccole impostazioni che tengono tutto insieme silenziosamente
+
+00:07:27.240 --> 00:07:28.440
+o che ti rovinano la giornata.
+
+00:07:28.440 --> 00:07:31.860
+Siamo onesti, il concetto sembra ingannevolmente semplice.
+
+00:07:33.280 --> 00:07:35.300
+Crea una connessione di servizio in Azure DevOps,
+
+00:07:35.420 --> 00:07:36.760
+le fornisce alcune credenziali,
+
+00:07:36.880 --> 00:07:38.000
+la indirizzi al tuo ambiente
+
+00:07:38.000 --> 00:07:40.040
+e torni a creare i tuoi flussi.
+
+00:07:41.420 --> 00:07:43.300
+In realtà però è una rete di autorizzazioni,
+
+00:07:43.420 --> 00:07:44.740
+token, handshake, API.
+
+00:07:46.000 --> 00:07:47.580
+Se ne tralasci uno, potresti interrompere
+
+00:07:47.580 --> 00:07:48.520
+non solo la tua pipeline,
+
+00:07:48.660 --> 00:07:50.520
+ma potenzialmente anche l'integrazione sottostante
+
+00:07:50.520 --> 00:07:53.000
+per tutti gli altri che utilizzano lo stesso servizio principale.
+
+00:07:53.820 --> 00:07:54.640
+Questa non è solo teoria.
+
+00:07:54.640 --> 00:07:57.220
+Ho visto team che lavoravano perfettamente per mesi
+
+00:07:57.220 --> 00:07:59.040
+solo per poi imbattersi in una singola distribuzione
+
+00:07:59.040 --> 00:08:00.680
+che si rifiutava di andare a buon fine.
+
+00:08:01.360 --> 00:08:03.520
+Tutto si riduce sempre a qualche dettaglio nascosto,
+
+00:08:03.620 --> 00:08:04.480
+un segreto scaduto,
+
+00:08:04.580 --> 00:08:06.780
+un ruolo mancante nell'account di servizio
+
+00:08:06.780 --> 00:08:08.860
+o un ambito di autorizzazione modificato
+
+00:08:08.860 --> 00:08:10.020
+in Azure Active Directory.
+
+00:08:11.180 --> 00:08:12.000
+Nel peggiore dei casi,
+
+00:08:12.160 --> 00:08:13.820
+potresti bloccare accidentalmente te stesso
+
+00:08:13.820 --> 00:08:15.040
+o il tuo team fuori dagli ambienti
+
+00:08:15.040 --> 00:08:17.180
+se diventi troppo aggressivo con le assegnazioni di ruolo.
+
+00:08:18.000 --> 00:08:18.740
+Immaggia la configurazione.
+
+00:08:18.740 --> 00:08:20.400
+Ottieni finalmente l'approvazione
+
+00:08:20.400 --> 00:08:22.720
+per utilizzare un servizio principale per la tua pipeline
+
+00:08:22.720 --> 00:08:24.020
+puntando a una vera sicurezza
+
+00:08:24.020 --> 00:08:25.160
+alla separazione dei compiti.
+
+00:08:26.160 --> 00:08:26.860
+La teoria ha senso.
+
+00:08:27.220 --> 00:08:28.360
+Hai un'identità per ambiente
+
+00:08:28.360 --> 00:08:29.940
+e tutto dovrebbe funzionare.
+
+00:08:30.360 --> 00:08:31.700
+Ma poi arriva il giorno della distribuzione.
+
+00:08:32.080 --> 00:08:32.880
+Esegui la tua pipeline
+
+00:08:32.880 --> 00:08:34.920
+e non riesci al primo passaggio di autenticazione.
+
+00:08:35.680 --> 00:08:36.900
+I messaggi di errore sono oscuri.
+
+00:08:37.340 --> 00:08:38.040
+Esamini i registri
+
+00:08:38.040 --> 00:08:39.360
+solo per scoprire che hai perso
+
+00:08:39.360 --> 00:08:41.700
+una piccola assegnazione di ruolo Dataverse.
+
+00:08:42.360 --> 00:08:43.220
+Una casella di controllo
+
+00:08:43.220 --> 00:08:44.920
+e ora il tuo agente non può accedere all'ambiente.
+
+00:08:45.400 --> 00:08:46.920
+Naturalmente i registri non lo segnalano.
+
+00:08:46.920 --> 00:08:49.200
+Ti hanno appena risposto con un messaggio generico
+
+00:08:49.200 --> 00:08:50.260
+di mancata autorizzazione
+
+00:08:50.260 --> 00:08:52.580
+e quindi ti ritrovi a curiosare nel portale di Azurele23
+
+00:08:52.580 --> 00:08:54.040
+a cambiare le autorizzazioni
+
+00:08:54.040 --> 00:08:56.160
+e a sperare di non rompere qualcos'altro nel processo.
+
+00:08:57.460 --> 00:08:59.820
+È frustrante e del tutto evitabile allo stesso tempo.
+
+00:09:01.020 --> 00:09:01.640
+C'è uno schema qui.
+
+00:09:02.340 --> 00:09:03.460
+Una autorizzazione mancata
+
+00:09:03.460 --> 00:09:04.820
+o una configurazione non standard
+
+00:09:04.820 --> 00:09:06.140
+possono bloccare l'intero spettacolo.
+
+00:09:07.020 --> 00:09:08.140
+Ecco perché la prossima consigliata
+
+00:09:08.140 --> 00:09:09.900
+è quella di usare un'entità a servizio dedicata.
+
+00:09:10.800 --> 00:09:11.680
+Ed ecco il trucco.
+
+00:09:12.420 --> 00:09:14.320
+Non limitarti ad assegnare i diritti di amministratore
+
+00:09:14.320 --> 00:09:15.140
+ovunque per comodità.
+
+00:09:15.140 --> 00:09:18.080
+Assegna solo i ruoli dataverse minimi necessari
+
+00:09:18.080 --> 00:09:20.160
+per il suo ambiente e la sua attività specifici.
+
+00:09:21.160 --> 00:09:22.240
+Potrebbe sembrare eccessivo
+
+00:09:22.240 --> 00:09:23.540
+se sei le prime armi con DevOps
+
+00:09:23.540 --> 00:09:24.340
+ma nel mondo reale
+
+00:09:24.340 --> 00:09:25.420
+questo ti salva dal rischio
+
+00:09:25.420 --> 00:09:27.620
+che qualcuno elimini o danneggia accidentalmente i dati
+
+00:09:27.620 --> 00:09:28.980
+perché un'entità a servizio onnipotente
+
+00:09:28.980 --> 00:09:29.780
+ha accesso ovunque.
+
+00:09:31.320 --> 00:09:32.620
+Significa anche che cambiare le chiavi
+
+00:09:32.620 --> 00:09:33.600
+o i segreti è più pulito.
+
+00:09:34.680 --> 00:09:35.780
+Se devi revocare una connessione
+
+00:09:35.780 --> 00:09:36.640
+dal controllo qualità
+
+00:09:36.640 --> 00:09:38.220
+non rischi di far saltare la produzione.
+
+00:09:38.220 --> 00:09:41.100
+I team che rispettano questa separazione
+
+00:09:41.100 --> 00:09:43.400
+raramente hanno tutti gli ambienti in panne.
+
+00:09:44.840 --> 00:09:46.140
+Ora parliamo dei pool di agenti
+
+00:09:46.140 --> 00:09:46.940
+perché stranamente
+
+00:09:46.940 --> 00:09:49.220
+vengono solitamente trattati come ripensamento.
+
+00:09:51.400 --> 00:09:52.320
+Hai due opzioni principali
+
+00:09:52.320 --> 00:09:53.540
+agenti ospitati da Microsoft
+
+00:09:53.540 --> 00:09:54.640
+e agenti self-hosted.
+
+00:09:55.160 --> 00:09:56.740
+La maggior parte delle persone
+
+00:09:56.740 --> 00:09:58.080
+sceglie ciò che è predefinito
+
+00:09:58.080 --> 00:09:59.620
+nel proprio progetto Azure DevOps
+
+00:09:59.620 --> 00:10:00.660
+e spera che funzioni.
+
+00:10:00.660 --> 00:10:03.540
+Per i processi d'ornetto
+
+00:10:03.540 --> 00:10:04.200
+web di base
+
+00:10:04.200 --> 00:10:05.280
+di solito funziona
+
+00:10:05.280 --> 00:10:07.120
+ma con Power Platform
+
+00:10:07.120 --> 00:10:08.500
+alla fine ti imbatterà in un ostacolo.
+
+00:10:08.940 --> 00:10:10.140
+Gli agenti ospitati da Microsoft
+
+00:10:10.140 --> 00:10:11.220
+sono ottimi per le attività
+
+00:10:11.220 --> 00:10:12.080
+di compilazione di base
+
+00:10:12.080 --> 00:10:13.160
+ma poiché vengono sottoposti
+
+00:10:13.160 --> 00:10:13.720
+a provisioning
+
+00:10:13.720 --> 00:10:14.720
+e condivisi in modo dinamico
+
+00:10:14.720 --> 00:10:15.340
+non puoi garantire
+
+00:10:15.340 --> 00:10:16.820
+che tutti i previsiti siano presenti.
+
+00:10:17.820 --> 00:10:18.780
+Come versioni specifiche
+
+00:10:18.780 --> 00:10:19.740
+di strumenti di compilazione
+
+00:10:19.740 --> 00:10:20.460
+di Power Platform
+
+00:10:20.460 --> 00:10:21.300
+o moduli PowerShell
+
+00:10:21.300 --> 00:10:22.280
+personalizzati necessari
+
+00:10:22.280 --> 00:10:23.780
+per attività di soluzione più complesse.
+
+00:10:24.960 --> 00:10:25.280
+Inoltre
+
+00:10:25.280 --> 00:10:26.720
+se hai bisogno di software personalizzato
+
+00:10:26.720 --> 00:10:27.320
+o integrazione
+
+00:10:27.320 --> 00:10:28.180
+qualsiasi cosa non sia
+
+00:10:28.180 --> 00:10:29.060
+nell'immagine standard
+
+00:10:29.060 --> 00:10:29.900
+sei bloccato
+
+00:10:29.900 --> 00:10:30.920
+e buona fortuna
+
+00:10:30.920 --> 00:10:31.480
+nella risoluzione
+
+00:10:31.480 --> 00:10:32.500
+dei problemi di errori isolati
+
+00:10:32.500 --> 00:10:33.660
+in ambienti di cui non sei proprietario.
+
+00:10:34.280 --> 00:10:35.160
+Gli agenti self-hosted
+
+00:10:35.160 --> 00:10:36.060
+ti danno il pieno controllo
+
+00:10:36.060 --> 00:10:36.580
+sull'ambiente
+
+00:10:36.580 --> 00:10:37.400
+il che è una benedizione
+
+00:10:37.400 --> 00:10:38.160
+e una maledizione.
+
+00:10:39.580 --> 00:10:40.340
+Da un lato
+
+00:10:40.340 --> 00:10:41.480
+puoi preinstallare strumenti
+
+00:10:41.480 --> 00:10:42.380
+di compilazione
+
+00:10:42.380 --> 00:10:42.900
+SDK
+
+00:10:42.900 --> 00:10:43.700
+script
+
+00:10:43.700 --> 00:10:45.080
+qualsiasi cosa richieda
+
+00:10:45.080 --> 00:10:45.840
+il tuo progetto.
+
+00:10:46.880 --> 00:10:48.040
+Se disponi di connettori univoci
+
+00:10:48.040 --> 00:10:49.400
+o di un set stabile di dipendenza
+
+00:10:49.400 --> 00:10:50.300
+ciò può farti risparmiare
+
+00:10:50.300 --> 00:10:51.040
+un sacco di tempo.
+
+00:10:51.760 --> 00:10:52.260
+D'altro canto
+
+00:10:52.260 --> 00:10:53.400
+sei completamente responsabile
+
+00:10:53.400 --> 00:10:53.980
+degli aggiornamenti
+
+00:10:53.980 --> 00:10:54.420
+delle macchine
+
+00:10:54.420 --> 00:10:55.340
+dell'applicazione di batch
+
+00:10:55.340 --> 00:10:56.340
+e del mantenimento
+
+00:10:56.340 --> 00:10:57.300
+in funzione dell'agente.
+
+00:10:57.300 --> 00:10:58.180
+Tavia
+
+00:10:58.180 --> 00:10:59.300
+molti team preferiscono
+
+00:10:59.300 --> 00:10:59.900
+questa strada
+
+00:10:59.900 --> 00:11:00.940
+soprattutto se il loro lavoro
+
+00:11:00.940 --> 00:11:01.700
+su Power Platform
+
+00:11:01.700 --> 00:11:02.640
+include molti passaggi
+
+00:11:02.640 --> 00:11:03.680
+di build personalizzati
+
+00:11:03.680 --> 00:11:04.360
+o integrazioni
+
+00:11:04.360 --> 00:11:05.220
+che non funzionano bene
+
+00:11:05.220 --> 00:11:06.600
+con le immagini Microsoft condivise.
+
+00:11:07.340 --> 00:11:07.780
+Un suggerimento
+
+00:11:07.780 --> 00:11:08.380
+che mi è trascurato
+
+00:11:08.380 --> 00:11:08.880
+è quello di eseguire
+
+00:11:08.880 --> 00:11:09.720
+sempre una prova generale.
+
+00:11:10.040 --> 00:11:11.200
+Testa la connessione del servizio
+
+00:11:11.200 --> 00:11:12.480
+ed esegui un'esportazione di prova
+
+00:11:12.480 --> 00:11:13.440
+prima di inserire elementi
+
+00:11:13.440 --> 00:11:14.420
+importanti nella pipeline.
+
+00:11:14.940 --> 00:11:15.760
+Solo perché la pipeline
+
+00:11:15.760 --> 00:11:16.760
+indica connesso
+
+00:11:16.760 --> 00:11:17.580
+non significa che abbia
+
+00:11:17.580 --> 00:11:18.600
+il giusto livello di accesso
+
+00:11:18.600 --> 00:11:19.320
+per ogni operazione
+
+00:11:19.320 --> 00:11:20.320
+che desideri eseguire.
+
+00:11:21.160 --> 00:11:22.000
+Quell'esportazione di prova
+
+00:11:22.000 --> 00:11:22.860
+è la tua rete di sicurezza.
+
+00:11:23.360 --> 00:11:24.040
+Rileverai lacuna
+
+00:11:24.040 --> 00:11:24.760
+nelle autorizzazioni
+
+00:11:24.760 --> 00:11:25.440
+i problemi di ruolo
+
+00:11:25.440 --> 00:11:26.700
+e persino stranezze di rete di base
+
+00:11:26.700 --> 00:11:27.460
+prima di essere immerso
+
+00:11:27.460 --> 00:11:27.880
+fino al collo
+
+00:11:27.880 --> 00:11:28.780
+in una distribuzione di prodotti.
+
+00:11:29.180 --> 00:11:30.000
+È meglio scoprirlo ora
+
+00:11:30.000 --> 00:11:30.860
+che quando sarai in corsa
+
+00:11:30.860 --> 00:11:32.080
+contro le finestre di go live.
+
+00:11:32.640 --> 00:11:33.660
+Quindi ciò che desideri davvero
+
+00:11:33.660 --> 00:11:34.800
+è affidabilità senza sorpresa.
+
+00:11:35.400 --> 00:11:36.420
+Le connessioni di servizio
+
+00:11:36.420 --> 00:11:36.840
+durevoli
+
+00:11:36.840 --> 00:11:37.700
+e i pool di agenti
+
+00:11:37.700 --> 00:11:38.200
+sono la base
+
+00:11:38.200 --> 00:11:39.440
+per tutto ciò che verrà dopo.
+
+00:11:41.120 --> 00:11:41.600
+Se sbagli
+
+00:11:41.600 --> 00:11:42.860
+non importa quanto sia raffinato
+
+00:11:42.860 --> 00:11:43.360
+il tuo YAML
+
+00:11:43.360 --> 00:11:44.360
+o quanto siano sofisticate
+
+00:11:44.360 --> 00:11:45.360
+le tue attività di pipeline
+
+00:11:45.360 --> 00:11:45.940
+falliranno
+
+00:11:45.940 --> 00:11:46.520
+perché le basi
+
+00:11:46.520 --> 00:11:47.920
+non sono cablate correttamente.
+
+00:11:49.120 --> 00:11:49.860
+Una volta che hai definito
+
+00:11:49.860 --> 00:11:51.340
+questo sistema idraulico invisibile
+
+00:11:54.040 --> 00:11:54.980
+meno drammaticità
+
+00:11:54.980 --> 00:11:56.160
+e molta più prevedibilità.
+
+00:11:56.900 --> 00:11:57.660
+I grattacapi passano
+
+00:11:57.660 --> 00:11:58.460
+dal perché la mia pipeline
+
+00:11:58.460 --> 00:11:59.140
+non è mai partita
+
+00:11:59.140 --> 00:11:59.640
+come posso
+
+00:11:59.640 --> 00:12:01.200
+renderla ancora più intelligente
+
+00:12:01.200 --> 00:12:01.660
+che è un problema
+
+00:12:01.660 --> 00:12:02.880
+molto più divertente
+
+00:12:02.880 --> 00:12:03.480
+da risolvere.
+
+00:12:04.140 --> 00:12:05.340
+Con quelle connessioni stabili
+
+00:12:05.340 --> 00:12:05.920
+e i tuoi agenti
+
+00:12:05.920 --> 00:12:07.140
+che funzionano in modo affidabile
+
+00:12:07.140 --> 00:12:07.840
+è appena superato
+
+00:12:07.840 --> 00:12:08.820
+il primo vero ostacolo.
+
+00:12:09.300 --> 00:12:09.600
+Tuttavia
+
+00:12:09.600 --> 00:12:10.680
+un sistema idraulico solido
+
+00:12:10.680 --> 00:12:11.240
+non garantisce
+
+00:12:11.240 --> 00:12:12.020
+di individuare i problemi
+
+00:12:12.020 --> 00:12:12.460
+di soluzione
+
+00:12:12.460 --> 00:12:13.480
+prima che raggiungano la produzione.
+
+00:12:14.040 --> 00:12:14.200
+Ora
+
+00:12:14.200 --> 00:12:15.000
+immergiamoci in come
+
+00:12:15.000 --> 00:12:15.900
+i controlli e le convalide
+
+00:12:15.900 --> 00:12:16.520
+automatizzati
+
+00:12:16.520 --> 00:12:17.460
+proteggono i tuoi ambienti
+
+00:12:17.460 --> 00:12:18.260
+da errori silenziosi
+
+00:12:18.260 --> 00:12:19.220
+prima che si diffondano.
+
+00:12:19.220 --> 00:12:21.760
+Guardrail automatizzati
+
+00:12:21.760 --> 00:12:22.860
+controlli delle dipendenze
+
+00:12:22.860 --> 00:12:24.180
+con valide predistribuzione.
+
+00:12:25.040 --> 00:12:25.440
+Se hai mai visto
+
+00:12:25.440 --> 00:12:25.920
+una distribuzione
+
+00:12:25.920 --> 00:12:26.520
+di Power Platform
+
+00:12:26.520 --> 00:12:27.780
+passare in fase di sviluppo
+
+00:12:27.780 --> 00:12:28.960
+seguire i movimenti
+
+00:12:28.960 --> 00:12:30.100
+in fase di controllo qualità
+
+00:12:30.100 --> 00:12:31.120
+e quindi far scattare
+
+00:12:31.120 --> 00:12:31.580
+gli allarmi
+
+00:12:31.580 --> 00:12:32.140
+nel momento in cui
+
+00:12:32.140 --> 00:12:32.940
+arriva in produzione
+
+00:12:32.940 --> 00:12:34.760
+sai dove vogliamo arrivare.
+
+00:12:35.460 --> 00:12:35.880
+I problemi
+
+00:12:35.880 --> 00:12:36.460
+non si annunciano
+
+00:12:36.460 --> 00:12:37.460
+quasi mai in anticipo.
+
+00:12:38.660 --> 00:12:39.200
+Al contrario
+
+00:12:39.200 --> 00:12:39.800
+si verificano
+
+00:12:39.800 --> 00:12:40.740
+dipendenze nascoste
+
+00:12:40.740 --> 00:12:41.320
+in silenzio
+
+00:12:41.320 --> 00:12:42.340
+del tipo che si trovano
+
+00:12:42.340 --> 00:12:42.900
+a due o tre click
+
+00:12:42.900 --> 00:12:43.440
+di profondità
+
+00:12:43.440 --> 00:12:44.180
+in un'app canvas
+
+00:12:44.180 --> 00:12:45.060
+o sepolte all'interno
+
+00:12:45.060 --> 00:12:45.700
+dei sottoflussi
+
+00:12:45.700 --> 00:12:46.000
+di un'app
+
+00:12:46.000 --> 00:12:46.900
+basata su modello.
+
+00:12:47.560 --> 00:12:48.200
+Per quanto riguarda
+
+00:12:48.200 --> 00:12:49.640
+lo sviluppo tutto sembra a posto
+
+00:12:49.640 --> 00:12:50.500
+ma la produzione
+
+00:12:50.500 --> 00:12:51.420
+con i suoi connettori
+
+00:12:51.420 --> 00:12:52.680
+diversi utenti con licenza
+
+00:12:52.680 --> 00:12:53.640
+o una sottile differenza
+
+00:12:53.640 --> 00:12:54.400
+nei ruoli di sicurezza
+
+00:12:54.400 --> 00:12:54.980
+di Dataverse
+
+00:12:54.980 --> 00:12:56.400
+trova immediatamente
+
+00:12:56.400 --> 00:12:57.120
+l'anello debole.
+
+00:12:57.740 --> 00:12:58.080
+Ma le pressioni
+
+00:12:58.080 --> 00:12:58.700
+stanno da fare.
+
+00:12:59.020 --> 00:12:59.740
+A volte l'unico avviso
+
+00:12:59.740 --> 00:13:00.160
+che si riceve
+
+00:13:00.160 --> 00:13:00.800
+è un utente che dice
+
+00:13:00.800 --> 00:13:01.440
+ehi questi dati
+
+00:13:01.440 --> 00:13:02.060
+non si aggiornano
+
+00:13:02.060 --> 00:13:03.000
+un ticket di supporto
+
+00:13:03.000 --> 00:13:03.840
+con una traccia dello stack
+
+00:13:03.840 --> 00:13:04.920
+che non offre nulla di utile.
+
+00:13:06.060 --> 00:13:06.640
+Problema di fondo
+
+00:13:06.640 --> 00:13:07.740
+nessuno ha verificato
+
+00:13:07.740 --> 00:13:08.320
+se tutti i pezzi
+
+00:13:08.320 --> 00:13:08.700
+in movimento
+
+00:13:08.700 --> 00:13:09.300
+sono effettivamente
+
+00:13:09.300 --> 00:13:10.420
+sopravvissuti allo spostamento.
+
+00:13:11.060 --> 00:13:11.440
+Ecco perché
+
+00:13:11.440 --> 00:13:12.640
+i controlli delle dipendenze
+
+00:13:12.640 --> 00:13:13.940
+le convalide pre-distribuzione
+
+00:13:13.940 --> 00:13:14.920
+non sono solo utili
+
+00:13:14.920 --> 00:13:16.700
+sono il sistema immunitario
+
+00:13:16.700 --> 00:13:17.180
+della pipeline.
+
+00:13:17.700 --> 00:13:18.140
+Pensa a loro
+
+00:13:18.140 --> 00:13:18.680
+come a un sistema
+
+00:13:18.680 --> 00:13:19.320
+che viaggia prima
+
+00:13:19.320 --> 00:13:20.100
+della distribuzione
+
+00:13:20.100 --> 00:13:21.120
+e illumina tutti gli angoli
+
+00:13:21.120 --> 00:13:21.700
+in cui i problemi
+
+00:13:21.700 --> 00:13:22.640
+amano nascondersi.
+
+00:13:24.000 --> 00:13:24.580
+Questi guardrail
+
+00:13:24.580 --> 00:13:25.200
+automatizzati
+
+00:13:25.200 --> 00:13:25.900
+rilevano elementi
+
+00:13:25.900 --> 00:13:27.040
+come flussi filio mancanti
+
+00:13:27.040 --> 00:13:28.060
+riferimenti di connessione
+
+00:13:28.060 --> 00:13:29.080
+assenti o componenti
+
+00:13:29.080 --> 00:13:29.640
+non gestiti
+
+00:13:29.640 --> 00:13:30.420
+che non sono mai stati
+
+00:13:30.420 --> 00:13:31.520
+aggiunti all'esportazione.
+
+00:13:32.940 --> 00:13:33.760
+Senza questi controlli
+
+00:13:33.760 --> 00:13:34.540
+ogni distribuzione
+
+00:13:34.540 --> 00:13:35.260
+è un atto di fede.
+
+00:13:35.780 --> 00:13:36.140
+Speri solo
+
+00:13:36.140 --> 00:13:37.000
+che l'impianto idraulico
+
+00:13:37.000 --> 00:13:37.920
+sottostante alla tua app
+
+00:13:37.920 --> 00:13:38.680
+abbia lo stesso aspetto
+
+00:13:38.680 --> 00:13:39.320
+in ogni ambiente
+
+00:13:39.320 --> 00:13:40.260
+e scopri che non è così
+
+00:13:40.260 --> 00:13:41.060
+solo quando il rapporto
+
+00:13:41.060 --> 00:13:41.520
+sull'incidente
+
+00:13:41.520 --> 00:13:42.200
+arriva nella tua casella
+
+00:13:42.200 --> 00:13:42.640
+di posto.
+
+00:13:43.040 --> 00:13:43.820
+Ho visto questa situazione
+
+00:13:43.820 --> 00:13:44.520
+ripetersi più volte
+
+00:13:44.520 --> 00:13:45.040
+di quanto vogliono.
+
+00:13:45.680 --> 00:13:46.320
+Un progetto aveva
+
+00:13:46.320 --> 00:13:47.220
+un incubo ricorrente
+
+00:13:47.220 --> 00:13:48.680
+e un flusso di power automate
+
+00:13:48.680 --> 00:13:49.560
+che funzionava benissimo
+
+00:13:49.560 --> 00:13:50.440
+in ogni test di sviluppo
+
+00:13:50.440 --> 00:13:51.760
+per poi scomparire completamente
+
+00:13:51.760 --> 00:13:52.520
+da una distribuzione
+
+00:13:52.520 --> 00:13:53.160
+di produzione.
+
+00:13:54.020 --> 00:13:54.640
+Cosa è successo?
+
+00:13:54.920 --> 00:13:55.360
+Si è scoperto
+
+00:13:55.360 --> 00:13:56.320
+che una soluzione rapida
+
+00:13:56.320 --> 00:13:57.120
+aveva un flusso figlio
+
+00:13:57.120 --> 00:13:57.900
+come dipendenza
+
+00:13:57.900 --> 00:13:58.980
+e il processo di esportazione
+
+00:13:58.980 --> 00:13:59.440
+non rilevava
+
+00:13:59.440 --> 00:14:00.120
+che un flusso figlio
+
+00:14:00.120 --> 00:14:00.560
+era esterno
+
+00:14:00.560 --> 00:14:01.480
+alla soluzione gestita.
+
+00:14:02.300 --> 00:14:03.340
+Quando quel flusso figlio
+
+00:14:03.340 --> 00:14:04.400
+non veniva visualizzato
+
+00:14:04.400 --> 00:14:05.280
+nel controllo qualità
+
+00:14:05.280 --> 00:14:06.160
+e nella produzione
+
+00:14:06.160 --> 00:14:07.200
+la logica padre
+
+00:14:07.200 --> 00:14:08.420
+semplicemente non funzionava.
+
+00:14:08.940 --> 00:14:09.340
+Nessun errore
+
+00:14:09.340 --> 00:14:09.940
+nessun avviso
+
+00:14:09.940 --> 00:14:10.440
+solo un processo
+
+00:14:10.440 --> 00:14:11.860
+che si disattivava silenziosamente
+
+00:14:11.860 --> 00:14:12.860
+e gli utenti erano confusi
+
+00:14:12.860 --> 00:14:13.540
+sul motivo per cui
+
+00:14:13.540 --> 00:14:14.040
+le loro attività
+
+00:14:14.040 --> 00:14:15.180
+si erano improvvisamente bloccate.
+
+00:14:15.480 --> 00:14:16.200
+Ci siamo resi conto
+
+00:14:16.200 --> 00:14:16.920
+solo dopo che un numero
+
+00:14:16.920 --> 00:14:17.700
+sufficiente di utenti
+
+00:14:17.700 --> 00:14:18.300
+aveva segnalato
+
+00:14:18.300 --> 00:14:19.140
+aggiornamenti mancanti
+
+00:14:19.140 --> 00:14:20.100
+che qualcuno aveva finalmente
+
+00:14:20.100 --> 00:14:21.200
+trovato il collegamento mancato.
+
+00:14:21.340 --> 00:14:21.820
+A quel punto
+
+00:14:21.820 --> 00:14:22.600
+erano passate ore
+
+00:14:22.600 --> 00:14:23.780
+a esaminare i file XML
+
+00:14:23.780 --> 00:14:24.560
+di esportazione
+
+00:14:24.560 --> 00:14:25.940
+e ad eseguire controlli manuali.
+
+00:14:26.720 --> 00:14:27.760
+Una dipendenza trascurata
+
+00:14:27.760 --> 00:14:28.660
+aveva causato il caos
+
+00:14:28.660 --> 00:14:29.980
+che avrebbe potuto essere segnalato
+
+00:14:29.980 --> 00:14:31.380
+con la giusta protezione in atto.
+
+00:14:32.180 --> 00:14:32.700
+Il vero problema
+
+00:14:32.700 --> 00:14:33.880
+è quanto sia ormai prevenibile.
+
+00:14:34.580 --> 00:14:35.120
+Strumenti come
+
+00:14:35.120 --> 00:14:35.880
+Solution Checker
+
+00:14:35.880 --> 00:14:36.640
+in Power Platform
+
+00:14:36.640 --> 00:14:37.700
+consentono di impostare
+
+00:14:37.700 --> 00:14:38.740
+scansioni automatizzate
+
+00:14:38.740 --> 00:14:40.000
+come passaggio della pipeline
+
+00:14:40.000 --> 00:14:41.240
+fornendo avvisi in anticipo
+
+00:14:41.240 --> 00:14:41.800
+su problemi
+
+00:14:41.800 --> 00:14:42.560
+con la stratificazione
+
+00:14:42.560 --> 00:14:43.260
+della soluzione
+
+00:14:43.260 --> 00:14:44.700
+dipendenze mancanti
+
+00:14:44.700 --> 00:14:46.060
+prestazioni delle app
+
+00:14:46.060 --> 00:14:47.020
+e persino consigli
+
+00:14:47.020 --> 00:14:47.840
+sulla sicurezza.
+
+00:14:49.200 --> 00:14:50.140
+Gli strumenti di compilazione
+
+00:14:50.140 --> 00:14:50.960
+di Power Platform
+
+00:14:50.960 --> 00:14:51.780
+per Azure DevOps
+
+00:14:51.780 --> 00:14:53.340
+avvicinano ulteriormente
+
+00:14:53.340 --> 00:14:53.920
+questo aspetto
+
+00:14:53.920 --> 00:14:55.120
+alla realtà CISD.
+
+00:14:55.940 --> 00:14:56.420
+Con il passaggio
+
+00:14:56.420 --> 00:14:57.160
+della pipeline giusto
+
+00:14:57.160 --> 00:14:57.800
+si fa molto di più
+
+00:14:57.800 --> 00:14:58.760
+di una semplice importazione
+
+00:14:58.760 --> 00:14:59.380
+e esportazione.
+
+00:14:59.880 --> 00:15:00.660
+Si eseguono controlli
+
+00:15:00.660 --> 00:15:01.200
+di convalida
+
+00:15:01.200 --> 00:15:02.020
+sia sulla soluzione
+
+00:15:02.020 --> 00:15:03.100
+che sulle relative connessioni
+
+00:15:03.100 --> 00:15:04.280
+all'ambiente di destinazione.
+
+00:15:05.380 --> 00:15:06.760
+Se si hanno requisiti aggiuntivi
+
+00:15:06.760 --> 00:15:07.820
+gli script PowerShell
+
+00:15:07.820 --> 00:15:08.600
+personalizzati
+
+00:15:08.600 --> 00:15:09.520
+consentono di andare
+
+00:15:09.520 --> 00:15:10.360
+ancora più a fondo
+
+00:15:10.360 --> 00:15:11.300
+eseguendo la scansione
+
+00:15:11.300 --> 00:15:11.820
+di elementi
+
+00:15:11.820 --> 00:15:12.500
+come le variabili
+
+00:15:12.500 --> 00:15:13.480
+di ambiente richieste
+
+00:15:13.480 --> 00:15:14.700
+convalidando le connessioni
+
+00:15:14.700 --> 00:15:15.600
+per le IP premium
+
+00:15:15.600 --> 00:15:16.660
+o verificando gli ambiti
+
+00:15:16.660 --> 00:15:17.500
+di autorizzazione
+
+00:15:17.500 --> 00:15:18.700
+nei flussi integrati
+
+00:15:18.700 --> 00:15:19.280
+in AD.
+
+00:15:20.780 --> 00:15:21.540
+Ciò che è interessante
+
+00:15:21.540 --> 00:15:22.480
+è quanto queste protezioni
+
+00:15:22.480 --> 00:15:23.140
+automatizzate
+
+00:15:23.140 --> 00:15:24.100
+siano in grado di rilevare
+
+00:15:24.100 --> 00:15:24.900
+rispetto ai vecchi metodi
+
+00:15:24.900 --> 00:15:26.080
+di esportazione e speranza.
+
+00:15:26.080 --> 00:15:27.420
+Studi della community
+
+00:15:27.420 --> 00:15:28.560
+affermano che questi controlli
+
+00:15:28.560 --> 00:15:29.880
+segnalano fino al 70%
+
+00:15:29.880 --> 00:15:30.420
+dei problemi
+
+00:15:30.420 --> 00:15:31.160
+prima che qualcosa
+
+00:15:31.160 --> 00:15:31.960
+venga pubblicato.
+
+00:15:32.440 --> 00:15:33.020
+Ciò significa
+
+00:15:33.020 --> 00:15:34.440
+meno chiamate fuori orario
+
+00:15:34.440 --> 00:15:35.620
+meno sprint di recupero
+
+00:15:35.620 --> 00:15:36.640
+per risolvere i problemi
+
+00:15:36.640 --> 00:15:37.380
+e molte meno.
+
+00:15:38.120 --> 00:15:39.040
+Riunioni imbarazzanti
+
+00:15:39.040 --> 00:15:40.260
+per spiegare alla dirigenza
+
+00:15:40.260 --> 00:15:41.180
+perché un go live
+
+00:15:41.180 --> 00:15:42.620
+è diventato un fallimento.
+
+00:15:43.880 --> 00:15:44.260
+Le ricerche
+
+00:15:44.260 --> 00:15:44.900
+e i casi di studio
+
+00:15:44.900 --> 00:15:45.460
+di Microsoft
+
+00:15:45.460 --> 00:15:46.220
+lo confermano.
+
+00:15:46.680 --> 00:15:47.400
+I team che eseguono
+
+00:15:47.400 --> 00:15:47.860
+la convalida
+
+00:15:47.860 --> 00:15:48.900
+predistribuzione di norma
+
+00:15:48.900 --> 00:15:49.940
+registrano un calo drastico
+
+00:15:49.940 --> 00:15:51.060
+delle interruzioni di produzione.
+
+00:15:51.360 --> 00:15:51.720
+I problemi
+
+00:15:51.720 --> 00:15:52.360
+vengono individuati
+
+00:15:52.360 --> 00:15:52.840
+così presto
+
+00:15:52.840 --> 00:15:53.480
+che vengono malapena
+
+00:15:53.480 --> 00:15:54.320
+registrati come incidenti.
+
+00:15:54.320 --> 00:15:55.420
+Un passaggio solido
+
+00:15:55.420 --> 00:15:55.900
+della pipeline
+
+00:15:55.900 --> 00:15:56.760
+per questo è semplice
+
+00:15:56.760 --> 00:15:57.360
+ma efficace.
+
+00:15:58.380 --> 00:15:59.220
+Esporta la tua soluzione
+
+00:15:59.220 --> 00:15:59.740
+dalla fonte
+
+00:15:59.740 --> 00:16:00.340
+ma prima ancora
+
+00:16:00.340 --> 00:16:01.320
+di prendere in considerazione
+
+00:16:01.320 --> 00:16:01.920
+l'importazione
+
+00:16:01.920 --> 00:16:03.040
+e l'ambiente di destinazione
+
+00:16:03.040 --> 00:16:04.020
+avvia una sequenza
+
+00:16:04.020 --> 00:16:04.860
+che esegua il controllo
+
+00:16:04.860 --> 00:16:05.440
+della soluzione
+
+00:16:05.440 --> 00:16:06.660
+e tutti i test personalizzati
+
+00:16:06.660 --> 00:16:07.300
+che hai aggiunto.
+
+00:16:08.280 --> 00:16:09.240
+Non fermarti solo a BID.
+
+00:16:09.780 --> 00:16:10.300
+Esegui query
+
+00:16:10.300 --> 00:16:11.480
+sul dataverse di produzione
+
+00:16:11.480 --> 00:16:12.120
+per assicurarti
+
+00:16:12.120 --> 00:16:12.540
+che l'entità
+
+00:16:12.540 --> 00:16:13.380
+che stai per sostituire
+
+00:16:13.380 --> 00:16:14.220
+non abbiano differenze
+
+00:16:14.220 --> 00:16:14.620
+di schema
+
+00:16:14.620 --> 00:16:15.260
+che causerebbero
+
+00:16:15.260 --> 00:16:16.220
+un errore silenzioso.
+
+00:16:17.220 --> 00:16:17.980
+Convalida riferimenti
+
+00:16:17.980 --> 00:16:18.400
+di connessione.
+
+00:16:18.780 --> 00:16:19.540
+Non dare per scontato
+
+00:16:19.540 --> 00:16:20.060
+che tutti coloro
+
+00:16:20.060 --> 00:16:20.300
+che avevano
+
+00:16:20.300 --> 00:16:21.120
+autorizzazioni in dev
+
+00:16:21.120 --> 00:16:21.480
+o QA
+
+00:16:21.480 --> 00:16:22.400
+avranno lo stesso ruolo
+
+00:16:22.400 --> 00:16:22.800
+in prod.
+
+00:16:23.560 --> 00:16:24.400
+Avere questi passaggi
+
+00:16:24.400 --> 00:16:25.020
+nella pipeline
+
+00:16:25.020 --> 00:16:26.000
+significa che lo script
+
+00:16:26.000 --> 00:16:26.900
+fallisce in anticipo
+
+00:16:26.900 --> 00:16:27.620
+se manca qualcosa
+
+00:16:27.620 --> 00:16:28.640
+e ottieni registri utili
+
+00:16:28.640 --> 00:16:29.180
+che ti indicano
+
+00:16:29.180 --> 00:16:29.640
+esattamente
+
+00:16:29.640 --> 00:16:30.540
+dove si trova la lacuna.
+
+00:16:31.340 --> 00:16:32.440
+Questi controlli automatizzati
+
+00:16:32.440 --> 00:16:33.140
+fanno la differenza
+
+00:16:33.140 --> 00:16:34.120
+tra trascorre la giornata
+
+00:16:34.120 --> 00:16:35.220
+a creare funzionalità utili
+
+00:16:35.220 --> 00:16:35.940
+e passare la serata
+
+00:16:35.940 --> 00:16:36.640
+a risolvere problemi
+
+00:16:36.640 --> 00:16:37.260
+di distribuzione
+
+00:16:37.260 --> 00:16:38.040
+non funzionanti.
+
+00:16:39.520 --> 00:16:40.100
+Non si limitano
+
+00:16:40.100 --> 00:16:40.860
+a mantenere stabile
+
+00:16:40.860 --> 00:16:41.320
+l'ambiente
+
+00:16:41.320 --> 00:16:42.240
+ma danno all'intero team
+
+00:16:42.240 --> 00:16:42.840
+la certezza
+
+00:16:42.840 --> 00:16:43.420
+che le modifiche
+
+00:16:43.420 --> 00:16:44.420
+in corso nella pipeline
+
+00:16:44.420 --> 00:16:45.340
+non abbiano saltato
+
+00:16:45.340 --> 00:16:46.500
+alcun passaggio cruciale
+
+00:16:46.500 --> 00:16:47.620
+o perso una dipendenza
+
+00:16:47.620 --> 00:16:48.640
+dell'ultimo minuto.
+
+00:16:49.860 --> 00:16:50.700
+Trasformano la giornata
+
+00:16:50.700 --> 00:16:51.420
+di distribuzione
+
+00:16:51.420 --> 00:16:51.860
+da un momento
+
+00:16:51.860 --> 00:16:52.360
+di tensione
+
+00:16:52.360 --> 00:16:52.780
+a una routine.
+
+00:16:53.520 --> 00:16:54.000
+Quando qualcuno
+
+00:16:54.000 --> 00:16:54.800
+chiede la distribuzione
+
+00:16:54.800 --> 00:16:55.340
+terminata
+
+00:16:55.340 --> 00:16:56.700
+puoi rispondere
+
+00:16:56.700 --> 00:16:57.760
+con più di quanto pensi
+
+00:16:57.760 --> 00:16:58.540
+perché hai le protezioni
+
+00:16:58.540 --> 00:16:59.380
+per dimostrarlo.
+
+00:17:00.940 --> 00:17:01.720
+È facile liquidare
+
+00:17:01.720 --> 00:17:02.200
+i controlli
+
+00:17:02.200 --> 00:17:02.940
+per la distribuzione
+
+00:17:02.940 --> 00:17:03.740
+come un'altra casella
+
+00:17:03.740 --> 00:17:04.400
+da spuntare
+
+00:17:04.400 --> 00:17:04.880
+ma nel mondo
+
+00:17:04.880 --> 00:17:05.680
+di Power Platform
+
+00:17:05.680 --> 00:17:06.840
+fanno risparmiare
+
+00:17:06.840 --> 00:17:07.960
+più tempo e fatica
+
+00:17:07.960 --> 00:17:08.960
+di quasi qualsiasi
+
+00:17:08.960 --> 00:17:09.880
+altra automazione
+
+00:17:09.880 --> 00:17:10.360
+di
+
+00:17:10.360 --> 00:17:12.400
+Invece di procedere
+
+00:17:12.400 --> 00:17:12.840
+a ritroso
+
+00:17:12.840 --> 00:17:13.900
+partendo da interruzioni
+
+00:17:13.900 --> 00:17:14.440
+e reclami
+
+00:17:14.440 --> 00:17:15.360
+ricevi avvisi
+
+00:17:15.360 --> 00:17:16.220
+sentinella proattivi
+
+00:17:16.220 --> 00:17:16.860
+tempestivi
+
+00:17:16.860 --> 00:17:17.780
+fruibili
+
+00:17:17.780 --> 00:17:18.340
+e collegati
+
+00:17:18.340 --> 00:17:18.820
+direttamente
+
+00:17:18.820 --> 00:17:19.580
+ai componenti
+
+00:17:19.580 --> 00:17:21.000
+considerali meno
+
+00:17:21.000 --> 00:17:21.920
+come una rete di sicurezza
+
+00:17:21.920 --> 00:17:22.860
+e più come un sistema RAD
+
+00:17:22.860 --> 00:17:24.140
+Naturalmente
+
+00:17:24.140 --> 00:17:25.160
+anche con le migliori protezioni
+
+00:17:25.160 --> 00:17:25.740
+le cose possono
+
+00:17:25.740 --> 00:17:26.700
+comunque andare storte
+
+00:17:26.700 --> 00:17:28.060
+Niente a prova
+
+00:17:28.060 --> 00:17:28.620
+di proiettile
+
+00:17:28.620 --> 00:17:29.020
+ogni team
+
+00:17:29.020 --> 00:17:29.720
+ha bisogno di un modo
+
+00:17:29.720 --> 00:17:30.720
+per annullare le modifiche
+
+00:17:30.720 --> 00:17:31.820
+quando qualcosa sfugge
+
+00:17:31.820 --> 00:17:33.680
+Vediamo quindi
+
+00:17:33.680 --> 00:17:34.220
+come funziona
+
+00:17:34.220 --> 00:17:35.000
+un vero e proprio piano
+
+00:17:35.000 --> 00:17:35.560
+di rollback
+
+00:17:35.560 --> 00:17:36.240
+e backup
+
+00:17:36.240 --> 00:17:37.160
+per Power Platform
+
+00:17:37.160 --> 00:17:38.300
+oltre alla semplice speranza
+
+00:17:38.300 --> 00:17:38.940
+che il pulsante
+
+00:17:38.940 --> 00:17:39.760
+annulla funzioni
+
+00:17:39.760 --> 00:17:42.280
+Quando le cose si rompono
+
+00:17:42.280 --> 00:17:42.960
+è necessario
+
+00:17:42.960 --> 00:17:43.860
+creare una vera strategia
+
+00:17:43.860 --> 00:17:44.760
+di rollback e backup
+
+00:17:44.760 --> 00:17:46.640
+Parliamo di cosa
+
+00:17:46.640 --> 00:17:47.520
+significa realmente
+
+00:17:47.520 --> 00:17:48.840
+il rollback per Power Platform
+
+00:17:48.840 --> 00:17:49.740
+perché è facile supporre
+
+00:17:49.740 --> 00:17:51.100
+che ci sia un grande pulsante
+
+00:17:51.100 --> 00:17:52.300
+annulla pronto a salvarti
+
+00:17:52.300 --> 00:17:53.120
+quando una distribuzione
+
+00:17:53.120 --> 00:17:53.680
+si blocca
+
+00:17:53.680 --> 00:17:55.740
+Tuttavia
+
+00:17:55.740 --> 00:17:56.140
+a differenza
+
+00:17:56.140 --> 00:17:57.040
+dei progetti di codice
+
+00:17:57.040 --> 00:17:57.700
+in cui un rollback
+
+00:17:57.700 --> 00:17:58.400
+è solo un ripristino
+
+00:17:58.400 --> 00:17:58.780
+di git
+
+00:17:58.780 --> 00:17:59.580
+o una ridistribuzione
+
+00:17:59.580 --> 00:18:00.180
+di un pacchetto
+
+00:18:00.180 --> 00:18:01.400
+il mondo di Power Platform
+
+00:18:01.400 --> 00:18:02.460
+è molto meno indulgente
+
+00:18:02.460 --> 00:18:03.940
+non esistono di ripristino
+
+00:18:03.940 --> 00:18:05.120
+della distribuzione nativa
+
+00:18:05.120 --> 00:18:06.620
+una volta eseguita
+
+00:18:06.620 --> 00:18:07.280
+un'importazione
+
+00:18:07.280 --> 00:18:07.740
+le modifiche
+
+00:18:07.740 --> 00:18:08.260
+vengono integrate
+
+00:18:08.260 --> 00:18:08.920
+nell'ambiente
+
+00:18:08.920 --> 00:18:09.640
+le tabelle potrebbero
+
+00:18:09.640 --> 00:18:10.420
+essere aggiornate
+
+00:18:10.420 --> 00:18:11.300
+i componenti potrebbero
+
+00:18:11.300 --> 00:18:12.080
+cambiare versione
+
+00:18:12.080 --> 00:18:12.980
+le relazioni tra i dati
+
+00:18:12.980 --> 00:18:13.480
+potrebbero essere
+
+00:18:13.480 --> 00:18:13.880
+tra i dati
+
+00:18:13.880 --> 00:18:14.400
+potrebbero essere
+
+00:18:14.400 --> 00:18:15.520
+organizzati in modo silenzioso
+
+00:18:15.520 --> 00:18:16.680
+se qualcosa non va
+
+00:18:16.680 --> 00:18:17.760
+a metà dell'importazione
+
+00:18:17.760 --> 00:18:18.880
+il risultato potrebbe essere
+
+00:18:18.880 --> 00:18:19.520
+la distribuzione
+
+00:18:19.520 --> 00:18:20.340
+di metà soluzione
+
+00:18:20.340 --> 00:18:21.400
+integrazioni interrotte
+
+00:18:21.400 --> 00:18:22.140
+utenti bloccati
+
+00:18:22.140 --> 00:18:23.020
+dall'accesso alle app
+
+00:18:23.020 --> 00:18:24.020
+su cui fanno affidamento
+
+00:18:24.020 --> 00:18:25.340
+la posta in gioco
+
+00:18:25.340 --> 00:18:26.140
+è raramente ovvia
+
+00:18:26.140 --> 00:18:27.020
+finché non si verifica
+
+00:18:27.020 --> 00:18:27.520
+e a quel punto
+
+00:18:27.520 --> 00:18:28.640
+la correzione richiede finezza
+
+00:18:28.640 --> 00:18:30.040
+la dura verità
+
+00:18:30.040 --> 00:18:30.720
+è che un'importazione
+
+00:18:30.720 --> 00:18:31.160
+mal riuscita
+
+00:18:31.160 --> 00:18:31.740
+lascia l'ambiente
+
+00:18:31.740 --> 00:18:32.680
+in una sorta di limbo
+
+00:18:32.680 --> 00:18:34.460
+alcuni componenti
+
+00:18:34.460 --> 00:18:35.560
+potrebbero essere aggiornati
+
+00:18:35.560 --> 00:18:36.720
+altri potrebbero restare
+
+00:18:36.720 --> 00:18:37.740
+alla vecchia versione
+
+00:18:37.740 --> 00:18:38.700
+e le connessioni
+
+00:18:38.700 --> 00:18:39.140
+o i ruoli
+
+00:18:39.140 --> 00:18:39.900
+potrebbero trovarsi
+
+00:18:39.900 --> 00:18:40.920
+in uno stato indefinito
+
+00:18:40.920 --> 00:18:42.140
+le configurazioni
+
+00:18:42.140 --> 00:18:42.980
+perdono rapidamente
+
+00:18:42.980 --> 00:18:43.900
+la sincronizzazione
+
+00:18:43.900 --> 00:18:44.600
+e il sistema
+
+00:18:44.600 --> 00:18:45.760
+non corrisponde esattamente
+
+00:18:45.760 --> 00:18:46.800
+alle intenzioni di tutti
+
+00:18:46.800 --> 00:18:48.280
+ciò che sembra
+
+00:18:48.280 --> 00:18:49.120
+una piccola modifica
+
+00:18:49.120 --> 00:18:50.220
+in una soluzione gestita
+
+00:18:50.220 --> 00:18:50.960
+può compromettere
+
+00:18:50.960 --> 00:18:51.680
+interi processi
+
+00:18:51.680 --> 00:18:52.540
+aziendali a valle
+
+00:18:52.540 --> 00:18:54.060
+sia la maggior parte
+
+00:18:54.060 --> 00:18:54.480
+dell'amministratore
+
+00:18:54.480 --> 00:18:55.960
+si ha la sensazione
+
+00:18:55.960 --> 00:18:56.840
+di poter semplicemente
+
+00:18:56.840 --> 00:18:57.740
+eseguire di nuovo
+
+00:18:57.740 --> 00:18:58.260
+la modifica
+
+00:18:58.260 --> 00:18:59.360
+o annullare un passaggio
+
+00:18:59.360 --> 00:18:59.920
+quando in pratica
+
+00:18:59.920 --> 00:19:00.420
+si ha a che fare
+
+00:19:00.420 --> 00:19:01.460
+con un'applicazione attiva
+
+00:19:01.460 --> 00:19:02.000
+su cui gli utenti
+
+00:19:02.000 --> 00:19:02.880
+contano per svolgere
+
+00:19:02.880 --> 00:19:03.480
+il proprio lavoro
+
+00:19:03.480 --> 00:19:04.880
+ora immagina
+
+00:19:04.880 --> 00:19:05.440
+posta in gioco
+
+00:19:05.440 --> 00:19:06.660
+con un esempio reale
+
+00:19:06.660 --> 00:19:08.020
+una grande società finanziaria
+
+00:19:08.020 --> 00:19:08.480
+aveva in coda
+
+00:19:08.480 --> 00:19:09.440
+una nuova funzionalità
+
+00:19:09.440 --> 00:19:10.320
+per il proprio portale
+
+00:19:10.320 --> 00:19:10.960
+Power Apps
+
+00:19:10.960 --> 00:19:11.840
+alcune modifiche
+
+00:19:11.840 --> 00:19:13.260
+al flusso di lavoro
+
+00:19:13.260 --> 00:19:14.740
+un paio di nuovi dashboard
+
+00:19:14.740 --> 00:19:15.520
+e una tabella
+
+00:19:15.520 --> 00:19:16.820
+dati e riconfigurata
+
+00:19:16.820 --> 00:19:18.680
+la modifica è stata superata
+
+00:19:18.680 --> 00:19:19.540
+rapidamente dal controllo
+
+00:19:19.540 --> 00:19:20.260
+qualità quindi hanno dato
+
+00:19:20.260 --> 00:19:21.080
+il via libero all'importazione
+
+00:19:21.080 --> 00:19:21.520
+in produzione
+
+00:19:21.520 --> 00:19:22.440
+la tada serata di venerdì
+
+00:19:22.440 --> 00:19:26.840
+l'importazione ha generato
+
+00:19:26.840 --> 00:19:27.800
+un errore a metà
+
+00:19:27.800 --> 00:19:28.540
+il risultato finale
+
+00:19:28.540 --> 00:19:29.060
+è che gli utenti
+
+00:19:29.060 --> 00:19:29.600
+che hanno effettuato
+
+00:19:29.600 --> 00:19:30.560
+l'accesso lunedì mattina
+
+00:19:30.560 --> 00:19:31.400
+hanno trovato dashboard
+
+00:19:31.400 --> 00:19:32.100
+non funzionanti
+
+00:19:32.100 --> 00:19:32.980
+e automazioni non riuscite
+
+00:19:32.980 --> 00:19:33.400
+e una manciata
+
+00:19:33.400 --> 00:19:33.980
+di App Canvas
+
+00:19:33.980 --> 00:19:34.820
+che non si caricavano
+
+00:19:34.820 --> 00:19:36.640
+a peggiorare le cose
+
+00:19:36.640 --> 00:19:37.720
+l'ultimo backup completo
+
+00:19:37.720 --> 00:19:38.160
+dell'ambiente
+
+00:19:38.160 --> 00:19:39.000
+era vecchio di settimane
+
+00:19:39.000 --> 00:19:39.840
+e non avevano esportato
+
+00:19:39.840 --> 00:19:40.420
+l'ultima versione
+
+00:19:40.420 --> 00:19:41.000
+della soluzione
+
+00:19:41.000 --> 00:19:41.840
+dopo le modifiche
+
+00:19:41.840 --> 00:19:42.500
+dell'ultimo minuto
+
+00:19:42.500 --> 00:19:43.680
+portate dallo sviluppatore
+
+00:19:43.680 --> 00:19:45.580
+le opzioni di ripristino
+
+00:19:45.580 --> 00:19:46.240
+erano limitate
+
+00:19:46.240 --> 00:19:46.940
+l'azienda ha perso
+
+00:19:46.940 --> 00:19:47.940
+un'intera giornata di lavoro
+
+00:19:47.940 --> 00:19:48.980
+mentre gli amministratori
+
+00:19:48.980 --> 00:19:49.660
+rimettevano insieme
+
+00:19:49.660 --> 00:19:50.140
+l'ambiente
+
+00:19:50.140 --> 00:19:51.720
+nessun singolo passaggio
+
+00:19:51.720 --> 00:19:53.100
+ha causato il disastro
+
+00:19:53.100 --> 00:19:53.880
+è stata una finestra
+
+00:19:53.880 --> 00:19:54.640
+di backup mancata
+
+00:19:54.640 --> 00:19:55.900
+la convinzione di soluzioni rapide
+
+00:19:55.900 --> 00:19:56.440
+e la mancanza
+
+00:19:56.440 --> 00:19:57.680
+di una pianificazione flessibile
+
+00:19:57.680 --> 00:19:58.180
+del rollback
+
+00:19:58.180 --> 00:19:58.980
+che li ha esposti
+
+00:19:58.980 --> 00:20:00.600
+quindi cosa puoi fare
+
+00:20:00.600 --> 00:20:01.080
+effettivamente
+
+00:20:01.080 --> 00:20:02.000
+per evitare di finire
+
+00:20:02.000 --> 00:20:02.940
+nel limbo del rollback
+
+00:20:02.940 --> 00:20:05.220
+il primo più affidabile livello
+
+00:20:05.220 --> 00:20:05.980
+è automatizzare
+
+00:20:05.980 --> 00:20:06.800
+le esportazioni
+
+00:20:06.800 --> 00:20:07.660
+della soluzione
+
+00:20:07.660 --> 00:20:08.660
+in ogni fase
+
+00:20:08.660 --> 00:20:10.540
+invece di affidarti
+
+00:20:10.540 --> 00:20:11.180
+all'ultima versione
+
+00:20:11.180 --> 00:20:12.020
+in una cartella di sviluppo
+
+00:20:12.020 --> 00:20:12.640
+la tua pipeline
+
+00:20:12.640 --> 00:20:13.480
+dovrebbe esportare
+
+00:20:13.480 --> 00:20:14.540
+automaticamente la soluzione
+
+00:20:14.540 --> 00:20:15.480
+in una posizione sicura
+
+00:20:15.480 --> 00:20:16.500
+idealmente nel controllo
+
+00:20:16.500 --> 00:20:17.420
+del codice sorgente
+
+00:20:17.420 --> 00:20:18.980
+in questo modo
+
+00:20:18.980 --> 00:20:19.780
+ogni versione
+
+00:20:19.780 --> 00:20:20.640
+è riuscita o non riuscita
+
+00:20:20.640 --> 00:20:21.820
+a un backup corrispondente
+
+00:20:21.820 --> 00:20:23.520
+se la distribuzione
+
+00:20:23.520 --> 00:20:24.480
+odierna non va a buon fine
+
+00:20:24.480 --> 00:20:25.360
+non rimani bloccato
+
+00:20:25.360 --> 00:20:26.020
+con ciò che si trova
+
+00:20:26.020 --> 00:20:26.620
+sul tuo desktop
+
+00:20:26.620 --> 00:20:28.100
+hai sempre accesso
+
+00:20:28.100 --> 00:20:28.860
+all'ultimo pacchetto
+
+00:20:28.860 --> 00:20:29.640
+valido o noto
+
+00:20:29.640 --> 00:20:31.400
+i backup noturni
+
+00:20:31.400 --> 00:20:31.800
+dell'ambiente
+
+00:20:31.800 --> 00:20:32.920
+sono un'altra mossa pratica
+
+00:20:32.920 --> 00:20:33.560
+anche se pensi
+
+00:20:33.560 --> 00:20:34.880
+di non averne mai bisogno
+
+00:20:34.880 --> 00:20:36.360
+Microsoft offre
+
+00:20:36.360 --> 00:20:37.220
+funzionalità di backup
+
+00:20:37.220 --> 00:20:38.120
+complete dell'ambiente
+
+00:20:38.120 --> 00:20:38.680
+in particolare
+
+00:20:38.680 --> 00:20:39.240
+per gli ambienti
+
+00:20:39.240 --> 00:20:39.700
+Dataverse
+
+00:20:39.700 --> 00:20:40.480
+ma rimarrai sorpreso
+
+00:20:40.480 --> 00:20:41.000
+da quanti team
+
+00:20:41.000 --> 00:20:41.720
+non automatizzano
+
+00:20:41.720 --> 00:20:42.720
+effettivamente l'utilizzo
+
+00:20:42.720 --> 00:20:44.160
+le linee ufficiali
+
+00:20:44.160 --> 00:20:44.620
+sono chiare
+
+00:20:44.620 --> 00:20:45.220
+esegui sempre
+
+00:20:45.220 --> 00:20:45.980
+un backup completo
+
+00:20:47.420 --> 00:20:49.400
+tuttavia sul campo
+
+00:20:49.400 --> 00:20:50.260
+molti team si affidano
+
+00:20:50.260 --> 00:20:50.660
+al principio
+
+00:20:50.660 --> 00:20:51.920
+lo faremo se ce ne ricordiamo
+
+00:20:51.920 --> 00:20:53.860
+funziona più o meno
+
+00:20:53.860 --> 00:20:54.660
+come ci si aspetterebbe
+
+00:20:54.660 --> 00:20:55.380
+finché non lo fa più
+
+00:20:55.380 --> 00:20:56.880
+configurare backup
+
+00:20:56.880 --> 00:20:58.080
+notturni o predistribuzione
+
+00:20:58.080 --> 00:20:58.760
+significa disporre
+
+00:20:58.760 --> 00:20:59.620
+di uno snapshot completo
+
+00:20:59.620 --> 00:21:00.140
+da cui eseguire
+
+00:21:00.140 --> 00:21:01.440
+ripristini in caso di problemi
+
+00:21:01.440 --> 00:21:02.720
+se abbinate alle esportazioni
+
+00:21:02.720 --> 00:21:03.720
+a livello di soluzione
+
+00:21:03.720 --> 00:21:04.360
+puoi decidere
+
+00:21:04.360 --> 00:21:05.020
+se ripristinare
+
+00:21:05.020 --> 00:21:05.740
+un intero ambiente
+
+00:21:05.740 --> 00:21:06.460
+o semplicemente
+
+00:21:06.460 --> 00:21:07.360
+eseguire il rollback
+
+00:21:07.360 --> 00:21:08.760
+di una singola soluzione
+
+00:21:08.760 --> 00:21:09.660
+seconda dell'entità
+
+00:21:09.660 --> 00:21:10.260
+del problema
+
+00:21:10.260 --> 00:21:12.040
+il file di soluzione
+
+00:21:12.040 --> 00:21:12.600
+delle versioni
+
+00:21:12.600 --> 00:21:12.960
+e il controllo
+
+00:21:12.960 --> 00:21:13.680
+del codice sorgente
+
+00:21:13.680 --> 00:21:14.680
+possono sembrare basilari
+
+00:21:14.680 --> 00:21:15.420
+ma sono un vero toccasale
+
+00:21:15.420 --> 00:21:16.940
+il monitoraggio di ogni file zip
+
+00:21:16.940 --> 00:21:18.020
+esportato con cronologia
+
+00:21:18.020 --> 00:21:18.500
+di commit
+
+00:21:18.500 --> 00:21:19.440
+denominazione dei rami
+
+00:21:19.440 --> 00:21:20.080
+e richieste pool
+
+00:21:20.080 --> 00:21:21.340
+avvicina le distribuzioni
+
+00:21:21.340 --> 00:21:22.080
+di power platform
+
+00:21:22.080 --> 00:21:22.660
+e cicli di vita
+
+00:21:22.660 --> 00:21:23.680
+delle applicazioni classiche
+
+00:21:23.680 --> 00:21:25.080
+ottieni un audit trail
+
+00:21:25.080 --> 00:21:26.160
+completo di cosa è cambiato
+
+00:21:26.160 --> 00:21:26.780
+quando e da chi
+
+00:21:26.780 --> 00:21:28.280
+se diventa necessario
+
+00:21:28.280 --> 00:21:28.640
+un rollback
+
+00:21:28.640 --> 00:21:29.920
+non è necessario organizzarsi
+
+00:21:29.920 --> 00:21:30.920
+basta ridistribuire
+
+00:21:30.920 --> 00:21:32.040
+la build precedente riuscita
+
+00:21:32.040 --> 00:21:33.520
+non è solo comodo
+
+00:21:33.520 --> 00:21:34.720
+è uno di po' affidabili
+
+00:21:34.720 --> 00:21:35.340
+per ripristinare
+
+00:21:35.340 --> 00:21:36.060
+modifiche aziendali
+
+00:21:36.060 --> 00:21:36.440
+critiche
+
+00:21:36.440 --> 00:21:37.900
+senza conseguenze collaterali
+
+00:21:37.900 --> 00:21:38.920
+senza collaterali
+
+00:21:38.920 --> 00:21:39.880
+quando è il momento
+
+00:21:39.880 --> 00:21:40.260
+di eseguire
+
+00:21:40.260 --> 00:21:41.060
+un vero rollback
+
+00:21:41.060 --> 00:21:42.420
+i file di soluzioni esportati
+
+00:21:42.420 --> 00:21:43.880
+sono la tua ancora di saldezza
+
+00:21:43.880 --> 00:21:44.540
+sono lezza
+
+00:21:44.540 --> 00:21:45.920
+inizia ripristinando
+
+00:21:45.920 --> 00:21:46.860
+la versione precedente
+
+00:21:46.860 --> 00:21:47.640
+della soluzione
+
+00:21:47.640 --> 00:21:48.580
+che è già convalidato
+
+00:21:48.580 --> 00:21:49.680
+in un ambiente inferiore
+
+00:21:49.680 --> 00:21:50.920
+il rollback
+
+00:21:50.920 --> 00:21:51.620
+a quello stato noto
+
+00:21:51.620 --> 00:21:52.140
+e funzionante
+
+00:21:52.140 --> 00:21:53.360
+rimposterà i tuoi componenti
+
+00:21:53.360 --> 00:21:53.760
+i flussi
+
+00:21:53.760 --> 00:21:54.980
+e le personalizzazioni correlate
+
+00:21:54.980 --> 00:21:56.520
+non otterrai una macchina
+
+00:21:56.520 --> 00:21:57.300
+del tempo perfetta
+
+00:21:57.300 --> 00:21:58.100
+il record
+
+00:21:58.100 --> 00:21:59.080
+o i dati transazionali
+
+00:21:59.080 --> 00:22:00.480
+modificati dall'ultima distribuzione
+
+00:22:00.480 --> 00:22:01.720
+potrebbero essere ancora a rischio
+
+00:22:01.720 --> 00:22:02.700
+ma puoi riportare l'app
+
+00:22:02.700 --> 00:22:03.920
+a una configurazione funzionante
+
+00:22:03.920 --> 00:22:04.980
+spesso entro un'ora
+
+00:22:04.980 --> 00:22:07.400
+per problemi più gravi
+
+00:22:07.400 --> 00:22:08.720
+come un'entità danneggiata
+
+00:22:08.720 --> 00:22:09.500
+relazioni perse
+
+00:22:09.500 --> 00:22:11.020
+o problemi di integrazione dei dati
+
+00:22:11.020 --> 00:22:12.600
+potresti dover utilizzare
+
+00:22:12.600 --> 00:22:13.000
+quel backup
+
+00:22:13.000 --> 00:22:13.820
+a livello di ambiente
+
+00:22:13.820 --> 00:22:14.880
+o suddividere i ripristini
+
+00:22:14.880 --> 00:22:15.760
+delle singole tabelle
+
+00:22:15.760 --> 00:22:17.080
+a seconda di ciò che è disponibile
+
+00:22:17.080 --> 00:22:19.100
+una lezione appresa
+
+00:22:19.100 --> 00:22:19.660
+a tue spese
+
+00:22:19.660 --> 00:22:21.020
+non dare mai per scontato
+
+00:22:21.020 --> 00:22:21.880
+che il tuo piano di rollback
+
+00:22:21.880 --> 00:22:22.360
+sia solido
+
+00:22:22.360 --> 00:22:23.480
+a meno che tu non lo abbia testato
+
+00:22:23.480 --> 00:22:24.140
+in una sandbox
+
+00:22:24.140 --> 00:22:25.840
+la differenza tra un processo
+
+00:22:25.840 --> 00:22:26.780
+di ripristino teorico
+
+00:22:26.780 --> 00:22:27.360
+e uno reale
+
+00:22:27.360 --> 00:22:27.960
+è enorme
+
+00:22:27.960 --> 00:22:30.220
+senza effettuare test
+
+00:22:30.220 --> 00:22:31.060
+rischi di ripristinare
+
+00:22:31.060 --> 00:22:31.880
+dipendenze incomplete
+
+00:22:31.880 --> 00:22:32.660
+o di riscontrare
+
+00:22:32.660 --> 00:22:33.700
+conflitti di importazione
+
+00:22:33.700 --> 00:22:34.240
+imprevisti
+
+00:22:34.240 --> 00:22:35.540
+esercitarsi per il rollback
+
+00:22:35.540 --> 00:22:35.720
+è un
+
+00:22:35.720 --> 00:22:36.780
+grazie a tutti

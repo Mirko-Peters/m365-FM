@@ -1,0 +1,937 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:02.440
+Welkom bij weer een nieuwe aflevering van Microsoft Knowledge Nuggets.
+
+00:00:02.620 --> 00:00:03.600
+Ik ben Mirko Peters.
+
+00:00:03.860 --> 00:00:05.860
+Het onderwerp van vandaag, Azure Logic Apps.
+
+00:00:06.020 --> 00:00:06.820
+Hier is de vraag.
+
+00:00:07.060 --> 00:00:09.820
+Wat als je jouw apps kon koppelen zonder één regelcode te schrijven?
+
+00:00:10.000 --> 00:00:12.440
+Ik heb het niet over simpele dingen zoals het versturen van een e-mail.
+
+00:00:12.620 --> 00:00:15.320
+Ik heb het over het verbinden van systemen die niet met elkaar communiceren.
+
+00:00:15.500 --> 00:00:20.540
+Je e-mail, je bestandsopslag, je database, je klantgegevens en ze automatisch laten samenwerken.
+
+00:00:20.740 --> 00:00:22.700
+Dat is precies wat Azure Logic Apps doet.
+
+00:00:22.900 --> 00:00:29.380
+In deze aflevering leg ik uit wat het echt is, hoe het werkt en waarom het belangrijk is voor iedereen die op het werk Microsoft Tools gebruikt.
+
+00:00:29.380 --> 00:00:33.880
+Aan het eind begrijp je het totaalplaatje en weet je precies waar Logic Apps in jouw wereld past.
+
+00:00:34.080 --> 00:00:36.900
+Het probleem, waarom automatisering een lijm nodig heeft.
+
+00:00:37.120 --> 00:00:39.540
+Laten we beginnen met een scenario dat de meeste mensen kennen.
+
+00:00:39.740 --> 00:00:43.460
+Je krijgt een bestand in een SharePoint map en iemand moet daarvan op de hoogte worden gesteld in Teams.
+
+00:00:43.660 --> 00:00:45.660
+Misschien moet er ook een database worden bijgewerkt.
+
+00:00:45.840 --> 00:00:48.440
+Drie afzonderlijke systemen zonder enige onderlinge verbinding.
+
+00:00:48.680 --> 00:00:49.640
+Dus, wat gebeurt er?
+
+00:00:49.800 --> 00:00:56.140
+Iemand controleert handmatig de map, kopieert de informatie, plakt deze in Teams, opent vervolgens de database en voert de update telkens opnieuw uit.
+
+00:00:56.300 --> 00:00:58.300
+Het is traag, saai en foutgevoelig.
+
+00:00:58.300 --> 00:01:01.760
+De oude manier om dit aan te pakken was door iemand aangepast de code te laten schrijven.
+
+00:01:01.960 --> 00:01:07.220
+Dat betekent een ontwikkelaar zoeken, uitleggen wat je nodig hebt, weken wachten tot ze het hebben gebouwd en dan weer wachten als er iets kapot gaat.
+
+00:01:07.440 --> 00:01:12.680
+Voor de meeste teams is dat geen optie omdat de IT-afdeling een achterstand heeft en zakelijke teamsproblemen hebben die nu opgelost moeten worden.
+
+00:01:12.840 --> 00:01:14.200
+Dus blijft het werk handmatig.
+
+00:01:14.340 --> 00:01:16.400
+Het probleem is niet dat mensen niet willen automatiseren.
+
+00:01:16.600 --> 00:01:18.800
+Het is dat het verbinden van verschillende systemen moeilijk is.
+
+00:01:18.960 --> 00:01:22.800
+Elk systeem heeft zijn eigen manier van authenticatie, eigen dataformaat en eigen regels.
+
+00:01:22.800 --> 00:01:28.420
+Code schrijven omdat allemaal te overbruggen kost tijd en expertise en de meeste bedrijven hebben niet genoeg ontwikkelaars beschikbaar.
+
+00:01:28.640 --> 00:01:31.340
+Dus, wat als er een platform was dat al die koppelingen voor je deed?
+
+00:01:31.520 --> 00:01:40.380
+Een platform dat al weet hoe het moet communiceren met SharePoint, Teams, Outlook, databases en honderden andere diensten, waar je alleen zegt, als dit gebeurt, doe dan dat en het regelt de rest.
+
+00:01:40.620 --> 00:01:42.620
+Dat is precies wat Azure Logic Apps is.
+
+00:01:42.800 --> 00:01:44.200
+Wat Logic Apps werkelijk is.
+
+00:01:44.200 --> 00:01:47.180
+Welkom bij weer een nieuwe aflevering van Microsoft Knowledge Nuggets.
+
+00:01:47.360 --> 00:01:50.680
+Ik ben Mirko Peters en vandaag praten we in begrijpelijke taal over Azure Logic Apps.
+
+00:01:50.880 --> 00:01:51.900
+Dus, wat is het precies?
+
+00:01:52.140 --> 00:01:53.160
+Laten we het opsplitsen.
+
+00:01:53.300 --> 00:01:56.180
+Azure Logic Apps is een cloud-gebaseerde workflow-service van Microsoft.
+
+00:01:56.420 --> 00:02:00.180
+Het draait in Azure, wat betekent dat Microsoft de servers, de schaalbaarheid en de uptime beheert.
+
+00:02:00.380 --> 00:02:02.060
+Daar hoef je je helemaal geen zorgen over te maken.
+
+00:02:02.240 --> 00:02:03.880
+Je bouwt simpelweg je workflow en hij draait.
+
+00:02:03.880 --> 00:02:05.820
+Dit is de eenvoudigste manier om erover na te denken.
+
+00:02:06.040 --> 00:02:07.560
+Stel je voor dat je bedrijf een kantoorpand is.
+
+00:02:07.720 --> 00:02:09.100
+Elke afdeling is een aparte kamer.
+
+00:02:09.300 --> 00:02:10.400
+SharePoint is één kamer.
+
+00:02:10.560 --> 00:02:11.340
+Teams is een andere.
+
+00:02:11.560 --> 00:02:13.120
+Je database bevindt zich verderop in de gang.
+
+00:02:13.340 --> 00:02:16.820
+Normaal gesproken moet iemand iets fysiek verplaatsen om het van de ene naar de andere kamer te krijgen.
+
+00:02:17.060 --> 00:02:19.100
+Logic Apps is de geautomatiseerde postkamer.
+
+00:02:19.300 --> 00:02:23.360
+Het staat in het midden, weet waar alles heen moet en stuurt berichten automatisch tussen afdelingen door.
+
+00:02:23.520 --> 00:02:25.720
+Je hoeft geen nieuwe deuren tussen elke kamer te bouwen.
+
+00:02:25.880 --> 00:02:27.720
+Je vertelt de postkamer gewoon wat hij moet doen.
+
+00:02:27.920 --> 00:02:31.580
+Misschien heb je wel eens van Power Automate gehoord en vraag je je af, is dat niet hetzelfde?
+
+00:02:31.580 --> 00:02:32.440
+Niet precies.
+
+00:02:32.620 --> 00:02:34.920
+Power Automate is gebouwd voor zakelijke gebruikers.
+
+00:02:35.100 --> 00:02:37.720
+Het is ontworpen voor eenvoudige persoonlijke workflows, zoals
+
+00:02:37.720 --> 00:02:39.480
+e-mail me als ik een bericht krijg in Teams.
+
+00:02:39.480 --> 00:02:42.340
+Logic Apps is gebouwd voor IT-teams en ontwikkelaars.
+
+00:02:42.540 --> 00:02:47.580
+Het verwerkt complexere scenario's, grotere volumes en bedrijfsbehoeften zoals beveiliging en compliance.
+
+00:02:47.840 --> 00:02:51.220
+Zie Power Automate als een fiets, ideaal om door het kantoor te reizen.
+
+00:02:51.460 --> 00:02:54.720
+Logic Apps is een vrachtwagen, gebouwd voor zwaardere ladingen en langere routes.
+
+00:02:55.080 --> 00:02:56.740
+Logic Apps is bovendien serverloos.
+
+00:02:56.940 --> 00:02:59.300
+Dat is een technische term, maar het betekent iets eenvoudigs.
+
+00:02:59.300 --> 00:03:01.620
+Je betaalt alleen wanneer je workflows daadwerkelijk draaien.
+
+00:03:01.760 --> 00:03:03.860
+Als er de hele dag niets gebeurt, betaal je niets.
+
+00:03:03.860 --> 00:03:09.220
+Als er duizend bestanden tegelijk worden geüpload, schaalt het platform automatisch op en betaal je voor wat je hebt gebruikt.
+
+00:03:09.420 --> 00:03:14.180
+Geen servers om te beheren, geen capaciteitsplanning, geen verspild geld aan inactieve hardware.
+
+00:03:14.440 --> 00:03:16.360
+De bouwstenen, triggers en acties.
+
+00:03:16.600 --> 00:03:19.360
+Elke Logic App begint op dezelfde manier met een trigger.
+
+00:03:19.600 --> 00:03:21.920
+Een trigger is simpelweg iets dat je workflow opstart.
+
+00:03:22.160 --> 00:03:23.740
+Denk erover als een bewegingssensor.
+
+00:03:24.000 --> 00:03:26.360
+Wanneer de sensor beweging detecteert, gaan de lichten aan.
+
+00:03:26.500 --> 00:03:29.180
+In Logic Apps start je workflow zodra de trigger wordt geactiveerd.
+
+00:03:29.320 --> 00:03:30.720
+Er zijn twee hoofdtypen triggers.
+
+00:03:30.720 --> 00:03:33.300
+Op gebeurtenissen gebaseerde triggers wachten tot er iets gebeurt.
+
+00:03:33.440 --> 00:03:35.140
+Een bestand wordt geüpload naar SharePoint.
+
+00:03:35.340 --> 00:03:36.800
+Een e-mail komt binnen in Outlook.
+
+00:03:36.960 --> 00:03:38.760
+Een nieuwe rij verschijnt in een database-tabel.
+
+00:03:38.960 --> 00:03:43.340
+Op schema gebaseerde triggers draaien op een timer elk uur, elke dag om 9 uur, elke maandagochtend.
+
+00:03:43.500 --> 00:03:45.020
+Je kiest wat logisch is voor jouw scenario.
+
+00:03:45.360 --> 00:03:47.340
+Zodra de trigger is geactiveerd, voeg je acties toe.
+
+00:03:47.480 --> 00:03:49.240
+Acties zijn de stappen die je workflow onderneemt.
+
+00:03:49.400 --> 00:03:50.440
+Stuur een bericht in Teams.
+
+00:03:50.700 --> 00:03:51.820
+Maak een record aan in Salesforce.
+
+00:03:52.240 --> 00:03:53.540
+Update een rij in SQL Server.
+
+00:03:53.780 --> 00:03:54.880
+Roep een externe API aan.
+
+00:03:55.060 --> 00:03:57.280
+Elke actie is een bouwsteen die je aan elkaar kunt klikken.
+
+00:03:57.280 --> 00:03:58.920
+Laat me een concreet voorbeeld geven.
+
+00:03:58.920 --> 00:04:02.500
+Stel dat je een SharePoint documentbibliotheek hebt waar je teamvoorstellen uploadt.
+
+00:04:02.540 --> 00:04:05.720
+Wanneer er een nieuw voorstel binnenkomt, wil je dat het team hiervan op de hoogte is in Teams.
+
+00:04:05.900 --> 00:04:08.600
+Je trigger is het moment waarop een bestand wordt aangemaakt in SharePoint.
+
+00:04:08.780 --> 00:04:11.180
+Je actie is het plaatsen van een bericht in een Teams kanaal.
+
+00:04:11.320 --> 00:04:11.940
+Twee blokken.
+
+00:04:12.160 --> 00:04:12.800
+Dat is alles.
+
+00:04:13.040 --> 00:04:16.000
+De workflow wordt automatisch uitgevoerd zodra iemand een bestand uploadt.
+
+00:04:16.120 --> 00:04:18.140
+Niemand hoeft eraan te denken de melding te versturen.
+
+00:04:18.340 --> 00:04:19.180
+Het gebeurt gewoon.
+
+00:04:19.400 --> 00:04:21.940
+De visuele designers is de plek waar je deze workflows bouwt.
+
+00:04:22.040 --> 00:04:24.440
+Het is een drag-and-drop canvas in de Azure portal.
+
+00:04:24.440 --> 00:04:28.460
+Je kiest je trigger uit een lijst, sleept deze naar het canvas en voegt er acties onder toe.
+
+00:04:28.460 --> 00:04:30.940
+Elke actie wordt verbonden met de voorgaande actie.
+
+00:04:31.100 --> 00:04:32.480
+Je kunt voorwaarden toevoegen.
+
+00:04:32.680 --> 00:04:37.260
+Als het bestand groter is dan 1 megabyte, stuur het naar het review team, anders sla het op in het archief.
+
+00:04:37.420 --> 00:04:38.460
+Je kunt lussen toevoegen.
+
+00:04:38.680 --> 00:04:40.400
+Je kunt parallelle vertakkingen toevoegen.
+
+00:04:40.600 --> 00:04:44.840
+De designers toont je de gehele stroom visueel, zodat je precies ziet wat er bij elke stap gebeurt.
+
+00:04:45.000 --> 00:04:47.500
+En het mooie is, je hoeft geen ontwikkelaar te zijn om het te gebruiken.
+
+00:04:47.680 --> 00:04:50.240
+Als je een stroomdiagram kunt tekenen, kun je een Logic App bouwen.
+
+00:04:50.400 --> 00:04:52.740
+Het platform regelt alle technische werk achter de schermen.
+
+00:04:53.080 --> 00:04:55.900
+Authenticatie, foutafhandeling en nieuwe pogingen zijn allemaal ingebouwd.
+
+00:04:55.900 --> 00:04:59.360
+Maar de echte kracht zit niet alleen in de workflow zelf, maar in waar je verbinding mee kunt maken.
+
+00:04:59.520 --> 00:05:00.920
+En dat brengt ons bij connectors.
+
+00:05:01.420 --> 00:05:03.140
+Connectors, de echte superkracht.
+
+00:05:03.360 --> 00:05:06.720
+Logic Apps wordt geleverd met meer dan 1400 vooraf gebouwde connectors.
+
+00:05:07.080 --> 00:05:10.300
+Dat aantal klinkt indrukwekkend, maar laat me uitleggen wat het echt betekent.
+
+00:05:10.460 --> 00:05:13.860
+Een connector is een kant-en-klare brug tussen Logic Apps en een andere dienst.
+
+00:05:14.100 --> 00:05:17.960
+Microsoft heeft het zware werk van authenticatie, foutafhandeling en nieuwe pogingen al gedaan,
+
+00:05:18.200 --> 00:05:19.780
+dus je kiest de gewenste dienst en het werkt.
+
+00:05:19.780 --> 00:05:22.880
+Wil je gegevens ophalen uit Salesforce? Daar is een connector voor.
+
+00:05:23.040 --> 00:05:25.820
+Moet je een record bijwerken in SAP? Daar is ook een connector voor.
+
+00:05:25.980 --> 00:05:29.360
+En als je een bericht naar een service nou wachtrij moet sturen, is er een connector beschikbaar.
+
+00:05:29.580 --> 00:05:34.140
+Microsoft 365 diensten zoals SharePoint, Teams, Outlook en OneDrive hebben allemaal connectors.
+
+00:05:34.440 --> 00:05:38.480
+Azure diensten zoals SQL Database, Blob Storage en Event Grid zijn allemaal gedekt.
+
+00:05:38.720 --> 00:05:43.040
+Diensten van derden zoals Dropbox, GitHub, Twitter en Slack, er zijn connectors voor allemaal.
+
+00:05:43.360 --> 00:05:47.120
+Elke connector bied je een set triggers en acties die specifiek zijn voor die dienst.
+
+00:05:47.120 --> 00:05:50.840
+De SharePoint connector luistert naar nieuwe bestanden, de Outlook connector verstuurt e-mails
+
+00:05:50.840 --> 00:05:53.820
+en de SQL connector voert queries en opgeslagen procedures uit.
+
+00:05:53.960 --> 00:05:56.160
+Je hoeft de API van elke dienst niet te leren.
+
+00:05:56.360 --> 00:05:58.400
+De connector abstraheert dat allemaal weg.
+
+00:05:58.640 --> 00:06:00.940
+Nu, twee soorten connectors waar je vanaf moet weten.
+
+00:06:01.200 --> 00:06:04.080
+Ingebouwde connectors draaien binnen de Logic Apps runtime zelf.
+
+00:06:04.300 --> 00:06:07.840
+Ze zijn sneller en goedkoper omdat er geen externe aanroep naar een geroste dienst nodig is.
+
+00:06:08.020 --> 00:06:12.980
+Ingebouwde connectors zijn onder andere HTTP, Service Bus, Azure Functions en diverse Azure Services.
+
+00:06:13.240 --> 00:06:16.700
+Beheerde connectors worden gehost door Microsoft en dekken het bredere ecosysteem.
+
+00:06:16.700 --> 00:06:19.420
+Honderden services van Microsoft en externe partijen.
+
+00:06:19.560 --> 00:06:22.200
+Ze kosten iets meer per aanroep, maar bieden veel meer mogelijkheden.
+
+00:06:22.380 --> 00:06:25.120
+Als er geen connector is voor de service die je nodig hebt, zit je niet vast.
+
+00:06:25.320 --> 00:06:29.300
+Logic Apps bevat een generieke HTTP actie waarmee je elke rest API direct kunt aanroepen.
+
+00:06:29.500 --> 00:06:32.280
+Geef simpelweg de URL, methode, headers en body op.
+
+00:06:32.360 --> 00:06:35.360
+Het werkt hetzelfde als een connector, alleen zonder het vooraf gebouwde gemak.
+
+00:06:35.480 --> 00:06:39.820
+Je regelt zelf de authenticatie, maar krijgt wel alle mogelijkheden voor opnieuw proberen en foutafhandeling van Logic Apps.
+
+00:06:40.020 --> 00:06:43.840
+De 1400 connectors zijn belangrijk omdat ze de grootste barrière voor automatisering wegnemen.
+
+00:06:43.840 --> 00:06:48.320
+Het integratiewerk. Elke connector die je niet zelf hoeft te bouwen, bespaart weken aan ontwikkeltijd.
+
+00:06:48.500 --> 00:06:56.720
+En wanneer je connectors combineert met triggers en acties, kun je workflows bouwen die je hele technologie stack ontspannen zonder één regel integratiecode te schrijven.
+
+00:06:56.940 --> 00:06:59.500
+Consumption versus standard. Welk model past bij jou?
+
+00:06:59.700 --> 00:07:03.940
+Je begrijpt nu wat Logic Apps is, hoe triggers en acties werken en wat de kracht van connectors is.
+
+00:07:04.120 --> 00:07:07.040
+Maar er is nog een beslissing die je moet nemen en die invloed heeft op je kosten.
+
+00:07:07.340 --> 00:07:10.200
+Logic Apps kent twee varianten, consumption en standard.
+
+00:07:10.200 --> 00:07:13.500
+En ze zijn niet hetzelfde, de verkeerde keuze kan je geld kosten.
+
+00:07:13.840 --> 00:07:16.160
+Consumption is het betalen per uitvoering, model.
+
+00:07:16.440 --> 00:07:19.260
+Je bouwt je workflow en betaalt alleen wanneer deze wordt uitgevoerd.
+
+00:07:19.440 --> 00:07:21.620
+Als deze de hele dag niets doet, betaal je niets.
+
+00:07:21.820 --> 00:07:24.960
+Als deze honderd keer wordt uitgevoerd, betaal je voor honderd uitvoeringen.
+
+00:07:25.100 --> 00:07:29.620
+De eerste 4000 acties per maand zijn gratis en daarna zijn het fracties van een cent per actie.
+
+00:07:29.780 --> 00:07:32.600
+Connector aanroepen kost een iets meer, maar nog steeds zeer kleine bedragen.
+
+00:07:32.840 --> 00:07:35.120
+Voor de meeste beginners is dit de juiste plek om te starten.
+
+00:07:35.320 --> 00:07:36.580
+Zie consumption als een taxi.
+
+00:07:36.780 --> 00:07:38.120
+Je betaalt voor de rit die je maakt.
+
+00:07:38.120 --> 00:07:40.200
+Als je nergens heen gaat, betaal je niets.
+
+00:07:40.380 --> 00:07:42.340
+Als je een korte rit maakt, kost het weinig.
+
+00:07:42.480 --> 00:07:44.200
+Als je een lange rit maakt, kost het meer.
+
+00:07:44.400 --> 00:07:46.380
+De prijs komt exact overeen met je gebruik.
+
+00:07:46.580 --> 00:07:47.480
+Standard is anders.
+
+00:07:47.780 --> 00:07:51.580
+Dit draait op Dedicated Compute als het hebben van je eigen server, maar beheert door Microsoft.
+
+00:07:51.860 --> 00:07:55.200
+Je betaalt een vast maandelijks bedrag op basis van hoeveel rekenkracht je reserveert.
+
+00:07:55.340 --> 00:08:01.760
+Het kleinste standard abonnement begint rond de 175 dollar per maand en geeft je één virtuele CPU en 3,5 gigabyte geheugen.
+
+00:08:01.920 --> 00:08:04.420
+Je kunt zoveel workflows draaien als je wilt op dat abonnement,
+
+00:08:04.640 --> 00:08:07.380
+en de prijs verandert niet op basis van hoe vaak ze worden uitgevoerd.
+
+00:08:07.380 --> 00:08:09.320
+Standard is als een afbetaling voor een auto.
+
+00:08:09.520 --> 00:08:12.900
+Je betaalt elke maand hetzelfde bedrag, of je nu eenmaal per dag rijdt of eenmaal per jaar.
+
+00:08:13.080 --> 00:08:16.640
+Als je veel rijdt, kan die vaste prijs per rit goedkoper zijn dan overal een taxi nemen.
+
+00:08:16.800 --> 00:08:19.600
+Maar als je nauwelijks rijdt, betaal je voor capaciteit die je niet gebruikt.
+
+00:08:19.760 --> 00:08:21.120
+Dus, wanneer kies je welke optie?
+
+00:08:21.320 --> 00:08:24.080
+Consumption is ideaal voor onregelmatige of kleinschalige workloads.
+
+00:08:24.360 --> 00:08:27.460
+Stel, een workflow die een paar keer per dag draait wanneer iemand een bestand uploadt,
+
+00:08:27.500 --> 00:08:28.940
+dat kost je centen per maand met consumption.
+
+00:08:29.200 --> 00:08:31.000
+Dus die op standard zetten zou zonde zijn.
+
+00:08:31.000 --> 00:08:35.800
+Maar als je een workflow hebt die duizenden keren per uur draait, zoals het verwerken van bestellingen,
+
+00:08:36.060 --> 00:08:41.300
+real-time data of complexe integraties, lopen de kosten per uitvoering bij consumption snel op.
+
+00:08:41.420 --> 00:08:44.740
+Op dat punt wordt de vaste maandprijs van standard de goedkopere optie.
+
+00:08:44.920 --> 00:08:46.620
+Er is nog een ander belangrijk verschil.
+
+00:08:46.880 --> 00:08:48.280
+Standard geeft je meer controle.
+
+00:08:48.540 --> 00:08:51.000
+Je krijgt betere prestaties omdat de computer voor jou is gereserveerd,
+
+00:08:51.700 --> 00:08:54.680
+plus ondersteuning voor virtuele netwerken voor strikte beveiligingseisen.
+
+00:08:54.860 --> 00:08:58.100
+En je kunt standard workflows zelfs lokaal op je eigen hardware draaien.
+
+00:08:58.100 --> 00:09:01.760
+Consumption draait alleen in de Microsoft Cloud op gedeelde infrastructuur,
+
+00:09:02.000 --> 00:09:04.860
+dus je hebt minder controle, maar je hoeft ook niets te beheren.
+
+00:09:04.980 --> 00:09:07.400
+Voor de meeste mensen die beginnen, is het antwoord simpel.
+
+00:09:07.640 --> 00:09:08.580
+Begin met consumption.
+
+00:09:08.900 --> 00:09:10.640
+Het kost vrijwel niets om het te proberen.
+
+00:09:10.860 --> 00:09:12.520
+Bouw je eerste workflow, kijk hoe het werkt,
+
+00:09:12.640 --> 00:09:17.080
+en maak je pas zorgen over standard als je volume groeit tot het punt waarop consumption duurder wordt dan het vaste abonnement.
+
+00:09:17.240 --> 00:09:18.760
+Je kunt altijd later migreren.
+
+00:09:18.980 --> 00:09:20.420
+Praktijk voorbeelden in actie.
+
+00:09:20.600 --> 00:09:22.800
+Ik laat je zien hoe dit eruit ziet bij echte bedrijven.
+
+00:09:22.800 --> 00:09:26.080
+Dit zijn geen ideeën, dit zijn echte workflows die vandaag de dag draaien.
+
+00:09:26.260 --> 00:09:27.680
+Voorbeeld 1 is de eenvoudigste.
+
+00:09:27.680 --> 00:09:31.160
+Een bestand komt in een SharePoint documentbibliotheek terecht, en dat is de trigger.
+
+00:09:31.360 --> 00:09:34.120
+De actie verstuurt een melding naar een Microsoft Teams kanaal.
+
+00:09:34.240 --> 00:09:36.860
+De naam van het bestand, wie het uploaden en een link om het te openen.
+
+00:09:36.980 --> 00:09:38.740
+De installatie duurt ongeveer drie minuten.
+
+00:09:38.940 --> 00:09:39.820
+Het resultaat?
+
+00:09:40.020 --> 00:09:42.140
+Niemand hoeft de map nog handmatig te controleren.
+
+00:09:42.320 --> 00:09:43.940
+Elk teamlid ziet die melding direct.
+
+00:09:44.160 --> 00:09:49.200
+Op jaarbasis bespaart die ene workflow uren aan controleren, doorsturen en die heb je het nieuwe bestand al gezien.
+
+00:09:49.440 --> 00:09:49.840
+Berichten.
+
+00:09:50.080 --> 00:09:52.140
+Het is iets kleins, maar het telt snel op.
+
+00:09:52.360 --> 00:09:53.740
+Voorbeeld 2 is complexer.
+
+00:09:53.740 --> 00:09:58.000
+Een klant plaatst een bestelling op een website en die bestelling komt in een SQL database terecht.
+
+00:09:58.220 --> 00:10:07.140
+Een Logic App pakt dit op, valideert de voorraad in een andere database, stuurt een bevestigingsmail via Outlook, maakt een record aan in Salesforce en plaatst een melding voor het magazijn team in Teams.
+
+00:10:07.400 --> 00:10:10.100
+Dat zijn vijf verschillende systemen verbonden in één flow.
+
+00:10:10.340 --> 00:10:15.840
+Voor Logic Apps moest iemand die database handmatig controleren, de e-mail versturen, Salesforce openen en naar het magazijn lopen.
+
+00:10:16.080 --> 00:10:19.500
+Nu gebeurt het automatisch in enkele seconden, zonder dat er een mens aan te pas komt.
+
+00:10:19.740 --> 00:10:22.180
+Dat is het soort integratie dat hele afdelingen redt.
+
+00:10:22.180 --> 00:10:24.160
+Voorbeeld 3 komt uit de gezondheidszorg.
+
+00:10:24.340 --> 00:10:28.280
+Een onderzoekstudie document eerde een Logic Apps workflow voor het anboorden van patiënten.
+
+00:10:28.520 --> 00:10:39.140
+Wanneer een nieuwe patiënt werd geregistreerd in een elektronisch patiëntendossier, maakte de Logic App accounts aan in Microsoft 365, stuurde welkomst materiaal, plande de eerste afspraak en bracht het zorgteam op de hoogte.
+
+00:10:39.300 --> 00:10:40.920
+De cijfers waren indrukwekkend.
+
+00:10:41.140 --> 00:10:45.820
+Handmatige fouten daalden met 75% en de anboording snelheid verbeterde met 40%.
+
+00:10:45.820 --> 00:10:50.680
+Dat is niet alleen sneller, dat is betere patiëntenzorg omdat het administratieve werk niet tussen wal en schip valt.
+
+00:10:50.680 --> 00:10:52.940
+Voorbeeld 4 is IT Incident Response.
+
+00:10:53.120 --> 00:10:55.780
+Een Azure Monitor waarschuwing gaat af wanneer een server uitvalt.
+
+00:10:56.000 --> 00:10:57.640
+Die waarschuwing activeert een Logic App.
+
+00:10:57.820 --> 00:11:02.980
+De workflow maakt een ticket aan in ServiceNow, plaatst een bericht in een Teams kanaal met de incidentdetails en start een timer.
+
+00:11:03.240 --> 00:11:07.100
+Als niemand het incident binnen 15 minuten erkent, escaleert de Logic App.
+
+00:11:07.220 --> 00:11:11.360
+Het stuurt een SMS naar de dienstdoende ingenieur, dan naar de teamleider en vervolgens naar de manager.
+
+00:11:11.620 --> 00:11:12.680
+Het gaat door totdat iemand reageert.
+
+00:11:12.680 --> 00:11:17.060
+Hiervoor vertrouwden IT-teams op e-mailmeldingen die in inboxen begraven raakten.
+
+00:11:17.200 --> 00:11:20.580
+Nu worden incidenten sneller aangepakt omdat de escalatie automatisch verloopt.
+
+00:11:20.740 --> 00:11:23.000
+De rode draad in al deze voorbeelden is hetzelfde.
+
+00:11:23.220 --> 00:11:25.900
+Logic Apps verbindt systemen die niet uit zichzelf met elkaar praten.
+
+00:11:26.080 --> 00:11:27.500
+SharePoint weet niets van Teams.
+
+00:11:27.780 --> 00:11:29.260
+Jouw database weet niets van Salesforce.
+
+00:11:29.760 --> 00:11:32.100
+Jouw monitoring tools weten niets van je ticketsysteem.
+
+00:11:32.280 --> 00:11:36.240
+Logic Apps staat in het midden, luistert naar gebeurtenissen en stuurt informatie waar het heen moet.
+
+00:11:36.380 --> 00:11:38.900
+Het is de lijn die je automatisering bij elkaar houdt.
+
+00:11:38.900 --> 00:11:41.900
+Waar Logic Apps naartoe gaat agentgebaseerde automatisering.
+
+00:11:42.100 --> 00:11:47.680
+Dat is waar Logic Apps nu staat, maar het platform verandert snel en de grootste verschuiving is iets waar je vanaf moet weten.
+
+00:11:47.920 --> 00:11:51.540
+Het heet agentgebaseerde automatisering en het verandert wat mogelijk is met workflows.
+
+00:11:51.880 --> 00:11:55.180
+Microsoft kondigt de Logic Apps automatisering aan tijdens Beeld 2026.
+
+00:11:55.480 --> 00:11:57.560
+De belangrijkste functie is simpel maar krachtig.
+
+00:11:57.700 --> 00:12:01.700
+Je kunt nu in natuurlijke taal beschrijven wat je wilt en het platform bouwt de workflow voor je.
+
+00:12:01.860 --> 00:12:05.420
+In plaats van elke trigger en actie te slepen en neer te zetten, typ je zoiets als
+
+00:12:05.420 --> 00:12:11.480
+Wanneer er een support ticket binnenkomt, controleer dan de klantgeschiedenis en als het een premium klant is, wijs het dan toe aan het senior team.
+
+00:12:11.680 --> 00:12:17.660
+Logic Apps analyseert je verzoek, kiest de juiste connectors, configureert de parameters en zet de volledige workflow op.
+
+00:12:17.820 --> 00:12:21.180
+Je kunt het daarna aanpassen in de visuele ontwerper, maar het zware werk is al gedaan.
+
+00:12:21.400 --> 00:12:24.520
+Alleen dat al is een grote verschuiving, maar de grotere verandering zijn AI-agents.
+
+00:12:24.740 --> 00:12:28.440
+Logic Apps stelt je nu in staat om AI-agents direct als stappen in je workflow te integreren.
+
+00:12:28.680 --> 00:12:31.560
+Deze agents roepen niet alleen een API aan en retourneren een resultaat.
+
+00:12:31.560 --> 00:12:39.020
+Ze redeneren. Ze gebruiken tools. Ze nemen beslissingen. Je geeft een agent een doel, een set tools die hij kan gebruiken en instructies over hoe hij zich moet gedragen.
+
+00:12:39.240 --> 00:12:45.960
+De agent bepaalt vervolgens de beste manier om het doel te bereiken door connectors aan te roepen, databases te bevragen en zelfs om menselijke goedkeuring te vragen wanneer dat nodig is.
+
+00:12:46.140 --> 00:12:48.760
+Denk eens na over wat dat betekent voor de voorbeelden die we net hebben behandeld.
+
+00:12:48.920 --> 00:12:52.520
+De SharePoint naar Teams melding is simpel, maar hoe zit het met de workflow voor klantbestellingen?
+
+00:12:52.640 --> 00:12:56.220
+In plaats van elke stap hard te coderen, zou je een agent kunnen hebben die uitzonderingen afhandelt.
+
+00:12:56.220 --> 00:12:59.620
+Er komt een bestelling binnen met een klantadres dat niet overeenkomt met de database.
+
+00:12:59.780 --> 00:13:06.620
+In plaats van dat de workflow faalt, kan de agent de klantgeschiedenis controleren, alternatieve adressen opzoeken en beslissen of hij het verwerkt of markeert voor beoordeling.
+
+00:13:06.780 --> 00:13:09.980
+Hij past zich aan situaties aan die de ontwerper van de workflow niet had voorzien.
+
+00:13:10.140 --> 00:13:13.700
+Het belangrijkste inzicht hier is dat Logic Apps niet langer alleen bedoeld is om apps te koppelen.
+
+00:13:13.880 --> 00:13:15.720
+Het wordt de orchestratie laag voor AI.
+
+00:13:15.940 --> 00:13:22.020
+De connectors regelen de koppelingen, de workflows regelen de logica en de agents regelen de beslissingen waarvoor voorheen een mens nodig was.
+
+00:13:22.220 --> 00:13:25.480
+Dat is een fundamenteel andere manier om over automatisering na te denken.
+
+00:13:25.480 --> 00:13:26.960
+Aan de slag met Logic Apps.
+
+00:13:27.160 --> 00:13:30.180
+Ik zal je precies vertellen hoe je kunt beginnen als je dit zelf wilt uitproberen.
+
+00:13:30.280 --> 00:13:31.240
+Je hebt niet veel nodig.
+
+00:13:31.460 --> 00:13:32.960
+Je hebt een Azure abonnement nodig.
+
+00:13:33.180 --> 00:13:36.840
+Als je die niet hebt, geeft Microsoft je 200 dollar aan gratis te goed voor de eerste maand.
+
+00:13:37.040 --> 00:13:40.560
+Dat is ruim voldoende om verschillende workflows te bouwen en te testen zonder een cent uit te geven.
+
+00:13:40.760 --> 00:13:42.540
+En je hebt een werk- of schoolaccount nodig.
+
+00:13:42.740 --> 00:13:47.820
+Een persoonlijk hotmailaccount werkt voor sommige dingen, maar gebruik voor de volledige ervaring een account dat gekoppeld is aan je organisatie.
+
+00:13:48.020 --> 00:13:49.960
+Begin met het verbruiksabonnement Consumption Plan.
+
+00:13:50.180 --> 00:13:51.640
+Dat is de goedkoopste manier om te leren.
+
+00:13:51.840 --> 00:13:54.420
+Je kunt je eerste workflow bouwen zonder vast te zitten aan maandelijkse kosten.
+
+00:13:54.420 --> 00:13:57.380
+Als je workflow één keer per dag draait, betaal je slechts een paar cent per maand.
+
+00:13:57.520 --> 00:13:58.660
+Er is geen enkel risico.
+
+00:13:58.900 --> 00:14:00.900
+Kies één scenario dat je nu al handmatig uitvoert.
+
+00:14:01.040 --> 00:14:03.420
+Probeer niet op de eerste dag je hele afdeling te automatiseren.
+
+00:14:03.620 --> 00:14:04.520
+Focus op één ding.
+
+00:14:04.740 --> 00:14:07.880
+Misschien is het een melding ontvangen wanneer een bestand in een specifieke map belandt.
+
+00:14:07.920 --> 00:14:10.460
+Of automatisch een mailbijlage opslaan in OneDrive.
+
+00:14:10.620 --> 00:14:14.120
+Of een bericht plaatsen in Teams wanneer er een nieuw item verschijnt in een SharePoint-lijst.
+
+00:14:14.260 --> 00:14:19.000
+Hoe eenvoudiger het scenario, hoe sneller je het werkend krijgt en hoe zelfverzekerder je je zult voelen bij het bouwen van de volgende.
+
+00:14:19.000 --> 00:14:21.240
+De Azure Portal heeft een visuele ontwerper.
+
+00:14:21.400 --> 00:14:24.340
+Open het kies een trigger uit de lijst, voeg een actie toe en test het.
+
+00:14:24.480 --> 00:14:25.780
+Je hoeft geen code te schrijven.
+
+00:14:25.960 --> 00:14:29.620
+De designer stoont de volledige stroom en je kunt deze direct uitvoeren om te zien of het werkt.
+
+00:14:29.940 --> 00:14:32.720
+Microsoft biedt ook schablonen voor veel voorkomende scenario's.
+
+00:14:32.880 --> 00:14:36.300
+Open de Logic Apps Designers en je ziet een galerij met vooraf gebouwde schablonen.
+
+00:14:36.460 --> 00:14:40.320
+Meldingen bij best- en subloods, e-mail naar Teams waarschuwingen, geplande gegevens exports.
+
+00:14:40.540 --> 00:14:43.460
+Je kunt een schabloon als startpunt gebruiken en aanpassen aan je eigen behoeften.
+
+00:14:43.620 --> 00:14:45.540
+Dat is de snelste manier om iets draaiende te krijgen.
+
+00:14:45.540 --> 00:14:49.740
+Begin vandaag nog. Kies één herhalende taak die je in verschillende apps uitvoert en automatiseer deze.
+
+00:14:49.940 --> 00:14:53.160
+Zelfs als het je vijf minuten per dag bespaart, zijn dat vijf minuten die je terugkrijgt.
+
+00:14:53.360 --> 00:14:55.820
+Zodra je ziet hoe makkelijk het is, zul je er meer gaan vinden.
+
+00:14:56.060 --> 00:14:57.480
+Dus dit is wat je moet onthouden.
+
+00:14:57.680 --> 00:14:59.920
+Logic Apps is de automatiseringslijm van Microsoft.
+
+00:15:00.260 --> 00:15:03.040
+Het verbindt systemen die van nature niet met elkaar communiceren.
+
+00:15:03.240 --> 00:15:07.080
+Het regelt het leidingwerk, authenticatie, pogingen, foutafhandeling en schaling,
+
+00:15:07.320 --> 00:15:08.760
+zodat jij dat niet hoeft te beheren.
+
+00:15:08.860 --> 00:15:11.200
+En het draait zonder dat je na hoeft te denken over servers.
+
+00:15:11.200 --> 00:15:15.440
+De belangrijkste conclusie is dit. Je hoeft geen ontwikkelaar te zijn om automatiseringen te bouwen
+
+00:15:15.440 --> 00:15:17.180
+en geen IT-professional om ze uit te voeren.
+
+00:15:17.340 --> 00:15:21.660
+De visuele designers, de vooraf gebouwde connectoren en de schablonen zijn allemaal ontworpen om de drempel te verlagen.
+
+00:15:21.840 --> 00:15:24.380
+Als je een proces kunt beschrijven, kun je het automatiseren.
+
+00:15:24.580 --> 00:15:28.320
+Je huiswerk is simpel. Denk aan één herhalende taak die je in verschillende apps uitvoert.
+
+00:15:28.460 --> 00:15:31.160
+Eén ding waarbij informatie van het ene systeem naar het andere moet worden verplaatst.
+
+00:15:31.320 --> 00:15:33.260
+Probeer het vervolgens te automatiseren met Logic Apps.
+
+00:15:33.500 --> 00:15:34.860
+Begin met het consumption abonnement.
+
+00:15:35.080 --> 00:15:36.420
+Gebruik een schabloon als die er is.
+
+00:15:36.600 --> 00:15:37.560
+Kijk hoe ver je komt.
+
+00:15:37.560 --> 00:15:40.520
+Dat was het voor deze aflevering van Microsoft Knowledge Nuggets.
+
+00:15:40.700 --> 00:15:43.040
+Als dit je heeft geholpen Logic Apps beter te begrijpen,
+
+00:15:43.260 --> 00:15:46.320
+deel het dan met iemand die begint aan hun reis in Microsoft Automatisering.
+
+00:15:46.520 --> 00:15:50.260
+En abonneer je op je favoriete podcast platform zodat je de volgende niet mist.
+
+00:15:50.460 --> 00:15:52.640
+Ik ben Merco Peters en bedankt voor het luisteren.

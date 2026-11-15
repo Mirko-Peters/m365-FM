@@ -1,0 +1,2638 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.380
+La plupart des gens pensent que protéger les données consiste à construire un mur solide autour d'elles,
+
+00:00:03.840 --> 00:00:06.600
+verrouiller le réseau, bloquer les pirates et vous êtes en sécurité.
+
+00:00:07.240 --> 00:00:10.620
+Le problème, c'est que ce mur ne sert à rien une fois que vos données sont à l'intérieur et en mouvement.
+
+00:00:12.080 --> 00:00:14.540
+Un employé ayant un accès légitime peut prendre une liste de clients
+
+00:00:14.540 --> 00:00:17.300
+et l'envoyer par e-mail à son compte personnel et le pare-feu laisse passer
+
+00:00:17.300 --> 00:00:19.240
+car la requête vient d'un utilisateur de confiance.
+
+00:00:20.700 --> 00:00:24.100
+Microsoft Purview est mentionné par tous ces jours-ci, mais qu'est-ce que c'est au juste ?
+
+00:00:24.100 --> 00:00:25.040
+Ce n'est pas un outil unique.
+
+00:00:25.480 --> 00:00:28.460
+C'est une famille de solutions axées sur une seule chose, protéger vos données,
+
+00:00:28.460 --> 00:00:30.100
+mais pas seulement votre infrastructure.
+
+00:00:30.720 --> 00:00:31.780
+Il y a trois piliers à comprendre.
+
+00:00:32.200 --> 00:00:34.120
+La gouvernance des données, savoir quelles données vous avez,
+
+00:00:34.300 --> 00:00:35.780
+la sécurité des données pour les protéger
+
+00:00:35.780 --> 00:00:38.080
+et la conformité pour vous respecter les règles.
+
+00:00:38.900 --> 00:00:42.240
+A la fin de cet épisode, vous verrez comment ces trois éléments s'articulent et par où commencer.
+
+00:00:42.780 --> 00:00:45.660
+Mais pour comprendre pourquoi Purview existe, il faut comprendre le problème qui résout.
+
+00:00:47.140 --> 00:00:50.000
+Le vrai problème, pourquoi la sécurité des infrastructures ne suffit plus.
+
+00:00:50.700 --> 00:00:53.720
+La plupart des entreprises supposent que si le réseau est verrouillé, les données sont en sécurité.
+
+00:00:54.160 --> 00:00:57.900
+Il y a 20 ans, quand tout résidait dans un bureau physique, c'était une hypothèse raisonnable.
+
+00:00:58.460 --> 00:00:59.580
+Ce n'est tout simplement plus vrai.
+
+00:01:00.040 --> 00:01:01.060
+Les données vivent partout maintenant.
+
+00:01:01.660 --> 00:01:04.500
+Applications cloud, appareils personnels, pièces jointes, lecteurs partagés,
+
+00:01:04.640 --> 00:01:07.900
+messages d'équipe dispersés dans des environnements que vous ne contrôlez pas totalement.
+
+00:01:08.760 --> 00:01:10.680
+Et une fois qu'un utilisateur a un accès légitime,
+
+00:01:10.960 --> 00:01:12.540
+une fois authentifié à l'intérieur du bâtiment,
+
+00:01:12.620 --> 00:01:15.920
+la sécurité de l'infrastructure ne peut pas contrôler ce qu'il fait des données.
+
+00:01:16.560 --> 00:01:17.240
+Considérez cet exemple.
+
+00:01:17.960 --> 00:01:20.760
+Un employé télécharge une liste de clients sur une clé USB personnelle.
+
+00:01:21.540 --> 00:01:22.500
+Le pare-feu ne l'a pas arrêté,
+
+00:01:22.620 --> 00:01:24.320
+et le système de détection d'intrusion ne l'a pas vu,
+
+00:01:24.380 --> 00:01:25.760
+car les données n'ont pas été interceptées.
+
+00:01:26.560 --> 00:01:28.700
+Elles ont été consultées par quelqu'un qui avait la permission de les voir.
+
+00:01:29.580 --> 00:01:31.640
+Les outils de sécurité cherchaient une attaque venant de l'extérieur,
+
+00:01:31.880 --> 00:01:32.980
+mais la menace venait de l'intérieur.
+
+00:01:33.800 --> 00:01:34.960
+C'est là que réside le changement fondamental.
+
+00:01:35.400 --> 00:01:38.140
+La protection doit passer de la couche infrastructure à la couche des données elle-même.
+
+00:01:38.760 --> 00:01:40.140
+Au lieu de simplement garder le bâtiment,
+
+00:01:40.240 --> 00:01:41.440
+vous devez garder les fichiers qui s'y trouvent.
+
+00:01:41.940 --> 00:01:43.060
+C'est exactement ce que fait Purview.
+
+00:01:43.460 --> 00:01:44.980
+Il applique des politiques directement aux données,
+
+00:01:45.160 --> 00:01:46.900
+pas seulement, au système qui les contient.
+
+00:01:47.480 --> 00:01:48.020
+Oui, les choses ainsi.
+
+00:01:48.020 --> 00:01:50.980
+La sécurité du bâtiment garde la porte en vérifiant les identités
+
+00:01:50.980 --> 00:01:52.360
+pour ne laisser entrer que les bonnes personnes.
+
+00:01:52.640 --> 00:01:54.840
+Mais une fois à l'intérieur, elle ne les suit pas à la trace.
+
+00:01:55.900 --> 00:01:56.560
+Purview est différent.
+
+00:01:57.100 --> 00:01:58.400
+Il pose un verrou sur le classeur lui-même,
+
+00:01:58.500 --> 00:02:00.200
+ce qui signifie que même si quelqu'un est dans le bâtiment,
+
+00:02:00.300 --> 00:02:02.600
+il ne peut pas ouvrir le classeur s'il n'y est pas autorisé.
+
+00:02:03.480 --> 00:02:05.320
+Ainsi, Purview consiste à verrouiller le classeur.
+
+00:02:05.660 --> 00:02:06.600
+Mais avant de pouvoir le verrouiller,
+
+00:02:06.920 --> 00:02:07.900
+il faut savoir ce qu'il y a dedans.
+
+00:02:08.780 --> 00:02:10.400
+Premier pilier, la gouvernance des données.
+
+00:02:10.640 --> 00:02:11.400
+Sachez ce que vous possédez.
+
+00:02:11.740 --> 00:02:13.080
+Savoir quelles données vous possédez réellement
+
+00:02:13.080 --> 00:02:15.280
+est la première étape de toute stratégie de protection des données.
+
+00:02:15.280 --> 00:02:17.500
+Cela semble évident, mais la plupart des organisations
+
+00:02:17.500 --> 00:02:19.220
+ignorent ce qui se cache dans leur site SharePoint
+
+00:02:19.220 --> 00:02:20.860
+partage de fichiers ou bases de données.
+
+00:02:21.520 --> 00:02:23.060
+Elles accumulent des années de contenu,
+
+00:02:23.200 --> 00:02:24.240
+comme d'anciens dossiers de projets,
+
+00:02:24.380 --> 00:02:26.300
+des documents en double et des feuilles de calcul
+
+00:02:26.300 --> 00:02:27.760
+contenant des informations clients
+
+00:02:27.760 --> 00:02:29.780
+que personne ne se souvient avoir créées.
+
+00:02:30.880 --> 00:02:32.440
+La cartographie des données de Purview résout ce problème.
+
+00:02:32.980 --> 00:02:34.500
+Elle analyse l'ensemble de votre environnement
+
+00:02:34.500 --> 00:02:36.120
+sur Azure, multicloud et sur site
+
+00:02:36.120 --> 00:02:38.280
+et capture les métadonnées de tout ce qu'elle trouve.
+
+00:02:39.000 --> 00:02:40.020
+Elle répond à des questions telles que
+
+00:02:40.020 --> 00:02:40.820
+quel est le type de données ?
+
+00:02:40.820 --> 00:02:41.500
+Où sont-elles stockées ?
+
+00:02:41.500 --> 00:02:42.120
+Qui les possèdent ?
+
+00:02:42.120 --> 00:02:43.820
+Quel est leur niveau de sensibilité ?
+
+00:02:43.820 --> 00:02:44.740
+La cartographie des données
+
+00:02:44.740 --> 00:02:46.220
+dresse un portrait complet de votre patrimoine de données.
+
+00:02:46.480 --> 00:02:47.020
+A partir de là,
+
+00:02:47.120 --> 00:02:48.240
+toutes ces métadonnées sont organisées
+
+00:02:48.240 --> 00:02:49.040
+dans le catalogue unifié.
+
+00:02:49.500 --> 00:02:50.480
+Voyez cela comme une bibliothèque
+
+00:02:50.480 --> 00:02:51.320
+avec un catalogue sur fiche.
+
+00:02:51.940 --> 00:02:53.060
+Avant l'existence du catalogue,
+
+00:02:53.160 --> 00:02:54.340
+il fallait parcourir chaque rayon
+
+00:02:54.340 --> 00:02:55.780
+en espérant trouver ce dont on avait besoin.
+
+00:02:56.240 --> 00:02:56.860
+Mais avec le catalogue,
+
+00:02:56.960 --> 00:02:57.980
+une seule recherche suffit pour savoir
+
+00:02:57.980 --> 00:02:59.040
+exactement où se trouve le livre.
+
+00:02:59.760 --> 00:03:00.940
+Vous pouvez organiser les données
+
+00:03:00.940 --> 00:03:01.780
+en domaine de gouvernance
+
+00:03:01.780 --> 00:03:03.160
+comme la finance, la RH et la R&D
+
+00:03:03.160 --> 00:03:04.460
+afin que les utilisateurs métiers trouvent
+
+00:03:04.460 --> 00:03:05.120
+ce dont ils ont besoin
+
+00:03:05.120 --> 00:03:06.200
+sans solliciter l'informatique.
+
+00:03:06.940 --> 00:03:08.280
+Un analyste financier peut parcourir
+
+00:03:08.280 --> 00:03:08.940
+le domaine finance
+
+00:03:08.940 --> 00:03:10.140
+et voir tous les jeux de données approuvés
+
+00:03:10.140 --> 00:03:11.960
+avec leur description et leur propriétaire.
+
+00:03:14.740 --> 00:03:15.800
+comment elles ont évolué au fil du temps.
+
+00:03:16.340 --> 00:03:17.240
+Si vous préparez un audit
+
+00:03:17.240 --> 00:03:18.080
+et que quelqu'un demande
+
+00:03:18.080 --> 00:03:19.820
+« D'où vient ce chiffre ? »
+
+00:03:19.820 --> 00:03:21.660
+La traçabilité remonte jusqu'à chaque transformation,
+
+00:03:21.840 --> 00:03:23.080
+ce qui est crucial lorsque les régulateurs
+
+00:03:23.080 --> 00:03:24.820
+exigent la preuve que vos rapports sont exacts.
+
+00:03:25.720 --> 00:03:27.600
+Le glossaire métier ajoute des descriptions
+
+00:03:27.600 --> 00:03:28.920
+en langage clair pour que les analystes
+
+00:03:28.920 --> 00:03:29.740
+comprennent un jeu de données
+
+00:03:29.740 --> 00:03:31.480
+sans avoir à retrouver la personne
+
+00:03:31.480 --> 00:03:32.880
+qui l'a créé il y a trois ans.
+
+00:03:34.340 --> 00:03:35.500
+Au lieu de voir une table nommée
+
+00:03:35.500 --> 00:03:37.200
+Custard 1023V de finale,
+
+00:03:37.380 --> 00:03:39.360
+il voit commande client 2023 version finale.
+
+00:03:40.420 --> 00:03:41.820
+Un changement simple et une différence majeure.
+
+00:03:42.300 --> 00:03:43.320
+Pourquoi est-ce important ?
+
+00:03:43.320 --> 00:03:44.380
+Vous ne pouvez pas protéger des données
+
+00:03:44.380 --> 00:03:45.420
+dont vous ignorez l'existence.
+
+00:03:45.980 --> 00:03:47.100
+Si vous ne savez pas qu'un site SharePoint
+
+00:03:47.100 --> 00:03:48.840
+contient des numéros de sécurité sociale de clients,
+
+00:03:48.920 --> 00:03:49.740
+vous ne pouvez pas le sécuriser
+
+00:03:49.740 --> 00:03:50.760
+et la gouvernance est le socle
+
+00:03:50.760 --> 00:03:51.700
+sur lequel tout repose.
+
+00:03:52.500 --> 00:03:53.080
+Une fois que vous savez
+
+00:03:53.080 --> 00:03:53.880
+quelles données vous avez
+
+00:03:53.880 --> 00:03:54.640
+et où elles se trouvent,
+
+00:03:54.840 --> 00:03:56.040
+la question suivante est évidente.
+
+00:03:56.740 --> 00:03:58.380
+Comment protéger les éléments sensibles ?
+
+00:03:58.940 --> 00:03:59.400
+Deuxième pilier,
+
+00:03:59.580 --> 00:04:00.500
+les étiquettes de sensibilité
+
+00:04:00.500 --> 00:04:01.280
+pour la sécurité des données.
+
+00:04:01.840 --> 00:04:02.660
+La gouvernance vous indique
+
+00:04:02.660 --> 00:04:03.340
+quelles données existent
+
+00:04:03.340 --> 00:04:04.300
+et la sécurité vous indique
+
+00:04:04.300 --> 00:04:04.780
+quoi en faire.
+
+00:04:05.580 --> 00:04:06.540
+L'outil principal pour cela
+
+00:04:06.540 --> 00:04:07.080
+est ce qu'on appelle
+
+00:04:07.080 --> 00:04:08.240
+les étiquettes de sensibilité.
+
+00:04:09.120 --> 00:04:10.400
+Considérez les étiquettes de sensibilité
+
+00:04:10.400 --> 00:04:11.220
+comme des balises numériques
+
+00:04:11.220 --> 00:04:11.840
+qui classent les données
+
+00:04:11.840 --> 00:04:12.880
+selon leur niveau de sensibilité.
+
+00:04:13.460 --> 00:04:14.340
+Les plus courantes sont publiques
+
+00:04:14.340 --> 00:04:15.000
+que quelqu'un interne
+
+00:04:15.000 --> 00:04:15.700
+mais que confidentiel
+
+00:04:15.700 --> 00:04:16.360
+et que confidentiel
+
+00:04:16.360 --> 00:04:17.900
+et que vous n'êtes pas limité à ceci.
+
+00:04:18.320 --> 00:04:18.840
+Vous pouvez créer
+
+00:04:18.840 --> 00:04:19.800
+des étiquettes personnalisées
+
+00:04:19.800 --> 00:04:20.520
+qui correspondent aux besoins
+
+00:04:20.520 --> 00:04:21.160
+de votre organisation.
+
+00:04:21.720 --> 00:04:22.300
+Peut-être souhaitez-vous
+
+00:04:22.300 --> 00:04:23.180
+une étiquette intitulée
+
+00:04:23.180 --> 00:04:23.820
+données RH,
+
+00:04:24.160 --> 00:04:25.000
+résultats financiers
+
+00:04:25.000 --> 00:04:26.200
+ou clients confidentiels.
+
+00:04:26.840 --> 00:04:27.380
+C'est vous qui décidez.
+
+00:04:27.700 --> 00:04:28.260
+Voici ce qu'il faut savoir
+
+00:04:28.260 --> 00:04:28.740
+sur les étiquettes.
+
+00:04:29.100 --> 00:04:29.860
+Elles accompagnent les données.
+
+00:04:30.640 --> 00:04:31.960
+Si un document est marqué confidentiel
+
+00:04:31.960 --> 00:04:32.720
+et que quelqu'un le joint
+
+00:04:32.720 --> 00:04:33.200
+à un email,
+
+00:04:33.380 --> 00:04:34.680
+l'étiquette reste attachée.
+
+00:04:35.480 --> 00:04:36.320
+Peu importe que le document
+
+00:04:36.320 --> 00:04:37.080
+soit téléchargé,
+
+00:04:37.460 --> 00:04:38.200
+copié sur OneDrive
+
+00:04:38.200 --> 00:04:39.100
+ou partagé via Teams,
+
+00:04:39.300 --> 00:04:40.400
+l'étiquette le suit partout.
+
+00:04:41.200 --> 00:04:41.940
+Ce n'est pas une étiquette
+
+00:04:41.940 --> 00:04:42.520
+sur un classeur,
+
+00:04:42.620 --> 00:04:43.280
+c'est un filigrane
+
+00:04:43.280 --> 00:04:44.360
+intégré au papier lui-même.
+
+00:04:45.160 --> 00:04:45.620
+Les étiquettes
+
+00:04:45.620 --> 00:04:46.120
+peuvent déclencher
+
+00:04:46.120 --> 00:04:46.860
+des actions automatiques.
+
+00:04:47.400 --> 00:04:48.240
+Vous pouvez chiffrer le document
+
+00:04:48.240 --> 00:04:49.040
+afin que seules les personnes
+
+00:04:49.040 --> 00:04:49.920
+autorisées puissent l'ouvrir.
+
+00:04:50.540 --> 00:04:51.300
+Les restrictions d'accès
+
+00:04:51.300 --> 00:04:52.240
+peuvent bloquer la modification
+
+00:04:52.240 --> 00:04:52.820
+ou l'impression
+
+00:04:52.820 --> 00:04:53.560
+et vous pouvez ajouter
+
+00:04:53.560 --> 00:04:53.940
+des entêtes,
+
+00:04:54.040 --> 00:04:54.420
+des pieds de page
+
+00:04:54.420 --> 00:04:54.960
+ou des filigranes
+
+00:04:54.960 --> 00:04:55.660
+indiquant confidentiel
+
+00:04:55.660 --> 00:04:57.000
+et confidentiel sur toute la page.
+
+00:04:57.740 --> 00:04:58.740
+L'étiquette indique au système
+
+00:04:58.740 --> 00:04:59.240
+ce qu'il doit faire
+
+00:04:59.240 --> 00:05:00.400
+et le système le fait automatiquement.
+
+00:05:01.060 --> 00:05:01.740
+Les étiquettes sont appliquées
+
+00:05:01.740 --> 00:05:02.180
+de trois manières.
+
+00:05:02.180 --> 00:05:03.060
+Manual signifie
+
+00:05:03.060 --> 00:05:03.920
+que l'utilisateur choisit
+
+00:05:03.920 --> 00:05:04.560
+lui-même l'étiquette.
+
+00:05:05.420 --> 00:05:06.200
+Automatique signifie
+
+00:05:06.200 --> 00:05:07.320
+que Purview détecte
+
+00:05:07.320 --> 00:05:08.000
+le contenu sensible
+
+00:05:08.000 --> 00:05:09.040
+comme un numéro de carte bancaire
+
+00:05:09.040 --> 00:05:10.340
+et applique l'étiquette tout seul.
+
+00:05:11.100 --> 00:05:11.940
+Recommandation de stratégie
+
+00:05:11.940 --> 00:05:12.660
+signifie que le système
+
+00:05:12.660 --> 00:05:13.440
+suggère une étiquette
+
+00:05:13.440 --> 00:05:14.540
+et que l'utilisateur la confirme.
+
+00:05:14.960 --> 00:05:15.920
+C'est cette option intermédiaire
+
+00:05:15.920 --> 00:05:16.720
+qui rend les choses intéressantes.
+
+00:05:16.980 --> 00:05:17.560
+Voici un exemple.
+
+00:05:17.840 --> 00:05:18.520
+Un document contient
+
+00:05:18.520 --> 00:05:19.360
+un numéro de carte bancaire.
+
+00:05:19.700 --> 00:05:20.580
+Le moteur de classification
+
+00:05:20.580 --> 00:05:21.740
+de Purview reconnaît ce modèle
+
+00:05:21.740 --> 00:05:22.380
+et avant même
+
+00:05:22.380 --> 00:05:23.520
+que le document ne soit enregistré
+
+00:05:23.520 --> 00:05:24.660
+applique automatiquement
+
+00:05:24.660 --> 00:05:25.020
+l'étiquette
+
+00:05:25.020 --> 00:05:25.960
+qui est hautement confidentielle
+
+00:05:25.960 --> 00:05:26.600
+et le chiffre
+
+00:05:26.600 --> 00:05:27.800
+sans aucune intervention humaine
+
+00:05:27.800 --> 00:05:28.520
+et le chiffre
+
+00:05:28.520 --> 00:05:29.540
+sans aucune intervention humaine.
+
+00:05:29.680 --> 00:05:30.500
+Les données sont protégées
+
+00:05:30.500 --> 00:05:31.180
+dès leur création
+
+00:05:31.180 --> 00:05:31.920
+mais les étiquettes
+
+00:05:31.920 --> 00:05:33.020
+ne s'appliquent pas uniquement
+
+00:05:33.020 --> 00:05:33.940
+aux fichiers individuels.
+
+00:05:34.560 --> 00:05:35.160
+Elles s'appliquent également
+
+00:05:35.160 --> 00:05:35.600
+aux conteneurs
+
+00:05:35.600 --> 00:05:36.580
+tels que les sites SharePoint,
+
+00:05:36.760 --> 00:05:37.300
+les canaux Teams
+
+00:05:37.300 --> 00:05:38.640
+et les groupes Microsoft 365.
+
+00:05:39.400 --> 00:05:40.400
+Cela signifie que vous pouvez dire
+
+00:05:40.400 --> 00:05:41.440
+tout site d'équipe
+
+00:05:41.440 --> 00:05:42.280
+étiquetée confidentielle
+
+00:05:42.280 --> 00:05:43.680
+bloque le partage externe
+
+00:05:43.680 --> 00:05:44.100
+par défaut.
+
+00:05:44.560 --> 00:05:45.580
+Vous définissez la règle une fois
+
+00:05:45.580 --> 00:05:46.460
+et chaque site portant
+
+00:05:46.460 --> 00:05:47.180
+cette étiquette hérite
+
+00:05:47.180 --> 00:05:47.660
+de la protection.
+
+00:05:48.300 --> 00:05:49.060
+Vous n'avez pas besoin
+
+00:05:49.060 --> 00:05:50.260
+de configurer chacun d'eux individuel.
+
+00:05:50.580 --> 00:05:51.200
+Ainsi, les étiquettes
+
+00:05:51.200 --> 00:05:51.900
+vous indiquent ce canaux élément.
+
+00:05:52.400 --> 00:05:53.220
+Elles le classent, le marquent
+
+00:05:53.220 --> 00:05:53.900
+et appliquent la protection
+
+00:05:53.900 --> 00:05:54.440
+automatiquement.
+
+00:05:55.180 --> 00:05:55.700
+Mais que se passe-t-il
+
+00:05:55.700 --> 00:05:56.280
+si quelqu'un essaie
+
+00:05:56.280 --> 00:05:57.300
+d'envoyer ses données étiquetées
+
+00:05:57.300 --> 00:05:58.940
+là où il ne devrait pas ?
+
+00:05:58.940 --> 00:05:59.800
+Prévention contre la perte
+
+00:05:59.800 --> 00:06:01.020
+de données bloquait les fuites ?
+
+00:06:01.020 --> 00:06:01.740
+Les étiquettes classe,
+
+00:06:01.900 --> 00:06:02.340
+la DLP,
+
+00:06:02.600 --> 00:06:03.420
+Prévention contre la perte
+
+00:06:03.420 --> 00:06:04.160
+de données, agit.
+
+00:06:04.700 --> 00:06:05.360
+C'est là que le système
+
+00:06:05.360 --> 00:06:06.100
+cesse d'être passif
+
+00:06:06.100 --> 00:06:06.780
+et commence à bloquer
+
+00:06:06.780 --> 00:06:07.580
+les choses en temps réel.
+
+00:06:08.280 --> 00:06:08.920
+Les stratégies DLP
+
+00:06:08.920 --> 00:06:09.600
+analysent les emails,
+
+00:06:09.700 --> 00:06:10.020
+les documents,
+
+00:06:10.160 --> 00:06:10.680
+les messages de chat
+
+00:06:10.680 --> 00:06:11.440
+et les applications cloud
+
+00:06:11.440 --> 00:06:12.260
+à la recherche d'informations
+
+00:06:12.260 --> 00:06:12.680
+sensibles.
+
+00:06:13.400 --> 00:06:14.360
+Lorsqu'elles détectent un risque,
+
+00:06:14.480 --> 00:06:14.900
+elles peuvent bloquer
+
+00:06:14.900 --> 00:06:15.600
+complètement l'action,
+
+00:06:15.960 --> 00:06:17.020
+afficher un conseil de stratégie
+
+00:06:17.020 --> 00:06:17.560
+à l'utilisateur,
+
+00:06:17.680 --> 00:06:18.460
+avertir un administrateur
+
+00:06:18.460 --> 00:06:19.440
+ou simplement enregistrer
+
+00:06:19.440 --> 00:06:20.160
+l'événement pour examiner
+
+00:06:20.160 --> 00:06:21.340
+ultérieure ou simple ultérieure.
+
+00:06:21.520 --> 00:06:22.100
+C'est vous qui décidez
+
+00:06:22.100 --> 00:06:22.800
+quelle réponse est adaptée
+
+00:06:22.800 --> 00:06:23.240
+à la situation.
+
+00:06:23.580 --> 00:06:24.060
+Laissez-moi vous donner
+
+00:06:24.060 --> 00:06:24.620
+un exemple concret.
+
+00:06:24.920 --> 00:06:25.840
+Un employé tente d'envoyer
+
+00:06:25.840 --> 00:06:26.920
+par email une feuille de calcul
+
+00:06:26.920 --> 00:06:27.640
+contenant des numéros
+
+00:06:27.640 --> 00:06:28.380
+de sécurité sociale
+
+00:06:28.380 --> 00:06:29.380
+vers son compte Gmail personnel.
+
+00:06:30.120 --> 00:06:31.660
+La DLP détecte les données sensibles,
+
+00:06:32.120 --> 00:06:33.400
+reconnaît le destinataire externe
+
+00:06:33.400 --> 00:06:34.180
+et bloque le message
+
+00:06:34.180 --> 00:06:34.900
+avant qu'il ne quitte
+
+00:06:34.900 --> 00:06:35.620
+votre organisation.
+
+00:06:36.260 --> 00:06:37.080
+L'utilisateur reçoit
+
+00:06:37.080 --> 00:06:38.000
+un avertissement indiquant.
+
+00:06:38.180 --> 00:06:38.800
+Ce message contient
+
+00:06:38.800 --> 00:06:39.760
+des informations sensibles
+
+00:06:39.760 --> 00:06:40.900
+et n'a pas été envoyé.
+
+00:06:41.320 --> 00:06:41.940
+L'action est bloquée,
+
+00:06:47.020 --> 00:06:47.820
+OneDrive, Teams
+
+00:06:47.820 --> 00:06:48.800
+et même sur les terminaux
+
+00:06:48.800 --> 00:06:49.300
+Windows.
+
+00:06:50.120 --> 00:06:50.820
+Peu importe où se trouvent
+
+00:06:50.820 --> 00:06:51.140
+les données
+
+00:06:51.140 --> 00:06:51.820
+ou comment quelqu'un
+
+00:06:51.820 --> 00:06:52.600
+tente de les transférer.
+
+00:06:53.300 --> 00:06:53.820
+Si elles contiennent
+
+00:06:53.820 --> 00:06:54.700
+des informations sensibles,
+
+00:06:54.780 --> 00:06:55.700
+la stratégie les détecte.
+
+00:06:56.440 --> 00:06:57.200
+Il est utile de savoir
+
+00:06:57.200 --> 00:06:57.740
+que vous pouvez d'abord
+
+00:06:57.740 --> 00:06:58.820
+exécuter les stratégies DLP
+
+00:06:58.820 --> 00:06:59.500
+en mode simulation.
+
+00:07:00.260 --> 00:07:01.240
+Cela signifie que vous testez
+
+00:07:01.240 --> 00:07:01.820
+ce qui serait bloqué
+
+00:07:01.820 --> 00:07:02.460
+sans réellement bloquer
+
+00:07:02.460 --> 00:07:02.980
+quoi que ce soit.
+
+00:07:03.420 --> 00:07:04.180
+Vous obtenez un rapport
+
+00:07:04.180 --> 00:07:05.140
+indiquant combien d'éléments
+
+00:07:05.140 --> 00:07:06.120
+auraient été interceptés,
+
+00:07:06.320 --> 00:07:06.840
+quels types de données
+
+00:07:06.840 --> 00:07:07.800
+ont déclenché la stratégie
+
+00:07:07.800 --> 00:07:08.640
+et quels utilisateurs
+
+00:07:08.640 --> 00:07:09.220
+étaient concernés.
+
+00:07:09.580 --> 00:07:10.140
+Ensuite, vous effectuez
+
+00:07:10.140 --> 00:07:10.660
+des ajustements
+
+00:07:10.660 --> 00:07:11.460
+avant d'activer l'application.
+
+00:07:11.460 --> 00:07:12.400
+C'est un moyen sûr
+
+00:07:12.400 --> 00:07:13.220
+d'apprendre sans perturber
+
+00:07:13.220 --> 00:07:14.040
+le travail de quiconque.
+
+00:07:14.460 --> 00:07:14.940
+La meilleure pratique
+
+00:07:14.940 --> 00:07:15.760
+consiste à commencer petit.
+
+00:07:16.340 --> 00:07:16.980
+Choisissez un type
+
+00:07:16.980 --> 00:07:17.760
+de données sensible,
+
+00:07:18.280 --> 00:07:19.140
+les numéros de carte bancaire
+
+00:07:19.140 --> 00:07:19.600
+par exemple,
+
+00:07:19.820 --> 00:07:20.500
+et appliquez la DLP
+
+00:07:20.500 --> 00:07:21.660
+à un petit groupe d'utilisateurs.
+
+00:07:22.180 --> 00:07:22.840
+Observez ce qui se passe.
+
+00:07:23.160 --> 00:07:24.040
+Éduquez les utilisateurs
+
+00:07:24.040 --> 00:07:25.080
+avec des conseils de stratégie
+
+00:07:25.080 --> 00:07:25.620
+qui expliquent pourquoi
+
+00:07:25.620 --> 00:07:26.320
+un élément a été bloqué.
+
+00:07:26.760 --> 00:07:27.740
+Étendez ensuite progressivement
+
+00:07:27.740 --> 00:07:28.420
+l'application à mesure
+
+00:07:28.420 --> 00:07:29.220
+que les gens s'y habituent.
+
+00:07:29.780 --> 00:07:30.420
+Ces conseils de stratégie
+
+00:07:30.420 --> 00:07:31.240
+sont très efficaces d'ailleurs.
+
+00:07:31.600 --> 00:07:32.360
+Au lieu de simplement dire
+
+00:07:32.360 --> 00:07:33.380
+bloqué qu'ils indiquent
+
+00:07:33.380 --> 00:07:33.960
+à l'utilisateur
+
+00:07:33.960 --> 00:07:34.780
+ce document contient
+
+00:07:34.780 --> 00:07:35.540
+des données sensibles.
+
+00:07:36.340 --> 00:07:36.680
+Êtes-vous sûr
+
+00:07:36.680 --> 00:07:37.740
+de vouloir l'envoyer ?
+
+00:07:37.740 --> 00:07:38.500
+Cela leur donne une chance
+
+00:07:38.500 --> 00:07:39.440
+de reconsidérer leur action
+
+00:07:39.440 --> 00:07:40.120
+sans avoir l'impression
+
+00:07:40.120 --> 00:07:41.020
+que le système les punit.
+
+00:07:41.720 --> 00:07:42.240
+La plupart des gens
+
+00:07:42.240 --> 00:07:42.680
+ne cherchent pas
+
+00:07:42.680 --> 00:07:43.320
+à faire fuiter des données.
+
+00:07:43.640 --> 00:07:44.320
+Ils vont juste trop vite.
+
+00:07:44.700 --> 00:07:45.280
+Maintenant que nous connaissons
+
+00:07:45.280 --> 00:07:45.640
+nos données,
+
+00:07:45.820 --> 00:07:46.340
+nous les protégeons
+
+00:07:46.340 --> 00:07:47.000
+avec des étiquettes
+
+00:07:47.000 --> 00:07:47.620
+et bloquons les fuites
+
+00:07:47.620 --> 00:07:48.200
+grâce à la DLP.
+
+00:07:48.820 --> 00:07:49.420
+Mais que se passe-t-il
+
+00:07:49.420 --> 00:07:50.320
+lorsqu'un auditeur se présente
+
+00:07:50.320 --> 00:07:51.740
+pour demander des preuves ?
+
+00:07:51.740 --> 00:07:52.280
+Troisième pilier,
+
+00:07:52.340 --> 00:07:53.100
+la conformité des données.
+
+00:07:53.860 --> 00:07:54.840
+Prouver que vous respectez les règles.
+
+00:07:55.320 --> 00:07:56.340
+La conformité consiste à prouver
+
+00:07:56.340 --> 00:07:57.040
+que vous êtes sécurisé,
+
+00:07:57.120 --> 00:07:57.720
+pas seulement à l'être.
+
+00:07:58.440 --> 00:07:58.800
+Vous pouvez avoir
+
+00:07:58.800 --> 00:07:59.800
+les meilleures protections au monde
+
+00:07:59.800 --> 00:08:01.300
+mais si un régulateur se présente
+
+00:08:01.300 --> 00:08:01.940
+et demande des preuves,
+
+00:08:02.000 --> 00:08:02.500
+il vous faudra plus
+
+00:08:02.500 --> 00:08:03.580
+que de bonnes intentions.
+
+00:08:04.100 --> 00:08:04.420
+Vous avez besoin
+
+00:08:04.420 --> 00:08:04.920
+de documentation,
+
+00:08:05.120 --> 00:08:05.600
+de pistes d'audit
+
+00:08:05.600 --> 00:08:06.620
+et d'un processus défendable.
+
+00:08:06.820 --> 00:08:07.340
+C'est là qu'intervient
+
+00:08:07.340 --> 00:08:08.600
+le gestionnaire de conformité de purview.
+
+00:08:08.880 --> 00:08:09.820
+Il vous attribue un score
+
+00:08:09.820 --> 00:08:10.900
+basé sur votre respect
+
+00:08:10.900 --> 00:08:12.140
+des exigences réglementaires.
+
+00:08:12.840 --> 00:08:13.720
+Imaginez une cote de crédit
+
+00:08:13.720 --> 00:08:14.540
+mais pour la conformité.
+
+00:08:14.980 --> 00:08:15.880
+Plus votre score est élevé,
+
+00:08:15.960 --> 00:08:16.820
+meilleur est votre posture
+
+00:08:16.820 --> 00:08:17.880
+et il évolue à mesure
+
+00:08:17.880 --> 00:08:18.680
+que vous prenez des mesures
+
+00:08:18.680 --> 00:08:19.240
+pour l'améliorer.
+
+00:08:20.020 --> 00:08:20.800
+Le gestionnaire de conformité
+
+00:08:20.800 --> 00:08:21.680
+fourni avec des évaluations
+
+00:08:21.680 --> 00:08:22.500
+intégrées pour les principales
+
+00:08:22.500 --> 00:08:23.020
+réglementations
+
+00:08:23.020 --> 00:08:23.800
+dont vous avez probablement donné.
+
+00:08:24.680 --> 00:08:26.060
+Le RGPD pour la confidentialité
+
+00:08:26.060 --> 00:08:26.740
+des données en Europe,
+
+00:08:26.960 --> 00:08:27.920
+IPA pour les informations
+
+00:08:27.920 --> 00:08:28.780
+de santé aux Etats-Unis,
+
+00:08:29.360 --> 00:08:30.420
+ISO 27001 pour la gestion
+
+00:08:30.420 --> 00:08:31.300
+de la sécurité de l'information,
+
+00:08:31.480 --> 00:08:32.740
+FINRA pour les services financiers,
+
+00:08:32.880 --> 00:08:34.100
+FedRAMP pour les services financiers,
+
+00:08:34.160 --> 00:08:34.700
+FedRAMP encore.
+
+00:08:35.840 --> 00:08:37.340
+Plus de 320 modèles au total.
+
+00:08:38.020 --> 00:08:39.020
+S'il existe une réglementation
+
+00:08:39.020 --> 00:08:39.820
+qui s'applique à votre secteur,
+
+00:08:39.900 --> 00:08:40.400
+il y a probablement
+
+00:08:40.400 --> 00:08:41.400
+une évaluation correspondante.
+
+00:08:41.780 --> 00:08:42.860
+Chaque évaluation décompose
+
+00:08:42.860 --> 00:08:43.940
+la réglementation en contrôle.
+
+00:08:44.440 --> 00:08:45.340
+Chaque contrôle est divisé
+
+00:08:45.340 --> 00:08:46.260
+en actions d'amélioration
+
+00:08:46.260 --> 00:08:47.720
+avec des conseils étape par étape
+
+00:08:47.720 --> 00:08:49.100
+et vous indique exactement
+
+00:08:49.100 --> 00:08:49.700
+ce que vous devez faire.
+
+00:08:50.340 --> 00:08:51.400
+Activez la journalisation d'audit,
+
+00:08:51.400 --> 00:08:52.260
+configurer les étiquettes
+
+00:08:52.260 --> 00:08:52.980
+de confidentialité
+
+00:08:52.980 --> 00:08:54.060
+et définir les stratégies de rétention.
+
+00:08:54.640 --> 00:08:55.380
+Vous n'avez pas à deviner
+
+00:08:55.380 --> 00:08:56.180
+à quoi ressemble la conformité.
+
+00:08:56.580 --> 00:08:57.200
+Le système vous le dit.
+
+00:08:57.560 --> 00:08:58.340
+Vous attribuez ces actions
+
+00:08:58.340 --> 00:08:59.280
+d'amélioration aux personnes
+
+00:08:59.280 --> 00:09:00.020
+de votre organisation.
+
+00:09:00.760 --> 00:09:01.800
+L'administrateur informatique
+
+00:09:01.800 --> 00:09:02.780
+reçoit les tâches techniques,
+
+00:09:03.020 --> 00:09:04.160
+le responsable de la conformité
+
+00:09:04.160 --> 00:09:05.320
+et la documentation des politiques,
+
+00:09:05.580 --> 00:09:06.160
+l'équipe juridique,
+
+00:09:06.200 --> 00:09:06.860
+les workflows de demande
+
+00:09:06.860 --> 00:09:07.740
+des personnes concernées.
+
+00:09:08.600 --> 00:09:09.740
+Chacun connaît ses responsabilités
+
+00:09:09.740 --> 00:09:10.340
+et vous pouvez suivre
+
+00:09:10.340 --> 00:09:11.720
+la progression en temps réel.
+
+00:09:12.380 --> 00:09:13.220
+Fini les feuilles de calcul
+
+00:09:13.220 --> 00:09:13.960
+échangées par email.
+
+00:09:14.460 --> 00:09:15.620
+Lorsqu'une personne termine une action,
+
+00:09:15.760 --> 00:09:16.500
+elle télécharge les preuves
+
+00:09:16.500 --> 00:09:17.880
+directement dans le compliance manager.
+
+00:09:18.620 --> 00:09:19.140
+Les preuves peuvent être
+
+00:09:19.140 --> 00:09:19.660
+des captures d'écran
+
+00:09:19.660 --> 00:09:20.320
+en montrant qu'une politique
+
+00:09:20.320 --> 00:09:21.280
+est configurée correctement.
+
+00:09:21.660 --> 00:09:22.280
+Il peut s'agir de documents
+
+00:09:22.280 --> 00:09:23.200
+de politique que vous avez réelligé.
+
+00:09:23.500 --> 00:09:24.340
+Il peut s'agir de journaux
+
+00:09:24.340 --> 00:09:25.260
+d'audit extraits du système.
+
+00:09:25.800 --> 00:09:26.620
+Tout est centralisé
+
+00:09:26.620 --> 00:09:27.700
+et organisé par contrôle,
+
+00:09:27.940 --> 00:09:28.900
+prêt pour le prochain audit.
+
+00:09:29.560 --> 00:09:30.320
+Voici le côté intelligent.
+
+00:09:30.720 --> 00:09:31.480
+Le compliance manager
+
+00:09:31.480 --> 00:09:32.280
+analyse automatiquement
+
+00:09:32.280 --> 00:09:32.880
+votre environnement.
+
+00:09:32.960 --> 00:09:34.320
+Microsoft 365 contrôle.
+
+00:09:35.020 --> 00:09:35.820
+Si vous avez configuré
+
+00:09:35.820 --> 00:09:36.980
+des étiquettes de confidentialité,
+
+00:09:37.160 --> 00:09:37.680
+il le détecte
+
+00:09:37.680 --> 00:09:38.640
+et vous crédite automatiquement.
+
+00:09:39.280 --> 00:09:39.880
+Si vous avez activé
+
+00:09:39.880 --> 00:09:40.760
+la journalisation d'audit,
+
+00:09:40.840 --> 00:09:41.280
+il le voit aussi.
+
+00:09:41.720 --> 00:09:42.480
+Vous n'avez pas à prouver
+
+00:09:42.480 --> 00:09:43.440
+manuellement chaque chose.
+
+00:09:43.880 --> 00:09:44.880
+Le système se vérifie lui-même.
+
+00:09:45.200 --> 00:09:45.780
+Les journaux d'audit
+
+00:09:45.780 --> 00:09:46.220
+dans Purview
+
+00:09:49.140 --> 00:09:50.920
+quand y ont-ils accédé ?
+
+00:09:50.920 --> 00:09:51.700
+Depuis quel endroit ?
+
+00:09:51.700 --> 00:09:52.660
+Qu'ont-ils fait avec ?
+
+00:09:52.660 --> 00:09:53.560
+Chaque action est journalisée
+
+00:09:53.560 --> 00:09:54.100
+et consultable.
+
+00:09:54.640 --> 00:09:55.500
+Lorsqu'un auditeur demande
+
+00:09:55.500 --> 00:09:56.560
+qui a vu ce fichier
+
+00:09:56.560 --> 00:09:57.020
+et quand,
+
+00:09:57.340 --> 00:09:57.900
+vous avez la réponse
+
+00:09:57.900 --> 00:09:58.500
+en quelques secondes,
+
+00:09:58.580 --> 00:09:59.160
+pas en quelques jours.
+
+00:09:59.800 --> 00:10:00.540
+L'e-discovery permet
+
+00:10:00.540 --> 00:10:01.320
+aux équipes juridiques
+
+00:10:01.320 --> 00:10:01.840
+de rechercher
+
+00:10:01.840 --> 00:10:02.580
+dans toutes vos données
+
+00:10:02.580 --> 00:10:03.760
+e-mail, documents,
+
+00:10:04.060 --> 00:10:04.660
+messages Teams,
+
+00:10:04.960 --> 00:10:05.560
+sites SharePoint
+
+00:10:05.560 --> 00:10:06.920
+et de placer des conservations
+
+00:10:06.920 --> 00:10:07.540
+sur le contenu
+
+00:10:07.540 --> 00:10:08.440
+lié aux enquêtes
+
+00:10:08.440 --> 00:10:09.160
+ou aux litiges.
+
+00:10:10.200 --> 00:10:10.800
+En cas de litige,
+
+00:10:10.880 --> 00:10:11.560
+vous pouvez préserver
+
+00:10:11.560 --> 00:10:12.840
+chaque élément de données associées
+
+00:10:12.840 --> 00:10:13.960
+et le produire comme preuve.
+
+00:10:14.560 --> 00:10:15.100
+Plus besoin de chercher
+
+00:10:15.100 --> 00:10:15.860
+des fichiers dans l'urgence
+
+00:10:15.860 --> 00:10:16.260
+ni de craindre
+
+00:10:16.260 --> 00:10:17.020
+que quelqu'un ait supprimé
+
+00:10:17.020 --> 00:10:17.660
+quelque chose d'important.
+
+00:10:18.400 --> 00:10:19.360
+La gestion des enregistrements
+
+00:10:19.360 --> 00:10:20.560
+garantit que les documents critiques
+
+00:10:20.560 --> 00:10:21.100
+sont conservés
+
+00:10:21.100 --> 00:10:21.940
+pendant les périodes requises
+
+00:10:21.940 --> 00:10:22.920
+et ne peuvent pas être supprimés
+
+00:10:22.920 --> 00:10:23.540
+prématurément.
+
+00:10:24.220 --> 00:10:25.140
+Si la réglementation exige
+
+00:10:25.140 --> 00:10:25.680
+que vous conserviez
+
+00:10:25.680 --> 00:10:26.400
+les documents financiers
+
+00:10:26.400 --> 00:10:26.880
+pendant 7 ans,
+
+00:10:26.980 --> 00:10:27.820
+la gestion des enregistrements
+
+00:10:27.820 --> 00:10:28.160
+l'impose.
+
+00:10:28.520 --> 00:10:28.960
+Les utilisateurs
+
+00:10:28.960 --> 00:10:29.760
+ne peuvent pas les supprimer.
+
+00:10:29.800 --> 00:10:30.320
+Les administrateurs
+
+00:10:30.320 --> 00:10:31.360
+ne peuvent pas contourner la politique.
+
+00:10:31.620 --> 00:10:32.080
+Les données restent
+
+00:10:32.080 --> 00:10:32.700
+jusqu'à l'expiration
+
+00:10:32.700 --> 00:10:33.560
+de la période de rétention
+
+00:10:33.560 --> 00:10:34.460
+puis elles sont éliminées
+
+00:10:34.460 --> 00:10:35.420
+de manière contrôlée.
+
+00:10:35.700 --> 00:10:36.900
+Pourquoi tout cela est-il important ?
+
+00:10:36.900 --> 00:10:37.940
+Les régulateurs ne se soucient pas
+
+00:10:37.940 --> 00:10:38.720
+des outils que vous utilisez.
+
+00:10:38.720 --> 00:10:39.760
+Ils ne se soucient pas du fait
+
+00:10:39.760 --> 00:10:40.480
+que vous ayez acheté Purview.
+
+00:10:40.820 --> 00:10:41.420
+Ils veulent que vous puissiez
+
+00:10:41.420 --> 00:10:42.600
+démontrer un processus défendable.
+
+00:10:43.020 --> 00:10:43.380
+Ils veulent voir
+
+00:10:43.380 --> 00:10:44.520
+que vous avez identifié les risques,
+
+00:10:44.740 --> 00:10:45.520
+mis en œuvre des contrôles,
+
+00:10:45.640 --> 00:10:46.400
+surveillé la conformité
+
+00:10:46.400 --> 00:10:47.140
+et obtenu des preuves
+
+00:10:47.140 --> 00:10:47.760
+pour chaque étape.
+
+00:10:48.240 --> 00:10:49.000
+Le compliance manager
+
+00:10:49.000 --> 00:10:49.760
+vous fournit ces preuves
+
+00:10:49.760 --> 00:10:50.620
+dans un format reconnu
+
+00:10:50.620 --> 00:10:51.360
+par les auditeurs.
+
+00:10:52.000 --> 00:10:52.980
+Mais voici quelque chose de nouveau
+
+00:10:52.980 --> 00:10:53.700
+qui change la donne.
+
+00:10:53.940 --> 00:10:54.100
+L'IA.
+
+00:10:55.380 --> 00:10:56.080
+La gouvernance de l'IA.
+
+00:10:56.680 --> 00:10:57.140
+Qu'est-ce qui change
+
+00:10:57.140 --> 00:10:58.900
+avec l'arrivée de copilotes ?
+
+00:10:58.900 --> 00:11:00.000
+Voici la définition la plus simple.
+
+00:11:00.760 --> 00:11:01.920
+La protection des données traditionnelles
+
+00:11:01.920 --> 00:11:02.620
+supposait que les humains
+
+00:11:02.620 --> 00:11:03.260
+accédaient aux données.
+
+00:11:03.880 --> 00:11:04.700
+Cette hypothèse a fait sens
+
+00:11:04.700 --> 00:11:05.300
+pendant des décennies.
+
+00:11:05.580 --> 00:11:06.480
+Une personne se connecte,
+
+00:11:06.560 --> 00:11:07.140
+cherche un fichier,
+
+00:11:07.420 --> 00:11:07.940
+l'ouvre, le lit.
+
+00:11:08.160 --> 00:11:09.280
+Le système sait qui a fait quoi
+
+00:11:09.280 --> 00:11:10.460
+et peut suivre chaque action.
+
+00:11:11.160 --> 00:11:12.380
+L'IA change totalement la donne.
+
+00:11:12.800 --> 00:11:13.860
+Copilotes et d'autres agents LIA
+
+00:11:13.860 --> 00:11:14.360
+peuvent accéder
+
+00:11:14.360 --> 00:11:15.480
+à d'immenses patrimoines de données
+
+00:11:15.480 --> 00:11:16.260
+en quelques secondes.
+
+00:11:16.580 --> 00:11:17.460
+Ils ne lisent pas un fichier à la fois.
+
+00:11:17.840 --> 00:11:18.880
+Ils scannent des milliers de documents,
+
+00:11:19.180 --> 00:11:19.820
+résument le contenu
+
+00:11:19.820 --> 00:11:20.800
+et font apparaître des informations
+
+00:11:20.800 --> 00:11:21.980
+que l'utilisateur ignorait
+
+00:11:21.980 --> 00:11:23.000
+peut-être, peut-être.
+
+00:11:23.580 --> 00:11:24.440
+Cette vitesse et cette échelle
+
+00:11:24.440 --> 00:11:25.860
+créent une toute nouvelle catégorie de risques.
+
+00:11:26.480 --> 00:11:27.180
+Imaginez que vos données
+
+00:11:27.180 --> 00:11:27.980
+sont comme un classeur.
+
+00:11:28.940 --> 00:11:29.540
+Dans l'ancien monde,
+
+00:11:29.540 --> 00:11:30.520
+chaque tiroir nécessitait une clé.
+
+00:11:31.100 --> 00:11:31.840
+Seule la bonne personne
+
+00:11:31.840 --> 00:11:33.140
+pouvait accéder au bon dossier.
+
+00:11:33.560 --> 00:11:35.060
+Copilotes est comme un assistant intelligent
+
+00:11:35.060 --> 00:11:36.180
+capable d'ouvrir tous les tiroirs
+
+00:11:36.180 --> 00:11:36.940
+à la fois si les clés
+
+00:11:36.940 --> 00:11:38.120
+sont restés sur les serrures.
+
+00:11:38.780 --> 00:11:39.500
+Si vos données ne sont pas
+
+00:11:39.500 --> 00:11:40.220
+correctement classées,
+
+00:11:40.360 --> 00:11:41.120
+Copilotes pourraient exposer
+
+00:11:41.120 --> 00:11:42.040
+des informations sensibles
+
+00:11:42.040 --> 00:11:43.220
+à quelqu'un qui ne devrait pas les voir.
+
+00:11:43.840 --> 00:11:44.940
+Non pas parce que le système est défectueux,
+
+00:11:45.000 --> 00:11:45.860
+mais parce que les données
+
+00:11:45.860 --> 00:11:46.640
+n'ont jamais été étiquetées.
+
+00:11:47.020 --> 00:11:47.860
+Un site SharePoint
+
+00:11:47.860 --> 00:11:49.440
+contenant des données personnelles clients
+
+00:11:49.440 --> 00:11:50.840
+accessibles à toute l'entreprise
+
+00:11:50.840 --> 00:11:52.620
+devient soudainement visible via l'IA
+
+00:11:52.620 --> 00:11:54.400
+comme jamais auparavant.
+
+00:11:55.160 --> 00:11:55.980
+Le mur a toujours été là,
+
+00:11:56.100 --> 00:11:57.140
+l'IA a simplement trouvé la porte.
+
+00:11:57.140 --> 00:11:58.920
+Alors que fait Purview au sujet ?
+
+00:11:58.920 --> 00:12:00.120
+Purview étend ses contrôles existants
+
+00:12:00.120 --> 00:12:01.580
+pour couvrir les interactions liées à l'IA.
+
+00:12:02.420 --> 00:12:03.600
+Les stratégies DLP scannent désormais
+
+00:12:03.600 --> 00:12:04.600
+les promptes et les réponses IA,
+
+00:12:04.740 --> 00:12:05.740
+pas seulement les emails et documents.
+
+00:12:06.620 --> 00:12:08.000
+Si quelqu'un pose une question à Copilote
+
+00:12:08.000 --> 00:12:09.060
+renvoyant des données sensibles,
+
+00:12:09.220 --> 00:12:10.220
+le DLP peut le bloquer.
+
+00:12:10.980 --> 00:12:12.100
+Les étiquettes de confidentialité
+
+00:12:12.100 --> 00:12:12.940
+sont appliquées au contenu
+
+00:12:12.940 --> 00:12:13.680
+généré par l'IA.
+
+00:12:14.880 --> 00:12:15.980
+Si Copilote crée un résumé
+
+00:12:15.980 --> 00:12:17.020
+d'un document confidentiel,
+
+00:12:17.120 --> 00:12:17.940
+ce résumé hérite
+
+00:12:17.940 --> 00:12:19.180
+de la même étiquette et protection.
+
+00:12:20.320 --> 00:12:21.820
+La gestion de la posture de sécurité
+
+00:12:21.820 --> 00:12:22.580
+des données pour l'IA
+
+00:12:22.580 --> 00:12:23.700
+surveille le partage excessif
+
+00:12:23.700 --> 00:12:24.600
+et les abus en temps réel.
+
+00:12:25.380 --> 00:12:26.400
+Elle observe l'utilisation
+
+00:12:26.400 --> 00:12:27.040
+des outils d'IA,
+
+00:12:27.240 --> 00:12:28.480
+les données auxquelles ils accèdent
+
+00:12:28.480 --> 00:12:30.300
+et si des politiques sont enfreintes.
+
+00:12:30.960 --> 00:12:32.180
+Si quelqu'un commence à poser
+
+00:12:32.180 --> 00:12:32.940
+à Copilote des questions
+
+00:12:32.940 --> 00:12:33.860
+suggérant une recherche
+
+00:12:33.860 --> 00:12:34.680
+de données interdites,
+
+00:12:34.780 --> 00:12:35.600
+le système le signale.
+
+00:12:36.100 --> 00:12:36.480
+Le signal.
+
+00:12:37.000 --> 00:12:38.280
+Compliance Manager inclut désormais
+
+00:12:38.280 --> 00:12:39.340
+des évaluations préétablies
+
+00:12:39.340 --> 00:12:40.260
+pour les réglementations IA
+
+00:12:40.260 --> 00:12:41.040
+comme le UI Act.
+
+00:12:41.780 --> 00:12:42.940
+Si votre organisation utilise
+
+00:12:42.940 --> 00:12:43.520
+des outils d'IA,
+
+00:12:43.740 --> 00:12:44.900
+vous devez prouver votre conformité
+
+00:12:44.900 --> 00:12:45.800
+à ces nouvelles règles.
+
+00:12:46.200 --> 00:12:46.860
+Les modèles d'évaluation
+
+00:12:46.860 --> 00:12:47.700
+sont déjà disponibles
+
+00:12:47.700 --> 00:12:48.340
+et prêts à l'emploi.
+
+00:12:49.060 --> 00:12:49.980
+L'AI Hub vous offre
+
+00:12:49.980 --> 00:12:51.500
+une visibilité sur les applications IA
+
+00:12:51.500 --> 00:12:52.700
+utilisées dans votre organisation
+
+00:12:52.700 --> 00:12:54.180
+et les données auxquelles elles accèdent.
+
+00:12:54.900 --> 00:12:55.400
+Vous pouvez voir
+
+00:12:55.400 --> 00:12:56.700
+quels employés utilisent Copilote,
+
+00:12:56.800 --> 00:12:58.280
+quels outils IA tiers sont connectés
+
+00:12:58.280 --> 00:12:59.620
+et quels types de données
+
+00:12:59.620 --> 00:13:00.500
+y circulent.
+
+00:13:01.280 --> 00:13:01.940
+Aucun angle mort.
+
+00:13:03.200 --> 00:13:04.220
+Purview peut également conserver
+
+00:13:04.220 --> 00:13:05.160
+les promptes et réponses IA
+
+00:13:05.160 --> 00:13:05.940
+pour des pistes d'audit.
+
+00:13:06.940 --> 00:13:07.940
+Si un régulateur demande
+
+00:13:07.940 --> 00:13:08.900
+qu'est-ce que cet employé
+
+00:13:08.900 --> 00:13:09.640
+a demandé à l'IA
+
+00:13:09.640 --> 00:13:10.680
+et qu'est-ce qu'elle lui a répondu,
+
+00:13:11.360 --> 00:13:12.080
+vous avez l'enregistrement.
+
+00:13:12.560 --> 00:13:13.200
+Promptes, réponses,
+
+00:13:13.260 --> 00:13:13.740
+horodatage,
+
+00:13:13.820 --> 00:13:14.720
+identité de l'utilisateur,
+
+00:13:14.840 --> 00:13:15.860
+tout est conservé pour enquête
+
+00:13:15.860 --> 00:13:16.920
+ou examen de conformité.
+
+00:13:17.880 --> 00:13:18.640
+Voyez les choses ainsi.
+
+00:13:18.800 --> 00:13:19.900
+Les trois piliers dont nous avons parlé,
+
+00:13:20.160 --> 00:13:20.640
+la gouvernance,
+
+00:13:20.740 --> 00:13:21.760
+la sécurité et la conformité,
+
+00:13:21.760 --> 00:13:22.840
+s'appliquent toujours à l'IA,
+
+00:13:23.140 --> 00:13:24.080
+mais les enjeux sont plus élevés.
+
+00:13:24.440 --> 00:13:25.220
+Si vos données n'étaient pas
+
+00:13:25.220 --> 00:13:25.880
+verrouillées auparavant,
+
+00:13:26.060 --> 00:13:27.440
+l'IA exposera la moindre faille.
+
+00:13:27.940 --> 00:13:28.820
+Purview vous donne les outils
+
+00:13:28.820 --> 00:13:29.720
+pour colmater ces failles
+
+00:13:29.720 --> 00:13:30.380
+avant qu'elles ne deviennent
+
+00:13:30.380 --> 00:13:30.780
+des violations.
+
+00:13:31.360 --> 00:13:32.140
+Ces trois piliers ne sont pas
+
+00:13:32.140 --> 00:13:32.820
+des projets séparés,
+
+00:13:33.120 --> 00:13:34.220
+ils fonctionnent ensemble en boucle.
+
+00:13:35.840 --> 00:13:37.640
+Comment les trois piliers sont connectés ?
+
+00:13:37.640 --> 00:13:39.140
+Alors comment tout cela s'articule-t-il ?
+
+00:13:39.140 --> 00:13:40.220
+La gouvernance identifie les données,
+
+00:13:40.360 --> 00:13:41.240
+la sécurité les protège,
+
+00:13:41.320 --> 00:13:42.020
+la conformité prouve
+
+00:13:42.020 --> 00:13:42.920
+que vous avez respecté les règles.
+
+00:13:43.240 --> 00:13:43.980
+Trois tâches distinctes,
+
+00:13:44.040 --> 00:13:44.800
+un système connecté.
+
+00:13:45.420 --> 00:13:46.520
+Mais voici ce que beaucoup de gens oublient.
+
+00:13:47.140 --> 00:13:48.340
+Ils ne travaillent pas seulement en séquence,
+
+00:13:48.540 --> 00:13:49.420
+ils se renforcent mutuellement.
+
+00:13:49.880 --> 00:13:51.360
+Un audit de conformité révèle une lacune
+
+00:13:51.360 --> 00:13:52.580
+dans votre classification des données.
+
+00:13:53.040 --> 00:13:53.800
+Peut-être avez-vous oublié
+
+00:13:53.800 --> 00:13:54.380
+un site SharePoint
+
+00:13:54.380 --> 00:13:55.700
+contenant des données clients non étiquetées.
+
+00:13:56.240 --> 00:13:57.060
+Cette lacune est réinjectée
+
+00:13:57.060 --> 00:13:57.600
+dans la gouvernance
+
+00:13:57.600 --> 00:13:58.300
+qui met à jour l'analyse
+
+00:13:58.300 --> 00:13:59.080
+de la cartographie des données.
+
+00:13:59.420 --> 00:14:00.000
+La gouvernance trouve
+
+00:14:00.000 --> 00:14:00.460
+les nouvelles données.
+
+00:14:00.860 --> 00:14:01.960
+La sécurité applique une protection.
+
+00:14:02.300 --> 00:14:03.360
+La conformité veille le processus.
+
+00:14:03.660 --> 00:14:04.480
+La boucle continue de tourner.
+
+00:14:04.760 --> 00:14:05.340
+Laissez-moi vous guider
+
+00:14:05.340 --> 00:14:06.240
+à travers un scénario réel.
+
+00:14:06.500 --> 00:14:07.280
+La cartographie des données
+
+00:14:07.280 --> 00:14:08.040
+analyse votre environnement.
+
+00:14:08.380 --> 00:14:09.180
+Elle trouve un site SharePoint
+
+00:14:09.180 --> 00:14:10.280
+avec des informations personnelles,
+
+00:14:10.360 --> 00:14:10.820
+pays, clients
+
+00:14:10.820 --> 00:14:11.520
+qui n'avaient jamais été dit.
+
+00:14:11.740 --> 00:14:12.600
+Personne ne savait qu'elles étaient là.
+
+00:14:12.880 --> 00:14:13.800
+Le moteur de classification
+
+00:14:13.800 --> 00:14:14.700
+de Purview détecte
+
+00:14:14.700 --> 00:14:15.420
+le contenu sensible
+
+00:14:15.420 --> 00:14:16.500
+et applique automatiquement
+
+00:14:16.500 --> 00:14:17.060
+une étiquette
+
+00:14:17.060 --> 00:14:17.980
+de haute confidentialité
+
+00:14:17.980 --> 00:14:18.520
+avec chiffrement.
+
+00:14:19.160 --> 00:14:19.920
+Cette étiquette déclenche
+
+00:14:19.920 --> 00:14:20.620
+une stratégie DLP
+
+00:14:20.620 --> 00:14:21.640
+que vous avez déjà configurée.
+
+00:14:22.320 --> 00:14:23.140
+Tout email transférant
+
+00:14:23.140 --> 00:14:23.640
+cette étiquette
+
+00:14:23.640 --> 00:14:24.460
+vers une adresse externe
+
+00:14:24.460 --> 00:14:25.400
+est automatiquement bloqué.
+
+00:14:25.940 --> 00:14:27.100
+Le gestionnaire de conformité
+
+00:14:27.100 --> 00:14:27.640
+voit que le contrôle
+
+00:14:27.640 --> 00:14:28.180
+est implémenté
+
+00:14:28.180 --> 00:14:28.580
+et vous accorde
+
+00:14:28.580 --> 00:14:29.080
+des points de score.
+
+00:14:29.640 --> 00:14:30.240
+Le journal d'audit
+
+00:14:30.240 --> 00:14:31.080
+enregistre l'intégralité
+
+00:14:31.080 --> 00:14:31.660
+du processus.
+
+00:14:32.000 --> 00:14:32.840
+Qui a trouvé les données ?
+
+00:14:32.840 --> 00:14:34.160
+Quand l'étiquette a été appliquée ?
+
+00:14:34.160 --> 00:14:34.600
+Quelle politique
+
+00:14:34.600 --> 00:14:36.100
+a bloqué l'action ?
+
+00:14:40.820 --> 00:14:42.160
+en tant que plateforme unifiée.
+
+00:14:42.780 --> 00:14:43.180
+Ce ne sont pas
+
+00:14:43.180 --> 00:14:43.960
+trois outils distincts
+
+00:14:43.960 --> 00:14:44.620
+qui partagent simplement
+
+00:14:44.620 --> 00:14:45.020
+un portail.
+
+00:14:45.120 --> 00:14:45.700
+C'est un moteur unique
+
+00:14:45.700 --> 00:14:46.240
+où chaque partie
+
+00:14:46.240 --> 00:14:46.940
+alimente les autres.
+
+00:14:47.580 --> 00:14:48.560
+L'intégration automatique.
+
+00:14:49.200 --> 00:14:49.940
+Une fois votre gouvernance
+
+00:14:49.940 --> 00:14:50.360
+en place,
+
+00:14:50.740 --> 00:14:51.580
+une fois votre environnement
+
+00:14:51.580 --> 00:14:52.920
+analysé et vos données classées,
+
+00:14:53.080 --> 00:14:54.340
+la sécurité et la conformité
+
+00:14:54.340 --> 00:14:54.900
+en bénéficient,
+
+00:14:55.080 --> 00:14:56.160
+sans configuration supplémentaire,
+
+00:14:56.600 --> 00:14:57.280
+vous n'avez pas à recréer
+
+00:14:57.280 --> 00:14:57.720
+vos étiquettes
+
+00:14:57.720 --> 00:14:58.660
+pour le gestionnaire de conformité.
+
+00:14:59.060 --> 00:14:59.800
+Vous n'avez pas à relancer
+
+00:14:59.800 --> 00:15:00.540
+d'analyse pour le DLP.
+
+00:15:00.980 --> 00:15:02.060
+Tout repose sur la même base.
+
+00:15:02.620 --> 00:15:03.540
+La plupart des organisations
+
+00:15:03.540 --> 00:15:04.080
+échouent en matière
+
+00:15:04.080 --> 00:15:04.860
+de protection des données
+
+00:15:04.860 --> 00:15:05.780
+car elles traitent ces aspects
+
+00:15:05.780 --> 00:15:07.020
+comme des initiatives déconnectées.
+
+00:15:07.020 --> 00:15:08.320
+Ils ont une équipe de gouvernance
+
+00:15:08.320 --> 00:15:08.980
+qui ne communique pas
+
+00:15:08.980 --> 00:15:09.640
+avec la sécurité.
+
+00:15:10.300 --> 00:15:11.600
+Un responsable de la conformité
+
+00:15:11.600 --> 00:15:12.760
+qui travaille sur un tableur différent.
+
+00:15:13.300 --> 00:15:14.060
+Une équipe informatique
+
+00:15:14.060 --> 00:15:14.900
+qui implémente des politiques
+
+00:15:14.900 --> 00:15:15.380
+sans comprendre
+
+00:15:15.380 --> 00:15:16.280
+les besoins de l'entreprise.
+
+00:15:16.960 --> 00:15:18.180
+Purview impose ses conversations
+
+00:15:18.180 --> 00:15:19.720
+en rendant les dépendances visibles.
+
+00:15:20.240 --> 00:15:20.800
+Le...
+
+00:15:20.800 --> 00:15:21.660
+On ne peut pas assurer
+
+00:15:21.660 --> 00:15:22.300
+une bonne conformité
+
+00:15:22.300 --> 00:15:22.880
+sans gouvernance.
+
+00:15:23.180 --> 00:15:23.720
+On ne peut pas assurer
+
+00:15:23.720 --> 00:15:24.320
+une bonne sécurité
+
+00:15:24.320 --> 00:15:24.760
+sans savoir
+
+00:15:24.760 --> 00:15:25.680
+quelles données on protège.
+
+00:15:26.340 --> 00:15:27.400
+Alors par où commencer ?
+
+00:15:27.400 --> 00:15:28.540
+Pas en activant tout en même temps.
+
+00:15:28.960 --> 00:15:29.760
+Commencez par la gouvernance.
+
+00:15:30.000 --> 00:15:30.540
+Trouvez vos données,
+
+00:15:30.660 --> 00:15:31.080
+classez-les,
+
+00:15:31.240 --> 00:15:31.880
+le reste suivra.
+
+00:15:32.320 --> 00:15:33.180
+C'est la pépite de connaissances
+
+00:15:33.180 --> 00:15:33.540
+d'aujourd'hui.
+
+00:15:34.280 --> 00:15:34.800
+Vos premiers pas.
+
+00:15:35.440 --> 00:15:36.180
+Alors lançons-nous.
+
+00:15:36.640 --> 00:15:37.340
+Ouvrez l'explorateur
+
+00:15:37.340 --> 00:15:37.980
+de données de Purview
+
+00:15:37.980 --> 00:15:38.940
+et voyez quelles informations
+
+00:15:38.940 --> 00:15:39.760
+sensibles existent déjà
+
+00:15:39.760 --> 00:15:40.460
+dans votre environnement.
+
+00:15:40.840 --> 00:15:41.620
+Vous pourriez être surpris
+
+00:15:41.620 --> 00:15:42.300
+par ce que vous allez trouver.
+
+00:15:42.820 --> 00:15:43.580
+Numéro de carte bancaire
+
+00:15:43.580 --> 00:15:44.320
+dans des pièces jointes,
+
+00:15:44.420 --> 00:15:45.460
+numéro de sécurité sociale
+
+00:15:45.460 --> 00:15:46.560
+sur de vieux sites SharePoint,
+
+00:15:46.700 --> 00:15:47.640
+informations médicales,
+
+00:15:47.740 --> 00:15:48.640
+dans des discussions Teams,
+
+00:15:48.840 --> 00:15:49.120
+oubliez.
+
+00:15:50.200 --> 00:15:51.040
+N'essayez pas de tout régler
+
+00:15:51.040 --> 00:15:51.580
+dès le premier jour.
+
+00:15:52.040 --> 00:15:52.580
+Contentez-vous de regarder.
+
+00:15:52.900 --> 00:15:53.500
+Concentrez-vous d'abord
+
+00:15:53.500 --> 00:15:54.420
+sur les risques les plus importants.
+
+00:15:54.620 --> 00:15:55.320
+Données financières,
+
+00:15:55.520 --> 00:15:56.120
+dossiers médicaux,
+
+00:15:56.560 --> 00:15:57.480
+informations personnelles.
+
+00:15:57.720 --> 00:15:58.600
+Ce sont ceux qui vous attirent
+
+00:15:58.600 --> 00:15:59.740
+des ennuis avec les régulateurs.
+
+00:16:00.220 --> 00:16:01.080
+Mettez votre énergie là
+
+00:16:04.800 --> 00:16:05.860
+Ensuite, appliquez des étiquettes
+
+00:16:05.860 --> 00:16:06.540
+de confidentialité
+
+00:16:06.540 --> 00:16:07.280
+à ce contenu critique,
+
+00:16:07.720 --> 00:16:08.620
+mais ne les déployez pas encore
+
+00:16:08.620 --> 00:16:09.100
+pour tout le monde.
+
+00:16:09.540 --> 00:16:10.260
+Commencez par un petit groupe
+
+00:16:10.260 --> 00:16:10.680
+d'utilisateurs.
+
+00:16:11.160 --> 00:16:11.820
+Laissez-les tester,
+
+00:16:12.180 --> 00:16:13.740
+s'habituer et vous faire des retours.
+
+00:16:14.180 --> 00:16:14.940
+Vous détecterez les erreurs
+
+00:16:14.940 --> 00:16:15.520
+de configuration
+
+00:16:15.520 --> 00:16:16.220
+avant qu'elles n'affectent
+
+00:16:16.220 --> 00:16:16.780
+toute l'entreprise.
+
+00:16:17.300 --> 00:16:17.860
+Configurez ensuite
+
+00:16:17.860 --> 00:16:19.040
+une stratégie DLP en mode test.
+
+00:16:19.680 --> 00:16:20.520
+Exécutez-la en simulation
+
+00:16:20.520 --> 00:16:21.420
+pour voir ce qui serait bloqué
+
+00:16:21.420 --> 00:16:22.660
+sans réellement rien bloquer.
+
+00:16:23.520 --> 00:16:24.400
+Passez en revue les rapports,
+
+00:16:24.520 --> 00:16:25.100
+ajustez vos règles,
+
+00:16:25.480 --> 00:16:26.260
+puis activez progressivement
+
+00:16:26.260 --> 00:16:26.720
+l'application.
+
+00:16:27.420 --> 00:16:28.120
+Utilisez le gestionnaire
+
+00:16:28.120 --> 00:16:29.100
+de conformité comme feuille de roue.
+
+00:16:29.560 --> 00:16:30.260
+Il vous montre exactement
+
+00:16:30.260 --> 00:16:30.800
+ce qui doit être fait
+
+00:16:30.800 --> 00:16:31.420
+pour respecter
+
+00:16:31.420 --> 00:16:32.460
+les réglementations
+
+00:16:32.460 --> 00:16:33.220
+de votre secteur.
+
+00:16:33.980 --> 00:16:34.740
+Vous n'avez pas à trouver
+
+00:16:34.740 --> 00:16:35.400
+cela par vous-même.
+
+00:16:35.940 --> 00:16:36.760
+Les évaluations vous disent
+
+00:16:36.760 --> 00:16:37.100
+quoi faire,
+
+00:16:37.160 --> 00:16:37.520
+dans quel ordre
+
+00:16:37.520 --> 00:16:38.020
+et comment prouver
+
+00:16:38.020 --> 00:16:38.560
+que vous l'avez fait.
+
+00:16:39.080 --> 00:16:40.080
+Voici la chose la plus puissante
+
+00:16:40.080 --> 00:16:41.000
+que vous puissiez faire dès maintenant.
+
+00:16:41.520 --> 00:16:42.080
+Lancez l'analyse
+
+00:16:42.080 --> 00:16:42.980
+de classification des données.
+
+00:16:43.280 --> 00:16:43.800
+Lancez-la simplement.
+
+00:16:44.160 --> 00:16:44.880
+Savoir ce que vous avez
+
+00:16:44.880 --> 00:16:45.400
+change tout.
+
+00:16:45.820 --> 00:16:46.640
+Tout le reste découle
+
+00:16:46.640 --> 00:16:47.200
+de cette étape.
+
+00:16:47.980 --> 00:16:48.580
+Microsoft Purview
+
+00:16:48.580 --> 00:16:49.180
+n'est pas un seul produit.
+
+00:16:49.640 --> 00:16:50.160
+C'est un système
+
+00:16:50.160 --> 00:16:50.640
+pour s'assurer
+
+00:16:50.640 --> 00:16:51.520
+que vos données sont trouvées,
+
+00:16:51.660 --> 00:16:52.760
+protégées et défendables.
+
+00:16:53.700 --> 00:16:54.640
+Commencez par la gouvernance.
+
+00:16:54.860 --> 00:16:55.520
+Ajoutez la sécurité,
+
+00:16:55.760 --> 00:16:56.580
+utilisez la conformité
+
+00:17:00.260 --> 00:17:09.040
+sur M365FM.
+
+00:17:09.660 --> 00:17:10.220
+Laissez un commentaire
+
+00:17:10.220 --> 00:17:10.520
+ce que vous voulez
+
+00:17:10.520 --> 00:17:11.140
+que l'on explique ensuite.
+
+00:17:11.640 --> 00:17:12.240
+Merci de votre écoute.

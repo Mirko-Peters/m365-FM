@@ -1,0 +1,808 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.520
+Klaar voor 10 dagen Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.860 --> 00:00:12.420
+Deze januari is M365, kom terug en we pakken het groter aan.
+
+00:00:12.660 --> 00:00:18.700
+Doe mee aan live-sessies, praktijkdemos en krijg praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.920 --> 00:00:21.460
+Geen algemene sliedes, geen eindeloos jargon.
+
+00:00:21.920 --> 00:00:29.120
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.120 --> 00:00:34.920
+Of je nu IT-professional, ontwikkelaar of zakelijk leider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.220 --> 00:00:40.540
+Met 10 volledige dagen kun je verschillende technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.880 --> 00:00:44.540
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.880 --> 00:00:49.180
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.460 --> 00:00:51.080
+De inschrijving is nu geopend.
+
+00:00:51.920 --> 00:00:53.220
+Claim vandaag nog je plek.
+
+00:00:54.900 --> 00:00:57.780
+Dat kan op m365com.net.
+
+00:00:57.780 --> 00:01:04.620
+Meld je nu aan op m365com.net, dan zien we je live in januari.
+
+00:01:04.860 --> 00:01:07.900
+Welkom terug bij een nieuwe aflevering van Microsoft Knowledge Nuggets.
+
+00:01:08.080 --> 00:01:11.640
+Ik ben je host Mirko Peters en vandaag pakken we een reëel datavraagstuk aan.
+
+00:01:11.820 --> 00:01:13.140
+Dus laat me je dit vragen.
+
+00:01:13.360 --> 00:01:19.560
+Stel je voor dat je in een fabriek bent met duizend sensoren voor temperatuur, druk, trillingen, die continu elke seconde een waarde doorgeven.
+
+00:01:19.780 --> 00:01:22.100
+Dat zijn dus duizend datapunten per seconde.
+
+00:01:22.460 --> 00:01:24.720
+Twintig jaar geleden was de oplossing simpel.
+
+00:01:24.720 --> 00:01:33.280
+Je verzamelde die data overdag, sloeg het op in een bestand, draaide s'nachts een badge op om het te verwerken en de volgende ochtend had je een rapport van wat er gisteren gebeurde.
+
+00:01:33.620 --> 00:01:37.220
+Dat werkte prima toen snel genoeg betekende tegen morgenochtend.
+
+00:01:37.380 --> 00:01:38.860
+Maar de wereld is veranderd.
+
+00:01:39.100 --> 00:01:43.160
+Sensoren werden goedkoper, appslimmer en gebruikers verwachten directe antwoorden.
+
+00:01:43.160 --> 00:01:51.180
+Nu betekent die nachtelijke badge op dat je data altijd een dag oud is en in een wereld waar een oververhitte machine binnen minuten brand kan veroorzaken, heb je niets aan data van gisteren.
+
+00:01:51.320 --> 00:01:55.080
+Dus stap je over op realtime waarbij je data verzamelt zodra deze wordt gegenereerd.
+
+00:01:55.260 --> 00:01:56.420
+Maar hier begint de ellende.
+
+00:01:56.680 --> 00:02:01.220
+Probeer al die streaming data maar eens in een traditionele database te stoppen, die loopt direct vast.
+
+00:02:01.580 --> 00:02:06.160
+Databases zijn gebouwd voor queries en transacties, niet om een waterval aan een vent te verwerken.
+
+00:02:06.160 --> 00:02:13.180
+Je probeert een reguliere message queue en dat werkt even, maar queues zijn ontworpen voor één consument die een bericht oppakt en verwerkt.
+
+00:02:13.720 --> 00:02:19.960
+Ze zijn dus niet gebouwd voor miljoenen events per seconde waarbij meerdere downstream systemen dezelfde stroom willen lezen.
+
+00:02:20.440 --> 00:02:21.920
+Dit is de kern van de uitdaging.
+
+00:02:22.140 --> 00:02:29.060
+Je hebt een manier nodig om enorme hoeveelheden data op te nemen, te bufferen zodat er niets verloren gaat en in realtime te distribueren naar meerdere consumenten.
+
+00:02:29.240 --> 00:02:30.600
+Dat is geen database probleem.
+
+00:02:30.800 --> 00:02:31.900
+Dat is geen queue probleem.
+
+00:02:32.040 --> 00:02:33.160
+Het is een streaming probleem.
+
+00:02:33.360 --> 00:02:34.320
+Dus wat is de oplossing?
+
+00:02:34.320 --> 00:02:36.280
+Dat is waar Azure Event Hubs in beeld komt.
+
+00:02:36.500 --> 00:02:37.660
+Wat is Azure Event Hubs?
+
+00:02:37.860 --> 00:02:39.600
+Hier is de eenvoudigste definitie.
+
+00:02:39.760 --> 00:02:46.780
+Azure Event Hubs is een volledig beheerd realtime data streaming platform, speciaal gebouwd om miljoenen events per seconde te verwerken met lage latentie.
+
+00:02:47.000 --> 00:02:49.260
+Merk op dat ik geen message queue of database zei.
+
+00:02:49.460 --> 00:02:51.840
+Event Hubs is geen wachtrij en het is geen database.
+
+00:02:52.220 --> 00:02:54.200
+Het is een stream en dat verschil is belangrijk.
+
+00:02:54.520 --> 00:02:57.920
+Een wachtrij houdt een bericht vast totdat één consumer het oppikt en dan is het weg.
+
+00:02:58.060 --> 00:03:01.960
+Een database slaat data op zodat je die later kunt opvragen, maar een stream is anders.
+
+00:03:01.960 --> 00:03:08.460
+Het is een continu stroom van events die meerdere lezers onafhankelijk en in hun eigen tempo kunnen lezen zonder iets uit de stream te verwijderen.
+
+00:03:08.580 --> 00:03:10.540
+Laten we nu een paar mythes uit de weg ruimen.
+
+00:03:10.760 --> 00:03:13.180
+Event Hubs kan miljoenen events per seconde aan.
+
+00:03:13.360 --> 00:03:24.420
+We hebben het over het opnemen van honderdduizenden berichten per seconde van duizenden producenten en dat met een zeer lage latentie miliseconden vanaf het moment dat een event wordt verzonden tot het moment dat een consumer het kan lezen.
+
+00:03:24.660 --> 00:03:26.460
+Hier is iets wat veel mensen verbaast.
+
+00:03:26.460 --> 00:03:36.840
+Event Hubs is Kafka-compatibel. Dus, als je eerder met Apache Kafka hebt gewerkt, kun je je bestaande Kafka tools en clients gebruiken om met Event Hubs te communiceren zonder een nieuw protocol te leren of je applicaties te herschrijven.
+
+00:03:37.000 --> 00:03:38.380
+Het spreekt dezelfde taal.
+
+00:03:38.560 --> 00:03:42.680
+De eenvoudigste manier om dit te zien is als een hoge snelheidsvoordeur voor data.
+
+00:03:43.000 --> 00:03:45.380
+Stel je een druk kantoorgebouw voor tijdens de spits.
+
+00:03:45.660 --> 00:03:51.860
+Honderden mensen lopen elke minuut door de voordeur en de deur houdt ze niet tegen, stelt geen vragen en stuurt ze niet naar specifieke ruimtes.
+
+00:03:51.860 --> 00:03:56.360
+Het laat ze gewoon snel naar binnen. Dat is Event Hubs. Het is de voordeur voor je data.
+
+00:03:56.580 --> 00:03:59.940
+Het verwerkt de data niet, analyseert ze niet en beslist niet wat ermee moet gebeuren.
+
+00:04:00.100 --> 00:04:05.260
+Het krijgt de data gewoon zo snel mogelijk in je Azure-omgeving, zodat je downstream-systemen het echte werk kunnen doen.
+
+00:04:05.420 --> 00:04:08.280
+Maar hoe werkt het eigenlijk? Laten we de onderdelen opsplitsen.
+
+00:04:08.460 --> 00:04:11.160
+De bouwstenen, partities, consumer groups, doorvoer.
+
+00:04:11.360 --> 00:04:14.100
+Binnen elke Event Hubs zit een structuur die het geheel laat werken.
+
+00:04:14.260 --> 00:04:18.120
+Het belangrijkste onderdeel is de partitie. Denk bij een partitie aan een rijstrook op een snelweg.
+
+00:04:18.300 --> 00:04:20.200
+Data komt binnen en belandt in een van deze rijstroken.
+
+00:04:20.200 --> 00:04:24.400
+Dit is de kern. Binnen elke rijstrook blijft de volgorde van Events precies zoals ze aankwamen.
+
+00:04:24.600 --> 00:04:27.600
+Event 1 komt voor Event 2 en Event 2 voor Event 3.
+
+00:04:27.800 --> 00:04:29.860
+Die volgorde verandert nooit binnen die rijstrook.
+
+00:04:30.000 --> 00:04:33.700
+Dus als je applicatie Events in de exacte volgorde nodig heeft, hou je ze in dezelfde partitie.
+
+00:04:33.880 --> 00:04:38.820
+Je kunt tussen de 2 en 32 partities per Event HUB hebben en dit aantal stel je in wanneer je de HUB aanmaakt.
+
+00:04:39.000 --> 00:04:43.040
+Je kunt dit later niet meer wijzigen. Je moet dus vooraf nadenken over je doorvoerbehoeften.
+
+00:04:43.220 --> 00:04:45.480
+Meer partities betekenen meer parallelle verwerking.
+
+00:04:45.480 --> 00:04:51.380
+Als je een hoog volume aan Events verwacht, wil je meer partities, zodat meerdere consumers tegelijkertijd uit verschillende banen kunnen lezen.
+
+00:04:51.560 --> 00:04:53.940
+Maar meer partities betekenen ook meer complexiteit.
+
+00:04:54.140 --> 00:04:57.700
+De vuistregel is om te kiezen op basis van je verwachten doorvoer niet willekeurig.
+
+00:04:57.820 --> 00:05:00.040
+Als je het niet zeker weet, begin dan kleiner en test.
+
+00:05:00.260 --> 00:05:01.900
+Partities alleen zijn echter niet genoeg.
+
+00:05:02.020 --> 00:05:03.480
+Je hebt ook consumer groups nodig.
+
+00:05:03.680 --> 00:05:07.560
+Een consumer group is simpelweg een afzonderlijke downstream applicatie die dezelfde stream leest.
+
+00:05:07.760 --> 00:05:10.480
+Elke consumer group krijgt zijn eigen onafhankelijke kopie.
+
+00:05:10.480 --> 00:05:17.280
+Dus, als je één groep hebt voor real-time analytics en een andere voor archivering naar opslag, lezen ze beide tegelijkertijd dezelfde events zonder elkaar te hinderen.
+
+00:05:17.440 --> 00:05:20.580
+De analytics groep leest temperatuurgegevens om afwijkingen te detecteren.
+
+00:05:20.740 --> 00:05:24.540
+De archiveringsgroep leest dezelfde gegevens en verstuurt deze naar een dataleek voor lange termijnopslag.
+
+00:05:24.780 --> 00:05:26.040
+Beide groepen zien elk event.
+
+00:05:26.300 --> 00:05:27.840
+Geen van beide groepen blokkeert de andere.
+
+00:05:28.060 --> 00:05:29.060
+En dit is erg belangrijk.
+
+00:05:29.340 --> 00:05:32.680
+In een traditionele wachtrij wordt een bericht door één processor geconsumeerd en daarna is het weg.
+
+00:05:32.820 --> 00:05:35.440
+Hier kunnen meerdere consumers onafhankelijk dezelfde stream lezen.
+
+00:05:35.660 --> 00:05:37.180
+Dat is de kracht van consumer groups.
+
+00:05:37.360 --> 00:05:39.720
+Maar hoe meet je hoeveel gegevens je eventhap kan verwerken?
+
+00:05:39.720 --> 00:05:41.420
+Daarvoor zijn throughput units.
+
+00:05:41.640 --> 00:05:44.600
+Een throughput unit, of tu, is hoe we de capaciteit meten.
+
+00:05:44.780 --> 00:05:49.840
+Eentu geeft je 1 megabyte per seconde aan inkomende data en 2 megabyte per seconde aan uitgaande data.
+
+00:05:50.080 --> 00:05:53.700
+Dus, als je 10 megabyte per seconde moet opnemen, heb je tenminste 10 tus nodig.
+
+00:05:53.900 --> 00:05:59.280
+Je kunt handmatig opschalen of je kunt auto- en vleet inschakelen, wat automatisch je tus verhoogt bij pieken in het verkeer.
+
+00:05:59.440 --> 00:06:02.440
+Je betaalt voor het maximale aantal tus dat in een uur is gebruikt.
+
+00:06:02.440 --> 00:06:07.540
+Dus, als je gedurende 10 minuten 20 tus gebruikt, betaal je voor 20 tus voor dat hele uur.
+
+00:06:07.720 --> 00:06:09.140
+Nog een onderdeel, retentie.
+
+00:06:09.140 --> 00:06:11.660
+Events verdwijnen niet uit de hab nadat ze zijn geconsumeerd.
+
+00:06:11.820 --> 00:06:14.060
+Ze blijven gedurende een instelbare periode in de hab staan.
+
+00:06:14.240 --> 00:06:16.000
+In de standaardlaag is dat 1 tot 7 dagen.
+
+00:06:16.180 --> 00:06:17.800
+In de premiumlaag tot wel 90 dagen.
+
+00:06:18.060 --> 00:06:19.920
+Dit maakt iets mogelijk dat replay wordt genoemd.
+
+00:06:20.060 --> 00:06:23.980
+Als je downstream consumer faalt, of als je gegevens opnieuw moet verwerken voor een nieuwe analyse,
+
+00:06:24.280 --> 00:06:26.000
+kun je teruggaan en oude events opnieuw lezen.
+
+00:06:26.240 --> 00:06:29.920
+Dat is anders dan bij een wachtrij, waar een bericht voor goed weg is zodra het is geconsumeerd.
+
+00:06:29.920 --> 00:06:33.600
+Je kent nu de onderdelen, maar hoe werken ze eigenlijk samen in een echt systeem?
+
+00:06:33.760 --> 00:06:34.460
+Hoe het werkt?
+
+00:06:34.460 --> 00:06:36.440
+Het producent-en-consumentmodel.
+
+00:06:36.640 --> 00:06:38.700
+Laten we de stroom van begin tot eind doorlopen.
+
+00:06:38.920 --> 00:06:40.480
+Aan de ene kant heb je producenten.
+
+00:06:40.660 --> 00:06:44.280
+Een producent is elke applicatie of apparaat dat gebeurtenissen naar de hab stuurt.
+
+00:06:44.480 --> 00:06:48.020
+Dit kan een temperatuur sensor in een fabriek zijn, een webserver die pagina bezoeken locht,
+
+00:06:48.180 --> 00:06:50.200
+of een bank-app die transactiegegevens verstuurt.
+
+00:06:50.500 --> 00:06:55.540
+Producenten kunnen communiceren met event-habs via drie verschillende protocollen, AMQP, HTTPS of Kafka.
+
+00:06:55.820 --> 00:06:59.180
+Dus welke taal of welk platform je ook gebruikt, er is altijd een manier om verbinding te maken.
+
+00:06:59.420 --> 00:07:02.820
+Wanneer een producent een gebeurtenis verstuurt, beslist de hab in welke partitie deze terechtkomt.
+
+00:07:02.960 --> 00:07:05.740
+Standaard worden gebeurtenissen verdeeld op basis van een round-robin methode.
+
+00:07:05.940 --> 00:07:09.240
+De eerste gebeurtenis gaat naar partitie 1, de tweede naar partitie 2, enzovoort.
+
+00:07:09.380 --> 00:07:11.100
+Maar je kunt ook een partitiesleutel gebruiken.
+
+00:07:11.100 --> 00:07:14.240
+Als je wilt dat alle gebeurtenissen van hetzelfde apparaat in dezelfde partitie belanden,
+
+00:07:14.400 --> 00:07:16.060
+stel je het apparaat ideeën als partitiesleutel.
+
+00:07:16.200 --> 00:07:19.080
+Op die manier blijft de volgorde van gebeurtenissen van dat apparaat behouden.
+
+00:07:19.280 --> 00:07:20.860
+De hab zelf doet niet veel aan verwerking.
+
+00:07:21.060 --> 00:07:24.440
+Het buffert de gebeurtenissen en slaat ze op in de partities voor de bewaarperiode.
+
+00:07:24.700 --> 00:07:26.380
+Zie het als een tijdelijke opslagruimte.
+
+00:07:26.580 --> 00:07:28.900
+De gebeurtenissen staan daar te wachten tot iemand ze leest.
+
+00:07:29.080 --> 00:07:30.700
+Aan de andere kant heb je consumenten.
+
+00:07:31.000 --> 00:07:33.660
+Consumenten zijn downstream applicaties die gegevens van de hab lezen.
+
+00:07:33.840 --> 00:07:35.240
+En dit is het belangrijke gedeelte.
+
+00:07:35.600 --> 00:07:37.020
+Consumenten gebruiken een poolmodel.
+
+00:07:37.020 --> 00:07:38.420
+Ze bepalen hun eigen tempo.
+
+00:07:38.700 --> 00:07:41.920
+Ze krijgen geen gebeurtenissen gepust, maar vragen erom wanneer ze er klaar voor zijn.
+
+00:07:42.120 --> 00:07:45.300
+Dit is anders dan bij een wachtrij waar het systeem berichten naar een consument bust.
+
+00:07:45.300 --> 00:07:48.120
+Hier bepaalt de consument wanneer de volgende batch wordt opgehaald.
+
+00:07:48.300 --> 00:07:51.080
+Elke consumentengroep houdt zijn eigen positie in de stream bij.
+
+00:07:51.320 --> 00:07:53.200
+Deze positie wordt een offset genoemd.
+
+00:07:53.320 --> 00:07:56.460
+De offset vertelt de consument welke gebeurtenissen al zijn verwerkt.
+
+00:07:56.600 --> 00:08:00.780
+En de consument slaat deze offset ergens duurzaam op, meestal in Azure blobopslag.
+
+00:08:01.000 --> 00:08:02.520
+Dit proces heet checkpointing.
+
+00:08:02.700 --> 00:08:04.440
+Dit is waarom checkpointing belangrijk is.
+
+00:08:04.440 --> 00:08:08.420
+Stel je voor dat je consument applicatie crash halverwege het verwerken van een batch gebeurtenissen.
+
+00:08:08.600 --> 00:08:12.740
+Bij herstart leest het het laatste checkpoint uit de blobopslag en hervat het vanaf dat exacte punt.
+
+00:08:12.740 --> 00:08:16.000
+Het verwerkt geen oude gebeurtenissen opnieuw en slaat geen gebeurtenissen over.
+
+00:08:16.200 --> 00:08:17.960
+Het gaat precies verder waar het gebleven was.
+
+00:08:18.140 --> 00:08:20.100
+En dat is betrouwbaarheid zonder complexiteit.
+
+00:08:20.320 --> 00:08:24.000
+Het belangrijkste inzicht is dat EventHab's producenten volledig ontkoppelt van consumenten.
+
+00:08:24.340 --> 00:08:26.020
+Producenten weten niet wie hun gegevens leest.
+
+00:08:26.340 --> 00:08:28.100
+Consumenten weten niet wie de gegevens verstuurt.
+
+00:08:28.280 --> 00:08:29.200
+Ze zijn onafhankelijk.
+
+00:08:29.400 --> 00:08:31.520
+De Hab zit in het midden, buffert en verdeelt gebeurtenissen.
+
+00:08:31.800 --> 00:08:33.340
+En beide kanten werken op hun eigen tempo.
+
+00:08:33.580 --> 00:08:38.100
+En die ontkoppeling is wat EventHab zo krachtig maakt voor het bouwen van schaalbare, veerkrachtige systemen.
+
+00:08:38.100 --> 00:08:40.780
+Laten we dit concreet maken met praktijkscenario's.
+
+00:08:41.480 --> 00:08:42.680
+Gebruikscenario's uit de praktijk.
+
+00:08:42.880 --> 00:08:45.280
+Laten we beginnen met de grootste IoT-telemetrie.
+
+00:08:45.520 --> 00:08:47.840
+Stel je een slimme fabriek voor met duizenden sensoren.
+
+00:08:48.040 --> 00:08:51.860
+Elke machine heeft sensoren die temperatuur, druk, trillingen en energieverbruik meten.
+
+00:08:52.020 --> 00:08:54.040
+En elke sensor stuurt om de paar seconden een waarde.
+
+00:08:54.280 --> 00:08:59.480
+Dat zijn geen honderden gebeurtenissen per seconde, maar honderdduizenden, misschien wel miljoenen, afhankelijk van de grootte van de fabriek.
+
+00:08:59.580 --> 00:09:04.280
+Dat kun je niet opslaan in een traditionele database en je kunt het niet verwerken met een batch op die één keer per dag draait.
+
+00:09:04.280 --> 00:09:08.280
+Tegen de tijd dat je het rapport krijgt, kan een machine al oververhit zijn geraakt en de productie hebben stilgelegd.
+
+00:09:08.920 --> 00:09:13.340
+Dus stuur je al die sensordata naar EventHabs dat deze enorme stroom verwerkt zonder enige moeite.
+
+00:09:13.660 --> 00:09:18.120
+Vervolgens koppel je Azure Stream Analytics aan de hub en worden er real-time queries op de data uitgevoerd.
+
+00:09:18.360 --> 00:09:24.760
+Wanneer een temperatuurmeting een drempelwaarde overschrijdt, wordt er een waarschuwing verstuurd, wordt een onderhoudsteam ingelicht en wordt de machine uitgeschakeld voordat deze uitvalt.
+
+00:09:24.960 --> 00:09:26.800
+Dat is voorspellend onderhoud in de praktijk.
+
+00:09:26.980 --> 00:09:30.020
+Een ander veelvoorkomend gebruikscenario is applicatie-logging en monitoring.
+
+00:09:30.020 --> 00:09:34.680
+Stel dat je een microservices-architectuur beheert met 50 verschillende services die elk iets anders doen.
+
+00:09:34.840 --> 00:09:38.560
+Elke service genereert logbestanden met fouten, waarschuwingen en prestatiestatistieken.
+
+00:09:38.760 --> 00:09:44.640
+Vroeger schreef je die laks naar bestanden op elke server en als er iets misging, moest je op vijf verschillende machines inloggen om de fout te vinden.
+
+00:09:44.880 --> 00:09:45.880
+Dat is een nachtmerrie.
+
+00:09:46.360 --> 00:09:51.480
+In plaats daarvan laat je elke service zijn laks naar één EventHab sturen, één centrale pijplijn.
+
+00:09:52.000 --> 00:09:54.200
+Daarna maak je meerdere consumentengroepen aan.
+
+00:09:54.400 --> 00:09:58.320
+Eén groep leest de stroom en stuurt kritieke fouten naar een real-time waarschuwingssysteem.
+
+00:09:58.320 --> 00:10:03.400
+Een andere groep leest dezelfde stroom en schrijft alle laks naar Azure Data Lake voor lange termijnopslag en analyse.
+
+00:10:03.620 --> 00:10:06.600
+Een derde groep voedt een live dashboard dat de systeem gezondheid toont.
+
+00:10:06.800 --> 00:10:09.840
+Elk team ziet dezelfde data in real-time zonder elkaar te hinderen.
+
+00:10:10.020 --> 00:10:11.940
+Clickstream analyse is een andere grootte.
+
+00:10:12.200 --> 00:10:14.020
+Stel je voor dat je een e-commerce website runt.
+
+00:10:14.180 --> 00:10:18.100
+Elke klik, paginaweergave, zoekopdracht en toevoegen aan winkelwagen, actie wordt naar EventHabs gestuurd.
+
+00:10:18.300 --> 00:10:20.360
+Dat is een enorme stroom aan gebruikersgedrag data.
+
+00:10:20.620 --> 00:10:23.160
+Downstream consumenten analyseren de stroom in real-time.
+
+00:10:23.360 --> 00:10:27.740
+Eén consument bouwt gebruikersprofielen op die laten zien welke producten mensen bekijken en welke categorieën ze doorzoeken.
+
+00:10:27.740 --> 00:10:31.500
+Een andere consument detecteert trends en ziet welke producten plotseling populair worden.
+
+00:10:31.660 --> 00:10:36.680
+Een derde consument personaliseert de winkelervaring door aanbevelingen te tonen op basis van waar de gebruiker net op heeft geklikt.
+
+00:10:36.880 --> 00:10:39.440
+Dit alles gebeurt in milliseconden, niet van de ene op de andere dag.
+
+00:10:39.560 --> 00:10:41.740
+En dan is er nog fraudedetectie in de financiële sector.
+
+00:10:42.000 --> 00:10:44.140
+Banken verwerken elke dag miljoenen transacties.
+
+00:10:44.340 --> 00:10:47.160
+Credit card betalingen, overboekingen, online betalingen.
+
+00:10:47.300 --> 00:10:51.460
+Elke transactie is een gebeurtenis en elke transactie moet in real-time worden beoordeeld op fraude.
+
+00:10:51.460 --> 00:10:56.120
+Je kunt niet wachten op een batchverwerking, want als een frauduleuze transactie wordt goedgekeurd, is het geld weg.
+
+00:10:56.300 --> 00:10:58.700
+Dus streamt de bank elke transactie naar Event Hubs.
+
+00:10:59.040 --> 00:11:03.720
+Stroomafwaarts consumeren machine learning modellen de stream en beoordelen ze elke transactie op frauderisico.
+
+00:11:03.860 --> 00:11:06.880
+Verdachte transacties worden binnen enkele seconden gemarkeerd en geblokkeerd.
+
+00:11:07.060 --> 00:11:11.820
+Ondertussen voeden afzonderlijke consumentengroepen dezelfde stream aan compliance-systemen voor wettelijke rapportage
+
+00:11:11.820 --> 00:11:14.460
+en aan operationele dashboards voor het monitoren van transactievolumes.
+
+00:11:15.280 --> 00:11:19.160
+Drie verschillende consumenten lezen allemaal dezelfde stream en doen allemaal verschillende dingen.
+
+00:11:19.160 --> 00:11:21.900
+De rode draad in al deze scenario's is hetzelfde.
+
+00:11:22.060 --> 00:11:25.660
+Hoog volume, meerdere consumenten en de behoefte aan real-time inzicht.
+
+00:11:25.880 --> 00:11:30.760
+Event Hubs is niet de oplossing voor elk probleem, maar bij deze combinatie is het de juiste tool voor de klus.
+
+00:11:30.980 --> 00:11:33.720
+Event Hubs is echter niet de enige berichtenservice in Azure.
+
+00:11:33.980 --> 00:11:35.480
+Laten we het vergelijken met de andere.
+
+00:11:35.720 --> 00:11:38.040
+Event Hubs versus Event Grid versus Service Bus.
+
+00:11:38.240 --> 00:11:40.860
+Azure heeft drie hoofddiensten voor het verplaatsen van gegevens.
+
+00:11:41.060 --> 00:11:43.040
+Event Grid, Event Hubs en Service Bus.
+
+00:11:43.300 --> 00:11:46.080
+Mensen halen ze constant door elkaar, dus laten we de verwarring wegnemen.
+
+00:11:46.280 --> 00:11:47.640
+Event Grid is het rookalarm.
+
+00:11:47.640 --> 00:11:49.360
+Het is lichtgewicht en reactief.
+
+00:11:49.560 --> 00:11:56.160
+Wanneer er iets gebeurt, een blob wordt geüpload naar opslag, een virtuele machine van status verandert of een resource wordt aangemaakt.
+
+00:11:56.320 --> 00:11:58.040
+Event Grid vuurt een gebeurtenis af.
+
+00:11:58.180 --> 00:12:01.380
+Het vervoert de gegevens zelf niet, het zegt alleen, hé, er is iets gebeurd.
+
+00:12:01.600 --> 00:12:04.920
+Vervolgens stuurt het die melding door naar handlers zoals Azure Functions of Logic Apps.
+
+00:12:05.100 --> 00:12:07.900
+Event Grid is geen stream en is niet ontworpen voor een hoge doorvoer.
+
+00:12:08.060 --> 00:12:10.640
+Het is voor discrete gebeurtenissen die een snelle reactie vereisen.
+
+00:12:10.840 --> 00:12:14.940
+Het beste voor blob upload triggers, wijzigingen in resource status en serverloze workflows.
+
+00:12:15.200 --> 00:12:16.540
+Service Bus is de postdienst.
+
+00:12:16.540 --> 00:12:19.200
+Het is betrouwbaar, geordend en garandeerd aflevering.
+
+00:12:19.360 --> 00:12:22.380
+Wanneer je een bericht via Service Bus verstuurt, weet je zeker dat het aankomt.
+
+00:12:22.480 --> 00:12:26.080
+Het ondersteunt first-in-first-out ordening, detectie van duplicaten en transacties.
+
+00:12:26.260 --> 00:12:30.480
+Als de verwerking van een bericht mislukt, gaat het naar een wachtrij voor dode brieven waar je het later kunt inspecteren.
+
+00:12:30.680 --> 00:12:35.940
+Service Bus is gebouwd voor bedrijfscritische workflows zoals betalingsverwerking, orderafhandeling en goedkeuringsketens.
+
+00:12:36.120 --> 00:12:42.440
+Het verwerkt duizenden berichten per seconde, geen miljoenen, en dat is prima, want bij het verwerken van een betaling heb je geen miljoenen gebeurtenissen per seconde nodig.
+
+00:12:42.440 --> 00:12:45.800
+Je hebt nodig dat elk bericht precies één keer in de juiste volgorde aankomt.
+
+00:12:45.920 --> 00:12:47.480
+Event Hubs is de beveiligingscamera.
+
+00:12:47.780 --> 00:12:50.060
+Het registreert alles voor terugkijken en analyse.
+
+00:12:50.320 --> 00:12:55.980
+Het is gebouwd voor streaming met een hoog volume, miljoenen gebeurtenissen per seconde, en meerdere consumenten kunnen onafhankelijk van elkaar dezelfde stream lezen.
+
+00:12:56.220 --> 00:12:59.700
+Gebeurtenissen blijven dagen of weken in de hap staan, zodat je ze indien nodig opnieuw kunt afspelen.
+
+00:12:59.880 --> 00:13:02.180
+Event Hubs is niet bedoeld voor transactionele berichtgeving.
+
+00:13:02.380 --> 00:13:08.740
+Het is bedoeld voor telemetrie, analyse, pijplijnen en elk scenario waarin je enorme hoeveelheden gegevens moet opnemen en distribueren naar meerdere consumenten.
+
+00:13:08.740 --> 00:13:12.960
+Dus, hoe maak je een keuze? Stel jezelf drie vragen. Reageer je op een verandering?
+
+00:13:13.120 --> 00:13:16.440
+Een blob is geüpload, een VM is gemaakt, een resource is van status veranderd.
+
+00:13:16.600 --> 00:13:20.040
+Dat is Event Grid. Heb je gegarandeerde afleveringen en strikte volgorde nodig?
+
+00:13:20.220 --> 00:13:23.940
+Het verwerken van betalingen, uitvoeren van workflows, coördineren van zakelijke transacties.
+
+00:13:24.100 --> 00:13:24.760
+Dat is Service Bus.
+
+00:13:24.980 --> 00:13:30.760
+Stream je enorme hoeveelheden data voor analytics, IoT-telemetrie, applicatielogboeken, klikstromen, fraudedetectie.
+
+00:13:30.980 --> 00:13:31.940
+Dat is Event Hubs.
+
+00:13:32.140 --> 00:13:34.660
+Hier is het punt. Je hoeft er niet slechts één te kiezen.
+
+00:13:34.920 --> 00:13:36.320
+Deze services werken samen.
+
+00:13:36.560 --> 00:13:38.400
+Event Hubs neemt de ruwe datastroom op.
+
+00:13:38.400 --> 00:13:42.200
+Event Grid reageert op gebeurtenissen binnen die stroom en activeert downstream acties.
+
+00:13:42.420 --> 00:13:45.560
+Service Bus regelt de betrouwbare berichtgeving voor zakelijke workflows.
+
+00:13:45.820 --> 00:13:48.060
+Gebruik ze samen en je krijgt het beste van alle werelden.
+
+00:13:48.320 --> 00:13:50.920
+Laten we praten over de kosten van het draaien van dit soort pijplijn.
+
+00:13:51.100 --> 00:13:52.160
+Prijzen en niveaus.
+
+00:13:52.420 --> 00:13:57.100
+Laten we over kosten praten, want weten wat Event Hubs doet is één ding, maar weten wat het kost is iets heel anders.
+
+00:13:57.360 --> 00:14:00.200
+Event Hubs heeft vier niveaus en Basic is de goedkoopste.
+
+00:14:00.400 --> 00:14:04.660
+Het geeft je één dag retentie, beperkte functies en de laagste kosten per doorvoereenheid.
+
+00:14:04.660 --> 00:14:09.780
+Dat werkt voor eenvoudige scenario's waar je niet veel nodig hebt, maar de meeste mensen slaan Basic over en beginnen met Standard.
+
+00:14:10.000 --> 00:14:11.440
+Standard is het ideale midden.
+
+00:14:11.640 --> 00:14:18.940
+Het biedt tot zeven dagen retentie, Event Hubs, Capture voor automatische archivering naar opslag, Kafka-compatibiliteit en tot twintig consumentengroepen.
+
+00:14:19.140 --> 00:14:23.360
+Dat dekt de meeste productie workloads, dus als je iets echt bouwt, is dit meestal waar je begint.
+
+00:14:23.360 --> 00:14:30.360
+Premium is een stap omhoog. Je krijgt 90 dagen retentie, 1 terabyte opslag per verwerkingseenheid, voorspelbare prestaties en VNet-ondersteuning voor netwerkisolatie.
+
+00:14:31.260 --> 00:14:37.260
+Gereserveerde resources betekenen dat drukke buren je niet beïnvloeden, en dit niveau is gebouwd voor hoogwaardige workloads waar latentie en isolatie ertoe doen.
+
+00:14:37.520 --> 00:14:42.440
+Dedicated is het topniveau, een single-tenant cluster speciaal voor jou met 10 terabyte per capaciteitseenheid.
+
+00:14:42.620 --> 00:14:45.820
+Het is voor zeer grote workloads waar je de hele omgeving voor jezelf nodig hebt.
+
+00:14:46.020 --> 00:14:51.260
+Ja, het is duur, maar als je constant enorme volumes verwerkt, kan het kosteneffectiever zijn dan het schalen van Premium.
+
+00:14:51.260 --> 00:15:05.920
+Dus, wat bepaalt de kosten? 4 dingen, doorvoereenheden, oftewel hoeveel data je verplaatst, retentieduur, hoe lang je gebeurtenissen bewaart, capture, of je archiveert naar opslag, en georeplicatie als je data kopieert over regio's voor noodherstel.
+
+00:15:06.080 --> 00:15:11.160
+Hier zijn een paar tips voor kostenoptimalisatie. Begin met standaard en schaal pas op wanneer dat nodig is.
+
+00:15:11.400 --> 00:15:19.260
+Gebruik een korte retentieperiode voor actuele data. Bewaar het een of twee dagen in de hap en verplaats het daarna naar goedkopere opslag zoals blob of dataleek voor analyse op lange termijn.
+
+00:15:19.260 --> 00:15:23.280
+Monitor uw doorvoergebruik, schaal uw TU's correct en voorkom overprovisioning.
+
+00:15:23.400 --> 00:15:30.360
+Gebruik waar mogelijk ook HTTP voor verzenders in plaats van AMQP, omdat AMQP verbindingen kosten met zich meebrengen en HTTP niet.
+
+00:15:30.540 --> 00:15:34.060
+Laten we nu een eenvoudige architectuur doorlopen om te zien hoe u echt van start gaat.
+
+00:15:34.260 --> 00:15:36.120
+Aan de slag, een eenvoudige architectuur.
+
+00:15:36.340 --> 00:15:41.680
+Het basispatroon is simpel. Producenten sturen events naar EventHubs en consumenten lezen vanuit EventHubs.
+
+00:15:41.920 --> 00:15:44.140
+Dat is alles. Hier is een concreet voorbeeld.
+
+00:15:44.140 --> 00:15:47.640
+Stel je voor dat IoT-apparaten temperatuurgegevens naar EventHubs sturen.
+
+00:15:47.780 --> 00:15:51.700
+Een Azure-functie wordt geactiveerd door elke nieuwe batch events en de functie verwerkt de data.
+
+00:15:52.000 --> 00:15:57.780
+Deze kan metingen binnen het normale bereik filteren, alleen de afwijkingen bewaren en deze vervolgens naar Cosmos DB schrijven voor snelle queries.
+
+00:15:58.100 --> 00:16:00.220
+Dat is een volledige pipeline in drie surfaces.
+
+00:16:00.560 --> 00:16:03.980
+Het mooie van functies is dat ze automatisch schalen met het aantal partities.
+
+00:16:04.360 --> 00:16:08.660
+Als u acht partities heeft, kunnen functies tot acht instanties opstarten die elk lezen.

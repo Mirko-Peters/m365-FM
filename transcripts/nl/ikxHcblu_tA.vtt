@@ -1,0 +1,1057 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.720
+De sector heeft ons een mythe verkocht.
+
+00:00:01.920 --> 00:00:05.060
+Ze vertelden ons dat embeddings de wondermiddel waren voor bedrijfsintelligentie.
+
+00:00:05.200 --> 00:00:09.400
+Je hebt de Vector database gebouwd, de documenten ingeladen, het budget uitgegeven...
+
+00:00:09.400 --> 00:00:10.880
+...en toch zijn de hallucinaties niet gestopt.
+
+00:00:11.040 --> 00:00:14.720
+In werkelijkheid is wiskundige gelijkenis niet hetzelfde als zakelijke relevantie.
+
+00:00:14.900 --> 00:00:16.520
+We zijn in de top K-val getrapt.
+
+00:00:16.740 --> 00:00:21.320
+Dit is het moment waarop je co-pilot het meest vergelijkbare datapunt in de hoogdimensionale ruimte ophaalt...
+
+00:00:21.320 --> 00:00:24.020
+...maar die data blijkt 100% fout voor de specifieke taak...
+
+00:00:24.020 --> 00:00:27.620
+...omdat nabijheid in 2026 een goedkope vervanging voor de waarheid is.
+
+00:00:27.620 --> 00:00:32.240
+Als je RAG-project momenteel stagneert in de pilotfase, dan is dat niet omdat de AI-dom is.
+
+00:00:32.420 --> 00:00:35.300
+Het komt omdat je retrieval-strategie is gebouwd op een illusie.
+
+00:00:35.460 --> 00:00:38.160
+Het is het structurele falen van pure Vector-modellen.
+
+00:00:38.560 --> 00:00:42.360
+Vectorse arg is een standaardlaag in de architectuur van een modern AI-systeem.
+
+00:00:42.540 --> 00:00:46.520
+Het is de kelder van de stack, niet het penthouse, maar we hebben het behandeld als het brein.
+
+00:00:46.700 --> 00:00:51.060
+De fundamentele tekortkoming van hoogdimensionale embeddings is dat ze van nature vaag zijn.
+
+00:00:51.280 --> 00:00:53.440
+Ze representeren concepten als coördinaten.
+
+00:00:53.440 --> 00:00:58.200
+Dat werkt prachtig als je zoekt naar sferen of algemene onderwerpen, maar werk vindt niet plaats in het land van sferen.
+
+00:00:58.400 --> 00:01:00.020
+Werk vindt plaats in het land van details.
+
+00:01:00.280 --> 00:01:01.980
+En hier breekt het pure Vector-model.
+
+00:01:02.160 --> 00:01:04.040
+Vectoren hebben moeite met exacte termen.
+
+00:01:04.240 --> 00:01:08.780
+Denk aan productcodes, SKUs, juridische terminologie, interne projectcodenamen.
+
+00:01:09.000 --> 00:01:13.360
+Voor een Vector-model kunnen Project Phoenix en Project Firebird wiskundig identiek lijken...
+
+00:01:13.360 --> 00:01:18.520
+...omdat ze een semantisch cluster delen, maar voor je financiële team vertegenwoordigen ze twee totaal verschillende budgetten.
+
+00:01:18.520 --> 00:01:23.580
+Wanneer je uitsluitend vertrouwt op deze embeddings, vraag je de AI in feite om te raden op basis van de omgeving.
+
+00:01:23.780 --> 00:01:27.080
+Het resultaat? Een foutmarge van 27% in bedrijfsoutput.
+
+00:01:27.300 --> 00:01:28.960
+Dat is niet zomaar een technische metrie.
+
+00:01:29.160 --> 00:01:33.840
+Die foutmarge vertaalt zich naar 1,8 uur aan verloren tijd per werknemer, elke week opnieuw.
+
+00:01:34.040 --> 00:01:36.400
+Mensen gebruiken Copilot niet om sneller te werken.
+
+00:01:36.620 --> 00:01:41.840
+Ze gebruiken het om concepten te genereren die ze vervolgens twee uur moeten fact-checken omdat de retrieval zetruis bevatten.
+
+00:01:41.980 --> 00:01:44.740
+We hebben een nauwkeurigheidscrisis en dat is geen LLM-probleem.
+
+00:01:44.740 --> 00:01:49.300
+Je lost dit niet op door over te stappen van GPT-4 naar GPT-5 of naar een groter contextvenster te gaan.
+
+00:01:49.460 --> 00:01:51.140
+Het is een probleem van retrieval engineering.
+
+00:01:51.380 --> 00:01:52.740
+We hebben een enorme aanname gedaan.
+
+00:01:52.960 --> 00:01:55.200
+We gingen ervan uit dat de wiskunde de context wel zou afhandelen.
+
+00:01:55.340 --> 00:02:00.760
+We dachten dat als we elk document in een lijst met getallen zouden veranderen, de relaties vanzelf zouden ontstaan, maar context is structureel.
+
+00:02:00.920 --> 00:02:02.540
+Het is niet alleen probabilistisch.
+
+00:02:02.740 --> 00:02:11.360
+In een bedrijfsomgeving zit de betekenis van een document niet alleen in de woorden, maar in de metadata, in de rechten en in de specifieke versiebeheer die een vectormodel volledig negeert.
+
+00:02:11.360 --> 00:02:16.980
+Wanneer je zoekt naar het nieuwste reisbeleid, vindt een vector zoekopdracht het beleid dat het meest klinkt als reisbeleid.
+
+00:02:17.120 --> 00:02:19.800
+Het vindt niet per se degene die gisteren is goedgekeurd.
+
+00:02:20.000 --> 00:02:21.520
+Het vindt de meest vergelijkbare.
+
+00:02:21.740 --> 00:02:27.060
+En als de meest vergelijkbare versie die van 2022 is omdat die meer beschrijvende tekst bevat, dan is dat wat je LLM krijgt.
+
+00:02:27.060 --> 00:02:31.540
+Vervolgens vertelt de AI-er werknemer dat ze business class kunnen boeken, ook al zegt het nieuwe beleid alleen economy.
+
+00:02:31.780 --> 00:02:34.420
+Dat is een hallucinatie veroorzaakt door gebrekkige data onderbouwing.
+
+00:02:34.600 --> 00:02:37.600
+Het model loogt niet, het vatte simpelweg de verkeerde stapel getallen samen.
+
+00:02:37.820 --> 00:02:41.820
+Dit is wat er gebeurt als je een model dat ontworpen is voor ontdekking, probeert te gebruiken voor precisie.
+
+00:02:42.500 --> 00:02:48.420
+Vectorzoekopdrachten zijn uitstekend in het vinden van een naald in een hooiberg als het je niet uitmaakt welke naald je krijgt, maar in het bedrijfsleven is er maar één juiste naald.
+
+00:02:48.580 --> 00:02:50.120
+De andere negen zijn een risico.
+
+00:02:50.120 --> 00:02:53.420
+We hebben de grens bereikt van wat pure gelijkenis voor ons kan betekenen.
+
+00:02:53.580 --> 00:03:02.120
+Als we die precisiedrempel van 99% willen halen die gereguleerde sectoren vereisen, moeten we stoppen met retrieval als een wiskundig probleem te zien en het als een redactioneel probleem behandelen.
+
+00:03:02.320 --> 00:03:08.160
+We moeten af van het idee dat, bijna goed, acceptabel is voor een systeem dat besluitvorming op directieniveau moet ondersteunen.
+
+00:03:08.200 --> 00:03:13.740
+Want op dit moment zijn de top-K-resultaten die in je co-pilot voert slechts een verzameling wiskundig gerelateerde ruis.
+
+00:03:13.900 --> 00:03:17.140
+Je vraagt een redeneermachine om een huis te bouwen op een fundament van zand.
+
+00:03:17.140 --> 00:03:19.180
+En dan vragen we ons af waarom het dak lekt.
+
+00:03:19.180 --> 00:03:24.220
+De verschuiving van 2025 naar 2026 is het besef dat embeddings slechts het startpunt zijn.
+
+00:03:24.440 --> 00:03:25.920
+Ze vormen de, misschien, stapel.
+
+00:03:26.060 --> 00:03:28.880
+Om bij de, ja, stapel te komen, hebben we een ander soort logica nodig.
+
+00:03:29.080 --> 00:03:31.960
+We moeten de dingen die we dachten te vervangen door embeddings opnieuw introduceren.
+
+00:03:32.080 --> 00:03:34.600
+We hebben structuur nodig, we hebben lexikale ankers nodig.
+
+00:03:34.780 --> 00:03:39.780
+En het allerbelangrijkste, we hebben een toezichthouder nodig die het verschil kent tussen een vergelijkbaar antwoord en een correct antwoord.
+
+00:03:40.000 --> 00:03:45.460
+Zonder dat is je RACH-project geen intelligentietool, maar slechts een zeer dure, zeer snelle manier om ongelijk te hebben.
+
+00:03:45.460 --> 00:03:50.200
+Maar hier breekt het model omdat gelijkenis een goedkope surrogaat voor de waarheid is.
+
+00:03:50.460 --> 00:03:52.620
+Die buurt is een gevaarlijke plek om in te wonen.
+
+00:03:52.840 --> 00:04:00.400
+We hebben te lang vertrouwd op deze dichte clusters, in de veronderstelling dat als twee dingen dicht bij elkaar staan in een vectorruimte, ze zakelijk gerelateerd moeten zijn, maar dat zijn ze niet.
+
+00:04:00.400 --> 00:04:03.220
+Gelijkenis is slechts een reflectie van woordgebruikpatronen.
+
+00:04:03.340 --> 00:04:10.220
+Het is een goedkope surrogaat voor de waarheid en in 2026 breekt het model omdat we zijn gestopt met zoeken naar gerelateerde zaken en behoefte hebben aan geverifieerde zaken.
+
+00:04:10.440 --> 00:04:13.520
+Wanneer je van een pilot naar een productieomgeving gaat, veranderen de belangen.
+
+00:04:13.720 --> 00:04:15.360
+De surrogaat is niet langer voldoende.
+
+00:04:15.560 --> 00:04:19.080
+Je hebt iets nodig dat de AI weer verankert in de werkelijke taal van je organisatie.
+
+00:04:19.240 --> 00:04:23.220
+Je hebt de precisie nodig die we per ongeluk weggooiden toen we volledig inzetten op embeddings.
+
+00:04:23.400 --> 00:04:26.500
+De hybride standaard waarom BM25 nog steeds ertoe doet.
+
+00:04:26.500 --> 00:04:30.400
+Als je naar de productiestandaard voor 2026 kijkt, is het landschap veranderd.
+
+00:04:30.500 --> 00:04:32.860
+We hebben het niet meer over experimentele vectorstores.
+
+00:04:33.020 --> 00:04:34.640
+We hebben het over de hybride standaard.
+
+00:04:34.800 --> 00:04:35.900
+De data is duidelijk.
+
+00:04:36.200 --> 00:04:40.580
+72% van de succesvolle enterprise racksystemen is afgestapt van puur vectoropvragen.
+
+00:04:40.800 --> 00:04:45.800
+Ze hebben een systeem met dubbelpad geïmplementeerd dat de betekenis van factoren combineert met de precisie van trefwoordovereenkomsten.
+
+00:04:45.980 --> 00:04:48.780
+Concreet hebben ze het BM25 algoritme weer ingevoerd.
+
+00:04:48.980 --> 00:04:53.840
+Voor degenen die geen 20 jaar in zoektechniek hebben gewerkt, BM25 is de klassieke methode voor sparse retrieval.
+
+00:04:53.840 --> 00:04:56.400
+Het is de logica die zoekt naar exacte woordovereenkomsten.
+
+00:04:56.600 --> 00:05:01.880
+Het is de oude manier waarvan we dachten dat embeddings die zouden doden, maar het blijkt dat de oude manier de enige is die de nieuwe manier scherp houdt.
+
+00:05:01.960 --> 00:05:04.480
+Wanneer je deze twee combineert, gebeurt er iets interessants.
+
+00:05:04.660 --> 00:05:07.600
+Je krijgt een 17% hogere recall over je volledige dataset.
+
+00:05:07.920 --> 00:05:13.840
+Die 17% is het verschil tussen een medewerker die het antwoord in 10 seconden vindt of die het na drie mislukte pogingen opgeeft.
+
+00:05:14.080 --> 00:05:18.700
+Denk eens aan wat er gebeurt als je stopt met het negeren van de specifieke woorden die je gebruikers daadwerkelijk typen.
+
+00:05:18.700 --> 00:05:27.860
+In een puur vector systeem, als een gebruiker vorm 10k 2025 typt, geeft het model wellicht prioriteit aan een algemeen artikel over financiële verslaglegging omdat de sfeer vergelijkbaar is.
+
+00:05:27.960 --> 00:05:32.880
+Maar met BM25 erbij ziet het systeem de specifieke 10k en 2025 reeks.
+
+00:05:32.880 --> 00:05:36.780
+Het herkent dat dit niet slechts concepten zijn. Het zijn lexikale ankers.
+
+00:05:37.020 --> 00:05:43.600
+Hybride Retrieval stelt het systeem in staat om te zeggen, ik weet dat je geïnteresseerd bent in financiële rapporten, maar ik zie ook dat je specifiek om dit exacte document vroeg.
+
+00:05:43.720 --> 00:05:49.340
+Het lost het probleem van out-of-domain zoekopdrachten op. Dit is de grootste hindernis voor elk vooraf getraind embedding model.
+
+00:05:49.560 --> 00:05:53.220
+Je vector model is waarschijnlijk getraind op een algemeen korpus van internettekst.
+
+00:05:53.380 --> 00:05:57.100
+Het weet wat een contract is, maar kent het specifieke jargon van jouw sector niet.
+
+00:05:57.260 --> 00:06:00.920
+Het begrijpt de eigen afkortingen die in jouw technische afdeling worden gebruikt niet.
+
+00:06:00.920 --> 00:06:04.980
+Het heeft de interne afkortingen die jouw logistieke team gebruikt voor verzendvertragingen niet gezien.
+
+00:06:05.140 --> 00:06:07.680
+Voor een algemeen embedding model is die terminologie ruis.
+
+00:06:07.900 --> 00:06:11.880
+Ze vallen buiten het domein, maar voor BM25 zijn die woorden signalen.
+
+00:06:12.040 --> 00:06:16.360
+Door naast de vector zoekopdracht ook een trefwoord zoekopdracht uit te voeren, creëer je een vangnet.
+
+00:06:16.520 --> 00:06:24.220
+Je zorgt ervoor dat als een gebruiker een specifieke term typt die het embedding model niet begrijpt, het systeem het document nog steeds op basis van de letterlijke tekst kan vinden.
+
+00:06:24.480 --> 00:06:26.860
+Zo bereik je de 0,8-precisiedrempel.
+
+00:06:27.020 --> 00:06:30.360
+In 2025 waren we blij als de AI grotendeels gelijk had.
+
+00:06:30.360 --> 00:06:33.860
+In 2026 is 80% nauwkeurigheid het absolute minimum om mee te doen.
+
+00:06:34.040 --> 00:06:35.660
+Hybride is de eerste stap richting dat doel.
+
+00:06:35.800 --> 00:06:37.620
+Het gaat erom de AI te verankeren in de realiteit.
+
+00:06:37.840 --> 00:06:39.280
+Zie het als een dubbel controlesysteem.
+
+00:06:39.420 --> 00:06:41.080
+Het vectorpad behandelt de intentie.
+
+00:06:41.260 --> 00:06:42.460
+Het wat proberen ze te doen?
+
+00:06:42.640 --> 00:06:44.360
+Het trefwoordpad behandelt de feiten.
+
+00:06:44.600 --> 00:06:46.060
+Het wat zeiden ze daadwerkelijk?
+
+00:06:46.320 --> 00:06:50.020
+Wanneer beide paden het eens zijn over een document, heb je een kandidaat met een hoogvertrouwen.
+
+00:06:50.220 --> 00:06:52.940
+Wanneer ze het oneens zijn, heb je een signaal dat je meer verwerking nodig hebt.
+
+00:06:53.100 --> 00:06:55.500
+Maar zelfs met deze hybride aanpak hebben we nog steeds een probleem.
+
+00:06:55.500 --> 00:06:57.320
+Je hebt het misschien stapel verbeterd.
+
+00:06:57.420 --> 00:07:00.580
+Je bent gegaan van 78% recal naar 91% recal.
+
+00:07:00.700 --> 00:07:04.520
+Je vindt meer van de juiste dingen, maar je geeft de LLM nog steeds een stapel kandidaten.
+
+00:07:04.700 --> 00:07:08.940
+En als je ooit naar een zoekresultaten set hebt gekeken, weet je dat de top 10 vaak een puinhoop is.
+
+00:07:09.120 --> 00:07:11.540
+Je hebt misschien het perfecte antwoord op positie 4.
+
+00:07:11.740 --> 00:07:15.940
+Maar op positie 1 heb je een document dat toevallig het trefwoord 20 keer herhaald.
+
+00:07:16.100 --> 00:07:20.500
+Of je hebt een document dat wiskundig vergelijkbaar is, maar totaal irrelevant voor het huidige jaar.
+
+00:07:20.680 --> 00:07:22.600
+Hybride zoeken geeft je de puzzelstukjes.
+
+00:07:22.600 --> 00:07:24.620
+Het legt de puzzel niet per se voor je.
+
+00:07:24.780 --> 00:07:29.540
+We gaan ervan uit dat als we de LLM de top 5 resultaten geven, deze slim genoeg is om de juiste te kiezen.
+
+00:07:29.720 --> 00:07:32.440
+Maar LLMs zijn gevoelig voor afleidende documenten.
+
+00:07:32.620 --> 00:07:41.400
+Als het eerste resultaat een erg lang, zeer zelfverzekerd klinkend document is dat feitelijk onjuist is, zal de LLM die informatie vaak prioriteren boven het juiste, kortere antwoord op positie 3.
+
+00:07:41.620 --> 00:07:43.580
+Dit is het lost-in-team-middel fenomeen.
+
+00:07:43.740 --> 00:07:46.440
+De volgorde van de informatie bepaalt de kwaliteit van het antwoord.
+
+00:07:46.600 --> 00:07:49.600
+Dus, hoewel hybride zoeken de basis is, is het niet het definitieve antwoord.
+
+00:07:49.600 --> 00:07:53.560
+Het is het filtratiesysteem. Het brengt je van een miljoen documenten terug naar 50.
+
+00:07:53.780 --> 00:07:57.380
+Maar 50 documenten is nog steeds te veel ruis voor een zakelijke beslissing met een hoog risico.
+
+00:07:57.560 --> 00:07:59.640
+Je kijkt nog steeds alleen naar een stapel kandidaten.
+
+00:07:59.840 --> 00:08:02.180
+Je hebt vooruitgang geboekt, maar het gat nog niet gedicht.
+
+00:08:02.340 --> 00:08:07.640
+Om daadwerkelijk de 0,9-precisie te bereiken die de zorg- en financiële sector vereisen, kun je niet stoppen bij het ophalen van data.
+
+00:08:07.900 --> 00:08:11.120
+Je moet een reden neerlaag toevoegen voordat de data de LLM ooit bereikt.
+
+00:08:11.280 --> 00:08:17.200
+Je hebt een supervisor nodig die naar die 50 kandidaten kan kijken en ze kan rangschikken op basis van echte logica, niet alleen op frequentie of coördinaten.
+
+00:08:17.200 --> 00:08:20.920
+Want op dit moment, zelfs met hybride zoeken, is je koopiloot nog steeds aan het gokken.
+
+00:08:21.060 --> 00:08:23.540
+Het is alleen een veel beter geïnformeerde gok dan voorheen.
+
+00:08:23.720 --> 00:08:25.220
+We hebben het zoekprobleem opgelost.
+
+00:08:25.440 --> 00:08:27.220
+Nu moeten we het rangschikkingsprobleem oplossen.
+
+00:08:27.420 --> 00:08:30.140
+En dat vereist een volledig andere architecturale laag.
+
+00:08:30.320 --> 00:08:33.300
+Zelfs met hybride zoeken kijk je nog steeds naar een stapel kandidaten.
+
+00:08:33.480 --> 00:08:34.960
+Je hebt een supervisor nodig.
+
+00:08:35.200 --> 00:08:38.340
+Het probleem met het hybride model is dat het geen eigen oordeel heeft.
+
+00:08:38.560 --> 00:08:43.100
+Het genereert een lijst op basis van twee verschillende scorensystemen die niet echt dezelfde taal spreken.
+
+00:08:43.100 --> 00:08:47.480
+Je voegt coördinaten uit een vectorruimte samen met frequentiescores uit een trefwoordindex.
+
+00:08:47.600 --> 00:08:53.000
+Het resultaat is een gecombineerde top 50 lijst die technisch beter is dan voorheen, maar in essentie ongecontroleerd blijft.
+
+00:08:53.160 --> 00:08:56.740
+Het is alsof een uitzendbureau je 50 cv's stuurt zonder ze daadwerkelijk te lezen.
+
+00:08:56.940 --> 00:09:01.440
+Ze filterden op trefwoorden en algemene ervaring, maar hebben niet gecontroleerd of de persoon de baan echt aan kan.
+
+00:09:01.600 --> 00:09:03.900
+In de RAG pipeline is de LLM je recruiter.
+
+00:09:04.120 --> 00:09:07.000
+Als je die manager 50 cv's geeft, raakt hij overspoeld.
+
+00:09:07.180 --> 00:09:11.400
+Hij kijkt naar de eerste drie, laat zich afleiden door een mooi opgemaakte leugen en neemt de verkeerde aan.
+
+00:09:11.400 --> 00:09:14.660
+Om dit op te lossen moeten we stoppen met zoeken als een proces van één stap te zien.
+
+00:09:14.820 --> 00:09:17.980
+We moeten een secundaire laag introduceren die fungeert als poortwachter.
+
+00:09:18.140 --> 00:09:19.860
+Want op dit moment geef je geen antwoord.
+
+00:09:20.020 --> 00:09:23.440
+Je geeft een huiswerkopdracht en je AI is niet gebouwd om huiswerk te maken.
+
+00:09:23.640 --> 00:09:24.940
+Hij is gebouwd om te redeneren.
+
+00:09:25.160 --> 00:09:28.080
+Als je wilt dat hij correct redeneert, moet je hem het juiste startpunt geven.
+
+00:09:28.280 --> 00:09:33.000
+Je hebt een supervisor nodig die naar de top 50 kandidaten kan kijken en beslissen welke de waarheid bevat.
+
+00:09:33.400 --> 00:09:35.940
+Semantische rangschikking, de laatste filter voor de waarheid.
+
+00:09:36.160 --> 00:09:38.320
+Dit is waar we de L2-ren ranker introduceren.
+
+00:09:38.320 --> 00:09:42.180
+In de 2026 architectuur is dit de onmisbare secundaire laag.
+
+00:09:42.260 --> 00:09:44.540
+Het fungeert als de redacteur voor je zoekresultaten.
+
+00:09:44.760 --> 00:09:46.960
+Denk aan de workflow die we tot nu toe hebben opgebouwd.
+
+00:09:47.120 --> 00:09:49.820
+Eerst haalt de hybride zoekopdracht een brede set kandidaten op.
+
+00:09:49.960 --> 00:09:54.280
+Het is snel, efficiënt, scant miljoenen documenten in milliseconden, maar het is ook oppervlakkig.
+
+00:09:54.400 --> 00:09:56.480
+De L2-ren ranker is het tegenovergestelde.
+
+00:09:56.660 --> 00:09:58.480
+Hij kijkt niet naar miljoenen documenten.
+
+00:09:58.660 --> 00:10:03.540
+Hij kijkt alleen naar de top 50, maar met een diepgang die de eerste zoeklaag nooit zou kunnen bereiken.
+
+00:10:03.540 --> 00:10:07.920
+Specifiek in het Microsoft ecosysteem hebben we het over modellen afgeleid van Bing.
+
+00:10:08.120 --> 00:10:09.540
+Dit zijn cross-attention transformers.
+
+00:10:10.320 --> 00:10:15.560
+In tegenstelling tot de initiële vector zoekopdracht, die een query vergelijkt met een vooraf berekende document-embedding,
+
+00:10:15.760 --> 00:10:17.540
+bekijkt de ranker de query en het document tegelijkertijd.
+
+00:10:18.440 --> 00:10:21.500
+Hij voert een diepe semantische vergelijking uit van de feitelijke tekst.
+
+00:10:21.680 --> 00:10:24.920
+Hij kijkt niet langer alleen naar coördinaten in een hoogdimensionale ruimte.
+
+00:10:25.100 --> 00:10:30.580
+Hij voert diepgaande redeneringen uit om te begrijpen of het document daadwerkelijk het antwoord bevat op de specifieke vraag.
+
+00:10:30.580 --> 00:10:33.800
+Dit is waar we de Atse-Arch-Reranker-scoren in actie zien.
+
+00:10:34.720 --> 00:10:38.380
+Deze score is anders dan de gelijkenisscores die je in de eerste laag ziet.
+
+00:10:38.560 --> 00:10:41.840
+Een gelijkenisscore vertelt je dit document is wiskundig gezien dichtbij.
+
+00:10:42.060 --> 00:10:45.800
+De Reranker-score vertelt je dit document is relevant voor de intentie van de gebruiker.
+
+00:10:45.960 --> 00:10:47.900
+Het verplaatste doel van is dit dichtbij?
+
+00:10:48.120 --> 00:10:49.360
+Naar beantwoordt dit de vraag?
+
+00:10:49.600 --> 00:10:52.880
+Dit onderscheid is de enige manier om te overleven in gereguleerde sectoren.
+
+00:10:53.080 --> 00:10:57.080
+Als je in de financiële wereld, de zorg of de juridische sector werkt, is 0,8 precisie en falen.
+
+00:10:57.080 --> 00:11:02.860
+Je hebt 0,9 of hoger nodig. Je kunt dat nauwkeurigheidsniveau niet bereiken met een enkelvoudig zoekproces.
+
+00:11:03.060 --> 00:11:07.680
+De Reranker is wat je in staat stelt om de lat te verleggen van het meestal goed naar Enterprise-niveau.
+
+00:11:07.840 --> 00:11:11.720
+Het lost de meest voorkomende fout in rach op het probleem van de verkeerde volgorde.
+
+00:11:11.980 --> 00:11:15.680
+Bij een standaard zoekopdracht staat het perfecte antwoord misschien op positie 8,
+
+00:11:15.860 --> 00:11:19.880
+maar omdat het niet de juiste trefwoordlichtheid had of de embedding vaag was, haalde het de top niet.
+
+00:11:19.880 --> 00:11:23.320
+De LLM is lui en focust zich op de eerste drie resultaten.
+
+00:11:23.500 --> 00:11:28.280
+Hij mist de waarheid op positie 8 en genereert een hallucinatie op basis van de ruis op positie 1.
+
+00:11:28.480 --> 00:11:33.240
+De Reranker stopt dit. Hij pakt dat perfecte antwoord op positie 8 en promoveert het naar positie 1.
+
+00:11:33.400 --> 00:11:39.660
+Hij identificeert dat, hoewel document 1 meer trefwoorden bevat, document 8 de werkelijke semantische inhoud heeft die nodig is om de vraag te beantwoorden.
+
+00:11:39.860 --> 00:11:44.560
+Deze verschuiving van ophalen naar rangschikken is de belangrijkste architecturale wijziging die je dit jaar kunt doorvoeren.
+
+00:11:44.740 --> 00:11:47.860
+We moeten stoppen met geobsedeerd te zijn door hoeveel informatie we kunnen vinden.
+
+00:11:47.860 --> 00:11:54.420
+We moeten geobsedeerd raken door de volgorde waarin die informatie wordt gepresenteerd, want de volgorde is belangrijker dan de hoeveelheid informatie.
+
+00:11:54.600 --> 00:11:58.160
+Als het juiste antwoord onderop de stapel ligt, is het alsof het niet bestaat.
+
+00:11:58.320 --> 00:12:01.020
+De Reranker zorgt ervoor dat de waarheid altijd bovenaan staat.
+
+00:12:01.220 --> 00:12:02.860
+Maar het gaat niet alleen om het verplaatsen van documenten.
+
+00:12:03.560 --> 00:12:06.520
+De L2-laag biedt ook semantische bijschriften en markeringen.
+
+00:12:06.680 --> 00:12:11.240
+Het identificeert de specifieke, letterlijke zinnen in het document die het meest relevant zijn.
+
+00:12:11.480 --> 00:12:13.300
+Dit geeft de LLM een speakbriefje.
+
+00:12:13.300 --> 00:12:20.000
+In plaats van het model een pdf van 10 pagina's te laten lezen om de speld in de hooiberg te vinden, wijst de Reranker direct naar de speld.
+
+00:12:20.240 --> 00:12:21.620
+Lees specifiek deze drie zinnen.
+
+00:12:21.880 --> 00:12:24.440
+Dit vermindert de cognitieve belasting van de LLM.
+
+00:12:24.660 --> 00:12:28.920
+Het minimaliseert het risico dat het model wordt afgeleid door irrelevante context elders in het document.
+
+00:12:29.220 --> 00:12:32.700
+Het is het verschil tussen iemand een boek geven en iemand een gemarkeerde alinea geven.
+
+00:12:32.960 --> 00:12:35.520
+Welke denk je dat leidt tot een sneller, nauwkeuriger antwoord?
+
+00:12:35.520 --> 00:12:38.500
+In 2026 is dit hoe we het vertrouwen en schat dichten.
+
+00:12:38.800 --> 00:12:43.740
+Gebruikers verliezen het vertrouwen in Copilot wanneer het drie soort van antwoorden geeft en het enige definitieve antwoord mist.
+
+00:12:43.940 --> 00:12:47.920
+De Reranker is de tool die ervoor zorgt dat het definitieve antwoord altijd het eerste is wat de gebruiker ziet.
+
+00:12:48.080 --> 00:12:50.220
+Het fungeert als het laatste filter voor de waarheid.
+
+00:12:50.400 --> 00:12:53.380
+Het overbrugt de kloof tussen ruwe data en bruikbare informatie.
+
+00:12:53.560 --> 00:12:55.660
+We moeten echter eerlijk zijn over de afwegingen.
+
+00:12:55.860 --> 00:12:57.680
+Dit niveau van precisie is niet gratis.
+
+00:12:57.920 --> 00:13:03.020
+Wanneer je overstapt van een eenvoudige, op wiskundige baseerde zoekopdracht naar een radiërende ranker, verandert de economie van je systeem.
+
+00:13:03.020 --> 00:13:05.580
+Je voegt rekenkracht toe. Je voegt latentie toe.
+
+00:13:05.760 --> 00:13:09.040
+En in een cloud-omgeving zoals Azure voeg je direct de kosten toe.
+
+00:13:09.200 --> 00:13:15.780
+Als je deze laag niet correct beheert, wordt de gewonnen precisie tenietgedaan door de infrastructuurrekening die je aan het eind van de maand ontvangt.
+
+00:13:15.900 --> 00:13:24.480
+We moeten de economie van nauwkeurigheid begrijpen, want in het bedrijfsleven is een perfect antwoord dat 10 dollar kost vaak minder waardevol dan een goed genoeg antwoord van 10 cent.
+
+00:13:24.680 --> 00:13:30.820
+De uitdaging van 2026 is het balanceren van de behoefte aan 0,9 precisie met de realiteit van een eindig budget.
+
+00:13:30.820 --> 00:13:35.940
+Je hebt de supervisor nodig, maar je moet er ook voor zorgen dat de supervisor niet de duurste persoon in het gebouw is.
+
+00:13:36.140 --> 00:13:41.300
+Maar deze precisie brengt kosten met zich mee en als je de infrastructuur niet beheert, verdwijnt het rendement.
+
+00:13:41.480 --> 00:13:48.200
+De verschuiving naar een meerfazige ophaalarchitectuur creëert een fundamentele spanning tussen de kwaliteit van het antwoord en de houdbaarheid van het budget.
+
+00:13:48.500 --> 00:13:54.860
+We hebben een punt bereikt waarop de technische mogelijkheid van 0,9 precisie reëel is, maar de financiële haalbaarheid vaak wordt genegeerd.
+
+00:13:55.000 --> 00:13:58.280
+In de begindagen van RAG waren we gefocust op het bewijzen dat het concept werkte.
+
+00:13:58.280 --> 00:14:01.640
+We maakten ons niet druk om de kosten per zoekopdracht omdat de volumes laag waren.
+
+00:14:01.780 --> 00:14:05.480
+Maar naarmate je schaalt van 10.000 naar 10.000 gebruikers, verandert de berekening.
+
+00:14:05.620 --> 00:14:11.020
+De secundaire laag van redenering die het systeem betrouwbaar maakt, is ook de laag die het onbetaalbaar kan maken.
+
+00:14:11.240 --> 00:14:14.040
+Want in het bedrijfsleven is nauwkeurigheid een luxeproduct.
+
+00:14:14.260 --> 00:14:17.960
+En als je je infrastructuur niet hebt ontworpen om het gewicht van die luxe te dragen,
+
+00:14:18.200 --> 00:14:22.540
+verbruikt je project zijn eigen rendement voordat het ooit een dollar aan meetbare waarde oplevert.
+
+00:14:23.240 --> 00:14:26.280
+De economie van nauwkeurigheid, prestaties versus kosten.
+
+00:14:26.280 --> 00:14:31.640
+De realiteit van de standaardlaag in Azure iSearch is dat semantische ranking een kwestie is van betalen om mee te doen.
+
+00:14:31.840 --> 00:14:35.520
+Je kunt niet simpelweg een schakelaar omzetten en verwachten dat je huidige budget toereikend blijft.
+
+00:14:35.720 --> 00:14:38.280
+Wanneer je de functionaliteit voor Epsearch rankerscores inschakelt,
+
+00:14:39.000 --> 00:14:43.680
+verlaat je de wereld van vaste kosten voor zoekeenheden en betreed je een wereld van variabele facturering per query.
+
+00:14:43.940 --> 00:14:45.220
+Laten we naar de cijfers kijken.
+
+00:14:45.500 --> 00:14:49.660
+Bij een gematigd zoekvolume, zegt 50.000 zoekopdrachten per maand op een dataset van 20 gigabyte,
+
+00:14:49.780 --> 00:14:52.740
+moet je rekening houden met maandelijkse extra kosten tussen de 300 en 800 dollar.
+
+00:14:52.740 --> 00:14:56.780
+Dat klinkt misschien beheersbaar voor één afdeling, maar als je bedenkt dat dit alleen de zoeklaag is
+
+00:14:56.780 --> 00:15:00.420
+en je daarnaast nog moet betalen voor de LLM tokens en het genereren van embeddings,
+
+00:15:00.580 --> 00:15:02.860
+dan begint de totale eigendomskost flink op te lopen.
+
+00:15:03.060 --> 00:15:07.580
+We hebben gezien dat organisaties een co-pilot pilot lanceren, enorm succes boeken in gebruikerstevredenheid
+
+00:15:07.580 --> 00:15:11.280
+en vervolgens de stekker er direct uittrekken zodra de eerste volledige factuur binnenkomt.
+
+00:15:11.340 --> 00:15:15.300
+Ze waren zo gefocust op de prestaties dat ze vergaten naar het prijskaartje van die prestaties te kijken.
+
+00:15:15.520 --> 00:15:19.460
+Dit is de belangrijkste reden waarom RACH projecten sneuvelen bij de overgang van het lab naar productie.
+
+00:15:19.460 --> 00:15:22.400
+De kosten van gelijkhebben zijn hoger dan de kosten van ongelijkhebben.
+
+00:15:22.540 --> 00:15:26.520
+Dus, hoe lossen we dit op? Hoe behouden we de precisie zonder de IT-afdeling failliet te laten gaan?
+
+00:15:26.700 --> 00:15:28.400
+Het antwoord ligt in semantische caching.
+
+00:15:28.640 --> 00:15:32.400
+In 2026 is semantische caching de redder van de rewa voor de onderneming.
+
+00:15:32.620 --> 00:15:34.040
+Dit is het probleem dat we oplossen.
+
+00:15:34.520 --> 00:15:37.600
+Medewerkers stellen vaak dezelfde vragen op net iets andere manieren.
+
+00:15:37.880 --> 00:15:41.200
+Wat is het vakantiebeleid? Kun je me de regels voor verlof laten zien?
+
+00:15:41.400 --> 00:15:42.980
+Hoeveel vakantiedagen krijg ik?
+
+00:15:43.120 --> 00:15:46.520
+In een standaard RACH-pipeline activeert elk van die vragen een volledige zoekopdracht,
+
+00:15:46.520 --> 00:15:48.640
+een semantische herwaardering en een LLM-aanroep.
+
+00:15:48.740 --> 00:15:50.540
+Je betaalt drie keer voor hetzelfde antwoord.
+
+00:15:50.920 --> 00:15:52.500
+Semantische caching stopt die verspilling.
+
+00:15:52.720 --> 00:15:57.060
+Het gebruikt een lichtgewicht-embedding-model om vast te stellen dat die drie vragen dezelfde intentie hebben.
+
+00:15:57.220 --> 00:15:59.340
+In plaats van terug te gaan naar de dure redeneermachine,
+
+00:15:59.600 --> 00:16:02.200
+haalt het systeem het geverifieerde antwoord uit een supersnelle cache.
+
+00:16:02.380 --> 00:16:05.520
+Dit kan je LLM-aanroepen met 60% tot 80% verminderen.
+
+00:16:05.700 --> 00:16:08.380
+En de transformatie van de gebruikerservaring is nog dramatischer.
+
+00:16:08.560 --> 00:16:12.880
+Je gaat van drie seconden wachten op een live GPT-4-inferentie naar een cache hit in minder dan 50 milliseconden.
+
+00:16:13.020 --> 00:16:15.280
+Dat is een snelheidswinst van 250 keer.
+
+00:16:15.280 --> 00:16:17.240
+Ineens voelt de co-pilot direct aan.
+
+00:16:17.420 --> 00:16:22.780
+Het verandert van een trage tool die mensen tolereren in een responsieve assistent die mensen daadwerkelijk graag gebruiken.
+
+00:16:22.940 --> 00:16:24.520
+Maar caching is slechts het halve werk.
+
+00:16:24.740 --> 00:16:26.580
+De andere helft is selectieve activering.
+
+00:16:26.880 --> 00:16:28.680
+Een van de grootste fouten die architecten maken,
+
+00:16:28.900 --> 00:16:31.440
+is semantische rangschikking toepassen op elke afzonderlijke query.
+
+00:16:31.640 --> 00:16:36.760
+Je hebt geen complexe redeneertransformer nodig om een document met de titel 2025 onkostevergoedingsformulier te vinden.
+
+00:16:36.940 --> 00:16:39.440
+Een simpele zoekopdracht op trefwoorden is daar meer dan voldoende voor.
+
+00:16:39.600 --> 00:16:43.200
+De strategie voor 2026 is om de eenvoudige treffers op de goedkope laag te houden.
+
+00:16:43.200 --> 00:16:48.100
+Je zou de L2-herwaarde erder alleen moeten activeren bij complexe natuurlijke taalvragen waar de intentie ambigu is.
+
+00:16:48.260 --> 00:16:50.940
+Door een logische poort aan het begin van je pipeline te implementeren,
+
+00:16:51.120 --> 00:16:54.500
+kun je je budget reserveren voor de vragen die daadwerkelijk die extra precisie nodig hebben.
+
+00:16:54.700 --> 00:16:56.120
+Zie het als een triagesysteem.
+
+00:16:56.320 --> 00:16:59.340
+De goedkope laag handelt de 70% aan routineverzoeken af.
+
+00:16:59.480 --> 00:17:03.140
+De dure semantische laag verwerkt de 30% die echt bedrijfswaarde oplevert.
+
+00:17:03.400 --> 00:17:04.840
+Zo hou je het budget in evenwicht.
+
+00:17:05.100 --> 00:17:08.120
+Zorg ervoor dat de kosten van de zoekopdracht de waarde van het antwoord niet overschrijden.
+
+00:17:08.120 --> 00:17:12.460
+Als een zoekopdracht 10 cent aan productiviteit oplevert, besteedt er dan geen dollar aan rekenkracht aan.
+
+00:17:12.600 --> 00:17:14.920
+We moeten ook kijken naar de indeling van de data zelf.
+
+00:17:15.140 --> 00:17:17.780
+Niet alle documenten vereisen een nauwkeurigheid van 0,9.
+
+00:17:17.960 --> 00:17:22.900
+Het menu van de kantine heeft geen binggebaseerde re-ranker nodig, maar documenten voor naleving van regelgeving wel.
+
+00:17:23.140 --> 00:17:27.320
+Door zoekindexen te partitioneren en verschillende rangschikkingstrategieën toe te passen,
+
+00:17:27.500 --> 00:17:30.720
+optimaliseer je de kosten op basis van het belang van de informatie.
+
+00:17:31.160 --> 00:17:33.120
+Dit noemen we waarde gebaseerde retrieval.
+
+00:17:33.340 --> 00:17:36.320
+Het is het inzicht dat nauwkeurigheid geen binaire keuze is.
+
+00:17:36.320 --> 00:17:37.780
+Het is een glijdende schaal.
+
+00:17:37.980 --> 00:17:42.560
+En als architect is het jouw taak om die schuifbalk te verplaatsen op basis van de specifieke behoeften van de business unit.
+
+00:17:42.740 --> 00:17:45.460
+Het doel is niet om het meest nauwkeurige systeem ooit te bouwen.
+
+00:17:45.620 --> 00:17:49.340
+Het doel is om het meest nauwkeurige systeem te bouwen dat het bedrijf ook echt kan betalen.
+
+00:17:49.520 --> 00:17:53.920
+Want een perfecte AI die te duur is om te gebruiken, is slechts een zeer geavanceerde pressepapier.
+
+00:17:54.080 --> 00:17:57.460
+In 2026 winnen niet de partijen met de hoogste benchmarks.
+
+00:17:57.760 --> 00:18:03.420
+De winnaars zijn degene die een nauwkeurigheid van 0,85 leveren tegen kosten die lineair meegroeien.
+
+00:18:03.420 --> 00:18:07.460
+Zij zijn degene die de infrastructuur als een beperking zagen, niet als een bijzaak.
+
+00:18:07.520 --> 00:18:10.360
+Het beheersen van de kosten is de technische kant van de vergelijking.
+
+00:18:10.540 --> 00:18:13.740
+Maar zelfs als de economische kant klopt, heb je nog steeds een menselijk probleem.
+
+00:18:13.900 --> 00:18:18.300
+Je moet de kloof dichten tussen de gekochte licenties en het daadwerkelijke vertrouwen dat gebruikers in het systeem hebben.
+
+00:18:18.460 --> 00:18:21.560
+Want als ze het antwoord niet vertrouwen, maakt het niet uit wat het kostte om het te genereren.
+
+00:18:21.760 --> 00:18:23.760
+Dan gaan ze gewoon terug naar de oude manier van zoeken.
+
+00:18:23.920 --> 00:18:25.700
+En dat brengt ons bij de governance kloof.
+
+00:18:25.820 --> 00:18:28.200
+Want vertrouwen gaat niet alleen over technische nauwkeurigheid.
+
+00:18:28.340 --> 00:18:30.820
+Het gaat over het raamwerk dat die nauwkeurigheid omringt.
+
+00:18:30.820 --> 00:18:34.660
+Het gaat om het weten dat de AI niet alleen gelijk heeft, maar dat het ook mag hebben.
+
+00:18:35.460 --> 00:18:39.660
+Kostenbeheer is de technische kant, maar de executieve kant rijdt om de governance kloof.
+
+00:18:39.800 --> 00:18:43.420
+Het optimaliseren van je infrastructuur lost slechts een deel van de puzzel op.
+
+00:18:43.500 --> 00:18:46.640
+Je kunt de meest kostenefficiënte precisie engine ter wereld bouwen,
+
+00:18:46.820 --> 00:18:50.700
+maar als het management bang is voor wat het kan blootleggen, komt het project nooit uit de sandbox.
+
+00:18:50.920 --> 00:18:55.480
+We hebben een punt bereikt waarop de bottleneck niet het compute budget of de latentie van de reranker is.
+
+00:18:55.480 --> 00:19:01.420
+De echte frictie zit in de kloof tussen de toegewezen licenties en de werkelijke autoriteit die de AI heeft om te opereren.
+
+00:19:01.600 --> 00:19:04.540
+De governance kloof, waarom beleid het gebruik in de weg staat.
+
+00:19:04.740 --> 00:19:07.480
+We hebben momenteel 15 miljoen betaalde licenties in het ecosysteem.
+
+00:19:08.220 --> 00:19:11.960
+Toch blijft de conversiegraad op de werkvloer steken op een schamele 35 procent.
+
+00:19:12.300 --> 00:19:16.100
+Dit betekent dat twee van de drie gelicentieerde gebruikers de tool in feite negeren.
+
+00:19:16.260 --> 00:19:18.780
+Ze stoppen met het gebruik ervan na de derde hallucinatie.
+
+00:19:19.000 --> 00:19:23.760
+Vertrouwen is broos en slechte retrieval vernietigt het sneller dan elke trainingssessie het kan opbouwen.
+
+00:19:23.760 --> 00:19:25.880
+Governance is niet zomaar een document.
+
+00:19:26.180 --> 00:19:27.720
+Het is een technische controle.
+
+00:19:28.140 --> 00:19:30.460
+Zonder dat sterft je rachtproject in week 12.
+
+00:19:30.720 --> 00:19:32.940
+Dus, hoe ziet het nieuwe model er in de praktijk uit?
+
+00:19:33.140 --> 00:19:35.160
+Het is een verschuiving naar beheerde agents.
+
+00:19:35.400 --> 00:19:37.540
+Het tijdperk van de chatbox loopt ten einde.
+
+00:19:37.800 --> 00:19:41.980
+We bewegen weg van een wereld waarin je een vraag stelt en hoopt dat de wiskunde een document vindt.
+
+00:19:42.060 --> 00:19:43.880
+Het nieuwe model draait om delegatie.
+
+00:19:44.080 --> 00:19:49.100
+Het gaat om de overgang van een systeem dat enkel ophoudt naar een systeem dat daadwerkelijk redeneert over het zoekproces zelf.
+
+00:19:49.280 --> 00:19:51.400
+We betreden het tijdperk van de beheerde agent.
+
+00:19:51.400 --> 00:19:56.600
+Een systeem dat niet alleen naar data zoekt, maar de huisregels begrijpt voordat het de motor überhaupt start.
+
+00:19:56.800 --> 00:20:00.200
+De 2026 roadmap van retrieval naar redeneren.
+
+00:20:00.440 --> 00:20:04.400
+Als je de komende 24 maanden relevant wilt blijven, moet je roadmap verschuiven naar agentenkracht.
+
+00:20:05.160 --> 00:20:06.200
+Dit is de nieuwe grens.
+
+00:20:06.400 --> 00:20:09.600
+In een standaardopstelling neemt het systeem je query en voert één zoekopdracht uit.
+
+00:20:09.800 --> 00:20:12.200
+In een agentenkopstelling plant de AI het zoekproces.
+
+00:20:12.400 --> 00:20:18.400
+Het kijkt naar je verzoek en beslist of het effector store moet raadplegen, een SQL database moet bevragen of wellicht een real-time API moet checken.
+
+00:20:18.400 --> 00:20:21.080
+Het redeneert door de stappen heen die nodig zijn om de waarheid te vinden.
+
+00:20:21.280 --> 00:20:23.240
+Dit is waar Graphrag de gouden standaard wordt.
+
+00:20:23.440 --> 00:20:28.400
+Voor omgevingen met hoge belangen waar je 99% nauwkeurigheid nodig hebt, kun je niet vertrouwen op platte documentfragmenten.
+
+00:20:29.120 --> 00:20:34.020
+Je hebt een knowledge graph nodig die de relaties tussen entiteiten, mensen, projecten en beleid in kaart brengt.
+
+00:20:34.180 --> 00:20:43.580
+Dit stelt de AI in staat om te begrijpen dat wanneer je vraagt naar het budget van de hoofdingenieur, het de persoon moet vinden, dan het project dat zij leiden, en vervolgens het specifieke financiële grootboek dat bij dat project hoort.
+
+00:20:43.580 --> 00:20:47.620
+Het is een multi-hop redeneerketen die platte vectorse arg simpelweg niet kan uitvoeren.
+
+00:20:47.740 --> 00:20:49.100
+Maar hier is de harde waarheid.
+
+00:20:49.260 --> 00:20:52.520
+Je AI wordt beperkt door je metadata, niet door je aantal licenties.
+
+00:20:52.700 --> 00:21:00.660
+Als je SharePoint sites en kerkhof zijn van documentliggend streepje 1, docx en definitiefliggend streepje v2liggend streepje echtliggend streepje definitief.pdf, dan zal geen enkele hoeveelheid agentekredenering je redden.
+
+00:21:00.780 --> 00:21:05.180
+Het voorbereiden van je datafundament is de enige manier om de naderende concurrentieachterstand te voorkomen.
+
+00:21:05.180 --> 00:21:14.340
+Organisaties die wachten met het repareren van hun retrieval laag zullen blijven steken op een adoptiegraad van 35%, terwijl hun concurrenten volledige workflows automatiseren.
+
+00:21:14.540 --> 00:21:19.180
+We bewegen van vectorse arg als tool naar semantische strategie als kerncompetentie voor bedrijven.
+
+00:21:19.980 --> 00:21:22.440
+Jouw transformatie begint met een retrieval audit.
+
+00:21:22.700 --> 00:21:27.160
+Stop met het meten van hoe snel de AI reageert en begin te meten hoe vaak het daadwerkelijk gelijk heeft.
+
+00:21:27.160 --> 00:21:36.000
+Identificeer de top 10% van je meest complexe use cases, waarbij nauwkeurigheid een vereiste is in plaats van een suggestie, en implementeer vandaag nog de L2-eranker in die pipelines.
+
+00:21:36.180 --> 00:21:42.100
+Als deze verschuiving in het model je denkwijze over je architectuur heeft veranderd, volg mij, Mirko Peters, dan op LinkedIn voor meer diepgaande analyses.
+
+00:21:42.380 --> 00:21:46.460
+Als dit je heeft geholpen om te achterhalen waarom je RACH-project momenteel faalt, laat dan een beoordeling achter.
+
+00:21:46.660 --> 00:21:50.840
+Het helpt deze podcast de architecten te bereiken die nog steeds vastzitten in de top-K-valstrik.
+
+00:21:50.840 --> 00:21:56.200
+Je volgende stap is het bekijken van onze deepdiff over agentek workflows om te zien waar deze precisie naartoe gaat.

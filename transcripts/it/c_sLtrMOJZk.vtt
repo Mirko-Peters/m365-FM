@@ -1,0 +1,1060 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.200
+L'argomento di oggi è uno di quelli di cui quasi tutti hanno sentito parlare, ma che in pochi sanno spiegare.
+
+00:00:05.020 --> 00:00:05.420
+GitOps.
+
+00:00:06.020 --> 00:00:09.740
+Probabilmente lo avrete sentito menzionare in annunci di lavoro, interventi a conferenze, nella documentazione di azione.
+
+00:00:10.000 --> 00:00:10.700
+Ma cos'è esattamente?
+
+00:00:11.060 --> 00:00:14.400
+È solo un altro termine di moda DevOps o è qualcosa di fondamentalmente diverso?
+
+00:00:14.900 --> 00:00:15.720
+Ecco la versione brev.
+
+00:00:16.140 --> 00:00:20.780
+GitOps è un modello operativo in cui Git diventa l'unica fonte di verità per l'intera infrastruttura.
+
+00:00:21.220 --> 00:00:23.660
+Non solo il codice dell'applicazione, ma tutto ciò che lo esegue.
+
+00:00:24.300 --> 00:00:26.880
+Alla fine di questo episodio capirai cos'è effettivamente GitOps,
+
+00:00:26.880 --> 00:00:32.260
+perché è diventato lo standard per la gestione di Kubernetes Azure e come rende i rollback semplici come un singolo comando.
+
+00:00:33.860 --> 00:00:36.360
+Il vecchio metodo è distribuzione manuale e la della configurazione.
+
+00:00:36.820 --> 00:00:38.300
+Iniziamo con il problema che GitOps risolve.
+
+00:00:38.660 --> 00:00:40.600
+L'immagine di gestire un cluster Kubernetes su Azure.
+
+00:00:41.140 --> 00:00:44.940
+Hai degli sviluppatori che eseguono il push del codice, una pipeline CI che crea immagini di container
+
+00:00:44.940 --> 00:00:47.380
+e qualcuno esegue il kubectl apply per distribuire tale immagini.
+
+00:00:47.880 --> 00:00:52.440
+Forse tu, forse un compagno di team, o clicchi su un pulsante in Azure DevOps e in entrambi i casi la distribuzione avviene.
+
+00:00:53.100 --> 00:00:54.220
+Funziona bene finché non succede più.
+
+00:00:54.560 --> 00:00:55.360
+Ecco cosa succede, dom.
+
+00:00:55.360 --> 00:00:59.600
+Qualcuno nel tuo team deve correggere un bug veloce, quindi si connette tramite SSH a un nodo,
+
+00:00:59.720 --> 00:01:02.880
+usa il portale di Azure o esegue kubectl edit direttamente su una distribuzione.
+
+00:01:03.340 --> 00:01:07.180
+Apporta una piccola modifica, come una modifica alla mappa di configurazione o una variabile di ambiente diversa,
+
+00:01:07.260 --> 00:01:08.140
+e sembra innocua.
+
+00:01:08.620 --> 00:01:09.340
+O almeno così pensa.
+
+00:01:09.760 --> 00:01:11.740
+Il problema è che quella modifica non è mai arrivata a Git,
+
+00:01:11.860 --> 00:01:15.580
+quindi il tuo cluster ora ha una configurazione che non corrisponde a quella presente nel tuo repository.
+
+00:01:16.240 --> 00:01:17.820
+Questo è chiamato spostamento della configurazione.
+
+00:01:17.820 --> 00:01:21.700
+Lo spostamento è un killer silenzioso perché funziona bene, fino alla distribuzione successiva,
+
+00:01:21.760 --> 00:01:25.520
+quando qualcuno esegue kubectl apply con il manifesto originale e sovrascrive quella correzione rapida.
+
+00:01:25.700 --> 00:01:28.880
+O peggio, lo spostamento causa un comportamento imprevisto che nessuno riesce a spiegare.
+
+00:01:29.260 --> 00:01:31.560
+Inizia il debug, controlla i registri, guardia il YAML in Git,
+
+00:01:31.780 --> 00:01:34.520
+e non sembra che ci sia nulla di sbagliato, ma il cluster sta facendo qualcosa di diverso.
+
+00:01:34.760 --> 00:01:37.380
+Non hai idea di cosa sia cambiato, quando sia cambiato, o chi lo abbia cambiato.
+
+00:01:37.380 --> 00:01:38.680
+Ho visto succedere una cosa del genere.
+
+00:01:38.940 --> 00:01:41.260
+Un compagno di squadra si connette tramite SSH a un nodo,
+
+00:01:41.340 --> 00:01:44.220
+modifica una configurazione per testare qualcosa, dimentica di ripristinare la tona a casa.
+
+00:01:44.900 --> 00:01:47.740
+Il giorno dopo, una distribuzione si interrompe, nessuno riesce a spiegarne il motivo.
+
+00:01:48.280 --> 00:01:50.660
+Il repository Git sembra pulito, ma il cluster è un disastro
+
+00:01:50.660 --> 00:01:53.200
+e rimani bloccato a passare ore a cercare di capire cosa sia successo.
+
+00:01:53.540 --> 00:01:54.200
+Ecco la domanda.
+
+00:01:55.160 --> 00:01:58.180
+C'era un modo per forzare il cluster a corrispondere sempre a ciò che si trova in Git.
+
+00:01:58.560 --> 00:02:00.720
+Se potessi garantire che tutto ciò che si trova nel tuo repository
+
+00:02:00.720 --> 00:02:02.500
+sia esattamente ciò che è in esecuzione e in produzione,
+
+00:02:02.860 --> 00:02:04.020
+questa è l'idea di base di GitOps.
+
+00:02:04.020 --> 00:02:05.840
+Cos'è in realtà GitOps?
+
+00:02:06.300 --> 00:02:07.440
+Quindi, cos'è esattamente GitOps?
+
+00:02:07.740 --> 00:02:09.400
+Ecco la definizione più semplice che posso dare.
+
+00:02:10.240 --> 00:02:12.640
+Git diventa la tua unica fonte di verità, non solo per il tuo codice,
+
+00:02:12.720 --> 00:02:14.900
+ma per tutto ciò di cui la tua infrastruttura ha bisogno per funzionare.
+
+00:02:15.500 --> 00:02:18.440
+Ogni configurazione, ogni manifesto di distribuzione, ogni variabile di ambiente,
+
+00:02:18.560 --> 00:02:20.140
+tutto risiede in Git, in Git.
+
+00:02:20.820 --> 00:02:22.900
+Niente viene eseguito sul tuo cluster, a meno che non sia definito lì.
+
+00:02:23.320 --> 00:02:24.940
+Ora, GitOps non è uno strumento che puoi acquistare.
+
+00:02:24.940 --> 00:02:27.080
+È un modello operativo come DevOps o DevSecOps.
+
+00:02:27.660 --> 00:02:30.400
+Un insieme di principi che guidano il modo in cui gestisci la tua infrastruttura.
+
+00:02:31.340 --> 00:02:33.880
+Lo standard OpenGitOps stabilisce quattro principi fondamentali.
+
+00:02:34.020 --> 00:02:35.020
+E voglio esaminarli tutti.
+
+00:02:35.440 --> 00:02:37.040
+Innanzitutto, il tuo sistema deve essere dichiarato.
+
+00:02:37.440 --> 00:02:40.240
+Ciò significa che descrivi lo stato finale, non i passaggi per arrivarci.
+
+00:02:40.800 --> 00:02:42.580
+Quindi, invece di scrivere uno script che dice
+
+00:02:42.580 --> 00:02:44.780
+Crea una distribuzione, scala la 5 repliche,
+
+00:02:44.900 --> 00:02:47.320
+esponi la porta 8080, scrivi un file YAM che dice
+
+00:02:47.320 --> 00:02:50.760
+Voglio 5 repliche sulla porta 8080 del sistema, capisce i passaggi.
+
+00:02:51.320 --> 00:02:51.880
+Questo è dichiarato.
+
+00:02:52.020 --> 00:02:53.680
+Deve essere sottoposto a controllo di versione.
+
+00:02:54.020 --> 00:02:56.320
+Ogni modifica portata allo stato del cluster è un commit in Git.
+
+00:02:56.620 --> 00:02:58.940
+Quindi è una cronologia completa di chi ha modificato cosa, quando e perché.
+
+00:02:59.300 --> 00:03:00.840
+Non dovrai più indovinare o cercare nei registri.
+
+00:03:01.380 --> 00:03:03.060
+Terzo luogo, le modifiche vengono estratte automatiche.
+
+00:03:03.060 --> 00:03:04.940
+Il cluster cerca di vedere cosa c'è di nuovo.
+
+00:03:05.380 --> 00:03:06.900
+Più avanti spiegherò perché questo è così importante.
+
+00:03:07.280 --> 00:03:09.240
+E quarto, il sistema viene continuamente riconciliato.
+
+00:03:09.680 --> 00:03:11.740
+C'è un agente software in esecuzione all'interno del cluster
+
+00:03:11.740 --> 00:03:14.500
+che confronta costantemente ciò che è in Git con ciò che è effettivamente in esecuzione.
+
+00:03:14.780 --> 00:03:16.320
+Se non corrispondono, corregge la differenza.
+
+00:03:16.760 --> 00:03:17.880
+Questo è il ciclo di riconciliazione.
+
+00:03:18.220 --> 00:03:18.860
+Pensalo in questo modo.
+
+00:03:19.300 --> 00:03:20.580
+Git è il progetto del tuo architetto.
+
+00:03:21.040 --> 00:03:22.940
+Descrive esattamente come dovrebbe apparire l'edificio.
+
+00:03:23.820 --> 00:03:24.860
+Kubernetes è il cantiere.
+
+00:03:25.420 --> 00:03:27.040
+E l'operatore GitOps è il capo squadra.
+
+00:03:27.660 --> 00:03:30.560
+Gira con il progetto controllando ogni muro, ogni trave, ogni finestra.
+
+00:03:30.560 --> 00:03:32.440
+Se qualcosa non corrisponde, lo corregge.
+
+00:03:33.080 --> 00:03:35.720
+Supponiamo che qualcuno del team apporti una modifica non autorizzata,
+
+00:03:35.780 --> 00:03:36.900
+la individua e la ripristina.
+
+00:03:37.440 --> 00:03:38.900
+Il progetto è sempre la fonte della verità.
+
+00:03:39.680 --> 00:03:40.740
+Ma è qui che avviene il vero cambiamento.
+
+00:03:41.160 --> 00:03:42.540
+Come funzionano effettivamente le distribuzioni?
+
+00:03:42.920 --> 00:03:45.220
+Nel CI CD tradizionale, modifiche vengono inviate al cluster.
+
+00:03:45.580 --> 00:03:47.080
+In GitOps il cluster le estrae,
+
+00:03:47.220 --> 00:03:49.120
+e questa differenza è più importante di quanto sembra.
+
+00:03:50.580 --> 00:03:51.620
+Distribuzioni basate su push?
+
+00:03:51.620 --> 00:03:54.580
+Parliamo di come funzionano effettivamente le distribuzioni,
+
+00:03:54.720 --> 00:03:56.000
+perché è qui che GitOps cambia tutto.
+
+00:03:56.580 --> 00:03:59.380
+Nel tradizionale modello basato su push, la pipeline CI fa tutto.
+
+00:04:00.020 --> 00:04:01.940
+Azure Pipelines Jenkins GitHub Actions.
+
+00:04:03.260 --> 00:04:04.820
+Crea il contenitore, esegue i test,
+
+00:04:04.920 --> 00:04:08.040
+e quindi esegue il push di quell'immagine direttamente nel cluster Kubernetes.
+
+00:04:08.700 --> 00:04:11.680
+La pipeline contiene le credenziali che le consentono di accedere direttamente al cluster.
+
+00:04:12.200 --> 00:04:13.360
+Di cerco la nuova distribuzione.
+
+00:04:14.140 --> 00:04:14.620
+Applicala ora.
+
+00:04:14.620 --> 00:04:16.960
+E funziona ma crea un problema di sicurezza.
+
+00:04:17.620 --> 00:04:19.700
+Il fatto è che se quella pipeline viene compromessa,
+
+00:04:19.840 --> 00:04:21.260
+qualcuno inserisce un passaggio dannoso,
+
+00:04:21.360 --> 00:04:22.820
+si verifica una perdita di token,
+
+00:04:22.920 --> 00:04:24.200
+una dipendenza viene dirottata.
+
+00:04:24.360 --> 00:04:26.680
+Quella pipeline ha una linea diretta con il cluster di produzione.
+
+00:04:27.480 --> 00:04:28.720
+Può distruggere le distribuzioni,
+
+00:04:28.800 --> 00:04:29.840
+eliminare gli spazi dei nomi,
+
+00:04:29.920 --> 00:04:31.040
+modificare le configurazioni,
+
+00:04:31.140 --> 00:04:33.300
+tutto con le autorizzazioni che lei ha concesso per svolgere suolo.
+
+00:04:33.660 --> 00:04:34.560
+Ora guarda il modello GitOps.
+
+00:04:34.980 --> 00:04:35.900
+Il flusso inizia allo stesso modo.
+
+00:04:36.240 --> 00:04:37.180
+CI crea il contenitore,
+
+00:04:37.180 --> 00:04:39.540
+lo esegue il push in un registro come Azure Container Registry.
+
+00:04:39.680 --> 00:04:40.680
+E qui che ci si interrompe.
+
+00:04:40.740 --> 00:04:41.420
+Non tocca il cluster.
+
+00:04:41.920 --> 00:04:43.680
+Invece, CI aggiorna un repository Git
+
+00:04:43.680 --> 00:04:44.740
+con il nuovo tag immagine,
+
+00:04:45.580 --> 00:04:47.500
+modifica una singola riga in un file YAML,
+
+00:04:47.680 --> 00:04:48.540
+la versione dell'immagine,
+
+00:04:48.720 --> 00:04:49.700
+e conferma tale modifica.
+
+00:04:50.120 --> 00:04:50.420
+Tutto qui.
+
+00:04:50.800 --> 00:04:51.800
+Nessun accesso direto al cluster.
+
+00:04:52.120 --> 00:04:53.480
+Quindi l'operatore GitOps in esecuzione
+
+00:04:53.480 --> 00:04:55.060
+all'interno del cluster rileva tale modifica.
+
+00:04:55.500 --> 00:04:57.320
+Estrà lo stato più recente da Git e lo applica.
+
+00:04:57.900 --> 00:04:59.080
+Il cluster si collega a Git,
+
+00:04:59.400 --> 00:05:00.040
+non viceversa.
+
+00:05:00.460 --> 00:05:01.580
+Questo è un modello basato su pull.
+
+00:05:01.860 --> 00:05:04.160
+Il cluster non espone mai la propria API a sistemi esterni.
+
+00:05:04.600 --> 00:05:05.480
+Attinge solo da Git.
+
+00:05:05.480 --> 00:05:07.280
+Se qualcuno compromette la pipeline CI,
+
+00:05:07.500 --> 00:05:09.760
+la cosa peggiore che può fare è modificare un manifesto in un repository.
+
+00:05:10.180 --> 00:05:11.320
+Non può toccare direttamente il cluster.
+
+00:05:11.640 --> 00:05:13.240
+L'operatore decide cosa applicare quando
+
+00:05:13.240 --> 00:05:14.540
+c'è anche un altro vantaggio.
+
+00:05:14.880 --> 00:05:16.440
+Si separa la creazione dalla distribuzione.
+
+00:05:16.740 --> 00:05:17.700
+CI fa ciò in cui è brava.
+
+00:05:17.980 --> 00:05:19.080
+Creazione, test, scansione.
+
+00:05:19.360 --> 00:05:21.100
+L'operatore GitOps gestisce la distribuzione.
+
+00:05:21.380 --> 00:05:22.700
+Ogni sistema si concentra su un'attività.
+
+00:05:23.060 --> 00:05:24.880
+Se la creazione non riesce, non cambia nulla nel cluster.
+
+00:05:25.300 --> 00:05:27.460
+Se la distribuzione non riesce, l'operatore riprova o ti avvisa.
+
+00:05:27.880 --> 00:05:28.580
+Non è netta separazione.
+
+00:05:29.060 --> 00:05:31.160
+Quindi invece di una pipeline che invia le modifiche al cluster,
+
+00:05:31.240 --> 00:05:32.960
+il cluster estrae lo stato desiderato da Git.
+
+00:05:33.420 --> 00:05:34.740
+Questa semplice inversione
+
+00:05:34.740 --> 00:05:37.040
+rende l'infrastruttura più sicura, più verificabile
+
+00:05:37.040 --> 00:05:38.840
+e più difficile da violare accidentalmente.
+
+00:05:40.340 --> 00:05:41.660
+Il ciclo di riconciliazione.
+
+00:05:41.660 --> 00:05:43.800
+Come fa l'operatore a sapere quando effettuare la giornata?
+
+00:05:44.220 --> 00:05:45.160
+Non attende una notifica.
+
+00:05:45.980 --> 00:05:46.860
+Esegue un ciclo continuo.
+
+00:05:47.000 --> 00:05:48.720
+Osserva Git confrontandolo con il cluster.
+
+00:05:48.880 --> 00:05:50.320
+Applica le modifiche se necessario.
+
+00:05:50.400 --> 00:05:51.460
+Quindi lo ripete all'infinito.
+
+00:05:52.260 --> 00:05:53.660
+Questo è chiamato ciclo di riconciliazione.
+
+00:05:54.120 --> 00:05:54.660
+Viene eseguito costantemente.
+
+00:05:55.280 --> 00:05:57.520
+Ogni pochi secondi o minuti, a seconda della configurazione.
+
+00:05:57.980 --> 00:05:59.380
+L'operatore non smette mai di controllare.
+
+00:05:59.720 --> 00:06:01.060
+Pensalo come un termostato in casa tua.
+
+00:06:01.560 --> 00:06:03.960
+Imposti la temperatura desiderata, diciamo 21 gradi CES.
+
+00:06:04.360 --> 00:06:06.500
+Termostato controlla costantemente la temperatura FD.
+
+00:06:06.500 --> 00:06:09.160
+Se scende sotto i 21 gradi CES, il riscaldamento si accende.
+
+00:06:09.160 --> 00:06:10.960
+Se sale sopra il riscaldamento si spegne.
+
+00:06:11.140 --> 00:06:12.900
+Continua a regolarsi per adattarsi alle tue impostazioni.
+
+00:06:13.140 --> 00:06:14.660
+L'operatore GitOps funziona allo stesso modo.
+
+00:06:14.980 --> 00:06:17.540
+Git mantiene lo stato desiderato, il cluster ha lo stato effettivo
+
+00:06:17.540 --> 00:06:20.200
+e l'operatore li confronta continuamente apportando modifiche.
+
+00:06:20.460 --> 00:06:23.380
+Quindi cosa succede quando qualcuno modifica manualmente una distribuzione del cluster?
+
+00:06:23.620 --> 00:06:26.140
+Forse esegue uno kubectl edit per modificare un conteggio di repliche.
+
+00:06:26.400 --> 00:06:29.380
+L'operatore rileva tale differenza nel ciclo di riconciliazione successivo.
+
+00:06:29.720 --> 00:06:32.060
+Il cluster ora ha tre repliche ma Git ne specifica cinque.
+
+00:06:32.240 --> 00:06:35.940
+Quindi l'operatore applica lo stato definito da Git e il cluster torna a cinque repliche.
+
+00:06:35.940 --> 00:06:37.600
+La modifica è notorizzata e scomparla.
+
+00:06:37.900 --> 00:06:39.260
+Cosa succede quando si esegue il push git?
+
+00:06:39.580 --> 00:06:40.200
+Stesso processo.
+
+00:06:40.460 --> 00:06:42.300
+L'operatore rileva la differenza e la applica.
+
+00:06:42.760 --> 00:06:45.220
+Uno sviluppatore unisce un APR che aggiorna la versione dell'immagine
+
+00:06:45.220 --> 00:06:47.100
+dalla versione 1.2 alla versione 1.3.
+
+00:06:47.400 --> 00:06:51.520
+L'operatore visualizza il nuovo manifesto, estrae la nuova immagine e avvia i nuovi pod.
+
+00:06:52.120 --> 00:06:54.000
+In pochi secondi il cluster corrisponde in nuovo a Git.
+
+00:06:54.340 --> 00:06:55.780
+Ora qui c'è una distinzione importante.
+
+00:06:56.560 --> 00:06:58.280
+Se un pod si arresta in modo anomalo, l'operatore non.
+
+00:06:58.580 --> 00:07:01.040
+Ha un lavoro di Kubernetes gestito dal controller del set di repliche.
+
+00:07:01.380 --> 00:07:03.560
+L'operatore GitOps si preoccupa solo della configurazione.
+
+00:07:03.560 --> 00:07:08.680
+Se il manifesto di distribuzione indica cinque repliche, immagine v1.3 e il cluster a cinque
+
+00:07:08.680 --> 00:07:11.440
+repliche in esecuzione sulla v1.3, l'operatore è soddisfatto.
+
+00:07:12.360 --> 00:07:14.120
+Non gli importa se un pod specifico è stato riavviato.
+
+00:07:14.500 --> 00:07:15.760
+Questo è il normale comportamento di Kubernetes.
+
+00:07:16.140 --> 00:07:19.260
+Tuttavia, se qualcuno modifica il manifesto in Git o se qualcuno modifica direttamente il
+
+00:07:19.260 --> 00:07:21.100
+cluster e crea una deviazione in deviazione, l'operatore intende.
+
+00:07:21.280 --> 00:07:22.600
+Ecco perché GitOps è autoriparante.
+
+00:07:23.180 --> 00:07:26.340
+Non si limita a distribuire le modifiche, ma impiedisce attivamente che la tua infrastruttura
+
+00:07:26.340 --> 00:07:27.500
+si allontani da quanto definito.
+
+00:07:27.900 --> 00:07:30.180
+Quindi ha bisogno di un operatore GitOps in esecuzione nel tuo cluster.
+
+00:07:30.180 --> 00:07:33.860
+È qui che entra in gioco Argo CD e Flux, Argo CD contro Flux.
+
+00:07:34.380 --> 00:07:38.880
+Quindi hai bisogno di un operatore GitOps e hai due scelte principali, entrambe eccellenti.
+
+00:07:39.300 --> 00:07:43.240
+Argo CD e Flux sono entrambi i progetti laureati CNCF, in che significa che hanno superato
+
+00:07:43.240 --> 00:07:46.000
+gli standard più elevati per stabilità, community e prontezza per la produzione.
+
+00:07:47.000 --> 00:07:48.740
+Ma affrontano lo stesso lavoro da angolazioni diverse.
+
+00:07:49.320 --> 00:07:52.520
+Argo CD è stato originamente creato da Intuit ed è dotato di un'interfaccia utente web.
+
+00:07:52.740 --> 00:07:55.600
+Quando installi Argo CD ottieni una dashboard in cui puoi vedere ogni applicazione,
+
+00:07:55.720 --> 00:07:59.240
+il suo stato di sincronizzazione, il suo stato di integrità e la cronologia delle distribuzioni.
+
+00:07:59.240 --> 00:08:03.240
+Puoi cliccare in giro, visualizzare le differenze tra Git e il cluster, attivare manualmente
+
+00:08:03.240 --> 00:08:04.540
+le cose, approvare le modifiche.
+
+00:08:05.000 --> 00:08:08.440
+È progettato per i team che desiderano dashboard visive e punti di controllo manuali.
+
+00:08:08.860 --> 00:08:11.100
+Flux deriva da WeWorks ed è più modulare.
+
+00:08:11.500 --> 00:08:12.800
+Non c'è un'interfaccia utente predefinita.
+
+00:08:13.200 --> 00:08:16.600
+Lavori dalla riga di comando e definisci tutto come risorse personalizzate di Kubernetes.
+
+00:08:17.220 --> 00:08:19.580
+Crea un oggetto repository Git che dice guarda questo repository.
+
+00:08:20.420 --> 00:08:22.920
+E un oggetto di personalizzazione che dice applica questo percorso.
+
+00:08:23.620 --> 00:08:24.860
+Flux lo rileva e lo riconcilia.
+
+00:08:24.860 --> 00:08:29.060
+Ti obbliga ad adottare flussi di lavoro nativi di Git perché non c'è una dashboard su cui ripiegare.
+
+00:08:29.620 --> 00:08:30.960
+Ecco cosa conta per gli utenti di Azure.
+
+00:08:31.300 --> 00:08:34.140
+Flux è l'opzione GitOps predefinita su Azure Kubernetes Service.
+
+00:08:34.640 --> 00:08:37.020
+Microsoft ha creato un'integrazione nativa attorno a Flux V2.
+
+00:08:37.640 --> 00:08:41.700
+Quando abiliti GitOps su un cluster HS tramite il portale di Azure, stai utilizzando Flux in background.
+
+00:08:42.520 --> 00:08:44.780
+Azure Arc utilizza anche Flux per la gestione multicluster.
+
+00:08:45.180 --> 00:08:47.740
+Quindi se sei un ingegnere di Azure, Flux è il punto di partenza naturale.
+
+00:08:48.120 --> 00:08:49.240
+Argo CD ha i suoi punti di forza.
+
+00:08:49.240 --> 00:08:54.540
+È più popolare per gli scenari di progettazione di piattaforme in cui si desidera un piano di controllo centrale per la gestione di più cluster.
+
+00:08:54.760 --> 00:08:57.820
+L'interfaccia utente semplifica le cose per i team che non hanno dimestichezza con la riga di comando.
+
+00:08:58.380 --> 00:09:03.520
+Inoltre si integra perfettamente con Argo Allouts per la distribuzione progressiva come distribuzioni canali, distribuzioni blue, berge e verdi simili.
+
+00:09:04.080 --> 00:09:06.120
+La differenza principale a livello di architettura è questa.
+
+00:09:06.180 --> 00:09:09.140
+Argo CD viene eseguito come applicazione autonoma con il proprio server IPA.
+
+00:09:09.740 --> 00:09:13.600
+Flux viene eseguito come un set di controlli a Kubernetes più profondamente integrati nel cluster stesso.
+
+00:09:13.600 --> 00:09:19.820
+Flux sembra parte del piano di controllo Kubernetes, mentre Argo CD sembra una piattaforma separata che si trova al di sopra di esso.
+
+00:09:20.220 --> 00:09:24.020
+Flux si basa inoltre in larga misura su Customize, uno strumento di creazione di modelli nativo di Kubernetes.
+
+00:09:24.260 --> 00:09:27.000
+Argo CD può utilizzare Customize, N o YAML semplice.
+
+00:09:27.680 --> 00:09:32.080
+Entrambi supportano Helm, ma Flux ha un controller Helm dedicato che gestisce le versioni di Helm in modo nativo.
+
+00:09:32.420 --> 00:09:33.400
+Non esiste una scelta sbagliata.
+
+00:09:33.400 --> 00:09:34.680
+Entrambi gli strumenti svolgono lo stesso.
+
+00:09:35.140 --> 00:09:37.560
+Ma per gli ingegneri di Azure, Flux è la strada più semplice.
+
+00:09:37.560 --> 00:09:43.480
+Puoi abilitare GitOps con Flux in pochi clic tramite il portale di Azure, indirizzarlo a un repository Git e avviare la sincronizzazione.
+
+00:09:44.040 --> 00:09:46.460
+Nessuna installazione aggiuntiva, nessun server separato da gestire.
+
+00:09:47.300 --> 00:09:50.060
+GitOps su Azure, HHS, Azure Arc e Azure DevOps.
+
+00:09:50.820 --> 00:09:53.040
+Quindi come appare effettivamente quando lo colleghi ad Azure?
+
+00:09:53.580 --> 00:09:54.420
+Iniziamo con HHS.
+
+00:09:54.780 --> 00:09:58.180
+Azure Kubernetes Service ha il supporto GitOps integrato tramite Flux V2.
+
+00:09:58.340 --> 00:10:04.720
+Nel portale di Azure vai al tuo cluster, trova la sezione GitOps e configuralo indirizzandolo a repository Git.
+
+00:10:05.420 --> 00:10:07.120
+Azure Repos Git Hub ovunque.
+
+00:10:07.560 --> 00:10:12.460
+Flux inizia a monitorare e qualsiasi manifesto inserisci in quel repository viene applicato automaticamente al tuo cluster.
+
+00:10:12.820 --> 00:10:13.840
+Ma HHS è solo un pezzo.
+
+00:10:14.280 --> 00:10:19.440
+Azure Arc estende GitOps ai cluster che non si trovano in Azure, in locale, in altri cloud e in periferia.
+
+00:10:20.260 --> 00:10:23.460
+Collegare l'Azur Arc e gestisci di tutti con la stessa configurazione GitOps.
+
+00:10:24.180 --> 00:10:26.300
+Un repository molti cluster, stato coerente ovunque.
+
+00:10:26.620 --> 00:10:27.120
+E cosa fa?
+
+00:10:27.480 --> 00:10:28.400
+Ora parliamo della pipeline?
+
+00:10:28.940 --> 00:10:31.900
+Azure DevOps si integra naturalmente con questo modello ed ecco lo schema comune.
+
+00:10:32.180 --> 00:10:36.540
+Il codice sorgente si trova in Azure Repos o GitHub e Azure Pipelines gestisce CI.
+
+00:10:36.540 --> 00:10:43.180
+Crea l'immagine del contenitore, esegui i test, esegui la scansione per rilevare le vulnerabilità ed esegui il push dell'immagine Azure Container Registry.
+
+00:10:43.500 --> 00:10:50.680
+Quindi la pipeline aggiorna i manifesti nel repository GitOps modificando il tag immagine da v1.2 a v1.3 esegue il comit di tale modifica e rese tutto qui.
+
+00:10:51.000 --> 00:10:52.260
+La pipeline non tocca mai il cluster.
+
+00:10:52.860 --> 00:10:55.540
+Flux in esecuzione all'interno di HHS rileva la modifica in Git.
+
+00:10:55.540 --> 00:10:59.320
+Estrae il nuovo manifesto, visualizza il tag immagine aggiornato e applica la distribuzione.
+
+00:10:59.680 --> 00:11:01.580
+Vengono avviati nuovi pod e il cluster viene conciliato.
+
+00:11:02.060 --> 00:11:04.740
+Se preferisci puoi usare GitHub Actions anziché Azure Pipelines.
+
+00:11:05.460 --> 00:11:06.160
+Il modello è lo stesso.
+
+00:11:06.720 --> 00:11:11.240
+CI gestisce la build, aggiorna i manifesti e l'operatore GitOps gestisce la distribuzione.
+
+00:11:11.620 --> 00:11:13.060
+Lo strumento non è importante, il modello sì.
+
+00:11:13.620 --> 00:11:14.580
+Ecco un dettaglio importante.
+
+00:11:15.060 --> 00:11:19.420
+Non archivi mai i segreti direttamente in Git, né chiavi AI, né stringhe di connessione, né certificati.
+
+00:11:19.920 --> 00:11:22.400
+Anche in un repository privato i segreti in Git rappresentano un rischio.
+
+00:11:22.400 --> 00:11:25.520
+Usa invece Azure Key Vault o un operatore di segreti esterni.
+
+00:11:25.880 --> 00:11:31.320
+Il manifesto fa riferimento al segreto in base al nome e l'operatore estrae il valore effettivo dal vault al momento della distribuzione.
+
+00:11:31.760 --> 00:11:33.040
+Puoi anche definire un criterio in cima.
+
+00:11:33.540 --> 00:11:39.520
+Azure Policy con Gatekeeper può applicare regole, come nessun contenitore privilegiato, o usare solo registri di contenitori approvati.
+
+00:11:40.680 --> 00:11:45.420
+Se qualcuno tenta di distribuire un manifesto che viola i criteri, Gatekeeper lo blocca prima che raggiunga il cluster.
+
+00:11:45.940 --> 00:11:47.400
+Vantaggio concreto in questo caso è la scalabilità.
+
+00:11:47.700 --> 00:11:50.500
+Con 50 cluster HHS non devi gestirli tutti singolarmente.
+
+00:11:50.500 --> 00:11:56.240
+Definisci lo stato desiderato in un singolo repository Git e ogni cluster si riconcilia con quello stato.
+
+00:11:57.320 --> 00:12:00.060
+Aggiungi un nuovo cluster, puntalo al repository e si configura da su.
+
+00:12:00.680 --> 00:12:02.540
+Devi aggiornare una configurazione in tutti i cluster?
+
+00:12:03.120 --> 00:12:05.540
+Modifica un file in Git e gli operatori gestiranno il resto.
+
+00:12:06.420 --> 00:12:07.600
+Questa è la promessa di GitOps su Azure.
+
+00:12:08.540 --> 00:12:10.820
+Un'unica fonte di verità, molti cluster, nessuna deviazione.
+
+00:12:12.280 --> 00:12:13.000
+Principale di vantaggio.
+
+00:12:13.000 --> 00:12:16.340
+Quindi tutto questo sembra buono in teoria, ma cosa significa concretamente per il tutorial?
+
+00:12:16.640 --> 00:12:18.460
+Cominciamo con quello che cattura l'attenzione di tutti.
+
+00:12:19.020 --> 00:12:20.180
+I rollback diventano banali.
+
+00:12:20.680 --> 00:12:24.380
+Viene eseguita una distribuzione errata, l'applicazione inizia a generare errori, gli utenti si lamentano.
+
+00:12:25.180 --> 00:12:31.080
+Nel vecchio mondo ti affannavi per trovare l'ultima configurazione valida nota, eseguivi una serie di comandi manuali e pregavi di non esserti perso qualcosa.
+
+00:12:31.620 --> 00:12:33.160
+In GitOps ripristini commit git.
+
+00:12:33.840 --> 00:12:34.280
+Tutto qui.
+
+00:12:34.600 --> 00:12:35.060
+Un comando.
+
+00:12:35.060 --> 00:12:40.140
+L'operatore vede il ripristino, recupera lo stato precedente e il cluster torna a ciò che funzionava prima.
+
+00:12:44.040 --> 00:12:45.660
+La traccia di controllo è integrata automaticamente.
+
+00:12:46.040 --> 00:12:47.720
+Ogni modifica è la tua infrastruttura, è un combi.
+
+00:12:48.340 --> 00:12:50.880
+Sai chi l'ha portata, quando l'ha portata e cosa ha cambiato esattamente.
+
+00:12:51.320 --> 00:12:54.740
+Non dovrai più indovinare se qualcuno ha modificato una distribuzione al 2D note e se dimensionarlo.
+
+00:12:55.280 --> 00:12:57.160
+La cronologia è lì, immutabile e revisionabile.
+
+00:12:57.700 --> 00:13:00.800
+L'autoriparazione è un'altra cosa che sembra magica finché non la vedi funzionare.
+
+00:13:01.300 --> 00:13:03.200
+Qualcuno modifica manomente una distribuzione nel cluster.
+
+00:13:03.600 --> 00:13:05.760
+Magari un ingegnere junior che cerca di risolvere qualcosa da lì.
+
+00:13:05.760 --> 00:13:09.360
+L'operatore rileva la deviazione nel ciclo di riconciliazione successivo e la ripristina.
+
+00:13:09.660 --> 00:13:12.900
+Il cluster si ripara da solo, non ti accorgi nemmeno che è successo a meno che tu non controlli i registri.
+
+00:13:13.360 --> 00:13:15.200
+La coerenza tra gli ambienti diventa automatica.
+
+00:13:15.800 --> 00:13:19.060
+Diviluppo, test, staging, produzione attingono tutti dallo stesso repository git.
+
+00:13:19.600 --> 00:13:21.800
+Rami o cartelle diversi, ma la stessa fonte di verità.
+
+00:13:22.400 --> 00:13:26.240
+Non funziona più sulla mia macchina perché il tuo cluster di staging si è allontanato dalla produzione settimane fa.
+
+00:13:27.020 --> 00:13:29.920
+La sicurezza migliora perché il cluster attinge da git anziché essere sottoposto a push.
+
+00:13:30.400 --> 00:13:33.580
+La pipeline CI non contiene mai credenziali che le consentono di accedere direttamente alla produzione.
+
+00:13:33.580 --> 00:13:38.620
+Se qualcuno compromette la pipeline e non può toccare il cluster, l'operatore decide cosa viene applicato e quando.
+
+00:13:39.120 --> 00:13:40.200
+Privilegio minimo progettazione.
+
+00:13:40.660 --> 00:13:41.880
+Ci sono anche dati a supporto di questo.
+
+00:13:42.320 --> 00:13:47.320
+Secondo la ricerca d'ora, i team che adottano GitOps registrano un calo di circa il 25% di errori di distribuzione
+
+00:13:47.320 --> 00:13:50.580
+e il tempo medio di ripristino scende a meno di ripristino scende a meno implementate.
+
+00:13:51.440 --> 00:13:53.760
+Questa non è teoria, è ciò che segnalano le organizzazioni.
+
+00:13:54.220 --> 00:13:56.280
+E c'è un vantaggio di collaborazione che è facile trascurare.
+
+00:13:56.760 --> 00:14:02.900
+Le modifiche all'infrastruttura passano attraverso richieste di pull, revisioni del codice e test automatizzati esattamente come il codice d'applicazione.
+
+00:14:02.900 --> 00:14:05.720
+Il team operativo e il team di sviluppo parlano la stessa lingua, Git.
+
+00:14:06.100 --> 00:14:08.240
+Niente più passaggi di consegne e niente più distribuisce questo però.
+
+00:14:08.580 --> 00:14:09.560
+Tutti lavorano allo stesso modo.
+
+00:14:10.060 --> 00:14:12.420
+Ma ci sono ancora alcuni malintesi comuni che vale la pena chiarire.
+
+00:14:14.060 --> 00:14:15.360
+Miti comuni e come iniziare.
+
+00:14:15.880 --> 00:14:17.740
+Iniziamo sfatando alcuni miti comuni su GitOps.
+
+00:14:18.380 --> 00:14:20.860
+Innanzitutto, molte persone pensano che GitOps sia solo per Kubernetes.
+
+00:14:23.950 --> 00:14:27.470
+Kubernetes è basato sullo stato dichiarativo e sulla riconciliazione, quindi una scelta naturale.
+
+00:14:27.470 --> 00:14:32.210
+Ma il fatto è che quegli stessi principi si applicano ovunque ci siano configurazioni dichiarative.
+
+00:14:32.710 --> 00:14:35.130
+Puoi usare GitOps con Terraform, Pullumi e persino Ansible.
+
+00:14:35.650 --> 00:14:38.350
+Basta archiviare quelle configurazioni in Git e far sì che una pipeline le applici.
+
+00:14:38.850 --> 00:14:43.370
+La parte di autoriparazione è più difficile al di fuori di Kubernetes, ma la disciplina della fonte della verità funziona ovunque.
+
+00:14:44.110 --> 00:14:47.450
+Un altro mito è che hai assolutamente bisogno di Argo CD o Flux per fare GitOps.
+
+00:14:47.450 --> 00:14:52.370
+Se vuoi un modello completo, la distribuzione è basata su Pull, la riconciliazione continua e il rilevamento delle derive,
+
+00:14:52.670 --> 00:14:54.510
+allora se hai bisogno di un qualche tipo di operatore GitOps.
+
+00:14:55.010 --> 00:14:59.430
+Ma puoi iniziare molto semplicemente inserendo tutti i tuoi manifesti in Git usando le richieste Pull per le modifiche.
+
+00:14:59.730 --> 00:15:02.450
+Questo da solo ti offre la maggior parte dei vantaggi di audit e collaborazione.
+
+00:15:02.770 --> 00:15:05.390
+Puoi sempre aggiungere un operatore in un secondo momento quando ti serve l'automazione.
+
+00:15:06.030 --> 00:15:08.910
+Infine c'è il mito secondo cui GitOps sostituisce completamente CSD.
+
+00:15:09.930 --> 00:15:10.830
+Sostituisce la parte CD.
+
+00:15:11.210 --> 00:15:14.830
+CAI continua a compilare il codice, segue test, esegue scansioni per rilevare vulnerabilità,
+
+00:15:14.830 --> 00:15:16.530
+invia immagini container a un registro.
+
+00:15:16.530 --> 00:15:18.010
+Tutto questo rimane uguale.
+
+00:15:18.110 --> 00:15:20.150
+Ciò che cambia è il modo in cui vengono distribuite tali immagini.
+
+00:15:20.470 --> 00:15:22.870
+Invece di essere la pipeline CI e inviarle nel cluster,
+
+00:15:23.130 --> 00:15:25.490
+l'operatore GitOps estrae i manifesti aggiornati da Git.
+
+00:15:25.910 --> 00:15:28.470
+Quindi c'è e GitOps funzionano insieme, non l'uno al posto dell'altro.
+
+00:15:28.870 --> 00:15:30.070
+Iniziare è davvero semplice.
+
+00:15:30.630 --> 00:15:33.610
+Scegli un piccolo cluster HS e abilita Flux tramite il portale di Azure.
+
+00:15:34.010 --> 00:15:34.810
+Bastano pochi clic.
+
+00:15:35.510 --> 00:15:39.370
+Quindi indirizzalo a un repository Git che contiene un semplice YAML di distribuzione,
+
+00:15:39.710 --> 00:15:41.550
+guardalo sincronizzarsi e sei pronto per iniziare.
+
+00:15:41.710 --> 00:15:44.790
+Prova a modificare un valore nello YAML, esegui il commit e guarda l'aggiornamento del cluster.
+
+00:15:44.790 --> 00:15:46.350
+Questo è il tuo primo flusso di lavoro GitOps.
+
+00:15:46.670 --> 00:15:50.470
+Da lì puoi aggiungere ambienti, imparare a personalizzarli dato che Flux ne fa un uso massiccio
+
+00:15:50.470 --> 00:15:54.010
+e impostare aggiornamenti automatici delle immagini con strumenti come Renovate o Dependabot.
+
+00:15:55.030 --> 00:15:56.050
+Ecco in sintesi GitOps.
+
+00:15:56.450 --> 00:15:58.750
+Trasforma la tua infrastruttura in un repository Git,
+
+00:15:59.050 --> 00:16:01.850
+rendendo tutto tracciabile, ripristinabile e autoriparante.
+
+00:16:02.510 --> 00:16:05.910
+Se gestisci Kubernetes o Azure, prova subito l'integrazione di GitOps in HKS.
+
+00:16:06.470 --> 00:16:09.330
+Ci vogliono 10 minuti per configurarla e cambierai il tuo modo di pensare a distribuzione.
+
+00:16:09.330 --> 00:16:12.830
+Iscriviti per ulteriori spiegazioni in inglese semplice degli strumenti gradi Microsoft.

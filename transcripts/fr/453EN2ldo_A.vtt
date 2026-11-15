@@ -1,0 +1,1051 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:06.660
+Prêt pour 10 jours de Microsoft 365, copilote, l'IA, Azure et les personnes qui façonnent l'avenir du travail.
+
+00:00:08.040 --> 00:00:11.500
+En janvier, la M365 con est de retour et nous allons plus loin.
+
+00:00:12.880 --> 00:00:18.100
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des connaissances pratiques de MVP et d'experts du secteur du monde entier.
+
+00:00:18.740 --> 00:00:21.200
+Pas de diapositif générique, pas de mots à la mode sans fin.
+
+00:00:22.460 --> 00:00:23.600
+Nous nous attaquons aux vrais défis.
+
+00:00:24.160 --> 00:00:28.280
+Copilot Studio, agent d'IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.280 --> 00:00:34.320
+Que vous soyez un professionnel de l'informatique, un développeur ou un chef d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.500 --> 00:00:39.980
+Pendant 10 jours complets, vous pouvez explorer de multiples technologies et vous connecter à une communauté mondiale.
+
+00:00:40.960 --> 00:00:44.220
+Regardez en direct et rapportez des informations pratiques à votre organisation.
+
+00:00:45.140 --> 00:00:48.940
+Janvier 2027, 10 jours, une communauté Microsoft.
+
+00:00:49.440 --> 00:00:50.640
+Les inscriptions sont ouvertes dès maintenant.
+
+00:00:51.840 --> 00:00:55.600
+Rendez-vous sur m365con.net et réservez votre place dès aujourd'hui.
+
+00:00:55.600 --> 00:00:58.860
+C'est m365con.net... .net.
+
+00:01:00.420 --> 00:01:04.580
+Rejoignez-nous dès maintenant sur m365con.net et nous vous retrouverons en direct en janvier.
+
+00:01:05.260 --> 00:01:07.560
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets.
+
+00:01:08.020 --> 00:01:09.020
+Je suis votre milkopit.
+
+00:01:09.540 --> 00:01:11.180
+Le sujet du jour, Azure Traffic Manager.
+
+00:01:12.020 --> 00:01:14.920
+Imaginez que vous ayez créé une application web que des utilisateurs du monde entier souhaitent utiliser.
+
+00:01:15.540 --> 00:01:19.000
+Les utilisateurs de Tokyo, Londres et São Paulo essayent tous d'accéder à votre application en même temps.
+
+00:01:19.880 --> 00:01:20.480
+Voici le problème.
+
+00:01:20.480 --> 00:01:24.520
+Chacun de ces utilisateurs accède à un serveur dans une région, disons, la Virginie.
+
+00:01:25.180 --> 00:01:30.060
+L'utilisateur de Tokyo attend plus de 200 millisecondes par requête et l'utilisateur de São Paulo vit une expérience encore pire.
+
+00:01:30.980 --> 00:01:36.860
+Si ce centre de données de Virginie tombe en panne, en raison d'une panne de courant, d'une coupure de réseau, d'un événement inattendu, toute votre application est hors ligne.
+
+00:01:37.380 --> 00:01:40.380
+Chaque utilisateur, où qu'il soit, constitue un point de défaillance unique et constitue un premier moment.
+
+00:01:40.680 --> 00:01:44.680
+Si vous pouviez acheminer automatiquement chaque utilisateur vers le serveur le plus proche, le plus rapide et le plus sain.
+
+00:01:44.680 --> 00:01:53.860
+Si un utilisateur de Tokyo était desservi par un centre de données au Japon, un utilisateur de Londres en Irlande et que l'une des régions tombe en panne, le trafic se déplace vers une autre région sans que vous n'ayez rien à faire.
+
+00:01:54.520 --> 00:01:59.320
+C'est exactement ce que fait Azure Traffic Manager et le fait au niveau DNS qui signifie que c'est plus simple que vous ne le pensez.
+
+00:02:00.180 --> 00:02:06.140
+A la fin de cet épisode, vous comprendrez ce qu'est réellement Traffic Manager, comment fonctionnent ces 6 méthodes de routage et quand utiliser chacune d'elles.
+
+00:02:06.680 --> 00:02:08.060
+Prenez votre café et plongeons-nous dans le visu sud.
+
+00:02:08.700 --> 00:02:11.000
+Pourquoi le routage du trafic mondial à l'avant ? Analysons-le.
+
+00:02:11.000 --> 00:02:16.740
+La plupart des gens entendent parler d'équilibrage de charge et pensent à un serveur unique distribuant le trafic sur quelques machines au sein d'un centre de données.
+
+00:02:17.440 --> 00:02:20.100
+C'est Azure Load Balancer et il fonctionne parfaitement pour une seule région.
+
+00:02:20.380 --> 00:02:23.300
+Mais que se passe-t-il lorsque vos utilisateurs sont répartis sur plusieurs comptes ?
+
+00:02:23.300 --> 00:02:27.040
+Un utilisateur au Japon qui accède à un serveur en Virginie n'obtiendra jamais une réponse rapide.
+
+00:02:28.120 --> 00:02:29.980
+La physique d'Internet ne le permet tout simplement pas.
+
+00:02:30.740 --> 00:02:34.520
+La lumière voyage à une vitesse fixe et chaque saut de réseau ajoute du retard.
+
+00:02:35.160 --> 00:02:37.580
+Vous ne pouvez pas résoudre ce problème avec un meilleur code ou un service plus rapide.
+
+00:02:37.580 --> 00:02:39.360
+Si le problème, les applications lentes perdent des utilisateurs.
+
+00:02:39.360 --> 00:02:42.000
+Un délai d'une seconde réduit les conversions de 7%.
+
+00:02:42.000 --> 00:02:46.200
+Une panne régionale ne fait pas que ralentir les choses, elle met toute votre application hors ligne.
+
+00:02:46.760 --> 00:02:50.360
+Vos utilisateurs ne peuvent pas vous joindre, vos revenus s'arrêtent et votre réputation en prend un gros.
+
+00:02:50.840 --> 00:02:56.260
+Il y a 20 ans, l'ancienne approche consistait à créer des serveurs dans chaque région et à diriger manuellement les utilisateurs vers le bon.
+
+00:02:56.880 --> 00:02:59.120
+Vous mettiez à jour les enregistrements DNS manuellement,
+
+00:02:59.300 --> 00:03:02.720
+tenez des feuilles de calcul indiquant où allaient les utilisateurs et priez pour ne pas faire d'erreurs lors d'un basculement.
+
+00:03:03.220 --> 00:03:07.260
+Cette approche est peu pratique et fragile, car elle n'est pas évolutive et se casse sous la pression.
+
+00:03:07.260 --> 00:03:13.100
+La nouvelle approche est un directeur de trafic unique basé sur DNS qui choisit le meilleur point de terminaison par utilisateur et par requête.
+
+00:03:13.700 --> 00:03:16.120
+Elle ne nécessite aucune mise à jour manuelle ni aucune feuille de calcul fragile.
+
+00:03:16.600 --> 00:03:20.940
+Au lieu de cela, elle examine où se trouve l'utilisateur, vérifie quels points de terminaison sont sains et renvoie le meilleur.
+
+00:03:21.780 --> 00:03:25.880
+Imaginez cela comme un système mondial de contrôle du trafic aérien où chaque centre de données est un aéroport
+
+00:03:25.880 --> 00:03:29.720
+et Traffic Manager est la tour de contrôle qui dirige chaque utilisateur vers le serveur disponible le plus proche.
+
+00:03:30.280 --> 00:03:31.440
+C'est là qu'intervient Traffic Manager.
+
+00:03:31.440 --> 00:03:34.260
+Parlons donc de ce que c'est réellement, de ce qu'est Traffic Manager.
+
+00:03:35.260 --> 00:03:36.440
+Voici la définition la plus simple.
+
+00:03:36.920 --> 00:03:39.920
+Traffic Manager est un équilibreur de charges basé sur DNS qui fonctionne à l'échelle mondiale.
+
+00:03:40.800 --> 00:03:44.340
+Imaginez-le comme un comptoir d'accueil intelligent à l'entrée d'un immeuble de bureau mondial.
+
+00:03:45.080 --> 00:03:48.400
+Lorsque vous entrez, le réceptionniste ne gère pas vos appels téléphoniques ni ne traite vos documents.
+
+00:03:49.040 --> 00:03:50.120
+Il vous indique simplement le bon étage.
+
+00:03:50.400 --> 00:03:51.440
+Et tout ce que fait Traffic Manager ?
+
+00:03:52.020 --> 00:03:53.580
+Il oriente les utilisateurs vers le bon serveur.
+
+00:03:53.860 --> 00:03:54.760
+Voici la principale distinction.
+
+00:03:55.280 --> 00:03:57.780
+Traffic Manager ne voit jamais votre trafic réel.
+
+00:03:58.300 --> 00:03:59.520
+Il ne traite pas les requêtes par proxy.
+
+00:03:59.520 --> 00:04:01.360
+N'inspecte pas les paquets et ne mets pas en cache le compte.
+
+00:04:01.740 --> 00:04:05.580
+Lorsqu'un utilisateur saisit votre nom de domaine dans son navigateur, une requête DNS est envoyée.
+
+00:04:06.600 --> 00:04:09.460
+Traffic Manager répond à cette requête avec l'adresse IP du meilleur point de terminaison,
+
+00:04:09.540 --> 00:04:12.080
+le plus proche, le plus sain, celui que vous avez configuré comme prioritaire.
+
+00:04:13.600 --> 00:04:17.420
+Ensuite, l'utilisateur se connecte directement à ce point de terminaison et Traffic Manager s'efface complètement.
+
+00:04:18.060 --> 00:04:20.400
+Cela signifie qu'il n'ajoute aucune latence à votre chemin de trafic,
+
+00:04:20.620 --> 00:04:23.260
+car il n'est pas au milieu du flux de données et ne peut pas ralentir les choses.
+
+00:04:23.940 --> 00:04:26.280
+Il fonctionne également avec n'importe quel point de terminaison connecté à Internet,
+
+00:04:26.280 --> 00:04:29.980
+peut-être les services Azure, les serveurs dans un autre cloud et même votre propre centre de données sur site.
+
+00:04:30.880 --> 00:04:33.360
+Tant que le point de terminaison possède une adresse IP publique ou un nom de domaine,
+
+00:04:33.460 --> 00:04:35.000
+Traffic Manager peut y acheminer le trafic.
+
+00:04:35.720 --> 00:04:38.280
+Et comme il s'agit d'un service mondial, il résiste aux pannes régionales.
+
+00:04:39.280 --> 00:04:42.340
+Si une région Azure entière tombant par un Traffic Manager continue de fonctionner
+
+00:04:42.340 --> 00:04:44.800
+et achemine les utilisateurs vers des points de terminaison sains ailleurs.
+
+00:04:45.500 --> 00:04:48.100
+Alors comment Traffic Manager sait-il quels points de terminaison sont sains ?
+
+00:04:48.100 --> 00:04:49.760
+Il les sonde de toutes les 30 secondes par défaut,
+
+00:04:49.760 --> 00:04:54.160
+en envoyant une requête HTTP ou HTTPS à un chemin spécifique sur chaque point de terminaison.
+
+00:04:54.800 --> 00:04:58.320
+Si le point de terminaison répond avec un code d'état de niveau 200 dans un délai d'attente, il est sain.
+
+00:04:58.980 --> 00:05:04.200
+S'il ne répond pas plusieurs fois de suite, Traffic Manager le marque comme dégradé et arrête d'y envoyer les utilisateurs.
+
+00:05:04.700 --> 00:05:08.940
+Lorsque le point de terminaison récupère, Traffic Manager le détecte également et le remet en rotation et le rotation.
+
+00:05:09.460 --> 00:05:11.960
+Cette surveillance de l'état de santé permet le basculement automatique.
+
+00:05:12.700 --> 00:05:16.700
+Examinons maintenant les différentes façons dont Traffic Manager décide vers quel point de terminaison envoyer les utilisateurs.
+
+00:05:16.700 --> 00:05:18.980
+C'est là qu'interviennent les méthodes de routage.
+
+00:05:20.720 --> 00:05:23.060
+Routage prioritaire, reprise après sinistre simplifiée.
+
+00:05:23.600 --> 00:05:25.580
+Le routage prioritaire est la méthode la plus simple à comprendre.
+
+00:05:26.020 --> 00:05:28.140
+Vous classez vos points de terminaison de 1 à autant que vous en avez.
+
+00:05:28.520 --> 00:05:28.780
+C'est tout.
+
+00:05:29.120 --> 00:05:30.260
+Tout le trafic passe en priorité 1.
+
+00:05:30.660 --> 00:05:34.700
+Si ce point de terminaison tombe en panne, le trafic passe en priorité 2, puis 3, et ainsi de suite dans la liste.
+
+00:05:35.080 --> 00:05:36.320
+Il s'agit d'une configuration Active Patient.
+
+00:05:36.900 --> 00:05:39.420
+Un point de terminaison gère tous les autres, attendants coulisses.
+
+00:05:40.060 --> 00:05:40.940
+Voici un exemple concret.
+
+00:05:41.700 --> 00:05:45.640
+Supposons que vos serveurs principaux fonctionnent dans l'Est des Etats-Unis et que vous ayez une sauvegarde en Europe de l'Ouest.
+
+00:05:45.640 --> 00:05:48.960
+Vous définissez l'Est des Etats-Unis comme priorité 1, l'Europe de l'Ouest comme priorité 2.
+
+00:05:49.380 --> 00:05:51.600
+Fonctionnement normal, chaque utilisateur se rend dans l'Est et les Etats-Unis.
+
+00:05:52.200 --> 00:05:55.620
+Mais lorsque l'Est des Etats-Unis subit une panne, peut-être une panne de courant, peut-être un problème de réseau,
+
+00:05:55.680 --> 00:05:57.340
+Traffic Manager le détecte en quelques secondes.
+
+00:05:57.960 --> 00:06:01.660
+Il arrête d'envoyer de nouveaux utilisateurs vers l'Est et les Etats-Unis et commence à les rediriger vers l'Europe de l'Ouest à la place.
+
+00:06:02.100 --> 00:06:05.140
+Votre application reste en ligne, vos utilisateurs ne remarqueront peut-être même pas ce qui s'est passé.
+
+00:06:05.580 --> 00:06:06.620
+Il y a un détail important ici.
+
+00:06:07.180 --> 00:06:09.020
+Les utilisateurs existants conservent leur connexion actuelle.
+
+00:06:09.020 --> 00:06:11.320
+Le routage basé sur DNS n'affecte que les nouvelles recherches DNS.
+
+00:06:11.700 --> 00:06:14.100
+Ainsi, si quelqu'un a déjà chargé votre application et a une session active,
+
+00:06:14.200 --> 00:06:18.300
+cette session continue d'aller au point de terminaison d'origine jusqu'à ce qu'elle se termine, jusqu'à ce qu'elle se termine ou que le cache DNS expire.
+
+00:06:18.660 --> 00:06:22.460
+C'est pourquoi vous devez définir une durée de vie DNS faible, 30 à 60 secondes, et la durée idéale.
+
+00:06:23.340 --> 00:06:26.300
+Une durée de vie faible signifie que les résolveurs DNS recherchent les mises à jour plus fréquemment.
+
+00:06:26.860 --> 00:06:29.680
+C'est lorsque Traffic Manager change de point de terminaison, le changement se propage plus rapidement.
+
+00:06:29.680 --> 00:06:32.440
+Une erreur courante est d'oublier de tester le basculement.
+
+00:06:33.240 --> 00:06:34.500
+Vous définissez un routage prioritaire.
+
+00:06:34.700 --> 00:06:36.900
+Vous déployez votre région de sauvegarde puis vous partez du principe que cela fonctionne.
+
+00:06:37.280 --> 00:06:37.860
+Mais voilà le problème.
+
+00:06:38.420 --> 00:06:40.600
+Votre région de sauvegarde doit gérer la charge complète.
+
+00:06:41.200 --> 00:06:43.660
+Si votre région principale gère un million d'utilisateurs par jour
+
+00:06:43.660 --> 00:06:46.180
+et que votre région de sauvegarde n'en gère que 100 000 en fonctionnement normal,
+
+00:06:46.420 --> 00:06:49.800
+cette région de sauvegarde risque de tomber en panne lorsque tout ce trafic lui est soudainement transféré.
+
+00:06:50.820 --> 00:06:51.680
+Testez votre basculement.
+
+00:06:52.380 --> 00:06:53.880
+Simulez une panne et observez ce qui se passe.
+
+00:06:54.240 --> 00:06:55.480
+C'est la seule façon de savoir si ça marche.
+
+00:06:55.860 --> 00:06:58.300
+La priorité consiste à maintenir votre application en vie en cas de panne.
+
+00:06:58.300 --> 00:07:01.320
+Mais qu'en est-il de la rendre rapide pour tout le monde ?
+
+00:07:01.320 --> 00:07:02.040
+Routage de performance.
+
+00:07:02.360 --> 00:07:03.040
+La vitesse avant tout.
+
+00:07:03.520 --> 00:07:05.820
+Le routage de performance fonctionne différemment du routage de pluride.
+
+00:07:06.240 --> 00:07:08.400
+Au lieu de dire toujours utiliser ce point de terminaison en premier cœur,
+
+00:07:08.500 --> 00:07:11.600
+il y a envoyé chaque utilisateur vers le point de terminaison qui lui offre la connexion la plus rapide.
+
+00:07:12.140 --> 00:07:14.320
+Ainsi, un utilisateur à Tokyo est redirigé vers un serveur au Jean.
+
+00:07:14.660 --> 00:07:16.300
+Un utilisateur à Londres est redirigé vers la Nantes.
+
+00:07:16.540 --> 00:07:18.440
+Un utilisateur à son polo est redirigé vers le Brésil.
+
+00:07:18.840 --> 00:07:21.540
+Chaque utilisateur bénéficie de l'expérience la plus rapide possible où qu'il se trouve.
+
+00:07:21.960 --> 00:07:25.140
+Comment Traffic Manager sait-il quel point de terminaison est le plus rapide ?
+
+00:07:25.140 --> 00:07:26.860
+Il utilise ce qu'on appelle une table de latence Internet.
+
+00:07:27.580 --> 00:07:29.240
+Considérez-la comme une carte qu'Azur tient un jour.
+
+00:07:29.840 --> 00:07:33.860
+Elle suit la latence réelle du réseau entre différentes parties du monde et chaque région Azure.
+
+00:07:34.680 --> 00:07:38.860
+Lorsqu'une requête DNS arrive, Traffic Manager vérifie où se trouve le résolveur DNS de l'utilisateur,
+
+00:07:39.060 --> 00:07:44.060
+recherche la table de latence et renvoie le point de terminaison qui offre à cet utilisateur la latence la plus faible.
+
+00:07:44.960 --> 00:07:46.300
+Voici quelque chose qui pourrait vous surprendre.
+
+00:07:46.660 --> 00:07:47.840
+Cela ne dépend pas de la distance physique.
+
+00:07:47.840 --> 00:07:52.880
+Un utilisateur en Inde peut en fait obtenir une latence plus faible vers l'est des Etats-Unis que vers l'Asie du Sud-Est
+
+00:07:52.880 --> 00:07:56.200
+selon la manière dont les câbles sous-marins et les points d'échange Internet acheminent le trafic à ce moment-là.
+
+00:07:56.920 --> 00:08:00.180
+Le tableau de latence capture les conditions réelles du réseau, pas seulement la distance en ligne droite.
+
+00:08:01.200 --> 00:08:04.420
+Ainsi, le point de terminaison, le plus proche n'est pas toujours celui qui est le plus proche géographiquement.
+
+00:08:04.940 --> 00:08:09.180
+Le routage de performance est parfaitement adapté aux applications mondiales où l'expérience utilisateur dépend de la vitesse.
+
+00:08:10.180 --> 00:08:13.020
+Sites de commerce électronique, streaming vidéo, outils de collaboration en temps réel,
+
+00:08:13.120 --> 00:08:15.160
+tout ce qui implique une réponse lente pour perdre un utilisateur.
+
+00:08:15.160 --> 00:08:19.120
+Mais il y a un hic. Il ne tient pas compte de la charge que chaque point de terminaison gère déjà.
+
+00:08:19.880 --> 00:08:24.160
+Si votre région de l'est des Etats-Unis fonctionne à 95% de sa capacité et que votre région d'Europe de l'Ouest est à 20%,
+
+00:08:24.160 --> 00:08:28.240
+le routage de performance peut toujours envoyer de nouveaux utilisateurs vers l'est des Etats-Unis car c'est la latence la plus faible.
+
+00:08:28.520 --> 00:08:30.000
+Il ne connaît pas la charge de votre serveur.
+
+00:08:30.280 --> 00:08:34.400
+Par conséquent, vous combinez généralement le routage de performance avec d'autres équilibreurs de charge dans chaque région,
+
+00:08:34.500 --> 00:08:36.180
+Azure Load Balancer ou Application Gateway,
+
+00:08:36.780 --> 00:08:40.860
+pour gérer la distribution réelle du trafic sur vos serveurs une fois que l'utilisateur arrive dans la bonne région.
+
+00:08:41.820 --> 00:08:43.460
+Le routage de performance optimise la vitesse.
+
+00:08:43.460 --> 00:08:47.460
+Mais que faire si vous devez contrôler le volume de trafic reçu par chaque point de terminaison ?
+
+00:08:48.180 --> 00:08:50.680
+Routage pondéré géographique, contrôler conformité.
+
+00:08:51.300 --> 00:08:52.940
+Le routage de performance est donc une question de vitesse.
+
+00:08:53.200 --> 00:08:56.940
+Mais que faire si vous souhaitez contrôler exactement le volume de trafic reçu par chaque point de terminaison ?
+
+00:08:56.940 --> 00:08:59.740
+Ou acheminer les utilisateurs en fonction de leur emplacement dans le monde ?
+
+00:08:59.740 --> 00:09:01.560
+C'est là qu'intervienne le routage pondéré géographique.
+
+00:09:01.840 --> 00:09:02.940
+Commençons par le routage pondéré.
+
+00:09:03.520 --> 00:09:05.240
+Celui-ci est exactement ce à quoi il ressemble.
+
+00:09:05.240 --> 00:09:09.200
+Vous attribuez un poids à chaque point de terminaison, un nombre compris entre A et un 0-0.
+
+00:09:09.520 --> 00:09:12.500
+Traffic Manager répartit ensuite le trafic proportionnellement en fonction de ses poids.
+
+00:09:13.380 --> 00:09:17.660
+Ainsi, si vous avez un point de terminaison A avec un poids de 80 et un point de terminaison B avec un poids de 20,
+
+00:09:17.820 --> 00:09:21.080
+environ 80% de vos utilisateurs sont dirigés vers A et 20% vers B.
+
+00:09:21.280 --> 00:09:21.980
+Un calcul simple.
+
+00:09:22.840 --> 00:09:24.100
+Pourquoi voudriez-vous faire cela ?
+
+00:09:24.100 --> 00:09:25.060
+Pensez à une version Canary.
+
+00:09:25.440 --> 00:09:29.820
+Vous avez créé une nouvelle version de votre application et vous souhaitez la tester auprès de vrais utilisateurs avant de la déployer pour tout le monde.
+
+00:09:30.140 --> 00:09:33.960
+Vous configurez un deuxième point de terminaison exécutant la nouvelle version lui attribuer une pondération de 5
+
+00:09:33.960 --> 00:09:36.520
+et attribuer à votre point de terminaison de production actuel une pondération de 95.
+
+00:09:36.660 --> 00:09:39.200
+Un certain nombre de 95 pour les utilisateurs utilisateurs utilisent la nouvelle version.
+
+00:09:39.340 --> 00:09:42.380
+Vous surveillez les erreurs, surveillez les performances et si tout semble correct,
+
+00:09:42.540 --> 00:09:44.860
+vous augmentez progressivement la pondération de la nouvelle version.
+
+00:09:45.020 --> 00:09:47.180
+Peut-être de 20% la semaine prochaine, puis de 50, puis de 100.
+
+00:09:47.280 --> 00:09:50.000
+Si quelque chose ne va pas, vous ramenez la pondération à 0 et le problème est maîtrisé.
+
+00:09:50.000 --> 00:09:54.080
+Pas de déploiement brutal, pas de retour en arrière sur une version défectueuse devant tous vos utilisateurs.
+
+00:09:54.440 --> 00:09:55.960
+La même idée s'applique au test A sur B.
+
+00:09:56.440 --> 00:09:58.700
+Vous voulez voir si une nouvelle fonctionnalité améliore l'engagement ?
+
+00:09:58.700 --> 00:10:02.380
+Envoyez la moitié de vos utilisateurs vers la version A et l'autre moitié vers la version B en utilisant des pondérations.
+
+00:10:02.520 --> 00:10:03.240
+Comparez les résultats.
+
+00:10:03.580 --> 00:10:05.340
+Ou bien vous migrez des utilisateurs d'une région à une autre.
+
+00:10:06.180 --> 00:10:09.600
+Déplacez progressivement la pondération de l'ancienne région vers la nouvelle sur quelques semaines.
+
+00:10:10.180 --> 00:10:11.600
+Voici cependant un point important à comprendre.
+
+00:10:12.000 --> 00:10:13.300
+Le routage pondéré n'est pas un tourniquet.
+
+00:10:13.640 --> 00:10:15.760
+Il n'alterne pas entre les points de terminaison, une requête à la fois.
+
+00:10:16.180 --> 00:10:17.300
+C'est une distribution statistique.
+
+00:10:17.300 --> 00:10:20.580
+Sur un grand nombre de requêtes, le trafic se répartit en fonction de vos pondérations.
+
+00:10:21.260 --> 00:10:23.660
+Cependant, un utilisateur unique effectuant plusieurs requêtes
+
+00:10:23.660 --> 00:10:27.480
+peut continuer à atteindre le même point de terminaison car son résolveur DNS met le résultat en cache.
+
+00:10:28.040 --> 00:10:29.680
+Ne considérez donc pas cela comme un équidoire, je ne sais pas.
+
+00:10:30.020 --> 00:10:32.860
+Considérez-le comme un contrôle de la proportion globale du trafic au fil du temps.
+
+00:10:33.460 --> 00:10:34.600
+Parlons maintenant du routage géographique.
+
+00:10:35.260 --> 00:10:38.080
+Celui-ci achemine les utilisateurs en fonction de l'origine de leur requête DNS,
+
+00:10:38.580 --> 00:10:40.360
+pays, continent ou région spécifique.
+
+00:10:41.120 --> 00:10:43.640
+Ainsi, un utilisateur en Allemagne est envoyé vers votre point de terminaison à Francfort.
+
+00:10:43.640 --> 00:10:46.860
+Un utilisateur au Brésil est envoyé vers votre point de terminaison à Sao Paulo.
+
+00:10:47.360 --> 00:10:48.240
+Ce niveau de granularité.
+
+00:10:48.700 --> 00:10:49.760
+Pourquoi l'utiliser ?
+
+00:10:49.760 --> 00:10:51.000
+La souveraineté des données est un et moins simple.
+
+00:10:51.380 --> 00:10:54.380
+Les réglementations de l'Union Européenne peuvent exiger que les données des utilisateurs restent en Europe.
+
+00:10:54.660 --> 00:10:56.960
+Le routage géographique vous permet de faire respecter cette règle au niveau du DER.
+
+00:10:57.240 --> 00:10:58.980
+Un utilisateur en France résout votre domaine
+
+00:10:58.980 --> 00:11:02.200
+et le gestionnaire de trafic renvoie l'adresse IP de votre point de terminaison européen.
+
+00:11:02.880 --> 00:11:04.080
+Ces données ne quittent jamais le continent.
+
+00:11:04.460 --> 00:11:05.520
+Il en va de même pour le contenu localisé.
+
+00:11:05.620 --> 00:11:09.020
+Si vous souhaitez que les utilisateurs au Japon voient une version en japonais de votre site,
+
+00:11:09.420 --> 00:11:12.200
+le routage géographique les envoie vers le point de terminaison qui diffuse ce contenu.
+
+00:11:13.640 --> 00:11:16.920
+Chaque région géographique doit correspondre exactement à un point de terminaison.
+
+00:11:17.280 --> 00:11:19.300
+Vous ne pouvez pas diviser un seul pays en deux points de terminaison.
+
+00:11:19.920 --> 00:11:21.460
+Donc si vous avez des utilisateurs en Allemagne
+
+00:11:21.460 --> 00:11:23.700
+et que vous voulez que 50% y a Francfort et 50% Berlin,
+
+00:11:23.840 --> 00:11:24.400
+vous ne pouvez pas le faire.
+
+00:11:24.540 --> 00:11:26.120
+Avec le routage géographique seul, seul,
+
+00:11:26.440 --> 00:11:27.960
+vous devrez plutôt utiliser un profil imbriqué.
+
+00:11:28.540 --> 00:11:30.340
+Les profils imbriqués sont exactement ce qu'ils semblent être.
+
+00:11:30.740 --> 00:11:32.580
+Vous placez un profil de gestionnaire de trafic dans un autre.
+
+00:11:33.100 --> 00:11:35.420
+Ainsi, au niveau supérieur, vous utilisez le routage géographique
+
+00:11:35.420 --> 00:11:37.340
+pour envoyer les utilisateurs européens vers un profil,
+
+00:11:37.560 --> 00:11:39.180
+les utilisateurs nord-américains vers un autre, et ainsi de suite.
+
+00:11:39.480 --> 00:11:40.760
+Ensuite, à l'intérieur de chacun de ces profils,
+
+00:11:40.760 --> 00:11:42.580
+vous utilisez le routage pondéré pour répartir le trafic
+
+00:11:42.580 --> 00:11:43.820
+entre les points de terminaison de cette région,
+
+00:11:44.320 --> 00:11:45.920
+le routage géographique en haut pour la conformité,
+
+00:11:46.020 --> 00:11:47.340
+le routage pondéré à l'intérieur pour le contrôle.
+
+00:11:47.860 --> 00:11:48.840
+C'est une combinaison puissante.
+
+00:11:49.400 --> 00:11:51.420
+Deux autres méthodes de routage gèrent des scénarios plus spécifiques.
+
+00:11:51.880 --> 00:11:52.360
+Examinons-les.
+
+00:11:53.160 --> 00:11:54.720
+Le routage multivaleur et le routage de sous-réseau
+
+00:11:54.720 --> 00:11:55.660
+pour un contrôle précis.
+
+00:11:56.400 --> 00:11:58.300
+Le routage multivaleur est une astuce simple mais utile.
+
+00:11:58.680 --> 00:12:01.320
+Au lieu de renvoyer un seul point de terminaison dans la réponse DNS,
+
+00:12:01.860 --> 00:12:05.120
+le gestionnaire de trafic renvoie plusieurs adresses IP saines en même temps.
+
+00:12:05.640 --> 00:12:08.400
+Votre navigateur ou votre application choisit la première adresse IP de la liste,
+
+00:12:08.400 --> 00:12:11.460
+ce qui répartit la charge sans que le gestionnaire de trafic ait besoin de prendre une décision pour chaque requin.
+
+00:12:11.760 --> 00:12:12.200
+Mais il y a un hic.
+
+00:12:12.620 --> 00:12:15.640
+Les valeurs multiples ne fonctionnent qu'avec les points de terminaison IPv4 et IPv6.
+
+00:12:16.380 --> 00:12:18.360
+Vous ne pouvez donc pas les utiliser avec les services d'application,
+
+00:12:18.440 --> 00:12:20.000
+les services cloud ou tout autre point de terminaison,
+
+00:12:20.140 --> 00:12:21.840
+utilisant un nom de domaine au lieu d'une adresse IP.
+
+00:12:22.440 --> 00:12:24.300
+Elles sont uniquement destinées aux points de terminaison d'assaut.
+
+00:12:24.860 --> 00:12:26.900
+Cependant, lorsque vous en avez, cela rend le système plus résilient
+
+00:12:26.900 --> 00:12:29.860
+car si une adresse IP échoue, le client peut en essayer une autre dans la liste
+
+00:12:29.860 --> 00:12:31.220
+sans effectuer une nouvelle recherche DNS.
+
+00:12:31.900 --> 00:12:33.860
+Cela signifie un basculement plus rapide côté client.
+
+00:12:34.420 --> 00:12:36.000
+Le routage de sous-réseau est encore plus spécialisé,
+
+00:12:36.000 --> 00:12:37.040
+mais puissant lorsque vous en avez besoin.
+
+00:12:37.380 --> 00:12:39.500
+Il achemine les utilisateurs en fonction du sous-réseau IP source
+
+00:12:39.500 --> 00:12:40.520
+d'où provient leur requête DNS.
+
+00:12:41.460 --> 00:12:43.740
+Vous pouvez donc mapper la plage d'adresse IP du bureau de votre entreprise
+
+00:12:43.740 --> 00:12:44.880
+à un point de terminaison intermédiaire
+
+00:12:44.880 --> 00:12:46.280
+et tous les autres obtiennent la version de production.
+
+00:12:47.100 --> 00:12:49.780
+Vous pouvez également acheminer les utilisateurs d'un sous-réseau VPN spécifique
+
+00:12:49.780 --> 00:12:51.300
+vers un backend dédié pour les tests.
+
+00:12:52.200 --> 00:12:53.600
+Imaginez un scénario de test interne
+
+00:12:53.600 --> 00:12:55.800
+dans lequel votre équipe de développement travaille depuis le bureau.
+
+00:12:56.580 --> 00:12:58.940
+Leurs requêtes DNS proviennent de votre plage d'adresse IP d'entreprise
+
+00:12:58.940 --> 00:13:01.000
+et vous mappez cette plage à un environnement de test
+
+00:13:01.000 --> 00:13:02.300
+où ils peuvent tester la dernière version.
+
+00:13:03.420 --> 00:13:05.340
+Tous les autres utilisateurs d'Internet obtiennent la version de production.
+
+00:13:06.000 --> 00:13:08.160
+Pas d'URL spéciale, pas de configuration VPN,
+
+00:13:08.520 --> 00:13:10.760
+juste un routage transparent basé sur la provenance de la requête.
+
+00:13:11.440 --> 00:13:12.460
+Ces deux méthodes sont spécialisées.
+
+00:13:12.800 --> 00:13:14.780
+La plupart des gens utiliseront la priorité, les performances,
+
+00:13:14.920 --> 00:13:17.180
+la pondération ou la géographie pour leur gestion principale du trafic.
+
+00:13:17.640 --> 00:13:19.900
+Cependant, les valeurs multiples et le sous-réseau sont là quand vous en avez besoin
+
+00:13:19.900 --> 00:13:22.080
+et ils résolvent des problèmes que les autres méthodes ne peuvent pas résoudre.
+
+00:13:22.840 --> 00:13:24.340
+Surveillance de l'état et basculement en pratique.
+
+00:13:24.900 --> 00:13:26.540
+Toutes ces méthodes de routage dépendent d'une chose,
+
+00:13:26.700 --> 00:13:28.560
+savoir quels points de terminaison sont réellement sains.
+
+00:13:29.200 --> 00:13:31.380
+Le routage du trafic vers un serveur défectueux n'est de personne.
+
+00:13:31.940 --> 00:13:34.140
+Parlons donc du fonctionnement pratique, de la surveillance de l'état.
+
+00:13:34.140 --> 00:13:37.300
+Trafic Manager envoie une sonde d'état à chaque point de terminaison
+
+00:13:37.300 --> 00:13:38.480
+toutes les 30 secondes par défaut.
+
+00:13:38.880 --> 00:13:40.960
+Et cette sonde est une requête HTTP ou HTTPS
+
+00:13:40.960 --> 00:13:42.980
+vers un chemin spécifique sur votre point de terminaison.
+
+00:13:43.520 --> 00:13:46.460
+Il attend une réponse avec un code d'état compris entre 200 et 289
+
+00:13:46.460 --> 00:13:47.740
+dans un certain délai d'attente.
+
+00:13:48.880 --> 00:13:50.920
+Si le point de terminaison répond correctement, il est sain.
+
+00:13:51.300 --> 00:13:52.780
+Si ce n'est pas le cas, Trafic Manager réessaye.
+
+00:13:53.720 --> 00:13:56.060
+Après un nombre configurable d'échecs, 3 par défaut,
+
+00:13:56.400 --> 00:13:58.620
+Trafic Manager marque ce point de terminaison comme dégradé
+
+00:13:58.620 --> 00:14:01.340
+et l'exclu du routage jusqu'à ce qu'il recommence à passer les contrôles d'intégrité.
+
+00:14:01.340 --> 00:14:03.860
+Vous pouvez configurer l'intervalle de vérification et les d'expiration.
+
+00:14:04.280 --> 00:14:05.880
+Des vérifications plus rapides signifient un basculement plein.
+
+00:14:06.340 --> 00:14:08.300
+Si vous définissez l'intervalle sur 10 secondes au lieu de 30,
+
+00:14:08.380 --> 00:14:10.100
+Trafic Manager détecte les défaillances plus tôt
+
+00:14:10.100 --> 00:14:11.940
+et redirige le trafic plus rapidement.
+
+00:14:12.880 --> 00:14:15.240
+Cependant, des vérifications plus rapides mettent davantage de charge
+
+00:14:15.240 --> 00:14:17.340
+sur vos points de terminaison car chaque vérification est une requête
+
+00:14:17.340 --> 00:14:18.140
+que votre serveur doit traiter.
+
+00:14:18.540 --> 00:14:19.960
+Ainsi, si vous avez des milliers de points de terminaison
+
+00:14:19.960 --> 00:14:21.440
+et que vous effectuez une vérification toutes les 10 secondes,
+
+00:14:21.500 --> 00:14:22.100
+les requêtes s'additionnent.
+
+00:14:22.380 --> 00:14:24.180
+Vous devez donc trouver un équilibre entre la vitesse et la surcharge.
+
+00:14:24.180 --> 00:14:27.640
+L'impact réel d'une configuration de vérification d'intégrité appropriée
+
+00:14:27.640 --> 00:14:29.320
+est la différence entre un basculement transparent
+
+00:14:29.320 --> 00:14:31.020
+et une fausse alarme qui interrompt votre routage.
+
+00:14:31.820 --> 00:14:33.180
+Si votre vérification est trop sensible,
+
+00:14:33.320 --> 00:14:34.960
+vous risquez de marquer un point de terminaison comme dégradé
+
+00:14:34.960 --> 00:14:35.940
+alors qu'il est en réalité correct.
+
+00:14:36.620 --> 00:14:39.080
+Un pic temporaire de latence, un bref problème réseau,
+
+00:14:39.180 --> 00:14:40.600
+une requête de base de données lentes.
+
+00:14:41.000 --> 00:14:42.660
+Tout cela peut déclencher un faux positif.
+
+00:14:43.540 --> 00:14:45.600
+Lorsque Trafic Manager cesse d'envoyer les utilisateurs
+
+00:14:45.600 --> 00:14:46.540
+vers ce point de terminaison,
+
+00:14:46.680 --> 00:14:48.320
+vous venez de créer une panne qui n'était pas nécessaire.
+
+00:14:48.780 --> 00:14:49.560
+Voici un piège courant.
+
+00:14:50.080 --> 00:14:51.680
+Les utilisateurs définissent le chemin de la sonde
+
+00:14:51.680 --> 00:14:53.460
+à la racine de leur application, juste une barre oblique.
+
+00:14:53.460 --> 00:14:55.420
+C'est bien pour un contrôle de santé de base,
+
+00:14:55.800 --> 00:14:58.520
+mais ce n'est pas l'idéal car la page racine risque de se charger lentement
+
+00:14:58.520 --> 00:15:00.580
+si elle affiche une page complète avec des requêtes de base de données,
+
+00:15:00.700 --> 00:15:02.340
+des images et du javascript.
+
+00:15:03.120 --> 00:15:04.960
+Une meilleure approche consiste à créer un point de terminaison
+
+00:15:04.960 --> 00:15:06.780
+de contrôle de santé dédié, quelque chose de léger.
+
+00:15:07.180 --> 00:15:09.600
+Un point de terminaison simple qui renvoie rapidement un code d'état de sang
+
+00:15:09.600 --> 00:15:11.660
+et confirme que l'application est en cours d'exécution.
+
+00:15:11.800 --> 00:15:13.480
+Pas de requête de base de données, pas de traitement lourd,
+
+00:15:13.560 --> 00:15:14.340
+juste un battement de cœur.
+
+00:15:15.000 --> 00:15:16.520
+De cette façon, vos sondes sont rapides, fiables
+
+00:15:16.520 --> 00:15:18.380
+et moins susceptibles de déclencher de fausses alarmes.
+
+00:15:19.100 --> 00:15:20.280
+Permettez-moi de conclure en vous expliquant
+
+00:15:20.280 --> 00:15:22.920
+quand vous devriez réellement utiliser Traffic Manager par rapport à d'autres options.
+
+00:15:24.180 --> 00:15:25.220
+Conclusion et guide de décision.
+
+00:15:25.780 --> 00:15:26.940
+Voici donc un bref récapitulatif.
+
+00:15:27.340 --> 00:15:29.600
+Traffic Manager est un directeur de trafic global basé sur DNS
+
+00:15:29.600 --> 00:15:30.680
+avec 6 méthodes de routage.
+
+00:15:31.340 --> 00:15:32.520
+Il ne gère pas réellement votre trafic.
+
+00:15:33.300 --> 00:15:35.220
+Il oriente simplement les utilisateurs vers le bon endroit
+
+00:15:35.220 --> 00:15:36.560
+en fonction de la méthode que vous choisissez.
+
+00:15:36.940 --> 00:15:38.700
+Le routage prioritaire est destiné à la reprise après signage.
+
+00:15:38.940 --> 00:15:40.600
+Il permet à votre application de continuer à fonctionner
+
+00:15:40.600 --> 00:15:41.540
+même si une région entière tombera.
+
+00:15:42.360 --> 00:15:44.340
+Le routage axé sur les performances est une question de vitesse.
+
+00:15:44.940 --> 00:15:46.600
+Il envoie chaque utilisateur au point de terminaison,
+
+00:15:46.700 --> 00:15:47.720
+présentant la latence la plus faible.
+
+00:15:47.720 --> 00:15:50.540
+Le routage pondéré vous permet d'effectuer des déploiements contrôlés
+
+00:15:50.540 --> 00:15:52.280
+tels que les versions Canary ou les tests assommés.
+
+00:15:53.260 --> 00:15:55.020
+Le routage géographique gère la conformité.
+
+00:15:55.580 --> 00:15:57.040
+Vous conservez les données dans la bonne région
+
+00:15:57.040 --> 00:15:58.520
+en fonction de l'emplacement de vos utilisateurs.
+
+00:15:58.940 --> 00:16:00.920
+Le routage à valeur multiple permet une distribution simple
+
+00:16:00.920 --> 00:16:02.320
+au niveau de l'adresse IP sur plusieurs adresses.
+
+00:16:03.000 --> 00:16:04.420
+Le routage de sous-réseau effectue des routes
+
+00:16:04.420 --> 00:16:06.320
+en fonction de l'adresse IP source de la requête DNS.
+
+00:16:07.100 --> 00:16:08.640
+Voyons maintenant comment Traffic Manager s'intègre
+
+00:16:08.640 --> 00:16:09.700
+dans une architecture réelle.
+
+00:16:10.100 --> 00:16:10.720
+Pensez-y !

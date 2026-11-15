@@ -1,0 +1,859 @@
+WEBVTT
+
+00:00:00.230 --> 00:00:07.550
+Klaar voor 10 dagen vol Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van Werk vormgeven.
+
+00:00:07.910 --> 00:00:12.350
+In januari is M365, kom terug en we pakken het groter aan.
+
+00:00:12.610 --> 00:00:18.570
+Doe mee aan live-sessies, praktijkdemonstraties en praktische kennis van MVP's en experts uit de hele wereld.
+
+00:00:18.770 --> 00:00:21.730
+Geen generieke sliedes, geen eindeloze modewoorden.
+
+00:00:21.990 --> 00:00:29.110
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.110 --> 00:00:34.990
+Of je nu een IT-professional, ontwikkelaar of bedrijfsleider bent, er zijn sessies speciaal voor jou.
+
+00:00:35.210 --> 00:00:40.630
+Gedurende 10 volle dagen kun je verschillende technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.910 --> 00:00:44.530
+Kijk live mee en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.910 --> 00:00:49.150
+Januari 2027, 10 dagen, 1 Microsoft Community.
+
+00:00:49.690 --> 00:00:51.190
+Registratie is nu geopend.
+
+00:00:52.050 --> 00:00:58.860
+Ga vandaag nog naar m365com.net
+
+00:00:58.860 --> 00:01:03.860
+Meld je nu aan op m365com.net en we zien je live in januari.
+
+00:01:04.640 --> 00:01:07.880
+Heb je je ooit afgevraagd wie jouw data in Power BI daadwerkelijk kan zien?
+
+00:01:08.120 --> 00:01:12.560
+Spoiler alert, het is niet zo privé als je misschien denkt, tenzij je beveiliging op rijniveau onder de knie hebt.
+
+00:01:12.740 --> 00:01:16.340
+In deze aflevering gaan we niet alleen de optie beveiliging op rijniveau aanvinken,
+
+00:01:16.560 --> 00:01:21.440
+maar ontleden we de verschillende onderdelen, van roldefinities tot de DAX expressies die stilletjes bepalen wie wat kan zien.
+
+00:01:21.440 --> 00:01:26.220
+De meeste mensen stoppen bij de installatie, maar wij laten je zien hoe elke beslissing met elkaar verbonden is,
+
+00:01:26.420 --> 00:01:30.060
+zodat je gegevens niet alleen vergrendeld zijn, maar ook ontworpen zijn voor beveiliging.
+
+00:01:30.320 --> 00:01:33.540
+Waarom beveiliging op rijniveau een systeem is, geen vinkje.
+
+00:01:33.720 --> 00:01:38.080
+Als je gewend bent om een gevoelige spreadsheet te beveiligen door er een wachtwoord op te zetten,
+
+00:01:38.300 --> 00:01:42.340
+weet je al dat er een kloof is tussen wat je bedoelt en wat je gegevens daadwerkelijk beschermt.
+
+00:01:42.640 --> 00:01:46.060
+Power BI met beveiliging op rijniveau kan precies hetzelfde aanvoelen.
+
+00:01:46.260 --> 00:01:50.540
+Je zet de beveiliging op rijniveau, schakelaar aan, wijst een paar rollen toe en denkt dat je klaar bent.
+
+00:01:50.540 --> 00:01:52.180
+Maar de realiteit is anders.
+
+00:01:52.440 --> 00:01:55.700
+Gevoelige gegevens vinden een weg naar buiten wanneer de verbanden tussen rollen,
+
+00:01:55.880 --> 00:01:58.420
+filters en gebruikers niet zorgvuldig in kaart worden gebracht.
+
+00:01:58.660 --> 00:02:02.740
+Mensen praten zelden over de momenten waarop iemand in het verkoopteam een dashboard opende
+
+00:02:02.740 --> 00:02:05.480
+en ineens inzicht kreeg in cijfers die ze nooit hadden mogen zien.
+
+00:02:05.660 --> 00:02:09.560
+Maar het gebeurt, en het begint bijna altijd met de aanname dat RLS Raw Level Security
+
+00:02:09.560 --> 00:02:12.600
+slechts een extra vakje is dat tijdens de installatie moet worden aangevinkt.
+
+00:02:12.760 --> 00:02:17.280
+Stel je voor dat je dashboardtoegang hebt gegeven, denkend dat je daarmee een collega meer bevoegdheden geeft.
+
+00:02:17.280 --> 00:02:22.020
+Dat lijkt onschuldig, toch? Maar in te veel organisaties betekent toegang tot één dashboard
+
+00:02:22.020 --> 00:02:24.160
+toegang tot alles wat er achter de schermen gebeurt.
+
+00:02:24.320 --> 00:02:28.480
+Ik heb omgevingen gezien waar één globale manager per ongeluk juniorgebruikers toegang gaf
+
+00:02:28.480 --> 00:02:33.020
+tot vertrouwelijke ouder gegevens, simpelweg omdat de naamgeving niet overeen kwam met de werkelijkheid.
+
+00:02:33.220 --> 00:02:34.700
+Dit is geen zeldzaam incident.
+
+00:02:35.040 --> 00:02:40.420
+Het is eerder regel dan uitzondering, vooral wanneer een bedrijf groeit en het aantal dashboards toeneemt.
+
+00:02:40.420 --> 00:02:47.280
+Iedereen wil snel vooruit, maar zonder structuur ontstaan er kleine hiaten die tijdens een audit kunnen uitgroeien tot grote problemen.
+
+00:02:47.460 --> 00:02:49.940
+Op papier klinkt RLS heel eenvoudig.
+
+00:02:50.160 --> 00:02:56.440
+Maak een rol aan, bijvoorbeeld, verkoop, voeg een filter toe zoals, regio gelijk aan VS, en koppel gebruikers eraan.
+
+00:02:56.560 --> 00:03:02.720
+Maar achter elk drop-down menu en selectievakje in Power BI zit een systeem dat beslissingen neemt over welke gegevens waarheen gaan.
+
+00:03:02.900 --> 00:03:08.280
+Als je een relatie mist of een filter een nieuwe gegevensbron niet detecteert, is dat niet zomaar een technische fout.
+
+00:03:08.280 --> 00:03:10.840
+Het is een potentieel beveiligingsincident.
+
+00:03:11.040 --> 00:03:16.300
+Je komt er pas achter als iemand gegevens tegenkomt die hij of zij niet zou mogen zien, en soms zelfs dan nog niet.
+
+00:03:16.520 --> 00:03:19.040
+Dat maakt deze kleine foutjes zo moeilijk te ontdekken.
+
+00:03:19.260 --> 00:03:24.380
+Ze gaan niet gepaard met waarschuwingssignalen en standaard-adits gaan vaak niet diep genoeg om ze op te merken.
+
+00:03:24.800 --> 00:03:29.320
+Wat vaak over het hoofd wordt gezien, is hoe nauw de RLS-componenten met elkaar verbonden zijn.
+
+00:03:29.520 --> 00:03:34.900
+De meeste tutorials behandelen de installatie in een mump van tijd en leiden je door de basisprincipes van het aanmaken van rollen en filters.
+
+00:03:34.900 --> 00:03:43.780
+Ze laten zien hoe je gebruikers koppelt en een voorbeeldvenster aanvinkt, maar bijna niemand staat stil bij de vraag hoe een filter op de verkooptabel bijvoorbeeld van invloed is op een tabel met gerelateerde gebieden.
+
+00:03:43.940 --> 00:03:51.080
+Elke logica in RLS heeft invloed op de andere componenten, toewijzingen, DAX-expressies en zelfs de naamgeving van de rollen zelf.
+
+00:03:51.340 --> 00:03:56.320
+Beschouw die keuzes als geïsoleerde stappen en je vertrouwt erop dat het systeem geen losse eindjes heeft.
+
+00:03:56.700 --> 00:04:01.020
+Maar één vergeten filter en plotseling is je zorgvuldig ingestelde rollen en zeef.
+
+00:04:01.020 --> 00:04:07.600
+Dit is een van die situaties waarin een gesloten deur niet de juiste vergelijking is, maar een weerwaar van draden.
+
+00:04:08.460 --> 00:04:11.900
+Verander je één onderdeel, dan kan het hele systeem ineens verschuiven.
+
+00:04:12.140 --> 00:04:15.580
+Mis je een draad, dan creëer je een lek dat pas opvalt als het wordt misbruikt.
+
+00:04:15.840 --> 00:04:18.500
+Werkelijke incidenten laten zien hoe dit in de praktijk werkt.
+
+00:04:18.680 --> 00:04:25.720
+Interne verhalen van analyse-teams vertellen over het moment waarop de Europese salesmanager per ongeluk data uit de Noord-Amerikaanse pipeline ontdekte.
+
+00:04:25.720 --> 00:04:32.060
+Dat was geen inbraak, maar een verkeerd toegepast filter, een onbedoelde standaardinstelling of een rol die niemand had gecontroleerd.
+
+00:04:32.200 --> 00:04:34.560
+Het zijn niet alleen horrorverhalen uit de praktijk.
+
+00:04:35.040 --> 00:04:44.080
+Microsoft's eigen kwetsbaarheidsrapporten noemen verkeerd geconfigureerde beveiliging op rijniveau als een van de belangrijkste oorzaken van genante datalekken bij grote organisaties.
+
+00:04:44.300 --> 00:04:51.040
+Voor elke krantenkop over een grote datalek zijn er tientallen die niet worden gemeld, maar wel blijvende gevolgen hebben achter de schermen.
+
+00:04:51.040 --> 00:04:59.540
+Wat deze problemen met elkaar verbindt, is het valse gevoel van veiligheid dat RLS biedt wanneer je het beschouwt als een simpel item op een takenlijst.
+
+00:05:00.140 --> 00:05:13.440
+Studies van Microsoft beveiligingsteams benadrukken dat het stapelen van filters, het toepassen ervan op tabellen, het gebruik van extra DAX-expressies of het combineren van statische en dynamische logica zowel de beveiliging als de complexiteit verhoogt.
+
+00:05:13.440 --> 00:05:20.660
+Elke extra laag maakt de boel niet alleen veiliger, maar vermenigvuldigt ook het aantal punten waar een configuratiefout kan optreden.
+
+00:05:21.200 --> 00:05:28.700
+In plaats van een simpele poortwachter aan de deur, krijg je een complex web waarin één gemiste schakel maandenlange beveiligingsplanning kan ondermijnen.
+
+00:05:29.380 --> 00:05:31.980
+Laten we ook de praktische realiteit niet negeren.
+
+00:05:31.980 --> 00:05:46.760
+Een systeem werkt misschien prima in de testomgeving, maar breng het in productie met echte gebruikers, echte afdelingen en constant wisselende teams en je krijgt situaties waarin iemand die vorig kwartaal van team is veranderd nog steeds toegang heeft tot de kwartaalcijfers.
+
+00:05:47.680 --> 00:05:52.760
+Namen en taken die in het begin logisch leken, veranderen in mysterieuze, verouderde artefacten.
+
+00:05:52.980 --> 00:05:56.120
+Niemand wil eraan zitten, voor het geval dat ze nog steeds in gebruik zijn.
+
+00:05:56.120 --> 00:06:00.840
+Als je RLS alleen tijdens de installatie inschakelt en verder gaat, bescherm je je gegevens niet.
+
+00:06:00.840 --> 00:06:05.820
+Je hoopt dat niemand per ongeluk aan de verkeerde deur klopt of dat nu uit nieuwsgierigheid of per ongeluk is.
+
+00:06:06.020 --> 00:06:10.040
+Dit alles leidt tot één fundamentele waarheid, beveiliging op rijniveau is dynamisch.
+
+00:06:10.240 --> 00:06:17.100
+Het verandert mee met je organisatie, elke rol die je aanmaakt, elk taxfilter dat je toepast, elke groep die je toewijst, dit zijn geen kleine keuzes.
+
+00:06:17.320 --> 00:06:22.280
+Ze vormen samen een levend, ademend beveiligingssysteem of, als ze genegeerd worden, een web vol gaten.
+
+00:06:22.280 --> 00:06:27.480
+Dus, voordat je verder gaat naar het volgende dashboard of een model overdraagt, sta even stil en vraag jezelf af,
+
+00:06:27.580 --> 00:06:31.380
+beheer ik eigenlijk wel een beveiligingssysteem of hoop ik alleen maar dat het inschakelen voldoende is.
+
+00:06:31.680 --> 00:06:36.920
+Het volgende deel van dit verhaal begint met het onderdeel dat centraal staat, de filterlogica zelf,
+
+00:06:37.180 --> 00:06:40.120
+en hoe deze elke andere beslissing die je neemt beïnvloedt.
+
+00:06:40.400 --> 00:06:43.280
+Het bouwen van een veilige basis, data filtering en rolontwerp.
+
+00:06:44.020 --> 00:06:48.340
+Als je ooit beveiliging op rijniveau hebt ingesteld in de veronderstelling dat het alleen maar ging om het verbergen van bepaalde rijen,
+
+00:06:48.340 --> 00:06:53.200
+dan ben je niet de enige. De belangrijkste reden waarom RLS, Real Level Security, problemen veroorzaakt, is een simpel misverstand.
+
+00:06:53.360 --> 00:06:57.520
+Het gaat niet alleen om wat zichtbaar is, maar om de vormgeving van de gehele gebruikerservaring.
+
+00:06:58.700 --> 00:07:05.580
+Een kleine misstap en plotseling verschijnt die vertrouwelijke bonustabel of dat salarissijfer van een directielid in iemands dashboard.
+
+00:07:06.020 --> 00:07:09.400
+Mensen ontdekken deze lekken echter pas wanneer rapporten al in omloop zijn,
+
+00:07:09.660 --> 00:07:12.100
+en tegen die tijd kan het lastig zijn om de fout te herstellen.
+
+00:07:12.320 --> 00:07:15.160
+Het vervelende is dat deze fouten zelden dramatisch lijken.
+
+00:07:15.160 --> 00:07:20.100
+Het gaat meestal om een uitzonderlijk geval. Een manager in de VS logt in en ziet precies wat hij of zij hoort te zien,
+
+00:07:20.280 --> 00:07:25.360
+maar een collega in Londen opent hetzelfde model en ziet, zonder dat iemand het doorheeft, het cijfer van New York staan.
+
+00:07:26.360 --> 00:07:29.220
+Neem bijvoorbeeld een fabric model voor wereldwijde verkoop.
+
+00:07:29.320 --> 00:07:32.820
+Je wilt dat managers in verschillende regio's alleen hun eigen gegevens zien.
+
+00:07:33.020 --> 00:07:36.060
+De eerste reactie is om een filter toe te voegen, iets simpels.
+
+00:07:36.360 --> 00:07:39.280
+Regio gelijk aan VS of land gelijk aan VK.
+
+00:07:39.280 --> 00:07:41.020
+Maar hier zit de crux.
+
+00:07:41.520 --> 00:07:44.380
+Hoe je dat filter schrijft en hoe je het in je model integreert,
+
+00:07:44.620 --> 00:07:48.660
+bepaalt of je systeem wel of niet overeind blijft zodra de zaken complexer worden.
+
+00:07:48.980 --> 00:07:53.480
+Veel mensen denken dat het doodsimpel is, een DAX filter van één regel, en gaan dan verder.
+
+00:07:53.920 --> 00:07:55.940
+Maar niet alle DAX gedraagt zich hetzelfde.
+
+00:07:56.200 --> 00:07:58.880
+Sterker nog, die nuance zorgen vaak voor problemen later,
+
+00:07:59.120 --> 00:08:01.900
+vooral wanneer je overstapt van Power BI Desktop naar Fabric,
+
+00:08:02.160 --> 00:08:04.600
+waar eigenaardigheden op cloudniveau de kop opsteken.
+
+00:08:04.940 --> 00:08:07.700
+RLS wordt al snel ingewikkeld als je je erin verdiept.
+
+00:08:07.940 --> 00:08:11.900
+Mensen vertrouwen vaak op functies zoals gebruikersnaam of gebruikersprincipaalnaam,
+
+00:08:12.060 --> 00:08:16.540
+in de veronderstelling dat ze hetzelfde doen of gewoon de functie gebruiken die in een blogpost wordt gebruikt.
+
+00:08:16.700 --> 00:08:19.880
+Maar vervang gebruikersnaam, die je Windows-naam in Desktop ophaalt,
+
+00:08:20.060 --> 00:08:23.400
+door gebruikersprincipaalnaam, die je e-mailadres in Fabric ophaalt,
+
+00:08:23.560 --> 00:08:25.740
+en plotseling begint je filterlogica te wankelen.
+
+00:08:25.920 --> 00:08:28.040
+Als je ooit een test hebt gehad die in Desktop werkte,
+
+00:08:28.260 --> 00:08:31.640
+maar crashte zodra je publiceerde naar Fabric, dan is dit waarschijnlijk de reden.
+
+00:08:31.640 --> 00:08:35.820
+En door de verkeerde te kiezen, ontstaan er stilletjes gaten waardoor de verkeerde mensen toegang krijgen
+
+00:08:35.820 --> 00:08:38.000
+tot gegevens waar ze nooit toegang toe zouden mogen hebben.
+
+00:08:38.200 --> 00:08:39.360
+Laten we concreet worden.
+
+00:08:39.580 --> 00:08:42.520
+Voor basisscenario's werkt een hardgecodeerde controle.
+
+00:08:42.920 --> 00:08:47.440
+Regio gelijk aan VS betekent dat alleen rijen worden weergegeven waar de regio VS is.
+
+00:08:47.620 --> 00:08:50.340
+Dat is een schoolvoorbeeld van statische RLS, Raw Level Security.
+
+00:08:50.560 --> 00:08:54.580
+Het is snel, eenvoudig en voor vaste indelingen, zoals een rapport dat alleen bedoeld is voor managers in de VS.
+
+00:08:54.760 --> 00:08:55.380
+Voldoet het prima.
+
+00:08:55.580 --> 00:08:58.680
+Maar zodra iemand dynamische beveiliging nodig heeft, verandert de situatie.
+
+00:08:58.680 --> 00:09:01.680
+Mogelijk moet u de toegang niet alleen bepalen op basis van de rapport viewer,
+
+00:09:01.900 --> 00:09:03.780
+maar ook op basis van relaties in een andere tabel,
+
+00:09:03.940 --> 00:09:07.440
+bijvoorbeeld een tabel met gebruikers toegang die aangeeft welke gebruikers welke regio's kunnen zien.
+
+00:09:07.640 --> 00:09:10.240
+Nu is uw RLS-filter geen vaste waarde meer.
+
+00:09:10.440 --> 00:09:14.960
+Het is een formule die in real-time opzoekt tot welke regio's elke persoon toegang zou moeten hebben.
+
+00:09:15.160 --> 00:09:17.500
+Hier kan DAX mislukken als u niet voorzichtig bent.
+
+00:09:17.720 --> 00:09:20.440
+U zou bijvoorbeeld een gebruikersprincipaalnaam kunnen gebruiken
+
+00:09:20.440 --> 00:09:23.160
+en die vervolgens proberen te koppelen aan uw toegangstabel.
+
+00:09:23.160 --> 00:09:28.620
+Maar als uw DAX afhankelijk is van berekende kolommen of logica gebruikt die niet reageert op de gebruikerscontext
+
+00:09:28.620 --> 00:09:32.600
+tijdens het bekijken van het rapport, kunt u per ongeluk het dynamische filter verstoren.
+
+00:09:33.180 --> 00:09:39.020
+Een praktijkvoorbeeld, een bedrijf stelt een dynamisch filter in op basis van een berekende kolom in de feitentabel,
+
+00:09:39.220 --> 00:09:43.920
+maar komt er later achter dat berekende kolommen worden geëvalueerd wanneer de gegevens worden geladen,
+
+00:09:44.220 --> 00:09:45.520
+niet wanneer ze worden bekeken.
+
+00:09:45.900 --> 00:09:50.700
+Dit betekent dat gebruikers hun gepersonaliseerde rijen niet kunnen zien of, erger nog, te veel zien.
+
+00:09:50.700 --> 00:09:55.500
+Je merkt het pas als een gebruiker je een bericht stuurt met de vraag waarom een rapporter voor hem of haar anders uitziet
+
+00:09:55.500 --> 00:09:57.100
+dan voor iemand anders in hetzelfde team.
+
+00:09:57.280 --> 00:10:02.040
+De documentatie van Microsoft en een lange reeks MVP-blogposts blijven maar roepen
+
+00:10:02.040 --> 00:10:04.520
+Vertrouw geen berekende kolommen met RLS.
+
+00:10:04.880 --> 00:10:07.260
+Berekende kolommen zijn vergrendeld bij het vernieuwen.
+
+00:10:07.440 --> 00:10:09.040
+Ze veranderen niet per gebruiker.
+
+00:10:09.260 --> 00:10:12.400
+Om RLS daadwerkelijk te laten reageren op de gebruiker,
+
+00:10:12.620 --> 00:10:17.660
+moet je filterlogica worden opgebouwd als een DAX-expressie op tabellen die worden bijgewerkt in de rapportcontext.
+
+00:10:17.660 --> 00:10:22.040
+Negeer je dit, dan zullen je dashboards je stiekem in de steek laten en dezelfde rijen tonen,
+
+00:10:22.260 --> 00:10:23.600
+ongeacht wie er is ingelogd.
+
+00:10:23.800 --> 00:10:27.460
+Statisch versus dynamisch RLS is niet alleen een technisch verschil.
+
+00:10:27.660 --> 00:10:30.380
+Het gaat erom wanneer en hoe gegevens worden gefilterd.
+
+00:10:31.300 --> 00:10:33.800
+Een statisch RLS is snel en rigide,
+
+00:10:34.140 --> 00:10:37.640
+ideaal wanneer je precies weet welke rol welke gegevens nodig heeft.
+
+00:10:38.800 --> 00:10:42.940
+Als je een rapport alleen voor een financiële of verkoopgroep opent, werkt dit prima.
+
+00:10:42.940 --> 00:10:46.980
+Maar bij een dynamische aanpak vindt elke toegangsbeslissing direct plaats,
+
+00:10:47.160 --> 00:10:51.980
+meestal door de huidige gebruikersidentiteit te vergelijken met een item in een opzoektabel met machtigingen.
+
+00:10:52.140 --> 00:10:56.780
+De flexibiliteit is krachtig, vooral voor grote organisaties of multitenant implementaties,
+
+00:10:56.960 --> 00:11:02.600
+maar elke stap in flexibiliteit voegt complexiteit toe en complexiteit brengt altijd verborgen risico's met zich mee.
+
+00:11:02.860 --> 00:11:07.040
+Zelfs ervaren beheerders struikelen vaak over de gedachte dat filters altijd eenvoudig zijn.
+
+00:11:07.220 --> 00:11:12.220
+De structuur van uw organisatie verandert voortdurend en uw DAX-filters moeten daarop inspelen.
+
+00:11:12.220 --> 00:11:16.680
+Veel filters falen omdat men zich niet realiseert hoe de RLS-logica wordt toegepast,
+
+00:11:16.900 --> 00:11:21.020
+niet tijdens het laden van gegevens, maar elke keer dat een gebruiker interactie heeft met het rapport.
+
+00:11:21.300 --> 00:11:26.960
+Vergeet dat en u kunt per ongeluk hele delen van uw datamodel openen of blokkeren zonder het te beseffen.
+
+00:11:28.300 --> 00:11:32.720
+Kortom, als de basis verkeerd is, doet de rest van wat u met RLS-bouwt er niet toe.
+
+00:11:33.800 --> 00:11:38.200
+De manier waarop u uw DAX schrijft, het soort filters dat u gebruikt en waar u ze toepast,
+
+00:11:38.400 --> 00:11:40.940
+bepalen samen uw werkelijke beveiligingspositie.
+
+00:11:40.940 --> 00:11:45.680
+Negeer de nuances en u krijgt een configuratie die in theorie werkt, maar in de praktijk lekt.
+
+00:11:46.180 --> 00:11:51.500
+Dit alles gebeurt nog voordat je gebruikers aan rollen koppelt, wat vaak het volgende punt is waar het misgaat.
+
+00:11:52.340 --> 00:11:55.140
+Het koppelen van rollen aan gebruikers, de valkuil.
+
+00:11:55.540 --> 00:12:00.080
+Je hebt je rollen ingesteld, de filters gemaakt en aan de modelzijde ziet alles er goed uit.
+
+00:12:00.280 --> 00:12:03.860
+De volgende stap, het toewijzen van gebruikers, lijkt een fluitje van een cent,
+
+00:12:04.060 --> 00:12:07.340
+maar hier beginnen de meeste beveiligingsplannen op rolniveau stilletjes te haperen.
+
+00:12:07.340 --> 00:12:09.380
+Dit is het kruispunt van IT-denken.
+
+00:12:10.060 --> 00:12:15.580
+De technische logica is aanwezig, maar nu gok je erop dat de menselijke kant, je gebruikers- en groepstoewijzingen,
+
+00:12:15.760 --> 00:12:18.940
+daadwerkelijk overeenkomt met de realiteit van hoe je bedrijf werkt.
+
+00:12:19.100 --> 00:12:22.180
+Het lijkt eenvoudig omdat er een groepsveld en een lijst met rollen is,
+
+00:12:22.420 --> 00:12:25.120
+maar de ervaring leert dat hier fouten zich graag verschuilen.
+
+00:12:25.380 --> 00:12:27.920
+Stel je voor, je hebt een managersrol aangemaakt,
+
+00:12:28.160 --> 00:12:35.120
+je zorgvuldig opgebouwde filter eraan toegevoegd en de rol in Power B of Fabric gekoppeld aan een Azure AD-groep genaamd managers.
+
+00:12:35.120 --> 00:12:40.120
+Je controleert het nog eens, laat er misschien zelfs iemand anders naar kijken en rolt het uit naar de organisatie.
+
+00:12:40.240 --> 00:12:42.700
+In eerste instantie lijkt het allemaal heel eenvoudig.
+
+00:12:42.880 --> 00:12:47.620
+Dat is nu juist het probleem, want groepslogica, vooral in grote organisaties, blijft zelden lang simpel.
+
+00:12:47.820 --> 00:12:53.120
+Teams veranderen, afdelingen reorganiseren, rollen evolueren, mensen verlaten het ene project en sluiten zich aan bij een ander.
+
+00:12:53.320 --> 00:12:58.140
+Wat gebeurt er als iemand van sales naar operations overstapt en niemand de oude groepslidmaatschappen verwijderd?
+
+00:12:58.140 --> 00:13:02.780
+Plotseling heeft uw waterdichte RLS Blauwdruk een gebruiker op twee plaatsen tegelijk.
+
+00:13:02.960 --> 00:13:07.180
+En er is een reëel risico dat die gebruiker toegang krijgt tot gegevens die niet langer van hem of haar zijn.
+
+00:13:07.360 --> 00:13:11.640
+Het is gemakkelijk om aan te nemen dat iedereen in een bepaalde Azure AD-groep dezelfde toegang zou moeten hebben.
+
+00:13:11.800 --> 00:13:14.440
+Maar in werkelijkheid kunnen groepslidmaatschappen verouderen.
+
+00:13:14.620 --> 00:13:19.840
+Iemand kan naar een andere regio verhuizen, maar zijn of haar naam blijft in de oorspronkelijke teamlijst staan.
+
+00:13:19.840 --> 00:13:26.840
+Zelfs als u als beheerder zeer gedisciplineerd bent met opruimen, houden groepseigenaren zelden alle wijzigingen bij.
+
+00:13:27.200 --> 00:13:28.740
+Vooral tijdens een drukke periode.
+
+00:13:29.040 --> 00:13:33.900
+En vergeet niet dat de synchronisatie tussen Azure AD en Power BI of Fabric niet altijd direct is.
+
+00:13:34.160 --> 00:13:39.680
+Soms loopt het uren achter en dat is meer dan genoeg tijd voor iemand om na een wijziging iets te zien wat hij of zij niet zou moeten zien.
+
+00:13:39.760 --> 00:13:45.880
+Wacht op een nachtelijke batchverwerking en een vertrekkende medewerker kan met veel meer context vertrekken dan je had bedoeld.
+
+00:13:46.580 --> 00:13:49.640
+Schaduwtoewijzingen klinken misschien dramatisch, maar ze zijn bijna routine.
+
+00:13:49.840 --> 00:13:56.700
+In de meeste praktijksituaties kan één gebruiker gemakkelijk in meerdere groepen terechtkomen, elk gekoppeld aan verschillende RLS-rollen.
+
+00:13:56.840 --> 00:14:00.020
+Het ontwerp is bedoeld om flexibel te zijn, wat in theorie goed is.
+
+00:14:00.200 --> 00:14:07.300
+In de praktijk betekent het dat je jong leert met een web van overgeërfde machtigingen en dat het niet altijd duidelijk is wie wat kan zien, tenzij je het handmatig nagaat.
+
+00:14:07.300 --> 00:14:15.140
+Als Sarah van de financiële afdeling bijvoorbeeld naar Auer verhuist en niemand haar uit de financiële groep haalt, heeft ze nu twee petten op een actuele en een verouderde.
+
+00:14:15.140 --> 00:14:24.420
+De meeste mensen merken het niet is totdat Sarah zelf een rapport probeert te openen dat bedoeld is voor de financiële afdeling en er nog steeds toegang toe krijgt, lang nadat ze naar een andere afdeling is overgeplaatst.
+
+00:14:24.580 --> 00:14:32.120
+De beveiligingsteams van Microsoft zelf wijzen fouten in roltoewijzingen aan als de belangrijkste oorzaak van onbedoelde datalekken in analyseomgevingen.
+
+00:14:32.120 --> 00:14:40.580
+De rekensom is simpel, hoe meer groepen en hoe meer gebruikers er van rol wisselen, hoe gemakkelijker het is om over het hoofd te zien wie er daadwerkelijk aan welke rol is gekoppeld.
+
+00:14:40.780 --> 00:14:43.660
+Wat het extra lastig maakt, is het gebrek aan duidelijke feedback.
+
+00:14:43.860 --> 00:14:48.580
+In tegenstelling tot andere beveiligingsfouten krijg je geen foutmelding of een onderbreking in de gebruikersinterface.
+
+00:14:48.740 --> 00:14:54.100
+Er is meestal geen geautomatiseerde waarschuwing of verplichte controle en onjuiste toewijzingen kunnen maandenlang onopgemerkt blijven,
+
+00:14:54.300 --> 00:14:59.400
+om pas aan het licht te komen tijdens een audit of wanneer iemand per ongeluk toegang krijgt tot gegevens waar hij of zij geen toegang toe had mogen hebben.
+
+00:14:59.400 --> 00:15:02.880
+Zelfs de beste bedoelingen worden teniet gedaan door de dagelijkse realiteit.
+
+00:15:03.060 --> 00:15:09.480
+Het controleren van groepslidmaatschappen is een best practice die iedereen aanbeveelt, maar weinig teams volgen deze daadwerkelijk nauwgezet op.
+
+00:15:09.600 --> 00:15:12.320
+Vanuit het perspectief van de beheerder is het een vervelende klus.
+
+00:15:12.560 --> 00:15:18.980
+Handmatige groepsbeoordelingen staan niet bepaald bovenaan de prioriteitenlijst, vooral niet als het analytics team andere problemen moet oplossen.
+
+00:15:19.180 --> 00:15:26.320
+En in de meeste organisaties is er geen proces voor regelmatige audits, omdat ervan wordt uitgegaan dat wijzigingen in HRIT vanzelf worden doorgevoerd.
+
+00:15:26.320 --> 00:15:31.300
+Maar juist die aannames zorgen ervoor dat machtigingen kunnen verschuiven en dat heimelijke toegang kan blijven bestaan.
+
+00:15:31.460 --> 00:15:38.840
+Het resultaat is dat je RLS-model, hoe nauwkeurig het er op papier ook uitziet, na verloop van tijd niet meer synchroon loopt met wie wat daadwerkelijk zou moeten zien.
+
+00:15:39.560 --> 00:15:45.160
+Geautomatiseerde add-tools kunnen helpen bij het opsporen van deze achtergebleven toewijzingen, maar het opzetten ervan vergt werk.
+
+00:15:45.360 --> 00:15:53.440
+Ze moeten verbinding maken met uw Azure AD, wijzigingen signaleren en mogelijk zelfs een workflow activeren wanneer iemands groepslidmaatschap niet meer overeenkomt met zijn of haar bedrijfseenheid.
+
+00:15:53.440 --> 00:15:59.500
+Niet elke Power BI-omgeving beschikt over dit soort controles, vooral niet bij kleinere bedrijven of projecten met strakke deadlines.
+
+00:15:59.840 --> 00:16:10.340
+Daardoor is wildgroei aan groepen onvermijdelijk. Hoe langer uw RLS-systeem in gebruik is, hoe groter de kans dat machtigingen verouderen of, erger nog, doorcijpelen naar verschillende lagen die u niet eens bijhoudt.
+
+00:16:10.540 --> 00:16:14.040
+Wat mensen echt verrast is dat toewijzingen niet zomaar een vinkje zijn.
+
+00:16:14.280 --> 00:16:18.360
+Ze vormen de continu schakel die uw beveiligingslogica verbindt met echte mensen.
+
+00:16:18.360 --> 00:16:21.860
+Laat ze maar los en alle slimme DAC's ter wereld zullen u niet redden.
+
+00:16:22.020 --> 00:16:25.720
+Het onderhouden van toewijzingen is een actief proces, geen eenmalige instelling.
+
+00:16:25.980 --> 00:16:33.200
+Systemen evolueren, gebruikers verplaatsen zich, uw model moet die veranderingen bijhouden, anders bent u afhankelijk van geluk en geluk is geen beveiligingsstrategie.
+
+00:16:33.440 --> 00:16:42.720
+Zelfs met de meest strikte toewijzingsprocessen komt er een grote verrassing op het moment dat je je zorgvuldig opgebouwde oplossing van Power BI Desktop naar de cloud-omgeving van Fabric overzet.
+
+00:16:42.720 --> 00:16:48.580
+Tot nu toe testen de meeste teams in een lokale sandbox op hun eigen machine met alleen testaccounts.
+
+00:16:49.140 --> 00:16:57.700
+Alles lijkt voorspelbaar, maar bij de overstap naar Fabric komen allerlei subtiele verschillen in gebruikerscontext, groepsresolutie en authenticatietijd aan het licht.
+
+00:16:57.960 --> 00:17:05.460
+Dat is waar we de eigenaardigheden tegenkomen die niemand verwacht en waarom toewijzingen die in theorie perfect lijken in productie spectaculair kunnen mislukken.
+
+00:17:05.640 --> 00:17:09.320
+Van desktop naar Fabric, de verborgen verschuivingen in RLS-gedrag.
+
+00:17:09.320 --> 00:17:14.400
+Als je er ooit van overtuigd bent geweest dat je de beveiliging op rijniveau volledig onder controle had in Power BI Desktop,
+
+00:17:14.640 --> 00:17:19.260
+maar vervolgens zag hoe alles instortte op het moment dat je publiceerde naar Fabric, dan ben je hier aan het juiste adres.
+
+00:17:19.500 --> 00:17:27.360
+Dit is het deel waar niemand je over vertelt in RLS-tutorials, het moment waarop al die vlekkeloze rol en filterlogica botst met de realiteit van de cloud.
+
+00:17:27.540 --> 00:17:33.420
+Je hebt elk filter gecontroleerd, elke groep zorgvuldig toegewezen en zelfs de randgevallen netjes toegewezen.
+
+00:17:33.420 --> 00:17:39.180
+Maar zodra je overstapt naar de Fabric-service, verandert er iets dat zelfs doorgewinterde beheerders verrast.
+
+00:17:39.320 --> 00:17:41.660
+Laten we beginnen met wat je in de desktopversie ziet.
+
+00:17:41.840 --> 00:17:43.980
+De preview werkt precies zoals je zou verwachten.
+
+00:17:44.160 --> 00:17:47.380
+Je test gebruikersrollen, je schakelt tussen voorbeeldidentiteiten.
+
+00:17:47.620 --> 00:17:53.100
+Alles klopt, de cijfers komen overeen en even lijkt het alsof je een eenvoudig proces onder de knie hebt.
+
+00:17:53.560 --> 00:17:59.740
+Maar zodra je teamgenoten hetzelfde Power BI bestand in de cloud openen, beginnen de problemen zich op te stapelen.
+
+00:17:59.740 --> 00:18:07.000
+Iemand meldt dat hij of zij cijfers buiten de eigen regio ziet, of erger nog, iemand heeft geen toegang tot een dataset die absoluut noodzakelijk is voor het werk.
+
+00:18:07.200 --> 00:18:14.400
+De frustratie neemt toe wanneer je beseft dat dezelfde RLS-configuratie die op jouw computer perfect werkte, nu meer als een suggestie dan als een regel fungeert.
+
+00:18:14.560 --> 00:18:18.080
+Maar die verwarring komt voort uit verschillen die je pas ziet na publicatie.
+
+00:18:18.420 --> 00:18:24.620
+De cloud-omgeving van Fabric opereert in een andere wereld als het gaat om beveiliging, identiteit en datacontext.
+
+00:18:24.620 --> 00:18:28.360
+Een klassiek probleem raakt de kern van dynamische RLS-patronen.
+
+00:18:28.540 --> 00:18:33.560
+In de desktop-versie haalt een DAX functie zoals Username, je lokale Windows-aanmelding op.
+
+00:18:33.660 --> 00:18:37.180
+Eenvoudig, voorspelbaar en binnen je eigen omgeving geruststellend stabiel.
+
+00:18:37.360 --> 00:18:41.100
+Maar op Fabric gebruikt diezelfde gebruikersnaam oproep je volledige e-mailadres.
+
+00:18:41.300 --> 00:18:44.940
+Het klinkt misschien onbeduidend, maar als je filter- of look-up domeinnamen gebruikt,
+
+00:18:45.160 --> 00:18:49.200
+of als je beveiligingstabel korte formaten in plaats van volledige e-mailadressen gebruikt,
+
+00:18:49.460 --> 00:18:52.360
+stort het hele systeem in elkaar zodra gebruikers de cloud gebruiken.
+
+00:18:52.960 --> 00:18:54.460
+Onvermijdelijk krijg je dan klachten.
+
+00:18:55.140 --> 00:18:56.940
+Dit is wat er in de praktijk gebeurt.
+
+00:18:57.140 --> 00:19:00.200
+Een rapport toont een landspecifieke uitsplitsing op de desktop,
+
+00:19:00.420 --> 00:19:03.280
+maar na publicatie zien gebruikers wereldwijde cijfers.
+
+00:19:03.540 --> 00:19:06.380
+Misschien was je model gebaseerd op de gebruikersprincipaalnaam,
+
+00:19:06.440 --> 00:19:08.540
+omdat al je toegangsleutels e-mailadressen zijn.
+
+00:19:08.800 --> 00:19:13.620
+Dat is goede praktijk voor de cloud, maar als je op de desktop bent begonnen en niet wist dat deze verschuiving plaatsvindt,
+
+00:19:13.680 --> 00:19:17.600
+ben je bezig met het oplossen van een probleem dat lokaal niet bestaat, maar op grote schaal escaleert.
+
+00:19:17.600 --> 00:19:22.580
+De waarheid is dat wat op je laptop werkt eerder een degelijk prototype is dan een afgewerkte oplossing.
+
+00:19:22.580 --> 00:19:27.900
+Lokale logica kan een valkuil bevatten die alleen door cloud-authenticatie wordt geactiveerd.
+
+00:19:28.120 --> 00:19:31.940
+Fabric heeft ook een aantal onzichtbare mechanismen die zonder waarschuwing in werking treden.
+
+00:19:32.100 --> 00:19:35.420
+Gegevens verversingen kunnen bijvoorbeeld worden uitgevoerd met andere referenties
+
+00:19:35.420 --> 00:19:37.880
+of terechtkomen bij een andere modeleigenaar dan verwacht.
+
+00:19:37.880 --> 00:19:41.020
+Als de eigenaar van de gepubliceerde dataset niet in de juiste groep zit,
+
+00:19:41.220 --> 00:19:45.140
+kan het gebeuren dat gebruikers helemaal geen gegevens zien of per ongeluk toegang krijgen tot alles.
+
+00:19:45.320 --> 00:19:48.560
+Het wijzigen van eigenaarschap in de cloud heeft niet alleen gevolgen voor machtigingen.
+
+00:19:48.740 --> 00:19:54.280
+Het kan verbindingen met gateways verbreken of de manier veranderen waarop referenties worden geëvalueerd ten opzichte van bronsystemen.
+
+00:19:54.460 --> 00:19:59.660
+Soms verbergen tenantinstellingen verouderd gedrag of staan er standaardopties op die de instellingen overschrijven
+
+00:19:59.660 --> 00:20:01.840
+die u tijdens desktop-tests hebt geconfigureerd.
+
+00:20:01.840 --> 00:20:09.600
+Voor organisaties met gelaagde tenantbeleidsregels kan iets kleins als het in- of uitschakelen van extern delen de logica van wie wat ziet van de ene op de andere dag veranderen.
+
+00:20:09.740 --> 00:20:12.620
+Wat mensen vaak verbaast, is hoe subtiel deze veranderingen zijn.
+
+00:20:12.860 --> 00:20:15.300
+Ze roepen niet, hé, je RLS werkt nu niet meer.
+
+00:20:15.480 --> 00:20:17.780
+In plaats daarvan werken dingen stilletjes verkeerd.
+
+00:20:17.960 --> 00:20:25.300
+Een kleine wijziging in authenticatie of de manier waarop een modelgroepslidmaatschap bepaalt tijdens het aanmelden, verandert de beveiligingscontext volledig.
+
+00:20:25.520 --> 00:20:30.560
+Microsoft ondersteuningsforums staan vol met beheerders die horrorverhalen delen over rapporten
+
+00:20:30.560 --> 00:20:36.820
+die elke desktop-test doorstonden, maar vervolgens volledig in de soep liepen zodra gebruikers ze in de cloud gingen gebruiken.
+
+00:20:37.040 --> 00:20:43.080
+Je ziet discussies waarin teams na een uitrol in allerijl al hun RLS-rollen proberen te patchen of opnieuw te ontwerpen.
+
+00:20:43.300 --> 00:20:50.500
+Niet omdat de logica slecht was, maar omdat de overstap naar Fabric de identiteitscontext zodanig heeft veranderd dat alles onbetrouwbaar is geworden.
+
+00:20:51.000 --> 00:20:55.600
+Zelfs cloud-upgrades of tenant-brede updates kunnen de beveiliging in nieuwe richtingen sturen.
+
+00:20:55.600 --> 00:21:01.260
+Soms synchroniseren groepstoewijzingen die door Azure AD worden beheerd na een update net iets anders dan voorheen,
+
+00:21:01.460 --> 00:21:08.500
+waardoor schaduwtoewijzingen plotseling meer prioriteit krijgen of bepaalde dynamische zoekopdrachten al waarden opleveren waar je een match verwachtte.
+
+00:21:08.660 --> 00:21:10.060
+Kleine veranderingen tellen op.
+
+00:21:10.240 --> 00:21:13.940
+Een kleine aanpassing in één onderdeel van de stack heeft gevolgen voor het hele beveiligingsnetwerk
+
+00:21:13.940 --> 00:21:17.560
+en je meest betrouwbare patroon van het vorige kwartaal is vandaag de dag niet meer voldoende.
+
+00:21:17.800 --> 00:21:23.560
+Daarom zijn teams in de praktijk RLS-testen gaan behandelen als een productietaak en niet alleen als een lokale controle.
+
+00:21:23.560 --> 00:21:26.800
+Het is niet genoeg om de rollen op je eigen laptop te controleren.
+
+00:21:27.100 --> 00:21:34.460
+Je moet het model daadwerkelijk in Fabric implementeren, echte gebruikersaccounts importeren en de volledige permissiestroom doorlopen.
+
+00:21:35.760 --> 00:21:43.420
+Pas dan ontdek je subtiele authenticatiefouten of discrepanties tussen groepstoewijzingen en wat Power BI als actueel beschouwt in Azure AD.
+
+00:21:43.860 --> 00:21:53.220
+Sommige organisaties voeren zelfs periodieke RLS-audits uit in de cloud om te controleren op afwijkingen tussen de logica van het toewijzingsmodel en wat Fabric daadwerkelijk afdwingt.
+
+00:21:53.220 --> 00:21:54.580
+Er is geen kortere weg.
+
+00:21:54.960 --> 00:22:01.140
+Als je niet test met echte mensen in de omgeving waar je rapport daadwerkelijk draait, is je RLS in feite gebaseerd op hoop.
+
+00:22:02.100 --> 00:22:08.220
+De cloud is de uiteindelijke scheidsrechter en de enige manier om te zien hoe filters en rollen op grote schaal met identiteiten interageren,
+
+00:22:08.880 --> 00:22:12.040
+is door je RLS vanaf het begin te ontwerpen met productie in gedachten.
+
+00:22:12.040 --> 00:22:24.560
+Als je deze tests uitstelt, werk je in het duister en de gevolgen blootgestolde gegevens, gefrustreerde teams of zorgvuldig beveiligingswerk dat er niet wordt gedaan door een verborgen schakelaar kost en uiteindelijk veel meer om te herstellen zodra het rapport in gebruik is.
+
+00:22:25.060 --> 00:22:30.560
+In deze context is de grote vraag niet alleen of je je RLS moet bijwerken telkens wanneer er iets verandert.
+
+00:22:30.740 --> 00:22:37.300
+Het gaat erom of je een plan hebt dat werkt naarmate je Fabric configuratie complexer wordt, je data groeit en de bedrijfsbehoeften veranderen.

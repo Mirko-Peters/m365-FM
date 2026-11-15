@@ -26,6 +26,11 @@
     "manage_event_duplicates"
    ]
   },
+  "/api/admin/events/review": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
   "/api/admin/events/claims": {
    "tools": [
     "manage_event_duplicates"
@@ -514,6 +519,17 @@
    "tools": [
     "list_events",
     "get_event"
+   ]
+  },
+  "/api/events/entity": {
+   "tools": [
+    "set_event_entity",
+    "search_entities"
+   ]
+  },
+  "/api/admin/events/entity": {
+   "tools": [
+    "manage_event_entity"
    ]
   },
   "/api/events/for-sponsors": {
@@ -1353,6 +1369,12 @@
   },
   "/api/admin/byod/block": {
    "skip": "Admin-Funktionen (Blog auf der eigenen Domain): Sperren und Freigeben einer Domain nur im Admin-Bereich der Community, nicht per KI-Token"
+  },
+  "/api/entity/claim/evidence": {
+   "skip": "Adress-Nachweis zur Übernahme (Geschäftsadresse, privat): nur angemeldet im Browser, bewusst nicht per KI-Token; die Redaktion entscheidet"
+  },
+  "/api/profile/business": {
+   "skip": "Private Geschäftsadresse je Firma (nie öffentlich): nur angemeldet im Browser, bewusst nicht per KI-Token"
   }
  }
 }

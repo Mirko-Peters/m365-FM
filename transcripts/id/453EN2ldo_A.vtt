@@ -1,0 +1,931 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:07.040
+Siap untuk 10 hari bersama Microsoft 365, Copilot, AI Azure, dan orang-orang yang membentuk masa depan pekerjaan.
+
+00:00:07.920 --> 00:00:12.000
+Januari ini, M365 John hadir kembali dan kami akan mengadakannya lebih besar.
+
+00:00:12.780 --> 00:00:18.240
+Bergabunglah dengan kami untuk sesi langsung demo dunia nyata dan pengetahuan praktis dari MVP dan pakar industri di seluruh dunia.
+
+00:00:18.820 --> 00:00:21.060
+Tidak ada slide umum, tidak ada kata kunci yang tak ada habisnya.
+
+00:00:22.080 --> 00:00:28.500
+Kami menangani tantangan nyata, Copilot Studio, agen AI, Fabric, Keamanan, Tata Kelola, dan Otomatisasi.
+
+00:00:28.500 --> 00:00:34.360
+Baik Anda seorang profesional TI, pengembang, atau pemimpin bisnis, ada sesi yang dirancang untuk Anda.
+
+00:00:35.380 --> 00:00:40.000
+Dengan 10 hari penuh, Anda dapat menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.860 --> 00:00:44.280
+Tonton langsung dan bawa wawasan praktis kembali ke organisasi Anda.
+
+00:00:45.200 --> 00:00:48.880
+Januari 2027, 10 hari, satu komunitas Microsoft.
+
+00:00:49.440 --> 00:00:50.560
+Pendaftaran sudah dibuka sekarang.
+
+00:00:51.840 --> 00:00:55.320
+Kunjungi M365.net dan amankan tempat Anda hari ini.
+
+00:00:55.940 --> 00:00:58.440
+Itulah M365 John Net.
+
+00:00:58.500 --> 00:01:04.800
+Bergabunglah sekarang di M365 John.net dan kami akan bertemu Anda secara langsung di bulan Januari.
+
+00:01:05.300 --> 00:01:07.520
+Lama datang di episode Microsoft Knowledge Nuggets lainnya.
+
+00:01:07.940 --> 00:01:09.160
+Saya pembawa acara Anda melikupi itu.
+
+00:01:09.600 --> 00:01:11.080
+Topik hari ini, Azure Traffic Manager.
+
+00:01:11.960 --> 00:01:15.000
+Bayangkan Anda telah membuat aplikasi web yang ingin digunakan oleh orang-orang di seluruh.
+
+00:01:15.340 --> 00:01:19.240
+Pengguna di Tokyo, London, São Paulo, mereka semua mencoba mengakses aplikasi Anda pada saat yang bersama.
+
+00:01:19.900 --> 00:01:24.320
+Namun soalnya, setiap pengguna tersebut mengakses server di satu wilayah, misalnya Virginia.
+
+00:01:25.060 --> 00:01:27.920
+Pengguna di Tokyo menunggu lebih dari 200 mili detik per permintaan.
+
+00:01:28.220 --> 00:01:30.500
+Dan pengguna di São Paulo mendapatkan pengalaman yang lebih buruk.
+
+00:01:30.960 --> 00:01:35.520
+Dan jika pusat data Virginia tersebut mati, terjadi pemadaman listrik jaringan terputus, sesuatu yang tidak terduga.
+
+00:01:35.640 --> 00:01:36.720
+Seluruh aplikasi Anda akan offline.
+
+00:01:37.360 --> 00:01:40.240
+Setiap pengguna di manapun itu adalah satu titik kegagalan dan itu adalah masalah besar.
+
+00:01:40.580 --> 00:01:44.640
+Jadi bagaimana jika Anda dapat mengarahkan setiap pengguna ke server terdekat tercepat dan tersehat mereka secara otomatis?
+
+00:01:45.040 --> 00:01:47.900
+Bagaimana jika pengguna di Tokyo mendapatkan layanan dari pusat data di Jepang?
+
+00:01:48.500 --> 00:01:53.960
+Pengguna di London dari Irlandia dan jika satu wilayah mati lalu lintas akan berpindah ke tempat lain tanpa Anda melakukan apapun?
+
+00:01:54.460 --> 00:01:59.480
+Itulah yang dilakukan Azure Traffic Manager dan ia melakukan di level DNS, yang berarti lebih sederhana dari yang Anda kira.
+
+00:02:00.140 --> 00:02:06.160
+Di akhir episode ini, Anda akan memahami apa sebenarnya Traffic Manager, bagaimana enam metode perhutiannya bekerja, dan kapan Anda akan menggunakan masing-masing metode.
+
+00:02:06.720 --> 00:02:07.900
+Ambil kopi Anda dan mari kita bah.
+
+00:02:08.620 --> 00:02:09.920
+Mengapa perhutian lalu lintas global?
+
+00:02:10.180 --> 00:02:10.960
+Mari kita uraikan.
+
+00:02:10.960 --> 00:02:17.120
+Kebanyakan orang mendengar penyeimbangan beban dan berpikir tentang satu server yang mendistribusikan lalu lintas ke beberapa mesin di dalam satu pusat data.
+
+00:02:17.520 --> 00:02:20.100
+Itulah Azure Load Balancer dan berfungsi dengan baik untuk satu wilayah.
+
+00:02:20.420 --> 00:02:22.680
+Namun, apa yang terjadi ketika pengguna Anda tersebut di berbagai benung?
+
+00:02:23.300 --> 00:02:27.160
+Pengguna di Jepang yang mengakses server di Virginia tidak akan pernah mendapatkan respons yang cepat.
+
+00:02:28.100 --> 00:02:30.040
+Fisika internet tidak akan membiarkan hal itu terjadi.
+
+00:02:30.740 --> 00:02:34.500
+Cahaya bergerak dengan kecepatan tetap dan setiap lompatan jaringan menambah penundaan.
+
+00:02:35.100 --> 00:02:37.180
+Anda tidak dapat memperbaikinya dengan kode yang lebih baik atau lainnya.
+
+00:02:37.680 --> 00:02:39.140
+Begini masalahnya, aplikasi yang lalu lupa guna.
+
+00:02:39.140 --> 00:02:46.300
+Penundaan satu detik memangkas konversi sebesar 7% dan pemadaman regional yang tidak hanya memperlambat segalanya tetapi juga membuat seluruh aplikasi Anda offline.
+
+00:02:46.800 --> 00:02:50.420
+Pengguna Anda tidak dapat menghubungi Anda pendapatan Anda terhenti dan reputasi Anda terdampau.
+
+00:02:50.800 --> 00:02:56.380
+20 tahun yang lalu, pendekatan lama adalah membangun server di setiap wilayah dan mengarahkan pengguna secara manual ke server yang tepat.
+
+00:02:56.860 --> 00:03:02.780
+Anda akan memperbarui catatan DNS secara manual mengelola spreadsheet tentang pengguna mana yang pergi kemana dan berdoa agar Anda tidak melakukan keselama film.
+
+00:03:02.780 --> 00:03:07.140
+Pendekatan itu tidak praktis dan rapuh karena tidak dapat disekalakan dan rusak saat ditekan.
+
+00:03:07.940 --> 00:03:13.280
+Pendekatan baru adalah satu direktur lalu lintas berbasis DNS yang memilih titik akhir terbaik per pengguna perpermintaan.
+
+00:03:13.720 --> 00:03:15.840
+Pendekatan ini tidak memerlukan pembaruan manual atau spreadsheet.
+
+00:03:15.840 --> 00:03:21.240
+Sebaliknya, pendekatan ini melihat di mana pengguna berada, memeriksa titik akhirnya yang sehat dan mengembalikan yang terbaik.
+
+00:03:21.760 --> 00:03:29.740
+Anggap saja seperti sistem kontrol lalu lintas udara global di mana setiap pusat data adalah bandara dan traffic manager adalah menara kontrol yang mengarahkan setiap pengguna ke server terdekat yang tersedia.
+
+00:03:30.300 --> 00:03:31.580
+Disitulah traffic manager hadirnya.
+
+00:03:31.840 --> 00:03:34.700
+Jadi mari kita bahas tentang apa sebenarnya traffic manager itu?
+
+00:03:35.380 --> 00:03:36.360
+Berikut definisi yang paling sederhana.
+
+00:03:36.840 --> 00:03:40.140
+Traffic manager adalah penyeimbang beban berbasis DNS yang berjalan dalam skala global.
+
+00:03:40.560 --> 00:03:44.440
+Bayangkan seperti meja resepsionis pintar di pintu masuk gedung perkantoran di seluruh dunia.
+
+00:03:44.440 --> 00:03:48.520
+Saat Anda masuk, resepsionis tidak menangani panggilan telepon atau memproses dokumen Anda.
+
+00:03:49.060 --> 00:03:49.880
+Mereka hanya mengarahkan Anda.
+
+00:03:50.240 --> 00:03:51.360
+Hanya dia dilakukan traffic manager.
+
+00:03:52.020 --> 00:03:53.320
+Ia mengarahkan pengguna ke serveran tepat.
+
+00:03:53.900 --> 00:03:54.840
+Inilah perbedaan utamanya.
+
+00:03:55.320 --> 00:03:57.800
+Traffic manager tidak pernah melihat lalu lintas Anda yang sebenarnya.
+
+00:03:58.460 --> 00:04:01.400
+Ia tidak meminta proxy, memeriksa paket, atau menyimpan konten dalamnya.
+
+00:04:01.740 --> 00:04:05.420
+Saat pengguna mengetikan nama domain Anda ke perambahan mereka, query DNS akan keluar.
+
+00:04:05.420 --> 00:04:12.680
+Traffic manager menjawab query tersebut dengan alamat IP titik akhir terbaik yang terdekat, yang paling sehat, yang telah Anda konfigurasikan sebagai prioritas.
+
+00:04:13.520 --> 00:04:17.460
+Kemudian pengguna terhubung langsung ke titik akhir tersebut, dan traffic manager benar-benar menyingkir.
+
+00:04:17.980 --> 00:04:20.540
+Artinya, ia menambahkan latensi nol ke jalur lalu lintas Anda.
+
+00:04:20.700 --> 00:04:23.400
+Karena ia tidak berada di tengah aliran data, ia tidak dapat memperlambat segalanya.
+
+00:04:24.020 --> 00:04:29.680
+Ia juga berfungsi dengan titik akhir yang terhubung ke internet, layan Azure, server di cloudline, bahkan pusat data lokal Anda sendiri.
+
+00:04:30.660 --> 00:04:35.100
+Selama titik akhir memiliki alamat IP publik atau nama domain traffic manager, dapat merutekannya.
+
+00:04:35.660 --> 00:04:38.580
+Dan karena ini adalah layanan global, layanan tangguh terhadap kegagalan regional.
+
+00:04:38.580 --> 00:04:44.680
+Jika seluruh wilayah Azure mati, traffic manager terus berjalan dan merutekan pengguna ke titik akhir yang sehat di tempat lain.
+
+00:04:45.500 --> 00:04:47.600
+Jadi bagaimana traffic manager mengetahui titik akhir mana yang sehat?
+
+00:04:48.060 --> 00:04:54.220
+Secara default, traffic manager membeksanya setiap 30 detik mengirimkan permintaan HTTP atau HTTPS ke jalur tertentu di setiap titik akhir.
+
+00:04:54.700 --> 00:04:58.400
+Jika titik akhir merespons dengan kode status level 200 dalam batas waktu, berarti titik akhir tersebut sehat.
+
+00:04:59.000 --> 00:05:04.240
+Jika gagal merespons beberapa kali berturut-turut, traffic manager menandainya sebagai rusak dan berhenti mengirim pengguna ke sana.
+
+00:05:04.240 --> 00:05:08.520
+Nah, saat titik akhir pulih, traffic manager juga mendeteksinya dan mengembalikannya ke rotasi.
+
+00:05:09.580 --> 00:05:12.040
+Pemantauan kesehatan inilah yang memungkinkan failover otomatis.
+
+00:05:12.700 --> 00:05:16.620
+Sekarang, mari kita lihat berbagai cara traffic manager memutuskan titik akhir mana yang akan dikirimi pengguna.
+
+00:05:17.720 --> 00:05:18.860
+Di sila metode perutian berperan.
+
+00:05:20.700 --> 00:05:23.040
+Perutian prioritas, pemulihan bencana menjadi sederhana.
+
+00:05:23.620 --> 00:05:25.460
+Perutian prioritas adalah metode paling sederhami.
+
+00:05:25.900 --> 00:05:28.220
+Anda memberi peringkat titik akhir dari satu hingga sebanyak Anda milik.
+
+00:05:28.220 --> 00:05:28.780
+Bisa saja.
+
+00:05:29.220 --> 00:05:30.420
+Semua lalu lintas masuk ke prioritas satu.
+
+00:05:30.420 --> 00:05:34.540
+Jika titik akhir itu gagal, lalu lintas beralih ke prioritas dua, lalu tiga, dan seterusnya.
+
+00:05:35.100 --> 00:05:36.120
+Ini adalah pengaturan aktifasi.
+
+00:05:36.820 --> 00:05:38.200
+Satu titik akhir menangani semuanya.
+
+00:05:38.360 --> 00:05:39.100
+Yang lain, buku.
+
+00:05:40.000 --> 00:05:41.000
+Berikut contoh dunia nyata.
+
+00:05:41.660 --> 00:05:45.440
+Katakanlah server utama Anda berjalan di AIS Timur dan Anda memiliki jadangan di Eropa Barat.
+
+00:05:45.980 --> 00:05:49.160
+Anda menetapkan AIS Timur sebagai prioritas satu, Eropa Barat sebagai prioritas lalu.
+
+00:05:49.320 --> 00:05:51.400
+Operasi normal setiap pengguna masuk ke AIS Timur.
+
+00:05:52.100 --> 00:05:57.320
+Namun ketika AIS Timur mengalami pemadaman, mungkin pemadaman listrik, mungkin masalah jaringan, traffic manager mendeteksinya dalam hitungan detik.
+
+00:05:57.320 --> 00:06:01.520
+Aplikasi berhenti mengirim pengguna baru ke AIS Timur dan mulai mengalihkan mereka ke Eropa Barat.
+
+00:06:02.140 --> 00:06:05.180
+Aplikasi Anda tetap online, pengguna Anda bahkan mungkin tidak menyadari apapun yang terjadi.
+
+00:06:05.540 --> 00:06:06.580
+Ada detail penting di sini.
+
+00:06:07.080 --> 00:06:08.760
+Pengguna yang sudah ada tetap mempertahankan kerasi mereka.
+
+00:06:09.200 --> 00:06:11.440
+Perhutian berbasis DNS hanya mengaruhi pencari DNS baru.
+
+00:06:11.700 --> 00:06:18.380
+Jadi, jika seorang telah memuat aplikasi Anda dan memiliki sesi aktif, sesi tersebut akan terus berlanjut ke titik akhir asli hingga sesi berakhir asli hingga sesi berakhir atau test DNS.
+
+00:06:18.720 --> 00:06:20.640
+Itulah sebabnya Anda ingin menetel TTL DNS Anda rendah.
+
+00:06:20.980 --> 00:06:22.480
+30 hingga 60 detik adalah waktu yang tepat.
+
+00:06:22.480 --> 00:06:26.400
+TTL yang rendah berarti resolver DNS memeriksa pembaruan lebih sering.
+
+00:06:26.760 --> 00:06:29.860
+Jadi, saat traffic manager mengganti titik akhir, perubahan tersebut menyebar lebih cepat.
+
+00:06:30.160 --> 00:06:32.700
+Satu kesalahan umum yang dilakukan orang adalah lupa menguji failover.
+
+00:06:33.180 --> 00:06:34.440
+Anda menetapkan perutian prioritas.
+
+00:06:34.560 --> 00:06:36.900
+Anda menyimparkan wilayah cadangan lalu Anda berasumsi itu berfungsi.
+
+00:06:37.300 --> 00:06:38.120
+Kemudian begini masalahnya.
+
+00:06:38.400 --> 00:06:40.560
+Wilayah cadangan Anda perlu menangani beban penuh.
+
+00:06:41.180 --> 00:06:43.620
+Jika wilayah utama Anda menangani 1 juta pengguna per hari,
+
+00:06:43.760 --> 00:06:46.140
+dan cadangan Anda hanya menangani 100 ribu selama operasi normal,
+
+00:06:46.140 --> 00:06:49.780
+cadangan tersebut mungkin akan gagal saat semua, lalu lintas itu tiba-tiba beralih ke sana.
+
+00:06:49.780 --> 00:06:53.800
+Uji failover Anda, simulasikan pemadaman dan lihat apa yang terjadi.
+
+00:06:54.160 --> 00:06:55.760
+Itulah satu-satunya cara untuk mengetahui apakah itu berfungsi.
+
+00:06:55.920 --> 00:06:58.900
+Prioritas adalah tentang menjaga aplikasi Anda tetap aktif selama kegiatan.
+
+00:06:58.980 --> 00:07:00.500
+Namun bagaimana dengan membuatnya cepat untuk semua?
+
+00:07:01.300 --> 00:07:03.120
+Perhutian kinerja, cepat di data segalanya.
+
+00:07:03.560 --> 00:07:05.780
+Perhutian kinerja bekerja secara berbeda dari perhutian prioritas.
+
+00:07:06.220 --> 00:07:08.180
+Daripada mengatakan selalu gunakan titik akhir ini terlebih dahulu.
+
+00:07:08.480 --> 00:07:11.740
+Yang tertulis adalah kirim setiap pengguna ke titik akhir manapun yang memberikan kondisi tersebut.
+
+00:07:12.000 --> 00:07:14.180
+Jadi pengguna di Tokyo akan diarahkan ke server di Jepang.
+
+00:07:14.840 --> 00:07:16.280
+Pengguna di London akan diarahkan ke Erani.
+
+00:07:16.280 --> 00:07:18.300
+Pengguna di Sampau Lo akan diarahkan ke Brazil.
+
+00:07:18.860 --> 00:07:21.500
+Setiap pengguna mendapatkan pengalaman secepat mungkin dimanapun mereka berada.
+
+00:07:22.020 --> 00:07:24.700
+Bagaimana traffic manager mengetahui titik akhir mana yang tercepat?
+
+00:07:25.180 --> 00:07:26.980
+Ia menggunakan sesuatu yang disebut tabel latensi internet.
+
+00:07:27.480 --> 00:07:29.380
+Anggap saja itu sebagai peta yang terus diperbarui Azure.
+
+00:07:29.820 --> 00:07:33.980
+Ia melacak latensi jaringan aktual antara berbagai belahan dunia dan setiap wilayah Azure.
+
+00:07:34.900 --> 00:07:40.080
+Saat query DNS masuk, traffic manager memeriksa lokasi resolver DNS pengguna mencari tabel latensi
+
+00:07:40.080 --> 00:07:44.040
+dan mengembalikan titik akhir yang memberi pengguna tersebut latensi terendah.
+
+00:07:44.040 --> 00:07:47.800
+Ini sesuatu yang mungkin mengejutkan, ini tidak dihasarkan pada jarak fisik.
+
+00:07:48.240 --> 00:07:51.500
+Pengguna di India mungkin benar-benar mendapatkan latensi yang lebih rendah ke Asia Tenggara.
+
+00:07:51.780 --> 00:07:55.320
+Tergantung pada ke Asia Tenggara, tergantung pada bagaimana kabel bawa laut dan pertukaran internet
+
+00:07:55.320 --> 00:07:56.600
+merotekan lalu lintas pada saat itu.
+
+00:07:57.180 --> 00:08:00.340
+Tabel latensi menangkap kondisi jaringan yang sebenarnya bukan hanya jarak garis lurus.
+
+00:08:01.360 --> 00:08:04.340
+Jadi titik akhir terdekat tidak selalu yang terdekat secara geografis.
+
+00:08:04.960 --> 00:08:09.340
+Perhutian kinerja sangat cocok untuk aplikasi global yang pengalaman penggunanya bergantung pada kecepatan.
+
+00:08:09.340 --> 00:08:15.580
+Situs e-commerce, streaming video, alat kolaborasi waktu nyata, apapun yang responja lambat, berarti pengguna akan hilang.
+
+00:08:15.620 --> 00:08:16.240
+Namun ada kendalai.
+
+00:08:16.580 --> 00:08:19.360
+Perhutian ini tidak mempertimbangkan seberapa banyak beban yang sudah ditangani setiap titik akhir.
+
+00:08:19.860 --> 00:08:24.500
+Jika wilayah AIS Timur Anda berjalan pada kapasitas 95% dan wilayah Eropa Barat Anda pada 20%,
+
+00:08:24.500 --> 00:08:28.200
+perhutian kinerja mungkin masih akan mengirim pengguna baru ke AIS Timur karena itu adalah latensi terendah bagi mereka.
+
+00:08:28.620 --> 00:08:30.000
+Perhutian ini tidak mengetahui beban server Anda.
+
+00:08:30.000 --> 00:08:36.200
+Jadi Anda biasanya menggabungkan perhutian kinerja dengan penyeimbang beban lain di dalam setiap wilayah Azure Load Balancer atau Application Gateway
+
+00:08:36.200 --> 00:08:40.920
+untuk menangani distribusi lalu lintas aktual di seluruh server Anda setelah pengguna tiba di wilayah yang tepat.
+
+00:08:41.820 --> 00:08:43.520
+Perhutian kinerja mengoptimalkan kecepatan.
+
+00:08:43.960 --> 00:08:47.280
+Namun bagaimana jika Anda perlu mengontrol seberapa banyak lalu lintas yang diterima setiap titik akhir?
+
+00:08:48.140 --> 00:08:50.820
+Perhutian tertimbang dan geografis, kontrol, dan kepatuhan.
+
+00:08:51.460 --> 00:08:52.620
+Jadi berkaitan dengan kecepatan.
+
+00:08:53.160 --> 00:08:56.320
+Namun bagaimana jika Anda ingin mengontrol seberapa banyak lalu lintas yang didapatkan setiap titik akhir?
+
+00:08:56.320 --> 00:08:59.240
+Atau mengarahkan pengguna berdasarkan lokasi mereka di dunia?
+
+00:08:59.640 --> 00:09:01.560
+Disinilah perhutian geografis dan tertimbang berperang.
+
+00:09:01.900 --> 00:09:03.100
+Mari kita mulai dengan perhutian tertimbang.
+
+00:09:03.560 --> 00:09:04.920
+Yang ini persis seperti namanya.
+
+00:09:05.820 --> 00:09:08.960
+Anda menetapkan bobot untuk setiap titik akhir angka antara 1 dan 1000.
+
+00:09:09.640 --> 00:09:12.480
+Traffic manager kemudian mendistribusikan lalu lintas secara proporsional bersebut.
+
+00:09:12.960 --> 00:09:18.180
+Jadi jika Anda memiliki titik akhir A dengan bobot 80 dan titik akhir B dengan bobot 20,
+
+00:09:18.180 --> 00:09:21.480
+kira-kira 80 persen pengguna Anda diarahkan ke A dan 20 persen ke B.
+
+00:09:21.620 --> 00:09:22.340
+Matematika sederhana.
+
+00:09:22.720 --> 00:09:23.660
+Karena mengapa Anda ingin melakukan itu?
+
+00:09:24.040 --> 00:09:25.180
+Pikirkan tentang release scanary.
+
+00:09:25.180 --> 00:09:30.040
+Anda telah membuat versi baru aplikasi Anda dan Anda ingin mengujinya dengan pengguna sungguhan sebelum meluncurkannya ke semua orang.
+
+00:09:30.380 --> 00:09:33.780
+Anda menyiapkan titik akhir kedua yang menjalankan versi baru memberinya bobot 5
+
+00:09:33.780 --> 00:09:36.600
+dan memberi titik akhir produksi Anda saat ini bobot 95.
+
+00:09:36.980 --> 00:09:38.680
+5 persen pengguna Anda menggunakan versi baru.
+
+00:09:39.140 --> 00:09:41.040
+Anda mengawasi kesalahan memantau kinerja.
+
+00:09:41.280 --> 00:09:44.660
+Dan jika semuanya tampak baik, Anda perlahan-lahan meningkatkan bobot pada versi baru.
+
+00:09:44.660 --> 00:09:47.580
+Mungkin 20 persen minggu depan, lalu 50, lalu 100.
+
+00:09:47.740 --> 00:09:50.340
+Jika terjadi kesalahan, Anda menurunkan bobot kembali ke 0 dan masalah tas.
+
+00:09:50.420 --> 00:09:51.700
+Tidak ada penerapan besar-besaran.
+
+00:09:51.700 --> 00:09:54.220
+Tidak perlu mengembalikan release yang rusak di depan semua pengguna Anda.
+
+00:09:54.500 --> 00:09:56.160
+Ide yang sama berlaku untuk pengujian api.
+
+00:09:56.460 --> 00:09:58.500
+Anda ingin melihat apakah fitur baru meningkatkan keterlibatan.
+
+00:09:58.820 --> 00:10:02.300
+Kirim setengah pengguna Anda ke versi A dan setengahnya lagi ke versi B menggunakan bobot yang sama.
+
+00:10:02.560 --> 00:10:03.100
+Bandingkan hasilnya.
+
+00:10:03.500 --> 00:10:05.520
+Anda memigrasikan penggunaan dari satu wilayah ke wilayah lain.
+
+00:10:06.160 --> 00:10:09.620
+Secara bertahap, alihkan bobot dari wilayah lama ke wilayah baru selama beberapa minggu.
+
+00:10:10.320 --> 00:10:11.600
+Namun, ada hal penting yang perlu dipaham.
+
+00:10:12.060 --> 00:10:13.340
+Perutuan tertimbang bukan Aaron Robin.
+
+00:10:13.700 --> 00:10:15.560
+Perutuan tidak bergantian antara titik akhir satu waktu.
+
+00:10:15.700 --> 00:10:17.280
+Ini adalah distribusi statistik.
+
+00:10:17.280 --> 00:10:20.680
+Selama sejumlah besar permintaan, lalu lintas terbagi menurut bobot Anda.
+
+00:10:21.180 --> 00:10:23.600
+Namun, satu pengguna yang membuat beberapa permintaan
+
+00:10:23.600 --> 00:10:25.320
+mungkin terus mencapai titik akhir yang sama
+
+00:10:25.320 --> 00:10:27.560
+karena resolver DNS mereka menyimpan hasilnya dalam charge.
+
+00:10:28.000 --> 00:10:29.480
+Jadi jangan menganggapnya sebagai penyakit sempurna.
+
+00:10:29.900 --> 00:10:33.120
+Anggap saja ini sebagai pengendalian proporsi keseluruhan lalu lintas dari waktu ke waktu.
+
+00:10:33.460 --> 00:10:34.820
+Sekarang mari kita bahas perutuan geografis.
+
+00:10:35.120 --> 00:10:37.840
+Yang ini merutekan pengguna berdasarkan asal query DNS mereka.
+
+00:10:38.780 --> 00:10:40.280
+Negara benua atau wilayah tertentu.
+
+00:10:40.800 --> 00:10:43.540
+Jadi pengguna di Jerman akan diarahkan ke titik akhir Anda di Frankfurt.
+
+00:10:44.180 --> 00:10:46.880
+Pengguna di Brazil akan diarahkan ke titik akhir Anda di Sao Paulo.
+
+00:10:47.280 --> 00:10:48.400
+Tingkat granularitas seperti itu.
+
+00:10:48.740 --> 00:10:49.640
+Mengapa Anda menggunakan ini?
+
+00:10:49.900 --> 00:10:50.980
+Kedaulatan data adalah setelah penting.
+
+00:10:51.340 --> 00:10:54.280
+Peraturan Uni Eropa mungkin mengharuskan data pengguna tetap berada di Eropa.
+
+00:10:54.640 --> 00:10:56.860
+Perutuan geografis memungkinkan Anda menerapkannya di tingkat DNS.
+
+00:10:57.340 --> 00:10:59.260
+Pengguna dari Perancis menyelesaikan domain Anda
+
+00:10:59.260 --> 00:11:02.360
+dan pengelola lalu lintas mengembalikan alamat IP titik akhir Eropa Anda.
+
+00:11:02.820 --> 00:11:04.100
+Data mereka tidak pernah meninggalkan benua.
+
+00:11:04.420 --> 00:11:05.700
+Hal yang sama berlaku untuk konten yang dilokok.
+
+00:11:05.700 --> 00:11:08.940
+Jika Anda ingin pengguna di Jepang melihat situs Anda dalam versi bahasa Jepang,
+
+00:11:09.420 --> 00:11:12.320
+perutuan geografis mengarahkan mereka ke titik akhir yang menyajikan konten tersebut.
+
+00:11:12.320 --> 00:11:13.980
+Ada satu aturan utama yang perlu Anda ketahui.
+
+00:11:14.220 --> 00:11:16.720
+Setiap wilayah geografis harus dipetakan ke satu titik akhir.
+
+00:11:17.260 --> 00:11:19.400
+Anda tidak dapat membagi satu negara menjadi dua titik akhir.
+
+00:11:19.840 --> 00:11:21.500
+Jadi jika Anda memiliki pengguna di Jerman
+
+00:11:21.500 --> 00:11:24.240
+dan ingin 50% pengguna pergi ke Frankfurt dan 50% ke Berlin,
+
+00:11:24.420 --> 00:11:26.380
+Anda tidak dapat melakukannya hanya dengan perutuan geografis.
+
+00:11:26.540 --> 00:11:27.900
+Anda perlu menggunakan profil bersarang.
+
+00:11:28.580 --> 00:11:30.100
+Profil bersarang persis seperti namanya.
+
+00:11:30.320 --> 00:11:32.600
+Anda menempatkan satu profil pengelola lintas di dalam profil.
+
+00:11:33.100 --> 00:11:35.280
+Jadi di tingkat teratas, Anda menggunakan perutuan geografis
+
+00:11:35.280 --> 00:11:36.860
+untuk mengirim pengguna Eropa ke satu profil,
+
+00:11:37.240 --> 00:11:38.980
+pengguna Amerika Utara ke profil lainnya, dan seterusnya.
+
+00:11:38.980 --> 00:11:40.760
+Kemudian di dalam setiap profil tersebut,
+
+00:11:40.880 --> 00:11:43.080
+Anda menggunakan perutuan tertimbang untuk membagi lalu lintas
+
+00:11:43.080 --> 00:11:44.400
+di antara titik akhir dalam wilayah tersebut.
+
+00:11:44.520 --> 00:11:47.580
+Geografis di bagian atas untuk kepatuhan tertimbang di bagian dalam untuk kontrol.
+
+00:11:47.860 --> 00:11:48.680
+Ini adalah kombinasi yang hebat.
+
+00:11:49.260 --> 00:11:51.340
+Dua metode perutuan lainnya menangani skenario yang lebih spesifik.
+
+00:11:51.800 --> 00:11:52.400
+Kita lihat keduanya.
+
+00:11:53.320 --> 00:11:55.260
+Perutuan multinilai dan subnet untuk kontrol terperinci.
+
+00:11:56.140 --> 00:11:58.220
+Perutuan multinilai adalah trik yang sederhana tetapi belum.
+
+00:11:58.580 --> 00:11:59.520
+Alih-alih mengembalikan.
+
+00:11:59.780 --> 00:12:01.700
+Hanya satu titik akhir dalam respons DNS,
+
+00:12:01.880 --> 00:12:02.800
+pengelola lalu, lintas,
+
+00:12:02.900 --> 00:12:05.300
+mengirimkan kembali beberapa alamat IP yang sehat sekaligus.
+
+00:12:05.300 --> 00:12:08.060
+Browser atau aplikasi Anda memilih yang pertama dari daftar
+
+00:12:08.060 --> 00:12:11.740
+yang menyebarkan beban tanpa pengelola lintas perlu memutuskan-untuskan untuk setiap nilai.
+
+00:12:11.780 --> 00:12:12.440
+Namun ada kenalanya.
+
+00:12:12.800 --> 00:12:15.860
+Multinilai hanya berfungsi dengan titik akhir IPv4 dan IPv6.
+
+00:12:16.160 --> 00:12:19.100
+Jadi Anda tidak dapat menggunakannya dengan layanan aplikasi,
+
+00:12:19.400 --> 00:12:19.900
+layanan cloud,
+
+00:12:20.160 --> 00:12:21.840
+atau titik akhir apapun yang menggunakan alamat IP.
+
+00:12:22.600 --> 00:12:24.100
+Ini murni untuk titik akhir berbasis IP.
+
+00:12:24.640 --> 00:12:26.980
+Namun, jika Anda memilikinya, sistem akan lebih tangguh.
+
+00:12:27.100 --> 00:12:28.160
+Karena jika satu IP gagal,
+
+00:12:28.560 --> 00:12:31.420
+klien dapat mencoba yang lain dari daftar tanpa melakukan pencarian DS baru.
+
+00:12:31.420 --> 00:12:33.860
+Ini berarti failover yang lebih cepat di sisi klien.
+
+00:12:33.860 --> 00:12:36.900
+Protean subnet bahkan lebih khusus tetapi hebat saat Anda membutuhkan.
+
+00:12:37.360 --> 00:12:40.700
+Ini merutakan pengguna berdasarkan subnet IP sumber tempat query DNS mereka berasal.
+
+00:12:41.420 --> 00:12:43.800
+Jadi Anda dapat memetakkan rentang IP kantor perusahaan Anda
+
+00:12:43.800 --> 00:12:46.300
+ke titik akhir pementasan dan semua orang mendapatkan versi produksi.
+
+00:12:47.180 --> 00:12:51.140
+Atau Anda dapat merutakan pengguna dari subnet VPN terkentu ke backend khusus untuk pengujian.
+
+00:12:52.120 --> 00:12:55.720
+Bayangkan skenario pengujian internal saat tim pengembangan Anda bekerja dari kantor.
+
+00:12:56.460 --> 00:12:58.880
+Query DNS mereka berasal dari rentang IP perusahaan Anda
+
+00:12:58.880 --> 00:13:03.020
+dan Anda memetakkan rentang tersebut ke lingkungan pementasan tempat mereka dapat menguji versi terbaru.
+
+00:13:03.020 --> 00:13:05.320
+Semua orang di internet mendapatkan versi produksi.
+
+00:13:06.100 --> 00:13:10.800
+Tidak ada URL khusus, tidak ada konfigurasi VPN hanya perutian transparan berdasarkan asal permintaan.
+
+00:13:11.420 --> 00:13:12.340
+Kedua metode ini khusus.
+
+00:13:12.740 --> 00:13:16.060
+Kebanyakan orang akan menggunakan prioritas, kinerja, pembobotan, atau geografis
+
+00:13:16.060 --> 00:13:17.360
+untuk manajemen lalu lintas utama Rek.
+
+00:13:17.560 --> 00:13:19.960
+Namun, multi nilai dan subnet tersedia saat Anda membutuhkannya
+
+00:13:19.960 --> 00:13:22.560
+dan keduanya mencekkan masalah yang tidak dapat diselesaikan oleh metode lain.
+
+00:13:22.720 --> 00:13:24.140
+Pemantauan kesehatan navewa pada dalam rakyat.
+
+00:13:24.140 --> 00:13:26.860
+Semua metode perutian ini bergantung pada satu hal,
+
+00:13:27.100 --> 00:13:28.720
+mengetahui titik akhir mana yang benar-benar sehat.
+
+00:13:29.220 --> 00:13:31.480
+Merutakan lalu lintas ke server yang rusak tidak membantu siapapun.
+
+00:13:31.900 --> 00:13:34.480
+Jadi, mari kita bahas cara kerja pemantauan kesehatan dalam rakyat.
+
+00:13:34.900 --> 00:13:38.560
+Traffic Manager mengirimkan pemeriksaan kesehatan ke setiap titik akhir setiap 30 detik
+
+00:13:38.560 --> 00:13:43.200
+secara default dan pemeriksaan tersebut adalah permintaan HTTP atau HTTPS ke jadwal tertentu di titik akhir Anda.
+
+00:13:43.200 --> 00:13:48.200
+Ia mengharapkan respons dengan kode status antara 200 antara 299 dalam periode waktu tunggu tertentu.
+
+00:13:48.840 --> 00:13:51.120
+Jika titik akhir tersebut sehat, titik akhir tersebut sehat.
+
+00:13:51.380 --> 00:13:52.900
+Jika tidak, Traffic Manager akan mencoba lagi.
+
+00:13:52.900 --> 00:13:55.580
+Setelah sejumlah kegagalan yang dapat dikonfigurasi,
+
+00:13:55.760 --> 00:13:58.860
+defaultnya tiga, Traffic Manager menandai titik akhir tersebut sebagai terdegradasi
+
+00:13:58.860 --> 00:14:01.420
+dan mencualikannya dari perutian hingga melewati pemeriksaan kesehatan lagi.
+
+00:14:01.840 --> 00:14:03.780
+Anda dapat mengonfigurasi interval pemeriksaan dan batas waktu.
+
+00:14:04.380 --> 00:14:05.660
+Pemeriksaan yang lebih cepat berarti failover.
+
+00:14:06.260 --> 00:14:08.640
+Jika Anda menyatel interval ke 10 detik alih-alih 30,
+
+00:14:08.640 --> 00:14:12.300
+Traffic Manager mendeteksi kegagalan lebih cepat dan mengalihkan lalu lintas lebih cepat.
+
+00:14:12.720 --> 00:14:15.500
+Namun, pemeriksaan yang lebih cepat memberi beban lebih pada titik akhir Anda
+
+00:14:15.500 --> 00:14:18.080
+karena setiap pemeriksaan merupakan permintaan yang harus ditangani server Anda.
+
+00:14:18.080 --> 00:14:22.040
+Jadi, jika Anda memiliki ribuan titik akhir dan Anda meriksa setiap 10 detik permintaan tersebut,
+
+00:14:22.200 --> 00:14:24.200
+jadi Anda perlu menyeimbangkan kecepatan dengan overhead.
+
+00:14:24.820 --> 00:14:27.660
+Dampak nyata dari konfigurasi pemeriksaan kesehatan yang tepat adalah
+
+00:14:27.660 --> 00:14:30.980
+perbedaan antara failover yang ngulus dan alarm palsu yang merusak perutean Anda.
+
+00:14:31.720 --> 00:14:33.160
+Jika pemeriksaan Anda terlalu sensitif,
+
+00:14:33.160 --> 00:14:36.060
+Anda mungkin menandai titik akhir sebagai terdegradasi pada sebenarnya baik-baik saja.
+
+00:14:36.920 --> 00:14:39.360
+Lonjakan latensi sementara, gangguan jaringan singkat,
+
+00:14:39.920 --> 00:14:42.740
+query basis data yang lambat, semua ini dapat memicu positif palsu.
+
+00:14:42.740 --> 00:14:46.240
+Ketika traffic manager berhenti mengirim pengguna ke titik akhir tersebut,
+
+00:14:46.380 --> 00:14:48.380
+Anda baru saja membuat pemadaman yang tidak perlu terjadi.
+
+00:14:48.760 --> 00:14:49.540
+Berikut adalah kesalahan umum.
+
+00:14:50.100 --> 00:14:52.360
+Orang-orang menetapkan jalur pemeriksaan ke akar aplikasi mereka,
+
+00:14:52.580 --> 00:14:53.400
+hanya garis miring ke depan.
+
+00:14:53.920 --> 00:14:55.640
+Itu bagus untuk pemeriksaan kesehatan dasar,
+
+00:14:55.740 --> 00:14:58.860
+tetapi itu tidak ideal karena halaman akar mungkin dimuat dengan lambat
+
+00:14:58.860 --> 00:15:02.560
+jika halaman tersebut menampilkan halaman penuh dengan query basis data, gambar, dan javascript.
+
+00:15:03.260 --> 00:15:07.160
+Pendekatan yang lebih baik adalah membuat titik akhir pemeriksaan kesehatan khusus sesuatu yang ringan,
+
+00:15:07.320 --> 00:15:09.460
+titik akhir sederhana yang membalikkan kode status 200
+
+00:15:09.460 --> 00:15:11.440
+dengan cepat dan mengonfirmasi bahwa aplikasi sistem berjalan.
+
+00:15:11.740 --> 00:15:14.560
+Tidak ada query basis data, tidak ada pemrosesan berat, hanya data jantung.
+
+00:15:14.980 --> 00:15:18.520
+Dengan begitu pemeriksaan Anda cepat andal dan kecil kemungkinannya untuk memicu alam palsu,
+
+00:15:19.160 --> 00:15:22.880
+mari saya rangkum kapan Anda benar-benar harus menggunakan traffic manager dibandingkan opsi lainnya.
+
+00:15:24.140 --> 00:15:25.220
+Kesimpulan dan panduan keputusan
+
+00:15:25.220 --> 00:15:26.720
+Jadi berikut rakap singkat.
+
+00:15:27.200 --> 00:15:31.000
+Traffic manager adalah direktur lalu lintas global berbasis DNS dengan 6 metode perlutean.
+
+00:15:31.400 --> 00:15:32.500
+Ia tidak benar-benar ngangani lalu lintasan.
+
+00:15:33.380 --> 00:15:36.300
+Ia hanya mengarahkan pengguna ke tempat yang tepat berdasarkan metode yang Anda pilih.
+
+00:15:36.940 --> 00:15:38.500
+Perlutean prioritas adalah untuk pemulihan benda.
+
+00:15:38.500 --> 00:15:41.460
+Aplikasi Anda tetap berjalan meskipun seluruh wilayah mengalami kamu.
+
+00:15:42.620 --> 00:15:44.180
+Perlutean kinerja adalah tentang kecepatan.
+
+00:15:45.000 --> 00:15:47.800
+Perlutean ini mengarahkan setiap pengguna ke titik akhir dengan latensi terendah.
+
+00:15:48.320 --> 00:15:52.320
+Perlutean tertimbang memungkinkan Anda melakukan peluncuran terkontrol seperti dari skaneri atau pengenjan habit.
+
+00:15:53.500 --> 00:15:55.000
+Perlutean geografis menangani kepatuhan.
+
+00:15:55.560 --> 00:15:58.420
+Anda menyimpan data di wilayah yang tepat sesuai dengan lokasi pengguna Anda.
+
+00:15:59.000 --> 00:16:02.020
+Multinilai untuk distribusi tingkat IP sederhana di beberapa alamat.
+
+00:16:03.020 --> 00:16:06.180
+Dan perlutean subnet merutekan berdasarkan IP sumber query DNS.
+
+00:16:06.180 --> 00:16:09.540
+Sekarang mari kita bahas di mana traffic manager cocok dengan arsitekturnya.
+
+00:16:09.920 --> 00:16:10.460
+Bayangkan saja.

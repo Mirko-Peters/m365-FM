@@ -1,0 +1,1141 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.720
+Wat is een Azure virtueel netwerk?
+
+00:00:01.900 --> 00:00:08.620
+De meeste mensen horen die term en denken dat het gewoon een instelling is die je inschakelt bij het implementeren van een virtuele machine, iets waar je een vinkje bij zet en daarna vergeet.
+
+00:00:08.780 --> 00:00:12.380
+Maar dit is de waarheid. Een Azure virtueel netwerk is niet zomaar een instelling.
+
+00:00:12.600 --> 00:00:14.840
+Het is het fundament van alles wat je in Azure bouwt.
+
+00:00:15.020 --> 00:00:20.560
+Elke virtuele machine, elke database, elke app service, elke functie die je implementeert, ze bevinden zich allemaal in zo'n netwerk.
+
+00:00:20.680 --> 00:00:22.980
+En als je niet begrijpt hoe ze werken, vlieg je blind.
+
+00:00:23.200 --> 00:00:29.680
+Aan het eind van deze aflevering begrijp je wat een V net werkelijk is, hoe het werkt en waarom elke resource die je implementeert ervan afhankelijk is.
+
+00:00:29.680 --> 00:00:35.280
+We behandelen wat een V net is, hoe IP adressen werken, subnetten, beveiliging, routering en hoe je V nets met elkaar verbindt.
+
+00:00:35.340 --> 00:00:36.760
+Pak je koffie en laten we beginnen.
+
+00:00:37.020 --> 00:00:37.880
+Wat is een V net?
+
+00:00:38.040 --> 00:00:39.480
+Het private cloud netwerk.
+
+00:00:39.700 --> 00:00:41.700
+Laten we beginnen met de eenvoudigste definitie.
+
+00:00:41.880 --> 00:00:46.480
+Een Azure virtueel netwerk of kortweg V net is je eigen private netwerk binnen Azure.
+
+00:00:46.740 --> 00:00:48.400
+Zie het als een privékantoorgebouw.
+
+00:00:48.580 --> 00:00:50.300
+Alleen mensen die jij toelaat kunnen naar binnen.
+
+00:00:50.580 --> 00:00:54.480
+Jij bepaalt wie er door de deur komt, wie naar welke verdieping mag en wie er volledig buiten wordt gesloten.
+
+00:00:54.740 --> 00:00:56.820
+Voordat V nets bestonden was alles anders.
+
+00:00:57.240 --> 00:01:01.000
+Implementeerde je een virtuele machine in de cloud, dan was deze standaard eigenlijk blootgesteld aan het internet.
+
+00:01:01.220 --> 00:01:02.540
+Zonder privé netwerk eromheen.
+
+00:01:02.760 --> 00:01:04.880
+Iedereen die het IP adres wist, kon proberen verbinding te maken.
+
+00:01:05.100 --> 00:01:06.420
+Dat was een beveiligingsnachtmerrie.
+
+00:01:06.620 --> 00:01:07.440
+Wat is er veranderd?
+
+00:01:07.580 --> 00:01:10.560
+Azure gaf je de mogelijkheid om geïsoleerde private netwerkruimtes te creëren.
+
+00:01:10.720 --> 00:01:11.940
+Je definieert een grens.
+
+00:01:12.100 --> 00:01:13.240
+Je bepaalt wat erin komt.
+
+00:01:13.500 --> 00:01:16.420
+Niets buiten die grens kan naar binnen, tenzij je het expliciet toestaat.
+
+00:01:16.580 --> 00:01:19.620
+Eén ding om vooraf te weten, je V net leeft in een specifieke Azure regio.
+
+00:01:19.800 --> 00:01:20.920
+Het is niet wereldwijd.
+
+00:01:21.160 --> 00:01:23.240
+Maak een V net aan in West-Europa en daar blijft het.
+
+00:01:23.240 --> 00:01:25.980
+Resources in een andere regio kunnen er niet zomaar in springen.
+
+00:01:26.120 --> 00:01:28.520
+Ze hebben hun eigen V net nodig of je moet ze later verbinden.
+
+00:01:28.760 --> 00:01:31.600
+Wanneer je een V net maakt, definieer je zelf de IP adresruimte.
+
+00:01:31.780 --> 00:01:32.960
+Azure kiest deze niet voor je.
+
+00:01:33.200 --> 00:01:35.860
+Jij bepaalt het bereik van IP adressen dat je resources zullen gebruiken.
+
+00:01:36.060 --> 00:01:39.380
+Dat is een grote verantwoordelijkheid en in het volgende deel bespreken we hoe je dit goed aanpakt.
+
+00:01:39.580 --> 00:01:40.860
+Dit is het belangrijkste punt.
+
+00:01:41.080 --> 00:01:42.100
+V nets zijn de basis.
+
+00:01:42.520 --> 00:01:48.320
+Elke virtuele machine, elke database, elke Azure functie die je implementeert, bevindt zich in zo'n netwerk.
+
+00:01:48.320 --> 00:01:51.360
+Zonder een V net hebben je resources geen privé netwerk context.
+
+00:01:51.600 --> 00:01:55.360
+Ze zweven gewoon in de cloud zonder grenzen, zonder isolatie, zonder beveiliging.
+
+00:01:55.560 --> 00:01:56.880
+Dus wat betekent dit voor jou?
+
+00:01:57.040 --> 00:01:59.460
+Als je iets bouwt in Azure, begin dan eerst met een V net.
+
+00:01:59.620 --> 00:02:02.000
+Niet nadat je je resources hebt ingezet, maar daarvoor.
+
+00:02:02.180 --> 00:02:03.900
+Je V net is de grond waarop je bouwt.
+
+00:02:04.020 --> 00:02:06.440
+Je zou geen huis bouwen zonder eerst de grond te kopen, toch?
+
+00:02:06.740 --> 00:02:07.420
+Hetzelfde idee.
+
+00:02:07.680 --> 00:02:10.600
+IP adressering en CIDR, het kiezen van je adresruimte.
+
+00:02:10.820 --> 00:02:11.840
+Dus laten we beginnen.
+
+00:02:12.140 --> 00:02:15.660
+Wanneer je een V net aanmaakt, is de eerste grote beslissing het kiezen van een IP bereik.
+
+00:02:15.660 --> 00:02:17.440
+Dat doe je met CIDR notatie.
+
+00:02:17.800 --> 00:02:21.940
+CIDR staat voor Classless Interdomain Routing, maar het betekent eigenlijk alleen dat je zegt
+
+00:02:21.940 --> 00:02:23.660
+ik heb zoveel IP adressen nodig.
+
+00:02:23.900 --> 00:02:24.820
+Waarom is dit belangrijk?
+
+00:02:25.160 --> 00:02:29.700
+Omdat het bereikt dat je kiest bepaalt hoeveel resources je in je virtuele netwerk kunt plaatsen.
+
+00:02:29.940 --> 00:02:30.600
+Zo werkt het.
+
+00:02:30.880 --> 00:02:34.140
+CIDR gebruikt een schuine streep en een getal, zoals 16 of 24.
+
+00:02:34.560 --> 00:02:36.780
+Dat getal geeft de grootte van de adresruimte aan.
+
+00:02:36.980 --> 00:02:40.080
+Een 16 geeft je ongeveer 65.000 IP adressen.
+
+00:02:40.320 --> 00:02:40.920
+Dat is veel.
+
+00:02:40.920 --> 00:02:46.160
+Een 24 geeft je er ongeveer 250, wat perfect is voor een klein team of één applicatielaag.
+
+00:02:46.280 --> 00:02:50.380
+Dus, wanneer je je V net ontwerpt, moet je nadenken over hoeveel resources je hebt en
+
+00:02:50.380 --> 00:02:51.320
+hoe je ze wilt groeperen.
+
+00:02:51.500 --> 00:02:53.620
+Nu kun je niet zomaar elk IP bereik kiezen.
+
+00:02:53.820 --> 00:02:59.160
+Asher volgt de RFC 1918 standaard, die privé IP bereiken reserveert voor interne netwerken.
+
+00:02:59.340 --> 00:03:00.380
+Je hebt drie opties.
+
+00:03:00.580 --> 00:03:03.980
+Het 10 XXX bereik is het grootst en biedt volop ruimte om te groeien.
+
+00:03:04.160 --> 00:03:08.160
+Het 172.16 XX bereik is wat kleiner, maar nog steeds nuttig.
+
+00:03:08.160 --> 00:03:12.920
+En het 192.168 XX bereik is het bereik dat je waarschijnlijk thuis op je router hebt.
+
+00:03:13.100 --> 00:03:13.760
+Dit is het punt.
+
+00:03:13.960 --> 00:03:17.220
+De adresruimte van je V net mag niet overlappen met een ander netwerk waarmee je verbinding
+
+00:03:17.220 --> 00:03:17.700
+wilt maken.
+
+00:03:17.920 --> 00:03:19.220
+Dit is een veelgemaakte fout.
+
+00:03:19.500 --> 00:03:22.580
+Veel mensen kiezen een bereik dat bekend voorkomt, om er later achter te komen dat het
+
+00:03:22.580 --> 00:03:23.820
+conflicteert met hun bedrijfsnetwerk.
+
+00:03:24.020 --> 00:03:29.060
+Dus, als je bedrijfsnetwerk 1.0.0.0.0 slash 1.6 gebruikt, gebruik dan niet datzelfde bereik
+
+00:03:29.060 --> 00:03:29.440
+in Asher.
+
+00:03:29.600 --> 00:03:33.260
+Als je ze later probeert te verbinden, zullen ze botsen en weet het verkeer niet waar het naartoe
+
+00:03:33.260 --> 00:03:33.440
+moet.
+
+00:03:33.440 --> 00:03:35.280
+Laat me je een concreet voorbeeld geven.
+
+00:03:35.280 --> 00:03:39.260
+Stel, je bouwt een hybride opstelling, waarbij Asher verbinding maakt met je on-premises
+
+00:03:39.260 --> 00:03:43.680
+datacenter en je datacenter gebruikt 1.0.0.0.0 slash 1.6.
+
+00:03:43.840 --> 00:03:47.880
+Als je een V net aanmaakt met hetzelfde bereik, heb je twee netwerken die strijden om dezelfde
+
+00:03:47.880 --> 00:03:48.340
+IP's.
+
+00:03:48.540 --> 00:03:49.540
+Denk er maar eens over na.
+
+00:03:49.720 --> 00:03:52.900
+Twee netwerken die hetzelfde IP-bereik gebruiken, kunnen niet goed communiceren.
+
+00:03:53.100 --> 00:03:54.940
+Het is als twee huizen met hetzelfde adres.
+
+00:03:55.180 --> 00:03:56.200
+De post raakt in de war.
+
+00:03:56.420 --> 00:03:58.380
+Dat is een probleem dat je niet achteraf wilt oplossen.
+
+00:03:58.620 --> 00:04:00.420
+Dus plan vooruit en kies een uniek bereik.
+
+00:04:00.560 --> 00:04:01.280
+En hier is een planningstip.
+
+00:04:01.940 --> 00:04:03.820
+Kies een groter bereik dan je denkt nodig te hebben.
+
+00:04:03.820 --> 00:04:07.480
+Je denkt misschien dat een 24 nu genoeg is, maar naarmate je applicatie groeit, wou
+
+00:04:07.480 --> 00:04:08.540
+je dat je een 16 had.
+
+00:04:08.720 --> 00:04:10.420
+Dit kun je achteraf niet zomaar aanpassen.
+
+00:04:10.680 --> 00:04:14.480
+Zodra je V net is aangemaakt en je resources hebt ingezet, is het wijzigen van de adresruimte
+
+00:04:14.480 --> 00:04:14.980
+ingewikkeld.
+
+00:04:15.120 --> 00:04:17.600
+Het is mogelijk, maar dat wil je niet op een live systeem doen.
+
+00:04:17.820 --> 00:04:19.380
+Geef jezelf dus de ruimte om te groeien.
+
+00:04:19.580 --> 00:04:20.600
+Wat betekent dit voor jou?
+
+00:04:20.800 --> 00:04:22.800
+Zie de adresruimte van je V net als het kopen van land.
+
+00:04:23.000 --> 00:04:24.500
+Zorg voor genoeg ruimte voor toekomstige groei.
+
+00:04:24.660 --> 00:04:26.980
+Als je denkt dat je een klein perceel nodig hebt, koop dan een middelgroot perceel.
+
+00:04:27.100 --> 00:04:28.500
+Je zult jezelf later dankbaar zijn.
+
+00:04:28.720 --> 00:04:29.900
+Dat is de belangrijkste, Lee.
+
+00:04:29.900 --> 00:04:32.460
+Plan je adresruimte met het oog op toekomstige groei.
+
+00:04:32.760 --> 00:04:34.440
+Subnetten, het verdelen van je netwerk.
+
+00:04:34.620 --> 00:04:37.260
+Oké, je hebt je V net en je hebt je adresruimte gekozen.
+
+00:04:37.480 --> 00:04:37.820
+Wat nu?
+
+00:04:37.980 --> 00:04:39.880
+Je gooit niet zomaar alles op één grote hoop.
+
+00:04:40.080 --> 00:04:41.260
+Daar komen subnetten kijken.
+
+00:04:41.540 --> 00:04:44.120
+Subnetten zijn een van de fundamentele bouwstenen van je V net.
+
+00:04:44.300 --> 00:04:46.560
+Hiermee kun je je resources ordenen en beveiligen.
+
+00:04:46.780 --> 00:04:49.680
+Een subnet is een kleiner deel van de adresruimte van je V net.
+
+00:04:49.860 --> 00:04:53.000
+Als je V net het gebouw is, zijn subnetten de individuele kamers.
+
+00:04:53.200 --> 00:04:57.280
+Je zou je surferruimte, je receptie en je kantine toch ook niet allemaal in dezelfde open ruimte plaatsen.
+
+00:04:57.520 --> 00:04:58.660
+Hetzelfde idee geldt hier.
+
+00:04:58.660 --> 00:05:02.000
+Het is een simpel concept, maar het maakt een enorm verschil in hoe je je netwerk beheert.
+
+00:05:02.280 --> 00:05:04.360
+Verschillende resources gaan in verschillende subnetten.
+
+00:05:04.520 --> 00:05:08.980
+Je webservers in het ene subnet, je databases in een ander en je applicatielogica in een derde.
+
+00:05:09.200 --> 00:05:09.560
+Waarom?
+
+00:05:09.720 --> 00:05:10.520
+Twee redenen.
+
+00:05:10.840 --> 00:05:12.020
+Beveiliging en organisatie.
+
+00:05:12.240 --> 00:05:15.180
+Laten we eerst over beveiliging praten, want dat is meestal het belangrijkste.
+
+00:05:15.620 --> 00:05:16.340
+Beveiliging eerst.
+
+00:05:16.540 --> 00:05:20.080
+Als iemand inbreekt op je webserver, wil je niet dat ze direct toegang hebben tot je database.
+
+00:05:20.360 --> 00:05:22.520
+Gescheiden subnetten creëren een natuurlijke barrière.
+
+00:05:22.740 --> 00:05:26.300
+De aanvaller zou die grens moeten oversteken en jij kunt precies controleren wat er doorheen gaat.
+
+00:05:26.300 --> 00:05:29.760
+Je kunt ook netwerkbeveiligingsgroepen gebruiken om verkeer tussen subnetten te beheren.
+
+00:05:29.920 --> 00:05:34.540
+Dat is een onderwerp voor een andere video, maar het is goed om te weten dat subnetten de basis vormen voor die beveiliging.
+
+00:05:35.040 --> 00:05:36.020
+Organisatie als tweede.
+
+00:05:36.280 --> 00:05:38.740
+Wanneer alles een plek heeft, is het beheer eenvoudiger.
+
+00:05:38.940 --> 00:05:43.100
+Je weet welk subnet je front-end resources bevat en welke je back-end data bevat.
+
+00:05:43.300 --> 00:05:48.860
+Je kunt beleid en regels op het hele subnet tegelijk toepassen, in plaats van elke resource afzonderlijk te configureren.
+
+00:05:49.100 --> 00:05:51.000
+Dat bespaart tijd en vermindert fouten.
+
+00:05:51.000 --> 00:05:53.100
+Hier is een detail dat mensen vaak verrast.
+
+00:05:53.300 --> 00:05:58.260
+Azure reserveert 5 IP-adressen in elk subnet voor eigen interne doeleinden, zoals routing en DNS.
+
+00:05:58.500 --> 00:06:04.080
+Dus als je een subnet met een 24 range aanmaakt voor 256 adressen, krijg je er in feite maar 251 bruikbare.
+
+00:06:04.260 --> 00:06:05.640
+Het is een veel voorkomende valkuil.
+
+00:06:05.820 --> 00:06:08.260
+Je plant voor 256, maar krijgt er slechts 251.
+
+00:06:08.440 --> 00:06:10.820
+Voeg daarom altijd wat extra ruimte toe bij het bepalen van je subnetten.
+
+00:06:10.940 --> 00:06:13.660
+Het goede nieuws is dat je na het aanmaken van het VNet nog subnetten kunt toevoegen.
+
+00:06:13.840 --> 00:06:16.580
+Je zit niet vast aan de subnetten die je tijdens de creatie hebt opgezet.
+
+00:06:16.580 --> 00:06:21.280
+Dus als je merkt dat je een apart subnet nodig hebt voor beheertools of monitoring systemen, voeg het later toe.
+
+00:06:21.460 --> 00:06:24.320
+Geen probleem, maar het is nog steeds beter om ze vooraf te plannen.
+
+00:06:24.540 --> 00:06:28.680
+Subnetten later toevoegen is mogelijk, maar je moet misschien resources verplaatsen, wat storend kan zijn.
+
+00:06:28.860 --> 00:06:30.120
+Maar dit is de best practice.
+
+00:06:30.380 --> 00:06:33.420
+Gebruik vanaf het begin aparte subnetten voor de verschillende lagen van je applicatie.
+
+00:06:33.660 --> 00:06:35.440
+Denk na over je applicatiearchitectuur.
+
+00:06:35.720 --> 00:06:42.320
+Doorgaans heb je een front-end laag die gebruikersverzoeken afhandelt, een back-end laag voor bedrijfslogica en een datalaag voor informatieopslag.
+
+00:06:42.500 --> 00:06:44.540
+Elk van deze zou zijn eigen subnet moeten hebben.
+
+00:06:44.540 --> 00:06:47.400
+Wacht niet tot je in productie bent om te beseffen dat je de boel moet splitsen.
+
+00:06:47.580 --> 00:06:50.060
+Dat is een stuk lastiger wanneer resources al zijn geïmplementeerd.
+
+00:06:50.260 --> 00:06:51.260
+Wat betekent dit voor jou?
+
+00:06:51.480 --> 00:06:54.180
+Subnetten zijn de manier waarop je je netwerk georganiseerd en veilig houdt.
+
+00:06:54.260 --> 00:06:55.600
+Het zijn de kamers in je gebouw.
+
+00:06:55.760 --> 00:06:58.500
+Plan ze vroeg en geef elke laag van je applicatie zijn eigen ruimte.
+
+00:06:58.740 --> 00:07:00.700
+Zo hou je je netwerk overzichtelijk en veilig.
+
+00:07:00.860 --> 00:07:02.800
+Publieke versus private IP-adressen.
+
+00:07:02.980 --> 00:07:03.660
+Wie kan wat zien?
+
+00:07:03.880 --> 00:07:07.340
+Laten we praten over IP-adressen, want niet alle IP-adressen zijn hetzelfde.
+
+00:07:07.560 --> 00:07:11.500
+Wanneer je een resource binnen een v-net implementeert, krijgt deze standaard een privaat IP-adres.
+
+00:07:11.500 --> 00:07:15.260
+Dat is het adres dat het gebruikt om te communiceren met andere resources binnen het v-net.
+
+00:07:15.480 --> 00:07:17.020
+Zie het als een intern doorkiesnummer.
+
+00:07:17.300 --> 00:07:19.100
+Alleen mensen in het gebouw kunnen het bereiken.
+
+00:07:19.320 --> 00:07:23.240
+Private IP's zijn alleen toegankelijk vanuit het v-net of vanuit verbonden netwerken.
+
+00:07:23.400 --> 00:07:26.760
+Als je thuis op je laptop zit, kun je een privaat IP in Azure niet bereiken.
+
+00:07:26.960 --> 00:07:28.140
+Het staat niet op het internet.
+
+00:07:28.440 --> 00:07:30.260
+Het bevindt zich in je eigen private netwerk.
+
+00:07:30.460 --> 00:07:32.620
+Dus, hoe maak je een resource bereikbaar vanaf het internet?
+
+00:07:32.820 --> 00:07:34.340
+Je geeft het een publiek IP-adres.
+
+00:07:34.580 --> 00:07:36.360
+Dat is het adres dat zichtbaar is voor de buitenwereld,
+
+00:07:36.520 --> 00:07:39.000
+als een gepubliceerd telefoonnummer in plaats van een intern toestelnummer.
+
+00:07:39.180 --> 00:07:40.420
+Dit is het belangrijkste punt.
+
+00:07:40.420 --> 00:07:42.100
+Publieke IP's zijn optioneel.
+
+00:07:42.260 --> 00:07:45.600
+Je wijst ze expliciet toe, omdat Azure nooit een publiek IP aan je resources geeft,
+
+00:07:45.680 --> 00:07:46.580
+tenzij je erom vraagt.
+
+00:07:46.780 --> 00:07:47.880
+Dat is een bewuste keuze.
+
+00:07:48.060 --> 00:07:50.740
+De standaard moet privaat zijn en publiek moet een wel overwogen keuze zijn.
+
+00:07:50.900 --> 00:07:52.460
+En hier maken veel beginners een fout.
+
+00:07:52.720 --> 00:07:54.440
+Ze geven alles een publiek IP-adres.
+
+00:07:54.620 --> 00:07:56.580
+Hun webserver, hun database, hun back-end API.
+
+00:07:56.840 --> 00:07:57.660
+Ze krijgen er allemaal een.
+
+00:07:57.800 --> 00:07:58.420
+Dat is een beveiligingsrisico.
+
+00:07:59.280 --> 00:08:01.480
+Je database hoeft niet bereikbaar te zijn vanaf het internet,
+
+00:08:01.720 --> 00:08:02.980
+en je back-end API evenmin.
+
+00:08:03.140 --> 00:08:05.420
+Alleen front-end resources waarmee gebruikers daadwerkelijk interacteren,
+
+00:08:06.140 --> 00:08:07.420
+moeten publieke IP-adressen hebben.
+
+00:08:07.420 --> 00:08:10.600
+Publieke IP-adressen zijn er in twee soorten, statisch en dynamisch.
+
+00:08:10.760 --> 00:08:14.200
+Een statisch publiek IP-adres blijft gelijk, zelfs als je de resource stopt en opnieuw start.
+
+00:08:14.360 --> 00:08:16.420
+Een dynamisch publiek IP-adres kan veranderen.
+
+00:08:16.540 --> 00:08:19.620
+Als je een productieapplicatie draait, wil je waarschijnlijk statische IP's,
+
+00:08:19.680 --> 00:08:20.960
+zodat gebruikers je altijd kunnen vinden.
+
+00:08:21.140 --> 00:08:23.420
+Als je iets test, is een dynamisch adres vaak prima.
+
+00:08:23.660 --> 00:08:26.380
+Je kunt ook een zogenaamde publieke IP-prefix gebruiken,
+
+00:08:26.620 --> 00:08:28.200
+waarmee je een blokadressen reserveert.
+
+00:08:28.380 --> 00:08:30.320
+In plaats van ze één voor één aan te maken,
+
+00:08:30.680 --> 00:08:33.960
+reserveer je een bereik en wijs je individuele adressen uit dat bereik toe.
+
+00:08:33.960 --> 00:08:37.400
+Handig als je weet dat je meerdere publieke IP's nodig hebt voor een project.
+
+00:08:37.640 --> 00:08:38.800
+Wat betekent dit voor jou?
+
+00:08:38.940 --> 00:08:41.000
+Private IP-adressen zijn de veilige standaard.
+
+00:08:41.160 --> 00:08:42.640
+Ze zijn als een intern doorkiesnummer.
+
+00:08:42.820 --> 00:08:45.060
+Publieke IP's zijn een bewuste keuze die je alleen maakt
+
+00:08:45.060 --> 00:08:46.840
+wanneer iets bereikbaar moet zijn vanaf buitenaf.
+
+00:08:46.940 --> 00:08:50.020
+En als je ze nodig hebt, denk dan na of je statisch of dynamisch wilt
+
+00:08:50.020 --> 00:08:51.400
+en of een prefix zinvol is.
+
+00:08:52.540 --> 00:08:54.040
+Netwerkbeveiligingsgroepen voor het beheren van verkeer.
+
+00:08:54.220 --> 00:08:57.320
+Dus, je hebt je vnet, je subnets en je IP-adressen op orde.
+
+00:08:57.480 --> 00:09:00.280
+Maar hoe controleer je daadwerkelijk welk verkeer naar binnen en buiten mag?
+
+00:09:00.280 --> 00:09:03.180
+Daar komen netwerkbeveiligingsgroepen, oftewel NSG's, in beeld.
+
+00:09:03.320 --> 00:09:07.100
+Een NSG is de poortwachter die controleert welk verkeer je resources binnenkomt en verlaat.
+
+00:09:07.280 --> 00:09:10.360
+Zie het als een uitsmijter bij de deur van een club die ID's controleert,
+
+00:09:10.600 --> 00:09:13.260
+de gastenlijst bekijkt en mensen weigert die daar niet horen te zijn.
+
+00:09:13.460 --> 00:09:17.760
+Elk stukje verkeer dat je resource probeert te bereiken, moet eerst langs deze uitsmijter.
+
+00:09:18.140 --> 00:09:19.580
+NSG's werken met regels.
+
+00:09:19.820 --> 00:09:22.920
+Elke regel staat toe of weigert op basis van vier zaken,
+
+00:09:23.140 --> 00:09:27.080
+het bron-IP-adres, het doel-IP-adres, het poortnummer en het protocol.
+
+00:09:27.080 --> 00:09:31.800
+Zo kun je verkeer vanaf mijn kantoor-IP-adres op poort 443 toestaan,
+
+00:09:31.960 --> 00:09:34.680
+of al het internetverkeer op poort 22 weigeren.
+
+00:09:34.840 --> 00:09:35.800
+Dat soort controle.
+
+00:09:36.060 --> 00:09:37.460
+Hier is een krachtige functie.
+
+00:09:37.640 --> 00:09:41.800
+Je kunt een NSG koppelen aan een subnet of direct aan de netwerkinterface van één enkele VM.
+
+00:09:42.040 --> 00:09:45.340
+Als je het aan een subnet koppelt, is die NSG van toepassing op alles daarbinnen.
+
+00:09:45.520 --> 00:09:47.680
+Elke VM, elke database, elke resource.
+
+00:09:47.900 --> 00:09:49.320
+Het is een overkoepelend beleid.
+
+00:09:49.520 --> 00:09:53.620
+Als je het aan de netwerkinterface van een specifieke VM koppelt, geldt dit alleen voor die ene machine.
+
+00:09:53.620 --> 00:09:59.960
+Je kunt zelfs beide doen. Een NSG op subnet-niveau voor algemene regels en een NSG op nik-niveau voor uitzonderingen.
+
+00:10:00.080 --> 00:10:02.660
+De standaardregels die Azure aanmaakt zijn heel redelijk.
+
+00:10:02.880 --> 00:10:06.500
+Ze staan al het verkeer binnen het v-net toe, zodat je resources met elkaar kunnen communiceren,
+
+00:10:06.740 --> 00:10:11.920
+en ze blokkeren al het verkeer van het internet, zodat niets van buitenaf je resources kan bereiken tenzij je dit expliciet toestaat.
+
+00:10:12.040 --> 00:10:13.180
+Dat is een goed beginpunt.
+
+00:10:13.400 --> 00:10:15.000
+Laat me je een veelvoorkomend voorbeeld geven.
+
+00:10:15.260 --> 00:10:18.300
+Stel dat je een Linux virtuele machine beheert en je moet er via SSH op inloggen.
+
+00:10:18.300 --> 00:10:23.500
+Je maakt een NSG-regel aan die inkomend verkeer op port 22 toestaat, maar je wilt niet dat SSH overal vandaan toegankelijk is.
+
+00:10:23.680 --> 00:10:29.760
+Dat is vragen om problemen, dus beperk je het tot je eigen IP-adres, zodat alleen jij via SSH kunt inloggen en al het andere wordt geblokkeerd.
+
+00:10:29.960 --> 00:10:33.460
+Hetzelfde geldt voor RDP op port 3389 voor Windows-machines.
+
+00:10:33.700 --> 00:10:34.740
+Wat betekent dit voor jou?
+
+00:10:35.020 --> 00:10:38.100
+NSG's zijn je eerste verdedigingslinie en het mooiste is, ze zijn gratis.
+
+00:10:38.260 --> 00:10:41.440
+Er zijn geen extra kosten aan verbonden, dus er is geen excuus om ze niet in te stellen.
+
+00:10:41.620 --> 00:10:44.380
+Elk subnet en elke resource zou een gekoppelde NSG moeten hebben.
+
+00:10:44.600 --> 00:10:47.100
+Begin met alles weigeren en open alleen wat je nodig hebt.
+
+00:10:47.100 --> 00:10:49.700
+Routetabellen en routering, het sturen van verkeer.
+
+00:10:49.840 --> 00:10:55.160
+Laten we het nu hebben over routering, want als je eenmaal hebt besloten welk verkeer is toegestaan, moet je bepalen waar het daadwerkelijk naartoe gaat.
+
+00:10:55.320 --> 00:10:58.680
+Het zit zo, Azure maakt automatisch systeemroutes aan voor elk subnet.
+
+00:10:58.860 --> 00:11:00.040
+Je hoeft zelf niets te doen.
+
+00:11:00.280 --> 00:11:03.060
+Zie het als een standaard GPS die de basiswege kent.
+
+00:11:03.280 --> 00:11:07.100
+Verkeer binnen het V-net, verkeer naar gekoppelde V-nets, verkeer naar het internet.
+
+00:11:07.380 --> 00:11:11.340
+Het werkt allemaal standaard, maar soms brengt de standaard GPS je niet waar je heen wilt.
+
+00:11:11.340 --> 00:11:14.580
+Dat is het moment waarop je door de gebruiker gedefinieerde routes of UDR's nodig hebt.
+
+00:11:14.580 --> 00:11:18.440
+Hiermee kun je de systeemroutes van Azure overschrijven en de controle over het pad van het verkeer overnemen.
+
+00:11:18.600 --> 00:11:19.240
+Hoe werkt het?
+
+00:11:19.360 --> 00:11:20.580
+Je maakt een routetabel aan.
+
+00:11:20.760 --> 00:11:22.120
+Je voegt je aangepaste routes toe.
+
+00:11:22.340 --> 00:11:24.240
+Vervolgens koppel je die routetabel aan een subnet.
+
+00:11:24.420 --> 00:11:28.000
+Vanaf dat moment voegt het verkeer dat het subnet verlaat jouw regels in plaats van de standaardinstellingen.
+
+00:11:28.160 --> 00:11:29.680
+Laat me je een concreet voorbeeld geven.
+
+00:11:29.940 --> 00:11:33.340
+Stel dat je wilt dat al het internetverkeer vanuit je V-net eerst via een firewall gaat.
+
+00:11:33.560 --> 00:11:36.420
+Misschien moet je het inspecteren, loggen of schadelijke sites blokkeren.
+
+00:11:36.420 --> 00:11:39.660
+De standaard systeemroutes stuurt internetverkeer direct naar buiten.
+
+00:11:39.660 --> 00:11:47.580
+Dat is niet wat je wilt, dus maak je een route aan die zegt dat al het verkeer naar 0.0.0.0, oftewel het hele internet, in plaats daarvan naar de firewall moet gaan.
+
+00:11:47.800 --> 00:11:49.660
+Dat is een door de gebruiker gedefinieerde route.
+
+00:11:50.080 --> 00:11:52.360
+Routetabellen gebruiken iets dat de next hop wordt genoemd.
+
+00:11:52.440 --> 00:11:54.460
+Dat is de bestemming waar het verkeer naartoe wordt gestuurd.
+
+00:11:54.620 --> 00:11:55.660
+Je hebt een paar opties.
+
+00:11:55.900 --> 00:11:58.320
+Je kunt het naar een virtueel apparaat sturen, zoals een firewall.
+
+00:11:58.560 --> 00:12:02.940
+Je kunt het naar een virtuele netwerk gateway sturen, waarmee je verbinding maakt met on-premises netwerken.
+
+00:12:03.100 --> 00:12:08.060
+Je kunt het rechtstreeks naar het internet sturen of naar NAN, waardoor het verkeer in feite wordt verwijderd.
+
+00:12:08.060 --> 00:12:13.160
+Het belangrijkste om te begrijpen is dat routering de manier is waarop je het pad van verkeer door je netwerk beheert.
+
+00:12:13.640 --> 00:12:17.140
+Systeemroutes zijn een goede standaard, maar ze zijn niet altijd geschikt voor jouw situatie.
+
+00:12:17.340 --> 00:12:23.360
+Als verkeer via een inspectiepunt of naar een specifieke gateway moet of volledig moet worden geblokkeerd, heb je door de gebruiker gedefinieerde routes nodig.
+
+00:12:23.600 --> 00:12:24.700
+Wat betekent dit voor jou?
+
+00:12:24.960 --> 00:12:30.200
+Routering bepaalt waar verkeer naartoe gaat en je hebt de mogelijkheid om Azure-standaarden te overschrijven wanneer dat nodig is.
+
+00:12:30.420 --> 00:12:36.000
+Begin met de systeemroutes, begrijp wat ze doen en voeg vervolgens aangepaste routes toe wanneer je architectuur daarom vraagt.
+
+00:12:36.000 --> 00:12:38.240
+V-net-pering, het verbinden van netwerken.
+
+00:12:38.380 --> 00:12:42.100
+Tot nu toe hebben we het gehad over één enkel V-net, één gebouw, één privé-netwerk.
+
+00:12:42.260 --> 00:12:44.080
+Maar wat gebeurt er als je meerdere V-nets hebt?
+
+00:12:44.280 --> 00:12:49.620
+Misschien heb je er een voor je productieomgeving en een andere voor tests, of draai je applicaties in verschillende Azure-regio's.
+
+00:12:49.800 --> 00:12:51.920
+Standaard zijn deze V-nets volledig geïsoleerd.
+
+00:12:52.100 --> 00:12:53.520
+Ze kunnen niet met elkaar communiceren.
+
+00:12:53.720 --> 00:12:55.600
+Het zijn als losstaande gebouwen zonder wegen ertussen.
+
+00:12:55.820 --> 00:12:57.520
+Dat is waar V-net-pering om de hoek komt kijken.
+
+00:12:57.720 --> 00:13:00.520
+Hiermee kun je twee V-nets privé verbinden, en dan bedoel ik ook echt privé.
+
+00:13:00.520 --> 00:13:03.640
+Verkeer tussen gekoppelde V-nets blijft op het Microsoft Backbone-netwerk.
+
+00:13:03.800 --> 00:13:05.440
+Het komt nooit op het openbare internet.
+
+00:13:05.680 --> 00:13:09.160
+Dat betekent lage latentie, hoge bandbreedte en geen blootstelling aan externe bedreigingen.
+
+00:13:09.320 --> 00:13:10.860
+Hier is iets wat mensen vaak verrast.
+
+00:13:11.040 --> 00:13:12.720
+Pering werkt ook tussen regio's.
+
+00:13:12.900 --> 00:13:14.500
+Dat wordt globale pering genoemd.
+
+00:13:14.620 --> 00:13:20.000
+Je kunt een V-net in West-Europa koppelen aan een V-net in Zuidoost-Azië, en het verkeer daartussen blijft op het privé-netwerk van Microsoft.
+
+00:13:20.280 --> 00:13:23.540
+Geen VP en gateways, geen publieke IP's, gewoon een directe privé-verbinding.
+
+00:13:23.740 --> 00:13:25.960
+Maar er is één regel die je absoluut niet mag overtreden.
+
+00:13:25.960 --> 00:13:28.660
+Gekoppelde V-nets moeten niet overlappende adresruimtes hebben.
+
+00:13:28.860 --> 00:13:34.340
+Als beide V-nets het 1.0.0.0.0 slash 1.6 bereik proberen te gebruiken, kunnen ze niet worden gekoppeld.
+
+00:13:34.520 --> 00:13:38.660
+De IP-adressen zouden botsen en Azure zou niet weten bij welk netwerk een pakket hoort.
+
+00:13:38.880 --> 00:13:42.620
+Herinner je je die eerdere planningstip over het zorgvuldig kiezen van je adresruimte nog?
+
+00:13:42.780 --> 00:13:43.420
+Dit is waarom.
+
+00:13:43.560 --> 00:13:47.980
+Als je denkt dat je V-nets later misschien wilt koppelen, zorg er dan vanaf het begin voor dat hun bereiken niet overlappen.
+
+00:13:48.180 --> 00:13:50.100
+Dit is een detail waar mensen vaak over struikelen.
+
+00:13:50.240 --> 00:13:51.460
+Pering is niet transitief.
+
+00:13:51.460 --> 00:13:52.480
+Wat betekent dat?
+
+00:13:52.660 --> 00:13:57.000
+Stel dat V-n-et-a gekoppeld is met V-n-et-b en V-n-et-b is gekoppeld met V-n-et-c.
+
+00:13:57.080 --> 00:13:59.980
+V-n-et-a bereikt V-n-et-c niet automatisch via bezig zijn niet verbonden.
+
+00:14:00.160 --> 00:14:02.760
+Elke pering is een directe link tussen precies twee V-n-ets.
+
+00:14:03.100 --> 00:14:06.280
+Als je wilt dat A met C communiceert, heb je een aparte pering tussen A en C nodig.
+
+00:14:06.460 --> 00:14:07.800
+Dus, hoe pak je dit op schaal aan?
+
+00:14:07.940 --> 00:14:09.540
+Je gebruikt een hub- en spookarchitectuur.
+
+00:14:09.700 --> 00:14:13.040
+Een centraal V-n-et, de hub, is gekoppeld met vele andere V-n-ets, de spokes.
+
+00:14:13.220 --> 00:14:17.160
+De hub kan gedeelde services bevatten, zoals een firewall, een VP en gateway of monitoring tools.
+
+00:14:17.160 --> 00:14:19.420
+De spokes bevatten je individuele workloads.
+
+00:14:19.660 --> 00:14:22.780
+Elke spook koppelt direct met de hub, maar spokes koppelen niet met elkaar.
+
+00:14:22.960 --> 00:14:26.120
+Als een spook een andere spook moet bereiken, gaat het verkeer via de hub.
+
+00:14:26.280 --> 00:14:29.840
+Dat houdt de boel georganiseerd en geeft je een centrale plek voor beveiligingsbeleid.
+
+00:14:30.020 --> 00:14:31.140
+Wat betekent dit voor jou?
+
+00:14:31.300 --> 00:14:34.660
+Pering is hoe je netwerken bouwt die meerdere V-n-et-s en regio's omspannen.
+
+00:14:34.840 --> 00:14:36.320
+Het is de brug tussen je gebouwen.
+
+00:14:36.500 --> 00:14:38.640
+Plan je adresruimte zodat ze niet overlappen.
+
+00:14:38.860 --> 00:14:43.860
+Onthoud dat pering niet transitief is en overwege een hub- en spookontwerp zodra je groeit buiten één V-n-et.
+
+00:14:43.860 --> 00:14:46.200
+Hoe alles verbonden is, het grote plaatje.
+
+00:14:46.360 --> 00:14:49.020
+Laten we dus een stap terug doen en zien hoe deze onderdelen in elkaar passen.
+
+00:14:49.200 --> 00:14:50.360
+Dat is waar de echte kracht zit.
+
+00:14:50.500 --> 00:14:51.620
+Je begint met een V-n-et.
+
+00:14:51.920 --> 00:14:53.380
+Dat is jouw privéruimte in Azure.
+
+00:14:53.660 --> 00:14:54.560
+Zie het als jouw land.
+
+00:14:54.800 --> 00:14:56.240
+Binnen dat land maak je subnets aan.
+
+00:14:56.480 --> 00:14:57.420
+Dat zijn je kamers.
+
+00:14:57.620 --> 00:15:00.520
+Eén voor websurvers, één voor databases, één voor beheertools.
+
+00:15:00.760 --> 00:15:04.000
+Elk subnet krijgt een eigen adresblok uit de adresruimte van het V-n-et.
+
+00:15:04.420 --> 00:15:05.820
+Vervolgens voeg je beveiliging toe.
+
+00:15:06.840 --> 00:15:08.500
+Netwerkbeveiligingsgroepen worden aan je subnets gekoppeld.
+
+00:15:08.680 --> 00:15:10.500
+Ze bepalen welk verkeer in en uit mag.
+
+00:15:10.500 --> 00:15:14.080
+Je websubnet staat verkeer van het internet toe op poort 443.
+
+00:15:14.280 --> 00:15:17.980
+Je database subnet staat alleen verkeer toe vanaf het websubnet op poort 1433.
+
+00:15:18.280 --> 00:15:20.860
+De uitsmijter bij elke deur weet precies wie er naar binnen mag.
+
+00:15:21.060 --> 00:15:22.360
+Daarna stel je routering in.
+
+00:15:22.580 --> 00:15:26.100
+Misschien wil je dat al het uitgaande internetverkeer via een firewall gaat voor inspectie.
+
+00:15:26.260 --> 00:15:29.760
+Je maakt een routetabel, voegt een aangepaste route toe en koppelt deze aan je subnets.
+
+00:15:29.960 --> 00:15:33.300
+Nu volgt het verkeer het pad dat jij hebt ontworpen in plaats van de standaard van Azure.
+
+00:15:33.500 --> 00:15:35.340
+En tot slot verbind je alles met elkaar.
+
+00:15:35.340 --> 00:15:40.260
+Je koppelt je V-net met andere V-nets, misschien een hap V-net met je firewall en gedeelde services.
+
+00:15:40.620 --> 00:15:45.180
+Nu omspant je applicatie meerdere netwerken, maar werkt het als één verbonden systeem.
+
+00:15:45.320 --> 00:15:46.500
+Hier is het aha-moment.
+
+00:15:46.720 --> 00:15:48.560
+Geen van deze onderdelen werkt in isolatie.
+
+00:15:48.720 --> 00:15:50.640
+Een V-net zonder subnets is slechts lege ruimte.
+
+00:15:50.860 --> 00:15:52.680
+Subnets zonder NSG staan wijd open.
+
+00:15:52.860 --> 00:15:55.540
+Routering zonder duidelijk ontwerp stuurt verkeer naar de verkeerde plek.
+
+00:15:55.660 --> 00:15:57.700
+Pering zonder planning zorgt voor adresconflicten.
+
+00:15:57.840 --> 00:15:58.720
+Het is een systeem.
+
+00:15:58.920 --> 00:16:00.340
+Elk onderdeel hangt af van de andere.
+
+00:16:00.580 --> 00:16:02.040
+Laat me je een concreet voorbeeld geven.
+
+00:16:02.300 --> 00:16:03.720
+Stel je een webapplicatie voor.
+
+00:16:03.720 --> 00:16:08.280
+Je webservers staan in een publiek subnet met een NSG die HTTPS verkeer van het internet toestaat.
+
+00:16:08.280 --> 00:16:12.720
+Je applicatieservers staan in een privaat subnet dat alleen verkeer accepteert van het websubnet.
+
+00:16:12.880 --> 00:16:17.200
+Je database bevindt zich in een ander privé subnet dat alleen verkeer van het appsubnet accepteert.
+
+00:16:17.380 --> 00:16:22.260
+Een routetabel dwingt al het uitgaande verkeer door een firewall in het HAPV-net voor logboekregistratie en inspectie.
+
+00:16:22.400 --> 00:16:26.300
+En het geheel is gekoppeld aan je bedrijfsnetwerk, zodat je interne team het kan beheren.
+
+00:16:26.500 --> 00:16:28.620
+Dat is de echte waarde, niet een enkele functie.
+
+00:16:28.780 --> 00:16:30.500
+Het gaat om hoe ze allemaal samenwerken.
+
+00:16:30.500 --> 00:16:36.200
+Twintig jaar geleden kocht je losse servers, configureerde je fysieke routers en beheerde je firewalls per apparaat.
+
+00:16:36.320 --> 00:16:38.280
+Alles was handmatig, traag en duur.
+
+00:16:38.480 --> 00:16:40.240
+Azure biedt je dit alles als een service.
+
+00:16:40.500 --> 00:16:43.740
+Je definieert het met een paar klikken of een script en het werkt gewoon.
+
+00:16:43.980 --> 00:16:45.140
+Wat betekent dit voor jou?
+
+00:16:45.360 --> 00:16:49.140
+Zodra je ziet hoe deze onderdelen in elkaar grijpen, wordt Azure netwerken voorspelbaar.
+
+00:16:49.340 --> 00:16:50.400
+Je bent niet aan het gokken.
+
+00:16:50.580 --> 00:16:51.580
+Je bent aan het ontwerpen.
+
+00:16:51.780 --> 00:16:55.340
+En als er iets kapot gaat, weet je precies waar je moet kijken omdat je het systeem begrijpt.
+
+00:16:55.540 --> 00:16:57.960
+Dus dit is wat ik wil dat je uit deze aflevering meeneemt.
+
+00:16:57.960 --> 00:17:00.380
+Ten eerste, de belangrijkste stap die je kunt zetten.
+
+00:17:00.620 --> 00:17:03.740
+Maak een v-net met een goed geplande adresruimte voordat je iets implementeert.
+
+00:17:03.960 --> 00:17:06.180
+Die ene beslissing beïnvloedt alles wat daarna komt.
+
+00:17:06.360 --> 00:17:09.040
+Ten tweede, gebruik subnets om je applicatielagen te scheiden.
+
+00:17:09.280 --> 00:17:12.280
+Websurvers, app-survers, databases, geef ze elk hun eigen ruimte.
+
+00:17:12.440 --> 00:17:14.180
+En ten derde, begin met NSG's.
+
+00:17:14.340 --> 00:17:15.160
+Ze zijn gratis.
+
+00:17:15.380 --> 00:17:18.480
+Ze zijn krachtig en verbeteren je beveiliging aanzienlijk vanaf dag 1.
+
+00:17:18.640 --> 00:17:21.300
+Je v-net is het fundament van alles wat je in Azure bouwt.
+
+00:17:21.520 --> 00:17:23.320
+Doe het goed en al het andere wordt makkelijker.
+
+00:17:23.320 --> 00:17:26.500
+Doe het fout en je zult al je tijd besteden aan het vechten tegen je netwerk.
+
+00:17:26.500 --> 00:17:30.600
+Abonneer je op je favoriete podcastplatform en deel dit met iemand die aan zijn Azure reis begint.
+
+00:17:30.820 --> 00:17:32.720
+Laat een reactie achter als het kwartje is gevallen.
+
+00:17:32.940 --> 00:17:34.420
+Ik zie je in de volgende aflevering.

@@ -1,0 +1,811 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.760
+Welkom bij weer een aflevering van Microsoft Kennisknabels hier op M365FM.
+
+00:00:03.880 --> 00:00:05.220
+Ik ben je host Mirko Peters.
+
+00:00:05.480 --> 00:00:09.240
+Het onderwerp van vandaag is iets waar bijna iedereen van heeft gehoord, maar weinig een echt begrijpen.
+
+00:00:09.420 --> 00:00:15.600
+Ik heb het over Power Automate, een tool die de meeste mensen afdoen als dat floating dat ergens in Microsoft 365 verstopt zit.
+
+00:00:15.800 --> 00:00:19.820
+Misschien heb je het ergens in een menu zien staan of er per ongeluk voorbij geklikt, maar luister goed.
+
+00:00:20.000 --> 00:00:23.620
+Power Automate is een van de krachtigste tools van het hele Microsoft platform.
+
+00:00:23.880 --> 00:00:29.380
+Aan het einde van deze aflevering weet je precies wat het is, hoe het werkt en waarom het ertoe doet voor je dagelijkse werk.
+
+00:00:29.380 --> 00:00:34.500
+Zie het als het inhuren van een virtuele assistent die nooit slaapt, nooit iets vergeet en nooit om loonsverhoging vraagt.
+
+00:00:34.640 --> 00:00:36.340
+Pak je koffie erbij en laten we beginnen.
+
+00:00:36.540 --> 00:00:38.520
+Het probleem dat Power Automate oplost.
+
+00:00:38.760 --> 00:00:40.300
+Laten we eerst met het probleem beginnen.
+
+00:00:40.580 --> 00:00:43.700
+Denk eens aan je normale werkdag en hoe vaak je dezelfde acties herhaalt.
+
+00:00:43.900 --> 00:00:47.360
+Bestanden verplaatsen tussen mappen, gegevens kopiëren naar een ander systeem,
+
+00:00:47.400 --> 00:00:51.100
+voor de honderdste keer diezelfde e-mail sturen, een document doorsturen voor goedkeuring
+
+00:00:51.100 --> 00:00:53.940
+of een spreadsheet bijwerken omdat iemand een formulier heeft ingevuld.
+
+00:00:54.200 --> 00:00:56.540
+Deze taken kosten elke week weer uren tijd.
+
+00:00:56.540 --> 00:00:59.960
+En het frustrerende is dat ze bijna geen strategische waarde toevoegen.
+
+00:01:00.140 --> 00:01:04.940
+Niemand is ooit gepromoveerd omdat hij zo goed kon kopiëren en plakken, maar we doen het toch omdat het moet gebeuren.
+
+00:01:05.080 --> 00:01:09.600
+Twintig jaar geleden, als je deze repetitieve taken wilde automatiseren, had je eigenlijk maar twee keuzes.
+
+00:01:09.760 --> 00:01:13.880
+Je kon iemand inhuren om het saaie werk voor je te doen of je kon zelf complexe code leren schrijven.
+
+00:01:14.100 --> 00:01:17.600
+Geen van beide opties was ideaal, want scripts waren kwetsbaar en gingen steeds kapot,
+
+00:01:17.720 --> 00:01:22.180
+terwijl Enterprise Automatisering Software een fortuin kostte en een heel team experts vereiste voor het onderhoud.
+
+00:01:22.180 --> 00:01:25.300
+Dus bleven de meeste mensen het repetitieve werk maar handmatig doen.
+
+00:01:25.600 --> 00:01:29.760
+Microsoft zag die frustrerende situatie en besloot daar verandering in te brengen door een tool te bouwen
+
+00:01:29.760 --> 00:01:34.820
+waarmee iedereen, en dan bedoel ik ook iedereen, repetitieve taken kan automatiseren zonder één regel code te schrijven.
+
+00:01:35.020 --> 00:01:36.500
+Die tool is Power Automate.
+
+00:01:36.680 --> 00:01:41.380
+In de basis verbindt het je apps en diensten zodat ze met elkaar kunnen praten zonder dat jij ertussenin hoeft te zitten.
+
+00:01:41.620 --> 00:01:45.080
+In plaats van dat jij de brug bent tussen Outlook, SharePoint en Teams,
+
+00:01:45.340 --> 00:01:50.380
+wordt Power Automate die brug het werk dag en nacht door zonder lunchpauze of ooit een typfout te maken.
+
+00:01:50.380 --> 00:01:53.500
+De simpele definitie, trigger plus actie.
+
+00:01:53.680 --> 00:01:55.580
+Dus, wat is Power Automate nu precies?
+
+00:01:55.800 --> 00:01:57.280
+Dit is de simpelste definitie.
+
+00:01:57.440 --> 00:02:00.740
+Power Automate bestaat uit twee dingen, een trigger en een of meer acties.
+
+00:02:01.000 --> 00:02:01.680
+Dat is alles.
+
+00:02:01.900 --> 00:02:03.660
+Al het andere bouwt voort op dat fundament.
+
+00:02:04.040 --> 00:02:05.540
+Zie een trigger als het startschot.
+
+00:02:05.720 --> 00:02:06.680
+Het is de wanneer.
+
+00:02:06.900 --> 00:02:10.940
+Wanneer er een nieuwe e-mail in je inbox komt, een bestand wordt aangemaakt in een SharePoint map,
+
+00:02:11.140 --> 00:02:14.360
+iemand een Microsoft formulier indient of een agenda-item begint.
+
+00:02:14.540 --> 00:02:16.880
+Er gebeurt niets totdat de trigger wordt geactiveerd.
+
+00:02:17.100 --> 00:02:17.840
+Dat is de kern.
+
+00:02:17.840 --> 00:02:20.440
+Een actie is wat er daarna gebeurt.
+
+00:02:20.680 --> 00:02:24.680
+Stuur een melding, maak een bestand aan, werk een spreadsheet rij bij, plaats een bericht in Teams,
+
+00:02:24.860 --> 00:02:26.820
+voeg een taak toe aan Planner, verstuur een e-mail.
+
+00:02:27.060 --> 00:02:29.340
+Dat is wat de automatisering doet als reactie op de trigger.
+
+00:02:29.620 --> 00:02:30.420
+Zo simpel is het.
+
+00:02:30.600 --> 00:02:32.280
+Laten we een praktijkscenario doorlopen.
+
+00:02:32.520 --> 00:02:34.940
+Stel je voor dat een klant een contactformulier op je website invult.
+
+00:02:35.140 --> 00:02:36.620
+Die formulierinzending is de trigger.
+
+00:02:36.920 --> 00:02:37.700
+Wat gebeurt er daarna?
+
+00:02:37.860 --> 00:02:40.300
+Je zou hun gegevens kunnen opslaan in een SharePoint-lijst.
+
+00:02:40.500 --> 00:02:41.580
+Dat is actie nummer 1.
+
+00:02:41.580 --> 00:02:43.980
+Stuur een melding naar je verkoopteam in Teams.
+
+00:02:44.120 --> 00:02:45.060
+Actie nummer 2.
+
+00:02:45.300 --> 00:02:47.760
+Maak een vervolgtaak aan in Planner voor morgenochtend.
+
+00:02:47.920 --> 00:02:48.720
+Actie nummer 3.
+
+00:02:48.900 --> 00:02:49.320
+Eén trigger.
+
+00:02:49.500 --> 00:02:50.180
+Meerdere acties.
+
+00:02:50.380 --> 00:02:52.140
+Allemaal automatisch binnen een enkele seconde.
+
+00:02:52.280 --> 00:02:53.540
+Geen handmatig werk nodig.
+
+00:02:53.760 --> 00:02:56.680
+Het mooie is, je hoeft geen enkele regelcode te schrijven om deze flows te bouwen.
+
+00:02:56.840 --> 00:02:59.160
+Je verbindt kant een klare onderdelen met elkaar als Lego blokjes.
+
+00:02:59.400 --> 00:03:01.720
+Microsoft heeft de blokjes al gebouwd voor honderden verschillende diensten.
+
+00:03:01.880 --> 00:03:03.100
+Je klikt ze gewoon aan elkaar vast.
+
+00:03:03.300 --> 00:03:04.780
+Wil je een stap toevoegen om een e-mail te sturen?
+
+00:03:04.980 --> 00:03:05.600
+Sleep hem erin.
+
+00:03:05.780 --> 00:03:07.400
+Wil je een stap toevoegen om een bestand aan te maken?
+
+00:03:07.620 --> 00:03:08.280
+Sleep hem erin.
+
+00:03:08.280 --> 00:03:11.040
+Wil je een voorwaarde toevoegen die controleert of iets waar is voordat je doorgaat?
+
+00:03:11.200 --> 00:03:11.880
+Sleep hem erin.
+
+00:03:12.060 --> 00:03:13.780
+Het is echt zo visueel en zo eenvoudig.
+
+00:03:13.920 --> 00:03:16.120
+De meeste mensen denken dat Power Automate ingewikkeld is.
+
+00:03:16.300 --> 00:03:19.480
+Maar als je alle marketingpraat en technisch jargon wegstreept, komt het neer op.
+
+00:03:19.580 --> 00:03:20.800
+Als dit gebeurt, doe dan dat.
+
+00:03:21.000 --> 00:03:22.100
+Dat is het hele concept.
+
+00:03:22.400 --> 00:03:25.580
+Zodra je die basis begrijpt, begint al het andere duidelijk te worden.
+
+00:03:25.800 --> 00:03:26.780
+De drie type flows.
+
+00:03:27.040 --> 00:03:30.660
+Nu je het basisconcept kent, gaan we kijken naar de verschillende manieren waarop flows kunnen draaien.
+
+00:03:30.660 --> 00:03:32.460
+Niet alle flows werken op dezelfde manier.
+
+00:03:32.680 --> 00:03:34.520
+Laten we de drie typen die je moet kennen uiteenzetten.
+
+00:03:34.700 --> 00:03:36.440
+De eerste zijn geautomatiseerde flows.
+
+00:03:36.680 --> 00:03:38.980
+Deze draaien volledig zelfstandig wanneer er iets gebeurt.
+
+00:03:39.140 --> 00:03:42.460
+Een nieuwe e-mail komt in je inbox en boom, er wordt een taak aangemaakt in Planner.
+
+00:03:42.700 --> 00:03:44.280
+Geen menselijke interactie nodig.
+
+00:03:44.520 --> 00:03:47.820
+Het draait gewoon op de achtergrond en doet zijn werk terwijl jij je op iets anders richt.
+
+00:03:48.020 --> 00:03:51.480
+Dit is het meest voorkomende type flow voor dagelijkse zakelijke automatisering.
+
+00:03:51.660 --> 00:03:54.800
+Je stelt het één keer in en het draait voor altijd totdat je het uitschakelt.
+
+00:03:54.800 --> 00:03:56.600
+Het tweede zijn instant flows.
+
+00:03:56.860 --> 00:04:01.680
+Deze draaien wanneer je op een knop klikt vanaf je telefoon, vanuit Teams of vanaf een SharePoint site.
+
+00:04:01.920 --> 00:04:05.560
+Stel je voor dat je een document in SharePoint bekijkt en er staat een knop met de tekst.
+
+00:04:05.560 --> 00:04:06.840
+Stuur dit ter goedkeuring.
+
+00:04:07.060 --> 00:04:09.100
+Je klikt erop en de flow regelt de rest.
+
+00:04:09.340 --> 00:04:12.360
+Instant flows zijn perfect voor acties die je zelf wilt aansturen.
+
+00:04:12.580 --> 00:04:16.000
+Je wilt niet dat ze automatisch worden uitgevoerd omdat je zelf wilt beslissen wanneer ze starten,
+
+00:04:16.140 --> 00:04:18.560
+maar zodra je dat doet neemt de flow al het zware werk voor je uithanden.
+
+00:04:18.760 --> 00:04:20.160
+Als derde zijn er geplande flows.
+
+00:04:20.400 --> 00:04:21.820
+Deze werken op basis van een timer.
+
+00:04:21.880 --> 00:04:24.780
+Stuur me elke maandag om 8 uur ochtends een overzicht van alle onvoltooide taken.
+
+00:04:24.980 --> 00:04:27.140
+Maak elke dag om 12 uur middags een backup van deze map.
+
+00:04:27.340 --> 00:04:29.240
+Genereer elke eerste dag van de maand een rapport.
+
+00:04:29.240 --> 00:04:33.920
+Je stelt het schema in, dagelijks, wekelijks, maandelijks, wat je ook nodig hebt, en het draait als een zonnetje.
+
+00:04:34.040 --> 00:04:37.800
+Geplande flows zijn ideaal voor terugkerende rapporten, herinneringen en opschoon taken.
+
+00:04:38.020 --> 00:04:39.220
+Dit is wat je moet begrijpen.
+
+00:04:39.400 --> 00:04:42.060
+De kernmotor is voor alle drie de typen exact hetzelfde.
+
+00:04:42.220 --> 00:04:43.920
+Het enige echte verschil is de trigger.
+
+00:04:44.680 --> 00:04:46.280
+Geautomatiseerde flows gebruiken event triggers.
+
+00:04:46.520 --> 00:04:48.380
+Instant flows gebruiken handmatige triggers.
+
+00:04:48.620 --> 00:04:53.360
+Geplande flows gebruiken tijd triggers, maar zodra de trigger afgaat, werkt alles daarna precies op dezelfde manier.
+
+00:04:53.560 --> 00:04:57.180
+Kies dus de trigger die past bij hoe je de flow wilt starten en je bent klaar om te gaan.
+
+00:04:57.180 --> 00:05:00.220
+Connectors, hoe Power Automate met alles communiceert.
+
+00:05:00.380 --> 00:05:04.580
+Je hebt dus triggers en acties, maar hoe communiceert Power Automate nu eigenlijk met al die verschillende apps?
+
+00:05:04.780 --> 00:05:05.900
+Het antwoord is connectors.
+
+00:05:06.280 --> 00:05:07.680
+Connectors zijn de vertalers.
+
+00:05:07.880 --> 00:05:12.800
+Power Automate spreekt niet van nature SharePoint, Outlook, Teams of Excel, maar connectors doen dat wel.
+
+00:05:12.980 --> 00:05:19.140
+Elke connector weet hoe hij met een specifieke service moet praten, wat deze kan, welke gegevens hij verwacht en hoe hij opdrachten moet verzenden.
+
+00:05:19.360 --> 00:05:23.680
+Wanneer je een stap aan je flow toevoegt, kies je eigenlijk gewoon een connector en vertel je wat hij moet doen.
+
+00:05:23.680 --> 00:05:27.920
+Er zijn momenteel meer dan 1400 kanten klare connectors en dat aantal blijft groeien.
+
+00:05:28.100 --> 00:05:38.220
+De Microsoft connectors, zoals SharePoint, Teams, Outlook en OneDrive, zijn standaard in de meeste plannen inbegrepen en dekken de services die je waarschijnlijk dagelijks gebruikt, maar de externe connectors openen een compleet nieuwe wereld.
+
+00:05:38.400 --> 00:05:43.520
+Salesforce, Adobe, DocuSign, Google, Twitter, MailChimp, Power Automate kan met ze allemaal praten.
+
+00:05:43.720 --> 00:05:50.460
+Je kunt een flow bouwen die begint met een inzending via Google Forms, de data opslaat in SharePoint, een DocuSign overeenkomst verstuurt en een melding plaatst in Teams.
+
+00:05:50.460 --> 00:05:53.540
+Alles in één flow, zonder het Microsoft ecosysteem te verlaten.
+
+00:05:53.700 --> 00:05:57.020
+En als er geen connector is voor het systeem dat je nodig hebt, kun je je eigen connector bouwen.
+
+00:05:57.180 --> 00:06:00.280
+Met aangepaste connectors kun je verbinding maken met elke service die een API heeft.
+
+00:06:00.440 --> 00:06:03.600
+Het kost iets meer werk, maar het betekent dat Power Automate met alles kan communiceren.
+
+00:06:03.780 --> 00:06:05.980
+Elke connector heeft zijn eigen set triggers en acties.
+
+00:06:06.220 --> 00:06:08.720
+Wanneer je er een kiest, zie je alleen wat die service daadwerkelijk kan doen.
+
+00:06:08.900 --> 00:06:11.540
+De connector van SharePoint weet alles van lijsten en bibliotheken.
+
+00:06:11.680 --> 00:06:14.020
+De connector van Outlook regelt e-mails en agenda's.
+
+00:06:14.180 --> 00:06:16.160
+De Teams connector regelt kanalen en berichten.
+
+00:06:16.340 --> 00:06:19.120
+Je hoeft niet te gissen, want de connector vertelt je precies wat er beschikbaar is.
+
+00:06:19.120 --> 00:06:21.220
+Dat is de ware kracht van Power Automate.
+
+00:06:21.360 --> 00:06:23.100
+Het is niet alleen voor Microsoft diensten.
+
+00:06:23.300 --> 00:06:29.580
+Het verbindt je volledige stack aan tools, je CRM, e-mail, bestandsopslag en projectmanagement tot één uniform automatiseringssysteem.
+
+00:06:29.760 --> 00:06:31.820
+Ze maken allemaal deel uit van dezelfde flow.
+
+00:06:32.040 --> 00:06:33.820
+Cloud flows versus desktop flows.
+
+00:06:34.060 --> 00:06:35.680
+Dit is waar mensen vaak in de war raken.
+
+00:06:35.880 --> 00:06:39.000
+Er zijn namelijk twee soorten Power Automate en ze werken heel verschillend.
+
+00:06:39.160 --> 00:06:40.640
+Het eerste type is Cloud flows.
+
+00:06:40.860 --> 00:06:42.680
+Deze draaien volledig op de servers van Microsoft.
+
+00:06:42.960 --> 00:06:45.060
+Wanneer je een Cloud flow bouwt, gebeurt alles in de cloud.
+
+00:06:45.220 --> 00:06:47.940
+Een formulier wordt ingediend en de gegevens worden opgeslagen in SharePoint.
+
+00:06:47.940 --> 00:06:50.800
+Er komt een e-mail binnen en er wordt een agenda-item aangemaakt.
+
+00:06:50.940 --> 00:06:54.060
+Je computer hoeft niet aan te staan en je hoeft geen software te installeren.
+
+00:06:54.220 --> 00:06:58.120
+De flow draait op de infrastructuur van Microsoft en je controleert later gewoon de resultaten.
+
+00:06:58.300 --> 00:07:01.520
+Cloud flows zijn waar de meeste mensen aan denken als ze Power Automate horen.
+
+00:07:01.700 --> 00:07:03.440
+Het tweede type is desktop flows.
+
+00:07:03.640 --> 00:07:04.680
+Dit is totaal anders.
+
+00:07:04.980 --> 00:07:08.440
+Desktop flows gebruiken iets genaamd Robotic Process Automation of RPA.
+
+00:07:08.700 --> 00:07:10.580
+En dit is wat dat in gewone taal betekent.
+
+00:07:10.760 --> 00:07:13.940
+Power Automate neemt letterlijk de controle over je muis en toetsenbord over.
+
+00:07:13.940 --> 00:07:20.200
+Het opent browservensters, klikt op knoppen, typt tekst in velden en kopieert gegevens van de ene naar de andere applicatie.
+
+00:07:20.360 --> 00:07:27.140
+Als je ooit iemand hebt zien werken met software voor extern bureaublad, dan ziet het er precies zo uit, alleen is er geen persoon aan de andere kant.
+
+00:07:27.340 --> 00:07:29.400
+Het is gewoon software die je muis bestuurt.
+
+00:07:29.580 --> 00:07:32.780
+De eerste keer dat je een desktop flow ziet draaien, is het nogal vreemd.
+
+00:07:32.900 --> 00:07:38.000
+Je cursor begint uit zichzelf te bewegen, vensters openen en sluiten en tekst verschijnt in velden waar je niet op hebt geklikt.
+
+00:07:38.160 --> 00:07:40.160
+Het lijkt alsof een geest je computer gebruikt.
+
+00:07:40.160 --> 00:07:43.440
+Maar zodra je aan het idee gewend bent, besef je hoe krachtig dit is.
+
+00:07:43.620 --> 00:07:45.440
+Dus, waarom zou je desktop flows nodig hebben?
+
+00:07:45.600 --> 00:07:48.220
+Omdat niet elk systeem een moderne API of connector heeft.
+
+00:07:48.480 --> 00:07:51.300
+Denk aan die oude bedrijfsapplicaties die bedrijven nog steeds gebruiken.
+
+00:07:51.480 --> 00:07:57.860
+Het boekhoudsysteem uit het begin van de jaren 2000, de aangepaste database van 15 jaar geleden, de verouderde oude software op een lokale server.
+
+00:07:58.160 --> 00:08:02.460
+Deze systemen hebben geen triggers, connectors of andere manieren om met de buitenwereld te praten,
+
+00:08:02.660 --> 00:08:07.240
+maar een desktop flow kan ermee communiceren zoals een mens dat zou doen door op knoppen te klikken en tekst te typen.
+
+00:08:07.420 --> 00:08:08.300
+Welke heb je nodig?
+
+00:08:08.300 --> 00:08:11.860
+Cloud flows werken voor moderne diensten die API's en connectors hebben.
+
+00:08:12.080 --> 00:08:17.280
+Desktop flows verwerken verouderde applicaties, oude software of alles wat niet programmatisch verbonden kan worden.
+
+00:08:17.480 --> 00:08:20.120
+In veel organisaties zul je uiteindelijk beide gebruiken.
+
+00:08:20.300 --> 00:08:22.520
+Hoe de onderdelen samenwerken, het systeem.
+
+00:08:22.680 --> 00:08:26.020
+Het zit zo, de meeste mensen denken dat Power Automate slechts één tool is,
+
+00:08:26.140 --> 00:08:29.320
+maar begrijpen hoe de onderdelen samenwerken is wat de echte kracht ontgrendelt.
+
+00:08:29.480 --> 00:08:31.480
+Het zijn eigenlijk drie lagen die samenwerken.
+
+00:08:31.680 --> 00:08:32.560
+Begin met de trigger.
+
+00:08:32.800 --> 00:08:34.320
+Er gebeurt iets in je werkomgeving.
+
+00:08:34.500 --> 00:08:37.620
+Een formulier wordt ingediend, een bestand wordt geüpload of er komt een e-mail binnen.
+
+00:08:37.620 --> 00:08:39.560
+Dat is de vonk die alles in werking zet.
+
+00:08:39.740 --> 00:08:40.740
+Daarna volgt de actie.
+
+00:08:40.920 --> 00:08:45.860
+De automatisering doet iets nuttigs, zoals gegevens opslaan, een melding sturen, een taak aanmaken of een record bijwerken.
+
+00:08:46.040 --> 00:08:47.080
+Daar wordt het werk verricht.
+
+00:08:47.320 --> 00:08:48.340
+Dan is er nog de connector.
+
+00:08:48.640 --> 00:08:50.620
+Deze overbrugt de kloof tussen je verschillende tools.
+
+00:08:50.840 --> 00:08:54.220
+Hiermee kan de trigger communiceren met de actie, zelfs als ze in totaal verschillende systemen zitten.
+
+00:08:54.400 --> 00:08:57.040
+De echte kracht zit niet in één onderdeel, maar in hoe ze gecombineerd worden.
+
+00:08:57.200 --> 00:08:58.460
+Ik geef je een concreet voorbeeld.
+
+00:08:58.720 --> 00:09:01.020
+Stel dat een klant een contactformulier op je website invult.
+
+00:09:01.240 --> 00:09:02.020
+Dat is de trigger.
+
+00:09:02.240 --> 00:09:06.100
+Power Automate pikt dit op en zoekt de juiste verkoper in een SharePoint-lijst.
+
+00:09:06.100 --> 00:09:09.660
+Actie 1. Vervolgens stuurt het een Teams-melding naar die verkoper.
+
+00:09:09.840 --> 00:09:13.740
+Actie 2. Daarna maakt het een vervolgtaak aan een planner voor de volgende ochtend.
+
+00:09:13.920 --> 00:09:17.780
+Actie 3. Vervolgens wordt alles gelogd in een Excel-spreadsheet voor rapportage.
+
+00:09:17.980 --> 00:09:23.480
+Actie 4. Vier acties vanuit één trigger over drie verschillende services, en dit gebeurt allemaal in enkele seconden.
+
+00:09:23.620 --> 00:09:27.440
+Eén trigger kan een kettingreactie veroorzaken van tientallen acties over meerdere services heen.
+
+00:09:27.580 --> 00:09:33.100
+Je kunt flows bouwen die SharePoint, Teams, Outlook, Planner, Excel en Salesforce raken in dezelfde automatisering.
+
+00:09:33.100 --> 00:09:37.820
+Automatisering. Elke actie geeft gegevens door aan de volgende, voortbouwend op wat eraan voor afging.
+
+00:09:37.980 --> 00:09:42.060
+De flow doet niet slechts één ding. Het regelt een heel proces van begin tot eind.
+
+00:09:42.340 --> 00:09:46.600
+Dat is de magie. Wat voorheen een handmatig proces van 10 minuten was het formulier controleren,
+
+00:09:46.840 --> 00:09:52.520
+de juiste persoon vinden, een bericht sturen, een taak aanmaken, de gegevensloggen gebeurt nu direct en automatisch.
+
+00:09:52.720 --> 00:09:57.400
+Geen fouten. De klant krijgt een snellere reactie. De verkoper krijgt een duidelijke volgende stap.
+
+00:09:57.400 --> 00:10:01.220
+En jij hoefde er niets voor te doen. Praktijkvoorbeelden die je morgen kunt gebruiken.
+
+00:10:01.440 --> 00:10:05.560
+Laten we dit concreet maken. Hier zijn drie flows die je nu kunt bouwen, vanaf vandaag.
+
+00:10:05.760 --> 00:10:07.760
+Begin met een flow voor het indienen van formulieren.
+
+00:10:07.960 --> 00:10:12.740
+Iemand vult een Microsoft formulier in, misschien een evenementregistratie, een feedbackformulier of een ondersteuningsverzoek.
+
+00:10:12.820 --> 00:10:16.260
+Wanneer ze op verzenden klikken, slaat Power Automate hun antwoorden op in een SharePoint-lijst.
+
+00:10:16.440 --> 00:10:18.420
+Daarna stuurt het een e-mail naar je team met de details.
+
+00:10:18.720 --> 00:10:24.620
+Dat is alles. Eén trigger, twee acties en plotseling hoef je nooit meer handmatig formulierreacties naar een spreadsheet te kopiëren.
+
+00:10:24.620 --> 00:10:29.580
+Elke inzending wordt automatisch vastgelegd, georganiseerd en gedeeld met de mensen die het moeten zien.
+
+00:10:29.760 --> 00:10:31.620
+De volgende is een goedkeuringstroom voor documenten.
+
+00:10:32.300 --> 00:10:34.360
+Iemand uploadt een bestand naar een SharePoint-map.
+
+00:10:34.520 --> 00:10:38.120
+Power Automate detecteert het nieuwe bestand en stuurt een goedkeuringsverzoek naar een manager.
+
+00:10:38.380 --> 00:10:42.380
+De manager krijgt een e-mail of teamsmelding met een eenvoudige knop voor goedkeuren of afwijzen.
+
+00:10:42.600 --> 00:10:45.640
+Bij goedkeuring wordt het bestand automatisch verplaatst naar een publicatiemap.
+
+00:10:45.840 --> 00:10:47.640
+Bij afwijzing blijft het in de concepten staan.
+
+00:10:47.840 --> 00:10:49.960
+Je hoeft niet langer mensen achterna te zitten voor handtekeningen.
+
+00:10:50.100 --> 00:10:52.520
+Geen onzekerheid meer of een document is beoordeeld of niet.
+
+00:10:52.520 --> 00:10:55.620
+De stroom regelt de gehele goedkeuringsketen van begin tot eind.
+
+00:10:55.800 --> 00:10:57.660
+Dan is er nog een dagelijkse taakoverzicht.
+
+00:10:57.880 --> 00:11:02.780
+Elke ochtend om 7 uur ochtends controleert Power Automate je SharePoint-takenlijst op onvoltooide zaken.
+
+00:11:02.980 --> 00:11:06.740
+Het verzamelt alle achterstallige en openstaande items en stuurt je een samenvatting in teams.
+
+00:11:06.960 --> 00:11:08.980
+Je begint je dag precies wetende wat er op je wacht.
+
+00:11:09.140 --> 00:11:12.100
+Het is niet nodig om meerdere lijsten te openen of verschillende tools te controleren.
+
+00:11:12.220 --> 00:11:14.740
+De samenvatting staat in je chat zodra je met je koffie gaat zitten.
+
+00:11:14.940 --> 00:11:17.640
+Elk van deze stromen duurt ongeveer 10 tot 15 minuten om te bouwen.
+
+00:11:17.840 --> 00:11:18.940
+Geen codering vereist.
+
+00:11:18.940 --> 00:11:20.460
+Geen IT-afdeling nodig.
+
+00:11:20.720 --> 00:11:22.900
+Alleen jij, een browser en de Power Automate Editor.
+
+00:11:23.140 --> 00:11:25.900
+De truc is om te beginnen met het proces dat je het meest irriteert.
+
+00:11:26.080 --> 00:11:29.060
+Het proces dat je dagelijks doet en waarbij je denkt dit moet beter kunnen.
+
+00:11:29.300 --> 00:11:31.240
+Dat is je eerste doelwit voor automatisering.
+
+00:11:31.480 --> 00:11:32.100
+Aan de slag.
+
+00:11:32.300 --> 00:11:33.940
+Je eerste stroom in 5 minuten.
+
+00:11:34.160 --> 00:11:35.280
+Klaar om het te proberen?
+
+00:11:35.420 --> 00:11:38.420
+Hier lees je precies hoe je je eerste stroom in een paar minuten laat draaien.
+
+00:11:38.640 --> 00:11:41.400
+Open je browser en ga naar make.powerautomate.com.
+
+00:11:41.560 --> 00:11:44.120
+Dat is je centrale hap voor het bouwen en beheren van stromen.
+
+00:11:44.120 --> 00:11:49.000
+Meld je aan met hetzelfde Microsoft 365 werkaccount dat je al gebruikt voor e-mail en Teams.
+
+00:11:49.180 --> 00:11:53.640
+Eenmaal aangemeld, klik je op maken in de linkerzijbalk en kies je voor geautomatiseerde cloudstroom.
+
+00:11:53.860 --> 00:11:57.860
+Dat vertelt Power Automate dat je een stroom wilt die automatisch draait wanneer er iets gebeurt.
+
+00:11:58.080 --> 00:12:02.060
+Voor je eerste stroom raad ik aan om wanneer een nieuwe e-mail binnenkomt als trigger te gebruiken.
+
+00:12:02.240 --> 00:12:05.240
+Het is eenvoudig, makkelijk te testen en iedereen krijgt e-mail.
+
+00:12:05.440 --> 00:12:07.100
+Klik op maken en je bent in de editor.
+
+00:12:07.400 --> 00:12:08.580
+Nu heb je een actie nodig.
+
+00:12:08.840 --> 00:12:11.340
+Klik op het plus teken onder je trigger en zoek naar Teams.
+
+00:12:11.340 --> 00:12:14.480
+Kies voor bericht plaatsen in een chat of kanaal.
+
+00:12:14.800 --> 00:12:16.420
+Selecteer FlowBot als de afzender.
+
+00:12:17.260 --> 00:12:20.800
+Kies jezelf als ontvanger en typ een bericht zoals nieuwe e-mail ontvangen.
+
+00:12:21.060 --> 00:12:22.680
+Dat is alles wat erbij komt kijken.
+
+00:12:22.900 --> 00:12:24.900
+Klik op opslaan en je eerste stroom is klaar.
+
+00:12:25.020 --> 00:12:27.060
+En hier is een tip die je keer op keer zult gebruiken.
+
+00:12:27.240 --> 00:12:28.700
+De testknop is je beste vriend.
+
+00:12:28.980 --> 00:12:33.400
+Wanneer je erop klikt, voert Power Automate je stroom onmiddellijk uit met beschikbare triggergegevens.
+
+00:12:33.620 --> 00:12:36.260
+Voor de e-mail trigger wacht het op de ontvangst van een nieuwe e-mail.
+
+00:12:36.520 --> 00:12:39.740
+Stuur jezelf gewoon even een snelle testmail en kijk hoe de flow wordt geactiveerd.
+
+00:12:39.740 --> 00:12:42.380
+Je hoeft niet te wachten tot de echte trigger vanzelf plaatsvindt.
+
+00:12:42.440 --> 00:12:44.360
+Als er iets misgaat, raak dan niet in paniek.
+
+00:12:44.520 --> 00:12:47.600
+Klik op de stap die mislukte en bekijk de secties met invoer en uitvoer.
+
+00:12:47.780 --> 00:12:49.920
+Invoer laat zien welke gegevens de stap heeft ontvangen.
+
+00:12:50.140 --> 00:12:51.820
+Uitvoer laat zien wat de stap probeerde te doen.
+
+00:12:52.000 --> 00:12:55.220
+In 9 van de 10 gevallen wordt het probleem duidelijk zodra je die 2 gebieden bekijkt.
+
+00:12:55.420 --> 00:12:58.080
+Misschien was het onderwerp van de e-mail anders opgemaakt dan verwacht.
+
+00:12:58.280 --> 00:12:59.400
+Misschien was een veld leeg.
+
+00:12:59.580 --> 00:13:02.420
+De foutmeldingen zijn verrassend nuttig zodra je weet waar je ze kunt vinden.
+
+00:13:02.660 --> 00:13:04.840
+Begin klein, test vaak en bouw het geleidelijk uit.
+
+00:13:04.980 --> 00:13:06.980
+Je allereerste flow heeft misschien maar 2 stappen.
+
+00:13:06.980 --> 00:13:10.100
+Je tiende flow kan er wel 20 hebben. En dat is volkomen prima.
+
+00:13:10.360 --> 00:13:14.400
+Elke flow die je bouwt, leert je iets nieuws over hoe je tools verbonden zijn en samenwerken.
+
+00:13:14.620 --> 00:13:15.660
+Dat is dus het systeem.
+
+00:13:15.820 --> 00:13:20.700
+Triggers, acties en connectoren werken samen om het routinewerk dat je tijd kost elke dag af te handelen.
+
+00:13:20.920 --> 00:13:24.860
+De meeste mensen denken dat automatisering ingewikkeld is of programmeervaardigheden vereist.
+
+00:13:25.020 --> 00:13:25.960
+Maar dat is niet meer zo.
+
+00:13:26.140 --> 00:13:31.200
+De slimste set die je nu kunt doen, is één dagelijkse repetitieve taak, kiezen en daar een flow voor bouwen.
+
+00:13:31.420 --> 00:13:36.240
+Abonneer je voor meer uitleg zoals deze en laat een reactie achter waarin je vertelt wat jij als eerste zou automatiseren.

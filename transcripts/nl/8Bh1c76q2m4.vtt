@@ -1,0 +1,646 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:04.280
+Vandaag hebben we het over iets waar bijna iedereen van heeft gehoord, maar niemand kan uitleggen, Kubernetes.
+
+00:00:04.560 --> 00:00:08.400
+Het is verwarrend omdat het een probleem oplost dat de meeste mensen niet zien totdat ze er tegenaan lopen.
+
+00:00:08.620 --> 00:00:11.820
+Iedereen weet dat het belangrijk is, maar vraag wat het doet en je krijgt een lege blik.
+
+00:00:11.940 --> 00:00:15.820
+Het is geen vervanging voor Docker of een cloud besturingssysteem, ook al denken mensen dat vaak.
+
+00:00:15.940 --> 00:00:20.640
+De verwarring is logisch, want Kubernetes lost een probleem op waarvan je niet wist dat het bestond totdat je ermee te maken krijgt.
+
+00:00:20.800 --> 00:00:24.700
+Het is een hulpmiddel dat essentieel wordt zodra je meer dan een handvol containers moet beheren.
+
+00:00:24.700 --> 00:00:34.520
+Aan het einde van deze aflevering begrijp je wat Kubernetes echt is, hoe het samenwerkt met containers en waarom Azure Kubernetes Service het praktisch maakt voor teams die niet alles vanaf nul willen opbouwen.
+
+00:00:34.680 --> 00:00:36.180
+Pak je koffie en laten we beginnen.
+
+00:00:36.420 --> 00:00:37.880
+Het probleem voor containers.
+
+00:00:38.200 --> 00:00:39.580
+Laten we teruggaan naar het probleem.
+
+00:00:39.780 --> 00:00:41.740
+Beeld je een softwarebedrijf in van 10 jaar geleden.
+
+00:00:41.920 --> 00:00:46.800
+Je hebt een paar applicaties die moeten draaien, dus koop je servers, installeer je besturingssystemen en implementeer je alles handmatig.
+
+00:00:46.960 --> 00:00:49.940
+Elke app krijgt zijn eigen machine en je kunt bronnen niet delen tussen hen.
+
+00:00:49.940 --> 00:00:54.760
+Als de ene app veel geheugen nodig heeft en de andere nauwelijks iets gebruikt, krijgen ze toch allebei hun eigen server.
+
+00:00:54.980 --> 00:00:56.160
+De verspilling was enorm.
+
+00:00:56.440 --> 00:01:02.380
+Surfers draaiden op misschien 20% capaciteit, maar je kon ze niet consolideren omdat de applicaties zouden vechten om dependencies.
+
+00:01:02.760 --> 00:01:09.000
+Je eindigde met een kamer vol servers die nauwelijks werk verzetten, allemaal stroom en koeling verbruikten en constant onderhoud nodig hadden.
+
+00:01:09.140 --> 00:01:12.440
+De ene app heeft Python 3.7 nodig, de andere heeft Python 3.8 nodig.
+
+00:01:12.620 --> 00:01:15.040
+De ene heeft een oudere bibliotheek nodig, de andere de allernieuwste.
+
+00:01:15.040 --> 00:01:20.460
+Je kunt ze niet op dezelfde machine draaien zonder dat er iets stuk gaat, dus koop je meer servers en betaal je voor hardware die grotendeels ongebruikt blijft.
+
+00:01:20.680 --> 00:01:25.680
+Virtuele machines hielpen een beetje door een fysieke server in kleinere stukken te verdelen, elk met zijn eigen OS.
+
+00:01:25.860 --> 00:01:30.660
+Maar elke VM is zwaar met een volledig OS dat schijfruimte en geheugen inneemt en minuten nodig heeft om op te starten.
+
+00:01:30.800 --> 00:01:33.820
+En je moest ze allemaal apart configureren, wat veel werk was.
+
+00:01:34.040 --> 00:01:38.300
+Je bent nog steeds al die besturingssystemen aan het beheren, patchen, updaten en beveiligen.
+
+00:01:38.300 --> 00:01:43.560
+Teams hadden iets lichters en draagbaarders nodig, een manier om een applicatie te verpakken met alles wat nodig is om te draaien,
+
+00:01:43.720 --> 00:01:48.060
+zonder de overhead van een volledige virtuele machine en die makkelijk tussen machines kon worden verplaatst.
+
+00:01:48.220 --> 00:01:51.580
+Dat is waar containers in beeld kwamen, wat containers werkelijk zijn.
+
+00:01:51.740 --> 00:01:55.860
+Een container is een klein pakketje dat je applicatie bevat met alles wat nodig is om te kunnen draaien.
+
+00:01:56.060 --> 00:02:01.180
+Dat betekent dat de code, de runtime, de bibliotheken en de configuratiebestanden allemaal samen in één eenheid zijn gebundeld.
+
+00:02:01.380 --> 00:02:03.140
+Zie het als een zeecontainer voor software.
+
+00:02:03.140 --> 00:02:08.280
+Een zeecontainer kan op een vrachtwagen, trein of schip en de container zelf blijft altijd hetzelfde.
+
+00:02:08.500 --> 00:02:10.860
+Jouw software container werkt op precies dezelfde manier.
+
+00:02:11.060 --> 00:02:15.480
+Je bouwt hem één keer en hij draait hetzelfde op je laptop, je testserver en je productieomgeving.
+
+00:02:15.680 --> 00:02:19.260
+Het belangrijkste verschil tussen containers en virtuele machines is hun efficiëntie.
+
+00:02:19.420 --> 00:02:24.860
+Een virtuele machine draait een volledig eigen besturingssysteem, dus elke VM heeft een eigen kernel, systeembestanden en al het andere.
+
+00:02:25.060 --> 00:02:27.240
+Een container deelt het besturingssysteem van de host.
+
+00:02:27.440 --> 00:02:30.220
+Het is slechts een proces met een eigen geïsoleerde blik op de wereld.
+
+00:02:30.220 --> 00:02:33.400
+Dat betekent dat containers in seconden opstarten, niet in minuten.
+
+00:02:33.560 --> 00:02:36.700
+Ze gebruiken minder geheugen en je kunt er meer op één machine kwijt.
+
+00:02:36.700 --> 00:02:42.120
+Docker maakte containers populair door ontwikkelaars een simpele manier te geven om ze met één commando te bouwen en te draaien.
+
+00:02:42.280 --> 00:02:45.380
+Plotseling begon het, het werkt op mijn machine, probleem te verdwijnen.
+
+00:02:45.560 --> 00:02:49.500
+Als je applicatie in een container op je laptop draait, draait hij op dezelfde manier op de server.
+
+00:02:49.760 --> 00:02:54.400
+De omgeving is overal consistent, maar containers lossen één probleem op en creëren een ander.
+
+00:02:54.640 --> 00:02:57.280
+Met een handvol containers werkt handmatig beheer prima.
+
+00:02:57.280 --> 00:02:59.960
+Je kunt ze zelf starten, stoppen en bijhouden.
+
+00:03:00.120 --> 00:03:01.740
+Maar wat gebeurt er als je er honderden hebt?
+
+00:03:01.920 --> 00:03:05.380
+Je moet bepalen welke server welke container draait, vastgelopen exemplaren herstarten,
+
+00:03:05.640 --> 00:03:07.880
+ze met elkaar verbinden en ze opschalen bij pieken in het verkeer.
+
+00:03:08.060 --> 00:03:11.200
+Dat is een nieuwe uitdaging en dat is precies waar Kubernetes om de hoek komt kijken.
+
+00:03:11.380 --> 00:03:12.760
+Het orchestratie probleem.
+
+00:03:12.960 --> 00:03:17.340
+Dus, je hebt containers aan de praat, je verpakt je applicatie, hij draait overal consistent en het leven is goed.
+
+00:03:17.340 --> 00:03:21.400
+Maar slechts voor even, met tien of twintig containers kun je de boel handmatig beheren.
+
+00:03:21.540 --> 00:03:26.580
+Je weet welke server welke container draait, je kunt iets herstarten als het crash en je kunt hier en daar wat dingen updaten.
+
+00:03:26.580 --> 00:03:34.380
+Het is beheersbaar, maar dan groeit je applicatie. Je stapt over op microservices, dus in plaats van één grote applicatie heb je er twintig kleinere.
+
+00:03:34.540 --> 00:03:38.940
+Elke service heeft voor de betrouwbaarheid meerdere kopieën nodig en nu kijk je naar 200 containers.
+
+00:03:39.300 --> 00:03:40.840
+Handmatig beheer werkt dan niet meer.
+
+00:03:41.040 --> 00:03:46.700
+Je moet bepalen welke server welke container draait, containers herstarten bij falen en ze verbinden zodat ze kunnen communiceren.
+
+00:03:46.920 --> 00:03:53.120
+Je moet ook opschalen bij verkeerspieken, misschien tijdens een uitverkoop of productlancering en weer afschalen als het rustiger wordt.
+
+00:03:53.120 --> 00:04:00.460
+En je moet updates uitrollen zonder downtime, wat betekent dat je oude containers één voor één vervangt door nieuwe, zorgvuldig, zonder iets te breken.
+
+00:04:00.680 --> 00:04:04.580
+Dit zijn orkestratieproblemen en dat is precies waar Kubernetes voor is gebouwd.
+
+00:04:04.740 --> 00:04:10.240
+Kubernetes is een open source platform dat het implementeren, schalen en beheren van gecontaineriseerde applicaties automatiseert.
+
+00:04:10.460 --> 00:04:12.620
+Zie het als het besturingssysteem voor je datacenter.
+
+00:04:12.880 --> 00:04:20.480
+Net zoals Windows of Linux de bronnen op één computer beheert, zoals CPU, geheugen en schijf, beheert Kubernetes de bronnen over al je servers heen.
+
+00:04:20.480 --> 00:04:23.760
+Het behandelt al je machines als één grote pool van rekenkracht.
+
+00:04:23.980 --> 00:04:29.460
+Jij vertelt wat je wilt draaien en het bepaalt waar het komt te staan, hoe het blijft draaien en hoe het verbonden wordt met de rest.
+
+00:04:30.100 --> 00:04:31.900
+Kernconcepten, pads, nodes en clusters.
+
+00:04:32.260 --> 00:04:34.460
+Laten we kijken hoe Kubernetes daadwerkelijk werkt.
+
+00:04:34.620 --> 00:04:37.060
+De kleinste eenheid in Kubernetes wordt een pad genoemd.
+
+00:04:37.180 --> 00:04:38.840
+Een pad verpakt één of meer containers.
+
+00:04:39.120 --> 00:04:43.380
+Containers binnen dezelfde pad delen opslag en netwerk, zodat ze met elkaar kunnen communiceren via localhost.
+
+00:04:43.560 --> 00:04:45.980
+Je kunt een pad zien als een enkele eenheid voor implementatie.
+
+00:04:46.120 --> 00:04:48.220
+Je implementeert geen containers direct in Kubernetes.
+
+00:04:48.220 --> 00:04:49.580
+Je implementeert pads.
+
+00:04:49.760 --> 00:04:52.040
+Pads draaien niet op zichzelf, ze draaien op nodes.
+
+00:04:52.220 --> 00:04:56.100
+Een node is een server, fysiek of virtueel, die deel uitmaakt van je Kubernetes-cluster.
+
+00:04:56.280 --> 00:05:00.400
+Elke node draait de software die nodig is voor pads, plus een paar andere zaken waar we zo op terugkomen.
+
+00:05:00.560 --> 00:05:04.140
+Een cluster is de verzameling van alle nodes die als één uniform systeem worden beheerd.
+
+00:05:04.360 --> 00:05:09.140
+Simpel gezegd, een pad is je applicatie, een node is waar deze draait en het cluster is de hele omgeving.
+
+00:05:09.340 --> 00:05:10.300
+Pads zijn vluchtig.
+
+00:05:10.480 --> 00:05:12.780
+Ze kunnen op elk moment worden aangemaakt, vernietigd of verplaatst.
+
+00:05:12.920 --> 00:05:13.940
+Dat is bewust zo ontworpen.
+
+00:05:14.080 --> 00:05:16.400
+Als een node faalt, verplaatst Kubernetes de pads naar een andere node.
+
+00:05:16.400 --> 00:05:18.380
+Bij opschalen worden er nieuwe pads aangemaakt.
+
+00:05:18.520 --> 00:05:21.000
+En wanneer een pad crash, wordt deze automatisch vervangen.
+
+00:05:21.160 --> 00:05:22.900
+Het geheel beschouwt pads als tijdelijk.
+
+00:05:23.080 --> 00:05:25.620
+Maar als pads komen en gaan, heb je een manier nodig om ze te bereiken.
+
+00:05:25.780 --> 00:05:28.640
+In plaats van direct met een pad te communiceren, communiceer je met een service.
+
+00:05:28.840 --> 00:05:32.980
+Een service biedt een stabiel netwerkadres dat verkeer naar de juiste pads leidt, zelfs als pads veranderen.
+
+00:05:33.120 --> 00:05:34.160
+Stel je een hotel voor.
+
+00:05:34.320 --> 00:05:36.200
+Het telefoonnummer van het hotel is de service.
+
+00:05:36.440 --> 00:05:39.220
+Kamers krijgen steeds andere gasten, maar het telefoonnummer blijft hetzelfde.
+
+00:05:39.380 --> 00:05:42.020
+Je belt de receptie en zij leiden je gesprek door naar de juiste kamer.
+
+00:05:42.180 --> 00:05:44.240
+Dat is precies wat een service in Kubernetes doet.
+
+00:05:44.240 --> 00:05:48.880
+Het geeft je een vast adres dat altijd verwijst naar de pads die op dat moment je applicatie draaien.
+
+00:05:49.040 --> 00:05:51.200
+Het control plane, het brein van het cluster.
+
+00:05:51.480 --> 00:05:53.640
+Dus, je hebt pads, nodes en een cluster.
+
+00:05:53.840 --> 00:05:55.660
+De vraag is, wie bepaalt wat waar draait?
+
+00:05:55.880 --> 00:05:57.400
+Dat is de taak van het control plane.
+
+00:05:57.600 --> 00:06:00.500
+Elk Kubernetes-cluster heeft er een, en het is het brein van de hele operatie.
+
+00:06:00.680 --> 00:06:02.140
+Hier worden alle beslissingen genomen.
+
+00:06:02.360 --> 00:06:04.280
+Het control plane bestaat uit verschillende onderdelen.
+
+00:06:04.480 --> 00:06:07.320
+Het eerste is de API-server, die fungeert als de voordeur van je cluster.
+
+00:06:07.540 --> 00:06:10.580
+Elk commando dat je naar Kubernetes stuurt, of het nu via de opdrachtregel,
+
+00:06:10.700 --> 00:06:13.600
+een dashboard of een automatisch script is, verloopt via de API-server.
+
+00:06:13.600 --> 00:06:17.020
+Het verifieert je aanvraag, controleert of je de bevoegdheid hebt om dit te doen,
+
+00:06:17.180 --> 00:06:18.960
+en stuurt het vervolgens door naar de juiste plek.
+
+00:06:19.120 --> 00:06:22.500
+Niets gebeurt in Kubernetes zonder eerst via de API-server te gaan.
+
+00:06:22.760 --> 00:06:26.000
+Vervolgens is er de scheduler, die bepaalt op welke nood elke pad draait.
+
+00:06:26.220 --> 00:06:28.340
+Wanneer je zegt, ik wil dat deze applicatie draait,
+
+00:06:28.460 --> 00:06:31.780
+bekijkt de scheduler alle beschikbare noods, controleert de aanwezige middelen,
+
+00:06:31.980 --> 00:06:35.260
+zoals CPU, geheugen en schijfruimte, en kiest de beste voor de taak.
+
+00:06:35.360 --> 00:06:38.780
+Het is als een hotelmanager die kamers toewijst op basis van wat elke gast nodig heeft.
+
+00:06:38.780 --> 00:06:43.960
+Een gast met veel bagage krijgt een grotere kamer, terwijl een lichtgewicht applicatie een kleinere nood krijgt met vrije capaciteit.
+
+00:06:44.180 --> 00:06:45.600
+Dan is er nog de controllermanager.
+
+00:06:45.800 --> 00:06:49.880
+Dit onderdeel houdt het cluster in de gaten en zorgt ervoor dat de werkelijke status overeenkomt met wat je hebt aangegeven.
+
+00:06:50.040 --> 00:06:52.700
+Je hebt aangegeven dat je drie kopieën van je webapp wilt laten draaien.
+
+00:06:52.860 --> 00:06:55.900
+De controllermanager controleert of er daadwerkelijk drie kopieën draaien.
+
+00:06:56.060 --> 00:06:58.420
+Als er een crash, merkt hij dit op en start hij een vervanger.
+
+00:06:58.640 --> 00:07:01.680
+Als iemand per ongeluk een pad verwijderd, maakt hij een nieuwe aan.
+
+00:07:01.820 --> 00:07:04.160
+Het is het onderdeel dat je cluster betrouwbaar houdt.
+
+00:07:04.160 --> 00:07:07.180
+En tot slot is er etcd, de database van het cluster.
+
+00:07:07.400 --> 00:07:11.140
+Het slaat alles op, zoals wat er draait, waar het draait en hoe het geconfigureerd is.
+
+00:07:11.340 --> 00:07:13.480
+Het is de bron van waarheid voor het hele cluster.
+
+00:07:13.720 --> 00:07:19.120
+Als de API-server de voordeur is, dan is etcd het archiefkastje in het kantoor waar alle gegevens worden bewaard.
+
+00:07:19.260 --> 00:07:23.640
+Het mooie van dit ontwerp is dat jij beschrijft wat je wilt en Kubernetes bedenkt hoe het werkelijkheid moet worden.
+
+00:07:23.820 --> 00:07:27.100
+Je vertelt niet hoe het dingen moet doen, je vertelt hoe het eindresultaat eruit moet zien.
+
+00:07:27.340 --> 00:07:31.360
+Dat is het declaratieve model en het is het kernidee achter alles wat Kubernetes doet.
+
+00:07:31.360 --> 00:07:33.920
+Workloads, deployments, services en schalen.
+
+00:07:34.120 --> 00:07:37.360
+Dus, laten we praten over hoe je applicaties daadwerkelijk op Kubernetes draait.
+
+00:07:37.500 --> 00:07:39.060
+Je zult niet direct pods aanmaken.
+
+00:07:39.220 --> 00:07:42.060
+In plaats daarvan gebruik je een object op een hoger niveau genaamd een deployment.
+
+00:07:42.400 --> 00:07:46.060
+Zie een deployment als een manager die Kubernetes vertelt hoeveel kopieën van je pad moeten draaien,
+
+00:07:46.240 --> 00:07:49.680
+welke container-image moet worden gebruikt en hoe ze moeten worden bijgewerkt bij een nieuwe versie.
+
+00:07:49.860 --> 00:07:52.580
+Het is de standaard manier om stateles applicaties te draaien.
+
+00:07:52.800 --> 00:07:57.480
+Wanneer je een deployment bijwerkt, bijvoorbeeld als je een nieuwe versie van je app bust, voert Kubernetes een rolling update uit.
+
+00:07:57.480 --> 00:08:01.020
+Het vervangt pods één voor één, zodat er altijd tenminste één kopie actief blijft.
+
+00:08:01.020 --> 00:08:04.400
+Dat betekent geen downtime en geen plotselinge onderbrekingen voor uw gebruikers.
+
+00:08:04.540 --> 00:08:08.860
+En als er iets misgaat met een nieuwe versie, kunt u met één commando terugkeren naar de vorige versie.
+
+00:08:09.080 --> 00:08:10.260
+Dat is een krachtig vangnet.
+
+00:08:10.420 --> 00:08:12.380
+Maar uw pods moeten natuurlijk wel bereikbaar zijn.
+
+00:08:12.620 --> 00:08:14.080
+Dat is waar services in beeld komen.
+
+00:08:14.280 --> 00:08:17.820
+Een service biedt een stabiel netwerkadres dat verkeer naar de juiste pods leidt.
+
+00:08:17.920 --> 00:08:22.280
+Het kan die pods ook blootstellen aan andere delen van uw applicatie of aan de buitenwereld.
+
+00:08:22.420 --> 00:08:26.100
+Een service kan intern zijn, alleen toegankelijk binnen het cluster of extern,
+
+00:08:26.100 --> 00:08:29.360
+met een openbaar IP-adres dat gebruikers vanaf internet kunnen bereiken.
+
+00:08:29.560 --> 00:08:31.000
+Laten we het nu hebben over schalen.
+
+00:08:31.200 --> 00:08:35.020
+Kubernetes kan uw applicatie automatisch laten groeien of krimpen op basis van de vraag.
+
+00:08:35.160 --> 00:08:38.200
+U stelt een doel in, bijvoorbeeld 70% CPU gebruik,
+
+00:08:38.360 --> 00:08:42.140
+en Kubernetes voegt pods toe als het gebruik boven die drempel komt en verwijdert ze als het daalt.
+
+00:08:42.340 --> 00:08:46.080
+Uw applicatie schaalt op tijdens een verkeerspiek en schaalt terug als het weer rustig wordt.
+
+00:08:46.280 --> 00:08:47.920
+Geen handmatige tussenkomst nodig.
+
+00:08:48.180 --> 00:08:50.200
+Maar al deze kracht brengt complexiteit met zich mee.
+
+00:08:50.200 --> 00:08:55.620
+Het beheren van uw eigen Kubernetes cluster betekent dat u verantwoordelijk bent voor het control plane, upgrades, beveiligingspatches en backups.
+
+00:08:55.840 --> 00:09:00.180
+U heeft diepgaande expertise nodig om noodstoringen, netwerkconfiguratie en clusterschaling af te handelen.
+
+00:09:00.420 --> 00:09:03.700
+Veel teams besteden meer tijd aan het beheren van het cluster dan aan het bouwen van applicaties.
+
+00:09:03.880 --> 00:09:06.120
+En dat is waar Managed Kubernetes om de hoek komt kijken.
+
+00:09:06.580 --> 00:09:08.180
+Zelfbeheerden versus Managed Kubernetes.
+
+00:09:08.540 --> 00:09:11.240
+Laten we het dus hebben over de realiteit van het zelfdraaien van Kubernetes.
+
+00:09:11.620 --> 00:09:17.580
+Wanneer u uw eigen cluster opzet, bent u verantwoordelijk voor alles, het control plane, upgrades, beveiligingspatches en etcd-backups.
+
+00:09:17.580 --> 00:09:20.380
+Als de API-server uitvalt, is dat uw probleem.
+
+00:09:20.540 --> 00:09:24.240
+Als er een beveiligingsslag wordt ontdekt in de versie die u draait, moet u deze patchen.
+
+00:09:24.400 --> 00:09:27.320
+Als etcd corrupt raakt, moet u herstellen vanaf een backup.
+
+00:09:27.620 --> 00:09:29.380
+Dit alles vereist diepgaande expertise.
+
+00:09:29.800 --> 00:09:34.820
+U moet begrijpen hoe nodes falen, hoe netwerken werken op clusterniveau en hoe u dingen schaalt zonder ze te breken.
+
+00:09:35.080 --> 00:09:36.480
+Dit is wat veel teams verrast.
+
+00:09:36.720 --> 00:09:41.900
+Veel organisaties besteden meer tijd aan het beheer van hun Kubernetes cluster dan aan het bouwen van de applicaties die erop draaien.
+
+00:09:42.060 --> 00:09:46.440
+Ze zijn voortdurend bezig met upgrades, het oplossen van netwerkproblemen en het omgaan met noodstoringen.
+
+00:09:46.440 --> 00:09:48.060
+Het cluster wordt een fulltime baan.
+
+00:09:48.240 --> 00:09:50.900
+Dat is niet de reden waarom u in eerste instantie voor Kubernetes koos.
+
+00:09:51.100 --> 00:09:53.380
+Dit is waar managed Kubernetes services van pas komen.
+
+00:09:53.620 --> 00:09:57.600
+Services zoals Azure Kubernetes Service of Axe beheren het control plane voor u.
+
+00:09:57.740 --> 00:10:01.680
+Azure beheert de API-server, etcd, de scheduler en de controller-manager.
+
+00:10:01.900 --> 00:10:04.580
+U hoeft zich geen zorgen te maken over het patchen of draaiende houden ervan.
+
+00:10:04.760 --> 00:10:08.280
+Je betaalt alleen voor de worker nodes, de virtuele machines waarop je workloads daadwerkelijk draaien.
+
+00:10:08.440 --> 00:10:10.080
+Het control plane zelf is gratis.
+
+00:10:10.300 --> 00:10:11.960
+Dit verandert de vergelijking drastisch.
+
+00:10:11.960 --> 00:10:17.500
+In plaats van tijd te besteden aan clusteronderhoud, kan je team zich richten op wat echt telt, de applicaties die jullie bouwen.
+
+00:10:17.680 --> 00:10:21.700
+Voor de meeste teams, zeker degene die net beginnen, is managed Kubernetes de juiste keuze.
+
+00:10:21.880 --> 00:10:25.140
+Je krijgt alle kracht van Kubernetes zonder de operationele overhead.
+
+00:10:25.340 --> 00:10:27.540
+Axe Kubernetes eenvoudig gemaakt op Azure.
+
+00:10:27.800 --> 00:10:28.980
+Dus, wat is Axe precies?
+
+00:10:29.180 --> 00:10:34.200
+Het is de managed Kubernetes service van Azure die een volledig cluster biedt zonder dat je het vanaf nul hoeft op te bouwen.
+
+00:10:34.360 --> 00:10:39.160
+Het control plane is gratis, zoals gezegd, dus je betaalt alleen voor de virtuele machines die je workloads draaien.
+
+00:10:39.160 --> 00:10:43.580
+Dat betekent dat je klein kunt beginnen, weinig betaalt en kunt opschalen naarmate je behoefte groeien.
+
+00:10:43.760 --> 00:10:45.540
+Azure neemt al het zware werk uit handen.
+
+00:10:45.740 --> 00:10:49.780
+Upgrades, patching en gezondheidsmonitoring voor het control plane worden allemaal geregeld.
+
+00:10:49.960 --> 00:10:53.860
+Je hebt geen toegewijd team van Kubernetes experts nodig om alles draaiende te houden.
+
+00:10:54.020 --> 00:10:59.300
+En omdat Axe onderdeel is van het Azure ecosysteem, integreert het met tools die je waarschijnlijk al gebruikt.
+
+00:10:59.500 --> 00:11:05.420
+Azure Active Directory voor authenticatie, Azure Monitor voor logging en metrics en Azure Policy voor governance.
+
+00:11:05.740 --> 00:11:07.300
+Ze werken allemaal direct samen.
+
+00:11:07.300 --> 00:11:09.600
+Geen losse onderdelen die je erbij moet knutselen.
+
+00:11:09.760 --> 00:11:14.240
+Het opzetten van CI, CD pipelines met GitHub Actions of Azure DevOps kost slechts minuten.
+
+00:11:14.440 --> 00:11:17.880
+Push een wijziging naar je repository en het bouwt automatisch een nieuwe container image.
+
+00:11:18.140 --> 00:11:21.180
+Pus deze naar Azure Container Registry en werk je deployment op Axe bij.
+
+00:11:21.400 --> 00:11:24.180
+Geen handmatige stappen, niet inloggen via SSH op servers.
+
+00:11:24.460 --> 00:11:25.760
+Alles is geautomatiseerd.
+
+00:11:25.960 --> 00:11:31.360
+Voor beginners is er de automatische modus van Axe ontworpen voor teams die niet elke beslissing over clusterconfiguratie willen nemen.
+
+00:11:31.560 --> 00:11:35.500
+Het biedt kant- en klare standaardinstellingen voor schalen, netwerken, beveiliging en upgrades.
+
+00:11:35.500 --> 00:11:38.160
+Je hoeft geen Kubernetes-expert te worden om te kunnen beginnen.
+
+00:11:38.380 --> 00:11:41.000
+Beschrijf simpelweg je applicatie en Axe regelt de rest.
+
+00:11:41.180 --> 00:11:44.840
+Eén commando geeft je een cluster, één manifestbestand krijgt je applicatie werkend.
+
+00:11:45.000 --> 00:11:50.120
+De vaardigheden die je leert met Axe zijn toepasbaar op elke Kubernetes-omgeving omdat het onderhuids standaard Kubernetes is.
+
+00:11:50.300 --> 00:11:55.740
+Je leert geen eigen systeem, je leert het echte werk terwijl Azure de operationele complexiteit afhandelt.
+
+00:11:56.000 --> 00:11:57.660
+Dus nu heb je het totaalplaatje.
+
+00:11:57.660 --> 00:12:01.300
+Containers verpakken je applicaties zodat ze overal consistent draaien.
+
+00:12:01.500 --> 00:12:07.320
+En Kubernetes orkestreert die containers op schaal, waarbij deployment, schalen en herstel automatisch worden afgehandeld.
+
+00:12:07.560 --> 00:12:13.240
+Axe maakt die orkestratie beheersbaar door het control plane te verzorgen en te integreren met de Azure tools die je al kent.
+
+00:12:13.460 --> 00:12:18.120
+De kernboodschap is, Kubernetes is niet alleen voor grote techbedrijven met enorme engineering teams.
+
+00:12:18.380 --> 00:12:21.500
+Met managed services zoals Axe is het toegankelijk voor elk team.
+
+00:12:21.700 --> 00:12:23.460
+Je huiswerk voor deze week is simpel.
+
+00:12:23.460 --> 00:12:28.440
+Maak een gratis Azure account aan, start een Axe cluster en implementeer een eenvoudige applicatie.
+
+00:12:28.620 --> 00:12:31.740
+Het kost je minuten en je zult zien hoe ver het platform is gevorderd.
+
+00:12:31.880 --> 00:12:33.100
+Klaar om de diepte in te gaan?
+
+00:12:33.280 --> 00:12:38.600
+De volgende aflevering gaat over het bouwen van je eerste container image en deze naar Azure Container Registry pushen.
+
+00:12:38.840 --> 00:12:43.920
+Abonneer je op je favoriete podcast platform en deel dit met iemand die net aan zijn Kubernetes reis begint.

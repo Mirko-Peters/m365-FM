@@ -2,6 +2,7 @@
 import json
 
 from site_learn import esc, LCSS
+import site_meta_community as PM   # Titel/Description (Suchabsicht)
 
 MCP_URL = "https://api-dub.m365.fm/mcp"
 AGENT_URL = "https://api-dub.m365.fm/agent/mcp"
@@ -117,5 +118,5 @@ def build(g):
                   f'{mvp_html}{agent_html}<h2>{esc(t["safe"])}</h2><ul>{sl}</ul><h2>{esc(t["faq"])}</h2><p>{esc(t["faqp"])}</p><h2>{esc(t["skh"])}</h2><p>{esc(t["skp"])}</p><p><a class="btn main" href="{BASE}/m365-fm-skill/SKILL.md" download>{esc(t["skd"])}</a></p><h3>{esc(t["cop"])}</h3><p>{esc(t["copp"])}</p><h3>{esc(t["chat"])}</h3><p>{esc(t["chatp"])}</p>{css}')
         ld = [{"@context": "https://schema.org", "@type": "HowTo", "name": t["title"], "description": t["intro"], "inLanguage": lang, "url": ru,
                "step": [{"@type": "HowToStep", "name": t["st1"], "text": t["st1p"]}, {"@type": "HowToStep", "name": t["st2"], "text": t["st2p"] + " " + MCP_URL}, {"@type": "HowToStep", "name": t["st3"], "text": t["ex"][0]}]}]
-        write(f"{'de/' if lang == 'de' else ''}community/mcp/index.html", page(lang, f'{t["title"]} – M365.FM', t["intro"][:155], ru, b, None, ld, og_type="website", extra_head=LCSS))
+        write(f"{'de/' if lang == 'de' else ''}community/mcp/index.html", page(lang, *(PM.hub_meta("mcp", lang) or (f'{t["title"]} – M365.FM', t["intro"][:155])), ru, b, None, ld, og_type="website", extra_head=LCSS))
         sitemap.append((ru, TODAY, None))
