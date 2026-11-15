@@ -225,3 +225,21 @@ test("Datenschutz: die neuen Tabellen und Spalten enthalten keine Nutzer- oder P
     for (const t of ["sponsor_clicks_daily", "ad_stats_daily", "ad_house_stats", "sponsor_queries_daily"]) assert.ok(!src.includes(t), t);
   } finally { done(); }
 });
+
+test("Browser und In-App-Browser von DuckDuckGo, Pinterest, Yandex, Baidu, Qwant und Seznam sind Menschen, ihre Crawler nicht", () => {
+  const H = { "accept": "*/*", "accept-language": "de-DE,de;q=0.9", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "sec-fetch-site": "same-site" };
+  const req = (ua) => new Request("https://api-dub.m365.fm/api/ads/serve", { headers: { ...H, "user-agent": ua } });
+  const people = [
+    "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Mobile DuckDuckGo/5 Safari/537.36",
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 DuckDuckGo/7 Safari/605.1.15",
+    "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Mobile Safari/537.36 [Pinterest/Android]",
+    "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 YaBrowser/24.7 YandexSearch/24.70 Mobile Safari/537.36",
+    "Mozilla/5.0 (Linux; Android 12) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0 Mobile Safari/537.36 baiduboxapp/13.40",
+  ];
+  const click = (ua) => new Request("https://c.m365.fm/abc", { headers: { "user-agent": ua, "accept": "text/html,application/xhtml+xml", "accept-language": "de-DE,de;q=0.9", "sec-fetch-mode": "navigate", "sec-fetch-dest": "document", "sec-fetch-site": "cross-site", "sec-fetch-user": "?1", "upgrade-insecure-requests": "1" } });
+  for (const ua of people) { assert.equal(isImpressionBot(req(ua)), false, "Einblendung: " + ua); assert.equal(classify(click(ua)).bot, false, "Klick: " + ua); }
+  const bots = ["DuckDuckBot/1.1; (+http://duckduckgo.com/duckduckbot.html)", "Mozilla/5.0 (compatible; Pinterestbot/1.0; +http://www.pinterest.com/bot.html)",
+    "Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)", "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)",
+    "Mozilla/5.0 (compatible; SeznamBot/4.0; +https://o-seznam.cz/napoveda/vyhledavani/en/seznambot-crawler/)", "Mozilla/5.0 (compatible; Qwantify/2.4w; +https://www.qwant.com/)"];
+  for (const ua of bots) assert.equal(isImpressionBot(req(ua)), true, ua);
+});
