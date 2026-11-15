@@ -3,7 +3,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { classify, isBot } from "../src/botcheck.js";
+import { classify, isBot, isImpressionBot } from "../src/botcheck.js";
 import { goBase, goHost, goUrl } from "../src/ads.js";
 import { handleSponsorLink } from "../src/sponsor.js";
 import worker from "../src/index.js";
@@ -61,6 +61,21 @@ test("classify: Sec-Fetch passt nicht zu einem Link-Klick", () => {
   assert.equal(classify(req({ "user-agent": CHROME, ...HUMAN, "sec-fetch-dest": "image" })).reason, "sec-fetch");
   assert.equal(classify(req({ "user-agent": CHROME, ...HUMAN, "sec-fetch-mode": "no-cors" })).bot, true);
   assert.equal(classify(req({ "user-agent": CHROME, ...HUMAN, "sec-fetch-dest": "iframe" })).bot, false, "Klick in einem eingebetteten Rahmen");
+});
+
+test("isImpressionBot: fetch() eines echten Browsers ist eine Einblendung, eindeutige Bots nicht", () => {
+  const fetchHdr = { "user-agent": CHROME, "accept-language": "de-DE,de;q=0.9", accept: "*/*", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "sec-fetch-site": "same-site" };
+  assert.equal(classify(req(fetchHdr)).bot, true, "als Link-Klick waere das kein Mensch");
+  assert.equal(isImpressionBot(req(fetchHdr)), false);
+  const { "accept-language": _l, ...noLang } = fetchHdr;
+  assert.equal(isImpressionBot(req(noLang)), false, "keine Punkte-Hinweise bei Einblendungen");
+  assert.equal(isImpressionBot(req({})), true, "ohne Browserkennung");
+  assert.equal(isImpressionBot(req({ ...fetchHdr, "sec-purpose": "prefetch" })), true);
+  assert.equal(isImpressionBot(req({ ...fetchHdr, "user-agent": "Mozilla/5.0 (compatible; bingbot/2.0)" })), true);
+  assert.equal(isImpressionBot(req({ ...fetchHdr, "user-agent": "python-requests/2.31" })), true);
+  assert.equal(isImpressionBot(req(fetchHdr, { botManagement: { verifiedBot: true } })), true);
+  assert.equal(isImpressionBot(req(fetchHdr, { botManagement: { score: 12 } })), true);
+  assert.equal(isImpressionBot(req(fetchHdr, { botManagement: { score: 80 }, asOrganization: "Hetzner Online GmbH" })), false);
 });
 
 test("classify: schwache Hinweise zaehlen erst ab zwei", () => {

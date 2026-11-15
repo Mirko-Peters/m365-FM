@@ -4,7 +4,7 @@
 // - Webhook /paypal/webhook: jede Nachricht per verify-webhook-signature mit PAYPAL_WEBHOOK_ID pruefen, idempotent ueber die Event-ID.
 // - Kampagne startet erst nach bestaetigter Zahlung UND Freigabe des Werbemittels durch einen Admin.
 // - Einblendungen cookiefrei beim Ausliefern des Platzes gezaehlt (je Kampagne, Platz, Seitentyp, Tag), Klicks ueber /go/<code>.
-import { classify, isBot } from "./botcheck.js";
+import { classify, isBot, isImpressionBot } from "./botcheck.js";
 import { LEAD_STATUS } from "./mediakit.js";
 import { cleanText, esc, rateLimit, sha256hex, audit, cors } from "./util.js";
 import { notify } from "./mail.js";
@@ -409,7 +409,7 @@ export async function handlePaypalWebhook(env, request) {
 // ---------------------------------------------------------------- Auslieferung, Zaehlung, Go-Link
 
 // Mensch oder Bot: Schaetzung aus Kopfzeilen, siehe botcheck.js (dort auch, was gespeichert wird: nur Tageszaehler)
-export { classify, isBot };
+export { classify, isBot, isImpressionBot };
 
 // Kurzlink-Basis (Teil "c.m365.fm"): env.GO_BASE = reiner https-Ursprung ohne Pfad, z. B. https://c.m365.fm. Ohne Wert (offline, Tests, Notfall)
 // bleibt die alte Adresse ${API}/go/<code>, die auch mit gesetzter Basis weiter funktioniert (alte Links in Seiten, Mails, Videobeschreibungen).
@@ -535,7 +535,7 @@ async function serve(env, request, url, J) {
   const slot = url.searchParams.get("slot"), pageType = url.searchParams.get("pt") || "other", lang = /^[a-z]{2}$/.test(url.searchParams.get("lang") || "") ? url.searchParams.get("lang") : "en";
   const topics = list(url.searchParams.get("topics"), 20).filter((t) => TOPIC.test(t));
   if (!HOUSE_SLOTS.includes(slot) || !PAGE_TYPES.includes(pageType)) return J({ error: "bad_request" }, 400, NS);
-  const bot = isBot(request), country = countryOf(request);
+  const bot = isImpressionBot(request), country = countryOf(request);   // fetch() aus assets/ads.js, kein Link-Klick: nicht classify()
   const houseKey = HOUSE_KEYS.has(url.searchParams.get("house")) ? url.searchParams.get("house") : "";
   const paid = bookingOn(env) && SLOTS.includes(slot) && url.searchParams.get("house_only") !== "1";   // Schalter aus oder reiner Hausplatz: nur Hausanzeigen
   const b = paid ? await pickCampaign(db, { slot, pageType, topics }) : null;

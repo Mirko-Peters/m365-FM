@@ -10,6 +10,8 @@ import { handleSponsorLink } from "../src/sponsor.js";
 
 // Kopfzeilen eines echten Browsers bei einem Link-Klick (die Bot-Erkennung wertet Sprache und Sec-Fetch aus, siehe src/botcheck.js)
 const HUMAN = { "accept-language": "de-DE,de;q=0.9,en;q=0.8", accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "sec-fetch-mode": "navigate", "sec-fetch-dest": "document", "sec-fetch-site": "cross-site", "sec-fetch-user": "?1" };
+// Kopfzeilen eines echten Browsers bei fetch() aus assets/ads.js (Einblendung /api/ads/serve, API-Aufrufe): KEINE Navigation
+const FETCH = { "accept-language": "de-DE,de;q=0.9,en;q=0.8", accept: "*/*", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "sec-fetch-site": "same-site" };
 
 const J = (data, status = 200, extra = {}) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json", ...extra } });
 const ADMIN = { id: 1, admin: true }, OWNER = { id: 2, admin: false }, OTHER = { id: 3, admin: false };
@@ -67,7 +69,7 @@ afterEach(() => { globalThis.fetch = realFetch; });
 async function call(path, { method = "GET", body, user, query = "", headers = {} } = {}) {
   const url = new URL(`https://api-dub.m365.fm${path}${query}`);
   const isBin = body instanceof Uint8Array;
-  const req = new Request(url, { method, headers: { "x-requested-with": "m365", "user-agent": "Mozilla/5.0 (Windows NT 10.0) Chrome/130", ...HUMAN, "cf-connecting-ip": "203.0.113.5", ...(body && !isBin ? { "content-type": "application/json" } : {}), ...headers },
+  const req = new Request(url, { method, headers: { "x-requested-with": "m365", "user-agent": "Mozilla/5.0 (Windows NT 10.0) Chrome/130", ...FETCH, "cf-connecting-ip": "203.0.113.5", ...(body && !isBin ? { "content-type": "application/json" } : {}), ...headers },
     body: body === undefined ? undefined : isBin ? body : JSON.stringify(body) });
   const res = await handleAds(env, req, url, url.pathname, user, J);
   const text = await res.text();
@@ -314,6 +316,25 @@ test("Auslieferung: zählt Einblendungen cookiefrei je Kampagne/Platz/Seitentyp/
   raw.prepare("UPDATE ad_bookings SET delivered=quantity-1 WHERE id=?").run(id);
   await call("/api/ads/serve", { query: "?slot=mid&pt=episode" });
   assert.equal(row(id).status, "ended");
+});
+
+test("Auslieferung mit echten fetch()-Kopfzeilen (Chrome, cors/empty, */*): zählt Einblendung, CPM verbraucht, Hausanzeige zählt", async () => {
+  // Regression: der Link-Klick-Filter (classify, Sec-Fetch navigate/document) darf fuer /api/ads/serve nicht gelten
+  const browserFetch = { "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+    "accept-language": "de-DE,de;q=0.9", accept: "*/*", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "sec-fetch-site": "same-site" };
+  const id = activeBooking({});
+  const r = await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de", headers: browserFetch });
+  assert.equal(r.json.ad.type, "banner");
+  assert.equal(raw.prepare("SELECT impressions FROM ad_stats_daily WHERE booking_id=?").get(id).impressions, 1);
+  assert.equal(row(id).delivered, 1, "CPM-Banner verbraucht die Einblendung");
+  // eindeutige Bots bleiben auch bei fetch()-Kopfzeilen ungezaehlt
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de", headers: { ...browserFetch, "user-agent": "Mozilla/5.0 (compatible; Googlebot/2.1)" } });
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de", headers: { ...browserFetch, "sec-purpose": "prefetch" } });
+  assert.equal(raw.prepare("SELECT impressions FROM ad_stats_daily WHERE booking_id=?").get(id).impressions, 1);
+  assert.equal(row(id).delivered, 1);
+  // Hausanzeige (eingebaute der Seite) zaehlt ebenfalls
+  await call("/api/ads/serve", { query: "?slot=top&pt=lang&lang=de&house=m365con", headers: browserFetch });
+  assert.equal(raw.prepare("SELECT SUM(impressions) n FROM ad_house_stats WHERE house='m365con'").get().n, 1);
 });
 
 test("Auswahl: Firmenkarte nur auf passenden Themen, exklusive Buchung geht vor", async () => {

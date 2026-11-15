@@ -13,6 +13,7 @@
 //     Chrome/Edge/Firefox in einer Version, die Sec-Fetch kennt, aber ganz ohne Sec-Fetch-Kopfzeilen (typisch fuer Skripte mit gefaelschter
 //     Browserkennung); Accept nur "*/*" statt text/html; Rechenzentrums-Netz (cf.asOrganization, z. B. Cloud-Anbieter - NIE allein, denn auch
 //     Menschen in Firmen- oder VPN-Netzen kommen von dort).
+// Einblendungen (/api/ads/serve, per fetch() aus assets/ads.js) pruefen nur Stufe 1 (isImpressionBot): fetch() ist nie navigate/document.
 // Bewusst NICHT ausgewertet: Sec-Fetch-User (fehlt bei manchen echten Klicks, z. B. in App-Browsern) und die IP-Adresse.
 //
 // Grenzen: Scanner, die sich wie ein vollstaendiger Browser verhalten (Headless-Browser mit allen Kopfzeilen, z. B. manche Mail-Sicherheitsdienste),
@@ -32,18 +33,26 @@ function engineVersion(ua) {
   return m ? Number(m[1]) : 0;
 }
 
+// Stufe 1 (eindeutig): Grund-Code oder "" - gilt fuer Klicks (classify) und Einblendungen (isImpressionBot)
+function hardSignal(request) {
+  const ua = header(request, "user-agent");
+  if (!ua) return "no-ua";
+  const purpose = ["sec-purpose", "purpose", "x-purpose"].map((k) => header(request, k)).join(" ").toLowerCase();
+  if (/\b(prefetch|prerender)\b/.test(purpose) || header(request, "x-moz").toLowerCase() === "prefetch") return "prefetch";
+  const bm = request.cf?.botManagement, bmScore = Number(bm?.score);
+  if (bm?.verifiedBot || (Number.isFinite(bmScore) && bmScore < 30)) return "bot-management";
+  if (BOT_UA.test(ua)) return "user-agent";
+  return "";
+}
+
 /**
  * Schaetzt, ob ein Aufruf ein Mensch (echter Klick) oder ein automatischer Abruf ist.
  * @returns {{bot: boolean, reason: string, score: number}} reason: kurzer Code fuer Tests/Fehlersuche (wird nicht gespeichert)
  */
 export function classify(request) {
+  const hard = hardSignal(request);
+  if (hard) return { bot: true, reason: hard, score: 0 };
   const ua = header(request, "user-agent");
-  if (!ua) return { bot: true, reason: "no-ua", score: 0 };
-  const purpose = ["sec-purpose", "purpose", "x-purpose"].map((k) => header(request, k)).join(" ").toLowerCase();
-  if (/\b(prefetch|prerender)\b/.test(purpose) || header(request, "x-moz").toLowerCase() === "prefetch") return { bot: true, reason: "prefetch", score: 0 };
-  const bm = request.cf?.botManagement, bmScore = Number(bm?.score);
-  if (bm?.verifiedBot || (Number.isFinite(bmScore) && bmScore < 30)) return { bot: true, reason: "bot-management", score: 0 };
-  if (BOT_UA.test(ua)) return { bot: true, reason: "user-agent", score: 0 };
 
   const mode = header(request, "sec-fetch-mode").toLowerCase(), dest = header(request, "sec-fetch-dest").toLowerCase();
   if ((mode && mode !== "navigate") || (dest && !["document", "iframe", "frame"].includes(dest))) return { bot: true, reason: "sec-fetch", score: 0 };
@@ -60,3 +69,10 @@ export function classify(request) {
 }
 
 export const isBot = (request) => classify(request).bot;
+
+/**
+ * Einblendungen (/api/ads/serve) kommen NICHT als Link-Klick, sondern per fetch() aus assets/ads.js: ein echter Browser sendet dort
+ * Sec-Fetch-Mode "cors", Sec-Fetch-Dest "empty" und Accept nur Sternchen. classify() wuerde das als Bot werten. Daher nur die eindeutigen
+ * Stufe-1-Merkmale (keine Browserkennung, Vorabruf, Cloudflare-Bot-Management, Crawler/Skript-Kennung) - ohne Sec-Fetch-Regel und ohne Punkte.
+ */
+export const isImpressionBot = (request) => !!hardSignal(request);
