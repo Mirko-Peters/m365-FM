@@ -1,0 +1,79 @@
+// Mensch oder Bot? Eine SCHAETZUNG aus Anfrage-Kopfzeilen, keine Gewissheit.
+//
+// Was wir NICHT tun: keine Cookies, kein Fingerprinting, keine Speicherung von IP oder Browserkennung. Das Ergebnis ist nur ein Ja/Nein,
+// das in einen Tageszaehler fliesst (clicks = echte Klicks, clicks_filtered = gefilterte Klicks). Die Gruende werden nicht gespeichert.
+//
+// Stufen (die ersten Treffer zaehlen sofort, schwache Hinweise erst ab zwei):
+//  1. Eindeutig: keine Browserkennung, Vorabruf (Purpose/Sec-Purpose/X-Moz prefetch|prerender), von Cloudflare als verifizierter Bot oder mit
+//     Bot-Wert unter 30 markiert (cf.botManagement gibt es nur mit dem Tarif "Bot Management" - ohne ihn fehlt das Feld, der Code kommt damit klar),
+//     bekannter Crawler, Vorschau-, Link-Scanner-, Skript- oder Headless-Agent in der Browserkennung.
+//  2. Passt nicht zu einem echten Klick auf einen Link: Sec-Fetch-Mode ist nicht "navigate" oder Sec-Fetch-Dest ist nicht "document"
+//     (z. B. Bild, Skript, fetch()). Das senden moderne Browser immer mit; ein Link-Klick ist immer Mode navigate und Dest document.
+//  3. Schwache Hinweise (je 1 Punkt, ab 2 Punkten gefiltert): Browser-Kennung ohne Accept-Language (echte Browser senden die Sprache fast immer);
+//     Chrome/Edge/Firefox in einer Version, die Sec-Fetch kennt, aber ganz ohne Sec-Fetch-Kopfzeilen (typisch fuer Skripte mit gefaelschter
+//     Browserkennung); Accept nur "*/*" statt text/html; Rechenzentrums-Netz (cf.asOrganization, z. B. Cloud-Anbieter - NIE allein, denn auch
+//     Menschen in Firmen- oder VPN-Netzen kommen von dort).
+// Einblendungen (/api/ads/serve, per fetch() aus assets/ads.js) pruefen nur Stufe 1 (isImpressionBot): fetch() ist nie navigate/document.
+// Bewusst NICHT ausgewertet: Sec-Fetch-User (fehlt bei manchen echten Klicks, z. B. in App-Browsern) und die IP-Adresse.
+//
+// Grenzen: Scanner, die sich wie ein vollstaendiger Browser verhalten (Headless-Browser mit allen Kopfzeilen, z. B. manche Mail-Sicherheitsdienste),
+// bleiben unerkannt und zaehlen als Mensch; umgekehrt kann ein ungewoehnlicher echter Browser (Datenschutz-Erweiterung, die Kopfzeilen entfernt)
+// zu Unrecht gefiltert werden. Die Quote "gefiltert" ist daher eine Naeherung, kein Beleg.
+
+// Nur echte Crawler-Namen: DuckDuckGo-, Pinterest-, Yandex-, Baidu-, Qwant- und Seznam-Browser/Apps sind Menschen
+export const BOT_UA = /(bot(?![a-z])|crawl|spider|slurp|archiver|preview|facebookexternalhit|facebot|linkedinbot|slackbot|slack-img|discordbot|whatsapp|telegrambot|twitterbot|pinterestbot|redditbot|embedly|vkshare|skypeuripreview|teams\/.*linkpreview|googleimageproxy|google-read-aloud|google-site-verification|mediapartners|adsbot|apis-google|feedfetcher|bingpreview|applebot|yandex(?:bot|images|video|metrika|direct|webmaster|accessibilitybot|favicons|mobilebot)|baiduspider|petalbot|bytespider|amazonbot|ccbot|gptbot|chatgpt|oai-searchbot|claude|anthropic|perplexity|cohere|semrush|ahrefs|mj12|dotbot|seznambot|qwantify|qwantbot|duckduckbot|duckassistbot|ia_archiver|proofpoint|mimecast|barracuda|safelinks|forcepoint|symantec|trendmicro|sophos|fireeye|urlscan|virustotal|netcraft|qualys|nessus|nmap|zgrab|masscan|curl\/|wget|python|aiohttp|httpx|urllib|requests\/|libwww|java\/|jakarta|apache-httpclient|okhttp|go-http|resty|node-fetch|undici|axios|got\/|superagent|guzzle|ruby|php\/|perl|scrapy|selenium|puppeteer|playwright|headless|phantomjs|lighthouse|pagespeed|pingdom|uptime|statuscake|monitor|http-client|httpclient|postman|insomnia|restsharp|\bscan)/i;
+
+// Rechenzentrums-Netze, aus denen Skripte kommen (schwacher Hinweis, Cloudflare/WARP bewusst nicht dabei: dort sitzen echte Menschen)
+const HOSTING_ORG = /(amazon|aws|microsoft corporation|digitalocean|hetzner|ovh|linode|akamai connected|vultr|oracle|alibaba|tencent|choopa|leaseweb|contabo|scaleway|google cloud|google-cloud|packet|colocrossing|m247)/i;
+
+function header(request, name) { return request.headers.get(name) || ""; }
+
+// Hauptversion aus "Chrome/124.0.0.0", "Edg/124", "Firefox/126.0"; 0 = keine solche Kennung
+function engineVersion(ua) {
+  const m = /\b(?:Chrome|Edg|Edge|Firefox|CriOS|FxiOS)\/(\d+)/.exec(ua);
+  return m ? Number(m[1]) : 0;
+}
+
+// Stufe 1 (eindeutig): Grund-Code oder "" - gilt fuer Klicks (classify) und Einblendungen (isImpressionBot)
+function hardSignal(request) {
+  const ua = header(request, "user-agent");
+  if (!ua) return "no-ua";
+  const purpose = ["sec-purpose", "purpose", "x-purpose"].map((k) => header(request, k)).join(" ").toLowerCase();
+  if (/\b(prefetch|prerender)\b/.test(purpose) || header(request, "x-moz").toLowerCase() === "prefetch") return "prefetch";
+  const bm = request.cf?.botManagement, bmScore = Number(bm?.score);
+  if (bm?.verifiedBot || (Number.isFinite(bmScore) && bmScore < 30)) return "bot-management";
+  if (BOT_UA.test(ua)) return "user-agent";
+  return "";
+}
+
+/**
+ * Schaetzt, ob ein Aufruf ein Mensch (echter Klick) oder ein automatischer Abruf ist.
+ * @returns {{bot: boolean, reason: string, score: number}} reason: kurzer Code fuer Tests/Fehlersuche (wird nicht gespeichert)
+ */
+export function classify(request) {
+  const hard = hardSignal(request);
+  if (hard) return { bot: true, reason: hard, score: 0 };
+  const ua = header(request, "user-agent");
+
+  const mode = header(request, "sec-fetch-mode").toLowerCase(), dest = header(request, "sec-fetch-dest").toLowerCase();
+  if ((mode && mode !== "navigate") || (dest && !["document", "iframe", "frame"].includes(dest))) return { bot: true, reason: "sec-fetch", score: 0 };
+
+  let score = 0;
+  const browserLike = /^Mozilla\//.test(ua);
+  if (browserLike && !header(request, "accept-language")) score++;
+  const v = engineVersion(ua), hasSec = !!(mode || dest || header(request, "sec-fetch-site"));
+  if (browserLike && v && !hasSec && !/CriOS|FxiOS/.test(ua) && (/Firefox\//.test(ua) ? v >= 90 : v >= 80)) score++;
+  const accept = header(request, "accept").trim();
+  if (browserLike && accept && !/text\/html|application\/xhtml/i.test(accept)) score++;
+  if (HOSTING_ORG.test(String(request.cf?.asOrganization || ""))) score++;
+  return score >= 2 ? { bot: true, reason: "signals", score } : { bot: false, reason: "", score };
+}
+
+export const isBot = (request) => classify(request).bot;
+
+/**
+ * Einblendungen (/api/ads/serve) kommen NICHT als Link-Klick, sondern per fetch() aus assets/ads.js: ein echter Browser sendet dort
+ * Sec-Fetch-Mode "cors", Sec-Fetch-Dest "empty" und Accept nur Sternchen. classify() wuerde das als Bot werten. Daher nur die eindeutigen
+ * Stufe-1-Merkmale (keine Browserkennung, Vorabruf, Cloudflare-Bot-Management, Crawler/Skript-Kennung) - ohne Sec-Fetch-Regel und ohne Punkte.
+ */
+export const isImpressionBot = (request) => !!hardSignal(request);

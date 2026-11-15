@@ -49,7 +49,9 @@ async function setup() {
     return handleSponsor(env, request, new URL(request.url), new URL(request.url).pathname, J, user);
   };
   const go = async (code, ua = "Mozilla/5.0 Chrome/130") => {
-    const request = new Request(`https://api.example/go/${code}?s=episode`, { headers: { "user-agent": ua, "cf-connecting-ip": "203.0.113.9" } });
+    const request = new Request(`https://api.example/go/${code}?s=episode`, { headers: { "user-agent": ua, "cf-connecting-ip": "203.0.113.9",
+      // Kopfzeilen eines echten Link-Klicks (botcheck.js); ohne sie zaehlt der Aufruf als gefiltert (clicks_filtered)
+      "accept-language": "de-DE,de;q=0.9", accept: "text/html,*/*;q=0.8", "sec-fetch-mode": "navigate", "sec-fetch-dest": "document", "sec-fetch-site": "cross-site" } });
     Object.defineProperty(request, "cf", { value: { country: "DE" } });
     const waits = [], response = await handleSponsorLink(env, request, new URL(request.url), new URL(request.url).pathname, { waitUntil: (p) => waits.push(p) });
     await Promise.all(waits);

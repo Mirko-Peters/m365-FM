@@ -5,7 +5,13 @@ import { test, beforeEach, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { handleAds, handlePaypalWebhook, handleAdGo, quote, loadPricing, resetPaypalToken, webpSize, pickCampaign, paypalConfig, adStatsForOrg } from "../src/ads.js";
+
 import { handleSponsorLink } from "../src/sponsor.js";
+
+// Kopfzeilen eines echten Browsers bei einem Link-Klick (die Bot-Erkennung wertet Sprache und Sec-Fetch aus, siehe src/botcheck.js)
+const HUMAN = { "accept-language": "de-DE,de;q=0.9,en;q=0.8", accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8", "sec-fetch-mode": "navigate", "sec-fetch-dest": "document", "sec-fetch-site": "cross-site", "sec-fetch-user": "?1" };
+// Kopfzeilen eines echten Browsers bei fetch() aus assets/ads.js (Einblendung /api/ads/serve, API-Aufrufe): KEINE Navigation
+const FETCH = { "accept-language": "de-DE,de;q=0.9,en;q=0.8", accept: "*/*", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "sec-fetch-site": "same-site" };
 
 const J = (data, status = 200, extra = {}) => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json", ...extra } });
 const ADMIN = { id: 1, admin: true }, OWNER = { id: 2, admin: false }, OTHER = { id: 3, admin: false };
@@ -63,7 +69,7 @@ afterEach(() => { globalThis.fetch = realFetch; });
 async function call(path, { method = "GET", body, user, query = "", headers = {} } = {}) {
   const url = new URL(`https://api-dub.m365.fm${path}${query}`);
   const isBin = body instanceof Uint8Array;
-  const req = new Request(url, { method, headers: { "x-requested-with": "m365", "user-agent": "Mozilla/5.0 (Windows NT 10.0) Chrome/130", "cf-connecting-ip": "203.0.113.5", ...(body && !isBin ? { "content-type": "application/json" } : {}), ...headers },
+  const req = new Request(url, { method, headers: { "x-requested-with": "m365", "user-agent": "Mozilla/5.0 (Windows NT 10.0) Chrome/130", ...FETCH, "cf-connecting-ip": "203.0.113.5", ...(body && !isBin ? { "content-type": "application/json" } : {}), ...headers },
     body: body === undefined ? undefined : isBin ? body : JSON.stringify(body) });
   const res = await handleAds(env, req, url, url.pathname, user, J);
   const text = await res.text();
@@ -271,6 +277,23 @@ function activeBooking(fields) {
   return Number(raw.prepare(`INSERT INTO ad_bookings(${k.join(",")}) VALUES(${k.map(() => "?").join(",")})`).run(...Object.values(base)).lastInsertRowid);
 }
 
+test("Auslieferung mit GO_BASE: Banner-, Karten- und Hausanzeigen-Links nutzen die Kurzform c.m365.fm/<code>", async () => {
+  env.GO_BASE = "https://c.m365.fm";
+  activeBooking({});
+  let r = await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de" });
+  assert.equal(r.json.ad.href, "https://c.m365.fm/ad-testcode01?s=mid&pt=episode");
+  activeBooking({ code: "ad-cardcode09", product: "company_card", quantity: 5, page_types: "episode", topics: "teams-phone" });
+  raw.prepare("UPDATE ad_bookings SET status='ended' WHERE code='ad-testcode01'").run();
+  r = await call("/api/ads/serve", { query: "?slot=mid&pt=episode&topics=teams-phone" });
+  assert.equal(r.json.ad.href, "https://c.m365.fm/ad-cardcode09?s=mid&pt=episode");
+  await call("/api/admin/ads/house", { method: "POST", user: ADMIN, body: { slot: "top", title: "M365Con 2027", url: "https://m365con.net/", langs: "de" } });
+  r = await call("/api/ads/serve", { query: "?slot=top&pt=lang&lang=de" });
+  assert.match(r.json.house.url, /^https:\/\/c\.m365\.fm\/h-x\d+\?s=top&pt=lang&l=de/);
+  delete env.GO_BASE;   // ohne Einstellung: alte Adresse (Rueckfall fuer offline, Tests und Notfall)
+  r = await call("/api/ads/serve", { query: "?slot=top&pt=lang&lang=de" });
+  assert.match(r.json.house.url, /^https:\/\/api-dub\.m365\.fm\/go\/h-x\d+\?s=top/);
+});
+
 test("Auslieferung: zählt Einblendungen cookiefrei je Kampagne/Platz/Seitentyp/Tag, ohne Bots; Hausanzeige als Rückfall", async () => {
   const id = activeBooking({});
   let r = await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de" });
@@ -295,6 +318,25 @@ test("Auslieferung: zählt Einblendungen cookiefrei je Kampagne/Platz/Seitentyp/
   assert.equal(row(id).status, "ended");
 });
 
+test("Auslieferung mit echten fetch()-Kopfzeilen (Chrome, cors/empty, */*): zählt Einblendung, CPM verbraucht, Hausanzeige zählt", async () => {
+  // Regression: der Link-Klick-Filter (classify, Sec-Fetch navigate/document) darf fuer /api/ads/serve nicht gelten
+  const browserFetch = { "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+    "accept-language": "de-DE,de;q=0.9", accept: "*/*", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "sec-fetch-site": "same-site" };
+  const id = activeBooking({});
+  const r = await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de", headers: browserFetch });
+  assert.equal(r.json.ad.type, "banner");
+  assert.equal(raw.prepare("SELECT impressions FROM ad_stats_daily WHERE booking_id=?").get(id).impressions, 1);
+  assert.equal(row(id).delivered, 1, "CPM-Banner verbraucht die Einblendung");
+  // eindeutige Bots bleiben auch bei fetch()-Kopfzeilen ungezaehlt
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de", headers: { ...browserFetch, "user-agent": "Mozilla/5.0 (compatible; Googlebot/2.1)" } });
+  await call("/api/ads/serve", { query: "?slot=mid&pt=episode&lang=de", headers: { ...browserFetch, "sec-purpose": "prefetch" } });
+  assert.equal(raw.prepare("SELECT impressions FROM ad_stats_daily WHERE booking_id=?").get(id).impressions, 1);
+  assert.equal(row(id).delivered, 1);
+  // Hausanzeige (eingebaute der Seite) zaehlt ebenfalls
+  await call("/api/ads/serve", { query: "?slot=top&pt=lang&lang=de&house=m365con", headers: browserFetch });
+  assert.equal(raw.prepare("SELECT SUM(impressions) n FROM ad_house_stats WHERE house='m365con'").get().n, 1);
+});
+
 test("Auswahl: Firmenkarte nur auf passenden Themen, exklusive Buchung geht vor", async () => {
   const card = activeBooking({ code: "ad-cardcode01", product: "company_card", quantity: 100 });
   assert.equal(await pickCampaign(env.DB, { slot: "mid", pageType: "episode", topics: ["copilot"] }), null);
@@ -307,7 +349,7 @@ test("Go-Link: zählt Klick, 302 zum Ziel mit UTM; Bots nicht; Firmenkarte zähl
   const id = activeBooking({});
   const go = async (code, ua = "Mozilla/5.0 Chrome/130", q = "?s=mid&pt=entity") => {
     const url = new URL(`https://api-dub.m365.fm/go/${code}${q}`);
-    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua } }), url, `/go/${code}`, undefined);
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua, ...HUMAN } }), url, `/go/${code}`, undefined);
   };
   let r = await go("ad-testcode01");
   assert.equal(r.status, 302);
@@ -316,8 +358,9 @@ test("Go-Link: zählt Klick, 302 zum Ziel mit UTM; Bots nicht; Firmenkarte zähl
   assert.equal(loc.searchParams.get("utm_campaign"), "ad-testcode01");
   assert.equal(r.headers.get("x-robots-tag"), "noindex, nofollow");
   await go("ad-testcode01", "curl/8.0");
-  const s = raw.prepare("SELECT SUM(clicks) c FROM ad_stats_daily WHERE booking_id=? AND page_type='entity'").get(id);
+  const s = raw.prepare("SELECT SUM(clicks) c,SUM(clicks_filtered) f FROM ad_stats_daily WHERE booking_id=? AND page_type='entity'").get(id);
   assert.equal(s.c, 1);
+  assert.equal(s.f, 1, "Bot-Klick wird getrennt als gefiltert gezaehlt");
   assert.equal(row(id).delivered, 0, "Banner: Klicks verbrauchen kein TKP-Volumen");
   const card = activeBooking({ code: "ad-cardcode02", product: "company_card", quantity: 2 });
   r = await go("ad-cardcode02");
@@ -330,7 +373,7 @@ test("Go-Link: zählt Klick, 302 zum Ziel mit UTM; Bots nicht; Firmenkarte zähl
 
 test("Go-Link nach dem Ende (Mirko 11.11.2026): beendete Buchung leitet weiter und zaehlt fuers Dashboard, ohne Verbrauch; pausiert zaehlt nicht", async () => {
   const go = async (code, ua) => { const url = new URL(`https://api-dub.m365.fm/go/${code}?s=mid&pt=episode`);
-    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua } }), url, `/go/${code}`, undefined); };
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua, ...HUMAN } }), url, `/go/${code}`, undefined); };
   const card = activeBooking({ code: "ad-cardend01", product: "company_card", quantity: 2, delivered: 2, status: "ended", start: "2025-01-01", end: "2025-02-01" });
   const r = await go("ad-cardend01", "Mozilla/5.0 Chrome/130");
   assert.equal(r.status, 302);
@@ -345,7 +388,7 @@ test("Go-Link nach dem Ende (Mirko 11.11.2026): beendete Buchung leitet weiter u
 
 test("Go-Link: nach dem Ende erstattete Buchung bleibt 'ended', leitet weiter, zaehlt aber keine neuen Klicks; alte Klicks bleiben sichtbar", async () => {
   const go = async (code, ua) => { const url = new URL(`https://api-dub.m365.fm/go/${code}?s=mid&pt=episode`);
-    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua } }), url, `/go/${code}`, undefined); };
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua, ...HUMAN } }), url, `/go/${code}`, undefined); };
   const id = activeBooking({ code: "ad-endrefund1", product: "company_card", quantity: 2, delivered: 2, status: "ended", start: "2025-01-01", end: "2025-02-01" });
   assert.equal((await go("ad-endrefund1", "Mozilla/5.0 Chrome/140")).status, 302);
   raw.prepare("UPDATE ad_bookings SET pay_status='refunded' WHERE id=?").run(id);   // wie der Erstattungszweig des PayPal-Webhooks: 'ended' bleibt 'ended'
@@ -496,7 +539,7 @@ test("Hausanzeigen: Einblendungen und Klicks cookiefrei je Platz/Seitentyp/Sprac
   ]);
   const go = async (code, q, ua = "Mozilla/5.0 Chrome/130", extra = {}) => {
     const url = new URL(`https://api-dub.m365.fm/go/${code}${q}`);
-    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua, ...extra } }), url, `/go/${code}`, undefined);
+    return handleSponsorLink(env, new Request(url, { headers: { "user-agent": ua, ...HUMAN, ...extra } }), url, `/go/${code}`, undefined);
   };
   r = await go("h-m365con", "?s=mid&pt=blog&l=de&e=teams-phone&p=mein-beitrag", undefined, de);
   assert.equal(r.status, 302);
@@ -504,7 +547,8 @@ test("Hausanzeigen: Einblendungen und Klicks cookiefrei je Platz/Seitentyp/Sprac
   assert.equal(u.origin, "https://m365con.net");
   assert.deepEqual(Object.fromEntries(u.searchParams), { utm_source: "m365.fm", utm_medium: "house_ad", utm_campaign: "m365con2027", utm_term: "teams-phone", utm_content: "mein-beitrag" });
   assert.equal(raw.prepare("SELECT clicks FROM ad_house_stats WHERE house='m365con' AND country='DE'").get().clicks, 1);
-  await go("h-m365con", "?s=mid&pt=blog&l=de", "curl/8");   // Bot: kein Klick
+  await go("h-m365con", "?s=mid&pt=blog&l=de", "curl/8");   // Bot: kein echter Klick, aber gefiltert gezaehlt
+  assert.equal(raw.prepare("SELECT clicks,clicks_filtered f FROM ad_house_stats WHERE house='m365con' AND country='XX'").get().f, 1);
   // keine personenbezogenen oder ungueltigen Werte in der UTM; Ziel nur aus der festen Liste
   const bad = new URL((await go("h-m365con", "?s=mid&pt=blog&l=de&e=Max%20Mustermann&p=max@example.com")).headers.get("location"));
   assert.equal(bad.searchParams.get("utm_term"), null); assert.equal(bad.searchParams.get("utm_content"), null);
