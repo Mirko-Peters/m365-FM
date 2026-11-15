@@ -1,0 +1,1057 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:02.200
+Bienvenue dans un nouvel épisode des Microsoft Knowledge Nuggets.
+
+00:00:02.560 --> 00:00:03.740
+Je suis votre hôte, Miro Peters.
+
+00:00:04.140 --> 00:00:04.920
+Voici le scénario.
+
+00:00:05.400 --> 00:00:08.100
+Vous travaillez dans Business Central et vous avez besoin d'une petite modification.
+
+00:00:08.860 --> 00:00:11.680
+Peut-être un champ supplémentaire dans une fiche client, une étape de validation différente,
+
+00:00:12.020 --> 00:00:13.860
+ou une règle qui vérifie une commande avant sa validation.
+
+00:00:14.580 --> 00:00:18.100
+Puis quelqu'un évoque les extensions, AL, les tables, les pages et les codonites,
+
+00:00:18.200 --> 00:00:21.640
+et soudain, cette demande simple semble parler un tout nouveau langage.
+
+00:00:22.040 --> 00:00:24.420
+C'est un langage certes, mais il n'a pas besoin d'être mystérieux.
+
+00:00:24.720 --> 00:00:26.260
+Imaginez Business Central comme un immeuble de blu.
+
+00:00:26.860 --> 00:00:29.320
+AL donne aux développeurs les instructions pour ajouter une pièce,
+
+00:00:29.320 --> 00:00:32.780
+un formulaire ou une nouvelle règle sans avoir à percer les murs du bâtiment.
+
+00:00:33.340 --> 00:00:34.740
+C'est ça, le Knowledge Nuggets du que du loup.
+
+00:00:35.400 --> 00:00:37.540
+A la fin de cet épisode, vous saurez ce qu'est le développement AL,
+
+00:00:37.640 --> 00:00:40.960
+pourquoi les extensions existent et comment le travail personnalisé s'intègre dans Business Central.
+
+00:00:42.260 --> 00:00:44.460
+Pourquoi les entreprises personnalisent-elles Business Central ?
+
+00:00:44.460 --> 00:00:46.680
+Business Central gère déjà beaucoup de tâches quotidiennes,
+
+00:00:46.820 --> 00:00:48.680
+finances, clients, commandes, factures de stock, le tout,
+
+00:00:48.880 --> 00:00:51.640
+dans un système connecté au lieu d'une pile de feuilles de calcul et d'outils séparés.
+
+00:00:52.340 --> 00:00:55.060
+Pour beaucoup d'entreprises, cette configuration standard couvre l'essentiel du travail.
+
+00:00:55.420 --> 00:00:56.120
+Mais voici le point clé.
+
+00:00:56.560 --> 00:00:58.300
+Il n'y a pas deux entreprises qui fonctionnent de la même manière.
+
+00:00:58.300 --> 00:01:01.980
+Prenez un distributeur alimentaire ayant besoin de détails de lots qu'une autre entreprise n'utilise jamais.
+
+00:01:02.320 --> 00:01:05.340
+Une entreprise de service exigeant un processus de validation spéciale avant facturation,
+
+00:01:06.080 --> 00:01:08.280
+un détaillant souhaitant des niveaux de récompense pour des remises,
+
+00:01:08.800 --> 00:01:12.640
+ou quelqu'un d'autre ayant besoin d'un formulaire avec ses propres champs de texte et ses règles internes.
+
+00:01:13.920 --> 00:01:16.040
+L'entreprise ne changera pas ses méthodes pour un champ manquant.
+
+00:01:16.440 --> 00:01:20.320
+Et vous ne voulez pas non plus que chaque petite demande se transforme en une modification risquée pour tout le système.
+
+00:01:20.780 --> 00:01:21.920
+C'est un problème plus important par le passé.
+
+00:01:21.920 --> 00:01:25.960
+Dans les anciens systèmes, les développeurs ouvraient le code original et le modifiaient directement.
+
+00:01:26.480 --> 00:01:28.260
+Cela fonctionnait jusqu'à l'arrivée de la mise à jour suivante.
+
+00:01:28.680 --> 00:01:33.740
+L'entreprise se retrouvait alors, avec la nouvelle version de Microsoft d'un côté et ses propres modifications de l'autre,
+
+00:01:33.940 --> 00:01:36.220
+et il fallait réconcilier le tout avant d'avancer.
+
+00:01:37.180 --> 00:01:40.800
+Imaginez un bureau où chaque locataire fait passer de nouveaux câbles dans les murs sans aucun plan.
+
+00:01:41.760 --> 00:01:45.820
+Ça fonctionne un temps, mais quand le bâtiment a besoin de réparation, personne ne sait quel câble appartient à qui.
+
+00:01:46.820 --> 00:01:48.240
+Business Central adopte une approche différente.
+
+00:01:48.240 --> 00:01:53.440
+Au lieu de réécrire l'application standard, les développeurs construisent un module séparé qui s'y connecte,
+
+00:01:53.660 --> 00:01:58.280
+préservant la partie standard, tandis que les modifications de l'entreprise s'exécutent via des points d'accès supportés.
+
+00:01:59.520 --> 00:02:02.940
+Cette séparation est cruciale lors des mises à jour, car Microsoft met à jour sa partie du bâtiment
+
+00:02:02.940 --> 00:02:05.240
+tandis que le travail personnalisé reste dans son propre espace.
+
+00:02:06.080 --> 00:02:08.780
+Il y a toujours des tests et des correctifs, ce sont des logiciels après tout,
+
+00:02:08.960 --> 00:02:13.540
+mais le développeur n'a plus à copier et à retravailler chaque modification au sein du code original de Microsoft.
+
+00:02:14.080 --> 00:02:16.220
+Alors qu'est-ce qu'une entreprise personnalise réellement ?
+
+00:02:16.220 --> 00:02:17.420
+Les personnalisations ajoutent des données.
+
+00:02:17.420 --> 00:02:20.340
+Le système standard ne stocke pas, par exemple, des instructions de livraison,
+
+00:02:20.480 --> 00:02:23.860
+un score de risque interne, un niveau d'adhésion ou un lien vers un système externe.
+
+00:02:24.360 --> 00:02:27.160
+Elles ajoutent également des écrans qui guident le personnel à travers une tâche dans le bonheur.
+
+00:02:27.820 --> 00:02:31.040
+Elles appliquent aussi des règles, comme l'arrêt d'une commande lorsqu'un document requis est manquant.
+
+00:02:31.680 --> 00:02:34.040
+Le travail personnalisé aide également les collaborateurs à éviter les étapes manuelles.
+
+00:02:34.480 --> 00:02:37.780
+Imaginez le personnel copiant des données clients de Business Central vers un autre outil chaque vendredi,
+
+00:02:38.040 --> 00:02:40.760
+vérifiant manuellement les conditions, puis envoyant un rapport à un responsable.
+
+00:02:40.760 --> 00:02:43.980
+Un changement bien conçu conserve ses informations dans Business Central,
+
+00:02:44.200 --> 00:02:48.440
+applique la règle de manière cohérente et offre au personnel un bouton ou une page adaptée à leur travail quotidien.
+
+00:02:48.940 --> 00:02:49.620
+Mettons fin à un mythe.
+
+00:02:50.100 --> 00:02:51.460
+Vous ne voulez pas tout personnaliser.
+
+00:02:51.960 --> 00:02:54.340
+Business Central Standard intègre déjà de nombreux processus.
+
+00:02:54.780 --> 00:02:58.440
+Modifiez quelque chose simplement parce que cela semble différent d'un ancien système créé du travail supplémentaire par la suite.
+
+00:02:58.760 --> 00:03:01.060
+Ainsi, un bon travail personnalisé commence par une raison commerciale claire.
+
+00:03:01.460 --> 00:03:03.200
+A quel problème les gens sont-ils confrontés ?
+
+00:03:03.200 --> 00:03:04.540
+Que devrait-il se passer à la place ?
+
+00:03:04.540 --> 00:03:06.540
+Et le produit standard peut-il déjà le faire ?
+
+00:03:07.140 --> 00:03:10.180
+Lorsque le produit standard ne répond pas à ce besoin, AL entre en jeu.
+
+00:03:10.780 --> 00:03:15.640
+AL se concentre sur Business Central lui-même en lisant, ajoutant et modifiant des enregistrements au niveau de la base de données
+
+00:03:15.640 --> 00:03:18.620
+tout en contrôlant ce qui se passe sur les pages, les rapports et d'autres parties de l'application.
+
+00:03:19.020 --> 00:03:24.100
+Il calcule également des valeurs, déplace des données et affiche des messages lorsque des règles ne sont pas respectées au cours des processus.
+
+00:03:24.560 --> 00:03:26.060
+C'est beaucoup de travail pour un seul langage.
+
+00:03:26.300 --> 00:03:28.920
+Mais AL n'est pas un outil généraliste pour tout type de logiciel.
+
+00:03:28.920 --> 00:03:33.420
+Et vous ne le choisiriez pas pour créer un site marchand public, un jeu mobile ou une application de bureau autonome.
+
+00:03:34.540 --> 00:03:40.740
+AL existe pour une tâche ciblée, façonner les données et le comportement au sein de Business Central afin que le système corresponde au fonctionnement d'une entreprise.
+
+00:03:41.140 --> 00:03:42.520
+Et c'est exactement ce que nous allons examiner ensuite.
+
+00:03:43.220 --> 00:03:45.680
+AL est Extensions, le modèle de complément sécurisé.
+
+00:03:46.940 --> 00:03:48.680
+AL signifie Application Language.
+
+00:03:49.280 --> 00:03:51.540
+C'est le langage de programmation de Microsoft pour Business Central.
+
+00:03:52.020 --> 00:03:57.420
+Et il offre aux développeurs un moyen structuré de créer de nouvelles fonctions métiers ou de modifier le comportement des parties existantes du système.
+
+00:03:57.820 --> 00:04:00.200
+Mais le mot Extension est tout aussi important qu'AL.
+
+00:04:00.920 --> 00:04:03.420
+Une extension est une application distincte que Business Central peut installer.
+
+00:04:03.420 --> 00:04:08.480
+Elle contient le travail personnalisé de l'entreprise, tandis que l'application Business Central Standard reste intacte.
+
+00:04:08.800 --> 00:04:11.980
+Voyez cela moins comme la réécriture d'un manuel que comme l'ajout de pages approuvées à celui-ci.
+
+00:04:12.600 --> 00:04:14.840
+Oh, des pages qui respectent les règles originales sans les effacer.
+
+00:04:15.380 --> 00:04:18.980
+Cela peut sembler être un détail technique, mais cela change la façon dont le travail personnalisé vaut mieux finir.
+
+00:04:19.320 --> 00:04:21.820
+Imaginez qu'une entreprise ait besoin d'un nouveau bureau pour une équipe spéciale.
+
+00:04:22.140 --> 00:04:25.680
+L'ancienne approche signifiait percer un mur dans le bâtiment principal et modifier la structure elle-même.
+
+00:04:26.420 --> 00:04:27.740
+Cela peut répondre aux besoins aujourd'hui.
+
+00:04:28.100 --> 00:04:29.920
+Mais les réparations futures deviennent un cauchemar.
+
+00:04:29.920 --> 00:04:32.280
+Car le bâtiment d'origine ne correspond plus à ses plans.
+
+00:04:32.940 --> 00:04:34.040
+Une extension fonctionne différemment.
+
+00:04:34.520 --> 00:04:37.560
+Le bâtiment dispose déjà de portes, de prises électriques et de règles pour ajouter de l'espace.
+
+00:04:38.220 --> 00:04:40.620
+Vous construisez la nouvelle pièce via ses connexions approuvées ?
+
+00:04:40.620 --> 00:04:45.040
+La pièce appartient à l'entreprise, mais le bâtiment principal peut toujours être entretenu sans avoir à détruire chaque mur personnalisé.
+
+00:04:45.420 --> 00:04:47.440
+C'est exactement ainsi que fonctionnent les extensions de Business Central.
+
+00:04:47.760 --> 00:04:50.440
+L'application de base contient le travail standard fourni par Microsoft.
+
+00:04:51.040 --> 00:04:55.600
+Une extension peut ajouter ses propres champs, écran, boutons, règles, rapports et même des liens vers d'autres systèmes.
+
+00:04:55.600 --> 00:05:01.400
+Elle peut réagir lorsque certaines actions métiers surviennent, mais elle le fait via des moyens de connexion pris en charge vers l'application standard.
+
+00:05:02.220 --> 00:05:03.160
+Les limites sont donc intégrées.
+
+00:05:03.560 --> 00:05:04.580
+C'est une bonne chose ?
+
+00:05:04.580 --> 00:05:08.160
+Sans limite, une petite demande personnalisée peut atteindre en profondeur des zones qu'elle ne devrait pas toucher.
+
+00:05:08.600 --> 00:05:12.660
+Avec les extensions, le développeur travaille avec des types d'objets clairs et des points de connexion définis.
+
+00:05:12.900 --> 00:05:16.240
+Ce qui rend le code plus facile à comprendre pour quelqu'un d'autre plus tard.
+
+00:05:17.000 --> 00:05:19.720
+Cette approche s'adapte aussi parfaitement à la version cloud de Business Central.
+
+00:05:20.220 --> 00:05:22.080
+Microsoft met régulièrement à jour le service.
+
+00:05:22.080 --> 00:05:27.160
+Une entreprise doit toujours tester son extension après les changements, surtout si elle dépend de parties du produit qui ont évolué.
+
+00:05:27.600 --> 00:05:29.940
+Un logiciel ne supprime jamais le besoin de maintenance.
+
+00:05:30.600 --> 00:05:36.020
+Mais garder le code personnalisé séparé réduit le risque que chaque mise à jour se transforme en une reconstruction majeure des anciennes modifications.
+
+00:05:36.660 --> 00:05:40.320
+Vous entendrez peut-être parler de C-SR-L lorsque les gens mentionnent les anciens systèmes Dynamics NL.
+
+00:05:41.120 --> 00:05:46.000
+C-SR-L est issu d'un modèle de développement antérieur où les développeurs modifiaient souvent directement les objets de l'application d'origine.
+
+00:05:46.000 --> 00:05:55.380
+De nombreuses entreprises ont utilisé ces systèmes avec succès pendant des années, mais cela liait étroitement le travail personnalisé au code standard et les mises à jour exigeaient beaucoup de comparaisons et de réparations.
+
+00:05:55.740 --> 00:05:58.120
+AL a fait basculer Business Central vers un développement basé sur des applications.
+
+00:05:58.520 --> 00:06:00.740
+Cela ne signifie pas que chaque extension est vaste ou complexe.
+
+00:06:01.220 --> 00:06:05.020
+Une extension peut simplement ajouter un champ à une fiche client et l'afficher sur un écran familier.
+
+00:06:05.220 --> 00:06:11.460
+Une autre peut contenir une solution complète pour un type d'activité particulier avec ses propres enregistrements, processus, pages et rapports.
+
+00:06:12.220 --> 00:06:13.500
+Les deux suivent le même principe de base.
+
+00:06:13.500 --> 00:06:17.540
+L'application personnalisée vit aux côtés de Business Central au lieu de dissimuler une réécriture de celui-ci.
+
+00:06:18.000 --> 00:06:19.580
+Vous pouvez également installer plus d'une extension.
+
+00:06:20.380 --> 00:06:27.480
+Une entreprise peut utiliser une extension d'un partenaire logiciel pour la paie, une autre pour l'expédition et une petite extension interne pour des règles spécifiques à cette entreprise.
+
+00:06:28.260 --> 00:06:33.520
+Business Central les réunit dans le même système de travail tant qu'elle respecte les règles de la plateforme et ne sont pas en conflit.
+
+00:06:34.100 --> 00:06:35.740
+Ainsi à elle n'est pas seulement un moyen d'écrire du code.
+
+00:06:36.140 --> 00:06:42.080
+C'est le langage que les développeurs utilisent pour créer ces applications complémentaires et les extensions sont le conteneur qui apporte ces changements dans Business Central.
+
+00:06:42.080 --> 00:06:47.200
+Ce modèle permet à une entreprise de personnaliser le système tout en conservant un produit standard reconnaissable et plus facile à maintenir.
+
+00:06:47.680 --> 00:06:51.080
+Ouvrons maintenant l'une de ces extensions pour examiner les éléments qui la composent.
+
+00:06:51.700 --> 00:06:54.240
+Les principaux éléments de construction à elle à l'intérieur d'une extension à elle.
+
+00:06:54.640 --> 00:06:55.760
+Les développeurs travaillent avec des objets.
+
+00:06:56.340 --> 00:07:02.460
+Un objet est un élément nommé de l'application ayant une tâche précise comme stocker des informations, afficher un écran, exécuter une règle ou générer un document.
+
+00:07:03.140 --> 00:07:05.980
+Une fois que vous voyez ces tâches séparément, à elle semble beaucoup moins être un mur de code.
+
+00:07:05.980 --> 00:07:08.980
+Commençons par l'endroit où résident les informations commerciales.
+
+00:07:09.900 --> 00:07:11.360
+Les tables stockent les données dans Business Central.
+
+00:07:11.840 --> 00:07:14.520
+Considérez une table comme un classeur numérique pour un type d'enregistrement.
+
+00:07:15.060 --> 00:07:18.540
+Un classeur peut contenir des clients, un autre des articles et un autre encore des commandes clients.
+
+00:07:19.340 --> 00:07:21.480
+Chaque enregistrement est affiché à l'intérieur de ce classeur.
+
+00:07:21.780 --> 00:07:24.080
+Une table client contient un enregistrement pour chaque client.
+
+00:07:24.560 --> 00:07:26.960
+Une table article contient un enregistrement pour chaque produit.
+
+00:07:27.560 --> 00:07:30.600
+Si votre entreprise a besoin d'informations que Business Central Standard ne stocke pas,
+
+00:07:30.600 --> 00:07:36.120
+une extension peut créer sa propre table, peut-être pour des niveaux de récompense, des inspections d'équipements ou des approbations de projets.
+
+00:07:37.440 --> 00:07:39.480
+Les champs sont les espaces étiquetés à l'intervalle de chaque enregistrement.
+
+00:07:39.900 --> 00:07:43.900
+Un enregistrement client peut inclure un nom, une adresse, un délai de paiement et un numéro de téléphone,
+
+00:07:44.120 --> 00:07:46.040
+car la table client contient des champs pour ses détails.
+
+00:07:47.080 --> 00:07:51.740
+Les champs peuvent contenir du texte, des dates, des montants, des réponses par oui ou non, ou un choix parmi une liste fixe.
+
+00:07:52.020 --> 00:07:53.640
+Un champ peut également pointer vers un autre enregistrement.
+
+00:07:54.040 --> 00:07:56.220
+Par exemple, un client pourrait contenir un champ ID de récompense.
+
+00:07:56.220 --> 00:08:01.420
+Au lieu de saisir du texte au hasard, le personnel sélectionne un niveau de récompense dans une table de récompense distincte.
+
+00:08:01.540 --> 00:08:04.600
+Ce lien maintient les données propres car tout le monde choisit dans la même liste connue.
+
+00:08:05.060 --> 00:08:06.400
+Ainsi, les tables contiennent les faits.
+
+00:08:06.460 --> 00:08:08.500
+Mais comment les gens voient-ils et travaillent-ils avec ces faits ?
+
+00:08:08.500 --> 00:08:08.820
+Les pages.
+
+00:08:09.160 --> 00:08:10.860
+Une page est l'écran que vous ouvrez dans Business Central.
+
+00:08:11.340 --> 00:08:12.260
+La fiche client est une page.
+
+00:08:12.780 --> 00:08:14.080
+Une liste de commandes client est une page.
+
+00:08:14.740 --> 00:08:17.680
+Une page contrôle ce que les utilisateurs peuvent voir, saisir, rechercher et modifier.
+
+00:08:18.240 --> 00:08:19.500
+Différentes pages conviennent à différentes tâches.
+
+00:08:19.980 --> 00:08:23.180
+Une page de fiche se concentre sur un enregistrement à la fois comme un client ou un article.
+
+00:08:23.180 --> 00:08:29.060
+Une page de liste affiche de nombreux enregistrements en ligne, ce qui est utile pour scanner, filtrer ou trouver quelque chose rapidement.
+
+00:08:29.740 --> 00:08:34.260
+Une page de feuille de travail prend en charge le travail où les personnes saisissent ou traitent plusieurs lignes d'informations ensemble.
+
+00:08:34.720 --> 00:08:35.800
+La table stocke les informations.
+
+00:08:36.460 --> 00:08:37.720
+La page les présente à l'utilisateur.
+
+00:08:38.480 --> 00:08:42.020
+Cette séparation est utile car vous pouvez modifier l'écran sans changer l'emplacement des données
+
+00:08:42.020 --> 00:08:47.580
+ou réutiliser la même table sur plusieurs pages lorsque différentes équipes ont besoin de vues différentes des mêmes enregistrements.
+
+00:08:48.300 --> 00:08:51.520
+Maintenant, que faire si les données appartiennent déjà à un enregistrement Business Central Stand ?
+
+00:08:51.520 --> 00:08:54.900
+En règle générale, vous ne créez pas une table client de remplacement juste parce qu'il vous faut un champ supplémentaire.
+
+00:08:55.300 --> 00:08:56.340
+Vous utilisez une extension de table.
+
+00:08:56.600 --> 00:08:59.540
+Une extension de table ajoute votre champ à la table client existante.
+
+00:09:00.080 --> 00:09:05.260
+L'enregistrement client standard reste à sa place tandis que votre extension ajoute les détails spécifiques à l'entreprise à côté des champs standards.
+
+00:09:06.360 --> 00:09:10.920
+Il peut s'agir d'un identifiant de récompense, d'un bon de livraison, d'un responsable de compte ou d'un champ lié à une autre partie de l'activité.
+
+00:09:11.480 --> 00:09:14.200
+Mais l'ajout du champ à la table ne l'affiche pas automatiquement à l'écran.
+
+00:09:14.200 --> 00:09:16.120
+Pour cela, vous utilisez une extension de page.
+
+00:09:16.460 --> 00:09:19.460
+Une extension de page ajoute un champ, un groupe ou une action à une page existante.
+
+00:09:19.900 --> 00:09:23.740
+Si l'entreprise doit permettre au personnel de choisir un niveau de récompense lors de la consultation d'un client,
+
+00:09:24.040 --> 00:09:27.460
+l'extension de page peut placer le champ ID de récompense sur la fiche client là où le personnel travaille déjà.
+
+00:09:28.060 --> 00:09:29.440
+Cela permet de conserver une expérience familiale.
+
+00:09:30.020 --> 00:09:32.900
+Au lieu d'envoyer les utilisateurs vers un écran personnalisé séparé pour un simple détail,
+
+00:09:33.020 --> 00:09:35.080
+l'extension ajoute ce détail à la page qu'ils connaissent déjà.
+
+00:09:35.820 --> 00:09:40.000
+Une extension de page peut également ajouter des actions comme un bouton ou une commande de menu qui lance une tâche.
+
+00:09:40.000 --> 00:09:44.680
+Par exemple, une fiche client pourrait inclure une action de récompense qui ouvre la liste des récompenses.
+
+00:09:45.180 --> 00:09:47.220
+En coulisses, il faut un endroit pour stocker les règles métiers.
+
+00:09:47.800 --> 00:09:48.860
+Cet endroit est souvent une codonie.
+
+00:09:49.400 --> 00:09:53.200
+Une codonie contient des procédures AL qui sont des morceaux de code nommés effectuant une tâche particulière.
+
+00:09:53.880 --> 00:09:58.680
+Voyez cela comme une équipe de back-office qui gère une tâche lorsqu'une page, un rapport ou un autre processus demande de l'aide.
+
+00:09:59.340 --> 00:10:02.100
+Supposons que le niveau de récompense détermine la remise appliquée à un client.
+
+00:10:02.980 --> 00:10:06.800
+Le calcul de la remise doit se trouver dans une codonie et non dans la page de fiche client elle-même.
+
+00:10:06.800 --> 00:10:13.040
+Ainsi, un processus de vente, un rapport ou une future page peut utiliser la même règle sans avoir à la copier à plusieurs endroits.
+
+00:10:13.640 --> 00:10:15.200
+Une seule règle, un seul endroit pour la maintenir.
+
+00:10:15.600 --> 00:10:18.120
+Business Central inclut également d'autres types d'objets pour différentes tâches.
+
+00:10:18.700 --> 00:10:22.700
+Les rapports collectent des données et les présentent dans un document ou une mise en page, comme une facture ou un rapport de vente.
+
+00:10:23.380 --> 00:10:28.180
+Les requêtes posent des questions ciblées sur les données, par exemple quels clients ont commandé un article spécifique sur une période de données.
+
+00:10:28.520 --> 00:10:32.140
+Par exemple, les XML ports aident à importer ou exporter des données dans un format structuré,
+
+00:10:32.240 --> 00:10:35.000
+souvent lorsqu'un autre système doit échanger des informations avec Business Central.
+
+00:10:35.000 --> 00:10:38.940
+Assemblez ces éléments et vous pourrez imaginer une petite extension de récompense client.
+
+00:10:39.380 --> 00:10:42.060
+Une table de récompense toque chaque niveau et son pourcentage de remise.
+
+00:10:42.460 --> 00:10:44.460
+Les pages de récompense permettent au personnel de gérer ses nus.
+
+00:10:44.820 --> 00:10:49.440
+Une extension de table client ajoute un ID de récompense à chaque client, tandis qu'une extension de page de fiche client l'affiche.
+
+00:10:50.180 --> 00:10:53.780
+Une action de page ouvre la liste des récompenses et l'unité de code calcule la règle de remise.
+
+00:10:54.620 --> 00:10:56.340
+Chaque objet gère une partie du travail.
+
+00:10:57.060 --> 00:11:01.620
+Cela rend l'extension plus facile à lire, à tester et à modifier lorsque la règle métier change six mois plus tard.
+
+00:11:01.620 --> 00:11:06.540
+Mais une règle métier doit souvent s'exécuter au moment précis, par exemple lorsqu'une commande est validée.
+
+00:11:06.900 --> 00:11:08.240
+C'est là qu'interviennent les déclencheurs et les événements.
+
+00:11:08.660 --> 00:11:10.040
+Événements, déclencheurs et règles métiers.
+
+00:11:10.420 --> 00:11:11.880
+Donc vous avez ajouté un champ de récompense client.
+
+00:11:12.260 --> 00:11:13.620
+Bien, voici la vraie question.
+
+00:11:14.100 --> 00:11:16.340
+Quand Business Central doit-il réellement utiliser ce champ ?
+
+00:11:16.340 --> 00:11:17.940
+Imaginez que vous êtes sur le point de valider une commande client.
+
+00:11:18.180 --> 00:11:21.180
+Avant que le système ne crée les écritures finales, vous souhaitez une vérification supplémentaire.
+
+00:11:21.460 --> 00:11:24.580
+Peut-être le client a-t-il besoin d'un niveau de récompense approuvé avant qu'une remise ne s'applique.
+
+00:11:24.580 --> 00:11:28.940
+Ou peut-être qu'un document de livraison requis doit exister avant que la commande puisse avancer.
+
+00:11:29.660 --> 00:11:30.920
+Vous laissez de vérification au bon moment.
+
+00:11:31.280 --> 00:11:35.300
+Mais vous ne voulez pas copier tout le processus de validation des ventes dans votre extension juste pour ajouter une règle.
+
+00:11:36.020 --> 00:11:37.900
+Ce processus gère déjà beaucoup de choses en arrière-plan.
+
+00:11:38.380 --> 00:11:41.980
+Si vous le copiez, votre extension sera coincée à devoir maintenir tous ses futurs changements.
+
+00:11:42.320 --> 00:11:42.680
+Pas idéal.
+
+00:11:43.060 --> 00:11:45.240
+AL offre donc aux développeurs plusieurs moyens d'exécuter du code.
+
+00:11:45.560 --> 00:11:47.260
+Le choix dépend de ce qui doit se passer.
+
+00:11:48.100 --> 00:11:48.920
+Tout d'abord les déclencheurs.
+
+00:11:49.280 --> 00:11:52.420
+Un déclencheur est un point nommé à l'intérieur d'un objet AL où le code peut s'exécuter.
+
+00:11:52.420 --> 00:11:55.760
+Lorsqu'une valeur est modifiée sur un champ de table, le déclencheur lance du code.
+
+00:11:56.180 --> 00:11:58.400
+Lorsqu'une page s'ouvre ou se ferme, le déclencheur lance du code.
+
+00:11:58.840 --> 00:12:03.440
+Les rapports, requêtes, XML ports, tables, extensions, AO ont tous ces points où un développeur peut ajouter des règles.
+
+00:12:04.100 --> 00:12:05.600
+Prenons le champ ID de récompense sur un client.
+
+00:12:06.000 --> 00:12:09.040
+Lorsqu'un utilisateur choisit un niveau de récompense, un déclencheur de validation peut s'exécuter.
+
+00:12:09.320 --> 00:12:10.780
+Le code vérifie le client est-il bloqué.
+
+00:12:11.200 --> 00:12:12.720
+Le niveau de récompense existe-t-il ?
+
+00:12:12.720 --> 00:12:14.320
+Un autre champ doit-il être mis à jour ?
+
+00:12:14.320 --> 00:12:16.260
+La vérification se fait au moment où la valeur change.
+
+00:12:16.260 --> 00:12:18.080
+Pas plus tard lorsqu'une erreur est découverte.
+
+00:12:18.080 --> 00:12:21.240
+Les déclencheurs fonctionnent bien lorsque la règle est étroitement liée à cet objet.
+
+00:12:21.680 --> 00:12:23.260
+Mais Business Central utilise aussi des événements.
+
+00:12:23.580 --> 00:12:24.440
+Un événement est comme un avis.
+
+00:12:24.860 --> 00:12:27.780
+Une partie de l'application l'envoie quand quelque chose se produit.
+
+00:12:28.160 --> 00:12:30.420
+Cela peut annoncer qu'un enregistrement est sur le point d'être inséré,
+
+00:12:30.700 --> 00:12:34.560
+qu'un document va être validé ou qu'un processus est terminé ou qu'un processus est terminé.
+
+00:12:34.660 --> 00:12:36.060
+Votre extension peut écouter cet avis.
+
+00:12:36.500 --> 00:12:38.920
+Le code qui écoute est appelé « abonné d'événement ».
+
+00:12:38.920 --> 00:12:40.500
+Il attend un événement nommé spécifique.
+
+00:12:40.660 --> 00:12:44.240
+Lorsque Business Central déclenche cet événement, l'abonné exécute sa propre procédure.
+
+00:12:44.600 --> 00:12:46.060
+Le processus standard reste aux commandes.
+
+00:12:46.060 --> 00:12:49.060
+Par exemple, quand Business Central commence à valider une commande client,
+
+00:12:49.200 --> 00:12:50.560
+il lève un événement avant de continuer.
+
+00:12:51.080 --> 00:12:52.700
+Votre extension de récompense reçoit cet avis.
+
+00:12:53.120 --> 00:12:55.120
+Elle vérifie l'ID de récompense et la règle de remise du client.
+
+00:12:55.600 --> 00:12:58.760
+Ensuite, elle autorise la poursuite du processus ou l'interrompt avec un message clair.
+
+00:12:59.460 --> 00:13:02.260
+Le processus de validation standard appartient toujours à Business Central.
+
+00:13:03.000 --> 00:13:06.200
+Votre extension ajoute simplement sa règle spécifique à l'entreprise à ce point de connexion.
+
+00:13:06.740 --> 00:13:10.080
+Vous entendrez souvent des noms d'événements comme « on before or on after who ».
+
+00:13:10.080 --> 00:13:12.600
+« On before ago » signifie que votre code s'exécute avant la fin d'une action.
+
+00:13:13.060 --> 00:13:14.980
+C'est parfait pour une vérification qui peut empêcher l'étape suivante.
+
+00:13:14.980 --> 00:13:18.760
+Comme « arrêter une commande client si une condition n'est pas remplie ».
+
+00:13:18.760 --> 00:13:20.380
+« After que » signifie que l'action a déjà eu.
+
+00:13:20.780 --> 00:13:21.440
+Vous pouvez alors réagir.
+
+00:13:21.800 --> 00:13:24.700
+Créer un enregistrement associé, mettre à jour une note ou démarrer une autre tâche.
+
+00:13:25.140 --> 00:13:27.120
+Les noms indiquent le moment et le moment est important.
+
+00:13:27.480 --> 00:13:29.560
+Une règle qui s'exécute après la validation ne peut pas l'empêcher.
+
+00:13:29.960 --> 00:13:32.660
+Une règle qui s'exécute trop tôt peut ne pas disposer des données nécessaires.
+
+00:13:33.080 --> 00:13:35.940
+Les développeurs choisissent donc l'événement en fonction de ce que la règle métier doit faire et quand.
+
+00:13:36.380 --> 00:13:37.840
+Le code peut également être déclenché par une action.
+
+00:13:37.840 --> 00:13:42.280
+Un utilisateur clique sur un bouton comme CAQ et vérifie le statut de récompense CAQ et cette action appelle une procédure.
+
+00:13:43.040 --> 00:13:45.700
+Le code peut aussi s'exécuter lorsqu'un objet en appelle un autre via une variable.
+
+00:13:46.180 --> 00:13:47.580
+Cela semble technique, mais c'est simple.
+
+00:13:48.100 --> 00:13:50.440
+Une partie de l'extension demande à une autre d'effectuer une tâche.
+
+00:13:50.940 --> 00:13:51.800
+Les variables aident à cela.
+
+00:13:52.180 --> 00:13:55.320
+Une variable est un espace nommé qui contient une valeur pendant l'exécution du code.
+
+00:13:55.800 --> 00:13:59.740
+Il peut s'agir d'un nombre, d'un texte, d'une date ou même d'un enregistrement business central comme le client actuel.
+
+00:13:59.740 --> 00:14:01.860
+En L, vous les déclarer avec TAC varicule.
+
+00:14:02.280 --> 00:14:07.260
+Par exemple, une procédure de récompense peut utiliser une variable nommée customer, customer actuel, pour stocker l'an actuel.
+
+00:14:07.500 --> 00:14:10.680
+Une autre variable appelée CA discount percent que contient le pourcentage de remise.
+
+00:14:10.960 --> 00:14:12.040
+Ce ne sont pas des enregistrements permanents.
+
+00:14:12.320 --> 00:14:14.120
+Ce sont juste des valeurs de travail pour cette partie du code.
+
+00:14:14.320 --> 00:14:15.660
+Voici ce qu'il faut savoir sur l'emplacement du code.
+
+00:14:16.060 --> 00:14:18.820
+Si une règle doit être utilisée à plusieurs endroits, placez-la dans une codonie.
+
+00:14:19.320 --> 00:14:25.760
+Ainsi, la fiche client, un processus de vente et un rapport peuvent tous appeler la même procédure de remise au lieu d'avoir chacun leur version.
+
+00:14:26.880 --> 00:14:28.020
+Cela évite un problème bien connu.
+
+00:14:28.020 --> 00:14:33.420
+Un écran applique une remise de 10%, un autre 5% et personne ne sait quelle règle est la bonne.
+
+00:14:34.300 --> 00:14:38.540
+Conserver les règles métiers partagées dans une codonite donne à l'extension une source unique pour cette décision.
+
+00:14:39.040 --> 00:14:41.100
+Les déclencheurs triggers gèrent donc les règles proches d'un objet.
+
+00:14:41.640 --> 00:14:44.520
+Les événements permettent à une extension de réagir au propre processus de business central.
+
+00:14:44.980 --> 00:14:46.640
+Les codonites regroupent la logique partagée.
+
+00:14:47.080 --> 00:14:48.920
+Une fois ces éléments connectés, la question suivante est
+
+00:14:48.920 --> 00:14:52.920
+Où les développeurs écrivent-ils, testent-ils et inspectent-ils tout ce code AL ?
+
+00:14:52.920 --> 00:14:57.600
+Le développement AL se fait généralement dans Visual Studio Code, souvent appelé VS Code.
+
+00:14:58.020 --> 00:14:59.860
+C'est votre espace de travail pour rédiger les fichiers AL.
+
+00:15:00.100 --> 00:15:01.280
+Il permet d'organiser votre extension.
+
+00:15:01.800 --> 00:15:06.200
+Il vous aide à trouver des problèmes et envoie l'application terminée vers un environnement business central pour les tests.
+
+00:15:06.600 --> 00:15:08.520
+Mais VS Code seul n'est qu'un éditeur de code général.
+
+00:15:09.320 --> 00:15:11.260
+Il nécessite l'extension de langage AL de Microsoft.
+
+00:15:11.900 --> 00:15:14.560
+Cette extension apprend à VS Code comment fonctionne business central.
+
+00:15:14.960 --> 00:15:16.700
+Elle peut suggérer des noms d'objets pendant que vous tapez.
+
+00:15:16.980 --> 00:15:18.540
+Elle signale les erreurs avant que vous ne publiez.
+
+00:15:18.900 --> 00:15:20.540
+Elle vous aide à parcourir les champs et les procédures.
+
+00:15:20.540 --> 00:15:23.020
+Et elle connecte votre projet à un environnement business central.
+
+00:15:23.520 --> 00:15:24.620
+Cela permet d'éviter bien certitude.
+
+00:15:24.920 --> 00:15:29.040
+Lorsque vous démarrez un nouveau projet AL, vous pouvez exécuter la commande calgo.cscode dans VS Code.
+
+00:15:29.580 --> 00:15:35.420
+Elle crée le dossier de projet de base et les fichiers de paramètres du nom de l'extension AL, l'éditeur, la version et l'environnement business central à utiliser.
+
+00:15:36.460 --> 00:15:38.520
+Considérez ce dossier de projet comme l'établi de l'extension.
+
+00:15:38.920 --> 00:15:39.900
+Chaque fichier AL est à sa place.
+
+00:15:40.180 --> 00:15:44.040
+Un fichier peut contenir une table, un autre une extension de page et une codonie peut avoir son propre fichier.
+
+00:15:44.400 --> 00:15:48.980
+Ainsi, quand quelqu'un ouvre le projet, il peut trouver la bonne partie sans faire défiler un document immense.
+
+00:15:48.980 --> 00:15:52.660
+Lorsque le code est prêt à être testé, VS Code le compile en un package d'application.
+
+00:15:53.200 --> 00:15:54.660
+C'est la version installable de l'extension.
+
+00:15:55.240 --> 00:15:58.140
+Business Central lit ce package et ajoute l'extension à l'environnement.
+
+00:15:59.040 --> 00:16:05.320
+S'il manque un champ, s'il y a une faute de frappe ou tout autre problème empêchant la compilation, VS Code vous en informe avant que le package n'atteigne Business Central.
+
+00:16:06.100 --> 00:16:07.840
+Les tests doivent d'abord s'effectuer dans un environnement sandbox.
+
+00:16:08.100 --> 00:16:12.820
+Sandbox est un environnement business central séparé où vous pouvez tester des modifications sans risquer de perturber les activités réelles.
+
+00:16:13.100 --> 00:16:18.500
+Publiez l'extension, vous ouvrez les pages modifiées, vous saisissez des enregistrements de tests et vous vérifiez si les règles fonctionnent comme prévu.
+
+00:16:18.980 --> 00:16:19.920
+Cette séparation est importante.
+
+00:16:20.320 --> 00:16:24.280
+Vous ne voulez pas découvrir qu'une nouvelle règle de validation bloque les commandes clients pendant que le personnel tente de travailler.
+
+00:16:25.020 --> 00:16:30.240
+Dans un sandbox, vous pouvez commettre des erreurs, supprimer des données de test, modifier le code et publier à nouveau sans affecter les données réelles.
+
+00:16:31.180 --> 00:16:33.440
+Parfois le code s'exécute, mais le résultat semble incorrect.
+
+00:16:33.900 --> 00:16:34.940
+C'est là que le débogage est utile.
+
+00:16:35.120 --> 00:16:39.660
+Vous placez un point d'arrêt dans le code, lancez le processus et l'extension se met en pause pendant l'exécution.
+
+00:16:40.300 --> 00:16:42.380
+Lors de cette pause, vous pouvez inspecter des valeurs comme
+
+00:16:42.380 --> 00:16:47.240
+le client actuel, le niveau de récompense sélectionné ou le pourcentage de remise calculé par la procédure.
+
+00:16:47.240 --> 00:16:51.080
+Au lieu de deviner pourquoi une règle a échoué, vous pouvez voir exactement ce que le code a reçu.
+
+00:16:51.600 --> 00:16:54.400
+Les équipes de développement utilisent également Git pour conserver un historique de leur travail.
+
+00:16:54.740 --> 00:16:57.280
+Git enregistre les modifications apportées au fichier du projet au fil du temps.
+
+00:16:57.560 --> 00:17:02.940
+Si quelqu'un modifie une règle et crée un problème, l'équipe peut comparer les versions, voire les changements et annuler si nécessaire.
+
+00:17:03.780 --> 00:17:06.520
+Cela aide également lorsque plusieurs développeurs travaillent sur la même extension.
+
+00:17:07.120 --> 00:17:09.440
+Pour un débutant, la meilleure approche consiste à commencer petit.
+
+00:17:09.440 --> 00:17:13.660
+Apprenez d'abord à connaître Business Central, puis créez une table et une page.
+
+00:17:14.120 --> 00:17:19.220
+Ensuite, étendez une page standard, ajoutez une règle métier simple et apprenez comment les événements et les données d'installation s'intègrent au projet.
+
+00:17:20.320 --> 00:17:24.400
+Connectons maintenant ces éléments via une petite extension qu'une entreprise pourrait réellement utiliser.
+
+00:17:26.760 --> 00:17:29.020
+Un exemple simple, créez une extension de récompense client.
+
+00:17:30.200 --> 00:17:32.380
+A quoi ressemble réellement une extension à elle ?
+
+00:17:32.380 --> 00:17:34.100
+Plongeons-nous dans un exemple simple.
+
+00:17:35.060 --> 00:17:38.560
+Imaginez que votre entreprise souhaite définir des niveaux de récompense client, chacun avec sa propre remise.
+
+00:17:38.560 --> 00:17:40.220
+Vous commencez par créer une table de récompense.
+
+00:17:40.700 --> 00:17:45.520
+Considérez-la comme un classeur numérique où chaque fichier contient un ID, une description et un pourcentage de remise.
+
+00:17:46.440 --> 00:17:47.920
+Leur bénéficie de 10% de réduction par exemple.
+
+00:17:48.220 --> 00:17:50.720
+Votre personnel doit pouvoir gérer ses niveaux sans utiliser d'outils techniques.
+
+00:17:51.220 --> 00:17:55.900
+Vous ajoutez donc deux pages, une liste de récompense pour voir tous les niveaux et une fiche de récompense pour modifier ou créer un niveau.
+
+00:17:56.700 --> 00:18:01.640
+Ils peuvent ajouter un nouveau niveau, ajuster un pourcentage ou consulter les données sans ouvrir l'environnement de développement.
+
+00:18:02.200 --> 00:18:04.960
+Ensuite, vous étendez la table client avec un nouveau champ appelé ID de récompense.
+
+00:18:04.960 --> 00:18:11.860
+Ce champ lit chaque client à un enregistrement de récompense et vous placez ce champ directement sur la fiche client où le personnel gère déjà les détails.
+
+00:18:12.300 --> 00:18:16.120
+Puis vous ajoutez une action de récompense pour qu'il puisse ouvrir la liste directement depuis cette même fiche.
+
+00:18:16.780 --> 00:18:19.000
+La règle de remise elle-même réside à l'intérieur d'une codonie.
+
+00:18:19.600 --> 00:18:25.120
+Lorsqu'un autre processus a besoin de la remise d'un client, il appelle cette codonie au lieu de la calculer encore et encore sur chaque page.
+
+00:18:25.620 --> 00:18:26.100
+C'est efficace.
+
+00:18:26.480 --> 00:18:30.100
+Une codonie d'installation ajoute des niveaux de récompense de base lors de la première installation de votre extension.
+
+00:18:30.100 --> 00:18:36.420
+Et un abonné aux événements, vérifiez le niveau de récompense choisi pendant le processus de vente, appliquant la règle de votre entreprise au bon moment.
+
+00:18:36.860 --> 00:18:39.420
+C'est une petite extension, mais observez tout ce qu'elle contient.
+
+00:18:39.880 --> 00:18:43.680
+Table de données, écran utilisateur, action de navigation, logique de configuration et règles métiers.
+
+00:18:43.960 --> 00:18:46.060
+Tout fonctionne ensemble. C'est là la véritable puissance d'aide.
+
+00:18:46.300 --> 00:18:46.580
+Très bien.
+
+00:18:47.000 --> 00:18:48.760
+En conclusion, votre point de départ en développement AL.
+
+00:18:49.260 --> 00:18:50.200
+Voici ce qu'il faut retenir.
+
+00:18:50.620 --> 00:18:56.440
+Le développement AL vous permet d'ajouter les fonctionnalités spécifiques dont votre entreprise a besoin à Business Central sans toucher à l'application principale.
+
+00:18:57.060 --> 00:18:58.580
+Et vous n'avez pas besoin de tout construire en une seule fois.
+
+00:18:58.580 --> 00:19:02.100
+Commencez par un champ, une extension de page et une règle claire.
+
+00:19:02.460 --> 00:19:03.580
+C'est votre première brique de construction.
+
+00:19:03.980 --> 00:19:07.880
+Si cette pépite de savoir vous a été utile, abonnez-vous sur votre plateforme de podcast préférée
+
+00:19:07.880 --> 00:19:10.620
+et partagez-la avec quelqu'un qui débute dans le développement Business Central.
+
+00:19:11.060 --> 00:19:13.100
+Rejoignez-nous la prochaine fois pour ajouter une nouvelle pièce au puzzle.
+
+00:19:13.580 --> 00:19:18.080
+Je suis Marco Peters, c'était un nouvel épisode des Microsoft Knowledge Nuggets sur M365FM.
+
+00:19:18.080 --> 00:19:19.080
+Merci.
+
+00:19:19.080 --> 00:19:20.080
+Merci.
+
+00:19:20.080 --> 00:19:21.080
+Merci.
+
+00:19:21.080 --> 00:19:22.080
+Merci.
+
+00:19:22.080 --> 00:19:23.080
+Merci.

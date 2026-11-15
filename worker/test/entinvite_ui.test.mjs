@@ -68,7 +68,7 @@ async function setup() {
 // profile.js auf der Community-Seite starten; user = angemeldetes Konto oder null. API-Aufrufe der Einladung gehen an den echten Handler.
 async function bootProfile(env, { search, hash = "#c-invite", user = null }) {
   const main = new El("main"), calls = [];
-  for (const [tag, id] of [["h1", "c-h1"], ["div", "c-page"], ["div", "c-expert"], ["div", "c-mvp"], ["div", "c-events"], ["div", "c-blog"]]) { const e = new El(tag); e.id = id; main.appendChild(e); }
+  for (const [tag, id] of [["h1", "c-h1"], ["div", "c-page"], ["div", "c-expert"], ["div", "c-mvp"], ["div", "c-events"], ["div", "c-events-import"], ["div", "c-blog"], ["div", "c-library"]]) { const e = new El(tag); e.id = id; main.appendChild(e); }
   const location = { search, hash, href: "https://www.m365.fm/community/" + search + hash, pathname: "/community/" }, replaced = [];
   const fetch = async (url, o = {}) => {
     const u = new URL(url); calls.push({ path: u.pathname + u.search, method: o.method || "GET", headers: o.headers || {}, body: o.body });
@@ -245,4 +245,15 @@ test("322-9: \"Testmail an mich\" schickt die gewaehlte Fassung mit (alle vier w
     sel.value = v; btn("Testmail an mich").click(); await flush();
     assert.deepEqual(calls.at(-1).body, { eid: "david-benaim", variant: v }); assert.match(msg(), new RegExp("Variante " + v));
   }
+});
+
+test("Reiter: der Import-Kasten (#c-events-import, ohne eigenen Reiter) gehoert zu Events und steht nicht ueber der Bibliothek", async () => {
+  const { env } = await setup();
+  const el = (main, id) => main.all((e) => e.id === id)[0];
+  let { main } = await bootProfile(env, { search: "", hash: "#c-library" });
+  assert.equal(el(main, "c-library").hidden, false); assert.equal(el(main, "c-events-import").hidden, true, "auf dem Reiter Bibliothek nicht sichtbar");
+  ({ main } = await bootProfile(env, { search: "", hash: "#c-events" }));
+  assert.equal(el(main, "c-events").hidden, false); assert.equal(el(main, "c-events-import").hidden, false, "auf dem Reiter Events sichtbar");
+  ({ main } = await bootProfile(env, { search: "", hash: "" }));
+  assert.equal(el(main, "c-page").hidden, false); assert.equal(el(main, "c-events-import").hidden, true, "Startreiter Konto");
 });

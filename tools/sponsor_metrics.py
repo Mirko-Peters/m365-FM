@@ -70,9 +70,20 @@ def slug_rows(placement_id):
         return {}
 
 
-def page_paths(record, placement):
+def entity_pages_sponsored(record, day):
+    """Entitaets- und Themenseiten tragen ein Sponsoring nur bis end + GRACE_DAYS (site_sponsorships.grace_end, wie die Kennzeichnung);
+    danach zaehlen ihre Aufrufe nicht mehr fuer diese Platzierung. Folgen, Beitraege und refs.page_paths bleiben dauerhaft (Mirko 11.11.2026).
+    Ohne day (Aufrufer ohne Tag) oder ohne "end" (unbefristet): immer."""
+    if not day or record.get("end") is None:
+        return True
+    import site_sponsorships
+    grace = site_sponsorships.grace_end(record)
+    return bool(grace) and dt.date.fromisoformat(day) <= grace
+
+
+def page_paths(record, placement, day=None):
     paths = set()
-    for kind in ("entities", "topics"):
+    for kind in ("entities", "topics") if entity_pages_sponsored(record, day) else ():
         paths.update(f"/entity/{key}/" for key in record.get(kind, []) if re.fullmatch(r"[a-z0-9-]{1,100}", str(key)))
     for value in record.get("posts", []):
         path = urllib.parse.urlsplit(str(value).strip()).path
@@ -360,7 +371,7 @@ def cloudflare(placements, day, out, statuses):
     if rum is not None and dt.date.fromisoformat(day) >= cf_rum.RUM_START:
         source_rows, failed = [], ""
         for placement in placements:
-            for path in page_paths(slug_rows(placement["id"]), placement):
+            for path in page_paths(slug_rows(placement["id"]), placement, day):
                 try:
                     groups = cf_rum.path_views(rum, day, path)
                 except cf_rum.RumError as error:
@@ -403,7 +414,7 @@ def cloudflare_zone(placements, day, out, statuses):
     query = """query($z:String!,$d:Date!,$p:String!){viewer{zones(filter:{zoneTag:$z}){httpRequestsAdaptiveGroups(limit:100,filter:{date_geq:$d,date_leq:$d,clientRequestPath:$p}){dimensions{date clientRequestPath}count}}}}"""
     source_rows, failed = [], False
     for placement in placements:
-        for path in page_paths(slug_rows(placement["id"]), placement):
+        for path in page_paths(slug_rows(placement["id"]), placement, day):
             payload = json.dumps({"query": query, "variables": {"z": zone, "d": day, "p": path}}).encode()
             status, data, _ = json_request("https://api.cloudflare.com/client/v4/graphql", payload, headers)
             if status != 200 or data.get("errors"):
@@ -443,7 +454,7 @@ def gsc(placements, day, out, statuses):
         source_rows = []
         for placement in placements:
             record = slug_rows(placement["id"])
-            urls = ["https://www.m365.fm" + path for path in page_paths(record, placement)]
+            urls = ["https://www.m365.fm" + path for path in page_paths(record, placement, day)]
             for page in urls:
                 query = {"startDate": day, "endDate": day, "dimensions": ["date"],
                          "dimensionFilterGroups": [{"filters": [{"dimension": "page", "operator": "equals", "expression": page}]}]}
@@ -469,7 +480,7 @@ def bing(placements, day, out, statuses):
         return
     attempted, failed, source_rows = False, False, []
     for placement in placements:
-        for path in page_paths(slug_rows(placement["id"]), placement):
+        for path in page_paths(slug_rows(placement["id"]), placement, day):
             page = urllib.parse.urljoin("https://www.m365.fm", path)
             query = urllib.parse.urlencode({"siteUrl": "https://www.m365.fm/", "pageUrl": page, "apikey": key})
             status, data, _ = json_request("https://ssl.bing.com/webmaster/api.svc/json/GetPageStats?" + query)

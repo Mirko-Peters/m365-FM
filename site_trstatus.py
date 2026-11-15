@@ -7,7 +7,8 @@ Arten (k):
            was in der Datenbank (ent_tr) steht, ergaenzt der Worker. Vormerken: Worker (Haiku).
   article  englische Video-Artikel (data/articles/<VIDEO>.json, generate_articles.py) mit ihren Sprachfassungen (article_tr.py); fl = Sprachen, die nach MAX_TRIES gesperrt sind
            (data/articles_tr_state.json). Vormerken: nicht moeglich (der Abarbeiter kennt die Art nicht, article_tr.py laeuft als eigener Batch-Job).
-Community-Inhalte (Blog, Podcast, Video) liefert der Worker direkt aus der Datenbank (Arten blog, podcast, video)."""
+Community-Inhalte (Blog, Podcast, Video) liefert der Worker direkt aus der Datenbank (Arten blog, podcast, video). Keine Doppelzaehlung: die Blog-Abfrage des Workers
+nimmt nur Beitraege mit leerem html (Community), fruehere Beitraege und Content-Pakete stehen nur hier als lblog."""
 import glob, gzip, json, os
 from pathlib import Path
 
@@ -146,11 +147,12 @@ def article_rows():
     return rows
 
 
-def build(write, TODAY, ents, legacy_posts, episodes):
-    """legacy_posts: frueher [{slug,title}] der Podpage-Beitraege im Seitenbau; die Liste kommt jetzt aus translate_blog.posts() (alle uebersetzten Blogartikel) und wird nur noch
-    gebraucht, wenn die nicht lesbar ist. episodes: [{slug,title}] der Hauptshow."""
+def build(write, TODAY, ents, legacy_posts, episodes, content_posts=()):
+    """Die Blogzeilen kommen aus translate_blog.posts() (alle uebersetzten Blogartikel: fruehere Beitraege plus Content-Pakete, Schluessel content/<slug>).
+    legacy_posts ([{slug,title}] alle frueheren Beitraege) und content_posts ([{slug,title}] freigegebene Content-Pakete) aus dem Seitenbau sind nur der Rueckfall,
+    wenn blog_sources() nichts liefert. episodes: [{slug,title}] der Hauptshow."""
     done = blog_done()
-    posts = blog_sources() or list(legacy_posts)
+    posts = blog_sources() or list(legacy_posts) + list(content_posts)
     rows = blog_rows(posts, done)
     notes = {}
     for l in LANGS:

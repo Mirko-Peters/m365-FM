@@ -1,0 +1,880 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.700
+Das heutige Thema ist eines, von dem fast jeder, der mit Daten arbeitet, schon gehört hat,
+
+00:00:03.960 --> 00:00:05.340
+das aber nur wenige wirklich verstehen.
+
+00:00:06.100 --> 00:00:07.140
+Microsoft Fabric OneLake.
+
+00:00:07.720 --> 00:00:09.700
+Sie haben es wahrscheinlich in der Microsoft-Werbung gesehen oder gehört,
+
+00:00:09.780 --> 00:00:12.540
+wie jemand es als den einheitlichen Data Lake für ihr gesamtes Unternehmen bezeichnet hat.
+
+00:00:13.060 --> 00:00:14.120
+Aber was bedeutet das eigentlich?
+
+00:00:14.740 --> 00:00:17.360
+Ist es nur ein weiterer Speicher-Bucket oder etwas grundlegend anderes?
+
+00:00:17.940 --> 00:00:18.800
+Ist die einfachste Definition?
+
+00:00:19.300 --> 00:00:22.840
+OneLake ist ein einzelner logischer Data Lake, der im Zentrum von Microsoft Fabric steht.
+
+00:00:23.280 --> 00:00:27.840
+Jeder Fabric-Dienst, ob Lakehouse, Warehouse, Eventhouse oder Power BI, speichert seine Daten dort.
+
+00:00:27.840 --> 00:00:29.560
+Und die wichtigste Regel ist an...
+
+00:00:29.560 --> 00:00:32.240
+Eine physische Datenkopie, auf die viele verschiedene Engines zugreifen können.
+
+00:00:32.600 --> 00:00:34.400
+Kein Kopieren von Daten mehr von einem Tool zum anderen.
+
+00:00:34.660 --> 00:00:37.020
+Kein Rätselraten mehr darüber, welche Version eines Berichts korrekt ist.
+
+00:00:37.280 --> 00:00:39.800
+Am Ende dieser Folge werden Sie verstehen, was OneLake eigentlich ist,
+
+00:00:39.920 --> 00:00:44.280
+wie es Daten-Duplizierung eliminiert und warum es die Spielregeln für Power BI, Data Engineering und KI verändert.
+
+00:00:45.320 --> 00:00:47.500
+Beginnen wir also mit dem Problem, das OneLake lösen sollte.
+
+00:00:48.900 --> 00:00:49.360
+Das Problem.
+
+00:00:49.780 --> 00:00:50.980
+Jede Abteilung hat ihren eigenen Lake.
+
+00:00:51.460 --> 00:00:53.000
+Stellen Sie sich vor, Sie arbeiten im mittelständischen Unterricht.
+
+00:00:53.260 --> 00:00:55.860
+Ihr Vertriebsteam nutzt ein CRM-System, um Abschlüsse zu verfolgen.
+
+00:00:55.860 --> 00:00:58.160
+Ihr Finanzteam nutzt das ERP für Abrechnungen und Rechnungen.
+
+00:00:58.160 --> 00:01:00.880
+Ihr Marketingteam zieht Daten aus seinen Kampagnen-Tools.
+
+00:01:01.380 --> 00:01:04.660
+Und Ihr Data Engineering Team verwaltet ein Data Warehouse für das Berichtswesen.
+
+00:01:05.060 --> 00:01:06.220
+Denken Sie also einmal darüber nach.
+
+00:01:06.620 --> 00:01:09.300
+Wie viele Kopien derselben Kundendaten existieren in diesen Systemen?
+
+00:01:09.800 --> 00:01:11.560
+In den meisten Unternehmen lautet die Antwort vier davon.
+
+00:01:12.060 --> 00:01:12.940
+Das CRM speichert Sie.
+
+00:01:13.220 --> 00:01:13.840
+Das ERP speichert Sie.
+
+00:01:13.840 --> 00:01:16.100
+Das Marketing exportiert Sie in sein Analyse-Tool.
+
+00:01:16.720 --> 00:01:18.960
+Jemand aus der Finanzabteilung erstellt eine Tabelle aus dem ERP.
+
+00:01:19.500 --> 00:01:23.100
+Und das Data Engineering Team kopiert Sie in das Warehouse, damit Power BI Sie lesen kann.
+
+00:01:23.900 --> 00:01:28.300
+Das ist dieselbe Kunden-ID, derselbe Umsatzbetrag, dasselbe Rechnungsdatum gespeichert an fünf verschiedenen Orten.
+
+00:01:28.700 --> 00:01:30.060
+Es liegt nicht daran, dass die Leute unvorsichtig sind.
+
+00:01:30.400 --> 00:01:32.360
+Es liegt daran, dass die alten Tools nicht miteinander kommunizieren können.
+
+00:01:32.620 --> 00:01:37.100
+Wenn man einen Bericht erstellen wollte, der Verkaufsdaten aus dem CRM mit Finanzdaten aus dem ERP kombiniert,
+
+00:01:37.100 --> 00:01:39.380
+musste man beide in etwas kopieren, das sie zusammenlesen konnte.
+
+00:01:39.760 --> 00:01:39.900
+Äh.
+
+00:01:40.460 --> 00:01:44.140
+Das bedeutete, Pipelines zu bauen, Jobs zu planen und zu hoffen, dass über Nacht nichts kaputt ging.
+
+00:01:44.680 --> 00:01:46.040
+Die versteckten Kosten summieren sich schnell.
+
+00:01:46.380 --> 00:01:48.860
+Die Speicherkosten steigen, weil man für dieselben Daten fünfmal bezahlt.
+
+00:01:49.360 --> 00:01:52.080
+Berichte veralten, weil eine Kopie aktualisiert wird und eine andere nicht.
+
+00:01:52.700 --> 00:01:54.580
+Und dann stellt jemand die Frage, die niemand beantworten will.
+
+00:01:55.020 --> 00:01:55.880
+Welche Version ist die richtige?
+
+00:01:56.420 --> 00:01:58.360
+Diese Verwirrung untergräbt das Vertrauen in Daten.
+
+00:01:58.780 --> 00:02:02.240
+Und sobald das Vertrauen weg ist, hören die Leute ganz auf, die Analyse-Plattform zu nutzen.
+
+00:02:03.080 --> 00:02:05.680
+Microsoft hat sich dieses Chaos angesehen und eine einfache Frage gestellt.
+
+00:02:05.680 --> 00:02:08.240
+Was wäre, wenn man nur eine Kopie seiner Daten hätte, die jedes Tool lesen kann?
+
+00:02:08.780 --> 00:02:11.580
+Keine Duplikate, keine Verwirrung, eine einzige Quelle der Wahrheit.
+
+00:02:12.640 --> 00:02:13.660
+Was genau ist eigentlich OneLake?
+
+00:02:14.120 --> 00:02:16.100
+OneLake ist Microsofts Antwort auf diese Frage.
+
+00:02:16.500 --> 00:02:18.800
+Es ist ein einzelner logischer DataLake für ihr gesamtes Unternehmen.
+
+00:02:19.380 --> 00:02:23.340
+Der entscheidende Leitsatz lautet, ein Lake pro Mandant, nicht ein Lake pro Team.
+
+00:02:24.040 --> 00:02:26.940
+Unter der Haube basiert OneLake auf Azure DataLake Storage Gentway.
+
+00:02:27.600 --> 00:02:29.140
+Die gleiche Technologie, die gleichen APIs.
+
+00:02:29.500 --> 00:02:32.200
+Aber Microsoft hat es als vollständig verwalteten SaaS-Dienst neu verpackt.
+
+00:02:32.200 --> 00:02:36.300
+Sie müssen keine Speicherkonten erstellen, keine Container verwalten und keine Zugriffsschlüssel einrichten.
+
+00:02:36.460 --> 00:02:37.120
+Sie nutzen es einfach.
+
+00:02:37.400 --> 00:02:39.180
+Stellen Sie es sich wie OneDrive für die Daten Ihres Unternehmens.
+
+00:02:39.700 --> 00:02:43.340
+OneDrive bietet Ihnen einen zentralen Ort für Ihre persönlichen Dateien, Dokumente, Fotos und Tabellen.
+
+00:02:43.620 --> 00:02:45.960
+Sie machen sich keine Gedanken darüber, wo diese physisch gespeichert sind.
+
+00:02:46.040 --> 00:02:47.260
+Sie öffnen sie einfach und arbeiten an.
+
+00:02:47.420 --> 00:02:49.920
+OneLake macht genau das Gleiche, nur für die Daten Ihres Unternehmens.
+
+00:02:50.520 --> 00:02:53.540
+Es bietet jedem Team, jedem Projekt und jeder Workload einen gemeinsamen Speicherpool.
+
+00:02:54.140 --> 00:02:55.360
+Hier gibt es nun einen wichtigen Unterschied.
+
+00:02:55.860 --> 00:02:57.080
+OneLake ist logisch, nicht physisch.
+
+00:02:57.080 --> 00:03:00.480
+Im Hintergrund kann es sich über mehrere Speicherkonten in verschiedenen Regionen erstrecken.
+
+00:03:00.720 --> 00:03:02.280
+Aber für Sie sieht es aus wie ein einziger großer Pup.
+
+00:03:02.740 --> 00:03:04.480
+Es ist Ihnen egal, welcher Server die Dateien enthält.
+
+00:03:04.560 --> 00:03:05.440
+Sie sehen einfach Ihre Daten.
+
+00:03:05.920 --> 00:03:07.520
+Jeder Fabrikdienst speichert seine Daten hier.
+
+00:03:07.920 --> 00:03:09.780
+Wenn Sie ein Lakehouse erstellen, liegen die Daten in OneLake.
+
+00:03:10.120 --> 00:03:12.120
+Wenn Sie ein Warehouse aufbauen, liegen die Tabellen in OneLake.
+
+00:03:12.560 --> 00:03:16.140
+Wenn Sie einen Power BI-Bericht im DirectLake-Modus ausführen, liest dieser direkt aus OneLake.
+
+00:03:16.800 --> 00:03:20.300
+Sogar Eventhouse, der Speicher für Echtzeitanalysen, kann seine Daten in OneLake bereitstellen.
+
+00:03:20.980 --> 00:03:24.400
+Alles verweist auf denselben Ort und das Standard-Datenformat ist Delta Parquet.
+
+00:03:24.400 --> 00:03:26.740
+Das ist ein offenes Format, kein Microsoft-Login.
+
+00:03:27.360 --> 00:03:29.060
+Databricks nutzt es, Spark-Engines lesen es.
+
+00:03:29.420 --> 00:03:31.000
+Tools wie Pandas und Polars können damit arbeiten.
+
+00:03:31.460 --> 00:03:33.500
+Ihre Daten sind also nicht in der Welt von Microsoft gefangen.
+
+00:03:33.980 --> 00:03:36.500
+Es ist offen und portabel, aber das wahre Geheimnis ist nicht der Speicher,
+
+00:03:36.780 --> 00:03:39.480
+sondern die OneLake die Notwendigkeit von Datenkopien von vornherein eliminiert.
+
+00:03:40.480 --> 00:03:41.360
+Das Prinzip der Einkopie.
+
+00:03:42.040 --> 00:03:45.020
+Hier ist der Grundgedanke, der OneLake von allem unterscheidet, was es bisher gab.
+
+00:03:45.540 --> 00:03:47.420
+Es nennt sich das Prinzip der Einkopie und es ist ganz einfach.
+
+00:03:47.740 --> 00:03:50.560
+Eine physische Datenkopie, auf die viele verschiedene Engines zugreifen können.
+
+00:03:50.880 --> 00:03:52.160
+Lassen Sie mich zeigen, was das bedeutet.
+
+00:03:52.160 --> 00:03:54.860
+Nehmen wir an, Sie haben eine Tabelle mit Verkaufsdaten in OneLake.
+
+00:03:55.020 --> 00:03:57.020
+Ein Dateningenieur lässt ein Spark-Notebook laufen, um Sie zu bereiten.
+
+00:03:57.380 --> 00:03:59.780
+Ein Business Analyst schreibt eine TSQL-Abfrage, um Sie zu sammeln.
+
+00:04:00.100 --> 00:04:02.260
+Und ein Power BI-Bericht liest Sie für ein Dashboard aus.
+
+00:04:02.580 --> 00:04:03.820
+Alle drei geschehen zur gleichen Zeit.
+
+00:04:04.180 --> 00:04:05.280
+Alle drei lesen dieselbe Datei.
+
+00:04:05.520 --> 00:04:06.180
+Niemand hätte was kopiert.
+
+00:04:06.920 --> 00:04:08.380
+In der alten Welt gab es das nie.
+
+00:04:08.920 --> 00:04:10.840
+Man kopierte Daten aus dem Data Lake in ein Warehouse.
+
+00:04:11.320 --> 00:04:13.700
+Dann kopierte man sie vom Warehouse in ein semantisches Modell.
+
+00:04:14.220 --> 00:04:15.420
+Anschließend aktualisierte man den Bericht.
+
+00:04:15.680 --> 00:04:16.980
+Das sind drei Kopien derselben Daten.
+
+00:04:17.460 --> 00:04:18.960
+Jeder einzelne kostet Zeit und Speicherplatz.
+
+00:04:18.960 --> 00:04:21.060
+Und wenn ein Schritt fehlschlug, waren die Zahlen falsch.
+
+00:04:21.480 --> 00:04:22.680
+Eine Kopie eliminiert all das.
+
+00:04:23.040 --> 00:04:24.240
+Die Daten liegen nur einmal in OneLake.
+
+00:04:24.620 --> 00:04:27.480
+Die Engines Spark, SQL und Power BI lesen Sie alle direkt.
+
+00:04:28.080 --> 00:04:28.620
+Keine Bewegung.
+
+00:04:28.960 --> 00:04:29.640
+Keine Duplizierung.
+
+00:04:30.060 --> 00:04:31.240
+Keine Synchronisationsprobleme.
+
+00:04:31.420 --> 00:04:32.320
+Die Kosteneinsparungen sind ja.
+
+00:04:32.660 --> 00:04:35.240
+Weniger Speicher, da man nicht für dieselben Daten fünfmal zahlt.
+
+00:04:35.760 --> 00:04:39.220
+Weniger ETL, da man keine Pipelines nur zum Verschieben von Daten zwischen Tools baut.
+
+00:04:40.080 --> 00:04:42.580
+Weniger Wartungsaufwand, da zwischen den Kopien nichts kaputt gehen kann.
+
+00:04:43.100 --> 00:04:44.460
+Und der Vorteil der Aktualität ist riesig.
+
+00:04:44.460 --> 00:04:46.400
+Eine Kopie bedeutet eine einzige Quelle dabei.
+
+00:04:46.780 --> 00:04:49.680
+Wenn die Daten aktualisiert werden, sieht jeder Bericht das Update sofort.
+
+00:04:50.280 --> 00:04:50.860
+Keine Fragen mehr.
+
+00:04:51.080 --> 00:04:53.160
+Nutzt dieser Bericht die Daten von letzter oder dieser Woche?
+
+00:04:54.180 --> 00:04:55.400
+Es sind überall immer dieselben Daten.
+
+00:04:55.960 --> 00:04:58.480
+Vielleicht denken Sie jetzt, ist das nicht einfach nur Azure Data Lake Storage.
+
+00:04:58.920 --> 00:04:59.300
+Nicht ganz.
+
+00:04:59.760 --> 00:05:00.780
+ADLS ist im Bias-Dienst.
+
+00:05:01.060 --> 00:05:01.900
+Sie erstellen Speicherkunden.
+
+00:05:02.300 --> 00:05:03.100
+Sie verwalten Container.
+
+00:05:03.340 --> 00:05:04.400
+Sie richten Zugriffsschlüssel ein.
+
+00:05:04.680 --> 00:05:06.020
+Sie entscheiden, welche Region was enthält.
+
+00:05:06.440 --> 00:05:07.720
+Es ist flexibel, aber es ist auch Arbeit.
+
+00:05:08.320 --> 00:05:09.240
+OneLake ist in SARS-Dienst.
+
+00:05:09.760 --> 00:05:10.820
+Sie erstellen keine Speicherkunden.
+
+00:05:11.200 --> 00:05:12.180
+Sie verwalten keine Container.
+
+00:05:12.180 --> 00:05:13.220
+Sie nutzen ihn einfach.
+
+00:05:13.600 --> 00:05:15.740
+Die zugrunde liegende Infrastruktur wird für Sie verwaltet.
+
+00:05:16.400 --> 00:05:18.660
+Eine Kopie ist großartig für Daten, die innerhalb von Fabric liegen.
+
+00:05:19.100 --> 00:05:20.480
+Aber was ist mit Daten, die woanders liegen?
+
+00:05:21.260 --> 00:05:21.620
+Shortcuts.
+
+00:05:22.080 --> 00:05:23.200
+Lassen Sie die Daten dort, wo sie sind.
+
+00:05:23.780 --> 00:05:24.820
+Genau hier kommen Shortcuts ins Spiel.
+
+00:05:25.200 --> 00:05:26.400
+Ein Shortcut ist ein virtueller Zeiger.
+
+00:05:26.920 --> 00:05:28.740
+Stellen Sie es sich wie einen symbolischen Link für Ihren Data Lake vor.
+
+00:05:29.380 --> 00:05:33.640
+Er ermöglicht den Zugriff auf Daten, die physisch außerhalb von OneLake liegen oder sie zu verschieben oder zu kopieren.
+
+00:05:34.740 --> 00:05:35.340
+So funktioniert es.
+
+00:05:35.640 --> 00:05:37.900
+Sie erstellen einen Shortcut innerhalb eines Lake House oder Warehouse.
+
+00:05:38.320 --> 00:05:40.840
+Und dieser Shortcut verweist auf eine Datei oder einen Ordner anderswo.
+
+00:05:40.840 --> 00:05:47.080
+Das könnte ein Azure Data Lake Storage Konto, ein Amazon S3 Bucket, Google Cloud Storage oder sogar ein anderer Fabric Arbeitsbereich sein.
+
+00:05:47.680 --> 00:05:50.940
+Die Daten bleiben, wo sie sind, aber innerhalb von Fabric sieht es so aus, als wären sie direkt im OneLake.
+
+00:05:51.520 --> 00:05:52.880
+Lassen Sie mich ein reales Szenario nennen.
+
+00:05:53.500 --> 00:05:56.200
+Ihr Vertriebsteam führt seine Analysen seit Jahren auf AWS durch.
+
+00:05:56.860 --> 00:05:58.360
+Also liegen alle Daten in S3 Buckets.
+
+00:05:59.220 --> 00:06:03.660
+Ihr Finanzteam nutzt Fabric und Power BI und muss Verkaufsdaten mit Finanzdaten kombinieren.
+
+00:06:03.660 --> 00:06:10.620
+In der alten Welt musste man alles aus S3 exportieren, auf Azure hochladen, eine Pipeline zur Synchronisierung erstellen und hoffen, dass nichts kaputt geht.
+
+00:06:11.480 --> 00:06:14.380
+Mit Shortcuts erstellen Sie eine Verknüpfung von Ihrem Lake House zum S3 Bucket.
+
+00:06:14.940 --> 00:06:19.040
+Die Daten bleiben in AWS, aber die Finanzabteilung kann Sie in Power BI abfragen, als wären Sie in OneLake gespeichert.
+
+00:06:19.580 --> 00:06:21.780
+Kein Export, kein Upload, keine Pipeline, um die man sich sorgen.
+
+00:06:22.220 --> 00:06:23.420
+Shortcuts funktionieren auch intern.
+
+00:06:23.960 --> 00:06:28.340
+Wenn ein Team einen aufbereiteten Datensatz in seinem Arbeitsbereich hat, kann ein anderes Team eine Verknüpfung dazu erstellen.
+
+00:06:28.940 --> 00:06:30.240
+Kein Kopieren, keine Duplizierung.
+
+00:06:30.880 --> 00:06:34.100
+Die Daten bleiben im ursprünglichen Arbeitsbereich und alle anderen greifen lediglich darauf zu.
+
+00:06:34.560 --> 00:06:35.980
+Es gibt eine Einschränkung, die Sie kennen sollten.
+
+00:06:36.860 --> 00:06:40.720
+Shortcuts kopieren keine Daten, daher hängt die Abfrageleistung von der Geschwindigkeit des Quellsystems ab.
+
+00:06:40.920 --> 00:06:46.100
+Wenn Sie eine Verknüpfung zu einem S3 Bucket am anderen Ende der Welt herstellen, sind Ihre Abfragen langsamer, als wenn die Daten lokal wären.
+
+00:06:46.520 --> 00:06:49.320
+Zählen Sie für häufig abgerufene Daten stattdessen das Mirroring in Betracht.
+
+00:06:49.320 --> 00:06:51.920
+Und damit kommen wir zu unserem nächsten Thema, Mirroring.
+
+00:06:52.500 --> 00:06:54.040
+Automatisches Einbinden von Datenbankdaten.
+
+00:06:54.600 --> 00:06:58.860
+Shortcuts eignen sich hervorragend für externe Dateispeicher, aber was ist mit Ihrem bestehenden Datenbank?
+
+00:06:59.440 --> 00:07:02.880
+Die, auf denen Ihr ERP, Ihr CRM und Ihre operativen Anwendungen laufen.
+
+00:07:03.440 --> 00:07:04.420
+Hier kommt Mirroring ins Spiel.
+
+00:07:04.920 --> 00:07:09.780
+Mirroring ist eine Möglichkeit, Daten aus Datenbanken nahezu in Echtzeit in OneLake zu übertragen, ohne eine einzige Pipeline zu erstellen.
+
+00:07:09.780 --> 00:07:17.280
+Sie verweisen Fabric auf Ihre Datenbank und das System erledigt den Rest, indem es automatisch eine inkrementelle Kopie der Daten im Delta-Paket-Format in OneLake erstellt
+
+00:07:17.280 --> 00:07:19.480
+und diese bei Änderungen in der Quelle aktuell hält.
+
+00:07:20.700 --> 00:07:27.320
+Zu den unterstützten Quellen gehören Azure SQL Database, SQL Server vor Ort, Cosmos DB und andere und Microsoft fügt mit der Zeit weitere hinzu.
+
+00:07:28.060 --> 00:07:32.960
+Das häufigste Szenario ist jedoch Ihre geschäftskritische Datenbank, auf der Ihr ERP oder Ihre Geschäftsanwendung läuft.
+
+00:07:33.520 --> 00:07:34.180
+So funktioniert es.
+
+00:07:34.180 --> 00:07:40.960
+Sie aktivieren Mirroring für eine Datenbank und Fabric liest den Änderungsfeed, Einfügungen, Updates sowie Löschungen und repliziert diese Änderungen in OneLake.
+
+00:07:41.740 --> 00:07:43.820
+Die erste Synchronisierung kopiert den vollständigen Daten.
+
+00:07:44.320 --> 00:07:48.040
+Danach erfolgt der Vorgang inkrementell und überträgt nur die geänderten Zeilen.
+
+00:07:48.660 --> 00:07:52.200
+Die Daten landen im Delta-Paket-Format und können von jeder Fabric-Engine abgefragt werden.
+
+00:07:52.800 --> 00:07:54.280
+Hier liegt der entscheidende Unterschied zu Shortcuts.
+
+00:07:54.900 --> 00:07:56.920
+Shortcuts kopieren keine Daten, Sie verweisen nur darauf.
+
+00:07:57.360 --> 00:08:04.580
+Mirroring kopiert die Daten tatsächlich, sodass sie physisch in OneLake liegen und die Abfrageleistung schnell ist, unabhängig davon, wie schnell oder langsam die Quelldatenbank ist.
+
+00:08:05.720 --> 00:08:07.780
+Der Kompromiss besteht daran, dass Sie eine Kopie speichern.
+
+00:08:07.880 --> 00:08:13.340
+Aber der Vorteil ist ein nahezu in Echtzeit verfügbarer Zugriff ohne zu erstellende Pipelines, zu verwaltende Zeitpläne, zu verwaltende Zeitpläne und Systeme.
+
+00:08:13.740 --> 00:08:15.420
+Lassen Sie mich Ihnen ein konkretes Eindrucksbeispiel geben.
+
+00:08:15.420 --> 00:08:21.800
+Ihr Unternehmen betreibt ein ERP-System auf SQL-Server, das alle Finanzdaten, Rechnungen, Zahlungen und das Hauptbuch enthält.
+
+00:08:22.600 --> 00:08:26.720
+In der alten Welt würden Sie einen ETL-Job erstellen, der jede Nacht läuft, die Daten extrahiert, transformiert.
+
+00:08:26.920 --> 00:08:27.800
+Und in ein Warehouse lädt.
+
+00:08:28.500 --> 00:08:30.340
+Dieser Job schlägt fehl, jemand muss ihn reparieren.
+
+00:08:30.520 --> 00:08:32.160
+Und die Daten sind immer mindestens einen Tag alt.
+
+00:08:32.700 --> 00:08:36.780
+Mit Mirroring aktivieren Sie es einmal und Fabric repliziert die Daten kontinuierlich in OneLake.
+
+00:08:37.400 --> 00:08:41.520
+Ihre Power BI-Berichte lesen direkt aus OneLake und sehen Daten, die wenige Minuten alt sind, nicht Stunden oder Tage.
+
+00:08:41.760 --> 00:08:42.940
+Und Sie müssen die Pipeline nie anfassen.
+
+00:08:43.120 --> 00:08:47.420
+Nun haben Sie Daten in OneLake durch Shortcuts, durch Mirroring und durch direkte Uploads.
+
+00:08:47.800 --> 00:08:48.720
+Wie nutzen Sie diese nun eigentlich?
+
+00:08:49.220 --> 00:08:50.460
+OneLake und die drei Datenspeicher.
+
+00:08:51.040 --> 00:08:53.840
+OneLake ist also die Speicherschicht, der Ort, an dem alle Ihre Dateien liegen.
+
+00:08:54.360 --> 00:08:55.000
+Aber hier ist der Punkt.
+
+00:08:55.140 --> 00:08:56.640
+Sie arbeiten eigentlich nicht direkt mit OneLake.
+
+00:08:57.220 --> 00:09:03.640
+Stattdessen interagieren Sie damit über sogenannte Datenspeicher, also Schnittstellen, die Ihnen verschiedene Wege bieten, mit denselben zugrunde liegenden Daten zu arbeiten.
+
+00:09:04.680 --> 00:09:06.140
+Es gibt drei Hauptdatenspeicher in Fabric.
+
+00:09:06.460 --> 00:09:07.940
+Lakehouse und Eventhouse und Eventhouse.
+
+00:09:08.400 --> 00:09:11.700
+Sie alle speichern Ihre Daten im selben OneLake, aber jeder dient einem anderen Zweck.
+
+00:09:12.540 --> 00:09:13.680
+Fangen wir mit dem Lakehouse an.
+
+00:09:13.980 --> 00:09:17.980
+Den flexiblen Datenspeicher, der Dateien wie CSV, JSON und Bilder sowie Delta-Tabellen akzeptiert.
+
+00:09:18.500 --> 00:09:22.740
+Sie verwenden ihn für Data Engineering, Machine Learning oder zum Ablegen von Rohdaten aus Quellsystemen.
+
+00:09:23.220 --> 00:09:25.800
+Es ist eine Werkbank, auf der Sie Daten bereinigen, transformieren und vorbereiten.
+
+00:09:25.800 --> 00:09:30.600
+Wenn Sie eine Medaillon-Architektur mit Bronze-, Silber- und Goldschichten aufbauen, geschieht dies im Lakehouse.
+
+00:09:31.260 --> 00:09:35.980
+Sie können über Spark-Notebooks oder den SQL-Analyse-Endpunkt für schreibgeschützte Abfragen darauf zugreifen.
+
+00:09:35.980 --> 00:09:39.060
+Als nächstes kommt das Warehouse, der strukturierte Datenspeicher.
+
+00:09:39.360 --> 00:09:44.680
+Es bietet volle TSQL-Lese- und Schreibunterstützung, sodass Sie Tabellen, sichten, gespeicherte Prozeduren und Funktionen erstellen,
+
+00:09:44.780 --> 00:09:47.660
+sowie Insert-, Update- und Delete-Befehle ausführen können, können.
+
+00:09:48.420 --> 00:09:52.140
+Es fühlt sich an wie eine traditionelle SQL-Server-Datenbank, weil es für Leute konzipiert ist, die in SQL-Ding.
+
+00:09:52.540 --> 00:09:58.020
+Nutzen Sie das Warehouse, wenn Sie BI-Berichte erstellen, komplexe Aggregationen ausführen oder von einem bestehenden Data-Warehouse migrieren.
+
+00:09:58.420 --> 00:10:00.340
+Betrachten Sie es als die Goldschicht für Unternehmensberichte.
+
+00:10:00.880 --> 00:10:05.840
+Dann gibt es noch das Event-Haus, den Echtzeit-Datenspeicher auf Basis der Custo-Engine, derselben Technologie hinter Azure Data Explorer.
+
+00:10:06.420 --> 00:10:11.820
+Es verarbeitet Streaming-Daten, Protokolle, IoT-Telemetrie und Klickströme, alles, was schnell eintrifft und sofort abgefragt werden muss.
+
+00:10:12.240 --> 00:10:14.260
+Sie fragen es mit KQL ab der Custo-Query-Language.
+
+00:10:14.820 --> 00:10:20.400
+Und wenn Sie die One-Lake-Verfügbarkeit aktivieren, werden diese Ereignisdaten für Lakehouse und Warehouse als Delta-Tabellen zugänglich.
+
+00:10:21.020 --> 00:10:22.200
+Hier ist also das, was Sie verstehen müssen.
+
+00:10:22.640 --> 00:10:24.420
+Alle drei speichern Ihre Daten im selben One-Lake.
+
+00:10:24.420 --> 00:10:27.360
+Eine in einem Lakehouse erstellte Tabelle kann von einer Warehouse-Aufragung gelesen werden.
+
+00:10:27.740 --> 00:10:30.460
+Auf eine Tabelle in einem Warehouse kann von einem Spark-Notebook aus zugegriffen werden.
+
+00:10:30.680 --> 00:10:34.080
+Daten, die in ein Event-Haus aufgenommen wurden, können als Delta-Tabellen für Power BI bereitgestellt werden.
+
+00:10:34.380 --> 00:10:37.400
+Sind keine separaten Datenbanken, sondern verschiedene Sichten auf denselben Data-Lake.
+
+00:10:37.640 --> 00:10:38.560
+Viele Leute verstehen das falsch.
+
+00:10:38.900 --> 00:10:42.080
+Sie denken, Lakehouse, Warehouse und Event-Haus seien konkurrierende Produkte, aber das sind sie nicht.
+
+00:10:42.800 --> 00:10:45.360
+Sie verwenden tatsächlich alle drei, da jedes ein anderes Problem löst.
+
+00:10:45.980 --> 00:10:50.120
+Lakehouse für Data-Engineering, Warehouse für BI, Event-Haus für Echtzeit und alle nutzen denselben Speicher.
+
+00:10:50.720 --> 00:10:53.920
+One-Lake übernimmt die Speicherung und die Datenspeicher den Zugriff.
+
+00:10:54.420 --> 00:10:55.420
+Aber wer darf es sehen?
+
+00:10:56.380 --> 00:10:57.760
+Sicherheit und Governance in One-Lake.
+
+00:10:58.380 --> 00:11:01.000
+Da alle ihre Daten an einem Ort liegen, wird die Sicherheit einfacher.
+
+00:11:01.740 --> 00:11:04.420
+Sie verwalten den Zugriff an einer Stelle anstatt in zehn verschiedenen Systemen.
+
+00:11:05.400 --> 00:11:09.060
+Kein Einstellen von Berechtigungen mehr in CRM, dann wieder im Warehouse und dann erneut in Power BI.
+
+00:11:09.620 --> 00:11:11.980
+One-Lake bietet ihnen ein einheitliches Sicherheitsmodell für alles.
+
+00:11:12.500 --> 00:11:14.340
+Auf der obersten Ebene gibt es Arbeitsbereichsrollen.
+
+00:11:14.580 --> 00:11:16.920
+Administrator, Mitglied, Mitwirkender, Betrachter, Betrachter.
+
+00:11:17.400 --> 00:11:19.080
+Dieses Steuern wäre in einem bestimmten Arbeitsbereich abhängig.
+
+00:11:19.620 --> 00:11:21.980
+Wenn jemand Betrachter ist, kann er Elemente sehen, aber nicht ändern.
+
+00:11:22.480 --> 00:11:24.340
+Wenn er Administrator ist, kontrolliert er alles.
+
+00:11:24.940 --> 00:11:25.280
+Ganz einfach.
+
+00:11:25.740 --> 00:11:26.560
+Aber Sie können auch weitergehen.
+
+00:11:27.180 --> 00:11:32.620
+One-Lake-Sicherheitsrollen ermöglichen Ihnen die Zugriffskontrolle auf Ordnertabellen, Spalten und sogar Zeilenebene und sogar Zeilenebene.
+
+00:11:32.980 --> 00:11:37.320
+Spalten-Ebene in Sicherheit bedeutet zum Beispiel, dass Sie Gehaltsinformationen vor allem außer der Personalabteilung verbergen können.
+
+00:11:37.780 --> 00:11:41.060
+Zeilenebene in Sicherheit bedeutet, dass ein Vertriebsleiter nur die Daten seiner eigenen Region sieht.
+
+00:11:41.360 --> 00:11:44.660
+Und das funktioniert über alle Datenspeichern weg gleich, da Sie alle auf demselben One-Lake basieren.
+
+00:11:45.040 --> 00:11:49.040
+Es gibt auch den One-Lake-Katalog, eine zentrale Ansicht, in der Sie alle Daten über alle Arbeitsbereiche hinwegsehen können.
+
+00:11:49.040 --> 00:11:53.680
+Sie können zertifizierte Datasets finden, prüfen, wem was gehört und die Governance von einem Ort aus verwalten.
+
+00:11:54.260 --> 00:11:58.880
+Er lässt sich in Microsoft Purview für Klassifizierung, Vertraulichkeitsbezeichnung und Verhinderung von Datenverlust integrieren.
+
+00:11:58.880 --> 00:12:05.620
+Wenn Sie also bestimmte Daten als vertraulich oder streng eingeschränkt markieren müssen, können Sie dies auf Lake-Ebene tun und es gilt überall.
+
+00:12:06.300 --> 00:12:09.100
+Und es gibt One-Lake-Diagnosen, die erfassen, wer wann auf was zugegriffen hat.
+
+00:12:09.860 --> 00:12:14.160
+Dies ist nützlich für Audits Compliance-Prüfungen und zur Beantwortung der Frage, wer hat letzte Woche auf diese Daten zugegriffen.
+
+00:12:14.500 --> 00:12:18.840
+Es protokolliert jeden Lese- und Schreibvorgang und speichert diese Protokolle als JSON-Dateien innerhalb eines Lake-Haus.
+
+00:12:19.480 --> 00:12:21.740
+Sie können sie mit Spark, SQL oder Power BI analysieren.
+
+00:12:22.100 --> 00:12:27.880
+Das große Ganze ist, ein Sicherheitsmodell für alle Ihre Daten, statt separate Regeln für jedes Tool zu verwalten.
+
+00:12:27.880 --> 00:12:30.760
+Das ist eine enorme Vereinfachung für jedes Unternehmen.
+
+00:12:31.920 --> 00:12:33.780
+Praktische Kenntnisse. Was das für Sie bedeutet.
+
+00:12:34.320 --> 00:12:37.060
+Was bedeutet das also konkret, wenn Sie heute mit Ihrer Fabrikreise beginnen?
+
+00:12:37.580 --> 00:12:38.140
+Schlüsseln wir es auch.
+
+00:12:38.600 --> 00:12:42.880
+Wenn Sie eine neue Datenplattform aufbauen, macht One-Lake komplexe Architektur für Datenbewegung überflüssig.
+
+00:12:43.620 --> 00:12:48.220
+Sie müssen nicht mehr planen, wie Daten von einem Lake in ein Warehouse und in ein semantisches Modell fließen.
+
+00:12:49.000 --> 00:12:50.920
+Linken Sie sie einfach in One-Lake ab und jedes Tool ist von dort.
+
+00:12:51.240 --> 00:12:53.160
+One-Lake in eine Kopie. Das ist die gesamte Architektur.
+
+00:12:53.300 --> 00:12:57.520
+Wenn Sie von einem älteren System migrieren, ermöglichen Ihnen Shortcuts und Mirroring, Daten dort zu lassen,
+
+00:12:57.520 --> 00:12:59.480
+wo Sie sind und Workloads schrittweise zu verlagern.
+
+00:12:59.820 --> 00:13:01.180
+Keine Big-Bang-Migration erforderlich.
+
+00:13:01.600 --> 00:13:03.760
+Verweisen Sie mit einem Shortcut auf Ihren bestehenden Data-Lake,
+
+00:13:03.840 --> 00:13:07.600
+spiegeln Sie Ihre SQL-Server-Datenbank und nutzen Sie Fabrik, während Ihre alten Systeme weiterlaufen.
+
+00:13:08.100 --> 00:13:09.100
+Sie bewegen sich in dem eigenen Teil.
+
+00:13:09.440 --> 00:13:10.440
+Hier ist der nötige Umdenkprozess.
+
+00:13:10.860 --> 00:13:12.120
+Hören Sie auf, um Speicher pro Projekt zu denken.
+
+00:13:12.640 --> 00:13:14.900
+Hören Sie auf, wie jede neue Initiative einen neuen Data-Lake zu erstellen.
+
+00:13:15.320 --> 00:13:18.200
+Denken Sie stattdessen an einen gemeinsamen Lake, auf den jedes Projekt zugreift.
+
+00:13:18.740 --> 00:13:21.480
+Daten Ihres Vertriebsteams, Ihres Finanzteams, Ihres Engineering-Teams.
+
+00:13:21.980 --> 00:13:22.920
+Alles liegt am selben Ort.
+
+00:13:23.320 --> 00:13:24.620
+Sie sehen nur jeweils unterschiedliche Teile davon.
+
+00:13:24.620 --> 00:13:27.200
+Für Power BI-Benutzer lesen Berichte direkt aus OneLake.
+
+00:13:27.540 --> 00:13:29.800
+Kein separater Import, keine duplizierten semantischen Modelle.
+
+00:13:30.120 --> 00:13:33.000
+Die Daten sind aktuell, weil es dieselben Daten sind, mit denen die Dateningenieure arbeiten.
+
+00:13:33.440 --> 00:13:37.140
+Für Dateningenieure bedeutet das weniger Pipelines zum Erstellen, Warten und Debuggen.
+
+00:13:37.500 --> 00:13:38.360
+Sie legen die Daten einmal ab.
+
+00:13:38.600 --> 00:13:39.800
+Alle anderen referenzieren Sie nur.
+
+00:13:40.100 --> 00:13:42.640
+Das Fazit ist, OneLake ist nicht einfach nur ein weiterer Data-Lake.
+
+00:13:42.980 --> 00:13:45.460
+Es ist das Fundament des Fabrik von allen bisher Dagewesenen unterscheidet.
+
+00:13:45.920 --> 00:13:48.760
+Das ist der Grund, warum Sie aufhören können, Daten zu kopieren und anfangen können, Ihnen zu vertrauen.
+
+00:13:49.340 --> 00:13:49.900
+Das war's also.
+
+00:13:50.080 --> 00:13:54.060
+OneLake ist der zentrale Data-Lake Ihres Unternehmens, basierend auf dem Prinzip der Einkopie.
+
+00:13:54.620 --> 00:13:58.240
+Eine physische Kopie der Daten, zugänglich für jedes Tool, jedes Team, jeden Workload.
+
+00:13:58.680 --> 00:14:01.720
+Keine Duplikate mehr, keine Verwirrung mehr darüber, welche Version korrekt ist.
+
+00:14:02.100 --> 00:14:03.000
+Ihre Hausaufgabe ist einfach.
+
+00:14:03.380 --> 00:14:06.480
+Beginnen Sie mit einer Verknüpfung von einer externen Quelle oder spiegeln Sie eine Datenbank.
+
+00:14:07.040 --> 00:14:10.480
+Erleben Sie, wie einfach es wird, wenn Sie keine Pipelines mehr bauen müssen, nur um Daten zu verschieben.
+
+00:14:11.140 --> 00:14:12.900
+Die meisten Unternehmen werden diesen Wandel nicht scheinvollziehen.
+
+00:14:13.500 --> 00:14:14.180
+Seien Sie die Ausnahme.
+
+00:14:14.180 --> 00:14:20.500
+Wenn diese Episode Ihnen geholfen hat, OneLake zu verstehen, abonnieren Sie Microsoft Knowledge Nuggets für weitere Fabrik-Inhalte in verständlicher Sprache.
+
+00:14:21.280 --> 00:14:23.860
+Und teilen Sie dies mit jemandem, der immer noch fünf separate Data-Lakes verweist.
+
+00:14:24.120 --> 00:14:25.000
+Wir werden es Ihnen später danken.

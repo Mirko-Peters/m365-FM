@@ -1,0 +1,937 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.860
+Su equipo de liderazgo piensa que esto es una cuestión de despliegue. No lo es. Esta es una
+
+00:00:03.860 --> 00:00:07.560
+decisión de gobernanza con un margen muy corto. Le aprecio un momento porque Copilot no espera
+
+00:00:07.560 --> 00:00:11.700
+que su limpieza de políticas o su alineación interna se pongan al día. Una vez que comienza
+
+00:00:11.700 --> 00:00:15.120
+a operar en su entorno, utiliza el sistema exactamente como lo encuentra, y ahí es donde
+
+00:00:15.120 --> 00:00:20.120
+esto falla. La mayoría de las organizaciones con múltiples tenants de Microsoft 365 asumen
+
+00:00:20.120 --> 00:00:23.540
+que tienen una sola historia de control de IA, principalmente porque compran un proveedor y
+
+00:00:23.540 --> 00:00:27.420
+gestionan un solo dominio de identidad. Escuchan una narrativa estratégica de Microsoft y asumen
+
+00:00:27.420 --> 00:00:30.940
+que la realidad coincide con la propuesta, pero la condición operativa es muy diferente.
+
+00:00:31.560 --> 00:00:34.440
+La IA trabaja en los límites de los tenants mientras el riesgo se desplaza directamente
+
+00:00:34.440 --> 00:00:37.800
+atrás. Entonces, la pregunta es ¿nos podemos habilitar Copilot a todas partes? La verdad
+
+00:00:37.800 --> 00:00:40.740
+pregunta es ¿qué modelo de gobernanza nos permite escalar de forma segura adaptar a
+
+00:00:40.740 --> 00:00:44.900
+que se comportan de manera independiente? Antes de llegar a ese modelo, debemos definir
+
+00:00:44.900 --> 00:00:49.640
+la trampa. La trampa, islas soberanas de IA dentro de una misma empresa. En la mayoría
+
+00:00:49.640 --> 00:00:54.380
+de las organizaciones, la ilusión comienza con la familiaridad. Abres Microsoft 365, abres
+
+00:00:54.380 --> 00:00:59.160
+Purview, abres Entra, abres Power Platform. La marca es la misma. El lenguaje administrativo
+
+00:00:59.160 --> 00:01:03.560
+se siente conectado y la dinámica comercial cuenta una historia muy limpia. Un ecosistema,
+
+00:01:03.640 --> 00:01:07.700
+una estrategia, una dirección. Pero el modelo de control subyacente no es uno solo y eso
+
+00:01:07.700 --> 00:01:12.240
+importa más que la marca. Según la investigación realizada, no existe un centro de administración
+
+00:01:12.240 --> 00:01:15.180
+de IA global único con paridad total de funciones que le brinda un solo lugar para
+
+00:01:15.180 --> 00:01:18.780
+gobernar Copilot de forma limpia en todos los tenants. Lo que usted realmente tiene es una
+
+00:01:18.780 --> 00:01:22.560
+pila de control fragmentada. Partes de la gobernanza residen en Purview, otras en los centros
+
+00:01:22.560 --> 00:01:26.860
+de administración y el resto está disperso entre Entra y Power Platform. Algunas características
+
+00:01:26.860 --> 00:01:29.960
+están surgiendo en las capas de control más nuevas de Microsoft, pero aún no forman
+
+00:01:29.960 --> 00:01:34.140
+un plano global completo y maduro que atraviese todos los límites de los tenants. Esa brecha
+
+00:01:34.140 --> 00:01:38.100
+crea una falsa confianza. Los líderes miran el ecosistema y asumen centralización, mientras
+
+00:01:38.100 --> 00:01:42.500
+que los equipos miran la identidad compartida y asumen consistencia. Compras ve un contrato
+
+00:01:42.500 --> 00:01:46.020
+y asume un modelo operativo, pero cada tenant sigue teniendo su propio límite de políticas
+
+00:01:46.020 --> 00:01:50.060
+y su propio límite de datos, lo que significa que en la práctica cada uno tiene su propia versión
+
+00:01:50.060 --> 00:01:53.740
+de la verdad. Entonces, lo que realmente está sucediendo es simple. Tenant tiene un entorno
+
+00:01:53.740 --> 00:01:57.380
+de IA empresarial único, pero tiene múltiples entornos de IA que resultan pertenecer a la
+
+00:01:57.380 --> 00:02:00.800
+misma empresa. Ese es un programa de riesgo muy diferente. Un tenant podría tener una
+
+00:02:00.800 --> 00:02:03.680
+cobertura de Purview más sólida, mientras que otro tiene una adopción de etiquetas
+
+00:02:03.680 --> 00:02:07.380
+más débil o una ingesta de auditoría incompleta. Desde el nivel de la junta directiva, esto
+
+00:02:07.380 --> 00:02:10.160
+podría seguir pareciendo un solo programa, pero desde el punto de vista de una auditoría
+
+00:02:10.160 --> 00:02:13.340
+o incidente no es un solo programa en absoluto. Es una colección de condiciones operativas
+
+00:02:13.340 --> 00:02:17.380
+separadas. Y una vez que esas condiciones se desvían, los informes empiezan a menos. No es
+
+00:02:17.380 --> 00:02:20.960
+forma intencionada, sino estructura. El equipo esencial pregunta, ¿estamos bajo gobernanza?
+
+00:02:21.540 --> 00:02:24.840
+Un inquilino dice que sí porque la auditoría está activa. Otro dice que sí porque existen
+
+00:02:24.840 --> 00:02:28.200
+etiquetas aunque la cobertura sea débil. Un tercero dice que sí porque la entidad está
+
+00:02:28.200 --> 00:02:32.980
+conectada. Un cuarto dice que sí porque Copilot está técnicamente implementada. Cada respuesta
+
+00:02:32.980 --> 00:02:36.780
+suena razonable por sí sola, pero ninguna significa lo mismo. Esa es la trampa. ¿Crees
+
+00:02:36.780 --> 00:02:40.300
+que estás viendo un plano de control global, cuando lo que realmente ves es un conjunto
+
+00:02:40.300 --> 00:02:44.240
+de islas soberanas de IA dentro de una misma empresa? Están conectadas en marca y a veces
+
+00:02:44.240 --> 00:02:48.560
+en identidad, pero no se gobiernan como un solo sistema. Y si no recuerdas nada más
+
+00:02:48.560 --> 00:02:53.040
+de esta sección, recuerda esta frase. No existe un centro de administración de IA global,
+
+00:02:53.200 --> 00:02:57.460
+solo la ilusión de uno. Una vez que esa ilusión se rompe, el siguiente problema aparece rápidamente.
+
+00:02:58.140 --> 00:03:01.100
+La mayoría de las organizaciones responden haciendo la gobernanza inquilino por inquilino
+
+00:03:01.100 --> 00:03:05.520
+manualmente y llaman a eso control. Porque la gobernanza manual por inquilino colapsa a gran
+
+00:03:05.520 --> 00:03:08.720
+escala. Una vez que los líderes ven el problema de los límites, la respuesta habitual parece
+
+00:03:08.720 --> 00:03:12.620
+sensata. Dicen, está bien, gobernaremos cada inquilino adecuadamente. Un equipo de administración
+
+00:03:12.620 --> 00:03:16.100
+revisa los ajustes aquí, otro equipo los repite allá. Alguien lleva una hoja de cálculo,
+
+00:03:16.320 --> 00:03:19.820
+otro construye una lista de verificación. Un grupo directivo se reúne una vez al mes y
+
+00:03:19.820 --> 00:03:23.700
+pregunta si el despliegue va por buen camino. Sobre el papel eso parece disciplinado. En
+
+00:03:23.700 --> 00:03:27.880
+la práctica, es repetición manual disfrazada de gobernanza. La razón por la que falla
+
+00:03:27.880 --> 00:03:33.260
+es sencilla. La repetición no produce control, produce variación con el tiempo. Eso sucede
+
+00:03:33.260 --> 00:03:37.200
+porque cada inquilino se mueve a una velocidad distinta, cada administrador interpreta los estándares
+
+00:03:37.200 --> 00:03:40.660
+de forma diferente y las excepciones locales empiezan a sentirse justificadas porque el negocio
+
+00:03:40.660 --> 00:03:44.700
+quiere progresar ahora, no después de otra revisión central. Este viejo modelo sobrevive
+
+00:03:44.700 --> 00:03:48.920
+porque se siente visible. La gente puede señalar tickets cerrados, políticas creadas y ajustes
+
+00:03:48.920 --> 00:03:52.960
+cambiados. Puede mostrar actividad, pero el esfuerzo visible no es lo mismo que un módulo
+
+00:03:52.960 --> 00:03:57.020
+operativo estable. Y con Copilot en el panorama, esa brecha se vuelve costosa muy rápidamente.
+
+00:03:57.540 --> 00:04:00.980
+El sistema comienza a usar los permisos existentes, la exposición de contenido y las brechas
+
+00:04:00.980 --> 00:04:04.520
+etiquetadas desde el momento en que los usuarios empiezan a usar prompts. Eso es lo que la mayoría
+
+00:04:04.520 --> 00:04:08.360
+de la gente pasa por ahí. Copilot no espera que la gobernanza madura. Funciona con los permisos
+
+00:04:08.360 --> 00:04:11.540
+que ya tienes, la higiene de contenido que ya toleras y la postura de auditoría que
+
+00:04:11.540 --> 00:04:16.600
+ya fallaste en estandarizar. Si un inquilino limpió el acceso y otro lo eliminó, o si
+
+00:04:16.600 --> 00:04:20.380
+un inquilino transmite datos de auditoría útiles mientras otro apenas captura lo suficiente
+
+00:04:20.380 --> 00:04:25.280
+para investigar, Copilot expondrá esas diferencias de inmediato. No ocurre en teoría, ocurre mediante
+
+00:04:25.280 --> 00:04:29.840
+el uso. Si un inquilino revisó el acceso general a SharePoint y otro asumió que era suficiente,
+
+00:04:29.960 --> 00:04:34.580
+la IA encontrará las brechas. Y un nivel más profundo, cada nuevo inquilino multiplica el
+
+00:04:34.580 --> 00:04:37.540
+problema, no porque los inquilinos sean malos, sino porque las diferencias no gestionadas
+
+00:04:37.540 --> 00:04:42.080
+se acumulan. Un nuevo equipo piloto añade una excepción local. Una fusión trae a otro
+
+00:04:42.080 --> 00:04:46.440
+inquilino con diferentes etiquetas y un administrador regional copia una base antigua. Una unidad
+
+00:04:46.440 --> 00:04:49.900
+de negocio pide un acceso más rápido y ninguna de esas decisiones parece dramática de forma
+
+00:04:49.900 --> 00:04:53.300
+aislada. Púntelas a lo largo de meses y obtendrá desviación de políticas, desviación
+
+00:04:53.300 --> 00:04:56.380
+de acceso y desviación de implementación. El resultado es un equipo de gobierno que
+
+00:04:56.380 --> 00:04:59.880
+dedica más tiempo a reconciliar diferencias que a prevenir riesgos. Ahí es donde el control
+
+00:04:59.880 --> 00:05:03.500
+manual falla. Se siente más seguro porque los humanos tocan la configuración, pero en realidad
+
+00:05:03.500 --> 00:05:06.760
+escala la inconsistencia porque cada punto de contacto es otra oportunidad para que los inquilinos
+
+00:05:06.760 --> 00:05:10.260
+diverjan. El resultado es una implementación más lenta donde se desea velocidad, más
+
+00:05:10.260 --> 00:05:12.940
+esfuerzo de auditoría donde se busque evidencia y más trabajo de corrección de sergenes
+
+00:05:12.940 --> 00:05:16.660
+estándares. Lo peor de todo es que creo una exposición oculta donde el liderazgo espera
+
+00:05:16.660 --> 00:05:20.800
+garantía. Esto lo entendí cuando dejé de tratar al gobierno como una tarea de configuración.
+
+00:05:21.140 --> 00:05:24.720
+No, se comporta más bien como un deterioro. Si limpia los permisos una vez, pero ningún
+
+00:05:24.720 --> 00:05:28.580
+control evita que vuelvan a desviarse, la exposición regresa. Si define una taxonomía
+
+00:05:28.580 --> 00:05:32.180
+de etiquetas una vez, pero los inquilinos la aplican de forma desigual, la base es erosión.
+
+00:05:32.520 --> 00:05:35.980
+Si aprueba copailote en oleadas sin verificar si los controles subyacentes siguen vigentes,
+
+00:05:35.980 --> 00:05:39.640
+no está escalando de forma segura. Simplemente se está expandiendo más rápido de lo que
+
+00:05:39.640 --> 00:05:42.580
+su gobierno puede seguir el ritmo. Por lo tanto, la métrica que importa aquí es la
+
+00:05:42.580 --> 00:05:45.840
+deviación de acceso. No solo si corrigió algo, sino que tan rápido se extienden los
+
+00:05:45.840 --> 00:05:50.080
+permisos nuevamente después de la corrección. Eso le dice si su modelo se mantiene firme
+
+00:05:50.080 --> 00:05:53.600
+o se está demoronando. Porque el gobierno no es un proyecto que se termina. Es un problema
+
+00:05:53.600 --> 00:05:57.000
+de deterioro que usted gestiona continuamente. Y cuando la escala rompe el modelo antiguo,
+
+00:05:57.040 --> 00:05:59.600
+la mayoría de los líderes recurren a la respuesta más familiar, la identidad.
+
+00:06:00.320 --> 00:06:03.520
+Sumen que si los usuarios pueden moverse limpiamente entre inquilinos, el gobierno se moverá
+
+00:06:03.520 --> 00:06:07.200
+de alguna manera con ellos. ¿Por qué la identidad no resuelve el gobierno?
+
+00:06:07.740 --> 00:06:11.220
+Aquí es donde muchos programas toman un camino equivocado porque la identidad parece la respuesta
+
+00:06:11.220 --> 00:06:15.500
+limpia. Si los usuarios pueden autenticarse entre inquilinos, si entra está conectado
+
+00:06:15.500 --> 00:06:18.520
+y si la configuración entre inquilinos está lista, los líderes asumen que la parte difícil
+
+00:06:18.520 --> 00:06:23.460
+está resuelta. El acceso parece unificado, el inicio de sesión parece unificado, el diagrama
+
+00:06:23.460 --> 00:06:27.340
+de arquitectura se ve ordenado, pero el gobierno de Copilot no se unifica solo porque la identidad
+
+00:06:27.340 --> 00:06:31.280
+pueda moverse. Esa suposición falla en el punto donde la IA realmente trabaja.
+
+00:06:31.280 --> 00:06:34.740
+Copilot fundamenta las respuestas dentro del contexto del inquilino donde se ejecuta la
+
+00:06:34.740 --> 00:06:36.720
+solicitud y la propia guía de Microsoft es clara al respecto.
+
+00:06:37.240 --> 00:06:41.860
+Microsoft 365 Copilot opera dentro del límite de seguridad y cumplimiento del inquilino y
+
+00:06:41.860 --> 00:06:44.880
+respeta los permisos del usuario en ese contexto específico del inquilino.
+
+00:06:45.300 --> 00:06:48.720
+Un usuario puede cambiar de contexto como invitado, sí, pero Copilot sigue limitado a un inquilino
+
+00:06:48.720 --> 00:06:52.500
+a la vez. No fusiona varios inquilinos en un espacio de trabajo inteligente para una sola
+
+00:06:52.500 --> 00:06:55.200
+respuesta. Por tanto, la identidad puede trasladarse, pero la gobernanza.
+
+00:06:55.680 --> 00:06:59.160
+Y una vez que separas esos dos conceptos, gran parte del lenguaje ejecutivo comienza a sonar
+
+00:06:59.160 --> 00:07:04.440
+peligrosamente vago. Inquilinos conectados. Identidad compartida. Experiencia unificada.
+
+00:07:06.000 --> 00:07:09.660
+Esas frases pueden ser direccionalmente ciertas para la colaboración, pero no equivalen a decir
+
+00:07:09.660 --> 00:07:13.120
+que la aplicación de políticas, la base de datos, el registro y la variación de controles funcionan
+
+00:07:13.120 --> 00:07:17.400
+ahora como un solo sistema. Esa brecha se vuelve aún más obvia cuando observas el modo
+
+00:07:17.400 --> 00:07:20.840
+multinquilino de Copilot Studio porque la vista previa cuenta una historia muy específica.
+
+00:07:21.080 --> 00:07:25.820
+Sí, el uso multinquilino existe y un agente alojado en un inquilino puede usarse desde otro,
+
+00:07:25.820 --> 00:07:29.460
+pero la autenticación del usuario final en modo multinquilino aún no es compatible en
+
+00:07:29.460 --> 00:07:31.580
+la versión preliminar. Los usuarios invitados no son compatibles.
+
+00:07:31.840 --> 00:07:36.620
+Los conectores personalizados. Los conectores estándar de Graph y Microsoft 365 no son compatibles.
+
+00:07:37.140 --> 00:07:40.760
+La función en multijero no es compatible. Varias capacidades de análisis no están disponibles.
+
+00:07:41.420 --> 00:07:43.920
+Las transcripciones de las conversaciones también están desactivadas en ese momento.
+
+00:07:44.240 --> 00:07:48.060
+Es una estructura de gobernanza entre inquilinos madura. Es una vista previa limitada con fronteras
+
+00:07:48.060 --> 00:07:51.580
+claras. Y esos límites importan porque rompen la historia que muchos equipos de liderazgo se cuentan
+
+00:07:51.580 --> 00:07:56.120
+a sí mismos. Escuchan multinquilino y asumen madurez operativa. Sus arquitectos se escuchan
+
+00:07:56.120 --> 00:08:00.520
+entre inquilinos y asumen simetría de políticas. Sus equipos de control escuchan mismo proveedor
+
+00:08:00.520 --> 00:08:04.080
+y asumen consistencia de auditoría. Entonces comienza el despliegue y la gente descubre
+
+00:08:04.080 --> 00:08:07.480
+comportamientos diferentes, señales faltantes y brechas incómodas en torno a la autenticación
+
+00:08:07.480 --> 00:08:11.880
+y el análisis. Imagina el segundo caso. Una empresa global establece relaciones internas
+
+00:08:11.880 --> 00:08:15.380
+entre inquilinos y asume que la experiencia del usuario se extenderá naturalmente al uso de
+
+00:08:15.380 --> 00:08:19.400
+Copilot. La expectativa suena razonable al involucrar confianza en directores compartidos,
+
+00:08:19.400 --> 00:08:23.620
+acceso más fluido y patrones de identidad comunes. Pero cuando los equipos prueban escenarios reales
+
+00:08:23.620 --> 00:08:27.360
+de Copilot y agentes, el comportamiento es desigual. Algunos datos solo aparecen en contextos
+
+00:08:27.360 --> 00:08:31.980
+cambiados. Algunos conectores disponibles. Algunas expectativas de auditoría no se alinean
+
+00:08:31.980 --> 00:08:35.600
+con lo que las características de vista previa realmente explican. El liderazgo sigue escuchando
+
+00:08:35.600 --> 00:08:38.780
+conectado mientras el equipo de controles comienza a encontrar excepción. Eso no es un caso
+
+00:08:38.780 --> 00:08:42.140
+límite técnico. Es una mala interpretación de la gobernadora. Porque los auditores no verifican
+
+00:08:42.140 --> 00:08:45.220
+tu historia de arquitectura, verifican la evidencia. Preguntan dónde se ejecutaron los
+
+00:08:45.220 --> 00:08:49.240
+proms que inquilino aplicó la política, qué registros existen y si tus controles eran realmente
+
+00:08:49.240 --> 00:08:53.220
+comparables en los entornos que describiste como vinculados. Si tu modelo operativo trató
+
+00:08:53.220 --> 00:08:57.100
+la identidad como gobernanza, no tendrás una respuesta clara. Entonces, si recuerdas
+
+00:08:57.100 --> 00:09:01.000
+una sola frase aquí que se hace. La identidad entre inquilinos no es inteligencia entre
+
+00:09:01.000 --> 00:09:04.440
+inquilinos. La identidad ayuda a los usuarios a ingresar. No le dice si el comportamiento
+
+00:09:04.440 --> 00:09:08.100
+de Copilot se rige de manera consistente y se monitorea adecuadamente o si es seguro escalarlo
+
+00:09:08.100 --> 00:09:11.140
+en todos los lugares que su empresa denomina ahora un entorno único. Y una vez que eso
+
+00:09:11.140 --> 00:09:14.440
+queda claro, la respuesta no puede ser más conexiones de inquilino. Tiene que ser la arquitectura.
+
+00:09:15.360 --> 00:09:19.200
+El modelo de gobernanza que realmente funciona. Centro Radios. Entonces, ¿cómo se ve un modelo
+
+00:09:19.200 --> 00:09:22.380
+de gobernanza real cuando su plataforma está fragmentada? La identidad es solo parcial.
+
+00:09:22.480 --> 00:09:26.100
+Los límites de los inquilinos siguen siendo importantes. Se ve como un sistema de centro
+
+00:09:26.100 --> 00:09:30.240
+Radios. No sugiero esto porque el diagrama se vea limpio en una diapositiva, sino porque
+
+00:09:30.240 --> 00:09:33.020
+realmente coincide con las condiciones operativas complejas con las que está lidiando ahora
+
+00:09:33.020 --> 00:09:37.700
+mismo. Necesito un lugar central donde las decisiones de gobernanza se diseñen, midan y
+
+00:09:37.700 --> 00:09:41.220
+apliquen como un solo sistema y luego necesita equipos locales de inquilinos para ejecutar esas
+
+00:09:41.220 --> 00:09:45.900
+decisiones. Estos equipos locales deben trabajar dentro de sus propios límites sin inventar su propia
+
+00:09:45.900 --> 00:09:50.060
+versión de las reglas cada vez que sienten un poco de presión. Debemos comenzar con el centro.
+
+00:09:50.860 --> 00:09:54.640
+El centro no es un portal de administración, no es un tablero brillante y definitivamente no es un
+
+00:09:54.640 --> 00:09:59.080
+equipo central heroico que salta cada inquilino para limpiar archivos manualmente. En cambio,
+
+00:09:59.140 --> 00:10:02.840
+el centro actúa como la máxima autoridad de gobernanza. Este grupo posee el diseño de
+
+00:10:02.840 --> 00:10:06.000
+políticas, las líneas base de auditoría, los estándares de etiquetas y los criterios de
+
+00:10:06.000 --> 00:10:10.060
+implementación. Son ellos quienes deciden qué significa realmente estar listo para Copilot,
+
+00:10:10.480 --> 00:10:13.840
+qué evidencia cuenta como prueba y qué tan rápido debe cerrarse una brecha de seguridad.
+
+00:10:13.840 --> 00:10:19.520
+Ese cambio transforma toda la conversación. Debido a esta estructura, global deja de ser una palabra
+
+00:10:19.520 --> 00:10:24.340
+para una pantalla mágica y comienza a significar un sistema de gobernanza unificado. Obtiene un
+
+00:10:24.340 --> 00:10:28.240
+estándar para los controles de preview, un estándar para cómo ingesta las auditorías y un estándar para
+
+00:10:28.240 --> 00:10:32.200
+sus etiquetas de sensibilidad. Existe una vara clara de lo que debe ser cierto antes de que a
+
+00:10:32.200 --> 00:10:35.920
+cualquier inquilino específico se le permita expandir el acceso a Copilot a más usuarios. Luego necesita
+
+00:10:35.920 --> 00:10:40.060
+los radios. Los radios son sus equipos locales de ejecución de inquilinos que toman esa línea base y le
+
+00:10:40.060 --> 00:10:44.800
+aplican a su entorno específico. Ellos son quienes ejecutan la remediación, validan los registros y
+
+00:10:44.800 --> 00:10:49.500
+revisan los permisos de acceso amplio. Sin embargo, hacen todo ese trabajo dentro de un espacio de
+
+00:10:49.500 --> 00:10:53.720
+diseño muy limitado, en lugar de uno libre para todos. Si un equipo local necesita desviarse del
+
+00:10:53.720 --> 00:10:58.080
+plan, existe un camino formal para las excepciones. Y si quieren moverse más rápido, primero deben
+
+00:10:58.080 --> 00:11:02.660
+cumplir con los controles compartidos. Cuando surgen diferencias regionales o legales, esos problemas
+
+00:11:02.660 --> 00:11:07.100
+se documentan y aprueban en lugar de ser absorbidos silenciosamente en alguna solución local de la que
+
+00:11:07.100 --> 00:11:11.320
+nadie más sabe. Esta estructura es vital porque los modelos totalmente centralizados suelen atascarse
+
+00:11:11.320 --> 00:11:14.960
+en los detalles locales, mientras que los totalmente locales derivan en una inconsistencia total casi de
+
+00:11:14.960 --> 00:11:20.000
+inmediato. El modelo de centro y radio se evita ambos patrones de fracaso. El centro le proporciona
+
+00:11:20.000 --> 00:11:23.340
+la coherencia que necesita, mientras que los radios le dan la velocidad de ejecución donde realmente
+
+00:11:23.340 --> 00:11:28.120
+ocurre el trabajo. Hagamos esto concreto. En el centro, usted define el conjunto mínimo de controles
+
+00:11:28.120 --> 00:11:31.300
+de purview que cada inquilino debe ejecutar antes de que se permita el crecimiento de Copilot.
+
+00:11:31.760 --> 00:11:35.620
+Usted define exactamente qué eventos de auditoría espera ver y con qué frecuencia los revisará.
+
+00:11:35.620 --> 00:11:40.240
+También crea una taxonomía de etiquetas compartida para contenido sensible, para que una etiqueta
+
+00:11:40.240 --> 00:11:45.200
+confidencial no signifique cinco cosas distintas en cinco inquilinos diferentes. Usted establece el
+
+00:11:45.200 --> 00:11:49.240
+ritmo de las revisiones, quizás mensual para su postura de seguridad general, y más frecuente en
+
+00:11:49.240 --> 00:11:53.380
+las áreas donde el despliegue está activo actualmente. En el radio, su equipo designa sus
+
+00:11:53.380 --> 00:11:58.480
+estándares de alto nivel a la realidad de ese inquilino específico. Identifican qué sitios aún tienen acceso
+
+00:11:58.480 --> 00:12:02.700
+amplio expuesto y qué unidades de negocio están rezagadas en su etiquetado. Verifican si la auditoría está
+
+00:12:02.700 --> 00:12:05.520
+realmente activada y si los registros correctos son visibles para el equipo de seguridad.
+
+00:12:05.940 --> 00:12:09.080
+Buscan administradores locales que pudieran haber introducido excepciones que nunca fueron
+
+00:12:09.080 --> 00:12:12.780
+revisadas oficialmente y deciden si un grupo piloto puede expandirse de forma segura o si
+
+00:12:12.780 --> 00:12:17.120
+necesitan detenerse de arreglar las cosas primero. Y aquí está la regla estricta, porque sin una regla,
+
+00:12:17.240 --> 00:12:21.480
+este modelo es solo una sugerencia en lugar de una gobernanza real. Ningún despliegue de Copilot
+
+00:12:21.480 --> 00:12:25.240
+ocurre en ningún inquilino sin un registro de auditoría validado, un escáner de uso compartido
+
+00:12:25.240 --> 00:12:28.920
+excesivo completado y una línea base mínima de cobertura de etiquetas. No hablo de que estas cosas
+
+00:12:28.920 --> 00:12:33.400
+estén planeadas o parcialmente discutidas. Deben estar validadas. Si un inquilino no puede probar
+
+00:12:33.400 --> 00:12:37.420
+que esas tres condiciones se cumplen, el despliegue se pausa. Eso puede sonar estricto hasta que lo
+
+00:12:37.420 --> 00:12:40.620
+compara con el costo masivo de limpiar un desastre después de que los usuarios comiencen a encontrar
+
+00:12:40.620 --> 00:12:44.440
+contenido sensible que nunca quiso exponer a través de la IA. Cuando lo ve de esa manera,
+
+00:12:44.520 --> 00:12:48.740
+estas reglas son solo sentido común básico. Otra razón por la que este modelo funciona también
+
+00:12:48.740 --> 00:12:52.460
+es el tiempo. Cuanto más se espere para configurar esto, más deuda de limpieza estará creando
+
+00:12:52.460 --> 00:12:56.420
+para usted más adelante. Cada inquilino que se despliega antes de alcanzar la línea base se convierte
+
+00:12:56.420 --> 00:13:00.040
+en otro enorme retraso de excepciones y evidencia faltante que su equipo eventualmente tendrá que
+
+00:13:00.040 --> 00:13:04.020
+desenredar. Los líderes a menudo tratan la gobernanza como algo que puede madurar después
+
+00:13:04.020 --> 00:13:07.300
+de que termine la adopción, pero en un mundo de copilot multi-inclino esa secuencia está
+
+00:13:07.300 --> 00:13:10.900
+completamente al revés. La gobernanza tiene que liderar el despliegue o el despliegue
+
+00:13:10.900 --> 00:13:14.520
+que le hará más deuda a la que sus equipos podrán esperar absorber. Si usted está liderando
+
+00:13:14.520 --> 00:13:18.340
+esto a nivel empresarial, su próximo paso es muy claro. Establezca el centro de control ahora
+
+00:13:18.340 --> 00:13:22.540
+y define esa base a él mismo. Asigne sus ramas y ponga su proceso de manejo de excepciones
+
+00:13:22.540 --> 00:13:26.940
+por escrito de inmediato. Debe lograr que el global signifique que sus decisiones y sus
+
+00:13:26.940 --> 00:13:30.580
+puertas de despliegue funcionen como un solo sistema, incluso cuando los inquilinos no lo
+
+00:13:30.580 --> 00:13:34.600
+hacen. Un modelo solo importa si realmente cambia lo que se aplica a la mañana siguiente,
+
+00:13:35.460 --> 00:13:39.300
+lo que los líderes deben medir antes de escalar. Un modelo de gobernanza solo se mantiene unidos
+
+00:13:39.300 --> 00:13:43.260
+si produce mediciones que todos comparten. De lo contrario, cada inquilino afirmará que
+
+00:13:43.260 --> 00:13:46.440
+está progresando en su propio lenguaje y el liderazgo recibirá actualizaciones de estado
+
+00:13:46.440 --> 00:13:51.140
+sin tener ningún control real. Antes de seguir escalando copilot necesita un pequeño conjunto
+
+00:13:51.140 --> 00:13:55.640
+de métricas que le digan si la arquitectura se comporta como usted cree. Los niveles de
+
+00:13:55.640 --> 00:13:58.720
+actividad no le dirán la verdad y las cifras de adopción definitivamente no le mostrarán
+
+00:13:58.720 --> 00:14:01.180
+los riesgos. Debería comenzar por reducir el intercambio excesivo de información.
+
+00:14:01.580 --> 00:14:04.260
+Esta sigue siendo una de las señales más claras de que su entorno se está volviendo
+
+00:14:04.260 --> 00:14:08.520
+realmente más seguro para la IA. Debe observar los grupos de acceso amplio, los sitios de
+
+00:14:08.520 --> 00:14:12.020
+SharePoint abiertos y los permisos antiguos que otorgan mucho más acceso del que la empresa
+
+00:14:12.020 --> 00:14:15.940
+realmente necesita. El objetivo aquí no es alcanzar un número perfecto, sino demostrar que
+
+00:14:15.940 --> 00:14:19.900
+su exposición disminuye antes de que el alcance de copilot aumene. Si esas dos líneas se mueven
+
+00:14:19.900 --> 00:14:23.180
+en direcciones opuestas, se está expandiendo mucho más rápido de lo que está solucionando
+
+00:14:23.180 --> 00:14:24.180
+los problemas subyacentes.
+
+00:14:24.680 --> 00:14:28.360
+La segunda métrica que necesita es la cobertura de observabilidad. ¿Puede realmente ver lo
+
+00:14:28.360 --> 00:14:31.200
+que copilot está haciendo en todos sus inquilinos de una manera que respalde una investigación
+
+00:14:31.200 --> 00:14:35.200
+real? La mayoría de las investigaciones apuntan a Microsoft Purview como el lugar principal
+
+00:14:35.200 --> 00:14:38.380
+donde se almacenan registros clave como la interacción con copilot, pero eso supone
+
+00:14:38.380 --> 00:14:41.620
+que tiene la auditoría activada en todas partes. La cobertura no es algo que simplemente
+
+00:14:41.620 --> 00:14:45.580
+pueda asumir que funciona. Necesita saber exactamente qué inquilinos tienen activa la ingesta de
+
+00:14:45.580 --> 00:14:49.880
+auditoría y cuáles aún le dejan con una visibilidad parcial. Si no tiene registro,
+
+00:14:49.880 --> 00:14:54.020
+no tiene gobernanza ni responsabilidad. Eso suena directo porque tiene que hacerlo.
+
+00:14:54.500 --> 00:14:57.740
+Si un inquilino no puede proporcionar evidencia utilizable a lo que está sucediendo, ese inquilino
+
+00:14:57.740 --> 00:15:00.920
+está listo para escalar de forma segura. No puede gobernar lo que no se le permite
+
+00:15:00.920 --> 00:15:04.420
+inspeccionar y ciertamente no podrá defender sus acciones si algo sale más más adelante.
+
+00:15:04.940 --> 00:15:08.140
+La tercera métrica es el tiempo de aplicación de políticas en todos los inquilinos. Aquí
+
+00:15:08.140 --> 00:15:12.280
+es donde el liderazgo descubre si el modelo de Hobanspoke es realmente real o solo decorativo.
+
+00:15:13.040 --> 00:15:16.420
+Una decisión central no significa absolutamente nada si un inquilino lo aplica esta semana mientras
+
+00:15:16.420 --> 00:15:19.860
+que otro espera un mes para pensarlo. Debe medir el tiempo que transcurre,
+
+00:15:19.860 --> 00:15:23.120
+desde que se aprueba una política hasta que se aplique efectivamente en cada uno de los
+
+00:15:23.120 --> 00:15:27.140
+inquilinos. No hablo del tiempo que toma anunciarlo o documentarlo, sino del tiempo hasta que
+
+00:15:27.140 --> 00:15:31.300
+realmente está en vivo. Para un programa de IA que avanza tan rápido, ese tipo de retraso
+
+00:15:31.300 --> 00:15:34.860
+es solo otra palabra para riesgo. Un objetivo práctico para la mayoría de las organizaciones
+
+00:15:34.860 --> 00:15:38.700
+es menos de 72 horas para cambios estándar. Si su tiempo de ciclo es mucho mayor que eso,
+
+00:15:39.400 --> 00:15:42.560
+aún no tiene un modelo escalable, solo tiene un problema de coordinación que necesita ser
+
+00:15:42.560 --> 00:15:46.300
+resuelto. A continuación debe observar su índice de cobertura etiqueta. No permite que
+
+00:15:46.300 --> 00:15:49.240
+esto se convierta en una métrica de vanidad donde un inquilino alcanza números altos mientras
+
+00:15:49.240 --> 00:15:52.680
+los autos se quedan ató. Que realmente importa es si su contenido sensible está etiquetado
+
+00:15:52.680 --> 00:15:56.540
+con suficiente consistencia para que el comportamiento de Copilot no se base en conjeturas del usuario.
+
+00:15:57.140 --> 00:16:01.400
+Aquí no busca la perfección, sino un nivel comparable de control en cada inquilino de
+
+00:16:01.400 --> 00:16:05.940
+la organización. Finalmente debe rastrear su tasa de desviación de acceso. Esta métrica
+
+00:16:05.940 --> 00:16:08.500
+le indica si sus esfuerzos de limpieza realmente perduran con el tiempo.
+
+00:16:09.060 --> 00:16:12.240
+Después de terminar un proyecto de remediación, ¿qué tan rápido? Comienzan a propagarse sus
+
+00:16:12.240 --> 00:16:15.740
+permisos nuevamente. ¿Con qué frecuencias o grupos amplios se infiltran de vuelta en el sistema?
+
+00:16:15.740 --> 00:16:18.880
+Muchos equipos se dan cuenta demasiado tarde porque midieron la corrección una vez y asumieron
+
+00:16:18.880 --> 00:16:22.420
+que el problema había desaparecido para siempre. No fue así. La única métrica que importa es que
+
+00:16:22.420 --> 00:16:26.280
+tan rápido comienza a deslizarse el sistema una vez que deja de observarlo. Ese es su tablero de
+
+00:16:26.280 --> 00:16:30.340
+control operativo. Necesita rastrear la reducción de sobreexposición, la cobertura de observabilidad,
+
+00:16:30.540 --> 00:16:34.380
+el tiempo de política, la cobertura de etiquetas y la desviación de acceso. El ritmo de sus informes
+
+00:16:34.380 --> 00:16:39.560
+importa tanto como los números en sí. El centro debe poseer el tablero ejecutivo porque el liderazgo
+
+00:16:39.560 --> 00:16:44.000
+necesita una visión única de toda la postura. Mientras tanto, los radios deben encargarse de la
+
+00:16:44.000 --> 00:16:48.320
+remediación porque el trabajo real debe ocurrir donde vive el límite del inquilino. Un equipo lee
+
+00:16:48.320 --> 00:16:52.560
+el sistema y el otro equipo lo corrige. Deberás traer estos números antes de expandirse, no después
+
+00:16:52.560 --> 00:16:56.980
+del hecho. El riesgo no está esperando su próxima reunión o taller de gobernantes. Ya está activo en
+
+00:16:56.980 --> 00:17:00.800
+cada inquilino donde Copilot puede encontrar exactamente lo que sus controles actuales aún
+
+00:17:00.800 --> 00:17:04.700
+le permiten ver. Los dos patrones que los líderes siguen pasando por alto. Sigo viendo dos patrones
+
+00:17:04.700 --> 00:17:08.840
+específicos en el campo y ambos ocurren porque los líderes tratan a Copilot como un lanzamiento de
+
+00:17:08.840 --> 00:17:13.060
+software en lugar de un evento de control importante. El primer patrón comienza cuando una organización
+
+00:17:13.060 --> 00:17:17.240
+lanza Copilot antes de establecer una línea base de preview real o revisar su acceso a SharePoint.
+
+00:17:18.000 --> 00:17:21.840
+En el primer día el despliegue parece perfecto. Las licencias están asignadas, los usuarios están
+
+00:17:21.840 --> 00:17:25.980
+emocionados y los mensajes internos giran en torno a la productividad. Pero entonces las consultas
+
+00:17:25.980 --> 00:17:29.660
+normales empiezan a extraer material que técnicamente siempre estuvo accesible pero que era prácticamente
+
+00:17:29.660 --> 00:17:34.680
+invisible para el empleado promedio. Antes de la IA nadie pasaba el día haciendo clic en sitios
+
+00:17:34.680 --> 00:17:39.500
+antiguos, carpetas obsoletas o permisos heredados para encontrar cosas que no deberían ver. Pero ahora no
+
+00:17:39.500 --> 00:17:43.600
+tienen que ser. Un usuario hace una pregunta básica, recibe un resumen y aparece un archivo,
+
+00:17:44.080 --> 00:17:48.740
+quizás contenido confidencial de RR, material financiero o información de acuerdos que debía
+
+00:17:48.740 --> 00:17:52.760
+permanecer en un círculo muy cerrado. No hubo una brecha, ni malware ni se rompió ningún límite de
+
+00:17:52.760 --> 00:17:56.640
+seguridad en el sentido tradicional. El sistema simplemente usó los permisos y el estado del
+
+00:17:56.640 --> 00:18:00.480
+contenido que el inquilino ya permitía desde el momento en que muchos equipos finalmente entienden
+
+00:18:00.480 --> 00:18:06.000
+el problema. La IA no creó la exposición, simplemente eliminó la fricción que solía ocultar. Una vez que eso
+
+00:18:06.000 --> 00:18:09.780
+sucede en un inquilino, la confianza ejecutiva suele caer en toda la organización porque nadie
+
+00:18:09.780 --> 00:18:14.620
+puede decir con certeza dónde podría aparecer ese mismo patrón después. El incidente puede parecer
+
+00:18:14.620 --> 00:18:18.520
+local, pero el daño a la confianza es a nivel de toda la empresa. Segundo patrón es más silencioso,
+
+00:18:18.660 --> 00:18:23.040
+pero es igual de peligroso. Una empresa establece relaciones de identidad entre inquilinos. Escucha
+
+00:18:23.040 --> 00:18:26.840
+que los escenarios multi inquilinos son posibles y asume que su modelo operativo es lo suficientemente
+
+00:18:26.840 --> 00:18:31.000
+maduro para un despliegue amplio. En una presentación eso suena como un plan sólido. En realidad las
+
+00:18:31.000 --> 00:18:35.140
+operaciones se vuelven complicadas. Un equipo espera una experiencia de copilot fluida en cada entorno
+
+00:18:35.140 --> 00:18:39.320
+conectado, mientras otro espera una visibilidad comparable y un tercero asume que los mismos
+
+00:18:39.320 --> 00:18:43.420
+controles seguirán al usuario a todas partes. Entonces el uso real comienza a exponer un
+
+00:18:43.420 --> 00:18:46.820
+comportamiento desigual, brechas en la autenticación y puntos débiles en lo que realmente se puede
+
+00:18:46.820 --> 00:18:50.860
+medir. El problema no es que estos equipos fueran descuidados. El verdadero problema es que
+
+00:18:50.860 --> 00:18:54.980
+tradujeron la conectividad en garantía. Esa suposición crea una historia falsa sobre el
+
+00:18:54.980 --> 00:18:59.080
+cumplimiento. Liderazgo escucha la palabra conectado y asume que la organización está lista.
+
+00:19:00.000 --> 00:19:03.580
+Meses después, las revisiones de control encuentran que el comportamiento, la evidencia y la
+
+00:19:03.580 --> 00:19:07.220
+aplicación variaron mucho más de lo que nadie quería admitir al principio. Ahora compare eso
+
+00:19:07.220 --> 00:19:10.740
+con un patrón mejor. Una organización diferente elige reducir la velocidad antes de escalar.
+
+00:19:11.180 --> 00:19:15.380
+Establece una base de etiquetas primero, revisan el acceso general primero y validan su visibilidad
+
+00:19:15.380 --> 00:19:19.920
+de auditoría antes de hacer cualquier otra cosa. Expandan copilot en oleadas, no porque teman la
+
+00:19:19.920 --> 00:19:23.560
+adopción, sino porque quieren que cada oleada produzca evidencia utilizable antes de que comience
+
+00:19:23.560 --> 00:19:28.360
+la siguiente. Esa organización suele avanzar más rápido a largo plazo porque no están deteniéndose
+
+00:19:28.360 --> 00:19:32.600
+constantemente para explicar sorpresas, limpiar contenido expuesto o discutir qué se suponía que
+
+00:19:32.600 --> 00:19:36.200
+significaba gobernado. Esa es la ventaja que la mayoría de los líderes pasan.
+
+00:19:36.540 --> 00:19:40.600
+Una buena gobernanza no bloquea su implementación. Elimina la fricción del despliegue una vez que
+
+00:19:40.600 --> 00:19:44.620
+termina esa primera oleada. La trampa no es la adopción en sí misma. La trampa es la adopción
+
+00:19:44.620 --> 00:19:48.320
+no gestionada en inquilinos que parecen conectados a distancia, pero que se comportan de forma muy
+
+00:19:48.320 --> 00:19:53.960
+distinta al verlos de cerca. La decisión que debes tomar es en realidad muy sencilla. Debes pasar ahora
+
+00:19:53.960 --> 00:19:57.660
+a un modelo de gobernanza de guía federado de tipo Hub and Spoke y dejar de confundir el cambio de
+
+00:19:57.660 --> 00:20:02.360
+configuración inquilino por inquilino con un control real. Deberías pausar la expansión de copilot en cualquier
+
+00:20:02.360 --> 00:20:05.620
+inquilino que no pueda demostrar su registro de eventos, sus revisiones de uso compartido y su
+
+00:20:05.620 --> 00:20:09.920
+cobertura a base de etiquetas. La idea seguirá el sistema que realmente construyas, no el organigrama
+
+00:20:09.920 --> 00:20:14.460
+al que reportas. Si esto cambió tu forma de pensar sobre la gobernanza de copilot multi-inquilino,
+
+00:20:14.600 --> 00:20:18.640
+sígueme, Mirko Peters, en LinkedIn y comparte esto con tu equipo si estás enfrentando estos problemas
+
+00:20:18.640 --> 00:20:19.040
+ahora mismo.

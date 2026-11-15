@@ -1,0 +1,1009 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.780
+Ti è stato detto che aggiungere il protocollo di contesto del modello, MCP in breve, a Copilot
+
+00:00:03.780 --> 00:00:08.000
+Studio è facile. Basta usare un connettore personalizzato. Dicono, tecnicamente è vero.
+
+00:00:08.360 --> 00:00:12.280
+Funzionalmente è una bugia. Lo stesso tipo di bugia del collegare semplicemente l'USB senza
+
+00:00:12.280 --> 00:00:16.140
+dirti quale lato è rivolto verso l'alto o che hai bisogno di un driver. Tre modifiche al registro
+
+00:00:16.140 --> 00:00:20.100
+e una mite preghiera agli dei del cloud per la stabilità dei pacchetti. MCP è commercializzato
+
+00:00:20.100 --> 00:00:24.920
+come USB per agenti di intelligenza artificiale. L'idea sembra chiara. Qualsiasi agente può parlare
+
+00:00:24.920 --> 00:00:28.680
+con qualsiasi fonte di conoscenza se entrambi seguono lo stesso protocollo. Una stretta di
+
+00:00:28.680 --> 00:00:33.140
+mano universale per il contesto. Ma Microsoft, sempre minimalista, ti fornisce solo la porta.
+
+00:00:33.360 --> 00:00:37.520
+Nessun cavo. Nessun diagramma di pinout. Nemmeno un'etichetta di avvertenza. Quindi, sì, puoi
+
+00:00:37.520 --> 00:00:41.040
+collegare qualcosa, ma metà delle volte è solo ornamentale. Il mito persiste perché
+
+00:00:41.040 --> 00:00:45.240
+l'interfaccia sembra obbediente. Aggiungi uno strumento e lui tuba. Filtra per protocollo
+
+00:00:45.240 --> 00:00:49.460
+di contesto del modello. Clicchi. Appare un menu a discesa ed ecco, interoperabilità
+
+00:00:49.460 --> 00:00:53.460
+immediata. Ma non è così. Ciò a cui ti stai realmente connettendo sono gli MCP integrati,
+
+00:00:53.720 --> 00:00:58.000
+una volta collegati direttamente al prodotto. MCP Dataverse? Funziona perché è di proprietà
+
+00:00:58.000 --> 00:01:01.940
+di Microsoft. Il tuo MCP personalizzato? Copilot non lo riconosce nemmeno finché non
+
+00:01:01.940 --> 00:01:05.760
+crei un traduttore. Un connettore personalizzato che non si comporta come una scorciatoia, ma
+
+00:01:05.760 --> 00:01:08.760
+come una missione diplomatica completa tra sistemi che non condividono vocabolario o
+
+00:01:08.760 --> 00:01:13.240
+ritmo. Quindi, oggi sfatiamo il mito. Ti mostrerò cos'è in realtà un MCP. Perché
+
+00:01:13.240 --> 00:01:16.960
+il tuo connettore non è così connesso come pretende di essere e come crearne uno che scambi
+
+00:01:16.960 --> 00:01:22.120
+realmente contesto invece di imitare la connettività. MCP non è una fonte di dati, è un ponte contestuale.
+
+00:01:22.340 --> 00:01:25.960
+L'interprete tra il tuo Copilot e la tua intelligenza esterna. E i connettori personalizzati
+
+00:01:25.960 --> 00:01:29.880
+non sono componenti aggiuntivi, sono impalcature di costruzione per quel ponte. Quindi, togliamoci
+
+00:01:29.880 --> 00:01:33.320
+la vernice di marketing di Microsoft e diamo un'occhiata a cosa succede realmente all'interno
+
+00:01:33.320 --> 00:01:37.640
+di Copilot Studio quando pensi di aver connesso un MCP. L'illusione della semplicità. A prima
+
+00:01:37.640 --> 00:01:42.240
+vista, Copilot Studio fa sembrare l'integrazione MCP semplice come aggiungere il latte al caffè.
+
+00:01:42.380 --> 00:01:47.080
+Clicca su Aggiungi strumento, filtra per protocollo contesto modello, seleziona il server, fatto.
+
+00:01:47.240 --> 00:01:51.660
+Pochi secondi dopo, eccola lì, elencata con orgoglio sotto strumenti. La maggior parte degli
+
+00:01:51.660 --> 00:01:55.520
+utenti si ferma lì e pubblica nei forum vantandosi che il loro contesto esterno è attivo.
+
+00:01:55.520 --> 00:02:00.680
+Non lo è. Ciò che hai connesso è un placebo. Ecco perché. Quel filtro MCP intuitivo mostra
+
+00:02:00.680 --> 00:02:05.640
+solo i componenti integrati di Microsoft. Dataverse MCP? SharePoint MCP? Forse uno per
+
+00:02:05.640 --> 00:02:09.660
+GitHub se sei fortunato. Vivono in profondità nella stessa infrastruttura Tenan. Nel momento
+
+00:02:09.660 --> 00:02:13.780
+in cui provi a collegare un MCP esterno, ad esempio Microsoft Learn o la tua ricerca semantica
+
+00:02:13.780 --> 00:02:18.220
+interna, scopri uno scaffale vuoto. Non c'è alcuno slot di import, né richiesta di autenticazione
+
+00:02:18.220 --> 00:02:22.000
+o handshake. La presunta opzione del protocollo è in realtà solo un'etichetta di categoria
+
+00:02:22.000 --> 00:02:26.440
+su giocattoli preinstallati. In realtà, Copilot si aspetta una disciplina di formattazione
+
+00:02:26.440 --> 00:02:32.200
+molto specifica. Vuole un endpoint HTTP trasmissibile in streaming conforme allo schema MCP. Richieste
+
+00:02:32.200 --> 00:02:36.680
+modellate come JSON contestuale, risposte emesse come eventi, sempre per trasmettere token in
+
+00:02:36.680 --> 00:02:40.600
+streaming, non per scaricarli. Il tuo servizio esterno, non importa quanto intelligente, è
+
+00:02:40.600 --> 00:02:44.020
+invisibile a meno che non risponda in quel dialetto. Senza di esso, Copilot si comporta
+
+00:02:44.020 --> 00:02:46.920
+come un turista che ha memorizzato tre frasi di viaggio e insiste sul fatto che la gente del
+
+00:02:46.920 --> 00:02:51.160
+posto non parla correttamente. Questa è la bugia principale. Ciò che sembra plug and play è in
+
+00:02:51.160 --> 00:02:55.060
+realtà codice e preghiera. L'interfaccia utente visibile nasconde l'applicazione dello schema che
+
+00:02:55.060 --> 00:03:00.100
+fa funzionare MCP. Quando selezioni un MCP dal menu, non stai incorporando il tuo contesto di modello.
+
+00:03:00.320 --> 00:03:04.680
+Stai richiamando un meccanismo di recupero interno. Funziona ingegnosamente bene con gli indici in
+
+00:03:04.680 --> 00:03:09.720
+stile Bing e le api dataverse, ma non consulta mai il tuo endpoint MCP a meno che tu non crei manualmente
+
+00:03:09.720 --> 00:03:14.380
+il bridge. Ed è qui che sta il paradosso. Copilot Studio è allo stesso tempo uno degli strumenti
+
+00:03:14.380 --> 00:03:18.800
+di orchestrazione più potenti che Microsoft abbia mai creato e uno dei più ingannevolmente limitati.
+
+00:03:18.940 --> 00:03:22.900
+Promette uno scambio di contesto universale, ma offre un'amnesia selettiva a meno che tu non
+
+00:03:22.900 --> 00:03:27.360
+gli insegni nuove maniere tramite la configurazione. Gli admin che lo scoprono per la prima volta temono
+
+00:03:27.360 --> 00:03:32.580
+un bug. Hanno seguito la documentazione, importato l'URL e aggiornato tre volte, ma non appare ancora
+
+00:03:32.580 --> 00:03:37.140
+nulla. Questo perché non hanno costruito il ponte. Hanno semplicemente dipinto un tunnel sul muro.
+
+00:03:37.380 --> 00:03:41.120
+Riconoscere questa illusione è il primo passo verso la competenza. Il tuo pannello di connessione
+
+00:03:41.120 --> 00:03:45.020
+non sta mentendo in modo malizioso. Sta semplicemente raccontando la versione semplificata della realtà
+
+00:03:45.020 --> 00:03:49.340
+pensata per gli utenti medi. Ma tu non sei nella media. Sei tu che ci si aspetta che funzioni
+
+00:03:49.340 --> 00:03:53.080
+davvero. E questo è il primo passo verso l'illuminazione. Sapere che quel delizioso
+
+00:03:53.080 --> 00:03:58.800
+piccolo pannello in Copilot Studio ti sta mentendo. Cos'è in realtà MCP? Ok, definiamo la creatura con cui
+
+00:03:58.800 --> 00:04:04.080
+abbiamo a che fare. MCP. Il Model Context Protocol non è un formato di file o un wrapper API. È una
+
+00:04:04.080 --> 00:04:08.280
+lingua franca per i sistemi di intelligenza artificiale. Un modo per cervelli distinti di condividere
+
+00:04:08.280 --> 00:04:12.840
+non dati ma il significato dei dati. Microsoft lo chiama USB per agenti, non perché trasmette
+
+00:04:12.840 --> 00:04:17.260
+byte ma perché standardizza la stretta di mano, chi collega dove, quale corrente scorre e come
+
+00:04:17.260 --> 00:04:20.980
+entrambe le parti concordano che ciò che si sta muovendo è un contesto valido, non rumore.
+
+00:04:21.280 --> 00:04:25.360
+Tecnicamente, MCP definisce come un agente e una fonte di contesto scambiano metadati
+
+00:04:25.360 --> 00:04:29.840
+strutturati, schemi di strumenti, azioni, parametri e token di contesto. Consideralo come
+
+00:04:29.840 --> 00:04:34.700
+una diplomazia internazionale. Il server MCP rappresenta una nazione sovrana di informazioni.
+
+00:04:34.700 --> 00:04:38.420
+Un insieme di regole su come un particolare insieme di conoscenze può essere interrogato,
+
+00:04:38.680 --> 00:04:44.080
+riepilogato o aggiornato. Il client MCP, in questo caso Copilot Studio, è l'inviato in visita che
+
+00:04:44.080 --> 00:04:48.440
+parla per conto dell'utente. E a fare da ponte tra i due c'è il connettore, il nostro paziente
+
+00:04:48.440 --> 00:04:52.600
+traduttore che si assicura che la query di SharePoint in una lingua diventi una richiesta di contesto
+
+00:04:52.600 --> 00:04:56.780
+post-view uno in un'altra. All'interno del protocollo, tutto è JSON, in modo prevedibile,
+
+00:04:57.080 --> 00:05:01.220
+efficiente, a volte noiosamente JSON, in modo che anche un modello linguistico di grandi dimensioni
+
+00:05:01.220 --> 00:05:05.180
+possa analizzarlo senza fantasticare. Ogni richiesta contiene un intento. Ogni risposta
+
+00:05:05.180 --> 00:05:08.640
+contiene token di contesto e citazioni facoltative. Ancora più interessante,
+
+00:05:08.840 --> 00:05:12.480
+tali risposte sono trasmissibili in streaming. Il copilota riceve frammenti parziali mentre il
+
+00:05:12.480 --> 00:05:16.220
+server MCP assembla il significato. Ciò impedisce all'intelligenza artificiale di bloccarsi a metà
+
+00:05:16.220 --> 00:05:20.000
+del pensiero e attendere la risposta completa. È una corsa a staffetta, non una consegna di pacchi.
+
+00:05:20.140 --> 00:05:25.180
+Ora, la metafora USB di Microsoft seduce perché allude alla semplicità. Collega AB e gli elettroni
+
+00:05:25.180 --> 00:05:30.660
+di conoscenza iniziano a fluire, ma questa analogia si rompe quasi immediatamente. Un cavo USB fisico
+
+00:05:30.660 --> 00:05:36.320
+presuppone pin fissi, tensioni stabili e un tipo di elettricità. MCP, al contrario, negozia schemi
+
+00:05:36.320 --> 00:05:41.560
+dinamici. Ogni dispositivo, ogni implementazione del server, può definire i propri verbi, proprietà
+
+00:05:41.560 --> 00:05:45.860
+e affordance contestuali. Immagina un'unità USB che cambia il cablaggio a seconda di chi viene
+
+00:05:45.860 --> 00:05:50.720
+collegata. Questo è più vicino alla realtà. Quindi, cosa si trova esattamente dove? A livello di base,
+
+00:05:51.000 --> 00:05:55.220
+il server MCP contiene definizioni di strumenti, descrizioni di azioni come cercare documenti,
+
+00:05:55.420 --> 00:05:59.280
+creare record o elencare tabelle, insieme a parametri e tipi di dati richiesti. È la corteccia
+
+00:05:59.280 --> 00:06:04.300
+dell'intelligenza. Il client MCP, Copilot Studio, ospita il cervello dell'agente che interpreta i
+
+00:06:04.300 --> 00:06:07.860
+prompt in linguaggio naturale e decide quali azioni richiamare. Tra di loro, il connettore
+
+00:06:07.860 --> 00:06:12.360
+personalizzato implementa il contratto, gestisce l'autenticazione, convalida lo schema e trasmette
+
+00:06:12.360 --> 00:06:17.300
+la conversazione tramite HTTP preservando la struttura. Quando Copilot invia un prompt, ad esempio,
+
+00:06:17.620 --> 00:06:22.380
+trova articoli sull'indicizzazione di SharePoint, non esegue lo scraping di pagine web, genera una query
+
+00:06:22.380 --> 00:06:27.420
+contestuale incorporata in JSON, la invia tramite il connettore al server MCP e riceve un payload
+
+00:06:27.420 --> 00:06:32.540
+contestuale strutturato, non testo non elaborato. Tale payload contiene metadati, fonti, punteggi
+
+00:06:32.540 --> 00:06:36.660
+di pertinenza, frammenti di testo che il modello linguistico di grandi dimensioni condensa in un
+
+00:06:36.660 --> 00:06:40.620
+inglese fluente per l'utente. Si tratta di sintesi del contesto, non di semplice recupero.
+
+00:06:40.780 --> 00:06:44.460
+Senza tale disciplina, Copilot funziona come un pappagallo che ripete riepiloghi di qualsiasi
+
+00:06:44.460 --> 00:06:49.060
+cosa gli venga fornita. Aggiungi MCP e all'improvviso ricorda le relazioni. Quale documento fa riferimento
+
+00:06:49.060 --> 00:06:53.280
+a quale API? Quale campo in dataverse è mappato a quale proprietà nel tuo CRM? Quale clausola
+
+00:06:53.280 --> 00:06:57.780
+di licenza regola quell'azione. In sostanza, MCP aggiorna Copilot da completamento automatico
+
+00:06:57.780 --> 00:07:01.360
+con Swagger a un analista semi-affidabile che comprende effettivamente la topologia dei dati
+
+00:07:01.360 --> 00:07:06.120
+della tua organizzazione. Quindi, sì, USB per agenti suona accattivante, ma l'interpretazione
+
+00:07:06.120 --> 00:07:10.720
+pratica è che MCP impone una conversazione cortese tra sistemi molto ostinati. Indica a Copilot
+
+00:07:10.720 --> 00:07:15.600
+studio di chiedere. Posso interrogare questo schema? Invece di dire senza pensarci, dammi tutto.
+
+00:07:15.740 --> 00:07:19.860
+Questa piccola cortesia fa la differenza tra un'allucinazione e una risposta compiacente. Ed ecco
+
+00:07:19.860 --> 00:07:24.220
+il colpo di scena che Microsoft non evidenzia mai. Il menu a discesa MCP in Copilot studio
+
+00:07:24.220 --> 00:07:27.900
+parla già questo protocollo, ma solo con il suo servizio. Quando ne crei uno personalizzato,
+
+00:07:28.160 --> 00:07:31.440
+stai effettivamente creando un nuovo dialetto all'interno di quel trattato. Stai definendo
+
+00:07:31.440 --> 00:07:35.220
+cosa significa effettivamente contesto all'interno delle mura della tua azienda. Sapere cos'è
+
+00:07:35.220 --> 00:07:39.620
+MCP, una grammatica strutturata dinamica per il contesto, non una fonte di dati, ti fornisce
+
+00:07:39.620 --> 00:07:43.160
+la teoria di cui hai bisogno prima di commettere il crimine dell'implementazione. Perché la prossima
+
+00:07:43.160 --> 00:07:47.500
+volta la commetteremo insieme. Costruiremo noi stessi lanshake e dimostreremo che il vero potere
+
+00:07:47.500 --> 00:07:51.140
+di Copilot studio non deriva dal menu, ma dalla comprensione del contratto. Questa è
+
+00:07:51.140 --> 00:07:54.940
+la nostra eresia pratica. Costruire il tuo connettore personalizzato completamente conforme
+
+00:07:54.940 --> 00:07:58.400
+e compatibile con lo streaming che parla fluentemente MCP invece di imitare l'accento.
+
+00:07:58.600 --> 00:08:02.580
+Costruire un vero connettore personalizzato. Ora entriamo nella parte che tutti affrontano
+
+00:08:02.580 --> 00:08:06.360
+in fretta, la costruzione vera e propria. La maggior parte dei tutorial agita le mani in
+
+00:08:06.360 --> 00:08:10.660
+modo vago e dice, importa semplicemente da GitHub. Omettono il campo minato di mancate corrispondenze
+
+00:08:10.660 --> 00:08:14.520
+di schema, configurazioni errate dell'host e stranezze di autenticazione in attesa dietro quel pulsante
+
+00:08:14.520 --> 00:08:18.180
+dall'aspetto innocente. Oggi lo esamineremo in modo pedante perché la precisione è la
+
+00:08:18.180 --> 00:08:22.720
+differenza tra un agente che pensa e uno che si imbroncia in silenzio. Innanzitutto, comprendi
+
+00:08:22.720 --> 00:08:27.060
+lo scheletro del flusso di lavoro. Importazione GitHub, configurazione endpoint, pubblicazione
+
+00:08:27.060 --> 00:08:32.200
+del connettore. Tre ossa. Se ne manca un'articolazione, avrai un arto senza vita. Quindi, iniziamo da dove
+
+00:08:32.200 --> 00:08:36.500
+Microsoft nasconde le ossa in Power Apps. È lì che nascono i connettori personalizzati, non in
+
+00:08:36.500 --> 00:08:40.840
+Copilot studio stesso. Copilot è semplicemente il consumatore finale di qualsiasi articolazione
+
+00:08:40.840 --> 00:08:45.000
+e crei qui. Quando fai clic su un nuovo connettore personalizzato, ti vengono presentate opzioni
+
+00:08:45.000 --> 00:08:49.380
+direttamente dal cappello del mago, da Open API, da Postman, da Zero o importate da GitHub.
+
+00:08:49.620 --> 00:08:53.420
+Scegli quest'ultima perché Microsoft mantiene silenziosamente un repository di modelli di
+
+00:08:53.420 --> 00:08:57.420
+connettori MCP nel suo ramo sviluppatore. Il modello di cui hai effettivamente bisogno è
+
+00:08:57.420 --> 00:09:02.360
+etichettato come MCP Streamable. Tutto ciò che non è Streamable sembrerà funzionante fino al momento
+
+00:09:02.360 --> 00:09:06.860
+in cui Copilot pone la prima domanda, dopodiché fallirà silenziosamente. Nessun fuoco
+
+00:09:06.860 --> 00:09:12.180
+d'artificio. Nessun errore. Solo un cortese nulla. Dopo aver scelto MCP Streamable, punta
+
+00:09:12.180 --> 00:09:17.080
+al ramo dev e fai clic su Continua. Il sistema recupera un blob di JSON che definisce i parametri
+
+00:09:17.080 --> 00:09:21.960
+del connettore. Autenticazione. Solitamente nessuna autenticazione perché MCP attualmente
+
+00:09:21.960 --> 00:09:26.060
+si basa sull'isolamento del Tenan. Una manciata di corpi di richiesta richiesti e mappature di
+
+00:09:26.060 --> 00:09:30.360
+intestazione critiche per lo streaming. Non toccarli ancora. L'istinto di tutti è di modificarli
+
+00:09:30.360 --> 00:09:34.840
+immediatamente, il che inevitabilmente interrompe l'intera sequenza. Scorri invece fino all'host.
+
+00:09:34.840 --> 00:09:38.480
+La documentazione di Microsoft lo sussurra come nota a piedi pagina. Ma ecco la verità.
+
+00:09:38.620 --> 00:09:44.340
+Il campo host si aspetta solo il nome di dominio. Se incolli un URL completo con HTTPS come dimensione
+
+00:09:44.340 --> 00:09:48.920
+inclusa o lasci il percorso finale ad APMCP, la fase di convalida del connettore fallisce
+
+00:09:48.920 --> 00:09:53.360
+con un silenzio squisito. Ti dice che tutto è stato convalidato correttamente, quindi si
+
+00:09:53.360 --> 00:09:58.840
+rifiuta di apparire in Copilot. Rimuovi il prefisso. Elimina APMCP e fornisci l'host nudo.
+
+00:09:59.100 --> 00:10:03.860
+Nessuna barra. Nessuno schema. Quella mossa chirurgica risolve l'80% di ciò che non compare nei
+
+00:10:03.860 --> 00:10:07.940
+miei reclami a discesa. Successivamente, devi modificare l'URL di base. Il modello include
+
+00:10:07.940 --> 00:10:12.980
+APMCP per impostazione predefinita. Rimuovi lo. Perché? Perché quando Copilot concatena
+
+00:10:12.980 --> 00:10:17.520
+i percorsi internamente, presuppone già quel prefisso. Lascialo e produrrai radici doppie
+
+00:10:17.520 --> 00:10:24.940
+come APMCP, APMCP, search. Che il server rifiuta perché ridondanti e ridicole. Riduci senza
+
+00:10:24.940 --> 00:10:29.280
+pietà. Ora, dai un nome chiaro alla tua creazione. Resisti all'impulso di chiamarla
+
+00:10:29.280 --> 00:10:33.720
+connettore di prova. La cache interna di Copilot rispetta solo nomi univoci. Duplicane
+
+00:10:33.720 --> 00:10:37.600
+uno e il tuo nuovo connettore si nasconde come un bambino timido dietro il primo. Adotta
+
+00:10:37.600 --> 00:10:42.960
+titoli descrittivi. Microsoft Learn MCP o Internal Research Context MCP. Quindi, fai
+
+00:10:42.960 --> 00:10:47.160
+clic su Crea. In questa fase, l'interfaccia utente di Microsoft esegue una lunga pausa
+
+00:10:47.160 --> 00:10:50.940
+teatrale. Il servizio connettore convalida la struttura, registra i metadati con l'ambiente
+
+00:10:50.940 --> 00:10:54.860
+e li distribuisce tra i data center regionali. Questa operazione può richiedere fino a 5 minuti.
+
+00:10:55.020 --> 00:10:58.300
+Durante quei minuti, sarai tentato di aggiornare. Non farlo. Ogni aggiornamento
+
+00:10:58.300 --> 00:11:01.080
+riavvia la memorizzazione nella cache, prolungando l'attesa come si si fu con la ruota della
+
+00:11:01.080 --> 00:11:04.680
+fortuna. Vai a prendere una bevanda. Quando la convalida viene completata correttamente,
+
+00:11:04.960 --> 00:11:08.500
+il connettore ora esiste ufficialmente nel tuo ambiente. Ma essere nato non è la stessa
+
+00:11:08.500 --> 00:11:12.600
+cosa che essere utile. Il passaggio successivo, ignorato da quasi tutti i blobi di avvio rapido,
+
+00:11:12.840 --> 00:11:16.540
+è l'allineamento dello schema. Le risposte del server MCP includono campi come descrizione
+
+00:11:16.540 --> 00:11:20.840
+dell'azione, schema dello strumento AD del token di flusso. Copilot si aspetta che siano esattamente
+
+00:11:20.840 --> 00:11:25.800
+come definiti nelle specifiche MCP. Se il tuo server MCP esterno usa le maiuscole in modo diverso
+
+00:11:25.800 --> 00:11:30.920
+o annida i metadati in payload response anziché in data. Tool. Copilot li scarta come incomprensibili.
+
+00:11:31.120 --> 00:11:36.500
+Nessun avviso. Nessun errore. Solo di nuovo silenzio. LLM dietro Copilot interpreta questo
+
+00:11:36.500 --> 00:11:41.460
+come se non sapessi come aiutarti. Congratulazioni. Hai creato un vuoto conforme. Per allinearti
+
+00:11:41.460 --> 00:11:45.480
+correttamente, apri la scheda definizione nel connettore appena creato. Espandi la prima
+
+00:11:45.480 --> 00:11:50.160
+operazione, solitamente query o get context, e confronta la sua sezione risposte con l'ultimo
+
+00:11:50.160 --> 00:11:54.920
+schema MCP su GitHub. Regola nomi e tipi delle proprietà affinché array siano array, oggetti
+
+00:11:54.920 --> 00:11:59.100
+siano oggetti e ogni stringa usi il casing corretto. Sì, sembra un po' burocratico.
+
+00:11:59.320 --> 00:12:03.440
+Benvenuti nella diplomazia. I traduttori non improvvisano la grammatica. Una volta completato
+
+00:12:03.440 --> 00:12:07.540
+l'allineamento, imposta il supporto allo streaming su sì. Di nuovo, la documentazione lo colloca
+
+00:12:07.540 --> 00:12:11.680
+dietro un accordione etichettato impostazioni avanzate opzionali, come se fosse il contorno
+
+00:12:11.680 --> 00:12:16.000
+anziché l'antipasto. MacOpilot richiede endpoint trasmissibili in streaming perché esegue il rendering
+
+00:12:16.000 --> 00:12:20.280
+delle risposte in modo incrementale. Se non lo contrassegni, il connettore tecnicamente si autentica
+
+00:12:20.280 --> 00:12:24.040
+ma scade a metà risposta, producendo mezze frasi o, peggio, markdown che terminano
+
+00:12:24.040 --> 00:12:28.520
+a metà parola. Qualcuno chiede invariabilmente, non posso semplicemente usare sync. No, MCP
+
+00:12:28.520 --> 00:12:32.020
+si aspetta flussi tokenizzati, non dump di massa, proprio per mantenere vivo il flusso
+
+00:12:32.020 --> 00:12:35.740
+della conversazione. Pensa a questo come a nutrire il grande modello linguistico tramite
+
+00:12:35.740 --> 00:12:39.680
+una flebo anziché infilargli un intero pasto in gola. La flebo gli consente di pensare
+
+00:12:39.680 --> 00:12:43.720
+mentre mangia. A questo punto potresti credere che il successo sia visibile. Torni a Copilot
+
+00:12:43.720 --> 00:12:47.680
+Studio, fai clic su Aggiungi strumento, filtra MCP e aggiorna ripetutamente quando il connettore
+
+00:12:47.680 --> 00:12:51.540
+non viene visualizzato. Ecco la scomoda verità. La propagazione ambientale è in ritardo di diversi
+
+00:12:51.540 --> 00:12:54.640
+minuti rispetto alla pubblicazione. L'area di lavoro deve sincronizzare il suo elenco
+
+00:12:54.640 --> 00:12:58.740
+di connettori con il servizio Power Platform. L'aggiornamento indesiderato ritarda la sincronizzazione.
+
+00:12:58.920 --> 00:13:03.220
+L'amministratore efficiente se ne va. Quello impaziente si ritrova in un paradosso temporale
+
+00:13:03.220 --> 00:13:07.000
+di sua creazione. Quando il connettore viene finalmente visualizzato, noterai qualcosa
+
+00:13:07.000 --> 00:13:10.440
+di leggermente diverso da quelli nativi di Microsoft. La sua icona non ha il sigillo
+
+00:13:10.440 --> 00:13:15.120
+incorporato. Non preoccuparti, hai creato qualcosa di unico. Selezionalo. Scegli Aggiungi
+
+00:13:15.120 --> 00:13:19.840
+Autenticati se richiesto. Copilot ora stabilisce un binding a quel connettore, recuperando
+
+00:13:19.840 --> 00:13:23.900
+i metadati dello strumento, il titolo, la descrizione e i parametri. La presenza di
+
+00:13:23.900 --> 00:13:28.520
+tali metadati è la prova che l'unshake è riuscito. Se non vedi nulla, rivedi l'allineamento
+
+00:13:28.520 --> 00:13:32.380
+dello schema. L'endpoint sta parlando, ma Copilot non riesce a trasmettere l'accento.
+
+00:13:32.540 --> 00:13:37.320
+Rimangono due insidie, entrambe deliziosamente stupide. Innanzitutto, la convalida del certificato.
+
+00:13:37.480 --> 00:13:41.080
+Se il tuo server MCP utilizza TLS autofirmato e non hai aggiunto tale certificato all'ambiente
+
+00:13:41.080 --> 00:13:44.480
+del connettore, le conversazioni moriranno al momento della connessione. Utilizza un certificato
+
+00:13:44.480 --> 00:13:47.940
+valido emesso da una cap pubblica o carica il tuo certificato radice tramite le impostazioni
+
+00:13:47.940 --> 00:13:52.000
+di Power Platform. In secondo luogo, il budget di Time Out. Gli endpoint trasmissibili in
+
+00:13:52.000 --> 00:13:54.800
+streaming devono rispondere con la codifica del trasferimento dell'intestazione suddivisa
+
+00:13:54.800 --> 00:13:59.120
+in blocchi. Senza di esso, Copilot presuppone una chiusura HTTP standard per segnalare la
+
+00:13:59.120 --> 00:14:02.840
+fine del messaggio e tronca prematuramente. Testa con Curl prima di accusare Microsoft.
+
+00:14:03.060 --> 00:14:07.380
+Ecco una microstoria che riassume perfettamente questo rituale. Un amministratore lamentò che
+
+00:14:07.380 --> 00:14:11.280
+il suo connettore smise di funzionare. Dopo un'ispezione forense, abbiamo scoperto che il suo
+
+00:14:11.280 --> 00:14:15.220
+ingegnere di hosting aveva introdotto Cloudflare davanti all'endpoint MCP, apparentemente per
+
+00:14:15.220 --> 00:14:19.220
+la memorizzazione nella cache. E Cloudflare, nella sua benevola ignoranza, ha rimosso le
+
+00:14:19.220 --> 00:14:23.440
+intestazioni di streaming per comprimere il traffico. Risultato? Silenzio totale. Morale.
+
+00:14:23.660 --> 00:14:27.780
+Al pipe non importa delle tue ottimizzazioni. Segui le specifiche o goditi il purgatorio del
+
+00:14:27.780 --> 00:14:32.360
+debug. Ora l'epifania. L'intero processo non è una complessità dannosa. Microsoft non
+
+00:14:32.360 --> 00:14:36.620
+ha teso trappole. Presuppone semplicemente una pazienza professionale. La bugia sul connettore
+
+00:14:36.620 --> 00:14:41.520
+personalizzato persiste perché l'interfaccia omette i passaggi tecnici. Dice una verità a metà
+
+00:14:41.520 --> 00:14:46.860
+per la folla occasionale. Se stai ancora guardando, hai già trasceso quella folla. Se fatto correttamente,
+
+00:14:47.200 --> 00:14:50.620
+ciò che hai costruito è più di un connettore. È una testa di ponte per la verità. Il tuo
+
+00:14:50.620 --> 00:14:54.380
+copilot non falsificherà più le informazioni provenienti da Bing. Eseguirà uno scambio
+
+00:14:54.380 --> 00:14:58.460
+di contesto autenticato, conforme allo schema e trasmissibile in streaming con qualsiasi livello
+
+00:14:58.460 --> 00:15:01.840
+di intelligence tu esponga. La prossima volta che qualcuno nella tua organizzazione dirà
+
+00:15:01.840 --> 00:15:06.720
+ho connesso MCP, ma non risponde. Sorriderai cupamente e risponderai, sì, perché hai costruito
+
+00:15:06.720 --> 00:15:10.320
+un dipinto a tunnel, non un ponte. Ora che il ponte è in piedi, verifichiamo che
+
+00:15:10.320 --> 00:15:14.960
+l'attraversamento funzioni davvero. Perché un bel ponte sospeso è comunque inutile finché
+
+00:15:14.960 --> 00:15:20.300
+qualcosa non lo attraversa. Testare e verificare l'integrazione. La verifica è la parte che tutti
+
+00:15:20.300 --> 00:15:24.080
+trattano come un ripensamento finché il loro agente non sorride educatamente e dice
+
+00:15:24.080 --> 00:15:28.760
+«Non so come aiutarti in questo». Questa frase è la versione di Copilot di una schermata blu.
+
+00:15:28.900 --> 00:15:33.340
+Il protocollo non è riuscito da qualche parte tra il connettore e il modello. Testare MCP non è
+
+00:15:33.340 --> 00:15:36.820
+affascinante, ma è il modo per dimostrare di aver costruito un ponte e non un'opera d'arte.
+
+00:15:36.820 --> 00:15:41.480
+Inizia con la cartina di tornasole. Copilot Studio vede effettivamente il connettore. Nel
+
+00:15:41.480 --> 00:15:45.240
+pannello degli strumenti, filtra di nuovo per protocollo di contesto del modello. Il titolo
+
+00:15:45.240 --> 00:15:49.480
+appena creato, ad esempio Microsoft Learn MCP, dovrebbe apparire accanto all'MCP ufficiale
+
+00:15:49.480 --> 00:15:53.980
+di Dataverse. In caso contrario, fermati lì. Visibilità equivale a registrazione. Nessuna
+
+00:15:53.980 --> 00:15:58.480
+voce, schema o host ancora disallineati. Supponendo che venga visualizzato, aggiungi lo strumento
+
+00:15:58.480 --> 00:16:02.700
+a Copilot. Nel momento in cui lo colleghi, Copilot recupera i metadati descrittivi dal server
+
+00:16:02.700 --> 00:16:06.800
+MCP, un dizionario di strumenti disponibili, ognuno con parametri e descrizioni in inglese
+
+00:16:06.800 --> 00:16:10.940
+semplice. Se noti che il campo della descrizione è popolato con Microsoft Doc Search o simili,
+
+00:16:11.180 --> 00:16:15.580
+congratulazioni, l'unshake ha funzionato. Ora il contesto viene riconosciuto, non indovinato.
+
+00:16:15.720 --> 00:16:19.960
+Per verificare la funzionalità, hai bisogno di una domanda controllata. Utilizza Microsoft
+
+00:16:19.960 --> 00:16:24.400
+Learn MCP come banco di prova perché è pubblico, educato e difficilmente esploderà. Chiedi
+
+00:16:24.400 --> 00:16:28.600
+al tuo agente come faccio a configurare SharePoint come fonte di conoscenza. Se la tua pipeline
+
+00:16:28.600 --> 00:16:32.960
+è intatta, osserva la telemetria. Il prompt segue questo percorso. Utente, connettore
+
+00:16:32.960 --> 00:16:37.520
+personalizzato, server MCP, modello linguistico di grandi dimensioni, risposta con citazioni.
+
+00:16:37.680 --> 00:16:42.340
+Ogni tappa introduce un potenziale fallimento. Quando la risposta restituisce un inglese
+
+00:16:42.340 --> 00:16:47.440
+incoerente con citazioni in markdown che rimandano alla sacra tripletta, connessione,
+
+00:16:47.660 --> 00:16:52.300
+comprensione e contestualizzazione. Il markdown stesso è la prova che la modalità streaming
+
+00:16:52.300 --> 00:16:57.360
+funziona correttamente. Vedrai il testo renderizzato in modo incrementale, frase, pausa, frase, citazione,
+
+00:16:57.360 --> 00:17:00.680
+anziché scaricarlo tutto in una volta. Quel ritmo è il battito cardiaco rivelatore di
+
+00:17:00.680 --> 00:17:04.900
+MCP, ma se qualcosa non funziona, Copilot diventa passivo-aggressivo. Decodifichiamo
+
+00:17:04.900 --> 00:17:09.140
+i suoi stati d'animo. Risposta vuota. Hai digitato una query valida. Copilot ha annuito
+
+00:17:09.140 --> 00:17:13.320
+e non ha prodotto nulla. Questo è un disallineamento dell'URL, molto probabilmente API MCP con doppio
+
+00:17:13.320 --> 00:17:17.040
+prefisso. Rivedi il percorso completo nella scheda di definizione del connettore, rimuovi
+
+00:17:17.040 --> 00:17:22.020
+la ridondanza, ripubblica, attendi i 5 minuti obbligatori. Markdown troncato. La risposta arriva
+
+00:17:22.020 --> 00:17:26.160
+ma finisce a metà frase come uno stagista annoiato che se ne va a metà conversazione. Il tuo
+
+00:17:26.160 --> 00:17:30.640
+endpoint non dichiara la codifica di trasferimento frammentata. In altre parole, hai promesso
+
+00:17:30.640 --> 00:17:34.140
+lo streaming ma hai inviato un dump statico. Allinea le tue intestazioni con le regole di
+
+00:17:34.140 --> 00:17:39.320
+streaming HTTP 1.1. Non so come aiutarti in questo. Questo scatena un terrore esistenziale.
+
+00:17:39.480 --> 00:17:42.680
+Significa che Copilot può raggiungere il connettore ma non riesce a passare lo schema.
+
+00:17:42.860 --> 00:17:46.580
+I nomi delle tue proprietà divergono dalla specifica MCP o l'oggetto apparente e mancante.
+
+00:17:46.780 --> 00:17:51.000
+Confronta di nuovo con il JSON di riferimento di Microsoft. La correzione non è mistica, solo
+
+00:17:51.000 --> 00:17:55.780
+burocratica. E se ricevi errori di connessione, ispeziona la tua catena di certificati SSL. I certificati
+
+00:17:55.780 --> 00:17:59.260
+autofirmati o scaduti causano spesso rifiuti silenziosi perché i servizi Power Platform
+
+00:17:59.260 --> 00:18:02.740
+non considerano attendibili le radici non verificate. Sostituiscile con una emessa da
+
+00:18:02.740 --> 00:18:07.400
+una K attendibile o carica esplicitamente il certificato radice. Ora, il test di conferma
+
+00:18:07.400 --> 00:18:12.060
+non è meramente tecnico, è logico. Poni domande diverse per rilevare la deriva semantica.
+
+00:18:12.300 --> 00:18:15.780
+Mostrami che i documenti di indicizzazione di SharePoint dovrebbero attivare la stessa
+
+00:18:15.780 --> 00:18:20.080
+azione di ricerca di documenti Microsoft di SharePoint. Formulazione diversa, scelta di strumenti
+
+00:18:20.080 --> 00:18:23.760
+identica. Questa è comprensione contestuale, non recupero di parole chiave. Se le risposte
+
+00:18:23.760 --> 00:18:27.600
+rimangono stabili tra le formulazioni, il tuo copilot è ufficialmente fluente. Ecco il
+
+00:18:27.600 --> 00:18:31.680
+trucco diagnostico che pochi menzionano. Osserva le intestazioni del flusso nella scheda di rete
+
+00:18:31.680 --> 00:18:35.260
+del tuo browser. Dovresti vedere blocchi di risposta preceduti da dati seguiti da oggetti
+
+00:18:35.260 --> 00:18:39.580
+JSON che rappresentano token incrementali. Ogni blocco corrisponde a una parte della risposta.
+
+00:18:39.800 --> 00:18:43.200
+Se vedi un singolo payload enorme alla fine del flusso, hai perso lo streaming e rischi
+
+00:18:43.200 --> 00:18:47.400
+timeout su query più lunghe. Concettualmente, pensa al test come alla direzione di un'orchestra.
+
+00:18:47.540 --> 00:18:52.180
+Il server MCP suona gli strumenti, i dati, lo schema, gli indici. Il connettore impugna
+
+00:18:52.180 --> 00:18:55.780
+la bacchetta. Copilot è l'orecchio del tuo direttore d'orchestra, che interpreta il ritmo.
+
+00:18:55.960 --> 00:18:59.800
+Se un musicista è in ritardo o inizia nella tonalità sbagliata, la musica crolla nel rumore.
+
+00:19:00.000 --> 00:19:04.060
+La verifica è la tua prova per allineare i tempi di tutti prima del concerto per i dirigenti
+
+00:19:04.060 --> 00:19:08.920
+che presumono la magia. Quando ogni sezione è armonizzata, invio rapido, scambio HTTP,
+
+00:19:09.540 --> 00:19:14.520
+sequenziamento dei flussi, sarai testimone di un piccolo miracolo, risposte coerenti, citate
+
+00:19:14.520 --> 00:19:19.180
+e gestite dall'azienda invece del jazz improvvisato predefinito di Copilot. Solo allora potrai
+
+00:19:19.180 --> 00:19:23.280
+dichiarare completata l'integrazione. Hai raggiunto il livello meccanico di MCP? Il
+
+00:19:23.280 --> 00:19:27.060
+trasporto affidabile del contesto. Quindi sì, goditi i piccoli e precisi risultati dei
+
+00:19:27.060 --> 00:19:30.740
+test, ma ricorda che non sono il finale. È il segnale diagnostico che conferma che il
+
+00:19:30.740 --> 00:19:34.320
+tuo cuore gli abbatte a ritmo con il polso dei dati. La parte meccanica è completata.
+
+00:19:34.720 --> 00:19:38.200
+Successivamente, affrontiamo quella filosofica. Perché a qualcuno dovrebbe interessare che
+
+00:19:38.200 --> 00:19:42.600
+questa complessa sinfonia esista? Perché è importante al di là della demo? Ecco la scomoda
+
+00:19:42.600 --> 00:19:47.740
+verità. L'impostazione di MCP non è un trucco da festa, è un'infrastruttura. Mentre altri
+
+00:19:47.740 --> 00:19:52.280
+cercano effetti speciali, tu definisci le regole che governano lo scambio della verità
+
+00:19:52.280 --> 00:19:56.680
+per l'IA in azienda. Il protocollo di contesto del modello standardizza tale verità. Ogni
+
+00:19:56.680 --> 00:20:01.440
+query, ogni recupero, tutto è vincolato dalla conformità allo schema. Senza di esso, Copilot
+
+00:20:01.440 --> 00:20:06.000
+si limita ad abbellire. Con MCP, ragiona entro limiti definiti. Questa è la distinzione
+
+00:20:06.000 --> 00:20:10.440
+tra immaginazione e governance, tra uno stagista stravagante e un analista conforme alle normative.
+
+00:20:10.600 --> 00:20:15.260
+Per le aziende, questo è molto importante. Un MCP correttamente integrato garantisce che ogni
+
+00:20:15.260 --> 00:20:19.860
+risposta di Copilot provenga da sistemi sanzionati, SharePoint, Dataverse, API interne,
+
+00:20:20.120 --> 00:20:24.280
+piuttosto che da frammenti raccolti alla deriva su Bing. La tua intelligenza artificiale ora consulta
+
+00:20:24.280 --> 00:20:29.420
+fonti primarie, non voci. La sicurezza segue naturalmente. Nel 2025, i ricercatori hanno
+
+00:20:29.420 --> 00:20:33.400
+registrato picchi di violazioni dovute a connettori mal configurati ed endpoint con troppi
+
+00:20:33.400 --> 00:20:38.480
+permessi. Causa di leak tra i Tenan. L'integrazione MCP eseguita correttamente rafforza i principi
+
+00:20:38.480 --> 00:20:42.820
+di Zero Trust. Il connettore agisce come un checkpoint dell'ambasciata. Privilegi minimi applicati,
+
+00:20:42.820 --> 00:20:46.360
+credenziali definite nell'ambito, contesto scambiato solo in base a trattati definiti.
+
+00:20:46.500 --> 00:20:50.260
+I team di governance apprezzano un valore ancora più profondo, l'auditabilità. Ogni
+
+00:20:50.260 --> 00:20:55.200
+transazione MCP produce registri espliciti. Chi ha chiesto? Quale schema ha risposto? Quali
+
+00:20:55.200 --> 00:20:59.100
+metadati sono stati restituiti? È una traccia cartacea che il tuo compliance officer può
+
+00:20:59.100 --> 00:21:03.100
+abbracciare di notte. Confronta ciò con le allucinazioni dell'IA generativa che hanno
+
+00:21:03.100 --> 00:21:07.140
+origine su internet. La verifica futura suggella la discussione.
+
+00:21:07.220 --> 00:21:11.960
+Memmano che Microsoft, OpenAI e altri convergono verso protocolli interagente standardizzati,
+
+00:21:11.960 --> 00:21:16.640
+La conformità MCP passerà dall'essere una curiosità a un requisito. I settori regolamentati,
+
+00:21:16.860 --> 00:21:20.160
+finanza, sanità e governo, la renderanno obbligatoria per i sistemi di intelligenza
+
+00:21:20.160 --> 00:21:23.520
+artificiale che scambiano dati contestuali. Quando arriverà quel promemoria, non dovrai
+
+00:21:23.520 --> 00:21:27.260
+più preoccuparti. Avrai già un bridge conforme che funziona silenziosamente in produzione.
+
+00:21:27.420 --> 00:21:30.760
+Quindi, quando i colleghi liquideranno la tua minuziosa configurazione come un'eccessiva
+
+00:21:30.760 --> 00:21:34.720
+ingegneria, sorridi con calma. La governance sembra sempre burocrazia finché non si verifica
+
+00:21:34.720 --> 00:21:39.580
+la violazione. Poi sembra lungimiranza. Fallo bene una volta e ogni istanza di copilot che distribuisci
+
+00:21:39.580 --> 00:21:42.960
+in seguito erediterà quella disciplina, consapevolezza contestuale entro confini
+
+00:21:42.960 --> 00:21:47.480
+controllati. Questo è il punto oltre la demo. Non stai solo collegando un protocollo. Stai
+
+00:21:47.480 --> 00:21:51.120
+definendo la memoria istituzionale in forma di macchina. La prossima volta che copilot
+
+00:21:51.120 --> 00:21:54.740
+risponderà a una richiesta normativa utilizzando l'esatta catena di fonti e citazioni che hai
+
+00:21:54.740 --> 00:21:58.800
+autorizzato. Ricorda questo momento le ore di ritaglio degli URL, corrispondenza degli
+
+00:21:58.800 --> 00:22:02.820
+schemi e controlli di integrità. È l'ingegneria invisibile dietro ogni IA responsabile.
+
+00:22:02.980 --> 00:22:07.260
+Ora, con la soddisfazione morale ripristinata e il ponte strutturalmente solido, rimane una domanda.
+
+00:22:07.260 --> 00:22:11.240
+Continuerai a sviluppare un'intelligenza disciplinata o lascerai che la semplicità del marketing ti
+
+00:22:11.240 --> 00:22:15.720
+seduca di nuovo nel caos. La cosa efficiente è ovvia. Aggiungere MCP non significa premere
+
+00:22:15.720 --> 00:22:19.040
+un interruttore. Significa riprogrammare il cervello di copilot studio in modo che smetta
+
+00:22:19.040 --> 00:22:22.080
+di avere allucinazioni e inizia a ragionare. La pigra promessa di usare solo un connettore
+
+00:22:22.080 --> 00:22:25.920
+personalizzato crolla quando ti rendi conto che il connettore non è una porta. È un intero corridoio
+
+00:22:25.920 --> 00:22:30.040
+che devi costruire, rinforzare e testare per verificare la presenza di perdite. Ma una volta completato,
+
+00:22:30.240 --> 00:22:33.940
+cambia il modo in cui si comporteranno tutti i futuri copilot. Ciò che hai realizzato è un sistema
+
+00:22:33.940 --> 00:22:37.520
+di alfabetizzazione strutturale progettato per nascondere i suoi figli. Hai insegnato
+
+00:22:37.520 --> 00:22:41.500
+a copilot studio a richiedere il contesto in modo cortese, ad autenticarsi prima di parlare
+
+00:22:41.500 --> 00:22:45.360
+e a restituire citazioni anziché finzione creativa. Questa disciplina lo trasforma da
+
+00:22:45.360 --> 00:22:49.880
+un chatbot appariscente in un analista conforme. E sì, ha richiesto pazienza. Convalida dello
+
+00:22:49.880 --> 00:22:52.820
+schema è un'eroica tolleranza per i ritardi di aggiornamento di Microsoft. Ma lo stesso
+
+00:22:52.820 --> 00:22:56.380
+vale per qualsiasi cosa degna di fiducia. La cosiddetta bugia del connettore personalizzato
+
+00:22:56.380 --> 00:23:00.860
+non è una cospirazione, è marketing di semplificazione. Microsoft dice la verità adatta alle
+
+00:23:00.860 --> 00:23:05.680
+demo. Tu hai creato quella adatta alla produzione. Ora sai che il protocollo model context è
+
+00:23:05.680 --> 00:23:09.940
+meno plug and play e più plug and negotiate, ovvero termini di trattato. Quindi, tratta
+
+00:23:09.940 --> 00:23:13.900
+ogni connettore che pubblichi come un emendamento costituzionale, diritti minimi, regole rigide,
+
+00:23:14.060 --> 00:23:17.960
+output verificabili. È così che puoi ampliare la governance senza sacrificare la velocità.
+
+00:23:18.160 --> 00:23:22.740
+Se la eviti, passerai le serate a spiegare ai dirigenti perché il chatbot ha citato bindi
+
+00:23:22.740 --> 00:23:27.340
+invece delle policy. Blocca il tuo percorso di aggiornamento. Iscriviti, abilita le notifiche
+
+00:23:27.340 --> 00:23:30.760
+e lascia che la conoscenza disciplinata arrivi automaticamente. Nessun controllo
+
+00:23:30.760 --> 00:23:34.340
+manuale. Nessuna preoccupazione per demo funzionanti a metà. Solo fornitura continua
+
+00:23:34.340 --> 00:23:37.740
+di informazioni che rispettano il contesto e la conformità. L'entropia vince a meno
+
+00:23:37.740 --> 00:23:42.680
+che tu non scelga la struttura. L'iscrizione è struttura. Segui il canale? Continua a creare
+
+00:23:42.680 --> 00:23:47.720
+un'ia razionale e il prossimo aggiornamento arriverà puntuale come un connettore configurato
+
+00:23:47.720 --> 00:23:49.900
+per eseguire una volta sola. Procedi.

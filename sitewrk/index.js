@@ -24,13 +24,17 @@ function notModified(request, etag, lastMod) {
   return !!(ims && lastMod && Date.parse(lastMod) <= Date.parse(ims));
 }
 
-// Seite aus dem R2-Bucket (pages/<pfad>/index.html) mit Kanten-Cache; null, wenn es sie dort nicht gibt (auch das wird kurz gemerkt)
+// Seite aus dem R2-Bucket (pages/<pfad>/index.html) mit Kanten-Cache; null, wenn es sie dort nicht gibt (auch das wird kurz gemerkt).
+// /a/index.html gilt wie /a/ (wie GitHub Pages). Schluessel im Bucket sind UTF-8 (z. B. pages/ru/tag/облако/index.html), die Adresse kommt
+// prozent-kodiert: fuer den Bucket dekodieren, der Cache-Schluessel bleibt kodiert (tools/purge_changed.py leert kodierte Adressen).
 async function r2Page(request, env, ctx, url, p) {
-  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + r2Path(p));
+  const d = p.replace(/\/index\.html$/i, "/");
+  let dp = d; try { dp = decodeURIComponent(d); } catch { /* ungueltige Kodierung: wie angefragt */ }
+  const cache = caches.default, ck = new Request(url.origin + "/__r2c" + r2Path(d));
   let hit = await cache.match(ck).catch(() => null), state = "HIT";
   if (!hit) {
     state = "MISS";
-    const obj = await env.PAGES.get("pages" + r2Path(p) + "index.html").catch(() => null);
+    const obj = await env.PAGES.get("pages" + r2Path(dp) + "index.html").catch(() => null);
     const cm = (obj && obj.customMetadata) || {};
     if (!obj || cm.gone === "1" || cm.src === "docs") {   // fehlt, vom Seitenbau als entfernt markiert oder nur Spiegel von GitHub Pages (dort 404 = wirklich weg)
       ctx.waitUntil(cache.put(ck, new Response("", { headers: { "cache-control": `public, max-age=${R2_MISS_TTL}`, "x-r2-miss": "1" } })).catch(() => {}));
@@ -228,6 +232,10 @@ function redirect(request, origin, path, search, status = 301) {
 const GONE_LANG = /^\/(pa|hi|ml|ta|te)(\/|$)/, MIRKO = /^(\/[a-z]{2})?\/community\/u\/mirko-peters(\/.*)?$/, EN_PREFIX = /^\/en(\/.*)?$/;
 const LANG_EP = /^\/(de|es|fr|it|pt|nl|pl|id|ru|uk|ar|he|ja|ko)\/show\/episodes\/([a-z0-9-]+)\/?$/;
 const INVITE = /^\/einladung\/([a-z0-9][a-z0-9-]{1,38})\/?$/;   // Profilkuerzel wie im Community-Worker (worker/src/inviter.js)
+// Eigene Seite eines Events, Profils oder einer Firma (site_events.py, site_members.py): entsteht erst mit dem naechsten Seitenbau. Listen zeigen nur
+// Eintraege mit Seite; ein Link von anderswo (Mail, Admin, Profil-Bereich) auf eine noch fehlende Seite fuehrt zur Liste der Sprache statt auf ein 404.
+export const EVENT_PAGE = /^(\/[a-z]{2})?\/community\/events\/([a-z0-9][a-z0-9-]{2,39})\/?$/;
+export const PROFILE_PAGE = /^(\/[a-z]{2})?\/community\/(u|c)\/([a-z0-9][a-z0-9-]{1,38})\/?$/;   // nur die Profilseite selbst (Unterseiten wie /blog/ nicht)
 // Reine Adressregeln (ohne Ursprung) - ein Schritt: Ziel oder "". site_links.py rule_target() ist der Nachbau.
 async function ruleStep(p, migrated) {
   const p0 = p.replace(/\/+$/, "") || "/";
@@ -329,9 +337,16 @@ export default {
     }
     if (res.status === 404 && env.PAGES && !IMG.test(p) && (request.method === "GET" || request.method === "HEAD")) {
       const r2 = await r2Page(rq, env, ctx, url, p);
+      if (r2 && !p.endsWith("/") && !/\.[a-z0-9]{1,8}$/i.test(p)) return new Response(null, { status: 301, headers: { ...SEC, location: url.origin + p + "/" + url.search, "cache-control": "public, max-age=600" } });   // wie GitHub Pages: Verzeichnis ohne "/" -> 301 auf "/"
       if (r2) return r2;
       const m = LANG_EP.exec(p);   // noch nicht hochgeladen: englisches Original statt 404 - umbenannt gleich auf den neuen Slug (ein Schritt)
       if (m) return Response.redirect(url.origin + ((migrated && (await redirectMap())["/show/episodes/" + m[2]]) || "/show/episodes/" + m[2] + "/") + url.search, 301);
+    }
+    if (res.status === 404 && (request.method === "GET" || request.method === "HEAD")) {   // nach dem R2-Rueckfall: eine Sprachfassung im Bucket gilt
+      const ev = EVENT_PAGE.exec(p);   // 302 und ohne Cache, weil die Seite spaeter entsteht
+      const pf = ev ? null : PROFILE_PAGE.exec(p);
+      const to = ev ? (ev[1] || "") + "/community/events/" : pf ? (pf[1] || "") + "/community/" + (pf[2] === "u" ? "members" : "companies") + "/" : "";
+      if (to) return new Response(null, { status: 302, headers: { ...SEC, location: url.origin + to, "cache-control": "no-store", "x-robots-tag": "noindex" } });
     }
     if (res.status === 404 && FEED_ITEM.test(p) && (request.method === "GET" || request.method === "HEAD")) return feedGone(request, p);
     const h = new Headers(res.headers);

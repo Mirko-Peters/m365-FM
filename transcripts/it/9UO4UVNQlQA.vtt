@@ -1,0 +1,1087 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.100
+Ciao e benvenuti a un altro episodio delle Microsoft Knowledge Nuggets qui su M375FM.
+
+00:00:04.460 --> 00:00:05.700
+Sono il vostro conduttore Mirko Peter.
+
+00:00:05.980 --> 00:00:09.200
+L'argomento di oggi è qualcosa che quasi tutti coloro che lavorano con le catene di approvvigionamento
+
+00:00:09.200 --> 00:00:11.080
+hanno sentito nominare, ma che pochi comprendono davvero.
+
+00:00:11.360 --> 00:00:13.340
+Dynamics 365 e Transportation Management.
+
+00:00:13.780 --> 00:00:14.260
+Ecco il problema.
+
+00:00:14.580 --> 00:00:15.640
+Un cliente effettua un ordine.
+
+00:00:15.880 --> 00:00:16.740
+La merce è in magazzino.
+
+00:00:17.040 --> 00:00:18.480
+Un vettore ha bisogno di un orario di ritiro.
+
+00:00:18.740 --> 00:00:22.280
+Il cliente attende la consegna e in seguito una fattura di trasporto arriva sulla scrivania di qualcuno.
+
+00:00:22.620 --> 00:00:25.840
+Per anni questi passaggi hanno vissuto in foglie di calcolo separati, telefonati, listini prezzi
+
+00:00:25.840 --> 00:00:27.020
+e passaggi di consegno tra i team.
+
+00:00:27.020 --> 00:00:28.240
+O è questo che è la delle lacune.
+
+00:00:28.660 --> 00:00:31.360
+Il magazzino potrebbe preparare la merce prima che il reparto trasporti è ben piano.
+
+00:00:31.500 --> 00:00:34.600
+L'amministrazione potrebbe ricevere una fattura senza sapere cosa sia stato concordato di pagare.
+
+00:00:34.700 --> 00:00:36.480
+Quindi cos'è esattamente la gestione dei trasporti?
+
+00:00:36.820 --> 00:00:41.440
+In parole semplici, è il centro logistico all'interno di Dynamics 365 e Supply Chain Management.
+
+00:00:41.860 --> 00:00:44.180
+Connette le baie di carico, i fornitori, i clienti, i vettori.
+
+00:00:44.740 --> 00:00:48.200
+Pianificheremo i carichi, sceglieremo rotte tariffe, spediremo merce e verificheremo i costi di trasporto.
+
+00:00:48.360 --> 00:00:52.920
+Alla fine di questo episodio vedrete come tutti questi pezzi si incastrano per semplificare la vostra via lavorativa.
+
+00:00:52.920 --> 00:00:57.360
+Perché esiste la gestione dei trasporti.
+
+00:00:58.440 --> 00:00:59.800
+Partiamo da una verità fondamentale.
+
+00:01:00.480 --> 00:01:03.900
+Le merci fisiche non si muovono solo perché esiste un ordine di vendita su uno schermo.
+
+00:01:04.280 --> 00:01:07.420
+Hanno bisogno di un camion, un rimorchio, un container o un altro mezzo di trasporto.
+
+00:01:07.760 --> 00:01:13.720
+Qualcuno deve sapere da dove parte la merce, dove deve arrivare, quanto spazio occupa, quando deve partire e quanto dovrebbe costare il viaggio.
+
+00:01:14.700 --> 00:01:17.120
+Ora, se immaginate una scatola che va a un cliente, sembra semplice.
+
+00:01:17.120 --> 00:01:25.880
+Ma un'azienda reale potrebbe spedire molti ordini dallo stesso magazzino nello stesso giorno, ricevere merci da diversi fornitori e spostare stock tra le proprie sedi contemporaneamente.
+
+00:01:26.720 --> 00:01:29.780
+Ogni movimento comporta persone, date, spazio e denaro.
+
+00:01:30.400 --> 00:01:32.980
+Senza un sistema condiviso, ogni team vede solo la propria parte.
+
+00:01:33.560 --> 00:01:35.100
+Le vendite vedono l'ordine del cliente.
+
+00:01:35.480 --> 00:01:36.820
+Le acquisti vedono l'ordine del fornitore.
+
+00:01:37.320 --> 00:01:40.520
+Il personale di magazzino vede gli articoli da prelevare, imballare, ricevere o stoccare.
+
+00:01:40.860 --> 00:01:45.420
+Il team dei trasporti vede un elenco di cose da movimentare, spesso dopo che tutti gli altri hanno già fatto la loro parte.
+
+00:01:45.420 --> 00:01:47.300
+Ed è qui che iniziano i ritardi e la confusione.
+
+00:01:47.740 --> 00:01:48.560
+Ecco un esempio concreto.
+
+00:01:49.060 --> 00:01:52.340
+Maginate che un magazzino abbia 10 ordini cliente pronti per la stessa città.
+
+00:01:52.560 --> 00:01:57.340
+Se nessuno collega quegli ordini prima di prenotare il trasporto, l'azienda potrebbe organizzare diversi viaggi parzialmente vuoti
+
+00:01:57.340 --> 00:02:00.660
+o il vettore potrebbe arrivare prima che il magazzino sappia quali merci devono salire sul veicolo.
+
+00:02:01.020 --> 00:02:02.640
+La merce è pronta, ma il movimento non è pianificato.
+
+00:02:03.260 --> 00:02:08.020
+Quindi la gestione dei trasporti dà a quel movimento uno spazio all'interno di Dynamics 365 Supply Chain Management.
+
+00:02:08.680 --> 00:02:13.760
+Non è una distinta app di spedizioni per consumatori dove inserisce un numero di tracking e guardia un pacco muoversi su una mappa.
+
+00:02:13.760 --> 00:02:17.480
+Invece funziona con i record aziendali già presenti all'interno della piattaforma connessa.
+
+00:02:17.840 --> 00:02:19.800
+Un ordine crea la necessità di movimentare delle merci.
+
+00:02:20.060 --> 00:02:21.320
+Il lavoro di magazzino prepara le merci.
+
+00:02:21.740 --> 00:02:25.220
+La gestione dei trasporti pianifica come tali merci viaggiano tra le sedi.
+
+00:02:25.600 --> 00:02:27.640
+Immaginano come lo sportello trasporti in un edificio per ufficio.
+
+00:02:28.200 --> 00:02:30.360
+Il team vendite porta una richiesta cliente allo sportello.
+
+00:02:30.840 --> 00:02:33.100
+L'ufficio acquisti comunica che un fornitore invierà delle merci.
+
+00:02:33.560 --> 00:02:35.640
+Il magazzino fornisce le scorte effettive e le baie di carico.
+
+00:02:35.760 --> 00:02:39.280
+Lo sportello trasporti collega queste richieste al piano di trasporto aziendale.
+
+00:02:39.280 --> 00:02:41.020
+Ci sono due direzioni principali.
+
+00:02:41.300 --> 00:02:43.880
+Trasporto in entrata significa che le merci viaggiano verso la tua azienda.
+
+00:02:44.380 --> 00:02:45.680
+Hai ordinato articoli da un fornitore.
+
+00:02:45.800 --> 00:02:47.460
+Quegli articoli devono raggiungere il tuo magazzino.
+
+00:02:47.840 --> 00:02:49.280
+A volte il fornitore controlla quel viaggio.
+
+00:02:49.400 --> 00:02:50.440
+A volte la tua azienda organizzarlo.
+
+00:02:50.940 --> 00:02:55.080
+In ogni caso serve un piano chiaro per portare le merci nel posto giusto e riceverle all'arrivo.
+
+00:02:55.620 --> 00:02:58.160
+Trasporto in uscita significa che le merci viaggiano fuori dalla tua azienda.
+
+00:02:58.660 --> 00:02:59.900
+Un cliente ha ordinato dei prodotti.
+
+00:03:00.280 --> 00:03:03.900
+Il magazzino li prepara e un vettore o un veicolo aziendale li porta al cliente.
+
+00:03:04.640 --> 00:03:07.220
+Entrambi i flussi riguardano il movimento ma il punto di partenza è differito.
+
+00:03:07.220 --> 00:03:09.440
+L'entrata inizia con un ordine di acquisto a un fornitore.
+
+00:03:09.780 --> 00:03:11.760
+L'uscita inizia con un ordine di vendita a un cliente.
+
+00:03:12.240 --> 00:03:14.320
+C'è anche un terzo tipo che i principianti spesso trascurano.
+
+00:03:14.480 --> 00:03:15.320
+Gli ordini di trasferimento.
+
+00:03:15.900 --> 00:03:18.820
+Un ordine di trasferimento sposta le scorte tra le sedi della propria azienda.
+
+00:03:19.340 --> 00:03:21.520
+Magari un magazzino ha troppa merce o un altro ne ha bisogno.
+
+00:03:22.300 --> 00:03:26.120
+Non è coinvolto alcun acquisto da parte di un cliente ma le merci fisiche necessitano comunque di trasporto.
+
+00:03:26.300 --> 00:03:32.700
+In 365 Transportation Management gli ordini di trasferimento appartengono allo scenario in uscita e possono essere pianificati insieme agli ordini di vendita.
+
+00:03:33.180 --> 00:03:34.760
+Ha senso se immagini la banchina di carico.
+
+00:03:34.760 --> 00:03:38.980
+Oh, che un pallet viaggi verso un cliente pagante o verso un altro magazzino aziendale.
+
+00:03:39.480 --> 00:03:43.880
+Qualcuno deve comunque organizzare il veicolo, riservare lo spazio e spedirlo dalla stessa porta.
+
+00:03:44.840 --> 00:03:49.320
+Quindi questo approccio connesso sostituisce la vecchia catena di liste separate telefonate con informazioni condivise.
+
+00:03:50.300 --> 00:03:51.980
+L'ordine che al sistema cosa deve essere movimentato.
+
+00:03:52.400 --> 00:03:53.600
+Il magazzino prepara gli articoli.
+
+00:03:54.060 --> 00:03:56.800
+La gestione dei trasporti trasforma tale esigenza in un piano di trasporto.
+
+00:03:57.080 --> 00:04:00.280
+Una volta che le merci devono muoversi, il sistema necessita prima di un piano di spedizione fatta.
+
+00:04:00.280 --> 00:04:01.840
+Pianificare il carico
+
+00:04:01.840 --> 00:04:07.100
+La pillola di conoscenza di oggi riguarda qualcosa di cui ogni team logistico ha bisogno, ma che spesso spiega in modo diverso.
+
+00:04:08.180 --> 00:04:08.960
+Pianificazione di un carico
+
+00:04:08.960 --> 00:04:12.520
+Puoi iniziare a pianificare i trasporti partendo dagli ordini o dalle spedizioni.
+
+00:04:12.960 --> 00:04:14.280
+Sono Mirko Peters, di M3SM.
+
+00:04:14.640 --> 00:04:16.260
+FM, lasciatemi sfatare subito un mito.
+
+00:04:16.620 --> 00:04:17.940
+Il piano di spedizione non parte da zero.
+
+00:04:18.340 --> 00:04:19.620
+Parte da record che già possiedi.
+
+00:04:20.000 --> 00:04:21.840
+Un ordine di vendita contiene ciò che un cliente acquista.
+
+00:04:21.840 --> 00:04:24.240
+Un ordine di acquisto elenca ciò che un fornitore deve inviare.
+
+00:04:24.240 --> 00:04:28.880
+Una spedizione raggruppa tale articolo in un record di trasporto più mirato, pronto per essere combinato con altri.
+
+00:04:29.440 --> 00:04:30.960
+Quindi quale punto di partenza dovessi usare?
+
+00:04:31.300 --> 00:04:32.360
+Dipende da come lavora l'azienda.
+
+00:04:32.880 --> 00:04:35.660
+Alcuni team pianificano in anticipo esaminando direttamente le righe dell'ordine.
+
+00:04:36.020 --> 00:04:39.020
+Altri team creano prima le spedizioni, poi decidono cosa viaggia insieme.
+
+00:04:39.420 --> 00:04:40.740
+Entrambi i percorsi portano la stessa domanda.
+
+00:04:41.100 --> 00:04:42.280
+Cosa dovrebbe andare sullo stesso vehicle?
+
+00:04:42.700 --> 00:04:43.880
+Ecco la definizione più semplice.
+
+00:04:43.880 --> 00:04:46.900
+Un carico è il record digitale per un movimento pianificato di merce.
+
+00:04:47.560 --> 00:04:52.120
+Puoi immaginarlo come un camion, un rimorchio, un container o una raccolta di spedizioni che viaggiano insieme.
+
+00:04:52.120 --> 00:04:56.280
+Ti offro un unico posto dove vedere quali merce appartengono insieme prima che inizi il lavoro fisico.
+
+00:04:57.020 --> 00:04:58.420
+Ora ecco qualcosa che molti sbagliano.
+
+00:04:58.900 --> 00:05:01.380
+Un carico non significa che ogni articolo entri in una scatola fisica.
+
+00:05:01.780 --> 00:05:04.180
+Significa che il sistema raggruppa le merce attorno a un piano di trasporto.
+
+00:05:04.460 --> 00:05:06.240
+Diverse spedizioni i clienti possono condividere stasù.
+
+00:05:06.680 --> 00:05:08.860
+Un ordine di grandi dimensioni potrebbe riempire un intero rimorso.
+
+00:05:08.960 --> 00:05:13.420
+Un container in arrivo da un fornitore può diventare un carico anche prima che il magazzino riceva la merce.
+
+00:05:14.020 --> 00:05:16.340
+Il punto è smettere di trattare ogni ordine con un viaggio a sé stand.
+
+00:05:16.860 --> 00:05:19.960
+Immagina che un distributore abbia sei ordini dei clienti pronti per la consegna di venerdì.
+
+00:05:19.960 --> 00:05:23.540
+Tutti e sei si trovano nella stessa area e ogni ordine riempie solo parte di un cane.
+
+00:05:24.060 --> 00:05:27.860
+Inviare sei veicoli semivuoti sprega spazio e crea sei distinti lavori di trasporto.
+
+00:05:28.540 --> 00:05:30.760
+Puoi invece raggruppare spedizioni compatibili in un unico carico.
+
+00:05:31.220 --> 00:05:33.520
+Compatibili significa che possono ragionevolmente viaggiare insieme.
+
+00:05:33.960 --> 00:05:36.660
+Partono dallo stesso magazzino, devono andare più o meno nello stesso momento,
+
+00:05:36.760 --> 00:05:39.420
+rientrano nei limiti del veicolo e seguono le tue regole di spedizione.
+
+00:05:39.780 --> 00:05:43.980
+Il sistema aiuta a unire quei record invece di fare affidamento su qualcuno che individua il modello in un foglio di calco.
+
+00:05:44.320 --> 00:05:45.480
+Quel gruppo ora ha un piano condiviso.
+
+00:05:45.480 --> 00:05:47.620
+Il tuo magazzino vede cosa appartiene al carico.
+
+00:05:48.080 --> 00:05:50.320
+Il pianificatore dei trasporti vede lo spazio e totale il peso.
+
+00:05:50.780 --> 00:05:53.680
+Le persone non devono ricostruire lo stesso elenco in email e in note o file separati.
+
+00:05:54.260 --> 00:05:54.780
+Ma ecco il punto.
+
+00:05:55.400 --> 00:05:57.800
+Raggruppare le merci non significa solo mettere insieme più articoli.
+
+00:05:58.200 --> 00:06:00.460
+Un camion ha dei limiti, peso, spazio sul pavimento, altezza.
+
+00:06:00.840 --> 00:06:01.820
+Un container ha le sue regole.
+
+00:06:02.480 --> 00:06:04.900
+Se il sistema raggruppa le merci senza controllare quei limiti,
+
+00:06:04.900 --> 00:06:07.540
+il carico potrebbe sembrare apposto sullo schermo ma fallire al carico.
+
+00:06:07.980 --> 00:06:10.720
+Dynamics 365 utilizza modelli di carico per aiutare a evitarlo.
+
+00:06:11.220 --> 00:06:14.960
+Pensa a un modello di carico come a un insieme riutilizzabile di limiti per un tipo di veicolo o container.
+
+00:06:16.040 --> 00:06:19.920
+Creane uno per un piccolo camion di consegna, un altro per un rimorchio più grande e un altro per un container.
+
+00:06:20.240 --> 00:06:24.220
+Ogni modello contiene limiti di peso, volume, altezza e altre regole di cui la tua azienda ha bisogno.
+
+00:06:24.760 --> 00:06:27.240
+Il modello conferisce al carico una forma prima ancora di iniziare a rimanere.
+
+00:06:27.620 --> 00:06:29.920
+Quindi se una spedizione pesa troppo o occupa troppo spazio,
+
+00:06:30.000 --> 00:06:32.020
+lì il pianificatore capisce che non va bene per quel carico.
+
+00:06:32.120 --> 00:06:36.380
+La soluzione potrebbe essere un secondo veicolo, un modello diverso, un diverso raggruppamento delle spedizioni.
+
+00:06:36.980 --> 00:06:41.060
+Il software non solleva i pallet ma fornisce al tuo team un piano più chiaro prima dell'inizio del lavoro fisico.
+
+00:06:41.840 --> 00:06:44.880
+Un approccio integrato è chiamato creazione del carico basata sul volume.
+
+00:06:45.480 --> 00:06:47.420
+Sembra più tecnico di quanto non sia in realtà.
+
+00:06:47.900 --> 00:06:53.180
+Significa che il sistema utilizza l'altezza e il peso massimo del modello di carico quando crea o suggerisce un carico.
+
+00:06:53.720 --> 00:06:56.520
+In parole povere controlla se la merce rientra nei limiti che è impostato.
+
+00:06:56.920 --> 00:06:58.140
+Quei valori non sono bloccati per sempre.
+
+00:06:58.500 --> 00:07:00.920
+Un pianificatore può sovrascriverli quando le esigenze del mondo reali cambia.
+
+00:07:01.300 --> 00:07:02.680
+Magari un trasportatore invia un rimorchio di velo.
+
+00:07:02.940 --> 00:07:04.220
+Magari un viaggio consente un'altezza di velo.
+
+00:07:04.620 --> 00:07:06.140
+Il modello fornisce la regola normale.
+
+00:07:06.600 --> 00:07:09.280
+Mentre la sovrascrittura gestisce l'eccezione senza rifare tutto.
+
+00:07:09.280 --> 00:07:11.300
+Torniamo a quei sei ordini cliente.
+
+00:07:11.800 --> 00:07:13.800
+Ognuno da solo potrebbe occupare il 15% di un camion.
+
+00:07:14.740 --> 00:07:17.220
+Pianificati separatamente potresti inviare sei veicoli quasi vuoti.
+
+00:07:17.960 --> 00:07:18.940
+Raggruppati in un unico carico.
+
+00:07:19.040 --> 00:07:21.880
+Gli stessi ordini possono riempire gran parte di un camion con spazio ancora disponibile.
+
+00:07:22.140 --> 00:07:23.080
+Questo è un uso migliore dello spazio.
+
+00:07:23.400 --> 00:07:25.020
+Ora la stessa idea funziona in entrambe direzioni.
+
+00:07:25.020 --> 00:07:28.480
+Per la pianificazione in entrata crea un carico attorno agli articoli prevenienti da un fornitore.
+
+00:07:28.780 --> 00:07:31.040
+Il piano di trasporto si collega alla ricezione prevista.
+
+00:07:31.320 --> 00:07:33.220
+Così il magazzino sa cosa deve arrivare e si prepara.
+
+00:07:33.740 --> 00:07:38.000
+Invece di scoprire una consegna solo quando si presenta il cancello e il team di ricezione ha un registro pianificato.
+
+00:07:38.580 --> 00:07:43.200
+Per la pianificazione in uscita seleziona gli articoli del magazzino che devono partire per i clienti e raggruppali in un carico.
+
+00:07:43.760 --> 00:07:47.020
+Il magazzino prepara la merce in base ai dettagli del carico, non a lista scollegata.
+
+00:07:47.260 --> 00:07:51.380
+Un carico completo ha comunque bisogno di un mezzo, di un'azienda che lo trasporti di un costo previsto.
+
+00:07:52.800 --> 00:07:54.480
+Percorsi, trasportatori e tariffe.
+
+00:07:55.620 --> 00:07:57.700
+Il carico ora ti dice cosa devi viaggiare insieme.
+
+00:07:58.760 --> 00:08:02.820
+Successivamente devi decidere chi lo trasporta, quale servizio utilizza e quanto dovrebbe costare il viaggio.
+
+00:08:03.200 --> 00:08:04.920
+L'azienda che trasporta la tua merce che è nata trasportatori.
+
+00:08:05.360 --> 00:08:08.180
+Può essere un'azienda di trasporti esterno che ritira e consegna il tuo carico.
+
+00:08:08.820 --> 00:08:11.440
+Può anche trattarsi della tua flotta se gestisci i tuoi camion e i tuoi autisti.
+
+00:08:12.020 --> 00:08:14.800
+In entrambi i casi il trasportatore è responsabile del viaggio fisico.
+
+00:08:15.520 --> 00:08:18.780
+Questa distinzione è importante perché serve comunque un piano anche quando il camion è tuo.
+
+00:08:19.400 --> 00:08:22.020
+Con un trasportatore esterno concorri prezzi e servizi in anticipo.
+
+00:08:22.020 --> 00:08:27.800
+Con la tua flotta potresti comunque voler calcolare il costo del trasporto, specialmente se i costi di consegna appaiono sugli ordini dei clienti.
+
+00:08:28.320 --> 00:08:31.460
+La Dynamics 365 e Transportation Management supporta entrambe le situazioni.
+
+00:08:31.960 --> 00:08:32.580
+Poi c'è il percorso.
+
+00:08:32.940 --> 00:08:36.640
+Un percorso è il tragitto pianificato dal ritiro a destinazione insieme alla scelta del servizio.
+
+00:08:36.640 --> 00:08:38.080
+Risponde a domande pratiche.
+
+00:08:38.640 --> 00:08:40.320
+Da quale magazzino ritira il trasportatore?
+
+00:08:40.680 --> 00:08:42.500
+Quale cliente o località riceve la merce?
+
+00:08:42.980 --> 00:08:44.640
+Quale servizio di trasporto gestisce il viaggio?
+
+00:08:45.160 --> 00:08:48.280
+Imagine una consegna che parte dal suo magazzino principale per un cliente dall'altra parte.
+
+00:08:48.640 --> 00:08:51.660
+Un percorso può usare il trasporto stradale standard che costa meno ma richiede più tempo.
+
+00:08:52.140 --> 00:08:54.300
+Un altro può usare un servizio più veloce e costoso.
+
+00:08:55.000 --> 00:08:57.320
+Stesso punto di partenza arrivo ma la scelta del trasporto cambia.
+
+00:08:57.920 --> 00:08:59.660
+Una tariffa è il costo previsto per quella scelta.
+
+00:08:59.660 --> 00:09:01.920
+Non è un numero casuale digitato all'ultimo minuto.
+
+00:09:02.340 --> 00:09:06.260
+Le tariffe derivano da accordi di prezzo con i vettori combinati con i dettagli della spedizione e del percorso.
+
+00:09:06.640 --> 00:09:10.380
+Da dove parte la merce? Dove va? Il servizio usato? La quantità trasportata?
+
+00:09:10.580 --> 00:09:12.160
+Un percorso le dice come la merce dovrebbe muovere.
+
+00:09:12.480 --> 00:09:14.080
+Una tariffa le dice quanto si aspetta di pagare.
+
+00:09:14.360 --> 00:09:17.920
+Questi due concetti vanno insieme perché un percorso economico potrebbe mancare la promessa di consegna
+
+00:09:17.920 --> 00:09:20.260
+mentre la velocità potrebbe costare più di quanto dovrebbero.
+
+00:09:20.460 --> 00:09:22.460
+La pianificazione del trasporto non è solo trovare un camion,
+
+00:09:22.520 --> 00:09:25.900
+è scegliere un servizio che rispetti l'impegno verso il cliente e le regole di costo aziendali.
+
+00:09:27.760 --> 00:09:30.100
+Dynamics 365 include il workbench, tariffe e percorsi.
+
+00:09:30.500 --> 00:09:32.280
+Il nome suona formale ma lo scopo è semplice.
+
+00:09:32.280 --> 00:09:36.860
+Offre ai pianificatori un posto dove confrontare fianco a fianco le scelte di percorso e tariffa per una spedizione.
+
+00:09:37.360 --> 00:09:40.860
+Invece di controllare una tabella di un vettore e poi un'altra confrontandola in un file separato,
+
+00:09:40.960 --> 00:09:43.120
+esamina le opzioni collegate a quella necessità di spedizione.
+
+00:09:43.580 --> 00:09:45.160
+Forse un'opzione raggiunge il cliente prima.
+
+00:09:45.760 --> 00:09:46.740
+Forse un'altra costa meno.
+
+00:09:47.360 --> 00:09:52.140
+Il sistema non sa se ogni cliente valorizzi la velocità più del costo perché le aziende lavorano in modo diverso.
+
+00:09:52.140 --> 00:09:56.180
+Un cliente potrebbe aver pagato per una consegna urgente, quindi il percorso più veloce ha senso.
+
+00:09:56.880 --> 00:09:59.660
+Un altro accetta una consegna più lunga e il costo inferiore è più adatto.
+
+00:09:59.660 --> 00:10:01.640
+Le persone prendono ancora la decisione.
+
+00:10:01.920 --> 00:10:07.180
+Transportation Management le offre scelte concordate e costi previsti mentre la sua azienda decide quale compromesso funziona.
+
+00:10:07.920 --> 00:10:09.600
+Ecco cosa fa realmente il modulo integrato.
+
+00:10:10.220 --> 00:10:14.380
+Le informazioni sulle tariffe provengono dalle tabelle tariffari che la sua azienda inserisce e mantiene nella Mixed S5.
+
+00:10:14.920 --> 00:10:18.660
+Pensi a queste tabelle come a registri memorizzati dei prezzi concordati con i vettori e di percorso.
+
+00:10:18.660 --> 00:10:23.640
+Si è negoziato un prezzo per un certo servizio e tratta che l'informazione risiede nel sistema e supporta la pianificazione.
+
+00:10:24.060 --> 00:10:26.080
+Funziona bene quando le sue tariffe seguono accordi noti.
+
+00:10:26.080 --> 00:10:31.740
+Ad esempio, lavorare con pochi vettori regolari, servire rotte familiari e aggiornare i prezzi quando cambiano i contratti.
+
+00:10:31.920 --> 00:10:35.260
+Il pianificatore dei trasporti usa le tariffe già registrate invece di cercare tra vecchi mail.
+
+00:10:35.920 --> 00:10:37.540
+Ma ecco qualcosa che molti fraintendono.
+
+00:10:38.140 --> 00:10:41.360
+Il modulo integrato non agisce come un sito di shopping in tempo reale collegato a ogni vettore.
+
+00:10:41.920 --> 00:10:46.000
+Non estrae automaticamente prezzi aggiornati da feed in tempo reale per confrontarli in un'ampia rete.
+
+00:10:46.880 --> 00:10:52.540
+Se la vostra azienda necessita di confronto tariffe tra più vettori, prenotazioni live o aggiornamenti dettagliati, di solito si collega a un sistema terzo.
+
+00:10:52.540 --> 00:10:56.200
+Non si tratta di una carenza della gestione dei trasporti. Definisce chiaramente il suo compito.
+
+00:10:56.840 --> 00:11:03.860
+Questi strumenti gestiscono la pianificazione strutturata dei trasporti nella supply chain, usando le informazioni su vettori, rotte e tariffe che l'azienda mantiene.
+
+00:11:04.420 --> 00:11:06.700
+Non è un sito web per il tracciamento di pacchi destinati ai consumatori.
+
+00:11:07.240 --> 00:11:12.420
+Non si usa come una mappa dove inserire un numero di tracciamento per vedere l'icona di un veicolo muoversi su strada.
+
+00:11:12.980 --> 00:11:16.340
+Questo modulo si concentra sulle decisioni di trasporto aziendale prima e durante la spedizione.
+
+00:11:16.860 --> 00:11:21.140
+Quali merci viaggiano insieme? Quale vettore le gestisce? Quale rotta applicare? Quanto dovrebbe costare il viaggio?
+
+00:11:21.140 --> 00:11:25.520
+Una volta che l'azienda seleziona il piano, i team di magazzino e trasporto devono eseguirlo.
+
+00:11:26.700 --> 00:11:31.140
+Dalla porta del magazzino a quella del cliente, un piano di trasporto è utile solo se può trasformarsi in una spedizione reale.
+
+00:11:31.920 --> 00:11:35.060
+Per un ordine in uscita, il flusso di solito inizia quando un cliente acquista qualcosa.
+
+00:11:35.660 --> 00:11:39.360
+L'ordine di vendita comunica all'azienda cosa vuole il cliente, dove deve andare e quando dovrebbe arrivare.
+
+00:11:39.780 --> 00:11:44.360
+L'ordine diventa la spedizione e si unisce a un carico pianificato con altre merci che viaggiano sullo stesso tragitto.
+
+00:11:44.700 --> 00:11:45.580
+Poi subentra il magazzino.
+
+00:11:45.580 --> 00:11:49.780
+Gli operatori prelevano gli articoli dallo stoccaggio, li imballano e li portano nell'area di carico corto.
+
+00:11:49.960 --> 00:11:54.680
+Poiché la spedizione fa parte di un carico, il team vede quali merci devono partire insieme e quale vettore le ritirerà.
+
+00:11:55.380 --> 00:12:00.120
+All'arrivo del veicolo, le merci passano dal magazzino al vettore che le trasporta fino al cliente.
+
+00:12:00.540 --> 00:12:02.380
+Ogni passaggio è collegato allo stesso registro di mobilitazione.
+
+00:12:02.760 --> 00:12:04.440
+Sembra scontato, ma immaginate il vecchio metodo.
+
+00:12:04.760 --> 00:12:06.480
+Un addetto al prelievo lavorava con un ordine cardano.
+
+00:12:06.760 --> 00:12:08.800
+Un pianificatore dei trasporti va a avere una lista separata.
+
+00:12:08.800 --> 00:12:12.960
+E qualcuno al carico cercava tra le email per verificare quale vettore dovesse prendere e quali pallet.
+
+00:12:13.600 --> 00:12:16.300
+Se cambiava un dettaglio, tutti necessitavano della versione aggiornata.
+
+00:12:16.800 --> 00:12:19.240
+Con la gestione dei trasporti, il carico fornisce ai team un registro condiviso.
+
+00:12:19.980 --> 00:12:24.320
+Il magazzino vede gli articoli collegati al carico, il pianificatore vede i dettagli della spedizione
+
+00:12:24.320 --> 00:12:26.960
+e chi organizza il ritiro vede il vettore e il servizio previsti.
+
+00:12:28.700 --> 00:12:30.580
+Invece di far girare diverse liste cartacee,
+
+00:12:30.920 --> 00:12:33.840
+le persone lavorano con informazioni collegate allo stesso ordine e spedizione.
+
+00:12:34.400 --> 00:12:35.240
+Ecco un semplice esempio.
+
+00:12:35.240 --> 00:12:38.660
+Un magazzino ha ordini per diversi clienti nella stessa zona di consegna.
+
+00:12:39.220 --> 00:12:41.520
+Un cliente ha ordinato cartoni di prodotti per la pulizia,
+
+00:12:41.680 --> 00:12:44.880
+un altro prodotti cartacei e un terzo un piccolo lotto di attrezzature.
+
+00:12:45.380 --> 00:12:47.060
+Ogni ordine deve essere prelevato e imballato,
+
+00:12:47.140 --> 00:12:49.720
+ma il team di trasporto non deve trattarli come viaggi completamente separati.
+
+00:12:49.900 --> 00:12:51.780
+Assegnano le spedizioni a un unico carico pianificato.
+
+00:12:51.980 --> 00:12:53.580
+Il personale di magazzino preleva ogni ordine,
+
+00:12:53.580 --> 00:12:55.780
+lo imballa correttamente e lo prepara per l'area di carico.
+
+00:12:56.300 --> 00:12:59.080
+Il registro del carico indica a loro che tutte quelle spedizioni viaggiano insieme.
+
+00:12:59.440 --> 00:13:03.220
+Quando arriva il vettore, il team consegna la merce per un unico movimento pianificato
+
+00:13:03.220 --> 00:13:06.180
+invece di cercare di abbinare pallet sfusi a un autista all'ultimo minuto.
+
+00:13:06.600 --> 00:13:08.000
+Il cliente riceve comunque il proprio ordine.
+
+00:13:08.680 --> 00:13:09.600
+Dietro le quinte, tuttavia,
+
+00:13:09.680 --> 00:13:12.300
+l'azienda ha pianificato quella consegna come parte di un movimento più ampio.
+
+00:13:12.820 --> 00:13:15.580
+Quel collegamento aiuta il magazzino a lavorare con il team di trasporto
+
+00:13:15.580 --> 00:13:18.860
+invece di lavorare in anticipo o attendere istruzioni che arrivano troppo tardi.
+
+00:13:19.420 --> 00:13:23.040
+Il trasporto in entrata segue la stessa idea di connessione solo nella direzione opposta.
+
+00:13:23.660 --> 00:13:26.300
+Un ordine di acquisto ti dice che la tua azienda si aspetta merce da un fornitore.
+
+00:13:26.980 --> 00:13:28.700
+Quando la tua azienda organizza il trasporto,
+
+00:13:29.000 --> 00:13:31.660
+un carico in entrata è pianificato e collega gli articoli in arrivo al viaggio
+
+00:13:31.660 --> 00:13:33.140
+prima che la merce raggiunga il magazzino.
+
+00:13:33.620 --> 00:13:37.300
+Il fornitore invia la spedizione, il vettore la porta nella tua sede e il magazzino la riceve.
+
+00:13:37.780 --> 00:13:40.460
+Il personale addetto al ricevimento può prepararsi perché sa cosa dovrebbe arrivare.
+
+00:13:40.840 --> 00:13:43.580
+Possono controllare il carico pianificato rispetto alla merce che arriva al dock,
+
+00:13:43.680 --> 00:13:45.780
+molto più chiaro di un camion che si presenta senza preavviso
+
+00:13:45.780 --> 00:13:49.100
+e qualcuno che cerca di capire a qualcuno che cerca di capire a quale ordine di acquisto partengono ai pallet.
+
+00:13:49.260 --> 00:13:51.180
+Anche gli ordini di trasferimento si adattano a questo progetto.
+
+00:13:51.520 --> 00:13:54.300
+Una sede aziendale spedisce le scorte mentre un'altra sede aziendale le riceve.
+
+00:13:54.800 --> 00:13:57.120
+Il primo magazzino prepara gli articoli e li spedisce
+
+00:13:57.120 --> 00:14:00.300
+mentre il secondo magazzino si aspetta gli stessi articoli e riceve nel suo inventario.
+
+00:14:01.100 --> 00:14:02.840
+Non c'è un cliente esterno alla fine di quel viaggio
+
+00:14:02.840 --> 00:14:05.960
+ma l'azienda ha comunque bisogno di un passaggio chiaro tra le due sedi.
+
+00:14:06.520 --> 00:14:09.880
+Il carico collega il lavoro di spedizione all'eccezione attorno all'unico movimento pianificato.
+
+00:14:10.320 --> 00:14:13.280
+Anche le scelte di consegna del cliente rimangono collegate alla decisione di spedizione.
+
+00:14:13.820 --> 00:14:16.040
+Se un pianificatore sceglie un servizio di trasporto più veloce
+
+00:14:16.040 --> 00:14:18.960
+perché un cliente ha bisogno di merce rapidamente, quella scelta si collega alla spedizione.
+
+00:14:19.440 --> 00:14:21.220
+Se l'azienda utilizza un servizio a basso costo
+
+00:14:21.220 --> 00:14:23.760
+perché la data di consegna lo consente, anche quella scelta si collega.
+
+00:14:23.760 --> 00:14:27.900
+Le persone possono ricondurre il costo di consegna al percorso e alla scelta del vettore che lo ha creato.
+
+00:14:28.240 --> 00:14:30.800
+Il veicolo può lasciare la banchina e la merce può arrivare in sicurezza
+
+00:14:30.800 --> 00:14:32.080
+ma il lavoro non è ancora terminato.
+
+00:14:32.620 --> 00:14:35.500
+Il vettore invia una fattura di trasporto in seguito e qualcuno deve controllarlo.
+
+00:14:36.700 --> 00:14:38.160
+Costi di trasporto e riconciliazione
+
+00:14:38.160 --> 00:14:42.240
+La merce ha lasciato il magazzino, la consegna potrebbe essere persino completata.
+
+00:14:42.560 --> 00:14:43.600
+Ma arriva la fattura del vettore.
+
+00:14:44.100 --> 00:14:48.120
+Quella fattura va controllata perché l'importo deve corrispondere alla scelta di trasporto
+
+00:14:48.120 --> 00:14:52.500
+pianificata in precedenza, inclusi vettore, rotta, servizio, dettagli del carico
+
+00:14:52.500 --> 00:14:53.820
+e costo previsto.
+
+00:14:54.740 --> 00:14:59.280
+Durante la pianificazione, Dynamics 365 può caccolare un costo di trasporto previsto in
+
+00:14:59.280 --> 00:15:00.160
+base alle tariffe dell'azienda.
+
+00:15:00.440 --> 00:15:03.840
+Questo importo previsto fornisce all'azienda una base di partenza prima che il vettore richieda
+
+00:15:03.840 --> 00:15:04.260
+il pagamento.
+
+00:15:04.700 --> 00:15:06.500
+In seguito il vettore invia la fattura per il trasporto.
+
+00:15:06.980 --> 00:15:10.100
+La riconciliazione del trasporto consiste nel confrontare tale fattura con le tariffe e
+
+00:15:10.100 --> 00:15:11.940
+dettagli della spedizione già registrati nel sistema.
+
+00:15:12.360 --> 00:15:15.680
+In parole semplici, l'azienda verifica se il vettore ha debitato quanto previsto per il
+
+00:15:15.680 --> 00:15:16.960
+servizio effettivamente prestato.
+
+00:15:17.500 --> 00:15:19.700
+Immaginiamo che il piano prevedesse un costo di 500 dollari.
+
+00:15:20.140 --> 00:15:23.720
+Anche la fattura del vettore mostra 500 dollari e i dettagli della spedizione coincidono.
+
+00:15:24.100 --> 00:15:27.480
+Quella fattura segue un percorso rapido nel processo di controllo perché il piano e la
+
+00:15:27.480 --> 00:15:28.400
+fattura concordano.
+
+00:15:28.800 --> 00:15:30.500
+Tuttavia le fatture non sempre corrispondono al piano.
+
+00:15:30.840 --> 00:15:33.940
+Forse la tabella delle tariffe era errate e il vettore ha fatturato un servizio diverso
+
+00:15:33.940 --> 00:15:37.500
+o il carico è cambiato dopo la pianificazione e la debito richiede spiegazioni.
+
+00:15:38.260 --> 00:15:41.740
+Senza un registro collegato, l'ufficio finanziario vede solo il numero di fatture importo dovendo
+
+00:15:41.740 --> 00:15:43.960
+poi chiedere al magazzino e al team di trasporto cosa sia successo.
+
+00:15:43.960 --> 00:15:48.080
+La gestione dei trasporti mantiene la decisione di trasporto collegata a tale controllo.
+
+00:15:48.500 --> 00:15:51.380
+Le regole possono confrontare la fattura del vettore con l'importo previsto e le informazioni
+
+00:15:51.380 --> 00:15:52.400
+sulla spedizione pianificata.
+
+00:15:52.780 --> 00:15:56.400
+Quando i dettagli rientrano nelle regole aziendali accettate la fattura può procedere.
+
+00:15:56.940 --> 00:16:00.160
+Quando i dettagli non coincidono il sistema ha segnato la differenza finché venga esaminata.
+
+00:16:00.860 --> 00:16:03.600
+Ciò significa che le persone non approvano il ciecamento e gli spese di trasporto.
+
+00:16:04.120 --> 00:16:08.080
+Un pianificatore di trasporti potrebbe dover confermare un servizio diverso oppure l'ufficio
+
+00:16:08.080 --> 00:16:10.820
+finanziario potrebbe dover chiedere il motivo di una debito extra.
+
+00:16:10.820 --> 00:16:13.880
+Il punto non è presumere che ogni discrepanza sia un errore giusto.
+
+00:16:14.500 --> 00:16:16.480
+Il punto è notare la discrepanza prima di effettuare il pagamento.
+
+00:16:16.900 --> 00:16:19.140
+Questo unisce le operazioni e la finanza attorno alla stessa spedizione.
+
+00:16:19.580 --> 00:16:21.340
+Il team di trasporto sceglie un vettore e un servizio.
+
+00:16:21.800 --> 00:16:23.360
+Tale scelta determina un costo previsto.
+
+00:16:23.960 --> 00:16:27.680
+Il magazzino spedisce la merce e l'ufficio finanziario verifica la fattura successiva rispetto
+
+00:16:27.680 --> 00:16:28.480
+al piano originale.
+
+00:16:29.480 --> 00:16:32.480
+Ogni team vede una parte diversa ma tutti esaminano informazioni collegate.
+
+00:16:32.840 --> 00:16:34.540
+Il processo integrato ha comunque un ambito ben definito.
+
+00:16:34.540 --> 00:16:38.600
+Le aziende che necessitano di un audio di trasporti su larga scala e altamente automatizzato
+
+00:16:38.600 --> 00:16:41.040
+spesso aggiungono un sistema di gestione dei trasporti di terze parti.
+
+00:16:41.500 --> 00:16:44.560
+Tali strumenti possono offrire connessioni più profonde con i vettori regoli di controllo
+
+00:16:44.560 --> 00:16:45.200
+più automatizzati.
+
+00:16:45.700 --> 00:16:49.340
+Il modulo integrato gestisce il costo pianificato e la riconciliazione all'interno della supply
+
+00:16:49.340 --> 00:16:53.240
+chain mentre un altro sistema può estendere tale lavoro quando l'azienda richiede di più.
+
+00:16:54.220 --> 00:16:57.880
+Mettendo insieme tutti questi elementi inizia ad apparire il quadro completo con i suoi ambiti
+
+00:16:57.880 --> 00:16:59.460
+di applicazione e i suoi limiti.
+
+00:16:59.460 --> 00:17:02.520
+Allora dove si trova esattamente la gestione dei trasporti?
+
+00:17:02.860 --> 00:17:07.060
+Fa parte di Dynamics 365 supply chain management che gira sulle app finance and operations.
+
+00:17:07.840 --> 00:17:08.400
+E' lì che risiede.
+
+00:17:08.720 --> 00:17:09.300
+Ecco a chi si è dato.
+
+00:17:09.980 --> 00:17:13.380
+Alle aziende che necessitano di un modo strutturato per pianificare consegne in arrivo,
+
+00:17:13.640 --> 00:17:17.940
+spedizioni clienti, trasferimenti di scorte tra sedi usando i propri vettori, tabelle tariffe
+
+00:17:17.940 --> 00:17:19.080
+e regole di carico.
+
+00:17:19.900 --> 00:17:21.460
+Ora chiudiamo un comune punto di confusione.
+
+00:17:22.160 --> 00:17:23.240
+Business Central è diverso.
+
+00:17:23.620 --> 00:17:26.700
+Business Central non include questo modulo di gestione dei trasporti integrati.
+
+00:17:26.700 --> 00:17:30.400
+Se usi Business Central e ti serve pianificazione dei trasporti, devi cercare un sistema di
+
+00:17:30.400 --> 00:17:31.700
+gestione dei trasporti di terze parti.
+
+00:17:32.000 --> 00:17:32.440
+Questo è il limite.
+
+00:17:32.860 --> 00:17:34.620
+Manteniamo chiaro il limite anche dall'altro lato.
+
+00:17:35.140 --> 00:17:38.580
+Il modulo integrato non sostituisce ogni portale vettori, servizio traffico live o
+
+00:17:38.580 --> 00:17:39.760
+strumento di tracciamento avanzato.
+
+00:17:40.300 --> 00:17:44.160
+Quando un'azienda ha bisogno di tariffe in tempo reale, più scelta di vettori o tracking
+
+00:17:44.160 --> 00:17:46.700
+dettagliato dopo la partenza collega un TMS esterno.
+
+00:17:47.720 --> 00:17:49.220
+Quegli strumenti gestiscono l'attività esterna.
+
+00:17:49.620 --> 00:17:50.720
+Ripensa all'edificio per ufficio.
+
+00:17:51.220 --> 00:17:53.820
+La gestione dei trasporti, lo sportello trasporti all'interno di quell'edificio.
+
+00:17:53.820 --> 00:17:56.380
+Si collega agli ordini, al lavoro di magazzino, alla finanza.
+
+00:17:57.100 --> 00:17:58.800
+Mantiene unito il piano di trasporto dell'azienda.
+
+00:17:59.700 --> 00:18:02.400
+Gli strumenti esterni dei vettori gestiscono l'attività oltre quello sportello.
+
+00:18:02.820 --> 00:18:04.020
+Due livelli diversi che lavorano insieme.
+
+00:18:06.980 --> 00:18:07.940
+Prossima pillola di conoscenza.
+
+00:18:08.740 --> 00:18:10.080
+Ecco il modo più semplice per pensarci.
+
+00:18:10.460 --> 00:18:13.420
+La gestione dei trasporti trasforma gli ordini in movimenti pianificati di merci.
+
+00:18:13.960 --> 00:18:17.140
+Poi collega quel movimento ai costi di trasporto che l'azienda verifica in seguito.
+
+00:18:17.640 --> 00:18:18.400
+Questo è il ciclo completo.
+
+00:18:19.060 --> 00:18:20.860
+Iscriviti sulla tua piattaforma podcast preferita.
+
+00:18:20.860 --> 00:18:25.660
+Condividi questa pillola di conoscenza con chi sta imparando Dynamics 365 Supply Chain Management.
+
+00:18:26.380 --> 00:18:28.640
+Poi esplora i nostri episodi su magazzino e inventario.
+
+00:18:29.220 --> 00:18:31.840
+Ogni carico dipende sempre dalle scorte dietro la porta del magazzino.

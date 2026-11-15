@@ -30,6 +30,7 @@ import { handleClaimVerify } from "./claimverify.js";
 import { handleOrgPair } from "./orgpair.js";
 import { handleEntFill } from "./entfill.js";
 import { handleEventImport, IMPORT_ROUTE, runEventImport } from "./eventimport.js";
+import { handleEventEntity, ENTITY_ROUTE, suggestEventEntities } from "./evententity.js";
 import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, purgeEntityClaimReview } from "./events.js";
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
@@ -229,6 +230,7 @@ async function deleteAccount(env, id) {
   await db.batch([
     db.prepare("DELETE FROM entity_claim_review WHERE eid IN (SELECT eid FROM entity_claims WHERE user_id=?)").bind(id),
     db.prepare("DELETE FROM entity_claim_mail WHERE claim_user=?").bind(id),
+    db.prepare("DELETE FROM entity_claim_evidence WHERE user_id=?").bind(id),   // Adress-Nachweis (0046): Geschaeftsadresse, Notiz, Beleg-Link
     db.prepare("DELETE FROM entity_claims WHERE user_id=? AND status<>'verified'").bind(id),
     db.prepare("DELETE FROM likes WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
     db.prepare("DELETE FROM reports WHERE user_id=? OR comment_id IN (SELECT id FROM comments WHERE user_id=?)").bind(id, id),
@@ -417,7 +419,8 @@ async function api(env, request, url, path, asUser, ctx) {
   if (/^\/api\/points(\/|$)/.test(path) || path.startsWith("/api/admin/points/")) { const p = await handlePoints(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/msg(\/|$)/.test(path)) { const p = await handleMessages(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/admin/org-pair") { const q = await handleOrgPair(env, request, url, path, user, J); if (q) return q; }
-  if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
+  if (/^\/api\/entity\/claim\/(domains|domain|forward|confirm|evidence)$/.test(path)) return handleClaimVerify(env, request, url, path, user, J);
+  if (ENTITY_ROUTE.test(path)) { const p = await handleEventEntity(env, request, url, path, user, J); if (p) return p; }   // Event <-> Event-Entitaet (evententity.js)
   if (IMPORT_ROUTE.test(path)) { const p = await handleEventImport(env, request, url, path, user, J); if (p) return p; }
   if (/^\/api\/(events?|speaker)(\/|$)/.test(path) || /^\/api\/entity\/claims?(\/|$)/.test(path) || /^\/api\/admin\/entity\/claims?$/.test(path)) { const p = await handleEvents(env, request, url, path, user, J); if (p) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return p; } }
   if (path === "/api/ui-i18n" && request.method === "GET") return J(await uiI18nExport(env), 200, { "cache-control": "public, max-age=300" });
@@ -622,6 +625,8 @@ export default {
       // Event-Import (Community Days, Sessionize) zur Minute 15 und 45: in diesem Aufruf, also nie im Aufruf der Digests (0 6 und */30) und der uebrigen
       // Aufgaben, und erst NACH den Benachrichtigungen (sie bekommen ihr Kontingent zuerst). Jeder Lauf ist hart gedeckelt (eventimport.js CAP:
       // rund 100 D1-Aufrufe und 12 Abrufe); was nicht hineinpasst, folgt im naechsten.
+      // Event <-> Event-Entitaet: Namensvergleich fuer neue Events (evententity.js suggestEventEntities, wenige D1-Aufrufe); eigene Aufgabe, damit die Zeile des Event-Imports unveraendert bleibt
+      if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventEntity", () => suggestEventEntities(env))));
       if (tick.getUTCMinutes() % 30 === 15) ctx.waitUntil(reminders.catch(() => 0).then(() => track(env, "eventImport", () => runEventImport(env))));
       return;
     }

@@ -1,7 +1,9 @@
 """Uebersetzungsstatus fuer die Verwaltung (site_trstatus.py): Blog-Artikel, Entitaeten in allen Sprachen, Video-Artikel. Ohne Netz, mit eigenem Wurzelordner;
-dazu eine Pruefung gegen die echten Repo-Daten (Zahlen passen zu data/blog_i18n/status.json)."""
+dazu eine Pruefung gegen die echten Repo-Daten (Zahlen passen zu data/blog_i18n/status.json). Rueckfall aus dem Seitenbau: alle frueheren Beitraege und die
+Content-Pakete bekommen eine Zeile, auch wenn sie schon in der Datenbank stehen."""
 import gzip, json, tempfile, unittest
 from pathlib import Path
+from unittest import mock
 
 import site_trstatus as S
 
@@ -80,6 +82,30 @@ class Fake(unittest.TestCase):
         # translate_blog.posts() ist hier nicht lesbar (leerer Wurzelordner, andere Quelle): sonst gilt die uebergebene Liste
         out = {}; S.build(lambda n, c: out.__setitem__(n, c), "d", [], [{"slug": "x", "title": "X"}], [])
         self.assertEqual([r["id"] for r in json.loads(out["translation-status.json"])["rows"]], ["x"])
+
+
+class Rows(unittest.TestCase):
+    def test_blog_rows_from_sources(self):
+        # Rueckfall (translate_blog.posts() leer): die vom Seitenbau uebergebenen frueheren Beitraege und Content-Pakete; Entitaeten und Video-Artikel hier ausgeblendet
+        out = {}
+        with mock.patch.object(S, "blog_done", lambda: {"de": ["alt-1", "content/neu"], "fr": ["alt-1"]}), \
+             mock.patch.object(S, "blog_sources", lambda: []), mock.patch.object(S, "article_rows", lambda: []):
+            S.build(lambda n, c: out.__setitem__(n, c), "2026-11-12", [], [{"slug": "alt-1", "title": "A"}, {"slug": "alt-2", "title": "B"}], [], [{"slug": "content/neu", "title": "N"}])
+        rows = {r["id"]: r for r in json.loads(out["translation-status.json"])["rows"]}
+        self.assertEqual(set(rows), {"alt-1", "alt-2", "content/neu"})
+        self.assertEqual(rows["alt-1"]["langs"], ["de", "fr"])
+        self.assertEqual(rows["alt-2"]["langs"], [])
+        self.assertEqual(rows["content/neu"]["langs"], ["de"])
+        self.assertTrue(all(r["k"] == "lblog" for r in rows.values()))
+
+    def test_sources_win_over_fallback(self):
+        # translate_blog.posts() lesbar: nur diese Liste, die uebergebenen Listen werden nicht zusaetzlich gezaehlt (keine Doppelzeilen)
+        out = {}
+        with mock.patch.object(S, "blog_done", lambda: {}), mock.patch.object(S, "blog_sources", lambda: [{"slug": "alt-1", "title": "A"}, {"slug": "content/neu", "title": "N"}]), \
+             mock.patch.object(S, "article_rows", lambda: []):
+            S.build(lambda n, c: out.__setitem__(n, c), "2026-11-12", [], [{"slug": "alt-1", "title": "A"}], [], [{"slug": "content/neu", "title": "N"}])
+        ids = [r["id"] for r in json.loads(out["translation-status.json"])["rows"]]
+        self.assertEqual(ids, ["alt-1", "content/neu"])
 
 
 class RealData(unittest.TestCase):

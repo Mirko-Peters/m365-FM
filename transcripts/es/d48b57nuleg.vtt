@@ -1,0 +1,862 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.480
+El tema de hoy es algo que casi todos los que trabajan con datos han escuchado, pero pocos comprenden realmente.
+
+00:00:06.120 --> 00:00:07.100
+Microsoft Fabric One Lake.
+
+00:00:07.720 --> 00:00:12.560
+Probablemente lo haya visto en el marketing de Microsoft o haya escuchado que lo llaman el lago de datos unificado para toda su organización.
+
+00:00:13.060 --> 00:00:14.180
+¿Pero qué significa eso en realidad?
+
+00:00:14.780 --> 00:00:17.600
+Solo otro contenedor de almacenamiento es algo fundamentalmente diferente.
+
+00:00:17.960 --> 00:00:18.940
+Aquí está la definición más sencilla.
+
+00:00:19.520 --> 00:00:22.680
+One Lake es un lago de datos lógico único que se sitúa en el centro de Microsoft Fabric.
+
+00:00:23.260 --> 00:00:27.840
+Todos los servicios de Fabric, Lake House, Warehouse, Event House y Power BI almacenan sus datos aquí.
+
+00:00:28.220 --> 00:00:28.880
+Y la regla clave simple.
+
+00:00:28.880 --> 00:00:32.220
+Una copia física de los datos es accesible para muchos motores diferentes.
+
+00:00:32.700 --> 00:00:34.380
+Se acabó el copiar datos de una herramienta a otra.
+
+00:00:34.660 --> 00:00:36.880
+Se acabó el preguntarse qué versión de un informe es la correcta.
+
+00:00:37.240 --> 00:00:44.340
+Al final de este episodio, entenderá qué es One Lake realmente, cómo eliminar la duplicidad de datos y por qué cambia las reglas del juego para Power BI, la ingeniería de datos y la EI.
+
+00:00:45.300 --> 00:00:47.860
+Comencemos con el problema que One Lake fue diseñado para resolver.
+
+00:00:49.000 --> 00:00:49.320
+El problema.
+
+00:00:49.820 --> 00:00:51.120
+Cada departamento tiene su propio lago.
+
+00:00:51.460 --> 00:00:52.740
+Imagine que trabaja en una empresa media.
+
+00:00:53.320 --> 00:00:55.400
+Su equipo de ventas usa un sistema CRM para los datos.
+
+00:00:55.520 --> 00:00:58.240
+Su equipo financiero maneja el ERP para la facturación y los recibos.
+
+00:00:58.700 --> 00:01:01.020
+Su equipo de marketing extrae datos de sus herramientas de campaña.
+
+00:01:01.440 --> 00:01:04.760
+Su equipo de ingeniería de datos gestiona un almacén de datos para la generación de informes.
+
+00:01:05.000 --> 00:01:06.180
+Entonces, eso es en lo que quiero que piense.
+
+00:01:06.620 --> 00:01:09.120
+¿Cuántas copias de los mismos datos de cliente existen en estos sistemas?
+
+00:01:09.840 --> 00:01:11.720
+En la mayoría de las empresas, la respuesta es 4 o 5.
+
+00:01:12.140 --> 00:01:12.900
+CRM los almacena.
+
+00:01:13.240 --> 00:01:13.800
+Los almacena.
+
+00:01:14.240 --> 00:01:16.160
+Marketing los exporta a su herramienta de análisis.
+
+00:01:16.820 --> 00:01:18.980
+Alguien en finanzas crea una hoja de cálculo desde el ERP.
+
+00:01:18.980 --> 00:01:23.140
+Y el equipo de ingeniería de datos los copia al almacén para que Power BI pueda leerlos.
+
+00:01:23.820 --> 00:01:28.220
+Es el mismo ID cliente, el mismo importe de ventas y la misma fecha de factura almacenados en 5 lugares distintos.
+
+00:01:28.760 --> 00:01:30.100
+Esto no sucede porque las personas se han descuento.
+
+00:01:30.380 --> 00:01:32.280
+Es porque las herramientas antiguas no se comunicaban entre ellos.
+
+00:01:32.700 --> 00:01:37.000
+Si quería ejecutar un informe que combinara datos de ventas del CRM con datos financieros del ERP,
+
+00:01:37.220 --> 00:01:39.500
+tenía que copiar ambos en algo que pudiera leerlos juntos.
+
+00:01:40.500 --> 00:01:44.380
+Eso significaba crear tuberías, programar tareas y esperar que nada se rompiera durante la noche.
+
+00:01:44.380 --> 00:01:46.000
+Los costos ocultos se acumulan rápido.
+
+00:01:46.360 --> 00:01:49.060
+La factura de almacenamiento crece porque está pagando 5 veces por los mismos datos.
+
+00:01:49.360 --> 00:01:52.220
+Los informes quedan obsoletos porque una copia se actualiza mientras otra no.
+
+00:01:52.700 --> 00:01:54.580
+Y entonces alguien le hace la pregunta que nadie quiere responder.
+
+00:01:55.080 --> 00:01:55.940
+¿Qué versión le correcta?
+
+00:01:56.420 --> 00:01:59.940
+Esa confusión era confianza en los datos y, una vez que la confianza desaparece,
+
+00:02:00.240 --> 00:02:02.300
+la gente deja de usar la plataforma de análisis por completo.
+
+00:02:03.140 --> 00:02:05.500
+Así que Microsoft observó este caos y planteó una pregunta simple.
+
+00:02:05.680 --> 00:02:08.360
+¿Qué tal si pudieras tener una copia de tus datos que cada herramienta pudiera leer?
+
+00:02:08.800 --> 00:02:11.520
+¿Sin duplicado, sin confusión, una única fuente de verdad?
+
+00:02:12.420 --> 00:02:13.660
+¿Qué es exactamente OneLay?
+
+00:02:14.380 --> 00:02:16.180
+OneLay que es la respuesta de Microsoft a esa pregunta.
+
+00:02:16.460 --> 00:02:18.980
+Es un único lago de datos lógico para toda tu organización.
+
+00:02:19.420 --> 00:02:20.760
+La frase clave a recordar es esta.
+
+00:02:21.260 --> 00:02:23.240
+Un lago por inquilino, no un lago por equipo.
+
+00:02:24.100 --> 00:02:27.180
+Internamente, OneLay que está construido sobre Azure Data Lake Storage and Dove.
+
+00:02:27.660 --> 00:02:32.120
+La misma tecnología, las mismas API, pero Microsoft la ha reempaquetado como un servicio SaaS totalmente administrado.
+
+00:02:32.460 --> 00:02:33.700
+No creas cuentas de almacenamiento.
+
+00:02:33.960 --> 00:02:34.980
+No administras contenedores.
+
+00:02:35.220 --> 00:02:37.120
+No configuras claves de acceso, simplemente lo usas.
+
+00:02:37.420 --> 00:02:39.080
+Piénsalo como OneDrive para los datos de empresa.
+
+00:02:39.640 --> 00:02:43.400
+OneDrive te da un lugar único para tus archivos personales, documentos, fotos y hojas de cálculo.
+
+00:02:43.400 --> 00:02:45.500
+No piensas en dónde están almacenados físicamente.
+
+00:02:45.940 --> 00:02:47.060
+Solo lo sabes y trabajas.
+
+00:02:47.440 --> 00:02:49.820
+OneLay hace lo mismo, pero para los datos de tu organización.
+
+00:02:50.480 --> 00:02:53.820
+Ofrece a cada equipo, cada proyecto y cada carga de trabajo un grupo de almacenamiento compartido.
+
+00:02:54.180 --> 00:02:55.320
+Ahora, aquí hay una distinción importante.
+
+00:02:55.800 --> 00:02:57.060
+OneLay es lógico, no físico.
+
+00:02:57.660 --> 00:03:00.720
+Internamente, puede abarcar múltiples cuentas de almacenamiento en diferentes regiones.
+
+00:03:00.860 --> 00:03:02.300
+Pero para ti parece un solo grupo gigante.
+
+00:03:02.820 --> 00:03:05.340
+No te importa qué servidor contiene los archivos, solo ves tus datos.
+
+00:03:05.340 --> 00:03:07.500
+Cada servicio de fábrica almacena sus datos.
+
+00:03:07.760 --> 00:03:09.920
+Cuando creas un Lake House, los datos residen en OneLay.
+
+00:03:10.140 --> 00:03:12.180
+Cuando construyes un almacén, las tablas residen en OneLay.
+
+00:03:12.560 --> 00:03:16.240
+Cuando ejecutas un informe de Power BI, si usa el modo DirectLake, lee directamente desde OneLay.
+
+00:03:16.780 --> 00:03:20.240
+Incluso EventHouse, el almacén de análisis en tiempo real puede exponer sus datos en OneLay.
+
+00:03:20.900 --> 00:03:24.500
+Todo apunta al mismo lugar y el formato de datos predeterminado es Delta Parquet.
+
+00:03:25.020 --> 00:03:26.840
+Es un formato abierto, no una exclusividad a Microsoft.
+
+00:03:27.300 --> 00:03:29.080
+Databricks lo usa, los motores de Spark lo leen.
+
+00:03:29.480 --> 00:03:31.080
+Herramientas como Pandas y Poder los pueden trabajar con.
+
+00:03:31.080 --> 00:03:33.600
+Sí que tus datos no están atrapados dentro del mundo de Microsoft.
+
+00:03:34.000 --> 00:03:34.920
+Es abierto y portátil.
+
+00:03:35.160 --> 00:03:36.880
+Pero la verdadera magia no es el almacenamiento.
+
+00:03:36.980 --> 00:03:39.480
+Es como OneLay elimina la necesidad de copiar datos en primer lugar.
+
+00:03:40.580 --> 00:03:41.540
+Principio de una sola copia.
+
+00:03:42.000 --> 00:03:45.100
+Ahora, aquí está la idea central que hace a OneLay diferente de todo lo anterior.
+
+00:03:45.620 --> 00:03:47.440
+Se llama el principio de una sola copia y es simple.
+
+00:03:47.720 --> 00:03:50.560
+Una copia física de los datos, accesible por muchos motores diferentes.
+
+00:03:50.920 --> 00:03:52.240
+Déjame mostrarte lo que eso significa.
+
+00:03:52.840 --> 00:03:54.800
+Supongamos que tienes una tabla de datos de ventas en OneLay.
+
+00:03:55.040 --> 00:03:56.880
+Un ingeniero de datos ejecuta un cuaderno de SparkParent.
+
+00:03:57.320 --> 00:03:59.840
+Una lista de negocios escribe una consulta TSQL para agregar.
+
+00:03:59.840 --> 00:04:02.380
+Y un informe de Power BI la lee para un panel de control.
+
+00:04:02.620 --> 00:04:03.860
+Los tres ocurren al mismo tiempo.
+
+00:04:04.240 --> 00:04:05.200
+Los tres leen el mismo archivo.
+
+00:04:05.540 --> 00:04:06.140
+Nadie copió nada.
+
+00:04:07.200 --> 00:04:08.460
+En el pasado eso nunca ocurría.
+
+00:04:08.980 --> 00:04:10.880
+Copiabas datos del DataLay a un almacén.
+
+00:04:11.420 --> 00:04:13.740
+Luego los copiabas del almacén a un modelo semántico.
+
+00:04:14.220 --> 00:04:15.500
+Después actualizabas el informe.
+
+00:04:15.780 --> 00:04:17.080
+Son tres copias de los mismos datos.
+
+00:04:17.540 --> 00:04:18.800
+Cada uno consume tiempo de almacenamiento.
+
+00:04:19.380 --> 00:04:21.120
+Y si un paso fallaba, tus números eran incorrectos.
+
+00:04:21.420 --> 00:04:22.620
+Una sola copia elimina todo eso.
+
+00:04:23.020 --> 00:04:24.120
+Los datos reciben OneLay una vez.
+
+00:04:24.120 --> 00:04:27.700
+Los motores Spark, SQL, Power BI los leen directamente.
+
+00:04:28.200 --> 00:04:28.620
+Sin movimiento.
+
+00:04:29.040 --> 00:04:29.640
+Sin duplicación.
+
+00:04:30.060 --> 00:04:31.060
+Sin problema de sincronización.
+
+00:04:31.480 --> 00:04:32.240
+El ahorro de costo es real.
+
+00:04:32.740 --> 00:04:35.200
+Menos almacenamiento porque no pagas cinco veces por los mismos datos.
+
+00:04:35.840 --> 00:04:39.080
+Menos CTL porque no creas tuberías solo para mover datos entre herramientas.
+
+00:04:40.100 --> 00:04:42.480
+Menos mantenimiento porque no hay nada que se rompa entre copias.
+
+00:04:43.100 --> 00:04:44.340
+Y el beneficio de la frescura es enorme.
+
+00:04:44.940 --> 00:04:46.460
+Una copia significa una única fuente de verdad.
+
+00:04:46.820 --> 00:04:49.880
+Cuando los datos se actualizan, cada informe ve la actualización de inmediato.
+
+00:04:49.880 --> 00:04:53.380
+Se acabo de preguntar, ¿este informe usa datos de la semana pasada o de esta?
+
+00:04:54.060 --> 00:04:55.680
+Siempre son los mismos datos en todas partes.
+
+00:04:56.140 --> 00:04:58.320
+Quizá piense, bueno, no es esto solo hacer data lake story.
+
+00:04:58.820 --> 00:04:59.200
+No exactamente.
+
+00:04:59.700 --> 00:05:00.500
+ADLS es un servicio.
+
+00:05:00.960 --> 00:05:01.780
+Creas cuentas de almacenamiento.
+
+00:05:02.240 --> 00:05:03.080
+Administra contenedores.
+
+00:05:03.440 --> 00:05:04.280
+Configuras claves de acceso.
+
+00:05:04.860 --> 00:05:06.020
+Decides qué región contiene qué.
+
+00:05:06.420 --> 00:05:07.800
+Es flexible, pero también requiere trabajo.
+
+00:05:08.380 --> 00:05:09.480
+OneLay, que es un servicio SaaS.
+
+00:05:09.860 --> 00:05:10.780
+No creas cuentas de almacenamiento.
+
+00:05:11.280 --> 00:05:12.280
+No administras contenedores.
+
+00:05:12.620 --> 00:05:13.400
+Simplemente lo usas.
+
+00:05:13.680 --> 00:05:15.740
+La infraestructura subyacente se maneja por ti.
+
+00:05:16.420 --> 00:05:18.600
+Una copia es ideal para datos dentro de Fabric.
+
+00:05:18.600 --> 00:05:20.500
+¿Pero qué pasa con los datos en otro lugar?
+
+00:05:21.080 --> 00:05:21.720
+Accesos directos.
+
+00:05:22.120 --> 00:05:23.100
+Deja los datos donde residen.
+
+00:05:23.680 --> 00:05:24.940
+Aquí es donde entran los accesos directos.
+
+00:05:25.240 --> 00:05:26.520
+Un acceso directo es un puntero virtual.
+
+00:05:26.940 --> 00:05:28.640
+Piénsalo como nace simbólico para tu data lake.
+
+00:05:29.280 --> 00:05:33.940
+Te permite acceder a datos que viven fuera de OneLay sin moverlos, ni copiarlos, ni copiar.
+
+00:05:34.680 --> 00:05:35.380
+Así es como funciona.
+
+00:05:35.680 --> 00:05:37.840
+Creas un acceso directo dentro de un lake house o un almacén.
+
+00:05:38.400 --> 00:05:40.800
+Y ese acceso directo apunta a un archivo o carpeta en otro lugar.
+
+00:05:41.200 --> 00:05:45.020
+Podría ser en Azure Data Lake Storage, un bucket de Amazon S3, Google Cloud Storage,
+
+00:05:45.020 --> 00:05:47.320
+o incluso otro espacio de trabajo de Fabric, Wave.
+
+00:05:47.320 --> 00:05:50.860
+Los datos permanecen donde están, pero desde Fabric parecen estar en OneLay.
+
+00:05:51.380 --> 00:05:52.920
+Déjame darte un escenario real.
+
+00:05:53.500 --> 00:05:58.540
+Tu equipo de ventas ha realizado su analítica en AWS por años, así que todos sus datos residen en buckets S.
+
+00:05:59.000 --> 00:06:03.920
+Tu equipo de finanzas usa Fabric y Power BI y necesitan combinar datos de ventas con datos financieros.
+
+00:06:04.800 --> 00:06:10.720
+En el viejo mundo exportabas todo desde S3, lo subías a Azure y creabas una canalización para mantenerlo sincronizado y esperabas que nada se rompiera.
+
+00:06:10.720 --> 00:06:14.460
+Con los accesos directos, creas un acceso directo de tu lake house al bucket de S3.
+
+00:06:14.960 --> 00:06:21.800
+Los datos permanecen en AWS, pero el equipo financiero puede consultarlos en Power BI como si estuvieran en OneLay, sin exportaciones, sin subidas, sin preocuparse por canalizaciones.
+
+00:06:22.120 --> 00:06:23.600
+Los accesos directos también funcionan en Internet.
+
+00:06:24.000 --> 00:06:28.600
+Si un equipo tiene un conjunto de datos seleccionado en su espacio de trabajo, otro equipo puede crear un acceso directo a él.
+
+00:06:28.600 --> 00:06:30.380
+Sin copias, sin duplicaciones.
+
+00:06:30.840 --> 00:06:34.320
+Los datos permanecen en el espacio de trabajo original y todos los demás simplemente hacen referencia a él.
+
+00:06:34.520 --> 00:06:35.980
+Hay una limitación que debes comprender.
+
+00:06:36.860 --> 00:06:40.760
+Los accesos directos no copian datos, por lo que el rendimiento de las consultas depende de la velocidad del sistema de red.
+
+00:06:41.180 --> 00:06:46.140
+Si creas un acceso directo a un bucket de S3 al otro lado del mundo, tus consultas serán más lentas que si los datos fueran locales.
+
+00:06:46.480 --> 00:06:49.480
+Para datos de acceso frecuente, considera usar la replicación Mirroring en su lugar.
+
+00:06:50.080 --> 00:06:51.280
+Y eso nos lleva a nuestro siguiente tema.
+
+00:06:51.540 --> 00:06:52.060
+La replicación.
+
+00:06:52.520 --> 00:06:54.000
+Trae datos de bases de datos automáticamente.
+
+00:06:54.000 --> 00:06:58.960
+Los accesos directos cubren muy bien el almacenamiento de archivos externo, pero ¿qué pasa con tus bases de datos existentes?
+
+00:06:59.420 --> 00:07:03.060
+Aquellas que ejecutan tu ERP, tu CRM, tus aplicaciones operativas.
+
+00:07:03.460 --> 00:07:04.580
+Ahí es donde entra en juego la replicación.
+
+00:07:04.980 --> 00:07:09.800
+La replicación es una forma de llevar datos de bases de datos a One Lake en tiempo casi real sin crear una sola canalización.
+
+00:07:10.160 --> 00:07:16.380
+Apuntas Fabric a tu base de datos y él se encarga del resto, creando una copia incremental automática de los datos en formato Delta Parquet dentro de One Lake,
+
+00:07:16.480 --> 00:07:19.300
+manteniendo esa copia actualizada a medida que ocurren cambios en el origen.
+
+00:07:19.300 --> 00:07:27.340
+Las fuentes admitidas incluyen Azure SQL Database, SQL Server Local, Cosmos DB y otras, y Microsoft agrega más con el tiempo,
+
+00:07:28.000 --> 00:07:33.020
+pero el escenario más común es tu base de datos crítica para el negocio, donde se ejecuta tu ERP o tu aplicación de línea de negocio.
+
+00:07:33.520 --> 00:07:34.140
+Así es como funciona.
+
+00:07:34.640 --> 00:07:41.080
+Habilitas la replicación en una base de datos y Fabric lee el registro de cambios, las inserciones, actualizaciones, eliminaciones y replique sus cambios en One Lake.
+
+00:07:41.800 --> 00:07:43.780
+La primera sincronización copia el conjunto de datos.
+
+00:07:43.780 --> 00:07:48.100
+Después de eso, es incremental, moviendo solo las filas modificadas.
+
+00:07:48.560 --> 00:07:52.340
+Los datos llegan en formato Delta Parquet, listos para ser consultados por cualquier motor de fábrica.
+
+00:07:52.680 --> 00:07:54.540
+Aquí está la diferencia clave con respecto a los accesos directos.
+
+00:07:54.880 --> 00:07:57.020
+Los accesos directos no copian datos, solo apuntan a ellos.
+
+00:07:57.500 --> 00:08:00.520
+La replicación sí copia los datos, por lo que residen físicamente en One Lake,
+
+00:08:00.800 --> 00:08:04.780
+y el rendimiento de las consultas es rápido sin importar qué tan lenta sea la base de datos de origen.
+
+00:08:04.780 --> 00:08:09.700
+La contrapartida es que almacenas una copia, pero el beneficio es un acceso en tiempo casi real,
+
+00:08:09.800 --> 00:08:13.120
+sin canalizaciones que crear, programaciones que gestionar, ni mantenimiento del que preocuparse.
+
+00:08:13.760 --> 00:08:15.240
+Permítame darles un caso de uso concreto.
+
+00:08:15.560 --> 00:08:22.040
+Su empresa ejecuta un ERP en SQL Server que contiene todos sus datos financieros, facturas, pagos y contabilidad general.
+
+00:08:22.620 --> 00:08:27.760
+En el viejo mundo uno creaba un trabajo de tele que se ejecutaba cada noche, extraía los datos, los transformaba y los cargaba en un almacén.
+
+00:08:28.540 --> 00:08:32.340
+Su trabajo fallaba, alguien tenía que arreglarlo, y los datos siempre tenían al menos un día de antigüedad.
+
+00:08:32.340 --> 00:08:36.800
+Con la duplicación, usted la habilita una vez y Fabric replica los datos en One Lake de forma continua.
+
+00:08:37.460 --> 00:08:42.980
+Sus informes de Power BI leen directamente de One Lake y ven datos con minutos de antigüedad, no horas o días, y nunca toca la canalización.
+
+00:08:43.440 --> 00:08:47.380
+Ahora usted tiene datos en One Lake provenientes de accesos directos, de la duplicación y de cargas directas.
+
+00:08:47.740 --> 00:08:48.480
+¿Cómo se utiliza en REN?
+
+00:08:49.080 --> 00:08:50.540
+One Lake y los tres almacenas datos.
+
+00:08:51.120 --> 00:08:53.940
+Bien, One Lake es la capa de almacenamiento, el lugar donde residen todos sus archivos.
+
+00:08:54.240 --> 00:08:56.840
+Pero aquí está el punto. Usted no trabaja realmente con One Lake de forma directa.
+
+00:08:57.200 --> 00:09:00.160
+En su lugar, interactúa con él a través de lo que llamamos almacenes de datos,
+
+00:09:00.160 --> 00:09:03.740
+que son interfaces que ofrecen distintas formas de trabajar con los mismos datos subyacentes.
+
+00:09:04.680 --> 00:09:08.260
+Existen tres almacenes de datos principales en Fabric, Lakehouse, Warehouse y Benhub.
+
+00:09:08.620 --> 00:09:11.800
+Todos almacenan sus datos en el mismo One Lake, pero cada uno cumple una función diferente.
+
+00:09:12.740 --> 00:09:18.100
+Comencemos con Lakehouse, el almacén de datos flexible que acepta archivos como CSV, JSON e imágenes, junto con tablas Delta.
+
+00:09:18.560 --> 00:09:23.140
+Lo utiliza cuando realiza ingeniería de datos, aprendizaje automático o cuando descarga datos sin procesar de sistemas de origen.
+
+00:09:23.440 --> 00:09:25.860
+Es un banco de trabajo donde usted limpia, transforma y prepara los datos.
+
+00:09:25.860 --> 00:09:30.660
+Si está construyendo una arquitectura de MediJone con capas de bronce, plata y oro, el Lakehouse es donde eso sucede.
+
+00:09:31.200 --> 00:09:36.080
+Puede acceder a él mediante Notebooks de Spark, a través del punto de conexión de análisis SQL para consultas de solo lectura.
+
+00:09:36.940 --> 00:09:39.100
+Siguiente es Warehouse, el almacén de datos estructurado.
+
+00:09:39.460 --> 00:09:44.780
+Le brinda soporte completo de lectura y escritura de SQL, por lo que puede crear tablas, vistas, procedimientos almacenados y funciones,
+
+00:09:44.880 --> 00:09:47.700
+y ejecutar sentencias de inserción, actualización y eliminación.
+
+00:09:48.540 --> 00:09:52.020
+Se siente como una base de datos tradicional de SQL Server porque está diseñado para quienes piensan en SQL.
+
+00:09:52.020 --> 00:09:57.960
+Utiliza Warehouse cuando crea informes de BI, ejecute agregaciones complejas o migre desde un almacén de datos existente,
+
+00:09:58.480 --> 00:10:00.020
+bien sea en él como la capa de oro para los informes empresariales.
+
+00:10:00.860 --> 00:10:04.300
+Luego está Eventhouse, el almacén de datos en tiempo real construido sobre el motor Custo,
+
+00:10:04.380 --> 00:10:06.140
+la misma tecnología detrás de Azure.explorer.
+
+00:10:06.460 --> 00:10:11.680
+Maneja datos en streaming, registros, telemetría de TI, flujo de clics, cualquier cosa que llegue rápido y necesite consultarse de inmediato.
+
+00:10:12.240 --> 00:10:14.500
+Usted realiza consultas con KQL, lenguaje de consulta de Custo.
+
+00:10:14.500 --> 00:10:20.320
+Y cuando habilitas la disponibilidad en OneLake, esos datos de eventos se vuelven accesibles para Lakehouse y Warehouse como tablas Delta.
+
+00:10:20.980 --> 00:10:22.200
+Así que esto es lo que necesitas entender.
+
+00:10:22.640 --> 00:10:24.440
+Los tres almacenan sus datos en el mismo OneLake.
+
+00:10:24.880 --> 00:10:27.480
+Una tabla creada en un Lakehouse puede ser leída por una consulta de Warehouse.
+
+00:10:27.760 --> 00:10:30.180
+Una tabla en un Warehouse puede ser accedida desde un cuaderno de Spark.
+
+00:10:30.640 --> 00:10:34.020
+Los datos ingeridos en Eventhouse pueden exponerse como tablas Delta para Power BI.
+
+00:10:34.400 --> 00:10:37.280
+No son bases de datos separadas, son vistas diferentes del mismo lago de datos.
+
+00:10:37.620 --> 00:10:38.520
+Muchas personas se equivocan.
+
+00:10:38.920 --> 00:10:42.040
+Piensan que Lakehouse, Warehouse y Eventhouse son productos que compiten, pero no es así.
+
+00:10:42.040 --> 00:10:45.380
+En realidad, usan los tres porque cada uno resuelve un problema diferente.
+
+00:10:46.040 --> 00:10:50.320
+Lakehouse para ingeniería de datos, Warehouse para vía, Eventhouse para tiempo real y todos comparten el mismo almacenamiento.
+
+00:10:51.000 --> 00:10:53.960
+OneLake maneja el almacenamiento y los almacenes de datos manejan el acceso.
+
+00:10:54.620 --> 00:10:55.460
+Pero ¿quién puede ver qué?
+
+00:10:56.440 --> 00:10:57.900
+Seguridad y gobernanza en OneLake.
+
+00:10:58.400 --> 00:11:01.280
+Debido a que todos tus datos viven en un solo lugar, la seguridad se vuelve más sencilla.
+
+00:11:01.820 --> 00:11:04.620
+Gestionarse el acceso en un solo sitio en lugar de 10 sistemas diferentes.
+
+00:11:05.400 --> 00:11:09.220
+Ya no hay que configurar permisos en el CRM, luego otra vez en el Warehouse y otra vez en Power BI.
+
+00:11:09.520 --> 00:11:11.880
+OneLake te ofrece un modelo de seguridad único para todo.
+
+00:11:12.600 --> 00:11:14.500
+En el nivel superior tienes roles de área de trabajo.
+
+00:11:14.980 --> 00:11:16.660
+Administrador, miembro, colaborador, visor.
+
+00:11:17.320 --> 00:11:19.340
+Estos controlan quién puede trabajar en área de trabajo determinada.
+
+00:11:19.720 --> 00:11:22.200
+Si alguien es visor, puede ver elementos, pero no modificarlos.
+
+00:11:22.960 --> 00:11:24.460
+Si es administrador, lo controla todo.
+
+00:11:24.900 --> 00:11:26.520
+Bastante sí, pero puedes ir más allá.
+
+00:11:27.300 --> 00:11:32.280
+Los roles de seguridad de OneLake te permiten controlar el acceso a nivel de carpeta, tabla, columna e incluso de fila.
+
+00:11:32.840 --> 00:11:37.380
+Por ejemplo, la seguridad a nivel de columna significa que puedes ocultar información salarial de todos excepto recursos humanos.
+
+00:11:37.380 --> 00:11:41.100
+La seguridad a nivel de fila significa que un gerente de venta solo ve los datos de su propia región.
+
+00:11:41.320 --> 00:11:44.820
+Y funciona de la misma manera en todos los almacenes de datos porque todos residen en el mismo OneLake.
+
+00:11:45.100 --> 00:11:48.940
+También existe el catálogo de OneLake, una vista central donde puedes ver todos los datos en todas las áreas de trabajo.
+
+00:11:49.340 --> 00:11:53.600
+Puedes encontrar conjuntos de datos certificados, verificar quién posee qué y gestionar la gobernanza desde un solo lugar.
+
+00:11:53.600 --> 00:11:58.860
+Se integra con Microsoft Purview para clasificación, etiquetas de sensibilidad y prevención de pérdida de datos.
+
+00:11:59.580 --> 00:12:05.680
+Entonces, si necesitas marcar ciertos datos como confidenciales o muy restringidos, puedes hacerlo a nivel de lag y se aplica en todas partes.
+
+00:12:06.320 --> 00:12:09.180
+Y existe el diagnóstico de OneLake que captura quién accedió a qué y cuándo.
+
+00:12:09.900 --> 00:12:14.100
+Es útil para auditorías, controles de cumplimiento y responder a la pregunta ¿Quién tocó estos datos la semana pasada?
+
+00:12:14.520 --> 00:12:18.860
+Registra cada operación de lectura y escritura y almacena esos registros como archivos JSON dentro de un LakeHouse.
+
+00:12:19.500 --> 00:12:21.760
+Puede analizarlos con Spark, SQL o Power BI.
+
+00:12:21.760 --> 00:12:28.220
+El panorama general es este, un modelo de seguridad único para todos sus datos, en lugar de gestionar reglas independientes para cada herramienta.
+
+00:12:28.600 --> 00:12:31.060
+Esa es una simplificación masiva para cualquier organización.
+
+00:12:31.940 --> 00:12:32.700
+Conclusiones prácticas.
+
+00:12:33.060 --> 00:12:34.000
+Lo que esto significa para usted.
+
+00:12:34.280 --> 00:12:37.240
+Entonces, ¿qué significa realmente todo esto si está comenzando su viaje con fábrica hoy mismo?
+
+00:12:37.680 --> 00:12:38.080
+Analicemos.
+
+00:12:38.520 --> 00:12:42.920
+Si está creando una nueva plataforma de datos, OneLake elimina la necesidad de diseñar un movimiento de datos complejo.
+
+00:12:43.320 --> 00:12:48.700
+No tiene que planificar cómo fluyen los datos desde un lago hacia un almacén y luego a un modelo semántico.
+
+00:12:49.140 --> 00:12:50.980
+Simplemente póngalos en OneLake y todas las herramientas de ahí.
+
+00:12:50.980 --> 00:12:52.200
+OneLake una sola copia.
+
+00:12:52.380 --> 00:12:53.160
+Esa es toda la arquitectura.
+
+00:12:53.660 --> 00:12:59.460
+Si está migrando de un sistema antiguo, los accesos directos y la replicación le permiten dejar los datos donde están mientras tarlada gradualmente las cargas.
+
+00:12:59.820 --> 00:13:01.180
+No se necesita una migración masiva.
+
+00:13:01.580 --> 00:13:07.940
+Apunte un acceso directo a su lago de datos existente, replique su base de datos de SQL Server y comience a usar Fabric mientras sus sistemas antiguos siguen funcionando.
+
+00:13:08.260 --> 00:13:09.320
+Te avanza su propio ritmo.
+
+00:13:09.440 --> 00:13:10.420
+Aquí está el cambio de mentalidad.
+
+00:13:10.860 --> 00:13:12.280
+Deje de pensar en almacenamiento por proyecto.
+
+00:13:12.700 --> 00:13:14.820
+Deje de crear un nuevo lago de datos para cada nueva iniciativa.
+
+00:13:15.320 --> 00:13:18.220
+Empiece a pensar en un lago compartido al que todos los proyectos accedan.
+
+00:13:18.220 --> 00:13:21.800
+Los datos de su equipo de ventas, los datos de su equipo de finanzas, los datos de su equipo de ingeniero.
+
+00:13:22.000 --> 00:13:22.920
+Todo vive en el mismo lugar.
+
+00:13:23.400 --> 00:13:24.660
+Simplemente ven partes diferentes de él.
+
+00:13:24.860 --> 00:13:27.360
+Para los usuarios de Power BI, los informes se leen directamente desde One.
+
+00:13:27.640 --> 00:13:29.860
+Sin importaciones separadas, sin modelos semánticos duplicados.
+
+00:13:30.160 --> 00:13:33.100
+Los datos están actualizados porque son los mismos con los que trabajan los ingenieros de datos.
+
+00:13:33.400 --> 00:13:37.160
+Para los ingenieros de datos, eso significa menos canalizaciones que construir, mantener y depurar.
+
+00:13:37.500 --> 00:13:38.340
+Deposita los datos una vez.
+
+00:13:38.580 --> 00:13:39.880
+Todos los demás simplemente los referencia.
+
+00:13:40.200 --> 00:13:40.940
+La conclusión es esta.
+
+00:13:41.300 --> 00:13:42.780
+One Lake no es solo otro lago de datos.
+
+00:13:43.040 --> 00:13:45.400
+Es la base que hace que Fabric sea diferente a todo lo anterior.
+
+00:13:46.040 --> 00:13:48.540
+La razón por la que puede dejar de copiar datos y empezar a confiar en ellos.
+
+00:13:49.380 --> 00:13:49.980
+Entonces ahí lo tiene.
+
+00:13:50.320 --> 00:13:54.120
+One Lake es el único lago de datos de su organización, construido sobre el principio de una sola copia.
+
+00:13:54.660 --> 00:13:58.220
+Una copia física de datos accesible para cualquier herramienta, cualquier equipo y cualquier carga de trabajo.
+
+00:13:58.700 --> 00:13:59.540
+No más duplicación.
+
+00:13:59.760 --> 00:14:01.740
+No más confusión sobre qué versión es la correcta.
+
+00:14:02.180 --> 00:14:02.960
+Su tarea es sensible.
+
+00:14:03.360 --> 00:14:06.520
+Comience con un acceso directo desde una fuente externa o replique una base de datos.
+
+00:14:06.520 --> 00:14:10.640
+Vea lo simple que se vuelve cuando uno tiene que construir canalizaciones solo para mover datos de un lado a otro.
+
+00:14:11.100 --> 00:14:13.020
+La mayoría de las organizaciones no harán este cambio rápidamente.
+
+00:14:13.540 --> 00:14:14.200
+Sea usted el que lo haga.
+
+00:14:14.540 --> 00:14:20.780
+Si este episodio le ayuda a entender One Lake, suscríbase a Microsoft Knowledge Nuggets para obtener más contenido sobre Fabric en lenguaje sencillo.
+
+00:14:21.320 --> 00:14:24.000
+Y comparte esto con alguien que todavía esté gestionando cinco lagos de datos separados.
+
+00:14:24.240 --> 00:14:25.080
+Te lo agradecerán más tarde.

@@ -1,0 +1,2233 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.440
+Excel, hukuman favorit manusia yang dibuat sendiri dan disamarkan sebagai perangkat lunak produktivitas.
+
+00:00:04.680 --> 00:00:09.740
+Setiap kantor memilikinya, orang yang masih percaya bahwa cara terbaik untuk menyelesaikan permintaan informasi dalam bentuk spreadsheet
+
+00:00:09.740 --> 00:00:14.140
+adalah dengan menyalin dan menempel 50 jawaban dari dokumen Word ke dalam sel yang diberi batas rapi secara manual.
+
+00:00:14.380 --> 00:00:17.640
+Melihatnya seperti melihat seseorang memahat email di atas loh batu.
+
+00:00:17.680 --> 00:00:19.700
+Itu mengharukan dalam arti antropologis.
+
+00:00:19.880 --> 00:00:23.960
+Kenyataannya, sebagian besar profesional masih menangani RFI Excel seperti tahun 1999.
+
+00:00:25.060 --> 00:00:27.100
+Berulang-ulang, rawan kesalahan, dan sangat manual.
+
+00:00:27.100 --> 00:00:30.160
+Setiap spreadsheet yang masuk adalah ritual kerja yang membosankan.
+
+00:00:30.300 --> 00:00:35.580
+Membuka email, mengunduh lampiran, memindai baris, menggumamkan kata-kata kotor, mulai menyalin jawaban sel demi sel.
+
+00:00:35.780 --> 00:00:41.160
+Satu kesalahan ketik, satu kesalahan tempel, satu titik koma yang hilang, dan seluruh departemen menghabiskan setengah hari untuk menyalakan rumus.
+
+00:00:41.360 --> 00:00:46.700
+Sekarang, bayangkan menolak nasib itu, bayangkan mendelegasikan seluruh kesengsaraan itu ke mesin yang tidak bosan,
+
+00:00:46.960 --> 00:00:49.900
+tidak membuat kesalahan ketik, dan tentu saja tidak membutuhkan kopi.
+
+00:00:50.120 --> 00:00:54.060
+Itu adalah agen otonom, perangkat lunak yang menjalankan siklus sepenuhnya sendiri.
+
+00:00:54.060 --> 00:00:59.220
+Ia membaca berkas Excel, menafsirkan pertanyaan, menemukan jawaban menggunakan AI generatif,
+
+00:00:59.520 --> 00:01:05.320
+menulis kembali jawaban tersebut ke dalam berkas yang sama, dan mengirimkan karya agung yang telah selesai langsung ke pemohon melalui email.
+
+00:01:05.540 --> 00:01:10.120
+Anda tidak hanya menghemat waktu, Anda juga menghilangkan konsep pekerjaan yang menyita waktu sepenuhnya.
+
+00:01:10.380 --> 00:01:14.240
+Kami akan membangun agen itu di dalam Microsoft Co-Pilot Studio dan Power Automate,
+
+00:01:14.480 --> 00:01:16.840
+sebuah pemberontakan praktis terhadap status quo spreadsheet.
+
+00:01:17.040 --> 00:01:20.900
+Saya menyebutnya peretasan karena ia membengkokkan Excel jauh melampaui tujuan aslinya.
+
+00:01:20.900 --> 00:01:26.980
+20 menit dari sekarang, Anda akan memiliki proses yang meningkatkan dirinya sendiri saat Anda menyeruput kopi dan merenungkan betapa usangnya Anda sekarang.
+
+00:01:27.220 --> 00:01:29.280
+Mari kita mulai dengan membedah organisme.
+
+00:01:29.500 --> 00:01:31.740
+Anatomi cetak biru agen otonom.
+
+00:01:31.980 --> 00:01:35.340
+Pertama, mari kita definisikan apa yang sebenarnya kita buat.
+
+00:01:35.500 --> 00:01:39.920
+Di Co-Pilot Studio, agen otonom bukanlah chatbot sopan yang menunggu instruksi.
+
+00:01:40.200 --> 00:01:45.640
+Ia adalah konstruksi yang beroperasi sendiri dengan tiga komponen inti, pemicu, logika, dan orkestrasi.
+
+00:01:45.640 --> 00:01:50.540
+Pemicu memulai proses, sebuah peristiwa seperti email baru masuk atau file diunggah ke sarepoin.
+
+00:01:50.720 --> 00:01:53.420
+Logika menentukan apa yang harus dilakukan saat itu terjadi.
+
+00:01:53.640 --> 00:01:58.260
+Orkestrasi menangani alat atau alur eksternal mana yang akan dipanggil sehingga semuanya terjadi dalam urutan yang benar.
+
+00:01:58.420 --> 00:02:04.500
+Anggap saja seperti jalur perakitan, tetapi alih-alih pekerja pabrik, Anda memiliki komponen power platform yang saling meneruskan komponen digital.
+
+00:02:04.780 --> 00:02:08.220
+Power Automate menerima email, menyimpan file, dan memberi tahu agen.
+
+00:02:08.400 --> 00:02:13.580
+Co-Pilot Studio membaca spreadsheet, bertukar pikiran tentang jawaban menggunakan AI generatif, dan menuliskannya kembali.
+
+00:02:13.580 --> 00:02:17.320
+Terakhir, Power Automate melampirkan kembali hasilnya dan mengirimkan balasan email.
+
+00:02:17.500 --> 00:02:19.860
+Tiga sistem, satu proses berpikir berkelanjutan.
+
+00:02:20.080 --> 00:02:22.040
+Nah, disinilah kebanyakan orang bingung.
+
+00:02:22.260 --> 00:02:27.440
+Microsoft berbicara tentang Co-Pilot seolah-olah itu satu hal, tetapi ada perbedaan penting antara agen Co-Pilot Studio standar.
+
+00:02:27.580 --> 00:02:29.680
+Co-Pilot normal menunggu Anda berbicara dengannya.
+
+00:02:29.940 --> 00:02:31.940
+Agen Studio tidak memerlukan pengawasan Anda.
+
+00:02:32.180 --> 00:02:35.300
+Ia dapat memicu dirinya sendiri berdasarkan kondisi yang Anda tetapkan.
+
+00:02:35.540 --> 00:02:40.120
+Itulah perbedaan antara pekerja magang yang membantu dan karyawan yang menjalankan departemen saat Anda tertidur.
+
+00:02:40.120 --> 00:02:42.660
+Mengapa menggunakan alur kerja RFI sebagai sandbox?
+
+00:02:42.880 --> 00:02:45.560
+Karena RFI adalah kekacauan yang terstruktur dengan indah.
+
+00:02:45.760 --> 00:02:48.360
+Setiap baris berisi pertanyaan dan mengharapkan jawaban.
+
+00:02:48.560 --> 00:02:50.680
+Polanya tidak pernah berubah, hanya isinya.
+
+00:02:50.960 --> 00:02:57.440
+Itu menjadikannya laboratorium yang sempurna untuk kecerdasan mesin, cukup terstruktur untuk diotomatisasi, cukup bervariasi untuk membenarkan penggunaan AI generatif.
+
+00:02:57.620 --> 00:02:59.440
+Anda tahu persis seperti apa yang baik itu.
+
+00:02:59.720 --> 00:03:02.900
+Setiap pertanyaan dijawab, dikembalikan dengan rapi, tanpa trauma emosional.
+
+00:03:03.120 --> 00:03:05.880
+Sebelum kita menyelami lebih dalam, mari kita gambar diagram mental.
+
+00:03:06.120 --> 00:03:08.300
+Mulailah dengan email yang berisi lampiran Excel.
+
+00:03:08.300 --> 00:03:10.420
+Email itu masuk ke kotak surat bersama.
+
+00:03:10.620 --> 00:03:17.200
+Power Automate mendeteksi file, memverifikasi formatnya yang benar, lalu menyalinnya ke lokasi sarepoin seperti area pementasan digital.
+
+00:03:17.560 --> 00:03:21.880
+Agen di Copilot Studio kemudian menerima pesan yang memberitahu file mana yang akan diproses.
+
+00:03:22.080 --> 00:03:31.540
+Agen membuka file itu, mengulangi pertanyaan, menghasilkan jawaban menggunakan basis pengetahuan yang dikonfigurasi atau menjadi landasan, dan menulis kembali respons ke tabel asli.
+
+00:03:31.840 --> 00:03:37.180
+Setelah selesai, Power Automate mengambil file itu lagi dan mengirimkannya melalui email kepada siapapun yang membuat permintaan.
+
+00:03:37.180 --> 00:03:43.200
+Jadi, data mengalir seperti ini, email, sarepoin, Copilot Studio, Power Automate, balasan email.
+
+00:03:43.400 --> 00:03:44.900
+Itulah anatomi otonomi.
+
+00:03:45.100 --> 00:03:48.420
+Pemicu memulai, logika memutuskan, dan orkestrasi mengeksekusi.
+
+00:03:48.640 --> 00:03:50.560
+Namun, otonomi tidak berarti mahatau.
+
+00:03:50.820 --> 00:03:52.980
+Agen tidak dapat berimprovisasi di luar batasannya.
+
+00:03:53.200 --> 00:03:56.100
+Anda harus menentukan izinnya dan memberinya konteks yang dibutuhkan.
+
+00:03:56.280 --> 00:04:00.300
+Di mana file berada, apa yang harus dibaca, di mana harus menulis, dan kapan harus meminta bantuan.
+
+00:04:00.560 --> 00:04:04.600
+Biarkan semua itu tidak jelas dan agen akan berhenti dengan sopan menunggu manusia yang tidak pernah datang.
+
+00:04:04.600 --> 00:04:07.440
+Itulah cetak birunya, pemahaman sebelum konfigurasi.
+
+00:04:07.700 --> 00:04:10.920
+Sekarang setelah Anda mengetahui seperti apa mesin itu, kita dapat mulai memberinya.
+
+00:04:11.100 --> 00:04:14.820
+Karena langkah berikutnya adalah mengajarkan Power Automate untuk bertindak sebagai penjaga gerbang,
+
+00:04:15.100 --> 00:04:18.560
+menyaring masukkan dan mengirimkannya ke karyawan digital baru Anda dengan presisi mekanis.
+
+00:04:18.740 --> 00:04:22.920
+Dan begitu itu terjadi, saat itulah kesenangan sebenarnya dimulai, menyaksikan mesin berpikir.
+
+00:04:23.100 --> 00:04:25.320
+Memberi makan mesin, desain aliran masukan.
+
+00:04:25.640 --> 00:04:28.700
+Setiap otomatisasi hebat dimulai dengan tindakan birokrasi.
+
+00:04:28.700 --> 00:04:33.100
+Dalam kasus ini, email tersebut masuk ke kotak surat bersama.
+
+00:04:33.300 --> 00:04:38.120
+Kotak surat digital yang setara dengan kotak surat tempat semua orang menumpahkan permintaan mendesak mereka dan segera melupakannya.
+
+00:04:38.360 --> 00:04:39.520
+Itulah titik masuk kami.
+
+00:04:39.800 --> 00:04:43.900
+Pesan yang masuk melengkapi tautan pertama dalam rantai dan Power Automate siap sebagai penjaga gerbang.
+
+00:04:44.160 --> 00:04:48.640
+Sekarang, Power Automate tidak hanya menunggu seperti pekerja magang yang memeriksa kotak masuk setiap 5 menit.
+
+00:04:48.760 --> 00:04:53.140
+Power Automate dikonfigurasi dengan pemicu yang tepat saat email baru masuk ke kotak surat bersama.
+
+00:04:53.140 --> 00:04:55.660
+Ini adalah prinsip otomatisasi pertama kami.
+
+00:04:55.940 --> 00:04:59.500
+Jangan bergantung pada pengamatan manusia, bergantunglah pada kondisi.
+
+00:04:59.940 --> 00:05:04.920
+Alur muncul saat lampiran masuk, menghilangkan masalah lama, saya tidak melihat email itu.
+
+00:05:05.160 --> 00:05:07.060
+Tindakan pertama adalah penyaringan.
+
+00:05:07.280 --> 00:05:11.160
+Anda memberitahu Power Automate untuk mengabaikan setiap lampiran yang bukan XLSX.
+
+00:05:11.320 --> 00:05:16.700
+PDF, tangkapan layar, dan foto kucing sesekali dari tim yang merayakan akhir tahun fiskal dibuang dengan prasangka.
+
+00:05:16.900 --> 00:05:21.460
+Tanpa aturan ini, agen Anda akan mencoba menafsirkan JPEG dari bagan dan gagal dengan sopan.
+
+00:05:21.460 --> 00:05:24.820
+Penyaringan menghemat siklus CPU dan martabat profesional Anda.
+
+00:05:25.000 --> 00:05:31.200
+Di dalam alur, kondisinya berbunyi hampir puitis jika nama lampiran diakhiri dengan XLSX lanjutkan.
+
+00:05:31.460 --> 00:05:34.200
+Baris yang satu itu memisahkan keteraturan dari kekacauan.
+
+00:05:34.380 --> 00:05:38.560
+Karena kekacauan di dunia otomatisasi selalu dimulai dengan jenis file yang tidak terduga.
+
+00:05:38.840 --> 00:05:42.260
+Setelah file lolos inspeksi, tantangan berikutnya adalah validasi struktur.
+
+00:05:42.480 --> 00:05:45.380
+File Excel yang valid harus berisi tabel nama, dan nama itu penting.
+
+00:05:45.600 --> 00:05:48.220
+Di alam semesta kita, tabel itu ditetapkan sebagai tabel satu.
+
+00:05:48.220 --> 00:05:52.000
+Jika itu terdengar kaku, bagus, itu membuat power otomat tetap waras.
+
+00:05:52.160 --> 00:05:55.200
+Tanpa tabel, Excel hanyalah papan tulis digital yang penuh dengan sel yang digabungkan,
+
+00:05:55.440 --> 00:05:56.980
+kolom tersembunyi, dan keputusasaan.
+
+00:05:57.140 --> 00:06:00.720
+Di sisi lain, tabel yang ditentukan memberi agen skema yang dapat diprediksi,
+
+00:06:01.080 --> 00:06:04.980
+kolom untuk pertanyaan, jawaban, dan data kontekstual apapun yang Anda tentukan.
+
+00:06:05.240 --> 00:06:06.480
+Tabel adalah kerangka.
+
+00:06:06.700 --> 00:06:08.620
+Tampanya, tidak ada yang bisa dianimasikan.
+
+00:06:09.020 --> 00:06:12.640
+Saat power otomat menemukan file, power otomat tidak mengeditnya langsung dari kotak surat.
+
+00:06:12.760 --> 00:06:14.280
+Itu akan menjadi tindakan diadab.
+
+00:06:14.280 --> 00:06:17.180
+Sebaliknya, power otomat membuat salinan terkontrol di Sarepoin.
+
+00:06:17.360 --> 00:06:21.200
+Anggap saja ini seperti memindahkan file dari jalan umum yang bising ke bangku laboratorium.
+
+00:06:21.460 --> 00:06:25.140
+Sarepoin menyediakan versi URL yang konsisten, dan token akses yang aman,
+
+00:06:25.420 --> 00:06:28.220
+yang memungkinkan Copilot Studio berinteraksi dengan data dengan aman.
+
+00:06:28.520 --> 00:06:31.440
+Setiap otomatisasi harus mencatat masukannya di tempat yang stabil.
+
+00:06:31.740 --> 00:06:35.040
+Sarepoin adalah stabilitas yang dibungkus dengan kepatuhan perusahaan.
+
+00:06:35.240 --> 00:06:37.280
+Sekarang setelah file berada di Sarepoin,
+
+00:06:37.600 --> 00:06:42.580
+alur mengekstrak ID filenya, pengenal unik yang memungkinkan agen menemukan spesimen yang tepat nanti.
+
+00:06:42.580 --> 00:06:48.240
+Bersamaan dengan ini, alur menarik ID pesan, alamat email asli yang membawa kita ke masalah ini sejak awal.
+
+00:06:48.460 --> 00:06:51.900
+Kedua ID menjadi titik referensi dalam percakapan mendatang dengan agen.
+
+00:06:52.140 --> 00:06:54.060
+Ini adalah dasar-dasar kebersihan metadata 101.
+
+00:06:54.460 --> 00:06:57.480
+Lacak semua yang masuk ke sistem Anda sehingga Anda dapat menutup loop dengan benar saat keluar.
+
+00:06:57.680 --> 00:07:01.440
+Pada titik ini, Anda mungkin bertanya-tanya mengapa kami sangat peduli dengan konvensi penamaan yang murni.
+
+00:07:02.600 --> 00:07:03.080
+Sederhana
+
+00:07:03.080 --> 00:07:08.100
+Jika nama file Anda terbaca seperti final-final RFI V23 di kelas,
+
+00:07:08.300 --> 00:07:10.260
+Anda secara efektif berbicara dalam bahasa roh kepada robot.
+
+00:07:10.400 --> 00:07:12.020
+Mesin berkembang pesat dalam keseragaman.
+
+00:07:12.320 --> 00:07:13.480
+Manusia tampaknya tidak.
+
+00:07:13.720 --> 00:07:17.100
+Beri nama file Anda dengan cara yang dapat diprediksi dan agen Anda akan berterima kasih karena tidak mengalami crash.
+
+00:07:17.300 --> 00:07:19.420
+Dengan berkas yang telah divalidasi dan disimpan dengan aman,
+
+00:07:19.620 --> 00:07:22.040
+alur tersebut mengirimkan perintah yang tepat kepada agen Copilot Studio.
+
+00:07:22.040 --> 00:07:26.960
+Pesan ini sengaja disusun seperti lakukan RFI pada berkas IDX dan balas ke pesan IDY.
+
+00:07:27.520 --> 00:07:32.300
+Tidak ada prosa yang muluk-muluk, tidak ada konteks pasif agresif, hanya maksud yang jelas dan dapat dibaca mesin.
+
+00:07:32.520 --> 00:07:35.000
+Ambiguitas adalah musuh bebuyutan otomatisasi.
+
+00:07:35.260 --> 00:07:37.600
+Disinilah konsep perintah terstruktur muncul.
+
+00:07:37.860 --> 00:07:40.540
+Tidak cukup hanya memberitahu agen proses berkas.
+
+00:07:40.740 --> 00:07:45.660
+Anda harus menyertakan konteks, cakupan berkas, tindakan yang diharapkan, dan tujuan respons.
+
+00:07:45.980 --> 00:07:49.120
+Tiga serangkai itu membentuk perancah linguistik untuk perilaku AI.
+
+00:07:49.120 --> 00:07:53.240
+Tampanya, agen mungkin mencoba melakukan sesuatu yang mengagumkan tetapi tidak relevan,
+
+00:07:53.540 --> 00:07:55.900
+seperti menulis balasan email yang sopan alih-alih mengisi sel.
+
+00:07:56.060 --> 00:07:58.060
+Integritas data adalah segalanya di sini.
+
+00:07:58.360 --> 00:08:02.840
+Setiap penggemar otomatisasi akhirnya belajar bahwa spreadsheet yang tidak terstruktur adalah ranjau darat digital.
+
+00:08:03.080 --> 00:08:07.660
+Perbedaan antara tabel yang bersih dan yang berantakan dapat menentukan apakah proses Anda terlihat cemerlang atau terkutuk.
+
+00:08:07.800 --> 00:08:09.440
+Power Automate menyukai keteraturan.
+
+00:08:09.700 --> 00:08:13.700
+Baris adalah catatan, kolom adalah variable, dan sel yang digabungkan adalah kejahatan terhadap logika.
+
+00:08:13.700 --> 00:08:18.900
+Ketika Anda menyerahkan tabel yang diformat dengan benar kepada agen, Anda tidak hanya memberinya data, tetapi juga memberinya pemahaman.
+
+00:08:18.900 --> 00:08:24.640
+Pada tahap ini, alur Power Automate kami telah mencapai tiga tonggak, deteksi, validasi, dan persiapan.
+
+00:08:24.880 --> 00:08:29.480
+Pemicu email menangkap pesan masuk, filter memastikan hanya file Excel yang sah yang bertahan,
+
+00:08:29.780 --> 00:08:32.400
+dan salinan sarepoin menyediakan habitat data yang stabil.
+
+00:08:32.720 --> 00:08:35.700
+Sekarang, mesin memiliki apa yang dibutuhkan untuk memulai pencernaan.
+
+00:08:35.940 --> 00:08:37.720
+Dengan kata lain, saatnya memberi makan.
+
+00:08:37.980 --> 00:08:40.560
+Alur yang telah selesai menyerahkan tongkat estafet kepada Copilot Studio,
+
+00:08:40.560 --> 00:08:43.840
+mengemas semua informasi yang diperlukan, lokasi file, ide, dan instruksi,
+
+00:08:44.080 --> 00:08:45.640
+serta mengirimkan perintah untuk diproses.
+
+00:08:45.820 --> 00:08:48.800
+Agen tidak peduli berapa banyak orang yang mengabaikan kotak masuk pagi ini
+
+00:08:48.800 --> 00:08:50.640
+atau berapa banyak versi spreadsheet yang ada.
+
+00:08:50.860 --> 00:08:55.380
+Agen hanya mengambil yang terbaru, membuka tabel, dan mulai menalar pertanyaan-pertanyaan di dalamnya.
+
+00:08:55.580 --> 00:08:57.320
+Dan itu membawa kita ke titik balik.
+
+00:08:57.500 --> 00:09:01.520
+Mesin sekarang menyimpan bahan untuk dipikirkan, daftar pertanyaan literal yang menunggu respons.
+
+00:09:01.760 --> 00:09:03.120
+Tahap input telah selesai.
+
+00:09:03.360 --> 00:09:07.000
+Gerbang terbuka, parameter ditetapkan, dan kekacauan telah dijinakan menjadi skema.
+
+00:09:07.000 --> 00:09:08.900
+Fase berikutnya adalah kognisi.
+
+00:09:09.180 --> 00:09:11.660
+Bagaimana agen membaca baris-baris tersebut, menafsirkannya,
+
+00:09:11.940 --> 00:09:14.880
+dan menghasilkan jawaban yang kredibel satu persatu tanpa perintah manusia.
+
+00:09:15.120 --> 00:09:18.200
+Sekarang setelah kita memberi makan mesin, saatnya untuk melihatnya mengunya.
+
+00:09:18.460 --> 00:09:20.340
+Lingkaran jawaban generatif otak AI.
+
+00:09:20.540 --> 00:09:24.500
+Pada titik ini, file tersebut diam-diam berada di sarepoin seperti pasien dalam pemeriksaan.
+
+00:09:24.740 --> 00:09:27.220
+Sekarang giliran agen Copilot Studio untuk berperan sebagai dokter,
+
+00:09:27.480 --> 00:09:29.660
+mendiagnosis setiap pertanyaan, dan meresepkan jawaban.
+
+00:09:29.880 --> 00:09:31.920
+Disinilah kecerdasan menggantikan otomatisasi,
+
+00:09:32.160 --> 00:09:34.700
+di mana sistem tidak hanya memindahkan data tetapi juga memahaminya.
+
+00:09:34.700 --> 00:09:37.520
+Masuk ke topik RFI, pusat kognitif agen kita.
+
+00:09:37.700 --> 00:09:40.660
+Topik di Copilot Studio pada dasarnya adalah cetak biru percakapan,
+
+00:09:40.940 --> 00:09:42.980
+serangkaian langkah yang dijalankan agen saat dipicu.
+
+00:09:43.180 --> 00:09:45.060
+Namun dalam konteks ini, tidak ada gelembung obrolan,
+
+00:09:45.240 --> 00:09:46.520
+tidak ada manusia yang harus ditenangkan.
+
+00:09:46.720 --> 00:09:48.020
+Topik RFI bekerja secara senyap,
+
+00:09:48.200 --> 00:09:51.220
+menjalankan satu pertanyaan pada satu waktu dalam urutan deterministik yang dibutuhkan.
+
+00:09:51.460 --> 00:09:53.280
+Setiap pertanyaan adalah ujian singkat.
+
+00:09:53.500 --> 00:09:56.360
+Setiap jawaban adalah esai yang disusun oleh otak generatif AI.
+
+00:09:56.520 --> 00:09:58.480
+Pertama, topik menerima parameter input,
+
+00:09:58.700 --> 00:10:00.980
+yaitu ide file yang menunjuk kesalinan sarepoin kita.
+
+00:10:00.980 --> 00:10:04.100
+Kemudian, ia menjalankan baris daftar yang ada dalam tindakan tabel.
+
+00:10:04.240 --> 00:10:05.760
+Perintah ini mengambil seluruh tabel,
+
+00:10:06.020 --> 00:10:07.360
+bukan sebagai baris dan kolom,
+
+00:10:07.580 --> 00:10:08.900
+tetapi sebagai data terstruktur.
+
+00:10:09.140 --> 00:10:11.140
+Agen meneruskannya ke variabel rekaman,
+
+00:10:11.380 --> 00:10:13.220
+cuplikan internal dunia Excel kita.
+
+00:10:13.460 --> 00:10:14.340
+Di dalam rekaman itu,
+
+00:10:14.480 --> 00:10:16.880
+terdapat larik semua baris yang disimpan dengan mudah
+
+00:10:16.880 --> 00:10:18.740
+dibawah sesuatu seperti nilai rekaman.
+
+00:10:19.020 --> 00:10:21.480
+Itulah perasmanan data yang akan dikonsumsi agen.
+
+00:10:21.720 --> 00:10:23.520
+Disinilah struktur bertemu dengan logika.
+
+00:10:23.760 --> 00:10:26.080
+Anda menginstruksikan agen untuk menetapkan larik itu sebagai item,
+
+00:10:26.320 --> 00:10:27.420
+koleksi kerja yang akan diulang.
+
+00:10:27.420 --> 00:10:29.180
+Kemudian, menggunakan perulangan 4Each,
+
+00:10:29.380 --> 00:10:31.040
+agen memeriksa setiap baris secara berurutan.
+
+00:10:31.280 --> 00:10:33.600
+Tidak ada yang dilewati, tidak ada bias, tidak ada keluhan.
+
+00:10:33.820 --> 00:10:34.560
+Untuk setiap baris,
+
+00:10:34.760 --> 00:10:37.340
+ia mengekstrak bidang pertanyaan dan menargetkannya untuk fase berikutnya,
+
+00:10:37.520 --> 00:10:38.100
+yaitu pembuatan.
+
+00:10:38.320 --> 00:10:38.980
+Pilihan desain ini,
+
+00:10:39.240 --> 00:10:40.640
+mengisolasi satu pertanyaan pada satu waktu,
+
+00:10:40.920 --> 00:10:41.800
+bukanlah hal yang sembarangan.
+
+00:10:42.040 --> 00:10:44.360
+Ini tentang menghindari apa yang saya sebut pendarahan konteks.
+
+00:10:44.580 --> 00:10:45.620
+Dalam model bahasa yang besar,
+
+00:10:45.900 --> 00:10:48.200
+menghapus beberapa perintah sekaligus mengundang kontaminasi.
+
+00:10:48.400 --> 00:10:50.880
+Konteks satu pertanyaan dapat mencemari jawaban berikutnya.
+
+00:10:51.120 --> 00:10:52.400
+Dengan mengisolasi setiap perintah,
+
+00:10:52.400 --> 00:10:53.920
+kita menegakkan kebersihan mental.
+
+00:10:54.120 --> 00:10:55.340
+Agen lupa setelah setiap baris,
+
+00:10:55.560 --> 00:10:57.380
+memastikan setiap jawaban lahir dengan sendirinya,
+
+00:10:57.600 --> 00:10:59.020
+tidak ternoda oleh kebingungan saudaranya.
+
+00:10:59.240 --> 00:11:00.580
+Sekarang, tibalah saatnya,
+
+00:11:00.780 --> 00:11:02.100
+simpul buat jawaban generatif.
+
+00:11:02.320 --> 00:11:05.460
+Ini adalah sel otak bertenaga turbo yang setara dengan Co-Pilot Studio.
+
+00:11:05.700 --> 00:11:07.180
+Anda memberikan teks pertanyaan,
+
+00:11:07.420 --> 00:11:10.260
+diinstruksikan untuk menemukan atau mensintesis jawaban terbaik
+
+00:11:10.260 --> 00:11:11.860
+berdasarkan sumber pengetahuan agen,
+
+00:11:12.080 --> 00:11:13.300
+dan agen melakukan sisanya.
+
+00:11:13.500 --> 00:11:14.560
+Agen tidak mengobrol,
+
+00:11:14.760 --> 00:11:15.380
+ia menghitung.
+
+00:11:15.600 --> 00:11:16.400
+Perbedaan ini penting.
+
+00:11:17.220 --> 00:11:18.900
+Otonomi tidak menginginkan percakapan,
+
+00:11:19.140 --> 00:11:20.580
+ia hanya ingin menyelesaikan tugas.
+
+00:11:20.580 --> 00:11:21.800
+Untuk menjaga disiplin,
+
+00:11:21.940 --> 00:11:23.940
+nonaktifkan properti kirim pesan di simpul ini.
+
+00:11:24.180 --> 00:11:26.240
+Sekelar itu terkubur dalam pengaturan lanjutan,
+
+00:11:26.440 --> 00:11:29.060
+dan menonaktifkannya akan menonaktifkan keluaran obrolan default.
+
+00:11:29.280 --> 00:11:29.680
+Mengapa?
+
+00:11:29.880 --> 00:11:33.180
+Karena Anda tidak ingin agen ini mencoba melakukan dialosopan dengan dirinya sendiri.
+
+00:11:33.440 --> 00:11:34.660
+Agen tidak mencatat pikirannya,
+
+00:11:34.860 --> 00:11:35.400
+ia bekerja.
+
+00:11:35.620 --> 00:11:37.880
+Semua jawaban malah akan disimpan ke dalam variable.
+
+00:11:38.180 --> 00:11:41.080
+Biasanya sesuatu yang diberi nama elegan seperti response AI.
+
+00:11:41.300 --> 00:11:45.500
+Ini adalah buku catatan agen yang menyimpan jawaban yang dihasilkan dalam bentuk query yang rapi.
+
+00:11:45.760 --> 00:11:47.680
+Setelah variable response AI diisi,
+
+00:11:47.680 --> 00:11:49.980
+agen menjalankan perintah perbarui baris.
+
+00:11:49.980 --> 00:11:52.440
+Bayangkan ini sebagai lengan mekanik robot.
+
+00:11:52.640 --> 00:11:54.800
+Salah satunya memasukkan jawaban tepat di tempatnya,
+
+00:11:55.100 --> 00:11:57.340
+mencocokkan setiap response dengan pertanyaan aslinya.
+
+00:11:57.560 --> 00:11:58.920
+Ia menggunakan ide file yang sama,
+
+00:11:59.260 --> 00:12:00.100
+nama tabel yang sama,
+
+00:12:00.380 --> 00:12:02.960
+dan menargetkan baris berdasarkan pengenal pertanyaan saat ini.
+
+00:12:03.220 --> 00:12:04.000
+Dalam hitungan detik,
+
+00:12:04.200 --> 00:12:07.300
+kolom jawaban yang tadinya kosong mulai terisi seperti laporan yang ditulis sendiri.
+
+00:12:07.500 --> 00:12:10.120
+Pada titik ini Anda telah mencapai putaran kognitif AI.
+
+00:12:10.360 --> 00:12:10.840
+Membaca,
+
+00:12:11.120 --> 00:12:11.600
+bernalar,
+
+00:12:11.800 --> 00:12:12.380
+merespons,
+
+00:12:12.580 --> 00:12:12.980
+merekam.
+
+00:12:13.220 --> 00:12:14.440
+Tidak mengasihkan untuk menontonnya,
+
+00:12:14.440 --> 00:12:17.600
+kecuali tentu saja Anda menghargai kekuatan otomatisasi yang tenang yang berpikir.
+
+00:12:17.600 --> 00:12:21.760
+Apa yang dulu menuntut waktu berjam-jam sekarang terjadi lebih cepat daripada Excel dapat memperbarui selnya sendiri.
+
+00:12:21.940 --> 00:12:23.980
+Sekarang mari kita bahas tentang landasan pengetahuan,
+
+00:12:24.200 --> 00:12:25.860
+kompas tak terlihat yang memandu jawaban ini.
+
+00:12:26.080 --> 00:12:28.300
+Di Copilot Studio Anda memiliki dua opsi utama,
+
+00:12:28.540 --> 00:12:31.180
+menggunakan informasi dari web atau basis pengetahuan khusus.
+
+00:12:31.400 --> 00:12:33.280
+Opsi web terhubung melalui landasan pencarian Bing,
+
+00:12:33.500 --> 00:12:35.340
+yang memungkinkan agen untuk menarik data langsung,
+
+00:12:35.580 --> 00:12:37.080
+pendekatan yang luas tetapi tidak stabil.
+
+00:12:37.360 --> 00:12:38.560
+Bagus untuk penelitian umum,
+
+00:12:38.760 --> 00:12:40.480
+tidak dapat diterima untuk domain milik sendiri.
+
+00:12:40.480 --> 00:12:41.840
+Ketika kerahasiaan penting,
+
+00:12:42.020 --> 00:12:45.700
+Anda menonaktifkan landasan web dan memberi sumber sarepoin atau datafas Anda sendiri.
+
+00:12:45.940 --> 00:12:48.360
+Begitulah cara Anda menjaga agen tetap cerdas dan setia.
+
+00:12:48.560 --> 00:12:50.460
+Keputusan ini menentukan jiwa bangunan Anda.
+
+00:12:50.700 --> 00:12:54.280
+Menggunakan landasan web memberikan agen Anda kesadaran ensiklopedis tetapi sedikit pengekangan.
+
+00:12:54.520 --> 00:12:57.580
+Ini mungkin meringkas blok yang sudah ketinggalan zaman sebagai kebenaran sejati.
+
+00:12:57.840 --> 00:13:01.980
+Basis pengetahuan khusus mempersempit jangkauannya tetapi meningkatkan presisi dan kepatuhan.
+
+00:13:02.260 --> 00:13:03.520
+Dalam lingkungan yang diatur,
+
+00:13:03.780 --> 00:13:05.780
+keandalan selalu mengungguli kreativitas.
+
+00:13:05.780 --> 00:13:07.760
+Biarkan pengacara Anda tidur nyenyak,
+
+00:13:07.940 --> 00:13:08.820
+pilih landasan internal.
+
+00:13:09.040 --> 00:13:10.780
+Untuk memverifikasi bahwa loop berfungsi,
+
+00:13:10.980 --> 00:13:12.960
+Anda dapat memeriksa transkrip proses Copilot Studio.
+
+00:13:13.180 --> 00:13:14.920
+Anda akan melihat setiap iterasi terungkap,
+
+00:13:15.120 --> 00:13:15.700
+perintah dikirim,
+
+00:13:15.900 --> 00:13:17.040
+simpul generatif merespons,
+
+00:13:17.280 --> 00:13:18.640
+dan baris yang diperbarui ditulis.
+
+00:13:18.840 --> 00:13:22.660
+Anehnya, ini memuaskan seperti menonton ban berjalan yang menghasilkan pemahaman.
+
+00:13:22.920 --> 00:13:25.120
+Setiap catatan bergerak dari ketidaktahuan menjadi pencerahan,
+
+00:13:25.420 --> 00:13:26.060
+satu pertanyaan,
+
+00:13:26.280 --> 00:13:26.820
+satu jawaban,
+
+00:13:27.120 --> 00:13:30.300
+satu desahan lega dari diri Anda di masa depan yang tidak harus melakukannya secara manual.
+
+00:13:30.560 --> 00:13:32.380
+Secara teknis, ini adalah desain kode rendah.
+
+00:13:32.380 --> 00:13:34.880
+Tetapi secara konseptual, ini adalah filosofi digital.
+
+00:13:35.080 --> 00:13:36.760
+Pikiran agen, sebagaimana adanya,
+
+00:13:37.060 --> 00:13:38.400
+hanya ada selama loop berlangsung.
+
+00:13:38.620 --> 00:13:40.280
+Saat ia menyelesaikan baris terakhir,
+
+00:13:40.440 --> 00:13:41.440
+ingatannya diatur ulang.
+
+00:13:41.660 --> 00:13:44.320
+Ia tidak khawatir tentang email besok atau kesalahan minggu lalu.
+
+00:13:44.520 --> 00:13:47.180
+Ia bekerja, lupa, dan menunggu tugas berikutnya.
+
+00:13:47.400 --> 00:13:48.260
+Dalam arti tertentu,
+
+00:13:48.420 --> 00:13:49.620
+ia adalah karyawan yang sempurna,
+
+00:13:49.860 --> 00:13:50.860
+tak kenal lelah, patuh,
+
+00:13:51.080 --> 00:13:52.460
+dan tidak mampu bergosip di tempat kerja.
+
+00:13:52.620 --> 00:13:53.620
+Pengembang terkadang bertanya,
+
+00:13:53.880 --> 00:13:57.180
+tidak bisakah saya mengirimkan semua pertanyaan sekaligus dan mendapatkan satu jawaban besar?
+
+00:13:57.340 --> 00:13:57.800
+Anda bisa,
+
+00:13:58.080 --> 00:13:59.040
+tetapi itu bukan otonomi,
+
+00:13:59.040 --> 00:14:00.180
+melainkan kekacauan.
+
+00:14:00.380 --> 00:14:02.700
+Satu perintah yang membengkak akan menghasilkan format yang tidak konsisten
+
+00:14:02.700 --> 00:14:04.160
+dan penautan konteks yang tidak masuk akal.
+
+00:14:04.300 --> 00:14:06.060
+Perulangan memastikan determinisme.
+
+00:14:06.360 --> 00:14:08.540
+Setiap pertanyaan menjadi unit kerja yang mandiri,
+
+00:14:08.800 --> 00:14:10.480
+kontrak mikro yang harus dipenuhi AI.
+
+00:14:10.660 --> 00:14:12.180
+Otonomi menyukai pengulangan.
+
+00:14:12.440 --> 00:14:14.400
+Hal ini dapat diprediksi berdasarkan desain.
+
+00:14:14.640 --> 00:14:17.060
+Sekarang, file Excel itu sendiri perlahan berubah.
+
+00:14:17.280 --> 00:14:19.580
+Sel-sel kosong diisi dengan kalimat-kalimat buatan mesin
+
+00:14:19.580 --> 00:14:21.020
+yang diambil dari kebijaksanaan Bing
+
+00:14:21.020 --> 00:14:23.280
+yang bersifat sementara atau dokumentasi internal Anda.
+
+00:14:23.280 --> 00:14:26.480
+Setiap perintah baris pembaruan mengunci hasil tersebut menjadi permanen,
+
+00:14:26.700 --> 00:14:28.600
+tindakan otomatisasi yang diberi stempel waktu.
+
+00:14:28.600 --> 00:14:29.960
+Dari sudut pandang pengguna,
+
+00:14:30.160 --> 00:14:31.860
+file yang mereka kirim kosong akan segera kembali
+
+00:14:31.860 --> 00:14:33.780
+dengan setiap pertanyaan yang terjawab dengan rapi.
+
+00:14:33.980 --> 00:14:35.120
+Tidak ada pengetikan manusia,
+
+00:14:35.320 --> 00:14:36.180
+tidak ada draft perantara,
+
+00:14:36.400 --> 00:14:37.820
+tidak ada balasan yang tidak disengaja.
+
+00:14:38.040 --> 00:14:41.040
+Inilah saatnya sistem beralih dari analisis ke eksekusi.
+
+00:14:41.380 --> 00:14:42.700
+Jawabannya kini sudah ada.
+
+00:14:43.040 --> 00:14:44.800
+Jawabannya hanya perlu dikirimkan.
+
+00:14:45.020 --> 00:14:47.280
+Dan itu memerlukan koneksi ulang dengan power otomat
+
+00:14:47.280 --> 00:14:49.140
+yang harus mengumpulkan berkas yang diperbarui
+
+00:14:49.140 --> 00:14:50.340
+dan menyusun email balasan.
+
+00:14:50.620 --> 00:14:51.940
+Namun sebelum kita menyerahkan kendali kembali,
+
+00:14:52.200 --> 00:14:54.140
+berhentilah sejenak untuk menghargai apa yang baru saja terjadi.
+
+00:14:54.360 --> 00:14:55.560
+Sebuah pemicu memicu suatu proses,
+
+00:14:55.780 --> 00:14:56.460
+data menjadi perintah,
+
+00:14:58.600 --> 00:15:01.200
+lingkaran itu lengkap dan semuanya terjadi secara diam-diam,
+
+00:15:01.380 --> 00:15:01.780
+tanpa Anda.
+
+00:15:01.960 --> 00:15:03.080
+Otonomi bukanlah sihir,
+
+00:15:03.240 --> 00:15:05.700
+itu hanya logika yang sangat jelas yang berpura-pura berpikir.
+
+00:15:05.980 --> 00:15:06.500
+Selanjutnya,
+
+00:15:06.700 --> 00:15:09.200
+mesin berhenti merasionalisasi dan mulai berkomunikasi.
+
+00:15:09.460 --> 00:15:12.060
+Saatnya memberikan spreadsheet kita yang baru tercerahkan suara
+
+00:15:12.060 --> 00:15:13.840
+dan membiarkannya membalas atas nama Anda.
+
+00:15:14.100 --> 00:15:15.840
+Mekanisme tulis balik dan balas.
+
+00:15:16.080 --> 00:15:18.500
+Sekarang setelah agen menyelesaikan beasiswa yang tenang,
+
+00:15:18.560 --> 00:15:20.360
+kita menyerahkan pena kembali ke power otomat,
+
+00:15:20.600 --> 00:15:23.540
+bagian dari proses yang mengubah kerja otak menjadi birokrasi sekali lagi.
+
+00:15:23.780 --> 00:15:24.260
+Pekerjaan,
+
+00:15:24.400 --> 00:15:25.880
+mengumpulkan berkas Excel yang diperbarui,
+
+00:15:25.880 --> 00:15:26.880
+melampirkannya ke email,
+
+00:15:27.140 --> 00:15:28.560
+dan mengirimkannya pulang seolah-olah manusia
+
+00:15:28.560 --> 00:15:30.500
+yang teliti telah melakukan pekerjaan itu selama ini.
+
+00:15:30.720 --> 00:15:31.340
+Hanya lebih cepat,
+
+00:15:31.520 --> 00:15:31.920
+lebih bersih,
+
+00:15:32.080 --> 00:15:33.520
+dan tanpa rasa takut eksistensial.
+
+00:15:33.720 --> 00:15:35.360
+Tantangan pertama adalah pengaturan waktu.
+
+00:15:35.620 --> 00:15:36.340
+Dalam otomatisasi,
+
+00:15:36.540 --> 00:15:37.760
+waktu bukanlah sesuatu yang sembarangan,
+
+00:15:37.980 --> 00:15:39.000
+melainkan toleransi mekanis.
+
+00:15:39.160 --> 00:15:41.100
+Copilot Studio mengharapkan power otomat
+
+00:15:41.100 --> 00:15:43.780
+untuk merespons dalam waktu sekitar 100 detik setelah dipanggil,
+
+00:15:44.020 --> 00:15:45.340
+atau menganggap prosesnya gagal.
+
+00:15:45.340 --> 00:15:47.680
+Ini adalah cara sopan Microsoft untuk mengatakan,
+
+00:15:47.940 --> 00:15:48.560
+jangan berlama-lama.
+
+00:15:48.860 --> 00:15:49.120
+Jadi,
+
+00:15:49.360 --> 00:15:51.180
+alur balasan harus bertindak dengan presisi,
+
+00:15:51.480 --> 00:15:52.580
+mengikuti template sederhana.
+
+00:15:52.780 --> 00:15:53.460
+Terima masukan,
+
+00:15:53.460 --> 00:15:55.140
+tunggu hanya selama yang diperlukan,
+
+00:15:55.400 --> 00:15:55.720
+balas,
+
+00:15:55.920 --> 00:15:56.340
+dan tutup.
+
+00:15:56.540 --> 00:15:58.340
+Disinilah trik kecil namun penting muncul,
+
+00:15:58.560 --> 00:15:59.580
+penundaan yang disengaja.
+
+00:15:59.780 --> 00:16:00.080
+Excel,
+
+00:16:00.340 --> 00:16:01.420
+selama puluhan tahun layanannya,
+
+00:16:01.740 --> 00:16:03.280
+memperbarui file cloud secepat pembuatan
+
+00:16:03.280 --> 00:16:05.020
+dek powerpoint selama panggilan konferensi,
+
+00:16:05.280 --> 00:16:07.140
+yang berarti Anda perlu memberinya waktu sejenak.
+
+00:16:07.320 --> 00:16:09.540
+Sebagian besar pembuat menambahkan blok penundaan 2 menit
+
+00:16:09.540 --> 00:16:11.060
+untuk menjamin semua baris yang ditulis
+
+00:16:11.060 --> 00:16:12.340
+AI benar-benar terdaftar di sarepoin
+
+00:16:12.340 --> 00:16:13.640
+sebelum ada yang mengambil file tersebut.
+
+00:16:13.640 --> 00:16:14.700
+Ini bukan kemalasan,
+
+00:16:14.940 --> 00:16:15.700
+ini sinkronisasi.
+
+00:16:15.880 --> 00:16:17.240
+Komputer dapat mengeksekusi lebih cepat
+
+00:16:17.240 --> 00:16:18.900
+daripada yang dapat dikonfirmasi oleh penyimpanan.
+
+00:16:18.900 --> 00:16:20.120
+Setelah jeda berakhir,
+
+00:16:20.280 --> 00:16:21.660
+alur melakukan pengambilan bedahnya.
+
+00:16:21.880 --> 00:16:23.000
+Ia menggunakan konten file
+
+00:16:23.000 --> 00:16:23.920
+untuk menarik spreadsheet
+
+00:16:23.920 --> 00:16:25.300
+yang sudah selesai dari sarepoin.
+
+00:16:25.520 --> 00:16:27.280
+Langkah ini membaca paket binar lengkap,
+
+00:16:27.540 --> 00:16:28.340
+bukan hanya tabel,
+
+00:16:28.660 --> 00:16:30.240
+memastikan bahwa apa yang dilampirkan
+
+00:16:30.240 --> 00:16:31.420
+ke email keluar sama persis
+
+00:16:31.420 --> 00:16:33.080
+dengan apa yang terakhir ditulis agen.
+
+00:16:33.300 --> 00:16:34.440
+Tidak ada buffering hantu
+
+00:16:34.440 --> 00:16:35.900
+atau sel yang terisi setengah.
+
+00:16:36.820 --> 00:16:37.900
+Dipasangkan dengan ini,
+
+00:16:37.900 --> 00:16:39.860
+get email V3 mengambil metadata
+
+00:16:39.860 --> 00:16:41.000
+dari permintaan asli,
+
+00:16:41.300 --> 00:16:41.700
+pengirim,
+
+00:16:42.000 --> 00:16:42.360
+subjek,
+
+00:16:42.560 --> 00:16:43.320
+dan ide pesan.
+
+00:16:43.500 --> 00:16:44.020
+Tanpa itu,
+
+00:16:44.320 --> 00:16:46.260
+balasan Anda tiba seperti drone yang hilang,
+
+00:16:46.480 --> 00:16:46.820
+cepat,
+
+00:16:47.000 --> 00:16:48.000
+tetapi tidak kemana-mana.
+
+00:16:48.000 --> 00:16:50.420
+Pengiriman sebenarnya ditangani oleh email terkirim
+
+00:16:50.420 --> 00:16:51.040
+dengan lampiran,
+
+00:16:51.280 --> 00:16:52.940
+merujuk pada ide pesan yang diarsipkan
+
+00:16:52.940 --> 00:16:54.060
+sehingga utas tetap utuh.
+
+00:16:54.220 --> 00:16:55.600
+Power otomat dengan patuh
+
+00:16:55.600 --> 00:16:57.100
+melampirkan kembali file Excel
+
+00:16:57.100 --> 00:16:57.980
+yang baru dijawab,
+
+00:16:58.200 --> 00:17:00.040
+menciptakan ilusi korespondensi manual.
+
+00:17:00.320 --> 00:17:01.320
+Menyaksikan langkah ini
+
+00:17:01.320 --> 00:17:02.580
+selesai anehnya melegakan.
+
+00:17:02.880 --> 00:17:03.780
+Lembar yang tadinya kosong
+
+00:17:03.780 --> 00:17:05.100
+dikembalikan dalam bentuk yang diubah,
+
+00:17:05.400 --> 00:17:06.080
+jawaban tetap utuh,
+
+00:17:06.300 --> 00:17:06.860
+diberi cap waktu,
+
+00:17:07.160 --> 00:17:08.320
+dan disejajarkan dengan sempurna,
+
+00:17:08.580 --> 00:17:09.280
+seperti menilai ujian
+
+00:17:09.280 --> 00:17:10.540
+di mana siswa adalah algoritma.
+
+00:17:10.740 --> 00:17:12.240
+Mari kita bahas toleransi kegagalan
+
+00:17:12.240 --> 00:17:13.540
+karena tidak setiap file Excel
+
+00:17:13.540 --> 00:17:14.260
+berperilaku baik.
+
+00:17:14.260 --> 00:17:16.120
+Mungkin nama tabel bukan tabel 1.
+
+00:17:16.440 --> 00:17:18.280
+Mungkin seseorang menggabungkan cell header
+
+00:17:18.280 --> 00:17:19.560
+menjadi mural dekoratif.
+
+00:17:19.740 --> 00:17:20.620
+Ketika ini terjadi,
+
+00:17:20.860 --> 00:17:21.920
+alur pembaruan seharusnya
+
+00:17:21.920 --> 00:17:22.920
+memunculkan kesalahan
+
+00:17:22.920 --> 00:17:24.280
+yang terkendali daripada meledak.
+
+00:17:24.420 --> 00:17:26.020
+Tambahkan pemeriksaan bersyarat.
+
+00:17:26.300 --> 00:17:27.560
+Jika tabel tidak ditemukan,
+
+00:17:27.860 --> 00:17:29.140
+kirimkan pemberitahuan sopan
+
+00:17:29.140 --> 00:17:31.100
+yang berbunyi pemrosesan RFI gagal,
+
+00:17:31.320 --> 00:17:32.160
+struktur tidak valid.
+
+00:17:32.360 --> 00:17:33.460
+Kedengarannya manusiawi
+
+00:17:33.460 --> 00:17:35.060
+dan mencegah 20 pesan TAMS
+
+00:17:35.060 --> 00:17:36.020
+yang panik bertanya-tanya
+
+00:17:36.020 --> 00:17:36.840
+mengapa hantu AI
+
+00:17:36.840 --> 00:17:37.920
+tidak menjawab email lagi.
+
+00:17:38.140 --> 00:17:40.040
+Performa juga menuntut pandangan ke depan.
+
+00:17:40.260 --> 00:17:42.060
+Memperbarui ratusan baris 1 per 1
+
+00:17:42.060 --> 00:17:43.260
+dapat memperlambat alur.
+
+00:17:43.380 --> 00:17:44.520
+Triknya adalah mengelompokkan,
+
+00:17:44.660 --> 00:17:45.340
+mengumpulkan baris,
+
+00:17:45.560 --> 00:17:46.680
+memperbaruinya dalam pelompok,
+
+00:17:46.820 --> 00:17:47.980
+atau memanfaatkan cabang paralel
+
+00:17:47.980 --> 00:17:48.600
+dengan hati-hati.
+
+00:17:48.820 --> 00:17:50.340
+Catatan pengoptimalan Microsoft sendiri
+
+00:17:50.340 --> 00:17:51.160
+memperingatkan bahwa
+
+00:17:51.160 --> 00:17:52.600
+loop tak terbatas mengundang latensi.
+
+00:17:52.760 --> 00:17:53.200
+Terjemahan,
+
+00:17:53.400 --> 00:17:55.000
+otomatisasi tidak berarti kecerobohan,
+
+00:17:55.240 --> 00:17:56.600
+itu berarti efisiensi yang terukur.
+
+00:17:56.780 --> 00:17:57.300
+Sekarang,
+
+00:17:57.480 --> 00:17:58.600
+koreografi lengkap terungkap.
+
+00:17:58.740 --> 00:18:00.600
+Co-Pilot Studio menyelesaikan kognisi.
+
+00:18:00.800 --> 00:18:02.620
+Power Automate menunda sinkronisasi,
+
+00:18:02.840 --> 00:18:03.540
+mengambil konten,
+
+00:18:03.720 --> 00:18:04.760
+mengemasnya dengan metadata,
+
+00:18:05.140 --> 00:18:06.080
+dan mengirimkan respons.
+
+00:18:06.440 --> 00:18:07.380
+Pemohon menerima email
+
+00:18:07.380 --> 00:18:08.580
+dengan lampiran asli mereka,
+
+00:18:08.580 --> 00:18:09.900
+hanya saja sekarang diisi
+
+00:18:09.900 --> 00:18:10.960
+dengan jawaban yang dibuat,
+
+00:18:11.180 --> 00:18:11.800
+divalidasi,
+
+00:18:12.080 --> 00:18:13.040
+dan diberi stempel waktu
+
+00:18:13.040 --> 00:18:13.960
+secara otomatis.
+
+00:18:14.160 --> 00:18:14.940
+Tidak ada yang mengetik,
+
+00:18:15.060 --> 00:18:15.780
+tidak ada yang menunggu,
+
+00:18:16.020 --> 00:18:17.100
+dan tidak ada yang membuka Excel
+
+00:18:17.100 --> 00:18:18.060
+kecuali hantu di mesin.
+
+00:18:18.260 --> 00:18:19.180
+Otonomi secara resmi
+
+00:18:19.180 --> 00:18:20.000
+telah mencapai hasil,
+
+00:18:20.280 --> 00:18:21.420
+tetapi seperti yang akan diingatkan
+
+00:18:21.420 --> 00:18:22.120
+oleh orang dewasa
+
+00:18:22.120 --> 00:18:22.800
+yang bertanggung jawab
+
+00:18:22.800 --> 00:18:23.620
+dalam tata kelola TI,
+
+00:18:23.820 --> 00:18:24.720
+otonomi dan anarki
+
+00:18:24.720 --> 00:18:25.460
+bukanlah sinonim.
+
+00:18:25.700 --> 00:18:27.300
+Sebelum Anda meninggalkan kreasi Anda,
+
+00:18:27.600 --> 00:18:28.800
+mungkin untuk menyombongkan diri
+
+00:18:28.800 --> 00:18:29.180
+di LinkedIn,
+
+00:18:29.580 --> 00:18:30.360
+Anda harus menghadapi
+
+00:18:30.360 --> 00:18:31.840
+batasan pengawasan yang tidak menarik.
+
+00:18:32.000 --> 00:18:32.980
+Itu membawa kita ke bagian
+
+00:18:32.980 --> 00:18:33.660
+yang suka diabaikan
+
+00:18:33.660 --> 00:18:34.440
+oleh setiap teknolog,
+
+00:18:34.620 --> 00:18:35.120
+pengskalaan,
+
+00:18:35.340 --> 00:18:35.720
+tata kelola,
+
+00:18:35.940 --> 00:18:36.880
+dan realitas itu sendiri.
+
+00:18:37.200 --> 00:18:37.680
+Pengskalaan,
+
+00:18:37.840 --> 00:18:38.320
+tata kelola,
+
+00:18:38.500 --> 00:18:39.560
+dan pemeriksaan realitas.
+
+00:18:39.780 --> 00:18:41.040
+Mari kita hancurkan ilusi itu
+
+00:18:41.040 --> 00:18:41.660
+sejak dini.
+
+00:18:41.920 --> 00:18:43.060
+Agen otonom Anda brilian,
+
+00:18:43.360 --> 00:18:44.340
+tetapi tidak maha kuasa.
+
+00:18:44.600 --> 00:18:45.880
+Ia beroperasi di dalam tembok,
+
+00:18:46.100 --> 00:18:46.980
+khususnya kotak pasir
+
+00:18:46.980 --> 00:18:47.860
+yang dibangun Microsoft.
+
+00:18:48.180 --> 00:18:49.080
+Agen Copilot Studio
+
+00:18:49.080 --> 00:18:50.280
+mengikuti kuota konsumsi,
+
+00:18:50.440 --> 00:18:51.160
+pembatasan api,
+
+00:18:51.380 --> 00:18:52.620
+dan apa yang disebut dokumentasi
+
+00:18:52.620 --> 00:18:53.120
+dengan menawan
+
+00:18:53.120 --> 00:18:54.100
+sebagai batasan perilaku
+
+00:18:54.100 --> 00:18:54.860
+yang bertanggung jawab.
+
+00:18:55.020 --> 00:18:55.500
+Terjemahannya,
+
+00:18:55.760 --> 00:18:56.900
+agen Anda tidak menjadi nakal
+
+00:18:56.900 --> 00:18:57.860
+karena server Microsoft
+
+00:18:57.860 --> 00:18:58.680
+tidak mengizinkannya.
+
+00:18:58.900 --> 00:18:59.320
+Pertama,
+
+00:18:59.600 --> 00:19:00.500
+batasan otonomi.
+
+00:19:00.780 --> 00:19:01.800
+Agen hanya dapat bertindak
+
+00:19:01.800 --> 00:19:02.880
+dalam instruksi yang jelas.
+
+00:19:03.100 --> 00:19:03.960
+Ia tidak akan mengimprovisasi
+
+00:19:03.960 --> 00:19:04.380
+proses baru,
+
+00:19:04.580 --> 00:19:05.420
+memperbaiki kesalahan pengguna,
+
+00:19:05.560 --> 00:19:06.540
+atau mereplikasi diri sendiri.
+
+00:19:06.740 --> 00:19:07.600
+Itu bukan cacat,
+
+00:19:07.820 --> 00:19:08.460
+itu peradaban.
+
+00:19:08.700 --> 00:19:09.860
+Anda mendefinisikan lingkungannya,
+
+00:19:10.080 --> 00:19:10.660
+jalur sarepoin,
+
+00:19:10.840 --> 00:19:11.340
+skema tabel,
+
+00:19:11.520 --> 00:19:11.940
+hak koneksi,
+
+00:19:12.140 --> 00:19:12.760
+dan ia mematuhinya.
+
+00:19:12.960 --> 00:19:13.740
+Anggap saja ia sebagai
+
+00:19:13.740 --> 00:19:14.440
+pekerja magang digital
+
+00:19:14.440 --> 00:19:15.240
+yang terkunci di kantor
+
+00:19:15.240 --> 00:19:16.100
+yang diberi label dengan baik.
+
+00:19:16.280 --> 00:19:17.280
+Biarkan pintunya terbuka
+
+00:19:17.280 --> 00:19:18.440
+dan ia tidak akan menjelajah.
+
+00:19:18.620 --> 00:19:20.000
+Ia akan tetap menunggu izin.
+
+00:19:20.240 --> 00:19:21.640
+Batasan itu mencegah kekacauan
+
+00:19:21.640 --> 00:19:23.080
+dan mempertahankan auditabilitas.
+
+00:19:23.280 --> 00:19:24.460
+Berikutnya adalah skala.
+
+00:19:24.700 --> 00:19:24.980
+Excel,
+
+00:19:25.220 --> 00:19:25.960
+meskipun ikonik,
+
+00:19:26.100 --> 00:19:27.240
+merupakan habitat yang rapuh
+
+00:19:27.240 --> 00:19:27.900
+untuk otonomi.
+
+00:19:28.200 --> 00:19:29.360
+Setelah volume RFI Anda
+
+00:19:29.360 --> 00:19:30.280
+membengkak melampaui
+
+00:19:30.280 --> 00:19:31.120
+beberapa ratus baris
+
+00:19:31.120 --> 00:19:32.560
+atau melibatkan pengguna bersamaan,
+
+00:19:32.840 --> 00:19:33.800
+migrasikan model data.
+
+00:19:34.040 --> 00:19:34.720
+Daftar dataverse
+
+00:19:34.720 --> 00:19:35.440
+atau sarepoin
+
+00:19:35.440 --> 00:19:36.660
+mengubah penanganan file acak
+
+00:19:36.660 --> 00:19:37.640
+menjadi operasi data
+
+00:19:37.640 --> 00:19:38.700
+yang diatur dengan benar.
+
+00:19:38.900 --> 00:19:39.840
+Logika power otomat
+
+00:19:39.840 --> 00:19:40.540
+yang sama berlaku,
+
+00:19:40.880 --> 00:19:42.000
+tetapi back-end penyimpanan
+
+00:19:42.000 --> 00:19:42.620
+tidak lagi mengeluh
+
+00:19:42.620 --> 00:19:43.700
+saat pengeditan simultan.
+
+00:19:43.900 --> 00:19:44.340
+Intinya,
+
+00:19:44.640 --> 00:19:46.060
+Excel adalah roda pelatihan.
+
+00:19:46.280 --> 00:19:47.660
+Alur kerja tingkat perusahaan
+
+00:19:47.660 --> 00:19:48.680
+menggunakan dataverse.
+
+00:19:48.680 --> 00:19:49.860
+Lalu ada tata kelola,
+
+00:19:50.100 --> 00:19:50.860
+Microsoft Purview
+
+00:19:50.860 --> 00:19:52.000
+untuk klasifikasi data,
+
+00:19:52.300 --> 00:19:53.200
+dan ide agen entra
+
+00:19:53.200 --> 00:19:54.340
+untuk kontrol identitas.
+
+00:19:54.580 --> 00:19:55.300
+Setiap agen otonom
+
+00:19:55.300 --> 00:19:56.480
+harus mengenakan lencana digital
+
+00:19:56.480 --> 00:19:57.660
+yang menyatakan siapa pemiliknya,
+
+00:19:57.880 --> 00:19:58.720
+apa yang dapat disentuhnya,
+
+00:19:58.920 --> 00:20:00.180
+dan kapan terakhir kali berperilaku.
+
+00:20:00.400 --> 00:20:01.380
+Ini bukan sandiwara,
+
+00:20:01.680 --> 00:20:02.660
+ini akuntabilitas.
+
+00:20:02.900 --> 00:20:03.660
+Dalam dunia AI
+
+00:20:03.660 --> 00:20:04.940
+yang semakin bersifat agen,
+
+00:20:05.200 --> 00:20:06.540
+jejak audit adalah serat moral.
+
+00:20:06.740 --> 00:20:08.060
+Pertahankan jejak audit tersebut
+
+00:20:08.060 --> 00:20:09.660
+atau otomatisasi Anda berisiko
+
+00:20:09.660 --> 00:20:10.660
+diberi label shadow it.
+
+00:20:10.820 --> 00:20:11.300
+Sekarang,
+
+00:20:11.460 --> 00:20:12.520
+akurasi dan kepatuhan.
+
+00:20:12.760 --> 00:20:14.180
+RFI mungkin menghasilkan jawaban,
+
+00:20:14.480 --> 00:20:15.780
+tetapi siapa yang menjamin kebenaran?
+
+00:20:15.780 --> 00:20:17.360
+Hadiah terbesar AI generatif
+
+00:20:17.360 --> 00:20:18.340
+adalah kefasihan.
+
+00:20:18.500 --> 00:20:19.360
+Kelemahan terbesarnya
+
+00:20:19.360 --> 00:20:20.380
+adalah kepercayaan.
+
+00:20:20.600 --> 00:20:21.560
+Itulah sebabnya manusia
+
+00:20:21.560 --> 00:20:22.180
+dalam lingkaran
+
+00:20:22.180 --> 00:20:23.520
+tetap tidak dapat dinegosiasikan.
+
+00:20:23.780 --> 00:20:24.400
+Secara berkala
+
+00:20:24.400 --> 00:20:25.320
+ambil sampel output
+
+00:20:25.320 --> 00:20:26.300
+dan validasi terhadap
+
+00:20:26.300 --> 00:20:27.120
+dokumentasi sumber.
+
+00:20:27.300 --> 00:20:28.240
+Di sektor yang diatur,
+
+00:20:28.540 --> 00:20:29.420
+catat pemeriksaan ini
+
+00:20:29.420 --> 00:20:30.520
+sebagai bukti kepatuhan.
+
+00:20:30.780 --> 00:20:31.720
+Menurut praktik terbaik
+
+00:20:31.720 --> 00:20:32.880
+dalam pengujian akurasi,
+
+00:20:33.220 --> 00:20:34.800
+menggabungkan tolok ukur otomatis
+
+00:20:34.800 --> 00:20:35.740
+dengan tinjauan manual
+
+00:20:35.740 --> 00:20:36.600
+secara dramatis
+
+00:20:36.600 --> 00:20:37.940
+mengurangi risiko halusinasi.
+
+00:20:38.160 --> 00:20:38.700
+Terjemahan,
+
+00:20:39.040 --> 00:20:40.080
+biarkan AI menyusun,
+
+00:20:40.340 --> 00:20:41.860
+tetapi biarkan manusia menilai.
+
+00:20:42.100 --> 00:20:43.060
+Secara operasional
+
+00:20:43.060 --> 00:20:44.220
+terapkan praktik terbaik
+
+00:20:44.220 --> 00:20:44.960
+power otomat,
+
+00:20:45.260 --> 00:20:46.600
+pantau riwayat alur kerja,
+
+00:20:46.920 --> 00:20:47.900
+perhatikan pelambatan,
+
+00:20:48.160 --> 00:20:48.860
+arsipkan log,
+
+00:20:49.080 --> 00:20:49.920
+dan ulangi skema.
+
+00:20:50.140 --> 00:20:51.840
+Alur kerja bukanlah furnitur,
+
+00:20:52.060 --> 00:20:53.600
+ia memerlukan pemeliharaan.
+
+00:20:53.840 --> 00:20:55.080
+Microsoft bahkan menerbitkan
+
+00:20:55.080 --> 00:20:56.120
+panduan yang menekankan
+
+00:20:56.120 --> 00:20:56.800
+tabel bernama,
+
+00:20:57.020 --> 00:20:57.520
+loop minimal,
+
+00:20:57.840 --> 00:20:59.200
+dan pemantauan kinerja aktif.
+
+00:20:59.340 --> 00:20:59.880
+Abaikan saja
+
+00:20:59.880 --> 00:21:00.840
+dan agen otonom Anda
+
+00:21:00.840 --> 00:21:02.000
+akan menghabiskan waktu lama
+
+00:21:02.000 --> 00:21:03.080
+untuk mencoba lagi proses
+
+00:21:03.080 --> 00:21:04.260
+yang gagal seperti Sisyphus
+
+00:21:04.260 --> 00:21:05.700
+yang mendorong data ke atas bukit.
+
+00:21:05.840 --> 00:21:06.540
+Dan terakhir,
+
+00:21:06.720 --> 00:21:07.640
+berpikirlah ke depan.
+
+00:21:07.800 --> 00:21:08.560
+Copilot Studio
+
+00:21:08.560 --> 00:21:09.460
+sudah mengisyaratkan
+
+00:21:09.460 --> 00:21:10.740
+orkestrasi multi-agen,
+
+00:21:10.740 --> 00:21:12.380
+agen mendelegasikan subtugas
+
+00:21:12.380 --> 00:21:12.940
+ke agen lain.
+
+00:21:13.160 --> 00:21:14.020
+Bayangkan satu bot
+
+00:21:14.020 --> 00:21:15.200
+mencari sumber data proyek,
+
+00:21:15.440 --> 00:21:16.620
+sementara yang lain merangkumnya,
+
+00:21:16.900 --> 00:21:18.340
+dan yang ketiga mengirimkan laporan.
+
+00:21:18.500 --> 00:21:19.480
+Itu akan datang.
+
+00:21:19.740 --> 00:21:20.500
+Agen RFI Anda
+
+00:21:20.500 --> 00:21:21.400
+hanyalah murid magang
+
+00:21:21.400 --> 00:21:22.260
+untuk ansambel itu.
+
+00:21:22.500 --> 00:21:22.760
+Namun,
+
+00:21:22.940 --> 00:21:23.860
+tanpa disiplin tata kelola
+
+00:21:23.860 --> 00:21:24.600
+yang Anda buat sekarang,
+
+00:21:24.820 --> 00:21:25.360
+sistem multi-agen
+
+00:21:25.360 --> 00:21:26.640
+akan menjadi kekacauan multi-agen.
+
+00:21:26.860 --> 00:21:27.120
+Jadi,
+
+00:21:27.280 --> 00:21:28.040
+pemeriksaan realitas
+
+00:21:28.040 --> 00:21:29.240
+otonomi tidak membebaskan Anda
+
+00:21:29.240 --> 00:21:29.940
+dari tanggung jawab.
+
+00:21:30.040 --> 00:21:31.300
+Otonomi justru mengalihkannya.
+
+00:21:31.600 --> 00:21:32.480
+Anda telah mengotomatiskan
+
+00:21:32.480 --> 00:21:33.040
+tenaga kerja,
+
+00:21:33.200 --> 00:21:33.960
+bukan akuntabilitas.
+
+00:21:34.140 --> 00:21:35.180
+Spreadsheet kini menjawab sendiri,
+
+00:21:35.180 --> 00:21:35.500
+ya,
+
+00:21:35.680 --> 00:21:37.020
+tetapi Anda tetap memiliki kebenarannya,
+
+00:21:37.260 --> 00:21:37.800
+keterlacakannya,
+
+00:21:38.040 --> 00:21:38.460
+dan nadanya.
+
+00:21:38.700 --> 00:21:40.200
+Dan itulah paradoks kemajuan.
+
+00:21:40.460 --> 00:21:41.460
+Semakin pintar alat Anda,
+
+00:21:41.720 --> 00:21:42.800
+semakin Anda harus berhati-hati
+
+00:21:42.800 --> 00:21:43.480
+dalam menggunakannya.
+
+00:21:43.700 --> 00:21:44.360
+Pertahankan batasan,
+
+00:21:44.540 --> 00:21:45.040
+batasi dokumen,
+
+00:21:45.180 --> 00:21:45.940
+dan perlakukan peretasan
+
+00:21:45.940 --> 00:21:46.500
+Excel otonom Anda
+
+00:21:46.500 --> 00:21:47.240
+bukan sebagai pemberontakan,
+
+00:21:47.420 --> 00:21:48.240
+tetapi sebagai penyempurnaan.
+
+00:21:48.400 --> 00:21:49.880
+Peradaban melalui pendelegasian.
+
+00:21:50.120 --> 00:21:50.540
+Sekarang,
+
+00:21:50.700 --> 00:21:51.500
+mesin berjalan sendiri.
+
+00:21:51.880 --> 00:21:52.700
+Satu-satunya pertanyaan
+
+00:21:52.700 --> 00:21:53.780
+yang belum terjawab sudah jelas.
+
+00:21:54.000 --> 00:21:54.700
+Jika spreadsheet Anda
+
+00:21:54.700 --> 00:21:55.840
+dapat beroperasi secara independen,
+
+00:21:56.080 --> 00:21:56.540
+apa sebenarnya
+
+00:21:56.540 --> 00:21:57.180
+yang ingin Anda lakukan
+
+00:21:57.180 --> 00:21:57.920
+dengan waktu tambahan?
+
+00:21:58.140 --> 00:21:59.820
+Keanggunan otomatisasi yang malas.
+
+00:22:00.020 --> 00:22:00.940
+Ada seni dalam melakukan
+
+00:22:00.940 --> 00:22:01.620
+lebih sedikit.
+
+00:22:01.800 --> 00:22:02.480
+Bukan ketidaktahuan,
+
+00:22:02.660 --> 00:22:03.480
+efisiensi yang disamarkan
+
+00:22:03.480 --> 00:22:04.280
+sebagai keterpisahan.
+
+00:22:04.520 --> 00:22:05.380
+Apa yang baru saja Anda buat
+
+00:22:05.380 --> 00:22:05.900
+bukanlah alat,
+
+00:22:06.100 --> 00:22:06.880
+melainkan pernyataan.
+
+00:22:07.040 --> 00:22:07.620
+Anda mengambil tugas
+
+00:22:07.620 --> 00:22:08.640
+yang dulunya membutuhkan kafein,
+
+00:22:08.680 --> 00:22:09.180
+keputusasaan,
+
+00:22:09.260 --> 00:22:09.600
+dan lembur,
+
+00:22:09.760 --> 00:22:10.560
+dan mengubahnya menjadi pekerjaan
+
+00:22:10.560 --> 00:22:11.380
+yang menyelesaikan dirinya sendiri.
+
+00:22:11.560 --> 00:22:12.460
+Itu bukan kemalasan,
+
+00:22:12.680 --> 00:22:13.980
+itu adalah peradaban yang pamer.
+
+00:22:14.180 --> 00:22:14.800
+Agen otonom
+
+00:22:14.800 --> 00:22:16.240
+tidak hanya mengotomatiskan klik,
+
+00:22:16.400 --> 00:22:17.360
+ia mengubah perhatian
+
+00:22:17.360 --> 00:22:18.360
+menjadi arsitektur.
+
+00:22:18.540 --> 00:22:19.520
+Email menjadi pemicu,
+
+00:22:19.780 --> 00:22:21.140
+spreadsheet menjadi percakapan,
+
+00:22:21.440 --> 00:22:22.220
+dan power otomat
+
+00:22:22.220 --> 00:22:23.840
+menjadi kurir yang tidak pernah tidur.
+
+00:22:24.000 --> 00:22:25.240
+Hasilnya elegan justru
+
+00:22:25.240 --> 00:22:26.260
+karena ia menghilang.
+
+00:22:26.480 --> 00:22:27.900
+Anda tidak melihat mesin bekerja,
+
+00:22:28.120 --> 00:22:28.960
+Anda hanya menyaksikan
+
+00:22:28.960 --> 00:22:29.840
+tidak adanya kerumitan.
+
+00:22:30.140 --> 00:22:31.600
+Jadi, inilah pelajaran sebenarnya.
+
+00:22:31.860 --> 00:22:33.240
+Otomatisasi bukan tentang kecepatan,
+
+00:22:33.360 --> 00:22:34.100
+ini tentang pengurangan.
+
+00:22:34.380 --> 00:22:35.460
+Setiap aturan yang Anda tetapkan,
+
+00:22:35.640 --> 00:22:36.700
+setiap aliran yang Anda hubungkan,
+
+00:22:36.920 --> 00:22:37.960
+berarti satu keputusan manusia
+
+00:22:37.960 --> 00:22:38.440
+yang lebih sedikit
+
+00:22:38.440 --> 00:22:39.140
+yang diperlukan besok.
+
+00:22:39.260 --> 00:22:40.440
+Agen menjawab pertanyaan,
+
+00:22:40.620 --> 00:22:41.300
+mengirim balasan,
+
+00:22:41.560 --> 00:22:42.600
+dan pensiun dengan tenang,
+
+00:22:42.840 --> 00:22:43.600
+sehingga Anda bebas
+
+00:22:43.600 --> 00:22:44.980
+untuk mengejar masalah tingkat tinggi
+
+00:22:44.980 --> 00:22:45.900
+atau tidur siang
+
+00:22:45.900 --> 00:22:46.920
+yang sangat bermartabat.
+
+00:22:47.060 --> 00:22:48.660
+Excel, simbol kuno ketekunan,
+
+00:22:48.660 --> 00:22:50.620
+akhirnya belajar mempertahankan diri.
+
+00:22:50.780 --> 00:22:51.420
+Program yang sama
+
+00:22:51.420 --> 00:22:52.880
+yang pernah menghukum ketidak efisienan
+
+00:22:52.880 --> 00:22:54.120
+kini menghargai pandangan ke depan.
+
+00:22:54.320 --> 00:22:54.880
+Ia membaca,
+
+00:22:55.100 --> 00:22:55.560
+merespons,
+
+00:22:55.740 --> 00:22:56.260
+dan menebus.
+
+00:22:56.500 --> 00:22:58.080
+Spreadsheet telah memasuki pencerahan.
+
+00:22:58.300 --> 00:22:58.800
+Tentu saja,
+
+00:22:59.020 --> 00:23:00.580
+peretasan ini mematahkan ekspektasi.
+
+00:23:00.800 --> 00:23:01.900
+Excel tidak pernah dimaksudkan
+
+00:23:01.900 --> 00:23:02.780
+untuk menahan kesadaran,
+
+00:23:03.100 --> 00:23:03.880
+namun disinilah kita
+
+00:23:03.880 --> 00:23:05.620
+menyaksikan sel-sel mengisi diri mereka sendiri
+
+00:23:05.620 --> 00:23:06.300
+karena kewajiban
+
+00:23:06.300 --> 00:23:07.440
+dan bukan karena instruksi.
+
+00:23:07.720 --> 00:23:09.260
+Jika itu tidak terasa seperti kemajuan,
+
+00:23:09.560 --> 00:23:11.480
+Anda mungkin masih menggabungkan sel secara manual.
+
+00:23:11.760 --> 00:23:13.040
+Biarkan era otonom dimulai
+
+00:23:13.040 --> 00:23:14.020
+dengan kerendahan hati
+
+00:23:14.020 --> 00:23:15.220
+dan kotak centang berlabel
+
+00:23:15.220 --> 00:23:16.540
+jalankan secara otomatis.
+
+00:23:16.720 --> 00:23:18.040
+Kunci jalur peningkatan Anda,
+
+00:23:18.300 --> 00:23:18.840
+berlangganan,
+
+00:23:18.980 --> 00:23:19.800
+aktifkan peringatan,
+
+00:23:20.040 --> 00:23:20.920
+dan biarkan pengetahuan
+
+00:23:20.920 --> 00:23:21.940
+muncul dengan sendirinya.
+
+00:23:22.200 --> 00:23:23.480
+Generasi alur kerja berikutnya
+
+00:23:23.480 --> 00:23:24.900
+tidak akan meminta persetujuan Anda.
+
+00:23:25.120 --> 00:23:26.800
+Mereka akan meminta alamat email Anda.
+
+00:23:27.020 --> 00:23:27.840
+Kirimkan dan mesin
+
+00:23:27.840 --> 00:23:28.880
+akan menangani sisanya.

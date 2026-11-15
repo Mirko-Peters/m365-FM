@@ -167,6 +167,14 @@ def _strings(n):
     for x in n.get("faq", []): yield x["q"]; yield x["a"]
 
 
+def fit_meta(m):
+    """Meta-Beschreibung knapp ueber 160 Zeichen (bis 200) an einer Wortgrenze kuerzen statt den bezahlten Text zu verwerfen (Testlauf 10.11.:
+    11 von 39 Fehlversuchen hatten 161-164 Zeichen). Ohne Wortgrenze ab Zeichen 100 oder ueber 200 Zeichen bleibt es beim Fehler."""
+    if len(m) <= 160 or len(m) > 200 or " " not in m[100:159]: return m
+    cut = m[:159].rsplit(" ", 1)[0].rstrip(" ,;:-\u2013\u2014")
+    return cut + "\u2026" if len(cut) >= 100 else m
+
+
 def validate(obj, ep, timed=None):
     """-> (notes | None, fehler[]). Streng: ungueltiges JSON, URLs/HTML, Laengen, veraenderte Produktnamen. Unbekannte Entitaets-ids und Kapitel ohne Zeitmarken werden verworfen."""
     err = []
@@ -180,7 +188,7 @@ def validate(obj, ep, timed=None):
     if not isinstance(obj, dict):
         return None, ["kein JSON-Objekt"]
     s = lambda k: obj.get(k).strip() if isinstance(obj.get(k), str) else ""
-    n = {"meta": s("meta"), "summary": s("summary")}
+    n = {"meta": fit_meta(s("meta")), "summary": s("summary")}
     if not n["meta"] or len(n["meta"]) > 160: err.append(f"meta Laenge {len(n['meta'])}")
     if not (120 <= len(n["summary"]) <= 700): err.append(f"summary Laenge {len(n['summary'])}")
     kp = obj.get("key_points")

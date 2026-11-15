@@ -1,0 +1,1861 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:07.330
+Prêt pour 10 jours de Microsoft 365, Copilot, l'IA, Azure et les personnes qui façonnent l'avenir du travail, MST.
+
+00:00:07.870 --> 00:00:11.970
+En janvier, la M365Con est de retour et nous allons plus loin.
+
+00:00:12.850 --> 00:00:18.090
+Rejoignez-nous pour des sessions en direct, des démonstrations concrètes et des connaissances pratiques de MVP et d'experts du secteur du monde entier.
+
+00:00:18.730 --> 00:00:21.070
+Pas de diapositif générique, pas de mots à la mode sans fin.
+
+00:00:22.110 --> 00:00:23.350
+Nous nous attaquons aux vrais défis.
+
+00:00:23.890 --> 00:00:28.590
+Copilot Studio, agent d'IA, fabrique, sécurité, gouvernance et automatisation.
+
+00:00:28.590 --> 00:00:34.290
+Que vous soyez un professionnel de l'informatique, un développeur ou un chef d'entreprise, des sessions sont conçues pour vous.
+
+00:00:35.470 --> 00:00:40.030
+Pendant 10 jours complets, vous pouvez explorer de multiples technologies et vous connecter à une communauté mondiale.
+
+00:00:40.950 --> 00:00:44.230
+Regardez en direct et rapportez des informations pratiques à votre organisation.
+
+00:00:45.150 --> 00:00:48.950
+Janvier 2027, 10 jours, une communauté Microsoft.
+
+00:00:49.370 --> 00:00:50.650
+Les inscriptions sont ouvertes dès maintenant.
+
+00:00:51.830 --> 00:00:55.630
+Rendez-vous sur M365Con.net et réservez votre place dès aujourd'hui.
+
+00:00:55.630 --> 00:00:58.230
+C'est M365Con.net...
+
+00:00:58.230 --> 00:01:04.550
+Rejoignez-nous dès maintenant sur M365Con.net et nous vous retrouverons en direct en janvier.
+
+00:01:05.190 --> 00:01:07.710
+Imaginez que vous achetez un nouvel ordinateur portable pour quelqu'un qui rejoint votre entreprise.
+
+00:01:07.910 --> 00:01:12.030
+Ils ont besoin d'email, de fichiers partagés, du Wi-Fi du bureau et peut-être d'un VPN lorsqu'ils travaillent à domicile.
+
+00:01:12.490 --> 00:01:14.190
+Chaque connexion pose la même question silencieuse.
+
+00:01:14.250 --> 00:01:15.630
+Cet ordinateur portable a-t-il sa place ici ?
+
+00:01:15.630 --> 00:01:18.930
+Dans de nombreuses petites entreprises, la réponse est toujours un mot de passe.
+
+00:01:19.030 --> 00:01:21.690
+Un code Wi-Fi partagé, une connexion VPN envoyée dans un message,
+
+00:01:21.810 --> 00:01:25.370
+puis une correction manuelle lorsque quelqu'un change un mot de passe, remplace un ordinateur portable ou quitte l'entreprise.
+
+00:01:25.830 --> 00:01:27.370
+Cela peut sembler être un problème de petite entreprise.
+
+00:01:28.370 --> 00:01:31.630
+La même question se pose dans une entreprise de 10 personnes et dans une entreprise de 10 000 personnes.
+
+00:01:32.070 --> 00:01:36.490
+Vous devez trouver un moyen pour un appareil de prouver qu'il appartient à votre entreprise sans demander à la personne qui l'utilise de continuer de continuer de continuer de s'assurer.
+
+00:01:36.490 --> 00:01:44.270
+Je suis Melko Peters de M365FM et cette pépite de connaissances explique les certificats Microsoft Cloud PKI et comment Intune peut gérer cette preuve en coulisses.
+
+00:01:45.110 --> 00:01:47.570
+Un minuscule fichier numérique peut remplacer un mot de passe à la porte du bureau.
+
+00:01:48.650 --> 00:01:49.870
+Voyons d'abord pourquoi ce fichier existe.
+
+00:01:50.670 --> 00:01:51.950
+Pourquoi les certificats existent ?
+
+00:01:51.950 --> 00:01:53.590
+Ouvrez un site web sécurisé dans votre navigateur.
+
+00:01:53.990 --> 00:01:56.630
+Avant de dire la page, votre navigateur vérifie quelque chose en arrière-plan.
+
+00:01:57.070 --> 00:01:58.210
+Il vérifie un certificat numérique.
+
+00:01:58.730 --> 00:02:03.370
+Ce certificat aide le navigateur à confirmer qu'il a atteint le véritable site web et peut créer une connexion protégée.
+
+00:02:03.510 --> 00:02:06.330
+La plupart des gens ne voient jamais cette vérification, mais vous vous y fiez tous les jours.
+
+00:02:06.930 --> 00:02:09.050
+Certificat fonctionne un peu comme un badge d'identification d'entreprise.
+
+00:02:09.350 --> 00:02:11.370
+Le badge porte un nom et des informations sur son auteur.
+
+00:02:12.190 --> 00:02:14.410
+Il contient également la preuve d'un fabricant de badge en qui vous avez confiance.
+
+00:02:15.050 --> 00:02:17.570
+Certificat numérique porte un nom ou une identité et une clé publique.
+
+00:02:18.090 --> 00:02:20.350
+Considérez la clé publique comme une information que d'autres peuvent inspecter.
+
+00:02:20.730 --> 00:02:27.330
+Le certificat contient également une signature numérique de confiance qui indique ce bureau de badge à vérifier cette identité et à prouver ce badge aiguë.
+
+00:02:28.130 --> 00:02:31.350
+Cela donne aux gardiens quelque chose à vérifier, mais un badge seul ne suffit pas.
+
+00:02:31.790 --> 00:02:33.630
+Quelqu'un pourrait prendre un badge imprimé sur un bureau.
+
+00:02:33.630 --> 00:02:36.930
+Le certificat numérique résolve ce problème avec une clé privée.
+
+00:02:37.330 --> 00:02:38.710
+La clé privée est le secret du détenteur.
+
+00:02:39.110 --> 00:02:41.190
+Reste avec un ordinateur portable, un téléphone ou un utilisateur.
+
+00:02:41.590 --> 00:02:47.010
+L'appareil l'utilise pour prouver qu'il est réellement propriétaire du certificat, mais il ne transmet pas ce secret au réseau Wi-Fi, au VPN ou à l'application vérifiant le badge.
+
+00:02:47.010 --> 00:02:52.290
+Imagine un gardien vous demandant de déverrouiller votre propre porte-badge plutôt que de vous demander de révéler la combinaison.
+
+00:02:52.830 --> 00:02:55.330
+Vous prouvez que vous pouvez l'ouvrir, mais le garde n'apprend jamais la combinaison.
+
+00:02:55.870 --> 00:02:58.070
+C'est pourquoi les certificats peuvent être plus sûrs qu'un mot de passe partagé.
+
+00:02:58.510 --> 00:02:59.910
+Un mot de passe Wi-Fi partagé peut voyager.
+
+00:03:00.430 --> 00:03:04.230
+Quelqu'un peut l'écrire, le transférer, le réutiliser sur un appareil personnel ou le conserver après avoir quitté l'entreprise.
+
+00:03:04.890 --> 00:03:08.610
+Un certificat d'appareil donne à chaque ordinateur portable, téléphone, gérer sa propre preuve.
+
+00:03:09.170 --> 00:03:11.010
+Alors qui crée et gère ces badges numériques ?
+
+00:03:11.010 --> 00:03:14.630
+Cette tâche incombe à PKI, abréviation de l'infrastructure à clé publique.
+
+00:03:14.950 --> 00:03:16.370
+Le nom semble lourd, mais l'idée est simple.
+
+00:03:16.770 --> 00:03:18.970
+PKI est le bureau des badges de votre espace de travail numérique.
+
+00:03:19.590 --> 00:03:22.170
+Il crée des certificats, les envoie aux bonnes personnes ou aux bons appareils,
+
+00:03:22.290 --> 00:03:25.470
+les renouvelle avant leur expiration et les annule lorsqu'ils ne devraient plus fonctionner.
+
+00:03:26.690 --> 00:03:28.830
+Au sein de ce bureau des badges se trouve une autorité de certification,
+
+00:03:29.250 --> 00:03:31.970
+généralement abrégée en CA, une CA, et le fabricant de badges de confiance.
+
+00:03:32.870 --> 00:03:36.790
+Lorsqu'un réseau Wi-Fi, un service VPN ou une application interne voit un certificat et pose une question,
+
+00:03:37.030 --> 00:03:40.290
+est-ce que je fais confiance au fabricant de badges qu'il a approuvés ?
+
+00:03:40.290 --> 00:03:43.910
+Si la réponse est oui, il peut vérifier le certificat et décider s'il laisse passer l'appareil.
+
+00:03:44.390 --> 00:03:45.230
+Il y a généralement deux couches.
+
+00:03:45.750 --> 00:03:47.230
+Au sommet se trouve l'autorité de certification racine.
+
+00:03:47.470 --> 00:03:50.190
+Considérez-la comme le siège social de l'entreprise qui approuve l'ensemble du système de badges.
+
+00:03:50.310 --> 00:03:52.190
+Il n'a pas besoin d'imprimer chaque badge pour chaque ordinateur portable.
+
+00:03:52.470 --> 00:03:54.430
+En dessous se trouve une autorité de certification et maîtrise.
+
+00:03:54.630 --> 00:03:55.170
+C'est le bureau qui gère.
+
+00:03:57.320 --> 00:03:58.780
+Il met des certificats pour les appareils utilisateurs,
+
+00:03:58.840 --> 00:04:00.780
+tandis que son autorité renvoie à l'autorité de certification et maîtrise.
+
+00:04:01.080 --> 00:04:03.840
+Lorsqu'un service vérifie la chaîne, il peut suivre le certificat de l'ordinateur portable
+
+00:04:03.840 --> 00:04:06.660
+à l'autorité de certification et maîtrise puis revenir à l'autorité de certification et maîtrise
+
+00:04:06.660 --> 00:04:07.200
+dans laquelle il fait confiance.
+
+00:04:07.320 --> 00:04:09.000
+Cette chaîne donne la structure du processus.
+
+00:04:09.420 --> 00:04:11.120
+Vous pouvez l'utiliser pour un Wi-Fi sécurisé
+
+00:04:11.120 --> 00:04:13.700
+où un ordinateur portable fait ses preuves avant de rejoindre le réseau.
+
+00:04:14.160 --> 00:04:15.200
+Vous pouvez l'utiliser pour un VPN
+
+00:04:15.200 --> 00:04:17.160
+où l'ordinateur portable prouve qu'il appartient au réseau
+
+00:04:17.160 --> 00:04:18.740
+avant d'accéder aux ressources de l'entreprise depuis son domicile.
+
+00:04:18.980 --> 00:04:21.040
+Vous pouvez également l'utiliser pour une application interne
+
+00:04:21.040 --> 00:04:22.780
+qui ne doit accepter que les appareils gérés par l'entreprise.
+
+00:04:23.420 --> 00:04:25.020
+L'employé n'a pas besoin de comprendre tout cela.
+
+00:04:25.560 --> 00:04:28.260
+Il ouvre l'ordinateur portable, choisit le Wi-Fi de l'entreprise et se connecte.
+
+00:04:28.260 --> 00:04:29.100
+C'est l'objectif.
+
+00:04:29.540 --> 00:04:31.600
+La partie difficile commence lorsque votre bureau de badge
+
+00:04:31.600 --> 00:04:32.740
+se trouve dans une salle de serveur.
+
+00:04:33.920 --> 00:04:35.480
+Pourquoi l'infrastructure à clé publique traditionnelle
+
+00:04:35.480 --> 00:04:36.860
+devient un fardeau pour les pieds d'entreprise ?
+
+00:04:36.860 --> 00:04:38.380
+Pendant de nombreuses années, ce système de badge
+
+00:04:38.380 --> 00:04:40.060
+signifiait construire et exploiter son propre équipe.
+
+00:04:40.500 --> 00:04:41.660
+Vous devez installer Windows Server
+
+00:04:41.660 --> 00:04:43.700
+puis ajouter les services de certificat Active Directory
+
+00:04:43.700 --> 00:04:44.740
+souvent appelés ADCS
+
+00:04:44.740 --> 00:04:47.280
+qui exécutent l'autorité de certification au sein du réseau de votre entreprise.
+
+00:04:48.020 --> 00:04:49.740
+Mais le serveur seul ne suffit pas.
+
+00:04:50.580 --> 00:04:52.200
+Si vous utilisez des appareils gérés par Intune,
+
+00:04:52.280 --> 00:04:53.780
+ils ont besoin d'un moyen de demander un certificat
+
+00:04:53.780 --> 00:04:55.180
+à cette autorité de certification locale.
+
+00:04:56.520 --> 00:04:58.240
+Cela signifie configurer un connecteur de certification
+
+00:04:58.260 --> 00:05:00.840
+un serveur NDES pour gérer les demandes de certificat,
+
+00:05:01.140 --> 00:05:03.200
+un proxy inverse pour un accès sécurisé depuis l'extérieur
+
+00:05:03.200 --> 00:05:05.240
+et des règles de pare-feu qui autorisent le trafic approprié.
+
+00:05:06.360 --> 00:05:07.220
+Chaque élément a une fonction.
+
+00:05:07.600 --> 00:05:09.340
+Ensemble, ils peuvent transformer un objectif simple
+
+00:05:09.340 --> 00:05:11.520
+comme un Wi-Fi sans mot de passe en un projet de serveur complet.
+
+00:05:12.020 --> 00:05:12.660
+Voici une analogie.
+
+00:05:13.040 --> 00:05:14.380
+Imaginez que vous souhaitiez imprimer des cartes d'accès
+
+00:05:14.380 --> 00:05:15.320
+pour le personnel dans votre propre bureau.
+
+00:05:15.500 --> 00:05:16.820
+N'achetez pas simplement une imprimante à cartes.
+
+00:05:16.980 --> 00:05:18.220
+Vous construisez une pièce fermée à clé pour cela.
+
+00:05:18.440 --> 00:05:20.620
+Vous ajoutez des armoires fermées à clé pour le stock de cartes et les dossiers.
+
+00:05:20.740 --> 00:05:21.780
+Vous installez une alimentation de secours.
+
+00:05:22.060 --> 00:05:23.720
+Vous définissez des règles pour les personnes autorisées à entrer.
+
+00:05:23.720 --> 00:05:25.840
+Ensuite, vous avez besoin de quelqu'un qui sache quel commutateur utiliser
+
+00:05:25.840 --> 00:05:27.080
+lorsque l'imprimante cesse de fonctionner.
+
+00:05:27.440 --> 00:05:29.720
+Cela se rapproche davantage de l'infrastructure à clé publique traditionnelle
+
+00:05:29.720 --> 00:05:30.300
+que la plupart des gens.
+
+00:05:30.640 --> 00:05:32.640
+Une petite entreprise peut souhaiter que les ordinateurs portables
+
+00:05:32.640 --> 00:05:34.780
+se connectent au Wi-Fi sans partager un seul mot de passe entre tous.
+
+00:05:35.360 --> 00:05:37.760
+Ou bien il peut vouloir un VPN qui reconnaît un ordinateur portable géré
+
+00:05:37.760 --> 00:05:39.580
+avant de demander à l'employé de se connecter.
+
+00:05:40.400 --> 00:05:41.420
+Des objectifs raisonnables.
+
+00:05:42.080 --> 00:05:44.040
+Cependant, l'ancienne méthode peut nécessiter des serveurs,
+
+00:05:44.140 --> 00:05:46.140
+des règles réseau, une planification de l'accès public
+
+00:05:46.140 --> 00:05:48.280
+et des connaissances que de nombreuses petites équipes informatiques
+
+00:05:48.280 --> 00:05:49.480
+n'ont tout simplement pas le temps de développer.
+
+00:05:49.480 --> 00:05:51.420
+Et le travail ne s'arrête pas après la configuration.
+
+00:05:51.840 --> 00:05:52.780
+Serveurs ont besoin de mise à jour.
+
+00:05:53.140 --> 00:05:55.140
+Le matériel arrive en fin de vie, les sauvegardes doivent être testées,
+
+00:05:55.220 --> 00:05:56.800
+pas seulement une coche verte dans un outil de sauvegarde.
+
+00:05:57.760 --> 00:05:59.420
+Les certificats ont des dates d'expiration
+
+00:05:59.420 --> 00:06:01.540
+et le système doit les renouveler avant que ces dates n'arrivent.
+
+00:06:02.520 --> 00:06:03.620
+Lorsque le renouvellement échoue,
+
+00:06:03.740 --> 00:06:06.120
+le premier signe peut venir d'un employé qui ne peut pas se connecter au Wi-Fi
+
+00:06:06.120 --> 00:06:07.000
+un lundi matin chargé.
+
+00:06:07.820 --> 00:06:09.820
+Le mot de passe de l'employé peut toujours fonctionner parfaitement.
+
+00:06:10.560 --> 00:06:12.600
+Son ordinateur portable peut toujours ouvrir Word et ses emails
+
+00:06:12.600 --> 00:06:13.660
+à partir d'une connexion mobile,
+
+00:06:13.780 --> 00:06:16.200
+mais le certificat qui permet au réseau de reconnaître cet ordinateur portable
+
+00:06:16.200 --> 00:06:16.740
+peut expirer.
+
+00:06:16.740 --> 00:06:19.760
+Le VPN peut le refuser, une application interne peut le refuser,
+
+00:06:19.840 --> 00:06:20.640
+le Wi-Fi peut le refuser.
+
+00:06:21.160 --> 00:06:23.780
+Cela se transforme en un appel au support qui semble étrange au premier abord.
+
+00:06:24.180 --> 00:06:25.840
+Mon mot de passe fonctionne, mais je ne peux pas me connecter.
+
+00:06:26.620 --> 00:06:29.200
+Quelqu'un doit ensuite déterminer si le problème se situe au niveau de l'appareil,
+
+00:06:29.280 --> 00:06:30.860
+du profil de certificat, du service réseau,
+
+00:06:30.980 --> 00:06:33.300
+de l'autorité de certification locale, du connecteur ou du pare-feu.
+
+00:06:34.040 --> 00:06:36.700
+Une petite équipe informatique peut perdre une demi-journée à suivre cette piste.
+
+00:06:37.220 --> 00:06:38.680
+Le travail à distance ajoute une couche supplémentaire.
+
+00:06:39.000 --> 00:06:42.120
+Un ordinateur portable au bureau peut accéder plus facilement aux services de certificat locaux,
+
+00:06:42.120 --> 00:06:44.320
+mais un ordinateur portable sur la table de cuisine de quelqu'un
+
+00:06:44.320 --> 00:06:46.760
+a toujours besoin d'un chemin sûr pour récupérer un certificat ou un nouveau.
+
+00:06:47.200 --> 00:06:50.180
+Vous pouvez exposer une partie du processus avec précaution via un proxy inverse
+
+00:06:50.180 --> 00:06:51.060
+et des règles de pare-feu.
+
+00:06:51.460 --> 00:06:53.240
+Cela fonctionne lorsqu'il est correctement planifié et maintenu,
+
+00:06:53.300 --> 00:06:54.580
+mais cela ajoute également des éléments mobiles,
+
+00:06:54.680 --> 00:06:56.020
+des paramètres et des emplacements supplémentaires
+
+00:06:56.020 --> 00:06:57.380
+où une petite erreur peut interrompre l'accès.
+
+00:06:58.780 --> 00:07:00.220
+Le coût ne se limite pas à une licence serveur,
+
+00:07:00.400 --> 00:07:02.280
+mais représente également le temps passé à appliquer les correctifs,
+
+00:07:02.360 --> 00:07:04.320
+les connaissances spécialisées et la documentation qui doit être ajoutée.
+
+00:07:05.220 --> 00:07:07.800
+C'est le risque qu'une personne comprenne le système de certificat,
+
+00:07:07.800 --> 00:07:10.100
+puis quitte l'entreprise avec la carte en tête.
+
+00:07:10.100 --> 00:07:12.700
+La PKI elle-même n'est pas réservée aux grandes entreprises.
+
+00:07:13.420 --> 00:07:16.240
+Une petite entreprise peut bénéficier du même type de protection des appareils
+
+00:07:16.240 --> 00:07:17.080
+qu'une grande entreprise.
+
+00:07:17.620 --> 00:07:19.520
+Le problème est que l'exécution d'une PKI à l'ancienne
+
+00:07:19.520 --> 00:07:21.880
+peut exiger l'effort d'un service informatique beaucoup plus important.
+
+00:07:22.680 --> 00:07:25.200
+Microsoft Cloud PKI conserve le processus de certification,
+
+00:07:25.460 --> 00:07:27.000
+mais transfère une grande partie de cette machinerie
+
+00:07:27.000 --> 00:07:28.740
+hors de votre salle de serveur vers le Cloud Microsoft.
+
+00:07:29.420 --> 00:07:31.100
+Est-ce que Microsoft Cloud PKI en réalité ?
+
+00:07:31.740 --> 00:07:34.240
+Microsoft Cloud PKI est le service d'autorité de certification
+
+00:07:34.240 --> 00:07:35.720
+géré de Microsoft au sein d'Intune.
+
+00:07:36.200 --> 00:07:37.240
+C'est la définition la plus simple.
+
+00:07:37.240 --> 00:07:39.400
+Il crée et gère les certificats pour les appareils
+
+00:07:39.400 --> 00:07:40.820
+et les utilisateurs gérés par Intune.
+
+00:07:41.480 --> 00:07:43.340
+Au lieu que votre entreprise exécute le système de badges
+
+00:07:43.340 --> 00:07:44.180
+sur des serveurs locaux,
+
+00:07:44.480 --> 00:07:47.020
+Microsoft exécute le service d'autorité de certification dans le Cloud.
+
+00:07:47.620 --> 00:07:50.080
+Vos employés n'ouvriront pas une application appelée Cloud PKI ?
+
+00:07:50.080 --> 00:07:51.820
+Nous cliquerons pas sur un bouton pour demander un certificat,
+
+00:07:51.900 --> 00:07:53.460
+n'enregistrons pas de fichier ou ne se sont pas de fichier.
+
+00:07:54.000 --> 00:07:55.300
+Cloud PKI fonctionne en arrière-plan.
+
+00:07:55.960 --> 00:07:58.200
+Il peut émettre un certificat lorsqu'un appareil géré en a besoin,
+
+00:07:58.420 --> 00:07:59.560
+le renouveler avant son expiration
+
+00:07:59.560 --> 00:08:01.960
+et le révoquer lorsque ce certificat ne devrait plus fonctionner.
+
+00:08:02.620 --> 00:08:04.060
+Reprenons l'analogie de l'immeuble de bureau.
+
+00:08:04.660 --> 00:08:05.800
+Entra ID se trouve à la réception.
+
+00:08:07.240 --> 00:08:08.600
+Ils contrôlent leur identité de connexion.
+
+00:08:09.220 --> 00:08:10.580
+Intune agit comme le gestionnaire de l'immeuble.
+
+00:08:11.260 --> 00:08:13.660
+Il sait quels ordinateurs portables et téléphones appartiennent à l'entreprise
+
+00:08:13.660 --> 00:08:15.480
+et envoient leurs paramètres, applications et règles.
+
+00:08:16.300 --> 00:08:18.600
+Cloud PKI est le bureau de badge sécurisé à l'intérieur de ce bâtiment.
+
+00:08:19.360 --> 00:08:20.400
+Intune indique au bureau de badge
+
+00:08:20.400 --> 00:08:22.020
+quels appareils gérés ont besoin d'un accès.
+
+00:08:22.540 --> 00:08:23.940
+Cloud PKI crée le certificat.
+
+00:08:24.500 --> 00:08:26.060
+L'appareil peut ensuite utiliser ce certificat
+
+00:08:26.060 --> 00:08:27.960
+lorsqu'il se connecte au service que votre entreprise a configuré
+
+00:08:27.960 --> 00:08:28.480
+pour lui faire confiance.
+
+00:08:28.840 --> 00:08:29.940
+Chaque service a un rôle clair.
+
+00:08:30.420 --> 00:08:31.660
+Vous n'avez pas besoin d'un serveur Windows local
+
+00:08:31.660 --> 00:08:33.200
+exécutant une autorité de certification RAC.
+
+00:08:33.200 --> 00:08:35.400
+Vous n'avez pas besoin d'un autre serveur local agissant
+
+00:08:35.400 --> 00:08:36.340
+en tant qu'autorité de certification.
+
+00:08:36.920 --> 00:08:38.200
+Microsoft peut héberger les deux parties
+
+00:08:38.200 --> 00:08:39.400
+dans une configuration Cloud First
+
+00:08:39.400 --> 00:08:41.020
+avec une autorité de certification au sommet
+
+00:08:41.020 --> 00:08:42.380
+et une autorité de certification à maîtrise
+
+00:08:42.380 --> 00:08:43.840
+gérant les certificats maîtrisés par vos appareils.
+
+00:08:44.020 --> 00:08:45.560
+Cela supprime beaucoup d'équipements du plan.
+
+00:08:45.960 --> 00:08:46.940
+Cela change également la personne
+
+00:08:46.940 --> 00:08:48.380
+qui gère le service de certificat sous-jacent.
+
+00:08:49.100 --> 00:08:51.020
+Dans le cadre d'une utilisation en production sous licence,
+
+00:08:51.180 --> 00:08:53.100
+Microsoft protège les clés de l'autorité de certification
+
+00:08:53.100 --> 00:08:54.540
+avec des modules de sécurité matérielle,
+
+00:08:54.720 --> 00:08:55.660
+généralement appelés HSM.
+
+00:08:56.080 --> 00:08:58.260
+Un HSM est un matériel de coffre-fort verrouillé
+
+00:08:58.260 --> 00:09:00.500
+conçu pour protéger les clés cryptographiques hautement sensibles.
+
+00:09:00.500 --> 00:09:02.300
+Vous n'avez pas besoin d'acheter, de monter en RAC,
+
+00:09:02.360 --> 00:09:03.780
+de corriger ou de protéger ce matériel vous-même.
+
+00:09:04.280 --> 00:09:05.700
+Microsoft l'exécute dans le cadre du service.
+
+00:09:06.140 --> 00:09:08.000
+Votre travail reste axé sur la décision commerciale,
+
+00:09:08.060 --> 00:09:09.900
+à savoir quels appareils doivent recevoir des certificats
+
+00:09:09.900 --> 00:09:12.200
+et à quoi ces certificats doivent-ils leur permettre d'accéder.
+
+00:09:12.900 --> 00:09:14.340
+Il y a un nom court qui mérite d'être connu ici,
+
+00:09:14.680 --> 00:09:15.080
+CCEP.
+
+00:09:15.760 --> 00:09:17.620
+Cela signifie Simple Certificate Enrollment Protocol.
+
+00:09:18.140 --> 00:09:19.660
+Vous n'aurez pas besoin de vous souvenir du nom complet
+
+00:09:19.660 --> 00:09:20.260
+après cet épisode.
+
+00:09:20.840 --> 00:09:22.580
+Considérez CEP comme la voie de demande protégée
+
+00:09:22.580 --> 00:09:24.500
+entre un appareil géré et le bureau des badges.
+
+00:09:25.300 --> 00:09:27.500
+Un ordinateur portable utilise cette voie pour demander un certificat.
+
+00:09:27.500 --> 00:09:29.780
+Cloud PKI vérifie la demande via Intune
+
+00:09:29.780 --> 00:09:33.060
+et renvoie le certificat signé lorsque la demande réussit ses vérifications.
+
+00:09:33.980 --> 00:09:35.920
+L'appareil n'envoie pas son secret privé via cette voie.
+
+00:09:36.480 --> 00:09:37.200
+Ce détail est important.
+
+00:09:37.580 --> 00:09:39.560
+L'appareil crée sa clé privée localement, puis la conserve.
+
+00:09:40.360 --> 00:09:42.680
+Cloud PKI reçoit une demande contenant les informations publiques
+
+00:09:42.680 --> 00:09:44.340
+dont il a besoin pour émettre le certificat
+
+00:09:44.340 --> 00:09:45.640
+et non la clé privée de l'appareil.
+
+00:09:46.300 --> 00:09:47.940
+Cloud PKI prend en charge les familles d'appareils
+
+00:09:47.940 --> 00:09:49.440
+que la plupart des petites entreprises utilisent déjà.
+
+00:09:50.120 --> 00:09:51.640
+Cela inclut les ordinateurs portables Windows,
+
+00:09:51.800 --> 00:09:53.640
+les Mac, les iPhones, les iPads et les appareils Android.
+
+00:09:53.640 --> 00:09:55.000
+La condition est simple.
+
+00:09:56.240 --> 00:09:57.980
+L'appareil doit être inscrit et géré via Intune
+
+00:09:57.980 --> 00:10:00.620
+et sa plateforme doit prendre en charge le profil de certificat d'Intune.
+
+00:10:01.660 --> 00:10:03.840
+Un ordinateur portable personnel qui n'est pas géré via Intune
+
+00:10:03.840 --> 00:10:04.680
+ne correspond pas à ce modèle.
+
+00:10:05.280 --> 00:10:06.280
+Cette limite est délibérée.
+
+00:10:06.760 --> 00:10:08.800
+Cloud PKI utilise les connaissances d'Intune sur l'appareil
+
+00:10:08.800 --> 00:10:09.700
+dans le cadre du processus.
+
+00:10:10.100 --> 00:10:12.560
+Il fonctionne donc mieux lorsque votre entreprise contrôle la configuration
+
+00:10:12.560 --> 00:10:13.800
+et peut appliquer ses règles de sécurité.
+
+00:10:14.800 --> 00:10:16.280
+Avant de planifier en conséquence, vérifiez les licences.
+
+00:10:16.640 --> 00:10:19.500
+Cloud PKI nécessite la bonne licence Microsoft en plus d'Intune.
+
+00:10:19.500 --> 00:10:22.120
+Microsoft modifie les détails du plan au fil du temps.
+
+00:10:22.540 --> 00:10:23.640
+Vérifiez donc vos droits actuels
+
+00:10:23.640 --> 00:10:24.980
+et confirmez qu'il y a besoin d'une licence
+
+00:10:24.980 --> 00:10:26.620
+avant de concevoir le service en conséquence.
+
+00:10:27.180 --> 00:10:29.300
+L'autorité de certification peut désormais résider dans le cloud
+
+00:10:29.300 --> 00:10:30.500
+mais le certificat doit toujours atteindre
+
+00:10:30.500 --> 00:10:31.980
+le bon ordinateur portable en toute sécurité.
+
+00:10:32.660 --> 00:10:34.760
+Ce parcours explique pourquoi Cloud PKI fonctionne si bien
+
+00:10:34.760 --> 00:10:35.640
+dans le travail moderne.
+
+00:10:36.240 --> 00:10:38.300
+Imaginez qu'un nouvel employé ouvre son ordinateur portable
+
+00:10:38.300 --> 00:10:39.560
+géré par Intune pour la première fois
+
+00:10:39.560 --> 00:10:41.180
+et doit se connecter à un réseau Wi-Fi sécurisé
+
+00:10:41.180 --> 00:10:41.880
+ou utiliser un VPN.
+
+00:10:43.280 --> 00:10:46.100
+Que se passe-t-il lorsqu'un appareil a besoin d'un certificat ?
+
+00:10:46.100 --> 00:10:48.680
+Imaginez un nouvel employé assis devant son ordinateur portable d'entreprise
+
+00:10:48.680 --> 00:10:49.620
+le premier matin à la maison.
+
+00:10:50.040 --> 00:10:51.480
+Cet ordinateur portable est déjà inscrit à Intune.
+
+00:10:51.880 --> 00:10:53.880
+Ils auront besoin du Wi-Fi du bureau lorsqu'ils arriveront sur place
+
+00:10:53.880 --> 00:10:55.620
+et probablement d'un VPN pour accéder au système interne
+
+00:10:55.620 --> 00:10:56.200
+depuis leur domicile
+
+00:10:56.200 --> 00:10:57.880
+mais ils ne devraient pas avoir à chercher un mot de passe Wi-Fi
+
+00:10:57.880 --> 00:10:58.840
+ou appeler le service informatique
+
+00:10:58.840 --> 00:11:00.600
+ou appeler le service informatique pour obtenir un certificat.
+
+00:11:00.700 --> 00:11:01.840
+Avant même que l'ordinateur portable
+
+00:11:01.840 --> 00:11:03.060
+ne demande son propre certificat,
+
+00:11:03.340 --> 00:11:05.300
+Intune envoie les certificats auxquels il doit faire confiance.
+
+00:11:06.180 --> 00:11:07.440
+Cela inclut le certificat racine
+
+00:11:07.440 --> 00:11:09.640
+et le certificat d'émission de votre configuration Cloud PKI.
+
+00:11:10.060 --> 00:11:11.420
+Cela semble être un détail, n'est-ce pas ?
+
+00:11:11.420 --> 00:11:12.320
+En fait, c'est toute la base
+
+00:11:12.320 --> 00:11:13.940
+et indique à l'ordinateur portable
+
+00:11:13.940 --> 00:11:15.080
+et casser l'autorité de certification
+
+00:11:15.080 --> 00:11:16.040
+à laquelle vous pouvez faire confiance.
+
+00:11:16.880 --> 00:11:17.560
+Sans cette confiance,
+
+00:11:17.800 --> 00:11:19.260
+l'ordinateur portable n'a aucun moyen de savoir
+
+00:11:19.260 --> 00:11:20.780
+si un certificat provient du service approuvé
+
+00:11:20.780 --> 00:11:22.160
+de votre entreprise ou d'un endroit quelconque.
+
+00:11:23.040 --> 00:11:25.040
+Ensuite, l'ordinateur portable génère sa propre clé privée.
+
+00:11:25.560 --> 00:11:27.080
+Cela se produit directement sur l'appareil lui-même
+
+00:11:27.080 --> 00:11:28.440
+et cette clé privée ne quitte jamais l'appareil.
+
+00:11:29.020 --> 00:11:30.080
+Elle n'est pas copiée dans Intune,
+
+00:11:30.220 --> 00:11:31.080
+envoyée à Cloud PKI
+
+00:11:31.080 --> 00:11:32.660
+ou transmise au service Wi-Fi.
+
+00:11:33.640 --> 00:11:35.240
+Cette séparation est ce qui protège le secret.
+
+00:11:35.780 --> 00:11:37.640
+Ensuite, l'ordinateur portable prépare une demande de certificat.
+
+00:11:38.060 --> 00:11:39.860
+Cette demande inclut les informations publiques nécessaires
+
+00:11:39.860 --> 00:11:41.200
+au certificat ainsi que la preuve
+
+00:11:41.200 --> 00:11:43.380
+que l'ordinateur portable contrôle sa propre clé privée.
+
+00:11:44.200 --> 00:11:45.460
+Il envoie cette requête via SHP,
+
+00:11:45.520 --> 00:11:46.400
+le chemin de requête protégée
+
+00:11:46.400 --> 00:11:47.560
+dont nous avons parlé précédemment.
+
+00:11:48.280 --> 00:11:49.480
+Seule la requête transite, pas la clé.
+
+00:11:49.840 --> 00:11:51.500
+Intune joue désormais un rôle actif dans la vérification.
+
+00:11:51.980 --> 00:11:53.080
+Il confirme que la requête provient
+
+00:11:53.080 --> 00:11:54.880
+d'un appareil inscrit et géré par votre entreprise.
+
+00:11:55.720 --> 00:11:56.760
+Il protège également la requête
+
+00:11:56.760 --> 00:11:58.520
+afin que le service Cloud PKI puisse vérifier
+
+00:11:58.520 --> 00:11:59.980
+qu'elle n'a pas été falsifiée en cours de route.
+
+00:12:00.920 --> 00:12:02.760
+Si la requête ne correspond pas à ce qu'Intune attend,
+
+00:12:03.080 --> 00:12:04.500
+aucun certificat n'est émis.
+
+00:12:05.000 --> 00:12:06.560
+Cela empêche un ordinateur portable inconnu
+
+00:12:06.560 --> 00:12:07.640
+d'en demander un et de l'obtenir.
+
+00:12:08.240 --> 00:12:09.600
+Lorsque toutes les vérifications sont réussies,
+
+00:12:09.600 --> 00:12:10.620
+Cloud PKI envoie la requête
+
+00:12:10.620 --> 00:12:12.000
+à l'autorité de certification et maîtrise.
+
+00:12:12.520 --> 00:12:13.920
+L'autorité de certification et maîtrise
+
+00:12:13.920 --> 00:12:15.620
+signe un certificat pour l'identité de cet appareil
+
+00:12:15.620 --> 00:12:17.560
+et Intune le renvoie à l'ordinateur portable.
+
+00:12:18.120 --> 00:12:19.260
+L'employé ne voit rien de tout cela.
+
+00:12:19.620 --> 00:12:20.880
+Il ouvre simplement l'ordinateur portable.
+
+00:12:21.000 --> 00:12:21.800
+Et lorsqu'il arrive au bureau,
+
+00:12:22.160 --> 00:12:23.340
+le réseau Wi-Fi peut demander une preuve
+
+00:12:23.340 --> 00:12:24.120
+à l'ordinateur portable.
+
+00:12:24.580 --> 00:12:25.840
+Au lieu de saisir un mot de passe partagé,
+
+00:12:25.920 --> 00:12:27.460
+l'ordinateur portable présente son certificat.
+
+00:12:28.100 --> 00:12:29.780
+Le réseau vérifie ensuite la chaîne de certificat.
+
+00:12:30.160 --> 00:12:31.080
+Ce certificat a-t-il été émis
+
+00:12:31.080 --> 00:12:32.300
+par l'autorité de certification et maîtrise
+
+00:12:32.300 --> 00:12:33.080
+à laquelle il fait confiance ?
+
+00:12:33.080 --> 00:12:34.240
+Cette autorité de certification et maîtrise
+
+00:12:34.240 --> 00:12:35.560
+renvoie-t-elle à l'autorité de certification racine
+
+00:12:35.560 --> 00:12:36.200
+à laquelle il fait confiance ?
+
+00:12:36.200 --> 00:12:37.440
+Si ces vérifications sont concluantes,
+
+00:12:37.500 --> 00:12:38.300
+l'ordinateur portable se connaît.
+
+00:12:38.500 --> 00:12:39.720
+Le même schéma fonctionne avec un VPN.
+
+00:12:40.220 --> 00:12:41.340
+Un service VPN peut vérifier
+
+00:12:41.340 --> 00:12:42.380
+si le certificat de l'appareil
+
+00:12:42.380 --> 00:12:43.460
+appartient à un ordinateur portable
+
+00:12:43.460 --> 00:12:44.220
+géré par l'entreprise
+
+00:12:44.220 --> 00:12:45.320
+avant d'autoriser une connexion.
+
+00:12:46.360 --> 00:12:47.700
+Une application interne peut faire de même
+
+00:12:47.700 --> 00:12:48.900
+en acceptant que les appareils
+
+00:12:48.900 --> 00:12:49.780
+qui possèdent un certificat
+
+00:12:49.780 --> 00:12:51.220
+de votre autorité de certification a prouvé.
+
+00:12:51.880 --> 00:12:52.960
+Le certificat ne remplace pas
+
+00:12:52.960 --> 00:12:54.180
+toutes les invites de connexion partout,
+
+00:12:54.820 --> 00:12:55.440
+mais il offre au service
+
+00:12:55.440 --> 00:12:57.180
+un autre moyen efficace d'identifier l'appareil.
+
+00:12:57.700 --> 00:12:58.400
+Parlons maintenant de la partie
+
+00:12:58.400 --> 00:12:59.400
+que les gens ne remarquent généralement
+
+00:12:59.400 --> 00:13:00.420
+que lorsqu'elle est défectueuse,
+
+00:13:00.760 --> 00:13:01.200
+l'expiration.
+
+00:13:02.020 --> 00:13:03.320
+Les certificats ne durent pas éternellement
+
+00:13:03.320 --> 00:13:03.880
+et c'est délibéré.
+
+00:13:04.360 --> 00:13:05.680
+Un certificat a besoin d'une date de fin,
+
+00:13:05.740 --> 00:13:07.000
+de sorte qu'un ancien identifiant d'appareil
+
+00:13:07.000 --> 00:13:07.940
+ne peut pas continuer à fonctionner
+
+00:13:07.940 --> 00:13:09.060
+indéfiniment sans une autre vérification.
+
+00:13:09.300 --> 00:13:10.120
+Cloud, PKI et Intune
+
+00:13:10.120 --> 00:13:11.260
+peuvent commencer le renouvellement
+
+00:13:11.260 --> 00:13:11.800
+avant cette date
+
+00:13:11.800 --> 00:13:13.440
+à chaque fois que l'appareil géré s'enregistre.
+
+00:13:14.140 --> 00:13:15.040
+L'ordinateur portable demande
+
+00:13:15.040 --> 00:13:16.020
+un certificat de remplacement
+
+00:13:16.020 --> 00:13:17.260
+et l'ensemble du processus
+
+00:13:17.260 --> 00:13:18.280
+suit le même chemin protégé.
+
+00:13:19.060 --> 00:13:20.120
+Pour l'employé, rien ne change.
+
+00:13:20.920 --> 00:13:21.800
+Il se connecte au Wi-Fi,
+
+00:13:21.880 --> 00:13:22.580
+il utilise le VPN.
+
+00:13:23.160 --> 00:13:24.580
+Le certificat se renouvelle en arrière-plan
+
+00:13:24.580 --> 00:13:25.660
+au lieu de venir un ticket d'assistance
+
+00:13:25.660 --> 00:13:26.820
+surprise le jour de son expiration.
+
+00:13:27.260 --> 00:13:28.240
+Un ordinateur portable perdu
+
+00:13:28.240 --> 00:13:29.960
+nécessite une réponse différente.
+
+00:13:31.100 --> 00:13:32.100
+Si un appareil disparaît,
+
+00:13:32.180 --> 00:13:32.960
+qu'un employé part
+
+00:13:32.960 --> 00:13:33.640
+ou que vous pensez
+
+00:13:33.640 --> 00:13:34.800
+que le certificat n'est plus fiable,
+
+00:13:34.920 --> 00:13:35.900
+un administrateur peut
+
+00:13:35.900 --> 00:13:37.340
+révoquer ce certificat
+
+00:13:37.340 --> 00:13:38.260
+dans Intune.
+
+00:13:38.700 --> 00:13:40.140
+Cloud, PKI publie cette modification
+
+00:13:40.140 --> 00:13:41.060
+de sorte que les services
+
+00:13:41.060 --> 00:13:42.200
+qui vérifient l'état du certificat
+
+00:13:42.200 --> 00:13:43.560
+peuvent rejeter l'ancien certificat
+
+00:13:43.560 --> 00:13:44.680
+peuvent rejeter l'ancien certificat.
+
+00:13:44.740 --> 00:13:46.080
+L'appareil peut toujours exister physiquement
+
+00:13:46.080 --> 00:13:46.920
+mais sa preuve numérique
+
+00:13:46.920 --> 00:13:47.720
+cesse de fonctionner.
+
+00:13:48.180 --> 00:13:48.900
+C'est une bien meilleure position
+
+00:13:48.900 --> 00:13:49.840
+que de changer un mot de passe Wi-Fi
+
+00:13:49.840 --> 00:13:50.720
+partagé et d'espérer
+
+00:13:50.720 --> 00:13:51.580
+que chaque ancien employé,
+
+00:13:54.580 --> 00:13:55.020
+ne l'a plus.
+
+00:13:55.760 --> 00:13:56.960
+Cependant, la livraison automatique
+
+00:13:56.960 --> 00:13:58.020
+de certificat ne signifie pas
+
+00:13:58.020 --> 00:13:58.840
+que Cloud, PKI gère
+
+00:13:58.840 --> 00:13:59.800
+toutes les tâches de certificat
+
+00:13:59.800 --> 00:14:00.400
+dans votre entreprise.
+
+00:14:00.980 --> 00:14:01.680
+Cela fonctionne très bien
+
+00:14:01.680 --> 00:14:02.820
+pour un ensemble spécifique de tâches.
+
+00:14:03.240 --> 00:14:04.040
+D'autres tâches nécessitent
+
+00:14:04.040 --> 00:14:05.240
+un service de certificat différent
+
+00:14:05.240 --> 00:14:06.560
+et connaître cette limite
+
+00:14:06.560 --> 00:14:07.280
+vous fera gagner du temps
+
+00:14:07.280 --> 00:14:08.220
+avant de commencer à créer.
+
+00:14:09.220 --> 00:14:10.240
+Ou Cloud, PKI s'intègre
+
+00:14:10.240 --> 00:14:10.940
+et où il ne s'intègre pas.
+
+00:14:11.260 --> 00:14:12.480
+Cloud, PKI est le mieux adapté
+
+00:14:12.480 --> 00:14:13.080
+lorsque vous avez besoin
+
+00:14:13.080 --> 00:14:14.100
+qu'un appareil d'entreprise gérée
+
+00:14:14.100 --> 00:14:15.200
+fasse ses preuves avant d'y avoir accès.
+
+00:14:15.660 --> 00:14:17.060
+Le Wi-Fi sécurisé en est un exemple classique.
+
+00:14:17.380 --> 00:14:18.020
+Au lieu de communiquer
+
+00:14:18.020 --> 00:14:18.880
+le même mot de passe sans fil
+
+00:14:18.880 --> 00:14:19.740
+à chaque nouvel employé,
+
+00:14:20.100 --> 00:14:21.280
+un Thune peut placer un certificat
+
+00:14:21.280 --> 00:14:22.180
+sur son ordinateur portable
+
+00:14:22.180 --> 00:14:22.900
+ou son téléphone géré
+
+00:14:22.900 --> 00:14:24.660
+et le réseau peut accepter ce certificat.
+
+00:14:25.340 --> 00:14:26.820
+L'accès VPN est une autre solution efficace.
+
+00:14:27.380 --> 00:14:28.400
+Un ordinateur portable géré
+
+00:14:28.400 --> 00:14:29.460
+peut présenter son certificat
+
+00:14:29.460 --> 00:14:30.200
+lorsqu'il se connecte,
+
+00:14:30.240 --> 00:14:31.400
+ce qui supprime les avis répétés
+
+00:14:31.400 --> 00:14:31.920
+de mot de passe
+
+00:14:31.920 --> 00:14:33.300
+et offre au VPN un autre moyen
+
+00:14:33.300 --> 00:14:34.060
+de vérifier l'appareil
+
+00:14:34.060 --> 00:14:34.940
+avant d'autoriser l'accès.
+
+00:14:35.680 --> 00:14:36.560
+Certaines applications internes
+
+00:14:36.560 --> 00:14:37.520
+peuvent utiliser la même approche
+
+00:14:37.520 --> 00:14:38.320
+lorsqu'elles doivent accepter
+
+00:14:38.320 --> 00:14:39.240
+uniquement les appareils gérés
+
+00:14:39.240 --> 00:14:39.820
+par votre entreprise.
+
+00:14:40.480 --> 00:14:41.700
+Cela fonctionne sur les ordinateurs
+
+00:14:41.700 --> 00:14:43.600
+portables Windows, Mac, iPhone, iPad
+
+00:14:43.600 --> 00:14:44.780
+et appareils Android gérés.
+
+00:14:45.380 --> 00:14:46.360
+Pour une petite entreprise,
+
+00:14:46.360 --> 00:14:47.720
+cela change un problème familier.
+
+00:14:48.540 --> 00:14:49.500
+Un mot de passe Wi-Fi partagé
+
+00:14:49.500 --> 00:14:50.220
+a tendance à se propager.
+
+00:14:50.940 --> 00:14:52.040
+Il apparaît dans les e-mails de bienvenue,
+
+00:14:52.220 --> 00:14:52.840
+les messages de chat,
+
+00:14:53.060 --> 00:14:53.840
+les ordinateurs portables,
+
+00:14:53.900 --> 00:14:54.460
+les anciens téléphones.
+
+00:14:55.120 --> 00:14:55.920
+Lorsqu'une personne part,
+
+00:14:56.080 --> 00:14:56.740
+le changer peut signifier
+
+00:14:56.740 --> 00:14:57.740
+reconnecter chaque imprimante,
+
+00:14:57.820 --> 00:14:58.540
+ordinateur portable,
+
+00:14:58.840 --> 00:15:00.020
+tablette et appareil de salle de réunion.
+
+00:15:00.620 --> 00:15:01.720
+Avec les certificats d'appareil,
+
+00:15:01.820 --> 00:15:02.500
+chaque appareil géré
+
+00:15:02.500 --> 00:15:03.800
+possède sa propre preuve d'accès.
+
+00:15:04.560 --> 00:15:05.480
+La décision d'accès devient
+
+00:15:05.480 --> 00:15:06.260
+également plus précise.
+
+00:15:06.680 --> 00:15:07.580
+Un mot de passe prouve uniquement
+
+00:15:07.580 --> 00:15:08.600
+que quelqu'un connaît le mot de passe.
+
+00:15:09.360 --> 00:15:11.020
+Les certificats émis via Cloud PKI
+
+00:15:11.020 --> 00:15:12.820
+connectent l'accès à un appareil
+
+00:15:12.820 --> 00:15:14.160
+et Kintun connaît et gère.
+
+00:15:14.900 --> 00:15:16.480
+Cela soutient l'idée de la confiance zéro.
+
+00:15:17.120 --> 00:15:18.160
+N'accordez pas l'accès simplement
+
+00:15:18.160 --> 00:15:19.020
+parce qu'un élément se trouve
+
+00:15:19.020 --> 00:15:19.800
+sur le réseau du bureau.
+
+00:15:20.340 --> 00:15:21.320
+Vérifiez l'appareil et sa preuve
+
+00:15:21.320 --> 00:15:22.540
+chaque fois que le service le demande.
+
+00:15:23.220 --> 00:15:24.500
+Il existe deux façons courantes de commencer.
+
+00:15:24.900 --> 00:15:25.780
+Si votre entreprise fonctionne
+
+00:15:25.780 --> 00:15:26.560
+principalement dans le cloud
+
+00:15:26.560 --> 00:15:27.380
+et ne dispose pas de systèmes
+
+00:15:27.380 --> 00:15:28.220
+de certificats existants,
+
+00:15:28.420 --> 00:15:29.200
+vous pouvez créer une autorité
+
+00:15:29.200 --> 00:15:30.120
+de certification racinée,
+
+00:15:30.180 --> 00:15:30.940
+une autorité de certification
+
+00:15:30.940 --> 00:15:31.800
+émettrice dans Cloud PKI.
+
+00:15:32.080 --> 00:15:32.800
+Vous configurez ensuite
+
+00:15:32.800 --> 00:15:33.460
+le service Wi-Fi
+
+00:15:33.460 --> 00:15:34.280
+de vos appareils gérés,
+
+00:15:34.360 --> 00:15:35.040
+la passerelle VPN
+
+00:15:35.040 --> 00:15:35.840
+ou certaines applications
+
+00:15:35.840 --> 00:15:36.440
+pour qu'ils approuvent
+
+00:15:36.440 --> 00:15:37.340
+cette chaîne de certificats.
+
+00:15:37.340 --> 00:15:38.600
+C'est le chemin de départ propre.
+
+00:15:39.060 --> 00:15:39.900
+Si vous exécutez déjà
+
+00:15:39.900 --> 00:15:40.820
+une autorité de certification,
+
+00:15:41.080 --> 00:15:41.800
+vous n'avez pas toujours besoin
+
+00:15:41.800 --> 00:15:42.380
+de la supprimer.
+
+00:15:42.980 --> 00:15:43.940
+Cloud PKI peut utiliser
+
+00:15:43.940 --> 00:15:44.880
+une autorité de certification
+
+00:15:44.880 --> 00:15:45.580
+émettrice qui renvoie
+
+00:15:45.580 --> 00:15:46.460
+à une autorité de certification
+
+00:15:46.460 --> 00:15:47.100
+ainsi inexistante
+
+00:15:47.100 --> 00:15:47.960
+de sorte que vos nouveaux appareils
+
+00:15:47.960 --> 00:15:48.460
+gérés par Ntune
+
+00:15:48.460 --> 00:15:48.900
+puissent s'adapter
+
+00:15:48.900 --> 00:15:49.420
+aux règles de confiance
+
+00:15:49.420 --> 00:15:50.100
+que vous utilisez déjà.
+
+00:15:50.920 --> 00:15:51.740
+Le chemin approprié
+
+00:15:51.740 --> 00:15:52.680
+dépend de ce que votre réseau
+
+00:15:52.680 --> 00:15:53.160
+approuve déjà,
+
+00:15:53.540 --> 00:15:55.540
+mais Cloud PKI a une limite ferme.
+
+00:15:56.000 --> 00:15:56.860
+Il cible les appareils
+
+00:15:56.860 --> 00:15:57.560
+inscrits dans Ntune.
+
+00:15:58.300 --> 00:15:59.060
+Il n'émet pas tous les types
+
+00:15:59.060 --> 00:16:00.380
+de certificats pour chaque machine
+
+00:16:00.380 --> 00:16:01.480
+ou service que votre entreprise
+
+00:16:01.480 --> 00:16:01.900
+possède.
+
+00:16:02.480 --> 00:16:03.380
+Par exemple, il ne remplace pas
+
+00:16:03.380 --> 00:16:03.920
+de manière générale
+
+00:16:03.920 --> 00:16:05.120
+les certificats sur les serveurs web,
+
+00:16:05.200 --> 00:16:05.820
+les passerelles VPN,
+
+00:16:05.980 --> 00:16:06.660
+les équilibres de charge
+
+00:16:06.660 --> 00:16:07.480
+ou d'autres serveurs
+
+00:16:07.480 --> 00:16:08.160
+ou d'autres serveurs.
+
+00:16:08.860 --> 00:16:09.640
+Il ne répond pas non plus
+
+00:16:09.640 --> 00:16:10.700
+aux besoins en certificat
+
+00:16:10.700 --> 00:16:11.660
+des ordinateurs non gérés,
+
+00:16:11.900 --> 00:16:12.540
+des systèmes isolés
+
+00:16:12.540 --> 00:16:13.500
+sans connexion au cloud
+
+00:16:13.500 --> 00:16:14.580
+ou des appareils Linux
+
+00:16:14.580 --> 00:16:15.800
+non pris en charge par Ntune.
+
+00:16:17.060 --> 00:16:18.220
+Cela ne réduit pas son utilité.
+
+00:16:18.560 --> 00:16:19.240
+Cela signifie simplement
+
+00:16:19.240 --> 00:16:19.860
+que vous devez adapter
+
+00:16:19.860 --> 00:16:20.440
+l'outil à la tâche.
+
+00:16:20.960 --> 00:16:22.260
+Cloud PKI gère les appareils
+
+00:16:22.260 --> 00:16:23.420
+de vos utilisateurs gérés.
+
+00:16:24.220 --> 00:16:24.800
+Un autre service
+
+00:16:24.800 --> 00:16:25.920
+peut toujours gérer les certificats
+
+00:16:25.920 --> 00:16:26.420
+pour les systèmes
+
+00:16:26.420 --> 00:16:27.460
+auxquels ces appareils se connectent.
+
+00:16:27.760 --> 00:16:28.600
+Votre contrôleur Wi-Fi,
+
+00:16:28.720 --> 00:16:29.480
+votre passerelle VPN
+
+00:16:29.480 --> 00:16:30.380
+ou votre application interne
+
+00:16:30.380 --> 00:16:31.380
+nécessitent également une configuration.
+
+00:16:31.800 --> 00:16:32.400
+Ils doivent faire confiance
+
+00:16:32.400 --> 00:16:33.200
+à la racine et à la chaîne
+
+00:16:33.200 --> 00:16:34.080
+de certificats et maîtrise
+
+00:16:34.080 --> 00:16:35.000
+utilisée par Cloud PKI.
+
+00:16:35.500 --> 00:16:36.560
+Si ce service ne reconnaît pas
+
+00:16:36.560 --> 00:16:37.640
+votre autorité de certification
+
+00:16:37.640 --> 00:16:38.880
+et rejettera un certificat
+
+00:16:38.880 --> 00:16:39.820
+d'appareil parfaitement valide,
+
+00:16:40.460 --> 00:16:41.120
+le côté appareil
+
+00:16:41.120 --> 00:16:41.720
+et le côté service
+
+00:16:41.720 --> 00:16:42.160
+doivent être d'accord.
+
+00:16:42.680 --> 00:16:43.380
+Un point de planification
+
+00:16:43.380 --> 00:16:43.920
+peut vous éviter
+
+00:16:43.920 --> 00:16:44.740
+des frustrations ultérieures.
+
+00:16:45.260 --> 00:16:45.700
+Lorsque vous créez
+
+00:16:45.700 --> 00:16:46.600
+une autorité de certification,
+
+00:16:46.740 --> 00:16:47.100
+vous choisissez
+
+00:16:47.100 --> 00:16:48.160
+ce que ces certificats peuvent faire.
+
+00:16:48.640 --> 00:16:49.500
+Ces choix doivent correspondre
+
+00:16:49.500 --> 00:16:50.440
+à l'utilisation que vous prévoyez.
+
+00:16:51.240 --> 00:16:51.860
+Authentification client
+
+00:16:51.860 --> 00:16:52.520
+pour l'accès Wi-Fi
+
+00:16:52.520 --> 00:16:53.660
+ou VPN par exemple.
+
+00:16:54.640 --> 00:16:55.640
+Si vous faites un choix trop étroit
+
+00:16:55.640 --> 00:16:56.280
+et vous avez besoin
+
+00:16:59.480 --> 00:17:00.560
+et déplacer les appareils.
+
+00:17:01.180 --> 00:17:02.380
+Décidez du premier cas d'utilisation
+
+00:17:02.380 --> 00:17:03.180
+avant de créer quoi que ce soit.
+
+00:17:03.760 --> 00:17:04.340
+Cela nous éloigne
+
+00:17:04.340 --> 00:17:05.000
+du schéma technique
+
+00:17:05.000 --> 00:17:05.480
+et nous ramène
+
+00:17:05.480 --> 00:17:06.540
+à un choix commercial simple.
+
+00:17:07.400 --> 00:17:08.440
+Ou un certificat d'appareil
+
+00:17:08.440 --> 00:17:09.520
+éliminerait-il un réel problème
+
+00:17:09.520 --> 00:17:10.420
+d'accès pour votre personnel.
+
+00:17:11.000 --> 00:17:11.960
+Un point de départ judicieux
+
+00:17:11.960 --> 00:17:12.780
+pour une petite entreprise.
+
+00:17:13.400 --> 00:17:14.280
+Alors par où une petite entreprise
+
+00:17:14.280 --> 00:17:15.400
+doit-elle commencer ?
+
+00:17:15.400 --> 00:17:16.160
+Commencez par un problème,
+
+00:17:16.260 --> 00:17:16.900
+pas par un déploiement
+
+00:17:16.900 --> 00:17:17.660
+à l'échelle de l'entreprise.
+
+00:17:18.360 --> 00:17:19.140
+Peut-être que le réseau Wi-Fi
+
+00:17:19.140 --> 00:17:19.660
+de votre personnel
+
+00:17:19.660 --> 00:17:21.000
+utilise toujours un mot de passe partagé
+
+00:17:21.000 --> 00:17:21.920
+ou que votre VPN oblige
+
+00:17:21.920 --> 00:17:22.860
+les utilisateurs à se connecter
+
+00:17:22.860 --> 00:17:23.320
+encore et encore.
+
+00:17:23.620 --> 00:17:24.080
+Peut-être avez-vous
+
+00:17:24.080 --> 00:17:24.820
+une application interne
+
+00:17:24.820 --> 00:17:25.380
+qui ne devrait s'ouvrir
+
+00:17:25.380 --> 00:17:26.860
+qu'à partir des ordinateurs portables ?
+
+00:17:26.860 --> 00:17:27.460
+Choisissez un problème.
+
+00:17:28.080 --> 00:17:28.640
+Assurez-vous ensuite
+
+00:17:28.640 --> 00:17:29.440
+que les bases sont en place.
+
+00:17:30.060 --> 00:17:31.080
+Ces appareils sont-ils inscrits
+
+00:17:31.080 --> 00:17:31.900
+dans Intune ?
+
+00:17:31.900 --> 00:17:32.420
+Les utilisateurs
+
+00:17:32.420 --> 00:17:33.940
+se connectent-ils via Entry-ID ?
+
+00:17:33.940 --> 00:17:34.880
+Votre licence Microsoft
+
+00:17:34.880 --> 00:17:35.620
+inclut-elle les besoins
+
+00:17:35.620 --> 00:17:37.020
+en matière de PKI Cloud ?
+
+00:17:37.020 --> 00:17:38.140
+Exécutez un petit projet pilote
+
+00:17:38.140 --> 00:17:38.920
+pour répondre à ces questions
+
+00:17:38.920 --> 00:17:39.680
+sans affecter tout le monde.
+
+00:17:40.380 --> 00:17:41.700
+Sélectionnez un groupe limité d'appareils.
+
+00:17:41.940 --> 00:17:42.760
+Créez la chaîne de confiance,
+
+00:17:42.900 --> 00:17:43.800
+le profil de certificat
+
+00:17:43.800 --> 00:17:44.980
+et la stratégie Wi-Fi ou VPN
+
+00:17:44.980 --> 00:17:45.840
+correspondant ensemble
+
+00:17:45.840 --> 00:17:47.020
+comme une tâche connectée.
+
+00:17:47.500 --> 00:17:48.800
+Ne traitez pas le certificat séparément
+
+00:17:48.800 --> 00:17:49.780
+car le service réseau
+
+00:17:49.780 --> 00:17:50.440
+doit savoir quelle chaîne
+
+00:17:50.440 --> 00:17:51.280
+de certificat accepter.
+
+00:17:51.700 --> 00:17:52.100
+Acceptez.
+
+00:17:52.340 --> 00:17:53.120
+Faites appel à la personne
+
+00:17:53.120 --> 00:17:53.860
+qui possède ce réseau.

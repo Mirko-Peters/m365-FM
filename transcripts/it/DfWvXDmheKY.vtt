@@ -1,0 +1,949 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.340
+Nasto trasportatore si ferma durante il turno, un muletto non parte, una pompa perde e improvvisamente tutti vogliono risposte.
+
+00:00:05.540 --> 00:00:08.040
+Quale squadra lo riparerà? Quando è stata l'ultima manutenzione?
+
+00:00:08.240 --> 00:00:11.820
+Abbiamo il pezzo di cambio giusto a disposizione? E dove sono i registri di servizio della riparazione precedente?
+
+00:00:12.580 --> 00:00:17.600
+Invece tutti iniziano a chiamare, aprire vecchi fogli di calcolo, rovistare tra le cartelle mentre l'attrezzatura rimane ferma.
+
+00:00:18.260 --> 00:00:21.600
+Questa corsa frenetica costa tempo e denaro reali prima ancora che una chiave inglese tocchi la macchina.
+
+00:00:21.840 --> 00:00:28.240
+Sono Mirko Peters, DM365FM, e questa pillola di conoscenza spiega la gestione degli asset di Dynamics 365 in modo semplice.
+
+00:00:28.240 --> 00:00:32.120
+Fa parte di Dynamics 365 e Supply Chain Management e offre alle aziende.
+
+00:00:32.680 --> 00:00:36.440
+Un unico posto per tracciare attrezzature, manutenzione e costi storico dei servizi.
+
+00:00:37.760 --> 00:00:42.560
+Più avanti vedremo come l'avviso di un sensore può trasformare una riparazione ed emergenza in un lavoro pianificato.
+
+00:00:42.860 --> 00:00:47.080
+Ma prima di arrivarci dobbiamo guardare agli asset fisici su cui un'azienda fa affidamento ogni singolo giorno.
+
+00:00:47.260 --> 00:00:49.940
+Ora, perché gli asset fisici diventano un problema aziendale?
+
+00:00:50.260 --> 00:00:52.880
+Pensiamo all'attrezzatura che mantiene operative le attività quotidiane.
+
+00:00:53.340 --> 00:00:56.500
+Una fabbrica può avere macchine di produzione, nastri trasportatori, motori e po'.
+
+00:00:56.500 --> 00:00:59.880
+Un magazzino dipende da muletti, attrezzature di carico e sistemi di smistamento.
+
+00:01:00.400 --> 00:01:02.680
+Un'azienda di trasporti ha bisogno di camion che partano puntuali.
+
+00:01:03.120 --> 00:01:06.820
+E un ufficio o un team di gestione e struttura si occupa di riscaldamento, raffreddamento, generatori e ascensori.
+
+00:01:07.580 --> 00:01:11.920
+Ognuno di questi elementi svolge un lavoro ma porta anche con sé una serie di domande
+
+00:01:11.920 --> 00:01:14.580
+che non spariscono solo perché l'attrezzatura funziona oggi.
+
+00:01:15.460 --> 00:01:16.980
+Dov'è in questo momento? Chi se ne occupa?
+
+00:01:17.320 --> 00:01:20.000
+Funziona ancora bene? Quando è stata l'ultima ispezione a riparazione?
+
+00:01:20.000 --> 00:01:23.700
+Queste domande sembrano semplici, finché le risposte non si trovano in cinque posti diversi.
+
+00:01:24.100 --> 00:01:28.600
+Un tecnico potrebbe sapere che se una macchina fa uno strano rumore significa guai perché ci ha lavorato accanto per anni?
+
+00:01:29.420 --> 00:01:33.360
+Un'altra persona tira un foglio di calcolo con le date di manutenzione, fagli acquisti e ordini pezzi altrove.
+
+00:01:34.020 --> 00:01:37.740
+L'ufficio amministrativo vede fatture e costi, ma non sempre l'intera storia della riparazione.
+
+00:01:38.380 --> 00:01:41.660
+Poi quel tecnico va in ferie, cambia lavoro o semplicemente non è in turno.
+
+00:01:42.220 --> 00:01:43.240
+La conoscenza esce dalla stanza.
+
+00:01:43.240 --> 00:01:48.740
+Succedeva continuamente con fogli di servizio cartacei, cartelle in un armadio dell'officina e fogli di calcolo inviati via email.
+
+00:01:49.620 --> 00:01:53.160
+Un team poteva mantenere l'attrezzatura operativa, ma ricostruire il quadro completo richiedeva tempo.
+
+00:01:53.480 --> 00:01:55.180
+Le persone spesso lavoravano con informazioni completi.
+
+00:01:55.620 --> 00:01:57.420
+Quando l'attrezzatura si rompe, il problema si diffonde rapido.
+
+00:01:57.780 --> 00:02:02.000
+Le operazioni possono perdere produzione o rallentare le consegne, e il team di manutenzione deve trovare il guasto.
+
+00:02:02.160 --> 00:02:04.540
+L'ufficio acquisti potrebbe dover accelerare un ordine per un pezzo mancante.
+
+00:02:04.540 --> 00:02:10.080
+L'ufficio finanziario vede poi una fattura costosa, ma non sempre riesce a collegare quel costo alla macchina o alla riparazione specifica.
+
+00:02:10.080 --> 00:02:11.500
+Nessuno pianifica un guasto.
+
+00:02:12.140 --> 00:02:14.560
+Il lavoro d'emergenza cambia anche il modo di agire delle persone.
+
+00:02:15.380 --> 00:02:21.020
+Un team ordina il primo pezzo che trova, paga un extra per la consegna rapida o salta la solita pianificazione perché la macchina deve ripartire.
+
+00:02:22.040 --> 00:02:23.700
+A volte quella vecchia soluzione è temporanea.
+
+00:02:23.980 --> 00:02:28.500
+È la scelta giusta, ma quando ogni riparazione sembra un'emergenza, i costi salgono e lo stesso guasto continua a ripresentarsi.
+
+00:02:29.120 --> 00:02:31.140
+Persone diverse hanno bisogno di parti diverse della stessa storia.
+
+00:02:31.260 --> 00:02:34.820
+Gli addetti alla manutenzione hanno bisogno di dettagli sulle riparazioni di note precedente.
+
+00:02:35.040 --> 00:02:37.080
+Le operazioni devono sapere se l'attrezzatura può funzionare.
+
+00:02:37.600 --> 00:02:39.700
+L'ufficio acquisti deve sapere quali componenti sono necessari.
+
+00:02:40.080 --> 00:02:44.420
+L'ufficio finanziario ha bisogno di una chiara traccia dei costi e i manager devono vedere dove continuano a verificarsi i guasti.
+
+00:02:45.160 --> 00:02:51.260
+Dynamics 365 Asset Management mantiene un registro operativo per le attrezzature fisiche e i lavori di manutenzione ad esse collegati.
+
+00:02:52.020 --> 00:02:54.660
+Non serve a sostituire la persona che sa come riparare un motore.
+
+00:02:55.720 --> 00:03:00.640
+Offre a quella persona e a tutti coloro che la circondano un luogo condiviso per registrare l'accaduto e trovare ciò di cui hanno bisogno.
+
+00:03:00.640 --> 00:03:05.820
+Prima che chiunque possa pianificare un lavoro di riparazione, il sistema ha bisogno di un quadro chiaro di ogni singolo cespite.
+
+00:03:06.420 --> 00:03:08.720
+Il registro dei cespiti è un file digitale per ogni macchina.
+
+00:03:09.400 --> 00:03:11.020
+Quindi ecco per pensare alla gestione dei cespiti.
+
+00:03:11.440 --> 00:03:15.240
+Immagina un archivio nella sala manutenzione dove ogni macchina ha la sua cartella etichettata.
+
+00:03:15.920 --> 00:03:19.720
+La differenza è che questa cartella si trova all'interno di Dynamics 365 su Play Chain Management.
+
+00:03:19.720 --> 00:03:23.220
+E le persone giuste possono trovarla senza frugare in un armadio o chiedere in giro.
+
+00:03:23.920 --> 00:03:26.140
+Apri la cartella di una macchina e parti dalla sua identità.
+
+00:03:26.600 --> 00:03:31.340
+Registra il nome, il numero di prodotto o di modello, il numero di serie e una descrizione semplice di ciò che fa.
+
+00:03:31.660 --> 00:03:37.720
+Aggiungi anche dettagli tecnici e informazioni sulla garanzia, così il team può verificare se una riparazione è coperta dal fornitore prima di ordinare i pezzi.
+
+00:03:38.740 --> 00:03:40.680
+Sembra una cosa elementare ma evita un bel grattacup.
+
+00:03:41.120 --> 00:03:46.480
+Due macchine sullo stesso piano possono sembrare quasi identiche mentre le loro parti, le date di garanzia e le esigenze di assistenza sono completamente diverse.
+
+00:03:46.480 --> 00:03:49.560
+Un registro chiaro dei cespiti al team è esattamente con quale macchina a che fare.
+
+00:03:50.040 --> 00:03:52.120
+Il registro deve anche rispondere a una domanda pratica.
+
+00:03:52.740 --> 00:03:53.820
+Dove lavora questa attrezzatura?
+
+00:03:54.380 --> 00:03:58.420
+Dynamics 365 Asset Management utilizza a questo scopo le cosiddette posizioni funzionali.
+
+00:03:58.760 --> 00:04:02.160
+Pensa a una posizione funzionale come al luogo in cui un cespite svolge il suo lavoro.
+
+00:04:02.460 --> 00:04:07.700
+Non solo un segnaposto su una mappa ma qualcosa come un sito, un edificio, un magazzino, un'officina, un'officina o una linea di produzione.
+
+00:04:07.880 --> 00:04:08.300
+Ecco un esempio.
+
+00:04:08.700 --> 00:04:10.220
+Immagina un'azienda con tre stabilimenti.
+
+00:04:10.300 --> 00:04:12.120
+All'interno di uno stabilimento si trova un'area di confetti.
+
+00:04:12.120 --> 00:04:13.920
+All'interno di quell'area corre una linea di trasporto.
+
+00:04:14.160 --> 00:04:16.620
+Quel nastro trasportatore include diversi motori, sensori e rulli.
+
+00:04:16.620 --> 00:04:22.220
+Puoi descrivere l'intera struttura nel sistema, dalla posizione più ampia fino all'attrezzatura che viene effettivamente ispezionata e riparata.
+
+00:04:22.960 --> 00:04:24.160
+Lo stabilimento si trova al vertice.
+
+00:04:24.540 --> 00:04:25.760
+Sotto di esso è la linea di produzione.
+
+00:04:26.080 --> 00:04:27.220
+Sotto la linea è il nastro trasportatore.
+
+00:04:27.640 --> 00:04:28.660
+Sotto il nastro è un motore.
+
+00:04:29.140 --> 00:04:32.340
+E sotto il motore potresti monitorare un componente che richiede attenzioni specifiche.
+
+00:04:32.900 --> 00:04:36.520
+Questa struttura il genitore figlio è da capire a cosa appartiene una risorsa e a cosa è collegata.
+
+00:04:36.520 --> 00:04:39.600
+Così quando un motore si guasta il tecnico non vede solo un numero di serie.
+
+00:04:40.080 --> 00:04:43.200
+Vede che appartiene alla linea 2 del nastro nell'area imballaggio dello stabilimento nord.
+
+00:04:44.040 --> 00:04:47.660
+Quel contesto aiuta il team a stimare quali attività potrebbero fermarsi mentre il motore è fuori servizio.
+
+00:04:48.020 --> 00:04:49.080
+Anche le attrezzature si spoglie.
+
+00:04:49.420 --> 00:04:51.260
+Un carrello elevatore può passare da un magazzino all'altro.
+
+00:04:51.720 --> 00:04:54.200
+Una pompa può lasciare il deposito da essere installata in un edificio.
+
+00:04:54.560 --> 00:04:58.320
+Dopo un cambio di processo, un macchinario può spostarsi da una linea di produzione a un'altra.
+
+00:04:58.820 --> 00:05:01.940
+La gestione degli asset può tracciare tali cambiamenti tramite la posizione funzionale.
+
+00:05:02.300 --> 00:05:03.400
+Questo è importante anche per i costi.
+
+00:05:03.400 --> 00:05:08.820
+Quando un asset si sposta, il sistema collega i costi di manutenzione e dettagli finanziari della nuova posizione.
+
+00:05:09.440 --> 00:05:13.740
+Quindi, se un macchinario lavora ora in un diverso stabilimento e reparto, il costo segue la macchina nel luogo in cui viene utilizzata.
+
+00:05:14.080 --> 00:05:16.800
+Non devi indovinare in seguito quale parte dell'azienda ha sostenuto la spesa di riparazione.
+
+00:05:17.140 --> 00:05:20.840
+Ora, una cartella con soli dettagli originali del macchinario non sarebbe molto utile dopo il primo anno.
+
+00:05:21.340 --> 00:05:23.780
+La parte utile è lo storico accanto al registro dell'asset.
+
+00:05:24.280 --> 00:05:25.820
+Le ispezioni si affiancano ai lavori di riparazione.
+
+00:05:26.000 --> 00:05:27.400
+I componenti sostituiti si affiancano ad opera.
+
+00:05:27.400 --> 00:05:31.760
+Le note del tecnico, i dettagli dei guasti e i tempi di fermo registrati diventano tutti parte dell'attrezzatura.
+
+00:05:32.100 --> 00:05:34.100
+Un nuovo tecnico può controllare cosa è successo l'ultimo anno.
+
+00:05:34.360 --> 00:05:36.940
+Magari scopre che lo stesso motore ha ricevuto due riparazioni in sei mesi.
+
+00:05:37.380 --> 00:05:38.860
+Magari un certo componente continua a usurarsi.
+
+00:05:39.380 --> 00:05:43.360
+O una nota precedente spiega un'impostazione da controllare prima che qualcuno smonti la macchina.
+
+00:05:44.160 --> 00:05:48.840
+Il sistema non ricorda meglio delle persone, ma offre un posto dove lasciare informazioni utili per chi verrà dopo.
+
+00:05:49.500 --> 00:05:50.360
+Un punto va chiarito.
+
+00:05:50.360 --> 00:05:56.100
+La gestione degli asset si concentra sulle attrezzature fisiche che richiedono cura, riparazione, ispezione o assistenza nel tempo.
+
+00:05:56.460 --> 00:06:00.840
+Pensa a macchinari, attrezzature di produzione, veicoli, impianti di edifici e risorse operative simili.
+
+00:06:01.580 --> 00:06:04.920
+Non è lo strumento adatto per tracciare laptop da ufficio, telefoni o licenze software.
+
+00:06:05.700 --> 00:06:12.340
+Questi elementi possono essere importanti per un'azienda, ma una macchina di produzione con parti mobili, necessità di assistenza, rischi di fermo crea un tipo di registro diverso.
+
+00:06:12.760 --> 00:06:14.860
+La gestione degli asset si concentra su quella storia di manutenzione.
+
+00:06:14.860 --> 00:06:20.340
+Una volta che ogni cespite ha un'identità, una posizione, una struttura, una storia chiare, il discorso cambia.
+
+00:06:21.060 --> 00:06:26.760
+Invece di aspettare che l'attrezzatura si guasti per poi chiedersi cosa sia successo, un team può pianificare la manutenzione di cui ha realmente bisogno.
+
+00:06:28.080 --> 00:06:30.820
+La manutenzione preventiva ripara prima che si rompa.
+
+00:06:31.660 --> 00:06:33.660
+Ci sono solitamente due modi in cui inizia la manutenzione.
+
+00:06:34.060 --> 00:06:35.380
+Il primo è l'ordine di lavoro reattivo.
+
+00:06:36.080 --> 00:06:40.200
+Qualcosa si rompe, la produzione si ferma e il personale ripara perché non ha altra scelta.
+
+00:06:40.320 --> 00:06:44.700
+Il secondo è la manutenzione programmata in cui il team si occupa dell'attrezzatura prima che un guasto ha causi un fermo.
+
+00:06:45.100 --> 00:06:50.340
+Utilizzare le linee guida del produttore insieme alle reali necessità quotidiane dell'attrezzatura cambia la giornata lavorativa.
+
+00:06:50.860 --> 00:06:54.360
+Il produttore potrebbe consigliare di controllare una pompa dopo un certo numero di ore,
+
+00:06:54.760 --> 00:06:59.640
+ma una pompa in un'area polverosa e calda potrebbe richiedere attenzione prima dello stesso modello in un luogo più pulito.
+
+00:07:00.220 --> 00:07:05.260
+La gestione degli asset offre al team di manutenzione un modo per pianificare basandosi sia sul manuale che sulle condizioni reali LOC,
+
+00:07:05.440 --> 00:07:08.320
+che è programmata non riguarda la riparazione di attrezzature che funzionano perfettamente.
+
+00:07:08.320 --> 00:07:15.380
+Si tratta di eseguire piccoli lavori noti, in momenti sensati, affinché un piccolo problema non diventi un guasto improvviso durante il turno più intenso della settimana.
+
+00:07:16.460 --> 00:07:24.840
+Un piano di manutenzione può coprire lavori ricorrenti come ispezioni visive, pulizia, lubrificazione, controlli di sicurezza, test di cinghio, filtri e sostituzione di componenti soggetti a usura.
+
+00:07:25.780 --> 00:07:30.560
+Pensiamo che il carrello elevato richiede controlli regolari a freni pneumatici, livelli di liquidi, luce e stato della batteria.
+
+00:07:30.560 --> 00:07:36.760
+Nessuno di questi controlli sembra critico di per sé, ma trascurarli ripetutamente può portare al guasto di un carrello quando serve di più al magazzino.
+
+00:07:37.160 --> 00:07:38.960
+Lo stesso concetto si applica a una linea di produzione.
+
+00:07:39.300 --> 00:07:44.900
+Un tecnico potrebbe pulire un sensore ogni settimana, controllare la tensione di una cinghia ogni mese e sostituire un pezzo dopo un periodo di utilizzo noto.
+
+00:07:45.440 --> 00:07:49.520
+La gestione degli asset aiuta il team a registrare queste routine e a segnalare il lavoro successivo quando è il momento.
+
+00:07:49.900 --> 00:07:55.380
+I programmi sono solo una parte del quadro. Un lavoro può scadere ogni settimana, ogni mese o dopo un numero prestabilito di giorni.
+
+00:07:55.940 --> 00:08:00.380
+Ma le date del calendario non sono sempre sufficienti, poiché due macchine dello stesso tipo possono lavorare per un numero diverso.
+
+00:08:00.740 --> 00:08:03.900
+Una macchina potrebbe funzionare un turno al giorno, un'altra potrebbe essere operativa 24 ore su 20.
+
+00:08:04.200 --> 00:08:07.400
+Le letture tecniche forniscono al team un altro modo per valutare quando intervenire con un'altra.
+
+00:08:07.760 --> 00:08:14.420
+A seconda dell'attrezzatura, ciò potrebbe includere ore di funzionamento, distanza percorsa, temperatura, pressione o altre misurazioni che indicano lo stato della macchina.
+
+00:08:14.900 --> 00:08:17.460
+Non si sostituisce un componente solo perché una data appare sul calendario.
+
+00:08:18.060 --> 00:08:21.680
+Lo si sostituisce quando il piano, l'utilizzo, le attrezzature e le letture indicano che è il momento di intervenire.
+
+00:08:22.100 --> 00:08:24.280
+Cirili di manutenzione aiutano in questo tipo di cura regolare.
+
+00:08:24.560 --> 00:08:28.900
+Un giro di ispezione fornisce al tecnico un percorso pianificato, una serie di controlli su diverse risorse.
+
+00:08:28.900 --> 00:08:35.780
+Invece di trattare ogni controllo come l'imprevisto, l'operatore ispeziona le apparecchiature correlate durante una visita di routine e ne registra i risultati.
+
+00:08:36.400 --> 00:08:38.940
+Immaginiamo un tecnico che inizia un giro mattutino nel riconfezionamento.
+
+00:08:39.420 --> 00:08:45.460
+Controlla una fila di motori dei nastri, trasportatori ascolta eventuali rumori insoliti, cerca raccordi allentati e registra i dati che interessano l'azienda.
+
+00:08:45.980 --> 00:08:49.380
+Il lavoro diventa coerente anche quando persone diverse effettuano il giro in giorni diversi.
+
+00:08:49.380 --> 00:08:56.820
+Ora immaginiamo che uno di questi controlli monitori, la vibrazione di un motore, per diverse settimane l'altura rimane nel suo intervallo normale, poi inizia a salire gradualmente.
+
+00:08:57.100 --> 00:09:03.180
+Il nastro trasportatore funziona ancora, quindi nessuno di fuori della manutenzione potrebbe notare un problema, ma la lettura ripetuta comunica al tecnico che qualcosa è cambiato.
+
+00:09:03.720 --> 00:09:09.880
+Questo dà al team il tempo di ispezionare il motore prima che si danneggi o fermi la linea, questa è chiamata manutenzione basata sulle condizioni.
+
+00:09:10.640 --> 00:09:13.800
+Invece di agire solo in una data prestabilita, il team monitora un valore tecnico.
+
+00:09:14.260 --> 00:09:19.100
+Quando tale lettura supera un limite stabilito dall'azienda, può comparire una richiesta di manutenzione da sottoporre a revisioni.
+
+00:09:19.560 --> 00:09:23.000
+Un sensore può fornire queste letture al processo, ma non ripara nulla.
+
+00:09:23.520 --> 00:09:27.260
+Può avvertire che una temperatura è troppo alta o che una vibrazione ha superato l'intervallo accettabile.
+
+00:09:27.940 --> 00:09:33.780
+Una persona deve comunque controllare l'apparecchiatura, decidere cosa significhi l'avviso, seguire le norme di sicurezza ed eseguire la riparazione o l'ispezione.
+
+00:09:34.300 --> 00:09:35.360
+Quel passaggio umano è fondamentale.
+
+00:09:35.360 --> 00:09:41.540
+Una lettura potrebbe indicare un cuscinetto usurato, ma potrebbe anche derivare da un raccordo alentato, da un problema del sensore o da un cambiamento dell'apparecchiatura.
+
+00:09:42.320 --> 00:09:44.000
+Il sistema richiama l'attenzione sulle condizioni.
+
+00:09:44.480 --> 00:09:46.680
+Il personale formato decide quale azione intraprendere successivamente.
+
+00:09:46.980 --> 00:09:48.760
+Quindi l'obiettivo non è prevedere ogni guasto alla perfezione.
+
+00:09:49.680 --> 00:09:56.460
+È dare ai team di manutenzione un preavviso, routine migliori, meno riparazioni che iniziano con una telefonata frettata dopo che l'apparecchiatura si è già fermata.
+
+00:09:57.600 --> 00:10:02.440
+Il lavoro pianificato richiede comunque un registro chiaro, un responsabile, i pezzi giusti e un modo per tracciare i costi.
+
+00:10:02.440 --> 00:10:05.900
+Gli ordini di lavoro sono il documento che coordina la riparazione.
+
+00:10:06.460 --> 00:10:10.260
+Quindi quando una necessità di manutenzione diventa un lavoro effettivo, diventa un ordine di lavoro.
+
+00:10:10.740 --> 00:10:15.500
+Pensatelo come il documento che segue una riparazione dalla prima segnalazione fino al completamento,
+
+00:10:15.640 --> 00:10:21.220
+fornendo al team un unico registro di cosa è andato storto, cosa deve essere fatto, chi è responsabile e quanto costa.
+
+00:10:21.860 --> 00:10:24.680
+Senza un ordine di lavoro un tecnico potrebbe comunque risolvere il problema,
+
+00:10:25.100 --> 00:10:28.400
+ma i dettagli potrebbero svanire in una telefonata, nel cambio turno o nella memoria di qualcuno.
+
+00:10:28.400 --> 00:10:32.660
+O nella memoria di qualcuno. E in seguito nessuno può rispondere facilmente a quale lavoro sia stato svolto,
+
+00:10:32.760 --> 00:10:35.380
+quanto tempo abbia richiesto, se lo stesso guasto si sia ripresentato.
+
+00:10:35.660 --> 00:10:37.700
+E senza quella registrazione si finisce per procedere a tendere.
+
+00:10:37.980 --> 00:10:39.840
+Ora un ordine di lavoro può iniziare in diversi modi.
+
+00:10:40.280 --> 00:10:42.780
+Potrebbe derivare da un lavoro di manutenzione programmata in scadenza,
+
+00:10:42.860 --> 00:10:46.600
+da un'ispezione che rileva un guasto, da un'avaria quando un'apparecchiatura si ferma,
+
+00:10:46.840 --> 00:10:52.300
+o da un tecnico che termina una riparazione, nota un altro problema e crea un intervento successivo prima di lasciare il sito.
+
+00:10:53.100 --> 00:10:54.540
+Motivi diversi, ma la stessa struttura.
+
+00:10:54.540 --> 00:10:59.640
+L'ordine di lavoro trasforma un'esigenza di manutenzione in qualcosa che il team può pianificare, assegnare, tracciare e chiudere.
+
+00:11:00.300 --> 00:11:03.800
+Quindi che sia programmato o non programmato, l'ordine di lavoro registra il motivo e la risposta.
+
+00:11:04.540 --> 00:11:06.160
+Innanzitutto l'ordine di lavoro descrive il colpo.
+
+00:11:06.720 --> 00:11:07.880
+Un breve titolo potrebbe recitare
+
+00:11:07.880 --> 00:11:10.560
+Ispezionare vibrazioni anomale sul motore 4 del nastro trasportato.
+
+00:11:11.200 --> 00:11:14.620
+Sotto il team di manutenzione può aggiungere i compiti necessari per completare il lavoro,
+
+00:11:14.740 --> 00:11:19.720
+come isolare l'apparecchiatura, ispezionare il supporto motore, controllare i cuscinetti, testare la riparazione e rimettere in servizio la macchina.
+
+00:11:20.220 --> 00:11:22.400
+Quel livello di dettaglio aiuta quando il lavoro passa di mano in mano.
+
+00:11:22.400 --> 00:11:26.600
+Una lista di controllo può guidare il tecnico attraverso un lavoro che deve avvenire in un certo ordine,
+
+00:11:26.720 --> 00:11:32.900
+il che è utile per le ispezioni regolari e aiuta nei riparazioni dove un passaggio mancato potrebbe creare rischi per la sicurezza o far funzionare male l'attrezzatura.
+
+00:11:34.000 --> 00:11:35.620
+Anche le istruzioni di sicurezza fanno parte del lavoro.
+
+00:11:36.020 --> 00:11:38.700
+L'operatore può dover bloccare l'alimentazione prima di aprire un pannello,
+
+00:11:38.760 --> 00:11:42.900
+indossare dispositivi di protezione e confermare che una linea si sia fermata prima di toccare parti in movimento.
+
+00:11:43.280 --> 00:11:47.500
+L'ordine di lavoro offre al team un posto dove includere quelle istruzioni affinché le persone possano vederle durante il lavoro.
+
+00:11:47.840 --> 00:11:48.800
+Poi arriva la pianificazione.
+
+00:11:48.800 --> 00:11:53.040
+Il team di manutenzione può assegnare gli operatori, stimare quanto tempo dovrebbe richiedere e programmare una data.
+
+00:11:53.340 --> 00:11:59.720
+Ciò non significa che ogni riparazione proceda esattamente secondo i piani perché i guasti e le apparecchiature raramente seguono il calendario ma fornisce al team che ha il team alternativo.
+
+00:12:00.140 --> 00:12:02.500
+È inoltre possibile aggiungere i pezzi di ricambio e i materiali necessari prima.
+
+00:12:02.960 --> 00:12:07.900
+Per il nostro motore e il nostro trasportatore ciò potrebbe includere un cuscinetto sostitutivo, bulloni, grasso o magari un intero motore.
+
+00:12:08.560 --> 00:12:11.020
+L'ordine di lavoro collega la riparazione agli articoli richiesti,
+
+00:12:11.100 --> 00:12:14.260
+così il tecnico non arriva pronto a lavorare per poi scoprire che il pezzo manca.
+
+00:12:14.260 --> 00:12:18.040
+Ciò significa che il tecnico non resta bloccato in attesa di un componente che non arriva mai.
+
+00:12:18.620 --> 00:12:21.640
+Se il magazzino possiede già l'articolo, il team può penificare in base a tale disponibilità.
+
+00:12:22.020 --> 00:12:25.560
+Se il magazzino non può coprirlo, la necessità passa al processo di acquisto
+
+00:12:25.560 --> 00:12:29.860
+e qualcuno può ordinare il pezzo richiesto senza fare affidamento su un messaggio afflettato
+
+00:12:29.860 --> 00:12:31.880
+o su una nota scritta a mano che va persa su una scrivania.
+
+00:12:32.740 --> 00:12:36.040
+L'ordine di lavoro mantiene ancora la cronologia della riparazione collecata a cui l'acquisto.
+
+00:12:36.040 --> 00:12:39.140
+È qui che la scheda di lavoro inizia a fare molto più che descrivere un guasto.
+
+00:12:39.480 --> 00:12:43.520
+È come una postazione di comando centrale che tutti possono consultare prima di iniziare la propria parte del lavoro.
+
+00:12:43.520 --> 00:12:45.900
+Aiuta le persone a prepararsi prima che il lavoro abilizzi.
+
+00:12:46.340 --> 00:12:49.400
+Il tecnico sa cosa ispezionare, il pianificatore sa che dovrebbe occuparsi del lavoro,
+
+00:12:49.560 --> 00:12:53.160
+il team del magazzino vede quali pezzi servono e l'ufficio acquisti agisce se un pezzo non è disponibile.
+
+00:12:53.900 --> 00:12:56.140
+Man mano che il lavoro procede, l'ordine registra il suo stato.
+
+00:12:56.520 --> 00:12:58.000
+Inizia come creato, poi qualcuno lo pianifica.
+
+00:12:58.600 --> 00:13:01.240
+Quando il tecnico inizia a lavorare, il team registra quel cambiamento.
+
+00:13:01.240 --> 00:13:06.740
+Dopo la riparazione, passa completato e un manager o un altro responsabile può revisionarlo prima che il record venga chiuso.
+
+00:13:07.080 --> 00:13:10.020
+Questi passaggi possono sembrare lavoro amministrativo, ma rispondono a domande prete.
+
+00:13:10.200 --> 00:13:12.200
+Qualcuno se ne sta occupando. Il lavoro è iniziato.
+
+00:13:12.200 --> 00:13:14.240
+La macchina è pronta per tornare al normale utilizzo?
+
+00:13:14.600 --> 00:13:16.900
+Qualcuno ha verificato che il lavoro rispetti gli standard richiesti?
+
+00:13:17.320 --> 00:13:21.100
+Queste domande sono esattamente ciò a cui un team di manutenzione deve rispondere durante un turno intenso.
+
+00:13:21.560 --> 00:13:24.580
+L'ordine di lavoro completato registra anche ciò che la riparazione ha utilizzato,
+
+00:13:24.680 --> 00:13:26.760
+tempo di mano d'opera, pezzi di ricambio, altre spese.
+
+00:13:26.760 --> 00:13:29.200
+Il sistema collega questi costi al bene interessato.
+
+00:13:30.140 --> 00:13:33.160
+Nel tempo questo offre all'azienda un quadro più chiaro di una pila di fatture.
+
+00:13:33.560 --> 00:13:36.200
+Un manager può vedere che un motore ha richiesto riparazioni ripetute
+
+00:13:36.200 --> 00:13:41.280
+e il team di manutenzione può confrontare il costo delle riparazioni in corso con il costo di sostituzione dell'attrezzatura
+
+00:13:41.280 --> 00:13:44.780
+senza cercare in sistemi separati e indovinare quale fattura appartenesse a quale guasto.
+
+00:13:44.780 --> 00:13:47.740
+La parte finale è spesso la più utile per il tecnico successivo.
+
+00:13:48.460 --> 00:13:51.960
+Al termine lavoro il tecnico può aggiungere note sul guasto, sui controlli effettuati,
+
+00:13:52.060 --> 00:13:54.540
+sul pezzo sostituito e su qualsiasi cosa valga la pena monitorare.
+
+00:13:54.860 --> 00:13:57.220
+Forse il cuscinetto si è guastato perché il supporto si è rallentato.
+
+00:13:57.500 --> 00:14:01.180
+Forse la riparazione ha risolto il rumore ma il motore dovrebbe subire un'altra ispezione tra due settimane.
+
+00:14:01.840 --> 00:14:06.700
+Quella nota rimane legata al lavoro completato quindi mesi dopo chiunque affronti lo stesso problema non deve ricominciare da zero.
+
+00:14:07.380 --> 00:14:11.480
+Può vedere cosa è successo prima, cosa ha funzionato e cosa aveva notato il tecnico precedente.
+
+00:14:12.300 --> 00:14:14.140
+Quella continuità può far risparmiare molto tempo in futuro.
+
+00:14:14.140 --> 00:14:17.420
+Un ordine di lavoro spiega un'attività di manutenzione dall'inizio alla fine
+
+00:14:17.420 --> 00:14:22.140
+ma il suo ruolo più ampio emerge quando quel lavoro si collega ai record di magazzino, alle attività di acquisto e ai record di costi.
+
+00:14:23.000 --> 00:14:24.820
+Ed è questo il vero valore di un ordine di lavoro.
+
+00:14:25.140 --> 00:14:26.220
+Non è solo un documento.
+
+00:14:26.340 --> 00:14:28.900
+È uno strumento che mantiene le operazioni di manutenzione senza intoppi.
+
+00:14:30.220 --> 00:14:32.640
+Connesso alla catena di approvvigionamento e alla finanza e al lavoro sul team.
+
+00:14:33.420 --> 00:14:34.820
+Pensa a un'azienda come un edificio per UFI.
+
+00:14:35.160 --> 00:14:36.840
+La gestione degli asset è il cuore della manutenzione.
+
+00:14:37.140 --> 00:14:40.620
+Si concentra sul far funzionare le attrezzature ma non è isolato dal resto dell'azienda
+
+00:14:40.620 --> 00:14:45.860
+perché il magazzino ricambi, l'ufficio acquisti, il team finanziario e gli operatori hanno tutti bisogno delle stesse informazioni.
+
+00:14:46.760 --> 00:14:50.800
+La gestione degli asset non è isolata, anzi, è collegata a ogni altro reparto tramite l'ordine di lavoro.
+
+00:14:51.440 --> 00:14:54.720
+Questo collegamento evita le persone di dover ricopiare gli stessi dati in posti diversi.
+
+00:14:55.160 --> 00:14:57.900
+Ciò significa meno possibilità di errore e molto meno tempo sprecato.
+
+00:14:57.900 --> 00:15:05.000
+All'interno di Dynamics 305 Supply Chain Management, le attività di manutenzione possono collegarsi alle giacenze di ricambi e materiali.
+
+00:15:05.860 --> 00:15:09.300
+Se una riparazione richiede un cuscinetto, un filtro o un motore sostitutivo,
+
+00:15:09.660 --> 00:15:13.000
+il team può verificare se il pezzo è già disponibile prima di contattare i fornitori.
+
+00:15:13.560 --> 00:15:15.080
+Le giacenze ti dicono cosa c'è già in magazzino.
+
+00:15:15.500 --> 00:15:19.740
+Quando il pezzo è necessario o non c'è, l'ufficio acquisti può partire dalla stessa esigenza di manutenzione.
+
+00:15:19.740 --> 00:15:25.160
+L'ordine di acquisto si collega alla riparazione, offrendo a tutti una visione chiara del motivo dell'ordine e della destinazione del pezzo all'arrivo.
+
+00:15:25.740 --> 00:15:27.660
+Anche la produzione è strettamente legata a questo processo.
+
+00:15:28.120 --> 00:15:33.400
+Se una macchina richiede un fermo programmato, le operation possono capire come il lavoro di manutenzione possa influire sulla linea o sui processi di magazzino.
+
+00:15:33.620 --> 00:15:39.420
+Questo non elimina il bisogno di comunicare tra colleghi, ma fornisce a tali conversazioni una base condivisa invece di una serie di supposizioni.
+
+00:15:39.860 --> 00:15:42.640
+Quindi quando manutenzione e produzione condividono lo stesso sistema, ci sono una tri.
+
+00:15:42.880 --> 00:15:44.200
+La finanza ha bisogno di una prospettiva diversa.
+
+00:15:44.200 --> 00:15:48.380
+Il team di manutenzione pensa al guasto e alla riparazione, ma la finanza deve sapere a cosa imputare la spesa.
+
+00:15:48.660 --> 00:15:52.480
+La gestione degli asset può collegare i costi alla posizione funzionale in cui opera l'attrezzatura,
+
+00:15:52.640 --> 00:15:56.260
+così la spesa di riparazione segue la macchina fino al reparto o all'area di business corretta.
+
+00:15:56.260 --> 00:15:58.820
+Immaginiamo che lo stesso tipo di macchina funziona in due sedi diverse.
+
+00:15:59.280 --> 00:16:02.060
+Entrambe necessitano di riparazioni, ma una delle due sedi la utilizza molto più.
+
+00:16:02.760 --> 00:16:07.100
+Quando i costi sono legati alla posizione corretta, i manager possono vedere quale sede sostiene la spesa,
+
+00:16:07.180 --> 00:16:09.800
+invece di vedere solo un totale unico di riparazioni prive di contesto.
+
+00:16:09.960 --> 00:16:13.500
+Questo rende meno confusa l'analisi dei costi e aiuta l'azienda a individuare dei pattern.
+
+00:16:13.940 --> 00:16:17.840
+Se una sede continua a spendere molto per lo stesso tipo di attrezzatura, il team può porsi domande più mirate.
+
+00:16:17.840 --> 00:16:21.560
+Quella sede opera su toni più lunghi, ha bisogno in pieno di manutenzione diverso.
+
+00:16:21.880 --> 00:16:23.840
+O è l'attrezzatura stessa che deve essere sostituita?
+
+00:16:24.360 --> 00:16:27.000
+Sono questi schemi che guidano decisioni di manutenzione migliori nel tempo.
+
+00:16:27.540 --> 00:16:30.660
+La gestione degli asset può anche collegarsi a Dynamics 365 e Field Service.
+
+00:16:31.040 --> 00:16:34.980
+La gestione degli asset traccia solitamente le attrezzature che l'azienda possiede e usa internamente,
+
+00:16:35.420 --> 00:16:39.220
+mentre il Field Service si concentra sul lavoro svolto per i clienti, spesso presso il loro sedi.
+
+00:16:39.780 --> 00:16:42.320
+Quando queste aree condividono informazioni di assistenza correlate,
+
+00:16:42.320 --> 00:16:44.980
+un'azienda può mantenere una visione più chiara delle apparecchiature,
+
+00:16:45.140 --> 00:16:47.080
+delle attività di servizio e del personale che svolge l'auto.
+
+00:16:47.260 --> 00:16:50.260
+Un'azienda potrebbe occuparsi della manutenzione dei macchinari nel proprio stabilimento
+
+00:16:50.260 --> 00:16:53.120
+e contemporaneamente inviare tecnici a riparare le apparecchiature vendute ai clienti.
+
+00:16:53.460 --> 00:16:56.620
+Sono lavori diversi, ma la cronologia dell'assistenza, i dettagli dell'attrezzatura
+
+00:16:56.620 --> 00:16:59.300
+e le abitudini di riparazione possono collegarsi dove serve l'azienda,
+
+00:16:59.420 --> 00:17:00.720
+anziché restare in archivi separati.
+
+00:17:01.660 --> 00:17:03.400
+I sensori aggiungono un'ulteriore fonte di informazione.
+
+00:17:03.780 --> 00:17:06.600
+Azure IoT Central può ricevere letture dalle apparecchiature connesse,
+
+00:17:06.680 --> 00:17:08.260
+come temperatura, pressione o vibrazioni.
+
+00:17:08.260 --> 00:17:11.140
+Quando una lettura esce dai limiti stabiliti dall'azienda,
+
+00:17:11.300 --> 00:17:14.280
+può attivare una richiesta di manutenzione da fare esaminare a qualcuno.
+
+00:17:15.100 --> 00:17:18.240
+Il sensore fornisce il segnale, ma aspetta al tecnico decidere cosa significhi
+
+00:17:18.240 --> 00:17:21.820
+e se l'attrezzatura richiede un'ispezione, una riparazione o un controllo più approfondito,
+
+00:17:22.780 --> 00:17:24.640
+l'avviso può raggiungere il processo di manutenzione,
+
+00:17:24.740 --> 00:17:27.480
+mentre l'attrezzatura è ancora in funzione anziché dopo che un guasto l'ha restato.
+
+00:17:27.820 --> 00:17:31.220
+Questo tipo di avviso tempestivo può impedire che un problema minore si trasformi in un guasto grave.
+
+00:17:31.520 --> 00:17:33.840
+Alcuni lavori richiedono anche più di una semplice lista di controllo scritto.
+
+00:17:35.040 --> 00:17:37.140
+Dynamics 365 Guides, utilizzato con HoloLens,
+
+00:17:37.140 --> 00:17:40.640
+può fornire ai tecnici una guida passo dopo passo mentre lavorano su apparecchiature complesse.
+
+00:17:41.040 --> 00:17:43.160
+Un operatore può seguire le istruzioni davanti a sé,
+
+00:17:43.320 --> 00:17:45.300
+il che è utile quando un compito prevede molte fasi
+
+00:17:45.300 --> 00:17:48.560
+o quando il metodo di un tecnico esperto deve essere condiviso con il personale più recente.
+
+00:17:49.020 --> 00:17:52.040
+Questo non trasforma un principiante in un esperto dall'oggi al domani,
+
+00:17:52.140 --> 00:17:54.720
+ma offre al tecnico una guida pratica direttamente sul campo,
+
+00:17:55.220 --> 00:17:57.800
+mentre i registri di manutenzione tengono traccia del lavoro svolto.
+
+00:17:58.460 --> 00:18:02.300
+Molti si aspettano che un'unica app aziendale gestisca ogni compito da sola, ma non funziona così.
+
+00:18:03.020 --> 00:18:05.180
+La gestione degli asset si occupa dell'aspetto manutentivo,
+
+00:18:05.180 --> 00:18:10.880
+mentre le parti connesse di Dynamics 365 gestiscono scorte, acquisti, finanza, assistenza a clienti e altre attività.
+
+00:18:11.720 --> 00:18:13.960
+Vantaggio deriva dal passaggio di registri tra queste aree
+
+00:18:13.960 --> 00:18:17.420
+senza dover ridigitare gli stessi dettagli o perdere il motivo che li ha generati.
+
+00:18:18.200 --> 00:18:20.680
+Solo le connessioni tra questi sistemi a rendere potente la piattaforma.
+
+00:18:21.080 --> 00:18:24.260
+Quindi uniamo questi ambienti connessi attraverso una semplice storia di manutenzione.
+
+00:18:24.640 --> 00:18:29.020
+Ora avete un quadro chiaro di come la gestione degli asset si inserisca nel più ampio ecosistema di Dynamics 365.
+
+00:18:29.020 --> 00:18:33.860
+Una giornata tipo, dall'avviso alla riparazione è completata.
+
+00:18:35.220 --> 00:18:38.380
+Immaginate il motore di un nastro trasportatore in magazzino che invia letture di brazionesco.
+
+00:18:38.520 --> 00:18:39.640
+Questo è l'avviso prima del guasto.
+
+00:18:40.260 --> 00:18:40.780
+Ecco il processo.
+
+00:18:41.340 --> 00:18:46.100
+Aprite il registro dell'asset, vedete la posizione del motore, la cronologia, la garanzia, la garanzia, lavori programmi.
+
+00:18:46.400 --> 00:18:51.100
+Poi create un ordine di lavoro, assegnate un tecnico, elencate le fasi di ispezione e verificate la disponibilità del cuscinetto a magazzino.
+
+00:18:51.100 --> 00:18:54.780
+Se il cuscinetto non è disponibile, il sistema lo ordina mentre tiene traccia di tempi e costi.
+
+00:18:55.100 --> 00:18:58.020
+Dopo la riparazione, il tecnico registra il risultato e lascia delle note.
+
+00:18:58.480 --> 00:19:02.960
+Il manager vede costi, costi ricorrenti, tempi di inattività e tutta la manutenzione relativa a quel motore.
+
+00:19:03.460 --> 00:19:04.680
+L'avviso non ha riparato il motore.
+
+00:19:05.040 --> 00:19:08.240
+Ha dato alle persone il tempo di pianificare invece di dover gestire un'emergenza improvvista.
+
+00:19:08.400 --> 00:19:10.460
+Quindi vediamo chi si adatta e cosa non sostituisce.
+
+00:19:11.040 --> 00:19:12.180
+Chi ha bisogno della gestione degli asset?
+
+00:19:12.780 --> 00:19:16.980
+Qualsiasi azienda che dipenda da macchinari, veicoli, attrezzature di produzione o impianti di edifici.
+
+00:19:16.980 --> 00:19:22.660
+Ciò include produttori, magazzini, team di trasporto, servizi di pubblica utilità e operazioni ad alto tasso di servizio.
+
+00:19:23.080 --> 00:19:26.200
+Ma attenzione, non sostituisce ai tecnici le norme di sicurezza e il giudizio umano.
+
+00:19:26.700 --> 00:19:30.240
+Offre a queste persone un registro condiviso come una cartella clinica per le vostre attrezzature
+
+00:19:30.240 --> 00:19:32.360
+e un metodo pianificato per far funzionare tutto.
+
+00:19:33.960 --> 00:19:36.920
+In conclusione, conservate la storia di attrezzature in un unico posto.
+
+00:19:37.640 --> 00:19:38.800
+Con la gestione degli asset.
+
+00:19:38.960 --> 00:19:43.040
+Tenete l'asset, il lavoro di manutenzione, i pezzi, i costi e lo storico degli interventi in un solo posto.
+
+00:19:43.040 --> 00:19:48.340
+Iscrivetevi a M3665.fm per altre pillole di conoscenza e linguaggio semplice e proseguiremente.
