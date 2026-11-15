@@ -20,11 +20,16 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - name: Tagesblock freigeben
-        run: python3 tools/blog_release.py "${{ inputs.date }}" "${{ inputs.limit }}" "${{ inputs.article_date }}"
+        env:   # Eingaben ueber die Umgebung, nicht in den Shell-Befehl eingesetzt
+          IN_DATE: ${{ inputs.date }}
+          IN_LIMIT: ${{ inputs.limit }}
+          IN_ARTICLE_DATE: ${{ inputs.article_date }}
+        run: python3 tools/blog_release.py "$IN_DATE" "$IN_LIMIT" "$IN_ARTICLE_DATE"
       - name: Speichern (auf die Website kommt es mit dem naechtlichen Seitenbau - Bot-Commits loesen keinen Bau aus)
         run: |
           git config user.name "m365fm-bot"; git config user.email "bot@m365.fm"
           git add -A imports/blog imports/blog-queue
           if git diff --cached --quiet; then echo "nichts freizugeben"; exit 0; fi
           git commit -m "Blog-Queue: Tagesblock freigegeben"
-          for i in 1 2 3; do git pull --rebase -q origin "${GITHUB_REF_NAME}" && git push -q && break; sleep 5; done
+          for i in 1 2 3; do git pull --rebase -q origin "${GITHUB_REF_NAME}" && git push -q && exit 0; sleep 5; done
+          echo "::error::Push nach drei Versuchen fehlgeschlagen"; exit 1
