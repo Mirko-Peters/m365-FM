@@ -24,7 +24,7 @@ To set out of office in Outlook, open the automatic replies settings, turn them 
 
 ## Check your account first
 
-Automatic replies run on the mailbox server, so they depend on an [Exchange Online](https://www.m365.fm/entity/exchange-online/) or Exchange account. Microsoft's page on [automatic out-of-office replies](https://support.microsoft.com/en-us/office/send-automatic-out-of-office-replies-from-outlook-9742f476-5348-4f9f-997f-5e208513bd67) says the built-in feature requires an Exchange or Microsoft 365 work or school account, and it states that automatic replies aren't supported for Gmail, Yahoo or other POP or IMAP accounts. Outlook for Mac works with Exchange, Outlook.com, Hotmail and Office 365 accounts. The mobile apps work with Microsoft 365, Exchange, Exchange hybrid and Outlook.com accounts.
+Automatic replies run on the mailbox server, so they depend on an [Exchange Online](https://www.m365.fm/entity/exchange-online/) or Exchange account. Microsoft's page on [automatic out-of-office replies](https://support.microsoft.com/office/send-automatic-out-of-office-replies-from-outlook-9742f476-5348-4f9f-997f-5e208513bd67) says the built-in feature requires an Exchange or Microsoft 365 work or school account, and it states that automatic replies aren't supported for Gmail, Yahoo or other POP or IMAP accounts. Outlook for Mac works with Exchange, Outlook.com, Hotmail and Office 365 accounts. The mobile apps work with Microsoft 365, Exchange, Exchange hybrid and Outlook.com accounts.
 
 If you only have an IMAP or POP account, Microsoft's workaround is a rule. The catch, per the same page: Outlook has to stay running while you're away, so it's a poor choice for a long trip.
 
@@ -55,7 +55,7 @@ The "contacts only" choice is worth knowing about. Microsoft warns that if you s
 
 ### Outlook on the web and Outlook.com
 
-Microsoft's [web steps](https://support.microsoft.com/en-us/outlook/send-automatic-out-of-office-replies-from-outlook-com-or-outlook-on-the-web) for the new experience are:
+Microsoft's [web steps](https://support.microsoft.com/outlook/send-automatic-out-of-office-replies-from-outlook-com-or-outlook-on-the-web) for the new experience are:
 
 1. Select **Settings** (the gear), then **Accounts**, then **Automatic replies**.
 2. Turn on **Turn on automatic replies**.
@@ -69,7 +69,7 @@ On the older web layout, the path is Settings, Account, Automatic replies, then 
 
 ### Outlook for Mac
 
-Microsoft documents this in its Mac article on [automatic out-of-office replies](https://support.microsoft.com/en-us/outlook/send-automatic-out-of-office-replies-from-outlook-for-mac).
+Microsoft documents this in its Mac article on [automatic out-of-office replies](https://support.microsoft.com/outlook/send-automatic-out-of-office-replies-from-outlook-for-mac).
 
 1. In the navigation pane, click **Mail**.
 2. From the **Tools** menu, choose **Automatic Replies**.
@@ -79,11 +79,11 @@ Microsoft documents this in its Mac article on [automatic out-of-office replies]
 6. To answer outside senders, check **Message for outside your organization**, choose **Send only to my contacts** or **Send to everyone** and type the text. This option only appears if your Exchange administrator has enabled it.
 7. Close the **Automatic Replies** window.
 
-If you set an end time, replies stop on their own when it passes. To turn them off earlier, go back to Tools, Automatic Replies and switch off **Send Automatic Replies**. Microsoft also notes that support for legacy Outlook for Mac ends in October 2026.
+If you set an end time, replies stop on their own when it passes. To turn them off earlier, go back to Tools, Automatic Replies and switch off **Send Automatic Replies**. Microsoft's page says support for legacy Outlook for Mac was to end in October 2026. That month has passed, so make sure you're on the new Outlook for Mac.
 
 ### Outlook for iOS and Android
 
-On the phone, you set automatic replies per account. Open **Settings**, select the account, select **Automatic Replies** and turn on the switch. Microsoft's mobile article lists these options: a time window with start and end times, a calendar block that shows you as out of office, the choice to clear or decline meetings in that window, replies to everyone or only to people in your organization, and separate messages for internal and external senders.
+On the phone, you set automatic replies per account. Open **Settings**, select the account, select **Automatic Replies** and turn on the switch. Microsoft's [mobile article](https://support.microsoft.com/outlook/how-do-i-enable-out-of-the-office-messages-for-each-of-my-accounts) lists these options: a time window with start and end times, a calendar block that shows you as out of office, the choice to clear or decline meetings in that window, replies to everyone or only to people in your organization, and separate messages for internal and external senders.
 
 Microsoft describes out-of-office replies as server-side rules, so a reply set on the phone runs on the server like any other. Open the setting in another client once after you save it to confirm.
 
@@ -106,7 +106,7 @@ Every version has one. In classic Outlook the message bar under the ribbon shows
 
 ## Why your out-of-office isn't working
 
-Microsoft's [article on troubleshooting OOF replies](https://learn.microsoft.com/en-us/troubleshoot/exchange/email-delivery/understand-troubleshoot-oof-replies) explains the mechanics. Out-of-office replies are server-side rules, so they work whether or not your Outlook is open. They are sent once per sender. The sender history is cleared when you turn the setting on or off or edit the rule.
+Microsoft's [article on troubleshooting OOF replies](https://learn.microsoft.com/troubleshoot/exchange/email-delivery/understand-troubleshoot-oof-replies) explains the mechanics. Out-of-office replies are server-side rules, so they work whether or not your Outlook is open. They are sent once per sender. The sender history is cleared when you turn the setting on or off or edit the rule.
 
 That "once per sender" rule fools many testers. If you test with your own second address and send two emails, you only get one reply. Test with a fresh address.
 
@@ -127,13 +127,13 @@ If you want a reply on every message instead of one per sender, Microsoft points
 
 ## Admins: setting it for a user or a shared mailbox
 
-Sometimes the person who needs the reply can't set it, because they're already gone or because the mailbox is shared. Microsoft's article on [setting automatic replies for a user or shared mailbox](https://learn.microsoft.com/en-us/troubleshoot/exchange/user-and-shared-mailboxes/set-automatic-replies) lists these methods.
+Sometimes the person who needs the reply can't set it, because they're already gone or because the mailbox is shared. Microsoft's article on [setting automatic replies for a user or shared mailbox](https://learn.microsoft.com/troubleshoot/exchange/user-and-shared-mailboxes/set-automatic-replies) lists these methods.
 
 1. **Microsoft 365 admin center.** Go to **Users**, then **Active users**, select a user who has an Exchange mailbox, and in the flyout choose **Mail settings** and **Automatic replies**. For a [shared mailbox](https://www.m365.fm/entity/shared-mailbox/), go to **Groups**, then **Shared mailboxes**, and select **Automatic replies** in the flyout.
 2. **Exchange admin center.** Under **Recipients**, then **Mailboxes**, select the mailbox, then **Others**, then **Manage automatic replies**.
-3. **Exchange Online PowerShell.** Use `Set-MailboxAutoReplyConfiguration` with the identity, `-AutoReplyState` (Disabled, Enabled or Scheduled) and start and end times for scheduled replies. See the cmdlet reference for the full parameter list, and run it through [Exchange Online PowerShell](https://www.m365.fm/entity/exchange-online-powershell/).
+3. **Exchange Online PowerShell.** Use `Set-MailboxAutoReplyConfiguration` with the identity, `-AutoReplyState` (Disabled, Enabled or Scheduled) and start and end times for scheduled replies. The Learn page for this method names only the cmdlet, so see the [cmdlet reference](https://learn.microsoft.com/powershell/module/exchange/set-mailboxautoreplyconfiguration) for the parameters, and run it through [Exchange Online PowerShell](https://www.m365.fm/entity/exchange-online-powershell/).
 
-The `ExternalAudience` setting controls who outside gets a reply. The value `Known` sends external replies only to people in the user's contacts.
+According to the cmdlet reference, the `ExternalAudience` parameter controls who outside gets a reply: `None`, `Known` or `All`. `Known` sends replies only to external senders in the mailbox's Contact list.
 
 For a shared mailbox that should answer outsiders all the time, think about whether an out-of-office is the right tool. It's meant for absences, with start and end dates. A permanent acknowledgment is usually better built in another way.
 
@@ -156,3 +156,13 @@ For a shared mailbox that should answer outsiders all the time, think about whet
 ## Next step
 
 Open your automatic replies settings today, even if the trip is weeks away, and check that the dates and both messages are right. Then send a test from an address that has never written to you, so you know how to set out of office in Outlook in a way that works for outside senders too.
+
+## Sources
+
+- [Send automatic out-of-office replies from Outlook (Microsoft Support)](https://support.microsoft.com/office/send-automatic-out-of-office-replies-from-outlook-9742f476-5348-4f9f-997f-5e208513bd67)
+- [Send automatic out-of-office replies from Outlook.com or Outlook on the web (Microsoft Support)](https://support.microsoft.com/outlook/send-automatic-out-of-office-replies-from-outlook-com-or-outlook-on-the-web)
+- [Send automatic out-of-office replies from Outlook for Mac (Microsoft Support)](https://support.microsoft.com/outlook/send-automatic-out-of-office-replies-from-outlook-for-mac)
+- [How do I enable out of the office messages for each of my accounts? (Microsoft Support)](https://support.microsoft.com/outlook/how-do-i-enable-out-of-the-office-messages-for-each-of-my-accounts)
+- [Understand and troubleshoot out-of-office replies (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/email-delivery/understand-troubleshoot-oof-replies)
+- [Set automatic replies for a user or shared mailbox (Microsoft Learn)](https://learn.microsoft.com/troubleshoot/exchange/user-and-shared-mailboxes/set-automatic-replies)
+- [Set-MailboxAutoReplyConfiguration (Microsoft Learn)](https://learn.microsoft.com/powershell/module/exchange/set-mailboxautoreplyconfiguration)

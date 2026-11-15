@@ -29,16 +29,16 @@ The Lean Enterprise Institute defines [5S](https://www.lean.org/lexicon-terms/fi
 
 That sounds trivial, but a typical workspace hides a lot of waste. Operators walk to look for a gauge. A fixture sits behind three pallets. A leaking hose is not noticed because the floor is always dirty.
 
-ASQ lists the benefits that a [5S programme](https://asq.org/quality-resources/lean/five-s-tutorial) can bring: improved safety, higher equipment availability, lower defect rates, reduced costs, increased production agility and flexibility, improved employee morale and better asset utilization. The page gives no measured figures. Treat these as hypotheses and measure your own result, as the example below shows.
+The benefits usually named for a 5S programme are improved safety, higher equipment availability, lower defect rates, reduced costs, more production agility and flexibility, better employee morale and better asset utilization. These are commonly cited claims, not measured figures from a source we could verify. Treat them as hypotheses and measure your own result, as the example below shows.
 
 ## What do the five S's mean?
 
-Each S has a Japanese name. Sources translate them slightly differently, so you will see "set in order" in some places and "straighten" in others. The meaning is the same.
+Each S has a Japanese name. Sources translate them slightly differently: the Lean Enterprise Institute says "straighten", while other sources say "set in order". The meaning is the same.
 
 1. **Seiri, sort.** Separate needed items from unneeded ones, such as tools, parts, materials and paperwork, and remove the unneeded. Be strict: if you cannot name the job an item serves this month, it does not belong at the workstation.
 2. **Seiton, set in order.** Arrange what remains so that, in the words of the Lean Enterprise Institute, there is "a place for everything and everything in its place". Frequently used items go closest to the point of use. Mark each place with a label, an outline or a shadow board.
 3. **Seiso, shine.** Clean and wash. On the shop floor, cleaning is also inspection: when you wipe a machine, you find leaks, loose bolts and worn parts early.
-4. **Seiketsu, standardize.** Maintain the cleanliness that results from regularly performing the first three S's. This means written standards, photos of the target state and a clear owner for each area.
+4. **Seiketsu, standardize.** The Lean Enterprise Institute describes it as the cleanliness that results from regular performance of the first three S's. In practice this means written standards, photos of the target state and a clear owner for each area.
 5. **Shitsuke, sustain.** Build the discipline to perform the first four S's every day, so that the state does not slide back.
 
 Two notes from the same source help to avoid confusion. Some practitioners add a sixth S for safety. And Toyota traditionally uses only four S's and drops shitsuke, because its daily, weekly and monthly audits of standardized work make it redundant. The lesson for you: sustaining needs something concrete, such as a routine of audits. Good intentions are not enough.
@@ -58,7 +58,7 @@ Do not start in the whole plant. A pilot area teaches you what works in your cul
 
 ## How do you audit and sustain 5S?
 
-Most 5S programmes fail after the clean-up, not during it. ASQ quotes a Quality Progress warning that many companies implement only the first three steps and that, unless the standardize and sustain steps are formalized, the initiative is doomed to failure. The fix is a simple 5S audit that is done often and visibly.
+Most 5S programmes fail after the clean-up, not during it. A frequent observation is that many companies implement only the first three steps, and that unless the standardize and sustain steps are formalized, the initiative fades. This is our own reading of common practice, not a measured result. The fix is a simple 5S audit that is done often and visibly.
 
 The State of Iowa's published [5S audit checklist](https://dom.iowa.gov/resource/lean-resources/5s-audit-checklist) is organized in the same five categories: remove all unnecessary materials and equipment, make it obvious where items belong, clean everything, establish policies and procedures to keep the first three in place including monitoring, and provide training and daily activities. That structure is a good template for your own checklist.
 
@@ -109,3 +109,8 @@ Software is not the core of 5S. A tidy bench does not need an app. But software 
 ## Next step
 
 Choose one work area this week, take photos and measure the minutes spent searching for tools. Then run the first two steps of 5S with the team, and set the date of the first audit before you start.
+
+## Sources
+
+- Lean Enterprise Institute: Five S (Lean Lexicon) - https://www.lean.org/lexicon-terms/five-s/
+- State of Iowa, Department of Management: 5S audit checklist - https://dom.iowa.gov/state-government/lean-enterprise/tools/5s-audit-checklist

@@ -24,20 +24,20 @@ To create a folder in [SharePoint](https://www.m365.fm/entity/sharepoint/), open
 
 ## Create a folder in a document library
 
-These are the steps for the modern SharePoint experience, as Microsoft describes them in its page [Create a folder in a document library](https://support.microsoft.com/en-us/sharepoint/documents-and-library/create-a-folder-in-a-document-library).
+These are the steps for the modern SharePoint experience, as Microsoft describes them in its page [Create a folder in a document library](https://support.microsoft.com/sharepoint/documents-and-library/create-a-folder-in-a-document-library).
 
 1. Go to the SharePoint site and open the document library where you want the folder.
 2. On the menu bar, select **+ New**, then select **Folder**.
 3. In the **Create a folder** dialog box, enter a name in the **Name** box, then select **Create**.
 4. If you don't see the new folder, refresh your browser.
 
-After you create a folder, you can add files to it or create subfolders inside it. Open the folder, and the same **+ New** menu is there. You can also drag files into it, because a document library supports drag and drop for adding files and moving them between folders.
+After you create a folder, you can add files to it or create subfolders inside it. Open the folder, and the same **+ New** menu is there.
 
 If your screen looks different from these steps, your SharePoint administrator might have set the Classic experience on the library. In that case, open the library, select the **Files** tab on the ribbon and, in the **New** group, select **New Folder**. The dialog is the same: enter a name and select **Create**.
 
 ### Where to click for a SharePoint list
 
-A list is not a library. Microsoft has a separate page called "Create a folder in a list", which I haven't reproduced here. If you're in a document library, use the steps above. If you're in a list and can't find a folder command, ask the list owner.
+A list is not a library. Microsoft documents lists separately from libraries, and this article doesn't cover them. If you're in a document library, use the steps above. If you're in a list and can't find a folder command, ask the list owner.
 
 ## Rename a folder
 
@@ -70,7 +70,7 @@ A simple pattern works for many teams: a few top-level folders that are stable (
 
 ## Move, copy and organize what you have
 
-You don't have to create the folder first and fill it by hand. Select files in the library and use the command bar. Microsoft's page [Move or copy files in SharePoint](https://support.microsoft.com/en-us/sharepoint/libraries/move-or-copy-files-in-sharepoint) describes it:
+You don't have to create the folder first and fill it by hand. Select files in the library and use the command bar. Microsoft's page [Move or copy files in SharePoint](https://support.microsoft.com/sharepoint/libraries/move-or-copy-files-in-sharepoint) describes it:
 
 1. Select the files or folders you want to move or copy.
 2. On the command bar, select **Move to** or **Copy to**. If you don't see them, select the **More** (ellipsis) icon first.
@@ -81,7 +81,7 @@ Some details save you from surprises. **Move to** keeps the document's version h
 
 ## Share a folder
 
-Share the folder, not each file. Microsoft's page [Share SharePoint files or folders](https://support.microsoft.com/en-us/sharepoint/sharepoint-sharing-and-permissions/share-sharepoint-files-or-folders) explains it. You can share only one item at a time, so put multiple items in a folder and share that folder.
+Share the folder, not each file. Microsoft's page [Share SharePoint files or folders](https://support.microsoft.com/sharepoint/sharepoint-sharing-and-permissions/share-sharepoint-files-or-folders) explains it. You can share only one item at a time, so put multiple items in a folder and share that folder.
 
 1. In the library, select the folder's circle icon.
 2. Select the **Share** icon at the top of the page.
@@ -93,7 +93,7 @@ The link types are **Anyone**, **People in your organization with the link**, **
 
 ## Folders or views?
 
-Folders are easy to understand, but every folder level adds a click and a longer path. Microsoft's page says views let you filter, group and sort files in several ways, and that for a large library, a combination of views and folders might work best. The page on document libraries also lists the other tools: columns that show details such as who created or last modified a file, views in List, Compact and Tiles form, and custom views you can save.
+Folders are easy to understand, but every folder level adds a click and a longer path. Microsoft's page says that in some cases you might consider using views instead of folders. The page on document libraries lists other tools: columns that show details such as who created or last modified a file, views in List, Compact and Tiles form, and custom views you can save.
 
 A practical rule: use folders for things that rarely change, like the client or the year, and use columns and views for everything that changes, like status or owner. Use folders when permissions differ. Use views when only the display differs.
 
@@ -110,10 +110,19 @@ A practical rule: use folders for things that rarely change, like the client or 
 
 - **Using SharePoint as a beginner.** Sites, libraries, lists and pages work together. The next article explains how to use SharePoint from the first click.
 - **Syncing a library to your PC.** The OneDrive sync app lets you work in File Explorer. Read about syncing OneDrive and SharePoint files if you prefer that.
-- **Permissions on a folder.** Unique permissions on a folder are useful when it needs different access than the rest of the library. Microsoft's older page on subfolder permissions applies to SharePoint Server 2013 and 2016, so for Microsoft 365 use the sharing page.
+- **Permissions on a folder.** Unique permissions on a folder are useful when it needs different access than the rest of the library. Microsoft's sharing page says sharing from the modern experience breaks inheritance at the list or library level.
 - **Recycle Bin.** Deleted folders go to the site Recycle Bin. Restore from there when someone removes one by mistake.
-- **Folders in lists.** Lists have their own folder command, covered on a separate Microsoft page.
+- **Folders in lists.** If you work in a list, not a library, look for Microsoft's separate guidance on lists.
 
 ## Next step
 
 Open your library, create one test folder with **+ New** and **Folder**, and move two files into it with **Move to**. If you want to create a folder in SharePoint that your team will still use next year, write down the naming rule for the top two levels and put it in the library description.
+
+## Sources
+
+- [Create a folder in a document library (Microsoft Support)](https://support.microsoft.com/sharepoint/documents-and-library/create-a-folder-in-a-document-library)
+- [Move or copy files in SharePoint (Microsoft Support)](https://support.microsoft.com/sharepoint/libraries/move-or-copy-files-in-sharepoint)
+- [Share SharePoint files or folders (Microsoft Support)](https://support.microsoft.com/sharepoint/sharepoint-sharing-and-permissions/share-sharepoint-files-or-folders)
+- [What is a document library? (Microsoft Support)](https://support.microsoft.com/sharepoint/documents-and-library/what-is-a-document-library)
+- [Restrictions and limitations in OneDrive and SharePoint (Microsoft Support)](https://support.microsoft.com/office/restrictions-and-limitations-in-onedrive-and-sharepoint-64883a5d-228e-48f5-b3d2-eb39e07630fa)
+- [What are the file path length limits? (Microsoft Support)](https://support.microsoft.com/onedrive/what-are-file-path-length-limits)

@@ -32,7 +32,7 @@ Signature features are available in every one of them. Microsoft's comparison of
 
 ### New Outlook for Windows
 
-These steps come from Microsoft's page on [adding and changing an email signature](https://support.microsoft.com/en-us/outlook/mail/how-to-add-and-change-an-email-signature-in-outlook).
+These steps come from Microsoft's page on [adding and changing an email signature](https://support.microsoft.com/outlook/mail/how-to-add-and-change-an-email-signature-in-outlook).
 
 1. Select the **Settings** gear, then **Accounts**, then **Signatures**.
 2. If you have more than one account, pick the account the signature belongs to.
@@ -58,19 +58,19 @@ Microsoft's accessibility guide for classic Outlook confirms this structure: you
 
 ### Outlook on the web
 
-Microsoft's web page for signatures gives this path: **Settings**, **Accounts**, **Signatures**. Create or edit the signature content, choose whether to include it on new messages and on replies and forwards, and save. Microsoft's page doesn't describe image handling for the web, so test a logo with a message to yourself before you roll it out to a team. The web version is also where many people first notice the old layout, which put signatures under Mail and Compose and reply. If you don't find Accounts in your settings, look there.
+The web app follows the same pattern as new Outlook: **Settings**, **Accounts**, **Signatures**. The Web tab of Microsoft's signature page wasn't available for this check, so verify the path on your screen. Create or edit the signature content, choose whether to include it on new messages and on replies and forwards, and save. Microsoft doesn't describe image handling for the web in the pages cited here, so test a logo with a message to yourself before you roll it out to a team. Microsoft's page on customizing a message in Outlook on the web places the signature under **Settings**, **Mail**, **Compose and reply**. If you don't find Accounts in your settings, look there.
 
 ### Outlook for Mac
 
-Microsoft documents the Mac steps in its article on [creating, inserting or changing a signature in Outlook for Mac](https://support.microsoft.com/en-us/outlook/create-insert-or-change-a-signature-in-outlook-for-mac). The path is **Outlook** menu, **Settings**, **Mail**, **Signatures**.
+Microsoft documents the Mac steps in its article on [creating, inserting or changing a signature in Outlook for Mac](https://support.microsoft.com/outlook/create-insert-or-change-a-signature-in-outlook-for-mac). The path is **Outlook** menu, **Settings**, **Mail**, **Signatures**.
 
 1. Open the **Outlook** menu and select **Settings**, then under **Mail** select **Signatures**.
-2. To change an existing signature, pick it under **Signature name** and select **Edit**. To create a new one, select the **Add** (+) icon and type a name.
+2. To change an existing signature, pick it under **Signature name** and select **Edit**. To create a new one, select the **Add** icon and type a name.
 3. Enter your text and format it. Select **See more items (...)** to add a picture, logo, hyperlink or table. For a link, choose **Link**, enter the text and address and select **OK**.
 4. Under **Set default signature**, select an account, then choose the signature for **New messages** and for **Replies or forwards**. Repeat for each account, since Mac defaults are per account.
-5. Close the **Signatures** window. That saves your changes.
+5. Close the **Signatures** window when you're done.
 
-If the Signature button is missing from the ribbon when you compose, add it by customizing the toolbar. Microsoft also notes that support for legacy Outlook for Mac ends in October 2026, so if you're still on the legacy app, plan the move.
+If the Signature button is missing from the ribbon when you compose, add it by customizing the toolbar. Microsoft's page says support for legacy Outlook for Mac was to end in October 2026. That month has passed, so if you're still on the legacy app, move to the new Outlook for Mac.
 
 ### Outlook for iOS and Android
 
@@ -80,7 +80,7 @@ On the phone the signature is a setting in the app, not in your mailbox settings
 
 This is the part that trips people up. For years the rule was simple: each Outlook kept its own signatures. That has changed, and it's why you now get inconsistent results.
 
-Microsoft's article on [Outlook roaming signatures](https://support.microsoft.com/en-us/outlook/outlook-roaming-signatures) explains what happens in Outlook for Windows. Signatures can be stored in your mailbox so they're available on every device where that account is set up. The requirements are Outlook build 2303 or higher and a Microsoft 365 or Outlook.com mailbox. Exchange on-premises, third-party mail and POP or IMAP accounts aren't supported. The feature turns on by itself, and existing signatures aren't overwritten.
+Microsoft's article on [Outlook roaming signatures](https://support.microsoft.com/outlook/outlook-roaming-signatures) explains what happens in Outlook for Windows. Signatures can be stored in your mailbox so they're available on every device where that account is set up. The requirements are Outlook build 2303 or higher and a Microsoft 365 or Outlook.com mailbox. Exchange on-premises, third-party mail and POP or IMAP accounts aren't supported. The feature turns on by itself, and existing signatures aren't overwritten.
 
 The details matter when you troubleshoot:
 
@@ -91,7 +91,7 @@ The details matter when you troubleshoot:
 
 The practical read is this: if the signature you changed isn't your default for the account, it may exist on one computer only. Make it the default for new messages or for replies, wait a moment, then check [Outlook on the web](https://www.m365.fm/entity/outlook-web/) on a second device. If you're on a POP or IMAP account, update each device by hand.
 
-Microsoft's pages say nothing about phone signatures syncing with the desktop. Treat the mobile signature as separate and set it once per phone.
+The Microsoft pages cited here say nothing about phone signatures syncing with the desktop. Treat the mobile signature as separate and set it once per phone.
 
 ## Defaults and multiple signatures
 
@@ -107,7 +107,7 @@ If you have a shared mailbox or send from several accounts, set the defaults for
 
 ## Start from a template
 
-If you don't want to design a signature from scratch, Microsoft offers templates. Its small-business signature page describes this route for classic Outlook for Windows:
+If you don't want to design a signature from scratch, Microsoft offers templates. Microsoft's page on creating a signature from a template describes this route for Outlook for Windows desktop:
 
 1. Download the signature template and open it in Word. If Word opens it in Protected View, select **Enable Editing**.
 2. Pick a design, select all its elements and copy them.
@@ -115,7 +115,7 @@ If you don't want to design a signature from scratch, Microsoft offers templates
 4. Edit the text, swap the photo or logo and add your links. To change a picture, right-click it, choose **Change Picture**, select the source file and click **Insert**. Drag the handles to resize. To change a link, right-click a social icon or highlight website text and choose **Edit Link**, then enter the address and click **OK**.
 5. Select and copy all signature elements again, go to **Message**, **Signature**, **Signatures**, click **New**, name it and paste into the **Edit signature** field. Click **OK**.
 
-After you save it, you can ask for the signature to be added automatically to future messages from the Signatures dialog. Microsoft's page also suggests emailing the finished signature to colleagues, who follow the same save steps. That keeps a team consistent without any tool, though it relies on everyone doing the steps themselves.
+After you save it, you can ask for the signature to be added automatically to future messages from the Signatures dialog. Microsoft's small-business signature page also suggests emailing the finished signature to colleagues, who follow the same save steps. That keeps a team consistent without any tool, though it relies on everyone doing the steps themselves.
 
 ## What to put in the signature
 
@@ -124,7 +124,7 @@ Microsoft says a signature can include text, links, pictures and images such as 
 - Name, job title, company and one way to reach you. A phone number or a website is enough.
 - A link only where it helps, for example your company site or a booking page. A signature with eight links looks like an ad.
 - A small logo, saved as a compact file. Large images make every message heavier.
-- Standard fonts. Microsoft recommends them for signatures because they display on most devices.
+- Standard fonts. Microsoft recommends standard fonts for signatures.
 - Alt text on images where the editor offers it, so screen reader users know what the image shows.
 
 A text-only fallback is worth keeping. Some recipients block images, and your logo then turns into an empty box. Make sure the name and contact details are text, not part of the picture.
@@ -133,7 +133,7 @@ If your company requires a legal or privacy disclaimer, ask legal or compliance 
 
 ## Where signatures are stored and how to move them
 
-On a classic Windows install, signature files historically live in a Signatures folder under your user profile in `AppData\Roaming\Microsoft\Signatures`. Copying that folder is the old way to move signatures to a new PC. I couldn't confirm the path on a Microsoft page, so check it on your machine before you rely on it. With roaming signatures, a default signature for a Microsoft 365 account follows the mailbox, so a copy is only needed for the extra signatures that stayed on the device.
+On a classic Windows install, signature files historically live in a Signatures folder under your user profile in `AppData\Roaming\Microsoft\Signatures`. Copying that folder is the old way to move signatures to a new PC. The Microsoft signature pages cited here don't state that path, so check it on your machine before you rely on it. With roaming signatures, a default signature for a Microsoft 365 account follows the mailbox, so a copy is only needed for the extra signatures that stayed on the device.
 
 Close Outlook before you copy files back, then open it and check that each signature shows up and looks right. Images are the first thing to break.
 
@@ -156,3 +156,15 @@ Close Outlook before you copy files back, then open it and check that each signa
 ## Next step
 
 Open your signature settings now and confirm that the signature you want is the default for both new messages and replies on each account. Then send a test email from every device where you want to change your signature in Outlook, so you know which ones follow the mailbox and which ones need a manual update.
+
+## Sources
+
+- [Add and change an email signature in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/mail/how-to-add-and-change-an-email-signature-in-outlook)
+- [Create, insert or change a signature in Outlook for Mac (Microsoft Support)](https://support.microsoft.com/outlook/create-insert-or-change-a-signature-in-outlook-for-mac)
+- [Outlook roaming signatures (Microsoft Support)](https://support.microsoft.com/outlook/outlook-roaming-signatures)
+- [Use a screen reader to add a signature in Outlook (Microsoft Support)](https://support.microsoft.com/accessibility/outlook/use-a-screen-reader-to-add-a-signature-in-outlook)
+- [Can I change my email signature? (Microsoft Support)](https://support.microsoft.com/outlook/can-i-change-my-email-signature)
+- [Compare Outlook for PC, Outlook on the web and Outlook for iOS and Android (Microsoft Support)](https://support.microsoft.com/office/compare-outlook-for-pc-outlook-on-the-web-and-outlook-for-ios-android-b26a7bf5-0ac7-48ba-97af-984e0645dde5)
+- [Create an email signature from a template (Microsoft Support)](https://support.microsoft.com/outlook/create-an-email-signature-from-a-template)
+- [Create an email signature for your small business (Microsoft Support)](https://support.microsoft.com/outlook/create-an-email-signature-for-your-small-business)
+- [Customize your email message in Outlook on the web (Microsoft Support)](https://support.microsoft.com/outlook/customize-your-email-message-in-outlook-on-the-web)

@@ -8,13 +8,13 @@ date: 2026-11-11
 topics: [safety-stock, buffer-management, enterprise-resource-planning]
 keypoints:
   - "Safety stock is extra inventory on top of normal demand that protects against variation in demand and in supply."
-  - "In daily use, buffer stock often means the same thing; in the theory of constraints, a buffer is a deliberate stock or time that protects a key point."
+  - "In daily use, buffer stock often means the same thing; in the theory of constraints, a buffer is a deliberate protection, mostly of time, at a key point."
   - "How much is enough depends on three things: the variation in demand, the variation in lead time and the service level you choose."
   - "Because lead time enters the statistical formula under a square root, halving the lead time cuts the safety stock by about 30 per cent."
   - "The service level is a business decision: in the example, going from 95 to 99 per cent adds about 40 per cent more stock."
 faq:
   - q: "What is the difference between safety stock and buffer stock?"
-    a: "In practice the two terms often mean the same extra inventory held against variation. In the theory of constraints, a buffer is a deliberate stock or time placed to protect a key point, such as the constraint or shipping, and it is managed by watching how much of it is used."
+    a: "In practice the two terms often mean the same extra inventory held against variation. In the theory of constraints, a buffer is a deliberate protection, usually of time, placed to protect a key point such as the constraint, and it is managed by watching how much of it is used."
   - q: "How do you calculate safety stock?"
     a: "A common formula multiplies a service-level factor Z by the standard deviation of daily demand and by the square root of the lead time in days. A simpler method subtracts average usage times average lead time from maximum usage times maximum lead time. Start simple, then refine with data."
   - q: "How can you reduce safety stock?"
@@ -27,7 +27,7 @@ faq:
 
 Most inventory in a plant has two layers. The first is cycle stock, which covers regular demand between deliveries. IBM, in its explainer on [safety stock](https://www.ibm.com/think/topics/safety-stock), defines cycle stock as the inventory needed to meet regular demand over a period, and safety stock as the buffer inventory kept in addition to it. IBM says the purpose is to reduce the risk of stockouts and of overpromising to customers, and it names variability in demand, supply and manufacturing as the reasons to hold it. The page does not treat buffer stock as a separate term.
 
-That matches daily use. Purchasing teams and planning systems often use "safety stock" and "buffer stock" for the same cushion. The word buffer gets a sharper meaning in the theory of constraints. There, according to the [encyclopedia entry on the theory of constraints](https://www.encyclopedia.com/management/encyclopedias-almanacs-transcripts-and-maps/theory-constraints), a buffer is time or stock that protects throughput: time buffers absorb internal disruptions, and stock buffers help to respond to market demand. [Buffer management](https://www.m365.fm/entity/buffer-management/) then uses the contents of the buffers to set priorities for expediting.
+That matches daily use. Purchasing teams and planning systems often use "safety stock" and "buffer stock" for the same cushion. The word buffer gets a sharper meaning in the theory of constraints. There, a buffer is a deliberate protection of throughput. The [drum-buffer-rope guide at dbrmfg.co.nz](https://dbrmfg.co.nz/Production%20DBR%20More%20On%20Buffers.htm) stresses that the buffer in drum-buffer-rope is concerned with time and not quantity: material is released early enough to reach the constraint when planned. [Buffer management](https://www.m365.fm/entity/buffer-management/) then uses how much of each buffer is consumed to set priorities for expediting. That last point is standard theory-of-constraints practice that we could not re-check in a source for this review.
 
 For this article, we use a working distinction, which is our own and not a standard:
 
@@ -38,15 +38,15 @@ The two work together. A buffer in front of the constraint may be made of safety
 
 ## How much is enough: three calculation methods
 
-There is no single right safety stock formula, and good inventory management starts by choosing the one that fits your data. The [Supply Chain Source](https://www.spscommerce.com/community/articles/how-to-calculate-safety-stock-formulas-and-methods-that-fit-your-data), a publication of the software vendor SPS Commerce, lists several methods and says the number should be calculated, not guessed. Its guidance is to start with the simplest method your data supports. IBM gives variants of the same formulas, and the two sources agree on the main variables.
+There is no universal safety stock formula. IBM says so directly and lists several variants, including the average-max formula. Good inventory management starts by choosing the one that fits your data, and our own rule is to start with the simplest method your data supports. The [Supply Chain Source](https://www.spscommerce.com/community/articles/how-to-calculate-safety-stock-formulas-and-methods-that-fit-your-data) of the software vendor SPS Commerce also covers these methods, but we could not re-open it for this review. The formulas below are the common textbook forms.
 
-1. **Average-max method.** Safety stock = (maximum daily usage × maximum lead time) − (average daily usage × average lead time). It needs little history. SPS notes the trade-off: it assumes that peak demand and the longest lead time happen together, so it tends to over-buffer.
-2. **Statistical method for demand variation.** Safety stock = Z × σd × √L. Z is the service-level factor, σd is the standard deviation of daily demand and L is the lead time in days. SPS lists Z values of 1.28 for 90 per cent, 1.65 for 95 per cent, 1.96 for 97.5 per cent and 2.33 for 99 per cent. It fits stable lead times with variable demand, and it needs a record of actual demand or forecast misses per day.
-3. **Combined method.** When both demand and lead time vary, SPS gives a formula that combines the two variations under one square root, and notes that it is the most accurate and needs the most data.
+1. **Average-max method.** Safety stock = (maximum daily usage × maximum lead time) − (average daily usage × average lead time). It needs little history. The trade-off is that it assumes peak demand and the longest lead time happen together, so it tends to over-buffer.
+2. **Statistical method for demand variation.** Safety stock = Z × σd × √L. Z is the service-level factor, σd is the standard deviation of daily demand and L is the lead time in days. The usual Z values from the normal distribution are 1.28 for 90 per cent, 1.65 for 95 per cent, 1.96 for 97.5 per cent and 2.33 for 99 per cent. It fits stable lead times with variable demand, and it needs a record of actual demand or forecast misses per day.
+3. **Combined method.** When both demand and lead time vary, the usual formula combines the two variations under one square root. It is the most accurate of the three in principle and needs the most data.
 
 The safety stock level then sets the inventory level at which you reorder. The reorder point follows from the result: expected demand during the lead time plus the safety stock. Three inputs drive every method, so they are also the three levers to pull. They are the variation in demand, the variation in supply and the service level.
 
-The service level is a business decision as much as a mathematical one. SPS suggests setting it by item class, based on the cost of a stockout. An ABC analysis, which sorts items by value or importance, is a simple way to do that. A cheap screw that stops an assembly line may deserve 99 per cent. An expensive part with a short lead time may not.
+The service level is a business decision as much as a mathematical one. A practical approach is to set it by item class, based on the cost of a stockout. An ABC analysis, which sorts items by value or importance, is a simple way to do that. A cheap screw that stops an assembly line may deserve 99 per cent. An expensive part with a short lead time may not.
 
 ## Example: one component, three service levels
 
@@ -60,7 +60,7 @@ The statistical formula gives, with √9 = 3:
 
 The reorder point at 95 per cent is 200 × 9 + 198 = 1,998 units. Going from 95 to 99 per cent adds 82 units, which is worth 2,050 and costs about 410 per year to hold. Whether that is worth it depends on what a stockout costs for this part. That is the business decision.
 
-Now compare the average-max method. Assume a peak demand of 320 units per day and a longest lead time of 12 days. The result is 320 × 12 − 200 × 9 = 3,840 − 1,800 = 2,040 units, about ten times the 95 per cent figure. It is the kind of over-buffering that SPS warns about.
+Now compare the average-max method. Assume a peak demand of 320 units per day and a longest lead time of 12 days. The result is 320 × 12 − 200 × 9 = 3,840 − 1,800 = 2,040 units, about ten times the 95 per cent figure. It is the kind of over-buffering this method is known for.
 
 ## How to reduce what you hold and avoid overstock
 
@@ -70,9 +70,9 @@ The formula shows where the stock comes from, so it also shows how to reduce it.
 - **Stabilise the lead time.** A supplier that delivers on the agreed day removes the lead time variation from the combined formula. Agree delivery windows and track the on-time rate. Look at the whole supply chain, not only at the first supplier.
 - **Reduce the variation in demand.** Smooth the schedule, share forecasts with suppliers and plan changes early. If the standard deviation falls from 40 to 30, the 95 per cent figure falls from 198 to about 149.
 - **Set service levels by class.** One level for all items wastes stock on items that do not need it.
-- **Check the data.** Old, inflated parameters that procurement and planning teams never updated are a common reason for overstock. Recalculate when patterns shift, because setting safety stock is not a one-off task. SPS suggests at least quarterly.
+- **Check the data.** Old, inflated parameters that procurement and planning teams never updated are a common reason for overstock. Recalculate when patterns shift, because setting safety stock is not a one-off task. Choose a review cycle that fits how fast your demand changes, for example quarterly.
 
-IBM states the risks on both sides. Too much stock raises carrying costs and can mean markdowns, expensive spare parts or spoiled goods. Too little means lost sales and unhappy customers. The importance of safety stock is that it protects service, and the aim is the right amount, not the lowest amount. Excess inventory and inventory costs rise quickly when the amount of safety stock is set once and forgotten.
+IBM describes the risks on both sides. Too much stock raises carrying costs and can mean markdowns, expensive spare parts or spoiled goods. Too little means lost sales and unhappy customers. The importance of safety stock is that it protects service, and the aim is the right amount, not the lowest amount. Excess inventory and inventory costs rise quickly when the amount of safety stock is set once and forgotten.
 
 ## Common mistakes
 
@@ -90,3 +90,9 @@ An [enterprise resource planning](https://www.m365.fm/entity/enterprise-resource
 ## Next step
 
 Pick ten items with the highest stock value, check their parameters against the last year of demand and delivery data, and recalculate with one of the formulas above. Then ask for each item what a stockout would really cost, which is the question that decides how much safety stock is enough.
+
+## Sources
+
+- IBM: What is safety stock? - https://www.ibm.com/think/topics/safety-stock (read via https://www.ibm.com/topics/safety-stock)
+- Theory of Constraints Production Drum Buffer Rope (dbrmfg.co.nz) - https://dbrmfg.co.nz/Production%20DBR%20More%20On%20Buffers.htm
+- SPS Commerce, Supply Chain Source: How to Calculate Safety Stock - https://www.spscommerce.com/community/articles/how-to-calculate-safety-stock-formulas-and-methods-that-fit-your-data (could not be re-opened for this review)

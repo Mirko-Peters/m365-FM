@@ -37,7 +37,7 @@ If you only contain, the same defect or stop will return. If you jump to correct
 
 ## When do you use the 5 whys?
 
-The ASQ glossary describes the [Five Whys](https://asq.org.in/glossary/quality/F/five-whys/) as a technique that involves repeatedly asking "why?". It is typically run about five times, but more or fewer is acceptable, and it credits Sakichi Toyoda with developing it. Its rules are practical:
+The five whys is a method of repeated questioning: after you identify a direct cause, you keep asking why. The Lean Enterprise Institute describes it in [Clarifying the "5 Whys" Problem-Solving Method](https://lean.org/?p=12637) as following the chain of causes all the way down to a root cause. It notes that the count varies, "sometimes three, sometimes eight", and credits Taiichi Ohno of Toyota with using the approach from the 1950s. Our routine for it is practical:
 
 1. Write a precise problem statement backed by data.
 2. Ask why the problem occurred and record the closest observable cause.
@@ -46,7 +46,7 @@ The ASQ glossary describes the [Five Whys](https://asq.org.in/glossary/quality/F
 5. Verify the root cause: does it lead to the problem, and would fixing it prevent the problem?
 6. Apply a countermeasure and confirm by follow-up measurement that the problem does not recur.
 
-The same page notes that each answer should be "an observed fact or measured data point, not a hypothesis". It also says the method works best for linear causal chains with one root cause, and recommends a fishbone diagram for complex problems.
+Each answer should be an observed fact or a measured data point, not a hypothesis. This is our rule, not a quotation. In our experience the method works best for linear causal chains with one root cause, and a fishbone diagram is the better start for complex problems.
 
 ## When is a fishbone diagram better?
 
@@ -121,3 +121,8 @@ Good analysis needs good data. Software can capture the reason for each stop at 
 ## Next step
 
 Take last week's biggest loss on your line, write a problem statement with a number and run the 5 whys with the operators who were there. Then verify the cause with a small trial. That is the practical way to apply root cause analysis in your production.
+
+## Sources
+
+- iSixSigma: Root cause analysis, Ishikawa diagrams and the 5 whys - https://www.isixsigma.com/cause-effect/root-cause-analysis-ishikawa-diagrams-and-the-5-whys/ (read via the alias https://www.isixsigma.com/?p=6430)
+- Lean Enterprise Institute: Clarifying the "5 Whys" Problem-Solving Method - https://lean.org/?p=12637

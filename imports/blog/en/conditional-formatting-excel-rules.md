@@ -22,7 +22,7 @@ faq:
 ---
 Conditional formatting in Excel changes how a cell looks, its fill color, font or an icon, depending on what's in it. You select the cells, go to the **Home** tab, choose **Conditional Formatting** and pick a rule such as **Greater Than** or **Duplicate Values**. When the data changes, the formatting changes with it. This article is for [Excel](https://www.m365.fm/entity/excel/) users who build reports, trackers or lists and want overdue dates, duplicates or top results to stand out without checking every row by hand. You'll learn the built-in rule types, how to write a formula rule, how rule order works, and how to clear and troubleshoot rules.
 
-The source for most details here is Microsoft's page on how to [use conditional formatting to highlight information in Excel](https://support.microsoft.com/en-us/excel/use-conditional-formatting-to-highlight-information-in-excel). Where I add something that isn't on that page, I say so.
+The source for most details here is Microsoft's page on how to [use conditional formatting to highlight information in Excel](https://support.microsoft.com/excel/use-conditional-formatting-to-highlight-information-in-excel). Where I add something that isn't on that page, I say so.
 
 ## How to apply conditional formatting in Excel
 
@@ -57,7 +57,7 @@ Typical uses:
 - **A Date Occurring** to mark dates that fall in a chosen period. Excel offers presets in the dialog, so pick one there instead of typing a date by hand.
 - **Duplicate Values** to mark repeats in a list. It's the quickest check before you build a pivot table or a lookup.
 
-**Top/Bottom Rules** work on ranking: Top 10 Items, Bottom 10 %, Above Average and Below Average. Microsoft's limits for these: the top or bottom number runs from 1 to 1000, or 1 to 100 when you use percent, and percentiles run from 0 to 100 (you type the number without a percent sign).
+**Top/Bottom Rules** work on ranking: Top 10 Items, Bottom 10 %, Above Average and Below Average. Microsoft's limits for these: the top or bottom number runs from 1 to 1000, or 1 to 100 when you use percent, and you type the percent number without a percent sign. Percentiles, which you use with color scales and data bars, run from 0 to 100.
 
 A small example makes this concrete. Say column C holds order values. Select C2 down to the last row, choose **Highlight Cells Rules** > **Greater Than**, enter your target, and choose a green fill. Add **Less Than** with a floor value and an orange fill on the same cells. Now the strongest and weakest orders stand out, and the middle stays plain. Change a number and the colors move.
 
@@ -65,11 +65,11 @@ A small example makes this concrete. Say column C holds order values. Select C2 
 
 These three show how values compare across a range, not whether they pass a test. Microsoft's pages describe them this way:
 
-- **Data Bars** put a bar in each cell. A longer bar means a larger value. You can choose gradient or solid fill, show borders, show bars only and format negative values.
+- **Data Bars** put a bar in each cell. A longer bar means a larger value. You can choose a gradient fill or a solid fill.
 - **Color Scales** use two or three colors. In a two-color scale one color marks high values and the other marks low ones. A three-color scale adds a middle color.
-- **Icon Sets** use three to five categories, and each icon covers a range of values. You can reverse the icon order, show icons only, or hide the icon for certain cells with **No Cell Icon**.
+- **Icon Sets** use three to five categories, and each icon covers a range of values you set with a threshold.
 
-The steps are the same for all three: select the cells, go to **Home** > **Conditional Formatting**, point to the type and click a style. Microsoft's page on [data bars, color scales and icon sets](https://support.microsoft.com/en-us/excel/use-data-bars-color-scales-and-icon-sets-to-highlight-data) adds a practical tip: widening a column that has data bars makes the differences between values easier to see. Icon sets can be combined with other conditional formats.
+The steps are the same for all three: select the cells, go to **Home** > **Conditional Formatting**, point to the type and click a style. Microsoft's page on [data bars, color scales and icon sets](https://support.microsoft.com/excel/use-data-bars-color-scales-and-icon-sets-to-highlight-data) adds a practical tip: widening a column that has data bars makes the differences between values easier to see. Icon sets can be combined with other conditional formats. The rule editor under **Manage Rules** offers more options, such as showing only the bar or only the icon, so look there on your own screen.
 
 Use them carefully. A column full of three-color scales on top of fills and icons is hard to read. One signal per column is a good habit. Color alone also shouldn't carry the meaning, since some readers can't tell red from green. Icons or a text column help with that, and I'd add one to any report that goes to a wide audience.
 
@@ -130,7 +130,7 @@ One limit from Microsoft: pasting formatted cells into another Excel instance do
 - **Long text.** Text criteria are limited to 255 characters.
 - **Order.** A higher rule overrides a lower one. Move the more specific rule up.
 - **Manual fill.** If a cell has a manual fill and the rule is true, the rule wins. If it looks wrong, check whether the rule is actually true.
-- **Excel for the web.** The page I used doesn't list web-specific steps or limits. I wouldn't promise that every rule type behaves the same in the browser. Test on a copy.
+- **Excel for the web.** The Microsoft page cited here doesn't list web-specific steps or limits, so don't assume every rule type behaves the same in the browser. Test on a copy.
 
 ## Common mistakes
 
@@ -152,3 +152,8 @@ One limit from Microsoft: pasting formatted cells into another Excel instance do
 ## Next step
 
 Open a real sheet and apply one rule with Highlight Cells Rules. Then try a formula rule such as `=B2<TODAY()` on a date column, and open Manage Rules to see how the order works. Keep conditional formatting in Excel simple: one clear signal per column beats a rainbow.
+
+## Sources
+
+- [Use conditional formatting to highlight information in Excel (Microsoft Support)](https://support.microsoft.com/excel/use-conditional-formatting-to-highlight-information-in-excel)
+- [Use data bars, color scales and icon sets to highlight data (Microsoft Support)](https://support.microsoft.com/excel/use-data-bars-color-scales-and-icon-sets-to-highlight-data)

@@ -34,11 +34,11 @@ Microsoft's overview names three types of cloud flow:
 
 Pick the type before you pick anything else. Ask what should start the work. If the answer is "something happens", use an automated flow. If it's "I decide", use an instant flow. If it's "every Monday at nine", use a scheduled flow. If you use Copilot to build the flow, Microsoft says your prompt determines the type.
 
-You can also use flows together with [Power Apps](https://www.m365.fm/entity/power-apps/). Microsoft has an article called Add a cloud flow to an app for that, which is a good second project once your first flow works.
+You can also use flows together with [Power Apps](https://www.m365.fm/entity/power-apps/). Microsoft's cloud flow tutorial lists an article called Add a cloud flow to an app for that, which may be a good second project once your first flow works.
 
 ## How to use Power Automate: build your first cloud flow
 
-There are two ways in. Microsoft says Copilot is on by default, but admins can disable it, so you may not see it. The second way, without Copilot, uses the **Create** button.
+There are two ways in. Copilot may not be available to you, and Microsoft's tutorial has a separate **Without copilot** tab for that case. The second way, without Copilot, uses the **Create** button.
 
 **Option 1: describe the flow to Copilot.**
 
@@ -50,7 +50,7 @@ There are two ways in. Microsoft says Copilot is on by default, but admins can d
 6. Check the connections. A green checkmark means a connection is valid. If asked, select **Sign in**.
 7. Select **Create flow**, then **Save**.
 
-Replace any example address with your own, so you see the results yourself. Microsoft also says a person should review anything an AI generated for accuracy.
+Replace any example address with your own, so you see the results yourself. Microsoft also says a human should review AI-generated content to verify that it's accurate and appropriate.
 
 **Option 2: build it yourself in the designer.** Use **Create** to start from a blank flow or a template. Then add steps. Microsoft's example uses the trigger **When a new tweet is posted**, and the steps are the same for other triggers:
 
@@ -64,7 +64,7 @@ Replace any example address with your own, so you see the results yourself. Micr
 
 Microsoft's tip is to use **Send an email (V2)** when you want formatting such as bold, lists or links in the message.
 
-Power Automate has a new designer, which is the default, and a classic designer. Copilot works only in the new one, and the steps are similar in both.
+Power Automate offers a new designer and a classic designer, and Microsoft says the steps in the tutorial are similar in both. Microsoft's troubleshooting page says the Copilot error summary is for the new designer.
 
 ## Plan the flow on paper before you build it
 
@@ -128,16 +128,23 @@ The page also mentions that flow owners get repair tips emails when a flow fails
 - **Ignoring connections.** Errors 401 and 403 point to the connection, as the troubleshooting page explains. Check the green checkmark on every connection.
 - **Sending to real people while testing.** Use your own address until the flow works.
 - **Leaving test flows running.** Turn off or delete flows you don't need.
-- **Assuming a licence question doesn't exist.** The pages I checked for this article don't cover licensing, so ask your admin which plan you have before you build something others depend on.
+- **Assuming a licence question doesn't exist.** The Microsoft pages cited here don't cover licensing, so ask your admin which plan you have before you build something others depend on.
 
 ## Related topics to explore
 
-- Run tasks on a schedule: Microsoft has a page named Run tasks on a schedule for daily, date-based and interval flows.
-- Add steps and conditions: the page named Add steps shows how to build multi-step flows.
+- Run tasks on a schedule: Microsoft lists a page named Run tasks on a schedule among the related pages of its cloud flow tutorial.
+- Add steps: the related page named Add steps, listed on the same tutorial, covers multi-step flows.
 - Format dates and times: dates from triggers often need formatting, which the `formatDateTime` function handles.
-- Triggers and actions in depth: the [tutorial for cloud flows](https://learn.microsoft.com/en-us/power-automate/get-started-with-cloud-flows) points to a page on working with triggers and actions.
-- Troubleshooting: the page on [fixing flow failures](https://learn.microsoft.com/en-us/power-automate/fix-flow-failures) goes deeper into connections and Conditional Access errors.
+- Triggers and actions in depth: the [tutorial for cloud flows](https://learn.microsoft.com/power-automate/get-started-with-cloud-flows) points to a page on working with triggers and actions.
+- Troubleshooting: the page on [fixing flow failures](https://learn.microsoft.com/power-automate/fix-flow-failures) goes deeper into connections and Conditional Access errors.
 
 ## Next step
 
-To use Power Automate, build one small flow this week: a scheduled email to yourself, tested with **Test** and checked in the run history. Read Microsoft's [cloud flow tutorial](https://learn.microsoft.com/en-us/power-automate/get-started-logic-flow) and the [overview of cloud flow types](https://learn.microsoft.com/en-us/power-automate/overview-cloud), then pick a real task and build it the same way.
+To use Power Automate, build one small flow this week: a scheduled email to yourself, tested with **Test** and checked in the run history. Read Microsoft's [cloud flow tutorial](https://learn.microsoft.com/power-automate/get-started-logic-flow) and the [overview of cloud flow types](https://learn.microsoft.com/power-automate/overview-cloud), then pick a real task and build it the same way.
+
+## Sources
+
+- [Create a cloud flow in Power Automate (Microsoft Learn)](https://learn.microsoft.com/power-automate/get-started-logic-flow)
+- [Get started with cloud flows (Microsoft Learn)](https://learn.microsoft.com/power-automate/get-started-with-cloud-flows)
+- [Overview of cloud flows (Microsoft Learn)](https://learn.microsoft.com/power-automate/overview-cloud)
+- [Fix flow failures (Microsoft Learn)](https://learn.microsoft.com/power-automate/fix-flow-failures)

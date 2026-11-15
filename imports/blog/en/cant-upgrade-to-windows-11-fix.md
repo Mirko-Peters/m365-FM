@@ -18,7 +18,7 @@ faq:
   - q: "How do I check if my PC has TPM 2.0?"
     a: "Press the Windows key and R, type tpm.msc and select OK. If TPM is ready, look at Specification Version under TPM Manufacturer Information. If you see Compatible TPM cannot be found, the TPM may be disabled in the firmware. You can also look under Windows Security, Device security, Security processor."
   - q: "What can I do if my PC can't upgrade to Windows 11?"
-    a: "Microsoft recommends either enrolling in consumer Extended Security Updates for Windows 10, which Microsoft says protects devices until October 12, 2027, or moving to a new Windows 11 PC. Microsoft does not recommend installing Windows 11 on hardware that doesn't meet the requirements."
+    a: "Microsoft's Windows 10 end-of-support page points to consumer Extended Security Updates, which it says can protect a Windows 10 device until October 12, 2027, or to moving to a new Windows 11 PC. Microsoft does not recommend installing Windows 11 on hardware that doesn't meet the requirements."
 ---
 If you can't upgrade to Windows 11, the PC almost always fails one of a short list of requirements: TPM 2.0, Secure Boot, UEFI boot mode, the processor, memory, storage or the Windows 10 version. The fastest way to find out which one is to run the **PC Health Check** app and read what it says. Some causes are only a firmware setting, and some mean the hardware is too old. This article is for Windows users who got the message "This PC can't run Windows 11" and for help desk staff who need a checklist. You'll find how to read the result, how to fix each cause, what to do when a fix isn't possible, and how admins find out which devices are blocked.
 
@@ -28,12 +28,12 @@ Don't change anything until you know which requirement fails. Switching a random
 
 Microsoft's FAQ on upgrading to Windows 11 says a device must meet the minimum system requirements. Two checks exist:
 
-- **Windows Update.** In Windows 10, Windows Update checks whether the device meets the requirements and shows when the upgrade is ready.
+- **Windows Update.** In Windows 10, check whether Windows Update offers the Windows 11 upgrade. If it doesn't, Microsoft says the device may not meet the hardware requirements, a compatibility issue may exist, or the upgrade may not be ready.
 - **PC Health Check.** Download the app from Microsoft's Windows 11 page and run the check. Per the Installation Assistant flow on Microsoft's page Ways to install Windows 11, you can run PC Health Check and select **Refresh** in the Assistant to update its result.
 
 If setup shows a message titled "What needs your attention", the device may not meet the requirements. The Installation Assistant can also say that the PC doesn't meet the minimum system requirements. In that case Microsoft recommends staying on Windows 10.
 
-Now compare the result with Microsoft's list on the [Windows 11 requirements](https://learn.microsoft.com/en-us/windows/whats-new/windows-11-requirements) page:
+Now compare the result with Microsoft's list on the [Windows 11 requirements](https://learn.microsoft.com/windows/whats-new/windows-11-requirements) page:
 
 - **Processor:** 1 GHz or faster with two or more cores, on a compatible 64-bit processor or system on a chip.
 - **RAM:** 4 GB or more.
@@ -47,7 +47,7 @@ Now compare the result with Microsoft's list on the [Windows 11 requirements](ht
 
 ## Cause 1: TPM 2.0 is off or missing
 
-A TPM, or Trusted Platform Module, is a security chip or firmware feature. Windows 11 needs version 2.0. Microsoft notes it supports features such as Windows Hello and BitLocker. The page on [enabling TPM 2.0](https://support.microsoft.com/en-us/windows/security/devicesecurity/enable-tpm-2-0-on-your-pc) says many retail motherboards ship with TPM switched off, although it's usually possible to turn on. See the [Trusted Platform Module](https://www.m365.fm/entity/trusted-platform-module/) page for background.
+A TPM, or Trusted Platform Module, is a security chip or firmware feature. Windows 11 needs version 2.0. Microsoft notes it supports features such as Windows Hello and BitLocker. The page on [enabling TPM 2.0](https://support.microsoft.com/windows/security/devicesecurity/enable-tpm-2-0-on-your-pc) says many retail motherboards ship with TPM switched off, although it's usually possible to turn on. See the [Trusted Platform Module](https://www.m365.fm/entity/trusted-platform-module/) page for background.
 
 **Check it.** There are two ways:
 
@@ -76,7 +76,7 @@ One catch: a PC that was installed in legacy mode usually uses an old disk layou
 
 ## Cause 3: The disk uses the old MBR layout
 
-If the firmware has to run in UEFI mode, the system disk needs GPT partitioning. Microsoft's tool for the conversion is `MBR2GPT`, described on Microsoft Learn's page [MBR2GPT.EXE](https://learn.microsoft.com/en-us/windows/deployment/mbr-to-gpt). Key facts from that page:
+If the firmware has to run in UEFI mode, the system disk needs GPT partitioning. Microsoft's tool for the conversion is `MBR2GPT`, described on Microsoft Learn's page [MBR2GPT.EXE](https://learn.microsoft.com/windows/deployment/mbr-to-gpt). Key facts from that page:
 
 - It converts a system disk from MBR to GPT without modifying or deleting the data on the disk.
 - `/validate` checks whether the disk is eligible without converting it. `/convert` validates and converts.
@@ -91,7 +91,7 @@ The page doesn't ask for a backup, but make one anyway. The order that works: ru
 
 This is the cause you can't fix with a setting. Microsoft publishes lists of supported processors. Microsoft's page on supported Intel processors covers the Intel Core line from the 8th through the 14th generation, plus some Core X-series, Celeron, Pentium and Xeon families. It notes that future generations that meet the same principles count as supported even if they aren't listed yet. The Core listing starts at the 8th generation, so an older Core chip is not on it, however fast it feels.
 
-Microsoft's page doesn't explain why a given model is excluded beyond saying the listed processors meet its design principles for security, reliability and the minimum requirements. For anything else, ask the hardware vendor. I haven't opened the AMD list, so check that page directly if you run a Ryzen system.
+Microsoft's page doesn't explain why a given model is excluded beyond saying the listed processors meet its design principles for security, reliability and the minimum requirements. For anything else, ask the hardware vendor. AMD systems have their own list of supported processors on Microsoft Learn, so check that page if you run a Ryzen system. The Intel list I checked doesn't include Core Ultra processors, which is a good reason to look up your exact model instead of assuming.
 
 If the check says the processor isn't supported, no setting will change that. The vendor of your PC is the right place to ask whether a newer model of the same line is supported.
 
@@ -101,7 +101,7 @@ If the check says the processor isn't supported, no setting will change that. Th
 - **Less than 64 GB available.** Microsoft's FAQ tells you to free up disk space if the drive is low. Move files to OneDrive, remove old apps, or use a larger drive.
 - **Graphics.** DirectX 12 and a WDDM 2.0 driver are required. Updating the graphics driver is the first thing to try.
 - **Windows 10 too old.** A direct upgrade needs version 2004 or later with the September 14, 2021 update. Microsoft's end-of-support page says only Windows 10 PCs running version 22H2 that meet the hardware specs can upgrade for free. Install the pending Windows 10 updates first.
-- **S mode.** Windows 11 Home supports S mode. Other editions in S mode must switch out of S mode first, which needs internet and can't be undone.
+- **S mode.** Microsoft's requirements page says S mode is only supported on the Home edition of Windows 11.
 
 ## When the PC qualifies but the upgrade doesn't appear
 
@@ -117,19 +117,19 @@ Microsoft's guidance for admins adds that devices don't upgrade automatically un
 
 Microsoft's page does not recommend installing Windows 11 on a device that doesn't meet the requirements. Guides online describe registry changes and modified install media that skip the checks. I won't walk through them: Microsoft doesn't support them, and I couldn't verify what they do to security updates on a Microsoft page. If you take that route anyway, you accept the risk, you need a full backup and you should expect to maintain the PC yourself.
 
-Microsoft's page [Windows 10 support has ended](https://support.microsoft.com/en-us/windows/deployment/updates-lifecycle/windows-10-support-has-ended-on-october-14-2025) describes the supported options:
+Microsoft's page [Windows 10 support has ended](https://support.microsoft.com/windows/deployment/updates-lifecycle/windows-10-support-has-ended-on-october-14-2025) describes the supported options:
 
-- **Consumer Extended Security Updates.** Microsoft says it protects Windows 10 devices until October 12, 2027. The page doesn't give enrollment steps or prices, and links to a separate page for them.
-- **A new Windows 11 PC.** Microsoft lists Copilot+ PCs, Surface devices and devices from other makers.
+- **Consumer Extended Security Updates.** Microsoft says it protects Windows 10 devices until October 12, 2027.
+- **A new Windows 11 PC.** Microsoft mentions Copilot+ PCs as one option.
 - **Trade in or recycle** the old PC.
 
 Windows 10 support itself ended on October 14, 2025. The PC keeps working, but it no longer gets free security fixes through Windows Update, and Microsoft says the risk from malware grows.
 
 ## For admins: find the blocked devices
 
-Don't check PCs one by one. Per Microsoft's page on upgrading devices to Windows 11 with Intune, Endpoint analytics shows which devices meet the hardware requirements and which requirement they miss. In the Work from anywhere report, the Windows tab lists the readiness of each device. Devices must be Intune-managed, co-managed, or have the Configuration Manager client with tenant attach.
+Don't check PCs one by one. Per Microsoft's page on upgrading devices to Windows 11 with Intune, Endpoint analytics gives you a Windows 11 readiness assessment. In the Work from anywhere report, the **Windows** tab shows the results device by device. Devices must be Intune-managed, co-managed, or have the Configuration Manager client with tenant attach.
 
-A feature update policy has a checkbox, "When a device isn't capable of running Windows 11, install the latest Windows 10 feature update". It lets one policy move capable devices to Windows 11 and keep incapable ones current. You can't add it to an existing policy. Without it, devices that don't meet the requirements stay on their current Windows 10 version. Use [Windows Update for Business](https://www.m365.fm/entity/windows-update-for-business/) rings so the first group is small.
+A feature update policy has a checkbox, "When a device isn't capable of running Windows 11, install the latest Windows 10 feature update". It lets one policy move capable devices to Windows 11 and keep incapable ones current. You can't add it to an existing policy. Without it, an incapable Windows 10 device that you target with a Windows 11 update stops getting automatic Windows 10 feature updates, and you have to move it to a Windows 10 feature update policy. Use [Windows Update for Business](https://www.m365.fm/entity/windows-update-for-business/) rings so the first group is small.
 
 ## Common mistakes
 
@@ -144,7 +144,7 @@ A feature update policy has a checkbox, "When a device isn't capable of running 
 ## Related topics to explore
 
 - **How to upgrade to Windows 11 when the PC qualifies.** The three routes and the 10-day return window.
-- **Secure Boot certificate updates.** Microsoft says certificates from 2011 begin to expire in June 2026, and that supported Windows versions handle it automatically.
+- **Secure Boot certificate updates.** Microsoft's certificates from 2011 began expiring in June 2026, and Microsoft says most personal devices should get the new ones through Microsoft-managed updates.
 - **TPM in business.** The role of the [Trusted Platform Module](https://www.m365.fm/entity/trusted-platform-module/) for BitLocker and Windows Hello.
 - **Extended Security Updates for Windows 10.** Who qualifies and for how long.
 - **Hardware refresh planning.** Use readiness reports to budget replacements instead of reacting to each ticket.
@@ -152,3 +152,13 @@ A feature update policy has a checkbox, "When a device isn't capable of running 
 ## Next step
 
 Run PC Health Check, write down the one requirement that fails and fix only that, starting with TPM and Secure Boot because they are the most likely to be a setting. If you're still asking why you can't upgrade to Windows 11 after that, the hardware is probably the answer, and the ESU or new PC options are the way forward.
+
+## Sources
+
+- [Windows 11 system requirements (Microsoft Learn)](https://learn.microsoft.com/windows/whats-new/windows-11-requirements)
+- [Windows 10 support has ended on October 14, 2025 (Microsoft Support)](https://support.microsoft.com/windows/deployment/updates-lifecycle/windows-10-support-has-ended-on-october-14-2025)
+- [Enable TPM 2.0 on your PC (Microsoft Support)](https://support.microsoft.com/windows/security/devicesecurity/enable-tpm-2-0-on-your-pc)
+- [Windows 11 supported Intel processors (Microsoft Learn)](https://learn.microsoft.com/windows-hardware/design/minimum/supported/windows-11-supported-intel-processors)
+- [MBR2GPT.EXE (Microsoft Learn)](https://learn.microsoft.com/windows/deployment/mbr-to-gpt)
+- [Ways to install Windows 11 (Microsoft Support)](https://support.microsoft.com/windows/ways-to-install-windows-11-e0edbbfb-cfc5-4011-868b-2ce77ac7c70e)
+- [Upgrade Windows 10 devices to Windows 11 with Intune (Microsoft Learn)](https://learn.microsoft.com/intune/device-updates/windows/upgrade-to-windows-11)

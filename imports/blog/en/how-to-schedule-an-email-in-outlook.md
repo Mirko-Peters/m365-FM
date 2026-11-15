@@ -32,7 +32,7 @@ One rule applies to all of them: scheduling isn't available for IMAP or POP acco
 
 ## Schedule send in new Outlook and Outlook on the web
 
-These are the steps from Microsoft's page on [delaying or scheduling email messages](https://support.microsoft.com/en-us/outlook/mail/delay-or-schedule-sending-email-messages-in-outlook) and its [schedule send page for the web](https://support.microsoft.com/en-us/outlook/schedule-send-for-outlook-on-the-web).
+These are the steps from Microsoft's page on [delaying or scheduling email messages](https://support.microsoft.com/outlook/mail/delay-or-schedule-sending-email-messages-in-outlook) and its [schedule send page for the web](https://support.microsoft.com/outlook/schedule-send-for-outlook-on-the-web).
 
 1. Start a new message and write it as usual, with at least one recipient.
 2. Select the dropdown arrow next to **Send**, then select **Schedule send**.
@@ -45,7 +45,7 @@ To send a scheduled message earlier in new Outlook, switch to **Drafts**, open t
 
 ## Delay Delivery in classic Outlook
 
-Microsoft's [classic Outlook instructions](https://support.microsoft.com/en-us/outlook/customize-your-email-message) describe two ways to hold mail back.
+Microsoft's [classic Outlook instructions](https://support.microsoft.com/outlook/customize-your-email-message) describe two ways to hold mail back.
 
 ### Delay one message
 
@@ -73,7 +73,7 @@ Microsoft says this rule is client-side, so Outlook must be running for the dela
 
 ## Schedule send in Outlook for Mac
 
-Microsoft's article on [Schedule send in Outlook for Mac](https://support.microsoft.com/en-us/outlook/use-schedule-send-in-outlook-for-mac) gives these steps.
+Microsoft's article on [Schedule send in Outlook for Mac](https://support.microsoft.com/outlook/use-schedule-send-in-outlook-for-mac) gives these steps.
 
 1. Compose your message and add at least one recipient on the **To:** line.
 2. Click the dropdown arrow on the **Send** button and choose **Schedule send**.
@@ -86,9 +86,9 @@ There are requirements. The article lists a Microsoft 365 subscription, Outlook 
 
 ## What about Outlook on a phone?
 
-Here I have to be careful. The Microsoft pages I opened for this article don't contain steps for scheduling a send from Outlook for iOS or Android. They don't say it's missing either, so check the app itself: open a new message, look at the options next to the send arrow and see what your version offers.
+The Microsoft pages cited here don't contain steps for scheduling a send from Outlook for iOS or Android. They don't say it's missing either, so check the app itself: open a new message, look at the options next to the send arrow and see what your version offers.
 
-Don't confuse it with the other "schedule" feature on mobile. Microsoft's page "What does it mean to schedule an email?" is about something different: in Outlook for Android and iOS you swipe a message in the inbox and choose when it should reappear (in a few hours, this evening, tomorrow morning or a custom time). That is snoozing mail you received, not delaying mail you write. The swipe option has to be enabled first.
+Don't confuse it with the other "schedule" feature on mobile. Microsoft's page "What does it mean to schedule an email?" is about something different: in Outlook for Android and iOS you swipe a message in the inbox and choose when it should reappear (in a few hours, this evening, tomorrow morning or a custom time). Microsoft's page describes only deferring mail you already received. It doesn't cover delaying mail you write. The page says to set it as a swipe option first.
 
 If you need a guaranteed send time from your phone, write the message in Outlook on the web in a mobile browser or use another device.
 
@@ -109,15 +109,15 @@ When the button isn't there, work through these causes in order.
 
 1. **Your account is IMAP or POP.** Microsoft says scheduling isn't available for those account types, and Mac scheduling needs an Exchange account.
 2. **You're on classic Outlook and looking for the dropdown.** Classic uses Delay Delivery on the Options tab, not a dropdown next to Send.
-3. **You're on an older Mac build.** Microsoft's article lists Outlook for Microsoft 365 for Mac, Outlook 2024 for Mac, Outlook 2021 for Mac and mentions Outlook 2019 for Mac. Earlier versions called it Send Later.
+3. **You're on an older Mac build.** Microsoft's article lists a Microsoft 365 subscription, Outlook 2019 for Mac or Outlook 2021 for Mac as requirements. Earlier versions called it Send Later.
 4. **You're on a different Outlook than you think.** Switch between new and classic and look again.
-5. **Your admin changed something.** If the first four don't explain it, ask IT. The Microsoft pages I read don't describe an admin setting that turns off scheduling, so treat this as a question for IT, not a known switch.
+5. **Your admin changed something.** If the first four don't explain it, ask IT. The Microsoft pages cited here don't describe an admin setting that turns off scheduling, so treat this as a question for IT, not a known switch.
 
 ## Recurring emails: Outlook can't do it alone
 
 Outlook doesn't have a built-in recurring send. For a weekly report or a monthly reminder, the clean answer from the Microsoft side is [Power Automate](https://www.m365.fm/entity/power-automate/).
 
-Microsoft's [cloud flow tutorial](https://learn.microsoft.com/en-us/power-automate/get-started-with-cloud-flows) builds a scheduled flow that sends an email on a schedule. Its example runs on the first of every month at a set time. The flow starts with a **Recurrence** trigger and uses the **Send an email** action through an **Office 365 Outlook** connection. You can send to several people by entering more addresses in the **To** field.
+Microsoft's [cloud flow tutorial](https://learn.microsoft.com/power-automate/get-started-with-cloud-flows) builds a scheduled flow that sends an email on a schedule. Its example runs on the first of every month at a set time. The flow starts with a **Recurrence** trigger and uses the **Send an email** action through an **Office 365 Outlook** connection. You can send to several people by entering more addresses in the **To** field.
 
 The tutorial's steps, in short:
 
@@ -126,7 +126,7 @@ The tutorial's steps, in short:
 3. Confirm the Office 365 Outlook connection and sign in if asked.
 4. Select **Create flow**, then **Save**.
 
-Test it with your own address first. If Copilot generated the flow, Microsoft's tutorial says a person should review the result for accuracy before it runs for real. I haven't seen a Microsoft page that describes a safe way to do recurring sends with Outlook rules, so don't build that on rules.
+Test it with your own address first. If Copilot generated the flow, Microsoft's tutorial says a person should review the result for accuracy before it runs for real. The Microsoft pages cited here don't describe recurring sends with Outlook rules, so don't build that on rules.
 
 ## Scheduling and risk
 
@@ -135,14 +135,14 @@ Scheduled mail carries a quiet risk: you can't see it the way you see sent mail.
 - Read any message that sits for more than a day before the time arrives, especially if it mentions people, prices or dates.
 - Keep sensitive attachments out of messages that wait in Drafts longer than you need.
 
-If your organization has retention or compliance rules, ask your admin how drafts are treated. I can't tell you from the pages I opened, so I won't guess.
+If your organization has retention or compliance rules, ask your admin how drafts are treated. The Microsoft pages cited here don't say, so ask rather than guess.
 
 ## Which method fits which job?
 
 It helps to match the tool to the problem, because the options aren't interchangeable.
 
 - **Send tomorrow morning, next Monday or after a holiday.** Use Schedule send in new Outlook, Outlook on the web or Outlook for Mac. The message waits in Drafts and goes at the time you set.
-- **Catch typos and missing attachments.** Use a short delay. In classic Outlook that's the rule that defers delivery by 1 to 120 minutes. On a Mac, Microsoft's Undo Send setting under Composing offers delays of 5 to 120 seconds, but Microsoft says that isn't true recall and it needs a Microsoft 365 subscription license or an Outlook.com account.
+- **Catch typos and missing attachments.** Use a short delay. In classic Outlook that's the rule that defers delivery by 1 to 120 minutes. On a Mac, Microsoft's [Undo Send article](https://support.microsoft.com/outlook/undo-send-in-outlook-for-mac) describes a setting under Outlook, Settings, Composing with delays of 5 to 120 seconds. Microsoft says it doesn't offer true message recall and works with Microsoft 365 subscription licenses and Outlook.com accounts.
 - **One message on a classic Exchange mailbox.** Use Delay Delivery on the Options tab.
 - **The same email every week or month.** Use a Power Automate flow with a Recurrence trigger.
 - **Mail you received that you want to see again later.** That's snooze in the mobile apps, not scheduling.
@@ -172,3 +172,13 @@ Choosing the minute is your job, and a few habits save embarrassment. Check the 
 ## Next step
 
 Open a draft in the version of Outlook you actually use, find the Schedule send or Delay Delivery command and queue a test email to yourself for five minutes from now. That tells you where scheduled messages sit in your setup and whether the message leaves on time before you rely on how to schedule an email in Outlook for something important.
+
+## Sources
+
+- [Delay or schedule sending email messages in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/mail/delay-or-schedule-sending-email-messages-in-outlook)
+- [Schedule send for Outlook on the web (Microsoft Support)](https://support.microsoft.com/outlook/schedule-send-for-outlook-on-the-web)
+- [Customize your email message (Microsoft Support)](https://support.microsoft.com/outlook/customize-your-email-message)
+- [Use Schedule send in Outlook for Mac (Microsoft Support)](https://support.microsoft.com/outlook/use-schedule-send-in-outlook-for-mac)
+- [Undo Send in Outlook for Mac (Microsoft Support)](https://support.microsoft.com/outlook/undo-send-in-outlook-for-mac)
+- [What does it mean to Schedule an email? (Microsoft Support)](https://support.microsoft.com/outlook/what-does-it-mean-to-schedule-an-email)
+- [Create your first cloud flow (Microsoft Learn)](https://learn.microsoft.com/power-automate/get-started-with-cloud-flows)

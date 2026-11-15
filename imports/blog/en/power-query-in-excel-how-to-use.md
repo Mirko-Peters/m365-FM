@@ -9,7 +9,7 @@ topics: [excel, power-query, power-query-m, power-bi-desktop]
 keypoints:
   - "Power Query in Excel is on the Data tab in the Get & Transform Data group. It connects to data, shapes it and loads it into a worksheet or the Data Model."
   - "Every change you make is recorded as a step in Applied Steps. The original source is not changed, and the steps run again at each refresh."
-  - "Append stacks rows from tables with the same columns. Merge joins two tables on matching key columns, and the matching columns need the same data type."
+  - "Append stacks rows and matches columns by header name. Merge joins two tables on key columns, and the matching columns need the same data type."
   - "Use Data, Refresh All to rerun queries. In Connection Properties you can refresh at an interval or when the file opens."
   - "Excel for Mac and Excel for the web support parts of Power Query, and Microsoft's pages differ on what each can author, so check your own build."
 faq:
@@ -26,9 +26,9 @@ Microsoft describes four phases: connect to the data, transform it, combine it w
 
 ## What Power Query is and where to find it
 
-[Power Query](https://www.m365.fm/entity/power-query/) is a data preparation engine with a graphical editor. According to Microsoft's page on [what Power Query is](https://learn.microsoft.com/en-us/power-query/power-query-what-is-power-query), it does extract, transform and load work, has no storage of its own, and leaves the destination to the host product. Excel is one host. [Power BI Desktop](https://www.m365.fm/entity/power-bi-desktop/) is another, and the two share the core editor. Connectors and destinations can differ by host, so don't assume that a query you saw in one product looks identical in the other.
+[Power Query](https://www.m365.fm/entity/power-query/) is a data preparation engine with a graphical editor. According to Microsoft's page on [what Power Query is](https://learn.microsoft.com/power-query/power-query-what-is-power-query), it does extract, transform and load work, has no storage of its own, and leaves the destination to the host product. Excel is one host. [Power BI Desktop](https://www.m365.fm/entity/power-bi-desktop/) is another, and the two share the core editor. Connectors and destinations can differ by host, so don't assume that a query you saw in one product looks identical in the other.
 
-Where it lives depends on the Excel version, per Microsoft's [overview of Power Query in Excel](https://support.microsoft.com/en-us/excel/about-power-query-in-excel):
+Where it lives depends on the Excel version, per Microsoft's [overview of Power Query in Excel](https://support.microsoft.com/excel/about-power-query-in-excel):
 
 - **Excel 2016, 2019 and Microsoft 365 for Windows.** Built in. Go to **Data** and look at the **Get & Transform Data** group.
 - **Excel 2010 and 2013 for Windows.** Power Query was a free add-in with its own ribbon tab. Microsoft says it has been deprecated, though it may still work.
@@ -47,11 +47,11 @@ The easiest start is data you already have in a workbook.
 4. Make your changes (see the next section).
 5. Select **Home** > **Close & Load**.
 
-Microsoft's page on importing from an Excel table says the result goes to a new worksheet by default and the original sheet isn't changed. Use **Load To** if you want a different destination. Rename the new sheet so nobody confuses it with the source.
+Microsoft's page on importing from an Excel table says Power Query creates a new worksheet and the original sheet stays the same. Use **Load To** if you want a different destination. Rename the new sheet so nobody confuses it with the source.
 
-To connect to something else, use **Data** > **Get Data** and choose a source: a file, a database, an online service, the web. After you select it, you get a preview and a choice between **Load** (straight to Excel) and **Transform Data** (open the editor first). My advice is to pick **Transform Data** nearly every time, even when you think the data is clean. The editor is where you set the column types, and wrong types cause most refresh errors later.
+To connect to something else, use **Data** > **Get Data** and choose a source: a file, a database, an online service, the web. After you select it, you get a preview and a choice between **Load** (straight to Excel) and **Transform Data** (open the editor first). Our advice is to pick **Transform Data** nearly every time, even when you think the data is clean. The editor is where you set the column types, and wrong types cause most refresh errors later.
 
-If you want a blank start, the same page lists **Data** > **Get Data** > **From Other Sources** > **Blank Query**, or **Launch Power Query Editor** under Get Data.
+If you want a blank start, Microsoft's page on creating, loading and editing a query lists **Data** > **Get Data** > **From Other Sources** > **Blank Query**, or **Launch Power Query Editor** under Get Data.
 
 ### The editor in plain words
 
@@ -80,9 +80,9 @@ One caution about renamed columns: Microsoft's refresh page notes that new sourc
 
 These two commands do different jobs, and people mix them up.
 
-**Append** stacks rows. Use it when you have the same kind of table many times, for example one export per month. Microsoft describes an append as stacking the rows of one query onto another. There are two flavors: an inline append builds on the existing query, and an intermediate append creates a new query each time.
+**Append** stacks rows. Use it when you have the same kind of table many times, for example one export per month. Microsoft describes an append as a new query with all rows of a first query followed by all rows of a second query. Columns are matched by header name, and unmatched columns get null values, so keep the headers identical. There are two flavors: an inline append builds on the existing query, and an intermediate append creates a new query each time.
 
-**Merge** joins two tables side by side based on matching values, like a lookup. Microsoft's page on [merging queries](https://support.microsoft.com/en-us/office/merge-queries-power-query-fd157620-5470-4c0f-b132-7ca2616d17f9) gives the steps:
+**Merge** joins two tables side by side based on matching values, like a lookup. Microsoft's page on [merging queries](https://support.microsoft.com/office/merge-queries-power-query-fd157620-5470-4c0f-b132-7ca2616d17f9) gives the steps:
 
 1. Make sure you have at least two queries with a column to match on. The matching columns need the same data type, such as Text or Number.
 2. In the editor, go to **Home** > **Merge Queries**. The result becomes a new step in the current query. If you want a separate query instead, open the arrow next to Merge Queries and choose **Merge Queries as New**.
@@ -100,7 +100,7 @@ The join kinds, per Microsoft:
 - **Left anti** keeps primary rows that have no match. **Right anti** keeps related rows that have no match.
 - **Cross** pairs every primary row with every related row.
 
-The position of a table matters, because left and right depend on which one you picked first. The checkbox **Use fuzzy matching to perform the merge** matches approximate values, and Microsoft says it only works on text columns. If a lookup was your habit before, a merge with a left outer join is the closest match, and a left anti join is a quick way to see which rows have no match, say orders without a customer record.
+The position of a table matters, because left and right depend on which one you picked first. The checkbox **Use fuzzy matching to perform the merge** matches approximate values. Microsoft's merge page links to a separate article for it, so read that before you rely on it, and expect it to suit text columns. If a lookup was your habit before, a merge with a left outer join is the closest match, and a left anti join is a quick way to see which rows have no match, say orders without a customer record.
 
 Microsoft also mentions privacy levels. Power Query classes each source as Public, Organizational or Private, and uses these to prevent accidental combining of data in ways that could expose private information to another source. If a merge asks you about privacy levels, read the message before you click through.
 
@@ -118,7 +118,7 @@ To edit a query later, select a cell in its data and choose **Query** > **Edit**
 
 ### Refresh
 
-Refreshing reruns every step against the current source. The ways, from Microsoft's [refresh page](https://support.microsoft.com/en-us/excel/refresh-an-external-data-connection-in-excel):
+Refreshing reruns every step against the current source. The ways, from Microsoft's [refresh page](https://support.microsoft.com/excel/refresh-an-external-data-connection-in-excel):
 
 - **Data** > **Refresh All** updates everything in the workbook (**Ctrl+Alt+F5**). The arrow beside it offers **Refresh** for the selected item (**Alt+F5**). **Esc** stops a refresh.
 - For automatic refresh, go to **Data** > **Queries & Connections**, open the **Connections** tab, right-click a connection and choose **Properties**. On the **Usage** tab you can set **Refresh every** (in minutes) and **Refresh data when opening the file**.
@@ -134,11 +134,11 @@ The two platforms support some of the tool, but Microsoft's pages don't line up 
 
 **Excel for the web.** Microsoft's page says you can import from sources including an Excel workbook, Text/CSV, XML, JSON, SQL Server, a SharePoint Online list and OData, plus a blank table or blank query. You can open the **Power Query Editor** (**Data** > **Get Data** > **Launch Power Query Editor**), load with **Close & Load**, and refresh with **Data** > **Refresh All**. Viewing and refreshing queries is available to all Microsoft 365 subscribers, while more functionality needs a business plan or an enterprise plan (E3 and above). Some features need third-party cookies enabled in the browser.
 
-**Excel for Mac.** One Microsoft page says you start with **Data** > **Get Data** > **Get Data (Power Query)**, that shaping needs Microsoft 365 and version 16.69 or later, and that **Transform Data** opens the editor. On the same page, a separate section states that authoring queries in the editor isn't available in Excel for Mac, and describes writing queries in VBA on Windows and importing the module on Mac. I can't reconcile those two statements, so test on your own Mac before you build a process around it. SQL Server import is described as Insiders Beta only.
+**Excel for Mac.** One Microsoft page says you start with **Data** > **Get Data** > **Get Data (Power Query)**, that shaping needs Microsoft 365 and version 16.69 or later, and that **Transform Data** opens the editor. On the same page, the section on VBA code states that authoring in the Power Query Editor is not available in Excel for Mac, and it describes exporting a module from Excel for Windows and importing it on Mac. These two statements are hard to reconcile, so test on your own Mac before you build a process around it. SQL Server import is described as Insiders Beta only.
 
 ## When Power Query isn't enough
 
-I'll be direct about this: Power Query is for preparing data, not for storing it. Microsoft says the host product determines where results go, which in Excel means a worksheet or the Data Model. A worksheet has a fixed row limit, so a very large query result won't fit on a sheet. Load it to the Data Model instead, or move the work to a database or a dedicated pipeline.
+To be direct about it: Power Query is for preparing data, not for storing it. Microsoft says the host product determines where results go, which in Excel means a worksheet or the Data Model. A worksheet has a fixed row limit (an Excel limit, not something the Power Query pages describe), so a very large query result won't fit on a sheet. Load it to the Data Model instead, or move the work to a database or a dedicated pipeline.
 
 Other limits worth knowing:
 
@@ -159,7 +159,7 @@ Other limits worth knowing:
 ## Related topics to explore
 
 - **Remove duplicates in the editor.** Power Query can dedupe a table as a step, which is repeatable, unlike the one-off command on the ribbon.
-- **Unpivot columns.** Turn month columns into rows before you build a PivotTable. Microsoft mentions Power Query for exactly this.
+- **Unpivot columns.** Turning month columns into rows before you build a PivotTable is a common use. Microsoft has a page on unpivoting columns in Power Query.
 - **Parameters.** Microsoft has a page on parameter queries for reusing a query with different inputs.
 - **The M language.** Learn how to read the script in the Advanced Editor, starting with the [Power Query M](https://www.m365.fm/entity/power-query-m/) page.
 - **Power BI.** Learn how the same editor works in [Power BI Desktop](https://www.m365.fm/entity/power-bi-desktop/) when your data outgrows Excel.
@@ -167,3 +167,15 @@ Other limits worth knowing:
 ## Next step
 
 Pick one export you clean by hand every week. Turn it into a table, run it through From Table/Range, set the column types and load it to a new sheet. Next week, paste the new export into the table and press Refresh All. That is Power Query in Excel doing its job.
+
+## Sources
+
+- [About Power Query in Excel (Microsoft Support)](https://support.microsoft.com/excel/about-power-query-in-excel)
+- [What is Power Query? (Microsoft Learn)](https://learn.microsoft.com/power-query/power-query-what-is-power-query)
+- [Import from an Excel Table (Microsoft Support)](https://support.microsoft.com/excel/get-started/import-from-an-excel-table)
+- [Create, load, or edit a query in Excel (Power Query) (Microsoft Support)](https://support.microsoft.com/excel/create-load-or-edit-a-query-in-excel-power-query)
+- [Append queries (Power Query) (Microsoft Support)](https://support.microsoft.com/excel/append-queries-power-query)
+- [Merge queries (Power Query) (Microsoft Support)](https://support.microsoft.com/office/merge-queries-power-query-fd157620-5470-4c0f-b132-7ca2616d17f9)
+- [Refresh an external data connection in Excel (Microsoft Support)](https://support.microsoft.com/excel/refresh-an-external-data-connection-in-excel)
+- [Use Power Query in Excel for the web (Microsoft Support)](https://support.microsoft.com/excel/use-power-query-in-excel-for-the-web)
+- [Import and shape data in Excel for Mac (Power Query) (Microsoft Support)](https://support.microsoft.com/office/import-and-shape-data-in-excel-for-mac-power-query-7b2f337d-e7d2-4fdf-bf00-3dfbb1e5e9c5)
