@@ -1,0 +1,928 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.100
+¿Qué cambia exactamente cuando una empresa pasa de un chatbot de IA a dozanas de herramientas de IA?
+
+00:00:04.400 --> 00:00:05.600
+Al principio parece sencillo.
+
+00:00:06.320 --> 00:00:08.440
+Un equipo añade un chatbot para atención al cliente.
+
+00:00:09.140 --> 00:00:13.540
+Otro usa IA para buscar en documentos de la empresa y las notas de reuniones se redactan automáticamente.
+
+00:00:14.400 --> 00:00:18.160
+Un flujo de trabajo puede leer un correo, extraer una solicitud y enviarle al sistema correo.
+
+00:00:18.540 --> 00:00:23.760
+En poco tiempo la empresa tiene varios modelos, agentes que pueden realizar acciones y herramientas que acceden a datos empresariales.
+
+00:00:23.760 --> 00:00:30.140
+Cada equipo suele conectarse directamente a un proveedor de IA distinto, usando su propia clave, sus límites y sus propias reglas de seguridad.
+
+00:00:30.760 --> 00:00:31.840
+Sus costos se vuelven difíciles.
+
+00:00:32.040 --> 00:00:33.580
+Una clave puede terminar equivocado.
+
+00:00:34.060 --> 00:00:37.420
+Cuando un agente llama a una herramienta es posible que nadie tenga un registro claro de lo que intentó hacer.
+
+00:00:37.920 --> 00:00:39.700
+Aquí es donde entra Microsoft AI Gateway.
+
+00:00:40.300 --> 00:00:45.440
+Al final de este episodio entenderás qué es, cómo encajan sus componentes y cuándo empieza a tener sentido para tu negocio.
+
+00:00:46.240 --> 00:00:48.660
+Piénsalo como un edificio de oficinas con muchas puertas laterales.
+
+00:00:49.400 --> 00:00:51.820
+Podrías dejar cada puerta abierta y esperar que la gente las use bien.
+
+00:00:51.820 --> 00:00:54.380
+O puedes hacer que todos entren por una entrada gestionada.
+
+00:00:55.180 --> 00:00:56.560
+Una puerta principal para la IA.
+
+00:00:56.880 --> 00:01:02.760
+Microsoft AI Gateway es un conjunto de funciones de gestión de API de Azure que le da a tu tráfico de IA un punto de control.
+
+00:01:03.240 --> 00:01:04.320
+Desgloséme en palabras sencillas.
+
+00:01:04.880 --> 00:01:07.580
+Imagina la configuración de IA de tu empresa como un edificio de oficina moda.
+
+00:01:07.860 --> 00:01:10.220
+Los modelos de IA son las salas donde ocurre el pensamiento.
+
+00:01:10.600 --> 00:01:14.240
+Tus agentes son los trabajadores que se mueven por el edificio, decidiendo qué tarea probada hacer después.
+
+00:01:14.680 --> 00:01:17.560
+Las herramientas son puertas de servicio que conducen a lugares como RR.
+
+00:01:18.280 --> 00:01:20.220
+Finanza, registros de clientes y archivos internos.
+
+00:01:20.220 --> 00:01:23.920
+El AI Gateway es la recepción y el puesto de seguridad en la entrada.
+
+00:01:24.800 --> 00:01:29.900
+Comprueba quién entra, aplica las reglas y registra dónde van las solicitudes antes de que lleguen al resto del edificio.
+
+00:01:31.040 --> 00:01:32.480
+Una solicitud sigue un camino sencillo.
+
+00:01:32.960 --> 00:01:36.200
+Una aplicación, un copilot o un agente envía una solicitud a la puerta de enlace.
+
+00:01:36.880 --> 00:01:39.440
+La puerta de enlace comprueba las reglas que se aplican en ese emisor.
+
+00:01:39.680 --> 00:01:42.740
+Luego lo envía al modelo herramienta agente o API empresarial aprobada.
+
+00:01:42.740 --> 00:01:47.840
+Y cuando llega una respuesta, pasa por la puerta de enlace de nuevo antes de llegar al usuario.
+
+00:01:48.940 --> 00:01:55.740
+Ese camino único le da a la empresa un lugar para gestionar el acceso, límites, controles de seguridad y registros sin integrar esos controles en cada aplicación.
+
+00:01:56.640 --> 00:01:59.100
+Esto también separa dos tareas que a menudo se mezclan.
+
+00:01:59.640 --> 00:02:02.440
+Los equipos de aplicaciones pueden centrarse en la experiencia que la gente realmente usa.
+
+00:02:02.920 --> 00:02:06.740
+Dios crea el asistente de soporte, la pantalla de búsqueda de documentos o el flujo de trabajo que ahorra tiempo.
+
+00:02:07.100 --> 00:02:10.920
+Mientras tanto, el equipo de plataforma gestiona las reglas compartidas tras bambalinas,
+
+00:02:11.220 --> 00:02:17.200
+decidiendo qué servicios están aprobados, qué identidades pueden usarlos, cuánto tráfico puede enviar a un proyecto y qué se registra.
+
+00:02:17.700 --> 00:02:20.480
+No querrás que cada equipo invente un nuevo plan de seguridad para cada chatbot.
+
+00:02:20.880 --> 00:02:23.960
+Microsoft AI Gateway puede situarse frente a varios tipos de tráfico de E.
+
+00:02:24.200 --> 00:02:28.420
+Puede gestionar llamadas a modelos de IA y llamadas a herramientas del protocolo de contexto de modelo MSP.
+
+00:02:28.960 --> 00:02:35.160
+También puede gestionar el tráfico de agente a agente A2A y las API empresariales que su compañía ya utiliza como una API para verificar un pedido,
+
+00:02:35.160 --> 00:02:39.020
+leer una política de RR o abrir un ticket de soporte.
+
+00:02:39.380 --> 00:02:43.800
+Esa última parte es importante porque la mayoría de las empresas no necesitan desechar sus sistemas existentes para usar IA,
+
+00:02:44.280 --> 00:02:49.560
+solo necesitan una forma segura para que la IA trabaje con esos sistemas y una puerta de enlace ayuda a poner controles en torno a esa conexión.
+
+00:02:50.140 --> 00:02:53.300
+Para bien, Microsoft AI Gateway no es modelo, no escribe respuestas por sí mismo.
+
+00:02:53.600 --> 00:02:58.700
+Tampoco es un creador de agentes, por lo tanto no lo usas para diseñar un asistente R, H, o para enseñarle a un agente financiero qué hacer.
+
+00:02:58.940 --> 00:03:02.920
+Y no reemplaza Microsoft Foundry, donde los equipos pueden construir, probar y gestionar proyectos de IA.
+
+00:03:02.920 --> 00:03:04.580
+En cambio, se sitúa en el medio.
+
+00:03:05.420 --> 00:03:12.640
+Foundry puede ayudarte a trabajar con modelos y agentes de IA, mientras que Azure API Management AI Gateway ayuda a controlar el tráfico que sus modelos, agentes y herramientas crean.
+
+00:03:13.580 --> 00:03:16.740
+Es posible que ya conozcas Azure API Management como una forma de gestionar APIs normales.
+
+00:03:17.640 --> 00:03:21.480
+Una API es simplemente una forma en que una pieza de software le pide algo a otra pieza de software.
+
+00:03:22.060 --> 00:03:26.540
+Y AI Gateway extiende esa misma idea para el trabajo con IA, porque las solicitudes de IA traen nuevas preguntas.
+
+00:03:26.980 --> 00:03:30.820
+¿Quién usó qué modelo? ¿Cuántos tokens consumió? ¿Puede este agente llamar a esa herramienta?
+
+00:03:30.820 --> 00:03:32.660
+¿Debería este prompt llegar al modelo si quiere?
+
+00:03:33.240 --> 00:03:36.340
+Poner la puerta de enlace en el medio te da un lugar único para responder esas preguntas.
+
+00:03:36.820 --> 00:03:41.060
+Y el primer punto de presión aparece cuando cada aplicación comienza a elegir su propio endpoint de modelo.
+
+00:03:42.000 --> 00:03:43.600
+Un endpoint, muchos modelos.
+
+00:03:44.420 --> 00:03:49.440
+Cuando tu aplicación se conecta directamente a un solo endpoint de modelo, esa elección queda integrada en el código mismo.
+
+00:03:49.440 --> 00:03:55.500
+A menudo el código está ligado a un proveedor, un despliegue específico, una región de Azure y un conjunto fijo de límites.
+
+00:03:56.420 --> 00:04:00.760
+Eso funciona bien mientras el proyecto es pequeño, pero imagina que tu sistema de soporte funciona con un modelo en una región.
+
+00:04:01.400 --> 00:04:06.900
+Meses después, ese modelo alcanza su capacidad, aparece un modelo mejor por menos dinero, o tu negocio necesita mudarse a otra región.
+
+00:04:07.740 --> 00:04:12.760
+Sin una capa compartida, cada equipo de aplicaciones tiene que cambiar su código, probarlo de nuevo y desplegar una actualización.
+
+00:04:13.360 --> 00:04:14.940
+Eso resulta en cambios lentos y desordenados.
+
+00:04:14.940 --> 00:04:18.320
+Microsoft AI Gateway brinda, sus aplicaciones, una puerta de entrada estable.
+
+00:04:18.700 --> 00:04:22.900
+Envían las solicitudes allí, y la elección del modelo puede cambiar entre bastidores sin que tenga que tocar la aplicación.
+
+00:04:23.340 --> 00:04:24.600
+Piénselo como el número de Telefón Press.
+
+00:04:25.160 --> 00:04:28.420
+Los clientes marcan un número aunque la llamada se pase a otro equipo u oficina.
+
+00:04:29.180 --> 00:04:30.560
+Nunca necesitan saber cómo se gestiona.
+
+00:04:30.960 --> 00:04:37.260
+Con AI Gateway, su aplicación llama a un punto final aprobado, y detrás de él, la puerta de enlace envía la solicitud al modelo que mejor se adapte a la tarea.
+
+00:04:37.940 --> 00:04:40.900
+Microsoft también tiene un enfoque más reciente llamado Unified Model AP.
+
+00:04:40.900 --> 00:04:50.400
+En pocas palabras, permite que una aplicación utilice un formato de solicitud al estilo de OpenAI, mientras que la puerta de enlace conecta a esa solicitud con distintos proveedores de modelos.
+
+00:04:51.240 --> 00:04:56.340
+Así, su aplicación envía un tipo de solicitud conocido, y la puerta de enlace gestiona todos los detalles del proveedor.
+
+00:04:57.120 --> 00:05:04.160
+Dependiendo de su configuración, esa solicitud podría ir a un despliegue de Azure OpenAI, un modelo Microsoft Foundry, Anthropic, Google Gemini o Amazon Bedrock.
+
+00:05:04.160 --> 00:05:08.620
+La ruta sigue las reglas que usted establece en una opción codificada o oculta dentro de cada aplicación.
+
+00:05:09.160 --> 00:05:13.020
+Esto da al equipo de la plataforma margen para realizar cambios sin afectar a quienes usan la aplicación.
+
+00:05:13.780 --> 00:05:16.080
+Supongamos que se imprese un asistente a día para atención al cliente.
+
+00:05:16.640 --> 00:05:17.680
+La mayoría de las preguntas son sencillas.
+
+00:05:18.180 --> 00:05:18.900
+¿Dónde está mi pedido?
+
+00:05:19.540 --> 00:05:20.700
+¿Cómo restablezco mi contraseño?
+
+00:05:21.160 --> 00:05:25.140
+Estas pueden ser respondidas rápidamente por un modelo más pequeño y económico sin gastar más de lo necesario.
+
+00:05:25.220 --> 00:05:29.280
+Luego, un cliente envía una pregunta larga e inusual que requiera un razonamiento cuidadoso o conocimiento del producto.
+
+00:05:29.740 --> 00:05:32.400
+La puerta de enlace dirige ese tipo de solicitud a un modelo más potente.
+
+00:05:32.400 --> 00:05:37.740
+La aplicación de soportes sigue enviando a la solicitud desigual, por lo que su equipo no necesita saber qué modelo gestionó la consulta
+
+00:05:37.740 --> 00:05:40.500
+y sus desarrolladores no tienen que configurar conexiones separadas para cada opción.
+
+00:05:42.080 --> 00:05:42.960
+Hay de la capacidad.
+
+00:05:43.580 --> 00:05:45.180
+Los puntos finales de los modelos de YAC tienen límite.
+
+00:05:45.500 --> 00:05:48.180
+Solo pueden manejar una cierta cantidad de tráfico durante un periodo de tiempo.
+
+00:05:48.640 --> 00:05:53.060
+Si cada solicitud llega a un único despliegue, una hora apunta a poder ralentizar o bloquear toda la experiencia.
+
+00:05:53.720 --> 00:05:57.840
+Una puerta de enlace puede distribuir el tráfico entre múltiples despliegues aprobados dirigiendo a otra región,
+
+00:05:58.100 --> 00:06:01.000
+cuando una se llena, o usando una ruta de respaldo si un punto final cae.
+
+00:06:01.000 --> 00:06:03.600
+Eso no significa que las solicitudes se van a rebotar al azar.
+
+00:06:03.720 --> 00:06:04.620
+Se sigue estableciendo las reglas.
+
+00:06:04.840 --> 00:06:08.840
+Por ejemplo, el tráfico orientado al cliente tiene prioridad en su modelo principal,
+
+00:06:09.120 --> 00:06:11.280
+mientras que las pruebas internas usan una ruta diferente,
+
+00:06:11.520 --> 00:06:14.620
+o una región maneja usuarios locales mientras otra actúa como respaldo.
+
+00:06:15.900 --> 00:06:16.920
+Punto es sencillo.
+
+00:06:17.420 --> 00:06:19.880
+Sus aplicaciones se conectan a una puerta de entrada controlada,
+
+00:06:20.180 --> 00:06:24.220
+y detrás de ella la plataforma puede ajustar modelos, regiones o proveedores con una interrupción mínima.
+
+00:06:24.740 --> 00:06:26.200
+Eso es importante porque la idea evoluciona rápida.
+
+00:06:26.580 --> 00:06:28.900
+Un modelo que funciona hoy podría no ser la mejor opción el mes que viene.
+
+00:06:28.900 --> 00:06:31.480
+Si cada aplicación se comunica directamente con su proveedor,
+
+00:06:31.580 --> 00:06:33.260
+cambiar de modelo se convierte en un proyecto para cada equipo.
+
+00:06:33.740 --> 00:06:36.600
+Con la puerta de enlace, la decisión del modelo reside en un lugar compartido.
+
+00:06:37.240 --> 00:06:39.160
+Una nota breve sobre la API de modelo unificado.
+
+00:06:39.940 --> 00:06:41.520
+Microsoft la incluye como vista previa pública.
+
+00:06:42.260 --> 00:06:45.480
+Las funciones en vista previa pueden cambiar y quizás no estén listas para todo caso de Usum Plus.
+
+00:06:45.920 --> 00:06:48.020
+Aún así, el patrón más amplio no depende de su única función,
+
+00:06:48.700 --> 00:06:51.540
+ya que su gestión de API puede situarse frente a los puntos finales del modelo,
+
+00:06:51.800 --> 00:06:54.620
+aplicar reglas de enrutamiento y ayudarle a gestionar más de un backend.
+
+00:06:54.620 --> 00:06:59.180
+La API de modelo unificado busca facilitar esa experiencia entre proveedores para las aplicaciones.
+
+00:07:00.020 --> 00:07:03.260
+Elegir el modelo correcto es solo la mitad del trabajo porque un modelo puede responder a una pregunta,
+
+00:07:03.640 --> 00:07:07.400
+pero un agente puede decidir tomar una acción que impacte sistemas reales de la empresa.
+
+00:07:08.360 --> 00:07:09.480
+Gobernanza de agentes y herramientas.
+
+00:07:10.060 --> 00:07:12.400
+Un agente lleva la IA más allá de solo responder preguntas.
+
+00:07:12.960 --> 00:07:16.300
+Es un software que puede analizar una tarea, elegir entre opciones aprobadas y llamar a las aprobadas
+
+00:07:16.300 --> 00:07:17.940
+y llamar a una herramienta o servicio para el teletro.
+
+00:07:17.940 --> 00:07:21.280
+Un agente de red podría buscar una política de vacaciones,
+
+00:07:21.400 --> 00:07:24.620
+uno de soporte a verificar un pedido y uno de finanzas a preparar una solicitud de pago.
+
+00:07:25.000 --> 00:07:27.760
+Esa capacidad es útil, pero también cambia el perfil de riesgo.
+
+00:07:28.040 --> 00:07:29.980
+Una respuesta incorrecta de un modelo confunde a alguien,
+
+00:07:30.120 --> 00:07:32.440
+pero un agente que usa la herramienta equivocada puede exponer datos,
+
+00:07:32.720 --> 00:07:35.940
+cambiar un registro o activar un registro o activar un proceso carácter.
+
+00:07:36.020 --> 00:07:37.680
+Es por esto que las herramientas necesitan su propia red.
+
+00:07:38.140 --> 00:07:40.600
+Oirá el término MSP o protocolo de contexto de modelo.
+
+00:07:41.120 --> 00:07:44.160
+Piénselo como una forma de conector estándar que da a la gente una manera conocida
+
+00:07:44.160 --> 00:07:47.160
+encontrar y usar una herramienta empresarial como un servicio de búsqueda de documentos
+
+00:07:47.160 --> 00:07:48.200
+o una app de consulta de pedido.
+
+00:07:48.480 --> 00:07:51.080
+En lugar de construir una conexión diferente para cada agente y sistema,
+
+00:07:51.220 --> 00:07:53.040
+MSP ofrece a los equipos un patrón común.
+
+00:07:53.560 --> 00:07:57.180
+Luego está A2A, agente-agente, una forma estándar, para que un agente contacte a otro.
+
+00:07:57.980 --> 00:08:01.100
+Por ejemplo, un agente de soporte le pide detalles de entrega a un agente de envíos
+
+00:08:01.100 --> 00:08:03.180
+en lugar de intentar entender el sistema de envío por sí mismo.
+
+00:08:03.660 --> 00:08:04.760
+Eso suena ordenado en papel,
+
+00:08:04.760 --> 00:08:08.480
+pero una cadena de agentes se complica cuando cada conexión tiene reglas de acceso diferentes,
+
+00:08:08.640 --> 00:08:10.400
+credenciales ocultas y herramientas desconocidas.
+
+00:08:10.960 --> 00:08:13.280
+Imagina un agente financiero que responde preguntas sobre factura.
+
+00:08:13.280 --> 00:08:15.980
+Solo debería usar una herramienta aprobada de búsqueda de facturas,
+
+00:08:16.200 --> 00:08:18.260
+pero alguien le otorga acceso amplio al sistema financiero
+
+00:08:18.260 --> 00:08:20.340
+porque es más rápido que definir una herramienta limitada.
+
+00:08:21.020 --> 00:08:22.820
+Un usuario envía una instrucción que parece inofensiva,
+
+00:08:23.020 --> 00:08:26.440
+pero las instrucciones ocultas en un documento adjunto empujan a la gente hacia una acción no aprobada.
+
+00:08:27.000 --> 00:08:28.280
+Si el agente tiene demasiado acceso,
+
+00:08:28.720 --> 00:08:32.460
+podría solicitar datos innecesarios o iniciar un flujo de trabajo que debería requerir aprobación humana.
+
+00:08:32.680 --> 00:08:34.040
+La gente no es malintencionada.
+
+00:08:34.460 --> 00:08:36.560
+Solo tuvo demasiada libertad de manejar información no confiable.
+
+00:08:37.020 --> 00:08:41.780
+Microsoft AI Gateway le permite colocar controles frente a los servidores MCP y las API empresariales.
+
+00:08:41.780 --> 00:08:44.980
+En lugar de una ruta directa de una aplicación de IA a una base de datos,
+
+00:08:45.120 --> 00:08:47.640
+usted expone una herramienta pequeña y controlada para una tarea específica.
+
+00:08:48.140 --> 00:08:50.560
+Por ejemplo, un agente pregunta, ¿comprueba el estado de este pedido?
+
+00:08:51.120 --> 00:08:54.960
+La herramienta devuelve solo el estado, no todos los pedidos ni el registro completo del cliente.
+
+00:08:55.340 --> 00:08:58.860
+Es una tarea limitada y la puerta de enlace verifica quién solicita antes de permitir la llamada.
+
+00:08:59.220 --> 00:09:00.940
+La identidad es el centro de esta configuración.
+
+00:09:01.440 --> 00:09:06.080
+Con Microsoft Entry ID, las aplicaciones inician sesión mediante identidades administradas en lugar de compartir claves blog.
+
+00:09:06.080 --> 00:09:10.600
+Una identidad administrada demuestra quién es sin que un desarrollador copie un secreto en el código.
+
+00:09:11.400 --> 00:09:12.800
+Cada agente debe tener su propia identidad.
+
+00:09:13.380 --> 00:09:15.420
+De esa manera, puede ver qué agente llamó a una herramienta,
+
+00:09:15.540 --> 00:09:18.360
+revocar el acceso a uno sin afectar a los demás y aplicar diferentes reglas.
+
+00:09:18.700 --> 00:09:22.600
+Un agente de recursos humanos no debería heredar los permisos de un agente financiero solo porque ambos usan IA.
+
+00:09:23.140 --> 00:09:24.320
+Esto sigue el principio de confianza.
+
+00:09:24.540 --> 00:09:25.600
+Verifique cada solicitud.
+
+00:09:25.820 --> 00:09:30.160
+Otorgue solo el acceso necesario para el trabajo actual y asuma que cualquier respuesta de aviso o herramienta podría ser insegura.
+
+00:09:30.160 --> 00:09:33.560
+En la práctica, el agente obtiene permiso para una herramienta y acción específica.
+
+00:09:33.900 --> 00:09:36.460
+Puede dar un saldo de vacaciones, pero no descargar el archivo de nómina.
+
+00:09:36.860 --> 00:09:39.140
+Puede crear un borrador de ticket de soporte, pero no cerrar un caso.
+
+00:09:39.760 --> 00:09:42.980
+La puerta de enlace también aplica comprobaciones de seguridad a los avisos y el tráfico de herramientas.
+
+00:09:43.260 --> 00:09:46.740
+Si una solicitud contiene contenido dañino o datos que no deberían salir del sistema,
+
+00:09:46.960 --> 00:09:48.560
+una política lo detiene antes de llegar al backend.
+
+00:09:48.920 --> 00:09:55.040
+Ningún filtro detecta todo, pero verificar el tráfico en un punto compartido es mucho más seguro que esperar que cada creador de agentes añada la misma protección.
+
+00:09:55.320 --> 00:09:57.200
+También necesita un catálogo de herramientas aprobadas.
+
+00:09:57.200 --> 00:10:00.620
+API Center actúa como un catálogo privado para API Servicios MSP
+
+00:10:00.620 --> 00:10:05.160
+para que los equipos encuentren la herramienta correcta sin buscar documentos antiguos o copiar direcciones web no verificadas.
+
+00:10:05.460 --> 00:10:09.260
+Eso ayuda a convertir qué herramienta puede usar mi agente en una decisión comercial controlada.
+
+00:10:09.940 --> 00:10:12.840
+Los controles de seguridad protegen la ruta, pero también crean una nueva pregunta.
+
+00:10:13.180 --> 00:10:16.280
+¿Qué equipos están usando esa ruta y cuánto uso de IA están generando?
+
+00:10:17.580 --> 00:10:19.040
+Costos de tokens, límites y visibilidad.
+
+00:10:19.840 --> 00:10:22.120
+Los costos de IA funcionan de manera diferente en la licencia de software.
+
+00:10:22.260 --> 00:10:23.500
+El medidor funciona con token.
+
+00:10:23.880 --> 00:10:24.420
+¿Qué es un token?
+
+00:10:24.660 --> 00:10:25.800
+Es un pequeño fragmento de texto.
+
+00:10:25.800 --> 00:10:27.300
+Una palabra corta podría usar un token.
+
+00:10:27.640 --> 00:10:28.780
+Una palabra más larga usa más.
+
+00:10:29.020 --> 00:10:30.240
+El modelo cuenta todo lo que usted envía.
+
+00:10:30.900 --> 00:10:31.320
+Su pregunta.
+
+00:10:31.720 --> 00:10:32.700
+Las instrucciones que añade.
+
+00:10:32.940 --> 00:10:34.840
+Cualquier documento que adjunte y la respuesta que devuelve.
+
+00:10:35.340 --> 00:10:36.900
+Entonces, una pregunta simple usa muy poco.
+
+00:10:37.180 --> 00:10:40.080
+Pero un agente que lee un documento de política largo hace preguntas de seguimiento.
+
+00:10:40.360 --> 00:10:43.600
+Llama a una herramienta y luego crea una respuesta detallada puede usar mucho más de lo que espera.
+
+00:10:44.240 --> 00:10:46.000
+Probablemente hayas visto esto con la transcripción de una red.
+
+00:10:46.380 --> 00:10:47.480
+Pese unas cuantas páginas de nota.
+
+00:10:47.480 --> 00:10:53.920
+El sistema de IA también procesa sus instrucciones del sistema, la transcripción, los datos de la empresa recuperados, los resultados de herramientas y las herramientas y las respuestas.
+
+00:10:54.200 --> 00:10:55.180
+Cada parte aumenta el uso.
+
+00:10:55.960 --> 00:10:59.100
+Por eso un agente ocupado puede agotar el límite de un modelo compartido sorprendentemente rápido.
+
+00:10:59.660 --> 00:11:02.640
+Imagina un equipo probando un nuevo asistente de marketing un viernes por la tarde.
+
+00:11:03.100 --> 00:11:07.960
+Alguien le da un gran conjunto de archivos de campaña y le pide que los compare, los reescriba y los resuma en bucle.
+
+00:11:08.380 --> 00:11:12.740
+Mientras tanto, el servicio de atención al cliente depende de la misma capacidad del modelo para las personas que intentan obtenerlo.
+
+00:11:12.900 --> 00:11:18.140
+Si la carga de trabajo de prueba utiliza la cuota compartida, el asistente de soporte puede ralentizarse o fallar cuando los clientes lo necesiten.
+
+00:11:18.280 --> 00:11:20.220
+El problema no es solo que la empresa haya gastado dinero.
+
+00:11:20.680 --> 00:11:23.560
+La carga de trabajo incorrecta toma capacidad de la carga de trabajo más importante.
+
+00:11:23.560 --> 00:11:27.380
+La puerta de enlace de IA de Azure App y Management puede aplicar límites antes de que eso suceda.
+
+00:11:27.380 --> 00:11:33.220
+Puedes establecer límites de solicitudes, límites de tokens y cuotas para una aplicación, equipo, proyecto o consumidor.
+
+00:11:33.920 --> 00:11:39.180
+Una cuota puede cubrir un intervalo, corto, tokens por minuto o un periodo más largo como una asignación diaria o mensual.
+
+00:11:40.040 --> 00:11:41.420
+Soledad a cada carga de trabajo un límite.
+
+00:11:41.760 --> 00:11:44.300
+El asistente de marketing puede tener un presupuesto adecuado a su propósito.
+
+00:11:44.800 --> 00:11:47.480
+Servicio de atención al cliente puede tener su propia asignación y una prioridad más alta.
+
+00:11:47.800 --> 00:11:52.340
+Cuando el asistente de marketing alcanza su límite, la puerta de enlace puede rechazar o ralentizar su siguiente solicitud.
+
+00:11:52.560 --> 00:11:55.920
+Servicio de atención al cliente sigue funcionando porque un proyecto de prueba no puede usar todo lo disponible.
+
+00:11:55.920 --> 00:11:58.800
+Esto también cambia la conversación sobre los costos mensuales.
+
+00:11:58.880 --> 00:12:03.420
+Sin una vista compartida de un equipo financiero puede recibir una factura de IA grande y preguntar ¿Quién usó todo esto?
+
+00:12:04.100 --> 00:12:08.320
+La respuesta puede ser difícil de encontrar cuando los equipos se conectan directamente a diferentes servicios con claves compartidas.
+
+00:12:08.700 --> 00:12:14.160
+Una puerta de enlace puede registrar al emisor, el modelo, el uso de tokens y el estado de la respuesta y las llamadas herramientas vinculadas a un sitio.
+
+00:12:14.420 --> 00:12:15.560
+Eso te da un rastro más claro.
+
+00:12:16.020 --> 00:12:24.320
+Puedes ver si el gasto provino de un asistente de RR.HH, un entorno de prueba de desarrollo, un chatbot para clientes o un agente que siguió reintentando tras un error.
+
+00:12:24.320 --> 00:12:29.020
+También puedes detectar patrones inusuales, como una aplicación enviando prompts mucho más grandes de lo normal.
+
+00:12:29.460 --> 00:12:32.820
+Si tu equipo comienza en Microsoft Foundry, la puerta de enlace también puede conectarse a ese trabajo.
+
+00:12:33.200 --> 00:12:37.840
+Los proyectos de Foundry pueden usar límites de tokens a nivel de proyecto mientras la puerta de enlace aplica las redes de tráfico a su alrededor.
+
+00:12:38.060 --> 00:12:43.560
+Eso les da a los desarrolladores de IA un punto de partida más simple, mientras el equipo de plataforma mantiene un lugar compartido para gestionar límites y monitoreo.
+
+00:12:43.940 --> 00:12:45.940
+También hay una función útil llamada Cache Semantic.
+
+00:12:46.580 --> 00:12:49.260
+Supongamos que un empleado pregunta ¿Dónde puede encontrar la política de viaje?
+
+00:12:49.260 --> 00:12:53.260
+Unos segundos después, otra pregunta. ¿Dónde está nuestra política para viajes de negocios?
+
+00:12:53.980 --> 00:13:00.140
+Las palabras cambian, pero el significado puede ser lo bastante similar como para que la pasarela reutilice una respuesta anterior adecuada en lugar de volver a llamar a modelo.
+
+00:13:00.680 --> 00:13:02.300
+Eso puede reducir costos y esa era la respuesta.
+
+00:13:02.700 --> 00:13:04.300
+Solo encaja en preguntas donde la reutilice sentido.
+
+00:13:04.940 --> 00:13:09.900
+No guardarías en Cache una solicitud sobre el saldo actual de vacaciones de alguien o el estado de un pedido, porque esas respuestas pueden cambiar.
+
+00:13:10.320 --> 00:13:11.740
+El enrutamiento también puede haber con los costos.
+
+00:13:11.740 --> 00:13:20.060
+Una empresa puede enviar trabajo adecuado, modelo de menor costo, usar la capacidad que ya reservó antes de pagar por uso adicional y cambiar una ruta de respaldo cuando aparece un límite.
+
+00:13:21.020 --> 00:13:22.880
+Aún así, una pasarela no elimina la responsabilidad.
+
+00:13:23.560 --> 00:13:24.540
+Los equipos necesitan presupuesto.
+
+00:13:24.800 --> 00:13:26.280
+Alguien necesita revisar las respuestas del modelo.
+
+00:13:26.680 --> 00:13:28.960
+Alguien necesita decidir si un agente debería existir siquiera.
+
+00:13:29.460 --> 00:13:32.400
+La pasarela te proporciona el medidor, las barreras de protección y registro del tráfico.
+
+00:13:32.900 --> 00:13:34.260
+No toma decisiones de negocio por ti.
+
+00:13:34.680 --> 00:13:39.380
+Una vez que puedes ver y controlar el tráfico, toda la configuración resulta más fácil de visualizar como ejemplo cotidiano.
+
+00:13:40.020 --> 00:13:40.820
+Cree una solicitud sencilla.
+
+00:13:40.820 --> 00:13:43.100
+Imagina a un asistente de recursos humanos dentro de una empresa.
+
+00:13:43.500 --> 00:13:47.600
+Un empleado pregunta, ¿cuántos días de licencia parental puedo tomar y puede iniciar la solicitud por mí?
+
+00:13:47.880 --> 00:13:52.100
+El objetivo es sencillo, dar al empleado una respuesta rápida y útil y luego ayudar con el siguiente paso aprobado.
+
+00:13:52.340 --> 00:13:58.660
+Pero el asistente de RR, Ed, no debe revelar datos de nómina, abrir todos los archivos de personal ni llevar una clave de proveedor de modelos dentro de su código.
+
+00:13:58.780 --> 00:14:00.600
+La solicitud comienza cuando el empleado inicia sesión.
+
+00:14:00.600 --> 00:14:08.800
+Antes de que el asistente envíe algo, un modelo o herramienta, la pasarela verifica quién es el empleado, si puede usar al asistente de RR, H, y qué límites se aplican a esa aplicación.
+
+00:14:08.800 --> 00:14:12.660
+El empleado ve una ventana de chat sencilla mientras estas comprobaciones ocurren detrás de él.
+
+00:14:12.860 --> 00:14:14.380
+Después, el asistente necesita una respuesta.
+
+00:14:14.600 --> 00:14:17.740
+Una pregunta básica sobre políticas puede ir al punto de conexión del modelo aprobado por la empresa.
+
+00:14:18.540 --> 00:14:24.440
+Si ese punto de conexión está ocupado o alcanza un límite establecido, la pasarela puede seguir una ruta de respaldo que la empresa ya aprobó.
+
+00:14:24.440 --> 00:14:28.360
+El empleado sigue recibiendo una respuesta a través del mismo asistente de RR, H.
+
+00:14:28.580 --> 00:14:33.580
+En lugar de ver un error porque una implementación del modelo se saturó, entonces el empleado pide iniciar la solicitud de licencia.
+
+00:14:33.980 --> 00:14:35.740
+En este punto, el agente necesita algo más que un modelo.
+
+00:14:36.380 --> 00:14:39.600
+Necesita una herramienta que pueda verificar los detalles del empleado y crear la solicitud correcta.
+
+00:14:39.920 --> 00:14:43.140
+El agente solicita usar una herramienta MSP aprobada para la gestión de licencias.
+
+00:14:43.580 --> 00:14:44.960
+La pasarela también verifica esa solicitud.
+
+00:14:45.240 --> 00:14:47.640
+Puede este agente de RR llamar a esta herramienta.
+
+00:14:47.880 --> 00:14:49.940
+Tiene este empleado permiso para iniciar este tipo de solicitud.
+
+00:14:49.940 --> 00:14:52.440
+¿La acción se ajusta a los permisos asignados al agente?
+
+00:14:52.940 --> 00:14:54.740
+¿Sólo entonces la herramienta recibe la llamada?
+
+00:14:54.900 --> 00:14:57.460
+La herramienta no devuelve una lista gigante de registros de empleado.
+
+00:14:58.200 --> 00:15:01.820
+Solo devuelve lo necesario para la tarea, el saldo de vacaciones disponible del empleado,
+
+00:15:02.120 --> 00:15:05.300
+la política que le aplica y la confirmación de que la solicitud fue creada como borrador.
+
+00:15:06.020 --> 00:15:07.240
+Esa respuesta limitada es importante.
+
+00:15:07.540 --> 00:15:12.220
+El agente tiene suficiente información para ayudar, pero no obtiene un acceso amplio solo por haber hecho una pregunta en lenguaje sencillo.
+
+00:15:12.940 --> 00:15:15.740
+Imagine que el empleado pega texto de un documento externo en el chat.
+
+00:15:15.740 --> 00:15:21.000
+El texto contiene instrucciones que intentan engañar al asistente para que ignore sus reglas o solicite información confidencial.
+
+00:15:21.760 --> 00:15:26.800
+La puerta de enlace puede aplicar controles de seguridad antes de que el prompt llegue al modelo o antes de que una herramienta reciba una solicitud.
+
+00:15:27.000 --> 00:15:28.880
+Si la solicitud infringe una regla, puede detenerse.
+
+00:15:29.180 --> 00:15:32.560
+El mismo tipo de control puede revisar una respuesta antes de que llegue el empleado.
+
+00:15:33.280 --> 00:15:35.160
+No todos los problemas provienen de un mal prompt, tampoco.
+
+00:15:36.000 --> 00:15:39.500
+Un modelo podría generar una respuesta que incluye información que no debería devolver.
+
+00:15:39.940 --> 00:15:43.580
+Un punto de control compartido le da a la empresa un lugar para inspeccionar esa ruta y actuar al respecto.
+
+00:15:44.000 --> 00:15:45.580
+Mientras tanto, la solicitud crea un registro.
+
+00:15:45.740 --> 00:15:48.620
+La empresa puede vincular el token utilizado al proyecto de asistencia de recursos humanos.
+
+00:15:49.000 --> 00:15:54.580
+Puede ver qué modelo manejó la pregunta, si la llamada a la herramienta tuvo éxito, si una solicitud fue bloqueada y cuánto tiempo tomó el proceso.
+
+00:15:54.980 --> 00:15:56.920
+Eso hace que el soporte de la revisión sea mucho más sencillo.
+
+00:15:57.000 --> 00:16:03.080
+Si un equipo de red forma que los empleados no pueden crear solicitudes de vacaciones, el equipo de operaciones puede buscar llamadas a herramientas fallidas.
+
+00:16:03.540 --> 00:16:06.940
+Si una regla de seguridad bloquea preguntas válidas, pueden ver el patrón y mejorar la política.
+
+00:16:07.780 --> 00:16:11.580
+Si un agente de repente usa mucha más capacidad de lo normal, ese cambio se vuelve visible.
+
+00:16:11.580 --> 00:16:18.140
+Y si la empresa actualiza una regla, como requerir una verificación adicional antes de cierta solicitud desde vacaciones, puede actualizar la política de la puerta de la nación.
+
+00:16:18.460 --> 00:16:21.840
+No necesita esperar actualizaciones de código por separado en cada aplicación de REE.
+
+00:16:22.060 --> 00:16:25.060
+H. Chatbot y flujo de trabajo que utilice la misma ruta controlada.
+
+00:16:25.240 --> 00:16:26.920
+El mismo patrón de solicitud sigue funcionando.
+
+00:16:26.920 --> 00:16:33.200
+Cuando la empresa agrega otro modelo, una nueva región, más herramientas internas u otro agente que maneje una tarea de RRRH.
+
+00:16:33.760 --> 00:16:34.120
+Relaciona.
+
+00:16:34.520 --> 00:16:35.480
+Comience con algo pequeño así.
+
+00:16:35.740 --> 00:16:38.860
+Una puerta de enlace se vuelve útil cuando el tráfico compartido es en tráfico compartido.
+
+00:16:39.160 --> 00:16:39.680
+¿Por dónde empezar?
+
+00:16:40.160 --> 00:16:41.320
+Pues por dónde comience realmente.
+
+00:16:42.180 --> 00:16:44.140
+Comience eligiendo una única carga de trabajo real.
+
+00:16:44.280 --> 00:16:48.380
+Quizás un asistente de soporte que ya llame un modelo o un agente que su equipo planea para RRRH.
+
+00:16:48.880 --> 00:16:50.420
+Finanza su búsqueda de documentos internos.
+
+00:16:50.760 --> 00:16:52.760
+No intente abordar todos los modelos y todas las herramientas.
+
+00:16:52.960 --> 00:16:54.360
+Ese es un camino rápido hacia el cabo.
+
+00:16:54.360 --> 00:16:56.940
+En lugar de dar claves de proveedor directamente a cada aplicación,
+
+00:16:57.480 --> 00:17:01.440
+coloque el punto final del modelo de esa carga de trabajo detrás de la puerta de enlace de IA de Azure API Management.
+
+00:17:01.640 --> 00:17:04.260
+Piénselo como un único puesto de control de seguridad para su tráfico de IA.
+
+00:17:04.580 --> 00:17:05.580
+Luego establezca los básicos.
+
+00:17:05.840 --> 00:17:07.100
+Nombre o propietario clave para la carga de trabajo.
+
+00:17:07.520 --> 00:17:10.940
+Use el acceso basado en Entra para que solo las personas o servicios adecuados puedan llegar a ello.
+
+00:17:11.460 --> 00:17:13.220
+Establezca un límite de tokens adecuado para el trabajo.
+
+00:17:13.360 --> 00:17:13.840
+Ni más ni menos.
+
+00:17:14.200 --> 00:17:15.680
+Activa el registro para que pueda ver lo que se ha sucedido.
+
+00:17:16.100 --> 00:17:18.580
+Agregue una regla de seguridad de contenido que su equipo pueda aprobar en RRRH.
+
+00:17:18.900 --> 00:17:19.540
+Piense en FormaSense.
+
+00:17:19.660 --> 00:17:22.100
+Una vez que la ruta del modelo y el límite de acceso funcionen,
+
+00:17:22.100 --> 00:17:24.260
+agregue herramientas MSIP aprobadas una por una.
+
+00:17:24.700 --> 00:17:27.840
+Cada herramienta debe tener una función específica y una razón clara para que la gente la use.
+
+00:17:28.280 --> 00:17:29.360
+Sin añadido si necesario.
+
+00:17:30.180 --> 00:17:33.880
+A partir de ahí usted crece una carga de trabajo controlada, modelos, herramientas y agentes compartidos.
+
+00:17:34.640 --> 00:17:35.940
+Sin ese punto de control inicial,
+
+00:17:36.240 --> 00:17:39.600
+cada nueva aplicación de IA crea otra vía no administrada hacia los datos de la empresa
+
+00:17:39.600 --> 00:17:40.960
+y otra línea en la factura de IA.
+
+00:17:41.540 --> 00:17:44.640
+Para la siguiente cápsula de conocimiento, ve a Azure API Management Simply Explain.
+
+00:17:45.520 --> 00:17:47.740
+Esa es la base sobre la que se construye Microsoft AI Gateway.

@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 import site_blog as BLG
 import site_content_blog as CBL
+import site_index_rule as IR
 import site_legacy_blog as LBL
 import translate_blog as TB
 
@@ -136,7 +137,7 @@ class ContentBlogI18nTests(unittest.TestCase):
 
     def test_translations_follow_legacy_rules(self):
         self.store(["de", "fr"])
-        with patch.object(LBL, "tr_config", return_value=(["de", "fr", "es"], ["de"])):
+        with patch.object(LBL, "tr_config", return_value=(["de", "fr", "es"], ["de"])), patch.object(IR, "MIN_CHARS", 10 ** 9):   # Freigabeliste allein (die Laengenregel ab 2500 Zeichen: tests/test_index_rule.py)
             out = CBL.translations(BASE, [self.original()], {"sap": {}})
         by = {p["lang"]: p for p in out}
         self.assertEqual(set(by), {"de", "fr"})   # es: noch nicht uebersetzt
@@ -191,7 +192,7 @@ class ContentBlogI18nTests(unittest.TestCase):
     # ---------- Seiten ----------
     def test_rendered_pages_hreflang_original_link_and_directory(self):
         self.store(["de", "fr"])
-        with patch.object(LBL, "tr_config", return_value=(["de", "fr"], ["de"])):
+        with patch.object(LBL, "tr_config", return_value=(["de", "fr"], ["de"])), patch.object(IR, "MIN_CHARS", 10 ** 9):   # Freigabeliste allein (die Laengenregel ab 2500 Zeichen: tests/test_index_rule.py)
             posts = [self.original()] + CBL.translations(BASE, [self.original()], {"sap": {}})
         files, r2, pages, sitemap = {}, {}, {}, []
 

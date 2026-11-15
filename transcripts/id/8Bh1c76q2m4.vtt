@@ -1,0 +1,1414 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.220
+Hari ini kita akan membahas sesuatu yang hampir semua orang pernah dengar tapi tidak bisa menjelaskannya, yaitu Kubernetes.
+
+00:00:04.600 --> 00:00:08.200
+Hal ini membingungkan karena ia menyelesaikan masalah yang tidak disadari orang sebelum mereka mengalami.
+
+00:00:08.560 --> 00:00:11.560
+Semua orang tahu itu penting, tapi kalau ditanya apa fungsinya, Anda hanya akan mendapat tata-tata.
+
+00:00:11.880 --> 00:00:15.300
+Ini bukan pengganti docker atau sistem operasi cloud meskipun orang sering menebak demikian.
+
+00:00:16.020 --> 00:00:20.000
+Kebingungan itu wajar karena Kubernetes memecahkan masalah yang tidak Anda sadari ada sebelum Anda menghadapinya.
+
+00:00:20.660 --> 00:00:24.040
+Ini adalah alat yang menjadi penting saat Anda memiliki lebih dari sekelintir kontainer untuk dikelola.
+
+00:00:24.260 --> 00:00:28.620
+Di akhir episode ini, Anda akan paham apa itu Kubernetes, bagaimana hubungannya dengan kontainer,
+
+00:00:28.620 --> 00:00:34.020
+dan mengapa Azure Kubernetes Service membuatnya praktis bagi tim yang tidak ingin membangun semuanya dari awal.
+
+00:00:34.700 --> 00:00:36.000
+Siapkan kopi Anda dan mari kita mulai.
+
+00:00:36.820 --> 00:00:37.820
+Masalah sebelum ada kontainer.
+
+00:00:38.640 --> 00:00:39.320
+Mari ke masalahnya.
+
+00:00:39.760 --> 00:00:41.260
+Bayangkan sebuah perusahaan perangkat menang sepuluhnya ngalah.
+
+00:00:41.620 --> 00:00:46.360
+Anda punya beberapa aplikasi untuk dijalankan, jadi Anda membeli server, menginstal sistem operasi, dan menerapkan semuanya secara manual.
+
+00:00:46.660 --> 00:00:49.860
+Setiap aplikasi mendapat mesin sendiri dan Anda tidak bisa berbagi sumber daya antara mereka.
+
+00:00:50.200 --> 00:00:54.560
+Jika satu aplikasi butuh banyak memori dan yang lain hampir tidak butuh apa-apa, keduanya tetap mendapat server sendiri.
+
+00:00:55.020 --> 00:00:55.780
+Pemurusannya sangat besar.
+
+00:00:55.780 --> 00:01:02.000
+Server mungkin hanya berjalan pada kapasitas 20%, tapi Anda tidak bisa menggabungkannya karena aplikasi akan berboot dependensi.
+
+00:01:02.740 --> 00:01:04.220
+Anda berakhir dengan ruangan penuh server.
+
+00:01:04.500 --> 00:01:08.980
+Masing-masing hampir tidak bekerja, mengonsumsi daya dan peninginan, serta semuanya butuh perawatan terus-menerus.
+
+00:01:09.680 --> 00:01:12.380
+Satu aplikasi butuh Python 3T7, yang lain butuh Python 3T4.
+
+00:01:12.700 --> 00:01:14.380
+Satu butuh pustaka lama, yang lain butuh yang terbaru.
+
+00:01:14.720 --> 00:01:20.020
+Anda tidak bisa menjalankannya di mesin yang sama tanpa merusak sesuatu, jadi Anda membeli lebih banyak server dan membayar perangkat keras yang lebih sering langgur.
+
+00:01:20.020 --> 00:01:25.620
+Mesin virtual sedikit membantu dengan membiarkan Anda membagi server fisik menjadi bagian yang lebih kecil, masing-masing menjalankan OS sendiri.
+
+00:01:25.740 --> 00:01:30.640
+Tetapi setiap VM terasa berat dengan OS penuh yang memakan ruang disk dan memoris, termemoris penuh yang memakan ruang disk dan mulai.
+
+00:01:30.940 --> 00:01:33.620
+Dan Anda harus menginfigurasi masing-masing secara terpisah yang merupakan pekerjaan.
+
+00:01:34.020 --> 00:01:37.840
+Anda tetap harus mengelola semua sistem operasi tersebut, menambal, merbarui, dan mengamankannya.
+
+00:01:38.080 --> 00:01:47.680
+Tim membutuhkan sesuatu yang lebih ringan dan portable, cara untuk mengemas aplikasi dengan semua kebutuhan menjalankannya tanpa beban mesin virtual penuh dan bisa dipindahkan dengan mudah antar mesin.
+
+00:01:47.680 --> 00:01:49.320
+Di situlah peran kontainer.
+
+00:01:49.880 --> 00:01:51.000
+Apa sebenarnya kontainer itu?
+
+00:01:51.800 --> 00:01:55.640
+Kontainer adalah paket kecil yang mencakup aplikasi Anda dan semua yang dibutuhkannya untuk berjalanan.
+
+00:01:56.140 --> 00:02:00.520
+Itu berarti kode, runtime, pustaka, dan file konfigurasi semuanya dibundal menjadi satu unit.
+
+00:02:01.020 --> 00:02:02.720
+Bayangkan itu seperti kemas untuk perangkat lunak.
+
+00:02:03.520 --> 00:02:06.400
+Kontainer pengiriman bisa dimuat ke truk, kereta, atau kapal.
+
+00:02:06.700 --> 00:02:08.040
+Dan kontainer sendiri tetap sama.
+
+00:02:08.860 --> 00:02:10.300
+Kontainer perangkat lunak Anda bekerja dengan cara.
+
+00:02:10.680 --> 00:02:14.880
+Anda membangunnya sekali, dan ia berjalan sama di laptop, server uji, maupun lingkungan produksi Anda.
+
+00:02:14.880 --> 00:02:18.940
+Perbedaan utama antara kontainer dan mesin virtual adalah seberapa efisien baik.
+
+00:02:19.440 --> 00:02:24.640
+Mesin virtual menjalankan sistem operasinya sendiri secara penuh sehingga setiap VM memiliki kernel, file sistem, dan segalanya sendiri.
+
+00:02:25.280 --> 00:02:26.880
+Sebuah kontainer berbagi sistem operasiosnya.
+
+00:02:27.460 --> 00:02:29.680
+Ia hanyalah sebuah proses dengan pandangan dunia yang terisolasi.
+
+00:02:30.340 --> 00:02:32.780
+Itu berarti kontainer bisa dimulai dalam hitungan detik, bukan menit.
+
+00:02:33.420 --> 00:02:36.400
+Kontainer menggunakan lebih stick memory, dan Anda bisa memuat lebih banyak kontainer di satu mesin.
+
+00:02:36.860 --> 00:02:41.640
+Docker mempopularkan kontainer dengan memberi pengembang cara mudah untuk membangun dan menjalankannya dengan satu perintah.
+
+00:02:41.640 --> 00:02:44.980
+Tiba-tiba, masalah berjalan di komputer saya mulai menghilang.
+
+00:02:45.800 --> 00:02:49.520
+Jika aplikasi Anda berjalan di kontainer di laptop Anda, ia akan berjalan dengan cara yang sama di server.
+
+00:02:49.860 --> 00:02:51.200
+Lingkungannya konsisten dimanapun.
+
+00:02:51.740 --> 00:02:54.060
+Namun kontainer menyelesaikan satu masalah dan menciptakan masalah.
+
+00:02:54.500 --> 00:02:57.020
+Dengan segelintir kontainer, pengelolaan manual bisa berjalan dengan.
+
+00:02:57.460 --> 00:02:59.620
+Anda bisa memulai menghentikan dan melacaknya sendiri.
+
+00:03:00.120 --> 00:03:01.560
+Namun apa yang terjadi ketika Anda memiliki ratusan?
+
+00:03:01.560 --> 00:03:05.580
+Anda perlu memutuskan server mana yang menjalankan kontainer apa memulai ulang yang gagal,
+
+00:03:05.660 --> 00:03:07.980
+menghubungkannya, dan meningkatkan skalanya saat trafik melonjak.
+
+00:03:08.300 --> 00:03:10.820
+Itu adalah tantangan baru, dan disitulah Kubernetes berperan.
+
+00:03:10.820 --> 00:03:12.260
+Masalah orkestrasi.
+
+00:03:12.700 --> 00:03:14.340
+Jadi, Anda berhasil menjalankan kontainer,
+
+00:03:14.420 --> 00:03:17.160
+mengemas aplikasi Anda, menjalankan secara konsisten dimanapun, dan semuanya terasat.
+
+00:03:17.400 --> 00:03:20.940
+Namun untuk sementara, dengan 10 atau 20 kontainer Anda bisa mengolah semuanya secara aman.
+
+00:03:21.380 --> 00:03:24.780
+Anda tahu server mana yang menjalankan kontainer apa bisa memulai ulang jika ada yang rusak,
+
+00:03:24.960 --> 00:03:27.620
+dan memperbarui beberapa hal di sana-sini, dan masih bisa dikolok.
+
+00:03:27.960 --> 00:03:29.100
+Namun kemudian aplikasi Anda berkembang.
+
+00:03:29.360 --> 00:03:30.640
+Anda beralih ke layan mikro.
+
+00:03:31.200 --> 00:03:33.900
+Jadi, alis satu aplikasi besar, Anda memiliki dua aplikasi yang lebih kecil.
+
+00:03:34.400 --> 00:03:36.480
+Masing-masing membutuhkan beberapa salinan agar Anda,
+
+00:03:36.840 --> 00:03:38.580
+dan sekarang Anda menangani 200 kontainer.
+
+00:03:40.820 --> 00:03:43.540
+Anda harus memutuskan server mana yang menjalankan setiap kontainer,
+
+00:03:43.640 --> 00:03:46.360
+memulai ulang kontainer saat gagal, dan menghubungkannya agar bisa berkomunikasi.
+
+00:03:46.800 --> 00:03:48.900
+Anda juga perlu meningkatkan skala saat trafik melonjak.
+
+00:03:49.200 --> 00:03:52.640
+Mungkin saat ada diskon atau peluncuran produk, dan menurunkannya saat kondisi tenang.
+
+00:03:53.340 --> 00:03:55.120
+Dan Anda perlu merilis pembaruan tanpa henti,
+
+00:03:55.540 --> 00:03:58.080
+yang berarti mengganti kontainer lama dengan yang baru satu persatu,
+
+00:03:58.640 --> 00:04:00.320
+dengan hati-hati, tanpa merusak apapun.
+
+00:04:00.740 --> 00:04:04.200
+Ini adalah masalah orkestrasi, dan itulah tepatnya yang dibangun untuk diselesaikan oleh Kubernetes.
+
+00:04:04.640 --> 00:04:07.760
+Kubernetes adalah platform sumber terbuka yang mengotomatiskan penerapan,
+
+00:04:07.860 --> 00:04:09.860
+penskalaan, dan pengelolaan aplikasi dalam kontainer.
+
+00:04:09.860 --> 00:04:12.140
+Anggap saja ini sebagai sistem operasi untuk pusat datang.
+
+00:04:12.700 --> 00:04:15.820
+Sama seperti Windows atau Linux yang mengelola sumber daya pada satu komputer,
+
+00:04:16.040 --> 00:04:19.420
+seperti CPU, memori, dan disk Kubernetes mengelola sumber daya di seluruh server Anda.
+
+00:04:20.460 --> 00:04:23.380
+Ia memperlakukan semua mesin Anda sebagai satu kumpulan besar di komputasi.
+
+00:04:23.860 --> 00:04:25.480
+Anda memberitahunya apa yang ingin dijalankan,
+
+00:04:25.540 --> 00:04:28.860
+dan ia mencari tahu di mana menempatkannya, cara menempatkannya, cara menjaganya, tanpa berjalan.
+
+00:04:30.000 --> 00:04:32.080
+Konsep inti, pot, node, dan kluster.
+
+00:04:32.700 --> 00:04:34.020
+Mari kita lihat kerja Kubernetes yang sebenarnya.
+
+00:04:34.900 --> 00:04:36.560
+Unit terkecil di Kubernetes disebut pot.
+
+00:04:36.700 --> 00:04:38.440
+Semua pot membunguh satu lebih kontainer.
+
+00:04:38.440 --> 00:04:41.260
+Kontainer di dalam pot yang sama berbagi penyimpanan dan jaringan,
+
+00:04:41.340 --> 00:04:43.560
+sehingga mereka dapat berkomunikasi satu sama lain melalui lokal.
+
+00:04:43.720 --> 00:04:45.760
+Anda dapat menganggap pot sebagai unit tunggal penerapan.
+
+00:04:46.180 --> 00:04:48.100
+Anda tidak menerapkan kontainer secara langsung di Kubernetes.
+
+00:04:48.560 --> 00:04:49.360
+Anda menerapkan pot.
+
+00:04:49.740 --> 00:04:51.280
+Pot tidak berjalan sendiri, mereka berjalan dengan node.
+
+00:04:51.940 --> 00:04:53.920
+Node adalah server, baik fisik maupun virtual,
+
+00:04:54.180 --> 00:04:55.760
+yang menjadi bagian dari kluster Kubernetes Anda.
+
+00:04:56.440 --> 00:04:59.080
+Setiap node menjalankan perangkat lunak yang diperlukan untuk menjalankan pot,
+
+00:04:59.160 --> 00:05:00.100
+ditambah beberapa hal yang nanti.
+
+00:05:00.520 --> 00:05:01.880
+Kluster adalah kumpulan semua node,
+
+00:05:01.880 --> 00:05:03.580
+yang dikelola sebagai satu sistem terpadu.
+
+00:05:03.580 --> 00:05:06.260
+Secara sederhana, pot adalah aplikasi Anda.
+
+00:05:06.480 --> 00:05:07.660
+Node adalah tempatnya berjalan,
+
+00:05:07.940 --> 00:05:09.460
+dan kluster adalah keseluruhan lingkungannya.
+
+00:05:09.780 --> 00:05:10.460
+Pot bersifat sementara.
+
+00:05:10.820 --> 00:05:12.740
+Mereka dapat dibuat, dihancurkan, atau dipindahkan kapan saja.
+
+00:05:13.120 --> 00:05:13.600
+Semua disengaja.
+
+00:05:13.920 --> 00:05:15.900
+Jika node gagal, Kubernetes memindahkan pot ke node lain.
+
+00:05:16.280 --> 00:05:17.720
+Untuk penskala naik, ia membuat pot baru.
+
+00:05:18.200 --> 00:05:19.080
+Dan ketika pot rusak,
+
+00:05:19.500 --> 00:05:20.640
+ia akan diganti secara otomatis.
+
+00:05:20.980 --> 00:05:22.800
+Keseluruhan sistem memperlakukan pot sebagai sesuatu yang sementara.
+
+00:05:23.220 --> 00:05:24.260
+Namun jika pot datang dan pergi,
+
+00:05:24.320 --> 00:05:25.580
+Anda memerlukan cara untuk berkomunikasi.
+
+00:05:25.580 --> 00:05:26.460
+Alian berbicara dengan pot,
+
+00:05:26.520 --> 00:05:28.100
+secara langsung Anda berbicara dengan layanan servis.
+
+00:05:28.100 --> 00:05:30.300
+Layanan menyediakan alamat jaringan stabil
+
+00:05:30.300 --> 00:05:31.960
+yang mengarahkan lalu lintas ke pot yang tepat,
+
+00:05:32.100 --> 00:05:33.020
+bahkan saat pot berubah.
+
+00:05:33.440 --> 00:05:34.020
+Bayang ke sebuah hotel.
+
+00:05:34.340 --> 00:05:35.580
+Nomor hotel tersebut adalah layanannya.
+
+00:05:36.300 --> 00:05:37.680
+Kamar berganti tamu sepanjang waktu,
+
+00:05:37.800 --> 00:05:38.960
+tetapi nomor teleponnya tepsam.
+
+00:05:39.320 --> 00:05:41.580
+Anda menepon resepsionis yang mereka meneruskan panggilan Anda ke kamar.
+
+00:05:41.960 --> 00:05:43.560
+Itulah tepatnya yang dilakukan layanan di Kubernetes.
+
+00:05:44.140 --> 00:05:45.440
+Layanan memberi Anda alamat tetap
+
+00:05:45.440 --> 00:05:46.740
+yang selalu mengarah ke pot manapun
+
+00:05:46.740 --> 00:05:48.020
+yang sedang menjalankan aplikasi Anda.
+
+00:05:48.980 --> 00:05:50.760
+Kontrol plane, otak dari kluster.
+
+00:05:51.420 --> 00:05:53.340
+Jadi Anda memiliki pot, node, dan kluster.
+
+00:05:53.860 --> 00:05:54.980
+Pertanyaan adalah siapa yang memutuskan
+
+00:05:54.980 --> 00:05:55.660
+apa yang berjalan di mana?
+
+00:05:55.660 --> 00:05:57.000
+Itu adalah tugas dari kontrol plane.
+
+00:05:57.500 --> 00:05:58.800
+Setiap kluster Kubernetes memilikinya,
+
+00:05:58.960 --> 00:06:00.380
+dan itu adalah otak dari seluruh operasi.
+
+00:06:00.940 --> 00:06:01.940
+Semua keputusan terjadi di sini.
+
+00:06:02.520 --> 00:06:03.720
+Kontrol plane memiliki beberapa pot.
+
+00:06:04.020 --> 00:06:05.160
+Yang pertama adalah API server
+
+00:06:05.160 --> 00:06:06.820
+yang bertindak sebagai pintu depan kluster Anda.
+
+00:06:07.260 --> 00:06:08.860
+Setiap perintah yang Anda kirim ke Kubernetes,
+
+00:06:09.320 --> 00:06:10.780
+baik dari baris perintah, dashboard,
+
+00:06:10.960 --> 00:06:11.860
+atau skrip otomatis,
+
+00:06:12.000 --> 00:06:13.080
+akan melalui API server.
+
+00:06:13.640 --> 00:06:15.620
+API server mengautentikasi permintaan Anda,
+
+00:06:15.760 --> 00:06:17.340
+memeriksa apakah Anda diizinkan melakukannya,
+
+00:06:17.460 --> 00:06:18.620
+lalu meneruskannya ke tempat yang tepat.
+
+00:06:19.220 --> 00:06:20.340
+Tidak ada yang terjadi di Kubernetes
+
+00:06:20.340 --> 00:06:22.040
+tanpa terlebih dahulu melalui API server.
+
+00:06:22.600 --> 00:06:23.800
+Berikutnya adalah scheduler
+
+00:06:23.800 --> 00:06:25.520
+yang memutuskan node mana yang menjalankan setiap pot.
+
+00:06:26.100 --> 00:06:26.980
+Saat Anda berkata,
+
+00:06:27.180 --> 00:06:28.680
+saya ingin aplikasi ini berjalan,
+
+00:06:28.820 --> 00:06:30.560
+scheduler melihat semua node yang tersedia,
+
+00:06:30.780 --> 00:06:31.680
+memeriksa sumber daya,
+
+00:06:31.780 --> 00:06:32.340
+seperti CPU,
+
+00:06:32.740 --> 00:06:33.060
+memori,
+
+00:06:33.240 --> 00:06:33.800
+dan ruang disk,
+
+00:06:34.120 --> 00:06:35.180
+lalu memilih yang terbaik.
+
+00:06:35.660 --> 00:06:36.560
+Ini seperti manajer hotel
+
+00:06:36.560 --> 00:06:37.280
+yang memberikan kamar
+
+00:06:37.280 --> 00:06:38.360
+berdasarkan kebutuhan setiap tak.
+
+00:06:38.800 --> 00:06:39.820
+Tamu dengan banyak bagasi
+
+00:06:39.820 --> 00:06:41.040
+mendapat kamar yang lebih besar,
+
+00:06:41.140 --> 00:06:42.060
+sementara aplikasi ringan
+
+00:06:42.060 --> 00:06:43.080
+mendapat node yang lebih kecil
+
+00:06:43.080 --> 00:06:43.900
+dengan kapasitas tersisa.
+
+00:06:44.280 --> 00:06:45.320
+Lalu ada controller manager.
+
+00:06:45.800 --> 00:06:47.040
+Komponen ini mengawasi kluster
+
+00:06:47.040 --> 00:06:48.260
+dan memastikan status aktual
+
+00:06:48.260 --> 00:06:49.740
+sesuai dengan apa yang Anda deklarasikan.
+
+00:06:49.740 --> 00:06:51.260
+Anda mengatakan ingin tiga salinan
+
+00:06:51.260 --> 00:06:52.140
+aplikasi web Anda berjalan.
+
+00:06:52.700 --> 00:06:53.760
+Controller manager memeriksa
+
+00:06:53.760 --> 00:06:55.440
+apakah benar ada tiga salinan yang sedang berjalan.
+
+00:06:55.880 --> 00:06:56.740
+Jika salah satu rusak,
+
+00:06:56.820 --> 00:06:57.560
+ia akan menyadarinya
+
+00:06:57.560 --> 00:06:58.300
+dan memulai penggantinya.
+
+00:06:58.660 --> 00:07:00.320
+Jika seseorang tidak sengaja menghapus pot,
+
+00:07:00.480 --> 00:07:01.200
+ia akan membuat yang baik.
+
+00:07:01.780 --> 00:07:02.680
+Ini yang menjaga kluster Anda
+
+00:07:02.680 --> 00:07:03.360
+tetap konsisten.
+
+00:07:04.260 --> 00:07:04.840
+Dan terakhir,
+
+00:07:04.960 --> 00:07:05.540
+ada ETCD,
+
+00:07:05.700 --> 00:07:06.800
+yaitu basis data kluster.
+
+00:07:07.340 --> 00:07:08.480
+ETCD menyimpan segalanya,
+
+00:07:08.620 --> 00:07:09.360
+seperti apa yang berjalan,
+
+00:07:09.440 --> 00:07:10.100
+di mana ia berjalan,
+
+00:07:10.160 --> 00:07:10.920
+dan bagaimana konfigurasi.
+
+00:07:11.080 --> 00:07:12.520
+Ini adalah sumber kebenaran utama
+
+00:07:12.520 --> 00:07:13.160
+untuk seluruh kluster.
+
+00:07:13.560 --> 00:07:15.280
+Jika API server adalah pintu depan,
+
+00:07:15.280 --> 00:07:16.880
+maka ETCD adalah lemari arsip
+
+00:07:16.880 --> 00:07:17.520
+di kantor belakang
+
+00:07:17.520 --> 00:07:18.860
+tempat semua catatan disimpan.
+
+00:07:19.320 --> 00:07:20.260
+Indahan desain ini adalah
+
+00:07:20.260 --> 00:07:21.700
+Anda mendeskripsikan apa yang diinginkan
+
+00:07:21.700 --> 00:07:22.820
+dan Kubernetes mencari cara
+
+00:07:22.820 --> 00:07:23.560
+untuk mewujudkannya.
+
+00:07:23.900 --> 00:07:25.260
+Anda tidak memberitahu cara melakukannya.
+
+00:07:25.440 --> 00:07:26.800
+Anda memberitahu seperti apa hasil akhirnya.
+
+00:07:27.100 --> 00:07:28.020
+Itulah model deklaratif
+
+00:07:28.020 --> 00:07:29.200
+dan itu adalah ide inti
+
+00:07:29.200 --> 00:07:30.580
+dibalik semua yang dilakukan Kubernetes.
+
+00:07:31.760 --> 00:07:32.480
+Workload deployment,
+
+00:07:32.680 --> 00:07:33.900
+layanan, dan penskalaan.
+
+00:07:34.360 --> 00:07:34.540
+Jadi,
+
+00:07:34.920 --> 00:07:35.980
+mari kita bicara tentang cara Anda
+
+00:07:35.980 --> 00:07:37.080
+menjalankan aplikasi di Kubernetes.
+
+00:07:37.560 --> 00:07:38.780
+Anda tidak akan melaput secara langsung.
+
+00:07:39.060 --> 00:07:39.480
+Sebaliknya,
+
+00:07:39.560 --> 00:07:40.900
+Anda akan menggunakan objek tingkat tinggi
+
+00:07:40.900 --> 00:07:41.540
+yang disebut deployment.
+
+00:07:41.900 --> 00:07:43.320
+Bayangkan deployment sebagai manager
+
+00:07:43.320 --> 00:07:44.480
+yang memberitahu Kubernetes
+
+00:07:44.480 --> 00:07:45.660
+berapa banyak salinan pod
+
+00:07:45.660 --> 00:07:46.460
+yang harus berjalan,
+
+00:07:46.660 --> 00:07:47.940
+image container mana yang digunakan,
+
+00:07:48.160 --> 00:07:49.100
+dan cara memperbaruinya
+
+00:07:49.100 --> 00:07:50.060
+saat versi baru dirilis.
+
+00:07:50.220 --> 00:07:50.920
+Ini adalah cara standar
+
+00:07:50.920 --> 00:07:52.140
+untuk menjalankan aplikasi statler.
+
+00:07:52.600 --> 00:07:53.960
+Saat Anda memperbarui deployment,
+
+00:07:54.100 --> 00:07:54.980
+misalnya Anda meluncurkan
+
+00:07:54.980 --> 00:07:55.840
+versi baru aplikasi,
+
+00:07:55.940 --> 00:07:56.760
+Kubernetes akan melakukan
+
+00:07:56.760 --> 00:07:57.480
+bambar guling update.
+
+00:07:57.760 --> 00:07:58.940
+Ini mengganti pod satu persatu
+
+00:07:58.940 --> 00:07:59.780
+memastikan setidaknya
+
+00:07:59.780 --> 00:08:00.780
+satu salinan selalu berjalan.
+
+00:08:01.240 --> 00:08:02.240
+Itu berarti tidak ada waktu henti
+
+00:08:02.240 --> 00:08:02.960
+dan tidak ada gangguan
+
+00:08:02.960 --> 00:08:03.800
+mendadak bagi penggunaan.
+
+00:08:04.280 --> 00:08:05.340
+Dan jika terjadi kesalahan
+
+00:08:05.340 --> 00:08:05.960
+pada versi baru,
+
+00:08:06.320 --> 00:08:07.760
+Anda dapat kembali ke versi sebelumnya
+
+00:08:07.760 --> 00:08:08.660
+dengan satu perintah.
+
+00:08:08.660 --> 00:08:09.800
+Itu adalah jaring pengaman
+
+00:08:09.800 --> 00:08:10.280
+yang sangat kuat.
+
+00:08:10.600 --> 00:08:11.420
+Namun, pod Anda tetap
+
+00:08:11.420 --> 00:08:12.120
+harus bisa dijangkau.
+
+00:08:12.500 --> 00:08:13.620
+Disitulah peran layanan servis.
+
+00:08:13.940 --> 00:08:14.880
+Sebuah layanan menyediakan
+
+00:08:14.880 --> 00:08:15.700
+alamat jaringan stabil
+
+00:08:15.700 --> 00:08:16.680
+yang merotekan lalu lintas
+
+00:08:16.680 --> 00:08:17.300
+ke pod yang tepat.
+
+00:08:17.780 --> 00:08:18.500
+Layanan juga dapat
+
+00:08:18.500 --> 00:08:19.520
+mengekspos pod tersebut
+
+00:08:19.520 --> 00:08:20.940
+ke bagian lain dari aplikasi Anda
+
+00:08:20.940 --> 00:08:21.760
+atau ke dunia luar.
+
+00:08:22.620 --> 00:08:23.840
+Layanan bisa bersifat internal,
+
+00:08:24.020 --> 00:08:25.340
+hanya dapat diakses dalam kluster
+
+00:08:25.340 --> 00:08:26.260
+atau eksternal
+
+00:08:26.260 --> 00:08:27.340
+dengan alamat IP publik
+
+00:08:27.340 --> 00:08:28.900
+yang dapat dijangkau dari internet.
+
+00:08:29.660 --> 00:08:30.820
+Nah, inilah hal tentang peskalaan.
+
+00:08:31.200 --> 00:08:32.400
+Kubernetes dapat secara otomatis
+
+00:08:32.400 --> 00:08:33.360
+memperbesar dan memperkecil
+
+00:08:33.360 --> 00:08:34.600
+aplikasi Anda berdasarkan permintaan.
+
+00:08:34.840 --> 00:08:35.820
+Anda menetapkan target,
+
+00:08:35.820 --> 00:08:37.580
+katakanlah penggunaan CPU 70%,
+
+00:08:37.580 --> 00:08:38.760
+dan Kubernetes menambah pod
+
+00:08:38.760 --> 00:08:39.700
+saat penggunaan melampaui
+
+00:08:39.700 --> 00:08:40.460
+ambang batas itu
+
+00:08:40.460 --> 00:08:41.780
+dan menghapusnya saat turun.
+
+00:08:42.620 --> 00:08:43.740
+Aplikasi Anda berskala naik
+
+00:08:43.740 --> 00:08:44.360
+saat ada lonjakan,
+
+00:08:44.480 --> 00:08:45.560
+lalu lintas dan berskala turun
+
+00:08:45.560 --> 00:08:46.360
+saat situasi tenang.
+
+00:08:46.680 --> 00:08:47.860
+Tidak diperlukan intervensi monop.
+
+00:08:48.100 --> 00:08:48.960
+Namun, semua kekuatan ini
+
+00:08:48.960 --> 00:08:49.800
+serta dengan kompleksitas.
+
+00:08:50.120 --> 00:08:51.580
+Menjalankan kluster Kubernetes sendiri
+
+00:08:51.580 --> 00:08:52.640
+berarti Anda bertanggung jawab
+
+00:08:52.640 --> 00:08:53.520
+atas kontrol plan,
+
+00:08:53.640 --> 00:08:54.740
+pembaruan, patch keamanan,
+
+00:08:54.880 --> 00:08:55.340
+dan cadangan.
+
+00:08:55.900 --> 00:08:57.000
+Anda butuh keahlian mendalam
+
+00:08:57.000 --> 00:08:58.040
+untuk menangani kegagalan
+
+00:08:58.040 --> 00:08:59.080
+luar konfigurasi jaringan
+
+00:08:59.080 --> 00:08:59.920
+dan penskalaan kluster.
+
+00:09:00.520 --> 00:09:01.360
+Banyak tim menghabiskan
+
+00:09:01.360 --> 00:09:02.000
+lebih banyak waktu
+
+00:09:02.000 --> 00:09:02.620
+mengelola kluster
+
+00:09:02.620 --> 00:09:03.560
+daripada membangun aplikasi.
+
+00:09:04.000 --> 00:09:04.900
+Dan disitulah peran Kubernetes
+
+00:09:04.900 --> 00:09:05.560
+terkelola manajer.
+
+00:09:06.380 --> 00:09:07.440
+Kubernetes yang dikelola sendiri
+
+00:09:07.440 --> 00:09:08.020
+versus terkelola.
+
+00:09:08.480 --> 00:09:09.420
+Jadi, mari bicara tentang
+
+00:09:09.420 --> 00:09:10.760
+realitas menjalankan Kubernetes sendiri.
+
+00:09:11.400 --> 00:09:12.800
+Saat Anda menyiapkan kluster sendiri,
+
+00:09:12.900 --> 00:09:13.580
+Anda bertanggung jawab
+
+00:09:13.580 --> 00:09:14.220
+atas segalanya,
+
+00:09:14.420 --> 00:09:14.940
+control plan,
+
+00:09:15.100 --> 00:09:16.260
+pembaruan, patch keamanan,
+
+00:09:16.400 --> 00:09:17.220
+dan cadangan ATCD.
+
+00:09:17.760 --> 00:09:18.840
+Jika server API mati,
+
+00:09:18.940 --> 00:09:19.620
+itu masalah Anda.
+
+00:09:20.260 --> 00:09:21.720
+Jika kerentanan keamanan ditemukan
+
+00:09:21.720 --> 00:09:22.940
+pada versi yang Anda jalankan,
+
+00:09:23.040 --> 00:09:23.840
+Anda harus menambalnya.
+
+00:09:24.720 --> 00:09:25.740
+Jika ATCD rusak,
+
+00:09:25.820 --> 00:09:26.680
+Anda harus memulihkannya
+
+00:09:26.680 --> 00:09:27.220
+dari cadangan.
+
+00:09:27.760 --> 00:09:28.460
+Semua ini memerlukan
+
+00:09:28.460 --> 00:09:29.080
+keahlian mendalam.
+
+00:09:29.080 --> 00:09:30.180
+Anda perlu memahami
+
+00:09:30.180 --> 00:09:31.080
+bagaimana Node gagal,
+
+00:09:31.180 --> 00:09:32.080
+bagaimana jaringan bekerja
+
+00:09:32.080 --> 00:09:32.700
+di tingkat kluster,
+
+00:09:32.800 --> 00:09:33.520
+dan cara mengekalakan
+
+00:09:33.520 --> 00:09:34.500
+sesuatu tanpa rusaknya.
+
+00:09:34.860 --> 00:09:35.760
+Inilah hal yang mengicutkan
+
+00:09:35.760 --> 00:09:36.140
+banyak tim.
+
+00:09:36.900 --> 00:09:37.660
+Banyak organisasi
+
+00:09:37.660 --> 00:09:38.720
+menghabiskan lebih banyak waktu
+
+00:09:38.720 --> 00:09:39.820
+mengelola kluster Kubernetes
+
+00:09:39.820 --> 00:09:40.920
+daripada membangun aplikasi
+
+00:09:40.920 --> 00:09:41.760
+yang berjalan di atasnya.
+
+00:09:42.160 --> 00:09:43.240
+Mereka terus-menerus bergulat
+
+00:09:43.240 --> 00:09:43.820
+dengan pembaruan,
+
+00:09:43.980 --> 00:09:45.020
+memecahkan masalah jaringan,
+
+00:09:45.200 --> 00:09:46.220
+dan menangani kegagalan Node.
+
+00:09:46.740 --> 00:09:47.360
+Kluster tersebut menjadi
+
+00:09:47.360 --> 00:09:47.940
+pekerjaan perlangsung.
+
+00:09:48.340 --> 00:09:49.060
+Bukan itu alasan Anda
+
+00:09:49.060 --> 00:09:50.420
+mengadopsi Kubernetes sejak awal.
+
+00:09:50.960 --> 00:09:52.060
+Disinilah layanan Kubernetes
+
+00:09:52.060 --> 00:09:52.740
+terkewal berperan.
+
+00:09:53.240 --> 00:09:54.900
+Layanan seperti Azure Kubernetes Service
+
+00:09:54.900 --> 00:09:55.900
+atau AKS menangani
+
+00:09:55.900 --> 00:09:57.120
+kontrol plan untuk Anda.
+
+00:09:57.860 --> 00:09:59.100
+Azure mengelola server API,
+
+00:09:59.280 --> 00:10:00.260
+HCD, scheduler,
+
+00:10:00.400 --> 00:10:01.400
+dan controller manager.
+
+00:10:01.980 --> 00:10:02.820
+Anda tidak perlu khawatir
+
+00:10:02.820 --> 00:10:03.460
+tentang menambalnya
+
+00:10:03.460 --> 00:10:04.400
+atau menjaganya agar tepat.
+
+00:10:04.660 --> 00:10:05.440
+Anda hanya membayar
+
+00:10:05.440 --> 00:10:06.160
+untuk Node pekerja,
+
+00:10:06.300 --> 00:10:06.900
+yaitu mesin virtual
+
+00:10:06.900 --> 00:10:08.080
+yang benar-benar menjalankan
+
+00:10:08.080 --> 00:10:08.560
+beban kerja.
+
+00:10:08.680 --> 00:10:09.440
+Plannya sendiri gratis.
+
+00:10:10.020 --> 00:10:10.980
+Hal ini mengubah situasinya
+
+00:10:10.980 --> 00:10:11.560
+secara drastis.
+
+00:10:11.880 --> 00:10:12.660
+Hal yang menghabiskan waktu
+
+00:10:12.660 --> 00:10:13.600
+untuk pemeliharaan kluster,
+
+00:10:13.940 --> 00:10:14.640
+tim Anda bisa fokus
+
+00:10:14.640 --> 00:10:15.480
+pada hal yang lebih penting,
+
+00:10:15.620 --> 00:10:17.020
+yaitu aplikasi yang sedang Anda bangun.
+
+00:10:17.720 --> 00:10:18.540
+Bagi sebagian besar tim,
+
+00:10:18.620 --> 00:10:19.720
+terutama mereka yang baru memulai
+
+00:10:19.720 --> 00:10:20.600
+Kubernetes terkelola
+
+00:10:20.600 --> 00:10:21.340
+adalah pilihan itu.
+
+00:10:21.340 --> 00:10:22.660
+Anda mendapatkan semua
+
+00:10:22.660 --> 00:10:23.340
+keunggulan Kubernetes
+
+00:10:23.340 --> 00:10:24.600
+tanpa beban operasional yang rumit.
+
+00:10:25.500 --> 00:10:26.520
+AKS membuat Kubernetes
+
+00:10:26.520 --> 00:10:27.220
+menjadi mudah di Azure.
+
+00:10:27.660 --> 00:10:28.740
+Jadi apa sebenarnya AKS itu?
+
+00:10:29.200 --> 00:10:30.240
+Ini adalah layanan Kubernetes
+
+00:10:30.240 --> 00:10:31.020
+terkelola di Azure
+
+00:10:31.020 --> 00:10:31.980
+yang memberi Anda kluster
+
+00:10:31.980 --> 00:10:32.640
+berfitur lengkap
+
+00:10:32.640 --> 00:10:33.420
+tanpa harus membangunnya
+
+00:10:33.420 --> 00:10:33.820
+dari awal.
+
+00:10:34.580 --> 00:10:35.480
+Control plan-nya gratis
+
+00:10:35.480 --> 00:10:36.540
+seperti yang disebutkan sebelumnya
+
+00:10:36.540 --> 00:10:37.380
+jadi Anda hanya membayar
+
+00:10:37.380 --> 00:10:37.880
+mesin virtual
+
+00:10:37.880 --> 00:10:38.860
+yang menjalankan beban kerjaan.
+
+00:10:39.240 --> 00:10:40.440
+Anda bisa mulai dengan skala kecil,
+
+00:10:40.620 --> 00:10:41.540
+membayar dengan biaya yang murah,
+
+00:10:41.620 --> 00:10:42.300
+dan mengingkatkan skala saat
+
+00:10:42.300 --> 00:10:42.840
+kebutuhan pertama.
+
+00:10:43.840 --> 00:10:44.460
+Azure menangani
+
+00:10:44.460 --> 00:10:45.240
+semua pekerjaan berat.
+
+00:10:45.840 --> 00:10:46.900
+Pembaruan, penambalan,
+
+00:10:47.080 --> 00:10:48.060
+dan pemantauan kesehatan
+
+00:10:48.060 --> 00:10:48.700
+untuk control plan
+
+00:10:48.700 --> 00:10:49.520
+semuanya sudah diurus.
+
+00:10:49.980 --> 00:10:51.000
+Anda tidak memerlukan tim
+
+00:10:51.000 --> 00:10:51.760
+khusus ahli Kubernetes
+
+00:10:51.760 --> 00:10:52.560
+hanya agar semuanya
+
+00:10:52.560 --> 00:10:53.200
+tetap berjalan.
+
+00:10:53.920 --> 00:10:54.720
+Dan karena AKS adalah
+
+00:10:54.720 --> 00:10:55.940
+bagian dari ekosistem Azure,
+
+00:10:56.080 --> 00:10:57.120
+layanan ini terintegrasi
+
+00:10:57.120 --> 00:10:57.900
+dengan alat yang mungkin
+
+00:10:57.900 --> 00:10:58.680
+sudah Anda gunakan.
+
+00:10:59.540 --> 00:11:00.500
+Azure Active Directory
+
+00:11:00.500 --> 00:11:01.460
+untuk autentikasi,
+
+00:11:01.780 --> 00:11:02.340
+Azure Monitor
+
+00:11:02.340 --> 00:11:03.320
+untuk log dan metrik,
+
+00:11:03.420 --> 00:11:04.620
+serta Azure Policy
+
+00:11:04.620 --> 00:11:05.320
+untuk tata kelola.
+
+00:11:06.080 --> 00:11:06.940
+Semuanya bekerja bersama
+
+00:11:06.940 --> 00:11:07.460
+secara langsung,
+
+00:11:07.760 --> 00:11:08.540
+tanpa perlu menyambungkan
+
+00:11:08.540 --> 00:11:09.100
+komponen interface.
+
+00:11:09.580 --> 00:11:10.880
+Menyiapkan pipeline CI per CD
+
+00:11:10.880 --> 00:11:11.740
+dengan GitHub Actions
+
+00:11:11.740 --> 00:11:12.520
+atau Azure DevOps
+
+00:11:12.520 --> 00:11:13.700
+hanya butuh beberapa menit.
+
+00:11:14.260 --> 00:11:14.820
+Kirim perubahan
+
+00:11:14.820 --> 00:11:15.600
+ke repository Anda,
+
+00:11:15.860 --> 00:11:16.760
+dan sistem akan otomatis
+
+00:11:16.760 --> 00:11:17.820
+membangun image kontainer baru,
+
+00:11:18.060 --> 00:11:19.460
+mengirimnya ke Azure Container Registry,
+
+00:11:19.620 --> 00:11:20.200
+lalu memperbarui
+
+00:11:20.200 --> 00:11:21.300
+deployment Anda di AKS
+
+00:11:21.300 --> 00:11:22.780
+tanpa langkah manual,
+
+00:11:22.980 --> 00:11:24.060
+tanpa perlu SSH ke server.
+
+00:11:24.380 --> 00:11:25.000
+Semuanya otomatis.
+
+00:11:25.800 --> 00:11:26.280
+Bagi pemula,
+
+00:11:26.460 --> 00:11:27.900
+tersedia mode otomatis AKS
+
+00:11:27.900 --> 00:11:28.720
+yang gerancang untuk tim
+
+00:11:28.720 --> 00:11:29.500
+yang tidak ingin mengambil
+
+00:11:29.500 --> 00:11:30.980
+setiap keputusan konfigurasi kluster.
+
+00:11:31.560 --> 00:11:32.980
+Mode ini menyediakan pengaturan bawaan
+
+00:11:32.980 --> 00:11:33.500
+siap pakai untuk
+
+00:11:33.500 --> 00:11:34.700
+penskalaan jaringan keamanan
+
+00:11:34.700 --> 00:11:35.180
+dan pembaru.
+
+00:11:35.680 --> 00:11:36.500
+Anda tidak harus menjadi
+
+00:11:36.500 --> 00:11:37.900
+ahli Kubernetes untuk memulai.
+
+00:11:38.380 --> 00:11:39.520
+Cukup deskripsikan aplikasi Anda
+
+00:11:39.520 --> 00:11:40.640
+dan AKS akan menangani sisanya.
+
+00:11:41.060 --> 00:11:42.320
+Satu perintah untuk membuat kluster,
+
+00:11:42.580 --> 00:11:43.280
+satu file manifest
+
+00:11:43.280 --> 00:11:44.580
+untuk menjalankan aplikasi Anda.
+
+00:11:44.580 --> 00:11:46.480
+Keterampilan yang Anda pelajari di AKS
+
+00:11:46.480 --> 00:11:47.820
+dapat diterapkan di lingkungan Kubernetes
+
+00:11:47.820 --> 00:11:48.720
+manapun karena dasarnya
+
+00:11:48.720 --> 00:11:49.440
+adalah Kubernetes-an.
+
+00:11:49.800 --> 00:11:51.320
+Anda tidak mempelajari sistem tertutup,
+
+00:11:51.440 --> 00:11:52.580
+Anda mempelajari sistem aslinya
+
+00:11:52.580 --> 00:11:53.140
+dengan Azure
+
+00:11:53.140 --> 00:11:55.480
+yang menangani kompleksitas operasionalnya.
+
+00:11:56.100 --> 00:11:57.420
+Jadi sekarang Anda sudah memahami.
+
+00:11:57.760 --> 00:11:59.160
+Kontainer mengemas aplikasi Anda
+
+00:11:59.160 --> 00:12:00.280
+agar berjalan konsisten
+
+00:12:00.280 --> 00:12:00.820
+di mana saja.
+
+00:12:01.240 --> 00:12:02.100
+Dan Kubernetes mengatur
+
+00:12:02.100 --> 00:12:02.760
+kontainer tersebut
+
+00:12:02.760 --> 00:12:03.520
+dalam skala besar,
+
+00:12:03.920 --> 00:12:04.580
+menangani deployment,
+
+00:12:04.920 --> 00:12:05.420
+penskalaan,
+
+00:12:05.440 --> 00:12:06.620
+dan pemulihan secara otomatis.
+
+00:12:07.600 --> 00:12:08.940
+AKS membuat orkestrasi tersebut
+
+00:12:08.940 --> 00:12:09.720
+lebih mudah dikelola
+
+00:12:09.720 --> 00:12:10.840
+dengan menangani kontrol plane
+
+00:12:10.840 --> 00:12:12.260
+dan berintegrasi dengan alat Azure
+
+00:12:12.260 --> 00:12:13.200
+yang sudah Anda kenal.
+
+00:12:13.780 --> 00:12:14.580
+Poin utamanya adalah
+
+00:12:14.580 --> 00:12:15.700
+Kubernetes bukan hanya
+
+00:12:15.700 --> 00:12:16.880
+untuk perusahaan teknologi besar
+
+00:12:16.880 --> 00:12:17.820
+dengan tim teknik yang masif.
+
+00:12:18.220 --> 00:12:19.020
+Dengan layanan terkelola
+
+00:12:19.020 --> 00:12:19.660
+seperti AKS,
+
+00:12:19.740 --> 00:12:21.000
+teknologi ini dapat diakses oleh tim.
+
+00:12:21.500 --> 00:12:23.040
+Tugas Anda minggu ini sederhana.
+
+00:12:23.860 --> 00:12:25.140
+Buat akun Azure gratis,
+
+00:12:25.640 --> 00:12:26.800
+jalankan kluster AKS
+
+00:12:26.800 --> 00:12:28.240
+dan terapkan aplikasi sederhana.
+
+00:12:28.880 --> 00:12:29.740
+Hanya butuh beberapa menit
+
+00:12:29.740 --> 00:12:30.460
+dan Anda akan melihat
+
+00:12:30.460 --> 00:12:31.480
+sejauh mana platform ini berkembang.
+
+00:12:31.940 --> 00:12:32.620
+Siap untuk mendalami.
+
+00:12:33.060 --> 00:12:33.840
+Episode berikutnya,
+
+00:12:34.020 --> 00:12:35.880
+membahas cara membuat citra kontainer pertama Anda
+
+00:12:35.880 --> 00:12:37.800
+dan mengirimnya ke Azure Container Registry.
+
+00:12:38.580 --> 00:12:40.420
+Perlangganan adalah di platform podcast favorit Anda.
+
+00:12:40.720 --> 00:12:41.900
+Dan bagikan ini kepada seseorang
+
+00:12:41.900 --> 00:12:42.860
+yang baru memulai perjalanan
+
+00:12:42.860 --> 00:12:43.460
+ke Kubernetes mereka.

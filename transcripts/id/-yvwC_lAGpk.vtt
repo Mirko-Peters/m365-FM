@@ -1,0 +1,952 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.360
+Selamat datang di episode lain dari Microsoft Knowledge Nugget.
+
+00:00:02.680 --> 00:00:03.720
+Saya pemandu Anda, Mirko Petra.
+
+00:00:03.980 --> 00:00:06.480
+Topik hari ini adalah sesuatu yang hampir semua orang pernah dengar,
+
+00:00:06.600 --> 00:00:07.820
+namun sedikit yang benar-benar paham.
+
+00:00:07.920 --> 00:00:08.140
+API.
+
+00:00:08.640 --> 00:00:10.260
+Anda mungkin sering mendengar istilah ini disebut-sebut.
+
+00:00:10.740 --> 00:00:12.820
+Ini adalah salah satu istilah teknologi yang digunakan orang
+
+00:00:12.820 --> 00:00:14.540
+saat ingin terlihat paham dengan apa yang mereka bicara.
+
+00:00:14.960 --> 00:00:16.680
+Namun faktanya, API sebenarnya sederhana.
+
+00:00:17.540 --> 00:00:20.100
+API hanyalah cara bagi satu perangkat lunak untuk berkomunikasi dengannya.
+
+00:00:20.340 --> 00:00:21.620
+Ponsel Anda meminta data kesebuah server.
+
+00:00:21.860 --> 00:00:22.780
+Server keminimkannya kembali.
+
+00:00:23.080 --> 00:00:23.940
+Itulah yang disebut panggilan API.
+
+00:00:24.160 --> 00:00:26.680
+Sekarang bayangkan Anda memiliki 20 API atau 50 atau serat.
+
+00:00:26.680 --> 00:00:29.400
+Masing-masing mungkin menggunakan autentikasi, batas kecepatan,
+
+00:00:29.760 --> 00:00:30.820
+dan dokumentasi yang berbeda.
+
+00:00:30.980 --> 00:00:33.940
+Jika ada, tiba-tiba apa yang dimulai sebagai percakapan sederhana
+
+00:00:33.940 --> 00:00:35.780
+antara dua aplikasi berubah menjadi kekacauan total.
+
+00:00:36.500 --> 00:00:38.940
+Tanpa pengelola pusat, setiap tim bekerja sendiri-sendiri.
+
+00:00:39.500 --> 00:00:41.020
+Satu tim membangun sistem autentikasi sendiri.
+
+00:00:41.300 --> 00:00:42.660
+Tim lain membangun sistem pencetan lock sendiri.
+
+00:00:43.080 --> 00:00:44.000
+Celah keamanan muncul di mana.
+
+00:00:44.620 --> 00:00:46.560
+Pengembang, bingung tentang API, mana yang melakukan apa,
+
+00:00:46.760 --> 00:00:50.180
+dan Anda tidak memiliki pandangan tunggal tentang apa yang sebenarnya terjadi di seluruh sistem Anda.
+
+00:00:50.620 --> 00:00:51.920
+Azure API Management menjawab masalah ini.
+
+00:00:52.440 --> 00:00:53.480
+Yang beri Anda satu pusat kendali.
+
+00:00:53.480 --> 00:00:57.280
+Bayangkan seperti menara pengawas lalu lintas udara untuk API Anda.
+
+00:00:57.740 --> 00:01:00.000
+Di akhir episode ini, Anda akan mengerti apa fungsinya,
+
+00:01:00.180 --> 00:01:02.720
+mengapa itu penting, dan bagaimana semua bagiannya saling melengkapi.
+
+00:01:03.480 --> 00:01:05.220
+Siapkan kopi Anda, dan mari kita mulai.
+
+00:01:06.260 --> 00:01:07.880
+Masalahnya terlalu banyak API tanpa kendali.
+
+00:01:08.700 --> 00:01:09.960
+Inilah realita perangkat lunak-undari.
+
+00:01:10.520 --> 00:01:12.740
+Sepuluh tahun lalu, Anda mungkin memiliki satu aplikasi besar,
+
+00:01:12.880 --> 00:01:15.100
+monolid, satu basis data, satu API sederhana.
+
+00:01:15.100 --> 00:01:19.760
+Hari ini, aplikasi yang sama mungkin dipecah menjadi puluhan layanan mikro.
+
+00:01:20.200 --> 00:01:21.460
+Setiap layanan menangani satu hal,
+
+00:01:21.560 --> 00:01:25.580
+seperti akun pengguna, pembayaran, inventaris, notifikasi, dan masing-masing mengekspos API-nya sendiri.
+
+00:01:26.100 --> 00:01:28.960
+Anda memiliki 10, 50, 100 titik masuk berbeda ke dalam sistem Anda.
+
+00:01:29.420 --> 00:01:32.420
+Sekarang bayangkan Anda seorang pengembang yang mencoba membangun sesuatu yang menggunakan API ini.
+
+00:01:32.820 --> 00:01:35.500
+Anda harus menemukan masing-masing dan mencari cara autentikasi untuk semua.
+
+00:01:35.800 --> 00:01:38.680
+Ada yang menggunakan kunci API, ada yang menggunakan OA, ada yang tidak menggunakan apapun.
+
+00:01:39.000 --> 00:01:41.780
+Anda harus menangani pembatasan kecepatan secara manual atau berisiko terblok.
+
+00:01:41.780 --> 00:01:44.140
+Anda harus memahami format data yang diharapkan oleh masing-masing API.
+
+00:01:44.480 --> 00:01:45.260
+Itu sangat melelahkan.
+
+00:01:45.840 --> 00:01:47.300
+Dan dari sisi operasional, situasinya lebih buruk.
+
+00:01:47.640 --> 00:01:51.720
+Tanpa gerbang pusat, setiap tim harus menambahkan keamanan dan pencatatan log ke layanan mereka sendiri secara manual.
+
+00:01:51.980 --> 00:01:54.220
+Beberapa tim melakukannya dengan baik, yang lain lupa mencatat log ke salah.
+
+00:01:54.460 --> 00:01:56.120
+Beberapa bahkan tidak melakukan validasi input salah.
+
+00:01:56.320 --> 00:02:01.020
+Tidak konsisten dan tentang kesalahan, mimpi buruk keamanan yang siap terjadi, kepatuan menjadi hampir mustahil.
+
+00:02:01.600 --> 00:02:03.240
+Perlu membuktikan siapa yang mengakses apa dan kapan.
+
+00:02:03.760 --> 00:02:07.500
+Semoga berhasil menarik jejak audit dari 20 layanan berbeda, masing-masing dengan format pencatatan list.
+
+00:02:07.500 --> 00:02:13.580
+Berapa banyak panggilan API yang ditangani sistem Anda bulan lalu, Anda harus menggabungkan metrik dari belasan dashboard yang berbeda.
+
+00:02:14.300 --> 00:02:14.720
+Ini masalah.
+
+00:02:15.120 --> 00:02:16.720
+Seiring Anda berkembang, ini bukan sekarang menyulitkan.
+
+00:02:16.940 --> 00:02:17.520
+Ini merusak segala.
+
+00:02:17.900 --> 00:02:21.320
+Anda tidak bisa menambah pengembang, layanan, atau pelanggan tanpa titik kendali pusat.
+
+00:02:21.600 --> 00:02:22.380
+Bayangkan ini sebuah gedung.
+
+00:02:22.860 --> 00:02:24.360
+Bayangkan setiap ruangan memiliki kunceng berbeda.
+
+00:02:24.600 --> 00:02:26.080
+Tidak ada meja resepsionis atau direktor.
+
+00:02:26.540 --> 00:02:30.380
+Pengunjung berkeliaran mencari pintu yang tepat, merasa frustrasi, dan akhirnya menyerah.
+
+00:02:31.120 --> 00:02:31.680
+Kacauan total.
+
+00:02:32.400 --> 00:02:34.680
+Inilah masalah yang dirancang untuk diselesaikan oleh manajemen API.
+
+00:02:34.680 --> 00:02:36.640
+Apa itu Azure API Management?
+
+00:02:36.980 --> 00:02:37.820
+Menara kontrolnya.
+
+00:02:38.480 --> 00:02:40.280
+Jadi apa sebenarnya Azure API Management itu?
+
+00:02:40.820 --> 00:02:41.680
+Ini definisi yang paling sederhana.
+
+00:02:42.200 --> 00:02:47.680
+Ini adalah layanan terkelola yang berada di antara API backend Anda dan aplikasi, situs web, perangkat, serta mitra yang menggunakannya.
+
+00:02:48.480 --> 00:02:49.980
+Tapi begini, ini bukan sekadar proxy.
+
+00:02:50.540 --> 00:02:51.660
+Proxy yang meneruskan lalu lintas.
+
+00:02:52.020 --> 00:02:54.860
+Azure API Management mencakup siklus hidup penuh API Anda.
+
+00:02:55.800 --> 00:02:58.140
+Mempublikasikan, mengemankan, memantau, hingga akhirnya menghentikan.
+
+00:02:58.560 --> 00:02:59.660
+Ini adalah pusat kendali yang lengkap.
+
+00:03:00.040 --> 00:03:01.500
+Mari kita bagi menjadi tiga komentar utama.
+
+00:03:01.940 --> 00:03:02.740
+Yang pertama adalah gateway.
+
+00:03:02.740 --> 00:03:07.980
+Setiap permintaan masuk dari aplikasi atau situs web mencapai gateway terlebih dahulu bukan langsung ke backend Anda.
+
+00:03:08.440 --> 00:03:14.000
+Gateway memproses permintaan, menegakkan kebijakan yang Anda buat, mengumpulkan metrik, lalu meneruskannya ke layanan backend yang tepat.
+
+00:03:14.820 --> 00:03:15.680
+Anggap saja ini sebagai prodisi.
+
+00:03:16.340 --> 00:03:17.600
+Berikutnya adalah bidang manajemen.
+
+00:03:18.200 --> 00:03:19.440
+Disinilah Anda menentukan segalanya.
+
+00:03:20.000 --> 00:03:22.280
+API Anda, kebijakan Anda, produk Anda, langganan Anda.
+
+00:03:22.940 --> 00:03:27.920
+Anda melakukannya melalui portal Azure, baris perintah, atau infrastruktur sebagai kode seperti bicep atau terraform.
+
+00:03:28.280 --> 00:03:30.340
+Ini adalah ruang kontrol untuk Anda mengonfigurasi cara kerja semua.
+
+00:03:30.340 --> 00:03:31.980
+Lalu portal pengembang.
+
+00:03:32.380 --> 00:03:35.580
+Ini adalah situs web mandiri tempat pengembang, baik internal maupun eksternal.
+
+00:03:35.740 --> 00:03:41.000
+Dapat menemukan API Anda, membaca dokumentasi, mendapatkan kunci langganan, dan bahkan menguji panggilan API langsung di browser mereka.
+
+00:03:41.860 --> 00:03:43.480
+Tidak perlu lagi saling mengirim surah beli CPDR.
+
+00:03:43.860 --> 00:03:44.640
+Ini adalah yang membantu.
+
+00:03:45.000 --> 00:03:45.800
+Kayakkan sebuah bandara modern.
+
+00:03:46.280 --> 00:03:47.240
+Gateway adalah anda sempat cunyit.
+
+00:03:47.640 --> 00:03:49.060
+Setiap pesawat mendarat di sana terlebih dahulu.
+
+00:03:49.060 --> 00:03:50.860
+Bidang manajemen adalah menara kontrolin.
+
+00:03:51.320 --> 00:03:54.000
+Ia mengarahkan lalu lintas, menetapkan aturan, dan memantau segala.
+
+00:03:54.300 --> 00:03:56.000
+Dan portal pengembang adalah papan informasinya.
+
+00:03:56.760 --> 00:04:00.600
+Pilot pemeriksaannya sebelum terbang dan mereka bisa menemukan semua informasi yang dibutuhkan tanpa harus berbicara dengan siapapun.
+
+00:04:00.960 --> 00:04:02.000
+Sekarang mari kita terus-terus di lebih dalam.
+
+00:04:02.240 --> 00:04:05.700
+Itu adalah bagian yang benar-benar dihubungi oleh aplikasi Anda dan tempat keajaiban yang sebenarnya terjadi.
+
+00:04:07.100 --> 00:04:08.480
+Gateway, pintu depan API Anda.
+
+00:04:09.120 --> 00:04:12.720
+Mari kita bahas tentang gateway, karena inilah bagian yang benar-benar dihubungi oleh aplikasi Anda.
+
+00:04:12.780 --> 00:04:17.000
+Setiap permintaan dari aplikasi seluler, situs web, atau perangkat IoT akan menuju gateway terlebih dahulu.
+
+00:04:17.000 --> 00:04:19.400
+Bukan langsung ke back-end Anda, telah tujuan utamanya.
+
+00:04:19.800 --> 00:04:22.260
+Gateway berada di depan dan bertindak sebagai satu titik masuk.
+
+00:04:22.640 --> 00:04:25.100
+Gateway dapat menerapkan kebijakan sebelum meneruskan permintaan.
+
+00:04:25.520 --> 00:04:28.000
+Kebijakan adalah aturan yang Anda tulis dalam XML atau JSON,
+
+00:04:28.200 --> 00:04:31.660
+seperti pembatasan kecepatan, pemfilteran API, penulisan ulang header, dan pemeriksaan notifikasi.
+
+00:04:32.840 --> 00:04:34.660
+Semua itu tanpa mengubah satu baris mengurde back-end Anda.
+
+00:04:35.000 --> 00:04:35.840
+Berikut adalah contoh konkret.
+
+00:04:36.340 --> 00:04:38.700
+Katakanlah Anda memiliki tingkat gratis dan tingkat premium untuk APN.
+
+00:04:39.080 --> 00:04:42.320
+Dengan kebijakan, Anda dapat membatasi pengguna gratis hingga 5 permintaan per menit,
+
+00:04:42.400 --> 00:04:43.840
+sementara pengguna premium mendapatkan serat.
+
+00:04:43.840 --> 00:04:45.420
+Back-end Anda tidak pernah mengetahui perbedaannya.
+
+00:04:45.420 --> 00:04:46.900
+Back-end hanya memproses permintaan.
+
+00:04:47.340 --> 00:04:48.400
+Gateway menangani penegakannya.
+
+00:04:48.940 --> 00:04:50.160
+Gateway juga menangani cacing.
+
+00:04:51.040 --> 00:04:54.000
+Jika data diminta berulang kali, seperti daftar produk yang jarang berubah,
+
+00:04:54.140 --> 00:04:56.880
+Gateway dapat menyimpan respons dan menyajikannya secara langsung.
+
+00:04:57.820 --> 00:04:59.320
+Tidak perlu mengganggu back-end Anda sama sekali,
+
+00:04:59.760 --> 00:05:02.100
+yang berarti respons lebih cepat dan beban server lebih ringan.
+
+00:05:02.580 --> 00:05:03.540
+Ini juga dapat mengubah data.
+
+00:05:04.140 --> 00:05:07.180
+Back-end Anda mungkin mengubahkan XML, tetapi aplikasi seluler Anda mengharapkan JSON.
+
+00:05:07.740 --> 00:05:09.020
+Gateway dapat mengubah versinya secara langsung.
+
+00:05:09.580 --> 00:05:12.120
+Back-end Anda tidak perlu diubah, dan aplikasi Anda juga tidak perlu diubah.
+
+00:05:12.700 --> 00:05:14.140
+Gateway menangani penerjemahannya.
+
+00:05:14.140 --> 00:05:17.860
+Dan Gateway mencatat setiap panggilan, setiap permintaan, setiap respons, setiap kesalahan.
+
+00:05:18.100 --> 00:05:21.200
+Anda mendapatkan jejak audit lengkap tentang siapa yang memanggil apa-apa dan apa yang terjadi.
+
+00:05:21.860 --> 00:05:23.700
+Itu saja sudah sepadan untuk kebutuhan-kepatuhan.
+
+00:05:24.360 --> 00:05:27.340
+Jika Anda memiliki audiens global, Anda dapat menerapkan Gateway di berbagai wilayah.
+
+00:05:28.000 --> 00:05:30.280
+Lalu lintas secara otomatis diarahkan ke yang terdekat,
+
+00:05:30.440 --> 00:05:32.760
+yang memberikan latensi lebih rendah dan pengalaman yang lebih baik.
+
+00:05:33.340 --> 00:05:35.940
+Satu hal lagi, Gateway menyembunyikan URL back-end asli Anda.
+
+00:05:36.320 --> 00:05:37.480
+Klien hanya melihat alamat Gateway.
+
+00:05:37.980 --> 00:05:39.560
+Server back-end Anda tetap tersembunyi dari internet.
+
+00:05:39.560 --> 00:05:41.880
+Itu adalah keuntungan keamanan yang sangat besar di check-out.
+
+00:05:42.960 --> 00:05:44.940
+Kebijakan mesin yang mengendalikan segalanya.
+
+00:05:45.620 --> 00:05:46.820
+Jadi bagaimana dengan saya sebutkan tadi?
+
+00:05:47.400 --> 00:05:49.380
+Itulah mesin yang membuat APIM benar-benar hebat.
+
+00:05:50.020 --> 00:05:53.780
+Kebijakan mengubah perilaku permintaan atau respons tanpa Anda harus menyentuh kode back-end.
+
+00:05:54.460 --> 00:05:56.040
+Anggaplah ini sebagai pembungkus di sekitar APN.
+
+00:05:56.640 --> 00:06:00.620
+Saat lalu lintas mengalir, kebijakan dapat menambah, menghapus, atau mengubah berbagai hal secara otomatis.
+
+00:06:00.900 --> 00:06:03.360
+Kebijakan dapat berjalan di empat titik dalam siklus hidup permintaan.
+
+00:06:03.360 --> 00:06:06.840
+Inbound, saat masuk sebelum permintaan mencapai back-end Anda.
+
+00:06:07.500 --> 00:06:09.960
+Outbound, saat kembali, sebelum respon sampai ke klien.
+
+00:06:10.640 --> 00:06:12.820
+Back-end, tepat sebelum permintaan mencapai layanan Anda.
+
+00:06:13.280 --> 00:06:15.060
+Dan pada kesalahan ketika terjadi kegagang.
+
+00:06:15.660 --> 00:06:19.040
+Tugas masuk yang umum termasuk memvalidasi token JWT untuk memeriksa identitas pemanggil,
+
+00:06:19.840 --> 00:06:22.880
+memeriksa kunci API, menulis ulang URL, dan membatasi berdasarkan alamat IP.
+
+00:06:23.360 --> 00:06:25.660
+Semua ini terjadi sebelum back-end Anda menerima satu permintaan pun.
+
+00:06:25.660 --> 00:06:27.980
+Untuk lalu lintas keluar, Anda dapat mengubah padanus.
+
+00:06:28.480 --> 00:06:31.620
+Cari dan ganti teks, hapus kolom sensitif, ubah format.
+
+00:06:31.620 --> 00:06:35.080
+Anda dapat menyimpan respons dalam CC agar permintaan berulang tidak membabani back-end Anda.
+
+00:06:35.520 --> 00:06:37.860
+Anda bahkan dapat menghapus header yang membocorkan informasi internet.
+
+00:06:38.300 --> 00:06:39.260
+Berikut adalah contoh konkret.
+
+00:06:39.640 --> 00:06:45.020
+Katakanlah api Anda mengembalikan deskripsi produk dengan kata biru di mana-mana Anda ingin melakukan rebranding dan menggunakan kuning sebagai get.
+
+00:06:45.840 --> 00:06:48.940
+Alih-alih mengubah kode back-end, Anda cukup menambahkan satu kebijakan keluar.
+
+00:06:49.680 --> 00:06:51.460
+Cari biru, ganti dengan kuning.
+
+00:06:52.120 --> 00:06:52.460
+Selesai.
+
+00:06:52.760 --> 00:06:53.820
+Back-end Anda tidak pernah berubah.
+
+00:06:54.100 --> 00:06:57.000
+Kebijakan pembatasan kecepatan dan kuota melindungi back-end Anda dari penyak.
+
+00:06:57.220 --> 00:07:00.840
+Jika aplikasi seorang rusak dan mulai membombadir api Anda 10 ribu kali per detik,
+
+00:07:00.840 --> 00:07:03.200
+kebijakan akan bertindak dan berkata pelan-pelan.
+
+00:07:03.760 --> 00:07:04.620
+Baikkan Anda tetap sehat.
+
+00:07:05.220 --> 00:07:05.980
+Perlogika tingkat lanjut.
+
+00:07:06.380 --> 00:07:08.520
+Anda dapat menulis ekspresi secara custom di dalam kebijakan.
+
+00:07:08.900 --> 00:07:10.240
+Ekspresi tersebut dikompilasi untuk internet.
+
+00:07:10.620 --> 00:07:11.760
+Jadi tidak ada dia waktu proses.
+
+00:07:12.160 --> 00:07:14.740
+Anda dapat mencari peran pengguna, menghitung batas kecepatan dinamis,
+
+00:07:14.940 --> 00:07:17.520
+atau mengubah respon secara kondisional berdasarkan header permintaan.
+
+00:07:18.160 --> 00:07:18.920
+Poin utamanya adalah ini.
+
+00:07:19.540 --> 00:07:23.380
+Kebijakan memungkinkan Anda mengontrol perilaku api tanpa menyentuh kode yang menjalankannya.
+
+00:07:23.380 --> 00:07:26.640
+Itu berarti perubahan lebih cepat, lebih sedikit penyebaran, dan risiko lebih rendah.
+
+00:07:27.680 --> 00:07:30.600
+Produk dan langganan mengemas api untuk konsumen.
+
+00:07:31.220 --> 00:07:34.520
+Sekarang api Anda sudah ditentukan, kebijakan sudah ada, dan gateway berjalan, lancar.
+
+00:07:35.240 --> 00:07:37.920
+Namun, bagaimana Anda memberikan akses berbeda kepada pelanggan yang berbeda?
+
+00:07:38.820 --> 00:07:40.100
+Disitulah produk dan langganan berbeda.
+
+00:07:40.820 --> 00:07:43.340
+Di APIM, Anda mengelompokkan api ke dalam sesuatu yang disebut produk.
+
+00:07:44.160 --> 00:07:45.000
+Anggap saja sebagai paket.
+
+00:07:45.640 --> 00:07:48.580
+Anda mungkin memiliki produk tingkat gratis yang hanya mencakup api dasar Anda.
+
+00:07:49.120 --> 00:07:52.940
+Mungkin hanya akses baca saja, lalu produk premiumnya mencakup segalanya,
+
+00:07:53.280 --> 00:07:55.120
+termasuk operasi tulis dan titik akhir admin.
+
+00:07:55.840 --> 00:07:58.600
+Pengembang tidak berlangganan api individu, mereka berlangganan produk.
+
+00:07:58.600 --> 00:08:01.440
+Saat mereka berlangganan, mereka mendapatkan kunci langganan.
+
+00:08:01.740 --> 00:08:04.460
+Sebenarnya, dua kunci, sehingga Anda dapat merotasi satu tanpa waktu.
+
+00:08:04.680 --> 00:08:07.520
+Kunci itu adalah izin mereka untuk menggunakan AIP apapun dalam produk tersebut.
+
+00:08:07.840 --> 00:08:09.120
+Anda mengontrol bagaimana langganan berkerja.
+
+00:08:09.780 --> 00:08:11.100
+Produk dapat memerlukan persetujuan.
+
+00:08:11.660 --> 00:08:14.800
+Anda menerima setiap pelanggan secara manual, atau mereka bisa terbuka untuk sualayan.
+
+00:08:15.260 --> 00:08:17.100
+Siapapun dapat mendaftar dan mendapatkan akses langsung.
+
+00:08:17.720 --> 00:08:20.820
+Anda juga dapat menyertakan ketentuan hukum yang harus dituju pengguna sebelum berlangganan.
+
+00:08:20.820 --> 00:08:22.960
+Itu penting jika api Anda menangani data sensitif.
+
+00:08:23.380 --> 00:08:24.880
+Beginilah cara Anda memonetisasi api.
+
+00:08:25.240 --> 00:08:27.860
+Produk gratis dengan batas kecepatan rendah 5 panggilan per menit.
+
+00:08:28.240 --> 00:08:31.800
+Produk berbayar dengan batas lebih tinggi atau lebih banyak titik akhir 100 panggilan per menit,
+
+00:08:31.980 --> 00:08:33.120
+ditambah akses ke fitur premium.
+
+00:08:33.580 --> 00:08:34.220
+Pengembang tidak peduli.
+
+00:08:34.620 --> 00:08:37.620
+Gateway menerapkan batasan berdasarkan produk mana yang dilanggani oleh pemanggil.
+
+00:08:38.040 --> 00:08:38.820
+Berikut contoh nyatanya.
+
+00:08:39.180 --> 00:08:40.740
+Bayangkan Anda sedang membangun aplikasi Converent.
+
+00:08:41.020 --> 00:08:45.240
+Anda membuat produk peserta dengan api untuk jadwal sesi, biografi pembicara, dan peta lokasi.
+
+00:08:46.100 --> 00:08:48.600
+Lalu produk sponsor yang juga menyertakan api penghasil prospek.
+
+00:08:48.600 --> 00:08:51.880
+Sponsor dapat memindai rencana peserta dan mendapatkan info kota.
+
+00:08:52.280 --> 00:08:54.380
+Backend yang sama produk berbeda, tingkat akses berbeda.
+
+00:08:54.800 --> 00:08:56.840
+Kedua kunci langganan tersebut dirancang untuk rotasi.
+
+00:08:57.880 --> 00:09:00.120
+Jika kunci disusupi, Anda dapat membuat yang baru.
+
+00:09:00.720 --> 00:09:02.740
+Kunci kedua mungkin akan Anda beralih tanpa mengganggu layan.
+
+00:09:03.420 --> 00:09:05.260
+Buat kunci baru, perbarui aplikasi Anda.
+
+00:09:05.620 --> 00:09:06.340
+Batalkan yang lama.
+
+00:09:07.020 --> 00:09:07.300
+Ulus.
+
+00:09:07.900 --> 00:09:08.600
+Portal pengembang.
+
+00:09:08.820 --> 00:09:10.300
+Sualayan untuk konsumen api.
+
+00:09:11.040 --> 00:09:12.180
+Anda telah menyiapkan produk api.
+
+00:09:12.500 --> 00:09:13.860
+Tarang pengembang perlu menemukan.
+
+00:09:14.280 --> 00:09:15.380
+Itulah tugas portal pengembang.
+
+00:09:15.380 --> 00:09:18.620
+Portal pengembang adalah situs web yang terintegrasi ke dalam setiap instans web.
+
+00:09:18.980 --> 00:09:24.460
+Pengembang menggunakannya untuk menelusuri api Anda, membaca dokumentasi, dan menguji endpoint secara interaktif langsung di perambat mereka.
+
+00:09:25.220 --> 00:09:26.900
+Tidak perlu pengaturan dan tidak ada email bolak-balik.
+
+00:09:27.460 --> 00:09:29.500
+Namun masalahnya, portal ini tidak dipublikasikan secara default.
+
+00:09:29.900 --> 00:09:33.640
+Saat pertama kali membuat instans APM, portal memang ada, tetapi tidak ada yang bisa melihatnya.
+
+00:09:33.960 --> 00:09:35.700
+Anda harus menyesuaikan dan menerbitkannya terlebih dahulu.
+
+00:09:35.900 --> 00:09:36.320
+Itu disengaja.
+
+00:09:36.800 --> 00:09:38.880
+Anda tidak ingin menunjukkan portal yang belum selesai kepada dunia.
+
+00:09:38.880 --> 00:09:43.920
+Anda dapat menyesuaikan warna merek, logo, bahkan menyematkan konten WordPress untuk blog di samping dokumentasi api Anda.
+
+00:09:44.220 --> 00:09:47.200
+Portal ini dapat disesuaikan sepenuhnya Anda sesuai dengan tampilan dan luansa perusahaan.
+
+00:09:47.480 --> 00:09:48.560
+Nilai sebenarnya adalah swalayan.
+
+00:09:49.080 --> 00:09:53.660
+Pengembang mendaftar, mendapatkan kunci langganan mereka secara otomatis, dan langsung mulai memanggil API.
+
+00:09:54.300 --> 00:09:58.780
+Tidak ada email manual, tidak perlu menunggu persetujuan, tidak ada tiket dukungan yang mendanyakan cara mendapatkan kunci.
+
+00:09:59.160 --> 00:10:02.000
+Mereka melakukannya sendiri, yang secara signifikan mengurangi beban dukungan Anda.
+
+00:10:02.460 --> 00:10:04.280
+Anda juga dapat mempublikasikan log perubahan dan catatan.
+
+00:10:04.280 --> 00:10:08.360
+Saat Anda memperbarui API, pengembang melihatnya di portal tanpa kejutan.
+
+00:10:08.980 --> 00:10:11.420
+Akses bisa bersifat publik bagi siapa saja dengan URL.
+
+00:10:11.620 --> 00:10:16.500
+Atau Anda dapat membatasinya untuk pengguna dari penyewa entry ID Anda, sehingga hanya orang di organisasi Anda yang bisa melusuri.
+
+00:10:17.580 --> 00:10:19.380
+Kedua opsi tersedia untuk kasih pengguna yang berbeda.
+
+00:10:19.820 --> 00:10:22.820
+Portal pengembang adalah hal yang menjadikan manajemen API Anda sebagai platform ingat.
+
+00:10:23.180 --> 00:10:24.700
+Anggap saja sebagai etalas untuk API Anda.
+
+00:10:25.120 --> 00:10:27.940
+Tanpanya, pengembang harus mencari melalui dokumen dan bertanya ke sana kemari.
+
+00:10:28.440 --> 00:10:30.960
+Dengan portal, mereka menemukan apa yang dibutuhkan dan mulai memulai.
+
+00:10:30.960 --> 00:10:34.540
+Keamanan, autentikasi, otorisasi, dan rahasia.
+
+00:10:35.580 --> 00:10:38.720
+Semua kekuatan ini tidak berguna jika keamanan tidak dikunci dengan ketat.
+
+00:10:39.180 --> 00:10:41.940
+Jadi, mari kita bahas bagaimana API menangani identitas, akses, dan rahasia.
+
+00:10:42.340 --> 00:10:44.220
+API mendukung berbagai metode autentikasi.
+
+00:10:44.820 --> 00:10:47.380
+Yang paling sederhana adalah kunci langganan yang telah kita bahas sebelumnya.
+
+00:10:47.860 --> 00:10:52.200
+Namun, untuk sistem produksi, Anda memerlukan sesuatu yang lebih kuat seperti OO2.0 token JWT,
+
+00:10:52.360 --> 00:10:54.020
+sertifikat klien, atau penfilteran IP.
+
+00:10:54.580 --> 00:10:56.780
+Anda dapat melapisinya berdasarkan seberapa sensitif API Anda.
+
+00:10:57.300 --> 00:11:00.260
+Untuk produksi, praktek terbaik adalah menggunakan OO2.0 entry ID.
+
+00:11:00.260 --> 00:11:01.680
+Begini cara kerjanya.
+
+00:11:02.080 --> 00:11:05.440
+Aplikasi klien mendapatkan token dari entry ID dan mengirimkannya bersama permintaan API.
+
+00:11:05.940 --> 00:11:10.020
+API memvalidasi token dengan memeriksa tanda tangan, penerbit audiens, dan masa berlakunya.
+
+00:11:10.740 --> 00:11:14.100
+Jika valid, API meneruskan permintaan ke backend Anda, termasuk token tersebut.
+
+00:11:14.800 --> 00:11:19.160
+Backend Anda mempercayainya karena API sudah meverifikasinya, jadi backend tidak perlu memvalidasi ulang.
+
+00:11:19.680 --> 00:11:21.540
+Itu adalah satu hal yang tidak perlu lagi ditangani setiap klien.
+
+00:11:22.260 --> 00:11:23.460
+Sekarang mari kita bicara tentang RISE.
+
+00:11:23.820 --> 00:11:26.280
+Kunci API, string koneksi, sertifikat. Anda tidak ingin itu.
+
+00:11:26.280 --> 00:11:28.620
+Ditulis langsung dalam file kebijakan atau kontrol sumber.
+
+00:11:28.620 --> 00:11:30.700
+API memiliki fitur yang disebut Name Values.
+
+00:11:31.240 --> 00:11:35.180
+Anda menyimpan rahasia secara terpusat di API dan merujuknya berdasarkan nama di kebijakan Anda.
+
+00:11:35.480 --> 00:11:37.520
+Nilai sebenarnya tidak pernah muncul dalam kode kebijakan Anda.
+
+00:11:38.140 --> 00:11:40.720
+Lebih baik lagi, Anda dapat menghubungkan Name Values ke Azure Key Vault.
+
+00:11:41.160 --> 00:11:44.160
+Rahasia tetap terenkripsi di Key Vault dan API mengambilnya saat terentak.
+
+00:11:44.520 --> 00:11:47.480
+Tidak ada seorang pun bahkan tim DevOps Anda yang melihat nilai rahasia sebenarnya.
+
+00:11:47.720 --> 00:11:52.600
+Saat Anda perlu merotasi kunci, Anda perbarunya di Key Vault dan API secara otomatis mendeteksi perubahan tersebut.
+
+00:11:53.220 --> 00:11:54.840
+API juga mendukung identitas terkelola.
+
+00:11:54.840 --> 00:12:01.600
+Ini memungkinkan API mengautentikasi ke layanan Azure lain, seperti Key Vault atau API Backend tanpa menyimpan kredensial apapun.
+
+00:12:02.300 --> 00:12:04.640
+Azure menangani identitas tersebut, jadi Anda perlu memberikan isi.
+
+00:12:04.940 --> 00:12:08.120
+Dan untuk isolasi jaringan, Anda dapat menempatkan API di dalam jaringan virtual.
+
+00:12:08.600 --> 00:12:09.360
+Itu adalah tingkat premium.
+
+00:12:09.360 --> 00:12:16.900
+Intinya adalah layanan backend Anda tidak perlu diekspos langsung ke internet.
+
+00:12:17.900 --> 00:12:19.960
+APIM adalah satu-satunya hal yang dilihat oleh dunia luar.
+
+00:12:20.400 --> 00:12:22.300
+Pendekatan berlapis ini membangun pertahanan yang mendalam.
+
+00:12:22.900 --> 00:12:26.880
+Autentikasi di gateway, rahasia di perangkas, isolasi jaringan di sekitar backend Anda.
+
+00:12:27.660 --> 00:12:28.920
+Setiap lapisan memperkuat lapisan berit.
+
+00:12:28.920 --> 00:12:31.720
+Tingkat harga, mana yang cocok untuk Anda?
+
+00:12:32.260 --> 00:12:33.200
+Jadi berapa biaya ini?
+
+00:12:33.620 --> 00:12:34.440
+Mari kita bahas tingkatan.
+
+00:12:34.840 --> 00:12:35.560
+Tingkat konsumsi.
+
+00:12:36.180 --> 00:12:38.000
+Bayar perpanggilan API tanpa biaya bulan nentuk.
+
+00:12:38.720 --> 00:12:41.920
+Sangat cocok untuk beban kerja bervolume rendah atau tidak menentu seperti saat membuat protokol.
+
+00:12:42.220 --> 00:12:44.180
+Jika Anda belum yakin apa yang Anda butuhkan, mulai lihat di sini.
+
+00:12:44.640 --> 00:12:48.120
+Tingkat pengembang memberi Anda biaya bulan dan tetapi yang rendah sekitar 50 dolar.
+
+00:12:48.420 --> 00:12:49.460
+Fitur angkat tetapi tanpa SAA.
+
+00:12:50.040 --> 00:12:51.520
+Ideal untuk lingkungan pengembangan dan pengujian.
+
+00:12:51.520 --> 00:12:54.060
+Anda mendapatkan semua yang dimiliki versi premium tetapi tidak bisa menggunakannya.
+
+00:12:54.360 --> 00:12:56.220
+Tingkat dasar adalah tingkat awal untuk produksi.
+
+00:12:56.220 --> 00:13:00.000
+Teruput lebih rendah tidak dukungan jaringan virtual tetapi Anda mendapatkan SLA yang nyata.
+
+00:13:00.300 --> 00:13:03.800
+Bagus untuk alat internal atau proyek kecil di mana jaringan pribadi tidak terlalu krusial.
+
+00:13:04.620 --> 00:13:06.240
+Kebanyakan bisnis memilih tingkat standar.
+
+00:13:06.760 --> 00:13:11.120
+Termasuk dukungan jaringan virtual, SLA 99.5% dan throughput yang baik.
+
+00:13:11.820 --> 00:13:14.920
+Jika Anda menjalankan API yang krusial bagi bisnis, disinilah Anda akan melakukan pilihan.
+
+00:13:15.320 --> 00:13:19.440
+Tingkat premium ditujukan bagi perusahaan global yang membutuhkan reliability maksimal dan jaringan pribadi.
+
+00:13:20.080 --> 00:13:25.360
+Penyebaran multiwilayah, gateway yang dihost sendiri, SLA 99.99% dan injeksi jaringan virtual penuh.
+
+00:13:25.360 --> 00:13:28.020
+Dimulai dari sekitar 2.700 per bulan per unit.
+
+00:13:28.740 --> 00:13:32.640
+Microsoft juga memperkenalkan tingkat V2, Basic V2, Standard V2, dan Premium V2.
+
+00:13:33.340 --> 00:13:36.400
+Mereka menyederhanakan harga dengan kuota permintaan yang disertakan dan kelebihan per juta.
+
+00:13:36.920 --> 00:13:41.920
+Alih-alih melacak banyak pengukur Anda mendapatkan kuota permintaan yang jelas dan membayar kelebihan penggunaan dalam kenaikan sederhan.
+
+00:13:42.340 --> 00:13:43.260
+Berikut cara memilihnya.
+
+00:13:43.500 --> 00:13:44.840
+Mulai dengan tingkat developer untuk pengujian.
+
+00:13:45.240 --> 00:13:46.380
+Pindah ke standar untuk produksi.
+
+00:13:46.520 --> 00:13:49.680
+Pilih premium jika Anda memerlukan skala global atau jaringan pribadi.
+
+00:13:50.140 --> 00:13:52.180
+Dan ingat, Anda selalu dapat bermigrasi ke tingkat lain yang tinggi.
+
+00:13:52.680 --> 00:13:54.120
+Rata yang kecil dan berkembangan seri kebutuhan Anda.
+
+00:13:54.120 --> 00:13:55.600
+Ini yang telah kita bahas.
+
+00:13:56.000 --> 00:14:02.220
+Manajemen API mengatasi kekacauan berbagai API dan menyatukannya ke dalam satu pusat kendali untuk gateway kebijakan, keamanan, dan pengalaman pengembang.
+
+00:14:02.580 --> 00:14:04.280
+Poin utamanya adalah ini lebih dari sekadar proksi.
+
+00:14:04.960 --> 00:14:07.480
+Anggap ini sebagai otak dan sistem saraf dari ekosistem API Anda.
+
+00:14:07.840 --> 00:14:10.680
+Tanpanya setiap tim membangun autentikasi, logging, dan pembetasan tarif mereka sendiri,
+
+00:14:11.060 --> 00:14:14.960
+Anda akan berakhir dengan ketidak konsistenan, celah keamanan, dan tidak adanya satu pandangan tunggal tentang apa yang terjadi.
+
+00:14:15.200 --> 00:14:21.100
+Dengannya, Anda mendapatkan konsistensi, keamanan, dan skalabilitas tanpa harus memulai dari awal untuk setiap layanan.
+
+00:14:21.880 --> 00:14:22.900
+Berikut adalah hatian sederhana.
+
+00:14:22.900 --> 00:14:25.600
+Pikirkan satu API yang saat ini Anda ekspos secara langsung.
+
+00:14:26.140 --> 00:14:27.680
+Mungkin titik akhir fungsi atau layanan aplikasi.
+
+00:14:28.420 --> 00:14:32.940
+Bagaimana menempatkan manajemen API di depannya dapat mengubah postur keamanan dan kemampuan Anda dalam memantau penggunaan.
+
+00:14:33.380 --> 00:14:37.540
+Bahkan hanya dengan memikirkan latihan itu akan menunjukkan nilainya pada langkah selanjutnya berlangganan ke seluruh ini.
+
+00:14:37.820 --> 00:14:40.500
+Pada episode mendatang, kami akan menunjukkan cara mengimpor API,
+
+00:14:40.920 --> 00:14:43.680
+menerapkan kebijakan pertama Anda, dan memantau penggunaan secara real-time.
+
+00:14:43.680 --> 00:14:45.140
+Anda akan beralih dari teori ke praktik.
+
+00:14:45.420 --> 00:14:48.020
+Dan jika Anda merasa ini bermanfaat, bagikan kepada seseorang yang sedang memenuh.
+
+00:14:48.180 --> 00:14:49.980
+Itu akan menyambarkan mereka ada sakit kepala selama berbulan.
+
+00:14:49.980 --> 00:14:50.940
+Terima kasih telah mendengar.
+
+00:14:50.940 --> 00:15:20.920
+Terima kasih telah menonton!

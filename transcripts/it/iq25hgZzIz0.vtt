@@ -1,0 +1,955 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.220
+per il settore artigianale.
+
+00:00:01.800 --> 00:00:04.160
+L'argomento di oggi è qualcosa di cui quasi tutti hanno sentito parlare,
+
+00:00:04.240 --> 00:00:05.440
+ma che pochi comprendono davvero.
+
+00:00:06.080 --> 00:00:07.840
+Probabilmente avrai visto Zool Monitor nel portale,
+
+00:00:07.940 --> 00:00:10.440
+ma magari ci avrai cliccato un po' pare, sentendoti però smarrito.
+
+00:00:11.060 --> 00:00:11.780
+E del tutto è normale.
+
+00:00:12.400 --> 00:00:13.060
+Ecco il vero problema.
+
+00:00:13.420 --> 00:00:15.000
+Hai una dashboard per le macchine virtuali,
+
+00:00:15.040 --> 00:00:16.780
+un'altra per le app, un'altra per la sicurezza,
+
+00:00:16.860 --> 00:00:18.120
+e nessuno di esse comunica con le altre.
+
+00:00:18.880 --> 00:00:21.280
+Quando qualcosa si rompe, salti da una schermata all'altra,
+
+00:00:21.400 --> 00:00:22.920
+cercando di ricostruire l'accaduto.
+
+00:00:23.500 --> 00:00:26.860
+E se potessi vedere tutto, metriche, log, avvisi, persino identità e email,
+
+00:00:27.160 --> 00:00:28.120
+in un unico posto?
+
+00:00:28.120 --> 00:00:31.820
+Alla fine di questo episodio capirai cos'è davvero Zool Monitor
+
+00:00:31.820 --> 00:00:34.360
+e come ti offre quella visione di insieme unificata.
+
+00:00:35.280 --> 00:00:35.840
+Quadro generale.
+
+00:00:36.440 --> 00:00:37.140
+Cos'è Zool Monitor?
+
+00:00:37.720 --> 00:00:39.180
+Quindi cos'è esattamente Zool Monitor?
+
+00:00:39.660 --> 00:00:41.140
+Cominciamo con una definizione semplice.
+
+00:00:41.800 --> 00:00:44.560
+Zool Monitor è la piattaforma di osservabilità centrale di Microsoft
+
+00:00:44.560 --> 00:00:47.780
+per raccogliere, analizzare e agire sui dati telemetria.
+
+00:00:48.260 --> 00:00:49.600
+È una definizione complessa, quindi scompagnata.
+
+00:00:49.960 --> 00:00:51.500
+Immaginalo come un moderno edificio per offizio.
+
+00:00:51.840 --> 00:00:54.320
+Hai una reception centrale di sicurezza all'ingresso principale?
+
+00:00:54.320 --> 00:00:56.520
+Quel banco vede chiunque entri, a quale piano vada,
+
+00:00:56.520 --> 00:00:58.580
+e in quale stanza ceda e quando se ne vada.
+
+00:00:59.180 --> 00:01:01.220
+È il singolo punto di consapevolezza per l'intero edificio.
+
+00:01:01.740 --> 00:01:03.360
+Zool Monitor è esattamente questo per il tuo cloud.
+
+00:01:03.700 --> 00:01:05.860
+È il sistema nervoso centrale che collega tutto insieme.
+
+00:01:07.000 --> 00:01:07.380
+A quel punto.
+
+00:01:07.780 --> 00:01:09.300
+Zool Monitor non è un singolo strumento.
+
+00:01:09.560 --> 00:01:12.720
+È una piattaforma che raggruppa metriche, log, tracce, avvisi da Azure,
+
+00:01:12.860 --> 00:01:14.740
+dall'ambiente on-premises e persino da altri cloud.
+
+00:01:15.080 --> 00:01:17.400
+Vent'anni fa avresti dovuto acquistare prodotti separati per ogni cosa.
+
+00:01:17.620 --> 00:01:20.220
+Uno strumento per i server, un altro per le app, un altro per le reti.
+
+00:01:20.220 --> 00:01:22.980
+Le stavano isolati senza mai condividere informazioni.
+
+00:01:23.440 --> 00:01:25.680
+Azure Monitor sostituisce completamente quella frammentazione.
+
+00:01:26.240 --> 00:01:28.420
+Ora potresti chiederti, è solo per le operazioni IT?
+
+00:01:29.120 --> 00:01:29.700
+Niente fatto.
+
+00:01:30.220 --> 00:01:33.900
+Azure Monitor è in realtà la base di Microsoft Defender for Cloud e Microsoft Sentinel,
+
+00:01:34.840 --> 00:01:36.260
+quindi è anche il fondamento per la sicurezza.
+
+00:01:36.920 --> 00:01:40.640
+La stessa piattaforma dati che ti avvisa che la CPU è sotto sforzo alimenta anche i tuoi strumenti di sicurezza.
+
+00:01:41.180 --> 00:01:42.900
+È un concetto potente se ti fermi a rifletterci.
+
+00:01:43.280 --> 00:01:44.060
+Ma entriamo nella specifica.
+
+00:01:44.060 --> 00:01:46.680
+Azure Monitor gestisce due tipi principali di dati
+
+00:01:46.680 --> 00:01:50.140
+e comprendere la differenza è fondamentale per capire l'intera piattaforma.
+
+00:01:50.780 --> 00:01:52.800
+I due elementi costitutivi, metriche e log.
+
+00:01:53.480 --> 00:01:54.400
+Iniziamo con le metriche.
+
+00:01:55.020 --> 00:01:57.000
+Sono valori numerici raccolti a intervalli irregolari?
+
+00:01:57.800 --> 00:02:02.040
+Pensali come ai tuoi segni vitali, come frequenza cardiaca, pressione sanguigna, temperatura corporea.
+
+00:02:02.600 --> 00:02:03.760
+Ti mostrano dando le cose in questo momento.
+
+00:02:04.180 --> 00:02:08.280
+In Azure Monitor le metriche riguardano elementi come la percentuale di CPU, l'utilizzo della memoria, cico al secondo.
+
+00:02:08.700 --> 00:02:10.520
+Sono leggere e arrivano quasi in tempo reale.
+
+00:02:10.520 --> 00:02:11.840
+Perfette per dashboard e trigger.
+
+00:02:12.140 --> 00:02:13.520
+Vedi picco nel momento esatto in cui si verifica.
+
+00:02:13.920 --> 00:02:15.780
+Poi ci sono i log, che sono completamente diversi.
+
+00:02:15.780 --> 00:02:18.800
+Sono registrazioni dettagliate di eventi, come un diario o una scatola nera.
+
+00:02:19.460 --> 00:02:22.380
+Una voce di log ti dice quando qualcuno ha riavviato una macchina virtuale
+
+00:02:22.380 --> 00:02:26.340
+quale codice di errore ha generato un'applicazione che ha effettuato l'accesso da dove e a che ora.
+
+00:02:26.960 --> 00:02:29.200
+I log sono molto più ricchi delle metriche, ma anche più pesanti.
+
+00:02:30.280 --> 00:02:35.680
+Risiedono in un'area di lavoro log analytics e l'interrovi usando il custo query language o che è QPL in breve.
+
+00:02:36.980 --> 00:02:37.820
+Ecco la differenza fondamentale.
+
+00:02:37.820 --> 00:02:39.440
+Le metriche ti dicono che qualcosa...
+
+00:02:39.440 --> 00:02:40.600
+I log ti dicono il perché.
+
+00:02:40.860 --> 00:02:43.440
+In metriche di guidare la tua auto, si accende la spia del motore.
+
+00:02:43.440 --> 00:02:46.520
+Quella è una metrica che ti avvisa che c'è un problema ma non sai quale.
+
+00:02:47.280 --> 00:02:49.880
+Allora vai dal meccanico che esegue un rapporto diagnostico.
+
+00:02:50.500 --> 00:02:53.220
+Quel rapporto ti dice esattamente quale sensore ha ceduto e che codice ha generato.
+
+00:02:53.580 --> 00:02:54.000
+Quello è il log.
+
+00:02:54.340 --> 00:02:55.540
+Le metriche sono la spia del motore.
+
+00:02:55.740 --> 00:02:57.420
+I log sono il rapporto diagnostico del meccanico.
+
+00:02:57.700 --> 00:02:58.200
+E bisogna entrare.
+
+00:02:58.520 --> 00:03:00.140
+Ecco un rapido dettaglio pratico gratuito.
+
+00:03:00.600 --> 00:03:01.980
+Hai 90 giorni di conservazione dei log.
+
+00:03:01.980 --> 00:03:07.080
+È un buon intervallo per la maggior parte della risoluzione dei problemi ma se ti serve di più per conformità o audit puoi estenderlo.
+
+00:03:07.500 --> 00:03:10.020
+Ricorda solo che una conservazione più lunga costa di più quindi pianifica.
+
+00:03:10.380 --> 00:03:11.860
+Ora comprendi due blocchi costitutivi.
+
+00:03:12.580 --> 00:03:13.720
+Metriche per un controllo rapido.
+
+00:03:13.800 --> 00:03:14.940
+Log per un'analisi approfondita.
+
+00:03:15.040 --> 00:03:16.480
+Ma da dove provengono tutti questi dati?
+
+00:03:17.040 --> 00:03:17.560
+Questa è la prossima.
+
+00:03:18.260 --> 00:03:19.760
+Da dove arrivano tutti i dati?
+
+00:03:20.200 --> 00:03:21.900
+Ora da dove provengono davvero tutti questi dati?
+
+00:03:22.380 --> 00:03:25.740
+Questa è la parte interessante perché Azure Monitor non controlla solo le tue macchine virtuali.
+
+00:03:25.840 --> 00:03:26.460
+Controlla tutto.
+
+00:03:27.060 --> 00:03:28.240
+Partiamo dalla fonte più semplice.
+
+00:03:28.240 --> 00:03:34.960
+Ogni risorsa Azure che crei come macchine virtuali, database, account di archiviazione e app service emette automaticamente metriche della piattaforma.
+
+00:03:35.800 --> 00:03:38.040
+Utilizzo CPU, il show disco, throughput di rete.
+
+00:03:38.580 --> 00:03:39.220
+È integrato.
+
+00:03:39.620 --> 00:03:40.680
+Non devi configurare nulla.
+
+00:03:41.120 --> 00:03:42.960
+Lo ottieni gratuitamente nel momento in cui crei la risorsa.
+
+00:03:43.360 --> 00:03:44.300
+Ma questa è solo la superficie.
+
+00:03:44.680 --> 00:03:49.400
+Per le tue applicazioni ti serve Application Insights, il servizio di gestione delle prestazioni e delle prestazioni di Azure Moni.
+
+00:03:49.880 --> 00:03:53.000
+Traccia tassi di richiesta, tempi di risposta, eccezioni e chiamati di dipendenza.
+
+00:03:53.000 --> 00:03:59.160
+Se la tua web app chiama un database o un API esterna, Application Insights vede quella chiamata e misura quanto tempo è impiegato.
+
+00:03:59.600 --> 00:04:01.260
+È come avere un detective dentro il tuo codice.
+
+00:04:01.540 --> 00:04:02.200
+Ora andiamo più a fondo.
+
+00:04:02.740 --> 00:04:08.740
+Le metriche della piattaforma di cui abbiamo parlato ti dicono cosa vede Azure dall'esterno della tua macchina virtuale, ma non cosa succede all'interno del sistema operativo.
+
+00:04:09.520 --> 00:04:13.400
+Per questo ti serve l'agente di monitoraggio di Azure, un piccolo software da installare dentro la tua VM.
+
+00:04:13.400 --> 00:04:19.000
+Raccoglie metriche e log a livello di sistema operativo, come carico della memoria, lunghezza della coda del disco e crash di applicazioni specifiche.
+
+00:04:19.340 --> 00:04:21.800
+È qui che vedi cosa sta succedendo realmente all'interno della macchina.
+
+00:04:22.320 --> 00:04:24.840
+La buona notizia è che lo stesso agente funziona anche al di fuori di Azure.
+
+00:04:25.280 --> 00:04:29.080
+Se è server in locale o su un altro cloud, puoi usare Azure Arc per connetterli.
+
+00:04:29.880 --> 00:04:35.160
+Una volta connessi, l'agente di monitoraggio di Azure funziona allo stesso modo, offrendoti gli stessi dati, dashboard e avvisi.
+
+00:04:35.400 --> 00:04:42.160
+Ovunque si trovi il server, c'è anche la possibilità di trasmettere i dati di Microsoft 365 e di Microsoft N3D direttamente in Azure Monitor.
+
+00:04:42.160 --> 00:04:44.800
+Log di accesso, log di controllo e dati di attività.
+
+00:04:45.140 --> 00:04:50.000
+Ogni volta che qualcuno tenta di accedere da una posizione insolita, quell'evento può confluire nel tuo spazio di lavoro di Log Analytics.
+
+00:04:50.540 --> 00:04:53.660
+Puoi correlarlo ai dati sulle prestazioni della tua applicazione e vedere il quadro completo.
+
+00:04:54.120 --> 00:04:55.480
+E infine i dati di sicurezza.
+
+00:04:55.960 --> 00:04:59.720
+Microsoft Defender for Cloud e Microsoft Sentinel si basano sulla stessa piattaforma dati.
+
+00:05:00.100 --> 00:05:04.620
+Quindi quando indaghi su un incidente di sicurezza, guardi gli stessi log che usi per la risoluzione dei problemi di prestazione.
+
+00:05:04.880 --> 00:05:06.940
+Non serve uno strumento separato. È tutto in un unico posto.
+
+00:05:06.940 --> 00:05:09.100
+Hai quindi tutti questi dati che arrivano da ogni parte.
+
+00:05:09.100 --> 00:05:12.660
+VM App, server locali, sistemi di identità e strumenti di sicurezza.
+
+00:05:13.280 --> 00:05:14.540
+Come fai a dare un senso a tutto questo?
+
+00:05:15.440 --> 00:05:17.000
+Visualizzazione è il tuo unico punto di controllo.
+
+00:05:17.600 --> 00:05:19.180
+Quindi come puoi vedere tutti questi dati?
+
+00:05:19.900 --> 00:05:22.820
+Azure Monitor offre diverse modalità, ma lo strumento principale sono le cartelle.
+
+00:05:23.200 --> 00:05:28.500
+Le cartelle di lavoro sono report interattivi che combinano testo, metriche, log e parametri in dashboard personalizzate.
+
+00:05:29.140 --> 00:05:30.340
+Immaginale come il tuo centro di comando.
+
+00:05:30.720 --> 00:05:31.520
+Ecco un esempio concreto.
+
+00:05:31.520 --> 00:05:35.840
+Immagina di creare un'unica cartella di lavoro che mostra tre cose su una pagina.
+
+00:05:36.840 --> 00:05:40.000
+Stato della VM, tempi di risposta delle app e anomalie di accesso.
+
+00:05:40.420 --> 00:05:41.140
+I server sono attivi.
+
+00:05:41.520 --> 00:05:42.380
+La tua web app è lenta.
+
+00:05:42.860 --> 00:05:44.700
+Ci sono tentativi di accesso insoliti dall'estero?
+
+00:05:45.140 --> 00:05:46.400
+Tutti e tre su un'unica schermata.
+
+00:05:46.840 --> 00:05:49.220
+Non servono tre strumenti diversi, basta una cartella di lavoro.
+
+00:05:49.680 --> 00:05:53.420
+E le cartelle di lavoro non sono solo grafici statici, supportano codici, colori, icone, soglie.
+
+00:05:53.420 --> 00:05:55.660
+Un server integro mostra un segno di spunta verde.
+
+00:05:55.900 --> 00:05:58.180
+Un server che si avvicina alla capacità massima mostra un avviso già.
+
+00:05:58.440 --> 00:05:59.740
+Un server non attivo diventa rosso.
+
+00:06:00.060 --> 00:06:02.300
+Puoi dare un'occhiata e sapere esattamente dove sono i problemi.
+
+00:06:02.920 --> 00:06:03.720
+La funzione è vincente.
+
+00:06:03.800 --> 00:06:04.920
+Quei grafici hanno il link cliccato.
+
+00:06:05.700 --> 00:06:10.480
+Se vedi un server con CPU alta, ci clicchi sopra e vieni portato direttamente a quella risorsa nel portale Azure.
+
+00:06:11.320 --> 00:06:12.840
+Nessuna ricerca, nessun copia e incolla.
+
+00:06:13.120 --> 00:06:13.640
+Basta un clic.
+
+00:06:14.400 --> 00:06:15.700
+I workbook non sono però l'unica opzione.
+
+00:06:16.300 --> 00:06:17.840
+Hai anche i dashboard nel portale Azure.
+
+00:06:18.360 --> 00:06:21.220
+Ti consentono di aggiungere riquadri da diverse fonti per una rapida panorà.
+
+00:06:21.560 --> 00:06:23.020
+Pensalo come al tuo briefing mattutino.
+
+00:06:23.420 --> 00:06:25.300
+Uno sguardo rapido per assicurarti che tutto sia sottoconto.
+
+00:06:25.800 --> 00:06:27.580
+Poi c'è l'esplora metriche per grafici ad hoc.
+
+00:06:28.220 --> 00:06:30.660
+Vuoi vedere l'utilizzo della CPU di tutte le tue VM nell'ultima ora?
+
+00:06:31.200 --> 00:06:34.400
+Apri l'esplora metriche, selezioni le risorse e ottieni un grafico in pochi secondi.
+
+00:06:34.700 --> 00:06:35.740
+Nessuna configurazione richiesta.
+
+00:06:36.000 --> 00:06:39.900
+E se devi condividere report con stakeholder che non usano Azure, puoi integrare Power BI.
+
+00:06:40.560 --> 00:06:44.720
+Il tuo team esecutivo riceve un report mensile che mostra lo stato del servizio ad uptime e i trend di performance.
+
+00:06:45.320 --> 00:06:47.320
+Non devono capire il cacuello o l'analisi dei log.
+
+00:06:47.900 --> 00:06:49.100
+Vedono solo i numeri che interessano.
+
+00:06:49.100 --> 00:06:50.400
+L'obiettivo è semplice.
+
+00:06:50.400 --> 00:06:52.400
+Un unico posto dove andare quando qualcosa non vuole.
+
+00:06:52.680 --> 00:06:56.820
+Basta passare da una schermata all'altra o accedere a tre strumenti diversi per capire cosa si è rotto.
+
+00:06:57.200 --> 00:06:59.120
+Apri Azure Monitor e vedi tutto.
+
+00:06:59.580 --> 00:07:00.580
+È l'unico punto di osservazione.
+
+00:07:01.360 --> 00:07:02.240
+Avvisi e automazione.
+
+00:07:02.680 --> 00:07:03.360
+Quando devi agire.
+
+00:07:03.860 --> 00:07:06.660
+Vedere i dati è fantastico, ma devi anche sapere quando intervenire.
+
+00:07:07.020 --> 00:07:08.000
+È qui che entri in gioco gli avvisi.
+
+00:07:08.300 --> 00:07:10.360
+Le avvisi di Azure Monitor funzionano sia su metriche che su loro.
+
+00:07:10.640 --> 00:07:13.340
+Imposti una condizione e quando questa viene soddisfatta succede qualcosa.
+
+00:07:14.060 --> 00:07:14.820
+Analizziamolo in dettaglio.
+
+00:07:14.820 --> 00:07:17.520
+Gli avvisi sulle metriche si basano su soglie e sono molto rapi.
+
+00:07:17.780 --> 00:07:21.840
+Dici CPU sopra il 90% per 5 minuti e quando accade l'avviso si attiva.
+
+00:07:22.140 --> 00:07:23.380
+Semplice, diretto, quasi in tempo reale.
+
+00:07:23.560 --> 00:07:25.720
+Sono ottimi quando sai esattamente cosa indica un problema.
+
+00:07:26.060 --> 00:07:27.120
+Gli avvisi sui log sono diversi.
+
+00:07:27.400 --> 00:07:28.960
+Sono basati su query e molto più flessibili.
+
+00:07:29.520 --> 00:07:32.600
+Invece di una semplice soglia scrivi una query che cerca un pattern specifico.
+
+00:07:33.420 --> 00:07:36.280
+Trova tentativi di accesso valliti dall'esterno degli Stati Uniti nell'ultima ora.
+
+00:07:37.320 --> 00:07:39.260
+Se la query restituisce risultati l'avviso si attiva.
+
+00:07:39.940 --> 00:07:42.880
+Ciò ti permette di cogliere scenari complessi che una semplice soglia non vedrebbe.
+
+00:07:42.880 --> 00:07:44.860
+Quando un avviso si attiva cosa succede dopo?
+
+00:07:45.160 --> 00:07:46.080
+Che entra in gioco i gruppi di azione.
+
+00:07:46.400 --> 00:07:47.800
+Un gruppo di azione definisce la risposta.
+
+00:07:48.140 --> 00:07:51.080
+Puoi inviare un email, un sms, una notifica push sul telefono
+
+00:07:51.080 --> 00:07:53.220
+o attivare un webbook che richiama un altro sistema.
+
+00:07:54.120 --> 00:07:57.320
+Ma l'opzione davvero potente è attivare una logic app per la risoluzione automatica.
+
+00:07:58.000 --> 00:08:01.020
+Immagina, un avviso si attiva perché un server sta finendo lo spazio su disco.
+
+00:08:01.800 --> 00:08:03.400
+Invece di svegliare qualcuno alle 2 del mattino,
+
+00:08:03.620 --> 00:08:06.760
+l'avviso attiva una logic app che esegue automaticamente uno scritto di pulizia.
+
+00:08:07.400 --> 00:08:09.180
+Il problema viene risolto prima ancora che qualcuno se ne accorgi.
+
+00:08:09.520 --> 00:08:11.840
+Ora ecco una novità del 2026 che cambia le regole del gioco.
+
+00:08:11.840 --> 00:08:15.720
+Le soglie dinamiche usano il machine learning per imparare come appare il comportamento normale
+
+00:08:15.720 --> 00:08:17.040
+nel tuo ambiente specifico.
+
+00:08:17.200 --> 00:08:18.980
+Tengono conto dei pattern orari giornali e settimane.
+
+00:08:19.440 --> 00:08:22.880
+Quindi se il tuo server lavora solidamente al 40% del CPU durante il giorno,
+
+00:08:23.280 --> 00:08:27.020
+ma raggiunge picchi del 70% ogni martedì alle 15 a causa di un backup programmato,
+
+00:08:27.080 --> 00:08:28.040
+il sistema lo apprende.
+
+00:08:28.720 --> 00:08:32.000
+Non ti avvisa per quel picco, ma solo quando accade qualcosa di veramente anomalo.
+
+00:08:32.600 --> 00:08:34.260
+Questo riduce drasticamente i falsi positivi.
+
+00:08:34.660 --> 00:08:36.880
+E c'è un'altra nuova funzionalità, gli avvisi sulle metriche basate.
+
+00:08:37.020 --> 00:08:40.620
+Questi ti permettono di usare query in stile KQL sulle metriche di Prometheus e OpenTelemetry.
+
+00:08:40.620 --> 00:08:43.640
+Quindi se usi Kubernetes e Prometheus per le metriche,
+
+00:08:44.000 --> 00:08:47.620
+puoi scrivere lo stesso tipo di query in stile log sui tuoi dati metrici.
+
+00:08:48.280 --> 00:08:51.040
+Ciò unifica la logica di avviso su tutte le tue fonti di telemetria.
+
+00:08:51.680 --> 00:08:52.240
+Punto è questo.
+
+00:08:52.620 --> 00:08:55.260
+Il monitoraggio diventa proattivo quando imposti correttamente gli avvisi.
+
+00:08:55.780 --> 00:08:57.440
+Rilevi i problemi prima che gli utenti se ne accorgono.
+
+00:08:58.000 --> 00:09:01.500
+Questa è la differenza tra ricevere una chiamata dal capo alle 3 del mattino perché il sito è giù
+
+00:09:01.500 --> 00:09:04.480
+e ricevere una notifica alle 3 che dice abbiamo risolto un potenziale problema
+
+00:09:04.480 --> 00:09:05.880
+prima che qualcuno se ne accorgesse.
+
+00:09:05.880 --> 00:09:09.380
+Cosa c'è di nuovo nel 2026? Perché è importante?
+
+00:09:10.460 --> 00:09:15.300
+Ora parliamo di cosa è cambiato davvero in Azure Monitor per il 2026 perché non è la stessa piattaforma di due anni fa.
+
+00:09:16.280 --> 00:09:17.320
+Ecco il più grande aggiornamento.
+
+00:09:17.400 --> 00:09:18.740
+OpenTelemetry è ora lo standard.
+
+00:09:19.600 --> 00:09:22.560
+L'ingestione nativa OTLP funziona direttamente con l'agente di Azure Monitor.
+
+00:09:22.900 --> 00:09:26.500
+Ciò significa che puoi utilizzare una strumentazione indipendente dal fornitore per tutte le tue applicazioni.
+
+00:09:26.500 --> 00:09:28.860
+Non sei vincolato agli SDK specifici di Microsoft.
+
+00:09:29.560 --> 00:09:31.620
+Scrivi la tua strumentazione una volta con standard aperti.
+
+00:09:31.700 --> 00:09:35.360
+Funziona sia che tu stia inviando dati ad Azure Monitor, Datadog o qualsiasi altro servizio.
+
+00:09:35.820 --> 00:09:38.180
+È fondamentale se la tua organizzazione valorizza la flessibilità.
+
+00:09:39.140 --> 00:09:41.820
+Successivamente il supporto per SLA e SLA ha diventato di primo livello.
+
+00:09:42.280 --> 00:09:44.980
+Puoi definire indicatori di livello di servizio per disponibilità e latenza,
+
+00:09:45.060 --> 00:09:49.240
+raggruppare le tue risorse in gruppi di servizio e monitorare i tuoi obiettivi di affidabilità in modo nativo.
+
+00:09:50.320 --> 00:09:53.600
+Niente più esportazione dei dati su fogli di calcolo per calcolare la percentuale di uptime.
+
+00:09:53.960 --> 00:09:55.280
+È integrato direttamente nel piattaforma.
+
+00:09:55.280 --> 00:09:57.900
+Ora ecco qualcosa su cui devi agire se non l'hai già fatto.
+
+00:09:58.580 --> 00:10:00.740
+Vecchio agente Log Analytics è completamente in pensione.
+
+00:10:01.300 --> 00:10:03.800
+Dal 2 marzo 2026 il back-end è stato disattivato.
+
+00:10:04.240 --> 00:10:07.120
+Se stai ancora usando quel vecchio agente il flusso dei tuoi dati si è interrotto.
+
+00:10:07.480 --> 00:10:10.380
+Tutti devono passare all'agente di Azure Monitor con le regole di raccolta dati.
+
+00:10:10.880 --> 00:10:13.280
+Se non hai ancora effettuato la migrazione questa è la tua priorità numero uno.
+
+00:10:14.000 --> 00:10:15.100
+E un altro cambiamento in arrivo.
+
+00:10:15.460 --> 00:10:18.620
+Microsoft Entry ID è ora richiesto per interrogare i dati di Application Insights.
+
+00:10:19.200 --> 00:10:21.140
+Le vecchie chiavi API Legacy daranno rimosso.
+
+00:10:21.140 --> 00:10:23.220
+La scadenza è il 30 settembre 2026.
+
+00:10:23.220 --> 00:10:27.160
+Quindi se avete script o strumenti che usano quelle vecchie chiavi dovete aggiornarli per
+
+00:10:27.160 --> 00:10:28.600
+usare l'autenticazione Entry ID.
+
+00:10:29.360 --> 00:10:33.120
+Infine i nuovi livelli di Log Basic e Auxiliary rendono molto più economico archiviare dati
+
+00:10:33.120 --> 00:10:34.480
+consultati meno frequentemente.
+
+00:10:34.940 --> 00:10:37.860
+Parleremo meglio dei costi tra un momento ma è un aspetto fondamentale per chiunque
+
+00:10:37.860 --> 00:10:39.840
+voglia tenere sotto controllo la bolletta del monitoraggio.
+
+00:10:40.100 --> 00:10:41.840
+Consigli pratici e ottimizzazione dei costi.
+
+00:10:41.840 --> 00:10:46.080
+A proposito di costi approfondiamo come funziona davvero il prezzo di Azure Monitor perché
+
+00:10:46.080 --> 00:10:47.720
+può sorprendervi se non state attenti.
+
+00:10:48.420 --> 00:10:49.720
+Azure Monitor si basa sull'utilizzo.
+
+00:10:49.980 --> 00:10:52.820
+Si paga per l'ingestione dei log e la conservazione delle metriche personalizzate di avvisi.
+
+00:10:53.140 --> 00:10:56.140
+Non c'è una tariffa mensile fissa il che è ottimo quando si è piccoli ma può crescere
+
+00:10:56.140 --> 00:10:57.620
+rapidamente se non si presta attenzione.
+
+00:10:57.980 --> 00:10:59.300
+Ecco la cosa più importante da capire.
+
+00:10:59.800 --> 00:11:00.740
+Esistono tre livelli di log.
+
+00:11:00.740 --> 00:11:04.040
+I log analytics costano circa 2,30 dollari per gigabyte.
+
+00:11:04.440 --> 00:11:07.300
+Questi sono i vostri log a fedeltà completa con capacità di query limitata.
+
+00:11:07.660 --> 00:11:09.940
+I log basic costano circa 0,50 dollari per gigabyte.
+
+00:11:10.280 --> 00:11:12.640
+Sono destinati ai dati che dovete conservare ma che non interrogate spesso.
+
+00:11:12.820 --> 00:11:15.060
+E i log seriali costano circa 0,5 dollari per gigabyte.
+
+00:11:15.500 --> 00:11:16.660
+Si tratta di prezzi di archiviazione.
+
+00:11:17.060 --> 00:11:19.040
+Li conservate per conformità ma non li guardate così mai.
+
+00:11:19.340 --> 00:11:21.580
+Avete 5 giga altuiti per i log analytics.
+
+00:11:22.520 --> 00:11:26.120
+Sono sufficienti per un piccolo ambiente ma finiscono in fretta quando iniziate a monitorare
+
+00:11:26.120 --> 00:11:27.280
+più server e applicazioni.
+
+00:11:27.280 --> 00:11:31.320
+Se la vostra ingestione giornaliera è stabile e superiore a 100 giga al giorno, i livelli
+
+00:11:31.320 --> 00:11:34.160
+di impegno possono farvi risparmiare dal 15 al 30%.
+
+00:11:34.160 --> 00:11:38.380
+Vi impegnate per una certa quantità di dati giornalieri e Microsoft vi offre uno sconto
+
+00:11:38.380 --> 00:11:40.180
+ma fatelo solo se il vostro utilizzo è prevedibile.
+
+00:11:40.700 --> 00:11:43.560
+Se oscilla drasticamente la tariff a consumo potrebbe effettivamente risultare più o no.
+
+00:11:43.880 --> 00:11:46.340
+Quindi cosa dovreste fare concretamente per mantenere i costi sotto controllo?
+
+00:11:46.820 --> 00:11:49.580
+Iniziate spostando i log di basso valore sui livelli basic o auxiliary.
+
+00:11:50.440 --> 00:11:53.540
+Quei log di debug del vostro ambiente di sviluppo non hanno bisogno di stare sul livello
+
+00:11:53.540 --> 00:11:54.200
+analytics.
+
+00:11:55.060 --> 00:11:57.120
+Successivamente impostate criteri di conservazione per tabella.
+
+00:11:57.480 --> 00:11:59.100
+Conservate i dati operativi per 31 giorni.
+
+00:11:59.400 --> 00:12:01.820
+Conservate i dati di conformità più a lungo ma non tenete tutto per sé.
+
+00:12:02.260 --> 00:12:03.820
+Poi utilizzate il campionamento in application in sé.
+
+00:12:04.160 --> 00:12:06.000
+Non è necessario che ogni singola richiesta venga registrato.
+
+00:12:06.660 --> 00:12:10.140
+Un campione statisticamente significativo vi offre le stesse informazioni del costo.
+
+00:12:10.680 --> 00:12:12.900
+E infine impostate tetti di spesa giornalieri e avvisi.
+
+00:12:13.660 --> 00:12:16.620
+Ricevete una notifica quando raggiungete l'80% del budget così non lo risolvete solo.
+
+00:12:16.840 --> 00:12:19.220
+L'errore più grande è che le persone commettano a inviare tutto a livello analytics
+
+00:12:19.220 --> 00:12:20.240
+per impostazione predefinita.
+
+00:12:20.460 --> 00:12:21.400
+Suddividete la vostra telemetria.
+
+00:12:21.400 --> 00:12:23.640
+Non ogni log ha bisogno di capacità di query completa.
+
+00:12:24.160 --> 00:12:25.560
+Tratta i dati economici come tali.
+
+00:12:26.480 --> 00:12:27.360
+Come si incassero tu quanto?
+
+00:12:27.780 --> 00:12:29.120
+Dunque ecco il punto su Azure Monitor.
+
+00:12:29.600 --> 00:12:30.260
+Non lavora da solo.
+
+00:12:30.660 --> 00:12:33.320
+È l'elemento centrale che collega tutto nel tuo mondo a Microsoft.
+
+00:12:33.900 --> 00:12:34.760
+Lascia che ti mostri come fa.
+
+00:12:34.760 --> 00:12:38.660
+I log di Azure AD fluiscono in Azure Monitor tramite le impostazioni di diagnostica.
+
+00:12:39.060 --> 00:12:42.900
+Quindi quando qualcuno dice che un'app è lenta controlla i log di accesso accanto ai dati sulle prestazioni
+
+00:12:42.900 --> 00:12:44.580
+c'è stato un ritardo nell'autenticazione.
+
+00:12:45.120 --> 00:12:46.620
+È intervenuto un criterio di accesso condizionale?
+
+00:12:46.860 --> 00:12:47.920
+Vedi tutto da un'unica schermata.
+
+00:12:48.280 --> 00:12:50.880
+Microsoft Sentinel gira sullo stesso workspace di Log Analytics.
+
+00:12:51.460 --> 00:12:53.920
+I tuoi dati operativi e di sicurezza convivono fianco a fianco.
+
+00:12:54.480 --> 00:12:56.480
+Quando indaghi su un incidente non cambi strumento.
+
+00:12:56.900 --> 00:12:57.780
+Interroghi un unico set ID.
+
+00:12:58.220 --> 00:12:58.960
+Questa è la vera potenza.
+
+00:12:58.960 --> 00:13:02.860
+Un evento di sicurezza sospetto potrebbe essere spiegato da un problema di prestazioni già individuato.
+
+00:13:02.860 --> 00:13:05.580
+Anche Defender for Cloud attinge l'Azure Monitor.
+
+00:13:06.180 --> 00:13:07.240
+Non crea una propria telemetria.
+
+00:13:07.820 --> 00:13:09.680
+Usa le stesse metriche e i log che già raccogli.
+
+00:13:10.140 --> 00:13:12.420
+Quindi quando Defender segnala una vulnerabilità di un OVM
+
+00:13:12.420 --> 00:13:15.480
+puoi controllare subito i dati sulle prestazioni di quell'OVM per verificare l'impatto.
+
+00:13:15.620 --> 00:13:19.200
+Persino i dati di governance di Microsoft Preview possono connettersi per il monitoraggio della conformità.
+
+00:13:19.420 --> 00:13:23.640
+Le tue policy di classificazione e conservazione dei dati si collegano a tutta la stessa piattaforma di osservabilità.
+
+00:13:24.100 --> 00:13:28.520
+Il Cloud Adoption Framework di Microsoft raccomanda Azure Monitor come piattaforma di monitoraggio primaria.
+
+00:13:28.960 --> 00:13:29.840
+Questa è la loro stessa guida.
+
+00:13:30.240 --> 00:13:32.260
+Ti stanno dicendo di costruire attorno a questo strumento.
+
+00:13:32.260 --> 00:13:34.220
+Ora immagina che qualcuno dica che SharePoint è lento.
+
+00:13:34.860 --> 00:13:38.540
+Con Azure Monitor apri una cartella di lavoro, controlli l'integrità del servizio SharePoint,
+
+00:13:38.700 --> 00:13:42.860
+osservi la VM che ospita il front-end web, controlli i log di accesso di entri e di peritardi di autenticazione
+
+00:13:42.860 --> 00:13:45.000
+e vedi i dati sulle prestazioni dell'app da Application Insights.
+
+00:13:45.540 --> 00:13:46.340
+Tutto un'unica schermata.
+
+00:13:46.920 --> 00:13:52.000
+Niente più salti tra l'interfaccia di amministrazione di SharePoint, la dashboard della VM e in 3D Application Insights.
+
+00:13:52.680 --> 00:13:53.180
+È tutto lì.
+
+00:13:53.900 --> 00:13:54.800
+Quindi ecco la conclusione.
+
+00:13:55.200 --> 00:13:57.300
+Azure Monitor non è solo un altro strumento di monitoraggio.
+
+00:13:57.300 --> 00:14:01.680
+È la dashboard centrale che unisce app, infrastruttura, identità e sicurezza.
+
+00:14:02.200 --> 00:14:04.300
+Il vero valore è l'integrazione, non una singola funzionalità.
+
+00:14:05.360 --> 00:14:08.500
+Una piattaforma dati, un linguaggio di query, un unico posto dove guardare.
+
+00:14:08.920 --> 00:14:12.820
+Se stai iniziando il tuo percorso nel cloud, abilita Azure Monitor sulla tua prima VM oggi stesso.
+
+00:14:13.340 --> 00:14:15.960
+Attiva semplicemente le impostazioni di diagnostica e scopri cosa ti stavi perdendo.
+
+00:14:16.360 --> 00:14:20.640
+Iscriviti sulla tua piattaforma di podcast preferita e condividi questo episodio con qualcuno che sta affogando in troppe dashboard.
+
+00:14:20.640 --> 00:14:24.800
+Sono Mirko Peters, questo è Microsoft Knowledge Nuggets su M365.

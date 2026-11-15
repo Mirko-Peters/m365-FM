@@ -64,18 +64,18 @@ class Component extends DCLogic {
     const f = s.f || 'open';
     const L = [
       { type: 'Podcast', date: '[DATE]', title: 'Copilot Studio governance – guest episode', src: 'Auto · M365.FM', progs: ['MVP'], open: true },
-      { type: 'Talk', date: '[DATE]', title: 'Azure Virtual Desktop in practice', src: 'Shared from LinkedIn', progs: ['MVP', 'NVP'], open: true },
+      { type: 'Speaker', date: '[DATE]', title: 'Azure Virtual Desktop in practice', src: 'Shared from LinkedIn', progs: ['MVP', 'NVP'], open: true },
       { type: 'Video', date: '[DATE]', title: 'Power Platform governance explained', src: 'Auto · YouTube', progs: ['MVP'], open: true },
-      { type: 'Blog', date: '[DATE]', title: 'SAP data in Microsoft Fabric', src: 'Auto · blog feed', progs: ['MVP', 'SAP'], open: true },
+      { type: 'Article', date: '[DATE]', title: 'SAP data in Microsoft Fabric', src: 'Auto · blog feed', progs: ['MVP', 'SAP'], open: true },
       { type: 'Training', date: '[DATE]', title: 'Copilot workshop for admins, 2 days', src: 'Added by hand', progs: ['MCT'], open: true },
-      { type: 'Code', date: '[DATE]', title: 'PnP script sample for site provisioning', src: 'Auto · GitHub', progs: ['MVP'], open: true },
+      { type: 'Open source', date: '[DATE]', title: 'PnP script sample for site provisioning', src: 'Auto · GitHub', progs: ['MVP'], open: true, wait: 'Pull request open' },
       { type: 'Podcast', date: '[DATE]', title: 'Teams Phone migration', src: 'Auto · M365.FM', progs: ['MVP'], open: false },
       { type: 'Event', date: '[DATE]', title: 'Organized: M365Con 2027 session track', src: 'Auto · M365.FM events', progs: ['MVP'], open: false }
     ];
     const items = L.filter((i) => f === 'all' || (f === 'open' ? i.open : !i.open)).map((i) => Object.assign({}, i, {
       progs: i.progs.map((n) => ({ n })),
-      st: i.open ? 'Not in portal' : 'Entered',
-      stStyle: i.open ? 'padding: 0 6px; background: #9a4f0f; color: #ffffff; font: 600 11px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;' : 'padding: 0 6px; background: #2f6b3a; color: #ffffff; font: 600 11px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;'
+      st: i.wait ? i.wait + ' · wait' : i.open ? 'Not in portal' : 'Entered',
+      stStyle: i.wait ? 'padding: 0 6px; border: 1px solid #9a4f0f; color: #9a4f0f; font: 600 11px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;' : i.open ? 'padding: 0 6px; background: #9a4f0f; color: #ffffff; font: 600 11px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;' : 'padding: 0 6px; background: #2f6b3a; color: #ffffff; font: 600 11px/1.7 Barlow Condensed, sans-serif; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;'
     }));
     const filters = [['open', 'Open · 6'], ['done', 'Entered'], ['all', 'All · 18']].map(([k, label]) => ({
       label, on: f === k,

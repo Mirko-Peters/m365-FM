@@ -1,0 +1,170 @@
+[
+ {
+  "n": 1,
+  "slug": "how-to-recall-an-email-in-outlook",
+  "kwhero_score": 75,
+  "status": "validate OK, humanlint OK (2147 Woerter)",
+  "changes": "Falsche Behauptung des Entwurfs gestrichen (Recall angeblich nicht per Web/Mobil; laut Microsoft werden Web, Mac, Android/iOS unterstuetzt). Mac-Mindestversion 16.94 statt 'New Outlook ab 2023'. Entwurf-Aussage 'Empfaenger muss Outlook nutzen' ersetzt (Loeschung erfolgt serverseitig). Neu: Exchange-Online-Admin-Einstellungen, Weiterleitung, Alter, Cross-Tenant, Message Trace, eDiscovery/Audit, Undo Send. Floskeln entfernt.",
+  "uncertain": "Schritte fuer klassisches Outlook (Message > Actions > Recall This Message, zwei Optionen) konnte ich auf keiner geoeffneten Microsoft-Seite sehen (Tabs nicht abrufbar); aus Fachwissen, vorsichtig formuliert. Standardwert RecallReadMessagesEnabled steht nicht in der Doku.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/how-to-recall-an-email-in-outlook-requirements-limitations-steps",
+   "https://support.microsoft.com/en-us/outlook/recall-an-email-message-in-outlook-for-mac",
+   "https://support.microsoft.com/en-us/outlook/can-i-undo-recall-a-sent-email",
+   "https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/work-with-cloud-based-message-recall",
+   "https://support.microsoft.com/en-us/outlook/undo-send-in-outlook-for-mac"
+  ],
+  "woerter_entwurf_vs_final": "1399 -> 2147"
+ },
+ {
+  "n": 2,
+  "slug": "how-to-change-signature-in-outlook",
+  "kwhero_score": 79,
+  "status": "validate OK, humanlint OK",
+  "changes": "Falsche Aussage des Entwurfs korrigiert (Signaturen syncen nie): seit Build 2303 roaming fuer M365/Outlook.com-Postfaecher. Mac-Pfad auf Outlook > Settings > Mail > Signatures. Erfundene Statistik (zwei Signaturen, 2-4 Updates pro Jahr, Help-Desks) gestrichen. Unbelegte Mac-Dateipfade, 'Bullets nur Windows', 'Konversationsansicht versteckt Signaturen', 'Mobile nur Text' gestrichen/abgeschwaecht. Neu: new Outlook Schritte, Standard-Einstellungen pro Konto, DisableRoamingSignatures, Hinweis Legacy-Mac-Ende Oktober 2026.",
+  "uncertain": "Windows-Ordnerpfad AppData\\Roaming\\Microsoft\\Signatures nicht auf Microsoft-Seite gesehen (im Text als ungeprueft markiert). Beschriftungen im klassischen Signaturen-Dialog (Select signature to edit, Choose default signature) aus Fachwissen; Struktur durch Screenreader-Seite bestaetigt. Web-Pfad Settings > Accounts > Signatures laut Microsoft-Seite, aeltere Variante Mail > Compose and reply erwaehnt.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/how-to-add-and-change-an-email-signature-in-outlook",
+   "https://support.microsoft.com/en-us/outlook/create-insert-or-change-a-signature-in-outlook-for-mac",
+   "https://support.microsoft.com/en-us/outlook/outlook-roaming-signatures",
+   "https://support.microsoft.com/en-us/outlook/can-i-change-my-email-signature",
+   "https://support.microsoft.com/en-us/outlook/officeweb/create-a-signature-and-automatic-reply",
+   "https://support.microsoft.com/en-gb/office/use-a-screen-reader-to-add-a-signature-in-outlook-a11f4989-e598-4288-ad55-8a3de4994b13",
+   "https://support.microsoft.com/en-us/outlook/create-an-email-signature-for-your-small-business"
+  ],
+  "woerter_entwurf_vs_final": "2700 -> 2309"
+ },
+ {
+  "n": 3,
+  "slug": "how-to-schedule-an-email-in-outlook",
+  "kwhero_score": 81,
+  "status": "validate OK, humanlint OK",
+  "changes": "Falsch im Entwurf: 'Scheduled-Ordner' (laut Microsoft liegen geplante Mails in Drafts); 'Rules koennen Wiederholung/Forward-Drafts' gestrichen; Regel-Verzoegerung nur 1-120 Min; Mac-Anforderungen (Exchange-Konto, kein IMAP/POP); Mobile-Schritte 'Schedule Send' im Entwurf nicht belegt, ersetzt durch Hinweis plus Abgrenzung zum Snooze-Swipe; Audit/Purview-Abschnitt (unbelegte Behauptungen), Zapier/Teams/VBA, 8-10-Uhr-Behauptung gestrichen. Neu: Power-Automate-Recurrence-Flow laut Learn-Tutorial, Fehlersuche, Common mistakes.",
+  "uncertain": "Ob Outlook fuer ein einzelnes Delay-Delivery-Mail laufen muss: Microsoft sagt es nur fuer die Regel; im Text vorsichtig als Test empfohlen. Outlook-Mobile Schedule send nicht belegt (nur Hinweis, selbst pruefen). Abbrechen/Aendern im Web nur Send now dokumentiert.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/delay-or-schedule-sending-email-messages-in-outlook",
+   "https://support.microsoft.com/en-us/outlook/schedule-send-for-outlook-on-the-web",
+   "https://support.microsoft.com/en-us/outlook/customize-your-email-message",
+   "https://support.microsoft.com/en-us/outlook/use-schedule-send-in-outlook-for-mac",
+   "https://support.microsoft.com/en-gb/outlook/what-does-it-mean-to-schedule-an-email",
+   "https://learn.microsoft.com/en-us/power-automate/get-started-with-cloud-flows"
+  ],
+  "woerter_entwurf_vs_final": "3179 -> 2380"
+ },
+ {
+  "n": 4,
+  "slug": "how-to-set-out-of-office-in-outlook",
+  "kwhero_score": 88,
+  "status": "validate OK, humanlint OK",
+  "changes": "Menuepfade korrigiert (neu Outlook: View > View settings > Accounts > Automatic Replies; Web: Settings > Accounts > Automatic replies; Mac: Tools > Automatic Replies). 'Mail > Automatic replies', 'View all Outlook settings', Mobile 'Profilsymbol' und Sync-Behauptungen gestrichen/ersetzt. Zapier-Absatz, lila Anzeige, 'Delegates verwalten OOO' (unbelegt) entfernt. Neu: Kontotyp-Voraussetzung, nur einmal pro Absender, Fehlerursachen aus Learn (Junk, Weiterleitung, Remote Domain, Transport Rules), Admin-Wege fuer Benutzer/Shared Mailbox.",
+  "uncertain": "Rules-Button im klassischen Fenster nur knapp beschrieben. Shared-Mailbox-Dauerantwort-Hinweis ist Empfehlung, nicht belegt.",
+  "urls": [
+   "https://support.microsoft.com/en-us/office/send-automatic-out-of-office-replies-from-outlook-9742f476-5348-4f9f-997f-5e208513bd67",
+   "https://support.microsoft.com/en-us/outlook/send-automatic-out-of-office-replies-from-outlook-com-or-outlook-on-the-web",
+   "https://support.microsoft.com/en-us/outlook/send-automatic-out-of-office-replies-from-outlook-for-mac",
+   "https://support.microsoft.com/en-us/outlook/how-do-i-enable-out-of-the-office-messages-for-each-of-my-accounts",
+   "https://learn.microsoft.com/en-us/troubleshoot/exchange/email-delivery/understand-troubleshoot-oof-replies",
+   "https://learn.microsoft.com/en-us/troubleshoot/exchange/user-and-shared-mailboxes/set-automatic-replies"
+  ],
+  "woerter_entwurf_vs_final": "1787 -> 2076"
+ },
+ {
+  "n": 5,
+  "slug": "how-to-encrypt-email-in-outlook",
+  "kwhero_score": 57,
+  "status": "validate OK, humanlint OK",
+  "changes": "Entwurf falsch: Familien-/Personal-Pläne hätten keine Verschlüsselung (laut Microsoft Encrypt/Do Not Forward in Outlook.com und neuem Outlook fuer Windows moeglich). Optionsnamen korrigiert (Encrypt, Do Not Forward statt 'Encrypt-Only/Encrypt & Prevent Forwarding'). Entwurf nur 1148 Woerter: ergaenzt um S/MIME-Schritte (neu Outlook, Mac), Lizenzliste aus Purview-FAQ, Empfaengersicht, 25-MB-Limit, Anhaenge, Build-2511-Problem, Sensitivity Labels. Nachtrag: Groessenlimit-Widerspruch (OME-FAQ 25 MB vs Exchange-Limits-Seite 100 MB fuer Purview) im Text offen gelegt.",
+  "uncertain": "Outlook on the web: Menuepfad fuer Encrypt nicht auf geoeffneter Microsoft-Seite gefunden (im Text offen formuliert). Classic-Outlook-Schritte nur ueber Learn-Hinweis (Options > Encrypt) belegt. Lizenzangaben stammen aus der Purview-FAQ und koennen sich aendern.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/send-s-mime-or-microsoft-purview-encrypted-emails-in-outlook",
+   "https://support.microsoft.com/en-us/outlook/send-encrypted-messages-with-a-microsoft-365-personal-or-family-subscription",
+   "https://learn.microsoft.com/en-us/purview/ome-faq",
+   "https://support.microsoft.com/en-us/outlook/mail/learn-about-securing-and-protecting-email-messages-in-outlook",
+   "https://support.microsoft.com/en-us/office/send-a-digitally-signed-or-encrypted-message-for-mac-a18ecf7f-a7ac-4edd-b02e-687b05eff547",
+   "https://support.microsoft.com/en-us/outlook/mail/set-up-outlook-to-use-s-mime-encryption",
+   "https://support.microsoft.com/en-us/office/classic-outlook-recipients-are-unable-to-open-encrypt-only-emails-cb75e2de-adac-4769-b02c-b9d2f0682791",
+   "https://learn.microsoft.com/en-us/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits"
+  ],
+  "woerter_entwurf_vs_final": "1148 -> 1972"
+ },
+ {
+  "n": 6,
+  "slug": "how-to-bcc-in-outlook",
+  "kwhero_score": 61,
+  "status": "validate OK, humanlint OK",
+  "changes": "Entwurf falsch: 'BCC-Empfaenger koennen nur dem Absender antworten' (Reply All erreicht To/Cc), 'nur Sender und jeder Bcc-Empfaenger kennen die Bcc-Liste' (Bcc-Empfaenger sehen sich nicht; Microsoft: nur Absender sieht Bcc, nur in Sent Items). Menuepfade korrigiert (neu Outlook: Options > Show fields > Show Bcc; Mac: Bcc rechts von To / Settings > Composing). Unbelegte Spam-Prozentbehauptungen, Zitate zu Add-ins/Teams/Kalender gestrichen. Neu: Exchange-Online-Limits (1.000/Nachricht, 10.000/Tag, Verteilergruppe zaehlt als 1), Safe-Senders-Hinweis, Sent-Items-Pruefung, Fehlersuche.",
+  "uncertain": "Classic Outlook und Web: Menuepfad fuer Bcc nicht auf geoeffneter Microsoft-Seite (Tabs); im Text vorsichtig/als Pruefhinweis formuliert. Reply-All-Verhalten von Bcc-Empfaengern ist allgemeines E-Mail-Verhalten, nicht von Microsoft-Seite belegt (im Text so gekennzeichnet).",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/show-hide-and-view-the-bcc-blind-carbon-copy-field-in-outlook-for-windows",
+   "https://support.microsoft.com/en-us/office/show-hide-and-view-the-bcc-field-in-outlook-for-mac-275f57a6-9d6e-4b00-b8c8-3b06b20d71ec",
+   "https://support.microsoft.com/en-us/outlook/mail/create-an-email-message-in-outlook",
+   "https://learn.microsoft.com/en-us/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits"
+  ],
+  "woerter_entwurf_vs_final": "2995 -> 2001"
+ },
+ {
+  "n": 7,
+  "slug": "outlook-dark-mode",
+  "kwhero_score": 87,
+  "status": "validate OK, humanlint OK",
+  "changes": "Entwurf nur 714 Woerter und teils falsch: Mac 'Outlook > Preferences', Web 'Settings > Dark mode', 'Switch Background'-Schalter, 'Dark Gray oder Black' fuer klassisch. Ersetzt durch Microsoft-Pfade: neu Outlook Settings > General > Appearance; klassisch Office Theme (Black) unter File > Options > General; Web Settings > General > Appearance; iOS Appearance; Android Dark Theme/Battery Saver. Neu: weisser Hintergrund (Turn on the lights, Light Reading Pane, 'never change message background'), Windows-11-Mica-Hinweis. Behauptungen zu Barrierefreiheit/Batterie/Nutzerzitate gestrichen.",
+  "uncertain": "Mac-Pfad stammt nur aus einer Community-Antwort (im Text gekennzeichnet). Aussage, dass Empfaenger Nachrichten in eigener Ansicht sehen, ist logische Folgerung, Microsoft sagt nur, die Schalter betreffen das eigene Fenster. Tipps zu Logos/Hintergruenden sind als eigene Empfehlungen markiert.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/dark-mode-in-outlook",
+   "https://support.microsoft.com/en-us/office/foundations-experiences/change-the-look-and-feel-of-microsoft-365",
+   "https://support.microsoft.com/en-us/outlook/change-the-look-of-your-mailbox-in-outlook-com-and-outlook-on-the-web",
+   "https://support.microsoft.com/en-gb/office/how-do-i-enable-dark-mode-on-outlook-for-ios-a006caed-e4c3-46d7-8832-faafd7d43af4",
+   "https://support.microsoft.com/en-au/office/how-do-i-enable-dark-mode-on-outlook-for-android-a2be4ece-377c-4541-9df4-500e8680f184"
+  ],
+  "woerter_entwurf_vs_final": "714 -> 1585"
+ },
+ {
+  "n": 8,
+  "slug": "how-to-share-outlook-calendar",
+  "kwhero_score": 78,
+  "status": "validate OK, humanlint OK",
+  "changes": "Falsch im Entwurf: 'Delegate-Setup nur am Desktop' (laut Microsoft in neuem Outlook und Web moeglich), 'External: Edit oft blockiert' (Microsoft: Edit/Delegate extern nicht moeglich), Berechtigungsnamen (Can view when I'm busy ... Delegate), erfundene Mobile-Menues ('Manage Sharing', 'Delegate access' in Mobile). Mobile-Schritte jetzt nach Microsoft (Gear > Add people). YouCanBookMe/Zapier/Teams-Automatisierung, Safari-Tipp, Auditing-Behauptungen entfernt. Neu: Sync-Tabelle (sofort/ca. 3 Std/Gmail 24-48 Std), Admin-Schalter fuer externes Teilen, Publish/Unpublish, Delegate-Optionen.",
+  "uncertain": "Klassisches Outlook: Share Calendar auf Home-Tab nicht auf geoeffneter Seite bestaetigt (Tab nicht abrufbar), im Text als Pruefhinweis. Mac-Schritte aus Microsoft-Mac-Artikel, nicht verlinkt (Linkgrenze 5). 'Alle Details zeigt alles ausser Privates' folgt aus Microsoft-Hinweis zu Private-Eintraegen.",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/calendar-sharing-in-microsoft-365",
+   "https://support.microsoft.com/en-us/outlook/sharing/share-an-outlook-calendar-as-view-only-with-others",
+   "https://support.microsoft.com/en-us/outlook/sharing/share-and-access-a-calendar-with-edit-or-delegate-permissions-in-outlook",
+   "https://support.microsoft.com/en-us/outlook/share-your-calendar-in-outlook-on-the-web",
+   "https://support.microsoft.com/en-US/Outlook/delegation-and-shared-calendars-in-outlook-for-mac",
+   "https://support.microsoft.com/en-us/outlook/training/calendar-sharing-in-outlook-mobile",
+   "https://learn.microsoft.com/en-us/microsoft-365/admin/manage/share-calendars-with-external-users?view=o365-worldwide"
+  ],
+  "woerter_entwurf_vs_final": "3561 -> 2320"
+ },
+ {
+  "n": 9,
+  "slug": "how-to-change-default-font-in-outlook",
+  "kwhero_score": 73,
+  "status": "validate OK, humanlint OK",
+  "changes": "Entwurf falsch/unbelegt: OWA habe 'keinen dauerhaften Default' (offen formuliert: nur View settings/Compose and reply nennen, Default dort nicht von Microsoft belegt), Dark-Mode-Pfad 'Dark Gray/Black' im Fontartikel (gestrichen), Spellcheck-/Sprachabschnitt (themenfremd), 'Updates setzen Schrift zurueck', 'Cache/Profil loeschen' (unbelegt), 'legal compliance'. Neu: new-Outlook-Pfad (View settings > Mail > Compose > Message format), klassisch (Stationery and Fonts > Personal Stationery), Reset auf Calibri 11 (+Body, Regular, 11), Mac Fonts-Dialog, Calibri-Light-Problem laut Microsoft Q&A, Ersatzschrift beim Empfaenger laut Microsoft.",
+  "uncertain": "Web: dauerhafter Default-Font nicht belegt, im Text so gesagt. Mac-Pfad: Einstellungen > Fonts aus Microsoft-Screenreader-Seite und Q&A, nicht aus normaler Support-Seite. Calibri-Light-Problem stammt aus einer Microsoft-Q&A-Antwort (Stand Anfang 2026).",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/mail/change-the-default-font-or-text-color-for-email-messages-in-outlook",
+   "https://support.microsoft.com/en-us/office/set-the-font-or-text-color-for-messages-you-send-83425b7b-4acc-4e94-8c04-fa1e31790318",
+   "https://support.microsoft.com/en-us/outlook/customize-your-email-message-in-outlook-on-the-web",
+   "https://support.microsoft.com/en-us/accessibility/outlook/mac/use-a-screen-reader-to-format-text-in-outlook-for-mac-email",
+   "https://learn.microsoft.com/en-us/answers/questions/5607893/unavailable-default-font-for-new-emails-replies-on"
+  ],
+  "woerter_entwurf_vs_final": "2203 -> 1720"
+ },
+ {
+  "n": 10,
+  "slug": "how-to-make-an-email-group-in-outlook",
+  "kwhero_score": 71,
+  "status": "validate OK, humanlint OK",
+  "changes": "Entwurf vermischte Kontaktlisten und Microsoft-365-Gruppen und beschrieb 'People tab, App-Launcher' fuer Web; Schritte jetzt nach Microsoft (neu Outlook: People > New contact list; klassisch: New Contact Group > Add Members > Save & Close; Web/Outlook.com; Mac). 'Wird synchronisiert nach 15-30 Min', Rules-Weiterleitung, 'Gruppen als Outlook-Item teilen', Public Folders gestrichen/unbelegt. Neu: Begriffsklaerung (Contact list = contact group = distribution list), Gruppentypen aus Learn-Vergleich, Empfaengerlimit-Hinweis (persoenliche Listen zaehlen einzeln).",
+  "uncertain": "Webschritte stammen aus der Outlook.com-Seite (Outlook on the web nicht separat geprueft). Mac-Artikel nicht verlinkt (Linkgrenze).",
+  "urls": [
+   "https://support.microsoft.com/en-us/outlook/people/create-edit-or-delete-a-contact-list-or-contact-group-in-outlook",
+   "https://support.microsoft.com/en-us/outlook/training/create-a-contact-group-in-outlook",
+   "https://support.microsoft.com/en-us/outlook/create-view-and-edit-contacts-and-contact-lists-in-outlook-com",
+   "https://support.microsoft.com/en-us/office/create-a-contact-list-or-distribution-list-in-outlook-for-mac-c5230b49-5e00-481b-a2ce-66f388f7bd34",
+   "https://learn.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide"
+  ],
+  "woerter_entwurf_vs_final": "2062 -> 1785"
+ }
+]

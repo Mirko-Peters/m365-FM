@@ -1,0 +1,1057 @@
+WEBVTT
+
+00:00:00.100 --> 00:00:04.180
+Welkom bij weer een nieuwe aflevering van Microsoft Knowledge Nuggets op M365FM.
+
+00:00:04.320 --> 00:00:05.700
+Ik ben je host Milko Peters.
+
+00:00:05.980 --> 00:00:09.640
+Wat als ik je vertelde dat er een tool op je computer staat die bijna alles kan automatiseren?
+
+00:00:09.860 --> 00:00:11.360
+Denk eens aan je normale werkdag.
+
+00:00:11.540 --> 00:00:14.780
+Je logt in, opent een paar applicaties, klikt door dezelfde menus als gisteren,
+
+00:00:14.940 --> 00:00:17.300
+draait dezelfde rapporten, controleert dezelfde services.
+
+00:00:17.580 --> 00:00:20.860
+Misschien ben je een uur bezig met iets dat in vijf minuten klaar zou moeten zijn.
+
+00:00:21.060 --> 00:00:23.140
+Die tool waar ik het over heb is PowerShell.
+
+00:00:23.320 --> 00:00:26.640
+Aan het einde van deze aflevering begrijp je wat PowerShell echt is,
+
+00:00:26.640 --> 00:00:31.260
+hoe de commando's werken en waarom het de verborgen superkracht van het Microsoft ecosysteem is.
+
+00:00:31.420 --> 00:00:37.200
+We beginnen bij het basisidee, doorlopen de bouwstenen en aan het einde heb je echte automatisering die je vandaag nog kunt gebruiken.
+
+00:00:37.360 --> 00:00:39.660
+Het grote plaatje, wat PowerShell eigenlijk is.
+
+00:00:39.860 --> 00:00:41.220
+Dus, wat is PowerShell precies?
+
+00:00:41.400 --> 00:00:44.060
+De meeste mensen horen de naam en denken dat het gewoon een hippe opdrachtprompt is.
+
+00:00:44.260 --> 00:00:44.860
+Dat is het niet.
+
+00:00:45.160 --> 00:00:47.320
+PowerShell is een volledig automatiseringsplatform.
+
+00:00:47.560 --> 00:00:51.680
+Zie het als een command line shell, een scriptaal en een tool voor beheer op afstand in één.
+
+00:00:51.860 --> 00:00:54.840
+In de command line shell typ je commando's en krijg je resultaten,
+
+00:00:54.840 --> 00:00:57.980
+maar het is ook een scriptaal waarmee je programma's schrijft die zelfstandig draaien
+
+00:00:57.980 --> 00:01:01.680
+en een beheertool waarmee je tientallen of honderden machines vanuit één venster bestuurt.
+
+00:01:01.840 --> 00:01:06.320
+Twintig jaar geleden betekende automatisering op Windows een rommelige verzameling van verschillende tools.
+
+00:01:06.580 --> 00:01:08.400
+Je gebruikt de batchbestanden voor simpele taken,
+
+00:01:08.620 --> 00:01:13.460
+VB script voor complexere zaken en aparte beheer consoles voor Exchange, Active Directory en Best and Servers.
+
+00:01:13.700 --> 00:01:15.340
+Geen van die tools communiceerde met elkaar.
+
+00:01:15.540 --> 00:01:19.260
+Je kopieerde gegevens van de ene tool, plakte ze in de andere en hoopte dat er niets verloren ging.
+
+00:01:19.500 --> 00:01:21.100
+PowerShell heeft dat allemaal veranderd.
+
+00:01:21.100 --> 00:01:23.020
+Het is één tool die met alles communiceert.
+
+00:01:23.180 --> 00:01:28.880
+Windows zelf, Azure, Microsoft 365, Exchange, Teams, SharePoint, Active Directory en tegenwoordig zelfs Linux machines.
+
+00:01:29.100 --> 00:01:32.760
+Je gebruikt dezelfde taal, dezelfde patronen en dezelfde commando's, ongeacht wat je aanstuurt.
+
+00:01:32.920 --> 00:01:34.240
+En het is platform onafhankelijk.
+
+00:01:34.480 --> 00:01:36.860
+PowerShell 7 draait op Windows, Linux en macOS.
+
+00:01:37.080 --> 00:01:39.380
+Dus in een gemengde omgeving hoef je niet van tool te wisselen.
+
+00:01:39.560 --> 00:01:40.740
+Dit is de kern van het verhaal.
+
+00:01:40.900 --> 00:01:44.380
+Als je in IT werkt, is PowerShell de taal van het Microsoft ecosysteem.
+
+00:01:44.380 --> 00:01:47.600
+Het is de manier waarop je communiceert met je infrastructuur en het saaie werk automatiseert,
+
+00:01:47.600 --> 00:01:49.680
+zodat je je kunt concentreren op de interessante problemen.
+
+00:01:49.760 --> 00:01:52.860
+Maar voordat we in de mogelijkheden duiken, laten we kijken hoe het echt werkt.
+
+00:01:53.000 --> 00:01:56.220
+Het werkwoord zelfstandig naamwoord patroon, hoe PowerShell commando's werken.
+
+00:01:56.400 --> 00:02:01.380
+Elk PowerShell commando volgt een simpel patroongenaamd werkwoord zelfstandig naamwoord en het is precies wat het zegt.
+
+00:02:01.560 --> 00:02:03.280
+Het werkwoord vertelt je wat je wilt doen.
+
+00:02:03.440 --> 00:02:05.960
+Get, set, new, remove, start, stop.
+
+00:02:06.080 --> 00:02:10.740
+En het zelfstandig naamwoord vertelt je wat het doelwit is, zoals process, service, user, item of mailbox.
+
+00:02:10.740 --> 00:02:13.540
+Dus get process geeft je een lijst met actieve processen.
+
+00:02:13.680 --> 00:02:15.720
+Get service toont je alle services op je computer.
+
+00:02:15.720 --> 00:02:17.560
+Set date verandert de systeemtijd.
+
+00:02:17.800 --> 00:02:19.240
+Stop service stopt een service.
+
+00:02:19.420 --> 00:02:23.560
+Het patroon is zo consistent dat je, zodra je het kent, commando's kunt raden die je nog nooit hebt gezien.
+
+00:02:23.760 --> 00:02:24.880
+Wil je een service starten?
+
+00:02:25.000 --> 00:02:25.940
+Type start service.
+
+00:02:26.200 --> 00:02:27.420
+Moet je een gebruiker verwijderen?
+
+00:02:27.520 --> 00:02:28.440
+Type remove user.
+
+00:02:28.740 --> 00:02:29.780
+Zo eenvoudig is het.
+
+00:02:30.000 --> 00:02:34.360
+PowerShell is ontworpen om ontdekbaar te zijn, dus je hoeft geen honderden commando's uit je hoofd te leren.
+
+00:02:34.580 --> 00:02:37.100
+Je beste vriend hier is de get command cmdlet.
+
+00:02:37.100 --> 00:02:41.640
+Voer get command noun service uit en het toont elk commando dat met services werkt.
+
+00:02:41.800 --> 00:02:45.340
+Get service, start service, stop service, restart service, set service.
+
+00:02:45.340 --> 00:02:46.800
+New service, remove service.
+
+00:02:46.980 --> 00:02:48.940
+Ze staan er allemaal door er simpelweg om te vragen.
+
+00:02:49.140 --> 00:02:50.560
+Laat me je een concreet voorbeeld geven.
+
+00:02:50.800 --> 00:02:53.140
+Stel dat je wilt weten welke commando's processen kunnen beheren.
+
+00:02:53.260 --> 00:02:55.020
+Je voert get command noun process uit.
+
+00:02:55.200 --> 00:02:59.000
+Je krijgt get process, start process, debug process, wait process terug.
+
+00:02:59.180 --> 00:03:00.080
+Je hoeft niet te gissen.
+
+00:03:00.280 --> 00:03:01.260
+De tool vertelt het je.
+
+00:03:01.500 --> 00:03:06.180
+Dat is wat PowerShell zo anders maakt dan ouderwetse opdrachtregelprogramma's waarbij je elke vlag en schakelaar moest onthouden.
+
+00:03:06.180 --> 00:03:07.760
+En dit is waarom dat belangrijk is.
+
+00:03:07.940 --> 00:03:10.380
+Je leert PowerShell niet door duizend commando's uit je hoofd te leren.
+
+00:03:10.560 --> 00:03:12.980
+Je leert het patroon en de rest kun je onderweg uitvogelen.
+
+00:03:12.980 --> 00:03:16.340
+Het is alsof je leert dat elk werkwoord in een taal dezelfde vervoeging volgt.
+
+00:03:16.540 --> 00:03:18.960
+Zodra je de regel kent kun je deze overal toepassen.
+
+00:03:19.120 --> 00:03:21.900
+Maar dit is waar PowerShell zich echt onderscheidt van al het andere.
+
+00:03:22.220 --> 00:03:24.380
+Objecten, geen tekst, dat is de game changer.
+
+00:03:24.660 --> 00:03:28.800
+Dus dit is wat PowerShell fundamenteel anders maakt dan elke opdrachtregel tool die eraan voor afging.
+
+00:03:29.260 --> 00:03:31.280
+Traditionele opdrachtregels voeren tekst uit.
+
+00:03:31.440 --> 00:03:34.940
+Je voert een commando uit en krijgt regels met tekens op je scherm en dat is het.
+
+00:03:35.080 --> 00:03:37.980
+Als je iets met die uitvoer wilt doen moet je het parsen in stukken snijden.
+
+00:03:38.160 --> 00:03:41.460
+De benodigde delen extraheren met tekenreeks manipulatie en dat is fragiel.
+
+00:03:41.460 --> 00:03:44.380
+Een spaatsie op de verkeerde plek en je hele script loopt vast.
+
+00:03:44.720 --> 00:03:46.040
+PowerShell werkt niet op die manier.
+
+00:03:46.220 --> 00:03:49.120
+Het geeft je objecten gestructureerde data met eigenschappen en methode.
+
+00:03:49.300 --> 00:03:51.620
+Wanneer je GetProcess uitvoert krijg je geen teksttabel.
+
+00:03:51.820 --> 00:03:53.040
+Je krijgt procesobjecten.
+
+00:03:53.220 --> 00:03:57.320
+Elk object heeft eigenschappen zoals naam, ID, CPU, geheugen, starttijd en methode zoals skill.
+
+00:03:57.500 --> 00:04:00.680
+Je kunt die eigenschappen opvragen, erop filteren, ze sorteren en exporteren.
+
+00:04:00.800 --> 00:04:04.800
+Je kunt dingen met data doen die normaal 20 regels tekstverwerking kosten in slechts één opdracht.
+
+00:04:05.020 --> 00:04:06.220
+Dat is wat het verschil maakt.
+
+00:04:06.420 --> 00:04:07.340
+Laat me het je laten zien.
+
+00:04:07.340 --> 00:04:11.100
+Op de oude manier, met het tasklist, commando in de opdracht prompt, krijg je een teksttabel.
+
+00:04:11.280 --> 00:04:15.720
+Als je processen wilt vinden die meer dan 50% CPU verbruiken, moet je logica schrijven om de tekst te ontleden.
+
+00:04:15.840 --> 00:04:18.680
+Je moet rekening houden met kolombreedtes, witruimte en kopteksten.
+
+00:04:18.860 --> 00:04:20.520
+Het is rommelig en het gaat constant mis.
+
+00:04:20.720 --> 00:04:22.200
+De PowerShell manier ziet er zo uit.
+
+00:04:22.380 --> 00:04:25.820
+GetProcess doorgestuurd naar where object met een voorwaarde doorgestuurd naar export csv.
+
+00:04:26.040 --> 00:04:26.840
+Dat is één regel.
+
+00:04:27.100 --> 00:04:29.100
+Filter alleen processen met meer dan 50% CPU.
+
+00:04:29.320 --> 00:04:30.420
+Sla op in een csv bestand.
+
+00:04:30.600 --> 00:04:30.920
+Klaar.
+
+00:04:31.080 --> 00:04:33.560
+Wat dit alles mogelijk maakt is de GetMember cmdlet.
+
+00:04:33.560 --> 00:04:37.120
+Je stuurt elk commando door naar GetMember en het toont je elke eigenschap en methode van die objecten.
+
+00:04:37.200 --> 00:04:38.840
+Het is alsof je onder de motorkap kijkt.
+
+00:04:39.020 --> 00:04:42.000
+Voer GetProcess en GetMember uit en plotseling zie je alles.
+
+00:04:42.200 --> 00:04:47.520
+Naam, ID, Handle, CPU, Working Set, Starttijd en methode zoals Skill, Refresh, Wait for Exit.
+
+00:04:47.640 --> 00:04:49.500
+Je hoeft niet te raden welke data beschikbaar is.
+
+00:04:49.660 --> 00:04:50.600
+De tool vertelt het je.
+
+00:04:50.760 --> 00:04:51.940
+Hier is een praktijkvoorbeeld.
+
+00:04:52.200 --> 00:04:53.980
+Stel, je bent beheerder van 50 servers.
+
+00:04:54.200 --> 00:04:56.480
+Je moet alle gestopte services op al die servers vinden.
+
+00:04:56.660 --> 00:05:01.140
+Op de oude manier zou je op elke server inloggen, services msc openen, handmatig controleren en noteren.
+
+00:05:01.140 --> 00:05:02.020
+Dat kost uren.
+
+00:05:02.020 --> 00:05:04.200
+Op de PowerShell manier schrijf je één commando.
+
+00:05:04.440 --> 00:05:08.120
+GetService op elke machine, filter waar status, stapt, is, exporteer naar een CSV.
+
+00:05:08.380 --> 00:05:11.200
+Eén commando, 50 servers, elke keer hetzelfde resultaat.
+
+00:05:11.360 --> 00:05:15.080
+Niet klikken door guis, geen handmatige notities, geen fouten door gegevens kopiëren tussen vensters.
+
+00:05:15.300 --> 00:05:16.720
+En dit is waarom dit belangrijk is.
+
+00:05:17.100 --> 00:05:19.340
+Objectoutput betekent dat je commando's aan elkaar kunt koppelen.
+
+00:05:19.520 --> 00:05:23.000
+De uitvoer van één commando gaat direct door naar de volgende als gestructureerde data.
+
+00:05:23.240 --> 00:05:26.060
+Je bent geen tekst aan het verwerken, je bent objecten aan het manipuleren.
+
+00:05:26.060 --> 00:05:31.300
+Het is het verschil tussen het sorteren van een stapel losse papieren en werken met een archiefkast waar alles een label heeft.
+
+00:05:31.300 --> 00:05:33.360
+Dus, nu ken je het patroon en de pipeline.
+
+00:05:33.580 --> 00:05:35.780
+Laten we praten over de commando's die je echt zult gebruiken.
+
+00:05:35.960 --> 00:05:37.920
+De vijf essentiële CMD-LED groepen.
+
+00:05:38.060 --> 00:05:41.200
+Je hoeft geen honderden CMD-LEDs te leren om productief te zijn met PowerShell.
+
+00:05:41.380 --> 00:05:44.960
+Begin met vijf groepen en je dekt ongeveer 80% van wat je dagelijks doet.
+
+00:05:45.160 --> 00:05:46.320
+Groep 1 is ontdekking.
+
+00:05:46.520 --> 00:05:49.820
+Het is de belangrijkste omdat het je PowerShell vanuit zichzelf leert.
+
+00:05:50.060 --> 00:05:51.740
+GetHelp, GetCommand, GetMember.
+
+00:05:51.920 --> 00:05:53.120
+Deze drie zijn je leermiddelen.
+
+00:05:53.120 --> 00:05:56.180
+Je hoeft niets uit je hoofd te leren, want je kunt het altijd opzoeken.
+
+00:05:56.400 --> 00:05:58.240
+GetHelp laat zien hoe je elk commando gebruikt.
+
+00:05:58.240 --> 00:06:02.520
+GetCommand toont welke commando's er zijn en GetMember laat zien welke gegevens die commando's opleveren.
+
+00:06:02.660 --> 00:06:04.660
+Als je niets anders leert, leer dan deze drie.
+
+00:06:04.840 --> 00:06:08.860
+Groep 2 is bestandssysteem voor de dagelijkse best-endstaken die je constant uitvoert.
+
+00:06:09.060 --> 00:06:15.240
+GetChildItem zond bestanden en mappen op, CopyItem kopieert ze, RemoveItem verwijdert ze en GetContent leest bestandsinhoud.
+
+00:06:15.440 --> 00:06:19.000
+Je kunt in één regel doen waarvoor je anders door meerdere mapvensters zou moeten klikken.
+
+00:06:19.000 --> 00:06:22.080
+Groep 3 is systeem voor het beheer van wat er op je computer draait.
+
+00:06:22.320 --> 00:06:27.820
+GetProcess toont actieve processen, GetService toont services en StartService en StopService besturen deze.
+
+00:06:27.820 --> 00:06:30.140
+Restart Computer start een machine opnieuw op.
+
+00:06:30.220 --> 00:06:35.580
+Als je ooit taakbeheer of services MSC hebt geopend, deze commando's vervangen dat volledig en ze werken op afstand.
+
+00:06:35.780 --> 00:06:38.960
+Je kunt services op 100 machines controleren zonder je bureau te verlaten.
+
+00:06:39.160 --> 00:06:42.420
+Groep 4 is filteren en vormgeven, waar de pipeline echt uitblinkt.
+
+00:06:42.420 --> 00:06:47.120
+WearObject filtert gegevens op basis van voorwaarden, SelectObject kiest welke eigenschappen je ziet,
+
+00:06:47.340 --> 00:06:50.040
+SortObject sorteert resultaten en GroupObject groepeert ze.
+
+00:06:50.240 --> 00:06:53.200
+Deze CMD lets veranderen ruwe data in nuttige informatie.
+
+00:06:53.200 --> 00:06:55.620
+Zonder deze dump je alleen maar gegevens op het scherm.
+
+00:06:55.820 --> 00:06:58.940
+Met deze kun je specifieke vragen stellen en specifieke antwoorden krijgen.
+
+00:06:59.160 --> 00:07:01.460
+Groep 5 is exporteren, hoe je je werk opslaat.
+
+00:07:01.620 --> 00:07:04.340
+Export CSV schrijft naar een bestand dat je in Excel opent,
+
+00:07:04.540 --> 00:07:08.160
+OutFile schrijft naar een tekstbestand en Convert to JSON zet om naar JSON-formaat.
+
+00:07:08.320 --> 00:07:11.920
+Met deze CMD lets verander je commando's in rapporten, logboeken of databestanden.
+
+00:07:12.120 --> 00:07:14.640
+Je voert een commando uit, filtert de resultaten en slaat ze op.
+
+00:07:14.840 --> 00:07:16.620
+Dat is een rapport, dat is automatisering.
+
+00:07:16.820 --> 00:07:18.540
+Hier is een kort voorbeeld voor elke groep.
+
+00:07:18.540 --> 00:07:23.380
+Bij Discovery voer je GetCommand nou een service uit om elk service-gerelateerd commando te zien.
+
+00:07:23.640 --> 00:07:27.380
+Bij bestandsysteem vindt GetChildItemC logs recurse.
+
+00:07:27.780 --> 00:07:31.040
+WearObject lengt GT 10 MB grote logbestanden.
+
+00:07:31.360 --> 00:07:33.080
+Voor systeem somt GetService.
+
+00:07:33.340 --> 00:07:36.440
+WearObject status EQ stapt de gestopte services op.
+
+00:07:36.600 --> 00:07:38.380
+Voor filteren toont GetProcess.
+
+00:07:38.640 --> 00:07:40.180
+SortObject CPU descending.
+
+00:07:40.520 --> 00:07:43.300
+SelectObject First 5 de 5 grootste CPU-gebruikers.
+
+00:07:43.580 --> 00:07:45.120
+En voor export gebruik je GetService.
+
+00:07:45.320 --> 00:07:46.540
+Export csvservices.csv.
+
+00:07:46.540 --> 00:07:49.020
+CSV slaat alles op in een bestand.
+
+00:07:49.200 --> 00:07:50.460
+Dit is waarom dit belangrijk is.
+
+00:07:50.700 --> 00:07:53.320
+Deze 5 groepen dekken het overgrote deel van wat je zult doen.
+
+00:07:53.480 --> 00:07:56.520
+Je hoeft geen PowerShell-expert te zijn, zolang je maar weet waar je moet beginnen.
+
+00:07:56.680 --> 00:07:59.360
+En de beste plek om te beginnen is de groep die je al het andere leert.
+
+00:07:59.580 --> 00:08:01.040
+Laten we het over Discovery hebben.
+
+00:08:01.400 --> 00:08:02.140
+Discovery eerst.
+
+00:08:02.280 --> 00:08:02.680
+GetHelp.
+
+00:08:02.860 --> 00:08:03.440
+GetCommand.
+
+00:08:03.580 --> 00:08:04.120
+GetMember.
+
+00:08:04.340 --> 00:08:07.620
+Laat me je vertellen over de allerbelangrijkste CMD-let die je ooit zult leren.
+
+00:08:07.760 --> 00:08:08.160
+GetHelp.
+
+00:08:08.320 --> 00:08:10.580
+Het is de ingebouwde handleiding van PowerShell.
+
+00:08:10.580 --> 00:08:16.620
+Typ GetHelp gevolgd door een opdrachtnaam en je ziet de syntaxes, parameters en, het belangrijkste, werkende voorbeelden.
+
+00:08:16.780 --> 00:08:19.220
+Je hoeft niet op internet te zoeken of iets uit je hoofd te leren.
+
+00:08:19.440 --> 00:08:21.660
+De documentatie zit gewoon in de tool zelf.
+
+00:08:21.940 --> 00:08:24.200
+Stel dat je wilt begrijpen hoe GetProcess werkt.
+
+00:08:24.360 --> 00:08:24.880
+Typ GetHelp.
+
+00:08:25.000 --> 00:08:25.560
+GetProcess.
+
+00:08:25.780 --> 00:08:29.220
+En het toont je de syntaxes, welke parameters het accepteert en wat die elk doen.
+
+00:08:29.420 --> 00:08:31.360
+Maar de echte waarde zit in de voorbeelden GetHelp.
+
+00:08:31.500 --> 00:08:31.920
+GetProcess.
+
+00:08:32.060 --> 00:08:32.440
+Exempels.
+
+00:08:32.680 --> 00:08:35.740
+Voorbeelden springen direct naar werkende code die je kunt kopiëren en uitvoeren.
+
+00:08:35.960 --> 00:08:38.120
+Zo leer je PowerShell vanuit PowerShell zelf.
+
+00:08:38.120 --> 00:08:39.660
+Dan is er nog GetCommand.
+
+00:08:39.900 --> 00:08:45.060
+Deze CMD-LED zomt alles op wat beschikbaar is in je sessie, elke CMD-LED, functie en script.
+
+00:08:45.260 --> 00:08:46.480
+En je kunt het filteren.
+
+00:08:46.700 --> 00:08:47.860
+GetCommand verb Get.
+
+00:08:48.360 --> 00:08:51.260
+Get toont je elk GetCommando en daar zijn er honderden van.
+
+00:08:51.500 --> 00:08:52.140
+GetProcess.
+
+00:08:52.340 --> 00:08:52.980
+GetService.
+
+00:08:53.240 --> 00:08:53.700
+GetDate.
+
+00:08:53.920 --> 00:08:54.460
+GetItem.
+
+00:08:54.640 --> 00:08:55.520
+GetChildItem.
+
+00:08:55.700 --> 00:08:56.340
+GetContent.
+
+00:08:56.500 --> 00:08:57.880
+Je hoeft het alleen maar te vragen.
+
+00:08:58.120 --> 00:08:58.640
+GetCommand.
+
+00:08:58.700 --> 00:09:01.200
+NowService toont je elk commando dat met services werkt.
+
+00:09:01.400 --> 00:09:01.820
+GetService.
+
+00:09:01.960 --> 00:09:02.500
+StartService.
+
+00:09:02.660 --> 00:09:03.140
+StopService.
+
+00:09:03.360 --> 00:09:04.000
+RestartService.
+
+00:09:04.220 --> 00:09:04.660
+SetService.
+
+00:09:04.860 --> 00:09:05.280
+NewService.
+
+00:09:05.500 --> 00:09:05.980
+RemoveService.
+
+00:09:05.980 --> 00:09:07.820
+Je hoeft niet te raden wat er beschikbaar is.
+
+00:09:07.820 --> 00:09:09.000
+De tool vertelt het je.
+
+00:09:09.160 --> 00:09:10.480
+En dan is er nog GetMember.
+
+00:09:10.700 --> 00:09:12.140
+Degene die alles ontsluit.
+
+00:09:12.320 --> 00:09:17.460
+Pipe elk commando naar GetMember en het laat zien wat er in de objecten zit die het commando teruggeeft.
+
+00:09:17.920 --> 00:09:19.060
+Voer GetProcess.
+
+00:09:19.320 --> 00:09:23.180
+GetMember uit en je ziet elke eigenschap en methode van procesobjecten.
+
+00:09:23.360 --> 00:09:29.300
+Namen, ID, CPU, WorkingSet, StartTijd en methoden zoals Kill, Refresh, WaitForExit.
+
+00:09:29.460 --> 00:09:31.680
+Je hoeft je niet af te vragen welke data beschikbaar is.
+
+00:09:31.840 --> 00:09:33.140
+Je kunt het direct inspecteren.
+
+00:09:33.140 --> 00:09:34.460
+Waarom dit belangrijk is.
+
+00:09:34.460 --> 00:09:36.280
+Je hoeft nooit alles uit je hoofd te leren.
+
+00:09:36.460 --> 00:09:38.040
+Je kunt leren terwijl je bezig bent.
+
+00:09:38.300 --> 00:09:39.820
+GetHelp leert je hoe je commando's gebruikt.
+
+00:09:39.980 --> 00:09:41.720
+GetCommand laat zien welke commando's er bestaan.
+
+00:09:41.900 --> 00:09:44.020
+En GetMember laat zien welke data die commando's teruggeven.
+
+00:09:44.240 --> 00:09:46.240
+Deze drie CMD-lets zijn je leermiddelen.
+
+00:09:46.480 --> 00:09:48.460
+Ze maken PowerShell zelf documenterend.
+
+00:09:48.660 --> 00:09:52.700
+Zodra je weet wat er beschikbaar is, is de volgende stap het vormgeven van die data tot iets nuttigs.
+
+00:09:52.960 --> 00:09:56.440
+Filteren, vormgeven en exporteren, opdrachten, omzetten in rapporten.
+
+00:09:56.640 --> 00:09:58.000
+Dit is het punt met PowerShell.
+
+00:09:58.000 --> 00:10:01.920
+De kracht zit niet in één enkel commando, maar in hoe je ze combineert via de pipeline.
+
+00:10:02.100 --> 00:10:08.060
+Je neemt de uitvoer van de ene CMD-let, pipe die naar de andere, en bouwt complexe operaties met eenvoudige bouwstenen.
+
+00:10:08.300 --> 00:10:12.040
+WearObject is je filter dat alleen objecten doorlaat die aan je voorwaarden voldoen.
+
+00:10:12.420 --> 00:10:13.000
+Dus, GetSurface.
+
+00:10:13.800 --> 00:10:17.220
+WearObject status EQ Running geeft je alleen actieve services.
+
+00:10:17.580 --> 00:10:19.660
+Niet meer scrollen door een lijst van 100 services.
+
+00:10:19.980 --> 00:10:21.800
+Het commando doet het filterwerk voor je.
+
+00:10:22.240 --> 00:10:24.420
+SelectObject kiest welke eigenschappen je wilt zien.
+
+00:10:24.420 --> 00:10:30.400
+GetProcess Select Object Namen, CPU, Working Set geeft alleen de data die voor jou relevant is.
+
+00:10:30.580 --> 00:10:35.600
+Het verwijdert handles, paged memory en sessie-idees en laat alleen de kolommen zien waar je om vroeg.
+
+00:10:35.800 --> 00:10:39.260
+Zo verander je een berg data in een overzichtelijke, leesbare tabel.
+
+00:10:39.540 --> 00:10:41.340
+SortObject ordent je resultaten.
+
+00:10:41.720 --> 00:10:46.820
+GetProcess SortObject CPU Descending toont eerste processen met het hoogste CPU-gebruik,
+
+00:10:47.060 --> 00:10:50.580
+zodat je het probleem direct vindt in plaats van een ongesorteerde lijst te doorzoeken.
+
+00:10:50.800 --> 00:10:54.260
+Export CSV slaat alles op in een bestand dat je in Excel kunt openen.
+
+00:10:54.260 --> 00:10:55.660
+Dit is waar de magie gebeurt.
+
+00:10:55.820 --> 00:10:58.580
+Je voert een commando uit, filtert het, vormt het en slaat het op.
+
+00:10:58.700 --> 00:11:00.520
+Dat is een rapport en dat is automatisering.
+
+00:11:00.720 --> 00:11:02.260
+Hier is het volledige patroon samengevoegd.
+
+00:11:02.900 --> 00:11:06.280
+GetSurface Where Object Status EQ stapt Select Object Namen,
+
+00:11:06.540 --> 00:11:09.260
+Display Namen Export CSV stapt Services.csv.
+
+00:11:10.120 --> 00:11:13.360
+Het is één commando dat alle services ophaalt, filtert op gestopte services,
+
+00:11:13.600 --> 00:11:16.800
+alleen de naam en weergave naam kiest en het resultaat opslaat in een CSV-bestand.
+
+00:11:16.960 --> 00:11:20.600
+Je kunt dit op één machine of op 100 draaien en je krijgt elke keer hetzelfde resultaat.
+
+00:11:20.600 --> 00:11:24.260
+Dit vervangt urenlang klikken door GUI's en handmatig kopiëren en plakken.
+
+00:11:24.380 --> 00:11:27.120
+In plaats van op elke server Services MS-seat te openen,
+
+00:11:27.220 --> 00:11:30.540
+door de lijst te scrollen, op te schrijven wat gestopt is en dit in een spreadsheet te typen,
+
+00:11:30.700 --> 00:11:31.720
+voer je één commando uit.
+
+00:11:31.900 --> 00:11:34.300
+Het duurt seconde, is nauwkeurig en is herhaalbaar.
+
+00:11:34.540 --> 00:11:35.400
+Waarom is dit belangrijk?
+
+00:11:35.740 --> 00:11:37.720
+Je gaat van reactief naar proactief werken.
+
+00:11:37.900 --> 00:11:39.780
+Je kunt deze rapporten op een schema draaien.
+
+00:11:39.980 --> 00:11:41.780
+Elke ochtend controleert een script je services,
+
+00:11:42.060 --> 00:11:44.080
+exporteert de resultaten en e-mailt deze naar je toe.
+
+00:11:44.240 --> 00:11:46.100
+Je ziet problemen voordat ze noodgevallen worden,
+
+00:11:46.240 --> 00:11:48.760
+omdat je weet wat draait, wat gestopt is en wat aandacht nodig heeft.
+
+00:11:48.760 --> 00:11:51.660
+In plaats van te wachten tot er iets kapot gaat, blijf je het voor.
+
+00:11:51.860 --> 00:11:55.160
+Dus nu heb je de onderdelen, de ontdekkingstools om te zien wat beschikbaar is,
+
+00:11:55.300 --> 00:11:59.340
+de filtertools om te vinden wat belangrijk is en de exporttools om je resultaten op te slaan.
+
+00:11:59.520 --> 00:12:02.320
+Laten we kijken hoe ze allemaal samenkomen in één systeem.
+
+00:12:02.760 --> 00:12:05.340
+Hoe het allemaal verbonden is, de pipeline in actie.
+
+00:12:05.500 --> 00:12:08.420
+De pipeline is het hart van PowerShell, niet zomaar een functie.
+
+00:12:08.620 --> 00:12:13.260
+Elke CMD-LED voert objecten uit en de pipeline stuurt die objecten direct door naar de volgende CMD-LED.
+
+00:12:13.480 --> 00:12:16.000
+Dat simpele idee is wat PowerShell zo krachtig maakt.
+
+00:12:16.000 --> 00:12:19.520
+Je bouwt complexe bewerkingen op uiteenvoudige bouwstenen, stap voor stap.
+
+00:12:19.680 --> 00:12:21.240
+Laat me een praktijkscenario geven.
+
+00:12:21.480 --> 00:12:23.860
+Stel dat een gebruiker belt omdat hun account is vergrendeld.
+
+00:12:24.060 --> 00:12:25.200
+Dit gebeurt de hele tijd.
+
+00:12:25.420 --> 00:12:28.700
+Iemand typt het wachtwoord te vaak verkeerd in en kan plotseling niet meer inloggen.
+
+00:12:28.880 --> 00:12:31.320
+De oude manier om dit af te handelen is erg vervelend.
+
+00:12:31.500 --> 00:12:33.800
+Je opent Active Directory Gebruikers en Computers,
+
+00:12:34.020 --> 00:12:37.140
+scrollt door de lijst, zoekt de gebruiker, klikt met de rechtermuisknop,
+
+00:12:37.340 --> 00:12:39.040
+controleert het account, ontgrendelt het,
+
+00:12:39.200 --> 00:12:43.040
+opent dan de logboeken om de vergrendelingsgebeurtenis te vinden en noteert handmatig de tijd en bron.
+
+00:12:43.040 --> 00:12:46.100
+Dat hele proces kost 5 tot 10 minuten per gebruiker
+
+00:12:46.100 --> 00:12:50.020
+en als meerdere gebruikers bellen, ben je de hele ochtend met dit ene ding bezig.
+
+00:12:50.140 --> 00:12:52.180
+De PowerShell manier is compleet anders.
+
+00:12:52.420 --> 00:12:55.600
+Een commando, get athouser, filter, locked out aq true,
+
+00:12:55.860 --> 00:12:57.620
+vindt elk vergrendeld account in je domein.
+
+00:12:57.840 --> 00:13:00.720
+Dan stuur je dat via een pipe naar unlock at account en dat is alles.
+
+00:13:00.920 --> 00:13:02.960
+Het script vindt de vergrendelde accounts en ontgrendelt ze,
+
+00:13:03.140 --> 00:13:06.020
+daarna stuur je het resultaat naar een logfunctie of exporteer je het naar een rapport.
+
+00:13:06.220 --> 00:13:07.780
+Je hebt een overzicht van wat er is gebeurd,
+
+00:13:07.980 --> 00:13:09.820
+wanneer het gebeurde en welke accounts getroffen waren,
+
+00:13:10.000 --> 00:13:11.080
+allemaal met één regelcode.
+
+00:13:11.080 --> 00:13:13.680
+En het mooie is, hetzelfde patroon werkt overal.
+
+00:13:13.900 --> 00:13:17.340
+Exchange mailboxen, teams, kanalen, SharePoint sites, Azure bronnen,
+
+00:13:17.460 --> 00:13:20.140
+de CMD-lets veranderen, maar de pipeline blijft hetzelfde.
+
+00:13:20.300 --> 00:13:23.300
+Je haalt iets op, filtert het, doet er iets mee en slaat het resultaat op.
+
+00:13:23.420 --> 00:13:25.460
+Bijvoorbeeld, get mailbox, filteren op een voorwaarde,
+
+00:13:25.620 --> 00:13:28.600
+een eigenschap instellen, exporteren naar CSV of een team ophalen,
+
+00:13:28.860 --> 00:13:31.200
+filteren op lidmaatschap, een lid toevoegen en de wijziging loggen.
+
+00:13:31.340 --> 00:13:32.980
+Het patroon is elke keer identiek.
+
+00:13:33.180 --> 00:13:34.020
+Waarom is dit belangrijk?
+
+00:13:34.380 --> 00:13:37.380
+Zodra je de pipeline begrijpt, kun je bijna alles automatiseren.
+
+00:13:37.380 --> 00:13:41.720
+Het patroon is hetzelfde, of je nu één gebruiker beheert of duizend, één server of honderd.
+
+00:13:41.880 --> 00:13:44.280
+Je leert het patroon één keer en past het overal toe.
+
+00:13:44.480 --> 00:13:46.560
+Oké, je hebt gezien wat het is en hoe het werkt.
+
+00:13:46.760 --> 00:13:49.180
+Laten we het nu hebben over wat je daadwerkelijk als volgende moet doen.
+
+00:13:49.360 --> 00:13:51.000
+Je eerste stappen naar automatisering.
+
+00:13:51.240 --> 00:13:52.160
+Dus, waar begin je?
+
+00:13:52.340 --> 00:13:55.220
+Open PowerShell en voer GetHelp uit om te beginnen met verkennen.
+
+00:13:55.440 --> 00:13:57.900
+Typ GetHelp, GetProcess en kijk wat het je laat zien.
+
+00:13:58.120 --> 00:14:01.680
+Typ daarna GetHelp, GetSurface examples en bekijk de werkende voorbeelden.
+
+00:14:01.900 --> 00:14:04.040
+Dit is hoe je de tool vanuit de tool zelf leert kennen.
+
+00:14:04.040 --> 00:14:06.820
+Je hoeft niet op internet te zoeken of tutorials te bekijken.
+
+00:14:07.000 --> 00:14:08.480
+De documentatie staat er gewoon.
+
+00:14:08.680 --> 00:14:10.680
+Kies vervolgens één taak die je elke week uitvoert.
+
+00:14:10.880 --> 00:14:15.260
+Misschien is het controleren welke services op een server draaien, bestanden in een map vermelden of een rapport exporteren.
+
+00:14:15.420 --> 00:14:17.520
+Schrijf er een one-liner, voor- en beginsimple.
+
+00:14:17.740 --> 00:14:20.520
+Iets als GetSurface, where object status, EQ running.
+
+00:14:20.780 --> 00:14:21.680
+Dat is een one-liner.
+
+00:14:21.960 --> 00:14:23.700
+Voer het uit, bekijk de uitvoer en sla het op.
+
+00:14:23.820 --> 00:14:26.100
+Je hebt zojuist iets geautomatiseerd wat je voorheen handmatig deed.
+
+00:14:26.300 --> 00:14:29.120
+Gebruik daarna GetCommand en GetMember om te ontdekken wat er mogelijk is.
+
+00:14:29.260 --> 00:14:32.320
+Je hoeft niet alles vooraf te weten, alleen hoe je vindt wat je nodig hebt.
+
+00:14:32.320 --> 00:14:36.800
+GetCommand non-service toont je elk service gerelateerd commando en GetProcess.
+
+00:14:37.200 --> 00:14:39.800
+GetMember toont je elke eigenschap van procesobjecten.
+
+00:14:39.940 --> 00:14:42.380
+De tool vertelt je wat hij kan, je hoeft het alleen maar te vragen.
+
+00:14:42.560 --> 00:14:43.940
+De beste eerste stap is simpel.
+
+00:14:44.440 --> 00:14:46.160
+Automatiseer de taak die je het vaakst uitvoert.
+
+00:14:46.380 --> 00:14:48.460
+Zelfs een simpele one-liner bespaart je tijd.
+
+00:14:48.660 --> 00:14:51.920
+Als je elke ochtend services controleert, schrijf dan een one-liner die dat voor je doet.
+
+00:14:52.100 --> 00:14:55.380
+Als je elke week tijdelijke bestanden opruimt, schrijf dan een one-liner die dit regelt.
+
+00:14:55.600 --> 00:14:57.120
+Begin klein en bouw vanaf daar verder.
+
+00:14:57.360 --> 00:14:58.540
+Wat is nu de volgende stap?
+
+00:14:58.880 --> 00:15:01.340
+Microsoft Learn heeft gratis PowerShell-leertrajecten.
+
+00:15:01.340 --> 00:15:04.180
+Ze zijn gestructureerd, praktisch en volledig gratis.
+
+00:15:04.340 --> 00:15:09.660
+De PowerShell-gallery heeft duizenden community-modules, dus waarschijnlijk heeft iemand al een module geschreven voor wat je wilt doen.
+
+00:15:09.800 --> 00:15:11.240
+Je hoeft het wiel niet opnieuw uit te vinden.
+
+00:15:11.480 --> 00:15:13.480
+PowerShell is een vaardigheid, niet zomaar een tool.
+
+00:15:13.680 --> 00:15:15.460
+Hoe meer je het gebruikt, hoe beter het klikt.
+
+00:15:15.640 --> 00:15:17.020
+Je hoeft geen ontwikkelaar te zijn.
+
+00:15:17.220 --> 00:15:18.120
+Je moet alleen beginnen.
+
+00:15:18.340 --> 00:15:20.660
+Tien minuten per dag is genoeg om echt vaardig te worden.
+
+00:15:20.920 --> 00:15:22.720
+Voer vandaag één commando uit, morgen twee.
+
+00:15:22.940 --> 00:15:25.680
+En voor je het weet, automatiseer je dingen waarvan je nooit dacht dat het kon.
+
+00:15:25.860 --> 00:15:29.540
+Dat is dus PowerShell, de taal die het hele Microsoft-ecosysteem verbindt.
+
+00:15:29.540 --> 00:15:32.460
+Open het en voer GetProcess uit om te zien hoe het eruit ziet.
+
+00:15:32.760 --> 00:15:36.100
+Abonneer je voor meer kennis en laat in een reactie weten wat je wilt automatiseren.
+
+00:15:36.300 --> 00:15:38.260
+Wat is één taak die je graag zou willen automatiseren?
+
+00:15:38.440 --> 00:15:39.120
+Laat het me weten.
+
+00:15:39.380 --> 00:15:41.200
+Misschien behandel ik het in een toekomstige aflevering.

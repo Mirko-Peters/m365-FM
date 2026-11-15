@@ -1,0 +1,856 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.720
+Witajcie w kolejnym odcinku serii Microsoft Knowledge Nugget w M365FM.
+
+00:00:03.860 --> 00:00:05.780
+Nazywam się Mirko Peters i jestem Waszym gospodarzem.
+
+00:00:05.940 --> 00:00:09.260
+W tej serii bierzemy na warsztat jedną technologię Microsoft i wyjaśniamy ją prostym językiem.
+
+00:00:09.480 --> 00:00:12.680
+Dzisiejszy temat to coś, o czym prawie każdy słyszał, ale większość osób nie potrafi wyjaśnić.
+
+00:00:12.840 --> 00:00:14.600
+Strefy docelowe Azure, Azure Landing Zones.
+
+00:00:14.800 --> 00:00:19.100
+Oto sytuacja. Wyobraź sobie, że przejmujesz dzierżawę Azure, w której każdy zespół robił co chciał.
+
+00:00:19.300 --> 00:00:22.820
+Brak konwencji nazywnictwa, brak polityk, brak planu sieci, subskrypcje wszędzie.
+
+00:00:23.020 --> 00:00:25.500
+Trochę produkcji, trochę testów i nie wiadomo, co jest czym.
+
+00:00:25.500 --> 00:00:27.360
+Nikt nie wie, kto jest za co odpowiedzialny.
+
+00:00:27.360 --> 00:00:30.640
+Rachunek to tajemnica, a gdy coś się psuje, znalezienie przyczyny zajmuje godziny.
+
+00:00:30.800 --> 00:00:33.700
+To problem chmurowego chaosu i jest on zaskakująco powszechny.
+
+00:00:33.860 --> 00:00:35.540
+Częstszy niż mogłoby się wydawać.
+
+00:00:35.740 --> 00:00:38.960
+Strefy docelowe Azure to coś, co zapobiega temu bałaganowi, zanim się zacznie.
+
+00:00:39.120 --> 00:00:42.340
+Pod koniec tego odcinka zrozumiesz, czym właściwie jest strefa docelowa,
+
+00:00:42.480 --> 00:00:46.240
+dlaczego 8 obszarów projektowych ma znaczenie i jak uniknąć najczęstszych błędów.
+
+00:00:46.400 --> 00:00:47.980
+Chwyć kawę i zanurkujmy w temat.
+
+00:00:48.200 --> 00:00:50.340
+Czym właściwie jest strefa docelowa Azure?
+
+00:00:50.540 --> 00:00:54.980
+Większość ludzi myśli, że strefa docelowa Azure to produkt, który klika się, by wdrożyć, ale tak nie jest.
+
+00:00:54.980 --> 00:00:57.680
+W portalu nie ma przycisku utwórz strefę docelową.
+
+00:00:57.880 --> 00:00:58.640
+To tak nie działa.
+
+00:00:58.920 --> 00:01:02.600
+Strefa docelowa to wstępnie skonfigurowane środowisko z gotowymi zabezpieczeniami.
+
+00:01:02.840 --> 00:01:07.260
+Sieć, tożsamość, monitoring, polityki, wszystko podłączone, zanim pojawią się jakiekolwiek obciążenia.
+
+00:01:07.480 --> 00:01:11.440
+Pomyśl o tym, jak o kupnie domu, który ma już prąd, hydraulikę i system alarmowy.
+
+00:01:11.640 --> 00:01:15.260
+Po prostu się wprowadzasz i zaczynasz pracę bez konieczności samodzielnego kładzenia instalacji.
+
+00:01:15.500 --> 00:01:19.620
+Główną ideą jest to, że jednostką izolacji jest subskrypcja, a nie grupa zasobów.
+
+00:01:19.620 --> 00:01:22.200
+Subskrypcja to Twoja granica zasięgu awarii.
+
+00:01:22.360 --> 00:01:27.380
+Dajesz zespołowi subskrypcję, ponieważ mają one własne limity przydziałów, przypisania polityk i rozliczenia.
+
+00:01:27.640 --> 00:01:31.260
+Strefa docelowa otacza te subskrypcje wszystkim, co zostało ustalone centralnie.
+
+00:01:31.440 --> 00:01:36.500
+Które regiony są dozwolone, z jaką siecią się łączą, jakie tagi są obowiązkowe i czego nie wolno im robić.
+
+00:01:36.680 --> 00:01:38.420
+Co więc faktycznie wymusza te zasady?
+
+00:01:38.620 --> 00:01:41.420
+Usługa Azure Policy, a nie dokumentacja czy dobre chęci.
+
+00:01:41.620 --> 00:01:44.380
+Jest przypisana w zakresie grupy zarządzania i wykonuje trzy zadania.
+
+00:01:44.380 --> 00:01:47.660
+Deny blokuje rzeczy takie jak niedozwolone regiony czy publiczne adresy IP.
+
+00:01:47.860 --> 00:01:50.560
+Audit oznacza zasoby niezgodne z polityką bez ich blokowania.
+
+00:01:50.800 --> 00:01:53.860
+Deploy If Not Exist naprawia automatycznie, wdrażając na przykład
+
+00:01:53.860 --> 00:01:57.240
+ustawienia diagnostyczne do Log Analytics lub plany Microsoft Defender.
+
+00:01:57.400 --> 00:02:00.980
+To różnica między ładem, który jest stroną w wiki, a ładem, który jest kodem.
+
+00:02:01.200 --> 00:02:05.800
+Zespoły działają szybko wewnątrz swojego pudełka, ale zespół platformy kontroluje pudełko, a nie jego zawartość.
+
+00:02:06.000 --> 00:02:10.320
+Wielka zmiana polega na tym, że zespoły mają własne subskrypcje, podczas gdy zespół centralny ustala zasady.
+
+00:02:10.540 --> 00:02:12.880
+Tożsamość i ład drzwi wejściowe i zbiór reguł.
+
+00:02:12.880 --> 00:02:18.280
+Sprawa wygląda tak. Strefa lądowania, Landing Zone, to nie jedna rzecz, lecz konstrukt złożony z ośmiu obszarów projektowych.
+
+00:02:18.480 --> 00:02:22.540
+Zanurzmy się w pierwsze trzy. Pierwszym z nich jest rozliczenia Azure oraz dzierżawca Entra.
+
+00:02:22.740 --> 00:02:26.140
+Chodzi o to, aby od początku poprawnie skonfigurować dzierżawce i subskrypcje.
+
+00:02:26.380 --> 00:02:29.540
+Brzmi prosto, ale zdziwiłbyś się, jak wiele organizacji robi to źle.
+
+00:02:29.760 --> 00:02:35.760
+Musisz przemyśleć strukturę rozliczeń, rejestrację oraz sposób, w jaki wszystko łączy się z dzierżawcą Entra, zanim cokolwiek wdrożysz.
+
+00:02:35.940 --> 00:02:39.260
+Twoją główną granicą bezpieczeństwa jest zarządzanie tożsamością i dostępem.
+
+00:02:39.260 --> 00:02:44.780
+Pomyśl o Entra ID jak o recepcji w budynku biurowym. Decyduje ona o tym, kto wchodzi do środka i co może robić.
+
+00:02:45.000 --> 00:02:50.200
+Warto korzystać z funkcji Privileged Identity Management, PIM, i wymuszać rolę RBAC oparte na zasadzie minimalnych uprawnień.
+
+00:02:50.340 --> 00:02:53.300
+Nie dawaj wszystkim dostępu właściciela, to prosta droga do katastrofy.
+
+00:02:53.540 --> 00:02:57.920
+Zamiast tego używaj PIM do przyznawania tymczasowego dostępu typu Just in Time, gdy jest on potrzebny,
+
+00:02:58.000 --> 00:03:00.800
+i ustaw cykliczne przeglądy, aby usuwać niepotrzebne uprawnienia.
+
+00:03:00.800 --> 00:03:06.660
+Trzecim obszarem projektowym jest organizacja zasobów, grupy zarządzania, subskrypcje i grupy zasobów.
+
+00:03:06.820 --> 00:03:12.120
+Grupy zarządzania znajdują się powyżej subskrypcji, a zasady i przypisania ról są dziedziczone w dół drzewa.
+
+00:03:12.280 --> 00:03:15.980
+Hierarchia referencyjna Cloud Adoption Framework zaczyna się od katalogu głównego dzierżawcy,
+
+00:03:16.040 --> 00:03:18.120
+a następnie grupy pośredniej dla Twojej organizacji.
+
+00:03:18.280 --> 00:03:22.600
+Poniżej znajdują się platforma Strefy Lądowania, Zasoby Wycofane z Eksploatacji i Środowisko Sandbox.
+
+00:03:22.780 --> 00:03:26.640
+Platforma zawiera współdzielone subskrypcje, zarządzanie tożsamością i łączność.
+
+00:03:26.640 --> 00:03:33.060
+Strefy lądowania dzielą się na korporacyjne, dla obciążeń wymagających łączności lokalnej oraz internetowe, dla aplikacji dostępnych publicznie.
+
+00:03:33.260 --> 00:03:34.700
+Dlaczego ta struktura jest ważna?
+
+00:03:34.880 --> 00:03:38.720
+Przypisujesz zasadę raz wysoko w drzewie, a wszystko poniżej jest z nią automatycznie zgodne.
+
+00:03:38.880 --> 00:03:43.700
+Przykład z życia, zasada odmowy na górze blokuje niedozwolone regiony dla każdej subskrypcji poniżej.
+
+00:03:43.920 --> 00:03:46.060
+Nie musisz konfigurować tego 50 razy.
+
+00:03:46.220 --> 00:03:50.520
+Ustaw raz, a zasada zostanie odziedziczona to prawdziwa siła hierarchii grup zarządzania.
+
+00:03:50.740 --> 00:03:52.800
+Sieci i bezpieczeństwo, ściany i zamki.
+
+00:03:53.120 --> 00:03:56.000
+Tożsamość i ład określają zasady, ale nic nie zadziała.
+
+00:03:56.000 --> 00:03:57.320
+Jeśli sieć to bałagan.
+
+00:03:57.480 --> 00:04:02.500
+Topologia sieci i łączność to czwarty obszar projektowy, czyli sposób strukturyzowania sieci wirtualnych.
+
+00:04:02.700 --> 00:04:10.300
+Istnieją dwa główne wzorce, hub and spoke, gdzie masz jedną centralną sieć wirtualną, jako hub i wiele sieci spoke łączących się z nią, lub Azure Virtual One,
+
+00:04:10.460 --> 00:04:13.760
+czyli zarządzana przez Microsoft wersja tego rozwiązania na większą skalę.
+
+00:04:13.940 --> 00:04:16.040
+Hub zawiera wszystkie współdzielone usługi.
+
+00:04:16.260 --> 00:04:23.360
+Azure Firewall do inspekcji ruchu, bramy ExpressRoute lub VPN do łączności lokalnej, obsługa DNS rzeczy, których potrzebuje każde obciążenie.
+
+00:04:23.360 --> 00:04:26.320
+Spoke to miejsca, w których faktycznie działają Twoje obciążenia.
+
+00:04:26.520 --> 00:04:31.800
+Łączą się one z hubem, więc ruch przechodzi przez centralne usługi, ale każdy spoke pozostaje odizolowany od pozostałych.
+
+00:04:31.960 --> 00:04:32.980
+Oto częsty błąd.
+
+00:04:33.140 --> 00:04:39.180
+Zespoły tworzą gigantyczną sieć połączeń, zamiast korzystać z koncentratora, łącząc każdą sieć wirtualną bezpośrednio z pozostałymi.
+
+00:04:39.320 --> 00:04:41.560
+To działa przez chwilę, ale szybko robi się bałagan.
+
+00:04:41.740 --> 00:04:44.700
+Kończysz z pajęczyną połączeń, których nikt nie jest w stanie prześledzić.
+
+00:04:44.980 --> 00:04:46.300
+Koncentrator upraszcza wszystko.
+
+00:04:46.580 --> 00:04:48.920
+Jedno miejsce do zarządzania, jedno miejsce do zabezpieczenia.
+
+00:04:49.160 --> 00:04:51.180
+Zaplanuj zakresy adresów IP na samym początku.
+
+00:04:51.420 --> 00:04:52.720
+To ważniejsze niż myślisz.
+
+00:04:52.920 --> 00:04:56.840
+Gdy segmenty połączą się z koncentratorem, naprawa nakładających się przestrzeni adresowych jest bolesna.
+
+00:04:57.040 --> 00:04:58.420
+Nie możesz ich po prostu zmienić.
+
+00:04:58.640 --> 00:05:01.920
+Musisz zerwać połączenie, zaktualizować zakres i połączyć się ponownie.
+
+00:05:02.140 --> 00:05:07.720
+Jeśli masz uruchomione obciążenia produkcyjne, oznacza to przestoje, więc wybierz zakresy C i DR wcześniej i upewnij się, że się nie nakładają.
+
+00:05:07.720 --> 00:05:14.020
+Piąty obszar projektowy to zalecenia dotyczące bezpieczeństwa, obejmujące szyfrowanie, ochronę tożsamości, wykrywanie zagrożeń i zarządzanie lukami.
+
+00:05:14.220 --> 00:05:18.060
+Włącz Microsoft Defender for Cloud we wszystkich subskrypcjach jako swoją podstawę.
+
+00:05:18.240 --> 00:05:23.760
+Daje to zalecenia dotyczące zarządzania stanem zabezpieczeń, alerty i wskazówki dotyczące naprawy wszystkiego w Twoim środowisku.
+
+00:05:23.960 --> 00:05:27.460
+Używaj prywatnych punktów końcowych, aby trzymać usługi z dala od publicznego internetu.
+
+00:05:27.660 --> 00:05:32.560
+Zamiast uzyskiwać dostęp do konta magazynu przez publiczny adres IP, nadajesz mu prywatny adres IP wewnątrz swojej sieci wirtualnej.
+
+00:05:32.560 --> 00:05:37.000
+Ruch nigdy nie opuszcza szkieletowej sieci Microsoft. Jest to bezpieczniejsze i prostsze w zarządzaniu.
+
+00:05:37.180 --> 00:05:41.560
+Umieść sieciowe grupy zabezpieczeń w każdej podsieci i domyślnie blokuj przychodzący ruch RDP z internetu.
+
+00:05:41.700 --> 00:05:42.980
+To powinno być standardem.
+
+00:05:43.180 --> 00:05:48.000
+Jeśli ktoś potrzebuje zdalnego dostępu, używa Azure Bastion lub serwera przesiadkowego, a nie bezpośredniej reguły RDP.
+
+00:05:48.240 --> 00:05:52.360
+Przykład z życia wzięty, zasada odmowy, która blokuje publiczne adresy IP na kontach magazynu.
+
+00:05:52.480 --> 00:05:58.480
+Przypisujesz zasadę na poziomie grupy zarządzania i w momencie, gdy ktoś próbuje wdrożyć konto magazynu z publicznym, punktem końcowym, wdrażanie kończy się niepowodzeniem.
+
+00:05:58.480 --> 00:06:02.480
+Komunikat o błędzie informuje, dlaczego tak się stało i użytkownik musi zamiast tego użyć prywatnego punktu końcowego.
+
+00:06:02.700 --> 00:06:07.300
+Bez wyjątków, to jest ład, który rzeczywiście działa, a nie tylko sugestia w jakimś dokumencie.
+
+00:06:07.580 --> 00:06:10.220
+Zarządzanie ład i automatyzacja dbanie o ciągłość działania.
+
+00:06:10.440 --> 00:06:13.600
+Masz więc budynek ze ścianami i zamkami, ale co tak naprawdę dzieje się w środku?
+
+00:06:13.800 --> 00:06:15.000
+Musisz mieć na oku wszystko.
+
+00:06:15.280 --> 00:06:17.040
+Szósty obszar projektowy to zarządzanie.
+
+00:06:17.200 --> 00:06:20.140
+To monitorowanie, kopie zapasowe, logowanie i strona operacyjna.
+
+00:06:20.340 --> 00:06:24.180
+Chcesz mieć jeden centralny obszar roboczy usługi Log Analytics, do którego każda subskrypcja wysyła swoje logi.
+
+00:06:24.180 --> 00:06:27.460
+Jedno miejsce do przeszukiwania wszystkiego, ustawiania alertów i rozwiązywania problemów.
+
+00:06:27.600 --> 00:06:28.280
+Taki jest cel.
+
+00:06:28.480 --> 00:06:31.820
+Jak teraz upewnić się, że każdy pojedynczy zasób wysyła tam swoje logi diagnostyczne?
+
+00:06:31.980 --> 00:06:32.940
+Nie robisz tego ręcznie.
+
+00:06:33.140 --> 00:06:37.680
+Tworzysz zasadę, która mówi, każdy zasób musi wysyłać swoje logi diagnostyczne do tego obszaru roboczego Log Analytics.
+
+00:06:37.960 --> 00:06:40.980
+I ustawiasz tę zasadę, aby działała w trybie wdrażania, jeśli zasób nie istnieje.
+
+00:06:41.160 --> 00:06:43.600
+Rezultat. Każdy nowy zasób jest konfigurowany automatycznie.
+
+00:06:43.800 --> 00:06:45.020
+Nikt nie musi o tym pamiętać.
+
+00:06:45.180 --> 00:06:46.140
+Po prostu tak się dzieje.
+
+00:06:46.320 --> 00:06:50.080
+Siódmym obszarem projektowym jest ład korporacyjny, wykorzystujący Azure Policy do egzekwowania zgodności.
+
+00:06:50.080 --> 00:06:53.700
+Grupujesz powiązane reguły w tzw. inicjatywę zasad lub zestaw zasad.
+
+00:06:53.900 --> 00:06:57.280
+Jedna inicjatywa dotyczy bezpieczeństwa, kolejna zarządzania kosztami.
+
+00:06:57.480 --> 00:07:00.540
+Każda z nich zawiera wiele zasad, które współpracują ze sobą.
+
+00:07:00.740 --> 00:07:05.760
+Oto przykład zestaw zasad wymuszający szyfrowanie, tagowanie i dozwolone rozmiary maszyn wirtualnych.
+
+00:07:06.000 --> 00:07:07.960
+Stosujesz go na poziomie grupy zarządzania.
+
+00:07:08.200 --> 00:07:10.400
+Każda subskrypcja pod nią dziedziczy te reguły.
+
+00:07:10.640 --> 00:07:17.560
+Gdy programista próbuje wdrożyć maszynę wirtualną, zasada sprawdza, czy używa ona zatwierdzonego rozmiaru, posiada wymagane tagi i używa szyfrowanych dysków.
+
+00:07:17.560 --> 00:07:21.760
+Jeśli którekolwiek sprawdzenie nie powiedzie się, wdrożenie zostaje zablokowane lub oznaczone na miejscu.
+
+00:07:21.920 --> 00:07:26.600
+Wyjaśnijmy różnicę między ładem korporacyjnym zapisanym na stronie wiki, a tym, który jest rzeczywistym kodem.
+
+00:07:26.820 --> 00:07:29.280
+Strona wiki mówi, proszę tagować swoje zasoby.
+
+00:07:29.560 --> 00:07:32.800
+Zasada mówi, nie możesz wdrożyć zasobu bez wymaganych tagów.
+
+00:07:33.020 --> 00:07:35.980
+Jedno to sugestia, drugie jest egzekwowane automatycznie.
+
+00:07:36.200 --> 00:07:39.180
+Ósmym obszarem projektowym jest automatyzacja platformy i DevOps.
+
+00:07:39.540 --> 00:07:41.960
+Infrastruktura jako kod oraz potoki ci, ciąg dalszy.
+
+00:07:42.100 --> 00:07:44.500
+Traktuj samą strefę docelową, landing zone, jak kod.
+
+00:07:44.500 --> 00:07:47.700
+Oznacza to pliki bicep, szablony arm lub terraform przechowywane w kontroli źródła.
+
+00:07:47.840 --> 00:07:50.200
+Każda zmiana przechodzi przez tak zwany pull request.
+
+00:07:50.440 --> 00:07:51.960
+Każde wdrożenie przebiega przez potok.
+
+00:07:52.140 --> 00:07:53.640
+Żadnego klikania w portalu Azure.
+
+00:07:53.880 --> 00:07:55.900
+W tym miejscu pojawia się subscription vending.
+
+00:07:56.100 --> 00:07:58.720
+Powtarzalny potok, który tworzy nowe subskrypcje na żądanie.
+
+00:07:58.960 --> 00:08:03.320
+Zespół przesyła wniosek z parametrami takimi jak centrum kosztów, rozmiar sieci i typ środowiska.
+
+00:08:03.560 --> 00:08:07.000
+Potok tworzy subskrypcję, umieszcza ją w odpowiedniej grupie zarządzania,
+
+00:08:07.160 --> 00:08:10.820
+przypisuje budżety, konfiguruje sieć typu spół i łączy ją z hubem.
+
+00:08:10.820 --> 00:08:13.560
+Wszystko zautomatyzowane. Dlaczego to jest ważne?
+
+00:08:13.760 --> 00:08:16.940
+Ponieważ nowa subskrypcja jest zgodna z zasadami w momencie powstania.
+
+00:08:17.200 --> 00:08:20.940
+Zasady są już na grupie zarządzania, a subskrypcja dziedziczy wszystko automatycznie.
+
+00:08:21.140 --> 00:08:23.220
+Nie ma czasu, w którym jest ona nieobjęta nadzorem.
+
+00:08:23.480 --> 00:08:25.620
+Żaden człowiek nie musi pamiętać o stosowaniu reguł.
+
+00:08:25.760 --> 00:08:26.660
+One już tam są.
+
+00:08:26.820 --> 00:08:31.160
+To pozwala zespołowi platformy wspierać setki subskrypcji, nie stając się wąskim gardłem.
+
+00:08:31.580 --> 00:08:35.560
+Automatyzacja wykonuje ciężką pracę, a zespół skupia się na ulepszaniu platformy
+
+00:08:35.560 --> 00:08:37.760
+zamiast klikać w portalu przy każdym wniosku.
+
+00:08:37.920 --> 00:08:41.400
+Podział na platformę i aplikacje to najczęstsze źródło nieporozumień.
+
+00:08:41.520 --> 00:08:45.060
+To były 8 obszarów projektowych, ale tutaj większość ludzi popełnia błędy.
+
+00:08:45.280 --> 00:08:48.900
+Istnieją dwa typy stref docelowych, a ich mylenie to najczęstszy błąd, jaki widzę.
+
+00:08:49.120 --> 00:08:51.660
+Strefy docelowe platformy i strefy docelowe aplikacji.
+
+00:08:51.900 --> 00:08:53.440
+Służą one zupełnie innym celom.
+
+00:08:53.680 --> 00:08:57.300
+Strefy docelowe platformy to wspólny fundament, którego właścicielem jest zespół platformy.
+
+00:08:57.300 --> 00:09:02.960
+Masz subskrypcję tożsamości z usługami domnowymi, subskrypcję zarządzania z analityką dzienników i kontami automatyzacji
+
+00:09:02.960 --> 00:09:08.580
+oraz subskrypcję łączności, która zawiera hub sieci wirtualnej Azure Firewall oraz bramy ExpressRoute lub VPN.
+
+00:09:08.800 --> 00:09:11.300
+To wspólne usługi, od których zależy każde obciążenie.
+
+00:09:11.580 --> 00:09:14.600
+Strefy docelowe aplikacji to miejsca, w których faktycznie działają obciążenia.
+
+00:09:14.760 --> 00:09:17.160
+To subskrypcje, które otrzymują zespoły aplikacyjne.
+
+00:09:17.360 --> 00:09:21.660
+Jest ich wiele, są jednorazowe i za każdym razem postępują według tego samego wzorca.
+
+00:09:21.660 --> 00:09:27.920
+Zespół otrzymuje subskrypcję, umieszcza ją w odpowiedniej grupie zarządzania, dziedziczy zasady, łączy się z siecią hub i zaczyna wdrażanie.
+
+00:09:28.120 --> 00:09:29.920
+Różnica w odpowiedzialności ma znaczenie.
+
+00:09:30.200 --> 00:09:33.200
+Stref platformy jest niewiele, może od 3 do 5 subskrypcji łącznie.
+
+00:09:33.440 --> 00:09:35.900
+Są długowieczne i centralnie zarządzane przez zespół platformy.
+
+00:09:36.080 --> 00:09:39.040
+Stref aplikacji jest wiele, możesz mieć ich dziesiątki lub setki.
+
+00:09:39.280 --> 00:09:43.360
+Są tymczasowe, obciążenie jest wdrażane, działa przez pewien czas, a następnie jest wycofywane.
+
+00:09:43.680 --> 00:09:45.960
+Subskrypcja jest czyszczona i wzorzec się powtarza.
+
+00:09:45.960 --> 00:09:47.600
+Oto klasyczny antywzorzec.
+
+00:09:47.600 --> 00:09:54.740
+Ktoś umieszcza współdzielony firewall w subskrypcji aplikacji lub wdraża bramę ExpressRoute w subskrypcji obciążenia zamiast w subskrypcji łączności.
+
+00:09:54.980 --> 00:09:57.960
+Teraz współdzielone usługi są rozproszone po całym środowisku.
+
+00:09:58.200 --> 00:09:59.380
+Nikt nie wie, gdzie co jest.
+
+00:09:59.620 --> 00:10:05.260
+Zespół platformy nie może zarządzać firewolem, bo jest w subskrypcji kogoś innego, a zespół aplikacji nie chce go utrzymywać.
+
+00:10:05.400 --> 00:10:06.040
+To bałagan.
+
+00:10:06.280 --> 00:10:08.640
+Utrzymuj współdzielone usługi w warstwie platformy.
+
+00:10:08.880 --> 00:10:13.440
+Subskrypcja łączności zawiera hub sieci wirtualnej, Azure Firewall i bramę ExpressRoute.
+
+00:10:13.760 --> 00:10:15.500
+Subskrypcje aplikacji łączą się z nim.
+
+00:10:15.720 --> 00:10:16.900
+Nie są jego właścicielami.
+
+00:10:16.900 --> 00:10:18.400
+One z niego tylko korzystają.
+
+00:10:18.700 --> 00:10:21.160
+Dla ciebie oznacza to wyraźny podział obowiązków.
+
+00:10:21.380 --> 00:10:25.500
+Zespół platformy kontroluje ramy zabezpieczenia, współdzielone usługi i polityki.
+
+00:10:25.740 --> 00:10:27.760
+Zespoły aplikacji działają wewnątrz szybko.
+
+00:10:28.000 --> 00:10:31.240
+Dostają subskrypcję, która jest już zgodna z zasadami, połączona i monitorowana.
+
+00:10:31.480 --> 00:10:33.040
+Nie muszą martwić się o fundamenty.
+
+00:10:33.200 --> 00:10:36.260
+Po prostu budują na nich, jak elementy łączą się ze sobą.
+
+00:10:36.520 --> 00:10:37.400
+Moment olśnienia.
+
+00:10:37.720 --> 00:10:40.620
+Znasz już poszczególne klocki, ale o to co naprawdę się liczy.
+
+00:10:40.820 --> 00:10:42.000
+Nie pracują w izolacji.
+
+00:10:42.320 --> 00:10:45.580
+Współpracują jako jeden połączony system i to sprawia, że wszystko działa.
+
+00:10:45.580 --> 00:10:46.940
+Pomyśl o tym w ten sposób.
+
+00:10:47.160 --> 00:10:49.780
+Tożsamość decyduje, kto może przejść przez drzwi wejściowe.
+
+00:10:50.000 --> 00:10:53.200
+Zarządzanie wskazuje, do jakich pokoi można wejść po przekroczeniu progu.
+
+00:10:53.400 --> 00:10:55.960
+Sieci kontrolują, jak poruszają się między tymi pokojami.
+
+00:10:56.360 --> 00:10:58.540
+Bezpieczeństwo czuwa nad zagrożeniami za każdym rogiem.
+
+00:10:58.800 --> 00:11:01.140
+Zarządzanie sprawia, że cały budynek działa płynnie.
+
+00:11:01.300 --> 00:11:04.740
+A automatyzacja czyni każdy krok powtarzalnym, więc nic nie zostaje pominięte.
+
+00:11:04.960 --> 00:11:09.180
+Każdy element zależy od pozostałych i razem tworzą coś znacznie większego niż każda część z osobna.
+
+00:11:09.180 --> 00:11:12.260
+Podam Wam konkretny przykład tego, jak ta interakcja faktycznie działa.
+
+00:11:12.480 --> 00:11:15.160
+Wyobraźmy sobie, że nowy zespół musi wdrożyć obciążenie.
+
+00:11:15.340 --> 00:11:20.760
+Przesyła wniosek przez potok automatycznego tworzenia subskrypcji, który automatycznie tworzy nową subskrypcję.
+
+00:11:21.000 --> 00:11:27.360
+Umieszcza te subskrypcje w odpowiedniej grupie zarządzania, co oznacza, że automatycznie dziedziczy ona wszystkie zasady tej grupy.
+
+00:11:27.600 --> 00:11:33.300
+Wymogi szyfrowania, dozwolone regiony, obowiązkowe tagi, konfiguracje logowania, wszystko, czego potrzeba.
+
+00:11:33.300 --> 00:11:37.220
+Potok konfiguruje również sieć typu Spoke i łączy ją z Hubem.
+
+00:11:37.380 --> 00:11:44.320
+Ustawienia diagnostyczne zaczynają wysyłać logi prosto do scentralizowanego obszaru roboczego analizy, a Defender for Cloud aktywuje ochronę.
+
+00:11:44.500 --> 00:11:49.760
+Cała subskrypcja staje się zgodna, połączona i monitorowana w kilka minut bez żadnej ingerencji człowieka.
+
+00:11:49.920 --> 00:11:53.240
+To jest prawdziwa różnica między chaosem w chmurze, a kontrolą nad chmurą.
+
+00:11:53.240 --> 00:11:59.600
+W nieuporządkowanym środowisku, które opisałem na początku, każdy z tych kroków zależy od tego, czy ktoś o nim pamięta, a ludzie zapominają.
+
+00:11:59.820 --> 00:12:02.420
+Albo robią to za każdym razem inaczej, albo w ogóle tego nie robią.
+
+00:12:02.420 --> 00:12:05.660
+Ale dzięki odpowiedniej strefie docelowej, Landing Zone, wszystko dzieje się automatycznie.
+
+00:12:05.880 --> 00:12:08.980
+System sam egzekwuje zasady, a zespół może działać szybko, niczego nie psując.
+
+00:12:09.180 --> 00:12:11.480
+Oto miejsce, w którym większość organizacji potyka się.
+
+00:12:11.660 --> 00:12:15.500
+Traktują Landing Zone jak jednorazowy projekt, wdrażają, odhaczają i idą dalej.
+
+00:12:15.720 --> 00:12:17.680
+Tymczasem Landing Zone to żywa platforma.
+
+00:12:17.860 --> 00:12:19.460
+Azure stale wprowadza nowe funkcje.
+
+00:12:19.720 --> 00:12:21.720
+Wasze wymogi dotyczące zgodności zmieniają się w czasie.
+
+00:12:22.000 --> 00:12:22.800
+Wasza firma rośnie.
+
+00:12:23.040 --> 00:12:25.720
+Landing Zone musi rosnąć razem z nią, inaczej zacznie działać przeciwko Wam.
+
+00:12:25.940 --> 00:12:28.160
+Model operacyjny ma większe znaczenie niż techniczne szablony.
+
+00:12:28.160 --> 00:12:29.640
+Kto jest właścicielem Landing Zone?
+
+00:12:29.840 --> 00:12:30.680
+Jak on ewoluuje?
+
+00:12:30.680 --> 00:12:32.140
+Jak obsługiwane są wyjątki?
+
+00:12:32.300 --> 00:12:35.000
+Jeśli Wasza jedyna odpowiedź to zarządza tym zespół platformy, to za mało.
+
+00:12:35.140 --> 00:12:36.480
+Potrzebujecie prawdziwych procesów.
+
+00:12:36.620 --> 00:12:38.300
+Potrzebujecie właściwego rejestru zadań backlogu.
+
+00:12:38.480 --> 00:12:40.620
+Musicie traktować Landing Zone jak produkt, a nie projekt.
+
+00:12:40.780 --> 00:12:41.980
+Oto przykład z życia wzięty.
+
+00:12:42.220 --> 00:12:45.580
+Zespół platformy obsługuje 200 subskrypcji, nie stając się przy tym wąskim gardłem.
+
+00:12:45.840 --> 00:12:48.940
+Sekretem jest automatyczne tworzenie subskrypcji w połączeniu z dziedziczeniem zasad.
+
+00:12:49.200 --> 00:12:52.060
+Zespół nie musi klikać w portalu, aby utworzyć każdą subskrypcję.
+
+00:12:52.220 --> 00:12:53.840
+Potok obsługuje to automatycznie.
+
+00:12:54.020 --> 00:12:56.460
+Nie muszą ręcznie konfigurować logowania dla każdego obciążenia.
+
+00:12:56.460 --> 00:12:58.360
+Zasady egzekwują to w sposób spójny.
+
+00:12:58.520 --> 00:13:00.600
+Nie muszą przeglądać każdego wdrożenia pod kątem zgodności.
+
+00:13:00.760 --> 00:13:03.080
+Pulpit nawigacyjny zgodności po prostu pokazuje im wyjątki.
+
+00:13:03.300 --> 00:13:05.580
+Skupiają się na anomaliach zamiast na rutynowej pracy.
+
+00:13:05.800 --> 00:13:09.780
+I to jest różnica między platformą, która skaluje się, a taką, która dusi biznes.
+
+00:13:09.960 --> 00:13:10.960
+Praktyczne wnioski.
+
+00:13:11.200 --> 00:13:13.440
+Zacznijcie od małych kroków, rozwijajcie się mądrze.
+
+00:13:13.620 --> 00:13:15.520
+Więc co właściwie zrobicie w poniedziałek rano?
+
+00:13:15.680 --> 00:13:16.820
+Oto szczera odpowiedź.
+
+00:13:16.920 --> 00:13:20.160
+Nie próbujcie budować pełnej hierarchii na skalę przedsiębiorstwa pierwszego dnia.
+
+00:13:20.300 --> 00:13:22.060
+To pułapka, której chcecie uniknąć.
+
+00:13:22.060 --> 00:13:26.800
+Spędzisz miesiące na projektowaniu scenariuszy, które mogą nigdy nie wystąpić i nigdy nie wdrożysz niczego rzeczywistego.
+
+00:13:27.020 --> 00:13:31.040
+Zamiast tego zacznij od minimalnej działającej strefy docelowej, czyli MVLZ.
+
+00:13:31.200 --> 00:13:32.940
+Podstawowe komponenty są proste.
+
+00:13:33.160 --> 00:13:38.740
+Jedna hierarchia grup zarządzania, kilka kluczowych zasad, takich jak ograniczenia regionów, szyfrowanie i obowiązkowe tagi,
+
+00:13:38.860 --> 00:13:44.440
+podstawowa sieć z jednym wirtualnym hubem i jednym spook oraz scentralizowane logowanie do obszaru roboczego Log Analytics.
+
+00:13:44.760 --> 00:13:45.480
+To wystarczy.
+
+00:13:45.680 --> 00:13:50.760
+Nie potrzebujesz Azure Virtual One pierwszego dnia ani złożonej inicjatywy zasad zawierającej 200 reguł.
+
+00:13:50.760 --> 00:13:54.040
+Potrzebujesz tylko tylu zabezpieczeń, by być bezpiecznym i nic ponadto.
+
+00:13:54.260 --> 00:13:58.120
+Następnie przenieś swoje pierwsze rzeczywiste obciążenie do tej strefy MVLZ nie maszynę testową,
+
+00:13:58.220 --> 00:14:00.500
+ale prawdziwe zadanie, na którym zależy twojemu zespołowi.
+
+00:14:00.680 --> 00:14:05.480
+Obserwuj zachowanie zasad, sprawdź, co nie działa, wyciągnij wnioski z trudności, a następnie wprowadzaj zmiany.
+
+00:14:05.680 --> 00:14:07.160
+Dodawaj kolejne zasady w miarę potrzeb.
+
+00:14:07.300 --> 00:14:11.840
+Rozszerzaj sieć, gdy zajdzie taka potrzeba i pozwól strefie docelowej naturalnie rozwijać się wraz z organizacją.
+
+00:14:12.040 --> 00:14:15.300
+Podam ci trzy konkretne wnioski, które możesz wykorzystać już teraz.
+
+00:14:15.300 --> 00:14:20.460
+Wniosek pierwszy. Wdróż akcelerator Azure Landing Zones z portalu do dzierżawy testowej.
+
+00:14:20.680 --> 00:14:28.300
+Nic to nie kosztuje, zajmuje około godziny i uczy więcej o tym, jak działają grupy zarządzania, zasady i dziedziczenie, niż jakikolwiek diagram czy dokumentacja.
+
+00:14:29.240 --> 00:14:35.880
+Możesz zobaczyć hierarchię, obserwować stosowanie zasad w czasie rzeczywistym i eksperymentować bez ryzyka uszkodzenia czegokolwiek ważnego.
+
+00:14:36.160 --> 00:14:39.720
+Wniosek drugi. Włącz zasady najpierw w trybie inspekcji, a nie blokowania.
+
+00:14:39.720 --> 00:14:44.660
+Tryb inspekcji pozwala dokładnie zobaczyć, co jest niezgodne w twoim środowisku, nikogo przy tym nie blokując.
+
+00:14:44.840 --> 00:14:50.860
+Obserwuj pulpit nawigacyjny z godności, a obiecuję, że będziesz zaskoczony, jak wiele zasobów po cichu łamie zasady, które wydawały się oczywiste.
+
+00:14:51.060 --> 00:14:54.720
+Gdy poznasz swoje środowisko, możesz przełączyć ważne zasady w tryb blokowania.
+
+00:14:55.020 --> 00:14:59.840
+Zacznij jednak od inspekcji, aby nie zablokować własnych zespołów, zanim dowiesz się, z czym masz do czynienia.
+
+00:15:00.080 --> 00:15:05.180
+Wniosek trzeci. Zaplanuj zakresy adresów IP i hierarchię grup zarządzania, zanim cokolwiek wdrożysz.
+
+00:15:05.180 --> 00:15:08.960
+Wiem, że brzmi to nudno, ale wprowadzanie zmian później jest naprawdę bolesne.
+
+00:15:09.720 --> 00:15:16.400
+Zakresy IP oznaczają konieczność usuwania peelingu sieciowego, a restrukturyzacja grup zarządzania oznacza przenoszenie subskrypcji i ponowną ocenę przypisań zasad.
+
+00:15:16.660 --> 00:15:20.200
+Zadbaj o te dwie rzeczy na początku, a zaoszczędzisz tygodnie pracy w przyszłości.
+
+00:15:20.420 --> 00:15:22.260
+Typowe pułapki są dość oczywiste.
+
+00:15:22.660 --> 00:15:26.580
+Przeinżynierowanie prowadzi do paraliżu decyzyjnego, który powstrzymuje cię przed jakimkolwiek wdrożeniem.
+
+00:15:26.920 --> 00:15:31.060
+Niedoinżynierowanie pozostawia cię bez żadnych zabezpieczeń, co jest po prostu chaosem w chmurze pod inną nazwą.
+
+00:15:31.060 --> 00:15:35.480
+A traktowanie strefy docelowej jako jednorazowego projektu zamiast żywej platformy gwarantuje, że zostaniesz w tyle.
+
+00:15:35.480 --> 00:15:38.860
+Unikaj tych trzech pułapek, a będziesz już o krok przed większością organizacji.
+
+00:15:39.000 --> 00:15:41.240
+Pamiętaj, celem nie jest idealna strefa docelowa.
+
+00:15:41.420 --> 00:15:45.040
+Celem jest nadzorowana fundacja, która pozwala zespołom działać szybko bez tworzenia chaosu.
+
+00:15:45.220 --> 00:15:48.580
+Zacznij od małych kroków, iteruj i pozwól zasadom wykonać ciężką pracę za ciebie.
+
+00:15:48.760 --> 00:15:51.100
+Oto czym są strefy docelowe Azure wyjaśnione prosto.
+
+00:15:51.220 --> 00:15:53.800
+To nie jest żadna skomplikowana koncepcja dla wielkich korporacji.
+
+00:15:54.040 --> 00:15:56.980
+Myśl o nich jak o nadzorowanej subskrypcji z wbudowanymi zabezpieczeniami.
+
+00:15:57.140 --> 00:16:00.960
+Osiem obszarów projektowych to po prostu pytania, na które musisz odpowiedzieć przed wdrożeniem.
+
+00:16:00.960 --> 00:16:04.700
+Tożsamość, sieć, bezpieczeństwo, zarządzanie, ład korporacyjny, automatyzacja.
+
+00:16:04.900 --> 00:16:08.780
+Odpowiedz na nie raz, zbuduj je w podstawach, a każde kolejne obciążenie na tym skorzysta.
+
+00:16:09.000 --> 00:16:11.100
+Oto najlepsza rzecz, jaką możesz teraz zrobić.
+
+00:16:11.320 --> 00:16:14.600
+Wdróż akcelerator w testowym najemcy i zobacz, jak zasady są dziedziczone.
+
+00:16:14.800 --> 00:16:17.220
+Ta jedna godzina nauczy cię więcej niż jakikolwiek diagram.
+
+00:16:17.620 --> 00:16:21.500
+Zasubskrybuj, aby otrzymywać więcej prostych wyjaśnień i zostaw komentarz, jeśli coś zrozumiałeś.
+
+00:16:21.500 --> 00:16:22.620
+Czytam każdy z nich.

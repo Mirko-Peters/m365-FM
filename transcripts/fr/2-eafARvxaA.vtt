@@ -1,0 +1,1171 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.020
+Alors, qu'advient-il de vos données lorsqu'un ancien employé se connecte à votre tenant 6 mois après son départ ?
+
+00:00:05.020 --> 00:00:06.220
+Je suis sérieux, réfléchissez.
+
+00:00:06.640 --> 00:00:11.240
+Vous avez désactivé son compte à son départ, mais avez-vous vérifié si un appareil conserve des identifiants en cache ?
+
+00:00:11.240 --> 00:00:14.080
+Avez-vous vérifié si l'inscription d'application qu'il a créée fonctionne toujours ?
+
+00:00:14.080 --> 00:00:16.420
+La plupart des administrateurs Microsoft 365 n'en ont aucune idée.
+
+00:00:16.600 --> 00:00:20.500
+Non pas qu'ils soient mauvais dans leur travail, mais parce que les informations nécessaires sont dispersées à 20 endroits différents.
+
+00:00:20.900 --> 00:00:21.720
+Voici l'ancienne méthode.
+
+00:00:21.780 --> 00:00:25.940
+Vous voulez enquêter sur une connexion suspecte, alors vous ouvrez le centre d'administration Antra pour vérifier les journaux d'audit.
+
+00:00:25.940 --> 00:00:29.360
+Ensuite, vous passez sur Exchange pour voir si des règles de messagerie ont été créées.
+
+00:00:29.740 --> 00:00:34.500
+Puis vous vérifiez SharePoint pour tout accès inhabituel au fichier, Defender pour les alertes et enfin Teams pour toute activité étrange.
+
+00:00:35.040 --> 00:00:37.680
+Au moment où vous avez vérifié 5 tableaux de bord, vous avez déjà perdu le fil.
+
+00:00:38.160 --> 00:00:39.700
+Et ce n'est que pour un utilisateur sur une seule journée.
+
+00:00:40.180 --> 00:00:41.420
+C'est là qu'intervient Microsoft Sentinel.
+
+00:00:41.980 --> 00:00:44.900
+Considérez-le comme le système de vidéosurveillance de tout votre bâtiment numérique.
+
+00:00:45.360 --> 00:00:49.400
+Vous savez comment un bureau physique a des caméras, à chaque entrée, chaque couloir, chaque porte, et comment un seul.
+
+00:00:49.780 --> 00:00:51.940
+Agents de sécurité peuvent les surveiller depuis un écran unique.
+
+00:00:52.600 --> 00:00:54.780
+C'est ce que Sentinel fait pour votre tenant Microsoft 365.
+
+00:00:54.780 --> 00:01:01.700
+Il centralise tous ces journaux distincts d'Antra, d'Exchange, de SharePoint et de Defender, pour vous permettre de voir réellement ce qui se passe.
+
+00:01:02.540 --> 00:01:05.040
+A la fin de cet épisode, vous comprendrez ce que fait réellement Sentinel,
+
+00:01:05.280 --> 00:01:08.820
+comment son nouveau lac de données change la donne pour conserver les journaux sans vous ruiner, et pourquoi.
+
+00:01:09.380 --> 00:01:15.080
+Cela concerne chaque administrateur Microsoft 365, pas seulement les équipes de sécurité, au titre pompeux, Ozai.
+
+00:01:15.680 --> 00:01:16.780
+Prenez votre café, plongeons dans le sujet.
+
+00:01:17.540 --> 00:01:18.540
+Ce qu'un SIEM fait réellement.
+
+00:01:19.180 --> 00:01:20.940
+Sentinel est ce que l'industrie appelle un SIEM.
+
+00:01:21.540 --> 00:01:23.700
+Cela signifie gestion des événements et des informations de sécurité.
+
+00:01:23.700 --> 00:01:24.940
+Disons-le en termes simples.
+
+00:01:25.420 --> 00:01:27.380
+Un SIEM est un outil qui collecte les journaux partout.
+
+00:01:27.880 --> 00:01:32.080
+Serveurs, pare-feu, applications, système d'identité, puis relie les points entre eux.
+
+00:01:32.300 --> 00:01:32.420
+Show.
+
+00:01:32.820 --> 00:01:33.700
+Voici pourquoi c'est important.
+
+00:01:34.080 --> 00:01:35.440
+Une seule entrée de journal n'est que du bruit.
+
+00:01:35.860 --> 00:01:37.140
+Quelqu'un a essayé de se connecter et a échoué.
+
+00:01:37.560 --> 00:01:38.280
+Et alors ?
+
+00:01:38.280 --> 00:01:39.440
+Cela arrive des centaines de fois par jour.
+
+00:01:40.120 --> 00:01:41.580
+Mais un SIEM ne regarde pas une seule entrée de journal.
+
+00:01:42.140 --> 00:01:47.120
+Il les examine tout ensemble, lui permettant de voir que la même adresse IP a tenté de se connecter à 5 comptes différents en 30 secondes.
+
+00:01:47.660 --> 00:01:48.380
+Ce n'est plus du bruit désormais.
+
+00:01:48.380 --> 00:01:49.760
+C'est une attaque par force brute.
+
+00:01:50.240 --> 00:01:51.340
+La magie réside dans la corrélation.
+
+00:01:51.900 --> 00:01:57.340
+Un SIEM prend une connexion suspecte d'entra et la relie à un téléchargement de fichiers sur SharePoint et à une règle de transfert d'email sur Exchange.
+
+00:01:58.020 --> 00:01:59.860
+Prise isolément, aucune de ces choses ne ressemble à une attaque.
+
+00:02:00.200 --> 00:02:01.100
+Ensemble, elle raconte une histoire.
+
+00:02:01.440 --> 00:02:04.820
+Quelqu'un s'est introduit, a trouvé ce qu'il cherchait et a mis en place un moyen d'intercepter vos emails.
+
+00:02:05.320 --> 00:02:06.760
+Imaginez cela comme un centre de contrôle du trafic.
+
+00:02:07.140 --> 00:02:08.120
+Vous ne surveillez pas seulement une caméra.
+
+00:02:08.500 --> 00:02:10.380
+Vous les regardez toutes en même temps et vous recherchez des modèles.
+
+00:02:10.380 --> 00:02:15.020
+Une voiture qui passe 4 fois au même carrefour, une personne qui entre dans le bâtiment, mais n'en ressort jamais.
+
+00:02:15.820 --> 00:02:17.660
+C'est ce qu'un SIEM fait pour votre environnement numérique.
+
+00:02:18.060 --> 00:02:19.460
+L'idée clé est simple mais puissante.
+
+00:02:19.920 --> 00:02:21.340
+Vous ne pouvez pas protéger ce que vous ne pouvez pas voir.
+
+00:02:21.740 --> 00:02:24.520
+Si vos données de sécurité sont dispersées sur 20 tableaux de bord, vous êtes aveugle.
+
+00:02:24.940 --> 00:02:30.600
+Vous pourriez détecter les choses évidentes, mais les attaques subtiles, celles qui surviennent lentement sur des semaines ou des mois, passeront inaperçues.
+
+00:02:31.080 --> 00:02:32.060
+Voici ce qu'il faut savoir, Sentinelle.
+
+00:02:32.620 --> 00:02:34.100
+C'est un SIEM, mais c'est bien plus que cela.
+
+00:02:35.060 --> 00:02:37.180
+La partie Soar, c'est ce qui donne des mains à un Sentinelle.
+
+00:02:37.780 --> 00:02:39.700
+Un SIEM traditionnel fonctionne comme une caméra de surveillance.
+
+00:02:39.700 --> 00:02:42.700
+Il vous montre tout ce qui se passe, mais ne peut rien faire pour intervenir.
+
+00:02:43.360 --> 00:02:45.000
+Il voit une intrusion, mais ne peut pas appeler la police.
+
+00:02:45.700 --> 00:02:46.440
+C'est là qu'intervient le Soar.
+
+00:02:46.980 --> 00:02:49.920
+S.O.R. signifie orchestration, automatisation et réponse en matière de sécurité.
+
+00:02:50.460 --> 00:02:51.800
+La partie de Sentinelle qui lui donne des mains.
+
+00:02:52.380 --> 00:02:53.140
+Voici comment cela se déroule.
+
+00:02:53.700 --> 00:02:54.720
+Sentinelle détecte une menace.
+
+00:02:55.100 --> 00:02:56.400
+Le compte d'un utilisateur est compromis.
+
+00:02:57.160 --> 00:03:01.140
+Quelqu'un se connecte depuis un pays jamais visité et commence à télécharger des fichiers jamais consultés.
+
+00:03:01.760 --> 00:03:05.320
+Un SIEM traditionnel créerait une alerte et attendrait une intervention humaine, ce qui pourrait prendre des heures.
+
+00:03:06.120 --> 00:03:07.320
+À ce moment-là, les dégâts seraient déjà faits.
+
+00:03:07.740 --> 00:03:08.460
+Sentinelle n'attend pas.
+
+00:03:08.800 --> 00:03:09.520
+Il agit automatiquement.
+
+00:03:10.320 --> 00:03:13.860
+Il peut désactiver le compte de cet utilisateur, bloquer son appareil des ressources de l'entreprise,
+
+00:03:14.020 --> 00:03:18.140
+révoquer les sessions actives et prévenir l'équipe de sécurité, le tout en quelques secondes, sans aucune intervention humaine.
+
+00:03:19.660 --> 00:03:22.080
+Cette automatisation repose sur ce que Sentinelle appelle des playbooks SUMU.
+
+00:03:22.600 --> 00:03:24.980
+En gros, ce sont des listes de tâches automatisées pour les incidents de sécurité.
+
+00:03:25.640 --> 00:03:28.540
+Lorsqu'une alerte spécifique se déclenche, Sentinelle exécute le playbook correspondant.
+
+00:03:28.960 --> 00:03:29.980
+Si ceci arrive, fait cela.
+
+00:03:30.660 --> 00:03:30.940
+Simple.
+
+00:03:31.380 --> 00:03:32.840
+Et vous n'avez pas besoin d'être programmeur pour les créer.
+
+00:03:33.460 --> 00:03:36.280
+Ils sont conçus avec un éditeur visuel, tout comme le dessin d'un organigramme.
+
+00:03:36.460 --> 00:03:39.520
+Alors pourquoi est-ce important pour vous en tant qu'administrateur Microsoft 305 ?
+
+00:03:39.520 --> 00:03:42.980
+Parce que vous ne voulez pas vous réveiller à 3h0 du matin pour bloquer manuellement une adresse IP.
+
+00:03:43.340 --> 00:03:44.060
+Vous avez mieux à faire.
+
+00:03:44.620 --> 00:03:46.240
+Et honnêtement, vous ne seriez pas assez rapide de toute façon.
+
+00:03:46.820 --> 00:03:50.500
+Le temps que vous atteignez votre ordinateur et que vous vous connectiez, l'attaque aura déjà atteint son but.
+
+00:03:51.200 --> 00:03:53.180
+L'automatisation n'est pas un luxe, c'est une nécessité.
+
+00:03:53.800 --> 00:03:57.380
+Ainsi, Sentinelle détecte les menaces et corrèle les signaux dans tout votre environnement.
+
+00:03:57.920 --> 00:03:59.740
+Et quand un problème survient, il réagit automatiquement.
+
+00:04:00.240 --> 00:04:01.740
+C'est le SIEM et le SOAR qui fonctionnent ensemble.
+
+00:04:01.800 --> 00:04:05.100
+Mais où se situe Sentinelle dans l'écosystème Microsoft ?
+
+00:04:05.100 --> 00:04:05.920
+C'est ce que nous allons voir maintenant.
+
+00:04:06.800 --> 00:04:08.660
+La place de Sentinelle dans la pile de sécurité Microsoft.
+
+00:04:09.140 --> 00:04:11.200
+Microsoft dispose d'un vaste portefeuille de produits de sécurité.
+
+00:04:11.840 --> 00:04:13.240
+Défendeur pour la protection des terminaux,
+
+00:04:13.500 --> 00:04:14.620
+Entra pour l'identité et les accès,
+
+00:04:14.900 --> 00:04:16.000
+Purview pour la sécurité des données,
+
+00:04:16.240 --> 00:04:17.460
+et Intune pour la gestion des appareils.
+
+00:04:18.060 --> 00:04:19.180
+Chacun remplit parfaitement sa mission.
+
+00:04:19.740 --> 00:04:21.680
+Mais voilà, il ne communique pas naturellement entre eux.
+
+00:04:22.560 --> 00:04:23.860
+Défendeur détecte un fichier suspect,
+
+00:04:24.120 --> 00:04:25.400
+Entra signale une connexion étrange,
+
+00:04:25.500 --> 00:04:27.760
+Purview repère un accès inhabituel aux données.
+
+00:04:28.600 --> 00:04:29.420
+Trois alertes distinctes,
+
+00:04:29.500 --> 00:04:30.340
+trois tableaux de bord séparés,
+
+00:04:30.600 --> 00:04:31.540
+trois enquêtes différentes.
+
+00:04:31.540 --> 00:04:33.120
+C'est là que Sentinelle intervient.
+
+00:04:33.620 --> 00:04:34.640
+Il se place sous chacun d'entre eux.
+
+00:04:35.280 --> 00:04:36.840
+Pas comme un concurrent, mais comme une fondation.
+
+00:04:37.540 --> 00:04:38.660
+Voyez cela comme le sol d'un bâtiment.
+
+00:04:39.200 --> 00:04:40.120
+Les pièces sont Defender,
+
+00:04:40.280 --> 00:04:41.420
+Entra, Purview et Intune,
+
+00:04:41.780 --> 00:04:42.880
+ayant chacune leur propre rôle.
+
+00:04:43.680 --> 00:04:44.740
+Mais c'est le sol qui les relie,
+
+00:04:44.980 --> 00:04:46.500
+vous permettant de passer d'une pièce à l'autre
+
+00:04:46.500 --> 00:04:47.380
+sans tomber dans le vide.
+
+00:04:48.060 --> 00:04:49.880
+Notez que ce n'est pas dit que Sentinelle était en concurrence avec Defender.
+
+00:04:50.460 --> 00:04:50.980
+Ce n'est pas le cas.
+
+00:04:51.440 --> 00:04:53.620
+Defender est excellent pour détecter les menaces sur les terminaux
+
+00:04:53.620 --> 00:04:54.700
+et dans Microsoft 365,
+
+00:04:54.920 --> 00:04:56.140
+mais il ne voit que ce qu'il surveille.
+
+00:04:56.140 --> 00:04:58.520
+Il ignore vos journaux de pare-feu sur site
+
+00:04:58.520 --> 00:05:00.780
+ou vos journaux AWS CloudTrail.
+
+00:05:02.100 --> 00:05:04.060
+Sentinelle est la plateforme sur laquelle s'appuie Defender
+
+00:05:04.060 --> 00:05:05.260
+et non le produit qui le remplace.
+
+00:05:05.620 --> 00:05:07.000
+Voici un changement majeur que vous devez connaître.
+
+00:05:07.260 --> 00:05:09.120
+Microsoft consolide tout au sein d'un seul emplacement.
+
+00:05:09.920 --> 00:05:11.440
+Après le 31 mars 2027,
+
+00:05:11.660 --> 00:05:14.080
+Sentinelle ne sera plus disponible dans le portail Azure.
+
+00:05:15.180 --> 00:05:17.220
+Il sera exclusivement présent dans le portail Microsoft Defender.
+
+00:05:17.660 --> 00:05:18.240
+Pendant des années,
+
+00:05:18.420 --> 00:05:20.600
+vous deviez basculer entre le portail Azure pour Sentinelle
+
+00:05:20.600 --> 00:05:22.440
+et le portail Defender pour le XDR.
+
+00:05:22.820 --> 00:05:23.440
+Cela va disparaître.
+
+00:05:23.680 --> 00:05:26.000
+Microsoft construit un centre d'opération de sécurité unifiée
+
+00:05:26.000 --> 00:05:27.700
+hébergé dans le portail Defender.
+
+00:05:28.220 --> 00:05:29.660
+Qu'est-ce que cela signifie pour vous ?
+
+00:05:29.660 --> 00:05:30.660
+Moins de portails à maîtriser.
+
+00:05:30.660 --> 00:05:31.860
+Moins de changements de contexte.
+
+00:05:32.260 --> 00:05:33.820
+Un seul endroit pour visualiser vos incidents,
+
+00:05:34.220 --> 00:05:34.880
+chasser les menaces
+
+00:05:34.880 --> 00:05:36.640
+et gérer votre posture de sécurité.
+
+00:05:37.040 --> 00:05:38.460
+C'est une évolution vers la simplicité
+
+00:05:38.460 --> 00:05:40.280
+et pour les administrateurs Microsoft 365
+
+00:05:40.280 --> 00:05:41.480
+déjà habitués au portail Defender,
+
+00:05:41.600 --> 00:05:42.320
+c'est une excellente nouvelle.
+
+00:05:42.720 --> 00:05:43.640
+Mais le véritable changement,
+
+00:05:43.720 --> 00:05:44.320
+c'est le lac de données.
+
+00:05:44.800 --> 00:05:45.720
+Nous aborderons ce point ensuite.
+
+00:05:45.720 --> 00:05:47.460
+Le nouveau lac de données unifié,
+
+00:05:47.520 --> 00:05:48.380
+qu'est-ce qui a changé ?
+
+00:05:48.380 --> 00:05:50.000
+Voici le problème auquel Sentinelle a toujours été con.
+
+00:05:50.420 --> 00:05:51.580
+Conserver les journaux coûte très cher.
+
+00:05:52.020 --> 00:05:53.040
+Pas juste un peu, énormément.
+
+00:05:53.500 --> 00:05:54.840
+La rétention par défaut était des 90 jours.
+
+00:05:55.500 --> 00:05:57.300
+Au-delà, soit vous payez le prix fort pour garder les données,
+
+00:05:57.420 --> 00:05:59.160
+soit vous leur disiez adieu à jamais, jamais.
+
+00:06:00.060 --> 00:06:02.200
+La plupart des organisations choisissaient de supprimer les journaux
+
+00:06:02.200 --> 00:06:02.720
+après trois mois,
+
+00:06:03.060 --> 00:06:04.780
+ce qui les laissait aveugles au-delà de cette période.
+
+00:06:05.460 --> 00:06:07.820
+Microsoft a résolu ce problème grâce au lac de données unifié,
+
+00:06:07.880 --> 00:06:08.800
+ce qui change complètement la donne.
+
+00:06:09.500 --> 00:06:11.020
+Sentinelle sépare désormais le stockage du calcul.
+
+00:06:11.020 --> 00:06:12.040
+Dans l'ancien modèle,
+
+00:06:12.140 --> 00:06:14.340
+vous payez un prix unique couvrant à la fois le stockage des données
+
+00:06:14.340 --> 00:06:15.540
+et leur interrogation rapide.
+
+00:06:16.380 --> 00:06:17.860
+C'était logique pour les enquêtes actives,
+
+00:06:18.240 --> 00:06:19.980
+mais terrible pour la rétention à long terme.
+
+00:06:20.620 --> 00:06:22.180
+Vous payez pour une vitesse inutile sur des données
+
+00:06:22.180 --> 00:06:22.960
+que vous consultiez à peine.
+
+00:06:23.380 --> 00:06:24.420
+Le lac de données renverse cette logique.
+
+00:06:24.740 --> 00:06:26.280
+Vous stockez vos données dans un niveau à faible coût.
+
+00:06:26.880 --> 00:06:28.820
+Elles restent présentes, accessibles et consultables,
+
+00:06:29.280 --> 00:06:31.560
+mais vous ne payez pour le calcul que lorsque vous lancez une requête.
+
+00:06:32.280 --> 00:06:33.800
+Considérez cela comme la différence entre
+
+00:06:33.800 --> 00:06:35.880
+louer un garde-meuble et avoir une cave.
+
+00:06:36.280 --> 00:06:38.400
+Le garde-meuble vous coûte chaque mois que vous l'utilisez ou non.
+
+00:06:38.920 --> 00:06:39.760
+La cave est simplement là.
+
+00:06:39.760 --> 00:06:42.180
+Vous ne dépensez de l'argent que lorsque vous descendez chercher quelque chose.
+
+00:06:42.560 --> 00:06:43.340
+Les chiffres parlent d'eux-mêmes.
+
+00:06:44.180 --> 00:06:46.120
+Microsoft affirme que le stockage dans le lac de données
+
+00:06:46.120 --> 00:06:48.680
+coûte moins de 15% des journaux d'analyse traditionnelle.
+
+00:06:49.720 --> 00:06:53.080
+C'est la différence entre conserver des journaux pendant 3 mois ou 3 ans,
+
+00:06:53.180 --> 00:06:55.160
+voire 12 ans, la nouvelle durée maximale de rétention,
+
+00:06:55.540 --> 00:06:56.200
+sans se ruiner.
+
+00:06:56.880 --> 00:06:58.620
+Et le meilleur dans tout ça, c'est que vous n'avez rien à faire de plus.
+
+00:06:59.520 --> 00:07:02.380
+Chaque journal déjà ingéré est automatiquement répliqué dans le lac de données.
+
+00:07:03.320 --> 00:07:05.140
+Aucune configuration, aucun nouveau connecteur.
+
+00:07:05.540 --> 00:07:06.240
+Cela se fait tout seul.
+
+00:07:06.240 --> 00:07:10.200
+Cela ouvre des possibilités puissantes comme la chasse aux menaces à grande échelle,
+
+00:07:10.320 --> 00:07:11.340
+ce que nous aborderons ensuite.
+
+00:07:12.220 --> 00:07:12.860
+La chasse aux menaces.
+
+00:07:13.440 --> 00:07:14.920
+Repéer les attaques dissimulées à la vue de tous,
+
+00:07:15.280 --> 00:07:17.260
+la plupart des gens ne réalisent pas cela concernant les cyberattaques.
+
+00:07:17.500 --> 00:07:18.280
+Elles ne se produisent pas rapidement.
+
+00:07:18.720 --> 00:07:19.320
+Elles se produisent lentement.
+
+00:07:19.580 --> 00:07:21.720
+Les experts en sécurité appellent cela « go and slow ».
+
+00:07:21.720 --> 00:07:23.480
+Un attaquant peut tester un mot de passe sur un compte,
+
+00:07:23.700 --> 00:07:25.240
+échouer et disparaître pendant un mois.
+
+00:07:26.100 --> 00:07:27.660
+Ensuite, il réessaye sur un compte différent.
+
+00:07:28.120 --> 00:07:28.820
+Un autre mois passe.
+
+00:07:29.300 --> 00:07:30.240
+Il teste un troisième compte.
+
+00:07:30.240 --> 00:07:33.220
+Chaque tentative semble anodine, comme quelqu'un ayant oublié son mot de passe.
+
+00:07:33.540 --> 00:07:34.200
+Mais voici le problème.
+
+00:07:34.760 --> 00:07:37.580
+Avec l'ancienne fenêtre de rétention de 90 jours, vous ne verriez jamais le schéma.
+
+00:07:38.100 --> 00:07:41.680
+Au moment de la troisième tentative, la première avait déjà été supprimée de vos journaux.
+
+00:07:42.460 --> 00:07:46.220
+Vous ne verriez qu'une connexion échouée, sans contexte, sans schéma, sans moyen de relier les points.
+
+00:07:46.840 --> 00:07:48.160
+Le lac de données change radicalement la situation.
+
+00:07:48.600 --> 00:07:51.260
+Désormais, vous pouvez exécuter des requêtes sur des années de données, et non plus des mois.
+
+00:07:51.460 --> 00:07:55.660
+Vous demandez à Sentinel d'afficher chaque connexion échouée depuis une IP spécifique sur les 12 derniers mois.
+
+00:07:56.300 --> 00:07:57.720
+Soudainement, le schéma devient parfaitement clair.
+
+00:07:57.720 --> 00:08:01.120
+Trois tentatives depuis la même IP utilisant la même technique sur différents comptes.
+
+00:08:01.800 --> 00:08:02.760
+C'est une attaque, pas un oubli.
+
+00:08:03.360 --> 00:08:07.300
+L'outil pour poser ces questions est qu'AQL, le langage de requête, custod, euh...
+
+00:08:07.300 --> 00:08:09.220
+Voyez cela comme un moteur de recherche pour vos journaux de sécurité.
+
+00:08:09.700 --> 00:08:12.920
+Vous tapez ce que vous cherchez, comme des échecs de connexion depuis une IP suspecte
+
+00:08:12.920 --> 00:08:16.680
+ou des règles de transfert inhabituelles créées hors heures ouvrables, et Sentinel vous renvoie les résultats.
+
+00:08:17.460 --> 00:08:19.560
+Cela vous permet de poser des questions dont vous ignoriez même avoir besoin.
+
+00:08:19.900 --> 00:08:22.460
+C'est pourquoi les équipes de sécurité sont enthousiastes à propos du lac de données.
+
+00:08:22.660 --> 00:08:24.140
+Non pas pour une nouvelle fonctionnalité tape à l'œil,
+
+00:08:24.480 --> 00:08:26.500
+mais parce qu'elles peuvent enfin voir ce qui était caché à la vue de tous.
+
+00:08:26.500 --> 00:08:30.120
+Les attaquants qui opèrent lentement, qui testent le terrain et se font dans le trafic normal,
+
+00:08:30.440 --> 00:08:32.800
+comptez sur le fait que vous ne pouviez pas remonter assez loin pour relier les points.
+
+00:08:33.620 --> 00:08:34.920
+Le lac de données leur enlève cet avantage.
+
+00:08:35.520 --> 00:08:38.600
+Les Sentinelles ne se limitent pas à regarder en arrière, il s'agit aussi de regarder vers l'avant.
+
+00:08:39.580 --> 00:08:41.920
+Les graphes et l'IA, le futur, qui est déjà là.
+
+00:08:42.520 --> 00:08:44.340
+Les attaquants pensent en graphes, pas en liste.
+
+00:08:45.060 --> 00:08:47.860
+Ils ne voient pas des utilisateurs et des appareils individuels, ils voient les connexions entre eux.
+
+00:08:48.320 --> 00:08:49.780
+Cet utilisateur a accès à ce serveur.
+
+00:08:50.340 --> 00:08:51.640
+Ce serveur se connecte à cette base de données.
+
+00:08:52.200 --> 00:08:53.900
+Cette base de données contient exactement ce qu'ils veulent.
+
+00:08:53.900 --> 00:08:56.780
+et cartographie tout le chemin avant même de faire le moindre mouvement.
+
+00:08:57.360 --> 00:08:58.060
+Maintenant, voici le problème.
+
+00:08:58.420 --> 00:08:59.860
+Les défenseurs ont toujours pensé en liste.
+
+00:09:00.360 --> 00:09:02.640
+Une liste d'alerte, une liste d'adresse IP, une liste d'utilisateurs.
+
+00:09:03.100 --> 00:09:05.860
+Bien sûr, les listes sont utiles, mais elles ne vous montrent pas les connexions.
+
+00:09:06.460 --> 00:09:08.140
+Elles ne vous montrent pas le chemin qu'un attaquant peut emprunter.
+
+00:09:08.540 --> 00:09:09.740
+Le graph de Sentinelles change cela.
+
+00:09:10.080 --> 00:09:12.360
+Il permet aux défenseurs de faire ce que les attaquants font depuis toujours.
+
+00:09:12.800 --> 00:09:14.360
+Ils vous montrent la carte, pas seulement les points.
+
+00:09:15.140 --> 00:09:16.980
+Voyez que l'utilisateur A a accès au serveur B.
+
+00:09:17.100 --> 00:09:18.640
+Le serveur B se connecte à la base de données C.
+
+00:09:18.640 --> 00:09:21.340
+Et la base de données C contient vos données clients les plus sensibles.
+
+00:09:22.020 --> 00:09:23.960
+Ce n'est pas juste de l'information, c'est du contexte.
+
+00:09:24.040 --> 00:09:26.100
+Et le contexte transforme une bonne enquête en une excellente enquête.
+
+00:09:26.480 --> 00:09:27.380
+Cela fonctionne dans les deux sens.
+
+00:09:27.880 --> 00:09:28.960
+Avant qu'une brèche ne se produise,
+
+00:09:29.300 --> 00:09:31.160
+vous utilisez le graph pour voir les chemins d'attaque potentiels.
+
+00:09:31.700 --> 00:09:32.660
+Trouvez les points de passage obligés.
+
+00:09:33.560 --> 00:09:36.580
+Un seul utilisateur, dont la compromission ouvrirait la moitié de votre réseau.
+
+00:09:37.060 --> 00:09:38.500
+Ensuite, vous pouvez prioriser cet utilisateur,
+
+00:09:38.660 --> 00:09:39.820
+appliquer des contrôles supplémentaires
+
+00:09:39.820 --> 00:09:41.620
+et réduire le rayon d'impact avant que les problèmes ne surviennent.
+
+00:09:42.060 --> 00:09:44.480
+Après une brèche, le graph vous montre le rayon d'impact réel,
+
+00:09:44.800 --> 00:09:45.640
+une alerte se déclenche
+
+00:09:45.640 --> 00:09:48.580
+et le graph de Sentinelle vous montre instantanément chaque système touché par l'utilisateur,
+
+00:09:48.680 --> 00:09:50.780
+chaque fichier accédé, chaque fichier accédé, chaque connexion établie.
+
+00:09:51.100 --> 00:09:53.100
+Pas de devinette, pas de traçage manuel, le graph fait tout.
+
+00:09:53.420 --> 00:09:54.200
+Maintenant, parlons de l'IA.
+
+00:09:54.560 --> 00:09:57.400
+Microsoft Security Copilot intègre le langage naturel dans l'équation.
+
+00:09:57.940 --> 00:09:59.400
+Au lieu d'écrire des requêtes KQL complexes,
+
+00:09:59.480 --> 00:10:01.620
+vous posez simplement vos questions en langage courant, courant.
+
+00:10:02.260 --> 00:10:04.740
+Montre-moi toutes les connexions depuis des lieux inhabituels au cours de la semaine dernière.
+
+00:10:05.320 --> 00:10:06.980
+Security Copilot transforme cela en requête,
+
+00:10:07.060 --> 00:10:09.000
+l'exécute sur vos données et affiche les résultats.
+
+00:10:09.400 --> 00:10:10.340
+Cela baisse la barrière à l'entrée.
+
+00:10:10.340 --> 00:10:12.620
+Pas besoin d'être un expert KQL pour traquer les menaces.
+
+00:10:13.020 --> 00:10:14.080
+Il y a aussi le serveur MCP.
+
+00:10:14.540 --> 00:10:15.980
+MCP signifie Model Context Protocol.
+
+00:10:16.580 --> 00:10:17.900
+En clair, cela permet aux agents IA,
+
+00:10:18.040 --> 00:10:18.760
+ces bots intelligents,
+
+00:10:19.140 --> 00:10:20.920
+d'interagir directement avec Sentinelle.
+
+00:10:21.740 --> 00:10:23.300
+Un agent peut poser des questions à Sentinelle,
+
+00:10:23.420 --> 00:10:24.120
+exécuter des requêtes,
+
+00:10:24.240 --> 00:10:25.500
+analyser les résultats et même agir.
+
+00:10:25.940 --> 00:10:26.860
+Sans intervention humaine.
+
+00:10:27.480 --> 00:10:28.320
+Cela semble futuriste,
+
+00:10:28.560 --> 00:10:29.520
+mais c'est déjà en cours de déploiement.
+
+00:10:30.060 --> 00:10:32.160
+Sentinelle vous permet donc de traquer les menaces sur des années de noeud.
+
+00:10:32.360 --> 00:10:33.940
+Voyez les relations exploitées par les attaquants.
+
+00:10:34.600 --> 00:10:36.400
+Vous pouvez poser des questions en langage naturel grâce à l'IA.
+
+00:10:36.400 --> 00:10:40.060
+Mais comment commencer sans être un expert en sécurité ?
+
+00:10:40.060 --> 00:10:40.900
+C'est ce que nous allons voir ensuite.
+
+00:10:41.600 --> 00:10:42.940
+Démarrer sans se laisser submerger.
+
+00:10:43.660 --> 00:10:45.560
+Vous pourriez penser que cela nécessite une équipe de sécurité
+
+00:10:45.560 --> 00:10:46.700
+avec un budget à 6 chiffres.
+
+00:10:47.360 --> 00:10:47.660
+C'est faux.
+
+00:10:47.980 --> 00:10:49.720
+Vous n'avez pas besoin d'une certification interminable.
+
+00:10:50.040 --> 00:10:51.740
+Il vous suffit d'un tenant Microsoft 365
+
+00:10:51.740 --> 00:10:53.140
+et de la volonté de commencer petit.
+
+00:10:53.820 --> 00:10:55.160
+La configuration de base est vraiment simple.
+
+00:10:55.820 --> 00:10:57.780
+Vous activez Sentinelle dans le portail Microsoft Defender.
+
+00:10:58.240 --> 00:10:59.360
+Ensuite, vous connectez vos sources de données.
+
+00:10:59.700 --> 00:10:59.960
+C'est tout.
+
+00:11:00.320 --> 00:11:01.660
+Pas besoin de tout configurer immédiatement.
+
+00:11:02.080 --> 00:11:02.880
+En fait, vous ne devriez pas le faire.
+
+00:11:03.240 --> 00:11:05.020
+Commencez par quelques sources qui vous importent le plus.
+
+00:11:05.020 --> 00:11:06.960
+Log de connexion Azure AD
+
+00:11:06.960 --> 00:11:08.640
+Log de flux de messagerie Exchange Online
+
+00:11:08.640 --> 00:11:10.200
+Alerbe Defender for Office 365
+
+00:11:10.200 --> 00:11:12.300
+Rien que ces trois sources vous offrent plus de visibilité
+
+00:11:12.300 --> 00:11:13.600
+que la plupart des entreprises aujourd'hui.
+
+00:11:14.360 --> 00:11:15.340
+Voici ce qui simplifie les choses.
+
+00:11:15.720 --> 00:11:16.960
+Sentinelle dispose d'un hub de contenu.
+
+00:11:17.360 --> 00:11:18.940
+Voyez cela comme un App Store pour les règles de sécurité.
+
+00:11:19.640 --> 00:11:20.720
+Vous parcourez par catégories.
+
+00:11:21.000 --> 00:11:22.940
+Menace d'identité, menace email, conformité
+
+00:11:22.940 --> 00:11:24.720
+et installez des règles de détection prêtes à l'emploi.
+
+00:11:25.360 --> 00:11:26.520
+Vous n'écrivez pas vos requêtes de zéro.
+
+00:11:26.920 --> 00:11:28.260
+Le KQL n'est pas nécessaire dès le premier jour.
+
+00:11:28.580 --> 00:11:30.800
+Le hub de contenu vous donne un point de départ fonctionnel immédiatement.
+
+00:11:31.540 --> 00:11:32.840
+Parlons maintenant des coûts.
+
+00:11:32.840 --> 00:11:33.960
+C'est la question que tout le monde se pose.
+
+00:11:33.960 --> 00:11:36.200
+Sentinelle utilise un modèle de paiement à l'utilisation.
+
+00:11:36.400 --> 00:11:37.520
+Payez pour les données que vous ingérez.
+
+00:11:37.900 --> 00:11:38.740
+Mais vous contrôlez les coûts.
+
+00:11:39.200 --> 00:11:41.360
+Les niveaux d'engagement permettent de s'engager sur un volume minimum
+
+00:11:41.360 --> 00:11:42.640
+pour obtenir une remise importante.
+
+00:11:43.060 --> 00:11:44.260
+Et rappelez-vous du data lake ?
+
+00:11:44.260 --> 00:11:45.200
+Cela change la donne économique.
+
+00:11:45.820 --> 00:11:47.260
+Les logs à haut volume et faible fidélité
+
+00:11:47.260 --> 00:11:49.720
+comme le trafic par feu vont directement dans le niveau data lake
+
+00:11:49.720 --> 00:11:50.580
+pour une fraction du prix.
+
+00:11:51.380 --> 00:11:53.840
+Ainsi, vous n'avez plus à choisir entre visibilité et budget.
+
+00:11:54.560 --> 00:11:55.660
+Le plus dur n'est pas la technologie,
+
+00:11:55.880 --> 00:11:56.860
+mais de savoir par où commencer.
+
+00:11:57.340 --> 00:11:58.080
+Voici donc mon conseil.
+
+00:11:58.420 --> 00:11:59.560
+Commencez avec une seule source de données
+
+00:11:59.560 --> 00:12:00.400
+et une seule règle de détection.
+
+00:12:00.740 --> 00:12:01.600
+Nectez les logs entre ID.
+
+00:12:01.600 --> 00:12:04.120
+Installez une règle qui alerte lorsqu'un administrateur global
+
+00:12:04.120 --> 00:12:05.580
+se connecte depuis un emplacement inhabituel.
+
+00:12:06.160 --> 00:12:07.080
+Et ce que Sentinelle vous indique.
+
+00:12:07.460 --> 00:12:08.400
+C'est suffisant pour démarrer.
+
+00:12:08.800 --> 00:12:10.200
+Ensuite, développez à mesure que vous prenez vos marques.
+
+00:12:10.540 --> 00:12:11.220
+Faisons le point.
+
+00:12:12.180 --> 00:12:12.740
+La vue dansant.
+
+00:12:13.220 --> 00:12:14.880
+Pourquoi cela change votre travail ?
+
+00:12:14.880 --> 00:12:15.800
+Sentinelle évolue.
+
+00:12:16.340 --> 00:12:18.080
+C'était au départ un outil pour les experts en sécurité.
+
+00:12:18.380 --> 00:12:20.680
+Cela devient désormais la plateforme au cœur de toute la sécurité Microsoft.
+
+00:12:21.520 --> 00:12:22.600
+Pour vous, en tant qu'administrateur M365,
+
+00:12:23.360 --> 00:12:25.500
+cela signifie que votre sécurité bénéficie d'une mise à niveau majeure
+
+00:12:25.500 --> 00:12:26.440
+sans que vous ayez la construire vous-même.
+
+00:12:26.740 --> 00:12:27.780
+Repensez à ce que nous avons abordé.
+
+00:12:27.780 --> 00:12:30.600
+Sentinelle collecte les signaux provenant de l'ensemble de votre environnement.
+
+00:12:31.300 --> 00:12:33.580
+Il les corrèle pour identifier des modèles que vous ne pourrez jamais détecter manuellement.
+
+00:12:34.140 --> 00:12:35.740
+Il peut répondre automatiquement en cas de problème.
+
+00:12:36.760 --> 00:12:38.520
+Le nouveau lac de données permet de conserver des années de données
+
+00:12:38.520 --> 00:12:39.740
+au lieu de quelques mois à un coût abordable.
+
+00:12:40.280 --> 00:12:42.520
+Le graphique vous montre les vecteurs d'attaque avant qu'ils ne soient exploités.
+
+00:12:43.240 --> 00:12:44.860
+IA vous permet de poser des questions en langage naturel.
+
+00:12:45.220 --> 00:12:46.660
+Tout cela est intégré nativement dans la plateforme.
+
+00:12:46.920 --> 00:12:48.820
+Vous n'avez pas besoin de l'assembler à partir d'outils disparates.
+
+00:12:49.520 --> 00:12:51.740
+Le lac de données élimine le compromis entre coût et visibilité.
+
+00:12:51.740 --> 00:12:54.540
+Vous n'avez plus à choisir entre conserver les journaux et économiser de l'argent.
+
+00:12:55.200 --> 00:12:55.740
+Vous pouvez faire les deux.
+
+00:12:56.360 --> 00:12:57.820
+Cela change votre vision de la sécurité.
+
+00:12:58.300 --> 00:13:00.400
+Au lieu de vous demander avons-nous les moyens de surveiller cela ?
+
+00:13:00.400 --> 00:13:02.580
+Vous vous demandez que devrions-nous surveiller d'autres ?
+
+00:13:02.580 --> 00:13:04.960
+Vous n'avez pas besoin d'être un analyste SOC pour tirer profit de Sentinelle.
+
+00:13:05.760 --> 00:13:07.860
+Il suffit de vouloir assurer la sécurité de votre tenant.
+
+00:13:08.760 --> 00:13:10.040
+Si vous écoutez ceci, c'est que c'est votre cas.
+
+00:13:10.620 --> 00:13:12.800
+L'intégration avec Defender entre Hyperview signifie
+
+00:13:12.800 --> 00:13:14.620
+moins de portails gérés, moins de changement de contexte
+
+00:13:14.620 --> 00:13:15.940
+et plus de contrôle depuis un seul endroit.
+
+00:13:16.720 --> 00:13:19.540
+Microsoft parie que la sécurité doit être intégrée et non ajoutée par-dessus.
+
+00:13:19.540 --> 00:13:23.960
+Sentinelle est la fondation de ce pari et il est en train de payer votre prochain étape.
+
+00:13:24.320 --> 00:13:25.380
+Voici ce que vous comprenez désormais.
+
+00:13:26.100 --> 00:13:28.120
+Sentinelle est le cerveau central de vos données de sécurité.
+
+00:13:28.940 --> 00:13:32.460
+Il collecte tout, corrèle les signaux et agit automatiquement en cas de problème.
+
+00:13:33.380 --> 00:13:35.720
+Le lac de données permet de conserver les journaux pendant des années plutôt que des mois.
+
+00:13:36.720 --> 00:13:38.860
+Les graphiques et liens le rendent plus intelligent au fil du temps
+
+00:13:38.860 --> 00:13:40.860
+et tout cela réside dans le portail Defender,
+
+00:13:41.220 --> 00:13:43.020
+aux côtés des outils que vous utilisez déjà.
+
+00:13:43.560 --> 00:13:44.980
+Vous n'avez pas besoin de le maîtriser du jour au lendemain.
+
+00:13:44.980 --> 00:13:48.120
+Mon conseil est simple, allez sur security.microsoft.com,
+
+00:13:48.220 --> 00:13:49.980
+ouvrez Sentinelle et parcourez le hub de contenu.
+
+00:13:50.300 --> 00:13:51.760
+Explorez simplement, voyez ce qui est disponible,
+
+00:13:51.840 --> 00:13:53.300
+choisissez un connecteur et une règle de détection.
+
+00:13:53.800 --> 00:13:54.620
+C'est votre point de départ.
+
+00:13:55.200 --> 00:13:56.440
+Beaucoup de gens ne feront pas ce premier pas.
+
+00:13:56.880 --> 00:13:58.380
+Ils liront des informations sur Sentinelle,
+
+00:13:58.480 --> 00:14:00.620
+approuveront puis fermeront le navigateur pour reprendre leur journée.
+
+00:14:01.200 --> 00:14:02.460
+C'est pour cela que vous aurez une longueur d'avance,
+
+00:14:02.720 --> 00:14:04.440
+car vous aurez réellement mis en pratique ce que vous avez appris.
+
+00:14:04.900 --> 00:14:07.180
+Si cet épisode vous a aidé à mieux comprendre Sentinelle,
+
+00:14:07.860 --> 00:14:09.500
+abonnez-vous à Microsoft Knowledge Nuggets.
+
+00:14:09.720 --> 00:14:11.440
+Nous décortiquons les sujets à la sécurité Microsoft
+
+00:14:11.440 --> 00:14:13.340
+et à une 365 en langage simple à chaque épisode.
+
+00:14:13.340 --> 00:14:16.340
+Partagez ceci avec quelqu'un qui souhaite découvrir Sentinelle,
+
+00:14:16.540 --> 00:14:17.560
+mais qui ne sait pas par où commencer.
+
+00:14:18.200 --> 00:14:18.660
+A la prochaine.

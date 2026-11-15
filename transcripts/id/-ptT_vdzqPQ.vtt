@@ -1,0 +1,1549 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.180
+Python adalah bahasa IE.
+
+00:00:01.740 --> 00:00:02.000
+Salah.
+
+00:00:02.440 --> 00:00:04.760
+Di dalam tumpukan Microsoft, AI yang menulis lem penghubungnya.
+
+00:00:04.860 --> 00:00:05.140
+Bukan Anda.
+
+00:00:05.540 --> 00:00:10.180
+Anda terus memaksakan Python ke Power Automate dan Power BI lalu heran mengapa alur Anda goya seperti kursi berkaki tiga.
+
+00:00:10.800 --> 00:00:11.240
+Ini solusinya.
+
+00:00:11.780 --> 00:00:17.200
+Saya akan menunjukkan mengapa orkestrasi gaya agen tipe dan copilot mengubah skrip ala TypeScript menjadi lem kelas utama,
+
+00:00:17.320 --> 00:00:22.600
+mendorong Python ke analitik terbatas, serta menyatukan proses bangun, debak, dan terapkan ke dalam satu putaran percakapan.
+
+00:00:23.180 --> 00:00:27.540
+Tetaplah di sini untuk langkah rahasia yang menghentikan inflasi cacat, kesalahan yang diam-diam menguras anggaran,
+
+00:00:27.540 --> 00:00:31.000
+dan pola hibrida yang memungkinkan Anda tetap menggunakan Python tanpa kerumitan.
+
+00:00:32.880 --> 00:00:34.940
+Masalahnya, gesekan Python di dalam Power Platform.
+
+00:00:35.440 --> 00:00:37.440
+Mari mulai dengan hal yang jelas, namun entah mengapa tidak terjadi.
+
+00:00:37.700 --> 00:00:40.000
+Power Automate tidak menjalankan Python sembarangan.
+
+00:00:40.500 --> 00:00:44.120
+Office Scripts yang bernuansa TypeScript adalah antarmuka skrip asli untuk Microsoft tiga.
+
+00:00:44.560 --> 00:00:45.480
+Excel Online menampungnya?
+
+00:00:45.820 --> 00:00:46.420
+Itulah jalurnya.
+
+00:00:46.720 --> 00:00:50.380
+Saat Anda bersikeras menggunakan Python, Anda menambahkan Azure Functions, Logic Apps, atau konektor custom.
+
+00:00:50.580 --> 00:00:55.120
+Sekarang Anda telah menambahkan komputasi eksternal, jalur penerapan, autentikasi, dan yang paling saya suka adalah misteri rantai yang bingung.
+
+00:00:55.120 --> 00:00:57.720
+Mengapa ini merugikan adalah masalah ekonomi sederhana ditambah problem.
+
+00:00:58.080 --> 00:01:00.820
+Pengaturan eksternal berarti lebih banyak layanan untuk dikonfigurasi,
+
+00:01:01.100 --> 00:01:02.720
+lebih banyak kredensia untuk dirotasi,
+
+00:01:02.980 --> 00:01:05.160
+dan lebih banyak biaya yang terus berjalan bahkan saat Anda tidur.
+
+00:01:05.580 --> 00:01:07.120
+Penghentikan dinamis menambah risiko seperti judul.
+
+00:01:07.500 --> 00:01:09.380
+Kode tersebut berjalan karena tidak ada kompilasi,
+
+00:01:09.520 --> 00:01:11.920
+lalu gagal di tengah jalan karena bidang tidak sesuai dengan asumsi Anda.
+
+00:01:12.400 --> 00:01:13.580
+Dalam sebuah alu itu tidak lucu.
+
+00:01:13.720 --> 00:01:16.060
+Itu berarti pertujuan yang gagal, SLA yang terlewat,
+
+00:01:16.160 --> 00:01:18.260
+dan tiket lain bertajuk mendesak yang ditulis dengan huruf kecil.
+
+00:01:18.860 --> 00:01:20.640
+Skenario spesifik aliran data Power BI.
+
+00:01:21.120 --> 00:01:22.220
+Anda sedang mentransformasi data.
+
+00:01:22.220 --> 00:01:25.540
+Co-Pilot sekarang dapat membuatkan Power Query M atau Python untuk Anda
+
+00:01:25.540 --> 00:01:26.760
+di dalam aliran data Gen 2.
+
+00:01:27.480 --> 00:01:29.880
+Bagus sampai Anda mencampurnya dengan layanan Python terpisah
+
+00:01:29.880 --> 00:01:32.560
+untuk tugas penghubung yang seharusnya bisa ditangani Power Automate secara asli.
+
+00:01:32.800 --> 00:01:34.360
+Sekarang silsilah data Anda melintasi berbagai prod.
+
+00:01:34.920 --> 00:01:37.780
+Observabilitas nikmati melacak kesalahan dari alur kefungsi hingga aliran data
+
+00:01:37.780 --> 00:01:40.200
+dalam waktu yang dibutuhkan pemangku kepentingan Anda untuk bertanya
+
+00:01:40.200 --> 00:01:41.120
+apakah sudah selesai.
+
+00:01:41.520 --> 00:01:42.240
+Untuk ketujuh kalinya,
+
+00:01:42.860 --> 00:01:43.720
+alur Power Automate.
+
+00:01:44.260 --> 00:01:46.160
+Inti utamanya adalah konektor asli dan office script.
+
+00:01:46.760 --> 00:01:48.600
+Orang masih memaksakan Python dibalik konektor custom
+
+00:01:48.600 --> 00:01:49.940
+hanya untuk mengganti nama kolom DXO.
+
+00:01:49.940 --> 00:01:52.860
+Seperti memanggil mobil Derek hanya untuk memundukkan mobil dari cerana.
+
+00:01:53.320 --> 00:01:54.740
+Setiap loncatan meningkatkan kerepuhan.
+
+00:01:55.800 --> 00:01:56.940
+Skema konektor bergeser,
+
+00:01:57.280 --> 00:01:58.240
+dependensi fungsi menua,
+
+00:01:58.380 --> 00:02:00.180
+ijim menyepat di seluruh peran entra,
+
+00:02:00.420 --> 00:02:01.060
+grup sumber daya,
+
+00:02:01.420 --> 00:02:04.280
+dan akun penyimpanan misterius yang tidak ingin diakui siapapun.
+
+00:02:05.820 --> 00:02:06.400
+Notebook Fabric,
+
+00:02:06.560 --> 00:02:09.420
+ya Python memang tepat di sini untuk data ML dan komputasi serius,
+
+00:02:09.540 --> 00:02:12.080
+tetapi ketika Anda menggunakan notebook sebagai lem orkestrasi,
+
+00:02:12.200 --> 00:02:14.100
+Anda menyatukan logika bisnis dengan kerenol komputasi.
+
+00:02:14.980 --> 00:02:15.980
+Penjadwalan, validasi,
+
+00:02:15.980 --> 00:02:17.680
+dan IOM menjadi sangat kaku dan tidak standar.
+
+00:02:17.680 --> 00:02:20.280
+Satu pembaruan lingkungan, versi pandas naik,
+
+00:02:20.400 --> 00:02:23.100
+dan kode perkat sederhana Anda pun jadi tumpukan artefak kuno.
+
+00:02:24.020 --> 00:02:25.280
+Pemula mengira mereka sudah menjadi derhana.
+
+00:02:25.680 --> 00:02:29.300
+Padahal mereka menciptakan titik kegagalan prosedural dengan tambahan YAML.
+
+00:02:29.880 --> 00:02:32.340
+Banyak orang melewatkan fakta bahwa Office Script bukan TypeScript main.
+
+00:02:32.740 --> 00:02:34.920
+Itu adalah jalur resmi untuk mengotomatisasi Excel
+
+00:02:34.920 --> 00:02:37.540
+dan tugas Microsoft 365 tanpa harus menambah infrastruktur.
+
+00:02:37.980 --> 00:02:39.140
+Bandingkan dengan not TypeScript penuh,
+
+00:02:39.260 --> 00:02:42.580
+yang mungkin Anda pakai di Azure Function untuk API tangguh saat benar-benar dibutuhkan.
+
+00:02:42.580 --> 00:02:45.040
+Python di dalam Power Platform dirancang secara tidak langsung.
+
+00:02:45.600 --> 00:02:46.240
+Anda memang bisa maaf.
+
+00:02:46.580 --> 00:02:49.560
+Namun sebagai perkat, mari bicara soal hitungan biaya tanpa bualan.
+
+00:02:50.200 --> 00:02:52.460
+Alur sederhana itu murah karena tetap berada di dalam platform.
+
+00:02:52.880 --> 00:02:55.980
+Konektor, pemicu, dan Office Script memanfaatkan lisensi yang sudah Anda miliki.
+
+00:02:56.540 --> 00:03:00.060
+Gunakan Python lewat Functions dan Anda harus mempayar dengan uang serta perhatian.
+
+00:03:00.760 --> 00:03:02.620
+Uang untuk eksekusi, penyimpanan, dan jaringan.
+
+00:03:02.980 --> 00:03:06.580
+Perhatian untuk versi, pengamanan image, rahasia, pengulangan cold start, dan drama.
+
+00:03:07.100 --> 00:03:08.620
+Kenapa gagal jam 2.14 pagi?
+
+00:03:09.120 --> 00:03:09.280
+Tidak.
+
+00:03:09.820 --> 00:03:10.780
+Untuk skala kecil tidak masalah.
+
+00:03:11.040 --> 00:03:13.720
+Untuk skala organisasi, itu jadi pos anggaran yang penuh penyesalan.
+
+00:03:14.320 --> 00:03:15.720
+Muda kegagalan umum muncul berulang kali.
+
+00:03:16.780 --> 00:03:19.860
+Konektor rapuh, di mana spesifikasi swagger Anda tertinggal kenyataan karena satu kolom.
+
+00:03:20.460 --> 00:03:23.980
+Pergeseran versi, pemberonan pustaka yang tidak dikunci karena seseorang suka pakai versi terbaru.
+
+00:03:24.620 --> 00:03:28.620
+Ijen yang berantakan, prinsipal layanan dengan akses sementara yang jadi permanen.
+
+00:03:29.420 --> 00:03:33.000
+Debugging lintas layanan memutar ulang alur di Power Automate Azure Functions
+
+00:03:33.000 --> 00:03:34.800
+dan log data flow seperti podcast kriminal.
+
+00:03:34.800 --> 00:03:39.280
+Sebenarnya, kebebasan tipe dinamis itu menyenangkan sampai jam 3 sore saat tutup kuartal
+
+00:03:39.280 --> 00:03:41.220
+dan alur Anda berhasil dengan bentuk data yang salah.
+
+00:03:41.760 --> 00:03:44.160
+Batasan tipe yang kuat mencegah kesalahan bodoh sebelum dirilis.
+
+00:03:44.800 --> 00:03:48.600
+Di dalam Power Platform, skrip ala TypeScript dan konektor terstruktur memberi Anda batasan tersebut.
+
+00:03:48.980 --> 00:03:50.160
+Python juga bisa punya tipe, ya benar.
+
+00:03:50.540 --> 00:03:52.240
+Tapi kebanyakan dari Anda tidak menopkan di dalam Anda.
+
+00:03:52.600 --> 00:03:54.180
+Jangan membantah log Anda sudah membuktikannya.
+
+00:03:54.700 --> 00:03:55.980
+Dan sekarang transisi yang Anda tunggu.
+
+00:03:56.500 --> 00:03:59.740
+Jika setiap kali Anda menyambung kode secara manual menimbulkan masalah, apa penggantinya?
+
+00:04:00.380 --> 00:04:04.680
+Gunakan AI yang menulis dan menjalankan kode perkat bagi Anda di dalam jalur yang dioptimalkan platform.
+
+00:04:05.500 --> 00:04:09.620
+Copilot bisa menerjemahkan bahasa alami menjadi skrip office untuk tugas Microsoft 365.
+
+00:04:10.940 --> 00:04:15.720
+Di Power BI, Copilot menggunakan metadata model semantik untuk menghasilkan M atau Python secara kurat
+
+00:04:15.720 --> 00:04:17.820
+dan membuat kerangka laporan dalam hitungan detik.
+
+00:04:18.440 --> 00:04:21.320
+Agen seperti agen tipe mengordinasikan alat dengan memori dan batasan
+
+00:04:21.320 --> 00:04:23.740
+mengurangi proses bolak-olak spesifikasi kode debak-debel ulang.
+
+00:04:24.380 --> 00:04:29.000
+Anda membatasi area kerja, mendapatkan tepi yang terstruktur, dan tetap menggunakan Python di tempat yang tepat.
+
+00:04:29.420 --> 00:04:31.020
+Analitik yang rapi bukan sekadar lakpan.
+
+00:04:31.620 --> 00:04:33.880
+Anda bisa saja bersikeras, tapi Python kan bisa melakukan apa saja.
+
+00:04:33.880 --> 00:04:35.200
+Python juga bisa melakukan apa.
+
+00:04:35.540 --> 00:04:37.300
+Itu tidak menjadikannya pengencang yang tepat untuk saat.
+
+00:04:37.740 --> 00:04:38.800
+Jaga akal harus siwat asyik.
+
+00:04:39.160 --> 00:04:40.420
+Biarkan ayah yang menulis kode penghubungi.
+
+00:04:40.660 --> 00:04:42.840
+Tempatkan Python di Note 2 atau layanan yang memang dirancang untuknya.
+
+00:04:43.340 --> 00:04:47.660
+Anda akan lebih hemat, lebih jarang rusak, dan bagiannya paling menyakitkan, lebih produktif.
+
+00:04:48.580 --> 00:04:49.660
+Mengapa pendekatan saat ini gagang?
+
+00:04:50.260 --> 00:04:51.760
+Kode manual dan buku berdomen statis.
+
+00:04:52.480 --> 00:04:56.580
+Siklus pengodean manual terlihat heroik di papan tulis, kebutuhan kode terapkan, uji perbaiki, terapkan, ulang.
+
+00:04:56.580 --> 00:04:59.220
+Kenyataannya ini seperti permain pukul tikus dalam mereka kenal.
+
+00:04:59.500 --> 00:05:00.980
+Aturan bisnis berubah di tengah sprint.
+
+00:05:01.600 --> 00:05:03.240
+Skema akhir Anda berubah saat makan siang.
+
+00:05:03.940 --> 00:05:05.920
+Dan satu-satunya hal yang konstan adalah penerapan ulang ini.
+
+00:05:06.460 --> 00:05:11.300
+Di power platform, siklus itu jauh lebih menyakitkan karena setiap lompatan dari power automate ke Azure Functions,
+
+00:05:11.400 --> 00:05:15.020
+ke power BI memperbesar hambatan dan melipat gandakan mode kegagalan Anda.
+
+00:05:15.860 --> 00:05:17.340
+Buku perdomen statis adalah jebakan lainnya.
+
+00:05:17.800 --> 00:05:20.040
+Anda menulis buku perdomen jerumas untuk logika akhir kuartal.
+
+00:05:20.040 --> 00:05:22.380
+Lalu tim penjualan menciptakan diskon baru.
+
+00:05:22.800 --> 00:05:24.880
+Keuangan mengubah pengakuan pendapatan dan hukum.
+
+00:05:25.120 --> 00:05:26.780
+Menambahkan persetujuan empat langkah kemarin.
+
+00:05:28.040 --> 00:05:30.540
+Kode penghubung Python di functions Anda tidak melengkung, tetapi retak.
+
+00:05:31.040 --> 00:05:34.280
+Anda memperbarui kode, meningkatkan dependensi, membangun ulang kontainer,
+
+00:05:34.340 --> 00:05:36.660
+dan mendapati bahwa cold start senang muncul saat demo eksekutif.
+
+00:05:37.140 --> 00:05:37.540
+Menarik bukan?
+
+00:05:38.040 --> 00:05:41.540
+Kebenaran yang dihindari banyak orang, kebebasan pengetikan dinamis terasa cepat seandainya sendirian.
+
+00:05:42.040 --> 00:05:43.520
+Dalam skala alur, ini adalah permainan rolet.
+
+00:05:44.220 --> 00:05:47.960
+Kolom opsional berubah dari string menjadi angka dan fungsi Anda berjalan lancar
+
+00:05:47.960 --> 00:05:51.120
+hingga suatu cabang mengharapkan teks dan mengunculkan pengecualian saat runtime.
+
+00:05:52.180 --> 00:05:53.700
+Itu bukan uji unit yang kekal dengan jelas.
+
+00:05:53.860 --> 00:05:56.360
+Itu produksi yang secara diem-diem salah mengklasifikasikan transaksi.
+
+00:05:57.020 --> 00:05:59.080
+Dan ini ajajak audit Anda pada dasarnya sebuah novel.
+
+00:05:59.700 --> 00:06:01.160
+Observabilitas adalah perburuan hartakan.
+
+00:06:01.580 --> 00:06:04.620
+Kesalahan berasal dari power automate, diubah di dalam konektor custom,
+
+00:06:04.780 --> 00:06:07.140
+memicu fungsi Python, melompat ke data flow gain 2,
+
+00:06:07.340 --> 00:06:10.580
+dan akhirnya muncul sebagai ubin rusak di power BE 2.
+
+00:06:11.200 --> 00:06:14.260
+Sekarang Anda membaca lima log yang tidak sepakat pada format stempel waktu yang sama.
+
+00:06:14.720 --> 00:06:15.780
+Anda menyebut ini investigasi.
+
+00:06:15.780 --> 00:06:18.060
+Pengguna menyebutnya kami masih belum memiliki angkanya.
+
+00:06:18.520 --> 00:06:21.180
+Kisah singkat, sebuah tim memangkas waktu pelaporan bulanan
+
+00:06:21.180 --> 00:06:23.860
+dengan menggabungkan transformasi menjadi satu fungsi Python.
+
+00:06:24.640 --> 00:06:26.500
+Itu berhasil sampai konflik dependensi muncul kembali.
+
+00:06:27.520 --> 00:06:29.920
+Pembaruan versi pandas minor mengubah default fungsi mereka
+
+00:06:29.920 --> 00:06:31.900
+secara diam-diam memaksa nilai 0 dan 2 minggu.
+
+00:06:32.120 --> 00:06:34.760
+Kemudian laporan varians mereka meleset sedikit saja hingga berbahaya.
+
+00:06:35.300 --> 00:06:35.920
+Mereka memperbaiki.
+
+00:06:36.340 --> 00:06:38.420
+Lalu itu berulang karena pengujian versi ada daftar dulu.
+
+00:06:38.880 --> 00:06:40.820
+Bug yang berulang bukanlah misteri, itu adalah alur kos.
+
+00:06:40.820 --> 00:06:43.420
+Dan tata kelola, konektor kustom basi seperti susu.
+
+00:06:44.300 --> 00:06:47.420
+Spesifikasi open API tertinggal dari kenyataan, token kendal luar sa,
+
+00:06:47.580 --> 00:06:50.140
+prinsip layanan mengumpulkan hak akses berlebih untuk sementara.
+
+00:06:50.500 --> 00:06:53.900
+Dan saluran Anda yang dulu elegan kini menjadi mesin Ruben Goldberg dengan temuan SOC.
+
+00:06:54.760 --> 00:06:57.560
+Siklus manual tidak hanya membuang waktu, tetapi mengakumulasi utang-opressure.
+
+00:06:58.380 --> 00:07:01.140
+Setiap perbaikan cepat adalah pemadaman di masa depan dengan undangan kalender.
+
+00:07:01.520 --> 00:07:04.000
+Pusatnya tidak dapat bertahan, karena pusatnya adalah perkat yang rap.
+
+00:07:04.360 --> 00:07:06.120
+Kode manual berfungsi saat domainnya stabil.
+
+00:07:06.680 --> 00:07:08.400
+Logika bisnis power platform tidak stabil.
+
+00:07:08.400 --> 00:07:10.360
+Oleh karena itu, perhatikanlah.
+
+00:07:10.960 --> 00:07:13.800
+Orkestrasi Anda harus adaptif memiliki tipe data di sisi luar
+
+00:07:13.800 --> 00:07:16.940
+dan dihasilkan dekat dengan primitive platform, bukan di jahit manual dari jauh.
+
+00:07:17.380 --> 00:07:18.840
+Berhentilah memperlakukan kode penghubungan layaknya.
+
+00:07:19.220 --> 00:07:20.700
+Biarkan agen yang mengatur dan membatasinya.
+
+00:07:21.380 --> 00:07:24.420
+Metode yang lebih baik agen dengan tipe data ditambah Copilot sebagai orkestrator.
+
+00:07:24.940 --> 00:07:26.720
+Hadirkan model yang tidak melawan platform.
+
+00:07:27.220 --> 00:07:30.400
+Agen menghasilkan, memanggil alat, mengamati hasil, dan merevisi.
+
+00:07:30.740 --> 00:07:33.620
+Bukan asal membuat kode, lainkan pemanggilan alat dengan batasan.
+
+00:07:34.500 --> 00:07:35.820
+Anda memberi agen kotak parah yang terbang.
+
+00:07:35.820 --> 00:07:41.700
+A script office untuk tindakan Microsoft 365, 4BI, data plugin dual untuk transformasi,
+
+00:07:41.860 --> 00:07:45.360
+konektor untuk perpindahan data, dan antarmuka dengan tipe data yang ketat diantaranya.
+
+00:07:46.480 --> 00:07:50.260
+Agen menyimpan konteks, menalat di seluruh langkah, dan hanya menulis kode di tempat yang seharusnya.
+
+00:07:50.720 --> 00:07:52.140
+Mulailah dengan script office dan Copilot.
+
+00:07:52.740 --> 00:07:53.660
+Anda mendeskripsikan asir.
+
+00:07:54.320 --> 00:07:55.660
+Saat baris baru muncul di tabel ini,
+
+00:07:55.860 --> 00:07:59.060
+normalisasi tanggal, isi bagian kosong, dan kirim ringkasan ke pemberi persetujuan melalui email.
+
+00:07:59.600 --> 00:08:02.680
+Copilot menerjemahkannya menjadi script office seperti TypeScript dan langkah-langkah alur.
+
+00:08:02.680 --> 00:08:06.800
+Tidak ada runtime eksternal, tidak ada kontainer untuk diamankan, tidak ada tempat penyimpanan kasi yang perlu dijaga.
+
+00:08:07.120 --> 00:08:08.460
+Kodenya berada di tempat data itu berada.
+
+00:08:08.980 --> 00:08:10.840
+Axle Online, SharePoint, OneDrive, dan Aluran.
+
+00:08:11.160 --> 00:08:12.340
+Menghubungkan konektor asli.
+
+00:08:12.980 --> 00:08:15.000
+Semakin sedikit bagian yang bergerak, semakin sedikit kemungkinan tentu.
+
+00:08:15.260 --> 00:08:18.240
+Hal yang dilewatkan kebanyakan orang adalah bahwa sisi luar dengan tipe data juga ada di sini.
+
+00:08:18.840 --> 00:08:23.660
+Model objek, tanda tangan metode, dan skema konektor memperlakukan bentuk sebelum runtime menjalankan prosesnya.
+
+00:08:23.660 --> 00:08:29.020
+Pindah ke dataflow Gen2 dengan Copilot, perintah menjadi Power Query M atau Python tetapi dengan konteks.
+
+00:08:29.480 --> 00:08:30.900
+Copilot sadar akan model semantik.
+
+00:08:31.640 --> 00:08:37.840
+Ia mengetahui tabel, kolom, ukuran, dan sinonim Anda, sehingga pembuatan didasarkan pada realitas Anda, bukan skema halusinasi.
+
+00:08:38.460 --> 00:08:39.380
+Butuh keren kalapanan cepat.
+
+00:08:39.980 --> 00:08:42.140
+Copilot bisa membuat halaman dengan visual dalam hitungan detik.
+
+00:08:42.560 --> 00:08:45.720
+Bukan karena sihir, melainkan karena memanfaatkan metadata yang sudah Anda kurasi.
+
+00:08:46.540 --> 00:08:50.400
+Anda memvalidasi perbedaan, mengunci pola, dan ini penting, jauhkan orkestrasi dari Python.
+
+00:08:51.100 --> 00:08:55.580
+Gunakan Python di dalam dataflow untuk kenal analitik, bukan untuk mengubah nama kolom atau mengirim persetujuan.
+
+00:08:56.560 --> 00:09:00.420
+Sekarang hadirkan type agent.p atau kerangka kerja agen serupa untuk penelaran multilangkah.
+
+00:09:00.980 --> 00:09:03.260
+Agen tidak menggantikan tata kelola Anda, ia justru menegakkannya.
+
+00:09:03.640 --> 00:09:07.360
+Ia mengingat kegagalan sebelumnya, memilih alat yang tepat, dan mengambil data dengan cerdas.
+
+00:09:08.000 --> 00:09:10.260
+Akurasi pemanggilan alat dan retensi konteks sangat penting di sini.
+
+00:09:10.880 --> 00:09:14.400
+Saat agen secara konsisten dapat memilih antara memperbarui lembar kerja atau mengirim email,
+
+00:09:14.400 --> 00:09:16.040
+Anda berhenti merilis kesalahan perangkaian manusia.
+
+00:09:16.860 --> 00:09:19.920
+Waktu penyelesaian menyusut karena agen menangani persiapan, membuat skrip,
+
+00:09:20.060 --> 00:09:24.920
+menguji terhadap sampel, memvalidasi output, dan baru kemudian mempromosikan perubahan.
+
+00:09:25.580 --> 00:09:26.980
+Mengapa ini berhasil adalah arsitekt yang sederhana?
+
+00:09:27.460 --> 00:09:28.320
+Atasi permukaan kode.
+
+00:09:29.040 --> 00:09:31.020
+Pasang batas berjenis statis di bagian penghubung,
+
+00:09:31.420 --> 00:09:35.520
+skema API terbuka pada konektor, model objek office script, model semantik di Power BI.
+
+00:09:36.640 --> 00:09:39.140
+Di dalam batas-batas sebut, biarkan AI membuat kode sesuai sifikasi.
+
+00:09:39.620 --> 00:09:42.740
+Alasan hal ini mengurangi kerusakan bukanlah sesuatu yang ajaib, mainkan pervalidasi.
+
+00:09:42.740 --> 00:09:45.560
+Anda menangkap kesalahan bentuk sebelum menjadi pemadaman sistem.
+
+00:09:46.300 --> 00:09:49.140
+Dan karena agen memiliki memori, Anda menghentikan kekambuhan.
+
+00:09:49.560 --> 00:09:52.560
+Bug yang kembali karena perbaikan Anda tidak memperbarui pola, hanya fail-nya.
+
+00:09:53.900 --> 00:09:56.200
+Pergeseran praktis, Python tetap berada di tempat I aminominas.
+
+00:09:56.740 --> 00:10:00.320
+Di dalam notebook, fabrik, atau aliran data untuk pemodelan analitik tingkat lanjut dan ML.
+
+00:10:00.760 --> 00:10:03.400
+Anda membiarkan copilot membantu analisis data eksplorasi,
+
+00:10:03.520 --> 00:10:05.740
+pola vektorisasi, dan kode visualisasi, dan kode visualisasi.
+
+00:10:06.380 --> 00:10:10.860
+Di sekitarnya, agen menangani perimeter, penjadwalan, validasi, EO, dan kebijakan.
+
+00:10:10.860 --> 00:10:17.120
+Agen memicu notebook, memvalidasi output, dan merutekkan hasil tanpa menciptakan orkestrasi khusus di Python.
+
+00:10:17.920 --> 00:10:21.340
+Anda tidak menyatukan logika bisnis kekarena Anda memisahkan kepentingan layaknya orang dewasa.
+
+00:10:22.240 --> 00:10:24.060
+Script office dan copilot memberikan kemenangan cepat.
+
+00:10:24.540 --> 00:10:25.740
+Agen menegakkan pengulangan.
+
+00:10:26.400 --> 00:10:27.820
+Inilah jalan pintas yang tidak diajarkan siapa.
+
+00:10:28.300 --> 00:10:29.340
+Kodifikasi prom sebagai aset.
+
+00:10:30.200 --> 00:10:33.040
+Perlakukan mereka seperti template dengan variable dan kriteria penerima.
+
+00:10:33.040 --> 00:10:38.420
+Jika Anda tidak ingat hal lain, tangkap prom yang berhasil, dan bentuk output yang diharapkan,
+
+00:10:39.160 --> 00:10:42.620
+agen dapat menggunakannya kembali, menyesuaikannya, dan meriksa hasilnya terhadap kontrak Anda.
+
+00:10:43.080 --> 00:10:47.600
+Begitulah cara Anda menggabungkan, membangun, mendebak, dan menyebarkan ke dalam loop percakapan yang tetap terkenal.
+
+00:10:47.940 --> 00:10:51.100
+Pengubah permainan yang tidak dibicarakan siapapun, kontrak bertipu untuk alat agen.
+
+00:10:51.560 --> 00:10:53.060
+Anda mendefinisikan skema input dan output.
+
+00:10:53.740 --> 00:10:56.280
+Agen dapat memvalidasi sebelum menjalankan satu langkah pun dalam produksi.
+
+00:10:56.280 --> 00:11:00.200
+Bandingkan dengan sekadar menjalankan Python dan berdoa jelasan Anda tidak munculkan properti tambah.
+
+00:11:00.500 --> 00:11:01.500
+Dan ya, Python bisa memiliki tipu.
+
+00:11:01.920 --> 00:11:04.020
+Intinya adalah disiplin di bagian tepi, bukan realitas bas.
+
+00:11:04.540 --> 00:11:09.420
+Di Power Platform, bagian tepinya adalah domain Microsoft, Office Power BI, Dataverse Power BI.
+
+00:11:09.820 --> 00:11:11.260
+Jadi gunakan primitif yang mereka optimalkan.
+
+00:11:11.640 --> 00:11:13.160
+Setelah Anda menguasainya, segalanya akan lancar.
+
+00:11:13.560 --> 00:11:15.220
+Versioning memiliki area permukaan yang lebih kecil.
+
+00:11:15.580 --> 00:11:16.680
+Prom dan script bukan monolith.
+
+00:11:17.760 --> 00:11:18.880
+Observabilitas menjadi terpusat.
+
+00:11:19.300 --> 00:11:23.940
+Riwayat eksekusi power automate, sil-sil aliran data, dan jejak agen, bukan lima dashboard log yang terputus.
+
+00:11:23.940 --> 00:11:28.180
+Biaya turun karena Anda memensiunkan fungsi azur yang hanya melakukan tugas rutin.
+
+00:11:29.120 --> 00:11:32.480
+Dan tingkat kerusakan turun karena orkestrator Anda memiliki aturan yang jelas, bukan buat tentang.
+
+00:11:32.940 --> 00:11:35.340
+Sekarang Anda mungkin berpikir ini terdengar seperti melepaskan kendali.
+
+00:11:36.540 --> 00:11:38.560
+Salah. Anda memindahkan kendali satu tinggi.
+
+00:11:39.040 --> 00:11:41.620
+Anda menentukan kontrak, alat batasan, dan gerbang peninjauan.
+
+00:11:42.320 --> 00:11:45.640
+Agen melakukan penyatuan lebih cepat daripada siklus manusia Anda dan tidak mudah error.
+
+00:11:46.300 --> 00:11:49.800
+Anda menyimpan Python untuk analitik bernilai tinggi di mana pustaka terbukti kemudian.
+
+00:11:50.260 --> 00:11:51.520
+Itu bukan menyerah, itu adalah strategik.
+
+00:11:52.100 --> 00:11:53.800
+Jika seperti apa rasanya ini dalam prakteknya.
+
+00:11:54.620 --> 00:11:55.340
+Ada permintaan masuk?
+
+00:11:56.180 --> 00:12:02.240
+Kita butuh laporan mingguan yang membersihkan CSV memperkaya dengan Dataverse mendorongnya ke model semantik dan mengirim email ke pemberi persetujuan.
+
+00:12:02.800 --> 00:12:07.660
+Cara lama, siapkan fungsi Python, hubungan konektor custom, berdebat dengan OAuth, berbaiki tipe data tiga kali.
+
+00:12:08.180 --> 00:12:12.580
+Cara baru, agen memanggil data flow Gen2 melalui co-pilot untuk membuat transformasi,
+
+00:12:12.800 --> 00:12:15.960
+memvalidasi kolom terhadap model, menggunakan Office Scripts untuk menyiapkan Excel,
+
+00:12:15.960 --> 00:12:20.000
+memicu alur notifikasi, dan mencatat silsilah data, dan mencatat silsilah data.
+
+00:12:20.200 --> 00:12:22.120
+Tanpa perkat custom tanpa penyebaran ulang di tengah malam.
+
+00:12:22.540 --> 00:12:27.040
+Alasannya berhasil karena Anda berhenti menggunakan Python sebagai plaster darurat pada platform yang dirancang dengan pengikatnya sendiri.
+
+00:12:27.400 --> 00:12:30.360
+Anda membiarkan AI menulis perkat di dekat sambungan, bukan menutupi celah.
+
+00:12:30.880 --> 00:12:33.220
+Dan saat bisnis berubah, bocoran, itu pasti akan terjadi.
+
+00:12:33.420 --> 00:12:35.700
+Anda cukup memperbarui perintah prompt, bukan gambar kontainer.
+
+00:12:35.700 --> 00:12:42.120
+Itulah cara Anda terus merilis fitur, sementara yang lain masih terjebak dalam masalah dependensi menjelaskan pada bagian keuangan mengapa versi terbaru adalah idian puru.
+
+00:12:42.560 --> 00:12:46.460
+Aplikasi pertama adalah data Power BI yang dihasilkan Python, bukan ditulis tangan, bukan ditulis tangan.
+
+00:12:46.780 --> 00:12:47.660
+Disinilah titik terangnya.
+
+00:12:48.120 --> 00:12:51.360
+Di Power BI, Anda tidak dibayar untuk menulis M artisanal atau Python kusat.
+
+00:12:51.840 --> 00:12:54.040
+Anda dibayar untuk memberikan data bersih dan laporan yang berfungsi.
+
+00:12:54.040 --> 00:12:58.240
+Co-Pilot di dalam Data Vlogen 2 mungkinkan Anda menyatakan transformasi dalam bahasa Inggris sederhana,
+
+00:12:58.840 --> 00:13:02.800
+lalu ia menghasilkan Power Query M atau ya Python yang berlapuk pada modal semantik aktual Anda.
+
+00:13:03.640 --> 00:13:06.000
+Bukan tabel khayalan, tapi tabel kolom dan ukuran Anda sendiri.
+
+00:13:06.580 --> 00:13:11.280
+Kesadaran semantik itu menghilangkan seluruh kategori kekacauan kolom yang tidak ditemukan bahkan sebelum dimulai.
+
+00:13:12.160 --> 00:13:12.760
+Mengapa ini penting?
+
+00:13:12.920 --> 00:13:15.020
+Generasi ditambah konteks sama dengan lebih sedikit berkonyol.
+
+00:13:15.460 --> 00:13:17.280
+Hal yang dilewatkan kebanyakan orang adalah siklus penintik.
+
+00:13:17.960 --> 00:13:18.920
+Anda tidak perlu mercah di kotak kita.
+
+00:13:19.100 --> 00:13:23.020
+Anda menggunakannya untuk draft cepat lalu meninjau perbedaannya dan mengunci polanya setelah.
+
+00:13:23.020 --> 00:13:27.180
+Dari sana, gunakan Co-Pilot untuk iterasi melalui perintah, bukan melalui suntingan tangan tanpa hantik.
+
+00:13:27.600 --> 00:13:31.420
+Anda memperlakukan kode seperti templat dengan variabel alih-alih catatan perasaan keyboard Anda.
+
+00:13:32.440 --> 00:13:33.580
+Seperti apa alur kerjanya?
+
+00:13:34.080 --> 00:13:38.160
+Anda meminta transaksi penjualan, memfilter 12 bulan terakhir, menormalisasi format tanggal,
+
+00:13:38.280 --> 00:13:40.720
+melakukan left join pada master pelanggan, dan menghitung margin kotor.
+
+00:13:41.360 --> 00:13:42.580
+Co-Pilot mengusulkan ematopeta.
+
+00:13:43.440 --> 00:13:45.420
+Anda melihat peratinjau hasil terhadap sampel,
+
+00:13:45.700 --> 00:13:48.780
+memvalidasi nama kolom terhadap modal semantik, dan menyematkan langkah tersebut.
+
+00:13:48.780 --> 00:13:53.180
+Butuh Python untuk kenal analitik, katakanlah deteksi pencilan atau dekomposisi musiman.
+
+00:13:53.700 --> 00:13:54.040
+Boleh saja.
+
+00:13:54.540 --> 00:13:58.360
+Biarkan Co-Pilot menghasilkannya di dalam aliran data, tetapi jaga agar orkestrasi tetap terpisah.
+
+00:13:58.860 --> 00:14:00.580
+Python menghitung platform ematopeta orkestrasi.
+
+00:14:00.940 --> 00:14:02.220
+Kemenangan cepat kerangka laporan.
+
+00:14:03.040 --> 00:14:06.260
+Co-Pilot dapat membuat halaman draft pertama dengan visual dalam hitungan detik.
+
+00:14:06.900 --> 00:14:07.760
+Ini bukan sehirnya, ini metadata.
+
+00:14:08.700 --> 00:14:11.680
+Anda sudah menamai ukuran, menambahkan sinonim, dan mengurasi hubungan data Anda.
+
+00:14:11.680 --> 00:14:15.020
+Co-Pilot memanfaatkan hal tersebut untuk menempatkan bagian secara cerdas.
+
+00:14:15.020 --> 00:14:19.860
+Anda menghemat pekerjaan kasar dan menghabiskan waktu menyempurnakan hal penting logika bisnis dan presentasi.
+
+00:14:21.220 --> 00:14:22.800
+Kesalahan umum yang meningkatkan cacat.
+
+00:14:23.520 --> 00:14:26.440
+Pertama, membiarkan Python yang dibuat Co-Pilot berkembang tak terkendali.
+
+00:14:27.020 --> 00:14:32.400
+Jika mulai mengganti nama kolom, memanggil endpoint eksternal, atau menyematkan logika alur kerja, Anda kembali ke keterikatan yang rapat.
+
+00:14:33.120 --> 00:14:35.320
+Kedua, melewatkan tinjauan kode karena yang menulisnya.
+
+00:14:36.000 --> 00:14:37.480
+Tidak tambahkan prompt tinjauan standar.
+
+00:14:37.480 --> 00:14:41.900
+Pada daftar periksa, validasi bentuk kolom tangani nul secara eksplisit buat join yang deterministik.
+
+00:14:42.800 --> 00:14:44.700
+Ketiga, mencampur orkestrasi dan analitik.
+
+00:14:45.380 --> 00:14:50.760
+Jika Anda mencampur logika persetujuan ke dalam transformasi Python, Anda menjamin perubahan skema berikutnya akan merusak alur kerja Anda.
+
+00:14:51.620 --> 00:14:52.900
+Aturan hibrida di sini sederhana.
+
+00:14:53.240 --> 00:14:56.500
+Python untuk inti analitik M atau langkah asli platform untuk teknis operasional.
+
+00:14:57.180 --> 00:15:01.320
+Gunakan data first atau one leg untuk input dan output yang dipahami seluruh platform.
+
+00:15:02.460 --> 00:15:05.740
+Saat perlu menyesuaikan transformasi, ubah prompt, dan validasi perbedaannya.
+
+00:15:05.900 --> 00:15:08.220
+Daripada menelusuri fungsi sepanjang 400 baris.
+
+00:15:08.820 --> 00:15:11.580
+Perubahan bisnis menjadi pengeditannya, bukan pembedahan kode perantara.
+
+00:15:12.080 --> 00:15:13.260
+Dan ya, observabilitas meningkat.
+
+00:15:13.260 --> 00:15:15.480
+Lini masalah dan data menunjukkan output ke apa?
+
+00:15:16.380 --> 00:15:20.420
+Maka langkah yang diusulkan ke pilot membentuk rantai yang dapat dibaca, bukan sekumpulan skrip buatan tangan.
+
+00:15:20.720 --> 00:15:22.580
+Ketika ada yang gagal, Anda memecahkan masalah di satu lalu.
+
+00:15:22.580 --> 00:15:30.040
+Bandingkan dengan pola lama Anda, Power Automate memicu konektor custom, memanggil api pattern yang mengubah kolom, lalu menulis ke danau yang lupa Anda beri tag.
+
+00:15:30.540 --> 00:15:31.060
+Menyenangkan sekarang.
+
+00:15:31.380 --> 00:15:32.960
+Hasilnya adalah kecepatan dengan lebih sedikit kejut.
+
+00:15:33.340 --> 00:15:34.740
+Anda membuat, meninjau, dan mencatat.
+
+00:15:35.160 --> 00:15:37.440
+Anda mencadangkan pattern untuk perhitungan berat di mana ia menggibat.
+
+00:15:37.860 --> 00:15:43.780
+Dan ketika CFO menciptakan metrik, baru pada selasa sore Anda memperbarui prompt dan memvalidasi ulang, bukan memvalidasi ulang citra kontainer.
+
+00:15:43.780 --> 00:15:45.100
+Coba berpura-pura baik itu tidak lebih.
+
+00:15:45.480 --> 00:15:46.200
+Keliran data sudah stabil.
+
+00:15:47.060 --> 00:15:49.580
+Sekarang hapus keterikatan rapuh yang membahani Power Automate Anda.
+
+00:15:50.840 --> 00:15:52.420
+Aplikasi 2, Power Automate.
+
+00:15:52.960 --> 00:15:55.240
+Ganti keterikatan Python dengan Office Scripts ditambah again.
+
+00:15:55.900 --> 00:15:58.600
+Di Power Automate, langkah yang benar sengaja dibuat membosankan.
+
+00:15:58.900 --> 00:16:00.380
+Konektor asli dan Office Scripts.
+
+00:16:00.920 --> 00:16:05.820
+Anda mendeskripsikan langkah-langkah Anda, co-pilot menyusun alur dalam skrip, dan Anda menyimpan semuanya di dalam Microsoft 365.
+
+00:16:06.740 --> 00:16:12.580
+Tidak ada Azure Functions, tidak ada kerangka konektor custom, tidak ada penambalan cair fresh SL tengah malam pada kontainer yang Anda lupa keberadaannya.
+
+00:16:12.580 --> 00:16:16.200
+Wahyu yang mengejutkan, saat Anda mengurangi komod yang bergerak, Anda mengurangi kegep.
+
+00:16:16.760 --> 00:16:17.580
+Mengapa Office Scripts?
+
+00:16:18.160 --> 00:16:22.480
+Karena skrip tersebut berbasis TypeScript dengan model objek terdefinisi yang memberi Anda tepi teketik,
+
+00:16:22.840 --> 00:16:26.200
+tanda tangan metode, dan bentuk yang dapat diprediksi sebelum rantai mempermalukan Anda.
+
+00:16:26.940 --> 00:16:27.700
+Co-pilot berputar.
+
+00:16:28.480 --> 00:16:32.440
+Untuk setiap baris baru di tabel ini, normalkan string tanggal, hitung status,
+
+00:16:33.240 --> 00:16:37.180
+dan kirim ringkasan ke pemilik melalui alur dan skrip.
+
+00:16:38.080 --> 00:16:41.920
+Data Anda tetap berada dekat Excel SharePoint atau tata kelola Anda tetap lebih sederhana,
+
+00:16:41.920 --> 00:16:46.580
+dan tingkat kerusakan berkurang karena Anda menghilangkan perantara piton ad hoc yang sering rusak di hari Selasa.
+
+00:16:46.980 --> 00:16:48.360
+Bagaimana menyusunnya agar berdapat di sekalian?
+
+00:16:48.860 --> 00:16:49.860
+Adopsi pola berbasis agen.
+
+00:16:50.580 --> 00:16:52.780
+Agen tersebut, tipe agen atau yang sebanding.
+
+00:16:53.180 --> 00:16:54.820
+Memilih alat dari kotak peralatan yang terbatas.
+
+00:16:55.240 --> 00:17:00.580
+Jalankan Office Script, panggil konektor grafik, tulis ke Dataverse, kirim persetujuan input dan output memiliki skema.
+
+00:17:01.020 --> 00:17:05.240
+Agen memvalidasi prasyarat, menjalankan pengujian terhadap sampel, dan baru kemudian menerapkan perubahan.
+
+00:17:06.100 --> 00:17:08.840
+Akurasi pemanggilan alat itu penting, jadi beri nama alat dengan jelas.
+
+00:17:09.400 --> 00:17:11.940
+Perbarui tabel lember kerja lebih baik daripada lakukan sesuatu.
+
+00:17:12.460 --> 00:17:16.500
+Ketika agen secara konsisten memilih alat yang tepat, Anda berhenti menghubungkan tindakan yang salah ke pemicu yang benar.
+
+00:17:16.900 --> 00:17:18.620
+Kemenangan cepat yang menciunkan pahitan sebagai perkat.
+
+00:17:19.360 --> 00:17:22.480
+Operasi Excel membersihkan kolom, menghapus duplikat, memisahkan bidang.
+
+00:17:22.880 --> 00:17:24.400
+Office Script menangani hal ini secara asli.
+
+00:17:25.100 --> 00:17:28.580
+Persetujuan dan notifikasi tindakan asli dalam hitungan menit, nol autentikasi kustom.
+
+00:17:29.340 --> 00:17:30.640
+Pembaruan Dataverse dan SharePoint.
+
+00:17:31.300 --> 00:17:33.840
+Konektor dengan kesadaran metadata bukan panggilan HTTP mentah.
+
+00:17:34.400 --> 00:17:37.960
+Biaya turun karena Anda tidak membayar komputasi yang selalu aktif hanya untuk mengganti nama kau.
+
+00:17:38.560 --> 00:17:43.400
+Waktu penyelesaian menyusut karena agen Anda dapat membuat, menguji, dan melakukan iterasi tanpa perlu pengaturan wadah manusia.
+
+00:17:44.180 --> 00:17:49.100
+Dan tim keamanan Anda berhenti curiga karena Anda menghapus titik akhir api tak dikenal yang dilabeli sementara oleh seseorang.
+
+00:17:49.440 --> 00:17:51.460
+Kesalahan yang harus dihindari karena tentu saja Anda akan mencoba.
+
+00:17:51.780 --> 00:17:54.920
+Pertama, memaksakan Python melalui konektor kustom untuk tugas sepele.
+
+00:17:55.480 --> 00:17:57.960
+Jika tugasnya adalah membentuk ulang tabel gunakan Office Script.
+
+00:17:58.220 --> 00:17:59.680
+Kedua, menabaikan tata kelola.
+
+00:18:00.620 --> 00:18:03.260
+Script memerlukan penerapan versi, kirbang peninjauhan, dan standar penama.
+
+00:18:03.680 --> 00:18:05.180
+Perlakuan script seperti kode karena memang itu lah.
+
+00:18:05.940 --> 00:18:08.980
+Ketiga, mengubur logika bisnis di lima alur tanpa kontrak tipe.
+
+00:18:09.940 --> 00:18:11.860
+Tentukan skema input dan output Anda sejak awal.
+
+00:18:13.040 --> 00:18:16.500
+Agen dapat menegakkannya, platform akan memvalidasinya, produksi akan berterima kasih kepada Anda.
+
+00:18:16.980 --> 00:18:17.800
+Anda masih menginginkan Python.
+
+00:18:18.140 --> 00:18:19.760
+Tempatkan di tempat yang seharusnya, analisis.
+
+00:18:20.220 --> 00:18:23.760
+Jika suatu alur membutuhkan predisi atau transformasi lanjutan, panggil layanan yang tepat.
+
+00:18:23.760 --> 00:18:30.800
+Pekerjaan buku catatan fabrik titik akhir ML dibalik API yang bersih bukan aplikasi flash derurat yang ditinggalkan seseorang di tingkat gratis.
+
+00:18:31.440 --> 00:18:32.280
+Alur mengordinasikan.
+
+00:18:32.680 --> 00:18:35.860
+Python menghitung mereka berinteraksi melalui kontrak bukan melalui firasat.
+
+00:18:36.420 --> 00:18:39.420
+Keuntungan halus dari Office Script ditambah Agen adalah kemudahan pemeliharaan.
+
+00:18:40.000 --> 00:18:42.400
+Prom menjadi aset, script menjadi alat yang dapat digunakan kembali.
+
+00:18:42.900 --> 00:18:45.680
+Alur menjadi lapisan orkestrasi yang tipis bukan musim logika.
+
+00:18:45.680 --> 00:18:52.140
+Ketika persyaratan berubah, Anda memperbarui prompt dan jika perlu, script dengan tinjauan daripada meninjau kembali seluruh tumpukan konektor kustom.
+
+00:18:53.220 --> 00:18:56.920
+Agen mengingat perbaikan sebelumnya, menggunakan kembali polanya, dan mencegah terulangnya masalah.
+
+00:18:57.320 --> 00:19:00.060
+Begitulah cara Anda mengubah kami menghabiskan sore untuk mendebak tipe menjadi.
+
+00:19:00.480 --> 00:19:01.680
+Kami sudah merilis sebelum makan siang.
+
+00:19:02.220 --> 00:19:05.660
+Kenyataan mengenai Python sebagai perekat di Power Automate hanyalah kesulitan yang dibuat.
+
+00:19:05.660 --> 00:19:09.880
+Anda membuktikan bahwa Anda bisa, sementara platform secara diam-diam menawarkan jalan yang lebih sederhana dalam.
+
+00:19:10.380 --> 00:19:10.760
+Kena-kena.
+
+00:19:11.160 --> 00:19:14.480
+Aplikasi ketiga, buku catatan fabrik berisi Python mengotomatiskan parameter.
+
+00:19:15.680 --> 00:19:18.100
+Python akhirnya berada di tempat terkuatnya, yakni inti komputasi.
+
+00:19:18.760 --> 00:19:25.280
+Bukan sebagai bel pintu atau saluran pipa, Anda menjaga logika bisnis di tepi dan biarkan buku catatan melakukan analitik pemodelan dan transformasi berat.
+
+00:19:26.140 --> 00:19:31.160
+Perimeter, penjadwalan, validasi, dan kebijakan I.O adalah rana agen serta alat berbasis TypeScript.
+
+00:19:31.800 --> 00:19:32.380
+Mengapa ini penting?
+
+00:19:32.620 --> 00:19:37.220
+Ketika Anda menyatukan orkestrasi ke dalam buku catatan setiap perubahan lingkungan menjadi insiden produksi.
+
+00:19:37.580 --> 00:19:38.340
+Pisahkan masalahnya.
+
+00:19:38.760 --> 00:19:43.600
+Agen memanggil buku catatan melalui api tugas yang bersih, memberikan input bertipe, dan mengharapkan output bertipe.
+
+00:19:43.600 --> 00:19:47.740
+Jika bentuknya menyimpang, ia gagal dengan cepat di tepi, bukan di tengah proses yang berjalan 20 menit.
+
+00:19:48.580 --> 00:19:49.560
+Gemani terdiri dalam praktik.
+
+00:19:50.060 --> 00:19:54.140
+Kopilot membantu di dalam buku catatan untuk EDA, vektorisasi, dan kerangka visualisasi.
+
+00:19:54.480 --> 00:19:56.160
+Anda tetap meninjau dan mengunci versi pustaka.
+
+00:19:56.480 --> 00:19:57.160
+Ingat kita profesor nomor.
+
+00:19:57.160 --> 00:20:06.740
+Agen menangani alur kerja, memicu saat data tiba, menjalankan pemeriksaan skema, meluncurkan tugas buku catatan, dan memvalidasi output terhadap kontrak sebelum diterbitkan ke one-like atau model semantik.
+
+00:20:07.580 --> 00:20:08.900
+Kelola versi buku catatan seperti kode.
+
+00:20:09.440 --> 00:20:11.180
+Simpan perintah PROM yang menghasilkan fungsi bantuan.
+
+00:20:11.780 --> 00:20:16.000
+Lakukan penguncian unit pada output, metrik, distribusi, dan jumlah baris daripada memeriksa teknis baris.
+
+00:20:16.300 --> 00:20:16.840
+Kemenangnya cepat.
+
+00:20:16.840 --> 00:20:23.420
+Minta kopilot untuk membuat langkah dekomposisi musiman, simpan di buku catatan, dan biarkan agen mengatur percobaan ulang serta peringatan.
+
+00:20:24.360 --> 00:20:26.220
+Logika bisnis ada dalam kontrak deklaratif.
+
+00:20:26.740 --> 00:20:27.920
+Python tetap bersifat komputasiun.
+
+00:20:28.560 --> 00:20:29.760
+Kesalahan yang harus dihindari.
+
+00:20:29.920 --> 00:20:36.640
+Menyembunyikan persetujuan atau penggantian nama di dalam buku catatan, menghubungkan alur ke titik akhir ad hoc, atau menyimpan satu-satunya definisi KPI di dalam komentar set.
+
+00:20:36.980 --> 00:20:37.820
+Jangan melakukan arkidata.
+
+00:20:38.380 --> 00:20:39.000
+Lakukan usitektur.
+
+00:20:39.820 --> 00:20:41.980
+Sekarang kuantifikasi hal tersebut agar Departemen Keuangan.
+
+00:20:42.460 --> 00:20:45.780
+Hasilnya, penghematan waktu, pengurangan biaya, dan pengurangan waktu di akibatnya.
+
+00:20:45.780 --> 00:20:49.320
+Pembuatan berbantuan AI memperpendeksi klus bangun, debak, dan penerapan.
+
+00:20:49.760 --> 00:20:51.380
+Kopilot menyusun transformasi dan skrip.
+
+00:20:51.980 --> 00:20:53.980
+Agen melakukan pengujian terhadap sampel sebelum promosi.
+
+00:20:54.500 --> 00:20:59.320
+Anda mengurangi pengerjaan ulang dan perpindahan konteks karena orkestrasi tetap asli dan kode berada di tempat ia deksekusi.
+
+00:20:59.720 --> 00:21:06.220
+Berikutnya, biaya, pensiunkan fungsi azure yang mengganti nama kolom, pertahankan alur di platform, buku catatan di fabrik, dan perekat di office scripts.
+
+00:21:06.860 --> 00:21:08.960
+Anda membayar lebih sedikit untuk komputasi dan jauh lebih sedikit.
+
+00:21:09.180 --> 00:21:12.440
+Tidak ada penambaran kontainer, lebih sedikit rahasia, dan lebih sedikit gangguan di akhir.
+
+00:21:12.900 --> 00:21:14.020
+Terakhir, cacat.
+
+00:21:14.020 --> 00:21:18.900
+Batas bertipe pada konektor, model objek office script, dan metadata semantik mendeteksi kesalahan bentuk sejak dini.
+
+00:21:19.600 --> 00:21:25.040
+Agar pembatas agen, akurasi pemanggilan alat, dan retensi konteks menghentikan siklus perbaikan hari Jumat rusak hari Senin.
+
+00:21:25.480 --> 00:21:27.960
+Kerjaan berulang berkurang karena Anda memperbarui pola, kenanya file.
+
+00:21:28.800 --> 00:21:30.240
+Tolok ukur praktis untuk dilacak.
+
+00:21:30.640 --> 00:21:34.520
+Waktu penyelesaian perinsiden, tingkat keberhasilan pemanggilan alat, dan waktu tunggu perubahan.
+
+00:21:34.520 --> 00:21:36.280
+Daftar periksa implementasi.
+
+00:21:36.460 --> 00:21:41.820
+Pilih orkestrator Anda, tentukan kontrak, buat templat prompt, tambahkan gerbang peninjauan, dan pantau hasil secara terpusat.
+
+00:21:42.680 --> 00:21:44.360
+Python tidak mati perannya dikembalikan ke spesialis.
+
+00:21:44.620 --> 00:21:46.080
+Bagus begitulah cara Anda mengirimkan.
+
+00:21:46.420 --> 00:21:47.620
+Argumen balasan dan sanggahan.
+
+00:21:48.040 --> 00:21:49.420
+Tapi Python mendominasi sains data.
+
+00:21:50.020 --> 00:21:51.220
+Nah, Python memang mendominasi sains data.
+
+00:21:51.600 --> 00:21:53.200
+Bustaka, komunitas, notebook, semuanya.
+
+00:21:53.680 --> 00:21:57.160
+Di Fabric itulah tepatnya mengapa Anda menyimpannya di dalam notebook dan kernel analitik.
+
+00:21:57.400 --> 00:21:59.960
+Mesin tidak mengatur lampu.
+
+00:21:59.960 --> 00:22:02.560
+Orkestrasi adalah jalan, sinyal, dan aturan.
+
+00:22:03.380 --> 00:22:04.500
+Itu adalah domain power platform.
+
+00:22:05.400 --> 00:22:08.960
+Konektor, Office Scripts, Data Full Gen 2, dan Copilot.
+
+00:22:09.940 --> 00:22:10.820
+Inilah yang disalahponnya orang.
+
+00:22:11.580 --> 00:22:14.640
+Dominasi dalam analitik tidak berarti cocok sebagai perkat di dalam tumpukan Microsoft.
+
+00:22:15.640 --> 00:22:20.740
+Di Power Automate, Python adalah komputasi eksternal tidak langsung melalui Azure Functions atau konektor custom.
+
+00:22:21.880 --> 00:22:24.320
+Itu menambah biaya, rahasia start dingin, dan penyimpangan versi.
+
+00:22:24.680 --> 00:22:28.280
+Sementara itu, Office Scripts berjalan di tempat data Microsoft 365 Anda,
+
+00:22:28.280 --> 00:22:30.500
+dan Copilot merancangnya dari bahasa sehari-hari.
+
+00:22:30.960 --> 00:22:33.980
+Anda memilih antara gesekan versus kecepatan asli, tetapi kami butuh logika custom.
+
+00:22:34.500 --> 00:22:34.840
+Bagus.
+
+00:22:35.200 --> 00:22:36.520
+Letakkan di balik batasan yang diketik.
+
+00:22:36.700 --> 00:22:40.120
+Gunakan pekerjaan notebook Fabric atau endpoint ML untuk prediksi dan transformasi berat.
+
+00:22:40.660 --> 00:22:41.640
+Tampilkan api yang bersih.
+
+00:22:41.840 --> 00:22:44.080
+Biarkan alur berorkestrasi dengan kontrak, bukan perasaan.
+
+00:22:44.440 --> 00:22:47.700
+Anda mendapatkan kekuatan Python tanpa harus mengatur setiap persetujuan penaman ulang
+
+00:22:47.700 --> 00:22:50.120
+dan perpindahan file secara manual berlapikasi flash yang akan ada dikotan.
+
+00:22:50.480 --> 00:22:52.640
+Lintasan Microsoft memperkuat misahan ini.
+
+00:22:53.940 --> 00:22:56.740
+Office Scripts adalah script yang disetujui untuk keunggulan M36.
+
+00:22:56.740 --> 00:23:00.160
+Copilot sadar model semantik di Power BI dan Dataflow Gen 2
+
+00:23:00.160 --> 00:23:02.880
+menghasilkan M atau Python yang berlabuh pada metadata Anda.
+
+00:23:03.800 --> 00:23:06.620
+Agen meningkatkan akurasi pemanggilan alat dan retensi konteks
+
+00:23:06.620 --> 00:23:08.700
+sehingga perkatnya dapat diandalkan dan diaudit.
+
+00:23:08.900 --> 00:23:11.800
+Tidak satupun dari hal itu mengharuskan Anda untuk menanamkan orkestrasi ke dalam bed.
+
+00:23:12.020 --> 00:23:13.700
+Hibrida bukanlah kompromi, menainkan desainnya.
+
+00:23:14.240 --> 00:23:17.560
+Script dan agen bergaya TypeScript menangani perimeter, Python menangani komputasi.
+
+00:23:18.200 --> 00:23:19.980
+Mereka bertemu di API atau antren yang diketik.
+
+00:23:20.480 --> 00:23:22.960
+Anda mengurangi waktu penyelesaian, menekan biaya operasional,
+
+00:23:22.960 --> 00:23:25.320
+dan memotong pengulangan cacat karena sambungannya eksplorasi.
+
+00:23:25.540 --> 00:23:26.740
+Gunakan Python di mana ia bersih.
+
+00:23:27.000 --> 00:23:28.420
+Berhentilah memaksainya menjadi lakpan.
+
+00:23:29.360 --> 00:23:30.780
+Hukup panduan implementasi tiga peran Anda.
+
+00:23:31.500 --> 00:23:32.220
+Minggu pertama, audit.
+
+00:23:32.720 --> 00:23:35.240
+Tandai setiap alur kerja dan alur data sebagai perkat atau analitik.
+
+00:23:35.880 --> 00:23:38.720
+Soroti Python dalam fungsi yang menyentuh persetujuan penaman ulang
+
+00:23:38.720 --> 00:23:40.060
+atau antipola e-pod of file.
+
+00:23:40.760 --> 00:23:42.620
+Dokumentasikan input, output, dan titik rawan kegan.
+
+00:23:43.100 --> 00:23:43.920
+Tarik metrik nyata.
+
+00:23:44.140 --> 00:23:45.980
+Waktu penyelesaian insiden, waktu tunggu perubahan,
+
+00:23:46.100 --> 00:23:48.280
+dan tingkat keberhasilan pemanggilan alat jika Anda memiliki agen.
+
+00:23:48.280 --> 00:23:50.560
+Jika tidak masalah, tetapkan garis dasar sekarang.
+
+00:23:51.360 --> 00:23:52.940
+Minggu kedua, migrasikan perkat trivial.
+
+00:23:53.740 --> 00:23:56.440
+Ganti titik akhir Python yang digunakan untuk tugas Excel atau SharePoint
+
+00:23:56.440 --> 00:23:58.100
+dengan Office Scripts ditambah konektor asli.
+
+00:23:59.200 --> 00:24:01.380
+Gunakan kapil untuk menyusun script dari bahasa Inggris sederhana.
+
+00:24:02.080 --> 00:24:03.920
+Lalu tambahkan daftar periksa tinjauan ringan.
+
+00:24:04.360 --> 00:24:06.280
+Bentuk kolom, penanganan nol, idem potensi.
+
+00:24:06.920 --> 00:24:09.320
+Tandarisasi tempat, perintah, dan beri nama script dengan benar,
+
+00:24:09.320 --> 00:24:11.780
+kata kerja kata benar dengan cakupan, bukan script final 2.
+
+00:24:12.500 --> 00:24:13.500
+Buat versinya direpositorian.
+
+00:24:13.780 --> 00:24:14.540
+Ya, script adalah kode.
+
+00:24:15.040 --> 00:24:16.440
+Minggu ketiga, refaktorisasi alur data.
+
+00:24:16.440 --> 00:24:20.400
+Pindahkan transformasi manual kepembuatan berbantuan copilot di dataflow Gen 2.
+
+00:24:21.300 --> 00:24:24.440
+Jauhkan orkestrasi dari Python, cadangkan untuk karnel analitik saja.
+
+00:24:25.400 --> 00:24:28.300
+Validasi terhadap model semantik nama kolom, tipe data, dan ukuran Anda.
+
+00:24:28.900 --> 00:24:31.520
+Tangkap perbedaannya Anda terima, dan tambahkan ke pustaka perintah Anda
+
+00:24:31.520 --> 00:24:34.220
+agar perubahan berikutnya adalah pengeditan perintah, bukan ekspedisi mencari.
+
+00:24:35.260 --> 00:24:38.100
+Minggu keempat, perkenalkan agen untuk orkestrasi kompleks.
+
+00:24:38.640 --> 00:24:41.400
+Batasi kota alat, lembar kerja, perbarui tabel,
+
+00:24:41.820 --> 00:24:44.700
+datafirst.doc, doc.upset, dataflow.run, email.send.
+
+00:24:44.700 --> 00:24:49.700
+Definisikan kontrak tipe untuk setiap alat, termasuk contoh payload dan kriteria penerimaan.
+
+00:24:50.260 --> 00:24:52.280
+Aktifkan validasi perajalankan terhadap sampel.
+
+00:24:52.460 --> 00:24:54.660
+Laca akurasi pemanggilan alat dan waktu penyelesaian.
+
+00:24:55.400 --> 00:24:56.980
+Saat agen gagal, perbaiki polanya.
+
+00:24:57.220 --> 00:25:00.120
+Perbarui perintah, skema, atau nama alat agar pengulangan berkurang.
+
+00:25:00.840 --> 00:25:01.660
+Data keluar disuruh perintah.
+
+00:25:02.020 --> 00:25:03.700
+Terapkan antarmuka bertipe di setiap sambungan.
+
+00:25:04.460 --> 00:25:05.380
+Simpan perintah bersama kode.
+
+00:25:05.980 --> 00:25:07.900
+Tambahkan gerbang tinjauan untuk script dan perubahan aliran.
+
+00:25:07.900 --> 00:25:10.900
+Pusatkan telemetri, riwayat jalankan power automate,
+
+00:25:11.060 --> 00:25:13.620
+silsilah aliran data, dan jejak agen dalam satu dashboard.
+
+00:25:14.420 --> 00:25:15.820
+Rencana pemulihan tidak bisa ditawar.
+
+00:25:16.400 --> 00:25:19.000
+Versi script sebelumnya, aliran data terakhir yang diketahui baik,
+
+00:25:19.120 --> 00:25:20.300
+dan snapshot pekerjaan notebook.
+
+00:25:21.440 --> 00:25:22.520
+Kriteria keluar pada hari ke-30.
+
+00:25:23.480 --> 00:25:25.360
+Lebih sedikit konektor kustom untuk perkat trivial,
+
+00:25:25.580 --> 00:25:26.680
+penurunan biaya operasional.
+
+00:25:27.180 --> 00:25:29.480
+Yang terukur, perubahan lebih cepat dengan dampak lebih kecil,
+
+00:25:29.580 --> 00:25:31.080
+dan antarmuka terdokumentasi yang memungkinkan
+
+00:25:31.080 --> 00:25:32.960
+anggota tim baru bekerja dalam sehari, bukan seminggu.
+
+00:25:33.500 --> 00:25:35.860
+Vitan tetap berada di dalam notebook dan kenal analitik.
+
+00:25:35.860 --> 00:25:37.160
+Bagaimana perkatnya?
+
+00:25:37.900 --> 00:25:39.520
+Dihasilkan bertipe dan membosankan.
+
+00:25:39.980 --> 00:25:40.480
+Telah intinya.
+
+00:25:41.040 --> 00:25:42.960
+Poin utama, dalam ekosistem Microsoft,
+
+00:25:43.160 --> 00:25:46.280
+agen ditambah script berbasis TypeScript berorkestrasi dengan bersih,
+
+00:25:46.420 --> 00:25:49.720
+sementara Python tetap terkandung dalam analitik tempat pustaka benar-benar berguna.
+
+00:25:51.140 --> 00:25:52.840
+Jika ini menghemat waktu Anda bayar utangnya,
+
+00:25:53.260 --> 00:25:53.800
+berlanggananlah.
+
+00:25:54.200 --> 00:25:57.000
+Tonton tindak lanjut tentang membangun buku panduan agen aplikasi pertama Anda
+
+00:25:57.000 --> 00:25:58.760
+dengan kontrak alat bertipe dan gerbang tinjauan.
+
+00:25:59.140 --> 00:26:01.360
+Anda akan mengirim lebih cepat dengan sedikit gangguan
+
+00:26:01.360 --> 00:26:03.320
+dan bagian keuangan akhir yang akan berhenti mengelola tentang faktor.
+
+00:26:03.640 --> 00:26:04.040
+Lanjutkan.

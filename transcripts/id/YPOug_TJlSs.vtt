@@ -1,0 +1,1975 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:00.960
+Copilot tidak bingung.
+
+00:00:01.460 --> 00:00:01.840
+Ya, patuh.
+
+00:00:02.360 --> 00:00:07.380
+Paragraf ceria yang baru saja ditulisnya tentang lonjakan Q4 perusahaan Anda yang luar biasa itu bukanlah gangguan.
+
+00:00:07.700 --> 00:00:09.760
+Itu adalah kebenaran menurut data Anda sendiri yang tidak terstrukturnya.
+
+00:00:10.260 --> 00:00:12.640
+Ini adalah efek sampah yang menghasilkan kepercayaan diri.
+
+00:00:13.100 --> 00:00:16.400
+Cara sopan Microsoft Fabric untuk mengatakan Anda melatih pembohong Anda sendiri.
+
+00:00:16.980 --> 00:00:22.000
+Copilot akan dengan senang hati berhalusinasi pola karena tabel Anda membisikkan ketidak konsistenan yang manis ke dalam konteks perintahnya.
+
+00:00:22.500 --> 00:00:23.120
+Inilah yang terjadi.
+
+00:00:23.520 --> 00:00:27.960
+Anda memiliki gabungan duplikat, semantik yang hilang, dan lapisan medali setengah matang yang menyamar sebagai kebenaran.
+
+00:00:27.960 --> 00:00:30.780
+Kemudian Anda memanggil Copilot dan meminta wawasan karena ia tidak bernalar.
+
+00:00:30.880 --> 00:00:31.400
+Ia mengatur ulang.
+
+00:00:31.860 --> 00:00:36.700
+Fabric memberinya metadata yang cacat dan Copilot mengembalikan mimpi jernih yang disamarkan sebagai analisis.
+
+00:00:37.460 --> 00:00:41.880
+Hari ini saya akan menunjukkan kepada Anda mengapa itu terjadi, di mana model data Anda mengkhianati Anda,
+
+00:00:42.020 --> 00:00:44.360
+dan cara membangunnya kembali sehingga Copilot berhenti mengarang cerita.
+
+00:00:44.480 --> 00:00:48.360
+Pada akhirnya, Anda akan memiliki AI yang akurat, dapat dijelaskan, dan pada akhirnya dapat dipercaya.
+
+00:00:49.400 --> 00:00:50.320
+Ilusi kecerdasan.
+
+00:00:51.240 --> 00:00:52.200
+Mengapa Copilot berbohong?
+
+00:00:52.680 --> 00:00:54.080
+Orang-orang berharap Copilot mengetahui banyak.
+
+00:00:54.080 --> 00:00:59.920
+Ia mencocokkan pola dari metadata, konteks, dan hubungan rapuh yang telah Anda definisikan di dalam Fabric.
+
+00:01:00.520 --> 00:01:03.300
+Anda pikir Anda berbicara dengan kecerdasan, Anda sebenarnya berbicara dengan refek.
+
+00:01:03.720 --> 00:01:07.380
+Berikan ambiguitas, dan ia akan langsung mencerminkan ambiguitas itu kembali, hanya lebih berkir.
+
+00:01:07.700 --> 00:01:08.580
+Inilah masalah sebenarnya.
+
+00:01:09.000 --> 00:01:12.100
+Sebagian besar implementasi Fabric memperlakukan desain skema sebagai renungan.
+
+00:01:12.500 --> 00:01:14.200
+Tabel fakta digabungkan pada kunci yang salah.
+
+00:01:14.540 --> 00:01:16.980
+Ukuran ditulis tidak konsisten, deskripsi hilang sama sekali.
+
+00:01:17.900 --> 00:01:20.900
+Copilot membaca kekacauan ini seperti anak kecil yang membaca kalimat tanpa tanda baca.
+
+00:01:21.080 --> 00:01:23.040
+Ia hanya menebak di mana-mana yang seharusnya berada.
+
+00:01:23.040 --> 00:01:25.840
+Hasilnya terdengar koheren, tetapi mungkin sangat salah.
+
+00:01:26.800 --> 00:01:31.740
+Katakanlah lapisan emas Anda berisi pendapatan dari satu sumber dan total penjualan dari sumber lain, keduanya tidak terstandarisasi.
+
+00:01:32.400 --> 00:01:36.040
+Copilot melihat nama kolam yang mirip dan dengan kesopananya yang tak terbatas menggabungkannya.
+
+00:01:36.820 --> 00:01:38.380
+Anda bertanya berapa pendapatan kuartal terakhir.
+
+00:01:38.980 --> 00:01:43.520
+Model ini menggabungkan ukuran dengan granularitas yang tidak sesuai, menghasilkan rata-rata di seluruh skala yang tidak kompatibel,
+
+00:01:43.800 --> 00:01:45.580
+dan menyajikannya kepada Anda dengan penuh keyakinan.
+
+00:01:45.840 --> 00:01:47.920
+Bagian terlihat profesional, matematika adalah fiksi.
+
+00:01:48.400 --> 00:01:49.360
+Ilusi muncul dari nada.
+
+00:01:49.360 --> 00:01:54.360
+Bahasa alami terasa seperti pemahaman, tetapi respons alami copilot hanya menutupi peniruan statistik.
+
+00:01:55.320 --> 00:01:57.480
+Saat Anda mengajukan pertanyaan, model tidak memvalidasi fakta.
+
+00:01:58.080 --> 00:02:01.740
+Model mengambil pola, kemungkinan sambungan, kolom yang masuk akal, teks yang mudah dicernak.
+
+00:02:02.340 --> 00:02:06.300
+Tanpa garis keturunan data yang ketat atau tata kelola semantik, model menciptakan apa yang tidak dapat disembuh.
+
+00:02:06.300 --> 00:02:08.820
+Pada dasarnya, modelnya skema Anda dengan keren manggung.
+
+00:02:09.400 --> 00:02:10.480
+Fabrik memperparah ilus ini.
+
+00:02:11.380 --> 00:02:15.700
+Karena agen data di Fabrik meneruskan konteks melalui metadata, setiap kesenjangan dalam hubungan,
+
+00:02:16.020 --> 00:02:20.220
+kunci asing yang hilang, dimensi yang tidak diberi tag, atau nama ukuran yang ambigu diperlakukan,
+
+00:02:20.600 --> 00:02:22.460
+sebagai petunjuk opsional, bukan mandat.
+
+00:02:23.500 --> 00:02:26.140
+Model mengisi kosongan tersebut melalui penyelesaian pola, bukan logika.
+
+00:02:26.640 --> 00:02:28.540
+Maksud Anda menggabungkan penjualan berdasarkan wilayah dan tanggal?
+
+00:02:29.080 --> 00:02:32.200
+Model mungkin membaca menggabungkan penjualan ke apapun yang berbau geografis.
+
+00:02:32.640 --> 00:02:35.280
+Kemudian SKL yang dihasilkannya dengan patuh bekerja sama dengan omong kosong itu.
+
+00:02:35.280 --> 00:02:38.400
+Pengguna tertipu karena antarmuka mendemokratisasi sintaksis permintaan.
+
+00:02:38.720 --> 00:02:40.280
+Anda mengetik kalimat, ia akan menampilkan visual.
+
+00:02:40.860 --> 00:02:44.300
+Anda berasumsi bahwa Anda memahaminya, tetapi model tersebut beroperasi dalam kabut statis.
+
+00:02:44.620 --> 00:02:47.100
+Semakin sedikit batasan yang Anda tetapkan, semakin bersahabat kebohongannya.
+
+00:02:48.000 --> 00:02:49.300
+Perubahan mental yang penting ada hari ini.
+
+00:02:49.520 --> 00:02:50.500
+Copelot bukanlah peramal.
+
+00:02:50.980 --> 00:02:54.540
+Ia tidak memiliki epistemologi, tidak memiliki konsep kebenaran, hanya cermin yang dibangun dari metadata.
+
+00:02:55.080 --> 00:02:57.700
+Ia mengubah model data Anda menjadi ruang probabilitas linguistik.
+
+00:02:58.600 --> 00:03:00.840
+Setiap cecah struktural menjadi halusinasi semantik.
+
+00:03:00.840 --> 00:03:05.460
+Jika skema Anda tidak konsisten, ia akan berhalusinasi tentang konsistensi yang tidak ada.
+
+00:03:06.660 --> 00:03:07.900
+Dan tragedi itu dapat diprediksi.
+
+00:03:08.580 --> 00:03:12.760
+Para eksekutif membuat keputusan berdasarkan fiksi yang terasa tervalidasi karena berasal dari Microsoft Fabric.
+
+00:03:13.300 --> 00:03:15.740
+Jika lapisan emas Anda goyah di bawah transformasi yang tidak konsisten,
+
+00:03:15.860 --> 00:03:18.220
+Copelot memperkuat goyangan itu menjadi penceritaan yang meyakinkan.
+
+00:03:19.220 --> 00:03:21.660
+Kefasian model tersebut menyamarkan kebusukan saluran Anda.
+
+00:03:22.180 --> 00:03:23.480
+Anggap Copelot sebagai mesin refleksi.
+
+00:03:24.200 --> 00:03:26.400
+Pecerdasannya dimulai dan diakhiri dengan kualitas skema Anda.
+
+00:03:26.400 --> 00:03:30.860
+Jika sambungan Anda bengkok, garis keturunan Anda rusak, atau semantik Anda tidak jelas,
+
+00:03:31.140 --> 00:03:32.880
+ia mencerminkan ketidakpastian sebagai kepastian.
+
+00:03:33.520 --> 00:03:34.980
+Itulah sebabnya penyembuhannya tidak dimulai.
+
+00:03:35.120 --> 00:03:37.100
+Dengan rekaya secepat tetapi dengan kebersihan arsitektur.
+
+00:03:37.620 --> 00:03:41.420
+Jadi, jika Copelot hanya sejujur arsitektur Anda, mari kita bedah di mana kebusukan itu dimulai.
+
+00:03:42.400 --> 00:03:43.000
+Mitos medali.
+
+00:03:43.180 --> 00:03:44.360
+Ketika perunggu mencemari emas,
+
+00:03:45.060 --> 00:03:47.900
+setiap insinyur data melafalkan arsitektur medali seperti kitab suci.
+
+00:03:48.080 --> 00:03:50.720
+Perunggu, perak, emas, mentah, halus, andal.
+
+00:03:50.960 --> 00:03:53.880
+Secara teori, ini adalah sejarah dari kekacauan menuju kejelasan.
+
+00:03:53.880 --> 00:03:58.200
+Setiap lapisan membersihkan ambiguitas hingga data mendapatkan lingkaran kebenarannya.
+
+00:03:59.420 --> 00:04:03.900
+Dalam prakteknya, kebanyakan orang membangun seluncuran aman hiburan tempat ketidakkonsistenan mentah
+
+00:04:03.900 --> 00:04:07.220
+melakukan perjalanan cepat dari perunggu langsung ke emas tanpa ada yang dibersihkan di antaranya.
+
+00:04:07.600 --> 00:04:08.420
+Mari kita mulai dari bawah.
+
+00:04:08.800 --> 00:04:09.800
+Perunggu adalah zona pendatangan.
+
+00:04:10.220 --> 00:04:14.160
+File parket, CSV, penyerapan IOT, catatan fosil organisasi Anda.
+
+00:04:14.860 --> 00:04:16.800
+Itu tidak seharusnya cantik, hanya ditangkap sepenuhnya.
+
+00:04:17.480 --> 00:04:20.120
+Namun orang lupa perunggu adalah karantina, bukan bahan aktif.
+
+00:04:20.120 --> 00:04:23.700
+Ketika kotoran mentah itu merebes ke atas melalui jalan pitas yang malas,
+
+00:04:23.840 --> 00:04:25.680
+query langsung, atau logika transformasi yang hilang,
+
+00:04:25.820 --> 00:04:28.160
+Anda memberi kopelut kebisingan yang tidak diolah sebagai konteks.
+
+00:04:28.860 --> 00:04:29.840
+Ya, ia akan berhalusinasi.
+
+00:04:30.320 --> 00:04:30.920
+Ia punya yang bagus.
+
+00:04:31.420 --> 00:04:33.200
+Anda memberinya jurnal mimpi dan meminta audit.
+
+00:04:33.740 --> 00:04:35.320
+Silver dimaksudkan untuk menyaring lumpur itu.
+
+00:04:35.900 --> 00:04:38.060
+Disinilah duplikat mati, skema selaras,
+
+00:04:38.340 --> 00:04:41.320
+tipe data cocok, dan kunci universal akhirnya menyetujui apa itu pelanggan.
+
+00:04:42.100 --> 00:04:44.820
+Namun, lihatlah sebagian besar pengaturan fabrik dan silver adalah
+
+00:04:44.820 --> 00:04:46.500
+permintaan maaf yang setengah hati.
+
+00:04:46.580 --> 00:04:48.160
+Penggabungan cepat, pencarian yang rapuh,
+
+00:04:48.440 --> 00:04:49.660
+konversi yang tidak terdokumentasi.
+
+00:04:50.300 --> 00:04:51.200
+Alasannya selalu sama.
+
+00:04:51.660 --> 00:04:52.440
+Kamu yang memperbaikinnya emas.
+
+00:04:52.840 --> 00:04:55.440
+Itu setara dengan memperbaiki tata bahasa dengan menerbitkan kamu selamat.
+
+00:04:56.020 --> 00:04:58.300
+Saat Anda mencapai emas, ilusi kepercayaan muncul.
+
+00:04:58.920 --> 00:05:00.300
+Segala sesuatu dalam emas tampak analis.
+
+00:05:00.600 --> 00:05:02.100
+Tabel yang bersih, nama yang ramah bisnis,
+
+00:05:02.200 --> 00:05:03.440
+dashboard yang bersinar dengan percaya diri.
+
+00:05:04.000 --> 00:05:06.460
+Namun di bawahnya Anda telah menumpuk konversi yang tidak cocok,
+
+00:05:06.460 --> 00:05:08.100
+stempel waktu yang tidak disinkronkan,
+
+00:05:08.100 --> 00:05:10.660
+dan benturan ID yang dilacak hingga ke perunggu.
+
+00:05:11.120 --> 00:05:13.620
+Metadata fabrik melacak hubungan tersebut secara otomatis.
+
+00:05:14.280 --> 00:05:16.240
+Dan coba tebak hubungan mana yang diandalkan copilot
+
+00:05:16.240 --> 00:05:17.360
+saat menafsirkan bahasa alami?
+
+00:05:17.900 --> 00:05:18.260
+Semuanya.
+
+00:05:18.740 --> 00:05:20.060
+Jadi saat garis keturunan berbohong,
+
+00:05:20.200 --> 00:05:20.920
+model waris itu tidak.
+
+00:05:21.540 --> 00:05:22.840
+Berikut skenario dunia nyata.
+
+00:05:23.360 --> 00:05:25.380
+Anda memiliki data transaksional dari dua sistem pesan.
+
+00:05:25.740 --> 00:05:28.560
+Keduanya dimasukkan ke dalam perunggu dengan format kunci yang sedikit berhubungan.
+
+00:05:28.620 --> 00:05:30.280
+Yang satu menggunakan ID perjalanan memilih,
+
+00:05:30.360 --> 00:05:31.140
+yang lain mencampur huruf.
+
+00:05:31.440 --> 00:05:33.380
+Di perak, seseorang menggabungkannya
+
+00:05:33.380 --> 00:05:36.180
+melalui gabungan dalam pada substring terpotong untuk menstandarisasi.
+
+00:05:36.180 --> 00:05:38.460
+Secara teknis, Anda memiliki data terpat.
+
+00:05:38.900 --> 00:05:40.880
+Secara semantik, Anda baru saja membuat kecocokan hentuk.
+
+00:05:41.580 --> 00:05:44.380
+Sekarang copilot dengan percaya diri menghitung pendapatan perjalanan rata-rata
+
+00:05:44.380 --> 00:05:46.720
+yang mencakup transaksi dari konteks yang sama sekali berbeda.
+
+00:05:47.240 --> 00:05:49.040
+Itu omong kosong yang tepat, sintaksis yang akurat,
+
+00:05:49.560 --> 00:05:50.440
+semantik yang dibuat-buat.
+
+00:05:50.900 --> 00:05:51.780
+Ini adalah mitos medali,
+
+00:05:52.100 --> 00:05:54.860
+gagasan bahwa memiliki lapisan secara otomatis memberikan kemurnian.
+
+00:05:55.680 --> 00:05:57.660
+Lapisan hanya sejujur disiplin di dalamnya.
+
+00:05:58.300 --> 00:05:59.720
+Runggu harus mengeksposan tropi mentah.
+
+00:06:00.240 --> 00:06:01.740
+Perak harus menegakkan rekontaminasi.
+
+00:06:02.040 --> 00:06:04.580
+Emas harus mewakili logika bisnis yang tersertifikasi.
+
+00:06:04.580 --> 00:06:07.480
+Tidak ada penggantian manual, tidak ada perbaikan sementara.
+
+00:06:08.300 --> 00:06:11.140
+Putuskan rantai itu dan Anda mengganti penyempurnaan dengan polusi rekursif.
+
+00:06:11.520 --> 00:06:12.880
+Pilot tentu saja tidak mengetahui semuanya.
+
+00:06:13.420 --> 00:06:15.740
+Ia mengambil apapun yang dinyatakan modal kain sebagai garis keturunan
+
+00:06:15.740 --> 00:06:16.720
+dan mengasumsikan kosalitas.
+
+00:06:17.480 --> 00:06:20.000
+Jika kolom berwarna emas merujuk pada gabungan dari tiga sumber
+
+00:06:20.000 --> 00:06:20.920
+yang tidak konsisten,
+
+00:06:21.440 --> 00:06:22.660
+AI akan melihat satu konsep.
+
+00:06:23.320 --> 00:06:24.960
+Tanyakan mengapa penjualan melonjak di bulan marat.
+
+00:06:25.220 --> 00:06:27.060
+AI dengan senang hati akan menghasilkan SQL
+
+00:06:27.060 --> 00:06:28.780
+yang menggabungkan setiap catatan berlabel marat
+
+00:06:28.780 --> 00:06:30.440
+di seluruh wilayah mata uang, zona waktu,
+
+00:06:30.440 --> 00:06:32.580
+karena Anda tidak pernah beritahu silver untuk menegakkan bad centers.
+
+00:06:33.060 --> 00:06:33.940
+AI tidak berbohong.
+
+00:06:34.520 --> 00:06:36.960
+AI menerjemahkan kelalaian kolektif Anda menjadi fiksi yang lancar.
+
+00:06:37.800 --> 00:06:39.880
+Inilah sebabnya mengapa asal data bukanlah meta-data opsional,
+
+00:06:40.040 --> 00:06:40.760
+melainkan GPS Google.
+
+00:06:41.560 --> 00:06:44.060
+Setiap transformasi, setiap gabungan, setiap definisi ukuran
+
+00:06:44.060 --> 00:06:46.160
+adalah jejak remah roti yang mengarah kembali ke sumber kebenaran.
+
+00:06:46.660 --> 00:06:48.340
+Fabric melacak garis keturunan secara visual,
+
+00:06:48.480 --> 00:06:49.800
+tetapi garis keturunan tanpa validasi
+
+00:06:49.800 --> 00:06:51.200
+seperti peta yang digambar dengan pensil.
+
+00:06:51.840 --> 00:06:53.560
+AI membaca garis-garis kabur itu sebagai kebenaran.
+
+00:06:54.180 --> 00:06:55.020
+Jadi terapkan validasi.
+
+00:06:55.020 --> 00:06:58.300
+Antara bronze dan silver, jalankan uji skema otomatis.
+
+00:06:58.920 --> 00:06:59.680
+Apakah ID selaras?
+
+00:07:00.100 --> 00:07:00.760
+Apakah nol ditangani?
+
+00:07:01.080 --> 00:07:01.740
+Apakah tipe konsisten?
+
+00:07:02.300 --> 00:07:04.180
+Antara silver dan gold, terapkan audit gabungan.
+
+00:07:04.600 --> 00:07:06.100
+Verifikasi ekspektasi satu ke satu.
+
+00:07:06.860 --> 00:07:08.500
+Pantau penyimpangan agregasi dan periksa
+
+00:07:08.500 --> 00:07:10.340
+kontinuitas garis keturunan tingkat kolom.
+
+00:07:10.780 --> 00:07:11.960
+Ini bukanlah ritual birokrasi,
+
+00:07:12.060 --> 00:07:13.800
+melainkan alat bertahan hidup untuk akurasi AA.
+
+00:07:14.740 --> 00:07:16.540
+Ketika query copy-load berjalan melalui lapisan
+
+00:07:16.540 --> 00:07:17.480
+yang telah Anda verifikasi,
+
+00:07:17.580 --> 00:07:19.680
+query tersebut mewarisi disiplin alih-alih ketidak teraturan.
+
+00:07:20.880 --> 00:07:23.080
+Ironisnya, Anda ingin copy-load mengotomatiskan analisis,
+
+00:07:23.080 --> 00:07:25.820
+tetapi fondasi yang menjadi sandarannya masih memerlukan kebersihan kuno.
+
+00:07:26.400 --> 00:07:27.380
+Sabah masuk, percaya dikeluar.
+
+00:07:27.740 --> 00:07:29.880
+Hingga Anda memperlakukan arsitektur sebagai filosofi moral,
+
+00:07:30.000 --> 00:07:30.940
+penyempurnaan sebagai kewajiban,
+
+00:07:31.060 --> 00:07:33.120
+bukan saran Anda tidak akan pernah memiliki air yang jujur.
+
+00:07:33.640 --> 00:07:34.800
+Bahkan dengan lapisan yang murni,
+
+00:07:35.040 --> 00:07:36.060
+copy-load masih dapat tersandung.
+
+00:07:36.320 --> 00:07:37.480
+Karena mengetahui data apa yang ada,
+
+00:07:37.660 --> 00:07:38.940
+tidak berarti mengetahui apa artinya.
+
+00:07:39.580 --> 00:07:42.400
+Alur yang sempurna dapat memberi makan model yang kosong secara semantik,
+
+00:07:42.500 --> 00:07:43.960
+yang membawa kita ke penerjemah yang hilang
+
+00:07:43.960 --> 00:07:45.760
+antara angka dan makna lapisan semantik.
+
+00:07:46.080 --> 00:07:47.820
+Otak yang lupa dibangun oleh data Anda.
+
+00:07:48.220 --> 00:07:48.460
+Endah.
+
+00:07:48.460 --> 00:07:52.120
+Otak yang hilang, lapisan semantik, dan defisit konteks.
+
+00:07:52.700 --> 00:07:55.140
+Disinilah sebagian besar implementasi fabrik kehilangan akal sehatnya,
+
+00:07:55.240 --> 00:07:55.760
+secara harfiah.
+
+00:07:56.260 --> 00:07:58.040
+Lapisan semantik adalah otak model data Anda,
+
+00:07:58.180 --> 00:08:00.720
+tetapi banyak organisasi memperlakukannya seperti hiasan dekoratif.
+
+00:08:01.260 --> 00:08:02.420
+Mereka berpikir jika tabel ada,
+
+00:08:02.580 --> 00:08:03.540
+maka mengikuti secara otomatis.
+
+00:08:04.420 --> 00:08:06.460
+Tabel adalah memori, semantik adalah pemahaman.
+
+00:08:07.080 --> 00:08:07.920
+Tanpa lapisan itu,
+
+00:08:08.060 --> 00:08:10.220
+copilot membaca angka seperti tulis membaca rambu jalan
+
+00:08:10.220 --> 00:08:11.600
+dalam bahasa lain secara fonetis,
+
+00:08:11.600 --> 00:08:13.940
+percaya diri, dan sama sekali tanpa konteks.
+
+00:08:14.640 --> 00:08:15.540
+Mari kita definisikan ini.
+
+00:08:16.180 --> 00:08:18.140
+Model semantik di fabrik memberitahu copilot
+
+00:08:18.140 --> 00:08:19.080
+apa arti data Anda,
+
+00:08:19.620 --> 00:08:20.280
+bukan hanya namanya.
+
+00:08:21.280 --> 00:08:23.000
+Ini adalah kamus yang menerjemahkan label kolom
+
+00:08:23.000 --> 00:08:23.980
+menjadi logika bisnis.
+
+00:08:24.780 --> 00:08:26.280
+Pendapatan menjadi jumlah penjualan
+
+00:08:26.280 --> 00:08:27.320
+tidak termasuk pengembaliannya.
+
+00:08:28.520 --> 00:08:30.180
+Pelanggan menjadi ID pembeli unik
+
+00:08:30.180 --> 00:08:31.300
+selama batas tahun fiskal.
+
+00:08:32.360 --> 00:08:34.340
+Tanpa itu, copilot memperlakukan kata-kata ini
+
+00:08:34.340 --> 00:08:35.260
+hanya sebagai token keluturan.
+
+00:08:35.900 --> 00:08:37.480
+Anda mungkin meminta total penjualan
+
+00:08:37.480 --> 00:08:38.740
+dan mendapatkan penerimaan kotor
+
+00:08:38.740 --> 00:08:40.320
+suatu hari pendapatan bersih pada hari berikutnya.
+
+00:08:40.320 --> 00:08:42.800
+Itu tidak berubah upah itu terombang ambil secara linguistik.
+
+00:08:43.360 --> 00:08:43.920
+Kenyataannya,
+
+00:08:44.160 --> 00:08:45.680
+model semantik bertindak seperti penerjemah
+
+00:08:45.680 --> 00:08:48.460
+dibahasa antara bahasa manusia dan logika DAX atau SKL.
+
+00:08:49.060 --> 00:08:50.340
+Ia menyerahkan maksud dengan komputasi.
+
+00:08:50.700 --> 00:08:51.940
+Jika tidak ada, copilot harus menebak.
+
+00:08:52.620 --> 00:08:53.900
+Dan model bahasa yang besar terkenal
+
+00:08:53.900 --> 00:08:54.880
+sebagai penebak yang bangga.
+
+00:08:55.240 --> 00:08:56.620
+Mereka menyusun kemungkinan gabungan,
+
+00:08:56.780 --> 00:08:57.380
+bukan yang akurat,
+
+00:08:57.520 --> 00:08:58.780
+dan mereka lebih mercahaya nama kolom
+
+00:08:58.780 --> 00:08:59.980
+daripada definisi bisnis Anda.
+
+00:09:00.500 --> 00:09:01.220
+Dalam satu model,
+
+00:09:01.340 --> 00:09:02.620
+pemesanan mengacu pada reservasi.
+
+00:09:03.280 --> 00:09:03.780
+Di tempat lain,
+
+00:09:03.860 --> 00:09:04.560
+intilah diselesaikan.
+
+00:09:05.000 --> 00:09:05.500
+Bagi copilot,
+
+00:09:05.580 --> 00:09:06.080
+tidak adalah sinonim.
+
+00:09:06.080 --> 00:09:08.160
+Anda hanya meminta pemesanan per kuartal
+
+00:09:08.160 --> 00:09:09.460
+dan ia melayani Anda berdua.
+
+00:09:09.820 --> 00:09:10.520
+Salah secara efisien.
+
+00:09:10.900 --> 00:09:11.740
+Lending kandu arsitektur.
+
+00:09:11.740 --> 00:09:13.040
+Di gudang data kosong,
+
+00:09:13.140 --> 00:09:14.800
+copilot mengintip langsung ke dalam tabel.
+
+00:09:15.340 --> 00:09:16.620
+Ia melihat tanggal, jumlah, jenis.
+
+00:09:17.260 --> 00:09:18.480
+Tata benda yang bagus tanpa konteks.
+
+00:09:18.960 --> 00:09:19.880
+Ia kemudian mencocokkan pola.
+
+00:09:20.460 --> 00:09:22.260
+Penjualan sama dengan jumlah menurut wilayah
+
+00:09:22.260 --> 00:09:24.060
+sama dengan bidang apapun yang berbau geografi.
+
+00:09:24.860 --> 00:09:26.060
+Namun, dalam model semantik,
+
+00:09:26.160 --> 00:09:27.300
+bidang-bidang tersebut telah dibudai.
+
+00:09:28.000 --> 00:09:29.600
+Jumlah penjualan mencakup ukuran DAX
+
+00:09:29.600 --> 00:09:31.260
+yang mendefinisikan cakupan mata uang
+
+00:09:31.260 --> 00:09:32.120
+dan logika agakasi.
+
+00:09:32.440 --> 00:09:34.600
+Wilayah memiliki hubungan yang disembatkan secara eksplisit.
+
+00:09:35.040 --> 00:09:36.580
+Jadi, ke Anda mengajukan pertanyaan yang sama.
+
+00:09:36.720 --> 00:09:38.180
+Copilot tidak merabar-rabar dalam kegelapan.
+
+00:09:41.740 --> 00:09:43.240
+Ini mah bahkan memberi Anda senjata untuk ini.
+
+00:09:44.060 --> 00:09:45.800
+Direct like untuk pemodelan potensi rendah.
+
+00:09:46.280 --> 00:09:47.380
+DAX untuk logika ukuran.
+
+00:09:47.860 --> 00:09:49.440
+Sinonim untuk fleksibilitas linguistik.
+
+00:09:49.580 --> 00:09:51.360
+Dan grup kalkulasi untuk konsistensi.
+
+00:09:52.400 --> 00:09:53.920
+Anggap sinonim sebagai kosa kata elastis.
+
+00:09:54.640 --> 00:09:55.960
+Jika pengguna menyebutkan laba bersih
+
+00:09:55.960 --> 00:09:57.280
+tetapi ukuran Anda adalah laba,
+
+00:09:57.380 --> 00:09:58.400
+Anda tidak mengganti nama kolom.
+
+00:09:58.460 --> 00:09:59.680
+Anda mengajarkan penerjemahan copilot.
+
+00:10:00.100 --> 00:10:02.000
+Pelompok kalkulasi kemudian merapkan tata bahasa
+
+00:10:02.000 --> 00:10:03.240
+memastikan kecerdasan waktu
+
+00:10:03.240 --> 00:10:04.940
+atau konversi mata uang berlaku secara serag.
+
+00:10:05.380 --> 00:10:07.560
+Bersama-sama, mereka membentuk sistem dasar model bahasa.
+
+00:10:08.080 --> 00:10:10.020
+Namun, sangat sedikit orang yang merepot-repot menghubungkannya.
+
+00:10:10.020 --> 00:10:11.920
+Mereka memasukkan tabel ke dalam fabrik
+
+00:10:11.920 --> 00:10:13.980
+dan berasumsi iCopilot akan menafsirkan nuansa.
+
+00:10:14.380 --> 00:10:15.060
+Bocoran tidak akan.
+
+00:10:15.740 --> 00:10:18.080
+Model tidak menyimpulkan KPI Anda dari keyakinan moral.
+
+00:10:18.900 --> 00:10:20.200
+Model menyimpulkannya dari tech metadata.
+
+00:10:21.080 --> 00:10:22.760
+Jika Anda belum memberi label pada ukuran,
+
+00:10:22.940 --> 00:10:24.520
+menjelaskan hubungan atau menentukan urutan
+
+00:10:24.520 --> 00:10:25.960
+kalkulasi copilot berimprovisasi.
+
+00:10:26.540 --> 00:10:27.960
+Improvisasi itu menarik di Club Jazz
+
+00:10:27.960 --> 00:10:30.300
+tetapi membawa malapetaka dalam analitik perusahaan.
+
+00:10:30.740 --> 00:10:31.960
+Jadi bagaimana Anda menerapkan semantik?
+
+00:10:32.560 --> 00:10:34.100
+Mulailah dengan mengaudit kosa kata model Anda.
+
+00:10:34.560 --> 00:10:36.260
+Setiap ukuran memerlukan definisi yang konsisten,
+
+00:10:36.460 --> 00:10:38.500
+disimpan secara terpusat, direferensikan secara universal.
+
+00:10:38.500 --> 00:10:40.980
+Tahan keinginan untuk mengganti nama kolom perlaporan.
+
+00:10:41.620 --> 00:10:43.120
+Beri alias di lapisan semantik saja.
+
+00:10:43.960 --> 00:10:45.900
+Buat kelompok kalkulasi untuk semua logika umum.
+
+00:10:46.240 --> 00:10:48.500
+Total tahun berjalan, rata-rata bergulir, rasio konversi.
+
+00:10:49.720 --> 00:10:50.920
+Kemudian tambahkan sinonim
+
+00:10:50.920 --> 00:10:52.160
+agar mesin bahasa alami copilot
+
+00:10:52.160 --> 00:10:53.580
+tidak menciptakan korelasinya sendiri.
+
+00:10:54.200 --> 00:10:55.140
+Sekarang hubungkan semantik
+
+00:10:55.140 --> 00:10:56.580
+dengan arsitektur instruksi copilot.
+
+00:10:57.300 --> 00:10:58.840
+Fabrik menawarkan dua tingkat kontrol,
+
+00:10:59.100 --> 00:11:00.800
+instruksi sumber data, dan instruksi agen.
+
+00:11:01.500 --> 00:11:04.080
+Instruksi sumber data mengklarifikasi spesifikasi skema,
+
+00:11:04.260 --> 00:11:06.080
+gabungan, referensi ukuran, nama pilihan,
+
+00:11:06.080 --> 00:11:08.440
+sementara instruksi agen mengatur nada, format, dan batasan.
+
+00:11:08.940 --> 00:11:10.460
+Ini berinteraksi melalui perintah dasar
+
+00:11:10.460 --> 00:11:12.340
+yang sepenuhnya bergantung pada penyelarasan semantik.
+
+00:11:13.300 --> 00:11:14.940
+Jika model semantik Anda mendefinisikan
+
+00:11:14.940 --> 00:11:16.060
+total penjualan dengan jelas,
+
+00:11:16.240 --> 00:11:18.320
+instruksi sumber data dapat menegakkan definisi tersebut
+
+00:11:18.320 --> 00:11:19.420
+saat copilot menulis SQL.
+
+00:11:20.220 --> 00:11:22.260
+Instruksi agen memastikan respons tetap ringkas,
+
+00:11:22.360 --> 00:11:23.600
+berbentuk tabel, atau diringkas.
+
+00:11:24.100 --> 00:11:26.200
+Gabungkan semuanya dan Anda mengganti kekacauan dengan protokol.
+
+00:11:26.760 --> 00:11:29.160
+Tanpa semantik, setiap jawaban copilot adalah improvisasi.
+
+00:11:29.800 --> 00:11:31.660
+Dengan semantik, setiap respons menjadi bukti.
+
+00:11:32.080 --> 00:11:34.340
+Anda tidak menyatil perintah Anda mengajarkan logika.
+
+00:11:34.340 --> 00:11:36.600
+Setelah Anda memberi copilot kauns yang konsisten,
+
+00:11:36.760 --> 00:11:38.640
+akurasinya meningkat karena ketidakpastian
+
+00:11:38.640 --> 00:11:39.780
+tidak dapat disembunyikan.
+
+00:11:40.720 --> 00:11:42.500
+Sekarang setelah copilot memahami bahasanya,
+
+00:11:42.640 --> 00:11:43.860
+kami akan mengajarkannya disiplin,
+
+00:11:43.940 --> 00:11:45.360
+aturan perilaku yang membuatnya tetap jujur.
+
+00:11:46.080 --> 00:11:48.140
+Disiplin untuk mesin, data, dan instruksi agen.
+
+00:11:48.920 --> 00:11:50.680
+Copilot mungkin akhirnya memahami kosa kata Anda,
+
+00:11:50.800 --> 00:11:52.020
+tetapi ia tetap membutuhkan data kram.
+
+00:11:52.760 --> 00:11:53.960
+Semantik mengajarkan makna,
+
+00:11:54.080 --> 00:11:55.180
+instruksi mengajarkan perilaku.
+
+00:11:55.920 --> 00:11:56.960
+Dan di Microsoft Fabric,
+
+00:11:57.080 --> 00:11:59.520
+perilaku tersebut dibentuk melalui dua tali yang berbeda.
+
+00:12:00.240 --> 00:12:02.040
+Instruksi sumber data dan instruksi agen.
+
+00:12:02.040 --> 00:12:03.460
+Yang satu mengatur anjing,
+
+00:12:03.640 --> 00:12:05.120
+yang lain melatihnya untuk tidak mengenya phone itu.
+
+00:12:05.500 --> 00:12:07.840
+Mulailah dengan instruksi sumber data perintah khusus skema.
+
+00:12:08.860 --> 00:12:10.120
+Perintah ini paling dekat dengan data
+
+00:12:10.120 --> 00:12:12.880
+dan memberi tahu copilot cara menafsirkan model Anda dengan tepat.
+
+00:12:13.280 --> 00:12:14.960
+Ingat kekacauan kita sebelumnya dengan sambungan cuaca?
+
+00:12:15.400 --> 00:12:17.200
+Instruksi sumber data adalah tempat Anda memperbaikinya.
+
+00:12:17.500 --> 00:12:19.540
+Anda menetapkan bahwa data suhu dan curah hujan
+
+00:12:19.540 --> 00:12:22.340
+harus digabungkan pada ID geografi pengambilan dan ID tangan.
+
+00:12:22.860 --> 00:12:24.160
+Ini menghilangkan tebakan dari model
+
+00:12:24.160 --> 00:12:25.380
+dan menggantinya dengan kewajiban.
+
+00:12:26.080 --> 00:12:29.380
+Fabric membaca deklarasi tersebut setiap kali copilot menyusun SQL atau DAX
+
+00:12:29.380 --> 00:12:31.900
+memastikan setiap query berakar melalui kunci yang tepat.
+
+00:12:32.660 --> 00:12:34.820
+Anggaplah deklarasi tersebut sebagai konstitusi relasional
+
+00:12:34.820 --> 00:12:35.960
+teks hukum yang tidak dapat diubah
+
+00:12:35.960 --> 00:12:37.840
+yang mendefinisikan bagaimana entitas dapat terhubung.
+
+00:12:38.560 --> 00:12:40.740
+Instruksi ini juga menangani sinonim dan definisi ukuran.
+
+00:12:41.580 --> 00:12:43.520
+Misalkan analis Anda menggunakan total penjualan,
+
+00:12:43.640 --> 00:12:45.780
+jumlah wajar, dan penerimaan kotor secara bergantian.
+
+00:12:46.360 --> 00:12:48.220
+Bagi manusia, semuanya memiliki arti yang kurang lebih besar.
+
+00:12:48.720 --> 00:12:50.840
+Bagi copilot, semuanya adalah varian berbeda yang berperhatian.
+
+00:12:51.880 --> 00:12:53.500
+Berdasarkan instruksi sumber data Anda menyelaraskan ini.
+
+00:12:53.500 --> 00:12:55.500
+Setiap kali total penjualan disebutkan,
+
+00:12:55.720 --> 00:12:56.840
+gunakan jumlah wajar total,
+
+00:12:57.300 --> 00:12:59.060
+sekarang ayah Anda berhenti memainkan rolet semantik
+
+00:12:59.060 --> 00:13:00.480
+dan mulai menjawab secara konsisten.
+
+00:13:01.400 --> 00:13:03.000
+Mereka dapat menentukan logika pengelompokan
+
+00:13:03.000 --> 00:13:04.020
+untuk analisis kategorika.
+
+00:13:04.960 --> 00:13:06.620
+Setelah pengguna menanyakan penjualan berdasarkan suhu,
+
+00:13:06.860 --> 00:13:08.220
+Anda dapat menentukan rentang sebelumnya.
+
+00:13:08.780 --> 00:13:09.840
+Di bawah 32 grad,
+
+00:13:10.060 --> 00:13:10.920
+sama dengan titik beku,
+
+00:13:11.160 --> 00:13:12.140
+hingga 53 dingin,
+
+00:13:12.220 --> 00:13:13.740
+53 hingga 70 sedang,
+
+00:13:13.840 --> 00:13:14.420
+dan seterusnya.
+
+00:13:15.120 --> 00:13:15.600
+Tanpa itu,
+
+00:13:15.600 --> 00:13:17.900
+copilot mengembalikan nilai numerik tak terbatas
+
+00:13:17.900 --> 00:13:19.760
+menenggelamkan pengguna dalam hal sepehan terperinci.
+
+00:13:20.600 --> 00:13:21.980
+Dengan menyematkan kelompok-kelompok ini,
+
+00:13:21.980 --> 00:13:23.020
+langsung dalam instruksi Anda,
+
+00:13:23.140 --> 00:13:24.920
+Anda memunculkan agregasi yang dapat diprediksi
+
+00:13:24.920 --> 00:13:25.720
+yang dapat direproduksi.
+
+00:13:26.100 --> 00:13:27.520
+Yang sebenarnya Anda lakukan di sini adalah
+
+00:13:27.520 --> 00:13:29.540
+mengubah metadata latin menjadi aturan eksplisit.
+
+00:13:30.100 --> 00:13:32.000
+Agen data fabric meneruskannya sebelum buat query,
+
+00:13:32.120 --> 00:13:33.620
+memperlakukannya sebagai kebenaran dasar
+
+00:13:33.620 --> 00:13:34.440
+yang tidak dapat diubah.
+
+00:13:34.920 --> 00:13:36.840
+Melewatkannya adalah alasan mengapa query sebelumnya
+
+00:13:36.840 --> 00:13:38.100
+menghasilkan hasil yang menyimpan
+
+00:13:38.100 --> 00:13:39.620
+dan menghasilkan SQL yang sepenuhnya valid
+
+00:13:39.620 --> 00:13:40.260
+untuk pertanyaan salah.
+
+00:13:40.760 --> 00:13:42.540
+Dengan instruksi data yang ditulis dengan benar,
+
+00:13:42.540 --> 00:13:44.600
+query copilot tetap berlabuh pada aturan bisnis
+
+00:13:44.600 --> 00:13:45.960
+daripada probabilitas linguistik.
+
+00:13:46.600 --> 00:13:48.320
+Sekarang, mari kita naik ke lapisan berikutnya,
+
+00:13:48.480 --> 00:13:49.920
+yaitu instruksi agen sekolah etiket
+
+00:13:51.980 --> 00:13:54.260
+instruksi sumber data memberitahu copilot apa arti data tersebut,
+
+00:13:54.420 --> 00:13:56.320
+instruksi agen menentukan bagaimana ia harus merespons.
+
+00:13:56.780 --> 00:13:59.040
+Instruksi tersebut mendefinisikan gaya penyajian dan cakupan Anda.
+
+00:13:59.660 --> 00:14:02.200
+Anda dapat menginstruksikan selalu rangkum dengan tabel yang ringkas.
+
+00:14:03.160 --> 00:14:06.540
+Atau, jika ada beberapa sumber penjelas garis keturunan sebelum agregasi.
+
+00:14:07.600 --> 00:14:10.040
+Pada dasarnya, Anda mengubah copilot dari pekerja magang
+
+00:14:10.040 --> 00:14:12.000
+yang terlalu bersemangat menjadi analis yang disiplin.
+
+00:14:13.020 --> 00:14:15.760
+Pertimbangkan aturan lima baris teratas dari penyetelan agen data.
+
+00:14:16.400 --> 00:14:18.700
+Alih-alih mengembalikan ribuan rekaman, Anda memberitahu.
+
+00:14:19.040 --> 00:14:21.460
+Render hanya lima teratas kecuali pengguna meminta sebaliknya.
+
+00:14:22.220 --> 00:14:23.660
+AI menegakkan keringkasan,
+
+00:14:24.040 --> 00:14:26.860
+sehingga manajer rata-rata tidak perlu menggulir data baru.
+
+00:14:27.740 --> 00:14:28.700
+Arahan berguna lainnya.
+
+00:14:29.460 --> 00:14:31.740
+Selalu berikan ringkasan di bagian atas setiap respons.
+
+00:14:32.800 --> 00:14:34.420
+Ini berfusi seperti komentar meta.
+
+00:14:35.080 --> 00:14:36.760
+Copilot menjelaskan apa yang ditampilkannya,
+
+00:14:37.000 --> 00:14:39.360
+membiarkan pengguna meverifikasi bahwa pengukuran penggabungan
+
+00:14:39.360 --> 00:14:40.760
+dan penyaringan sesuai dengan harapan.
+
+00:14:41.620 --> 00:14:43.060
+Ini mengubah penalaran yang tidak terlihat
+
+00:14:43.060 --> 00:14:45.140
+menjadi konfirmasi yang terlihat yang penting untuk kepercayaan.
+
+00:14:45.980 --> 00:14:46.760
+Perhatikan interaksinya.
+
+00:14:46.980 --> 00:14:48.800
+Instruksi data mendefinisikan fakta.
+
+00:14:49.020 --> 00:14:50.780
+Instruksi agen mendefinisikan suara.
+
+00:14:50.780 --> 00:14:53.220
+Bersama-sama semuanya membentuk kode etikopilot.
+
+00:14:53.900 --> 00:14:56.940
+Agen data menggabungkan ini menjadi perintah komposit setiap kali menjawab pertanyaan.
+
+00:14:57.940 --> 00:14:59.400
+Model bahasa tidak bebas.
+
+00:14:59.900 --> 00:15:01.600
+Ia mengondisikan dirinya sendiri melalui aturan Anda.
+
+00:15:02.040 --> 00:15:03.360
+Sekarang tata kelola mulai berperan.
+
+00:15:03.720 --> 00:15:06.080
+Instruksi ini tidak dapat hidup dalam salinan individual yang ngarkis.
+
+00:15:06.080 --> 00:15:09.220
+Jika setiap pengguna fabrik menyesuaikan sinonim dengan selera pribadi,
+
+00:15:09.700 --> 00:15:12.540
+Anda telah memperkenalkan kembali bubble yang telah Anda hilangkan selama berbulan-bulan.
+
+00:15:12.820 --> 00:15:16.300
+Anda akan mendapatkan lima definisi untuk keuntungan dan nol kesepakatan selama tinjauan teriwulan.
+
+00:15:17.240 --> 00:15:20.360
+Pusatkan set instruksi, publikasikan melalui ruang kerja manajemen fabrik,
+
+00:15:20.460 --> 00:15:23.960
+validasi melalui tinjauan sejawat dan kunci dibalik kontrol versi.
+
+00:15:24.560 --> 00:15:27.500
+Fleksibilitas tanpa tata kelola adalah pemberontakan yang disamankan sebagai inovasi.
+
+00:15:27.940 --> 00:15:30.800
+Tentu saja, bahkan aturan ini akan rusak jika Anda tidak pernah memverifikasi.
+
+00:15:31.380 --> 00:15:34.760
+Pendekatan cerdas adalah memperlakukan kualitas instruksi seperti kualitas kode.
+
+00:15:35.320 --> 00:15:37.140
+Setelah setiap pengeditan uji perilaku kopilot,
+
+00:15:37.560 --> 00:15:39.700
+ajukan pertanyaan yang sama dua kali setelah membersihkan CC,
+
+00:15:39.860 --> 00:15:41.140
+lihat apakah ia mengulang SKL yang sama.
+
+00:15:41.620 --> 00:15:43.120
+Periksa query yang dihasilkan, pastikan.
+
+00:15:43.480 --> 00:15:45.920
+Mereka tersebut mencerminkan gabungan yang dipaksakan dan perbaiki ukuran.
+
+00:15:46.300 --> 00:15:48.280
+Jika keluarannya menyimpang, tinjau kembali instruksi Anda.
+
+00:15:48.800 --> 00:15:52.300
+Bahkan teknisi Microsoft sendiri mengakui bahwa penyetelan ini lebih merupakan seni daripada sains,
+
+00:15:52.300 --> 00:15:54.660
+yang merupakan singkatan yang bagus untuk dibagian yang konstan.
+
+00:15:55.240 --> 00:15:56.580
+Disinilah contoh query menyelamatkan Anda.
+
+00:15:57.240 --> 00:15:58.980
+Itulah jawaban Fabric untuk membatas,
+
+00:15:59.200 --> 00:16:03.360
+yang memungkinkan Anda membuat kode keras fragment SQL kanonik untuk maksud analitis umum.
+
+00:16:04.260 --> 00:16:06.600
+Katakanlah Anda tahu bahwa total pendapatan menurut kelompok suhu
+
+00:16:06.600 --> 00:16:08.960
+harus selalu melakukan penggabungan ganda pada geografi dan tangga.
+
+00:16:09.360 --> 00:16:10.660
+Anda mencatatnya sebagai contoh query.
+
+00:16:11.300 --> 00:16:13.240
+Ketika pengguna melanyakan varisif rasa tersebut,
+
+00:16:13.360 --> 00:16:16.520
+kopilot mengambilkan improvisasi dan menggunakan kembali logika Anda yang sebenarnya.
+
+00:16:17.120 --> 00:16:20.560
+Ini setara dengan AI yang menerbitkan formulir yang telah disetujui sebelumnya
+
+00:16:20.560 --> 00:16:23.200
+diisi dengan benar setiap saat, tidak mampu melakukan sebetulnya kreatif.
+
+00:16:24.080 --> 00:16:26.480
+Seiring waktu, Anda dapat membangun pustaka contoh query ini,
+
+00:16:26.620 --> 00:16:29.240
+mengubah kopilot dari seorang generalis menjadi pakar domain.
+
+00:16:29.760 --> 00:16:30.840
+Anggap saja ini sebagai memori otak.
+
+00:16:31.460 --> 00:16:33.800
+AI secara bertahap mempelajari seperti apa rasanya benar
+
+00:16:33.800 --> 00:16:36.400
+melalui pengulangan dan batasan alih-alih kejeniusan bentuk bebas.
+
+00:16:36.900 --> 00:16:39.400
+Namun, instruksi yang paling pintar tidak dapat menembus dosa estetik.
+
+00:16:39.900 --> 00:16:42.940
+Jika alur data Anda goyah di bawah lapisan medali yang tidak konsisten
+
+00:16:42.940 --> 00:16:43.960
+atau semantik yang hilang,
+
+00:16:44.080 --> 00:16:47.600
+semua pembatas ini sama saja dengan pidato tegas yang disampaikan di kapal yang tenggelam.
+
+00:16:47.600 --> 00:16:50.780
+Instruksi membatasi bahasa mereka tidak dapat menciptakan kebenaran.
+
+00:16:51.240 --> 00:16:53.620
+Itulah sebabnya penyetelan merupakan arsitektur loop tertutup
+
+00:16:53.620 --> 00:16:54.620
+yang mendefinisikan keandalan,
+
+00:16:54.760 --> 00:16:55.780
+semantik mendefinisikan makna,
+
+00:16:55.900 --> 00:16:57.240
+dan instruksi mendefinisikan kepatuhan.
+
+00:16:57.920 --> 00:16:59.660
+Alur kerja pragmatis terlihat seperti ini,
+
+00:16:59.860 --> 00:17:02.660
+membangun lapisan medali yang bersih mendefinisikan models.
+
+00:17:02.980 --> 00:17:03.660
+Mantik yang tepat,
+
+00:17:03.840 --> 00:17:05.960
+mewadikan definisi tersebut ke dalam instruksi sumber data,
+
+00:17:06.180 --> 00:17:08.200
+menyesuaikan kepribadian kopilot melalui instruksi agen,
+
+00:17:08.380 --> 00:17:09.420
+lalu mengujinya tanpa henti.
+
+00:17:10.000 --> 00:17:11.620
+Tiap anomali yang Anda deteksi sejak awal
+
+00:17:11.620 --> 00:17:13.980
+akan menghindarkan Anda dari email kemarahan ekskutif di kemudian hari.
+
+00:17:13.980 --> 00:17:15.300
+Jadi, disiplin itu penting.
+
+00:17:15.720 --> 00:17:17.360
+Itu tidak glamor, itu bukan keajaiban AI.
+
+00:17:18.140 --> 00:17:19.200
+Itu adalah penegakan aturan,
+
+00:17:19.340 --> 00:17:20.040
+clearing uang tunai,
+
+00:17:20.140 --> 00:17:20.980
+pengujian konsistensi,
+
+00:17:21.060 --> 00:17:22.400
+dan pemeriksaan harga diri sesekali
+
+00:17:22.400 --> 00:17:24.480
+ketika AI Anda masih bersiklas bahwa total penjualan
+
+00:17:24.480 --> 00:17:25.360
+sama dengan ongkos kotor
+
+00:17:25.360 --> 00:17:26.720
+ditambah pengembalian uang kos kotor
+
+00:17:26.720 --> 00:17:27.520
+ditambah keajaiban.
+
+00:17:28.540 --> 00:17:29.960
+Namun begitu disiplin itu melekat,
+
+00:17:30.060 --> 00:17:31.140
+kopilot menjadi sangat andal.
+
+00:17:32.000 --> 00:17:32.840
+Halusinasinya hilang,
+
+00:17:32.960 --> 00:17:34.220
+persendainya berperilaku baik,
+
+00:17:34.340 --> 00:17:35.620
+dan dashboard Anda berhenti menipu Anda.
+
+00:17:36.160 --> 00:17:37.520
+Anda dapat memperbaiki aturan.
+
+00:17:37.740 --> 00:17:38.220
+Di dalam fabrik,
+
+00:17:38.340 --> 00:17:40.660
+tetapi kejujuran kopilot masih bergantung pada arsitektur.
+
+00:17:40.660 --> 00:17:42.340
+di luar fabrik tata kelola sistemik
+
+00:17:42.340 --> 00:17:44.480
+yang mengawasi kebenaran di seluruh data estate Anda.
+
+00:17:45.260 --> 00:17:46.820
+Dan itulah yang akan kita tuju selanjutnya.
+
+00:17:47.640 --> 00:17:49.600
+Penyembuhan sistemik membangun kebenaran yang dapat diplikasi.
+
+00:17:50.060 --> 00:17:50.740
+Mari kita perbesar.
+
+00:17:51.200 --> 00:17:52.580
+Setelah semua penyetelan sinonim
+
+00:17:52.580 --> 00:17:53.720
+dan pelatihan kepatuhan AI
+
+00:17:53.720 --> 00:17:55.080
+masih ada satu fakta brutal,
+
+00:17:55.860 --> 00:17:58.320
+kebenaran kopilot bergantung pada integritas ekosistem Anda.
+
+00:17:58.500 --> 00:17:59.380
+Anda dapat melatihnya,
+
+00:17:59.560 --> 00:17:59.980
+memarahinya,
+
+00:18:00.140 --> 00:18:01.780
+dan memberinya penghargaan dengan sambungan yang jelas.
+
+00:18:01.880 --> 00:18:03.220
+Tetapi jika arsitektur di sekitar fabrik
+
+00:18:03.220 --> 00:18:04.180
+meneteskan data yang membusuk,
+
+00:18:04.240 --> 00:18:05.060
+meneteskan data yang membusuk,
+
+00:18:05.120 --> 00:18:06.320
+ya akan tetap berpohong dengan sopan.
+
+00:18:06.320 --> 00:18:08.680
+Yang Anda butuhkan adalah penyembuhan sistemik tata kelola,
+
+00:18:09.100 --> 00:18:10.100
+penegakan garis keturunan,
+
+00:18:10.220 --> 00:18:12.240
+dan disiplin arsitektur yang membuat kebohongan secara fisik
+
+00:18:12.240 --> 00:18:12.860
+menjadi tidak mungkin.
+
+00:18:13.480 --> 00:18:14.500
+Pada tingkat arsitektur,
+
+00:18:14.600 --> 00:18:16.420
+fabrik berhasil hanya jika semua yang ada di atas
+
+00:18:16.420 --> 00:18:18.280
+dan di bawahnya memiliki kompas moral yang sama
+
+00:18:18.280 --> 00:18:19.300
+tentang kebersihan data.
+
+00:18:19.900 --> 00:18:21.040
+Itu dimulai dengan penegakan skema.
+
+00:18:21.600 --> 00:18:23.520
+Setiap kumpulan data di leghouse dan gudang Anda
+
+00:18:23.520 --> 00:18:25.000
+memperlukan kunci, tipe data,
+
+00:18:25.220 --> 00:18:26.320
+dan hubungan yang ditentukan.
+
+00:18:27.160 --> 00:18:28.160
+Kontrak yang tidak dapat diubah
+
+00:18:28.160 --> 00:18:29.600
+yang menjelaskan bagaimana yang tidak saling terkait.
+
+00:18:30.160 --> 00:18:31.620
+Penyimpangan dalam satu tabel seharusnya
+
+00:18:31.620 --> 00:18:32.980
+tidak diam-diam menyebar ke lapisan osan.
+
+00:18:36.320 --> 00:18:37.860
+Berikan penyerapan hingga definisi selaras.
+
+00:18:38.580 --> 00:18:40.540
+Dalam prakteknya, ini tidak memperlambat pengembangan.
+
+00:18:40.700 --> 00:18:41.880
+Ini mencegah korupsi diam-diam
+
+00:18:41.880 --> 00:18:43.720
+sebelum bermetastasis ke jawaban kopilot.
+
+00:18:44.740 --> 00:18:46.540
+Selanjutnya, perkenalkan versi semantik.
+
+00:18:46.880 --> 00:18:48.200
+Perakomodan data Anda seperti perangkat Lung.
+
+00:18:48.640 --> 00:18:50.040
+Setiap kali Anda mengubah definisi,
+
+00:18:50.560 --> 00:18:51.360
+mengganti nama kolom,
+
+00:18:51.700 --> 00:18:52.500
+mengubah rumus ukuran,
+
+00:18:52.840 --> 00:18:53.720
+atau menyesuaikan hubungan,
+
+00:18:54.040 --> 00:18:54.700
+tingkatkan versi,
+
+00:18:55.420 --> 00:18:56.880
+fabrik tidak secara otomatis mengenali
+
+00:18:56.880 --> 00:18:58.560
+dampak filosofis dari pendapatan
+
+00:18:58.560 --> 00:19:00.760
+sama dengan bruto dikurangi diskon menjadi
+
+00:19:00.760 --> 00:19:02.960
+pendapatan sama dengan bersih setelah pajak.
+
+00:19:03.980 --> 00:19:04.640
+Manusia harus melakukan.
+
+00:19:04.640 --> 00:19:07.080
+Pembuatan versi menjaga riwayat garis keturunan
+
+00:19:07.080 --> 00:19:08.680
+memungkinkan Anda melacak jawaban kopilot
+
+00:19:08.680 --> 00:19:10.380
+malah yang mengandalkan semantik yang sudah ketinggalan jam.
+
+00:19:10.640 --> 00:19:12.340
+Tanpa itu, Anda tidak akan pernah mengaudit
+
+00:19:12.340 --> 00:19:13.340
+saat kebohongan mulai berada.
+
+00:19:14.040 --> 00:19:15.680
+Sekarang kaitkan peningkatan hukum dengan dokumentasi.
+
+00:19:16.000 --> 00:19:17.940
+Microsoft Purview atau katalog data one leg
+
+00:19:17.940 --> 00:19:18.760
+bukanlah wallpaper.
+
+00:19:19.620 --> 00:19:21.500
+Memori institusional lah yang mencegah amnesia skema.
+
+00:19:22.600 --> 00:19:24.380
+Kumpulan data tersertifikasi dalam katalog ini
+
+00:19:24.380 --> 00:19:25.760
+bertindak sebagai satu-satunya sumber
+
+00:19:25.760 --> 00:19:27.300
+yang diizinkan untuk kopilot dan powerbate.
+
+00:19:27.980 --> 00:19:29.720
+Anggaplah mereka sebagai entitas yang diaktakan
+
+00:19:29.720 --> 00:19:31.420
+representasi kebenaran yang meningkat secara hukum.
+
+00:19:32.100 --> 00:19:33.580
+Jika kumpulan data tidak tersertifikasi,
+
+00:19:34.640 --> 00:19:36.540
+dengan mengintegrasikan metadata Purview
+
+00:19:36.540 --> 00:19:38.320
+dengan agen data Fabric, Anda memastikan bahwa
+
+00:19:38.320 --> 00:19:39.820
+setiap situs query yang digerakkan oleh AI
+
+00:19:39.820 --> 00:19:41.200
+memiliki asal yang dapat diverifikasi.
+
+00:19:41.680 --> 00:19:43.600
+Ketika seorang bertanya, dari mana angka ini berasal?
+
+00:19:44.220 --> 00:19:44.980
+Anda benar dapat menjawab.
+
+00:19:45.720 --> 00:19:47.240
+Untuk kesinambungan konteks di seluruh sistem,
+
+00:19:47.360 --> 00:19:49.160
+aktifkan pencerminan dan pemodelan kembaran digital.
+
+00:19:50.300 --> 00:19:51.860
+Pencerminan mereplikasi sumber eksternal
+
+00:19:51.860 --> 00:19:53.400
+seperti SQL Server, Cosmos DB,
+
+00:19:53.660 --> 00:19:55.700
+atau PostgreSQL ke dalam Fabric secara real-time
+
+00:19:55.700 --> 00:19:57.180
+menjaga skema dan kesegaran.
+
+00:19:57.720 --> 00:19:59.420
+Ini adalah sistem kekebalan Fabric terhadap latensi
+
+00:19:59.420 --> 00:20:00.140
+dan ketidakcocokan.
+
+00:20:00.520 --> 00:20:02.780
+Pemodelan kembaran digital yang baru diperkenalkan
+
+00:20:02.780 --> 00:20:04.340
+melangkah lebih jauh.
+
+00:20:04.440 --> 00:20:06.020
+Ia membangun padanan digital langsung
+
+00:20:06.020 --> 00:20:07.720
+dari lingkungan fisik atau bisnis.
+
+00:20:09.120 --> 00:20:10.860
+Copilot kemudian dapat menanyakan kembaran ini,
+
+00:20:11.280 --> 00:20:12.700
+memahami hubungan seperti keluaran pabrik,
+
+00:20:13.000 --> 00:20:14.240
+mengaruhi penundaan transportasi.
+
+00:20:15.760 --> 00:20:17.400
+Hal ini menjaga penularannya tetap berlandaskan
+
+00:20:17.400 --> 00:20:18.740
+pada realitas yang tersinkronisasi,
+
+00:20:18.860 --> 00:20:19.600
+bukan ekstrak yang basi.
+
+00:20:20.000 --> 00:20:21.800
+Bahkan arsitektur terbaik pun mengalami pergeseran sering.
+
+00:20:22.200 --> 00:20:24.380
+Itulah sebabnya Anda melakukan audit kebenaran berkala,
+
+00:20:24.520 --> 00:20:26.080
+pemeriksaan ritual tempat keluaran AI
+
+00:20:26.080 --> 00:20:27.660
+memenuhi validasi sumber kebenaran.
+
+00:20:28.220 --> 00:20:29.780
+Anda memilih query yang representatif
+
+00:20:29.780 --> 00:20:31.100
+menjalankannya kembali secara manual
+
+00:20:31.100 --> 00:20:33.360
+atau melalui SGL yang tersimpan dan membandingkan hasilnya.
+
+00:20:34.200 --> 00:20:36.020
+Setiap perbedaan menandakan entropi arsitektur,
+
+00:20:36.200 --> 00:20:37.940
+sambungan yang rusak, ukuran yang menyimpang,
+
+00:20:38.060 --> 00:20:39.460
+atau garis keturunan yang kedaluarsa.
+
+00:20:40.200 --> 00:20:41.860
+Anggap saja ini sebagai tes polygraph untuk copilot.
+
+00:20:42.600 --> 00:20:43.620
+Dilakukan setiap 3 bulan,
+
+00:20:43.720 --> 00:20:46.180
+ini memungkinkan Anda mengkalibrasi ulang set instruksi dan semantik
+
+00:20:46.180 --> 00:20:48.540
+sebelum ketidakpercayaan meningkat menjadi rasa malu di ruang kapal.
+
+00:20:48.900 --> 00:20:51.120
+Yang terpenting, semua lapisan tumpukan analitik Anda,
+
+00:20:51.360 --> 00:20:53.000
+BI, copilot, ruang kerja fabrik,
+
+00:20:53.140 --> 00:20:54.660
+harus diambil dari satu sumber semantik.
+
+00:20:55.280 --> 00:20:56.540
+Kumpulan data bayangan adalah musuh.
+
+00:20:57.020 --> 00:20:58.920
+Setiap kali departemennya ambisius mengkloning model
+
+00:20:58.920 --> 00:21:01.880
+agar bergerak lebih cepat, ia menciptakan dialek kebenaran yang lain.
+
+00:21:02.420 --> 00:21:04.680
+Tiba-tiba, Power BI, copilot, dan Excel, copilot
+
+00:21:04.680 --> 00:21:06.480
+berbicara dalam tiga bahasa yang sedikit berbeda
+
+00:21:06.480 --> 00:21:07.660
+tentang angka pendapatan yang sama.
+
+00:21:08.520 --> 00:21:10.440
+Obatnya adalah kesatuan yang ditegakkan.
+
+00:21:10.580 --> 00:21:11.720
+Semantik terpusat dalam satu model,
+
+00:21:12.080 --> 00:21:13.600
+mengeksposnya hanya baca ke konsumen hilir,
+
+00:21:13.720 --> 00:21:16.080
+dan mengunci kepatuhan kebijakan kesertifikasi kumpulan data.
+
+00:21:16.960 --> 00:21:18.900
+Jika Johnny di bagian penjualan menginginkan metri khusus,
+
+00:21:18.980 --> 00:21:20.260
+ia bernegosiasi melalui tata kelola,
+
+00:21:20.420 --> 00:21:21.100
+bukan seluruh ansamik.
+
+00:21:21.500 --> 00:21:22.840
+Terakhir, tutup lingkaran pembelajar.
+
+00:21:22.840 --> 00:21:24.700
+Tata kelola bukanlah dokumen statis,
+
+00:21:24.700 --> 00:21:28.000
+melainkan dialog berkelanjutan antara analis manusia dan agen AEI.
+
+00:21:28.560 --> 00:21:30.200
+Manusia menyetel, copilot mengeksekusi,
+
+00:21:30.360 --> 00:21:32.100
+manusia memverifikasi, dan copilot meningkatkan
+
+00:21:32.100 --> 00:21:33.140
+melalui konteks yang diperbarui.
+
+00:21:34.180 --> 00:21:36.200
+Setiap iterasi mengajarkan sistem seperti apa,
+
+00:21:36.340 --> 00:21:37.140
+eksekusi yang jujur.
+
+00:21:37.820 --> 00:21:40.080
+Seiring waktu, umpan balik ini menjadi infrastruktur
+
+00:21:40.080 --> 00:21:41.780
+yang tidak terlihat, peranca akurasi.
+
+00:21:42.260 --> 00:21:43.340
+Jika Anda mencapai kematangan ini,
+
+00:21:43.460 --> 00:21:44.560
+sesuatu yang luar biasa terjadi.
+
+00:21:45.080 --> 00:21:47.600
+Copilot berhenti merasa seperti peramal yang tidak dapat diprediksi
+
+00:21:47.600 --> 00:21:49.260
+dan mulai berperilaku seperti analis junior,
+
+00:21:49.400 --> 00:21:50.900
+cepat, konsisten, berbeda dengan kebijakan.
+
+00:21:51.680 --> 00:21:52.720
+Halusinasi menguap, bukan.
+
+00:21:52.720 --> 00:21:54.740
+Karena AI tiba-tiba menjadi jujur,
+
+00:21:54.880 --> 00:21:57.560
+tetapi karena ketidakjujuran tidak lagi sesuai dengan struktur.
+
+00:21:58.220 --> 00:21:59.620
+Kebenaran menjadi jalan yang paling mudah,
+
+00:21:59.760 --> 00:22:01.340
+jadi penyembuhan sistemik bukanlah kemewahan,
+
+00:22:01.500 --> 00:22:02.360
+melainkan tata kelola.
+
+00:22:03.360 --> 00:22:05.440
+Pendegakan skema menjaga tulang tetap lurus,
+
+00:22:05.580 --> 00:22:06.940
+versi semantik mengingat sejarah,
+
+00:22:07.460 --> 00:22:09.200
+sertifikasi cakupan menjaga integritas,
+
+00:22:09.420 --> 00:22:12.220
+dan semantik sumber tunggal menjaga koherensi.
+
+00:22:13.500 --> 00:22:15.400
+Pencerminan menghubungkan realitas dengan refleksi,
+
+00:22:15.540 --> 00:22:17.380
+audit kebenaran menjaga keduanya tetap sinkron.
+
+00:22:17.880 --> 00:22:19.760
+Di antara keduanya, copilot tidak perlu menciptakan,
+
+00:22:19.760 --> 00:22:20.820
+ia hanya melaporkan.
+
+00:22:20.820 --> 00:22:23.360
+Setelah Anda menegakkan kebenaran secara struktural,
+
+00:22:23.480 --> 00:22:25.500
+Anda telah memperoleh hak untuk mengotomatiskan wawasan,
+
+00:22:25.580 --> 00:22:27.180
+dan itu membawa kita ke pelajaran terakhir,
+
+00:22:27.260 --> 00:22:30.200
+mengajar mesin untuk mengatakan kebenaran dengan desain depan persuasi.
+
+00:22:30.800 --> 00:22:32.320
+Mengajar copilot untuk mengatakan kebenaran.
+
+00:22:32.880 --> 00:22:34.300
+Copilot tidak pernah tidak dapat dipercaya,
+
+00:22:34.520 --> 00:22:35.040
+ia patuh.
+
+00:22:35.800 --> 00:22:38.160
+Ia menjawab dengan setiap kekacauan apapun yang Anda kodekan.
+
+00:22:38.980 --> 00:22:40.680
+Setelah Anda memberinya arsitektur yang disiplin,
+
+00:22:40.780 --> 00:22:41.580
+semantik yang konsisten,
+
+00:22:41.680 --> 00:22:42.660
+dan instruksi yang eksplisit,
+
+00:22:42.940 --> 00:22:44.500
+ia berhenti berhalusinasi bukan karena moralitas,
+
+00:22:44.600 --> 00:22:45.460
+tetapi karena kepercayaan.
+
+00:22:45.460 --> 00:22:47.360
+Berikut persamaan yang bertahan lama,
+
+00:22:47.620 --> 00:22:49.540
+lapisan medali yang bersih ditambah disiplin semantik,
+
+00:22:49.620 --> 00:22:52.440
+ditambah instruksi yang diatur sama dengan kebenaran AI yang dapat diverifikasi.
+
+00:22:52.960 --> 00:22:54.300
+Hilangkan ambiguitas pada sumbernya,
+
+00:22:54.500 --> 00:22:55.640
+dokumentasikan makna dengan tepat,
+
+00:22:55.760 --> 00:22:56.820
+uji keluaran secara teratur,
+
+00:22:56.920 --> 00:22:59.740
+dan copilot menjadi cermin yang dipoles untuk menjadi cerminkan fakta saja.
+
+00:23:00.500 --> 00:23:02.660
+Jika lingkungan kerja Anda masih membisikkan kontradiksi,
+
+00:23:02.800 --> 00:23:04.080
+inilah saatnya Anda mengauditnya.
+
+00:23:04.080 --> 00:23:05.820
+Terapkan kontrak skema,
+
+00:23:06.160 --> 00:23:07.260
+sertifikasi kumpulan data,
+
+00:23:07.460 --> 00:23:08.260
+buat versi semantik Anda,
+
+00:23:08.360 --> 00:23:09.880
+dan jalankan audit kebenaran tribulan Anda.
+
+00:23:10.440 --> 00:23:12.780
+Kemudian saksikan salcopilot berubah dari improvisasi yang percaya diri,
+
+00:23:12.840 --> 00:23:13.940
+menjadi rekan kerja yang dapat ditunuh.
+
+00:23:14.540 --> 00:23:15.480
+Akurasi bukanlah sihir,
+
+00:23:15.640 --> 00:23:16.300
+itu pemeliharaan.
+
+00:23:16.840 --> 00:23:17.880
+Bangun struktur yang sangat rapat,
+
+00:23:17.960 --> 00:23:19.400
+sehingga kebohongan secara fisik tidak dapat melewat.
+
+00:23:19.980 --> 00:23:20.500
+Lakukan itu,
+
+00:23:20.640 --> 00:23:22.700
+dan setiap perintah di masa mendatang tidak menghasilkan cerita,
+
+00:23:22.820 --> 00:23:23.280
+tetapi bernyakut.
+
+00:23:23.940 --> 00:23:25.120
+Jika ini menghemat waktu Anda,
+
+00:23:25.240 --> 00:23:26.340
+atau potensi rasa malu,
+
+00:23:26.580 --> 00:23:27.280
+bayarlah usaha Anda,
+
+00:23:27.580 --> 00:23:29.000
+berlangganan acara M365.
+
+00:23:29.000 --> 00:23:31.060
+Kami mengkhususkan diri dalam membuat
+
+00:23:31.060 --> 00:23:32.140
+iMicrosoft benar-benar andal.
+
+00:23:32.960 --> 00:23:34.620
+Tutorial berikutnya menyelami lebih dalam lagi
+
+00:23:34.620 --> 00:23:35.640
+teknik akurasi copilot.
+
+00:23:36.220 --> 00:23:37.440
+Efisensi adalah milik orang yang disiplik.
+
+00:23:37.900 --> 00:23:38.440
+Tetap ada di sini.

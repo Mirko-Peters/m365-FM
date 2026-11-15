@@ -1,0 +1,1003 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:05.200
+Dzisiejszy temat to coś, o czym słyszał prawie każdy, ale niewielu potrafi wyjaśnić mechanizm agenta AI.
+
+00:00:05.400 --> 00:00:09.380
+Pewnie widziałeś to w postach na blogach czy podczas prelekcji, ale co to właściwie oznacza?
+
+00:00:09.600 --> 00:00:14.060
+Rzecz w tym, większość ludzi uważa, że budowanie agenta AI polega na napisaniu idealnego promptu,
+
+00:00:14.140 --> 00:00:17.880
+tej jednej magicznej instrukcji, która sprawi, że model zrobi dokładnie to, czego chcesz.
+
+00:00:17.940 --> 00:00:20.520
+Ale to tak, jakby myśleć, że samochód to tylko silnik.
+
+00:00:20.720 --> 00:00:25.740
+Oczywiście silnik jest ważny, ale bez kół, kierownicy, hamulców i nadwozia nigdzie nie zajedziesz.
+
+00:00:25.740 --> 00:00:29.720
+Pod koniec tego odcinka zrozumiesz, czym naprawdę jest mechanizm agenta,
+
+00:00:29.920 --> 00:00:36.880
+dlaczego jest to kolejny etap ewolucji po inżynierii promptów i jak Microsoft AI Foundry wciela to w życie dla prawdziwych firm.
+
+00:00:37.360 --> 00:00:38.780
+Złap kawę i zaczynajmy.
+
+00:00:39.000 --> 00:00:40.880
+Dlaczego promptowanie już nie wystarcza?
+
+00:00:41.120 --> 00:00:42.200
+Wróćmy do wczesnych dni.
+
+00:00:42.400 --> 00:00:45.460
+Około lat 2022 do 2024 praca z AI była prosta.
+
+00:00:45.640 --> 00:00:47.420
+Pisałeś prompt i otrzymywałeś odpowiedź.
+
+00:00:47.520 --> 00:00:48.740
+Potrzebujesz szkicu e-maila?
+
+00:00:48.880 --> 00:00:49.540
+Napisz prompt.
+
+00:00:49.700 --> 00:00:51.180
+Potrzebujesz podsumowania artykułu?
+
+00:00:51.340 --> 00:00:52.020
+Napisz prompt.
+
+00:00:52.180 --> 00:00:54.680
+W przypadku prostych zadań typu Oneshot sprawdzało się to świetnie.
+
+00:00:54.680 --> 00:00:57.440
+Mogłeś o coś zapytać, a model udzielał rozsądnej odpowiedzi.
+
+00:00:57.620 --> 00:00:59.380
+Ale potem ludzie stali się bardziej ambitni.
+
+00:00:59.620 --> 00:01:02.040
+Zaczęli prosić te modele o wykonywanie prawdziwej pracy.
+
+00:01:02.320 --> 00:01:05.660
+Zbadaj temat i napisz raport, przeanalizuj kod i napraw błąd,
+
+00:01:05.720 --> 00:01:09.400
+albo obsłuż wieloetapową rozmowę z klientem od początku do końca.
+
+00:01:09.580 --> 00:01:11.720
+I nagle jeden prompt przestał wystarczać.
+
+00:01:11.900 --> 00:01:12.780
+Oto co się stało.
+
+00:01:12.960 --> 00:01:14.720
+Okno kontekstowe modelu zapełniało się.
+
+00:01:14.820 --> 00:01:18.920
+Zapominał on wcześniejsze instrukcje i zaczynał zmyślać fakty lub dawać niepełne wyniki.
+
+00:01:19.200 --> 00:01:22.560
+Im dłużej trwało zadanie, tym bardziej zawodne stawały się rezultaty.
+
+00:01:22.560 --> 00:01:24.400
+Pewnie sam tego doświadczyłeś.
+
+00:01:24.400 --> 00:01:27.700
+Prosisz a i o zrobienie czegoś złożonego, a pod koniec okazuje się,
+
+00:01:27.900 --> 00:01:30.060
+że zapomniało o co prosiłeś na samym początku.
+
+00:01:30.400 --> 00:01:33.840
+Wyobraź sobie, że prosisz jedną osobę o zbudowanie całego domu od podstaw
+
+00:01:33.840 --> 00:01:36.160
+za jednym podejściem bez sprawdzania jej pracy.
+
+00:01:36.440 --> 00:01:38.080
+Właśnie o to prosiliśmy te modele.
+
+00:01:38.320 --> 00:01:40.260
+Wyniki były dokładnie takie, jakich można było oczekiwać.
+
+00:01:40.340 --> 00:01:43.060
+Niedokończony dom z brakującymi ścianami i drzwiami, które się nie otwierają.
+
+00:01:43.380 --> 00:01:44.700
+Rozwiązaniem nie był lepszy prompt.
+
+00:01:44.960 --> 00:01:47.200
+Mógłbyś spędzić godziny na dopracowywaniu brzmienia,
+
+00:01:47.360 --> 00:01:49.320
+dodawaniu przykładów i uściślaniu instrukcji,
+
+00:01:49.320 --> 00:01:51.460
+a i tak zawiódłby w długich, złożonych zadaniach,
+
+00:01:51.460 --> 00:01:53.500
+ponieważ podstawowy problem nie leżał w prompcie.
+
+00:01:53.700 --> 00:01:55.780
+Problem tkwił w braku systemu wokół niego.
+
+00:01:56.080 --> 00:01:58.940
+Model nie potrzebował lepszych słów, ale lepszego wsparcia.
+
+00:01:59.180 --> 00:02:02.840
+Wtedy zaczęła się ewolucja od inżynierii promptów do inżynierii kontekstu.
+
+00:02:03.000 --> 00:02:04.340
+Trzy fazy ewolucji AI.
+
+00:02:04.620 --> 00:02:07.040
+Oto jak postrzegam ewolucję sztucznej inteligencji.
+
+00:02:07.240 --> 00:02:10.080
+Trzy fazy, z których każda zmienia punkt ciężkości dla inżynierów.
+
+00:02:10.220 --> 00:02:11.920
+Pierwszą fazą była inżynieria promptów.
+
+00:02:12.060 --> 00:02:14.820
+Trwała ona mniej więcej od 2022 roku do 2024 roku.
+
+00:02:14.820 --> 00:02:16.060
+Główne pytanie było proste.
+
+00:02:16.140 --> 00:02:17.340
+Co powinienem powiedzieć modelowi?
+
+00:02:17.480 --> 00:02:20.400
+Pisałeś jedną instrukcję, otrzymywałeś jedną odpowiedź i to wszystko.
+
+00:02:20.400 --> 00:02:22.840
+Cała sztuka polegała na doborze słów i to nie wypowiedzi.
+
+00:02:23.040 --> 00:02:24.840
+W przypadku podstawowych zadań to wystarczało.
+
+00:02:25.020 --> 00:02:29.220
+Następnie nadeszła druga faza inżynieria kontekstu od 2024 roku do 2025 roku.
+
+00:02:29.420 --> 00:02:32.540
+Pytanie zmieniło się z co mam powiedzieć, na co model powinien widzieć.
+
+00:02:32.820 --> 00:02:36.740
+Inżynierowie odkryli, że to, czym karmisz model, jest ważniejsze niż to, jak pytasz.
+
+00:02:36.960 --> 00:02:41.920
+Zbudowali więc systemy takie jak wywoływanie narzędzi RAK oraz protokół kontekstu modelu MCP.
+
+00:02:42.100 --> 00:02:45.080
+Pozwalają one modelowi pobierać odpowiednie informacje w locie.
+
+00:02:45.320 --> 00:02:49.540
+Zamiast upychać wszystko w jednym prompcie, model mógł pobrać to, czego potrzebował, kiedy tego potrzebował.
+
+00:02:49.540 --> 00:02:53.180
+Trzecia faza to etap, w którym jesteśmy teraz inżynieria uprzęży Harness Engineering.
+
+00:02:53.460 --> 00:02:57.800
+Od około 2026 roku pytanie brzmi, jaki system muszę zbudować wokół modelu?
+
+00:02:57.940 --> 00:03:04.820
+Tutaj robi się ciekawie, ponieważ niezawodność, pamięć, orkiestracja i zabezpieczenia nie pochodzą z samego modelu, lecz z systemu zbudowanego wokół niego.
+
+00:03:05.040 --> 00:03:07.140
+Oto najprostszy sposób, by o tym myśleć.
+
+00:03:07.240 --> 00:03:08.900
+Agent to model plus uprząż.
+
+00:03:09.020 --> 00:03:10.200
+Uprząż to cała reszta.
+
+00:03:10.440 --> 00:03:12.560
+Model wykonuje myślenie, uprząż wykonuje resztę.
+
+00:03:12.560 --> 00:03:15.580
+I ta uprząż to sekretny składnik, który sprawia, że wszystko działa.
+
+00:03:15.740 --> 00:03:19.640
+Pomyśl o tym tak, model to wykwalifikowany pracownik, bardzo utalentowany, ale ograniczony.
+
+00:03:19.820 --> 00:03:23.420
+Uprząż to warsztat, narzędzia, lista kontrolna, przełożony i hamulce.
+
+00:03:23.660 --> 00:03:25.780
+Bez warsztatu pracownik nie ma gdzie pracować.
+
+00:03:26.020 --> 00:03:27.640
+Bez narzędzi nie może nic zbudować.
+
+00:03:27.880 --> 00:03:29.700
+Bez listy kontrolnej zapomina o krokach.
+
+00:03:29.880 --> 00:03:32.800
+Bez przełożonego popełnia błędy, a bez hamulców wypala się.
+
+00:03:33.000 --> 00:03:34.600
+Uprząż zapewnia całą tę strukturę.
+
+00:03:34.720 --> 00:03:36.440
+Co więc dokładnie znajduje się w tej uprzęży?
+
+00:03:36.600 --> 00:03:39.000
+Otwórzmy ją, co tak naprawdę zawiera uprząż.
+
+00:03:39.160 --> 00:03:40.640
+Więc, co wchodzi w skład uprzęży?
+
+00:03:40.820 --> 00:03:42.580
+Przejdźmy przez te elementy jeden po drugim.
+
+00:03:42.720 --> 00:03:43.960
+Po pierwsze, pętla agenta.
+
+00:03:44.140 --> 00:03:45.880
+To cykl, który utrzymuje działanie agenta.
+
+00:03:46.140 --> 00:03:48.220
+Model myśli, a następnie decyduje się wywołać narzędzie.
+
+00:03:48.440 --> 00:03:50.120
+Narzędzie uruchamia się i odsyła wynik.
+
+00:03:50.340 --> 00:03:53.320
+Model patrzy na to, myśli ponownie i być może wywołuje inne narzędzie.
+
+00:03:53.520 --> 00:03:56.180
+Pętla trwa, dopóki agent nie osiągnie swojego celu.
+
+00:03:56.400 --> 00:03:59.940
+Bez tej pętli otrzymujesz tylko pojedyncze pytanie i pojedynczą odpowiedź.
+
+00:03:59.940 --> 00:04:03.260
+Dzięki niej masz system, który rozwiązuje problemy krok po kroku.
+
+00:04:03.500 --> 00:04:05.100
+Następnie, zarządzanie kontekstem.
+
+00:04:05.340 --> 00:04:08.080
+Jest to kluczowe, ponieważ modele mają ograniczony zakres uwagi.
+
+00:04:08.280 --> 00:04:11.120
+Ich okno kontekstowe może pomieścić tylko tyle, zanim wystąpi przepełnienie.
+
+00:04:11.320 --> 00:04:12.840
+Wkracza tutaj system pomocniczy.
+
+00:04:13.020 --> 00:04:16.880
+Kompresuje on konwersacje, podsumowuje wszystkie wiadomości i ustala priorytety.
+
+00:04:17.080 --> 00:04:19.560
+Pomyśl o tym, jak o systemie archiwizacji dla konwersacji.
+
+00:04:19.800 --> 00:04:22.400
+System ten porządkuje ją tak, by model widział tylko to, co istotne.
+
+00:04:22.600 --> 00:04:25.240
+Bez tego długie sesje tracą spójność, gdy model gubi wątek.
+
+00:04:25.240 --> 00:04:27.380
+Kolejną kwestią są narzędzia i umiejętności.
+
+00:04:27.580 --> 00:04:28.380
+To ręce agenta.
+
+00:04:28.660 --> 00:04:30.500
+Sam model potrafi jedynie generować tekst.
+
+00:04:30.500 --> 00:04:33.860
+Nie potrafi odczytać pliku, przeglądać sieci, uruchomić kodu, ani odpytać bazy danych.
+
+00:04:34.100 --> 00:04:35.980
+System pomocniczy nadaje mu te możliwości.
+
+00:04:36.260 --> 00:04:41.180
+Dostęp do plików, przeglądanie sieci, wykonywanie kodu, zapytania do bazy – wszystko to zapewnia system.
+
+00:04:41.520 --> 00:04:44.500
+Model decyduje, kiedy ich użyć, a system sprawia, że działają.
+
+00:04:44.700 --> 00:04:47.000
+Pamięć i trwałość sesji to kolejny ważny element.
+
+00:04:47.280 --> 00:04:52.120
+System pomocniczy zapamiętuje poprzednie sesje, więc kiedy wracasz do agenta następnego dnia, nie zaczyna on od zera.
+
+00:04:52.120 --> 00:04:55.420
+Pamięta Twoje preferencje, kontekst projektu i podjęte decyzje.
+
+00:04:55.600 --> 00:04:58.420
+Agent uczy się z czasem, ponieważ system przechowuje te historie.
+
+00:04:58.680 --> 00:05:01.980
+Zabezpieczenia to warstwa bezpieczeństwa, limity nakładane na zachowanie agenta.
+
+00:05:02.140 --> 00:05:03.980
+Pomyśl o tym jako o regulaminie agenta.
+
+00:05:04.220 --> 00:05:11.060
+Maksymalna liczba kroków, niedozwolone działania, wymóg akceptacji przez człowieka przy ryzykownych ruchach, takich jak zapisywanie plików czy wysyłanie e-maili.
+
+00:05:11.260 --> 00:05:15.140
+Bez zabezpieczeń agent mógłby działać w nieskończoność lub zrobić coś, czego nie planowałeś.
+
+00:05:15.360 --> 00:05:16.960
+System pomocniczy trzyma go w ryzach.
+
+00:05:16.960 --> 00:05:18.360
+Na koniec orkiestracja.
+
+00:05:18.620 --> 00:05:22.000
+System może uruchamiać wyspecjalizowanych subagentów do różnych zadań.
+
+00:05:22.200 --> 00:05:24.960
+Jeden zajmuje się badaniami, drugi pisaniem, a trzeci weryfikacją.
+
+00:05:25.960 --> 00:05:28.680
+Współpracują jak zespół specjalistów na placu budowy.
+
+00:05:28.920 --> 00:05:32.940
+Każdy robi to, w czym jest najlepszy, a system dba, by nie wchodzili sobie w drogę.
+
+00:05:33.100 --> 00:05:34.740
+Te elementy to nie tylko teoria.
+
+00:05:35.040 --> 00:05:38.400
+Microsoft stworzył pełną platformę, która wprowadza to wszystko w życie.
+
+00:05:38.680 --> 00:05:41.960
+Przedstawiamy Microsoft AI Foundry, korporacyjny system pomocniczy.
+
+00:05:42.140 --> 00:05:44.620
+Tą platformą jest właśnie Microsoft AI Foundry.
+
+00:05:44.620 --> 00:05:48.760
+Pomyśl o tym, jak o kompletnym warsztacie do tworzenia i uruchamiania agentów, a i na dużą skalę.
+
+00:05:48.880 --> 00:05:52.480
+A kiedy mówię skala, mam na myśli prawdziwą skalę, a nie eksperyment laboratoryjny.
+
+00:05:52.680 --> 00:05:58.700
+Foundry obsługuje dziś ponad 70 tysięcy klientów, a w samym ostatnim kwartale przetworzyło 100 bilionów tokenów.
+
+00:05:58.820 --> 00:06:00.640
+To 100 bilionów to nie literówka.
+
+00:06:00.880 --> 00:06:04.060
+Każdego dnia obsługuje 2 miliardy korporacyjnych zapytań wyszukiwania.
+
+00:06:04.220 --> 00:06:07.520
+To platforma produkcyjna obsługująca jedne z największych obciążeń na świecie.
+
+00:06:07.740 --> 00:06:10.720
+Foundry w praktyce dostarcza ten system jako usługę zarządzaną.
+
+00:06:10.720 --> 00:06:15.860
+Nie musisz tworzyć od zera zarządzania kontekstem pamięci, zabezpieczeń ani koordynacji, bo wszystko jest już wbudowane.
+
+00:06:16.040 --> 00:06:18.860
+Ty dostarczasz agenta, a Foundry zapewnia dla niego środowisko pracy.
+
+00:06:19.140 --> 00:06:20.540
+Porozmawiajmy teraz o tożsamości.
+
+00:06:20.720 --> 00:06:21.820
+To bardzo ważna kwestia.
+
+00:06:22.040 --> 00:06:24.640
+Każdy agent w Foundry otrzymuje własny identyfikator Entra.
+
+00:06:24.840 --> 00:06:26.620
+W zasadzie jest to tożsamość cyfrowa.
+
+00:06:26.780 --> 00:06:29.660
+Pomyśl o tym, jak o identyfikatorze pracownika wydanym przez recepcję.
+
+00:06:29.880 --> 00:06:34.720
+Agent może logować się do usług, uzyskiwać dostęp do danych i działać w imieniu organizacji, zupełnie jak pracownik.
+
+00:06:34.900 --> 00:06:38.360
+A ponieważ każde działanie jest powiązane z tą tożsamością, podlega ono pełnemu audytowi.
+
+00:06:38.360 --> 00:06:41.700
+Dlaczego to ma znaczenie? W przedsiębiorstwie musisz wiedzieć, kto co zrobił.
+
+00:06:41.800 --> 00:06:43.980
+Każde działanie jest rejestrowane i możliwe do wyśledzenia.
+
+00:06:44.200 --> 00:06:50.240
+Foundry łączy się z ponad 1400 źródłami danych korporacyjnych, od SharePoint i Dynamics 365 po Salesforce i własne bazy danych.
+
+00:06:50.420 --> 00:06:53.480
+Jeśli twoja firma z tego korzysta, Foundry prawdopodobnie ma odpowiedni konektor.
+
+00:06:53.700 --> 00:06:55.400
+Agent więc nie zgaduje ani nie zmyśla.
+
+00:06:55.600 --> 00:07:00.060
+Pobiera rzeczywiste dane z rzeczywistych systemów, co oznacza, że odpowiedzi opierają się na twoich faktycznych danych biznesowych.
+
+00:07:00.300 --> 00:07:01.400
+Następnie mamy pamięć.
+
+00:07:01.540 --> 00:07:03.300
+Foundry zawiera wbudowane typy pamięci.
+
+00:07:03.500 --> 00:07:06.160
+Pamięć proceduralna pomaga agentowi uczyć się na podstawie poprzednich zadań.
+
+00:07:06.160 --> 00:07:08.640
+Z czasem staje się lepszy, niczym podczas szkolenia w pracy.
+
+00:07:08.840 --> 00:07:13.200
+Trwałość sesji oznacza, że pamięta poprzednie rozmowy, więc nie zaczyna od zera za każdym razem, gdy z nim rozmawiasz.
+
+00:07:13.380 --> 00:07:15.920
+Dzięki temu interakcje wydają się płynne i inteligentne.
+
+00:07:16.120 --> 00:07:17.080
+Jak to właściwie działa?
+
+00:07:17.360 --> 00:07:21.100
+Przeanalizujmy komponenty, które Microsoft udostępnia do tworzenia niestandardowych struktur.
+
+00:07:21.300 --> 00:07:23.820
+Framework agenta – tworzenie niestandardowych struktur.
+
+00:07:24.060 --> 00:07:26.120
+Jak więc faktycznie zbudować taką strukturę?
+
+00:07:26.320 --> 00:07:32.320
+Microsoft udostępnia dedykowany zestaw SDK o nazwie Microsoft Agent Framework, znany wcześniej jako Semantic Kernel.
+
+00:07:32.320 --> 00:07:34.660
+Został przebudowany, ale idea pozostała ta sama.
+
+00:07:34.820 --> 00:07:38.140
+Pozwala on programistom tworzyć niestandardowe struktury agentów w Pythonie i C-Kratka.
+
+00:07:38.360 --> 00:07:40.000
+Framework składa się z trzech warstw.
+
+00:07:40.180 --> 00:07:45.680
+Na dole znajduje się pętla agenta – główny cykl wnioskowania, w którym model myśli wywołuje narzędzia, otrzymuje wyniki i myśli ponownie.
+
+00:07:45.840 --> 00:07:49.600
+Na tym opierają się przepływy pracy, czyli wzorce koordynacji zarządzające wieloma agentami.
+
+00:07:49.760 --> 00:07:53.420
+A całość spina warstwa struktury, czyli powłoka, która trzyma to wszystko w ryzach.
+
+00:07:53.620 --> 00:07:56.440
+Microsoft dostarcza pięć wbudowanych wzorców koordynacji.
+
+00:07:56.740 --> 00:07:59.880
+Sekwencyjny uruchamia agentów jednego po drugim w określonej kolejności.
+
+00:07:59.880 --> 00:08:02.120
+Równoległy uruchamia ich wszystkich jednocześnie.
+
+00:08:02.260 --> 00:08:05.580
+Przekazanie kontroli przenosi zadanie z jednego agenta na drugiego w zależności od potrzeb.
+
+00:08:05.760 --> 00:08:08.940
+Czad grupowy pozwala wielu agentom rozmawiać w ramach jednej konwersacji.
+
+00:08:09.180 --> 00:08:11.740
+Jest też Magentic, menedżer z Microsoft Research.
+
+00:08:11.960 --> 00:08:19.360
+Tutaj agent nadzorujący generuje plan, a następnie deleguje pracę wyspecjalizowanym pod agentom, jak kierownik projektu przydzielający zadania członkom zespołu.
+
+00:08:19.540 --> 00:08:22.180
+Każdy wzorzec rozwiązuje inny problem koordynacyjny.
+
+00:08:22.340 --> 00:08:23.380
+Oto najlepsza część.
+
+00:08:23.600 --> 00:08:25.120
+Framework jest rozszerzalny.
+
+00:08:25.120 --> 00:08:31.900
+Możesz podłączyć dowolny model od OpenAI, Anthropic i Google Gemini po Amazon Bedrock, a nawet lokalne modele na Allama.
+
+00:08:32.120 --> 00:08:33.380
+To samo dotyczy narzędzi.
+
+00:08:33.580 --> 00:08:37.020
+Łączysz się przez OpenAI, protokół kontekstu modelu lub bezpośredni kod.
+
+00:08:37.180 --> 00:08:40.860
+Niektórzy obawiają się, że używanie frameworka Microsoftu zamyka Cię w ich ekosystemie.
+
+00:08:40.980 --> 00:08:41.600
+To nieprawda.
+
+00:08:41.760 --> 00:08:44.880
+Ten framework współpracuje z każdym stosem technologicznym, którego już używasz.
+
+00:08:45.040 --> 00:08:49.720
+Warstwa Harness dodaje możliwości takie jak dostęp do plików, wykonywanie kodu, oprogramowanie pośredniczące, planowania i telemetria.
+
+00:08:49.720 --> 00:08:56.240
+Więc budowa agenta za pomocą tego frameworka oznacza stworzenie kompletnego systemu, który czyta pliki, pisze kod, planuje wieloetapowe zadania i rejestruje wszystko w celach debugowania.
+
+00:08:56.400 --> 00:08:58.240
+To coś więcej niż tylko interfejs czatu.
+
+00:08:58.420 --> 00:08:59.300
+Oto jak to wygląda.
+
+00:08:59.560 --> 00:09:02.220
+Wyobraź sobie agenta programistycznego zbudowanego na tym frameworku.
+
+00:09:02.420 --> 00:09:05.620
+Dajesz mu zadanie, powiedzmy, dodanie nowej funkcji do istniejącej bazy kodu.
+
+00:09:05.820 --> 00:09:08.580
+Agent zaczyna od przeglądania dokumentacji, aby zrozumieć API.
+
+00:09:08.580 --> 00:09:09.860
+Następnie pisze kod.
+
+00:09:09.980 --> 00:09:12.360
+Potem uruchamia testy, aby upewnić się, że nic się nie zepsuło.
+
+00:09:12.500 --> 00:09:19.800
+Jeśli test zawiedzie, odczytuje błąd, naprawia usterkę i uruchamia testy ponownie wszystko w ramach tego samego Harness, zapętlając cykl myślenia, działania i sprawdzania, aż zadanie zostanie wykonane.
+
+00:09:20.000 --> 00:09:22.480
+Bez tej warstwy musiałbyś ręcznie wprowadzać każdy krok.
+
+00:09:22.700 --> 00:09:25.220
+Dzięki niej agent zajmuje się całym procesem samodzielnie.
+
+00:09:25.440 --> 00:09:28.380
+Jednym z popularnych przykładów działania Harness jest wzorzec CLAV.
+
+00:09:28.580 --> 00:09:32.940
+Microsoft udostępnił go w Foundry i jest to świetna demonstracja tego, jak te elementy łączą się w całość.
+
+00:09:33.140 --> 00:09:34.780
+Agenci w stylu CLAV i Herme.
+
+00:09:34.780 --> 00:09:36.780
+Porozmawiajmy o agentach typu CLAV.
+
+00:09:36.940 --> 00:09:39.800
+Nazwa pochodzi od projektów open source, takich jak OpenCLAV.
+
+00:09:39.900 --> 00:09:44.200
+Ci agenci żyją na Twojej maszynie, czekają na instrukcje, a następnie samodzielnie wykonują długie zadania.
+
+00:09:44.440 --> 00:09:46.580
+Są zawsze gotowi do działania, gdy ich potrzebujesz.
+
+00:09:46.760 --> 00:09:49.960
+Pomyśl o nich jak o osobistym asystencie, który nigdy nie bierze dnia wolnego.
+
+00:09:50.200 --> 00:09:52.020
+Wersja Microsoftu nazywa się Hermes.
+
+00:09:52.240 --> 00:09:56.440
+Działa wewnątrz hostowanego przez Foundry piaskownicy agentów i posiada imponujące możliwości.
+
+00:09:56.700 --> 00:09:59.980
+Hermes ma własny system plików, własną pamięć i własny zestaw narzędzi.
+
+00:09:59.980 --> 00:10:04.180
+Może ustawiać własne procedury konserwacji, czyszcząc stare pliki i organizując swój obszar roboczy.
+
+00:10:04.320 --> 00:10:07.720
+A jeśli zorientuje się, że potrzebuje nowej umiejętności, której nie posiada, może ją zbudować w locie.
+
+00:10:07.860 --> 00:10:09.880
+A teraz oto kluczowa kwestia dotycząca agentów CLAV.
+
+00:10:10.020 --> 00:10:12.240
+Architekci chmury nazywają je zwierzętami domowymi, a nie bydłem.
+
+00:10:12.440 --> 00:10:13.760
+Zwierzęta domowe są wyjątkowe.
+
+00:10:13.960 --> 00:10:16.200
+Nadajesz im imiona, dbasz o nie i nie możesz ich łatwo zastąpić.
+
+00:10:16.380 --> 00:10:19.440
+Bydło jest wymienne, więc jeśli jedno padnie, uruchamiasz kolejne.
+
+00:10:19.600 --> 00:10:21.500
+Agenci CLAV to zdecydowanie zwierzęta domowe.
+
+00:10:21.500 --> 00:10:24.400
+Każdy z nich ma swój własny stan, historię i wyuczone zachowania.
+
+00:10:24.600 --> 00:10:28.240
+Ta wyjątkowość czyni je potężnymi, ale też utrudnia odzyskiwanie i skalowanie.
+
+00:10:28.520 --> 00:10:33.620
+Jeśli coś pójdzie nie tak, nie możesz po prostu usunąć instancji i zacząć od nowa, bo stracisz całą zgromadzoną wiedzę.
+
+00:10:33.860 --> 00:10:36.240
+Rozwiązaniem firmy Microsoft są tak zwane procedury.
+
+00:10:36.400 --> 00:10:41.240
+To zaplanowane zadania, które pozwalają agentowi obudzić się, wykonać prace konserwacyjne, a następnie wrócić do snu.
+
+00:10:41.420 --> 00:10:47.180
+Zamiast utrzymywać piaskownicę działającą 24 siódmych, co kosztuje, agent wyłącza się po okresie braku aktywności.
+
+00:10:47.180 --> 00:10:53.660
+System procedur wybudza go, gdy trzeba coś zrobić, np. oczyścić stare umiejętności, wykonać kopię zapasową lub sprawdzić nowe zadania.
+
+00:10:53.880 --> 00:10:55.040
+Następnie wraca do snu.
+
+00:10:55.200 --> 00:10:58.740
+Oszczędza to koszty, jednocześnie zapewniając dostępność agenta, gdy go potrzebujesz.
+
+00:10:58.980 --> 00:11:00.700
+Piaskownica izoluje każdą sesję.
+
+00:11:00.900 --> 00:11:05.420
+Pliki, pamięć i konfiguracja twojego agenta pozostają zamknięte w jego własnym środowisku.
+
+00:11:05.620 --> 00:11:11.040
+A system zarządzania obsługuje ten stan między sesjami, więc nie musisz się martwić o wyciek danych jednego agenta do drugiego.
+
+00:11:11.300 --> 00:11:15.220
+Budowa własnego systemu od podstaw jest możliwa, ale większość firm tego nie potrzebuje.
+
+00:11:15.220 --> 00:11:19.020
+Foundry zapewnia gotową platformę ze wszystkimi tymi wbudowanymi funkcjami.
+
+00:11:19.180 --> 00:11:21.520
+Prawdziwe pytanie brzmi, co ma robić twój agent?
+
+00:11:21.880 --> 00:11:24.780
+Publikacja i współpraca, gdzie systemy spotykają się z ludźmi.
+
+00:11:25.000 --> 00:11:28.580
+Zbudowałeś więc swojego agenta, wyposażyłeś go w narzędzia, pamięć, orkiestrację i piaskownicę.
+
+00:11:28.720 --> 00:11:30.280
+A teraz, jak ludzie będą go używać?
+
+00:11:30.420 --> 00:11:32.320
+W tym miejscu Foundry ułatwia sprawę.
+
+00:11:32.500 --> 00:11:38.120
+Gdy agent jest zbudowany i wdrożony, możesz opublikować go w Microsoft 365, kopilot w Microsoft Teams jednym kliknięciem.
+
+00:11:38.120 --> 00:11:41.480
+Nie 10 kliknięć, nie 3-dniowy proces wdrażania, tylko jedno kliknięcie.
+
+00:11:41.600 --> 00:11:45.740
+I twój agent pojawia się dokładnie tam, gdzie ludzie już pracują w ich poczcie, czatach i dokumentach.
+
+00:11:45.920 --> 00:11:47.720
+Foundry obsługuje dwa tryby wdrażania.
+
+00:11:47.900 --> 00:11:49.540
+Po pierwsze, agenci wspomagający.
+
+00:11:49.760 --> 00:11:53.580
+Działają oni w twoim imieniu, tworząc projekty e-maili, planując spotkania czy wyszukując dokumenty.
+
+00:11:53.780 --> 00:11:57.860
+Działają jak twoje przedłużenie, jak bardzo szybki asystent, który wykonuje twoje polecenia.
+
+00:11:58.020 --> 00:11:59.600
+Po drugie, agenci autonomiczni.
+
+00:11:59.840 --> 00:12:01.500
+Są oni nowsi i bardziej interesujący.
+
+00:12:01.740 --> 00:12:04.480
+Działają we własnym imieniu, mając własny adres e-mail i własną tożsamość.
+
+00:12:04.480 --> 00:12:06.420
+Nie musisz ich za każdym razem prosić o reakcję.
+
+00:12:06.600 --> 00:12:07.700
+Przejmują inicjatywę.
+
+00:12:07.840 --> 00:12:09.960
+Agenci autonomiczni posiadają pełne konto użytkownika.
+
+00:12:10.220 --> 00:12:13.260
+Możesz dodać ich do czatu grupowego w Teams tak samo, jak dodałbyś ludzkiego współpracownika.
+
+00:12:13.500 --> 00:12:16.760
+Śledzą konwersacje i włączają się, gdy mogą pomóc, śledząc otwarte zadania,
+
+00:12:16.880 --> 00:12:20.280
+odpowiadając na pytania o pracę zespołu, a nawet wdrażając nowych członków zespołu
+
+00:12:20.280 --> 00:12:23.580
+przez przesyłanie im odpowiednich dokumentów i przedstawianie właściwym osobom.
+
+00:12:23.720 --> 00:12:24.760
+Oto konkretny przykład.
+
+00:12:25.020 --> 00:12:27.260
+Załóżmy, że masz agenta zarządzającego przepływem pracy.
+
+00:12:27.520 --> 00:12:29.180
+Dodajesz go do swojego czatu grupowego w Teams.
+
+00:12:29.180 --> 00:12:32.000
+Ktoś mówi, hej, potrzebuje raportu za trzeci kwartał na piątek.
+
+00:12:32.140 --> 00:12:34.000
+Agent zauważa, że to zadanie do wykonania.
+
+00:12:34.200 --> 00:12:38.600
+Tworzy zadanie, przypisuje je do odpowiedniej osoby i dodaje przypomnienie na czwartek, aby sprawdzić postępy.
+
+00:12:38.820 --> 00:12:40.060
+Nikt mu nie kazał tego robić.
+
+00:12:40.260 --> 00:12:42.600
+Po prostu zobaczył coś, co trzeba zrobić i to zrobił.
+
+00:12:42.760 --> 00:12:44.720
+Harness zarządza wszystkimi uprawnieniami w tle.
+
+00:12:44.940 --> 00:12:47.940
+Tylko upoważnieni użytkownicy mogą wchodzić w interakcję z agentem na czacie grupowym.
+
+00:12:48.160 --> 00:12:50.780
+Agent widzi tylko te wiadomości, które ma prawo widzieć, a resztę ignoruje.
+
+00:12:50.960 --> 00:12:53.520
+Przestrzega tych samych kontroli dostępu, co członkowie twojego zespołu.
+
+00:12:53.520 --> 00:12:55.780
+Oto dlaczego inżynieria Harness naprawdę się opłaca.
+
+00:12:55.940 --> 00:12:58.680
+Agent przestaje być hotbotem, którego otwierasz w karcie przeglądarki.
+
+00:12:58.880 --> 00:13:00.580
+Staje się produktywnym członkiem zespołu.
+
+00:13:00.820 --> 00:13:04.340
+Jest tam, gdzie ty pracuje tak jak twój zespół, a wszystko to możliwe dzięki temu,
+
+00:13:04.500 --> 00:13:08.980
+że Harness system otaczający model zarządza tożsamością, uprawnieniami, wdrażaniem i integracją.
+
+00:13:09.240 --> 00:13:11.800
+Bez Harness miałbyś tylko kolejne okno czatu do sprawdzania.
+
+00:13:12.020 --> 00:13:13.520
+Jednak każde potężne narzędzie wymaga zabezpieczeń.
+
+00:13:14.160 --> 00:13:16.580
+Porozmawiajmy o mechanizmach kontrolnych, które czynią to wszystko bezpiecznym.
+
+00:13:16.720 --> 00:13:19.100
+Odpowiedzialna sztuczna inteligencja i ład korporacyjny w systemie Harness.
+
+00:13:19.100 --> 00:13:19.980
+Oto w czym rzecz.
+
+00:13:20.140 --> 00:13:22.840
+Inżynieria Harness nie polega tylko na zwiększaniu możliwości agentów.
+
+00:13:23.040 --> 00:13:25.300
+Chodzi o to, by uczynić je bezpiecznymi i godnymi zaufania.
+
+00:13:25.520 --> 00:13:28.660
+Agent, który potrafi wysyłać e-maile, modyfikować pliki i działać na czatach grupowych,
+
+00:13:28.760 --> 00:13:30.420
+jest potężny, ale ta moc wymaga kontroli.
+
+00:13:30.560 --> 00:13:32.880
+Pomyśl o tym, jak oddaniu pracownikowi kluczy do budynku.
+
+00:13:33.120 --> 00:13:36.120
+Chcesz, żeby wykonywał swoją pracę, ale ustalasz też zasady dotyczące tego,
+
+00:13:36.220 --> 00:13:37.180
+do czego i kiedy ma dostęp.
+
+00:13:37.380 --> 00:13:41.260
+Podejście firmy Microsoft opiera się na standardzie odpowiedzialnej sztucznej inteligencji.
+
+00:13:41.260 --> 00:13:45.660
+Sześć zasad wyznacza wszystko sprawiedliwość, niezawodność i bezpieczeństwo,
+
+00:13:45.660 --> 00:13:49.060
+prywatność, inkluzywność, przejrzystość i odpowiedzialność.
+
+00:13:49.240 --> 00:13:51.520
+To nie tylko ładne hasła wypisane na plakacie.
+
+00:13:51.720 --> 00:13:55.420
+To rzeczywisty fundament, na którym od podstaw zaprojektowano całą platformę.
+
+00:13:55.620 --> 00:13:58.440
+Harness to miejsce, w którym te zasady stają się rzeczywistym kodem.
+
+00:13:58.620 --> 00:14:00.700
+Mechanizmy ochronne ograniczają działania agenta.
+
+00:14:00.920 --> 00:14:04.460
+Haki cyklu życia pozwalają egzekwować zasady na każdym etapie pracy agenta.
+
+00:14:04.660 --> 00:14:07.240
+Przed uruchomieniem agenta, po nim, przed wywołaniem narzędzia,
+
+00:14:07.240 --> 00:14:10.540
+po uzyskaniu wyniku możesz wstawić własne kontrole w dowolnym momencie.
+
+00:14:10.840 --> 00:14:13.360
+Chcesz zablokować agentowi dostęp do określonych baz danych?
+
+00:14:13.360 --> 00:14:17.120
+Możesz to zrobić. Chcesz wymagać zatwierdzenia przez człowieka, zanim agent wyśle e-mail?
+
+00:14:17.240 --> 00:14:20.200
+To również możesz zrobić. Obie te rzeczy można łatwo skonfigurować.
+
+00:14:20.400 --> 00:14:23.840
+Well-Architected Framework platformy Azure zawiera dedykowane wskazówki dla obciążeń AI.
+
+00:14:24.040 --> 00:14:26.780
+Obejmuje wszystko od szyfrowania danych po reagowanie na incydenty.
+
+00:14:27.040 --> 00:14:31.620
+Chodzi o to, że budowanie systemu AI nie różni się zasadniczo od budowania jakiegokolwiek innego systemu dla przedsiębiorstw.
+
+00:14:31.800 --> 00:14:34.800
+Nadal potrzebujesz bezpieczeństwa, niezawodności i doskonałości operacyjnej.
+
+00:14:34.800 --> 00:14:38.900
+Well-Architected Framework oferuje uporządkowane podejście do tych kwestii, byś się w tym nie pogubił.
+
+00:14:39.040 --> 00:14:41.080
+Oprócz tego istnieje Cloud Adoption Framework.
+
+00:14:41.080 --> 00:14:43.580
+Zapewnia on czterostopniowy proces zarządzania sztuczną inteligencją.
+
+00:14:43.700 --> 00:14:46.300
+Po pierwsze, identyfikacja zagrożeń. Co może pójść nie tak?
+
+00:14:46.440 --> 00:14:48.860
+Po drugie, pomiar skutków. Jak poważne mogą być konsekwencje?
+
+00:14:48.980 --> 00:14:52.120
+Po trzecie, mitygacja za pomocą kontroli. Jakie mechanizmy wdrożyć, by temu zapobiec?
+
+00:14:52.260 --> 00:14:55.680
+Po czwarte, działanie z monitoringiem. Jak wykrywać problemy, gdy się pojawią?
+
+00:14:55.840 --> 00:14:59.960
+To praktyczne podejście krok po kroku, które zmienia abstrakcyjne obawy w konkretne działania.
+
+00:14:59.960 --> 00:15:03.180
+W przypadku systemów agentowych oznacza to kilka kluczowych kwestii.
+
+00:15:03.320 --> 00:15:06.100
+Limity liczby kroków, aby agent nie działał w nieskończoność.
+
+00:15:06.240 --> 00:15:08.880
+Ograniczenia narzędzi, by miał dostęp tylko do tego, co niezbędne.
+
+00:15:09.060 --> 00:15:11.180
+Wymóg akceptacji przez człowieka przy działaniach wysokiego ryzyka.
+
+00:15:11.400 --> 00:15:14.080
+Ścieżki audytu, dzięki którym każda decyzja jest rejestrowana i możliwa do sprawdzenia.
+
+00:15:14.300 --> 00:15:17.620
+Filtry bezpieczeństwa treści, które wyłapują problematyczne wyniki, zanim ktokolwiek je zobaczy.
+
+00:15:17.820 --> 00:15:20.500
+Każdy element współpracuje, by trzymać agenta na krótkiej smyczy.
+
+00:15:20.720 --> 00:15:24.120
+Microsoft zapewnia wbudowane zabezpieczenia treści i ewaluatory w ramach Foundry.
+
+00:15:24.120 --> 00:15:27.200
+Możesz przetestować agenta według określonych kryteriów przed wdrożeniem.
+
+00:15:27.200 --> 00:15:28.300
+Czy trzyma się tematu?
+
+00:15:28.440 --> 00:15:30.200
+Czy odpowiednio obsługuje wrażliwe dane?
+
+00:15:30.380 --> 00:15:32.620
+Czy odrzuca prośby, których nie powinien spełniać?
+
+00:15:32.760 --> 00:15:37.340
+Możesz automatycznie uruchamiać te oceny i uzyskać wynik przed udostępnieniem agenta zespołowi.
+
+00:15:37.560 --> 00:15:40.800
+W ten sposób wykrywasz problemy wcześniej, a nie dopiero gdy coś pójdzie nie tak.
+
+00:15:40.980 --> 00:15:45.340
+Oto pełny obraz od prostego zapytania pobezpiecznego, produkcyjnego agenta autonomicznego.
+
+00:15:45.340 --> 00:15:51.540
+Model wykonuje pracę myślową, a cała otoczka zajmuje się resztą, koordynacją, zabezpieczeniami i zarządzaniem.
+
+00:15:51.720 --> 00:15:53.460
+Podsumujmy zatem te transformacje.
+
+00:15:53.740 --> 00:15:55.300
+Zaczęliśmy od prostego promptowania.
+
+00:15:55.520 --> 00:15:57.420
+Wpisujesz zapytanie, otrzymujesz odpowiedź.
+
+00:15:57.500 --> 00:15:59.000
+To sprawdzało się w prostych zadaniach.
+
+00:15:59.180 --> 00:16:00.860
+Potem przeszliśmy do inżynierii kontekstu.
+
+00:16:01.060 --> 00:16:03.900
+Zarządzaj tym, co widzi model, ładując odpowiednie informacje w odpowiednim czasie.
+
+00:16:04.080 --> 00:16:05.780
+To działało w bardziej złożonych zadaniach.
+
+00:16:05.900 --> 00:16:08.460
+A teraz dotarliśmy do pełnej inżynierii systemów nadzorczych.
+
+00:16:08.460 --> 00:16:12.520
+Zbuduj kompletny system wokół modelu z pamięcią, narzędziami, koordynacją i zabezpieczeniami.
+
+00:16:12.680 --> 00:16:13.800
+Oto kluczowy wniosek.
+
+00:16:13.920 --> 00:16:16.540
+Agent jest tak niezawodny, jak system, który go otacza.
+
+00:16:16.540 --> 00:16:20.300
+Model ma znaczenie absolutnie, ale to system nadzorczy decyduje o powodzeniu wdrożenia.
+
+00:16:20.580 --> 00:16:24.920
+Możesz mieć najlepszy model na świecie, ale bez dobrego systemu zawiedzie w rzeczywistych zadaniach.
+
+00:16:25.140 --> 00:16:29.940
+Możesz też mieć przeciętny model z doskonałym systemem nadzorczym, który zawsze przekroczy oczekiwania.
+
+00:16:30.140 --> 00:16:31.180
+Oto Twoje wyzwanie.
+
+00:16:31.400 --> 00:16:34.240
+W kolejnym projekcie, a i myśl wykraczającą poza sam prompt.
+
+00:16:34.440 --> 00:16:36.280
+Nie pytaj, co powinienem powiedzieć modelowi.
+
+00:16:36.400 --> 00:16:38.540
+Zapytaj, jaki system muszę wokół niego zbudować.
+
+00:16:38.700 --> 00:16:41.760
+Ta zmiana myślenia odróżnia DEMA od systemów produkcyjnych.
+
+00:16:41.920 --> 00:16:45.320
+W kolejnym odcinku zagłębimy się w jeden element tego systemu – pamięć.
+
+00:16:45.320 --> 00:16:49.980
+Jak agenci uczą się z czasem, jak pamiętają swoje działania i jak to wpływa na ich możliwości.
+
+00:16:50.440 --> 00:16:52.060
+Zasubskrybuj, aby niczego nie przegapić.

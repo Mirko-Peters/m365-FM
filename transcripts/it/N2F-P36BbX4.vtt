@@ -1,0 +1,631 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.320
+L'argomento di oggi è qualcosa di cui quasi tutti hanno sentito parlare ma che quasi nessuno sa
+
+00:00:03.320 --> 00:00:06.780
+spiegare. Sto parlando degli agenti IA. Probabilmente avrai sentito il termine in una
+
+00:00:06.780 --> 00:00:11.600
+riunione, letto in un blog o visto in un titolo. Tutti ne parlano. Ma chiedi a qualcuno di definirne
+
+00:00:11.600 --> 00:00:15.460
+uno. Le risposte diventano subito confuse. L'hype è forte, le definizioni sono vaghe,
+
+00:00:15.520 --> 00:00:18.580
+l'espressione viene usata così liberamente da aver perso quasi tutto il suo significato.
+
+00:00:18.980 --> 00:00:21.940
+Ecco l'errore più comune che le persone commettono. Pensano che un agente sia solo
+
+00:00:21.940 --> 00:00:25.660
+un chatbot con un nome più elegante. Gli chiedi qualcosa e lui risponde. Quello non è un agente,
+
+00:00:25.660 --> 00:00:30.440
+è un chatbot. E c'è una reale differenza tra i due. Quindi cosa è cambiato? Perché tutti sono
+
+00:00:30.440 --> 00:00:33.960
+improvvisamente ossessionati dall'agente? E cosa ancora più importante? Perché dovrebbe interessarti
+
+00:00:33.960 --> 00:00:38.440
+se non siano sviluppato? Alla fine di questo episodio capirai cosa è davvero un agente IA perché
+
+00:00:38.440 --> 00:00:42.360
+Microsoft ha costruito un intero framework attorno a loro e perché questo è importante per il tuo modo
+
+00:00:42.360 --> 00:00:49.470
+di lavorare. Cos'è esattamente un agente IA? Sai già come funziona un chatbot? Digiti qualcosa e lui
+
+00:00:49.470 --> 00:00:55.050
+risponde. Questa è una conversazione. È reattiva. Aspetta che tu dica qualcosa poi risponde. Un agente è
+
+00:00:55.050 --> 00:00:59.510
+diverso. Non si limita a rispondere. Agisce. Pensare. Decidere. Agire. Questa è la definizione
+
+00:00:59.510 --> 00:01:03.370
+più semplice che posso darti. Ecco come funziona. Per prima cosa la gente pensa. Usa un modello
+
+00:01:03.370 --> 00:01:06.710
+linguistico di grandi dimensioni per ragionare su ciò di cui hai davvero bisogno, non solo su ciò
+
+00:01:06.710 --> 00:01:10.370
+che hai digitato ma su ciò che intendevi. Se dici prenota una riunione con Sara martedì prossimo,
+
+00:01:10.470 --> 00:01:15.030
+la gente non si limita a ripetertelo. Riflette su ciò che quella richiesta significa davvero. Poi decide.
+
+00:01:15.730 --> 00:01:20.090
+Scompone la tua richiesta in vari passati. Prenotare una riunione diventa un piano. Controlla il calendario.
+
+00:01:20.090 --> 00:01:24.510
+Trova uno slot libero. Verifica la disponibilità di Sara. Invia un invito. L'agente non indovina. Crea
+
+00:01:24.510 --> 00:01:29.510
+una sequenza di azioni. Agisce. Richiama strumenti e servizi per farlo accadere. Non ti dice come
+
+00:01:29.510 --> 00:01:33.690
+prenotare una riunione. La prenota è basta. Non spiega come controllare il meteo. Lo controlla e ti
+
+00:01:33.690 --> 00:01:39.250
+dà la risposta. Pensa alla differenza. Un chatbot è reattivo. Aspetta la tua prossima domanda. Un agente è
+
+00:01:39.250 --> 00:01:44.150
+proattivo. Gli dai un obiettivo e lui va a lavorarci. Potrebbe tornare con delle domande se ha bisogno di
+
+00:01:44.150 --> 00:01:48.090
+maggiori informazioni. Ma non ha bisogno che tu lo guidi passo dopo passo. Come il banco
+
+00:01:48.090 --> 00:01:52.850
+informazioni di una biblioteca. Chiedi dove si trova un libro e ti indicano il corridoio. Un
+
+00:01:52.850 --> 00:01:57.210
+agente è come un assistente personale che ha le chiavi dell'edificio. Ho bisogno di informazioni
+
+00:01:57.210 --> 00:02:01.170
+sui nostri migliori clienti per la riunione di domani. E loro vanno a cercarle. Le organizzano
+
+00:02:01.170 --> 00:02:04.830
+e ti consegnano un documento di repito. Non è detto loro dove cercare o quale formato utilizzare.
+
+00:02:05.150 --> 00:02:09.490
+Hanno capito tutto da solo. Ma il segreto non è solo l'LM. Modello linguistico intelligente ma da solo
+
+00:02:09.490 --> 00:02:13.590
+è solo un cervello senza mani. Ciò che rende un agente tale è la combinazione di tre elementi.
+
+00:02:13.590 --> 00:02:18.050
+ragionamento. La capacità di analizzare un problema. Strumenti. La capacità di agire sul
+
+00:02:18.050 --> 00:02:22.830
+mondo. E memoria. La capacità di ricordare quanto è accaduto in precedenza. Metti insieme questi tre
+
+00:02:22.830 --> 00:02:26.030
+elementi e otterrai qualcosa che non si limita a rispondere alle domande ma porta a termine il
+
+00:02:26.030 --> 00:02:30.930
+lavoro. Riva del framework un panorama frammentato. Quindi se gli agenti sono così utili perché non
+
+00:02:30.930 --> 00:02:34.850
+li stanno già costruendo tutti? La risposta breve è che fino a poco tempo fa era un processo
+
+00:02:34.850 --> 00:02:39.170
+disordinato. Dovevi venire tu stesso diversi strumenti un po' come cercare di costruire un'auto
+
+00:02:39.170 --> 00:02:43.550
+comprando pezzi da produttori diversi sperando che si incastrassero. Primo tentativo
+
+00:02:43.550 --> 00:02:47.370
+di Microsoft di risolvere questo problema è stato Semantic Kernel un SDK per integrare
+
+00:02:47.370 --> 00:02:51.070
+l'IA nelle applicazioni. Roba potente ma era una cassetta degli attrezzi in un progetto. Ti
+
+00:02:51.070 --> 00:02:56.470
+davi pezzi ma dovevi ancora capire come assemblarli? Poi è arrivato Gen di Microsoft Research. Questo
+
+00:02:56.470 --> 00:02:59.890
+framework ha esplorato le conversazioni multiagente in cui gli agenti IA parlano,
+
+00:03:00.010 --> 00:03:04.230
+dibattono e collaborano. All'avanguardia sì ma sperimentale non pensato per sistemi di
+
+00:03:04.230 --> 00:03:08.650
+produzione. Così gli sviluppatori si sono trovati difficili. Semantic Kernel era stabile e pronto
+
+00:03:08.650 --> 00:03:13.270
+per l'azienda ma mancava di modelli di orchestrazione avanzati. Autogen aveva le fantastiche
+
+00:03:13.270 --> 00:03:17.950
+funzionalità multiagente ma non era qualcosa che avresti eseguito in un ambiente live. Ognuno
+
+00:03:17.950 --> 00:03:21.530
+aveva la sua curva di apprendimento, il suo modo di operare, la sua comunità. E non era
+
+00:03:21.530 --> 00:03:26.490
+solo Microsoft. Sono spuntati altri framework. Langchain, QI e una dozzina di altri. L'ecosistema
+
+00:03:26.490 --> 00:03:30.630
+era completamente dispersivo. Se volevi costruire agenti al lavoro dovevi diventare un esperto in
+
+00:03:30.630 --> 00:03:35.130
+un mondo in rapida evoluzione. Quale framework imparare? Quale sopravviverà? Qual è quello
+
+00:03:35.130 --> 00:03:39.450
+che Microsoft sostiene davvero? Per un principiante era Trabogen. Immagina di essere uno sviluppatore
+
+00:03:39.450 --> 00:03:43.830
+in un'azienda che esplora gli agenti. Fai ricerche e trovi cinque framework diversi. Ognuno
+
+00:03:43.830 --> 00:03:48.290
+con la sua documentazione, i suoi modelli, la sua comunità. Non sai da dove cominciare. Non sai
+
+00:03:48.290 --> 00:03:52.490
+su quale puntare il tuo tempo. Quella frammentazione ha creato una vera barriera. Non si trattava
+
+00:03:52.490 --> 00:03:56.690
+solo di imparare uno strumento ma di scommettere su un intero ecosistema. E man mano che i casi
+
+00:03:56.690 --> 00:04:00.230
+d'uso degli agenti passavano da esperimenti a processi aziendali reali, Microsoft ha capito
+
+00:04:00.230 --> 00:04:04.590
+che non era sostenibile. Avevano bisogno di un framework, un approccio unificato, una risposta
+
+00:04:04.590 --> 00:04:09.970
+alla domanda. Come costruisco un agente? Cos'è il Microsoft Agent Framework? Quindi
+
+00:04:09.970 --> 00:04:13.410
+Microsoft ha preso i due framework che aveva, Semantic Kernel e Autogen, e li ha uniti in
+
+00:04:13.410 --> 00:04:19.270
+uno solo. Il risultato è il Microsoft Agent Framework, un SDK unificato che unisce la stabilità
+
+00:04:19.270 --> 00:04:25.290
+Enterprise di Semantic Kernel con i modelli multi-agente all'avanguardia di Autogen. I team
+
+00:04:25.290 --> 00:04:29.070
+che hanno creato quei due framework ora lavorano insieme su questo. Questo framework è stato
+
+00:04:29.070 --> 00:04:34.570
+lanciato in anteprima a fine 2025 e ha raggiunto la versione 1.0 a luglio 2026. Questa cronologia
+
+00:04:34.570 --> 00:04:37.890
+è importante perché ti dice che non si tratta di un progetto di ricerca o di un esperimento,
+
+00:04:38.250 --> 00:04:41.770
+è un prodotto pronto a produzione. Microsoft sta dicendo costruite i vostri sistemi reali
+
+00:04:41.770 --> 00:04:46.330
+su questo. Anche open source. Lo potete trovare su GitHub con oltre 7000 stelle e più di 100
+
+00:04:46.330 --> 00:04:51.210
+contributori. La community attiva. Ci sono sessioni di office hour settimanali dove puoi parlare
+
+00:04:51.210 --> 00:04:53.970
+direttamente con il team di ingegneri. Non è qualcosa che si ottiene con un prodotto
+
+00:04:53.970 --> 00:04:58.290
+chiuso. Il framework supporta Python e .NET come linguaggi di primo livello. Che tu sia uno
+
+00:04:58.290 --> 00:05:02.910
+sviluppatore C-Shargo, Python hai la stessa esperienza. Ai. E questo è importante perché molti
+
+00:05:02.910 --> 00:05:06.610
+framework AI sono solo per Python. Microsoft ha fatto una scelta deliberata di trattare
+
+00:05:06.610 --> 00:05:10.570
+entrambi i linguaggi allo stesso modo. Ed ecco qualcosa che potrebbe sorprenderti. Il framework
+
+00:05:10.570 --> 00:05:15.210
+supporta oltre 7 diversi fornitori di modelli. Microsoft Foundry, Azure OpenAI, OpenAI, Anthropic
+
+00:05:15.210 --> 00:05:20.510
+Cloud, Amazon Bedrock, Google Gemini, persino modelli locali, tramite Allama. Scrivi la logica
+
+00:05:20.510 --> 00:05:24.690
+del tuo agente una volta e funziona con tutti loro. Non sei vincolato a un solo fornitore. Passi
+
+00:05:24.690 --> 00:05:28.370
+da OpenAI ad Anthropic cambiando. Un valore di configurazione non l'intera base di codice,
+
+00:05:28.490 --> 00:05:32.130
+non l'intera base di codice. Framework ha due componenti principali. Gli agenti sono i blocchi
+
+00:05:32.130 --> 00:05:36.230
+costitutivi, unità di ragionamento individuali che possono pensare e agire. I workflow sono
+
+00:05:36.230 --> 00:05:39.710
+il livello di orchestrazione che collega più agenti insieme. Puoi avere un agente che svolge
+
+00:05:39.710 --> 00:05:43.970
+un compito, un intero team che lavora su un progetto complesso. C'è anche qualcosa chiamato
+
+00:05:43.970 --> 00:05:48.050
+definizioni dichiarative. Definisci il comportamento di un agente in un file YAM. Ciò significa
+
+00:05:48.050 --> 00:05:51.710
+che la configurazione del tuo agente è soggetta a controllo di versione. Mettila su Git, revisionarla
+
+00:05:51.710 --> 00:05:56.050
+nelle pull request e distribuiscela tramite pipeline CECD. Per i team aziendali questo è un enorme
+
+00:05:56.050 --> 00:06:00.230
+vantaggio. Ma ecco cosa voglio che tu capisca. Questo framework non è solo per gli sviluppatori
+
+00:06:00.230 --> 00:06:04.630
+che costruiscono sistemi complessi. È progettato per scenari aziendali. Sicurezza, conformità,
+
+00:06:04.750 --> 00:06:08.710
+osservabilità, approvazioni umane sono integrati e non aggiunti in seguito. Ed è proprio questo
+
+00:06:08.710 --> 00:06:13.510
+che lo distingue dai framework sperimentali visti in precedenza. Componenti base, agenti,
+
+00:06:13.610 --> 00:06:17.350
+strumenti, memoria e flussi di logo. Analizziamolo suddividendolo nei quattro concetti fondamentali.
+
+00:06:17.590 --> 00:06:21.870
+Se impari questi capirai il 90% di ciò che fa questo framework. Per prima cosa gli agenti.
+
+00:06:22.110 --> 00:06:26.630
+Sono unità fondamentale. Ogni agente ha un nome, una serie di istruzioni e accesso agli strumenti.
+
+00:06:26.730 --> 00:06:30.110
+È un'unità di ragionamento capace di pensare al G. Gli dici chi è, cosa deve fare,
+
+00:06:30.230 --> 00:06:34.970
+e quali risorse può utilizzare. Tutto il resto deriva da questo. Poi gli strumenti. Sono le mani
+
+00:06:34.970 --> 00:06:39.930
+dell'agente, funzioni, api o servizi esterni che può chiamare come dati meteo, accesso al calendario,
+
+00:06:40.190 --> 00:06:45.250
+query a database o operazioni su file. L'agente non sa come fare queste cose da solo. Ha bisogno
+
+00:06:45.250 --> 00:06:49.850
+di strumenti per interagire con il mondo e agire. Puoi scrivere semplici funzioni tu stesso oppure
+
+00:06:49.850 --> 00:06:54.550
+usare server MCP in modo del context protocol. È un modo standard per collegare gli agenti a
+
+00:06:54.550 --> 00:06:59.690
+servizi esterni. Pensalo come una presa universale. Se un servizio supporta MCP, il tuo agente può usarlo
+
+00:06:59.690 --> 00:07:04.090
+senza codice di integrazione personalizzato. Poi c'è la memoria. È l'archivio del cervello.
+
+00:07:04.590 --> 00:07:09.170
+Ne esistono due tipi. La memoria di sessione a breve termine. Ricorda cosa è successo durante
+
+00:07:09.170 --> 00:07:13.490
+una singola conversazione. I provider di contesto sono lungo termine. Ricordano preferenze fatte
+
+00:07:13.490 --> 00:07:18.590
+attraverso più conversazioni. La memoria è ciò che rende un agente intelligente. Senza di
+
+00:07:18.590 --> 00:07:23.370
+essa un'interazione riparte da zero. Ti presenti e, la volta successiva che parli, si è dimenticato tu.
+
+00:07:23.370 --> 00:07:28.450
+Con la memoria la gente sa chi sei, cosa vede discusso e cosa ti sta a cuore. È la differenza
+
+00:07:28.450 --> 00:07:32.810
+tra parlare con uno sconosciuto o con un collega che conosce il tuo lavoro. Infine i flussi di lavoro.
+
+00:07:33.350 --> 00:07:38.110
+È il livello di orchestrazione dove definisci più agenti che lavorano insieme. I flussi possono
+
+00:07:38.110 --> 00:07:43.270
+essere sequenziali. Passo A poi passo B. Possono essere simultanei con più agenti che lavorano in
+
+00:07:43.270 --> 00:07:49.950
+parallelo oppure condizionali. Se succede questo vai qui. Se succede quello vai là. I flussi di lavoro
+
+00:07:49.950 --> 00:07:53.610
+supportano anche i check-in. Se qualcosa fallisce a metà il sistema può riprendere da dove si era
+
+00:07:53.610 --> 00:07:58.590
+interrotto. Non devi cominciare da capo. È importante per attività lunghe che richiedono ore o molti
+
+00:07:58.590 --> 00:08:03.410
+passaggi. Sono integrati anche i modelli di supervisione umana. Gli agenti possono fermarsi e chiedere
+
+00:08:03.410 --> 00:08:08.030
+l'approvazione prima di compiere azioni sensibili. Se un agente deve inviare un email o approvare un
+
+00:08:08.030 --> 00:08:13.270
+pagamento può fermarsi in attesa di un sì umano. È essenziale per i settori regolamentali. Ecco un esempio
+
+00:08:13.270 --> 00:08:18.770
+reale. Immagina un agente per la preparazione alle vendite. Domani è una riunione con un cliente. Dice all'agente
+
+00:08:18.770 --> 00:08:23.310
+aiutami a preparare. Lui controlla il tuo calendario per confermare l'ora. Estrai i dati da CRM per
+
+00:08:23.310 --> 00:08:27.850
+verificare lo storico. Cerca nel materiale di marketing in casi studio pertinenti. Genera un
+
+00:08:27.850 --> 00:08:32.010
+documento di briefing e una presentazione powerpoint. Tutto senza che tu debba fare nulla. Questo non è
+
+00:08:32.010 --> 00:08:36.610
+un chatbot. Questo è un agente. Perché dovrebbe interessare? Valore pratico. Quindi capito cos'è il
+
+00:08:36.610 --> 00:08:41.250
+framework. Ma il punto è perché dovrebbe importarti se non sei uno sviluppatore di sistemi di A. La
+
+00:08:41.250 --> 00:08:45.510
+risposta è che questo framework non vive solo nel terminale di uno sviluppatore. Alimenta strumenti con cui
+
+00:08:45.510 --> 00:08:48.750
+gli utenti aziendali interagiscono quotidiano. Gli agenti creati con i framework possono essere
+
+00:08:48.750 --> 00:08:52.390
+pubblicati direttamente in Microsoft Teams e nella chat di Copay. Significa che gli agenti della tua
+
+00:08:52.390 --> 00:08:55.850
+organizzazione vivono dove già lavori. Non hai bisogno di un'app separata da installare un nuovo
+
+00:08:55.850 --> 00:09:00.030
+accesso da ricordare una curva di apprendimento. Appli semplicemente Teams e l'agente lì. Per
+
+00:09:00.030 --> 00:09:04.030
+i responsabili decisioni aziendali questo conta ancora di più. Il framework fornisce controlli
+
+00:09:04.030 --> 00:09:08.210
+aziendali che sono realmente importanti. Ottieni la gestione dell'identità tramite EntraID,
+
+00:09:08.350 --> 00:09:12.410
+controlli di accesso affinché gli agenti vedano solo ciò che devono, Audit Trail per sapere cosa fa
+
+00:09:12.410 --> 00:09:18.410
+ogni agente quando e la governance dei dati per proteggere le informazioni sensibili. E c'è un problema a cui
+
+00:09:18.410 --> 00:09:22.950
+potreste non aver pensato. Lo shadow AI è una realtà. I dipendenti usano strumenti di IA non
+
+00:09:22.950 --> 00:09:27.050
+autorizzati ogni giorno, incollando dati aziendali in chatbot pubblici, caricando documenti sensibili
+
+00:09:27.050 --> 00:09:31.290
+su server sconosciuti e sperando che vada tutto bene. I team IT sanno che sta succedendo ma non
+
+00:09:31.290 --> 00:09:35.890
+possono fermarlo vietando gli strumenti. Le persone troveranno sempre un modo. Questo framework offre
+
+00:09:35.890 --> 00:09:41.230
+all'IT un modo per fornire agenti approvati e sicuri che risultano comunque moderni. Invece di dire
+
+00:09:41.230 --> 00:09:47.490
+ai dipendenti non usate l'IA puoi dire usate questi agenti, sono sicuri, controllati e lavorano con i vostri
+
+00:09:47.490 --> 00:09:51.530
+dati. C'è anche il problema della proliferazione degli agenti e sta già cadendo. I team stanno
+
+00:09:51.530 --> 00:09:55.050
+creando agenti più velocemente di quanto chiunque possa monitorare. Il framework ti offre un unico
+
+00:09:55.050 --> 00:09:59.410
+posto per gestire, monitorare e governare tutti loro. Puoi vedere quali agenti vengono utilizzati,
+
+00:09:59.510 --> 00:10:03.050
+quali stanno accumulando polvere, quali necessitano di attenzione. La visibilità sui costi è un altro
+
+00:10:03.050 --> 00:10:07.690
+aspetto fondamentale. Puoi vedere esattamente quanto costa eseguire ogni agente, quali sono costosi,
+
+00:10:07.810 --> 00:10:12.490
+quali efficienti e dove ottimizzare. Non è qualcosa che ottieni con una raccolta di strumenti
+
+00:10:12.490 --> 00:10:17.710
+e script casuali. In conclusione, questo framework rende gli agenti di IA pratici, sicuri e gestibili
+
+00:10:17.710 --> 00:10:21.910
+per le organizzazioni reali. Non si tratta solo di creare una tecnologia interessante, ma di
+
+00:10:21.910 --> 00:10:25.730
+costruire qualcosa che funzioni in un'azienda reale con vincoli reali e sicurezza, conformità,
+
+00:10:25.910 --> 00:10:30.650
+budget e governance. Se sei responsabile di una di queste cose, questo framework è importante per te.
+
+00:10:31.210 --> 00:10:34.830
+Come si inserisce nel quadro generale? Quindi dove si colloca esattamente il framework degli agenti?
+
+00:10:35.250 --> 00:10:39.490
+Non è un prodotto a sé stante, è un tassello di un puzzle molto più grande. Vediamo come si collega il tool.
+
+00:10:39.930 --> 00:10:44.550
+Partiamo da Georea e iFoundry. Pensare in questo modo. Il framework degli agenti è il modo in cui
+
+00:10:44.550 --> 00:10:48.510
+costruisci i tuoi agenti e Foundry è il luogo in cui vivono ed eseguono. Si occupa di tutto il lavoro
+
+00:10:48.510 --> 00:10:53.690
+pesante, infrastruttura, scalabilità, monitoraggio e sicurezza. Costruisci in locale, distribuisci su
+
+00:10:53.690 --> 00:10:56.910
+Foundry e il tuo agente viene eseguito in un ambiente di produzione con controlli aziendali.
+
+00:10:58.550 --> 00:11:04.470
+Ora, se non sei uno sviluppatore, hai un'altra opzione, Copilot Studio. Questo è il percorso low-code. Utilizzi un'interfaccia
+
+00:11:04.470 --> 00:11:09.470
+visiva per definire cosa fa il tuo agente, collegarlo a fonti di dati e pubblicarlo su Teams. Nessun codice
+
+00:11:09.470 --> 00:11:13.170
+richieste. Framework degli agenti è per gli sviluppatori che desiderano il controllo. Si
+
+00:11:13.170 --> 00:11:17.870
+completa una vicenda. Hai bisogno di personalizzazione. Usa Framework. Devi muoverti velocemente. Usa
+
+00:11:17.870 --> 00:11:24.310
+Copilot Studio. Poi c'è Microsoft 365 Copilot, il lato rivolto all'utente. Gli agenti costruiti
+
+00:11:24.310 --> 00:11:27.870
+con il framework possono apparire direttamente dentro di Copilot. Quindi gli utenti interagiscono
+
+00:11:27.870 --> 00:11:31.410
+con loro attraverso un'interfaccia familiare, lo stesso Copilot che usano già per il lavoro.
+
+00:11:31.970 --> 00:11:35.050
+Nessun nuovo strumento da imparare, nessun nuovo flusso di lavoro da adottare. Né qui che
+
+00:11:35.050 --> 00:11:39.130
+risplende il vero valore, il livello di intelligenza, è composto da tre parti. WorkIQ
+
+00:11:39.130 --> 00:11:43.830
+si collega ai tuoi dati personali, email, calendario e chat. FoundryIQ si collega alla
+
+00:11:43.830 --> 00:11:48.650
+conoscenza organizzativa, documenti, policy e risorse condivise. E FabricIQ si collega ai
+
+00:11:48.650 --> 00:11:52.730
+dati aziendali, numeri di vendita, record dei clienti e metri che operativi. Gli agenti
+
+00:11:52.730 --> 00:11:56.570
+possono attingere da tutti e tre. È questo che li rende davvero utili. Non si limitano a rispondere
+
+00:11:56.570 --> 00:12:00.570
+a domande generiche, hanno un contesto. Sanno chi sei, a cosa stai lavorando e quali dati sono
+
+00:12:00.570 --> 00:12:04.330
+importanti per la tua attività. Quando un agente prepara un documento informativo per una
+
+00:12:04.330 --> 00:12:07.950
+riunione di vendita non sta tirando indovina. Sta attingendo dal tuo calendario, dal tuo CRM,
+
+00:12:08.030 --> 00:12:10.990
+dai tuoi materiali di marketing, dalla base di conoscenza aziendale, tutto in una sola
+
+00:12:10.990 --> 00:12:14.950
+richiesta e tutto funziona con il modello di sicurezza Microsoft. Entra ID per l'identità,
+
+00:12:15.070 --> 00:12:18.610
+Intune per la gestione dei dispositivi e Defender per la protezione delle minacce. Se la tua
+
+00:12:18.610 --> 00:12:22.210
+organizzazione utilizza già questi strumenti, il framework si integra perfettamente. Non c'è
+
+00:12:22.210 --> 00:12:25.310
+bisogno di creare un livello di sicurezza separato. Per le organizzazioni che utilizzano
+
+00:12:25.310 --> 00:12:29.810
+già Microsoft 365, Azure e Power Platform, questo framework è il naturale passo successivo. Non
+
+00:12:29.810 --> 00:12:33.490
+stai partendo da zero. Stai estendendo ciò che già possiedi. La visione a lungo termine.
+
+00:12:34.330 --> 00:12:38.410
+Le agenti diventeranno comuni quanto le A. Ogni processo aziendale avrà un livello di agenti,
+
+00:12:38.490 --> 00:12:41.810
+non per sostituire le persone, ma per aiutarlo a lavorare più velocemente con informazioni
+
+00:12:41.810 --> 00:12:45.070
+migliori e meno compiti ripetitivi. Questo framework è il modo in cui costruisci quei
+
+00:12:45.070 --> 00:12:49.970
+livelli. Per iniziare, ecco il tuo primo passo. Ecco la buona notizia. Non serve essere esperti
+
+00:12:49.970 --> 00:12:54.850
+di A per iniziare. Ci sono due percorsi. Il percorso no-code è Copilot Studio. Interfaccia
+
+00:12:54.850 --> 00:12:58.790
+visiva trascina, rilascia, configura nessun codice richiesto. Puoi avere qualcosa di pronto in
+
+00:12:58.790 --> 00:13:02.470
+ore e non giorni. Se il tuo obiettivo è risolvere rapidamente uno specifico problema aziendale,
+
+00:13:02.470 --> 00:13:05.310
+questa è la tua strada. Il percorso con codice è il framework dell'agente stesso.
+
+00:13:05.590 --> 00:13:10.150
+Instali i pacchetti per Python o Python.net e usi l'estensione VS Code. E vale la pena
+
+00:13:10.150 --> 00:13:15.030
+parlare dell'estensione perché include competenze basate sugli A. Le dici cosa vuoi. Crea un
+
+00:13:15.030 --> 00:13:18.470
+agente di preparazione vendita che controlla il mio calendario ed estrae dati dal CRM e
+
+00:13:18.470 --> 00:13:21.810
+lui crea l'intera struttura del progetto per te. Codice, file di configurazione, tutto.
+
+00:13:22.270 --> 00:13:25.950
+Non è una pagina bianca. Vantaggio competitivi. L'estensione include anche qualcosa chiamato
+
+00:13:25.950 --> 00:13:29.930
+Agent Inspector. È uno strumento visivo che ti mostra cosa sta facendo l'agente in tempo reale
+
+00:13:29.930 --> 00:13:33.130
+passo dopo passo. Puoi vederlo mentre pensi. Puoi vedere quali strumenti ti sta chiamando.
+
+00:13:33.550 --> 00:13:37.330
+Puoi vedere dove si blocca. È come avere un debugger che parla in modo chiaro. Se usi
+
+00:13:37.330 --> 00:13:41.650
+già semantic kernel o auto gem, ci sono assistenti di migrazione che analizzano il tuo codice esistente
+
+00:13:41.650 --> 00:13:46.490
+e generano un piano di migrazione dettagliato. Non devi ricominciare da capo. Il framework è
+
+00:13:46.490 --> 00:13:50.990
+open source. Il reposito di GitHub si trova su github.com slash microsoft slash gemframe.
+
+00:13:51.330 --> 00:13:56.110
+Esempi, documentazione, forum di discussione, tutto lì. La community è attiva. Ci sono sessioni di
+
+00:13:56.110 --> 00:13:59.710
+assistenza settimanali dove puoi parlare direttamente con il team di ingegner. Non è qualcosa che si ottiene
+
+00:13:59.710 --> 00:14:03.690
+con la maggior parte dei framework. Il messaggio chiave è questo. Inzi in piccolo. Crea un singolo
+
+00:14:03.690 --> 00:14:07.870
+agente che faccia una cosa utile. Magari controlla il tuo calendario. Magari riassume le tue email.
+
+00:14:08.390 --> 00:14:12.490
+Magari cerca informazioni sui clienti. Vedi che effetto fa. Poi espandi. La cosa più importante
+
+00:14:12.490 --> 00:14:16.710
+è comprendere i concetti. Ed è di questo che trattava questo episodio. Lascia che concluda
+
+00:14:16.710 --> 00:14:21.550
+collegando questi pezzi. Un agente non è un chatbot. È un sistema che pensa, decide e agisce
+
+00:14:21.550 --> 00:14:26.310
+autonomamente. Il framework esiste perché costruire agenti in passato significava destreggiarsi tra
+
+00:14:26.310 --> 00:14:29.530
+strumenti e framework incompatibili che non comunicavano tra loro. Quella frammentazione
+
+00:14:29.530 --> 00:14:33.930
+rendeva tutto confuso. Quindi Microsoft ha creato un unico modo per costruire uno per distribuire
+
+00:14:33.930 --> 00:14:38.230
+uno per gestire. Basta passare da un framework all'altro o assemblare pezzi incompatibili tra
+
+00:14:38.230 --> 00:14:43.330
+loro. Per i principianti ecco il concetto chiave. Gli agenti AI non sono magia. Sono sistemi
+
+00:14:43.330 --> 00:14:47.650
+strutturati che ragionano, usano strumenti e ricordano il contesto. Microsoft vi ha fornito un
+
+00:14:47.650 --> 00:14:51.810
+framework completo per costruirli pronto per la produzione fin da ora. Non è solo pubblicità. Gli
+
+00:14:51.810 --> 00:14:55.450
+agenti stanno diventando parte integrante del nostro lavoro proprio come le app e i siti web anni fa.
+
+00:14:56.110 --> 00:14:59.350
+Gli strumenti ci sono. La community è attiva e il vostro primo agente è più vicino
+
+00:14:59.350 --> 00:15:04.130
+di quanto pensiate. Se volete approfondire iniziate dall'apposito di GitHub e dall'estensione per
+
+00:15:04.130 --> 00:15:08.030
+VS Code. Iscrivetevi sulla vostra piattaforma di podcast preferita e condividete questo episodio
+
+00:15:08.030 --> 00:15:09.070
+con chi sta iniziando il suo percorso.

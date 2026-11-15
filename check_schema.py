@@ -3,7 +3,7 @@
 aufloesbare @id-Verweise, widerspruechliche @id-Definitionen.
 T37 Sponsor: sichtbare Kennzeichnung (data-spm, site_sponsorships.note) und "sponsor" an WebPage/PodcastEpisode/BlogPosting/VideoObject
 gehoeren zusammen (beide Richtungen); die Kennzeichnung steht direkt unter der H1 (vor dem ersten H2); Links zum Sponsor tragen rel="sponsored".
-Aufruf: python check_schema.py [Verzeichnis]  (Standard: docs/)"""
+Aufruf: python check_schema.py [Verzeichnis]  (Standard: docs/; r2out/ daneben wird mit Hinweisen mitgeprueft)"""
 import glob, json, re, sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -28,7 +28,11 @@ ids = defaultdict(set)
 defs = defaultdict(set)
 
 
+R2 = [False]   # gerade r2out/: Fehler dort nur als Hinweis (s. u.)
+
+
 def note(kind, msg, f):
+    if R2[0] and kind == "E": kind, msg = "W", "r2out: " + msg
     (errs if kind == "E" else warns)[msg] += 1
     examples.setdefault(msg, f)
 
@@ -94,22 +98,27 @@ def sponsor_check(h, f, sp):
 
 
 n = 0
-for p in sorted(glob.glob(str(DOCS / "**" / "*.html"), recursive=True)):
-    h = open(p, encoding="utf-8", errors="ignore").read()
-    blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)
-    if not blocks:
-        if 'data-spm="' in h:
-            note("E", "Kennzeichnung (Sponsored/Anzeige) ohne sponsor im JSON-LD", p.replace(str(DOCS), ""))
-        continue
-    n += 1
-    f = p.replace(str(DOCS), "")
-    sp = []
-    for b in blocks:
-        try:
-            walk(json.loads(b), f, True, sp)
-        except Exception as ex:
-            note("E", "JSON-LD nicht parsebar: " + str(ex)[:60], f)
-    sponsor_check(h, f, sp)
+# r2out/ neben docs/ (Seiten nur im R2-Bucket, seit 11.11.2026 alle Sprachseiten ausser en/de) wird mitgeprueft, Fehler dort nur als Hinweis
+# ("r2out: ..."): die schon vorher dort liegenden Sprachfassungen waren nie Teil der blockierenden Pruefung
+for base in (DOCS, DOCS.parent / "r2out"):
+    R2[0] = base != DOCS
+    for p in sorted(glob.glob(str(base / "**" / "*.html"), recursive=True)):
+        h = open(p, encoding="utf-8", errors="ignore").read()
+        blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S)
+        f = ("/r2out" if R2[0] else "") + p.replace(str(base), "")
+        if not blocks:
+            if 'data-spm="' in h:
+                note("E", "Kennzeichnung (Sponsored/Anzeige) ohne sponsor im JSON-LD", f)
+            continue
+        n += 1
+        sp = []
+        for b in blocks:
+            try:
+                walk(json.loads(b), f, True, sp)
+            except Exception as ex:
+                note("E", "JSON-LD nicht parsebar: " + str(ex)[:60], f)
+        sponsor_check(h, f, sp)
+R2[0] = False
 # @id-Verweise (nur {"@id": x}) muessen irgendwo definiert sein
 refs = set()
 for p in glob.glob(str(DOCS / "**" / "*.html"), recursive=True)[:2000]:
