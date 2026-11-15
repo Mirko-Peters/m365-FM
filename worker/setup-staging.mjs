@@ -29,8 +29,12 @@ export function guard(toml) {
   if (!new RegExp(`^database_name = "${STAGING_DB}"$`, "m").test(code)) problems.push(`D1 muss "${STAGING_DB}" heissen`);
   const forbidden = [[/api-dub\.m365\.fm/, "Live-API api-dub.m365.fm"], [/(?<![-\w])dub\.m365\.fm/, "dub.m365.fm"], [/www\.m365\.fm/, "www.m365.fm"], [/pattern = "m365\.fm/, "m365.fm (Live-Zone-Apex)"],
     [/database_name = "m365-dub"/, "Live-Datenbank m365-dub"], [/bucket_name = "m365-fm"/, "Live-Bucket m365-fm"], [/m365-search/, "Live-Index m365-search"],
-    [/\[env\.staging\.ai\]/, "KI-Bindung"], [/\[\[env\.staging\.vectorize\]\]/, "Vectorize-Bindung"], [/send_email/, "Mail-Bindung"], [/\[env\.staging\.triggers\]/, "Crons"]];
+    [/\[env\.staging\.ai\]/, "KI-Bindung"], [/\[\[env\.staging\.vectorize\]\]/, "Vectorize-Bindung"], [/send_email/, "Mail-Bindung"]];
   for (const [re, what] of forbidden) if (re.test(code)) problems.push("Im Staging-Abschnitt nicht erlaubt: " + what);
+  // [env.staging.triggers] muss da sein und genau crons = [] enthalten: wrangler erbt [triggers] sonst vom Live-Teil (drei Live-Crons in Staging).
+  const trig = code.match(/^\[env\.staging\.triggers\][ \t]*\n([\s\S]*?)(?=^\[|(?![\s\S]))/m);
+  if (!trig) problems.push("[env.staging.triggers] mit crons = [] fehlt (sonst erbt wrangler die Live-Crons)");
+  else if (trig[1].split("\n").map((l) => l.trim()).filter(Boolean).join("\n") !== "crons = []") problems.push("Im Staging-Abschnitt nicht erlaubt: Crons (nur crons = [])");
   return problems;
 }
 

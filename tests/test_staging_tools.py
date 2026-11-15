@@ -152,7 +152,7 @@ class Isolation(unittest.TestCase):
             "KI": w + '\n[env.staging.ai]\nbinding = "AI"\n',
             "Vectorize": w + '\n[[env.staging.vectorize]]\nbinding = "VEC"\nindex_name = "m365-search"\n',
             "Mail": w + '\n[[env.staging.send_email]]\nname = "EMAIL"\n',
-            "Cron": w + '\n[env.staging.triggers]\ncrons = ["0 6 * * *"]\n',
+            "Cron": self.last(w, "crons = []", 'crons = ["0 6 * * *"]'),
             "PayPal live": self.last(w, 'PAYPAL_ENV = "sandbox"', 'PAYPAL_ENV = "live"'),
             "Buchung an": self.last(w, 'ADS_BOOKING = "0"', 'ADS_BOOKING = "1"'),
             "Live-SITE": self.last(w, 'SITE = "https://staging.m365.fm"', 'SITE = "https://www.m365.fm"'),
@@ -169,6 +169,11 @@ class Isolation(unittest.TestCase):
         self.assertTrue(any("routes" in e for e in ISO.check_worker_toml(no_routes)))
         no_dev = self.last(w, "workers_dev = false", "")
         self.assertTrue(any("workers_dev" in e for e in ISO.check_worker_toml(no_dev)))
+        no_trig = w[:w.rindex("\n[env.staging.triggers]")] + "\n"   # ohne eigenen Block erbt wrangler die drei Live-Crons
+        self.assertTrue(any("triggers" in e and "erben" in e for e in ISO.check_worker_toml(no_trig)))
+        self.assertTrue(any("triggers" in e for e in ISO.check_toml(no_trig, "x")), "auch ohne require_triggers: Live-Teil hat Crons")
+        no_list = self.last(w, "crons = []", "")
+        self.assertTrue(any("triggers.crons" in e for e in ISO.check_worker_toml(no_list)))
         no_env = w[:w.index("\n# ================================================================ Testumgebung")]
         self.assertTrue(any("env.staging" in e for e in ISO.check_worker_toml(no_env)))
 

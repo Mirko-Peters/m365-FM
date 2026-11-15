@@ -3,7 +3,8 @@
 
 Geprueft werden
   - worker/wrangler.toml und sitewrk/wrangler.toml, Abschnitt [env.staging]: eigener Name, eigene Domain, eigene Datenbank, eigener Bucket,
-    routes und workers_dev ausdruecklich (wrangler erbt sie sonst vom Live-Teil!), keine KI-/Vectorize-/Mail-Bindung, keine Crons, ENVIRONMENT=staging;
+    routes, workers_dev und (Worker) [env.staging.triggers] crons = [] ausdruecklich (wrangler erbt sie sonst vom Live-Teil!), keine KI-/Vectorize-/Mail-Bindung,
+    keine Crons, ENVIRONMENT=staging;
   - .github/workflows/worker-staging.yml und site-staging.yml: laufen nur auf `staging`, jeder Job in der Umgebung `staging`, jeder wrangler-Aufruf mit
     `--env staging` (oder mit Staging-Ressource), nur erlaubte Secrets, keine Live-Skripte (setup.mjs), keine Live-Namen.
 Ende 0 = sauber, 1 = Verstoss (jede Zeile erklaert, was falsch ist). Aufruf:  python3 tools/check_staging_isolation.py
@@ -27,7 +28,7 @@ def host_of(pattern):
     return str(pattern).split("/", 1)[0].lower()
 
 
-def check_toml(text, label, expect_db=False):
+def check_toml(text, label, expect_db=False, require_triggers=False):
     """Pruefung eines wrangler.toml-Textes. -> Liste von Fehlern."""
     errs = []
     try:
@@ -57,9 +58,12 @@ def check_toml(text, label, expect_db=False):
     for k in env:
         if k not in ENV_KEYS_OK:
             errs.append(f"{label}: [env.staging] hat {k!r} - nicht erlaubt (KI, Vectorize, Mail, Dienste und andere Bindungen gibt es in Staging nicht)")
-    trig = env.get("triggers") or {}
-    if trig.get("crons"):
-        errs.append(f"{label}: [env.staging] triggers.crons muss leer sein (keine Crons in Staging)")
+    trig = env.get("triggers")
+    if trig is None:
+        if require_triggers or "triggers" in cfg:   # wrangler erbt [triggers] vom Live-Teil: ohne eigenen Block laufen die Live-Crons in Staging
+            errs.append(f"{label}: [env.staging.triggers] mit crons = [] fehlt - wrangler wuerde die Live-Crons erben")
+    elif not isinstance(trig, dict) or trig.get("crons") != []:
+        errs.append(f"{label}: [env.staging] triggers.crons muss leer sein (crons = [], keine Crons in Staging)")
     top_ids = {d.get("database_id") for d in cfg.get("d1_databases", []) or []}
     for d in env.get("d1_databases", []) or []:
         if d.get("database_name") != "m365-dub-staging":
@@ -90,7 +94,7 @@ def check_toml(text, label, expect_db=False):
 
 
 def check_worker_toml(text):
-    errs = check_toml(text, "worker/wrangler.toml", expect_db=True)
+    errs = check_toml(text, "worker/wrangler.toml", expect_db=True, require_triggers=True)
     env = (tomllib.loads(text).get("env") or {}).get("staging") or {}
     v = env.get("vars") or {}
     if host_of(v.get("SITE", "").replace("https://", "")) != "staging.m365.fm":

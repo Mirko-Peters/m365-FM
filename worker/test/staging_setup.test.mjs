@@ -20,9 +20,18 @@ test("Live-Namen im Staging-Abschnitt werden gefunden", () => {
   assert.ok(guard(bad('name = "m365-dub-community-staging"', 'name = "m365-dub-community"')).length);
   assert.ok(guard(TOML + '\n[env.staging.ai]\nbinding = "AI"\n').length);
   assert.ok(guard(TOML + '\n[[env.staging.vectorize]]\nbinding = "VEC"\nindex_name = "m365-search"\n').length);
-  assert.ok(guard(TOML + '\n[env.staging.triggers]\ncrons = ["0 6 * * *"]\n').length);
+  assert.ok(guard(bad("crons = []", 'crons = ["0 6 * * *"]')).length);
+  assert.ok(guard(bad("crons = []", 'crons = [\n  "*/15 * * * *",\n]')).length);
   assert.ok(guard(TOML + '\n[[env.staging.send_email]]\nname = "EMAIL"\n').length);
   assert.ok(guard("name = 'x'\n").length, "ohne [env.staging] kein Deploy");
+});
+
+test("ohne [env.staging.triggers] (crons = []) erbt wrangler die Live-Crons: guard bricht ab", () => {
+  const i = TOML.lastIndexOf("\n[env.staging.triggers]");
+  assert.ok(i > TOML.indexOf("\n[env.staging]"), "Block steht im Staging-Abschnitt");
+  const ohne = TOML.slice(0, i) + "\n";
+  assert.ok(guard(ohne).some((p) => p.includes("Live-Crons")));
+  assert.deepEqual(guard(ohne + "\n[env.staging.triggers]\ncrons = []\n"), []);
 });
 
 test("Kommentare mit Live-Namen im Staging-Abschnitt stoeren nicht", () => {

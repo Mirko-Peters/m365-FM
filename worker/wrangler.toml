@@ -64,9 +64,10 @@ bucket_name = "m365-fm"
 enabled = true   # Workers Logs (Fehler je Request und Cron im Dashboard sichtbar)
 
 # ================================================================ Testumgebung (Staging) - STAGING.md
-# Eigener Worker, eigene D1-Datenbank, eigene Adresse. Bindungen, Variablen und Crons werden von wrangler NICHT aus dem Live-Teil oben geerbt
-# (nur routes, workers_dev, main, compatibility_date und observability werden geerbt - darum stehen routes und workers_dev hier ausdruecklich).
-# Absichtlich NICHT vorhanden: [ai], [[vectorize]] (Live-Index m365-search), [[send_email]], [[r2_buckets]], [triggers] (keine Crons) und alle Secrets fuer
+# Eigener Worker, eigene D1-Datenbank, eigene Adresse. Bindungen und Variablen werden von wrangler NICHT aus dem Live-Teil oben geerbt.
+# ACHTUNG: routes, workers_dev, triggers (Crons), main, compatibility_date und observability werden geerbt - darum stehen routes, workers_dev
+# und [env.staging.triggers] mit crons = [] hier ausdruecklich. Fehlt [env.staging.triggers], laufen die drei Live-Crons auch in Staging.
+# Absichtlich NICHT vorhanden: [ai], [[vectorize]] (Live-Index m365-search), [[send_email]], [[r2_buckets]] und alle Secrets fuer
 # Mail, KI, LinkedIn, Spreaker, YouTube, Maps, HeySummit, Push. Zusaetzlich sperrt ENVIRONMENT="staging" diese Wege im Code (worker/src/staging.js).
 # Deploy ausschliesslich ueber .github/workflows/worker-staging.yml (wrangler deploy --env staging). tools/check_staging_isolation.py verbietet hier jeden Live-Namen.
 # Dieser Block bleibt der LETZTE der Datei: setup.mjs (Live) ersetzt nur das erste database_id / AI_GATEWAY_ID weiter oben.
@@ -97,3 +98,6 @@ SEARCH_DEMAND_MIN = "3"
 
 [env.staging.observability]
 enabled = true
+
+[env.staging.triggers]
+crons = []   # keine Crons in Staging; ohne diesen Block erbt wrangler die Live-Crons (tools/check_staging_isolation.py prueft das)

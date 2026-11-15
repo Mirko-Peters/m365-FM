@@ -126,14 +126,14 @@ Nach einem Push auf `staging` entstehen automatisch zwei Dinge, getrennt von Liv
 | Community-API | `api-dub.m365.fm`, Worker `m365-dub-community`, Datenbank `m365-dub` | `api-staging.m365.fm`, Worker `m365-dub-community-staging`, eigene Datenbank `m365-dub-staging` |
 | Seite | `www.m365.fm`, Worker `m365-dub-site`, Bucket `m365-fm` | `staging.m365.fm`, Worker `m365-dub-site-staging`, eigener Bucket `m365-fm-staging` |
 | Workflows | `worker.yml`, `sitewrk.yml`, `site.yml` (Push auf `main`) | `worker-staging.yml`, `site-staging.yml` (Push auf `staging`, Umgebung `staging`) |
-| Zeitpläne (Crons) | ja | **keine** |
+| Zeitpläne (Crons) | ja | **keine** (`[env.staging.triggers]` mit `crons = []`, sonst erbt Wrangler die Live-Crons) |
 | Mail, KI, LinkedIn, Spreaker, YouTube, Push, Google/Maps | ja | **gesperrt** (kein Schlüssel, im Code gesperrt, Netzwerkaufrufe dorthin werden abgewiesen) |
 | PayPal / Werbebuchung | live / an | Sandbox / aus |
 | Suchmaschinen | ja | `noindex, nofollow` überall, `robots.txt` verbietet alles |
 
 Die Testdatenbank ist am Anfang **leer** (die Crons sind aus, es kommen keine Live-Daten hinein). Getestet werden also Code und Datenbankschema, nicht die Live-Daten. Die Testseite wird verkleinert gebaut (Deutsch und Englisch) und liest dafür nur die **öffentlichen** Exporte der Live-API (nur lesen), schreibt aber überall die Staging-Adressen hinein (`tools/staging_rewrite.py`).
 
-**Schutz gegen Verwechslung:** `tools/check_staging_isolation.py` läuft in `staging-checks` und vor jedem Staging-Deploy. Es wird rot, wenn `[env.staging]` in den `wrangler.toml` oder ein Staging-Workflow eine Live-Datenbank, einen Live-Bucket, einen Live-Worker, eine Live-Domain, einen Cron, eine KI-/Mail-/Vectorize-Anbindung oder ein Live-Secret nennt. Der Staging-Upload (`tools/staging_upload.py`) schreibt nur in den Bucket `m365-fm-staging` und liest nur die Staging-Zugangsdaten. Bilder kommen weiter aus `img.m365.fm` (nur lesen).
+**Schutz gegen Verwechslung:** `tools/check_staging_isolation.py` läuft in `staging-checks` und vor jedem Staging-Deploy. Es wird rot, wenn `[env.staging]` in den `wrangler.toml` oder ein Staging-Workflow eine Live-Datenbank, einen Live-Bucket, einen Live-Worker, eine Live-Domain, einen Cron, eine KI-/Mail-/Vectorize-Anbindung oder ein Live-Secret nennt, und wenn im Worker der Block `[env.staging.triggers]` mit `crons = []` fehlt (ohne ihn übernimmt Wrangler die drei Live-Crons). Der Staging-Upload (`tools/staging_upload.py`) schreibt nur in den Bucket `m365-fm-staging` und liest nur die Staging-Zugangsdaten. Bilder kommen weiter aus `img.m365.fm` (nur lesen).
 
 **Rauchtest:** Nach dem Deploy ruft `tools/staging_smoke.mjs` (Job `staging-smoke` in `staging-checks`) die wichtigsten Seiten und API-Routen der Testumgebung ab (Health, `noindex`, Events-Export, `robots.txt`, Startseite, `/de/`, je eine Folgen-, Entitäts- und Eventseite aus dem Sitemap). Er fließt in `staging-geprueft` ein: ohne laufende, gesunde Testumgebung wird `live-schalten.yml` nicht grün. Bei Pull Requests wird der Rauchtest übersprungen.
 
