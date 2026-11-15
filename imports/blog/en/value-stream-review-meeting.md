@@ -126,3 +126,9 @@ iFAKT's [Polaris Operator](https://www.m365.fm/entity/polaris-operator/) is a mo
 ## Next step
 
 A value stream review works when it is short, fixed in the calendar and tied to an action list. This week, book the first 45-minute review for one product family, print the agenda above and prepare the three flow measures and the map.
+
+## Sources
+
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Insights on Why, When, and How Value-Stream Mapping is a Vital Part (eBook) - Lean Enterprise Institute](https://email.lean.org/hubfs/ebook%20files/eBook-Top5-VSM-final.pdf)
+- [Taking a Value Stream Walk at Firm A - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/taking-a-value-stream-walk-at-firm-a/)

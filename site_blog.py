@@ -9,7 +9,6 @@ import site_topics as TOP
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Beitraege (data/sponsorships.json)
 import site_img_dims as IMG
 import site_listen as LST   # Anhoeren-Karten (Stoerer) in den Beitraegen
-import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_milestones as MST   # Wochenzusammenfassungen: eigene Vor/Zurueck-Reihe, darunter nur weitere Zusammenfassungen statt Inhaltslisten
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
 
@@ -208,7 +207,7 @@ def build(g, posts, people, api):
         is_by = lambda p, h: p["handle"] == h or any(c.get("handle") == h for c in (p.get("coauthors") or []))   # Co-Autoren: der Beitrag steht auch in ihrer Blogliste
         _pub = lambda p: (p["handle"], p["slug"]) in _idx_keys   # zaehlt fuer den Index der Verzeichnisse: genau die Beitraege, die oben auf index stehen (alle Originalbeitraege, freigegebene Sprachfassungen)
         PER = 100   # T6: Verzeichnisse seitenweise (vorher alle ~2.300 Beitraege in einer Liste, ca. 1 MB)
-        def paged(items, ru, rel, head_html, title, desc, noidx, ld=None):
+        def paged(items, ru, rel, head_html, title, desc, noidx, ld=None, first_html=""):   # first_html: nur auf Seite 1 (z. B. Top-Liste mit Skript), nicht auf /page/N/
             npg = max(1, (len(items) + PER - 1) // PER)
             for pno in range(npg):
                 part = items[pno * PER:(pno + 1) * PER]
@@ -218,7 +217,7 @@ def build(g, posts, people, api):
                     links = " ".join(f'<a href="{ru if q == 0 else f"{ru}page/{q + 1}/"}"{" aria-current=page style=font-weight:700" if q == pno else ""}>{q + 1}</a>' for q in range(npg))
                     nav = f'<nav class="pages" aria-label="{esc(T(lang, "Pages", "Seiten"))}" style="margin:1em 0">{esc(T(lang, "Page", "Seite"))} {links}</nav>'
                 prev_next = ((f'<link rel="prev" href="{ru if pno == 1 else f"{ru}page/{pno}/"}">' if pno else "") + (f'<link rel="next" href="{ru}page/{pno + 2}/">' if pno + 1 < npg else ""))
-                b = shell(lang, f'{CSS}{head_html}{nav}{lst(part)}{nav}')
+                b = shell(lang, f'{CSS}{head_html}{first_html if pno == 0 else ""}{nav}{lst(part)}{nav}')
                 write(f"{pfx2(lang)}{rel}{'' if pno == 0 else f'page/{pno + 1}/'}index.html", page(lang, title + (f" ({pno + 1})" if pno else ""), desc, pu, b, None, ld if pno == 0 else None, og_type="website", extra_head=LCSS + prev_next, noindex=noidx))
                 if not noidx:
                     sitemap.append((pu, (iso(part[0]["published"]) if part else TODAY), None))
@@ -234,7 +233,7 @@ def build(g, posts, people, api):
         ld = [{"@context": "https://schema.org", "@type": "Blog", "name": "M365.FM " + title_blog, "url": ru, "inLanguage": lang,
                "blogPost": [{"@id": f"{croot}u/{p['handle']}/blog/{p['slug']}/#post"} for p in it[:50]]}]
         write(f"{pfx2(lang)}community/blog/feed.xml", rss("M365.FM " + title_blog, ru, it, croot, pb, lang))
-        paged(it, ru, "community/blog/", f'<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>' + top_block(lang, mine, croot, api), f'{title_blog} – M365.FM', intro, noidx, ld)
+        paged(it, ru, "community/blog/", f'<h1>{esc(title_blog)}</h1><p class="mut">{esc(intro)}</p>', f'{title_blog} – M365.FM', intro, noidx, ld, first_html=top_block(lang, mine, croot, api))
 
 
 def rss(title, link, items, croot, pb, lang):

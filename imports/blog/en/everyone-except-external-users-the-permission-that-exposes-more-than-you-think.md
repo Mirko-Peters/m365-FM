@@ -21,7 +21,7 @@ This article explains what the claim is, how it differs from other ways of grant
 
 ## What "Everyone except external users" actually is
 
-[Everyone except external users](https://www.m365.fm/entity/everyone-except-external-users/) (often shortened to EEEU) is a built-in claim in SharePoint and Microsoft 365. It is not a group you create and maintain. It represents every internal user of your tenant.
+[Everyone except external users](https://www.m365.fm/entity/everyone-except-external-users/) (often shortened to EEEU) is a built-in claim in SharePoint and Microsoft 365. Microsoft Learn lists it among the special SharePoint groups: it is not a group you create and maintain, and all users added to your organization automatically become members of it. It represents every internal user of your tenant. One common route to it: according to Microsoft Learn, when a group-connected team site is set to Public, "Everyone except external users" has a default permission level of Edit on that site, and you can't change that default.
 
 The important part is the scope. If you grant this claim access to a site, a library or a folder, then every internal user can reach that content at the permission level you granted. There is no membership list to check and no owner who approved individual people. The claim itself is the audience.
 
@@ -61,7 +61,7 @@ This is a hypothetical example, but the pattern is easy to recognize: access tha
 
 A review has three goals: find where the claim is used, decide whether the broad access is intended, and replace it where it is not.
 
-1. **Find it.** Look at the permissions of your sites, libraries and folders, and check whether the EEEU claim appears. Check Microsoft Learn for the SharePoint admin tools and reporting available for this in your tenant, as these options change over time.
+1. **Find it.** Look at the permissions of your sites, libraries and folders, and check whether the EEEU claim appears. Microsoft Learn describes data access governance reports in the SharePoint admin center that cover this claim, among them an activity report on content shared with "Everyone except external users" and a snapshot report on sites and files shared via the special SharePoint groups. Their availability depends on your licensing, and these options change over time, so check Microsoft Learn for what applies to your tenant.
 2. **Classify the content.** For each place, ask whether the content is truly meant for everyone inside the organization. Company-wide announcements and general policies often are. Project files and HR or finance material usually are not.
 3. **Replace with a defined audience.** Where broad access is not intended, use the Microsoft 365 group or team, or the SharePoint groups Owners, Members and Visitors, as Microsoft recommends. People who should only read can be added to the Visitors group.
 4. **Keep intended broad access intentional.** If a site is meant to be open to all internal users, document that decision and keep the content on that site limited to material that fits.
@@ -79,3 +79,10 @@ Some organizations use third-party tools to inventory and report on permissions 
 - Review access before rolling out AI assistants like Copilot, since they can surface content users already have access to.
 - Test permission changes on a pilot site first and keep a record or backup so you can go back.
 - Where broad internal access is intended, make it a documented decision and keep sensitive material elsewhere.
+
+## Sources
+
+- [Default SharePoint groups (Microsoft Learn)](https://learn.microsoft.com/sharepoint/default-sharepoint-groups)
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Data access governance reports for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)
+- [Data, Privacy, and Security for Microsoft Copilot (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)

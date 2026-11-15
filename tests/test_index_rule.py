@@ -139,8 +139,8 @@ def blog_post(slug, lang="de", body="", html=None, votes=0, **kw):
     return p
 
 
-def build_blog(posts):
-    files, r2, pages, sitemap = {}, {}, {}, []
+def build_blog(posts, files=None):
+    files, r2, pages, sitemap = ({} if files is None else files), {}, {}, []
 
     def page(lang, title, desc, canonical, body, alternates=None, jsonld=None, xdefault=None, noindex=False, **kw):
         pages[canonical] = {"noindex": noindex, "alt": alternates}
@@ -182,6 +182,14 @@ class BlogPageTests(unittest.TestCase):
         tr = [blog_post("t", "fr", html="<p>x</p>", votes=4, tr_of="en", tr_index=True, legacy=True)]
         h2 = BLG.top_block("fr", tr, f"{BASE}/fr/community/", "https://api.example.test")
         self.assertIn("Titel t", h2); self.assertIn('data-lang=""', h2)
+
+    def test_top_block_only_on_first_directory_page(self):
+        files = {}
+        build_blog([blog_post(f"p{i:03d}", "de", body=words(40), votes=i % 3, published=1793836800 - i) for i in range(150)], files)
+        first, second = files["de/community/blog/index.html"], files["de/community/blog/page/2/index.html"]
+        self.assertEqual(first.count('class="bl-top"'), 1)
+        self.assertNotIn('class="bl-top"', second)
+        self.assertNotIn("/api/blog/top", second)
 
     def test_translation_noindex_follows_tr_index_only(self):
         pages, _ = build_blog([blog_post("t1", "fr", html="<p>kurz</p>", tr_of="en", tr_index=False, legacy=True), blog_post("t2", "fr", html="<p>kurz</p>", tr_of="en", tr_index=True, legacy=True)])

@@ -27,7 +27,7 @@ Continuous improvement in manufacturing means making many small, regular improve
 
 [Continuous improvement](https://www.m365.fm/entity/continuous-improvement/) is the habit of improving a little, all the time. In a plant, that means shorter changeovers, fewer defects, less walking, less waiting, clearer instructions. No single change is dramatic. The value comes from the number of changes and from the fact that they never stop.
 
-Toyota describes this on its [Toyota Production System page](https://global.toyota/en/company/vision-and-philosophy/production-system/index.html). It says that all employees implement daily incremental kaizen, and that only humans can implement kaizen. [Kaizen](https://www.m365.fm/entity/kaizen/) is the Japanese word for "change for the better". It is the origin of what many plants call continuous improvement.
+Toyota describes this on its [Toyota Production System page](https://global.toyota/en/company/vision-and-philosophy/production-system/index.html). It says that all employees implement daily incremental kaizen, and that only humans can implement kaizen. [Kaizen](https://www.m365.fm/entity/kaizen/) is commonly translated from Japanese as "change for the better", a gloss that Toyota's page does not give. It is the origin of what many plants call continuous improvement.
 
 Three points define good practice:
 
@@ -39,9 +39,9 @@ Three points define good practice:
 
 The three terms overlap, and the differences are about origin and use, not about method.
 
-According to an [explanation of CIP by item24](https://blog.item24.com/en/intralogistics/what-is-cip-a-simple-explanation-of-continuous-improvement/), kaizen is the older Japanese philosophy, from the words for change and better. Toyota built on it in the 1950s. CIP is the Western, workplace-focused version, and the article says that a 1990 MIT study named the method.
+Kaizen is the older Japanese philosophy, from the words for change and better, and Toyota is closely associated with it. CIP is the Western, workplace-focused version of the same idea.
 
-KVP is the German name for the same process. A German reference describes the [kontinuierlicher Verbesserungsprozess](https://www.socialnet.de/lexikon/Kontinuierlicher-Verbesserungsprozess) as a quality management element that improves services, products and internal processes step by step. It says the term appeared in the late 1980s, modeled on Japanese kaizen, and that Deming's PDCA cycle from the 1950s is its basis. The involvement of all employees is central.
+KVP is the German name for the same process. The kontinuierlicher Verbesserungsprozess is a quality management element that improves services, products and internal processes step by step. It is modeled on Japanese kaizen and builds on the PDCA cycle associated with Deming. The involvement of all employees is central.
 
 In short, kaizen is the philosophy, CIP is the English label for the process, and KVP is the German label. If your plant uses German and English terms side by side, agree on one word per document to avoid confusion.
 
@@ -54,7 +54,7 @@ The usual model is the PDCA cycle: plan, do, check, act. The American Society fo
 3. **Check.** Review the results and note what you learned.
 4. **Act.** If the change worked, fold it into broader changes. If not, restart the cycle with a different plan.
 
-Read the full description on the [ASQ page on the PDCA cycle](https://asq.org/quality-resources/pdca-cycle). The item24 article adds a practical rule: define just one measure for each PDCA cycle. That keeps the test clean. If you change three things at once, you will not know which one helped.
+Read the full description on the [ASQ page on the PDCA cycle](https://asq.org/quality-resources/pdca-cycle). A practical rule from our own experience: define just one measure for each PDCA cycle. That keeps the test clean. If you change three things at once, you will not know which one helped.
 
 Many teams link the [PDCA cycle](https://www.m365.fm/entity/pdca-cycle/) to a one-page problem sheet, so each cycle leaves a written record that others can read.
 
@@ -124,3 +124,8 @@ For a first start, a board and a spreadsheet are enough. Software helps when the
 ## Next step
 
 Pick one area this week and run one PDCA cycle on a problem the team already complains about. Record the baseline, the change and the result. That single page is the practical start of continuous improvement in manufacturing in your plant.
+
+## Sources
+
+- Toyota Motor Corporation: Toyota Production System - https://global.toyota/en/company/vision-and-philosophy/production-system/index.html
+- ASQ: Plan-Do-Check-Act (PDCA) Cycle - https://asq.org/quality-resources/pdca-cycle

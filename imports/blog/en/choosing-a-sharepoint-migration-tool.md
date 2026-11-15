@@ -8,7 +8,7 @@ date: 2026-12-09
 topics: [sharepoint-migration, sharegate, sharepoint-essentials-toolkit]
 faq:
   - q: "Does a SharePoint migration delete the source files?"
-    a: "According to Microsoft Learn, migrating copies the files and the source files are not deleted. That gives you a way back if something looks wrong, but you should still test with a pilot first and keep a backup of important content before any cutover or cleanup of the old location."
+    a: "According to Microsoft Learn, when you migrate content to Microsoft 365 you are copying the files and the source files are not deleted. That gives you a way back if something looks wrong, but you should still test with a pilot first and keep a backup of important content before any cutover or cleanup of the old location. Cross-tenant SharePoint site migration works differently: it moves content and leaves a redirect behind."
   - q: "Which Microsoft tool should I use for file shares or Google Workspace?"
     a: "Microsoft names the Migration Manager in the SharePoint admin center for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares. For SharePoint Server 2010, 2013 and 2016, it names the SharePoint Migration Tool (SPMT). Check Microsoft Learn for the current list and limits."
   - q: "Do I need a third-party migration tool?"
@@ -21,7 +21,7 @@ This article gives a practical way to choose: define the source and scope, look 
 
 ## Start with the source and the scope
 
-[SharePoint migration](https://www.m365.fm/entity/sharepoint-migration/) means moving content from file shares, other cloud services or older SharePoint Server versions into SharePoint and OneDrive in Microsoft 365. Microsoft Learn is explicit that migrating copies the files: the source files are not deleted. That is useful, because the original remains as a fallback while you verify the result.
+[SharePoint migration](https://www.m365.fm/entity/sharepoint-migration/) means moving content from file shares, other cloud services or older SharePoint Server versions into SharePoint and OneDrive in Microsoft 365. Microsoft Learn is explicit that when you migrate content to Microsoft 365 you are copying the files: the source files are not deleted. That is useful, because the original remains as a fallback while you verify the result. The exception is cross-tenant SharePoint site migration, which Microsoft documents as a move that leaves a redirect at the source (see below).
 
 Before you look at any tool, write down:
 
@@ -37,19 +37,19 @@ Imagine a team with a large file share where half of the folders have not been t
 Microsoft documents its own tools on the [migrate to SharePoint page on Microsoft Learn](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online). Two are central:
 
 - **Migration Manager** in the SharePoint admin center, named for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares.
-- **SharePoint Migration Tool (SPMT)**, named for SharePoint Server 2010, 2013 and 2016, including classic workflows and classic pages.
+- **SharePoint Migration Tool (SPMT)**, named for SharePoint Server 2010, 2013 and 2016 environments only. For classic SharePoint Server workflows, Microsoft says SPMT can migrate SharePoint Server 2010 out-of-the-box approval and collect feedback workflows to Power Automate. Classic pages are covered by a separate page transformation guide.
 
-Microsoft also states that the Mover tool is retired for admin-led migrations, so older guidance that mentions it may be outdated. For large data volumes over a limited network connection, Microsoft names Azure Data Box as an option.
+Microsoft also states that the Mover tool is retired for all admin-led migrations, with the Google Drive, Box, Dropbox and Egnyte migrations integrated into Migration Manager, so older guidance that mentions it may be outdated. For large data volumes over a limited network connection, Microsoft names Azure Data Box as an option.
 
-Two further points from the documentation matter for planning. Classic SharePoint Server workflows should be rebuilt as Power Automate flows rather than expected to move over unchanged. And a Migration Administrator role lets a migration team work without full SharePoint admin access, which helps if you want to limit who holds broad permissions during the project.
+Two further points from the documentation matter for planning. Microsoft recommends moving classic SharePoint Server workflows to Power Automate flows rather than expecting them to carry over unchanged; SPMT can migrate only certain SharePoint Server 2010 workflows. And a Migration Administrator role lets a migration team work without full SharePoint admin access, which helps if you want to limit who holds broad permissions during the project.
 
-Moving between two Microsoft 365 tenants is a separate topic with its own tooling and constraints. Microsoft's documentation describes PowerShell for moving OneDrive content between tenants and a cross-tenant SharePoint solution that was in private preview at the time of checking. Verify the current status on Microsoft Learn.
+Moving between two Microsoft 365 tenants is a separate topic with its own tooling and constraints. Microsoft's documentation describes PowerShell for moving OneDrive content between tenants. For SharePoint sites, a dedicated Microsoft Learn page describes a cross-tenant SharePoint site migration feature run with SharePoint Online PowerShell, currently available only to Enterprise Agreement customers with Cross-Tenant Shared Data Migration licenses. It moves content in a single pass and does not support incremental or delta passes. The general migration overview page still describes a private preview, so the Learn pages are not fully consistent; verify the current status on Microsoft Learn.
 
 ## When a third-party tool enters the picture
 
 Native tools cover many common scenarios, but not every project fits neatly. Teams sometimes look at third-party tools when they have requirements the native tools do not cover, for example around reporting or work surrounding the migration. That is a requirements question, not a quality ranking. Check each tool's documentation for what it actually offers.
 
-[ShareGate](https://www.m365.fm/entity/sharegate/) is a vendor of Microsoft 365 migration, consolidation and governance tools. Microsoft Learn also notes that third-party tools exist, ShareGate being one example. Others exist, and the right one depends on your scenario.
+[ShareGate](https://www.m365.fm/entity/sharegate/) is a vendor of Microsoft 365 migration, consolidation and governance tools. Others exist, and the right one depends on your scenario.
 
 The [SharePoint Essentials Toolkit](https://www.m365.fm/entity/sharepoint-essentials-toolkit/) from [Cognillo](https://www.m365.fm/entity/cognillo/) is another option, though it is broader than a migration tool. According to the vendor's product page, it covers permission reports, oversharing and sharing link reports, broken link monitoring, content tools, metadata reports and scheduled exports, plus SharePoint-to-SharePoint migration. The page states that item IDs, version history and metadata are kept, with verification reports after the migration, and gives a throughput of 2 to 3 GB per hour. These are the vendor's own statements and were not tested by M365.FM. Cognillo sponsors M365.FM, so this section is sponsored content.
 
@@ -87,7 +87,12 @@ Treat any speed figure, from a vendor or from documentation, as a rough indicati
 - Define source, scope and must-preserve items before you look at any tool.
 - Check the native Microsoft options first: Migration Manager and SPMT, as documented on Microsoft Learn.
 - Remember that migration copies content and does not delete the source, but do not retire the source until the result is verified.
-- Rebuild classic SharePoint Server workflows as Power Automate flows rather than expecting them to carry over.
+- Plan to move classic SharePoint Server workflows to Power Automate flows rather than expecting them to carry over; SPMT covers only certain SharePoint Server 2010 workflows.
 - Treat third-party tools such as ShareGate or the SharePoint Essentials Toolkit as options, and compare them on your own requirements, including which sources they support.
 - Verify vendor claims about speed, features and prices yourself; they were not tested by M365.FM.
 - Always pilot on a small slice, in a test site or tenant, and keep a backup and a way back.
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)
+- [Cross-tenant SharePoint site migration overview (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/migration/cross-tenant-sharepoint-migration)

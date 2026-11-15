@@ -47,7 +47,7 @@ Use this formula:
 
 ## What counts as available time and demand?
 
-Be strict here, because most errors come from these two inputs. The [Process Excellence Network](https://www.processexcellencenetwork.com/lean-six-sigma-business-transformation/articles/what-is-takt-time/) describes available production time as total production time minus breaks, maintenance activities, shift changeover and clean-down time, and customer demand as the units required by the customer in a time period.
+Be strict here, because most errors come from these two inputs. Available production time is total production time minus breaks, maintenance activities, shift changeover and clean-down time, and customer demand is the units required by the customer in a time period.
 
 Typical items to subtract from the shift:
 
@@ -61,7 +61,7 @@ Do not subtract unplanned stops such as breakdowns. Those are a loss that you tr
 
 For demand, use customer orders or a reliable forecast, not the plan of what the plant would like to make. If the customer takes 140 units per shift, the demand is 140 units, even if the plant has capacity for 200. Making the extra 60 is overproduction.
 
-Process Excellence Network gives a worked example: 8 hours, which is 480 minutes, minus 50 minutes of breaks leaves 430 minutes. With a demand of 100 pieces, takt is 430 ÷ 100 = 4.3 minutes, or 258 seconds.
+A worked example: 8 hours, which is 480 minutes, minus 50 minutes of breaks leaves 430 minutes. With a demand of 100 pieces, takt is 430 ÷ 100 = 4.3 minutes, or 258 seconds.
 
 ## How is takt different from cycle time and lead time?
 
@@ -73,7 +73,7 @@ Three times are often mixed up.
 
 The comparison of takt and cycle time is the heart of the method. If the cycle time of a station is longer than takt, that station cannot keep up. It is a [bottleneck](https://www.m365.fm/entity/bottleneck/) relative to demand, and the line will build queues in front of it. If the cycle time is much shorter than takt, the station will wait, or it will overproduce if nobody stops it.
 
-The Process Excellence Network advises measuring individual cycle times and bringing them closer to takt. It also notes that you may want to run a little under takt, to absorb variation in process steps, breakdowns and quality issues. So aim for cycle times at or just under takt.
+Measure individual cycle times and bring them closer to takt. In my experience, some plants aim slightly below takt to absorb variation in process steps, breakdowns and quality issues, but that is a deliberate choice, not part of the takt definition. My advice: aim for cycle times at or just under takt.
 
 ## How do you use takt to balance a line?
 
@@ -126,3 +126,7 @@ A spreadsheet is enough to calculate takt. The harder question is what happens w
 ## Next step
 
 Pick one line, list the planned stops and calculate takt for one shift from the customer demand. Then compare the cycle time of each station with it, and start with the station that is furthest above takt time.
+
+## Sources
+
+- [Takt Time - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/takt-time/)

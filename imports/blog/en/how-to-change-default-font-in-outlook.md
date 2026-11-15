@@ -16,7 +16,7 @@ faq:
   - q: "Where is the default font setting in classic Outlook?"
     a: "Go to File, then Options, then Mail. Under Compose messages, select Stationery and Fonts. On the Personal Stationery tab, select Font under New mail messages, and pick the font, style and size. Use Replying or forwarding messages on the same tab to set those separately, then select OK in every window."
   - q: "Why does my Outlook font go back to Calibri?"
-    a: "Calibri 11 is the default for new, reply and forward messages. Common causes of a revert: you closed a dialog without selecting OK, you changed the wrong message type, you're composing in plain text, or an admin policy sets the font. On a Mac, some font variants such as Calibri Light can't be set as the default."
+    a: "Microsoft names 11-point Calibri as the default for new, reply and forward messages in Outlook 2016. Common causes of a revert: you closed a dialog without selecting OK, you changed the wrong message type, you're composing in plain text, or an admin policy sets the font. On a Mac, a Microsoft Q&A thread reports that variants such as Calibri Light can't be set as the default."
   - q: "Will recipients see the font I choose?"
     a: "Only if they have it installed. Microsoft says that when a recipient doesn't have your chosen font, their mail program substitutes an available one. For that reason, stick with fonts that ship with Windows and macOS, such as Arial, Calibri or Verdana, when you write to customers or people outside your company."
 ---
@@ -24,7 +24,7 @@ To change the default font in Outlook, open the font settings for new messages a
 
 ## Which Outlook are you using?
 
-If you see a File menu in the top left of the window, you're on classic Outlook. If you see a Settings gear and no File menu, you're on new Outlook or Outlook on the web. The menu names below follow that split. Microsoft's own pages are split the same way: one for [new Outlook](https://support.microsoft.com/en-us/outlook/mail/change-the-default-font-or-text-color-for-email-messages-in-outlook) and one for [classic Outlook](https://support.microsoft.com/en-us/office/set-the-font-or-text-color-for-messages-you-send-83425b7b-4acc-4e94-8c04-fa1e31790318).
+If you see a File menu in the top left of the window, you're on classic Outlook. If you see a Settings gear and no File menu, you're on new Outlook or Outlook on the web. The menu names below follow that split. Microsoft's own pages are split the same way: one for [new Outlook](https://support.microsoft.com/outlook/mail/change-the-default-font-or-text-color-for-email-messages-in-outlook) and one for [classic Outlook](https://support.microsoft.com/office/set-the-font-or-text-color-for-messages-you-send-83425b7b-4acc-4e94-8c04-fa1e31790318).
 
 One fact before you start: the default is Calibri in black, and for new, reply and forward messages in Outlook 2016 Microsoft names 11-point Calibri. You can change the font, its color, size and style, for all the messages you send.
 
@@ -37,7 +37,7 @@ One fact before you start: the default is Calibri in black, and for new, reply a
 5. To set replies and forwards separately, select **Font** under **Replying or forwarding messages** and repeat step 4.
 6. Select **OK** in every window, not just the last one.
 
-Microsoft's example is switching from Calibri to Arial. The same dialog has a button for **Composing and reading plain text messages**, which is where you set the font for plain text. Plain text doesn't carry the formatting of HTML mail, so treat that setting as a display choice for your own screen.
+Microsoft's example is switching from Calibri to Arial. The same dialog has a separate button for plain text messages, which is where you set the font for plain text. Plain text doesn't carry the formatting of HTML mail, so treat that setting as a display choice for your own screen.
 
 Start a new message to check. The font you picked should be there immediately. If you have several email accounts, test one message from each account.
 
@@ -54,15 +54,15 @@ Microsoft says you can set font, color, size and style for new messages and for 
 
 ## Outlook on the web
 
-In [Outlook on the web](https://www.m365.fm/entity/outlook-web/), you can always change the font of the message in front of you. Microsoft's page on [customizing an email message in Outlook on the web](https://support.microsoft.com/en-us/outlook/customize-your-email-message-in-outlook-on-the-web) says to select **Show formatting options** next to **Send**, then **Font**, to change the font, size, color or style for that message.
+In [Outlook on the web](https://www.m365.fm/entity/outlook-web/), you can always change the font of the message in front of you. Microsoft's page on [customizing an email message in Outlook on the web](https://support.microsoft.com/outlook/customize-your-email-message-in-outlook-on-the-web) says to select **Show formatting options** next to **Send**, then **Font**, to change the font, size, color or style for that message.
 
-For a permanent default, check **Settings**, then **Mail**, then **Compose and reply**. Microsoft's article doesn't describe a message format option there, so I can't confirm a default font setting from a Microsoft page. If your version has one, it's in that Compose and reply screen. If not, you'll have to set the font per message, or write in new Outlook or classic Outlook, where the default is documented.
+For a permanent default, check **Settings**, then **Mail**, then **Compose and reply**. Microsoft's article on customizing a message describes only the signature there, so no Microsoft documentation page confirms a default font setting. If your version has one, it's in that Compose and reply screen. If not, you'll have to set the font per message, or write in new Outlook or classic Outlook, where the default is documented.
 
 ## Outlook for Mac
 
-On the Mac, the default font setting sits behind a **Fonts** button. Microsoft's accessibility page for Outlook for Mac describes it this way: open Outlook's preferences (called Settings in newer builds), select **Fonts**, and in the Fonts dialog choose **New mail**, then pick the font on the **Font** tab. The same dialog sets defaults for replies and forwards and for plain text messages.
+On the Mac, the default font setting sits behind a **Fonts** button. Microsoft's accessibility page for Outlook for Mac describes it this way: open Outlook's preferences (called Settings in newer builds), select **Fonts**, and in the Fonts dialog choose **New mail**, then pick the font on the **Font** tab. The same dialog has entries for **Reply or forward** and for **Plain text**.
 
-A reported problem exists. In a Microsoft Q&A answer about the new Outlook for Mac, a user could not set Calibri Light as the default font. The answer says that variants such as Light and Bold can't be set as the default through the standard interface, that Microsoft was investigating and that no timeline was given. Suggested workarounds there were clearing the cache, setting the font in Outlook on the web (Settings, Mail, Compose and reply), or using a legacy version. Treat that as the state at the time of the answer and check whether an update changed it. If your preferred font is a variant, pick the regular weight of the same family as a stand-in.
+A reported problem exists. In a Microsoft Q&A thread about the new Outlook for Mac, a user could not set Calibri Light as the default font. The answer there is anonymous and not part of Microsoft's documentation. It says that variants such as Light and Bold can't be set as the default through the font selection menu, that Microsoft was investigating and that no timeline was given. Suggested workarounds there were clearing the cache, setting the font in Outlook on the web (Settings, Mail, Compose and reply), or using a legacy version. The thread showed no accepted solution as of January 2026, so check whether an update changed it. If your preferred font is a variant, pick the regular weight of the same family as a stand-in.
 
 ## One message or every message?
 
@@ -121,3 +121,11 @@ To go back to the standard look in classic Outlook, open the same Font dialog, s
 ## Next step
 
 Open the font settings in your version of Outlook, set the font for new messages and for replies and forwards, and then send yourself a test mail. If it looks right on your phone as well, you're done with how to change the default font in Outlook, and you won't need to touch it again.
+
+## Sources
+
+- [Change the default font or text color for email messages in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/mail/change-the-default-font-or-text-color-for-email-messages-in-outlook)
+- [Set the font or text color for messages you send (Microsoft Support)](https://support.microsoft.com/office/set-the-font-or-text-color-for-messages-you-send-83425b7b-4acc-4e94-8c04-fa1e31790318)
+- [Customize your email message in Outlook on the web (Microsoft Support)](https://support.microsoft.com/outlook/customize-your-email-message-in-outlook-on-the-web)
+- [Use a screen reader to format text in Outlook for Mac email (Microsoft Support)](https://support.microsoft.com/accessibility/outlook/mac/use-a-screen-reader-to-format-text-in-outlook-for-mac-email)
+- [Unavailable default font for new emails/replies on Outlook 2025 for Mac (Microsoft Q&A)](https://learn.microsoft.com/answers/questions/5607893/unavailable-default-font-for-new-emails-replies-on)

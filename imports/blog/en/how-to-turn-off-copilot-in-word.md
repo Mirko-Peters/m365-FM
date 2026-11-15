@@ -74,9 +74,9 @@ The only thing to remember is the scope. If you cleared the checkbox in Word and
 
 Microsoft's support article says that these settings aren't available when you're signed in with a work or school account. That is the most common reason people can't find the checkbox in an organization. In that case, the access to Copilot is an admin decision, not a user setting. Ask your IT team whether a license is assigned to you and whether they want to change it.
 
-If you use a personal account and the checkbox still isn't there, Microsoft offers a fallback. Change your account privacy settings instead. On Windows, go to **File**, **Account**, **Account Privacy**, **Manage Settings**. On Mac, go to **Preferences**, then **Personal Settings**, then **Privacy**. Be aware of the side effect, which Microsoft names: this also turns off other features, such as text predictions in Word and automatic alt text for images. Decide whether you can live without those before you use the privacy route.
+If you use a personal account and the checkbox still isn't there, Microsoft offers a fallback. Change your account privacy settings instead. On Windows, go to **File**, **Account**, **Account Privacy**, **Manage Settings** and clear **Turn on experiences that analyze your content** under connected experiences. On Mac, go to **Preferences**, then **Personal Settings**, then **Privacy**, open **Manage Connected Experiences** and clear the same checkbox. The change applies to all Microsoft 365 apps the next time they open. Be aware of the side effect, which Microsoft names: this also turns off other features, such as suggested replies in Outlook, text predictions in Word, PowerPoint Designer and automatic alt text for images. Decide whether you can live without those before you use the privacy route.
 
-Outlook works differently. Microsoft says Outlook has a separate **Turn on Copilot** toggle, and that setting applies across all devices signed in with the same account. If your question is about mail and not Word, use that toggle.
+Outlook works differently. Microsoft says Outlook has a separate **Turn on Copilot** toggle, and that setting applies across all devices signed in with the same account. If your question is about mail and not Word, use that toggle. The locations vary by platform, and when I checked, Microsoft's page said classic Outlook for Windows had no such toggle yet and gave no estimated date.
 
 ## What admins can do about Copilot in Word
 
@@ -84,7 +84,7 @@ For work and school accounts, two separate things exist, and admins often mix th
 
 **Licensed Copilot.** Microsoft's requirements page says users need a Microsoft Copilot license plus a qualifying prerequisite license. Admins assign these licenses in the Microsoft 365 admin center. If a user shouldn't have licensed Copilot, the license assignment is the control to look at. The pages I checked describe assigning licenses and don't give a click path for removing one, so use the admin center help for that step and test with one account before you change many.
 
-**Copilot Chat.** Microsoft Copilot Chat is available to users with an eligible Microsoft 365 subscription, and a Copilot license is not required for it. Admins decide whether Copilot Chat is pinned in the Microsoft 365 apps. In the Microsoft 365 admin center, the role needed is AI administrator, and the setting is under **Copilot**, then **Settings**, then **Pin Microsoft Copilot Chat**. The choices are to pin it (the recommended default) or not to pin it. Changes can take up to 48 hours. Microsoft's pinning article names Teams and Outlook as examples for the navigation bar and doesn't list Word, so don't promise your users that this setting changes Word. Users who aren't licensed can also unpin Copilot Chat themselves in their app settings.
+**Copilot Chat.** Microsoft Copilot Chat is available to users with an eligible Microsoft 365 subscription, and a Copilot license is not required for it. Admins decide whether Copilot Chat is pinned in the Microsoft 365 apps. In the Microsoft 365 admin center, the role needed is AI administrator, and the setting is under **Copilot**, then **Settings**, then **Pin Microsoft Copilot Chat**. The choices are to pin it (the recommended default) or not to pin it. Changes can take up to 48 hours. Microsoft's pinning article names Teams and Outlook for the navigation bar and doesn't list Word, so don't promise your users that this setting changes Word. If a user unpins Copilot Chat, Microsoft says it respects that choice in future sessions. The page also says the pinning setting no longer applies to the Microsoft Copilot app.
 
 If you manage devices and want to check what users see, test with a pilot account that has the same license and policy as the group. A policy change that works for one group may not apply to another. Document the outcome in a short note, so the next admin doesn't have to repeat the test.
 
@@ -94,7 +94,7 @@ If you manage devices and want to check what users see, test with a pilot accoun
 - **Removing the ribbon icon and calling it done.** Microsoft says Copilot stays reachable through other methods.
 - **Forgetting to restart Word.** The change applies after you close and reopen the app.
 - **Searching for the checkbox in an old version.** It needs Word version 2412 on Windows or 16.93 on Mac.
-- **Using the privacy route without knowing the cost.** It also disables text predictions and automatic alt text.
+- **Using the privacy route without knowing the cost.** It also disables features such as text predictions, PowerPoint Designer and automatic alt text.
 - **Expecting a user setting on a work account.** In an organization, license and policy decide.
 
 ## Related topics to explore
@@ -102,9 +102,15 @@ If you manage devices and want to check what users see, test with a pilot accoun
 - Turn off Copilot in Excel and PowerPoint: the same checkbox exists in each app and needs its own click.
 - Turn off Copilot in Outlook: it uses a separate **Turn on Copilot** toggle that follows the account across devices.
 - Remove Copilot from Windows 11: the Windows app is a different product with its own uninstall and policy options.
-- Licensing for admins: the [Microsoft Copilot requirements](https://learn.microsoft.com/en-us/copilot/microsoft-365/microsoft-365-copilot-requirements) and [license options](https://learn.microsoft.com/en-us/copilot/plan/copilot-license-options) explain which licenses qualify.
-- Copilot Chat pinning: the [pinning article](https://learn.microsoft.com/en-us/microsoft-365/copilot/pin-copilot-chat-navbar) explains the tenant-wide setting and what users can change.
+- Licensing for admins: the [Microsoft Copilot requirements](https://learn.microsoft.com/copilot/microsoft-365/microsoft-365-copilot-requirements) and [license options](https://learn.microsoft.com/copilot/plan/copilot-license-options) explain which licenses qualify.
+- Copilot Chat pinning: the [pinning article](https://learn.microsoft.com/microsoft-365/copilot/pin-copilot-chat-navbar) explains the tenant-wide setting and what users can change.
 
 ## Next step
 
-To turn off Copilot in Word, clear **Enable Copilot** in the Word options, restart the app, and repeat the step in Excel and PowerPoint if you want them quiet too. Microsoft's article on how to [turn off Copilot in Microsoft 365 apps](https://support.microsoft.com/en-us/privacy/turn-off-copilot-in-microsoft-365-apps) is the one to bookmark, and admins should ask which accounts really need a Copilot license.
+To turn off Copilot in Word, clear **Enable Copilot** in the Word options, restart the app, and repeat the step in Excel and PowerPoint if you want them quiet too. Microsoft's article on how to [turn off Copilot in Microsoft 365 apps](https://support.microsoft.com/privacy/turn-off-copilot-in-microsoft-365-apps) is the one to bookmark, and admins should ask which accounts really need a Copilot license.
+
+## Sources
+
+- [Turn off Copilot in Microsoft 365 apps (Microsoft Support)](https://support.microsoft.com/privacy/turn-off-copilot-in-microsoft-365-apps)
+- [Pin Microsoft 365 Copilot Chat to the navigation bar (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/pin-copilot-chat-navbar)
+- [Microsoft 365 Copilot requirements (Microsoft Learn)](https://learn.microsoft.com/copilot/microsoft-365/microsoft-365-copilot-requirements)

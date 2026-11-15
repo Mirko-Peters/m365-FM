@@ -69,8 +69,8 @@ Then do the check that gives the sheet its value: compute the same KPIs from a r
 A simulation run is a random sample. Breakdowns, arrival times and processing times vary, so two runs of the same scenario give two different answers. Treat a single run as an anecdote.
 
 1. **Validate the baseline.** Run the model for a period you know, and compare the KPIs with reality. If the model can't reproduce the past within a range you accept, fix the model before you test any change.
-2. **Use replications.** Run each scenario several times with independent random streams. A MIT lecture on [simulation experiment design](https://ocw.tau.edu.ng/courses/sloan-school-of-management/15-066j-system-optimization-and-analysis-for-manufacturing-summer-2003/lecture-notes/lec20_experiment_design.pdf) describes setting the number of replications by a precision target: you keep going until the confidence interval is narrow enough relative to the estimate. It also notes that with fewer than 30 replications you use the Student-t distribution for the interval.
-3. **Handle warm-up.** For a plant that runs continuously, the model starts empty and needs time to reach normal operation. The same lecture describes discarding the first part of each replication and mentions Welch's method for choosing how much to discard. If your question is about a defined period, such as one order batch, start the model in the state the plant has at that time.
+2. **Use replications.** Run each scenario several times with independent random streams. A common approach is to set the number of replications by a precision target: you keep going until the confidence interval is narrow enough relative to the estimate.
+3. **Handle warm-up.** For a plant that runs continuously, the model starts empty and needs time to reach normal operation. Typically you discard the first part of each replication, and Welch's method is one way to choose how much to discard. If your question is about a defined period, such as one order batch, start the model in the state the plant has at that time.
 4. **Change one thing per scenario.** If scenario B adds a machine and changes the shift pattern and the batch size, you won't know which one did what.
 5. **Report ranges.** "Throughput rises by 4% to 9%" is more honest than "rises by 6.5%". If the intervals of two scenarios overlap heavily, say that the data doesn't separate them.
 6. **Look at the whole stream.** A gain at one machine can push the bottleneck somewhere else. Check utilization and queues along the flow, not only at the station you changed.
@@ -125,3 +125,8 @@ For this kind of study, iFAKT Polaris offers two modules to look at. [iFAKT](htt
 ## Next step
 
 Manufacturing simulation KPI tracking pays off when the model and the plant speak the same numbers. Take your next simulation question, write the KPI sheet on one page with formula, time basis and unit, and check it against a real past period before you run the first scenario.
+
+## Sources
+
+- [ISO/DIS 22400-2 Key performance indicators (KPIs) for manufacturing operations management, Part 2 (draft) - ISO](https://www.iso.org/standard/87563.html)
+- [Data refresh in Power BI - Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/connect-data/refresh-data)

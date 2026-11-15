@@ -37,7 +37,7 @@ Each decision needs different information. The first needs product economics and
 
 Start by finding out whether anything is short. Compare the hours of the scarce resource that full demand needs with the hours available. If demand fits, there's no mix problem at this level, and you can plan to demand. If it doesn't fit, you need a rule for rationing.
 
-A common rule is limiting factor analysis, described in an [accounting study guide](https://opentuition.com/cima/cima-p1/notes/cima-p1-5-limiting-factor-analysis-and-throughput-accounting/): calculate contribution per unit, divide it by the scarce resource used per unit, rank products from highest to lowest and allocate the resource down the ranking, capping each product at its maximum demand until the resource runs out. The guide notes that with two or more scarce resources at once, you need linear programming instead.
+A common rule is limiting factor analysis, described in an [accounting study guide](https://opentuition.com/cima/cima-ba2/notes/cima-ba2-18-limited-factor-analysis-and-make-or-buy-decisions/): calculate contribution per unit, divide it by the scarce resource used per unit, rank products from highest to lowest and allocate the resource down the ranking, up to each product's demand, until the resource runs out. In general, with two or more scarce resources at once, a simple ranking is not enough and you need linear programming.
 
 Here is a hypothetical example, invented only to show the arithmetic. A bottleneck has 400 hours this month. Three products compete for it:
 
@@ -51,7 +51,7 @@ Ranking by contribution per bottleneck hour reverses the order: B first (100 uni
 
 Two warnings before you use this on real data.
 
-**Costs depend on your assumptions.** The same study guide shows that treating only direct material as variable (throughput accounting) can produce a different ranking from treating labor as variable too. Each plan is best only under its own assumption, so pick the cost view with finance and use it consistently.
+**Costs depend on your assumptions.** A [study article on throughput accounting](https://opentuition.com/acca/articles/throughput-accounting-and-bottleneck-decisions-for-acca-pm/) treats direct material as the only fully variable cost, while conventional limiting factor analysis uses contribution after all variable costs, so the two views can produce different rankings. Each plan is best only under its own assumption, so pick the cost view with finance and use it consistently.
 
 **The ranking isn't the whole decision.** Customer commitments, contracts, strategic products, minimum lot sizes and quality requirements all limit what you can drop. Use the ranking to see what a commitment costs, then decide with sales whether to keep it.
 
@@ -134,3 +134,11 @@ If your mix keeps changing on shared resources, a simulation can show what each 
 ## Next step
 
 Find your scarce resource and calculate contribution per hour for your three biggest products, using the cost view your finance team agrees with. Compare that ranking with your current product mix planning in manufacturing, and note any product that takes more bottleneck time than it earns.
+
+## Sources
+
+- [Limited Factor Analysis and Make or Buy Decisions - OpenTuition](https://opentuition.com/cima/cima-ba2/notes/cima-ba2-18-limited-factor-analysis-and-make-or-buy-decisions/)
+- [Throughput Accounting and Bottleneck Decisions for ACCA PM - OpenTuition](https://opentuition.com/acca/articles/throughput-accounting-and-bottleneck-decisions-for-acca-pm/)
+- [Heijunka - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/heijunka/)
+- [Single-Minute Exchange of Die - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/single-minute-exchange-of-die/)
+- [Demand forecasting with Planning Optimization - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/master-planning/planning-optimization/demand-forecast)

@@ -28,8 +28,8 @@ It also means the target is a new place with its own structure. A file that was 
 Microsoft names different tools for different sources:
 
 - **Migration Manager** in the SharePoint admin center for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares.
-- **SharePoint Migration Tool (SPMT)** for SharePoint Server 2010, 2013 and 2016, including classic workflows and classic pages.
-- **Azure Data Box** for large amounts of data over a limited network connection.
+- **SharePoint Migration Tool (SPMT)** for SharePoint Server 2010, 2013 and 2016 environments only. For classic workflows Microsoft recommends moving them to Power Automate flows, and SPMT can migrate certain SharePoint Server 2010 workflows. Classic pages are covered by a separate guide on transforming them to modern pages.
+- **Azure Data Box** to copy terabytes of data from your servers without depending on the WAN link. The data lands in Azure first, and you then use SPMT to migrate it to SharePoint.
 
 Third-party tools such as ShareGate also exist. Whichever you evaluate, the questions in this article apply. Check the current Microsoft Learn page on [migrating to SharePoint](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) for the latest tool guidance, since tools and their status change over time (the Mover tool, for example, is described as retired for admin-led migrations).
 
@@ -47,7 +47,7 @@ Imagine a finance team library with signed agreements. Prior drafts may matter t
 
 Whether and how a tool carries versions, and whether you can limit the number of versions, depends on the tool and its current version. Check the documentation for your chosen tool rather than assuming. Then confirm in a pilot: open a migrated file with a known history and look at its version history in the target library.
 
-Also review the target library's own versioning settings before you migrate, so you know how versions will be handled once users start editing. Those settings live in the library, and your migration plan should not be the first time anyone looks at them.
+Also review the target library's own versioning settings before you migrate, so you know how versions will be handled once users start editing. Those settings live in the library, and your migration plan should not be the first time anyone looks at them. Microsoft Learn explains that version limits decide how many versions a library keeps, and that versions removed because of those limits are deleted permanently. Check the limit before you decide how much history to migrate.
 
 ## Metadata: prepare the target first
 
@@ -70,12 +70,12 @@ Microsoft Learn has an overview of [managed metadata in SharePoint](https://lear
 
 Before you migrate, sketch the target document library as deliberately as the source. A few decisions have lasting effect:
 
-- **Columns:** Which columns are required, which optional, which tied to a term set? Making a column required after files already exist can leave existing items without a value in that column.
+- **Columns:** Which columns are required, which optional, which tied to a term set? In my experience, making a column required after files already exist can leave existing items without a value in that column, so check them after the change.
 - **Views:** If users used folders for navigation, provide views grouped or filtered by the new columns so the move feels like an improvement, not a loss.
 - **Permissions:** Libraries support permissions at library, folder or file level. Migrating a source with complex folder permissions into one flat library can change who sees what. Decide whether to keep the same permission structure or simplify it. Changing or breaking inheritance affects access, so test it in a pilot site first (or a test tenant) and keep a record of the original permissions and a backup so you have a way back.
 - **Limits:** Check the current SharePoint limits and restrictions on Microsoft Learn (for example for path length and file names), since source content can contain names or structures the target does not accept.
 
-Where the source contains classic SharePoint Server workflows, Microsoft's guidance is to rebuild them as Power Automate flows. Those are not metadata or versions, but they often depend on both, so check that the columns your flow reads or writes exist in the target.
+Where the source contains classic SharePoint Server workflows, Microsoft recommends moving them to Power Automate flows. Those are not metadata or versions, but they often depend on both, so check that the columns your flow reads or writes exist in the target.
 
 ## Run a pilot and compare
 
@@ -98,7 +98,7 @@ Then compare, item by item:
 
 Only after the pilot passes should you plan the main run. Because migration copies content and leaves the source files in place, you can fix mapping problems and run the sample again without losing the original. Keep it that way: do not delete or lock the source until users have confirmed the target. If a migration step or a PowerShell script changes data or access in the target, test it in a pilot site or test tenant first and make sure you have a backup or another way back, for example by being able to remove the pilot content and start over.
 
-If you use a dedicated migration team, the Migration Administrator role lets them work without full SharePoint admin access, which keeps the pilot and the main run within a limited set of permissions.
+If you use a dedicated migration team, the Migration Administrator role gives them access to Migration Manager in the Microsoft 365 admin center without the broader SharePoint administrator role, which keeps the pilot and the main run within a limited set of permissions.
 
 ## Practical takeaways
 
@@ -109,3 +109,9 @@ If you use a dedicated migration team, the Migration Administrator role lets the
 - Run a pilot with a deliberately varied sample and compare source and target item by item.
 - Keep the source until the target is confirmed. Test any change to permissions or data in a pilot site first and have a way back.
 - Recheck [Microsoft Learn](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) before starting, because tool status and capabilities change over time.
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)
+- [Overview of managed metadata in SharePoint (Microsoft Learn)](https://learn.microsoft.com/sharepoint/managed-metadata)
+- [Version history limits for document libraries (Microsoft Learn)](https://learn.microsoft.com/sharepoint/document-library-version-history-limits)

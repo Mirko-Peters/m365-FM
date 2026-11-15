@@ -37,9 +37,9 @@ Breaking inheritance means a library, folder or file stops following the permiss
 
 Often this is exactly what the requester wanted. Imagine a finance subfolder that should not be visible to the whole team, so it gets its own list of people.
 
-The side effect is less visible. The item now has an access list that lives separately from the site. To understand who can reach it, you have to look at the item itself, not just at the site. Multiply that by many folders, libraries and files and the site stops being something you can explain by looking at its groups.
+The side effect is less visible. The item now has an access list that lives separately from the site. To understand who can reach it, you have to look at the item itself, not just at the site. Multiply that by many folders, libraries and files and the site stops being something you can explain by looking at its groups. Microsoft also sets limits here: 50,000 is the supported limit of unique permissions in a list or library, with a general recommendation of 5,000, and in a list or library with more than 100,000 items you cannot break inheritance on the list itself.
 
-**Test first.** Changing inheritance changes who can access content. Before you do it, or before you reverse it, try the change on a pilot site or in a test tenant, and make sure you can return to the previous state, for example by documenting the existing permissions beforehand. Check Microsoft Learn for what happens to an item's unique permissions when inheritance is restored, and record them beforehand.
+**Test first.** Changing inheritance changes who can access content. Before you do it, or before you reverse it, try the change on a pilot site or in a test tenant, and make sure you can return to the previous state, for example by documenting the existing permissions beforehand. Microsoft Support states that you can restore inheritance at any time, and that this removes the custom permissions you set, so record them beforehand.
 
 ## Why exceptions turn into permission debt
 
@@ -58,7 +58,7 @@ None of this is a defect in SharePoint. It is a consequence of making many local
 
 ## Native options to try before breaking inheritance
 
-Microsoft recommends managing permissions through the Microsoft 365 group or the team where possible. It also advises against nested security groups because they can cause performance problems. Within that model, there are several options worth considering before you create a unique permission set.
+Microsoft Learn says permissions for team sites are best managed through the Microsoft 365 group or the team, and recommends against managing them separately with SharePoint groups. It describes nested security groups as not recommended because they can cause performance issues. Within that model, there are several options worth considering before you create a unique permission set.
 
 **Use a separate site for a different audience.** If a body of content has a clearly different audience, a separate site keeps the permission model simple. The site is the boundary, and its groups describe who has access. This is often easier to reason about than a folder with an exception.
 
@@ -94,3 +94,11 @@ Cleaning up is itself a change to access. Do not remove or reset permissions in 
 - Document who owns each exception and when it will be reviewed.
 - Test permission changes, including clean-ups and inheritance resets, on a pilot site first, and keep a record of the previous state.
 - Check [Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/modern-experience-sharing-permissions) for the current permission model and available reporting before you design your process.
+
+## Sources
+
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Default SharePoint groups (Microsoft Learn)](https://learn.microsoft.com/sharepoint/default-sharepoint-groups)
+- [Customize permissions for a SharePoint list or library (Microsoft Support)](https://support.microsoft.com/office/customize-permissions-for-a-sharepoint-list-or-library-02d770f3-59eb-4910-a608-5f84cc297782)
+- [List View Threshold for large lists and libraries (Microsoft Support)](https://support.microsoft.com/office/b8588dae-9387-48c2-9248-c24122f07c59)
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)

@@ -4,12 +4,14 @@ from site_i18n import T
 import site_updates as SU
 import site_quotes as SQ   # Quotes an Personen-Entitaeten
 import site_media as MED
+import site_event_link as EVL   # Event <-> Event-Entitaet: Termine, Sessions und Speaker auf der Seite der Entitaet
 import site_sponsorships as SPM
 import site_ads as ADS   # T37 Sponsor: Kennzeichnung gesponserter Entitaeten (data/sponsorships.json)
 import json
 import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partner, Positionen ...)
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import site_listen as LST   # Anhoeren-Karten (kompakte Variante unter den Beitraegen einer Entitaet)
+import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht (reine Funktionen)
 import re
 from datetime import date
 from urllib.parse import quote, urlsplit
@@ -342,6 +344,34 @@ def long_for(e, lang):
     return lt, bool(lt.strip())
 
 
+LONG_INDEX_MIN = 2500   # Mirko 13.11.2026: hat die Beschreibung (Langtext) in DIESER Sprache 2500 Zeichen oder mehr (ab 2500), steht die Seite auf index, egal welche Sprache
+_LONG_IDX = {}
+
+
+def native_long(e, lang):
+    """Langtext genau in lang (ohne Rueckfall auf Englisch/Deutsch, ohne Event-Text): redaktionell, sonst Ueberblick aus data/entity_texts, sonst KI-Uebersetzung."""
+    L = e.get("long") or {}
+    own = "" if FD.is_ai(e, "long", lang) else (L.get(lang) or "")
+    return own or (GENTEXT.get(e["id"]) or {}).get(lang) or FD.long_text(e, lang) or ""
+
+
+def long_index_langs(e):
+    """Sprachen, in denen die Seite wegen eines langen eigenen Textes (>= LONG_INDEX_MIN Zeichen) indexiert wird. Der angezeigte Text muss der eigene Text der Sprache sein
+    (kein Englisch-Rueckfall auf einer fr-Seite), sonst gaebe es ein Duplikat in falscher Sprache."""
+    r = _LONG_IDX.get(e["id"])
+    if r is None:
+        r = _LONG_IDX[e["id"]] = [l for l in COMM_LANGS
+                                  if len(native_long(e, l).strip()) >= LONG_INDEX_MIN and long_for(e, l)[0].strip() == native_long(e, l).strip()]
+    return r
+
+
+def index_langs(lx, has_de, thin):
+    """Sprachen, in denen die Entitaetsseite auf index steht (und damit im hreflang-Cluster): en, wenn nicht duenn; de, wenn echter deutscher Text und nicht duenn;
+    dazu jede Sprache mit langem eigenem Text (lx, long_index_langs) - auch bei duenner Entitaet. Reihenfolge: en, de, dann lx."""
+    r = ([] if thin else ["en"] + (["de"] if has_de else []))
+    return r + [l for l in lx if l not in r]
+
+
 def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
     """Schema.org-Knoten einer Entitaet (sprachneutrale @id)."""
     person_aka = person_aka or {}
@@ -466,6 +496,8 @@ def ent_ld(BASE, e, lang, glossary_set=None, person_aka=None):
             n["@type"] = "EventSeries"
         if rel.get("organized_by"):
             n["organizer"] = [ref(x) for x in rel["organized_by"]]
+        if n["@type"] == "EventSeries" and EVL.for_entity(i):   # bestaetigte, oeffentliche Termine als subEvent (Event.superEvent auf den Event-Seiten zeigt zurueck)
+            n["subEvent"] = EVL.ld_nodes(BASE, i)
     elif t == "media":
         if rel.get("created_by"):
             n["creator"] = [ref(x) for x in rel["created_by"]]; n["author"] = [ref(x) for x in rel["created_by"]]
@@ -661,6 +693,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": entity_graph}, ensure_ascii=False))
 
     cfg_t = lambda lang: S[lang]
+    _nf = MM.name_flags(recs)   # gleicher Name unter zwei Kennungen: Titel braucht die Kennung (site_meta_entities)
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0
         stat = fetch_wiki(api, lang)
@@ -687,7 +720,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                "hasDefinedTerm": [{"@id": eid_of(BASE, e["id"])} for e in _terms]},
               {"@context": "https://schema.org", "@type": "CollectionPage", "name": s["entities"], "url": root, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(recs), "itemListElement":
                [{"@type": "ListItem", "position": i + 1, "item": {"@id": eid_of(BASE, e["id"])}} for i, e in enumerate(sorted(recs, key=lambda x: x["name"].lower()))]}}]
-        (write if lang in ("en", "de") else (g.get("write_r2") or write))(f"{rel}/index.html", page(lang, f'{s["entities"]} – M365.FM', s["intro"], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
+        _hm = MM.entities_hub_meta(lang, len(recs)) or (f'{s["entities"]} – M365.FM', s["intro"])   # en/de: Inhalt + Nutzen; andere Sprachen (noindex) bisheriger Text
+        (write if lang in ("en", "de") else (g.get("write_r2") or write))(f"{rel}/index.html", page(lang, _hm[0], _hm[1], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
         if lang in ("en", "de"): sitemap.append((root, TODAY, None))
 
         # Einzelseiten
@@ -742,8 +776,11 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 facts.append((T(lang, "Date", "Datum"), esc(e["start"] + (" – " + e["end"] if e.get("end") else ""))))
             ft = '<table class="en-facts"><tbody>' + "".join(f'<tr><th scope="row">{esc(a)}</th><td>{b}</td></tr>' for a, b in facts) + "</tbody></table>"
             evl = ""
-            if e["id"] in EVENTS:
-                ev_ = EVENTS[e["id"]]; evl = f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{T(lang, "Go to the event", "Zum Event")}: {esc(ev_["title"])}</a></p>'
+            _lk = EVL.for_entity(e["id"])   # bestaetigt zugeordnete Events (Termine, Sessions, Speaker); sonst bleibt es beim bisherigen Block ueber die Themen des Events
+            if _lk:
+                evl += EVL.html(BASE, lang, e["id"], TODAY)
+            if e["id"] in EVENTS and EVENTS[e["id"]]["handle"] not in {_x["handle"] for _x in _lk}:
+                ev_ = EVENTS[e["id"]]; evl += f'<p><a class="btn" href="{BASE}{pfx(lang)}/community/events/{ev_["handle"]}/">{T(lang, "Go to the event", "Zum Event")}: {esc(ev_["title"])}</a></p>'
                 _ses = ev_.get("sessions", []); _spk = {}
                 for _se in _ses:
                     for _x in _se.get("speakers", []):
@@ -918,8 +955,10 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                 _app = max(len(ep_find(e, "en")), len(ep_find(e, "de"))) + len((SPEAKERS.get(e["id"]) or {}).get("sessions") or [])   # T42: gleiche Entscheidung fuer en und de (sonst verweist en per hreflang auf ein noindex-de)
                 _real = (len(FD.desc_en(e)) > 80 and not e.get("speaker")) or bool((e.get("long") or {}).get("en")) or bool(FD.long_text(e, "en"))
                 _thin = not _real and _app < 2 and not SQ.BY_PERSON.get(e["id"])   # eigene Zitate sind echter Inhalt
-            _alts = {"en": eurl(BASE, "en", e["id"]), "de": eurl(BASE, "de", e["id"])} if _has_de and not _thin else None
-            _noidx = lang not in ("en", "de") or (lang == "de" and not _has_de) or _thin
+            _lx = long_index_langs(e)   # Sprachen mit Beschreibung ab 2500 Zeichen (jede Sprache): index + hreflang
+            _il = index_langs(_lx, _has_de, _thin)   # alle indexierbaren Sprachen; hreflang nur unter ihnen (kein Verweis auf ein noindex-en bei duenner Entitaet)
+            _alts = {l: eurl(BASE, l, e["id"]) for l in _il} if len(_il) > 1 else None
+            _noidx = lang not in _il
             _feedu = f"{BASE}/entity/{e['id']}/feed.xml"
             if lang == "en" and (_arts or eps):   # Themen-Feed: neueste Artikel und Folgen zu dieser Entitaet (fuer Leser und Agenten)
                 from xml.sax.saxutils import escape as _x
@@ -936,7 +975,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _w = g.get("write_r2") or write   # Entitaetsseiten ALLER Sprachen liegen im R2-Bucket, nicht in GitHub Pages (Site-Worker liefert sie unter derselben Adresse). Englisch (~114 MB) seit 9.11.2026: docs/ lag mit 982 MB ueber der Grenze von 980 MB, jeder Seitenbau brach ab; de seit #310, die anderen 13 Sprachen von Anfang an
             ld = ld + _qld   # Quotation-Knoten der Person
             _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=[x for v in groups.values() for x in v], exclude=(e["id"],)) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten; Themen = verwandte Entitaeten
-            _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {tlab(lang, e["type"])} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
+            _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
+            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if (_alts and lang in _alts) else None, ld, xdefault=(_alts or {}).get("en"), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 

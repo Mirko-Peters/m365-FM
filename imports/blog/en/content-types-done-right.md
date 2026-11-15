@@ -109,3 +109,8 @@ A few patterns cause most of the pain.
 - Test every change on a pilot site or test tenant, and know your way back before editing or deleting anything in use.
 - Roll out in small steps, communicate changes, and plan how existing documents will be classified.
 - Check Microsoft Learn for current behaviour on inheritance, publishing and sharing of content types before you design a central model.
+
+## Sources
+
+- [Introduction to content types and content type publishing (Microsoft Support)](https://support.microsoft.com/topic/a5026d23-8df8-42f6-b0d6-1920880c0d03)
+- [Introduction to managed metadata (Microsoft Learn)](https://learn.microsoft.com/sharepoint/managed-metadata)

@@ -118,3 +118,9 @@ Low-volume plants have many part numbers and shared machines, so spreadsheets re
 ## Next step
 
 Choose one part family and calculate your own interval with the numbers of the last three months. Write down what would have to change for lean aerospace manufacturing to run it at half that interval, and start with the changeover on the bottleneck machine.
+
+## Sources
+
+- [Implementation of lean processes at a high-mix low-volume aerospace manufacturing facility in France - MIT thesis](https://dspace.mit.edu/handle/1721.1/34795)
+- [The Backbone of Lean in the Back Shops - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-backbone-of-lean-in-the-back-shops/)
+- [Lean, High Tech Help Aerospace Supplier Compete - Assembly Magazine](https://www.assemblymag.com/articles/94385-lean-high-tech-help-aerospace-supplier-compete)

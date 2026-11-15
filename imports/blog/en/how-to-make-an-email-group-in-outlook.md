@@ -18,15 +18,15 @@ faq:
   - q: "How do I send an email to an Outlook group?"
     a: "Start a new message and type the group's name in the To line, then pick it from the suggestions. In classic Outlook you can also select To, type the name in the Search box, double-click the group and select OK. Everyone in the list becomes a recipient. If you want to hide the addresses, put the group in Bcc."
   - q: "Should I use a contact list or a Microsoft 365 group?"
-    a: "Use a contact list when you just need to send the same message to the same people and you manage it alone. Use a Microsoft 365 group when the people need a shared inbox, calendar and files. Microsoft describes the group as a collaboration space for people inside and outside your company, managed in the admin center."
+    a: "Use a contact list when you just need to send the same message to the same people and you manage it alone. Use a Microsoft 365 group when the people need a shared inbox, calendar and files. Microsoft describes Microsoft 365 Groups as used for collaboration between users inside and outside your company."
 ---
 To make an email group in Outlook, create a contact list: open People, choose New contact list, name it, add the email addresses of your members and save it. In classic Outlook the same thing is called a contact group, and it lives under People, Home, New Contact Group. After that, you type the group's name in the To line and Outlook fills in everyone. This article is for [Outlook](https://www.m365.fm/entity/outlook/) users who write to the same people again and again, and for the admins who get asked "can you make me a group for the team?" It explains the steps in each version and how to pick between a personal list and a shared group.
 
 ## Contact list, contact group, distribution list: the same thing?
 
-The terms cause most of the confusion, so start there. Microsoft's page on [creating, editing and deleting a contact list](https://support.microsoft.com/en-us/outlook/people/create-edit-or-delete-a-contact-list-or-contact-group-in-outlook) states that contact lists are formerly referred to as contact groups in classic Outlook. It also describes contact groups, or distribution lists, as a quick way to message people you contact repeatedly. So three names, one personal feature.
+The terms cause most of the confusion, so start there. Microsoft's page on [creating, editing and deleting a contact list](https://support.microsoft.com/outlook/people/create-edit-or-delete-a-contact-list-or-contact-group-in-outlook) states that contact lists are formerly referred to as contact groups in classic Outlook. It also describes contact groups, or distribution lists, as a quick way to message people you contact repeatedly. So three names, one personal feature.
 
-A [distribution list](https://www.m365.fm/entity/distribution-list/) in the admin sense is something else. It's a mail-enabled group that an admin creates, and everyone in the organization can use it. Your personal list is a collection of email addresses saved in your own contacts. Nobody else sees it.
+A [distribution list](https://www.m365.fm/entity/distribution-list/) in the admin sense is something else. It's a mail-enabled group that an admin creates and that others in the organization can send to. Your personal list is a collection of email addresses saved in your own contacts. Nobody else sees it.
 
 Which one do you need? If you're managing a list for your own use, make a contact list. If the whole company needs to write to "People in Building A", ask your admin for a distribution group. If a team needs a shared inbox, calendar and files, that's a Microsoft 365 group, covered further down.
 
@@ -39,11 +39,11 @@ Which one do you need? If you're managing a list for your own use, make a contac
 
 To add contacts later, select **People**, then **Your contact lists**, hover over the list and select the **Edit** pencil. Enter names or email addresses under **Add recipients**, then select **Save**. To remove someone, open the same edit view, select the **X** beside the contact and select **Save**. To rename a list, edit it and change the name.
 
-To delete a list, select **People**, then **Your contact lists**, hover over the list and select the **Delete** trash button. To delete several at once, check their boxes and choose **Delete** on the ribbon. Confirm with **Delete** again. Deleting a list removes only the list. The contacts stay.
+To delete a list, select **People**, then **Your contact lists**, hover over the list and select the **Delete** button. To delete several at once, check their boxes and choose **Delete** on the ribbon. Confirm with **Delete** again. Deleting a list removes only the list. The contacts stay.
 
 ## Classic Outlook for Windows
 
-Microsoft's training page on [creating a contact group](https://support.microsoft.com/en-us/outlook/training/create-a-contact-group-in-outlook) gives these steps.
+Microsoft's training page on [creating a contact group](https://support.microsoft.com/outlook/training/create-a-contact-group-in-outlook) gives these steps.
 
 1. Open **People** from the navigation bar.
 2. On the **Home** tab, select **New Contact Group**.
@@ -56,7 +56,7 @@ That's it. The group now sits in your contacts. To email it, go to **Home**, sel
 
 ## Outlook on the web and Outlook.com
 
-Microsoft's page on [contact lists in Outlook.com](https://support.microsoft.com/en-us/outlook/create-view-and-edit-contacts-and-contact-lists-in-outlook-com) describes the web steps.
+Microsoft's page on [contact lists in Outlook.com](https://support.microsoft.com/outlook/create-view-and-edit-contacts-and-contact-lists-in-outlook-com) describes the web steps.
 
 1. Select the **People** icon at the lower left.
 2. On the toolbar, select the arrow next to **New contact**, then **New contact list**.
@@ -77,11 +77,11 @@ Microsoft's Mac article says:
 4. Under **Add members**, type a contact's email address and select **Add**. Repeat for each contact.
 5. Select **Save**.
 
-To remove a member, select the trash button next to that contact and select **Save**. Syncing contact lists from the server works only with Microsoft 365 and Outlook.com accounts. For a POP or IMAP account, use the **Contacts** folder under **On My Computer**. If **New Contact List** is grayed out, turn on those folders: select **Outlook**, **Settings**, then under **Quick Settings** select **Display**, and under **Sidebar** turn on **Show On my Computer folders**. Support for legacy Outlook for Mac ends in October 2026.
+To remove a member, select the trash button next to that contact and select **Save**. Syncing contact lists from the server works only with Microsoft 365 and Outlook.com accounts. For a POP or IMAP account, use the **Contacts** folder under **On My Computer**. If **New Contact List** is grayed out, turn on those folders: select **Outlook**, **Settings**, then under **Quick Settings** select **Display**, and under **Sidebar** turn on **Show On my Computer folders**. Microsoft's page says support for legacy Outlook for Mac was to end in October 2026. That month has passed, so check that you're on the new Outlook for Mac.
 
 ## Using your group
 
-To send a message to the group, start a new message and type the group's name in the **To** line. Outlook expands it to the members. A message sent to a contact list goes to all recipients in the list. You can also add a contact list to meeting requests and to other contact lists.
+To send a message to the group, start a new message and type the group's name in the **To** line. Outlook expands it to the members. A message sent to a contact list goes to all recipients in the list. Microsoft's Mac article adds that you can also add a contact list to meeting requests and to other contact lists.
 
 Two things to think about before you click Send.
 
@@ -91,17 +91,17 @@ Second, limits. In Exchange Online, a distribution group in the shared address b
 
 ## When to use a Microsoft 365 group instead
 
-Microsoft's page on [comparing types of groups in Microsoft 365](https://learn.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide) lays out the options. In short:
+Microsoft's page on [comparing types of groups in Microsoft 365](https://learn.microsoft.com/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide) lays out the options. In short:
 
-- **[Microsoft 365 Groups](https://www.m365.fm/entity/microsoft-365-groups/)** are for collaboration between users inside and outside your company. Each group gets a group email, a shared workspace for conversations, files and calendar events, and can connect to Teams.
+- **[Microsoft 365 Groups](https://www.m365.fm/entity/microsoft-365-groups/)** are for collaboration between users inside and outside your company. Microsoft's contact-list page names a shared inbox, calendar and files as reasons to create a Microsoft 365 group instead of a contact list.
 - **Distribution groups** send email notifications to a fixed set of people, such as "People in Building A".
 - **Dynamic distribution groups** send mail to people matching attributes such as department or location, with membership worked out at send time.
-- **Mail-enabled security groups** grant access to resources and email notifications to the same users.
+- **Mail-enabled security groups** work like regular security groups and can also send mail to all members.
 - **[Shared mailboxes](https://www.m365.fm/entity/shared-mailbox/)** give several people access to one mailbox, such as a support address or reception desk.
 
-Microsoft's page on contact lists also warns not to confuse them with Microsoft 365 Groups, which it presents as the stronger option that can share an inbox, calendar and files.
+Microsoft's page on contact lists also suggests creating a group when you need more robust functionality, such as sharing an inbox, calendar and files.
 
-A few limits from the comparison page are worth knowing. Microsoft 365 Groups can't be members of distribution groups or security groups. External users can join Microsoft 365 Groups and send email to them only if the administrator enables those features. Shared mailboxes can't be migrated to Microsoft 365 Groups. And a distribution group added to a Teams team adds only its members, not the group.
+A few limits from the comparison page are worth knowing. Microsoft 365 Groups can't be members of distribution groups or security groups. People from outside the organization can be added to a Microsoft 365 Group only if the administrator enables this feature. Shared mailboxes can't be migrated to Microsoft 365 Groups. And a distribution group added to a Teams team adds only its members, not the group.
 
 My rule: personal list for your own mailing, distribution group for company-wide announcements, Microsoft 365 group when people need to work together.
 
@@ -132,3 +132,12 @@ My rule: personal list for your own mailing, distribution group for company-wide
 ## Next step
 
 Open People in your Outlook, create a contact list with two of your own addresses and send a test message to it. Once you've seen how a message to the group lands, you'll know how to make an email group in Outlook that behaves the way you expect.
+
+## Sources
+
+- [Create, edit or delete a contact list or contact group in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/people/create-edit-or-delete-a-contact-list-or-contact-group-in-outlook)
+- [Create a contact group in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/training/create-a-contact-group-in-outlook)
+- [Create, view and edit contacts and contact lists in Outlook.com (Microsoft Support)](https://support.microsoft.com/outlook/create-view-and-edit-contacts-and-contact-lists-in-outlook-com)
+- [Create a contact list or distribution list in Outlook for Mac (Microsoft Support)](https://support.microsoft.com/outlook/create-a-contact-list-or-distribution-list-in-outlook-for-mac)
+- [Compare types of groups in Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/create-groups/compare-groups)
+- [Exchange Online limits (Microsoft Learn)](https://learn.microsoft.com/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits)

@@ -24,7 +24,7 @@ To enable Remote Desktop in Windows 11, open **Settings**, go to **System**, the
 
 ## Check the edition first
 
-This is the step that saves the most time. Microsoft's Learn article on [enabling Remote Desktop](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-access) says the PC that receives the connection can run Windows Professional, Enterprise or Education, and that Windows Home can't host incoming connections. A Home PC can still be the client that connects to other systems. Microsoft's support page on [how to use Remote Desktop](https://support.microsoft.com/en-us/windows/how-to-use-remote-desktop-5fe128d5-8fb1-7a23-3b8a-41e636865e8c) says the same about the client side: it can run any edition of Windows or another operating system.
+This is the step that saves the most time. Microsoft's Learn article on [enabling Remote Desktop](https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-access) says the PC that receives the connection can run Windows Professional, Enterprise or Education, and that Windows Home can't host incoming connections. A Home PC can still be the client that connects to other systems. Microsoft's support page on [how to use Remote Desktop](https://support.microsoft.com/windows/how-to-use-remote-desktop-5fe128d5-8fb1-7a23-3b8a-41e636865e8c) says the same about the client side: it can run any edition of Windows or another operating system.
 
 To check the edition, go to **Start**, **Settings**, **System**, **About** and read the **Edition** line. If it says Home, the **Remote Desktop** switch won't do what you want. Your options are to upgrade the edition on that PC, or use another way to reach it. This article only covers the built-in feature.
 
@@ -48,7 +48,7 @@ For a script or a PC you manage remotely, the setting is a registry value and a 
 2. `Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name 'UserAuthentication' -Value 1` requires Network Level Authentication.
 3. `Enable-NetFirewallRule -DisplayGroup 'Remote Desktop'` opens the built-in firewall rules.
 
-Remote Desktop listens on TCP port 3389 by default, which Microsoft's outside-access article names as the typical port.
+Remote Desktop uses TCP port 3389 by default, which Microsoft's outside-access article names as the typical port, and that matters when you set up outside access.
 
 ## Decide who may connect
 
@@ -60,25 +60,25 @@ Keep the list short. If someone doesn't need remote access, they shouldn't be on
 
 ### Network Level Authentication
 
-Microsoft describes Network Level Authentication (NLA) as requiring users to authenticate before a session is established. That reduces the risk of unauthorized access and of malicious software. Microsoft recommends it for most environments. Older clients that don't support NLA may need it switched off temporarily, but keep it on whenever you can. You can also find the setting by running `SystemPropertiesRemote.exe`, which opens the Remote tab of System Properties.
+Microsoft describes Network Level Authentication (NLA) as requiring users to authenticate before a session is established. That reduces the risk of unauthorized access. Microsoft's article recommends keeping it enabled whenever possible. Older clients that don't support NLA may need it switched off temporarily, but keep it on whenever you can. You can also find the setting by running `SystemPropertiesRemote.exe`, which opens the Remote tab of System Properties.
 
 ## Connect from another device
 
 On Windows, search for **Remote Desktop Connection** in the taskbar, open it, enter the PC name and select **Connect**. Sign in with your account on the remote PC.
 
-On a Mac, an iPhone or an iPad, Microsoft's support page names the **Windows App**, which you install from the Microsoft Store or Apple App Store. Add the PC name, then select the PC. On Android, install the **Remote Desktop** app from Google Play.
+On a Mac, an iPhone or an iPad, Microsoft's support page names the **Windows App**, which is available from the Microsoft Store or the Apple App Store. Add the PC name, then select the PC. On Android, install the **Remote Desktop** app from Google Play.
 
-The Learn overview of [Windows App](https://www.m365.fm/entity/windows-app/) describes it as Microsoft's client for connecting to Windows devices and apps. It covers Azure Virtual Desktop, Windows 365, Microsoft Dev Box, Remote Desktop Services and Remote PC, which is a physical PC you connect to remotely, on Windows, macOS, iOS and iPadOS, Android and ChromeOS, and more. Two details matter to admins. Remote PC connections on supported platforms work without signing in, but the other services need a work or school account, and personal Microsoft accounts aren't supported. And Windows App doesn't support Remote Desktop Services on Windows. For that, Microsoft says to keep using the Remote Desktop app on Windows. If your organization runs session hosts on [Windows Server](https://www.m365.fm/entity/windows-server/), that detail decides which client you roll out.
+The Learn overview of [Windows App](https://www.m365.fm/entity/windows-app/) describes it as Microsoft's client for connecting to Windows devices and apps. It covers Azure Virtual Desktop, Windows 365, Microsoft Dev Box, Remote Desktop Services and Remote PC, which is a physical PC you connect to remotely, on Windows, macOS, iOS and iPadOS, Android and ChromeOS, web browsers and more. Two details matter to admins. On platforms that support remote PC connections you can use Windows App without signing in, but signing in, which the other services need, requires a work or school account, and personal Microsoft accounts aren't supported. And Windows App doesn't support Remote Desktop Services on Windows. For that, Microsoft says to keep using the Remote Desktop app on Windows. If your organization runs session hosts on [Windows Server](https://www.m365.fm/entity/windows-server/), that detail decides which client you roll out.
 
 ## Connect from outside your network
 
-Remote Desktop connections are peer-to-peer, so your client needs direct network access to the PC. At home or in an office that's fine. From outside, Microsoft's article on [accessing your PC from outside your network](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-outside-access) names two methods.
+Remote Desktop connections are peer-to-peer, so your client needs direct network access to the PC. At home or in an office that's fine. From outside, Microsoft's article on [accessing your PC from outside your network](https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-outside-access) names two methods.
 
 **A VPN** is the one Microsoft prefers. When you're connected, the Remote Desktop client behaves as if it were on the same network, and your PC is never exposed to the public internet. The article doesn't recommend a specific VPN service.
 
 **Port forwarding** maps a port on your router's public IP address to the PC's internal address, usually port 3389. The steps depend on the router. Microsoft warns that this opens your PC up to the internet, which isn't recommended. If you do it anyway, set a strong password on the PC, and restrict the mapping to known source addresses where the router allows it, for example your office network. Give the PC a static internal IP address so that the forwarding rule keeps pointing at it, and consider dynamic DNS if your ISP changes your public address. If you change the port, the router mapping has to match what the PC listens on.
 
-For anything beyond a few PCs, Microsoft's page also points to Remote Desktop Gateway, though that article doesn't cover it.
+For anything beyond a few PCs, look at your organization's remote access options instead of forwarding ports; Microsoft's outside-access article only covers port forwarding and a VPN.
 
 ## If the connection fails
 
@@ -115,3 +115,10 @@ When you no longer need remote access, turn the **Remote Desktop** switch off ag
 ## Next step
 
 Check the edition, switch the feature on, add only the accounts that need it, and connect once from inside your network before you think about the internet. If you need access from outside, start with a VPN. That is the safest way to enable Remote Desktop in Windows 11 without handing the world a port to try.
+
+## Sources
+
+- [Allow access to your PC with Remote Desktop (Microsoft Learn)](https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-access)
+- [Allow Remote Desktop access from outside your network (Microsoft Learn)](https://learn.microsoft.com/windows-server/remote/remote-desktop-services/remotepc/remote-desktop-allow-outside-access)
+- [How to use Remote Desktop (Microsoft Support)](https://support.microsoft.com/windows/how-to-use-remote-desktop-5fe128d5-8fb1-7a23-3b8a-41e636865e8c)
+- [What is Windows App? (Microsoft Learn)](https://learn.microsoft.com/windows-app/overview)

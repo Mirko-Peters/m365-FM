@@ -64,7 +64,7 @@ Two settings change the result more than anything else:
 
 Sourceday says the causes usually start upstream. It lists supplier dates that are accepted but not updated, delays that arrive late so the schedule still shows the original plan, coordination that lives in emails and spreadsheets, and ERP data that reflects what was expected instead of what will happen.
 
-Symestic adds more causes:
+Symestic describes failure patterns such as OEE-driven cherry-picking and reschedule thrash. Two more causes are common in my experience:
 
 - **Chasing equipment efficiency.** Pressure to raise [OEE](https://www.m365.fm/entity/oee/) can push shifts to pick long runs and defer small orders. OEE combines availability, performance and quality, so a long run is the easy way to raise it. Show adherence next to OEE so that cherry-picking becomes visible.
 - **Reschedule thrash.** Frequent rewrites of the plan make adherence look good while measuring against a plan that was just adjusted.
@@ -133,3 +133,9 @@ Comparing planned and actual values needs both sets of data in one place. [iFAKT
 ## Next step
 
 Write down your definition of schedule adherence for one line: the tolerance window, the frozen plan and the three tests. Then measure last month with that definition and rank the reasons for the misses, so you know where to start.
+
+## Sources
+
+- [Schedule Adherence: Calculator and how to Improve - SourceDay](https://sourceday.com/blog/schedule-adherence/)
+- [Schedule Attainment vs Production Adherence: Formulas - Fabrico](https://www.fabrico.io/blog/schedule-attainment-vs-production-adherence/)
+- [Schedule Adherence - Symestic](https://www.symestic.com/en-us/what-is/schedule-adherence)

@@ -24,7 +24,7 @@ Power Automate formatDateTime turns a date and time into the text you want. The 
 
 ## How formatDateTime works
 
-The function takes a timestamp and rewrites it. Microsoft's article on formatting date and time values in a flow describes the first argument as the date and time you want to format. It can be typed by hand or come from dynamic content. Typed values should be in ISO 8601 form, such as `2009-06-15T13:45:30`. The second argument is the format string. A single character is a standard format string. More than one character is a custom format string, which controls the position and precision of the month, day, year, hour, second and so on.
+The function takes a timestamp and rewrites it. Microsoft's article on formatting date and time values in a flow describes the first argument as the date and time you want to format. It can be typed by hand or come from dynamic content. Typed values are expected in ISO 8601 form, which Microsoft writes as `yyyy-MM-ddTHH:mm:ssZ`. Some of the page's own examples, such as `2009-06-15T13:45:30`, leave off the Z. The second argument is the format string. A single character is a standard format string. More than one character is a custom format string, which controls the position and precision of the month, day, year, hour, second and so on.
 
 Three details from Microsoft's workflow expression reference are worth remembering:
 
@@ -45,7 +45,7 @@ Microsoft's article gives a clear way to insert the expression in a flow.
 5. Add the format string in single quotes, for example `'MM/dd/yyyy'`.
 6. Select **OK** to insert the expression.
 
-The pattern from Microsoft's page looks like this: `formatDateTime('2023-10-22', 'dd/MM/yyyy hh:mm tt')` for a fixed value in quotes, and the same call with a dynamic content item in place of the quoted value, without quotes.
+The template on Microsoft's page is `formatDateTime('<your-value>', 'dd/MM/yyyy hh:mm tt')`. With a fixed date it becomes `formatDateTime('2023-10-22', 'dd/MM/yyyy hh:mm tt')`. With dynamic content, put the item in place of the quoted value, without quotes.
 
 The worked example in the article uses a manually triggered flow with a **Date** input. The expression is `formatDateTime(triggerBody()?['date'], 'MM/dd/yyyy')`. With a date of `2023-10-22`, the email shows the date in the `MM/dd/yyyy` form.
 
@@ -60,7 +60,7 @@ Standard strings are a single letter. Microsoft's examples for the timestamp `20
 
 The .NET documentation lists more standard letters. Examples with the same timestamp: `'d'` gives `6/15/2009`, `'t'` gives `1:45 PM`, `'T'` gives `1:45:30 PM`, `'s'` gives the sortable `2009-06-15T13:45:30`, and `'Y'` gives `June 2009`. Most of these follow the culture rules, so the same letter can look different with another locale. The ones that always look the same everywhere are `o`, `r`, `s` and `u`.
 
-Custom strings give you control. These are the specifiers that matter for flows:
+Custom strings give you control. Microsoft's flow page links to the .NET rules for them, and these are the specifiers that matter for flows:
 
 - `yyyy` is the four-digit year, and `yy` the two-digit year.
 - `MM` is the month with a leading zero, `MMM` the short month name and `MMMM` the full month name. `M` is the month without a leading zero.
@@ -69,7 +69,7 @@ Custom strings give you control. These are the specifiers that matter for flows:
 - `mm` is the minute, `ss` the second, and `fff` the milliseconds.
 - `tt` is AM or PM.
 
-Following that table, `formatDateTime('2009-06-15T13:45:30', 'yyyy-MM-dd')` gives `2009-06-15`, and `'hh:mm tt'` gives `01:45 PM`. Microsoft's flow article also shows `formatDateTime(utcNow(), 'MMMM dd, yyyy, HH:mm')`, which returns the current UTC date and time in the pattern `June 15, 2009, 16:50`, using a fixed sample date.
+Following these rules, `formatDateTime('2009-06-15T13:45:30', 'yyyy-MM-dd')` gives `2009-06-15`, and `'hh:mm tt'` gives `01:45 PM`. Microsoft's flow article also shows `formatDateTime(utcNow(), 'MMMM dd, yyyy, HH:mm')`, which returns the current UTC date and time in the pattern `June 15, 2009, 16:50`, using a fixed sample date.
 
 Two quirks come from the .NET rules. First, a single letter is always read as a standard string. If you want a single custom specifier, put a percent sign in front of it, for example `'%d'`. Second, to insert fixed text in a pattern, escape the character with a backslash or put the text in quotes. Other characters that aren't specifiers are copied to the output as they are. The slash and the colon are replaced by the separators of the locale, which can surprise you when you pass another locale.
 
@@ -77,11 +77,11 @@ Two quirks come from the .NET rules. First, a single letter is always read as a 
 
 Power Automate uses UTC by default, and `utcNow()` returns the current date and time in UTC. If your users are in Berlin or New York, the clock time in your email will be off unless you convert it first.
 
-Microsoft's article combines both functions: `formatDateTime(convertTimeZone(utcNow(), 'UTC', 'Eastern Standard Time'), 'yyyy-MM-dd HH:mm:ss')`. The inner function changes the time zone, the outer one formats the result. The time zone names are the Windows names, such as `UTC`, `Pacific Standard Time` and `Eastern Standard Time`. For other regions, use the matching Windows time zone name from Microsoft's list.
+Microsoft's article combines both functions: `formatDateTime(convertTimeZone(utcNow(), 'UTC', 'Eastern Standard Time'), 'yyyy-MM-dd HH:mm:ss')`. The inner function changes the time zone, the outer one formats the result. The time zone names in Microsoft's examples, such as `UTC`, `Pacific Standard Time` and `Eastern Standard Time`, are Windows-style names. The pages cited here give no full list, so look up the exact name for other regions in Microsoft's list of Windows time zones.
 
 The workflow reference also describes `convertFromUtc`, which takes a UTC timestamp and a destination time zone and returns the converted time without the UTC offset. Its example: `convertFromUtc('2018-01-01T08:00:00.0000000Z', 'Pacific Standard Time')` returns `"2018-01-01T00:00:00.0000000"`. There's also `convertToUtc`, which goes the other way. And Power Automate has a **Convert time zone** action with the inputs **Base time**, **Source time zone**, **Destination time zone** and an optional **Format string**, if you prefer an action over an expression.
 
-If the input isn't valid ISO 8601, expect an error such as "The date time string must match ISO8601 format." A date typed as `15/03/2018` is a typical cause. For dates that arrive in a local format, the reference describes `parseDateTime` with a locale and a format, for example `parseDateTime('21052019', 'fr-fr', 'ddMMyyyy')`, which returns `'2019-05-21T00:00:00.0000000'`. Parse first, then format.
+If the input isn't valid ISO 8601, expect the action to fail with an error about the date format. The pages cited here don't quote that message. A date typed as `15/03/2018` is a typical cause. For dates that arrive in a local format, the reference describes `parseDateTime` with a locale and a format, for example `parseDateTime('21052019', 'fr-fr', 'ddMMyyyy')`, which returns `'2019-05-21T00:00:00.0000000'`. Parse first, then format.
 
 ## Common mistakes
 
@@ -95,12 +95,19 @@ If the input isn't valid ISO 8601, expect an error such as "The date time string
 
 ## Related topics to explore
 
-- Convert time zones: Microsoft's article on [converting time zones](https://learn.microsoft.com/en-us/power-automate/convert-time-zone) covers both the action and the expression.
+- Convert time zones: Microsoft's article on [converting time zones](https://learn.microsoft.com/power-automate/convert-time-zone) covers both the action and the expression.
 - Add or subtract time: `addDays` and `addToTime` take the same optional format, so you can shift and format in one call.
 - Parse local date formats: `parseDateTime` takes a locale and a format for dates that don't arrive as ISO 8601.
-- The full function list: the [workflow expression reference](https://learn.microsoft.com/en-us/azure/logic-apps/expression-functions-reference) documents every date and time function.
-- All custom specifiers: the [custom date and time format strings](https://learn.microsoft.com/en-us/dotnet/standard/base-types/custom-date-and-time-format-strings) page lists every letter.
+- The full function list: the [workflow expression reference](https://learn.microsoft.com/azure/logic-apps/expression-functions-reference) documents every date and time function.
+- All custom specifiers: the [custom date and time format strings](https://learn.microsoft.com/dotnet/standard/base-types/custom-date-and-time-format-strings) page lists every letter.
 
 ## Next step
 
-For reliable Power Automate formatDateTime results, start with an ISO 8601 date, convert the time zone before you format, and test the pattern in a **Compose** action. Then read Microsoft's article on how to [customize or format date and time values in a flow](https://learn.microsoft.com/en-us/power-automate/date-time-values), and keep a short list of the patterns your team uses most.
+For reliable Power Automate formatDateTime results, start with an ISO 8601 date, convert the time zone before you format, and test the pattern in a **Compose** action. Then read Microsoft's article on how to [customize or format date and time values in a flow](https://learn.microsoft.com/power-automate/date-time-values), and keep a short list of the patterns your team uses most.
+
+## Sources
+
+- [Customize or format date and time values in a flow (Microsoft Learn)](https://learn.microsoft.com/power-automate/date-time-values)
+- [Reference guide to workflow expression functions in Azure Logic Apps and Power Automate (Microsoft Learn)](https://learn.microsoft.com/azure/logic-apps/expression-functions-reference)
+- [Convert a time zone (Microsoft Learn)](https://learn.microsoft.com/power-automate/convert-time-zone)
+- [Custom date and time format strings (Microsoft Learn)](https://learn.microsoft.com/dotnet/standard/base-types/custom-date-and-time-format-strings)

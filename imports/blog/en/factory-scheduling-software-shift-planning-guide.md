@@ -57,7 +57,7 @@ Skip the long feature lists and check what hurts on your floor today.
 - **Fast changes.** Call-offs happen. Open shifts, swap requests and approvals should work from a phone, with a manager in control.
 - **Skills on the roster.** The tool should show who is qualified for which station, or at least integrate with whatever list holds that data.
 - **Clean exports.** Hours, absences and overtime should leave the tool in a form payroll and reporting can use without re-keying.
-- **An open interface.** If you need to connect other systems, ask how. Microsoft documents that Shifts can sync with a workforce management system, through a connector or a custom integration with the Microsoft Graph API, and that Power Automate can be used to build workflows such as approving swap requests automatically. Its page on [Shifts connectors](https://learn.microsoft.com/en-us/microsoft-365/frontline/shifts-connectors?view=o365-worldwide) also notes that Microsoft-managed connectors were retired on December 7, 2025, so check the current status of any connector before you plan around it.
+- **An open interface.** If you need to connect other systems, ask how. Microsoft documents that Shifts can sync with a workforce management system, through a connector or a custom integration with the Microsoft Graph API, and, on the [Shifts for Teams page](https://learn.microsoft.com/en-us/microsoft-365/frontline/shifts-for-teams-landing-page?view=o365-worldwide), that Power Automate can be used to build workflows such as approving swap requests automatically. Its page on [Shifts connectors](https://learn.microsoft.com/en-us/microsoft-365/frontline/shifts-connectors?view=o365-worldwide) also notes that Microsoft-managed connectors were retired on December 7, 2025, so check the current status of any connector before you plan around it.
 
 ## What should factory scheduling software do?
 
@@ -125,3 +125,10 @@ When the problem is the production sequence under real limits, iFAKT Polaris is 
 ## Next step
 
 Factory scheduling software and shift planning work best when they share one capacity calendar. This week, take one line and compare three things for the same shift: the roster, the capacity your scheduler assumes and what the line actually produced, and write down the gaps.
+
+## Sources
+
+- [Shifts for Teams - Microsoft Learn](https://learn.microsoft.com/en-us/microsoft-365/frontline/shifts-for-teams-landing-page?view=o365-worldwide)
+- [Advanced planning and scheduling - Wikipedia](https://en.wikipedia.org/wiki/Advanced_planning_and_scheduling)
+- [Fact Sheet #23: Overtime Pay Requirements of the FLSA - U.S. Department of Labor](https://www.dol.gov/agencies/whd/fact-sheets/23-flsa-overtime-pay)
+- [Shifts connectors - Microsoft Learn](https://learn.microsoft.com/en-us/microsoft-365/frontline/shifts-connectors?view=o365-worldwide)

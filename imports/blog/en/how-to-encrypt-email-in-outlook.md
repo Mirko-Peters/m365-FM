@@ -24,7 +24,7 @@ To encrypt an email in Outlook, start a new message, select **Options**, then **
 
 ## Two ways to encrypt: Purview Message Encryption and S/MIME
 
-Outlook offers two main methods, and they work very differently. Microsoft's article on [securing and protecting email messages in Outlook](https://support.microsoft.com/en-us/outlook/mail/learn-about-securing-and-protecting-email-messages-in-outlook) compares them.
+Outlook offers two main methods, and they work very differently. Microsoft's article on [securing and protecting email messages in Outlook](https://support.microsoft.com/outlook/mail/learn-about-securing-and-protecting-email-messages-in-outlook) describes both. The comparison below combines it with other Microsoft pages.
 
 **Microsoft Purview Message Encryption** encrypts the message through Microsoft 365. Recipients using most Outlook versions can read encrypt-only messages directly, and recipients on other mail services get a link to a portal. It needs a qualifying Microsoft 365 subscription, and your organization or account has to allow it. Do Not Forward belongs to this family: it uses Information Rights Management to restrict what the recipient can do.
 
@@ -34,7 +34,7 @@ Which to pick? For most people sending to customers or partners, Purview Message
 
 ## How to encrypt an email in new Outlook for Windows
 
-These steps come from Microsoft's page on [sending S/MIME or Purview encrypted emails](https://support.microsoft.com/en-us/outlook/mail/send-s-mime-or-microsoft-purview-encrypted-emails-in-outlook).
+These steps come from Microsoft's page on [sending S/MIME or Purview encrypted emails](https://support.microsoft.com/outlook/mail/send-s-mime-or-microsoft-purview-encrypted-emails-in-outlook).
 
 ### With Purview Message Encryption
 
@@ -43,7 +43,7 @@ These steps come from Microsoft's page on [sending S/MIME or Purview encrypted e
 3. Choose a restriction, such as **Encrypt** or **Do Not Forward**.
 4. Finish the message and select **Send**.
 
-Microsoft says Purview requires an Office 365 Enterprise E3 license on your email server, and otherwise points you to S/MIME. Its Message Encryption FAQ lists more plans (see the licensing section below). One more detail from the same page: don't apply S/MIME to a message already protected by Purview. Remove any S/MIME signing or encryption first.
+Microsoft's page ties Purview Message Encryption to an email server with an Office 365 Enterprise E3 license. The Message Encryption FAQ lists more plans (see the licensing section below). One more detail from the same page: don't apply S/MIME to a message already protected by Purview. Remove any S/MIME signing or encryption first.
 
 ### With S/MIME for one message
 
@@ -61,9 +61,9 @@ Go to **Settings**, **Mail**, **S/MIME**. Select **Encrypt contents and attachme
 
 ## Classic Outlook, web and Mac
 
-**Classic Outlook for Windows.** The path that works is **Options**, then **Encrypt**, then **Encrypt** or **Do Not Forward**. Microsoft documents a known problem with an older route: in a certain update of Microsoft 365 Apps (Current Channel version 2511), encrypting through **File**, **Encrypt** left classic Outlook recipients unable to open Encrypt Only messages. Their reading pane said the message with restricted permission could not be viewed, and an attachment called message_v2.rpmsg appeared. Microsoft lists this as fixed in later builds. Its advice: update Microsoft 365 Apps and use **Options**, **Encrypt**.
+**Classic Outlook for Windows.** The path that works is **Options**, then **Encrypt**, then **Encrypt** or **Do Not Forward**. Microsoft documents a known problem with an older route: in a certain update of Microsoft 365 Apps (Current Channel version 2511), encrypting through **File**, **Encrypt** left classic Outlook recipients unable to open Encrypt Only messages. Their reading pane said the message with restricted permission could not be viewed, and an attachment called message_v2.rpmsg appeared. Microsoft's known-issue page, last updated on February 19, 2026, lists fixes in updated builds of the affected versions. Its workaround for senders: update Microsoft 365 Apps and use **Options**, **Encrypt**.
 
-**Outlook on the web.** Microsoft's FAQ lists Outlook on the web as a client that can create protected messages. The exact menu path isn't on the pages I opened. Look for the **Encrypt** command in the options of the compose window, and if it's missing, treat that as a license or admin question, not a bug.
+**Outlook on the web.** Microsoft's FAQ lists Outlook on the web as a client that can create protected messages. The Microsoft pages cited here don't give the exact menu path. Look for the **Encrypt** command in the options of the compose window, and if it's missing, treat that as a license or admin question, not a bug.
 
 **Outlook for Mac.** Microsoft's Mac article describes S/MIME and doesn't describe a Purview button.
 
@@ -76,7 +76,7 @@ You also need a copy of each recipient's certificate saved with their contact in
 
 ## Encrypting with a Microsoft 365 Personal or Family plan
 
-A popular claim says consumer plans can't encrypt at all. Microsoft's own article says otherwise. In [its page for personal and family subscriptions](https://support.microsoft.com/en-us/outlook/send-encrypted-messages-with-a-microsoft-365-personal-or-family-subscription), sending encrypted mail is covered for Outlook.com and new Outlook for Windows. The steps:
+A popular claim says consumer plans can't encrypt at all. Microsoft's own article says otherwise. In [its page for personal and family subscriptions](https://support.microsoft.com/outlook/send-encrypted-messages-with-a-microsoft-365-personal-or-family-subscription), sending encrypted mail is covered for Outlook.com and new Outlook for Windows. The steps:
 
 1. Compose a new message.
 2. Select the **Options** ribbon.
@@ -95,11 +95,11 @@ Recipients can read these messages in new Outlook, Outlook for Mac, Outlook.com 
 
 Tell people to expect something unusual. A recipient on Gmail won't see your message in their inbox like a normal one. They see a notice with a link, sign in or enter a passcode, and read your message in a browser.
 
-Microsoft's FAQ on [Message Encryption](https://learn.microsoft.com/en-us/purview/ome-faq) adds some useful details.
+Microsoft's FAQ on [Message Encryption](https://learn.microsoft.com/purview/ome-faq) adds some useful details.
 
 - Internal and external recipients can receive encrypted mail in Outlook for Windows, Outlook for Mac, Outlook on the web, Outlook for Android and Outlook for iOS, or through a web portal, regardless of organization. The portal needs no separate download.
-- Size limits differ by page. The Message Encryption FAQ names 25 MB including attachments, while Microsoft's Exchange Online limits page lists 100 MB for Purview Message Encryption and 25 MB for the deprecated OME. Check the [Exchange Online limits](https://learn.microsoft.com/en-us/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits) page for the current value before you send a large file.
-- Any file type can be attached, but protection applies only to supported formats. Office formats such as docx, xlsx and pptx are encrypted by default. The old 97-2003 formats aren't supported. PDF encryption is off by default and an admin turns it on with `Set-IRMConfiguration -EnablePdfEncryption $true`.
+- Size limits differ by page. The Message Encryption FAQ names 25 MB including attachments, while Microsoft's Exchange Online limits page lists 100 MB for Purview Message Encryption and 25 MB for the deprecated OME. Check the [Exchange Online limits](https://learn.microsoft.com/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits) page for the current value before you send a large file.
+- Any file type can be attached, but protection applies only to supported formats. Office formats such as docx, xlsx and pptx are encrypted by default. The old 97-2003 formats aren't supported. For PDF files, Microsoft shows the admin command `Set-IRMConfiguration -EnablePdfEncryption $true` to turn on encryption.
 - SharePoint and OneDrive cloud attachments aren't supported. Only the mail message is encrypted.
 - Recipients can keep signing in to the portal as long as the sender's organization is active and the mail isn't set to expire.
 
@@ -135,3 +135,14 @@ Admins often prefer to take the decision away from users with [sensitivity label
 ## Next step
 
 Send a test message to yourself at a personal address. Use Options, Encrypt, Do Not Forward, and open it the way a customer would. Once you've seen how to encrypt email in Outlook from the recipient's side, you'll know what to explain before you send anything sensitive.
+
+## Sources
+
+- [Learn about securing and protecting email messages in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/mail/learn-about-securing-and-protecting-email-messages-in-outlook)
+- [Send S/MIME or Microsoft Purview encrypted emails in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/mail/send-s-mime-or-microsoft-purview-encrypted-emails-in-outlook)
+- [Set up Outlook to use S/MIME encryption (Microsoft Support)](https://support.microsoft.com/outlook/mail/set-up-outlook-to-use-s-mime-encryption)
+- [Encrypt email messages using S/MIME in the new Outlook for Mac (Microsoft Support)](https://support.microsoft.com/office/encrypt-email-messages-using-s-mime-in-the-new-outlook-for-mac-623f5b72-4a8c-4293-a8a2-1f2ea223fde5)
+- [Send encrypted messages with a Microsoft 365 Personal or Family subscription (Microsoft Support)](https://support.microsoft.com/outlook/send-encrypted-messages-with-a-microsoft-365-personal-or-family-subscription)
+- [Classic Outlook: recipients are unable to open Encrypt Only emails (Microsoft Support known issue)](https://support.microsoft.com/support/known-issues/classic-outlook-recipients-are-unable-to-open-encrypt-only-emails)
+- [Message Encryption FAQ (Microsoft Learn)](https://learn.microsoft.com/purview/ome-faq)
+- [Exchange Online limits (Microsoft Learn)](https://learn.microsoft.com/office365/servicedescriptions/exchange-online-service-description/exchange-online-limits)

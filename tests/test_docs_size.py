@@ -89,3 +89,20 @@ class R2outChecksTest(unittest.TestCase):
             r = self.run_check(root, "check_encoding"); self.assertEqual(r.returncode, 0, r.stdout + r.stderr); self.assertIn("HINWEIS Mojibake 1 x r2out/ru/tag/облако/index.html", r.stdout)
             (root / "docs/en/a/index.html").write_text("<html><body>" + bad_ld + moj + "</body></html>", "utf-8")
             self.assertEqual(self.run_check(root, "check_schema").returncode, 1); self.assertEqual(self.run_check(root, "check_encoding").returncode, 1)
+
+
+class BuildSizeReportTest(unittest.TestCase):
+    def test_report_lists_dirs_and_subdirs(self):
+        import json, tempfile
+        from pathlib import Path
+        import site_size
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d)
+            (out / "show" / "episodes" / "a").mkdir(parents=True)
+            (out / "show" / "episodes" / "a" / "index.html").write_text("x" * 2000)
+            (out / "index.html").write_text("y" * 10)
+            site_size.sizes(out)
+            r = json.loads((out / "build-size.json").read_text())
+            self.assertEqual(r["files"], 2)
+            self.assertIn("show", r["dirs_mb"])
+            self.assertIn("show/episodes", r["subdirs_mb"])

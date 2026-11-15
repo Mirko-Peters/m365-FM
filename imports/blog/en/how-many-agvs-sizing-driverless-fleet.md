@@ -40,7 +40,7 @@ The target utilisation must be well below 100 per cent. A single AGV that works 
 
 A formula treats the work as an average and the AGVs as independent. In a plant, AGVs wait for each other.
 
-The Standridge case shows the gap. The analytic estimate suggested two AGVs. The simulation then tested two and three AGVs over a 16-hour day, with 20 replications. With two AGVs, the average time to complete a move was 9.4 minutes, and the maximum time averaged about 81.5 minutes. With three, the average fell to about 3.1 minutes, utilisation was roughly 80 per cent, and about 11.8 per cent of the time was lost to congestion. Management chose three. The author concludes that simulation was needed to find the trade-off between responsiveness and contention.
+The Standridge case shows the gap. We could not re-open the book chapter or the Ulgen and Kedia paper for this review, so the figures in this section are as those sources report them. The analytic estimate suggested two AGVs. The simulation then tested two and three AGVs over a 16-hour day, with 20 replications. With two AGVs, the average time to complete a move was 9.4 minutes, and the maximum time averaged about 81.5 minutes. With three, the average fell to about 3.1 minutes, utilisation was roughly 80 per cent, and about 11.8 per cent of the time was lost to congestion. Management chose three. The author concludes that simulation was needed to find the trade-off between responsiveness and contention.
 
 An older [paper by Onur Ulgen and Pankaj Kedia](https://pmcorp.com/wp-content/uploads/2020/06/Using-Simulation-in-Design-of-a-Cellular-Assembly-Plant-with-AGV.pdf) from the modelling firm Production Modeling Corporation, without a stated year, compares an analytic method with simulation for a cellular assembly plant. The authors' model reached its best throughput with three AGVs, while the analytic method gave two. When they cut all cycle times to a tenth, the analytic method gave five AGVs and the simulation 11. Their model also showed blocking rising from about 1 per cent with three AGVs to about 47 per cent with four. These are results of simplified models, and the authors have an interest in simulation tools, so treat them as an illustration of the pattern, not as a rule.
 
@@ -100,3 +100,8 @@ The estimate is a starting point. The team then models 10, 11, 12 and 13 AGVs in
 ## Next step
 
 Take the peak hour of one transport route, measure the time of a move from pickup to the next pickup, and run the workload method. Then ask a simulation to answer the question how many AGVs do I need when the AGVs queue, charge and share the aisles.
+
+## Sources
+
+- Standridge, C.: Beyond Lean: Simulation in Practice, chapter on Automated Guided Vehicle Systems (Engineering LibreTexts; page could not be re-opened for this review) - https://eng.libretexts.org/Bookshelves/Industrial_and_Systems_Engineering/Beyond_Lean_-_Simulation_in_Practice_%28Standridge%29/17%3A_Automated_Guided_Vehicle_Systems/17.03%3A_Section_3-
+- Ulgen, O., Kedia, P.: Using Simulation in Design of a Cellular Assembly Plant with AGV (Production Modeling Corporation; PDF could not be re-opened for this review) - https://pmcorp.com/wp-content/uploads/2020/06/Using-Simulation-in-Design-of-a-Cellular-Assembly-Plant-with-AGV.pdf

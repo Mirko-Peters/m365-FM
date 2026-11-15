@@ -123,3 +123,9 @@ If you'd like a planning stack that is built from modules, iFAKT Polaris is one 
 ## Next step
 
 Modular production planning software pays off when you choose the module by symptom. Write down the single biggest planning problem in your plant, find which layer it belongs to, and ask two vendors to show how that module works on one of your own product families.
+
+## Sources
+
+- [Manufacturing resource planning - Wikipedia](https://en.wikipedia.org/wiki/Manufacturing_resource_planning)
+- [Master production schedule - Wikipedia](https://en.wikipedia.org/wiki/Master_production_schedule)
+- [Master planning overview - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/master-planning/master-planning-home-page)

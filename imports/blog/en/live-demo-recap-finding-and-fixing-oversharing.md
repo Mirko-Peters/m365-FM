@@ -96,3 +96,11 @@ A bulk action that works as designed can still produce the wrong outcome if the 
 - If you evaluate a tool such as the SharePoint Essentials Toolkit, test it on a pilot site, compare it with alternatives, and remember that vendor statements on functions, speed and price are not independently verified.
 - Never run bulk removals without a recorded starting state and a way back.
 - Repeat the review on a schedule. Scheduled reports and permission-change monitoring are designed to help with that.
+
+## Sources
+
+- [Manage sharing settings for SharePoint and OneDrive in Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepoint/turn-external-sharing-on-or-off)
+- [Change the default sharing link for a site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-default-sharing-link)
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Learn about sensitivity labels (Microsoft Learn)](https://learn.microsoft.com/purview/sensitivity-labels)
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)

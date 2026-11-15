@@ -10,7 +10,7 @@ faq:
   - q: "What should a SharePoint site audit cover?"
     a: "A useful audit looks at size and growth, settings such as sharing and permissions, and ownership. It also asks whether the site is still needed. Microsoft Learn names external sharing, default sharing links, metadata and site ownership as governance topics, so those are sensible starting points."
   - q: "How often should I run SharePoint permission and sharing reports?"
-    a: "Microsoft recommends running snapshot reports in Data access governance quarterly and activity reports monthly. These reports require SharePoint Advanced Management and the SharePoint administrator role. Data collection pauses if no report is generated for three months, so check Microsoft Learn for current details."
+    a: "Microsoft recommends running snapshot reports in Data access governance quarterly and activity reports monthly. These reports require the SharePoint administrator role plus the licensing from the SharePoint Advanced Management prerequisites. For organizations without SharePoint Advanced Management, activity reports need data collection to be enabled, and it pauses if no report is generated for three months, so check Microsoft Learn for current details."
   - q: "Does the single-site sharing report show everything?"
     a: "No. The CSV report a site admin can create lists unique files, users, permissions and links, but it does not include Anyone links or links that were e-mailed but not clicked. It shows SharePoint groups, not the individual people inside them. Plan for those gaps when you interpret the results."
 ---
@@ -21,11 +21,11 @@ Most SharePoint tenants grow faster than anyone reviews them. Sites are created,
 
 ## Why audit at all: governance gives the audit a purpose
 
-An audit without rules produces a list of observations and no decisions. That is where [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) comes in. Microsoft describes governance in general as the set of policies, roles, responsibilities and processes that control how an organization's business divisions and IT teams work together. For SharePoint in Microsoft 365, the Microsoft Learn guide on [intranet governance](https://learn.microsoft.com/en-us/sharepoint/intranet-governance) adds practical points:
+An audit without rules produces a list of observations and no decisions. That is where [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) comes in. The [SharePoint governance overview](https://learn.microsoft.com/en-us/sharepoint/governance-overview) on Microsoft Learn describes governance as the set of policies, roles, responsibilities and processes that control how your organization's business divisions and IT teams work together to achieve its goals. For SharePoint in Microsoft 365, the Microsoft Learn guide on [intranet governance](https://learn.microsoft.com/en-us/sharepoint/intranet-governance) adds practical points:
 
 - Start governance planning early and review it regularly.
 - A governance team should include business and IT and stay in place after launch.
-- The business is responsible, not IT alone.
+- Governance should reflect the goals of business stakeholders, not just the expectations of IT.
 - Policies are requirements; guidelines are recommendations.
 
 Before you audit, decide which of your rules are policies and which are guidelines. A site that breaks a policy needs action. A site that ignores a guideline might only need a conversation.
@@ -50,12 +50,12 @@ Settings are where an audit finds risk. Microsoft Learn names external sharing, 
 
 Two built-in report types help here, both described under [SharePoint reporting](https://www.m365.fm/entity/sharepoint-reporting/).
 
-**Data access governance reports (organization-wide).** You find them in the SharePoint admin center under Reports, Data access governance. They need SharePoint Advanced Management and the SharePoint administrator role. The two types behave differently:
+**Data access governance reports (organization-wide).** You find them in the SharePoint admin center under Reports, Data access governance. They need the SharePoint administrator role plus the licensing from the SharePoint Advanced Management prerequisites. The two types behave differently:
 
 - **Snapshot reports** show data as of the day they were created. Microsoft Learn names site permissions across the organization and sensitivity labels applied to files.
 - **Activity reports** cover the last 28 days. Microsoft Learn names sharing links and content shared with "Everyone except external users".
 
-Microsoft recommends snapshot reports quarterly and activity reports monthly. Note that data collection pauses if no report is generated for three months.
+Microsoft recommends snapshot reports quarterly and activity reports monthly. Note that for organizations without SharePoint Advanced Management, data collection for activity reports pauses if no report is generated for three months.
 
 **The single-site CSV report.** A site admin can create a CSV file listing every unique file, user, permission and link on a SharePoint site or OneDrive. The file is saved on the site, and Microsoft suggests keeping it in a folder that only site owners can access.
 
@@ -75,7 +75,7 @@ Sprawl means sites and content that exist without a clear purpose or owner. It i
 
 Governance gives you two levers against sprawl, both named in the Microsoft Learn guide:
 
-- **Ownership.** Define site ownership, for example with a primary and a secondary contact per site. A secondary contact gives the site a second person to ask when the primary contact is unavailable or has left.
+- **Ownership.** Define site ownership. Microsoft's example policy is that every site has a primary and a secondary contact responsible for it. A secondary contact gives the site a second person to ask when the primary contact is unavailable or has left.
 - **Creation model.** Sites can be created by request or by self-service. Request-based creation gives you a checkpoint; self-service gives you speed. Neither is right for every organization, and many combine them by site type.
 
 Microsoft also notes that policies work best when site owners do not have to think about them, for example through site designs. The idea is that owners follow rules more easily when they do not have to remember them.
@@ -93,7 +93,7 @@ For each site you audit, you can land on one of a few outcomes:
 3. **Review with the owner.** The site is quiet; the owner decides whether to continue.
 4. **Archive or delete.** The site is no longer needed and your lifecycle rules allow it.
 
-The Microsoft Learn governance guide says a review cycle can be automated, for example with Power Automate. A recurring review that asks owners to confirm their site is still needed is easier to sustain than a one-off clean-up.
+The Microsoft Learn governance guide raises Power Automate flows as one way to trigger an intranet content review at a set interval. A recurring review that asks owners to confirm their site is still needed is easier to sustain than a one-off clean-up.
 
 **Be careful with outcomes 2 and 4.** Changing permissions, breaking inheritance, deleting sites or running bulk changes can remove access or lose data. Test the change on a pilot site or in a test tenant first, and make sure you have a backup or a way to restore before you touch production. Check Microsoft Learn for the retention and restore options that apply to your tenant, since the way back depends on your configuration.
 
@@ -101,10 +101,19 @@ The Microsoft Learn governance guide says a review cycle can be automated, for e
 
 - Decide your policies and guidelines first, so the audit has a standard to measure against.
 - Treat size, settings and sprawl as three separate questions. A large site is not automatically a problem.
-- If you have SharePoint Advanced Management and the SharePoint administrator role, run Data access governance snapshot reports quarterly and activity reports monthly, as Microsoft recommends. Do not let three months pass without a report.
+- If you meet the licensing prerequisites and have the SharePoint administrator role, run Data access governance snapshot reports quarterly and activity reports monthly, as Microsoft recommends. Without SharePoint Advanced Management, do not let three months pass without an activity report, because data collection pauses.
 - Use the single-site CSV report for detail, and remember what it leaves out: Anyone links, e-mailed links that were not clicked, and the people inside SharePoint groups.
 - Store audit exports in a folder that only site owners can access.
-- Name a primary and a secondary contact per site, and make the business, not IT alone, responsible for the answers.
+- Name a primary and a secondary contact per site, as in Microsoft's example policy, and involve the business, not just IT, in the answers.
 - Attach every finding to a lifecycle outcome: keep, fix, review or archive.
 - Test any change to permissions, inheritance or site deletion on a pilot site first, and have a backup or restore path ready.
 - Verify feature availability, licensing and report details on Microsoft Learn before you build a process around them.
+
+## Sources
+
+- [SharePoint governance overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/governance-overview)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [Data access governance reports for SharePoint sites (Microsoft Learn)](https://learn.microsoft.com/sharepoint/data-access-governance-reports)
+- [Report on file and folder sharing in a SharePoint site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharing-reports)
+- [Prerequisites for SharePoint Advanced Management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharepoint-advanced-management-prerequisites)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)

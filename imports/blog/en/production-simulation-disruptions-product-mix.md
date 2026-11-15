@@ -27,7 +27,7 @@ A production simulation lets you replay a disruption in a model: a breakdown at 
 
 A disruption is anything that makes the plan wrong: less capacity than planned, material that isn't there, or demand that looks different from the forecast. A plan answers "what should happen." A [factory simulation](https://www.m365.fm/entity/factory-simulation/) answers "what happens if this goes wrong."
 
-NIST describes discrete event simulation as a way to analyze a production system under [different scenarios and conditions](https://www.nist.gov/node/603446), and to measure throughput, capacity and bottlenecks. The same NIST page names the main obstacle: it is hard to get timely, accurate data on equipment and processes. Keep that in mind, because it decides how far you can trust any result.
+NIST describes discrete event simulation as a way to analyze a production system under [different scenarios and conditions](https://www.nist.gov/node/603446), and to measure throughput, capacity and bottlenecks. The same NIST abstract says that discrete event simulation is rarely used because of the difficulty of attaining timely and accurate statistical modeling. Keep that in mind, because it decides how far you can trust any result.
 
 The most useful thing a simulation shows is where the pain lands. A stop at one machine rarely hurts only that machine. Work piles up in front of it, starves the stations behind it and delays orders that never touched it. A model makes that chain visible in minutes instead of weeks of firefighting.
 
@@ -52,7 +52,7 @@ Use your own records to rank them. Look at last year's downtime log, the shift r
 
 Product mix is the share of each variant in your order stream. It matters because variants rarely use shared machines for the same length of time. When the mix changes, the load on each resource changes, even if the total number of units stays the same.
 
-A paper from the Winter Simulation Conference on [interactive manufacturing simulation](https://www.informs-sim.org/wsc01papers/129.PDF) shows the effect in a batch furnace area. Products can only share a batch under specific combination rules, so the order of products affects furnace use, and the bottleneck shifts as the mix changes. That's an old paper and a special case, but the lesson holds for most shared resources.
+The effect is easy to see on a batch resource such as a furnace. In my experience, when products can only share a batch under specific combination rules, the order of products affects how well the furnace is used, and the bottleneck can shift as the mix changes. Treat this as an illustration, not a measured result.
 
 Here is a way to work through it:
 
@@ -130,3 +130,9 @@ If your questions are about capacity, staffing, buffers or product mix, iFAKT Po
 ## Next step
 
 Production simulation disruptions are easiest to handle if you start from your own downtime log. Pick the one disruption that cost you the most last year, write it as a one-sentence scenario with duration and affected resource, and test it in a model, even a rough one, before the next planning meeting.
+
+## Sources
+
+- [Push-button discrete event simulation analysis of factory floor operations - NIST](https://www.nist.gov/node/603446)
+- [What is the Theory of Constraints, and How Does it Compare to Lean Thinking? - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/what-is-the-theory-of-constraints-and-how-does-it-compare-to-lean-thinking/)
+- [Create and use what-if parameters in Power BI Desktop - Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-what-if)

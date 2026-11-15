@@ -93,3 +93,9 @@ A few habits make the rule work day to day.
 - If one area needs a different audience, consider a separate site instead of many individual entries.
 - Always test permission changes on a pilot site or test tenant first, and have a backup or a way back before you remove access or restore inheritance.
 - Check the [SharePoint sharing and permissions documentation on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/modern-experience-sharing-permissions) for the current behaviour in your tenant.
+
+## Sources
+
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Default SharePoint groups (Microsoft Learn)](https://learn.microsoft.com/sharepoint/default-sharepoint-groups)
+- [Understanding permission levels in SharePoint (Microsoft Learn)](https://learn.microsoft.com/sharepoint/understanding-permission-levels)

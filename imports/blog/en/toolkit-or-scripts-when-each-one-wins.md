@@ -10,7 +10,7 @@ faq:
   - q: "Can I use PnP PowerShell and a toolkit together?"
     a: "Yes. They are not mutually exclusive. One possible split is scripts for repeatable, automated jobs and a graphical tool for ad hoc reports and reviews with site owners. Choose per task. Whichever you use, test changes on a pilot site first and make sure you have a way back."
   - q: "Is PnP PowerShell free to use?"
-    a: "PnP PowerShell is an open-source module maintained by the community. Free in terms of licence does not mean free of effort: you need PowerShell skills, time to write and maintain scripts, and a process for testing and reviewing them before they touch production."
+    a: "PnP PowerShell is an open-source, community-provided module. Microsoft Learn states that it is not a Microsoft-provided module and that there is no SLA or direct support from Microsoft. Free in terms of licence does not mean free of effort: you need PowerShell skills, time to write and maintain scripts, and a process for testing and reviewing them before they touch production."
   - q: "When does a script beat a graphical tool?"
     a: "Scripts tend to fit best when a task must run the same way many times, needs to be versioned and reviewed like code, or is too specific for a general tool. A graphical tool tends to fit when people without scripting skills need reports or one-off fixes. Which fits depends on your tasks and team."
 ---
@@ -29,7 +29,7 @@ Native features often cover a lot of everyday needs. Scripts and tools earn thei
 
 ## What scripts do well
 
-PnP PowerShell is an open-source PowerShell module maintained by the community. It is used to manage SharePoint, Teams and Microsoft 365 through Microsoft Graph and CSOM. Scripts have some clear strengths:
+PnP PowerShell is an open-source PowerShell module with over 700 cmdlets for Microsoft 365 environments such as SharePoint Online, Teams and Microsoft Entra ID. Microsoft Learn describes it as community-provided and not a Microsoft-provided module, with no SLA or direct support from Microsoft. Scripts have some clear strengths:
 
 - **Repeatability.** A script runs the same way every time, and you can schedule it with the automation platform you already use.
 - **Review and versioning.** Script files can live in source control, be peer reviewed and be rolled back like any other code.
@@ -96,3 +96,7 @@ A mix is a possible outcome: scripts for the repeatable provisioning and automat
 - Test every change that touches permissions, sharing or content on a pilot site or test tenant first.
 - Have a backup or a documented way back before any bulk change.
 - Assign an owner to every script and every tool so nothing depends on one person's memory.
+
+## Sources
+
+- [PnP PowerShell Overview (Microsoft Learn)](https://learn.microsoft.com/powershell/sharepoint/sharepoint-pnp/sharepoint-pnp-cmdlets)

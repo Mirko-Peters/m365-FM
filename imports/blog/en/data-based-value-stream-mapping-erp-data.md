@@ -29,15 +29,15 @@ Digital value stream mapping builds the value stream map from recorded data inst
 - The value stream map is static. It rests on snapshots and estimates and does not capture variability.
 - Recording times, inventories and key figures by hand makes it very time-consuming to repeat the mapping.
 - The modelling language suits simple linear flows, so branched flows and several product families are hard to capture.
-- Choosing the process steps and recording correct data depends on the user's experience.
+- Recognising the process steps, recording the correct data and designing a target state are not trivial.
 
-PTW also reports from its first industrial projects that customer demand, the volume share of a product family and the machine allocation for shared resources were each corrected by more than 20 percent compared with the experts' first estimates. That is a result from a research project and may not match your plant. It does show that estimates deserve a check against data.
+PTW also reports from its first industrial projects that customer demand, the share of a product family and other inputs were each corrected by more than 20 percent compared with the first estimates of the process experts. That is a result from a research project and may not match your plant. It does show that estimates deserve a check against data.
 
 Manual mapping has another weakness. Christoph Roser of AllAboutLean warns that if you only ask employees, you get the ideal state and not reality, and the deviations from the standard are what matter. He recommends that you draw the current state on the shop floor and verify the information yourself. His article [Practical Tips for Value Stream Mapping](https://www.allaboutlean.com/vsm-pitfalls/) also points out, in a reader comment, that data from the walk should be checked against MES or other reporting systems. The check works both ways: data tests the walk, and the walk tests the data.
 
 ## What is digital value stream mapping, and which data does it use?
 
-Digital value stream mapping, also called data-driven or data-based VSM, creates the value stream map from records in your systems. PTW describes how transaction data can build product-process matrices, and how production feedback and event data allow process mining. Process mining reconstructs actual process flows and derives metrics such as throughput, processing and waiting times. A 2026 paper by Paryanto, Faizin and Franke in the *Journal of Manufacturing and Materials Processing*, [Improving Manufacturing Line Design Efficiency Using Digital Value Stream Mapping](https://cris.fau.de/publications/361160193), proposes a framework with real-time operational data instead of static, manually aggregated data.
+Digital value stream mapping, also called data-driven or data-based VSM, creates the value stream map from records in your systems. PTW describes how transaction data can build product-process matrices, and how production feedback and event data allow process mining. Process mining reconstructs actual process flows and derives metrics such as throughput, processing and waiting times.
 
 Two kinds of system supply most of the data:
 
@@ -97,3 +97,8 @@ Extracting, cleaning and joining data by hand takes time, and it must be repeate
 ## Next step
 
 List the systems that hold demand, routings, stock and production feedback for one product family, and ask who books each figure and when. Then try digital value stream mapping on that family for four weeks of data, and walk the flow to check the result.
+
+## Sources
+
+- [Datengestuetzte Wertstrommethode (data-assisted value stream method) - PTW, TU Darmstadt](https://www.ptw.tu-darmstadt.de/forschung_ptw/cip/abgeschlossene_projekte_1/datengestuetzte_wertstrommethode/index.en.jsp)
+- [Practical Tips for Value Stream Mapping - AllAboutLean.com](https://www.allaboutlean.com/vsm-pitfalls/)

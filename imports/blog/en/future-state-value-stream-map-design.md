@@ -48,10 +48,10 @@ LEI gives an example for the pitch: with a takt time of 30 seconds and a pack-ou
 Gemba Academy, a lean training provider, describes a similar order in its guide to [creating a future state map](https://blog.gembaacademy.com/2008/02/26/lets-create-a-future-state-value-stream-map/). The steps below follow it:
 
 1. **Compare cycle times with takt time.** Draw a simple graph with each step's cycle time and the takt time. Steps above takt time cannot meet demand. This also helps identify waste and the bottleneck of the current state.
-2. **Decide: build to stock or make to order.** A finished goods supermarket suits many products and unreliable forecasts. Make to order suits stable demand with few products.
+2. **Decide: build to stock or make to order.** The Gemba Academy example has a single, stable product and chooses make to order. In my experience, a finished goods supermarket suits many products and unreliable forecasts.
 3. **Calculate the crew size and design continuous flow.** Divide the total cycle time by takt time to get the number of operators. Then design a cell, for example in a U shape, so that each unit moves from step to step.
 4. **Add pull where flow is not possible.** Use kanban cards between a supermarket and the upstream steps. Withdrawal cards trigger shipments, and production cards trigger replenishment.
-5. **Schedule the pacemaker.** Pick the one process that receives the schedule, typically the step closest to the customer, and let the upstream steps respond through pull.
+5. **Schedule the pacemaker.** Pick the one process that receives the schedule, in the Gemba Academy example shipping, and let the upstream steps respond through pull.
 
 Do not try to optimize every step at once, because the aim is to streamline the whole flow. The map helps identify which changes come first. Waiting and stock are the main inefficiency, so look there. A target state with three clear changes beats one with twelve.
 
@@ -103,3 +103,9 @@ A model can check a target state before you build it. [iFAKT's Polaris Simulator
 ## Next step
 
 Take your current state map, compare each cycle time with takt time and sketch the cell, the supermarket and the pacemaker. Then write a one-page plan so that your future state value stream map leads to action.
+
+## Sources
+
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [6 Guidelines for Moving Toward a Lean Value Stream - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/6-guidelines-for-moving-toward-a-lean-value-stream/)
+- [Let's Create a Future State Value Stream Map! - Gemba Academy](https://blog.gembaacademy.com/2008/02/26/lets-create-a-future-state-value-stream-map/)

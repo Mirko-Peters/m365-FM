@@ -24,7 +24,7 @@ To turn on dark mode in Outlook, open Settings, go to General, then Appearance, 
 
 ## What Outlook dark mode actually changes
 
-Dark mode swaps the light interface for a dark one, and Microsoft says Outlook can also recolor the messages you read to match. In new Outlook, dark mode gives the reading pane a dark background. In classic Outlook, Microsoft's page on the [look and feel of Microsoft 365](https://support.microsoft.com/en-us/office/foundations-experiences/change-the-look-and-feel-of-microsoft-365) says that in the Black theme, Word and Outlook recolor documents and emails by default to match the app.
+Dark mode swaps the light interface for a dark one, and Microsoft says Outlook can also recolor the messages you read to match. In new Outlook, dark mode gives the reading pane a dark background. In classic Outlook, Microsoft's page on the [look and feel of Microsoft 365](https://support.microsoft.com/office/change-the-look-and-feel-of-microsoft-365-63e65e1c-08d4-4dea-820e-335f54672310) says that in the Black theme, Word and Outlook recolor documents and emails by default to match the app.
 
 That is where the confusion starts. A lot of email arrives as HTML with its own colors, logos on white backgrounds and fixed formatting. Outlook tries to recolor it, but the result is not always pretty, and it can differ message by message. So you have two jobs: switch dark mode on, and know how to bring back the original look when a message needs it.
 
@@ -32,7 +32,7 @@ Which Outlook are you using? If you see a File menu in the top left, you're on c
 
 ## How to turn on dark mode in new Outlook for Windows
 
-Microsoft's page on [dark mode in Outlook](https://support.microsoft.com/en-us/outlook/mail/dark-mode-in-outlook) gives these steps for new Outlook.
+Microsoft's page on [dark mode in Outlook](https://support.microsoft.com/outlook/mail/dark-mode-in-outlook) gives these steps for new Outlook.
 
 1. Select **Settings**, then **General**, then **Appearance**.
 2. Under **Dark mode**, select **Dark**.
@@ -59,17 +59,17 @@ The Office theme applies to all Microsoft 365 apps, so changing it in Outlook al
 
 ## Outlook on the web
 
-[Outlook on the web](https://www.m365.fm/entity/outlook-web/) has its own setting. Microsoft's page on [changing the look of your mailbox](https://support.microsoft.com/en-us/outlook/change-the-look-of-your-mailbox-in-outlook-com-and-outlook-on-the-web) says to select the **Settings** gear, go to **General**, then **Appearance**, and choose a theme or a mode to turn on dark mode. The page doesn't list the names of the modes, so check the Appearance screen on your own mailbox.
+[Outlook on the web](https://www.m365.fm/entity/outlook-web/) has its own setting. Microsoft's page on [changing the look of your mailbox](https://support.microsoft.com/outlook/change-the-look-of-your-mailbox-in-outlook-com-and-outlook-on-the-web) says to select the **Settings** gear, go to **General**, then **Appearance**, and choose a theme or a mode to turn on dark mode. The page doesn't list the names of the modes, so check the Appearance screen on your own mailbox.
 
 ## Outlook for Mac
 
-Microsoft's pages I opened don't give Mac steps for dark mode. A community answer on Microsoft's Q&A site describes this path: open Outlook, open the settings (older versions call them Preferences), select **General**, and in the **Appearance** section click **Dark**. It also says to choose **System** if your Mac switches between light and dark on a schedule, so Outlook follows it. Since that answer comes from a volunteer, not from Microsoft's documentation, the menu names may differ slightly in your version.
+The Microsoft pages cited here give no Mac steps for dark mode. A community answer on Microsoft's Q&A site describes this path: open Outlook, open the settings (older versions call them Preferences), select **General**, and in the **Appearance** section click **Dark**. It also says to choose **System** if your Mac switches between light and dark on a schedule, so Outlook follows it. Since that answer comes from a volunteer, not from Microsoft's documentation, the menu names may differ slightly in your version.
 
 ## Outlook for iOS and Android
 
-On iPhone and iPad, [Microsoft's article](https://support.microsoft.com/en-gb/office/how-do-i-enable-dark-mode-on-outlook-for-ios-a006caed-e4c3-46d7-8832-faafd7d43af4) says to open Outlook's **Settings**, tap **Appearance** and choose **Light**, **Dark** or **System Default**. By default, Outlook for iOS version 4.5.0 or later follows the system Dark Mode setting. Choose System Default to keep it that way. Choosing Light or Dark overrides the system setting. On iOS 12 or earlier, the setting is a **Dark Appearance** toggle under Preferences.
+On iPhone and iPad, [Microsoft's article](https://support.microsoft.com/office/how-do-i-enable-dark-mode-on-outlook-for-ios-a006caed-e4c3-46d7-8832-faafd7d43af4) says to open Outlook's **Settings**, tap **Appearance** and choose **Light**, **Dark** or **System Default**. By default, Outlook for iOS version 4.5.0 or later follows the system Dark Mode setting. Choose System Default to keep it that way. Choosing Light or Dark overrides the system setting. On iOS 12 or earlier, the setting is a **Dark Appearance** toggle under Preferences.
 
-On Android, Microsoft's [Android article](https://support.microsoft.com/en-au/office/how-do-i-enable-dark-mode-on-outlook-for-android-a2be4ece-377c-4541-9df4-500e8680f184) says to open Outlook's **Settings** and find the **Dark Theme** switch under **Preferences**. You get two options: **Dark Theme**, which keeps dark mode on until you turn it off, and **Set by Battery Saver**, which turns it on whenever the device is in Battery Saver mode.
+On Android, Microsoft's [Android article](https://support.microsoft.com/office/how-do-i-enable-dark-mode-on-outlook-for-android-a2be4ece-377c-4541-9df4-500e8680f184) says to open Outlook's **Settings** and find the **Dark Theme** switch under **Preferences**. You get two options: **Dark Theme**, which keeps dark mode on until you turn it off, and **Set by Battery Saver**, which turns it on whenever the device is in Battery Saver mode.
 
 ## Fixing the white message background
 
@@ -79,15 +79,13 @@ This is the most common complaint, and Microsoft gives several fixes for new Out
 - **Keep the pane light:** go to the **View** tab and select **Light Reading Pane**. The interface stays dark while the reading pane and compose window stay light.
 - **Compose window:** on the Message toolbar, **Toggle light background** turns dark mode off for that window, and **Toggle dark background** makes the message window black.
 
-In classic Outlook, the Black theme recolors emails by default. To stop it, Microsoft says to go to **File**, **Options**, **General**, open **Personalize your copy of Microsoft Office** and check the option to never change the message background color. Microsoft's page notes that the black color theme gives the message window a black background and that you can switch the message window to white if you prefer.
-
-On Windows 11, a background effect called Mica may add a tint to the window. To turn it off, go to Windows Settings, Personalization, Colors, Transparency effects.
+In classic Outlook, the Black theme recolors emails by default. Microsoft says you can turn this off in each app's General options. In classic Outlook that is **File**, **Options**, **General**, where the **Personalize your copy of Microsoft Office** section has an option to never change the message background color. Microsoft's page notes that the black color theme gives the message window a black background and that you can switch the message window to white if you prefer.
 
 Which one should you pick? If you read mostly plain internal mail, leave recoloring on. If your inbox is full of newsletters and invoices with logos, use Turn on the lights per message or keep the reading pane light. Don't switch dark mode off completely because of a few bad senders.
 
 ## How your emails look to other people
 
-Dark mode is a setting on your device. The compose buttons Microsoft describes are for your own window: Toggle light background and Toggle dark background change how you see the message while writing. Nothing in Microsoft's pages says these toggles change what recipients receive. Recipients read your message in their own app with their own theme, so you can't control which one they use.
+Dark mode is a setting on your device. The compose buttons Microsoft describes are for your own window: Toggle light background and Toggle dark background change how you see the message while writing. Nothing in the Microsoft pages cited here says these toggles change what recipients receive. Recipients read your message in their own app with their own theme, so you can't control which one they use.
 
 What you can do is write messages that survive both. These are my suggestions, not Microsoft rules.
 
@@ -118,3 +116,11 @@ The article on how to change your signature in Outlook covers the signature edit
 ## Next step
 
 Turn on dark mode in the version of Outlook you use, open your newest newsletter or invoice email and try Turn on the lights or Light Reading Pane. That takes a minute and tells you whether Outlook dark mode suits your inbox, or whether you'd rather keep the reading pane light.
+
+## Sources
+
+- [Dark mode in Outlook (Microsoft Support)](https://support.microsoft.com/outlook/mail/dark-mode-in-outlook)
+- [Change the look and feel of Microsoft 365 (Microsoft Support)](https://support.microsoft.com/office/change-the-look-and-feel-of-microsoft-365-63e65e1c-08d4-4dea-820e-335f54672310)
+- [Change the look of your mailbox in Outlook.com and Outlook on the web (Microsoft Support)](https://support.microsoft.com/outlook/change-the-look-of-your-mailbox-in-outlook-com-and-outlook-on-the-web)
+- [How do I enable dark mode on Outlook for iOS? (Microsoft Support)](https://support.microsoft.com/office/how-do-i-enable-dark-mode-on-outlook-for-ios-a006caed-e4c3-46d7-8832-faafd7d43af4)
+- [How do I enable dark mode on Outlook for Android? (Microsoft Support)](https://support.microsoft.com/office/how-do-i-enable-dark-mode-on-outlook-for-android-a2be4ece-377c-4541-9df4-500e8680f184)

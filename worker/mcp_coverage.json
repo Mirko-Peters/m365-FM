@@ -26,6 +26,11 @@
     "manage_event_duplicates"
    ]
   },
+  "/api/admin/events/review": {
+   "tools": [
+    "manage_event_duplicates"
+   ]
+  },
   "/api/admin/events/claims": {
    "tools": [
     "manage_event_duplicates"
@@ -306,6 +311,9 @@
     "save_blog_post"
    ]
   },
+  "/api/blog/top": {
+   "skip": "Zähler/Listen nur für die Seitenanzeige (Top-Listen nach Stimmen auf dem Blog-Verzeichnis) - Stimmen stehen in list_blog_posts"
+  },
   "/api/blog/vote": {
    "tools": [
     "vote_blog_post"
@@ -514,6 +522,17 @@
    "tools": [
     "list_events",
     "get_event"
+   ]
+  },
+  "/api/events/entity": {
+   "tools": [
+    "set_event_entity",
+    "search_entities"
+   ]
+  },
+  "/api/admin/events/entity": {
+   "tools": [
+    "manage_event_entity"
    ]
   },
   "/api/events/for-sponsors": {

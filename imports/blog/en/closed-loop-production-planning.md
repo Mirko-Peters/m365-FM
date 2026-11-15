@@ -29,7 +29,7 @@ Think of a heating system with a thermostat, a simple control system. It measure
 
 In [closed-loop production scheduling](https://www.m365.fm/entity/closed-loop-production-scheduling/), planning, shop floor execution, measurement, learning and replanning form a continuous feedback loop, so schedules are revised from the current production state instead of staying static after release.
 
-The idea is old. A glossary entry for closed-loop MRP describes it as a system with a feedback feature that links tasks such as purchasing, scheduling and dispatching. See the [Capterra glossary entry on closed-loop MRP](https://www.capterra.com/glossary/closed-loop-mrp-closed-loop-material-requirements-planning/). Later, [MRP II](https://www.techtarget.com/searcherp/definition/closed-loop-manufacturing-resource-planning-MRP) widened the manufacturing planning process to other resources and added capacity planning, and both MRP and MRP II are seen as predecessors of ERP. What is new is that sensors, the internet of things, terminals and planning software make fast feedback possible for more plants. Industrial IoT sensors and automation help here. A closed loop links planning and execution in one planning system, from production planning and control to the production process itself, using real-time data.
+The idea is old. Closed-loop MRP is the older form of it: material requirements planning with a feedback loop from execution. Later, [MRP II](https://en.wikipedia.org/wiki/Manufacturing_resource_planning) extended closed-loop MRP to the coordination of the whole manufacturing operation and included a detailed schedule that accounts for machine and labor capacity. In my view, what is new is that sensors, the internet of things, terminals and planning software make fast feedback possible for more plants. Industrial IoT sensors and automation help here. A closed loop links planning and execution in one planning system, from production planning and control to the production process itself, using real-time data.
 
 ## Why do plans drift away from the shop floor?
 
@@ -125,3 +125,9 @@ A closed loop needs two directions: plans to the floor and progress back to plan
 ## Next step
 
 Pick the bottleneck in your plant, list the five events that most often break the plan and decide who reacts to each one, and how fast. That is the first working version of closed loop production planning, and it needs no new software.
+
+## Sources
+
+- [Manufacturing resource planning - Wikipedia](https://en.wikipedia.org/wiki/Manufacturing_resource_planning)
+- [What is real-time production rescheduling and how does it work? - Delfoi](https://delfoi.com/?p=25229)
+- [Glossary (MRP and Supply Chain Planning Help) - Oracle](https://docs.oracle.com/cd/A60725_05/html/comnls/us/mrp/gls.htm)

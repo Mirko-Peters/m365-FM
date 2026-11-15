@@ -53,7 +53,7 @@ The price is more changeovers. A leveled sequence switches between products many
 
 ## How does a leveling box work?
 
-A heijunka box is a tool for turning the leveled plan into daily work. The institute describes it as a tool used to level the mix and volume of production by distributing kanban at fixed intervals. It is also called a leveling box.
+A heijunka box is a tool for turning the leveled plan into daily work. The institute describes a [heijunka box](https://www.lean.org/lexicon-terms/heijunka-box/) as a tool used to level the mix and volume of production by distributing kanban at fixed intervals. It is also called a leveling box.
 
 The structure is a grid:
 
@@ -61,7 +61,7 @@ The structure is a grid:
 - **Columns.** Each vertical column is a fixed time interval for the paced withdrawal of kanban. In the institute's example, the shift starts at 7:00 a.m. and kanban are withdrawn every 20 minutes.
 - **Kanban in the slots.** Each kanban in a slot represents one pitch of production for one product type.
 
-The institute defines pitch as the takt time multiplied by the pack-out quantity. A material handler withdraws the kanban at each interval and distributes them to the production processes. Because demand is released in short increments rather than as a full shift's, day's or week's worth, the box levels both volume and mix.
+The institute defines [pitch](https://www.lean.org/lexicon-terms/pitch/) as the takt time multiplied by the pack-out quantity. A material handler withdraws the kanban at each interval and distributes them to the production processes. Because demand is released in short increments rather than as a full shift's, day's or week's worth, the box levels both volume and mix.
 
 In the institute's example, product A has a 20-minute pitch, so it gets one kanban per interval. Product B has a 10-minute pitch and gets two kanban per interval. Product C has a 40-minute pitch, so its kanban appear in every other interval.
 
@@ -112,3 +112,10 @@ Building a leveled sequence by hand is possible for a few products. With many pr
 ## Next step
 
 Pick one line with a few products, calculate takt and the pitch, and write down a leveled sequence for one day. Then measure your changeover times, because they decide whether heijunka works on that line.
+
+## Sources
+
+- [Heijunka - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/heijunka/)
+- [Takt Time - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/takt-time/)
+- [Heijunka Box - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/heijunka-box/)
+- [Pitch - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/pitch/)

@@ -13,7 +13,7 @@ import site_landing as LND
 import site_mediakit as MKT
 import site_expert_connect as ECN
 import site_entities as ENT
-from site_i18n import COMM_LANGS, pfx
+from site_i18n import COMM_LANGS, pfx, site_langs
 import site_members as MEM
 import site_roles as ROLE
 import site_invite as INV
@@ -31,6 +31,7 @@ import site_ads as ADS
 import site_media as MED
 import site_sidebar as SBR
 import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
+import site_meta_podcast as MP   # SEO-Titel und Meta-Descriptions der Podcast-Seiten (suchintent-freundlich, reine Funktionen)
 import site_r2 as R2
 import site_listen as LST   # "Show folgen"-Knopf auf den Folgenseiten und Anhoeren-Karten
 from site_size import sizes, writers
@@ -70,6 +71,10 @@ LANGS = {
     "ja": ("日本語", "ja", "ltr", 7393232, "ja_JP"),
     "ko": ("한국어", "ko", "ltr", 7393236, "ko_KR")
 }
+
+_SEL = site_langs()
+if _SEL is not None:   # SITE_LANGS: verkleinerter Bau (Staging); ohne Variable bleibt LANGS vollstaendig
+    LANGS = {k: v for k, v in LANGS.items() if k in _SEL}
 
 # UI-Texte je Sprache: listen, watch, transcript, all, more, about, bio, home
 UI = {
@@ -1153,6 +1158,7 @@ def build():
     if EN_TOP: TOP_REAL.add("en")   # Fusszeile englischer Seiten -> /top/
     # Episoden-Seiten
     DPOS = {l: {i["vid"]: n for n, i in enumerate(seq)} for l, seq in by_lang.items()}   # Stelle jeder Folge in ihrer Sprache (neueste zuerst) fuer Vor/Zurueck
+    MPU = MP.Uniq()   # SEO-Titel der Folgenseiten: je Sprache einmalig
     for (vid, l), it in items.items():
         e = it["e"]; ui = UI[l]
         intro, hdr, bullets, aud = parse_desc(e["desc"])
@@ -1281,8 +1287,9 @@ def build():
 {footer(l)}{community_tags(l, vid, css_async=True)}"""
         if _spr: body = SPM.mark(body, _spr, "episode")   # T37 Sponsor: Links zum Sponsor mit rel="sponsored"
         OG_COVER[canonical] = art_svg(vid, LANGS[l][0], lang=l)
+        _mt = MP.episode_title(l, e["title"], uniq=MPU); _md = MP.episode_desc(l, intro, prefer_answer=True, has_video=True, has_transcript=bool(_trf or tr)) or short(intro)   # Thema zuerst, dann Format und Marke; Description = Kernaussage
         write(f'{l}/{it["slug"]}/index.html',
-              page(l, e["title"], short(intro), canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
+              page(l, _mt, _md, canonical, body, alts, ld + _nld, xdefault=alts.get("en"), side=side_for(l, e["title"], body), extra_head=f'<meta property="article:section" content="{esc(cat_name(pc, l))}">' + "".join(f'<meta property="article:tag" content="{esc(t)}">' for t in tagraw[l][vid])))
         sitemap.append((canonical, it["date"], alts))
         if vid in ORIG: ORIG_ALTS.setdefault(ORIG[vid], {})[l] = (canonical, e["title"])
 
@@ -1344,7 +1351,8 @@ def build():
 {section(5, HT(l, "sec_topics"), f'<h2 style="margin-top:0">{esc(HT(l, "topics_h"))}</h2><div class="chips">{cats}</div>')}</main>
 {m365con_band()}
 <main class="wrap"><section id="c-curator"></section><section id="c-sub"></section>{faq_html(l, "FAQ")}{cta_box(HT(l, "cta_h"), HT(l, "cta_p"), HT(l, "cta_btn"), f"{BASE}/show/")}{author_box(l)}</main>{footer(l)}{community_tags(l)}"""
-        write(f"{l}/index.html", page(l, title, d, home, body, alts_home, ld, xdefault=f"{BASE}/", og_type="website"))
+        write(f"{l}/index.html", page(l, title, d, home,   # Titel/Description der Sprach-Startseiten kommen aus data/home_i18n.json (PR Teil C)
+               body, alts_home, ld, xdefault=f"{BASE}/", og_type="website"))
         sitemap.append((home, TODAY, alts_home))
 
     # Wurzel
@@ -1374,8 +1382,8 @@ def build():
 {section(4, "Topics", f'<h2 style="margin-top:0">The Microsoft cloud, one concept at a time</h2><div class="chips">{topics_root}</div>')}</main>
 {m365con_band()}
 <main class="wrap">{faq_html('en', 'FAQ')}{cta_box(HT("en", "cta_h"), HT("en", "cta_p"), HT("en", "cta_btn"), f"{BASE}/show/")}{author_box('en')}</main>{footer_en()}"""
-    write("index.html", page("en", "M365.FM – Microsoft community: blog, podcast, events & explainers | Mirko Peters",
-          "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 14 languages.",
+    write("index.html", page("en", "M365.FM: Microsoft 365 Podcast, Blog & Explainers",   # Suchabsicht (12.11.2026); eigener Wortlaut, damit / und /en/ (data/home_i18n.json) keinen doppelten Titel haben
+          f"Microsoft 365, Copilot, Azure and Power Platform explained: podcast, blog, events and animated videos by Microsoft MVP Mirko Peters, in {len(active)} languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/",
            "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": f"{BASE}/search/?q={{search_term_string}}"}, "query-input": "required name=search_term_string"}, "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, alts_home))   # T42: wie im HTML
@@ -1424,7 +1432,7 @@ def build():
     # Community-Seite je Sprache (noindex) + Service Worker fuer Web-Push
     for l in list(active) + ["en"]:
         ct = _CI.get(l, _CI.get("en", {})).get("profile", "Profile")
-        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-mvp"></div><div id="c-events"></div><div id="c-events-import"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-notes"></div><div id="c-wish"></div><div id="c-mail"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/entity-match.js"></script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/mvp-tracker.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/events-import.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/credits.js"></script><script defer src="{BASE}/assets/notes.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/mailprefs.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS + f'<link rel="stylesheet" href="{BASE}/assets/mvp-tracker.css">', noindex=True))
+        write("community/index.html" if l == "en" else f"{l}/community/index.html", page(l, f"{ct} – M365.FM" + ("" if l == "en" else f" {LANGS[l][0]}"), ct, (f"{BASE}/community/" if l == "en" else f"{BASE}/{l}/community/"), f'{header(l, "")}<main class="wrap" style="max-width:48em"><h1 id="c-h1">{esc(ct)}</h1><div id="c-page"></div><div id="c-expert"></div><div id="c-mvp"></div><div id="c-events"></div><div id="c-events-import"></div><div id="c-events-entity"></div><div id="c-blog"></div><div id="c-podcast"></div><div id="c-shows"></div><div id="c-video"></div><div id="c-library"></div><div id="c-guests"></div><div id="c-feed"></div><div id="c-notes"></div><div id="c-wish"></div><div id="c-mail"></div><div id="c-messages"></div></main>{footer(l)}{community_tags(l)}<script>window.M365X={{api:"{COMMUNITY_API}",base:"{BASE}",lang:"{l}"}}</script><script defer src="{BASE}/assets/entity-match.js"></script><script defer src="{BASE}/assets/profile.js"></script><script defer src="{BASE}/assets/mvp-tracker.js"></script><script defer src="{BASE}/assets/events.js"></script><script defer src="{BASE}/assets/events-import.js"></script><script defer src="{BASE}/assets/events-entity.js"></script><script defer src="{BASE}/assets/editor.js"></script><script defer src="{BASE}/assets/seo.js"></script><script defer src="{BASE}/assets/credits.js"></script><script defer src="{BASE}/assets/notes.js"></script><script defer src="{BASE}/assets/blog.js"></script><script defer src="{BASE}/assets/podcast.js"></script><script defer src="{BASE}/assets/shows.js"></script><script defer src="{BASE}/assets/video.js"></script><script defer src="{BASE}/assets/library.js"></script><script defer src="{BASE}/assets/guests.js"></script><script defer src="{BASE}/assets/feeditems.js"></script><script defer src="{BASE}/assets/wish.js"></script><script defer src="{BASE}/assets/mailprefs.js"></script><script defer src="{BASE}/assets/messages.js"></script>', og_type="website", extra_head=LRN.WCSS + f'<link rel="stylesheet" href="{BASE}/assets/mvp-tracker.css">', noindex=True))
     # MVP-Tracker als eigene App "M365.FM Contributor" (PWA nur fuer /community/contributor/, eigenes Manifest und eigener Service Worker)
     import site_contributor as CONTRIB
     CONTRIB.build({"BASE": BASE, "write": write, "page": page, "header": header, "footer": footer, "community_tags": community_tags,
@@ -1532,6 +1540,7 @@ def build():
     for _x in (LRN._fetch_json(f"{COMMUNITY_API}/api/qa/export") or {}).get("items", []):
         ENT.FAQ.setdefault(_x["eid"], []).append(_x)
     ENT.CLAIMS.update({c["eid"]: c["handle"] for c in _cl}); MEM.CLAIMED.update({c["handle"]: c["eid"] for c in _cl})
+    import site_event_link as _EVL; _EVL.load(_events, {p["handle"] for p in _people}, {o["handle"] for o in _orgs}, TODAY)   # Event <-> Event-Entitaet (bestaetigte Zuordnung aus dem Export): Termine auf der Entitaetsseite, superEvent auf der Event-Seite
     ENT.set_kinds(_orgs, _people)   # Branchen und Jobs: Mitglieder und Firmen auf den Entitaetsseiten
     ENT.set_teams(_orgs, _people, {p["handle"]: MEM.person_entity(p["handle"]) for p in _people})   # Mitarbeitende der Community-Firma -> Personen auf der verknuepften Firmen-Entitaet
     import site_updates as _SU
@@ -1626,7 +1635,8 @@ def build():
 <h2>{esc(ui[3])}</h2><div class="list">{rows_html(lst)}</div>
 <h2>{esc(TOPICS.get(l, "Topics"))}</h2><div class="chips">{others}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/podcast/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
-        return page(l, label, desc, canonical, body, alts, ld, og_type="website", noindex=noindex, side=side_for(l, label, body))
+        _mt, _md = (label, desc) if noindex else MP.category_meta(l, label, len(lst), [x["e"]["title"] for x in lst[:6]])   # Tag-Seiten (noindex) bleiben unveraendert
+        return page(l, _mt, _md, canonical, body, alts, ld, og_type="website", noindex=noindex, side=side_for(l, label, body))
 
     ncat = ntag = 0
     for l in active:
@@ -1650,7 +1660,8 @@ def build():
 <div class="btns">{sub_btns(l)}<a class="btn" href="{BASE}/{l}/">{esc(ui[7])}</a></div></div>{topics_nav(l)}
 <div class="stats"><div><b>{len(_eps)}</b><span>{esc(ui[3])}</span></div><div><b>{len({i["vid"] for i in _eps})}</b><span>Videos</span></div><div><b>{len(active)}</b><span>{esc(HT(l, "st_languages"))}</span></div></div>
 <h2>{esc(ui[3])}</h2><div class="list">{rows_html(_eps)}</div>{author_box(l)}</main>{footer(l)}{community_tags(l)}"""
-        write(f"{l}/podcast/index.html", page(l, _pt, _pd, _pu, _pb, _palts, _pld, og_type="website", side=side_for(l, _pt, _pb)))
+        _mt, _md = MP.podcast_hub_meta(l, _pt, len(_eps))
+        write(f"{l}/podcast/index.html", page(l, _mt, _md, _pu, _pb, _palts, _pld, og_type="website", side=side_for(l, _pt, _pb)))
         sitemap.append((_pu, TODAY, _palts))
         for c in ORDER:
             if c not in catidx[l]:
@@ -1692,7 +1703,8 @@ def build():
 <div class="kicker">★ {esc(LANGS[l][0])}{"" if prov or not _pa else " · " + esc(TOPW.fmt_range(l, _pa, _pb))}</div><h1>{esc(h1)}</h1>{"" if prov else f'<p class="mut">{esc(TOPW.note(l))}</p>'}
 <div class="list">{rows}</div>
 <p style="margin-top:1.6em"><a class="btn" href="{BASE}/{l}/podcast/">{esc(ui[3])} →</a></p></main>{footer(l)}"""
-        write(f"{l}/top/index.html", page(l, f"{label} – M365.FM {LANGS[l][0]}", short(" · ".join(strip_tags(x["e"]["title"]).split(":")[0] for x in t[:3]), 155), u, body, None if prov else alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body), switch=sw_top))
+        _mt, _md = MP.top_meta(l, label, None if prov else h1, [x["e"]["title"] for x in t[:3]])
+        write(f"{l}/top/index.html", page(l, _mt, _md, u, body, None if prov else alts, ld, og_type="website", noindex=prov, side=side_for(l, label, body), switch=sw_top))
         if not prov:
             sitemap.append((u, wk, alts))
         topfeed[l] = [{"rank": n + 1, "title": strip_tags(x["e"]["title"]), "url": url_of(x), "episode": x["eid"]} for n, x in enumerate(t)]

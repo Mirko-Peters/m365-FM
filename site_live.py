@@ -7,6 +7,7 @@ from pathlib import Path
 
 from site_learn import esc, ENTS
 import site_player as PL   # Player erst nach Klick (wie der Live-Player oben)
+import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
 
 D = Path(__file__).parent / "data"
 T = {"en": dict(title="M365 Show – the live stream", h="M365 Show", kicker="Live on YouTube", lede="The M365 Show is a running live stream show: conversations and demos with Microsoft community experts about Microsoft 365, Copilot, Azure, the Power Platform and AI agents. Hosted by Mirko Peters, Microsoft MVP.",
@@ -89,7 +90,7 @@ def build(g):
             if s.get("start"):
                 ld.append({"@context": "https://schema.org", "@type": "BroadcastEvent", "name": s["title"], "startDate": s["start"], "isLiveBroadcast": True, "url": f'{root}{s["slug"]}/',
                            "videoFormat": "HD", "publishedOn": {"@type": "BroadcastService", "name": "YouTube", "url": yt}})
-        write(f"{'de/' if lang == 'de' else ''}live/index.html", page(lang, f'{t["title"]} | M365.FM', short(desc, 155), root, shell(body), None, ld, og_type="website"))
+        write(f"{'de/' if lang == 'de' else ''}live/index.html", page(lang, *MP.live_hub_meta(lang, desc), root, shell(body), None, ld, og_type="website"))
         sitemap.append((root, TODAY, None))
         for s in streams:
             u = f'{root}{s["slug"]}/'; d = (s.get("description") or "").strip(); dn = s.get("start") or s.get("published") or ""
@@ -104,6 +105,6 @@ def build(g):
             sb = (f'<p class="mut"><a href="{root}">{esc(t["back"])}</a></p><article><h1>{esc(s["title"])}</h1><p class="mut">{when(s)}{" · " + str(s["views"]) + " " + t["views"] if s.get("views") else ""}</p>'
                   f'<div style="margin:22px 0">{PL.player("youtube", s["id"], s["title"], t["play"])}</div>'
                   f'{("<h2>" + esc(t["desc"]) + "</h2>" + paras) if paras else ""}<p><a class="btn" href="https://www.youtube.com/watch?v={s["id"]}" rel="noopener">{esc(t["open"])} ↗</a></p></article>')
-            write(f"{'de/' if lang == 'de' else ''}live/{s['slug']}/index.html", page(lang, f'{s["title"]} – M365 Show | M365.FM', short(d, 155) or s["title"], u, shell(sb), None, [vid], og_type="video.other", side=(g["side"](lang, s["title"] + " " + d[:2000]) if g.get("side") else "")))
+            write(f"{'de/' if lang == 'de' else ''}live/{s['slug']}/index.html", page(lang, *MP.live_stream_meta(lang, s["title"], d), u, shell(sb), None, [vid], og_type="video.other", side=(g["side"](lang, s["title"] + " " + d[:2000]) if g.get("side") else "")))
             sitemap.append((u, (s.get("published") or TODAY)[:10], None))
     write("de/live/index.html", f'<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={BASE}/de/podcast/"><link rel="canonical" href="{BASE}/de/podcast/"><title>Podcast auf Deutsch</title></head><body><p><a href="{BASE}/de/podcast/">Weiter zum deutschen Podcast</a></p></body></html>')
