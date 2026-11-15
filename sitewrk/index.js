@@ -295,9 +295,10 @@ export async function finalTarget(p, migrated) {
 // Profilseite eines neuen Mitglieds, solange der Seitenbau sie noch nicht erzeugt hat: /community/u/<handle>/ und /<sprache>/community/u/<handle>/
 // entstehen nur beim statischen Seitenbau (site_members.py, Stunden). Fehlt die Seite (404 vom Ursprung), baut der Worker eine einfache Live-Seite aus
 // dem oeffentlichen Profil-Endpunkt der Community-API (GET /api/profile/<handle>, ohne Anmeldung nur fuer oeffentliche Profile, sonst 404).
-// 200 nur bei einem oeffentlichen Profil, sonst und bei jedem API-Fehler bleibt es beim normalen 404 (nie eine 5xx-Seite). Die Seite ist noindex und
-// no-store: nach dem Bau gilt sofort die feste Seite (die kanonische). Nur Felder, die auch die statische Seite zeigt (ohne Kontaktdaten).
-export const PROFILE_PAGE = /^(?:\/(de|fr|es|it|nl|pt|pl|id|ru|uk|ar|he|ja|ko))?\/community\/u\/([a-z0-9][a-z0-9-]{2,29})\/?(?:index\.html)?$/;   // Kuerzel wie HANDLE in worker/src/profiles.js
+// 200 nur bei einem oeffentlichen Profil; sonst und bei jedem API-Fehler greift die 302-Weiterleitung zur Mitgliederliste (PROFILE_PAGE, nie eine
+// 5xx-Seite). Die Seite ist noindex und no-store: nach dem Bau gilt sofort die feste Seite (die kanonische). Nur Felder, die auch die statische Seite
+// zeigt (ohne Kontaktdaten). Nur Personen (/u/); Firmen (/c/) gehen direkt zur Firmenliste.
+export const LIVE_PROFILE_PAGE = /^(?:\/(de|fr|es|it|nl|pt|pl|id|ru|uk|ar|he|ja|ko))?\/community\/u\/([a-z0-9][a-z0-9-]{2,29})\/?(?:index\.html)?$/;   // Kuerzel wie HANDLE in worker/src/profiles.js
 const COMMUNITY_API = "https://api-dub.m365.fm", PROFILE_MISS_TTL = 60;
 const esc = (x) => String(x ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const str = (x, max) => (typeof x === "string" ? x.trim().slice(0, max) : "");
@@ -335,7 +336,7 @@ export function profileHtml(v, lang, handle, api) {
     (chans.length ? `<h2>${esc(L.channels)}</h2><ul>${chans.join("")}</ul>` : "") +
     `<p class="mut"><small>${esc(L.fresh)}</small></p></body></html>`;
 }
-// null = kein Live-Profil (unbekannt, nicht oeffentlich, API-Fehler): der Aufrufer liefert dann das normale 404
+// null = kein Live-Profil (unbekannt, nicht oeffentlich, API-Fehler): der Aufrufer leitet dann per 302 zur Mitgliederliste weiter
 async function profileLive(request, env, ctx, url, m) {
   const handle = m[2], lang = m[1] || "", api = (env && typeof env.COMMUNITY_API === "string" && /^https:\/\/[a-z0-9.-]+$/i.test(env.COMMUNITY_API) ? env.COMMUNITY_API : COMMUNITY_API);
   const cache = caches.default, ck = new Request(url.origin + "/__live/u/" + handle);
@@ -443,16 +444,14 @@ export default {
       if (m) return Response.redirect(url.origin + ((migrated && (await redirectMap())["/show/episodes/" + m[2]]) || "/show/episodes/" + m[2] + "/") + url.search, 301);
     }
     if (res.status === 404 && (request.method === "GET" || request.method === "HEAD")) {   // nach dem R2-Rueckfall: eine Sprachfassung im Bucket gilt
+      const pm = LIVE_PROFILE_PAGE.exec(p);   // Profil eines neuen Mitglieds vor dem naechsten Seitenbau (s. profileLive); sonst die 302 unten
+      if (pm) { const live = await profileLive(request, env, ctx, url, pm); if (live) return live; }
       const ev = EVENT_PAGE.exec(p);   // 302 und ohne Cache, weil die Seite spaeter entsteht
       const pf = ev ? null : PROFILE_PAGE.exec(p);
       const to = ev ? (ev[1] || "") + "/community/events/" : pf ? (pf[1] || "") + "/community/" + (pf[2] === "u" ? "members" : "companies") + "/" : "";
       if (to) return new Response(null, { status: 302, headers: { ...SEC, location: url.origin + to, "cache-control": "no-store", "x-robots-tag": "noindex" } });
     }
     if (res.status === 404 && FEED_ITEM.test(p) && (request.method === "GET" || request.method === "HEAD")) return feedGone(request, p);
-    if (res.status === 404 && (request.method === "GET" || request.method === "HEAD")) {   // Profil eines neuen Mitglieds vor dem naechsten Seitenbau (s. profileLive)
-      const pm = PROFILE_PAGE.exec(p);
-      if (pm) { const live = await profileLive(request, env, ctx, url, pm); if (live) return live; }
-    }
     const h = new Headers(res.headers);
     finishHeaders(h, p);
     return new Response(request.method === "HEAD" ? null : res.body, { status: res.status, statusText: res.statusText, headers: h });

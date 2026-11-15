@@ -1,5 +1,5 @@
 // Live-Profilseite (Rueckfall fuer /community/u/<kuerzel>/, solange der Seitenbau sie noch nicht erzeugt hat): oeffentliches Profil -> 200,
-// sonst und bei jedem API-Fehler das normale 404; alles escaped; noindex und no-store.
+// sonst und bei jedem API-Fehler die 302-Weiterleitung zur Mitgliederliste (#359); alles escaped; noindex und no-store.
 import { test, beforeEach } from "node:test"; import assert from "node:assert/strict";
 const store = new Map(); let apiCalls = [], apiMode = null;
 globalThis.caches = { default: { match: async (r) => { const x = store.get(r.url); return x ? x.clone() : undefined; }, put: async (r, res) => { store.set(r.url, res.clone()); } } };
@@ -26,6 +26,7 @@ globalThis.fetch = async (req) => {
 const { default: W } = await import("../index.js");
 const env = { MIGRATED: "1" };
 const req = (path, method = "GET") => new Request("https://www.m365.fm" + path, { method });
+const toMembers = (r, lang = "") => { assert.equal(r.status, 302); assert.equal(r.headers.get("location"), "https://www.m365.fm" + lang + "/community/members/"); assert.equal(r.headers.get("x-m365-live"), null); };
 const run = async (r) => { const w = []; const res = await W.fetch(r, env, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
 beforeEach(() => { store.clear(); apiCalls = []; apiMode = null; });
 
@@ -59,19 +60,18 @@ test("noindex (Header und Meta) und kein Cache; HEAD ohne Inhalt; Sicherheits-He
   const h = await run(req("/de/community/u/nilufer/", "HEAD")); assert.equal(h.status, 200); assert.equal(await h.text(), "");
   assert.equal(h.headers.get("cache-control"), "no-store"); assert.equal(h.headers.get("x-robots-tag"), "noindex");
 });
-test("nicht oeffentlich oder unbekannt: 404 (kein Live-Profil)", async () => {
-  let r = await run(req("/community/u/unbekannt/")); assert.equal(r.status, 404);
-  apiMode = "private"; r = await run(req("/de/community/u/nilufer/")); assert.equal(r.status, 404); assert.equal(r.headers.get("x-m365-live"), null);
-  // Sicherung: antwortet das API trotzdem mit einem nicht oeffentlichen, fremden oder falsch getypten Profil, bleibt es beim 404
+test("nicht oeffentlich oder unbekannt: 302 zur Mitgliederliste (kein Live-Profil)", async () => {
+  let r = await run(req("/community/u/unbekannt/")); toMembers(r);
+  apiMode = "private"; r = await run(req("/de/community/u/nilufer/")); toMembers(r, "/de");
+  // Sicherung: antwortet das API trotzdem mit einem nicht oeffentlichen, fremden oder falsch getypten Profil, bleibt es bei der Weiterleitung
   for (const prof of [{ ...PUB().profile, public: false }, { ...PUB().profile, public: "true" }, { ...PUB().profile, handle: "anderer" }, { ...PUB().profile, type: "o" }]) {
-    store.clear(); apiMode = { profile: prof }; assert.equal((await run(req("/community/u/nilufer/"))).status, 404, JSON.stringify([prof.public, prof.handle, prof.type]));
+    store.clear(); apiMode = { profile: prof }; assert.equal((await run(req("/community/u/nilufer/"))).status, 302, JSON.stringify([prof.public, prof.handle, prof.type]));
   }
-  store.clear(); apiMode = { nope: 1 }; assert.equal((await run(req("/community/u/nilufer/"))).status, 404);
+  store.clear(); apiMode = { nope: 1 }; toMembers(await run(req("/community/u/nilufer/")));
 });
-test("API-Fehler (Netz, 500, kaputtes JSON): normales 404, nie eine 5xx-Seite", async () => {
+test("API-Fehler (Netz, 500, kaputtes JSON): 302 zur Mitgliederliste, nie eine 5xx-Seite", async () => {
   for (const mode of ["throw", "500", "badjson"]) {
-    store.clear(); apiMode = mode; const r = await run(req("/community/u/nilufer/")); assert.equal(r.status, 404, mode);
-    assert.equal(r.headers.get("x-m365-live"), null);
+    store.clear(); apiMode = mode; toMembers(await run(req("/community/u/nilufer/")));
   }
 });
 test("XSS: Name, Kopfzeile, Text, Firma, Land, Kanalart und Bild-Kennung werden escaped; nur http/https-Links", async () => {
@@ -90,8 +90,12 @@ test("XSS: Name, Kopfzeile, Text, Firma, Land, Kanalart und Bild-Kennung werden 
   store.clear(); apiMode = { profile: { ...PUB().profile, img: '1"><script>x</script>' } }; const t = await (await run(req("/community/u/nilufer/"))).text(); assert.ok(!/<img/.test(t) && !t.includes("<script"));
 });
 test("nur genau diese Adressen und nur GET/HEAD; ungueltige Kuerzel erreichen das API nie", async () => {
-  for (const p of ["/community/u/ni/", "/community/u/Nilufer/", "/community/u/" + "a".repeat(31) + "/", "/community/u/-abc/", "/community/u/nilufer/blog/", "/community/u/nilufer/x/", "/community/u/%3Cscript%3E/", "/xx/community/u/nilufer/", "/community/c/nilufer/", "/community/u/", "/de/de/community/u/nilufer/"])
+  for (const p of ["/community/u/Nilufer/", "/community/u/-abc/", "/community/u/nilufer/blog/", "/community/u/nilufer/x/", "/community/u/%3Cscript%3E/", "/community/u/", "/de/de/community/u/nilufer/"])
     assert.equal((await run(req(p))).status, 404, p);
+  // ausserhalb der Live-Kuerzel, aber eine Profiladresse: wie bisher die 302 aus #359 (Firmen zur Firmenliste), ohne API-Aufruf
+  for (const [p, to] of [["/community/u/ni/", "/community/members/"], ["/community/u/" + "a".repeat(31) + "/", "/community/members/"], ["/xx/community/u/nilufer/", "/xx/community/members/"], ["/community/c/nilufer/", "/community/companies/"], ["/de/community/c/contoso/", "/de/community/companies/"]]) {
+    const r = await run(req(p)); assert.equal(r.status, 302, p); assert.equal(r.headers.get("location"), "https://www.m365.fm" + to, p);
+  }
   assert.equal((await run(req("/en/community/u/nilufer/"))).status, 301, "/en/ leitet wie bisher nach /");
   assert.equal(apiCalls.length, 0);
   assert.equal((await run(req("/community/u/nilufer/", "POST"))).status, 404); assert.equal(apiCalls.length, 0);
