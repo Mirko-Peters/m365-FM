@@ -10,6 +10,7 @@ import json
 import site_facts as FX   # belegte Fakten (Rechtsform, Register, Kunden, Partner, Positionen ...)
 import site_mentions as MEN   # Erwaehnungen in fremden Medien als Quellen (data/press_mentions.json)
 import site_listen as LST   # Anhoeren-Karten (kompakte Variante unter den Beitraegen einer Entitaet)
+import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht (reine Funktionen)
 import re
 from datetime import date
 from urllib.parse import quote, urlsplit
@@ -661,6 +662,7 @@ def build(g, wiki_links, experts_by_ent, ep_find):
     write("entities.jsonld", json.dumps({"@context": "https://schema.org", "@graph": entity_graph}, ensure_ascii=False))
 
     cfg_t = lambda lang: S[lang]
+    _nf = MM.name_flags(recs)   # gleicher Name unter zwei Kennungen: Titel braucht die Kennung (site_meta_entities)
     for lang in COMM_LANGS:
         s = S[lang]; li = 1 if lang == "de" else 0
         stat = fetch_wiki(api, lang)
@@ -687,7 +689,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
                "hasDefinedTerm": [{"@id": eid_of(BASE, e["id"])} for e in _terms]},
               {"@context": "https://schema.org", "@type": "CollectionPage", "name": s["entities"], "url": root, "description": s["intro"], "mainEntity": {"@type": "ItemList", "numberOfItems": len(recs), "itemListElement":
                [{"@type": "ListItem", "position": i + 1, "item": {"@id": eid_of(BASE, e["id"])}} for i, e in enumerate(sorted(recs, key=lambda x: x["name"].lower()))]}}]
-        (write if lang in ("en", "de") else (g.get("write_r2") or write))(f"{rel}/index.html", page(lang, f'{s["entities"]} – M365.FM', s["intro"], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
+        _hm = MM.entities_hub_meta(lang, len(recs)) or (f'{s["entities"]} – M365.FM', s["intro"])   # en/de: Inhalt + Nutzen; andere Sprachen (noindex) bisheriger Text
+        (write if lang in ("en", "de") else (g.get("write_r2") or write))(f"{rel}/index.html", page(lang, _hm[0], _hm[1], root, body, None, ld, og_type="website", extra_head=LCSS + WCSS + css, noindex=lang not in ("en", "de")))
         if lang in ("en", "de"): sitemap.append((root, TODAY, None))
 
         # Einzelseiten
@@ -936,7 +939,8 @@ def build(g, wiki_links, experts_by_ent, ep_find):
             _w = g.get("write_r2") or write   # Entitaetsseiten ALLER Sprachen liegen im R2-Bucket, nicht in GitHub Pages (Site-Worker liefert sie unter derselben Adresse). Englisch (~114 MB) seit 9.11.2026: docs/ lag mit 982 MB ueber der Grenze von 980 MB, jeder Seitenbau brach ab; de seit #310, die anderen 13 Sprachen von Anfang an
             ld = ld + _qld   # Quotation-Knoten der Person
             _side = g["side"](lang, f'{e["name"]} {d} {_lt[:1500]}', ids=[x for v in groups.values() for x in v], exclude=(e["id"],)) if g.get("side") else ""   # Sidebar wie auf allen Inhaltsseiten; Themen = verwandte Entitaeten
-            _w(f"{rel}/{e['id']}/index.html", page(lang, f'{e["name"]} – {tlab(lang, e["type"])} | M365.FM', d[:155], u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
+            _mt, _md = MM.entity_meta(lang, e, d, n_eps=len(eps), flags=_nf[e["id"]], type_label=tlab(lang, e["type"]))   # Suchabsicht: "Was ist X?" / "Wer ist X?" statt "X – Typ"
+            _w(f"{rel}/{e['id']}/index.html", page(lang, _mt, _md, u, b, _alts if lang in ("en", "de") else None, ld, xdefault=eurl(BASE, "en", e["id"]), og_type="website", extra_head=LCSS + css + _fhead, noindex=_noidx, side=_side))
             if not _noidx: sitemap.append((u, _mod, _alts))
 
 

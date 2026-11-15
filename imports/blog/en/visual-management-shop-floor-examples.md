@@ -25,7 +25,7 @@ Visual management makes the status of work readable where it happens, so that th
 
 ## What is visual management?
 
-The Lean Enterprise Institute describes an [andon](https://www.lean.org/lexicon-terms/andon/) as a visual management tool that highlights the status of operations in an area at a single glance. That sentence also describes the purpose of the whole practice. A guide on [visual management tools](https://resources.rework.com/de/libraries/process-management/visual-management) quotes the same institute: the status of the system can be understood at a glance by everyone involved. The guide's own working definition goes one step further: the practice makes the standard, the current state and the gap between them visible, so that deviations announce themselves.
+The Lean Enterprise Institute describes an [andon](https://www.lean.org/lexicon-terms/andon/) as a visual management tool that highlights the status of operations in an area at a single glance. That sentence also describes the purpose of the whole practice. A guide on [visual management tools](https://resources.rework.com/libraries/process-management/visual-management) quotes the same institute: the status of the system can be understood at a glance by everyone involved. The guide's own working definition goes one step further: the practice makes the standard, the current state and the gap between them visible, so that deviations announce themselves.
 
 Three words matter here. **Standard**: what should be. **Current state**: what is. **Gap**: the difference, which tells the team where to act. A board that shows only the current state, with no standard to compare, is a number on a wall.
 
@@ -115,3 +115,9 @@ Paper boards are right for a start. They fall behind when plans change during th
 ## Next step
 
 Pick one cell and one problem, write the standard and set up one visual management tool that shows the gap. Review it with the team after four weeks and decide whether it needs a signal or a control.
+
+## Sources
+
+- [Andon - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/andon/)
+- [Visual Management: Tools and Examples for the Workplace - Rework](https://resources.rework.com/libraries/process-management/visual-management)
+- [5S - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/five-s/)

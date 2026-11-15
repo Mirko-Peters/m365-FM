@@ -36,7 +36,7 @@ Neither replaces the other. A well-labeled file in a site that half the company 
 
 [Oversharing](https://www.m365.fm/entity/oversharing/) means content is shared more broadly than intended, for example through organization-wide or anonymous links. In the past, that content was often protected by obscurity: nobody knew where it was, so nobody found it.
 
-AI assistants change that. Copilot can surface content to users, and the practical effect is that material a person technically had access to, but never would have found, can now appear in an answer. According to Microsoft documentation, Copilot is designed to work within the access a user already has, so overly broad access can be enough for content to appear.
+AI assistants change that. Copilot can surface content to users, and the practical effect is that material a person technically had access to, but never would have found, can now appear in an answer. According to Microsoft documentation, Copilot is designed to work within the access a user already has, so overly broad access can be enough for content to appear. Microsoft also documents that Copilot recognizes sensitivity labels, and that for labels with encryption it returns data from an item only if the user has the permission to copy content (the EXTRACT usage right).
 
 Imagine a team site where a HR spreadsheet was shared with "everyone in the organization" years ago because it was convenient. Nobody opened it for months. With search and AI summaries, the file may now show up for people who were never meant to see it. The permission was always the problem; the new tooling just makes it visible.
 
@@ -50,7 +50,7 @@ Labels are powerful, but they have limits that matter for sequencing.
 
 **They need a design.** A useful label set is small and clear. If a tenant starts with too many labels, users may not understand the difference between them and may pick whatever is quickest. A label only helps if people, or automation, apply it correctly.
 
-**They do not remove broad links by themselves.** Depending on how a label is configured, it may restrict access or add encryption, but an anonymous or organization-wide link is a sharing setting that you still need to review. Check Microsoft Learn for how labels interact with sharing and with SharePoint sites in your configuration.
+**They do not remove broad links by themselves.** Depending on how a label is configured, it may restrict access or add encryption, but an anonymous or organization-wide link is a sharing setting that you still need to review. Microsoft Learn does describe container-level settings: a label applied to a SharePoint site, Teams team or Microsoft 365 group can control external sharing and access from unmanaged devices, and a label can set the default sharing link type. These settings protect the container; they do not label the items inside it. Check Microsoft Learn for how labels interact with sharing and with SharePoint sites in your configuration.
 
 **They have prerequisites.** Licensing, tenant settings and client support affect what you can enforce. Verify these on Microsoft Learn before you plan a rollout around specific label behaviour.
 
@@ -93,3 +93,9 @@ Notice that steps 1 to 3 can overlap. You do not need a perfect cleanup before y
 - Test every access change on a pilot site first, record the previous state, and keep a way back. This applies especially to bulk changes, scripts and inheritance changes.
 - Involve content owners; IT can find the exposure, but owners decide what is intended.
 - Repeat the review regularly, and check Microsoft Learn for current features, licensing and prerequisites before you commit to a design.
+
+## Sources
+
+- [Learn about sensitivity labels (Microsoft Learn)](https://learn.microsoft.com/purview/sensitivity-labels)
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)
+- [Change the default sharing link for a site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-default-sharing-link)

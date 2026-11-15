@@ -27,17 +27,17 @@ Poka-yoke in manufacturing means designing a task, a fixture or a machine so tha
 
 Poka-yoke is a Japanese term. "Poka" refers to an inadvertent error and "yoke" to prevention. The Lean Enterprise Institute (LEI) describes it as [simple and inexpensive devices that help operators avoid mistakes](https://www.lean.org/lexicon-terms/poka-yoke/), such as wrong parts, missing parts or parts installed backwards. The goal is to build quality into the process and catch the defect at its source, with zero defects as the aim. People can then solve the problem instead of sorting bad parts later. The best devices stop errors before they happen and make the wrong action physically impossible.
 
-An [encyclopedia entry on poka-yoke](https://encyclopedia.com/management/encyclopedias-almanacs-transcripts-and-maps/poka-yoke) credits quality engineer Shigeo Shingo with developing the idea and formalising it in Japanese manufacturing. Many English texts also use the terms "mistake proofing" and "error-proofing". The American Society for Quality (ASQ) treats them as the same tool. In lean manufacturing it sits next to quality control: control finds defective units, poka-yoke stops them from being made.
+The [Think Insights page on poka-yoke](https://thinkinsights.net/consulting/poka-yoke) says that Shigeo Shingo formalised the concept in the 1960s as part of the Toyota Production System. Many English texts also use the terms "mistake proofing" and "error-proofing". The American Society for Quality (ASQ) uses "mistake proofing" and lists poka-yoke as another name for it. In lean manufacturing it sits next to quality control: control finds defective units, poka-yoke stops them from being made.
 
-Popular lore, repeated on the [Shingo Institute website](https://shingo.org/?p=499), says the idea was first called "baka-yoke", or fool-proofing. Shingo objected because the term implied that workers are fools, and he changed it to "mistake". The same page quotes him: mistakes are inevitable, but the defects that arise from them are not. That sentence is a good way to explain poka-yoke to a team.
+Popular lore, repeated in an article on the [Shingo Institute website](https://shingo.org/mistake-proofing-mistakes/), says the idea was first called "baka-yoke", or fool-proofing. Shingo objected because the term was disrespectful to workers, essentially calling them fools. The same article quotes him: mistakes are inevitable, but the defects that arise from them are not. That sentence is a good way to explain poka-yoke to a team.
 
 Poka-yoke is not blame. It starts from the view that people make mistakes now and then, and that the process should not depend on perfect attention. It is also not a replacement for training or [standard work](https://www.m365.fm/entity/standard-work/). Standard work defines the correct way to do the job. Poka-yoke protects that way from slips.
 
-It also changes the role of inspection. LEI points out that sampling inspection can miss defects that exist in total production. A 100 per cent inspection is costly and finds defects only after they have occurred, which makes the root cause harder to remove. Error proofing at the station avoids both problems: every unit is checked, and the check happens when the mistake is still easy to trace.
+It also changes the role of inspection. LEI argues that quality by sampling inspection guarantees defects. In our view, a 100 per cent inspection is costly and finds defects only after they have occurred, which makes the root cause harder to remove. Error proofing at the station avoids both problems: every unit is checked, and the check happens when the mistake is still easy to trace.
 
 ## Prevention and detection: two levels of error prevention
 
-ASQ's description of [mistake proofing](https://www.asq.org/quality-resources/mistake-proofing) separates two levels.
+ASQ's description of [mistake proofing](https://www.asq.org/quality-resources/mistake-proofing) says it makes an error impossible or makes it immediately obvious. Its procedure first looks for ways to make the error impossible, and then for ways to detect the error and minimise its effects. We call these two levels prevention and detection.
 
 **Prevention** makes the error impossible. ASQ names three routes:
 
@@ -51,22 +51,22 @@ LEI uses a similar split for devices: a **shutdown** type, which LEI calls the m
 
 ## Poka-yoke in manufacturing: three classic methods
 
-Shingo's work is often summarised as three methods. The encyclopedia entry cited above describes them as follows.
+Poka-yoke devices are commonly grouped into three methods. ASQ lists them as setting functions (contact, motion-step and fixed-value), and the Think Insights page cited above defines them as follows. The examples are ours.
 
-1. **Contact method.** A sensing device or physical shape checks the form, size or position of the part. Examples are a pin that stops a misplaced part from fitting, a limit switch or a proximity switch.
-2. **Fixed-value method.** The same action must happen a set number of times. A counter or a pre-counted set of parts shows when the count is wrong. The entry's example is tightening six bolts with a wrench dipped in diluted paint, so an unpainted bolt shows unfinished work.
-3. **Motion-step method.** One person does several different actions in sequence. Sensors or a sequence check confirm that each step happened and alert the operator when one is skipped.
+1. **Contact method.** A sensing device or physical shape checks a physical attribute of the product or process, such as form, size, position or presence. Examples are a pin that stops a misplaced part from fitting, or a limit switch or proximity switch that confirms a part is present.
+2. **Fixed-value method.** The correct quantity of parts, actions or inputs must be reached. A counter or a pre-counted set of parts shows when the count is wrong. For example, a kit with exactly six bolts for a task shows at once if a bolt is left over.
+3. **Motion-step method.** The work must happen in the correct order. An interlock or a sequence check confirms that each step happened, and alerts the operator or blocks the next step when one is skipped.
 
 Pick the method by the type of error. Wrong part or wrong position points to the contact method. A miscount points to the fixed-value method. A skipped step points to the motion-step method.
 
 ## Poka yoke examples from the shop floor
 
-The following poka yoke examples come from the LEI lexicon and the encyclopedia entry, plus common practice on assembly lines.
+The following poka yoke examples are partly taken from the LEI lexicon and partly common practice on assembly lines. They are illustrations, not a catalogue.
 
 - **Part shape.** A part has a notch or an off-centre hole, so it fits only in the correct orientation. This is prevention by design.
 - **Fixture pin.** A steel pin on a fixture blocks a misplaced part. This is the contact method.
 - **Drill counter.** A counter on a drill sounds a buzzer if the worker removes the workpiece before the correct number of holes is made. This is the fixed-value method, with a warning.
-- **Sensor on the pick.** A photocell stops the product from advancing until the needed parts have been picked up. LEI lists this as a workplace example.
+- **Sensor on the pick.** A photocell above the parts containers stops the product from moving to the next stage until the needed parts have been picked up. LEI lists photocells above parts containers as an example.
 - **Interlock.** A proximity switch blocks an air wrench until the gearbox is filled with oil. This is a shutdown device that enforces a sequence.
 - **Colour and shadow boards.** Torque tools or fasteners are colour-coded to the product variant, and each tool has an outline on the board. Anyone can see at a glance what is missing. This is detection, and it is simple.
 
@@ -74,7 +74,7 @@ Notice that none of these needs a computer. Most are made by the team in a few h
 
 ## How to implement poka-yoke: five steps
 
-ASQ lists a short route to implement mistake proofing. This version is adapted for a first pilot.
+ASQ lists a five-step procedure for mistake proofing. This version adds a first step, picking one error, and is adapted for a first pilot.
 
 1. **Pick one recurring error.** Use your defect log, customer complaints or the [scrap rate](https://www.m365.fm/entity/scrap-rate/) by cause. Choose an error that happens often and costs real money or safety.
 2. **Flowchart the process** at the station and mark where the human error can happen.
@@ -96,8 +96,8 @@ The team changes the connector housing with a small key so it cannot enter rotat
 
 ## Common mistakes
 
-- **Choosing a warning where prevention is possible.** A buzzer is easy to add and easy to ignore. LEI notes that warning devices alert people but do not prevent the error.
-- **Over-engineering.** LEI says a good poka-yoke is simple, reliable, low-maintenance and inexpensive. A complex sensor system that fails weekly will be bypassed.
+- **Choosing a warning where prevention is possible.** A buzzer is easy to add and easy to ignore. Warning devices alert people but do not prevent the error.
+- **Over-engineering.** LEI describes poka-yoke as simple and inexpensive devices; in our experience they must also be reliable and low-maintenance. A complex sensor system that fails weekly will be bypassed.
 - **Skipping the operators.** A device that makes the job slower or harder will be switched off. Test it with the people who use it.
 - **Fixing the symptom, not the cause.** If the error comes from unclear drawings or poor lighting, a device at the station treats only part of the problem.
 - **No daily check.** Test the device with a known-bad part at the start of each shift. A poka-yoke that stopped working silently is worse than none, because people trust it.
@@ -106,3 +106,10 @@ The team changes the connector housing with a small key so it cannot enter rotat
 ## Next step
 
 Choose one error from your defect log and walk to the station today. Trace it to its source and try to design out the mistake before you reach for a sensor. That is the first, practical step of poka-yoke in manufacturing.
+
+## Sources
+
+- Lean Enterprise Institute: Poka Yoke (Lean Lexicon) - https://www.lean.org/lexicon-terms/poka-yoke/
+- ASQ: Mistake Proofing - https://asq.org/quality-resources/mistake-proofing
+- Shingo Institute: Mistake-Proofing Mistakes - https://shingo.org/mistake-proofing-mistakes/
+- Think Insights: Poka-Yoke - https://thinkinsights.net/consulting/poka-yoke

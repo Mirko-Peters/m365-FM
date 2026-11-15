@@ -1,0 +1,139 @@
+name: staging-checks
+# Alle Prüfungen, die eine Änderung bestehen muss, bevor sie live gehen darf (Staging Schritt 1, siehe STAGING.md).
+# Läuft bei Push auf den Zweig `staging`, bei Pull Requests gegen `main` oder `staging` und von Hand.
+# Veröffentlicht nichts, ändert nichts, schreibt kein Geheimnis: nur lesen, bauen, testen.
+# Das Gesamtergebnis ist der Statuscheck `staging-geprueft` (letzter Job). Er ist der einzige Name, den die Schutzregel für `main`
+# verlangen muss; `live-schalten.yml` prüft ihn für den aktuellen Stand von `staging`, bevor etwas nach `main` übernommen wird.
+on:
+  push:
+    branches: [staging]
+  pull_request:
+    branches: [main, staging]
+  workflow_dispatch:
+    inputs:
+      voll:
+        description: "Seitenbau mit allen Sprachen (sonst verkleinert: Deutsch und Englisch)"
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: staging-checks-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  worker-und-seitenworker:
+    name: Worker-Tests (Community-API und Site-Worker)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Community-API - Syntax und Tests (node --test)
+        working-directory: worker
+        run: |
+          npm ci --no-audit --no-fund
+          for f in src/*.js setup.mjs; do node --check "$f"; done
+          node --test
+      - name: Site-Worker - Syntax und Tests
+        working-directory: sitewrk
+        run: node --check index.js && node --test
+      - name: Tests der Seiten-Skripte (Sponsor-Rechner, Player, Entitäts-Abgleich, Suchzähler)
+        run: node --test tests/*.test.mjs
+
+  python-tests:
+    name: Python-Tests (unittest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q requests cryptography pillow pyyaml
+      - name: python3 -m unittest discover -s tests
+        run: python3 -m unittest discover -s tests
+      - name: Plattform-Sync-Regressionen (offline)
+        run: python3 tools/test_sync_platforms.py
+
+  mcp-abdeckung:
+    name: MCP-Abdeckung
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      # Ohne MCP_URL: nur der Quelltext wird abgeglichen (jede API-Route hat ein Tool oder eine Begründung), kein Aufruf des Live-Servers
+      - run: node tools/check_mcp_coverage.mjs
+
+  migrationen:
+    name: Migrationen (Nummern, Reihenfolge, leere Datenbank)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: main als Vergleich holen
+        run: git fetch --no-tags origin main:refs/remotes/origin/main
+      - name: Nummernkollision, Reihenfolge, unveränderte Altdateien, Einspielen in leere SQLite
+        run: python3 tools/check_migrations.py --base origin/main
+
+  seitenbau-probe:
+    name: Seitenbau-Probelauf (ohne Veröffentlichung)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      # Verkleinerter Bau: nur Deutsch und Englisch (Stellschraube SITE_LANGS in site_i18n.py / generate_site.py); von Hand mit "voll" alle Sprachen
+      SITE_LANGS: ${{ (github.event_name == 'workflow_dispatch' && inputs.voll) && 'alle' || 'de,en' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Cache der Community-Exporte (nur lesen)
+        uses: actions/cache/restore@v4
+        with:
+          path: data/cache
+          key: exports-${{ github.run_id }}
+          restore-keys: exports-
+      - run: pip install -q requests cryptography pillow
+      # Liest nur die öffentlichen Exporte von api-dub.m365.fm (GET). Lädt nichts hoch, schreibt nichts nach Cloudflare, GitHub Pages oder R2.
+      - name: Seite bauen (generate_site.py)
+        run: python generate_site.py
+      - name: Schema.org (JSON-LD) prüfen
+        run: python check_schema.py
+      - name: Titel und Beschreibungen prüfen
+        run: python check_titles.py
+      - name: Encoding prüfen (Mojibake)
+        run: python check_encoding.py
+      - name: Größe des Baus ins Protokoll
+        if: always()
+        run: |
+          if [ -d docs ]; then
+            { echo "### Seitenbau-Probelauf"; echo; echo "Sprachen: \`${SITE_LANGS}\`"; echo; echo "Größe docs/: $(du -sh docs | cut -f1), Seiten (index.html): $(find docs -name index.html | wc -l)"; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  staging-geprueft:
+    # FESTER NAME - nicht umbenennen: die Schutzregel für `main` und live-schalten.yml verlassen sich darauf.
+    name: staging-geprueft
+    needs: [worker-und-seitenworker, python-tests, mcp-abdeckung, migrationen, seitenbau-probe]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Gesamtergebnis
+        env:
+          ERGEBNISSE: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          needs = json.loads(os.environ["ERGEBNISSE"])
+          rot = {k: v["result"] for k, v in needs.items() if v["result"] != "success"}
+          zeilen = ["### staging-geprueft", ""] + [f"- {'OK  ' if v['result'] == 'success' else 'ROT '} `{k}`: {v['result']}" for k, v in sorted(needs.items())]
+          open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8").write("\n".join(zeilen) + "\n")
+          if rot:
+              print("::error::Nicht bestanden: " + ", ".join(f"{k} ({v})" for k, v in rot.items()))
+              sys.exit(1)
+          print("Alle Prüfungen bestanden.")
+          PY

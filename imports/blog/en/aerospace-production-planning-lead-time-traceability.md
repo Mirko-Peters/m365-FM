@@ -123,3 +123,9 @@ Many suppliers still plan in spreadsheets next to their [ERP system](https://www
 ## Next step
 
 Take your five longest-lead items and compare the lead time in the master data with the last three deliveries. Any gap of more than a week is a direct input for better aerospace production planning, and it costs you nothing to find.
+
+## Sources
+
+- [Aerospace Supply Chain: Challenges and Resilience - Surgere](https://surgere.com/blog/aerospace-supply-chain-challenges-and-resilience/)
+- [Advanced planning in multi-level production networks in aviation and aerospace - 4flow](https://www.4flow.com/blog/advanced-planning-in-multi-level-production-networks-in-aviation-and-aerospace)
+- [How to Fulfill AS 9100 Traceability Requirements as a Defense Subcontractor - In Compliance Magazine](https://incompliancemag.com/how-to-fulfill-as-9100-traceability-requirements-as-a-defense-subcontractor/)

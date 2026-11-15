@@ -98,3 +98,9 @@ If something goes wrong in the first 30 days, a deleted account can be restored,
 - Keep a short written offboarding checklist and assign an owner for the SharePoint part, not only for the account.
 
 For the official steps and current values, see the Microsoft Learn pages on [removing a former employee](https://learn.microsoft.com/en-us/microsoft-365/admin/add-users/remove-former-employee-step-5) and [deleting a user](https://learn.microsoft.com/en-us/microsoft-365/admin/add-users/delete-a-user), as well as the documentation on [SharePoint sharing and permissions](https://learn.microsoft.com/en-us/sharepoint/modern-experience-sharing-permissions).
+
+## Sources
+
+- [Step 5 - Give another employee access to OneDrive and Outlook data (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/add-users/remove-former-employee-step-5)
+- [Delete a user from your organization (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/admin/add-users/delete-a-user)
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)

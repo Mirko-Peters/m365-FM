@@ -65,7 +65,7 @@ Use these as scorecard rows. For each, the right-hand question is what you'd ask
 
 ### Why does experiment handling deserve its own check?
 
-Simulation models with random inputs give a different answer on every run, so a single run is just one sample. An [MIT lecture on experiment design](https://ocw.tau.edu.ng/courses/sloan-school-of-management/15-066j-system-optimization-and-analysis-for-manufacturing-summer-2003/lecture-notes/lec20_experiment_design.pdf) (hosted on a mirror of MIT OpenCourseWare) frames the key question as how many independent replications you need for a given accuracy, and describes a stopping rule based on the width of a confidence interval. For models that run continuously, it also covers the warm-up period: you discard the first observations of each replication and average the rest, and Welch's method helps you choose where the warm-up ends.
+Simulation models with random inputs give a different answer on every run, so a single run is just one sample. The key question is how many independent replications you need for a given accuracy, and a common stopping rule is based on the width of a confidence interval. For models that run continuously there is also a warm-up period: you typically discard the first observations of each replication and average the rest, and Welch's method is one way to choose where the warm-up ends.
 
 You don't need to do that math yourself, but the software should. Ask whether it can run replications automatically, report confidence intervals, help set a warm-up period and compare scenarios in one view. If it can only show one animated run, you'll end up deciding on a coin toss.
 
@@ -122,3 +122,9 @@ If you want a simulation that starts from your ERP data, iFAKT Polaris is one ca
 ## Next step
 
 Choosing manufacturing simulation software gets easier once you have a scorecard with weights agreed in advance. Pick one real decision in your plant, assemble the data pack for it and give the same case to two or three candidates.
+
+## Sources
+
+- [A comparison of three simulation methodologies for a Lean Six Sigma manufacturing project - International Journal of Lean Six Sigma](https://emerald.com/insight/content/doi/10.1108/IJLSS-03-2018-0025/full/html)
+- [Discrete Simulation Software Ranking (Dias et al., WSC 2016)](https://www.informs-sim.org/wsc16papers/095.pdf)
+- [What is Azure Batch? - Microsoft Learn](https://learn.microsoft.com/en-us/azure/batch/batch-technical-overview)

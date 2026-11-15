@@ -77,7 +77,7 @@ Compare these pairs:
 
 The better notes can be checked. Another person can count the packs or look at the shadow board. That makes follow-up fair, because the team argues about facts and not about opinions.
 
-Two more habits help. Capture observations during the walk, not hours later, because details fade. A small notebook or a printed template on a clipboard works well. And protect people. Womack describes in his introduction to [*Gemba Walks*](https://www.lean.org/wp-content/uploads/2021/01/gemba-walks-introduction.pdf) that he kept promises of confidentiality to the organisations that hosted him. Treat your notes the same way: write about the process, and share names only where a person has agreed to own an action.
+Two more habits help. Capture observations during the walk, not hours later, because details fade. A small notebook or a printed template on a clipboard works well. And protect people. Treat your notes as confidential: write about the process, and share names only where a person has agreed to own an action.
 
 ## Adapting the form to your focus
 
@@ -134,3 +134,9 @@ A shared spreadsheet or task board is enough for the action log. Software become
 ## Next step
 
 Build your gemba walk template on one page this week: a header, a list of facts and an action log with owner, date and status. Use it on your next walk, and log each result as part of your [continuous improvement](https://www.m365.fm/entity/continuous-improvement/) routine.
+
+## Sources
+
+- [Gemba - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/gemba/)
+- [How to Go to the Gemba: Go See, Ask Why, Show Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/)
+- [Gemba Walk Checklist - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/gemba-walk-checklist/)

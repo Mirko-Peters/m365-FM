@@ -25,9 +25,9 @@ A [spaghetti diagram](https://www.m365.fm/entity/spaghetti-diagram/) is a drawin
 
 ## What the diagram shows
 
-The American Society for Quality (ASQ) defines a [spaghetti diagram](https://asq.org/quality-resources/spaghetti-diagram) as a visual representation using a continuous flow line that traces the path of an item or activity through a process. It helps teams spot redundant steps and ways to speed up the work. ASQ's example is a health department office that studied the walking between frequent tasks and then rearranged work areas.
+A spaghetti diagram traces the path of an item or activity through a process with one continuous line, which helps teams spot redundant steps and ways to speed up the work. The American Society for Quality (ASQ) has a [page on the spaghetti diagram](https://asq.org/quality-resources/spaghetti-diagram), but we could not re-open it for this review, so we rely on the two sources below.
 
-The Lean Enterprise Institute (LEI) describes a spaghetti chart as a simple drawing made at the gemba, the place where the work happens, that plots the path taken by a product as it travels through the steps along a value stream. Both descriptions agree on the main idea: you draw what really happens, with one unbroken line, and you let the shape of the line tell the story.
+The Lean Enterprise Institute (LEI) [defines a spaghetti chart](https://www.lean.org/lexicon-terms/spaghetti-chart/) as a diagram of the path taken by a product as it travels through the steps along a value stream. In the ASSEMBLY magazine article [Leading Lean: Untangling Spaghetti](https://www.assemblymag.com/articles/86327-leading-lean-untangling-spaghetti), Jamie Flinchbaugh describes starting with a 2D scale layout of the work area and tracing a line on it to represent the flow of work, and he calls for direct observation: go and see what is actually going on. The main idea is the same in both: you draw what really happens, with one unbroken line, and you let the shape of the line tell the story. Drawing it at the gemba, the place where the work happens, is our recommendation for getting it right.
 
 The name explains the look. When people walk back and forth between a store, a bench and a machine, the line looks like a plate of spaghetti. A clean flow looks like a few straight lines. In lean thinking, unneeded movement and transport are two of the [eight wastes](https://www.m365.fm/entity/eight-wastes/), because they take time and add no value for the customer.
 
@@ -62,7 +62,7 @@ The team asks why for each line and agrees three changes:
 
 The new distance is 60 × 5 + 10 × 45 + 24 × 10 = 300 + 450 + 240 = 990 metres. At the same speed, that is about 17 minutes. The saving is about 71 minutes per shift. The numbers are made up, but the method is the same in any plant: measure before, change, measure after.
 
-LEI also reports a real case. At Thrustmaster of Texas, a Houston maker of marine propulsion equipment, a spaghetti chart of the assembly department showed technicians taking 110 steps per thruster and walking over seven miles, which LEI equates to nearly 10 hours wasted per unit. The team redesigned the assembly layout with a focus on flow, waste elimination and standard work. The article reports 100 per cent on-time delivery about 18 months later. It gives no figure for the cost savings. See the LEI story on the [Thrustmaster spaghetti chart](https://www.lean.org/the-lean-post/articles/small-chart-big-impact-how-a-simple-spaghetti-chart-led-to-huge-wins-at-thrustmaster-of-texas/).
+LEI also reports a real case in [Thrustmaster Comes Around](https://www.lean.org/the-lean-post/articles/thrustmaster-comes-around/). At Thrustmaster of Texas, a Houston-based maker of heavy-duty marine products, two employees created a spaghetti diagram that tracked the 300 steps needed to put together one product. Walking around the facility, mostly to retrieve parts and materials, added up to seven miles, and the article reports nearly 10 hours of non-value-added time for the tracked assembly. The article also describes reorganising the assembly area into cells, but it does not say that the diagram caused that change, and it gives no cost savings for the diagram. Another LEI post on this case ("Small chart, big impact") could not be re-opened for this review, so we do not repeat its figures.
 
 ## What to do with the diagram
 
@@ -93,3 +93,10 @@ A paper floor plan and a pen are enough for a first diagram. Digital floor plans
 ## Next step
 
 Print the floor plan of one area, pick one operator, and trace the path for one hour at the gemba. Then measure the distance and ask why for the three longest lines. That is a practical way to start with a spaghetti diagram.
+
+## Sources
+
+- Lean Enterprise Institute: Spaghetti Chart (Lean Lexicon) - https://www.lean.org/lexicon-terms/spaghetti-chart/
+- ASSEMBLY magazine: Leading Lean: Untangling Spaghetti - https://www.assemblymag.com/articles/86327-leading-lean-untangling-spaghetti
+- Lean Enterprise Institute: Thrustmaster Comes Around - https://www.lean.org/the-lean-post/articles/thrustmaster-comes-around/
+- ASQ: Spaghetti Diagram - https://asq.org/quality-resources/spaghetti-diagram (could not be re-opened for this review)

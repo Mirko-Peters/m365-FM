@@ -14,42 +14,42 @@ keypoints:
   - "Random events need many replications: one run can rank two options the wrong way round."
 faq:
   - q: "What are the most common simulation project mistakes?"
-    a: "Five recur: starting without a clear question, modelling too much or too little detail, using weak or averaged data, skipping validation against the real system, and trusting one run. Averill Law lists 17 pitfalls in 2003 and 23 in 2024. The five here are our own selection from those lists."
+    a: "Five recur: starting without a clear question, modelling too much or too little detail, using weak or averaged data, skipping validation against the real system, and trusting one run. Averill Law lists 17 pitfalls in four groups in a 2003 paper. The five here are my own selection, shaped by practice."
   - q: "How do you validate a simulation model?"
     a: "Compare the model's output with data from the existing system, for example output per shift, under the same conditions. Have experts review the assumptions and the results for reasonableness, and test which inputs move the results most. Do this before you use the model to compare options."
   - q: "How much detail should a simulation model have?"
     a: "Just enough to answer the question. Start with a simple model and add detail only when a result needs it. Too much detail delays the project and can hide the factors that matter, while too little misses the effects you want to test. Write the assumptions down and review them with the people who know the line."
 ---
 
-Simulation project mistakes are mostly avoidable, and most of them are made before the first model is built. This guide is for plant managers who sponsor a manufacturing simulation project, and for the engineers who build the model, when they want the work to end in a decision. You will learn five common mistakes, drawn from two papers by the simulation expert Averill Law and from practice, a worked example with numbers that shows why one run is not enough, and a checklist for your next project with [factory simulation](https://www.m365.fm/entity/factory-simulation/).
+Simulation project mistakes are mostly avoidable, and most of them are made before the first model is built. This guide is for plant managers who sponsor a manufacturing simulation project, and for the engineers who build the model, when they want the work to end in a decision. You will learn five common mistakes, drawn from a paper by the simulation expert Averill Law and from practice, a worked example with numbers that shows why one run is not enough, and a checklist for your next project with [factory simulation](https://www.m365.fm/entity/factory-simulation/).
 
 ## Simulation project mistakes: where they come from
 
-A simulation project is not a programming exercise. Averill Law, in his paper on [how to conduct a successful simulation study](https://www.informs-sim.org/wsc03papers/009.pdf) at the 2003 Winter Simulation Conference, lists 17 pitfalls in four groups: modelling and validation, software, randomness and the design of experiments. In 2024 he extended the list to 23 pitfalls in [a paper for the same conference](https://informs-sim.org/wsc24papers/inv198.pdf). He notes that programming is only 25 to 50 per cent of the work in a sound study.
+A simulation project is not a programming exercise. Averill Law, in his paper on [how to conduct a successful simulation study](https://www.informs-sim.org/wsc03papers/009.pdf) at the 2003 Winter Simulation Conference, lists 17 pitfalls in four groups: modelling and validation, software, randomness and the design of experiments. He notes that programming is only 25 to 50 per cent of the work in a sound study.
 
-Law works at his own simulation consultancy, Averill M. Law & Associates, so his lists reflect one expert view. They agree with a practical paper by J. Michael Knoll and Joseph Heim of Genie Industries on the [adoption of discrete event simulation in a manufacturing environment](https://informs-sim.org/wsc00papers/175.PDF), which is based on one mid-sized manufacturer and reports no quantified savings.
+Law works at his own simulation consultancy, Averill M. Law & Associates, so his list reflects one expert view.
 
 From these sources and from common practice, we pick five mistakes that matter most for a plant. This selection is our own, not a ranking from the papers.
 
 ## Mistake 1: No clear question and no contact with the decision-maker
 
-The first mistake is to start with the tool, not with the question. Law lists undefined objectives and little regular contact with the decision-maker among his pitfalls. He quotes a warning that the greatest model for the wrong problem will be of little value to the decision-maker. In one of his examples, an analyst worked for months without consulting the requesting general, who left the final briefing after five minutes saying that this was not the problem he was interested in.
+The first mistake is to start with the tool, not with the question. In my experience, undefined objectives and little regular contact with the decision-maker are common reasons why a model answers a question nobody asked. A model for the wrong problem is of little value to the decision-maker.
 
-Knoll and Heim add a practical rule: a model whose output will not be used should not be built.
+A practical rule: a model whose output will not be used should not be built.
 
 **How to avoid it.** Write the question as a decision. "Which of two layouts delivers 3,000 units per shift?" is a question. "Let's simulate the plant" is not. Hold a kick-off meeting with everyone who is affected, name who decides and by when, and agree on regular review meetings during the project.
 
 ## Mistake 2: The wrong level of detail
 
-The second mistake is to model too much, or too little. Law calls an inappropriate level of detail one of the most common errors, especially for new analysts. His advice is to include just enough detail to answer the questions of interest, and to start simple and add detail as needed. Knoll and Heim agree: keep the scope tight, and do not expand a model only because it is possible.
+The second mistake is to model too much, or too little. In my experience, an inappropriate level of detail is one of the most common errors, especially for new analysts. My advice is to include just enough detail to answer the questions of interest, to start simple and add detail as needed, to keep the scope tight and not to expand a model only because it is possible.
 
 Too much detail delays the project, and it hides the factors that matter in a crowd of parameters. Too little leaves out an effect that you wanted to test, such as a changeover or a buffer.
 
-**How to avoid it.** Ask for each element and each input parameter of the model whether it changes the answer to the question. If not, leave it out or use a simple rule. Write the assumptions down in a short conceptual model, which Law calls an absolutely critical activity that is often skipped, and go through it with the people who know the line.
+**How to avoid it.** Ask for each element and each input parameter of the model whether it changes the answer to the question. If not, leave it out or use a simple rule. Write the assumptions down in a short conceptual model, a step that is often skipped, and go through it with the people who know the line.
 
 ## Mistake 3: Weak simulation data collection
 
-The third mistake concerns data. Law lists poor system data collection among the pitfalls, and he also warns about two typical errors in input modelling. The first is to replace a random input with its average. In his queueing example, using constant times equal to the means removes the queue completely, so the model shows no waiting where the real system has it. The second is to choose a distribution such as the normal one by habit. In one of his examples, a normal distribution for service times produced an output error of 39 per cent compared with a better-fitting distribution.
+The third mistake concerns data. Poor system data collection is a typical pitfall, and so are two errors in input modelling. The first is to replace a random input with its average. In a queueing system, constant times equal to the means can remove the queue completely, so the model shows no waiting where the real system has it. The second is to choose a distribution such as the normal one by habit. A poorly fitting distribution can distort the output, so test the fit against data.
 
 The plant data itself needs care. Does the stop reason in the manufacturing execution system agree with the maintenance record? If a [digital twin](https://www.m365.fm/entity/digital-twin/), a maintained digital representation of a physical resource that is kept up to date from observations, is available, it can supply current data. If not, plan time for measurement.
 
@@ -57,13 +57,13 @@ The plant data itself needs care. Does the stop reason in the manufacturing exec
 
 ## Mistake 4: Skipping simulation model validation
 
-The fourth mistake is to trust a model that has never been compared with reality. Law calls the comparison of model output with the existing system the most important validation technique, and he says it also supports credibility. In his 2024 paper, he gives a paper-pulp example in which model and system throughput differed by only 0.4 and 1.1 per cent. He also recommends a structured walkthrough of the assumptions with all stakeholders, because model errors and omissions will be found.
+The fourth mistake is to trust a model that has never been compared with reality. Comparing model output with the existing system is the most direct validation technique, and it also supports credibility. A structured walkthrough of the assumptions with all stakeholders helps too, because model errors and omissions tend to surface.
 
 **How to avoid it.** Build the baseline first, and check it against output, stops and lead time of the real-world line. Have experts review the simulation results for reasonableness and test which input parameter moves the results most. Only then use the model for options. If the line does not exist yet, compare the model with a similar line or with calculations, and say so openly.
 
 ## Mistake 5: Treating one run as the truth
 
-The fifth mistake is statistical. A simulation with random events gives a different result in each run. Law warns against treating the output of one run as the true performance of the model. In his example of a motor-vehicle office, the average delay ranged from 1.83 to 10.37 minutes across replications. He also lists the omission of a warm-up period, when the starting state is empty and unrepresentative, and the comparison of options without confidence intervals.
+The fifth mistake is statistical. A simulation with random events gives a different result in each run. Do not treat the output of one run as the true performance of the model. Typical statistical mistakes also include omitting a warm-up period, when the starting state is empty and unrepresentative, and comparing options without confidence intervals.
 
 **How to avoid it.** Run many independent replications, discard the warm-up, plan the analyses before the runs, and compare options using ranges or confidence intervals, not single numbers.
 
@@ -102,3 +102,7 @@ Five replications are a minimum for an illustration. A real project would run mo
 ## Next step
 
 Take your next manufacturing simulation project, or one that is running now, and check it against the checklist above. Where an answer is missing, you have found a likely cause of simulation project mistakes, and you can fix it before the model is built.
+
+## Sources
+
+- [How to Conduct a Successful Simulation Study (Law, WSC 2003)](https://www.informs-sim.org/wsc03papers/009.pdf)

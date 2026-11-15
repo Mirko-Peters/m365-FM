@@ -32,7 +32,7 @@ Before you install, check these prerequisites:
 
 - **PowerShell version and .NET.** Windows PowerShell 5.1 needs .NET Framework 4.7.2. Windows 11, Windows Server 2022 and Windows Server 2025 ship with 4.8.x, so you're fine there. PowerShell 7 works too, and the minimum version depends on the module version, which the next section explains.
 - **Execution policy.** Microsoft's page says that without a suitable execution policy you get the error "Files cannot be loaded because running scripts is disabled on this system". Its documented fix is `Set-ExecutionPolicy RemoteSigned`, run as administrator. Read Microsoft's page on execution policies before you change it, and ask your security team first if the machine is managed.
-- **PowerShellGet and PackageManagement.** REST connections on Windows need PowerShellGet, and PowerShellGet depends on PackageManagement. Without them you may see an error about a missing `Update-ModuleManifest` cmdlet. Microsoft also says that preview versions of these two modules can cause connection problems, and it gives a command to list the installed versions: `Get-InstalledModule PackageManagement -AllVersions; Get-InstalledModule PowerShellGet -AllVersions`.
+- **PowerShellGet and PackageManagement.** REST connections on Windows need PowerShellGet, and PowerShellGet depends on PackageManagement. Without PowerShellGet, Microsoft says you get the error "Cannot find a cmdlet Update-Manifest" when you try to connect. Microsoft also says that preview versions of these two modules can cause connection problems, and it gives a command to list the installed versions: `Get-InstalledModule PackageManagement -AllVersions; Get-InstalledModule PowerShellGet -AllVersions`.
 - **TLS 1.2.** On Windows PowerShell 5.1 with an older Windows, the PowerShell Gallery requires TLS 1.2 or later. If the download fails with a connection error on an old server, this is the first thing to check.
 
 A very old system is a dead end. Windows 7 SP1 and Windows Server 2008 R2 SP1 only get module version 2.0.3, and Microsoft says that version can't connect because it lacks REST support.
@@ -44,7 +44,7 @@ Windows PowerShell 5.1 works with all module versions, with the .NET requirement
 - Module 3.10.0 or later needs PowerShell 7.6.0 or later, which uses .NET 10.
 - Modules 3.5.0 to 3.9.2 need PowerShell 7.4.0 or later, which uses .NET 8.
 - Modules 3.0.0 to 3.4.0 need PowerShell 7.2.0 or later, which uses .NET 6.
-- Module 2.0.4 and later versions of the 2.x line need PowerShell 7.0.3.
+- Module 2.0.4 was the first version with PowerShell 7 support, and it started with PowerShell 7.0.3. Microsoft's tables list higher minimums for later 2.x versions, so check them if you stay on the 2.x line.
 
 So if you installed the latest module on a machine with PowerShell 7.4, expect trouble. Either update PowerShell, or install an older module version with `-RequiredVersion`. At the time of writing, Microsoft lists 3.10.1 as the current version. Check the module page for the number that applies when you read this.
 
@@ -68,7 +68,7 @@ These steps work in Windows PowerShell 5.1 and in PowerShell 7.
 4. Answer any prompt PowerShell shows during the install. Your organization must allow access to the PowerShell Gallery for the download to work.
 5. Verify the install with `Get-InstalledModule ExchangeOnlineManagement | Format-List Name,Version,InstalledLocation`.
 6. Read the `InstalledLocation` line. A path under `%ProgramFiles%\WindowsPowerShell\Modules\` means the module is installed for all users. A path in your Documents folder means it's installed for the current user only.
-7. Test it in a new window with `Connect-ExchangeOnline -UserPrincipalName admin@contoso.com`. For the connection details, see the [Connect to Exchange Online PowerShell](https://learn.microsoft.com/en-us/powershell/exchange/connect-to-exchange-online-powershell?view=exchange-ps) article.
+7. Test it in a new window with `Connect-ExchangeOnline -UserPrincipalName admin@contoso.com`. For the connection details, see the [Connect to Exchange Online PowerShell](https://learn.microsoft.com/powershell/exchange/connect-to-exchange-online-powershell) article.
 
 Want a preview build? Add `-AllowPrerelease`. To pick a specific preview, combine it with `-RequiredVersion`. `Find-Module ExchangeOnlineManagement -AllVersions -AllowPrerelease` lists what's available, and leaving out `-AllowPrerelease` lists only the public versions. Don't put a preview build on a production admin server unless you have a reason. Test it on a spare machine first.
 
@@ -88,9 +88,9 @@ Microsoft's module page lists a few specific errors and fixes.
 - **Errors about PowerShellGetFormatVersion, or about being unable to download providers.** Update PowerShellGet and restart PowerShell.
 - **Download fails on an older Windows PowerShell 5.1 machine.** The PowerShell Gallery needs TLS 1.2 or later. Microsoft links a blog post about the gallery's TLS support for the details.
 - **"Files cannot be loaded because running scripts is disabled on this system".** Set the execution policy as described above, as administrator.
-- **"Cannot find a cmdlet Update-Manifest" or a similar message about `Update-ModuleManifest` when you connect.** PowerShellGet or PackageManagement is missing. Install both and restart PowerShell.
+- **"Cannot find a cmdlet Update-Manifest" when you connect.** Microsoft's page ties this error to a missing PowerShellGet. Install it (and PackageManagement, which it depends on) and restart PowerShell.
 
-If an install works but the connection later fails with an odd assembly error, the cause is usually another module in the same session. Open a new window and connect first.
+If an install works but the connection later fails with an odd error, open a new PowerShell window and connect before you load other modules. This is our own troubleshooting habit, not a statement from Microsoft's page.
 
 ## Common mistakes
 
@@ -102,7 +102,7 @@ If an install works but the connection later fails with an odd assembly error, t
 
 ## Related topics to explore
 
-- Connect with the module: once it's installed, the next question is how to sign in, with or without MFA, which the article on the [Exchange Online PowerShell module](https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell-v2?view=exchange-ps) and its connection companion cover.
+- Connect with the module: once it's installed, the next question is how to sign in, with or without MFA, which the article on the [Exchange Online PowerShell module](https://learn.microsoft.com/powershell/exchange/exchange-online-powershell-v2) and its connection companion cover.
 - App-only authentication: scheduled scripts need a certificate or managed identity, not a typed password.
 - Using the module in PowerShell 7 on Linux and macOS: the supported versions differ by operating system, so check the compatibility list first.
 - Controlling who can use PowerShell: an Exchange admin can enable or disable access to Exchange Online PowerShell per user.
@@ -111,3 +111,7 @@ If an install works but the connection later fails with an odd assembly error, t
 ## Next step
 
 To install the Exchange Online PowerShell module, run `Install-Module -Name ExchangeOnlineManagement`, verify it with `Get-InstalledModule`, and keep the scope the same for every later update. Then connect with `Connect-ExchangeOnline` in a fresh window and run `Get-AcceptedDomain` to prove the setup works.
+
+## Sources
+
+- [About the Exchange Online PowerShell module (Microsoft Learn)](https://learn.microsoft.com/powershell/exchange/exchange-online-powershell-v2)

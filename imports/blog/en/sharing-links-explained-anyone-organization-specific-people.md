@@ -104,3 +104,11 @@ Third-party tools exist alongside the native features, for example the SharePoin
 - **Review links and guests together.** Membership and links are two separate routes to external access.
 - **Test before you remove.** Use a pilot site or test tenant, communicate with owners, and keep a record so changes can be reversed.
 - **Spot-check regularly.** Open Manage access on a few frequently shared files each quarter and see what is really out there.
+
+## Sources
+
+- [Manage sharing settings for SharePoint and OneDrive in Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepoint/turn-external-sharing-on-or-off)
+- [Change the default sharing link for a site (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-default-sharing-link)
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)
+- [Share OneDrive files and folders (Microsoft Support)](https://support.microsoft.com/office/share-onedrive-files-and-folders-9fcc2f7d-de0c-4cec-93b0-a82024800c07)
+- [Stop sharing OneDrive or SharePoint files or folders or change permissions (Microsoft Support)](https://support.microsoft.com/office/stop-sharing-onedrive-or-sharepoint-files-or-folders-or-change-permissions-0a36470f-d7fe-40a0-bd74-0ac6c1e13323)

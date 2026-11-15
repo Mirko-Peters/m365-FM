@@ -79,7 +79,7 @@ Understanding the mechanics helps you set expectations with your organization.
 
 A policy can run in **simulation mode**, where it runs once and creates a report. This is a sensible first step: you see what the policy would find before anyone receives a notification. In **active mode**, the policy runs regularly, creates reports and sends notifications. Recipients can respond from the e-mail, for example by confirming that the site is still in use.
 
-If nobody responds after several notices, the policy can take no action, set the site to read-only, or archive it after a configurable read-only period with Microsoft 365 Archive.
+If nobody responds after several notices, the policy can, depending on the policy type, take no action and keep reporting, set the site to read-only, or archive it after a configurable read-only period with Microsoft 365 Archive.
 
 Two points deserve attention:
 
@@ -99,3 +99,9 @@ Because setting a site to read-only or archiving it changes how people can work,
 - **Test first and keep a way back.** Use a pilot site or test tenant and have a backup or recovery option before deleting, restoring, changing permissions or acting in bulk.
 - **Check Microsoft Learn** for current licensing, features and recovery behaviour before you finalize the process.
 - **Add owner handover to your offboarding checklist**, so ownership of sites is transferred before an account is disabled.
+
+## Sources
+
+- [SharePoint site lifecycle management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/site-lifecycle-management)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)
+- [Prerequisites for SharePoint Advanced Management (Microsoft Learn)](https://learn.microsoft.com/sharepoint/sharepoint-advanced-management-prerequisites)

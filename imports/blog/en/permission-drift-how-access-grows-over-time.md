@@ -12,7 +12,7 @@ faq:
   - q: "How is permission drift different from a one-time misconfiguration?"
     a: "A misconfiguration is a single wrong setting that can often be traced to one change. Drift builds up from many small, individually reasonable decisions over time. No single change looks wrong, but together they move access away from what the business actually needs."
   - q: "Does the Permission Creep Index apply to SharePoint site permissions?"
-    a: "The Permission Creep Index is a metric in Microsoft Entra Permissions Management. It compares granted permissions with the permissions an identity actually uses. Check Microsoft Learn for current scope and availability before assuming it covers your SharePoint scenarios. The underlying idea of granted versus used access is useful regardless."
+    a: "No. The Permission Creep Index was a metric in Microsoft Entra Permissions Management, a product for cloud infrastructure entitlements on AWS, Azure and GCP. Microsoft's archived documentation says the product was no longer available for purchase from April 1, 2025 and was retired in 2025, so do not plan around it. The underlying idea of granted versus used access is still useful for SharePoint reviews."
 ---
 
 Most access problems do not start with a dramatic mistake. They start with a reasonable request: someone needs to see a document library for a project, a colleague changes teams, a vendor needs temporary access. Each decision makes sense when it is made.
@@ -55,11 +55,11 @@ There is also a practical cost to audits and reviews. If the current state canno
 
 One useful way to look at drift is to compare what an identity has been granted with what it actually uses. Permissions that are granted but never used are candidates for removal.
 
-The [Permission Creep Index (PCI)](https://www.m365.fm/entity/permission-creep-index/) applies this idea. It is a risk metric in Microsoft Entra Permissions Management that compares the permissions an identity has been granted with the permissions it actually uses. A higher score means more unused, excessive permissions.
+The [Permission Creep Index (PCI)](https://www.m365.fm/entity/permission-creep-index/) applied this idea. Microsoft's glossary for Microsoft Entra Permissions Management defines it as a number from 0 to 100 that represents the risk from users who have access to high-risk privileges but are not actively using them. It belonged to a product for cloud infrastructure entitlements on AWS, Azure and GCP, not to SharePoint sites.
 
-Two cautions are worth stating. First, the metric belongs to Microsoft Entra Permissions Management, so check [Microsoft Learn](https://learn.microsoft.com/) for its current scope, availability and licensing before building a process around it. Do not assume it covers every Microsoft 365 workload, including individual SharePoint sites. Second, "unused" does not always mean "unnecessary". Some access is needed rarely, for example for year-end processes or incident response. A score is a prompt to investigate, not an instruction to delete.
+Two cautions are worth stating. First, that product has been retired. Microsoft's archived documentation says it was no longer available for purchase from April 1, 2025 and was retired in 2025, so do not build a process around the metric. Second, "unused" does not always mean "unnecessary". Some access is needed rarely, for example for year-end processes or incident response. A score is a prompt to investigate, not an instruction to delete.
 
-Even if you do not use that tool, the principle transfers. Whenever you review access, ask two questions: what is granted, and what is actually needed or used?
+Even without that metric, the principle transfers. Whenever you review access, ask two questions: what is granted, and what is actually needed or used?
 
 ## Least privilege as the counterweight
 
@@ -83,9 +83,15 @@ Drift is usually easier to manage through habits that make removal as normal as 
 - **Prefer groups with clear purpose over individual grants.** Direct permissions and one-off folder shares are the hardest to see and the easiest to forget.
 - **Give temporary access an end date.** Decide at the time of granting when it should be reviewed or removed.
 - **Review on a schedule and on events.** Reviews tied to role changes, project closures and owner departures catch drift where it starts.
-- **Compare granted with used.** Where tooling such as the Permission Creep Index is available to you, use it to prioritise what to look at first, and treat "unused" as a question, not a verdict.
+- **Compare granted with used.** Where you have usage data for an identity or a site, use it to prioritise what to look at first, and treat "unused" as a question, not a verdict.
 - **Document exceptions.** If a one-off share is necessary, record why and when it should be revisited.
 
 A final and important note: removing permissions, breaking inheritance, deleting groups or running bulk changes with PowerShell can lock people out or cut off business processes, and some changes are hard to undo. Always test cleanup on a pilot site or in a test tenant first, and make sure you have a backup or a documented way back, such as an export of the current permissions, before changing production access.
 
 For current details on the features mentioned, start at [Microsoft Learn](https://learn.microsoft.com/) and verify what applies to your licensing and tenant.
+
+## Sources
+
+- [Microsoft Entra Permissions Management glossary (archived) (Microsoft Learn)](https://learn.microsoft.com/previous-versions/entra/permissions-management/multi-cloud-glossary)
+- [Microsoft Entra Permissions Management offboarding guidance (archived) (Microsoft Learn)](https://learn.microsoft.com/previous-versions/entra/permissions-management/how-to-offboard-permissions-management)
+- [What are access reviews? (Microsoft Learn)](https://learn.microsoft.com/entra/id-governance/access-reviews-overview)

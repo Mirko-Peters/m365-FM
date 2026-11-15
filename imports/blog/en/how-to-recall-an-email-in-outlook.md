@@ -26,7 +26,7 @@ To recall an email in Outlook, open the sent message from your Sent Items folder
 
 Recall isn't an undo button. It's a request that Exchange tries to carry out in the background. When you recall a message, a service in Exchange Online tries to delete the original from the recipients' mailboxes, and Microsoft's documentation says it's a hard delete. Then the recall message itself is dropped, so the recipient usually never sees a "recall request" arrive. The service keeps trying for up to 24 hours before it gives up.
 
-Microsoft's [recall requirements page](https://support.microsoft.com/en-us/outlook/mail/how-to-recall-an-email-in-outlook-requirements-limitations-steps) lists three conditions:
+Microsoft's [recall requirements page](https://support.microsoft.com/outlook/mail/how-to-recall-an-email-in-outlook-requirements-limitations-steps) lists three conditions:
 
 - You and the recipient both have a Microsoft 365 work or school account in the same organization.
 - The recipient hasn't opened the message.
@@ -51,13 +51,13 @@ If you don't see a Recall Message button, you may not be on new Outlook yet. Mic
 
 ### Classic Outlook for Windows
 
-Classic Outlook is the version with the full ribbon and the File menu. You work from Sent Items again and open the message in its own window. The recall command sits on the **Message** tab of the opened message under **Actions**, and it's called **Recall This Message**. You then choose between deleting unread copies and deleting unread copies and replacing them with a new message. If you pick replace, Outlook opens a copy of the original that you edit and send. The labels can differ slightly between builds, so if you can't find the command, check the Classic Outlook tab on Microsoft's [recall page](https://support.microsoft.com/en-us/outlook/mail/how-to-recall-an-email-in-outlook-requirements-limitations-steps).
+Classic Outlook is the version with the full ribbon and the File menu. You work from Sent Items again and open the message in its own window. The recall command sits on the **Message** tab of the opened message under **Actions**, and it's called **Recall This Message**. You then choose between deleting unread copies and deleting unread copies and replacing them with a new message. If you pick replace, Outlook opens a copy of the original that you edit and send. The labels can differ slightly between builds. Microsoft's recall page keeps the classic steps on a separate Classic Outlook tab, so check that tab if you can't find the command. The page is here: [recall page](https://support.microsoft.com/outlook/mail/how-to-recall-an-email-in-outlook-requirements-limitations-steps).
 
-Two limits matter for classic Outlook. First, Microsoft's Exchange Online documentation says recall doesn't work when Outlook runs in Online mode, or when several Exchange accounts are configured in the same Outlook profile. Second, if the command is missing, check the account type first. Microsoft's article links to a short check for whether your classic Outlook profile uses an Exchange account, and recall depends on that.
+Two limits matter for classic Outlook. First, Microsoft's Exchange Online documentation says recall doesn't work when Outlook runs in Online mode, or when several Exchange accounts are configured in the same Outlook profile. Second, if the command is missing, check the account type first, because recall needs a Microsoft 365 work or school account.
 
 ## How to recall an email in Outlook for Mac
 
-Mac support is newer than Windows support and it has a version floor. Microsoft's [Outlook for Mac recall article](https://support.microsoft.com/en-us/outlook/recall-an-email-message-in-outlook-for-mac) says you need Outlook for Mac 16.94 (Build 25010522) or later. It also says the feature isn't supported in legacy Outlook for Mac.
+Mac support is newer than Windows support and it has a version floor. Microsoft's [Outlook for Mac recall article](https://support.microsoft.com/outlook/recall-an-email-message-in-outlook-for-mac) says you need Outlook for Mac 16.94 (Build 25010522) or later. It also says the feature isn't supported in legacy Outlook for Mac.
 
 1. Select **Sent** in the folder pane.
 2. Double-click the sent message so it opens in its own window.
@@ -72,7 +72,7 @@ The same account rule applies on Mac: you and the recipient both need Microsoft 
 
 Older advice says recall is a desktop-only feature. That's out of date. Microsoft's Exchange Online documentation lists these clients as supported for recall: classic Outlook, new Outlook, Outlook on the web, Outlook for Mac and Outlook for Android and iOS.
 
-On a phone, Microsoft's [mobile recall page](https://support.microsoft.com/en-us/outlook/can-i-undo-recall-a-sent-email) gives this path: open the message from your Sent folder, tap the three-dot More options menu in the top right corner and tap **Recall**. You get an email telling you whether the recall succeeded. The same page says a recall can fail if the message is very old or if your IT administrator has turned the feature off.
+On a phone, Microsoft's [mobile recall page](https://support.microsoft.com/outlook/can-i-undo-recall-a-sent-email) gives this path: open the message from your Sent folder, tap the three-dot More options menu in the top right corner and tap **Recall**. You get an email telling you whether the recall succeeded. The same page says a recall can fail if the message is very old or if your IT administrator has turned the feature off.
 
 You start the recall in whichever supported client you send from. Microsoft describes the deletion as happening in the recipient's mailbox, so the recipient doesn't need a special client. What matters is the account type and whether the message was already opened.
 
@@ -107,7 +107,7 @@ If you run the tenant, here's what to check before the first recall ticket lands
 5. Make sure `Office365Reports@microsoft.com` isn't blocked. Recall reports come from that sender, and a mail rule that eats them makes recalls look broken.
 6. Know how to verify a recall with [message trace](https://www.m365.fm/entity/message-trace/). A recall message in a trace often shows the status Failed, and that's normal because Transport drops it after the recall completes. The Drop event detail shows the real result, either `Result:Success` or `Result:Failed`.
 
-Shared and delegated mailboxes work with limits. Microsoft says messages sent from a [shared mailbox](https://www.m365.fm/entity/shared-mailbox/) can be recalled, but the report opens only in a browser and requires sign-in with the owning mailbox's credentials. Signing in as the shared account doesn't work. The recall status report is also limited to about 50,000 recipients, although the recall itself is attempted for every eligible recipient. The full details are in Microsoft's article on [cloud-based message recall](https://learn.microsoft.com/en-us/exchange/mail-flow-best-practices/work-with-cloud-based-message-recall), which is worth a bookmark.
+Shared and delegated mailboxes work with limits. Microsoft says messages sent from a [shared mailbox](https://www.m365.fm/entity/shared-mailbox/) can be recalled, but the report opens only in a browser and requires sign-in with the owning mailbox's credentials. Signing in as the shared account doesn't work. The recall status report is also limited to about 50,000 recipients, although the recall itself is attempted for every eligible recipient. The full details are in Microsoft's article on [cloud-based message recall](https://learn.microsoft.com/exchange/mail-flow-best-practices/work-with-cloud-based-message-recall), which is worth a bookmark.
 
 ## Common mistakes
 
@@ -120,7 +120,7 @@ Shared and delegated mailboxes work with limits. Microsoft says messages sent fr
 
 ## Undo Send: the better safety net
 
-Undo Send is not recall. It holds the message for a few seconds before it leaves your outbox. In Outlook for Mac you set it under **Outlook > Settings > Composing**, with a delay of 5, 10, 15 or up to 120 seconds. After you send, a prompt appears at the bottom of the window and you select **Undo** to cancel. Microsoft says this isn't true recall and that it's available only with Microsoft 365 subscription licenses and Outlook.com accounts. Microsoft's recall page also names an Undo Send delay in new Outlook for Windows and in Outlook.com for personal accounts, so look for it in your compose settings.
+Undo Send is not recall. It holds the message for a few seconds before it leaves your outbox. According to Microsoft's [Undo Send article for Outlook for Mac](https://support.microsoft.com/outlook/undo-send-in-outlook-for-mac), you set it under **Outlook > Settings > Composing**, with a delay of 5 to 120 seconds. After you send, a prompt appears at the bottom of the window and you select **Undo** to cancel. Microsoft says it doesn't offer true message recall and works with Microsoft 365 subscription licenses and Outlook.com accounts. Microsoft's recall page also names an Undo Send delay in new Outlook for Windows and in Outlook.com for personal accounts, so look for it in your compose settings.
 
 ## Related topics to explore
 
@@ -132,3 +132,11 @@ Undo Send is not recall. It holds the message for a few seconds before it leaves
 ## Next step
 
 Open Outlook, go to Sent Items and find the last message you sent to a colleague. Check whether your version shows the Recall command and turn on a short Undo Send delay while you're at it. That way, the next time you need to know how to recall an email in Outlook, you'll already know where the button is.
+
+## Sources
+
+- [How to recall an email in Outlook: requirements, limitations, steps (Microsoft Support)](https://support.microsoft.com/outlook/mail/how-to-recall-an-email-in-outlook-requirements-limitations-steps)
+- [Recall an email message in Outlook for Mac (Microsoft Support)](https://support.microsoft.com/outlook/recall-an-email-message-in-outlook-for-mac)
+- [Can I undo or recall a sent email? (Microsoft Support)](https://support.microsoft.com/outlook/can-i-undo-recall-a-sent-email)
+- [Undo Send in Outlook for Mac (Microsoft Support)](https://support.microsoft.com/outlook/undo-send-in-outlook-for-mac)
+- [Cloud-based message recall (Microsoft Learn)](https://learn.microsoft.com/exchange/mail-flow-best-practices/work-with-cloud-based-message-recall)

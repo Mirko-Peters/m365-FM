@@ -42,7 +42,7 @@ Translate that into tool checks:
 - **Two flows.** Can you draw the information flow, such as the schedule or order signal each process receives, and not only the boxes in a row?
 - **Current and future state.** Can you keep both for the same product family, compare them and keep older versions?
 - **Product family as a unit.** Can you group products and maps by family, so one plant doesn't end up with a pile of unrelated drawings?
-- **Standard icons.** LEI's [article on the fundamentals](https://www.lean.org/the-lean-post/articles/understanding-the-fundamentals-of-value-stream-mapping/) lists not using standard icons as a pitfall, because other people then struggle to read the map. A tool should provide the standard set and not invite everyone to invent their own.
+- **Standard icons.** LEI's [article on the fundamentals](https://www.lean.org/the-lean-post/articles/understanding-the-fundamentals-of-value-stream-mapping/) points to standardized icons so that everyone can read the map. A tool should provide the standard set and not invite everyone to invent their own.
 - **Process data as fields.** The same article describes process data boxes under each step with cycle time, downtime, uptime, changeover time, percent complete and accurate (%C/A) and availability, plus a timeline with lead time. If these are structured fields, the software can total them, compare maps and feed a dashboard. If they're text in a shape, it can't.
 - **Calculations you can inspect.** When the tool shows a lead time or a ratio, you should be able to see how it was calculated. A number you can't trace won't survive the first skeptical plant manager.
 
@@ -142,3 +142,9 @@ If you want a data-based option to include in your pilot, look at iFAKT Polaris.
 ## Next step
 
 Choosing the top value stream mapping software is easier with a written list of criteria. Pick one product family, write down your must-haves from the three tests of method, data and people, and ask two vendors to map that family from your own data.
+
+## Sources
+
+- [Value Stream Mapping - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/value-stream-mapping/)
+- [Understanding the Fundamentals of Value Stream Mapping - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/understanding-the-fundamentals-of-value-stream-mapping/)
+- [Row-level security (RLS) with Power BI - Microsoft Learn](https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security)

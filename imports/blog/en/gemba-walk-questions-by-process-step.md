@@ -101,7 +101,7 @@ Waste observation is easier with a list in your head. Taiichi Ohno of Toyota ide
 - **Motion:** unnecessary body movements, such as searching for parts, tools or documents.
 - **Correction:** inspecting, reworking and scrapping defective output.
 
-Match them to the steps. This keeps a [gemba walk](https://www.m365.fm/entity/gemba-walk/) focused. At material supply, look for conveyance and inventory. At machining, look for waiting and overproduction. At assembly, motion. At test, correction. The Japanese word for waste is *muda*. Jim Womack also asks about *mura*, unevenness or variation, and *muri*, overburden, as described in his [introduction to Gemba Walks](https://www.lean.org/wp-content/uploads/2021/01/gemba-walks-introduction.pdf). Use the three words as a lens, but always count what you see before you name it.
+Match them to the steps. This keeps a [gemba walk](https://www.m365.fm/entity/gemba-walk/) focused. At material supply, look for conveyance and inventory. At machining, look for waiting and overproduction. At assembly, motion. At test, correction. The Japanese word for waste is *muda*. Lean practice also looks at *mura*, unevenness or variation, and *muri*, overburden; the [Toyota Production System](https://global.toyota/en/company/vision-and-philosophy/production-system/index.html) material names them next to waste. Use the three words as a lens, but always count what you see before you name it.
 
 ## Example: counting waste at one assembly station
 
@@ -137,3 +137,9 @@ Notes from walks show waste at one station. To see how steps connect, a value st
 ## Next step
 
 Pick one product flow, write three questions for each process step and take them on a walk this week. Count what you see, bring the facts back to the team and use them to prepare better gemba walk questions for the next round.
+
+## Sources
+
+- [How to Go to the Gemba: Go See, Ask Why, Show Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/)
+- [Seven Wastes - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/seven-wastes/)
+- [Toyota Production System - Toyota Motor Corporation (global site)](https://global.toyota/en/company/vision-and-philosophy/production-system/index.html)

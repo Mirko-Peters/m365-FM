@@ -44,7 +44,7 @@ People who search for floor plans often find retail advice. A retail store layou
 
 ## How do you map the current material flow?
 
-The most direct tool is the spaghetti diagram. ASQ defines a [spaghetti diagram](https://asq.org/quality-resources/spaghetti-diagram) as a visual map that traces, with one continuous line, how an item or activity moves through a process. The Lean Enterprise Institute's lexicon describes a [spaghetti chart](https://www.lean.org/lexicon-terms/spaghetti-chart/) as a diagram of the path taken by a product as it travels through the steps along a value stream. It is called that because in a mass-production organization the product's route often looks like a plate of spaghetti.
+The most direct tool is the spaghetti diagram. In practice it traces, with one continuous line, how an item or a person moves through a process. The Lean Enterprise Institute's lexicon describes a [spaghetti chart](https://www.lean.org/lexicon-terms/spaghetti-chart/) as a diagram of the path taken by a product as it travels through the steps along a value stream. It is called that because in a mass-production organization the product's route often looks like a plate of spaghetti.
 
 Follow these steps:
 
@@ -61,7 +61,7 @@ The picture will show problems quickly. The numbers let you compare the current 
 
 ## Which layout type fits your products?
 
-Before you move machines, decide which basic layout you are aiming for. A university open textbook on business [describes four types](https://pressbooks.library.vcu.edu/businessfoundations201/chapter/16-2/):
+Before you move machines, decide which basic layout you are aiming for. In general, four basic layout types are used:
 
 - **Process layout.** Similar tasks are grouped into departments, and items move between stations as needed. It suits small runs of varied products on general-purpose machines.
 - **Product layout.** Workstations line up along a line that products travel down. It suits continuous or repetitive production.
@@ -118,3 +118,8 @@ Spreadsheets and drawings work for a single line. They struggle when product mix
 ## Next step
 
 Pick one product family this week and draw a spaghetti diagram of its path, with measured distances. Use that baseline to sketch one alternative for your shop floor layout, and compare it with the same numbers before you move any machine.
+
+## Sources
+
+- [Spaghetti Chart - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/spaghetti-chart/)
+- [Small Chart, Big Impact: How a Simple Spaghetti Chart Led to Huge Wins at Thrustmaster of Texas - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/small-chart-big-impact-how-a-simple-spaghetti-chart-led-to-huge-wins-at-thrustmaster-of-texas/)

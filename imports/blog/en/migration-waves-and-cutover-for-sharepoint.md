@@ -50,18 +50,18 @@ Useful questions when assigning content to waves:
 - **Who owns it?** Content with an active owner who can validate the result is a good early candidate.
 - **How is it connected?** Sites that link to each other, or share a workflow, should move together or have a plan for broken links.
 - **How much downtime can it take?** Business-critical libraries may need a tighter cutover window than an archive.
-- **Does it depend on workflows?** Microsoft Learn says classic SharePoint Server workflows should be rebuilt as Power Automate flows. Those rebuilds take time and belong in the plan, not as a surprise during cutover.
+- **Does it depend on workflows?** Microsoft Learn recommends moving classic SharePoint Server workflows to Power Automate flows, and SPMT can migrate certain SharePoint Server 2010 workflows. Moving them takes time and belong in the plan, not as a surprise during cutover.
 
 Later waves can take the larger or more complex content, once the team has a repeatable routine.
 
 ## Tools and roles to line up before the first wave
 
-Microsoft Learn names specific tools depending on the source. The Migration Manager in the SharePoint admin center covers sources such as Box, Dropbox, Google Workspace, Egnyte and file shares. The SharePoint Migration Tool (SPMT) covers SharePoint Server 2010, 2013 and 2016, including classic workflows and classic pages. The same page notes that the Mover tool is retired for admin-led migrations. Third-party tools exist too, for example ShareGate, and can be one option to evaluate next to the Microsoft tools. Tool capabilities change, so confirm the current state on [Microsoft Learn](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) before you commit.
+Microsoft Learn names specific tools depending on the source. The Migration Manager in the SharePoint admin center covers sources such as Box, Dropbox, Google Workspace, Egnyte and file shares. The SharePoint Migration Tool (SPMT) covers SharePoint Server 2010, 2013 and 2016 environments only; classic pages are covered by a separate guide on transforming them to modern pages. The same page notes that the Mover tool is retired for admin-led migrations. Third-party tools exist too, for example ShareGate, and can be one option to evaluate next to the Microsoft tools. Tool capabilities change, so confirm the current state on [Microsoft Learn](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) before you commit.
 
 Two further points from that documentation matter for wave planning:
 
-- **Network limits.** For large amounts of data over a limited network connection, Microsoft names Azure Data Box. If bandwidth is your bottleneck, that affects how you size waves and when the initial copy can start.
-- **Roles.** A role called Migration Administrator lets a migration team work without full SharePoint admin access. That is useful when an external or temporary team runs the waves and you want to keep their rights narrow.
+- **Network limits.** To avoid depending on the WAN link for large amounts of data, Microsoft names Azure Data Box: the data is copied to a device, shipped to Microsoft and lands in Azure, and you then use SPMT to migrate it to SharePoint. If bandwidth is your bottleneck, that affects how you size waves and when the initial copy can start.
+- **Roles.** A role called Migration Administrator gives a migration team access to Migration Manager in the Microsoft 365 admin center without the broader SharePoint administrator role. That is useful when an external or temporary team runs the waves and you want to keep their rights narrow.
 
 If your project is a move between two Microsoft 365 tenants, that is a separate topic. It follows different rules and tooling, so do not assume the same plan applies.
 
@@ -85,8 +85,12 @@ Decide in advance what would cause you to stop. For example, if validation fails
 - Treat waves as the way you divide work and the cutover as the moment users switch. Plan both.
 - Use the fact that migration copies content: keep the source available as a way back until the owner confirms the result.
 - Start with a small, representative first wave and write down what it teaches you before planning the second.
-- Rebuild classic SharePoint Server workflows as Power Automate flows and schedule that work early.
+- Move classic SharePoint Server workflows to Power Automate flows, as Microsoft recommends, and schedule that work early.
 - Check which tool fits each source on Microsoft Learn, and consider whether a third-party tool is worth evaluating alongside the Microsoft options.
 - Consider the Migration Administrator role to keep a migration team's rights narrow.
 - If bandwidth is limited, look at Azure Data Box as Microsoft describes it, and size waves accordingly.
 - Rehearse every cutover on a pilot site or test tenant, with a backup or rollback path, and agree stop criteria before the window opens.
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)

@@ -128,3 +128,9 @@ If your main gap is a feasible plan and its link to the floor, iFAKT Polaris is 
 ## Next step
 
 Write down which of two sentences is truer in your plant: "We can't build a schedule we trust" or "We can't see what is really happening." That answer settles most of the aps vs mes question for you, and it tells you which vendor conversation to have first.
+
+## Sources
+
+- [OPC UA Common Object Model: ISA-95, section 4.2.3 ISA-95 - OPC Foundation](https://reference.opcfoundation.org/specs/OPC-10030/4.2.3)
+- [ISA-95 Standard: Enterprise-Control System Integration - ISA](https://www.isa.org/standards-and-publications/isa-standards/isa-95-standard)
+- [Production Control - FIR at RWTH Aachen](https://www.fir.rwth-aachen.de/en/research/production-management/production-control)

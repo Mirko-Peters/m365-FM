@@ -25,17 +25,17 @@ faq:
 
 ## Buffer management in production: what a buffer is for
 
-A line is a chain of stations. When one stops, its neighbours soon feel it. The paper by Birkan Can, Andreas Beham and Cathal Heavey, presented at the [2008 Winter Simulation Conference](https://www.informs-sim.org/wsc08papers/225.pdf), describes the two failure modes. A machine is starved if there is no job to process in its upstream buffer. It is blocked if the job cannot be passed on because there is no space in the downstream buffer. A buffer between two stations is the cushion against both. It lets the upstream station keep working when the downstream one stops, and the downstream one keep working when the upstream one stops.
+A line is a chain of stations. When one stops, its neighbours soon feel it. Line modelling uses two terms for the two failure modes, and they appear, for example, in the buffer allocation paper by Birkan Can, Andreas Beham and Cathal Heavey from the [2008 Winter Simulation Conference](https://www.informs-sim.org/wsc08papers/225.pdf). A machine is starved if there is no job to process in its upstream buffer. It is blocked if the job cannot be passed on because there is no space in the downstream buffer. A buffer between two stations is the cushion against both. It lets the upstream station keep working when the downstream one stops, and the downstream one keep working when the upstream one stops.
 
 A buffer is not free. It is inventory in the process, so it adds waiting time and delay to every part that passes through it. It also takes space and can hide problems. The art is to hold enough to protect output and no more.
 
-Buffers come in different forms. A time buffer is a planned amount of time or a planned lead in the schedule. A storage buffer holds goods. The warehouse equipment vendor Mecalux describes a [storage buffer](https://mecalux.com/blog/storage-buffer) as an area that temporarily houses goods, used when supply and demand rates do not coincide or as a handover between two processes. It distinguishes supply buffers, which hold raw materials or semi-finished parts near the line, from dispatch buffers, which sequence orders for shipment. That is a vendor source, so treat the benefits it lists as the vendor's view. At the plant door, a receiving buffer of raw materials can also protect the line from a delay somewhere in the supply chain. The idea fits a line equally well on a smaller scale: a few parts on a conveyor, a rack of trays, or a marked floor area between two machines.
+Buffers come in different forms. A time buffer is a planned amount of time or a planned lead in the schedule. A storage buffer holds goods. A storage buffer is an area that temporarily houses goods, for example when supply and demand rates do not coincide or as a handover between two processes. Supply buffers hold raw materials or semi-finished parts near the line, and dispatch buffers sequence orders for shipment. At the plant door, a receiving buffer of raw materials can also protect the line from a delay somewhere in the supply chain. The idea fits a line equally well on a smaller scale: a few parts on a conveyor, a rack of trays, or a marked floor area between two machines.
 
 ## Where to put buffers
 
 You cannot buffer everywhere, and you should not try. A buffering strategy picks a few places on purpose, and operations teams then manage them. These placement rules are our own planning aid, not a standard.
 
-1. **In front of the constraint.** The [theory of constraints](https://www.m365.fm/entity/theory-of-constraints/) holds that the constraint sets the pace of the whole system. The [encyclopedia entry on the theory](https://www.encyclopedia.com/management/encyclopedias-almanacs-transcripts-and-maps/theory-constraints) describes the buffer as time or stock that protects throughput. If the constraint waits for parts, the line loses output that nobody can recover. A buffer here is the most valuable one.
+1. **In front of the constraint.** The [theory of constraints](https://www.m365.fm/entity/theory-of-constraints/) holds that the constraint sets the pace of the whole system. In Goldratt's drum-buffer-rope approach, the buffer is time or stock that protects the throughput of the constraint. If the constraint waits for parts, the line loses output that nobody can recover. A buffer here is the most valuable one.
 2. **Behind stations that stop often and for long.** Place it so that its stops do not reach the constraint. A press that has a long tool change every shift is a candidate.
 3. **At points where the rate or the batch changes.** An oven that takes a batch of 50 and releases it, or a station that runs faster than its neighbour, needs a place for the difference.
 4. **Before shipping.** A small buffer lets you sequence orders and load a truck in the right order.
@@ -51,7 +51,7 @@ The size follows from the stop you want to survive, and the variability of the s
 - **How fast does the downstream station consume?** Multiply the consumption rate by the stop duration. That gives the number of parts the buffer must hold. Add a margin, for instance 20 per cent, to cover variation.
 - **Can the buffer refill?** The upstream station needs spare capacity. If it runs at the same rate as the downstream one, the buffer never refills after a stop, and it stays empty from then on.
 
-The size does not have to be exact, because the returns diminish. The Can, Beham and Heavey paper notes that throughput is a concave, increasing function of the total buffer capacity. Put simply, the first slots add the most, and each further slot adds less. In the 9-station test line of the paper, with a budget of eight buffer slots, the best allocation put one slot in each gap between stations. This is an academic benchmark, not a rule for your line, but it shows that a few small buffers in the right places beat a few large ones in the wrong place.
+The size does not have to be exact, because the returns diminish. Buffer allocation research generally treats throughput as a concave, increasing function of the total buffer capacity. Put simply, the first slots add the most, and each further slot adds less. We could not re-check the exact figures in the Can, Beham and Heavey paper, so we quote none. As a rule of thumb, a few small buffers in the right places beat a few large ones in the wrong place.
 
 ## Example: a feeder, a constraint and a packer
 
@@ -71,7 +71,7 @@ A stops for 20 minutes about three times per shift for tool changes and small fa
 
 ## How to run the buffers
 
-A buffer is a living part of the line, not a number on a drawing. The theory of constraints calls this buffer management: the contents of the buffers are used to set priorities for expediting, and the frequency of missing items shows where to improve.
+A buffer is a living part of the line, not a number on a drawing. In the theory of constraints this is called buffer management: the state of the buffer is used to set priorities for expediting, and how often items are missing shows where to improve.
 
 1. **Mark the buffer.** Give it a fixed place and a visible size, for example three zones: full, half, nearly empty.
 2. **Read the signal.** A buffer that is often empty means that the upstream station is too slow or too unreliable. A buffer that is always full means that the downstream station is the limit, or that the buffer is too big.
@@ -95,3 +95,7 @@ A manufacturing execution system records the duration and frequency of stops, wh
 ## Next step
 
 Take the constraint of one line, measure the stops of the station in front of it for two weeks, and size a buffer with the three questions above. Then watch its contents for a month, and use that signal for buffer management in production on the rest of the line.
+
+## Sources
+
+- Can, B., Beham, A., Heavey, C.: buffer allocation paper, Winter Simulation Conference 2008 (full text could not be retrieved for this review) - https://www.informs-sim.org/wsc08papers/225.pdf

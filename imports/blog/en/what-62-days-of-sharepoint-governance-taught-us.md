@@ -8,7 +8,7 @@ date: 2027-01-15
 topics: [cognillo, sharepoint-governance, oversharing]
 faq:
   - q: "Where should SharePoint governance start?"
-    a: "Microsoft Learn advises starting governance planning early and reviewing it regularly. A practical start is a governance team with business and IT, defined site ownership such as a primary and secondary contact, and clear rules for external sharing and default sharing links. Check the intranet governance guide on Microsoft Learn."
+    a: "Microsoft Learn advises starting governance planning early and reviewing it regularly. A practical start is a governance team with business and IT, defined site ownership (Microsoft's example policy is a primary and a secondary contact per site), and clear rules for external sharing and default sharing links. Check the intranet governance guide on Microsoft Learn."
   - q: "What is oversharing in SharePoint and Microsoft 365?"
     a: "Oversharing means content is shared more broadly than intended, for example through organization-wide or anonymous links. It matters more with AI assistants such as Copilot, which can surface content that users can already access. Reviewing sharing links and open permissions is a common first step."
   - q: "Do I need a third-party tool for SharePoint governance?"
@@ -23,24 +23,24 @@ The answer depends on your tenant, so treat the sequence below as a starting poi
 
 ## Governance is policies and people, not a tool
 
-Microsoft describes governance in general as "the set of policies, roles, responsibilities, and processes that control how an organization's business divisions and IT teams work together to achieve its goals." That sentence comes from the SharePoint Server documentation, which says it does not cover SharePoint in Microsoft 365, but the idea carries over.
+The [SharePoint governance overview on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/governance-overview) defines governance as "the set of policies, roles, responsibilities, and processes that control how your organization's business divisions and IT teams work together to achieve its goals." It recommends considering governance first and having a plan in place early.
 
-For SharePoint in Microsoft 365, the Microsoft Learn guide on intranet governance adds some useful principles:
+The Microsoft Learn guide on intranet governance adds some useful principles:
 
 - Start governance planning early and review it regularly.
 - Include business and IT in the governance team, and keep the team in place after launch.
-- The business is responsible, not IT alone.
+- Governance should reflect the goals of business stakeholders, not just the expectations of IT.
 - Policies are requirements; guidelines are recommendations.
 
 That last distinction is easy to skip and it matters. If everything is called a policy, nothing can be enforced. If everything is a guideline, nothing changes.
 
-For a deeper definition, see the page on [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) and the [governance overview on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/governance/what-is-governance-in-sharepoint).
+For a deeper definition, see the page on [SharePoint governance](https://www.m365.fm/entity/sharepoint-governance/) and the [governance overview on Microsoft Learn](https://learn.microsoft.com/en-us/sharepoint/governance-overview).
 
 ## Weeks 1 to 2: ownership before everything else
 
 Imagine a tenant with several hundred team sites. Some were created years ago by people who have since left. Nobody can say who decides whether a site is still needed or who may share its content externally.
 
-Every later governance step depends on knowing who is responsible. Microsoft Learn suggests defining ownership of sites, for example with a primary and a secondary contact per site. That small rule helps because a single owner who leaves the company leaves the site orphaned.
+Every later governance step depends on knowing who is responsible. Microsoft Learn gives site ownership as a policy example: every SharePoint site has a primary and a secondary contact responsible for the site and its content. That small rule helps because a single owner who leaves the company leaves the site orphaned.
 
 Practical questions for this phase:
 
@@ -86,7 +86,7 @@ Removing sharing links, changing permissions or running bulk changes can break a
 
 ## Weeks 8 to 9: make it repeat
 
-A cleanup is a snapshot. Governance is what keeps the snapshot from decaying. Microsoft Learn notes that a review cycle can be automated, for example with Power Automate, and that governance should be reviewed regularly.
+A cleanup is a snapshot. Governance is what keeps the snapshot from decaying. Microsoft Learn raises Power Automate flows as one way to trigger an intranet content review at a set interval, and says that governance should be reviewed regularly.
 
 For a recurring cycle, decide:
 
@@ -98,10 +98,17 @@ If you use a tool for scheduled exports, the vendor's product page states that r
 
 ## Practical takeaways
 
-- **Start with owners.** Define a primary and a secondary contact per site before you measure anything.
+- **Start with owners.** Define a primary and a secondary contact per site, as in Microsoft's example policy, before you measure anything.
 - **Write rules before reports.** Decide on external sharing, default links and exceptions first, and separate policies (requirements) from guidelines (recommendations).
 - **Build rules into site creation** where you can, so owners do not have to remember them.
 - **Review oversharing early,** especially before a Copilot rollout, and start with native options such as SharePoint Advanced Management.
 - **Test every bulk change first** on a pilot site or test tenant, and keep a way back.
 - **Add tools only for a reason.** Compare native features with third-party options, and check vendor claims yourself.
 - **Make the review recurring.** A governance team that stays in place after launch matters more than the initial cleanup.
+
+## Sources
+
+- [SharePoint governance overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/governance-overview)
+- [Planning intranet governance (Microsoft Learn)](https://learn.microsoft.com/sharepoint/intranet-governance)
+- [SharePoint Advanced Management overview (Microsoft Learn)](https://learn.microsoft.com/sharepoint/advanced-management)
+- [Microsoft 365 Copilot data, privacy, and security (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/microsoft-365-copilot-privacy)

@@ -25,9 +25,9 @@ Scrap rate in manufacturing is the share of the units you make that you cannot s
 
 ## What scrap is, and how it differs from rework
 
-Scrap is output that is unusable and cannot be salvaged. Rework is output that needs further processing before it can ship. The [glossary of the maintenance software vendor Tractian](https://tractian.com/en/glossary/scrap-rate) puts it this way: if a part cannot be salvaged or safely used, it belongs in the scrap column. It also stresses that you must draw a clear line between scrapped, reworkable and in-spec units, and apply it the same way on every shift. That is a vendor source, but the advice is sound and easy to check in your own plant.
+Scrap is output that is unusable and cannot be salvaged. Rework is output that needs further processing before it can ship. [Tractian](https://tractian.com/en/blog/scrap-rate-calculate-minimize), a maintenance software vendor, says that unsalvageable parts belong in the scrap column. It also says you need a clear line between what gets scrapped, what can be reworked and what is still within spec, and that if definitions vary from shift to shift, the numbers will not mean much. That is a vendor source, but the advice is sound and easy to check in your own plant.
 
-The two losses look similar in a report and behave differently on the floor. Rework costs time, labour and sometimes a second machine pass. Scrap costs the material and everything done to it so far. The quality control view and the cost view differ: inspection counts the defects, and finance counts the money. In OEE, both reduce the quality factor. The [OEE.com page on the quality factor](https://oee.com/oee-factors/) defines good parts as those that pass through the process the first time without rework, so quality in OEE works like first pass yield. Rework parts count as a loss even if they are fixed later.
+The two losses look similar in a report and behave differently on the floor. Rework costs time, labour and sometimes a second machine pass. Scrap costs the material and everything done to it so far. The quality control view and the cost view differ: inspection counts the defects, and finance counts the money. In OEE, both reduce the quality factor. The [OEE.com page on the quality factor](https://oee.com/oee-factors/) defines good parts as those that pass through the process the first time without rework, and says OEE quality is similar to first pass yield. The page lists scrap and parts that need rework as examples of quality loss.
 
 The [scrap rate](https://www.m365.fm/entity/scrap-rate/) is therefore one of the basic quality measures in a plant. It also feeds directly into [OEE](https://www.m365.fm/entity/oee/).
 
@@ -61,11 +61,11 @@ Now the cost. Assume the raw material is 6.00 per unit. Assume the labour and ma
 - Weekly scrap cost: 360 × 9.70 = 3,492.
 - Over 50 weeks: about 174,600.
 
-If the team removes one third of the scrap, the saving is about 58,000 per year before the cost of the fix. The quality magazine article on the [cost of quality](https://www.qualitymag.com/articles/94524-cost-quality-and-cost-of-quality) lists rework and scrap under internal failure costs, the costs of products that fail before they leave the plant. Use the same logic: put a money figure on scrap, so that management sees it next to other costs and can judge the savings.
+If the team removes one third of the scrap, the saving is about 58,000 per year before the cost of the fix. Quality Magazine's article [The Cost of Quality](https://www.qualitymag.com/articles/90842-the-cost-of-quality) says that failure costs, which can be internal or external, result from scrap, rework or warranty issues. Use the same logic: put a money figure on scrap, so that management sees it next to other costs and can judge the savings.
 
 ## How to measure scrap and find the root causes
 
-Tractian lists the common causes: errors in process steps, poor or inconsistent material quality, unplanned equipment deviations, human error during set-up or operation, and inadequate preventive maintenance. Worn tooling, misaligned fixtures and drifting motors can all push a process out of specification.
+Tractian lists the common causes as errors in process steps, subpar material quality, unplanned equipment deviations and human error during set-up or operation. It also points out that worn or misaligned equipment can push products out of spec. Worn tooling, misaligned fixtures and drifting motors can all push a process out of specification.
 
 You cannot tell which cause matters in your plant without data. Break the scrap down by:
 
@@ -78,7 +78,7 @@ Then rank the causes in a Pareto chart. In many plants a few causes explain most
 
 ## What is an acceptable scrap rate?
 
-There is no universal answer. Tractian's glossary says most operations aim for scrap rates under 5 per cent and that top plants in precision industries often get below 2 per cent. It gives no source for these figures, so treat them as a rough orientation from one vendor, not as a standard. A process that cuts sheet metal, one that moulds plastic and one that assembles electronics have different material yields and different tolerances. Compare each line with its own history and with your best comparable line. Then set a target that you can reach by removing named causes, not by wishing.
+There is no universal answer. Tractian says most established operations aim for scrap rates under 5 per cent and that top-performing plants often push below 2 per cent, and it notes that benchmarks vary. It gives no source for these figures, so treat them as a rough orientation from one vendor, not as a standard. A process that cuts sheet metal, one that moulds plastic and one that assembles electronics have different material yields and different tolerances. Compare each line with its own history and with your best comparable line. Then set a target that you can reach by removing named causes, not by wishing.
 
 ## How to reduce scrap in five steps
 
@@ -106,3 +106,9 @@ An ERP or manufacturing execution system can record scrap against the work order
 ## Next step
 
 Take last month's scrap, split it into scrap and rework, and put a cost on each cause. Then pick the biggest one and visit the station this week. That is the practical start for any scrap rate in manufacturing programme.
+
+## Sources
+
+- Tractian: Scrap Rate: How to Calculate and Minimize Manufacturing Waste - https://tractian.com/en/blog/scrap-rate-calculate-minimize
+- OEE.com: OEE Factors - https://oee.com/oee-factors/
+- Quality Magazine: The Cost of Quality - https://www.qualitymag.com/articles/90842-the-cost-of-quality

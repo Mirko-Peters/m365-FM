@@ -10,13 +10,13 @@ keypoints:
   - "The theory of constraints (TOC) says the output of a system is limited by its weakest link, so improvement effort belongs on the constraint first."
   - "The five focusing steps are: identify the constraint, exploit it, subordinate everything else, elevate it, and go back to step one without letting inertia set in."
   - "A constraint is not always a machine; it can be a policy, a supplier or market demand, so check rules and flows as well as capacities."
-  - "Drum-buffer-rope schedules the plant: the constraint is the drum, a time or stock buffer protects it, and a rope releases material at the rate it can use."
+  - "Drum-buffer-rope schedules the plant: the constraint is the drum, a buffer, mostly of time, protects it, and a rope releases material at the rate it can use."
   - "Exploit before you elevate: look for hidden capacity at the constraint, such as relief during breaks, no starving and no scrap, before spending money."
 faq:
   - q: "What are the five focusing steps of the theory of constraints?"
     a: "Identify the constraint, decide how to exploit it, subordinate everything else to that decision, elevate the constraint, and then go back to step one without letting inertia create a new constraint. The cycle repeats, because once a constraint is broken, the next weakest link becomes the one that limits the plant."
   - q: "What is drum-buffer-rope?"
-    a: "Drum-buffer-rope is a scheduling method from the theory of constraints. The constraint is the drum that sets the pace, a buffer of time or stock protects it from disruption, and a rope releases raw material at the rate the constraint can use, so other resources do not overproduce."
+    a: "Drum-buffer-rope is a scheduling method from the theory of constraints. The constraint is the drum that sets the pace, a buffer, mostly of time, protects it from disruption, and a rope releases raw material at the rate the constraint can use, so other resources do not overproduce."
   - q: "How is the theory of constraints different from lean?"
     a: "One Lean Enterprise Institute author describes the difference this way: TOC starts by finding the constraint and works on it, while lean starts by defining customer value and walking the whole value stream. Both aim at profit and continuous improvement, and many practitioners combine them to decide where to start."
 ---
@@ -25,19 +25,19 @@ The theory of constraints in manufacturing says that the output of a plant is li
 
 ## Theory of constraints in manufacturing: the core idea
 
-[Theory of constraints](https://www.m365.fm/entity/theory-of-constraints/) (TOC) was developed by Dr. Eliyahu Goldratt. The [entry on the theory in the Encyclopedia of Management](https://www.encyclopedia.com/management/encyclopedias-almanacs-transcripts-and-maps/theory-constraints), published on encyclopedia.com, states its premise: the strength of any chain, process or system depends on its weakest link. Goldratt's 1984 novel *The Goal* popularised the ideas by following a plant manager who has to save a failing plant. The encyclopedia entry has a promotional tone and gives no criticism, so read it as an introduction and not as proof of results.
+[Theory of constraints](https://www.m365.fm/entity/theory-of-constraints/) (TOC) was developed by Dr. Eliyahu Goldratt. Its premise is that the strength of a chain, process or system depends on its weakest link. The Lean Enterprise Institute (LEI) author Sergio Rattner notes that the ideas were first published in *The Goal* by Eliyahu M. Goldratt and Jeff Cox in 1984. The novel follows a plant manager who has to save a failing plant. Read TOC as a way to decide where to focus, not as proof of results.
 
 A constraint is whatever limits the system from reaching its goal. In a plant, it is often a machine, but not always. The Lean Enterprise Institute (LEI) author Sergio Rattner writes in [What is the Theory of Constraints, and How Does it Compare to Lean Thinking?](https://www.lean.org/the-lean-post/articles/what-is-the-theory-of-constraints-and-how-does-it-compare-to-lean-thinking/) that a constraint can be physical or a policy, and that outside the shop floor, constraints such as market demand also exist. He adds that Goldratt argues that most organisations have very few true constraints. That is the practical value: if only one or two limits decide your output, you do not need to improve everything. You keep the focus on the system constraint and leave the rest alone for now.
 
-TOC also changes what you measure. Both Rattner and the encyclopedia entry name three measures: throughput, inventory and operating expense. The entry defines throughput as the rate at which the system generates money through sales, not through production. Rattner summarises the aim as maximising throughput while minimising inventory and operating expense. So a machine that makes parts nobody orders adds no throughput, however busy it is. The entry also describes the thinking processes, a set of logic tools such as the current reality tree and the evaporating cloud, which help to find the root causes behind a problem. They are a topic of their own, and this guide focuses on the focusing steps.
+TOC also changes what you measure. Rattner names three measures: throughput, inventory and operating expense. He defines throughput as the rate at which the entire organization generates money through sales for a product or service, so it is counted at the sale, not at production. He summarises the aim as maximising throughput while minimising inventory and operating expense. So a machine that makes parts nobody orders adds no throughput, however busy it is. TOC also includes a set of logic tools known as the thinking processes, such as the current reality tree and the evaporating cloud, which help to find the root causes behind a problem. They are a topic of their own, and this guide focuses on the focusing steps.
 
 ## The five focusing steps
 
-The steps are the heart of the method. The wording below follows the encyclopedia entry, and the explanations add the points made by Rattner and by a [personal web page of Dr. K. J. Youngman](https://www.dbrmfg.co.nz/Bottom%20Line%20Process%20of%20Change.htm) on implementing the theory.
+The steps are the heart of the method. The wording below follows Rattner's article, and the explanations add his points and our own.
 
 1. **Identify the system's constraint.** Find the one resource, rule or flow that limits output. Often it is a physical [bottleneck](https://www.m365.fm/entity/bottleneck/): the machine in front of which work piles up, and after which work is scarce. In some plants it is a policy, such as a minimum batch rule or a purchasing limit.
-2. **Decide how to exploit the constraint.** Get the most out of what the constraint already has. Youngman lists waste such as waiting, over-processing, over-production and defects as typical places to look. Rattner gives an example: reduce the downtime of the bottleneck without expensive upgrades.
-3. **Subordinate everything else to that decision.** Every other resource works to the pace of the constraint. Youngman calls this active restraint: non-constraints should not be kept busy with work that is not needed, because that only creates stock.
+2. **Decide how to exploit the constraint.** Get the most out of what the constraint already has. Look first at lost time and defects at the constraint; this is our own advice. Rattner gives an example: reduce or eliminate the downtime of the bottleneck without expensive changes or upgrades.
+3. **Subordinate everything else to that decision.** Every other resource works to the pace of the constraint. In our words: non-constraints should not be kept busy with work that is not needed, because that only creates stock.
 4. **Elevate the constraint.** Raise its capacity, which may need money or new equipment. Rattner notes that this step applies only if steps two and three are not enough.
 5. **Go back to step one, but do not let inertia create a new constraint.** Once a constraint is broken, another resource becomes the weakest link. The cycle starts again, which makes it a form of continuous improvement.
 
@@ -45,13 +45,13 @@ The order matters. It is tempting to jump to step four and buy a machine, when s
 
 ## Drum-buffer-rope and buffer management
 
-Drum-buffer-rope (DBR) is the scheduling method that applies steps two and three. The encyclopedia entry describes the parts:
+Drum-buffer-rope (DBR) is the scheduling method that applies steps two and three. The parts are usually described as follows. This is the standard description, which we could not re-check in a source for this review, except for the buffer:
 
 - **The drum** is the constraint. It sets the pace of the whole system.
-- **The buffer** is time or stock that protects throughput. Time buffers absorb internal disruptions, and stock buffers help to respond to market demand.
+- **The buffer** protects throughput. In DBR it is mainly a time buffer: the [drum-buffer-rope guide at dbrmfg.co.nz](https://dbrmfg.co.nz/Production%20DBR%20More%20On%20Buffers.htm) stresses that the buffer is concerned with time and not quantity, so material is released early enough to reach the constraint when planned.
 - **The rope** is a release schedule for raw materials, tied to the drum and the buffer. It keeps other resources subordinate by releasing work only at the rate the constraint can use it.
 
-The entry also describes [buffer management](https://www.m365.fm/entity/buffer-management/): the contents of the buffers are used to set priorities for expediting, and the frequency of missing items shows where to improve. So the buffer is not only a safety cushion. It is also a signal. If the same item is often late into the buffer, the cause upstream deserves attention.
+[Buffer management](https://www.m365.fm/entity/buffer-management/), in the usual description, uses the state of the buffers to set priorities for expediting, and the frequency of missing items shows where to improve. So the buffer is not only a safety cushion. It is also a signal. If the same item is often late into the buffer, the cause upstream deserves attention.
 
 In plain terms: do not release more material than the constraint can process, protect the constraint from running out of work, and watch what is missing in front of it.
 
@@ -86,7 +86,7 @@ In practice, the two combine well. Rattner argues that TOC can complement lean, 
 - **Keeping non-constraints busy.** High utilisation at a station that is not the constraint only builds stock.
 - **Elevating before exploiting.** Spending money on capacity while the constraint idles for 30 minutes per shift wastes it.
 - **Stopping after the first success.** Inertia is the fifth step's warning. The next constraint is waiting.
-- **Judging stations by local efficiency.** The encyclopedia entry de-emphasises local measures such as efficiency and utilisation in favour of throughput.
+- **Judging stations by local efficiency.** Rattner names asset utilization and burden absorption as traditional metrics that TOC replaces with throughput, inventory and operating expense.
 
 ## How software can help
 
@@ -95,3 +95,8 @@ A manufacturing execution system shows the actual output and downtime at each st
 ## Next step
 
 Pick one line, list the capacity of each station per hour, and check where work piles up. Then ask what lost time the constraint has, which is the first step toward the theory of constraints in manufacturing on your own floor.
+
+## Sources
+
+- Lean Enterprise Institute (Sergio Rattner): What is the Theory of Constraints, and How Does it Compare to Lean Thinking? - https://www.lean.org/the-lean-post/articles/what-is-the-theory-of-constraints-and-how-does-it-compare-to-lean-thinking/
+- Theory of Constraints Production Drum Buffer Rope (dbrmfg.co.nz) - https://dbrmfg.co.nz/Production%20DBR%20More%20On%20Buffers.htm

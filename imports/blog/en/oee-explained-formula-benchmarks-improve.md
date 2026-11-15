@@ -140,3 +140,10 @@ Manual OEE tracking on paper works for a pilot. It gets hard with many lines and
 ## Next step
 
 Pick one line and calculate your OEE score for one shift by hand, with availability, performance and quality shown separately. Then list the three biggest losses and choose one to work on this month.
+
+## Sources
+
+- [OEE Calculation: Definitions, Formulas, and Examples - OEE.com (Vorne Industries)](https://www.oee.com/calculating-oee/)
+- [Manufacturing KPIs: An Essential Guide to Metrics and Dashboards - MachineMetrics](https://machinemetrics.com/blog/manufacturing-kpis)
+- [Six Big Losses in Manufacturing - OEE.com (Vorne Industries)](https://www.oee.com/oee-six-big-losses/)
+- [World-Class OEE - OEE.com (Vorne Industries)](https://oee.com/world-class-oee)

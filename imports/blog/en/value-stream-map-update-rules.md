@@ -108,3 +108,8 @@ Updating a paper map means redrawing it and re-entering the numbers. When the mo
 ## Next step
 
 A value stream map update works when the rules are written down. This week, put the seven triggers and the three levels on one page, name the owner of each map, and set a date for the first monthly refresh of the data boxes.
+
+## Sources
+
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Insights on Why, When, and How Value-Stream Mapping is a Vital Part (eBook) - Lean Enterprise Institute](https://email.lean.org/hubfs/ebook%20files/eBook-Top5-VSM-final.pdf)

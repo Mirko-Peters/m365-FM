@@ -27,7 +27,7 @@ Why digital twin projects fail is mostly a management question, not a software q
 
 A digital twin is a maintained digital representation of a physical resource that is kept up to date from observations, for example with live data from machines in near real-time. The important words are "maintained" and "kept up to date". A digital twin is not a one-time model, and it is not a 3D model or a set of CAD files of the plant. It is a system that has to stay true to the plant, and that is where projects break.
 
-Several sources describe the same pattern. A paper at the [2023 Winter Simulation Conference](https://www.informs-sim.org/wsc23papers/167.pdf) by Siyuan Chen and co-authors reviews the challenges of digital twins in manufacturing maintenance. It groups them into organizational ones, such as company culture, high upfront costs and fear of job loss, methodological ones, such as unclear benefits and unclear business objectives, and technical ones, such as data acquisition from legacy machines and interoperability. The study is small, with six industry interviewees, so the authors say the findings may not represent all companies.
+Several sources describe the same pattern. In my experience, the challenges fall into three groups. Organizational ones are company culture, high upfront costs and fear of job loss. Methodological ones are unclear benefits and unclear business objectives. Technical ones are data acquisition from legacy machines and interoperability. These are my observations from projects, not survey results.
 
 The software vendors say the same from their side. Simio, a simulation vendor, argues in a [blog post](https://www.simio.com/blog/the-3-data-headaches-killing-your-digital-twin-project-and-practical-fixes-that-actually-work) that projects more often stall on data problems than on technology. Informatica, a data management vendor, writes in its [article on data foundations](https://www.informatica.com/blogs/why-digital-twins-fail-without-the-right-data-foundation.html) that a twin without trusted data is limited and can mislead. Both sell tools for the data problem, so read them as one view.
 
@@ -35,7 +35,7 @@ From these sources and from common project practice, we group the failures into 
 
 ## Failure 1: no decision depends on the twin
 
-The biggest challenge is that nobody can say what the digital twin is for. "We want to be an [Industry 4.0](https://www.m365.fm/entity/industry-4-0/) plant" is a direction, not a use case. The Chen paper lists unclear business objectives and unclear benefits as methodological challenges, and it lists identifying use cases and securing management commitment among the barriers.
+The biggest challenge is that nobody can say what the digital twin is for. "We want to be an [Industry 4.0](https://www.m365.fm/entity/industry-4-0/) plant" is a direction, not a use case. Unclear business objectives and unclear benefits are the most common methodological challenges in my experience, and so are the missing use case and weak management commitment.
 
 A simple test helps. Ask the sponsor one direct question: which specific decision will be taken differently, by whom and by which date, because this twin exists? Good answers are concrete. "We will choose between a second shift and a new machine for line 3 in March." "We will set buffer sizes before the new layout is built." A weak answer is "we will have better visibility".
 
@@ -57,7 +57,7 @@ For a plant, the practical form of this problem is simple. Does the [manufacturi
 
 A digital twin has two kinds of owners, and both are often missing. Each data item needs an owner who can say whether it is correct. The model needs an owner who updates it when the plant changes.
 
-The Chen paper is clear on this point. It says that organizational challenges require processes that ensure regular updates, and it recommends updating the model whenever the physical system changes. Interviewees also stressed the importance of human expertise in maintaining, understanding and verifying the results of the twin. A digital twin that nobody maintains is a snapshot. After the first layout change or the first new product, it no longer matches the plant, and the operators who notice stop trusting it.
+Organizational challenges require processes that ensure regular updates, and the model should be updated whenever the physical system changes. In my experience, human expertise is needed to maintain the twin, to understand it and to verify its results. A digital twin that nobody maintains is a snapshot. After the first layout change or the first new product, it no longer matches the plant, and the operators who notice stop trusting it.
 
 The same paper notes that most respondents use digital twins only at the digital shadow stage. A fully connected, self-updating twin is a long-term goal, and the first useful version is often a simpler model with a clear owner.
 
@@ -65,11 +65,11 @@ The same paper notes that most respondents use digital twins only at the digital
 
 The next pitfall is ambition. A digital twin project that starts with "the whole plant" has to reconcile data from every line, every system and every team before it shows anything. The number of data items grows with every line, and so does the number of conflicts.
 
-A narrow scope, a digital twin pilot on one line, puts the model in front of real users early. One line, one decision and one group of users are enough to find out whether the data holds and whether people use the answer. The Chen paper lists securing management commitment and building trust among the barriers, and a quick, correct first result helps with both.
+A narrow scope, a digital twin pilot on one line, puts the model in front of real users early. One line, one decision and one group of users are enough to find out whether the data holds and whether people use the answer. Management commitment and trust are common barriers, and a quick, correct first result helps with both.
 
 ## Failure 5: the project is treated as an IT project
 
-If IT or an external team builds the model alone, the people who know the plant join late. They find that the model ignores a manual step, a shared tool or an informal rule. The Chen paper lists company culture, communication problems and fear of job loss as challenges. Treat the project as change management, with a measurable business case that the plant can check, and let operators, maintenance and planning help to define what the model shows.
+If IT or an external team builds the model alone, the people who know the plant join late. They find that the model ignores a manual step, a shared tool or an informal rule. Company culture, communication problems and fear of job loss are common challenges. Treat the project as change management, with a measurable business case that the plant can check, and let operators, maintenance and planning help to define what the model shows.
 
 ## Example: audit one line before you scale
 
@@ -115,3 +115,8 @@ The data audit and the model both need a single, consistent description of produ
 ## Next step
 
 Pick one line and one decision for the next quarter, and ask your team to audit the 10 to 20 data items that decision needs. If the audit shows that most items are not ready, you have found out why digital twin projects fail before spending the budget, and you know where to start.
+
+## Sources
+
+- [Digital Thread vs. Digital Twin: How Simulation Connects Both for Manufacturing Excellence (the 3 data headaches) - Simio](https://www.simio.com/blog/the-3-data-headaches-killing-your-digital-twin-project-and-practical-fixes-that-actually-work)
+- [Why Digital Twins Fail Without the Right Data Foundation - Informatica](https://www.informatica.com/blogs/why-digital-twins-fail-without-the-right-data-foundation.html)

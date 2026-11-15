@@ -25,7 +25,7 @@ MRP (material requirements planning) works out what material you need and when t
 
 ## What does MRP actually do?
 
-Take the mechanics from the [MIT course notes on MRP](https://ocw.mit.edu/courses/2-854-introduction-to-manufacturing-systems-fall-2016/4eec617bb52d64f4ea1bed6d9905bc00_MIT2_854F16_MatrialRequire.pdf). The inputs are a master production schedule (what must be delivered and when, plus on-hand inventory), an item master with the bill of materials, lot-sizing rules and planning lead times, and inventory status.
+Take the mechanics from the [MIT course notes on MRP](https://ocw.mit.edu/courses/2-854-introduction-to-manufacturing-systems-fall-2016/4eec617bb52d64f4ea1bed6d9905bc00_MIT2_854F16_MatrialRequire.pdf). The inputs are a master production schedule (demand as quantities and due dates), an item master with the bill of materials, lot-sizing rules and planning lead times, and inventory status.
 
 The logic has four parts:
 
@@ -139,3 +139,9 @@ If your MRP plan is right but the schedule is wrong, iFAKT Polaris is one option
 ## Next step
 
 Open your latest MRP run and pick the machine that is overloaded most often. Sequence next week's orders on it by hand, with real calendars and setup times, and see how far the result differs from the plan. That one exercise tells you whether the mrp vs aps question is a data issue or a scheduling issue in your plant.
+
+## Sources
+
+- [Material Requirements Planning (lecture notes, 2.854 Introduction to Manufacturing Systems) - MIT OpenCourseWare](https://ocw.mit.edu/courses/2-854-introduction-to-manufacturing-systems-fall-2016/4eec617bb52d64f4ea1bed6d9905bc00_MIT2_854F16_MatrialRequire.pdf)
+- [Create a constrained master plan - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/master-planning/tasks/constrained-plan)
+- [Operations scheduling and job scheduling - Microsoft Learn](https://learn.microsoft.com/en-us/dynamics365/supply-chain/production-control/operations-scheduling)

@@ -119,3 +119,8 @@ The goal is software that closes the gap between the plan and the floor without 
 ## Next step
 
 Write down one problem on one cell this week and map how its data flows today. That map shows whether you need a new MES or just a better connection for shop floor digitalization.
+
+## Sources
+
+- [OPC UA Common Object Model: ISA-95, section 4.2.3 ISA-95 - OPC Foundation](https://reference.opcfoundation.org/specs/OPC-10030/4.2.3)
+- [Andon - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/andon/)

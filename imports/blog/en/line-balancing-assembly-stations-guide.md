@@ -33,13 +33,13 @@ The benefit is simple. A balanced line meets demand with fewer operators or with
 
 ## The three numbers you need
 
-An [open operations management textbook from eCampusOntario](https://ecampusontario.pressbooks.pub/opsmgmt/?p=1689) gives the basic formulas for balancing a line.
+Course notes on [assembly line balancing](https://home.zcu.cz/~preuss/UPPK/DS-install/HTMLfiles/BALANCE.HTM), hosted at home.zcu.cz, give the basic rules for balancing a line: the minimum number of stations is the total time to make one unit divided by the cycle time and rounded up, efficiency is the time needed divided by the time allocated, and idle time is the time allocated minus the time needed. In the formulas below, the takt time plays the role of the cycle time.
 
 1. **Takt time** = available production time ÷ required output.
 2. **Minimum number of stations** = total task time ÷ takt time, rounded up to a whole number.
 3. **Balance efficiency** = total task time ÷ (number of stations × takt time).
 
-The idle time per cycle is the number of stations times the takt time, minus the total task time. The textbook example shows the effect: 68 minutes of work at a 15-minute takt needs at least 5 stations, and with 5 stations the efficiency is 90.7 per cent. With 6 stations it falls to 75.5 per cent, because the sixth station adds idle time without adding output. The numbers show a trade-off. More stations make it easier to stay under the takt time, but each extra station costs idle time.
+The idle time per cycle is the number of stations times the takt time, minus the total task time. A small example of our own shows the effect: 68 minutes of work at a 15-minute takt needs at least 5 stations (68 ÷ 15 = 4.5, rounded up), and with 5 stations the efficiency is 68 ÷ 75 = 90.7 per cent. With 6 stations it falls to 68 ÷ 90 = 75.6 per cent, because the sixth station adds idle time without adding output. The numbers show a trade-off. More stations make it easier to stay under the takt time, but each extra station costs idle time.
 
 The formulas give the theoretical minimum. In practice, tasks cannot be split at will, and some tasks must come before others. So the real number of stations is often higher than the minimum. Check the bottleneck first: the longest single task sets a floor for the cycle time of any station that carries it.
 
@@ -52,7 +52,7 @@ The formulas give the theoretical minimum. In practice, tasks cannot be split at
 5. **Assign tasks to workstations.** Start at the first workstation and add tasks in precedence order until the next task would push it above the takt time. Then open the next workstation. Try a few alternatives, because the first assignment is rarely the best.
 6. **Check the balance.** Calculate the efficiency, and draw the loads in a chart.
 
-The chart helps. LEI describes the [operator balance chart](https://www.lean.org/lexicon-terms/operator-balance-chart/), also called a yamazumi board, as a graphic tool where each operator gets a vertical bar built from the stacked work elements. The bars show each operator's workload compared with the takt time. The aim, in LEI's words, is a workload very nearly equal to, but slightly less than, the takt time. With the chart on a wall, the team can move blocks of work between operators and see the effect at once.
+The chart helps. LEI describes the [operator balance chart](https://www.lean.org/lexicon-terms/operator-balance-chart/), also called a yamazumi board, as a graphic tool where each operator gets a vertical bar built from the stacked work elements. The bars show each operator's workload compared with the takt time. The aim, in LEI's words, is to make the amount of work for each operator very nearly equal to, but slightly less than, takt time. With the chart on a wall, the team can move blocks of work between operators and see the effect at once.
 
 ## Example: nine tasks, a 60-second takt
 
@@ -108,3 +108,9 @@ For a few workstations, a spreadsheet and a yamazumi chart on the wall are enoug
 ## Next step
 
 Take one assembly line this week, measure the time of each task at the station, and draw the yamazumi chart against the takt time. Then move one block of work and see what happens. That is a practical start for line balancing on your own line.
+
+## Sources
+
+- Lean Enterprise Institute: Takt Time (Lean Lexicon) - https://www.lean.org/lexicon-terms/takt-time/
+- Lean Enterprise Institute: Operator Balance Chart (Lean Lexicon) - https://www.lean.org/lexicon-terms/operator-balance-chart/
+- Assembly Line Balancing (course notes, home.zcu.cz) - https://home.zcu.cz/~preuss/UPPK/DS-install/HTMLfiles/BALANCE.HTM

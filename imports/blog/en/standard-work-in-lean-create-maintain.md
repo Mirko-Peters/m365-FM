@@ -25,7 +25,7 @@ Standard work is the current best method for a task, written down with its seque
 
 ## What is standard work in lean?
 
-The Lean Enterprise Institute defines [standardized work](https://www.lean.org/lexicon-terms/standardized-work/) as establishing precise procedures for each operator's work in a production process. The terms "standard work" and "standardized work" are used for the same idea.
+The Lean Enterprise Institute defines [standardized work](https://www.lean.org/lexicon-terms/standardized-work/) as establishing precise procedures for each operator's work in a production process. In my experience, the terms "standard work" and "standardized work" are used for the same idea.
 
 Many plants already have standard operating procedures (SOPs). Standard work differs because it adds timing against takt time and is meant to be improved, not just followed. It lives on the shop floor, next to the work. A value stream map shows which processes need a standard first.
 
@@ -124,3 +124,8 @@ Standards for process steps and responsibilities often sit in documents that nob
 ## Next step
 
 Pick one repeatable task, observe three operators and write the current best method on one page together with them. Then post it at the workstation and set the date to review the standard work with the team.
+
+## Sources
+
+- [Standardized Work - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/standardized-work/)
+- [5 Missing Pieces in Your Standardized Work (Part 1 of 3) - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/five-missing-pieces-in-your-standardized-work-part-1-of-3/)

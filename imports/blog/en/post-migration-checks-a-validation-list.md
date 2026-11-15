@@ -12,7 +12,7 @@ faq:
   - q: "Do links keep working after content has been migrated?"
     a: "It depends on the link. Links that point to the old location do not automatically point to the new one, and embedded addresses inside documents, pages and web parts are usually not rewritten. Check a sample of links in each content type and look at Microsoft Learn for what your migration tool handles."
   - q: "What happens to classic SharePoint Server workflows after migration?"
-    a: "Microsoft Learn says classic SharePoint Server workflows should be rebuilt as Power Automate flows. So after a migration, list every workflow that existed in the source, rebuild the ones still needed, and test each flow with realistic data before users depend on it."
+    a: "Microsoft Learn recommends moving classic SharePoint Server workflows to Power Automate flows, and SPMT can migrate certain SharePoint Server 2010 workflows. So after a migration, list every workflow that existed in the source, move or rebuild the ones still needed, and test each flow with realistic data before users depend on it."
 ---
 
 A migration tool reporting "completed" tells you that a job ran. It does not tell you that people can work in the new place. Post-migration validation closes that gap: you check that content, access, links and automations behave the way the business expects.
@@ -25,7 +25,7 @@ Microsoft Learn describes SharePoint migration as moving content into Microsoft 
 
 That sentence shapes the whole validation phase. As long as the source stays untouched, you have a baseline to compare against and a way back if something turns out wrong. So agree on one rule before you start checking: the source is not retired, archived or switched to read-only without a decision, and that decision comes after the checks below.
 
-Also note which tool did the work, because it affects what you validate. Microsoft names the Migration Manager in the SharePoint admin center for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares, and the SharePoint Migration Tool (SPMT) for SharePoint Server 2010, 2013 and 2016, including classic workflows and classic pages. Read the report your tool produces and treat every warning or skipped item as a work item, not as noise.
+Also note which tool did the work, because it affects what you validate. Microsoft names the Migration Manager in the SharePoint admin center for sources such as Box, Dropbox, Google Workspace, Egnyte and file shares, and the SharePoint Migration Tool (SPMT) for SharePoint Server 2010, 2013 and 2016 environments only. Classic pages are covered by a separate Microsoft guide on transforming them to modern pages. Read the report your tool produces and treat every warning or skipped item as a work item, not as noise.
 
 If you can, run your first validation on a pilot site or a test tenant. Findings from a pilot are cheap. The same findings after a full cutover are not.
 
@@ -55,7 +55,7 @@ Start from how [SharePoint permissions](https://www.m365.fm/entity/sharepoint-pe
 
 Now turn that into checks. Imagine a project folder on a file share that only five people could open. After migration it sits in a library of a team site with fifty members. Nothing failed technically, but the audience grew tenfold. For each migrated area, ask who could access it before, who can access it now, and whether the difference is intended.
 
-Also review sharing: whether links were carried over at all depends on the tool, so check the documentation of the tool you used. External sharing is only possible on a site if it is allowed at organization level first. Microsoft recommends managing permissions through the Microsoft 365 group or the team where possible and advises against nested security groups because they can cause performance problems.
+Also review sharing: whether links were carried over at all depends on the tool, so check the documentation of the tool you used. External sharing is only possible on a site if it is allowed at organization level first. Microsoft says permissions for team sites are best managed through the Microsoft 365 group or the team, and describes nested security groups as not recommended because they can cause performance issues.
 
 A caution on fixing what you find: changing permissions, removing access or breaking inheritance can lock people out or expose content. Do it first on a pilot site or test tenant, record the current state so you can restore it, and make changes in small, documented steps rather than in bulk.
 
@@ -78,7 +78,7 @@ Microsoft's pages on changing site addresses and site redirects describe when li
 
 Automations are the quiet casualties of migrations, because nobody notices them until a process stops.
 
-Microsoft Learn says classic SharePoint Server workflows should be rebuilt as Power Automate flows. For an address change it adds that Power Apps custom forms must be recreated, SharePoint 2013 workflows must be republished, and custom solutions keep their old address dependencies. Use this as a prompt, even if your migration is not an address change: anything that stores an address or runs on the source platform needs a deliberate check.
+Microsoft Learn recommends moving classic SharePoint Server workflows to Power Automate flows. For an address change it adds that Power Apps custom forms must be recreated, SharePoint 2013 workflows must be republished, and custom solutions keep their old address dependencies. Use this as a prompt, even if your migration is not an address change: anything that stores an address or runs on the source platform needs a deliberate check.
 
 Build a simple inventory from the source: every workflow, custom form, approval process, scheduled task and integration that touched the migrated content. For each one record whether it is still needed, who owns it, how it was rebuilt, and who tested it. Test with realistic data in a pilot site, not with the live library.
 
@@ -97,8 +97,15 @@ Then set an exit criterion for the source. Microsoft states that source files ar
 - Compare structure, counts and samples of files and metadata between source and target.
 - Review who has access before and after. Check team site, group and Visitors membership, and sharing links, against what the business intended.
 - Test links in pages, web parts and documents. Embedded addresses are not updated automatically.
-- Inventory workflows and custom forms, rebuild what is still needed, and test each with realistic data.
+- Inventory workflows and custom forms, move or rebuild what is still needed, and test each with realistic data.
 - Try every change that touches access or content on a pilot site or test tenant first, with a backup or a documented way back.
 - Close with user acceptance and a written decision about when the source is retired.
 
 For the exact behaviour of your tool and tenant, check [Microsoft Learn](https://learn.microsoft.com/en-us/sharepointmigration/migrate-to-sharepoint-online) before you rely on any assumption in this list.
+
+## Sources
+
+- [Migrate to Microsoft 365 (Microsoft Learn)](https://learn.microsoft.com/sharepointmigration/migrate-to-sharepoint-online)
+- [Change a site address (Microsoft Learn)](https://learn.microsoft.com/sharepoint/change-site-address)
+- [Manage site redirects (Microsoft Learn)](https://learn.microsoft.com/sharepoint/manage-site-redirects)
+- [Sharing & permissions in the SharePoint modern experience (Microsoft Learn)](https://learn.microsoft.com/sharepoint/modern-experience-sharing-permissions)

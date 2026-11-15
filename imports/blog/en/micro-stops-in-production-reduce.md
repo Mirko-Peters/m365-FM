@@ -9,7 +9,7 @@ topics: [micro-stops, oee, manufacturing-execution-system]
 keypoints:
   - "Micro-stops are very short interruptions that the operator clears at once, so they usually go unrecorded even though they add up to large losses."
   - "In OEE, micro-stops count as a performance loss, not an availability loss, which is why a good availability figure can hide them."
-  - "Manually recorded downtime is often highly inaccurate, and automatic counting from the machine signal is the most reliable way to see short stops."
+  - "Manually recorded downtime tends to miss short events, and automatic counting from the machine signal is the most reliable way to see short stops."
   - "Count stops per hour and per cause, rank them in a Pareto chart, and fix the most frequent cause that has a concrete improvement idea."
   - "Most micro-stop fixes are small and physical, such as a guide, a sensor position, a cleaned surface or a changed feed, and the operators know them."
 faq:
@@ -37,16 +37,16 @@ A [micro-stop](https://www.m365.fm/entity/micro-stops/) is therefore defined les
 
 In OEE, short interruptions are a performance loss. The OEE.com page on the [OEE factors](https://oee.com/oee-factors/) defines performance loss as anything that makes the process run below its maximum speed while it is running, including slow cycles and small stops. Availability, by contrast, covers stops long enough for an operator to log a reason, usually several minutes.
 
-This matters for how you read your [OEE](https://www.m365.fm/entity/oee/) result. A line can report 90 per cent availability and still lose a lot of output. If the performance factor is low and nobody knows why, micro-stops are the first suspect. Vorne, an OEE software vendor, writes that slow cycles and small stops are often larger sources of lost time than individual downtime reasons. That is a vendor statement, so check it against your own data. The method below does exactly that.
+This matters for how you read your [OEE](https://www.m365.fm/entity/oee/) result. A line can report 90 per cent availability and still lose a lot of output. If the performance factor is low and nobody knows why, micro-stops are the first suspect. Vorne, an OEE software vendor, writes that frequent small stops or slow cycles may result in significant lost production time that is not measured. That is a vendor statement, so check it against your own data. The method below does exactly that.
 
 ## How to find micro-stops and rank them in a Pareto chart
 
-Vorne also says that manually recorded downtime is often highly inaccurate, and that manual sheets overlook shorter events. Its guide to [downtime tracking](https://vorne.com/learn/downtime/machine-downtime-tracking-and-reporting) recommends automated data collection and notes that automation catches shorter stops that are easy to miss. Follow these steps.
+Manually recorded downtime tends to miss shorter events, so automatic capture from the machine signal is the more reliable way to see them. This is our own assessment; Vorne also publishes a guide to [downtime tracking](https://vorne.com/learn/downtime/machine-downtime-tracking-and-reporting), which we could not re-open for this review. Follow these steps.
 
 1. **Pick one line** that you suspect, usually the bottleneck or a machine with a low performance factor.
 2. **Define the event.** Write the shortest interruption you count, for example 10 seconds. Write the limit above which it is downtime, for example 5 minutes.
 3. **Capture the signal.** Use the run signal, a part counter or a simple sensor, for example from the PLC (programmable logic controller) that runs the equipment. A manufacturing execution system or a data logger can store each event with a timestamp. Without any system, use operator tally sheets for two weeks as a first look.
-4. **Add a reason.** Let operators choose a reason after the restart, from a short list. Vorne suggests no more than 25 reasons, all actionable, describing symptoms rather than root causes.
+4. **Add a reason.** Let operators choose a reason after the restart, from a short list. Vorne recommends capturing up to 25 reasons, the smallest set that is truly actionable, and describing the most common symptoms rather than root causes.
 5. **Count frequency, not only minutes.** Record the number of events per hour and the total time per cause.
 6. **Rank the causes** in a Pareto chart, a bar chart sorted from largest to smallest with a cumulative line.
 
@@ -54,7 +54,7 @@ Look at the time of day, the shift, the product, the material batch and the cycl
 
 ## How to reduce small stops and the loss they cause
 
-Take the most frequent or largest cause that has a concrete improvement idea. Vorne's advice is to focus first on the largest loss where the team has concrete ideas, using a cycle of tracking, picking and fixing. Then:
+Take the most frequent or largest cause that has a concrete improvement idea. Vorne lists attacking the largest sources of downtime among its strategies. The condition that the team already has a concrete idea is our own practical rule. Then:
 
 - **Ask the operators.** They clear these interruptions every day and usually know the cause.
 - **Go to the shop floor and watch.** Film it on a phone if it happens too fast to see. Ask why it happened, and then why again. This is root cause analysis in its simplest form.
@@ -96,3 +96,11 @@ A [manufacturing execution system](https://www.m365.fm/entity/manufacturing-exec
 ## Next step
 
 Pick the line with the weakest performance factor and log every interruption longer than a few seconds for two weeks. Then rank the causes and start with the top one. That is the fastest way to deal with micro stops in production.
+
+## Sources
+
+- OEE.com: OEE Six Big Losses - https://oee.com/oee-six-big-losses
+- OEE.com: OEE Factors - https://oee.com/oee-factors/
+- Vorne: Optimizing downtime reasons - https://www.vorne.com/solutions/use-cases/reduce-down-time/optimizing-downtime-reasons/
+- Vorne: How to reduce downtime - https://www.vorne.com/learn/downtime/how-to-reduce-downtime/
+- Vorne: Machine downtime tracking and reporting - https://vorne.com/learn/downtime/machine-downtime-tracking-and-reporting (could not be re-opened for this review)

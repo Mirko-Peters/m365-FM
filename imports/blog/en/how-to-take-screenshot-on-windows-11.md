@@ -7,7 +7,7 @@ author: mirko-p
 date: 2026-11-12
 topics: [windows-365]
 keypoints:
-  - "Press Windows logo key + Shift + S to open the snip overlay and drag over the area you want. It works in any app."
+  - "Press Windows logo key + Shift + S to open the snip overlay, then drag over the area you want to capture."
   - "The Print Screen key copies the whole screen to the clipboard. Windows logo key + PrtScn can be used as a print screen shortcut, and screenshots land in Pictures, then Screenshots."
   - "Snipping Tool offers rectangle, window, full screen and freeform snips, plus a delay of 1 to 5 seconds for menus and tooltips."
   - "Windows logo key + Shift + R starts a screen recording in Snipping Tool. Text actions and Quick redact help hide email addresses and phone numbers."
@@ -26,7 +26,7 @@ Which method is right depends on what you need. For a quick picture to paste int
 
 ## Pick a method
 
-Here is how the methods compare, as described on Microsoft's pages:
+Here is how the methods compare, based on Microsoft's pages and standard Windows behavior:
 
 - **Windows logo key + Shift + S.** Opens the image snip overlay. Best for a region, a window or the whole screen.
 - **Print Screen (PrtSc).** Copies a static image of the entire screen to the clipboard. Nothing is saved until you paste it somewhere.
@@ -35,11 +35,11 @@ Here is how the methods compare, as described on Microsoft's pages:
 - **Windows logo key + Shift + R.** Opens the overlay for a video clip.
 - **Xbox Game Bar.** Press Windows logo key + G. Microsoft's accessibility page lists Windows logo key + Alt + Print Screen for a screenshot, saved as a PNG in the Captures folder, and Windows logo key + Alt + R to start and stop a recording.
 
-I'd learn only two of them: the snip shortcut for everyday work, and Print Screen for the case where you need the entire screen without any extra windows.
+Our suggestion is to learn only two of them: the snip shortcut for everyday work, and Print Screen for the case where you need the entire screen without any extra windows.
 
 ## How to take a screenshot on Windows 11 with Snipping Tool
 
-Microsoft's page on [using Snipping Tool to capture screenshots](https://support.microsoft.com/en-us/windows/apps/use-snipping-tool-to-capture-screenshots) covers both Windows 11 and Windows 10. Here is the Windows 11 workflow.
+Microsoft's page on [using Snipping Tool to capture screenshots](https://support.microsoft.com/windows/apps/use-snipping-tool-to-capture-screenshots) covers both Windows 11 and Windows 10. Here is the Windows 11 workflow.
 
 1. **Open it.** Press **Windows logo key + Shift + S** for the overlay. Or select **Start**, enter *snipping tool* and select **Snipping Tool** from the results. To keep it handy, search for it and select **Pin to taskbar**.
 2. **Choose a mode.** In the app, open **Snipping Mode**, then select **New**. The modes are:
@@ -76,9 +76,9 @@ Print Screen is the oldest method, and it still confuses people because it does 
 
 A plain press of **Print Screen** copies the entire screen to the clipboard. There's no file. If you try to find one, you won't. Open an app such as Paint, Word or a chat window and press **Ctrl+V**. That's where the image appears.
 
-The combination with the Windows logo key is the one that creates a file. Microsoft's page on the [print screen keyboard shortcut](https://support.microsoft.com/en-us/windows/keyboard-shortcut-for-print-screen-601210c0-b3a9-7b58-bc40-bae4dcf5f108) says you may use Windows logo key + PrtScn as a shortcut for print screen, depending on your device. To find the pictures, open File Explorer from the taskbar, select **Pictures** in the side pane, then select **Screenshots**.
+The combination with the Windows logo key is the one that creates a file. Microsoft's page on the [print screen keyboard shortcut](https://support.microsoft.com/windows/keyboard-shortcut-for-print-screen-601210c0-b3a9-7b58-bc40-bae4dcf5f108) says you may use Windows logo key + PrtScn as a shortcut for print screen, depending on your device. To find the pictures, open File Explorer from the taskbar, select **Pictures** in the side pane, then select **Screenshots**.
 
-Many guides also list **Alt + PrtScn** for capturing just the active window. The Microsoft pages I opened don't list it for desktop keyboards, so test it on your device before you tell users it works. A Surface page does describe a similar combination for Surface keyboards: Fn + Alt + Spacebar copies the active window to the clipboard.
+Many guides also list **Alt + PrtScn** for capturing just the active window. Microsoft's page on keyboard shortcuts in Windows lists it as capturing a screenshot of the active window and copying it to the clipboard, so paste it into an app like a plain Print Screen. A Surface page describes a similar combination for Surface keyboards: Fn + Alt + Spacebar copies the active window to the clipboard.
 
 ### No Print Screen key?
 
@@ -113,7 +113,7 @@ To share a snip, select the **See More** menu in the top right, then select **Sh
 
 Windows 11 has two built-in recorders.
 
-**Snipping Tool.** Open the app, select **Record**, then **New**. Or press **Windows logo key + Shift + R**. Select the screen area, select **Start**, and select **Stop** when you're done. You can save the recording as it is or select **Edit in Clipchamp**. In Clipchamp, the Captions tab has a **Transcribe media** button, and the Audio tab lets you set the volume from 0 to 200 percent. Microsoft's page doesn't say whether a recording captures system sound, so test that before you record a training video.
+**Snipping Tool.** Open the app, select **Record**, then **New**. Or press **Windows logo key + Shift + R**. Select the screen area, select **Start**, and select **Stop** when you're done. You can save the recording as it is or select **Edit in Clipchamp**. Microsoft's shortcut list says a recording from **Windows logo key + Shift + R** is saved by default as an MP4 file in the Screen Recordings subfolder of Videos. In Clipchamp, the Captions tab has a **Transcribe media** button, and the Audio tab lets you set the volume from 0 to 200 percent. Microsoft's page doesn't say whether a recording captures system sound, so test that before you record a training video.
 
 **Xbox Game Bar.** Press **Windows logo key + G**. Microsoft's accessibility page says to press Windows logo key + Alt + R to start recording and again to stop. Recordings go to the Videos folder, in a subfolder called Captures, as MP4 files. If Game Bar doesn't open, press Windows logo key + I, search for *xbox* and turn on **Xbox Game Bar**.
 
@@ -124,14 +124,14 @@ Work down the list.
 - **"Print Screen did nothing."** Plain Print Screen copies to the clipboard and nothing else happens on screen. Paste with Ctrl+V to check. If your laptop shares the key with another function, add **Fn**.
 - **"I can't find the file."** Look in **Pictures** > **Screenshots**. For Game Bar captures, look in **Videos** > **Captures**.
 - **"The snip overlay doesn't appear."** Try opening Snipping Tool from Start. If the app itself fails, repair it.
-- **Repair or reset the app.** Per Microsoft, go to **Settings** > **Apps** > **Installed apps**, select the **More** icon next to Snipping Tool, then **Advanced options**. Select **Repair** if it's there. If not, or if it doesn't help, select **Reset**. Microsoft's page [repair apps and programs in Windows](https://support.microsoft.com/en-us/windows/apps/repair-apps-and-programs-in-windows) doesn't say whether either option touches your settings.
+- **Repair or reset the app.** Per Microsoft, go to **Settings** > **Apps** > **Installed apps**, select the **More** icon next to Snipping Tool, then **Advanced options**. Select **Repair** if it's there. If not, or if it doesn't help, select **Reset**. Microsoft's page [repair apps and programs in Windows](https://support.microsoft.com/windows/apps/repair-apps-and-programs-in-windows) doesn't say whether either option touches your settings.
 - **The captured image is black.** Some protected content, such as certain video or a remote session, can't be captured. See the next section.
 
 ## Screenshots of a Cloud PC come out blank
 
-This one is for admins. If a user says that a screenshot of a remote session is empty, the cause may be a security setting, not a fault. Microsoft's page on [Display Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/en-us/windows-365/enterprise/windows-cloud-display-protection) describes it as protection against unauthorized screen capture and recording of a remote session by threats on the endpoint. It's marked as a preview. The page says that when you try to capture an active remote session, the content should be blocked or appear blank.
+This one is for admins. If a user says that a screenshot of a remote session is empty, the cause may be a security setting, not a fault. Microsoft's page on [Display Protection for Windows 365 and Azure Virtual Desktop](https://learn.microsoft.com/windows-365/enterprise/windows-cloud-display-protection) describes it as a way to help protect against screen capture malware on users' devices. The page says that when you try to capture an active remote session with a screen capture tool, the content should be blocked or appear blank. The page also says it doesn't prevent someone from photographing the screen.
 
-Display Protection is set in the Microsoft Intune admin center under **Devices** > **Manage Windows 365 Cloud PCs** > **Cloud PC Settings**, in the IO Protection section. It requires the Windows App on a physical Windows 11 endpoint. Changes can take up to 8 hours to reach an endpoint, and selecting **Refresh** in Windows App applies them at once. Tell users in advance if you turn it on, or they'll open tickets about broken screenshots. See [Windows 365](https://www.m365.fm/entity/windows-365/) for more on Cloud PCs.
+For Windows 365, Display Protection is set in the Microsoft Intune admin center under **Devices** > **Manage Windows 365 Cloud PCs** > **Cloud PC Settings**, in the IO Protection section. Azure Virtual Desktop uses a host pool RDP property instead. It requires the Windows App on a physical Windows 11 endpoint. Changes can take up to 8 hours to reach an endpoint, and selecting **Refresh** in Windows App applies them at once. Tell users in advance if you turn it on, or they'll open tickets about broken screenshots. See [Windows 365](https://www.m365.fm/entity/windows-365/) for more on Cloud PCs.
 
 ## Common mistakes
 
@@ -153,3 +153,13 @@ Display Protection is set in the Microsoft Intune admin center under **Devices**
 ## Next step
 
 Press Windows logo key + Shift + S now, snip something and open File Explorer to see where the file lands. Once you know how to take a screenshot on Windows 11 and where it goes, add the delay for menus and the video clip for processes.
+
+## Sources
+
+- [Use Snipping Tool to capture screenshots (Microsoft Support)](https://support.microsoft.com/windows/apps/use-snipping-tool-to-capture-screenshots)
+- [Keyboard shortcut for Print Screen (Microsoft Support)](https://support.microsoft.com/windows/keyboard-shortcut-for-print-screen-601210c0-b3a9-7b58-bc40-bae4dcf5f108)
+- [Keyboard shortcuts in Windows (Microsoft Support)](https://support.microsoft.com/windows/keyboard-shortcuts-in-windows-dcc61a57-8ff0-cffe-9796-cb9706c75eec)
+- [Take a screenshot or record your screen on Surface (Microsoft Support)](https://support.microsoft.com/surface/cover-keyboard/take-a-screenshot-or-record-your-screen-on-surface)
+- [Use a screen reader to record your screen with Xbox Game Bar (Microsoft Support)](https://support.microsoft.com/accessibility/windows/use-a-screen-reader-to-record-your-screen-with-xbox-game-bar)
+- [Repair apps and programs in Windows (Microsoft Support)](https://support.microsoft.com/windows/apps/repair-apps-and-programs-in-windows)
+- [Display protection for Windows 365 and Azure Virtual Desktop (Microsoft Learn)](https://learn.microsoft.com/windows-365/enterprise/windows-cloud-display-protection)

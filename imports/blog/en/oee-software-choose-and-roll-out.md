@@ -149,3 +149,10 @@ OEE software looks backward at equipment time. If your questions are also about 
 ## Next step
 
 Choose one constraint machine and write down your definitions of planned time, ideal speed and downtime on a single page. Then ask each vendor on your shortlist to run the pilot for this OEE software decision on that machine, using your definitions, and compare their counts with a manual log before you sign.
+
+## Sources
+
+- [Overall Equipment Effectiveness - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/overall-equipment-effectiveness/)
+- [ISO 22400-2:2014 Key performance indicators (KPIs) for manufacturing operations management, Part 2 - ISO](https://www.iso.org/standard/54497.html)
+- [Automatic page refresh in Power BI - Microsoft Learn](https://learn.microsoft.com/en-gb/power-bi/create-reports/desktop-automatic-page-refresh)
+- [Real-time streaming in Power BI - Microsoft Learn](https://learn.microsoft.com/en-us/power-bi/connect-data/service-real-time-streaming)

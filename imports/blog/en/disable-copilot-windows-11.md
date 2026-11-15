@@ -18,7 +18,7 @@ faq:
   - q: "Does the TurnOffWindowsCopilot policy still work?"
     a: "It's deprecated, and Microsoft says it may be removed in a future release. The policy description also says it isn't for the new Copilot experience. It targeted the old Copilot in Windows sidebar. For the current Microsoft Copilot app, use an AppLocker rule to prevent it or the RemoveMicrosoftCopilotApp policy to uninstall it."
   - q: "Can I stop the Copilot key from opening Copilot?"
-    a: "Yes. In Settings, go to Personalization, Text input, Customize Copilot key on keyboard and pick Search, Custom or another app. Admins can set the key's target with the Set Copilot Hardware Key policy. Without a Copilot key, Windows key plus C opens the same prompt box."
+    a: "Yes. In Settings, go to Personalization, Text input, Customize Copilot key on keyboard, select Custom and choose an app. Admins can set the key's target with the Set Copilot Hardware Key policy. Without a Copilot key, Windows key plus C opens the same prompt box."
 ---
 To disable Copilot in Windows 11, open **Settings**, go to **Apps**, then **Installed apps**, select the three dots next to Copilot and choose **Uninstall**. In a company, an admin has two cleaner options: an AppLocker rule that blocks the Microsoft Copilot app, or the `RemoveMicrosoftCopilotApp` policy that uninstalls it on devices that meet certain conditions. This article is for Windows users who want Copilot gone and for admins who have to do it on many PCs. It also explains why the older policy no longer does the job, what the Copilot key does, and where Copilot keeps appearing even after you remove the app.
 
@@ -28,7 +28,7 @@ The name has covered several things over the last two years, so be clear which o
 
 That has two consequences for anyone who wants to disable [Copilot](https://www.m365.fm/entity/copilot/). Older how-to guides describe a policy and a taskbar toggle for the sidebar, and parts of that advice no longer fit. And Copilot in Windows isn't the same product as Copilot inside Word, Excel or Outlook. Removing the Windows app doesn't change those, and the reverse is true as well.
 
-For work and school accounts, Microsoft adds a detail worth knowing. The consumer Microsoft Copilot app doesn't support Microsoft Entra sign-in. Entra users who sign in there are redirected to `https://m365.cloud.microsoft/chat` in a browser. Microsoft also says that if pinning isn't allowed, Copilot Chat isn't available through the app, Outlook or Teams, but users can still reach it at that web address unless the address is blocked.
+For work and school accounts, Microsoft adds a detail worth knowing. The consumer Microsoft Copilot app doesn't support Microsoft Entra sign-in. Entra users who sign in there are redirected to `https://m365.cloud.microsoft/chat` in a browser. Separately, Microsoft's page on pinning Copilot Chat says that with the **Do not pin** option, Copilot Chat won't be available by default in Teams and Outlook, and users can still add it themselves from the app store. That page also says the setting no longer applies to the Microsoft Copilot app. Because Entra users are redirected to the web address, removing the Windows app doesn't remove their access to Copilot Chat in a browser.
 
 ## How to disable Copilot in Windows 11 on one PC
 
@@ -50,7 +50,7 @@ For a managed fleet, Microsoft recommends AppLocker over the legacy policy. Its 
 - **Package name:** `MICROSOFT.COPILOT`
 - **Package version:** `*` and above
 
-When the rule is enabled, it prevents the consumer app from being installed if it isn't already there, and it blocks the app from launching if it is. That behavior is what most admins want, and it's the only one of the three options that works both before and after installation. Microsoft links its page on editing an AppLocker policy for the mechanics. Roll the rule out to a pilot group first, and test that the Microsoft 365 Copilot app, which has a different package, still starts where you want it.
+When the rule is enabled, it prevents the consumer app from being installed if it isn't already there, and it blocks the app from launching if it is. That behavior is what most admins want, because it covers devices both before and after the app arrives. Microsoft links its page on editing an AppLocker policy for the mechanics. Roll the rule out to a pilot group first, and test that the Microsoft 365 Copilot app, which has a different package, still starts where you want it.
 
 ## Use the RemoveMicrosoftCopilotApp policy, and skip the old one
 
@@ -82,7 +82,7 @@ Keep one more point in mind. Microsoft's pages are updated often in this area, a
 
 ## The Copilot key, Win+C and other places Copilot appears
 
-Many modern keyboards have a Copilot key. Microsoft says that since the May 2025 preview, a short press opens a lightweight prompt box that can be expanded to the full app. Users can change what the key does in **Settings**, **Personalization**, **Text input**, **Customize Copilot key on keyboard**, where the options are **Search**, **Custom**, or a mapped app. Admins can set the key's target with the **Set Copilot Hardware Key** policy under **User Configuration**, **Administrative Templates**, **Windows Components**, **Windows Copilot**. The value is the identifier of an app. Microsoft's example is the identifier of the Microsoft 365 Copilot app.
+Many modern keyboards have a Copilot key. Microsoft says that since the May 2025 preview, a short press opens a lightweight prompt box that can be expanded to the full app. Users can change what the key does in **Settings**, **Personalization**, **Text input**, **Customize Copilot key on keyboard** by selecting **Custom** and choosing an app. Admins can set the key's target with the **Set Copilot Hardware Key** policy under **User Configuration**, **Administrative Templates**, **Windows Components**, **Windows Copilot**. The value is the identifier of an app. Microsoft's example is the identifier of the Microsoft 365 Copilot app.
 
 Voice is another gap. Microsoft says there is no feature-specific toggle to disable voice chat in the Windows experience. Turning off optional connected experiences also turns off web grounding, and Microsoft warns that this affects text Copilot as well.
 
@@ -93,17 +93,23 @@ Finally, other apps have their own switches. Word, Excel and PowerPoint have an 
 - **Using the old policy for the new app.** TurnOffWindowsCopilot is deprecated and not meant for the current experience.
 - **Expecting uninstall to be permanent.** Users can reinstall the app unless AppLocker blocks the package.
 - **Treating RemoveMicrosoftCopilotApp as a block.** It only removes the app on devices that meet its conditions, and it's skipped if the app was launched in the last 28 days.
-- **Forgetting that Entra users can still reach Copilot Chat in a browser.** The web address works unless you block it.
+- **Forgetting that Entra users are redirected to a browser address.** Removing the Windows app doesn't change their access to Copilot Chat at `m365.cloud.microsoft/chat`.
 - **Assuming one change covers everything.** The Windows app, Microsoft 365 apps and the Copilot key each have their own controls.
 
 ## Related topics to explore
 
 - Turn off Copilot in Word and the other Office apps: each app has its own **Enable Copilot** checkbox, which is covered in a separate article.
 - AppLocker basics for packaged apps: Microsoft's documentation on editing an AppLocker policy explains the rule types, and the Copilot article links to it.
-- Pinning Copilot Chat: the [pinning article](https://learn.microsoft.com/en-us/microsoft-365/copilot/pin-copilot-chat-navbar) explains what happens in the Microsoft 365 apps for work accounts.
+- Pinning Copilot Chat: the [pinning article](https://learn.microsoft.com/microsoft-365/copilot/pin-copilot-chat-navbar) explains the **Do not pin** option for Teams and Outlook and why it no longer applies to the Microsoft Copilot app.
 - Optional connected experiences: they control web grounding for Copilot and have side effects.
 - Copilot key mapping: decide whether the key should open search or another app.
 
 ## Next step
 
-To disable Copilot in Windows 11, uninstall the Microsoft Copilot app from **Installed apps**, and add an AppLocker rule for `MICROSOFT.COPILOT` if you need it to stay off on managed devices. Read the [WindowsAI policy documentation](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-windowsai) and the article on the [Windows and Microsoft Copilot Chat experience](https://learn.microsoft.com/en-us/windows/client-management/manage-windows-copilot) before you build a policy, because the names and conditions have changed more than once.
+To disable Copilot in Windows 11, uninstall the Microsoft Copilot app from **Installed apps**, and add an AppLocker rule for `MICROSOFT.COPILOT` if you need it to stay off on managed devices. Read the [WindowsAI policy documentation](https://learn.microsoft.com/windows/client-management/mdm/policy-csp-windowsai) and the article on the [Windows and Microsoft Copilot Chat experience](https://learn.microsoft.com/windows/client-management/manage-windows-copilot) before you build a policy, because the names and conditions have changed more than once.
+
+## Sources
+
+- [Updated Windows and Microsoft Copilot Chat experience (Microsoft Learn)](https://learn.microsoft.com/windows/client-management/manage-windows-copilot)
+- [Policy CSP - WindowsAI (Microsoft Learn)](https://learn.microsoft.com/windows/client-management/mdm/policy-csp-windowsai)
+- [Pin Microsoft 365 Copilot Chat to the navigation bar (Microsoft Learn)](https://learn.microsoft.com/microsoft-365/copilot/pin-copilot-chat-navbar)

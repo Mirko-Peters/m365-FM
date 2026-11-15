@@ -96,3 +96,10 @@ Software does not replace either practice, but it can help you choose where to l
 ## Next step
 
 Write down for your own leaders what a gemba walk is, what an informal round is and how the week is split between them. Then add the walks to your [continuous improvement](https://www.m365.fm/entity/continuous-improvement/) routine and compare a gemba walk with management by walking around after eight weeks, using the actions and feedback each one produced.
+
+## Sources
+
+- [Gemba - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/gemba/)
+- [Step by step: Measuring the value of managing by walking around - W. P. Carey News (Arizona State University)](https://knowledge.wpcarey.asu.edu/20250428-step-step-measuring-value-managing-walking-around)
+- [Manager visits heighten workers motivation, productivity - Cornell Chronicle](https://news.cornell.edu/node/329122)
+- [Leader Standard Work - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/leader-standard-work/)

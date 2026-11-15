@@ -43,7 +43,7 @@ The two answer different questions.
 
 **Scheduling** asks: what runs where, and when? It works over days or hours, per resource and per order. It decides the sequence and the start time of each operation.
 
-A chapter on the history of manufacturing scheduling, found as a Wiley book excerpt, puts the split this way: planning approximates future material and capacity needs over a longer horizon, while scheduling defines operations precisely over a short interval. See the [excerpt, "Why Schedule?"](https://catalogimages.wiley.com/images/db/pdf/0471352640.pdf). The excerpt does not name its author in the preview, so treat it as background reading.
+A common way to draw the line is this: planning approximates future material and capacity needs over a longer horizon, while scheduling defines operations precisely over a short interval.
 
 You need both. Rough-cut capacity planning tells you whether the plant can carry the load in principle, and finite capacity planning turns that into a production schedule per resource. Scheduling tells you whether a particular order can be finished on its due date.
 
@@ -51,7 +51,7 @@ You need both. Rough-cut capacity planning tells you whether the plant can carry
 
 Delfoi explains that MRP plans with infinite capacity. It uses backward scheduling from due dates to set material needs and order timing, and it does not check whether machines or workstations are free. It assumes unlimited resources. The result can be a plan that overloads a [bottleneck](https://www.m365.fm/entity/bottleneck/) while other machines sit idle. The Fabrico blog makes the same point in simple words: classic MRP can book three jobs on one machine at the same time, and its dates often cannot be met on the floor. See the [Fabrico article on finite and infinite scheduling](https://www.fabrico.io/blog/finite-vs-infinite-capacity-scheduling/).
 
-The Wiley excerpt adds the consequence: when the schedule assumes that work starts as soon as it arrives and uses average queue times, expediting becomes the normal way of working. Planners then fix the plan by hand every day.
+In my experience, when a schedule assumes that work starts as soon as it arrives and uses average queue times, expediting becomes the normal way of working and planners fix the plan by hand every day.
 
 Infinite capacity planning is not useless. It is fast, and it is fine for rough, long-range planning, where approximate timing is enough. The problem starts when you use its dates as promises to customers.
 
@@ -135,3 +135,8 @@ Finite scheduling by hand works for a few machines and breaks as orders and cons
 ## Next step
 
 Take the bottleneck in your plant and compare its real net capacity for the next two weeks with the orders that are due. If the daily load exceeds the hours available, you have a case for finite capacity scheduling, and you can show the planners and the sales team where the first conflict falls.
+
+## Sources
+
+- [What is finite capacity scheduling and how does it differ from MRP? - Delfoi](https://delfoi.com/?p=25192)
+- [Finite vs Infinite Capacity Scheduling: Why MRP Schedules Break on the Floor - Fabrico](https://www.fabrico.io/blog/finite-vs-infinite-capacity-scheduling/)

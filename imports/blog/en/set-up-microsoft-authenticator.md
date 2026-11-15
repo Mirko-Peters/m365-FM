@@ -50,7 +50,7 @@ If your phone camera can't read the code, click **I can't scan the bar code** on
 
 ## Set up Microsoft Authenticator for a work or school account
 
-For work or school accounts, Microsoft's article on [setting up security info from a sign-in page](https://support.microsoft.com/en-us/accounts-billing/work-school/set-up-security-info-from-a-sign-in-page) describes a wizard. You see it when you sign in and your organization requires security info that you haven't set up yet. If your screen doesn't match the steps below, your admin may not have enabled this experience, so ask them.
+For work or school accounts, Microsoft's article on [setting up security info from a sign-in page](https://support.microsoft.com/accounts-billing/work-school/set-up-security-info-from-a-sign-in-page) describes a wizard. You see it when you sign in and your organization requires security info that you haven't set up yet. If your screen doesn't match the steps below, your admin may not have enabled this experience, so ask them.
 
 1. Select **Next** at the prompt. The **Keep your account secure** wizard shows the first required method.
 2. Select **Download now**, install Microsoft Authenticator on your phone, then select **Next**.
@@ -87,7 +87,7 @@ Microsoft's backup article says what is and isn't covered:
 - **Third-party accounts**, such as LinkedIn and Facebook, back up their 30-second codes.
 - **Work or school accounts aren't backed up.** Only the account name is saved. After a restore, you sign in and register the account again on the new device.
 
-To turn on backup on Android, open the app, tap the three-dot icon, open **Settings** and turn on the **Cloud Backup** toggle. You then choose the personal Microsoft account where the backup is stored. Microsoft's article also states that starting January 2027, Android backup will no longer use a Microsoft personal account, and you'll use Google One backup instead. That date is in Microsoft's article as I read it, so check the current page before you tell users.
+To turn on backup on Android, open the app, tap the three-dot icon, open **Settings** and turn on the **Cloud Backup** toggle. You then choose the personal Microsoft account where the backup is stored. Microsoft's article also states that starting January 2027, Android backup will no longer use a Microsoft personal account, and you'll use Google One backup instead. That date is in Microsoft's article, so check the current page before you tell users.
 
 On iOS, Microsoft's restore article lists three prerequisites: iCloud Drive, iCloud Keychain and iCloud Backup must be turned on. Then install the app on the new phone and open it. The backed-up codes and account names appear, and for accounts that show **Sign in to restore your account**, tap **Sign in**, enter your password and confirm your email or phone number.
 
@@ -104,12 +104,19 @@ Two rules apply to both systems. A backup restores only onto the same device typ
 
 ## Related topics to explore
 
-- Add Authenticator as a verification method: [How to add your accounts to Microsoft Authenticator](https://support.microsoft.com/en-us/authenticator/how-to-add-your-accounts-to-microsoft-authenticator) covers the personal account methods.
+- Add Authenticator as a verification method: [How to add your accounts to Microsoft Authenticator](https://support.microsoft.com/authenticator/how-to-add-your-accounts-to-microsoft-authenticator) covers the personal account methods.
 - Multifactor authentication for organizations: admins decide which methods users must register, and the choice shapes the wizard that users see.
-- Move Authenticator to a new phone: the [restore article](https://support.microsoft.com/en-us/authenticator/restore-account-credentials-from-microsoft-authenticator) lists the iOS prerequisites and the account types that come back.
-- Back up your accounts: the [backup article](https://support.microsoft.com/en-us/authenticator/back-up-your-accounts-in-microsoft-authenticator) explains Cloud Backup on Android.
+- Move Authenticator to a new phone: the [restore article](https://support.microsoft.com/authenticator/restore-account-credentials-from-microsoft-authenticator) lists the iOS prerequisites and the account types that come back.
+- Back up your accounts: the [backup article](https://support.microsoft.com/authenticator/back-up-your-accounts-in-microsoft-authenticator) explains Cloud Backup on Android.
 - What to do after losing a phone: plan a second method for every important account.
 
 ## Next step
 
 To set up Microsoft Authenticator, update the app, add your account with the QR code for your account type, and approve the test sign-in. Then turn on backup right away and register a second method, so the next new phone costs you minutes and not a support ticket.
+
+## Sources
+
+- [How to add your accounts to Microsoft Authenticator (Microsoft Support)](https://support.microsoft.com/authenticator/how-to-add-your-accounts-to-microsoft-authenticator)
+- [Set up security info from a sign-in page (Microsoft Support)](https://support.microsoft.com/accounts-billing/work-school/set-up-security-info-from-a-sign-in-page)
+- [Back up your accounts in Microsoft Authenticator (Microsoft Support)](https://support.microsoft.com/authenticator/back-up-your-accounts-in-microsoft-authenticator)
+- [Restore account credentials from Microsoft Authenticator (Microsoft Support)](https://support.microsoft.com/authenticator/restore-account-credentials-from-microsoft-authenticator)

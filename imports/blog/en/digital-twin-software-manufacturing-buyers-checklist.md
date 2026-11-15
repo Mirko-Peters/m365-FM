@@ -146,3 +146,10 @@ If your first question is about planning and what-if decisions, iFAKT Polaris is
 ## Next step
 
 Write down the one decision you want a twin to support, and the number that should change if it works. Take that page to your next vendor conversation and ask each vendor how their digital twin software for manufacturing would answer it on one pilot line, with what data, at what total cost over three years.
+
+## Sources
+
+- [Essential Elements (digital twins) - NIST](https://www.nist.gov/el/applied-economics-office/manufacturing/topics-manufacturing/digital-twins/essential-elements)
+- [What is Azure Digital Twins? - Microsoft Learn](https://learn.microsoft.com/en-us/azure/digital-twins/overview)
+- [Data history for Azure Digital Twins - Microsoft Learn](https://learn.microsoft.com/en-us/azure/digital-twins/concepts-data-history)
+- [ISO 23247-1:2021 Digital twin framework for manufacturing, Part 1 - ISO](https://www.iso.org/standard/75066.html)

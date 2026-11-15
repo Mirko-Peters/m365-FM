@@ -22,7 +22,7 @@ faq:
 ---
 XLOOKUP in Excel finds a value in one range and returns the matching item from another range: `=XLOOKUP(lookup_value, lookup_array, return_array)`. Type an employee ID, point at the ID column, point at the name column, and you get the name. This article is for Excel users who still write VLOOKUP out of habit, or who have just seen XLOOKUP in a colleague's file. You'll get the syntax, the six arguments, worked examples for the cases that come up at work, the comparison with VLOOKUP, and a list of the errors you're likely to hit.
 
-The syntax and options below follow Microsoft's page on the [XLOOKUP function](https://support.microsoft.com/en-us/office/xlookup-function-b7fd680e-6d10-43e6-84f9-88eae8bf5929). Where a pattern isn't on that page, the text says so. It's a function for [Excel](https://www.m365.fm/entity/excel/), and it's the one Microsoft itself suggests as the better choice when you open the VLOOKUP help page.
+The syntax and options below follow Microsoft's page on the [XLOOKUP function](https://support.microsoft.com/office/xlookup-function-b7fd680e-6d10-43e6-84f9-88eae8bf5929). Where a pattern isn't on that page, the text says so. It's a function for [Excel](https://www.m365.fm/entity/excel/), and it's the one Microsoft itself suggests as the better choice when you open the VLOOKUP help page.
 
 ## The syntax and the six arguments
 
@@ -81,7 +81,7 @@ Modes `-1` and `1` are for scales: tax rates, commission tiers, price breaks. Pu
 
 `=XLOOKUP(E2,$A$2:$A$6,$B$2:$B$6,,-1)`
 
-With `-1` Excel returns the exact match, or the next smaller threshold if there is none. The empty slot before the `-1` skips the not-found argument. Microsoft's own example for the approximate match uses `1` to return a tax rate for the next larger income value, so choose the direction that fits your table. Unlike old-style approximate VLOOKUP, you don't have to sort the thresholds for these modes. Binary search modes are the ones that need sorted data.
+With `-1` Excel returns the exact match, or the next smaller threshold if there is none. The empty slot before the `-1` skips the not-found argument. Microsoft's own example for the approximate match uses `1` to return a tax rate for the next larger income value, so choose the direction that fits your table. Microsoft's page warns about sorted data only for the binary search modes, so unlike old-style approximate VLOOKUP, these modes aren't documented as needing sorted thresholds. Test with your own table to be sure.
 
 ## Search from the bottom: the last match
 
@@ -97,7 +97,7 @@ Microsoft's page notes that, unlike VLOOKUP, XLOOKUP can return multiple columns
 
 `=XLOOKUP(D2,A2:A100,B2:D100)`
 
-The formula puts the match from column B in the cell and spills the values from columns C and D into the cells to the right. Leave room for them. If cells on the right already contain data, Excel shows a spill error instead of overwriting them. Microsoft's example returns an employee name and a department from a single formula.
+The formula puts the match from column B in the cell and spills the values from columns C and D into the cells to the right. Leave room for them. In our experience, if cells on the right already contain data, Excel shows a spill error instead of overwriting them. Microsoft's XLOOKUP page doesn't describe spilling. Microsoft's example returns an employee name and a department from a single formula.
 
 ## Two-way lookups
 
@@ -117,7 +117,7 @@ Each comparison returns TRUE or FALSE. Multiplying them gives 1 only in rows whe
 
 ## XLOOKUP and VLOOKUP side by side
 
-Microsoft's [VLOOKUP page](https://support.microsoft.com/en-us/office/vlookup-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1) gives the syntax as `VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])`, and says the lookup value must be in the first column of the range. If you leave out `range_lookup`, VLOOKUP does an approximate match, which assumes the first column is sorted. Set it to FALSE for an exact match. The same page suggests trying XLOOKUP and says it works in any direction and returns exact matches by default.
+Microsoft's [VLOOKUP page](https://support.microsoft.com/office/vlookup-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1) gives the syntax as `VLOOKUP(lookup_value, table_array, col_index_num, [range_lookup])`, and says the lookup value must be in the first column of the range. If you leave out `range_lookup`, VLOOKUP does an approximate match, which assumes the first column is sorted. Set it to FALSE for an exact match. The same page suggests trying XLOOKUP and says it works in any direction and returns exact matches by default.
 
 The same job in both functions, with IDs in column A and names in column B:
 
@@ -160,3 +160,8 @@ If you send a workbook to someone on an older version, the formula may show an e
 ## Next step
 
 Take one VLOOKUP from your current workbook and rewrite it as XLOOKUP. Add a not-found message, and compare the two results on a few IDs you know. If both agree, you have a pattern you can reuse for every new XLOOKUP in Excel.
+
+## Sources
+
+- [XLOOKUP function (Microsoft Support)](https://support.microsoft.com/office/xlookup-function-b7fd680e-6d10-43e6-84f9-88eae8bf5929)
+- [VLOOKUP function (Microsoft Support)](https://support.microsoft.com/office/vlookup-function-0bbc8083-26fe-4963-8ab8-93a18ad188a1)

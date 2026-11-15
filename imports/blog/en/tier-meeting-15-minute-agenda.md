@@ -25,7 +25,7 @@ A tier meeting is a short, standing daily meeting at a board where a team review
 
 ## What is a tier meeting?
 
-A tier meeting is one level of a daily management system. The same idea is also called a daily stand-up meeting in manufacturing, a huddle, or simply the shop floor meeting. Kaizen Institute describes [daily management](https://kaizen.com/insights/daily-management-manufacturing-plant/) as a connected routine of four tiered meetings, each feeding the next, held at a fixed time every day and run on a visual board.
+A tier meeting is one level of a daily management system. The same idea is also called a daily stand-up meeting in manufacturing, a huddle, or simply the shop floor meeting. In my experience, daily management is a connected routine of tiered meetings, each feeding the next, held at a fixed time every day and run on a visual board.
 
 The tiers are:
 
@@ -113,3 +113,7 @@ A paper board is enough at the start. As plans change during the day, a paper bo
 ## Next step
 
 Choose one cell, set up a simple board and hold a 15-minute tier meeting there at the same time every day for the next two weeks. Then add a tier 2 meeting that takes the problems the cell cannot solve.
+
+## Sources
+
+- [Tiered Meetings in Manufacturing, The Operating Rhythm That Protects Execution - Catalyst Connection](https://blog.catalystconnection.org/tiered-meetings-in-manufacturing-the-operating-rhythm-that-protects-execution)

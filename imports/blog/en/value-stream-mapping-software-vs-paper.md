@@ -93,3 +93,10 @@ Once you have the method, software can keep maps current. [iFAKT's Polaris VSM](
 ## Next step
 
 Draw one current state map on A3 paper this month, and write down where you wished for a calculator or a way to share it. Then use that list to judge any value stream mapping software against the real needs of your team.
+
+## Sources
+
+- [Learning to See, Part 1 (Rother and Shook) - Lean Enterprise Institute](https://www.lean.org/wp-content/uploads/2021/01/Learning-to-See-part1.pdf)
+- [Practical Tips for Value Stream Mapping - AllAboutLean.com](https://www.allaboutlean.com/vsm-pitfalls/)
+- [Do you Use VSM Software? - Gemba Academy](https://blog.gembaacademy.com/?p=728)
+- [Value Stream Mapping Software - LeanBlog.org](https://www.leanblog.org/2006/09/value-stream-mapping-software)

@@ -9,7 +9,7 @@ topics: [ifakt, kaizen, operational-excellence, gemba-walk]
 keypoints:
   - "An operational excellence culture is a set of daily behaviors, not a poster: people see problems, speak up and fix them close to the work."
   - "Systems drive behavior, so meeting formats, targets and recognition must reward the behavior you want, not only the result."
-  - "Three leader habits carry the culture: go and see the work, ask why, and show respect by removing waste from people's jobs."
+  - "Three leader habits carry the culture: go and see the work, ask why, and show respect."
   - "Engagement grows when operators own problems in their own area and see their ideas acted on within days."
   - "Measure culture with leading signs such as ideas closed and walks held, and keep lagging KPIs as the check on results."
 faq:
@@ -35,7 +35,7 @@ A short test: ask three operators what happens when they report a problem. If th
 
 ## Which leadership behaviors build it?
 
-Leadership behavior is the strongest lever you have. The Lean Enterprise Institute (LEI) describes three habits in its article on [continuous improvement as culture](https://www.lean.org/the-lean-post/articles/lean-continuous-improvement-as-culture/):
+Leadership behavior is the strongest lever you have. The Toyota phrase "go see, ask why, show respect", which the Lean Enterprise Institute (LEI) [attributes to chairman Fujio Cho](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/), gives three habits:
 
 - **Go and see.** Spend time where the work happens, called the gemba (the Japanese word for "the real place"). A regular [gemba walk](https://www.m365.fm/entity/gemba-walk/) is the usual format.
 - **Ask why.** Question what you see and what you assume, until you reach the facts and the root cause.
@@ -118,3 +118,10 @@ Operational excellence software cannot create culture. It can remove one common 
 ## Next step
 
 This week, put one fixed floor walk and one 10-minute huddle into the calendar of the area you want to start with. Then run the 90-day plan and check, after the first month, whether people see that raising a problem leads to action. That is the first sign that your operational excellence culture is taking hold, and the start of operational excellence you can sustain.
+
+## Sources
+
+- [Shingo Model - Shingo Institute](https://shingo.org/model)
+- [How to Go to the Gemba: Go See, Ask Why, Show Respect - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-to-go-to-the-gemba-go-see-ask-why-show-respect/)
+- [How do you define respect for people? - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/how-do-you-define-respect-for-people/)
+- [Toyota Production System - Toyota Motor Corporation (global site)](https://global.toyota/en/company/vision-and-philosophy/production-system/index.html)

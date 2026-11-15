@@ -2,6 +2,7 @@
 import json, re, html, os
 from functools import lru_cache
 import site_media as MED
+import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -313,7 +314,8 @@ def build_learn(ctx):
         terms = sorted(GLOSS, key=lambda x: x["name"].lower())
         az = az_html(terms, lang, lambda x, d, o, lang=lang: f'<dt><a href="{BASE}/{"de/" if lang == "de" else ""}entity/{x["id"]}/">{esc(x["name"])}</a></dt><dd>{esc(d)}</dd>')
         body = shell(lang, f'<h1>{esc(t["glossary"])}</h1><p class="mut">{esc(t["glossary_intro"])}</p>{az}')
-        write(f"{rel}/index.html", page(lang, f'{t["glossary"]} – M365.FM', t["glossary_intro"], gb, body, None, gloss_ld(lang, gb), og_type="website", extra_head=LCSS))
+        _gm = MM.glossary_meta(lang, len(terms)) or (f'{t["glossary"]} – M365.FM', t["glossary_intro"])
+        write(f"{rel}/index.html", page(lang, _gm[0], _gm[1], gb, body, None, gloss_ld(lang, gb), og_type="website", extra_head=LCSS))
         sitemap.append((gb, TODAY, None))
         for x in terms:   # Einzelne Glossarseiten gibt es nicht mehr: Hinweisseite mit Verknuepfung zur Entitaet
             u = f"{gb}{x['id']}/"; tgt = f"{BASE}/{'de/' if lang == 'de' else ''}entity/{x['id']}/"
@@ -346,7 +348,7 @@ def build_learn(ctx):
                             f'<button type="button" class="ln-btn ln-reset">{esc(t["reset"])}</button></div>{tr}{PATH_JS}')
             ld = [{"@context": "https://schema.org", "@type": "ItemList", "name": f'{t["paths"]}: {cat_name(c, lang)}', "itemListElement":
                    [{"@type": "ListItem", "position": i + 1, "url": url_of(x), "name": x["e"]["title"]} for i, x in enumerate(lst)]}]
-            write(f"{lang}/path/{c}/index.html", page(lang, f'{t["paths"]}: {cat_name(c, lang)} – M365.FM', t["paths_intro"], pu, b, None, ld, og_type="website", extra_head=LCSS))
+            write(f"{lang}/path/{c}/index.html", page(lang, *MM.path_meta(lang, cat_name(c, lang), len(lst)), pu, b, None, ld, og_type="website", extra_head=LCSS))
             sitemap.append((pu, TODAY, None))
         # Trainer
         pool = []
@@ -366,7 +368,8 @@ def build_learn(ctx):
         cfg = json.dumps({"t": {k: t[k] for k in ("check", "next", "finish", "again", "start", "soon", "weak", "name", "cert", "cert_text", "cert_note", "print", "explain")} | {"score": g["SCORE"].get(lang, "{s}/{n}")}, "pool": pool}, ensure_ascii=False).replace("</", "<\\/")
         b = shell(lang, f'<nav aria-label="breadcrumb"><a href="{BASE}/{lang}/learn/">{esc(t["learn"])}</a></nav><h1>{esc(t["trainer"])}</h1><p class="mut">{esc(t["trainer_intro"])}</p>'
                         f'<div id="lntr"><div class="stage"></div><script type="application/json" class="cfg">{cfg}</script></div><p><small>{esc(t["cert_note"])}</small></p>{TRAINER_JS}')
-        write(f"{lang}/trainer/index.html", page(lang, f'{t["trainer"]} – M365.FM {LANGS[lang][0]}', t["trainer_intro"], tu, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
+        _tm = MM.trainer_meta(lang) or (f'{t["trainer"]} – M365.FM {LANGS[lang][0]}', t["trainer_intro"])
+        write(f"{lang}/trainer/index.html", page(lang, _tm[0], _tm[1], tu, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
         # Hub
         hu = f"{BASE}/{lang}/learn/"
         cards = (f'<a class="ln-card" href="{BASE}/{lang}/glossary/"><b>{esc(t["glossary"])}</b><span>{esc(t["glossary_intro"])}</span></a>'
@@ -377,7 +380,7 @@ def build_learn(ctx):
                  f'<a class="ln-card" href="{BASE}/{"de/" if lang == "de" else ""}community/events/"><b>Events</b><span>{esc("Konferenzen, Sessions und Speaker der Community" if lang == "de" else "Conferences, sessions and speakers of the community")}</span></a>')
         pl = "".join(f'<a class="ln-card" href="{BASE}/{lang}/path/{c}/"><b>{esc(cat_name(c, lang))}</b><span>{len(paths[c])}</span></a>' for c in ORDER if c in paths)
         b = shell(lang, f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(t["learn_intro"])}</p><h2>{esc(t["paths"])}</h2><div class="ln-grid">{pl}</div><div class="ln-grid">{cards}</div>')
-        write(f"{lang}/learn/index.html", page(lang, f'{t["learn"]} – M365.FM {LANGS[lang][0]}', t["learn_intro"], hu, b, None, None, og_type="website", extra_head=LCSS))
+        write(f"{lang}/learn/index.html", page(lang, *MM.learn_meta(lang), hu, b, None, None, og_type="website", extra_head=LCSS))
         sitemap.append((hu, TODAY, None))
     # Englischer Lern-Hub /learn/ (Menuepunkt "Learn" wie in allen Sprachen, Mirko 6.11.2026): Glossar, Entitaeten, Mitglieder, Firmen, Events.
     # Lernpfade und Trainer entstehen aus den Folgen der Dub-Sprachen und gibt es auf Englisch (noch) nicht.
@@ -389,7 +392,7 @@ def build_learn(ctx):
              f'<a class="ln-card" href="{BASE}/community/events/"><b>Events</b><span>Conferences, sessions and speakers of the community</span></a>')
     _li = "Free resources to learn Microsoft 365, Copilot, Azure and security: the glossary, the entity database and the experts, companies and events of the community."
     b = shell("en", f'<h1>{esc(t["learn"])}</h1><p class="mut">{esc(_li)}</p><div class="ln-grid">{cards}</div>')
-    write("learn/index.html", page("en", f'{t["learn"]} – M365.FM', _li, hu, b, None, None, og_type="website", extra_head=LCSS))
+    write("learn/index.html", page("en", *MM.learn_en_meta(), hu, b, None, None, og_type="website", extra_head=LCSS))
     sitemap.append((hu, TODAY, None))
 
 

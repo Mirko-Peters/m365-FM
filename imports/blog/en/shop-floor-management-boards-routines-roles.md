@@ -111,3 +111,8 @@ Paper boards work well at the start. Later the plan changes during the day, and 
 ## Next step
 
 Choose one cell this week, set up a simple board with five measures and hold a 10-minute shop floor management meeting at the same time every day for four weeks. Review the board with the team at the end of that period and decide what to keep, what to drop and which cell comes next.
+
+## Sources
+
+- [Build Your "House" of Production on a Stable Foundation - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/build-your-house-of-production-on-a-stable-foundation/)
+- [Leader Standard Work - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/leader-standard-work/)

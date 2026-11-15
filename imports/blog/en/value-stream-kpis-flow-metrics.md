@@ -118,3 +118,9 @@ iFAKT's [Polaris Analyzer](https://www.m365.fm/entity/polaris-analyzer/) is a mo
 ## Next step
 
 Value stream KPIs work when they are few, written down and tied to the whole flow. This week, pick three KPIs from the list for one product family, write the formula and data source for each and put the first trend on the board.
+
+## Sources
+
+- [The Mythical Value Stream Manager - Lean Enterprise Institute](https://www.lean.org/the-lean-post/articles/the-mythical-value-stream-manager)
+- [ISO 22400-2:2014 Key performance indicators (KPIs) for manufacturing operations management, Part 2 - ISO](https://www.iso.org/standard/54497.html)
+- [Overall Equipment Effectiveness - Lean Enterprise Institute (Lean Lexicon)](https://www.lean.org/lexicon-terms/overall-equipment-effectiveness/)
