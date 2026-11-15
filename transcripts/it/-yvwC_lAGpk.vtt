@@ -1,0 +1,619 @@
+WEBVTT
+
+00:00:00.180 --> 00:00:03.600
+Benvenuti a un altro episodio delle pillole di conoscenza Microsoft. Sono il vostro ospite Mirko
+
+00:00:03.600 --> 00:00:07.040
+Pitt. L'argomento di oggi è uno di quelli che quasi tutti hanno sentito nominare ma che pochi
+
+00:00:07.040 --> 00:00:11.000
+comprendono davvero. Le API. Probabilmente avrete sentito questo termine usato molto spesso. È una
+
+00:00:11.000 --> 00:00:15.520
+di quelle parole tecnologiche che la gente usa quando vuole sembrare esperta. La verità è che
+
+00:00:15.520 --> 00:00:20.540
+le API sono in realtà semplici. Sono solo un modo in cui un software comunica con un altro. Il tuo
+
+00:00:20.540 --> 00:00:24.200
+telefono richiede dati a un server. Server è l'indietro. Questa è una chiamata API. Ora
+
+00:00:24.200 --> 00:00:29.060
+immaginate di avere 20 API o 50 o 100. Ognuna potrebbe usare un'autenticazione diversa. Limiti
+
+00:00:29.060 --> 00:00:32.940
+di velocità differenti. Documentazioni varie, se presenti. Improvvisamente ciò che era
+
+00:00:32.940 --> 00:00:37.060
+iniziato come una semplice conversazione tra due app diventa un caos totale. Senza un gestore
+
+00:00:37.060 --> 00:00:41.600
+centrale ogni team reinventa la ruota. Un team costruisce il proprio sistema di autenticazione
+
+00:00:41.600 --> 00:00:46.080
+e un altro il proprio logging. Le alcune di sicurezza poi non. Gli sviluppatori si confondono
+
+00:00:46.080 --> 00:00:50.720
+su cosa faccia ogni API e non si ha una visione unica di ciò che accade nel sistema. Agile
+
+00:00:50.720 --> 00:00:55.200
+API Management risolve questo problema. Ti fornisce un centro di controllo. Pensalo come un attore
+
+00:00:55.200 --> 00:00:59.040
+di controllo del traffico aereo per le tue API. Alla fine di questo episodio capirai
+
+00:00:59.040 --> 00:01:04.680
+cos'è perché è importante e come si incastrano tutti i pezzi. Prendete il vostro caffè e
+
+00:01:04.680 --> 00:01:10.640
+iniziamo. Il problema troppe API nessun controllo. Ecco la realtà del software moderno. Dieci
+
+00:01:10.640 --> 00:01:14.420
+anni fa probabilmente avevi un'unica grande applicazione. Un monolite. Un database. Un
+
+00:01:14.420 --> 00:01:19.860
+API semplice. Oggi quella stessa applicazione potrebbe essere suddivisa in dozzine di microservizi.
+
+00:01:20.420 --> 00:01:24.440
+Ogni servizio gestisce una cosa. Account utente, pagamenti, inventario, notifiche e dispone
+
+00:01:24.440 --> 00:01:29.540
+la propria API. All'improvviso hai 10, 50, 100 punti di ingresso diversi nel tuo sistema. Ora
+
+00:01:29.540 --> 00:01:33.060
+immagina di essere uno sviluppatore che cerca di costruire qualcosa usando queste API. Devi
+
+00:01:33.060 --> 00:01:37.960
+trovare ciascuna di esse e capire come autenticarti. Alcune usano chiavi API, altre o out, altre
+
+00:01:37.960 --> 00:01:42.760
+ancora nulla. Devi gestire manualmente rate limiting rischi di venire bloccato. Devi comprendere
+
+00:01:42.760 --> 00:01:46.840
+il formato dati che ciascuno richiede. È estenuante. La situazione peggiora dal punto di
+
+00:01:46.840 --> 00:01:50.760
+vista operativo. Senza un gateway centrale ogni team deve aggiungere sicurezza e log al proprio
+
+00:01:50.760 --> 00:01:54.320
+servizio manualmente. Alcuni team lavorano bene, altri dimentichano di registrare gli errori.
+
+00:01:54.560 --> 00:01:58.180
+Alcuni non convalidano affatto l'input. È incoerente, soggetto a errori. Un incubo
+
+00:01:58.180 --> 00:02:02.180
+di sicurezza pronto ad accadere. La conformità diventa quasi impossibile. Devi dimostrare
+
+00:02:02.180 --> 00:02:06.160
+chi ha avuto accesso a cose e quando? Buona fortuna estrale audit trail da 20 servizi diversi,
+
+00:02:06.360 --> 00:02:09.560
+ognuno con il proprio formato di log. Devi sapere quante chiamate API hai gestito il tuo
+
+00:02:09.560 --> 00:02:13.700
+sistema il mese scorso? Stai mettendo insieme metriche da una dozzina di dashboard diversi.
+
+00:02:14.300 --> 00:02:17.520
+Fatto questo. Man mano che scali questo non è solo un problema. Non lo sta con il suo
+
+00:02:17.520 --> 00:02:20.700
+mondo. Non puoi aggiungere più sviluppatori, più servizi o più clienti senza un punto di
+
+00:02:20.700 --> 00:02:24.120
+controllo centrale. Pensalo come a un edificio. Immagina che ogni stanza abbia una serratura
+
+00:02:24.120 --> 00:02:28.640
+diversa. Non c'è una reception, un elenco. I visitatori vagano cercando la porta giusta,
+
+00:02:28.740 --> 00:02:33.640
+frustrati finendo per rinunciare. Caos totale. Questo è il problema che la gestione delle API
+
+00:02:33.640 --> 00:02:38.660
+è stata progettata per risolvere. Cos'è Azure API Management? La torre di controllo. Allora,
+
+00:02:38.760 --> 00:02:42.700
+cos'è esattamente Azure API Management? Ecco la definizione più semplice. È un servizio
+
+00:02:42.700 --> 00:02:47.100
+gestito che si colloca tra le tue API di backend e le app, i siti, i dispositivi e i partner
+
+00:02:47.100 --> 00:02:51.880
+che le usano. Ma attenzione, non è solo un proxy. Un proxy inoltre al traffico e basta.
+
+00:02:52.280 --> 00:02:56.680
+Azure API Management copre l'intero ciclo di vita delle tue API. Pubblicazione, sicurezza,
+
+00:02:56.780 --> 00:03:01.120
+monitoraggio e infine il ritiro. È un centro completo. Analizziamolo in tre componenti
+
+00:03:01.120 --> 00:03:05.000
+principali. Primo è il gateway. Questa è la porta d'ingresso. Ogni richiesta in arrivo
+
+00:03:05.000 --> 00:03:08.880
+da un app o un sito colpisce prima il gateway, mai direttamente il tuo backend. Il gateway
+
+00:03:08.880 --> 00:03:13.020
+elabora la richiesta, applica le policy impostate, raccoglie metriche e la inoltre al servizio
+
+00:03:13.020 --> 00:03:18.920
+corretto. Immaginalo come un vigile urbano. Poi c'è il piano di gestione. È qui che definisci
+
+00:03:18.920 --> 00:03:23.980
+tutto. Le tue API, le policy prodotti, le sottoscrizioni. Lo fai tramite il portale
+
+00:03:23.980 --> 00:03:28.420
+Azure, la riga di comando, l'infrastruttura come codice, come bicep, terraforma. È la
+
+00:03:28.420 --> 00:03:32.920
+sala controllo dove configuri come funziona ogni cosa. I poli per gli sviluppatori. Un sito
+
+00:03:32.920 --> 00:03:38.640
+self-service dove gli sviluppatori, in termi ed esterni, scoprono API, leggono documentazione,
+
+00:03:38.640 --> 00:03:44.380
+ottengono chiavi e testano chiamate. Niente più PDF inviati via email. Ecco un'analogia
+
+00:03:44.380 --> 00:03:48.720
+utile. Pensa a un aeroporto moderno e la pista di atterraggio. Ogni aereo atterra prima
+
+00:03:48.720 --> 00:03:53.440
+lì. Il piano di gestione è la torre di controllo. Dirige il traffico, stabilisce regole e monitora
+
+00:03:53.440 --> 00:03:57.580
+tutto. È il portale per gli sviluppatori e tabellano informativi. I piloti lo controllano
+
+00:03:57.580 --> 00:04:01.620
+prima di volare e trovano tutte le info necessarie senza chiedere a nessuno. Ora concentriamoci
+
+00:04:01.620 --> 00:04:07.360
+sul gateway. È la parte con cui le tue app comunicano e dove avviene la vera magia. Il gateway
+
+00:04:07.360 --> 00:04:10.760
+è la porta all'interesse delle tue API. Parliamo del gateway perché è questa parte
+
+00:04:10.760 --> 00:04:15.060
+con cui le tue app comunicano realmente. Ogni richiesta da un'app mobile, un sito web o
+
+00:04:15.060 --> 00:04:18.860
+un dispositivo IoT colpisce prima il gateway, ma il tuo backend è direttamente. È proprio
+
+00:04:18.860 --> 00:04:22.980
+questo il punto. Il gateway si posiziona davanti e funge da un unico punto di ingresso. Il gateway
+
+00:04:22.980 --> 00:04:26.780
+può applicare policy prima di inoltrare la richiesta. Le policy sono regole che scrivi
+
+00:04:26.780 --> 00:04:30.900
+in XML o JSON come limitazione del traffico, filtraggio IP, riscrittura degli header e controlli
+
+00:04:30.900 --> 00:04:35.440
+di autenticazione. Il tutto senza modificare una sola riga del tuo codice backend. Con esempio
+
+00:04:35.440 --> 00:04:39.780
+concreto. Diciamo che hai un livello gratuito e un premium per la tua IP. Con una policy
+
+00:04:39.780 --> 00:04:43.200
+puoi limitare gli utenti gratuiti a 5 richieste al minuto, mentre quelli premium ne ottengono
+
+00:04:43.200 --> 00:04:47.460
+100. Il tuo backend non nota mai la differenza. Elabora semplicemente le richieste. Il gateway
+
+00:04:47.460 --> 00:04:51.200
+gestisce l'applicazione delle regole. Il gateway gestisce anche la memorizzazione. Se i dati
+
+00:04:51.200 --> 00:04:54.560
+vengono richiesti ripetutamente, come un elenco di prodotti che cambia raramente, il gateway
+
+00:04:54.560 --> 00:04:59.020
+può memorizzare la risposta e fornirla direttamente. Non c'è bisogno di disturbare affatto il
+
+00:04:59.020 --> 00:05:03.240
+backend, che significa risposte più rapide e meno carico sui tuoi server. Può anche trasformare
+
+00:05:03.240 --> 00:05:07.180
+i dati. Il tuo backend potrebbe restituire XML, ma la tua app mobile si aspetta acceso.
+
+00:05:07.700 --> 00:05:11.180
+Il gateway può convertirle al volo. Il tuo backend non deve cambiare, nemmeno la tua app
+
+00:05:11.180 --> 00:05:16.700
+deve farlo. Il gateway gestisce la traduzione. Registra ogni chiamata, ogni richiesta, ogni
+
+00:05:16.700 --> 00:05:20.280
+risposta, ogni errore. Ottiene una traccia di controllo completa di chi ha chiamato cosa,
+
+00:05:20.360 --> 00:05:23.960
+quando e cosa è successo. Solo questo vale il prezzo del biglietto per la conformità.
+
+00:05:24.460 --> 00:05:28.740
+Se hai un pubblico globale puoi distribuire il gateway in più regioni. Il traffico viene
+
+00:05:28.740 --> 00:05:32.300
+ingrizzato automaticamente a quella più vicina, il che offre una latenza inferiore e un'esperienza
+
+00:05:32.300 --> 00:05:36.980
+migliore. Un'altra cosa, il gateway nasconde il tuo vero URL backend. I client vedono solo
+
+00:05:36.980 --> 00:05:40.500
+l'indirizzo del gateway. I tuoi server backend rimangono nascosti da internet. È un enorme
+
+00:05:40.500 --> 00:05:45.760
+vantaggio per la sicurezza fin da subito. Policy, il motore che controlla tutto. Quindi
+
+00:05:45.760 --> 00:05:49.320
+che dire di quelle policy che ho menzionato? Sono il motore che rende la PIM davvero potente?
+
+00:05:49.880 --> 00:05:52.980
+Una policy modifica il comportamento di una richiesta o di una risposta senza che tu debba
+
+00:05:52.980 --> 00:05:57.260
+mettere il codice del backend. Pensala come un wrapper attorno alla tua IP. Mentre il traffico
+
+00:05:57.260 --> 00:06:01.760
+scorre può aggiungere, rimuovere o modificare elementi automaticamente. Le policy possono essere
+
+00:06:01.760 --> 00:06:05.580
+eseguite in quattro punti del ciclo di vita della richiesta. Inbound, in entrata prima che la
+
+00:06:05.580 --> 00:06:10.140
+richiesta raggiunga il backend. Outbound, in uscita prima che la risposta arrivi al client.
+
+00:06:10.680 --> 00:06:14.460
+Backend, proprio prima che la richiesta colpisca il tuo servizio. E in caso di errore, quando qualcosa
+
+00:06:14.460 --> 00:06:19.340
+fallisce. Le operazioni in entrata comune includono la convalida di token JWT per verificare l'identità
+
+00:06:19.340 --> 00:06:22.560
+del chiamante, il controllo delle chiavi API, la riscrittura di URL e l'imitazione tramite
+
+00:06:22.560 --> 00:06:26.840
+indirizzo IP. Tutto ciò avviene prima che il tuo backend riceva una singola richiesta. Per l'operazione in uscita
+
+00:06:26.840 --> 00:06:30.940
+puoi trasformare il corpo della risposta. Trovare e sostituire testo, rimuovere i campi sensibili,
+
+00:06:31.180 --> 00:06:34.520
+cambiare formati. Puoi memorizzare nella cassa le risposte in modo che le richieste ripetute
+
+00:06:34.520 --> 00:06:37.760
+non raggiungano il tuo backend. Puoi persino eliminare intestazioni che rivelano informazioni
+
+00:06:37.760 --> 00:06:42.080
+in te. Ecco un esempio concreto. Supponi che la tua API restituisca descrizioni di prodotti con
+
+00:06:42.080 --> 00:06:46.780
+la parola blu ovunque. Puoi fare il rebranding e usare invece il giallo. Invece di modificare il
+
+00:06:46.780 --> 00:06:52.340
+codice del tuo backend, aggiungi una policy in uscita. Trova blu, sostituisci con giallo. Fatto.
+
+00:06:52.800 --> 00:06:56.480
+Tuo backend non cambia mai. Le policy di limitazione della frequenza e di quota proteggono il tuo
+
+00:06:56.480 --> 00:07:00.360
+backend. Se l'app di qualcuno impazzisce e inizia a martellare la tua API 10.000 volte al
+
+00:07:00.360 --> 00:07:05.660
+secondo, la policy interviene e dice rallenta. Tuo backend rimane operativo. Ti serve una logica
+
+00:07:05.660 --> 00:07:09.100
+avanzata. Puoi scrivere espressioni C-Shark personalizzate all'interno delle policy. Vengono
+
+00:07:09.100 --> 00:07:12.720
+compilate per garantire le prestazioni. Non c'è alcun costo di esecuzione. Puoi cercare ruolo
+
+00:07:12.720 --> 00:07:16.960
+utente, calcolare i limiti di frequenza dinamici o trasformare risposte in base alle intestazioni
+
+00:07:16.960 --> 00:07:21.460
+della richiesta. Concetto chiave è questo. Le policy ti consentono di controllare il comportamento
+
+00:07:21.460 --> 00:07:25.240
+delle tue API senza toccare il codice che le esegue. Ciò significa modifiche più rapide,
+
+00:07:25.240 --> 00:07:30.080
+meno distribuzioni e meno rischi. Prodotti e abbonamenti. Il confezionamento delle API
+
+00:07:30.080 --> 00:07:34.000
+per i consumatori. Ora le tue API sono definite, le policy sono in atto e il gateway funziona
+
+00:07:34.000 --> 00:07:39.040
+a pieno ritmo. Ma come puoi dare a clienti diversi l'accesso a cose diverse? È qui che
+
+00:07:39.040 --> 00:07:42.720
+entra in gioco prodotti e abbonamenti. In Appim raggruppi le Appim qualcosa chiamato
+
+00:07:42.720 --> 00:07:47.820
+prodotto? Pensalo con un pacchetto. Potresti avere un prodotto gratuito che include solo le
+
+00:07:47.820 --> 00:07:52.580
+tue API di base. Magari solo accesso in lettura, poi un prodotto premium che include tutto,
+
+00:07:52.580 --> 00:07:56.680
+compreso operazioni di scrittura ed endpoint e amministrazione. Gli sviluppatori non si
+
+00:07:56.680 --> 00:08:00.660
+abbonano alle singole API e si abbonano a un prodotto. Quando si abbonano ricevono una
+
+00:08:00.660 --> 00:08:04.980
+chiave di abbonamento. Anzi due chiavi. Così puoi ruotarne una senza tempo in attività. Quella
+
+00:08:04.980 --> 00:08:08.460
+chiave è il loro pass per utilizzare qualsiasi API interno di quel prodotto. Sei tu a controllare
+
+00:08:08.460 --> 00:08:12.440
+come funzionano i abbonamenti. Prodotti possono richiedere approvazione. Puoi accettare manumento
+
+00:08:12.440 --> 00:08:16.320
+ogni abbonato oppure possono essere aperti al self-service. Chiunque si registra ottiene
+
+00:08:16.320 --> 00:08:20.220
+l'accesso immediato. Puoi anche includere termini legali che gli utenti devono accettare prima
+
+00:08:20.220 --> 00:08:25.280
+di abbonarsi. È importante se le tue API gestiscono dati sensibili. È così che monetizzi le API. Un
+
+00:08:25.280 --> 00:08:29.200
+prodotto gratuito con limiti di frequenza bassi, 5 chiamate al minuto. Un prodotto a pagamento con
+
+00:08:29.200 --> 00:08:32.840
+limiti più alti o più endpoint, 100 chiamate al minuto più l'accesso a funzionalità premium.
+
+00:08:33.420 --> 00:08:37.080
+Al tuo backhand non importa. Il gateway applica i limiti in base al prodotto a cui il chiamante è
+
+00:08:37.080 --> 00:08:40.640
+effettuato l'abbonamento. Ecco un esempio concreto. Immagina di creare un'app per una conferenza.
+
+00:08:40.980 --> 00:08:44.380
+Crea un prodotto per i partecipanti con API per il programma delle sessioni, le biografie dei
+
+00:08:44.380 --> 00:08:48.200
+relatori e la mappa della sede. Poi un prodotto per gli sponsor che include anche API per la
+
+00:08:48.200 --> 00:08:51.400
+generazione di lead. Gli sponsor possono scansionare i badge dei partecipanti e ottenere
+
+00:08:51.400 --> 00:08:55.040
+informazioni di icono. Stesso backhand, prodotti diversi, livelli di accesso diversi. Quelle due
+
+00:08:55.040 --> 00:08:59.040
+chiavi di sottoscrizione sono progettate per la rotazione. Se una chiave viene compromessa
+
+00:08:59.040 --> 00:09:03.040
+ne generi una nuova. La seconda chiave ti permette di passare a quella nuova senza interrompersi.
+
+00:09:03.380 --> 00:09:07.460
+Genera la nuova chiave, aggiorna la tua app, revoca quella vecchia. Senta interruzione.
+
+00:09:07.900 --> 00:09:12.260
+Portale per sviluppatori, self-service per gli utenti delle API. Quindi hai configurato i tuoi prodotti API.
+
+00:09:12.700 --> 00:09:17.200
+Ora gli sviluppatori devono trovare. Questo è il compito del portale per sviluppatore. Il portale per sviluppatore è un sito
+
+00:09:17.200 --> 00:09:21.500
+integrato in ogni istanza PM. Gli sviluppatori lo usano per esplorare le tue API, leggere la
+
+00:09:21.500 --> 00:09:25.460
+documentazione e testare gli endpoint in modo interattivo direttamente dal browser. Nessuna
+
+00:09:25.460 --> 00:09:29.100
+configurazione necessaria, niente scambio di me. C'è però un aspetto da considerare e di default non
+
+00:09:29.100 --> 00:09:34.300
+è pubblicato. Quando crei la tua istanza PM, il portale esiste ma nessuno può vederlo. Devi prima
+
+00:09:34.300 --> 00:09:39.940
+personalizzarlo e pubblicarlo. È voluto. Non vuoi mostrare al mondo un portale a metà? Puoi personalizzare
+
+00:09:39.940 --> 00:09:43.260
+i colori del brand, loghi e persino incorporare contenuti WordPress per un blog accanto alla
+
+00:09:43.260 --> 00:09:46.860
+documentazione delle tue. È completamente personalizzabile per adattarsi all'immagine della tua
+
+00:09:46.860 --> 00:09:51.340
+app. Vero valore è il self-service. Gli sviluppatori si registrano, ottengono le loro chiavi di
+
+00:09:51.340 --> 00:09:55.700
+sottoscrizione automaticamente e iniziano subito a chiamare le API. Niente email manuale, niente
+
+00:09:55.700 --> 00:09:59.580
+attese per l'approvazione, niente etiquette supporto per chiedere come ottenere una chiave. Fanno tutto
+
+00:09:59.580 --> 00:10:03.840
+da soli, il che riduce notevolmente il carico di supporto. Puoi anche pubblicare log delle modifiche
+
+00:10:03.840 --> 00:10:09.520
+note di rilascio. Quando aggiorni un API, gli sviluppatori la vedono nel portale senza sorprese. L'accesso
+
+00:10:09.520 --> 00:10:13.500
+può essere pubblico per chiunque abbia l'URL, oppure puoi limitarlo agli utenti del tuo tenant
+
+00:10:13.500 --> 00:10:18.520
+in 3D, così solo le persone della tua organizzazione possono navigare. Entrambe le opzioni esistono
+
+00:10:18.520 --> 00:10:22.420
+per diversi casi d'uso. Il portale per sviluppatori è ciò che rende la tua gestione API una vera
+
+00:10:22.420 --> 00:10:26.320
+piattaforma. Consideralo come la vetrina per le tue API. Senza di esso, gli sviluppatori
+
+00:10:26.320 --> 00:10:30.040
+devono cercare tre documenti e chiedere in giro. Con esso trovano ciò di cui hanno bisogno
+
+00:10:30.040 --> 00:10:36.620
+e iniziano a sviluppare. Sicurezza, autenticazione, autorizzazione e segreti. Tutta questa potenza
+
+00:10:36.620 --> 00:10:41.000
+è inutile se la sicurezza non è blindata. Quindi parliamo di come APIM gestisce identità,
+
+00:10:41.000 --> 00:10:45.360
+accesso e segreti. APIM supporta molteplici metodi di autenticazione. Più semplice è
+
+00:10:45.360 --> 00:10:48.760
+quello delle chiavi di sottoscrizione di cui abbiamo parlato prima. Tuttavia, per i sistemi
+
+00:10:48.760 --> 00:10:53.600
+in produzione servono soluzioni più robuste come OAuth 2.0, token JWT, certificati client
+
+00:10:53.600 --> 00:10:57.420
+o FIT3P. Si utilizzano questi livelli in base al grado di sensibilità della tua IP. Per
+
+00:10:57.420 --> 00:11:02.620
+la produzione, la best practice è usare OAuth 2.0 con Entry. Ecco come funziona. L'app client
+
+00:11:02.620 --> 00:11:07.620
+ottiene un token da Entry e lo invia con la richiesta API. APIM valida il token controllando
+
+00:11:07.620 --> 00:11:12.800
+firma, emittente, destinatario e scadenza. Se valido, APIM inoltre ha la richiesta al
+
+00:11:12.800 --> 00:11:17.080
+backend, includendo il token. Il backend si fida perché APIM ha già verificato tutto,
+
+00:11:17.180 --> 00:11:21.620
+non serve una nuova convalida. È un compito in meno che ogni servizio deve gestire.
+
+00:11:22.340 --> 00:11:26.840
+Ora parliamo di segreti. Chiavi API, string di connessione, certificati. Non vanno inseriti
+
+00:11:26.840 --> 00:11:30.320
+nel codice delle policy o nel controllo versione. APIM offre una funzionalità chiamata valori
+
+00:11:30.320 --> 00:11:34.920
+denominati NIMB. Memorizzi segreti centralmente in APIM e li richiami per nome nelle tue policy.
+
+00:11:34.920 --> 00:11:38.580
+policy. Il valore reale non appare mai nel codice delle tue policy. Ancora meglio,
+
+00:11:38.680 --> 00:11:42.840
+puoi collegare i valori denominati ad Azure Key Vault. I segreti restano cifrati in Key Vault
+
+00:11:42.840 --> 00:11:47.220
+e APIM li recupera a runtime. Nessuno, nemmeno il team DevOps, vede il valore reale del segreto.
+
+00:11:47.680 --> 00:11:51.380
+Quando devi ruotare una chiave, l'aggiorni in Key Vault e APIM recepisce la modifica
+
+00:11:51.380 --> 00:11:57.300
+automaticamente. APIM supporta anche le identità gestite. Questo permette ad APIM di autenticarsi
+
+00:11:57.300 --> 00:12:01.660
+su altri servizi Azure, come Key Vault o API di backend, senza memorizzare i credenziali.
+
+00:12:01.660 --> 00:12:05.460
+Azzur gestisce l'identità, tu devi solo concedere l'autorizzazione. Per l'isolamento
+
+00:12:05.460 --> 00:12:09.180
+di rete puoi distribuire APIM all'interno di una rete virtuale. Questa è la versione
+
+00:12:09.180 --> 00:12:14.560
+premium. Oppure usa Azure Front Door. Il punto è che i tuoi servizi di backend non devono
+
+00:12:14.560 --> 00:12:19.340
+mai essere esposti direttamente a internet. APIM è l'unica cosa che il mondo esterno
+
+00:12:19.340 --> 00:12:23.680
+può vedere. Questo approccio a strati crea una difesa in profondità. Autenticazione al
+
+00:12:23.680 --> 00:12:28.020
+gateway, segreti in un volt, isolamento di rete attorno ai tuoi backend. Ogni livello
+
+00:12:28.020 --> 00:12:34.000
+rafforza quello successivo. Livelli di prezzo, quale fa per te? Quindi quanto costa? Esaminiamo
+
+00:12:34.000 --> 00:12:39.640
+i vari livelli. A consumo. Paghi per chiamata API senza costi mensili. Ideale per bassi volumi
+
+00:12:39.640 --> 00:12:43.620
+o carichi variabili come quando stai facendo prototipazione. Se non sai ancora cosa ti serve,
+
+00:12:43.740 --> 00:12:48.540
+parti da qui. Il livello developer offre un costo mensile fisso ridotto circa 50 dollari. Set
+
+00:12:48.540 --> 00:12:52.260
+di funzionalità completo ma senza SDA. Ideale per ambienti di sviluppo e test. Hai tutto ciò
+
+00:12:52.260 --> 00:12:55.620
+che offre la premium ma non è destinato alla produzione. Il livello basic è la produzione
+
+00:12:55.620 --> 00:13:00.720
+di base. Throughput inferiore, niente supporto per reti virtuali ma con un vero SLA. Ottimo per
+
+00:13:00.720 --> 00:13:05.220
+strumenti interni o piccoli progetti dove la rete privata non è critica. La maggior parte delle
+
+00:13:05.220 --> 00:13:10.300
+aziende esce il livello standard. Include supporto per rete virtuale, un SLA del 995% M, un buon
+
+00:13:10.300 --> 00:13:15.680
+throughput. Se gestisci API critiche per il business probabilmente è qui che ti stabilizzerai. Il livello
+
+00:13:15.680 --> 00:13:20.760
+premium è per le aziende globali che necessitano di massima affidabilità e reti private. Distribuzione
+
+00:13:20.760 --> 00:13:26.520
+multiregione gateway self-hosted SLA a 99,99% piena iniezione in rete virtuale. Parte da circa
+
+00:13:26.520 --> 00:13:32.320
+2.700 al mese per unità. Microsoft ha introdotto anche i livelli V2, Basic V2, Standard V2 e Premium
+
+00:13:32.320 --> 00:13:37.400
+V2. Semplificano i prezzi con quote di richieste incluse e costi per milione di extra. Invece di
+
+00:13:37.400 --> 00:13:41.300
+monitorare più contatori è un pacchetto chiaro di richieste e paghi l'uso extra in semplici
+
+00:13:41.300 --> 00:13:45.860
+incrementi. Ecco come scegliere. Inizia con il livello developer per i test. Passa allo standard
+
+00:13:45.860 --> 00:13:50.580
+traduzione. Scegli il premium se ti serve a scala globale o rete privata. E ricorda puoi
+
+00:13:50.580 --> 00:13:53.860
+sempre migrare ad altri livelli in seguito. Inizia in piccolo e cresci man mano che le
+
+00:13:53.860 --> 00:13:57.740
+tue esigenze cambiano. Dove cosa dobbiamo trattare? La gestione API prende il caos di
+
+00:13:57.740 --> 00:14:01.440
+molte API e li unisce in un centro di controllo per gateway, policy, sicurezza ed esperienza
+
+00:14:01.440 --> 00:14:05.800
+sviluppatore. Il concetto chiave è che è molto più di un proxy. Immaginalo come il cervello
+
+00:14:05.800 --> 00:14:09.340
+e il sistema nervoso del tuo ecosistema API. Senza di esso ni team crea proprio sistemi di
+
+00:14:09.340 --> 00:14:12.860
+autenticazione, log e limitazione da frequente. Il risultato è in coerenza, lacune di sicurezza e
+
+00:14:12.860 --> 00:14:18.200
+nessuna visione unica di ciò che accade. Con esso ottieni coerenza, sicurezza e scalabilità
+
+00:14:18.200 --> 00:14:24.440
+senza reinventare la ruota per ogni servizio. Un semplice esercizio. Pensa a un API che esponi
+
+00:14:24.440 --> 00:14:28.820
+direttamente al momento. Magari un endpoint di funzione, è un servizio app. In che modo
+
+00:14:28.820 --> 00:14:32.240
+posizionare la gestione API davanti cambierebbe la tua postura di sicurezza e la capacità di
+
+00:14:32.240 --> 00:14:35.700
+monitorare l'uso? Anche solo riflettere su questo esercizio e ti mostrare il valore.
+
+00:14:36.080 --> 00:14:40.780
+Prossimo passo, iscriviti al canale. Nei prossimi episodi mostreremo come importare un API, applicare
+
+00:14:40.780 --> 00:14:45.780
+la tua prima policy e monitorare l'uso in tempo reale. Passerai dalla teoria alla pratica. E se
+
+00:14:45.780 --> 00:14:50.460
+l'hai trovato utile, condividilo con chi sta creando un'app. Gli sparmerà mesi di mal di testa. Grazie
+
+00:14:50.460 --> 00:14:50.740
+attenzione.

@@ -1,0 +1,1105 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.200
+¿Qué pasaría si una de tus cuentas de administración fuera robada en este momento?
+
+00:00:02.480 --> 00:00:05.260
+No una cuenta de usuario anormal, sino una de las que tiene las llaves de todo.
+
+00:00:05.580 --> 00:00:08.140
+Tu sistema de correo, tu almacenamiento de archivos, tu base de datos de usuarios.
+
+00:00:08.600 --> 00:00:10.820
+¿Cuánto daño podría hacer alguien antes de que te dieras cuenta?
+
+00:00:11.200 --> 00:00:12.260
+Y está la respuesta incómoda.
+
+00:00:12.640 --> 00:00:15.200
+Si ese administrador tiene acceso permanente como la mayoría,
+
+00:00:15.380 --> 00:00:16.960
+el atacante no necesita irrumpir de nuevo.
+
+00:00:17.320 --> 00:00:21.000
+Ya están dentro y pueden leer cada correo, cambiar cada contraseña y borrar cada usuario.
+
+00:00:21.520 --> 00:00:23.120
+Y pueden hacerlo a las tres a...
+
+00:00:23.120 --> 00:00:24.420
+De un sábado cuando nadie está vigilando.
+
+00:00:24.900 --> 00:00:27.060
+La mayoría piensa que el riesgo son las contraseñas débiles.
+
+00:00:27.140 --> 00:00:28.040
+Y sí, eso es parte del problema.
+
+00:00:28.040 --> 00:00:31.520
+El problema mayor es algo en lo que la mayoría de las organizaciones nunca piensan.
+
+00:00:31.620 --> 00:00:33.240
+No es que la gente tenga derechos de administrador,
+
+00:00:33.320 --> 00:00:35.800
+es que los tienen todo el tiempo, incluso cuando no los usan.
+
+00:00:35.900 --> 00:00:37.660
+Es como dejar la puerta de entrada abierta de par en par
+
+00:00:37.660 --> 00:00:39.600
+porque quizás necesitas sacar algo del auto más tarde.
+
+00:00:40.200 --> 00:00:43.220
+Al final de este episodio, entenderás que es la gestión de identidades privilegiadas
+
+00:00:43.220 --> 00:00:44.280
+y por qué soluciona esto.
+
+00:00:44.700 --> 00:00:47.660
+Es como darle a alguien una tarjeta de hotel que funciona solo el tiempo necesario
+
+00:00:47.660 --> 00:00:48.980
+y luego se desactiva al salir.
+
+00:00:49.620 --> 00:00:51.740
+Sin acceso permanente, no hay puertas abiertas.
+
+00:00:52.400 --> 00:00:55.460
+Primero, hablemos de por qué los privilegios permanentes son un problema tan grande.
+
+00:00:56.160 --> 00:00:57.780
+El problema de los privilegios permanentes.
+
+00:00:58.540 --> 00:01:01.580
+Privilegios permanentes es el término técnico para permisos que siempre están activos
+
+00:01:01.580 --> 00:01:03.540
+aunque no los necesites y están en todas partes.
+
+00:01:04.880 --> 00:01:05.900
+Piénsalo como si fueran oficinas.
+
+00:01:06.460 --> 00:01:09.140
+Tienes un guardia de seguridad en la puerta y quizás un sistema de tarjetas,
+
+00:01:09.300 --> 00:01:11.280
+pero dentro todas las puertas están abiertas toda la noche.
+
+00:01:11.860 --> 00:01:14.420
+La sala de servidores, los archivadores con registro de empleados,
+
+00:01:14.500 --> 00:01:16.160
+las oficinas ejecutivas, todo abierto,
+
+00:01:16.380 --> 00:01:18.960
+solo porque alguien podría necesitar entrar fuera de horario.
+
+00:01:19.540 --> 00:01:21.200
+Esos son los privilegios permanentes en el mundo físico.
+
+00:01:21.680 --> 00:01:23.100
+Suena ridículo cuando dices en voz alta,
+
+00:01:23.220 --> 00:01:26.600
+pero si es exactamente como la mayoría de las organizaciones manejan el acceso administrativo,
+
+00:01:27.120 --> 00:01:28.200
+el problema es la superficie de ataque.
+
+00:01:28.980 --> 00:01:31.480
+Si una cuenta de administrador se ve comprometida mediante phishing,
+
+00:01:31.620 --> 00:01:33.180
+relleno de credenciales o una laptop robada,
+
+00:01:33.380 --> 00:01:34.760
+el atacante ya tiene las llaves de todo.
+
+00:01:35.800 --> 00:01:38.180
+No necesitan escalar privilegios porque los privilegios ya están ahí
+
+00:01:38.180 --> 00:01:41.400
+y no necesitan encontrar una segunda vulnerabilidad porque la primera les dio todo.
+
+00:01:41.400 --> 00:01:43.880
+Y aquí está la parte que sorprende a la mayoría.
+
+00:01:44.620 --> 00:01:47.480
+Un administrador típico tiene 168 horas de acceso por semana.
+
+00:01:48.080 --> 00:01:48.920
+Eso es 24-7.
+
+00:01:49.440 --> 00:01:52.140
+Pero realmente usan esos derechos de administrador tal vez durante 30 minutos.
+
+00:01:52.640 --> 00:01:54.120
+30 minutos de 168 horas.
+
+00:01:54.640 --> 00:01:58.020
+Eso significa que su acceso elevado permanece ahí sin usarse y sin protección
+
+00:01:58.020 --> 00:02:00.260
+durante 167 horas y media cada semana.
+
+00:02:00.920 --> 00:02:02.200
+Esa es una ventana masiva para un atacante.
+
+00:02:02.680 --> 00:02:04.680
+Sus escenarios del mundo real hacen que esto sea aún más aterrador.
+
+00:02:05.080 --> 00:02:06.200
+Un correo de phishing se filtra,
+
+00:02:06.280 --> 00:02:08.440
+alguien hace clic en el enlace y sus credenciales son robadas.
+
+00:02:09.120 --> 00:02:10.540
+El atacante inicia sesión a las 2 A.
+
+00:02:10.540 --> 00:02:13.380
+Con acceso administrativo total sin pasos adicionales.
+
+00:02:14.000 --> 00:02:15.680
+O una laptop se queda en una cafetería
+
+00:02:15.680 --> 00:02:18.580
+y el ladrón ahora tiene un dispositivo que puede acceder a todo su tenant.
+
+00:02:19.120 --> 00:02:21.040
+O alguien usa la misma contraseña en varios sitios,
+
+00:02:21.180 --> 00:02:25.080
+uno es vulnerado y sus credenciales de administrador terminan en la huevo oscura.
+
+00:02:25.600 --> 00:02:28.540
+En resumen, el problema no es que las personas tengan derechos de administrador.
+
+00:02:29.260 --> 00:02:30.820
+El problema es que los tienen todo el tiempo.
+
+00:02:31.460 --> 00:02:34.840
+Los privilegios permanentes convierten cada cuenta comprometida en un desastre potencial.
+
+00:02:35.280 --> 00:02:37.100
+Y lo peor es que la mayoría de las organizaciones
+
+00:02:37.100 --> 00:02:39.040
+ni siquiera sabe cuántos administradores permanentes tienen.
+
+00:02:39.040 --> 00:02:43.000
+Entonces, ¿qué pasaría si hubiera una forma de dar acceso a las personas solo cuando lo necesitan?
+
+00:02:43.580 --> 00:02:44.180
+¿Qué es PIN?
+
+00:02:44.880 --> 00:02:47.180
+Eso es exactamente lo que hace Privileged Identity Management.
+
+00:02:47.580 --> 00:02:48.080
+PIN para VR.
+
+00:02:48.640 --> 00:02:49.800
+Es un servicio dentro de Microsoft.
+
+00:02:50.000 --> 00:02:51.500
+Entra que cambia cómo se asignan los roles,
+
+00:02:51.680 --> 00:02:53.380
+no qué roles existen, eso siguen igual.
+
+00:02:54.060 --> 00:02:55.780
+Controla cómo y cuándo alguien puede usarlo realmente.
+
+00:02:56.420 --> 00:02:57.480
+Aquí está la definición más simple.
+
+00:02:57.900 --> 00:03:00.300
+En lugar de dar a alguien un rol de administrador permanentemente,
+
+00:03:00.360 --> 00:03:01.620
+lo haces elegible para solicitarlo.
+
+00:03:01.960 --> 00:03:03.440
+No tienen el poder hasta que lo piden.
+
+00:03:03.440 --> 00:03:06.120
+Cuando lo piden, deben demostrar que realmente lo necesitan.
+
+00:03:06.220 --> 00:03:07.500
+Entonces, lo obtienen por tiempo limitado.
+
+00:03:07.940 --> 00:03:09.680
+Y cuando ese tiempo termine, el poder desaparece.
+
+00:03:10.220 --> 00:03:11.420
+Piénsalo como una tarjeta de hotel.
+
+00:03:12.060 --> 00:03:15.260
+Al registrarte en un hotel, recibes una llave para tu habitación durante tu estancia,
+
+00:03:15.520 --> 00:03:17.560
+un acceso permanente a todas las habitaciones siempre.
+
+00:03:18.040 --> 00:03:20.060
+Si intentas usarla después de hacer el checkout, la puerta aparece.
+
+00:03:20.280 --> 00:03:21.620
+PIN funciona de la misma manera.
+
+00:03:22.020 --> 00:03:23.780
+No obtienes acceso permanente a la suite principal.
+
+00:03:24.340 --> 00:03:26.640
+Obtienes una llave que funciona por unas horas y luego se autodestruye.
+
+00:03:27.100 --> 00:03:28.140
+Ahora, aclaremos algunos mitos.
+
+00:03:28.500 --> 00:03:29.740
+PIN no es un nuevo conjunto de errores.
+
+00:03:29.740 --> 00:03:31.500
+No crea nuevas capacidades de administración.
+
+00:03:31.960 --> 00:03:33.440
+No reemplaza las contraseñas ni la MFL.
+
+00:03:33.920 --> 00:03:34.940
+Y no es solo para profesionales de T.
+
+00:03:35.220 --> 00:03:37.460
+Cualquier organización como Microsoft entra puede usarlo.
+
+00:03:38.080 --> 00:03:40.960
+Lo que hace es añadir una capa de control sobre los roles que ya tienes.
+
+00:03:41.700 --> 00:03:44.440
+El concepto central se llama acceso justo a tiempo, o JIT.
+
+00:03:45.020 --> 00:03:47.700
+Piénsalo como un boleto con tiempo limitado en lugar de una insignia permanente.
+
+00:03:48.060 --> 00:03:50.140
+Llegas, solicitas el boleto, lo usas y expira.
+
+00:03:50.900 --> 00:03:52.000
+Sin permisos residuales,
+
+00:03:52.280 --> 00:03:55.620
+sin cuentas de administrador olvidadas que alguien usó hace cinco años y nunca se eliminaron,
+
+00:03:55.940 --> 00:03:58.300
+hay dos tipos de asignaciones en PIN, elegible y activo.
+
+00:03:58.300 --> 00:04:00.660
+Elegible significa que tienes el derecho de solicitar el rol.
+
+00:04:01.300 --> 00:04:02.340
+Activo significa que ya lo tienes.
+
+00:04:02.800 --> 00:04:04.160
+Esa es la vieja forma, acceso permanente.
+
+00:04:04.640 --> 00:04:07.440
+El objetivo de PIN es pasar a las personas de activo a elegible.
+
+00:04:07.960 --> 00:04:09.820
+Aún puedes hacer tu trabajo, solo tienes que pedirlo primero.
+
+00:04:10.260 --> 00:04:12.360
+Entonces, ¿cómo funcionan estos dos tipos de asignaciones en la pared?
+
+00:04:12.940 --> 00:04:13.300
+Analicémoslo.
+
+00:04:14.140 --> 00:04:15.760
+Asignaciones elegibles frente a activas.
+
+00:04:16.240 --> 00:04:17.820
+Entonces, ¿cuál es la diferencia entre elegible y activo?
+
+00:04:18.120 --> 00:04:18.900
+Hagámoslo concreto.
+
+00:04:19.280 --> 00:04:22.180
+Elegible significa que tienes derecho a obtener un rol, pero aún no lo tienes.
+
+00:04:22.620 --> 00:04:25.320
+Piénsalo como una tarjeta de membresía que te permite abrir una puerta,
+
+00:04:25.320 --> 00:04:28.080
+pero solo cuando la deslizas y el sistema verifica que tienes permiso.
+
+00:04:28.640 --> 00:04:30.180
+Sin deslizarla, no hace nada por sí sola.
+
+00:04:30.800 --> 00:04:32.740
+Tienes la tarjeta en tu bolsillo, pero la puerta sigue cerrada.
+
+00:04:33.080 --> 00:04:34.360
+Activo significa que ya tienes el rol.
+
+00:04:34.840 --> 00:04:36.140
+Esa es la vieja forma, acceso permanente.
+
+00:04:36.600 --> 00:04:39.080
+Cruzas cualquier puerta en cualquier momento porque tu credencial nunca caduca.
+
+00:04:39.500 --> 00:04:42.860
+Eso es conveniente, claro, pero también es lo que hace que las cuentas comprometidas sean tan peligrosas.
+
+00:04:43.180 --> 00:04:44.820
+En términos simples, elegible significa que puedes.
+
+00:04:45.160 --> 00:04:45.940
+Activo significa que vas.
+
+00:04:46.400 --> 00:04:47.340
+Esa distinción lo es todo.
+
+00:04:47.880 --> 00:04:48.740
+Aquí hay un ejemplo del mundo real.
+
+00:04:48.740 --> 00:04:50.780
+Imagina una técnica de soporte llamada Sara.
+
+00:04:51.160 --> 00:04:55.360
+Ella necesita acceso al administrador global ocasionalmente para corregir un problema de sincronización de directorio,
+
+00:04:55.440 --> 00:04:57.000
+quizás una vez al mes durante unos 30 minutos.
+
+00:04:57.400 --> 00:04:59.720
+Sin PIM le darías el rol de administrador global de forma permanente.
+
+00:05:00.020 --> 00:05:04.320
+Ahora, ella tiene ese poder las 24 horas del día, los 7 días de la semana, incluso cuando duerme o está de vacaciones.
+
+00:05:04.920 --> 00:05:08.240
+Si su cuenta es objeto de phishing, el atacante tiene control total de tu inquilino.
+
+00:05:08.540 --> 00:05:10.540
+Con PIM haces que Sara sea elegible para administrador global.
+
+00:05:10.920 --> 00:05:11.920
+Ella no tiene el rol en su día a día.
+
+00:05:12.420 --> 00:05:17.520
+Cuando ocurre el problema de sincronización, activa el rol durante 30 minutos, soluciona el problema y este expira.
+
+00:05:17.520 --> 00:05:20.280
+Ahora, el atacante que roba sus credenciales más tarde no encuentra nada.
+
+00:05:20.940 --> 00:05:22.900
+Sin privilegios permanentes, sin puertas abiertas.
+
+00:05:23.300 --> 00:05:24.700
+Este es el beneficio de seguridad clave.
+
+00:05:25.140 --> 00:05:26.900
+Ser elegible no le da nada a un atacante.
+
+00:05:27.440 --> 00:05:30.900
+También tendrían que activar el rol, lo que requiere MFE, justificación y aprobación.
+
+00:05:31.420 --> 00:05:32.080
+Cada paso obstáculo.
+
+00:05:32.860 --> 00:05:34.820
+La mayoría de los atacantes buscarán un objetivo más fácil.
+
+00:05:35.380 --> 00:05:36.940
+Ahora, una nota rápida sobre elegibilidad permanente.
+
+00:05:37.500 --> 00:05:39.980
+Puedes hacer que alguien sea elegible de forma permanente para un rol,
+
+00:05:40.080 --> 00:05:42.760
+lo que significa que puede activarlo en cualquier momento sin fecha de caducidad en su elegibilidad,
+
+00:05:42.920 --> 00:05:44.900
+pero la mejor práctica es evitar esto o evitar esto.
+
+00:05:45.320 --> 00:05:46.960
+Establece una elegibilidad con un límite de tiempo azul.
+
+00:05:46.960 --> 00:05:51.020
+Haz que alguien sea elegible por un año o seis meses o lo que tenga sentido para tu organización.
+
+00:05:51.320 --> 00:05:52.360
+Es obligar a realizar una revisión.
+
+00:05:52.540 --> 00:05:53.340
+Todavía necesitan esto.
+
+00:05:53.600 --> 00:05:54.360
+Si es así, renuévalo.
+
+00:05:54.580 --> 00:05:55.300
+Si no, elimínalo.
+
+00:05:55.660 --> 00:05:59.480
+De lo contrario, la elegibilidad se acumula con el tiempo y terminas con el mismo problema con el que empezaste.
+
+00:05:59.700 --> 00:06:01.280
+Demasiadas personas que pueden reclamar demasiado poder.
+
+00:06:01.840 --> 00:06:04.200
+Entonces, una vez que alguien es elegible, ¿cómo activa realmente el rol?
+
+00:06:04.560 --> 00:06:06.280
+Ahí es donde entran los verdaderos filtros de seguridad.
+
+00:06:06.560 --> 00:06:07.460
+Plugo de trabajo de activación.
+
+00:06:07.780 --> 00:06:10.040
+El proceso de activación es donde PIM realmente demuestra su valor.
+
+00:06:10.480 --> 00:06:11.820
+Veámoslo desde la perspectiva del usuario.
+
+00:06:11.820 --> 00:06:15.740
+Imaginemos que alguien llamada Sara necesita solucionar un problema de sincronización de directorio.
+
+00:06:16.440 --> 00:06:19.540
+Abre el portal de PIM dentro del portal de Azure o del centro de administración de Entra.
+
+00:06:19.740 --> 00:06:23.340
+Busca el rol para el que es elegible, en este caso administrador global, y hace clic en activar.
+
+00:06:23.340 --> 00:06:26.380
+Primero, elige cuánto tiempo necesite el rol.
+
+00:06:26.580 --> 00:06:29.800
+El valor predeterminado podría ser de 8 horas, pero ella sabe que esa corrección toma 30 minutos.
+
+00:06:30.300 --> 00:06:31.220
+Así que lo establece en una hora.
+
+00:06:31.600 --> 00:06:32.840
+Es inteligente porque más siempre es mejor.
+
+00:06:33.300 --> 00:06:37.280
+El administrador puede establecer una duración máxima para cada rol, desde 30 minutos hasta 24 horas.
+
+00:06:37.980 --> 00:06:40.120
+La solicitud de una hora de Sara se ajusta a esa política.
+
+00:06:40.880 --> 00:06:42.580
+Luego, tiene que proporcionar una justificación.
+
+00:06:43.460 --> 00:06:45.520
+Una razón real no solo necesito acceso de administrador.
+
+00:06:46.140 --> 00:06:49.240
+Ella escribe corrigiendo el problema de sincronización de directorio, ticket 40 y no.
+
+00:06:49.720 --> 00:06:51.660
+Eso no es burocracia, crea un registro de auditoría.
+
+00:06:51.660 --> 00:06:57.380
+Más tarde, si alguien pregunta por qué Sara tenía acceso de administrador global a las 2 PM del martes, existe un registro con ese motivo.
+
+00:06:57.860 --> 00:06:59.540
+Si se requiere MFI, debería ser así.
+
+00:06:59.740 --> 00:07:02.260
+Se le solicita a Sara que se autentique aunque ya ha iniciado sesión en el portal.
+
+00:07:02.640 --> 00:07:03.700
+PIM requiere una prueba reciente.
+
+00:07:04.220 --> 00:07:06.740
+Ella abre su aplicación de autenticación, aprueba la solicitud y siga.
+
+00:07:07.000 --> 00:07:07.800
+Esto es fundamental.
+
+00:07:08.320 --> 00:07:12.160
+Si la contraseña de Sara fuera robada, pero el atacante no tuviera su teléfono, no podría activar el rol.
+
+00:07:12.900 --> 00:07:16.640
+El MFI en la activación es la diferencia entre una cuenta comprometida y un incidente contenido.
+
+00:07:16.980 --> 00:07:20.560
+Si se requiere aprobación, la solicitud va a un aprobador designado.
+
+00:07:20.560 --> 00:07:26.940
+Quizás el gerente de Sara, un miembro del equipo de seguridad, reciben una notificación, revisan la justificación y aprueban o deniegan.
+
+00:07:27.700 --> 00:07:30.980
+Algunas organizaciones requieren múltiples aprobadores para los roles más sencillos.
+
+00:07:31.280 --> 00:07:31.840
+La idea es simple.
+
+00:07:32.580 --> 00:07:36.980
+Ninguna persona debería poder otorgarse a sí misma poder ilimitado sin que alguien más lo autorice.
+
+00:07:37.600 --> 00:07:41.380
+Una vez aprobado el rol seco, Sara ahora tiene acceso a administrador global durante una hora.
+
+00:07:41.380 --> 00:07:48.220
+Ella abre el centro de administración de Entra, navega la configuración de sincronización, soluciona el problema, cierra el portal y vuelve a su trabajo normal.
+
+00:07:48.840 --> 00:07:50.980
+Aquí está lo importante, no necesitas recordar el desactivo.
+
+00:07:51.840 --> 00:07:53.300
+PIN maneja el vencimiento automáticamente.
+
+00:07:53.960 --> 00:07:58.840
+Cuando se cumple la hora, el rol se desactiva y el acceso de Sara vuelve a sus permisos de usuario normales.
+
+00:07:59.580 --> 00:08:02.040
+No quedan privilegios persistentes ni sesiones de administrador olvidado.
+
+00:08:02.440 --> 00:08:05.460
+También puede desactivarlo manualmente antes y termina más rápido de lo esperado.
+
+00:08:06.560 --> 00:08:10.700
+Sara tuvo exactamente el acceso que necesitaba durante el tiempo exacto que lo requirió, con total auditabilidad.
+
+00:08:10.700 --> 00:08:16.580
+Si alguien hubiera robado sus credenciales durante esa hora, habría tenido un margen muy estrecho para causar daños y cada acción habría quedado registrada.
+
+00:08:16.860 --> 00:08:19.940
+Ese es el flujo de trabajo principal para los roles de Entra, pero PIN puede hacer mucho más que eso.
+
+00:08:20.160 --> 00:08:21.760
+También funciona para grupos y recursos de A.
+
+00:08:23.720 --> 00:08:24.320
+PIN para grupos.
+
+00:08:24.840 --> 00:08:29.860
+PIN no es solo para roles de administrador individuales, también gestiona la pertenencia a grupos y ahí es donde se vuelve realmente práctico.
+
+00:08:30.540 --> 00:08:32.320
+Hay dos tipos de grupos que puedes gestionar con PIN.
+
+00:08:33.100 --> 00:08:37.960
+Grupos de Microsoft 365, los que usas para equipos, buzones compartidos y colaboración.
+
+00:08:37.960 --> 00:08:42.840
+Y grupos de seguridad, los que usas para conceder acceso a aplicaciones, recursos o permisos.
+
+00:08:44.120 --> 00:08:46.560
+PIN funciona con grupos asignados, no con grupos dinámicos.
+
+00:08:46.800 --> 00:08:52.320
+Los grupos dinámicos se basan en reglas, por lo que la pertenencia cambia automáticamente, pero PIN necesita grupos donde añadas y eliminas personas explícitamente.
+
+00:08:52.680 --> 00:08:53.300
+Entonces, ¿cómo funciona?
+
+00:08:53.580 --> 00:08:58.000
+Puedes hacer que alguien sea un propietario, miembro apto de un grupo, no tienen la pertenencia hasta que la activan.
+
+00:08:58.600 --> 00:09:03.500
+Cuando lo hacen, obtienen todos los permisos que conlleva estar en ese grupo y cuando la activación expira, son eliminados.
+
+00:09:03.840 --> 00:09:04.560
+Que hay un ejemplo real.
+
+00:09:05.040 --> 00:09:10.460
+Supongamos que tienes un equipo de proyecto trabajando en una biblioteca de documentos confidenciales a la que solo pueden acceder los miembros un grupo de seguridad específico.
+
+00:09:11.020 --> 00:09:13.100
+Normalmente, nadie en la empresa es miembro de ese grupo.
+
+00:09:14.060 --> 00:09:20.340
+Cuando alguien del proyecto necesita acceso, activa su pertenencia en PIN, obtiene acceso por unas horas, hace su trabajo y la pertenencia expira.
+
+00:09:21.460 --> 00:09:23.260
+Después de eso, la biblioteca de documentos queda bloqueada.
+
+00:09:23.260 --> 00:09:26.640
+El proceso de activación para grupos funciona exactamente igual que para los roles.
+
+00:09:27.260 --> 00:09:31.460
+MFA si es necesario, justificación, aprobación si se requiere, límite de tiempo, todo que ha registrado.
+
+00:09:31.880 --> 00:09:33.220
+Se aplican los mismos controles de seguridad.
+
+00:09:33.480 --> 00:09:34.180
+¿Por qué es esto importante?
+
+00:09:34.460 --> 00:09:36.460
+Porque los grupos controlan mucho más de lo que podría pensar.
+
+00:09:36.860 --> 00:09:44.120
+La pertenencia a un grupo puede conceder acceso a aplicaciones, asignar licencias o dar permisos a sitios de SharePoint, canales de Teams o recursos de Azure, canales de Teams o recursos de Azure.
+
+00:09:44.320 --> 00:09:49.300
+Al hacer que la pertenencia al grupo sea apta en lugar de permanente, controlas todas esas cosas mediante una única política de PIN.
+
+00:09:49.640 --> 00:09:52.600
+Algo importante a saber, primero, debes integrar los grupos en PIN.
+
+00:09:52.600 --> 00:09:54.020
+No aparecen automáticamente.
+
+00:09:54.620 --> 00:09:58.940
+Vas al portal de PIN, descubres los grupos en tu inquilino y seleccionas los que deseas gestionar.
+
+00:09:59.480 --> 00:10:01.700
+Una vez que un grupo está integrado, no puedes sacarlo de PIN.
+
+00:10:02.080 --> 00:10:04.720
+Así que piensa detenidamente qué grupos necesitan este nivel de control.
+
+00:10:05.360 --> 00:10:10.700
+Para la mayoría de las organizaciones, los mejores candidatos son los grupos que conceden acceso a datos confidenciales o aplicaciones críticas.
+
+00:10:11.360 --> 00:10:12.880
+Empieza por ahí y siempre puedes añadir más después.
+
+00:10:13.220 --> 00:10:17.220
+Y luego están los recursos de Azure, la infraestructura real como máquinas virtuales y bases de datos.
+
+00:10:18.700 --> 00:10:19.700
+PIN para recursos de Azure.
+
+00:10:20.120 --> 00:10:21.760
+PIN también funciona para roles RBA Azure.
+
+00:10:21.760 --> 00:10:27.920
+Es el sistema de permisos que controla quien puede hacer que dentro de tus suscripciones, grupos de recursos y recursos individuales de Azure, el modelo es el mismo.
+
+00:10:28.400 --> 00:10:33.380
+Alguien se vuelve elegible como propietario de una suscripción, pero solo se activa por una hora cuando necesita hacer un cambio.
+
+00:10:33.380 --> 00:10:38.480
+Solicitan el rol, justifican su necesidad, pasan la MFA si es necesario y obtienen la aprobación si se requiere.
+
+00:10:38.940 --> 00:10:39.800
+Entonces el rol se activa.
+
+00:10:40.060 --> 00:10:43.120
+Cuando se acaba el tiempo, se desactiva automáticamente, sin acceso permanente.
+
+00:10:43.360 --> 00:10:45.100
+¿Por qué es importante esto por separado de los roles de Azure?
+
+00:10:45.280 --> 00:10:47.640
+Porque los roles de recursos de Azure controlan tu infraestructura real.
+
+00:10:48.040 --> 00:10:53.580
+Las máquinas virtuales, las bases de datos, las cuentas de almacenamiento, la red, son las cosas que mantienen tu negocio en marcha.
+
+00:10:53.580 --> 00:10:58.080
+Si alguien tiene acceso permanente de propietario en una suscripción de producción, puede borrarlo todo.
+
+00:10:58.760 --> 00:11:01.080
+Si esa cuenta es comprometida del atacante, también puede.
+
+00:11:01.640 --> 00:11:02.520
+Aquí hay un ejemplo típico.
+
+00:11:02.980 --> 00:11:06.500
+Un desarrollador necesita acceso de colaborador para implementar efectos en un entorno de producción.
+
+00:11:06.980 --> 00:11:12.000
+Sin PIN le darías acceso de colaborador permanente y ahora tendría ese poder todos los días, incluso cuando no esté implementando nada.
+
+00:11:12.400 --> 00:11:13.220
+Con PIN es elegible.
+
+00:11:14.020 --> 00:11:15.900
+Se activa cuando se abre la ventana de implementación.
+
+00:11:16.080 --> 00:11:17.540
+Hace su trabajo y el rol expira.
+
+00:11:18.160 --> 00:11:20.380
+El resto del tiempo, no tiene acceso especial a producción.
+
+00:11:21.560 --> 00:11:23.900
+El contraste con las asignaciones RBAC permanentes es drástico.
+
+00:11:24.400 --> 00:11:26.800
+La mayoría de los entornos de Azure tienen demasiados propietarios permanentes.
+
+00:11:27.160 --> 00:11:29.840
+La gente acumula permisos a lo largo de los años y nunca los devuelve.
+
+00:11:30.280 --> 00:11:31.560
+PIN fuerza una ruptura limpia.
+
+00:11:31.920 --> 00:11:33.580
+Si no lo necesitas en este momento, no lo tiene.
+
+00:11:33.580 --> 00:11:37.680
+Todo esto crea un entorno mucho más seguro, pero ¿cómo se traduce esto en beneficios del mundo real?
+
+00:11:38.700 --> 00:11:39.900
+Beneficios de seguridad y auditoría.
+
+00:11:40.320 --> 00:11:41.260
+El mayor beneficio es simple.
+
+00:11:41.560 --> 00:11:42.560
+Reducir la superficie de ataque.
+
+00:11:43.220 --> 00:11:46.640
+Si una cuenta es comprometida pero no tiene roles activos, el atacante no obtiene nada.
+
+00:11:47.220 --> 00:11:49.280
+Inicia sesión como un usuario estándar sin poder especial.
+
+00:11:49.900 --> 00:11:53.280
+No puede borrar recursos, no puede leer datos sensibles, no puede cambiar configuraciones.
+
+00:11:53.940 --> 00:11:54.860
+El compromiso está contenido.
+
+00:11:55.560 --> 00:11:58.660
+Pero incluso si el atacante intenta activar un rol, se encuentra con múltiples barreras.
+
+00:11:59.320 --> 00:12:01.780
+La MFA detiene a cualquiera que no tenga el teléfono del usuario.
+
+00:12:02.780 --> 00:12:04.440
+Justificación requiere que expliquen lo que están haciendo.
+
+00:12:04.800 --> 00:12:06.540
+La aprobación significa que alguien más debe dar el visto.
+
+00:12:06.820 --> 00:12:08.080
+Cada barrera se lo pone más difícil.
+
+00:12:08.520 --> 00:12:11.020
+La mayoría de los atacantes se rendirán y buscarán un objetivo más fácil.
+
+00:12:11.180 --> 00:12:12.220
+Luego está el rastro de auditoría.
+
+00:12:12.220 --> 00:12:13.440
+Cada activación se registra.
+
+00:12:13.760 --> 00:12:14.500
+¿Quién activó qué rol?
+
+00:12:14.840 --> 00:12:15.160
+¿Cuándo?
+
+00:12:15.360 --> 00:12:16.000
+¿Por cuánto tiempo?
+
+00:12:16.260 --> 00:12:17.000
+¿Con qué justificación?
+
+00:12:17.360 --> 00:12:17.940
+¿Quién la aprobó?
+
+00:12:18.260 --> 00:12:19.860
+Esto no es un simple registro de inicio de sesión.
+
+00:12:20.020 --> 00:12:21.760
+Es un historial completo de cada acción privilegiada.
+
+00:12:22.320 --> 00:12:23.240
+Los auditores encantan esto.
+
+00:12:23.480 --> 00:12:26.460
+Puedes demostrar que el acceso privilegiado fue temporal, justificado y aprobado.
+
+00:12:27.000 --> 00:12:28.940
+Ya no hace falta adivinar quién tiene derecho de administrador a la CCS.
+
+00:12:29.160 --> 00:12:30.780
+PIN también permite realizar revisiones de exceso.
+
+00:12:30.780 --> 00:12:34.480
+Son controles programados donde los gerentes revisan quién sigue necesitando elegibilidad
+
+00:12:34.480 --> 00:12:35.140
+para ciertos roles.
+
+00:12:35.460 --> 00:12:39.180
+Si alguien no ha activado un rol en seis meses, quizá ya no lo necesite.
+
+00:12:39.840 --> 00:12:42.620
+La revisión puede eliminar automáticamente las asignaciones obsoletas.
+
+00:12:43.060 --> 00:12:44.780
+Esto evita el exceso de privilegios.
+
+00:12:45.060 --> 00:12:47.840
+Esa acumulación lenta de permisos que ocurre cuando nadie hace limpieza.
+
+00:12:48.360 --> 00:12:50.100
+Existe un beneficio directo en la puntuación de seguridad.
+
+00:12:50.640 --> 00:12:53.580
+Usa PIN mejora tu puntuación de seguridad de entidad en Microsoft Entra.
+
+00:12:54.100 --> 00:12:57.860
+Microsoft rastrea que también proteges tu entorno y el uso de PIN es un factor clave.
+
+00:12:58.560 --> 00:13:01.600
+Cuantos más roles cambias de permanentes elegibles, mayor será tu puntuación.
+
+00:13:02.260 --> 00:13:04.980
+Pero seamos honestos, PIN por sí solo no es una solución mágica.
+
+00:13:05.420 --> 00:13:07.400
+Debe formar parte de una estrategia de seguridad más amplia.
+
+00:13:07.700 --> 00:13:09.260
+Necesitas estaciones de trabajo administrativo.
+
+00:13:09.440 --> 00:13:11.280
+Aún necesitas políticas de acceso condicional.
+
+00:13:11.640 --> 00:13:13.080
+Aún necesitas una buena higiene de contraseñas.
+
+00:13:13.960 --> 00:13:17.680
+PIN resuelve un problema específico, los privilegios permanentes, y lo hace muy bien.
+
+00:13:18.500 --> 00:13:20.260
+Pero no reemplaza a todos los demás controles de seguridad.
+
+00:13:20.780 --> 00:13:26.280
+Dicho esto, si no haces nada más, pasar tus cuentas de administrador global de permanentes elegibles es uno de los cambios de mayor impacto.
+
+00:13:27.180 --> 00:13:31.220
+Reduce tu superficie a ataque de 168 horas a la semana a la pequeña ventana que tú elijas.
+
+00:13:31.820 --> 00:13:32.620
+Difícil superar eso.
+
+00:13:33.220 --> 00:13:34.820
+Errores comunes y mejores prácticas.
+
+00:13:35.320 --> 00:13:36.940
+PIN es potente, pero no es infalible.
+
+00:13:37.380 --> 00:13:38.180
+Gente comete errores.
+
+00:13:38.760 --> 00:13:40.620
+Repasemos los más comunes para que no los repita.
+
+00:13:41.280 --> 00:13:43.940
+Primero, tratar a PIN como un misil que disparas y olvidas.
+
+00:13:44.420 --> 00:13:46.020
+No puedes configurarlo una vez y olvidarte de él.
+
+00:13:46.440 --> 00:13:47.360
+Que déjalo avisarlo periódicamente.
+
+00:13:47.960 --> 00:13:49.220
+Te han cubierto los roles correctos.
+
+00:13:49.540 --> 00:13:51.200
+Tus tiempos de activación siguen siendo razonables.
+
+00:13:51.440 --> 00:13:52.900
+Los aprobadores siguen siendo las personas indicadas.
+
+00:13:53.380 --> 00:13:54.540
+PIN necesita atención continua.
+
+00:13:55.040 --> 00:13:56.420
+Trátalo como una planta, no como una ropa.
+
+00:13:56.960 --> 00:13:59.240
+Segundo, dejar demasiadas asignaciones activas permanente.
+
+00:13:59.560 --> 00:14:00.540
+Esto anula el objetivo principal.
+
+00:14:00.540 --> 00:14:06.560
+Si haces a un administrador global elegible, pero dejas a otros tres activos permanentemente, no has reducido mucho tu superficie de ataque.
+
+00:14:07.340 --> 00:14:10.220
+Quieres eliminar los privilegios permanentes, no solo mover unas cuantas cuentas.
+
+00:14:10.600 --> 00:14:11.120
+Simple a cable.
+
+00:14:11.120 --> 00:14:14.420
+Si alguien no necesita acceso permanente, hazlo elegible.
+
+00:14:14.900 --> 00:14:15.580
+Esa es la idea central.
+
+00:14:15.900 --> 00:14:18.100
+Tercero, establecer duración de activación demasiado largas.
+
+00:14:18.380 --> 00:14:21.040
+Una ventana de activación de 24 horas es básicamente acceso permanente.
+
+00:14:21.300 --> 00:14:22.680
+El objetivo es el acceso limitado en el tiempo.
+
+00:14:23.040 --> 00:14:24.660
+Mantén las duraciones tan cortas como sea práctico.
+
+00:14:24.920 --> 00:14:26.180
+Una hora para mayoría de las tareas.
+
+00:14:26.340 --> 00:14:27.920
+Cuatro horas para ventanas de mantenimiento mayor.
+
+00:14:27.920 --> 00:14:30.100
+Cualquier tiempo mayor requiere una justificación cero.
+
+00:14:30.980 --> 00:14:32.800
+Cuarto, no requerir MFA en la activación.
+
+00:14:33.140 --> 00:14:35.000
+Esta es la barrera de seguridad más importante de todo.
+
+00:14:35.260 --> 00:14:39.060
+Si permite activar roles sin MFA y una contraseña robada es todo lo que un atacante necesita.
+
+00:14:39.600 --> 00:14:42.180
+El MFA durante la activación no es negociable para cualquier rollo sensible.
+
+00:14:42.700 --> 00:14:46.080
+Piénselo como la recepción verificando su identificación antes de entrar al edificio.
+
+00:14:46.780 --> 00:14:50.580
+Quinto, depender demasiado de las asignaciones elegibles sin flujos de aprobación adecuados.
+
+00:14:51.100 --> 00:14:54.520
+Ser elegible es mejor que estar activo permanentemente, pero no basta por sí solo.
+
+00:14:55.160 --> 00:14:57.800
+Si cualquiera puede activar un rol en cualquier momento sin supervisión,
+
+00:14:58.180 --> 00:15:00.620
+solo añade un clic al proceso sin agregar seguridad real.
+
+00:15:01.560 --> 00:15:04.560
+Combine la elegibilidad con la aprobación para los roles más sensibles.
+
+00:15:05.760 --> 00:15:07.640
+Sexto, ignorar las cuentas de emergencia break-lass.
+
+00:15:08.060 --> 00:15:10.420
+Necesita cuentas de emergencia que omitan PIN por completo.
+
+00:15:11.120 --> 00:15:14.880
+Si algo sale mal, un aprobador no está disponible, una política falla o alguien queda bloqueado,
+
+00:15:15.000 --> 00:15:16.580
+necesita una forma de entrar.
+
+00:15:17.140 --> 00:15:20.140
+Crea una o dos cuentas de emergencia con acceso a administrador global permanente.
+
+00:15:20.760 --> 00:15:22.560
+Bloquéalas con contraseñas largas y complejas.
+
+00:15:23.160 --> 00:15:25.100
+Guárdalas de forma segura y monitorealas intensamente.
+
+00:15:25.440 --> 00:15:27.060
+Nunca deben usarse en operaciones normales.
+
+00:15:27.060 --> 00:15:29.420
+La mejor práctica general es de poco a poco.
+
+00:15:29.960 --> 00:15:31.240
+Elija un rol de alto riesgo.
+
+00:15:31.500 --> 00:15:33.040
+El administrador global es la opción obvia.
+
+00:15:33.500 --> 00:15:34.360
+Y hágalo solo elegible.
+
+00:15:34.900 --> 00:15:37.680
+Pruebe el flujo de trabajo, capacite a sus administradores y luego expanda hacia otros
+
+00:15:37.680 --> 00:15:38.080
+roles gradual.
+
+00:15:38.540 --> 00:15:39.740
+Monitore las alertas en PIN.
+
+00:15:40.080 --> 00:15:42.180
+Le dirá si tiene demasiados administradores globales.
+
+00:15:42.180 --> 00:15:45.860
+Si los roles no se están activando o si algo parece extraño, presta atención a esas señales
+
+00:15:45.860 --> 00:15:47.480
+y conviene PIN con el acceso condicional.
+
+00:15:47.940 --> 00:15:50.480
+Exija métodos de autenticación más sólidos para la activación del rol.
+
+00:15:50.840 --> 00:15:52.720
+Obliga a que la activación provenga de dispositivos compatibles.
+
+00:15:53.400 --> 00:15:54.420
+Añade restricciones de ubicación.
+
+00:15:54.760 --> 00:15:57.140
+Cuanta más capas añada, más difícil se lo pone el atacante.
+
+00:15:57.900 --> 00:15:58.800
+Entonces es a lo que llegamos.
+
+00:15:59.220 --> 00:16:01.100
+El acceso a administrador permanente es un riesgo enorme.
+
+00:16:01.540 --> 00:16:03.480
+Es la puerta sin llave que permanece abierta toda la noche.
+
+00:16:04.040 --> 00:16:06.320
+PIN reemplaza eso con acceso temporal justo a tiempo.
+
+00:16:07.080 --> 00:16:09.340
+Una llave que funciona por unas horas y luego deja de funcionar.
+
+00:16:09.340 --> 00:16:13.000
+La acción más importante que puede tomar hoy entre el centro de administración de ENTRA
+
+00:16:13.000 --> 00:16:13.540
+habrá PIN.
+
+00:16:14.000 --> 00:16:17.120
+Encuentre sus cuentas de administrador global y haga que al menos una sea elegible en lugar
+
+00:16:17.120 --> 00:16:18.080
+de estar permanente activa.
+
+00:16:18.660 --> 00:16:22.200
+Ese pequeño cambio reduce su superficie de ataque de 168 horas a la semana a la pequeña
+
+00:16:22.200 --> 00:16:23.060
+ventana que usted elija.
+
+00:16:23.900 --> 00:16:25.860
+¿Sabe cuántos administradores permanente tiene ahora mismo?
+
+00:16:26.380 --> 00:16:28.280
+La mayoría de las personas no lo sabe y ese es precisamente el problema.
+
+00:16:28.700 --> 00:16:32.120
+Si este episodio le ayudó, suscríbase para más explicaciones sencillas sobre la seguridad
+
+00:16:32.120 --> 00:16:32.660
+de Microsoft.
+
+00:16:33.440 --> 00:16:36.720
+Y haga clic en el siguiente video para aprender sobre las revisiones de acceso y cómo auditar
+
+00:16:36.720 --> 00:16:38.080
+quién sigue necesitando sus permisos.
+
+00:16:38.080 --> 00:16:40.480
+Porque saber quién tiene el poder es el primer paso para controlarlo.

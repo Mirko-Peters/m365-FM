@@ -4,6 +4,7 @@ bleiben aber statisch (HTML mit Tabellen und Bildern bleibt vollstaendig erhalte
 import ast, json, re, zlib
 from datetime import datetime, timezone
 
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 import site_media as MED
 import site_podpage as P
 import site_r2 as R2
@@ -45,7 +46,8 @@ def tr_config():
         c = json.loads(f.read_text("utf-8")) if f.exists() else {}
     except Exception:
         c = {}
-    build = [l for l in (c.get("build") or []) if l != "en"]
+    from site_i18n import only
+    build = only([l for l in (c.get("build") or []) if l != "en"])   # SITE_LANGS: verkleinerter Bau
     return build, [l for l in (c.get("index") or []) if l in build]
 
 
@@ -68,8 +70,8 @@ def translations(BASE, posts_by_slug, fixhtml):
             html = fixhtml(html)
             if not re.search(r"<img\b", html) and p.get("hero"): html = p["hero"] + html
             out.append({**{k: v for k, v in p.items() if k not in ("src", "hero")}, "lang": lang, "title": title, "summary": (desc or "")[:400], "html": html, "faq": [{"q": q["name"], "a": q["acceptedAnswer"]["text"]} for q in faq if q.get("name")],
-                        "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html), "tr_of": "en", "ai_tr": True, "tr_index": lang in index}); n += 1
-        print(f"Blog-Uebersetzungen {lang}: {n} Beitraege{' (index)' if lang in index else ' (noindex)'}")
+                        "images": re.findall(r'<img[^>]+src="(https://[^"]+)"', html), "tr_of": "en", "ai_tr": True, "tr_index": IR.index_or_long(lang in index, desc, html)}); n += 1   # 13.11.2026: auch eine nicht freigegebene Sprache steht auf index, wenn der uebersetzte Text >= 2500 Zeichen hat (assemble liefert nur vollstaendige Fassungen, kein Englisch-Rueckfall)
+        print(f"Blog-Uebersetzungen {lang}: {n} Beitraege{' (index)' if lang in index else ' (noindex, ausser Fassungen ab 2500 Zeichen)'}")
     return out
 
 

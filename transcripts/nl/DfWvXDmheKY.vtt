@@ -1,0 +1,889 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.080
+Een transportband stopt tijdens de dienst, een heftruck start niet, een pomp begint te lekken en plotseling wil iedereen antwoorden.
+
+00:00:05.260 --> 00:00:10.100
+Welk team gaat het repareren? Wanneer was de laatste onderhoudsbeurt? Hebben we het juiste onderdeel op voorraad?
+
+00:00:10.180 --> 00:00:12.660
+En waar zijn de onderhoudsrapporten van de vorige reparatie?
+
+00:00:12.800 --> 00:00:18.060
+In plaats daarvan begint men rond te bellen, oude spreadsheets te openen en mappen te doorzoeken terwijl de apparatuur stilstaat.
+
+00:00:18.200 --> 00:00:21.780
+Dat gehaast kost kostbare tijd en geldt nog voordat er een sleutel op de machine is gezet.
+
+00:00:21.940 --> 00:00:28.660
+Ik ben Mirko Peters van M365FM en dit kennisfragment legt Dynamics 365 Asset Management in begrijpelijke taal uit.
+
+00:00:28.660 --> 00:00:37.460
+Het is onderdeel van Dynamics 365 Supply Chain Management en geeft bedrijven één plek om apparatuur, onderhoudswerkzaamheden, kosten en servicegeschiedenis bij te houden.
+
+00:00:37.760 --> 00:00:42.460
+Straks laten we zien hoe een sensorwaarschuwing een noodreparatie kan veranderen in gepland werk.
+
+00:00:42.660 --> 00:00:47.320
+Maar voordat we daar zijn, moeten we kijken naar de fysieke bedrijfsmiddelen waar een bedrijf dagelijks op vertrouwt.
+
+00:00:47.480 --> 00:00:49.900
+Waarom fysieke bedrijfsmiddelen een zakelijk probleem worden?
+
+00:00:50.120 --> 00:00:53.280
+Laten we denken aan de apparatuur die de normale bedrijfsvoering draaiende houdt.
+
+00:00:53.340 --> 00:00:56.600
+Een fabriek heeft misschien productiemachines, transportbanden, motoren en pompen.
+
+00:00:56.600 --> 00:00:59.600
+Een magazijn is afhankelijk van heftrucks, laadapparatuur en sorteersystemen.
+
+00:01:00.240 --> 00:01:03.360
+Een transportbedrijf heeft vrachtwagens nodig die ook echt op tijd vertrekken.
+
+00:01:03.480 --> 00:01:07.380
+En een facilitaire team zorgt voor verwarming, koeling, generatoren en liften.
+
+00:01:07.660 --> 00:01:14.700
+Al deze zaken hebben een functie, maar elk item brengt ook vragen met zich mee die niet zomaar verdwijnen omdat de apparatuur vandaag werkt.
+
+00:01:14.940 --> 00:01:15.940
+Waar is het op dit moment?
+
+00:01:16.180 --> 00:01:17.020
+Wie zorgt ervoor?
+
+00:01:17.220 --> 00:01:18.440
+Presteert het nog steeds goed?
+
+00:01:18.660 --> 00:01:20.540
+Wanneer was de laatste inspectie of reparatie?
+
+00:01:20.720 --> 00:01:24.040
+Die vragen klinken simpel totdat de antwoorden op vijf verschillende plekken staan.
+
+00:01:24.040 --> 00:01:29.160
+Een technicus weet misschien dat een vreemd geluid van een machine problemen betekent, omdat hij er al jaren naast werkt.
+
+00:01:29.300 --> 00:01:33.920
+Iemand anders houdt een spreadsheet bij met onderhoudsdata, aankopenstanden en bestellingen van onderdelen ergens anders.
+
+00:01:34.180 --> 00:01:38.100
+Financiën ziet facturen en kosten, maar niet altijd het volledige reparatieverhaal erachter.
+
+00:01:38.320 --> 00:01:42.060
+Dan neemt die technicus vakantie, krijgt een andere baan of is simpelweg niet aan het werk.
+
+00:01:42.240 --> 00:01:43.520
+De kennis verlaat de ruimte.
+
+00:01:43.760 --> 00:01:49.360
+Dit gebeurde vroeger voortdurend met papieren onderhoudsformulieren, mappen in een werkkast en spreadsheets die via e-mail werden gedeeld.
+
+00:01:49.540 --> 00:01:53.180
+Een team kon de apparatuur wel draaiende houden, maar het totaaloverzicht krijgen kostte tijd.
+
+00:01:53.180 --> 00:01:55.360
+Mensen werken vaak met onvolledige informatie.
+
+00:01:55.540 --> 00:01:57.940
+Wanneer apparatuur kapot gaat, verspreidt het probleem zich snel.
+
+00:01:58.100 --> 00:02:01.960
+De operatie kan productie verliezen of leveringen vertragen, en het onderhoudsteam moet de fout opsporen.
+
+00:02:02.120 --> 00:02:05.040
+Inkoop moet wellicht met spoed een bestelling plaatsen voor een ontbrekend onderdeel.
+
+00:02:05.220 --> 00:02:10.460
+Financiën ziet later een dure factuur, maar kan die kosten niet altijd koppelen aan de specifieke machine of reparatie.
+
+00:02:10.680 --> 00:02:11.860
+Niemand plant een defect.
+
+00:02:12.460 --> 00:02:14.980
+Noodreparaties veranderen bovendien hoe mensen te werk gaan.
+
+00:02:15.180 --> 00:02:21.700
+Een team bestelt het eerste onderdeel dat ze vinden, betaalt extra voor snelle levering of slaat de gebruikelijke planning over omdat de machine moet draaien.
+
+00:02:21.700 --> 00:02:28.620
+Soms is zo'n tijdelijke oplossing de juiste keuze, maar als elke reparatie als een noodgeval voelt, stijgen de kosten en blijft hetzelfde defect terugkomen.
+
+00:02:28.800 --> 00:02:31.580
+Verschillende mensen hebben verschillende delen van hetzelfde verhaal nodig.
+
+00:02:32.080 --> 00:02:34.900
+Onderhoudsmonteurs hebben reparatiedetails en eerdere notities nodig.
+
+00:02:35.140 --> 00:02:37.560
+Operations moet weten of de apparatuur kan draaien.
+
+00:02:37.740 --> 00:02:39.880
+Inkoop moet weten welke onderdelen nodig zijn.
+
+00:02:39.880 --> 00:02:45.100
+Financiën heeft een duidelijk kostenoverzicht nodig en managers moeten zien waar storingen en uitgaven steeds weer opduiken.
+
+00:02:45.340 --> 00:02:51.700
+Dynamics 365 Asset Management houdt dat werkdossier bij voor fysieke apparatuur en de bijbehorende onderhoudstaken.
+
+00:02:51.920 --> 00:02:55.380
+Het is niet bedoeld om de persoon die weet hoe een motor moet worden gerepareerd te vervangen.
+
+00:02:55.600 --> 00:03:01.000
+Het geeft die persoon en iedereen om hen heen een gedeelde plek om vast te leggen wat er is gebeurd en te vinden wat ze nodig hebben.
+
+00:03:01.260 --> 00:03:05.800
+Voordat iemand onderhoudt kan plannen, heeft het systeem een helderbeeld nodig van elk afzonderlijk asset.
+
+00:03:05.800 --> 00:03:09.040
+Het asset record, een digitaal dossier voor elke machine.
+
+00:03:09.280 --> 00:03:11.320
+Dus, zo moet je naar asset management kijken.
+
+00:03:11.580 --> 00:03:15.780
+Stel je een archiefkast in de onderhoudsruimte voor waar elke machine een eigen gelabelde map heeft.
+
+00:03:15.960 --> 00:03:23.640
+Het verschil is dat deze map in Dynamics 365 Supply Chain Management staat en dat de juiste mensen deze kunnen vinden zonder in een kast te graven of rond te vragen.
+
+00:03:23.840 --> 00:03:26.420
+Open de map van een machine en je begint met de identiteit.
+
+00:03:26.720 --> 00:03:31.360
+Leg de naam, het product of modelnummer, het serienummer en een duidelijke omschrijving van de functie vast.
+
+00:03:31.360 --> 00:03:38.300
+Voeg ook technische details en garantieinformatie toe, zodat het team kan controleren of een reparatie onder de leveranciersgarantie valt voordat onderdelen worden besteld.
+
+00:03:38.500 --> 00:03:40.920
+Dat klinkt eenvoudig, maar het voorkomt een hoop hoofdpijn.
+
+00:03:41.100 --> 00:03:46.600
+Twee machines op dezelfde werkvloer kunnen er bijna identiek uitzien, terwijl hun onderdelen, garantiedata of onderhoudsbehoeften totaal verschillend zijn.
+
+00:03:46.760 --> 00:03:50.060
+Een helder asset record vertelt het team precies met welke machine ze te maken hebben.
+
+00:03:50.240 --> 00:03:52.560
+Het dossier moet ook een praktische vraag beantwoorden.
+
+00:03:52.800 --> 00:03:54.060
+Waar staat deze apparatuur?
+
+00:03:54.300 --> 00:03:58.800
+Dynamics 365 Asset Management gebruikt daarvoor zogenaamde functionele locaties.
+
+00:03:58.800 --> 00:04:01.980
+Denk bij een functionele locatie aan de plek waar een asset zijn werk doet.
+
+00:04:02.100 --> 00:04:07.220
+Niet zomaar een speld op een kaart, maar iets als een vestiging, een gebouw, een magazijn, een werkplaats of een productielijn.
+
+00:04:07.400 --> 00:04:08.340
+Hier is een voorbeeld.
+
+00:04:08.620 --> 00:04:10.220
+Stel je een bedrijf voor met drie fabrieken.
+
+00:04:10.400 --> 00:04:12.180
+In één fabriek bevindt zich een inpakafdeling.
+
+00:04:12.420 --> 00:04:14.020
+In die afdeling loopt een transportband.
+
+00:04:14.240 --> 00:04:17.080
+Die transportband bevat verschillende motoren, sensoren en rollen.
+
+00:04:17.200 --> 00:04:22.800
+Je kunt die hele structuur in het systeem beschrijven, van de grotere locatie tot aan de apparatuur die mensen daadwerkelijk inspecteren en repareren.
+
+00:04:23.000 --> 00:04:24.300
+De fabriek staat bovenaan.
+
+00:04:24.520 --> 00:04:25.760
+Daaronder de productielijn.
+
+00:04:25.760 --> 00:04:27.380
+Onder de lijn de transportband.
+
+00:04:27.560 --> 00:04:29.020
+Onder de transportband een motor.
+
+00:04:29.260 --> 00:04:32.700
+En onder de motor kun je een onderdeel bijhouden dat specifieke aandacht nodig heeft.
+
+00:04:32.920 --> 00:04:36.740
+Deze ouderkindstructuur helpt mensen te begrijpen waar een asset bij hoort en waar het mee verbonden is.
+
+00:04:36.900 --> 00:04:39.920
+Dus, wanneer een motor uitvalt, ziet de monteur niet alleen een serienummer.
+
+00:04:40.140 --> 00:04:43.660
+Ze zien dat deze bij transportband 2 in de verpakkingsafdeling van Fabriek Noord hoort.
+
+00:04:43.840 --> 00:04:47.700
+Die context helpt het team inschatten welk werk stil kan komen te liggen terwijl de motor buiten werking is.
+
+00:04:48.040 --> 00:04:49.260
+Apparatuur verplaatst zich ook.
+
+00:04:49.400 --> 00:04:51.740
+Een heftruck kan van het ene magazijn naar het andere gaan.
+
+00:04:51.920 --> 00:04:54.700
+Een pomp kan uit de opslag komen en in een gebouw worden geïnstalleerd.
+
+00:04:54.700 --> 00:04:58.620
+Na een proceswijziging kan een machine van de ene naar de andere productielijn verhuizen.
+
+00:04:58.800 --> 00:05:02.040
+Asset management kan die wijzigingen volgen via de functionele locatie.
+
+00:05:02.200 --> 00:05:03.760
+En dat is ook belangrijk voor de kosten.
+
+00:05:04.040 --> 00:05:09.080
+Wanneer een asset verhuist, koppelt het systeem de onderhoudskosten aan de financiële gegevens van de nieuwe locatie.
+
+00:05:09.260 --> 00:05:13.860
+Dus, als een machine nu in een andere fabriek of afdeling werkt, volgen de kosten de machine naar de plek waar deze wordt gebruikt.
+
+00:05:14.000 --> 00:05:17.180
+Je hoeft later niet te raden welk deel van het bedrijf de reparatienota moet betalen.
+
+00:05:17.340 --> 00:05:21.140
+Een map met alleen de oorspronkelijke machinegegevens zou na het eerste jaar niet veel helpen.
+
+00:05:21.300 --> 00:05:23.760
+Het nuttige deel is de geschiedenis naast het asset dossier.
+
+00:05:23.760 --> 00:05:25.900
+Inspecties staan naast reparatiewerkzaamheden.
+
+00:05:26.080 --> 00:05:27.920
+Vervangen onderdelen staan naast de arbeidsuren.
+
+00:05:28.120 --> 00:05:31.980
+Notices van monteurs, defectdetails en geregistreerde downtime worden allemaal onderdeel van hetzelfde apparatuurverhaal.
+
+00:05:32.100 --> 00:05:34.200
+Een nieuwe monteur kan zien wat er de vorige keer is gebeurd.
+
+00:05:34.420 --> 00:05:37.380
+Misschien ontdekken ze dat dezelfde motor twee reparaties in zes maanden heeft gehad.
+
+00:05:37.560 --> 00:05:39.320
+Misschien blijft een bepaald onderdeel slijten.
+
+00:05:39.520 --> 00:05:43.840
+Of een eerdere notitie legt een instelling uit die gecontroleerd moet worden voordat iemand de machine uit elkaar haalt.
+
+00:05:43.840 --> 00:05:49.180
+Het systeem onthoudt niet beter dan mensen, maar het geeft mensen een plek om nuttige informatie achter te laten voor de volgende persoon.
+
+00:05:49.340 --> 00:05:50.900
+Eén punt moet worden opgehelderd.
+
+00:05:51.060 --> 00:05:56.440
+Asset Management richt zich op fysieke apparatuur die na verloop van tijd regelmatig onderhoud, reparatie, inspectie of service nodig heeft.
+
+00:05:56.660 --> 00:06:01.380
+Denk aan machines, productieapparatuur, voertuigen, gebouwinstallaties en soortgelijke werkende activa.
+
+00:06:01.520 --> 00:06:04.840
+Het is niet de tool voor het volgen van kantoorlaptops, telefoons of softwarelicenties.
+
+00:06:05.680 --> 00:06:12.580
+Die items kunnen belangrijk zijn voor een bedrijf, maar een productiemachine met bewegende delen, onderhoudsbehoeften en uitvalrisico creëert een ander soort dossier.
+
+00:06:12.780 --> 00:06:15.100
+Asset Management richt zich op dat onderhoudsverhaal.
+
+00:06:15.340 --> 00:06:21.000
+Zodra elk bedrijfsmiddel een duidelijke identiteit, locatie, structuur en geschiedenis heeft, verandert het gesprek.
+
+00:06:21.000 --> 00:06:27.560
+In plaats van te wachten tot apparatuur uitvalt en dan te vragen wat er is gebeurd, kan een team het onderhoud plannen dat de apparatuur echt nodig heeft.
+
+00:06:28.200 --> 00:06:30.960
+Preventief onderhoud repareert het voordat het kapot gaat.
+
+00:06:31.260 --> 00:06:33.860
+Er zijn meestal twee manieren waarop onderhoud begint.
+
+00:06:33.860 --> 00:06:35.880
+De eerste is een reactieve werkorder.
+
+00:06:36.160 --> 00:06:40.320
+Iets valt uit, de productie stopt en mensen repareren het omdat ze geen andere keuze hebben.
+
+00:06:40.500 --> 00:06:44.980
+De tweede is gepland onderhoud, waarbij een team voor apparatuur zorgt voordat een effect leidt tot stilstand.
+
+00:06:44.980 --> 00:06:50.880
+Het combineren van het advies van de fabrikant met wat de apparatuur in het dagelijks gebruik echt nodig heeft, verandert de werkdag.
+
+00:06:51.040 --> 00:06:59.720
+Een fabrikant raadt misschien aan om een pomp na een vast aantal bedrijfsuren te controleren, maar een pomp in een stoffige, hete ruimte heeft eerder aandacht nodig dan hetzelfde model op een schone plek.
+
+00:06:59.720 --> 00:07:05.340
+Adset Management geeft het onderhoudsteam de mogelijkheid om te plannen op basis van zowel de handleiding als de werkelijke omstandigheden ter plaatse.
+
+00:07:05.500 --> 00:07:08.740
+Gepland onderhoud gaat niet over het repareren van apparatuur die perfect werkt.
+
+00:07:08.900 --> 00:07:16.060
+Het gaat over het uitvoeren van kleine, bekende klussen op verstandige tijden, zodat een klein probleem niet uitgroeit tot een onverwachte storing tijdens de drukste dienst van de week.
+
+00:07:16.060 --> 00:07:25.280
+Een onderhoudsplan kan terugkerend werk dekken, zoals visuele inspecties, schoonmaken, smeren, veiligheidschecks, het testen van riemen of filters en het vervangen van onderdelen die na verloop van tijd slijten.
+
+00:07:25.500 --> 00:07:31.140
+Denk aan een vorkheftruc. Deze heeft regelmatige controles nodig van remmen, banden, vloeist of niveaus, verlichting en de conditie van de accu.
+
+00:07:31.320 --> 00:07:37.140
+Geen van die controles lijkt op zichzelf dramatisch, maar het herhaaldelijk overslaan ervan kan ertoe leiden dat een heftruc uitvalt wanneer een magazijn deze het hardst nodig heeft.
+
+00:07:37.360 --> 00:07:39.160
+Hetzelfde idee geldt voor een productielijn.
+
+00:07:39.160 --> 00:07:45.160
+Een technicus kan elke week een sensor reinigen, elke maand de riemspanning controleren en na een bekende gebruiksperiode een onderdeel vervangen.
+
+00:07:45.320 --> 00:07:49.960
+Het Z-management helpt het team om die routines vast te leggen en het volgende werkstuk naar voren te halen wanneer het tijd is.
+
+00:07:50.120 --> 00:07:55.640
+Planningen zijn een onderdeel van dat plaatje. Een klus kan elke week, elke maand of na een bepaald aantal dagen nodig zijn.
+
+00:07:55.800 --> 00:08:00.560
+Maar kalenderdata zijn niet altijd voldoende, omdat twee machines van hetzelfde type heel verschillende uren kunnen draaien.
+
+00:08:00.740 --> 00:08:04.040
+De ene machine draait misschien één dienst per dag, de andere misschien dag en nacht.
+
+00:08:04.220 --> 00:08:07.920
+Technische meetwaarden geven het team een andere manier om te beoordelen wanneer onderhoud moet plaatsvinden.
+
+00:08:07.920 --> 00:08:14.700
+Afhankelijk van de apparatuur kan dit gaan om bedrijfsuren, afgeligde afstand, temperatuur, druk of een andere meting die het team iets vertelt over de conditie.
+
+00:08:14.840 --> 00:08:17.700
+Je vervangt een onderdeel niet alleen omdat er een datum op een kalender staat.
+
+00:08:17.880 --> 00:08:22.020
+Je vervangt het wanneer het plan, het gebruik van de apparatuur en de meetwaarden aangeven dat het werk nodig is.
+
+00:08:22.600 --> 00:08:24.740
+Onderhoudsrondes helpen bij dit soort regelmatig onderhoud.
+
+00:08:24.960 --> 00:08:29.200
+Een ronde geeft de technicus een geplande route of een reeks inspecties bij verschillende bedrijfsmiddelen.
+
+00:08:29.200 --> 00:08:36.160
+In plaats van elke controle als een aparte verrassing te behandelen, inspecteert de medewerker gerelateerde apparatuur tijdens één routinematig bezoek en noteert de resultaten gaandeweg.
+
+00:08:36.160 --> 00:08:39.300
+Stel je een technicus voor die aan een ochtendronde begint in een verpakkingsruimte.
+
+00:08:39.460 --> 00:08:45.780
+Ze controleren en rijdt transportmotoren, luisteren naar ongewone geluiden, zoeken naar loszittende onderdelen en noteren de waarden die voor het bedrijf van belang zijn.
+
+00:08:45.940 --> 00:08:49.840
+Het werk wordt consistent, zelfs wanneer verschillende mensen op verschillende dagen de ronde lopen.
+
+00:08:50.100 --> 00:08:52.940
+Stel je nu voor dat een van die controles de trillingen van een motor bijhoudt.
+
+00:08:53.060 --> 00:08:55.580
+Gedurende enkele weken blijft de waarde binnen het normale bereik.
+
+00:08:55.760 --> 00:08:57.300
+Dan begint deze langzaam op te lopen.
+
+00:08:57.500 --> 00:09:03.500
+De transportband rijdt nog steeds, dus buiten het onderhoudsteam merkt niemand het probleem op, maar de herhaalde meting vertelt de technicus dat er iets is veranderd.
+
+00:09:03.500 --> 00:09:07.980
+Dat geeft het team de tijd om de motor te inspecteren voordat deze zichzelf beschadigt of de lijn stillegt.
+
+00:09:08.160 --> 00:09:10.420
+Dit wordt conditieafhankelijk onderhoud genoemd.
+
+00:09:10.520 --> 00:09:14.180
+In plaats van alleen op een vaste datum te handelen, houdt het team een technische waarde in de gaten.
+
+00:09:14.420 --> 00:09:19.600
+Wanneer die metingen door het bedrijf vastgestelde limiet overschrijdt, kan er een onderhoudsbehoefte ontstaan die door iemand moet worden beoordeeld.
+
+00:09:19.740 --> 00:09:23.240
+Een sensor kan die waarden in het proces invoeren, maar hij repareert niets.
+
+00:09:23.420 --> 00:09:27.700
+Hij kan waarschuwen dat een temperatuur te hoog is of dat trillingen buiten een acceptabel bereik zijn gekomen.
+
+00:09:27.700 --> 00:09:34.080
+Een persoon moet de apparatuur nog steeds controleren, bepalen wat de waarschuwing betekent, veiligheidsregels volgen en de reparatie of inspectie uitvoeren.
+
+00:09:34.220 --> 00:09:35.800
+Die menselijke stap is essentieel.
+
+00:09:35.940 --> 00:09:41.980
+Een meting kan wijzen op een versleten lager, maar het kan ook komen door een loszittend onderdeel, een sensorprobleem of een verandering in hoe de apparatuur draait.
+
+00:09:42.120 --> 00:09:44.320
+Het systeem vestigt de aandacht op de conditie.
+
+00:09:44.520 --> 00:09:46.840
+Getrainde mensen beslissen welke actie daarna moet volgen.
+
+00:09:47.020 --> 00:09:49.440
+Het doel is dus niet om elke storing perfect te voorspellen.
+
+00:09:49.640 --> 00:09:57.100
+Het is om onderhoudsteams eerder te waarschuwen, voor betere routines te zorgen en minder reparaties te hebben die beginnen met een haastig telefoontje nadat apparatuur al is gestopt.
+
+00:09:57.100 --> 00:10:03.200
+Gepland werk vereist nog steeds een duidelijk werkoverzicht, iemand die verantwoordelijk is, de juiste onderdelen en een manier om de kosten bij te houden.
+
+00:10:03.580 --> 00:10:03.980
+Werkbonnen
+
+00:10:03.980 --> 00:10:06.500
+Het werkdocument dat de reparatie samenbindt.
+
+00:10:06.600 --> 00:10:09.320
+Dus, wanneer wordt een onderhoudsbehoefte daadwerkelijk werk?
+
+00:10:09.500 --> 00:10:10.540
+Het wordt een werkbon.
+
+00:10:10.820 --> 00:10:21.660
+Zie het als het werkdocument dat een reparatie volgt van de eerste melding tot aan de voltooide klus, waardoor het team 1 overzicht heeft van wat er misging, wat er moet gebeuren, wie verantwoordelijk is en wat het uiteindelijk kost.
+
+00:10:21.660 --> 00:10:29.280
+Zonder een werkbon kan een technicus het probleem misschien wel oplossen, maar de details kunnen verloren gaan in een telefoontje, een ploegoverdracht of iemands geheugen.
+
+00:10:29.460 --> 00:10:35.160
+En achteraf kan niemand gemakkelijk antwoorden welk werk is uitgevoerd, hoe lang het duurde of of dezelfde storing is teruggekeerd.
+
+00:10:35.340 --> 00:10:37.980
+En zonder die registratie ben je aangewezen op giswerk.
+
+00:10:38.160 --> 00:10:40.440
+Een werkorder kan op verschillende manieren ontstaan.
+
+00:10:40.440 --> 00:10:52.540
+Het kan komen uit een geplande onderhoudsbeurt, een inspectie die een defect aan het licht brengt, een storing waarbij apparatuur uitvalt, of van een monteur die na een reparatie een ander probleem opmerkt en vervolgwerk aanmaakt voordat hij vertrekt.
+
+00:10:52.780 --> 00:10:54.860
+Verschillende redenen, maar dezelfde structuur.
+
+00:10:55.080 --> 00:11:00.040
+De werkorder zet een onderhoudsbehoefte om in iets wat het team kan inplannen, toewijzen, volgen en afronden.
+
+00:11:00.260 --> 00:11:04.240
+Dus, of het nu gepland of ongepland is, de werkorder legt de reden en de reactie vast.
+
+00:11:04.440 --> 00:11:06.640
+Ten eerste beschrijft de werkorder de taak.
+
+00:11:06.640 --> 00:11:10.840
+Een korte titel kan zijn, inspecteer ongebruikelijke trilling bij transportmotor 4.
+
+00:11:11.040 --> 00:11:20.000
+Daaronder kan het onderhoudstiem de taken toevoegen die nodig zijn om het werk af te ronden, zoals de apparatuur isoleren, de motorsteun inspecteren, lagers controleren, de reparatie testen en de machine weer in gebruik nemen.
+
+00:11:20.200 --> 00:11:22.780
+Dat detailniveau helpt wanneer het werk van persoon wisselt.
+
+00:11:22.920 --> 00:11:33.440
+Een checklist kan de monteur door werk leiden dat in een bepaalde volgorde moet gebeuren, nuttig voor periodieke inspecties en reparaties waarbij een gemiste stap veiligheidsrisico's kan opleveren of de apparatuur slecht kan laten draaien.
+
+00:11:34.340 --> 00:11:35.760
+Veiligheidsinstructies horen ook bij het werk.
+
+00:11:35.760 --> 00:11:43.260
+De medewerker moet wellicht de stroom uitschakelen voordat een paneel wordt geopend, beschermende uitrusting dragen of bevestigen dat een lijn stilstaat voordat bewegende delen worden aangeraakt.
+
+00:11:43.420 --> 00:11:47.700
+De werkorder geeft het team een plek om die instructies op te nemen waar mensen ze tijdens het werk zullen zien.
+
+00:11:47.940 --> 00:11:48.780
+Dan volgt de planning.
+
+00:11:49.040 --> 00:11:53.280
+Het onderhoudsteam kan de medewerkers toewijzen, inschatten hoe lang het duurt en een datum en tijd plannen.
+
+00:11:53.520 --> 00:11:59.900
+Dat betekent niet dat elke reparatie precies volgens plan verloopt, want effecten houden zelde rekening met de kalender, maar het geeft het team een duidelijk startpunt.
+
+00:12:00.080 --> 00:12:02.880
+Je kunt ook de onderdelen en benodigdheden voor de klus toevoegen.
+
+00:12:02.880 --> 00:12:08.200
+Voor onze transportmotor kan dat een vervangend lager, bouten, smeermiddel of wellicht een complete motor zijn.
+
+00:12:08.380 --> 00:12:14.680
+De werkorder koppelt de reparatie aan de benodigde items, zodat de monteur niet klaarstaat om te werken en vervolgens ontdekt dat het onderdeel ontbreekt.
+
+00:12:14.880 --> 00:12:18.420
+Dat betekent dat de monteur niet vastzit in afwachting van een onderdeel dat nooit aankomt.
+
+00:12:18.560 --> 00:12:22.180
+Als de voorraad het item al bevat, kan het team plannen op basis van die voorraad.
+
+00:12:22.320 --> 00:12:32.360
+Als de voorraad het niet dekt, gaat de behoefte naar het inkoopproces en kan iemand het vereiste onderdeel bestellen zonder afhankelijk te zijn van een haastig bericht of een handgeschreven briefje dat op een bureau kwijtraakt.
+
+00:12:32.880 --> 00:12:36.160
+De werkorder houdt het reparatieverhaal verbonden met die aankoop.
+
+00:12:36.360 --> 00:12:39.160
+Dit is waar het werkorder meer doet dan alleen een defect beschrijven.
+
+00:12:39.340 --> 00:12:43.660
+Het is als een centrale commandopost waar iedereen op kan kijken voordat ze aan hun deel van het werk beginnen.
+
+00:12:43.860 --> 00:12:46.280
+Het helpt mensen zich voor te bereiden voordat het werk begint.
+
+00:12:46.440 --> 00:12:47.800
+De monteur weet wat hij moet inspecteren.
+
+00:12:48.020 --> 00:12:49.220
+De planner weet wie de klus moet doen.
+
+00:12:49.220 --> 00:12:53.560
+Het maga zijn team ziet welke onderdelen nodig zijn en inkoop kan actie ondernemen als een onderdeel niet beschikbaar is.
+
+00:12:53.740 --> 00:12:56.220
+Naarmate het werk vordert, legt de order de status vast.
+
+00:12:56.380 --> 00:12:58.640
+Het begint als aangemaakt, waarna iemand het inplant.
+
+00:12:58.640 --> 00:13:01.420
+Wanneer de monteur begint, legt het team die wijziging vast.
+
+00:13:01.620 --> 00:13:06.660
+Na de reparatie gaat de status naar voltooid en kan een manager of verantwoordelijke het beoordelen voordat het dossier wordt gesloten.
+
+00:13:06.900 --> 00:13:10.040
+Die stappen klinken misschien als administratie, maar ze beantwoorden praktische vragen.
+
+00:13:10.220 --> 00:13:11.400
+Is iemand hiermee bezig?
+
+00:13:11.560 --> 00:13:12.560
+Is de klus al gestart?
+
+00:13:12.740 --> 00:13:14.560
+Is de machine klaar voor normaal gebruik?
+
+00:13:14.680 --> 00:13:17.380
+Heeft iemand gecontroleerd of het werk voldoet aan de vereiste norm?
+
+00:13:17.560 --> 00:13:21.500
+En die vragen zijn precies wat een onderhoudsteam beantwoord wil hebben tijdens een drukke dienst.
+
+00:13:21.500 --> 00:13:30.000
+De voltooide werkorder legt ook vast wat er is gebruikt bij de reparatie, zoals arbeidsuren, onderdelen en andere kosten, en het systeem koppelt die kosten aan het betreffende bedrijfsmiddel.
+
+00:13:30.200 --> 00:13:33.740
+Op termijn geeft dat het bedrijf een duidelijker beeld dan een stapel facturen.
+
+00:13:34.180 --> 00:13:44.300
+Een manager kan zien dat één motor herhaaldelijk gerepareerd moest worden, en het onderhoudsteam kan de kosten van voortdurende reparaties vergelijken met vervanging, zonder in aparte systemen te zoeken.
+
+00:13:45.080 --> 00:13:48.040
+Het laatste onderdeel is vaak het nuttigst voor de volgende monteur.
+
+00:13:48.040 --> 00:13:54.580
+Als het werk klaar is, kan de monteur notities toevoegen over het defect, de uitgevoerde controles, het vervangen onderdeel en zaken die de aandacht verdienen.
+
+00:13:54.780 --> 00:13:57.420
+Misschien faalde het lager omdat de bevestiging was losgeraakt.
+
+00:13:57.620 --> 00:14:02.000
+Misschien loste de reparatie het geluid op, maar moet de motor over twee weken opnieuw worden geïnspecteerd.
+
+00:14:02.200 --> 00:14:07.040
+Die notitie blijft bij het voltooide werk, zodat iemand maanden later niet bij nul hoeft te beginnen.
+
+00:14:07.420 --> 00:14:11.720
+Ze kunnen zien wat er eerder is gebeurd, wat werkte en wat de vorige monteur is opgevallen.
+
+00:14:11.960 --> 00:14:14.640
+Die continuïteit kan op de lange termijn veel tijd besparen.
+
+00:14:14.640 --> 00:14:22.720
+Een werkorder verklaart één onderhoudsklus van begin tot eind, maar de bredere rol wordt duidelijk wanneer die klus verbonden wordt met voorraad, inkoopactiviteiten en kostenregistraties.
+
+00:14:22.880 --> 00:14:24.760
+En dat is de echte waarde van een werkorder.
+
+00:14:24.960 --> 00:14:26.320
+Het is niet zomaar een document.
+
+00:14:26.660 --> 00:14:29.580
+Het is een tool die de onderhoudsoperatie soepel laat draaien.
+
+00:14:29.920 --> 00:14:32.980
+Verbonden met de supply chain, financiën en het veldwerk.
+
+00:14:33.220 --> 00:14:34.980
+Zie een bedrijf als een kantoorgebouw.
+
+00:14:35.380 --> 00:14:37.000
+Assetmanagement is de onderhoudsafdeling.
+
+00:14:37.000 --> 00:14:46.440
+Het is gericht op het draaiende houden van apparatuur, maar staat niet los van de rest van het bedrijf, omdat het onderdelenmagazijn, de inkoopafdeling, het financiële team en onderhoudsmonteurs allemaal dezelfde informatie nodig hebben.
+
+00:14:46.780 --> 00:14:48.360
+Assetmanagement staat niet op zichzelf.
+
+00:14:48.540 --> 00:14:51.140
+Het is via de werkbond verbonden met alle andere afdelingen.
+
+00:14:51.300 --> 00:14:55.120
+Die verbinding voorkomt dat mensen dezelfde gegevens op verschillende plekken moeten overtypen.
+
+00:14:55.360 --> 00:14:58.420
+Dat betekent minder kans op fouten en veel minder tijdverlies.
+
+00:14:58.420 --> 00:15:05.560
+Binnen Dynamics 365 Supply Chain Management kan onderhoudswerk worden gekoppeld aan de voorraadgegevens voor reserveonderdelen en benodigdheden.
+
+00:15:05.720 --> 00:15:13.180
+Als voor een reparatie een lager, filter of vervangende motor nodig is, kan het team controleren of dit item al beschikbaar is voordat er leveranciers worden benaderd.
+
+00:15:13.360 --> 00:15:15.420
+De voorraad laat zien wat er in het magazijn ligt.
+
+00:15:15.680 --> 00:15:21.920
+Wanneer het benodigde onderdeel er niet is, kan de inkoopafdeling werken vanuit dezelfde onderhoudsbehoefte en wordt een inkooporder gekoppeld aan het reparatiewerk,
+
+00:15:22.080 --> 00:15:25.480
+zodat iedereen duidelijk ziet waarom het item is besteld en waar het heen gaat als het binnenkomt.
+
+00:15:25.680 --> 00:15:27.660
+Productie is ook nauw betrokken bij dit proces.
+
+00:15:27.660 --> 00:15:33.780
+Als een machine geplande uitvaltijd nodig heeft, kan de operatie zien dat onderhoudswerkzaamheden invloed kunnen hebben op de productielijn of een magazijnproces.
+
+00:15:33.960 --> 00:15:39.060
+Dat neemt de noodzaak voor overleg niet weg, maar het geeft die gesprekken een gedeeld verslag in plaats van een reeks aannames.
+
+00:15:39.320 --> 00:15:42.680
+Dus, wanneer onderhoud en productie hetzelfde systeem delen, is er minder wrijving.
+
+00:15:42.920 --> 00:15:44.600
+Financiën heeft een ander perspectief nodig.
+
+00:15:44.800 --> 00:15:48.760
+Een onderhoudsteam denkt aan het effect en de reparatie, maar financiën moet weten waar de kosten thuishoren.
+
+00:15:48.940 --> 00:15:52.900
+Asset Management kan activa-kosten koppelen aan de functionele locatie waar de apparatuur wordt gebruikt,
+
+00:15:53.060 --> 00:15:55.660
+zodat reparatiekosten de machine volgen naar de juiste afdeling of bedrijfsgebied.
+
+00:15:55.660 --> 00:15:59.260
+Stel je voor dat hetzelfde type machine op twee verschillende locaties draait.
+
+00:15:59.460 --> 00:16:02.740
+Beiden hebben reparaties nodig, maar de ene locatie gebruikt de machine veel intensiever.
+
+00:16:02.960 --> 00:16:06.860
+Wanneer kosten aan de juiste locatie worden gekoppeld, kunnen managers zien welke locatie de kosten draagt,
+
+00:16:07.060 --> 00:16:09.960
+in plaats van één groot totaalbedrag voor reparaties te zien zonder nuttige context.
+
+00:16:10.160 --> 00:16:13.640
+Dat maakt kosten discussies minder verwarrend en helpt een bedrijf patronen te herkennen.
+
+00:16:13.840 --> 00:16:18.340
+Als één locatie continu hoge kosten maakt voor hetzelfde type apparatuur, kan het team betere vragen stellen.
+
+00:16:18.540 --> 00:16:20.040
+Draait die locatie langere diensten?
+
+00:16:20.040 --> 00:16:23.980
+Is er een ander onderhoudsplan nodig, of moet de apparatuur zelf worden vervangen?
+
+00:16:24.140 --> 00:16:27.420
+Het zijn deze patronen die op termijn leiden tot betere onderhoudsbeslissingen.
+
+00:16:27.580 --> 00:16:31.160
+Asset Management kan ook worden verbonden met Dynamics 365 Field Service.
+
+00:16:31.420 --> 00:16:35.760
+Asset Management volgt doorgaans apparatuur die een bedrijf bezit en gebruikt binnen de eigen bedrijfsvoering,
+
+00:16:35.940 --> 00:16:39.680
+terwijl Field Service zich richt op werkzaamheden voor klanten, vaak op locatie bij de klant.
+
+00:16:39.900 --> 00:16:45.160
+Wanneer die afdelingen relevante service informatie delen, behoudt een bedrijf beter overzicht op apparatuur,
+
+00:16:45.380 --> 00:16:47.020
+serviceactiviteiten en het personeel.
+
+00:16:47.020 --> 00:16:51.100
+Een bedrijf kan machines in de eigen fabriek onderhouden en tegelijkertijd technici sturen
+
+00:16:51.100 --> 00:16:53.220
+om verkochte apparatuur bij klanten te repareren.
+
+00:16:53.440 --> 00:16:58.000
+Dat zijn verschillende taken, maar de onderhoudshistorie, apparatuurgegevens en reparatiepatronen
+
+00:16:58.000 --> 00:17:01.140
+kunnen verbonden worden waar nodig, in plaats van in losse systemen te staan.
+
+00:17:01.400 --> 00:17:03.560
+Sensoren voegen nog een bron van informatie toe.
+
+00:17:03.740 --> 00:17:08.920
+Azure IoT Central kan meetwaarden ontvangen van verbonden apparatuur, zoals temperatuur, druk of trillingen.
+
+00:17:09.120 --> 00:17:12.100
+Wanneer een waarde buiten de ingestelde limiet van het bedrijf valt,
+
+00:17:12.340 --> 00:17:14.860
+kan dit een onderhoudsmelding voor beoordeling activeren.
+
+00:17:14.860 --> 00:17:18.700
+De sensor geeft het signaal, maar de technicus bepaalt wat dit betekent
+
+00:17:18.700 --> 00:17:22.120
+en of inspectie, reparatie of nadere controle nodig is.
+
+00:17:22.300 --> 00:17:25.420
+De waarschuwing bereikt het onderhoudsproces terwijl de apparatuur nog draait,
+
+00:17:25.580 --> 00:17:27.580
+in plaats van nadat een defect de boel heeft stilgelegd.
+
+00:17:27.740 --> 00:17:31.360
+Dit soort vroege waarschuwingen kan voorkomen dat een klein probleem uitgroeit tot een grote storing.
+
+00:17:31.640 --> 00:17:34.320
+Sommige klussen vereisen ook meer dan alleen een geschreven checklist.
+
+00:17:34.580 --> 00:17:37.840
+Dynamics 365 Kites, in combinatie met HoloLens,
+
+00:17:38.040 --> 00:17:41.180
+biedt technici stapsgewijze instructies bij het werken aan complexe apparatuur.
+
+00:17:41.180 --> 00:17:45.380
+Een medewerker volgt instructies voor hun ogen, dit helpt bij taken met veel stappen
+
+00:17:45.380 --> 00:17:49.180
+of wanneer kennis van ervaren technici moet worden gedeeld met nieuw personeel.
+
+00:17:49.840 --> 00:17:52.060
+Dat maakt van een beginner niet direct een expert,
+
+00:17:52.340 --> 00:17:54.940
+maar geeft de technicus praktische hulp op de werkvloer,
+
+00:17:55.140 --> 00:17:57.320
+terwijl onderhoudsrapporten de taak bijhouden.
+
+00:17:58.160 --> 00:18:01.620
+Velen verwachten dat één bedrijfsap elke taak zelfstandig afhandelt,
+
+00:18:01.860 --> 00:18:02.720
+maar zo werkt het niet.
+
+00:18:02.940 --> 00:18:04.720
+Asset Management verzorgt het onderhoud,
+
+00:18:04.720 --> 00:18:11.360
+terwijl verbonden onderdelen van Dynamics 365 voorraad, inkoop, financiën, klantenservice en ander werk beheren.
+
+00:18:11.480 --> 00:18:14.480
+Het voordeel is dat gegevens tussen deze gebieden worden uitgewisseld
+
+00:18:14.480 --> 00:18:17.580
+zonder dat men details opnieuw hoeft in te voeren of de context verliest.
+
+00:18:17.840 --> 00:18:21.060
+Juist de verbindingen tussen deze systemen maken het platform zo krachtig.
+
+00:18:21.240 --> 00:18:24.700
+Laten we die verbonden onderdelen samenbrengen via één simpel onderhoudsverhaal.
+
+00:18:24.880 --> 00:18:29.980
+Nu heeft u een duidelijk beeld van hoe Asset Management in het grotere Dynamics 365 ecosysteem past.
+
+00:18:29.980 --> 00:18:34.240
+Een dag uit het leven, van waarschuwing tot voltooide reparatie.
+
+00:18:34.460 --> 00:18:38.260
+Stel je een transportmotor in een magazijn voor die ongebruikelijke trillingen doorgeeft.
+
+00:18:38.500 --> 00:18:40.020
+Dat is de waarschuwing voor het defect.
+
+00:18:40.300 --> 00:18:41.140
+Dit is het proces.
+
+00:18:41.380 --> 00:18:46.260
+Je opent het Asset-dossier, bekijkt de locatie, historie, garantie en geplande werkzaamheden van de motor.
+
+00:18:46.480 --> 00:18:51.200
+Vervolgens maak je een werkorder, wijst een technicus toe, noteert inspectiestappen en controleert de voorraad voor het lager.
+
+00:18:51.380 --> 00:18:55.000
+Als het lager niet op voorraad is, bestelt het systeem dit terwijl tijd en kosten worden bijgehouden.
+
+00:18:55.000 --> 00:18:58.460
+Na reparatie legt de technicus het resultaat vast en laat notities achter.
+
+00:18:58.460 --> 00:19:02.980
+De manager ziet kosten, herhaaldelijke defecten, uitvaltijd en al het onderhoud aan die motor.
+
+00:19:03.180 --> 00:19:05.020
+De waarschuwing repareerde de motor niet.
+
+00:19:05.180 --> 00:19:08.480
+Het gaf mensen de tijd om te plannen in plaats van te moeten starten met een noodgreep.
+
+00:19:08.600 --> 00:19:10.680
+Dus, voor wie is het geschikt en wat vervangt het niet?
+
+00:19:10.900 --> 00:19:12.680
+Dus, wie heeft er Asset Management nodig?
+
+00:19:12.880 --> 00:19:17.500
+Elk bedrijf dat afhankelijk is van machines, voertuigen, productieapparatuur of gebouwinstallaties.
+
+00:19:17.740 --> 00:19:22.640
+Dat omvat fabrikanten, magazijnen, transportteams, nutsbedrijven en servicegerichte operaties.
+
+00:19:22.640 --> 00:19:26.760
+Maar, dit is het punt, het vervangt geen technici, veiligheidsregels of beoordelingsvermogen.
+
+00:19:26.920 --> 00:19:33.240
+Het geeft die mensen één gedeeld overzicht, o, als een medisch dossier voor je apparatuur en een geplande manier om alles draaiende te houden.
+
+00:19:34.240 --> 00:19:37.280
+Conclusie, hou de geschiedenis van apparatuur op één plek.
+
+00:19:37.620 --> 00:19:43.380
+Met Asset Management hou je het asset, onderhoudswerk, onderdelen, kosten en servicehistorie op één plek.
+
+00:19:43.380 --> 00:19:48.640
+Abonneer je op M365.fm voor meer kennis in begrijpelijke taal en ga door naar het volgende bouwblok.

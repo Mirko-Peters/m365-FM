@@ -1,0 +1,1264 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.640
+O vendedor atualiza o endereço de um cliente.
+
+00:00:02.240 --> 00:00:05.300
+Mais tarde, o financeiro abre o mesmo registro e ainda vê o endereço antigo.
+
+00:00:05.980 --> 00:00:06.960
+Então, qual endereço está correto?
+
+00:00:07.300 --> 00:00:10.120
+Por anos, corrigir isso significava alguém exportar dados, editar uma planilha,
+
+00:00:10.200 --> 00:00:12.920
+enviá-la por e-mail e editar a mesma atualização duas vezes em um segundo aplicativo.
+
+00:00:13.360 --> 00:00:15.260
+O DualWrite do Dynamics 365 muda isso.
+
+00:00:15.740 --> 00:00:19.200
+Ele conecta aplicativos de finanças e operações com aplicativos de clientes baseados no Dataverse,
+
+00:00:19.460 --> 00:00:22.840
+para que registros compartilhados como clientes e pedidos permaneçam sincronizados automaticamente.
+
+00:00:23.260 --> 00:00:25.860
+Você está comigo? Eu sou o Milko Peters, da M305FM,
+
+00:00:26.000 --> 00:00:28.540
+e esta pílula de conhecimento explica o DualWrite em termos simples.
+
+00:00:28.540 --> 00:00:32.500
+Abordaremos o que é transferido, como é transferido, onde o DualWrite se encaixa e onde não se encaixa.
+
+00:00:33.400 --> 00:00:36.340
+Primeiro, vamos começar com o problema de negócio que criou a necessidade para ele.
+
+00:00:38.430 --> 00:00:39.770
+O problema que o DualWrite resolve.
+
+00:00:41.290 --> 00:00:43.710
+Imagine uma empresa onde dois grupos trabalham com o mesmo cliente,
+
+00:00:43.770 --> 00:00:45.590
+mas usam aplicativos completamente diferentes no dia a dia.
+
+00:00:46.190 --> 00:00:48.390
+Aplicativos de finanças e operações cuidam do trabalho de back-off.
+
+00:00:48.810 --> 00:00:51.650
+Isso inclui dinheiro, estoque, produtos, pedidos, compras e acadetos para mim.
+
+00:00:52.090 --> 00:00:53.270
+É aqui que a empresa rastreia.
+
+00:00:53.450 --> 00:00:56.370
+O que vende, o que pode entregar, o que deve e o que um cliente precisa pagar.
+
+00:00:57.650 --> 00:00:59.630
+Aplicativos de clientes focam no trabalho mais próximo ao cliente.
+
+00:01:00.010 --> 00:01:02.110
+Equipes de vendas acompanham leads e criam oportunidade.
+
+00:01:02.570 --> 00:01:04.430
+O atendimento ao cliente lida com dúvidas e casos.
+
+00:01:04.990 --> 00:01:07.250
+O serviço de campo planeja tarefas e envia pessoas locais.
+
+00:01:07.790 --> 00:01:09.870
+Equipes de projeto rastreiam o trabalho prometido no clima.
+
+00:01:10.090 --> 00:01:11.590
+Trabalhos diferentes precisam de telas diferentes.
+
+00:01:11.910 --> 00:01:14.230
+Um vendedor não deveria ter que procurar em uma tela financeira
+
+00:01:14.230 --> 00:01:16.090
+apenas para atualizar um contato após uma ligação.
+
+00:01:16.550 --> 00:01:18.810
+Mas um usuário financeiro precisa de detalhes de cliente
+
+00:01:18.810 --> 00:01:20.670
+pedido que correspondam ao que as vendas veem,
+
+00:01:20.950 --> 00:01:23.310
+afinal, faturas e entregas dependem dessas informações.
+
+00:01:24.230 --> 00:01:27.010
+Sem uma conexão, um cliente silenciosamente se torna dois registros.
+
+00:01:27.010 --> 00:01:28.950
+Vendas pode listar como Northin Bikes,
+
+00:01:29.010 --> 00:01:31.130
+o financeiro pode listar como Northin Bicycle Company.
+
+00:01:31.970 --> 00:01:33.150
+Um registro tem um novo endereço,
+
+00:01:33.230 --> 00:01:35.670
+o outro identifica faturas para o escritório antigo, antigo.
+
+00:01:36.470 --> 00:01:38.450
+Ambos os registros parecem razoáveis sozinhos,
+
+00:01:38.550 --> 00:01:40.450
+mas já não descrevem o mesmo relacionamento comercial.
+
+00:01:40.990 --> 00:01:42.090
+Pequenos problemas surgem primeiro.
+
+00:01:42.450 --> 00:01:43.730
+Alguém não consegue encontrar um cliente
+
+00:01:43.730 --> 00:01:45.170
+porque o nome está diferente e outro aplicativo.
+
+00:01:45.630 --> 00:01:47.150
+Um representante de vendas promete um preço,
+
+00:01:47.250 --> 00:01:47.910
+verifica o estoque,
+
+00:01:47.990 --> 00:01:49.690
+mas a informação não coincide com o lado operacional.
+
+00:01:50.170 --> 00:01:51.870
+O financeiro precisa processar um pedido,
+
+00:01:51.870 --> 00:01:53.670
+mas os detalhes do cliente exigem uma verificação,
+
+00:01:53.770 --> 00:01:54.510
+um e-mail e outra atualização.
+
+00:01:54.510 --> 00:01:56.630
+Então esses pequenos problemas se acumulam.
+
+00:01:56.810 --> 00:01:58.710
+Alguém exporta dados de clientes para uma planilha.
+
+00:01:59.330 --> 00:02:01.590
+Outra pessoa corrige algumas linhas e importa para outro lugar.
+
+00:02:02.330 --> 00:02:04.470
+Alguém mais insere um novo cliente em ambos os aplicativos
+
+00:02:04.470 --> 00:02:06.110
+porque ninguém sabe qual registro aparecerá primeiro.
+
+00:02:06.670 --> 00:02:08.690
+Logo há duplicatas, endereços diferentes
+
+00:02:08.690 --> 00:02:10.990
+e mais tempo gasto verificando dados do que usando-os.
+
+00:02:11.650 --> 00:02:13.310
+Nada disso acontece porque as pessoas são de cuidado.
+
+00:02:13.710 --> 00:02:15.950
+Acontece porque os sistemas pedem que as pessoas sejam em conexão.
+
+00:02:16.410 --> 00:02:17.110
+Pessoas copiam dados.
+
+00:02:17.410 --> 00:02:18.870
+Pessoas precisam lembrar qual aplicativo vem primeiro.
+
+00:02:19.130 --> 00:02:21.450
+Pessoas encontram erros depois que eles já chegaram a outra equipe.
+
+00:02:21.810 --> 00:02:24.170
+Essa abordagem funcionava quando os sistemas de negócios eram separados,
+
+00:02:24.170 --> 00:02:25.350
+as equipes aceitavam atraso.
+
+00:02:25.750 --> 00:02:27.710
+Mas quando vendas, serviços, finanças e operações
+
+00:02:27.710 --> 00:02:29.830
+precisam das mesmas informações do cliente durante o dia,
+
+00:02:29.910 --> 00:02:31.870
+uma planilha torna-se uma ferramenta de transferência em eficiência.
+
+00:02:32.530 --> 00:02:34.170
+Pense em uma conversa simples sobre um pedido.
+
+00:02:34.650 --> 00:02:35.690
+O cliente liga para vendas e pergunta
+
+00:02:35.690 --> 00:02:37.030
+quanto vocês podem entregar na próxima semana.
+
+00:02:37.630 --> 00:02:38.170
+Quanto vai custar?
+
+00:02:38.850 --> 00:02:41.970
+A equipe de vendas precisa de detalhes de produto, preço e estoque para responder.
+
+00:02:42.830 --> 00:02:43.970
+Assim que o cliente concorda,
+
+00:02:44.170 --> 00:02:46.450
+finanças e operações precisam das informações corretas do cliente
+
+00:02:46.450 --> 00:02:47.750
+e do pedido para processar a venda.
+
+00:02:48.510 --> 00:02:49.710
+Ambos os lados precisam dos mesmos.
+
+00:02:49.710 --> 00:02:52.690
+Vendas precisam desses fatos no aplicativo onde o pessoal de vendas trabalha.
+
+00:02:53.390 --> 00:02:55.390
+Finanças e operações precisam deles no aplicativo
+
+00:02:55.390 --> 00:02:57.150
+onde gerenciam pedidos, dinheiro e entrega.
+
+00:02:57.910 --> 00:03:00.910
+O objetivo não é tentar forçar todas as equipes a usarem uma única tela gigante.
+
+00:03:01.330 --> 00:03:02.950
+O objetivo é que os registros compartilhados
+
+00:03:02.950 --> 00:03:04.090
+sigam uma rota clara e acordada.
+
+00:03:04.670 --> 00:03:06.210
+É aí que a gravação dupla do All Right Ensemble.
+
+00:03:07.110 --> 00:03:08.210
+O que é a gravação dupla, afinal?
+
+00:03:08.610 --> 00:03:10.090
+Então, o que exatamente é a gravação dupla?
+
+00:03:10.590 --> 00:03:11.550
+Aqui está a definição mais simples.
+
+00:03:11.710 --> 00:03:14.430
+A gravação dupla é a conexão integrada da Microsoft
+
+00:03:14.430 --> 00:03:15.590
+que mantém dados selecionados,
+
+00:03:15.590 --> 00:03:19.390
+sincronizados entre os aplicativos do Dynamics 365 Finance & Operations e Dataverse.
+
+00:03:19.850 --> 00:03:21.530
+O Dataverse é a base de dados compartilhada
+
+00:03:21.530 --> 00:03:23.150
+por trás de muitos aplicativos de negócios na Microsoft.
+
+00:03:23.650 --> 00:03:26.190
+Dynamics 365 Sales, Customer Service, Field Service
+
+00:03:26.190 --> 00:03:28.130
+e partes do Project Operations usam essa base.
+
+00:03:28.610 --> 00:03:30.330
+O Power Apps e o Power Automate também podem usar.
+
+00:03:30.790 --> 00:03:32.990
+Você não precisa saber como o Dataverse armazena cada registro
+
+00:03:32.990 --> 00:03:33.910
+para entender a gravação dupla.
+
+00:03:34.470 --> 00:03:36.130
+Apenas pense nela como a área de dados comum
+
+00:03:36.130 --> 00:03:38.270
+lá dos aplicativos de cliente do Dynamics 365.
+
+00:03:38.730 --> 00:03:40.650
+Imagine um prédio comercial com um escritório de atendimento
+
+00:03:40.650 --> 00:03:41.470
+e um setor administrativo.
+
+00:03:41.750 --> 00:03:43.930
+O escritório de atendimento lida com conversas com clientes.
+
+00:03:43.930 --> 00:03:46.370
+Pessoal de vendas, agentes de serviços, trabalhadores de campo.
+
+00:03:47.990 --> 00:03:50.330
+Todos eles precisam de telas que ajudem a conversar com as pessoas,
+
+00:03:50.450 --> 00:03:51.910
+rastrear solicitações e gerenciar o trabalho.
+
+00:03:52.290 --> 00:03:54.550
+O setor administrativo lida com o trabalho que mantém a empresa funcionando.
+
+00:03:54.930 --> 00:03:57.750
+Nosso registro financeiro, estoque, pedidos, compras, entrega.
+
+00:03:58.470 --> 00:04:00.150
+Ambos os setores trabalham para a mesma empresa,
+
+00:04:00.350 --> 00:04:02.130
+mas sem uma conexão adequada entre eles,
+
+00:04:02.270 --> 00:04:04.190
+alguém tem que levar as informações de um lado para o outro.
+
+00:04:04.650 --> 00:04:05.850
+Eles carregam um formulário impresso,
+
+00:04:05.930 --> 00:04:07.750
+enviam um e-mail ou copiam dados para outro sistema.
+
+00:04:08.450 --> 00:04:10.010
+O trabalho ainda é feito, mas demora mais
+
+00:04:10.010 --> 00:04:11.690
+e detalhes podem mudar ao longo do caminho.
+
+00:04:11.690 --> 00:04:13.950
+A gravação dupla é como uma porta interna
+
+00:04:13.950 --> 00:04:15.410
+com funcionários entre esses dois escritórios.
+
+00:04:15.950 --> 00:04:17.470
+Quando um registro compatível muda de um lado,
+
+00:04:17.730 --> 00:04:20.490
+a gravação dupla passa a alteração relacionada a essa porta para o outro lado.
+
+00:04:21.210 --> 00:04:22.810
+Ele não combina todos os aplicativos gigantes.
+
+00:04:23.390 --> 00:04:24.510
+Vendas ainda pode trabalhar em venda.
+
+00:04:24.850 --> 00:04:26.090
+Finanças ainda pode trabalhar em finanças.
+
+00:04:26.430 --> 00:04:28.390
+Cada equipe mantém as telas criadas para seu trabalho,
+
+00:04:28.510 --> 00:04:30.170
+enquanto informações compartilhadas e selecionadas
+
+00:04:30.170 --> 00:04:31.490
+permanecem conectadas nos bastidores.
+
+00:04:31.570 --> 00:04:32.510
+Palavra suportar é importante.
+
+00:04:32.950 --> 00:04:35.730
+DualWrite não copia cegamente cada parte dos dados em um dos sistemas.
+
+00:04:36.170 --> 00:04:37.970
+Ele funciona através de conexões definidas
+
+00:04:37.970 --> 00:04:39.350
+entre registros que pertencem a um outro.
+
+00:04:39.350 --> 00:04:41.970
+A Microsoft chama essas conexões de mapas de tabela.
+
+00:04:42.810 --> 00:04:45.490
+Uma tabela é simplesmente um lugar onde um aplicativo mantém um tipo de registro.
+
+00:04:45.830 --> 00:04:47.570
+Uma tabela de clientes mantém registro de clientes.
+
+00:04:47.850 --> 00:04:49.210
+Uma tabela de produtos mantém registro de produtos.
+
+00:04:49.530 --> 00:04:51.270
+Uma tabela de endereço mantém detalhes de endereço.
+
+00:04:51.610 --> 00:04:53.090
+Um mapa de tabela diz ao DualWrite
+
+00:04:53.090 --> 00:04:55.290
+qual tabela no lado de Finanças e Operações se conecta
+
+00:04:55.290 --> 00:04:56.410
+qual tabela no Dataverse.
+
+00:04:57.070 --> 00:04:59.250
+Pense em um mapa de tabela com uma folha de tradução acordada.
+
+00:04:59.250 --> 00:05:01.230
+Uma coluna identifica um registro de um lado.
+
+00:05:01.710 --> 00:05:04.130
+Outra coluna identifica seu registro correspondente do outro lado.
+
+00:05:04.550 --> 00:05:06.970
+O restante da folha explica quais campos pertencem um ao outro.
+
+00:05:06.970 --> 00:05:09.810
+Nosso nome, número de telefone, linha de endereço.
+
+00:05:10.070 --> 00:05:11.630
+Esse acordo estabelece as regras de conexão.
+
+00:05:12.050 --> 00:05:14.330
+Sem ele, dois aplicativos poderiam usar rótulos diferentes
+
+00:05:14.330 --> 00:05:15.850
+ou armazenar o mesmo detalhe em lugares diferentes.
+
+00:05:16.130 --> 00:05:18.410
+Um mapa diz ao DualWrite como esses detalhes se relacionam.
+
+00:05:18.830 --> 00:05:20.970
+Os aplicativos não precisam de pessoa para interpretá-los toda vez.
+
+00:05:21.330 --> 00:05:23.430
+Agora, as pessoas costumam ouvir o nome DualWrite
+
+00:05:23.430 --> 00:05:26.230
+e presumem que isso significa que toda mudança sempre se move nos dois sentidos.
+
+00:05:26.490 --> 00:05:27.310
+Às vezes, sim.
+
+00:05:27.770 --> 00:05:29.150
+Para um mapa bidirecional suportado,
+
+00:05:29.190 --> 00:05:32.110
+uma alteração no Dataverse pode atualizar o registro relacionado no Finance and Operations.
+
+00:05:32.530 --> 00:05:34.450
+Uma alteração suportada no Finance and Operations
+
+00:05:34.450 --> 00:05:36.630
+também pode atualizar o registro relacionado no Dataverse.
+
+00:05:36.970 --> 00:05:39.330
+Ambos os lados podem participar do mesmo registro compartilhado.
+
+00:05:39.730 --> 00:05:40.510
+Essa é a parte do Aldo.
+
+00:05:40.890 --> 00:05:42.270
+A atualização ocorre quase em tempo real.
+
+00:05:42.770 --> 00:05:44.490
+Ela se move rapidamente à medida que as pessoas trabalham
+
+00:05:44.490 --> 00:05:46.370
+ao invés de esperar por um trabalho agendado que roda durante a noite.
+
+00:05:47.070 --> 00:05:48.710
+Um usuário atualiza um registro suportado
+
+00:05:48.710 --> 00:05:51.910
+e a conexão envia essa atualização enquanto o trabalho ainda está em andamento.
+
+00:05:52.490 --> 00:05:54.630
+Quase tempo real não significa mágica ou atraso zero.
+
+00:05:55.010 --> 00:05:57.350
+Significa que a conexão foi criada por trabalho comercial ao vivo,
+
+00:05:57.550 --> 00:05:59.010
+não por uma troca de arquivos uma vez por dia.
+
+00:05:59.570 --> 00:06:00.570
+Se alguém altera um detalhe,
+
+00:06:00.630 --> 00:06:03.070
+a equipe relacionada não precisa esperar até a manhã seguinte para vê-lo.
+
+00:06:03.470 --> 00:06:04.810
+Isso muda a forma como as equipes podem trabalhar.
+
+00:06:04.810 --> 00:06:07.370
+O FrontOffice pode usar dados provenientes do BackOffice.
+
+00:06:07.710 --> 00:06:11.050
+O BackOffice pode receber atualizações suportadas de aplicativos voltados ao cliente.
+
+00:06:11.110 --> 00:06:12.870
+Dataverse torna-se a base de dados de um lado,
+
+00:06:13.010 --> 00:06:15.070
+o Finance and Operations permanece a base operacional do outro
+
+00:06:15.070 --> 00:06:17.910
+e o DualWrite mantém os registros compartilhados, aprovados e conectados.
+
+00:06:19.170 --> 00:06:21.010
+Ainda assim, uma porta internativa precisa de regras.
+
+00:06:21.410 --> 00:06:23.750
+Antes de permitir que um registro viaje em ambas as direções,
+
+00:06:23.870 --> 00:06:25.850
+você precisa saber onde esse registro deve começar,
+
+00:06:26.230 --> 00:06:29.210
+quem pode alterá-lo e qual lado deve liderar quando os dois aplicativos discordarem.
+
+00:06:29.210 --> 00:06:32.450
+Quais dados podem ser transferidos e qual sistema é o proprietário?
+
+00:06:33.210 --> 00:06:35.310
+Então, quais registros o DualWrite consegue manter conectado?
+
+00:06:35.650 --> 00:06:38.770
+Os exemplos comuns começam com os registros que muitos departamentos compartilham diariamente.
+
+00:06:39.570 --> 00:06:43.210
+Registro de clientes, endereços, contatos, produtos, fornecedores, detalhes da empresa
+
+00:06:43.210 --> 00:06:46.110
+e informações de referência usadas para finanças e impostos.
+
+00:06:47.250 --> 00:06:48.830
+Pense em um registro de cliente por um momento.
+
+00:06:49.410 --> 00:06:53.390
+Vendas precisa do nome do cliente, contato principal, número de telefone e endereço de entrega.
+
+00:06:54.390 --> 00:06:58.890
+Financeiro precisa do registro legal do cliente, detalhes de cobrança e informações necessárias para pedidos e faturas.
+
+00:06:59.210 --> 00:07:01.490
+Cada departamento mantém sua própria lista de clientes separada,
+
+00:07:01.810 --> 00:07:04.250
+a empresa gasta tempo comparando registros em vez de atender o cliente.
+
+00:07:05.050 --> 00:07:06.470
+Com os mapeamentos de DualWrite corretos,
+
+00:07:06.510 --> 00:07:08.630
+essas equipes podem trabalhar com detalhes de clientes conectados.
+
+00:07:09.090 --> 00:07:11.690
+Isso não significa que usuários de vendas precisam aprender o aplicativo financeiro de repente.
+
+00:07:12.110 --> 00:07:15.450
+Significa que eles podem trabalhar com informações de clientes no Dynamics 305 Sales,
+
+00:07:15.970 --> 00:07:19.070
+enquanto os usuários do financeiro trabalham com as informações relacionadas no Finance.
+
+00:07:19.850 --> 00:07:22.570
+O cliente permanece reconhecível como o mesmo em ambos os lugares.
+
+00:07:23.690 --> 00:07:24.310
+Endereço importante.
+
+00:07:24.310 --> 00:07:29.370
+Um cliente pode ter um endereço de cobrança, um de entrega e talvez um local onde um técnico precise visitar.
+
+00:07:29.790 --> 00:07:32.990
+Podem ser tratados apenas como textos simples, copiados em uma caixa, pescados em uma caixa,
+
+00:07:33.050 --> 00:07:34.470
+pois cada endereço tem uma função diferente.
+
+00:07:35.230 --> 00:07:38.290
+O DualWrite suporta a estrutura de registro compartilhada necessária para esse relacionamento.
+
+00:07:38.590 --> 00:07:40.090
+Os contatos seguem o mesmo padrão.
+
+00:07:40.150 --> 00:07:43.950
+Uma empresa cliente pode ter um comprador, um contato de contas a pagar e um gerente de serviços.
+
+00:07:44.630 --> 00:07:46.230
+Vendas precisa saber quem toma as decisões.
+
+00:07:46.630 --> 00:07:48.450
+Financeiro precisa saber para onde direcionar dúvidas de cobrança.
+
+00:07:48.890 --> 00:07:50.650
+Serviço precisa saber quem está aguardando o local.
+
+00:07:50.650 --> 00:07:54.510
+Registros conectados ajudam cada equipe a ver as pessoas ligadas ao cliente sem precisar
+
+00:07:54.510 --> 00:07:56.150
+recriar essas informações em cada aplicativo.
+
+00:07:56.470 --> 00:07:57.510
+Produtos são outro exemplo comum.
+
+00:07:58.030 --> 00:08:01.270
+Um representante de vendas precisa saber o que a empresa vende, qual o custo do produto,
+
+00:08:01.550 --> 00:08:02.530
+se há estoque disponível.
+
+00:08:03.050 --> 00:08:06.570
+Essas respostas geralmente vêm do lado operacional do negócio, pois é onde o produto, estoque,
+
+00:08:06.710 --> 00:08:08.270
+compras e atendimento são gerenciados.
+
+00:08:08.750 --> 00:08:11.570
+Por isso que as informações de produtos geralmente começam em finanças e operações.
+
+00:08:12.210 --> 00:08:14.470
+A equipe de operações cria e prepara um produto lá.
+
+00:08:14.850 --> 00:08:19.610
+Assim que o produto está pronto para o trabalho com o cliente, o DualWrite pode enviar os detalhes relacionados
+
+00:08:19.610 --> 00:08:20.730
+ao produto para o Dataverse.
+
+00:08:21.390 --> 00:08:24.670
+Os usuários de vendas podem então selecionar e discutir o produto em seu próprio aplicativo
+
+00:08:24.670 --> 00:08:26.830
+sem que alguém precise inserir a lista de produtos uma segunda vez.
+
+00:08:27.350 --> 00:08:31.030
+Isso ajuda as conversas de vendas a permanecerem baseadas no que a empresa realmente pode fornecer.
+
+00:08:31.630 --> 00:08:35.190
+Detalhes de preços e estoque também podem chegar às vendas através dos aplicativos conectados.
+
+00:08:35.850 --> 00:08:40.190
+Em vez de adivinhar se um item existe, se o preço mudou ou se o estoque pode cumprir uma promessa,
+
+00:08:40.710 --> 00:08:43.670
+a equipe de vendas pode trabalhar com informações vinculadas ao lado operacional.
+
+00:08:43.670 --> 00:08:46.230
+Isso não elimina a necessidade de um bom julgamento de vendas.
+
+00:08:46.770 --> 00:08:49.990
+Elimina o motivo evitável para um representante de vendas ligar para o armazém apenas para
+
+00:08:49.990 --> 00:08:50.970
+confirmar detalhes básicos.
+
+00:08:51.490 --> 00:08:54.390
+Informações de fornecedores também podem se conectar onde um processo de negócio precisar
+
+00:08:54.390 --> 00:08:54.510
+dele.
+
+00:08:54.870 --> 00:08:58.730
+Detalhes da empresa, estruturas organizacionais, dados de referência financeira e dados fiscais
+
+00:08:58.730 --> 00:09:01.370
+podem ser importantes tanto para o lado do cliente quanto para o lado da operação.
+
+00:09:02.210 --> 00:09:05.610
+Os registros exatos dependem dos aplicativos e processos que uma empresa usa, mas o padrão
+
+00:09:05.610 --> 00:09:06.350
+permanece o mesmo.
+
+00:09:07.210 --> 00:09:09.430
+Compartilhe os registros que precisam significar a mesma coisa.
+
+00:09:09.430 --> 00:09:13.050
+Agora, não presuma que todo o registro deve viajar em ambas as direções.
+
+00:09:13.490 --> 00:09:14.970
+Uns aplicativos oferecem superdirecionais.
+
+00:09:15.450 --> 00:09:18.670
+Uma alteração pode começar no Dataverse e ir para o Finance and Operations, ou começar
+
+00:09:18.670 --> 00:09:20.110
+no Finance and Operations e ir para o Dataverse.
+
+00:09:20.930 --> 00:09:24.070
+Essa abordagem funciona para registros em que ambos os lados têm um motivo de negócio
+
+00:09:24.070 --> 00:09:25.450
+adequado para atualizar detalhes aprovados.
+
+00:09:25.770 --> 00:09:26.890
+Outros mapeamentos são as gerenciais e as direções.
+
+00:09:27.290 --> 00:09:28.430
+Produtos nos dão um exemplo útil.
+
+00:09:29.030 --> 00:09:32.510
+Em muitas empresas, o Finance and Operations é responsável pela criação de produtos,
+
+00:09:32.510 --> 00:09:36.170
+pois as operações controlam o mestre de produtos, estoque, unidades e outros detalhes
+
+00:09:36.170 --> 00:09:37.570
+necessários para vender e entregar.
+
+00:09:37.570 --> 00:09:41.450
+O produto, então, flui para o Dataverse, onde as equipes de vendas e serviço podem
+
+00:09:41.450 --> 00:09:41.890
+usá-lo.
+
+00:09:42.370 --> 00:09:43.030
+Essa é uma regra clara.
+
+00:09:43.450 --> 00:09:45.690
+O produto não precisa de duas equipes criando versões conflitantes.
+
+00:09:46.550 --> 00:09:47.990
+Um lado cria e governa o produto.
+
+00:09:48.630 --> 00:09:50.770
+O outro lado recebe e usa como parte do seu trabalho.
+
+00:09:51.370 --> 00:09:53.210
+Cada registro compartilhado precisa desse tipo de decisão.
+
+00:09:53.430 --> 00:09:54.290
+Onde esse registro começa?
+
+00:09:54.670 --> 00:09:55.190
+Quem pode editar?
+
+00:09:55.610 --> 00:09:59.310
+Se o nome, endereço, preço ou classificação parecer errado, qual equipe o corrige?
+
+00:09:59.750 --> 00:10:02.550
+Essas perguntas parecem simples, mas evitam muita confusão mais tarde.
+
+00:10:02.930 --> 00:10:04.610
+Uma conexão pode mover uma alteração muito rapidamente.
+
+00:10:05.030 --> 00:10:07.550
+Se ninguém concordou sobre quem é o responsável pela alteração, ela pode mover um erro.
+
+00:10:07.570 --> 00:10:08.130
+Com a mesma rapidez.
+
+00:10:08.270 --> 00:10:12.070
+Por um proprietário para o registro e, quando necessário, para detalhes individuais dentro
+
+00:10:12.070 --> 00:10:12.730
+desse registro.
+
+00:10:12.890 --> 00:10:15.630
+Por exemplo, as vendas podem ser responsáveis pelos detalhes de relacionamento do cliente
+
+00:10:15.630 --> 00:10:16.790
+e pelas informações de contato principal.
+
+00:10:16.950 --> 00:10:19.070
+E as operações podem ser responsáveis pelos detalhes relacionados ao pagamento.
+
+00:10:19.170 --> 00:10:21.310
+E as operações podem ser responsáveis pelos detalhes de produto e estoque.
+
+00:10:21.430 --> 00:10:25.290
+Sua divisão exata depende de como sua empresa trabalha, mas precisa ser documentada e compreendida
+
+00:10:25.290 --> 00:10:26.690
+pelas pessoas que usam os aplicativos.
+
+00:10:26.690 --> 00:10:29.270
+Há também dois termos que você pode ver após a gravação dupla.
+
+00:10:29.370 --> 00:10:30.530
+DualWrite expandiu o Dataverse.
+
+00:10:30.710 --> 00:10:32.190
+Party, Party e Company, Empresa.
+
+00:10:32.850 --> 00:10:36.450
+Um Party é a maneira da Microsoft de lidar com uma pessoa ou organização de forma consistente.
+
+00:10:37.210 --> 00:10:41.570
+Isso ajuda a conectar pessoas, organizações, contatos e endereços sem tratar cada relacionamento
+
+00:10:41.570 --> 00:10:43.730
+como um registro separado e não relacionado.
+
+00:10:44.750 --> 00:10:48.810
+Uma Company ajuda o Dataverse a entender o contexto da empresa de negócios usado pelo Finance & Operations.
+
+00:10:49.370 --> 00:10:51.490
+Você não precisa se tornar um especialista em nenhum desses termos no primeiro dia.
+
+00:10:51.490 --> 00:10:55.730
+Saiba apenas que eles existem, pois o Finance & Operations lida com estruturas de negócios
+
+00:10:55.730 --> 00:10:58.830
+que os aplicativos de clientes precisam reconhecer quando os registros cruzam os dois lados.
+
+00:10:59.330 --> 00:11:02.910
+Assim que os registros podem trafegar em ambas as direções, o processo em torno desses registros
+
+00:11:02.910 --> 00:11:06.230
+é tão importante quanto os próprios dados, com uma alteração viagem dos aplicativos.
+
+00:11:07.390 --> 00:11:09.950
+Vamos acompanhar uma alteração pelo sistema e ver o que realmente acontece.
+
+00:11:10.550 --> 00:11:13.570
+Um representante de venda está em uma chamada com um cliente que acabou de se mudar para um novo escritório.
+
+00:11:14.290 --> 00:11:18.470
+Durante essa conversa, o representante abre o registro do cliente no Dynamics 306 Sales
+
+00:11:18.470 --> 00:11:19.490
+e atualiza o endereço.
+
+00:11:20.050 --> 00:11:20.590
+Simples, certo?
+
+00:11:20.590 --> 00:11:22.190
+Em seguida, ele salva o registro.
+
+00:11:22.550 --> 00:11:23.830
+É aí que a parte interessante começa.
+
+00:11:24.370 --> 00:11:28.130
+Sales armazena essa alteração no Dataverse, que é o lado de dados, para aplicativos voltados ao cliente.
+
+00:11:28.530 --> 00:11:33.170
+Então, o DualWrite verifica o mapa que conecta as informações de cliente e endereço entre este local e o Finance & Operations.
+
+00:11:34.030 --> 00:11:35.670
+Ele envia alteração correspondente automáticamente.
+
+00:11:36.330 --> 00:11:39.310
+Nada de arquivos de exportação e impasses compartilhados esperando que alguém os pegue.
+
+00:11:39.670 --> 00:11:42.950
+Ninguém precisa enviar um e-mail para o financeiro dizendo aí, por favor, atualize este endereço.
+
+00:11:43.610 --> 00:11:47.330
+O mapa já sabe quais campos estão vinculados e envia alteração suportada diretamente
+
+00:11:47.330 --> 00:11:49.610
+para o registro do cliente relacionado no Finance & Operations.
+
+00:11:49.610 --> 00:11:53.750
+Assim, o usuário do financeiro pode abrir esse registro mais tarde, ver o endereço atualizado,
+
+00:11:54.150 --> 00:11:56.490
+processar um pedido ou preparar uma fatura sem interrupções.
+
+00:11:57.010 --> 00:11:58.570
+Esse é o resultado prático, simples e direto.
+
+00:11:59.210 --> 00:12:02.530
+Duas pessoas continuam trabalhando em aplicativos diferentes, mas nenhuma precisa redigitar os
+
+00:12:02.530 --> 00:12:03.490
+mesmos detalhes do cliente.
+
+00:12:03.490 --> 00:12:06.870
+O representante de vendas trabalha em uma tela projetada para conversas com o cliente.
+
+00:12:07.230 --> 00:12:09.770
+O usuário do financeiro trabalha em uma tela criada para tarefas financeiras.
+
+00:12:09.770 --> 00:12:13.990
+Cada pessoa vê as informações do cliente de que realmente precisa exatamente onde precisa.
+
+00:12:14.650 --> 00:12:16.110
+E o fluxo funciona na outra direção também.
+
+00:12:16.690 --> 00:12:19.910
+Imagine que o financeiro atualiza informações suportadas do cliente no Finance & Operations.
+
+00:12:20.910 --> 00:12:24.330
+Digamos que um usuário do financeiro corrija um detalhe que pertence ao registro do cliente operacional.
+
+00:12:25.470 --> 00:12:29.230
+DualWrite usa o mapa correspondente de forma inversa e envia essa atualização para o Dataverse.
+
+00:12:29.230 --> 00:12:33.190
+Então o Sallius ou qualquer outro aplicativo baseado no Dataverse pode captá-la.
+
+00:12:34.130 --> 00:12:36.310
+Essa conexão é síncrona para o trabalho diário normal.
+
+00:12:36.890 --> 00:12:41.050
+Síncrona significa que os aplicativos tentam concluir a atualização relacionada no mesmo momento de trabalho,
+
+00:12:41.190 --> 00:12:43.870
+em vez de deixá-la para um processo em segundo plano que pode rodar 20 minutos depois.
+
+00:12:44.550 --> 00:12:48.250
+Se a conexão não puder concluir a atualização, esse problema precisa de atenção imediata,
+
+00:12:48.370 --> 00:12:50.690
+sem ficar oculto até que alguém note uma divergência.
+
+00:12:51.310 --> 00:12:53.510
+Esse comportamento faz sentido para registro de negócio compartilhado.
+
+00:12:53.790 --> 00:12:56.650
+Você não quer que o endereço de um cliente, detalhes de produto ou outras informações compartilhadas
+
+00:12:56.650 --> 00:12:59.210
+fiquem defasados por horas, fiquem defasados por horas porque um trabalho em lote não fez.
+
+00:12:59.230 --> 00:13:02.030
+As pessoas tomam decisões com base no que vem na tela agora mesmo.
+
+00:13:02.410 --> 00:13:05.370
+Portanto, a conexão mantém ambos os lados alinhados enquanto o trabalho acontece.
+
+00:13:05.910 --> 00:13:08.310
+Mesmo o trabalho em tempo real às vezes precisa de uma pausa controlada.
+
+00:13:09.010 --> 00:13:11.310
+O Dual Write inclui opções de Reproduzir, Pausar e Recuperar.
+
+00:13:11.690 --> 00:13:14.770
+Reproduzir significa que o mapeamento está ativo e as alterações suportadas foi uma...
+
+00:13:14.770 --> 00:13:18.310
+Pausar interrompe temporariamente o mapeamento quando uma equipe precisa realizar um trabalho planejado
+
+00:13:18.310 --> 00:13:20.370
+e investigar um problema, ou gerenciar um problema, ou gerenciar um uso.
+
+00:13:20.630 --> 00:13:22.170
+Mas a pausa não é um estacionamento permanente.
+
+00:13:22.790 --> 00:13:26.070
+Quando o mapeamento está pausado, as alterações podem entrar em uma fila por tempo e espaço de mim.
+
+00:13:26.070 --> 00:13:29.470
+Quando o mapeamento é retomado, a recuperação processa as alterações pendentes.
+
+00:13:29.810 --> 00:13:32.330
+Isso ajuda as equipes a se recuperarem após uma interrupção planejada.
+
+00:13:32.950 --> 00:13:36.390
+No entanto, alguém precisa ser responsável por essa pausa e saber quando o mapeamento deve voltar a você.
+
+00:13:37.190 --> 00:13:40.610
+Antes de tudo isso começar no trabalho diário, existe outra etapa, a sincronização inicial.
+
+00:13:40.950 --> 00:13:44.510
+A sincronização inicial traz registro de ambos os lados para um ponto de partida comum.
+
+00:13:44.870 --> 00:13:48.890
+Pense em uma empresa que já possui clientes no Finance Operations e registros de clientes no Dataverse.
+
+00:13:48.890 --> 00:13:53.170
+A conexão não pode simplesmente ser ativada assumindo que cada registro existente corresponda perfeitamente.
+
+00:13:53.590 --> 00:13:54.630
+É necessário uma linha de partida.
+
+00:13:55.010 --> 00:13:59.510
+A sincronização inicial ajuda a trazer os dados existentes antes que as pessoas dependam de atualizações em tempo real.
+
+00:14:00.150 --> 00:14:04.870
+Esse trabalho exige cuidado, pois registros duplicados, endereços incompletos e dados de teste antigos
+
+00:14:04.870 --> 00:14:07.110
+não se limpam magicamente só porque uma sincronização começou.
+
+00:14:07.850 --> 00:14:11.390
+Eles podem, na verdade, criar problemas mais rapidamente se os registros não seguirem as regras estabelecidas.
+
+00:14:11.750 --> 00:14:16.070
+Uma vez que os mapeamentos estão em execução, as pessoas que gerenciam o DualWrite precisam de um local claro para verificar sua integridade.
+
+00:14:16.070 --> 00:14:22.210
+O DualWrite fornece logs combinados de atividade e erro para que os administradores possam ver o que a conexão processou e onde encontrou dificuldades.
+
+00:14:22.930 --> 00:14:24.430
+Eles também podem definir alertas e limites.
+
+00:14:25.030 --> 00:14:30.170
+Isso significa que as pessoas certas ficam sabendo dos problemas antes que os usuários os descubram por meio de uma atualização ausente ou com falha.
+
+00:14:30.690 --> 00:14:33.210
+Essa visão de suporte é importante porque todo erro tem uma causa.
+
+00:14:33.810 --> 00:14:35.110
+Talvez um campo obrigatório seja a falta.
+
+00:14:35.530 --> 00:14:37.050
+Talvez um registro relacionado ainda não tenha chegado.
+
+00:14:37.350 --> 00:14:39.630
+Talvez alguém tenha alterado dados de uma forma que não se encaixa no lugar.
+
+00:14:39.970 --> 00:14:43.970
+Tentar processar novamente um registro com falha sem corrigir a causa geralmente gera a mesma falha novamente.
+
+00:14:43.970 --> 00:14:47.410
+Uma configuração de DualWrite bem executada monitora a conexão,
+
+00:14:47.690 --> 00:14:52.530
+corrige a razão por trás dos erros e mantém os mapeamentos focados nos registros que realmente precisam permanecer conectados.
+
+00:14:53.370 --> 00:14:54.250
+Onde o DualWrite aplica?
+
+00:14:54.690 --> 00:14:59.090
+O DualWrite se aplica melhor quando sua empresa utiliza o Dynamics 365 Finance ou Supply Chain Management
+
+00:14:59.090 --> 00:15:03.590
+junto com aplicativos voltados ao cliente como vendas, atendimento ao cliente, serviço de campo ou operações de projeto.
+
+00:15:04.430 --> 00:15:07.150
+Esses aplicativos suportam diferentes partes da mesma conversa com esse.
+
+00:15:07.630 --> 00:15:13.110
+Uma equipe fala com o cliente, outra planeja a entrega, gerencia o estoque, rastreia custos ou envia a fatura.
+
+00:15:13.110 --> 00:15:17.250
+Quando ambos os grupos precisam trabalhar com registros relacionados durante o dia,
+
+00:15:17.430 --> 00:15:20.750
+o DualWrite pode conectar esse trabalho sem forçar todos a usarem o mesmo aplicativo.
+
+00:15:21.370 --> 00:15:23.210
+Considere o processo de Prospect to Cash como um exemplo.
+
+00:15:23.770 --> 00:15:26.710
+Um vendedor trabalha com um cliente em potencial no Dynamics 365 Sales.
+
+00:15:27.490 --> 00:15:31.370
+Eles rastreiam o contato, discutem produtos, criam uma cotação e avançam para um pedido.
+
+00:15:31.930 --> 00:15:38.450
+Durante essa conversa, o vendedor precisa de detalhes do cliente, informações de produtos, preços e dados de pedidos relacionados ao setor financeiro da empresa.
+
+00:15:38.450 --> 00:15:44.670
+Assim que a venda se torna real, o setor de finanças e gerenciamento da cadeia de suprimentos assume o trabalho que ocorre após a promessa.
+
+00:15:45.110 --> 00:15:47.930
+Ele cuida do preenchimento do pedido, faturamento de estoque e registro financeiro.
+
+00:15:48.610 --> 00:15:51.010
+O DualWrite ajuda essas duas partes a permanecerem conectados.
+
+00:15:51.510 --> 00:15:54.210
+Os vendedores podem trabalhar no aplicativo que se ajusta ao seu trabalho,
+
+00:15:54.290 --> 00:15:57.550
+enquanto finanças e operações gerenciam a transação no aplicativo criado para suas funções.
+
+00:15:58.090 --> 00:16:02.150
+O cliente não se torna duas histórias separadas, uma contada por vendas e outra contada por finanças.
+
+00:16:02.770 --> 00:16:04.070
+O Field Service oferece outro bom exemplo.
+
+00:16:04.070 --> 00:16:08.550
+Imagine uma empresa que envia técnicos para instalar, reparar ou manter equipamentos nos locais dos clientes.
+
+00:16:09.210 --> 00:16:15.090
+O técnico de campo precisa de detalhes do cliente, detalhes sobre o trabalho e informações sobre o ativo do cliente referente ao item instalado ou suportado.
+
+00:16:15.730 --> 00:16:20.450
+Nos bastidores, a empresa também precisa rastrear peças, custos, compras e o dinheiro vinculado a esse trabalho.
+
+00:16:20.950 --> 00:16:23.310
+O Field Service concentra-se no planejamento e na conclusão da visita.
+
+00:16:23.670 --> 00:16:27.050
+O setor de finanças e operações concentra-se no registro operacional e financeiro ao redor disso.
+
+00:16:27.190 --> 00:16:31.570
+Quando esses registros se conectam corretamente, o trabalho do técnico não fica separado das peças usadas,
+
+00:16:31.670 --> 00:16:33.750
+do custo do trabalho e do registro cliente a ele vinculado.
+
+00:16:34.850 --> 00:16:38.990
+Project Operations segue o mesmo padrão, especialmente para empresas que vendem trabalho por projeto.
+
+00:16:39.330 --> 00:16:43.790
+Uma equipe de projeto pode gerenciar o trabalho do cliente, o tempo das pessoas, custos planejados e marcos do projeto.
+
+00:16:44.230 --> 00:16:47.950
+O setor financeiro precisa ver o lado financeiro de compras, custos, faturamento e relatórios.
+
+00:16:48.690 --> 00:16:53.050
+Sem uma conexão, gerentes de projeto podem perder muito tempo cobrando atualizações do financeiro,
+
+00:16:53.190 --> 00:16:56.190
+enquanto o financeiro aguarda as equipes de projeto confirmarem o que aconteceu.
+
+00:16:57.050 --> 00:17:02.610
+Registros de projeto conectados dão a ambos os grupos uma visão mais clara do trabalho à medida que ele passa de uma promessa do cliente para uma atividade financeira.
+
+00:17:02.610 --> 00:17:07.010
+Há também um benefício mais amplo da Power Platform aqui, porque o lado do aplicativo do cliente usa o Dataverse,
+
+00:17:07.110 --> 00:17:10.550
+dados aprovados no Dataverse podem suportar Power Apps e Power Apps e Power Automate.
+
+00:17:10.970 --> 00:17:13.410
+Uma empresa pode criar um pequeno aplicativo para uma equipe interna,
+
+00:17:13.650 --> 00:17:16.830
+ou criar um fluxo que responda quando um registro de negócio e de negócio atinge nada do ponto.
+
+00:17:17.250 --> 00:17:20.750
+Isso não significa que todo registro de finanças e operações deva, de repente, fazer parte de todo o Power App.
+
+00:17:21.030 --> 00:17:25.010
+Isso significa que os registros conectados podem fazer parte de um conjunto mais amplo de ferramentas de negócios,
+
+00:17:25.130 --> 00:17:27.710
+desde que a empresa escolha esse propósito com cuidado e proteja os dados adequadamente.
+
+00:17:27.710 --> 00:17:29.430
+Um limite para isso permanecer claro.
+
+00:17:29.950 --> 00:17:32.470
+O DualWrite não oferece suporte ao Dynamics 305 Business Central.
+
+00:17:32.890 --> 00:17:36.470
+O Business Central pode se conectar a outros produtos da Microsoft por outros métodos,
+
+00:17:36.550 --> 00:17:41.730
+mas o DualWrite é voltado para o lado de finanças e operações do Dynamics 305 e para aplicativos baseados no Dataverse.
+
+00:17:42.470 --> 00:17:45.050
+Também não é uma ferramenta para copiar todas as tabelas que você encontrar.
+
+00:17:45.650 --> 00:17:49.190
+Um registro deve ser movido porque as pessoas precisam do mesmo registro operacional em ambos os lugares,
+
+00:17:49.290 --> 00:17:50.810
+não porque copiar dados pareça mais seguro.
+
+00:17:51.490 --> 00:17:53.930
+DualWrite também não substitui um plano de integração mais amplo
+
+00:17:53.930 --> 00:17:57.650
+quando uma empresa precisa de feeds de relatório, links para sistemas de terceiros ou uma grande migração de dados.
+
+00:17:58.230 --> 00:18:01.410
+Tratar cada conexão de dados como o mesmo trabalho cria problemas rapidamente.
+
+00:18:02.810 --> 00:18:05.290
+Limites, preparação e erros comuns.
+
+00:18:05.910 --> 00:18:08.550
+Pense no DualWrite como acordo de aperto de mão entre dois sistemas.
+
+00:18:09.210 --> 00:18:11.750
+Eles concordam em manter certos registros compartilhados em sincronia,
+
+00:18:11.830 --> 00:18:14.310
+mas não é um canal mágico para cada tabela relatória ou sistema externo.
+
+00:18:14.810 --> 00:18:17.550
+Antes de configurá-lo, verifique quais integrações já existem.
+
+00:18:18.110 --> 00:18:21.170
+Se uma conexão antiga e o DualWrite atualizarem o mesmo registro de cliente,
+
+00:18:21.230 --> 00:18:22.890
+você pode criar conflitos rapidamente.
+
+00:18:23.470 --> 00:18:24.470
+Essa é uma dor de cabeça que você não quer.
+
+00:18:24.830 --> 00:18:26.210
+Portanto, concorde com o básico primeiro.
+
+00:18:26.210 --> 00:18:27.450
+Como vocês inserirão os nomes?
+
+00:18:27.730 --> 00:18:29.250
+Qual empresa é legal e proprietária de cada registro?
+
+00:18:29.590 --> 00:18:30.490
+Quem pode fazer alterações?
+
+00:18:30.870 --> 00:18:32.590
+Quais funções de segurança cada equipe precisa?
+
+00:18:33.370 --> 00:18:35.690
+Duplicatas e registros incompletos antes da primeira sincronização.
+
+00:18:35.950 --> 00:18:37.410
+Comece com os mapas pré-criados da Microsoft.
+
+00:18:37.850 --> 00:18:38.870
+Já conecta um registro com uso.
+
+00:18:39.270 --> 00:18:41.450
+Tabelas e campos personalizados, esses precisam de teste de cuidado.
+
+00:18:41.810 --> 00:18:44.450
+E verifique as tabelas relacionadas e as dependências de mapeamento,
+
+00:18:44.510 --> 00:18:47.290
+que às vezes um registro precisa que outro exista antes de poder ser sincronizado.
+
+00:18:47.650 --> 00:18:49.970
+Planeje sua primeira sincronização com base na quantidade de dados que se postou.
+
+00:18:50.190 --> 00:18:52.350
+Não trate como um interruptor de luz que você aciona durante o almoço.
+
+00:18:52.350 --> 00:18:53.350
+Isso que eu usará provando.
+
+00:18:53.690 --> 00:18:56.370
+Um mapa pausado ainda precisa de um proprietário e de um plano de reinicialização.
+
+00:18:56.670 --> 00:18:58.850
+Alterações na fila e registro com falha não permanecem lá para cima.
+
+00:18:59.470 --> 00:19:02.130
+Observe os registros de atividade, erros, alertas e limites.
+
+00:19:02.650 --> 00:19:06.350
+Quando algo falhar, encontre o campo ausente, o registro incorreto ou a regra quebrada por trás disso.
+
+00:19:06.810 --> 00:19:08.450
+Repetir as tentativas não corrigirá dados ruins.
+
+00:19:08.910 --> 00:19:11.670
+Quando você vê o DualWrite como uma ponte controlada, tudo se encaixa.
+
+00:19:13.410 --> 00:19:13.770
+Conclusão.
+
+00:19:13.850 --> 00:19:15.250
+Uma conversa de negócio compartilhada.
+
+00:19:16.330 --> 00:19:19.910
+DualWrite mantém os registros compartilhados, suportados e movimento entre o financeiro e operações
+
+00:19:19.910 --> 00:19:21.390
+e seus aplicativos baseados no Dataverse.
+
+00:19:22.150 --> 00:19:24.490
+Dessa forma, as equipes podem trabalhar a partir de dados de negócio conectado.
+
+00:19:25.590 --> 00:19:29.610
+Inscreva-se na sua plataforma de podcast favorita para mais pílulas de conhecimento comigo,
+
+00:19:29.790 --> 00:19:32.110
+Mirko Peters, em m307.fm.
+
+00:19:32.290 --> 00:19:36.070
+E compartilhe este episódio com alguém que ainda está conectando vendas, serviços e finanças
+
+00:19:36.070 --> 00:19:37.110
+por meio de outra planilha.
+
+00:19:37.110 --> 00:19:37.580
+E compartilhe este episódio com alguém que ainda está conectado com alguém que ainda está conectado com alguém que ainda está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que está conectado com alguém que

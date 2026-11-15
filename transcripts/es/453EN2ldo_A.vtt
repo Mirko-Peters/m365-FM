@@ -1,0 +1,982 @@
+WEBVTT
+
+00:00:00.270 --> 00:00:11.610
+Preparado para 10 días de Microsoft 365, Copilot, EA, Azure y las personas que dan forma al futuro del trabajo, este enero, M365 con regresa y lo hace a lo grande.
+
+00:00:12.610 --> 00:00:21.270
+Una de nuestras sesiones en vivo, demostraciones reales y conocimientos prácticos de MVP y expertos del sector en todo el mundo, sin diapositivas genéricas ni palabras de moda interminable.
+
+00:00:22.010 --> 00:00:28.670
+Estamos abordando los desafíos reales, Copilot Studio, agentes de IAA Fabric, seguridad, gobernanza y automatización.
+
+00:00:28.670 --> 00:00:34.390
+Ya sea un profesional de TI, un desarrollador o un líder empresarial, hay sesiones diseñadas para usted.
+
+00:00:35.510 --> 00:00:40.050
+Con 10 días completos, puede explorar múltiples tecnologías y conectarse con una comunidad global.
+
+00:00:40.930 --> 00:00:43.670
+Mírelo en vivo y lleve conocimientos prácticos a su organización.
+
+00:00:45.150 --> 00:00:50.550
+Enero de 2027, 10 días, una comunidad de Microsoft. La inscripción ya está abierta.
+
+00:00:51.890 --> 00:00:55.610
+Vaya a m365com.net y asegure su lugar hoy mismo.
+
+00:00:55.610 --> 00:00:58.490
+Eso es m365com.net.
+
+00:01:00.210 --> 00:01:04.770
+Únase ahora en m365com.net y nos vemos en vivo en enero.
+
+00:01:05.330 --> 00:01:07.490
+Bienvenido a otro episodio de Microsoft Knowledge Nuggets.
+
+00:01:08.050 --> 00:01:09.110
+Soy su anfitrión, Milco Pites.
+
+00:01:09.590 --> 00:01:11.190
+El tema de hoy es Azure Traffic Manager.
+
+00:01:12.070 --> 00:01:15.010
+Imagina que ha creado una aplicación web que quieren usar personas de todo el mundo.
+
+00:01:15.610 --> 00:01:18.950
+Usuarios de Tokio, Londres y San Pablo intentan acceder a su aplicación al mismo tiempo.
+
+00:01:19.750 --> 00:01:20.510
+Pero aquí está el problema.
+
+00:01:20.910 --> 00:01:24.350
+Todos y cada uno de sus usuarios acceden a un servidor de una región, digamos Virginia.
+
+00:01:24.350 --> 00:01:30.250
+El usuario de Tokio espera más de 200 milisegundos por solicitud y el usuario de San Pablo tiene una experiencia aún peor.
+
+00:01:31.030 --> 00:01:36.850
+Y si ese centro de datos de Virginia deja de funcionar, se produce un corte de energía, un corte de red o algo inesperado, toda la aplicación se desconecta.
+
+00:01:37.330 --> 00:01:40.150
+Todos los usuarios en todas partes son un único punto de error y suponen un gran problema.
+
+00:01:40.690 --> 00:01:44.410
+¿Y si pudieras dirigir a cada usuario a su servidor más cercano, rápido y saludable de forma automática?
+
+00:01:44.410 --> 00:01:47.870
+¿Qué pasaría si un usuario en Tokio usara un centro de datos de Japón?
+
+00:01:48.270 --> 00:01:49.690
+Si un usuario de Londres recibiese un...
+
+00:01:49.690 --> 00:01:53.890
+Si una región dejara de funcionar, el tráfico se trasladara a otro lugar sin que usted hiciera nada.
+
+00:01:54.470 --> 00:01:56.210
+Eso es exactamente lo que hace Azure Traffic Manager.
+
+00:01:56.330 --> 00:01:59.390
+Y lo hace a nivel de DNS, lo que significa que es más sencillo de lo que crees.
+
+00:02:00.210 --> 00:02:06.050
+Al final de este episodio entenderás qué es realmente Traffic Manager, cómo funcionan sus seis métodos de enrutamiento y cuándo usar cada uno.
+
+00:02:06.830 --> 00:02:07.750
+Toma tu café y empecemos.
+
+00:02:08.530 --> 00:02:09.950
+Porque es importante el enrutamiento de tráfico.
+
+00:02:10.230 --> 00:02:11.070
+Vamos a desgrosar.
+
+00:02:11.070 --> 00:02:16.790
+Al oír hablar de equilibrio de carga, muchos piensan en un servidor que distribuye tráfico entre pocas máquinas dentro de un centro de datos.
+
+00:02:17.510 --> 00:02:18.390
+Eso es Azure Load Balancer.
+
+00:02:18.750 --> 00:02:20.030
+Y funciona muy bien para una única región.
+
+00:02:20.390 --> 00:02:22.750
+¿Pero qué ocurre cuando los usuarios están repartidos por varias comunidades?
+
+00:02:23.270 --> 00:02:27.090
+Un usuario de Japón que accede a un servidor de Virginia nunca obtendrá una respuesta rápida.
+
+00:02:28.170 --> 00:02:29.850
+La física de Internet no lo permite.
+
+00:02:30.770 --> 00:02:34.470
+La luz viaja a una velocidad fija y cada salto de red añade un retraso.
+
+00:02:35.270 --> 00:02:37.250
+No se puede solucionar con un mejor código o un servicio más rápido.
+
+00:02:37.770 --> 00:02:39.450
+La cuestión es que las aplicaciones lentas pierden un usuario.
+
+00:02:39.450 --> 00:02:46.350
+Un retraso en un segundo reduce las conversiones en un 7% y una interrupción regional no solo ralentiza las cosas, sino que deja toda la aplicación fuera de línea.
+
+00:02:46.750 --> 00:02:50.470
+Los usuarios no pueden comunicarse con ustedes, los ingresos se detienen y su reputación se ve afectada.
+
+00:02:50.850 --> 00:02:56.370
+Hace 20 años, el enfoque antiguo consistía en crear servidores en cada región y dirigir manualmente a los usuarios al correcto.
+
+00:02:56.370 --> 00:03:02.790
+Actualizabas los registros DNS a mano, mantenías hojas de cálculo de qué usuarios iban a dónde y rezabas para no cometer un error de una conmutación prueba.
+
+00:03:03.430 --> 00:03:07.210
+Ese enfoque es poco práctico y frágil porque no es escalable y se rompe bajo presión.
+
+00:03:08.090 --> 00:03:13.110
+El nuevo enfoque es un único director de tráfico basado en DNS que elige el mejor punto final por usuario y solicitud.
+
+00:03:13.810 --> 00:03:16.110
+No requiere actualizaciones manuales ni hojas de cálculo frágil.
+
+00:03:16.110 --> 00:03:21.050
+En su lugar, observa dónde está el usuario, comprueba qué puntos finales están en buen estado y devuelve el mejor.
+
+00:03:21.710 --> 00:03:25.770
+Piensa en ello como un sistema de control de tráfico aéreo global, donde cada centro de datos es un aeropuerto
+
+00:03:25.770 --> 00:03:29.830
+y Traffic Manager es la torre de control que dirige a cada usuario al servidor disponible más cercano.
+
+00:03:30.330 --> 00:03:31.410
+Ahí es donde entra el juego Traffic Manager.
+
+00:03:31.970 --> 00:03:34.370
+Hablemos de lo que es en realidad, de lo que es Traffic Manager.
+
+00:03:35.350 --> 00:03:36.410
+Esta es la definición más sencilla.
+
+00:03:36.870 --> 00:03:40.190
+Traffic Manager es un equilibrador de carga basado en DNS que se ejecuta a escala global.
+
+00:03:40.770 --> 00:03:44.430
+Imagínalo como una recepción inteligente en la entrada a un edificio de oficinas a nivel mundial.
+
+00:03:44.430 --> 00:03:48.410
+Cuando entras, el recepcionista no atiende tus llamadas telefónicas ni procesa tu papeleo.
+
+00:03:49.070 --> 00:03:50.150
+Solo te indica la planta correcta.
+
+00:03:50.390 --> 00:03:51.290
+Eso es todo lo que es el Traffic Manager.
+
+00:03:52.090 --> 00:03:53.630
+Indica a los usuarios el servidor correcto.
+
+00:03:53.890 --> 00:03:54.850
+Esta es la diferencia clave.
+
+00:03:55.310 --> 00:03:57.570
+Traffic Manager nunca ve tu tráfico real.
+
+00:03:58.630 --> 00:04:01.650
+No procesa solicitudes, no inspecciona paquetes ni demacena contenido en caché.
+
+00:04:01.790 --> 00:04:05.250
+Cuando un usuario escribe tu nombre de dominio en su navegador, se envía una consulta DNS.
+
+00:04:05.970 --> 00:04:09.070
+Traffic Manager responde a esa consulta con la dirección IP del mejor punto final,
+
+00:04:09.290 --> 00:04:12.590
+el más cercano, el más saludable, el que has configurado como prioritario.
+
+00:04:12.590 --> 00:04:17.690
+A continuación, el usuario se conecta directamente a ese punto final y Traffic Manager se aparta por completo.
+
+00:04:18.070 --> 00:04:23.250
+Eso significa que añade latencia cero a la ruta del tráfico porque no está en medio de flujo de datos y no puede ralentizar las cosas.
+
+00:04:24.070 --> 00:04:30.050
+También funciona con cualquier punto de conexión con conexión a Internet, servicios de hardware, servidores en otra nube e incluso su propio centro de datos local.
+
+00:04:30.850 --> 00:04:35.250
+Siempre que el punto de conexión tenga una dirección IP pública o un nombre de dominio, Traffic Manager puede enrutarlo.
+
+00:04:35.250 --> 00:04:38.630
+Y como es un servicio global, es resistente a los fallos regionales.
+
+00:04:39.290 --> 00:04:44.870
+Si una región completa de Azure falla, Traffic Manager sigue operando y enruta a los usuarios a puntos de conexión sanos externos.
+
+00:04:45.490 --> 00:04:47.570
+No sé cómo sabe Traffic Manager qué punto de conexión es tan sano.
+
+00:04:48.150 --> 00:04:54.410
+Los hundea cada 30 segundos de forma predeterminada, enviando una solicitud HTTP o HTTPS a una ruta específica en cada punto de conexión.
+
+00:04:54.810 --> 00:04:58.290
+Si el endpoint responde con un código estado 200 dentro del tiempo de espera, es saludable.
+
+00:04:59.190 --> 00:05:04.010
+Si no responde varias veces seguidas, Traffic Manager lo marca como degradado y deja de enviar usuarios allí.
+
+00:05:04.010 --> 00:05:08.730
+Cuando el punto de conexión se recupera, Traffic Manager también lo detecta y lo vuelve a poner en rotación.
+
+00:05:09.330 --> 00:05:12.090
+Esta monitorización del estado es lo que permite la conmutación automática.
+
+00:05:12.790 --> 00:05:16.550
+Ahora veamos las diferentes formas en que Traffic Manager decide a qué punto final los usuarios.
+
+00:05:17.670 --> 00:05:19.290
+Ahí es donde entran los métodos de enrutamiento.
+
+00:05:20.550 --> 00:05:23.070
+Enrutamiento prioritario y recuperación fácil ante desastres.
+
+00:05:23.650 --> 00:05:25.570
+El enrutamiento prioritario es el método más sencillo.
+
+00:05:25.970 --> 00:05:28.210
+Clasifica tus puntos finales del 1 al número que tengas.
+
+00:05:28.430 --> 00:05:28.730
+Es esto.
+
+00:05:29.130 --> 00:05:30.410
+Todo el tráfico va a la prioridad 2.
+
+00:05:30.410 --> 00:05:34.510
+Si ese punto final falla, el tráfico cambia a la prioridad 2, luego a la 3 y así sucesivamente.
+
+00:05:35.130 --> 00:05:36.370
+Es una configuración activa para sí.
+
+00:05:36.890 --> 00:05:39.250
+El mundo final se encarga de todo, los demás se esperan entre bastidores.
+
+00:05:40.090 --> 00:05:41.150
+Este es un ejemplo del mundo real.
+
+00:05:41.430 --> 00:05:45.590
+Supongamos que tus servidores principales se ejecutan en el este de U y tienes un respaldo en Europa Occidental.
+
+00:05:45.890 --> 00:05:49.050
+Fijas el este de U como prioridad 1, Europa Occidental como 2.
+
+00:05:49.270 --> 00:05:51.910
+En funcionamiento normal, todos los usuarios van al este de U.
+
+00:05:51.910 --> 00:05:57.690
+Pero si el este de U sufre una interrupción, ya sea eléctrica o de red, Traffic Manager lo detecta en segundos.
+
+00:05:57.690 --> 00:06:01.910
+Deja de enviar nuevos usuarios al este de U y comienza a redirigirlos a Europa Occidental.
+
+00:06:02.230 --> 00:06:05.050
+Si tu aplicación sigue online, es posible que los usuarios no noten que pasó algo.
+
+00:06:05.530 --> 00:06:06.690
+Ahora viene aquí un detalle importante.
+
+00:06:07.230 --> 00:06:08.950
+Los usuarios existentes mantienen su conexión actual.
+
+00:06:09.230 --> 00:06:11.390
+El derrutamiento DNS solo afecta nuevas búsquedas DNS.
+
+00:06:11.750 --> 00:06:14.090
+Por lo tanto, si alguien da cargo a tu aplicación y tiene una sesión activa,
+
+00:06:14.250 --> 00:06:17.970
+esa sesión continúa yendo al punto de conexión original hasta que finalice o caduque la caché de DNS.
+
+00:06:18.690 --> 00:06:20.570
+Por eso debes establecer un TTL de DNS bajo.
+
+00:06:21.010 --> 00:06:22.390
+El punto óptimo es de 30 segundos.
+
+00:06:22.390 --> 00:06:26.570
+Un TTL bajo significa que los solucionadores de DNS comproban si hay actualizaciones con Afro.
+
+00:06:26.830 --> 00:06:29.630
+Así que cuando Traffic Manager cambia los puntos de conexión, cambia su propaganda.
+
+00:06:30.130 --> 00:06:32.950
+Un error común que comete la gente es olvidarse de probar la computación por error.
+
+00:06:33.210 --> 00:06:37.010
+Estableces un enrutamiento prioritario, implementas tu región de respaldo y lo das por hecho que funciona.
+
+00:06:37.310 --> 00:06:37.950
+Pero aquí está la cuestión.
+
+00:06:38.310 --> 00:06:40.530
+Tu región de respaldo debe gestionar la carga completa.
+
+00:06:41.290 --> 00:06:45.530
+Si tu servidor principal gestiona un millón de usuarios al día y tu respaldo solo 100 mil en operaciones normales,
+
+00:06:45.610 --> 00:06:49.690
+ese respaldo podría colapsar cuando todo el tráfico se desplace repentinamente hacia él.
+
+00:06:49.690 --> 00:06:51.750
+Prueba tu computación por error.
+
+00:06:52.310 --> 00:06:54.130
+Simula una interrupción y observa lo que ocurre.
+
+00:06:54.330 --> 00:06:55.550
+Esa es la única manera de saber si funciona.
+
+00:06:55.830 --> 00:06:58.430
+La prioridad consiste en mantener activa la aplicación durante los fallos.
+
+00:06:58.990 --> 00:07:00.250
+Pero ¿qué pasa con la rapidez para todo?
+
+00:07:01.290 --> 00:07:02.070
+Enrutamiento de rendimiento.
+
+00:07:02.370 --> 00:07:03.210
+Velocidad por encima de todo.
+
+00:07:03.550 --> 00:07:05.650
+El enrutamiento de rendimiento funciona distinto al de prioridad.
+
+00:07:06.190 --> 00:07:08.370
+En lugar de decir utilizar siempre este punto de conexión primero,
+
+00:07:08.630 --> 00:07:11.830
+dice enviar a cada usuario el punto de conexión que le proporciona la conexión más rápida.
+
+00:07:11.830 --> 00:07:14.430
+Por tanto, un usuario de Tokio se enruta a un servidor de Japón.
+
+00:07:14.750 --> 00:07:16.190
+Un usuario de Londres se enruta a Irlanda.
+
+00:07:16.490 --> 00:07:18.290
+Un usuario de San Paulo se enruta a Brasil.
+
+00:07:18.750 --> 00:07:21.750
+Todos los usuarios obtienen experiencia más rápida posible sin importar dónde se encuentran.
+
+00:07:22.030 --> 00:07:24.650
+¿Cómo sabe Traffic Manager qué punto de conexión es el más rápido?
+
+00:07:25.090 --> 00:07:27.030
+Utiliza algo denominado tabla de latencia de Internet.
+
+00:07:27.490 --> 00:07:29.250
+Imagínate que es un mapa que Azure mantiene actualizado.
+
+00:07:29.870 --> 00:07:34.070
+Realiza un seguimiento de la latencia de red real entre diferentes partes del mundo y cada región de Azure.
+
+00:07:34.630 --> 00:07:36.110
+Cuando llega una consulta de DNS,
+
+00:07:36.390 --> 00:07:39.650
+Traffic Manager comprueba dónde se encuentra el solucionador de DNS del usuario,
+
+00:07:39.650 --> 00:07:44.290
+busca en la tabla de latencia y devuelve el punto de conexión que proporciona a ese usuario la latencia más baja.
+
+00:07:44.850 --> 00:07:46.270
+Ahora bien, esto podría sorprenderte.
+
+00:07:46.770 --> 00:07:47.830
+No se basa en la distancia física.
+
+00:07:48.350 --> 00:07:51.130
+Un usuario de la India podría obtener una latencia más baja en el este de Ewe,
+
+00:07:51.430 --> 00:07:54.830
+que en el sudeste asiático, según como los cables submarinos y los intercambios de Internet,
+
+00:07:54.950 --> 00:07:56.150
+enrutan el tráfico en ese momento.
+
+00:07:56.910 --> 00:08:00.630
+La tabla de latencia captura las condiciones reales de la red, no solo la distancia en línea recta.
+
+00:08:01.370 --> 00:08:04.550
+El punto de conexión más cercano no siempre es el que se haya más cerca geográficamente.
+
+00:08:04.970 --> 00:08:07.370
+El enrutamiento de rendimiento es ideal para aplicaciones globales
+
+00:08:07.370 --> 00:08:09.230
+en las que la experiencia del usuario depende de la velocidad.
+
+00:08:10.250 --> 00:08:13.290
+Sitios de comercio electrónico, streaming y herramientas de colaboración en tiempo real,
+
+00:08:13.370 --> 00:08:15.270
+todo donde una respuesta lenta pierde al usuario.
+
+00:08:15.690 --> 00:08:16.190
+Pero hay un problema.
+
+00:08:16.670 --> 00:08:19.150
+No tiene en cuenta cuánta carga está gestionando cada punto de conexión.
+
+00:08:19.610 --> 00:08:23.030
+Si la región del este de Ewe funciona al 95% de su capacidad
+
+00:08:23.030 --> 00:08:26.910
+y la región de Europa Occidental al 20% podría enviar nuevos usuarios al este de E,
+
+00:08:27.010 --> 00:08:28.350
+porque es de la latencia más baja para él.
+
+00:08:28.970 --> 00:08:29.970
+No tiene en cuenta la carga de servidor.
+
+00:08:30.270 --> 00:08:32.630
+Por lo tanto, normalmente se combina el enrutamiento de rendimiento
+
+00:08:32.630 --> 00:08:34.970
+con otros equilibradores de carga dentro de cada región,
+
+00:08:34.970 --> 00:08:36.610
+Azure Load Balancer o Application Gateway,
+
+00:08:36.770 --> 00:08:38.990
+para gestionar la distribución real del tráfico en los servidores
+
+00:08:38.990 --> 00:08:40.630
+una vez que el usuario llega a la región correcta.
+
+00:08:41.830 --> 00:08:43.450
+El enrutamiento de rendimiento optimiza la velocidad.
+
+00:08:43.930 --> 00:08:47.050
+Pero ¿qué pasa si necesitas controlar cuánto tráfico recibe cada punto final?
+
+00:08:48.210 --> 00:08:49.670
+Enrutamiento ponderado y geográfico.
+
+00:08:49.970 --> 00:08:50.790
+Control y cumplimiento.
+
+00:08:51.310 --> 00:08:52.670
+El enrutamiento de rendimiento es velocidad.
+
+00:08:53.170 --> 00:08:56.250
+Pero ¿qué pasa si quieres controlar exactamente cuánto tráfico recibe cada punto final?
+
+00:08:56.750 --> 00:08:59.250
+¿O enrutar a los usuarios en función de su ubicación en el mundo?
+
+00:08:59.610 --> 00:09:01.650
+Ahí es donde entra en juego el enrutamiento ponderado y geográfico.
+
+00:09:01.650 --> 00:09:03.150
+Empecemos con el enrutamiento ponderado.
+
+00:09:03.550 --> 00:09:05.030
+Este es exactamente lo que parece.
+
+00:09:05.930 --> 00:09:09.570
+Asignas un peso a cada punto final, un número entre 1 y 1000, luego Traffic Manager.
+
+00:09:09.870 --> 00:09:12.410
+Distribuye el tráfico proporcionalmente en función de esos pesos.
+
+00:09:13.290 --> 00:09:17.350
+Entonces, si tienes un punto final A con un peso de 80 y un punto final B con un peso de 20,
+
+00:09:17.610 --> 00:09:21.210
+aproximadamente el 80% de tus usuarios se envían A y el 20% van a B.
+
+00:09:21.350 --> 00:09:22.050
+Matemáticas simples.
+
+00:09:22.810 --> 00:09:23.910
+Ahora bien, ¿por qué querrías hacer eso?
+
+00:09:24.090 --> 00:09:25.030
+Piensa en una versión Canary.
+
+00:09:25.450 --> 00:09:29.770
+Has creado una nueva versión de tu aplicación y quieres probarla con usuarios reales antes de implementarla para todos.
+
+00:09:29.770 --> 00:09:32.110
+Configuras un segundo punto de conexión que ejecuta.
+
+00:09:32.230 --> 00:09:35.390
+La nueva versión, le das una ponderación de 5 y le das tu punto de conexión de producción actual.
+
+00:09:35.490 --> 00:09:39.170
+Una ponderación de 95, el 5% de 95, el 5% de tus usuarios acceder a la nueva versión.
+
+00:09:39.410 --> 00:09:41.050
+Observa si hay errores, supervisas el rendimiento.
+
+00:09:41.390 --> 00:09:44.190
+Y si todo parece bien, aumentas poco a poco la ponderación de la nueva versión,
+
+00:09:44.330 --> 00:09:47.110
+quizás un 20% semana que viene, luego un 50% y luego un 100%.
+
+00:09:47.110 --> 00:09:50.290
+Si algo sale mal, vuelves a bajar la ponderación a cero y el problema queda controlado.
+
+00:09:50.290 --> 00:09:54.290
+No hay una implementación radical ni se puede revertir una versión defectuosa delante de todos tus usuarios.
+
+00:09:54.530 --> 00:09:55.910
+La misma idea se aplica a las pruebas A.
+
+00:09:56.290 --> 00:09:58.430
+¿Quieres ver si una nueva función mejora la interacción?
+
+00:09:58.430 --> 00:10:02.310
+Envía la mitad de tus usuarios a la versión A y a la otra mitad a la versión B usando ponderación en cero.
+
+00:10:02.550 --> 00:10:03.210
+Compara los resultados.
+
+00:10:03.610 --> 00:10:05.470
+O bien, estás migrando usuarios de una región a otra.
+
+00:10:06.110 --> 00:10:09.610
+Cambia gradualmente la ponderación de la región antigua a la nueva a lo largo de unas semanas.
+
+00:10:10.190 --> 00:10:11.670
+Sin embargo, hay algo importante que debes entender.
+
+00:10:12.010 --> 00:10:13.510
+El rendimiento ponderado no es un proceso roto.
+
+00:10:13.730 --> 00:10:15.890
+No alterna entre puntos de conexión una solicitud cada vez.
+
+00:10:16.230 --> 00:10:17.270
+Es una distribución estadística.
+
+00:10:17.450 --> 00:10:20.570
+En un gran número de solicitudes, el tráfico se divide según tus ponderaciones.
+
+00:10:21.250 --> 00:10:25.330
+Sin embargo, un solo usuario que realiza varias solicitudes podría seguir llegando al mismo punto final
+
+00:10:25.330 --> 00:10:27.690
+porque su solucionador de DNS al resultado, PAC,
+
+00:10:27.690 --> 00:10:29.710
+lo consideres un equilibrio de carga perfecto.
+
+00:10:29.930 --> 00:10:32.890
+Piensa en ello como el control de la proporción general del tráfico a lo largo del tiempo.
+
+00:10:33.450 --> 00:10:34.870
+Hablemos ahora de enrutamiento geográfico.
+
+00:10:35.190 --> 00:10:37.990
+Este enruta a los usuarios en función del origen de su consulta de DNS,
+
+00:10:38.650 --> 00:10:40.310
+país, continente o una región específica.
+
+00:10:41.110 --> 00:10:43.550
+Por ejemplo, un usuario en Alemania es enviado a tu punto final en Frankfurt.
+
+00:10:44.130 --> 00:10:46.870
+Un usuario en Brasil es enviado a tu punto final en San Pablo.
+
+00:10:47.350 --> 00:10:48.410
+Es sin nivel de granularidad.
+
+00:10:48.710 --> 00:10:49.550
+¿Por qué usarías esto?
+
+00:10:49.750 --> 00:10:50.890
+La soberanía de los datos mundial.
+
+00:10:50.890 --> 00:10:54.390
+Las normas de la Unión Europea podrían exigir que los datos del usuario se queden en Europa.
+
+00:10:54.670 --> 00:10:56.890
+El enrutamiento geográfico te permite hacer cumplir eso a nivel de DNS.
+
+00:10:57.310 --> 00:10:58.970
+Un usuario de Francia resuelve tu dominio
+
+00:10:58.970 --> 00:11:02.270
+y el gestor de tráfico devuelve la dirección IP de tu punto final europeo.
+
+00:11:02.830 --> 00:11:04.150
+Sus datos nunca salen del continente.
+
+00:11:04.470 --> 00:11:05.590
+Lo mismo ocurre con tener localizado.
+
+00:11:06.110 --> 00:11:08.890
+Si quieres que los usuarios de Japón vean una versión en japonés de tu sitio,
+
+00:11:08.950 --> 00:11:11.850
+el enrutamiento geográfico los envía al punto final que sirve ese contenido.
+
+00:11:12.610 --> 00:11:13.890
+Hay una regla clave que debes conocer.
+
+00:11:14.150 --> 00:11:16.850
+Cada región geográfica debe asignarse a un solo punto final.
+
+00:11:16.850 --> 00:11:19.350
+No puedes dividir un solo país en dos puntos finales.
+
+00:11:19.910 --> 00:11:23.030
+Por lo tanto, si tienes usuarios en Alemania y quieres que el 50% vaya a Frankfurt y a Frankfurt
+
+00:11:23.030 --> 00:11:26.090
+y el 50% a Berlín, no puedes hacerlo solo con el enrutamiento geográfico.
+
+00:11:26.450 --> 00:11:28.050
+En su lugar, tendrías que usar un perfil anidado.
+
+00:11:28.530 --> 00:11:30.430
+Los perfiles anidados son exactamente lo que parecen.
+
+00:11:30.810 --> 00:11:32.570
+Colocas un perfil de Traffic Manager dentro de otro.
+
+00:11:33.150 --> 00:11:35.410
+Así, en el nivel superior usas el enrutamiento geográfico
+
+00:11:35.410 --> 00:11:38.810
+para dirigir a los usuarios europeos a un perfil, a los norteamericanos a otro y demás.
+
+00:11:39.450 --> 00:11:41.850
+Dentro de cada uno de esos perfiles, usas el enrutamiento ponderado
+
+00:11:41.850 --> 00:11:44.070
+para dividir el tráfico entre los puntos finales dentro de ese régimen.
+
+00:11:44.070 --> 00:11:47.330
+Geográfico arriba por cumplimiento ponderado dentro para el control.
+
+00:11:47.730 --> 00:11:48.770
+Es una combinación poderosa.
+
+00:11:49.270 --> 00:11:51.510
+Otros dos métodos de enrutamiento cubren escenarios específicos.
+
+00:11:51.810 --> 00:11:52.450
+Echemos un vistazo.
+
+00:11:53.190 --> 00:11:55.870
+Enrutamiento multivalor y de subred para un control detallado.
+
+00:11:56.370 --> 00:11:58.330
+El enrutamiento multivalor es un truco simple pero útil.
+
+00:11:58.650 --> 00:12:01.570
+En lugar de devolver solo un punto final en la respuesta de MS,
+
+00:12:01.830 --> 00:12:05.210
+Traffic Manager envía varias direcciones IP sanas a la vez.
+
+00:12:05.710 --> 00:12:07.890
+Su navegador o aplicación elige la primera de la lista,
+
+00:12:08.270 --> 00:12:11.470
+lo que distribuye la carga sin que el gestor de tráfico tenga que decidir para cada solicitud.
+
+00:12:11.470 --> 00:12:15.910
+Pero en truco, el valor múltiple solo funciona con puntos finales IPv4 e IPv6,
+
+00:12:16.310 --> 00:12:18.810
+por lo que no es posible usarlo con servicios de aplicaciones en la nube
+
+00:12:18.810 --> 00:12:21.910
+o cualquier punto final que use un nombre de dominio en lugar de una IP,
+
+00:12:22.610 --> 00:12:24.210
+exclusivamente para puntos finales basados en IP.
+
+00:12:24.690 --> 00:12:26.870
+Sin embargo, cuando los tiene, el sistema es más resistente
+
+00:12:26.870 --> 00:12:29.710
+porque si una IP falla, el cliente puede probar con otra de la lista
+
+00:12:29.710 --> 00:12:31.330
+sin realizar una nueva búsqueda de DNS.
+
+00:12:31.810 --> 00:12:34.210
+Eso significa una conmutación por error más rápida en el lado del cliente.
+
+00:12:34.450 --> 00:12:37.010
+Enrutamiento de subred es aún más específico pero potente cuando lo necesite.
+
+00:12:37.010 --> 00:12:40.790
+Enruta a los usuarios en función de la subred IP de origen de la que proviene su consulta de DNS.
+
+00:12:41.530 --> 00:12:44.210
+Así, puede asignar el rango de IP de su oficina a un punto final de pruebas
+
+00:12:44.210 --> 00:12:46.010
+mientras que el resto obtiene la versión de producción.
+
+00:12:47.070 --> 00:12:51.290
+También puede enrutar a usuarios desde una subred VPN específica a un backend dedicado de pruebas.
+
+00:12:52.170 --> 00:12:55.810
+Imagina un escenario de prueba interna en el que su equipo de desarrollo trabaja desde la oficina.
+
+00:12:56.610 --> 00:12:59.210
+Sus consultas DNS provienen de su rango de IP corporativas
+
+00:12:59.210 --> 00:13:02.690
+y usted asigna ese rango a un entorno de ensayo donde pueden probar la última compilación.
+
+00:13:03.450 --> 00:13:05.350
+Todos los demás en Internet obtienen la versión de producción.
+
+00:13:06.050 --> 00:13:08.270
+Sin URL especiales, sin configuraciones de VPN,
+
+00:13:08.450 --> 00:13:10.930
+solo enrutamiento transparente basado en el origen de la solicitud.
+
+00:13:11.370 --> 00:13:12.470
+Ambos métodos son específicos.
+
+00:13:12.790 --> 00:13:16.230
+La mayoría de las personas utilizarán prioridad, rendimiento, ponderación o geografía
+
+00:13:16.230 --> 00:13:17.370
+para su gestión principal del tránsito.
+
+00:13:17.630 --> 00:13:19.790
+Sin embargo, los valores múltiples y las subredes están ahí.
+
+00:13:19.890 --> 00:13:22.250
+Cuando las necesite, resuelven problemas que los otros métodos no pueden.
+
+00:13:22.770 --> 00:13:24.190
+Supervisión del estado de conmutación por error.
+
+00:13:24.690 --> 00:13:26.750
+Todos estos métodos de enrutamiento dependen de una cosa,
+
+00:13:26.830 --> 00:13:28.610
+saber qué puntos finales están realmente en buen estado.
+
+00:13:29.190 --> 00:13:31.430
+Enrutar el tráfico a un servidor averiado no ayuda a nadie.
+
+00:13:32.030 --> 00:13:34.490
+Hablemos de cómo funciona la supervisión del estado en la práctica.
+
+00:13:34.950 --> 00:13:39.410
+Traffic Manager envía una sonda de estado a cada punto final cada 30 segundos de forma predeterminada
+
+00:13:39.410 --> 00:13:43.190
+y esa sonda es una solicitud HTTP o HTTPS a una ruta específica en su punto final.
+
+00:13:43.690 --> 00:13:46.690
+Espera una respuesta con un código de estado entre 200 y 299
+
+00:13:46.690 --> 00:13:48.590
+dentro de un periodo de tiempo de espera determinado.
+
+00:13:48.990 --> 00:13:50.890
+Si el punto final responde correctamente, está en buen estado.
+
+00:13:51.290 --> 00:13:52.830
+Si no lo hace, Traffic Manager vuelve a intentar.
+
+00:13:53.370 --> 00:13:56.710
+Tras una cantidad configurable de fallos, 3 de forma predeterminada,
+
+00:13:56.810 --> 00:13:59.190
+Traffic Manager marca ese punto de conexión como degradado
+
+00:13:59.190 --> 00:14:01.830
+y lo excluye del imputamiento hasta que vuelva a superar las comprobaciones de estado.
+
+00:14:01.990 --> 00:14:03.770
+Puedes configurar el intervalo de sondeo y el tiempo de espera.
+
+00:14:04.310 --> 00:14:05.990
+Las comprobaciones más rápidas implican una computación rural.
+
+00:14:06.250 --> 00:14:10.350
+Si estableces el intervalo en 10 segundos en lugar de 30, Traffic Manager detecta los fallos antes
+
+00:14:10.350 --> 00:14:12.190
+y redirige el tráfico más rápidamente.
+
+00:14:12.710 --> 00:14:16.150
+Sin embargo, las comprobaciones más rápidas suponen una mayor carga para los puntos de conexión,
+
+00:14:16.250 --> 00:14:18.350
+ya que cada comprobación es una solicitud que el servidor de gestión.
+
+00:14:18.530 --> 00:14:21.510
+Por tanto, si tienes miles de puntos de conexión y realizas comprobaciones cada 10 segundos,
+
+00:14:21.590 --> 00:14:22.290
+la solicitud se acumula.
+
+00:14:22.290 --> 00:14:24.310
+Por lo tanto, debes equilibrar la velocidad con el sobrecrito.
+
+00:14:24.310 --> 00:14:27.170
+El impacto real de una configuración adecuada de comprobaciones de estado
+
+00:14:27.170 --> 00:14:29.390
+es la diferencia entre una computación por error sin problemas
+
+00:14:29.390 --> 00:14:31.170
+y una falsa alarma que interrumpe el enrutamiento.
+
+00:14:31.730 --> 00:14:33.130
+Si la comprobación es demasiado sensible,
+
+00:14:33.290 --> 00:14:36.150
+podrías marcar un punto de conexión como degradado cuando en realidad está bien.
+
+00:14:36.730 --> 00:14:39.150
+Un pico temporal de latencia, un breve fallo en la red,
+
+00:14:39.630 --> 00:14:40.870
+una consulta lenta a la base de datos.
+
+00:14:41.050 --> 00:14:42.790
+Cualquiera de estos podría desencadenar un falso positivo.
+
+00:14:43.530 --> 00:14:46.010
+Cuando Traffic Manager deja de enviar usuarios a ese punto final,
+
+00:14:46.010 --> 00:14:48.410
+acaba de crear una interrupción que no tenía por qué ocurrir.
+
+00:14:48.830 --> 00:14:49.590
+Este es un error común.
+
+00:14:50.090 --> 00:14:52.570
+Las personas establecen la ruta de la sonda en la raíz de su aplicación,
+
+00:14:52.570 --> 00:14:53.450
+solo una barra diagonal.
+
+00:14:54.010 --> 00:14:55.690
+Eso está bien para una comprobación de estado básica,
+
+00:14:55.850 --> 00:14:58.930
+pero no es lo ideal porque la página raíz podría cargarse lentamente
+
+00:14:58.930 --> 00:15:01.270
+si representa una página completa con consultas de base de datos,
+
+00:15:01.410 --> 00:15:02.230
+imágenes y JavaScript.
+
+00:15:03.230 --> 00:15:06.010
+Un mejor enfoque es crear un punto final de comprobación de estado dedicado.
+
+00:15:06.390 --> 00:15:06.930
+Algo ligero.
+
+00:15:07.290 --> 00:15:09.750
+Un punto final simple que devuelva un código de estado 200 rápidamente
+
+00:15:09.750 --> 00:15:11.250
+y confirme que la aplicación se está ejecutando.
+
+00:15:11.730 --> 00:15:12.990
+Sin consultas a la base de datos,
+
+00:15:12.990 --> 00:15:14.610
+sin procesamiento pesado, solo un latido.
+
+00:15:14.890 --> 00:15:16.550
+De esa manera, sus ondas son rápidas, confiables
+
+00:15:16.550 --> 00:15:18.670
+y tienen menos probabilidades de desencadenar falsas alarmas.
+
+00:15:19.130 --> 00:15:21.390
+Permítanme concluir con cuándo debería usar Traffic Manager
+
+00:15:21.390 --> 00:15:22.770
+en comparación con otras opciones.
+
+00:15:24.070 --> 00:15:25.250
+Conclusión y guía de tu decisión.
+
+00:15:25.850 --> 00:15:26.710
+Este es un resumen rápido.
+
+00:15:27.230 --> 00:15:29.110
+Traffic Manager es un director de tráfico global
+
+00:15:29.110 --> 00:15:30.930
+basado en DNS con seis métodos de enrutamiento.
+
+00:15:31.450 --> 00:15:32.690
+En realidad no gestiona el tráfico.
+
+00:15:33.510 --> 00:15:35.370
+Simplemente dirige a los usuarios al lugar adecuado
+
+00:15:35.370 --> 00:15:36.550
+en función del método que elijas.
+
+00:15:36.950 --> 00:15:38.510
+El enrutamiento prioritario es para la recuperación.
+
+00:15:38.910 --> 00:15:41.330
+Mantiene tu aplicación activa incluso si toda una región falla.
+
+00:15:42.210 --> 00:15:44.290
+El enrutamiento de rendimiento tiene que ver con el resto.
+
+00:15:44.990 --> 00:15:47.750
+Envía a cada usuario al punto final con la latencia más baja.
+
+00:15:47.750 --> 00:15:50.690
+El enrutamiento ponderado permite hacer despliegues controlados
+
+00:15:50.690 --> 00:15:52.150
+como lanzamientos canario o pruebas A-B.
+
+00:15:53.130 --> 00:15:55.110
+El enrutamiento geográfico gestiona el cumplimiento.
+
+00:15:55.570 --> 00:15:57.110
+Mantiene los datos en la región adecuada
+
+00:15:57.110 --> 00:15:58.450
+según la ubicación de los usuarios.
+
+00:15:58.970 --> 00:16:00.970
+El enrutamiento multivalor es para una distribución simple
+
+00:16:00.970 --> 00:16:02.150
+a nivel de IP en varias direcciones.
+
+00:16:02.890 --> 00:16:04.510
+Y el enrutamiento de subred enruta
+
+00:16:04.510 --> 00:16:06.290
+en función del IP de origen de la consulta DNS.
+
+00:16:07.070 --> 00:16:08.610
+Ahora hablemos de dónde encaja Traffic Manager
+
+00:16:08.610 --> 00:16:09.690
+en una arquitectura real.
+
+00:16:09.690 --> 00:16:10.470
+Piénselo.

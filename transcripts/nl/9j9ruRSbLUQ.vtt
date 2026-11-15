@@ -1,0 +1,1009 @@
+WEBVTT
+
+00:00:00.120 --> 00:00:03.920
+Welkom bij een nieuwe aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:00:04.040 --> 00:00:05.540
+Ik ben uw host, Mirko Peters.
+
+00:00:05.760 --> 00:00:08.380
+U implementeert Azure Resources door in de portal te klikken.
+
+00:00:08.520 --> 00:00:10.320
+Het werkt prima, totdat het misgaat.
+
+00:00:10.480 --> 00:00:13.180
+Dan moet u het opnieuw doen, maar u weet niet meer precies wat u hebt gekozen.
+
+00:00:13.340 --> 00:00:16.120
+U moet het overdragen aan een teamlid en die kan uw stappen niet volgen.
+
+00:00:16.600 --> 00:00:18.240
+Versiebeheer, er is niets om te committen.
+
+00:00:18.520 --> 00:00:20.280
+Dat is het probleem dat we vandaag gaan oplossen.
+
+00:00:20.500 --> 00:00:23.820
+Aan het einde van deze aflevering begrijpt u wat infrastructure als code is,
+
+00:00:24.020 --> 00:00:27.620
+waarom Bicep bestaat en hoe het Azure implementaties eenvoudiger en betrouwbaarder maakt.
+
+00:00:27.620 --> 00:00:31.780
+We beginnen met het probleem, dan de oplossing en vervolgens een praktisch voorbeeld dat u kunt volgen.
+
+00:00:31.900 --> 00:00:33.620
+Pak een kop koffie en laten we beginnen.
+
+00:00:33.840 --> 00:00:34.920
+Het portalprobleem.
+
+00:00:35.140 --> 00:00:36.360
+De klik om te implementeren.
+
+00:00:36.520 --> 00:00:37.340
+Valkuil voelt snel.
+
+00:00:37.520 --> 00:00:40.200
+U logt in, vult een formulier in, klikt op, maken en klaar.
+
+00:00:40.320 --> 00:00:44.320
+Maar wat gebeurt er als u het opnieuw moet doen met dezelfde instellingen, regio en NAAM-evingsconventie?
+
+00:00:44.460 --> 00:00:47.740
+Je moet alles wat je hebt gekozen onthouden en dat is waar het misgaat.
+
+00:00:48.020 --> 00:00:52.720
+Want matige implementatie betekent inconsistente resultaten, menselijke fouten en geen addedspoor.
+
+00:00:52.860 --> 00:00:53.620
+Hier is een praktijkvoorbeeld.
+
+00:00:54.460 --> 00:00:57.260
+Iemand in je team maakt een resource aan met iets andere instellingen.
+
+00:00:57.260 --> 00:00:59.460
+Nu heb je twee omgevingen die niet overeenkomen.
+
+00:00:59.680 --> 00:01:02.620
+De ene werkt, de andere niet en veel succes met uitzoeken waarom.
+
+00:01:02.840 --> 00:01:04.540
+Dan is er nog het documentatieprobleem.
+
+00:01:04.920 --> 00:01:10.640
+Infrastructuur als een woorddocument of erger nog, een YouTube-video die zes maanden geleden is opgenomen toen de portal er compleet anders uitzag.
+
+00:01:10.780 --> 00:01:13.580
+Functies worden verplaatst, menu's veranderen, nieuwe opties verschijnen.
+
+00:01:13.720 --> 00:01:18.080
+Ik sprak met een productmanager van het Azure Portal team en hij vertelde dat ze twee keer per dag nieuwe functies uitbrengen.
+
+00:01:18.220 --> 00:01:19.120
+Twee keer per dag.
+
+00:01:19.320 --> 00:01:21.640
+Je woorddocument is verouderd voordat je het hebt afgeschreven.
+
+00:01:21.820 --> 00:01:25.400
+Het punt is, rondklikken werkt prima om te leren, maar niet in een productieomgeving.
+
+00:01:25.400 --> 00:01:30.500
+Dus wat is het alternatief? Je schrijft een bestand waarin je beschrijft wat je wilt en vervolgens geef je Azure de opdracht om het te bouwen.
+
+00:01:30.700 --> 00:01:32.080
+Wat is infrastructuur als code?
+
+00:01:32.600 --> 00:01:37.000
+Infrastructuur als code betekent dat je je cloudomgeving beheert met code in plaats van door een webportal te klikken.
+
+00:01:37.220 --> 00:01:40.420
+Dit is het kernidee. Je schrijft een bestand dat je infrastructuur beschrijft.
+
+00:01:40.640 --> 00:01:43.520
+Dat bestand staat in je repository en je kunt het versiebeheer toepassen.
+
+00:01:43.780 --> 00:01:47.940
+Het controleren via een pull request en het morgen opnieuw uitvoeren om hetzelfde resultaat te krijgen.
+
+00:01:48.180 --> 00:01:50.020
+Een belangrijk begrip hier is declaratief.
+
+00:01:50.240 --> 00:01:52.960
+Dat betekent dat je beschrijft wat je wilt, niet hoe je het moet bouwen.
+
+00:01:52.960 --> 00:01:58.320
+Je vertelt Azure niet om eerst een resourcegroep aan te maken, dan een opslagaccount toe te voegen en vervolgens de netwerkinstellingen te configureren.
+
+00:01:58.460 --> 00:02:02.620
+In plaats daarvan zeg je ik wil een resourcegroep met een opslagaccount en netwerkinstellingen die op deze manier zijn geconfigureerd.
+
+00:02:02.780 --> 00:02:04.120
+En Azure bepaalt de volgorde.
+
+00:02:04.340 --> 00:02:06.360
+Het resultaat is iets dat idempotentie wordt genoemd.
+
+00:02:06.520 --> 00:02:09.120
+Voer het één keer uit, voer het honderd keer uit en je krijgt hetzelfde resultaat.
+
+00:02:09.300 --> 00:02:10.000
+Dat is de kracht.
+
+00:02:10.240 --> 00:02:12.260
+Zie het als een blauwdruk versus handmatig bouwen.
+
+00:02:12.440 --> 00:02:15.040
+Een blauwdruk is herhaalbaar, deelbaar en controleerbaar.
+
+00:02:15.280 --> 00:02:17.740
+Geef het aan iemand anders en die bouwt precies hetzelfde.
+
+00:02:18.120 --> 00:02:19.180
+Verschillende tools doen dit.
+
+00:02:19.180 --> 00:02:21.720
+ARM Templates, Bicep, Terraform, Pulumi.
+
+00:02:21.860 --> 00:02:24.220
+Ze implementeren allemaal hetzelfde concept op verschillende manieren.
+
+00:02:24.440 --> 00:02:25.760
+Dat is een belangrijk onderscheid.
+
+00:02:26.160 --> 00:02:27.520
+Infrastructuur als code is het concept.
+
+00:02:27.800 --> 00:02:29.760
+Bicep is slecht één tool die het implementeert.
+
+00:02:29.960 --> 00:02:30.760
+Maar hier komt het.
+
+00:02:30.880 --> 00:02:33.560
+Azure heeft al jaren een IAC-taal genaamd, ARM Schablone.
+
+00:02:33.720 --> 00:02:36.040
+En er is een reden waarom Microsoft een nieuwe heeft ontwikkeld.
+
+00:02:36.180 --> 00:02:37.540
+Het probleem met ARM Schablone.
+
+00:02:37.700 --> 00:02:40.320
+ARM Schablone zijn het oorspronkelijke Azure IAC-formaat.
+
+00:02:40.460 --> 00:02:42.700
+Het zijn JSON-bestanden en ze hebben veel voordelen.
+
+00:02:42.960 --> 00:02:47.700
+Volledige dekking van elke Azure resource en dezelfde implementatie-engine als die je intern gebruikt.
+
+00:02:47.700 --> 00:02:51.180
+Als je het in de portal kunt maken, kun je het ook in een ARM Schablone definiëren.
+
+00:02:51.360 --> 00:02:52.400
+Dus, wat is het probleem?
+
+00:02:52.620 --> 00:02:55.060
+JSON is geweldig voor machines, maar verschrikkelijk voor mensen.
+
+00:02:55.300 --> 00:02:56.560
+Laat me je laten zien wat ik bedoel.
+
+00:02:56.700 --> 00:02:59.480
+Een opslagaccount in een ARM Schablone vereist ongeveer 20 regels code.
+
+00:02:59.680 --> 00:03:02.020
+Hetzelfde opslagaccount in Bicep, ongeveer 10 regels.
+
+00:03:02.240 --> 00:03:04.200
+De JSON-versie is ongeveer twee keer zo groot.
+
+00:03:04.360 --> 00:03:05.860
+En dat is slechts een simpele resource.
+
+00:03:06.140 --> 00:03:10.360
+Stel je een volledige implementatie voor met netwerken, rekenkracht, databases en beveiligingsregels.
+
+00:03:10.520 --> 00:03:12.460
+De ARM Schablone wordt een muur van tekst.
+
+00:03:12.620 --> 00:03:14.680
+De veel voorkomende pijnpunten zijn voorspelbaar.
+
+00:03:14.980 --> 00:03:16.680
+Ontbrekende komma's, verkeerd geplaatste haakjes.
+
+00:03:16.840 --> 00:03:20.380
+Een ontslachtige structuur waardoor het moeilijk is om te zien waar de ene resource eindigt en de andere begint.
+
+00:03:20.500 --> 00:03:24.600
+Je bent meer tijd kwijt aan het worstelen met de JSON-syntaxis dan aan het daadwerkelijk definiëren van je infrastructuur.
+
+00:03:24.740 --> 00:03:26.380
+En dan zijn er nog de afhankelijkheden.
+
+00:03:26.560 --> 00:03:29.160
+In ARM moet je afhankelijkheden handmatig declareren.
+
+00:03:29.340 --> 00:03:33.120
+Als resource A resource B nodig heeft, moet je dat expliciet vermelden.
+
+00:03:33.340 --> 00:03:35.420
+Mis je er één, dan mislukt je implementatie.
+
+00:03:35.660 --> 00:03:37.540
+Succes met het uitzoeken welke je bent vergeten.
+
+00:03:37.680 --> 00:03:41.500
+Als je ooit hebt geprobeerd om handmatig een JSON-bestand van 200 regels te schrijven, weet je dat het geen pretje is?
+
+00:03:41.500 --> 00:03:46.340
+Helemaal niet. De leerkurve is stijl. Nieuwe teamleden hebben moeite om ARM templates te begrijpen.
+
+00:03:46.500 --> 00:03:49.440
+De drempel om te beginnen is hoog. En wat gebeurt er in de praktijk?
+
+00:03:49.640 --> 00:03:52.380
+Veel teams hebben uiteindelijk maar één persoon die de ARM template kent.
+
+00:03:52.560 --> 00:03:54.340
+Die persoon wordt een single point of failure.
+
+00:03:54.600 --> 00:03:58.700
+Hij of zij is de enige die de implementatie kan aanpassen en de enige die kan debuggen als er iets misgaat.
+
+00:03:58.840 --> 00:03:59.740
+Dat is niet houdbaar.
+
+00:04:00.020 --> 00:04:04.220
+Microsoft heeft de feedback gehoord en daarom Bicep ontwikkeld om precies deze problemen op te lossen.
+
+00:04:04.420 --> 00:04:05.200
+Wat is Bicep?
+
+00:04:05.200 --> 00:04:06.680
+Wat is Bicep nu precies?
+
+00:04:06.880 --> 00:04:11.320
+Het is een taal die is ontworpen voor het implementeren van Azure resources en in de kern is het een transpilair.
+
+00:04:11.500 --> 00:04:13.820
+Je schrijft in Bicep en het compileert naar ARM JSON.
+
+00:04:14.220 --> 00:04:17.040
+Dezelfde engine eronder, maar een veel schonere manier van schrijven.
+
+00:04:17.200 --> 00:04:19.720
+En de naam Bicep is eigenlijk ARM achterstevoren gespeld.
+
+00:04:19.880 --> 00:04:20.660
+Bicep. ARM.
+
+00:04:20.840 --> 00:04:22.200
+Een klein grapje van Microsoft.
+
+00:04:22.600 --> 00:04:24.380
+Maar als je het in actie ziet, begrijp je het.
+
+00:04:24.580 --> 00:04:26.560
+Bicep bouwt voort op ARM in plaats van het te vervangen.
+
+00:04:26.700 --> 00:04:29.080
+Je krijgt dezelfde mogelijkheden met een eenvoudigere syntaxis.
+
+00:04:29.300 --> 00:04:31.220
+Bicep vervangt ARM niet, maar bouwt erop voort.
+
+00:04:31.220 --> 00:04:33.680
+Alles wat je met ARM kunt doen, kun je ook met Bicep doen.
+
+00:04:33.800 --> 00:04:37.080
+Elk resource type, elke API versie, elke configuratie optie is er.
+
+00:04:37.200 --> 00:04:38.880
+Het enige verschil is hoe je het schrijft.
+
+00:04:39.020 --> 00:04:40.540
+De syntaxis is veel overzichtelijker.
+
+00:04:40.740 --> 00:04:43.920
+Geen aanhalingstekens rond eigenschapsnamen, geen comma's tussen eigenschappen, geen haakjes om bij te houden.
+
+00:04:44.020 --> 00:04:45.140
+Het is gewoon eenvoudiger.
+
+00:04:45.360 --> 00:04:46.960
+Vergelijk de twee versies eens naast elkaar.
+
+00:04:47.180 --> 00:04:50.060
+De ARM JSON versie van een opslagaccount zit vol met overbodige informatie.
+
+00:04:50.620 --> 00:04:52.820
+Aanhalingstekens, comma's, haakjes, geneste structuren.
+
+00:04:52.940 --> 00:04:55.820
+De Bicep versie bevat dezelfde informatie, maar is leesbaar.
+
+00:04:55.820 --> 00:05:01.000
+Je kunt ernaar kijken en direct begrijpen wat het doet, zonder door lage JSON syntaxis te hoeven navigeren.
+
+00:05:01.120 --> 00:05:04.140
+Een grote verbetering is de automatische afhankelijkheidsinferentie.
+
+00:05:04.300 --> 00:05:06.800
+In ARM moet je afhankelijkheden handmatig declareren.
+
+00:05:07.000 --> 00:05:12.180
+Maar in Bicep, als resource A verwijst naar resource B, berekent het systeem de afhankelijkheid automatisch.
+
+00:05:12.320 --> 00:05:13.640
+Je hoeft het niet uit te schrijven.
+
+00:05:13.820 --> 00:05:14.640
+Het werkt gewoon.
+
+00:05:14.860 --> 00:05:16.600
+En dat alleen al bespaart uren debuggen.
+
+00:05:16.780 --> 00:05:18.540
+Modules zijn een ander belangrijk onderdeel.
+
+00:05:18.720 --> 00:05:23.040
+Je kunt je infrastructuur opsplitsen in kleinere, herbruikbare onderdelen en deze delen tussen projecten.
+
+00:05:23.040 --> 00:05:26.160
+Het ene team bouwt een netwerkmodule en een ander team gebruikt deze.
+
+00:05:26.340 --> 00:05:28.260
+Je hoeft het wiel niet elke keer opnieuw uit te vinden.
+
+00:05:28.500 --> 00:05:32.440
+Met parameters en variabelen kun je je invoer één keer definiëren en overal hergebruiken.
+
+00:05:32.640 --> 00:05:35.320
+Geen gedoe meer met het zoeken en vervangen van hardgecodeerde waarden.
+
+00:05:35.520 --> 00:05:40.360
+En string interpolatie betekent dat je prefixopslag kunt schrijven in plaats van complexe concatenatiefuncties.
+
+00:05:40.540 --> 00:05:43.400
+De tooling is nog een reden waarom Bicep zo prettig is om mee te werken.
+
+00:05:43.580 --> 00:05:47.980
+De VS Code extensie biedt Intel iSense, syntax, markering en real-time foutcontrole.
+
+00:05:48.180 --> 00:05:50.960
+Eerlijk gezegd is het een van de beste taal extensies in VS Code.
+
+00:05:50.960 --> 00:05:53.440
+Je begint te typen en het suggereert wat er daarna komt.
+
+00:05:53.600 --> 00:05:55.660
+Maak je een fout, dan krijg je het meteen te horen.
+
+00:05:55.800 --> 00:05:59.480
+Je hoeft niet meer te wachten tot een implementatie mislukt voordat je erachter komt dat je een comma bent vergeten.
+
+00:05:59.620 --> 00:06:01.120
+Maar hoe ziet dit er in de praktijk uit?
+
+00:06:01.360 --> 00:06:03.600
+Laten we eens kijken hoe Bicep verschilt van ARM.
+
+00:06:03.880 --> 00:06:05.720
+Bicep versus ARM, wat is het verschil?
+
+00:06:05.900 --> 00:06:09.380
+Laten we het hebben over de verschillen wanneer je Bicep gebruikt in plaats van ARM JSON.
+
+00:06:09.720 --> 00:06:11.520
+De bestandsgrootte is een duidelijk verschil.
+
+00:06:11.780 --> 00:06:15.240
+Bicep bestanden zijn ongeveer half zo groot als vergelijkbare ARM templates.
+
+00:06:15.520 --> 00:06:16.580
+Dat is geen overdrijving.
+
+00:06:16.580 --> 00:06:21.280
+Je verwijdert alle aanhalingstekens, comma's, haakjes en boilerplate code en wat overblijft is alleen de infrastructuurdefinitie.
+
+00:06:21.400 --> 00:06:23.280
+De helft van de code, hetzelfde resultaat.
+
+00:06:23.600 --> 00:06:24.680
+Leesbaarheid volgt vanzelf.
+
+00:06:24.920 --> 00:06:28.080
+Minder regels, een schonere structuur en gemakkelijker in één oogopslag te begrijpen.
+
+00:06:28.280 --> 00:06:31.500
+Wanneer je een Bicep bestand opent, kun je het scannen en begrijpen wat er wordt geïmplementeerd.
+
+00:06:31.680 --> 00:06:36.100
+Met ARM JSON moet je door verschillende lagen van geneste structuren heen voordat je de daadwerkelijke resource configuratie vindt.
+
+00:06:36.500 --> 00:06:38.160
+Afhankelijkheden besparen enorm veel tijd.
+
+00:06:38.380 --> 00:06:40.480
+In ARM declareer je handmatig afhankelijkheden.
+
+00:06:40.660 --> 00:06:42.600
+Als je er een mist, mislukt je implementatie.
+
+00:06:42.600 --> 00:06:46.880
+In Bicep, als resource A verwijst naar resource B, handelt het systeem dit automatisch af.
+
+00:06:46.980 --> 00:06:49.560
+Het voegt de afhankelijkheid toe tijdens het compileren naar ARM JSON.
+
+00:06:49.840 --> 00:06:51.880
+Je hoeft er niet over na te denken, het werkt gewoon.
+
+00:06:52.060 --> 00:06:53.840
+En dat alleen al bespaart uren debuggen.
+
+00:06:54.020 --> 00:06:55.520
+Modules zijn een ander groot verschil.
+
+00:06:55.720 --> 00:06:58.320
+ARM had geneste templates, maar die waren lastig om mee te werken.
+
+00:06:58.480 --> 00:07:01.120
+Aparte bestanden, complexe koppelingen, moeilijk te versioneren.
+
+00:07:01.360 --> 00:07:04.780
+Bicep heeft modules, die overzichtelijker, versioneerbaar en herbruikbaar zijn.
+
+00:07:04.960 --> 00:07:08.900
+Je definieert een module één keer, publiceert deze naar een register en verwijst er overal naar.
+
+00:07:09.120 --> 00:07:11.440
+Dezelfde module, dezelfde configuratie elke keer.
+
+00:07:11.440 --> 00:07:13.620
+Het implementatieproces zelf is identiek.
+
+00:07:13.800 --> 00:07:17.040
+Bicep compileert naar ARM JSON en vervolgens implementeert Azure Resource Manager het.
+
+00:07:17.200 --> 00:07:18.720
+Dezelfde engine, dezelfde pipeline.
+
+00:07:18.920 --> 00:07:20.600
+Je hoeft je implementatieproces niet te veranderen.
+
+00:07:20.680 --> 00:07:22.600
+Je hoeft alleen de manier waarop je de schablonen schrijft aan te passen.
+
+00:07:22.740 --> 00:07:26.860
+De WhatEF-functie is technisch gezien beschikbaar in ARM, maar Bicep maakt deze veel toegankelijker.
+
+00:07:27.040 --> 00:07:30.420
+Je kunt wijzigingen bekijken voordat je ze implementeert en precies zien wat er wordt aangemaakt.
+
+00:07:30.660 --> 00:07:31.560
+Gewijzigd of verwijderd.
+
+00:07:31.720 --> 00:07:33.580
+Geen verrassingen, geen onbedoelde verwijderingen.
+
+00:07:33.760 --> 00:07:37.020
+Je voert de WhatEF-test uit, bekijkt de uitvoer en als alles er goed uitziet, implementeer je.
+
+00:07:37.020 --> 00:07:39.260
+De leerkurve is een van de sterke punten van Bicep.
+
+00:07:39.400 --> 00:07:41.360
+ARM JSON gaat ervan uit dat je weet wat je doet.
+
+00:07:41.500 --> 00:07:43.260
+Het is ontworpen voor machines, niet voor mensen.
+
+00:07:43.520 --> 00:07:44.880
+Bicep is ontworpen voor beginners.
+
+00:07:45.200 --> 00:07:47.000
+Intuitieve syntaxes, tools die je begeleiden.
+
+00:07:47.160 --> 00:07:49.720
+Je kunt het in een middag leren en aan het einde van de week al productief zijn.
+
+00:07:49.960 --> 00:07:52.700
+Microsoft heeft Bicep aangewezen als de aanbevolen ontwikkelomgeving.
+
+00:07:52.880 --> 00:07:55.540
+Alle nieuwe functies en verbeteringen zijn eerst gericht op Bicep.
+
+00:07:55.580 --> 00:07:59.460
+ARM-schablonen werken nog steeds en zullen niet verdwijnen, maar je zou waarschijnlijk geen nieuwe moeten schrijven.
+
+00:07:59.620 --> 00:08:02.400
+Als je vandaag een nieuw project start, is Bicep de beste keuze.
+
+00:08:02.400 --> 00:08:04.960
+Drie regels Bicep om een resource groep te implementeren.
+
+00:08:05.140 --> 00:08:06.180
+Slechts drie regels.
+
+00:08:06.380 --> 00:08:08.720
+De equivalente ARM JSON is ongeveer 15 regels.
+
+00:08:08.920 --> 00:08:12.480
+Hetzelfde resultaat, dezelfde implementatie, maar de ene is leesbaar en de andere is rommel.
+
+00:08:12.660 --> 00:08:14.460
+Nu vraag je je misschien af, een Terraform dan?
+
+00:08:14.620 --> 00:08:15.980
+Moet ik Bicep of Terraform leren?
+
+00:08:16.600 --> 00:08:17.040
+Aanhalingsteken.
+
+00:08:17.260 --> 00:08:18.460
+Bicep versus Terraform.
+
+00:08:18.640 --> 00:08:19.460
+Welke moet je gebruiken?
+
+00:08:19.660 --> 00:08:21.640
+Welkom terug bij Microsoft Knowledge Nuggets.
+
+00:08:21.860 --> 00:08:24.540
+Ik ben Mirko Peters en vandaag behandelen we een vraag die steeds terugkomt.
+
+00:08:24.620 --> 00:08:25.480
+Bicep of Terraform.
+
+00:08:25.720 --> 00:08:26.980
+Laten we het eens nader bekijken.
+
+00:08:27.200 --> 00:08:28.620
+Terraform werkt in meerdere clouds.
+
+00:08:28.620 --> 00:08:32.220
+Je kunt het gebruiken voor Azure, AWS, GCP of zelfs alle drie tegelijk.
+
+00:08:32.420 --> 00:08:34.840
+Bicep daarentegen is gebouwd voor Azure en niets anders.
+
+00:08:35.100 --> 00:08:37.260
+Dat fundamentele verschil heeft invloed op alles.
+
+00:08:37.500 --> 00:08:40.720
+Als je in meerdere clouds werkt, is Terraform de beste keuze.
+
+00:08:41.100 --> 00:08:44.900
+Je leert één taal, één tool, één workflow en het werkt overal.
+
+00:08:45.080 --> 00:08:48.820
+Maar als je voornamelijk met Azure werkt, heeft Bicep een aantal echte voordelen.
+
+00:08:49.040 --> 00:08:51.500
+Hier is de eerste, geen statusbestand om te beheren.
+
+00:08:51.700 --> 00:08:55.880
+Terraform houdt een statusbestand bij dat bijhoud wat er wordt geïmplementeerd en dat bestand is cruciaal.
+
+00:08:55.880 --> 00:08:59.260
+Als het beschadigd raakt of niet meer gesynchroniseerd is, heb je een serieus probleem.
+
+00:08:59.260 --> 00:09:02.380
+Je moet het veilig opslaan, er een backup van maken en de toegang beheren.
+
+00:09:02.560 --> 00:09:07.440
+Bicep communiceert rechtstreeks met Azure Resource Manager, controleert wat er al aanwezig is en achterhaalt de verschillen.
+
+00:09:07.600 --> 00:09:11.200
+Geen statusbestand betekent geen synchronisatieproblemen en geen risico op beschadiging.
+
+00:09:11.340 --> 00:09:13.420
+Een tweede voordeel is ondersteuning vanaf dag één.
+
+00:09:13.660 --> 00:09:18.200
+Wanneer Microsoft een nieuwe Azure functie uitbrengt, ondersteunt Bicep deze direct dezelfde dag nog.
+
+00:09:18.340 --> 00:09:22.700
+Terraform moet wachten op een provider update, wat soms snel gaat, maar soms ook weken duurt.
+
+00:09:22.860 --> 00:09:26.220
+Als je een nieuwe functie direct nodig hebt, is Bicep de enige optie.
+
+00:09:26.220 --> 00:09:33.640
+Ten derde is het ontwikkeld door het Azure team. De tools, de IntelliSense, de foutmeldingen, alles is ontworpen op basis van hoe Azure daadwerkelijk werkt.
+
+00:09:33.840 --> 00:09:37.720
+Wanneer je Bicep schrijft, gebruik je een taal die Azure Resources Native begrijpt.
+
+00:09:37.900 --> 00:09:42.060
+Het weet welke eigenschappen vereist zijn, welke waarden geldig zijn en welke afhankelijkheden er bestaan.
+
+00:09:42.260 --> 00:09:45.000
+Die diepe integratie is moeilijk te repliceren met een tool van derde.
+
+00:09:45.140 --> 00:09:46.560
+Je kunt ze ook allebei gebruiken.
+
+00:09:46.820 --> 00:09:51.300
+Veel organisaties gebruiken Bicep voor platform en landingzones en Terraform voor multicloud workloads.
+
+00:09:51.540 --> 00:09:55.100
+Ze sluiten elkaar niet uit. Je kunt voor elke taak de juiste tool kiezen.
+
+00:09:55.100 --> 00:09:59.340
+Het eerlijke antwoord is dit. Specifiek voor het leren van Azure heeft Bicep minder complexe onderdelen.
+
+00:09:59.500 --> 00:10:01.360
+Het is een eenvoudigere aanpak voor beginners.
+
+00:10:01.620 --> 00:10:04.780
+Je hoeft niets te leren over statusbestanden, providers of back-end configuratie.
+
+00:10:04.940 --> 00:10:08.080
+Je installeert Azure CLI, opent VS-code en begint met schrijven.
+
+00:10:08.260 --> 00:10:11.820
+Genoeg theorie. Laten we het hebben over wat je daadwerkelijk nodig hebt om te beginnen.
+
+00:10:12.060 --> 00:10:13.960
+Aan de slag. Wat je echt nodig hebt.
+
+00:10:14.180 --> 00:10:18.300
+Je hebt twee dingen nodig om te beginnen. Azure CLI en de Bicep-extensie voor VS-code.
+
+00:10:18.560 --> 00:10:21.080
+Dat is alles. Geen aparte Bicep CLI om te installeren.
+
+00:10:21.240 --> 00:10:22.420
+Geen extra tools om te configureren.
+
+00:10:22.420 --> 00:10:24.520
+Azure CLI wordt geleverd met Bicep ingebouwd.
+
+00:10:24.640 --> 00:10:26.740
+Het installeren van Azure CLI is vrij eenvoudig.
+
+00:10:26.880 --> 00:10:28.080
+Ga naar Microsoft Docs.
+
+00:10:28.260 --> 00:10:30.380
+Zoek de installatiepagina voor je besturingssysteem.
+
+00:10:30.520 --> 00:10:33.840
+Op een Mac is het één commando, accentgraven, brew install, Azure CLI accentgraven.
+
+00:10:33.980 --> 00:10:36.020
+Op Windows is er een MSI-installatieprogramma.
+
+00:10:36.200 --> 00:10:37.660
+Download het, voer het uit, klaar.
+
+00:10:37.780 --> 00:10:39.720
+Het werkt ook op Linux via je pakketbeheerder.
+
+00:10:39.920 --> 00:10:43.540
+Nadat het is geïnstalleerd, voer je AZ-version uit om te controleren of alles werkt.
+
+00:10:43.700 --> 00:10:47.000
+Je zou zowel de Azure CLI-versie als de Bicep-versie moeten zien staan.
+
+00:10:47.220 --> 00:10:48.240
+Open nu VS-code.
+
+00:10:48.480 --> 00:10:51.200
+Ga naar het extensiepaneel aan de linkerkant en zoek naar Bicep.
+
+00:10:51.200 --> 00:10:54.900
+Installeer de versie van Microsoft, niet die van een derde partij, maar de officiële.
+
+00:10:55.060 --> 00:10:56.640
+Je hebt deze extensie echt nodig.
+
+00:10:56.880 --> 00:11:00.020
+Het biedt Intel iSense die suggesties geeft voor resource-eigenschappen terwijl je typt,
+
+00:11:00.160 --> 00:11:03.740
+markeert syntax zodat je fouten in één oogopslag kunt zien en controleert in realtime op fouten.
+
+00:11:03.880 --> 00:11:07.660
+Je ziet rode golvende lijnen onder alles wat fout is, nog voordat je probeert te implementeren.
+
+00:11:07.840 --> 00:11:12.840
+Eerlijk gezegd is het een van de beste taal extensies in VS-code en een belangrijke reden waarom Bicep zo prettig is om mee te werken.
+
+00:11:13.060 --> 00:11:15.380
+Maak nu een nieuw bestand aan en noem het main, Bicep.
+
+00:11:15.460 --> 00:11:18.360
+Die Bicep-extensie vertelt VS-code dat de extensie geactiveerd moet worden.
+
+00:11:18.360 --> 00:11:22.720
+Zonder deze extensie schrijf je gewoon platte tekst. Met de extensie krijg je de volledige tooling ervaring.
+
+00:11:22.920 --> 00:11:26.700
+Hier is een kort voorbeeld, een implementatie van een resource-groep in slechts drie regels-code.
+
+00:11:26.860 --> 00:11:31.960
+Eerst stelt u het doelbereik in op abonnement, vervolgens definieert u de resource, een resource-groep met een naam en een locatie.
+
+00:11:32.180 --> 00:11:33.580
+Dat is alles, drie regels.
+
+00:11:33.800 --> 00:11:38.020
+Vergelijk dat eens met het ARM JSON-equivalent, dat bestaat uit ongeveer 15 regels met haakjes en aanhalingstekens.
+
+00:11:38.200 --> 00:11:40.560
+Om dit te implementeren, gebruikt u de Azure CLI.
+
+00:11:40.720 --> 00:11:44.980
+Omdat u implementeert op abonnementsniveau, is de opdracht accentgraven az-deployment-sub-create accentgraven.
+
+00:11:44.980 --> 00:11:48.560
+U geeft een locatie op voor de implementatie-metadata en verwijst naar uw BICEP-bestand.
+
+00:11:48.700 --> 00:11:51.540
+Dat is de manier via de opdrachtregel, maar er is ook een begeleide methode.
+
+00:11:51.700 --> 00:11:55.560
+Klik in VS-code met de rechter muisknop op het BICEP-bestand en selecteer BICEP-bestand implementeren.
+
+00:11:55.700 --> 00:11:57.240
+U wordt door het hele proces geleid.
+
+00:11:57.400 --> 00:12:03.940
+Er wordt gevraagd om een implementatie-naam, uw abonnement, of u een resource-groep wilt maken of selecteren, en of u een parameter-bestand hebt.
+
+00:12:04.120 --> 00:12:06.120
+U zegt nee en de implementatie wordt uitgevoerd.
+
+00:12:06.280 --> 00:12:08.160
+Het resultaat verschijnt in uw Azure-portal.
+
+00:12:08.320 --> 00:12:11.280
+Net zoals wanneer u in de portal rondklikt, maar nu hebt u een bestand dat u kunt hergebruiken.
+
+00:12:11.280 --> 00:12:14.680
+Je kunt het vastleggen in je repository, delen met je team en het morgen opnieuw uitvoeren.
+
+00:12:14.800 --> 00:12:16.360
+En hier komt het magische gedeelte.
+
+00:12:16.580 --> 00:12:19.400
+Voer dezelfde implementatie opnieuw uit en kijk wat er gebeurt.
+
+00:12:19.580 --> 00:12:20.960
+De kracht van idempotentie.
+
+00:12:21.120 --> 00:12:25.540
+Het punt met het uitvoeren van implementaties is dat je ze steeds opnieuw wilt kunnen uitvoeren zonder dat er iets kapot gaat.
+
+00:12:25.740 --> 00:12:27.560
+Dat is precies wat idempotentie je biedt.
+
+00:12:27.660 --> 00:12:32.560
+De eerste keer dat je het BICEP-bestand uitvoert, maakt het de resource-groep aan, maar de tweede keer dat je het uitvoert, gebeurt er niets.
+
+00:12:32.780 --> 00:12:34.900
+Geen foutmelding, geen duplicaat, niets.
+
+00:12:35.120 --> 00:12:39.800
+BICEP controleert wat er al in Azure staat, vergelijkt het met wat je hebt aangevraagd en zegt dat er niets hoeft te worden gewijzigd.
+
+00:12:39.840 --> 00:12:43.860
+Het heeft niet geprobeerd een nieuwe resource-groep aan te maken en het heeft geen foutmelding gegeven dat er al een bestaat.
+
+00:12:44.000 --> 00:12:46.880
+Het heeft alleen bevestigd dat de huidige status overeenkomt met de gewenste status.
+
+00:12:47.120 --> 00:12:49.960
+Zie het als het uitvoeren van accentgraven gidsstatus accentgraven op een schone repository.
+
+00:12:50.240 --> 00:12:51.100
+Er is niets te doen.
+
+00:12:51.300 --> 00:12:52.840
+Alles is al precies zoals het hoort.
+
+00:12:53.060 --> 00:12:54.900
+Dit is de kracht van infrastructuur als code.
+
+00:12:54.900 --> 00:12:58.780
+Je kunt je implementatie keer op keer uitvoeren en elke keer hetzelfde resultaat krijgen.
+
+00:12:59.000 --> 00:13:00.620
+Geen verrassingen, geen afwijkingen.
+
+00:13:00.740 --> 00:13:03.460
+Je weet precies wat er is geïmplementeerd, omdat het bestand dat aangeeft.
+
+00:13:03.660 --> 00:13:05.540
+Het bestand wordt je enige bron van waarheid.
+
+00:13:05.700 --> 00:13:08.220
+Je hoeft je nooit af te vragen of je een instelling wel hebt onthouden...
+
+00:13:08.220 --> 00:13:10.440
+...of te worstelen met het probleem dat het op jouw machine wel werkt...
+
+00:13:10.440 --> 00:13:13.220
+...of door de Azure portal te zoeken om te controleren of iemand iets heeft gewijzigd.
+
+00:13:13.340 --> 00:13:14.720
+Het bestand vertelt je wat er is.
+
+00:13:14.900 --> 00:13:17.980
+Als je iets wilt wijzigen, wijzig je het bestand en voer je de implementatie opnieuw uit.
+
+00:13:17.980 --> 00:13:22.240
+Als je wilt controleren, voer je de implementatie opnieuw uit en bevestig deze dat alles overeenkomt.
+
+00:13:22.380 --> 00:13:24.420
+Zo bouw je vertrouwen op in je infrastructuur.
+
+00:13:24.600 --> 00:13:26.240
+Het bestand is de bron van waarheid.
+
+00:13:26.240 --> 00:13:31.140
+Niet je geheugen, niet een woorddocument, niet een YouTube-video van zes maanden geleden, maar het bestand.
+
+00:13:31.340 --> 00:13:33.900
+Dus, waar past Bicep in het grotere geheel van Azure?
+
+00:13:34.100 --> 00:13:36.300
+Het grotere geheel waar Bicep in past.
+
+00:13:36.560 --> 00:13:39.600
+Bicep maakt deel uit van het Azure Resource Manager ecosysteem.
+
+00:13:39.720 --> 00:13:40.920
+Het is geen aparte tool.
+
+00:13:41.180 --> 00:13:44.700
+Veel mensen denken van wel, maar het is eigenlijk gewoon een betere manier om ARM schablonen te schrijven.
+
+00:13:44.700 --> 00:13:48.960
+Onder de motorkap is het nog steeds ARM, dezelfde implementatie-engine, dezelfde API, alles is hetzelfde.
+
+00:13:49.080 --> 00:13:50.800
+Het enige verschil is hoe je het schrijft.
+
+00:13:50.960 --> 00:13:54.740
+En omdat Bicep compileert naar ARM, werkt alles wat met ARM werkt ook met Bicep.
+
+00:13:54.740 --> 00:13:57.700
+Azure Policy zorgt voor naleving van de regels voor je implementaties.
+
+00:13:58.040 --> 00:13:59.960
+RBAC bepaalt wie wat mag implementeren.
+
+00:14:00.280 --> 00:14:02.300
+Kostenbeheer houdt de uitgaven voor je resources bij.
+
+00:14:02.480 --> 00:14:05.960
+Azure DevOps en GitHub Actions implementeren je Bicep bestanden via pipelines.
+
+00:14:06.220 --> 00:14:09.320
+Dit werkt allemaal perfect omdat Bicep standaard ARM JSON produceert.
+
+00:14:09.460 --> 00:14:10.880
+Je verliest niets door over te stappen.
+
+00:14:11.100 --> 00:14:12.780
+Sterker nog, je wint aan duidelijkheid.
+
+00:14:12.920 --> 00:14:15.740
+Microsoft heeft een compleet ecosysteem rond Bicep gebouwd.
+
+00:14:15.820 --> 00:14:21.120
+Azure Verified Modules, AVM, is een samengestelde bibliotheek met Bicep en Terraform modules die de best practices volgen.
+
+00:14:21.260 --> 00:14:23.040
+Je hoeft niet alles helemaal zelf te schrijven.
+
+00:14:23.040 --> 00:14:28.440
+Je kunt vooraf gebouwde modules gebruiken voor veelvoorkomende patronen zoals virtuele netwerken, opslagaccounts en app services.
+
+00:14:28.660 --> 00:14:32.040
+Ze zijn getest, onderhouden en afgestemd op het Well-Architected Framework.
+
+00:14:32.200 --> 00:14:37.260
+Het Cloud Adoption Framework bevat referentie-implementaties van Bicep voor gestandardiseerde bedrijfsarchitecturen.
+
+00:14:37.420 --> 00:14:40.120
+Als je een landingzone bouwt, is er een Bicep-schabloon voor.
+
+00:14:40.880 --> 00:14:43.600
+Implementatiestacks bieden je levenscyclus beheer voor groepen resources.
+
+00:14:43.940 --> 00:14:48.940
+Je kunt een stack implementeren en als je een resource uit je Bicep-bestand verwijderd, kan de stack deze voor je opruimen.
+
+00:14:48.940 --> 00:14:51.160
+Of beschermen tegen onbedoelde verwijdering.
+
+00:14:51.380 --> 00:14:52.060
+Jij beslist.
+
+00:14:52.260 --> 00:14:57.660
+Het ecosysteem blijft groeien met meer modules, betere tools en een diepere integratie met AI en GitHub Copilot.
+
+00:14:57.860 --> 00:15:02.240
+Je kunt in eenvoudige taal beschrijven wat je wilt en Copilot genereert de Bicep-code voor je.
+
+00:15:02.440 --> 00:15:06.540
+Microsoft blijft investeren in Bicep als de belangrijkste auteurservaring voor Azure.
+
+00:15:06.800 --> 00:15:09.120
+Nieuwe functies zijn daarom eerst gericht op Bicep.
+
+00:15:09.280 --> 00:15:12.640
+Arm-schablonen werken nog steeds, maar de innovatie vindt plaats in Bicep.
+
+00:15:12.640 --> 00:15:17.220
+Kortom, als je in Azure werkt, is Bicep de logische volgende stap na het openen van de portal.
+
+00:15:17.440 --> 00:15:20.220
+Je hoeft Terraform niet te leren of Arm-JSON te beheersen.
+
+00:15:20.380 --> 00:15:26.420
+Je installeert twee dingen, schrijft een paar regelscode en je implementeert infrastructuur die herhaalbaar, versiebeheerd en betrouwbaar is.
+
+00:15:26.620 --> 00:15:29.200
+Laat ik je afsluiten met iets praktisch dat je vandaag nog kunt doen.
+
+00:15:29.400 --> 00:15:34.300
+Je weet nu wat infrastructuur als code is, waarom Bicep bestaat en hoe het Azure implementaties vereenvoudigt.
+
+00:15:34.480 --> 00:15:37.780
+Hier komt het belangrijkste punt, Bicep is geen ander implementatiesysteem.
+
+00:15:37.780 --> 00:15:46.300
+Het is een betere manier om dezelfde Arm-schablonen te schrijven die je sowieso al zou schrijven, met dezelfde Engine en Azure Resource Manager, maar dan in een taal die mensen daadwerkelijk kunnen lezen en schrijven.
+
+00:15:46.440 --> 00:15:47.700
+Hier is een uitdaging voor je.
+
+00:15:47.940 --> 00:15:51.700
+Maak een Main-Bicep bestand aan, implementeer een resource groep en voer de implementatie twee keer uit.
+
+00:15:51.840 --> 00:15:53.180
+Kijk hoe het beide keren werkt.
+
+00:15:53.360 --> 00:15:57.400
+De eerste keer wordt de resource aangemaakt en de tweede keer wordt bevestigd dat er niets is veranderd.
+
+00:15:57.580 --> 00:16:01.520
+Dat is het moment waarop je het snapt, waarop je beseft dat je nooit meer in de portal hoeft te klikken.
+
+00:16:01.720 --> 00:16:02.440
+Dit is de basis.
+
+00:16:02.440 --> 00:16:07.880
+Vanuit hier kun je opslagaccounts, virtuele netwerken en app-services toevoegen volgens hetzelfde patroon.
+
+00:16:08.040 --> 00:16:10.500
+Schrijf een bestand, implementeer het en voer het opnieuw uit.
+
+00:16:10.720 --> 00:16:14.020
+Dat bestand wordt je bron van waarheid en alles wat je verder doet, vloeit daaruit voort.
+
+00:16:14.220 --> 00:16:15.020
+Vond je dit nuttig?
+
+00:16:15.200 --> 00:16:17.880
+Deel het dan met iemand die nog steeds aan het rondklikken is in het portaal.
+
+00:16:17.960 --> 00:16:19.240
+Diegene zal je dankbaar zijn.
+
+00:16:19.500 --> 00:16:25.660
+Abonneer je op je favoriete podcast platform en in de volgende aflevering gaan we met Bicep een stap verder door echte middelen in te zetten bij echte projecten.
+
+00:16:25.660 --> 00:16:26.660
+Dankjewel.

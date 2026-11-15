@@ -1,0 +1,1300 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.920
+Halo dan selamat datang di episode lain Microsoft Knowledge Nuggets di M365 FM
+
+00:00:03.920 --> 00:00:05.580
+Pembawa acara anda Mirko Peter
+
+00:00:05.580 --> 00:00:09.680
+Topik hari ini adalah sesuatu yang hampir semua orang yang bekerja dengan rantai pasokan pernah dengar
+
+00:00:09.680 --> 00:00:11.040
+Tetapi sedikit yang benar-benar memahami
+
+00:00:11.040 --> 00:00:13.100
+Manajemen transportasi Dynamics 365
+
+00:00:13.100 --> 00:00:14.240
+Inilah masalahnya
+
+00:00:14.240 --> 00:00:18.380
+Pelanggan memesan, stok tertahan di gudang, pengangkut membutuhkan waktu pengambilan
+
+00:00:18.380 --> 00:00:22.320
+Pelanggan mengharapkan pengiriman, dan nantinya tagihan angkutan sampai di meja seseorang
+
+00:00:22.320 --> 00:00:27.280
+Selama bertahun-tahun, langkah-langkah itu tersimpan dalam member kerja terpisah, panggilan telepon, lombar tarif, dan serata yang manter
+
+00:00:27.280 --> 00:00:28.460
+Dan menciptakan kesenjangan
+
+00:00:28.460 --> 00:00:31.300
+Gudang mungkin menyiapkan barang sebelum transportasi memiliki rencana
+
+00:00:31.300 --> 00:00:34.240
+Keuangan mungkin melihat tagihan tanpa mengetahui apa yang disepakati untuk bayar
+
+00:00:34.240 --> 00:00:36.180
+Jadi apa sebenarnya main transportasi itu?
+
+00:00:36.740 --> 00:00:41.260
+Dalam bahasa yang sederhana, ini adalah meja transportasi di dalam manajemen rantai pasokan Dynamics 365
+
+00:00:41.260 --> 00:00:44.040
+Ini menghubungkan pintu gudang, vendor, pelanggan, dan pengangkut
+
+00:00:44.040 --> 00:00:48.140
+Yang akan merencanakan muatan, memilih rute dan tarif, mengirim barang, dan meriksa biaya angkutan
+
+00:00:48.140 --> 00:00:52.780
+Di akhir episode ini, anda akan melihat bagaimana semua bagian ini menyatu untuk mempermudah kehidupan kerja anda
+
+00:00:52.780 --> 00:00:57.120
+Mengapa manajemen transportasi ada?
+
+00:00:58.260 --> 00:00:59.860
+Mari kita mulai dengan kebenaran mendasar
+
+00:00:59.860 --> 00:01:03.820
+Barang fisik tidak berpindah hanya karena pesanan penjualan ada di layar
+
+00:01:03.820 --> 00:01:07.200
+Mereka membutuhkan truck, trailer, container, atau cara lain untuk mempergian
+
+00:01:07.200 --> 00:01:09.700
+Seseorang perlu mengetahui dari mana barang berasal
+
+00:01:09.700 --> 00:01:11.820
+Kemana harus tiba, berapa banyak ruang yang dibutuhkan
+
+00:01:11.820 --> 00:01:14.020
+Kapan harus berangkat, dan berapa biaya perjalanannya
+
+00:01:14.020 --> 00:01:17.860
+Sekarang saat anda membayangkan satu kota pergi ke satu pelangan itu terdengar sedih
+
+00:01:17.860 --> 00:01:21.580
+Tetapi perusahaan nyata mungkin mengirim banyak pesanan dari gudang yang sama pada hari yang sama
+
+00:01:21.580 --> 00:01:23.080
+Menerima barang dari beberapa vendor
+
+00:01:23.080 --> 00:01:25.900
+Dan memindahkan stok antarsitusnya sendiri pada waktu yang bersamaan
+
+00:01:25.900 --> 00:01:29.940
+Setiap pergerakan memiliki orang, tanggal, ruang, dan uang yang terikat di dalam
+
+00:01:29.940 --> 00:01:32.900
+Tanpa sistem bersama, setiap tim hanya melihat bagiannya sendiri
+
+00:01:32.900 --> 00:01:34.800
+Penjualan melihat pesanan pelanggan
+
+00:01:34.800 --> 00:01:36.600
+Pembelian melihat pesanan vendor
+
+00:01:36.600 --> 00:01:40.400
+Tauf gudang melihat barang yang perlu mereka ambil, kemas, trim, atau simpan
+
+00:01:40.400 --> 00:01:45.440
+Tim transportasi melihat daftar barang yang harus dipindahkan seringkali setelah semua orang melakukan bagiannya
+
+00:01:45.440 --> 00:01:47.600
+Dan disitulah penundaan dan kebingungan dimulai
+
+00:01:47.600 --> 00:01:48.640
+Berikut adalah contoh konkret
+
+00:01:48.640 --> 00:01:52.000
+Bayangkan sebuah gudang memiliki 10 pesanan pelanggan yang siap untuk kota yang sama
+
+00:01:52.000 --> 00:01:55.440
+Jika tidak ada yang menghubungkan pesanan tersebut sebelum pesanan transportasi
+
+00:01:55.440 --> 00:01:57.840
+Perusahaan mungkin mengatur beberapa perjalanan yang terisi sebagian
+
+00:01:57.840 --> 00:02:00.980
+Atau pengangkut mungkin tiba seberu-beruang gudang mengetahui barang mana yang harus dimuat ke kendaraan
+
+00:02:00.980 --> 00:02:02.720
+Barang sudah siap tetapi pergerakannya tidak rencana
+
+00:02:02.720 --> 00:02:08.020
+Jadi, manajemen transportasi memberikan pergerakan itu tempat di dalam Dynamics 365 Supply Chain Management
+
+00:02:08.020 --> 00:02:13.440
+Ini bukan aplikasi pengiriman konsumen terpisah tempat Anda mengetik nomor pelacakan dan melihat paket bergerak di peta
+
+00:02:14.220 --> 00:02:17.780
+Sebaliknya, aplikasi ini bekerja dengan catatan bisnis yang sudah ada di dalam platform yang terupu
+
+00:02:17.780 --> 00:02:19.800
+Sebuah pesanan menciptakan kebutuhan untuk memindahkan barang
+
+00:02:19.800 --> 00:02:21.460
+Pekerjaan gudang mempersiapkan barang-barang sebut
+
+00:02:21.460 --> 00:02:25.180
+Manajemen transportasi merencanakan bagaimana barang tersebut berpindah antar lokasi
+
+00:02:25.180 --> 00:02:27.760
+Anggap saja seperti meja transportasi di sebuah gedung perkantor
+
+00:02:27.760 --> 00:02:30.160
+Tim penjualan membawa permintaan pelanggan ke meja tersebut
+
+00:02:30.160 --> 00:02:33.220
+Bagian pembelian membawa berita bahwa vendor akan mengirimkan barang masuk
+
+00:02:33.220 --> 00:02:35.520
+Gudang menyediakan stok aktual dan pintu pemuatan
+
+00:02:35.520 --> 00:02:39.860
+Meja transportasi menghubungkan permintaan tersebut dengan rencana transportasi perusahaan
+
+00:02:39.860 --> 00:02:40.860
+Ada dua arah utama
+
+00:02:40.860 --> 00:02:43.600
+Transportasi masuk berarti barang masuk ke bisnis Anda
+
+00:02:43.600 --> 00:02:47.320
+Anda telah memesan barang dari vendor dan barang tersebut harus sampai ke gudang Anda
+
+00:02:47.320 --> 00:02:50.560
+Terkadang vendor mengontrol perjalanan itu, terkadang perusahaan Anda yang mengaturnya
+
+00:02:50.560 --> 00:02:55.220
+Apapun itu, Anda memerlukan rencana yang jelas untuk membawa barang ke tempat yang tepat dan menerimanya saat tiba
+
+00:02:55.220 --> 00:02:57.820
+Transportasi keluar berarti barang keluar dari bisnis Anda
+
+00:02:57.820 --> 00:03:00.000
+Seorang pelanggan telah memesan produk
+
+00:03:00.000 --> 00:03:04.140
+Gudang menyiapkannya dan pengangkut atau kendaraan perusahaan membawanya ke pelanggan
+
+00:03:04.140 --> 00:03:07.320
+Kedua alur berhubungan dengan pergerakan, namun titik awalnya berbeda
+
+00:03:07.320 --> 00:03:09.500
+Transportasi masuk dimulai dengan pesanan pembelian vendor
+
+00:03:09.500 --> 00:03:12.140
+Transportasi keluar dimulai dengan pesanan penjualan dan pelanggan
+
+00:03:12.140 --> 00:03:14.260
+Ada juga jenis ketiga yang sering dilawarkan oleh pemula
+
+00:03:14.260 --> 00:03:15.220
+Yaitu pesanan transfer
+
+00:03:15.220 --> 00:03:18.740
+Pesanan transfer memindahkan stok antar lokasi perusahaan Anda sendiri
+
+00:03:18.740 --> 00:03:21.620
+Mungkin satu gudang memiliki terlalu banyak stok dan gudang lain membutuhkannya
+
+00:03:21.620 --> 00:03:23.800
+Tidak ada pembelian pelanggan yang terlibat
+
+00:03:23.800 --> 00:03:26.080
+Tetapi barang fisik tetap memerlukan transportasi
+
+00:03:26.080 --> 00:03:27.760
+Dalam tiga transportation management
+
+00:03:27.760 --> 00:03:30.060
+Pesanan transfer termasuk dalam skenario keluar
+
+00:03:30.060 --> 00:03:32.520
+Dan dapat direncanakan bersama pesanan penjualan
+
+00:03:32.520 --> 00:03:34.840
+Hal itu masuk akal ketika Anda mewayangkan rumah ke muat
+
+00:03:34.840 --> 00:03:38.080
+Oh baik, palet dikirim ke pelanggan atau ke gudang perusahaan lain
+
+00:03:38.080 --> 00:03:39.740
+Seseorang tetap harus mengatur kendaraan
+
+00:03:40.280 --> 00:03:41.020
+Memesan ruang
+
+00:03:41.020 --> 00:03:43.880
+Dan mengirimkannya dari pintu yang sama
+
+00:03:43.880 --> 00:03:48.020
+Jadi pendekatan terhubung ini menggantikan rontai lama yang terdiri dari daftar terpisah
+
+00:03:48.020 --> 00:03:49.580
+Dan panggilan telepon dengan informasi bersama
+
+00:03:49.580 --> 00:03:52.120
+Pesan memberitahu sistem apa yang perlu dipindahkan
+
+00:03:52.120 --> 00:03:53.580
+Udah menyiapkan barang-barangnya
+
+00:03:53.580 --> 00:03:56.860
+Manajemen transportasi mengubah kebutuhan tersebut menjadi rencana transportasi
+
+00:03:56.860 --> 00:03:58.140
+Setelah barang perlu dipindahkan
+
+00:03:58.140 --> 00:04:00.360
+Sistem terlebih dahulu memerlukan rencana pengiriman yang bisa dijadar
+
+00:04:00.360 --> 00:04:01.840
+Merencanakan muatan
+
+00:04:01.840 --> 00:04:05.780
+Intisari pengetahuan hari ini adalah tentang sesuatu yang dibutuhkan oleh setiap tim logistik
+
+00:04:05.780 --> 00:04:07.380
+Namun seringkali dijelaskan secara berbeda
+
+00:04:07.380 --> 00:04:08.820
+Merencanakan muatan
+
+00:04:08.820 --> 00:04:12.580
+Anda dapat mulai merencanakan transportasi dari pesanan atau pengiriman
+
+00:04:12.580 --> 00:04:16.130
+Dan izinkan saya meluskan mitos cerang
+
+00:04:16.130 --> 00:04:17.990
+Rencana pengiriman tidak dimulai dari awal
+
+00:04:17.990 --> 00:04:19.870
+Rencana ini dimulai dari catatan yang sudah Anda miliki
+
+00:04:19.870 --> 00:04:21.870
+Pesanan penjualan menyimpan apa yang dibeli pelang
+
+00:04:21.870 --> 00:04:24.250
+Pesanan pembelian mencantumkan apa yang perlu dikirimkan oleh vendor
+
+00:04:24.250 --> 00:04:29.230
+Pengiriman mengelompokkan item tersebut ke dalam catatan pengiriman yang lebih terfokus siap untuk digabungkan dengan ini
+
+00:04:29.230 --> 00:04:30.970
+Jadi titik awal mana yang harus Anda gunakan
+
+00:04:30.970 --> 00:04:32.410
+Itu bergantung pada cara kerja perusahaan
+
+00:04:32.410 --> 00:04:34.290
+Beberapa tim merencanakan lebih awal
+
+00:04:34.290 --> 00:04:35.490
+Melihat langsung pada baris pesanan
+
+00:04:35.490 --> 00:04:37.490
+Tim lain membuat pengiriman terlebih dahulu
+
+00:04:37.490 --> 00:04:39.090
+Lalu memutuskan apa yang akan dikirim bersama
+
+00:04:40.330 --> 00:04:42.350
+Apa yang harus dimuat dalam kendaraan yang sama
+
+00:04:42.350 --> 00:04:43.850
+Berikut ada definisi paling sederhana
+
+00:04:43.850 --> 00:04:46.950
+Muatan lot adalah catatan digital untuk pergerakan barang yang diancanakan
+
+00:04:46.950 --> 00:04:52.310
+Anda bisa membayangkannya sebagai satu truck, satu trailer, satu kontainer, atau satu kumpulan pengiriman yang berpergian bersama
+
+00:04:52.310 --> 00:04:56.650
+Ini memberi Anda satu tempat untuk melihat darang mana yang harus bersama sebelum pekerjaan fisik dimulai
+
+00:04:56.650 --> 00:04:58.670
+Dan inilah sesuatu yang sering disalahpahami banyak orang
+
+00:04:58.670 --> 00:05:01.670
+Muatan tidak berarti setiap item harus muat di dalam satu kotak fisik
+
+00:05:01.670 --> 00:05:03.910
+Ini berarti sistem mengumpulkan barang berdasarkan satu transportasi
+
+00:05:03.910 --> 00:05:06.670
+Beberapa pengiriman pelanggan mungkin berbagi satu terlalu
+
+00:05:06.670 --> 00:05:08.770
+Pesanan besar mungkin memenuhi seluruh trailer dengan sendirinya
+
+00:05:08.770 --> 00:05:13.370
+Kontainer yang datang dari vendor juga bisa menjadi muatan bahkan sebelum gudang Anda menerima barangnya
+
+00:05:13.370 --> 00:05:16.550
+Intinya adalah berhenti memperlakukan setiap pesanan sebagai perjalanan sendiri
+
+00:05:16.550 --> 00:05:20.030
+Bayangkan seorang distributor memiliki enam pesanan pelanggan yang siap untuk pengiriman hari Jumat
+
+00:05:20.030 --> 00:05:21.750
+Keenamnya berada di area yang sama
+
+00:05:21.750 --> 00:05:23.630
+Dan setiap pesanan hanya mengisi sebagian truck
+
+00:05:23.630 --> 00:05:26.050
+Mengirim enam kendaraan yang setengah kosong membuang ruang
+
+00:05:26.050 --> 00:05:28.130
+Dan menciptakan enam pekerjaan transportasi terpisah
+
+00:05:28.130 --> 00:05:30.970
+Tim tersebut dapat mengompokkan pengiriman yang kompatibel ke dalam satu muat
+
+00:05:30.970 --> 00:05:33.410
+Kompatibel berarti mereka bisa masuk akal untuk dikirim bersama
+
+00:05:33.410 --> 00:05:35.210
+Mereka berangkat dari gudang yang sama
+
+00:05:35.210 --> 00:05:36.730
+Perlu dikirim sekitar waktu yang sama
+
+00:05:36.730 --> 00:05:37.910
+Pas dengan batasan kendaraan
+
+00:05:37.910 --> 00:05:39.590
+Dan mengikuti aturan pengiriman Anda
+
+00:05:39.590 --> 00:05:41.470
+Sistem membantu menyatukan catatan tersebut
+
+00:05:41.470 --> 00:05:44.030
+Alih-alih mengandalkan seseorang untuk melihat pola dalam spreadsheet
+
+00:05:44.030 --> 00:05:45.830
+Kelompok itu sekarang memiliki rencana bersama
+
+00:05:45.830 --> 00:05:48.070
+Budang Anda melihat apa yang termasuk dalam muatan tersebut
+
+00:05:48.070 --> 00:05:50.410
+Perencana transportasi melihat total ruang dan beratnya
+
+00:05:50.410 --> 00:05:53.990
+Orang tidak perlu menyusun ulang daftar yang sama di email, catatan, atau file terpisah
+
+00:05:53.990 --> 00:05:54.650
+Enam masalah
+
+00:05:54.650 --> 00:05:57.730
+Mengelompokkan barang bukan sekadar menggabungkan lebih banyak item
+
+00:05:57.730 --> 00:05:59.030
+Truck memiliki batasan
+
+00:05:59.030 --> 00:06:00.310
+Berat, ruang lantai, tinggi
+
+00:06:00.310 --> 00:06:01.870
+Kontainer memiliki aturannya sendiri
+
+00:06:01.870 --> 00:06:05.050
+Jika sistem mengelompokkan barang tanpa meriksa batasan tersebut
+
+00:06:05.050 --> 00:06:07.670
+Tempat muatan mungkin terlihat bagus di layar tetapi gagal di demaga pemuatan
+
+00:06:07.670 --> 00:06:10.950
+Dynamics 365 menggunakan tempat muatan untuk membantu menghindari hal itu
+
+00:06:10.950 --> 00:06:15.190
+Anggap tempat muatan sebagai sekumpulan batasan yang dapat digunakan kembali untuk jenis kendaraan atau konten
+
+00:06:15.190 --> 00:06:17.370
+Buat satu untuk truck pengiriman kecil
+
+00:06:17.370 --> 00:06:18.770
+Yang lain untuk trailer yang lebih besar
+
+00:06:18.770 --> 00:06:19.910
+Dan lainnya untuk konten pengiriman
+
+00:06:19.910 --> 00:06:24.310
+Setiap tempat menyimpan batasan untuk berat, volume tinggi, dan aturan lain yang dibutuhkan perusahaan
+
+00:06:24.310 --> 00:06:27.010
+Tempat memberikan bentuk pada muatan sebelum Anda mulai mengisi
+
+00:06:27.010 --> 00:06:30.290
+Jadi, jika suatu pengiriman terlalu berat atau memakan terlalu banyak ruang
+
+00:06:30.290 --> 00:06:32.170
+Rencana akan melihat bahwa barang tersebut tidak seharusnya
+
+00:06:32.170 --> 00:06:36.770
+Jawabannya mungkin kendaraan kedua, templat yang berbeda, atau pengelompokan pengiriman yang berbeda
+
+00:06:36.770 --> 00:06:38.290
+Perangkat lunak ini tidak mengangkat palet
+
+00:06:38.290 --> 00:06:41.210
+Tetapi memberikan rencana yang lebih jelas bagi tim Anda sebelum pekerjaan fisik
+
+00:06:41.210 --> 00:06:44.830
+Salah satu pendekatan bawaan disebut pembuatan muatan berbasis volume
+
+00:06:44.830 --> 00:06:47.530
+Setelah itu terdengar lebih teknis dari yang seharusnya
+
+00:06:47.530 --> 00:06:51.390
+Artinya, sistem menggunakan tinggi dan berat maksimum dari templat muatan Anda
+
+00:06:51.390 --> 00:06:53.110
+Saat membuat atau menyarankan muatan
+
+00:06:53.110 --> 00:06:56.770
+Secara sederhana, sistem memeriksa apakah barang tersebut sesuai dengan batas yang Anda tetap
+
+00:06:56.770 --> 00:06:58.210
+Nilainnya tersebut tidak terkunci selama
+
+00:06:58.210 --> 00:07:00.790
+Seorang perencana dapat menggantinya saat kebutuhan di lapangan baru
+
+00:07:00.790 --> 00:07:02.690
+Mungkin pihak pengangkut mengirimkan trailer-rewe
+
+00:07:02.690 --> 00:07:04.270
+Mungkin suatu perjalanan mengisinkan pihak
+
+00:07:04.270 --> 00:07:05.950
+Templat memberikan aturan normal
+
+00:07:05.950 --> 00:07:09.270
+Dan penggantian menangani pengecualian tanpa harus membangun semuanya kembali
+
+00:07:09.270 --> 00:07:11.410
+Mari kembali ke enam pesanan pelanggan tersebut
+
+00:07:11.410 --> 00:07:14.170
+Masih-masih mungkin memakan 15% dari kapasitas tersebut
+
+00:07:14.170 --> 00:07:17.330
+Jika direncanakan secara terbisa, Anda mungkin mengirim enam kendaraan yang sebagian besar
+
+00:07:17.330 --> 00:07:19.270
+Jika dikelompokkan menjadi satu muatan
+
+00:07:19.270 --> 00:07:21.850
+Dan pesanan yang sama dapat mengisi sebagian besar satu truk dengan ruang tersisa
+
+00:07:21.850 --> 00:07:23.010
+Itu adalah penggunaan ruang yang lebih
+
+00:07:23.010 --> 00:07:24.930
+Kini gagasan yang sama berfungsi untuk kedua
+
+00:07:24.930 --> 00:07:28.330
+Untuk perencanaan masuk buat muatan dari barang-barang yang datang dari vendor
+
+00:07:28.330 --> 00:07:31.010
+Rencana transportasi terhubung ke penerimaan yang diharapkan
+
+00:07:31.010 --> 00:07:33.430
+Sehingga gudang tahu apa yang akan datang dan bersiap untuk kedatangan
+
+00:07:33.430 --> 00:07:36.010
+Alih-alih baru mengetahui pengiriman saat tiba di gerbang
+
+00:07:36.010 --> 00:07:37.990
+Tim penerima memiliki catatan yang terencana
+
+00:07:37.990 --> 00:07:39.570
+Untuk perencanaan keluar
+
+00:07:39.570 --> 00:07:41.610
+Pilih barang gudang yang perlu dikirim ke pelanggan
+
+00:07:41.610 --> 00:07:43.130
+Dan kelompokkan ke dalam muatan
+
+00:07:43.130 --> 00:07:46.030
+Gudang menyiapkan barang-barang tersebut berdasarkan detail muatan
+
+00:07:46.030 --> 00:07:47.550
+Bukan daftar yang terpisah
+
+00:07:47.550 --> 00:07:49.430
+Satu muatan penuh masih memerlukan cara pengiriman
+
+00:07:49.430 --> 00:07:51.370
+Perusahaan yang memindahkannya dan biaya yang diharap
+
+00:07:51.370 --> 00:07:54.270
+Ruta pengangkut dan tarif
+
+00:07:54.270 --> 00:07:54.530
+Wah
+
+00:07:54.530 --> 00:07:57.850
+Muatan sekarang beritahu Anda apa yang harus dikirim bersama
+
+00:07:57.850 --> 00:08:00.570
+Selanjutnya Anda perlu memutuskan siapa yang memindahkannya
+
+00:08:00.570 --> 00:08:03.130
+Layanan apa yang mereka gunakan dan berapa biaya perjalanan tersebut
+
+00:08:03.130 --> 00:08:04.970
+Perusahaan yang memindahkan barang Anda disebut pengangkut
+
+00:08:04.970 --> 00:08:08.450
+Itu bisa berupa perusahaan transportasi luar yang mengambil dan mengirimkan kargo Anda
+
+00:08:08.450 --> 00:08:10.070
+Itu juga bisa berarti armada Anda sendiri
+
+00:08:10.070 --> 00:08:11.610
+Jika Anda mengoperasikan truk dan pemoblin
+
+00:08:11.610 --> 00:08:15.010
+Bagaimanapun pihak pengangkut bertanggung jawab atas perjalanan fisik tersebut
+
+00:08:15.010 --> 00:08:17.650
+Perbedaan itu penting karena Anda tetap membutuhkan rencana
+
+00:08:17.650 --> 00:08:18.970
+Meskipun truk tersebut milik Anda sendiri
+
+00:08:18.970 --> 00:08:22.090
+Dengan pengangkut luar Anda menyepakati harga dan layanan sebelumnya
+
+00:08:22.090 --> 00:08:25.410
+Dengan armada sendiri Anda mungkin tetap ingin biaya transportasi dihitung
+
+00:08:25.410 --> 00:08:27.790
+Terutama jika biaya pengiriman muncul di pesanan pelanggan
+
+00:08:27.790 --> 00:08:31.510
+Manajemen transportasi Dynamics 365 mendukung kedua situasi tersebut
+
+00:08:31.510 --> 00:08:32.630
+Lalu ada rutenya
+
+00:08:32.630 --> 00:08:35.270
+Rutenya adalah jalur terencana dari penjemputan hingga tujuan
+
+00:08:35.270 --> 00:08:36.510
+Meserta pilihan layanannya
+
+00:08:36.510 --> 00:08:38.150
+Rute menjawab pertanyaan praktis
+
+00:08:38.150 --> 00:08:40.350
+Dari gudang mana kurir mengambil barang
+
+00:08:40.350 --> 00:08:42.550
+Pelanggan atau lokasi mana yang menerima barang tersebut
+
+00:08:42.550 --> 00:08:44.770
+Layanan kurir mana yang menangkan di perjalanan tersebut
+
+00:08:44.770 --> 00:08:46.890
+Bayangkan pengiriman dari gudang utama Anda
+
+00:08:46.890 --> 00:08:48.070
+Untuk pelanggan di seberang negara
+
+00:08:48.070 --> 00:08:50.750
+Satu rute mungkin menggunakan angkutan darat standar yang lebih murah
+
+00:08:50.750 --> 00:08:51.590
+Tetapi memakai bapak tersebut
+
+00:08:51.590 --> 00:08:54.470
+Rute lain mungkin menggunakan layanan yang lebih cepat dan lebih mahal
+
+00:08:54.470 --> 00:08:57.550
+Itu awal dan akhir sama tetapi pilihan transportasi berubah
+
+00:08:57.550 --> 00:08:59.590
+Tarif adalah biaya yang diperkirakan untuk pilihan
+
+00:08:59.590 --> 00:09:01.930
+Ini bukan angka acak yang diketik di saat terakhir
+
+00:09:01.930 --> 00:09:03.770
+Tarif berasal dari perjanjian harga
+
+00:09:03.770 --> 00:09:06.230
+Dengan kurir yang dikombinasikan dengan detail pengiriman atau rute
+
+00:09:06.230 --> 00:09:07.630
+Di mana barang berasal
+
+00:09:07.630 --> 00:09:08.370
+Kemana tujuannya
+
+00:09:08.370 --> 00:09:09.310
+Layanan yang digunakan
+
+00:09:09.310 --> 00:09:10.310
+Dan jumlah yang diangkut
+
+00:09:10.310 --> 00:09:12.830
+Jadi rute memberitahu Anda bagaimana barang harus dipindahkan
+
+00:09:12.830 --> 00:09:15.870
+Kedua gagasan itu saling berkaitan
+
+00:09:15.870 --> 00:09:17.730
+Karena rute murah bisa meleset dari janji pengiriman
+
+00:09:17.730 --> 00:09:19.930
+Sementara kecepatan bisa lebih mahal daripada nilai pesanan
+
+00:09:19.930 --> 00:09:22.350
+Perencanaan transportasi bukan sekadar mencari truk
+
+00:09:22.350 --> 00:09:24.610
+Tetapi memilih layanan yang sesuai dengan komitmen pelanggan
+
+00:09:24.610 --> 00:09:25.830
+Dan aturan biaya perusahaan
+
+00:09:26.350 --> 00:09:28.510
+Dynamics 365
+
+00:09:28.510 --> 00:09:30.030
+Menyertakan meja kejar rute tarif
+
+00:09:30.030 --> 00:09:32.430
+Namanya terdengar formal tetapi tujuannya sederhana
+
+00:09:32.430 --> 00:09:34.690
+Ini memberi perencana tempat untuk membandingkan
+
+00:09:34.690 --> 00:09:36.830
+Pilihan rute dan tarif untuk pengiriman secara berdampingan
+
+00:09:37.410 --> 00:09:38.850
+Daripada memeriksa tabel satu kurir
+
+00:09:38.850 --> 00:09:40.770
+Lalu kurir lain dan membandingkannya di file terpisah
+
+00:09:40.770 --> 00:09:43.110
+Anda meninjau pilihan yang terkait dengan kebutuhan pengiriman itu
+
+00:09:43.110 --> 00:09:45.270
+Mungkin satu opsi sampai ke pelanggan lebih cepat
+
+00:09:45.270 --> 00:09:46.730
+Mungkin yang lain biaya lebih rendah
+
+00:09:46.730 --> 00:09:48.790
+Sistem tidak tahu apakah setiap pelanggan
+
+00:09:48.790 --> 00:09:50.370
+Lebih mementikan kecepatan daripada biaya
+
+00:09:50.370 --> 00:09:52.170
+Karena bisnis bekerja secara berbeda
+
+00:09:52.170 --> 00:09:55.010
+Seorang pelanggan mungkin telah membayar untuk pengiriman mendesak
+
+00:09:55.010 --> 00:09:56.770
+Jadi rute yang lebih cepat masuk akal
+
+00:09:56.770 --> 00:09:58.490
+Pelanggan lain menerima pengiriman yang lebih lama
+
+00:09:58.490 --> 00:09:59.810
+Dan biaya yang lebih rendah lebih cocok
+
+00:09:59.810 --> 00:10:01.470
+Manusia tetapi membuat keputusan
+
+00:10:01.470 --> 00:10:04.090
+Manajemen transportasi memberi Anda pilihan yang disepakati
+
+00:10:04.090 --> 00:10:05.030
+Dan biaya yang diperkirakan
+
+00:10:05.030 --> 00:10:07.170
+Sementara bisnis Anda menentukan pertukaran mana yang berfungsi
+
+00:10:07.170 --> 00:10:09.610
+Ini lah yang sebenarnya dilakukan oleh modul bawang tersebut
+
+00:10:09.610 --> 00:10:12.510
+Informasi tarif berasal dari tabel tarif yang dimasukkan
+
+00:10:12.510 --> 00:10:14.190
+Dan dikelola perusahaan Anda di Dynamics 365
+
+00:10:14.190 --> 00:10:16.690
+Anggap tabel ini sebagai catatan tersimpan
+
+00:10:16.690 --> 00:10:18.530
+Dari harga kurir dan aturan rute yang disepakati
+
+00:10:18.530 --> 00:10:20.750
+Jika Anda telah menegosiasikan harga untuk layanan
+
+00:10:20.750 --> 00:10:21.510
+Dan jalur tertentu
+
+00:10:21.510 --> 00:10:23.710
+Informasi tersebut ada dalam sistem dan mendukung perencanaan
+
+00:10:23.710 --> 00:10:26.110
+Itu berfungsi dengan baik jika tarif Anda menggunakan perjanjian yang ketepuk
+
+00:10:26.110 --> 00:10:28.570
+Misalnya, bekerja dengan beberapa kurir tetap
+
+00:10:28.570 --> 00:10:29.770
+Melayani rute yang familiar
+
+00:10:29.770 --> 00:10:31.750
+Dan memperbarui harga saat kontrak berubung
+
+00:10:31.750 --> 00:10:34.010
+Perencana transportasi menggunakan tarif yang sudah tercatat
+
+00:10:34.010 --> 00:10:35.290
+Alih-alih mencari melalui email lama
+
+00:10:35.290 --> 00:10:37.610
+Namun inilah sesuatu yang sering disalahpahami oleh men
+
+00:10:37.610 --> 00:10:40.370
+Modul bawaan tidak bertindak seperti situs belanja langsung
+
+00:10:40.370 --> 00:10:41.310
+Yang terhubung ke setiap kurir
+
+00:10:41.310 --> 00:10:44.450
+Modul ini tidak secara otomatis menarik harga baru dari umpan langsung
+
+00:10:44.450 --> 00:10:46.570
+Dan membandingkannya di seluruh jaringan yang luas secara waktunya
+
+00:10:46.570 --> 00:10:48.950
+Jika perusahaan Anda membutuhkan perbandingan tarif multi kurir
+
+00:10:48.950 --> 00:10:49.890
+Tahu tanpa pesanan langsung
+
+00:10:49.890 --> 00:10:51.510
+Atau pembara status pengiriman yang mendalam
+
+00:10:51.510 --> 00:10:52.950
+Anda biasanya menghubungkan sistem peaktif
+
+00:10:52.950 --> 00:10:54.650
+Itu bukan kegalan manajemen transportasi
+
+00:10:54.650 --> 00:10:56.310
+Sistem ini mendefinisikan tugasnya ini
+
+00:10:56.310 --> 00:10:59.190
+Perangkat ini menangani perencanaan transportasi terstruktur
+
+00:10:59.190 --> 00:11:00.550
+Dalam manajemen rantai pasokan
+
+00:11:00.550 --> 00:11:03.810
+Menggunakan informasi kurir, rute, dan tarif yang dikelola perusahaan Anda
+
+00:11:03.810 --> 00:11:06.630
+Dan ini juga bukan situs web pelacakan paket konsumen
+
+00:11:06.630 --> 00:11:08.370
+Anda tidak akan menggunakannya
+
+00:11:08.370 --> 00:11:10.770
+Seperti peta tempat Anda memasukkan satu nomor pelacakan
+
+00:11:10.770 --> 00:11:12.530
+Dan melihat ikon kendaraan melaju di jalan
+
+00:11:12.530 --> 00:11:16.330
+Modul ini berfokus pada keputusan transportasi bisnis sebelum dan saat pengiriman
+
+00:11:16.330 --> 00:11:18.110
+Barang mana yang dipindahkan bersama
+
+00:11:18.110 --> 00:11:19.070
+Kurir mana yang menanganinya
+
+00:11:19.070 --> 00:11:19.990
+Rute mana yang berlaku
+
+00:11:19.990 --> 00:11:21.190
+Dan berapa biaya berjalanan
+
+00:11:21.190 --> 00:11:23.730
+Setelah perusahaan Anda memilih rencana tersebut
+
+00:11:23.730 --> 00:11:25.670
+Tim gudang dan transportasi perlu melaksanakannya
+
+00:11:25.670 --> 00:11:27.930
+Dari pintu gudang hingga pintu pelangan
+
+00:11:27.930 --> 00:11:31.690
+Rencana transportasi hanya membantu jika orang dapat benar-benar mengubahnya menjadi pengiriman nyata
+
+00:11:31.690 --> 00:11:35.030
+Untuk pesanan keluar, alurnya biasanya dimulai saat pelangan membeli sesuatu
+
+00:11:35.030 --> 00:11:38.070
+Pesanan penjualan memberi tahu bisnis apa yang diinginkan pelangan
+
+00:11:38.070 --> 00:11:39.590
+Kemana harus pergi dan kapan harus tiba
+
+00:11:39.590 --> 00:11:42.750
+Pesanan itu menjadi pengiriman bergabung dengan muatan yang direncanakan bersama barang lain
+
+00:11:42.750 --> 00:11:44.690
+Dan direncanakan bersama barang lain yang melakukan perjalanan yang sama
+
+00:11:44.690 --> 00:11:45.770
+Kemudian gudang mengambil alih
+
+00:11:45.770 --> 00:11:47.710
+Pekerja mengambil barang dari penyimpanan
+
+00:11:47.710 --> 00:11:49.850
+Mengemasnya dan membawanya ke area pemuatan yang takut
+
+00:11:49.850 --> 00:11:51.390
+Karena pengiriman termasuk dalam muatan
+
+00:11:51.390 --> 00:11:53.390
+Tim dapat melihat barang mana yang harus pergi bersama
+
+00:11:55.670 --> 00:11:58.350
+Kendaraan tiba, barang berpindah dari gudang ke kurir
+
+00:11:58.350 --> 00:12:00.090
+Dan kurir membawanya ke pelanggan
+
+00:12:00.090 --> 00:12:02.450
+Setiap langkah terhubung ke catatan pergerakan yang sama
+
+00:12:02.450 --> 00:12:04.510
+Itu terdengar biasa tetapi bayangkan cara lama
+
+00:12:04.510 --> 00:12:06.430
+Seorang pengambil barang mungkin bekerja di pesanan chat
+
+00:12:06.430 --> 00:12:09.090
+Rencana transportasi mungkin memegang daftar terpisah
+
+00:12:09.090 --> 00:12:11.250
+Dan seseorang di pintu pemuatan mungkin mencari melalui email
+
+00:12:11.250 --> 00:12:13.130
+Untuk memiksa kurir mana yang harus mengambil paletman
+
+00:12:13.130 --> 00:12:16.270
+Jika satu detail berubah, semua orang membutuhkan versi yang diperbarui
+
+00:12:16.270 --> 00:12:19.190
+Dengan manajemen transportasi, muatan memberikan catatan bersama kepada
+
+00:12:19.190 --> 00:12:21.750
+Gudang dapat melihat barang yang terhubung ke muatan
+
+00:12:21.750 --> 00:12:23.830
+Rencana transportasi dapat melihat detail pengiriman
+
+00:12:23.830 --> 00:12:27.330
+Dan orang yang mengatur penjemputan dapat melihat kurir dan layanan yang direncanakan
+
+00:12:27.330 --> 00:12:30.650
+Alih-alih mengedarkan beberapa daftar kertas
+
+00:12:30.650 --> 00:12:33.930
+Orang bekerja dari informasi yang tertaut ke pesanan dan pengiriman yang sama
+
+00:12:33.930 --> 00:12:35.330
+Berikut adalah contoh sederhana
+
+00:12:35.330 --> 00:12:38.730
+Sebuah gudang memiliki pesanan untuk beberapa pelanggan di area pengiriman yang sama
+
+00:12:38.730 --> 00:12:41.330
+Satu pelanggan memesan karton perlengkapan kebersihan
+
+00:12:41.330 --> 00:12:42.750
+Yang lain memesan produk kertas
+
+00:12:42.750 --> 00:12:44.890
+Dan yang ketiga memesan sekumpulan kecil peralatan
+
+00:12:44.890 --> 00:12:46.630
+Setiap pesanan perlu diambil dan dikemas
+
+00:12:46.630 --> 00:12:49.830
+Tetapi tim transportasi tidak perlu memperlakukannya sebagai perjalanan yang benar-benar terpisah
+
+00:12:49.830 --> 00:12:51.710
+Mereka menetapkan pengiriman tersebut ke satu moden
+
+00:12:51.710 --> 00:12:54.430
+Taf gudang mengambil setiap pesanan, mengemasnya dengan benar
+
+00:12:54.430 --> 00:12:55.790
+Dan menyiapkannya untuk area pemuatan
+
+00:12:55.790 --> 00:12:58.970
+Catatan muatan memberitahu mereka bahwa semua pengiriman tersebut harus diangkut
+
+00:12:58.970 --> 00:13:00.110
+Saat kurir tiba
+
+00:13:00.110 --> 00:13:02.430
+Tim menyerahkan barang untuk satu pergerakan
+
+00:13:02.430 --> 00:13:06.330
+Rencana alih-alih mencoba mencocokkan palet secara terpisah dengan pengemudi di saat-saat terakhir
+
+00:13:06.330 --> 00:13:08.030
+Pelanggan tetap menerima pesanan mereka sendiri
+
+00:13:08.030 --> 00:13:09.370
+Namun dibalik layar
+
+00:13:09.370 --> 00:13:12.690
+Bisnis telah merencanakan pengiriman tersebut sebagai bagian dari pergerakan yang lebih besar
+
+00:13:12.690 --> 00:13:16.930
+Keterkaitan itu membantu gudang bekerja sama dengan tim transportasi alih-alih bekerja mendahului
+
+00:13:16.930 --> 00:13:18.710
+Atau menunggu instruksi yang datang terlambat
+
+00:13:18.710 --> 00:13:21.750
+Transportasi masuk mengikuti gagasan terhubung yang sama
+
+00:13:21.750 --> 00:13:23.270
+Hanya saja ke arah sebaliknya
+
+00:13:23.270 --> 00:13:26.390
+Pesanan pembelian memberitahu Anda bahwa perusahaan Anda mengharapkan berani vendor
+
+00:13:26.390 --> 00:13:28.850
+Saat bisnis Anda mengatur transportasi
+
+00:13:28.850 --> 00:13:33.050
+Muatan masuk yang terencana menghubungkan item yang masuk ke perjalanan tersebut sebelum barang mencapai gudang
+
+00:13:33.050 --> 00:13:34.870
+Vendor mengirimkan muatan
+
+00:13:34.870 --> 00:13:36.390
+Kurir membawanya ke lokasi Anda
+
+00:13:36.390 --> 00:13:37.430
+Dan gudang menerimanya
+
+00:13:37.430 --> 00:13:40.350
+Taf penerima dapat bersiap karena mereka tahu apa yang seharusnya tiba
+
+00:13:40.350 --> 00:13:43.530
+Mereka dapat memiksa muatan terencana terhadap barang yang tiba di dermaga
+
+00:13:43.530 --> 00:13:45.830
+Jauh lebih jelas daripada truk yang muncul tanpa peringatan
+
+00:13:45.830 --> 00:13:48.830
+Dan seseorang mencoba mencari tahu pesanan pembelian mana yang dimiliki palet tersebut
+
+00:13:48.830 --> 00:13:50.930
+Pesanan transfer juga sesuai dengan proses ini
+
+00:13:50.930 --> 00:13:54.150
+Satu lokasi perusahaan mengirimkan stok keluar sementara lokasi perusahaan lain
+
+00:13:54.150 --> 00:13:57.030
+Gudang pertama menyiapkan item dan mengirimkannya
+
+00:13:57.030 --> 00:14:00.330
+Dan gudang kedua mengharapkan item yang sama dan menerimanya ke dalam stoknya
+
+00:14:00.330 --> 00:14:02.890
+Tidak ada pelanggan luar di akhir perjalanan tersebut
+
+00:14:02.890 --> 00:14:05.910
+Namun perusahaan tetap membutuhkan serah terima yang jelas antara kedua lokasi
+
+00:14:05.910 --> 00:14:10.050
+Muatan tersebut menghubungkan pekerjaan pengiriman dan penerimaan sekitar satu pergerakan terencana
+
+00:14:10.050 --> 00:14:13.170
+Pilihan pengiriman pelanggan juga tetap terhubung dengan keputusan pengiriman
+
+00:14:13.170 --> 00:14:17.350
+Jika perencana memilih layanan kurir yang lebih cepat karena pelanggan membutuhkan barang yang cepat
+
+00:14:17.350 --> 00:14:18.830
+Pilihan itu terhubung ke pengiriman
+
+00:14:18.830 --> 00:14:22.790
+Jika bisnis menggunakan layanan berbiaya lebih rendah karena tanggal pengiriman mungkinkan
+
+00:14:22.790 --> 00:14:23.810
+Pilihan itu juga terhubung
+
+00:14:23.810 --> 00:14:27.750
+Orang-orang dapat melacak biaya pengiriman kembali ke rute dan pilihan kurir yang membuatnya
+
+00:14:27.750 --> 00:14:31.170
+Kendaraan mungkin meninggalkan termaga dan barang mungkin tiba dengan selamat
+
+00:14:31.170 --> 00:14:32.270
+Tetapi pekerjaan belum selesai
+
+00:14:32.270 --> 00:14:35.590
+Kurir mengirimkan tagihan angkutan setelahnya dan seseorang perlu meriksanya
+
+00:14:35.590 --> 00:14:38.010
+Biaya angkutan dan rekonsiliasi
+
+00:14:38.010 --> 00:14:42.050
+Barang telah meninggalkan gudang dan pengiriman bahkan mungkin sudah selesai
+
+00:14:42.050 --> 00:14:43.490
+Kemudian faktur kurir tiba
+
+00:14:43.490 --> 00:14:48.110
+Faktur itu perlu diperiksa karena jumlah pada tagihan harus terhubung kembali ke pilihan transportasi
+
+00:14:48.110 --> 00:14:49.770
+Yang direncanakan perusahaan sebelumnya
+
+00:14:49.770 --> 00:14:53.970
+Termasuk kurir, rute, layanan, detail muatan, dan biaya angkutan yang diharapkan
+
+00:14:53.970 --> 00:15:00.110
+Selama perencanaan, Dynamics 365 dapat menghitung biaya transportasi yang diharapkan dari informasi tarif perusahaan
+
+00:15:00.110 --> 00:15:04.250
+Jumlah yang diharapkan tersebut memberikan titik awal bagi bisnis sebelum pihak ekspedisi meminta pembayaran
+
+00:15:04.250 --> 00:15:06.270
+Nantinya pihak ekspedisi akan mengiriman bahkan
+
+00:15:06.270 --> 00:15:11.970
+Rekonsiliasi pengiriman berarti membandingkan tagihan tersebut dengan tarif dan detail pengiriman yang sudah tercatat di sistem
+
+00:15:11.970 --> 00:15:17.230
+Singkatnya, perusahaan memeriksa apakah pihak ekspedisi mengenakan biaya sesuai harapan perusahaan untuk layanan yang benar-benar tersebut
+
+00:15:17.230 --> 00:15:19.690
+Bayangkan rencana menunjukkan biaya sebesar 500 dolar
+
+00:15:19.690 --> 00:15:23.630
+Tagihan dari ekspedisi juga menunjukkan 500 dolar dan detail pengirimannya cocok
+
+00:15:23.630 --> 00:15:28.410
+Tagihan tersebut memiliki jalur yang jelas melalui proses pemeriksaan karena catatan rencana dan tagihan sudah sesuai
+
+00:15:28.410 --> 00:15:30.410
+Namun tagihan tidak selalu sesuai dengan rencana
+
+00:15:30.410 --> 00:15:33.890
+Mungkin label tarifnya salah, mungkin pihak ekspedisi lagi untuk layanan berbeda
+
+00:15:33.890 --> 00:15:37.450
+Atau mungkin muatan berubah setelah perencanaan dan biaya tersebut perlu penjelasan
+
+00:15:37.450 --> 00:15:41.470
+Tanpa catatan yang terhubung, bagian keuangan mungkin hanya melihat nomor tagihan dan jumlahnya
+
+00:15:41.470 --> 00:15:44.570
+Lalu menghabiskan waktu bertanya kepada tim gudang dan transportasi tentang apa yang terjadi
+
+00:15:44.570 --> 00:15:48.150
+Manajemen transportasi menjaga keputusan pengangkutan tetap terhubung dengan pemeriksaan tersebut
+
+00:15:48.150 --> 00:15:52.290
+Aturan dapat membandingkan tagihan ekspedisi dengan jumlah yang diharapkan dan informasi pengiriman yang direncanakan
+
+00:15:52.290 --> 00:15:56.510
+Ketika detailnya sesuai dengan aturan yang diterima perusahaan, tagihan dapat diproses lebih lanjut
+
+00:15:56.510 --> 00:16:00.390
+Ketika detailnya tidak sesuai, sistem mengirimkan selisih tersebut untuk ditinjau oleh seseorang
+
+00:16:00.390 --> 00:16:03.530
+Itu berarti orang tidak menyetujui setiap biaya pengiriman secara membabi buta
+
+00:16:03.530 --> 00:16:08.150
+Perencana transportasi mungkin perlu mengonfirmasi bahwa pihak ekspedisi menggunakan layanan yang berbeda
+
+00:16:08.150 --> 00:16:11.030
+Atau seseorang di bagian keuangan mungkin perlu melanyakan mengapa ada biaya tambah
+
+00:16:11.030 --> 00:16:13.870
+Intinya bukan untuk berasumsi bahwa setiap ketidakcocokan itu salah
+
+00:16:13.870 --> 00:16:16.570
+Intinya adalah untuk menyadari ketidakcocokan tersebut sebelumnya
+
+00:16:16.570 --> 00:16:19.330
+Hal ini menyatukan operasional dan keuangan dalam pengiriman yang salah
+
+00:16:19.330 --> 00:16:21.310
+Tim transportasi memilih pihak ekspedisi dan layanan
+
+00:16:21.310 --> 00:16:23.350
+Pilihan tersebut menciptakan pihak yang diharapkan
+
+00:16:23.350 --> 00:16:28.830
+Gudang mengirimkan barang dan keuangan meneriksa tagihan yang datang kemudian terhadap catatan apa yang telah direcanakan perusahaan
+
+00:16:28.830 --> 00:16:32.610
+Setiap tim melihat bagian yang berbeda tetapi mereka melihat informasi yang saling terhubung
+
+00:16:32.610 --> 00:16:34.610
+Namun proses bawaan ini memiliki cakupan yang jelas
+
+00:16:34.610 --> 00:16:40.550
+Perusahaan yang membutuhkan audit pengiriman berskala besar dan sangat otomatis seringkali melambahkan sistem manajemen transportasi pihak ketiga
+
+00:16:40.550 --> 00:16:45.190
+Alat-alat tersebut dapat memberikan koneksi ekspedisi yang lebih dalam dan aturan pemeriksaan yang lebih otomatis
+
+00:16:45.190 --> 00:16:50.130
+Modul bawaan menangani pekerjaan biaya yang direncanakan dan rekonsiliasi di dalam manajemen rantai pasokan
+
+00:16:50.130 --> 00:16:53.430
+Sementara sistem lain dapat memperluas pekerjaan tersebut saat bisnis membutuhkan lebih banyak
+
+00:16:53.430 --> 00:16:57.170
+Gabungkan semua blok bangunan ini dan gambaran lengkapnya mulai muncul
+
+00:16:57.170 --> 00:16:59.430
+Dimana ia pas dan apa yang tidak dilakukannya
+
+00:16:59.430 --> 00:17:02.310
+Jadi dimana sebenarnya manajemen transportasi berada?
+
+00:17:02.850 --> 00:17:07.310
+Sistem ini berada di dalam dinamik setiga multiple supply chain management yang berjalan pada aplikasi finance and operations
+
+00:17:07.310 --> 00:17:08.230
+Belum tempat
+
+00:17:08.230 --> 00:17:09.530
+Ini siapa yang cocok menurut?
+
+00:17:09.670 --> 00:17:15.430
+Bisnis yang membutuhkan cara terstruktur untuk merencanakan pengiriman masuk, pengiriman keluar pelanggan, transfer stok antar lokasi perusahaan
+
+00:17:15.430 --> 00:17:19.650
+Semuanya menggunakan catatan kurir, tabel tarif, dan aturan muatan mereka sendiri dan aturan mereka sendiri
+
+00:17:19.650 --> 00:17:21.690
+Sekarang mari kita berjelas poin yang sering membingungkan
+
+00:17:21.690 --> 00:17:23.210
+Bisnis sentral berbeda
+
+00:17:23.210 --> 00:17:26.590
+Bisnis sentral tidak menyertakan modul manajemen transportasi bawaan ini
+
+00:17:26.590 --> 00:17:29.670
+Jika Anda menggunakan bisnis sentral dan membutuhkan perencanaan transportasi
+
+00:17:29.670 --> 00:17:31.650
+Anda perlu melihat sistem manajemen transportasi pihak ketiga
+
+00:17:31.650 --> 00:17:32.450
+Bula batasan
+
+00:17:32.450 --> 00:17:34.670
+Mari kita juga jaga batasan itu tetap jelas di situ
+
+00:17:34.670 --> 00:17:39.550
+Modul bawaan tidak menggantikan setiap portal kurir, layanan lalu lintas langsung, atau alat pelacakan canggih
+
+00:17:39.550 --> 00:17:42.210
+Saat bisnis membutuhkan tarif langsung dari banyak kurir
+
+00:17:42.210 --> 00:17:44.730
+Pilihan kurir yang lebih luas, atau pelacakan lebih mendalam
+
+00:17:44.730 --> 00:17:47.450
+Setelah barang meninggalkan demaga, mereka menghubungkan TMS pihak ketiga
+
+00:17:47.450 --> 00:17:49.390
+Alat tersebut menangani aktivitas di luar
+
+00:17:49.390 --> 00:17:50.650
+Ini kembali gedung kurir yang tersebut
+
+00:17:50.650 --> 00:17:53.830
+Manajemen transportasi adalah meja transportasi di dalam gedung itu
+
+00:17:53.830 --> 00:17:56.190
+Ini terhubung ke pesanan pekerjaan gudang dan keuangan
+
+00:17:56.190 --> 00:17:59.110
+Ini menjaga rencana transportasi perusahaan sendiri tetap terperang
+
+00:17:59.110 --> 00:18:02.210
+Alat kurir luar mungkin menangani aktivitas di luar meja tersebut
+
+00:18:02.210 --> 00:18:04.270
+Dua lapisan berbeda yang bekerja bersama
+
+00:18:04.270 --> 00:18:06.350
+Kesimpulan
+
+00:18:06.350 --> 00:18:07.950
+Rangkut pangkutan berikutnya
+
+00:18:07.950 --> 00:18:10.130
+Inilah cara paling sederhana untuk mengikirkan
+
+00:18:10.130 --> 00:18:13.490
+Manajemen transportasi mengubah pesan bisnis menjadi pergerakan barang yang terencana
+
+00:18:13.490 --> 00:18:17.290
+Kemudian menghubungkan pergerakan tersebut dengan biaya pengiriman yang diperiksa perusahaan setelahnya
+
+00:18:17.290 --> 00:18:18.550
+Itulah siklus penuhnya
+
+00:18:18.550 --> 00:18:20.690
+Berlangganan adalah di platform podcast favorit
+
+00:18:20.690 --> 00:18:24.190
+Bagikan nugget pengetahuan ini kepada seseorang yang sedang mempelajari
+
+00:18:24.190 --> 00:18:25.170
+Dynamics 3 Management
+
+00:18:25.170 --> 00:18:28.830
+Lalu jelajahi episode gudang dan inventaris kami berikutnya
+
+00:18:28.830 --> 00:18:31.810
+Setiap muatan masih bergantung pada stok yang ada di balik pintu gudang
+
+00:18:31.810 --> 00:19:01.790
+Terima kasih telah menonton!

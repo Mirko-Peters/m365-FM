@@ -1,0 +1,1102 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.920
+Halo semuanya dan selamat datang di episode lain Microsoft Knowledge Nuggets di M365FM.
+
+00:00:05.600 --> 00:00:06.220
+Saya Mirko Peters.
+
+00:00:06.840 --> 00:00:09.580
+Jadi Microsoft Defender for Cloud terdengar seperti antivirus, bukan?
+
+00:00:10.220 --> 00:00:13.640
+Itu tebakan yang wajar karena nama Defender muncul di banyak alat keamanan Microsoft.
+
+00:00:14.400 --> 00:00:17.700
+Namun begini, Defender for Cloud tidak memindai laptop Anda untuk mencari file jahat,
+
+00:00:17.780 --> 00:00:19.560
+melainkan mengawasi seluruh pengaturan cloud Anda.
+
+00:00:20.040 --> 00:00:23.640
+Anggaplah seperti ini, Defender for Endpoint menjaga keamanan di dalam satu ruangan.
+
+00:00:24.600 --> 00:00:27.780
+Alat ini mengawasi satu laptop atau server dari malware program asing
+
+00:00:27.780 --> 00:00:29.960
+atau tanda seseorang mencoba mengambil kendali.
+
+00:00:30.340 --> 00:00:33.080
+Defender for Cloud mengawasi seluruh gedung kantor di sekitar ruangan itu.
+
+00:00:33.560 --> 00:00:36.540
+Ia memeriksa siapa yang bisa masuk dan apakah ada pintu samping yang menghadap kejalanan.
+
+00:00:37.200 --> 00:00:42.720
+Ia memeriksa kunci, alarm, ruang penyimpanan, dan aturan yang menentukan siapa yang bisa mengakses area sensitif.
+
+00:00:43.320 --> 00:00:45.380
+Sederhananya, alat ini membantu Anda melihat tiga hal.
+
+00:00:45.500 --> 00:00:48.740
+Seberapa aman sumber daya cloud Anda diatur, apakah ada sesuatu yang mencurigakan terjadi,
+
+00:00:48.840 --> 00:00:50.260
+dan apa yang harus Anda perbaiki terlebih dahulu.
+
+00:00:50.380 --> 00:00:52.360
+Peringatan mungkin memberitahu Anda bahwa sebuah pintu tidak terkini.
+
+00:00:52.580 --> 00:00:55.560
+Peringatan ancaman aktif memberitahu Anda bahwa seorang mungkin sudah mencoba membuka pintu.
+
+00:00:55.920 --> 00:00:56.600
+Perbedaan itu penting.
+
+00:00:56.600 --> 00:01:00.160
+Jadi, mari kita mulai dengan alasan mengapa keamanan cloud menjadi berantakan dengan pikecuk.
+
+00:01:00.620 --> 00:01:02.400
+Mengapa keamanan cloud begitu mudah rusak?
+
+00:01:02.880 --> 00:01:06.140
+Bertahun-tahun lalu, sebuah perusahaan mungkin memiliki ruang server kecil,
+
+00:01:06.280 --> 00:01:09.460
+beberapa server fisik, dan satu tim yang mengurus sebagian besarnya.
+
+00:01:09.960 --> 00:01:10.860
+Pengaturannya berjalan lama.
+
+00:01:11.400 --> 00:01:13.660
+Hari ini perusahaan dapat membuat mesin virtual baru dalam itu.
+
+00:01:14.040 --> 00:01:16.280
+Seorang pengembang bisa menambah penyimpanan untuk proyek,
+
+00:01:16.400 --> 00:01:19.240
+tim lain bisa membuat database, orang lain bisa menjalankan kontainer untuk aplikasi.
+
+00:01:19.240 --> 00:01:22.460
+Setiap bagian mungkin memiliki tim sendiri dan alat keamanan sendiri.
+
+00:01:22.960 --> 00:01:24.900
+Anda mungkin memiliki satu alat untuk server,
+
+00:01:25.060 --> 00:01:26.740
+yang lain untuk database, yang lain untuk penyimpanan,
+
+00:01:26.840 --> 00:01:27.860
+dan satu lagi untuk kontainer.
+
+00:01:28.300 --> 00:01:29.800
+Setiap alat menunjukkan sebagian gambaran,
+
+00:01:29.940 --> 00:01:32.220
+tetapi tidak ada yang melihat seluruh beda untuk menciptakan celah.
+
+00:01:32.680 --> 00:01:35.060
+Akun penyimpanan mungkin tidak sengaja mengizinkan akses publik.
+
+00:01:35.620 --> 00:01:39.260
+Mesin virtual mungkin membiarkan remote desktop protokol RDP terbuka ke internet.
+
+00:01:39.880 --> 00:01:41.920
+Pada Linux itu bisa berupa Skursial atau SSH.
+
+00:01:42.320 --> 00:01:45.320
+Akun admin lama mungkin masih memiliki akses berbulan-bulan setelah kontraktor keluar.
+
+00:01:45.520 --> 00:01:48.540
+Sebuah server mungkin melawatkan pembaruan keamanan karena hanya berjalan sebagai tes.
+
+00:01:48.540 --> 00:01:50.620
+Tidak satupun dari kesalahan ini membutuhkan penyerangan cerdas.
+
+00:01:50.860 --> 00:01:52.420
+Mereka hanya butuh satu pintu samping yang tidak terkutuk.
+
+00:01:52.660 --> 00:01:54.140
+Dan lingkungan cloud terus berubah setiap saat.
+
+00:01:54.600 --> 00:01:58.020
+Sumber dayat aman pada hari Senin bisa menjadi terbuka pada hari Selasa
+
+00:01:58.020 --> 00:01:59.840
+karena seseorang mengubah satu pengaturan,
+
+00:02:00.000 --> 00:02:01.220
+membuat aturan jaringan baru,
+
+00:02:01.460 --> 00:02:04.300
+atau menyaring templat lama yang masih memiliki izin lemah di dalamnya.
+
+00:02:04.820 --> 00:02:05.880
+Anda mungkin pernah melihat ini di kehidupannya.
+
+00:02:06.420 --> 00:02:07.700
+Sebuah tim membutuhkan server tercepat.
+
+00:02:08.220 --> 00:02:10.560
+Mereka membuat mesin virtual memberinya alamat publik
+
+00:02:10.560 --> 00:02:11.680
+agar bisa terhubung dari rumah,
+
+00:02:11.960 --> 00:02:13.900
+lalu membuka RDP atau SSH karena lebih cepat.
+
+00:02:14.320 --> 00:02:14.960
+Kemudiannya berhasil.
+
+00:02:15.260 --> 00:02:16.040
+Kemudian proyek berakhir,
+
+00:02:16.040 --> 00:02:18.220
+orang-orang beralih ke hal lain dan server itu tetap daring.
+
+00:02:18.720 --> 00:02:19.760
+Pintu pabriknya tetap terbuka.
+
+00:02:20.160 --> 00:02:21.200
+Tidak ada yang berniat seperti itu,
+
+00:02:21.340 --> 00:02:24.120
+tetapi halnya terjadi karena sumber daya cloud mudah dibuat dan mudah dilupakan.
+
+00:02:24.540 --> 00:02:26.380
+Sekarang tambahkan cara banyak perusahaan benar-benar bekerja.
+
+00:02:26.780 --> 00:02:28.080
+Anda mungkin memiliki beban kerja di Azure.
+
+00:02:28.480 --> 00:02:30.820
+Anda mungkin masih menjalankan server di kantor atau pusat data sendiri.
+
+00:02:31.240 --> 00:02:33.620
+Pemasok mungkin menggunakan Amazon Web Services atau AWS.
+
+00:02:34.220 --> 00:02:35.680
+Tim lain mungkin menggunakan Google Cloud Platform.
+
+00:02:36.320 --> 00:02:37.720
+Kamu tidak terpaku di satu portal saja.
+
+00:02:38.360 --> 00:02:40.420
+Daftar peringatan yang panjang juga tidak menyelesaikan masalah.
+
+00:02:40.720 --> 00:02:42.900
+Jika Anda melihat ratusan peringatan tanpa mengetahui
+
+00:02:42.900 --> 00:02:44.240
+mana yang mengekspos data pelanggan,
+
+00:02:44.240 --> 00:02:46.380
+mana yang menciptakan rute ke sesuatu yang sensitif,
+
+00:02:46.440 --> 00:02:48.420
+dan mana yang menciptakan rute ke sesuatu yang sensitif,
+
+00:02:48.500 --> 00:02:49.780
+Anda tetap tidak tahu harus mulai dari mana.
+
+00:02:50.080 --> 00:02:50.820
+Anda membutuhkan konteks.
+
+00:02:51.100 --> 00:02:52.280
+Anda perlu mengetahui apa yang ada,
+
+00:02:52.400 --> 00:02:53.260
+apa yang menghadap ke internet,
+
+00:02:53.380 --> 00:02:54.320
+siapa yang dapat mengaksesnya,
+
+00:02:54.380 --> 00:02:55.120
+dan berbicara mengaksesnya,
+
+00:02:55.180 --> 00:02:56.040
+dan perbaikan mana yang paling mulai.
+
+00:02:56.200 --> 00:02:57.440
+Disitulah Defender for Cloud berperan.
+
+00:02:57.840 --> 00:03:00.000
+Alat ini mencari pintu yang lemah sebelum seseorang masuk ke dalam.
+
+00:03:00.720 --> 00:03:01.900
+Management Posture Common Cloud.
+
+00:03:02.520 --> 00:03:04.740
+Plok bangunan pertamanya adalah Management Posture Common Cloud.
+
+00:03:05.140 --> 00:03:05.920
+Nama itu terdengar berat,
+
+00:03:06.000 --> 00:03:07.680
+jadi izinkan saya menjelaskannya dengan bahasa sederhana.
+
+00:03:07.680 --> 00:03:10.300
+Ini adalah inspeksi keselamatan berkala untuk sumber daya cloud Anda.
+
+00:03:10.920 --> 00:03:13.640
+Alih-alih berkeliling gedung nyata dengan papan klip Defender for Cloud
+
+00:03:13.640 --> 00:03:15.580
+meriksa pengaturan di sekitar layanan cloud Anda.
+
+00:03:16.220 --> 00:03:18.800
+Alat ini mencari hal-hal yang dapat membiarkan sumber daya terbuka,
+
+00:03:18.980 --> 00:03:19.820
+aturan jaringan yang lemah,
+
+00:03:19.940 --> 00:03:20.600
+enkripsi yang hilang,
+
+00:03:20.720 --> 00:03:21.480
+akses yang berlebihan,
+
+00:03:21.620 --> 00:03:24.540
+atau pengaturan tidak lagi sesuai dengan aturan perusahaan Anda.
+
+00:03:25.040 --> 00:03:27.200
+Dan pemeriksaannya terus berjalan seiring perubahan lingkungan Anda.
+
+00:03:27.620 --> 00:03:28.840
+Itu penting karena keamanan cloud,
+
+00:03:28.940 --> 00:03:30.700
+bukanlah sesuatu yang Anda teruskali lalu dilupakan.
+
+00:03:31.060 --> 00:03:32.580
+Sumber daya dapat dibuat, diubah, disalin,
+
+00:03:32.580 --> 00:03:33.700
+atau dipindahkan kapan saja.
+
+00:03:33.700 --> 00:03:35.840
+Defender for Cloud terus memeriksa pengaturan saat ini
+
+00:03:35.840 --> 00:03:38.780
+daripada mengandalkan tinjauan yang diselesaikan seseorang berbulan-bulan lalu.
+
+00:03:39.120 --> 00:03:40.700
+Anda akan sering melihat sesuatu yang disebut skor kamar.
+
+00:03:41.200 --> 00:03:43.540
+Anggap saja seperti skor inspeksi untuk lokasi kantor yang besar.
+
+00:03:43.760 --> 00:03:46.100
+Ini memberi Anda gambaran tentang berapa banyak kontrol keselamatan
+
+00:03:46.100 --> 00:03:48.340
+yang direkomendasikan telah terpasang dan di mana pekerja masih diperlukan.
+
+00:03:48.440 --> 00:03:49.600
+Ini bukan tes lulus atau gagal.
+
+00:03:50.080 --> 00:03:51.920
+Skor 100 bukan berarti tidak ada risiko.
+
+00:03:52.380 --> 00:03:54.340
+Pemeriksaan yang termasuk dalam skor tersebut terlihat aman.
+
+00:03:55.140 --> 00:03:57.520
+Dan skor yang lebih rendah bukan berarti cloud Anda sudah dibobol.
+
+00:03:57.520 --> 00:04:00.400
+Itu berarti Defender for Cloud menemukan pengaturan yang perlu diperhatikan.
+
+00:04:00.400 --> 00:04:05.060
+Skor tersebut memberi Anda arah, tetapi yang lebih berguna daripada angkanya sendiri adalah rekomendasi dibalik.
+
+00:04:05.520 --> 00:04:07.500
+Rekomendasi memberi tahu Anda apa yang perlu diperhatikan,
+
+00:04:07.620 --> 00:04:09.840
+sumber daya mana yang berisiko, dan perubahan apa yang dapat mengurangi.
+
+00:04:10.200 --> 00:04:13.920
+Anda mungkin melihat akun penyimpanan tertentu mengizinkan akses yang lebih luas daripada yang diizinkan kebijakan.
+
+00:04:14.420 --> 00:04:17.540
+Atau komputer virtual mungkin tidak memiliki kontrol yang diharapkan oleh dasar keamanan Anda.
+
+00:04:17.740 --> 00:04:18.860
+Anda tidak perlu menempat keamanan harus.
+
+00:04:19.300 --> 00:04:21.980
+Rekomendasi tersebut mengarah ke sumber daya dan menjelaskan masalahnya
+
+00:04:21.980 --> 00:04:23.660
+dengan cara yang dapat ditindak lanjuti oleh tingkat.
+
+00:04:23.660 --> 00:04:26.560
+Itu mengubah peringatan yang sama menjadi tugas kerja dengan pemilik yang jatuh.
+
+00:04:26.620 --> 00:04:28.480
+Namun tidak semua temuan memerlukan respons yang sama.
+
+00:04:28.960 --> 00:04:30.120
+Bayangkan Anda menemukan doang yang salah.
+
+00:04:30.360 --> 00:04:32.640
+Satu, memengaruhi sumber daya uji kecil yang tidak dapat dijangkau siap.
+
+00:04:32.940 --> 00:04:37.040
+Yang lain, memengaruhi sumber daya yang menghadap publik yang dapat menjangkau data pelangat atau sistem sensitif.
+
+00:04:37.460 --> 00:04:38.540
+Anda memperbaikin kedua terlebih dahulu.
+
+00:04:38.960 --> 00:04:40.800
+Itulah pemikiran di balik prioritas berbasis risiko.
+
+00:04:41.200 --> 00:04:44.220
+Defender for Cloud membantu Anda meluangkan waktu di mana pengaturan yang lemah
+
+00:04:44.220 --> 00:04:47.760
+dapat menyebabkan sesuatu yang lebih serius daripada menganggap setiap peringatan setara.
+
+00:04:48.580 --> 00:04:51.000
+Ini mengarah pada istilah yang mungkin Anda lihat, yaitu jalur serangan.
+
+00:04:51.340 --> 00:04:53.740
+Jalur serangan adalah rute yang mungkin digunakan penyerang.
+
+00:04:54.260 --> 00:04:56.660
+Mulai dari titik lemah dan bergerak menuju sesuatu yang penting.
+
+00:04:57.080 --> 00:04:58.620
+Mungkin suatu sumber daya memiliki akses bu.
+
+00:04:58.900 --> 00:05:01.540
+Mungkin sumber daya itu terhubung ke identitas dengan izin yang luas.
+
+00:05:01.840 --> 00:05:04.660
+Mungkin identitas itu dapat menjangkau bahasa data yang menyimpan informasi sensitif.
+
+00:05:04.740 --> 00:05:06.120
+Defender for Cloud dapat menunjukkan latar tersebut.
+
+00:05:06.380 --> 00:05:08.140
+Itu tidak berarti penyerang telah menggunakan rute tersebut.
+
+00:05:08.140 --> 00:05:11.800
+Itu berarti rute tersebut ada dan Anda harus memutuskan apakah akan menutupnya sebelum ada orang lain yang melakukan.
+
+00:05:11.940 --> 00:05:12.540
+Berbedaan yang besar.
+
+00:05:12.540 --> 00:05:18.080
+Jalur serangan membantu Anda melihat mengapa pengaturan kecil dapat berdampak jauh di luar sumber daya tempat yang pertama kali muncul.
+
+00:05:18.460 --> 00:05:20.820
+Titik akhir publik sendiri mungkin terlihat seperti satu masalah kecil.
+
+00:05:21.400 --> 00:05:25.460
+Jika terhubung ke identitas yang kuat dan data sensitif, itu menjadi prioritas yang jauh lebih tinggi.
+
+00:05:26.060 --> 00:05:28.880
+Terkadang, beberapa jalur serangan berbagi titik lemah yang sama.
+
+00:05:29.240 --> 00:05:30.560
+Microsoft menyebut ini sebagai titik hambatan.
+
+00:05:30.560 --> 00:05:34.240
+Titik hambatan adalah satu tempat di mana perbaikan dapat menutup beberapa rute yang mungkin sekaligus.
+
+00:05:34.520 --> 00:05:40.920
+Misalnya, memperketat akses pada satu identitas atau menghapus satu koneksi publik yang tidak perlu dapat mengurangi risiko di berbagai sumber daya.
+
+00:05:41.100 --> 00:05:42.100
+Itu menghemat waktu.
+
+00:05:42.100 --> 00:05:47.500
+Alih-alih memperbaiki 10 gejala terkait satu per satu, tim keamanan dan cloud Anda dapat fokus pada penyebab bersama.
+
+00:05:48.100 --> 00:05:50.420
+Defender for cloud juga menggunakan kebijakan dan pemeriksaan kepatuhan.
+
+00:05:51.000 --> 00:05:53.960
+Kebijakan adalah aturan yang Anda terapkan di seluruh langganan dan sumber daya azuran.
+
+00:05:54.720 --> 00:05:59.160
+Anda mungkin mengetahukan aturan bahwa penyimpanan memerlukan enkripsi, port jaringan tertentu tidak boleh tetap terbuka,
+
+00:05:59.160 --> 00:06:02.180
+atau sumber daya memerlukan pengaturan keamanan khusus sebelum digunakan.
+
+00:06:02.980 --> 00:06:04.060
+Kebijakan menciptakan konsisten.
+
+00:06:04.620 --> 00:06:09.640
+Tanpa kebijakan, setiap tim dapat membangun sumber daya dengan caranya sendiri, dan keamanan menjadi pemeriksaan manual setelahnya.
+
+00:06:10.400 --> 00:06:15.140
+Dengan kebijakan, Anda dapat memeriksa apakah sumber daya mengikuti aturan yang sama saat dibuat dan diubah.
+
+00:06:15.540 --> 00:06:16.440
+Namun, ada kesalahan umum di sini.
+
+00:06:16.880 --> 00:06:21.080
+Banyak tim membiarkan kebijakan dalam mode audit saja dan berasumsi kebijakan tersebut akan menghentikan pengaturan yang berisik.
+
+00:06:21.180 --> 00:06:22.420
+Mode audit hanya melaporkan masalah.
+
+00:06:22.820 --> 00:06:26.320
+Mode ini memberitahu Anda bahwa seseorang membuat sesuatu di luar aturan tetapi tidak memblokir berduk.
+
+00:06:26.320 --> 00:06:30.580
+Itu bisa menjadi titik awal yang masuk akal saat Anda mempelajari sumber daya apa yang mungkin rusak.
+
+00:06:30.980 --> 00:06:35.580
+Setelah Anda memahami dampaknya dan memperbaiki masalah lama, beberapa aturan berisiko tinggi mungkin memerlukan penegakan yang lebih.
+
+00:06:35.740 --> 00:06:39.000
+Jadi tujuannya bukan untuk mengejar skor sempurna atau membaca setiap peringatan di step portal.
+
+00:06:39.320 --> 00:06:40.620
+Anda membangun daftar tugas yang jatuh.
+
+00:06:40.620 --> 00:06:47.400
+Anda melihat sumber daya mana yang terhubung ke target sensitif dan perbaikan tunggal mana yang terhubung ke target sensitif dan perbaikan tunggal mana yang menghapus beberapa jatuh.
+
+00:06:47.460 --> 00:06:50.440
+Hal itu memberikan tim keamanan dan tim cloud tempat yang sama untuk memulai.
+
+00:06:50.440 --> 00:06:55.180
+Pengaturan yang lebih aman mengurangi peluang yang mudah tetapi tidak dapat menghentikan setiap ancaman yang sudah berjara.
+
+00:06:55.960 --> 00:06:59.900
+Manajemen postur, perlindungan beban kerja, memeriksa pengaturan di sekitar layanan cloud Anda.
+
+00:07:00.420 --> 00:07:02.820
+Perlindungan beban kerja melihat hal-hal yang benar-benar berjalan di sana.
+
+00:07:03.240 --> 00:07:05.380
+Pikirkan tentang segala hal yang dijalankan perusahaan Anda di cloud.
+
+00:07:05.380 --> 00:07:07.080
+Mesin virtual menjalankan aplikasi bisnis lama.
+
+00:07:07.460 --> 00:07:08.560
+Basis data menyimpan catam pelang.
+
+00:07:08.900 --> 00:07:10.320
+Akum penyimpanan menyimpan file yang diunggah.
+
+00:07:10.680 --> 00:07:12.240
+Kontainer menjalankan bagian dari aplikasi model.
+
+00:07:12.580 --> 00:07:14.060
+Aplikasi web menangani permintaan pelanggan.
+
+00:07:14.320 --> 00:07:15.080
+Itu semua adalah beban kerja.
+
+00:07:15.080 --> 00:07:18.600
+Defender for cloud menambahkan perlindungan berdasarkan beban kerja yang perlu Anda lindungi.
+
+00:07:18.680 --> 00:07:23.000
+Layanan ini tidak memperlakukan basis data, server, dan konten yang seolah-olah semuanya menghadapi risiko yang sama.
+
+00:07:23.620 --> 00:07:25.700
+Selain intinya, pekerjaannya terjadi dalam dua bagian.
+
+00:07:25.940 --> 00:07:31.560
+Pertama, ia mencari titik lemah sebelum masalah dimulai yaitu kelemahan perangkat lunak yang diketahui atau pengaturan keamanan yang hilang.
+
+00:07:31.640 --> 00:07:35.420
+Kemudian, ia mengawasi tanda-tanda aktivitas mencurigakan saat beban kerja berjalan.
+
+00:07:35.780 --> 00:07:38.660
+Sehingga dapat membantu Anda menemukan kelemahan pada server sebelum penyerang menemukannya.
+
+00:07:38.660 --> 00:07:46.500
+Layanan ini juga dapat memberitahu Anda jika aktivitas di server tersebut terlihat salah seperti sinyal malware, perubahan yang tidak biasa, atau upaya menggunakan tidak biasa, atau upaya menggunakan metode serangan yang diketahui.
+
+00:07:46.660 --> 00:07:48.760
+Microsoft mengelompokkan perlindungan ini ke dalam paket Defender.
+
+00:07:49.180 --> 00:07:51.100
+Anda memilih paket berdasarkan apa yang Anda jalankan.
+
+00:07:51.540 --> 00:07:54.060
+Jika Anda memiliki mesin virtual, Anda melihat Defender for Servers.
+
+00:07:54.500 --> 00:07:57.640
+Jika bisnis Anda menyimpan file di penyimpanan Azure, Anda melihat Defender for Storage.
+
+00:07:58.140 --> 00:08:02.240
+Jika Anda menjalankan kontener atau basis data, ada paket dan pemeriksaan yang dirancang untuk beban kerja tersebut.
+
+00:08:02.540 --> 00:08:05.600
+Tidak ada satu saklar besar yang memberikan perlindungan yang sama pada setiap sumber daya.
+
+00:08:05.600 --> 00:08:08.280
+Hal itu akan menimbulkan biaya dan kebisingan yang mungkin tidak Anda perlu.
+
+00:08:08.560 --> 00:08:14.880
+Sebaliknya, Anda memutuskan beban kerja mana, yang menyimpan data penting, layanan penting, atau menghadapi lebih banyak paparan lalu aktifkan perlindungan yang tepat untuk mereka.
+
+00:08:15.440 --> 00:08:16.620
+Mari kita gunakan server sebagai contoh.
+
+00:08:17.100 --> 00:08:20.720
+Defender for Servers dapat membantu menemukan kelemahan perangkat lunak pada server Windows dan Linux.
+
+00:08:21.140 --> 00:08:24.400
+Layanan ini dapat melaporkan pembaru yang terlewat dan menunjukkan di mana kelemahan SIM.
+
+00:08:24.700 --> 00:08:30.100
+Layanan ini juga dapat memantau perubahan file, yang penting saat sebuah file atau pengaturan sistem berubah dengan cara yang perlu diselidiki.
+
+00:08:30.540 --> 00:08:31.780
+Sinyal malware juga penting.
+
+00:08:31.780 --> 00:08:36.400
+Sebuah server bisa terlihat sehat dari luar padahal ada sesuatu yang berbahaya berjalan di dalam sistem operasinya.
+
+00:08:36.900 --> 00:08:39.680
+Dan disitulah Defender for Endpoint dapat terhubung dengan Defender for Cloud.
+
+00:08:40.220 --> 00:08:42.060
+Namanya terdengan mirip namun tugas mereka berbeda.
+
+00:08:42.340 --> 00:08:44.160
+Defender for Endpoint mengawasi perangkat itu sendiri.
+
+00:08:44.660 --> 00:08:48.540
+Layanan ini melihat aktivitas di dalam sistem operasi, proses, file, dan perilaku pada laptop atau server.
+
+00:08:49.220 --> 00:08:51.560
+Defender for Cloud melihat sumber daya cloud di sekitar perangkat tersebut.
+
+00:08:52.140 --> 00:08:57.780
+Layanan ini melihat pengaturan cloud server, eksposer jaringannya, rencana perlindungan beban kerja, dan risiko lebih luas yang terkait dengan sumber daya tersebut.
+
+00:08:58.240 --> 00:08:59.980
+Bersama-sama memberikan gambaran yang lebih luar.
+
+00:08:59.980 --> 00:09:04.000
+Bayangkan Defender for Endpoint mendeteksi aktivitas mencurigakan pada mesin virtual.
+
+00:09:04.560 --> 00:09:07.740
+Secara mandiri, peringatan itu memberi tahu Anda bahwa mungkin ada yang salah di dalam.
+
+00:09:08.040 --> 00:09:09.700
+Defender for Cloud menambahkan konteks di sekitarnya.
+
+00:09:10.240 --> 00:09:11.800
+Apakah mesin virtual tersebut terbuka ke internet?
+
+00:09:12.220 --> 00:09:13.060
+Tim mana yang memilikinya?
+
+00:09:13.500 --> 00:09:15.020
+Apakah ia terhubung ke basis data sensitif?
+
+00:09:15.340 --> 00:09:16.960
+Apakah ada kelemahan yang diketahui pada mesin yang sama?
+
+00:09:16.960 --> 00:09:21.000
+Apa yang harus diperbaiki oleh tim cloud atau infrastruktur sementara tim keamanan melakukan penyelidikan?
+
+00:09:21.480 --> 00:09:26.200
+Hal itu mengubah percakapan dari kita memiliki peringatan menjadi server ini memiliki aktivitas mencurigakan.
+
+00:09:27.080 --> 00:09:28.540
+Server ini memiliki eksposur publik.
+
+00:09:28.540 --> 00:09:30.100
+Dan inilah orang yang perlu bertindak.
+
+00:09:30.720 --> 00:09:33.520
+Salah satu fitur praktis untuk mesin virtual adalah akses just-in-time.
+
+00:09:33.860 --> 00:09:37.460
+Banyak administrator membutuhkan RDP untuk server Windows atau SSH untuk server Linux.
+
+00:09:37.860 --> 00:09:42.200
+Pendekatan yang berisiko adalah membiarkan port manajemen tersebut terbuka sepanjang waktu karena seseorang mungkin membutuhkan.
+
+00:09:42.360 --> 00:09:44.000
+Akses just-in-time mengambil pendekatan yang berbeda.
+
+00:09:44.100 --> 00:09:49.380
+Fitur ini menjaga pintu manajemen tetap tertutup lalu membukanya untuk periode singkat yang disetujui saat administrator perlu terung.
+
+00:09:49.560 --> 00:09:51.300
+Setelah waktu tersebut berakhir, pintu akan tertutup.
+
+00:09:51.520 --> 00:09:55.000
+Anda tidak membiarkan akses tersedia setiap hari hanya karena Anda mungkin membutuhkannya minggu depan.
+
+00:09:55.000 --> 00:09:57.140
+Penyimpanan memerlukan jenis perlindungannya sendiri.
+
+00:09:57.800 --> 00:10:01.860
+Akun penyimpanan mungkin berisi dokumen, cadangan, laporan, atau file yang diunggah oleh pelanggan.
+
+00:10:02.620 --> 00:10:07.500
+Defender for Storage dapat memindai file yang diunggah untuk mencari malware dan memberikan peringatan terkait akses yang mencurigakan.
+
+00:10:08.020 --> 00:10:12.280
+Layanan ini juga dapat membantu Anda memahami kapan data sensitif mungkin berada di tempat yang memerlukan perhatian lebih.
+
+00:10:12.280 --> 00:10:14.440
+Hal itu penting karena file berbahaya.
+
+00:10:14.620 --> 00:10:18.960
+Dalam penyimpanan mungkin tidak menyebabkan masalah sampai seseorang mengunduhnya atau layanan lain mulai memprosesnya.
+
+00:10:19.380 --> 00:10:21.560
+Kontainer dan basis data memerlukan pemeriksaan yang berbeda.
+
+00:10:22.240 --> 00:10:28.840
+Kontainer seringkali berjalan dengan cepat dan dalam jumlah besar sehingga perlindungannya berfokus pada gambar, pengaturan, dan perilaku yang terkait dengan beban kerja kontainer.
+
+00:10:29.660 --> 00:10:34.460
+Basis data memerlukan perhatian terkait query mencurigakan, aktivitas masuk, dan ancaman terkait data.
+
+00:10:35.760 --> 00:10:37.780
+Tujuannya bukan menggunakan satu pemindahan umum untuk semua.
+
+00:10:38.040 --> 00:10:40.780
+Tujuannya adalah menerapkan perlindungan yang sesuai dengan tugas setiap beban kerja.
+
+00:10:40.780 --> 00:10:44.220
+Namun, setiap perlindungan ini bergantung pada sesuatu yang sangat mendasar.
+
+00:10:44.860 --> 00:10:47.900
+Defender for Cloud hanya dapat melindungi dan melaporkan sumber daya yang dapat dilihat.
+
+00:10:48.800 --> 00:10:52.560
+Dan begitu Anda melihat melampaui satu langgana Azure, itu menjadi masalah yang jauh lebih besar.
+
+00:10:53.580 --> 00:10:56.160
+Satu tampilan di seluruh Azure, lokal, dan cloud lainnya.
+
+00:10:56.640 --> 00:10:59.140
+Kebanyakan perusahaan tidak menyimpan setiap beban kerja di satu tempat.
+
+00:10:59.600 --> 00:11:03.600
+Anda mungkin menjalankan sebagian besar layanan di Azure sementara server lama masih berjalan di kantor Anda.
+
+00:11:03.980 --> 00:11:07.280
+Sebuah unit bisnis mungkin menggunakan Amazon Web Services yang sering disebut AWS.
+
+00:11:07.940 --> 00:11:10.600
+Tim lain mungkin memiliki layanan di Google Cloud Platform atau GCP.
+
+00:11:11.140 --> 00:11:15.440
+Hal itu membuat Anda memiliki portal terpisah, data terpisah, dan cara terpisah untuk menemukan masalah.
+
+00:11:15.540 --> 00:11:18.140
+Ini seperti memiliki tiga penjaga keamanan berbeda yang tidak saling bicara.
+
+00:11:18.740 --> 00:11:23.840
+Defender for Cloud dapat menyatukan lingkungan Azure, lokal, AWS, dan GCP yang terhubung ke dalam satu tampilan keamanan.
+
+00:11:23.960 --> 00:11:24.580
+Tujuannya sederhana.
+
+00:11:24.580 --> 00:11:35.020
+Daripada membuka satu dashboard untuk memiliki mesin virtual Azure, dashboard lain untuk akun AWS, dan sistem ketiga untuk server di gedung Anda sendiri, Anda dapat melihat status keamanan lingkungan yang terhubung tersebut di satu tempat.
+
+00:11:35.820 --> 00:11:38.460
+Satu tampilan itu menghindarkan Anda dari berpindah antar layar dan kehilangan konteks.
+
+00:11:38.860 --> 00:11:40.800
+Nah, itu tidak berarti setiap cloud bekerja dengan persis sama.
+
+00:11:40.800 --> 00:11:47.540
+Sistem Azure, AWS, GCP, dan lokal masing-masing memiliki layanan, aturan akses, dan metode koneksinya sendiri.
+
+00:11:48.400 --> 00:11:53.960
+Namun, Defender for Cloud dapat mengumpulkan informasi keamanan dari lingkungan yang Anda hubungkan, lalu menampilkan tepon tersebut dalam tampilan umum.
+
+00:11:53.960 --> 00:11:56.240
+Hal itu mengurangi kemungkinan kehilangan konteks.
+
+00:11:56.540 --> 00:12:07.140
+Sebagai contoh, peringatan pada server lebih bermakna ketika Anda juga dapat melihat apakah server tersebut termasuk dalam langganan cloud berada di akun AWS atau berjalan sebagai bagian dari layanan lokal yang lama.
+
+00:12:08.020 --> 00:12:13.780
+Tim keamanan dapat menghabiskan lebih sedikit waktu untuk bertanya di mana sumber daya, dan lebih banyak waktu untuk memutuskan apa yang memerlukan perhatian.
+
+00:12:14.380 --> 00:12:16.980
+Sebelum Anda dapat melindungi sesuatu, Anda perlu tahu bahwa itu ada.
+
+00:12:17.620 --> 00:12:19.060
+Di sinilah inventaris aset menjadi penting.
+
+00:12:19.320 --> 00:12:22.880
+Inventaris aset hanyalah daftar hal-hal yang dimiliki atau dijalankan perusahaan Anda di cloud.
+
+00:12:22.880 --> 00:12:28.520
+Itu dapat mencakup mesin virtual, basis data, akun penyimpanan, kluster kontainer, dan layanan lainnya.
+
+00:12:28.960 --> 00:12:31.040
+Terdengar jelas, tetapi sumber daya cloud muncul dengan cepat.
+
+00:12:31.700 --> 00:12:33.720
+Tim proyek mungkin membuat lingkungan pengujian.
+
+00:12:34.360 --> 00:12:36.340
+Memasuk mungkin membuat sumber daya di akun cloud lain.
+
+00:12:37.400 --> 00:12:40.800
+Beban kerja lama mungkin terus berjalan setelah orang yang membuatnya pindah ke peran lain.
+
+00:12:41.440 --> 00:12:44.640
+Jika tidak ada dalam inventaris Anda, itu dapat dengan mudah berada di luar upaya keamananan.
+
+00:12:45.140 --> 00:12:49.060
+Defender for Cloud membantu Anda melihat sumber daya yang dikenali beserta cakupan keamanannya.
+
+00:12:49.060 --> 00:12:54.860
+Anda dapat melihat apakah suatu sumber daya yang memiliki perlindungan hanya memiliki sebagian perlindungan yang diharapkan atau tidak terlindungi sama sekali.
+
+00:12:55.180 --> 00:12:56.320
+Kelompok terakhir itulah yang menurut Anda.
+
+00:12:56.640 --> 00:12:59.120
+Sumber daya yang tidak terlindungi tidak selalu tidak aman.
+
+00:12:59.400 --> 00:13:05.220
+Namun, jika basis data produksi atau server yang menghadap internet tidak memiliki rencana perlindungan, itu adalah celah yang harus dipahami.
+
+00:13:05.660 --> 00:13:08.600
+Tampilan cakupan mengubah asumsi yang samar menjadi daftar yang dapat Anda periksa.
+
+00:13:09.060 --> 00:13:10.260
+Apakah semua server kita sudah terlindung?
+
+00:13:10.680 --> 00:13:12.060
+Menjadi pertanyaan dengan jawaban yang nyatakan.
+
+00:13:12.580 --> 00:13:13.500
+Ijin akses juga penting.
+
+00:13:13.500 --> 00:13:18.560
+Perusahaan besar tidak ingin setiap orang di portal keamanan melihat dan mengelola setiap sumber daya.
+
+00:13:19.140 --> 00:13:21.360
+Tim infrastruktur mungkin perlu menangani temuan terkait server.
+
+00:13:21.820 --> 00:13:23.840
+Tim basis data mungkin perlu menangani temuan terkait basis data.
+
+00:13:24.180 --> 00:13:28.340
+Tim yang bertanggung jawab atas satu area bisnis mungkin hanya memerlukan akses ke sumber daya cloud area tersebut.
+
+00:13:29.080 --> 00:13:31.300
+Cakupan dan izin cloud membantu menciptakan batasan tersebut.
+
+00:13:31.760 --> 00:13:34.500
+Anggaplah cakupan cloud sebagai area tertentu tempat seseorang dapat bekerja.
+
+00:13:34.500 --> 00:13:42.420
+Anda dapat menghubungkan peran kelingkungan, langganan, atau grup sumber daya tertentu sehingga orang hanya melihat tanggung jawab mereka tanpa mendapatkan akses ke hal lainnya.
+
+00:13:43.260 --> 00:13:44.760
+Hal itu menjaga tanggung jawab tetap jelas.
+
+00:13:45.380 --> 00:13:47.940
+Tim infrastruktur dapat fokus pada server dan temuan terkait.
+
+00:13:48.460 --> 00:13:51.960
+Pada saat yang sama tim basis data dapat meninjau temuan basis data dan menangani sistem yang mereka miliki.
+
+00:13:52.540 --> 00:13:57.280
+Kedua tim bekerja dari gambaran keamanan terhubung yang sama namun tidak perlu mengelola layanan tim lainnya.
+
+00:13:57.280 --> 00:13:59.280
+Ada satu batasan yang harus selalu Anda ingat.
+
+00:13:59.660 --> 00:14:03.120
+Defender for cloud hanya dapat melaporkan lingkungan yang telah Anda hubungkan dan onboarding.
+
+00:14:03.120 --> 00:14:06.360
+Jika langganan Azure tidak disertakan, hal itu bisa menjadi titik buta.
+
+00:14:06.980 --> 00:14:11.140
+Jika akun AWS belum dihubungkan, Defender for cloud tidak dapat melaporkan sumber daya di dalamnya.
+
+00:14:11.940 --> 00:14:15.940
+Hal yang sama berlaku untuk GCP dan server lokal yang belum dimasukkan ke dalam layanan.
+
+00:14:16.720 --> 00:14:18.720
+Tidak ada dashboard yang dapat menampilkan apa yang tidak diketahuinya.
+
+00:14:18.960 --> 00:14:20.580
+Onboarding tidak lengkap menyebabkan masalah umum.
+
+00:14:21.080 --> 00:14:28.100
+Perusahaan melihat dashboard keamanan baru menganggapnya mencakup seluruh bisnis lalu menemukan langganan yang terlupakan atau akur cloud terpisah yang tidak pernah muncul dalam tampilan tersebut.
+
+00:14:28.100 --> 00:14:30.420
+Jadi tinjau cakupan Anda sebelum mercayai hasilnya.
+
+00:14:31.100 --> 00:14:32.220
+Tanyakan langgan apa saja yang ada.
+
+00:14:32.220 --> 00:14:34.600
+Tanyakan siapa pemilik akun AWS dan GCP.
+
+00:14:35.160 --> 00:14:36.660
+Tanyakan apakah server lama masih digunakan.
+
+00:14:37.340 --> 00:14:40.260
+Kemudian bandingkan daftar tersebut dengan apa yang sebenarnya dapat dilihat oleh Defender for Cloud.
+
+00:14:40.700 --> 00:14:44.720
+Setelah tampilan terhubung, kepatuhan menjadi jauh lebih berguna daripada lembar sebar yang penuh dengan pemeriksaan lama.
+
+00:14:45.220 --> 00:14:46.940
+Kepatuhan tanpa perlu repot mengejar lembar sebar.
+
+00:14:47.540 --> 00:14:51.620
+Kepatuhan berarti memeriksa apakah pengaturan cloud Anda memenuhi aturan yang telah disetujui perusahaan untuk ikut.
+
+00:14:51.720 --> 00:14:57.840
+Aturan tersebut mungkin berasal dari kontrak pelanggan, persyaratan hukum, standar industri, atau kebijakan keamanan internal Anda sendiri.
+
+00:14:57.840 --> 00:15:01.500
+Dulu, ini seringkali berarti seseorang harus mengumpulkan tangkapan layar sebelum audit.
+
+00:15:01.820 --> 00:15:07.220
+Mereka akan bertanya apakah enkripsi aktif, apakah pencatatan log menyala, atau apakah aturan akses sesuai kebijakan perusahaan.
+
+00:15:08.000 --> 00:15:11.640
+Saat lembar kerja sampai ke auditor, bagian dari lingkungan mungkin sudah berubah.
+
+00:15:12.300 --> 00:15:13.920
+Layanan cloud tidak menunggu tinjauan tahunan.
+
+00:15:14.380 --> 00:15:18.540
+Defender for Cloud memberi Anda cara untuk memeriksa sumber daya cloud terhadap standar pahuan secara terus-menerus.
+
+00:15:18.540 --> 00:15:25.220
+Anda mungkin melihat standar seperti CES, NIST, ISO 27001, HIPAA, PCI DSS, dan Microsoft Cloud Security Benchmark.
+
+00:15:26.140 --> 00:15:30.220
+Anda tidak perlu menghafal setiap standar untuk memahami gagasan dasarnya, asing standar berisi kontrol.
+
+00:15:30.740 --> 00:15:32.180
+Kontrol adalah aturan atau perlindungan.
+
+00:15:32.560 --> 00:15:39.480
+Ini bisa memeriksa apakah pengaturan aktif, apakah akses dibatasi, atau apakah sumber daya mengikuti konfigurasi yang disyaratkan.
+
+00:15:39.940 --> 00:15:44.360
+Tampilan kepatuhan menunjukkan pemeriksaan mana yang berhasil yang gagal, dan sumber daya mana yang menyebabkan hasil gagal.
+
+00:15:44.800 --> 00:15:46.660
+Hal itu membuat standar yang besar menjadi lebih mudah dikeluar.
+
+00:15:46.660 --> 00:15:51.400
+Alih-alih melihat baris yang menyatakan kontrol gagal, Anda bisa melihat lebih dalam dan mengetahui sumber daya yang terdampak.
+
+00:15:51.720 --> 00:15:56.420
+Anda juga bisa melihat saran perbaikan yang terkait dengan temuan tersebut, sehingga penanggung jawab sumber daya memiliki titik awal.
+
+00:15:56.780 --> 00:16:00.080
+Bayangkan seorang auditor bertanya apakah penyimpanan cloud Anda mengikuti aturan tertentu.
+
+00:16:00.380 --> 00:16:07.820
+Alih-alih mencari di catatan lama, Anda bisa meninjau status kontrol saat ini, melihat sumber daya yang disertakan, dan mengidentifikasi masalah yang ada.
+
+00:16:08.620 --> 00:16:12.800
+Tim keamanan Anda mendapatkan daftar tugas, auditor Anda mendapatkan bukti berdasarkan lingkungan seperti saat ini.
+
+00:16:13.400 --> 00:16:15.240
+Pemeriksaan terus diperbarui seiring perubahan sumber daya.
+
+00:16:15.240 --> 00:16:20.480
+Jika seseorang mengubah pengaturan cloud setelah audit terakhir, perubahan itu dapat muncul di tampilan kepatuhan.
+
+00:16:21.040 --> 00:16:25.340
+Ini mengubah kepatuhan dari kegiatan mendadak sekali setahun menjadi bagian rutin dalam mengelola sumber daya cloud.
+
+00:16:25.760 --> 00:16:28.020
+Itu menghemat waktu tetapi juga menciptakan akuntabilitas.
+
+00:16:28.360 --> 00:16:30.860
+Kontrol yang gagal menunjukkan bahwa suatu aturan perlu perhatian.
+
+00:16:31.380 --> 00:16:36.740
+Tim yang memiliki sumber daya tersebut dapat memperbaikinya, mendokumentasikan pengecualian, atau menjelaskan mengapa pengaturan itu tidak berlaku.
+
+00:16:37.120 --> 00:16:41.020
+Hasilnya menjadi lebih jelas daripada lembar kerja di mana tidak ada yang tahu siapa yang terakhir memperbarui sel.
+
+00:16:41.020 --> 00:16:44.320
+Namun, skor kepatuhan yang tinggi tidak menjamin keamanan dari setiap serangan.
+
+00:16:45.020 --> 00:16:47.520
+Kepatuhan meriksa apakah Anda memenuhi serangkaian aturan yang telah ditetapkan.
+
+00:16:47.800 --> 00:16:49.440
+Penyerang tidak membatasi diri pada daftar risiko.
+
+00:16:49.960 --> 00:16:53.080
+Sumber daya bisa memenuhi standar namun tetap menghadapi kelemahan perangkat lunak baru,
+
+00:16:53.200 --> 00:16:55.760
+kata sani yang dicuri, anti curi, atau aktivitas mencurigakan yang perlu disedi.
+
+00:16:55.980 --> 00:16:59.680
+Jadi, gunakan kepatuhan sebagai cara untuk memenuhi aturan yang disepakati dan menjaga bukti tak terkini.
+
+00:17:00.020 --> 00:17:02.780
+Gunakan untuk menemukan celah, menetapkan tugas, dan menunjukkan kemaju.
+
+00:17:02.780 --> 00:17:07.880
+Semua ini mungkin terasa besar saat pertama kali membuka portal, itulah sebabnya langkah terbaik berikutnya adalah rencana sederhana untuk lingkungan.
+
+00:17:08.080 --> 00:17:09.480
+Cara memulai tanpa mengaktifkan semuanya.
+
+00:17:10.020 --> 00:17:10.780
+Jadi bagaimana memulai?
+
+00:17:11.080 --> 00:17:13.440
+Pertama, buat peta sederhana dari apa yang sebenarnya di caranya.
+
+00:17:14.000 --> 00:17:18.680
+Daftarkan langganan Azure Anda, lalu server, akun penyimpanan, basis data, layanan kontainer,
+
+00:17:18.960 --> 00:17:21.960
+dan beban kerja apapun di AWS, Google Cloud, atau pusat data Anda sendiri.
+
+00:17:22.500 --> 00:17:23.100
+Buat-bata praktis.
+
+00:17:23.540 --> 00:17:27.280
+Anda mencoba menjawab satu pertanyaan, apa yang perlu dilindungi, dan di mana letaknya.
+
+00:17:27.800 --> 00:17:31.140
+Setelah memiliki peta tersebut, hubungkan lingkungan yang ingin Anda pantau oleh Defender for Cloud.
+
+00:17:31.140 --> 00:17:34.840
+Namun sebelum terjun ke ratusan rekomendasi, periksa tampilan cakupan terlebih dahulu.
+
+00:17:35.480 --> 00:17:38.160
+Temuan hanya membantu jika Anda tahu apakah sumber daya yang tepat sudah muncul.
+
+00:17:38.800 --> 00:17:39.820
+Mulai dengan manajemen postur.
+
+00:17:40.300 --> 00:17:43.240
+Tinjau skor keamanan Anda, lalu lihat temuan berisiko tertinggi di baliknya.
+
+00:17:43.640 --> 00:17:44.940
+Jangan mencoba menyelesaikan pada hari pertama.
+
+00:17:45.520 --> 00:17:48.160
+Sebaliknya, cari masalah yang terus muncul di seluruh lingkungan Anda.
+
+00:17:48.940 --> 00:17:53.480
+Paparan publik, kontrol identitas yang lemah, port manajemen terbuka, dan patch yang hilang.
+
+00:17:54.080 --> 00:17:56.120
+Itu seringkali menjadi cara tercepat untuk mengurangi risiko.
+
+00:17:56.480 --> 00:18:00.660
+Selanjutnya, pilih paket perlindungan beban kerja berdasarkan layanan yang benar-benar Anda gunakan dari risiko yang di bawah.
+
+00:18:01.140 --> 00:18:06.640
+Server produksi yang menyimpan data bisnis memerlukan perhatian berbeda dibanding sistem uji jangka pendek tanpa informasi sensitif.
+
+00:18:07.120 --> 00:18:08.660
+Jadi aktifkan perlindungan alasan yang tepat.
+
+00:18:09.080 --> 00:18:13.580
+Untuk server yang memerlukan deteksi tingkat perangkat lebih dalam, hubungkan Microsoft Defender for Endpoint.
+
+00:18:14.180 --> 00:18:17.180
+Itu memberi Anda tampilan aktivitas yang lebih baik di dalam sistem operasi,
+
+00:18:17.360 --> 00:18:20.100
+sementara Defender for Cloud tetap memantau sumber daya cloud dan paparannya.
+
+00:18:20.900 --> 00:18:23.180
+Kemudian tetapkan pemilik untuk setiap temuan yang memerlukan tindak.
+
+00:18:23.620 --> 00:18:26.640
+Rekomendasi tanpa pemilik hanya akan menjadi pengingat yang tidak ditangani siapapun.
+
+00:18:27.200 --> 00:18:29.280
+Tim infrastruktur Anda mungkin menangani perbaikan server,
+
+00:18:29.280 --> 00:18:31.540
+rutin aplikasi mungkin menangani pengaturan basis data,
+
+00:18:31.960 --> 00:18:34.980
+dan tim keamanan mungkin melacak pekerjaan serta meninjau penyelesaiannya.
+
+00:18:35.580 --> 00:18:36.680
+Tetapkan waktu tinjauan rutin.
+
+00:18:37.040 --> 00:18:38.680
+Mingguan mungkin cocok untuk lingkungan yang sibuk,
+
+00:18:38.760 --> 00:18:40.160
+sementara bulanan mungkin cocok untuk lingkungan yang lebih.
+
+00:18:40.560 --> 00:18:42.520
+Jadwal tidak terlalu penting dibandingkan menjadikannya rutin itu.
+
+00:18:42.960 --> 00:18:44.620
+Anda tidak sedang berusaha mencapai skor sempurna.
+
+00:18:44.880 --> 00:18:48.060
+Anda menghapus jalur masuk yang mudah ke cloud Anda satu perbaikan yang jelas setiap kalinya.
+
+00:18:48.060 --> 00:18:52.040
+Anggap Defender for Cloud sebagai satpam yang memeriksa pengaturan cloud Anda,
+
+00:18:52.280 --> 00:18:53.760
+melindungi ruangan penting,
+
+00:18:53.760 --> 00:18:56.680
+dan mengarahkan tim Anda pada risiko yang perlu diprioritaskan.
+
+00:18:57.220 --> 00:18:59.940
+Sebagai tantangan sederhana, hubungkan satu langganan Azure minggu ini.
+
+00:19:00.260 --> 00:19:02.040
+Periksa sumber daya mana yang muncul dalam cakupan,
+
+00:19:02.160 --> 00:19:03.440
+temukan sumber daya yang paling terekspos,
+
+00:19:03.640 --> 00:19:04.980
+dan tugaskan seseorang untuk memperfiki.
+
+00:19:05.200 --> 00:19:06.660
+Itu memberi Anda titik awal yang nyata,
+
+00:19:06.840 --> 00:19:08.420
+bukan sekadar dashboard keamanan lain yang diabaikan.
+
+00:19:09.040 --> 00:19:11.200
+Informasi singkat berikutnya untuk dipelajari adalah
+
+00:19:11.200 --> 00:19:13.620
+Microsoft Defender for Endpoint versus Defender for Cloud.
+
+00:19:13.620 --> 00:19:16.160
+Yang satu mengawasi apa yang terjadi di perangkat,
+
+00:19:16.260 --> 00:19:17.880
+yang lain mengawasi sumber daya cloud di sekitarnya,
+
+00:19:17.880 --> 00:19:20.820
+dan bersama-sama mereka membantu Anda melihat kedua sisi dari masalah keamanan yang sama.

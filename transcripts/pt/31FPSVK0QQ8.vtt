@@ -1,0 +1,1303 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.000
+Olá e bem-vindos a mais um episódio das pilas de conhecimento da Microsoft aqui na M3Z100FM.
+
+00:00:04.460 --> 00:00:05.660
+Eu sou seu apresentador, Mico Pito.
+
+00:00:05.880 --> 00:00:09.640
+O tópico de hoje é algo que quase todos que trabalham com cadeias de suprimentos já ouviram falar,
+
+00:00:09.720 --> 00:00:10.880
+mas poucos realmente entendem.
+
+00:00:11.480 --> 00:00:13.380
+Gerenciamento de transporte do Dynamics 305.
+
+00:00:13.740 --> 00:00:14.320
+Aqui está o...
+
+00:00:14.320 --> 00:00:15.660
+Um cliente faz um pedido.
+
+00:00:15.760 --> 00:00:17.000
+O estoque fica parado no armazém.
+
+00:00:17.060 --> 00:00:18.720
+Uma transportadora precisa de um horário de coleta.
+
+00:00:18.780 --> 00:00:22.000
+O cliente espera a entrega e, mais tarde, uma fatura de frete cai na mesa de alguém.
+
+00:00:22.520 --> 00:00:24.580
+Por anos, essas etapas viviam em planilhas separadas.
+
+00:00:24.800 --> 00:00:27.080
+Telefonemas, tabelas de taxas e transferências entre equipes.
+
+00:00:27.400 --> 00:00:28.340
+Ah, isso cria lacunas.
+
+00:00:28.340 --> 00:00:31.260
+O armazém pode preparar as mercadorias antes que o transporte tenha um todo.
+
+00:00:31.640 --> 00:00:34.020
+O financeiro pode ver uma fatura sem saber o que foi acurado para pagamento.
+
+00:00:34.660 --> 00:00:36.340
+O que exatamente é o gerenciamento de transporte?
+
+00:00:36.720 --> 00:00:41.020
+Em termos simples, é a central de transporte dentro do Dynamics 365 Supply Chain Management.
+
+00:00:41.720 --> 00:00:44.300
+Ele conecta docas de armazém, fornecedores, clientes e transportadores.
+
+00:00:44.600 --> 00:00:48.400
+Planejaremos cargas, escolheremos rotas e tarifas, despacharemos mercadorias e verificaremos custos de frete.
+
+00:00:48.540 --> 00:00:52.760
+Ao final deste episódio, você verá como todas essas peças se encaixam para facilitar sua vida profissional.
+
+00:00:55.770 --> 00:00:57.370
+Por que o gerenciamento de transporte existe?
+
+00:00:58.330 --> 00:00:59.770
+Vamos começar com uma verdade básica.
+
+00:01:00.550 --> 00:01:03.810
+Mercadorias físicas não se movem apenas porque um pedido de venda existe em uma tela.
+
+00:01:04.250 --> 00:01:07.130
+Elas precisam de um caminhão, um reboque, um contêiner ou outro meio de transporte.
+
+00:01:07.930 --> 00:01:10.790
+Alguém precisa saber de onde as mercadorias saem, onde devem chegar,
+
+00:01:11.030 --> 00:01:13.890
+quanto espaço ocupam, quando devem partir e quanta viagem deve custar.
+
+00:01:14.630 --> 00:01:17.250
+Agora, quando você imagina uma caixa indo para um cliente, parece simples.
+
+00:01:18.010 --> 00:01:21.150
+Mas uma empresa real pode enviar muitos pedidos do mesmo armazém no mesmo dia,
+
+00:01:21.250 --> 00:01:25.410
+receber mercadorias de vários fornecedores e mover estoque entre seus próprios locais ao mesmo tempo.
+
+00:01:25.410 --> 00:01:29.790
+Cada movimento tem pessoas, datas, espaço e dinheiro vinculados a ele.
+
+00:01:30.330 --> 00:01:33.050
+Sem um sistema compartilhado, cada equipe vê apenas a sua própria parte.
+
+00:01:33.570 --> 00:01:34.790
+Vendas vê o pedido do cliente.
+
+00:01:35.510 --> 00:01:36.730
+Compras vê o pedido do fornecedor.
+
+00:01:37.330 --> 00:01:40.610
+A equipe do armazém vê os itens que precisa separar, embalar, receber ou armazenar.
+
+00:01:41.030 --> 00:01:43.370
+A equipe de transporte vê uma lista de coisas que devem se mover,
+
+00:01:43.450 --> 00:01:45.430
+muitas vezes depois que todos os outros já fizeram sua parte.
+
+00:01:45.890 --> 00:01:47.290
+E é aí que os atrasos e a confusão começam.
+
+00:01:47.690 --> 00:01:48.570
+Está um exemplo concreto.
+
+00:01:49.070 --> 00:01:52.050
+Imagine que um armazém tenha 10 pedidos de clientes prontos para a mesma cidade.
+
+00:01:52.050 --> 00:01:55.150
+Se ninguém conectar esses pedidos antes de reservar o transporte,
+
+00:01:55.190 --> 00:01:57.610
+a empresa pode organizar várias viagens parcialmente preenchidas
+
+00:01:57.610 --> 00:02:00.810
+ou a transportadora pode chegar antes que o armazém saiba quais mercadorias pertencem ao veículo.
+
+00:02:01.030 --> 00:02:02.670
+As mercadorias estão prontas, mas o movimento não está bom.
+
+00:02:03.290 --> 00:02:05.790
+Portanto, o gerenciamento de transporte dá esse movimento um lugar,
+
+00:02:05.910 --> 00:02:07.970
+dentro do Dynamics 305 Supply Chain Management.
+
+00:02:08.770 --> 00:02:10.850
+Não é um aplicativo de envio ao consumidor separado,
+
+00:02:10.890 --> 00:02:13.650
+onde você digita um número de rastreamento e vê um pacote se mover em um mapa.
+
+00:02:14.310 --> 00:02:17.430
+Em vez disso, ele funciona com os registros comerciais que já estão dentro da plataforma conectada.
+
+00:02:17.830 --> 00:02:19.770
+Um pedido cria a necessidade de movimentação de mercadorias.
+
+00:02:20.090 --> 00:02:21.350
+Trabalho de armazém prepara as mercadorias.
+
+00:02:21.350 --> 00:02:25.050
+O gerenciamento de transporte planeja como essas mercadorias viajam entre locais.
+
+00:02:25.650 --> 00:02:27.570
+Pense nisso como a central de transporte é um prédio comercial.
+
+00:02:28.210 --> 00:02:30.330
+A equipe de vendas traz uma solicitação de cliente para a central.
+
+00:02:30.750 --> 00:02:33.230
+O setor de compras traz a notícia de que um fornecedor enviará mercadoria.
+
+00:02:33.570 --> 00:02:35.670
+O armazém traz o estoque real e as docas de carregamento.
+
+00:02:36.150 --> 00:02:39.230
+A central de transporte conecta essas solicitações ao plano de transporte da empresa.
+
+00:02:39.850 --> 00:02:41.010
+Existem duas direções principais.
+
+00:02:41.270 --> 00:02:44.110
+Transporte de entrada significa que as mercadorias viajam para dentro da sua empresa.
+
+00:02:44.330 --> 00:02:47.530
+Você pediu itens de um fornecedor, e esses itens precisam chegar ao seu armazém.
+
+00:02:47.530 --> 00:02:50.550
+Às vezes o fornecedor controla essa viagem, às vezes a sua empresa organiza.
+
+00:02:50.930 --> 00:02:54.170
+De qualquer forma, você precisa de um plano claro para levar as mercadorias ao lugar certo
+
+00:02:54.170 --> 00:02:55.190
+e recebê-las quando chegarem.
+
+00:02:55.550 --> 00:02:58.310
+O transporte de saída significa que as mercadorias viajam para fora da sua empresa.
+
+00:02:58.750 --> 00:02:59.850
+Um cliente pediu produtos.
+
+00:03:00.470 --> 00:03:01.650
+O armazém os prepara.
+
+00:03:01.870 --> 00:03:04.190
+Uma transportadora ou veículo da empresa os leva ao cliente.
+
+00:03:04.670 --> 00:03:07.070
+Ambos os fluxos lidam com a movimentação, mas o ponto de partida é diferente.
+
+00:03:07.530 --> 00:03:09.390
+A entrada começa com o pedido de compra e um fornecedor.
+
+00:03:09.390 --> 00:03:11.690
+A saída começa com o pedido de venda e um cliente.
+
+00:03:11.690 --> 00:03:14.350
+Há também um terceiro tipo que os iniciantes costumam ignorar.
+
+00:03:14.470 --> 00:03:15.270
+Pedido de transferência.
+
+00:03:15.950 --> 00:03:18.870
+Um pedido de transferência em movimento e estoque entre os locais da sua própria empresa.
+
+00:03:19.210 --> 00:03:21.690
+Talvez um armazém tenha estoque demais e outro armazém precise dele.
+
+00:03:22.310 --> 00:03:25.990
+Nenhuma compra de cliente está envolvida, mas as mercadorias físicas ainda precisam de transporte.
+
+00:03:26.370 --> 00:03:30.630
+No 365 Transportation Management, os pedidos de transferência pertencem ao cenário de saída
+
+00:03:30.630 --> 00:03:32.530
+e podem ser planejados junto com os pedidos de venda.
+
+00:03:33.110 --> 00:03:34.850
+Isso faz sentido quando você imagina a doca de carne.
+
+00:03:35.390 --> 00:03:38.650
+Se um palete viaja para um cliente pagante ou para outro armazém da empresa,
+
+00:03:38.650 --> 00:03:43.910
+alguém ainda precisa organizar o veículo, reservar espaço e enviá-lo pela mesma porta.
+
+00:03:44.770 --> 00:03:48.670
+Portanto, essa abordagem conectada substitui a antiga cadeia de listas separadas e telefonemas
+
+00:03:48.670 --> 00:03:49.790
+por informações compartilhadas.
+
+00:03:50.350 --> 00:03:51.990
+O pedido informa ao sistema o que precisa ser movido.
+
+00:03:52.390 --> 00:03:53.570
+O armazém prepara os itens.
+
+00:03:54.010 --> 00:03:56.750
+O gerenciamento de transporte transforma essa necessidade em um plano de transporte.
+
+00:03:57.110 --> 00:03:59.850
+Assim que as mercadorias precisam se mover, o sistema precisa primeiro de um plano de envio
+
+00:03:59.850 --> 00:04:00.110
+viável.
+
+00:04:01.110 --> 00:04:01.750
+Planejando a carga.
+
+00:04:02.270 --> 00:04:05.370
+A pílula de conhecimento de hoje é sobre algo que toda equipe de logística precisa,
+
+00:04:05.370 --> 00:04:07.070
+mas costuma explicar de maneiras diferentes.
+
+00:04:07.070 --> 00:04:08.790
+Planejar uma carga.
+
+00:04:09.690 --> 00:04:12.470
+Você pode começar a planejar o transporte a partir de pedidos ou embarques.
+
+00:04:14.670 --> 00:04:16.110
+Deixe-me esclarecer um mito logo de início.
+
+00:04:16.550 --> 00:04:17.770
+O plano de envio não começa do zero.
+
+00:04:18.150 --> 00:04:19.870
+Ele começa a partir de registros que você já possui.
+
+00:04:20.170 --> 00:04:21.930
+Um pedido de venda contém o que um cliente comprou.
+
+00:04:22.190 --> 00:04:24.250
+Um pedido de compra lista o que um fornecedor precisa enviar.
+
+00:04:24.590 --> 00:04:28.370
+Uma remessa agrupa esses itens em um registro de envio mais focado, pronto para ser combinado
+
+00:04:28.370 --> 00:04:28.850
+com outros.
+
+00:04:29.450 --> 00:04:30.850
+Então, qual ponto de partida você deve usar?
+
+00:04:31.310 --> 00:04:32.470
+Isso depende de como sua empresa trabalha.
+
+00:04:32.770 --> 00:04:35.530
+Algumas equipes planejam cedo, olhando diretamente para as linhas do pedido.
+
+00:04:35.530 --> 00:04:39.070
+Outras equipes criam remessas primeiro e depois decidem o que viaja junto.
+
+00:04:39.490 --> 00:04:40.830
+Ambos os caminhos levam a mesma pergunta.
+
+00:04:41.190 --> 00:04:42.190
+O que deve no mesmo veículo?
+
+00:04:42.630 --> 00:04:43.670
+Aqui está a definição mais simples.
+
+00:04:44.170 --> 00:04:46.930
+Uma carga é o registro digital para o movimento planejado de mercadorias.
+
+00:04:47.490 --> 00:04:51.150
+Você pode imaginar como um caminhão, uma carreta, um container ou uma coleção de remessas
+
+00:04:51.150 --> 00:04:52.130
+que viajam juntas?
+
+00:04:52.810 --> 00:04:55.790
+Isso lhe dá um lugar para ver quais mercadorias pertencem umas às outras antes do trabalho
+
+00:04:55.790 --> 00:04:56.330
+físico começar.
+
+00:04:57.070 --> 00:04:58.370
+Agora, aqui muitas pessoas confundem.
+
+00:04:59.010 --> 00:05:01.350
+Uma carga não significa que cada item cabe dentro de uma caixa física.
+
+00:05:01.350 --> 00:05:04.190
+Significa que o sistema agrupa mercadorias em torno de um plano de transporte.
+
+00:05:04.430 --> 00:05:06.150
+Várias remessas de clientes podem compartilhar um caminho.
+
+00:05:06.650 --> 00:05:08.570
+Um pedido grande pode encher uma carreta inteira por si só.
+
+00:05:09.170 --> 00:05:12.270
+Um container vindo de um fornecedor também pode se tornar uma carga, antes mesmo de seu
+
+00:05:12.270 --> 00:05:13.490
+depósito receber as mercadorias.
+
+00:05:13.970 --> 00:05:16.410
+O objetivo é parar de tratar cada pedido como sua própria viagem.
+
+00:05:16.890 --> 00:05:20.050
+Imagine que um distribuidor tem seis pedidos de clientes prontos para entrega na sexta-feira.
+
+00:05:20.490 --> 00:05:23.510
+Todos os seis estão na mesma área e cada pedido preenche apenas parte de um caminhão.
+
+00:05:23.910 --> 00:05:28.010
+Enviar seis veículos semivazios desperdiça espaço e cria seis trabalhos de transporte separados.
+
+00:05:28.010 --> 00:05:30.870
+A equipe pode, em vez disso, agrupar remessas compatíveis em uma única carga.
+
+00:05:31.250 --> 00:05:33.510
+Compatível significa que elas podem razoavelmente viajar juntas.
+
+00:05:34.050 --> 00:05:37.410
+Elas saem do mesmo depósito, precisam ir quase ao mesmo tempo, cabem nos limites do
+
+00:05:37.410 --> 00:05:38.990
+veículo e seguem suas regras de envio.
+
+00:05:39.770 --> 00:05:42.950
+O sistema ajuda a reunir esses registros em vez de depender de alguém para identificar
+
+00:05:42.950 --> 00:05:43.910
+o padrão em uma planilha.
+
+00:05:44.210 --> 00:05:45.670
+Esse grupo agora tem um plano compartilhado.
+
+00:05:46.070 --> 00:05:47.650
+Seu depósito vê o que pertence à carga.
+
+00:05:48.170 --> 00:05:50.270
+Planejador de transporte vê o espaço e o peso totais.
+
+00:05:50.750 --> 00:05:53.790
+As pessoas não precisam refazer a mesma lista em e-mails, notas ou um arquivo separado.
+
+00:05:54.290 --> 00:05:54.810
+Aqui está a questão.
+
+00:05:55.430 --> 00:05:57.670
+Agrupar mercadorias não é apenas colocar mais itens juntos.
+
+00:05:58.250 --> 00:06:00.290
+Um caminhão tem limites, peso, espaço no piso, altura.
+
+00:06:00.790 --> 00:06:02.050
+Contêiner tem suas próprias regras.
+
+00:06:02.550 --> 00:06:06.150
+Se o sistema agrupa mercadorias sem verificar esses limites, a carga pode parecer boa na
+
+00:06:06.150 --> 00:06:07.490
+tela, mas falha na doca de carregamento.
+
+00:06:08.030 --> 00:06:10.670
+Dynamics 365 usa modelos de carga para ajudar a evitar isso.
+
+00:06:11.230 --> 00:06:14.510
+Pense em um modelo de carga como um conjunto reutilizável de limites para um tipo de veículo
+
+00:06:14.510 --> 00:06:14.990
+ou contêiner.
+
+00:06:16.010 --> 00:06:18.790
+Crie um para um caminhão de entrega pequeno, outro para uma carreta maior, outro para um
+
+00:06:18.790 --> 00:06:19.750
+contêiner de transporte.
+
+00:06:20.010 --> 00:06:24.290
+Cada modelo contém limites de peso, volume, altura e outras regras que sua empresa precisa.
+
+00:06:24.870 --> 00:06:27.130
+O modelo dá a carga uma forma antes de você começar a preenchê-la.
+
+00:06:27.130 --> 00:06:30.990
+Portanto, se uma remessa pesar demais ou ocupar muito espaço, o planejador percebe que ela
+
+00:06:30.990 --> 00:06:31.890
+não pertence àquela carga.
+
+00:06:32.410 --> 00:06:35.870
+A resposta pode ser um segundo veículo, um modelo diferente ou um agrupamento diferente
+
+00:06:35.870 --> 00:06:36.390
+de remessas.
+
+00:06:36.910 --> 00:06:40.230
+O software não levanta paletes, mas oferece à sua equipe um plano mais claro antes
+
+00:06:40.230 --> 00:06:41.210
+do início do trabalho físico.
+
+00:06:41.870 --> 00:06:44.910
+Uma abordagem integrada é chamada de construção de carga baseada em volume.
+
+00:06:45.730 --> 00:06:47.370
+Isso soa mais técnico do que realmente precisa ser.
+
+00:06:47.370 --> 00:06:52.130
+Significa que o sistema usa a altura e o peso máximos do seu modelo de carga ao criar ou
+
+00:06:52.130 --> 00:06:53.050
+sugerir uma carga.
+
+00:06:53.650 --> 00:06:56.610
+Em termos simples, ele verifica se as mercadorias cabem dentro dos limites que você definir.
+
+00:06:56.850 --> 00:06:58.130
+Esses valores não são fixos para sempre.
+
+00:06:58.530 --> 00:07:00.870
+Um planejador pode substituí-los quando as necessidades do mundo real.
+
+00:07:01.270 --> 00:07:02.750
+Talvez uma transportadora envie um trailer diferente.
+
+00:07:03.050 --> 00:07:04.370
+Talvez uma viagem permita uma altura diferente.
+
+00:07:04.730 --> 00:07:08.870
+O modelo fornece a regra normal e a substituição lida com a exceção sem ter que reconstruir
+
+00:07:08.870 --> 00:07:09.150
+tudo.
+
+00:07:09.150 --> 00:07:11.290
+Vamos botar aqueles seis pedidos de clientes.
+
+00:07:11.810 --> 00:07:13.710
+Cada um sozinho pode ocupar 15% de um caminhão.
+
+00:07:14.610 --> 00:07:17.350
+Planejado separadamente, você poderia enviar seis veículos praticamente vazios.
+
+00:07:17.970 --> 00:07:21.090
+Agrupados em uma carga, os mesmos pedidos podem preencher a maior parte de um caminhão
+
+00:07:21.090 --> 00:07:21.810
+com espaço para mais.
+
+00:07:22.210 --> 00:07:23.070
+Isso é um uso melhor do espaço.
+
+00:07:23.450 --> 00:07:24.970
+Agora, a mesma ideia funciona em ambas as direções.
+
+00:07:25.390 --> 00:07:28.290
+Para o planejamento de entrada, cria uma carga com itens vindos de um fornecedor.
+
+00:07:28.750 --> 00:07:31.870
+O plano de transporte conecta-se ao recebimento esperado, para que o armazém saiba o que
+
+00:07:31.870 --> 00:07:33.130
+deve chegar e se prepare a chegada.
+
+00:07:33.730 --> 00:07:37.090
+Em vez de saber sobre uma entrega apenas quando ela aparece no portão, a equipe de recebimentos
+
+00:07:37.090 --> 00:07:38.030
+tem um registro planejado.
+
+00:07:38.030 --> 00:07:41.850
+Para o planejamento de saída, selecione os itens do armazém que precisam ser enviados
+
+00:07:41.850 --> 00:07:43.230
+aos clientes e agrupe-os em uma carga.
+
+00:07:43.670 --> 00:07:46.750
+O armazém prepara essas mercadorias com base nos detalhes da carga, não em uma lista
+
+00:07:46.750 --> 00:07:47.170
+desconexa.
+
+00:07:47.570 --> 00:07:50.630
+Uma carga completa ainda precisa de um meio de transporte, uma empresa para movê-la
+
+00:07:50.630 --> 00:07:51.450
+e um custo esperado.
+
+00:07:52.830 --> 00:07:54.450
+Rotas, transportadoras e taxas.
+
+00:07:55.910 --> 00:07:57.830
+A carga agora diz a você o que precisa viajar junto.
+
+00:07:58.510 --> 00:08:01.430
+Em seguida, você precisa decidir quem fará o transporte, qual serviço eles usarão
+
+00:08:01.430 --> 00:08:02.710
+e qual deve ser o custo dessa viagem.
+
+00:08:03.090 --> 00:08:05.070
+A empresa que move suas mercadorias é chamada de transportadora.
+
+00:08:05.070 --> 00:08:08.110
+Pode ser uma empresa de transporte externa que coleta e entrega sua carga.
+
+00:08:08.690 --> 00:08:11.350
+Também pode significar sua própria frota, caso você gerencie seus próprios caminhões
+
+00:08:11.350 --> 00:08:11.610
+e motores.
+
+00:08:11.990 --> 00:08:14.710
+De qualquer forma, a transportadora é responsável pela viagem física.
+
+00:08:15.470 --> 00:08:18.310
+Essa distinção é importante porque você ainda precisa de um plano mesmo quando o caminhão
+
+00:08:18.310 --> 00:08:18.890
+pertence a você.
+
+00:08:19.410 --> 00:08:22.210
+Com a transportadora externa, você concorda com o preço de serviço com antecedência.
+
+00:08:22.610 --> 00:08:25.550
+Com sua própria frota, você ainda pode querer que o custo do transporte seja calculado,
+
+00:08:25.650 --> 00:08:27.930
+especialmente se os custos de entrega aparecerem nos pídeos dos clientes.
+
+00:08:28.250 --> 00:08:31.550
+O gerenciamento de transporte do Dynamics 365 oferece suporte a ambas estrelas.
+
+00:08:31.550 --> 00:08:32.730
+Depois, a rota.
+
+00:08:33.010 --> 00:08:36.470
+Uma rota é o caminho planejado da coleta ao destino junto com a escolha do serviço.
+
+00:08:36.910 --> 00:08:38.010
+Ela responde a perguntas práticas.
+
+00:08:38.590 --> 00:08:40.350
+De qual armazém a transportadora coleta a carga?
+
+00:08:40.710 --> 00:08:42.450
+Qual cliente ou local recebe a mercadoria?
+
+00:08:43.010 --> 00:08:44.650
+Qual serviço de transporte realiza a viagem?
+
+00:08:45.190 --> 00:08:48.210
+Imagina uma entrega saindo do seu armazém principal para um cliente do outro lado do país.
+
+00:08:48.670 --> 00:08:51.570
+Uma rota pode usar frete e rodovério padrão que custa menos, mas leva mais tempo.
+
+00:08:52.130 --> 00:08:54.310
+Outra pode usar um serviço mais rápido e mais caro.
+
+00:08:54.970 --> 00:08:57.530
+Mesmo ponto de partida e chegada, mas a escolha do transporte muda.
+
+00:08:57.970 --> 00:08:59.650
+Uma tarifa é a cobrança esperada para essa escolha.
+
+00:08:59.650 --> 00:09:01.770
+Não há um número aleatório digitado de última hora.
+
+00:09:02.330 --> 00:09:06.310
+As tarifas vêm de acordos de preços com transportadoras combinados com detalhes do envio da rota.
+
+00:09:06.670 --> 00:09:10.210
+De onde a mercadoria sai, para onde vai, o serviço utilizado e a quantidade de transportado.
+
+00:09:10.670 --> 00:09:12.410
+Portanto, uma rota diz qual a mercadoria deve se mover.
+
+00:09:12.510 --> 00:09:13.690
+Uma tarifa diz o que você espera pagar.
+
+00:09:14.470 --> 00:09:17.850
+Essas duas ideias andam juntas, pois uma rota barata pode descumprir seu prazo de entrega,
+
+00:09:17.930 --> 00:09:19.890
+enquanto a velocidade pode custar mais do que o pedido permite.
+
+00:09:20.630 --> 00:09:22.750
+Planejamento de transporte não é apenas encontrar um caminhão,
+
+00:09:22.790 --> 00:09:25.930
+é escolher um serviço que se adeque ao compromisso com seu cliente e às regras de custo da empresa.
+
+00:09:25.930 --> 00:09:30.090
+O Dynamics 365 é a bancada de trabalho de rotas e tarifa.
+
+00:09:30.550 --> 00:09:32.350
+O nome parece formal, mas o propósito é simples.
+
+00:09:32.830 --> 00:09:36.930
+Ele oferece aos planejadores um local para comparar escolhas de rotas e tarifas para o envio lado a lado.
+
+00:09:37.390 --> 00:09:41.310
+Em vez de verificar a tabela de uma transportadora e depois de outra e comparar em um arquivo separado,
+
+00:09:41.470 --> 00:09:43.450
+você analisa as escolhas conectadas àquela necessidade de envio.
+
+00:09:43.650 --> 00:09:46.370
+Talvez uma opção chegue ao cliente mais cedo, talvez outra custe menos.
+
+00:09:46.370 --> 00:09:50.290
+O sistema não sabe se cada cliente valoriza mais a velocidade do que o custo,
+
+00:09:50.350 --> 00:09:52.030
+porque as empresas funcionam de formas diferentes.
+
+00:09:52.750 --> 00:09:56.030
+Um cliente pode ter pago por uma entrega urgente, então a rota mais rápida faz sentido.
+
+00:09:56.850 --> 00:09:59.690
+Outro aceita uma entrega mais longa e a cobrança menor se encaixa melhor.
+
+00:10:00.370 --> 00:10:01.410
+As pessoas ainda tomam decisão.
+
+00:10:01.870 --> 00:10:05.050
+O gerenciamento de transporte oferece opções acordadas e custos esperados,
+
+00:10:05.150 --> 00:10:07.190
+enquanto seu negócio decide qual compensação funciona melhor.
+
+00:10:07.990 --> 00:10:09.630
+Veja o que o módulo integrado realmente faz.
+
+00:10:10.290 --> 00:10:13.370
+As informações de tarifa vêm de tabelas que sua empresa insere e mantém no Dynamics 365.
+
+00:10:13.370 --> 00:10:18.570
+Pense nessas tabelas como registros armazenados de preços acordados e regras de rolo.
+
+00:10:18.850 --> 00:10:21.030
+Se você negociou um preço para determinado serviço e trecho,
+
+00:10:21.110 --> 00:10:23.510
+essa informação fica no sistema e auxilia no planejamento.
+
+00:10:24.010 --> 00:10:26.030
+Isso funciona bem quando suas tarifas seguem acordos conhecidos.
+
+00:10:26.350 --> 00:10:28.570
+Por exemplo, trabalhar com algumas transportadoras regulares,
+
+00:10:28.750 --> 00:10:31.550
+atender rotas familiares e atualizar preços quando contratos mudam.
+
+00:10:31.890 --> 00:10:35.290
+O planejador de transporte usa tarifas já registradas em vez de procurar em meios antigos,
+
+00:10:35.830 --> 00:10:37.570
+mas aqui está algo que muitos interpretam mal.
+
+00:10:38.150 --> 00:10:41.410
+O módulo integrado não funciona como um site de compras conectado a todas as transportadoras.
+
+00:10:41.410 --> 00:10:44.590
+Ele não busca automaticamente preços atualizados de feeds ao vivo
+
+00:10:44.590 --> 00:10:46.430
+nem compara através de uma ampla rede em tempo real.
+
+00:10:46.790 --> 00:10:49.130
+Se sua empresa precisa comparar tarifas de várias transportadoras,
+
+00:10:49.210 --> 00:10:51.430
+links de agendamento em tempo real ou atualizações detalhadas de envio,
+
+00:10:51.490 --> 00:10:52.830
+você geralmente conecta um sistema de terceiros.
+
+00:10:52.990 --> 00:10:54.690
+Isso não é uma falha da gestão de transporte.
+
+00:10:55.110 --> 00:10:56.190
+Ela define seu trabalho claramente.
+
+00:10:56.790 --> 00:10:59.430
+Essas ferramentas lidam com o planejamento estruturado de transporte
+
+00:10:59.430 --> 00:11:00.810
+dentro da gestão da cadeia de suprimentos,
+
+00:11:00.930 --> 00:11:03.830
+usando as informações de transportador, a rota e tarifas que sua empresa mantém.
+
+00:11:04.370 --> 00:11:06.570
+Também não é um site de rastreamento de encomendas para o consumidor.
+
+00:11:06.570 --> 00:11:10.070
+Você não vai usá-lo como um mapa, onde insere um número de rastreio
+
+00:11:10.070 --> 00:11:12.470
+e observa um ícone de veículo percorrendo uma estrada.
+
+00:11:13.050 --> 00:11:16.150
+Este módulo foca nas decisões de transporte do negócio antes e durante o envio.
+
+00:11:16.810 --> 00:11:18.030
+Quais mercadorias seguem juntas?
+
+00:11:18.110 --> 00:11:19.210
+Qual transportadoras manos é?
+
+00:11:19.310 --> 00:11:21.190
+Qual rota se aplica e qual deve ser o custo da viagem?
+
+00:11:21.690 --> 00:11:23.270
+Uma vez que sua empresa seleciona esse plano,
+
+00:11:23.470 --> 00:11:25.630
+as equipes de armazém e transporte precisam executá-lo.
+
+00:11:26.710 --> 00:11:28.290
+Da porta do armazém à porta do cliente,
+
+00:11:28.370 --> 00:11:31.450
+um plano de transporte só ajuda quando as pessoas conseguem transformá-lo em um envio real.
+
+00:11:31.950 --> 00:11:32.830
+Para um pedido de saída,
+
+00:11:32.890 --> 00:11:34.990
+o fluxo geralmente começa quando um cliente compra algo.
+
+00:11:34.990 --> 00:11:37.690
+O pedido de venda diz à empresa o que o cliente quer,
+
+00:11:37.810 --> 00:11:39.330
+para onde precisa ir e quando deve chegar.
+
+00:11:39.790 --> 00:11:40.970
+Esse pedido se torna um envio.
+
+00:11:41.050 --> 00:11:44.310
+O envio se junta a uma carga planejada com outras mercadorias viajando na mesma viagem.
+
+00:11:44.650 --> 00:11:45.750
+Então o armazém assume o controle.
+
+00:11:46.010 --> 00:11:47.690
+Os trabalhadores pegam os itens no estoque,
+
+00:11:47.790 --> 00:11:49.570
+embalam e levam para a área de carregamento correta.
+
+00:11:49.970 --> 00:11:51.310
+Como o envio pertence a uma carga,
+
+00:11:51.510 --> 00:11:54.890
+a equipe pode ver quais mercadorias precisam sair juntas e qual transportadora irá coletá-la.
+
+00:11:55.390 --> 00:11:56.270
+Quando o veículo chega,
+
+00:11:56.550 --> 00:11:58.450
+as mercadorias saem do armazém para a transportadora
+
+00:11:58.450 --> 00:12:00.150
+e a transportadora as leva até o cliente.
+
+00:12:00.270 --> 00:12:02.370
+Cada etapa se conecta ao mesmo registro de movimentação.
+
+00:12:02.730 --> 00:12:04.330
+Isso parece comum, mas imagine um modo antigo.
+
+00:12:04.330 --> 00:12:06.310
+Um separador de pedidos poderia trabalhar com o pedido.
+
+00:12:06.510 --> 00:12:08.870
+Um planejador de transporte poderia ter uma lista separada.
+
+00:12:09.030 --> 00:12:10.790
+E alguém na doca de carga poderia buscar em e-mails
+
+00:12:10.790 --> 00:12:12.970
+para verificar qual transportadora deveria levar quais paletes.
+
+00:12:13.610 --> 00:12:16.230
+Se um detalhe mudasse, todos precisavam da versão atualizada.
+
+00:12:16.730 --> 00:12:17.570
+Com a gestão de transporte,
+
+00:12:17.610 --> 00:12:19.410
+a carga fornece às equipes um registro compartilhado.
+
+00:12:19.950 --> 00:12:21.790
+O armazém pode ver os itens conectados à carga,
+
+00:12:21.890 --> 00:12:24.050
+o planejador de transporte pode ver os detalhes do envio
+
+00:12:24.050 --> 00:12:27.270
+e a pessoa que organiza a coleta pode ver a transportadora e os serviços planejados.
+
+00:12:28.710 --> 00:12:30.330
+Em vez de passar várias listas de papel,
+
+00:12:30.790 --> 00:12:33.710
+as pessoas trabalham com informações vinculadas ao mesmo pedido e enviam.
+
+00:12:33.710 --> 00:12:35.230
+E este é um exemplo simples.
+
+00:12:35.690 --> 00:12:38.630
+Um armazém tem pedidos para vários clientes na mesma área de entrega.
+
+00:12:39.250 --> 00:12:41.370
+Um cliente pediu caixas de materiais de limpeza,
+
+00:12:41.570 --> 00:12:44.730
+outro pediu produtos de papel e um terceiro pediu um pequeno lote de equipamentos.
+
+00:12:45.230 --> 00:12:47.010
+Cada pedido precisa de separação e embalagem,
+
+00:12:47.090 --> 00:12:49.790
+mas a equipe de transporte não precisa tratá-los com viagens totalmente separadas.
+
+00:12:49.910 --> 00:12:51.630
+Eles atribuem os envios a uma carga planejada.
+
+00:12:51.890 --> 00:12:53.590
+A equipe do armazém seleciona cada pedido,
+
+00:12:53.750 --> 00:12:55.670
+embala corretamente e o prepara para a área de carregamento.
+
+00:12:55.670 --> 00:12:59.170
+O registro de carga informa que todas essas remessas viajam juntas.
+
+00:12:59.170 --> 00:13:00.650
+Quando a transportadora chega,
+
+00:13:00.910 --> 00:13:03.210
+a equipe entrega as mercadorias para um movimento planejado,
+
+00:13:03.330 --> 00:13:06.010
+em vez de tentar combinar paletes soltos ao motorista na última hora.
+
+00:13:06.590 --> 00:13:08.030
+O cliente ainda recebe seu próprio pedido.
+
+00:13:08.830 --> 00:13:09.750
+Nos bastidores, porém,
+
+00:13:09.850 --> 00:13:12.210
+a empresa planejou essa entrega como parte de movimento maior.
+
+00:13:12.870 --> 00:13:15.230
+Esse selo ajuda o armazém a trabalhar com a equipe de transporte,
+
+00:13:15.330 --> 00:13:16.510
+em vez de trabalhar à frente dela,
+
+00:13:17.010 --> 00:13:18.650
+ou esperar por instruções que chegaram tarde demais.
+
+00:13:18.650 --> 00:13:23.150
+O transporte de entrada segue a mesma ideia conectada apenas na direção oposta.
+
+00:13:23.610 --> 00:13:26.350
+Um pedido de compra informa que sua empresa espera a mercadoria de um fornecedor.
+
+00:13:26.350 --> 00:13:28.690
+Quando sua empresa organiza o transporte,
+
+00:13:28.830 --> 00:13:31.530
+uma carga de entrada planejada conecta os itens recebidos à viagem,
+
+00:13:31.790 --> 00:13:33.110
+antes que as mercadorias cheguem ao armazém.
+
+00:13:33.690 --> 00:13:35.010
+O fornecedor envia a remessa,
+
+00:13:35.110 --> 00:13:37.510
+a transportadora traz para o seu local e o armazém a recebe.
+
+00:13:37.850 --> 00:13:40.250
+A equipe de recebimento pode se preparar porque sabe que deve chegar.
+
+00:13:40.810 --> 00:13:43.750
+Eles podem verificar a carga planejada em relação aos produtos que chegam à doca
+
+00:13:43.750 --> 00:13:45.970
+de forma muito mais clara do que um caminhão aparecendo sem aviso
+
+00:13:45.970 --> 00:13:48.770
+e alguém tentando descobrir a qual pedido de compra os paletes pertencem.
+
+00:13:49.270 --> 00:13:51.030
+Pedidos de transferência também se encaixam nesse processo.
+
+00:13:51.590 --> 00:13:52.830
+Um local da empresa envia estoque,
+
+00:13:52.910 --> 00:13:54.230
+enquanto outro local da empresa o recebe.
+
+00:13:54.230 --> 00:13:57.250
+O primeiro armazém prepara os itens e os envia,
+
+00:13:57.330 --> 00:14:00.210
+e o segundo armazém espera os mesmos itens e os recebe em seu estoque.
+
+00:14:01.030 --> 00:14:02.890
+Nenhum cliente externo está no fim dessa viagem,
+
+00:14:03.370 --> 00:14:05.990
+mas a empresa ainda precisa de uma entrega clara entre os dois locais.
+
+00:14:06.510 --> 00:14:09.970
+A carga conecta o trabalho de envio e recebimento em torno de um movimento planejado.
+
+00:14:10.310 --> 00:14:13.290
+As escolhas de entrega do cliente também permanecem conectadas à decisão de envio.
+
+00:14:13.810 --> 00:14:16.150
+Se um planejador escolhe um serviço de transportadora mais rápido
+
+00:14:16.150 --> 00:14:17.870
+porque um cliente precisa de mercadorias rapidamente,
+
+00:14:17.930 --> 00:14:18.930
+essa escolha se conecta à remessa.
+
+00:14:19.450 --> 00:14:21.270
+Se a empresa usa um serviço de menor custo
+
+00:14:21.270 --> 00:14:22.430
+porque a data de entrega permite,
+
+00:14:22.510 --> 00:14:23.770
+essa escolha também se conecta.
+
+00:14:23.770 --> 00:14:26.410
+As pessoas podem rastrear o custo de entrega até a rota
+
+00:14:26.410 --> 00:14:27.790
+e a escolha da transportadora que o criou.
+
+00:14:28.230 --> 00:14:31.030
+O veículo pode sair da doca e as mercadorias podem chegar com segurança,
+
+00:14:31.150 --> 00:14:32.210
+mas o trabalho ainda não terminou.
+
+00:14:32.650 --> 00:14:34.510
+A transportadora envia uma fatura de frete depois,
+
+00:14:34.590 --> 00:14:35.410
+e alguém precisa verificá-la.
+
+00:14:36.710 --> 00:14:37.930
+Custo de frete e conciliação.
+
+00:14:39.370 --> 00:14:41.910
+As mercadorias deixaram o armazém e a entrega pode até estar completa.
+
+00:14:42.330 --> 00:14:43.590
+Então a fatura da transportadora chega.
+
+00:14:43.950 --> 00:14:45.450
+Essa fatura precisa de conferência
+
+00:14:45.450 --> 00:14:48.050
+porque o valor na conta deve se conectar à escolha de transporte
+
+00:14:48.050 --> 00:14:49.350
+que a empresa planejou anteriormente,
+
+00:14:49.350 --> 00:14:52.110
+incluindo a transportadora, rota, serviço, detalhes da carga
+
+00:14:52.110 --> 00:14:54.210
+e custo de frete esperado.
+
+00:14:54.810 --> 00:14:58.170
+Durante o planejamento, o Dynamics 365 pode calcular um custo de transporte
+
+00:14:58.170 --> 00:15:00.010
+esperado a partir das informações e tarifas da empresa.
+
+00:15:00.430 --> 00:15:02.670
+Esse valor esperado oferece à empresa um ponto de partida
+
+00:15:02.670 --> 00:15:04.210
+antes que a transportadora solicite o pagamento.
+
+00:15:04.650 --> 00:15:06.450
+Mais tarde, a transportadora envia sua fatura de frete.
+
+00:15:07.030 --> 00:15:09.950
+A reconciliação de frete significa comparar essa fatura com a tarifa
+
+00:15:09.950 --> 00:15:11.890
+e os detalhes de envio já registrados no sistema.
+
+00:15:11.890 --> 00:15:14.790
+Em termos simples, a empresa verifica se a transportadora cobrou
+
+00:15:14.790 --> 00:15:17.050
+o que era esperado pelo serviço que realmente transportou a mercadoria.
+
+00:15:17.470 --> 00:15:19.670
+Imagine que o planejamento indicou uma cobrança de 500 dólares.
+
+00:15:20.250 --> 00:15:22.390
+A fatura da transportadora também mostra 500 dólares
+
+00:15:22.390 --> 00:15:23.630
+e os detalhes da remessa conhecida.
+
+00:15:24.030 --> 00:15:26.490
+Essa fatura segue um caminho direto pelo processo de verificação,
+
+00:15:26.610 --> 00:15:28.370
+pois o registro planejado e a fatura estão de acordo.
+
+00:15:28.770 --> 00:15:30.370
+Mas as faturas nem sempre correspondem jamais.
+
+00:15:30.790 --> 00:15:32.650
+Talvez a tabela de tarifas estivesse errada,
+
+00:15:32.730 --> 00:15:34.830
+talvez a transportadora tenha cobrado por um serviço diferente
+
+00:15:34.830 --> 00:15:37.450
+ou a carga mudou após o planejamento e a cobrança precisa de explicação.
+
+00:15:38.250 --> 00:15:40.950
+Sem um registro conectado, o financeiro pode ver apenas um número de fatura
+
+00:15:40.950 --> 00:15:42.870
+em um valor, perdendo tempo perguntando ao depósito
+
+00:15:42.870 --> 00:15:44.250
+e à equipe de transporte que aconteceu.
+
+00:15:44.810 --> 00:15:47.970
+O gerenciamento de transporte mantém a decisão logística conectada a essa verificação.
+
+00:15:48.550 --> 00:15:50.210
+Regras podem comparar a fatura da transportadora
+
+00:15:50.210 --> 00:15:52.150
+com o valor esperado e informações de remessa planejadas.
+
+00:15:52.730 --> 00:15:55.150
+Quando os detalhes se encaixam nas regras aceitas pela empresa,
+
+00:15:55.310 --> 00:15:56.470
+a fatura pode seguir adiante.
+
+00:15:57.030 --> 00:15:59.990
+Quando os detalhes não coincidem, o sistema envia diferença para alguém analisar.
+
+00:16:00.930 --> 00:16:03.530
+Isso significa que as pessoas não aprovam cada cobrança de frete às cegas.
+
+00:16:04.030 --> 00:16:06.230
+Um planejador de transporte pode precisar confirmar
+
+00:16:06.230 --> 00:16:07.810
+se a transportadora usou um serviço diferente
+
+00:16:07.810 --> 00:16:10.830
+ou alguém no financeiro pode precisar perguntar por que uma taxa extra apareceu.
+
+00:16:11.610 --> 00:16:13.870
+O ponto não é presumir que toda a divergência esteja errada, não é?
+
+00:16:14.390 --> 00:16:16.410
+O ponto é notar a divergência antes do pagamento.
+
+00:16:16.890 --> 00:16:19.090
+Isso une as operações e o financeiro em torno da mesma remessa.
+
+00:16:19.530 --> 00:16:21.510
+A equipe de transporte escolhe uma transportadora e um serviço.
+
+00:16:21.850 --> 00:16:23.270
+Essa escolha cria um custo esperado.
+
+00:16:23.890 --> 00:16:25.270
+O depósito envia as mercadorias
+
+00:16:25.270 --> 00:16:28.650
+e o financeiro verifica a fatura posterior contra o registro do que a empresa planejou.
+
+00:16:29.690 --> 00:16:32.330
+Cada equipe vê uma parte diferente, mas estão olhando para informações conectadas.
+
+00:16:32.810 --> 00:16:34.310
+O processo integrado tem um escopo claro, né?
+
+00:16:35.250 --> 00:16:38.250
+Empresas que precisam de auditoria de frete em larga escala e altamente automatizada
+
+00:16:38.250 --> 00:16:40.810
+frequentemente adicionam um sistema de gerenciamento de transporte de terceiros.
+
+00:16:41.430 --> 00:16:44.090
+Essas ferramentas podem trazer conexões mais profundas com transportadoras
+
+00:16:44.090 --> 00:16:45.290
+e regras de verificação mais automatizadas.
+
+00:16:45.630 --> 00:16:47.430
+O módulo integrado cuida do custo planejado
+
+00:16:47.430 --> 00:16:50.250
+e do trabalho de reconciliação dentro do gerenciamento da cadeia de suprimentos,
+
+00:16:50.590 --> 00:16:53.250
+enquanto o outro sistema pode ampliar esse trabalho quando a empresa precisa de mais.
+
+00:16:53.250 --> 00:16:57.550
+Junte todos esses blocos de construção e o cenário completo começa a surgir,
+
+00:16:57.590 --> 00:16:59.110
+onde ele se encaixa e o que ele não faz.
+
+00:17:00.530 --> 00:17:02.370
+Onde o gerenciamento e transporte realmente residem?
+
+00:17:02.830 --> 00:17:07.250
+Ele pertence ao Dynamics 365 Supply Chain Management rodando os aplicativos Finance Operations.
+
+00:17:07.790 --> 00:17:08.330
+Esse é o celular.
+
+00:17:08.670 --> 00:17:09.310
+Aqui ele é declarado.
+
+00:17:09.770 --> 00:17:12.670
+Empresas que precisam de uma forma estruturada para planejar entregas de entrada,
+
+00:17:12.790 --> 00:17:15.710
+envios de saída para clientes e transferências de estoque entre unidades da empresa,
+
+00:17:16.130 --> 00:17:19.210
+usando seus próprios registros de transportadoras, tabelas de taxas e regras de carga.
+
+00:17:19.810 --> 00:17:21.550
+Agora vamos esclarecer um ponto comum de confusão.
+
+00:17:21.550 --> 00:17:23.190
+O Business Central é diferente.
+
+00:17:23.650 --> 00:17:26.550
+O Business Central não inclui esse módulo integrado de gerenciamento de transporte.
+
+00:17:26.870 --> 00:17:29.230
+Se você usa o Business Central e precisa de planejamento de transporte,
+
+00:17:29.310 --> 00:17:31.570
+você deve procurar um sistema de gerenciamento de transporte de terceiros.
+
+00:17:31.970 --> 00:17:32.390
+Esse é o limite.
+
+00:17:32.810 --> 00:17:34.550
+Vamos também manter o limite claro do outro lado.
+
+00:17:35.090 --> 00:17:37.750
+O módulo integrado não substitui todos os portais de transportadoras,
+
+00:17:37.810 --> 00:17:39.950
+serviços de tráfego ao vivo ou ferramentas avançadas de rastreamento.
+
+00:17:40.050 --> 00:17:42.850
+Quando uma empresa precisa de taxas em tempo real de várias transportadoras,
+
+00:17:42.950 --> 00:17:44.130
+mais opções de transportadoras,
+
+00:17:44.190 --> 00:17:46.170
+ou um rastreamento mais profundo após a saída das mercadorias,
+
+00:17:46.230 --> 00:17:47.490
+ela conecta um TMS de terceiros.
+
+00:17:47.770 --> 00:17:49.310
+Essas ferramentas lidam com atividades técnicas.
+
+00:17:49.450 --> 00:17:50.770
+Pense novamente no prédio escrito.
+
+00:17:50.770 --> 00:17:53.810
+O gerenciamento de transporte é a mesa de transporte dentro desse prédio.
+
+00:17:54.230 --> 00:17:56.450
+Ele se conecta a pedidos ao trabalho de armazém e ao financiar.
+
+00:17:56.990 --> 00:17:58.850
+Ele mantém unido o próprio plano de transporte da empresa.
+
+00:17:59.790 --> 00:18:02.170
+Ferramentas externas de transportadoras podem lidar com atividades além dessa.
+
+00:18:02.690 --> 00:18:04.170
+Duas camadas diferentes trabalhando junto.
+
+00:18:07.100 --> 00:18:07.720
+Próximo conhecimento.
+
+00:18:08.720 --> 00:18:10.120
+E que está a maneira mais simples de pensar nisso?
+
+00:18:10.400 --> 00:18:12.400
+O gerenciamento de transporte transforma pedidos comerciais
+
+00:18:12.400 --> 00:18:13.700
+em movimentação planejada de mercadoria.
+
+00:18:13.900 --> 00:18:16.060
+Depois, ele conecta essa movimentação aos custos de frete
+
+00:18:16.060 --> 00:18:17.280
+que a empresa verifica posteriormente.
+
+00:18:17.660 --> 00:18:18.500
+Esse é o ciclo completo.
+
+00:18:19.100 --> 00:18:20.800
+Inscreva-se em sua plataforma de podcast favorita.
+
+00:18:20.800 --> 00:18:23.820
+Compartilhe esta pílula de conhecimento com alguém que esteja aprendendo
+
+00:18:23.820 --> 00:18:25.640
+o Dynamics 305 Supply Chain Management.
+
+00:18:26.400 --> 00:18:28.720
+Depois, explore nossos episódios sobre armazém e estoque.
+
+00:18:29.240 --> 00:18:31.820
+Cada carga ainda depende do estoque que está atrás da porta do armazém.

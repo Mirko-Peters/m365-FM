@@ -1,6 +1,7 @@
 """Copilot-Bibliothek: Prompts, Anweisungen, KQL/DAX/PowerShell, Flows ... Einzelseiten + Verzeichnis. Eintraege kommen aus /api/library/export (Google-Index ab 10 Upvotes)."""
 from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
 from site_learn import ENTS, esc, _fetch_json, LCSS
 
 INDEX_VOTES = 10
@@ -35,6 +36,14 @@ CSS = ('<style>.bl-vote{font:inherit;cursor:pointer;border:1px solid var(--bd);b
        '.lib-code{white-space:pre-wrap;word-break:break-word;border:1px solid var(--bd);border-radius:.5em;padding:1em;background:var(--card);max-height:32em;overflow:auto}</style>')
 
 
+def is_indexable(p):
+    """Index ja/nein eines Eintrags: ab 10 Upvotes (bisherige Regel) oder - 13.11.2026 - mit >= 2500 Zeichen Text in der Sprache der Seite (site_index_rule). Jeder Eintrag hat
+    nur eine Seite, in der Sprache des Eintrags (lang). Zaehlt nur Text-Arten (Prompt, Anweisung, Skill ...): der Code einer KQL-/DAX-/PowerShell-/JSON-Vorlage ist kein Text
+    der Seitensprache, bei ihnen zaehlt nur die Beschreibung."""
+    code = bool(KINDS.get(p.get("kind"), KINDS["other"])[2])
+    return IR.index_or_long(p.get("votes", 0) >= INDEX_VOTES, p.get("summary"), None if code else p.get("body"))
+
+
 def build(g, items, people, api):
     BASE, write, page, header, footer, footer_en, LANGS = g["BASE"], g["write"], g["page"], g["header"], g["footer"], g["footer_en"], g["LANGS"]
     ctags, sitemap, TODAY = g.get("community_tags"), g["sitemap"], g["TODAY"]
@@ -50,6 +59,8 @@ def build(g, items, people, api):
             write(f"{pfx2(lang)}community/library/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=True))
             continue
         links = {i: f"{BASE}{pfx(lang) if lang == 'de' else ''}/entity/{i}/" for i in ENTS}
+        _n_long = sum(1 for p in mine if p.get("votes", 0) < INDEX_VOTES and is_indexable(p))
+        if _n_long: print(f"Bibliothek {lang}: {_n_long} Eintraege ab {IR.MIN_CHARS} Zeichen Text auf index (sonst zu wenig Stimmen)")
         for p in mine:
             a = pb[p["handle"]]; au = f"{BASE}/community/u/{a['handle']}/"; u = f"{croot}library/{p['handle']}-{p['slug']}/"
             topics = [t for t in p.get("topics", []) if t in ENTS]
@@ -66,7 +77,7 @@ def build(g, items, people, api):
                     "author": {"@type": "Person", "@id": au + "#person", "name": a["name"], "url": au}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics]}
             if lang_code: node["programmingLanguage"] = lang_code
             ld = [{"@context": "https://schema.org", **node}]
-            noidx = p.get("votes", 0) < INDEX_VOTES
+            noidx = not is_indexable(p)
             write(f"{pfx2(lang)}community/library/{p['handle']}-{p['slug']}/index.html", page(lang, f'{p["title"]} – {kl(lang, p["kind"])} | M365.FM', (p.get("summary") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=noidx, side=(g["side"](lang, p["title"] + " " + (p.get("summary") or ""), ids=topics) if g.get("side") else "")))
             if not noidx:
                 sitemap.append((u, iso(p.get("updated") or p["published"]), None))
@@ -77,7 +88,7 @@ def build(g, items, people, api):
                 groups += f'<h2>{esc(kl(lang, k))}</h2><ul style="padding:0;list-style:none">' + "".join(
                     f'<li style="padding:.6em 0;border-bottom:1px solid var(--bd)"><a href="{croot}library/{p["handle"]}-{p["slug"]}/"><b>{esc(p["title"])}</b></a> <span class="mut">· {esc(pb[p["handle"]]["name"])} · ▲ {p.get("votes", 0)}</span>'
                     f'{("<br>" + esc(p["summary"])) if p.get("summary") else ""}</li>' for p in it) + "</ul>"
-        noidx = not any(p.get("votes", 0) >= INDEX_VOTES for p in mine)
+        noidx = not any(is_indexable(p) for p in mine)
         b = shell(lang, f'<h1>{esc(t0)}</h1><p class="mut">{esc(intro)}</p><p><a class="btn main" href="{croot}#c-library">{esc(T(lang, "Add an entry", "Eintrag anlegen"))}</a></p>{groups}')
         write(f"{pfx2(lang)}community/library/index.html", page(lang, f"{t0} – M365.FM", intro, ru, b, None, None, og_type="website", extra_head=LCSS, noindex=noidx))
         if not noidx:

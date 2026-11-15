@@ -1,0 +1,868 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.620
+Witajcie w kolejnym odcinku Microsoft Knowledge Nugget tutaj w M365FM.
+
+00:00:03.780 --> 00:00:05.440
+Jestem Waszym gospodarzem, Mirko Peters.
+
+00:00:05.680 --> 00:00:09.220
+Dzisiejszy temat to coś, o czym prawie każdy słyszał, ale niewielu tak naprawdę rozumie.
+
+00:00:09.440 --> 00:00:14.940
+Mówię o Power Automate, narzędziu, które większość ludzi lekceważy jako to coś od przepływów ukryte gdzieś w Microsoft 365.
+
+00:00:15.680 --> 00:00:19.800
+Może widzieliście wzmiankę o nim w menu lub kliknęliście obok przez przypadek, ale sprawa wygląda tak.
+
+00:00:19.920 --> 00:00:23.500
+Power Automate to jedno z najpotężniejszych narzędzi w całej platformie Microsoft.
+
+00:00:23.780 --> 00:00:29.320
+Pod koniec tego odcinka będziecie dokładnie wiedzieć, czym ono jest, jak działa i dlaczego jest ważne w Waszej codziennej pracy.
+
+00:00:29.320 --> 00:00:34.720
+Pomyślcie o tym, jak o zatrudnieniu wirtualnego asystenta, który nigdy nie śpi, nigdy nie zapomina i nigdy nie prosi o podwyżkę.
+
+00:00:34.880 --> 00:00:36.320
+Chwyćcie za kawę i zaczynajmy.
+
+00:00:36.520 --> 00:00:38.460
+Problem, który rozwiązuje Power Automate.
+
+00:00:38.740 --> 00:00:40.180
+Zacznijmy od samego problemu.
+
+00:00:40.320 --> 00:00:43.880
+Pomyślcie o swoim typowym dniu pracy i o tym, ile razy powtarzacie te same czynności.
+
+00:00:44.120 --> 00:00:49.440
+Przenoszenie plików między folderami, kopiowanie danych do innego systemu, wysyłanie tego samego maila po raz setny,
+
+00:00:49.580 --> 00:00:53.900
+przesyłanie dokumentu do zatwierdzenia lub aktualizacja arkusza, bo ktoś przesłał formularz.
+
+00:00:53.900 --> 00:01:00.120
+Te zadania pochłaniają godziny każdego tygodnia, a frustrujące jest to, że nie wnoszą prawie żadnej wartości strategicznej.
+
+00:01:00.320 --> 00:01:05.000
+Nikt nigdy nie awansował za bycie świetnym w kopiowaniu i wklejaniu, ale robimy to, bo trzeba to wykonać.
+
+00:01:05.140 --> 00:01:09.620
+20 lat temu, jeśli chcieliście zautomatyzować te powtarzalne zadania, mieliście tak naprawdę tylko dwa wybory.
+
+00:01:09.860 --> 00:01:13.880
+Mogliście zatrudnić kogoś do tej nudnej pracy za Was lub nauczyć się pisać złożony kod samodzielnie.
+
+00:01:14.100 --> 00:01:17.020
+Żadna z opcji nie była dobra, bo skrypty były nietrwałe i ciągle się psuły,
+
+00:01:17.020 --> 00:01:22.040
+a oprogramowanie do automatyzacji klasy korporacyjnej kosztowało fortunę i wymagało całego zespołu ekspertów do utrzymania.
+
+00:01:22.240 --> 00:01:25.400
+Więc większość ludzi po prostu dalej wykonywała tę powtarzalną pracę ręcznie.
+
+00:01:25.620 --> 00:01:28.840
+Microsoft przyjrzał się tej frustrującej sytuacji i postanowił to zmienić,
+
+00:01:28.960 --> 00:01:34.580
+tworząc narzędzie, które pozwala każdemu mam na myśli, każdemu zautomatyzować powtarzalne zadania bez pisania ani jednej linijki kodu.
+
+00:01:34.780 --> 00:01:36.460
+Tym narzędziem jest Power Automate.
+
+00:01:36.660 --> 00:01:41.560
+W najprostszym ujęciu łączy ono Wasze aplikacje i usługi, aby mogły się komunikować ze sobą bez Waszego udziału.
+
+00:01:41.560 --> 00:01:46.160
+Zamiast być mostem między Outlookiem, SharePointem i Teams, Power Automate staje się tym mostem,
+
+00:01:46.260 --> 00:01:50.700
+pracując przez całą dobę, bez przerwy na lunch i bez popełniania choćby jednego błędu w pisaniu.
+
+00:01:51.220 --> 00:01:53.480
+Prosta definicja – wyzwalacz plus akcja.
+
+00:01:53.680 --> 00:01:55.560
+Czym więc dokładnie jest Power Automate?
+
+00:01:55.740 --> 00:01:57.080
+Oto najprostsza definicja.
+
+00:01:57.240 --> 00:02:00.760
+Power Automate składa się z dwóch rzeczy – wyzwalacza i jednej lub więcej akcji.
+
+00:02:00.920 --> 00:02:03.500
+To wszystko. Wszystko inne opiera się na tym fundamencie.
+
+00:02:03.680 --> 00:02:05.840
+Pomyślcie o wyzwalaczu jako o pistolecie startowym.
+
+00:02:06.000 --> 00:02:07.240
+To jest moment, kiedy…
+
+00:02:07.240 --> 00:02:10.780
+Gdy nowa wiadomość trafia do skrzynki, gdy w folderze SharePoint powstaje plik,
+
+00:02:10.780 --> 00:02:14.440
+gdy ktoś przesyła formularz Microsoft, gdy rozpoczyna się wydarzenie w kalendarzu.
+
+00:02:14.620 --> 00:02:16.780
+Nic się nie dzieje, dopóki wyzwalacz nie zadziała.
+
+00:02:16.960 --> 00:02:17.880
+To jest kluczowe.
+
+00:02:18.740 --> 00:02:20.500
+Akcja to to, co dzieje się później.
+
+00:02:20.780 --> 00:02:23.980
+Wysłanie powiadomienia, utworzenie pliku, aktualizacja wiersza arkusza,
+
+00:02:24.100 --> 00:02:26.860
+wpis w Teams, dodanie zadania w planerze, wysłanie e-maila.
+
+00:02:26.980 --> 00:02:29.460
+To właśnie robi automatyzacja w odpowiedzi na wyzwalacz.
+
+00:02:29.580 --> 00:02:30.340
+To takie proste.
+
+00:02:30.740 --> 00:02:32.180
+Przeanalizujmy rzeczywisty scenariusz.
+
+00:02:32.380 --> 00:02:34.920
+Wyobraź sobie, że klient wypełnia formularz kontaktowy na Twojej stronie.
+
+00:02:35.100 --> 00:02:36.840
+To przesłanie formularza jest wyzwalaczem.
+
+00:02:36.960 --> 00:02:37.760
+Co dzieje się dalej?
+
+00:02:37.760 --> 00:02:40.020
+Możesz zapisać ich dane na liście SharePoint.
+
+00:02:40.200 --> 00:02:41.260
+To akcja numer jeden.
+
+00:02:41.500 --> 00:02:44.060
+Wyślij powiadomienie do zespołu sprzedaży w aplikacji Teams.
+
+00:02:44.240 --> 00:02:45.080
+Akcja numer dwa.
+
+00:02:45.280 --> 00:02:47.820
+Utwórz zadanie kontrolne w planerze na jutrzejszy poranek.
+
+00:02:47.980 --> 00:02:48.820
+Akcja numer trzy.
+
+00:02:49.080 --> 00:02:49.720
+Jeden wyzwalacz.
+
+00:02:49.840 --> 00:02:50.300
+Wiele akcji.
+
+00:02:50.460 --> 00:02:52.300
+Wszystko dzieje się automatycznie w kilka sekund.
+
+00:02:52.480 --> 00:02:53.640
+Bez potrzeby ręcznej pracy.
+
+00:02:53.920 --> 00:02:56.840
+Chodzi o to, że nie musisz pisać ani jednej linii kodu, by tworzyć te przepływy.
+
+00:02:57.000 --> 00:02:58.960
+Łączysz gotowe elementy niczym klocki Lego.
+
+00:02:59.220 --> 00:03:01.660
+Microsoft stworzył już gotowe bloki dla setek różnych usług.
+
+00:03:01.880 --> 00:03:03.100
+Wystarczy je ze sobą połączyć.
+
+00:03:03.100 --> 00:03:04.680
+Chcesz dodać krok wysyłania e-maila?
+
+00:03:04.760 --> 00:03:05.760
+Po prostu go przeciągnij.
+
+00:03:05.880 --> 00:03:07.160
+Chcesz dodać krok tworzenia pliku?
+
+00:03:07.340 --> 00:03:08.320
+Po prostu go przeciągnij.
+
+00:03:08.500 --> 00:03:10.860
+Chcesz dodać warunek sprawdzający, czy coś jest prawdą, zanim przejdziesz dalej?
+
+00:03:11.000 --> 00:03:12.020
+Po prostu go przeciągnij.
+
+00:03:12.140 --> 00:03:13.840
+To naprawdę takie wizualne i takie proste.
+
+00:03:14.020 --> 00:03:16.160
+Większość ludzi uważa powerautomaty za skomplikowane.
+
+00:03:16.340 --> 00:03:19.540
+Ale odrzuć cały marketingowy i techniczny żargon, a sprowadza się to do
+
+00:03:19.540 --> 00:03:20.940
+Kiedy stanie się to, zrób tamto.
+
+00:03:21.080 --> 00:03:22.100
+To cała koncepcja.
+
+00:03:22.380 --> 00:03:25.560
+Gdy zrozumiesz te podstawy, wszystko inne zaczyna mieć sens.
+
+00:03:25.740 --> 00:03:26.900
+Trzy typy przepływów.
+
+00:03:26.900 --> 00:03:30.580
+Skoro znasz już podstawową koncepcję, przyjrzyjmy się sposobom działania przepływów.
+
+00:03:30.700 --> 00:03:32.580
+Nie wszystkie przepływy działają w ten sam sposób.
+
+00:03:32.780 --> 00:03:34.560
+Omówmy trzy typy, które musisz znać.
+
+00:03:34.700 --> 00:03:36.300
+Pierwszym są przepływy automatyczne.
+
+00:03:36.480 --> 00:03:38.860
+Uruchamiają się całkowicie samodzielnie, gdy coś się wydarzy.
+
+00:03:39.060 --> 00:03:40.640
+Nowy e-mail trafia do skrzynki i boom.
+
+00:03:40.820 --> 00:03:42.440
+Zadanie zostaje utworzone w planerze.
+
+00:03:42.620 --> 00:03:44.560
+Nie jest wymagana żadna interakcja człowieka.
+
+00:03:44.780 --> 00:03:48.060
+Działa w tle, wykonując swoją pracę, podczas gdy Ty zajmujesz się czymś innym.
+
+00:03:48.200 --> 00:03:50.900
+To najczęstszy typ przepływów codziennej automatyzacji biznesowej.
+
+00:03:51.640 --> 00:03:54.660
+Ustawiasz go raz i działa bez końca, dopóki go nie wyłączysz.
+
+00:03:54.660 --> 00:03:56.740
+Drugim są przepływy natychmiastowe.
+
+00:03:57.040 --> 00:04:01.680
+Uruchamiają się, gdy klikniesz przycisk w telefonie w aplikacji Teams lub na stronie SharePoint.
+
+00:04:01.940 --> 00:04:06.660
+Wyobraź sobie, że przeglądasz dokument w SharePoint i widzisz przycisk wyślij do zatwierdzenia.
+
+00:04:06.900 --> 00:04:09.020
+Klikasz go, a przepływ zajmuje się resztą.
+
+00:04:09.220 --> 00:04:12.440
+Przepływy natychmiastowe są idealne do działań, które chcesz kontrolować.
+
+00:04:12.640 --> 00:04:15.720
+Nie chcesz, aby uruchamiały się automatycznie, bo to Ty decydujesz, kiedy mają wystartować,
+
+00:04:15.840 --> 00:04:18.400
+ale gdy już to zrobisz, przepływ wykonuje całą czarną robotę za Ciebie.
+
+00:04:18.560 --> 00:04:20.280
+Trzecim rodzajem są przepływy zaplanowane.
+
+00:04:20.480 --> 00:04:22.020
+Uruchamiają się one według harmonogramu.
+
+00:04:22.020 --> 00:04:24.880
+W każdy poniedziałek o 8 rano wyślij mi podsumowanie wszystkich niedokończonych zadań.
+
+00:04:24.980 --> 00:04:27.180
+Codziennie w południe wykonaj kopię zapasową tego folderu.
+
+00:04:27.340 --> 00:04:29.300
+W każdy pierwszy dzień miesiąca wygeneruj raport.
+
+00:04:29.440 --> 00:04:33.720
+Ustawiasz harmonogram dzienny, tygodniowy, miesięczny, cokolwiek potrzebujesz i wszystko działa jak w zegarku.
+
+00:04:33.880 --> 00:04:37.880
+Zaplanowane przepływy świetnie sprawdzają się w powtarzalnych raportach, przypomnieniach i zadaniach porządkowych.
+
+00:04:38.040 --> 00:04:39.240
+Oto co musisz zrozumieć.
+
+00:04:39.360 --> 00:04:42.160
+Podstawowy silnik jest dokładnie taki sam dla wszystkich trzech typów.
+
+00:04:42.360 --> 00:04:44.080
+Jedyną prawdziwą różnicą jest wyzwalacz.
+
+00:04:44.220 --> 00:04:46.260
+Przepływy automatyczne używają wyzwalaczy zdarzeń.
+
+00:04:46.260 --> 00:04:48.500
+Przepływy natychmiastowe używają wyzwalaczy ręcznych.
+
+00:04:48.640 --> 00:04:53.280
+Przepływy zaplanowane używają wyzwalaczy czasowych, ale gdy wyzwalacz zadziała, wszystko inne przebiega dokładnie tak samo.
+
+00:04:53.500 --> 00:04:57.100
+Wybierz więc wyzwalacz, który odpowiada temu, jak chcesz uruchamiać przepływ i gotowe.
+
+00:04:57.280 --> 00:05:00.300
+Łączniki, czyli sposób, w jaki Power Automate komunikuje się ze wszystkim.
+
+00:05:00.560 --> 00:05:04.620
+Masz więc wyzwalacze i akcje, ale jak Power Automate faktycznie komunikuje się z tymi wszystkimi różnymi aplikacjami?
+
+00:05:04.800 --> 00:05:06.020
+Odpowiedzią są łączniki.
+
+00:05:06.240 --> 00:05:07.820
+Łączniki pełnią rolę tłumaczy.
+
+00:05:08.020 --> 00:05:12.840
+Power Automate nie mówi natywnie w języku SharePointa, Outlooka, Teams czy Excela, ale łączniki tak.
+
+00:05:12.840 --> 00:05:19.100
+Każdy łącznik wie, jak komunikować się z konkretną usługą, co może ona zrobić, jakich danych oczekuje i jak wysyłać polecenia.
+
+00:05:19.320 --> 00:05:23.680
+Dodając krok do swojego przepływu, w rzeczywistości wybierasz łącznik i mówisz mu, co ma zrobić.
+
+00:05:23.900 --> 00:05:27.920
+Obecnie istnieje ponad 1400 gotowych łączników i liczba ta stale rośnie.
+
+00:05:28.180 --> 00:05:35.180
+Łączniki Microsoftu SharePoint, Teams Outlook, OnDrive są standardem w większości planów i obejmują usługi, których prawdopodobnie używasz na co dzień,
+
+00:05:35.340 --> 00:05:38.080
+ale łączniki firm trzecich otwierają zupełnie nowe możliwości.
+
+00:05:38.080 --> 00:05:43.540
+Salesforce, Adobe, DocuSign, Google, Twitter, MailChimp, Power Automate może się z nimi wszystkimi połączyć.
+
+00:05:43.760 --> 00:05:50.460
+Możesz zbudować przepływ, który zaczyna się od zgłoszenia z Google Forms, zapisuje dane w SharePoint, wysyła umowę przez DocuSign i publikuje powiadomienie w Teams.
+
+00:05:50.680 --> 00:05:53.400
+Wszystko w jednym przepływie, bez opuszczania ekosystemu Microsoft.
+
+00:05:53.680 --> 00:05:57.000
+A jeśli nie ma łącznika dla systemu, którego potrzebujesz, możesz zbudować własny.
+
+00:05:57.000 --> 00:06:00.200
+Niestandardowe łączniki pozwalają łączyć się z każdą usługą, która posiada API.
+
+00:06:00.420 --> 00:06:03.520
+Wymaga to trochę więcej pracy, ale oznacza, że Power Automate może połączyć się ze wszystkim.
+
+00:06:03.760 --> 00:06:05.980
+Każdy łącznik ma swój własny zestaw wyzwalaczy i akcji.
+
+00:06:06.180 --> 00:06:09.020
+Kiedy wybierzesz jeden z nich, zobaczysz tylko to, co dana usługa faktycznie potrafi.
+
+00:06:09.180 --> 00:06:11.300
+Łącznik SharePointa obsługuje listy i biblioteki.
+
+00:06:11.520 --> 00:06:14.000
+Łącznik Outlooka obsługuje wiadomości e-mail i kalendarze.
+
+00:06:14.180 --> 00:06:16.140
+Łącznik Teams obsługuje kanały i wiadomości.
+
+00:06:16.340 --> 00:06:19.220
+Nie musisz zgadywać, ponieważ łącznik dokładnie pokazuje, co jest dostępne.
+
+00:06:19.220 --> 00:06:21.240
+Na tym polega prawdziwa moc Power Automate.
+
+00:06:21.240 --> 00:06:23.000
+To nie tylko usługi firmy Microsoft.
+
+00:06:23.320 --> 00:06:29.220
+Łączy cały Twój zestaw narzędzi CRM, pocztę e-mail, przechowywanie plików i zarządzanie projektami w jeden spójny system automatyzacji.
+
+00:06:29.460 --> 00:06:31.740
+Wszystkie one stają się częścią tego samego przepływu.
+
+00:06:31.920 --> 00:06:33.900
+Przepływy w chmurze kontra przepływy na pulpicie.
+
+00:06:34.160 --> 00:06:35.860
+W tym miejscu pojawiają się wątpliwości.
+
+00:06:36.180 --> 00:06:39.000
+Istnieją właściwie dwa rodzaje Power Automate i działają one bardzo różnie.
+
+00:06:39.200 --> 00:06:40.760
+Pierwszym rodzajem są przepływy w chmurze.
+
+00:06:40.980 --> 00:06:42.800
+Działają one całkowicie na serwerach Microsoftu.
+
+00:06:42.800 --> 00:06:45.180
+Kiedy budujesz przepływ w chmurze, wszystko dzieje się w chmurze.
+
+00:06:45.340 --> 00:06:47.800
+Formularz zostaje przesłany, a dane zapisane w SharePoint.
+
+00:06:47.800 --> 00:06:50.580
+Przychodzi wiadomość e-mail i tworzone jest wydarzenie w kalendarzu.
+
+00:06:50.740 --> 00:06:52.020
+Twój komputer nie musi być włączony.
+
+00:06:52.120 --> 00:06:54.340
+Nie potrzebujesz też zainstalowanego żadnego oprogramowania.
+
+00:06:54.560 --> 00:06:57.880
+Przepływ działa na infrastrukturze Microsoftu, a Ty po prostu sprawdzasz wyniki później.
+
+00:06:58.120 --> 00:07:01.360
+Przepływy w chmurze to coś, o czym większość ludzi myśli, słysząc Power Automate.
+
+00:07:01.580 --> 00:07:03.320
+Drugim rodzajem są przepływy na pulpicie.
+
+00:07:03.500 --> 00:07:04.520
+To zupełnie co innego.
+
+00:07:04.740 --> 00:07:06.560
+Przepływy na pulpicie wykorzystują tak zwany
+
+00:07:06.560 --> 00:07:08.900
+zrobotyzowaną automatyzację procesów, czyli RPA.
+
+00:07:08.900 --> 00:07:10.780
+Oto co to oznacza w prostym języku.
+
+00:07:10.940 --> 00:07:14.120
+Power Automate dosłownie przejmuje kontrolę nad myszką i klawiaturą.
+
+00:07:14.120 --> 00:07:19.700
+Otwiera okna przeglądarki, klika przyciski, wpisuje tekst w pola i kopiuje dane między aplikacjami.
+
+00:07:19.920 --> 00:07:23.320
+Jeśli kiedykolwiek widziałeś, jak ktoś używa oprogramowania do zdalnego pulpitu,
+
+00:07:23.460 --> 00:07:27.080
+wygląda to dokładnie tak samo z tą różnicą, że po drugiej stronie nie ma człowieka.
+
+00:07:27.220 --> 00:07:29.500
+To po prostu oprogramowanie poruszające Twoją myszką.
+
+00:07:29.760 --> 00:07:32.860
+Gdy po raz pierwszy widzisz działający przepływ na pulpicie, jest to dość dziwne.
+
+00:07:33.040 --> 00:07:35.780
+Kursor zaczyna się poruszać sam z siebie, okna otwierają się i zamykają,
+
+00:07:35.880 --> 00:07:37.820
+a tekst pojawia się w polach, w które nie klikałeś.
+
+00:07:38.000 --> 00:07:40.160
+Wygląda to tak, jakby ktoś używał Twojego komputera,
+
+00:07:40.160 --> 00:07:43.540
+ale kiedy przyzwyczaisz się do tej niezwykłości, zrozumiesz, jak potężne to jest narzędzie.
+
+00:07:43.680 --> 00:07:45.420
+Po co więc potrzebujesz przepływów na pulpicie?
+
+00:07:45.600 --> 00:07:48.340
+Ponieważ nie każdy system posiada nowoczesny interfejs API lub łącznik.
+
+00:07:48.480 --> 00:07:51.340
+Pomyśl o starych aplikacjach biznesowych, z których firmy wciąż korzystają.
+
+00:07:51.600 --> 00:07:53.100
+System księgowy z początku lat 2000,
+
+00:07:53.420 --> 00:07:55.420
+niestandardowa baza danych stworzona 15 lat temu,
+
+00:07:55.600 --> 00:07:57.900
+starsze oprogramowanie HR działające na lokalnym serwerze.
+
+00:07:58.020 --> 00:08:02.240
+Te systemy nie mają wyzwalaczy, łączników, ani żadnego sposobu na komunikację ze światem zewnętrznym,
+
+00:08:02.240 --> 00:08:07.020
+ale przepływ na pulpicie może wchodzić z nimi w interakcję tak samo jak człowiek klikając przyciski i wpisując tekst.
+
+00:08:07.180 --> 00:08:08.320
+Którego z nich potrzebujesz?
+
+00:08:08.480 --> 00:08:12.020
+Przepływy w chmurze sprawdzają się w przypadku nowoczesnych usług posiadających API i łączniki.
+
+00:08:12.240 --> 00:08:15.880
+Przepływy na pulpicie obsługują starsze aplikacje, stare oprogramowanie lub wszystko to,
+
+00:08:15.980 --> 00:08:17.260
+czego nie można połączyć programowo.
+
+00:08:17.460 --> 00:08:19.980
+W wielu organizacjach będziesz używać obu tych rozwiązań.
+
+00:08:20.120 --> 00:08:22.660
+Jak poszczególne elementy pasują do siebie, tworząc system.
+
+00:08:22.920 --> 00:08:24.240
+Sęk w tym, że większość ludzi myśli,
+
+00:08:24.380 --> 00:08:25.820
+iż Power Automate to tylko jedno narzędzie,
+
+00:08:25.940 --> 00:08:27.700
+ale zrozumienie, jak te elementy do siebie pasują,
+
+00:08:27.700 --> 00:08:29.080
+pozwala odkryć jego prawdziwą moc.
+
+00:08:29.240 --> 00:08:31.480
+W rzeczywistości to trzy warstwy współpracujące ze sobą.
+
+00:08:31.680 --> 00:08:32.820
+Zacznijmy od wyzwalacza.
+
+00:08:33.000 --> 00:08:34.700
+Coś dzieje się w Twoim środowisku pracy.
+
+00:08:34.980 --> 00:08:37.520
+Wysłano formularz, przesłano plik albo nadszedł e-mail.
+
+00:08:37.680 --> 00:08:39.340
+To iskra, która uruchamia wszystko.
+
+00:08:39.660 --> 00:08:40.720
+Następnie mamy akcję.
+
+00:08:40.980 --> 00:08:43.940
+Automatyzacja robi coś użytecznego, jak zapisanie danych, wysłanie powiadomienia,
+
+00:08:44.040 --> 00:08:45.620
+utworzenie zadania lub aktualizacja rekordu.
+
+00:08:45.780 --> 00:08:47.200
+To tutaj wykonywana jest praca.
+
+00:08:47.440 --> 00:08:48.440
+Jest jeszcze łącznik.
+
+00:08:48.640 --> 00:08:50.680
+Stanowi on most między Twoimi różnymi narzędziami.
+
+00:08:50.900 --> 00:08:54.300
+Pozwala on wyzwalaczowi komunikować się z akcją, nawet jeśli działają w zupełnie różnych systemach.
+
+00:08:54.300 --> 00:08:57.040
+Prawdziwa moc nie tkwi w pojedynczym elemencie, lecz w sposobie ich łączenia.
+
+00:08:57.220 --> 00:08:58.300
+Podam Ci prawdziwy przykład.
+
+00:08:58.540 --> 00:09:00.980
+Załóżmy, że klient wypełnia formularz kontaktowy na Twojej stronie.
+
+00:09:01.140 --> 00:09:02.040
+To jest wyzwalacz.
+
+00:09:02.160 --> 00:09:05.940
+Power Automate przechwytuje to i znajduje odpowiedniego sprzedawcę na liście SharePoint.
+
+00:09:06.140 --> 00:09:06.920
+Akcja pierwsza.
+
+00:09:07.140 --> 00:09:09.860
+Następnie wysyła powiadomienie na Teams do tego sprzedawcy.
+
+00:09:10.060 --> 00:09:10.740
+Akcja druga.
+
+00:09:10.900 --> 00:09:13.640
+Potem tworzy zadanie w planerze na następny poranek.
+
+00:09:13.820 --> 00:09:14.540
+Akcja trzecia.
+
+00:09:14.780 --> 00:09:17.800
+Na koniec rejestruje wszystko w arkuszu Excel do celów raportowania.
+
+00:09:18.060 --> 00:09:18.760
+Akcja czwarta.
+
+00:09:18.760 --> 00:09:23.580
+Cztery akcje z jednego wyzwalacza w trzech różnych usługach, a wszystko dzieje się w kilka sekund.
+
+00:09:23.780 --> 00:09:27.100
+Jeden wyzwalacz może uruchomić dziesiątki działań w wielu usługach.
+
+00:09:27.360 --> 00:09:33.740
+Możesz tworzyć przepływy, które obsługują SharePoint, Teams, Outlook, Planner, Excel i Salesforce w ramach jednej automatyzacji.
+
+00:09:33.980 --> 00:09:37.440
+Każda akcja przekazuje dane do kolejnej, budując na tym, co było wcześniej.
+
+00:09:37.740 --> 00:09:39.480
+Przepływ nie robi tylko jednej rzeczy.
+
+00:09:39.780 --> 00:09:42.080
+Obsługuje cały proces od początku do końca.
+
+00:09:42.080 --> 00:09:43.280
+Na tym polega magia.
+
+00:09:43.500 --> 00:09:52.460
+To, co kiedyś było 10-minutowym procesem ręcznym sprawdzanie formularza, szukanie osoby, wysyłanie wiadomości, tworzenie zadań, zapisywanie danych teraz dzieje się natychmiast i automatycznie.
+
+00:09:52.660 --> 00:09:53.360
+Bez błędów.
+
+00:09:53.520 --> 00:09:55.240
+Klient otrzymuje szybszą odpowiedź.
+
+00:09:55.420 --> 00:09:57.320
+Sprzedawca ma jasny kolejny krok do wykonania.
+
+00:09:57.500 --> 00:09:58.920
+A ty nie musisz kiwnąć palcem.
+
+00:09:59.100 --> 00:10:01.480
+Praktyczne przykłady, które możesz wykorzystać od jutra.
+
+00:10:01.680 --> 00:10:02.860
+Przejdźmy do konkretów.
+
+00:10:03.040 --> 00:10:05.580
+Oto trzy przepływy, które możesz zbudować już dziś.
+
+00:10:05.800 --> 00:10:07.780
+Zacznij od przepływu przesyłania formularza.
+
+00:10:07.780 --> 00:10:12.600
+Ktoś wypełnia formularz Microsoft. Może to być rejestracja na wydarzenie, opinia lub zgłoszenie wsparcia.
+
+00:10:12.820 --> 00:10:15.940
+Gdy kliknie Wyślij, Power Automatę zapisuje odpowiedzi na liście SharePoint.
+
+00:10:16.160 --> 00:10:18.660
+Następnie wysyła e-mail do Twojego zespołu z tymi szczegółami.
+
+00:10:18.780 --> 00:10:19.320
+To wszystko.
+
+00:10:19.600 --> 00:10:24.420
+Jeden wyzwalacz, dwie akcje i nagle nie musisz już ręcznie kopiować odpowiedzi z formularzy do arkusza kalkulacyjnego.
+
+00:10:24.660 --> 00:10:29.620
+Każde zgłoszenie jest automatycznie przechwytywane, organizowane i udostępniane osobom, które muszą je zobaczyć.
+
+00:10:29.760 --> 00:10:31.780
+Kolejnym przykładem jest proces zatwierdzania dokumentów.
+
+00:10:32.500 --> 00:10:34.440
+Ktoś przesyła plik do folderu SharePoint.
+
+00:10:34.440 --> 00:10:38.100
+Power Automatę wykrywa nowy plik i wysyła prośbę o zatwierdzenie do menedżera.
+
+00:10:38.300 --> 00:10:42.360
+Menedżer otrzymuje e-mail lub powiadomienie w Teams z prostymi przyciskami zatwierdzenia lub odrzucenia.
+
+00:10:42.560 --> 00:10:45.560
+Jeśli zatwierdzi plik, automatycznie przenosi się do folderu publikacji.
+
+00:10:45.800 --> 00:10:47.700
+Jeśli odrzuci, pozostaje w wersji roboczej.
+
+00:10:47.880 --> 00:10:49.940
+Koniec z uganianiem się za ludźmi w celu uzyskania podpisu.
+
+00:10:50.140 --> 00:10:52.440
+Koniec z zastanawianiem się, czy dokument został przejrzany.
+
+00:10:52.640 --> 00:10:55.460
+Przepływ obsługuje cały proces zatwierdzania od początku do końca.
+
+00:10:55.660 --> 00:10:57.940
+Kolejną opcją jest codzienne podsumowanie zadań.
+
+00:10:57.940 --> 00:11:02.900
+Każdego ranka o siódmej Power Automatę sprawdza listę zadań SharePoint w poszukiwaniu nieukończonych pozycji.
+
+00:11:03.140 --> 00:11:06.640
+Zbiera wszystkie zaległe i bieżące zadania, wysyłając Ci podsumowanie w Teams.
+
+00:11:06.900 --> 00:11:09.180
+Rozpoczynasz dzień dokładnie wiedząc, co na Ciebie czeka.
+
+00:11:09.400 --> 00:11:12.040
+Nie musisz otwierać wielu list, ani sprawdzać różnych narzędzi.
+
+00:11:12.240 --> 00:11:14.560
+Podsumowanie czeka na Ciebie w czacie, gdy siadasz z kawą.
+
+00:11:14.780 --> 00:11:17.600
+Zbudowanie każdego z tych przepływów zajmuje około 10 do 15 minut.
+
+00:11:17.820 --> 00:11:19.100
+Bez konieczności programowania.
+
+00:11:19.360 --> 00:11:20.320
+Bez pomocy działu IT.
+
+00:11:20.520 --> 00:11:22.880
+Tylko Ty, przeglądarka i edytor Power Automatę.
+
+00:11:22.880 --> 00:11:25.960
+Sztuczka polega na rozpoczęciu od procesu, który najbardziej Cię irytuje.
+
+00:11:26.120 --> 00:11:29.080
+Tego, który wykonujesz codziennie, myśląc, musi być na to lepszy sposób.
+
+00:11:29.280 --> 00:11:31.120
+To Twój pierwszy cel do automatyzacji.
+
+00:11:31.320 --> 00:11:32.080
+Pierwsze kroki.
+
+00:11:32.300 --> 00:11:34.000
+Twój pierwszy przepływ w 5 minut.
+
+00:11:34.240 --> 00:11:35.380
+Gotowy, by spróbować?
+
+00:11:35.540 --> 00:11:38.320
+Oto jak uruchomić swój pierwszy przepływ w zaledwie kilka minut.
+
+00:11:38.520 --> 00:11:41.420
+Otwórz przeglądarkę i wejdź na make.powerautomate.com.
+
+00:11:41.540 --> 00:11:44.120
+To Twoje główne centrum do tworzenia i zarządzania przepływami.
+
+00:11:44.340 --> 00:11:48.980
+Zaloguj się tym samym kontem służbowym Microsoft 365, którego używasz do e-maila i Teams.
+
+00:11:48.980 --> 00:11:53.600
+Po zalogowaniu kliknij Utwórz na lewym pasku, a następnie wybierz Automatyczny przepływ w chmurze.
+
+00:11:53.740 --> 00:11:58.020
+To informuje Power Automate, że chcesz przepływ uruchamiający się automatycznie przy wystąpieniu zdarzenia.
+
+00:11:58.300 --> 00:12:01.900
+Dla pierwszego przepływu polecam wyzwalacz po nadejściu nowej wiadomości e-mail.
+
+00:12:02.140 --> 00:12:05.120
+Jest prosty, łatwy do przetestowania i każdy korzysta z poczty.
+
+00:12:05.320 --> 00:12:07.280
+Kliknij Utwórz i jesteś w edytorze.
+
+00:12:07.480 --> 00:12:08.680
+Teraz potrzebujesz akcji.
+
+00:12:08.900 --> 00:12:11.280
+Kliknij znak plus pod wyzwalaczem i wyszukaj Teams.
+
+00:12:11.540 --> 00:12:13.920
+Wybierz Opublikuj wiadomość w czacie lub kanale.
+
+00:12:14.740 --> 00:12:16.400
+Wybierz Flowbot jako nadawcę.
+
+00:12:16.400 --> 00:12:19.920
+Wybierz siebie jako odbiorcę i wpisz wiadomość, na przykład
+
+00:12:19.920 --> 00:12:21.420
+Otrzymano nowy e-mail.
+
+00:12:21.580 --> 00:12:22.160
+To wszystko.
+
+00:12:22.400 --> 00:12:24.680
+Kliknij Zapisz i Twój pierwszy przepływ jest gotowy.
+
+00:12:24.860 --> 00:12:26.940
+Oto wskazówka, z której będziesz korzystać wielokrotnie.
+
+00:12:27.140 --> 00:12:29.000
+Przycisk testowania to Twój najlepszy przyjaciel.
+
+00:12:29.200 --> 00:12:33.360
+Gdy go klikniesz, Power Automate natychmiast uruchomi przepływ, używając dostępnych danych wyzwalających.
+
+00:12:33.560 --> 00:12:36.420
+W przypadku wyzwalacza e-mail będzie on czekał na nadejście nowej wiadomości.
+
+00:12:36.620 --> 00:12:39.680
+Po prostu wyślij do siebie szybki testowy e-mail i zobacz, jak uruchamia się proces.
+
+00:12:39.680 --> 00:12:42.340
+Nie musisz czekać, aż prawdziwy wyzwalacz zadziała samoczynnie.
+
+00:12:42.340 --> 00:12:44.180
+Jeśli coś pójdzie nie tak, nie panikuj.
+
+00:12:44.320 --> 00:12:47.680
+Kliknij Krok, który zawiódł i sprawdź sekcję danych wejściowych oraz wyjściowych.
+
+00:12:47.900 --> 00:12:49.920
+Dane wejściowe pokazują, co otrzymał dany krok.
+
+00:12:50.120 --> 00:12:51.920
+Dane wyjściowe pokazują, co próbował zrobić.
+
+00:12:52.100 --> 00:12:55.320
+W 9 na 10 przypadków problem staje się oczywisty po sprawdzeniu tych dwóch miejsc.
+
+00:12:55.560 --> 00:12:57.880
+Może temat e-maila miał inny format niż oczekiwano.
+
+00:12:58.100 --> 00:12:59.300
+Może jakieś pole było puste.
+
+00:12:59.520 --> 00:13:02.340
+Komunikaty o błędach są zaskakująco pomocne, gdy już wiesz, gdzie ich szukać.
+
+00:13:02.500 --> 00:13:04.720
+Zacznij od małych rzeczy, testuj często i rozbudowuj stopniowo.
+
+00:13:04.940 --> 00:13:06.940
+Twój pierwszy proces może składać się tylko z dwóch kroków.
+
+00:13:06.940 --> 00:13:08.800
+Twój dziesiąty proces może mieć ich już dwadzieścia.
+
+00:13:08.940 --> 00:13:10.280
+I to jest całkowicie w porządku.
+
+00:13:10.500 --> 00:13:14.480
+Każdy stworzony proces uczy Cię czegoś nowego o tym, jak Twoje narzędzia łączą się i współpracują.
+
+00:13:14.680 --> 00:13:15.640
+Oto cały system.
+
+00:13:15.900 --> 00:13:20.760
+Wyzwalacze, akcje i łączniki współpracują, aby zająć się żmudną pracą, która codziennie zabiera Twój czas.
+
+00:13:20.960 --> 00:13:25.760
+Większość ludzi uważa, że automatyzacja jest skomplikowana lub wymaga umiejętności kodowania, ale to już nieprawda.
+
+00:13:26.160 --> 00:13:31.560
+Najmądrzejszą rzeczą, jaką możesz teraz zrobić, jest wybranie jednego powtarzalnego zadania i stworzenie dla niego procesu.
+
+00:13:31.560 --> 00:13:36.220
+Zasubskrybuj, aby otrzymywać więcej takich analiz i napisz w komentarzu, co zautomatyzujesz jako pierwsze.

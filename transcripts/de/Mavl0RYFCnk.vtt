@@ -1,0 +1,844 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.880
+Das heutige Thema ist eines, von dem fast jeder schon einmal gehört hat, das aber kaum jemand erklären kann.
+
+00:00:04.180 --> 00:00:05.540
+Serverless. Was genau ist das?
+
+00:00:05.880 --> 00:00:08.280
+Ist es wirklich nur Code, der auf nichts läuft, oder ist es etwas viel Größeres?
+
+00:00:11.860 --> 00:00:16.220
+Es bedeutet, dass man sich keine Gedanken über sie macht, und diese Unterscheidung verändert die Art und Weise, wie man Software entwickelt, grundlegend.
+
+00:00:16.460 --> 00:00:21.280
+Am Ende dieser Folge wirst du verstehen, was Azure Functions eigentlich ist, wie die Preisgestaltung wirklich funktioniert und wann du sie verwenden solltest.
+
+00:00:21.700 --> 00:00:24.860
+Wir werden das Ganze in seine einzelnen Bausteine aufschlüsseln und mit dem größten Mythos beginnen.
+
+00:00:25.380 --> 00:00:26.540
+Was Serverless eigentlich bedeutet?
+
+00:00:27.340 --> 00:00:28.560
+Lassen Sie uns gleich ein paar Mythen aufklären.
+
+00:00:29.100 --> 00:00:32.300
+Der Begriff Serverless ist der schlechteste Marketingbegriff, den sich Microsoft hier ausgedacht hat.
+
+00:00:32.300 --> 00:00:34.820
+Er suggeriert den Leuten, dass buchstäblich keine Server im Spiel sind.
+
+00:00:35.260 --> 00:00:36.820
+Das stimmt nicht. Es gibt Server jede Menge.
+
+00:00:37.200 --> 00:00:38.160
+Man muss sie nur nie anfassen.
+
+00:00:38.600 --> 00:00:42.200
+Vor 20 Jahren musste man viel Arbeit investieren, um einen Code im Internet auszuführen.
+
+00:00:42.740 --> 00:00:47.700
+Sie würden eine virtuelle Maschine mieten, ein Betriebssystem installieren, einen Webserver konfigurieren und ihre Anwendung bereitstellen.
+
+00:00:47.920 --> 00:00:52.360
+Dann würden sie jedes Wochenende damit verbringen, Sicherheitsupdates zu patchen und sicherzustellen, dass das Ding nicht um drei Morgens abstürzt.
+
+00:00:52.600 --> 00:00:55.980
+Und hier ist der Clou. Sie haben für diesen Server bezahlt, unabhängig davon, ob ihr Code lief oder nicht.
+
+00:00:56.040 --> 00:00:59.000
+Er stand einfach da und brummte vor sich hin und verbrannte Geld, während sie schlug.
+
+00:00:59.320 --> 00:01:01.200
+Serverless stellt dieses gesamte Modell auf den Kopf.
+
+00:01:01.200 --> 00:01:04.760
+Sie schreiben ihren Code, laden ihn hoch und die Plattform kümmert sich um alles Weitere.
+
+00:01:05.260 --> 00:01:08.200
+Das Betriebssystem, die Sicherheitspatches, die Skalierung und die Verfügbarkeit.
+
+00:01:08.800 --> 00:01:10.860
+Ihre Aufgabe steht nur darin, die wichtige Logik zu schreiben.
+
+00:01:11.260 --> 00:01:15.360
+Stellen Sie sich das wie den Unterschied zwischen dem Betrieb einer Restaurantküche und der Nutzung eines Verkaufsautomaten vor.
+
+00:01:15.700 --> 00:01:18.800
+Eine Restaurantküche benötigt volles Personal, ständige Versorgung und Wartung.
+
+00:01:19.380 --> 00:01:22.060
+Sie kostet jeden Tag Geld, selbst wenn niemand durch die Tür kommt.
+
+00:01:23.200 --> 00:01:26.700
+Ein Verkaufsautomat steht einfach in der Ecke und tut nichts, bis jemand einen Knopf drückt.
+
+00:01:26.700 --> 00:01:29.780
+Dann erwacht er zum Leben, erledigt seine Arbeit und geht wieder in den Ruhezustand.
+
+00:01:30.140 --> 00:01:32.060
+Sie zahlen nur für den Strom, wenn er tatsächlich funktioniert.
+
+00:01:32.460 --> 00:01:33.560
+Das ist Serverless in aller Kürze.
+
+00:01:33.960 --> 00:01:35.460
+Azure Functions ist die Version von Microsoft.
+
+00:01:35.980 --> 00:01:38.180
+Sie führt kleine Codestücke als Reaktion auf Ereignisse aus.
+
+00:01:38.780 --> 00:01:40.600
+Ihr Code ruht, bis er durch etwas aktiviert wird.
+
+00:01:41.040 --> 00:01:42.940
+Dann wird er ausgeführt beendet und wechselt wieder in den Ruhezustand.
+
+00:01:43.400 --> 00:01:44.600
+Wie sieht dieser Code nun konkret aus?
+
+00:01:45.360 --> 00:01:46.180
+Was sind Azure Functions?
+
+00:01:46.640 --> 00:01:49.540
+Eine Funktion ist ein einzelner Code-Ausschnitt, der eine bestimmte Aufgabe ausführt.
+
+00:01:49.540 --> 00:01:54.100
+Es handelt sich nicht um eine komplette Anwendung mit einer Anmeldeseite einer Datenbank und 20 Bildschirten.
+
+00:01:54.340 --> 00:01:55.920
+Es handelt sich um eine einzelne fokussierte Aufgabe.
+
+00:01:56.240 --> 00:02:00.540
+Stellen Sie sich das wie ein Lichtschalter in Ihrem Haus vor, der entweder ausgeschaltet ist, um zu funktionieren, und dann wieder ausgeschaltet wird.
+
+00:02:01.380 --> 00:02:03.060
+Ein herkömmlicher Webservice ist das Gegenteil.
+
+00:02:03.440 --> 00:02:08.080
+Er lässt beispielsweise alle Lichter in Ihrem Haus 24 Stunden am Tag, 7 Tage die Woche an, selbst wenn niemand zu Hause ist.
+
+00:02:08.520 --> 00:02:11.060
+Azure Functions unterstützt eine Reihe verschiedener Programmiersprachen.
+
+00:02:11.420 --> 00:02:13.380
+Sie können jede Sprache verwenden, mit der Sie vertraut sind.
+
+00:02:13.520 --> 00:02:15.720
+JavaScript, Python, C, Java oder PowerShell.
+
+00:02:16.000 --> 00:02:16.920
+Hier gibt es keine richtige Antwort.
+
+00:02:17.100 --> 00:02:18.520
+Wählen Sie die Sprache, mit der Sie bereits verdranken.
+
+00:02:18.520 --> 00:02:20.480
+Nun wollen wir eine häufige Verwirrung ausräumen.
+
+00:02:20.900 --> 00:02:22.660
+Eine Funktions-App ist nicht dasselbe wie eine Funktion.
+
+00:02:23.160 --> 00:02:24.480
+Die Funktions-App ist der Container.
+
+00:02:25.020 --> 00:02:26.040
+Stellen Sie sich wie eine Toolbox.
+
+00:02:26.460 --> 00:02:29.780
+Sie erstellen eine Funktions-App und fügen dieser Toolbox mehrere Funktionen zu.
+
+00:02:30.200 --> 00:02:32.320
+Jede Funktion ist ein separates Tool, das eine eigene Aufgabe führt.
+
+00:02:32.680 --> 00:02:38.420
+Sie können eine Funktion haben, die Benutzeranmeldungen verarbeitet, eine andere, die hochgeladene Bilder verarbeitet, und eine dritte, die nächtliche Berichte sendet.
+
+00:02:38.820 --> 00:02:41.000
+Sie alle befinden sich in derselben Toolbox, aber unabhängig von anderen.
+
+00:02:41.780 --> 00:02:43.060
+Noch ein wichtiger Punkt zu Funktionen.
+
+00:02:43.120 --> 00:02:44.380
+Sie sind standardmäßig zustandslos.
+
+00:02:44.640 --> 00:02:46.380
+Das bedeutet, dass Sie sich zwischen den Ausführungen nichts merken.
+
+00:02:46.380 --> 00:02:49.560
+Wenn Ihre Funktion eine Datei verarbeitet und abgeschlossen ist, ist das erledigt.
+
+00:02:49.880 --> 00:02:52.300
+Bei der nächsten Ausführung wird sie neu gestartet, ohne sich an die letzte Ausführung.
+
+00:02:52.560 --> 00:02:55.620
+Das klingt nach einer Einschränkung, ist aber genau das Feature, das Sie so leistungsstark macht.
+
+00:02:56.160 --> 00:03:03.580
+Da Funktionen keinen Arbeitsspeicher oder Zustand speichern, kann Azure bei Datenverkehrsspitzen sofort 100 Kopien Ihrer Funktion hochfahren und sie genauso schnell wieder herunterfahren, wenn der Datenverkehr abnimmt.
+
+00:03:04.120 --> 00:03:06.720
+So erhalten Sie Skalierbarkeit, ohne für ungenutzte Server zu bezahlen.
+
+00:03:07.060 --> 00:03:11.860
+Hier stellt sich die Frage, wenn eine Funktion einfach nur da sitzt und nichts tut, bis sie durch etwas aufgeweckt wird, was weckt sie denn eigentlich auf?
+
+00:03:12.340 --> 00:03:13.140
+Wir kommen Trigger ins Spiel.
+
+00:03:13.140 --> 00:03:14.620
+Trigger, das Wann.
+
+00:03:15.400 --> 00:03:17.900
+Jede Funktion muss genau einen Trigger haben und das ist nicht optional.
+
+00:03:18.380 --> 00:03:20.340
+Der Trigger ist das Ereignis, das Deine Funktion aufweckt.
+
+00:03:20.780 --> 00:03:23.240
+Ohne ihn sitzt Dein Code einfach nur da und tut absolut nichts.
+
+00:03:23.840 --> 00:03:25.020
+Stell Dir Trigger wie eine Türklingel vor.
+
+00:03:25.300 --> 00:03:26.560
+Deine Funktion wartet im Haus.
+
+00:03:27.340 --> 00:03:28.040
+Sie könnte ewig warten.
+
+00:03:28.560 --> 00:03:30.120
+Es passiert nichts, bis jemand an der Tür klingelt.
+
+00:03:30.980 --> 00:03:34.440
+Dann wird die Funktion aktiv, öffnet die Tür, erledigt ihre Arbeit und wartet wieder.
+
+00:03:35.000 --> 00:03:37.280
+Es gibt vier Trigger, auf die Anfänger am häufigsten stoßen.
+
+00:03:37.880 --> 00:03:40.160
+Der HTTP Trigger ist der häufigste Ausgangspunkt.
+
+00:03:40.820 --> 00:03:44.020
+Jemand besucht eine URL oder tätigt einen API-Aufruf und Deine Funktion wird ausgelöst.
+
+00:03:44.360 --> 00:03:47.520
+Auf diese Weise erstellst Du schlanke APIs, ohne einen ganzen Web-Server einzurichten.
+
+00:03:48.120 --> 00:03:50.440
+Dann gibt es noch den Timer Trigger, der nach einem Zeitplan ausgeführt wird.
+
+00:03:50.840 --> 00:03:57.420
+Du legst einen Kronausdruck fest, etwa jede Stunde ausführen oder jede Nacht um Mitternacht ausführen und Deine Funktion wird genau zu diesen Zeiten ausgelöst.
+
+00:03:58.260 --> 00:04:01.760
+Perfekt für Wartungsaufgaben, Bereinigungsaufträge oder das Generieren von nächtlichen Berichten.
+
+00:04:01.760 --> 00:04:05.140
+Der Blob-Trigger wird ausgelöst, wenn eine Datei in den Azure-Speicher hochgeladen wird.
+
+00:04:05.460 --> 00:04:07.560
+Angenommen, jemand lädt eine PDF-Datei in einem bestimmten Ordner hoch.
+
+00:04:08.020 --> 00:04:10.860
+Der Blob-Trigger erkennt diesen Upload und führt ihre Funktion automatisch aus.
+
+00:04:11.320 --> 00:04:14.860
+Dies ist von großer Bedeutung für die Bildverarbeitung, Dokumentkonvertierung und Dateiüberprüfung.
+
+00:04:15.340 --> 00:04:17.620
+Der Warteschlang-Trigger wird ausgelöst, wenn eine Nachricht in einer Warteschlange.
+
+00:04:18.120 --> 00:04:20.440
+Warteschlangen sind eine Möglichkeit, verschiedene Teile Ihres Systems zu entkommen.
+
+00:04:20.740 --> 00:04:25.380
+Ein Dienst stellt eine Nachricht in eine Warteschlange und ihre Funktion ruft sie ab und verarbeitet sie, sobald sie bereit ist.
+
+00:04:25.720 --> 00:04:28.060
+Dadurch wird verhindert, dass ein langsamer Dienst alles andere blockiert.
+
+00:04:28.060 --> 00:04:29.400
+Das ist der entscheidende Punkt.
+
+00:04:29.940 --> 00:04:33.240
+Wenn ein Trigger ausgelöst wird, übergibt er automatisch Daten an ihre Funktionen.
+
+00:04:33.820 --> 00:04:36.000
+Sie müssen diese nicht abfragen oder prüfen, ob etwas passiert ist.
+
+00:04:36.380 --> 00:04:39.220
+Der Trigger übergibt Ihnen alles, was Sie benötigen und Ihre Funktion verarbeitet es einfach.
+
+00:04:39.560 --> 00:04:42.260
+Eine Funktion ohne Trigger ist einfach nur Code, der herumliegt und nichts tut.
+
+00:04:42.800 --> 00:04:43.880
+Der Trigger gibt Ihren Zweck.
+
+00:04:44.460 --> 00:04:46.500
+Der Trigger teilt Ihre Funktion also mit, wann sie ausgeführt werden sollen.
+
+00:04:46.820 --> 00:04:48.520
+Aber woher kommen die Daten und wo werden sie hingeschickt?
+
+00:04:48.980 --> 00:04:49.860
+Hier kommen Bindungen ins Spiel.
+
+00:04:51.000 --> 00:04:52.560
+Bindungen, Daten rein, Daten raus.
+
+00:04:53.140 --> 00:04:58.580
+Bindungen sind eine Möglichkeit, deiner Funktion mitzuteilen, welche Daten sie lesen und wohin die Ergebnisse gesendet werden sollen und dass du dafür zusätzlichen Code schreiben musst.
+
+00:04:59.000 --> 00:05:00.440
+Das ist ganz schön viel, deshalb möchte ich es hier vereinfacht.
+
+00:05:00.800 --> 00:05:01.380
+Es gibt zwei Typen.
+
+00:05:02.120 --> 00:05:03.560
+Eingabebindungen bringen Daten in deine Funktion.
+
+00:05:04.400 --> 00:05:05.680
+Ausgabebindungen senden Daten raus.
+
+00:05:06.220 --> 00:05:11.480
+Ohne Bindungen müsstest du jedes Mal SDK-Code schreiben, wenn du mit einem Speicherkonto, einer Datenbank oder einer Warteschlange kommunizieren möchtest.
+
+00:05:11.940 --> 00:05:16.720
+Du müsstest Verbindungszeichenfolgen verarbeiten, Wiederholungsversuche verwalten, Daten serialisieren und Antworten deserialisieren.
+
+00:05:17.080 --> 00:05:18.900
+Das sind eine Menge Boilerplate-Coden, um eine Datei zu lesen.
+
+00:05:18.900 --> 00:05:21.120
+Mit Bindungen deklarierst du einfach, was du benötigst.
+
+00:05:21.500 --> 00:05:25.100
+Du sagst, ich möchte aus diesem Block-Container lesen oder ich möchte in diese Warteschlange schreiben.
+
+00:05:25.540 --> 00:05:26.700
+Die Runtime kümmert sich um den Rest.
+
+00:05:27.040 --> 00:05:30.640
+Sie öffnet die Verbindung, liest die Daten und übergibt sie als Parameter an deine Funktion.
+
+00:05:31.200 --> 00:05:35.080
+Wenn deine Funktion abgeschlossen ist, übernimmt sie den Rückgabewert und schreibt ihn an die von dir angegebene Stelle.
+
+00:05:35.680 --> 00:05:36.820
+Stelle dir Bindungen wie Pipes vor.
+
+00:05:37.480 --> 00:05:40.200
+Sie verbinden ihre Funktion mit einem Speicherkonto, einer Datenbank und einer Warteschlange.
+
+00:05:40.720 --> 00:05:42.520
+Die Daten fließen automatisch durch diese Pipes.
+
+00:05:43.440 --> 00:05:45.060
+Ihre Funktion muss nicht wissen, wie die Pipes funktionieren.
+
+00:05:45.180 --> 00:05:48.080
+Sie empfängt lediglich die eingehenden Daten und sendet die Daten, die ausgegeben werden.
+
+00:05:48.080 --> 00:05:49.380
+Hier ist ein konkretes Beispiel.
+
+00:05:49.500 --> 00:05:51.060
+Angenommen, Sie verfügen über eine Blob-Eingabebindung.
+
+00:05:51.380 --> 00:05:55.660
+Wenn Ihre Funktion startet, liest sie automatisch eine Datei aus dem Blob-Speicher und übergibt sie ihn als Parameter.
+
+00:05:55.920 --> 00:05:57.520
+Sie schreiben keinen Code für das Storage-SDK.
+
+00:05:57.880 --> 00:05:59.360
+Sie rufen lediglich die Daten ab und verarbeiten.
+
+00:05:59.720 --> 00:06:01.360
+Ein weiteres Beispiel, eine Warteschlange-Ausgabebindung.
+
+00:06:01.700 --> 00:06:04.380
+Ihre Funktion verarbeitet etwas und gibt am Ende einen Wert zurück.
+
+00:06:04.880 --> 00:06:08.060
+Die Runtime serialisiert diesen Wert und legt ihn in der Warteschlange ab.
+
+00:06:08.500 --> 00:06:09.340
+Sie schreiben keinen Warteschlange.
+
+00:06:09.720 --> 00:06:10.780
+Sie geben lediglich einen Wert zurück.
+
+00:06:11.080 --> 00:06:11.720
+Bindungen sind optional.
+
+00:06:12.320 --> 00:06:13.880
+Sie können null, ein oder viele Bindungen verwenden.
+
+00:06:14.480 --> 00:06:16.880
+Einige Funktionen benötigen lediglich einen Trigger ohne jegliche Bindung.
+
+00:06:16.880 --> 00:06:20.400
+Andere verfügen möglicherweise über drei oder vier Bindungen, die eine Verbindung mit verschiedenen Diensten.
+
+00:06:20.760 --> 00:06:23.740
+Die Kombination aus Triggern und Bindungen macht Azure Functions so leistungsstark.
+
+00:06:24.300 --> 00:06:26.740
+Sie schreiben die Geschäftslogik, den eigentlichen Entscheidungsfindungscode.
+
+00:06:27.460 --> 00:06:28.840
+Die Plattform übernimmt die gesamte Integration.
+
+00:06:29.560 --> 00:06:32.080
+Ihre Funktion bleibt klein, fokussiert und leicht verständlich.
+
+00:06:33.960 --> 00:06:34.680
+Die Preisgestaltung.
+
+00:06:35.040 --> 00:06:36.720
+Die Preisgestaltung überrascht die meisten Anfänger.
+
+00:06:37.420 --> 00:06:41.640
+Für die meisten Leute ist der Verbrauchsplan die Standardauswahl und Sie sollten ihn in 90% der Fälle verwenden.
+
+00:06:42.240 --> 00:06:42.980
+Und so funktioniert es.
+
+00:06:43.140 --> 00:06:45.200
+Sie zahlen nur, wenn Ihre Funktion tatsächlich ausgeführt wird.
+
+00:06:45.200 --> 00:06:46.840
+Wenn Sie inaktiv ist, zahlen Sie nichts.
+
+00:06:47.240 --> 00:06:48.020
+Null, keine Cent.
+
+00:06:48.680 --> 00:06:50.360
+Die Rechnung setzt sich aus zwei Komponenten zusammen.
+
+00:06:50.720 --> 00:06:53.600
+Erstens die Anzahl der Ausführungen, also wie oft Ihre Funktion ausgelöst wird.
+
+00:06:54.420 --> 00:06:57.220
+Zweitens die Ausführungszeit, gemessen in GB-Sekunden.
+
+00:06:57.780 --> 00:07:01.140
+Das ist im Grunde die Ausführungsdauer Ihrer Funktion multipliziert mit dem von Ihr verwendeten Arbeitsspeichel.
+
+00:07:01.380 --> 00:07:02.600
+Der kostenlose Zuschuss ist großzügig.
+
+00:07:02.960 --> 00:07:07.060
+Sie erhalten eine Million Ausführungen pro Monat und 400.000 Gigabyte Sekunden völlig kostenlos.
+
+00:07:07.600 --> 00:07:11.140
+Für die meisten kleinen Projekte, Hobby-Apps und Prototypen zahlen Sie keinen Cent.
+
+00:07:11.620 --> 00:07:11.920
+Niemals.
+
+00:07:11.920 --> 00:07:15.140
+Selbst wenn Sie den kostenlosen Zuschuss überschreiten, sind die Tarife immer noch unglaublich.
+
+00:07:15.400 --> 00:07:16.720
+20 Cent pro Million Ausführung.
+
+00:07:16.940 --> 00:07:17.580
+Das ist kein Tippfehler.
+
+00:07:17.880 --> 00:07:19.120
+20 Cent für eine Million Ausführung.
+
+00:07:19.480 --> 00:07:22.100
+Stellen Sie sich vor, Sie zahlen nur für Strom, wenn Sie ihn einschalten.
+
+00:07:22.640 --> 00:07:25.080
+Es gibt keine monatliche Grundgebühr für die Verkabelung in Ihren Wänden.
+
+00:07:25.560 --> 00:07:27.360
+Sie zahlen nur für den Strom, den Sie tatsächlich verbrauchen.
+
+00:07:27.800 --> 00:07:28.640
+Es gibt jetzt noch andere Pläne.
+
+00:07:29.040 --> 00:07:31.500
+Flex Consumption ist neuer und bietet Unterstützung für virtuelle Netzwerke.
+
+00:07:31.900 --> 00:07:35.040
+Premium hält Ihre Funktion immer betriebsbereit, sodass es keine Verzögerungen beim Kaltstatt gibt.
+
+00:07:35.040 --> 00:07:38.400
+Dedicated bietet Ihnen eine feste Kapazität in einem herkömmlichen App-Service-Plan.
+
+00:07:39.020 --> 00:07:41.320
+Für den Einstieg ist Consumption jedoch fast immer die richtige Wahl.
+
+00:07:41.720 --> 00:07:42.300
+Eine Warnung jedoch.
+
+00:07:42.860 --> 00:07:45.900
+Die kostenlose Zuteilung wird auf alle Ihre Funktions-Apps im selben Abonnement aufgeteilt.
+
+00:07:46.340 --> 00:07:49.860
+Wenn Sie über 10 Funktions-Apps verfügen, greifen alle auf dieselben 1 Million kostenlosen Ausführungen zu.
+
+00:07:50.520 --> 00:07:52.700
+Behalten Sie dies also im Auge, wenn Sie mehr als nur ein paar Funktions-Apps erscheinen.
+
+00:07:53.020 --> 00:07:53.780
+Die Preise sind großartig.
+
+00:07:54.200 --> 00:07:56.300
+Aber lassen Sie uns dies anhand eines konkreten Beispiels verdeuteln.
+
+00:07:56.780 --> 00:07:57.780
+Ein Szenario aus der Praxis.
+
+00:07:58.260 --> 00:08:00.800
+Dählen Sie sich vor, Sie betreiben eine Website auf der Benutzerprofilbilder hochladen.
+
+00:08:00.800 --> 00:08:03.260
+Diese Bilder sind riesig, etwa 10 Megabyte pro Bild.
+
+00:08:04.000 --> 00:08:05.280
+Und das verursacht einige echte Probleme.
+
+00:08:05.800 --> 00:08:09.720
+Große Dateien kosten mehr beim Speichern, verlangsamen Ihre Website jedes Mal, wenn jemand eine Seite lädt
+
+00:08:09.720 --> 00:08:12.240
+und frustrieren Ihre Benutzer, die warten müssen, bis Sie Fotos erhalten.
+
+00:08:12.820 --> 00:08:15.700
+Daher benötigen Sie eine Möglichkeit, diese Bilder automatisch zu verkleinern.
+
+00:08:16.160 --> 00:08:19.340
+Ohne Azure Functions müssten Sie einen Hintergrund-Worker von Grund auf neu erstellen.
+
+00:08:19.780 --> 00:08:23.740
+Das bedeutet, dass Sie einen separaten Server benötigen, eine Warteschlange zum Verwalten der Arbeitslast einrichten
+
+00:08:23.740 --> 00:08:25.760
+und Code schreiben müssen, um alle beweglichen Teile zu verarbeiten.
+
+00:08:25.760 --> 00:08:29.400
+Das ist eine Menge unnötiger Komplexität für etwas so Einfaches wie das Verkleinern eines Bildes.
+
+00:08:29.400 --> 00:08:32.980
+Mit Azure Functions benötigen Sie lediglich einen Blob-Trigger und eine Funktion.
+
+00:08:33.660 --> 00:08:34.940
+Sie müssen sich keine Gedanken ums Server machen.
+
+00:08:35.280 --> 00:08:36.380
+Ich erkläre Ihnen, wie es funktioniert.
+
+00:08:36.980 --> 00:08:40.660
+Ein Benutzer lädt ein Foto über Ihre Website hoch und diese Datei wird im Azure Blob Storage abgelegt.
+
+00:08:41.140 --> 00:08:43.320
+Sobald die Datei eintrifft, wird automatisch ein Blob-Trigger ausgelöst.
+
+00:08:43.700 --> 00:08:47.820
+Ihre Funktion wird aktiviert, führt den Komprimierungscode aus und speichert die kleinere Version wieder im Speicher.
+
+00:08:48.560 --> 00:08:49.820
+All dies geschieht innerhalb von Sekunden.
+
+00:08:50.300 --> 00:08:54.020
+Der Benutzer muss nie warten, da der gesamte Prozess völlig unsichtbar im Hintergrund abläuft.
+
+00:08:54.680 --> 00:08:56.480
+Hier ist ein weiteres Beispiel aus dem Alltag.
+
+00:08:56.580 --> 00:08:58.780
+Senden einer Willkommens-E-Mail, wenn sich jemand für Ihren Dienst anmeldet.
+
+00:08:59.280 --> 00:09:01.880
+Ein HTTP-Trigger findet die Registrierungsanforderungen von Ihrer Website an.
+
+00:09:02.260 --> 00:09:06.840
+Ihre Funktion wird ausgelöst, ruft die E-Mail-Adresse des Benutzers ab, sendet eine Willkommensnachricht über SendGrid und schon ist sie fertig.
+
+00:09:07.220 --> 00:09:08.640
+Der Benutzer erhält seine E-Mail fast sofort.
+
+00:09:09.240 --> 00:09:12.060
+Kein E-Mail-Server muss eingerichtet oder eine Sendewarteschlange verwaltet werden.
+
+00:09:12.240 --> 00:09:13.780
+Nur eine Funktion, ein Auftrag fertig.
+
+00:09:14.260 --> 00:09:16.360
+Genau für solche Aufträge wurde Azure Functions entwickelt.
+
+00:09:16.860 --> 00:09:18.520
+Kleine, fokussierte, ereignisgesteuerte Aufgaben.
+
+00:09:18.920 --> 00:09:20.780
+Keine riesigen Anwendungen, keine komplexen Workflows,
+
+00:09:20.780 --> 00:09:24.020
+sondern einfach nur eine Sache, die gut erledigt wird und durch ein Geschehen an einer anderen Stelle ausgelöst wird.
+
+00:09:24.020 --> 00:09:26.220
+Wann sollten Azure Functions verwendet werden?
+
+00:09:26.820 --> 00:09:29.500
+Wann sollten Sie also auf eine Funktion zurückgreifen und wann auf etwas anderes?
+
+00:09:30.080 --> 00:09:31.380
+Hier ist eine schnelle Möglichkeit, die zu entscheiden.
+
+00:09:31.740 --> 00:09:35.540
+Fragen Sie sich, ob es sich um eine kurze Aufgabe handelt, ob sie eigenes gesteuert ist und ob sie zustandslos ist.
+
+00:09:36.140 --> 00:09:39.440
+Wenn Sie alle drei Fragen mit Ja beantwortet haben, ist Azure Functions wahrscheinlich das richtige Tool.
+
+00:09:40.200 --> 00:09:41.480
+Beginnen wir mit den guten Anwendungsfällen.
+
+00:09:41.940 --> 00:09:43.620
+APIs und Webhooks passen perfekt zusammen.
+
+00:09:43.800 --> 00:09:49.140
+Sie benötigen einen schlanken Endpunkt, der auf eine HTTP-Anforderung reagiert, eine Aufgabe ausführt und ein Ergebnis zurückgibt.
+
+00:09:49.140 --> 00:09:51.520
+Genau dafür sind HTTP-Trigger konzipiert.
+
+00:09:52.220 --> 00:09:53.940
+Die Datei in Bildverarbeitung ist ein weiterer wichtiger Aspekt.
+
+00:09:54.540 --> 00:09:59.000
+Eine Datei landet im Speicher, ihre Funktion wird ausgelöst, transformiert sie und speichert das Ergebnis alles ohne Server.
+
+00:09:59.820 --> 00:10:04.020
+Geplante Aufgaben wie die nächtliche Bereinigung oder die Berichterstellung funktionieren hervorragend mit Timer-Triggern.
+
+00:10:05.060 --> 00:10:07.360
+Auch die Datentransformation für ETL-Pipelines ist üblich.
+
+00:10:07.760 --> 00:10:12.980
+Und Funktionen sind das perfekte Integrations-Element, da sie zwei Dienste miteinander verbinden, die normalerweise nicht miteinander kommunizieren.
+
+00:10:13.300 --> 00:10:15.320
+Sprechen wir nun darüber, wann Funktionen nicht gut geeignet sind.
+
+00:10:15.320 --> 00:10:23.160
+Prozesse mit langer Ausführungszeit sind ein Problem, da Funktionen im Verbrauchstarif standardmäßig ein Time-Out-Limit von fünf Minuten haben, das bei Konfiguration auf bis zu zehn Minuten erhöht werden kann.
+
+00:10:23.740 --> 00:10:26.220
+Wenn Ihr Auftrag länger dauert, benötigen Sie eine andere Lösung.
+
+00:10:26.920 --> 00:10:28.440
+Zustandsbehaftete Anwendungen sind ein weiteres Problem.
+
+00:10:29.000 --> 00:10:30.800
+Funktionen speichern zwischen den Ausführungen nichts.
+
+00:10:31.360 --> 00:10:35.420
+Wenn Sie den Sitzungsstatus beibehalten oder den Fortschritt über Schritte hinweg verfolgen müssen, verstoßen Sie gegen das Design.
+
+00:10:35.860 --> 00:10:37.460
+Hohe Compute-Workloads sind ebenfalls nicht geeignet.
+
+00:10:37.600 --> 00:10:42.380
+Wenn Sie über Minuten oder Stunden hinweg eine anhaltende CPU-Auslastung benötigen, ist eine virtuelle Maschine der bessere Wahl.
+
+00:10:42.380 --> 00:10:48.060
+Komplexe Workflows, bei denen eine Aufgabe von einer anderen abhängt, werden besser von dauerhaften Funktionen oder Logic Apps verarbeitet.
+
+00:10:48.420 --> 00:10:49.880
+Hier ist ein kurzer Überblick über die Alternativen.
+
+00:10:50.460 --> 00:10:53.100
+Azure Logic Apps ist die No-Code-Option zum Verbinden von Diensten.
+
+00:10:53.520 --> 00:10:57.280
+Wenn Sie keinen benutzerdefinierten Code schreiben müssen, kann Logic Apps die Aufgabe mit einem visuellen Designer erledigen.
+
+00:10:57.540 --> 00:11:00.960
+Azure App Service eignet sich für vollständige Web-Anwendungen, die rund um die Uhr ausgeführt werden.
+
+00:11:00.960 --> 00:11:04.940
+Wenn Sie eine vollständige Website oder API benötigen, die man verfügbar ist, ist dies das richtige Tool für Sie.
+
+00:11:05.040 --> 00:11:08.840
+Azure Container Apps bietet Ihnen containerisierte Microservices mit mehr Kontrolle über die Laufzeit.
+
+00:11:08.840 --> 00:11:12.260
+Und Azure Virtual Machines gibt Ihnen bei Bedarf die volle Kontrolle über das Betriebssystem.
+
+00:11:12.980 --> 00:11:14.040
+Hier ist eine einfache Faustregel.
+
+00:11:14.460 --> 00:11:18.440
+Wenn Sie den Auftrag in einem Satz beschreiben können, ist er wahrscheinlich ein guter Kandidat für eine Funktion.
+
+00:11:19.460 --> 00:11:20.900
+Komprimieren Sie Bilder, wenn Sie hochgeladen werden.
+
+00:11:21.420 --> 00:11:23.140
+Senden Sie eine Willkommens-E-Mail, wenn sich jemand anmeldet.
+
+00:11:23.900 --> 00:11:25.820
+Führen Sie jeden Abend um Mitternacht den Bereitungsauftrag auf.
+
+00:11:26.340 --> 00:11:27.820
+Ein Satz, ein Auftrag, eine Funktion.
+
+00:11:28.800 --> 00:11:30.300
+Häufige Anfängerfehler, die Sie vermeiden sollten.
+
+00:11:30.780 --> 00:11:32.520
+Sprechen wir nun über ein paar Dinge, auf die Sie achten sollten.
+
+00:11:33.160 --> 00:11:35.320
+Das sind die Fehler, die fast jeder zu Beginn begeht.
+
+00:11:35.320 --> 00:11:38.580
+Ein häufiger Anfängerfehler ist zu glauben, Funktionen seien immer kostenlos.
+
+00:11:39.000 --> 00:11:40.180
+Die kostenlose Bereitstellung ist groß.
+
+00:11:40.540 --> 00:11:42.400
+Ich weiß, eine Million Ausführungen klingen nach viel.
+
+00:11:42.920 --> 00:11:47.440
+Aber wenn Ihre Funktion viral geht oder von einem Bot attackiert wird, summieren sich diese Ausführungen schnell.
+
+00:11:47.900 --> 00:11:52.600
+Überwachen Sie daher Ihre Nutzung, richten Sie in Azure eine Budgetwarnung ein und erhalten Sie am Ende des Monats keine überraschende Rechnung.
+
+00:11:52.820 --> 00:11:54.500
+Ein weiterer Fehler ist das Ignorieren von Kaltstarts.
+
+00:11:54.840 --> 00:11:57.820
+Wenn Ihre Funktion nach einer Zeit im Leerlauf zum ersten Mal ausgeführt wird, dauert dies länger.
+
+00:11:58.280 --> 00:12:00.000
+Beim Verbrauchstarif kann das ein paar Sekunden dauern.
+
+00:12:00.000 --> 00:12:01.660
+Für die meisten Anwendungsfälle ist das in Ordnung.
+
+00:12:02.060 --> 00:12:08.540
+Wenn Sie jedoch eine latenzempfindliche API erstellen, bei der jede Millisekunde zählt, sollten Sie den Premium-Tarif in Betracht ziehen oder Always-Ready-Instanzen aktivieren.
+
+00:12:09.220 --> 00:12:11.040
+Dann gibt es noch das Schreiben von Funktionen, die zu lange dauern.
+
+00:12:11.760 --> 00:12:14.740
+Der Verbrauchstarif hat ein Timeout, standardmäßig 5 Minuten, maximal 10 Minuten.
+
+00:12:15.720 --> 00:12:19.880
+Wenn Ihre Funktion 15 Minuten benötigt, um eine Datei zu verarbeiten, wird sie auf halbem Weg beendet.
+
+00:12:20.400 --> 00:12:22.960
+Teilen Sie den Auftrag in kleinere Teile auf oder verwenden Sie einen anderen Hosting.
+
+00:12:23.440 --> 00:12:26.780
+Ein weiterer Fehler, den man leicht übersehen kann, ist die Nichtverwendung von aus Paketbereitstellung aus.
+
+00:12:26.780 --> 00:12:31.260
+Dabei handelt es sich um eine einfache Konfigurationsänderung, die Kaltstarts verbessert und Bereitstellungen zuverlässiger macht.
+
+00:12:31.760 --> 00:12:36.980
+Anstatt einzelne Dateien zu kopieren, stellen Sie ein ZIP-Paket bereit, aktivieren Sie dazu einfach das Kontrollkästchen im Portal.
+
+00:12:37.440 --> 00:12:40.620
+Das Verfügbarmachen von HTTP-Endpunkten ohne Authentifizierung ist eine weitere Falle.
+
+00:12:40.880 --> 00:12:44.520
+Es ist leicht, eine Funktion während des Tests auf anonym zu belassen und dann zu vergessen, sie zu sperren.
+
+00:12:45.000 --> 00:12:46.860
+Legen Sie die Autorisierungsebene von Anfang an richtig fest.
+
+00:12:47.180 --> 00:12:48.520
+Verwenden Sie Funktions- oder Administrativschluss.
+
+00:12:48.800 --> 00:12:49.600
+Lassen Sie die Tür nicht auf.
+
+00:12:49.840 --> 00:12:52.820
+Die Wiederverwendung von Speicherkonten in mehreren Funktions-Apps ist ebenfalls ein Problem.
+
+00:12:53.060 --> 00:12:54.420
+In der Entwicklung ist die gemeinsame Nutzung ein Problem.
+
+00:12:54.420 --> 00:12:57.600
+In der Produktion sollte jede Funktions-App über ein eigenes Speicherkonto verfügen.
+
+00:12:58.060 --> 00:13:01.600
+Andernfalls treten Probleme mit lauten Nachbarn auf, bei denen der Datenverkehr einer Funktion verlangsamt.
+
+00:13:02.100 --> 00:13:04.080
+Und schließlich darf Application Insights nicht aktiviert werden.
+
+00:13:04.460 --> 00:13:05.480
+Ohne Application Insights blieben.
+
+00:13:06.000 --> 00:13:08.280
+Sie sehen keine Fehler, Störungen oder Leistungsprobleme.
+
+00:13:08.620 --> 00:13:11.280
+Sie erfahren nicht, ob Ihre Funktion zu lange ausgeführt wird oder unbemerkt fehlschlägt.
+
+00:13:11.600 --> 00:13:12.520
+Aktivieren Sie Application Insights.
+
+00:13:12.720 --> 00:13:15.200
+Es dauert 30 Sekunden und erspart stundenlanges Debuggen.
+
+00:13:15.680 --> 00:13:19.120
+Die goldene Regel für all dies lautet, halten Sie Ihre Funktion klein, fokussiert und zustandslos.
+
+00:13:19.800 --> 00:13:21.420
+Ein Auftrag pro Funktion, nicht mehr.
+
+00:13:21.880 --> 00:13:22.720
+Es ist also das System auf.
+
+00:13:22.720 --> 00:13:26.920
+Azure Functions ist eine serverlose Compute-Lösung, die kleine Codestücke als Reaktion auf Ereignisse ausführt.
+
+00:13:27.280 --> 00:13:28.640
+Sie zahlen nur, wenn Ihr Code ausgeführt wird.
+
+00:13:29.080 --> 00:13:31.220
+Trigger teilen Ihrer Funktion mit, wann sie aktiviert werden soll.
+
+00:13:31.280 --> 00:13:32.780
+Bindungen verbinden Sie mit den benötigten Daten.
+
+00:13:32.900 --> 00:13:35.780
+Und der Verbrauchstarif sorgt dafür, dass die Funktion für kleine Projekte nahezu kostenlos ist.
+
+00:13:36.120 --> 00:13:40.200
+Im Moment ist es am besten, eine einfache, über HTTP ausgelöste Funktion im Azure-Portal zu erstellen.
+
+00:13:40.940 --> 00:13:42.380
+Das dauert fünf Minuten und ist kostenlos.
+
+00:13:42.940 --> 00:13:46.220
+Abonnieren Sie Microsoft Knowledge Nuggets, um weitere einfache englische Aufschlüsselungen zu erhalten.
+
+00:13:46.220 --> 00:13:48.580
+Und teilen Sie dies mit allen, die immer wieder nachfragen, was serverlos bedeutet.
+
+00:13:48.580 --> 00:13:49.460
+Hau.
+
+00:13:49.460 --> 00:13:49.480
+Hau.

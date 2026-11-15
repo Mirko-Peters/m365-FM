@@ -3,7 +3,7 @@
 import { cleanText, randomToken, sha256hex, rateLimit } from "./util.js";
 import { levelName } from "./levels.js";
 import { baseIds, entityMap, handleEntity } from "./entities.js";
-import { autoVerifyCert, cleanI18n, saveI18n, readI18n } from "./profiles.js";
+import { autoVerifyCert, cleanI18n, saveI18n, readI18n, RESERVED_HANDLES } from "./profiles.js";
 import { canManage, EVENT_ROLES, promoteWaitlist, partnerAction, handleEvents } from "./events.js";
 import { handleEventImport, adminEventGate } from "./eventimport.js";
 import { markEdited } from "./eventmerge.js";
@@ -496,6 +496,7 @@ export async function callTool(env, user, name, a) {
     const cur = await db.prepare("SELECT handle FROM profiles WHERE user_id=?").bind(user.id).first();
     let handle = a.handle !== undefined ? String(a.handle).toLowerCase().trim() : cur?.handle;
     if (!handle || !HANDLE.test(handle)) return { error: cur ? "bad_handle" : "handle_required" };
+    if (RESERVED_HANDLES.has(handle) && cur?.handle !== handle) return { error: "handle_taken" };   // verdeckt sonst /api/profile/me|business|company; nur neu vergeben gesperrt
     if (await db.prepare("SELECT 1 x FROM profiles WHERE handle=? AND user_id<>?").bind(handle, user.id).first() || await db.prepare("SELECT 1 x FROM orgs WHERE handle=?").bind(handle).first()) return { error: "handle_taken" };
     if (!cur) await db.prepare("INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(?,0,?,'','','','','',1,?)").bind(user.id, handle, now()).run();
     const sets = [["handle", handle]];

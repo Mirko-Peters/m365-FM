@@ -71,6 +71,19 @@ class SponsorDashboardTests(unittest.TestCase):
             self.assertTrue(SPN.dashboard_copy("en")[key])
             self.assertTrue(SPN.dashboard_copy("de")[key])
 
+    def test_status_texts_for_term_grace_and_after_in_all_languages(self):
+        frontend = (ROOT / "assets" / "sponsor-dashboard.js").read_text("utf-8")
+        de, en = SPN.dashboard_copy("de"), SPN.dashboard_copy("en")
+        self.assertEqual((de["running"], de["grace_until"], de["ended_visible"]), ("Läuft", "Karenzzeit bis", "Beendet – Zahlen weiter sichtbar"))
+        self.assertEqual((en["running"], en["grace_until"], en["ended_visible"]), ("Running", "Grace period until", "Ended – figures stay visible"))
+        for lang in SPN.LANGS_ALL:
+            copy = SPN.dashboard_copy(lang)
+            for key in ("running", "grace_until", "ended_visible"):
+                self.assertIn(f'"{key}"', frontend)
+                self.assertTrue(copy[key])
+                if lang not in ("en", "de"):
+                    self.assertNotEqual(copy[key], en[key], f"{lang}/{key} fehlt in data/py_i18n.json")
+
     def test_dashboard_does_not_assign_companies_by_website(self):
         frontend = (ROOT / "assets" / "sponsor-dashboard.js").read_text("utf-8")
         self.assertNotIn("publicPlacements", frontend)

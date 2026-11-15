@@ -1,6 +1,6 @@
-# Spreaker-Website-Feld im RSS (2026-11-11 04:52 UTC)
+# Spreaker-Website-Feld im RSS (2026-11-15 04:57 UTC)
 
-Gesetzt laut Protokoll: 3230 · im Feed gleich: 3153 · im Feed anders: 0 · nicht im Feed: 77 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
+Gesetzt laut Protokoll: 3922 · im Feed gleich: 3820 · im Feed anders: 0 · nicht im Feed: 102 · ausstehend (frisch gesetzt, Feed noch nicht erneuert): 0
 
 - 67311542: nicht_im_feed · soll https://www.m365.fm/show/episodes/building-reusable-components-with-power-platform-cli-pac-cli/ · Feed None
 - 67312816: nicht_im_feed · soll https://www.m365.fm/show/episodes/using-microsoft-graph-for-custom-app-integrations/ · Feed None
@@ -79,3 +79,26 @@ Gesetzt laut Protokoll: 3230 · im Feed gleich: 3153 · im Feed anders: 0 · nic
 - 67640587: nicht_im_feed · soll https://www.m365.fm/show/episodes/m365-is-not-ready-for-kritis-or-is-it/ · Feed None
 - 67646241: nicht_im_feed · soll https://www.m365.fm/show/episodes/defender-alone-vs-sentinel-whos-failing-you/ · Feed None
 - 67652145: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-settings-microsoft-wont-explain/ · Feed None
+- 67655533: nicht_im_feed · soll https://www.m365.fm/show/episodes/your-team-building-is-broken-minecraft-fixes-it/ · Feed None
+- 67656260: nicht_im_feed · soll https://www.m365.fm/show/episodes/copilot-connectors-the-missing-link-in-bizchat/ · Feed None
+- 67659452: nicht_im_feed · soll https://www.m365.fm/show/episodes/why-copilot-fails-most-businesses/ · Feed None
+- 67664576: nicht_im_feed · soll https://www.m365.fm/show/episodes/teams-admins-are-missing-this-hidden-layer/ · Feed None
+- 67664577: nicht_im_feed · soll https://www.m365.fm/show/episodes/your-mip-rollout-is-broken-heres-why/ · Feed None
+- 67677986: nicht_im_feed · soll https://www.m365.fm/show/episodes/full-stack-skills-why-youre-not-using-them-in-teams/ · Feed None
+- 67684642: nicht_im_feed · soll https://www.m365.fm/show/episodes/azure-solutions-break-under-pressure-heres-why/ · Feed None
+- 67692646: nicht_im_feed · soll https://www.m365.fm/show/episodes/did-mainframes-just-win-altair-vs-azure/ · Feed None
+- 67697666: nicht_im_feed · soll https://www.m365.fm/show/episodes/agentic-ai-is-rewriting-devops/ · Feed None
+- 67704978: nicht_im_feed · soll https://www.m365.fm/show/episodes/azure-cli-vs-powershell-one-clear-winner/ · Feed None
+- 67714774: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-hidden-risks-lurking-in-your-cloud/ · Feed None
+- 67722917: nicht_im_feed · soll https://www.m365.fm/show/episodes/microsoft-fabric-changes-everything-for-bi-pros/ · Feed None
+- 67730942: nicht_im_feed · soll https://www.m365.fm/show/episodes/passwords-are-broken-passkeys-fix-everything/ · Feed None
+- 67736930: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-power-platform-hits-its-limit-here/ · Feed None
+- 67742556: nicht_im_feed · soll https://www.m365.fm/show/episodes/owasp-2025-net-vulnerabilities-architectural-risks/ · Feed None
+- 67746475: nicht_im_feed · soll https://www.m365.fm/show/episodes/why-arm-templates-are-holding-you-back/ · Feed None
+- 67750560: nicht_im_feed · soll https://www.m365.fm/show/episodes/unit-vs-integration-vs-front-end-the-testing-face-off/ · Feed None
+- 67754723: nicht_im_feed · soll https://www.m365.fm/show/episodes/stop-using-entity-framework-like-this/ · Feed None
+- 67760699: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-cloud-promise-is-broken/ · Feed None
+- 67768620: nicht_im_feed · soll https://www.m365.fm/show/episodes/quantum-code-isnt-magic-its-debuggable/ · Feed None
+- 67774564: nicht_im_feed · soll https://www.m365.fm/show/episodes/build-azure-apps-without-writing-boilerplate/ · Feed None
+- 67780825: nicht_im_feed · soll https://www.m365.fm/show/episodes/your-sharepoint-content-map-is-lying-to-you/ · Feed None
+- 67788801: nicht_im_feed · soll https://www.m365.fm/show/episodes/the-hidden-ai-engine-inside-net-10/ · Feed None

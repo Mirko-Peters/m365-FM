@@ -13,7 +13,7 @@ import site_landing as LND
 import site_mediakit as MKT
 import site_expert_connect as ECN
 import site_entities as ENT
-from site_i18n import COMM_LANGS, pfx
+from site_i18n import COMM_LANGS, pfx, site_langs
 import site_members as MEM
 import site_roles as ROLE
 import site_invite as INV
@@ -32,7 +32,8 @@ import site_media as MED
 import site_sidebar as SBR
 import site_topweek as TOPW   # Top 10 der Vorwoche (data/top.json): Wochenbezeichnung, ItemList, englische Seite /top/
 import site_r2 as R2
-from site_size import sizes
+import site_listen as LST   # "Show folgen"-Knopf auf den Folgenseiten und Anhoeren-Karten
+from site_size import sizes, writers
 import site_sponsorships as SPM   # T37 Sponsor: Kennzeichnung bezahlter Inhalte (data/sponsorships.json)
 import site_transcripts as TRF   # #266: Transkripte als Dateien je Folge (R2, /…/transcript.txt|.vtt)
 import glob, hashlib, html, json, os, re, shutil, sys, unicodedata
@@ -69,6 +70,10 @@ LANGS = {
     "ja": ("日本語", "ja", "ltr", 7393232, "ja_JP"),
     "ko": ("한국어", "ko", "ltr", 7393236, "ko_KR")
 }
+
+_SEL = site_langs()
+if _SEL is not None:   # SITE_LANGS: verkleinerter Bau (Staging); ohne Variable bleibt LANGS vollstaendig
+    LANGS = {k: v for k, v in LANGS.items() if k in _SEL}
 
 # UI-Texte je Sprache: listen, watch, transcript, all, more, about, bio, home
 UI = {
@@ -1038,20 +1043,8 @@ def build():
     def side_for(l, title, body_html, home=False):   # Sidebar der Sprachseiten: Themen der Seite (Treffer im Text), neueste Folgen der Sprache, Community
         return sidebar(l, strip_tags(title + " " + body_html.split("<main", 1)[-1])[:2500], home=home)
 
-    R2_EXT = (".html", ".json", ".jsonld", ".xml")   # T32: Bild-URLs auch in Exporten (entities*.json, Register, Sitemaps) auf img.m365.fm
-    R2OUT = ROOT / "r2out"; _r2n = [0, 0]   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
-    def write_r2(rel, content):
-        p = R2OUT / rel; p.parent.mkdir(parents=True, exist_ok=True)
-        c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
-        p.write_text(c, encoding="utf-8"); _r2n[0] += 1; _r2n[1] += len(c.encode("utf-8"))
-    def write(rel, content):
-        if rel == "translations-blog.json" or rel.startswith("blog-import/"):
-            write_r2(rel, content)
-            return
-        p = OUT / rel
-        p.parent.mkdir(parents=True, exist_ok=True)
-        c = R2.rewrite(content) if rel.endswith(R2_EXT) else content
-        p.write_text(c, encoding="utf-8")
+    R2OUT = ROOT / "r2out"   # Seiten, die nicht in GitHub Pages liegen, sondern im R2-Bucket (tools/r2_pages_upload.py laedt sie hoch, der Site-Worker liefert sie aus)
+    write, write_r2, _r2n = writers(OUT, R2OUT, R2.rewrite, LANGS)   # write: docs/, ausser was site_size.r2_only nach r2out/ legt (Seiten der Sprachen ausser en/de, Exporte); write_r2: immer r2out/
 
     # Taxonomie: Kategorien (video-weit) + sprachbezogene Tags
     cat_of = {}
@@ -1277,7 +1270,7 @@ def build():
 {chips_html(l, it)}<p class="lede">{intro}</p>
 <figure class="cover" style="margin-inline:0">{art_svg(vid, LANGS[l][0], "M365.FM · " + ui[0], l)}</figure>
 <div class="panel">{PL.player("spreaker", it["eid"], e["title"], ui[0], link=spk)}
-<div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>
+<div class="btns">{btns}</div>{"<p class=showrow>M365.FM ▸ " + showrow + "</p>" if showrow else ""}</div>{LST.follow_for(BASE, l)}
 <div style="margin:22px 0">{PL.player("youtube", vid, e["title"], ui[1], link=yt)}</div>
 <p class="mut">▶ {esc(e["title"])}</p>
 <h2>{esc(hdr)}</h2><ol class="points">{lis}</ol>
@@ -1303,7 +1296,8 @@ def build():
     import site_legacy_blog as LBL
     _posts = list(BLG.fetch_posts(COMMUNITY_API)); _have = {(p["slug"], p.get("lang") or "en") for p in _posts if p["handle"] == "mirko-p"}
     import site_content_blog as CBL; _posts += [p for p in CBL.translations(BASE, _posts, LRN.ENTS) if (p["slug"], p["lang"]) not in _have]   # Sprachfassungen der englischen Content-Pakete (Uebersetzer-Team, data/blog_i18n), nur zu live stehenden Originalen
-    _posts += [p for p in LBL.items(BASE) if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
+    _leg_all = LBL.items(BASE)   # alle frueheren Beitraege aus der Quelle (auch die schon in der Datenbank stehen): Grundlage der Uebersetzungsuebersicht
+    _posts += [p for p in _leg_all if (p["slug"], p.get("lang") or "en") not in _have]   # plus die frueheren Podpage-Blogbeitraege als Community-Beitraege von mirko-p; T6: je Slug UND Sprache (die deutschen Fassungen blieben sonst beim D1-Import auf der Strecke)
     # Sprach-Startseiten (Wunsch Mirko 6.11.2026: "Behandle die Startseite als komplett eigene"): /<sprache>/ ist die Startseite von "/" in der
     # eigenen Sprache - Hub mit den Inhalten der Sprache (Blog inkl. Sprachfassungen, Podcast, Events, Bibliothek, Videos; ohne Eintrag einer Art:
     # englische Eintraege, gekennzeichnet), dazu ein Abschnitt "Podcast in <Sprache>". Die fruehere Podcast-Startseite der Sprache (Titel,
@@ -1384,8 +1378,8 @@ def build():
 {section(4, "Topics", f'<h2 style="margin-top:0">The Microsoft cloud, one concept at a time</h2><div class="chips">{topics_root}</div>')}</main>
 {m365con_band()}
 <main class="wrap">{faq_html('en', 'FAQ')}{cta_box(HT("en", "cta_h"), HT("en", "cta_p"), HT("en", "cta_btn"), f"{BASE}/show/")}{author_box('en')}</main>{footer_en()}"""
-    write("index.html", page("en", "M365.FM – Microsoft community: blog, podcast, events & explainers | Mirko Peters",
-          "Blog posts, podcasts and events from the Microsoft community plus animated explainers on Microsoft 365, Copilot, Azure and Power Platform by Microsoft MVP Mirko Peters – in 14 languages.",
+    write("index.html", page("en", "M365.FM: Microsoft 365 Podcast, Blog & Explainers",   # Suchabsicht (12.11.2026); eigener Wortlaut, damit / und /en/ (data/home_i18n.json) keinen doppelten Titel haben
+          f"Microsoft 365, Copilot, Azure and Power Platform explained: podcast, blog, events and animated videos by Microsoft MVP Mirko Peters, in {len(active)} languages.",
           f"{BASE}/", root_body, alts_home, [person_ld(), org_ld(), event_ld(), faq_ld("en"), {"@context": "https://schema.org", "@type": "WebSite", "@id": f"{BASE}/#website", "name": "M365.FM international", "url": f"{BASE}/",
            "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": f"{BASE}/search/?q={{search_term_string}}"}, "query-input": "required name=search_term_string"}, "inLanguage": [LANGS[x][1] for x in active], "publisher": {"@id": f"{BASE}/#org"}, "author": {"@id": f"{BASE}/entity/mirko-peters/#entity"}}], og_type="website"))
     sitemap.append((f"{BASE}/", TODAY, alts_home))   # T42: wie im HTML
@@ -1547,7 +1541,7 @@ def build():
     import site_updates as _SU
     _SU.load(COMMUNITY_API)
     # (Blogbeitraege samt Sprachfassungen: _posts entsteht seit 6.11. vor den Sprach-Startseiten, die sie zeigen)
-    SPM.check_posts(_posts)   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren
+    SPM.check_posts(_posts + CBL.live_refs(LRN.ENTS))   # T37 Sponsor: Beitraege in data/sponsorships.json muessen existieren (auch Content-Pakete, die der Worker erst nach diesem Bau anlegt)
     LBL.publish(write, BASE); MEM.BLOGLANGS = {p["lang"] for p in _posts}   # stand seit T6 versehentlich im Kommentar: blog-import/ fuer den Worker und die Blog-Sprachen der Profile
     import site_content_blog as CBL; CBL.publish(write, LRN.ENTS)   # T15: freigegebene Content-Pakete imports/blog/<sprache>/*.md -> blog-content/index.json (Worker-Cron importContentBlog)
     for _p in _posts:
@@ -1560,6 +1554,9 @@ def build():
         for _t in _p.get("topics", []):
             _pbt.setdefault(_t, []).append(_p)
     _ctx["posts_by_topic"] = _pbt; _ctx["author_box"] = author_box
+    import site_listen as _LSTm   # Anhoeren-Karten (Stoerer): Katalog der Folgen einmal, Beitraege und Entitaetsseiten nutzen dieselbe Zuordnung (site_listen.py)
+    _lst = _LSTm.configure(_ctx)
+    if _lst: _lst.index_posts(_posts)
     import site_milestones as MST
     print("Updates-Seite (Wochenzusammenfassungen):", MST.build(_ctx, _posts))   # Mirko 6.11.2026: nur die woechentlichen Meilensteine, keine Tagesliste mit Inhalten oder GitHub-Meldungen
     phase("Blog geladen, Folgen der Hauptshow zugeordnet")
@@ -1749,7 +1746,7 @@ def build():
     print(f"Spreaker-Seitenzuordnung: {len(_spk)} Folgen")
     phase("Sitemaps")
     import site_quotes as _SQ
-    write("sponsors.json", json.dumps({"version": 1, "generated": TODAY, **SPM.sponsors_json(TODAY, LRN.ENTS)}, ensure_ascii=False))   # aktive Sponsor-Firmen (ids, Namen): der Worker nimmt Leads fuer sie ohne Werbebuchung an (ads.js sponsor-lead)
+    write("sponsors.json", json.dumps({"version": 1, "generated": TODAY, **SPM.sponsors_json(TODAY, LRN.ENTS)}, ensure_ascii=False))   # aktive Sponsor-Firmen inkl. 182 Tage Karenzzeit (ids, Namen): der Worker nimmt Leads fuer sie ohne Werbebuchung an (ads.js sponsor-lead)
     write("quotes.json", json.dumps({"version": 1, "generated": TODAY, "quotes": _SQ.ALL}, ensure_ascii=False))   # Quotes an Personen-Entitaeten; der Worker uebernimmt sie in D1 (importQuotesFromSite)
     write("robots.txt", f"User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\n# KI-Suchen und Assistenten ausdrücklich erlaubt\n" + "".join(f"User-agent: {b}\nAllow: /\n\n" for b in ("GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-User", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "Applebot-Extended", "Bingbot")) + f"Sitemap: {BASE}/sitemap.xml\n")
     # llms.txt (Überblick), llms-full.txt (alle Folgen), agent.json (Maschinen-Beschreibung), episodes.json (Datenfeed)
@@ -1961,7 +1958,7 @@ Mirko Peters, {BASE}/about/
     write_src(OUT, ROOT / "data" / "ui_js_en.json")
     import site_trstatus as TRS
     try:
-        TRS.build(write, TODAY, list(ENT.ENTS.values()), [{"slug": p["slug"], "title": p["title"]} for p in _posts if p.get("legacy") and p.get("lang") == "en"], [{"slug": x["slug"], "title": x["e"]["title"]} for x in PP.episode_index(BASE)["items"]])
+        TRS.build(write, TODAY, list(ENT.ENTS.values()), [{"slug": p["slug"], "title": p["title"]} for p in _leg_all if p.get("legacy") and (p.get("lang") or "en") == "en"], [{"slug": x["slug"], "title": x["e"]["title"]} for x in PP.episode_index(BASE)["items"]], [{"slug": x["slug"], "title": x["title"]} for x in CBL.tr_sources(LRN.ENTS)])
     except Exception as _e:
         print("Uebersetzungsstatus nicht geschrieben:", str(_e)[:160])
     # Inhalt <-> Entitaet mit Gewicht fuer die Datenbank (content_topic, Paket 13): fruehere Beitraege (Slug) und Folgen der Hauptshow (Slug); der Worker uebernimmt die Liste alle 30 Minuten

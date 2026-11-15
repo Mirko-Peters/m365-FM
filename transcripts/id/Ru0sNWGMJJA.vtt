@@ -1,0 +1,2599 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:01.660
+Anda masih melakukan audit Fabric secara manual?
+
+00:00:02.100 --> 00:00:02.660
+Menarik sekali.
+
+00:00:03.060 --> 00:00:05.420
+Itu berarti Anda secara sukarela menghabiskan akhir pekan
+
+00:00:05.420 --> 00:00:07.160
+untuk memeriksa silang data set Power BI,
+
+00:00:07.380 --> 00:00:09.680
+ruang kerja Fabric, dan klasifikasi Purview dengan spreadsheet.
+
+00:00:10.280 --> 00:00:12.780
+Mengagumkan, jika tujuan Anda adalah memenangkan penghargaan
+
+00:00:12.780 --> 00:00:14.760
+untuk penggunaan kecerdasan manusia yang paling tidak efisien.
+
+00:00:15.400 --> 00:00:17.860
+Tata keluar dari Microsoft Fabric tidak sulit karena fiturnya tidak ada.
+
+00:00:18.680 --> 00:00:21.480
+Ini sulit karena sistemnya menolak untuk berbicara dalam bahasa yang sama.
+
+00:00:22.200 --> 00:00:24.580
+Masih-masih beroperasi seperti manajer yang merasa penting
+
+00:00:24.580 --> 00:00:26.220
+dan bersikeras bahwa departemen mereka berbed.
+
+00:00:26.860 --> 00:00:28.140
+Purview melacak klasifikasi,
+
+00:00:28.140 --> 00:00:30.500
+Power BI menegakkan keamanan, Fabric menangani alur kerja,
+
+00:00:30.620 --> 00:00:32.640
+dan Anda harus menjadi wasit atas argumen mereka di Excel.
+
+00:00:33.440 --> 00:00:36.100
+Perkenalkan GPT-5 di dalam Microsoft 365 Copilot.
+
+00:00:36.520 --> 00:00:38.860
+Ini bukan asisten penggunaan yang sama yang Anda minta untuk meningkat catatan.
+
+00:00:39.140 --> 00:00:40.200
+Ini adalah auditor yang mengumpulkan.
+
+00:00:40.640 --> 00:00:41.040
+Apa bedanya?
+
+00:00:41.460 --> 00:00:42.960
+GPT-5 tidak hanya menemukan informasi,
+
+00:00:43.120 --> 00:00:44.080
+ia memahami hubungan antar dat.
+
+00:00:44.640 --> 00:00:46.460
+Dalam video ini, Anda akan mempelajari bagaimana
+
+00:00:46.460 --> 00:00:48.740
+ia mengotomatiskan tata kelola Fabric di seluruh layanan
+
+00:00:48.740 --> 00:00:50.180
+tanpa satupun verifikasi manual.
+
+00:00:50.860 --> 00:00:53.200
+Penalaran berantai yang akan datang mengubah pekerjaan kepatuhan
+
+00:00:53.200 --> 00:00:54.680
+yang membosankan menjadi logika murni.
+
+00:00:55.500 --> 00:00:57.180
+Mengapa tata kelola rusak di Microsoft Fabric?
+
+00:00:57.180 --> 00:00:58.760
+Inilah kebenaran yang tidak nyaman.
+
+00:00:59.420 --> 00:01:01.940
+Fabric menyatukan analitik tetapi lupa menyatukan tata kelola.
+
+00:01:02.460 --> 00:01:03.560
+Di balik dashboard yang mengilap,
+
+00:01:03.640 --> 00:01:06.200
+terdapat jaringan sistem yang berantakan dan saling berebut perhatian.
+
+00:01:07.140 --> 00:01:09.200
+Fabric menyimpan data, Power BI memvisualisasikannya,
+
+00:01:09.280 --> 00:01:10.200
+dan preview mengategorikannya,
+
+00:01:10.340 --> 00:01:12.160
+tetapi tidak satupun mereka berkomunikasi dengan lancar.
+
+00:01:12.540 --> 00:01:14.260
+Anda mungkin mengira mikros pembangunan untuk saling mikros.
+
+00:01:14.680 --> 00:01:17.280
+Dalam prakteknya, ini lebih seperti 3 jenius di meja konferensi,
+
+00:01:17.440 --> 00:01:19.140
+masing-masing berbicara dengan dialek jason mereka sendiri.
+
+00:01:19.580 --> 00:01:21.660
+Itulah mengapa tata kelola runtuh dibawa ambisinya sendiri.
+
+00:01:21.880 --> 00:01:24.880
+Anda memiliki leg house yang penuh dengan data sensitif,
+
+00:01:24.880 --> 00:01:27.800
+dashboard Power BI yang mereferensikannya dari 15 sudut,
+
+00:01:27.920 --> 00:01:29.880
+dan preview yang menetapkan label dalam isolasi total.
+
+00:01:30.680 --> 00:01:34.240
+Ketika auditor meminta bukti bahwa setiap dataset terklasifikasi telah diamankan,
+
+00:01:34.560 --> 00:01:36.280
+Anda menemukan bahwa Fabric mengetahui silsilah,
+
+00:01:36.440 --> 00:01:37.280
+preview mengetahui label,
+
+00:01:37.580 --> 00:01:38.680
+dan Power BI mengetahui peran,
+
+00:01:38.760 --> 00:01:40.260
+tetapi tidak ada yang tahu cerita lengkapnya.
+
+00:01:40.960 --> 00:01:42.120
+Hasilnya adalah spageti digital,
+
+00:01:42.340 --> 00:01:45.300
+mengkota berujung yang berisi bidang izin dan aliran yang saling terhubung.
+
+00:01:46.200 --> 00:01:47.300
+Setiap undan menyentuh yang lain,
+
+00:01:47.740 --> 00:01:49.060
+namun tidak satupun dari mereka mengoneksinya.
+
+00:01:49.060 --> 00:01:52.320
+Kantor tetap kelola akhirnya menarik ekspor API secara manual,
+
+00:01:52.540 --> 00:01:54.580
+memeriksa silang nama yang hampir tapi tidak sepenuhnya,
+
+00:01:54.700 --> 00:01:57.380
+cocok, dan berdebat dengan file CSV yang menolak untuk selarat.
+
+00:01:57.960 --> 00:02:00.480
+Audit rata-rata menjadi eksperimen sosiologi tentang kesabaran manusia.
+
+00:02:00.980 --> 00:02:02.140
+Ambil contoh Helena dari bagian keputusan.
+
+00:02:02.540 --> 00:02:04.920
+Dia pernah menghabiskan dua minggu untuk mencocokkan kumpulan data
+
+00:02:04.920 --> 00:02:07.100
+yang sangat rahasia di preview dengan batasan di Power BI.
+
+00:02:07.820 --> 00:02:10.880
+Dua minggu untuk mengetahui bahwa separuh aset salah diklasifikasikan
+
+00:02:10.880 --> 00:02:14.100
+dan separuh lainnya salah diberi label karena seseorang mengubah nama ruang kerja di tengah proyek.
+
+00:02:14.640 --> 00:02:16.500
+Fondisnya, jika Fabric memiliki hati norani,
+
+00:02:16.720 --> 00:02:17.320
+ia akan meminta maaf.
+
+00:02:17.320 --> 00:02:20.280
+Tetapi Fabric tidak memiliki, ia hanya mencatat kejadian dan tersenyum.
+
+00:02:20.780 --> 00:02:22.480
+Masalah sebenarnya bukan teknis, melainkan logis.
+
+00:02:22.820 --> 00:02:26.320
+Platform-platform ini sangat cemerlang dalam menyimpan fakta tetapi tidak tahu cara menalar fakta tersenyum.
+
+00:02:26.480 --> 00:02:29.460
+Mereka bisa memberitahu Anda apa yang ada, tetapi bukan bagaimana hal tersebut berhubungan dengan kau.
+
+00:02:29.820 --> 00:02:31.880
+Itulah sebabnya skrip dan query Anda hanya sampai di situ saja.
+
+00:02:32.260 --> 00:02:33.980
+Untuk memvalidasi kepatuhan di seluruh sistem,
+
+00:02:34.160 --> 00:02:37.480
+Anda memerlukan entitas yang mampu melakukan inferensi sesuatu yang tidak hanya melihat data,
+
+00:02:37.620 --> 00:02:38.980
+tetapi menyimpulkan hubungan di antaranya.
+
+00:02:39.540 --> 00:02:43.840
+Hadir GPT-5, pemagang pertama dalam sejarah Microsoft yang tidak memerlukan pengawasan konstan.
+
+00:02:43.840 --> 00:02:47.220
+Tidak seperti model co-pilot sebelumnya, ia tidak berhenti pada pencocokan kata kunci.
+
+00:02:48.060 --> 00:02:51.240
+Ia melakukan penalaran terstruktur, menghubungkan grafik silsilah Fabric,
+
+00:02:51.540 --> 00:02:54.800
+klasifikasi overview, dan model keamanan Power BI menjadi narasi yang terpadu.
+
+00:02:55.960 --> 00:02:58.120
+Ia membangun apa yang tidak bisa dilakukan oleh alat itu sendiri, yaitu.
+
+00:02:58.620 --> 00:03:01.720
+Tata kelola akhirnya beralih dari inspeksi tanpa akhir keotomatisasi cerdas,
+
+00:03:01.820 --> 00:03:05.900
+dan untuk pertama kalinya Anda dapat mengaudit sistem alih-alih mendiagnosis ke salah paham.
+
+00:03:06.840 --> 00:03:08.420
+Hadir GPT-5, penalaran.
+
+00:03:08.420 --> 00:03:10.020
+Sebagai mata rantai yang hilang.
+
+00:03:10.600 --> 00:03:14.420
+Mari kita perjelas, GPT-5 tidak sekadar bangun suatu pagi dan belajar mengetik lebih cepat.
+
+00:03:15.300 --> 00:03:17.940
+Berita utama mungkin berbicara tentang kecepatan, tetapi itu hanyalah efek samping.
+
+00:03:18.280 --> 00:03:19.860
+Berita utama yang sebenarnya adalah penalaran.
+
+00:03:20.280 --> 00:03:23.600
+Microsoft membangun logika rantai pemikiran langsung ke dalam otak operasional co-pilot.
+
+00:03:24.360 --> 00:03:27.080
+Artinya, model ini tidak sekadar memuntahkan dokumentasi
+
+00:03:27.080 --> 00:03:30.680
+yang mensimulasikan cara berpikir pakar manusia tanpa kecanduan COVID dan cuti tahunan.
+
+00:03:31.080 --> 00:03:32.060
+Bandingkan itu dengan GPT-4.
+
+00:03:32.640 --> 00:03:34.100
+Model sebelumnya seperti asisten rajin,
+
+00:03:34.260 --> 00:03:36.020
+yang menjawab pertanyaan persis seperti yang diucapkan.
+
+00:03:36.020 --> 00:03:40.000
+Tanyakan kepadanya tentang kebijakan perview dan ia akan dengan patuh tetap berada di dalam kotak pasir.
+
+00:03:40.320 --> 00:03:40.720
+Cerdas ya?
+
+00:03:41.400 --> 00:03:41.960
+Otonom tidak.
+
+00:03:42.600 --> 00:03:45.460
+Ia tidak bisa menyimpulkan bahwa pertanyaan Anda tentang akses set data
+
+00:03:45.460 --> 00:03:49.320
+mungkin juga memerlukan pemeriksaan silang peran power BI dan alur kerja Fabric.
+
+00:03:49.980 --> 00:03:51.020
+Anda harus menyuapi konteksnya.
+
+00:03:51.680 --> 00:03:54.400
+Sebaliknya, GPT-5 mempelajari konteksnya sendiri saat ia berjalan.
+
+00:03:54.920 --> 00:03:58.280
+Ia memperhatikan koneksi yang lupa Anda sebutkan dan menalar melaluinya sebelum merespons.
+
+00:03:59.020 --> 00:04:01.340
+Beginilah tampilannya di dalam Microsoft 365 Co-pilot.
+
+00:04:01.340 --> 00:04:03.880
+Saat Anda mengirimkan kuerita taklola,
+
+00:04:04.240 --> 00:04:06.460
+katakan tunjukkan semua aset Fabric yang berisi alamat pelanggan
+
+00:04:06.460 --> 00:04:08.560
+yang tidak diklasifikasikan di Purview, GPT-5,
+
+00:04:08.700 --> 00:04:09.960
+pemicu rantai penalaran internal.
+
+00:04:11.100 --> 00:04:12.480
+Langkah pertama, interpretasikan nyata.
+
+00:04:13.020 --> 00:04:15.360
+Ia mengenali permintaan itu bukan tentang satu sistem saja,
+
+00:04:15.500 --> 00:04:17.520
+melainkan tentang ketiga permukaan estate data Anda.
+
+00:04:18.680 --> 00:04:19.260
+Langkah kedua,
+
+00:04:19.500 --> 00:04:21.580
+ia meluncurkan utas mental terpisah satu per domain.
+
+00:04:22.080 --> 00:04:23.440
+Fabric menyediakan silsila data,
+
+00:04:23.440 --> 00:04:25.540
+Purview menyumbangkan metadata klasifikasi,
+
+00:04:25.740 --> 00:04:28.140
+dan Power BI mengekspos konfigurasi keamanan.
+
+00:04:28.140 --> 00:04:28.960
+Langkah ketiga,
+
+00:04:29.360 --> 00:04:32.800
+ia menyatukan utas-utas tersebut dengan menyelaraskan pengenal dan meriksa silang semantik
+
+00:04:32.800 --> 00:04:34.260
+sehingga jawaban akhir diverifikasi,
+
+00:04:34.440 --> 00:04:36.240
+bukan diverifikasi, bukan diperkirakan.
+
+00:04:36.840 --> 00:04:38.080
+Co-pilot lama menjahit informasi,
+
+00:04:38.300 --> 00:04:39.740
+Co-pilot baru memvalidasi logika.
+
+00:04:40.200 --> 00:04:42.520
+Itu adalah sebabnya perbandingan kecepatan yang sederhana melewakan kone otomat.
+
+00:04:42.780 --> 00:04:45.260
+Bagian yang inovatif bukanlah seberapa cepat ia membalas,
+
+00:04:45.380 --> 00:04:48.300
+melainkan bahwa setiap balasan memiliki penalaran internal yang sudah tertanam.
+
+00:04:48.460 --> 00:04:51.720
+Seolah-olah Power Automate bersekolah lulus dengan predikat sumacum laude
+
+00:04:51.720 --> 00:04:54.060
+dan kembali dengan dekat untuk menegakkan klausul kepatuhan.
+
+00:04:54.060 --> 00:04:56.680
+Kebanyakan pengguna menganggap penalaran sebagai sikap bertelik.
+
+00:04:57.100 --> 00:04:59.360
+Mereka berasumsi penjelasan yang panjang berarti modal sedang pamer.
+
+00:04:59.960 --> 00:05:03.560
+Tidak, penjelasan itu adalah bukti pertimbangan mendokumentasikan jejak audit kognitifnya.
+
+00:05:03.980 --> 00:05:06.440
+Sama seperti auditor menulis catatan pendukung setiap kesimpulan,
+
+00:05:06.700 --> 00:05:08.720
+GPT-5 menguraikan langkah logis yang diikutinya.
+
+00:05:09.400 --> 00:05:11.400
+Jejak audit itu bukan basa-basi, melainkan perlindungan.
+
+00:05:12.240 --> 00:05:14.280
+Saat regulator bertanya bagaimana kesimpulan dicapai,
+
+00:05:14.280 --> 00:05:16.800
+Anda punya jawaban di luar sekadar co-pilot yang bilang begitu.
+
+00:05:17.540 --> 00:05:18.720
+Mari kita berada modal fungsional ini.
+
+00:05:18.720 --> 00:05:20.600
+Bayangkan sebagai alur tiga tahap,
+
+00:05:20.880 --> 00:05:24.620
+interpretasi permintaan, penalaran multidomain, dan sintesis terverifikasi.
+
+00:05:25.760 --> 00:05:28.440
+Pada tahap pertama, co-pilot memproses bahasa sesuai konteks,
+
+00:05:29.040 --> 00:05:32.400
+memahami bahwa data sensitif tanpa label berarti ada celah klasifikasi per view.
+
+00:05:34.320 --> 00:05:35.180
+Pada tahap kedua,
+
+00:05:35.180 --> 00:05:39.880
+ia menalar lintas bidang data secara simultan mengorelasikan kolom yang tidak identik
+
+00:05:39.880 --> 00:05:44.320
+tapi terkait secara fungsi seperti mencocokkan customer ID di Fabric dengan cash ID di Power BI.
+
+00:05:44.320 --> 00:05:47.240
+Pada tahap sintesis akhir,
+
+00:05:47.380 --> 00:05:51.300
+ia meverifikasi silang setiap tautan yang disimpulkan sebelum menyajikan ringkasan yang bisa Anda percaya.
+
+00:05:51.780 --> 00:05:53.920
+Dan yang mengejutkan, Anda tidak pernah memintanya melakukan resmu.
+
+00:05:54.560 --> 00:05:57.680
+Proses penalaran berjalan secara tak terlihat seperti komite internal mini
+
+00:05:57.680 --> 00:05:59.980
+yang mendebat bukti sebelum juru bicara berbicara.
+
+00:06:00.760 --> 00:06:02.760
+Dan itulah maksud Microsoft dengan Embedded Chain of Thought.
+
+00:06:03.580 --> 00:06:07.120
+IPT-5 memilih kapan penalaran lebih dalam diperlukan dan menerapkannya secara otomatis.
+
+00:06:07.860 --> 00:06:10.680
+Jadi, saat Anda mengajukan pertanyaan kepatuhan yang tampak sederhana,
+
+00:06:10.680 --> 00:06:14.480
+tabel leg host man yang berisi PII tapi tidak memiliki artefak power BI terkait.
+
+00:06:15.140 --> 00:06:17.880
+Sebagai aturan, IPT-5 tidak menggunakan pencarian kata kunci.
+
+00:06:18.320 --> 00:06:21.240
+Ia menyusun ulang grafik silsila, mereferensikan silang tech purview,
+
+00:06:21.900 --> 00:06:26.260
+menafsirkan ikatan keamanan, dan memunculkan ketidakcocokan yang dapat diverifikasi di semua set data.
+
+00:06:27.140 --> 00:06:29.180
+Hasilnya bukan tebakan menainkan kesimpulan yang diturunkan.
+
+00:06:29.840 --> 00:06:33.560
+Dan ini akhirnya memecahkan masalah tata kelola yang tidak pernah bisa diartikulasikan oleh Fabric sendiri.
+
+00:06:34.360 --> 00:06:37.140
+Untuk pertama kalinya, kebenaran kontekstual menggantikan korelasi manual.
+
+00:06:37.140 --> 00:06:40.760
+Anda menghabiskan lebih sedikit waktu mengumpulkan fragment dan lebih banyak waktu menafsirkan seret.
+
+00:06:40.960 --> 00:06:42.960
+Model melakukan pemikiran telasional atas nama Anda,
+
+00:06:43.100 --> 00:06:46.080
+seperti mendelegasikan analisis kepada seseorang yang tidak hanya membaca kebijakan,
+
+00:06:46.180 --> 00:06:48.540
+tetapi juga membaca kebijakan, tetapi juga memahami politik dibaliknya.
+
+00:06:48.660 --> 00:06:50.020
+Jadi, seberapa berbeda ke hari Anda nanti?
+
+00:06:50.560 --> 00:06:52.960
+Bayangkan seorang intern yang memprediksi objek kebijakan,
+
+00:06:53.220 --> 00:06:55.000
+makna yang tumpang tindi sebelum Anda membuat query,
+
+00:06:55.160 --> 00:06:56.900
+menjelaskan penalarannya baris demi baris,
+
+00:06:57.160 --> 00:06:59.660
+dan tidak mengganggu kecuali ada konflik data yang nyata, tulik.
+
+00:07:00.600 --> 00:07:02.200
+Itulah GP terima di langkau pilot intern,
+
+00:07:02.200 --> 00:07:05.340
+yang dipromosikan menjadi petugas kepatuan yang bekerja senyap selalu menalar.
+
+00:07:06.100 --> 00:07:08.040
+Sekarang mari kita terapkan dalam audit yang sebenarnya.
+
+00:07:09.180 --> 00:07:10.580
+Cara lama versus cara GPT 5.
+
+00:07:11.440 --> 00:07:12.400
+Mari kita jelani sebenarnya nyata.
+
+00:07:13.620 --> 00:07:14.120
+Tugas Anda,
+
+00:07:14.460 --> 00:07:18.100
+konfirmasikan setiap set data di Fabric Lakehouse yang berisi informasi identitas pribadi
+
+00:07:18.100 --> 00:07:21.700
+telah diklasifikasikan di Purview dan dilindungi oleh keamanan tingkat baris di Power BI.
+
+00:07:22.880 --> 00:07:24.200
+Tujuan yang lugas, eksekusi yang katastrofik,
+
+00:07:24.200 --> 00:07:28.180
+alur kerja lama menyerupai perburuan harta karun yang dirancang oleh penyiksa diri.
+
+00:07:28.620 --> 00:07:30.920
+Anda membuka Power BI untuk mengekspor peran akses,
+
+00:07:31.220 --> 00:07:32.940
+masuk ke Purview untuk mendaftar aset per label,
+
+00:07:33.140 --> 00:07:36.340
+lalu mengekspor metadata alur Fabric dengan harapan nama kolomnya cocok.
+
+00:07:36.880 --> 00:07:37.500
+Jarang sekali cocok.
+
+00:07:37.800 --> 00:07:40.820
+Tiga dashboard, empat ekspor, dua migrasi, dan tetap tidak ada kepastian.
+
+00:07:41.360 --> 00:07:43.640
+Anda mendamaikan data yang hidup di semesta paralel.
+
+00:07:44.060 --> 00:07:45.200
+Pembelet versi lama tidak banyak ember.
+
+00:07:45.600 --> 00:07:46.960
+Ia bisa meringkas di dalam tiap layanan,
+
+00:07:46.960 --> 00:07:49.100
+tetapi tidak punya perkat intelektual untuk menghubungkannya.
+
+00:07:49.860 --> 00:07:50.260
+Pemintanya,
+
+00:07:50.460 --> 00:07:53.220
+mencantumkan kumpulan data terklasifikasi Purview yang digunakan di Power BI,
+
+00:07:53.220 --> 00:07:55.300
+hanya menghasilkan daftar terpisah secara sopan.
+
+00:07:55.860 --> 00:07:58.740
+Rasanya seperti mempekerjakan tiga penerjemah yang masing-masing hanya tahu satu bahasa.
+
+00:07:59.340 --> 00:08:01.440
+Ya, mereka berbicara dengan lancar, tapi tidak pernah satu sama lain.
+
+00:08:01.840 --> 00:08:04.400
+Audit berakhir dengan Anda berdoa agar nama-namanya selara secara kebetulan.
+
+00:08:04.800 --> 00:08:05.500
+Bocorannya tidak pernah.
+
+00:08:06.120 --> 00:08:07.100
+Sekarang masuk lagi PT 5.
+
+00:08:07.940 --> 00:08:09.680
+Query yang sama mekanisme otak yang benar-benar beda.
+
+00:08:10.280 --> 00:08:12.440
+Anda berkata audit semua aset Fabric dengan PEI
+
+00:08:12.440 --> 00:08:14.940
+untuk mengonfirmasi klasifikasi dan batasan keamanan.
+
+00:08:15.940 --> 00:08:19.280
+Copyright yang ditenagai GPT 5 menafsirkan pernyataan tersebut secara holistik.
+
+00:08:19.900 --> 00:08:20.400
+Langkah satu,
+
+00:08:20.400 --> 00:08:25.000
+ia menanyakan grafik silsilah internal Fabric melacak setiap artefak yang merujuk data pelanggan.
+
+00:08:26.000 --> 00:08:27.320
+Ia tidak berhenti di kontainer penyimpanan.
+
+00:08:27.960 --> 00:08:30.220
+Ia mengikuti transformasi melalui buku catatan dan lalu.
+
+00:08:30.820 --> 00:08:31.360
+Langkah dua,
+
+00:08:31.620 --> 00:08:33.360
+ia mengambil tabel klasifikasi Purview
+
+00:08:33.360 --> 00:08:36.420
+untuk memverifikasi apakah artefak tersebut membawa label data sensitif.
+
+00:08:37.080 --> 00:08:37.720
+Langkah tiga,
+
+00:08:38.220 --> 00:08:39.300
+ia masuk ke Power BI
+
+00:08:39.300 --> 00:08:41.600
+untuk memeriksa pemetaan keamanan tingkat baris
+
+00:08:41.600 --> 00:08:44.100
+terhadap pengenal silsilah yang sama yang diekspos Fabric.
+
+00:08:44.900 --> 00:08:45.420
+Langkah empat,
+
+00:08:45.560 --> 00:08:47.920
+ia menggabungkan pengetahuan itu menjadi ringkasan kepatuhan tunggal,
+
+00:08:47.920 --> 00:08:50.920
+lengkap dengan ketidak konsisten yang belum terselesaikan dan ditandai sebagai risiko.
+
+00:08:51.320 --> 00:08:52.960
+Anda sama sekali tidak menyebutkan secara eksplisit
+
+00:08:52.960 --> 00:08:55.060
+untuk mengurasikan ID atau menggabungkan berdasarkan nama kumun.
+
+00:08:56.040 --> 00:08:57.460
+Lapisan penalar menyimpulkannya sendiri.
+
+00:08:57.700 --> 00:08:59.540
+Karena GPT 5 menyusun logika secara internal,
+
+00:08:59.820 --> 00:09:03.440
+ia mengidentifikasi hubungan yang biasanya dikonfirmasi auditor manusia secara manual.
+
+00:09:04.420 --> 00:09:05.380
+Ini bukan pencocokan pola,
+
+00:09:05.480 --> 00:09:07.080
+ini adalah inferensi dalam skala perusahaan.
+
+00:09:07.080 --> 00:09:08.580
+Untuk mendapatkan wawasan,
+
+00:09:08.680 --> 00:09:09.660
+mari kita berdoa urutan penalar.
+
+00:09:10.580 --> 00:09:11.560
+Identifikasi cocokkan,
+
+00:09:11.720 --> 00:09:12.220
+periksa silang,
+
+00:09:12.420 --> 00:09:12.780
+sintesis.
+
+00:09:13.340 --> 00:09:13.660
+Pertama,
+
+00:09:13.740 --> 00:09:15.580
+identifikasi sisilahnya apa yang berasal dari mana.
+
+00:09:16.100 --> 00:09:16.340
+Kedua,
+
+00:09:16.440 --> 00:09:17.640
+cocokkan kumpulan data dengan label preview.
+
+00:09:18.240 --> 00:09:18.540
+Ketiga,
+
+00:09:18.660 --> 00:09:21.040
+periksa silang batasan Power BI untuk kumpulan data yang sama tersebut.
+
+00:09:21.740 --> 00:09:22.060
+Terakhir,
+
+00:09:22.180 --> 00:09:24.520
+sintesis semuanya menjadi laporan tata kelola yang terverifikasi.
+
+00:09:25.080 --> 00:09:26.340
+Seluruh siklus dieksekusi dengan
+
+00:09:26.340 --> 00:09:27.480
+satu query menggantikan
+
+00:09:27.480 --> 00:09:28.680
+jam kerja triase manual.
+
+00:09:29.800 --> 00:09:31.020
+Yang membuat ini kuat bukanlah sihir,
+
+00:09:31.120 --> 00:09:31.940
+melainkan konsistensi.
+
+00:09:32.700 --> 00:09:33.740
+Auditor manusia bisa berbuat salah.
+
+00:09:33.740 --> 00:09:35.040
+Mereka melupakan nama alur data,
+
+00:09:35.140 --> 00:09:36.560
+melewarkan tabel yang diklasifikasi ulang,
+
+00:09:36.660 --> 00:09:37.380
+dan kehilang kesabaran.
+
+00:09:37.820 --> 00:09:38.600
+GPT-5 tidak begitu.
+
+00:09:39.020 --> 00:09:40.240
+Ia memperlakukan setiap catatan
+
+00:09:40.240 --> 00:09:41.520
+sebagai bagian dari rantai logis,
+
+00:09:41.620 --> 00:09:43.500
+melacak hubungan hingga ambang batas kepercayaan terpenuhi.
+
+00:09:44.140 --> 00:09:44.880
+Dalam praktiknya,
+
+00:09:45.080 --> 00:09:46.500
+itu berarti tata kelola fabrik berhenti
+
+00:09:46.500 --> 00:09:47.460
+menjadi permainan tebak-tebakan
+
+00:09:47.460 --> 00:09:48.220
+dan mulai menjadi auditor.
+
+00:09:48.540 --> 00:09:49.660
+Model ini mereduksi kepatuhan
+
+00:09:49.660 --> 00:09:51.100
+menjadi persamaan yang bisa dipecahkan.
+
+00:09:51.480 --> 00:09:52.920
+Mari tambahkan sedikit rasa tidak percaya di manusia.
+
+00:09:53.380 --> 00:09:54.360
+Selama tinjauan tertutup,
+
+00:09:54.460 --> 00:09:55.680
+seorang pimpinan TI melakukan audit
+
+00:09:55.680 --> 00:09:57.240
+lintas layanan dengan harapan GPT-5
+
+00:09:57.240 --> 00:09:58.120
+akan kesulitan menangani
+
+00:09:58.120 --> 00:09:59.360
+pengidentifikasi yang tidak konsisten.
+
+00:09:59.920 --> 00:10:00.400
+Sebaliknya,
+
+00:10:00.560 --> 00:10:01.500
+model tersebut menyimpulkan
+
+00:10:01.500 --> 00:10:02.340
+pemetaan dengan benar,
+
+00:10:02.520 --> 00:10:04.040
+mengenali bahwa ID pelanggan di Power BI
+
+00:10:04.040 --> 00:10:05.320
+merujuk pada bidang yang sama
+
+00:10:05.320 --> 00:10:06.540
+dengan kunci pelanggan di fabrik.
+
+00:10:07.200 --> 00:10:08.240
+Pimpinan tersebut menatap hasilnya
+
+00:10:08.240 --> 00:10:09.620
+seolah sistem itu bisa membaca pikiran.
+
+00:10:10.200 --> 00:10:10.560
+Sebenarnya,
+
+00:10:10.660 --> 00:10:11.540
+sistem itu membaca metadata
+
+00:10:11.540 --> 00:10:12.640
+dengan jauh lebih baik dari itu.
+
+00:10:13.260 --> 00:10:13.860
+Gak mempencerahannya.
+
+00:10:14.560 --> 00:10:15.700
+Kompleksitas perintah yang sama,
+
+00:10:15.900 --> 00:10:17.060
+penalaran yang jauh lebih cerdas,
+
+00:10:17.620 --> 00:10:19.180
+Anda tidak menjadi auditor yang lebih baik dalam sebuah.
+
+00:10:19.420 --> 00:10:20.200
+Sistem yang menjadi lebih baik.
+
+00:10:20.460 --> 00:10:21.620
+Dan tiba-tiba tugas yang dulunya
+
+00:10:21.620 --> 00:10:22.760
+memerlukan skrip, ekspor,
+
+00:10:22.760 --> 00:10:23.800
+dan kerja lembur akhir pekan
+
+00:10:23.800 --> 00:10:25.140
+berkurang menjadi sekadar perintah pecahkan.
+
+00:10:25.300 --> 00:10:26.260
+Banya tunggu tingjau.
+
+00:10:26.640 --> 00:10:27.820
+Penalaran menangani korelasinya.
+
+00:10:28.480 --> 00:10:29.260
+Perhatikan suatu yang halus.
+
+00:10:29.960 --> 00:10:31.200
+Kopilot kini memberikan penjelasan,
+
+00:10:31.300 --> 00:10:32.120
+bukan sekadar jawaban.
+
+00:10:33.180 --> 00:10:34.220
+Laporannya mencakup alasan
+
+00:10:34.220 --> 00:10:35.060
+untuk setiap kesimpulan.
+
+00:10:35.760 --> 00:10:36.740
+Jalur pelacakan silsilah,
+
+00:10:36.900 --> 00:10:37.620
+sumber klasifikasi,
+
+00:10:37.720 --> 00:10:38.880
+dan kebijakan AS yang diterapkan.
+
+00:10:39.400 --> 00:10:40.920
+Transparansi tersebut mengubah audit
+
+00:10:40.920 --> 00:10:42.040
+dari dokumentasi reaktif
+
+00:10:42.040 --> 00:10:43.020
+menjadi bukti yang hidup.
+
+00:10:43.640 --> 00:10:45.140
+Anda dapat menunjukkan kepada manajemen
+
+00:10:45.140 --> 00:10:46.420
+mengapa suatu set data gagal
+
+00:10:46.420 --> 00:10:46.920
+dalam kepatuhan
+
+00:10:46.920 --> 00:10:48.120
+tanpa harus membaca orang tiga ekspor.
+
+00:10:48.420 --> 00:10:49.640
+AI telah membuktikan logikanya.
+
+00:10:49.640 --> 00:10:50.940
+Secara ekonomi ini
+
+00:10:50.940 --> 00:10:51.800
+bersifat transformatik.
+
+00:10:52.340 --> 00:10:53.080
+Biaya audit manual
+
+00:10:53.080 --> 00:10:54.440
+bukan hanya soal tenaga kerja,
+
+00:10:54.600 --> 00:10:55.160
+melainkan peluang.
+
+00:10:55.620 --> 00:10:56.520
+Setiap jam yang dihabiskan
+
+00:10:56.520 --> 00:10:57.500
+untuk merekonsilasi CSV
+
+00:10:57.500 --> 00:10:58.460
+adalah jam yang tidak digunakan
+
+00:10:58.460 --> 00:10:59.340
+untuk meningkatkan arsitek.
+
+00:10:59.920 --> 00:11:01.160
+GPT-5 membahasih banget tersebut.
+
+00:11:01.540 --> 00:11:02.720
+Anda mendapatkan kembali waktu,
+
+00:11:03.080 --> 00:11:03.920
+mengurangi kesalahan,
+
+00:11:04.180 --> 00:11:05.340
+dan menetapkan pola kepatuhan
+
+00:11:05.340 --> 00:11:06.040
+yang dapat diulang
+
+00:11:06.040 --> 00:11:06.860
+di seluruh penyewa.
+
+00:11:07.660 --> 00:11:08.320
+Perubahan ini terlupa.
+
+00:11:08.940 --> 00:11:09.780
+Tata kelola bergeser
+
+00:11:09.780 --> 00:11:10.760
+dari kepanikan episodik
+
+00:11:10.760 --> 00:11:11.980
+menjadi jaminan berkelanjutan.
+
+00:11:12.680 --> 00:11:13.420
+Dan secara filosofi
+
+00:11:13.420 --> 00:11:14.360
+sesuatu yang lebih dan terjadi.
+
+00:11:15.000 --> 00:11:16.120
+Tabrik dulunya terasa buram.
+
+00:11:16.120 --> 00:11:17.280
+Mesin besar dengan terlalu banyak
+
+00:11:17.280 --> 00:11:18.140
+kompartemen rahasia.
+
+00:11:18.820 --> 00:11:19.560
+Dengan GPT-5
+
+00:11:19.560 --> 00:11:21.100
+yang menyaksikan kompartemen tersebut.
+
+00:11:21.220 --> 00:11:22.160
+Menyalah batas antara
+
+00:11:22.160 --> 00:11:23.160
+Purview, Power BI,
+
+00:11:23.360 --> 00:11:24.140
+dan Fabrik memudar
+
+00:11:24.140 --> 00:11:25.300
+menjadi satu skema terhubung
+
+00:11:25.300 --> 00:11:26.300
+yang diawasi oleh kecerdasan
+
+00:11:26.300 --> 00:11:27.020
+yang terus menalar.
+
+00:11:28.020 --> 00:11:28.920
+Anda tidak lagi merangkak
+
+00:11:28.920 --> 00:11:29.980
+melalui log Anda mengelola
+
+00:11:29.980 --> 00:11:30.940
+akuntabilitas sistemik.
+
+00:11:31.720 --> 00:11:32.040
+Jadi ya,
+
+00:11:32.140 --> 00:11:33.020
+generasi auditor spreadsheet
+
+00:11:33.020 --> 00:11:33.860
+yang menggunakan papan klip
+
+00:11:33.860 --> 00:11:34.640
+akhirnya bisa beristirahat.
+
+00:11:35.300 --> 00:11:36.240
+PT-5 dalam Copa-Lot
+
+00:11:36.240 --> 00:11:37.040
+telah menginternalisasi
+
+00:11:37.040 --> 00:11:37.620
+metode mereka,
+
+00:11:37.800 --> 00:11:38.880
+menyempurnakan kekacauan mereka,
+
+00:11:39.040 --> 00:11:40.080
+dan mengotomatiskan niat mereka.
+
+00:11:40.320 --> 00:11:41.340
+Visibilitas bukan lagi masalah.
+
+00:11:41.800 --> 00:11:42.820
+Verifikasi terjadi serinstan.
+
+00:11:43.480 --> 00:11:44.740
+Dan sekarang setelah logika tertangani,
+
+00:11:44.820 --> 00:11:46.080
+kita bisa membahas dampak selanjutnya
+
+00:11:46.080 --> 00:11:47.460
+apa yang dilakukan otomatisasi ini
+
+00:11:47.460 --> 00:11:48.100
+terhadap anggaran,
+
+00:11:48.220 --> 00:11:48.740
+posisi kepatuhan,
+
+00:11:48.820 --> 00:11:49.460
+dan kewarasan Anda.
+
+00:11:50.920 --> 00:11:52.860
+Dampak bisnis dari kepatuhan reaktif
+
+00:11:52.860 --> 00:11:53.840
+menjadi prediktif.
+
+00:11:54.480 --> 00:11:55.620
+Mari kita kuantifikasi hal ini
+
+00:11:55.620 --> 00:11:56.560
+secara rasional sebelum ada
+
+00:11:56.560 --> 00:11:57.080
+yang mulai merayakan
+
+00:11:57.080 --> 00:11:57.980
+keajiban produktivitas.
+
+00:11:58.320 --> 00:11:59.380
+Audit manual tidak hanya lambat,
+
+00:11:59.460 --> 00:12:00.300
+tetapi juga bentuk tindakan
+
+00:12:00.300 --> 00:12:01.040
+merugikan diri sendiri
+
+00:12:01.040 --> 00:12:01.880
+yang mahal secara finansial.
+
+00:12:02.120 --> 00:12:02.980
+Setiap tinjauan teriwulanan
+
+00:12:02.980 --> 00:12:04.200
+memerlukan analis manusia
+
+00:12:04.200 --> 00:12:05.760
+untuk menarik metod hatta,
+
+00:12:05.920 --> 00:12:06.800
+menyelaraskan ekspor,
+
+00:12:06.800 --> 00:12:08.080
+memverifikasi klasifikasi,
+
+00:12:08.180 --> 00:12:09.380
+dan membenarkan ketidaksesuaian
+
+00:12:09.380 --> 00:12:10.660
+aktivitas yang tidak menghasilkan
+
+00:12:10.660 --> 00:12:11.540
+keungkulan kompetitif.
+
+00:12:12.020 --> 00:12:12.940
+Jadi Anda pada dasarnya
+
+00:12:12.940 --> 00:12:14.140
+membayar ahli untuk mengawasi lo.
+
+00:12:14.660 --> 00:12:15.600
+Dipat gendakan hal itu
+
+00:12:15.600 --> 00:12:16.640
+di seluruh unit bisnis
+
+00:12:16.640 --> 00:12:17.560
+dan tata kelola berhenti
+
+00:12:17.560 --> 00:12:18.420
+menjadi fungsi kontrol.
+
+00:12:19.000 --> 00:12:19.940
+Itu menjadi pajak tersembunyi.
+
+00:12:20.280 --> 00:12:21.380
+Sekarang amati apa yang terjadi
+
+00:12:21.380 --> 00:12:22.700
+saat otomatisasi penerbangan masuk.
+
+00:12:23.300 --> 00:12:24.300
+GPT-Limut tidak sekadar
+
+00:12:24.300 --> 00:12:25.660
+mempercepat pemeriksaan individual.
+
+00:12:26.260 --> 00:12:26.980
+Ia mendefinisikan
+
+00:12:26.980 --> 00:12:28.260
+ulang sifat temporal kepatuhan.
+
+00:12:29.380 --> 00:12:30.840
+Dulu, snapshot statistik
+
+00:12:30.840 --> 00:12:32.500
+jadwalkan setiap siklus fiskal
+
+00:12:32.500 --> 00:12:33.880
+yang akurasinya menurun
+
+00:12:33.880 --> 00:12:35.080
+saat alur kerja berubah.
+
+00:12:35.840 --> 00:12:37.220
+Sekarang, jaminan berkelanjutan
+
+00:12:37.220 --> 00:12:38.680
+didukung oleh korelasi otomatis.
+
+00:12:39.600 --> 00:12:40.680
+Pola lama mencari kesalahan
+
+00:12:40.680 --> 00:12:41.780
+setelah kesalahan itu terjadi.
+
+00:12:42.180 --> 00:12:43.220
+Pola baru mengantisipasinya
+
+00:12:43.220 --> 00:12:44.640
+sebelum kesalahan itu menyebar luas.
+
+00:12:45.000 --> 00:12:46.020
+Pertimbangkan audit prediktif.
+
+00:12:46.620 --> 00:12:48.280
+Karena GPT-Limut memahami hubungan,
+
+00:12:48.380 --> 00:12:49.800
+ia mengenali saat pergeseran data
+
+00:12:49.800 --> 00:12:50.500
+mulai terjadi.
+
+00:12:51.140 --> 00:12:51.760
+Katakanlah seseorang
+
+00:12:51.760 --> 00:12:53.000
+memodifikasi notebook fabric
+
+00:12:53.000 --> 00:12:54.020
+yang memasuk tabel data plan.
+
+00:12:54.600 --> 00:12:55.940
+Modal tersebut langsung menyimpulkan
+
+00:12:55.940 --> 00:12:57.380
+bahwa cakupan klasifikasi perfume
+
+00:12:57.380 --> 00:12:58.340
+mungkin tidak lagi cocok.
+
+00:12:58.860 --> 00:12:59.780
+Memberikan peringatan sebelum
+
+00:12:59.780 --> 00:13:00.740
+telah muncul dalam laporan.
+
+00:13:00.740 --> 00:13:02.160
+Ini seperti sistem imun
+
+00:13:02.160 --> 00:13:03.160
+yang tertanam dalam copilot
+
+00:13:03.160 --> 00:13:04.020
+mendeteksi infeksi
+
+00:13:04.020 --> 00:13:04.800
+sebelum muncul gejala.
+
+00:13:05.600 --> 00:13:06.420
+Dalam tata kelola itu
+
+00:13:06.420 --> 00:13:07.160
+adalah sebuah evolusi.
+
+00:13:07.600 --> 00:13:08.500
+Matematika operasionalnya pun
+
+00:13:08.500 --> 00:13:09.120
+sampai mengusankannya.
+
+00:13:09.760 --> 00:13:10.640
+Siklus audit yang tadinya
+
+00:13:10.640 --> 00:13:11.580
+memakan waktu berhari kini
+
+00:13:11.580 --> 00:13:12.180
+selesai dalam itu.
+
+00:13:13.260 --> 00:13:14.080
+Model ini melakukan
+
+00:13:14.080 --> 00:13:15.060
+penalaran korelasional
+
+00:13:15.060 --> 00:13:15.740
+lintas platform
+
+00:13:15.740 --> 00:13:16.600
+lebih cepat daripada
+
+00:13:16.600 --> 00:13:17.380
+skrip konvensional
+
+00:13:17.380 --> 00:13:18.660
+saat mengautentikasi koneksi.
+
+00:13:19.580 --> 00:13:20.280
+Itu bukan hiperbola,
+
+00:13:20.400 --> 00:13:21.380
+itu realitas komputasi.
+
+00:13:22.380 --> 00:13:23.280
+Penalaran memungkinkan
+
+00:13:23.280 --> 00:13:24.180
+copilot menjalankan
+
+00:13:24.180 --> 00:13:25.080
+validasi serentak,
+
+00:13:25.300 --> 00:13:26.060
+mengubah alur kerja
+
+00:13:26.060 --> 00:13:27.380
+sekuensial menjadi paralel.
+
+00:13:28.080 --> 00:13:28.560
+Hasilnya,
+
+00:13:28.560 --> 00:13:29.340
+waktu kembali,
+
+00:13:30.740 --> 00:13:32.100
+Tuhan terjaga dalam skala besar.
+
+00:13:32.880 --> 00:13:33.580
+Keyakinan tumbuh
+
+00:13:33.580 --> 00:13:34.500
+seiring dengan kecepatan.
+
+00:13:35.140 --> 00:13:36.020
+Audit lama bergantung
+
+00:13:36.020 --> 00:13:36.720
+pada penggabungan
+
+00:13:36.720 --> 00:13:37.240
+yang tidak lengkap
+
+00:13:37.240 --> 00:13:38.080
+dan inferensi manual,
+
+00:13:38.380 --> 00:13:39.360
+sekadar tebakan yang dibungkus
+
+00:13:39.360 --> 00:13:40.020
+laporan formal.
+
+00:13:40.880 --> 00:13:41.740
+JPT 5 menggantikan
+
+00:13:41.740 --> 00:13:43.260
+estimasi dengan verifikasi silam.
+
+00:13:44.120 --> 00:13:44.920
+Saat ia menyatakan
+
+00:13:44.920 --> 00:13:45.820
+kumpulan data patuh,
+
+00:13:46.080 --> 00:13:47.180
+itu karena silsilah
+
+00:13:47.180 --> 00:13:48.420
+klasifikasi dan kebijakan
+
+00:13:48.420 --> 00:13:49.080
+keamanan selaras
+
+00:13:49.080 --> 00:13:50.400
+dengan logika yang dapat diamati,
+
+00:13:50.560 --> 00:13:51.140
+bukan asumsi.
+
+00:13:51.840 --> 00:13:52.440
+Manager berhenti
+
+00:13:52.440 --> 00:13:53.320
+menandatangani laporan
+
+00:13:53.320 --> 00:13:53.900
+yang diam-diam mereka.
+
+00:13:54.140 --> 00:13:55.320
+Para eksekutif mendapatkan
+
+00:13:55.320 --> 00:13:55.860
+kembali kepercayaan
+
+00:13:55.860 --> 00:13:56.340
+berhasil berminat.
+
+00:13:57.100 --> 00:13:58.160
+Organisasi beralih dari
+
+00:13:58.160 --> 00:13:59.140
+kami rasa kami patuh
+
+00:13:59.140 --> 00:14:00.340
+menjadi kami dapat membuktikannya
+
+00:14:00.340 --> 00:14:01.100
+secara terprogram.
+
+00:14:02.000 --> 00:14:02.760
+Skalabilitas adalah
+
+00:14:02.760 --> 00:14:03.480
+kemenangan yang tenang.
+
+00:14:03.900 --> 00:14:04.120
+Dulu,
+
+00:14:04.300 --> 00:14:05.180
+tata kelola berskala
+
+00:14:05.180 --> 00:14:06.480
+linier dengan jumlah staff.
+
+00:14:07.260 --> 00:14:07.880
+Setiap ruang kerja
+
+00:14:07.880 --> 00:14:08.960
+baru menuntut tenaga kerja
+
+00:14:08.960 --> 00:14:09.520
+yang sebanding.
+
+00:14:10.780 --> 00:14:11.780
+Dengan penalaran kopilot,
+
+00:14:11.900 --> 00:14:12.900
+skala menjadi logaritmik.
+
+00:14:14.140 --> 00:14:14.980
+Satu model penalaran
+
+00:14:14.980 --> 00:14:15.760
+dapat mengawasi
+
+00:14:15.760 --> 00:14:16.980
+ribuan aset secara bersamaan,
+
+00:14:17.160 --> 00:14:18.120
+mempelajari pola sistemik
+
+00:14:18.120 --> 00:14:18.880
+daripada mengulangi
+
+00:14:18.880 --> 00:14:19.500
+langkah manual.
+
+00:14:20.460 --> 00:14:21.440
+Saat penyewa baru muncul,
+
+00:14:21.680 --> 00:14:22.560
+mereka mewarisi struktur
+
+00:14:22.560 --> 00:14:23.280
+tata kelola yang telah
+
+00:14:23.280 --> 00:14:24.100
+tervalidasi alih-alih
+
+00:14:24.100 --> 00:14:24.940
+kekacauan yang dibuat khusus.
+
+00:14:25.520 --> 00:14:25.920
+Dan ya,
+
+00:14:25.920 --> 00:14:27.260
+GPT-5 memiliki ingatan
+
+00:14:27.260 --> 00:14:27.780
+yang lebih tajam
+
+00:14:27.780 --> 00:14:28.340
+daripada spesit
+
+00:14:28.340 --> 00:14:29.280
+bersama tim kepatuan Anda.
+
+00:14:29.760 --> 00:14:30.660
+Ia tidak hanya melacak file
+
+00:14:30.660 --> 00:14:31.580
+yang belum diklasifikasikan,
+
+00:14:31.700 --> 00:14:32.180
+ia mengingat mengapa
+
+00:14:32.180 --> 00:14:32.800
+file tersebut lewat.
+
+00:14:33.340 --> 00:14:34.040
+Konteks tersebut
+
+00:14:34.040 --> 00:14:34.820
+mengubah perbaikan
+
+00:14:34.820 --> 00:14:35.460
+dari pembersihan
+
+00:14:35.460 --> 00:14:36.220
+menjadi pencegahan.
+
+00:14:37.080 --> 00:14:38.020
+Pada siklus berikutnya,
+
+00:14:38.220 --> 00:14:38.740
+model melakukan
+
+00:14:38.740 --> 00:14:39.580
+pemeriksaan mandiri
+
+00:14:39.580 --> 00:14:40.800
+pada titik-titik lemah tersebut
+
+00:14:40.800 --> 00:14:41.440
+terlebih dahulu
+
+00:14:41.440 --> 00:14:42.420
+yang berarti CSV Anda
+
+00:14:42.420 --> 00:14:43.020
+yang terlupakan,
+
+00:14:43.300 --> 00:14:44.040
+yang terselip di folder
+
+00:14:44.040 --> 00:14:44.880
+aliran data acak
+
+00:14:44.880 --> 00:14:45.520
+akhirnya terungkap
+
+00:14:45.520 --> 00:14:46.480
+sebelum mempermalukan Anda
+
+00:14:46.480 --> 00:14:47.220
+dalam rapat audit.
+
+00:14:48.000 --> 00:14:48.800
+Kemajuan terkadang
+
+00:14:48.800 --> 00:14:49.780
+terasa seperti pengawasan
+
+00:14:49.780 --> 00:14:50.480
+dan dalam kasus ini
+
+00:14:50.480 --> 00:14:51.140
+memang itulah tujuan.
+
+00:14:51.760 --> 00:14:52.460
+Secara ekonomi,
+
+00:14:52.560 --> 00:14:53.640
+implikasinya berdampak luas.
+
+00:14:54.160 --> 00:14:55.240
+Waktu audit yang berkurang,
+
+00:14:55.460 --> 00:14:56.840
+berarti jam kerja teknis kembali
+
+00:14:56.840 --> 00:14:58.300
+lebih sedikit penalti regulasi
+
+00:14:58.300 --> 00:14:59.320
+dan risiko reputasi
+
+00:14:59.320 --> 00:14:59.960
+yang lebih rendah.
+
+00:15:00.500 --> 00:15:01.200
+Pendanaan tata kelola
+
+00:15:01.200 --> 00:15:02.220
+beralih dari mitigasi
+
+00:15:02.220 --> 00:15:03.620
+krisis kepengembangan kapabilitas.
+
+00:15:04.380 --> 00:15:05.380
+Alih-alih merekrut kontraktor
+
+00:15:05.380 --> 00:15:06.320
+untuk menambah spreadsheet
+
+00:15:06.320 --> 00:15:07.160
+tim berinvestasi
+
+00:15:07.160 --> 00:15:07.900
+dalam menyempurnakan
+
+00:15:07.900 --> 00:15:08.660
+prom dan konektor
+
+00:15:08.660 --> 00:15:09.200
+yang meningkatkan
+
+00:15:09.200 --> 00:15:10.300
+mesin penalaran itu sendiri.
+
+00:15:10.820 --> 00:15:11.540
+Anda berhenti bekerja
+
+00:15:11.540 --> 00:15:12.100
+demi kepatuan
+
+00:15:12.100 --> 00:15:12.580
+dan mulai membawa
+
+00:15:12.580 --> 00:15:13.360
+kepatuan bekerjaan untuk.
+
+00:15:13.800 --> 00:15:14.540
+Pergesaran budaya ini
+
+00:15:14.540 --> 00:15:14.980
+terasa halus,
+
+00:15:14.980 --> 00:15:15.500
+namun mendalam.
+
+00:15:15.880 --> 00:15:16.840
+Dalam TI tradisional,
+
+00:15:16.980 --> 00:15:17.620
+kepatuan identik
+
+00:15:17.620 --> 00:15:18.720
+dengan pekerjaan membosankan.
+
+00:15:19.000 --> 00:15:20.000
+Beban tambahan pada inovasi.
+
+00:15:20.780 --> 00:15:21.760
+GPT-5 dan Copilot
+
+00:15:21.760 --> 00:15:22.340
+merangkai kembali
+
+00:15:22.340 --> 00:15:23.160
+sebagai prinsip desain
+
+00:15:23.160 --> 00:15:23.720
+yang berkelanjutan.
+
+00:15:24.180 --> 00:15:24.780
+Tata kelola menjadi
+
+00:15:24.780 --> 00:15:25.700
+hal yang menyatu dengan sistem.
+
+00:15:26.020 --> 00:15:26.600
+Audit tidak lagi
+
+00:15:26.600 --> 00:15:27.220
+mengganggu proyek
+
+00:15:27.220 --> 00:15:28.100
+melainkan mendampingnya
+
+00:15:28.100 --> 00:15:29.540
+seperti kompilasi latar belakang.
+
+00:15:29.980 --> 00:15:31.000
+Desain dan melihat keamanan
+
+00:15:31.000 --> 00:15:32.200
+bukan sebagai birokrasi
+
+00:15:32.200 --> 00:15:33.160
+melainkan kebersihan
+
+00:15:33.160 --> 00:15:33.700
+selalu ada.
+
+00:15:34.140 --> 00:15:34.800
+Jarang menghambat.
+
+00:15:35.860 --> 00:15:36.980
+Mari kita bersikap sedikit sinis.
+
+00:15:37.540 --> 00:15:38.320
+Manager yang dulunya
+
+00:15:38.320 --> 00:15:39.120
+mengabaikan dashboard
+
+00:15:39.120 --> 00:15:39.720
+tata kelola
+
+00:15:39.720 --> 00:15:40.420
+kini mengutipnya
+
+00:15:40.420 --> 00:15:41.160
+dalam presentasi.
+
+00:15:41.160 --> 00:15:41.900
+Mengapa?
+
+00:15:42.140 --> 00:15:43.160
+Karena kecerdasan prediktif
+
+00:15:43.160 --> 00:15:43.940
+membuat hasil terlihat
+
+00:15:43.940 --> 00:15:44.540
+mengesankan.
+
+00:15:45.360 --> 00:15:46.000
+Saat Copilot
+
+00:15:46.000 --> 00:15:47.040
+meramalkan risiko
+
+00:15:47.040 --> 00:15:47.740
+sebelum auditor
+
+00:15:47.740 --> 00:15:48.580
+meminta laporan,
+
+00:15:49.080 --> 00:15:49.820
+pimpinan menyebutnya
+
+00:15:49.820 --> 00:15:50.900
+visi strategis.
+
+00:15:51.580 --> 00:15:51.900
+Artinya,
+
+00:15:52.160 --> 00:15:52.800
+mereka akhirnya melihat
+
+00:15:52.800 --> 00:15:53.880
+nada tidak terkejut oleh masalah.
+
+00:15:54.500 --> 00:15:54.940
+Jadi, ya,
+
+00:15:55.100 --> 00:15:55.980
+GPT-5 tidak hanya
+
+00:15:55.980 --> 00:15:57.240
+mengotomatiskan dokumentasi,
+
+00:15:57.500 --> 00:15:58.100
+tapi meningkatkan
+
+00:15:58.100 --> 00:15:59.100
+kesadaran organisasi,
+
+00:15:59.400 --> 00:16:00.000
+mengubah kepatuhan
+
+00:16:00.000 --> 00:16:00.820
+dari latihan forensik
+
+00:16:00.820 --> 00:16:01.980
+menjadi tindakan preventif.
+
+00:16:02.920 --> 00:16:03.300
+Sistem ini
+
+00:16:03.300 --> 00:16:04.280
+mengimunisasi dirinya sendiri
+
+00:16:04.280 --> 00:16:05.340
+terhadap pendonan prosedura.
+
+00:16:05.660 --> 00:16:06.100
+Dan Anda,
+
+00:16:06.300 --> 00:16:07.340
+auditor yang kurang tidur itu,
+
+00:16:07.480 --> 00:16:08.420
+menjadi ahli diagnostik
+
+00:16:08.420 --> 00:16:09.440
+yang bekerja secepat kilat.
+
+00:16:11.160 --> 00:16:12.140
+Hampir tidak ada yang merindukan
+
+00:16:12.140 --> 00:16:12.760
+nombor kerja tersebut.
+
+00:16:13.260 --> 00:16:14.680
+Menerapkan alur kerja GPT-5
+
+00:16:14.680 --> 00:16:15.560
+di Copilot Studio.
+
+00:16:16.060 --> 00:16:16.820
+Sekarang, mari kita masuk
+
+00:16:16.820 --> 00:16:17.200
+ke rana, tak?
+
+00:16:17.740 --> 00:16:18.420
+Bagian di mana teori
+
+00:16:18.420 --> 00:16:19.340
+bertemu dengan konfigurasi.
+
+00:16:20.260 --> 00:16:21.140
+Menyiapkan alur kerja
+
+00:16:21.140 --> 00:16:22.140
+penalaran GPT-5
+
+00:16:22.140 --> 00:16:22.800
+di Copilot Studio
+
+00:16:22.800 --> 00:16:23.420
+bukanlah sihir.
+
+00:16:23.540 --> 00:16:24.740
+Ini hanya perpipaan terstruktur.
+
+00:16:25.820 --> 00:16:26.760
+Namun, seperti pipa manapun,
+
+00:16:26.820 --> 00:16:27.460
+satu konektor yang salah
+
+00:16:27.460 --> 00:16:28.460
+akan membuat lagi kabucor kemana.
+
+00:16:28.920 --> 00:16:29.780
+Jadi, mari kita sambungkan
+
+00:16:29.780 --> 00:16:30.360
+pipanya dengan benar.
+
+00:16:31.000 --> 00:16:31.580
+Langkah pertama,
+
+00:16:31.700 --> 00:16:32.900
+aktifkan penalaran GPT-5
+
+00:16:32.900 --> 00:16:33.860
+di dalam Copilot Studio.
+
+00:16:34.380 --> 00:16:35.140
+Jangan berasumsi itu sudah.
+
+00:16:35.600 --> 00:16:36.600
+Microsoft memperlakukan ini
+
+00:16:36.600 --> 00:16:37.480
+sebagai fitur keamanan,
+
+00:16:37.580 --> 00:16:38.360
+bukan pengaturan standar.
+
+00:16:38.520 --> 00:16:39.900
+Di lingkungan Copilot Studio Anda,
+
+00:16:40.180 --> 00:16:41.220
+buka menu pemilihan model.
+
+00:16:41.480 --> 00:16:42.920
+Temukan model penalaran GPT-5
+
+00:16:42.920 --> 00:16:44.040
+dan atur secara eksplisit
+
+00:16:44.040 --> 00:16:44.640
+sebagai standar
+
+00:16:44.640 --> 00:16:45.860
+untuk Copilot custom Anda.
+
+00:16:47.100 --> 00:16:48.220
+Tanda ini mengontrol akses
+
+00:16:48.220 --> 00:16:49.300
+kooperasi alur berpikir,
+
+00:16:49.680 --> 00:16:50.480
+mekanisme yang memungkinkan
+
+00:16:50.480 --> 00:16:51.840
+Copilot bernalar di seluruh fabrik
+
+00:16:51.840 --> 00:16:52.740
+Power BI dan Proview
+
+00:16:52.740 --> 00:16:53.360
+secara bersamaan,
+
+00:16:53.520 --> 00:16:54.100
+bukan berurutan.
+
+00:16:54.820 --> 00:16:56.080
+Tanpanya, Anda hanya berbicara
+
+00:16:56.080 --> 00:16:56.660
+dengan model lama
+
+00:16:56.660 --> 00:16:57.580
+dan bertanya-tanya mengapa
+
+00:16:57.580 --> 00:16:58.600
+ia melupakan konteks lebih cepat
+
+00:16:58.600 --> 00:16:59.400
+daripada atmakang Anda
+
+00:16:59.400 --> 00:16:59.960
+setelah makan siang.
+
+00:17:00.260 --> 00:17:00.760
+Langkah kedua,
+
+00:17:00.900 --> 00:17:01.680
+konfigurasikan konektor.
+
+00:17:01.680 --> 00:17:04.080
+Logika membutuhkan visibilitas
+
+00:17:04.080 --> 00:17:04.860
+dan penalaran
+
+00:17:04.860 --> 00:17:05.680
+tidak dapat menyimpulkan
+
+00:17:05.680 --> 00:17:06.480
+apa yang tidak bisa dilihat.
+
+00:17:07.120 --> 00:17:08.440
+Tastikan api fabrik Power BI
+
+00:17:08.440 --> 00:17:09.500
+dan Proview ditautkan
+
+00:17:09.500 --> 00:17:10.460
+melalui konektor resmi.
+
+00:17:11.540 --> 00:17:12.500
+Setiap konektor melakukan
+
+00:17:12.500 --> 00:17:14.140
+autentikasi dengan Microsoft EntraID
+
+00:17:14.140 --> 00:17:15.700
+dan mengekspos titik akhir metadata.
+
+00:17:16.500 --> 00:17:17.620
+Himpunan data kompensifikasi
+
+00:17:17.620 --> 00:17:18.120
+peran kamar.
+
+00:17:18.800 --> 00:17:20.160
+Keunggulan Copilot Studio adalah
+
+00:17:20.160 --> 00:17:21.160
+konektor ini berbicara
+
+00:17:21.160 --> 00:17:22.440
+dalam dialek platform untuk Anda.
+
+00:17:23.680 --> 00:17:25.160
+Fabrik mengeluarkan peta silsilah,
+
+00:17:25.160 --> 00:17:26.620
+Power BI mengekspos pengikatan data
+
+00:17:26.620 --> 00:17:28.060
+dan Proview mencantumkan label
+
+00:17:28.060 --> 00:17:28.920
+sensitivitas.
+
+00:17:29.440 --> 00:17:30.500
+Bersama-sama mereka membentuk
+
+00:17:30.500 --> 00:17:31.240
+ekosistem tridata
+
+00:17:31.240 --> 00:17:32.160
+yang dibutuhkan GPT-5
+
+00:17:32.160 --> 00:17:33.120
+untuk berpikir secara kohen.
+
+00:17:33.520 --> 00:17:34.140
+Langkah ketiga,
+
+00:17:34.400 --> 00:17:35.340
+siapkan template perintah
+
+00:17:35.340 --> 00:17:36.160
+untuk audit rutin.
+
+00:17:37.000 --> 00:17:37.660
+Anda akan membuat
+
+00:17:37.660 --> 00:17:38.320
+kerangka perintah
+
+00:17:38.320 --> 00:17:39.240
+yang dapat digunakan kembali
+
+00:17:39.240 --> 00:17:39.920
+seperti mengaudit
+
+00:17:39.920 --> 00:17:40.660
+semua aset fabrik
+
+00:17:40.660 --> 00:17:41.640
+yang berisi tipe data tentu
+
+00:17:41.640 --> 00:17:42.520
+guna memastikan kesarasan
+
+00:17:42.520 --> 00:17:43.100
+dengan label preview
+
+00:17:43.100 --> 00:17:43.820
+dan aturan RLS.
+
+00:17:44.500 --> 00:17:45.780
+Variabel menyuntikkan konteks
+
+00:17:45.780 --> 00:17:47.180
+sementara mesin penalaran model
+
+00:17:47.180 --> 00:17:48.260
+melakukan penyelidikan.
+
+00:17:49.260 --> 00:17:50.420
+Berbeda dengan alur kerja kaku
+
+00:17:50.420 --> 00:17:51.120
+di Power Automate,
+
+00:17:51.260 --> 00:17:52.540
+perintah ini berperilaku secara dinamis.
+
+00:17:53.140 --> 00:17:54.080
+GPT-5 menyesuaikan
+
+00:17:54.080 --> 00:17:54.880
+kedalaman penalaran
+
+00:17:54.880 --> 00:17:55.720
+dengan kompleksitas kue.
+
+00:17:56.220 --> 00:17:57.000
+Pemeriksaan sepele
+
+00:17:57.000 --> 00:17:57.820
+pada satu ruang kerja
+
+00:17:57.820 --> 00:17:59.000
+menjalankan penalaran ringan
+
+00:17:59.000 --> 00:18:00.420
+sementara audit seluruh perusahaan
+
+00:18:00.420 --> 00:18:01.200
+memicu inferensi
+
+00:18:01.200 --> 00:18:02.100
+multi lapis penuh.
+
+00:18:02.880 --> 00:18:03.420
+Langkah empat,
+
+00:18:03.560 --> 00:18:04.520
+uji kedalaman penalaran
+
+00:18:04.520 --> 00:18:05.780
+menggunakan anomali yang diatur.
+
+00:18:06.380 --> 00:18:07.380
+Salahan buatan bukan sekadar
+
+00:18:07.380 --> 00:18:07.840
+untuk QA
+
+00:18:07.840 --> 00:18:08.680
+melengkang latihan logika.
+
+00:18:09.400 --> 00:18:10.200
+Masukkan kumpulan data
+
+00:18:10.200 --> 00:18:11.020
+yang salah klasifikasi
+
+00:18:11.020 --> 00:18:11.900
+di Fabric Lake House,
+
+00:18:12.000 --> 00:18:12.900
+hapus label preview-nya
+
+00:18:12.900 --> 00:18:13.780
+dan berikan akses
+
+00:18:13.780 --> 00:18:14.760
+Power BI terbuka.
+
+00:18:15.460 --> 00:18:16.680
+Kemudian jalankan audit kopiloten.
+
+00:18:17.080 --> 00:18:18.060
+Outputnya harus menyoroti
+
+00:18:18.060 --> 00:18:19.260
+klasifikasi yang tidak cocok,
+
+00:18:19.480 --> 00:18:20.220
+RLS yang hilang,
+
+00:18:20.340 --> 00:18:21.340
+dan konflik silsilah data.
+
+00:18:21.980 --> 00:18:22.440
+Jika tidak,
+
+00:18:22.760 --> 00:18:23.900
+konfigurasi penalaran Anda,
+
+00:18:23.900 --> 00:18:24.860
+kurang visibilitas
+
+00:18:24.860 --> 00:18:25.580
+atau konektor,
+
+00:18:25.820 --> 00:18:26.480
+salah cakupan.
+
+00:18:27.040 --> 00:18:27.740
+Anggap ini sebagai
+
+00:18:27.740 --> 00:18:29.240
+mengkalibrasi kompas moral AI.
+
+00:18:29.940 --> 00:18:30.820
+Ia tidak dapat menegakkan
+
+00:18:30.820 --> 00:18:31.500
+tata kelola etis
+
+00:18:31.500 --> 00:18:32.100
+jika ia buta.
+
+00:18:32.700 --> 00:18:33.260
+Langkah lima,
+
+00:18:33.340 --> 00:18:33.980
+tinjau dan ulangi
+
+00:18:33.980 --> 00:18:34.580
+di dalam dasber
+
+00:18:34.580 --> 00:18:35.360
+tata kelola Fabric.
+
+00:18:36.060 --> 00:18:37.460
+GPT-5 menghasilkan hasil baik
+
+00:18:37.460 --> 00:18:38.500
+sebagai narasi maupun skema.
+
+00:18:39.160 --> 00:18:40.460
+Ringkasan JSON yang dapat diekspor
+
+00:18:40.460 --> 00:18:41.320
+mencakup penganal sumber,
+
+00:18:41.500 --> 00:18:42.280
+probabilitas risiko,
+
+00:18:42.360 --> 00:18:43.580
+dan perbaikan yang direkomendasikan.
+
+00:18:44.080 --> 00:18:44.940
+Masukkan data tersebut
+
+00:18:44.940 --> 00:18:45.860
+ke ruang kerja audit Fabric
+
+00:18:45.860 --> 00:18:47.140
+tempat Anda dapat mengurutkan temuan
+
+00:18:47.140 --> 00:18:48.100
+berdasarkan tingkat kebaran.
+
+00:18:48.420 --> 00:18:48.940
+Seiring waktu,
+
+00:18:49.120 --> 00:18:49.900
+sesi ini menciptakan
+
+00:18:49.900 --> 00:18:51.080
+pustaka templat penalaran
+
+00:18:51.080 --> 00:18:51.740
+yang disesuaikan
+
+00:18:51.740 --> 00:18:53.300
+dengan konfensi penaman set data,
+
+00:18:53.640 --> 00:18:54.360
+rejim kepatuhan,
+
+00:18:54.660 --> 00:18:56.080
+dan kekacauan korporat khas Anda.
+
+00:18:56.760 --> 00:18:58.020
+Inilah jalan pintas konsep tolnya.
+
+00:18:58.540 --> 00:18:59.880
+Power Query bertemu dengan EE.
+
+00:19:00.440 --> 00:19:01.780
+Dulu, Power Query memungkinkan
+
+00:19:01.780 --> 00:19:02.500
+Anda mengubah data
+
+00:19:02.500 --> 00:19:03.340
+secara deklaratif.
+
+00:19:04.020 --> 00:19:04.840
+Logika ditulis sekali,
+
+00:19:04.980 --> 00:19:05.700
+diterapkan tematik.
+
+00:19:06.380 --> 00:19:07.760
+Copilot dengan penalaran GPT-5
+
+00:19:07.760 --> 00:19:08.620
+melakukan introspeksi
+
+00:19:08.620 --> 00:19:09.380
+dengan cara yang sama.
+
+00:19:10.140 --> 00:19:11.260
+Jalur penalaran ditulis sekali,
+
+00:19:11.460 --> 00:19:12.520
+diterapkan secara berkelanjutan.
+
+00:19:13.040 --> 00:19:14.120
+Anda tidak sedang membangun alur,
+
+00:19:14.200 --> 00:19:14.980
+Anda sedang mendefinisikan
+
+00:19:14.980 --> 00:19:15.680
+bagaimana kecerdasan
+
+00:19:15.680 --> 00:19:16.220
+memvalidasi data.
+
+00:19:16.220 --> 00:19:18.000
+Catatan peringatan yang ironis.
+
+00:19:18.400 --> 00:19:19.720
+Otomatisasi tanpa skeptisisme
+
+00:19:19.720 --> 00:19:20.420
+mengubah Anda menjadi
+
+00:19:20.420 --> 00:19:21.440
+penonton sistem Anda sendiri.
+
+00:19:22.420 --> 00:19:23.740
+Meskipun deduksi GPT-5
+
+00:19:23.740 --> 00:19:25.140
+sangat akurat kepercayaan,
+
+00:19:25.460 --> 00:19:26.540
+buta mengundang kelalaian.
+
+00:19:27.820 --> 00:19:28.720
+Selalu validasi output
+
+00:19:28.720 --> 00:19:29.500
+menggunakan penampil
+
+00:19:29.500 --> 00:19:30.440
+silsilat bewaan fabrik
+
+00:19:30.440 --> 00:19:31.320
+atau wawasan purview.
+
+00:19:31.680 --> 00:19:32.820
+Anggap ini sebagai menjalankan
+
+00:19:32.820 --> 00:19:33.720
+pembukuan entry ganda
+
+00:19:33.720 --> 00:19:34.540
+untuk logika mesin.
+
+00:19:34.880 --> 00:19:35.740
+Anda memastikan bahwa
+
+00:19:35.740 --> 00:19:36.440
+ajaran baru AI
+
+00:19:36.440 --> 00:19:37.900
+tetap selaras dengan kebenaran kanonik.
+
+00:19:38.340 --> 00:19:39.340
+Jika muncul perbedaan,
+
+00:19:39.500 --> 00:19:40.500
+sesuaikan injeksi konteks.
+
+00:19:41.440 --> 00:19:42.280
+Sesuaikan sumber metadata
+
+00:19:42.280 --> 00:19:43.460
+mana yang diprioritaskannya.
+
+00:19:44.240 --> 00:19:45.580
+Jada singkat praktek terbaik.
+
+00:19:45.580 --> 00:19:46.440
+Pertama,
+
+00:19:46.720 --> 00:19:47.620
+bot perintah tetap spesifik
+
+00:19:47.620 --> 00:19:48.620
+namun dapat digeneralisasi.
+
+00:19:49.040 --> 00:19:49.640
+Hindari arahan
+
+00:19:49.640 --> 00:19:50.700
+seperti periksa tabel data
+
+00:19:50.700 --> 00:19:51.540
+peranggan 123
+
+00:19:51.540 --> 00:19:52.960
+dan pilihlah pola
+
+00:19:52.960 --> 00:19:54.060
+seperti periksa semua tabel
+
+00:19:54.060 --> 00:19:55.100
+yang berhubungan dengan peranggan.
+
+00:19:55.800 --> 00:19:56.560
+GPT-5 berkembang
+
+00:19:56.560 --> 00:19:57.520
+dengan inferensi relasional.
+
+00:19:58.340 --> 00:19:59.160
+Ia membutuhkan ruang lingkung.
+
+00:19:59.260 --> 00:19:59.800
+Bukan spesifis itu.
+
+00:20:00.800 --> 00:20:01.280
+Kedua,
+
+00:20:01.400 --> 00:20:02.400
+bot pos pemeriksaan validasi.
+
+00:20:03.080 --> 00:20:03.780
+Jadwalkan kopilot
+
+00:20:03.780 --> 00:20:05.200
+untuk melakukan proses penalaran
+
+00:20:05.200 --> 00:20:06.040
+setelah perubahan skema
+
+00:20:06.040 --> 00:20:07.460
+atau penerapan pipa yang signifikan.
+
+00:20:07.920 --> 00:20:08.420
+Itu lebih mudah
+
+00:20:08.420 --> 00:20:09.560
+daripada terburu-buru menangani insiden.
+
+00:20:09.800 --> 00:20:10.080
+Ketiga,
+
+00:20:10.200 --> 00:20:11.180
+pantau versi model.
+
+00:20:11.180 --> 00:20:12.600
+Pembaruan di masa mendatang
+
+00:20:12.600 --> 00:20:13.680
+dapat mengubah iristi penalaran.
+
+00:20:13.980 --> 00:20:15.340
+Konsistensi menuntut dokumentasi.
+
+00:20:15.960 --> 00:20:16.860
+Satu cerita mikro terakhir
+
+00:20:16.860 --> 00:20:17.480
+untuk memperjelasin.
+
+00:20:17.940 --> 00:20:18.880
+Sebuah tim keuangan menengah
+
+00:20:18.880 --> 00:20:20.100
+menguji alur kerja persis ini.
+
+00:20:20.620 --> 00:20:21.140
+Tim kepatuhan
+
+00:20:21.140 --> 00:20:22.160
+beranggotakan dua orang
+
+00:20:22.160 --> 00:20:23.520
+yang mengelola delapan fabrik lakehouse.
+
+00:20:23.980 --> 00:20:24.380
+Sebelumnya,
+
+00:20:24.500 --> 00:20:25.580
+siklus audit memakan waktu.
+
+00:20:25.880 --> 00:20:26.280
+Tiga minggu.
+
+00:20:27.060 --> 00:20:28.780
+Setelah menerapkan penalaran GPT-5,
+
+00:20:28.940 --> 00:20:29.660
+satu sesi kopilot
+
+00:20:29.660 --> 00:20:30.680
+berkelanjutan menghasilkan
+
+00:20:30.680 --> 00:20:31.640
+validasi lendas platform
+
+00:20:31.640 --> 00:20:32.240
+dalam semalam.
+
+00:20:32.840 --> 00:20:33.520
+Keesokan paginya,
+
+00:20:33.620 --> 00:20:34.440
+mereka tidak lagi mencocokkan
+
+00:20:34.440 --> 00:20:34.820
+lembar kerja.
+
+00:20:34.920 --> 00:20:35.520
+Mereka menyetujui
+
+00:20:35.520 --> 00:20:36.520
+laporan otomatisasi.
+
+00:20:37.200 --> 00:20:37.980
+Dewan kepatuhan mereka
+
+00:20:37.980 --> 00:20:38.760
+menyebut perubahan itu
+
+00:20:38.760 --> 00:20:40.220
+sebagai produktivitas yang luar biasa.
+
+00:20:40.920 --> 00:20:41.660
+Saya menyebutnya logika
+
+00:20:41.660 --> 00:20:42.500
+yang akhirnya menjalankan terbaik.
+
+00:20:42.840 --> 00:20:44.040
+Dan begitulah cara GPT-5
+
+00:20:44.040 --> 00:20:44.860
+mengubah tata kelola
+
+00:20:44.860 --> 00:20:46.080
+dari pemadaman api episodik
+
+00:20:46.080 --> 00:20:47.220
+menjadi penyelarasan abadi.
+
+00:20:47.960 --> 00:20:48.880
+Anda menjaga keteraturan
+
+00:20:48.880 --> 00:20:49.680
+secepat penalaran
+
+00:20:49.680 --> 00:20:50.620
+yang membuat kita tepat
+
+00:20:50.620 --> 00:20:51.280
+ke babak akhir.
+
+00:20:51.960 --> 00:20:53.000
+Mengapa bersusah payah
+
+00:20:53.000 --> 00:20:53.620
+dengan tata kelola
+
+00:20:53.620 --> 00:20:54.920
+akan menjadi artefak sejarah,
+
+00:20:55.100 --> 00:20:56.060
+yaitu tata kelola
+
+00:20:56.060 --> 00:20:56.820
+tanpa beban.
+
+00:20:57.420 --> 00:20:58.140
+Jadi itulah alurnya.
+
+00:20:58.520 --> 00:20:59.860
+Audit manual digantikan oleh
+
+00:20:59.860 --> 00:21:00.900
+logika inferensial
+
+00:21:00.900 --> 00:21:01.740
+kepatuhan reaktif
+
+00:21:01.740 --> 00:21:02.340
+digantikan oleh
+
+00:21:02.340 --> 00:21:03.200
+jaminan prediktif.
+
+00:21:04.240 --> 00:21:05.320
+Penalaran GPT-5
+
+00:21:05.320 --> 00:21:06.140
+mengubah kopilot
+
+00:21:06.140 --> 00:21:06.960
+dari asisten pencatat
+
+00:21:06.960 --> 00:21:07.580
+menjadi pengawas
+
+00:21:07.580 --> 00:21:09.060
+akuntabilitas yang sesungguhnya.
+
+00:21:09.880 --> 00:21:10.600
+Ini bukan sekadar
+
+00:21:10.600 --> 00:21:11.220
+memberikan jawaban
+
+00:21:11.220 --> 00:21:12.500
+tetapi membangun pemahaman.
+
+00:21:13.260 --> 00:21:14.360
+Ingat riat tata kelola yang lama.
+
+00:21:14.840 --> 00:21:15.800
+Fabrik melacak silsila,
+
+00:21:16.000 --> 00:21:17.220
+purview mengklasifikasikan data,
+
+00:21:17.420 --> 00:21:18.580
+Power BI membatasi akses.
+
+00:21:19.140 --> 00:21:20.220
+GPT-5 menyatukannya
+
+00:21:20.220 --> 00:21:21.380
+di bawah satu otak audit
+
+00:21:21.380 --> 00:21:22.700
+yang evaluasi konteks
+
+00:21:22.700 --> 00:21:23.560
+semudah konten.
+
+00:21:24.340 --> 00:21:25.320
+Hal terceder tentang Fabrik
+
+00:21:25.320 --> 00:21:26.240
+bukanlah Fabrik itu sendiri,
+
+00:21:26.520 --> 00:21:27.320
+melainkan AI yang akhir
+
+00:21:27.320 --> 00:21:28.020
+menjaga kejujurannya.
+
+00:21:28.460 --> 00:21:29.740
+Jika Anda telah melalui malam
+
+00:21:29.740 --> 00:21:30.320
+tanpa tidur
+
+00:21:30.320 --> 00:21:31.580
+untuk memeriksa silang CSV,
+
+00:21:31.720 --> 00:21:32.500
+inilah kelegaan Anda.
+
+00:21:32.960 --> 00:21:33.780
+Aktifkan penalaran
+
+00:21:33.780 --> 00:21:34.160
+di konektor
+
+00:21:34.160 --> 00:21:35.180
+nirkabel kopilot studio
+
+00:21:35.180 --> 00:21:36.140
+dan biarkan GPT-5
+
+00:21:36.140 --> 00:21:37.400
+menargetkan ketidak konsistenan
+
+00:21:37.400 --> 00:21:38.580
+sebelum mereka menargetkan Anda.
+
+00:21:39.380 --> 00:21:40.560
+Evolusi tata kelola berikutnya
+
+00:21:40.560 --> 00:21:41.220
+bukanlah dokumen,
+
+00:21:41.340 --> 00:21:42.380
+melainkan penalaran terus-menerus.
+
+00:21:42.960 --> 00:21:44.000
+Kunci jalur peningkatan Anda,
+
+00:21:44.320 --> 00:21:44.820
+berlangganan,
+
+00:21:44.920 --> 00:21:45.640
+nyalakan notifikasi
+
+00:21:45.640 --> 00:21:46.640
+dan biarkan episode baru
+
+00:21:46.640 --> 00:21:47.440
+tanya secara otomatik.
+
+00:21:47.640 --> 00:21:48.520
+Tanpa pemeriksaan manual,
+
+00:21:48.660 --> 00:21:49.500
+tanpa pembaruan yang terawat.
+
+00:21:49.620 --> 00:21:50.720
+Hanya pengiriman kejelasan yang berlanjut.
+
+00:21:50.920 --> 00:21:51.360
+Lanjutkan.

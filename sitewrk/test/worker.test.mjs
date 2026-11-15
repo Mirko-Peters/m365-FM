@@ -173,6 +173,20 @@ test("Alter R2-Rueckfall (nach 404) liefert keine Spiegel-Objekte von GitHub Pag
   const a = await W.fetch(req("/gonepage/", "US"), e5, { waitUntil: () => {} }); assert.equal(a.status, 404);
   const b = await W.fetch(req("/thin/", "US"), e5, { waitUntil: () => {} }); assert.equal(b.status, 200); assert.equal(await b.text(), "<html>thin</html>");
 });
+test("R2-Rueckfall (R2_PRIMARY=0, Sprachseiten nur im Bucket): Unicode-Pfade, /index.html und Verzeichnis ohne Schrägstrich wie bei GitHub Pages", async () => {
+  store.clear(); const keys = [];
+  const e7 = { ...env, R2_PRIMARY: "0", PAGES: { get: async (k) => { keys.push(k); return k === "pages/ru/tag/облако/index.html" || k === "pages/fr/tag/x/index.html" ? { ...obj2("<html>r2 " + k + "</html>", "text/html"), customMetadata: {} } : null; } } };
+  const go = async (r) => { const w = []; const res = await W.fetch(r, e7, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
+  const ru = await go(req("/ru/tag/" + encodeURIComponent("облако") + "/", "RU"));
+  assert.equal(ru.status, 200); assert.equal(await ru.text(), "<html>r2 pages/ru/tag/облако/index.html</html>"); assert.ok(keys.includes("pages/ru/tag/облако/index.html"), "Bucket-Schluessel dekodiert (UTF-8)");
+  assert.equal(ru.headers.get("cache-control"), HTML_CC); assert.equal(ru.headers.get("strict-transport-security"), "max-age=31536000; includeSubDomains"); assert.equal(ru.headers.get("x-content-type-options"), "nosniff");
+  assert.ok(store.has("https://www.m365.fm/__r2c/ru/tag/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE/"), "Cache-Schluessel kodiert wie die Purge-Adressen");
+  const hit = await go(req("/ru/tag/" + encodeURIComponent("облако") + "/", "US")); assert.equal(hit.headers.get("x-m365-cache"), "HIT");
+  const ix = await go(req("/fr/tag/x/index.html", "FR")); assert.equal(ix.status, 200); assert.equal(await ix.text(), "<html>r2 pages/fr/tag/x/index.html</html>");
+  const ns = await go(req("/fr/tag/x?utm_source=a", "FR")); assert.equal(ns.status, 301); assert.equal(ns.headers.get("location"), "https://www.m365.fm/fr/tag/x/?utm_source=a");
+  const bad = await go(req("/ru/tag/%E0%A4%A/", "RU")); assert.equal(bad.status, 404, "ungueltige Kodierung: kein Absturz");
+  const miss = await go(req("/fr/tag/fehlt", "FR")); assert.equal(miss.status, 404, "ohne Seite im Bucket kein 301");
+});
 test("R2 zuerst: haengende Pruefung der Bau-Kennung blockiert keine Anfrage", async () => {
   store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
   const e6 = { ...env2, PAGES: { get: (k) => (k === "pages/r2-build.txt" ? new Promise(() => {}) : Promise.resolve(B2[k] || null)) } };

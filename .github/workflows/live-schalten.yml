@@ -1,0 +1,184 @@
+name: Live schalten (staging nach main)
+# Nur von Hand (Knopf "Run workflow"). Übernimmt den Zweig `staging` nach `main` - aber nur, wenn die Prüfungen (staging-checks, Statuscheck
+# `staging-geprueft`) für genau den aktuellen Stand von `staging` grün sind. Sonst Abbruch mit klarer Meldung, es wird nichts verändert.
+# Ablauf und Einstellungen: STAGING.md.
+#
+# Wie übernommen wird: über einen Pull Request staging -> main, der sofort mit der Schnellprüfung der GitHub-API zusammengeführt wird
+# (Merge-Commit, kein Force-Push). So funktioniert es mit und ohne Schutzregel für `main`: der Statuscheck hängt am Stand von staging.
+# Wichtig: Ein Merge mit dem GITHUB_TOKEN löst selbst KEINE Push-Workflows aus (GitHub-Regel gegen Endlosschleifen). Darum stößt dieser
+# Workflow die Live-Workflows (worker.yml, sitewrk.yml, site.yml) danach selbst an - genau die, die ein Push dieser Dateien auf main starten würde.
+on:
+  workflow_dispatch:
+    inputs:
+      nur_pruefen:
+        description: "Nur prüfen, ob staging live gehen dürfte - nichts übernehmen"
+        type: boolean
+        default: false
+permissions:
+  contents: write        # Zusammenführen nach main
+  pull-requests: write   # Pull Request staging -> main anlegen
+  actions: write         # Live-Workflows nach dem Zusammenführen anstoßen
+  checks: read
+concurrency:
+  group: live-schalten
+  cancel-in-progress: false
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # Umgebung `production`: dort kann Mirko zusätzlich "Required reviewers" einschalten (Freigabe-Klick), siehe STAGING.md
+    environment: production
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main, fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -q pyyaml
+
+      - name: Stand von staging und main lesen
+        id: staende
+        run: |
+          set -euo pipefail
+          if ! SHA=$(gh api "repos/$REPO/git/ref/heads/staging" --jq .object.sha 2>/dev/null); then
+            echo "::error::Den Zweig staging gibt es noch nicht. Zuerst anlegen (STAGING.md, Schritt 1)."; exit 1
+          fi
+          MAIN=$(gh api "repos/$REPO/git/ref/heads/main" --jq .object.sha)
+          read -r STATUS AHEAD BEHIND < <(gh api "repos/$REPO/compare/main...$SHA" --jq '[.status, .ahead_by, .behind_by] | @tsv')
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"; echo "main=$MAIN" >> "$GITHUB_OUTPUT"
+          echo "ahead=$AHEAD" >> "$GITHUB_OUTPUT"; echo "behind=$BEHIND" >> "$GITHUB_OUTPUT"
+          echo "staging ${SHA:0:7} | main ${MAIN:0:7} | staging ist $AHEAD Commit(s) voraus, $BEHIND hinter main (Status: $STATUS)"
+
+      - name: Nichts zu übernehmen?
+        id: leer
+        if: steps.staende.outputs.ahead == '0'
+        run: |
+          echo "::notice::staging enthält nichts, was main nicht schon hat. Es gibt nichts live zu schalten."
+          echo "### Live schalten" >> "$GITHUB_STEP_SUMMARY"; echo "staging hat keine neuen Änderungen gegenüber main. Nichts zu tun." >> "$GITHUB_STEP_SUMMARY"
+          echo "fertig=1" >> "$GITHUB_OUTPUT"
+
+      - name: Prüfungen für genau diesen Stand von staging kontrollieren
+        if: steps.leer.outputs.fertig != '1'
+        env:
+          SHA: ${{ steps.staende.outputs.sha }}
+        run: |
+          set -uo pipefail
+          gh api "repos/$REPO/actions/workflows/staging-checks.yml/runs?head_sha=$SHA&per_page=50" > "$RUNNER_TEMP/runs.json" || echo '{"workflow_runs":[]}' > "$RUNNER_TEMP/runs.json"
+          gh api "repos/$REPO/commits/$SHA/check-runs?check_name=staging-geprueft&per_page=50" > "$RUNNER_TEMP/checks.json" || echo '{"check_runs":[]}' > "$RUNNER_TEMP/checks.json"
+          if MELDUNG=$(python3 tools/live_schalten.py gate --sha "$SHA" --runs "$RUNNER_TEMP/runs.json" --checks "$RUNNER_TEMP/checks.json"); then
+            echo "::notice::$MELDUNG"
+          else
+            echo "::error title=Nicht live geschaltet::$MELDUNG"
+            { echo "### Live schalten: ABGEBROCHEN"; echo; echo "$MELDUNG"; echo; echo "Es wurde nichts verändert."; } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Nur prüfen - Ende
+        if: steps.leer.outputs.fertig != '1' && inputs.nur_pruefen
+        run: |
+          { echo "### Live schalten (nur geprüft)"; echo; echo "staging \`${{ steps.staende.outputs.sha }}\` darf live gehen. Es wurde nichts übernommen."; } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Pull Request staging -> main anlegen oder wiederverwenden
+        id: pr
+        if: steps.leer.outputs.fertig != '1' && !inputs.nur_pruefen
+        env:
+          SHA: ${{ steps.staende.outputs.sha }}
+          AHEAD: ${{ steps.staende.outputs.ahead }}
+        run: |
+          set -euo pipefail
+          N=$(gh api "repos/$REPO/pulls?state=open&base=main&head=${REPO%%/*}:staging" --jq '.[0].number // empty')
+          if [ -z "$N" ]; then
+            LISTE=$(gh api "repos/$REPO/compare/main...$SHA" --jq '[.commits[-30:][] | "- " + (.commit.message | split("\n")[0])] | join("\n")')
+            python3 - "$AHEAD" "$SHA" "$LISTE" > "$RUNNER_TEMP/pr.json" <<'PY'
+          import json, sys
+          ahead, sha, liste = sys.argv[1:4]
+          body = ("Live schalten: Der geprüfte Stand von `staging` kommt nach `main`.\n\n"
+                  f"Stand: `{sha}` ({ahead} Commit(s) voraus). Die Prüfungen (`staging-geprueft`) sind für genau diesen Stand grün.\n\n"
+                  "Die letzten Änderungen:\n\n" + liste + "\n\n"
+                  "Angelegt vom Workflow `live-schalten.yml` nach Klick auf \"Run workflow\".\n")
+          print(json.dumps({"title": f"Live schalten: staging nach main ({sha[:7]})", "head": "staging", "base": "main", "body": body}))
+          PY
+            if ! gh api "repos/$REPO/pulls" --method POST --input "$RUNNER_TEMP/pr.json" > "$RUNNER_TEMP/pr-antwort.json" 2> "$RUNNER_TEMP/pr-fehler.txt"; then
+              if grep -qi "not permitted to create or approve pull requests" "$RUNNER_TEMP/pr-fehler.txt"; then
+                echo "::error title=Pull Request nicht erlaubt::GitHub Actions darf keine Pull Requests anlegen. Einmalig einschalten: https://github.com/$REPO/settings/actions (Workflow permissions > Allow GitHub Actions to create and approve pull requests). Siehe STAGING.md."
+              else
+                echo "::error title=Pull Request nicht angelegt::$(head -c 400 "$RUNNER_TEMP/pr-fehler.txt")"
+              fi
+              exit 1
+            fi
+            N=$(python3 -c "import json;print(json.load(open('$RUNNER_TEMP/pr-antwort.json'))['number'])")
+            echo "Pull Request #$N angelegt."
+          else
+            echo "Offener Pull Request #$N wird verwendet."
+          fi
+          echo "nummer=$N" >> "$GITHUB_OUTPUT"
+
+      - name: Zusammenführbar? (Konflikte erkennen)
+        if: steps.leer.outputs.fertig != '1' && !inputs.nur_pruefen
+        env:
+          N: ${{ steps.pr.outputs.nummer }}
+          SHA: ${{ steps.staende.outputs.sha }}
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 12); do
+            M=$(gh api "repos/$REPO/pulls/$N" --jq '[.mergeable, .head.sha] | @tsv')
+            MERGEABLE=${M%%$'\t'*}; HEAD=${M##*$'\t'}
+            if [ "$HEAD" != "$SHA" ]; then
+              echo "::error title=staging hat sich geändert::Während des Schaltens kam ein neuer Commit auf staging ($HEAD). Prüfungen abwarten und erneut schalten."; exit 1
+            fi
+            [ "$MERGEABLE" != "null" ] && break
+            sleep 5
+          done
+          if [ "$MERGEABLE" = "false" ]; then
+            echo "::error title=Konflikt::staging und main lassen sich nicht automatisch zusammenführen (Konflikt, meist in Daten-Dateien, die Bots auf main ändern). main in staging übernehmen und Konflikte lösen (git merge origin/main auf staging), Prüfungen abwarten, erneut schalten."; exit 1
+          fi
+
+      - name: Zusammenführen nach main
+        id: merge
+        if: steps.leer.outputs.fertig != '1' && !inputs.nur_pruefen
+        env:
+          N: ${{ steps.pr.outputs.nummer }}
+          SHA: ${{ steps.staende.outputs.sha }}
+        run: |
+          set -uo pipefail
+          # sha= sorgt dafür, dass genau der geprüfte Stand übernommen wird (kein Commit dazwischen)
+          if gh api "repos/$REPO/pulls/$N/merge" --method PUT -f merge_method=merge -f sha="$SHA" \
+               -f commit_title="Live schalten: staging nach main (#$N)" > "$RUNNER_TEMP/merge.json" 2> "$RUNNER_TEMP/merge-fehler.txt"; then
+            NEU=$(python3 -c "import json;print(json.load(open('$RUNNER_TEMP/merge.json'))['sha'])")
+            echo "neu=$NEU" >> "$GITHUB_OUTPUT"
+            echo "::notice::main steht jetzt auf ${NEU:0:7}."
+          else
+            FEHLER=$(head -c 500 "$RUNNER_TEMP/merge-fehler.txt")
+            echo "::error title=Zusammenführen abgelehnt::$FEHLER | Häufige Gründe: Schutzregel von main verlangt etwas, das fehlt (Statuscheck staging-geprueft für diesen Stand, Freigabe), oder staging hat sich geändert. Siehe STAGING.md."
+            { echo "### Live schalten: Zusammenführen abgelehnt"; echo; echo "Pull Request #$N bleibt offen. Antwort von GitHub: \`$FEHLER\`"; } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Live-Workflows anstoßen (ein Merge mit GITHUB_TOKEN startet sie nicht von selbst)
+        if: steps.leer.outputs.fertig != '1' && !inputs.nur_pruefen
+        env:
+          ALT: ${{ steps.staende.outputs.main }}
+          NEU: ${{ steps.merge.outputs.neu }}
+          SEITE_BAUEN: ${{ vars.SITE_PUSH_BUILD || '1' }}
+        run: |
+          set -uo pipefail
+          git fetch --no-tags origin main
+          PLAN=$(python3 tools/live_schalten.py plan --base "$ALT" --head "$NEU")
+          echo "Geänderte Dateien: $(git diff --name-only "$ALT..$NEU" | wc -l)"
+          FEHLT=0; GESTARTET=""
+          for W in $PLAN; do
+            if [ "$W" = "site.yml" ] && [ "$SEITE_BAUEN" = "0" ]; then echo "site.yml übersprungen (Repo-Variable SITE_PUSH_BUILD=0, kommt mit dem nächtlichen Bau)"; continue; fi
+            ARGS=()
+            [ "$W" = "site.yml" ] && ARGS=(-f mode=fresh)   # wie ein Push-Bau: ohne Spotify-/Plattform-Abgleich
+            if gh workflow run "$W" --ref main "${ARGS[@]}"; then GESTARTET="$GESTARTET $W"; else echo "::error::$W konnte nicht angestoßen werden - bitte unter Actions von Hand starten."; FEHLT=1; fi
+          done
+          {
+            echo "### Live geschaltet"; echo
+            echo "- main steht auf \`$NEU\` (vorher \`$ALT\`)"
+            echo "- Pull Request: #${{ steps.pr.outputs.nummer }}"
+            echo "- Live-Workflows angestoßen:${GESTARTET:- keine (nur Daten oder Doku geändert)}"
+            echo; echo "Fortschritt: https://github.com/$REPO/actions"
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $FEHLT

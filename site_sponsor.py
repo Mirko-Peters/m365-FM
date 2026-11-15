@@ -128,6 +128,10 @@ def dashboard_copy(lang):
         "clicks": ("Clicks", "Klicks"),
         "downloads": ("Episode downloads", "Folgen-Downloads"),
         "ended": ("Ended", "Beendet"),
+        # Status Stand heute (Mirko 11.11.2026): laeuft -> Karenzzeit bis TT.MM.JJJJ (end + 182 Tage) -> beendet, Zahlen bleiben sichtbar; 13 weitere Sprachen in data/py_i18n.json
+        "running": ("Running", "Läuft"),
+        "grace_until": ("Grace period until", "Karenzzeit bis"),
+        "ended_visible": ("Ended – figures stay visible", "Beendet – Zahlen weiter sichtbar"),
         "dashboard": ("Overview", "Übersicht"),
         "placement_view": ("Placement detail", "Platzierungsdetails"),
         "report_view": ("Monthly report", "Monatsbericht"),

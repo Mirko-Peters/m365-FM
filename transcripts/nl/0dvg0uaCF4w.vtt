@@ -1,0 +1,961 @@
+WEBVTT
+
+00:00:00.100 --> 00:00:03.660
+Waarom draait de maandafsluiting nog steeds om vijf verschillende spreadsheetversies,
+
+00:00:03.840 --> 00:00:06.820
+iemand die naar het juiste bestand zoekt en een manager die wacht op een antwoord dat
+
+00:00:06.820 --> 00:00:08.620
+eigenlijk al lang voor de hand liggend zou moeten zijn?
+
+00:00:08.800 --> 00:00:12.080
+Je hebt misschien één groot boek, meerdere afdelingen en duizenden transacties,
+
+00:00:12.300 --> 00:00:14.740
+maar je kunt nog steeds geen helder financieel verhaal vertellen.
+
+00:00:14.960 --> 00:00:17.860
+Dat is waar Dynamics 365 Finance om de hoek komt kijken.
+
+00:00:18.080 --> 00:00:22.740
+Ik ben Mirko Peters van M365FM en in dit artikel leg ik uit hoe geboekte financiële gegevens
+
+00:00:22.740 --> 00:00:25.040
+worden omgezet in rapporten die mensen daadwerkelijk kunnen lezen.
+
+00:00:25.260 --> 00:00:28.280
+Zie elke transactie als een document dat eenmaal in een centrale archiefkast is opgeslagen
+
+00:00:28.280 --> 00:00:31.660
+en vervolgens op verschillende manieren kan worden gelezen zonder telkens de cijfers opnieuw te hoeven invoeren.
+
+00:00:31.780 --> 00:00:34.060
+Laten we beginnen met de gegevens in die archiefkast.
+
+00:00:34.240 --> 00:00:37.580
+De basis, het grootboek, de hoofdrekeningen en de categorieën.
+
+00:00:37.720 --> 00:00:40.880
+Het grootboek is de belangrijkste financiële administratie van een bedrijf
+
+00:00:40.880 --> 00:00:43.780
+en elke geboekte transactie komt daar op de een of andere manier terecht.
+
+00:00:43.980 --> 00:00:48.880
+Een klantfactuur, een leveranciersrekening, een salarisboeking, een bankbetaling of een voorraadcorrectie
+
+00:00:48.880 --> 00:00:50.560
+laten allemaal een boekhoudkundig record achter.
+
+00:00:50.820 --> 00:00:53.440
+Zie het grootboek als een grote archiefkast met een strikte regel
+
+00:00:53.440 --> 00:00:56.460
+je stopt een huurfactuur niet in dezelfde lade als productverkopen
+
+00:00:56.460 --> 00:00:59.280
+en je stopt een bankzaldo niet bij de salarissen van werknemers.
+
+00:00:59.420 --> 00:01:01.600
+Elk bedrag heeft een eigen financiële plek nodig.
+
+00:01:01.860 --> 00:01:04.880
+Die plek begint met een hoofdrekening die één simpele vraag beantwoordt
+
+00:01:04.880 --> 00:01:06.080
+waar heeft dit geldbetrekking op.
+
+00:01:06.180 --> 00:01:09.060
+Contant geld staat op één hoofdrekening, verkoopopbrengsten op een andere
+
+00:01:09.060 --> 00:01:13.920
+en huurkosten, lonen, debiteuren, krediteuren, leningen en belastingen hebben elk hun eigen rekening.
+
+00:01:14.040 --> 00:01:16.320
+Dus wanneer uw bedrijf een maandelijkse huurfactuur betaalt
+
+00:01:16.320 --> 00:01:19.940
+boekt Dynamics 365 Finance dat bedrag op de rekening voor huurkosten.
+
+00:01:20.140 --> 00:01:21.620
+En wanneer een klant een factuur betaalt
+
+00:01:21.620 --> 00:01:23.600
+komt de opbrengst terecht op een verkooprekening
+
+00:01:23.600 --> 00:01:26.380
+terwijl het onbetaalde bedrag op de rekening voor debiteuren komt te staan.
+
+00:01:26.560 --> 00:01:29.260
+De rekening vertelt finance wat er financieel is gebeurd.
+
+00:01:29.500 --> 00:01:33.200
+Deze structuur is belangrijk omdat een financieel overzicht de cijfers niet verzint
+
+00:01:33.200 --> 00:01:35.880
+maar de cijfers leest en groepeert die al in het grootboek staan.
+
+00:01:36.080 --> 00:01:38.400
+Als de boekhoudkundige gegevens op de verkeerde plek terechtkomen
+
+00:01:38.400 --> 00:01:41.900
+kan geen enkel rapportontwerp de betekenis later corrigeren zonder handmatige aanpassingen.
+
+00:01:42.240 --> 00:01:43.380
+Hoofdrekeningen hebben ook type
+
+00:01:43.380 --> 00:01:47.840
+en een rekeningtype geeft Dynamics 365 Finance een brede klassificatie.
+
+00:01:48.080 --> 00:01:51.840
+Winst- en verliesrekeningen registreren de inkomsten en uitgaven over een bepaalde periode
+
+00:01:51.840 --> 00:01:54.500
+en hun gecombineerde saldo draagt bij aan het ja-resultaat.
+
+00:01:54.660 --> 00:01:58.480
+De balans registreert wat het bedrijf bezit, wat het verschuldigt is en het belang van de eigenaar,
+
+00:01:58.600 --> 00:02:00.300
+activa, passiva en eigen vermogen.
+
+00:02:00.480 --> 00:02:03.900
+Contant geld is normaal gesproken een actief, een banklening is normaal gesproken een passieve,
+
+00:02:04.040 --> 00:02:06.780
+verkoopbrengst te horen bij de winst- en verliesrekening en huur hoort bij de kosten.
+
+00:02:07.020 --> 00:02:09.380
+Dat klinkt misschien als basisboekhouding en dat is het ook,
+
+00:02:09.520 --> 00:02:11.780
+maar het is tevens het eerste controlepunt voor rapportage
+
+00:02:11.780 --> 00:02:15.600
+omdat het systeem moet weten of een rekening op een winst- en verliesrekening of een balans thuishoort.
+
+00:02:15.760 --> 00:02:17.440
+Er is ook een speciaal totaalrekening type,
+
+00:02:17.440 --> 00:02:19.760
+waarmee een reeks rekeningsaldi kan worden opgeteld.
+
+00:02:19.940 --> 00:02:23.280
+Dit kunt u bijvoorbeeld gebruiken wanneer u een totaal over een bepaald interval wilt berekenen.
+
+00:02:23.460 --> 00:02:27.400
+Veel financiële teams stellen hun totaal en echter rechtstreeks samen in de financiële rapportage.
+
+00:02:27.760 --> 00:02:31.100
+Rekeningtypen blijven breed en dat is waar hoofdrekening-categorieën in beeld komen.
+
+00:02:31.320 --> 00:02:34.780
+Zij creëren een nuttigere rapportagegroep binnen die brede klassificatie.
+
+00:02:35.020 --> 00:02:38.700
+Zo kunnen activa-rekeningen bijvoorbeeld worden ondergebracht in categorieën zoals contanten,
+
+00:02:38.920 --> 00:02:41.200
+vaste activa, debiteuren of korte termijnbeleggingen.
+
+00:02:41.300 --> 00:02:44.080
+Passiva-rekeningen daarentegen kunnen worden ondergebracht in crediteuren,
+
+00:02:44.080 --> 00:02:46.000
+te betalen belastingen of lange termijn schulden.
+
+00:02:46.120 --> 00:02:47.440
+Het verschil is eenvoudig.
+
+00:02:47.600 --> 00:02:50.200
+Het rekeningtype geeft de algemene boekhoud-categorie aan
+
+00:02:50.200 --> 00:02:53.700
+en de hoofdrekening-categorie bepaalt de rapportagegroep die u wilt laten zien.
+
+00:02:53.920 --> 00:02:55.560
+Stel je voor dat je meerdere bankrekeningen hebt,
+
+00:02:55.680 --> 00:02:57.840
+een kasrekening en een rekening voor het vereffenen van contanten.
+
+00:02:58.040 --> 00:02:59.980
+Elk van deze rekeningen kan een eigen hoofdrekening hebben,
+
+00:03:00.140 --> 00:03:02.160
+omdat de financiële afdeling die mate van detail nodig heeft.
+
+00:03:02.340 --> 00:03:04.580
+Toch kunnen ze allemaal tot de categorie contanten behoren.
+
+00:03:04.760 --> 00:03:08.460
+Een rapport kan dus één overzichtelijke kasregel tonen wanneer dat alles is wat de lezer nodig heeft.
+
+00:03:08.460 --> 00:03:12.080
+Daarom gebruiken de standaard financiële rapporten hoofdrekening-categorieën.
+
+00:03:12.220 --> 00:03:18.420
+Ze hebben een vertrouwde structuur nodig voordat ze zal die kunnen weergeven in secties zoals activa, passiva, opbrengsten of kosten.
+
+00:03:18.780 --> 00:03:20.460
+Een overzichtelijke opzet loont later,
+
+00:03:20.580 --> 00:03:22.720
+want wanneer hoofdrekeningen duidelijke regels volgen,
+
+00:03:22.920 --> 00:03:27.540
+rekening-type correct zijn en categorieën overeenkomen met de manier waarop uw bedrijf de financiële overzichten leest,
+
+00:03:27.720 --> 00:03:29.200
+wordt rapporteren veel eenvoudiger.
+
+00:03:29.400 --> 00:03:31.240
+Je begint met gegevens die al een plek hebben.
+
+00:03:31.480 --> 00:03:33.500
+Rekeningen leggen uit wat er financieel is gebeurd,
+
+00:03:33.640 --> 00:03:35.500
+maar leidinggevenden willen meestal meer dan dat.
+
+00:03:35.500 --> 00:03:42.060
+Oh, ze willen ook weten waar het is gebeurd, wie het geld heeft uitgegeven en welk onderdeel van het bedrijf het resultaat heeft behaald.
+
+00:03:42.680 --> 00:03:46.380
+Financiële dimensies die de vragen beantwoorden die leiders daadwerkelijk stellen.
+
+00:03:46.580 --> 00:03:49.220
+Een hoofdrekening laat zien waar het geld mee te maken heeft.
+
+00:03:49.460 --> 00:03:53.580
+Simpel genoeg, maar financiële dimensies voegen de zakelijke context rondom dat bedrag toe.
+
+00:03:53.740 --> 00:03:56.200
+Ze beantwoorden de vragen die leiders stellen wanneer ze een totaalbedrag zien.
+
+00:03:56.420 --> 00:03:57.700
+Welke afdeling heeft het uitgegeven?
+
+00:03:57.880 --> 00:03:59.000
+Welke locatie heeft het verdiend?
+
+00:03:59.240 --> 00:04:00.120
+Welke business unit?
+
+00:04:00.320 --> 00:04:01.360
+Was het gekoppeld aan een project?
+
+00:04:01.620 --> 00:04:03.000
+Laten we eens kijken naar huurkosten.
+
+00:04:03.000 --> 00:04:06.820
+Uw bedrijf betaalt mogelijk huur voor een hoofdkantoor, een magazijn en verschillende winkellocaties.
+
+00:04:06.980 --> 00:04:09.800
+Als elke betaling wordt geboekt als huurkosten, ziet u de totale rekening.
+
+00:04:10.000 --> 00:04:13.080
+Dat is nuttig, maar het vertelt een regiomanager niet wat hun locatie kost.
+
+00:04:13.240 --> 00:04:15.140
+Een financiële dimensie vult die leemte op.
+
+00:04:15.280 --> 00:04:20.800
+U kunt afdeling, financiën, verkoop of operations toevoegen, of kostenplaats, business unit, regio of project.
+
+00:04:20.980 --> 00:04:23.380
+Die waarden worden gekoppeld aan de boeking wanneer deze wordt verwerkt.
+
+00:04:23.540 --> 00:04:26.580
+Dus de rekening blijft huurkosten, maar de boeking vertelt een completer verhaal.
+
+00:04:26.740 --> 00:04:29.000
+Een betaling zou kunnen luiden, huurkosten hoofdkantoor.
+
+00:04:29.120 --> 00:04:30.720
+Een andere, huurkosten magazijn.
+
+00:04:30.720 --> 00:04:32.460
+Een derde, huurkosten winkel Noord.
+
+00:04:32.620 --> 00:04:35.020
+Hetzelfde account, maar een andere betekenis voor de bedrijfsvoering.
+
+00:04:35.200 --> 00:04:40.140
+Dit geeft de financiële afdeling één consistente accountstructuur, terwijl leidinggevende de resultaten per afdeling binnen het bedrijf kunnen bekijken.
+
+00:04:40.280 --> 00:04:41.960
+De salesdirecteur kijkt naar de omzet.
+
+00:04:42.120 --> 00:04:43.960
+De magazijnmanager kijkt naar het magazijn.
+
+00:04:44.140 --> 00:04:46.180
+De financiële afdeling ziet het totaal van iedereen.
+
+00:04:46.420 --> 00:04:48.820
+Dit voorkomt een veelvoorkomende gewoonte bij spreadsheets.
+
+00:04:49.060 --> 00:04:52.880
+Zonder dimensies exporteert iemand grootboek saldi en begint handmatig kolommen toe te voegen.
+
+00:04:52.880 --> 00:04:58.900
+Sorteren, filteren, getallen kopiëren naar een nieuwe werkmap en dan proberen uit te leggen waarom het totaal van de afdeling niet overeenkomt met het totaal van het bedrijf.
+
+00:04:59.000 --> 00:05:03.140
+Met dimensies die worden ingevoerd wanneer de transactie wordt geboekt, begint dat werk vanuit een betere basis.
+
+00:05:03.400 --> 00:05:07.700
+De details horen al bij de boekhouding, maar het werkt alleen als de waarden consistent blijven.
+
+00:05:07.700 --> 00:05:16.640
+Als de ene persoon Regio Noord selecteert, een andere Noord en een derde Noord 01 splitst het rapport wat één saldo zou moeten zijn in afzonderlijke regels.
+
+00:05:16.820 --> 00:05:21.720
+De financiële afdeling heeft duidelijke namen, duidelijk eigenaarschap en regels nodig over welke waarden mensen mogen gebruiken.
+
+00:05:21.940 --> 00:05:25.180
+Dynamics 365 Finance ondersteunt dit met accountregels.
+
+00:05:25.380 --> 00:05:29.720
+Afhankelijk van het account kan het systeem een dimensie vereisen of de waarden beperken die gebruikers kunnen selecteren.
+
+00:05:29.880 --> 00:05:34.740
+Een onkostenrekening kan bijvoorbeeld een kostenplaats vereisen, terwijl een bankrekening mogelijk alleen een bedrijfseenheid nodig heeft.
+
+00:05:34.920 --> 00:05:37.280
+Je hoeft niet voor elke rekening dezelfde details te gebruiken.
+
+00:05:37.280 --> 00:05:38.280
+Hier is een simpele regel.
+
+00:05:38.420 --> 00:05:42.880
+Gebruik een financiële dimensie wanneer je verwacht de waarden te hergebruiken en saldi op basis daarvan in de loop van de tijd te rapporteren.
+
+00:05:43.000 --> 00:05:44.160
+Afdeling is herbruikbaar.
+
+00:05:44.520 --> 00:05:45.680
+Kostenplaats is herbruikbaar.
+
+00:05:45.940 --> 00:05:47.100
+Regio is herbruikbaar.
+
+00:05:47.300 --> 00:05:47.840
+Project ook.
+
+00:05:47.980 --> 00:05:51.900
+Als je financiële team saldi en kosten per project bijhoudt, is het factuurnummer anders.
+
+00:05:52.100 --> 00:05:53.420
+Het inkoopordernummer is anders.
+
+00:05:53.720 --> 00:05:57.460
+Deze waarden horen vaak bij één transactie of één kortlopende opdracht.
+
+00:05:57.660 --> 00:06:03.800
+Het aanmaken van een financiële dimensie voor elk factuurnummer resulteert in duizenden unieke waarden die niemand op een overzicht wil hebben.
+
+00:06:04.020 --> 00:06:06.020
+Daar komen financiële techs beter van pas.
+
+00:06:06.020 --> 00:06:13.140
+Een financiële techs laat een flexibele referentie op, bijvoorbeeld een factuurnummer, inkooporder, betalingsreferentie of idee van een extern systeem.
+
+00:06:13.340 --> 00:06:18.960
+Deze techs staat bij de boekingspost voor detail en analyse, maar heeft niet dezelfde gestructureerde rol als een financiële dimensie.
+
+00:06:19.260 --> 00:06:21.800
+Financiële dimensies maken deel uit van de rekeningsstructuur.
+
+00:06:21.980 --> 00:06:26.260
+Het systeem controleert of de waarde geldig is en de financiële afdeling kan deze gebruiken om saldi samen te vatten.
+
+00:06:26.660 --> 00:06:27.900
+Financiële techs zijn lichter.
+
+00:06:28.100 --> 00:06:31.780
+Ze labelen een transactie zonder dat label een permanent rapportage segment te maken.
+
+00:06:31.780 --> 00:06:35.560
+Maak de scheen dimensie aan met de naam, factuurnummer, om later facturen terug te vinden.
+
+00:06:35.780 --> 00:06:38.300
+Gebruik daarvoor transactiegegevens of een financiële tech.
+
+00:06:38.420 --> 00:06:44.140
+Nog een belangrijk instellingspunt, financiële rapportage kan gebruik maken van de dimensies die al in uw systeem aanwezig zijn, zonder dat u extra rapportagetools nodig hebt.
+
+00:06:44.280 --> 00:06:50.440
+Op de pagina voor het instellen van financiële rapportage kiest de financiële afdeling welke dimensies worden weergegeven voor het ontwerp en de weergave van rapporten en in welke volgorde.
+
+00:06:50.440 --> 00:06:52.320
+Die volgorde is belangrijker dan het lijkt.
+
+00:06:52.480 --> 00:06:57.940
+Als uw rapporten normaal gesproken de volgende gegevens weergeven, hoofdrekening, afdeling, kostenplaats, project, dan weten mensen waar ze moeten zoeken.
+
+00:06:58.100 --> 00:07:02.400
+Als de volgorde verandert van het ene rapport naar het andere, wordt het lezen van details trager en is de kans op fouten groter.
+
+00:07:02.640 --> 00:07:07.420
+Zodra elke boeking de juiste herbruikbare labels heeft, kan het grootboek meer antwoorden geven dan alleen, wat hebben we uitgegeven?
+
+00:07:07.580 --> 00:07:11.480
+Het geeft ook antwoord op de vragen, waar, wie en welk onderdeel van het bedrijf.
+
+00:07:11.600 --> 00:07:17.320
+En met die details kan Dynamics 365 finance die geboekte boekingen omzetten in een financieel overzicht.
+
+00:07:17.320 --> 00:07:19.580
+Wat financiële rapportage nu eigenlijk is.
+
+00:07:19.760 --> 00:07:24.600
+Dus, zodra uw grootboekboekingen de juiste rekeningen en dimensies bevatten, wat doet financiële rapportage er dan precies mee?
+
+00:07:24.840 --> 00:07:30.060
+Financiële rapportage is de add-in in Dynamics 365 finance voor het maken, onderhouden en bekijken van financiële overzichten.
+
+00:07:30.280 --> 00:07:32.980
+Dat klinkt technisch, dus laten we het in begrijpelijke taal uitleggen.
+
+00:07:33.120 --> 00:07:42.840
+Het is het onderdeel van Dynamics 365 finance dat uw grootboek zal die omzet in rapporten, zoals een winst- en verliesrekening, balans, kastroomoverzicht, proefbalans of budget versus werkelijke cijfers.
+
+00:07:42.840 --> 00:07:48.300
+Het is geen nieuw grootboek. Niemand boekt een factuur in de financiële rapportage of betaalt een leverancier vanuit het grootboek.
+
+00:07:48.360 --> 00:07:53.140
+De booking vindt plaats in Dynamics 365 finance en de financiële rapportage leest de resultaten daarna.
+
+00:07:53.300 --> 00:07:55.660
+Het is ook niet zomaar een dashboard met een paar grafieken.
+
+00:07:55.860 --> 00:07:57.840
+Met een dashboard kunt u snel een trend bekijken.
+
+00:07:58.040 --> 00:08:06.160
+Een financieel overzicht biedt een gestructureerd beeld van rekeninggroepen, totale, rapportageperiode, vergelijkingen en de mogelijkheid om de details achter een cijfer te bekijken.
+
+00:08:06.360 --> 00:08:09.020
+Zie het als de rapportageruimte die is gekoppeld aan het grootboek.
+
+00:08:09.020 --> 00:08:16.480
+Het grootboek registreert transacties. De financiële rapportage ordent deze in het formaat dat uw financiële team, managers, additors of bestuursleden nodig hebben om te lezen.
+
+00:08:16.680 --> 00:08:21.400
+Achter de schermen maakt de financiële rapportage gebruik van een financiële data warehouse dat wordt bijgewerkt vanuit het grootboek.
+
+00:08:21.540 --> 00:08:28.820
+Een data warehouse is een rapportagekopie van financiële gegevens die zo is georganiseerd dat rapporten kunnen worden gegenereerd zonder dat mensen die facturen invoeren of journaalposten boeken, worden vertraagd.
+
+00:08:28.920 --> 00:08:33.480
+Die scheiding helpt de financiële afdeling van OU om een overzicht te bekijken terwijl andere gebruikers doorwerken.
+
+00:08:33.480 --> 00:08:37.920
+U hoeft niet elk saldo naar een spreadsheet te exporteren om een overzichtelijk maandelijksrapport te maken.
+
+00:08:37.920 --> 00:08:42.760
+Microsoft levert 22 standaard financiële rapporten mee met Dynamics 365 Finance.
+
+00:08:42.960 --> 00:08:51.920
+U krijgt een winst- en verliesrekening, balans, kastroomoverzicht, gedetailleerde proefbalans, samenvattende proefbalans, doorlopende onkostenrapporten en budget versus werkelijke rapporten.
+
+00:08:52.100 --> 00:08:57.220
+Daarnaast zijn er rapporten voor wekelijkse verkopen en kortingen, auditgegevens, ratio's of een balans naast een winst- en verliesrekening.
+
+00:08:57.360 --> 00:09:00.240
+Maar dat betekent niet dat iedereen vanaf dag 1 overeenkomt met uw bedrijf.
+
+00:09:00.240 --> 00:09:05.460
+De rapportindeling ziet er misschien goed uit, maar uw eigen belangrijkste rekeningen en categorieën moeten nog steeds correct aan de rijen worden gekoppeld.
+
+00:09:05.460 --> 00:09:11.960
+Als uw bedrijf een rekeninggroep directe kosten noemt, terwijl het standaardrapport kosten van verkochte goederen verwacht, moet iemand die instelling controleren.
+
+00:09:12.120 --> 00:09:14.020
+Begin in ieder geval met een standaardrapport.
+
+00:09:14.200 --> 00:09:20.040
+Het biedt u een werkend voorbeeld, een vertrouwde structuur en een veel sneller startpunt dan elk rapport vanaf een lege pagina op te bouwen.
+
+00:09:20.200 --> 00:09:25.320
+Open het vergelijk de saldi met uw grootboek, controleer de rekeninggroeperingen en pas alleen aan wat uw bedrijf nodig heeft.
+
+00:09:25.560 --> 00:09:30.140
+Dynamics 365 Finance beschikt over verschillende rapportagetools en dit is waar mensen vaak door elkaar raken.
+
+00:09:30.140 --> 00:09:34.140
+Financiële rapportage behandelt financiële overzichten op basis van het grootboek.
+
+00:09:34.300 --> 00:09:45.180
+SQL Server Reporting Services, SSRS, is doorgaans geschikt voor opgemaakte bedrijfsdocumenten en gedetailleerde rapporten zoals facturen, inkooporders, klantoverzichten of lange transactielijsten.
+
+00:09:45.380 --> 00:09:47.840
+Het is ontworpen voor pagina's met een vaste layout.
+
+00:09:47.840 --> 00:09:55.780
+Elektronische rapportage behandelt bestanden die naar een andere locatie moeten worden verzonden, zoals bankbestanden, belastingaangifte, XML-bestanden, CSV-bestanden of andere gereguleerde formaten.
+
+00:09:56.020 --> 00:09:59.160
+Deze tool is gericht op het verzenden en ontvangen van gestructureerde gegevens.
+
+00:09:59.400 --> 00:10:01.380
+Power BI is geschikt voor interactieve analyses.
+
+00:10:01.700 --> 00:10:06.920
+U gebruikt Power BI wanneer u grafieken, filters, trends en managementweergave nodig hebt om vragen te onderzoeken.
+
+00:10:07.140 --> 00:10:09.000
+Welke regio heeft de snelst groeiende kosten?
+
+00:10:09.200 --> 00:10:12.240
+Hoe verhouden de werkelijke uitgaven zich tot het budget over meerdere maanden?
+
+00:10:12.460 --> 00:10:15.440
+Financiële rapportage behandelt de formele financiële overzichten.
+
+00:10:15.440 --> 00:10:18.120
+Power BI helpt mensen om de patronen daarin te onderzoeken.
+
+00:10:18.320 --> 00:10:22.740
+Excel biedt de financiële afdeling een vertrouwde omgeving om cijfers te controleren of aanvullende analyses uit te voeren,
+
+00:10:22.900 --> 00:10:25.740
+maar het hoeft niet de plek te worden waar elk financieel overzicht helemaal opnieuw wordt opgesteld.
+
+00:10:25.920 --> 00:10:27.420
+Elke tool heeft zijn eigen functie.
+
+00:10:27.620 --> 00:10:32.340
+Kies de juiste optie en rapporteren wordt minder een kwestie van cijfers herschrijven en meer een kwestie van ze lezen.
+
+00:10:32.540 --> 00:10:36.080
+Een rapport opbouwen, rijden, kolommen en rapportdefinities.
+
+00:10:36.920 --> 00:10:39.120
+Elk financieel overzicht begint met een vorm.
+
+00:10:39.320 --> 00:10:44.260
+Je moet bepalen wat er aan de linkerkant komt, wat er bovenaan komt en hoe het rapport die twee samenbrengt.
+
+00:10:44.260 --> 00:10:50.080
+In Dynamics 365 Finance noemen we die onderdelen rijdefinities, kolomdefinities en rapportdefinities.
+
+00:10:50.260 --> 00:10:51.620
+Laten we beginnen met de rijen.
+
+00:10:51.780 --> 00:10:54.240
+Een rijdefinitie bepaalt de linkerkant van je overzicht.
+
+00:10:54.420 --> 00:10:58.240
+Het vertelt het systeem welke rekeningen, rekeningcategorieën of dimensiecombinaties moeten worden gebruikt.
+
+00:10:58.380 --> 00:11:01.380
+Het geeft ook aan hoe elke regel moet worden genoemd en waar totalen moeten verschijnen.
+
+00:11:01.580 --> 00:11:03.340
+Denk aan een normale winst- en verliesrekening.
+
+00:11:03.500 --> 00:11:06.400
+Omzet bovenaan, kosten van verkochte goederen daaronder, dan bruto winstmarge.
+
+00:11:06.640 --> 00:11:09.660
+Daaronder komen de operationele kosten en onderaan het nettoresultaat.
+
+00:11:09.820 --> 00:11:11.960
+Elk van die regels heeft zijn eigen instructies nodig.
+
+00:11:11.960 --> 00:11:16.580
+Omzet kan verwijzen naar een groep verkooprekeningen, terwijl kosten van verkochte goederen verwijzen naar kostenrekeningen.
+
+00:11:16.780 --> 00:11:19.420
+Bruto winstmarge verwijst helemaal niet naar een rekening.
+
+00:11:19.600 --> 00:11:23.340
+Het berekent een totaal door de kosten van verkochte goederen van de omzet af te trekken.
+
+00:11:23.560 --> 00:11:25.180
+Dat is de taak van een rijdefinitie.
+
+00:11:25.340 --> 00:11:29.440
+Het vertelt de financiële rapportage welke geboekte saldie op elke regel thuishoren...
+
+00:11:29.440 --> 00:11:32.700
+...en hoe die regels moeten worden opgeteld of afgetrokken om het totaal te berekenen.
+
+00:11:32.860 --> 00:11:37.660
+Je kunt een rij opbouwen rond individuele hoofdrekeningen, een reeks rekeningen of een hoofdrekeningcategorie.
+
+00:11:37.660 --> 00:11:39.740
+Categorieën besparen veel instelwerk.
+
+00:11:39.920 --> 00:11:43.720
+Een balans scheidt bijvoorbeeld normaal gesproken activa, passiva en eigen vermogen.
+
+00:11:43.940 --> 00:11:48.100
+Binnen de activa kun je contanten, debiteuren, vaste activa en voorraad weergeven.
+
+00:11:48.320 --> 00:11:51.220
+Als die rekeningen al in de juiste hoofdrekeningcategorieën staan...
+
+00:11:51.220 --> 00:11:55.120
+...kunnen de standaard balansrijen die groepen gebruiken zonder elke rekening afzonderlijk te hoeven vermelden.
+
+00:11:55.320 --> 00:11:57.100
+Dat zorgt voor een overzichtelijker ontwerp.
+
+00:11:57.260 --> 00:12:00.660
+De financiële afdeling houdt nog steeds aparte rekeningen bij voor aparte saldie...
+
+00:12:00.660 --> 00:12:03.520
+...maar de lezer ziet alleen het detailniveau dat relevant is voor een formeel overzicht.
+
+00:12:03.660 --> 00:12:05.960
+Als ze meer details nodig hebben, kunnen ze dieper kijken.
+
+00:12:05.960 --> 00:12:09.240
+Het overzicht zelf hoeft geen telefoonboek met rekeningnummers te worden.
+
+00:12:09.440 --> 00:12:11.700
+Rijen beantwoorden één vraag, wat rapporteren we?
+
+00:12:11.820 --> 00:12:14.340
+Kolommen beantwoorden een andere, hoe willen we het weergeven?
+
+00:12:14.480 --> 00:12:18.040
+Een kolomdefinitie bepaalt welke informatie over de pagina wordt weergegeven.
+
+00:12:18.200 --> 00:12:22.200
+U kunt de huidige maand, de resultaten tot nu toe dit jaar, de resultaten tot nu toe vorig jaar...
+
+00:12:22.200 --> 00:12:26.000
+...het budget, de werkelijke cijfers of het verschil tussen de werkelijke en de budgetcijfers weergeven.
+
+00:12:26.160 --> 00:12:29.340
+Een eenvoudige winst- en verliesrekening kan beginnen met een kolom met een beschrijving.
+
+00:12:29.540 --> 00:12:32.360
+Vervolgens kunt u de werkelijke cijfers voor de huidige periode weergeven...
+
+00:12:32.360 --> 00:12:35.460
+...daarna de resultaten tot nu toe dit jaar, vervolgens het budget en tot slot de afwijking.
+
+00:12:35.620 --> 00:12:38.560
+Die kolom met de afwijking berekent het verschil automatisch...
+
+00:12:38.560 --> 00:12:42.420
+...zodat managers na het genereren van het rapport geen nieuwe formule in Excel hoeven te maken.
+
+00:12:42.600 --> 00:12:46.360
+U kunt periodes ook naast elkaar plaatsen, bijvoorbeeld januari tot en met december...
+
+00:12:46.360 --> 00:12:50.420
+...dit kwartaal naast hetzelfde kwartaal vorig jaar of de werkelijke resultaten naast een prognose.
+
+00:12:50.600 --> 00:12:53.260
+De rijen bepalen de onderwerpen en de kolommen de weergave.
+
+00:12:53.500 --> 00:12:56.960
+Door deze twee elementen te combineren, krijgt u een groot deel van een financieel overzicht...
+
+00:12:56.960 --> 00:12:59.420
+...maar het systeem heeft nog steeds een plek nodig waar u het rapport en naam geeft...
+
+00:12:59.420 --> 00:13:02.800
+...en Dynamics 365 Finance vertelt welke rij- en kolomdefinities bij elkaar horen.
+
+00:13:03.020 --> 00:13:04.340
+Dat is de rapportdefinitie.
+
+00:13:04.500 --> 00:13:08.460
+Een rapportdefinitie combineert rijen en kolommen tot iets dat mensen kunnen genereren.
+
+00:13:08.660 --> 00:13:12.420
+Het bepaalt ook instellingen zoals afronding en hoe negatieve bedragen worden weergegeven.
+
+00:13:12.600 --> 00:13:14.000
+Hier is een concreet voorbeeld.
+
+00:13:14.220 --> 00:13:17.320
+Je zou een rijdefinitie kunnen maken met de naam winst- en verliesrekening...
+
+00:13:17.320 --> 00:13:20.720
+...en vervolgens een kolomdefinitie met de naam maandelijks werkelijk budget en afwijking.
+
+00:13:20.720 --> 00:13:25.100
+De rapportdefinitie verbindt deze en geeft het uiteindelijke rapport een naam, bijvoorbeeld...
+
+00:13:25.100 --> 00:13:26.620
+...Winst- en verliesrekeningmanagement.
+
+00:13:26.860 --> 00:13:29.840
+Deze scheiding is handig omdat je de onderdelen kunt hergebruiken.
+
+00:13:30.060 --> 00:13:34.660
+Een rijdefinitie voor een winst- en verliesrekening kan bijvoorbeeld werken met een maandelijkse kolomindeling...
+
+00:13:34.660 --> 00:13:37.800
+...een jaar- tot datumindeling en een vergelijkingsindeling met het voorgaande jaar.
+
+00:13:37.980 --> 00:13:42.500
+Je hoeft niet telkens dezelfde omzet en kostenstructuur opnieuw op te bouwen wanneer iemand een nieuwe vraag stelt.
+
+00:13:42.760 --> 00:13:45.200
+Sommige bedrijven hebben één rapport nodig voor één bedrijf.
+
+00:13:45.340 --> 00:13:48.360
+Andere bedrijven hebben een rapport nodig dat de structuur van een groter bedrijf volgt.
+
+00:13:48.360 --> 00:13:50.460
+Dat is waar een rapportagestructuur van pas komt.
+
+00:13:50.460 --> 00:13:54.120
+Met een rapportagestructuur kun je financiële resultaten organiseren in rapportageeenheden.
+
+00:13:54.320 --> 00:13:59.480
+Deze eenheden kunnen rechtspersoonlijkheden, regio's, afdelingen, businessunits of een ander onderdeel van de bedrijfstructuur vertegenwoordigen.
+
+00:13:59.680 --> 00:14:01.400
+Stel je een groep voor met drie dochterondernemingen.
+
+00:14:01.580 --> 00:14:05.600
+Het moederbedrijf wil elke dochteronderneming afzonderlijk zien en vervolgens één gecombineerd totaal voor de groep.
+
+00:14:05.700 --> 00:14:11.020
+Een rapportagestructuur kan die structuur beschrijven, ouw, elke dochteronderneming als rapportageeenheid en het groepstotaal daarboven.
+
+00:14:11.260 --> 00:14:13.020
+Dezelfde aanpak werkt voor regio's.
+
+00:14:13.020 --> 00:14:17.660
+Je kunt Noord, Zuid en West als aparte eenheden weergeven en vervolgens een totaal voor het hele bedrijf opnemen.
+
+00:14:17.660 --> 00:14:23.280
+Of een afdelingsleider hoeft misschien alleen zijn of haar eigen eenheid te zien, terwijl het financiële team het volledige overzicht nodig heeft.
+
+00:14:23.460 --> 00:14:29.420
+Eén rapportdefinitie kan slechts aan één rapportagestructuur tegelijk worden gekoppeld, dus kiest de structuur die past bij de vraag die het rapport moet beantwoorden.
+
+00:14:29.640 --> 00:14:36.000
+Voor degene die hier nog niet bekend mee zijn, bevat Rapport Designers & Wizard waarmee je kunt beginnen met het bouwen van deze onderdelen zonder meteen alle opties te hoeven bekijken.
+
+00:14:36.160 --> 00:14:40.100
+Je kiest het rapport type, doorloopt de basisopties en maakt een eerste ontwerp.
+
+00:14:40.240 --> 00:14:47.300
+Naarmate je financiële team meer vertrouwd raakt met het programma, kunnen ze de rijdefinities, kolomdefinities, rapportdefinities en rapportagestructuren rechtstreeks bewerken.
+
+00:14:47.300 --> 00:14:51.980
+Dat geeft ze meer controle over berekeningen, layout, groepering en de weergave van dimensies.
+
+00:14:52.140 --> 00:14:55.140
+Het doel is niet om het meest complexe rapport mogelijk te maken.
+
+00:14:55.380 --> 00:15:03.080
+Het gaat erom een rapport te maken waarin elke regel een echte zakelijke vraag beantwoordt, elke kolom de vergelijking duidelijk maakt en de cijfers overeen komen met het grootboek.
+
+00:15:03.160 --> 00:15:05.400
+Rapporten uitvoeren, lezen en onderhouden.
+
+00:15:05.600 --> 00:15:10.500
+Een rapport is pas nuttig als mensen het kunnen lezen, er vragen over kunnen stellen en kunnen vertrouwen op wat ze zien.
+
+00:15:10.720 --> 00:15:15.340
+Nadat u een financieel rapport hebt gegenereerd, zit u niet automatisch vast aan één statische pagina.
+
+00:15:15.340 --> 00:15:22.040
+U kunt de rapportdatum wijzigen, een valuta kiezen, schakelen tussen samenvatting en detailweergave en filters toepassen op financiële dimensies of kenmerken.
+
+00:15:22.220 --> 00:15:26.640
+Dit betekent dat hetzelfde rapport verschillende vragen kan beantwoorden zonder dat iemand het naar een nieuwe werkmap hoeft te kopiëren.
+
+00:15:26.800 --> 00:15:30.680
+Een financieel manager kan bijvoorbeeld beginnen met de volledige winst en verliesrekening van het bedrijf voor de huidige maand.
+
+00:15:30.860 --> 00:15:35.860
+Vervolgens kan hij of zij filteren op één bedrijfseenheid, de gegevens in een andere valuta bekijken of de datum wijzigen om een andere periode te vergelijken.
+
+00:15:36.000 --> 00:15:37.460
+Het rapportontwerp blijft behouden.
+
+00:15:37.640 --> 00:15:39.680
+De weergave verandert afhankelijk van de betreffende vraag.
+
+00:15:39.680 --> 00:15:41.340
+Twee weergave zijn hierbij belangrijk.
+
+00:15:41.500 --> 00:15:46.420
+De samenvattingsweergave geeft u een overzicht van de financiële situatie op hoog niveau, de totale omzet, de totale kosten en het netto-resultaat.
+
+00:15:46.540 --> 00:15:49.880
+De detailweergave biedt meer informatie om te bekijken wanneer een totaalbedrag niet klopt.
+
+00:15:50.040 --> 00:15:51.380
+En dat brengt ons bij het inzoomen.
+
+00:15:51.640 --> 00:15:54.380
+Stel dat een post voor operationele kosten veel hoger is dan begroot.
+
+00:15:54.560 --> 00:16:00.520
+In plaats van een e-mail te versturen, een grootboeklijst te exporteren en handmatig rekeningnummers te controleren, kunt u inzoomen op dat bedrag in het rapport.
+
+00:16:00.740 --> 00:16:03.660
+U kunt het saldo volgen naar de transacties die erachter schuil gaan.
+
+00:16:03.920 --> 00:16:08.420
+Daarmee kunt u de journaalposten, datums, vouchers en andere details zien die tot het cijfer hebben geleid.
+
+00:16:08.560 --> 00:16:12.560
+Het rapport vormt een startpunt voor een gesprek, niet het definitieve antwoord dat op papier staat.
+
+00:16:12.780 --> 00:16:14.680
+Dit is vooral handig aan het einde van de maand.
+
+00:16:14.860 --> 00:16:17.280
+Iemand vraagt, waarom zijn de magazijnkosten gestegen?
+
+00:16:17.460 --> 00:16:25.480
+U begint met het magazijnoverzicht, zoekt de kostenpost op, zoomt in op de transacties en ziet of de stijging te wijten is aan huur, reparaties, personeel of een eenmalige kostenpost.
+
+00:16:25.480 --> 00:16:30.040
+De financiële afdeling besteedt minder tijd aan het zoeken naar de oorzaak en meer tijd aan het uitleggen van het resultaat.
+
+00:16:30.240 --> 00:16:32.380
+Rapporten kunnen ook volgens een schema worden gegenereerd.
+
+00:16:32.380 --> 00:16:36.600
+Een team kan dagelijks, wekelijks, maandelijks of jaarlijks rapporten genereren, afhankelijk van de taak.
+
+00:16:36.760 --> 00:16:43.780
+Maandelijkse managementrapporten zijn een voor de hand liggend voorbeeld, maar schema's kunnen teams ook helpen bij het voorbereiden van regelmatige budgetbeoordelingen of terugkerende groepsrapporten.
+
+00:16:43.960 --> 00:16:51.340
+Voor bedrijven met meerdere juridische entiteiten kan financiële rapportage rapporten overal deze entiteiten ondersteunen en valuta's omrekenen voor rapportagedoeleinden.
+
+00:16:51.340 --> 00:16:58.280
+Een groepsfinancieel team heeft mogelijk elk bedrijf in zijn lokale valuta nodig, terwijl de directie wellicht één overzicht in een rapportagevaluta nodig heeft.
+
+00:16:58.280 --> 00:17:03.920
+De structuur vereist een zorgvuldige opzet, maar de lezer hoeft het rapport niet elke maand opnieuw op te bouwen vanuit afzonderlijke bestanden.
+
+00:17:04.100 --> 00:17:07.080
+Hier zijn 10 mijl één onderhoudsdetail dat het onthouden waard is.
+
+00:17:07.300 --> 00:17:10.920
+Nieuw gegenereerde rapporten krijgen standaard een vervaldatum van 90 dagen.
+
+00:17:11.200 --> 00:17:16.300
+Gebruikers met de juiste beveiligingsrechten kunnen deze periode wijzigen, inclusief het instellen van een rapport dat nooit verloopt.
+
+00:17:16.460 --> 00:17:19.660
+De persoon die een rapport genereert kan zijn of haar eigen rapport verwijderen.
+
+00:17:19.660 --> 00:17:25.960
+Gebruikers met de beveiligingsrechten voor financiële rapportage kunnen rapporten verwijderen die door andere gebruikers zijn gemaakt en de vervaldatum van rapporten beheren.
+
+00:17:26.140 --> 00:17:30.520
+Dit voorkomt dat de rapportenlijst een lang archief wordt van oude rapporten die niemand meer kan identificeren.
+
+00:17:30.720 --> 00:17:32.760
+Maar wees ook voorzichtig met oudere rapporten.
+
+00:17:32.980 --> 00:17:42.060
+Vanaf versie 10.0.4 van financiële rapportage gebruikt Dynamics 365 Finance de huidige transactiegegevens wanneer u een opgeslagen rapport opnieuw uitvoert of inzoomt op de details ervan.
+
+00:17:42.060 --> 00:17:48.800
+Als iemand een onderliggende transactie heeft bewerkt nadat het rapport voor het eerst werd uitgevoerd, kunnen de details in de inzoomweergave afwijken van wat u oorspronkelijk zag.
+
+00:17:48.800 --> 00:17:53.240
+De opgeslagen zal die op het hoogste niveau veranderen meestal niet, maar de ondersteunende details wel.
+
+00:17:53.440 --> 00:18:01.760
+Dus als Finance een onveranderlijke auditkopie nodig heeft voor een afgesloten periode, exporteer dan het definitieve rapport naar Excel of PDF en bewaar dat bestand in uw normale archiveringsproces.
+
+00:18:01.940 --> 00:18:04.060
+Nog een laatste waarschuwing over de add-in zelf.
+
+00:18:04.060 --> 00:18:12.520
+Als iemand de invoegtoepassing voor financiële rapportage verwijdert, verwijdert Dynamics 365 Finance permanent eerder gemaakte rapporten, rapportontwerpen en configuraties.
+
+00:18:12.700 --> 00:18:15.720
+Microsoft biedt geen ondersteuning voor het herstellen van dergelijke gegevens.
+
+00:18:15.720 --> 00:18:20.240
+Beschouw het als het verwijderen van een gedeelde finance werkruimte, niet als het verwijderen van een app van je telefoon.
+
+00:18:20.440 --> 00:18:24.100
+Formele overzichten helpen finance de cijfers in een gecontroleerd formaat te presenteren.
+
+00:18:24.320 --> 00:18:28.420
+Voor snellere visuele weergave en trendanalyses is er een andere tool die hierbij aansluit.
+
+00:18:28.660 --> 00:18:30.280
+Waar passen PowerBee en Excel in?
+
+00:18:30.280 --> 00:18:32.500
+Waar passen PowerBee en Excel nu precies in?
+
+00:18:32.660 --> 00:18:36.460
+Financiële rapportage behandelt je formele overzichten, de overzichten die additors nodig hebben.
+
+00:18:36.620 --> 00:18:39.280
+PowerBee zorgt voor grafieken, trends en interactieve managementweergave.
+
+00:18:39.960 --> 00:18:42.420
+Omzet per regio, budget versus werkelijkheid.
+
+00:18:42.620 --> 00:18:44.340
+Excel heeft ook nog steeds zijn plaats.
+
+00:18:44.340 --> 00:18:49.220
+Je team gebruikt het voor controles, berekeningen en het delen van cijfers in een formaat dat iedereen al kent.
+
+00:18:49.420 --> 00:18:55.520
+De werkruimte voor financiële analyse bevat PowerBee content voor veelgebruikte weergave, maar zorg ervoor dat elk dashboard zich op één vraag richt.
+
+00:18:55.700 --> 00:18:57.760
+Probeer niet alles op hetzelfde scherm te proppen.
+
+00:18:57.980 --> 00:19:01.040
+Het beste is dat al deze tools dezelfde finance gegevens lezen.
+
+00:19:01.260 --> 00:19:02.200
+Alles werkt samen.
+
+00:19:03.200 --> 00:19:03.720
+Afronding.
+
+00:19:04.180 --> 00:19:05.640
+Stel eerst het grootboek samen.
+
+00:19:06.260 --> 00:19:08.340
+Een duidelijk rapport begint niet met de layout.
+
+00:19:08.660 --> 00:19:09.860
+Het begint veel eerder.
+
+00:19:10.120 --> 00:19:12.580
+Schone hoofdrekeningen, herbruikbare dimensies.
+
+00:19:12.580 --> 00:19:14.540
+Zonder die basis doet de rest er niet toe.
+
+00:19:14.720 --> 00:19:20.040
+Begin met een standaardrapport, test het met uw werkelijke saldi en pas vervolgens alleen aan wat uw bedrijf nodig heeft.
+
+00:19:20.240 --> 00:19:29.440
+Abonneer u op meer Microsoft-kennis van Mirko Peters op M365FM en deel dit met iemand die nog steeds denkt dat financiële rapportage in Dynamics 365 begint en eindigt met Excel.
+
+00:19:29.440 --> 00:19:30.440
+***
+
+00:19:30.440 --> 00:19:31.440
+***
+
+00:19:31.440 --> 00:19:32.440
+***
+
+00:19:32.440 --> 00:19:33.440
+***
