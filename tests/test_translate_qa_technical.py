@@ -37,6 +37,11 @@ class TechnicalUnits(unittest.TestCase):
         self.assertEqual(self.reason("ru", head, head), "falsche-schrift")
         self.assertEqual(self.reason("de", "Take Care of Your Data and Stay Secure Today", "Take Care of Your Data and Stay Secure Today"), "unuebersetzt")
 
+    def test_unveraenderte_title_case_ueberschrift_faellt_durch(self):
+        head = "What Is Microsoft Purview And Why It Matters"
+        for lang in ("ja", "ru"):
+            self.assertEqual(self.reason(lang, head, head), "falsche-schrift", lang)
+
     def test_namen_in_uebersetzter_ueberschrift_zaehlen_nicht_als_lateinisch(self):
         self.assertTrue(self.ok("ja", "Google Cloud Identity and Google Workspace Explained", "Google Cloud Identity と Google Workspace の違い"))
         self.assertTrue(self.ok("he", "Data Factory and Dataflows in Fabric", "Data Factory ו-Dataflows ב-Fabric"))

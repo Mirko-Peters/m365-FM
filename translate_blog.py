@@ -506,7 +506,7 @@ def qa(lang, src, out):
         # reiner <code>-Absatz oder "Azure Center for SAP solutionsとは何ですか？" bei jedem Versuch durch.
         # Dasselbe gilt fuer Namen, die schon in der Quelle gross geschrieben stehen ("Google Cloud Identity と Google Workspace の違い").
         alpha = _plain(_without_names(out, src)); raw = len(re.findall(f"[{SCRIPT[lang]}]", alpha)); own = raw * DENSE.get(lang, 1)
-        if alpha and (own < 0.25 * max(1, own + len(alpha) - raw) or (raw == 0 and not _technical(src))): return False, "falsche-schrift", None
+        if (alpha and own < 0.25 * max(1, own + len(alpha) - raw)) or (raw == 0 and not _technical(src)): return False, "falsche-schrift", None
     words = re.findall(r"[a-zA-Z]+", re.sub(r"<[^>]+>", " ", src))
     if lang not in SCRIPT and same and len(words) >= 8 and not _technical(src): return False, "unuebersetzt", None
     if len(src) >= 80 and not (0.3 <= len(out) / len(src) <= 5): return False, "laenge", None
