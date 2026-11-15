@@ -3,7 +3,26 @@
 import json
 from pathlib import Path
 
-COMM_LANGS = ("en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
+ALL_COMM_LANGS = ("en", "de", "fr", "es", "it", "nl", "pt", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
+
+
+def site_langs():
+    """Verkleinerter Bau (Staging-Probelauf und Staging-Seite): Umgebungsvariable SITE_LANGS="de,en" baut nur diese Sprachen.
+    Leer oder "alle" = alle Sprachen (Live, wie bisher). Englisch und Deutsch sind immer dabei (die Reihenfolge en, de, ... bleibt, COMM_LANGS[2:] sind die weiteren)."""
+    import os
+    v = os.environ.get("SITE_LANGS", "").strip().lower()
+    if not v or v == "alle":
+        return None
+    return {x.strip() for x in v.split(",") if x.strip()} | {"en", "de"}
+
+
+def only(langs):
+    """Filtert eine Liste/ein Tupel von Sprachen auf SITE_LANGS (ohne Variable unveraendert)."""
+    sel = site_langs()
+    return langs if sel is None else type(langs)(l for l in langs if l in sel)
+
+
+COMM_LANGS = only(ALL_COMM_LANGS)
 _P = Path(__file__).parent / "data" / "ui_i18n.json"
 _D = json.loads(_P.read_text("utf-8")) if _P.exists() else {}
 

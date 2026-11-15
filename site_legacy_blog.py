@@ -45,7 +45,8 @@ def tr_config():
         c = json.loads(f.read_text("utf-8")) if f.exists() else {}
     except Exception:
         c = {}
-    build = [l for l in (c.get("build") or []) if l != "en"]
+    from site_i18n import only
+    build = only([l for l in (c.get("build") or []) if l != "en"])   # SITE_LANGS: verkleinerter Bau
     return build, [l for l in (c.get("index") or []) if l in build]
 
 
