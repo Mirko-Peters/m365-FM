@@ -35,7 +35,7 @@ import { handleEvents, deleteUserEvents, ensureM365Con, claimLinkedinEntity, pur
 import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
-import { handleByodServe } from "./byod.js";
+import { handleByodServe, handleByodApi, runByodChecks, deleteUserByod } from "./byod.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
@@ -243,6 +243,7 @@ async function deleteAccount(env, id) {
     db.prepare("DELETE FROM push_subs WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_reports WHERE user_id=?").bind(id), db.prepare("DELETE FROM wiki_rev WHERE user_id=? AND status IN ('pending','rejected')").bind(id), db.prepare("UPDATE wiki_rev SET user_id=0 WHERE user_id=?").bind(id), db.prepare("DELETE FROM curators WHERE user_id=?").bind(id), db.prepare("DELETE FROM user_identities WHERE user_id=?").bind(id), db.prepare("DELETE FROM users WHERE id=?").bind(id),
   ]);
   await deleteUserEvents(db, id);
+  await deleteUserByod(env, id);   // Blog auf der eigenen Domain (0049): Domains des Kontos samt Hostname bei Cloudflare (nur mit Secrets)
   await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserSearchDemand(db, id);   // Nachfrage zu eigenen Inhalten und zum Profil (#156): braucht Handle und Inhalte, also vor deleteUserBlog/deleteUserData
@@ -449,6 +450,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
+  if (path.startsWith("/api/byod/") || path === "/api/admin/byod" || path === "/api/admin/byod/block") { const q = await handleByodApi(env, request, url, path, user, J); if (q) return q; }   // Blog auf der eigenen Domain (Schalter BYOD)
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/notes/")) { const q = await handleNotes(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/credit/")) { const q = await handleCredits(env, request, url, path, user, J); if (q) return q; }
@@ -641,6 +643,7 @@ export default {
       T("purgeSearchStats", () => purgeSearchStats(env.DB));   // Suchbegriffe und Nachfrage: 12 Monate (#156)
     }
     if (event.cron === "*/30 * * * *") T("runDigest", () => runDigest(env, { at: scheduledAt }));
+    if (event.cron === "*/30 * * * *") T("byodChecks", () => runByodChecks(env));   // Blog auf der eigenen Domain: DNS/Zertifikat offener und aktiver Domains (nur mit BYOD=1)
     T("refreshFeeds", () => refreshFeeds(env));
     T("refreshContributions", () => refreshContributions(env));
     T("pollUpdates", () => pollUpdates(env));
