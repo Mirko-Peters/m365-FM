@@ -3,6 +3,8 @@ from datetime import datetime, timezone
 from site_i18n import COMM_LANGS, pfx, pfx2, T
 from site_learn import ENTS, esc, _fetch_json, LCSS
 from site_design import pager as PG, neighbours as NB   # Vor/Zurueck am Seitenende (rel=prev/next)
+import site_player as PL   # Spreaker-Player erst nach Klick
+import site_meta_podcast as MP   # suchintent-freundliche <title>/meta description
 
 
 def fetch_eps(api):
@@ -41,7 +43,7 @@ def build(g, eps, people, api):
             u = f"{croot}podcast/{e['slug']}/"; au = f"{BASE}/community/u/{e['handle']}/"
             topics = [t for t in e.get("topics", []) if t in ENTS]
             tl = "".join(f'<a class="mb-tag" href="{BASE}/entity/{t}/">{esc(ENTS[t]["name"])}</a> ' for t in topics)
-            player = "" if not e["spreaker_id"] else f'<iframe title="{esc(e["title"])}" src="https://widget.spreaker.com/player?episode_id={e["spreaker_id"]}&theme=light" width="100%" height="200" loading="lazy" style="border:0"></iframe>'
+            player = "" if not e["spreaker_id"] else PL.player("spreaker", e["spreaker_id"], e["title"], T(lang, "Listen on Spreaker", "Bei Spreaker anhören"), link=e.get("ep_url"), height=200)
             gs = [g for g in (e.get("guests") or []) if g.get("handle") != e["handle"]]
             guests_html = (f'<p class="mut">{esc(T(lang, "Guests", "Gäste"))}: ' + ", ".join(f'<a href="{croot}u/{g["handle"]}/">{esc(g["name"])}</a>' for g in gs) + "</p>") if gs else ""
             b = shell(lang, f'<p class="mut"><a href="{croot}podcast/">{esc(ttl)}</a></p><article><h1>{esc(e["title"])}</h1>'
@@ -54,7 +56,7 @@ def build(g, eps, people, api):
                    "datePublished": iso(e["published"]), "author": {"@type": "Person", "@id": au + "#person", "name": e["name"], "url": au}, **({"actor": [{"@type": "Person", "@id": f"{BASE}/community/u/{g['handle']}/#person", "name": g["name"], "url": f"{BASE}/community/u/{g['handle']}/"} for g in gs]} if gs else {}),
                    "partOfSeries": {"@type": "PodcastSeries", "name": "M365.FM", "url": f"{BASE}/"}, "about": [{"@id": f"{BASE}/entity/{t}/#entity"} for t in topics],
                    "associatedMedia": {"@type": "AudioObject", "contentUrl": e["ep_url"]}}]
-            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, f'{e["title"]} – {ttl} | M365.FM', (e.get("description") or "")[:155], u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]")))
+            write(f"{pfx2(lang)}community/podcast/{e['slug']}/index.html", page(lang, *MP.community_item_meta(lang, "podcast", e["title"], e["name"], e.get("description")), u, b, None, ld, og_type="article", extra_head=LCSS, noindex=e["title"].startswith("[Test]"), side=(g["side"](lang, e["title"] + " " + (e.get("description") or "")[:1500], ids=topics) if g.get("side") else "")))
             if not e["title"].startswith("[Test]"): sitemap.append((u, iso(e["published"]), None))
         it = sorted(mine, key=lambda x: -x["published"]); ru = f"{croot}podcast/"
         lst = '<ul class="bl-list" style="padding:0;list-style:none">' + "".join(f'<li style="padding:.7em 0;border-bottom:1px solid var(--bd)"><a href="{croot}podcast/{e["slug"]}/"><b>{esc(e["title"])}</b></a> <span class="mut">· {esc(e["name"])} · {iso(e["published"])}</span></li>' for e in it) + "</ul>"

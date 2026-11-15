@@ -1,0 +1,1981 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.740
+Halo semuanya dan selamat datang di episode lain dari kumpulan pengetahuan Microsoft di M365FM.
+
+00:00:04.960 --> 00:00:06.280
+Em, saya Mirko Peters membawa acara.
+
+00:00:06.580 --> 00:00:08.740
+Topik hari ini adalah topik yang hampir semua orang pernah dengar,
+
+00:00:08.880 --> 00:00:10.540
+tetapi sangat sedikit orang yang benar-benar memahami.
+
+00:00:10.900 --> 00:00:11.560
+Basis Data Vector.
+
+00:00:12.000 --> 00:00:14.040
+Anda mungkin pernah melihat istilah itu di artikel tentang AI
+
+00:00:14.040 --> 00:00:16.460
+atau mendengarnya dalam percakapan tentang Copilot dan JCPT.
+
+00:00:17.000 --> 00:00:18.080
+Namun apa sebenarnya Basis Data Vector?
+
+00:00:18.580 --> 00:00:21.000
+Apakah itu sekadar basis data biasa dengan namanya lebih menarik?
+
+00:00:21.060 --> 00:00:22.180
+Atau sesuatu yang sama sekali berbeda?
+
+00:00:22.520 --> 00:00:24.380
+Bayangkan mencari jaket merah di situs e-commerce
+
+00:00:24.380 --> 00:00:27.560
+dan mendapatkan hasil yang menunjukkan mantel merah tua dan pakaian luar merah anggur.
+
+00:00:27.560 --> 00:00:30.280
+Bagaimana komputer tahu bahwa keduanya adalah hal yang sempurna?
+
+00:00:30.640 --> 00:00:32.180
+Komputer tidak mencocokkan kata komputer.
+
+00:00:32.260 --> 00:00:34.540
+Merah tua bukanlah merah dan mantel bukanlah jaket.
+
+00:00:35.140 --> 00:00:37.660
+Namun entah bagaimana mesin mencari memahami bahwa keduanya terkait
+
+00:00:37.660 --> 00:00:39.160
+dan itulah penelusuran Vector yang sempurna.
+
+00:00:39.160 --> 00:00:42.060
+Di akhir episode ini, Anda akan memahami apa sebenarnya Basis Data Vector itu,
+
+00:00:42.140 --> 00:00:44.120
+mengapa Basis Data itu mendukung penelusuran AI dan Copilot,
+
+00:00:44.260 --> 00:00:45.860
+serta bagaimana Basis Data itu cocok dengan Copilot,
+
+00:00:45.940 --> 00:00:46.760
+serta bagaimana kalau Microsoft.
+
+00:00:46.900 --> 00:00:48.260
+Kami membuatnya dalam bahasa Inggris yang sering.
+
+00:00:48.520 --> 00:00:51.000
+Tanpa matematika, tanpa jargon, hanya blok bangunan yang jelas.
+
+00:00:51.720 --> 00:00:52.520
+Apa sebenarnya Vector itu?
+
+00:00:52.520 --> 00:00:54.620
+Mari kita mulai dengan pertanyaan inti.
+
+00:00:55.120 --> 00:00:56.040
+Apa sebenarnya Vector itu?
+
+00:00:56.840 --> 00:00:58.560
+Ketika kebanyakan orang mendengar kata Vector,
+
+00:00:58.740 --> 00:01:00.500
+mereka membayangkan anak panah dari kelas fisika,
+
+00:01:00.620 --> 00:01:01.400
+arah dan besarnya.
+
+00:01:01.980 --> 00:01:03.180
+Dalam komputasi itu jawab besederhan.
+
+00:01:03.520 --> 00:01:05.000
+Vector sebenarnya hanyalah daftar angka.
+
+00:01:05.860 --> 00:01:07.480
+Susunan satu dimensi yang mewakili sesuatu
+
+00:01:07.480 --> 00:01:09.080
+dalam format yang dapat digunakan komputer.
+
+00:01:09.500 --> 00:01:10.840
+Berikut cara praktis untuk menggambarkan.
+
+00:01:11.180 --> 00:01:14.260
+Jika saya meminta Anda untuk menemui saya di lantai 3 di sayap B kamar 12,
+
+00:01:14.440 --> 00:01:16.640
+itu adalah tiga angka yang menggambarkan lokasi tertentu.
+
+00:01:16.640 --> 00:01:18.880
+Itu adalah Vector tiga dimensi yang memberitahu Anda dengan tepat
+
+00:01:18.880 --> 00:01:20.140
+di mana sesuatu berada di sebuah gedung.
+
+00:01:20.140 --> 00:01:21.580
+Sekarang bayangkan saya menambahkan,
+
+00:01:21.900 --> 00:01:24.420
+warna pintu, ukuran ruangan, harga per kaki persegi,
+
+00:01:25.100 --> 00:01:26.660
+setiap detail baru menjadi dimensi lain.
+
+00:01:27.260 --> 00:01:28.640
+Jadi semakin banyak dimensi yang Anda buat,
+
+00:01:28.740 --> 00:01:30.740
+semakin banyak informasi yang dapat Anda tangkap tentang benda itu.
+
+00:01:31.220 --> 00:01:33.100
+Sebuah mobil dapat dijelaskan berdasarkan kecepatan,
+
+00:01:33.180 --> 00:01:34.760
+jarak tempuh, harga berat, dan peringkat keselam.
+
+00:01:35.060 --> 00:01:36.100
+Itu adalah Vector lima dimensi.
+
+00:01:36.640 --> 00:01:38.540
+Sebuah produk dapat dijelaskan oleh ratusan fitur
+
+00:01:38.540 --> 00:01:40.340
+yang memberi Anda Vector berdimensi tinggi.
+
+00:01:40.840 --> 00:01:41.400
+Begini masalahnya.
+
+00:01:41.660 --> 00:01:44.580
+Vector memungkinkan kita memubah sesuatu menjadi angka yang dapat dibandingkan oleh komputer.
+
+00:01:44.580 --> 00:01:46.320
+Kata-kata, gambar, suara, dokumen,
+
+00:01:46.320 --> 00:01:47.700
+apapun dapat menjadi daftar angka.
+
+00:01:48.040 --> 00:01:49.020
+Setelah semuanya menjadi angka,
+
+00:01:49.120 --> 00:01:51.120
+Anda dapat mulai mengukur seberapa mirip dua hal sebenarnya.
+
+00:01:51.700 --> 00:01:54.260
+Dua ruangnya di lantai yang sama dengan warna pintu yang serupa berakhir
+
+00:01:54.260 --> 00:01:55.300
+berdekatan dalam ruang Vector.
+
+00:01:55.760 --> 00:01:57.900
+Dan dua produk yang serupa juga berkumpul bersama.
+
+00:01:58.920 --> 00:02:01.180
+Jadi sederhana itulah yang memungkinkan pencarian AI modern.
+
+00:02:01.880 --> 00:02:03.140
+Dari Vector hingga penyematan,
+
+00:02:03.580 --> 00:02:04.500
+tidak semua Vector sama.
+
+00:02:05.100 --> 00:02:06.640
+Ada jenis khusus yang disebut penyematan,
+
+00:02:06.860 --> 00:02:08.120
+dan disitulah kekuatan sebenarnya muncul.
+
+00:02:08.540 --> 00:02:09.580
+Jadi apa sebenarnya penyematan itu?
+
+00:02:09.920 --> 00:02:11.580
+Penyematan adalah Vector yang mengkilih makna.
+
+00:02:12.420 --> 00:02:14.140
+Model pembelajaran mesin seperti penyematan
+
+00:02:14.140 --> 00:02:16.660
+teks Azure Open AI membaca teks dan menempatkannya
+
+00:02:16.660 --> 00:02:18.180
+dalam ruang berdimensi tinggi.
+
+00:02:18.880 --> 00:02:20.660
+Model tersebut belajar dari miliaran contoh
+
+00:02:20.660 --> 00:02:22.720
+sehingga memahami bagaimana kata-kata sering berhubungan.
+
+00:02:23.320 --> 00:02:24.680
+Raja dan ratu berakhir berdekatan
+
+00:02:24.680 --> 00:02:26.340
+karena mereka memiliki konteks yang serupa.
+
+00:02:26.940 --> 00:02:28.060
+Raja dan kupi berakhir berjauhan
+
+00:02:28.060 --> 00:02:29.980
+karena mereka tidak memiliki konteks yang serupa.
+
+00:02:30.080 --> 00:02:31.220
+Berikut artinya Dama Senggusudera.
+
+00:02:31.800 --> 00:02:33.060
+Saat Anda mencari jaket merah,
+
+00:02:33.380 --> 00:02:34.640
+sistem menemukan mantul merah tua.
+
+00:02:36.080 --> 00:02:38.300
+Model penyematan mengenali bahwa merah dan merah tua
+
+00:02:38.300 --> 00:02:41.000
+memiliki makna yang dekat dan jaket serta mangkal juga dekat.
+
+00:02:41.720 --> 00:02:43.220
+Penyematan untuk kedua frase tersebut
+
+00:02:43.220 --> 00:02:44.540
+menjadi tetangga dalam ruang vektor.
+
+00:02:45.080 --> 00:02:46.480
+Komputer tidak lagi mencocokkan huruf.
+
+00:02:47.080 --> 00:02:47.880
+Komputer mencocokkan mat.
+
+00:02:48.740 --> 00:02:50.440
+Sekarang izinkan saya memberi Anda contoh kelas.
+
+00:02:50.860 --> 00:02:51.820
+Ambil vektor untuk raja,
+
+00:02:52.080 --> 00:02:53.120
+kurangi vektor untuk pria,
+
+00:02:53.240 --> 00:02:54.500
+dan tambahkan vektor untuk wanita.
+
+00:02:55.680 --> 00:02:57.620
+Hasilnya sangat dekat dengan vektor untuk ratu.
+
+00:02:58.340 --> 00:02:59.800
+Raja dikurangi pria, ditambah wanita sama.
+
+00:03:00.300 --> 00:03:01.480
+Kedengarannya seperti sulap,
+
+00:03:01.640 --> 00:03:03.000
+tetapi begitulah cara model tersebut
+
+00:03:03.000 --> 00:03:04.180
+mengubah hubungan menjadi angkat.
+
+00:03:05.200 --> 00:03:06.700
+Model tersebut mempelajari bahwa
+
+00:03:06.700 --> 00:03:08.840
+raja dan ratu memiliki hubungan yang mirip
+
+00:03:08.840 --> 00:03:09.800
+dengan pria dan wanita,
+
+00:03:10.020 --> 00:03:11.980
+dan hubungan tersebut dikodekan dalam koordinat.
+
+00:03:11.980 --> 00:03:14.740
+Jadi, model penyematan mengambil data mentah Anda,
+
+00:03:14.900 --> 00:03:16.540
+baik itu teks, gambar, atau audio,
+
+00:03:17.020 --> 00:03:18.400
+dan mengubahnya menjadi daftar angka
+
+00:03:18.400 --> 00:03:19.340
+yang mewakili maknanya.
+
+00:03:20.100 --> 00:03:21.580
+Angka-angka tersebut menjadi koordinat
+
+00:03:21.580 --> 00:03:22.800
+dalam ruang berdimensi tinggi.
+
+00:03:23.460 --> 00:03:25.200
+Kemudian, saat Anda mencari query Anda,
+
+00:03:25.300 --> 00:03:26.760
+diubah menjadi jenis koordinat yang sama.
+
+00:03:27.240 --> 00:03:27.920
+Yang perlu Anda lakukan
+
+00:03:27.920 --> 00:03:28.980
+hanyalah mengukur jarak kedua.
+
+00:03:29.220 --> 00:03:29.880
+Itulah ide intinya.
+
+00:03:30.440 --> 00:03:31.900
+Mengapa basis data tradisional tidak berfungsi?
+
+00:03:32.360 --> 00:03:33.500
+Jika penyematan begitu hebat,
+
+00:03:33.600 --> 00:03:34.520
+mengapa kita tidak bisa menggunakan
+
+00:03:34.520 --> 00:03:35.220
+basis data biasa saja?
+
+00:03:35.620 --> 00:03:36.440
+Mari kita jawab pertanyaan itu.
+
+00:03:36.440 --> 00:03:39.180
+Basis data SQL tradisional dibuat
+
+00:03:39.180 --> 00:03:40.040
+untuk pencocokan eksat.
+
+00:03:40.400 --> 00:03:41.980
+Anda menulis di mana warna sama dengan merah,
+
+00:03:42.160 --> 00:03:43.300
+dan basis data itu akan menemukan
+
+00:03:43.300 --> 00:03:44.460
+setiap baris di mana kolom warna
+
+00:03:44.460 --> 00:03:45.400
+secara alfias sama dengan merah.
+
+00:03:45.600 --> 00:03:47.140
+Itu sangat cocok untuk data terstruktur
+
+00:03:47.140 --> 00:03:48.000
+seperti nama pelanggan,
+
+00:03:48.100 --> 00:03:48.700
+tanggal pemesanan,
+
+00:03:48.840 --> 00:03:49.500
+atau harga produk.
+
+00:03:49.800 --> 00:03:50.780
+Tetap itu akan gagal total
+
+00:03:50.780 --> 00:03:52.180
+saat Anda membutuhkan makna yang kabur.
+
+00:03:52.700 --> 00:03:53.840
+Cobalah menulis query SQL
+
+00:03:53.840 --> 00:03:55.100
+yang menemukan kode merah tua
+
+00:03:55.100 --> 00:03:56.520
+saat data Anda hanya menyebutkan
+
+00:03:56.520 --> 00:03:57.280
+jaket merah anggur.
+
+00:03:58.180 --> 00:04:00.040
+Anda tidak bisa karena SQL tidak memahami konsep.
+
+00:04:00.840 --> 00:04:01.820
+Basis data tradisional
+
+00:04:01.820 --> 00:04:03.520
+menyimpan data dalam baris dan kolom.
+
+00:04:04.020 --> 00:04:05.300
+Basis data tersebut dioptimalkan
+
+00:04:05.300 --> 00:04:06.420
+untuk penggabungan agregasi
+
+00:04:06.420 --> 00:04:07.260
+dan pencarian eksat.
+
+00:04:07.860 --> 00:04:08.900
+Basis data tersebut tidak tahu
+
+00:04:08.900 --> 00:04:10.460
+bahwa mobil dan mobil adalah hal yang sama.
+
+00:04:10.700 --> 00:04:11.840
+Basis data tersebut tidak tahu bahwa
+
+00:04:11.840 --> 00:04:13.620
+gembira dan gembira adalah emosiensi.
+
+00:04:13.760 --> 00:04:15.060
+Basis data tersebut hanya mencocokkan string.
+
+00:04:15.340 --> 00:04:16.740
+Dan jika data Anda tidak terstruktur
+
+00:04:16.740 --> 00:04:18.520
+seperti PDF, gambar, rekaman audio,
+
+00:04:18.660 --> 00:04:19.420
+atau dokumen panjang,
+
+00:04:19.900 --> 00:04:21.440
+basis data tradisional dapat menyimpannya
+
+00:04:21.440 --> 00:04:21.900
+sebagai blog,
+
+00:04:22.100 --> 00:04:23.520
+tetapi tidak dapat benar-benar mencari isinya.
+
+00:04:24.620 --> 00:04:25.980
+Anda memerlukan pencarian teks lengkap.
+
+00:04:27.480 --> 00:04:28.900
+Jika pengguna mengetik laporan anggaran,
+
+00:04:29.100 --> 00:04:29.960
+tetapi dokumen tersebut
+
+00:04:29.960 --> 00:04:31.100
+menyebutkan ringkasan keuangan,
+
+00:04:31.260 --> 00:04:32.060
+pencarian kata kunci
+
+00:04:32.060 --> 00:04:33.220
+tidak akan menemukannya sama sekali.
+
+00:04:33.440 --> 00:04:34.240
+Tetapi pikirkan seperti ini.
+
+00:04:34.460 --> 00:04:36.060
+Basis data biasa itu seperti lemari arsip.
+
+00:04:36.420 --> 00:04:37.820
+Anda perlu mengetahui nama file yang tepat
+
+00:04:37.820 --> 00:04:38.980
+untuk menemukan apa yang Anda cari.
+
+00:04:39.460 --> 00:04:40.480
+Basis data faktor itu seperti
+
+00:04:40.480 --> 00:04:41.880
+pustakawan yang mengerti maksud Anda.
+
+00:04:42.480 --> 00:04:43.180
+Anda dapat berkata,
+
+00:04:43.280 --> 00:04:44.120
+saya butuh dokumen tentang
+
+00:04:44.120 --> 00:04:45.260
+pengeluaran kuartal terakhir.
+
+00:04:45.820 --> 00:04:47.100
+Pustakawan itu tahu persis folder
+
+00:04:47.100 --> 00:04:47.980
+mana yang harus diambil
+
+00:04:47.980 --> 00:04:49.280
+meskipun folder itu diberi label
+
+00:04:49.280 --> 00:04:50.560
+ringkasan keuangan kuartal ketiga.
+
+00:04:51.280 --> 00:04:52.620
+Pustakawan itu memahami maksud,
+
+00:04:52.920 --> 00:04:53.720
+bukan sekadar label.
+
+00:04:54.200 --> 00:04:55.400
+Itulah sebabnya basis data faktoran.
+
+00:04:55.400 --> 00:04:57.400
+Basis data itu menyimpan penyematan,
+
+00:04:57.480 --> 00:04:58.360
+faktor penangkap makna,
+
+00:04:58.620 --> 00:04:59.520
+dan mengindeksnya dengan cara
+
+00:04:59.520 --> 00:05:00.720
+yang mempercepat pencarian kesamaan.
+
+00:05:01.540 --> 00:05:02.420
+Basis data tradisional.
+
+00:05:03.080 --> 00:05:04.320
+Basis data itu menambahkan
+
+00:05:04.320 --> 00:05:05.700
+lapisan pemahaman di atasnya
+
+00:05:05.700 --> 00:05:06.720
+dan lapisan itu mengubah segala.
+
+00:05:06.940 --> 00:05:08.280
+Basis data faktor menambahkan
+
+00:05:08.280 --> 00:05:09.260
+lapisan pemahaman di atasnya
+
+00:05:09.260 --> 00:05:10.320
+dan lapisan itu mengubah segala.
+
+00:05:10.740 --> 00:05:11.880
+Cara kerja basis data faktor.
+
+00:05:12.240 --> 00:05:12.960
+Jadi bagaimana semua ini
+
+00:05:12.960 --> 00:05:13.780
+bekerja di balik layar?
+
+00:05:14.340 --> 00:05:15.720
+Mari kita bahas dua fase utama,
+
+00:05:16.120 --> 00:05:16.880
+penyerapan dan query.
+
+00:05:17.240 --> 00:05:18.300
+Penyerapan adalah fase penyiapan.
+
+00:05:19.220 --> 00:05:20.380
+Anda mengambil data mentah,
+
+00:05:20.560 --> 00:05:21.180
+deskripsi produk,
+
+00:05:21.500 --> 00:05:22.140
+tiket dukungan,
+
+00:05:22.600 --> 00:05:24.200
+dokumen internal apapun yang Anda miliki,
+
+00:05:24.200 --> 00:05:25.620
+dan menjalankan setiap bagian
+
+00:05:25.620 --> 00:05:26.760
+menyebut model penyematan.
+
+00:05:27.540 --> 00:05:28.980
+Model itu mengubah teks menjadi vektor
+
+00:05:28.980 --> 00:05:30.280
+yang pada dasarnya adalah
+
+00:05:30.280 --> 00:05:32.040
+daftar angka yang menangkap makna.
+
+00:05:32.460 --> 00:05:33.780
+Kemudian Anda menyimpan vektor itu
+
+00:05:33.780 --> 00:05:35.200
+dalam basis data bersama dengan
+
+00:05:35.200 --> 00:05:36.260
+beberapa metadata,
+
+00:05:36.560 --> 00:05:37.600
+teks asli, stempel waktu,
+
+00:05:37.800 --> 00:05:39.180
+mungkin kategori atau URL sumber.
+
+00:05:39.600 --> 00:05:40.460
+Nah inilah bagian yang pintar.
+
+00:05:40.700 --> 00:05:41.920
+Jika Anda memiliki situr dokumen,
+
+00:05:42.020 --> 00:05:43.380
+memeriksa setiap vektor satu persatukan
+
+00:05:43.380 --> 00:05:44.080
+memakan waktu lama.
+
+00:05:44.340 --> 00:05:45.740
+Itulah sebabnya basis data saya
+
+00:05:45.740 --> 00:05:47.000
+menggunakan sesuatu yang disebut pengindeksan.
+
+00:05:47.440 --> 00:05:48.480
+Anggap pengindeksan seperti
+
+00:05:48.480 --> 00:05:50.160
+membuat peta ruang vektor alih-alih
+
+00:05:50.160 --> 00:05:51.520
+mengetuk setiap pintu.
+
+00:05:52.300 --> 00:05:53.220
+Dua metode umum adalah
+
+00:05:54.200 --> 00:05:55.540
+IVF adalah singkatan dari
+
+00:05:55.540 --> 00:05:56.180
+indeks berkas tempat.
+
+00:05:56.520 --> 00:05:57.720
+Ia bekerja dengan melompokkan vektor
+
+00:05:57.720 --> 00:05:58.640
+yang serupa ke dalam kluster.
+
+00:05:59.140 --> 00:05:59.880
+Saat Anda mencari,
+
+00:06:00.060 --> 00:06:01.440
+alih-alih memindahi semua juta vektor
+
+00:06:01.440 --> 00:06:02.500
+Anda hanya memeriksa kluster
+
+00:06:02.500 --> 00:06:03.200
+yang paling menjanjikan.
+
+00:06:03.480 --> 00:06:04.780
+Ini seperti mencari buku di perpustakaan.
+
+00:06:05.420 --> 00:06:06.680
+Anda langsung menuju ke bagian yang tepat
+
+00:06:06.680 --> 00:06:07.760
+alih-alih memindahi setiap lap.
+
+00:06:08.220 --> 00:06:09.540
+H adalah singkatan dari dunia kecil
+
+00:06:09.540 --> 00:06:11.000
+yang dapat dinavigasi secara hirarkis.
+
+00:06:11.300 --> 00:06:12.260
+Ide-nya cukup elegan.
+
+00:06:12.760 --> 00:06:13.780
+Ia membangun peta multilapis
+
+00:06:13.780 --> 00:06:14.400
+dari vektor Anda.
+
+00:06:15.100 --> 00:06:16.280
+Lapisan teratas berisi beberapa
+
+00:06:16.280 --> 00:06:17.560
+vektor representatif yang memberi Anda
+
+00:06:17.560 --> 00:06:18.360
+gambaran kasar tentang
+
+00:06:18.360 --> 00:06:19.080
+di mana letak berbagai.
+
+00:06:24.200 --> 00:06:25.080
+Mulai lalu menelusuri lapisan
+
+00:06:25.080 --> 00:06:25.860
+demi lapisan hingga Anda
+
+00:06:25.860 --> 00:06:27.020
+menemukan kecocokan yang tepat.
+
+00:06:27.540 --> 00:06:28.900
+Ini seperti menggunakan peta kota terlebih dahulu.
+
+00:06:29.140 --> 00:06:30.040
+Lalu peta lingkungan sekitar.
+
+00:06:30.180 --> 00:06:30.800
+Lalu peta jalan.
+
+00:06:31.480 --> 00:06:32.420
+Masih yang akan membuat Anda lebih dekat.
+
+00:06:32.760 --> 00:06:33.740
+Hasilnya adalah Anda dapat
+
+00:06:33.740 --> 00:06:34.660
+mencari jutaan vektor
+
+00:06:34.660 --> 00:06:35.780
+dalam hitungan mili detik.
+
+00:06:36.160 --> 00:06:37.740
+Itulah yang mendukung fitur AI waktu nyata.
+
+00:06:38.500 --> 00:06:40.060
+Saat Anda mengetik pertanyaan ke copilot
+
+00:06:40.060 --> 00:06:41.320
+dan mendapatkan jawaban kembali,
+
+00:06:41.760 --> 00:06:42.420
+dalam hitungan detik,
+
+00:06:42.520 --> 00:06:43.700
+di suatu tempat basis data vektor
+
+00:06:43.700 --> 00:06:45.020
+baru saja menjalankan pencari kesamaan
+
+00:06:45.020 --> 00:06:46.040
+di ribuan atau jutaan dokumen.
+
+00:06:46.040 --> 00:06:47.520
+Fase query bekerja dengan cara yang sama
+
+00:06:47.520 --> 00:06:48.080
+secara terbalik.
+
+00:06:48.080 --> 00:06:49.280
+Anda mengetik pertanyaan Anda.
+
+00:06:49.540 --> 00:06:51.080
+Pertanyaan itu diubah menjadi vektor
+
+00:06:51.080 --> 00:06:52.800
+menggunakan modal penyematan yang sama persis.
+
+00:06:53.180 --> 00:06:54.840
+Kemudian basis data menemukan tetangga terdekat
+
+00:06:54.840 --> 00:06:56.320
+ke vektor query Anda menggunakan indeks.
+
+00:06:56.900 --> 00:06:58.360
+Ia mengembalikan hasil yang paling mirip
+
+00:06:58.360 --> 00:06:59.500
+yang diberi peringkat berdasarkan jat.
+
+00:07:00.000 --> 00:07:00.920
+Semakin dekat vektor,
+
+00:07:01.180 --> 00:07:02.280
+semakin relevan hasilnya.
+
+00:07:03.420 --> 00:07:05.240
+Ekosistem Microsoft tempat vektor berada.
+
+00:07:05.940 --> 00:07:07.480
+Jadi mana semua ini berada di dunia Microsoft?
+
+00:07:08.280 --> 00:07:08.900
+Jawaban singkatnya, Dima.
+
+00:07:09.300 --> 00:07:10.860
+Microsoft menambahkan kemampuan vektor
+
+00:07:10.860 --> 00:07:11.640
+ke dalam platform data
+
+00:07:11.640 --> 00:07:12.860
+yang sudah Anda gunakan alih-alih
+
+00:07:12.860 --> 00:07:15.140
+mendorong Anda menuju basis data spesialis yang terpisah.
+
+00:07:15.780 --> 00:07:16.580
+Mari kita bahas yang utama.
+
+00:07:16.580 --> 00:07:19.360
+Azure AI Search adalah penyimpanan vektor
+
+00:07:19.360 --> 00:07:21.140
+yang paling umum untuk data perusahaan.
+
+00:07:21.720 --> 00:07:23.260
+Itu adalah generasi augmented retrieval.
+
+00:07:24.220 --> 00:07:25.200
+Mendukung pencarian hybrid
+
+00:07:25.200 --> 00:07:26.820
+yang berarti menggabungkan pencocokan
+
+00:07:26.820 --> 00:07:28.800
+kata kunci tradisional dengan kesamaan vektor.
+
+00:07:29.360 --> 00:07:29.900
+Mengapa itu penting?
+
+00:07:30.300 --> 00:07:31.880
+Karena beberapa pencarian bekerja paling baik
+
+00:07:31.880 --> 00:07:32.640
+dengan kata kunci,
+
+00:07:32.820 --> 00:07:33.540
+kode produk yang tepat,
+
+00:07:33.660 --> 00:07:34.140
+nama tanggal.
+
+00:07:34.420 --> 00:07:35.980
+Sementara yang lain memperlukan pemahaman semantik.
+
+00:07:36.320 --> 00:07:37.380
+Pencarian hybrid memberi Anda kedua.
+
+00:07:37.960 --> 00:07:39.440
+Azure AI Search juga menyertakan
+
+00:07:39.440 --> 00:07:40.740
+vektorisasi terintegrasi
+
+00:07:40.740 --> 00:07:42.340
+sehingga Anda dapat menyiapkan alur
+
+00:07:42.340 --> 00:07:43.980
+yang secara otomatis melompokkan dokumen
+
+00:07:43.980 --> 00:07:45.020
+menghasilkan penyematan
+
+00:07:45.020 --> 00:07:46.260
+dan mengindeksnya tanpa menulis
+
+00:07:46.260 --> 00:07:46.820
+kode khusus.
+
+00:07:47.600 --> 00:07:49.320
+Cosmos DB kini memiliki pencarian vektor asli
+
+00:07:49.320 --> 00:07:50.380
+dengan pengindeksan disk ANN.
+
+00:07:50.860 --> 00:07:51.980
+Disk ANN adalah singkatan
+
+00:07:51.980 --> 00:07:53.660
+dari perkiraan tetangga terdekat berbasis disk
+
+00:07:53.660 --> 00:07:55.920
+dan dibuat untuk latensi di bawah 20 milidetik
+
+00:07:55.920 --> 00:07:56.900
+bahkan dalam skala besar.
+
+00:07:57.380 --> 00:07:58.720
+Itu bagus untuk data operasional
+
+00:07:58.720 --> 00:08:00.100
+yang sudah ada di Cosmos DB.
+
+00:08:01.060 --> 00:08:02.020
+Katakanlah Anda sedang membangun
+
+00:08:02.020 --> 00:08:03.360
+aplikasi e-commerce dengan Cosmos DB
+
+00:08:03.360 --> 00:08:03.900
+sebagai pekenan.
+
+00:08:04.380 --> 00:08:06.020
+Kini Anda dapat menambahkan pencarian vektor
+
+00:08:06.020 --> 00:08:07.340
+langsung ke katalog produk Anda
+
+00:08:07.340 --> 00:08:08.880
+tanpa memindahkan data kelainan terpisah.
+
+00:08:09.580 --> 00:08:11.260
+Pelanggan mencari sepatu musim panas yang ringan
+
+00:08:11.260 --> 00:08:12.840
+dan aplikasi Anda menemukan produk
+
+00:08:12.840 --> 00:08:13.760
+dengan deskripsi serupa
+
+00:08:13.760 --> 00:08:14.480
+di dalam basis data
+
+00:08:14.480 --> 00:08:18.120
+yang sudah ada Azure SQL Server 2025
+
+00:08:18.120 --> 00:08:19.960
+dan Azure SQL Database juga telah bergabung.
+
+00:08:20.520 --> 00:08:21.580
+Keduanya kini menyertakan
+
+00:08:21.580 --> 00:08:22.560
+tipe data vektor asli
+
+00:08:22.560 --> 00:08:23.940
+dan fungsi seperti pencarian vektor.
+
+00:08:24.200 --> 00:08:25.440
+Artinya Anda dapat menyimpan
+
+00:08:25.440 --> 00:08:27.180
+penyematan tepat di samping data relasional Anda.
+
+00:08:27.580 --> 00:08:28.260
+Catatan pelanggan
+
+00:08:28.260 --> 00:08:29.940
+dengan representasi vektor preferensi mereka,
+
+00:08:30.100 --> 00:08:30.880
+item inventaris
+
+00:08:30.880 --> 00:08:31.920
+dengan deskripsi vektor,
+
+00:08:32.120 --> 00:08:32.700
+tiket dukungan
+
+00:08:32.700 --> 00:08:34.820
+dengan penyematan vektor konten mereka.
+
+00:08:35.820 --> 00:08:36.500
+Anda tidak merupakan
+
+00:08:36.500 --> 00:08:37.480
+bahasa catat vektor terpisah.
+
+00:08:37.660 --> 00:08:38.540
+Keterampilan SQL Anda
+
+00:08:38.540 --> 00:08:39.320
+sudah ada tetap berlaku.
+
+00:08:39.760 --> 00:08:40.920
+Cukup tambahkan kolom vektor
+
+00:08:40.920 --> 00:08:42.000
+buat indeks dan mulai query
+
+00:08:42.000 --> 00:08:42.900
+berdasarkan kesamaan.
+
+00:08:42.900 --> 00:08:44.460
+Beginilah cara kopilot
+
+00:08:44.460 --> 00:08:45.320
+menggunakannya secara mendalam.
+
+00:08:46.060 --> 00:08:46.840
+Saat Anda bertanya,
+
+00:08:47.040 --> 00:08:48.400
+tunjukkan laporan penjualan
+
+00:08:48.400 --> 00:08:49.200
+ketika tahun lalu,
+
+00:08:49.580 --> 00:08:50.420
+kopilot tidak mencari
+
+00:08:50.420 --> 00:08:50.980
+frasa persis
+
+00:08:50.980 --> 00:08:52.240
+laporan penjualan ketika.
+
+00:08:53.000 --> 00:08:54.240
+Kopilot mengubah pertanyaan Anda
+
+00:08:54.240 --> 00:08:54.900
+menjadi vektor
+
+00:08:54.900 --> 00:08:56.280
+mencari di seluruh dokumen indeks,
+
+00:08:56.540 --> 00:08:57.500
+email, file sharepoint,
+
+00:08:57.660 --> 00:08:58.280
+dokumen OneDrive,
+
+00:08:58.420 --> 00:08:58.980
+obrolan Teams,
+
+00:08:59.260 --> 00:09:00.020
+dan menemukan dokumen
+
+00:09:00.020 --> 00:09:00.520
+yang penyematannya
+
+00:09:00.520 --> 00:09:01.720
+paling dekat dengan query Anda.
+
+00:09:02.060 --> 00:09:02.160
+Dia.
+
+00:09:03.360 --> 00:09:04.380
+Ia mungkin menemukan berkas
+
+00:09:04.380 --> 00:09:05.120
+bernama ringkasan
+
+00:09:05.120 --> 00:09:06.560
+keuangan kuartal ketiga 2024
+
+00:09:06.560 --> 00:09:07.580
+karena maknanya cocok
+
+00:09:07.580 --> 00:09:08.340
+meskipun kata-katanya
+
+00:09:08.340 --> 00:09:09.020
+tidak sama persis.
+
+00:09:09.500 --> 00:09:10.540
+Itulah cara kerja pencana efektor.
+
+00:09:12.900 --> 00:09:13.820
+Adi-adi berkata,
+
+00:09:13.920 --> 00:09:15.100
+belilah basis data vektor khusus.
+
+00:09:15.200 --> 00:09:15.900
+Mereka menambahkan
+
+00:09:15.900 --> 00:09:16.620
+kemampuan vektor
+
+00:09:16.620 --> 00:09:18.160
+ke alat yang sudah Anda gunakan.
+
+00:09:18.800 --> 00:09:19.440
+Azure Eye Search,
+
+00:09:19.520 --> 00:09:19.920
+Cosmos DB,
+
+00:09:20.000 --> 00:09:20.460
+Scale Server,
+
+00:09:20.600 --> 00:09:21.340
+semuanya kini berbicara
+
+00:09:21.340 --> 00:09:22.120
+tentang vektor.
+
+00:09:22.760 --> 00:09:23.240
+Anda tidak perlu
+
+00:09:23.240 --> 00:09:24.000
+mempelajari sistem baru.
+
+00:09:24.340 --> 00:09:24.920
+Anda hanya perlu
+
+00:09:24.920 --> 00:09:25.760
+memahami konsepnya
+
+00:09:25.760 --> 00:09:26.700
+dan Microsoft akan
+
+00:09:26.700 --> 00:09:27.780
+menangani pekerjaan beratnya.
+
+00:09:28.560 --> 00:09:29.440
+Kasus penggunaan AI
+
+00:09:29.440 --> 00:09:30.080
+di dunia nyata.
+
+00:09:30.760 --> 00:09:31.360
+Jadi di mana Anda
+
+00:09:31.360 --> 00:09:31.820
+benar-benar melihat
+
+00:09:31.820 --> 00:09:32.600
+basis data vektor
+
+00:09:32.600 --> 00:09:33.360
+bekerja saat ini?
+
+00:09:34.060 --> 00:09:34.780
+Beginilah cara kerjanya
+
+00:09:34.780 --> 00:09:35.140
+di dunia.
+
+00:09:35.660 --> 00:09:36.420
+Adalah yang terbesar.
+
+00:09:36.920 --> 00:09:37.560
+Itulah singkatan
+
+00:09:37.560 --> 00:09:38.800
+dari Retrieval Augmented Generation
+
+00:09:38.800 --> 00:09:39.520
+dan begitulah cara
+
+00:09:39.520 --> 00:09:40.160
+sebagian besar AI
+
+00:09:40.160 --> 00:09:41.060
+perusahaan berjalan saat ini.
+
+00:09:41.740 --> 00:09:42.480
+Saat Anda mengajukan
+
+00:09:42.480 --> 00:09:43.400
+pertanyaan kepada chatbot,
+
+00:09:43.500 --> 00:09:44.020
+ia tidak menebak
+
+00:09:44.020 --> 00:09:44.720
+dari data pelatihan.
+
+00:09:45.020 --> 00:09:45.500
+Sebaliknya,
+
+00:09:45.660 --> 00:09:46.380
+ia mencari dokumen
+
+00:09:46.380 --> 00:09:46.820
+yang relevan
+
+00:09:46.820 --> 00:09:47.820
+di basis data vektor,
+
+00:09:48.000 --> 00:09:49.140
+mengambil kecocokan terdekat,
+
+00:09:49.520 --> 00:09:50.160
+dan menyerahkannya
+
+00:09:50.160 --> 00:09:50.780
+ke model bahasa
+
+00:09:50.780 --> 00:09:51.480
+sebagai konteks.
+
+00:09:52.060 --> 00:09:52.800
+Model tersebut kemudian
+
+00:09:52.800 --> 00:09:53.420
+membangun jawaban
+
+00:09:53.420 --> 00:09:54.600
+dari dokumen aktual tersebut.
+
+00:09:55.040 --> 00:09:55.360
+Artinya,
+
+00:09:55.500 --> 00:09:56.160
+jawaban yang akurat
+
+00:09:56.160 --> 00:09:57.180
+tentang kebijakan produk
+
+00:09:57.180 --> 00:09:58.080
+atau data perusahaan analis.
+
+00:09:58.580 --> 00:09:59.640
+Tanpa basis data vektor,
+
+00:09:59.760 --> 00:10:00.500
+AI akan menebak
+
+00:10:00.500 --> 00:10:01.800
+dari pengetahuan umum internet.
+
+00:10:02.360 --> 00:10:03.280
+Dengan basis data vektor,
+
+00:10:03.360 --> 00:10:03.820
+AI akan menarik
+
+00:10:08.800 --> 00:10:09.400
+dengan cara yang sama.
+
+00:10:10.000 --> 00:10:10.960
+Mereka mengubah pengguna
+
+00:10:10.960 --> 00:10:11.620
+menjadi vektor
+
+00:10:11.620 --> 00:10:12.580
+berdasarkan perilaku
+
+00:10:12.580 --> 00:10:13.340
+apa yang Anda tonton,
+
+00:10:13.500 --> 00:10:14.240
+beli, atau klik.
+
+00:10:15.020 --> 00:10:15.960
+Dan mereka mengubah item
+
+00:10:15.960 --> 00:10:16.500
+menjadi vektor
+
+00:10:16.500 --> 00:10:17.360
+berdasarkan deskripsi
+
+00:10:17.360 --> 00:10:18.020
+ulasan dan fitur.
+
+00:10:18.580 --> 00:10:19.080
+Kemudian mereka hanya
+
+00:10:19.080 --> 00:10:19.980
+menemukan tetangga terdekat.
+
+00:10:20.320 --> 00:10:20.960
+Vektor Anda dekat
+
+00:10:20.960 --> 00:10:21.520
+dengan vektor film
+
+00:10:21.520 --> 00:10:22.620
+mereka merekomendasikan film itu.
+
+00:10:23.200 --> 00:10:24.460
+Itu adalah pencarian kesamaan
+
+00:10:24.460 --> 00:10:25.460
+dalam skala besar
+
+00:10:25.460 --> 00:10:27.140
+berjalan ratusan kali per detik
+
+00:10:27.140 --> 00:10:28.120
+untuk setiap pengguna.
+
+00:10:28.820 --> 00:10:29.380
+Pencarian semantik
+
+00:10:29.380 --> 00:10:30.500
+adalah contoh pengguna besar ketik.
+
+00:10:31.000 --> 00:10:31.540
+Inilah pencarian
+
+00:10:31.540 --> 00:10:32.120
+berdasarkan mana,
+
+00:10:32.240 --> 00:10:32.940
+bukan berdasarkan ketik.
+
+00:10:33.700 --> 00:10:34.600
+Akhir dukungan mengetik,
+
+00:10:35.020 --> 00:10:35.860
+pelanggan tidak dapat masuk
+
+00:10:35.860 --> 00:10:36.480
+setelah pengaturan
+
+00:10:36.480 --> 00:10:37.180
+ulang kata sandi.
+
+00:10:37.540 --> 00:10:38.420
+Dan menemukan artikel
+
+00:10:38.420 --> 00:10:38.900
+berjudul
+
+00:10:38.900 --> 00:10:39.600
+memecahkan masalah
+
+00:10:39.600 --> 00:10:40.560
+kegagalan autentikasi
+
+00:10:40.560 --> 00:10:41.500
+setelah pembaruan credit check.
+
+00:10:41.980 --> 00:10:42.800
+Kata-katanya tidak cocok
+
+00:10:42.800 --> 00:10:43.640
+tetapi artinya cocok.
+
+00:10:44.080 --> 00:10:44.540
+Selain dimungkinkan
+
+00:10:44.540 --> 00:10:45.140
+pencarian faktor.
+
+00:10:45.600 --> 00:10:46.460
+Untuk tim yang menangani
+
+00:10:46.460 --> 00:10:47.280
+ratusan tiket sehari
+
+00:10:47.280 --> 00:10:48.000
+ini memangkas waktu
+
+00:10:48.000 --> 00:10:49.080
+penyelesaian secara dramatis.
+
+00:10:49.840 --> 00:10:50.900
+Lalu ada deteksi anomali.
+
+00:10:51.340 --> 00:10:52.320
+Kurang kentara tetapi ampuh.
+
+00:10:53.080 --> 00:10:53.760
+Anda menanamkan
+
+00:10:53.760 --> 00:10:54.400
+perilaku normal,
+
+00:10:54.620 --> 00:10:55.420
+pola transaksi umum,
+
+00:10:55.560 --> 00:10:56.360
+metrik sistem biasa,
+
+00:10:56.600 --> 00:10:58.080
+tindakan pengguna standar,
+
+00:10:58.860 --> 00:10:59.760
+simpan vektor tersebut,
+
+00:11:00.180 --> 00:11:01.000
+lalu tandai apapun
+
+00:11:01.000 --> 00:11:01.840
+yang jauh dari kluster.
+
+00:11:02.460 --> 00:11:03.100
+Transaksi yang tidak
+
+00:11:03.100 --> 00:11:04.240
+tampak normal itu penipuan.
+
+00:11:04.760 --> 00:11:05.700
+Metrik server yang jauh
+
+00:11:05.700 --> 00:11:06.480
+di luar rentang biasa
+
+00:11:06.480 --> 00:11:07.200
+itu adalah insiden
+
+00:11:07.200 --> 00:11:07.760
+yang sedang terjadi.
+
+00:11:08.000 --> 00:11:08.980
+Basis data faktor membuat ini
+
+00:11:08.980 --> 00:11:09.660
+cukup cepat untuk
+
+00:11:09.660 --> 00:11:10.640
+dijalankan secara real-time.
+
+00:11:11.140 --> 00:11:11.920
+Di dunia Microsoft,
+
+00:11:12.280 --> 00:11:12.920
+ini muncul di mana-mana.
+
+00:11:13.500 --> 00:11:14.220
+Power Apps menggunakan
+
+00:11:14.220 --> 00:11:14.880
+pencarian faktor
+
+00:11:14.880 --> 00:11:15.600
+untuk saran AI
+
+00:11:15.600 --> 00:11:16.680
+saat Anda membuat formulir.
+
+00:11:17.260 --> 00:11:18.740
+Dynamics 365 menggunakannya
+
+00:11:18.740 --> 00:11:19.660
+untuk pencarian cerdas
+
+00:11:19.660 --> 00:11:20.660
+di seluruh catatan pelanggan.
+
+00:11:21.240 --> 00:11:21.940
+Transkrip berapa tim
+
+00:11:21.940 --> 00:11:22.900
+diubah menjadi faktor
+
+00:11:22.900 --> 00:11:24.120
+sehingga Anda dapat mencari
+
+00:11:24.120 --> 00:11:24.940
+apa yang kita putuskan
+
+00:11:24.940 --> 00:11:25.520
+tentang anggaran
+
+00:11:25.520 --> 00:11:26.680
+dan menemukan momen
+
+00:11:26.680 --> 00:11:27.480
+yang tepat dalam rekaman.
+
+00:11:27.480 --> 00:11:30.040
+Copilot untuk Microsoft 365
+
+00:11:30.040 --> 00:11:30.760
+pada dasarnya
+
+00:11:30.760 --> 00:11:32.160
+adalah sistem RAG Raksasa
+
+00:11:32.160 --> 00:11:33.080
+yang berjalan di atas
+
+00:11:33.080 --> 00:11:34.560
+data pribadi dan perusahaan Anda.
+
+00:11:34.760 --> 00:11:35.360
+Semuanya didukung
+
+00:11:35.360 --> 00:11:36.300
+oleh pencarian faktor.
+
+00:11:37.380 --> 00:11:38.540
+Menjaga semuanya tetap sinkron.
+
+00:11:38.680 --> 00:11:39.280
+Vaktor ETL.
+
+00:11:39.860 --> 00:11:40.940
+Nah inilah tantangan praktisnya.
+
+00:11:41.520 --> 00:11:42.140
+Data berubah,
+
+00:11:42.340 --> 00:11:43.000
+dokumen diperbarui,
+
+00:11:43.120 --> 00:11:44.060
+produk baru ditambahkan.
+
+00:11:44.600 --> 00:11:45.240
+Kebijakan lama,
+
+00:11:45.400 --> 00:11:45.900
+diarsipkan.
+
+00:11:46.320 --> 00:11:47.560
+Setiap kali data sumber Anda berubah,
+
+00:11:47.660 --> 00:11:48.720
+faktor Anda juga perlu berubah.
+
+00:11:49.320 --> 00:11:50.440
+Disinilah ETL Vaktor Perubah.
+
+00:11:50.780 --> 00:11:51.680
+ETL adalah singkatan
+
+00:11:51.680 --> 00:11:52.760
+dari Extract Transform Load.
+
+00:11:52.760 --> 00:11:53.900
+Untuk database Vaktor,
+
+00:11:54.180 --> 00:11:55.000
+prosesnya seperti ini.
+
+00:11:55.660 --> 00:11:56.140
+Pertama,
+
+00:11:56.420 --> 00:11:57.320
+Anda mengekstrak dokumen
+
+00:11:57.320 --> 00:11:58.220
+baru atau yang diubah
+
+00:11:58.220 --> 00:11:58.880
+dari sumber Anda
+
+00:11:58.880 --> 00:11:59.700
+mungkin wadah penyimpanan
+
+00:11:59.700 --> 00:12:00.660
+plop, pustaka SharePoint
+
+00:12:00.660 --> 00:12:01.580
+atau database SQL.
+
+00:12:02.280 --> 00:12:03.380
+Kemudian, Anda mengubahnya
+
+00:12:03.380 --> 00:12:04.080
+dengan membagi teks
+
+00:12:04.080 --> 00:12:04.940
+menjadi beberapa bagian
+
+00:12:04.940 --> 00:12:05.600
+yang dapat dikelola
+
+00:12:05.600 --> 00:12:06.660
+dan menjalankan setiap bagian
+
+00:12:06.660 --> 00:12:07.660
+melalui model penyempatan Anda.
+
+00:12:08.120 --> 00:12:09.320
+Terakhir, Anda memuat faktor
+
+00:12:09.320 --> 00:12:10.080
+yang dihasilkan ke dalam
+
+00:12:10.080 --> 00:12:10.940
+penyimpanan faktor Anda
+
+00:12:10.940 --> 00:12:11.920
+bersama dengan metadata
+
+00:12:11.920 --> 00:12:13.200
+seperti URL sumber asli,
+
+00:12:13.340 --> 00:12:13.860
+setempat waktu,
+
+00:12:14.060 --> 00:12:15.460
+dan versi model yang digunakan.
+
+00:12:16.200 --> 00:12:16.920
+Praktik terbaik di sini
+
+00:12:16.920 --> 00:12:17.840
+proses secara bertahap.
+
+00:12:18.320 --> 00:12:19.140
+Jangan sematkan kembali
+
+00:12:19.140 --> 00:12:19.940
+seluruh korpus Anda
+
+00:12:19.940 --> 00:12:20.940
+setiap kali ada perubahan.
+
+00:12:21.460 --> 00:12:22.300
+Hanya proses dokumen
+
+00:12:22.300 --> 00:12:23.200
+yang benar-benar berubah.
+
+00:12:23.720 --> 00:12:24.600
+Lacak versi model mana
+
+00:12:24.600 --> 00:12:25.900
+yang menghasilkan setiap penyempatan,
+
+00:12:26.040 --> 00:12:26.780
+tingkatkan model Anda,
+
+00:12:26.980 --> 00:12:27.600
+dan faktor lama
+
+00:12:27.600 --> 00:12:28.500
+menjadi tidak konsisten
+
+00:12:28.500 --> 00:12:28.980
+dengan yang baru.
+
+00:12:29.540 --> 00:12:30.400
+Dan perhatikan biaya Anda.
+
+00:12:30.800 --> 00:12:31.460
+API penyempatan
+
+00:12:31.460 --> 00:12:32.860
+menggunakan biaya berdasarkan token
+
+00:12:32.860 --> 00:12:33.980
+jadi memproses jutaan dokumen
+
+00:12:33.980 --> 00:12:34.720
+yang bertambah dengan cepat.
+
+00:12:35.200 --> 00:12:35.520
+Di Azure,
+
+00:12:35.620 --> 00:12:36.240
+alur kerja yang umum
+
+00:12:36.240 --> 00:12:36.880
+sangatlah mudah.
+
+00:12:37.340 --> 00:12:38.080
+Letakkan dokumen Anda
+
+00:12:38.080 --> 00:12:38.680
+di penyimpanan blog.
+
+00:12:39.300 --> 00:12:39.780
+Kemudian,
+
+00:12:39.940 --> 00:12:40.840
+siapkan pengindeks pencarian
+
+00:12:40.840 --> 00:12:41.340
+Azure AI
+
+00:12:41.340 --> 00:12:42.220
+dengan serangkaian
+
+00:12:42.220 --> 00:12:43.200
+keterampilan terintegrasi
+
+00:12:43.200 --> 00:12:43.660
+yang menangani
+
+00:12:43.660 --> 00:12:44.640
+pengelompokan dan penyempatan
+
+00:12:44.640 --> 00:12:45.260
+secara otomatis.
+
+00:12:45.800 --> 00:12:46.620
+Microsoft menyediakan
+
+00:12:46.620 --> 00:12:47.680
+keterampilan pemisahan teks
+
+00:12:47.680 --> 00:12:48.940
+untuk pengelompokan
+
+00:12:48.940 --> 00:12:49.760
+dan keterampilan model
+
+00:12:49.760 --> 00:12:50.720
+penyempatan Azure Open AI
+
+00:12:50.720 --> 00:12:51.520
+untuk pembuatan vektor.
+
+00:12:52.040 --> 00:12:52.720
+Pengindeks berjalan
+
+00:12:52.720 --> 00:12:53.380
+sesuai jadwal,
+
+00:12:53.560 --> 00:12:54.240
+mengambil file baru,
+
+00:12:54.440 --> 00:12:54.900
+memprosesnya,
+
+00:12:54.960 --> 00:12:55.580
+dan memasukkan vektor
+
+00:12:55.580 --> 00:12:56.240
+ke dalam indeks.
+
+00:12:56.360 --> 00:12:56.700
+Indeks.
+
+00:12:57.160 --> 00:12:58.360
+Tidak diperlukan kode alur khusus.
+
+00:12:58.960 --> 00:12:59.680
+Berikut kesalahan umum.
+
+00:12:59.940 --> 00:13:00.540
+Mengabaikan metadata.
+
+00:13:01.360 --> 00:13:01.800
+Setiap vektor
+
+00:13:01.800 --> 00:13:03.020
+merupakan referensi sumbernya,
+
+00:13:03.280 --> 00:13:04.480
+nama dan versi model penyempatan,
+
+00:13:04.560 --> 00:13:05.680
+serta stempel waktu pembuatan.
+
+00:13:06.160 --> 00:13:06.580
+Lampai itu,
+
+00:13:06.740 --> 00:13:07.980
+Anda tidak dapat melacak asal hasil,
+
+00:13:08.080 --> 00:13:08.900
+Anda tidak dapat menyematkan
+
+00:13:08.900 --> 00:13:09.760
+ulang saat model berubah,
+
+00:13:09.840 --> 00:13:10.620
+dan Anda akan kesulitan
+
+00:13:16.620 --> 00:13:18.600
+Jadi siap untuk mencobanya sendiri?
+
+00:13:19.540 --> 00:13:20.160
+Mulai dengan sederhana.
+
+00:13:20.620 --> 00:13:21.320
+Buka portal Azure
+
+00:13:21.320 --> 00:13:22.100
+dan buat sumber daya
+
+00:13:22.100 --> 00:13:22.980
+pencarian Azure AI.
+
+00:13:23.480 --> 00:13:24.640
+Kemudian aktifkan pencarian vektor
+
+00:13:24.640 --> 00:13:25.380
+pada indeks yang ada.
+
+00:13:25.840 --> 00:13:26.800
+Unggah beberapa dokumen,
+
+00:13:27.100 --> 00:13:28.000
+pilih model penyematan,
+
+00:13:28.080 --> 00:13:28.980
+dan jalankan query kesamaan.
+
+00:13:29.500 --> 00:13:30.320
+Akan melihatnya berfungsi
+
+00:13:30.320 --> 00:13:30.760
+dalam waktu go.
+
+00:13:31.060 --> 00:13:31.880
+Bagi para pengembang,
+
+00:13:32.020 --> 00:13:32.760
+ambil patent SDK,
+
+00:13:33.040 --> 00:13:34.060
+sematkan beberapa dokumen
+
+00:13:34.060 --> 00:13:35.180
+menggunakan Azure Open AI,
+
+00:13:35.320 --> 00:13:36.660
+simpan dalam pencarian vektor
+
+00:13:36.660 --> 00:13:37.340
+kosmos DB,
+
+00:13:37.600 --> 00:13:38.600
+dan tulis query
+
+00:13:38.600 --> 00:13:39.960
+yang menemukan kecocokan terdekat.
+
+00:13:40.720 --> 00:13:41.620
+Microsoft menyediakan
+
+00:13:41.620 --> 00:13:42.740
+contoh kode dan dokumentasi
+
+00:13:42.740 --> 00:13:43.580
+yang jelas untuk mandu Anda.
+
+00:13:43.920 --> 00:13:44.720
+Anda tidak perlu menjadi
+
+00:13:44.720 --> 00:13:45.160
+ilmuwan data
+
+00:13:46.620 --> 00:13:47.900
+alat-alat Microsoft
+
+00:13:47.900 --> 00:13:49.300
+menangani pembuatan penyematan,
+
+00:13:49.520 --> 00:13:50.100
+pengindeksan,
+
+00:13:50.240 --> 00:13:50.920
+dan logika query.
+
+00:13:51.520 --> 00:13:52.000
+Tugas Anda
+
+00:13:52.000 --> 00:13:53.000
+hanyalah memahami konsep
+
+00:13:53.000 --> 00:13:54.020
+dan mengarahkan alat tersebut
+
+00:13:54.020 --> 00:13:54.900
+ke data Anda sendiri.
+
+00:13:55.660 --> 00:13:56.060
+Inilah tantangan.
+
+00:13:56.500 --> 00:13:57.440
+Pikirkan masalah pencarian
+
+00:13:57.440 --> 00:13:58.100
+yang Anda bisa saat ini.
+
+00:13:58.680 --> 00:13:59.940
+Mungkin menemukan dokumen internal
+
+00:13:59.940 --> 00:14:01.200
+atau mencari katalog produk
+
+00:14:01.200 --> 00:14:02.540
+atau menjawab pertanyaan pelanggan
+
+00:14:02.540 --> 00:14:03.360
+dari basis pengetahuan.
+
+00:14:03.920 --> 00:14:04.580
+Apakah pencarian vektor
+
+00:14:04.580 --> 00:14:05.280
+dapat bekerja lebih baik
+
+00:14:05.280 --> 00:14:06.220
+dari penyelucokan, kata kuncik.
+
+00:14:07.520 --> 00:14:08.600
+Pilih kumpulan data kecil,
+
+00:14:08.780 --> 00:14:09.620
+bahkan 100 dokumen,
+
+00:14:09.900 --> 00:14:10.400
+dan cobalah.
+
+00:14:11.220 --> 00:14:12.280
+Anda akan langsung merasakan perbedaannya.
+
+00:14:13.460 --> 00:14:14.680
+Jadi sekarang Anda memahami
+
+00:14:14.680 --> 00:14:15.160
+apa sebenarnya
+
+00:14:15.160 --> 00:14:15.980
+basis data vektor itu.
+
+00:14:16.440 --> 00:14:17.160
+Basis data vektor
+
+00:14:17.160 --> 00:14:18.500
+bukanlah teknologi AI yang misterius
+
+00:14:18.500 --> 00:14:19.260
+melainkan hanya cara
+
+00:14:19.260 --> 00:14:20.200
+untuk menyimpan dan mencari
+
+00:14:20.200 --> 00:14:20.880
+makna data Anda,
+
+00:14:21.040 --> 00:14:21.800
+bukan kata-kata yang tepat.
+
+00:14:22.720 --> 00:14:23.400
+Basis data vektor
+
+00:14:23.400 --> 00:14:24.540
+mendukung fitur pencarian cerdas
+
+00:14:24.540 --> 00:14:25.520
+dan AI di dalam Microsoft
+
+00:14:25.520 --> 00:14:26.240
+tiga dan co-pilot.
+
+00:14:27.200 --> 00:14:28.560
+Setiap kali Anda mengajukan pertanyaan
+
+00:14:28.560 --> 00:14:29.860
+dan mendapatkan jawaban yang relevan
+
+00:14:29.860 --> 00:14:31.180
+di suatu tempat basis data vektor
+
+00:14:31.180 --> 00:14:31.960
+menemukan kecocokan
+
+00:14:31.960 --> 00:14:32.900
+terdekat dengan query Anda.
+
+00:14:33.540 --> 00:14:34.480
+Fakta terstruktur Anda,
+
+00:14:34.700 --> 00:14:35.260
+nama pelanggan,
+
+00:14:35.260 --> 00:14:36.620
+jumlah pesanan, jumlah inventaris,
+
+00:14:36.860 --> 00:14:37.400
+semuanya masih ada
+
+00:14:37.400 --> 00:14:38.400
+di basis data tradisional.
+
+00:14:38.940 --> 00:14:39.740
+Basis data vektor
+
+00:14:39.740 --> 00:14:41.000
+menambahkan lapisan pemahaman.
+
+00:14:41.000 --> 00:14:42.220
+Basis data vektor
+
+00:14:42.220 --> 00:14:43.120
+memungkinkan aplikasi Anda
+
+00:14:43.120 --> 00:14:43.720
+mencari berdasarkan
+
+00:14:43.720 --> 00:14:44.580
+makna, maksud, dan code.
+
+00:14:44.920 --> 00:14:45.620
+Itulah gambaran besarnya.
+
+00:14:45.980 --> 00:14:46.980
+Berlangganan untuk mendapatkan
+
+00:14:46.980 --> 00:14:48.140
+lebih banyak uraian teknologi Microsoft
+
+00:14:48.140 --> 00:14:49.280
+dalam bahasa Inggris yang lebih sempurna.
+
+00:14:49.340 --> 00:14:49.800
+Di lain waktu,
+
+00:14:49.920 --> 00:14:50.380
+kita akan melihat
+
+00:14:50.380 --> 00:14:51.820
+cara kerja alur RAG sebenarnya
+
+00:14:51.820 --> 00:14:52.920
+dan cara Anda dapat membuatnya
+
+00:14:52.920 --> 00:14:53.640
+dalam waktu satu-sat.
+
+00:14:53.760 --> 00:14:54.480
+Terima kasih telah mendengar.

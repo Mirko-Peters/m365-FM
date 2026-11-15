@@ -5,6 +5,8 @@ import unicodedata
 from pathlib import Path
 from site_i18n import COMM_LANGS, pfx, pfx2, overlay
 from site_learn import esc, LCSS, ENTS
+import site_index_rule as IR   # Index-Regel "ab 2500 Zeichen eigener Text" (13.11.2026)
+import site_meta_entities as MM   # SEO-Titel und Meta-Descriptions nach Suchabsicht
 
 ROOT = Path(__file__).parent
 
@@ -29,13 +31,16 @@ def _country_slug(value):
 def fetch_directory(api):
     """Liest nur öffentliche, paginierte Verzeichniseinträge für Seiteninhalt und SEO-Landingpages."""
     import site_fetch as SF
-    items, page = [], 1
-    while page <= 20:
+    # Bis has_more endet: der Worker begrenzt je Tabelle (5000), Firmen zählen je Standort, die Summe kann darüber liegen.
+    items, page, last = [], 1, 1000   # Sicherheitsgrenze, danach aus total
+    while page <= last:
         data = SF.fetch(f"{api}/api/directory?limit=100&page={page}") or {}
         batch = data.get("items") or []
         items.extend(batch)
         if not data.get("has_more") or not batch:
             break
+        if data.get("total"):
+            last = min(last, -(-int(data["total"]) // 100))
         page += 1
     return items
 
@@ -81,8 +86,14 @@ def _read_intros(g):
         return {}
 
 
+# Japanisch/Chinesisch ohne Leerzeichen: jedes Han-/Kana-Zeichen zählt als Wort (sonst wäre ein ganzer Absatz ein Wort).
+# Koreanisch trennt Wörter mit Leerzeichen und wird wie andere Sprachen gezählt.
+_CJK = "\u3040-\u30ff\u31f0-\u31ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f"
+_WORD = re.compile(rf"[{_CJK}]|(?:(?![{_CJK}])[\w'-])+")
+
+
 def _words(value):
-    return re.findall(r"[\w'-]+", re.sub(r"<[^>]*>", " ", str(value or "")).lower())
+    return _WORD.findall(re.sub(r"<[^>]*>", " ", str(value or "")).lower())
 
 
 def _shingles(value):
@@ -100,6 +111,8 @@ def _similarity(left, right):
 def _indexable(items, kind="hub", intro="", detail="", parent=""):
     minimum = 5 if kind == "topic" else 3
     own_text = f"{intro} {detail}".strip()
+    if kind != "hub" and items and IR.long_enough(own_text) and _similarity(own_text, parent) < 0.5:
+        return True   # 13.11.2026: eigener Text >= 2500 Zeichen (Sprache der Seite; die Aufrufer uebergeben nur uebersetzte Texte): index, auch mit weniger Eintraegen/Woertern; ein Duplikat des Elterntexts bleibt noindex
     return (len(items) >= minimum if kind != "hub" else len(items) >= minimum) and \
         (kind == "hub" or (bool(parent) and len(_words(own_text)) >= 150 and _similarity(own_text, parent) < 0.5))
 
@@ -145,6 +158,21 @@ def _facts_sections(entries, place, lang, s):
 DIR_CSS = "<style>.dir-wrap nav ol{display:flex;flex-wrap:wrap;gap:.3em .6em;list-style:none;padding:0;margin:1em 0;font-size:.9rem}.dir-wrap nav li+li::before{content:'›';margin-inline-end:.6em;color:var(--mut)}.dir-items{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(16em,1fr));gap:.8em}.dir-item{border:1px solid var(--bd);background:var(--card);padding:.8em 1em}.dir-item p{margin:.3em 0 0;color:var(--mut)}</style>"
 
 
+def _facets(items):
+    """Filterwerte über alle Einträge (wie facets in /api/directory), nicht nur die eingebetteten ersten 30."""
+    out = {}
+    for key in ("country", "city", "topic", "program", "lang"):
+        seen = {}
+        for item in items:
+            values = (item.get("topics") or []) if key == "topic" else (item.get("programs") or []) if key == "program" else [item.get(key)]
+            for raw in values:
+                value = str(raw or "").strip()
+                if value and value.lower() not in seen:
+                    seen[value.lower()] = value
+        out[key] = sorted(seen.values())
+    return out
+
+
 def _breadcrumb(crumbs):
     items = [{"@type": "ListItem", "position": i + 1, "name": label, "item": url} for i, (label, url) in enumerate(crumbs)]
     return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items}
@@ -157,6 +185,7 @@ def build(g):
     items = fetch_directory(api)
     intros = _read_intros(g)
     today = g["TODAY"]
+    facets = _facets(items)
     hub_alternates = {
         lang: f"{BASE}{pfx(lang)}/directory/" for lang in COMM_LANGS
         if _indexable(items) and (lang in ("en", "de") or S[lang]["intro"] != S["en"]["intro"])
@@ -164,7 +193,7 @@ def build(g):
     for lang in COMM_LANGS:
         s = S[lang]
         canonical = f"{BASE}{pfx(lang)}/directory/"
-        config = json.dumps({"api": api, "base": BASE, "lang": lang, "items": items[:30], "labels": s, "mapsKey": maps_key}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+        config = json.dumps({"api": api, "base": BASE, "lang": lang, "items": items[:30], "facets": facets, "labels": s, "mapsKey": maps_key}, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
         filters = "".join(f'<label>{esc(s[key])}<select data-filter="{name}"><option value="">{esc(s["all"])}</option></select></label>' for key, name in [("type", "type"), ("topic", "topic"), ("program", "program"), ("lang", "lang"), ("country", "country"), ("city", "city"), ("mode", "mode")])
         filters = f'<label>{esc(s["search"])}<input type="search" data-filter="q" maxlength="100"></label>' + filters
         placeholder = f'<div class="dir-map-placeholder" role="img" aria-label="{esc(s["map_notice"])}"><svg viewBox="0 0 640 360" aria-hidden="true"><rect width="640" height="360" fill="var(--card)"/><path d="M0 70h640M0 150h640M0 245h640M95 0v360M245 0v360M430 0v360M560 0v360" stroke="var(--bd)" stroke-width="8"/><path d="M0 205h640M355 0v360" stroke="var(--ac)" stroke-width="5" opacity=".4"/></svg></div>'
@@ -176,36 +205,47 @@ def build(g):
                        "itemListElement": [{"@type": "ListItem", "position": i + 1, "item": _schema_item(BASE, item)} for i, item in enumerate(items)]}]
         body = (f'{g["header"](lang, "")}<main class="wrap dir-wrap" style="padding-top:2em"><h1>{esc(s["title"])}</h1><p class="mut">{esc(s["intro"])}</p>'
                 f'<form class="dir-filters" aria-label="{esc(s["search"])}">{filters}</form><div class="dir-view" role="group" aria-label="{map_aria}"><button class="btn" type="button" data-view="list" aria-pressed="true">{esc(s["list"])}</button>{map_view}</div><div class="dir-layout" data-view="list" data-map-available="{str(bool(maps_key)).lower()}"><section class="dir-list"><h2>{esc(s["list"])}</h2><p class="mut" data-count></p><div data-results>{_list(items[:30], lang, s)}</div><button class="btn" type="button" data-more hidden>{esc(s["more"])}</button></section>{map_panel}</div></main>'
-                f'<style>.dir-filters{{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:.6em;margin:1.2em 0}}.dir-filters label{{display:grid;gap:.2em;font-weight:600}}.dir-filters input,.dir-filters select{{font:inherit;min-height:2.6em;padding:.35em;border:1px solid var(--bd);border-radius:0;background:var(--card);color:var(--fg)}}.dir-layout{{display:grid;grid-template-columns:minmax(0,1fr) minmax(20em,1fr);gap:1.2em}}.dir-layout[data-map-available=false]{{grid-template-columns:1fr}}.dir-list,.dir-map-panel{{min-width:0}}.dir-items{{list-style:none;padding:0}}.dir-item{{padding:.8em 0;border-bottom:1px solid var(--bd)}}.dir-item p{{margin:.2em 0;color:var(--mut)}}.dir-badge{{display:inline-block;border:1px solid var(--ac);padding:.05em .5em;font:600 .8em "Barlow Condensed",sans-serif;letter-spacing:.08em;text-transform:uppercase}}.dir-map-placeholder,.dir-map{{height:26em;border:1px solid var(--bd);overflow:hidden}}.dir-map-placeholder svg{{width:100%;height:100%}}.dir-map{{background:var(--card)}}.dir-wrap nav ol{{display:flex;flex-wrap:wrap;gap:.5em;list-style:none;padding:0;color:var(--mut)}}.dir-wrap nav li+li:before{{content:"/";margin-inline-end:.5em}}.dir-wrap section{{margin:2em 0}}@media(max-width:48em){{.dir-layout{{grid-template-columns:1fr}}.dir-layout[data-view=map] .dir-list{{display:none}}.dir-layout[data-view=list] .dir-map-panel{{display:none}}.dir-map-placeholder,.dir-map{{height:20em}}}}</style>'
+                f'<style>.dir-filters{{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:.6em;margin:1.2em 0}}.dir-filters label{{display:grid;gap:6px;font-weight:600}}.dir-filters input,.dir-filters select{{width:100%;min-width:0}}.dir-layout{{display:grid;grid-template-columns:minmax(0,1fr) minmax(20em,1fr);gap:1.2em}}.dir-layout[data-map-available=false]{{grid-template-columns:1fr}}.dir-list,.dir-map-panel{{min-width:0}}.dir-items{{list-style:none;padding:0}}.dir-item{{padding:.8em 0;border-bottom:1px solid var(--bd)}}.dir-item p{{margin:.2em 0;color:var(--mut)}}.dir-badge{{display:inline-block;border:1px solid var(--ac);padding:.05em .5em;font:600 .8em "Barlow Condensed",sans-serif;letter-spacing:.08em;text-transform:uppercase}}.dir-map-placeholder,.dir-map{{height:26em;border:1px solid var(--bd);overflow:hidden}}.dir-map-placeholder svg{{width:100%;height:100%}}.dir-map{{background:var(--card)}}.dir-wrap nav ol{{display:flex;flex-wrap:wrap;gap:.5em;list-style:none;padding:0;color:var(--mut)}}.dir-wrap nav li+li:before{{content:"/";margin-inline-end:.5em}}.dir-wrap section{{margin:2em 0}}@media(max-width:48em){{.dir-layout{{grid-template-columns:1fr}}.dir-layout[data-view=map] .dir-list{{display:none}}.dir-layout[data-view=list] .dir-map-panel{{display:none}}.dir-map-placeholder,.dir-map{{height:20em}}}}</style>'
                 f'<script>window.M365D={config}</script><script defer src="{BASE}/assets/directory.js"></script>'
                 f'{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
         hub_indexable = lang in hub_alternates
         alternates = hub_alternates if hub_indexable else None
-        write(f"{pfx2(lang)}directory/index.html", page(lang, s["title"], s["intro"], canonical, body, alternates, hub_schema, xdefault=alternates.get("en") if alternates else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not hub_indexable))
+        _hm = MM.directory_hub_meta(lang, *(sum(i.get("type") == k for i in items) for k in ("expert", "company", "event"))) or (s["title"], s["intro"])   # en/de: Inhalt + Zahlen aus den Eintraegen
+        write(f"{pfx2(lang)}directory/index.html", page(lang, _hm[0], _hm[1], canonical, body, alternates, hub_schema, xdefault=alternates.get("en") if alternates else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not hub_indexable))
         if hub_indexable:
             g["sitemap"].append((canonical, today, None))
 
-    groups = {}
+    groups, city_names = {}, {}
     for item in items:
         country = item.get("country") or ""
         code = _country_slug(country)
         if not code:
             continue
-        groups.setdefault(("country", code, "", ""), []).append(item)
-        city = item.get("city") or ""
-        if city:
-            groups.setdefault(("city", code, _slug(city), city), []).append(item)
+        groups.setdefault(("country", code, ""), []).append(item)
+        city = str(item.get("city") or "").strip()
+        city_slug = _slug(city)
+        if city_slug:   # Gruppe je Slug (Berlin/berlin = eine Seite); leerer Slug (z. B. 東京) würde sonst die Länderseite überschreiben
+            groups.setdefault(("city", code, city_slug), []).append(item)
+            names = city_names.setdefault((code, city_slug), {})
+            names[city] = names.get(city, 0) + 1
         for topic in item.get("topics") or []:
             if re.fullmatch(r"[a-z0-9-]{2,48}", str(topic)):
-                groups.setdefault(("topic", code, topic, topic), []).append(item)
+                groups.setdefault(("topic", code, topic), []).append(item)
+
+    def label_of(kind, country, slug):
+        if kind == "city":   # häufigste Schreibweise
+            return min(city_names[(country, slug)].items(), key=lambda pair: (-pair[1], pair[0]))[0]
+        if kind == "topic":   # Entitätsname statt Kennung; die Kennung bleibt im Pfad
+            return (ENTS.get(slug) or {}).get("name") or slug
+        return ""
+
     country_groups = {key[1]: value for key, value in groups.items() if key[0] == "country"}
     cities_by_country = {}
-    for kind, country, slug, label in groups:
+    for kind, country, slug in groups:
         if kind == "city":
-            cities_by_country.setdefault(country, []).append((slug, label))
-    for (kind, country, slug, label), entries in groups.items():
-        if kind == "city" and not entries:
-            continue
+            cities_by_country.setdefault(country, []).append((slug, label_of(kind, country, slug)))
+    for (kind, country, slug), entries in groups.items():
+        label = label_of(kind, country, slug)
         if kind == "country":
             rel = f"directory/{country}/"
             intro_key = f"country:{country}"
@@ -266,6 +306,9 @@ def build(g):
                     f'{sections}{neighbors}<section><h2>{esc(s["directory"])}: {len(entries)} {esc(s["result"])}</h2>{_list(entries, lang, s)}</section></main>{g["footer"](lang) if lang in g["LANGS"] else g["footer_en"]()}')
             own_indexable = data["indexable"]
             alts = page_alternates if own_indexable else None
-            write(f"{pfx2(lang)}{rel}index.html", page(lang, title, intro or title, canonical, body, alts, structured, xdefault=alts.get("en") if alts else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not own_indexable))
+            _cx, _cc, _ce = (sum(i.get("type") == k for i in entries) for k in ("expert", "company", "event"))
+            _mt = MM.directory_place_title(lang, kind, label, place, _cx, _cc) or title   # en/de: Suchabsicht + Zahlen; andere Sprachen bisheriger Titel
+            _md = MM.directory_place_desc(lang, kind, label, place, _cx, _cc, _ce, intro) or intro or title
+            write(f"{pfx2(lang)}{rel}index.html", page(lang, _mt, _md, canonical, body, alts, structured, xdefault=alts.get("en") if alts else None, og_type="website", extra_head=LCSS + DIR_CSS, noindex=not own_indexable))
             if own_indexable:
                 g["sitemap"].append((canonical, today, None))

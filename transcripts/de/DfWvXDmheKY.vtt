@@ -1,0 +1,1144 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.900
+Ein Förderband stoppt mitten in der Schicht, ein Gabelstapler springt nicht an, eine Pumpe wird undicht und plötzlich braucht jeder Antwort.
+
+00:00:05.600 --> 00:00:08.040
+Wer repariert das? Wann war die letzte Wartung?
+
+00:00:08.260 --> 00:00:11.720
+Haben wir das richtige Teil vorrätig? Und wo sind die Aufzeichnungen der letzten Reparatur?
+
+00:00:12.620 --> 00:00:17.660
+Stattdessen fangen alle an herum zu telefonieren, öffnen alte Tabellen und durchsuchen Ordner, während das Gerät einfach still steht.
+
+00:00:18.300 --> 00:00:21.480
+Diese Hektik kostet wertvolle Zeit und Geld, noch bevor ein Werkzeug die Maschine überhaupt berührt hat.
+
+00:00:22.000 --> 00:00:27.960
+Ich bin Mirko Peters von M350CFM und dieses Wissenshäppchen erklärt Dynamics 365 Asset Management in einfachen Worten.
+
+00:00:27.960 --> 00:00:36.520
+Es ist Teil des Dynamics 365 Supply Chain Managements und bietet Unternehmen einen zentralen Ort für die Verwaltung von Geräten, Wartungen, Kosten und Servicehistorien.
+
+00:00:37.820 --> 00:00:42.340
+Später zeigen wir, wie eine Sensorwarnung eine Notfallreparatur in eine geplante Arbeit verwandeln kann.
+
+00:00:42.920 --> 00:00:46.940
+Doch bevor wir dazu kommen, müssen wir uns die physischen Anlagen ansehen, auf die sich ein Unternehmen täglich verlässt.
+
+00:00:47.280 --> 00:00:49.740
+Warum physische Anlagen zu einem geschäftlichen Problem werden?
+
+00:00:50.240 --> 00:00:52.680
+Denken wir an die Ausrüstung, die den normalen Betrieb am Laufen hält.
+
+00:00:53.340 --> 00:00:56.080
+Eine Fabrik hat Produktionsmaschinen, Förderbänder, Motoren und Pumpen.
+
+00:00:56.080 --> 00:00:59.900
+Ein Lager ist auf Gabelstapler, Verladeausrüstung und Satiersysteme angewiesen.
+
+00:01:00.340 --> 00:01:02.460
+Ein Transportunternehmen braucht LKW, die tatsächlich pünktlich abfahren.
+
+00:01:03.180 --> 00:01:06.560
+Und ein Facility-Team kümmert sich um Heizung, Kühlung, Generatoren und Aufzüge.
+
+00:01:07.320 --> 00:01:13.920
+Jedes dieser Elemente erfüllt eine Aufgabe, bringt aber auch eine Reihe von Fragen mit sich, die nicht einfach verschwinden, nur weil das Gerät heute funktioniert.
+
+00:01:15.200 --> 00:01:18.140
+Wo befindet es sich gerade? Wer kümmert sich darum? Funktioniert es noch einwandfrei?
+
+00:01:18.560 --> 00:01:20.020
+Wann war die letzte Inspektion der Reparatur?
+
+00:01:20.320 --> 00:01:23.620
+Diese Fragen klingen einfach, bis man feststellt, dass die Antworten an fünf verschiedenen Orten.
+
+00:01:23.620 --> 00:01:28.840
+Ein Techniker weiß vielleicht, dass ein komisches Geräusch Ärger bedeutet, weil er seit Jahren neben der Maschine arbeitet.
+
+00:01:29.460 --> 00:01:33.580
+Eine andere Person führt eine Tabelle mit Wartungsdaten, während Einkaufsunterlagen und Ersatzteilbestellungen wandelst.
+
+00:01:33.980 --> 00:01:37.640
+Die Finanzabteilung sieht Rechnungen und Kosten, aber nicht immer die ganze Reparaturgeschichte dahinter.
+
+00:01:38.420 --> 00:01:41.660
+Dann nimmt dieser Techniker Urlaub, wechselt den Job oder ist einfach nicht im Dienst.
+
+00:01:42.240 --> 00:01:43.140
+Das Wissen verlässt den Raum.
+
+00:01:44.220 --> 00:01:48.700
+Früher passierte das ständig mit Papierwartungsblättern, Ordnern im Werkstattschrank und per E-Mail verschickten Tabellen.
+
+00:01:48.700 --> 00:01:52.940
+Ein Team konnte die Geräte zwar am Laufen halten, aber der vollständige Überblick kostete Zeit.
+
+00:01:53.360 --> 00:01:55.200
+Die Mitarbeiter arbeiten oft mit unvollständigen Informationen.
+
+00:01:55.660 --> 00:01:57.520
+Wenn Geräte ausfallen, verbreitet sich das Problem schnell.
+
+00:01:57.840 --> 00:02:00.220
+Die Produktion gerät ins Stocken oder Lieferungen verzögern sich.
+
+00:02:00.380 --> 00:02:01.740
+Das Wartungsteam muss den Fehler finden.
+
+00:02:02.080 --> 00:02:04.320
+Der Einkauf muss unter Umständen ein fehlendes Teil per Eilauftrag bestellen.
+
+00:02:04.840 --> 00:02:09.960
+Die Finanzabteilung sieht später eine teure Rechnung, kann diese aber nicht immer der spezifischen Maschine oder Reparatur zuordnen.
+
+00:02:10.540 --> 00:02:11.480
+Niemand plant eine Auswahl.
+
+00:02:12.760 --> 00:02:14.460
+Notfallarbeiten verändern auch das Verhalten der Mitarbeiter.
+
+00:02:14.460 --> 00:02:21.220
+Ein Team bestellt das erste Teil, das es finden kann, zahlt extra für eine schnelle Lieferung oder überspringt die übliche Planung, weil die Maschine wieder laufen muss.
+
+00:02:22.120 --> 00:02:23.980
+Manchmal ist diese Notlösung die richtige Entscheidung.
+
+00:02:24.120 --> 00:02:28.340
+Aber wenn sich jede Reparatur wie ein Notfall anfühlt, steigen die Kosten und derselbe Fehler tritt immer wieder auf.
+
+00:02:29.060 --> 00:02:31.160
+Unterschiedliche Leute benötigen unterschiedliche Teile derselben Geschichten.
+
+00:02:31.920 --> 00:02:34.520
+Wartungstechniker benötigen Reparaturdetails und frühere Notizen.
+
+00:02:35.000 --> 00:02:37.060
+Die Betriebsleitung muss wissen, ob die Anlagen betriebsbereit sind.
+
+00:02:37.060 --> 00:02:39.520
+Der Einkauf muss wissen, welche Teile benötigt werden.
+
+00:02:40.060 --> 00:02:44.600
+Die Finanzabteilung braucht eine klare Kostenaufstellung und Manager müssen sehen, wo Ausfälle und Ausgaben ständig auftreten.
+
+00:02:45.140 --> 00:02:51.240
+Dynamics 365 Asset Management führt diese Arbeitsunterlagen für physische Anlagen und die damit verbundenen Wartungsaufträge zusammen.
+
+00:02:51.980 --> 00:02:54.700
+Es soll nicht die Person ersetzen, die weiß, wie man einen Motor repariert.
+
+00:02:55.660 --> 00:03:00.520
+Es gibt dieser Person und allen anderen einen gemeinsamen Ort, um festzuhalten, was passiert ist und um zu finden, was sie brauchen.
+
+00:03:01.200 --> 00:03:05.520
+Bevor jemand Reparaturarbeiten planen kann, benötigt das System ein klares Bild jeder einzelnen Anlage.
+
+00:03:06.400 --> 00:03:08.620
+Der Anlagendatensatz. Eine digitale Akte für jede Maschine.
+
+00:03:09.400 --> 00:03:10.800
+Also sollten Sie über das Asset Management denken.
+
+00:03:11.400 --> 00:03:15.400
+Stellen Sie sich einen Aktenschrank im Wartungsraum vor, in dem jede Maschine ihren eigenen beschrifteten Ordner hat.
+
+00:03:16.040 --> 00:03:22.940
+Der Unterschied ist, dass dieser Ordner in Dynamics Dynamics Supply Chain Management liegt und die richtigen Leute ihn finden können, ohne in einem Schrank zu wühlen oder herumzufragen.
+
+00:03:23.760 --> 00:03:26.180
+Öffnen Sie den Ordner für eine Maschine und beginnen Sie mit ihrer Identität.
+
+00:03:26.180 --> 00:03:31.300
+Erfassen Sie den Namen, die Produkt- oder Modellnummer, die Seriennummer und eine einfache Beschreibung der Funktion.
+
+00:03:31.640 --> 00:03:37.780
+Fügen Sie technische Details und Garantieinformationen hinzu, damit das Team prüfen kann, ob eine Reparatur unter die Herstellergarantie fällt, bevor Teile bestellt werden.
+
+00:03:38.600 --> 00:03:40.740
+Das klingt grundlegend, aber es erspart einem echte Kopfschmerzen.
+
+00:03:41.120 --> 00:03:46.420
+Zwei Maschinen auf derselben Etage können fast identisch aussehen, während ihre Teile, Garantiedaten oder Wartungsanforderungen völlig unterschiedlich sind.
+
+00:03:46.680 --> 00:03:49.680
+Ein klarer Anlagendatensatz sagt dem Team genau, mit welcher Maschine Sie es zu tun haben.
+
+00:03:50.060 --> 00:03:52.240
+Der Datensatz muss auch eine praktische Frage beantworten.
+
+00:03:52.700 --> 00:03:53.700
+Wo arbeitet diese Ausrüstung?
+
+00:03:53.700 --> 00:03:58.220
+Dynamics 365 Asset Management verwendet dafür sogenannte funktionale Standorte.
+
+00:03:58.800 --> 00:04:02.580
+Stellen Sie sich einen funktionalen Standort als den Ort vor, an dem eine Anlage Ihre Arbeit verrichtet.
+
+00:04:02.640 --> 00:04:07.600
+Nicht nur eine Stecknadel auf einer Karte, sondern eher wie ein Standort, ein Gebäude, ein Lager, eine Werkstatt oder eine Produktionslinie.
+
+00:04:07.720 --> 00:04:08.180
+Dies ist ein Beispiel.
+
+00:04:08.640 --> 00:04:09.980
+Stellen Sie sich ein Unternehmen mit drei Werken vor.
+
+00:04:10.300 --> 00:04:12.000
+Innerhalb eines Werks befindet sich ein Verpackungsbereich.
+
+00:04:12.280 --> 00:04:13.600
+In diesem Bereich verläuft eine Förderlinie.
+
+00:04:14.160 --> 00:04:16.620
+Dieses Förderband umfasst mehrere Motoren, Sensoren und Rollen.
+
+00:04:16.620 --> 00:04:22.620
+Sie können diese gesamte Struktur im System abbilden, vom übergeordneten Standort bis hinunter zum Gerät, das tatsächlich gewartet und repariert wird.
+
+00:04:22.620 --> 00:04:32.540
+An der Spitze steht das Werk, darunter die Produktionslinie, unter der Linie das Förderband, unter dem Förderband ein Motor und unter dem Motor können Sie eine Komponente erfassen, die besondere Aufmerksamkeit erfordert.
+
+00:04:32.880 --> 00:04:36.600
+Diese Eltern-Kind-Struktur hilft zu verstehen, wohin ein Anlagegut gehört und womit es verbunden ist.
+
+00:04:37.000 --> 00:04:39.440
+Wenn also ein Motor ausfällt, sieht der Techniker nicht nur eine Seriennummer.
+
+00:04:40.060 --> 00:04:42.960
+Er sieht, dass er zu Förderband 2 im Verpackungsbereich des Nordwerks gehört.
+
+00:04:42.960 --> 00:04:47.480
+Dieser Kontext hilft dem Team einzuschätzen, welche Arbeiten während des Motorausfalls stillstehen können.
+
+00:04:48.060 --> 00:04:48.940
+Anlagen werden noch bewegt.
+
+00:04:49.400 --> 00:04:51.180
+Ein Gabelstapler kann von einem anderen verlegt werden.
+
+00:04:51.660 --> 00:04:54.280
+Eine Pumpe kann aus dem Lager entnommen und in einem Gebäude installiert werden.
+
+00:04:54.760 --> 00:04:58.520
+Nach einer Prozessänderung kann eine Maschine von einer Produktionslinie zu einer anderen wechseln.
+
+00:04:58.900 --> 00:05:01.880
+Die Anlagenverwaltung kann diese Änderungen über den technischen Platz nachverfolgen.
+
+00:05:02.360 --> 00:05:03.200
+Das ist auch für die Kosten wichtig.
+
+00:05:03.760 --> 00:05:08.540
+Wenn ein Anlagegut umzieht, verknüpft das System dessen Instandhaltungskosten mit den Finanzdaten des neuen Standorts.
+
+00:05:08.540 --> 00:05:13.860
+Wenn eine Maschine also in einem anderen Werk oder einer anderen Abteilung arbeitet, folgen die Kosten der Maschine an den Einsatzorten.
+
+00:05:14.060 --> 00:05:16.680
+Wir müssen später nicht raten, welcher Geschäftsbereich die Reparaturkosten getragen.
+
+00:05:17.140 --> 00:05:20.680
+Ein Ordner mit nur den ursprünglichen Maschinendaten wäre nach dem ersten Jahr wenig hilfreich.
+
+00:05:21.360 --> 00:05:23.880
+Der nützliche Teil ist die Historie neben dem Anlagendatensatz.
+
+00:05:24.340 --> 00:05:25.660
+Inspektionen stehen neben Reparaturarbeiten.
+
+00:05:26.020 --> 00:05:27.520
+Ersetzte Teile stehen neben dem Zeitaufwand.
+
+00:05:27.900 --> 00:05:31.860
+Techniker-Hinweise, Fehlerdetails und erfasste Stillstandszeiten werden Teil der gleichen Anlagengeschichte.
+
+00:05:32.220 --> 00:05:33.840
+Ein neuer Techniker kann prüfen, was beim letzten Mal passiert.
+
+00:05:34.240 --> 00:05:36.880
+Vielleicht stellt er fest, dass derselbe Motor in sechs Monaten zwar noch repariert wurde.
+
+00:05:36.880 --> 00:05:38.840
+Vielleicht nutzt sich ein bestimmtes Teil ständig ab.
+
+00:05:39.340 --> 00:05:43.420
+Oder eine frühere Notiz erklärt eine Einstellung, die geprüft werden muss, bevor jemand die Maschine zerlegt.
+
+00:05:44.020 --> 00:05:49.080
+Das System erinnert sich nicht besser als Menschen, aber es bietet einen Ort, um nützliche Informationen für den Nachfolger zu hinterlassen.
+
+00:05:49.460 --> 00:05:50.520
+Ein Punkt muss geklärt werden.
+
+00:05:50.880 --> 00:05:56.180
+Die Anlagenverwaltung konzentriert sich auf physische Geräte, die im Laufe der Zeit regelmäßige Pflege, Reparatur, Inspektion und Erwartung benötigen.
+
+00:05:56.460 --> 00:06:00.660
+Denken Sie an Maschinen, Produktionsausrüstung, Fahrzeuge, Gebäudeausstattung und ähnliche Betriebsmittel.
+
+00:06:01.480 --> 00:06:05.100
+Es ist nicht das Werkzeug zur Nachverfolgung von Bürolaptops, Telefon oder Softwarelizenzenzen.
+
+00:06:05.100 --> 00:06:12.200
+Diese Dinge mögen für ein Unternehmen wichtig sein, aber eine Produktionsmaschine mit beweglichen Teilen, Wartungsbedarf und Stillstandsrisiko erfordert eine andere Art von Datensatz.
+
+00:06:12.720 --> 00:06:14.900
+Die Anlagenverwaltung konzentriert sich auf diese Entstandungsgeschichte.
+
+00:06:15.320 --> 00:06:20.460
+Sobald jedes Betriebsmittel eine klare Identität, einen Standort, eine Struktur und Historie hat, ändert sich das Gespräch.
+
+00:06:21.280 --> 00:06:26.620
+Anstatt darauf zu warten, dass Geräte ausfallen und dann zu fragen, was passiert ist, kann ein Team die tatsächlich benötigte Pflege planen.
+
+00:06:26.620 --> 00:06:30.700
+Präventive Wartung. Reparieren, bevor es ausfällt.
+
+00:06:31.660 --> 00:06:33.500
+Es gibt üblicherweise zwei Arten, wie Wartung beginnen.
+
+00:06:33.960 --> 00:06:35.440
+Die erste ist der reaktive Arbeitsauftrag.
+
+00:06:36.180 --> 00:06:40.060
+Etwas geht kaputt, die Produktion stoppt und Leute reparieren es, weil sie keine andere Wahl haben.
+
+00:06:40.620 --> 00:06:44.460
+Die zweite ist die geplante Wartung, bei der ein Teamgeräte betreut, bevor es einem Fehler in Stillstand wird.
+
+00:06:44.920 --> 00:06:50.660
+Die Hersteller Vorgaben mit dem tatsächlichen Bedarf im täglichen Gebrauch zu kombinieren, verändert den Arbeitsalltag, verändert den Arbeitsalltag.
+
+00:06:50.660 --> 00:06:59.640
+Ein Hersteller empfiehlt vielleicht, eine Pumpe nach einer bestimmten Betriebsstundenzahl zu prüfen, aber eine Pumpe in einer staubigen, heißen Umgebung benötigt frühe Aufmerksamkeit als das gleiche Modell an einem sauberen Ort.
+
+00:07:00.340 --> 00:07:04.960
+Asset Management gibt dem Wartungsteam die Möglichkeit, sowohl nach Handbuch als auch nach den realen Bedingungen vor Ort zu planen.
+
+00:07:05.420 --> 00:07:08.600
+Bei der geplanten Wartung geht es nicht darum, perfekt funktionierende Geräte zu reparieren.
+
+00:07:08.680 --> 00:07:15.360
+Es geht darum, kleine, bekannte Aufgaben zu sinnvollen Zeiten zu erledigen, damit aus einem kleinen Problem kein unerwarteter Ausfall während der arbeitsreichsten Schicht der Woche wirken.
+
+00:07:15.360 --> 00:07:24.980
+Ein Wartungsplan kann wiederkehrende Arbeiten abdecken wie Sichtprüfungen, Reinigung, Schmierung, Sicherheitschecks, das Prüfen von Riemen oder Filtern sowie den Austausch von Verschleißteilen sowie den Austeilen.
+
+00:07:25.700 --> 00:07:30.700
+Denken Sie an einen Gabelstapler. Er benötigt regelmäßige Kontrollen von Bremsen, Reifen, Flüssigkeitsständen, Leuchtung und Batteriezustand.
+
+00:07:30.980 --> 00:07:36.900
+Keine dieser Prüfungen wirkt für sich genommen dramatisch, aber sie wiederholt zu versäumen kann dazu führen, dass ein Gabelstapler genau dann ausfällt, wenn das Lager ihn am meisten braucht.
+
+00:07:37.280 --> 00:07:38.900
+Dasselbe Prinzip gilt für eine Produktionslinie.
+
+00:07:39.280 --> 00:07:44.440
+Ein Techniker reinigt vielleicht jede Woche einen Sensor, prüft monatlich die Riemenspannung oder setzt einen Teil nach einer bekannten Nutzungsdauer.
+
+00:07:45.360 --> 00:07:49.440
+Asset Management hilft dem Team, diese Routinen zu erfassen und die nächste anstehende Arbeit rechtzeitig anzuzeigen.
+
+00:07:50.200 --> 00:07:55.360
+Zeitpläne sind ein Teil dieses Gesamtbildes. Eine Aufgabe kann wöchentlich, monatlich oder nach einer festgelegten Anzahl von Tagen fertig sein.
+
+00:07:56.000 --> 00:08:00.320
+Aber Kalenderdaten reichen nicht immer aus, da zwei Maschinen desselben Typs sehr unterschiedliche Laufzeiten haben können.
+
+00:08:00.920 --> 00:08:03.720
+Eine Maschine läuft vielleicht eine Schicht pro Tag, eine andere rund um die Uhr.
+
+00:08:04.220 --> 00:08:07.320
+Technische Messwerte geben dem Team eine weitere Möglichkeit zu beurteilen, wann Wartung erfolgt.
+
+00:08:07.800 --> 00:08:14.440
+Je nach Gerät können dies Betriebsstunden, zurückgelegte Distanz, Temperatur, Druck oder andere Messgrößen sein, die dem Team etwas über den Zustand verraten.
+
+00:08:14.440 --> 00:08:17.320
+Man tauscht ein Teil nicht einfach aus, nur weil ein Datum im Kalender steht.
+
+00:08:18.000 --> 00:08:21.600
+Man tauscht es aus, wenn der Plan, die Gerätennutzung und die Messwerte zeigen, dass die Arbeit fällig ist.
+
+00:08:22.320 --> 00:08:24.300
+Ratungsrundgänge unterstützen diese Art der regelmäßigen Pflege.
+
+00:08:24.880 --> 00:08:28.820
+Ein Rundgang gibt dem Techniker eine geplante Route oder eine Reihe von Inspektionen für verschiedene Anlagen vor.
+
+00:08:29.440 --> 00:08:36.080
+Anstatt jede Prüfung als separate Überraschung zu behandeln, inspiziert der Mitarbeiter die zugehörige Ausrüstung während eines Routinebesuchs und protokolliert die Ergebnisse fortlaufend.
+
+00:08:36.360 --> 00:08:38.440
+Denzel sich ein Techniker vor, der einen morgendlichen Rundgang in einem Verpackungsbereich.
+
+00:08:39.440 --> 00:08:45.100
+Er prüft eine Reihe von Fördermotoren, achtet auf ungewöhnliche Geräusche, sucht nach losen Befestigungen, notiert die für das Unternehmen wichtigen Messwerte.
+
+00:08:45.860 --> 00:08:49.620
+Die Arbeit wird konsistent, selbst wenn unterschiedliche Personen in den Rundgang an verschiedenen Tagen durchführen.
+
+00:08:50.140 --> 00:08:52.800
+Stellen Sie sich nun vor, eine dieser Prüfungen erfasst die Vibration eines Motors.
+
+00:08:53.140 --> 00:08:55.260
+Über mehrere Wochen hinweg bleibt der Messwert im Normalbereich.
+
+00:08:55.640 --> 00:08:56.440
+Dann beginnt er langsam anzusteigen.
+
+00:08:57.160 --> 00:09:00.380
+Das Förderband läuft zwar weiter, sodass außerhalb der Instandhaltung niemand ein Problem bemerkt,
+
+00:09:00.440 --> 00:09:02.940
+aber der wiederholte Messwert zeigt dem Techniker, dass sich etwas verändert hat.
+
+00:09:02.940 --> 00:09:07.700
+Das gibt dem Team Zeit, den Motor zu inspizieren, bevor er sich selbst beschädigt oder die Anlage stillsteht.
+
+00:09:08.320 --> 00:09:09.920
+Dies nennt man zustandsorientierte Instandhaltung.
+
+00:09:10.860 --> 00:09:13.620
+Nur nach einem festen Termin zu handeln, überwacht das Team einen technischen Wert.
+
+00:09:14.280 --> 00:09:19.000
+Wenn dieser Messwert ein vom Unternehmen festgelegtes Limit überschreitet, erscheint ein Instandhaltungsbedarf zur Überprüfung.
+
+00:09:19.540 --> 00:09:22.920
+Ein Sensor kann diese Werte in den Prozess einspeisen, aber er repariert nichts.
+
+00:09:23.480 --> 00:09:27.380
+Er kann warnen, wenn eine Temperatur zu hoch ist oder die Vibration einen akzeptablen Bereich überschritten hat.
+
+00:09:27.380 --> 00:09:33.560
+Eine Person muss die Ausrüstung dennoch prüfen, entscheiden, was die Warnung bedeutet, Sicherheitsregeln befolgen und die Reparatur oder Inspektion durchführen.
+
+00:09:34.260 --> 00:09:35.420
+Dieser Menschenschritt ist entscheidend.
+
+00:09:35.840 --> 00:09:41.400
+Ein Messwert könnte auf ein verschlissenes Lager hinweisen, aber er könnte auch von einer lockeren Verschraubung, einem Sensorfehler oder einer Veränderung in Betrieb kommen.
+
+00:09:42.360 --> 00:09:44.140
+Das System lenkt die Aufmerksamkeit auf den Zustand.
+
+00:09:44.480 --> 00:09:46.620
+Geschultes Personal entscheidet, welche Maßnahme als nächstes ansteht.
+
+00:09:46.940 --> 00:09:48.860
+Das Ziel ist also nicht, jeden Ausfall perfekt vorherzusagen.
+
+00:09:49.480 --> 00:09:54.340
+Es geht darum, Instandhaltungsteams frühzeitiger zu informieren, bessere Abläufe zu schaffen und weniger Reparaturen durchzuführen,
+
+00:09:54.340 --> 00:09:56.480
+die erst nach einem Notruf bei einem Stillstand beginnen.
+
+00:09:57.380 --> 00:10:02.560
+Geplante Arbeit erfordert dennoch einen klaren Arbeitsnachweis, eine verantwortliche Person, die richtigen Teile und eine Möglichkeit zur Kostenverfolgung.
+
+00:10:03.500 --> 00:10:06.000
+Arbeitsaufträge sind der Beleg, der die Reparatur zusammenhält.
+
+00:10:06.740 --> 00:10:08.920
+Wann wird also aus einem Instandhaltungsbedarf eine tatsächliche Arbeit?
+
+00:10:09.400 --> 00:10:10.300
+Die wird zu einem Arbeitsauftrag.
+
+00:10:10.600 --> 00:10:14.780
+Betrachten Sie ihn als das Arbeitsticket, das eine Reparatur von der ersten Meldung bis zum Abschluss begleitet
+
+00:10:14.780 --> 00:10:20.960
+und dem Team eine zentrale Dokumentation liefert, was schiefgelaufen ist, was zu tun ist, wer zuständig ist und was es am Ende kostet.
+
+00:10:20.960 --> 00:10:28.760
+Ohne einen Arbeitsauftrag kann ein Techniker das Problem zwar beheben, aber die Details könnten einem Telefonat bei einer Schichtübergabe oder im Gedächtnis verloren gehen.
+
+00:10:29.680 --> 00:10:34.840
+Und später kann niemand mehr leicht beantworten, welche Arbeiten durchgeführt wurden, wie lange sie dauerten oder ob derselbe Fehler erneut aufgetreten ist.
+
+00:10:35.700 --> 00:10:37.580
+Und ohne diese Aufzeichnung bleibt Ihnen nur das Rätselrad.
+
+00:10:38.020 --> 00:10:40.140
+Nun, ein Arbeitsauftrag kann auf verschiedene Weise entstehen.
+
+00:10:40.140 --> 00:10:46.600
+Er kann aus einer fälligen Wartung, einer Inspektion, bei der ein Fehler gefunden wurde, einem Defekt bei Geräteausfall oder von einem Technikerstamm,
+
+00:10:46.880 --> 00:10:52.100
+der eine Reparatur abschließt, ein weiteres Problem bemerkt und Folgearbeiten anlegt, bevor er den Einsatzort verlässt.
+
+00:10:53.120 --> 00:10:54.600
+Unterschiedliche Gründe, aber die gleiche Struktur.
+
+00:10:55.000 --> 00:10:59.540
+Der Arbeitsauftrag macht aus einem Wartungsbedarf etwas, das das Team planen, zuweisen, verfolgen und abschließen kann.
+
+00:11:00.380 --> 00:11:03.580
+Ob geplant oder ungeplant, der Arbeitsauftrag erfasst also den Grund und die Reaktion.
+
+00:11:04.420 --> 00:11:06.080
+Zuerst beschreibt der Arbeitsauftrag die Aufgabe.
+
+00:11:06.080 --> 00:11:10.280
+Ein Kurztitel könnte lauten, ungewöhnliche Vibrationen an Fördermotor 4 prüfen.
+
+00:11:11.120 --> 00:11:14.320
+Darunter kann das Wartungsteam die für die Arbeit erforderlichen Schritte hinzufügen, wie zum
+
+00:11:14.320 --> 00:11:19.660
+B. Die Anlage freischalten, die Motorhalterung inspizieren, Lager prüfen, Temperatur testen und die Maschine wieder in Betrieb nehmen.
+
+00:11:20.160 --> 00:11:22.500
+Dieser Detaillierungsgrad ist hilfreich, wenn die Arbeit an jemand anderen übergibt.
+
+00:11:22.720 --> 00:11:26.300
+Eine Checkliste kann den Techniker durch Arbeiten führen, die in einer bestimmten Reihenfolge erfolgen müssen,
+
+00:11:26.300 --> 00:11:32.720
+was bei regelmäßigen Inspektionen nützlich ist und bei Reparaturen hilft, bei denen ein vergessener Schritt Sicherheitsrisiken bergen oder die Anlage beeinträchtigen könnte.
+
+00:11:34.120 --> 00:11:35.380
+Sicherheitsanweisungen gehören ebenfalls zur Arbeit.
+
+00:11:35.380 --> 00:11:39.100
+Der Mitarbeiter muss eventuell die Stromzufuhr unterbrechen, bevor er ein Gehäuse öffnet,
+
+00:11:39.160 --> 00:11:42.760
+Schutzausrüstung tragen oder sicherstellen, dass eine Anlage stillsteht, bevor er bewegliche Teile berührt.
+
+00:11:43.320 --> 00:11:47.420
+Der Arbeitsauftrag bietet dem Team einen Platz, um diese Anweisung dort einzufügen, wo sie während der Arbeit gesehen werden.
+
+00:11:47.920 --> 00:11:48.640
+Dann folgt die Planung.
+
+00:11:49.080 --> 00:11:52.920
+Das Wartungsteam kann den Mitarbeiter zuweisen, die Dauerschätzen sowie Datum und Uhrzeit festlegen.
+
+00:11:53.060 --> 00:11:59.240
+Das bedeutet nicht, dass jede Reparatur exakt nach Plan verläuft, da Anlagenausfälle sich selten an den Kalender halten, aber es gibt dem Team einen klaren Ausgangspunkt.
+
+00:11:59.840 --> 00:12:02.540
+Sie können auf die für den Auftrag benötigten Teile und Materialien hinzu.
+
+00:12:02.540 --> 00:12:07.580
+Für unseren Fördermotor könnte das ein Ersatzlager, Bolzenschmiermittel oder vielleicht ein ganzer Motor sein.
+
+00:12:08.280 --> 00:12:14.000
+Der Arbeitsauftrag verknüpft die Reparatur mit den benötigten Artikeln, damit der Techniker nicht arbeitsbereit eintrifft und dann feststellt, dass das Teil fehlt.
+
+00:12:14.280 --> 00:12:14.540
+Ne wild!
+
+00:12:14.540 --> 00:12:17.960
+Das bedeutet, der Techniker bleibt nicht untätig und wartet auf ein Teil, das nie ankommt.
+
+00:12:18.420 --> 00:12:21.280
+Wenn der Artikel auf Lager ist, kann das Team die Planung entsprechend anpassen.
+
+00:12:21.960 --> 00:12:25.340
+Wenn das Lager den Bedarf nicht decken kann, geht dieser in den Einkaufsprozess über.
+
+00:12:25.900 --> 00:12:31.940
+Und jemand kann das benötigte Teil bestellen, ohne sich auf eine hastige Nachricht oder einen handgeschriebenen Zettel verlassen zu müssen, der auf einem Schreibtisch verloren geht.
+
+00:12:32.820 --> 00:12:35.700
+Der Arbeitsauftrag verbindet die Reparaturhistorie weiterhin mit dem Einkauf.
+
+00:12:36.400 --> 00:12:38.540
+Hier beginnt das Arbeitsticket, mehr zu sein als nur eine Fehlerbeschreibung.
+
+00:12:38.540 --> 00:12:43.280
+Es ist wie eine zentrale Kommandostelle, die jeder einsehen kann, bevor er seine Arbeit beginnt.
+
+00:12:43.940 --> 00:12:45.900
+Es hilft den Mitarbeitern, sich vor Arbeitsbeginn vorzubereiten.
+
+00:12:46.420 --> 00:12:47.760
+Der Techniker weiß, was zu prüfen ist.
+
+00:12:47.840 --> 00:12:49.340
+Der Planer weiß, wer den Auftrag übernimmt.
+
+00:12:49.560 --> 00:12:52.980
+Das Lagerteam sieht den Materialbedarf und der Einkauf kann bei fehlenden Teilen handeln.
+
+00:12:53.880 --> 00:12:56.100
+Wenn er in die Arbeit fortschreitet, protokolliert der Auftrag seinen Status.
+
+00:12:56.440 --> 00:12:58.060
+Er beginnt, als er stellt, dann plant ihn niemand ein.
+
+00:12:58.580 --> 00:13:01.220
+Wenn der Techniker die Arbeit aufnimmt, erfasst das Team diese Änderung.
+
+00:13:01.580 --> 00:13:03.340
+Nach der Reparatur wechselt er auf abgeschlossen.
+
+00:13:03.340 --> 00:13:06.400
+Und ein Vorgesetzter oder Verantwortlicher kann ihn vor Abschluss prüfen.
+
+00:13:06.400 --> 00:13:09.800
+Diese Schritte klingen vielleicht nach Verwaltung, aber sie beantworten praktische Fragen.
+
+00:13:10.140 --> 00:13:10.840
+Kümmert sich jemand darum?
+
+00:13:11.420 --> 00:13:12.100
+Hat die Arbeit begonnen?
+
+00:13:12.660 --> 00:13:14.000
+Ist die Maschine wieder einsatzbereit?
+
+00:13:14.640 --> 00:13:16.860
+Hat jemand geprüft, ob die Arbeit den Anforderungen entspricht?
+
+00:13:17.320 --> 00:13:21.040
+Genau diese Fragen muss ein Standhaltungsteam während einer arbeitsreichen Schicht beantwortet haben.
+
+00:13:21.780 --> 00:13:24.820
+Der abgeschlossene Arbeitsauftrag erfasst zudem, was für die Reparatur aufgewendet wurde,
+
+00:13:24.920 --> 00:13:28.940
+Arbeitszeit, Teile und sonstige Kosten und das System verknüpft diese mit dem jeweiligen Anlagengut.
+
+00:13:29.860 --> 00:13:33.120
+Mit der Zeit ergibt das für das Unternehmen ein klares Bild als ein Stapel Rechnungen.
+
+00:13:33.120 --> 00:13:36.940
+Ein Manager erkennt, dass ein Motor wiederholt Reparaturen brauchte
+
+00:13:36.940 --> 00:13:41.100
+und das Instandhaltungsteam kann die laufenden Kosten mit denen eines Austauschs vergleichen,
+
+00:13:41.180 --> 00:13:43.940
+ohne in verschiedenen Systemen nach Rechnungen suchen zu müssen.
+
+00:13:45.140 --> 00:13:47.720
+Der letzte Teil ist oft der nützlichste für den nächsten Techniker.
+
+00:13:48.500 --> 00:13:51.060
+Nach Abschluss der Arbeit kann der Techniker Notizen zum Fehler,
+
+00:13:51.160 --> 00:13:54.340
+zu den Prüfungen, den ersetzten Teilen und weiteren Beobachtungen hinzufügen.
+
+00:13:54.860 --> 00:13:56.920
+Vielleicht fiel das Lager aus, weil sich die Halterung gelockert hatte.
+
+00:13:57.160 --> 00:13:59.000
+Vielleicht hat die Reparatur das Geräusch behoben,
+
+00:13:59.120 --> 00:14:01.160
+aber der Motor sollte in zwei Wochen erneut überprüft werden.
+
+00:14:01.160 --> 00:14:03.520
+Diese Notiz bleibt beim abgeschlossenen Auftrag,
+
+00:14:03.600 --> 00:14:06.700
+damit jemand, der Monate später vor demselben Problem steht, nicht bei Null anfangen muss.
+
+00:14:07.760 --> 00:14:11.400
+Er kann sehen, was zuvor geschah, was geholfen hat und was der Techniker zuvor bemerkt hat.
+
+00:14:12.300 --> 00:14:14.120
+Diese Kontinuität kann später viel Zeit sparen.
+
+00:14:14.560 --> 00:14:17.260
+Ein Arbeitsauftrag beschreibt einen Instandhaltungsjob von Anfang bis Ende.
+
+00:14:17.580 --> 00:14:19.220
+Seine größere Bedeutung entfaltet er jedoch,
+
+00:14:19.380 --> 00:14:22.340
+wenn er mit Lagerbeständen, Einkaufsaktivitäten und Kostenaufzeichnung verknüpft wird.
+
+00:14:22.860 --> 00:14:24.700
+Und das ist der wahre Wert eines Arbeitsauftrags.
+
+00:14:25.040 --> 00:14:25.840
+Es ist nicht bloß ein Dokument.
+
+00:14:25.840 --> 00:14:29.020
+Es ist ein Werkzeug, das den Instandhaltungsbetrieb reibungslos am Lauf.
+
+00:14:30.160 --> 00:14:32.320
+Verbunden mit Lieferkette, Finanzen und Außendienst.
+
+00:14:33.280 --> 00:14:34.740
+Stellen Sie sich ein Unternehmen im Bürogebäude vor.
+
+00:14:35.120 --> 00:14:36.760
+Die Anlagenverwaltung ist die Schaltzentrale entstanden.
+
+00:14:37.200 --> 00:14:39.320
+Ihr Fokus liegt auf der Betriebsbereitschaft der Anlagen,
+
+00:14:39.440 --> 00:14:41.300
+doch sie ist nicht vom restlichen Unternehmen isoliert,
+
+00:14:41.440 --> 00:14:43.680
+da Lager, Einkauf, Finanzabteilungen und Serviceteams
+
+00:14:43.680 --> 00:14:45.760
+alle auf dieselben Informationen angewiesen sind.
+
+00:14:46.560 --> 00:14:48.240
+Die Anlagenverwaltung ist nicht isoliert,
+
+00:14:48.340 --> 00:14:50.880
+sie ist über Arbeitsaufträge mit jeder anderen Abteilung verbunden.
+
+00:14:51.300 --> 00:14:52.860
+Diese Verbindung erspart es den Mitarbeitern,
+
+00:14:52.940 --> 00:14:54.880
+dieselben Details mehrfach an verschiedenen Stellen einzugeben.
+
+00:14:54.880 --> 00:14:57.940
+Das bedeutet weniger Fehlerquellen und deutlich weniger Zeitverlust.
+
+00:14:58.760 --> 00:15:01.160
+Innerhalb von Dynamics 365 Supply Chain Management
+
+00:15:01.160 --> 00:15:03.200
+kann Instandhaltungsarbeit direkt mit den Lagerbeständen
+
+00:15:03.200 --> 00:15:05.080
+für Ersatzteile und Verbrauchsmaterial verknüpft werden.
+
+00:15:05.820 --> 00:15:09.260
+Wenn für eine Reparatur ein Lager, ein Filter oder ein Ersatzmotor benötigt wird,
+
+00:15:09.400 --> 00:15:11.540
+kann das Team prüfen, ob dieser Artikel bereits verfügbar ist,
+
+00:15:11.620 --> 00:15:12.880
+bevor Lieferanten kontaktiert werden.
+
+00:15:13.380 --> 00:15:15.140
+Der Lagerbestand zeigt Ihnen, was griffbereit im Regal ist.
+
+00:15:15.440 --> 00:15:16.960
+Ist das benötigte Teil nicht vorrätig,
+
+00:15:17.040 --> 00:15:19.280
+kann der Einkauf direkt auf den Instandhaltungsbedarf reagieren,
+
+00:15:19.340 --> 00:15:21.160
+die Bestellung wird mit dem Reparaturauftrag verknüpft,
+
+00:15:21.200 --> 00:15:22.880
+sodass alle wissen, warum der Artikel bestellt wurde
+
+00:15:22.880 --> 00:15:25.480
+und wo er nach Ankunft benötigt würde und wo er nach Ankunft benötigt wird.
+
+00:15:25.740 --> 00:15:27.520
+Auch die Produktion ist eng in diesem Prozess eingebunden.
+
+00:15:28.020 --> 00:15:30.140
+Wenn eine Maschine geplante Stillstandszeiten benötigt,
+
+00:15:30.200 --> 00:15:31.560
+sieht der Betrieb, wie sich die Wartungsarbeiten
+
+00:15:31.560 --> 00:15:33.320
+auf die Fertigungslinie oder Lagerprozesse auswirken.
+
+00:15:33.600 --> 00:15:35.860
+Das macht den persönlichen Austausch zwar nicht überflüssig,
+
+00:15:36.160 --> 00:15:38.000
+bietet aber eine gemeinsame Datengrundlage
+
+00:15:38.000 --> 00:15:39.360
+statt einer Kette von Vermutungen.
+
+00:15:39.760 --> 00:15:41.680
+Wenn Instandhaltung und Produktion dasselbe System nutzen,
+
+00:15:41.760 --> 00:15:42.640
+entstehen weniger Reitungswerte.
+
+00:15:42.840 --> 00:15:44.160
+Die Finanzabteilung benötigt eine andere Perspektive.
+
+00:15:44.160 --> 00:15:46.920
+Während das Instandhaltungsteam an den Defekt und die Reparatur denkt,
+
+00:15:47.020 --> 00:15:48.460
+muss die Finanzabteilung wissen, wo die Kosten anfangen.
+
+00:15:48.660 --> 00:15:50.160
+Die Anlagenverwaltung verknüpft Kosten
+
+00:15:50.160 --> 00:15:51.960
+mit dem funktionalen Standort der Ausrüstung,
+
+00:15:52.060 --> 00:15:53.460
+sodass Reparaturausgaben der Maschine
+
+00:15:53.460 --> 00:15:56.220
+direkt der richtigen Abteilung oder dem Geschäftsbereich zugeordnet werden.
+
+00:15:56.880 --> 00:15:58.740
+Stellen Sie sich dieselbe Art von Maschinen an Standorten vor.
+
+00:15:59.380 --> 00:16:00.320
+Beide fordern Reparaturen,
+
+00:16:00.380 --> 00:16:02.020
+aber ein Standort nutzt die Maschine deutlich intensiver.
+
+00:16:02.580 --> 00:16:04.880
+Wenn Kosten dem korrekten Standort zugeordnet sind,
+
+00:16:04.980 --> 00:16:07.240
+erkennen Manager, welcher Standort die Ausgaben verursacht,
+
+00:16:07.320 --> 00:16:09.720
+statt nur eine Gesamtsumme ohne hilfreichen Kontext zu sehen.
+
+00:16:10.120 --> 00:16:11.940
+Das macht Diskussionen über Kosten transparenter
+
+00:16:11.940 --> 00:16:13.380
+und hilft dem Unternehmen, Muster zu erkennen.
+
+00:16:13.840 --> 00:16:15.540
+Wenn an einem Standort kontinuierlich hohe Kosten
+
+00:16:15.540 --> 00:16:16.940
+für dieselbe Art von Ausrüstung anfallen,
+
+00:16:17.000 --> 00:16:18.240
+kann das Team gezieltere Fragen stellen.
+
+00:16:18.560 --> 00:16:19.760
+Hat dieser Standort längere Schichten?
+
+00:16:20.200 --> 00:16:21.380
+Ist ein Norderwartungsplan erforderlich?
+
+00:16:21.800 --> 00:16:23.580
+Oder muss die Anlage selbst ausgetauscht werden?
+
+00:16:24.240 --> 00:16:25.660
+Genau diese Muster führen im Laufe der Zeit
+
+00:16:25.660 --> 00:16:27.100
+zu fundierteren Entscheidungen in Standhaltung.
+
+00:16:27.520 --> 00:16:28.960
+Die Anlagenverwaltung lässt sich zudem
+
+00:16:28.960 --> 00:16:30.780
+mit Dynamics 365 Field Service verbinden.
+
+00:16:30.780 --> 00:16:33.020
+Die Anlagenverwaltung überwacht meist Ausrüstung,
+
+00:16:33.080 --> 00:16:34.480
+die sich im Besitz des Unternehmens befindet
+
+00:16:34.480 --> 00:16:35.800
+und betriebsintern genutzt wird,
+
+00:16:35.880 --> 00:16:38.140
+während der Außendienst sich auf Arbeiten für Kunden konzentriert,
+
+00:16:38.200 --> 00:16:39.060
+die oft vor Ort erbracht werden.
+
+00:16:39.060 --> 00:16:42.280
+Wenn diese Bereiche relevante Serviceinformationen austauschen,
+
+00:16:42.520 --> 00:16:44.520
+behält ein Unternehmen den besseren Überblick über Anlagen,
+
+00:16:44.660 --> 00:16:46.440
+Serviceaktivitäten und die beteiligten Mitarbeiter.
+
+00:16:47.360 --> 00:16:49.120
+Ein Unternehmen wartet möglicherweise Maschinen
+
+00:16:49.120 --> 00:16:51.080
+in der eigenen Fabrik und entsendet gleichzeitig Techniker
+
+00:16:51.080 --> 00:16:52.620
+zur Reparatur verkaufter Geräte bei Kunden.
+
+00:16:53.380 --> 00:16:54.480
+Das sind unterschiedliche Aufgaben,
+
+00:16:54.560 --> 00:16:57.040
+aber Servicehistorie, Gerätedetails und Reparaturabläufe
+
+00:16:57.040 --> 00:16:59.000
+können dort vernetzt werden, wo das Unternehmen sie benötigt,
+
+00:16:59.200 --> 00:17:00.760
+statt in getrennten Datensätzen zu verweilen.
+
+00:17:01.640 --> 00:17:03.420
+Rinsuren stellen eine weitere Informationsquelle dar.
+
+00:17:03.760 --> 00:17:06.300
+Azure IoT Central kann Messwerte von vernetzten Anlagen empfangen,
+
+00:17:06.400 --> 00:17:08.000
+wie zum Beispiel Temperatur, Druck oder Vibration.
+
+00:17:08.000 --> 00:17:11.800
+Sobald ein Wert außerhalb eines vom Unternehmen festgelegten Grenzwerts liegt,
+
+00:17:12.000 --> 00:17:14.400
+kann dies einen Wartungsprozess zur Überprüfung auslösen.
+
+00:17:15.120 --> 00:17:16.140
+Der Sensor liefert das Signal,
+
+00:17:16.500 --> 00:17:18.120
+aber der Techniker entscheidet, was es bedeutet
+
+00:17:18.120 --> 00:17:21.780
+und ob die Anlage eine Inspektion, Reparatur oder genauere Prüfung benötigt.
+
+00:17:22.740 --> 00:17:24.220
+Die Warnung erreicht den Wartungsprozess,
+
+00:17:24.520 --> 00:17:25.380
+während die Anlage noch läuft,
+
+00:17:25.460 --> 00:17:27.180
+anstatt erst nach einem Stillstand durch einen Defekt.
+
+00:17:27.840 --> 00:17:29.320
+Diese Art der Frühwarnung kann verhindern,
+
+00:17:29.400 --> 00:17:31.120
+dass aus einem kleinen Problem ein großer Ausfall wird.
+
+00:17:31.240 --> 00:17:33.880
+Manche Aufgaben erfordern mehr als nur eine schriftliche Checkliste.
+
+00:17:33.880 --> 00:17:37.920
+Dynamics 365 Guides kann in Verbindung mit HoloLens Technikern
+
+00:17:37.920 --> 00:17:40.560
+Schritt-für-Schritt-Anleitungen bei der Arbeit an komplexen Geräten bieten.
+
+00:17:41.160 --> 00:17:43.160
+Mitarbeiter können Anweisungen direkt vor sich sehen.
+
+00:17:43.300 --> 00:17:44.580
+Das hilft bei vielschichtigen Aufgaben
+
+00:17:44.580 --> 00:17:46.060
+oder wenn das Wissen erfahrener Techniker
+
+00:17:46.060 --> 00:17:48.040
+an neue Mitarbeiter weitergegeben werden muss.
+
+00:17:49.160 --> 00:17:51.460
+Das macht einen Anfänger nicht über Nacht zum Experten,
+
+00:17:51.820 --> 00:17:54.800
+bietet dem Techniker aber praktische Anleitung direkt am Einsatzort,
+
+00:17:55.260 --> 00:17:57.460
+während die Wartungsunterlagen den Auftrag begleiten.
+
+00:17:57.460 --> 00:18:00.140
+Viele erwarten, dass eine einzige Business-App
+
+00:18:00.140 --> 00:18:02.380
+alle Aufgaben allein bewältigt, doch so funktioniert es nicht.
+
+00:18:03.000 --> 00:18:04.700
+Das Asset-Management kümmert sich um die Wartung,
+
+00:18:05.080 --> 00:18:07.280
+während andere Teile von Dynamics 365-Lager,
+
+00:18:07.700 --> 00:18:10.840
+Einkauf, Finanzen, Kundenservice und weitere Aufgaben abdecken.
+
+00:18:11.620 --> 00:18:13.860
+Der Vorteil liegt im Datenaustausch zwischen diesen Bereichen,
+
+00:18:14.140 --> 00:18:16.180
+ohne dass Details manuell erneut eingegeben werden müssen
+
+00:18:16.180 --> 00:18:17.380
+oder der Kontext verloren geht.
+
+00:18:18.000 --> 00:18:19.360
+Die Verbindungen zwischen diesen Systemen
+
+00:18:19.360 --> 00:18:20.700
+machen die Plattformen so leistungsfähig.
+
+00:18:21.160 --> 00:18:22.320
+Führen wir diese verbundenen Bereiche
+
+00:18:22.320 --> 00:18:24.300
+also anhand eines einfachen Wartungsbeispiels zusammen.
+
+00:18:24.380 --> 00:18:25.720
+Jetzt haben Sie ein klares Bild davon,
+
+00:18:25.720 --> 00:18:29.080
+wie sich das Asset-Management in das größere Dynamics 365-Ökosystem einfügt.
+
+00:18:30.800 --> 00:18:31.880
+Ein typischer Ablauf.
+
+00:18:32.240 --> 00:18:33.920
+Von der Warnung bis zur abgeschlossenen Reparatur.
+
+00:18:35.100 --> 00:18:36.660
+Stellen Sie sich einen Motor an einem Lagerförderband
+
+00:18:36.660 --> 00:18:38.120
+vor der ungewöhnlichen Vibrationswerte mit.
+
+00:18:38.460 --> 00:18:39.640
+Das ist die Warnung vor einem Ausfall.
+
+00:18:40.160 --> 00:18:40.880
+So sieht der Prozess aus.
+
+00:18:41.360 --> 00:18:42.640
+Sie öffnen den Anlagendatensatz,
+
+00:18:42.720 --> 00:18:44.100
+sehen Standort, Historie, Garantie
+
+00:18:44.100 --> 00:18:45.800
+und geplante Wartungsarbeiten des Motors.
+
+00:18:46.380 --> 00:18:47.620
+Dann erstellen Sie einen Arbeitsauftrag,
+
+00:18:47.700 --> 00:18:48.560
+weisen einen Techniker zu,
+
+00:18:48.680 --> 00:18:49.660
+listen Inspektionsschritte auf
+
+00:18:49.660 --> 00:18:51.120
+und prüfen den Lagerbestand für das Lagerteil.
+
+00:18:51.480 --> 00:18:52.580
+Ist das Lagerteil nicht vorrätig,
+
+00:18:52.580 --> 00:18:54.640
+bestellt das System, ist automatisch und erfasst dabei Zeit und Kosten.
+
+00:18:54.640 --> 00:18:57.120
+Nach der Reparatur protokolliert der Techniker das Ergebnis
+
+00:18:57.120 --> 00:18:57.980
+und hinterlässt Notizen.
+
+00:18:58.500 --> 00:18:59.460
+Der Manager sieht Kosten,
+
+00:18:59.840 --> 00:19:01.300
+wiederkehrende Fehler, Ausfallzeiten
+
+00:19:01.300 --> 00:19:02.860
+und die gesamte Wartung rund um diesen Motor.
+
+00:19:03.380 --> 00:19:04.680
+Die Warnung hat den Motor nicht repariert.
+
+00:19:05.040 --> 00:19:06.380
+Sie gab den Leuten Zeit zur Planung,
+
+00:19:06.460 --> 00:19:08.020
+anstatt mit einer Notfallaktion zu beginnen.
+
+00:19:08.420 --> 00:19:10.000
+Also das Wichtigste, für wen es geeignet ist
+
+00:19:10.000 --> 00:19:10.620
+und was ist nicht der Sinn.
+
+00:19:11.060 --> 00:19:12.180
+Wer braucht also Anlagenmanagement?
+
+00:19:12.880 --> 00:19:14.080
+Jedes Unternehmen, das auf Maschinen,
+
+00:19:14.180 --> 00:19:15.500
+Fahrzeuge, Produktionsanlagen
+
+00:19:15.500 --> 00:19:16.980
+oder Gebäudetechnik angewiesen ist.
+
+00:19:17.560 --> 00:19:19.380
+Dazu gehören Hersteller, Lagerhäuser,
+
+00:19:19.600 --> 00:19:21.240
+Transportunternehmen, Versorgungsbetriebe
+
+00:19:21.240 --> 00:19:22.560
+und serviceintensive Betriebe.
+
+00:19:22.920 --> 00:19:23.640
+Aber eines ist klar,
+
+00:19:23.640 --> 00:19:25.460
+es ersetzt weder Techniker, Sicherheitsregel
+
+00:19:25.460 --> 00:19:26.320
+noch menschliches Urteil zu.
+
+00:19:26.640 --> 00:19:28.480
+Es gibt diesen Personen einen gemeinsamen Datensatz
+
+00:19:28.480 --> 00:19:30.180
+wie eine Krankenakte für ihre Ausrüstung
+
+00:19:30.180 --> 00:19:31.140
+und einen geplanten Weg,
+
+00:19:31.320 --> 00:19:32.340
+alles am Laufen zu halten.
+
+00:19:34.220 --> 00:19:34.660
+Fazit
+
+00:19:34.660 --> 00:19:37.000
+Halten Sie die Historie der Geräte an einem Ort fest.
+
+00:19:37.640 --> 00:19:38.780
+Mit Anlagenmanagement
+
+00:19:38.780 --> 00:19:40.700
+führen Sie Anlage, Wartungsauftrag, Teile,
+
+00:19:40.860 --> 00:19:42.940
+Kosten und Servicehistorie an einem zentralen Ort.
+
+00:19:43.680 --> 00:19:45.600
+Abonnieren Sie M365.fm
+
+00:19:45.600 --> 00:19:46.960
+für mehr verständliches Expertenwissen
+
+00:19:46.960 --> 00:19:48.380
+und machen Sie mit dem nächsten Baustell weiter.

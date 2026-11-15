@@ -1,0 +1,775 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.780
+Je co-pilot probleem is eigenlijk geen probleem met de functies. Het is een vertrouwensprobleem in het model dat erachter zit.
+
+00:00:04.960 --> 00:00:08.860
+De meeste teams denken nog steeds dat veiligheid in prompts, rechten en een paar filters aan de rand zit.
+
+00:00:09.040 --> 00:00:14.220
+Maar hier komt het aanvallers hoeven je prompt niet te kraken, ze hoeven alleen de context eromheen te vergiftigen en daar gaat het mis.
+
+00:00:14.680 --> 00:00:20.220
+Basisfilters kunnen voor de hand liggende rommel tegenhouden, maar missen de payload die verborgen zit in een e-mail, een SharePoint bestand of een formulierveld.
+
+00:00:20.440 --> 00:00:25.180
+Deze opgehaalde inhoud blijft daar rustig wachten totdat co-pilot het binnenhaalt en behandelt als een directe instructie.
+
+00:00:25.180 --> 00:00:30.680
+We hebben de waarschuwingssignalen al gezien met het echo lag in Microsoft 365 Copilot en het share lag in Copilot Studio.
+
+00:00:30.940 --> 00:00:33.500
+En de realiteit is dat patches het patroon niet hebben doorbroken.
+
+00:00:33.700 --> 00:00:40.960
+Omdat Copilot in je volledige Microsoft 365 omgeving kan zoeken, samenvatten en actie ondernemen, kan één foutief instructiepad zich snel verspreiden.
+
+00:00:41.120 --> 00:00:49.020
+Het gaat dus niet om het toevoegen van nog een dashboard aan je stack, maar om het plaatsen van Azure Logic Apps in het traject om kwaadaardige payloads te inspecteren, te scoren en te blokkeren voordat Copilot überhaupt draait.
+
+00:00:49.160 --> 00:00:51.380
+Het echte gevaar is de architectuur, niet te prompt.
+
+00:00:51.380 --> 00:00:55.740
+Het oude model gaat ervan uit dat je het systeem veilig houdt door betere instructies rondom het model te schrijven.
+
+00:00:55.900 --> 00:01:00.340
+Je geeft het een sterke systeem prompt, je voegt scheidingstekens toe en je vertelt gebruikers wat ze niet moeten doen.
+
+00:01:00.560 --> 00:01:10.480
+Dat klinkt op papier logisch, maar in werkelijkheid dwingt het model geen vertrouwensgrenzen af zoals een beveiligingssysteem dat zou doen, omdat het taal leest in één gedeeld kanaal waar instructies en gegevens strijden om aandacht.
+
+00:01:10.480 --> 00:01:21.720
+Die aanname is de zwakke plek. Als een model niet betrouwbaar het verschil kan zien tussen een gebruiker die om hulp vraagt en een document dat het stilletjes opdraagt eerdere instructies te negeren, dan kan het controlepunt niet alleen bij de promptlaag liggen.
+
+00:01:21.880 --> 00:01:27.100
+Je probeert gedrag aan de rand te beveiligen terwijl het werkelijke risico in de stroom van context zit die het model ingaat.
+
+00:01:27.320 --> 00:01:31.480
+Dit werd voor veel teams duidelijk zodra Copilot workloads die zwaar leunen op het ophalen van gegevens opdoken.
+
+00:01:31.660 --> 00:01:37.640
+Op het moment dat Copilot begint te putten uit Microsoft Graph e-mails, bestanden en chatgeschiedenis, verandert het aanvalsoppervlak volledig.
+
+00:01:37.640 --> 00:01:44.640
+Je beveiligt niet langer alleen een gesprek, je beveiligt een live-stroom van inputs met wisselend vertrouwen en een niveau dieper vergroot Copilot het bereik.
+
+00:01:44.800 --> 00:01:48.820
+Het beantwoordt niet alleen vragen, het haalt gegevens op, vat samen en volgt verwijzingen.
+
+00:01:48.940 --> 00:01:56.860
+In sommige configuraties kan het zelfs tools of workflows activeren, dus wanneer niet vertrouw de inhoud die keten binnendringt, kan het model die invloed doortrekken naar gevoelige acties.
+
+00:01:57.120 --> 00:01:59.900
+Daarom is indirecte prompt injectie op dit moment zo belangrijk.
+
+00:02:00.100 --> 00:02:05.060
+In productiesystemen is de gebruikelijke aanval niet altijd een gebruiker die, negeer je regels, in het chatvenster typt.
+
+00:02:05.060 --> 00:02:10.280
+De gevaarlijkere versie bevindt zich in opgehaalde inhoud, vaak weken voordat iemand merkt dat die er is.
+
+00:02:10.440 --> 00:02:17.820
+Een schadelijk document, een gefabriceerde e-mail of een formulierinvoer lijkt onschadelijk voor mensen, maar bevat instructietaal die direct op het model is gericht.
+
+00:02:18.060 --> 00:02:23.920
+Later haalt Copilot die inhoud op als relevante context, mengt deze met betrouwbaar materiaal en het model volgt de verkeerde instructie.
+
+00:02:24.080 --> 00:02:27.300
+De aanvalsketen is simpel en dat is precies wat hem zo gevaarlijk maakt.
+
+00:02:27.300 --> 00:02:36.080
+Eerst plaatst de aanvaller inhoud op een plek waar Copilot later bij kan, dan brengt het ophalen die inhoud in de sessie en vervolgens behandelt het model de payload als instructie in plaats van als data.
+
+00:02:36.300 --> 00:02:43.900
+Daarna kan het beginnen met het klaarzetten van gevoelige informatie, het vormgeven van antwoorden of het pushen van data richting een exfiltratiepad via links of tools.
+
+00:02:44.140 --> 00:02:49.140
+Dus voor leiders is dit niet alleen AI-hygiëne, het is runtime controle die direct verbonden is met toegangsbeheer.
+
+00:02:49.140 --> 00:02:58.360
+Als Copilot een breed bereik heeft binnen de tenant en het model context van gemengd vertrouwen gebruikt zonder strikte scheiding, dan moet je beveiligingsmodel rekening houden met wat de stroom binnenkomt voor uitvoering.
+
+00:02:58.600 --> 00:03:00.740
+Zodra je dat inziet, verandert de oplossing ook.
+
+00:03:00.860 --> 00:03:05.180
+Je stopt met het obsessief streven naar perfecte prompts en begint met het plaatsen van handhaving waar de context zich verplaatst.
+
+00:03:05.360 --> 00:03:07.680
+Waarom basisverdedigingen falen in de productieomgeving?
+
+00:03:07.880 --> 00:03:10.480
+De meeste teams maken direct in het begin een fundamentele fout.
+
+00:03:10.700 --> 00:03:15.380
+Ze gaan ervan uit dat de beveiligingscontroles die ze jarenlang in appontwikkeling hebben gebruikt net zo goed werken voor Copilot.
+
+00:03:15.380 --> 00:03:21.860
+Ze schrijven een sterkere systeemprompt, verpakken gebruikersinvoer in speciale tekens en publiceren wat richtlijnen voor medewerkers en voelen zich dan veilig.
+
+00:03:21.980 --> 00:03:26.620
+Die stappen zijn niet slecht en ik zou je niet adviseren ermee te stoppen, maar ze vormen geen echte beveiligingsgrens.
+
+00:03:26.760 --> 00:03:31.560
+Ze proberen het model alleen te overtuigen zich te gedragen en in beveiliging is overtuiging niet hetzelfde als handhaving.
+
+00:03:31.800 --> 00:03:32.860
+Dat is waar de kloof zit.
+
+00:03:33.040 --> 00:03:40.740
+Een systeemprompt vertelt het model wat je voorkeur heeft, maar het kan niet voorkomen dat een kwaadaardig bestand om de aandacht van het model strijdt zodra dat bestand in de werkruimte wordt getrokken.
+
+00:03:40.740 --> 00:03:46.240
+Het gebruik van scheidingstekens kan helpen de tekst te structureren, maar het geeft het model geen manier om beveiligingsmachtigingen te controleren.
+
+00:03:46.440 --> 00:03:53.340
+Richtlijnen voor medewerkers zijn geweldig om eerlijke fouten te voorkomen, maar ze doen absoluut niets tegen een schadelijk document of een verborgen payload in je opgehaalde data.
+
+00:03:53.540 --> 00:03:57.360
+De controle bestaat als een suggestie, niet als een harde regel die wordt uitgevoerd bij de executie.
+
+00:03:57.600 --> 00:03:59.080
+RegEx heeft een soortgelijk probleem.
+
+00:03:59.220 --> 00:04:02.420
+Het is snel en goedkoop, dus het is de moeite waard om als snelle eerste controle te gebruiken.
+
+00:04:02.580 --> 00:04:07.160
+Als een gebruiker negeer alle voorgaande instructies, typt, zou je systeem dat binnen enkele milliseconden moeten opvangen.
+
+00:04:07.160 --> 00:04:12.580
+Je kunt het ook gebruiken om overduidelijke privacy om zeilende, zinnen of SQL-achtige tekens in je tool argumenten te markeren.
+
+00:04:12.800 --> 00:04:16.020
+Dat deel werkt prima, maar RegEx herkent alleen patronen die je al hebt gedefinieerd,
+
+00:04:16.160 --> 00:04:20.820
+dus het faalt wanneer de formulering iets verandert of wanneer de aanval gebaseerd is op betekenis in plaats van op specifieke woorden.
+
+00:04:21.080 --> 00:04:22.860
+Daarom heb je classifierlagen nodig.
+
+00:04:23.060 --> 00:04:27.740
+Azure AI Content Safety heeft prompt shields die zowel directe als indirecte injectieaanvallen kunnen detecteren.
+
+00:04:27.920 --> 00:04:31.800
+In een Logic App kun je een API aanroepen om de prompt te controleren voordat het model deze ziet,
+
+00:04:32.020 --> 00:04:34.920
+en vervolgens het pad van de workflow wijzigen als er een aanval wordt gedetecteerd.
+
+00:04:34.920 --> 00:04:38.060
+Dit is een veel sterkere controle dan eenvoudige tekstvergelijking,
+
+00:04:38.220 --> 00:04:41.680
+omdat het kijkt naar de intentie achter de woorden in zowel de prompt als de documenten.
+
+00:04:41.880 --> 00:04:47.080
+Zelfs dan is detectie op zichzelf niet genoeg, want een risico zien heeft geen zin als je geen manier hebt om het te stoppen.
+
+00:04:47.820 --> 00:04:51.080
+Beveiligingsteams onderschatten vaak dit specifieke onderdeel van het proces.
+
+00:04:51.440 --> 00:04:56.160
+Een waarschuwing in een logbestand is geen inperking, en een mooi dashboard-item is dat ook niet.
+
+00:04:56.380 --> 00:05:00.920
+Zelfs een melding met hoge prioriteit in je CM faalt als de payload al door Copilot is gegaan
+
+00:05:00.920 --> 00:05:03.300
+en een actie in een downstream systeem heeft geactiveerd.
+
+00:05:03.500 --> 00:05:06.060
+Achteraf bekijken wat er is gebeurd is nuttig voor een onderzoek,
+
+00:05:06.220 --> 00:05:08.960
+maar het is niet goed genoeg wanneer een aanval in seconden plaatsvindt.
+
+00:05:09.040 --> 00:05:13.040
+Je hebt te maken met een model dat kan handelen binnen systemen die je organisatie al vertrouwt.
+
+00:05:13.160 --> 00:05:17.020
+Er is ook een probleem met valse negatieven waar de meeste productmarketing aan voorbij gaat.
+
+00:05:17.300 --> 00:05:20.920
+Indirecte aanvallen veroorzaken een groot deel van de gemiste detecties in de echte wereld,
+
+00:05:21.060 --> 00:05:25.660
+omdat de gevaarlijke instructie er volkomen normaal uitziet totdat het model deze combineert met de rest van het gesprek.
+
+00:05:25.660 --> 00:05:30.740
+Tegen de tijd dat een mens de output bekijkt en doorheeft dat er iets mis is, heeft de schadelijke input zijn werk al gedaan.
+
+00:05:30.940 --> 00:05:32.660
+De praktische fout hier is heel simpel.
+
+00:05:32.860 --> 00:05:35.640
+Teams besteden al hun tijd aan het in de gaten houden van wat Copilot zegt,
+
+00:05:35.800 --> 00:05:37.920
+maar controleren niet met dezelfde discipline wat erin gaat.
+
+00:05:38.100 --> 00:05:39.960
+Ze inspecteren het antwoord nadat het is gegenereerd,
+
+00:05:40.160 --> 00:05:42.840
+terwijl ze onbetrouwbaar materiaal laten binnenkomen voordat het werk begint.
+
+00:05:43.000 --> 00:05:44.660
+Die volgorde is volledig verkeerd.
+
+00:05:44.900 --> 00:05:48.660
+Zodra je dat gebrek erkent, verandert het hele doel van je beveiligingsstrategie.
+
+00:05:48.820 --> 00:05:50.940
+Je stopt met vragen hoe je een veiligere prompt schrijft
+
+00:05:50.940 --> 00:05:54.040
+en begint te vragen waar je de data kunt onderscheppen voordat het model uitvoert.
+
+00:05:54.040 --> 00:05:55.740
+Het Logic App Firewall model.
+
+00:05:55.940 --> 00:06:00.140
+Als onderschepping het doel is, moeten we kijken hoe die controle er in de praktijk eigenlijk uitziet.
+
+00:06:00.320 --> 00:06:04.260
+Je moet Azure Logic Apps gebruiken als een beleidslaag die voor de uitvoeringsfase zit.
+
+00:06:04.460 --> 00:06:08.040
+Het moet geen passieve tool zijn die een rapport stuurt nadat de schade al is aangericht.
+
+00:06:08.220 --> 00:06:11.680
+Je moet het direct in het pad plaatsen waar gebruikersinvoer en opgehaalde data zich bevinden,
+
+00:06:11.900 --> 00:06:14.320
+zodat ze kunnen worden geïnspecteerd voordat het model aan het werk gaat.
+
+00:06:14.560 --> 00:06:17.680
+Deze verschuiving is krachtig omdat apps gebouwd zijn voor orkestratie.
+
+00:06:17.860 --> 00:06:20.180
+Het kan worden geactiveerd door specifieke gebeurtenissen,
+
+00:06:20.180 --> 00:06:23.800
+andere API's aanroepen en beslissingen nemen op basis van complexe voorwaarden.
+
+00:06:23.960 --> 00:06:27.240
+Je kunt gegevens routeren, waarschuwingen naar Microsoft Sentinel sturen
+
+00:06:27.240 --> 00:06:31.720
+en het proces verrijken met externe informatie zonder vanaf nul een aangepaste beveiligingsgateway te bouwen.
+
+00:06:31.860 --> 00:06:33.720
+Je probeert hier co-pilot niet te vervangen.
+
+00:06:33.940 --> 00:06:36.680
+Je voegt alleen een controlelaag toe aan de stroom eromheen.
+
+00:06:36.880 --> 00:06:39.340
+De logica achter dit model is bewust eenvoudig gehouden.
+
+00:06:39.560 --> 00:06:42.220
+Eerst activeer je het proces, daarna normaliseer je de gegevens.
+
+00:06:42.400 --> 00:06:46.460
+Je inspecteert ze, beoordeelt het risico, neemt een beslissing en routeert of locht uiteindelijk het resultaat.
+
+00:06:46.620 --> 00:06:47.740
+Dat is het hele patroon.
+
+00:06:47.740 --> 00:06:52.700
+Wanneer een verzoek of inhoud de workflow binnenkomt, haalt de logic app die payload op en standaardiseert deze.
+
+00:06:52.900 --> 00:06:57.320
+Ruwe invoer is meestal rommelig omdat verschillende connectoren data op verschillende manieren verwerken.
+
+00:06:57.500 --> 00:07:03.000
+Een e-mail ziet er anders uit dan een formulierinvoer en bestandsinhoud of toolparameters hebben allemaal andere metadata en velden.
+
+00:07:03.220 --> 00:07:08.240
+Als je probeert een inspectie uit te voeren voordat je de gegevens normaliseert, zal je detectiesysteem enorm veel ruis geven.
+
+00:07:08.460 --> 00:07:12.280
+Zodra de payload is samengevoegd tot een consistent formaat, begint de eerste inspectieronde.
+
+00:07:12.540 --> 00:07:14.840
+Dit is waar je aangepaste regex nog steeds een taak heeft.
+
+00:07:15.020 --> 00:07:19.640
+Het is niet de definitieve rechter of een magische oplossing, maar het werkt als een zeer snel filter aan de rand van je systeem.
+
+00:07:19.780 --> 00:07:26.960
+Je kunt snel scannen op bekende overschrijvende taal, coderings, hints of verdachte patronen in toolparameters om direct een triage van de situatie te krijgen.
+
+00:07:27.220 --> 00:07:30.900
+Daarna ga je naar de tweede inspectieronde, die veel dieper op de inhoud ingaat.
+
+00:07:31.120 --> 00:07:34.300
+Dit is waar je de prompt shields van Azure AI Content Safety aanroept.
+
+00:07:34.300 --> 00:07:40.960
+De Logic-app stuurt de gebruikersprompt en opgehaalde documenten naar de API en vertakt vervolgens op basis van of er een aanval is gedetecteerd.
+
+00:07:41.140 --> 00:07:45.240
+Dit is belangrijk omdat prompt-injecties er niet altijd uitzien als duidelijke computercode.
+
+00:07:45.500 --> 00:07:49.960
+Soms wordt het gevaar pas duidelijk wanneer de prompt en het document als één geheel worden geëvalueerd.
+
+00:07:50.140 --> 00:07:55.400
+Er is nog één laag die dit verandert van een eenvoudig filter in een echte beveiligingscontrole, en dat is Threat Intelligence.
+
+00:07:55.780 --> 00:08:01.680
+Als inhoud verwijst naar een bekend kwaadaardig domein of een verdachte URL die je team eerder heeft gezien, zou dat je beslissing moeten veranderen.
+
+00:08:01.680 --> 00:08:07.800
+Logic-apps kunnen de gebeurtenis vergelijken met Defender Threat Intelligence of andere externe feeds om een betrouwbaarheidsscore aan het risico toe te voegen.
+
+00:08:08.000 --> 00:08:15.800
+Dit betekent dat een vreemd patroon van een vertrouwde bron mag passeren, terwijl hetzelfde patroon in combinatie met een vijandige reputatiescore direct wordt geblokkeerd.
+
+00:08:16.060 --> 00:08:19.480
+Dit maakt van je beslissingsboom iets meer dan alleen een ja- of nee-keuze.
+
+00:08:19.720 --> 00:08:25.040
+Je kunt het verzoek toestaan als de risicoscore laag is, of je kunt het opschonen door de onveilige fragmenten te verwijderen.
+
+00:08:25.160 --> 00:08:28.840
+Je kunt ervoor kiezen de gegevens in quarantaine te plaatsen als de bron handmatige controle vereist.
+
+00:08:28.840 --> 00:08:33.260
+Als de actiegevoelige gegevens betreft, kun je zelfs menselijke goedkeuring vereisen voordat deze wordt voortgezet.
+
+00:08:33.460 --> 00:08:37.340
+Natuurlijk, als het signaal sterk genoeg is, blokkeer je simpelweg het verzoek en verstuur je een waarschuwing.
+
+00:08:37.520 --> 00:08:40.760
+Dat scala aan opties is wat dit model daadwerkelijk laat werken voor een bedrijf.
+
+00:08:41.320 --> 00:08:45.300
+Beveiligingsteams remmen vaak de acceptatie af omdat ze elk geval dat enigszins onzeker lijkt weigeren,
+
+00:08:45.480 --> 00:08:48.420
+en wanneer controles te streng zijn, vinden mensen manieren om ze te omzeilen.
+
+00:08:48.560 --> 00:08:53.100
+Een workflow met risicoscores geeft je de ruimte om te reageren op basis van werkelijk risico in plaats van paniek.
+
+00:08:53.240 --> 00:08:56.740
+Dit is precies waarom Logic-apps beter geschikt is dan een verzameling losse tools.
+
+00:08:58.840 --> 00:09:01.420
+Het ecosysteem en werkt perfect samen met Sentinel Playbooks.
+
+00:09:01.620 --> 00:09:06.400
+Je kunt een inhoudscontrole aanvragen, bedreigingsgegevens opzoeken en Added Events pushen, allemaal op één plek.
+
+00:09:06.500 --> 00:09:11.840
+Je hebt geen lange ontwikkelcyclus nodig telkens wanneer een aanvaller zijn bewoordingen aanpast of er een nieuwe toegangsweg tot het systeem verschijnt.
+
+00:09:11.980 --> 00:09:14.540
+De regel die dit alles laat werken is heel eenvoudig.
+
+00:09:14.680 --> 00:09:18.440
+Je moet elk stukje context als onbetrouwbaar beschouwen totdat het is beoordeeld.
+
+00:09:18.660 --> 00:09:24.180
+Dat betekent niet alleen de gebruikersprompt, maar ook de inhoud van de e-mail, het geüploaden bestand en het SharePoint formulierveld.
+
+00:09:24.180 --> 00:09:28.180
+Het omvat de connector payload, de opgehaalde documentfragmenten en zelfs de toolargumenten.
+
+00:09:28.840 --> 00:09:30.300
+Alles moet worden gecontroleerd.
+
+00:09:30.480 --> 00:09:35.240
+Op het moment dat je aanneemt dat een van die bronnen standaard veilig is, heb je een nieuw gat gecreëerd voor een aanvaller.
+
+00:09:35.480 --> 00:09:42.020
+Zodra je workflow deze regel consistent afdwingt, hoef je niet langer te vertrouwen op Copilot om zelfgoeden van slechte data te scheiden.
+
+00:09:42.220 --> 00:09:44.620
+Het proces wordt een gecontroleerd toegangssysteem.
+
+00:09:44.780 --> 00:09:51.980
+Op papier klinkt dat als een geweldige theorie, maar waar mensen echt om geven, is wat er gebeurt als een gevaarlijke payload de workflow in de echte wereld raakt.
+
+00:09:51.980 --> 00:10:01.460
+Wat de workflow daadwerkelijk doet tijdens runtime, wanneer het systeem live gaat, is niet alleen tekst scannen op slechte woorden, maar een volledig beeld vormen van het verzoek voordat er een besluit wordt genomen.
+
+00:10:01.680 --> 00:10:10.480
+Een event bereikt je ingangspunt, bijvoorbeeld een formulierinzending, een e-mailstroom of een document upload gekoppeld aan een Copilot proces en Logic Apps voorziet dat event direct van metadata.
+
+00:10:10.840 --> 00:10:16.280
+Het houdt bij wie het verzoek heeft verstuurd, welke app het heeft aangeraakt, waar het bestand vandaan kwam en wat het systeem hierna gaat doen.
+
+00:10:16.280 --> 00:10:21.680
+Deze extra context is essentieel, omdat dezelfde zin iets compleet anders kan betekenen, afhankelijk van waar deze vandaan komt.
+
+00:10:21.900 --> 00:10:25.760
+Zodra die gegevens zijn vastgelegd, wordt de payload opgesplitst in specifieke vertrouwenszones.
+
+00:10:25.980 --> 00:10:27.460
+Je moet die scheiding duidelijk houden.
+
+00:10:27.640 --> 00:10:34.160
+De prompt van de gebruiker gaat in één bak, opgehaalde documenten in een andere, en gespreksgeschiedenis of toolparameters krijgen hun eigen ruimte.
+
+00:10:34.340 --> 00:10:41.440
+Als je dit allemaal te vroeg mengt, verlies je het vermogen om te zien waar een risicovolle instructie begon en wordt je beoordelingsproces puur gokwerk.
+
+00:10:41.440 --> 00:10:48.340
+Veel teams slaan deze stap over omdat alles combineren sneller voelt, maar in werkelijkheid verbergt het juist het pad dat je moet volgen.
+
+00:10:48.580 --> 00:10:50.880
+Vervolgens gaat de workflow over naar normalisatie.
+
+00:10:51.140 --> 00:10:55.040
+Dit is het saaie deel van het werk, maar het is ook wat je detectie daadwerkelijk bruikbaar maakt.
+
+00:10:55.200 --> 00:11:03.160
+Je moet opmaak verwijderen die voor ruis zorgt, URL-codering of Base64-sporen decoderen en geneste velden plat slaan zodat de inspectie op een stabiele vorm draait.
+
+00:11:03.160 --> 00:11:10.320
+Als de ene connector rich text stuurt terwijl de andere JSON-fragmenten stuurt, wil je dat ze allemaal worden teruggebracht naar velden die je controles consistent kunnen lezen.
+
+00:11:10.320 --> 00:11:14.920
+Zonder dit besteed je logica meer tijd aan het bestrijden van formaatafwijkingen dan aan het vinden van daadwerkelijke aanvallen.
+
+00:11:15.120 --> 00:11:18.540
+Nadat de gegevens zijn opgeschoond, wordt eerst de snelle patrooncontrole uitgevoerd.
+
+00:11:18.760 --> 00:11:20.620
+Dit moet goedkoop, direct en snel zijn.
+
+00:11:20.820 --> 00:11:27.680
+Je zoekt naar zinsneden die het systeemgedrag proberen te overschrijven, zoals variaties op negeer alle voorgaande instructies of systeemoverride.
+
+00:11:27.800 --> 00:11:34.060
+Je zoekt ook naar extractietaal waarbij iemand vraagt om vertrouwelijk materiaal te onthullen, geheimen te dumpen of privacy-instellingen te omzeilen.
+
+00:11:34.060 --> 00:11:41.220
+In logic-apps verwerken teams dit meestal via expressies of composed stappen die vlaggen instellen, in plaats van het verzoek bij elke hit direct te blokkeren.
+
+00:11:41.440 --> 00:11:45.540
+Dat markeren is belangrijk, want een enkele zin betekent niet altijd dat iemand kwaadwillend is.
+
+00:11:45.720 --> 00:11:51.320
+Iemand die werkt binnen een geldige beveiligingsworkflow moet misschien letterlijk vragen naar het beoordelen van de afhandeling van vertrouwelijke inhoud.
+
+00:11:51.500 --> 00:11:56.980
+Om dit op te lossen, stuurt de workflow de rijkere payload naar Azure AI Content Safety Prompt Shields voor een diepere blik.
+
+00:11:56.980 --> 00:12:04.200
+De API-aanroep bevat zowel de gebruikersprompt als de opgehaalde documenten, omdat de relatie daartussen meestal de plek is waar het echte probleem zich schuilhoudt.
+
+00:12:04.240 --> 00:12:10.660
+De service geeft een simpel signaal terug en als een aanval wordt gedetecteerd, wijzigt de workflow simpelweg het pad voordat de modelaanroep überhaupt plaatsvindt.
+
+00:12:10.780 --> 00:12:12.580
+Daarna moet je externe context toevoegen.
+
+00:12:12.780 --> 00:12:16.100
+Threat Intelligence-opzoekingen geven de workflow een extra lens om doorheen te kijken.
+
+00:12:16.300 --> 00:12:23.980
+Je kunt Microsoft Defender Threat Intelligence of elke vertrouwde TAXII-bron raadplegen om te controleren op domeinen, URL's of bronindicatoren die verband houden met misbruik.
+
+00:12:23.980 --> 00:12:30.600
+Je moet betrouwbaarheidsscores gebruiken waar beschikbaar, omdat de reputatie van een bron de uiteindelijke score moet beïnvloeden, niet volledig vervangen.
+
+00:12:30.760 --> 00:12:36.220
+Een zwakke payload van een risicovolle bron moet altijd zwaarder wegen dan dezelfde payload vanuit een bekend intern proces.
+
+00:12:36.440 --> 00:12:38.880
+Ten slotte stelt het systeem een samengestelde score op.
+
+00:12:39.020 --> 00:12:44.480
+Hierbij wordt gekeken naar de kracht van patroonherkenning, het resultaat van prompt shields, de reputatie van de bron en de gevoeligheid van de actie.
+
+00:12:44.600 --> 00:12:50.100
+Een verzoek met laag risico om een openbaar artikel samen te vatten weegt minder zwaar dan een verzoek dat beschermde bestanden kan blootstellen.
+
+00:12:50.100 --> 00:12:52.540
+Deze gecombineerde score bepaalt de vervolgstap.
+
+00:12:52.540 --> 00:12:54.520
+Schone gebeurtenissen gaan door zoals gepland.
+
+00:12:54.720 --> 00:12:58.120
+Gevallen met een gemiddeld risico worden geschoond of omgeleid naar een veilig alternatief.
+
+00:12:58.260 --> 00:13:01.580
+En gevallen met een hoog risico worden geblokkeerd voordat co-pilot überhaupt wordt uitgevoerd.
+
+00:13:01.760 --> 00:13:05.180
+Alles wordt vastgelegd in een audit trail waarbij het besluitvormingspad bewaard blijft.
+
+00:13:05.400 --> 00:13:09.620
+Deze geblokkeerde gebeurtenissen laten zien waar de druk toeneemt en welke bronnen voor problemen zorgen.
+
+00:13:09.860 --> 00:13:15.560
+Wanneer je ziet welke patronen in je bedrijfsprocessen glippen, heb je eindelijk de data om het systeem bij te sturen.
+
+00:13:15.560 --> 00:13:18.700
+Hoe je afstemt voor minimale ruis en reëel zakelijk gebruik.
+
+00:13:18.840 --> 00:13:21.300
+Zodra het systeem draait, verandert de aard van het werk.
+
+00:13:21.300 --> 00:13:23.740
+Het bouwen van de flow is eigenlijk het makkelijke deel.
+
+00:13:23.920 --> 00:13:26.700
+Het zo instellen dat mensen het vertrouwen en niet naar omwegen zoeken,
+
+00:13:26.960 --> 00:13:30.360
+bepaalt of dit een echte beveiligingscontrole wordt of slechts een misluktexperiment.
+
+00:13:30.580 --> 00:13:35.780
+Als het systeem voor teveel frictie zorgt, zullen gebruikers manieren vinden om het te omzeilen, wat het project zinloos maakt.
+
+00:13:36.020 --> 00:13:37.200
+Begin met een smalle focus.
+
+00:13:37.520 --> 00:13:40.560
+Probeer niet vanaf dag 1 elk co-pilot contactpunt te monitoren.
+
+00:13:40.560 --> 00:13:46.440
+Kies in plaats daarvan de plekken waar het risico het hoogst is en het pad duidelijk, zoals acties met tools of waardevolle databronnen.
+
+00:13:46.560 --> 00:13:51.940
+Begin bijvoorbeeld met één SharePoint-proces of een specifieke workflow om signalen te krijgen die je daadwerkelijk kunt interpreteren.
+
+00:13:52.060 --> 00:13:55.200
+Een kleine scope geeft je de ruimte om te leren zonder te verdrinken in data.
+
+00:13:55.480 --> 00:13:59.820
+Stel, bij je eerste controle is je filters in op recall, in plaats van op absolute zekerheid.
+
+00:14:00.000 --> 00:14:05.420
+De eerste controle is bedoeld om verdachte taal vroegtijdig te vangen, niet om buiten redelijke twijfelkwaadaardige intenties te bewijzen.
+
+00:14:05.420 --> 00:14:10.000
+Als je je patronen forceert om perfect te zijn, worden ze rigide en mis je juist de dingen waar het om gaat.
+
+00:14:10.180 --> 00:14:15.980
+Het is beter als het systeem in het begin wat vaker een vlaggetje plaatst, om vervolgens met latere controles de ruis te verminderen.
+
+00:14:16.240 --> 00:14:18.700
+Daarom is scoren belangrijker dan losse treffers.
+
+00:14:18.980 --> 00:14:25.820
+Een losse zinsnede mag niet altijd een verzoek blokkeren, maar in combinatie met een prompt shield en een risicovolle bron verandert het beeld.
+
+00:14:26.320 --> 00:14:30.860
+Zwakke signalen moeten zich opstapelen, terwijl sterke signalen het blokkeren moeten versnellen.
+
+00:14:30.860 --> 00:14:36.360
+Dit is het fundamentele verschil tussen een star, irritant filter en een beleidsmodel dat echt werkt voor een bedrijf.
+
+00:14:36.460 --> 00:14:38.760
+Je moet ook een maximum instellen voor foutpositieven.
+
+00:14:38.940 --> 00:14:44.180
+Probeer het onder de 2% te houden, want zodra mensen het gevoel hebben dat de controle hun werk blokkeert, verliezen ze het vertrouwen in het systeem.
+
+00:14:44.380 --> 00:14:45.840
+Dat is wanneer de sluiproutes beginnen.
+
+00:14:46.140 --> 00:14:51.860
+Gebruikers kopiëren tekst naar onbeheerde tools, teams bouwen, schaduwprocessen en beheerders vragen om algemene uitzonderingen.
+
+00:14:52.000 --> 00:14:56.780
+De controle stort van binnenuit in, niet omdat de detectie faalde, maar omdat de weerstand te groot werd.
+
+00:14:56.940 --> 00:14:59.520
+Om dit te voorkomen, moet je naar de juiste statistieken kijken.
+
+00:14:59.520 --> 00:15:02.780
+Vergeet oppervlakkige dashboards en focus op de gemiddelde detectietijd.
+
+00:15:02.960 --> 00:15:06.380
+Je wilt die onder de 15 minuten houden voor alles wat een handmatige beoordeling vereist.
+
+00:15:06.540 --> 00:15:11.300
+Je moet ook je geautomatiseerde insluitingstijd bijhouden en streven naar minder dan 5 minuten waar blokkeren veilig kan.
+
+00:15:11.480 --> 00:15:15.780
+Als de workflow constant wordt geactiveerd maar nooit echt een beslissing beïnvloedt, is het slechts ruis.
+
+00:15:15.920 --> 00:15:18.680
+Kosten zijn een andere factor die voortdurende bijsturing behoeft.
+
+00:15:18.860 --> 00:15:24.580
+Op verbruik gebaseerde Logic apps zijn geweldig voor onregelmatige werklasten of kleine pilots, omdat je alleen betaalt voor wat je uitvoert.
+
+00:15:24.580 --> 00:15:30.420
+Het standaardplan is echter logischer zodra je eventvolume voorspelbaar en hoog genoeg is dat de kosten per uitvoering pijn gaan doen.
+
+00:15:30.620 --> 00:15:31.440
+Gok hier niet op.
+
+00:15:31.620 --> 00:15:35.700
+Meet je werkelijke triggeraantallen en payload groottes voordat je je aan een prijsmodel verbindt.
+
+00:15:35.800 --> 00:15:37.660
+Wees voorzichtig met hoe je omgaat met opslag.
+
+00:15:37.820 --> 00:15:43.460
+Je hebt voldoende uitvoeringsgeschiedenis nodig voor incidentevaluaties en governancebewijs, maar geen enorme database voor gevoelige inhoud.
+
+00:15:43.700 --> 00:15:48.720
+Behoud de specifieke velden die verklaren waarom een besluit werd genomen en verwijder de rommel die een bewaarrisico vormt.
+
+00:15:48.720 --> 00:15:53.480
+Te veel data opslaan kan je beveiligingstool in een privacy-aansprakelijkheid veranderen als je niet oppast.
+
+00:15:53.640 --> 00:15:56.760
+Koppel tenslotte al deze optimalisaties terug aan je bredere governance.
+
+00:15:57.040 --> 00:16:02.700
+Breng de workflow in kaart met NIST-IRMF-functies zoals meten en beheren en koppel deze aan je datagevoeligheidslabels in Purview.
+
+00:16:02.960 --> 00:16:08.880
+Soms is de beste oplossing niet een slimmere detector, maar simpelweg onnodig bereik uit de workflow verwijderen voordat het een probleem wordt.
+
+00:16:09.100 --> 00:16:12.980
+Wanneer je dat punt bereikt, debateer je niet langer abstract over AI-veiligheid.
+
+00:16:12.980 --> 00:16:18.220
+Je draait een echt operationeel model met drempelwaarden en afwegingen die een bedrijf daadwerkelijk kan beheren.
+
+00:16:18.220 --> 00:16:20.320
+Wat dit verandert voor leiders en architecten.
+
+00:16:20.560 --> 00:16:26.140
+Zodra je dit invoert, stopt Copilot met werken als een blind vertrouwensysteem en daar vindt de echte verschuiving plaats.
+
+00:16:26.360 --> 00:16:31.900
+Voor deze wijziging kreeg het model een brei van gemengde context, terwijl je team hoopte dat de juiste instructies zouden winnen.
+
+00:16:32.060 --> 00:16:36.380
+Nu wordt die context gescreend, gescoord en gerouteerd voordat het model de kans krijgt om het aan te raken.
+
+00:16:36.560 --> 00:16:41.160
+Het beveiligingsresultaat is niet langer slechts een abstract beleid, want nu functioneert het als gecontroleerde uitvoering.
+
+00:16:41.160 --> 00:16:45.060
+Voor architecten verplaatst dit de plek waar beveiliging daadwerkelijk in je ontwerp leeft.
+
+00:16:45.060 --> 00:16:51.400
+Het bevindt zich niet langer alleen in tenantinstellingen, machtigingen of prompt schablonen, maar direct in het transactiepad.
+
+00:16:51.760 --> 00:16:57.340
+Elk belangrijk verzoek krijgt een interceptiepunt en elke gevoelige actie volgt een specifiek besluitvormingspad.
+
+00:16:57.580 --> 00:17:03.060
+Dit betekent dat elke nieuwe connector, agent of plug-in iets is dat je evalueert als een invoerpad in plaats van als zomaar een productiviteitsfunctie.
+
+00:17:03.800 --> 00:17:07.940
+Dit is essentieel omdat architecturale afwijkingen meestal de reden zijn waarom deze programma's mislukken.
+
+00:17:07.940 --> 00:17:15.200
+Een team rolt Copilot uit voor een enkele use case, dan koppelt een ander team een formulier en uiteindelijk voegt iemand een workflow toe of geeft een agent toegang tot tools.
+
+00:17:15.400 --> 00:17:21.160
+Elk van deze wijzigingen lijkt op zichzelf klein, maar samen creëren ze een veel groter aanvalspad dan iemand ooit had voorzien.
+
+00:17:21.340 --> 00:17:26.820
+Als je geen interceptie in je bedrijfsmodel opneemt, zal de omgeving veel sneller uitbreiden dan je controles kunnen bijhouden.
+
+00:17:27.020 --> 00:17:32.240
+Voor security leaders lost deze aanpak eindelijk een rommelig eigendomsprobleem op dat de meeste organisaties teistert.
+
+00:17:32.340 --> 00:17:35.940
+Op dit moment valt Copilot risico meestal in de gaten tussen verschillende teams.
+
+00:17:35.940 --> 00:17:42.900
+Het SOC ziet de waarschuwingen, de Microsoft 365 beheerders zien de configuratie en de AI-eigenaar geeft alleen om adoptie.
+
+00:17:43.100 --> 00:17:48.020
+Wanneer je een Logic Apps controlepad gebruikt, kunnen al deze groepen eindelijk werken vanuit één responsmodel.
+
+00:17:48.200 --> 00:17:52.420
+Ze gebruiken hetzelfde gebeurtenissenlogboek, dezelfde scoringslogica en dezelfde branchegeschiedenis,
+
+00:17:52.580 --> 00:17:56.700
+wat verwarring vermindert wanneer een risicovolle prompt of een schadelijk document opduikt in een live workflow.
+
+00:17:56.920 --> 00:17:59.720
+De zakelijke kant hiervan is veel directer dan mensen verwachten.
+
+00:17:59.940 --> 00:18:03.480
+Een dreiging vroegtijdig blokkeren is altijd goedkoper dan deze later moeten opruimen.
+
+00:18:03.480 --> 00:18:07.540
+Opruimen omvat onderzoeken, juridische beoordelingen en onderbrekingen voor gebruikers
+
+00:18:07.540 --> 00:18:11.880
+en eindigt meestal met een vervelende ronde van toegangscontroles die voor de uithol hadden moeten plaatsvinden.
+
+00:18:12.100 --> 00:18:15.320
+Leiders hebben geen lange lezing over AI-ethiek nodig om dit te begrijpen.
+
+00:18:15.500 --> 00:18:21.640
+Ze moeten alleen zien dat runtime controle minder kost dan onbeheerd risico door de systemen laten verspreiden die hun personeel dagelijks gebruikt.
+
+00:18:21.820 --> 00:18:25.800
+Voor leidinggevenden brengt dit een ongemakkelijk punt naar voren over waar risico zich bevindt.
+
+00:18:25.900 --> 00:18:31.680
+AI-risico bevindt zich niet langer in een sandbox of een labpilot, maar nu in Word, Outlook, SharePoint en Teams.
+
+00:18:31.680 --> 00:18:38.520
+Mensen gaan er al vanuit dat deze plekken veilig genoeg zijn om snel te schakelen en dat geleende vertrouwen is precies wat de inzet voor het bedrijf verhoogt.
+
+00:18:38.620 --> 00:18:46.280
+Een slechte workflow in een experimentele app is een beheersbaar probleem, maar een slechte workflow in je dagelijkse productiviteitstack is een heel ander verhaal.
+
+00:18:46.420 --> 00:18:48.920
+Je uitholpad moet klein en zeer wel overwogen blijven.
+
+00:18:49.160 --> 00:18:52.120
+Begin met één use case, één trigger en één scoringsmodel.
+
+00:18:52.300 --> 00:18:56.180
+Kies een pad waar de data er werkelijk toe doet en het gedrag voor jou makkelijk te observeren is.
+
+00:18:56.180 --> 00:19:02.720
+Je moet bewijzen dat de workflow risicovolle invoer opvangt en de veilige doorlaat, terwijl mensen nuttige informatie krijgen als controle nodig is.
+
+00:19:02.920 --> 00:19:05.600
+Zodra je bewijst dat dit werkt, kun je beginnen met uitbreiden.
+
+00:19:05.840 --> 00:19:09.380
+Later kun je anomaliedetectie of outputcontroles toevoegen waar deze passen.
+
+00:19:09.520 --> 00:19:15.580
+Je kunt zelfs diepere monitoring toevoegen voor misbruik, maar de eerste poort moet staan waar de onbetrouwbare context het systeem binnenkomt.
+
+00:19:15.700 --> 00:19:20.180
+Als die eerste poort zwak blijft, probeert elke latere controle slechts een slecht startpunt te compenseren.
+
+00:19:20.880 --> 00:19:22.840
+De verschuiving hier is eigenlijk heel simpel.
+
+00:19:22.840 --> 00:19:30.020
+Stop met het behandelen van prompt injectie als een taalprobleem en begin het te zien als runtime controle over onbetrouwbare context in Copilot.
+
+00:19:30.220 --> 00:19:34.060
+Neem deze week de tijd om één Copilot workflow van begin tot eind in kaart te brengen.
+
+00:19:34.260 --> 00:19:40.080
+Zoek het laatste veilige interceptiepunt voor uitvoering en bouw één logicapp die dat specifieke pad beoordeelt, blokkeert en logt.
+
+00:19:40.320 --> 00:19:42.840
+Wil je meer weten over Copilot beveiliging zonder poespas?
+
+00:19:43.040 --> 00:19:44.800
+Abonneer je dan en laat een beoordeling achter.
+
+00:19:45.040 --> 00:19:50.960
+Je kunt ook contact met mij, Mirko Peters, opnemen via LinkedIn om me te vertellen over het specifieke tenantscenario dat je wilt beveiligen.

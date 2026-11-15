@@ -1,0 +1,1087 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.620
+Entonces, ¿qué sucede con sus datos cuando un ex empleado inicia sesión en su inquilino
+
+00:00:03.620 --> 00:00:04.840
+seis meses después de renunciar?
+
+00:00:05.040 --> 00:00:06.340
+Abre el C. Piénselo.
+
+00:00:06.680 --> 00:00:10.060
+Desactivó su cuenta cuando se fue, pero ¿verificó si algún dispositivo aún conserva
+
+00:00:10.060 --> 00:00:10.900
+credenciales en caché?
+
+00:00:11.240 --> 00:00:13.580
+¿Se fijó si el registro de una aplicación que ellos crearon todavía funciona?
+
+00:00:13.920 --> 00:00:16.260
+La mayoría de los administradores de Microsoft 365 no tienen it.
+
+00:00:16.420 --> 00:00:19.700
+No porque sean malos en su trabajo, sino porque la información que necesitan está dispersa
+
+00:00:19.700 --> 00:00:20.580
+en 20 lugares distintos.
+
+00:00:20.780 --> 00:00:21.580
+Así es la forma activa de hacerlo.
+
+00:00:21.840 --> 00:00:24.620
+Quiere investigar un inicio de sesión sospechoso, así que abre el centro de administración
+
+00:00:24.620 --> 00:00:26.180
+de Entra para revisar los registros de auditoría.
+
+00:00:26.500 --> 00:00:29.280
+Luego salta a Exchange para ver si se creó alguna regla de correo.
+
+00:00:29.280 --> 00:00:31.800
+Después revisa SharePoint por acceso inusual a archivos.
+
+00:00:32.060 --> 00:00:34.600
+Luego Defender por alertas y Teams por actividad extraña.
+
+00:00:35.080 --> 00:00:37.500
+Para cuando ha revisado cinco paneles, ya perdió el hilo.
+
+00:00:38.160 --> 00:00:39.400
+¿Y eso es solo un usuario en un día?
+
+00:00:40.060 --> 00:00:41.300
+Y es donde entra Microsoft Sentinel.
+
+00:00:41.860 --> 00:00:44.880
+Piénselo como el sistema de cámaras de seguridad para todo su edificio digital.
+
+00:00:45.380 --> 00:00:49.260
+¿Sabe cómo una oficina física tiene cámaras en cada entrada, pasillo y puerta, y un guardia
+
+00:00:49.260 --> 00:00:49.660
+de seguridad?
+
+00:00:49.800 --> 00:00:51.900
+¿Puede verlas todas desde una sola pantalla?
+
+00:00:52.420 --> 00:00:54.800
+Eso es lo que hace Sentinel para su inquilino de Microsoft 365.
+
+00:00:55.100 --> 00:00:58.940
+Toma todos esos registros separados de Entra, Exchange, SharePoint y Defender, y los
+
+00:00:58.940 --> 00:01:01.760
+ponen en un lugar donde realmente puede ver lo que sucede.
+
+00:01:02.320 --> 00:01:05.380
+Al final de este episodio, entenderá lo que Sentinel hace realmente, como su nuevo
+
+00:01:05.380 --> 00:01:08.500
+lago de datos cambia las reglas del juego para guardar registros sin gastar una fortuna.
+
+00:01:08.620 --> 00:01:12.060
+¿Y por qué esto le importa a todo administrador de Microsoft 365, no solo a los equipos de
+
+00:01:12.060 --> 00:01:13.300
+seguridad con títulos elegantes?
+
+00:01:13.460 --> 00:01:15.340
+No solo a los equipos de seguridad con títulos elegantes.
+
+00:01:15.720 --> 00:01:16.720
+Tome su café y comencemos.
+
+00:01:17.240 --> 00:01:18.340
+¿Qué hace realmente un SIEM?
+
+00:01:19.040 --> 00:01:20.940
+Sentinel es lo que la industria llama un SIEM.
+
+00:01:21.540 --> 00:01:23.660
+Eso significa gestión de eventos de información de seguridad.
+
+00:01:23.980 --> 00:01:24.960
+Digámoslo en palabras sencillas.
+
+00:01:25.440 --> 00:01:29.060
+Un SIEM es una herramienta que recopila registros de todas partes, sus servidores, firewalls,
+
+00:01:29.100 --> 00:01:32.440
+aplicaciones, sistemas de identidad y luego conecta los puntos entre ellos.
+
+00:01:32.880 --> 00:01:33.640
+Y aquí por qué es importante.
+
+00:01:34.000 --> 00:01:35.480
+Una sola entrada de registro es solo ruido.
+
+00:01:35.820 --> 00:01:37.220
+Alguien intentó iniciar sesión y falló.
+
+00:01:37.460 --> 00:01:37.820
+Gran cosa.
+
+00:01:38.320 --> 00:01:39.540
+Eso sucede cientos veces al día.
+
+00:01:40.020 --> 00:01:42.040
+Pero un SIEM no mira una sola entrada de registro.
+
+00:01:42.120 --> 00:01:44.980
+Las mira todas juntas, por lo que puede ver que la misma dirección IP intentó iniciar
+
+00:01:44.980 --> 00:01:47.120
+sesión en cinco cuentas distintas en 30 segundos.
+
+00:01:47.700 --> 00:01:48.280
+Eso ya no es ruido.
+
+00:01:48.480 --> 00:01:49.600
+Eso es un ataque de fuerza.
+
+00:01:49.940 --> 00:01:51.100
+La magia está en la correlación.
+
+00:01:51.100 --> 00:01:55.300
+Un SIEM toma un inicio de sesión sospechoso de entrada y lo conecta con una descarga de
+
+00:01:55.300 --> 00:01:57.380
+archivo de SharePoint y una regla de reenvío de correo de exchange.
+
+00:01:58.000 --> 00:01:59.880
+Por sí solas, ninguna de esas cosas parece un ataque.
+
+00:02:00.180 --> 00:02:00.900
+Punta buena historia.
+
+00:02:01.420 --> 00:02:04.440
+Alguien entró, encontró lo que buscaba y configuró una forma de seguir recibiendo
+
+00:02:04.440 --> 00:02:04.880
+tu correo.
+
+00:02:05.320 --> 00:02:06.720
+Piénselo como un centro de control de tráfico.
+
+00:02:07.140 --> 00:02:08.040
+No solo observas una cámara.
+
+00:02:08.540 --> 00:02:10.320
+Se observas todas a la vez y buscas patrones.
+
+00:02:10.760 --> 00:02:12.660
+Un auto que pasa cuatro veces por la misma intersección.
+
+00:02:12.740 --> 00:02:15.100
+Una persona que entra al edificio pero nunca sale.
+
+00:02:15.680 --> 00:02:17.440
+Eso es lo que hace un SIEM por tu entorno digital.
+
+00:02:17.740 --> 00:02:19.360
+La idea clave aquí es simple pero poderosa.
+
+00:02:19.360 --> 00:02:21.200
+No puedes proteger lo que no puedes ver.
+
+00:02:21.660 --> 00:02:24.460
+Si tus datos de seguridad están dispersos en 20 paneles, estás a ciega.
+
+00:02:24.860 --> 00:02:28.840
+Quizás detectes lo obvio, pero los ataques sutiles, los que ocurren lentamente durante
+
+00:02:28.840 --> 00:02:30.660
+semanas o meses, se te escaparán por completo.
+
+00:02:31.060 --> 00:02:32.020
+Ahora, es lo importante es el SIEM.
+
+00:02:32.380 --> 00:02:34.000
+Es un SIEM, pero es mucho más que eso.
+
+00:02:35.240 --> 00:02:35.920
+La parte de SIEM.
+
+00:02:36.140 --> 00:02:36.920
+¿Por qué SIEM tiene manos?
+
+00:02:37.580 --> 00:02:39.520
+Un SIEM tradicional funciona como una cámara de seguridad.
+
+00:02:40.040 --> 00:02:42.600
+Te muestra todo lo que sucede pero no puede hacer nada al respecto.
+
+00:02:43.340 --> 00:02:44.900
+Una intrusión pero no puede llamar a la policía.
+
+00:02:45.680 --> 00:02:46.440
+Ahí es donde entra SIEM.
+
+00:02:46.440 --> 00:02:49.800
+Su AR significa orquestación, automatización y respuesta de seguridad.
+
+00:02:50.440 --> 00:02:51.620
+La parte de Sentinel que tiene manos.
+
+00:02:52.320 --> 00:02:53.000
+Así es como funciona.
+
+00:02:53.580 --> 00:02:54.640
+¿Sentinel detecta una amenaza?
+
+00:02:55.060 --> 00:02:56.280
+La cuenta de un usuario es comprometida.
+
+00:02:57.020 --> 00:03:00.420
+Alguien inicia sesión desde un país que nunca ha visitado y comienza a descargar archivos
+
+00:03:00.420 --> 00:03:01.220
+que nunca había tocado.
+
+00:03:01.660 --> 00:03:04.620
+Un SIEM tradicional crearía una alerta y esperaría que un humano responda, lo cual
+
+00:03:04.620 --> 00:03:05.360
+podría tomar horas.
+
+00:03:05.960 --> 00:03:07.160
+Y para entonces el daño está hecho.
+
+00:03:07.660 --> 00:03:08.360
+Sentinel no espera.
+
+00:03:08.820 --> 00:03:09.620
+Actúa automáticamente.
+
+00:03:09.620 --> 00:03:13.860
+Puede deshabilitar la cuenta del usuario, bloquear su dispositivo o los recursos de la empresa,
+
+00:03:13.980 --> 00:03:17.680
+revocar sesiones activas y notificar al equipo de seguridad todo en segundos sin intervención
+
+00:03:17.680 --> 00:03:18.040
+humana.
+
+00:03:19.620 --> 00:03:21.940
+Esta automatización se ejecuta con algo que Sentinel llama Playbook.
+
+00:03:22.520 --> 00:03:25.080
+Básicamente son listas de tareas automatizadas para incidentes de seguridad.
+
+00:03:25.580 --> 00:03:28.620
+Cuando se dispara una alerta específica, Sentinel ejecuta el Playbook correspondiente.
+
+00:03:28.940 --> 00:03:29.880
+Si pasa esto, haz aquello.
+
+00:03:30.620 --> 00:03:30.860
+Simple.
+
+00:03:30.860 --> 00:03:32.980
+Y no necesitas ser programador para caerlo.
+
+00:03:33.480 --> 00:03:36.120
+Se caen con un diseñador visual, igual que dibujar un diagrama de flujo.
+
+00:03:36.620 --> 00:03:39.200
+Entonces, ¿por qué es importante esto para ti como administrador de Microsoft 365?
+
+00:03:39.700 --> 00:03:43.000
+Porque no querrás despertarte las tres antes para bloquear malmente una dirección IP.
+
+00:03:43.260 --> 00:03:44.260
+Tienes cosas mejores que hacer.
+
+00:03:44.580 --> 00:03:46.400
+Y honestamente, de todo modo, no se da lo suficientemente rápido.
+
+00:03:46.800 --> 00:03:50.600
+Para cuando llegues a tu laptop e inicies sesión, el atacante ya habrá logrado su objetivo.
+
+00:03:51.220 --> 00:03:53.080
+La automatización no es un lujo, es una necesidad.
+
+00:03:53.760 --> 00:03:57.420
+Así que Sentinel detecta amenazas y correlaciona señales en todo tu entorno.
+
+00:03:57.420 --> 00:03:59.860
+Y cuando algo malo sucede, responde automáticamente.
+
+00:03:59.860 --> 00:04:01.600
+Eso es 100 misoar trabajando juntos.
+
+00:04:02.040 --> 00:04:04.500
+Pero, ¿dónde vive realmente Sentinel en el mundo de Microsoft?
+
+00:04:04.940 --> 00:04:05.900
+Eso es lo que veremos a continuación.
+
+00:04:06.800 --> 00:04:08.520
+En lugar de Sentinel, la pila de seguridad de Microsoft.
+
+00:04:09.220 --> 00:04:10.940
+Microsoft tiene todo un portafolio de productos de seguridad.
+
+00:04:11.700 --> 00:04:13.220
+Defender para protección de endpoints.
+
+00:04:13.440 --> 00:04:14.500
+Entra para identidad y acceso.
+
+00:04:15.020 --> 00:04:16.100
+Purview para seguridad de datos.
+
+00:04:16.280 --> 00:04:17.580
+Intune para gestión de dispositivos.
+
+00:04:18.080 --> 00:04:19.140
+Cada uno hace bien su propio trabajo.
+
+00:04:19.680 --> 00:04:20.360
+Pero aquí está el detalle.
+
+00:04:20.440 --> 00:04:21.740
+No se comunica naturalmente entre sí.
+
+00:04:22.440 --> 00:04:24.140
+Defender detecta un archivo sospechoso.
+
+00:04:24.460 --> 00:04:25.880
+Entra marca un inicio de sesión extraño.
+
+00:04:26.220 --> 00:04:27.860
+Purview captura un acceso a datos inusual.
+
+00:04:27.860 --> 00:04:29.320
+Tres alertas separadas.
+
+00:04:29.440 --> 00:04:30.260
+Tres paneles distintos.
+
+00:04:30.480 --> 00:04:31.500
+Tres investigaciones diferentes.
+
+00:04:32.220 --> 00:04:33.020
+Ahí es donde entra Sentinel.
+
+00:04:33.520 --> 00:04:34.640
+Se sitúa por debajo de todo ser.
+
+00:04:35.240 --> 00:04:36.880
+No como un competidor, sino como la base.
+
+00:04:37.540 --> 00:04:38.860
+Piénselo como el piso de un edificio.
+
+00:04:39.160 --> 00:04:41.520
+Las habitaciones son Defender entre Purview e Intune.
+
+00:04:41.780 --> 00:04:42.860
+Cada una con su propio opositorio.
+
+00:04:43.560 --> 00:04:44.880
+Pero el piso es lo que los conecta.
+
+00:04:45.140 --> 00:04:47.460
+Permitiéndole caminar de una habitación a otra sin caer al vacío.
+
+00:04:48.080 --> 00:04:49.960
+Not que no dije que Sentinel compite con Defender.
+
+00:04:50.440 --> 00:04:50.860
+No lo hace.
+
+00:04:51.340 --> 00:04:52.260
+Defender es excelente.
+
+00:04:52.260 --> 00:04:54.500
+Detectando amenazas en Endpoints y en Microsoft 365.
+
+00:04:54.720 --> 00:04:56.120
+Pero solo ve lo que está a su alcance.
+
+00:04:56.820 --> 00:04:59.000
+No conoce sus registros de firewall locales.
+
+00:04:59.140 --> 00:05:01.100
+Ni sus registros de AWS CloudTrail.
+
+00:05:02.060 --> 00:05:04.100
+Sentinel es la plataforma sobre la que se apoya a Defender.
+
+00:05:04.200 --> 00:05:05.200
+No el producto que lo reemplaza.
+
+00:05:05.600 --> 00:05:06.780
+Aquí hay un gran cambio que debe conocer.
+
+00:05:07.220 --> 00:05:09.120
+Microsoft está consolidando todo en un solo lugar.
+
+00:05:09.840 --> 00:05:11.820
+Después del 31 de marzo de 2027.
+
+00:05:12.000 --> 00:05:14.120
+Sentinel ya no estará disponible en el portal de Azure.
+
+00:05:15.120 --> 00:05:17.180
+Solo vivirá en el portal de Microsoft Defender.
+
+00:05:17.180 --> 00:05:22.660
+Por años tuvo que saltar entre el portal de Azure para Sentinel y el portal de Defender para XDR para XDR.
+
+00:05:22.820 --> 00:05:23.500
+Eso está por desaparecer.
+
+00:05:23.680 --> 00:05:26.480
+Microsoft está construyendo un centro de operaciones de seguridad unificado.
+
+00:05:26.640 --> 00:05:27.880
+Y el portal de Defender es donde reside.
+
+00:05:28.220 --> 00:05:29.180
+¿Qué significa esto para usted?
+
+00:05:29.560 --> 00:05:30.500
+Menos portales que aprender.
+
+00:05:30.900 --> 00:05:31.700
+Menos cambios de contexto.
+
+00:05:32.280 --> 00:05:36.300
+Un solo lugar donde puede ver sus incidentes, buscar amenazas y gestionar su postura de seguridad.
+
+00:05:36.800 --> 00:05:38.300
+Es un paso hacia la simplicidad.
+
+00:05:38.420 --> 00:05:42.160
+Y para los administradores de Microsoft 365 que ya viven en el portal de Defender, eso es una buena noticia.
+
+00:05:42.640 --> 00:05:44.260
+El verdadero punto de inflexión es el lago de datos.
+
+00:05:44.840 --> 00:05:45.700
+Acabriríamos a Candonato.
+
+00:05:45.700 --> 00:05:48.080
+El nuevo lago de datos unificado que cambió.
+
+00:05:48.380 --> 00:05:49.860
+Entonces es el problema que sentías siempre tú.
+
+00:05:50.260 --> 00:05:51.840
+Mantener los registros almacenados costaba mucho.
+
+00:05:52.120 --> 00:05:52.920
+No solo un poco o mucho.
+
+00:05:53.520 --> 00:05:54.580
+La retención para determinada arena.
+
+00:05:55.360 --> 00:05:59.020
+Después de eso, o pagaba una prima para mantener los datos o se despedía de ellos para siempre.
+
+00:05:59.940 --> 00:06:02.860
+La mayoría de las organizaciones optaban por eliminar los registros después de tres meses.
+
+00:06:03.180 --> 00:06:05.100
+Lo que significaba que operaban a ciegas a partir de ese punto.
+
+00:06:05.540 --> 00:06:08.660
+Microsoft resolvió esto con el Data Lake unificado y eso cambia el cálculo por completo.
+
+00:06:09.340 --> 00:06:11.040
+Sentinel ahora se para el almacenamiento del cómputo.
+
+00:06:11.040 --> 00:06:15.640
+En un modelo anterior pagabas un precio que cubría tanto el almacenamiento de datos como la capacidad de consultarlos rápidamente.
+
+00:06:16.260 --> 00:06:20.040
+Eso tenía sentido para investigaciones activas, pero era terrible para la retención a largo plazo.
+
+00:06:20.580 --> 00:06:23.000
+Pagabas por una velocidad que no necesitabas en datos que apenas tocaba.
+
+00:06:23.420 --> 00:06:24.220
+Y Atalé cambia eso.
+
+00:06:24.680 --> 00:06:26.340
+Almacenas tus datos en un nivel de bajo costo.
+
+00:06:26.880 --> 00:06:29.780
+Siguen ahí siendo accesibles y buscables, pero solo pagas por el cómputo.
+
+00:06:30.160 --> 00:06:35.780
+Cuando ejecutas una consulta, piénsalo como la diferencia entre alquilar una bodega o tener un sótano.
+
+00:06:36.300 --> 00:06:37.580
+La bodega te cuesta cada mes.
+
+00:06:37.740 --> 00:06:38.400
+La uses o no.
+
+00:06:38.880 --> 00:06:39.780
+El sótano siempre está ahí.
+
+00:06:40.220 --> 00:06:42.160
+Solo gastas dinero cuando bajas y buscas algo.
+
+00:06:42.560 --> 00:06:43.620
+Las cifras hablan por sí solas.
+
+00:06:43.860 --> 00:06:49.040
+Microsoft dice que almacenar datos en el Data Lake cuesta menos del 15% de lo que cuestan los registros analíticos tradicionales.
+
+00:06:49.600 --> 00:06:56.140
+Es la diferencia entre guardar registros por tres meses o por tres años o incluso doce años el nuevo máximo de retención sin gastar una fortuna.
+
+00:06:56.800 --> 00:06:58.400
+Y lo mejor es que no tienes que hacer nada adicional.
+
+00:06:59.160 --> 00:07:02.160
+Cada registro que estás ingiriendo se replica automáticamente en el Data Lake.
+
+00:07:02.160 --> 00:07:02.880
+En el Data.
+
+00:07:03.200 --> 00:07:04.040
+Sin configuración.
+
+00:07:04.440 --> 00:07:05.220
+Sin nuevos conectores.
+
+00:07:05.500 --> 00:07:06.220
+Simplemente sucede.
+
+00:07:07.200 --> 00:07:11.500
+Esto abre posibilidades poderosas como la búsqueda de amenazas a gran escala, que es precisamente lo que veremos a continuación.
+
+00:07:12.180 --> 00:07:12.740
+Búsqueda de amenaza.
+
+00:07:13.340 --> 00:07:14.820
+Contrar ataques escondidos a simple vista.
+
+00:07:15.280 --> 00:07:17.180
+La mayoría no se da cuenta de esto sobre los ciberataques.
+
+00:07:17.540 --> 00:07:18.160
+No ocurren rápido.
+
+00:07:18.620 --> 00:07:19.220
+Ocurren lentamente.
+
+00:07:19.500 --> 00:07:21.100
+Los profesionales de seguridad lo llaman bajo edad.
+
+00:07:21.740 --> 00:07:25.280
+Un atacante podría probar una contraseña en una cuenta, fallar y desaparecer por un mes.
+
+00:07:26.020 --> 00:07:27.580
+Luego lo intenta de nuevo en una cuenta diferente.
+
+00:07:28.120 --> 00:07:28.760
+Pasa otro mes.
+
+00:07:29.240 --> 00:07:30.060
+Probar una tercera cuenta.
+
+00:07:30.060 --> 00:07:31.860
+Cada intento parece inofensivo.
+
+00:07:32.040 --> 00:07:33.060
+Alguien que olvidó su contraseña.
+
+00:07:33.520 --> 00:07:34.200
+Pero aquí está el problema.
+
+00:07:34.720 --> 00:07:37.620
+En la antigua ventana de retención de 90 días, nunca verías el patrón.
+
+00:07:38.000 --> 00:07:41.700
+Para cuando ocurrió el tercer intento, el primero ya se había borrado de tus registros.
+
+00:07:42.400 --> 00:07:46.240
+Verías un solo inicio de sesión fallido, sin contexto, sin patrón, sin forma de conectar los puntos.
+
+00:07:46.820 --> 00:07:48.120
+El Data Lake cambia su por completo.
+
+00:07:48.540 --> 00:07:51.060
+Ahora puedes ejecutar consultas en años de datos, no meses.
+
+00:07:51.640 --> 00:07:55.760
+Le pides a Sentinel que te muestre cada inicio de sesión fallido desde una IP específica en los últimos 12 meses.
+
+00:07:56.240 --> 00:07:57.680
+De repente el patrón se vuelve cristalín.
+
+00:07:57.680 --> 00:08:01.120
+Tres intentos desde la misma IP usando la misma técnica en diferentes cuentas.
+
+00:08:01.700 --> 00:08:02.760
+Eso es un ataque, no un olvido.
+
+00:08:03.340 --> 00:08:06.660
+La herramienta para hacer estas preguntas es KQL, Justo Query Language.
+
+00:08:07.300 --> 00:08:09.320
+Piénselo como un motor de búsqueda para sus registros de seguridad.
+
+00:08:09.680 --> 00:08:14.840
+Usted escribe lo que busca como inicios de sesión fallidos desde una IP sospechosa o reglas de reenvío inusuales creadas fuera de horario.
+
+00:08:14.980 --> 00:08:16.620
+Y Sentinel devuelve los resultados.
+
+00:08:17.260 --> 00:08:19.460
+Le permite hacer preguntas que ni siquiera sabía que necesitaba plantear.
+
+00:08:19.900 --> 00:08:22.580
+Es por eso que los equipos de seguridad están entusiasmados con el lago de datos.
+
+00:08:22.580 --> 00:08:26.520
+No por una nueva característica llamativa, sino porque finalmente pueden ver lo que ha estado oculto a plena vista.
+
+00:08:26.520 --> 00:08:30.240
+Los atacantes que operan lentamente, que prueban el terreno y se mezclan con el tráfico normal,
+
+00:08:30.340 --> 00:08:32.940
+confiaban en el hecho de que usted no podía mirar atrás lo suficiente para conectar los puntos.
+
+00:08:33.500 --> 00:08:34.780
+El lago de datos elimina esa ventaja.
+
+00:08:35.380 --> 00:08:37.200
+Pero Sentinel no se trata solo de mirar hacia atrás.
+
+00:08:37.560 --> 00:08:38.700
+También se trata de mirar hacia adelante.
+
+00:08:39.700 --> 00:08:41.800
+Gráficos, EIA, el futuro que ya está aquí.
+
+00:08:42.440 --> 00:08:44.280
+Los atacantes piensan en gráficos, no en listas.
+
+00:08:45.000 --> 00:08:46.720
+No ven usuarios y dispositivos individuales.
+
+00:08:46.820 --> 00:08:47.860
+Ven las conexiones entre ellos.
+
+00:08:48.260 --> 00:08:49.800
+Este usuario tiene acceso a ese servidor.
+
+00:08:49.800 --> 00:08:51.700
+Ese servidor se conecta a esta base de datos.
+
+00:08:52.080 --> 00:08:53.960
+Y esa base de datos contiene exactamente lo que ellos quieren.
+
+00:08:54.520 --> 00:08:56.660
+Mapean todo el camino antes de hacer cualquier movimiento.
+
+00:08:57.380 --> 00:08:58.040
+Ahora, aquí está el problema.
+
+00:08:58.300 --> 00:08:59.840
+Los defensores siempre han pensado en listas.
+
+00:09:00.260 --> 00:09:02.820
+Una lista de alertas, una lista de direcciones IP, una lista de usuarios.
+
+00:09:03.140 --> 00:09:05.860
+Claro, las listas son útiles, pero no le muestran las conexiones.
+
+00:09:06.420 --> 00:09:08.120
+No le muestran el camino que puede tomar un atacante.
+
+00:09:08.500 --> 00:09:09.540
+El gráfico de Sentinel cambias.
+
+00:09:09.960 --> 00:09:12.440
+Permite a los defensores hacer lo que los atacantes han estado haciendo todo el tiempo.
+
+00:09:12.840 --> 00:09:14.380
+Le muestra el mapa, no solo los puntos.
+
+00:09:15.040 --> 00:09:16.720
+Usted ve que el usuario A tiene acceso al servidor B.
+
+00:09:16.720 --> 00:09:18.560
+El servidor B se conecta a la base de datos C.
+
+00:09:19.160 --> 00:09:21.640
+Y la base de datos C contiene sus datos de clientes más confidenciales.
+
+00:09:21.940 --> 00:09:23.520
+Eso no es solo información, es contexto.
+
+00:09:24.000 --> 00:09:25.940
+Y el contexto convierte una buena investigación en excelente.
+
+00:09:26.400 --> 00:09:27.240
+Esto funciona de dos maneras.
+
+00:09:27.820 --> 00:09:31.080
+Antes de que ocurra una brecha, usted usa el gráfico para ver posibles rutas de ataque.
+
+00:09:31.680 --> 00:09:32.580
+Te encuentra a punto crítico.
+
+00:09:33.480 --> 00:09:36.320
+Un solo usuario cuya vulneración abriría la mitad de su red.
+
+00:09:37.020 --> 00:09:41.640
+Entonces puede priorizar a ese usuario, aplicar controles adicionales y reducir radio de impacto antes de que algo salga mal.
+
+00:09:42.300 --> 00:09:44.760
+Después de una brecha, el gráfico le muestra el radio de impacto real.
+
+00:09:44.760 --> 00:09:48.680
+Se dispara una alerta y el gráfico de Sentinel le muestra al instante cada sistema que tocó ese usuario,
+
+00:09:48.780 --> 00:09:50.600
+cada archivo al que accedió, cada conexión realizada.
+
+00:09:51.120 --> 00:09:53.140
+Sin conjetura, sin rastreo manual, el gráfico lo hace todo.
+
+00:09:53.340 --> 00:09:54.140
+Ahora, hablemos de IA.
+
+00:09:54.500 --> 00:09:57.380
+Microsoft Security Copilot incorpora el lenguaje natural al panorama.
+
+00:09:57.940 --> 00:10:01.500
+En lugar de escribir consultas KQL complejas, simplemente hace preguntas en lenguaje sencillo.
+
+00:10:02.220 --> 00:10:04.820
+Muéstrame todos los inicios de sesión de ubicaciones inusuales en la última semana.
+
+00:10:05.260 --> 00:10:08.960
+Security Copilot convierte a una consulta, la ejecuta contra sus datos y muestra los resultados.
+
+00:10:09.360 --> 00:10:10.080
+Reduce las barreras.
+
+00:10:10.520 --> 00:10:12.660
+No necesita ser un experto en KQL para buscar amenaza.
+
+00:10:12.660 --> 00:10:14.080
+También existe el servidor MSP.
+
+00:10:14.480 --> 00:10:16.140
+MSP significa modo de context protocol.
+
+00:10:16.500 --> 00:10:21.100
+En palabras sencillas, permite que los agentes de IA, o bots inteligentes, interactúen directamente con Sentinel.
+
+00:10:21.640 --> 00:10:25.820
+Un agente puede hacerle preguntas a Sentinel, ejecutar consultas, analizar resultados e incluso tomar medidas.
+
+00:10:25.940 --> 00:10:26.920
+Todo sin intervención humana.
+
+00:10:27.500 --> 00:10:29.440
+Suena futurista, pero ya se está implementando.
+
+00:10:30.020 --> 00:10:31.840
+Entonces, Sentinel te permite buscar entre años de datos.
+
+00:10:32.400 --> 00:10:34.000
+Ves las relaciones que los atacantes aprovechan.
+
+00:10:34.560 --> 00:10:36.360
+Y puedes hacer preguntas en lenguaje sencillo usando IA.
+
+00:10:36.900 --> 00:10:39.440
+Pero, ¿cómo empiezas realmente sin ser un experto en seguridad?
+
+00:10:39.960 --> 00:10:40.840
+Eso es lo que veremos a continuar.
+
+00:10:40.840 --> 00:10:42.840
+Comenzar sin agobiarse.
+
+00:10:43.500 --> 00:10:46.840
+Podrías pensar que esto suena algo que solo un equipo de seguridad con un presupuesto enorme puede manejar.
+
+00:10:47.220 --> 00:10:47.700
+Eso no es cierto.
+
+00:10:48.000 --> 00:10:49.660
+No necesitas una certificación terminable.
+
+00:10:50.020 --> 00:10:53.440
+Solo necesitas un inquilino de Microsoft 365 y la disposición de empezar poco a poco.
+
+00:10:53.760 --> 00:10:55.220
+La configuración básica es realmente sencilla.
+
+00:10:55.760 --> 00:10:57.720
+Habilitas Sentinel en el portal de Microsoft Defender.
+
+00:10:58.180 --> 00:10:59.320
+Luego conectas tus fuentes de datos.
+
+00:10:59.560 --> 00:10:59.920
+Eso es todo.
+
+00:11:00.300 --> 00:11:01.580
+No necesitas configurarlo todo a la vez.
+
+00:11:02.140 --> 00:11:02.860
+De hecho, no debes hacer.
+
+00:11:03.200 --> 00:11:05.380
+Empieza solo con unas pocas fuentes que serán más importantes para ti.
+
+00:11:05.380 --> 00:11:10.240
+Registros de inicio de sesión de Azure, ID, registros de flujo de correo de exchange online, alertas de Defender for Office 3.5.
+
+00:11:10.480 --> 00:11:13.820
+Esos tres por sí solos te dan más visibilidad que la que tienen la mayoría de las organizaciones hoy en día.
+
+00:11:14.340 --> 00:11:15.280
+Esto es lo que lo hace más fácil.
+
+00:11:15.740 --> 00:11:16.780
+Sentinel tiene un centro de contenido.
+
+00:11:17.300 --> 00:11:18.980
+Piensa en ello como una de aplicaciones para reglas de seguridad.
+
+00:11:19.480 --> 00:11:20.320
+Navegas por categoría.
+
+00:11:20.520 --> 00:11:21.220
+Amenazas de identidad.
+
+00:11:21.540 --> 00:11:22.420
+Amenazas de correo electrónico.
+
+00:11:22.540 --> 00:11:23.180
+Monitor y cumplimiento.
+
+00:11:23.300 --> 00:11:24.760
+Instalas reglas de detección preconstruidas.
+
+00:11:25.380 --> 00:11:26.540
+No escribes consultas desde cero.
+
+00:11:27.020 --> 00:11:27.980
+No necesitas caguar el breve.
+
+00:11:28.440 --> 00:11:30.860
+Centro de contenido te da un punto de partida que funciona de inmediato.
+
+00:11:31.420 --> 00:11:32.420
+Ahora, hablemos de costos.
+
+00:11:33.040 --> 00:11:34.060
+Esa es la pregunta que todos hacen.
+
+00:11:34.480 --> 00:11:36.040
+Sentinel utiliza un modelo de pago por uso.
+
+00:11:36.380 --> 00:11:38.680
+Pagas por los datos que ingresas, pero puedes controlar el costo.
+
+00:11:39.140 --> 00:11:42.680
+Los niveles de compromiso te permiten comprometerte a un volumen mínimo y obtener un gran descuento.
+
+00:11:42.960 --> 00:11:43.860
+¿Y recuerdas el Data Lake?
+
+00:11:44.220 --> 00:11:44.840
+Cambia la economía.
+
+00:11:45.760 --> 00:11:48.440
+Los registros de alto volumen y baja fidelidad, como el tráfico de firewall,
+
+00:11:48.580 --> 00:11:50.880
+van directo al nivel de Data Lake a una fracción del costo.
+
+00:11:51.340 --> 00:11:53.900
+Si quiera, no tienes que elegir entre visibilidad y presupuesto.
+
+00:11:54.420 --> 00:11:56.840
+La parte más difícil no es la tecnología, es saber por dónde empezar.
+
+00:11:57.340 --> 00:11:57.980
+Aquí está mi consejo.
+
+00:11:58.420 --> 00:12:00.360
+Empieza con una fuente de datos y una regla de detección.
+
+00:12:00.700 --> 00:12:01.760
+Conecta los registros de entrega.
+
+00:12:02.200 --> 00:12:05.740
+Instala una regla que alerte cuando un administrador global inicia sesión desde una ubicación inusual.
+
+00:12:06.100 --> 00:12:06.920
+Es lo que te dice Sentinel.
+
+00:12:07.360 --> 00:12:08.360
+Eso es suficiente para comenzar.
+
+00:12:08.840 --> 00:12:10.060
+Luego expande a medida que te sientas cómodo.
+
+00:12:10.400 --> 00:12:11.260
+Vamos a unir todo esto.
+
+00:12:12.060 --> 00:12:12.700
+Panorama general.
+
+00:12:13.240 --> 00:12:14.280
+¿Por qué esto cambia tu trabajo?
+
+00:12:14.800 --> 00:12:15.780
+Sentinel está evolucionando.
+
+00:12:15.780 --> 00:12:20.920
+Comenzó como una herramienta para expertos en seguridad y ahora se convierte en la plataforma detrás de toda la seguridad de Microsoft.
+
+00:12:20.920 --> 00:12:23.280
+Para ti como administrador de M365.
+
+00:12:23.360 --> 00:12:26.220
+Eso significa que tu seguridad recibe una gran mejora sin tener que construirlo tú mismo.
+
+00:12:26.640 --> 00:12:27.580
+Piensa en lo que hemos cubierto.
+
+00:12:28.080 --> 00:12:30.440
+Sentinel recopila señales de todo tu entorno.
+
+00:12:31.220 --> 00:12:33.740
+Las correlaciona para encontrar patrones que nunca detectarías manualmente.
+
+00:12:34.060 --> 00:12:35.800
+Puede responder automáticamente cuando algo sale mal.
+
+00:12:35.800 --> 00:12:39.700
+El nuevo Data Lake hace que sea asequible conservar años de datos en lugar de meses.
+
+00:12:40.280 --> 00:12:42.580
+El gráfico te muestra las rutas de ataque antes de que sean explotadas.
+
+00:12:43.040 --> 00:12:44.940
+La idea te permite hacer preguntas en lenguaje sencillo.
+
+00:12:45.260 --> 00:12:46.560
+Todo esto está integrado en la plataforma.
+
+00:12:46.900 --> 00:12:49.060
+No tienes que unirlo pieza por pieza desde herramientas separadas.
+
+00:12:49.440 --> 00:12:54.620
+El Data Lake elimina el compromiso entre costo y visibilidad, por lo que ya no tienes que decidir entre guardar registros o ahorrar dinero.
+
+00:12:55.160 --> 00:12:55.840
+Puedes hacer ambas cosas.
+
+00:12:56.320 --> 00:12:57.820
+Eso cambia tu forma de pensar sobre la seguridad.
+
+00:12:58.380 --> 00:13:00.140
+En lugar de preguntar, podemos permitirnos monitorear esto.
+
+00:13:00.800 --> 00:13:02.280
+Preguntas, ¿qué más deberíamos estar vigilando?
+
+00:13:02.940 --> 00:13:05.220
+No necesitas ser un analista SOC para beneficiarte de Sentinel.
+
+00:13:05.640 --> 00:13:08.140
+Solo necesitas ser alguien a quien le importe mantener seguro a tu inquilino.
+
+00:13:08.700 --> 00:13:10.020
+Y si estás escuchando esto, eres tú.
+
+00:13:10.520 --> 00:13:16.080
+La integración con Defender entre Hyperview significa menos portales que administrar, menos cambios de contexto y más control desde un solo lugar.
+
+00:13:16.660 --> 00:13:19.560
+Microsoft apuesta porque la seguridad debe estar integrada, no añadida por fuera.
+
+00:13:20.040 --> 00:13:22.440
+Sentinel es la base de esa apuesta y está dando sus frutos.
+
+00:13:23.200 --> 00:13:23.800
+Tú siguen de paso.
+
+00:13:24.260 --> 00:13:25.400
+Entonces, esto es lo que ahora comprendes.
+
+00:13:26.000 --> 00:13:28.260
+Sentinel es el cerebro central para tus datos de seguridad.
+
+00:13:28.260 --> 00:13:32.580
+Lo recopila todo, correlaciona las señales y actúa automáticamente cuando algo sale mal.
+
+00:13:33.360 --> 00:13:36.300
+El Data Lake hace que sea asequible mantener registros durante años en lugar de meses.
+
+00:13:37.200 --> 00:13:39.580
+Los gráficos y la IA lo hacen más inteligente con el tiempo.
+
+00:13:39.700 --> 00:13:42.780
+Y todo esto vive en el portal de Defender junto a las herramientas que ya usas.
+
+00:13:43.500 --> 00:13:44.960
+No necesitas dominarlo de la noche a la mañana.
+
+00:13:45.260 --> 00:13:46.060
+Mi consejo es simple.
+
+00:13:46.380 --> 00:13:49.820
+Ve a security.microsoft.com, abre Sentinel y explora el centro de contenido.
+
+00:13:50.260 --> 00:13:53.460
+Solo explora, mira lo que hay disponible, elige un conector y una regla de detección.
+
+00:13:53.760 --> 00:13:54.480
+Ese es tu punto de partida.
+
+00:13:55.020 --> 00:13:56.440
+Muchas personas no darán ese primer paso.
+
+00:13:56.440 --> 00:14:00.700
+Leerán sobre Sentinel, asentirán con la cabeza, luego cerrarán el navegador y continuarán con su vida.
+
+00:14:01.200 --> 00:14:02.360
+Es por eso que estarás por delante.
+
+00:14:02.680 --> 00:14:04.320
+Porque realmente hiciste algo con lo que aprendiste.
+
+00:14:04.900 --> 00:14:09.300
+Si este episodio te ayudó a entender un poco mejor Sentinel, suscríbete a Microsoft Nudget Nuggets.
+
+00:14:09.780 --> 00:14:13.360
+Desglosamos los temas de seguridad de Microsoft DM365 y lenguaje sencillo en cada episodio.
+
+00:14:14.160 --> 00:14:17.520
+Compártelo con alguien que haya querido aprender sobre Sentinel pero no sepa por dónde empezar.
+
+00:14:18.120 --> 00:14:18.680
+Nos vemos en un video.
+
+00:14:18.680 --> 00:14:19.680
+¡Gracias!
+
+00:14:19.680 --> 00:14:20.680
+¡Gracias!
+
+00:14:20.680 --> 00:14:21.680
+¡Gracias!
+
+00:14:21.680 --> 00:14:22.680
+¡Gracias!

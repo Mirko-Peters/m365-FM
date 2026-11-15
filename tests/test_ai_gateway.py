@@ -121,6 +121,97 @@ class AiGatewayTests(unittest.TestCase):
         self.assertAlmostEqual(ai_gateway.estimated_eur(1_000_000, 0, batch=True) * 2, ai_gateway.estimated_eur(1_000_000, 0))
         self.assertTrue(ai_gateway.check_budget("generate_articles", "claude-sonnet-5-5"))   # nur Haiku hat ein Tagesbudget
 
+    def test_gateway_passes_cache_control_through(self):
+        body = {"model": "claude-sonnet-5-5", "max_tokens": 10, "messages": [{"role": "user", "content": [
+            {"type": "text", "text": "Artikel: ...", "cache_control": {"type": "ephemeral"}},
+            {"type": "text", "text": "Aufgabe"},
+        ]}], "system": [{"type": "text", "text": "sys", "cache_control": {"type": "ephemeral", "ttl": "1h"}}]}
+        for env in ({}, {"CLOUDFLARE_ACCOUNT_ID": "account", "CF_AIG_TOKEN": "test-token"}):
+            with patch.dict("os.environ", env, clear=True):
+                req = ai_gateway.anthropic_request("/v1/messages", body, job="t", model="claude-sonnet-5-5", api_key="test-key")
+            self.assertEqual(json.loads(req.data), body)   # direkt und ueber das AI Gateway unveraendert
+
+    def test_usage_tokens_and_cache_report(self):
+        self.assertEqual(ai_gateway.usage_tokens({"input_tokens": 10, "cache_read_input_tokens": 300, "cache_creation_input_tokens": 50, "output_tokens": 7}), (360, 7, 300, 50))
+        self.assertEqual(ai_gateway.usage_tokens(None), (0, 0, 0, 0))
+        sent = []
+
+        def fake_open(req, timeout):
+            sent.append(json.loads(req.data))
+            return Reply({"ok": True})
+
+        with patch.dict("os.environ", {"COMMUNITY_API": "https://api.example", "CRON_KEY": "x"}, clear=True), \
+                patch.object(ai_gateway, "urlopen", fake_open):
+            ai_gateway.report_usage("t", "claude-haiku-5-5", 360, 7, "de", cache_read=300, cache_write=50)
+        self.assertEqual(sent[0]["input_tokens"], 360)
+        self.assertEqual(sent[0]["cache_read_input_tokens"], 300)
+        self.assertEqual(sent[0]["cache_creation_input_tokens"], 50)
+
+
+class ArticlePromptCacheTests(unittest.TestCase):
+    """generate_articles: Folgeaufrufe teilen den Artikeltext als gecachten Anfang; Aufgabe und Zielsprache stehen dahinter."""
+
+    def test_followups_share_cached_article_prefix(self):
+        import generate_articles as G
+        bodies = []
+
+        def fake_open(req, timeout):
+            bodies.append(json.loads(req.data))
+            usage = {"input_tokens": 200, "output_tokens": 30, "cache_creation_input_tokens": 0 if len(bodies) > 1 else 4000,
+                     "cache_read_input_tokens": 4000 if len(bodies) > 1 else 0}
+            return Reply({"content": [{"type": "text", "text": "[]"}], "usage": usage})
+
+        html = "<h2>Abschnitt</h2>" + "<p>" + "Copilot hilft beim Schreiben. " * 800 + "</p>"
+        before = dict(G.USAGE)
+        with patch.dict("os.environ", {"ANTHROPIC_API_KEY": "test-key"}, clear=True), patch.object(G, "urlopen", fake_open):
+            G.info_for("fr", html); G.faq_for("ja", html); G.infos_for("fr", html, ["schritte"]); G.quiz_for("fr", html)
+        self.assertEqual(len(bodies), 4)
+        prefixes = []
+        for b in bodies:
+            self.assertNotIn("system", b)
+            content = b["messages"][0]["content"]
+            self.assertEqual(len(content), 2)
+            self.assertEqual(content[0]["cache_control"], {"type": "ephemeral"})   # Breakpoint am Ende des stabilen Artikeltexts
+            self.assertNotIn("cache_control", content[1])
+            self.assertTrue(content[0]["text"].startswith("Artikel:\n"))
+            self.assertIn("obigen Artikel", content[1]["text"])
+            prefixes.append(content[0]["text"])
+        self.assertEqual(len(set(prefixes)), 1, "alle Folgeaufrufe muessen denselben Anfang senden")
+        self.assertEqual(prefixes[0], G.article_block(html))
+        for b, lang in zip(bodies, ("Französisch", "Japanisch", "Französisch", "Französisch")):   # Variables (Sprache) nur hinter dem Breakpoint
+            self.assertNotIn(lang, b["messages"][0]["content"][0]["text"])
+            self.assertIn(lang, b["messages"][0]["content"][1]["text"])
+        self.assertEqual(G.USAGE["cache_read"] - before["cache_read"], 12000)
+        self.assertEqual(G.USAGE["cache_write"] - before["cache_write"], 4000)
+        self.assertEqual(G.USAGE["in"] - before["in"], 4 * 200 + 4 * 4000)
+
+    def test_single_followup_without_breakpoint(self):
+        import generate_articles as G
+        bodies = []
+
+        def fake_open(req, timeout):
+            bodies.append(json.loads(req.data))
+            return Reply({"content": [{"type": "text", "text": "[]"}], "usage": {"input_tokens": 5, "output_tokens": 5}})
+
+        with patch.dict("os.environ", {"ANTHROPIC_API_KEY": "test-key"}, clear=True), patch.object(G, "urlopen", fake_open):
+            G.quiz_for("de", "<p>Text</p>", cache=False)
+        content = bodies[0]["messages"][0]["content"]
+        self.assertEqual(content[0]["text"], G.article_block("<p>Text</p>"))
+        self.assertNotIn("cache_control", json.dumps(bodies[0]))   # einzelner Nachruestaufruf: kein Cache-Schreibaufschlag
+
+    def test_article_prompt_unchanged_without_breakpoint(self):
+        import generate_articles as G
+        bodies = []
+
+        def fake_open(req, timeout):
+            bodies.append(json.loads(req.data))
+            return Reply({"content": [{"type": "text", "text": "<p>x</p>"}], "usage": {"input_tokens": 5, "output_tokens": 5}})
+
+        with patch.dict("os.environ", {"ANTHROPIC_API_KEY": "test-key"}, clear=True), patch.object(G, "urlopen", fake_open):
+            G.ask("de", "Titel", "Transkript " * 10)
+        self.assertIsInstance(bodies[0]["messages"][0]["content"], str)   # Transkript je Sprache verschieden, Regeln < 1 Wiederverwendung: kein Cache
+        self.assertNotIn("cache_control", json.dumps(bodies[0]))
+
 
 if __name__ == "__main__":
     unittest.main()

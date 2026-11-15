@@ -1,5 +1,7 @@
 import { cleanText, esc, rateLimit, sha256hex } from "./util.js";
 import { notify } from "./mail.js";
+import { handleAdGo, handleHouseGo, adStatsForOrg } from "./ads.js";
+import { sponsorPhase } from "./sponsor_extra.js";
 
 const now = () => Math.floor(Date.now() / 1000);
 const STATUSES = new Set(["new", "contacted", "won", "lost", "spam"]);
@@ -57,7 +59,8 @@ const SURFACES = new Set(["topic", "entity", "episode", "video-desc", "post", "s
 const METRIC_SOURCES = {
   spreaker: new Set(["podcast_plays"]),
   youtube: new Set(["video_views", "video_watch_minutes", "video_retention"]),
-  cloudflare: new Set(["page_views"]),
+  cloudflare: new Set(["page_views"]),       // Zonen-Anfragen je Pfad: ungefiltert, auch Bots (nur Fallback)
+  cloudflare_rum: new Set(["page_views"]),   // Cloudflare Web Analytics: echte Seitenaufrufe im Browser, Bots weitgehend ausgeschlossen
   gsc: new Set(["gsc_impressions", "gsc_clicks"]),
   bing_webmaster: new Set(["bing_impressions", "bing_clicks"]),
   press_ranger: new Set(["press_views", "ai_visibility"]),
@@ -72,6 +75,10 @@ const SOURCE_BY_METRIC = {
   ai_citations: ["Bing AI Performance", "manual"],
   search_impressions: ["Google Search Console", "measured"],
 };
+
+// Gibt es fuer Platzierung+Tag+Pfad einen Web-Analytics-Wert, zaehlt nur dieser; der ungefilterte Zonenwert entfaellt (keine Doppelzaehlung).
+const RUM_PREFERRED = `NOT (m.source='cloudflare' AND EXISTS (SELECT 1 FROM sponsor_metrics_daily r WHERE r.placement_id=m.placement_id
+  AND r.day=m.day AND r.metric=m.metric AND r.dim=m.dim AND r.source='cloudflare_rum'))`;
 
 function isDay(value) {
   if (!DAY.test(String(value || ""))) return false;
@@ -126,7 +133,11 @@ export async function handleSponsorLink(env, request, url, path, ctx) {
   if (!/^[a-z0-9-]{3,40}$/.test(code) || !["GET", "HEAD"].includes(request.method)) {
     return new Response(null, { status: code ? 404 : 404, headers });
   }
+  // Bewusst ohne Laufzeitpruefung (Mirko 11.11.2026): Links in Folgen und Beitraegen leiten nach dem Ende weiter und zaehlen weiter; nur active=0
+  // (von Hand im Admin gesetzt) stoppt einen Code. Eine Erstattung (sponsor_orders.js) setzt nur das Ende der Platzierung, nicht active.
   const link = await env.DB.prepare("SELECT code,target_url,utm FROM sponsor_links WHERE code=? AND active=1").bind(code).first();
+  if (!link && code.startsWith("ad-")) return handleAdGo(env, request, url, code, ctx);   // #281: gebuchte Werbeplaetze
+  if (!link && code.startsWith("h-")) return handleHouseGo(env, request, url, code, ctx);   // #281: Hausanzeigen (M365Con, Services ...)
   const target = safeTarget(link?.target_url);
   if (!link || !target) return miss();
   for (const [key, value] of Object.entries(cleanUtm(link.utm))) target.searchParams.set(key, value);
@@ -177,9 +188,11 @@ export async function handleSponsor(env, request, url, path, J, user) {
     const orgs = (await db.prepare(`SELECT DISTINCT o.id,o.handle,o.name
       FROM orgs o
       WHERE ((?=1 AND (?<>'' OR EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
-          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id)))
+          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id)
+          OR EXISTS (SELECT 1 FROM ad_bookings ab WHERE ab.org_id=o.id AND ab.status<>'draft')))
         OR (?=0 AND (EXISTS (SELECT 1 FROM sponsor_placements sp WHERE sp.org_id=o.id)
-          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id))
+          OR EXISTS (SELECT 1 FROM event_partners ep WHERE ep.org_id=o.id)
+          OR EXISTS (SELECT 1 FROM ad_bookings ab WHERE ab.org_id=o.id AND ab.status<>'draft'))
           AND EXISTS (SELECT 1 FROM org_members m WHERE m.org_id=o.id AND m.user_id=?
             AND m.status='active' AND m.role IN ('owner','admin','events'))))
         AND (?='' OR o.handle=?)
@@ -195,24 +208,27 @@ export async function handleSponsor(env, request, url, path, J, user) {
     weekEnd.setUTCDate(weekEnd.getUTCDate() - ((weekEnd.getUTCDay() + 6) % 7));
     const weekStart = new Date(weekEnd);
     weekStart.setUTCDate(weekStart.getUTCDate() - 49);
+    // Mirko 11.11.2026: einmal gekauft = fuer immer einsehbar. Platzierungen und Event-Partnerschaften bleiben nach ihrem Ende in JEDEM
+    // spaeteren Zeitraum gelistet (kein Filter auf "end"), samt allen danach eingehenden Zahlen; nur was erst nach dem Zeitraum beginnt, fehlt.
+    // status: Stand heute (sponsorPhase: active/grace/ended/upcoming, grace_end = end + GRACE_DAYS); start/end bleiben die gebuchte Laufzeit.
+    const today = new Date().toISOString().slice(0, 10);
     for (const org of orgs) {
-      const placements = (await db.prepare(`SELECT id,title,channel,langs,start,end,refs,created,
-        CASE WHEN start>? THEN 'upcoming' WHEN end IS NOT NULL AND end<? THEN 'ended' ELSE 'active' END status
-        FROM sponsor_placements WHERE org_id=? AND (start IS NULL OR start<=?) AND (end IS NULL OR end>=?)
-        ORDER BY start DESC,id`).bind(period.to, period.from, org.id, period.to, period.from).all()).results || [];
+      const placements = ((await db.prepare(`SELECT id,title,channel,langs,start,end,refs,created
+        FROM sponsor_placements WHERE org_id=? AND (start IS NULL OR start<=?)
+        ORDER BY start DESC,id`).bind(org.id, period.to).all()).results || []).map((p) => ({ ...p, ...sponsorPhase(p.start, p.end, today) }));
       const eventPartners = (await db.prepare(`SELECT e.handle id,e.title,e.start,e.end,p.kind,p.level,p.status
         FROM event_partners p JOIN events e ON e.id=p.event_id WHERE p.org_id=?
-        AND (e.start IS NULL OR substr(e.start,1,10)<=?) AND (e.end IS NULL OR substr(e.end,1,10)>=?)
-        ORDER BY e.start DESC,e.id DESC`).bind(org.id, period.to, period.from).all()).results || [];
-      const aggregate = (await db.prepare(`SELECT metric,SUM(value) value,MAX(fetched_at) fetched_at
-        FROM sponsor_metrics_daily WHERE placement_id IN (SELECT id FROM sponsor_placements WHERE org_id=?)
-        AND day>=? AND day<=? GROUP BY metric`).bind(org.id, period.from, period.to).all()).results || [];
+        AND (e.start IS NULL OR substr(e.start,1,10)<=?)
+        ORDER BY e.start DESC,e.id DESC`).bind(org.id, period.to).all()).results || [];
+      const aggregate = (await db.prepare(`SELECT metric,SUM(value) value,MAX(fetched_at) fetched_at,
+        MAX(source='cloudflare') unfiltered FROM sponsor_metrics_daily m WHERE placement_id IN (SELECT id FROM sponsor_placements WHERE org_id=?)
+        AND day>=? AND day<=? AND ${RUM_PREFERRED} GROUP BY metric`).bind(org.id, period.from, period.to).all()).results || [];
       const weekly = (await db.prepare(`SELECT date(day,'-'||((CAST(strftime('%w',day) AS INTEGER)+6)%7)||' days') week,
         SUM(CASE WHEN metric='podcast_plays' THEN value ELSE 0 END) podcast,
         SUM(CASE WHEN metric='video_views' THEN value ELSE 0 END) video,
         SUM(CASE WHEN metric='page_views' THEN value ELSE 0 END) website
-        FROM sponsor_metrics_daily WHERE placement_id IN (SELECT id FROM sponsor_placements WHERE org_id=?)
-        AND day>=? AND day<=? GROUP BY week ORDER BY week`)
+        FROM sponsor_metrics_daily m WHERE placement_id IN (SELECT id FROM sponsor_placements WHERE org_id=?)
+        AND day>=? AND day<=? AND ${RUM_PREFERRED} GROUP BY week ORDER BY week`)
         .bind(org.id, weekStart.toISOString().slice(0, 10), period.to).all()).results || [];
         const nextPlacements = (await db.prepare(`SELECT id,title,channel,langs,start,end,refs
         FROM sponsor_placements WHERE org_id=? AND start>=? AND start<=? ORDER BY start,id`)
@@ -233,7 +249,9 @@ export async function handleSponsor(env, request, url, path, J, user) {
           }), { value: 0, fetched_at: 0 }) : sums[key === "search_impressions" ? "gsc_impressions" : key];
         const hasValue = row && (row.fetched_at || row.last_day);
         const fetchedAt = row?.fetched_at || (row?.last_day ? Date.parse(`${row.last_day}T00:00:00Z`) / 1000 : 0);
-        return { key, value: hasValue ? Number(row.value) : null, source, kind,
+        // Seitenaufrufe: "Cloudflare Web Analytics", solange kein ungefilterter Zonenwert mitgezaehlt wird
+        const label = key === "page_views" && hasValue && !row.unfiltered ? "Cloudflare Web Analytics" : source;
+        return { key, value: hasValue ? Number(row.value) : null, source: label, kind,
           as_of: fetchedAt ? new Date(fetchedAt * 1000).toISOString().slice(0, 10) : null };
       });
       const placementRows = [];
@@ -241,7 +259,7 @@ export async function handleSponsor(env, request, url, path, J, user) {
         let refs = {};
         try { refs = JSON.parse(placement.refs || "{}"); } catch {}
         const records = (await db.prepare(`SELECT day,metric,dim,value,source,kind,fetched_at
-          FROM sponsor_metrics_daily WHERE placement_id=? AND day>=? AND day<=? ORDER BY day,metric,dim`)
+          FROM sponsor_metrics_daily m WHERE placement_id=? AND day>=? AND day<=? AND ${RUM_PREFERRED} ORDER BY day,metric,dim`)
           .bind(placement.id, period.from, period.to).all()).results || [];
         const clickBreakdown = (await db.prepare(`SELECT c.surface,c.country,SUM(c.clicks) clicks,MAX(c.day) as_of
           FROM sponsor_clicks_daily c JOIN sponsor_links l ON l.code=c.code
@@ -249,7 +267,8 @@ export async function handleSponsor(env, request, url, path, J, user) {
           .bind(placement.id, period.from, period.to).all()).results || [];
         placementRows.push({ ...placement, refs, metrics: records, clicks: clickBreakdown });
       }
-      items.push({ id: org.id, handle: org.handle, name: org.name, metrics, weekly, next_placements: nextPlacements,
+      const ads = await adStatsForOrg(db, org.id, period.from, period.to).catch(() => []);   // #281: gebuchte Werbeplaetze
+      items.push({ id: org.id, handle: org.handle, name: org.name, metrics, weekly, next_placements: nextPlacements, ads,
         manual: manual.map((metric) => ({ ...metric, kind: "manual", as_of: new Date(metric.updated * 1000).toISOString().slice(0, 10) })),
         placements: placementRows.map((placement) => ({ ...placement, type: placement.channel })),
         event_partners: eventPartners.map((event) => ({ ...event, type: "event_partner", metric: null })),
@@ -269,8 +288,8 @@ export async function handleSponsor(env, request, url, path, J, user) {
     }
     const period = selectedPeriod(url);
     if (!period) return J({ error: "bad_period" }, 400, { "cache-control": "no-store" });
-    const metrics = (await db.prepare(`SELECT day,metric,dim,value,source,kind,fetched_at FROM sponsor_metrics_daily
-      WHERE placement_id=? AND day>=? AND day<=? ORDER BY day,metric,dim`).bind(id, period.from, period.to).all()).results || [];
+    const metrics = (await db.prepare(`SELECT day,metric,dim,value,source,kind,fetched_at FROM sponsor_metrics_daily m
+      WHERE placement_id=? AND day>=? AND day<=? AND ${RUM_PREFERRED} ORDER BY day,metric,dim`).bind(id, period.from, period.to).all()).results || [];
     const manual = (await db.prepare(`SELECT source,metric,period,value,link,updated FROM sponsor_manual_metrics
       WHERE placement_id=? AND period BETWEEN substr(?,1,7) AND substr(?,1,7) ORDER BY period,metric`)
       .bind(id, period.from, period.to).all()).results || [];
@@ -278,7 +297,8 @@ export async function handleSponsor(env, request, url, path, J, user) {
       FROM sponsor_clicks_daily c JOIN sponsor_links l ON l.code=c.code
       WHERE l.placement_id=? AND c.day>=? AND c.day<=? GROUP BY c.surface,c.country`)
       .bind(id, period.from, period.to).all()).results || [];
-    return J({ placement, metrics, manual, clicks, period }, 200, { "cache-control": "no-store" });
+    const phase = sponsorPhase(placement.start, placement.end, new Date().toISOString().slice(0, 10));   // kein Zeitfilter: auch lange nach dem Ende abrufbar
+    return J({ placement: { ...placement, ...phase }, metrics, manual, clicks, period }, 200, { "cache-control": "no-store" });
   }
   if (path === "/api/sponsor/sources" && request.method === "GET") {
     if (!user) return J({ error: "login" }, 401);

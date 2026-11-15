@@ -50,12 +50,12 @@ class SponsorshipTests(unittest.TestCase):
         return str(cm.exception)
 
     # --- Datei im Repo und Uebersetzungen ---
-    def test_repo_file_is_valid_and_empty(self):
+    def test_repo_file_is_valid(self):   # seit #308 mit iFAKT (unbefristet)
         d = json.loads((ROOT / "data" / "sponsorships.json").read_text("utf-8"))
         recs, errs = SPM.check_structure(d)
-        self.assertEqual((recs, errs), ([], []))
-        st = SPM.init("2026-11-03", {}, path=ROOT / "data" / "sponsorships.json")
-        self.assertEqual((st["ent"], st["ep"], st["vid"], st["post"]), ({}, {}, {}, {}))
+        self.assertEqual(errs, [])
+        for r in recs:
+            self.assertTrue(r.get("end") is None or SPM._day(r["end"]), r["id"])
 
     def test_labels_hand_written_for_all_languages(self):
         self.assertEqual(SPM.check_i18n(), [])
@@ -73,8 +73,14 @@ class SponsorshipTests(unittest.TestCase):
                            rec(id="x4", sponsor={"name": "", "url": "http://acme.example/"}), rec(id="x5", sponsor={"name": "M", "url": "https://www.m365.fm/"}),
                            rec(id="x6", price=1500), rec(id="x6", entities="acme-backup"), rec(id="x7", end="2027/01/01"), rec(id="x8", topics=["entra-id", "entra-id"])])
         for part in ('"id" fehlt oder ungueltig', '"x1": "label"', '"x2": "start"', '"x3": "end" liegt vor "start"', '"x4": "sponsor.name"', '"x4": "sponsor.url" muss',
-                     '"x5": "sponsor.url" darf nicht auf m365.fm', 'unbekanntes Feld "price"', '"x6": id doppelt', '"entities" muss eine Liste', '"x7": "end" fehlt oder ist kein Datum', '"topics" enthaelt Doppelte'):
+                     '"x5": "sponsor.url" darf nicht auf m365.fm', 'unbekanntes Feld "price"', '"x6": id doppelt', '"entities" muss eine Liste', '"x7": "end" muss ein Datum', '"topics" enthaelt Doppelte'):
             self.assertIn(part, msg)
+
+    def test_open_ended_sponsorship(self):   # "end": null = unbefristet, kein Fehler, immer aktiv ab "start"
+        st = self.init([rec(id="u1", end=None, entities=["acme-backup"])], today="2030-01-01")   # kein Fehler, nach Jahren noch aktiv
+        self.assertIn("acme-backup", st["ent"])
+        self.assertTrue(SPM._active({"start": "2026-11-06", "end": None}, "2030-01-01"))
+        self.assertFalse(SPM._active({"start": "2026-11-06", "end": None}, "2026-11-05"))
 
     def test_sponsor_url_on_shared_platform_is_rejected(self):   # sonst bekaemen eigene LinkedIn-/YouTube-Links der Seite rel="sponsored"
         msg = self.errors([rec(id="s1", sponsor={"name": "Acme", "url": "https://www.linkedin.com/company/acme/"}),
@@ -102,19 +108,16 @@ class SponsorshipTests(unittest.TestCase):
             SPM.check_posts(POSTS)
         self.assertIn('Beitrag "/de/community/u/mirko-p/blog/gone/" gibt es nicht', str(cm.exception))
 
-    def test_topic_limit(self):
+    def test_no_topic_limit(self):   # Mirko, 6.11.2026: kein eigenes Themen-Sponsoring mehr, also keine Obergrenze je Thema
+        self.assertFalse(hasattr(SPM, "TOPIC_MAX"))
         four = [rec(id=f"t{i}", topics=["entra-id"], start="2026-11-01", end="2027-01-31") for i in range(4)]
-        self.assertIn('Thema "entra-id": 4 Themen-Sponsorings gleichzeitig am 2026-11-01 (hoechstens 3)', self.errors(four))
-        later = four[:3] + [rec(id="t3", topics=["entra-id"], start="2027-02-01", end="2027-04-30")]   # folgt nahtlos: nie mehr als 3 gleichzeitig
-        self.init(later)
-        future = four[:3] + [rec(id="t3", topics=["entra-id"], start="2027-01-31", end="2027-04-30")]   # ueberschneidet sich am letzten Tag
-        self.assertIn("4 Themen-Sponsorings gleichzeitig am 2027-01-31", self.errors(future, today="2026-11-03"))
-        self.init([rec(id=f"t{i}", topics=["entra-id"]) for i in range(3)] + [rec(id="p1", topics=["purview"])])
+        self.init(four)   # vier gleichzeitig: kein Fehler mehr
+        self.assertEqual(len(SPM.entity("entra-id")), 4)   # alle bleiben gekennzeichnet
 
     # --- Index und Laufzeit ---
     def test_entity_banner_only_while_running_content_label_permanent(self):
         r = rec(entities=["acme-backup"], topics=["entra-id"], episodes=["backup-done-right"], posts=["/community/u/mirko-p/blog/acme-pr/"], start="2026-11-01", end="2026-11-30")
-        for today, running in (("2026-10-31", False), ("2026-11-01", True), ("2026-11-30", True), ("2026-12-01", False)):
+        for today, running in (("2026-10-31", False), ("2026-11-01", True), ("2026-11-30", True), ("2026-12-01", True), ("2027-05-31", True), ("2027-06-01", False)):   # Karenzzeit: end + 182 Tage
             SPM.reset(); self.init([r], today=today)
             self.assertEqual(bool(SPM.entity("acme-backup")), running, today)
             self.assertEqual(bool(SPM.entity("entra-id")), running, today)

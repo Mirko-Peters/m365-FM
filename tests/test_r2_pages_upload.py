@@ -193,6 +193,18 @@ class R2outOrderTest(Base):
             self.assertIn(("put", "pages/fr/y/index.html"), self.s3.log, "zurueckgekehrter Schluessel wird neu geladen (Manifest gekuerzt)")
         self._with_clean_manifest(body)
 
+    def test_missing_page_blocks_deploy_existing_page_does_not(self):
+        """11.11.2026: Sprachseiten ausser en/de gibt es nur im Bucket. Fehlt eine Seite dort nach dem Upload noch ganz -> Ende 1 (kein Deploy, sonst 404);
+        scheitert nur die neue Fassung einer schon geladenen Seite, bleibt die alte erreichbar -> Warnung, Ende 0."""
+        def body():
+            tree(self.r2out, {"pl/x/index.html": "pl", "ru/tag/облако/index.html": "ru"})
+            self.s3.fail_put.add("pages/ru/tag/облако/index.html")
+            self.assertEqual(self.r2out_run(), 1, "neue Seite fehlt im Bucket")
+            self.s3.fail_put.clear(); self.assertEqual(self.r2out_run(), 0); self.assertIn("pages/ru/tag/облако/index.html", self.s3.obj)
+            tree(self.r2out, {"ru/tag/облако/index.html": "ru2"}); self.s3.fail_put.add("pages/ru/tag/облако/index.html")
+            self.assertEqual(self.r2out_run(), 0, "alte Fassung liegt noch im Bucket")
+        self._with_clean_manifest(body)
+
 
 if __name__ == "__main__":
     unittest.main()

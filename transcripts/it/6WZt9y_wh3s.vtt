@@ -1,0 +1,820 @@
+WEBVTT
+
+00:00:01.710 --> 00:00:05.150
+La fattura di un fornitore arriva sulla tua scrivania. La merce potrebbe essere già in
+
+00:00:05.150 --> 00:00:08.750
+magazzino o il servizio già completato, ma il conto alla rovescia per il pagamento inizia
+
+00:00:08.750 --> 00:00:12.630
+subito. Quindi cosa succede realmente prima che il denaro lasci l'azienda? Benvenuti a un altro
+
+00:00:12.630 --> 00:00:17.170
+Knowledge Nugget di Emerge 365 FM. Sono Mir Peters e oggi esaminiamo la contabilità a fornitori
+
+00:00:17.170 --> 00:00:22.030
+di Dynamics 365 in parole semplici. Non è solo un posto dove qualcuno digita fatture su uno schermo.
+
+00:00:22.530 --> 00:00:25.610
+È l'ufficio finanziario dell'azienda che controlla ogni fattura, chi l'ha inviata,
+
+00:00:25.710 --> 00:00:29.950
+cosa l'azienda ha accettato di acquistare se deve essere pagata. Ecco la definizione più semplice.
+
+00:00:29.950 --> 00:00:33.710
+La contabilità a fornitori è il denaro che la tua azienda deve ai venditori per beni o servizi
+
+00:00:33.710 --> 00:00:37.790
+già acquistati. Pensala come l'ufficio pagamenti all'interno di un grande edificio. Le fatture
+
+00:00:37.790 --> 00:00:40.890
+arrivano alla reception, vengono controllate rispetto ai registri aziendali, passano per
+
+00:00:40.890 --> 00:00:44.950
+l'approvazione e solo allora raggiungono chi autorizza il pagamento. Seguiremo quel percorso
+
+00:00:44.950 --> 00:00:49.790
+dal record del fornitore fino al timbro finale di pagamento. Dynamics 365 lo chiama regolamento.
+
+00:00:50.650 --> 00:00:55.310
+Perché esiste la contabilità a fornitori? Immagina di gestire una piccola azienda che vende mobili
+
+00:00:55.310 --> 00:00:59.210
+per ufficio. Hai bisogno di scrivanie prima di poterle vendere e ti servono anche scatole per
+
+00:00:59.210 --> 00:01:02.510
+imballaggio, servizi di pulizia, accesso a internet, pezzi di ricambio, forse un'azienda
+
+00:01:02.510 --> 00:01:06.630
+di spedizioni. Se dovessi pagare ogni fornitore nel momento in cui ordini qualcosa, acquistare
+
+00:01:06.630 --> 00:01:10.210
+qualsiasi cosa, diventerebbe molto difficile e molto in fretta. La maggior parte dell'azienda
+
+00:01:10.210 --> 00:01:13.810
+acquista prima e paga dopo secondo termini concordati. Un fornitore consegna la merce o
+
+00:01:13.810 --> 00:01:17.930
+finisce il lavoro poi invia una fattura e il suo conto. La tua azienda ora deve quell'importo
+
+00:01:17.930 --> 00:01:21.890
+ma non invia il denaro senza prima aver controllato i dettagli. Quell'importo non pagato figura nei
+
+00:01:21.890 --> 00:01:25.250
+libri contabili dell'azienda come possibile. Passività può sembrare una parola finanziaria
+
+00:01:25.250 --> 00:01:29.510
+spaventosa. Ma il significato è semplice, è un importo che l'azienda deve a qualcun altro.
+
+00:01:30.070 --> 00:01:33.650
+Se la tua azienda riceve una fattura per fornitore d'ufficio e non l'ha ancora pagata, quella fattura
+
+00:01:33.650 --> 00:01:37.390
+rientra nella contabilità fornitore finché il pagamento non la salda. L'azienda ha ancora il
+
+00:01:37.390 --> 00:01:41.350
+contante per ora ma ha anche una promessa da mantenere. Questo è importante perché un'azienda
+
+00:01:41.350 --> 00:01:46.130
+può sembrare solida nel suo conto bancario pur avendo una pila di fatture non pagate. I team
+
+00:01:46.130 --> 00:01:50.290
+finanziari devono vedere entrambi i lati. Quanto contante c'è in banca e quanto di quel
+
+00:01:50.290 --> 00:01:54.250
+denaro dovrà presto uscire. Prima dei sistemi finanziari connessi, questo lavoro si
+
+00:01:54.250 --> 00:01:57.570
+trasformava spesso in una caccia alla carta. Una fattura poteva arrivare per posta, restare
+
+00:01:57.570 --> 00:02:01.050
+sulla scrivania di qualcuno, poi viaggiare tramite posta interna per l'approvazione mentre
+
+00:02:01.050 --> 00:02:04.910
+un'altra restava nella casa alle mail. Qualcuno poteva digitare la stessa fattura in un foglio
+
+00:02:04.910 --> 00:02:08.710
+di calcolo mentre un'altra persona la inseriva in un sistema contabile. Ciò crea problemi
+
+00:02:08.710 --> 00:02:12.770
+familiari. Un manager si perde un'email di approvazione, una fattura viene pagata in ritardo,
+
+00:02:12.850 --> 00:02:16.030
+un fornitore invia di nuovo la stessa fattura e nessuno nota che era già arrivata al team
+
+00:02:16.030 --> 00:02:20.370
+finanziario. Peggio ancora potrebbe essere pagata due volte perché la copia cartacea e quella via
+
+00:02:20.370 --> 00:02:24.570
+email sembrano fatture di... Dynamics 365 offre all'azienda un unico luogo per registrare questo
+
+00:02:24.570 --> 00:02:28.430
+luogo. Registra ciò che l'azienda deve, aiuta a controllare le fatture e mantiene un percorso
+
+00:02:28.430 --> 00:02:32.770
+chiaro dall'arrivo della bolletta al suo pagamento. Ciò non significa che ogni fattura proceda senza
+
+00:02:32.770 --> 00:02:36.470
+una revisione umana. Il team finanziario decide comunque quando qualcosa non va, ma il sistema
+
+00:02:36.470 --> 00:02:40.390
+fornisce loro i registri e le regole per decidere senza inseguire documenti in giro per l'ufficio.
+
+00:02:40.850 --> 00:02:44.390
+Potresti sentire parlare anche di crediti verso clienti nella stessa conversazione. I nomi suonano
+
+00:02:44.390 --> 00:02:49.330
+quasi identici ma guardano in direzioni opposte. I debiti verso fornitori tracciano il denaro che esce
+
+00:02:49.330 --> 00:02:52.490
+dalla vostra azienda perché dovete pagare i venditori. I crediti verso clienti tracciano
+
+00:02:52.490 --> 00:02:55.930
+il denaro che arriva alla vostra azienda perché i clienti devono pagare voi. Se la vostra azienda
+
+00:02:55.930 --> 00:02:59.410
+acquista stampanti da un fornitore quella fattura entra nei debiti verso fornitori. Se la vostra
+
+00:02:59.410 --> 00:03:03.030
+azienda vende scrivania a un cliente e invia una fattura quella fattura del cliente entra nei
+
+00:03:03.030 --> 00:03:07.070
+crediti verso clienti. Quindi i debiti tracciano ciò che dovete pagare mentre i crediti tracciano
+
+00:03:07.070 --> 00:03:10.550
+ciò che gli altri devono pagare voi. I debiti verso fornitori puntano un risultato molto
+
+00:03:10.550 --> 00:03:14.810
+pratico. Pagare il fornitore giusto per l'importo corretto la data concordata. Pagare troppo
+
+00:03:14.810 --> 00:03:18.670
+presto significa che l'azienda perde liquidità prima del necessario. Pagare troppo tardi significa
+
+00:03:18.670 --> 00:03:23.230
+che un fornitore potrebbe sollecitare il pagamento e interrompere condizioni favore. Pagare l'importo
+
+00:03:23.230 --> 00:03:27.130
+sbagliato costringe qualcuno a risolvere l'errore in seguito spesso con email, note di credito e
+
+00:03:27.130 --> 00:03:32.590
+molta frustrazione. Quindi prima che una fattura possa seguire questo processo Dynamics 365 deve
+
+00:03:32.590 --> 00:03:37.650
+sapere esattamente chi è il fornitore e quali regole si applicano a quel rapporto. Costruire le
+
+00:03:37.650 --> 00:03:41.950
+fondamenta del fornitore. Dunque prima che Dynamics 365 possa elaborare una singola fattura deve
+
+00:03:41.950 --> 00:03:45.190
+prima sapere esattamente chi l'ha inviata. È qui che entra in gioco il record del fornitore.
+
+00:03:45.570 --> 00:03:49.650
+Senza di esso il sistema non sa chi pagare o quali regole seguire. Un fornitore potrebbe
+
+00:03:49.650 --> 00:03:53.830
+fornire beni fisici come carta, portatili o pezzi di ricambio. Potrebbe anche fornire un
+
+00:03:53.830 --> 00:03:57.950
+servizio come la contabilità o il supporto software. Il prodotto cambia ma il ruolo rimane
+
+00:03:57.950 --> 00:04:02.350
+lo stesso. Questa è la parte che la vostra tendo potrebbe dover pagare. Pensate al record del
+
+00:04:02.350 --> 00:04:06.750
+fornitore come il fascicolo del fornitore all'interno di Dynamics 365. Memorizza i dettagli di base
+
+00:04:06.750 --> 00:04:09.950
+necessari al team finanziario ma stabilisce anche le regole che controllano ciò che accade in
+
+00:04:09.950 --> 00:04:13.250
+seguito. Inserite il nome, l'indirizzo e le informazioni di contatto del fornitore in
+
+00:04:13.250 --> 00:04:16.770
+modo che l'azienda sappia esattamente con chi ha a che fare. Puoi anche registrare la valuta
+
+00:04:16.770 --> 00:04:20.450
+utilizzata per fatture e pagamenti, il che fa una grande differenza quando acquisti da fornitore
+
+00:04:20.450 --> 00:04:24.670
+in paesi diversi. Ora per i dettagli di pagamento, una scheda fornitore può includere termini di
+
+00:04:24.670 --> 00:04:28.310
+pagamento o metodo di pagamento. Potrebbero sembrare piccoli campi su uno schermo ma rispondono a
+
+00:04:28.310 --> 00:04:32.650
+domande molto pratiche. Quando dovrebbe essere pagato questo fornitore? E come dovrebbe inviare il denaro
+
+00:04:32.650 --> 00:04:36.010
+all'azienda? I termini di pagamento definiscono la regola di scadenza. Alcuni fornitori ti
+
+00:04:36.010 --> 00:04:39.590
+consentono di pagare 30 giorni dopo la data della fattura. Altri chiedono il pagamento dentro 14
+
+00:04:39.590 --> 00:04:44.230
+giorni. Alcuni offrono persino un sconto se paghi in anticipo. Dynamics 365 utilizza i termini
+
+00:04:44.230 --> 00:04:48.390
+registrati per calcolare automaticamente la scadenza di ogni fattura. Nessuno deve ricordare
+
+00:04:48.390 --> 00:04:53.230
+l'accordo? Questo crea coerenza. Se 5 persone diverse elaborano fatture per lo stesso fornitore,
+
+00:04:53.510 --> 00:04:57.610
+seguono tutte la stessa regola di pagamento. Nessuno deve scavare tra vecchi e-mail o chiamare il team
+
+00:04:57.610 --> 00:05:01.630
+acquisti solo per chiedere quando va pagata una fattura. Il metodo di pagamento descrive come arriva il
+
+00:05:01.630 --> 00:05:05.490
+denaro. La tua azienda potrebbe pagare un fornitore tramite bonifico elettronico o un altro tramite
+
+00:05:05.490 --> 00:05:10.990
+assai. In alcuni casi un'azienda può anche utilizzare e pagherò cambiari. Dynamics 365 ti
+
+00:05:10.990 --> 00:05:14.730
+consente di definire i tuoi metodi di pagamento collegandoli ai tipi di sistema dove è necessario.
+
+00:05:15.070 --> 00:05:18.750
+Ora, le aziende solitamente hanno a che fare con più di un fornitore. Un'azienda in crescita potrebbe
+
+00:05:18.750 --> 00:05:23.270
+averne decine e centinaia o addirittura migliaia. Creare ogni impostazione da zero per ciascuno sarebbe
+
+00:05:23.270 --> 00:05:28.330
+una perdita di tempo e causerebbe errori. Ecco perché Dynamics 365 utilizza i gruppi di fornitori. Un gruppo
+
+00:05:28.330 --> 00:05:32.130
+di fornitori raccoglie i fornitori che condividono le stesse regole finanziarie generali. Ad esempio
+
+00:05:32.130 --> 00:05:35.190
+potresti inserire i fornitori di cancelleria locale in un gruppo e i fornitori di scorte
+
+00:05:35.190 --> 00:05:39.030
+esteri in un altro. Il gruppo contiene impostazioni condivise su come registrare le transazioni,
+
+00:05:39.170 --> 00:05:43.290
+come funzionano pagamenti e saldi, come l'azienda riporta i saldi di quei fornitori. Mantieni
+
+00:05:43.290 --> 00:05:47.530
+comunque una scheda fornitore separata per ogni fornitore. È importante perché ogni fornitore ha bisogno
+
+00:05:47.530 --> 00:05:52.270
+del proprio nome, indirizzo, dettagli di pagamento e cronologia. Gruppo di fornitori fornisce solo un punto
+
+00:05:52.270 --> 00:05:56.450
+di partenza comune così l'ufficio contabilità non deve ricostruire le stesse regole più volte. Dietro le
+
+00:05:56.450 --> 00:06:00.350
+quinte c'è un altro elemento chiamato profilo di registrazione fornitore. Nome sembra tecnico,
+
+00:06:00.450 --> 00:06:04.670
+quindi spieghiamolo in modo semplice. Un profilo di registrazione è una mappa che indica Dynamics
+
+00:06:04.670 --> 00:06:08.870
+365 dove appartengono le transazioni fornitore nel registro generale. Il registro generale è il libro
+
+00:06:08.870 --> 00:06:13.610
+principale dei conti finanziari dell'azienda. Quando viene registrata una fattura, Dynamics 365 deve
+
+00:06:13.610 --> 00:06:18.570
+registrare sia ciò che l'azienda deve, sia dove appartiene il costo correlato. Il profilo di registrazione
+
+00:06:18.570 --> 00:06:22.650
+guida il lato fornitore di quella voce contabile utilizzando le regole impostate per il fornitore o il gruppo
+
+00:06:22.650 --> 00:06:26.090
+di fornitori. Il personale amministrativo non deve scegliere ogni volta quei conti di
+
+00:06:26.090 --> 00:06:30.090
+mastro a memoria. Il sistema segue invece una mappa che riduce le voci incoerenti e offre al
+
+00:06:30.090 --> 00:06:33.610
+team finanziario una visione molto più chiara dei debiti verso i fornitore. L'azienda prepara
+
+00:06:33.610 --> 00:06:37.270
+anche il lato pagamenti prima dell'arrivo delle fatture. Nella gestione casse e banche si impostano
+
+00:06:37.270 --> 00:06:40.710
+i conti correnti che finanziaranno i pagamenti ai fornitori. Giornali di pagamento offrono al
+
+00:06:40.710 --> 00:06:43.750
+personale un'area di lavoro per preparare e registrare i pagamenti utilizzando metodi
+
+00:06:43.750 --> 00:06:48.610
+approvati. Quindi per ricapitolare, l'anagrafica fornitore identifica chi riceve il denaro. Le condizioni
+
+00:06:48.610 --> 00:06:51.790
+di pagamento stabiliscono la scadenza, mentre il metodo di pagamento e il conto bancario
+
+00:06:51.790 --> 00:06:55.970
+definiscono come il denaro esce dall'azienda. Con queste regole pronte una fattura può entrare
+
+00:06:55.970 --> 00:07:01.390
+nell'ufficio finanziario e iniziare. Il suo percorso dà l'arrivo all'approvazione. Con
+
+00:07:01.390 --> 00:07:06.470
+l'anagrafica fornitore pronta, Dynamics 365 sa ora chi pagare, secondo quali regole. Quindi
+
+00:07:06.470 --> 00:07:09.530
+cosa succede quando arriva una fattura vera e propria? A volte l'addetto amministrativo
+
+00:07:09.530 --> 00:07:13.150
+la inserisce manualmente. Questo avviene quando una fattura arriva via email, cartacea, tramite
+
+00:07:13.150 --> 00:07:17.790
+un portale fornitore e qualcuno deve digitare i dettagli nel sistema. L'addetto seleziona il
+
+00:07:17.790 --> 00:07:21.210
+fornitore, inserisce numero e data fattura, poi aggiunge righe, importi, imposte e
+
+00:07:21.210 --> 00:07:25.770
+qualsiasi riferimento all'ordine di acquisto collegato. Il numero della fattura merita
+
+00:07:25.770 --> 00:07:29.450
+attenzione. Proviene dal fornitore e non dalla vostra azienda e aiuta a identificare quello
+
+00:07:29.450 --> 00:07:33.710
+specifico conto. Se arriva una fattura di 1200 dollari da Northland Office Supplies con
+
+00:07:33.710 --> 00:07:38.710
+numero N148, Dynamics 365 può usare quel numero con l'anagrafica fornitore per rilevare
+
+00:07:38.710 --> 00:07:43.410
+una voce duplicata. Anche gli allegati vanno associati al record. Una fattura PDF, un documento
+
+00:07:43.410 --> 00:07:46.530
+scansionato o della documentazione di supporto possono essere archiviati insieme alla fattura
+
+00:07:46.530 --> 00:07:50.530
+in Dynamics 365. Ciò significa che chi revisione al record può vedere il documento dietro
+
+00:07:50.530 --> 00:07:55.830
+i numeri senza frugare in caselle mail condivise o archivi, cartacei. Per volumi maggiori le
+
+00:07:55.830 --> 00:08:00.330
+fatture possono essere inserite elettronicamente. Dynamics 365 supporta l'importazione di dati
+
+00:08:00.330 --> 00:08:03.410
+di fatturazione tramite entità di dati. Si pensa alle entità di dati come un modulo
+
+00:08:03.410 --> 00:08:06.770
+standard che un altro sistema può compilare prima di inviare l'informazione a Dynamics
+
+00:08:06.770 --> 00:08:11.910
+365. Un servizio esterno di acquisizione fattura, ad esempio, può inviare l'intestazione,
+
+00:08:12.090 --> 00:08:15.790
+le righe e l'allegato della fattura in un unico pacchetto dati. L'intestazione contiene
+
+00:08:15.790 --> 00:08:19.930
+i dettagli principali del conto, fornitore, numero fattura, date, valuta, importo totale e riferimento
+
+00:08:19.930 --> 00:08:23.530
+all'ordine di acquisto. Le righe spiegano per cosa viene effettuato la debita. Una riga
+
+00:08:23.530 --> 00:08:27.490
+può riguardare carta per stampanti, un'altra tonere e un'altra ancora la consegna. Mantenere
+
+00:08:27.490 --> 00:08:30.410
+quei dettagli separati aiuta il personale amministrativo a vedere esattamente cosa sta
+
+00:08:30.410 --> 00:08:34.930
+provando. Anche le informazioni fiscali viaggiano insieme alla fattura. Dynamics 365 necessita
+
+00:08:34.930 --> 00:08:38.050
+dell'importo dell'imposta di dettagli correlati affinché l'azienda registri correttamente
+
+00:08:38.050 --> 00:08:41.110
+la fattura. Alcuni fattori possono impedire a una fattura di procedere senza una revisione.
+
+00:08:41.230 --> 00:08:44.950
+Un fornitore mancante, una data non valida, un numero di fattura ripetuto o un totale che
+
+00:08:44.950 --> 00:08:49.230
+non corrisponde. Questa pausa protegge l'azienda. Una policy per le fatture del fornitore verifica
+
+00:08:49.230 --> 00:08:53.170
+se la fattura rispetta le regole stabilite dall'azienda. I controlli sui duplicati cercano
+
+00:08:53.170 --> 00:08:56.950
+fatture già note come stesso fornitore e il numero fattura già registrati. L'obiettivo
+
+00:08:56.950 --> 00:09:00.050
+non è accusare il fornitore di aver commesso un errore. I fornitori potrebbero rispedire
+
+00:09:00.050 --> 00:09:02.950
+una fattura perché non sono sicuri che sia arrivato. Un impiegato potrebbe inserire lo
+
+00:09:02.950 --> 00:09:06.890
+stesso pdf due volte per sbaglio. In entrambi i casi pagare due volte la stessa fattura crea un
+
+00:09:06.890 --> 00:09:10.630
+lavoro che nessuno desidera. Una volta che Dynamics 365 accetta la fattura, la domanda successiva
+
+00:09:10.630 --> 00:09:14.290
+è semplice. Chi è autorizzato ad approvare? È qui che entra in gioco il workflow. Il workflow
+
+00:09:14.290 --> 00:09:18.150
+è il percorso di approvazione all'interno del sistema. Invece di inviare un pdf a un manager
+
+00:09:18.150 --> 00:09:23.330
+sperando che torni indietro, Dynamics 365 invia la fattura alla persona o al ruolo definito
+
+00:09:23.330 --> 00:09:28.310
+dalle regole aziendali. Ogni organizzazione decide tali regole in base a come vuole gestire
+
+00:09:28.310 --> 00:09:31.670
+le decisioni finanziarie. Una piccola fattura di routine potrebbe seguire un percorso breve.
+
+00:09:31.970 --> 00:09:35.690
+Una fattura che supera un certo importo potrebbe richiedere un senior manager. Una fattura legata
+
+00:09:35.690 --> 00:09:39.650
+a uno specifico dipartimento può andare al responsabile di quel dipartimento. È persino possibile
+
+00:09:39.650 --> 00:09:42.810
+creare percorsi di approvazione diversi per tipi di fornitore come fornitore di scorte
+
+00:09:42.810 --> 00:09:46.470
+di servizio o paltatori. Il percorso segue la regola, non la memoria di qualcuno. Questo
+
+00:09:46.470 --> 00:09:49.430
+rende l'approvazione molto più facile da monitorare. L'amministrazione può vedere se
+
+00:09:49.430 --> 00:09:53.150
+una fattura in attesa di revisione si è stata approvata o se necessita di ulteriori informazioni.
+
+00:09:53.450 --> 00:09:56.610
+Chi approva può controllare la fattura e decidere se appartiene al proprio dipartimento
+
+00:09:56.610 --> 00:10:00.770
+e se l'addebito sembra corretto. Alcune fatture soddisfano ogni regola e procedono automaticamente.
+
+00:10:01.250 --> 00:10:04.950
+Il fornitore è noto, i dettagli importati sono completi e la fattura supera i controlli di
+
+00:10:04.950 --> 00:10:08.590
+policy. Queste fatture non richiedono che qualcuno ripeta ogni volta gli stessi controlli
+
+00:10:08.590 --> 00:10:12.850
+di base. Altre fatture diventano eccezioni. Forse manca il conto del fornitore. Forse
+
+00:10:12.850 --> 00:10:16.870
+il numero della fattura esiste già. Forse una riga importata contiene un errore. Dynamics
+
+00:10:16.870 --> 00:10:21.230
+365 mantiene tali fatture in un elenco di errori di importazione dove il personale finanziario
+
+00:10:21.230 --> 00:10:24.410
+può vedere il messaggio di errore e risolvere il problema prima di creare una fattura in sospetto.
+
+00:10:24.590 --> 00:10:28.910
+Il documento rimane importante durante la visione. Dynamics 365 include un visualizzatore di
+
+00:10:28.910 --> 00:10:32.510
+allegati nelle pagine delle fatture così l'operatore può guardare l'immagine della fattura
+
+00:10:32.510 --> 00:10:36.390
+accanto al record che sta correggendo. Non c'è bisogno di passare da una schermata all'altra
+
+00:10:36.390 --> 00:10:40.490
+solo per confermare se un fornitore ha digitato 6.800 sulla fattura originale. L'automazione
+
+00:10:40.490 --> 00:10:44.230
+gestisce lo spostamento di routine. Le persone gestiscono le domande. L'approvazione conferma
+
+00:10:44.230 --> 00:10:47.610
+che la persona giusta ha accettato di far procedere la fattura ma non dimostra ancora che il fornitore
+
+00:10:47.610 --> 00:10:51.910
+abbia fatturato esattamente quanto ordinato ha ricevuto. Per questo Dynamics 365 confronta
+
+00:10:51.910 --> 00:10:55.810
+la documentazione. Riconcideva tutto. Controllare cosa ha ordinato l'azienda e l'approvazione conferma
+
+00:10:55.810 --> 00:10:59.990
+che la persona giusta ha esaminato la fattura. Ma la riconciliazione risponde a domande diverse. La fattura
+
+00:10:59.990 --> 00:11:03.130
+concorda con ciò che l'azienda effettivamente ha accettato di acquistare. Quando un acquisto
+
+00:11:03.130 --> 00:11:07.350
+inizia con un ordine di acquisto, Dynamics 365 dispone di un regolo con cui effettuare il controllo.
+
+00:11:07.470 --> 00:11:11.270
+Pensa a un ordine di acquisto come alla nota d'ordine dell'azienda. Registra il fornitore,
+
+00:11:11.490 --> 00:11:15.470
+ciò che è stato richiesto, la quantità, il prezzo e le condizioni. Qualcuno all'ufficio acquisti
+
+00:11:15.470 --> 00:11:19.110
+crea quell'ordine prima che arrivi a qualsiasi fattura. Perché è importante? L'ordine di acquisto
+
+00:11:19.110 --> 00:11:22.990
+registra l'accordo prima che si presenti la fattura. Senza di esso il responsabile finanziario
+
+00:11:22.990 --> 00:11:27.030
+vede solo una fattura intestata. Con esso può confrontare l'addebito del fornitore con la richiesta
+
+00:11:27.030 --> 00:11:32.190
+originale. Per i benefici c'è un altro documento che conta. Quando arriva una consegna, il team di
+
+00:11:32.190 --> 00:11:36.290
+magazzino registra un'entrata merci, che è la prova in Dynamics 365 che la merce ha raggiunto
+
+00:11:36.290 --> 00:11:41.010
+l'azienda, inclusa la quantità. Non significa che ogni articolo fosse perfetto, ma registra ciò che è
+
+00:11:41.010 --> 00:11:45.010
+stato ricevuto rispetto a quell'ordine. Immagina un'azienda che ordina 10 sedie official. L'ordine di
+
+00:11:45.010 --> 00:11:49.690
+acquisto elenca 10 sedie a un prezzo concordato, ma quando arriva il camion, il magazzino ne conta solo
+
+00:11:49.690 --> 00:11:54.890
+8 perché due sono in ordine arretrato. Il team di ricezione registra un'entrata merci per 8. Quindi il
+
+00:11:54.890 --> 00:11:58.690
+fornitore invia una fattura per 10 sedie che potrebbe essere corretta dal suo punto di vista se
+
+00:11:58.690 --> 00:12:02.430
+fattura l'intero ordine prima che le ultime due spedite. Ma ora la tua azienda ha una discrepanza.
+
+00:12:02.910 --> 00:12:08.630
+Ordinate 10, ricevute 8, fatturate 10. Dynamics 365 può rilevare tale differenza tramite le fatture.
+
+00:12:09.310 --> 00:12:13.050
+La riconciliazione a due vie confronta l'ordine di acquisto con la fattura del fornitore, verificando se
+
+00:12:13.050 --> 00:12:17.050
+la fattura è in linea con l'ordine per prezzo e quantità. Questo funziona per gli acquisti in cui il controllo
+
+00:12:17.050 --> 00:12:21.890
+dell'ordine originale fornisce un controllo sufficiente. Rileva se un fornitore addebita un prezzo più alto o più unità
+
+00:12:21.890 --> 00:12:25.450
+di quelle ordinate ma non verifica se la merce sia effettivamente arrivata perché confronto a
+
+00:12:25.450 --> 00:12:29.770
+solo due record. L'ordine di acquisto e la fattura. La riconciliazione a tre vie aggiunge
+
+00:12:29.770 --> 00:12:34.470
+l'entrata merci. Quindi Dynamics 365 ha confronto insieme l'ordine di acquisto, l'entrata merci e la
+
+00:12:34.470 --> 00:12:39.790
+fattura. Nel nostro esempio delle sedie il sistema vede l'ordine per 10, l'entrata per 8 e la fattura
+
+00:12:39.790 --> 00:12:44.090
+per 10. E quella differenza diventa un motivo per sospendere la fattura invece di lasciarla
+
+00:12:44.090 --> 00:12:49.030
+procedere. Per le aziende che acquistano scorte, attrezzature o grandi quantità di beni fisici,
+
+00:12:49.030 --> 00:12:53.270
+questo controllo offre alla finanza un controllo più solido aiutando a evitare di pagare articoli
+
+00:12:53.270 --> 00:12:58.550
+mai arrivati o pagare più di quanto ricevuto. L'ufficio acquisti conferma l'accordo. La ricezione
+
+00:12:58.550 --> 00:13:02.610
+conferma ciò che è arrivato e la fattura del fornitore chiede il pagamento. Tutti e tre i
+
+00:13:02.610 --> 00:13:06.310
+documenti devono raccontare la stessa storia. Le piccole differenze sono comuni nel mondo degli
+
+00:13:06.310 --> 00:13:10.950
+affari. Un prezzo potrebbe variare per arrotondamenti o un fornitore potrebbe includere una lieve variazione
+
+00:13:10.950 --> 00:13:15.490
+di quantità. Se ogni piccola differenza bloccasse una fattura, i team finanziari perderebbero troppo
+
+00:13:15.490 --> 00:13:20.150
+tempo a gestire questioni rilevanti. Per questo Dynamics 365 permette di impostare politiche di
+
+00:13:20.150 --> 00:13:24.830
+corrispondenza e limiti di tolleranza. La tolleranza è una differenza consentita. L'azienda decide quale
+
+00:13:24.830 --> 00:13:31.490
+importo o percentuale accettare per prezzo, quantità, totale o oneri. Ciò che rientra nel limite procede
+
+00:13:31.490 --> 00:13:35.910
+automaticamente, mentre ciò che lo supera viene segnalato per una revisione. È l'azienda a stabilire
+
+00:13:35.910 --> 00:13:40.230
+tali limiti. Un'attività potrebbe tollerare piccole variazioni per materiale da ufficio, ma imporre
+
+00:13:40.230 --> 00:13:45.170
+limiti rigorosi per macchinari costosi. Il sistema non decide cosa sia ragionevole. I reparti finanzi
+
+00:13:45.170 --> 00:13:50.270
+acquisti definiscono le regole e Dynamics 365 le applica con coerenza. Questo cambia il modo in cui
+
+00:13:50.270 --> 00:13:53.350
+il team finanziario impiega il proprio tempo. Invece di controllare ogni fattura corretta riga
+
+00:13:53.350 --> 00:13:57.930
+per riga, possono concentrarsi sulle eccezioni o, investigando le fatture in cui il prezzo è cambiato,
+
+00:13:58.210 --> 00:14:02.890
+manca la ricevuta o la quantità non coincide. Le fatture corrette seguono le regole, ma le persone
+
+00:14:02.890 --> 00:14:07.190
+dedicano attenzione dove è necessario un giudizio. Questo è il vero valore della corrispondenza. Il sistema
+
+00:14:07.190 --> 00:14:11.150
+gestisce i controlli di routine, mentre gli umani gestiscono le questioni che richiedono discernimento.
+
+00:14:11.390 --> 00:14:14.890
+Non è il sistema che sostituisce mano, è il sistema che separa i controlli di routine dalle vere
+
+00:14:14.890 --> 00:14:20.570
+questioni. Un punto può creare confusione. La corrispondenza standard di Dynamics 365 supporta
+
+00:14:20.570 --> 00:14:25.130
+quella 2 a 3 vie. Se un'azienda necessita di una corrispondenza a 4 vie, aggiungendo ad esempio
+
+00:14:25.130 --> 00:14:29.210
+un controllo di ispezione, serve lavoro extra o una soluzione personalizzata. La corrispondenza ha un
+
+00:14:29.210 --> 00:14:33.830
+compito chiaro. Confronta la fattura del fornitore con i record interni di acquisto e ricezione,
+
+00:14:33.830 --> 00:14:38.470
+segnalando le lacune prima del pagamento. Una volta che la fattura supera la revisione
+
+00:14:38.470 --> 00:14:45.050
+dei controlli, diventa un debito da pianificare, pagando i fornitori e chiudendo i conti. Dopo
+
+00:14:45.050 --> 00:14:49.850
+che una fattura ha superato i controlli richiesti, Dynamics 365 può registrarla. La registrazione
+
+00:14:49.850 --> 00:14:54.090
+rende la fattura un documento contabile ufficiale. L'azienda segna il debito verso il fornitore,
+
+00:14:54.550 --> 00:14:59.170
+che risulterà non pagato fino al saldo. Fattura è pronta, ma ciò non significa che il denaro
+
+00:14:59.170 --> 00:15:02.490
+esca immediatamente. I team finanziari devono decidere quali fatture pagare in un ciclo
+
+00:15:02.490 --> 00:15:07.430
+di pagamenti. Dynamics 365 assiste con una proposta di pagamento che analizza le fatture
+
+00:15:07.430 --> 00:15:12.610
+in scadenza e suggerisce quali includere in base alle regole aziendali. La proposta di pagamento
+
+00:15:12.610 --> 00:15:15.710
+è solo una lista iniziale che qualcuno deve comunque revisionare. Forse una fattura di un
+
+00:15:15.710 --> 00:15:19.310
+fornitore scade questa settimana, mentre un'altra può attendere la fine del mese in base ai termini
+
+00:15:19.310 --> 00:15:23.650
+concordati. Il team finanziario controlla le fatture proposte, rimuove o aggiunge voci se
+
+00:15:23.650 --> 00:15:28.110
+necessario, quindi prepara il giornale di pagamento. In questo modo i pagamenti sono raggruppati e controllati
+
+00:15:28.110 --> 00:15:32.350
+invece di essere inviati in modo frammentato. Si pensa al giornale di pagamento come il foglio di lavoro
+
+00:15:32.350 --> 00:15:36.290
+dei pagamenti dell'azienda. Elenca i pagamenti ai fornitori che l'azienda intende inviare, gli importi
+
+00:15:36.290 --> 00:15:40.110
+e dettagli del pagamento. Il personale amministrativo lo utilizza per preparare un lotto controllato di
+
+00:15:40.110 --> 00:15:44.290
+pagamenti anziché inviare denaro una fattura alla volta senza un registro condiviso. Come esce il
+
+00:15:44.290 --> 00:15:49.790
+denaro? Dipende dal metodo di pagamento impostato per il fornitore per l'azienda. Dynamics 365 consente
+
+00:15:49.790 --> 00:15:53.870
+a un'azienda di creare i propri metodi di pagamento e di collegarli a tipologie come assegni, pagamenti
+
+00:15:53.870 --> 00:15:58.230
+elettronici o effetti cambiari. L'assegno è uno strumento familiare. Un pagamento elettronico invia denaro
+
+00:15:58.230 --> 00:16:01.810
+attraverso il processo bancario dell'azienda. Un effetto cambiario registra una promessa formale
+
+00:16:01.810 --> 00:16:05.230
+di pagamento secondo condizioni concordate. Non tutte le aziende utilizzano ogni metodo,
+
+00:16:05.470 --> 00:16:10.070
+ma Dynamics 365 offre un modo per registrare il percorso utilizzato. Ogni metodo di pagamento
+
+00:16:10.070 --> 00:16:13.610
+deve anche puntare al conto bancario aziendale corretto. Questa connessione è importante perché
+
+00:16:13.610 --> 00:16:17.570
+un'azienda può detenere conti separati per diverse entità legali. Valuto a scopi di pagamento.
+
+00:16:18.470 --> 00:16:22.330
+Quando l'ufficio finanziario prepara un pagamento, il sistema deve sapere quale conto bancario lo finanzia,
+
+00:16:22.750 --> 00:16:27.070
+altrimenti il personale potrebbe creare un pagamento corretto a fronte di un conto errato. Anche la tempistica
+
+00:16:27.070 --> 00:16:30.990
+dei pagamenti richiedati. Pagare dopo la data di scadenza può portare a solleciti controversi
+
+00:16:30.990 --> 00:16:34.790
+a un rapporto danneggiato con il fornitore. Pagare troppo presto fa uscire la liquidità prima
+
+00:16:34.790 --> 00:16:39.150
+che l'azienda deve effettivamente farlo. Dynamics 365 mantiene visibile la data di scadenza
+
+00:16:39.150 --> 00:16:42.350
+della fattura, così l'amministrazione può pianificare i pagamenti in base ai termini
+
+00:16:42.350 --> 00:16:46.370
+concordati con ciascun fornitore, offrendo maggiore controllo sul flusso di cassa in uscita.
+
+00:16:47.030 --> 00:16:51.470
+Dynamics 365 deve rispondere a una domanda semplice. Quale fattura ha coperto quel pagamento?
+
+00:16:51.890 --> 00:16:55.270
+La risposta è la chiusura delle partite. La chiusura delle partite collega il pagamento alla
+
+00:16:55.270 --> 00:16:58.610
+specifica fattura o alle fatture del fornitore che salva. Si pensi a questo come all'abbinamento
+
+00:16:58.610 --> 00:17:02.090
+di una ricevuta al conto che va a estinguere. Senza la chiusura delle partite, un'azienda
+
+00:17:02.090 --> 00:17:05.070
+potrebbe vedere una fattura e un pagamento sullo stesso conto fornitore, ma non avere
+
+00:17:05.070 --> 00:17:08.150
+una registrazione chiara che appartengano l'uno all'altro. Un pagamento completo salda
+
+00:17:08.150 --> 00:17:11.530
+l'intera fattura, ma gli affari non sono sempre così ordinati. Un'azienda potrebbe pagare
+
+00:17:11.530 --> 00:17:15.010
+solo una parte di una fattura ora e il resto in sé. La chiusura delle partite registra il pagamento
+
+00:17:15.010 --> 00:17:17.890
+parziale e lascia aperto il saldo rimanente, così l'ufficio finanziario può vedere
+
+00:17:17.890 --> 00:17:21.130
+esattamente quanto è ancora dovuto al fornitore. Questa visibilità è fondamentale per avere
+
+00:17:21.130 --> 00:17:25.410
+saldi fornitori accurati. Il singolo pagamento può anche coprire diverse fatture. Forse un'azienda
+
+00:17:25.410 --> 00:17:30.030
+paga 5 fatture in scadenza dello stesso fornitore con un unico pagamento elettronico. La liquidazione
+
+00:17:30.030 --> 00:17:34.050
+collega quell'unico importo in uscita a ciascuna fattura che salda. Se il pagamento non copre
+
+00:17:34.050 --> 00:17:38.250
+interamente ogni fattura, il saldo aperto rimane chiaro, anziché confondersi in un totale
+
+00:17:38.250 --> 00:17:42.470
+ambiguo. Ciò crea un registro tracciabile in cui è possibile seguire la fattura attraverso
+
+00:17:42.470 --> 00:17:45.890
+la sua approvazione e il risultato della riconciliazione. Visualizza il pagamento preparato
+
+00:17:45.890 --> 00:17:49.610
+nel giornale e osserva come tale pagamento ha regolato il saldo del fornitore. Quando
+
+00:17:49.610 --> 00:17:52.290
+qualcuno chiede perché il denaro è uscito dall'azienda, l'ufficio finanziario non deve
+
+00:17:52.290 --> 00:17:56.150
+ricostruire la storia tramite email ed estratti conto bancari. Il processo può apparire su
+
+00:17:56.150 --> 00:18:01.110
+pagine separate in Dynamics 365, ma ogni record si collega al successivo come un unico flusso
+
+00:18:01.110 --> 00:18:06.510
+controllato, il quadro connesso della contabilità a fornitori. Immagina di ricevere una fattura
+
+00:18:06.510 --> 00:18:10.310
+per forniture d'ufficio. Il record del fornitore contiene le regole di pagamento e la fattura
+
+00:18:10.310 --> 00:18:14.410
+importata riporta i dettagli del conto oltre al documento stesso. L'ufficio acquisti fornisce
+
+00:18:14.410 --> 00:18:18.430
+l'ordine di acquisto. Il ricevimento merci fornisce la bolla, così il processo di riconciliazione
+
+00:18:18.430 --> 00:18:21.850
+e record reali da confrontare. Ora, dietro le quinte, il profilo di registrazione inserisce
+
+00:18:21.850 --> 00:18:25.550
+il debito e la spesa nei conti di contabilità già e record. La gestione casse e banche controlla
+
+00:18:25.550 --> 00:18:29.250
+quale metodo di pagamento utilizzi e quale conto bancario invia il denaro. L'allegato
+
+00:18:29.250 --> 00:18:33.070
+rimane associato alla transazione, così puoi sempre recuperare la fattura originale in seguito
+
+00:18:33.070 --> 00:18:36.290
+per la verifica. L'automazione non sostituisce il giudizio del team finanziario.

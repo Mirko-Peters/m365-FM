@@ -12,9 +12,9 @@ name: Belegzahlen für /sponsor/ (monatlich, T37)
 #   Repo-Variable GSC_SITE (Standard sc-domain:m365.fm, sonst z. B. https://www.m365.fm/).
 # Fehlt das Secret oder antwortet die API mit einem Fehler, bleiben die alten Werte stehen (status + note in der Datei), der Lauf bleibt
 # gruen. Ungueltige Eingaben oder Daten lassen den Lauf scheitern; dann wird nichts gespeichert.
-# Seitenbau: site.yml laeuft bei Pushes auf data/** - aber nicht bei Commits mit dem Standard-Token (GitHub-Regel, TECH-AUDIT.md).
-# Deshalb startet der letzte Schritt site.yml per workflow_dispatch (wie import-entities.yml); sonst kaeme die Aenderung erst mit dem
-# taeglichen Bau (17 5 * * *, spaetestens nach 24 h) auf die Seite.
+# Seitenbau: site.yml baut bei Daten-Commits nicht (nur naechtlich um 01:07 UTC und bei Code-Pushes). Nach einer Handeingabe
+# ("Run workflow") startet der letzte Schritt site.yml per workflow_dispatch, damit die Zahlen am selben Tag auf /sponsor/ stehen;
+# der monatliche Zeitplan-Lauf wartet auf den naechtlichen Bau (spaetestens nach 24 h).
 on:
   schedule:
     - cron: "37 6 4 * *"   # am 4. des Monats: die Search-Console-Daten des Vormonats sind dann endgueltig
@@ -92,8 +92,8 @@ jobs:
             sleep $((i*5))
           done
           echo "::error::Belegzahlen konnten nicht gesichert werden"; exit 1
-      - name: Seitenbau starten (neue Belegzahlen)
-        if: env.PUSHED == '1'
+      - name: Seitenbau starten (neue Belegzahlen; nur bei Handeingabe - der Monatslauf kommt mit dem naechtlichen Bau)
+        if: env.PUSHED == '1' && github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run site.yml --ref main
+        run: gh workflow run site.yml --ref main -f mode=fresh   # ohne Spotify-/Plattform-Abgleich (die kommen naechtlich)

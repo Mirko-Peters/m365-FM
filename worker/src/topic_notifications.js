@@ -225,7 +225,7 @@ export async function queueSessionReminders(env, at = now()) {
   };
   const [dayLo, dayHi] = range(86400), [soonLo, soonHi] = range(900);
   const rows = (await db.prepare(
-    "SELECT s.id,s.title,s.start,e.handle,e.title event_title,e.tz FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND e.public=1 AND ((s.start BETWEEN ? AND ?) OR (s.start BETWEEN ? AND ?))",
+    "SELECT s.id,s.title,s.start,e.handle,e.title event_title,e.tz FROM event_sessions s JOIN events e ON e.id=s.event_id WHERE s.status='live' AND e.public=1 AND e.tz<>'' AND ((s.start BETWEEN ? AND ?) OR (s.start BETWEEN ? AND ?))",   // tz '' = importiertes Event ohne bekannte Zeitzone: keine Erinnerung zur falschen Zeit
   ).bind(dayLo, dayHi, soonLo, soonHi).all()).results || [];
   let queued = 0;
   for (const s of rows) {

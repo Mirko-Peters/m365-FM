@@ -1,12 +1,13 @@
-name: Mediadaten erzeugen (PDF, täglich)
+name: Mediadaten erzeugen (PDF, monatlich)
 # Baut die Mediadaten (EN/DE) aus Live-Daten und legt sie in R2 ab (mediakit/...). Der Worker (/api/mediakit) haengt sie an die E-Mail.
+# Zweite Marke (#260): M365Con-Sponsordeck (tools/mediakit_con.py) -> mediakit/m365con/... (brand=m365con), Vorschau GET /api/mediakit/summary?brand=m365con.
 on:
   schedule:
-    - cron: "41 6 * * *"
+    - cron: "41 6 1 * *"   # am 1. jedes Monats; Zahlen gelten fuer den abgeschlossenen Vormonat
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["tools/mediakit.py", ".github/workflows/mediakit.yml"]
+    paths: ["tools/mediakit.py", "tools/mediakit_con.py", "tools/cf_rum.py", "data/m365con_theme.json", "data/stats/m365con_linkedin.json", ".github/workflows/mediakit.yml"]
 permissions:
   contents: read
 concurrency: { group: mediakit, cancel-in-progress: false }
@@ -29,11 +30,16 @@ jobs:
         env:
           YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
           YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_ANALYTICS_TOKEN: ${{ secrets.CF_ANALYTICS_TOKEN }}   # bevorzugt: Lese-Token "Read analytics and logs"
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}   # Fallback, falls CF_ANALYTICS_TOKEN fehlt
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}   # nur Fallback (Zonen-Statistik, ungefiltert)
+          # Cloudflare Web Analytics (RUM, tools/cf_rum.py): Konto-ID aus vorhandenen Secrets, siteTag optional (sonst automatisch gesucht)
+          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID || secrets.CLOUDFLARE_ACCOUNT_ID || secrets.R2_ACCOUNT_ID }}
+          CF_RUM_SITE_TAG: ${{ vars.CF_RUM_SITE_TAG || secrets.CF_RUM_SITE_TAG }}
           BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}   # Google-Suche fuer den YouTube-Kanal (Creator-Property), nur bei status ok
         run: python tools/mediakit.py --out out/mediakit --fonts .cache/fonts
-      - name: In R2 hochladen (mediakit/…)
+      - name: In R2 hochladen (mediakit/…)   # direkt nach dem eigenen Bau: ein Fehler im Con-Deck darf den M365.FM-Upload nicht verhindern
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
@@ -53,12 +59,53 @@ jobs:
                   print("hochgeladen:", key)
           s3.upload_file("out/mediakit/latest.json", b, "mediakit/latest.json", ExtraArgs={"ContentType": "application/json", "CacheControl": "public, max-age=3600"})
           PY
+      - name: M365Con-Sponsordeck erzeugen (EN/DE, ohne Preise)
+        if: always()
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+          BING_WEBMASTER_API_KEY: ${{ secrets.BING_WEBMASTER_API_KEY }}
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          HEYSUMMIT_API_KEY: ${{ secrets.HEYSUMMIT_API_KEY }}
+        run: python tools/mediakit.py --brand m365con --out out/mediakit-con --fonts .cache/fonts
+      - name: M365Con-Deck in R2 hochladen (mediakit/m365con/…)
+        if: always() && hashFiles('out/mediakit-con/latest.json') != ''
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          python - <<'PY'
+          import boto3, datetime, os
+          s3 = boto3.client("s3", endpoint_url=f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com",
+                            aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"], aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"], region_name="auto")
+          b = os.environ["R2_BUCKET"]; month = datetime.date.today().strftime("%Y-%m")
+          for lang in ("en", "de"):
+              f = f"out/mediakit-con/m365con-sponsor-deck-{lang}.pdf"
+              for key in (f"mediakit/m365con/m365con-sponsor-deck-{lang}.pdf", f"mediakit/m365con/archive/m365con-sponsor-deck-{lang}-{month}.pdf"):
+                  s3.upload_file(f, b, key, ExtraArgs={"ContentType": "application/pdf", "CacheControl": "public, max-age=3600",
+                                                      "ContentDisposition": f'inline; filename="M365Con-Sponsor-Deck-{lang.upper()}.pdf"'})
+                  print("hochgeladen:", key)
+          s3.upload_file("out/mediakit-con/latest.json", b, "mediakit/m365con/latest.json", ExtraArgs={"ContentType": "application/json", "CacheControl": "public, max-age=3600"})
+          PY
       - name: Zusammenfassung
+        if: always()
         run: |
           python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
-          import json; d = json.load(open("out/mediakit/latest.json"))
-          print("### Mediadaten", d["generated"])
-          for k in ("youtube", "cloudflare", "bing", "local"): print(f"- {k}: {d.get(k)}")
+          import json, os
+          if os.path.exists("out/mediakit/latest.json"):
+              d = json.load(open("out/mediakit/latest.json"))
+              print("### Mediadaten", d["generated"])
+              for k in ("youtube", "cloudflare", "bing", "local", "yt_search"): print(f"- {k}: {d.get(k)}")
+          if os.path.exists("out/mediakit-con/latest.json"):
+              c = json.load(open("out/mediakit-con/latest.json"))
+              print("\n### M365Con-Sponsordeck", c["generated"])
+              print("- Abschnitte:", ", ".join(f"{k} {'ja' if v else 'nein'}" for k, v in c["sections"].items()))
+              for k in c["kpis"]: print(f"- {k['label']['de']}: {k['value']:,} ({k['source']['de']}, {k['period']['de']})")
+          else:
+              print("\n### M365Con-Sponsordeck: keine Kennzahlen - nichts hochgeladen (Log des Schritts pruefen)")
           PY
       - uses: actions/upload-artifact@v4
-        with: { name: mediakit, path: out/mediakit, retention-days: 14 }
+        if: always()
+        with: { name: mediakit, path: "out/mediakit*", retention-days: 14 }

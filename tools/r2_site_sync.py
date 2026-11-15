@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from r2_common import GONE_KEY, IMG, client, ctype, read_gone, upload, url_of   # noqa: E402
+from r2_common import GONE_KEY, IMG, client, ctype, read_gone, upload, url_of, THREADS   # noqa: E402
 
 MARKER = "r2-build.txt"
 META = {"src": "docs"}
@@ -96,7 +96,7 @@ def main(src):
             return k, None
         except Exception as e: return k, str(e)[:120]
     own, foreign, bad = [], 0, []
-    with ThreadPoolExecutor(16) as ex:
+    with ThreadPoolExecutor(THREADS) as ex:
         for k, md, e in ex.map(head, cand):
             if e: bad.append(k)
             elif md.get("src") == "docs": own.append(k)
@@ -109,7 +109,7 @@ def main(src):
         return fail(f"{n_guard} Dateien waeren als entfernt zu markieren, mehr als der Bau enthaelt ({len(files)}) - vermutlich falsches Verzeichnis. "
                     "Bei Absicht einmal mit R2_TOMBSTONE_FORCE=1 laufen lassen")
     marked = []
-    with ThreadPoolExecutor(16) as ex:
+    with ThreadPoolExecutor(THREADS) as ex:
         for k, e in ex.map(mark, own):
             if e:
                 bad.append(k)

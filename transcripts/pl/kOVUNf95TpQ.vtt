@@ -1,0 +1,634 @@
+WEBVTT
+
+00:00:00.140 --> 00:00:07.480
+Gotowi na 10 dni z Microsoft 365, kopilotem AI Azure oraz ludźmi kształtującymi przyszłość pracy?
+
+00:00:07.680 --> 00:00:12.600
+W styczniu powraca M365Con i tym razem działamy z jeszcze większym rozmachem.
+
+00:00:12.900 --> 00:00:18.360
+Dołącz do nas na sesję na żywo praktyczne dema i wiedzę od MVP oraz ekspertów z całego świata.
+
+00:00:18.620 --> 00:00:21.860
+Żadnych ogólnych slajdów, żadnych niekończących się korpomowy.
+
+00:00:22.240 --> 00:00:28.880
+Zajmujemy się prawdziwymi wyzwaniami, kopilot studio, agentami AI Fabric, bezpieczeństwem, ładem i automatyzacją.
+
+00:00:28.880 --> 00:00:35.140
+Niezależnie od tego, czy jesteś informatykiem, programistą czy liderem biznesu, mamy sesje stworzone dla Ciebie.
+
+00:00:35.380 --> 00:00:40.460
+Przez 10 pełnych dni możesz zgłębiać różne technologie i łączyć się z globalną społecznością.
+
+00:00:40.820 --> 00:00:44.580
+Oglądaj na żywo i zabierz praktyczne wnioski do swojej organizacji.
+
+00:00:44.580 --> 00:00:51.140
+Styczeń 2027 roku, 10 dni, jedna społeczność Microsoft. Rejestracja jest już otwarta.
+
+00:00:51.680 --> 00:00:53.580
+Zarezerwuj swoje miejsce już dziś.
+
+00:00:55.360 --> 00:00:57.560
+To m365.con.net
+
+00:00:57.560 --> 00:01:04.860
+Dołącz teraz na m365.con.net. Widzimy się na żywo w styczniu.
+
+00:01:05.020 --> 00:01:09.560
+Witamy w kolejnym odcinku pigułek wiedzy o Microsoft na M365FM.
+
+00:01:09.780 --> 00:01:15.020
+Nazywam się Melko Peters, a dzisiejszy temat to coś, o czym prawie każdy słyszał, ale mało kto rozumie Azure Express Route.
+
+00:01:15.020 --> 00:01:19.200
+Czym dokładniej jest to rozwiązanie? Czy to tylko wymyślny VPN, czy może coś zupełnie innego?
+
+00:01:19.400 --> 00:01:21.460
+Wyobraź sobie, że jutro zakładasz nową firmę.
+
+00:01:21.600 --> 00:01:24.520
+Polegasz na aplikacjach w chmurze, współdzieleniu plików i pracy zdalnej.
+
+00:01:24.520 --> 00:01:27.900
+Każdego dnia Twoje połączenie z Azure przechodzi przez publiczny internet.
+
+00:01:28.100 --> 00:01:30.620
+To jak jazda autostradą z nieprzewidywalnym ruchem.
+
+00:01:30.860 --> 00:01:38.160
+Sprawdza się przy poczcie e-mail, ale gdy przesyłasz kluczowe dane lub używasz aplikacji czasu rzeczywistego, szybkość i niezawodność mają ogromne znaczenie.
+
+00:01:38.860 --> 00:01:45.300
+Azure Express Route to prywatny pas ruchu, dedykowane łącze fizyczne z Twojego biura lub centrum danych prosto do sieci Microsoftu.
+
+00:01:45.300 --> 00:01:52.780
+Pod koniec tego odcinka zrozumiesz, czym naprawdę jest Express Route, jak jest zbudowany i czy Twoja firma powinna go używać zamiast zwykłego VPN.
+
+00:01:53.000 --> 00:01:54.540
+Analogia prywatnej autostrady.
+
+00:01:54.780 --> 00:01:58.800
+Wyobraźmy sobie publiczny internet jako zatłoczoną, dwupasmową autostradę dzieloną ze wszystkimi.
+
+00:01:59.020 --> 00:02:01.980
+Dostawcy dojeżdżający do pracy i turyści blokują tę samą drogę.
+
+00:02:02.140 --> 00:02:07.840
+Twoje pakiety danych utykają w tym ruchu za każdym razem, gdy ktoś streamuje film lub pobiera duży plik ruch Twojej firmy zwalnia.
+
+00:02:08.060 --> 00:02:10.580
+Taka jest rzeczywistość dzielenia drogi z całym światem.
+
+00:02:10.580 --> 00:02:17.800
+Express Route tworzy prywatny, zarezerwowany pas, który łączy Twoją sieć lokalną bezpośrednio z Azure, dzięki czemu Twój ruch całkowicie omija internet.
+
+00:02:18.000 --> 00:02:23.320
+Oznacza to stałą prędkość, mniejsze opóźnienia i większe bezpieczeństwo, ponieważ Twoje dane nigdy nie dotykają publicznej drogi.
+
+00:02:23.460 --> 00:02:31.320
+To nie magia, to fizyczne lub wirtualne połączenie wykonane przez partnera, takiego jak Equinix Megaport lub bezpośrednio z Microsoftem przez tak zwany Express Route Direct.
+
+00:02:31.600 --> 00:02:37.020
+Rezultatem jest przewidywalna wydajność bez walki o przepustowość oraz gwarancja dostępności SLA od Microsoftu.
+
+00:02:37.020 --> 00:02:40.800
+Oto sedno sprawy, główna idea, połączenie prywatne zamiast publicznego.
+
+00:02:41.000 --> 00:02:42.560
+Cała reszta to tylko szczegóły.
+
+00:02:42.800 --> 00:02:45.440
+Gdy to zrozumiesz, reszta Express Route stanie się jasna.
+
+00:02:45.660 --> 00:02:48.020
+Elementy składowe, obwód, peering, brama.
+
+00:02:48.280 --> 00:02:50.360
+Jak więc powstaje ta prywatna autostrada?
+
+00:02:50.620 --> 00:02:52.080
+Omówmy główne komponenty.
+
+00:02:52.320 --> 00:02:56.720
+Obwód Express Route to podstawa fizyczny, kabel lub łącze wirtualne zamawiane u dostawcy.
+
+00:02:56.960 --> 00:02:59.180
+Zawiera dwa połączenia dla wbudowanej redendencji.
+
+00:02:59.440 --> 00:03:01.520
+Jeśli jedno łącze zawiedzie, drugie działa dalej.
+
+00:03:01.680 --> 00:03:03.680
+To jest wbudowane w każdy obwód domyślnie.
+
+00:03:03.680 --> 00:03:06.560
+Na tym obwodzie konfiguruje się tak zwane peeringi.
+
+00:03:06.940 --> 00:03:09.060
+To oddzielne bramy dla różnych typów ruchu.
+
+00:03:09.180 --> 00:03:10.480
+Musisz znać dwa główne.
+
+00:03:10.680 --> 00:03:13.680
+Private Peering łączy się z Twoimi sieciami wirtualnymi Azure.
+
+00:03:13.900 --> 00:03:17.460
+To tam znajdują się Twoje maszyny wirtualne, bazy danych i aplikacje wewnętrzne.
+
+00:03:17.620 --> 00:03:19.920
+To brama używana dla Twoich prywatnych obciążeń.
+
+00:03:20.080 --> 00:03:22.700
+Następnie Microsoft Peering łączy się z publicznymi usługami Microsoft,
+
+00:03:22.920 --> 00:03:27.220
+takimi jak Microsoft 365, Dynamics 365 i publiczne punkty końcowe Azure.
+
+00:03:27.380 --> 00:03:30.520
+To brama dostępu do aplikacji SAS i innych usług Microsoft.
+
+00:03:30.520 --> 00:03:35.980
+Aby połączyć obwód z siecią wirtualną Azure, potrzebujesz bramy sieci wirtualnej ExpressRoute.
+
+00:03:36.200 --> 00:03:42.420
+Pomyśl o niej jak o specjalnym routerze w sieci Azure, który komunikuje się z obwodem za pomocą protokołu BGP.
+
+00:03:42.680 --> 00:03:46.700
+BGP to sposób, w jaki obie strony automatycznie wymieniają informacje o trasach.
+
+00:03:46.880 --> 00:03:48.520
+Nie potrzeba ręcznych tablic routingu.
+
+00:03:48.800 --> 00:03:54.500
+Brama występuje w różnych rozmiarach – standard, high performance, ultra performance – w zależności od spodziewanego ruchu.
+
+00:03:54.500 --> 00:04:00.600
+Istnieje też FastPuff – opcjonalna funkcja pozwalająca na ominięcie bramy dla jeszcze niższych opóźnień przy szybkich łączach.
+
+00:04:00.760 --> 00:04:05.540
+Przy prędkościach 10 Gbps lub wyższych FastPuff robi zauważalną różnicę.
+
+00:04:05.700 --> 00:04:12.140
+Te trzy elementy – obwód Peering i brama – tworzą kompletną prywatną autostradę z Twojego biura do zasobów w chmurze.
+
+00:04:12.360 --> 00:04:17.100
+Każdy pełni określoną rolę, a razem tworzą niezawodne, szybkie i bezpieczne połączenie.
+
+00:04:17.380 --> 00:04:20.240
+Dwa sposoby połączenia – przez dostawcę lub bezpośrednie.
+
+00:04:20.240 --> 00:04:25.680
+Większość firm wybiera AT&T, Verizon lub dostawcę chmurowego jak Megaport czy Equinix.
+
+00:04:25.900 --> 00:04:34.820
+Dostawca obsługuje połączenie fizyczne z Twojej lokalizacji do najbliższego punktu Peeringu ExpressRoute, czyli węzła brzekowego Microsoft, gdzie następuje przekazanie danych.
+
+00:04:35.020 --> 00:04:38.460
+Podajesz im tylko klucz usługi z portalu Azure, a oni zajmują się resztą.
+
+00:04:38.640 --> 00:04:40.880
+To podejście jest prostsze i szybsze w konfiguracji.
+
+00:04:41.120 --> 00:04:44.640
+Obsługuje przepustowość od 50 Mbit na sekundę aż do 10 Gbit.
+
+00:04:44.640 --> 00:04:50.560
+Dostawca zarządza odcinkiem pośrednim, więc nie musisz martwić się o fizyczną infrastrukturę między biurem a siecią Microsoft.
+
+00:04:51.060 --> 00:04:52.780
+Alternatywą jest ExpressRoute Direct.
+
+00:04:53.000 --> 00:04:58.720
+W przypadku Direct otrzymujesz dwa fizyczne porty w lokalizacji peeringowej, oferujące przepustowość 10, 100, a nawet 400 Gbit na portugalski.
+
+00:04:58.920 --> 00:05:06.460
+Direct jest przeznaczony do scenariuszy o dużym natężeniu, takich jak ogromne migracje danych, branże regulowane wymagające izolacji fizycznej lub łączenie wielu chmur przez jeden zestaw portów.
+
+00:05:06.460 --> 00:05:08.040
+Oto minusy tego rozwiązania.
+
+00:05:08.260 --> 00:05:18.080
+Direct daje większą kontrolę i wyższe prędkości, ale sam odpowiadasz za zarządzanie fizycznym połączeniem, krosowanie w centrum danych, koordynację z obiektem oraz rozwiązywanie problemów ze sprzętem.
+
+00:05:18.360 --> 00:05:21.620
+Dla 90% firm model dostawcy jest właściwym wyborem.
+
+00:05:21.900 --> 00:05:28.020
+Direct jest dla ścisłej czołówki organizacji, które potrzebują maksymalnej przepustowości lub mają specyficzne wymagania dotyczące zgodności.
+
+00:05:28.240 --> 00:05:30.760
+Utrzymanie łączności, odporność i redundencja.
+
+00:05:30.760 --> 00:05:36.380
+Każdy obwód ExpressRoute ma wbudowaną redundencję, dwa fizyczne połączenia z dwoma oddzielnymi routrami brzekowymi firmy Microsoft.
+
+00:05:36.680 --> 00:05:39.560
+Jeśli jedno łącze ulegnie awarii, drugie zapewnia ciągłość ruchu.
+
+00:05:39.660 --> 00:05:43.660
+To standardowe ustawienie, ale jest pewien haczyk Microsoft chce, abyś myślał bardziej perspektywicznie.
+
+00:05:43.820 --> 00:05:47.460
+Prawdziwym zagrożeniem nie jest uszkodzony światłowód, lecz utrata całej lokalizacji peelingowej.
+
+00:05:47.680 --> 00:05:53.640
+Wyobraź sobie pożar w centrum danych, ekipę budowlaną, przecinającą główny kabel lub awarię zasilania, która wyłącza cały obiekt.
+
+00:05:53.760 --> 00:05:57.540
+To zdarzenie, które unieruchamia pojedynczy obwód, nawet jeśli ma redundantne łącza.
+
+00:05:57.540 --> 00:06:01.880
+Masz do wyboru trzy poziomy odporności. Standard to rozwiązanie, które otrzymujesz domyślnie.
+
+00:06:02.100 --> 00:06:03.760
+Dwa łącza w jednej lokalizacji peelingowej.
+
+00:06:03.960 --> 00:06:07.540
+Wysoka odporność zapewnia jedno łącze w każdej z dwóch różnych lokalizacji peelingowych w tym samym obszarze metropolitalnym.
+
+00:06:08.300 --> 00:06:10.040
+Maksymalna odporność idzie o krok dalej.
+
+00:06:10.280 --> 00:06:13.740
+Dwa oddzielne obwody w dwóch różnych lokalizacjach peelingowych, każdy z własną parą łączy.
+
+00:06:13.920 --> 00:06:18.380
+To złoty standard. Możesz stracić całą lokalizację peelingową, a łączność nadal będzie działać.
+
+00:06:18.560 --> 00:06:22.240
+Dlaczego to ma znaczenie? Ponieważ ExpressRoute często obsługuje krytyczne zadania.
+
+00:06:22.460 --> 00:06:24.080
+Przestój oznacza utratę przychodów.
+
+00:06:24.080 --> 00:06:26.960
+Szpital nie może pozwolić sobie na utratę dostępu do dokumentacji pacjentów.
+
+00:06:27.100 --> 00:06:29.760
+Firma handlowa nie może pozwolić sobie nawet na kilka sekund przerwy.
+
+00:06:29.960 --> 00:06:33.080
+Dlatego w takich scenariuszach dodatkowa inwestycja w redondencję ma sens.
+
+00:06:33.280 --> 00:06:37.560
+Możesz również połączyć ExpressRoute z zapasową siecią VPN jako tańszą opcję przełączania awaryjnego.
+
+00:06:37.800 --> 00:06:42.540
+Gdy ExpressRoute nie działa, VPN obsługuje mniej ważny ruch lub służy jako zapasowa ścieżka dla kluczowych usług.
+
+00:06:42.780 --> 00:06:44.900
+Wiele przedsiębiorstw stosuje to podejście hybrydowe.
+
+00:06:45.100 --> 00:06:47.640
+ExpressRoute do ważnych zadań VPN jako sieć bezpieczeństwa.
+
+00:06:47.840 --> 00:06:50.820
+Główny wniosek jest prosty. Nie zakładaj, że jeden obwód wystarczy.
+
+00:06:50.820 --> 00:06:55.440
+Planuj na wypadek nieoczekiwanych zdarzeń. Twoje połączenie jest tak niezawodne, jak jego najsłabsze ogniwo.
+
+00:06:55.660 --> 00:06:59.760
+ExpressRoute kontra VPN typu site to site. Oto pytanie, które słyszę cały czas.
+
+00:06:59.980 --> 00:07:03.280
+Obie usługi łączą sieć lokalną z Azure, ale działają zupełnie inaczej.
+
+00:07:03.520 --> 00:07:05.600
+VPN korzysta z publicznego internetu.
+
+00:07:05.740 --> 00:07:12.100
+Twoje dane są szyfrowane, więc są bezpieczne w przesyłaniu, ale jesteś zdany na łaskę przeciążeń internetu, decyzji o trasowaniu dostawców i zmienne opóźnienia.
+
+00:07:12.320 --> 00:07:16.700
+Najwyższa jednostka SK u bramy VPN osiąga maksymalnie około 1,25 gigabita na sekundę.
+
+00:07:16.700 --> 00:07:22.160
+Dla wielu scenariuszy to wystarczy, ale jest to sztywny limit. ExpressRoute jest prywatny. Nie korzysta z internetu.
+
+00:07:22.300 --> 00:07:25.820
+Opóźnienia są przewidywalne, ponieważ ruch pozostaje w sieci szkieletowej Microsoft.
+
+00:07:26.220 --> 00:07:32.180
+Przepustowość sięga nawet 100 gigabitów na sekundę. Microsoft gwarantuje 99,9% dostępności dla samego połączenia.
+
+00:07:32.380 --> 00:07:34.220
+Koszty to moment weryfikacji rzeczywistości.
+
+00:07:34.420 --> 00:07:35.920
+VPN jest znacznie tańszy.
+
+00:07:36.120 --> 00:07:40.640
+Typowa mała lub średnia firma płaci od dwucyfrowych do niskich trzycyfrowych kwot miesięcznie za swoją bramę VPN.
+
+00:07:40.880 --> 00:07:46.120
+ExpressRoute zaczyna się od wysokich kwot trzycyfrowych i może wzrosnąć do tysięcy, zwłaszcza po dodaniu opłat dostawcy.
+
+00:07:46.120 --> 00:07:51.520
+Dostawca nalicza opłaty za fizyczne połączenie, połączenia krosowe, łącza ostatniej mili i opłaty portowe.
+
+00:07:51.700 --> 00:07:54.660
+Koszty te często przewyższają opłaty Azure za samo łącze.
+
+00:07:54.860 --> 00:07:56.760
+Czas konfiguracji to kolejna duża różnica.
+
+00:07:57.000 --> 00:07:58.960
+VPN można udostępnić w kilka godzin.
+
+00:07:59.140 --> 00:08:01.240
+Tworzysz bramę, konfigurujesz tunel i gotowe.
+
+00:08:01.460 --> 00:08:05.080
+ExpressRoute zajmuje od dni do tygodni, ponieważ dostawca musi fizycznie skonfigurować połączenie.
+
+00:08:05.340 --> 00:08:06.400
+Nie da się tego przyspieszyć.
+
+00:08:06.620 --> 00:08:08.040
+Bezpieczeństwo również działa inaczej.
+
+00:08:08.220 --> 00:08:10.100
+VPN posiada wbudowane szyfrowanie IPSED.
+
+00:08:10.100 --> 00:08:12.100
+Twój ruch jest szyfrowany od końca do końca.
+
+00:08:12.100 --> 00:08:15.560
+ExpressRoute zapewnia prywatną ścieżkę, ale nie szyfruje wszystkiego automatycznie.
+
+00:08:15.760 --> 00:08:20.460
+Jeśli potrzebujesz szyfrowania w ramach prywatnego łącza, potrzebujesz dodatkowych środków, takich jak MadSets w ExpressRoute Direct.
+
+00:08:20.680 --> 00:08:23.280
+Dla większości firm sama prywatna ścieżka jest wystarczająca.
+
+00:08:23.480 --> 00:08:27.580
+Jeśli jednak Twoje wymagania dotyczące zgodności wymagają szyfrowania na poziomie sieci, musisz to zaplanować.
+
+00:08:27.780 --> 00:08:29.260
+Więc kiedy używać każdego z nich?
+
+00:08:29.440 --> 00:08:34.640
+VPN jest świetny do środowisk testowych i deweloperskich małych biur z lekkim obciążeniem lub jako połączenie zapasowe.
+
+00:08:34.640 --> 00:08:41.120
+ExpressRoute jest dla systemów produkcyjnych, aplikacji o dużej przepustowości, środowisk wymagających zgodności lub wszystkiego wrażliwego na opóźnienia.
+
+00:08:41.360 --> 00:08:42.960
+Wiele przedsiębiorstw używa obu.
+
+00:08:43.160 --> 00:08:46.200
+VPN dla mniej krytycznego ruchu ExpressRoute dla ważnych rzeczy.
+
+00:08:46.480 --> 00:08:47.500
+Wniosek jest prosty.
+
+00:08:47.680 --> 00:08:50.240
+VPN jest wystarczająco dobry dla wielu scenariuszy.
+
+00:08:50.440 --> 00:08:55.420
+ExpressRoute to przesada, chyba że naprawdę potrzebujesz wydajności, przewidywalności lub korzyści związanych ze zgodnością.
+
+00:08:55.600 --> 00:08:58.560
+Nie płać za prywatny pas ruchu, jeśli publiczna droga działa dobrze.
+
+00:08:58.740 --> 00:09:00.980
+Kiedy prawdziwe firmy korzystają z ExpressRoute.
+
+00:09:00.980 --> 00:09:03.340
+Więc gdzie ExpressRoute faktycznie robi różnicę?
+
+00:09:03.500 --> 00:09:07.200
+Przejdźmy przez kilka rzeczywistych przykładów, w których teoria staje się praktyką.
+
+00:09:07.380 --> 00:09:09.040
+Opieka zdrowotna to ważny przykład.
+
+00:09:09.260 --> 00:09:15.280
+Pomyśl o szpitalu, który musi przenieść duże pliki MR i tomografii komputerowej z pamięci lokalnej do Azure w celu analizy.
+
+00:09:15.460 --> 00:09:18.660
+W publicznym internecie zmienne opóźnienia mogą spowolnić działanie.
+
+00:09:18.880 --> 00:09:23.820
+Radiolog czekający na załadowanie obrazów jest nie tylko sfrustrowany, może opóźniać opiekę nad pacjentem.
+
+00:09:24.020 --> 00:09:28.420
+ExpressRoute zapewnia stałą prędkość, więc obrazy docierają dokładnie wtedy, kiedy są oczekiwane.
+
+00:09:28.420 --> 00:09:30.380
+Finanse to kolejny wyraźny przykład.
+
+00:09:30.380 --> 00:09:33.680
+Aplikacje transakcyjne wymagają niskich i przewidywalnych opóźnień.
+
+00:09:33.840 --> 00:09:36.740
+Nawet 20 milisekund wahań może kosztować realne pieniądze.
+
+00:09:36.920 --> 00:09:41.860
+W handlu wysokiej częstotliwości to różnica między wykonaniem transakcji a całkowitym przegapieniem okazji.
+
+00:09:42.060 --> 00:09:45.860
+ExpressRoute zapewnia im gwarantowaną ścieżkę z wydajnością, na której mogą polegać.
+
+00:09:45.980 --> 00:09:47.480
+Teraz porozmawiajmy o produkcji.
+
+00:09:47.680 --> 00:09:53.520
+Fabryki z czujnikami IOT przesyłają ciągłe strumienie danych do Azure, a przerwa w dostępie do internetu mogłaby zatrzymać linię produkcyjną.
+
+00:09:53.520 --> 00:09:59.020
+Jeśli czujnik przestanie wysyłać dane, system może uznać, że maszyna uległa awarii i uruchomić zatrzymanie awaryjne.
+
+00:09:59.220 --> 00:10:03.640
+ExpressRoute zapewnia niezawodność, której te ciągłe strumienie danych potrzebują, aby wszystko działało.
+
+00:10:03.800 --> 00:10:06.060
+Odzyskiwanie po awarii to ważny przypadek użycia.
+
+00:10:06.260 --> 00:10:10.900
+Organizacje replikują całe centra danych do Azure, co oznacza ciągłe przesyłanie terabajtów danych.
+
+00:10:11.140 --> 00:10:15.460
+ExpressRoute zapewnia wysoką przepustowość i umowę SL, a niezbędną do replikacji synchronicznej.
+
+00:10:15.460 --> 00:10:20.940
+Przy użyciu VPN możesz mieć trudności z dotrzymaniem celów czasu odzyskiwania, ponieważ połączenie po prostu nie obsłuży takiej przepustowości.
+
+00:10:21.100 --> 00:10:24.560
+Transfery dużych ilości danych to kolejny obszar, w którym ExpressRoute naprawdę się opłaca.
+
+00:10:24.780 --> 00:10:29.620
+Jeśli przesyłasz terabajty lub petabajty danych do Azure plików multimedialnych, danych badawczych czy archiwów historycznych,
+
+00:10:29.720 --> 00:10:33.760
+nieograniczony plan danych w ExpressRoute może być tańszy niż płacenie opłat za ruch wychodzący w internecie.
+
+00:10:33.940 --> 00:10:35.520
+W dużej skali rachunek się zmienia.
+
+00:10:35.760 --> 00:10:40.360
+Stały koszt łącza staje się bardziej ekonomiczny niż płacenie za każdy gigabajt przy ogromnych transferach danych.
+
+00:10:40.420 --> 00:10:42.500
+Istnieje również łączność wielooddziałowa.
+
+00:10:42.500 --> 00:10:49.980
+Dzięki ExpressRoute Global Leach możesz połączyć dwa zdalne biura przy użyciu tego samego łącza, kierując ruch przez szkieletową sieć Microsoft zamiast przez Azure.
+
+00:10:50.220 --> 00:10:53.820
+W niektórych scenariuszach może to zastąpić lub uzupełnić tradycyjne połączenie One.
+
+00:10:53.980 --> 00:10:57.120
+To sytuacje, w których dodatkowy koszt ExpressRoute zwraca się sam.
+
+00:10:57.320 --> 00:11:00.580
+Uniknięte przestoje, szybsze operacje i spełnione wymogi zgodności.
+
+00:11:00.860 --> 00:11:02.640
+Gdy podliczysz koszty, pytanie się zmienia.
+
+00:11:02.840 --> 00:11:06.680
+To już nie jest, czy stać mnie na ExpressRoute, tylko czy stać mnie na to, by go nie mieć.
+
+00:11:06.840 --> 00:11:08.000
+Proces udostępniania.
+
+00:11:08.320 --> 00:11:10.240
+Zdecydowałeś więc, że ExpressRoute ma sens.
+
+00:11:10.240 --> 00:11:11.660
+Jak właściwie go uzyskać?
+
+00:11:11.660 --> 00:11:14.980
+W tym momencie wiele osób czuje się zagubionych, ponieważ nie polega to na pstryknięciu przełącznikiem.
+
+00:11:15.100 --> 00:11:16.220
+To proces dwuetapowy.
+
+00:11:16.400 --> 00:11:17.820
+Krok pierwszy odbywa się w Azure.
+
+00:11:18.040 --> 00:11:19.960
+Tworzysz łącze ExpressRoute w portalu.
+
+00:11:20.140 --> 00:11:21.340
+Ta część jest szybka.
+
+00:11:21.600 --> 00:11:23.120
+Zasób pojawia się w kilka minut.
+
+00:11:23.360 --> 00:11:26.300
+Nadajesz mu nazwę, wybierasz przepustowość i wskazujesz dostawcę.
+
+00:11:26.440 --> 00:11:27.560
+Ale jest pewien haczył.
+
+00:11:27.720 --> 00:11:30.160
+Łącze istnieje w Azure, ale nie jest jeszcze gotowe do użycia.
+
+00:11:30.300 --> 00:11:32.800
+To jak zamawianie zjazdu z autostrady, który jeszcze nie został zbudowany.
+
+00:11:32.980 --> 00:11:35.320
+Krok drugi to moment, w którym odbywa się właściwa praca.
+
+00:11:35.320 --> 00:11:39.860
+Pobierasz klucz usługi złącza, to unikalny identyfikator i przekazujesz go swojemu dostawcy.
+
+00:11:40.060 --> 00:11:45.800
+Następnie konfigurują oni fizyczne połączenie z Twojej lokalizacji do routera brzekowego Microsoft w punkcie komunikacji Peering Location.
+
+00:11:46.000 --> 00:11:48.920
+To część, która zajmuje czas, dni, a czasem nawet tygodnie.
+
+00:11:49.180 --> 00:11:55.340
+Zależy to od obłożenia dostawcy, czy konieczne jest ręczne krosowanie połączeń i czy w punkcie styku jest wolna przepustowość.
+
+00:11:55.340 --> 00:12:00.460
+Gdy dostawca zakończy pracę, status u dostawcy w Azure zmieni się z nieprzydzielonego na przydzielony.
+
+00:12:00.640 --> 00:12:03.320
+To dla Ciebie sygnał, że połączenie fizyczne jest gotowe.
+
+00:12:03.560 --> 00:12:07.680
+Dopiero teraz możesz skonfigurować komunikację równorzędną i podłączyć ją do bramy sieci wirtualnej.
+
+00:12:07.900 --> 00:12:11.280
+Następnie tworzysz obiekt połączenia, który łączy obwód z Twoją bramą.
+
+00:12:11.520 --> 00:12:14.600
+Sesja BGP ustanawia się automatycznie i trasy zaczynają przepływać.
+
+00:12:14.780 --> 00:12:16.720
+Twoja prywatna autostrada jest otwarta do działania.
+
+00:12:16.920 --> 00:12:17.660
+Całkowity czas?
+
+00:12:17.840 --> 00:12:19.020
+Po stronie Azure godziny.
+
+00:12:19.180 --> 00:12:20.960
+Po stronie dostawcy potencjalnie tygodnie.
+
+00:12:21.180 --> 00:12:22.160
+Wniosek jest prosty.
+
+00:12:22.160 --> 00:12:23.300
+Planuj z wyprzedzeniem.
+
+00:12:23.460 --> 00:12:26.020
+Nie czekaj z rozpoczęciem procesu, aż będziesz potrzebować połączenia.
+
+00:12:26.260 --> 00:12:28.700
+Zamów obwód na tygodnie przed planowanym oknem migracji.
+
+00:12:28.860 --> 00:12:30.060
+Czy to rozwiązanie dla Ciebie?
+
+00:12:30.200 --> 00:12:32.560
+Po tym wszystkim, co omówiliśmy, najważniejsze pytanie brzmi.
+
+00:12:32.640 --> 00:12:33.980
+Czy naprawdę potrzebujesz ExpressRoot?
+
+00:12:34.140 --> 00:12:35.340
+Bądźmy ze sobą szczerzy.
+
+00:12:35.580 --> 00:12:37.760
+Zacznij od analizy tego, czego naprawdę potrzebujesz.
+
+00:12:37.940 --> 00:12:41.060
+Jeśli masz obciążenia wymagające stałych opóźnień lub dużej przepustowości,
+
+00:12:41.180 --> 00:12:42.380
+ExpressRoot może być tego wart.
+
+00:12:42.520 --> 00:12:45.160
+Ale jeśli przesyłasz tylko niewielkie ilości danych od czasu do czasu,
+
+00:12:45.280 --> 00:12:46.880
+VPN sprawdzi się wystarczająco dobrze.
+
+00:12:46.880 --> 00:12:49.920
+Dla małej firmy z kilkoma użytkownikami i aplikacjami w chmurze,
+
+00:12:50.040 --> 00:12:52.140
+ExpressRoot byłby przesadą i zbyt dużym kosztem.
+
+00:12:52.300 --> 00:12:55.180
+Nie daj sobie wmówić marketingowi, że potrzebujesz prywatnej autostrady,
+
+00:12:55.300 --> 00:12:56.640
+gdy zwykła droga sprawdza się dobrze.
+
+00:12:56.880 --> 00:13:00.880
+Jeśli natomiast jesteś średnią lub dużą firmą obsługującą krytyczne aplikacje w Azure
+
+00:13:00.880 --> 00:13:04.360
+lub masz wymogi zgodności w opiece zdrowotnej, finansach, administracji.

@@ -4,6 +4,7 @@
 - related: verwandte Beitraege ueber gemeinsame Themen (Hauptthema zaehlt doppelt), dann nach Datum.
 Ergebnisse der Zuordnung werden je Beitrag in data/cache/blog_topics.json gehalten (Hash von Titel und Textanfang)."""
 import hashlib, html as _h, json, re
+from functools import lru_cache
 from pathlib import Path
 
 ROOT = Path(__file__).parent
@@ -64,6 +65,9 @@ def score_topics(ix, title, text, k=10, key=None):
     return top
 
 
+_rx_big = lru_cache(maxsize=32)(re.compile)   # das Muster aller Entitaetsnamen (~50 KB) nicht je Beitrag neu kompilieren, falls der re-Cache (512) es verdraengt hat
+
+
 _SKIP = re.compile(r"<(a|h1|h2|h3|h4|h5|h6|code|pre|script|style|figure|figcaption)\b[^>]*>.*?</\1>", re.S | re.I)
 
 
@@ -77,7 +81,7 @@ def autolink_html(html, ents, url_of, max_links=8, exclude=()):
             if len(n) >= 4 and (len(n) >= 6 or " " in n or n in ("Teams", "Excel", "Azure", "Loop", "Viva")): names.append((n, e["id"]))
     if not names: return html, []
     names.sort(key=lambda x: -len(x[0]))
-    rx = re.compile(r"(?<![\w-])(" + "|".join(re.escape(n) for n, _ in names) + r")(?![\w-])")
+    rx = _rx_big(r"(?<![\w-])(" + "|".join(re.escape(n) for n, _ in names) + r")(?![\w-])")   # einmal je Bau (je Muster) kompiliert
     byname = {n.lower(): i for n, i in names}
     # geschuetzte Bereiche herausnehmen
     parts, pos, used, links = [], 0, set(), []

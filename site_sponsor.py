@@ -75,6 +75,11 @@ def url(base, lang):
     return f"{base}/sponsor/" if lang == "en" or lang not in LANGS_ALL else f"{base}/{lang}/sponsor/"
 
 
+def mediakit_url(base, lang):
+    """Mediadaten-Seite: nur EN und DE (site_mediakit.py), andere Sprachen auf EN."""
+    return f"{base}/de/media-kit/" if lang == "de" else f"{base}/media-kit/"
+
+
 def dashboard_url(base, lang):
     return f"{base}/sponsor/dashboard/" if lang == "en" else f"{base}/{lang}/sponsor/dashboard/"
 
@@ -123,6 +128,10 @@ def dashboard_copy(lang):
         "clicks": ("Clicks", "Klicks"),
         "downloads": ("Episode downloads", "Folgen-Downloads"),
         "ended": ("Ended", "Beendet"),
+        # Status Stand heute (Mirko 11.11.2026): laeuft -> Karenzzeit bis TT.MM.JJJJ (end + 182 Tage) -> beendet, Zahlen bleiben sichtbar; 13 weitere Sprachen in data/py_i18n.json
+        "running": ("Running", "Läuft"),
+        "grace_until": ("Grace period until", "Karenzzeit bis"),
+        "ended_visible": ("Ended – figures stay visible", "Beendet – Zahlen weiter sichtbar"),
         "dashboard": ("Overview", "Übersicht"),
         "placement_view": ("Placement detail", "Platzierungsdetails"),
         "report_view": ("Monthly report", "Monatsbericht"),
@@ -168,6 +177,12 @@ def dashboard_copy(lang):
         "rule_leads": ("Leads are shared only with consent.", "Leads geben wir nur mit Einwilligung weiter."),
         "rule_source": ("Every figure shows its source and latest update.", "Jede Kennzahl zeigt Quelle und letzten Datenstand."),
         "search_impressions": ("Search impressions", "Such-Impressionen"),
+        "ads_title": ("Booked ad placements", "Gebuchte Werbeplätze"),
+        "ads_impressions": ("Impressions", "Einblendungen"),
+        "ads_ctr": ("Click rate", "Klickrate"),
+        "ads_leads": ("Leads", "Leads"),
+        "ads_volume": ("Used / booked", "Verbraucht / gebucht"),
+        "ads_note": ("Counted on M365.FM without cookies; bots are filtered out. Leads are listed on the ad placements page.", "Auf M365.FM ohne Cookies gezählt; Bots werden herausgefiltert. Leads stehen auf der Seite Werbeplätze."),
         "detail_intro": ("Placement performance and source data", "Leistung und Quelldaten der Platzierung"),
         "podcast_tab": ("Podcast", "Podcast"),
         "video_tab": ("Video", "Video"),
@@ -213,7 +228,8 @@ def dashboard_copy(lang):
         "source_press": ("Press Ranger", "Press Ranger"),
         "source_spreaker": ("Spreaker", "Spreaker"),
         "source_youtube": ("YouTube Analytics", "YouTube Analytics"),
-        "source_cloudflare": ("Cloudflare analytics", "Cloudflare Analytics"),
+        "source_cloudflare": ("Cloudflare edge statistics (unfiltered)", "Cloudflare-Randstatistik (ungefiltert)"),
+        "source_cloudflare_rum": ("Cloudflare Web Analytics", "Cloudflare Web Analytics"),
         "source_counter": ("M365.FM link counter", "M365.FM-Linkzähler"),
         "source_gsc": ("Google Search Console", "Google Search Console"),
         "source_bing_webmaster": ("Bing Webmaster Tools", "Bing Webmaster Tools"),
@@ -223,7 +239,10 @@ def dashboard_copy(lang):
         "source_reach": ("Cross-channel estimate", "Kanalübergreifende Schätzung"),
         "source_desc_spreaker": ("Plays per sponsored episode; no per-listener data.", "Aufrufe gesponserter Folgen; keine Daten einzelner Hörer."),
         "source_desc_youtube": ("Views and watch time, after Analytics access is enabled.", "Aufrufe und Wiedergabezeit nach Freigabe des Analytics-Zugriffs."),
-        "source_desc_cloudflare": ("Page views by URL; no cookies or client-side tracking.", "Seitenaufrufe je URL; keine Cookies und kein Client-Tracking."),
+        "source_desc_cloudflare": ("Requests by URL at the edge, unfiltered and including bots; only used where Web Analytics has no value.",
+                                   "Anfragen je URL am Rand, ungefiltert und einschließlich Bots; nur genutzt, wo Web Analytics keinen Wert hat."),
+        "source_desc_cloudflare_rum": ("Real page loads in the browser by URL (cookie-free beacon), bots largely excluded; available since 29 Oct 2026.",
+                                       "Echte Seitenaufrufe im Browser je URL (Beacon ohne Cookies), Bots weitgehend ausgeschlossen; verfügbar seit 29.10.2026."),
         "source_desc_counter": ("Cookie-free daily totals by link and page surface.", "Cookiefreie Tagessummen je Link und Fläche."),
         "source_desc_gsc": ("Impressions and clicks for sponsored URLs.", "Impressions und Klicks für gesponserte URLs."),
         "source_desc_bing_webmaster": ("Page statistics for sponsored URLs.", "Seitenstatistik für gesponserte URLs."),
@@ -277,7 +296,7 @@ DASHBOARD_CSS = """:root{--sdb-measured:#2f6b3a;--sdb-estimated:var(--ac);--sdb-
 .sdb-row-link{display:block;color:var(--fg);text-decoration:none}.sdb-row-link:hover{color:var(--ac)}
 .sdb-status{white-space:nowrap}.sdb-source-inline{display:block;margin-top:.35em}.sdb-rule-box{background:var(--ink);color:var(--bg)}
 .sdb-form{display:grid;gap:.8em;border-top:1px solid var(--bd);margin-top:1.5em;padding-top:1em}
-.sdb-form label{display:grid;gap:.25em}.sdb-form input,.sdb-form select{max-width:40em;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--bd);padding:.6em}
+.sdb-form label{display:grid;gap:.25em}.sdb-form input,.sdb-form select{width:100%;max-width:40em}
 .sdb-status{border:1px solid var(--bd);padding:.05em .5em}
 .sdb-chart{min-height:8em;display:grid;gap:.6em}.sdb-bars{height:12em;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.5em;align-items:end;border-bottom:1px solid var(--bd)}
 .sdb-bar-group{height:100%;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:1px;min-width:0}.sdb-bar-group small{font-size:.65em;color:var(--mut);overflow:hidden}
@@ -423,7 +442,8 @@ def default_state(quick):
     d = PRICING["defaults"]
     tops = [{k: q[k] for k in ("id", "name", "en", "lvl", "rated", "example", "custom", "url")} for q in quick if q["default"]]
     return {"goal": d["goal"], "rt": d["runtime"], "topics": tops, "video": False, "pr": bool(d["pr"]), "auth": False, "dash": False, "l14": False,
-            "topic": False, "expert": False, "li": False, "con": False, "cnt": {"pr": 1, "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]}, "prTouched": False}
+            "ads": False, "expert": False, "li": False, "live": False, "con": False,
+            "cnt": {"pr": 1, "ex": d["cnt"]["ex"], "li": d["cnt"]["li"], "lv": d["cnt"].get("lv", 1)}, "prTouched": False}
 
 
 # ---- Seite ----
@@ -443,8 +463,9 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-dot:after{content:"";position:absolute;inset:-4px;border-radius:50%;background:var(--spn-on);opacity:.22}
 @media (prefers-reduced-motion:no-preference){.spn-dot:after{animation:spn-pulse 2.4s ease-in-out infinite;will-change:transform,opacity}}
 @keyframes spn-pulse{50%{transform:scale(1.35);opacity:.08}}
-.spn-lead{max-width:62ch;color:var(--mut);font-size:1.1rem;margin:0 0 20px}
+.spn-lead{max-width:62ch;color:var(--mut);font-size:1.1rem;margin:0 0 20px}.spn-mk{margin:-6px 0 22px}
 .spn-cards{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+@media(min-width:720px){.spn-cards{grid-template-columns:repeat(3,1fr)}.spn-cards[data-n="4"]{grid-template-columns:repeat(2,1fr)}}   /* Mirko, 5.11.2026: 3 x 2 statt 6 nebeneinander */
 .spn-card{background:var(--card);border:1px solid var(--bd);padding:14px 16px;display:grid;gap:3px;align-content:start}
 .spn-card b{unicode-bidi:isolate;font:600 2rem/1.05 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1",sans-serif;font-variant-numeric:tabular-nums;color:var(--ac)}
 .spn-card span{color:var(--fg);font-size:.92rem;line-height:1.35}.spn-card small{color:var(--mut);font-size:.78rem}
@@ -481,7 +502,7 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-l1{color:var(--spn-good)}.spn-l2{color:var(--ac)}.spn-l3{color:var(--spn-on)}.spn-l4{color:var(--spn-red)}.spn-l0{color:var(--mut)}
 .spn-add{display:grid;gap:4px}.spn-add label{font-size:.9rem;color:var(--mut)}
 .spn-addrow{display:flex;flex-wrap:wrap;gap:8px}
-.spn-addrow input{flex:1 1 220px;min-width:0;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);padding:9px 11px}
+.spn-addrow input{flex:1 1 220px;min-width:0}
 .spn-msg{margin:2px 0 0;font-size:.86rem;color:var(--spn-red)}
 .spn-plist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .spn-prow{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;background:var(--card);border:1px solid var(--bd);padding:10px 14px}
@@ -502,6 +523,16 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-cnt{min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
 .spn-lock{margin:4px 0 0;font-size:.82rem;color:var(--ac)}
 .spn-extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.spn-extras>.spn-wide{grid-column:1/-1}.spn-adsbox{grid-column:1/-1;margin-top:6px;display:grid;gap:12px;min-width:0}.spn-adsbox[hidden]{display:none}
+.spn-row.spn-ads{border-top:1px dashed var(--bd);padding-top:6px}
+/* Rechner der Werbeplaetze (assets/ads-book.js) im Konfigurator: einspaltig, Formularfelder wie die uebrigen Felder der Seite */
+.spn .adb{display:grid;gap:16px}.spn .adb h3{margin:0 0 .5em;font-size:1.1rem}.spn .adb-calc,.spn .adb-form{padding:16px;border:1px solid var(--bd);background:var(--bg)}
+.spn .adb-f{display:grid;gap:4px;margin:0 0 10px}.spn .adb-f label{font-weight:600}
+.spn .adb input[type=text],.spn .adb input[type=url],.spn .adb input[type=email],.spn .adb input[type=number],.spn .adb input[type=date],.spn .adb select{width:100%;max-width:32em}   /* Aussehen: assets/forms.css (#298) */
+.spn .adb fieldset{border:1px solid var(--bd);margin:0 0 10px;padding:8px 12px}.spn .adb legend{font-size:.9rem;color:var(--mut);padding:0 4px}.spn .adb-pt label{display:inline-block;margin-inline-end:14px}
+.spn .adb-sum{display:grid;grid-template-columns:minmax(0,1fr) max-content;gap:4px 18px;margin:12px 0 0;padding:10px 0 0;border-top:1px solid var(--bd)}.spn .adb-sum dt,.spn .adb-sum dd{margin:0}.spn .adb-sum dd{text-align:end;font-variant-numeric:tabular-nums}.spn .adb-sum dt:last-of-type,.spn .adb-sum dd:last-of-type{font-weight:600}
+.spn .adb .lp-note,.spn .adb .mut{margin:6px 0 0;font-size:.84rem;color:var(--mut)}.spn .adb .adm-msg.bad{color:var(--spn-red)}.spn .adb .btn{margin-top:6px}
+.spn .adb .lp-table{width:100%;border-collapse:collapse;font-size:.88rem}.spn .adb .lp-table th,.spn .adb .lp-table td{text-align:start;padding:6px 8px;border-bottom:1px solid var(--bd)}
 @media (max-width:480px){.spn-item{grid-template-columns:auto minmax(0,1fr)}.spn-price{grid-column:2;text-align:start}.spn-prow{grid-template-columns:minmax(0,1fr) auto}.spn-meter{display:none}}
 .spn-total{display:grid;gap:4px}
 .spn-big{font:600 2.6rem/1 "Barlow Condensed","Barlow Condensed FB0","Barlow Condensed FB1",sans-serif;font-variant-numeric:tabular-nums}
@@ -525,12 +556,13 @@ html.a11y-hc .spn{--spn-on:#ffb52e;--spn-good:#3cc9a1;--spn-red:#ff8a80}
 .spn-req{padding:28px 0;border-bottom:1px solid var(--bd);display:grid;gap:12px}.spn-req h2{font-size:1.5rem}
 .spn-req>p{margin:0;max-width:65ch}.spn-sum2{font-weight:600}
 .spn-form{display:grid;gap:12px;max-width:560px}
-.spn-f{display:grid;gap:4px}.spn-f label{font-size:.9rem;color:var(--mut)}
-.spn-f input,.spn-f textarea{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);padding:9px 11px}
-.spn-f textarea{min-height:96px;resize:vertical}.spn-f [aria-invalid=true]{border-color:var(--spn-red);box-shadow:inset 0 0 0 1px var(--spn-red)}
+.spn-f{display:grid;gap:4px}.spn-f label{font-weight:600}
+.spn-f input,.spn-f textarea{width:100%}
+.spn-f [aria-invalid=true]{border-color:var(--spn-red);box-shadow:inset 0 0 0 1px var(--spn-red)}
 .spn-err{margin:0;font-size:.86rem;color:var(--spn-red)}
 .spn-hp{position:absolute;inset-inline-start:-10000px;width:1px;height:1px;overflow:hidden}
 .spn-status{padding:10px 12px;border:1px solid var(--spn-red)}.spn-status:focus{outline:3px solid var(--ac)}
+.spn-inv{margin-top:20px;padding:14px 18px;border:1px solid var(--bd);background:var(--card)}.spn-inv summary{cursor:pointer;font-weight:700}.spn-inv form{margin-top:10px}
 .spn-done{padding:16px 18px;border:1px solid var(--ac);background:var(--spn-soft)}.spn-done h3{font-size:1.3rem;margin-bottom:6px}.spn-done p{margin:0}
 .spn-faq{margin-top:8px}.spn-faq h2{font-size:1.5rem;margin:28px 0 8px}
 /* Rueckfall-Texte (englisch) auf ar/he-Seiten: Reihenfolge nach dem Inhalt, Ausrichtung bleibt die der Seite */
@@ -571,11 +603,12 @@ def _chart(lang, bing, nums, day):
     return (f'<figure class="spn-chart"><h2>{E(tx(lang, "chart_h"))}</h2>' + (desk + mob).replace("{aria}", E(aria)) + '</figure>')
 
 
-def _item(cid, title, body, price, unit, checked=False, extra="", also="", cls="spn-item"):
+def _item(cid, title, body, price, unit, checked=False, extra="", also="", cls="spn-item", ctl="", after=""):
     d = f"{cid}-d"
-    return (f'<div class="{cls}"><input type="checkbox" id="{cid}" aria-describedby="{d}{(" " + also) if also else ""}"{" checked" if checked else ""}>'
+    ctl = f' aria-controls="{ctl}"' if ctl else ""
+    return (f'<div class="{cls}"><input type="checkbox" id="{cid}" aria-describedby="{d}{(" " + also) if also else ""}"{" checked" if checked else ""}{ctl}>'
             f'<div><h3><label for="{cid}">{E(title)}</label></h3><div id="{d}">{body}</div>{extra}</div>'
-            f'<div class="spn-price"><span dir="ltr">{E(price)}</span><small>{E(unit)}</small></div></div>')
+            f'<div class="spn-price"><span dir="ltr">{E(price)}</span><small>{E(unit)}</small></div>{after}</div>')   # after: ganze Breite unter der Zeile
 
 
 def _stepper(k, aria, less, more, n):
@@ -617,10 +650,12 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     cards.append((nums.get("eps") or _num(n_main), t("card_episodes"), ""))
     cards.append((nums.get("langs") or _num(n_langs), t("card_langs"), ""))
     srcs.append(t("src_build", date=day(g["TODAY"], lang)))
-    proof = ('<ul class="spn-cards">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
+    proof = (f'<ul class="spn-cards" data-n="{len(cards)}">' + "".join(f'<li class="spn-card"><b dir="auto">{E(a)}</b><span>{E(b)}</span>' + (f'<small>{E(c)}</small>' if c else "") + "</li>" for a, b, c in cards) + "</ul>"
              + "".join(f'<p class="spn-src">{E(s)}</p>' for s in srcs) + (_chart(lang, bing, nums, day) if bing["ok"] and bing["weekly"] else ""))
     hero = (f'<header class="spn-hero"><p class="spn-eyebrow"><span class="spn-dot" aria-hidden="true"></span>{E(t("eyebrow"))}</p><h1>{E(t("h1"))}</h1>'
-            f'<p class="spn-lead">{E(t("lead", episodes=eps))}</p><section aria-label="{E(t("proof_aria"))}">{proof}</section></header>')
+            f'<p class="spn-lead">{E(t("lead", episodes=eps))}</p>'
+            f'<p class="spn-mk"><a class="btn" href="{E(mediakit_url(B, lang))}">{E(t("mediakit_cta"))} →</a></p>'   # Mirko, 5.11.2026: Mediadaten immer verlinken
+            f'<section aria-label="{E(t("proof_aria"))}">{proof}</section></header>')
     mail = f'<a href="mailto:{MAIL}">{MAIL}</a>'
     nojs = f'<noscript><p class="spn-nojs">{E(t("noscript", mail="{mail}")).replace("{mail}", mail)}</p></noscript>'
     step = lambda n, hid, h, inner: (f'<section class="spn-step" aria-labelledby="{hid}"><div class="spn-sh"><span class="spn-n">{E(t("step", n=n))}</span>'
@@ -649,7 +684,7 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     s3 = step(3, "spn-s3", t("s3_h"), f'<p class="spn-hint">{E(t("s3_hint"))}</p><div class="spn-seg" role="radiogroup" aria-labelledby="spn-s3">{rts}</div>'
               f'<p class="spn-note" id="spn-rtrec">{E(v.get("rtRec", ""))}</p>')
     ul = lambda *xs: "<ul>" + "".join(f'<li>{E(x)}</li>' for x in xs) + "</ul>"
-    cnt = v.get("counts") or {"pr": "", "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]}
+    cnt = {"lv": d["cnt"].get("lv", 1), **(v.get("counts") or {"pr": "", "ex": d["cnt"]["ex"], "li": d["cnt"]["li"]})}
     base = (f'<div class="spn-item spn-base"><input type="checkbox" id="spn-base" checked disabled aria-label="{E(t("base_aria"))}">'
             f'<div><h3><label for="spn-base">{E(t("base_h"))}</label> <span class="spn-tag" id="spn-pk">{E(v.get("pkCount", ""))}</span></h3>'
             f'{ul(t("base_b1", episodes=eps), t("base_b2"), t("base_b3"), t("base_b4"))}</div>'
@@ -663,9 +698,11 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
     hint = lambda s: f'<p class="spn-hint">{E(s)}</p>'
     extras = (_item("spn-dash", t("dash_h"), hint(t("dash_hint")), fmt_usd(pr["dash"]), t("unit_once"), extra=f'<p class="spn-lock" id="spn-lock" hidden>{E(t("dash_lock"))}</p>', also="spn-lock")
               + _item("spn-l14", t("lang_h", n=n_langs), hint(t("lang_hint")), fmt_usd(pr["lang"]), t("unit_month"))
-              + _item("spn-topic", t("topic_h"), hint(t("topic_hint", n=P["topic_sponsors_max"])), fmt_usd(pr["topic"]), t("unit_month"))
+              + ads_item(g, lang, t)   # Banner-Werbung (Mirko, 6.11.2026): ersetzt das Themen-Sponsoring, klappt die Buchung aus #285 auf
               + _item("spn-expert", t("expert_h"), hint(t("expert_hint")), fmt_usd(pr["expert"]), t("unit_episode"), extra=_stepper("ex", t("expert_stepper"), t("one_less"), t("one_more"), cnt["ex"]))
               + _item("spn-li", t("li_h"), hint(t("li_hint")), fmt_usd(pr["li"]), t("unit_issue"), extra=_stepper("li", t("li_stepper"), t("one_less"), t("one_more"), cnt["li"]) + f'<p class="spn-note">{E(t("li_note"))}</p>')
+              + _item("spn-live", t("live_h"), hint(t("live_hint")) + f'<p class="spn-note">{E(t("live_note"))}</p>', fmt_usd(pr["live"]), t("unit_session"),
+                      extra=_stepper("lv", t("live_stepper"), t("one_less"), t("one_more"), cnt["lv"]))   # Livesession (LinkedIn + YouTube), immer als gesponsert gekennzeichnet
               + (_item("spn-con", t("con_h"), hint(t("con_hint")), "", t("on_request")) if con_on else ""))
     s5 = step(5, "spn-s5", t("s5_h"), f'<div class="spn-extras">{extras}</div>')
     # Preisuebersicht (sticky, nur die Summenzeile ist live)
@@ -699,10 +736,56 @@ def body_html(g, lang, stats, quick, ssr, n_main, n_langs, con_on):
             f'<p class="spn-err" id="spn-topics-e" hidden></p><div><button type="submit" class="spn-btn" id="spn-submit" disabled>{E(t("submit"))}</button></div>'
             f'<p class="spn-fine">{E(t("privacy", link="{link}")).replace("{link}", plink)}</p>'
             f'<div class="spn-status" id="spn-status" tabindex="-1" hidden></div></form>'
-            f'<div class="spn-done" id="spn-done" tabindex="-1" hidden><h3>{E(t("done_h"))}</h3><p>{E(t("done_p"))}</p></div></section>')
+            f'<div class="spn-done" id="spn-done" tabindex="-1" hidden><h3>{E(t("done_h"))}</h3><p>{E(t("done_p"))}</p></div>'
+            + invoice_html(t) + '</section>')
     faq = "".join(f'<details><summary>{E(q)}</summary><p>{E(a)}</p></details>' for q, a in faq_items(lang, stats, nums, day))
     faq = f'<section class="faq spn-faq" aria-labelledby="spn-faq-h"><h2 id="spn-faq-h">{E(t("faq_h"))}</h2>{faq}</section>'
     return hero + nojs + f'<div class="spn-grid"><div class="spn-build">{s1}{s2}{s3}{s4}{s5}</div>{console}{form}{faq}</div>'
+
+
+def banner_range():
+    """Kleinster und groesster TKP der Banner (EUR, ganze Euro) aus den Startwerten data/ad_pricing.json - nur fuer die Anzeige im Konfigurator;
+    der Preis der Auswahl kommt immer vom Server (/api/ads/quote, Werte aus D1)."""
+    import site_landing as LP
+    c = [p["price_cents"] for p in LP._ad_pricing().get("products", []) if p.get("id") in LP.BANNERS and isinstance(p.get("price_cents"), int)]
+    if not c: return None
+    f = lambda v: str(v // 100) if v % 100 == 0 else f"{v / 100:.2f}"
+    return f(min(c)), f(max(c))
+
+
+def ads_item(g, lang, t):
+    """Extra "Banner-Werbung": Haken klappt den Rechner der Werbeplaetze auf (assets/ads-book.js, nur die drei Banner; Seitentypen inkl.
+    Blogbeitraege und Themenseiten, fruehe Platzierung im Text = banner_mid, Themen-Targeting mit den Themen aus Schritt 2). Buchung aus
+    (data/ad_slots.json "booking"): nur Rechner, die Auswahl geht mit der Anfrage mit; an: Anmeldung, Werbemittel, PayPal wie auf /for/advertisers/."""
+    import site_ads as ADS
+    import site_landing as LP
+    B = g["BASE"]
+    on = ADS.booking_on()
+    cfg = LP.adbook_cfg(B, lang, url(B, lang), products=LP.BANNERS, product="banner_mid", booking=on, anchor="#spn-ads")
+    rng = banner_range()
+    price = t("ads_price", min=rng[0], max=rng[1]) if rng else t("on_request")
+    box = (f'<div class="spn-adsbox" id="spn-adsbox" hidden><p class="spn-note">{E(t("ads_on" if on else "ads_off"))}</p>'
+           f'<div class="adb" id="spn-adb" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}"></div></div>')
+    return _item("spn-ads", t("ads_h"), f'<p class="spn-hint">{E(t("ads_hint"))}</p>', price, t("unit_cpm"), after=box, cls="spn-item spn-wide", ctl="spn-adsbox")
+
+
+def advertise_button(B, lang):
+    """#281: Verweis auf die direkt buchbaren Werbeplaetze - nur, wenn die Buchung an ist (data/ad_slots.json "booking")."""
+    import site_ads as ADS
+    if not ADS.booking_on():
+        return ""
+    return f'<a class="btn" href="{E(ADS.advertise_url(B, lang))}">{E(ADS.texts(lang, "slot")["adv_cta"])}</a>'
+
+
+def invoice_html(t):
+    """#281: direkt bestellen per PayPal-Rechnung, nur ohne M365Con (assets/sponsor.js blendet um; Preis rechnet der Server neu).
+    Solange die Buchung aus ist (data/ad_slots.json "booking"), gibt es nur das Anfrageformular."""
+    import site_ads as ADS
+    if not ADS.booking_on():
+        return ""
+    return (f'<details class="spn-inv" id="spn-inv" hidden><summary>{E(t("inv_h"))}</summary><p>{E(t("inv_intro"))}</p>'
+            f'<div id="spn-inv-body" aria-live="polite"></div></details>'
+            f'<p class="spn-fine" id="spn-inv-con" hidden>{E(t("inv_con"))}</p>')
 
 
 def faq_items(lang, stats, nums, day):
@@ -727,7 +810,12 @@ def jsonld(B, lang, u, hl, lastmod, faqs, n_langs):
         if unit: o["priceSpecification"] = {"@type": "UnitPriceSpecification", "price": str(pr[key]), "priceCurrency": PRICING["currency"], "unitCode": unit}
         return o
     offers = [offer(t("base_h"), "base", "MON"), offer(t("video_h"), "video", "MON"), offer(t("pr_h"), "pr"), offer(t("row_auth"), "auth", "MON"),
-              offer(t("dash_h"), "dash"), offer(t("lang_h", n=n_langs), "lang", "MON"), offer(t("topic_h"), "topic", "MON"), offer(t("expert_h"), "expert"), offer(t("li_h"), "li")]
+              offer(t("dash_h"), "dash"), offer(t("lang_h", n=n_langs), "lang", "MON"), offer(t("expert_h"), "expert"), offer(t("li_h"), "li"), offer(t("live_h"), "live")]
+    rng = banner_range()
+    if rng:   # Banner-Werbung: TKP in EUR (Startwerte), je 1.000 Einblendungen
+        offers.append({"@type": "Offer", "name": t("ads_h"), "priceCurrency": "EUR",
+                       "priceSpecification": {"@type": "UnitPriceSpecification", "minPrice": rng[0], "maxPrice": rng[1], "priceCurrency": "EUR",
+                                              "referenceQuantity": {"@type": "QuantitativeValue", "value": 1000, "unitText": "impressions"}}})
     return [{"@context": "https://schema.org", "@type": "WebPage", "@id": u + "#page", "url": u, "name": t("h1"), "inLanguage": hl, "isPartOf": {"@id": f"{B}/#website"},
              "publisher": {"@id": f"{B}/#org"}, "dateModified": lastmod, "mainEntity": {"@id": u + "#service"}},
             {"@context": "https://schema.org", "@type": "Service", "@id": u + "#service", "name": t("svc_name"), "serviceType": t("svc_type"), "url": u,
@@ -782,11 +870,13 @@ def build(g):
         S = ssr.get(lang) or {}
         hl = g["LANGS"][lang][1] if lang in LG else "en"
         cfg = {"P": P, "T": I18N.get(lang, {}) if lang != "en" else {}, "E": EN, "lang": lang, "api": g["api"], "page": page, "mail": MAIL, "nLangs": n_langs,
-               "con": con_on, "quick": [[q["id"], q["name"], q["en"], q["lvl"], q["rated"], q["example"], q["url"], q["default"], q["al"]] for q in quick],
-               "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec")}
+               "con": con_on, "quick": [[q["id"], q["name"], q["en"], q["lvl"], q["rated"], q["example"], q["url"], q["default"], q["al"], q["eid"] or ""] for q in quick],
+               "ents": search, "entBase": ebase, "key": S.get("key", ""), "dec": S.get("dec"),
+               "community": f"{B}/{'' if lang == 'en' else lang + '/'}community/", "adsJs": asset_url(B, "ads-book.js")}
         body = body_html(g, lang, stats, quick, S, n_main, n_langs, con_on)
         dash = dashboard_url(B, lang)
-        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a></p>'
+        adv = advertise_button(B, lang)
+        body = (f'{g["header"](lang, "")}<main class="wrap spn-wrap"><p><a class="btn" href="{E(dash)}">{E(tx(lang, "dash_h"))}</a> {adv}</p>'
                 f'<div class="spn" id="spn" data-ssr="{1 if S else 0}" data-cfg="{E(json.dumps(cfg, ensure_ascii=False, separators=(",", ":")))}">'
                 f'{body}</div></main>{g["footer"](lang)}{js}')
         faqs = faq_items(lang, stats, S.get("nums") or {}, _day(g))

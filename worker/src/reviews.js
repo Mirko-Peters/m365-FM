@@ -1,5 +1,6 @@
 // Hoerer-Bewertungen fuer den Podcast (Show "en" = M365.FM): 1–5 Sterne + Text, eine Bewertung je Mitglied, "hilfreich"-Stimmen, Moderation durch Admin/Editor.
 import { cleanText, rateLimit } from "./util.js";
+import { can, gate, logEdit, roleOf } from "./perm.js";
 const now = () => Math.floor(Date.now() / 1000);
 const SHOW = /^[a-z]{2,3}$/;
 let ready = false;
@@ -26,7 +27,7 @@ export async function handleReviews(env, request, url, path, user, J) {
       voted = ((await db.prepare("SELECT review_id FROM review_helpful WHERE user_id=?").bind(user.id).all()).results || []).map((x) => x.review_id);
     }
     return J({ show, count: agg.n, sum: agg.s, dist: [agg.c1 || 0, agg.c2 || 0, agg.c3 || 0, agg.c4 || 0, agg.c5 || 0],
-      items: rows.map((r) => ({ id: r.id, rating: r.rating, title: r.title, body: r.body, name: r.name, handle: r.handle || "", created: r.created, helpful: r.helpful, own: !!user && r.user_id === user.id, voted: voted.includes(r.id) })), mine, can_moderate: !!(user && (user.admin || user.editor)) },
+      items: rows.map((r) => ({ id: r.id, rating: r.rating, title: r.title, body: r.body, name: r.name, handle: r.handle || "", created: r.created, helpful: r.helpful, own: !!user && r.user_id === user.id, voted: voted.includes(r.id) })), mine, can_moderate: can(user, "queue.review").ok && can(user, "review.hide", { topics: [] }).ok },
       200, { "cache-control": user ? "no-store" : "public, max-age=60" });
   }
   if (!user) return J({ error: "login" }, 401);
@@ -52,10 +53,13 @@ export async function handleReviews(env, request, url, path, user, J) {
     return J({ ok: true, voted: !had, helpful: n.n });
   }
   if (path === "/api/reviews/delete" && method === "POST") {
-    const b = await body(), id = +b.id, r = await db.prepare("SELECT user_id FROM show_reviews WHERE id=?").bind(id).first();
-    if (!r || (r.user_id !== user.id && !user.admin && !user.editor)) return J({ error: "forbidden" }, 403);
-    if (r.user_id === user.id && !(user.admin || user.editor)) await db.prepare("DELETE FROM show_reviews WHERE id=?").bind(id).run();
-    else await db.prepare("UPDATE show_reviews SET status='hidden' WHERE id=?").bind(id).run();   // Moderation: ausblenden, Autor kann nicht neu schreiben
+    const b = await body(), id = +b.id, r = await db.prepare("SELECT user_id,status FROM show_reviews WHERE id=?").bind(id).first();
+    if (!r) return J({ error: "forbidden" }, 403);
+    if (r.user_id === user.id && roleOf(user) !== "admin") { await db.prepare("DELETE FROM show_reviews WHERE id=?").bind(id).run(); return J({ ok: true }); }   // die eigene Bewertung loescht jede und jeder selbst (auch Editoren)
+    if (!(await gate(db, user, "queue.review")).ok) return J({ error: "forbidden" }, 403);   // wie bisher nur Editoren und Admin
+    const g = await gate(db, user, "review.hide", { ownerId: r.user_id }); if (!g.ok) return J({ error: g.why }, 403);   // can(): eigene Firma, Tageslimit; ohne Thema, also nicht fuer Fach-Editoren
+    await db.prepare("UPDATE show_reviews SET status='hidden' WHERE id=?").bind(id).run();   // ausblenden, Autor kann nicht neu schreiben
+    await logEdit(db, g.actor, "review.hide", "show_review", id, { before: { status: r.status || "" }, after: { status: "hidden" } });
     return J({ ok: true });
   }
   return J({ error: "not_found" }, 404);

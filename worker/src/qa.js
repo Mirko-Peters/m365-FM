@@ -2,6 +2,7 @@
 import { cleanText, esc, rateLimit } from "./util.js";
 import { knownIds } from "./entities.js";
 import { notify } from "./mail.js";
+import { gate, logEdit } from "./perm.js";
 
 const ID = /^[a-z0-9-]{2,48}$/;
 const now = () => Math.floor(Date.now() / 1000);
@@ -69,7 +70,11 @@ export async function handleQa(env, request, url, path, user, J) {
     const b = await body(), isQ = b.kind === "q";
     const row = isQ ? await db.prepare("SELECT q.id,q.user_id,q.eid FROM entity_q q WHERE q.id=?").bind(+b.id).first() : await db.prepare("SELECT a.id,a.user_id,q.eid FROM entity_a a JOIN entity_q q ON q.id=a.q_id WHERE a.id=?").bind(+b.id).first();
     if (!row) return J({ error: "not_found" }, 404);
-    if (row.user_id !== user.id && !user.admin && !user.editor) return J({ error: "forbidden" }, 403);
+    if (row.user_id !== user.id) {   // fremde Frage/Antwort ausblenden = Moderation: can(review.hide) mit Fachbereich und eigener Firma, im Protokoll
+      if (!(await gate(db, user, "queue.review")).ok) return J({ error: "forbidden" }, 403);   // wie bisher nur Editoren und Admin (Moderatoren: Kommentare und Meldungen ueber die Pruefliste)
+      const g = await gate(db, user, "review.hide", { ownerId: row.user_id, topics: [row.eid] }); if (!g.ok) return J({ error: g.why }, 403);
+      await logEdit(db, g.actor, "review.hide", isQ ? "qa_q" : "qa_a", row.id, { before: { hidden: 0 }, after: { hidden: 1 } });
+    }
     await db.prepare(`UPDATE ${isQ ? "entity_q" : "entity_a"} SET hidden=1 WHERE id=?`).bind(row.id).run();
     return J({ ok: true });
   }

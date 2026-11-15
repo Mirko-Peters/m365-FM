@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
-import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify, sha256hex, anthropicUrl, anthropicHeaders, anthropicFetch, haikuJson, AI_BUDGET_ERROR } from "../src/util.js";
+import { cleanText, cleanName, esc, isLang, LANGS, b64u, sign, verify, sha256hex, anthropicUrl, anthropicHeaders, anthropicFetch, haikuJson, usageUsd, AI_BUDGET_ERROR } from "../src/util.js";
 import { runTrQueue } from "../src/autotr.js";
 import worker from "../src/index.js";
 import { sanitize } from "../src/wiki.js";
@@ -216,7 +216,36 @@ test("AI-Budget-API: Cron-Key schützt Abfrage und idempotente Verbrauchsmeldung
     response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify({ ...report, id: "workflow-batch-1", batch: true }) }), env);
     assert.equal(response.status, 200);
     assert.ok(Math.abs(raw.prepare("SELECT usd FROM ai_spend WHERE id='workflow-batch-1'").get().usd - 0.00055) < 1e-10, "Batch API: halber Preis");
+    // Prompt-Cache: 1000 Eingabe-Token, davon 800 gelesen (0,1x) und 100 geschrieben (1,25x) -> (100 + 80 + 125) x 0,10 $/MTok + 2000 x 0,50 $/MTok
+    response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify({ ...report, id: "workflow-cache-1", cache_read_input_tokens: 800, cache_creation_input_tokens: 100 }) }), env);
+    assert.equal(response.status, 200);
+    assert.ok(Math.abs(raw.prepare("SELECT usd FROM ai_spend WHERE id='workflow-cache-1'").get().usd - (305 * 0.10 + 2000 * 0.50) / 1e6) < 1e-12);
+    assert.equal(raw.prepare("SELECT in_tok FROM ai_spend WHERE id='workflow-cache-1'").get().in_tok, 1000);
+    response = await worker.fetch(new Request(url, { method: "POST", headers: { "x-cron-key": env.CRON_KEY, "content-type": "application/json" }, body: JSON.stringify({ ...report, id: "workflow-cache-2", cache_read_input_tokens: 900, cache_creation_input_tokens: 200 }) }), env);
+    assert.equal(response.status, 400, "Cache-Anteile groesser als die Eingabe werden abgelehnt");
   } finally {
+    raw.close();
+  }
+});
+
+test("Prompt-Cache: Kosten aus usage mit gelesenen und geschriebenen Cache-Token", async () => {
+  const prices = { input: 0.10, output: 0.50 };
+  assert.ok(Math.abs(usageUsd(prices, { input_tokens: 1000, output_tokens: 2000 }) - 0.0011) < 1e-12);
+  assert.ok(Math.abs(usageUsd(prices, { input_tokens: 100, cache_read_input_tokens: 1000, cache_creation_input_tokens: 400, output_tokens: 0 }) - (100 + 100 + 500) * 0.10 / 1e6) < 1e-12);
+  assert.ok(Math.abs(usageUsd(prices, { input_tokens: 0, cache_creation_input_tokens: 400, cache_creation: { ephemeral_1h_input_tokens: 400 } }) - 800 * 0.10 / 1e6) < 1e-12, "1-h-Cache: 2x");
+  assert.ok(Math.abs(usageUsd(prices, { input_tokens: 1000 }, true) - 0.00005) < 1e-12, "Batch: halber Preis");
+  const { db, raw } = await searchDb();
+  const oldFetch = globalThis.fetch; let sent;
+  const body = { model: "claude-haiku-5-5", max_tokens: 100, system: [{ type: "text", text: "lange Regeln", cache_control: { type: "ephemeral", ttl: "1h" } }], messages: [{ role: "user", content: "x" }] };
+  globalThis.fetch = async (url, init) => { sent = JSON.parse(init.body); return new Response(JSON.stringify({ usage: { input_tokens: 50, cache_read_input_tokens: 1000, output_tokens: 10 }, content: [{ type: "text", text: "ok" }] }), { status: 200 }); };
+  try {
+    await anthropicFetch({ DB: db, ANTHROPIC_API_KEY: "unit-test-key", CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "unit-test-token" }, body, { job: "prompt_cache_test" });
+    assert.deepEqual(sent, body, "cache_control geht unveraendert ueber das AI Gateway");
+    const row = raw.prepare("SELECT in_tok,usd FROM ai_spend WHERE job='prompt_cache_test'").get();
+    assert.equal(row.in_tok, 1050);
+    assert.ok(Math.abs(row.usd - ((50 + 100) * 0.10 + 10 * 0.50) / 1e6) < 1e-12, "Cache-Lesen kostet 0,1x");
+  } finally {
+    globalThis.fetch = oldFetch;
     raw.close();
   }
 });
@@ -260,7 +289,7 @@ test("contributions: Quellen, Metadaten, Privatsphäre, Kategorien und Berichtse
       url, url.pathname, actor, J);
   };
 
-  const source = await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml", title: "My blog", public: true });
+  const source = await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml", title: "My blog", public: true, mode: "track" });
   assert.equal(source.status, 201);
   assert.equal((await source.json()).source.public, true);
   assert.equal((await (await call("/api/contributions/source", "POST", { kind: "blog", url: "https://example.com/feed.xml" })).json()).error, "source_exists");
@@ -424,6 +453,27 @@ test("schema: Migrationen sind idempotent und enthalten jede zur Laufzeit angele
     if (/^ALTER TABLE search_doc ADD COLUMN (?:grp|title_norm) TEXT NOT NULL DEFAULT ''$/i.test(s)
       || /^ALTER TABLE (?:push_subs ADD COLUMN digest INTEGER NOT NULL DEFAULT 1|events ADD COLUMN tz TEXT NOT NULL DEFAULT 'Europe\/Berlin')$/i.test(s)) continue;
     if (/^ALTER TABLE (?:expert_requests ADD COLUMN (?:hide_outlet INTEGER NOT NULL DEFAULT 0|reach TEXT NOT NULL DEFAULT ''|audience TEXT NOT NULL DEFAULT 'all'|mode TEXT NOT NULL DEFAULT 'match'|held_reason TEXT NOT NULL DEFAULT '')|expert_request_replies ADD COLUMN (?:kind TEXT NOT NULL DEFAULT 'match'|status TEXT NOT NULL DEFAULT 'pending')|contributions ADD COLUMN expert_request_id INTEGER)$/i.test(s)) continue;
+    if (/^ALTER TABLE users ADD COLUMN (?:merged_into INTEGER|merged_at INTEGER NOT NULL DEFAULT 0|role_source TEXT NOT NULL DEFAULT '')$/i.test(s)
+      || /^INSERT OR IGNORE INTO user_identities\(user_id, provider, sub, created\) SELECT id, provider, sub, created FROM users$/i.test(s)) continue;   // #279: Rueckfuellung ist idempotent
+    if (/^INSERT OR IGNORE INTO ad_(?:products|prices|settings)\(/i.test(s)) continue;   // #281: Startwerte, idempotent (vorhandene Admin-Werte bleiben)
+    if (/^ALTER TABLE org_entity ADD COLUMN confirmed INTEGER NOT NULL DEFAULT 0$/i.test(s) || /^UPDATE org_entity SET confirmed=1 WHERE EXISTS \(/i.test(s)) continue;   // 0026: Rueckfuellung setzt nur 1, idempotent
+    if (/^ALTER TABLE orgs ADD COLUMN unclaimed INTEGER NOT NULL DEFAULT 0$/i.test(s)) continue;   // 0034: Spalte mit Standardwert
+    if (/^ALTER TABLE i18n_override(?:_rev)? ADD COLUMN src_hash TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0041: Quell-Anker der Handtexte (Vertrag i18n-overrides v1), Spalte mit Standardwert
+    if (/^ALTER TABLE episode_urls ADD COLUMN (?:title|fields) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0045: Titel und abweichende Felder der Spreaker-Folge, Spalten mit Standardwert
+    if (/^ALTER TABLE entity_contacts ADD COLUMN source TEXT NOT NULL DEFAULT 'guest'$/i.test(s)) continue;   // 0040: Herkunft der Kontaktadresse (guest | speaker), Laufzeit-Absicherung in entinvite.js
+    if (/^ALTER TABLE entity_claims ADD COLUMN (?:verified_via|verified_domain|fwd_mask) TEXT NOT NULL DEFAULT ''$/i.test(s) || /^UPDATE entity_claims SET verified_via=CASE /i.test(s)) continue;   // 0032: Spalten mit Standardwert, Rueckfuellung idempotent
+    if (/^ALTER TABLE ad_leads ADD COLUMN (?:sponsor|assigned) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0033: Sponsor-Leads, Spalten mit Standardwert
+    if (/^ALTER TABLE (?:mediakit_requests ADD COLUMN (?:status TEXT NOT NULL DEFAULT 'open'|status_updated INTEGER)|ad_leads ADD COLUMN (?:lead_status TEXT NOT NULL DEFAULT 'open'|lead_status_updated INTEGER))$/i.test(s)) continue;   // 0031: Lead-Status, Laufzeit-Absicherung in mediakit.js
+    if (/^ALTER TABLE (?:events|event_sessions) ADD COLUMN (?:source|source_url|url_key|name_key|city_key|unclaimed|retired|merged_into|sessionize_api|sessionize_synced|sessionize_state|organizer_name|title_key|sessionize_id|keys_v|edited_at|edited_fields) (?:TEXT|INTEGER) NOT NULL DEFAULT (?:''|0)$/i.test(s)) continue;   // 0035: Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
+    if (/^ALTER TABLE events ADD COLUMN (?:review TEXT NOT NULL DEFAULT 'approved'|review_at INTEGER NOT NULL DEFAULT 0)$/i.test(s)) continue;   // 0047: Pruefliste neuer Events, Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
+    // MVP-Tracker (0027): Spalten mit Standardwert; die Laufzeit-Absicherung in contributions.js legt sie nur an, wenn sie fehlen
+    if (/^ALTER TABLE contributions ADD COLUMN (?:portal|portal_at|attendees|live_views|sessions) INTEGER NOT NULL DEFAULT 0$/i.test(s)
+      || /^ALTER TABLE contributions ADD COLUMN (?:review|portal_desc|role|area|event_format|country) TEXT NOT NULL DEFAULT ''$/i.test(s)
+      || /^ALTER TABLE contributions ADD COLUMN audience TEXT NOT NULL DEFAULT '\[\]'$/i.test(s)
+      || /^ALTER TABLE user_prefs ADD COLUMN report_start INTEGER NOT NULL DEFAULT 4$/i.test(s)) continue;
+    // 0036 (eigene Quellen): Spalten mit Standardwert; contributions.js legt sie zur Laufzeit nur an, wenn sie fehlen
+    if (/^ALTER TABLE (?:contributions ADD COLUMN (?:guid|canon|ctype|teaser) TEXT NOT NULL DEFAULT ''|contributions ADD COLUMN feed_item_id INTEGER NOT NULL DEFAULT 0|contribution_sources ADD COLUMN (?:mode TEXT NOT NULL DEFAULT 'track'|(?:etag|modified|last_error) TEXT NOT NULL DEFAULT ''|topics TEXT NOT NULL DEFAULT '\[\]'|seeded INTEGER NOT NULL DEFAULT 0)|feed_items ADD COLUMN origin TEXT NOT NULL DEFAULT '')$/i.test(s)) continue;
+    if (/^ALTER TABLE events ADD COLUMN (?:entity|entity_state) TEXT NOT NULL DEFAULT ''$/i.test(s)) continue;   // 0048: Event-Entitaet (evententity.js), Spalten mit Standardwert (D1 fuehrt jede Migration nur einmal aus)
     assert.match(s, /^CREATE (TABLE|INDEX|UNIQUE INDEX) IF NOT EXISTS /i, "nur idempotente Anweisungen: " + s.slice(0, 60));
   }
   const inMig = new Set([...sql.matchAll(/CREATE (?:TABLE|UNIQUE INDEX|INDEX) IF NOT EXISTS (\w+)/gi)].map((m) => m[1]));
@@ -565,6 +615,30 @@ test("contentblog: importContentBlog legt Pakete pending/live an, erneuert nur u
     clock = 3000; file = { items: [P({ slug: "b-post", publish: true, title: "B noch neuer", hash: "h4" })] };
     await importContentBlog({ DB: db, SITE: "https://x" }, now);
     assert.equal(st("b-post").title, "Im Editor", "Schutz bleibt dauerhaft");
+  } finally { globalThis.fetch = old; }
+});
+
+test("contentblog: viele unveraenderte Pakete kosten nur eine Abfrage, neue Pakete kommen in Schueben von 40 (SQLite)", async () => {
+  const { DatabaseSync } = await import("node:sqlite");
+  const raw = new DatabaseSync(":memory:");
+  const dir = new URL("../migrations/", import.meta.url);
+  for (const f of readdirSync(dir).filter((f) => f.endsWith(".sql")).sort()) raw.exec(readFileSync(new URL(f, dir), "utf-8"));
+  let calls = 0;
+  const db = { prepare(sql) { calls++; const st = raw.prepare(sql); let args = []; const o = { bind(...a) { args = a; return o; }, all: async () => ({ results: st.all(...args) }), first: async () => st.get(...args) ?? null, run: async () => st.run(...args) }; return o; } };
+  raw.exec(`INSERT INTO users(id,provider,sub,name,role,banned,created) VALUES(1,'g','1','Mirko','user',0,1);
+    INSERT INTO profiles(user_id,public,handle,headline,about,company,job,country,show_org,updated) VALUES(1,1,'mirko-p','','','','','',1,1)`);
+  const P = (n, o) => ({ slug: "post-" + n, lang: "en", title: "Beitrag " + n, summary: "Kurz", html: "<p>Text</p>", author: "mirko-p", topics: [], faq: [], publish: true, published: 100, hash: "h" + n, ...o });
+  const items = Array.from({ length: 110 }, (_, i) => P(i));
+  const old = globalThis.fetch; globalThis.fetch = async () => ({ ok: true, json: async () => ({ items }) });
+  try {
+    const { importContentBlog } = await import("../src/contentblog.js");
+    let r = await importContentBlog({ DB: db, SITE: "https://x" }, () => 1000);
+    assert.equal(r.created, 40, "ein Schub: hoechstens 40"); assert.equal(r.seen, 110);
+    await importContentBlog({ DB: db, SITE: "https://x" }, () => 1100); r = await importContentBlog({ DB: db, SITE: "https://x" }, () => 1200);
+    assert.equal(raw.prepare("SELECT COUNT(*) n FROM blog_posts WHERE status='live'").get().n, 110, "nach drei Laeufen sind alle 110 live");
+    calls = 0; r = await importContentBlog({ DB: db, SITE: "https://x" }, () => 1300);
+    assert.deepEqual([r.created, r.updated, r.published], [0, 0, 0]);
+    assert.ok(calls <= 3, "unveraenderte Pakete: keine Abfrage je Paket, war " + calls);
   } finally { globalThis.fetch = old; }
 });
 

@@ -16,30 +16,40 @@ unbekannte Felder sind deshalb ein Fehler):
                                                    "advertisement": vom Sponsor beauftragter Inhalt (PR-Artikel) - EN "Advertisement · Paid content on behalf of Acme",
                                                    DE "Anzeige · Bezahlter Inhalt im Auftrag von Acme"
         "start": "2026-12-01", "end": "2027-05-31",
-                                                   Laufzeit, ISO-Datum, beide Tage eingeschlossen
+                                                   Laufzeit, ISO-Datum, beide Tage eingeschlossen. "end": null (oder fehlt) = unbefristet: immer aktiv, keine Nachfrist.
+                                                   Karenzzeit (Mirko 11.11.2026, fuer ALLE Sponsorings): alles, was waehrend der Laufzeit gilt, bleibt GRACE_DAYS = 182 Tage
+                                                   (6 Monate) nach "end" unveraendert stehen (wirksames Ende = end + 182, eingeschlossen), damit ein Kunde nahtlos verlaengern kann
+        "manager": {"handle": "mirko-p", "entity": "mirko-peters"},
+                                                   optional: Betreuer des Sponsorings (Community-Handle, Personen-Entitaet); Leads des Lead-Formulars werden ihm zugewiesen
+        "note": "...",                             optional: interne Notiz (max. 400 Zeichen, wird nicht angezeigt)
         "entities": ["acme-backup"],               optional: Entitaeten des Sponsors (ids aus data/entities.json bzw. der Entitaetsdatenbank).
-                                                   Nur waehrend der Laufzeit: Kennzeichnung auf der Entitaetsseite, Badge in der Entitaetsliste,
-                                                   WebPage.sponsor, Link "Offizielle Website" mit rel="sponsored noopener"
+                                                   Waehrend der Laufzeit und 182 Tage (6 Monate Karenzzeit) danach: Kennzeichnung auf der Entitaetsseite, Badge in der
+                                                   Entitaetsliste, WebPage.sponsor, Link "Offizielle Website" mit rel="sponsored noopener"; bei Firmen (Typ org) zusaetzlich
+                                                   Lead-Formular auf der Firmenseite, Partner-Block im Firmenverzeichnis und Eintrag in sponsors.json (Worker nimmt Leads an)
         "topics": ["entra-id"],                    optional: Themen-Sponsoring (Entitaets-ids vom Typ product, platform, concept, category, cert).
                                                    Wie "entities", aber rel="sponsored" nur fuer Links auf die Website des Sponsors (die offizielle Website
-                                                   eines Microsoft-Produkts ist kein bezahlter Link). Hoechstens 3 Themen-Sponsorings je Thema gleichzeitig
+                                                   eines Microsoft-Produkts ist kein bezahlter Link). Ohne Obergrenze je Thema: das eigene Produkt
+                                                   "Themen-Sponsoring" (max. 3 je Thema) gibt es nicht mehr, Banner-Werbung mit Themen-Targeting ersetzt es
+                                                   (Mirko, 6.11.2026); bestehende Eintraege bleiben gekennzeichnet
         "episodes": ["<slug>", "de/<slug>"],       optional: Folgen. "<slug>" = englische Show (/show/episodes/<slug>/), "<sprache>/<slug>" = Dub-Folge (/de/<slug>/);
                                                    auch volle Pfade wie "/show/episodes/<slug>/". Gilt fuer alle Sprachfassungen der Folge (englische Seite,
                                                    lokalisierte Show-Seiten, Dub-Folgen desselben Videos) und DAUERHAFT, auch nach dem Ende der Laufzeit
         "posts": ["/community/u/mirko-p/blog/<slug>/"], optional: Blogbeitraege (Pfad, mit oder ohne Sprachpraefix);
                                                    gilt fuer alle Sprachfassungen, dauerhaft
         "go": "acme-2026-12"                        optionaler aktiver Linkcode aus dem Sponsor-Dashboard
+        "lead_topics": ["lean-management"],         optional: Themen-Entitaeten (ids), zu denen das Lead-Formular des Sponsors (Firma aus "entities") auch auf
+                                                   Blogbeitraegen, Folgen und Sprachseiten erscheint, die eines davon verlinken (Kasten "Anzeige" vor dem Seitenende).
+                                                   Nur waehrend der Laufzeit; unbekannte ids werden ignoriert (Warnung). Ohne das Feld: Formular nur auf der Firmenseite
       }
     ]
   }
 
 Felder, die mit "_" beginnen, sind nur auf oberster Ebene erlaubt (Hinweise, z. B. "_doc").
-Pruefungen beim Bau: Aufbau und Felder, Datumsangaben (start <= end), unbekannte Entitaeten, Themen, Folgen und Beitraege,
-hoechstens TOPIC_MAX gleichzeitig laufende Themen-Sponsorings je Thema (an jedem Tag, auch in der Zukunft), Uebersetzungen der Kennzeichnung
+Pruefungen beim Bau: Aufbau und Felder, Datumsangaben (start <= end), unbekannte Entitaeten, Themen, Folgen und Beitraege, Uebersetzungen der Kennzeichnung
 fuer alle 15 Sprachen in data/py_i18n.json. Mit SITE_OFFLINE=1 (lokaler Bau ohne Community-API) werden unbekannte Verweise nur gemeldet.
 Zum Testen: Umgebungsvariable M365_SPONSORSHIPS = Pfad einer anderen Datei (nie echte Daten aus Tests committen)."""
 import json, os, re
-from datetime import date
+from datetime import date, timedelta
 from html import escape
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -49,9 +59,15 @@ FILE = Path(__file__).parent / "data" / "sponsorships.json"
 I18N = Path(__file__).parent / "data" / "py_i18n.json"
 ENV = "M365_SPONSORSHIPS"
 LABELS = ("sponsored", "advertisement")
-TOPIC_MAX = 3   # "max. 3 sponsors per topic" (Sponsor-Seite); der Bau prueft es hier
 TOPIC_TYPES = ("product", "platform", "concept", "category", "cert")
-REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go")
+REC_KEYS = ("id", "sponsor", "label", "start", "end", "entities", "topics", "episodes", "posts", "go", "note", "manager", "lead_topics")
+# Mirko 6.11.2026: Entitaeten des Sponsors (Firma + Produkte) sind bei gesponserten Inhalten EXTRA zur Obergrenze von 10 Themen, solange das Sponsoring
+# laeuft und GRACE_MONTHS danach. Mirko 11.11.2026: diese Karenzzeit gilt fuer ALLES, was ein laufendes Sponsoring zeigt (Kennzeichnung, Badge, rel="sponsored",
+# Lead-Formular, Partner-Block, sponsors.json), damit ein Kunde weitermachen und verlaengern kann. Eine Definition: _active() (wirksames Ende grace_end()).
+# Umgesetzt als 182 Tage (6 x ~30,4 Tage) nach "end", nicht als Kalendermonate: Tag 182 zaehlt noch, Tag 183 nicht mehr. Pendant: worker/src/sponsor_extra.js.
+GRACE_MONTHS = 6   # Mirko 6.11.2026
+GRACE_DAYS = 182
+TOPIC_CAP = 10
 REF_KEYS = ("entities", "topics", "episodes", "posts")
 # Kennzeichnung je Art: (Badge en, Badge de, Zusatz en, Zusatz de). Die 13 weiteren Sprachen sind von Hand in data/py_i18n.json gepflegt
 # (Schluessel = englischer Text); T() zieht sie dort den maschinellen Uebersetzungen vor. Deutsch immer "Anzeige".
@@ -70,7 +86,7 @@ class SponsorshipError(ValueError):
 
 
 def _empty():
-    return {"recs": [], "ent": {}, "own": set(), "ep": {}, "vid": {}, "post": {}, "post_refs": {}, "today": ""}
+    return {"recs": [], "ent": {}, "own": set(), "ep": {}, "vid": {}, "post": {}, "post_refs": {}, "today": "", "lead": [], "lead_ent": {}}
 
 
 _S = None   # Zustand nach init(); ohne init() wird die Datei beim ersten Zugriff nur mit Aufbau-Pruefung geladen
@@ -142,8 +158,17 @@ def check_structure(d):
         if "go" in r and (not isinstance(r["go"], str) or not re.fullmatch(r"[a-z0-9-]{3,40}", r["go"])):
             errs.append(f'{w}: "go" muss ein aktiver Linkcode aus a-z, 0-9 und Bindestrich sein')
         s, e = _day(r.get("start")), _day(r.get("end"))
+        if "note" in r and (not isinstance(r["note"], str) or len(r["note"]) > 400): errs.append(f'{w}: "note" muss ein Text bis 400 Zeichen sein (interne Notiz, wird nicht angezeigt)')
+        if "lead_topics" in r:
+            lt = r["lead_topics"]
+            if not isinstance(lt, list) or not all(isinstance(x, str) and _ID.match(x) for x in lt) or len(set(lt)) != len(lt) or len(lt) > 60:
+                errs.append(f'{w}: "lead_topics" muss eine Liste von Entitaets-ids ohne Doppelte sein (hoechstens 60)')
+        mg = r.get("manager")
+        if mg is not None and (not isinstance(mg, dict) or set(mg) - {"handle", "entity"} or not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,63}", str(mg.get("handle", "")))
+                               or ("entity" in mg and not re.fullmatch(r"[a-z0-9][a-z0-9-]{1,63}", str(mg.get("entity"))))):
+            errs.append(f'{w}: "manager" muss {{"handle": "<Mitglieds-Handle>", "entity": "<Personen-Entitaet>"}} sein (Betreuer; Leads werden ihm zugewiesen)')
         if not s: errs.append(f'{w}: "start" fehlt oder ist kein Datum (JJJJ-MM-TT)')
-        if not e: errs.append(f'{w}: "end" fehlt oder ist kein Datum (JJJJ-MM-TT)')
+        if r.get("end") is not None and not e: errs.append(f'{w}: "end" muss ein Datum (JJJJ-MM-TT) oder null sein (null = unbefristet)')
         if s and e and e < s: errs.append(f'{w}: "end" liegt vor "start"')
         for k in REF_KEYS:
             if k not in r: continue
@@ -171,25 +196,6 @@ def post_ref(x):
     if seg[0] in COMM_LANGS and len(seg) == 2: p = seg[1]
     m = _POST.match(p)
     return (m.group(1), m.group(2)) if m else None
-
-
-def check_topic_limit(recs):
-    """Hoechstens TOPIC_MAX Themen-Sponsorings je Thema, die sich zeitlich ueberschneiden (an jedem Tag, auch in der Zukunft;
-    die groesste Ueberschneidung liegt immer an einem Starttag)."""
-    errs, by = [], {}
-    for r in recs:
-        s, e = _day(r.get("start")), _day(r.get("end"))
-        if not (s and e): continue
-        for t in r.get("topics") or []:
-            by.setdefault(t, []).append((s, e, str(r.get("id"))))
-    for t, lst in sorted(by.items()):
-        worst, day0 = [], None
-        for a in lst:
-            hit = [b for b in lst if b[0] <= a[0] <= b[1]]
-            if len(hit) > len(worst): worst, day0 = hit, a[0]
-        if len(worst) > TOPIC_MAX:
-            errs.append(f'Thema "{t}": {len(worst)} Themen-Sponsorings gleichzeitig am {day0.isoformat()} (hoechstens {TOPIC_MAX}): ' + ", ".join(sorted(b[2] for b in worst)))
-    return errs
 
 
 def check_i18n():
@@ -243,16 +249,37 @@ def init(today, ents, episodes=(), dubs=None, orig=None, path=None):
     errs, ref = check_refs(recs, ents, episodes, dubs)
     if ref and _offline():
         print("WARNUNG (SITE_OFFLINE=1) Sponsorings:\n - " + "\n - ".join(ref)); ref = []
-    _fail(check_topic_limit(recs) + errs + ref)
+    _fail(errs + ref)
     st = _index(recs, today, dubs or {}, orig or {})
-    print(f"Sponsorings: {len(recs)} Eintraege, {sum(1 for r in recs if _active(r, st['today']))} laufend; gekennzeichnet: {len(st['ent'])} Entitaetsseiten, "
-          f"{len(st['ep'])} Folgen der Show, {len(st['vid'])} Videos (Dub-Folgen), {len(st['post'])} Beitraege")
+    st["lead"], unknown = lead_index(recs, st["today"], ents)
+    st["lead_ent"] = lead_entities(recs, st["today"], ents)
+    if unknown: print("WARNUNG Sponsorings: lead_topics ohne Entitaet (ignoriert): " + ", ".join(sorted(unknown)))
+    grace = [f'{r["id"]} bis {grace_end(r):%d.%m.%Y}' for r in recs if status(r, st["today"]).startswith("Karenzzeit")]
+    print(f"Sponsorings: {len(recs)} Eintraege, {sum(1 for r in recs if _active(r, st['today']))} laufend" + (f" (davon in Karenzzeit: {', '.join(grace)})" if grace else "")
+          + f"; gekennzeichnet: {len(st['ent'])} Entitaetsseiten, {len(st['ep'])} Folgen der Show, {len(st['vid'])} Videos (Dub-Folgen), {len(st['post'])} Beitraege")
     return st
 
 
+def grace_end(r):
+    """Wirksames Ende eines befristeten Sponsorings: "end" + GRACE_DAYS (6 Monate Karenzzeit, Mirko 11.11.2026, fuer alle Kunden); None bei "end" null/fehlt oder ungueltig."""
+    e = _day(r.get("end"))
+    return e + timedelta(days=GRACE_DAYS) if e else None
+
+
 def _active(r, today):
-    t = _day(today)
-    return bool(t and _day(r["start"]) <= t <= _day(r["end"]))
+    """DIE Laufzeit-Pruefung fuer alles, was ein laufendes Sponsoring zeigt: start <= today <= end + GRACE_DAYS (beide eingeschlossen); end null/fehlt: unbefristet."""
+    t, s = _day(today), _day(r.get("start"))
+    if not (t and s and s <= t): return False
+    return r.get("end") is None or bool(grace_end(r) and t <= grace_end(r))
+
+
+def status(r, today):
+    """Interne Anzeige (Baulog, Werkzeuge): "geplant", "laeuft", "laeuft (unbefristet)", "Karenzzeit bis TT.MM.JJJJ" oder "beendet". Oeffentliche Seiten zeigen nur die Kennzeichnung."""
+    t, s, e = _day(today), _day(r.get("start")), _day(r.get("end"))
+    if not (t and s) or t < s: return "geplant"
+    if r.get("end") is None: return "laeuft (unbefristet)"
+    if e and t <= e: return "laeuft"
+    return f"Karenzzeit bis {grace_end(r):%d.%m.%Y}" if _active(r, today) else "beendet"
 
 
 def _index(recs, today, dubs, orig):
@@ -263,7 +290,7 @@ def _index(recs, today, dubs, orig):
     def add(d, k, r):
         if r not in d.setdefault(k, []): d[k].append(r)
     for r in sorted(recs, key=lambda r: (r["start"], r["id"])):
-        if _active(r, st["today"]):   # Banner auf Entitaetsseiten nur waehrend der Laufzeit
+        if _active(r, st["today"]):   # Banner auf Entitaetsseiten waehrend der Laufzeit und der Karenzzeit (182 Tage nach "end")
             for x in list(r.get("entities") or []) + list(r.get("topics") or []): add(st["ent"], x, r)
             st["own"].update(r.get("entities") or [])
         for x in r.get("episodes") or []:   # Folgen und Beitraege behalten die Kennzeichnung dauerhaft
@@ -282,6 +309,94 @@ def _index(recs, today, dubs, orig):
     return st
 
 
+def lead_index(recs, today, ents):
+    """Lead-Formular auf Beitraegen und Folgen: [{"org": id der Sponsor-Firma, "name", "topics": {ids}}] fuer laufende Sponsorings mit "lead_topics".
+    Themen = lead_topics (nur bekannte ids) plus Firma und ihre Produkte. -> (Liste, unbekannte ids)"""
+    out, unknown = [], set()
+    for o in active_sponsor_orgs(today, ents, recs):
+        lt = list(dict.fromkeys(t for r in sorted(recs, key=lambda r: (r["start"], r["id"])) if _active(r, today) and o["id"] in (r.get("entities") or []) for t in (r.get("lead_topics") or [])))   # alle aktiven Sponsorings der Firma: bei Verlaengerung steht der alte Vertrag in der Karenzzeit noch vorn
+        if not lt or any(x["org"] == o["id"] for x in out): continue
+        known = [t for t in lt if t in ents]; unknown.update(t for t in lt if t not in ents)
+        out.append({"org": o["id"], "name": o["name"], "topics": set(known) | set(sponsor_extra_entities(o["id"], today, ents, recs))})
+    return out, unknown
+
+
+def lead_entities(recs, today, ents):
+    """Entitaetsseiten mit Lead-Formular: {entity-id: {"org", "name"}} = Sponsor-Firma und ihre Produkte (Polaris und die Module bei iFAKT)."""
+    out = {}
+    for o in active_sponsor_orgs(today, ents, recs):
+        for x in sponsor_extra_entities(o["id"], today, ents, recs):
+            out.setdefault(x, {"org": o["id"], "name": o["name"]})
+    return out
+
+
+def lead_org_of(eid):
+    """Sponsor-Firma, deren Lead-Formular auf der Entitaetsseite eid steht (die Firma selbst oder eines ihrer Produkte), sonst None."""
+    return (_state().get("lead_ent") or {}).get(eid)
+
+
+def lead_for_page(topics):
+    """Sponsor-Firma, deren Lead-Formular zu den Themen (verlinkte Entitaeten) einer Seite passt, sonst None. Reihenfolge der Sponsorings."""
+    ts = set(topics or [])
+    for x in (_state().get("lead") or []):
+        if x["topics"] & ts: return x
+    return None
+
+
+def _in_grace(r, today):
+    """Laeuft oder ist vor hoechstens GRACE_DAYS Tagen zu Ende gegangen (end + 182 Tage eingeschlossen); seit 11.11.2026 gleichbedeutend mit _active()."""
+    return _active(r, today)
+
+
+def sponsor_extra_entities(org_id, today, ents, recs=None):
+    """Extra-Entitaeten eines Sponsors: [org_id] + Produkte (rel developed_by -> org; Produkte/Plattformen mit part_of -> org), in Reihenfolge von ents.
+    Nur wenn ein Sponsoring mit org_id in "entities" laeuft oder vor <= GRACE_DAYS Tagen endete (GRACE_MONTHS = 6), sonst []."""
+    recs = _state()["recs"] if recs is None else recs
+    if org_id not in ents or not any(org_id in (r.get("entities") or []) and _in_grace(r, today) for r in recs): return []
+    out = [org_id]
+    for eid, e in ents.items():
+        if eid in out: continue
+        for rel in e.get("rel") or []:
+            if len(rel) == 2 and rel[1] == org_id and (rel[0] == "developed_by" or (rel[0] == "part_of" and e.get("type") in ("product", "platform"))):
+                out.append(eid); break
+    return out
+
+
+def active_sponsor_orgs(today, ents, recs=None):
+    """Aktive Sponsor-Firmen (Entitaetstyp org in "entities" eines laufenden Sponsorings inkl. 182 Tage Karenzzeit, unbefristet eingeschlossen): [{"id", "name", "rec"}].
+    Grundlage fuer Firmenverzeichnis, Lead-Formular und sponsors.json (der Worker nimmt Leads nur fuer diese Firmen ohne Buchung an)."""
+    recs = _state()["recs"] if recs is None else recs
+    out, seen = [], set()
+    for r in sorted(recs, key=lambda r: (r["start"], r["id"])):
+        if not _active(r, today): continue
+        for x in r.get("entities") or []:
+            if x in seen or (ents.get(x) or {}).get("type") != "org": continue
+            seen.add(x); out.append({"id": x, "name": ents[x].get("name") or x, "rec": r})
+    return out
+
+
+def sponsors_json(today, ents, recs=None):
+    """Inhalt von sponsors.json: nur ids und Namen der aktiven Sponsor-Firmen (keine Vertragsdaten)."""
+    return {"orgs": [{"id": o["id"], "name": o["name"], "manager": (o["rec"].get("manager") or {}).get("handle", "")} for o in active_sponsor_orgs(today, ents, recs)]}
+
+
+def split_topics(topics, extras, cap=TOPIC_CAP):
+    """Themenliste fuer Chips: extras vorn (ohne Doppelte), danach die ersten cap normalen Themen in bisheriger Reihenfolge.
+    Gibt (Liste, Menge der Extras) zurueck; ohne extras einfach die ersten cap Themen."""
+    ex = list(dict.fromkeys(extras or []))
+    return ex + [t for t in dict.fromkeys(topics or []) if t not in ex][:cap], set(ex)
+
+
+def post_extras(recs, today, ents):
+    """Extras fuer einen gesponserten Beitrag: Vereinigung ueber alle zugehoerigen Sponsorings (nur Sponsor-Entitaeten aus "entities")."""
+    out = []
+    for r in recs or []:
+        for o in r.get("entities") or []:
+            for x in sponsor_extra_entities(o, today, ents, [r]):
+                if x not in out: out.append(x)
+    return out
+
+
 def check_posts(posts):
     """Nach dem Laden der Blogbeitraege (Community-Export + fruehere Beitraege): jeder Verweis muss einen Beitrag treffen."""
     st = _state()
@@ -295,7 +410,7 @@ def check_posts(posts):
 def _state():
     if _S is None:   # ohne init() (einzelnes Modul, Tests): Aufbau und Themen-Grenze pruefen, Verweise nicht
         recs, errs = check_structure(read())
-        _fail(errs + check_topic_limit(recs))
+        _fail(errs)
         _index(recs, date.today().isoformat(), {}, {})
     return _S
 
@@ -320,12 +435,12 @@ def set_go_codes(codes, offline=False):
 # --- Abfragen fuer die Seiten (leere Liste = keine Kennzeichnung, die Seite bleibt Byte fuer Byte wie ohne Sponsorings) ---
 
 def entity(eid):
-    """Laufende Sponsorings (Entitaet des Sponsors oder Themen-Sponsoring) dieser Entitaet."""
+    """Laufende Sponsorings (inkl. Karenzzeit; Entitaet des Sponsors oder Themen-Sponsoring) dieser Entitaet."""
     return list(_state()["ent"].get(eid, []))
 
 
 def entity_own(eid):
-    """True, wenn die Entitaet einem laufenden Sponsor selbst gehoert ("entities"): ihr Link "Offizielle Website" ist ein bezahlter Link."""
+    """True, wenn die Entitaet einem laufenden Sponsor (inkl. Karenzzeit) selbst gehoert ("entities"): ihr Link "Offizielle Website" ist ein bezahlter Link."""
     return eid in _state()["own"]
 
 
@@ -335,6 +450,13 @@ def episode(slug=None, vid=None):
     for r in (st["ep"].get(slug, []) if slug else []) + (st["vid"].get(vid, []) if vid else []):
         if r not in out: out.append(r)
     return out
+
+
+def running(today=None):
+    """Alle laufenden Sponsorings (Zeitraum eingeschlossen plus 182 Tage Karenzzeit nach "end", unbefristete immer), egal ob ein Inhalt namentlich zugeordnet ist. Grundlage dafuer, dass Links auf die
+    Website eines laufenden Sponsors in JEDEM Blogbeitrag rel="sponsored" tragen, auch wenn der Beitrag nicht in "posts" steht (z. B. die Cognillo-Reihe)."""
+    st = _state(); t = str(today or st["today"])[:10]
+    return [r for r in sorted(st["recs"], key=lambda r: (r["start"], r["id"])) if _active(r, t)]
 
 
 def post(handle, slug):

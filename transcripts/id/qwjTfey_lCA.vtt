@@ -1,0 +1,1048 @@
+WEBVTT
+
+00:00:00.340 --> 00:00:07.040
+Siap untuk 10 hari pembahasan Microsoft 365, Copilot, AI, Azure, dan para tokoh, pembentuk masa depan kerja.
+
+00:00:07.860 --> 00:00:12.000
+Januari ini, M365 Con kembali hadir dan kami tampil lebih besar.
+
+00:00:12.780 --> 00:00:18.220
+Bergabunglah bersama kami dalam sesi langsung demo dunia nyata dan pengetahuan praktis dari MVP serta pakar industri di seluruh dunia.
+
+00:00:18.880 --> 00:00:21.160
+Tanpa slide generik, tanpa jargon yang tak ada habis.
+
+00:00:22.040 --> 00:00:28.640
+Kami akan membahas tantangan nyata, Copilot Studio, Agen, AI, Fabrik, Keamanan, Tata Kelola, dan Otomatisasi.
+
+00:00:28.640 --> 00:00:34.500
+Baik Anda seorang profesional IT, pengembang, atau pemimpin bisnis, tersedia sesi yang dirancang khusus untuk Anda.
+
+00:00:35.440 --> 00:00:40.180
+Selama 10 hari penuh, Anda bisa menjelajahi berbagai teknologi dan terhubung dengan komunitas global.
+
+00:00:40.900 --> 00:00:44.360
+Taksikan secara langsung, dan bawa wasam praktis kembali ke organisasi Anda.
+
+00:00:45.200 --> 00:00:48.860
+Januari 2022, 10 hari, satu komunitas Microsoft.
+
+00:00:49.440 --> 00:00:50.520
+Pendaturan sudah dibuka sekarang.
+
+00:00:52.480 --> 00:00:54.600
+Dapatkan tempat Anda hari ini.
+
+00:00:54.600 --> 00:00:58.700
+Kunjungi m365con.net
+
+00:00:58.700 --> 00:01:02.280
+Daftar sekarang di m365con.net
+
+00:01:02.280 --> 00:01:04.720
+Dan sampai jumpa, langsung di bulan Januari.
+
+00:01:05.400 --> 00:01:07.440
+Datang di episode lain dari Microsoft Knowledge Nuggets.
+
+00:01:07.780 --> 00:01:08.300
+Saya Mirko Peters.
+
+00:01:08.780 --> 00:01:12.600
+Topik hari ini adalah masalah yang hampir dialami setiap orang yang mempelajari sains data atau membelajari sains data.
+
+00:01:12.800 --> 00:01:17.180
+Anda sudah menonton beberapa tutorial, Anda sudah memahami dasarnya, tetapi ada satu hal yang membuat Anda terhenti.
+
+00:01:17.180 --> 00:01:19.480
+Anda tidak memiliki data menarik untuk dipraktekan.
+
+00:01:20.240 --> 00:01:22.940
+Anda mulai mencari data set publik, dan disitulah masalah dimulai.
+
+00:01:22.940 --> 00:01:28.420
+Anda menemukan situs pemerintah dengan data cuaca yang bagus, tetapi berkasnya dalam format aneh yang belum pernah Anda lihat.
+
+00:01:29.140 --> 00:01:31.500
+Nama kolomnya tidak masuk akal, dan separuh nilainya hilang.
+
+00:01:32.140 --> 00:01:36.940
+Anda menghabiskan waktu berjam-jam hanya untuk membukanya, dan saat data sudah cukup bersih untuk digunakan, antusiasma Anda sudah hilang.
+
+00:01:37.420 --> 00:01:38.760
+Saya pernah mengalaminya, dan selamat berperusaha.
+
+00:01:39.200 --> 00:01:40.760
+Episode hari ini akan nambatan itu sepenuhnya.
+
+00:01:41.160 --> 00:01:49.520
+Di akhir episode ini, Anda akan tahu apa itu Azure Open Datasets, dan cara mendapatkan data gratis yang siap pakai dalam hitungan menit tanpa perlu scraping, pembersihan, atau pusing.
+
+00:01:50.220 --> 00:01:50.780
+Mari kita mulai.
+
+00:01:50.780 --> 00:01:53.260
+Apa sebenarnya Azure Open Datasets itu?
+
+00:01:54.100 --> 00:01:55.680
+Jadi, apa sebenarnya Azure Open Datasets itu?
+
+00:01:56.240 --> 00:01:57.260
+Berikut definisi paling sederhana.
+
+00:01:57.620 --> 00:02:01.420
+Ini adalah pustaka gratis berisi data set publik yang telah dibersihkan oleh Microsoft dan dihosting di Azure.
+
+00:02:01.860 --> 00:02:11.140
+Anggaplah seperti perpustakaan di mana orang lain sudah memeriksa setiap buku dari halaman robek, memperbaiki kesalahan ejaan, dan menyusun semuanya sesuai abjad, sehingga Anda tinggal masuk dan mengambil apa yang Anda butuhkan.
+
+00:02:11.600 --> 00:02:12.280
+Sekarang ini penting.
+
+00:02:12.280 --> 00:02:15.620
+Ini bukan layanan perbayar terpisah yang harus Anda daftar atau tambahan premium.
+
+00:02:16.060 --> 00:02:18.680
+Ini hanyalah data yang tersimpan di penyimpanan Azure yang bisa Anda akasih.
+
+00:02:19.020 --> 00:02:19.380
+Putusan ini.
+
+00:02:19.540 --> 00:02:32.060
+Microsoft telah mengambil data set publik dari pihak seperti NOAA, Piro Sensus AS, dan pemerintah kota, dan mereka telah melakukan semua kerja keras dalam menormalkan skema, memperbaiki ketidak konsistenan, dan mengatur jadwal pembaruan agar data tetap terkini.
+
+00:02:32.940 --> 00:02:34.520
+Bandingkan itu dengan cara lama dalam kelasan slot.
+
+00:02:35.240 --> 00:02:45.800
+Anda akan menemukan data set di situs pemerintah, mengunduh file zip yang berisi file CSV dengan format berbeda, membukanya, dan menemukan nilai yang hilang, format tanggal yang aneh, serta kolom yang tidak cocok antar file.
+
+00:02:46.480 --> 00:02:50.160
+Kemudian Anda akan menghabiskan waktu berjam-jam, terkadang berhari-hari, menulis kode untuk membersihkan semua.
+
+00:02:50.500 --> 00:02:54.760
+Dan saat Anda selesai, Anda bahkan tidak yakin apakah Anda telah melakukannya dengan Microsoft menangani semua hal tersebut.
+
+00:02:54.760 --> 00:03:02.680
+Mereka menormalkan data ke dalam skema yang konsisten, memperbaiki celah, dan menyimpannya dalam format parquet, sebuah format penyimpanan kolom yang membuat query menjadi sangat cepat.
+
+00:03:03.160 --> 00:03:08.380
+Jika Anda pernah mencoba melakukan query pada file CSV raksasa dan menunggu lama hingga termuat, Anda akan menghargai apa yang dilakukan parquet.
+
+00:03:08.660 --> 00:03:12.420
+Format ini dioptimalkan untuk analitik sehingga query Anda berjalan jauh lebih cepat daripada teks biasa.
+
+00:03:12.520 --> 00:03:16.800
+Berikut poin kuncinya, datanya sendiri gratis dan Microsoft selalu membayar untuk penyimpanannya.
+
+00:03:17.280 --> 00:03:20.020
+Anda hanya membayar biaya komputasi jika Anda memprosesnya dan kita akan merasakan.
+
+00:03:20.300 --> 00:03:22.420
+Nata yang berada di penyimpanan Azure tidak membebani biaya apapun.
+
+00:03:22.420 --> 00:03:24.800
+Izinkan saya memberikan analogi agar hal ini lebih konkret.
+
+00:03:25.200 --> 00:03:26.760
+Bayangkan Anda pindah ke gedung kantor baru.
+
+00:03:27.460 --> 00:03:34.620
+Dengan cara lama, Anda akan mendapatkan tumpukan kayu, drywall, kabel, dan perlengkapan pipa, dan Anda harus membangun setiap ruangan sendiri dari awal.
+
+00:03:35.620 --> 00:03:37.500
+Seperti itulah rasanya bekerja dengan data publik mentah.
+
+00:03:38.260 --> 00:03:39.820
+Azure Open Dataset adalah kebalikannya.
+
+00:03:39.920 --> 00:03:42.200
+Ini adalah ruangan data siap pakai yang bisa Anda masuki.
+
+00:03:42.880 --> 00:03:46.700
+Ruangan cuaca sudah berperabotan, ruangan sensus memiliki segalanya yang sudah diberi label dan diatur.
+
+00:03:47.080 --> 00:03:48.020
+Anda tidak perlu merakit awal.
+
+00:03:48.540 --> 00:03:50.000
+Anda cukup masuk dan mulai bekerja.
+
+00:03:50.000 --> 00:03:52.280
+Masalah yang dipecahkan Open Dataset.
+
+00:03:52.460 --> 00:03:53.860
+Jadi mengapa mikros membangun ini?
+
+00:03:54.380 --> 00:03:55.380
+Masalah apa yang mereka selesaikan?
+
+00:03:55.860 --> 00:03:56.400
+Mari kita bedah.
+
+00:03:56.780 --> 00:03:57.820
+Penemuan adalah masalah pertama.
+
+00:03:58.280 --> 00:04:00.680
+Anda membutuhkan data publik yang anda, tetapi menemukannya butuh waktu.
+
+00:04:01.040 --> 00:04:04.520
+Ada ratusan situs web pemerintah, repository akademik, dan portal data di luar sana.
+
+00:04:04.920 --> 00:04:06.820
+Beberapa terawat dengan baik, beberapa terbengkalai.
+
+00:04:07.160 --> 00:04:10.840
+Dan beberapa mengharuskan Anda mengisi formulir atau menyetujui lisensi sebelum Anda dapat mengunduh apa.
+
+00:04:11.100 --> 00:04:14.820
+Hanya untuk menemukan data set yang bersih dan rapat digunakan mungkin menghabiskan waktu berhari-hari untuk mencari.
+
+00:04:14.820 --> 00:04:16.000
+Lalu ada masalah persiapan.
+
+00:04:16.420 --> 00:04:19.840
+Data mentah dari sumber pemerintah berantakan tidak konsisten dan penuh dengan celah.
+
+00:04:20.320 --> 00:04:21.400
+Ambil contoh data cuaca normal.
+
+00:04:21.880 --> 00:04:26.440
+Data ini berasal dari ribuan stasiun cuaca di seluruh dunia, yang masing-masing melapor dalam format yang sedikit berbeda.
+
+00:04:26.940 --> 00:04:31.700
+Beberapa stasiun melapor suhu dalam Celsius, lainnya dalam Fahrenheit, ada yang mencatat curah hujan, ada yang tidak.
+
+00:04:32.180 --> 00:04:35.940
+Dan beberapa memiliki data bersih bertahun-tahun, sementara yang lain memiliki celah besar karena sensor rusak.
+
+00:04:36.280 --> 00:04:38.500
+Membersihkan data tersebut secara manual adalah pekerjaan yang menurut.
+
+00:04:38.500 --> 00:04:41.000
+Segala masalah lainnya, beberapa set data ini sangat lepsar.
+
+00:04:41.420 --> 00:04:42.920
+Data cuaca mencakup hingga beberapa dekat.
+
+00:04:43.200 --> 00:04:45.500
+Data taksi NYC memiliki ratusan juta data perjalanan.
+
+00:04:45.680 --> 00:04:47.120
+Citra satelit mencapai ukuran petabyte.
+
+00:04:47.820 --> 00:04:50.900
+Memindahkan data sebanyak itu ke lingkungan komputasi Anda lambat dan mahal.
+
+00:04:51.340 --> 00:04:56.820
+Jika Anda menjalankan model pembelajaran mesin di Cloud VM, Anda tentu tidak ingin menghabiskan waktu berjam-jam mengunduh data sebelum bisa melatih.
+
+00:04:57.220 --> 00:04:58.980
+Dan akhirnya, reproduktivitas itu penting.
+
+00:04:59.240 --> 00:05:02.340
+Saat Anda menjalankan eksperimen, Anda memerlukan data yang konsisten.
+
+00:05:02.340 --> 00:05:06.760
+Jika Anda mengunduh set data hari ini dan rekan Anda mengunduhnya minggu depan, Anda perlu data yang sama.
+
+00:05:07.360 --> 00:05:10.040
+Set data yang terkurasi dan terdokumentasi membuat eksperimen dapat diulang.
+
+00:05:10.440 --> 00:05:14.100
+Anda dapat mempublikasikan hasil Anda dan orang lain dapat memverifikasinya menggunakan data yang sama persis.
+
+00:05:14.680 --> 00:05:15.760
+Sekarang mari kita luluskan sebuah mito.
+
+00:05:16.240 --> 00:05:18.660
+Kebanyakan orang berpikir pembelajaran mesin hanya tentang algoritma.
+
+00:05:18.980 --> 00:05:23.500
+Namun wawasan nyata dari Microsoft adalah bahwa sebagian besar masalah pembelajaran mesin dipengaruhi oleh faktor dunia nyata.
+
+00:05:23.500 --> 00:05:25.700
+Cuaca, hari libur, demografi, dan kondisi ekonomi.
+
+00:05:26.220 --> 00:05:30.880
+Jika Anda mencoba memprediksi penjualan, mengetahui apakah itu hari libur atau hari selasa yang hujan akan memberikan perbedaan besar.
+
+00:05:31.140 --> 00:05:34.040
+Jika Anda memprediksi konsumsi energi, suhu, dan waktu dalam sehari sangat lepas.
+
+00:05:34.440 --> 00:05:37.340
+Jika Anda memodelkan risiko asuransi, demografi lingkungan sangatlah krusif.
+
+00:05:37.760 --> 00:05:40.240
+Tanpa singal eksternal ini, model Anda akan kehilangan konteks.
+
+00:05:40.580 --> 00:05:43.600
+Ini seperti mencoba memprediksi pola lalu lintas tanpa mengetahui jam berapa sekarang.
+
+00:05:44.160 --> 00:05:46.440
+Anda mungkin mendapatkan beberapa pola yang tepat, tetapi Anda akan berapa besar.
+
+00:05:46.620 --> 00:05:48.460
+Dan itulah inti dari masalah waktu ke data.
+
+00:05:49.040 --> 00:05:51.520
+Dibutuhkan waktu berminggu-minggu hanya untuk mendapatkan data yang dapat di gunakan.
+
+00:05:51.520 --> 00:05:54.500
+Berminggu-minggu untuk mencari mengundung bersihkan dan memvalidasi.
+
+00:05:54.860 --> 00:05:57.040
+Saat data sudah siap, pertanyaan bisnis mungkin telah berubah.
+
+00:05:57.800 --> 00:06:00.920
+Azure Open Data Sets memangkas lin masa tersebut dari hitungan minggu menjadi menit.
+
+00:06:01.580 --> 00:06:02.340
+Apa saja yang sih kata lho?
+
+00:06:02.800 --> 00:06:03.500
+Cuacaan hari libur.
+
+00:06:03.940 --> 00:06:05.220
+Mari kita bahas lebih dalam kata waktu ini.
+
+00:06:06.040 --> 00:06:08.400
+Set data pertama yang hampir semua orang enggak berguna adalah data cuaca.
+
+00:06:09.200 --> 00:06:11.020
+Microsoft menampung set data cuaca NOA.
+
+00:06:11.480 --> 00:06:15.080
+Data ini memberikan Anda pembacaan historis dan hampir waktu nyata dari stasiun cuaca di seluruh dunia.
+
+00:06:15.080 --> 00:06:18.820
+Kita berbicara tentang suhu, curah hujan, kecepatan angin, dan tekanan barometrik.
+
+00:06:18.820 --> 00:06:22.900
+Jenis data yang memengaruhi segalanya mulai dari apa yang dibeli orang hingga seberapa banyak energi yang mereka guna.
+
+00:06:23.100 --> 00:06:24.240
+Dan data ini mencakup puluhan tahun.
+
+00:06:24.760 --> 00:06:25.640
+Diperbarui secara berkala.
+
+00:06:26.000 --> 00:06:31.000
+Jadi jika Anda ingin melihat pola cuaca dari tahun 1990-an atau mengambil data pembacaan minggu lalu, semuanya ada di sana.
+
+00:06:31.440 --> 00:06:32.380
+Data cuaca memang sangat bagus.
+
+00:06:32.840 --> 00:06:33.540
+Membuat inilah masalahnya.
+
+00:06:33.880 --> 00:06:35.580
+Ada kumpulan data lain yang sangat cocok dipadukan ini.
+
+00:06:35.920 --> 00:06:36.520
+Hari libur nasional.
+
+00:06:36.740 --> 00:06:41.500
+Microsoft memiliki kumpulan data hari libur yang mencakup 38 negara dari tahun 1970 hingga 2009.
+
+00:06:41.500 --> 00:06:44.760
+Jadi Anda bisa melihat ke belakang untuk analisis historis atau ke depan untuk perencet.
+
+00:06:44.760 --> 00:06:48.180
+Data ini memberi Anda penanda hari libur khusus negara untuk rentang tanggal berapa.
+
+00:06:48.460 --> 00:06:51.120
+Perlu mengetahui apakah hari Selasa tertentu adalah hari libur nasional di cepat.
+
+00:06:51.600 --> 00:06:52.020
+Nggak ada di sana.
+
+00:06:52.300 --> 00:06:55.080
+Ingin memeriksa apakah hari Senin di bulan Agustus itu adalah hari libur bang di Inggris?
+
+00:06:55.420 --> 00:06:56.560
+Satu query dan Anda akan mendapatkan.
+
+00:06:56.880 --> 00:06:58.900
+Mengapa kedua kumpulan data ini sangat kuat jika digabungi?
+
+00:06:59.280 --> 00:07:01.940
+Cuaca dan hari libur secara dramatis meningkatkan prediksi darat waktu.
+
+00:07:02.440 --> 00:07:04.040
+Pikirkan tentang peramalan penjualan retail.
+
+00:07:04.140 --> 00:07:07.900
+Jika Anda mencoba memprediksi berapa banyak unit produk yang akan terjual minggu depan,
+
+00:07:07.980 --> 00:07:11.840
+mengetahui bahwa itu hari libur dan akan turun hujan dapat mengurangi kesalahan prediksi Anda hingga 2 dijit.
+
+00:07:11.840 --> 00:07:16.620
+Itu bukanlah peningkatan yang kecil, itu adalah perbedaan antara memiliki terlalu banyak inventaris di gudang
+
+00:07:16.620 --> 00:07:18.480
+dan kehabisan stok barang terlaris Anda.
+
+00:07:19.220 --> 00:07:22.560
+Dan inilah poinnya, kebanyakan perusahaan tidak memiliki data ini secara internal.
+
+00:07:23.080 --> 00:07:26.500
+Mereka punya data penjualan, tentu saja, tetapi mereka tidak punya sumber sejarah cuaca
+
+00:07:26.500 --> 00:07:28.200
+atau kalender hari libur yang bersih dan terpercaya.
+
+00:07:28.880 --> 00:07:31.960
+Jadi, mereka harus membangunnya sendiri, memakan waktu atau mereka tidak menggunakannya,
+
+00:07:32.060 --> 00:07:32.900
+yang merugikan prediksi mereka.
+
+00:07:33.380 --> 00:07:35.980
+Azure Open Dataset memberikan bagian yang hilang itu secara instan.
+
+00:07:36.420 --> 00:07:38.120
+Namun, cuaca dan hari libur hanyalah permulaan.
+
+00:07:38.120 --> 00:07:42.660
+Oja yang dikatakan, data sensus, demografi, dan sosial ekonomi.
+
+00:07:43.460 --> 00:07:46.660
+Kategori berikutnya penting jika Anda membangun model prediksi sesuatu tentang orang.
+
+00:07:47.200 --> 00:07:48.400
+Adalah data sensus dan demografi.
+
+00:07:48.840 --> 00:07:54.780
+Microsoft menyimpan data sensus AS yang mencakup populasi, pendapatan, tingkat pendidikan, dan distribusi usia.
+
+00:07:55.280 --> 00:07:59.300
+Dan data ini tersedia di berbagai tingkat geografis, mulai dari negara bagian, wilayah, bahkan wilayah sensus.
+
+00:07:59.300 --> 00:08:02.980
+Jadi, Anda bisa mendapatkan median pendapatan rumah tangga untuk lingkungan tertentu
+
+00:08:02.980 --> 00:08:05.780
+atau rincian populasi berdasarkan kelompok usia untuk seluruh negara bagian.
+
+00:08:06.480 --> 00:08:10.100
+Ada juga kumpulan data statistik tenaga kerja AS yang memberi Anda tingkat lapangan kerja,
+
+00:08:10.240 --> 00:08:12.320
+jumlah partisipasi tenaga kerja, dan rincian industri.
+
+00:08:12.920 --> 00:08:16.800
+Anda bisa melihat berapa banyak orang yang bekerja di sektor manufaktur dibandingkan jasa di suatu wilayah
+
+00:08:16.800 --> 00:08:18.740
+atau bagaimana pengangguran berubah dari waktu-waktu.
+
+00:08:19.320 --> 00:08:20.380
+Mengapa ini penting bagi pemula?
+
+00:08:20.960 --> 00:08:23.900
+Karena jika Anda ingin membangun model yang memprediksi sesuatu tentang orang,
+
+00:08:24.100 --> 00:08:25.500
+ini adalah tempat yang sempurna untuk memulai.
+
+00:08:25.500 --> 00:08:26.580
+Ini contoh nyatanya.
+
+00:08:27.180 --> 00:08:29.060
+Bayangkan Anda sedang membangun model untuk perusahaan si.
+
+00:08:29.540 --> 00:08:32.660
+Anda memiliki data klaim, usia, jumlah, tetapi model Anda tidak akurat
+
+00:08:32.660 --> 00:08:35.500
+karena Anda kehilangan konteks tentang di mana orang-orang ini tinggal.
+
+00:08:35.900 --> 00:08:39.140
+Jadi, Anda memperkaya data tersebut dengan statistik pendapatan dan pendidikan dari sensus.
+
+00:08:39.660 --> 00:08:41.800
+Tiba-tiba model tersebut melihat pola yang terlewatkan sebelumnya.
+
+00:08:42.220 --> 00:08:44.980
+Orang di daerah berpenghasilan lebih rendah mengajukan klaim berbeda
+
+00:08:44.980 --> 00:08:47.220
+dan tingkat pendidikan lebih tinggi mengubah profil risiko.
+
+00:08:47.640 --> 00:08:50.380
+Model menjadi lebih baik karena memiliki lebih banyak informasi tentang dunia.
+
+00:08:50.820 --> 00:08:53.020
+Itulah yang membaca data terbuka azure berharga bagi pemula.
+
+00:08:53.240 --> 00:08:56.500
+Anda tidak perlu menjadi data engineer untuk menarik data sensus ke dalam proyek.
+
+00:08:56.720 --> 00:08:57.980
+Datanya sudah bersih dan siap dikenalki.
+
+00:08:57.980 --> 00:09:01.960
+Gabungkan dengan data Anda sendiri dan analisis Anda akan mendapatkan kedalamannya sebelumnya tidak dimiliki.
+
+00:09:02.320 --> 00:09:03.200
+Apa saja isi katalognya?
+
+00:09:03.620 --> 00:09:05.700
+Mobilitas keselamatan publik dan layan kesehatan.
+
+00:09:06.220 --> 00:09:09.100
+Favorit klasik bagi pemula adalah sedata perjalanan taksi NYC.
+
+00:09:09.640 --> 00:09:12.980
+Ini adalah salah satu sedata publik paling terkenal berisi jutaan catatan perjalanan
+
+00:09:12.980 --> 00:09:15.200
+dengan waktu jemput dan antar, lokasi, serta tarif.
+
+00:09:15.680 --> 00:09:18.120
+Setiap perjalanan taksi kuning di New York menghasilkan satu catatan.
+
+00:09:18.480 --> 00:09:21.440
+Di mana mereka naik, di mana mereka turun, berapa biayanya, berapa lama perjalanan.
+
+00:09:21.440 --> 00:09:23.800
+Ini adalah sedata yang hebat untuk mempelajari analisis data.
+
+00:09:24.100 --> 00:09:25.040
+Mengapa pemula menyukainya?
+
+00:09:25.320 --> 00:09:26.440
+Karena menarik dan bersifat visual.
+
+00:09:26.960 --> 00:09:30.140
+Muat ke dalam Power BI dan mulailah membuat peta ke mana orang paling sering berpergian.
+
+00:09:30.520 --> 00:09:31.900
+Lihat bagaimana tarif berubah sepanjang hari.
+
+00:09:32.340 --> 00:09:32.900
+Membukan polanya.
+
+00:09:33.460 --> 00:09:34.700
+Lingkungan mana yang sibuk pada jam sibuk.
+
+00:09:35.280 --> 00:09:36.760
+Bandara mana yang menghasilkan perjalanan terbanyak.
+
+00:09:37.400 --> 00:09:38.580
+Bagaimana cuaca memperjalanan.
+
+00:09:39.080 --> 00:09:39.900
+Data ini bercerita.
+
+00:09:40.080 --> 00:09:42.540
+Jadi belajar terasa seperti memecahkan teka-teki, bukan mengerjakan pengen.
+
+00:09:42.840 --> 00:09:44.200
+Data keselamatan publik adalah yang berikut.
+
+00:09:44.200 --> 00:09:46.780
+Microsoft menampung data keselamatan San Francisco
+
+00:09:46.780 --> 00:09:49.980
+yang mencatat insiden kejahatan dengan jenis, lokasi, dan stempel waktu.
+
+00:09:50.200 --> 00:09:52.680
+Sekali lagi sempurna untuk pemula karena datanya langsung bermakna.
+
+00:09:53.140 --> 00:09:55.360
+Buat peta hotspot, analisis pola kejahatan berdasarkan waktu.
+
+00:09:56.000 --> 00:09:58.460
+Ini menunjukkan bagaimana data terbuka mendukung proyeksi pilengat.
+
+00:09:59.020 --> 00:10:02.320
+Perencana kota dan polisi menggunakan ini untuk memutuskan di mana harus menyebarkan sumber daya.
+
+00:10:02.760 --> 00:10:04.380
+Lalu ada danau data COVID-19.
+
+00:10:04.980 --> 00:10:05.700
+Ini bukanlah satu setap.
+
+00:10:06.060 --> 00:10:07.100
+Ini menggabungkan berbagai sumber.
+
+00:10:07.620 --> 00:10:10.800
+Hasil pasien, pengujian, kapasitas rumah sakit, kebijakan, mobilitas.
+
+00:10:10.800 --> 00:10:14.000
+Selama pandemi, peneliti menggunakannya untuk melacak virus,
+
+00:10:14.160 --> 00:10:16.340
+memodelkan penyebarannya, dan mengevaluasi intervensi.
+
+00:10:16.620 --> 00:10:19.960
+Itu menunjukkan bagaimana set data terbuka bisa berdampak nyata pada dunia saat dapat diakses.
+
+00:10:20.180 --> 00:10:23.660
+Ketiga set data ini, perjalanan taksi, keselamatan publik, dan COVID-19,
+
+00:10:24.160 --> 00:10:25.020
+memiliki sesuatu yang penting.
+
+00:10:25.180 --> 00:10:25.740
+Semuanya tidak abstrak.
+
+00:10:26.080 --> 00:10:27.640
+Anda tidak perlu menjadi ahli untuk memahami.
+
+00:10:28.000 --> 00:10:30.100
+Datanya tentang orang, tempat, dan peristiwa nyata.
+
+00:10:30.540 --> 00:10:31.740
+Itu membuat belajar menjadi lebih mudah.
+
+00:10:32.160 --> 00:10:34.840
+Ada juga set data tolok ukur bagi mereka yang secara khusus mempelajari ML.
+
+00:10:35.740 --> 00:10:36.620
+Lepas saja isi katalognya.
+
+00:10:36.620 --> 00:10:37.780
+Set data tolok ukur ML.
+
+00:10:37.780 --> 00:10:41.220
+Jadi Anda telah mendapatkan semua data dunia nyata dari bagian sebelumnya.
+
+00:10:41.300 --> 00:10:44.640
+Namun, bagaimana jika Anda mengikuti tutorial dan hanya membutuhkan kumpulan data yang bersih
+
+00:10:44.640 --> 00:10:46.160
+dan sederhana untuk mati teknik tertentu?
+
+00:10:46.480 --> 00:10:48.400
+Azure Open Dataset juga menyediakan hal tersebut untuk Anda.
+
+00:10:48.680 --> 00:10:49.740
+Anda pelanis sebagai sebuah kotak warna.
+
+00:10:50.000 --> 00:10:51.520
+Anda memiliki perkakas listrik untuk pekerjaan besar,
+
+00:10:51.640 --> 00:10:53.800
+tapi terkadang Anda hanya butuh hal yang sederhana untuk mempelajari dasar.
+
+00:10:53.960 --> 00:10:55.580
+Itulah keguna dari kumpulan data tolok ukur benchmark.
+
+00:10:56.280 --> 00:10:59.540
+Ambil contoh kumpulan data diabetes dengan 42 sampel dan 10 fitur.
+
+00:10:59.540 --> 00:11:04.400
+Ini adalah masalah regresi klasik yang sering Anda temui dalam buku teks dan tutorial
+
+00:11:04.400 --> 00:11:06.540
+dan tersedia langsung di Azure Open Datasets.
+
+00:11:06.860 --> 00:11:07.960
+Siap dimuat ke Azure ML.
+
+00:11:08.700 --> 00:11:11.980
+Jika Anda sedang mempelajari ML otomatis, ini adalah kumpulan data yang tepat untuk mulai.
+
+00:11:12.460 --> 00:11:15.700
+Cukup kecil untuk iterasi dengan cepat, tetapi cukup nyata untuk mengejarkan alu kerja kepadanya.
+
+00:11:15.700 --> 00:11:19.000
+Lalu ada kumpulan data berita Microsoft, disingkat main,
+
+00:11:19.100 --> 00:11:21.600
+yang ditunjukkan bagi mereka yang tertarik dengan sistem rekomendasi.
+
+00:11:22.400 --> 00:11:26.420
+Ini adalah tolok ukur skala besar dengan interaksi pengguna, konten berita, dan metadata.
+
+00:11:27.360 --> 00:11:29.640
+Jika Anda ingin membangun mesin rekomendasi berita,
+
+00:11:29.880 --> 00:11:32.740
+jenis teknologi yang mendukung bagian rekomendasi untuk Anda di situs web berita,
+
+00:11:33.560 --> 00:11:35.080
+ini adalah kumpulan data yang tepat untuk berlaku.
+
+00:11:35.500 --> 00:11:38.240
+Ini adalah jenis data yang sama dengan digunakan sistem rekomendasi nyata.
+
+00:11:38.500 --> 00:11:41.160
+Bahkan ada kumpulan data simulasi penjualan cuceruk yang dibuat khusus
+
+00:11:41.160 --> 00:11:42.920
+untuk menunjukkan bagaimana Azure ML berskala.
+
+00:11:42.920 --> 00:11:46.000
+Anda dapat melatih ribuan model secara bersamaan pada data ini
+
+00:11:46.000 --> 00:11:49.880
+yang merupakan cara terbaik untuk memahami pemprosesan paralel dan penyetelan hyperparameter.
+
+00:11:50.440 --> 00:11:52.920
+Gini masalahnya, jika Anda mengikuti tutorial Azure ML
+
+00:11:52.920 --> 00:11:55.800
+dan membutuhkan data, kemungkinan besar data tersebut sudah ada di katalog ini.
+
+00:11:56.320 --> 00:12:00.520
+Microsoft telah memastikan bahwa kumpulan data yang digunakan dalam dokumentasi dan jalur
+
+00:12:00.520 --> 00:12:02.720
+pembelajaran mereka tersedia melalui Open Data Sets,
+
+00:12:02.920 --> 00:12:06.200
+jadi Anda tidak perlu repot mencari berkas yang tepat digunakan dalam tutorial.
+
+00:12:06.720 --> 00:12:07.480
+Semua yang sudah tersedia di sana.
+
+00:12:08.400 --> 00:12:11.660
+Namun, memiliki katalog yang bagus tidak berguna jika Anda tidak bisa mendapatkan datanya.
+
+00:12:11.660 --> 00:12:16.020
+Cara mengakses Open Data Sets, Python, Power BI, dan Azure ML.
+
+00:12:16.740 --> 00:12:18.300
+Jadi, Anda sudah melihat isi katalognya,
+
+00:12:18.500 --> 00:12:21.400
+tetapi pertanyaan sebenarnya adalah bagaimana cara mendapatkan data ini ke tangan Anda.
+
+00:12:22.060 --> 00:12:23.960
+Jawabannya bergantung pada alat yang Anda gunakan,
+
+00:12:24.120 --> 00:12:25.260
+tetapi ada beberapa jalur,
+
+00:12:25.740 --> 00:12:27.920
+dan beberapa di antaranya bahkan tidak menurutkan akun Azure.
+
+00:12:28.240 --> 00:12:28.660
+Mari kita besok.
+
+00:12:29.100 --> 00:12:30.000
+Opsi termudah adalah Python.
+
+00:12:30.680 --> 00:12:32.740
+Dari lingkungan Python manapun tidak perlu akun Azure.
+
+00:12:33.280 --> 00:12:36.220
+Microsoft menerbitkan paket Python bernama Azure ML Open Data Sets.
+
+00:12:36.220 --> 00:12:37.820
+Anda cukup menginstallnya dengan pip,
+
+00:12:37.920 --> 00:12:39.400
+lalu mengimpor kumpulan data apapun secara lalu.
+
+00:12:39.700 --> 00:12:41.260
+Misalnya, dari Azure ML Open.
+
+00:12:41.660 --> 00:12:44.380
+Data Sets, impor data cuaca, NOAA.
+
+00:12:45.140 --> 00:12:47.060
+Anda tentukan tanggal mulai dan tanggal akhir,
+
+00:12:47.420 --> 00:12:48.800
+lalu paket tersebut akan menangani sisanya.
+
+00:12:49.440 --> 00:12:51.540
+Paket ini mengunduh berkas terkait dari penyimpanan Azure,
+
+00:12:51.760 --> 00:12:54.340
+memprosesnya, dan memberikan Anda terangka data, data frame pandas.
+
+00:12:55.680 --> 00:12:58.940
+Tiga baris kode dan Anda mendapatkan data cuaca selama puluhan tahun siap untuk dianalisis.
+
+00:12:59.280 --> 00:13:01.160
+Ini berfungsi di Jupyter Notebook, VS Code,
+
+00:13:01.400 --> 00:13:03.060
+atau lingkungan Python apapun yang Anda sukai.
+
+00:13:03.060 --> 00:13:06.140
+Di dalam Azure Machine Learning, prosesnya bahkan lebih lancar.
+
+00:13:06.800 --> 00:13:08.900
+Anda buka ruang kerja, pergi ke bagian data, klik buat,
+
+00:13:09.300 --> 00:13:11.520
+lalu pilih dari Azure Open Data Sets.
+
+00:13:13.240 --> 00:13:15.140
+Sebuah katalog muncul menampilkan semua yang tersedia.
+
+00:13:15.680 --> 00:13:17.560
+Anda menelusuri memiliki kumpulan data yang diinginkan,
+
+00:13:17.660 --> 00:13:19.860
+memfilternya berdasarkan rentang tanggal atau wilayah geografis,
+
+00:13:19.980 --> 00:13:21.160
+lalu mendaftarkannya ke ruang kerja Anda.
+
+00:13:21.600 --> 00:13:24.420
+Setelah terdaftar, Azure ML secara otomatis menghasilkan potongan kode
+
+00:13:24.420 --> 00:13:26.980
+yang bisa Anda gunakan di pipeline atau eksperimen apapun,
+
+00:13:27.080 --> 00:13:29.600
+jadi Anda tidak perlu mengingat jalur penyimpanan atau sintaks impornya.
+
+00:13:30.140 --> 00:13:30.920
+Semuanya di tangan untuk Anda.
+
+00:13:30.920 --> 00:13:32.080
+Bagaimana dengan Power BI?
+
+00:13:32.400 --> 00:13:35.040
+Disinilah segalanya menjadi menarik bagi analis yang tidak menulis kok.
+
+00:13:35.340 --> 00:13:37.740
+Anda bisa menggunakan konektor Azure Blob Storage di Power BI
+
+00:13:37.740 --> 00:13:40.500
+dan mengarahkannya ke URL penyimpanan publik yang didokumentasikan Microsoft
+
+00:13:40.500 --> 00:13:41.400
+untuk setiap kumpulan data.
+
+00:13:41.900 --> 00:13:44.540
+Jadi, jika Anda ingin menarik data taksi NYC ke dashboard,
+
+00:13:44.720 --> 00:13:47.340
+temukan URL penyimpanannya di halaman ikhtisar kumpulan data,
+
+00:13:47.480 --> 00:13:49.700
+masukkan ke Power BI, dan mulailah membuat visualisasi.
+
+00:13:50.780 --> 00:13:53.980
+Data cuaca, perjalanan taksi, insiden keamanan publik,
+
+00:13:54.120 --> 00:13:57.420
+semuanya tersedia langsung di laporan Anda tanpa rekayasa data perantara.
+
+00:13:57.420 --> 00:14:02.080
+Untuk pengguna SQL tersebut, Anda bisa melakukan query pada Open Dataset
+
+00:14:02.080 --> 00:14:03.980
+menggunakan fungsi Open Rowset terhadap jalur blobot.
+
+00:14:04.780 --> 00:14:08.420
+Ini adalah SQL tanpa server, artinya Anda tidak perlu menyediakan penyimpanan di awal.
+
+00:14:09.020 --> 00:14:12.440
+Anda cukup menulis query, dan Synapse akan membaca data langsung dari tempat penyimpanannya.
+
+00:14:12.980 --> 00:14:15.920
+Ingin tahu berapa banyak perjalanan taksi yang terjadi pada hari Natal tahun 2009?
+
+00:14:16.640 --> 00:14:19.260
+Tulis satu query SQL dan Anda mendapatkan jawabannya dalam hitungan detik.
+
+00:14:19.260 --> 00:14:23.500
+Dan jika Anda menggunakan Azure Databricks, SDK Python yang sama berfungsi di notebook Databricks,
+
+00:14:23.620 --> 00:14:26.540
+tetapi Anda bisa menggunakan Spark DataFrame alih-alih Pandas,
+
+00:14:26.660 --> 00:14:28.840
+yang penting saat bekerja dengan kumpulan data yang lebih besar.
+
+00:14:30.260 --> 00:14:32.040
+Data taksi NYC memiliki jutaan catatan.
+
+00:14:32.700 --> 00:14:34.960
+Pandas bisa menanganinya, tetapi Spark menanganinya lebih baik.
+
+00:14:35.360 --> 00:14:38.000
+Impor yang sama, sintaks yang sama, hanya saja dengan Spark di belakangnya.
+
+00:14:38.660 --> 00:14:40.380
+Inilah kesamaan di semua metode ini.
+
+00:14:41.040 --> 00:14:44.180
+Microsoft memublikasikan URL akun penyimpanan untuk setiap kumpulan data,
+
+00:14:44.320 --> 00:14:45.400
+dan URL tersebut bersifat.
+
+00:14:45.400 --> 00:14:47.280
+Siapapun bisa mengaksesnya dari alat APOC,
+
+00:14:47.620 --> 00:14:50.400
+Azure Open Dataset SDK hanyalah lapisan kenyamanan tambahan.
+
+00:14:50.740 --> 00:14:53.240
+Jika mau, Anda bisa menuskode sendiri untuk membaca file parkfet
+
+00:14:53.240 --> 00:14:54.820
+mentah langsung dari URL penyimpanan tersebut.
+
+00:14:55.380 --> 00:14:58.840
+SDK ini hanya mempermudah dengan menangani pemfilteran tanggal dan konversi untuk Anda.
+
+00:14:59.720 --> 00:15:01.540
+Pertanyaan yang biaya, apakah benar-benar gratis?
+
+00:15:02.100 --> 00:15:03.240
+Ini adalah pertanyaan yang ditanyakan semua.
+
+00:15:03.820 --> 00:15:04.780
+Apakah ini benar-benar gratis?
+
+00:15:05.120 --> 00:15:06.720
+Jawaban singkatnya adalah, sekaligus tidak.
+
+00:15:07.120 --> 00:15:08.240
+Inilah alasannya kenapa bisa demikian.
+
+00:15:08.540 --> 00:15:10.020
+Sebenarnya, data yang sendiri sepenuhnya gratis.
+
+00:15:10.500 --> 00:15:11.900
+Microsoft selalu menanggung biaya penyimpanannya.
+
+00:15:11.900 --> 00:15:13.980
+Ini bukan promosi atau penawaran terbatas.
+
+00:15:13.980 --> 00:15:15.780
+Ini sudah menjadi bagian dari desain lainannya.
+
+00:15:16.220 --> 00:15:17.640
+Mereka yang menampung, mereka yang membayar,
+
+00:15:17.720 --> 00:15:20.320
+dan Anda bisa mengaksesnya tanpa mengeluarkan spacer pun untuk datanya.
+
+00:15:20.680 --> 00:15:21.600
+Namun, di sila biaya mulia muncul.
+
+00:15:22.040 --> 00:15:22.980
+Anda membayar untuk komputasi.
+
+00:15:23.280 --> 00:15:25.800
+Artinya, jika Anda menjalankan mesin virtual untuk memproses data,
+
+00:15:25.900 --> 00:15:26.900
+Anda membayar VM tersebut.
+
+00:15:27.280 --> 00:15:29.480
+Untuk kluster Databricks yang menganalisis jutaan perjalanan taksi,
+
+00:15:29.560 --> 00:15:30.440
+Anda membayar kluster itu.
+
+00:15:30.820 --> 00:15:32.680
+Jika Anda menggunakan SQL tanpa server synapse,
+
+00:15:32.780 --> 00:15:34.260
+Anda membayar query yang Anda jalankan.
+
+00:15:34.660 --> 00:15:35.660
+Ini adalah biaya Azure Standard.
+
+00:15:36.260 --> 00:15:37.820
+Biaya ini tidak khusus untuk kumpulan data terbuka.
+
+00:15:38.140 --> 00:15:38.840
+Kemudian, ada biaya krisis.
+
+00:15:38.840 --> 00:15:40.400
+Biaya ini bisa membuat Anda terkejut.
+
+00:15:40.760 --> 00:15:42.680
+Jika Anda memindahkan data antar wilayah Azure
+
+00:15:42.680 --> 00:15:44.180
+atau memindahkannya keluar dari Azure,
+
+00:15:44.300 --> 00:15:45.660
+Anda dikenakan biaya egress.
+
+00:15:46.360 --> 00:15:48.720
+Harga biasanya sekitar 8 hingga 9 sen per gigabyte.
+
+00:15:49.320 --> 00:15:51.800
+Itu terdengar kecil sampai Anda memindahkan data dalam jumlah terobat.
+
+00:15:52.460 --> 00:15:53.920
+Dan beberapa kumpulan data ini sangat besar.
+
+00:15:54.480 --> 00:15:56.960
+Data cuaca saja mencakup beberapa dekade dan banyak stasiun cuaca.
+
+00:15:57.520 --> 00:15:59.740
+Membacanya dari wilayah yang berbeda akan menambah biaya dengan cepat.
+
+00:16:00.020 --> 00:16:01.420
+Ada juga biaya untuk penyimpanan Anda sendiri.
+
+00:16:01.880 --> 00:16:03.960
+Mungkin Anda menyalin data ke akun penyimpanan Anda sendiri
+
+00:16:03.960 --> 00:16:05.500
+karena ingin menyimpan snapshot atau mengubahnya.
+
+00:16:05.500 --> 00:16:08.200
+Anda membayar penyimpanan itu dengan tarif Azure standar.
+
+00:16:08.200 --> 00:16:09.820
+Microsoft transparan mengenai hal ini.
+
+00:16:10.280 --> 00:16:12.040
+Jika kumpulan data memiliki biaya egress,
+
+00:16:12.140 --> 00:16:13.740
+Anda akan menemukannya di halaman ringkasan.
+
+00:16:14.160 --> 00:16:14.880
+Tidak ada tagian yang wujud.
+
+00:16:15.280 --> 00:16:18.300
+Tetapi Anda perlu memiksinya sebelum menarik data dan jumlah besar antar wilayah.
+
+00:16:18.580 --> 00:16:19.660
+Berikut tip utama untuk pemula.
+
+00:16:20.160 --> 00:16:22.320
+Simpan komputasi Anda di wilayah yang sama dengan kumpulan data tersebut.
+
+00:16:22.500 --> 00:16:24.700
+Setiap kumpulan data memiliki wilayah tertentu tempat data tersebut.
+
+00:16:24.880 --> 00:16:27.500
+Jika VM atau kluster data bricks Anda berada di wilayah yang sama,
+
+00:16:27.620 --> 00:16:28.880
+Anda terhindar dari biaya egress sepenuh.
+
+00:16:29.280 --> 00:16:31.800
+Data tetap lokal, query lebih cepat, dan tagihan Anda tetap benar.
+
+00:16:32.080 --> 00:16:34.340
+Mari kita lihat dua skenario nyata agar lebih jelas.
+
+00:16:34.340 --> 00:16:39.160
+Skenario 1, Anda seorang pemula yang menarik sampel kecil data cuaca ke dashboard Power BI
+
+00:16:39.160 --> 00:16:41.140
+beberapa ribu baris, mungkin beberapa megabyte.
+
+00:16:41.580 --> 00:16:43.940
+Biaya komputasi Anda nol karena Power BI yang menanganinya.
+
+00:16:44.440 --> 00:16:46.060
+Biaya egress Anda nol karena Anda tidak memiliki data.
+
+00:16:46.380 --> 00:16:47.380
+Ini tidak membenahi Anda selenari.

@@ -46,3 +46,17 @@ Ein Inhalt existiert genau einmal (Entität, Folge, Beitrag) in seiner Originals
 - Personenseiten zeigen die Zitate mit Sprung zur Folge (Zeitmarke), JSON-LD `Quotation` mit `creator` = Person; der Seitenbau veröffentlicht `quotes.json`, der Worker-Cron `importQuotesFromSite` legt sie in D1 (`quote`), Export `/api/quotes/export?person=`.
 - Folgenseiten zeigen dieselben Zitate in den Shownotes („Zitate aus dieser Folge“) mit Link auf die Personen-Entität und Zeitmarke.
 - Offen: Freigabe der Quotes in der Verwaltung statt per QA-Datei, MCP-Lesetool, Zitate in den Spreaker-Shownotes (apply-shownotes) nur nach Freigabe durch Mirko.
+
+## SEO-Prüfbericht (Mirko, 6.11.2026) – später
+Befunde aus dem externen Prüfbericht, je eine Zeile mit kurzer Einordnung. Nichts davon blockiert den Seitenbau.
+- Links ohne title-Attribut: kaum Ranking-Wirkung, Linktext genügt; nur bei reinen Icon-/Bild-Links ein `aria-label` oder title ergänzen. Niedrige Priorität.
+- `<img>` ohne title-Attribut: `alt` genügt meist (title wird kaum ausgewertet); nicht lohnenswert, alt-Texte lieber inhaltlich prüfen.
+- Keine /.well-known/ai.txt: Nicht standardisiert, kaum Auswertung; llms.txt, agent.json und MCP-Server-Card gibt es schon. Nur anlegen, wenn wir KI-Crawler-Regeln ausdrücklich festhalten wollen (dann zusammen mit robots.txt).
+- Keine WebMCP-Integration im Frontend: Idee, Seitenfunktionen (Suche, Folgen finden) als Browser-Tools für Agenten anzubieten; Standard noch jung. Beobachten, später als kleines Experiment mit dem vorhandenen MCP-Server.
+- Kein Universal Commerce Protocol unter /.well-known/ucp: Wir verkaufen nichts im Shop-Sinn; erst relevant, wenn die Sponsoring-Pakete (Konfigurator) bestellbar werden. Bis dahin nicht nötig.
+- 21 style-Attribute im body: in CSS-Klassen auslagern (sauberer, CSP-freundlicher, etwas kleinere Seiten); geringer Aufwand, mit dem Inline-CSS-Umbau erledigen.
+- Inline-`<style>`-Blöcke: ins gehashte Stylesheet verschieben, spart rund 150 MB über alle Seiten (siehe Zeile zur Seitengröße oben); lohnt sich, größter Hebel bei Größe und Ladezeit.
+- 9 Inline-JavaScript-Blöcke: in eigene Dateien auslagern (Caching, CSP ohne `unsafe-inline`); mittlerer Aufwand, lohnt sich zusammen mit dem Bündeln.
+- 5 externe JS-Dateien: auf 3–4 bündeln (weniger Requests); bei HTTP/2 nur kleiner Gewinn, im selben Zug wie das Auslagern erledigen.
+- „Keine Mobile-Version unter separater URL“: nicht nötig, die Seite ist responsive; eine separate m.-Adresse würde nur Dubletten erzeugen.
+- Kein `Vary: User-Agent`: nur bei „Dynamic Serving“ (je Gerät anderes HTML) nötig, bei responsivem Design nicht; nichts tun.

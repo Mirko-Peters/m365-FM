@@ -12,6 +12,10 @@ from sync_spreaker import _save_top, _show_maps, _show_stats, episode_stats
 
 class LandingPageTests(unittest.TestCase):
     def setUp(self):
+        # #281: Standard der Tests = Buchung der Werbeplaetze an; der Aus-Zustand hat einen eigenen Test
+        self._ads = patch.object(site_landing, "_ads_on", return_value=True)
+        self._ads.start()
+        self.addCleanup(self._ads.stop)
         self.files = {}
         self.r2_files = {}
         self.pages = []
@@ -53,9 +57,9 @@ class LandingPageTests(unittest.TestCase):
     def test_all_pages_have_localized_routes_and_hreflang_clusters(self):
         with self.tr_all():
             self.build()
-        self.assertEqual(len(site_landing.PAGES), 13)
-        self.assertEqual(len(self.files), 28)
-        self.assertEqual(len(self.r2_files), 14 * (len(site_landing.LANGS_ALL) - 2))
+        self.assertEqual(len(site_landing.PAGES), 14)   # #281: + Werbeplaetze
+        self.assertEqual(len(self.files), 30)
+        self.assertEqual(len(self.r2_files), 15 * (len(site_landing.LANGS_ALL) - 2))
         self.assertEqual(len(self.sitemap), len(self.files) + len(self.r2_files))
         self.assertEqual(len(self.pages), len(self.sitemap))
         for path in ("services/index.html", "de/services/index.html", "for/sponsors/index.html"):
@@ -72,7 +76,7 @@ class LandingPageTests(unittest.TestCase):
     def test_untranslated_languages_are_noindex_and_outside_the_cluster(self):
         with self.tr_de():
             self.build()
-        self.assertEqual(len(self.sitemap), 28)
+        self.assertEqual(len(self.sitemap), 30)
         for lang, canonical, alternates, xdefault, kwargs in self.pages:
             if lang in ("en", "de"):
                 self.assertEqual(set(alternates), {"en", "de"})
@@ -103,7 +107,7 @@ class LandingPageTests(unittest.TestCase):
         import re
         hub = self.files["services/index.html"]
         thumbs = re.findall(r'<img [^>]*loading="lazy"[^>]*>', hub)
-        self.assertEqual(len(thumbs), 13)
+        self.assertEqual(len(thumbs), 14)
         for tag in thumbs:
             self.assertIn('width="480" height="270"', tag)
             self.assertRegex(tag, r'alt="[^"]{20,}"')
@@ -154,6 +158,62 @@ class LandingPageTests(unittest.TestCase):
         self.assertIn("Bald verfügbar", self.files["de/for/experts/index.html"])
         self.assertNotIn("MVP Contribution Tracker ist kostenlos", self.files["de/i-want-to/prove-my-community-impact/index.html"])
         self.assertNotIn("$", buyers)
+        # Mirko, 5.11.2026: Seiten fuer Sponsoren verlinken immer die Mediadaten
+        self.assertIn('href="https://www.m365.fm/media-kit/"', buyers.replace("https://example.test", "https://www.m365.fm"))
+        self.assertIn("/de/media-kit/", self.files["de/for/sponsors/index.html"])
+        self.assertNotIn("/media-kit/", self.files["for/experts/index.html"])
+
+    def test_ad_placements_page_prices_booking_and_links(self):
+        """#281: neue Service-Seite Werbeplaetze mit oeffentlicher Preistabelle, Rechner/Buchung und Verlinkung (Hub, Mediadaten)."""
+        with self.tr_de():
+            self.build()
+        import html as H
+        import re
+        de = self.files["de/for/advertisers/index.html"]
+        en = self.files["for/advertisers/index.html"]
+        self.assertIn("Werbeplätze auf M365.FM direkt buchen", de)
+        rows = re.findall(r'<tr data-product="(\w+)"><th scope="row">([^<]+)</th><td>[^<]*</td><td>[^<]+</td><td class="ad-price">([^<]+)</td></tr>', de)
+        self.assertEqual([(r[0], r[2]) for r in rows], [("banner_top", "40,00\u00a0€"), ("banner_mid", "25,00\u00a0€"), ("banner_bottom", "15,00\u00a0€"),
+                                                        ("company_card", "0,80\u00a0€"), ("lead_form", "20,00\u00a0€")])
+        self.assertIn("Einführungspreise", de)
+        self.assertIn("Mindestbuchung für Banner: 10.000 Einblendungen", de)
+        self.assertIn('href="https://example.test/de/for/advertisers/#book"', de)
+        self.assertIn('href="https://example.test/de/media-kit/"', de)
+        self.assertIn('href="https://example.test/de/sponsor/"', de)
+        cfg = json.loads(H.unescape(re.search(r'<div id="adbook" class="adb" data-cfg="([^"]+)"', de).group(1)))
+        self.assertEqual(cfg["t"]["submit"], "Kostenpflichtig buchen")
+        self.assertEqual(cfg["names"]["banner_mid"], "Banner Mitte")
+        self.assertRegex(de, r'<script defer src="https://example\.test/assets/ads-book\.js\?v=[0-9a-f]{10}"></script>')
+        self.assertIn("40.00\u00a0€", en)
+        ja = json.loads(H.unescape(re.search(r'data-cfg="([^"]+)"', self.r2_files["ja/for/advertisers/index.html"]).group(1)))
+        self.assertEqual(ja["t"]["submit"], "支払い義務のある予約をする")   # Oberflaeche in allen 15 Sprachen
+        for hub in ("services/index.html", "de/services/index.html"):
+            self.assertIn("for/advertisers/", self.files[hub])
+
+    def test_ad_placements_booking_off_noindex_unlinked_coming_soon(self):
+        """Mirko, 5.11.2026: bis PayPal getestet ist nur eigene Werbung - Seite noindex, nicht verlinkt, Hinweis "bald verfuegbar"."""
+        self._ads.stop()
+        with patch.object(site_landing, "_ads_on", return_value=False), self.tr_de():
+            self.build()
+        self._ads.start()
+        de = self.files["de/for/advertisers/index.html"]
+        self.assertIn("Bald verfügbar", de)
+        self.assertIn("Online-Buchung und Bezahlung der Werbeplätze starten in Kürze", de)
+        self.assertIn("40,00\u00a0€", de)                       # Preise bleiben sichtbar
+        self.assertNotIn("ads-book.js", de)
+        self.assertNotIn('id="adbook"', de)
+        self.assertIn('href="https://example.test/de/sponsor/#spn-req"', de)
+        self.assertNotIn("for/advertisers/#book", de)
+        pages = {canonical: (alternates, kwargs) for _, canonical, alternates, _, kwargs in self.pages}
+        alts, kw = pages["https://example.test/de/for/advertisers/"]
+        self.assertTrue(kw.get("noindex")); self.assertIsNone(alts)
+        self.assertNotIn("https://example.test/for/advertisers/", [u for u, _, _ in self.sitemap])
+        self.assertEqual(len(self.sitemap), 28)
+        for hub in ("services/index.html", "de/services/index.html"):
+            self.assertNotIn("for/advertisers/", self.files[hub])
+        for path, html_ in self.files.items():
+            if "advertisers" not in path:
+                self.assertNotIn("for/advertisers/", html_, path)
 
     def test_stats_put_value_label_and_source_on_separate_elements(self):
         with self.tr_de():
@@ -271,22 +331,30 @@ class LandingPageTests(unittest.TestCase):
                 rendered = site_landing._stats({"stats": {"bing": {}, "gsc": {}}}, "en")
         self.assertNotIn("Spreaker downloads", rendered)
 
-    def test_spreaker_updates_language_lists_and_keeps_previous_complete_totals(self):
+    def test_spreaker_week_snapshot_needs_all_languages_and_keeps_previous_complete_totals(self):
+        from datetime import date
         with tempfile.TemporaryDirectory() as tmp:
             data = Path(tmp) / "data" / "top.json"
             data.parent.mkdir()
             previous = {"from": "old-start", "to": "old-end", "downloads": {"en": 22, "de": 11}, "complete": True}
-            data.write_text(json.dumps({"spreaker": previous, "langs": {"en": [1]}}), "utf-8")
+            data.write_text(json.dumps({"week": "2026-W44", "spreaker": previous, "langs": {"en": [1]}}), "utf-8")
             required = {"en", "de", "ru", "ja"}
+            monday = date(2026, 11, 2)
+            # eine Website-Sprache fehlt -> nichts geschrieben, vorige Woche bleibt
             self.assertFalse(_save_top(Path(tmp), required, {"en": [], "de": [2], "ru": []},
-                                       {"en": 2, "de": 3, "ru": 0}, "start", "end"))
+                                       {"en": 2, "de": 3, "ru": 0}, monday))
             updated = json.loads(data.read_text("utf-8"))
-            self.assertEqual(updated["langs"], {"en": [], "de": [2], "ru": []})
-            self.assertEqual(updated["spreaker"], previous)
+            self.assertEqual((updated["week"], updated["langs"], updated["spreaker"]), ("2026-W44", {"en": [1]}, previous))
+            # alle Sprachen da, aber Downloads fuer ja fehlen -> neue Liste, Downloads-Stand bleibt der vorige
             self.assertTrue(_save_top(Path(tmp), required, {"en": [], "de": [2], "ru": [], "ja": []},
-                                      {"en": 2, "de": 3, "ru": 0, "ja": 0}, "start", "end"))
+                                      {"en": 2, "de": 3, "ru": 0}, monday))
+            updated = json.loads(data.read_text("utf-8"))
+            self.assertEqual((updated["week"], updated["langs"]["de"], updated["spreaker"]), ("2026-W45", [2], previous))
+            self.assertTrue(_save_top(Path(tmp), required, {"en": [], "de": [2], "ru": [], "ja": []},
+                                      {"en": 2, "de": 3, "ru": 0, "ja": 0}, monday))
             updated = json.loads(data.read_text("utf-8"))
             self.assertEqual(updated["spreaker"]["downloads"]["ru"], 0)
+            self.assertEqual((updated["spreaker"]["from"], updated["spreaker"]["to"]), ("2026-11-02", "2026-11-08"))
 
     def test_non_site_shows_remain_in_sync(self):
         shows, required = _show_maps({"en": 1, "hi": 2, "ml": 3})

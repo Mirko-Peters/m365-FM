@@ -1,7 +1,5 @@
-// Site-Worker: Region (T32), Cache (T41), Validatoren - mit nachgebauter Cache API, R2 und fetch (ohne HTMLRewriter)
+// Site-Worker: Cache (T41), Validatoren, R2 - mit nachgebauter Cache API, R2 und fetch. Die Einwilligungs-Region (T32) ist mit Microsoft Clarity entfernt.
 import { test } from "node:test"; import assert from "node:assert/strict";
-import { regionOf, tagFor, lmFor, conditional, countries, isHtmlPath } from "../consent.js";
-import { execFileSync } from "node:child_process";
 const LM = "Sun, 01 Nov 2026 10:00:37 GMT", LM0 = "Sun, 01 Nov 2026 10:00:00 GMT", LM1 = "Sun, 01 Nov 2026 10:00:01 GMT";
 const store = new Map(); let r2gets = 0, lastOrigin = null;
 globalThis.caches = { default: { match: async (r) => { const x = store.get(r.url); return x ? x.clone() : undefined; }, put: async (r, res) => { store.set(r.url, res.clone()); } } };
@@ -17,71 +15,44 @@ globalThis.fetch = async (req) => {
   if (u.pathname === "/assets/a.css") return new Response("a{}", { headers: { "content-type": "text/css", etag: 'W/"css1"' } });
   if (u.pathname === "/callback") return new Response(null, { status: 301, headers: { location: "https://www.m365.fm/callback/" } });
   if (u.pathname === "/og/alt.png") return new Response("PNG", { headers: { "content-type": "image/png" } });
+  if (u.pathname === "/community/feed/101-copilot-explained/") return new Response("<html>feed</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
+  if (u.pathname === "/community/events/gebautes-event/") return new Response("<html>event</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
+  if (u.pathname === "/einladung/gebaut/") return new Response("<html>einladung</html>", { headers: { "content-type": "text/html; charset=utf-8" } });
   return new Response("404", { status: 404, headers: { "content-type": "text/html" } });
 };
-const { default: W, r2Key, __resetR2Ready } = await import("../index.js");
+const { default: W, r2Key, __resetR2Ready, isHtmlPath } = await import("../index.js");
 const PAGES = { get: async (k) => { r2gets++; if (k === "pages/pl/x/index.html") return { httpEtag: '"r2e"', uploaded: new Date("2026-11-01T20:00:00Z"), arrayBuffer: async () => new TextEncoder().encode("<html>pl</html>").buffer }; if (k === "pages/blog-import/index.json") return { body: new Response('{"total":7}').body }; if (k === "pages/translations-blog.json") return { body: new Response('{"count":3}').body }; return null; } };
-const env = { PAGES, MIGRATED: "1", CONSENT_COUNTRIES: "DE,AT,GB,CH,NO,PL" };
+const env = { PAGES, MIGRATED: "1" };
 const req = (path, c, h = {}, method = "GET") => { const r = new Request("https://www.m365.fm" + path, { headers: h, method }); if (c) Object.defineProperty(r, "cf", { value: { country: c } }); return r; };
 const run = async (r) => { const w = []; const res = await W.fetch(r, env, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
 
-test("Laenderliste: ohne Variable, leer, * oder fehlerhaft -> ueberall Banner (frischer Prozess, Reihenfolge egal)", () => {
-  const code = `import { regionOf, countries } from "./consent.js"; const r = new Request("https://x/"); Object.defineProperty(r, "cf", { value: { country: "US" } });
-    console.log(JSON.stringify([regionOf(r, {}), regionOf(r, undefined), countries(undefined) === "*"]));`;
-  const out = execFileSync(process.execPath, ["--input-type=module", "-e", code], { cwd: new URL("..", import.meta.url), encoding: "utf8" });
-  assert.deepEqual(JSON.parse(out.trim().split("\n").pop()), ["1", "1", true]);
-  const us = req("/", "US");
-  for (const bad of ["DEU,AUT", '["DE","AT"]', "DE|AT", "DE,AUT", "   "]) assert.equal(regionOf(us, { CONSENT_COUNTRIES: bad }), "1", bad);
-  assert.equal(regionOf(us, { CONSENT_COUNTRIES: "de, at;\nch" }), "0"); assert.equal(regionOf(req("/", "CH"), { CONSENT_COUNTRIES: "de, at;\nch" }), "1");
-  assert.equal(countries("*"), "*");
-});
-test("Region aus cf.country, Liste aus der Konfiguration, sicherer Rueckfall", () => {
-  assert.equal(regionOf(req("/", "DE"), env), "1"); assert.equal(regionOf(req("/", "US"), env), "0");
-  assert.equal(regionOf(req("/", "XX"), env), "1"); assert.equal(regionOf(req("/", "T1"), env), "1"); assert.equal(regionOf(req("/"), env), "1");
-  assert.equal(regionOf(req("/", undefined, { "cf-ipcountry": "us" }), env), "0");
-  assert.equal(regionOf(req("/", "US"), {}), "1"); assert.equal(regionOf(req("/", "US"), { CONSENT_COUNTRIES: "*" }), "1");
-});
-test("Validatoren mit Region: ETag-Endung, Last-Modified-Sekunde (Region 1 immer spaeter)", () => {
-  assert.equal(tagFor('"abc"', "1"), 'W/"abc.r1"'); assert.equal(tagFor('W/"abc"', "0"), 'W/"abc.r0"'); assert.equal(tagFor(null, "0"), null);
-  assert.equal(lmFor(LM, "0"), LM0); assert.equal(lmFor(LM, "1"), LM1); assert.equal(lmFor("kaputt", "1"), null);
-  assert.ok(Date.parse(lmFor(LM, "1")) > Date.parse(lmFor(LM, "0")));
+const HTML_CC = "public, max-age=0, s-maxage=600, stale-while-revalidate=86400";
+test("HTML-Adressen erkennen", () => {
   assert.ok(isHtmlPath("/") && isHtmlPath("/de/entity/x/") && isHtmlPath("/impressum") && isHtmlPath("/a.html"));
   assert.ok(!isHtmlPath("/feed.json") && !isHtmlPath("/sitemap.xml") && !isHtmlPath("/llms.txt"));
-  let c = conditional(req("/", "DE", { "if-none-match": 'W/"abc.r1"', "if-modified-since": LM1 }), "1");
-  assert.equal(c.own, true); assert.equal(c.req.headers.get("if-none-match"), 'W/"abc"'); assert.equal(c.req.headers.get("if-modified-since"), "Sun, 01 Nov 2026 10:00:59 GMT");
-  c = conditional(req("/", "US", { "if-none-match": 'W/"abc.r1"', "if-modified-since": LM1 }), "0");
-  assert.equal(c.own, false); assert.equal(c.req.headers.get("if-none-match"), null); assert.equal(c.req.headers.get("if-modified-since"), null);
-  c = conditional(req("/", "US", { "if-none-match": '"abc"', "if-modified-since": LM }), "0");   // Browser-Cache von vor T32: verworfen
-  assert.equal(c.req.headers.get("if-none-match"), null); assert.equal(c.req.headers.get("if-modified-since"), null);
-  c = conditional(req("/", "US", { range: "bytes=0-9", "if-range": '"abc"' }), "0"); assert.equal(c.req.headers.get("range"), null); assert.equal(c.req.headers.get("if-range"), null);
 });
-test("HTML von GitHub Pages: Region im Header, privater Cache, Validatoren mit Region", async () => {
-  const r = await run(req("/", "US")); assert.equal(r.status, 200);
-  assert.equal(r.headers.get("x-m365-cr"), "0"); assert.equal(r.headers.get("cache-control"), "private, no-cache");
-  assert.equal(r.headers.get("etag"), 'W/"abc.r0"'); assert.equal(r.headers.get("last-modified"), LM0);
-  const d = await run(req("/", "DE")); assert.equal(d.headers.get("x-m365-cr"), "1"); assert.equal(d.headers.get("etag"), 'W/"abc.r1"'); assert.equal(d.headers.get("last-modified"), LM1);
+test("HTML von GitHub Pages: ohne Einwilligungs-Region, oeffentlicher Cache, Validatoren des Ursprungs unveraendert", async () => {
+  for (const c of ["US", "DE", undefined]) {
+    const r = await run(req("/", c)); assert.equal(r.status, 200);
+    assert.equal(r.headers.get("x-m365-cr"), null); assert.equal(r.headers.get("cache-control"), HTML_CC);
+    assert.equal(r.headers.get("etag"), '"abc"'); assert.equal(r.headers.get("last-modified"), LM);
+    assert.doesNotMatch(await r.text(), /data-cr/);
+  }
 });
-test("304 nur fuer die eigene Region - per ETag und per Last-Modified allein (Kante entfernt den ETag)", async () => {
-  let r = await run(req("/", "DE", { "if-none-match": 'W/"abc.r1"' })); assert.equal(r.status, 304); assert.equal(r.headers.get("etag"), 'W/"abc.r1"'); assert.equal(r.headers.get("x-m365-cr"), "1");
-  assert.equal(lastOrigin.headers.get("if-none-match"), 'W/"abc"');
-  r = await run(req("/", "US", { "if-none-match": 'W/"abc.r1"' })); assert.equal(r.status, 200); assert.equal(r.headers.get("etag"), 'W/"abc.r0"');   // Laenderwechsel: neue Fassung
-  r = await run(req("/", "DE", { "if-modified-since": LM1 })); assert.equal(r.status, 304); assert.equal(r.headers.get("last-modified"), LM1); assert.equal(r.headers.get("cache-control"), "private, no-cache");
-  r = await run(req("/", "US", { "if-modified-since": LM0 })); assert.equal(r.status, 304); assert.equal(r.headers.get("last-modified"), LM0);
-  r = await run(req("/", "DE", { "if-modified-since": LM0 })); assert.equal(r.status, 200); assert.equal(r.headers.get("last-modified"), LM1);   // Fassung ohne Banner -> nie 304 in Region 1
-  assert.equal(lastOrigin.headers.get("if-modified-since"), null);
-  r = await run(req("/", "US", { "if-modified-since": LM1 })); assert.equal(r.status, 200);
-  r = await run(req("/", "US", { "if-none-match": '"abc"' })); assert.equal(r.status, 200); assert.equal(r.headers.get("x-m365-cr"), "0");   // alter Browser-Cache: frische, markierte Fassung
+test("304 ueber die Validatoren des Ursprungs; alte Regions-Validatoren (T32) bekommen die frische Seite", async () => {
+  let r = await run(req("/", "DE", { "if-modified-since": LM })); assert.equal(r.status, 304); assert.equal(r.headers.get("cache-control"), HTML_CC);
+  assert.equal(lastOrigin.headers.get("if-modified-since"), LM);
+  r = await run(req("/", "DE", { "if-none-match": 'W/"abc"' })); assert.equal(r.status, 304);
+  r = await run(req("/", "DE", { "if-none-match": 'W/"abc.r1"' })); assert.equal(r.status, 200, "Browser-Cache mit Clarity-Hinweis: neue Fassung");
+  r = await run(req("/", "US", { "if-modified-since": LM0 })); assert.equal(r.status, 200);
+  r = await run(req("/nolm/", "US", { "if-modified-since": LM })); assert.equal(r.status, 304);
 });
-test("ohne ETag: Revalidierung allein ueber Last-Modified mit Region", async () => {
-  const r = await run(req("/nolm/", "US")); assert.equal(r.headers.get("etag"), null); assert.equal(r.headers.get("last-modified"), LM0);
-  const r2 = await run(req("/nolm/", "US", { "if-modified-since": LM0 })); assert.equal(r2.status, 304); assert.equal(lastOrigin.headers.get("if-modified-since"), "Sun, 01 Nov 2026 10:00:59 GMT");
-});
-test("R2-Seite: Region, Cache, 304 mit Regions-Validatoren", async () => {
+test("R2-Seite: Cache, 304 per ETag und Last-Modified, gleich fuer alle Laender", async () => {
   const r = await run(req("/pl/x/", "PL")); assert.equal(r.status, 200); assert.equal(await r.text(), "<html>pl</html>");
-  assert.equal(r.headers.get("x-m365-cr"), "1"); assert.equal(r.headers.get("etag"), 'W/"r2e.r1"'); assert.equal(r.headers.get("last-modified"), "Sun, 01 Nov 2026 20:00:01 GMT");
-  const n = r2gets; const r2 = await run(req("/pl/x/", "PL", { "if-none-match": 'W/"r2e.r1"' })); assert.equal(r2.status, 304); assert.equal(r2gets, n, "aus dem Kanten-Cache");
-  const r2b = await run(req("/pl/x/", "PL", { "if-modified-since": "Sun, 01 Nov 2026 20:00:01 GMT" })); assert.equal(r2b.status, 304);
-  const r3 = await run(req("/pl/x/", "US", { "if-none-match": 'W/"r2e.r1"', "if-modified-since": "Sun, 01 Nov 2026 20:00:01 GMT" })); assert.equal(r3.status, 200); assert.equal(r3.headers.get("x-m365-cr"), "0");
+  assert.equal(r.headers.get("x-m365-cr"), null); assert.equal(r.headers.get("etag"), '"r2e"'); assert.equal(r.headers.get("last-modified"), "Sun, 01 Nov 2026 20:00:00 GMT");
+  const n = r2gets; const r2 = await run(req("/pl/x/", "US", { "if-none-match": '"r2e"' })); assert.equal(r2.status, 304); assert.equal(r2gets, n, "aus dem Kanten-Cache");
+  const r2b = await run(req("/pl/x/", "PL", { "if-modified-since": "Sun, 01 Nov 2026 20:00:00 GMT" })); assert.equal(r2b.status, 304);
+  const r3 = await run(req("/pl/x/", "PL", { "if-none-match": 'W/"r2e.r1"' })); assert.equal(r3.status, 200);
 });
 test("R2-Datenexporte: gleiche Pfade, JSON- und Cache-Header, Blog-Import bleibt noindex", async () => {
   const blog = await run(req("/blog-import/index.json", "US"));
@@ -95,13 +66,12 @@ test("R2-Datenexporte: gleiche Pfade, JSON- und Cache-Header, Blog-Import bleibt
   assert.equal(translations.headers.get("cache-control"), "public, max-age=0, s-maxage=600, stale-while-revalidate=86400");
   assert.equal(translations.headers.get("x-robots-tag"), null);
 });
-test("Range auf HTML: ganze Seite statt 206; Dateien (JSON) und Assets unveraendert", async () => {
-  const g = await run(req("/rng/", "DE", { range: "bytes=0-8" })); assert.equal(g.status, 200); assert.equal(await g.text(), "<html><body>full</body></html>");
+test("Dateien (JSON) und Assets unveraendert", async () => {
   const j = await run(req("/feed.json", "DE")); assert.equal(j.headers.get("etag"), '"j1"'); assert.equal(j.headers.get("last-modified"), LM); assert.equal(j.headers.get("x-m365-cr"), null);
   const j2 = await run(req("/feed.json", "DE", { "if-modified-since": LM })); assert.equal(j2.status, 304); assert.equal(lastOrigin.headers.get("if-modified-since"), LM);
 });
 test("HEAD ohne Body; Assets und 404 unveraendert", async () => {
-  const h = await run(req("/", "US", {}, "HEAD")); assert.equal(h.status, 200); assert.equal(h.body, null); assert.equal(h.headers.get("x-m365-cr"), "0");
+  const h = await run(req("/", "US", {}, "HEAD")); assert.equal(h.status, 200); assert.equal(h.body, null); assert.equal(h.headers.get("x-m365-cr"), null);
   const a = await run(req("/assets/a.css", "DE")); assert.equal(a.headers.get("etag"), 'W/"css1"'); assert.equal(a.headers.get("x-m365-cr"), null); assert.match(a.headers.get("cache-control"), /max-age=3600/);
   const n = await run(req("/gibt-es-nicht/", "DE")); assert.equal(n.status, 404);
 });
@@ -129,7 +99,7 @@ const warm = async () => { __resetR2Ready(); await W.fetch(req("/nolm/", "US"), 
 const readyNow = async () => { const w = []; await W.fetch(req("/__probe/", "US"), env2, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return true; };
 const run2 = async (r) => { const w = []; const before = lastOrigin; const res = await W.fetch(r, env2, { waitUntil: (p) => w.push(p) }); await Promise.all(w); if (lastOrigin !== before && !["/show/redirects.json", "/r2-build.txt"].includes(new URL(lastOrigin.url).pathname)) origins2++; return res; };
 
-test("R2 zuerst: Seite aus dem Bucket ohne Abruf bei GitHub Pages, gleiche Header, Region", async () => {
+test("R2 zuerst: Seite aus dem Bucket ohne Abruf bei GitHub Pages, gleiche Header", async () => {
   store.clear(); globalThis.ORIGIN_BUILD = "b1"; await warm(); origins2 = 0;
   const a = await run2(req("/de/r2only/", "DE"));
   assert.equal(a.status, 200); assert.equal(await a.text(), "<html><body>r2 de</body></html>");
@@ -138,7 +108,7 @@ test("R2 zuerst: Seite aus dem Bucket ohne Abruf bei GitHub Pages, gleiche Heade
   assert.equal(a.headers.get("strict-transport-security"), "max-age=31536000; includeSubDomains");
   assert.equal(origins2, 0, "kein Abruf bei GitHub Pages");
   const b = await run2(req("/de/r2only/", "US")); assert.equal(b.headers.get("x-m365-cache"), "HIT");
-  assert.notEqual(a.headers.get("etag"), b.headers.get("etag"), "Validatoren je Region");
+  assert.equal(a.headers.get("etag"), b.headers.get("etag"), "gleiche Validatoren fuer alle Laender");
   const s = await run2(req("/", "US")); assert.equal(await s.text(), "<html><body>r2 start</body></html>"); assert.match(s.headers.get("link") || "", /api-catalog/);
 });
 test("R2 zuerst: Dateien mit Content-Type aus den Metadaten, gehashtes CSS ein Jahr, Exporte noindex", async () => {
@@ -203,6 +173,20 @@ test("Alter R2-Rueckfall (nach 404) liefert keine Spiegel-Objekte von GitHub Pag
   const a = await W.fetch(req("/gonepage/", "US"), e5, { waitUntil: () => {} }); assert.equal(a.status, 404);
   const b = await W.fetch(req("/thin/", "US"), e5, { waitUntil: () => {} }); assert.equal(b.status, 200); assert.equal(await b.text(), "<html>thin</html>");
 });
+test("R2-Rueckfall (R2_PRIMARY=0, Sprachseiten nur im Bucket): Unicode-Pfade, /index.html und Verzeichnis ohne Schrägstrich wie bei GitHub Pages", async () => {
+  store.clear(); const keys = [];
+  const e7 = { ...env, R2_PRIMARY: "0", PAGES: { get: async (k) => { keys.push(k); return k === "pages/ru/tag/облако/index.html" || k === "pages/fr/tag/x/index.html" ? { ...obj2("<html>r2 " + k + "</html>", "text/html"), customMetadata: {} } : null; } } };
+  const go = async (r) => { const w = []; const res = await W.fetch(r, e7, { waitUntil: (p) => w.push(p) }); await Promise.all(w); return res; };
+  const ru = await go(req("/ru/tag/" + encodeURIComponent("облако") + "/", "RU"));
+  assert.equal(ru.status, 200); assert.equal(await ru.text(), "<html>r2 pages/ru/tag/облако/index.html</html>"); assert.ok(keys.includes("pages/ru/tag/облако/index.html"), "Bucket-Schluessel dekodiert (UTF-8)");
+  assert.equal(ru.headers.get("cache-control"), HTML_CC); assert.equal(ru.headers.get("strict-transport-security"), "max-age=31536000; includeSubDomains"); assert.equal(ru.headers.get("x-content-type-options"), "nosniff");
+  assert.ok(store.has("https://www.m365.fm/__r2c/ru/tag/%D0%BE%D0%B1%D0%BB%D0%B0%D0%BA%D0%BE/"), "Cache-Schluessel kodiert wie die Purge-Adressen");
+  const hit = await go(req("/ru/tag/" + encodeURIComponent("облако") + "/", "US")); assert.equal(hit.headers.get("x-m365-cache"), "HIT");
+  const ix = await go(req("/fr/tag/x/index.html", "FR")); assert.equal(ix.status, 200); assert.equal(await ix.text(), "<html>r2 pages/fr/tag/x/index.html</html>");
+  const ns = await go(req("/fr/tag/x?utm_source=a", "FR")); assert.equal(ns.status, 301); assert.equal(ns.headers.get("location"), "https://www.m365.fm/fr/tag/x/?utm_source=a");
+  const bad = await go(req("/ru/tag/%E0%A4%A/", "RU")); assert.equal(bad.status, 404, "ungueltige Kodierung: kein Absturz");
+  const miss = await go(req("/fr/tag/fehlt", "FR")); assert.equal(miss.status, 404, "ohne Seite im Bucket kein 301");
+});
 test("R2 zuerst: haengende Pruefung der Bau-Kennung blockiert keine Anfrage", async () => {
   store.clear(); __resetR2Ready(); globalThis.ORIGIN_BUILD = "b1";
   const e6 = { ...env2, PAGES: { get: (k) => (k === "pages/r2-build.txt" ? new Promise(() => {}) : Promise.resolve(B2[k] || null)) } };
@@ -238,4 +222,38 @@ test("Weiterleitung des Ursprungs behaelt die Query (OAuth-Code auf /callback)",
   assert.equal(r.status, 301); assert.equal(r.headers.get("location"), "https://www.m365.fm/callback/?code=4%2F0Ab&scope=x");
   const r2 = await run(req("/callback", "DE"));
   assert.equal(r2.headers.get("location"), "https://www.m365.fm/callback/");
+});
+
+test("Entfernte Inhaltsseiten (/community/feed/<id>-<slug>/, z. B. GitHub-Aktivitaet): 410 Gone mit noindex statt 404, bestehende bleiben 200", async () => {
+  for (const p of ["/community/feed/100-mirko-peters-pushed-to-main/", "/de/community/feed/100-mirko-peters-pushed-to-main/", "/community/feed/102-x", "/community/feed/102-x/index.html"]) {
+    const r = await run(req(p, "US")); assert.equal(r.status, 410, p);
+    assert.equal(r.headers.get("x-robots-tag"), "noindex", p); assert.match(r.headers.get("content-type"), /text\/html/);
+    const t = await r.text(); assert.match(t, /noindex/); assert.ok(!/github/i.test(t), p);
+    assert.match(t, p.startsWith("/de/") ? /href="\/de\/community\/"/ : /href="\/community\/"/);
+  }
+  const h = await run(req("/community/feed/100-x/", "US", {}, "HEAD")); assert.equal(h.status, 410); assert.equal(await h.text(), "");
+  const ok = await run(req("/community/feed/101-copilot-explained/", "US")); assert.equal(ok.status, 200);
+  for (const p of ["/community/feedback/", "/community/feed/", "/community/feed/abc/", "/fr/community/feed/100-x/"]) assert.equal((await run(req(p, "US"))).status, 404, p);
+});
+test("Einladungslink (#320): gebaute Seite bleibt 200; fehlt sie (noch nicht gebaut, Profil privat, Konto geloescht), 302 zur Community mit dem Kuerzel statt 404", async () => {
+  const ok = await run(req("/einladung/gebaut/", "DE")); assert.equal(ok.status, 200); assert.equal(await ok.text(), "<html>einladung</html>");
+  for (const [path, to] of [["/einladung/neu-dabei/", "/community/?ref=neu-dabei"], ["/einladung/neu-dabei", "/community/?ref=neu-dabei"], ["/einladung/max-m/?utm_source=x", "/community/?ref=max-m"], ["/einladung/" + "a".repeat(39) + "/", "/community/?ref=" + "a".repeat(39)]]) {
+    const r = await run(req(path, "DE")); assert.equal(r.status, 302, path); assert.equal(r.headers.get("location"), "https://www.m365.fm" + to);
+    assert.equal(r.headers.get("cache-control"), "no-store"); assert.equal(r.headers.get("x-robots-tag"), "noindex");
+  }
+  const head = await run(req("/einladung/neu-dabei/", "DE", {}, "HEAD")); assert.equal(head.status, 302);
+  for (const path of ["/einladung/", "/einladung/Gross/", "/einladung/a/", "/einladung/" + "a".repeat(40) + "/", "/einladung/max-m/x/", "/einladung/%3Cscript%3E/", "/de/einladung/max-m/"])
+    assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Kuerzel, nur genau diese Adresse
+  assert.equal((await run(req("/einladung/neu-dabei/", "DE", {}, "POST"))).status, 404);
+});
+test("Event-, Profil- oder Firmenseite noch nicht gebaut (neu, importiert): 302 zur Liste statt 404; gebaute bleibt 200", async () => {
+  const ok = await run(req("/community/events/gebautes-event/", "DE")); assert.equal(ok.status, 200); assert.equal(await ok.text(), "<html>event</html>");
+  for (const [path, to] of [["/community/events/community-days-2026-guadalajara/", "/community/events/"], ["/community/events/abc", "/community/events/"], ["/de/community/events/azure-day-bonn/?utm_source=x", "/de/community/events/"], ["/community/u/neu-dabei/", "/community/members/"], ["/de/community/c/contoso/", "/de/community/companies/"]]) {
+    const r = await run(req(path, "DE")); assert.equal(r.status, 302, path); assert.equal(r.headers.get("location"), "https://www.m365.fm" + to, path);
+    assert.equal(r.headers.get("cache-control"), "no-store"); assert.equal(r.headers.get("x-robots-tag"), "noindex");
+  }
+  assert.equal((await run(req("/community/events/neu-event/", "DE", {}, "HEAD"))).status, 302);
+  for (const path of ["/community/events/", "/community/events/ab/", "/community/events/Gross/", "/community/events/x/y/", "/community/events/" + "a".repeat(41) + "/", "/community/events/%3Cscript%3E/", "/community/events/feed.xml", "/community/u/max-m/blog/x/", "/community/u/a/", "/community/x/max-m/"])
+    assert.equal((await run(req(path, "DE"))).status, 404, path);   // nur gueltige Event-Kuerzel, nur genau diese Adresse
+  assert.equal((await run(req("/community/events/neu-event/", "DE", {}, "POST"))).status, 404);
 });

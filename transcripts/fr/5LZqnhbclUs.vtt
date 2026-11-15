@@ -1,0 +1,2182 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.520
+Bienvenue dans un nouvel épisode de Microsoft Knowledge Nuggets sur M365FM.
+
+00:00:03.940 --> 00:00:07.360
+Je suis Mirko Peters et aujourd'hui, nous nous penchons sur Microsoft Defender XDR.
+
+00:00:07.760 --> 00:00:08.140
+Imagine la 7.
+
+00:00:08.540 --> 00:00:09.800
+Vous êtes à votre bureau en mardi matin.
+
+00:00:10.220 --> 00:00:11.080
+Votre téléphone vibre.
+
+00:00:11.260 --> 00:00:11.820
+Alerte de sécurité.
+
+00:00:12.220 --> 00:00:13.820
+Est-ce réel ou juste du bruit de fond ?
+
+00:00:13.820 --> 00:00:15.220
+Puis une autre alerte sur un email suspect,
+
+00:00:15.480 --> 00:00:17.980
+une autre sur une connexion inhabituelle depuis un lieu étrange.
+
+00:00:18.600 --> 00:00:19.400
+Sont-elles liées ?
+
+00:00:19.400 --> 00:00:20.300
+Peut-être, peut-être pas.
+
+00:00:20.740 --> 00:00:22.500
+C'est le problème auquel la plupart des entreprises font face aujourd'hui.
+
+00:00:23.080 --> 00:00:24.860
+Aujourd'hui, nous verrons ce qu'est réellement Defender XDR,
+
+00:00:24.980 --> 00:00:26.880
+pourquoi Microsoft l'a conçu et pourquoi c'est important
+
+00:00:26.880 --> 00:00:29.620
+pour toute organisation utilisant Microsoft 365.
+
+00:00:30.000 --> 00:00:32.340
+Voici ce qu'il faut savoir sur les attaques modernes.
+
+00:00:32.400 --> 00:00:33.820
+Les attaquants ne s'en prennent pas qu'à une seule cible.
+
+00:00:34.380 --> 00:00:34.960
+Ils agissent rapidement.
+
+00:00:35.340 --> 00:00:37.400
+Email, appareil, identité, ils frappent partout.
+
+00:00:38.180 --> 00:00:39.600
+Vos outils de sécurité doivent suivre leur rythme.
+
+00:00:39.940 --> 00:00:42.180
+Nous détaillerons les 5 piliers qui composent Defender XDR
+
+00:00:42.180 --> 00:00:45.040
+et vous montrerons comment ils s'assemblent en une couche de sécurité unifiée.
+
+00:00:45.580 --> 00:00:47.180
+Mais d'abord, parlons du problème qu'ils résout.
+
+00:00:48.440 --> 00:00:49.840
+Le problème, la sécurité est cloisonnée.
+
+00:00:50.540 --> 00:00:51.800
+Il y a 20 ans, la sécurité était simple.
+
+00:00:52.360 --> 00:00:53.620
+Vous achetez un antivirus pour vos PC,
+
+00:00:53.860 --> 00:00:55.020
+un filtre anti-spam pour vos emails,
+
+00:00:55.020 --> 00:00:56.420
+un pare-feu pour votre réseau.
+
+00:00:57.040 --> 00:00:59.540
+Chaque outil avait une fonction unique et ne communiquait jamais entre eux.
+
+00:01:00.000 --> 00:01:01.020
+C'est acceptable à l'époque,
+
+00:01:01.500 --> 00:01:02.640
+car les attaques étaient plus simples aussi.
+
+00:01:03.040 --> 00:01:03.920
+Mais voici ce qui se passe aujourd'hui.
+
+00:01:04.420 --> 00:01:05.700
+Un attaquant envoie un email de fichier.
+
+00:01:06.040 --> 00:01:06.620
+Quelqu'un clique dessus.
+
+00:01:07.080 --> 00:01:08.320
+Un logiciel malveillant s'installe sur un appart.
+
+00:01:08.660 --> 00:01:09.700
+Le malware vole un mot de passe.
+
+00:01:10.080 --> 00:01:12.020
+L'attaquant accède alors à vos applications cloud,
+
+00:01:12.400 --> 00:01:13.640
+vos fichiers, vos données clients,
+
+00:01:13.900 --> 00:01:15.020
+à... c'est une chaîne d'événements.
+
+00:01:15.620 --> 00:01:17.660
+Mais vos outils voient cela comme 5 problèmes distincts.
+
+00:01:18.000 --> 00:01:19.200
+Le filtre email voit un message.
+
+00:01:19.640 --> 00:01:20.680
+L'antivirus voit un fichier.
+
+00:01:21.060 --> 00:01:22.500
+Le système d'identité voit une connexion.
+
+00:01:22.700 --> 00:01:24.420
+Aucun d'entre eux ne sait qu'ils font face à la même attaque.
+
+00:01:24.900 --> 00:01:26.520
+Imaginez un bâtiment avec 3 agents de sécurité.
+
+00:01:26.960 --> 00:01:28.120
+Un à l'entrée, un sur le parking,
+
+00:01:28.440 --> 00:01:29.200
+un dans la salle du courrier.
+
+00:01:29.640 --> 00:01:30.660
+Ils ne partagent jamais d'informations.
+
+00:01:31.220 --> 00:01:32.580
+Un voleur entre par la porte principale
+
+00:01:32.580 --> 00:01:34.240
+et l'agent du courrier ne sait rien de son arrivée.
+
+00:01:34.720 --> 00:01:36.460
+C'est ainsi que fonctionnent la plupart des outils de sécurité actuels.
+
+00:01:36.700 --> 00:01:38.280
+Ils sont dans le même bâtiment, mais ne se parlent pas.
+
+00:01:38.840 --> 00:01:41.260
+Résultat, votre équipe reçoit 5 alertes au lieu d'une seule histoire.
+
+00:01:41.740 --> 00:01:43.220
+Perdent du temps à chasser des faux positifs.
+
+00:01:43.600 --> 00:01:44.840
+La vraie menace se cache dans ce bruit.
+
+00:01:45.240 --> 00:01:46.300
+De temps que quelqu'un fasse le lien,
+
+00:01:46.480 --> 00:01:47.360
+l'attaquant a déjà gagné.
+
+00:01:47.840 --> 00:01:48.820
+Ce dont vous avez vraiment besoin,
+
+00:01:48.900 --> 00:01:50.500
+c'est d'un système qui voit au-delà de tous ces domaines
+
+00:01:50.500 --> 00:01:51.980
+et qui dit « Ces alertes sont liées.
+
+00:01:52.420 --> 00:01:53.100
+Voici une vue d'ensemble.
+
+00:01:53.460 --> 00:01:55.100
+Voici ce qu'il faut faire. »
+
+00:01:55.100 --> 00:01:57.600
+C'est exactement pourquoi Microsoft Defender XDR a été conçu.
+
+00:01:58.340 --> 00:01:59.680
+Qu'est-ce que Defender XDR ?
+
+00:01:59.680 --> 00:02:00.160
+C'est le parapluie.
+
+00:02:00.520 --> 00:02:01.820
+Alors définissons ce qu'est réellement cet outil.
+
+00:02:02.380 --> 00:02:04.020
+Microsoft Defender XDR est ce qu'on appelle
+
+00:02:04.020 --> 00:02:05.940
+une plateforme de détection et de réponse étendue.
+
+00:02:06.360 --> 00:02:07.280
+Ça fait beaucoup de mots, je comprends,
+
+00:02:07.320 --> 00:02:08.500
+mais l'idée centrale est toute simple.
+
+00:02:09.360 --> 00:02:10.920
+Ce système recueille des signaux provenant
+
+00:02:10.920 --> 00:02:12.240
+de tout Microsoft 365,
+
+00:02:12.240 --> 00:02:13.800
+de vos terminaux, de vos emails,
+
+00:02:13.920 --> 00:02:14.880
+de vos comptes utilisateurs
+
+00:02:14.880 --> 00:02:15.960
+et de vos applications cloud
+
+00:02:15.960 --> 00:02:17.660
+pour les assembler dans une vue unifiée.
+
+00:02:17.660 --> 00:02:20.600
+XDR signifie détection et réponse étendue
+
+00:02:20.600 --> 00:02:23.260
+et le mot le plus important ici est cliqué étendu peu
+
+00:02:23.260 --> 00:02:25.160
+car il ne s'agit plus seulement d'ordinateur.
+
+00:02:25.900 --> 00:02:27.300
+Cela couvre les emails, les identités,
+
+00:02:27.380 --> 00:02:28.840
+les applications cloud et bien plus.
+
+00:02:29.420 --> 00:02:30.580
+La différence est comme regarder
+
+00:02:30.580 --> 00:02:31.780
+une seule caméra de sécurité
+
+00:02:31.780 --> 00:02:33.060
+au lieu de surveiller tout un bâtiment
+
+00:02:33.060 --> 00:02:33.980
+sur un seul écran.
+
+00:02:34.640 --> 00:02:35.520
+Vous obtenez une vision globale
+
+00:02:35.520 --> 00:02:36.320
+plutôt qu'un tout petit fragment.
+
+00:02:37.040 --> 00:02:38.340
+Voici ce qui surprend la plupart des gens.
+
+00:02:39.040 --> 00:02:40.640
+Defender XDR n'est pas un tout nouveau produit
+
+00:02:40.640 --> 00:02:41.680
+que vous devez acheter séparément.
+
+00:02:42.140 --> 00:02:43.200
+C'est plutôt une couche unificatrice
+
+00:02:43.200 --> 00:02:44.400
+qui s'ajoute aux outils de sécurité
+
+00:02:44.400 --> 00:02:45.320
+que vous possédez peut-être déjà.
+
+00:02:45.860 --> 00:02:47.040
+Voyez cela comme le centre de commande
+
+00:02:47.040 --> 00:02:47.620
+dont j'ai parlé plus tôt.
+
+00:02:48.500 --> 00:02:49.740
+Les différents produits Defender
+
+00:02:49.740 --> 00:02:51.300
+comme Defender for Endpoint,
+
+00:02:51.580 --> 00:02:53.060
+Defender for Office 365,
+
+00:02:53.460 --> 00:02:54.400
+Defender for Identity,
+
+00:02:54.820 --> 00:02:55.720
+Defender for Cloud Apps
+
+00:02:55.720 --> 00:02:57.540
+et les outils de gestion des vulnérabilités
+
+00:02:57.540 --> 00:02:59.980
+sont comme des caméras surveillant différentes pièces.
+
+00:03:01.200 --> 00:03:03.540
+Defender XDR est l'opérateur devant l'écran principal
+
+00:03:03.540 --> 00:03:05.120
+faisant le lien entre toutes ces informations.
+
+00:03:05.840 --> 00:03:07.440
+Alors que fait-il concrètement ?
+
+00:03:07.440 --> 00:03:08.720
+Il collecte automatiquement les alertes
+
+00:03:08.720 --> 00:03:10.880
+de tous ces produits Defender individuels ?
+
+00:03:10.880 --> 00:03:12.040
+Ensuite, il regroupe les alertes
+
+00:03:12.040 --> 00:03:13.200
+liées dans ce qu'on appelle un incident.
+
+00:03:13.740 --> 00:03:15.200
+Ainsi, au lieu de 10 alarmes distinctes
+
+00:03:15.200 --> 00:03:15.900
+potentiellement liées,
+
+00:03:16.080 --> 00:03:17.040
+vous obtenez un incident
+
+00:03:17.040 --> 00:03:18.120
+qui raconte toute l'histoire.
+
+00:03:18.960 --> 00:03:20.160
+L'email qui a déclenché l'attaque,
+
+00:03:20.240 --> 00:03:20.940
+l'appareil infecté,
+
+00:03:21.120 --> 00:03:21.840
+le compte compromis,
+
+00:03:21.960 --> 00:03:23.420
+tout est réuni devant vous.
+
+00:03:23.640 --> 00:03:23.920
+Sème.
+
+00:03:24.540 --> 00:03:26.040
+Et ce point-là prend souvent les gens au dépourvu.
+
+00:03:26.320 --> 00:03:27.520
+Vous n'achetez pas Defender XDR
+
+00:03:27.520 --> 00:03:28.520
+comme un article séparé.
+
+00:03:29.020 --> 00:03:30.780
+Il est inclus dans Microsoft 365 E5
+
+00:03:30.780 --> 00:03:31.520
+et fait également partie
+
+00:03:31.520 --> 00:03:33.260
+du module complémentaire de sécurité E5.
+
+00:03:33.260 --> 00:03:36.720
+Si vous avez Microsoft 365 Business Premium ou E3,
+
+00:03:36.960 --> 00:03:37.680
+avec certains modules,
+
+00:03:37.920 --> 00:03:38.980
+vous avez peut-être déjà accès
+
+00:03:38.980 --> 00:03:40.160
+à certaines de ces fonctionnalités
+
+00:03:40.160 --> 00:03:41.160
+sans même le savoir.
+
+00:03:41.760 --> 00:03:43.600
+Nous parlerons plus en détail des licences plus tard.
+
+00:03:43.720 --> 00:03:44.460
+Mais l'essentiel est simple.
+
+00:03:45.220 --> 00:03:46.840
+Si vous payez déjà pour Microsoft 365,
+
+00:03:47.060 --> 00:03:48.240
+vous êtes peut-être beaucoup plus proche
+
+00:03:48.240 --> 00:03:49.580
+de cette protection que vous ne le pensez.
+
+00:03:50.380 --> 00:03:51.120
+Les 5 composants.
+
+00:03:52.080 --> 00:03:52.960
+Analysons les 5 éléments
+
+00:03:52.960 --> 00:03:54.180
+qui constituent réellement le système,
+
+00:03:54.440 --> 00:03:56.100
+car Defender XDR semble abstrait
+
+00:03:56.100 --> 00:03:56.800
+tant qu'on ne comprend pas
+
+00:03:56.800 --> 00:03:57.400
+ce qu'il alimente.
+
+00:03:57.400 --> 00:03:59.800
+D'abord, Defender for Endpoint.
+
+00:04:00.220 --> 00:04:01.320
+Celui-ci protège les appareils
+
+00:04:01.320 --> 00:04:02.480
+Windows, Mac, Linux
+
+00:04:02.480 --> 00:04:03.500
+et même les téléphones portables.
+
+00:04:04.020 --> 00:04:05.480
+C'est la version moderne de l'antivirus,
+
+00:04:05.920 --> 00:04:07.040
+mais qui va bien au-delà.
+
+00:04:07.680 --> 00:04:08.560
+Au lieu de simplement scanner
+
+00:04:08.560 --> 00:04:09.500
+les fichiers malveillants connus,
+
+00:04:09.580 --> 00:04:10.780
+il surveille les comportements suspects.
+
+00:04:11.700 --> 00:04:13.100
+Si un programme commence à agir bizarrement,
+
+00:04:13.420 --> 00:04:14.140
+à chiffrer des fichiers,
+
+00:04:14.300 --> 00:04:15.520
+à se connecter à des serveurs inconnus
+
+00:04:15.520 --> 00:04:16.880
+ou à modifier les paramètres système,
+
+00:04:17.280 --> 00:04:18.360
+Defender for Endpoint le signale.
+
+00:04:18.900 --> 00:04:20.120
+Il peut mener une enquête automatique
+
+00:04:20.120 --> 00:04:20.900
+et si nécessaire,
+
+00:04:21.080 --> 00:04:22.560
+isoler totalement cet appareil du réseau.
+
+00:04:23.300 --> 00:04:24.140
+Un clic suffit pour couper
+
+00:04:24.140 --> 00:04:24.980
+cette machine de tout le reste.
+
+00:04:25.680 --> 00:04:27.140
+Vient ensuite Defender for Office 365.
+
+00:04:27.620 --> 00:04:28.420
+Il protège vos emails
+
+00:04:28.420 --> 00:04:29.300
+et vos outils de collaboration.
+
+00:04:30.320 --> 00:04:30.880
+C'est lui qui bloque
+
+00:04:30.880 --> 00:04:31.640
+les emails de phishing,
+
+00:04:31.760 --> 00:04:32.680
+les pièces jointes malveillantes
+
+00:04:32.680 --> 00:04:33.520
+et les liens dangereux
+
+00:04:33.520 --> 00:04:34.060
+avant qu'il n'atteigne
+
+00:04:34.060 --> 00:04:34.920
+votre boîte de réception,
+
+00:04:35.360 --> 00:04:36.700
+tout en analysant les messages Teams,
+
+00:04:36.800 --> 00:04:37.460
+les fichiers SharePoint
+
+00:04:37.460 --> 00:04:38.360
+et le Stockage OneDrive
+
+00:04:38.360 --> 00:04:39.360
+à la recherche de menaces.
+
+00:04:40.360 --> 00:04:41.240
+Ainsi, si quelqu'un partage
+
+00:04:41.240 --> 00:04:41.780
+un fichier dangereux
+
+00:04:41.780 --> 00:04:42.700
+dans une discussion d'équipe,
+
+00:04:42.820 --> 00:04:43.320
+il le détecte.
+
+00:04:43.700 --> 00:04:45.000
+Ensuite, nous avons Defender for Identity.
+
+00:04:45.380 --> 00:04:45.980
+Celui-ci surveille
+
+00:04:45.980 --> 00:04:47.180
+votre infrastructure d'identité.
+
+00:04:47.980 --> 00:04:48.560
+Si vous utilisez
+
+00:04:48.560 --> 00:04:49.680
+un Active Directory sur site,
+
+00:04:49.780 --> 00:04:50.700
+le système qui gère
+
+00:04:50.700 --> 00:04:51.560
+les comptes utilisateurs
+
+00:04:51.560 --> 00:04:52.080
+et les mots de passe
+
+00:04:52.080 --> 00:04:52.680
+dans votre entreprise
+
+00:04:52.680 --> 00:04:53.580
+Defender for Identity
+
+00:04:53.580 --> 00:04:54.260
+le surveille
+
+00:04:54.260 --> 00:04:54.700
+pour détecter
+
+00:04:54.700 --> 00:04:55.960
+toute activité suspecte.
+
+00:04:57.000 --> 00:04:58.000
+Il détecte le vol d'identifiant
+
+00:04:58.000 --> 00:04:58.620
+lorsqu'un attaquant
+
+00:04:58.620 --> 00:04:59.280
+dérobe un mot de passe
+
+00:04:59.280 --> 00:05:00.180
+et tente de l'utiliser ailleurs.
+
+00:05:01.040 --> 00:05:02.240
+Il repère les déplacements latéraux
+
+00:05:02.240 --> 00:05:02.960
+où quelqu'un passe
+
+00:05:02.960 --> 00:05:03.560
+d'un compte à un autre
+
+00:05:03.560 --> 00:05:05.060
+et signale l'évasion de privilège
+
+00:05:05.060 --> 00:05:06.200
+lorsqu'un utilisateur standard
+
+00:05:06.200 --> 00:05:06.780
+tente soudainement
+
+00:05:06.780 --> 00:05:08.060
+d'obtenir des droits d'administrateur.
+
+00:05:08.720 --> 00:05:09.340
+Ce sont précisément
+
+00:05:09.340 --> 00:05:10.180
+les techniques que les attaquants
+
+00:05:10.180 --> 00:05:10.700
+utilisent une fois
+
+00:05:10.700 --> 00:05:11.960
+qu'ils ont pénétré votre réseau.
+
+00:05:12.740 --> 00:05:13.400
+Le quatrième élément
+
+00:05:13.400 --> 00:05:14.300
+est Defender for Cloud Apps.
+
+00:05:14.680 --> 00:05:15.660
+Il vous donne une visibilité
+
+00:05:15.660 --> 00:05:17.120
+sur toutes les applications cloud
+
+00:05:17.120 --> 00:05:18.220
+que vos employés utilisent,
+
+00:05:18.220 --> 00:05:19.660
+qu'elles soient approuvées
+
+00:05:19.660 --> 00:05:20.140
+ou non.
+
+00:05:20.600 --> 00:05:21.760
+Il découvre le Shadow ITCub,
+
+00:05:21.840 --> 00:05:22.540
+c'est-à-dire les services
+
+00:05:22.540 --> 00:05:23.220
+auxquels votre équipe
+
+00:05:23.220 --> 00:05:24.220
+a souscrit sans vous en informer.
+
+00:05:24.480 --> 00:05:25.340
+Il détecte les comportements
+
+00:05:25.340 --> 00:05:25.880
+inhabituels
+
+00:05:25.880 --> 00:05:27.080
+comme un utilisateur téléchargeant
+
+00:05:27.080 --> 00:05:27.620
+des milliers de fichiers
+
+00:05:27.620 --> 00:05:28.260
+à 2h du matin
+
+00:05:28.260 --> 00:05:29.680
+et peut bloquer les applications risquées
+
+00:05:29.680 --> 00:05:30.500
+ou contrôler les données
+
+00:05:30.500 --> 00:05:31.400
+partagées via celles-ci.
+
+00:05:32.380 --> 00:05:33.700
+Enfin, la gestion des vulnérabilités.
+
+00:05:34.500 --> 00:05:35.060
+Elle est intégrée
+
+00:05:35.060 --> 00:05:35.940
+à Defender for Endpoint
+
+00:05:35.940 --> 00:05:36.500
+mais elle mérite
+
+00:05:36.500 --> 00:05:37.600
+d'être mentionnée séparément.
+
+00:05:38.140 --> 00:05:38.860
+Elle analyse en continu
+
+00:05:38.860 --> 00:05:39.340
+vos appareils
+
+00:05:39.340 --> 00:05:40.160
+à la recherche de correctifs
+
+00:05:40.160 --> 00:05:40.940
+de sécurité manquants,
+
+00:05:41.100 --> 00:05:41.900
+de configurations faibles
+
+00:05:41.900 --> 00:05:42.620
+et d'autres expositions.
+
+00:05:43.300 --> 00:05:43.580
+Ensuite,
+
+00:05:43.660 --> 00:05:44.060
+elle vous fournit
+
+00:05:44.060 --> 00:05:44.680
+une liste priorisée
+
+00:05:44.680 --> 00:05:45.660
+des éléments à corriger en premier.
+
+00:05:46.220 --> 00:05:46.480
+Ainsi,
+
+00:05:46.560 --> 00:05:47.060
+au lieu de deviner
+
+00:05:47.060 --> 00:05:47.580
+quelles mises à jour
+
+00:05:47.580 --> 00:05:48.360
+sont les plus importantes,
+
+00:05:48.500 --> 00:05:49.440
+elle vous indique exactement
+
+00:05:49.440 --> 00:05:50.260
+quelles vulnérabilités
+
+00:05:50.260 --> 00:05:51.080
+sont les plus susceptibles
+
+00:05:51.080 --> 00:05:51.700
+d'être exploitées.
+
+00:05:52.220 --> 00:05:52.600
+Voici maintenant
+
+00:05:52.600 --> 00:05:53.240
+l'idée principale.
+
+00:05:53.800 --> 00:05:54.400
+Chacun de ces produits
+
+00:05:54.400 --> 00:05:55.540
+existait de manière indépendante
+
+00:05:55.540 --> 00:05:55.960
+avant l'arrivée
+
+00:05:55.960 --> 00:05:56.840
+de Defender XDR.
+
+00:05:57.820 --> 00:05:58.740
+Microsoft les a développés
+
+00:05:58.740 --> 00:05:59.580
+séparément au fil des ans
+
+00:05:59.580 --> 00:06:00.280
+puis quelqu'un a posé
+
+00:06:00.280 --> 00:06:01.120
+une question pertinente.
+
+00:06:01.740 --> 00:06:03.280
+Et si tout cela fonctionnait ensemble ?
+
+00:06:03.280 --> 00:06:04.280
+C'est exactement ce que permet
+
+00:06:04.280 --> 00:06:05.080
+Defender XDR.
+
+00:06:05.520 --> 00:06:06.440
+C'est le lien qui transforme
+
+00:06:06.440 --> 00:06:07.060
+5 bons produits
+
+00:06:07.060 --> 00:06:08.260
+en un système unique et puissant.
+
+00:06:08.260 --> 00:06:10.660
+Comment ils travaillent ensemble ?
+
+00:06:10.660 --> 00:06:11.340
+Laissez-moi vous présenter
+
+00:06:11.340 --> 00:06:12.020
+un scénario réel
+
+00:06:12.020 --> 00:06:12.480
+pour que vous voyez
+
+00:06:12.480 --> 00:06:13.260
+comment cela se déroule.
+
+00:06:13.680 --> 00:06:14.260
+L'un de vos employés
+
+00:06:14.260 --> 00:06:15.100
+reçoit un email de phishing,
+
+00:06:15.580 --> 00:06:16.660
+semble provenir de son patron,
+
+00:06:16.960 --> 00:06:17.720
+lui demandant de consulter
+
+00:06:17.720 --> 00:06:18.140
+un document.
+
+00:06:18.520 --> 00:06:19.600
+Defender for Office 305
+
+00:06:19.600 --> 00:06:20.320
+pourrait ne pas le signaler
+
+00:06:20.320 --> 00:06:21.420
+car le lien semble légitime.
+
+00:06:22.000 --> 00:06:22.660
+L'employé clique,
+
+00:06:22.880 --> 00:06:23.500
+tape son mot de passe
+
+00:06:23.500 --> 00:06:24.120
+sur ce qui ressemble
+
+00:06:24.120 --> 00:06:24.640
+à une vraie page
+
+00:06:24.640 --> 00:06:25.520
+de connexion Microsoft
+
+00:06:25.520 --> 00:06:26.380
+et l'attaquant possède
+
+00:06:26.380 --> 00:06:27.600
+désormais ses identifiants.
+
+00:06:28.280 --> 00:06:29.200
+En quelques minutes,
+
+00:06:29.320 --> 00:06:30.120
+Defender for Identity
+
+00:06:30.120 --> 00:06:31.100
+repère le même utilisateur
+
+00:06:31.100 --> 00:06:32.000
+se connectant depuis un pays
+
+00:06:32.000 --> 00:06:32.700
+où il n'est jamais allé.
+
+00:06:33.200 --> 00:06:34.480
+Pendant que Defender for Endpoint
+
+00:06:34.480 --> 00:06:35.700
+détecte un processus suspect
+
+00:06:35.700 --> 00:06:36.600
+sur l'ordinateur portable
+
+00:06:36.600 --> 00:06:37.340
+tentant de se connecter
+
+00:06:37.340 --> 00:06:38.040
+à un serveur externe.
+
+00:06:38.680 --> 00:06:38.920
+Maintenant,
+
+00:06:39.040 --> 00:06:39.700
+imaginez ce qui se passe
+
+00:06:39.700 --> 00:06:40.220
+sans XDR.
+
+00:06:40.660 --> 00:06:42.080
+On se fait trois alertes distinctes.
+
+00:06:42.160 --> 00:06:43.200
+Une de la sécurité des emails,
+
+00:06:43.520 --> 00:06:44.480
+une du suivi des identités
+
+00:06:44.480 --> 00:06:45.320
+et une de la protection
+
+00:06:45.320 --> 00:06:45.880
+des terminaux.
+
+00:06:46.300 --> 00:06:47.360
+Chacune dans une console différente
+
+00:06:47.360 --> 00:06:48.240
+avec une connexion différente.
+
+00:06:48.580 --> 00:06:49.260
+Votre équipe de sécurité
+
+00:06:49.260 --> 00:06:49.780
+tente manuellement
+
+00:06:49.780 --> 00:06:50.860
+de déterminer si elles sont liées.
+
+00:06:51.360 --> 00:06:51.920
+Quoi qu'il en soit,
+
+00:06:52.200 --> 00:06:53.020
+l'attaquant s'enfonce
+
+00:06:53.020 --> 00:06:53.680
+dans votre réseau
+
+00:06:53.680 --> 00:06:54.440
+pendant qu'il cherche.
+
+00:06:55.100 --> 00:06:55.900
+Avec Defender XDR,
+
+00:06:56.060 --> 00:06:57.180
+tout ce processus est automatique.
+
+00:06:57.720 --> 00:06:58.380
+La plateforme relie
+
+00:06:58.380 --> 00:06:58.880
+les points entre eux.
+
+00:06:59.280 --> 00:07:00.120
+Elle reconnaît que l'email,
+
+00:07:04.480 --> 00:07:05.500
+elle construit un incident unique
+
+00:07:05.500 --> 00:07:06.140
+avec une chronologie.
+
+00:07:06.400 --> 00:07:06.780
+Vous l'ouvrez
+
+00:07:06.780 --> 00:07:07.760
+et découvrez toute l'histoire.
+
+00:07:08.340 --> 00:07:08.800
+La connexion,
+
+00:07:08.860 --> 00:07:09.600
+l'activité de l'appareil,
+
+00:07:09.680 --> 00:07:10.620
+tout est présenté dans l'ordre.
+
+00:07:11.040 --> 00:07:11.700
+Et cela ne se contente pas
+
+00:07:11.700 --> 00:07:12.260
+de vous dire si que c'est bon.
+
+00:07:12.600 --> 00:07:13.720
+Defender XDR peut aussi agir.
+
+00:07:14.100 --> 00:07:14.780
+Selon vos paramètres,
+
+00:07:14.860 --> 00:07:16.100
+il peut isoler automatiquement
+
+00:07:16.100 --> 00:07:17.300
+l'appareil compromis du réseau,
+
+00:07:17.640 --> 00:07:18.900
+réinitialiser le mot de passe
+
+00:07:18.900 --> 00:07:19.600
+de l'utilisateur
+
+00:07:19.600 --> 00:07:20.700
+ou bloquer les connexions
+
+00:07:20.700 --> 00:07:21.540
+depuis ce lieu suspect.
+
+00:07:22.300 --> 00:07:23.040
+Le tout en quelques minutes
+
+00:07:23.040 --> 00:07:23.740
+sans que personne n'ait besoin
+
+00:07:23.740 --> 00:07:24.180
+d'ouvrir un ticket
+
+00:07:24.180 --> 00:07:24.840
+ou de passer un appel.
+
+00:07:25.340 --> 00:07:25.760
+Imaginez cela
+
+00:07:25.760 --> 00:07:26.640
+comme une équipe de spécialistes.
+
+00:07:27.000 --> 00:07:27.480
+Un pompier,
+
+00:07:27.760 --> 00:07:28.300
+un ambulancier,
+
+00:07:28.300 --> 00:07:28.860
+un policier,
+
+00:07:29.200 --> 00:07:29.940
+tout sous la coordination
+
+00:07:29.940 --> 00:07:30.820
+d'un seul responsable.
+
+00:07:31.380 --> 00:07:32.160
+Le coordinateur écoute
+
+00:07:32.160 --> 00:07:32.620
+chacun d'eux,
+
+00:07:32.780 --> 00:07:33.400
+identifie le schéma
+
+00:07:33.400 --> 00:07:34.600
+et déploie la réponse appropriée
+
+00:07:34.600 --> 00:07:35.420
+avant même que quiconque
+
+00:07:35.420 --> 00:07:36.760
+ne réalise qu'il y a un problème.
+
+00:07:37.360 --> 00:07:38.260
+Il ne s'agit pas de confort.
+
+00:07:38.700 --> 00:07:39.380
+Il s'agit de vitesse.
+
+00:07:39.780 --> 00:07:40.500
+Les attaquants peuvent roder
+
+00:07:40.500 --> 00:07:40.980
+dans un réseau
+
+00:07:40.980 --> 00:07:41.440
+pendant des jours
+
+00:07:41.440 --> 00:07:42.000
+avant que quelqu'un
+
+00:07:42.000 --> 00:07:42.560
+ne s'en aperçoive.
+
+00:07:42.880 --> 00:07:43.420
+Avec XDR,
+
+00:07:43.520 --> 00:07:44.180
+cette fenêtre se réduit
+
+00:07:44.180 --> 00:07:44.660
+à des heures,
+
+00:07:44.720 --> 00:07:45.140
+voire des minutes.
+
+00:07:45.780 --> 00:07:46.340
+Et en sécurité,
+
+00:07:46.480 --> 00:07:47.520
+le temps est la seule chose
+
+00:07:47.520 --> 00:07:48.440
+que l'on ne récupère jamais.
+
+00:07:49.020 --> 00:07:50.080
+Ce qui fait concrètement pour vous.
+
+00:07:50.600 --> 00:07:51.240
+Alors qu'est-ce que tout cela
+
+00:07:51.240 --> 00:07:52.560
+signifie pour votre entreprise ?
+
+00:07:52.560 --> 00:07:53.120
+Passons à la pratique.
+
+00:07:58.300 --> 00:08:00.180
+Elle reçoit peut-être
+
+00:08:00.180 --> 00:08:00.800
+10 histoires claires
+
+00:08:00.800 --> 00:08:01.640
+chacune avec son contexte,
+
+00:08:01.720 --> 00:08:02.000
+ses preuves
+
+00:08:02.000 --> 00:08:03.120
+et une prochaine étape recommandée.
+
+00:08:03.640 --> 00:08:04.660
+Il travaille sur de vraies menaces
+
+00:08:04.660 --> 00:08:05.580
+au lieu de chasser des fantômes.
+
+00:08:06.200 --> 00:08:06.460
+Ensuite,
+
+00:08:06.520 --> 00:08:07.360
+les enquêtes sont plus rapides.
+
+00:08:08.400 --> 00:08:09.100
+Depuis la vue incident,
+
+00:08:09.200 --> 00:08:10.000
+vous voyez l'attaque entière
+
+00:08:10.000 --> 00:08:11.020
+sous forme de chronologie.
+
+00:08:11.720 --> 00:08:12.720
+Cliquez sur n'importe quel élément,
+
+00:08:12.840 --> 00:08:13.240
+l'appareil,
+
+00:08:13.320 --> 00:08:13.980
+le compte utilisateur
+
+00:08:13.980 --> 00:08:14.360
+ou l'email
+
+00:08:14.360 --> 00:08:15.520
+et obtenez plus de détails
+
+00:08:15.520 --> 00:08:16.120
+sans quitter l'écran.
+
+00:08:16.560 --> 00:08:17.420
+Tout ce dont vous avez besoin.
+
+00:08:18.100 --> 00:08:18.620
+Pas besoin de passer
+
+00:08:18.620 --> 00:08:19.320
+d'une console à l'autre
+
+00:08:19.320 --> 00:08:19.960
+ni de copier-coller.
+
+00:08:20.680 --> 00:08:21.460
+Et le plus grand avantage
+
+00:08:21.460 --> 00:08:21.780
+est peut-être
+
+00:08:21.780 --> 00:08:22.800
+le nettoyage automatisé.
+
+00:08:23.420 --> 00:08:24.340
+Si la menace est évidente,
+
+00:08:24.480 --> 00:08:25.160
+Defender XDR
+
+00:08:25.160 --> 00:08:25.860
+se charge lui-même
+
+00:08:25.860 --> 00:08:26.620
+de la remédiation.
+
+00:08:27.360 --> 00:08:28.160
+Il supprime l'email
+
+00:08:28.160 --> 00:08:28.640
+malveillant
+
+00:08:28.640 --> 00:08:29.800
+de toutes les boîtes de réception,
+
+00:08:30.320 --> 00:08:31.240
+retire le fichier infecté
+
+00:08:31.240 --> 00:08:31.700
+de l'appareil
+
+00:08:31.700 --> 00:08:32.140
+et annule
+
+00:08:32.140 --> 00:08:33.300
+même les modifications
+
+00:08:33.300 --> 00:08:33.820
+de registres
+
+00:08:33.820 --> 00:08:34.800
+effectuées par l'attaquant.
+
+00:08:35.700 --> 00:08:36.200
+Considérez cela
+
+00:08:36.200 --> 00:08:36.680
+comme un système
+
+00:08:36.680 --> 00:08:37.600
+de sécurité auto-nettoyant.
+
+00:08:37.860 --> 00:08:38.640
+Inutile d'envoyer quelqu'un
+
+00:08:38.640 --> 00:08:39.280
+avec une serpillière,
+
+00:08:39.360 --> 00:08:40.360
+le système s'occupe du nettoyage.
+
+00:08:40.880 --> 00:08:41.120
+Ensuite,
+
+00:08:41.180 --> 00:08:41.860
+il y a l'aspect proactif.
+
+00:08:42.260 --> 00:08:42.880
+C'est là que la gestion
+
+00:08:42.880 --> 00:08:43.820
+des vulnérabilités brille.
+
+00:08:44.380 --> 00:08:45.400
+Au lieu de simplement réagir,
+
+00:08:45.480 --> 00:08:46.120
+Defender XDR
+
+00:08:46.120 --> 00:08:47.100
+vous aide à prévenir les attaques.
+
+00:08:47.580 --> 00:08:48.260
+Il scanne en continu
+
+00:08:48.260 --> 00:08:48.720
+vos appareils
+
+00:08:48.720 --> 00:08:49.100
+à la recherche
+
+00:08:49.100 --> 00:08:49.900
+de correctifs manquants,
+
+00:08:49.980 --> 00:08:50.560
+de mot de passe faible
+
+00:08:50.560 --> 00:08:51.400
+et de mauvaise configuration.
+
+00:08:52.240 --> 00:08:52.940
+Vous obtenez une liste
+
+00:08:52.940 --> 00:08:53.720
+priorisée des éléments
+
+00:08:53.720 --> 00:08:54.500
+à corriger en premier,
+
+00:08:54.820 --> 00:08:55.820
+basé sur les vulnérabilités
+
+00:08:55.820 --> 00:08:56.520
+les plus susceptibles
+
+00:08:56.520 --> 00:08:57.060
+d'être exploités.
+
+00:08:57.460 --> 00:08:58.220
+Fini les conjectures,
+
+00:08:58.320 --> 00:08:59.240
+place à un plan d'action clair.
+
+00:08:59.600 --> 00:09:00.100
+Et voici un point
+
+00:09:00.100 --> 00:09:00.920
+que beaucoup de gens négligent.
+
+00:09:01.480 --> 00:09:02.360
+Defender XDR fonctionne
+
+00:09:02.360 --> 00:09:03.080
+sur toutes les plateformes,
+
+00:09:03.140 --> 00:09:03.660
+pas seulement Windows.
+
+00:09:03.900 --> 00:09:04.680
+Il couvre également Mac,
+
+00:09:04.760 --> 00:09:05.620
+Linux, iOS et Android.
+
+00:09:06.340 --> 00:09:07.000
+Si votre entreprise
+
+00:09:07.000 --> 00:09:08.020
+utilise un mélange d'appareils,
+
+00:09:08.100 --> 00:09:08.760
+vous restez protégé.
+
+00:09:09.220 --> 00:09:09.920
+Voici un cas concret.
+
+00:09:10.320 --> 00:09:11.000
+Nous avons travaillé
+
+00:09:11.000 --> 00:09:11.780
+avec un partenaire
+
+00:09:11.780 --> 00:09:12.420
+gérant la sécurité
+
+00:09:12.420 --> 00:09:13.240
+d'une entreprise de taille.
+
+00:09:13.620 --> 00:09:14.340
+Avant XDR,
+
+00:09:14.460 --> 00:09:15.380
+leur temps de réponse aux incidents
+
+00:09:15.380 --> 00:09:16.200
+était d'environ 4 heures
+
+00:09:16.200 --> 00:09:16.580
+en moyenne.
+
+00:09:17.300 --> 00:09:17.980
+Après l'activation
+
+00:09:17.980 --> 00:09:18.560
+et la configuration
+
+00:09:18.560 --> 00:09:19.820
+de règles de réponse automatisées,
+
+00:09:19.900 --> 00:09:20.380
+ce temps est passé
+
+00:09:20.380 --> 00:09:21.180
+à environ 20 minutes.
+
+00:09:21.860 --> 00:09:22.680
+La différence ne vient pas
+
+00:09:22.680 --> 00:09:23.420
+d'une équipe plus grande
+
+00:09:23.420 --> 00:09:24.300
+ou d'une meilleure formation
+
+00:09:24.300 --> 00:09:24.920
+mais du système
+
+00:09:24.920 --> 00:09:26.160
+qui fait le lien pour eux.
+
+00:09:26.600 --> 00:09:26.920
+C'est donc là
+
+00:09:26.920 --> 00:09:27.640
+l'impact pratique.
+
+00:09:28.200 --> 00:09:28.720
+Moins d'alertes,
+
+00:09:28.900 --> 00:09:29.700
+des enquêtes plus rapides,
+
+00:09:29.880 --> 00:09:30.860
+un nettoyage automatisé
+
+00:09:30.860 --> 00:09:31.960
+et une prévention proactive.
+
+00:09:32.960 --> 00:09:33.700
+Il ne s'agit pas seulement
+
+00:09:33.700 --> 00:09:34.600
+d'avoir de meilleurs outils
+
+00:09:34.600 --> 00:09:35.240
+mais des outils
+
+00:09:35.240 --> 00:09:36.020
+qui travaillent ensemble
+
+00:09:36.020 --> 00:09:36.660
+pour que votre équipe
+
+00:09:36.660 --> 00:09:37.380
+puisse se concentrer
+
+00:09:41.000 --> 00:09:42.540
+nous avons passé en revue
+
+00:09:42.540 --> 00:09:43.200
+les 5 composants.
+
+00:09:43.500 --> 00:09:44.380
+Mais voici le point crucial.
+
+00:09:44.520 --> 00:09:45.460
+La vraie valeur ne réside pas
+
+00:09:45.460 --> 00:09:45.880
+dans l'un d'eux
+
+00:09:45.880 --> 00:09:46.900
+mais dans leur intégration.
+
+00:09:47.620 --> 00:09:48.720
+Lorsque Defender for Endpoint
+
+00:09:48.720 --> 00:09:49.940
+voit un fichier être téléchargé,
+
+00:09:50.340 --> 00:09:51.320
+Defender for Identity
+
+00:09:51.320 --> 00:09:52.040
+détecte un changement
+
+00:09:52.040 --> 00:09:52.440
+de mot de passe
+
+00:09:52.440 --> 00:09:53.420
+depuis un lieu inhabituel
+
+00:09:53.420 --> 00:09:54.780
+et Defender for Cloud Apps
+
+00:09:54.780 --> 00:09:56.000
+remarque des données téléchargées
+
+00:09:56.000 --> 00:09:56.540
+vers un service
+
+00:09:56.540 --> 00:09:57.500
+de stockage personnel
+
+00:09:57.500 --> 00:09:59.360
+par prix individuellement.
+
+00:09:59.580 --> 00:10:00.360
+Chacun n'est qu'un point de données,
+
+00:10:00.500 --> 00:10:01.640
+un signal sur un tableau de bord.
+
+00:10:03.040 --> 00:10:03.380
+Et ensemble,
+
+00:10:03.460 --> 00:10:04.160
+ils racontent une histoire
+
+00:10:04.160 --> 00:10:05.020
+et cette histoire est claire.
+
+00:10:05.660 --> 00:10:06.740
+Le compte de quelqu'un est compromis
+
+00:10:06.740 --> 00:10:07.760
+et des données quittent
+
+00:10:07.760 --> 00:10:08.420
+votre organisation.
+
+00:10:09.520 --> 00:10:10.300
+La plupart des gens pensent
+
+00:10:10.300 --> 00:10:11.220
+que la sécurité consiste
+
+00:10:11.220 --> 00:10:12.180
+à acheter le meilleur antivirus
+
+00:10:12.180 --> 00:10:13.180
+ou le meilleur filtre email.
+
+00:10:13.680 --> 00:10:14.240
+C'est ce que l'industrie
+
+00:10:14.240 --> 00:10:15.300
+nous enseigne depuis des décennies.
+
+00:10:15.920 --> 00:10:16.420
+Mais la réalité
+
+00:10:16.420 --> 00:10:17.500
+est que la sécurité
+
+00:10:17.500 --> 00:10:18.200
+ne repose pas
+
+00:10:18.200 --> 00:10:19.100
+sur un produit unique
+
+00:10:19.100 --> 00:10:20.640
+mais sur la mise en relation
+
+00:10:20.640 --> 00:10:21.760
+de tout ce qui se passe
+
+00:10:21.760 --> 00:10:22.720
+dans votre environnement.
+
+00:10:23.280 --> 00:10:24.000
+Defender XDR
+
+00:10:24.000 --> 00:10:25.240
+relie ses points automatiquement
+
+00:10:25.240 --> 00:10:26.340
+évitant à votre équipe
+
+00:10:26.340 --> 00:10:27.280
+de devoir tout assembler
+
+00:10:27.280 --> 00:10:27.880
+manuellement.
+
+00:10:28.460 --> 00:10:28.940
+Il existe ici
+
+00:10:28.940 --> 00:10:29.720
+un effet multiplicateur
+
+00:10:29.720 --> 00:10:30.300
+facile à ignorer.
+
+00:10:30.780 --> 00:10:31.720
+Lorsqu'un composant Defender
+
+00:10:31.720 --> 00:10:32.940
+détecte quelque chose de nouveau,
+
+00:10:33.380 --> 00:10:33.920
+cette intelligence
+
+00:10:33.920 --> 00:10:34.880
+alimente tous les autres.
+
+00:10:35.320 --> 00:10:35.860
+Laissez-moi vous donner
+
+00:10:35.860 --> 00:10:36.480
+un exemple concret.
+
+00:10:36.780 --> 00:10:37.960
+Imaginons que Defender for Endpoint
+
+00:10:37.960 --> 00:10:38.860
+détecte une nouvelle variante
+
+00:10:38.860 --> 00:10:39.620
+de logiciel malveillant
+
+00:10:40.300 --> 00:10:41.260
+et cette information
+
+00:10:41.260 --> 00:10:42.120
+ne reste pas isolée.
+
+00:10:42.720 --> 00:10:44.180
+Defender for Office 365
+
+00:10:44.180 --> 00:10:44.920
+commence immédiatement
+
+00:10:44.920 --> 00:10:45.800
+à analyser les emails
+
+00:10:45.800 --> 00:10:46.420
+entrants à la recherche
+
+00:10:46.420 --> 00:10:47.120
+de ce même logiciel
+
+00:10:47.120 --> 00:10:48.520
+et Defender for Identity
+
+00:10:48.520 --> 00:10:49.140
+surveille les signes
+
+00:10:49.140 --> 00:10:49.900
+de vol d'identifiant.
+
+00:10:50.380 --> 00:10:51.240
+La détection à un endroit
+
+00:10:51.240 --> 00:10:52.020
+renforce la protection
+
+00:10:52.020 --> 00:10:52.600
+partout ailleurs.
+
+00:10:53.100 --> 00:10:53.800
+C'est un niveau de coordination
+
+00:10:53.800 --> 00:10:54.420
+qu'il est tout simplement
+
+00:10:54.420 --> 00:10:55.180
+impossible d'obtenir
+
+00:10:55.180 --> 00:10:56.100
+en achetant des outils séparés
+
+00:10:56.100 --> 00:10:56.980
+auprès de différents fournisseurs.
+
+00:10:57.560 --> 00:10:58.440
+Il vous faudrait une équipe dédiée
+
+00:10:58.440 --> 00:10:59.060
+rien que pour maintenir
+
+00:10:59.060 --> 00:11:00.100
+le fonctionnement des intégrations.
+
+00:11:00.960 --> 00:11:01.660
+C'est pourquoi Microsoft
+
+00:11:01.660 --> 00:11:02.960
+peut rivaliser avec des entreprises
+
+00:11:02.960 --> 00:11:03.940
+comme CrowdStrike
+
+00:11:03.940 --> 00:11:04.460
+et Palo Alto
+
+00:11:04.460 --> 00:11:05.440
+sur le marché du XDR.
+
+00:11:06.320 --> 00:11:07.620
+Non pas parce qu'un composant Defender
+
+00:11:07.620 --> 00:11:08.200
+est nettement meilleur
+
+00:11:08.200 --> 00:11:09.340
+que ses équivalents concurrents
+
+00:11:09.340 --> 00:11:10.780
+mais parce que l'intégration
+
+00:11:10.780 --> 00:11:12.020
+au sein de Microsoft 365
+
+00:11:12.020 --> 00:11:13.100
+est native.
+
+00:11:13.640 --> 00:11:14.320
+Elle est intégrée
+
+00:11:14.320 --> 00:11:15.160
+directement dans la plateforme.
+
+00:11:15.620 --> 00:11:16.280
+D'autres fournisseurs
+
+00:11:16.280 --> 00:11:17.320
+peuvent aussi intégrer leurs produits
+
+00:11:17.320 --> 00:11:18.480
+mais ce n'est jamais aussi fluide
+
+00:11:18.480 --> 00:11:19.240
+que lorsque tout provient
+
+00:11:19.240 --> 00:11:19.920
+de la même entreprise
+
+00:11:19.920 --> 00:11:21.200
+et partage le même modèle de données.
+
+00:11:21.980 --> 00:11:23.160
+Alors qui en profite le plus ?
+
+00:11:23.160 --> 00:11:24.120
+Si votre entreprise utilise
+
+00:11:24.120 --> 00:11:24.940
+Microsoft 365
+
+00:11:24.940 --> 00:11:25.680
+vous disposez déjà
+
+00:11:25.680 --> 00:11:26.880
+d'une partie de cette infrastructure.
+
+00:11:27.840 --> 00:11:28.400
+Passez à E5
+
+00:11:28.400 --> 00:11:29.120
+ou ajoutez le module
+
+00:11:29.120 --> 00:11:30.380
+complémentaire de sécurité E5
+
+00:11:30.380 --> 00:11:31.180
+débloque l'expérience
+
+00:11:31.180 --> 00:11:32.500
+Defender XDR complète.
+
+00:11:33.220 --> 00:11:34.160
+Pour les petites entreprises
+
+00:11:34.160 --> 00:11:36.020
+Microsoft 365 Business Premium
+
+00:11:36.020 --> 00:11:37.140
+offre un sous-ensemble solide
+
+00:11:37.140 --> 00:11:37.840
+de ses capacités.
+
+00:11:38.260 --> 00:11:38.800
+L'idée est que vous n'avez
+
+00:11:38.800 --> 00:11:39.340
+peut-être pas besoin
+
+00:11:39.340 --> 00:11:40.060
+d'acheter une toute nouvelle
+
+00:11:40.060 --> 00:11:40.620
+pile de sécurité.
+
+00:11:41.040 --> 00:11:41.580
+Il vous suffit peut-être
+
+00:11:41.580 --> 00:11:42.120
+simplement d'activer
+
+00:11:42.120 --> 00:11:42.760
+ce que vous possédez déjà.
+
+00:11:43.440 --> 00:11:43.880
+En résumé,
+
+00:11:43.960 --> 00:11:45.180
+que devez-vous faire ?
+
+00:11:45.180 --> 00:11:46.180
+Concluons avec trois étapes
+
+00:11:46.180 --> 00:11:46.920
+concrètes que vous pouvez
+
+00:11:46.920 --> 00:11:47.800
+entreprendre dès aujourd'hui.
+
+00:11:48.720 --> 00:11:49.300
+Première étape,
+
+00:11:49.440 --> 00:11:50.220
+vérifiez vos licences.
+
+00:11:50.740 --> 00:11:51.500
+C'est la chose la plus simple
+
+00:11:51.500 --> 00:11:51.800
+à faire.
+
+00:11:52.340 --> 00:11:52.820
+Allez dans le centre
+
+00:11:52.820 --> 00:11:54.280
+d'administration Microsoft 365,
+
+00:11:54.560 --> 00:11:55.340
+examinez vos abonnements
+
+00:11:55.340 --> 00:11:56.140
+et voyez ce pour quoi
+
+00:11:56.140 --> 00:11:56.560
+vous payez.
+
+00:11:57.120 --> 00:11:57.900
+Avez-vous E5 E3
+
+00:11:57.900 --> 00:11:58.920
+avec le module de sécurité
+
+00:11:58.920 --> 00:12:00.820
+ou Business Premium ?
+
+00:12:00.820 --> 00:12:01.380
+Cela vous indique
+
+00:12:01.380 --> 00:12:02.060
+à quelle capacité
+
+00:12:02.060 --> 00:12:02.460
+Defender,
+
+00:12:02.520 --> 00:12:03.240
+vous avez déjà accès.
+
+00:12:03.520 --> 00:12:04.180
+Vous pourriez être surpris
+
+00:12:04.180 --> 00:12:04.760
+par ce qui est inclus.
+
+00:12:05.880 --> 00:12:06.440
+Deuxième étape,
+
+00:12:06.500 --> 00:12:07.300
+si vous avez la bonne licence,
+
+00:12:07.460 --> 00:12:08.800
+activez Defender XDR.
+
+00:12:09.420 --> 00:12:09.900
+Ce n'est pas toujours
+
+00:12:09.900 --> 00:12:10.520
+activé par défaut.
+
+00:12:10.860 --> 00:12:12.560
+Allez sur security.microsoft.com,
+
+00:12:12.740 --> 00:12:13.740
+trouvez la section des paramètres
+
+00:12:13.740 --> 00:12:14.560
+et activez l'expérience
+
+00:12:14.560 --> 00:12:15.400
+unifiée des incidents.
+
+00:12:16.540 --> 00:12:17.520
+La documentation de Microsoft
+
+00:12:17.520 --> 00:12:18.240
+indique que cela prend
+
+00:12:18.240 --> 00:12:18.820
+environ 10 minutes.
+
+00:12:19.300 --> 00:12:19.900
+Vous n'avez pas besoin
+
+00:12:19.900 --> 00:12:20.540
+de tout configurer
+
+00:12:20.540 --> 00:12:21.000
+en une seule fois.
+
+00:12:21.440 --> 00:12:22.340
+Le simple fait d'activer
+
+00:12:22.340 --> 00:12:23.240
+le moteur de corrélation
+
+00:12:23.240 --> 00:12:24.100
+vous donne immédiatement
+
+00:12:24.100 --> 00:12:25.100
+une meilleure visibilité.
+
+00:12:26.180 --> 00:12:26.700
+Troisième étape,
+
+00:12:26.800 --> 00:12:27.780
+commencez par les victoires faciles.
+
+00:12:28.580 --> 00:12:29.540
+Déployez Defender for Endpoint
+
+00:12:29.540 --> 00:12:30.200
+sur tous vos appareils
+
+00:12:30.200 --> 00:12:31.040
+si ce n'est pas déjà fait.
+
+00:12:31.840 --> 00:12:32.680
+Si vous utilisez Entune,
+
+00:12:32.760 --> 00:12:33.220
+c'est très simple.
+
+00:12:33.640 --> 00:12:34.360
+Activez les stratégies
+
+00:12:34.360 --> 00:12:35.260
+de sécurité prédéfinies
+
+00:12:35.260 --> 00:12:36.420
+de Defender for Office 365.
+
+00:12:36.900 --> 00:12:38.020
+Il existe une stratégie standard
+
+00:12:38.020 --> 00:12:39.080
+et une stratégie stricte
+
+00:12:39.080 --> 00:12:39.580
+et l'une ou l'autre
+
+00:12:39.580 --> 00:12:40.340
+bloque la majorité
+
+00:12:40.340 --> 00:12:41.360
+des menaces par email courantes
+
+00:12:41.360 --> 00:12:41.840
+dès le départ.
+
+00:12:42.580 --> 00:12:43.360
+Ensuite, jetez un œil
+
+00:12:43.360 --> 00:12:43.820
+au tableau de bord
+
+00:12:43.820 --> 00:12:44.840
+de gestion des vulnérabilités.
+
+00:12:45.300 --> 00:12:45.760
+Il vous montrera
+
+00:12:45.760 --> 00:12:46.900
+vos expositions les plus critiques
+
+00:12:46.900 --> 00:12:47.600
+et vous dira exactement
+
+00:12:47.600 --> 00:12:48.600
+quoi corriger en priorité.
+
+00:12:49.320 --> 00:12:49.940
+Un conseil ici,
+
+00:12:50.020 --> 00:12:50.820
+n'essayez pas de tout faire
+
+00:12:50.820 --> 00:12:51.400
+en même temps.
+
+00:12:52.080 --> 00:12:52.680
+Chaque composant
+
+00:12:52.680 --> 00:12:53.600
+ajoute de la protection
+
+00:12:53.600 --> 00:12:54.760
+mais aussi de la complexité.
+
+00:12:55.260 --> 00:12:56.100
+Commencez par un élément,
+
+00:12:56.100 --> 00:12:57.140
+apprenez à le maîtriser
+
+00:12:57.140 --> 00:12:58.320
+puis passez au suivant.
+
+00:12:59.320 --> 00:13:00.020
+Vouloir tout activer
+
+00:13:00.020 --> 00:13:00.700
+dès le premier jour
+
+00:13:00.700 --> 00:13:01.760
+est la recette de la frustration.
+
+00:13:02.660 --> 00:13:03.220
+Si vous ne devez faire
+
+00:13:03.220 --> 00:13:03.580
+qu'une chose,
+
+00:13:03.660 --> 00:13:04.420
+optez pour les stratégies
+
+00:13:04.420 --> 00:13:05.300
+prédéfinies de Defender
+
+00:13:05.300 --> 00:13:06.180
+pour Office 365.
+
+00:13:06.900 --> 00:13:07.760
+L'email reste le vecteur
+
+00:13:07.760 --> 00:13:08.380
+numéro un utilisé
+
+00:13:08.380 --> 00:13:08.900
+par les attaquants
+
+00:13:08.900 --> 00:13:09.820
+pour infiltrer les organisations.
+
+00:13:10.340 --> 00:13:11.020
+Bloquez ces menaces
+
+00:13:11.020 --> 00:13:11.620
+dès la passerelle
+
+00:13:11.620 --> 00:13:12.620
+et l'action la plus efficace
+
+00:13:12.620 --> 00:13:13.380
+que vous puissiez mener.
+
+00:13:14.100 --> 00:13:14.960
+Une fois opérationnel,
+
+00:13:15.040 --> 00:13:15.920
+utilisez le tableau de bord
+
+00:13:15.920 --> 00:13:16.900
+Microsoft Secure Score
+
+00:13:16.900 --> 00:13:17.860
+pour suivre vos progrès.
+
+00:13:18.620 --> 00:13:19.040
+Il vous fournit
+
+00:13:19.040 --> 00:13:20.200
+une liste d'actions recommandées
+
+00:13:20.200 --> 00:13:21.080
+et montre comment
+
+00:13:21.080 --> 00:13:21.740
+chacune améliore
+
+00:13:21.740 --> 00:13:22.880
+votre posture de sécurité.
+
+00:13:22.880 --> 00:13:24.380
+C'est comme une liste de tâches
+
+00:13:24.380 --> 00:13:25.500
+qui se hiérarchise d'elle-même.
+
+00:13:26.200 --> 00:13:26.760
+Si vous ne savez pas
+
+00:13:26.760 --> 00:13:27.180
+ce que vous avez
+
+00:13:27.180 --> 00:13:27.840
+ou par où commencer,
+
+00:13:28.260 --> 00:13:29.240
+contactez votre prestataire
+
+00:13:29.240 --> 00:13:29.620
+informatique
+
+00:13:29.620 --> 00:13:30.440
+ou partenaire Microsoft.
+
+00:13:31.120 --> 00:13:32.340
+Ils peuvent auditer vos licences,
+
+00:13:32.760 --> 00:13:33.580
+vous aider à configurer
+
+00:13:33.580 --> 00:13:34.300
+les bonnes protections
+
+00:13:34.300 --> 00:13:35.760
+et éviter de gaspiller
+
+00:13:35.760 --> 00:13:36.560
+des ressources.
+
+00:13:37.820 --> 00:13:38.280
+Voilà, donc ce qu'est
+
+00:13:38.280 --> 00:13:39.300
+Microsoft Defender XDR.
+
+00:13:39.900 --> 00:13:40.860
+Ce n'est pas un produit unique
+
+00:13:40.860 --> 00:13:41.640
+que l'on achète tel quel.
+
+00:13:42.000 --> 00:13:42.980
+C'est une couche de sécurité
+
+00:13:42.980 --> 00:13:43.620
+unifiée
+
+00:13:43.620 --> 00:13:44.720
+qui connecte vos protections
+
+00:13:44.720 --> 00:13:45.320
+existantes
+
+00:13:45.320 --> 00:13:46.640
+en un système intelligent.
+
+00:13:47.420 --> 00:13:48.140
+La vraie valeur réside
+
+00:13:48.140 --> 00:13:48.540
+dans la manière
+
+00:13:48.540 --> 00:13:49.660
+dont ces composants interagissent.
+
+00:13:50.220 --> 00:13:51.060
+Ils communiquent entre eux,
+
+00:13:51.240 --> 00:13:52.180
+automatisent les réponses
+
+00:13:52.180 --> 00:13:52.900
+et réduisent le temps
+
+00:13:52.900 --> 00:13:53.900
+dont disposent les attaquants.
+
+00:13:54.760 --> 00:13:55.400
+Commencez par un audit
+
+00:13:55.400 --> 00:13:55.820
+de vos licences
+
+00:13:55.820 --> 00:13:56.900
+puis activez les fonctionnalités de base.
+
+00:13:57.500 --> 00:13:58.680
+Vous possédez déjà plus de protections
+
+00:13:58.680 --> 00:13:59.320
+que vous ne le pensez.
+
+00:13:59.680 --> 00:14:00.380
+Merci de votre écoute.
+
+00:14:00.720 --> 00:14:01.380
+Si cela vous a aidé,
+
+00:14:01.520 --> 00:14:02.160
+partagez cette vidéo
+
+00:14:02.160 --> 00:14:02.900
+avec quelqu'un qui cherche
+
+00:14:02.900 --> 00:14:04.040
+à comprendre la sécurité Microsoft.
+
+00:14:04.480 --> 00:14:04.940
+A la prochaine.

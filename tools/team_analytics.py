@@ -54,7 +54,7 @@ def err(e):
 
 # ---------------------------------------------------------------- Google Search Console
 
-def gsc():
+def gsc(site=None):
     raw = os.environ.get("GSC_SERVICE_ACCOUNT_JSON", "").strip()
     if not raw:
         return {"status": "Secret GSC_SERVICE_ACCOUNT_JSON fehlt"}
@@ -63,7 +63,7 @@ def gsc():
         sa = json.loads(raw)
         token = H.http_json(H.token_uri(sa), form={"grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
                                                   "assertion": H.jwt_assertion(sa, int(time.time()))}).get("access_token")
-        site = os.environ.get("GSC_SITE", "") or "sc-domain:m365.fm"
+        site = site or os.environ.get("GSC_SITE", "") or "sc-domain:m365.fm"
         url = H.GSC_API.format(site=urllib.parse.quote(site, safe=""))
         hd = {"Authorization": "Bearer " + token}
 
@@ -80,7 +80,10 @@ def gsc():
         row = lambda r, k: {k: r["keys"][0], "clicks": int(r.get("clicks", 0)), "impressions": int(r.get("impressions", 0)),
                             "ctr": round(r.get("ctr", 0) * 100, 2), "position": round(r.get("position", 0), 1)}
         queries = [row(r, "query") for r in q(START, END, ["query"], 1000)]
-        pages = [row(r, "page") for r in q(START, END, ["page"], 500)]
+        try:   # YouTube-Creator-Properties kennen evtl. keine Seiten-Dimension
+            pages = [row(r, "page") for r in q(START, END, ["page"], 500)]
+        except Exception:   # noqa: BLE001
+            pages = []
         quick = sorted([x for x in queries if 4 <= x["position"] <= 20 and x["impressions"] >= 100], key=lambda x: -x["impressions"])[:50]
         expect = {1: 25, 2: 15, 3: 10, 4: 7, 5: 5}
         ctr_gap = sorted([x for x in queries if x["position"] <= 5 and x["impressions"] >= 300 and x["ctr"] < expect.get(max(1, round(x["position"])), 5) / 2],
@@ -159,14 +162,14 @@ def youtube():
 
 # ---------------------------------------------------------------- Bing
 
-def bing():
+def bing(site_url="https://m365.fm/"):
     key = os.environ.get("BING_WEBMASTER_API_KEY", "").strip()
     if not key:
         return {"status": "Secret BING_WEBMASTER_API_KEY fehlt"}
     base = "https://ssl.bing.com/webmaster/api.svc/json/"
     day = lambda s: (lambda m: dt.datetime.fromtimestamp(int(m.group()) / 1000, dt.timezone.utc).date() if m else None)(re.search(r"\d{9,}", str(s)))
     try:
-        q = lambda m: get_json(base + m + "?" + urllib.parse.urlencode({"siteUrl": "https://m365.fm/", "apikey": key})).get("d") or []
+        q = lambda m: get_json(base + m + "?" + urllib.parse.urlencode({"siteUrl": site_url, "apikey": key})).get("d") or []
         rows = sorted((day(r.get("Date")), int(r.get("Clicks") or 0), int(r.get("Impressions") or 0)) for r in q("GetRankAndTrafficStats") if day(r.get("Date")))
         since = TODAY - dt.timedelta(days=28)
         wk = {}
@@ -184,13 +187,36 @@ def bing():
             return [{key_name.lower(): k, "clicks": v[0], "impressions": v[1], "position": round(v[2] / v[3], 1) if v[3] else None}
                     for k, v in sorted(a.items(), key=lambda kv: -kv[1][1]) if k]
 
-        return {"status": "ok", "period": {"from": since.isoformat(), "to": TODAY.isoformat()},
+        return {"status": "ok", "site": site_url, "period": {"from": since.isoformat(), "to": TODAY.isoformat()},
                 "totals": {"clicks": sum(r[1] for r in rows if r[0] >= since), "impressions": sum(r[2] for r in rows if r[0] >= since)},
                 "weekly": [[k, v[0], v[1]] for k, v in sorted(wk.items())],
                 "queries": agg("GetQueryStats", "Query")[:300], "pages": agg("GetPageStats", "Query")[:200],
                 "note": "AI Performance (Copilot-Zitate) hat keine API: data/stats/ai_performance.json (monatlich per Workflow ai-stats.yml)."}
     except Exception as e:   # noqa: BLE001
         return {"status": f"Abruf fehlgeschlagen ({err(e)})"}
+
+
+# Weitere Properties (m365con.net, YouTube-Kanal in der Search Console). Je Property ein eigener Abruf;
+# ein Fehler bei einer Property stoppt die anderen nicht. Liste per Variable GSC_EXTRA_SITES (Komma-getrennt) aenderbar.
+EXTRA_GSC = {
+    "m365con": ["sc-domain:m365con.net", "https://m365con.net/"],
+    "youtube_search": ["sc-creator-profile:youtube.com/channel/ido4tn3khkldhp3733e9ja"],
+}
+EXTRA_BING = {"m365con": "https://m365con.net/"}
+
+
+def gsc_extra():
+    env = [x.strip() for x in os.environ.get("GSC_EXTRA_SITES", "").split(",") if x.strip()]
+    targets = {f"site{i}": [x] for i, x in enumerate(env, 1)} if env else EXTRA_GSC
+    out = {}
+    for name, candidates in targets.items():
+        res = {}
+        for cand in candidates:   # erste Variante, die antwortet, gewinnt (Domain- oder URL-Praefix-Property)
+            res = gsc(cand)
+            if res.get("status") == "ok":
+                break
+        out[name] = res
+    return out
 
 
 def pct(a, b):
@@ -220,6 +246,24 @@ def summary(g, y, b):
     return "\n".join(out) + "\n"
 
 
+def summary_extra(gx, bx):
+    out = []
+    for name, d in gx.items():
+        if d.get("status") == "ok":
+            t, p = d["totals"], d["previous"]
+            out += [f"## Google Search Console – {name} ({d.get('site')})",
+                    f"- Klicks {t['clicks']:,} ({pct(t['clicks'], p['clicks'])}), Impressionen {t['impressions']:,} ({pct(t['impressions'], p['impressions'])}), CTR {t['ctr']} %",
+                    "- Top-Suchanfragen: " + "; ".join(f"{x['query']} ({x['impressions']:,})" for x in d["queries"][:10]), ""]
+        else:
+            out += [f"## Google Search Console – {name}", f"- {d.get('status')}", ""]
+    for name, d in bx.items():
+        if d.get("status") == "ok":
+            out += [f"## Bing – {name}", f"- Klicks {d['totals']['clicks']:,}, Impressionen {d['totals']['impressions']:,} (28 Tage)", ""]
+        else:
+            out += [f"## Bing – {name}", f"- {d.get('status')}", ""]
+    return "\n".join(out) + ("\n" if out else "")
+
+
 def main():
     out = Path(sys.argv[1] if len(sys.argv) > 1 else ROOT / "reports" / "analytics")
     out.mkdir(parents=True, exist_ok=True)
@@ -228,7 +272,15 @@ def main():
     for name, data in (("gsc", g), ("youtube", y), ("bing", b)):
         (out / f"{name}.json").write_text(json.dumps({**meta, **data}, ensure_ascii=False, indent=1), "utf-8")
         print(name, data.get("status"))
-    (out / "summary.md").write_text(summary(g, y, b), "utf-8")
+    gx = gsc_extra()
+    bx = {name: bing(url) for name, url in EXTRA_BING.items()}
+    for name, data in gx.items():
+        (out / f"gsc_{name}.json").write_text(json.dumps({**meta, **data}, ensure_ascii=False, indent=1), "utf-8")
+        print("gsc_" + name, data.get("status"))
+    for name, data in bx.items():
+        (out / f"bing_{name}.json").write_text(json.dumps({**meta, **data}, ensure_ascii=False, indent=1), "utf-8")
+        print("bing_" + name, data.get("status"))
+    (out / "summary.md").write_text(summary(g, y, b) + "\n" + summary_extra(gx, bx), "utf-8")
 
 
 if __name__ == "__main__":

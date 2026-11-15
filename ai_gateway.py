@@ -26,6 +26,17 @@ def gateway_base_url():
     return f"https://gateway.ai.cloudflare.com/v1/{urllib.parse.quote(account, safe='')}/{urllib.parse.quote(gateway, safe='')}/anthropic"
 
 
+def thinking_off(model):
+    """Feld, das das Denken fuer dieses Modell abschaltet (Anthropic-Modellreferenz, Stand 3.11.2026; nie blind "disabled"; genutzt von rewrite_shownotes.py
+    und fill_entities.py): Haiku nimmt {"type": "disabled"}; Claude Sonnet 5.5 weist das mit HTTP 400 ab und nimmt stattdessen {"type": "between_tools"} (ohne weiteres Feld,
+    nur dieses Modell); bei allen anderen bleibt das Feld weg - dort denkt das Modell und der Aufrufer muss max_tokens um einen Denk-Zuschlag erhoehen
+    (die Kostenobergrenze rechnet mit max_tokens). Beide Werte gelten nur bis Aufwand high; die Aufrufer setzen keinen hoeheren."""
+    m = str(model).lower()
+    if "haiku" in m: return {"thinking": {"type": "disabled"}}
+    if m.startswith("claude-sonnet-5-5"): return {"thinking": {"type": "between_tools"}}
+    return {}
+
+
 def anthropic_request(path, data=None, headers=None, *, job, lang="", model="", cache_ttl=None, api_key=None):
     if path.startswith(ANTHROPIC_API):
         path = path[len(ANTHROPIC_API):]
@@ -48,6 +59,17 @@ def anthropic_request(path, data=None, headers=None, *, job, lang="", model="", 
     h.update(headers or {})
     payload = json.dumps(data).encode() if data is not None and not isinstance(data, bytes) else data
     return urllib.request.Request(gateway_base_url() + path, payload, h)
+
+
+def thinking_off(model):
+    """Feld fuer den Anfragekoerper, das das Denken fuer dieses Modell abschaltet (Anthropic-Modellreferenz, Stand 3.11.2026; wie rewrite_shownotes.thinking_off):
+    Haiku nimmt {"type": "disabled"} (Claude Haiku 5.5 denkt ohne das Feld adaptiv, das kostet Ausgabe-Token und frisst max_tokens); Claude Sonnet 5.5 weist
+    "disabled" mit HTTP 400 ab und nimmt stattdessen {"type": "between_tools"} (ohne weiteres Feld, nur bis effort high - ohne effort gilt high); bei allen anderen
+    Modellen bleibt das Feld weg (dort laesst sich das Denken nicht sicher abschalten)."""
+    m = str(model).lower()
+    if "haiku" in m: return {"thinking": {"type": "disabled"}}
+    if m.startswith("claude-sonnet-5-5"): return {"thinking": {"type": "between_tools"}}
+    return {}
 
 
 def urlopen(request, timeout):
@@ -108,8 +130,28 @@ def check_budget(job, model, estimate_eur=0):
     return True
 
 
-def report_usage(job, model, input_tokens, output_tokens, lang="", batch=False):
-    """Meldet bezahlten Verbrauch; wirft nie (das Ergebnis ist bezahlt und darf nicht verloren gehen)."""
+def remaining_eur(job, model):
+    """Rest des Haiku-Tagesbudgets in EUR laut Community-Worker, damit ein Lauf seine Anfragen darauf zuschneiden kann. None, wenn die Grenze nicht gilt (kein
+    Haiku, kein COMMUNITY_API) oder der Rest nicht abrufbar ist - dann entscheidet wie bisher allein check_budget (fail-closed)."""
+    if "haiku" not in str(model).lower() or not os.environ.get("COMMUNITY_API"):
+        return None
+    result = _budget_request({"action": "check", "job": job, "model": model, "estimate_eur": 0})
+    try:
+        return max(0.0, float(result["remaining_eur"])) if isinstance(result, dict) else None
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+def usage_tokens(usage):
+    """usage-Antwort von Claude -> (Eingabe gesamt inkl. Prompt-Cache, Ausgabe, davon Cache gelesen, davon Cache geschrieben)."""
+    u = usage or {}
+    read, write = int(u.get("cache_read_input_tokens") or 0), int(u.get("cache_creation_input_tokens") or 0)
+    return int(u.get("input_tokens") or 0) + read + write, int(u.get("output_tokens") or 0), read, write
+
+
+def report_usage(job, model, input_tokens, output_tokens, lang="", batch=False, cache_read=0, cache_write=0):
+    """Meldet bezahlten Verbrauch; wirft nie (das Ergebnis ist bezahlt und darf nicht verloren gehen).
+    input_tokens = Eingabe gesamt; cache_read/cache_write = Anteil daraus, der aus dem Prompt-Cache gelesen (0,1x) bzw. in ihn geschrieben (1,25x) wurde."""
     if "haiku" not in str(model).lower() or not os.environ.get("COMMUNITY_API"):
         return
     payload = {
@@ -118,6 +160,10 @@ def report_usage(job, model, input_tokens, output_tokens, lang="", batch=False):
     }
     if batch:
         payload["batch"] = True
+    if cache_read:
+        payload["cache_read_input_tokens"] = int(cache_read)
+    if cache_write:
+        payload["cache_creation_input_tokens"] = int(cache_write)
     result = _budget_request(payload)
     if not isinstance(result, dict) or not result.get("ok"):
         print(f"::warning::Haiku-Verbrauch von {job} konnte nicht gemeldet werden: {result if not isinstance(result, dict) else 'Antwort ohne ok'}.")

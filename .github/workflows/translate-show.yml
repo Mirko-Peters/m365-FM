@@ -4,6 +4,10 @@ on:
     inputs:
       langs: { description: "Sprachen, kommagetrennt (leer = alle 19)", required: false, default: "" }
       limit: { description: "Nur die neuesten N Folgen (leer = alle)", required: false, default: "" }
+      slugs: { description: "Nur diese Folgen (Slugs, kommagetrennt)", required: false, default: "" }
+      stale: { description: "Veraltete Fassungen (englisches Original geaendert) neu uebersetzen - kostenpflichtig, nur von Hand; ohne slugs hoechstens 200 je Lauf", type: boolean, default: false }
+      wishes: { description: "Nur die in /redaktion/ vorgemerkten Folgen (Wunschliste 'neu uebersetzen')", type: boolean, default: false }
+      force_manual: { description: "Auch Folgen neu uebersetzen, bei denen nur von Hand bearbeitete Felder veraltet sind (Standard: gesperrt)", type: boolean, default: false }
 permissions:
   contents: write
 concurrency: { group: translate-show, cancel-in-progress: false }
@@ -29,10 +33,19 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY_SHOW }}
           LANGS_IN: ${{ inputs.langs }}
           LIMIT_IN: ${{ inputs.limit }}
+          SLUGS_IN: ${{ inputs.slugs }}
+          STALE_IN: ${{ inputs.stale }}
+          WISHES_IN: ${{ inputs.wishes }}
+          FORCE_IN: ${{ inputs.force_manual }}
         run: |
           ARGS=""
           [ -n "$LANGS_IN" ] && ARGS="$ARGS --langs $LANGS_IN"
           [ -n "$LIMIT_IN" ] && ARGS="$ARGS --limit $LIMIT_IN"
+          [ -n "$SLUGS_IN" ] && ARGS="$ARGS --slugs $SLUGS_IN"
+          [ "$STALE_IN" = "true" ] && ARGS="$ARGS --stale"
+          [ "$WISHES_IN" = "true" ] && ARGS="$ARGS --wishes"
+          [ "$FORCE_IN" = "true" ] && ARGS="$ARGS --force-manual"
+          echo "Aufruf: translate_show.py $ARGS"
           python translate_show.py $ARGS
       - name: Ergebnis committen
         if: always()

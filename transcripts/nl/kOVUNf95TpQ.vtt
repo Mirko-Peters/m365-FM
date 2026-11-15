@@ -1,0 +1,649 @@
+WEBVTT
+
+00:00:00.230 --> 00:00:07.550
+Klaar voor 10 dagen vol Microsoft 365, Copilot, AI, Azure en de mensen die de toekomst van werk vormgeven?
+
+00:00:07.950 --> 00:00:12.390
+Deze januari is M365, kom terug en pakken we het groter aan.
+
+00:00:12.650 --> 00:00:18.730
+Doe mee voor live-sessies, praktijkdemo's en praktische kennis van MVP's en experts van over de hele wereld.
+
+00:00:18.950 --> 00:00:21.470
+Geen algemene sliedes, geen eindeloos jargon.
+
+00:00:21.910 --> 00:00:29.110
+We pakken de echte uitdagingen aan Copilot Studio, AI Agents, Fabric, Beveiliging, Governance en Automatisering.
+
+00:00:29.110 --> 00:00:34.870
+Of je nu IT-professional, ontwikkelaar of business leader bent, er zijn sessies speciaal voor jou.
+
+00:00:35.210 --> 00:00:40.510
+Met 10 volledige dagen kun je diverse technologieën verkennen en in contact komen met een wereldwijde community.
+
+00:00:40.930 --> 00:00:44.510
+Kijk live en neem praktische inzichten mee terug naar je organisatie.
+
+00:00:44.890 --> 00:00:51.170
+Januari 2027, 10 dagen, 1 Microsoft Community. De registratie is nu geopend.
+
+00:00:51.930 --> 00:00:53.230
+Claim vandaag nog je plek.
+
+00:00:55.370 --> 00:00:57.650
+Dat is m365.com.net
+
+00:00:57.650 --> 00:01:04.740
+Meld je nu aan op m365.com.net en we zien je live in januari.
+
+00:01:05.000 --> 00:01:09.620
+Welkom bij weer een aflevering van Microsoft Knowledge Nuggets hier op M365FM.
+
+00:01:09.800 --> 00:01:14.360
+Ik ben Melco Peters en het onderwerp van vandaag is er een waar bijna iedereen van heeft gehoord, maar weinig een echt begrijpen.
+
+00:01:14.540 --> 00:01:15.420
+Azure Express route.
+
+00:01:15.680 --> 00:01:19.040
+Wat is het precies? Is het gewoon een luxe VPN of is het iets heel anders?
+
+00:01:19.360 --> 00:01:21.240
+Stel je voor dat je morgen een nieuw bedrijf start.
+
+00:01:21.440 --> 00:01:24.520
+Je vertrouwt op cloud apps, het delen van bestanden en werken op afstand.
+
+00:01:24.520 --> 00:01:27.800
+Elke dag verloopt je verbinding met Azure via het openbare internet.
+
+00:01:28.060 --> 00:01:30.680
+Dat is als rijden op een snelweg met onvoorspelbaar verkeer.
+
+00:01:30.840 --> 00:01:38.080
+Het werkt prima voor e-mail, maar wanneer je kritieke data verplaatst of real-time applicaties draait, worden snelheid en betrouwbaarheid erg belangrijk.
+
+00:01:38.660 --> 00:01:45.160
+Azure Express route is de privébaan, een dedicated fysieke verbinding vanaf je kantoor of datacenter direct naar het netwerk van Microsoft.
+
+00:01:45.160 --> 00:01:52.600
+Aan het eind van deze aflevering begrijp je wat Express route echt is, hoe het is opgebouwd en of je bedrijf het moet gebruiken in plaats van een normale VPN.
+
+00:01:52.960 --> 00:01:54.780
+De analogie van de privé snelweg.
+
+00:01:55.020 --> 00:01:58.720
+Laten we het openbare internet voorstellen als een drukke tweebaansweg die iedereen deelt.
+
+00:01:58.860 --> 00:02:01.780
+Couriers, forenzen en toeristen verstoppen allemaal dezelfde weg.
+
+00:02:01.920 --> 00:02:03.940
+Je datapakketjes komen vast te zitten in dat verkeer.
+
+00:02:04.040 --> 00:02:07.920
+Telkens als iemand een film streamt of een groot bestand download, vertraagt jouw zakelijke verkeer.
+
+00:02:08.100 --> 00:02:10.820
+Dat is de realiteit van het delen van de weg met de hele wereld.
+
+00:02:10.820 --> 00:02:17.760
+Express route creëert een privé rijstrook die je on-premises netwerk direct verbindt met Azure, waardoor je verkeer het internet volledig omzeilt.
+
+00:02:18.000 --> 00:02:23.340
+Dat betekent constante snelheid, lagere latentie en hogere beveiliging, omdat je data nooit de openbare weg raakt.
+
+00:02:23.540 --> 00:02:31.300
+Dit is geen magie, het is een fysieke of virtuele verbinding gemaakt via een partner zoals Equinix Megaport, of direct met Microsoft via iets genaamd Express route direct.
+
+00:02:31.480 --> 00:02:36.700
+Het resultaat is voorspelbare prestatie zonder strijd om bandbreedte en een Microsoft-sla die uptime garandeert.
+
+00:02:36.700 --> 00:02:40.860
+Dit is de kern van de zaak, het grote idee, een privéverbinding in plaats van een publieke.
+
+00:02:41.000 --> 00:02:42.380
+Al het andere is slechts detail.
+
+00:02:42.620 --> 00:02:45.460
+Zodra je dat begrijpt, wordt de rest van Express route logisch.
+
+00:02:45.920 --> 00:02:47.780
+Bouwstenen, circuit, pairing, gateway.
+
+00:02:48.080 --> 00:02:50.360
+Dus, hoe wordt die privé snelweg eigenlijk aangelegd?
+
+00:02:50.500 --> 00:02:52.400
+Laten we de belangrijkste onderdelen bekijken.
+
+00:02:52.580 --> 00:02:56.680
+Een Express route circuit is de basis, de fysieke kabel of virtuele link die je bij een provider bestelt.
+
+00:02:56.860 --> 00:02:59.400
+Het wordt geleverd met twee verbindingen voor ingebouwde redundantie.
+
+00:02:59.560 --> 00:03:01.660
+Als één verbinding uitvalt, blijft de andere werken.
+
+00:03:01.860 --> 00:03:03.660
+Dat zit standaard in elk circuit verwerkt.
+
+00:03:03.660 --> 00:03:06.540
+Bovenop dat circuit configureer je iets dat pairings heet.
+
+00:03:06.740 --> 00:03:10.900
+Dit zijn afzonderlijke poorten voor verschillende soorten verkeer en er zijn er twee die je moet kennen.
+
+00:03:11.080 --> 00:03:13.940
+Private Pairing maakt verbinding met je virtuele Azure netwerken.
+
+00:03:14.180 --> 00:03:17.400
+Dat is waar je VM's, databases en interne applicaties zich bevinden.
+
+00:03:17.640 --> 00:03:19.760
+Dit is de poort die je gebruikt voor je privé workloads.
+
+00:03:20.040 --> 00:03:26.980
+Microsoft Pairing verbindt vervolgens met publieke Microsoft diensten zoals Microsoft 365, Dynamics 365 en Azure Public Endpoints.
+
+00:03:27.200 --> 00:03:30.580
+Dat is de poort voor toegang tot SaaS applicaties en andere Microsoft services.
+
+00:03:30.580 --> 00:03:36.000
+Om het circuit met je virtuele Azure netwerk te verbinden, heb je een express route virtual network gateway nodig.
+
+00:03:36.240 --> 00:03:42.500
+Zie het als een speciale router in je Azure netwerk die de taal BGP, Border Gateway Protocol, spreekt met het circuit.
+
+00:03:42.860 --> 00:03:46.560
+BGP zorgt ervoor dat beide kanten automatisch routeringsinformatie uitwisselen.
+
+00:03:46.720 --> 00:03:48.580
+Handmatige routetabellen zijn niet nodig.
+
+00:03:48.820 --> 00:03:54.620
+De gateway is beschikbaar in verschillende formaten, standaard, high performance of ultra performance, afhankelijk van het verwachte verkeer.
+
+00:03:54.620 --> 00:04:00.440
+Er is ook FastPad, een optionele functie waarmee verkeerde gateway kan omzeilen voor nog lagere latentie op snelle circuits.
+
+00:04:00.720 --> 00:04:05.380
+Als je werkt met 10 gigabit per seconde of hoger, kan FastPad een merkbaar verschil maken.
+
+00:04:05.660 --> 00:04:11.960
+Deze drie onderdelen, circuit, pairing en gateway, vormen samen de privé snelweg van je kantoor naar je cloud workloads.
+
+00:04:12.200 --> 00:04:17.180
+Elk onderdeel speelt een specifieke rol en samen creëren ze een verbinding die betrouwbaar, snel en veilig is.
+
+00:04:17.360 --> 00:04:20.300
+Er zijn twee manieren om te verbinden, via een provider of direct.
+
+00:04:20.300 --> 00:04:25.800
+De meeste bedrijven kiezen voor partijen als AT&T, Verizon of een cloud exchange provider zoals Megaport of Equinix.
+
+00:04:25.980 --> 00:04:31.580
+De provider beheert de fysieke verbinding van jouw locatie naar de dichtstbijzijnde express route pering locatie.
+
+00:04:31.780 --> 00:04:34.300
+Dat is een Microsoft Edge locatie waar de overdracht plaatsvindt.
+
+00:04:34.980 --> 00:04:38.560
+Je geeft hen simpelweg een serviceleutel uit je Azure portal en zij regelen de rest.
+
+00:04:38.800 --> 00:04:40.920
+Deze aanpak is eenvoudiger en sneller op te zetten.
+
+00:04:41.120 --> 00:04:44.660
+Het ondersteunt bandbreedtes van 50 megabit per seconde tot wel 10 gigabit.
+
+00:04:44.660 --> 00:04:50.800
+De provider beheert het middentraject, dus je hoeft je geen zorgen te maken over de fysieke infrastructuur tussen je kantoor en het Microsoft netwerk.
+
+00:04:50.960 --> 00:04:52.840
+Het alternatief is express route direct.
+
+00:04:53.100 --> 00:04:58.600
+Bij direct krijg je twee fysieke poorten op een pering locatie, waarbij we praten over 10, 100 of zelfs 400 gigabit per poort.
+
+00:04:58.820 --> 00:05:06.680
+Direct is bedoeld voor scenario's met grote volumes, zoals enorme datamigraties, gereguleerde sectoren die fysieke isolatie vereisen, of het verbinden van meerdere clouds via eensetpoorten.
+
+00:05:06.840 --> 00:05:07.760
+Dit is de afweging.
+
+00:05:07.760 --> 00:05:18.160
+Direct geeft je meer controle en hogere snelheden, maar je bent zelf verantwoordelijk voor de fysieke verbinding, cross-connects in het datacenter, afstemming met de faciliteit en het afhandelen van hardware problemen.
+
+00:05:18.340 --> 00:05:21.940
+Voor 90% van de bedrijven is het provider model de juiste keuze.
+
+00:05:22.220 --> 00:05:27.740
+Direct is voor de top, voor organisaties die maximale doorvoer nodig hebben of specifieke compliance-eisen hebben.
+
+00:05:28.340 --> 00:05:30.620
+Verbonden blijven, veerkracht en redundantie.
+
+00:05:30.800 --> 00:05:36.520
+Elk express routencercuit heeft ingebouwde redundantie met twee fysieke verbindingen naar twee afzonderlijke Microsoft Edge routers.
+
+00:05:36.520 --> 00:05:39.740
+Als de ene verbinding uitvalt, zorgt de andere dat je verkeer blijft stromen.
+
+00:05:39.940 --> 00:05:40.860
+Dat is de standaard.
+
+00:05:41.040 --> 00:05:43.360
+Maar hier komt het, Microsoft wil dat je groter denkt.
+
+00:05:43.560 --> 00:05:47.540
+Het echte gevaar is niet één kapotte glasvezelkabel, maar het verliezen van een hele peringlocatie.
+
+00:05:47.780 --> 00:05:53.420
+Denk aan brand in het datacenter, een bouwploeg die de hoofdkabel doorknipt, of een stroomstoring die de hele faciliteit platlegt.
+
+00:05:53.660 --> 00:05:57.640
+Dat is het soort gebeurtenis dat een enkel circuit uitschakelt, zelfs met redundante verbindingen.
+
+00:05:57.760 --> 00:05:59.920
+Je hebt drie niveaus van veerkracht om uit te kiezen.
+
+00:06:00.180 --> 00:06:01.600
+Standaard is wat je krijgt als basis.
+
+00:06:01.880 --> 00:06:03.720
+Twee verbindingen op één peringlocatie.
+
+00:06:03.720 --> 00:06:07.980
+Hoge veerkracht geeft je één verbinding op elk van twee verschillende peringlocaties binnen dezelfde regio.
+
+00:06:08.280 --> 00:06:09.940
+Maximale veerkracht gaat nog een stap verder.
+
+00:06:10.160 --> 00:06:13.820
+Twee afzonderlijke circuits op twee verschillende peringlocaties, elk met een eigen paar verbindingen.
+
+00:06:13.980 --> 00:06:15.120
+Dat is de gouden standaard.
+
+00:06:15.300 --> 00:06:18.160
+Je kunt een hele peringlocatie verliezen en toch verbonden blijven.
+
+00:06:18.380 --> 00:06:19.220
+Waarom is dit belangrijk?
+
+00:06:19.520 --> 00:06:22.380
+Omdat ExpressRoute vaak bedrijfscritieke workloads ondersteunt.
+
+00:06:22.600 --> 00:06:24.020
+Downtime betekent omzetverlies.
+
+00:06:24.220 --> 00:06:26.880
+Een ziekenhuis kan het zich niet veroorloven de toegang tot patiëntendossiers te verliezen.
+
+00:06:27.040 --> 00:06:29.780
+Een handelsveermaak kan zich zelfs een paar seconden onderbreking niet veroorloven.
+
+00:06:29.780 --> 00:06:33.300
+Dus de extra investering in redundantie is logisch voor die scenario's.
+
+00:06:33.400 --> 00:06:37.440
+Je kunt ExpressRoute ook koppelen met een backup VPN als goedkopere failover optie.
+
+00:06:37.660 --> 00:06:42.620
+Wanneer ExpressRoute down is, verwerkt de VPN minder kritiek verkeer of dient het als backup pad voor essentiële diensten.
+
+00:06:42.820 --> 00:06:44.920
+Veel ondernemingen gebruiken deze hybride aanpak.
+
+00:06:45.220 --> 00:06:47.680
+ExpressRoute voor de belangrijke zaken, VPN als vangnet.
+
+00:06:47.840 --> 00:06:49.100
+De belangrijkste lay is simpel.
+
+00:06:49.320 --> 00:06:50.960
+Ga er niet vanuit dat één circuit genoeg is.
+
+00:06:51.160 --> 00:06:52.520
+Hou rekening met het onverwachte.
+
+00:06:52.740 --> 00:06:55.340
+Je verbinding is slecht zo betrouwbaar als je zwakste schakel.
+
+00:06:55.800 --> 00:06:57.680
+ExpressRoute versus site-to-site VPN.
+
+00:06:57.680 --> 00:06:59.540
+Dit is een vraag die ik constant hoor.
+
+00:06:59.780 --> 00:07:03.260
+Beide diensten verbinden je lokale netwerk met Azure, maar ze werken heel anders.
+
+00:07:03.480 --> 00:07:05.580
+Een VPN maakt gebruik van het publieke internet.
+
+00:07:05.760 --> 00:07:09.760
+Je gegevens zijn versleuteld en dus veilig tijdens het transport, maar je bent afhankelijk van internetcongestie,
+
+00:07:09.860 --> 00:07:12.140
+routeringskeuzes van ISP's en variabele latentie.
+
+00:07:12.280 --> 00:07:16.680
+De krachtigste VPN Gateway SKU haalt een maximum van ongeveer 1,25 gigabit per seconde.
+
+00:07:16.820 --> 00:07:19.220
+Dat is voor veel scenario's prima, maar het is wel een harde grens.
+
+00:07:19.420 --> 00:07:20.740
+ExpressRoute is privaat.
+
+00:07:20.860 --> 00:07:22.380
+Er komt geen internet aan te pas.
+
+00:07:22.560 --> 00:07:26.000
+De latentie is voorspelbaar omdat je verkeer op het backbone-netwerk van Microsoft blijft.
+
+00:07:26.000 --> 00:07:28.520
+De bandbreedte loopt op tot 100 gigabit per seconde.
+
+00:07:28.620 --> 00:07:32.360
+Microsoft garandeert 99,9% uptime voor de verbinding zelf.
+
+00:07:32.540 --> 00:07:34.140
+De kosten zijn waar het echt om draait.
+
+00:07:34.320 --> 00:07:35.740
+VPN is veel goedkoper.
+
+00:07:35.960 --> 00:07:40.520
+Een gemiddeld MKB-bedrijf betaalt dubbele tot lage driedubbele cijfers per maand voor hun VPN Gateway.
+
+00:07:40.780 --> 00:07:46.140
+ExpressRoute begint bij hoge driedubbele cijfers en kan oplopen tot in de duizenden, zeker als je providerkosten meetelt.
+
+00:07:46.340 --> 00:07:51.400
+De provider rekent voor de fysieke verbinding, de cross-connects, de last-miele-circuits en de poortkosten.
+
+00:07:51.400 --> 00:07:54.720
+Die kosten overstijgen vaak wat Azure rekent voor het circuit zelf.
+
+00:07:54.860 --> 00:07:56.720
+De installatietijd is een ander groot verschil.
+
+00:07:56.940 --> 00:07:58.400
+VPN kan binnen enkele uren worden opgeleverd.
+
+00:07:59.040 --> 00:08:01.540
+Je maakt de gateway aan, configureert de tunnel en klaar ben je.
+
+00:08:01.860 --> 00:08:05.200
+ExpressRoute duurt dagen tot weken omdat de provider de verbinding fysiek moet configureren.
+
+00:08:05.400 --> 00:08:06.440
+Dat kun je niet versnellen.
+
+00:08:06.760 --> 00:08:07.940
+Beveiliging werkt ook anders.
+
+00:08:08.200 --> 00:08:10.180
+VPN heeft ingebouwde IPsec-versleuteling.
+
+00:08:10.380 --> 00:08:12.080
+Je verkeer is end-to-end versleuteld.
+
+00:08:12.460 --> 00:08:15.400
+ExpressRoute biedt een privaat pad, maar versleutelt niet automatisch alles.
+
+00:08:15.640 --> 00:08:20.580
+Als je versleuteling nodig hebt over de private verbinding, heb je extra maatregelen nodig zoals MaxSec op ExpressRoute Direct.
+
+00:08:20.580 --> 00:08:23.340
+Voor de meeste bedrijven volstaat het private pad alleen.
+
+00:08:23.500 --> 00:08:27.400
+Maar als je compliance-eisen versleuteling op netwerkniveau vereisen, moet je dit plannen.
+
+00:08:27.600 --> 00:08:29.240
+Dus, wanneer gebruik je welke optie?
+
+00:08:29.420 --> 00:08:34.540
+VPN is ideaal voor test- en ontwikkelomgevingen, kleine kantoren met lichte workloads of als backup-verbinding.
+
+00:08:34.760 --> 00:08:40.980
+ExpressRoute is bedoeld voor productiesystemen, bandbreedte, intensieve applicaties, compliance-omgevingen of latentiegevoelige zaken.
+
+00:08:41.260 --> 00:08:42.780
+Veel ondernemingen gebruiken beide.
+
+00:08:43.060 --> 00:08:46.300
+VPN voor minder kritiekverkeer, ExpressRoute voor de belangrijke zaken.
+
+00:08:46.480 --> 00:08:47.900
+De conclusie is eenvoudig.
+
+00:08:48.040 --> 00:08:50.100
+VPN is voor veel scenario's goed genoeg.
+
+00:08:50.100 --> 00:08:55.380
+ExpressRoute is overdreven tenzij je echte prestaties, de voorspelbaarheid of de compliance-voordelen nodig hebt.
+
+00:08:55.580 --> 00:08:58.580
+Betaal niet voor een privé-rijstrook als een openbare weg prima werkt.
+
+00:08:58.820 --> 00:09:03.260
+Wanneer echte bedrijven ExpressRoute gebruiken, waar maakt ExpressRoute nu echt het verschil?
+
+00:09:03.440 --> 00:09:07.120
+Laten we enkele voorbeelden uit de praktijk bekijken waar de theorie praktisch wordt.
+
+00:09:07.320 --> 00:09:09.180
+De zorgsector is een belangrijk voorbeeld.
+
+00:09:09.500 --> 00:09:15.000
+Denk aan een ziekenhuis dat groterie- en CT-scanbestanden moet verplaatsen van lokale opslag naar Azure voor analyse.
+
+00:09:15.320 --> 00:09:18.600
+Via het openbare internet kan variabele latentie de boel vertragen.
+
+00:09:18.600 --> 00:09:23.880
+Een radioloog die wacht tot beelden zijn geladen, is niet alleen gefrustreerd, maar vertraagt mogelijk de patiëntenzorg.
+
+00:09:24.080 --> 00:09:28.220
+ExpressRoute biedt hen constante snelheid, zodat die beelden precies aankomen wanneer verwacht.
+
+00:09:28.380 --> 00:09:30.680
+De financiële sector is een ander duidelijk voorbeeld.
+
+00:09:31.300 --> 00:09:33.760
+Handelsapplicaties hebben lage, voorspelbare latentie nodig.
+
+00:09:34.040 --> 00:09:36.620
+Zelfs 20 milliseconden jitter kan echt geld kosten.
+
+00:09:36.620 --> 00:09:41.840
+Bij high frequency trading is dat het verschil tussen een trade uitvoeren of het moment volledig missen.
+
+00:09:42.040 --> 00:09:45.640
+ExpressRoute biedt hen een gegarandeerd pad met prestaties waar ze op kunnen rekenen.
+
+00:09:45.840 --> 00:09:47.560
+Laten we het nu hebben over de productiesector.
+
+00:09:47.840 --> 00:09:53.660
+Fabrieken met IoT-sensoren sturen continu datastromen naar Azure en een internetonderbreking kan een productielijn stilleggen.
+
+00:09:53.840 --> 00:09:58.900
+Als een sensor stopt met rapporteren, kan het systeem aannemen dat de machine defect is en een noodstop activeren.
+
+00:09:59.180 --> 00:10:03.580
+ExpressRoute biedt de betrouwbaarheid die die continu datastromen nodig hebben om alles draaiende te houden.
+
+00:10:03.580 --> 00:10:11.320
+De zester recovery is een grote use case. Organisaties repliceren volledige datacenters naar Azure, wat betekent dat terabytes aan data continu worden verplaatst.
+
+00:10:11.640 --> 00:10:15.480
+ExpressRoute biedt de hoge bandbreedte en sla die nodig zijn voor synchrone replicatie.
+
+00:10:15.700 --> 00:10:20.840
+Met een VPN kan het lastig zijn om je hersteldoelstellingen te halen, omdat de verbinding de doorvoor simpelweg niet aan kan.
+
+00:10:21.080 --> 00:10:24.540
+Grote gegevensoverdrachten zijn een ander gebied waar ExpressRoute echt loont.
+
+00:10:24.540 --> 00:10:29.880
+Als je terabytes of petabytes naar Azure verplaatst, zoals mediabestanden, onderzoeksgegevens of archieven,
+
+00:10:29.880 --> 00:10:33.640
+kan het onbeperkte dataplan op ExpressRoute goedkoper zijn dan internet de greskosten.
+
+00:10:33.800 --> 00:10:35.600
+Op grote schaal verandert de berekening.
+
+00:10:35.800 --> 00:10:40.380
+De vaste kosten van het circuit worden economischer dan per gigabyte betalen voor enorme datatransfers.
+
+00:10:40.580 --> 00:10:42.360
+Er is ook multisite connectiviteit.
+
+00:10:42.600 --> 00:10:46.580
+Met ExpressRoute Global Reach kun je twee externe kantoren verbinden via hetzelfde circuit,
+
+00:10:46.820 --> 00:10:50.020
+waarbij verkeer over de backbone van Microsoft wordt geleid in plaats van via Azure.
+
+00:10:50.020 --> 00:10:53.600
+Dat kan voor sommige scenario's een traditionele WAN-verbinding vervangen of aanvullen.
+
+00:10:53.800 --> 00:10:57.100
+Dit zijn de situaties waarin de extra kosten van ExpressRoute zichzelf terugverdienen.
+
+00:10:57.100 --> 00:11:00.420
+Voorkomen van downtime, snellere operaties en voldoen aan compliance eisen.
+
+00:11:00.660 --> 00:11:02.720
+Wanneer je de cijfers naast elkaar legt, verandert de vraag.
+
+00:11:02.900 --> 00:11:04.600
+Het is niet, kan ik ExpressRoute betalen?
+
+00:11:04.800 --> 00:11:06.560
+Het is, kan ik me veroorloven het niet te hebben?
+
+00:11:06.740 --> 00:11:07.860
+Het provisioning proces.
+
+00:11:08.260 --> 00:11:10.380
+Dus, je hebt besloten dat ExpressRoute zinvol is.
+
+00:11:10.540 --> 00:11:11.740
+Hoe krijg je er daadwerkelijk een?
+
+00:11:11.900 --> 00:11:14.680
+Dit is waar veel mensen verward raken, omdat het niet zoiets is als een schakelaar omzetten.
+
+00:11:14.860 --> 00:11:16.260
+Het is een proces van twee stappen.
+
+00:11:16.460 --> 00:11:17.840
+Stap 1 vindt plaats in Azure.
+
+00:11:17.840 --> 00:11:20.080
+Je maakt het ExpressRoute circuit aan in de portal.
+
+00:11:20.340 --> 00:11:21.260
+Dit deel gaat snel.
+
+00:11:21.460 --> 00:11:23.320
+De resource verschijnt binnen enkele minuten.
+
+00:11:23.540 --> 00:11:26.080
+Je geeft het een naam, kiest je bandbreedte en kiest je provider.
+
+00:11:26.300 --> 00:11:27.740
+Maar hier is het addertje onder het gras.
+
+00:11:27.960 --> 00:11:30.200
+Het circuit bestaat in Azure, maar is nog niet bruikbaar.
+
+00:11:30.400 --> 00:11:33.040
+Het is alsof je een afslag op de snelweg bestelt die nog niet is gebouwd.
+
+00:11:33.240 --> 00:11:34.880
+Bij stap 2 gebeurt het echte werk.
+
+00:11:35.100 --> 00:11:38.400
+Je neemt de serviceleutel van je circuit, dat is een uniek identificatienummer,
+
+00:11:38.660 --> 00:11:40.040
+en je geeft deze aan je provider.
+
+00:11:40.320 --> 00:11:45.820
+Zij configureren vervolgens de fysieke verbinding vanaf jouw locatie naar de Microsoft Edge Router op de peringlocatie.
+
+00:11:46.020 --> 00:11:48.680
+Dit is het onderdeel dat tijd kost, dagen, soms weken.
+
+00:11:48.680 --> 00:11:54.680
+Het hangt af van de achterstand van de provider of cross-connects handmatig moeten worden gepatcht en of er capaciteit beschikbaar is op de peringlocatie.
+
+00:11:55.460 --> 00:12:00.820
+Zodra de provider het werk afrond, verandert de status in Azure van niet geprovisioneerd naar geprovisioneerd.
+
+00:12:01.040 --> 00:12:03.460
+Dat is je signaal dat de fysieke verbinding klaar is.
+
+00:12:03.620 --> 00:12:07.520
+Pas nu kun je perings configureren en deze verbinden met je Virtual Network Gateway.
+
+00:12:07.840 --> 00:12:11.120
+Daarna maak je een verbindingsobject aan dat het circuit koppelt aan je gateway.
+
+00:12:11.400 --> 00:12:14.780
+De BGP-sessie wordt automatisch opgezet en routes beginnen te stromen.
+
+00:12:14.780 --> 00:12:16.900
+Je privé snelweg is geopend voor gebruik.
+
+00:12:17.040 --> 00:12:21.020
+Totale tijd? Azure kant, uren, provider kant, mogelijk weken.
+
+00:12:21.240 --> 00:12:23.000
+Delay is simpel, plan vooruit.
+
+00:12:23.240 --> 00:12:26.020
+Wacht niet tot je de verbinding nodig hebt om het proces te starten.
+
+00:12:26.220 --> 00:12:28.560
+Bestel je circuitweken voor je migratievenster.
+
+00:12:28.860 --> 00:12:29.820
+Is het geschikt voor jou?
+
+00:12:30.040 --> 00:12:33.880
+Na alles wat we hebben besproken, is de grote vraag, moet je echt express route nemen?
+
+00:12:34.120 --> 00:12:35.420
+Laten we daar eerlijk over zijn.
+
+00:12:35.680 --> 00:12:37.580
+Begin met te kijken naar wat je echt nodig hebt.
+
+00:12:37.800 --> 00:12:42.520
+Als je workloads hebt die consistente latentie of hoge bandbreedte vereisen, kan express route het waard zijn.
+
+00:12:42.520 --> 00:12:46.920
+Maar als je slechts af en toe kleine hoeveelheden verplaatst, volstaat een VPN prima.
+
+00:12:47.180 --> 00:12:51.940
+Voor een klein bedrijf met een paar gebruikers en cloud apps is express route overkill en te duur.
+
+00:12:52.180 --> 00:12:56.660
+Laat je door marketing niet wijsmaken dat je een privé snelweg nodig hebt als een gewone weg prima werkt.
+
+00:12:56.820 --> 00:13:00.580
+Maar als je een middelgroot of groot bedrijf bent met kritieke applicaties in Azure,
+
+00:13:00.860 --> 00:13:04.340
+of je hebt compliance eisen voor de gezondheidszorg, financiën of overheid.

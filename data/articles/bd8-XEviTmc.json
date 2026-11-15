@@ -95,6 +95,52 @@
      }
     ]
    }
+  ],
+  "quiz": [
+   {
+    "q": "Welchen Weg nimmt der Datenverkehr einer VM zum Blob Storage ohne Private Link?",
+    "opts": [
+     "Er bleibt vollständig innerhalb des virtuellen Azure-Netzwerks",
+     "Er verlässt das virtuelle Netzwerk und läuft über das öffentliche Internet",
+     "Er läuft automatisch über das Microsoft-Backbone zur privaten IP",
+     "Er nutzt standardmäßig einen verschlüsselten VPN-Tunnel zum Speicherkonto"
+    ],
+    "a": 1,
+    "why": "Standardmäßig löst die URL zu einer öffentlichen IP auf, daher geht der Verkehr trotz gleicher Cloud über das Internet."
+   },
+   {
+    "q": "Was ist beim Azure Private Link der private Endpunkt?",
+    "opts": [
+     "Eine zusätzliche Firewall-Regel am öffentlichen Endpunkt des Dienstes",
+     "Ein dedizierter VPN-Tunnel vom lokalen Rechenzentrum zu Azure",
+     "Eine virtuelle NIC mit privater IP im eigenen Subnetz",
+     "Ein Load Balancer, der Anfragen auf mehrere Speicherkonten verteilt"
+    ],
+    "a": 2,
+    "why": "Der private Endpunkt ist eine virtuelle NIC mit privater IP-Adresse aus Ihrem Subnetz, die sich mit dem PaaS-Dienst verbindet."
+   },
+   {
+    "q": "Was ist laut Artikel der größte Fehler bei der Einrichtung von Private Link?",
+    "opts": [
+     "Den öffentlichen Netzwerkzugriff nach dem Anlegen des Endpunkts nicht zu deaktivieren",
+     "Die Anwendung nach dem Anlegen des Endpunkts nicht umzuschreiben",
+     "Mehrere private Endpunkte für unterschiedliche Unterressourcen eines Speicherkontos zu erstellen",
+     "Den PaaS-Dienst in einer anderen Region als den Endpunkt zu betreiben"
+    ],
+    "a": 0,
+    "why": "Der öffentliche Endpunkt bleibt standardmäßig aktiv; ohne ausdrückliches Abschalten ist praktisch nichts abgesichert."
+   },
+   {
+    "q": "Welche Voraussetzung gilt für den Private Link Service zur Bereitstellung eigener Anwendungen?",
+    "opts": [
+     "Ein ExpressRoute-Anschluss zwischen Anbieter und Kunde ist zwingend nötig",
+     "Die Kunden-Netzwerke müssen per Peering mit dem Anbieter-Netzwerk verbunden sein",
+     "Der Dienst benötigt eine öffentliche IP-Adresse für den Kundenzugriff",
+     "Die Anwendung muss hinter einem Standard Load Balancer liegen, nicht Basic"
+    ],
+    "a": 3,
+    "why": "Der Private Link Service funktioniert nur mit Standard Load Balancern; wer Basic nutzt, muss zuerst upgraden."
+   }
   ]
  }
 }

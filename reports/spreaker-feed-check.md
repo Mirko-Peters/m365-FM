@@ -1,6 +1,6 @@
-# Spreaker-Feed gegen geschriebene Shownotes (2026-11-05T06:34Z)
+# Spreaker-Feed gegen geschriebene Shownotes (2026-11-15T08:28Z)
 
-Geschrieben: 643 · im Feed: 634 · Text gleich: 634 · alle m365-Links im Feed: 634
+Geschrieben: 643 · im Feed: 622 · Text gleich: 622 · alle m365-Links im Feed: 622
 
 | Folge | im Feed | Text gleich | Links Datei | Links Feed | HTML im Feed |
 |---|---|---|---|---|---|
@@ -13,18 +13,18 @@ Geschrieben: 643 · im Feed: 634 · Text gleich: 634 · alle m365-Links im Feed:
 | 67393690 | nein | nein |  |  | nein |
 | 67401530 | nein | nein |  |  | nein |
 | 67411474 | nein | nein |  |  | nein |
-| 67419834 | ja | ja | 6 | 6 | ja |
-| 67464190 | ja | ja | 6 | 6 | ja |
-| 67481390 | ja | ja | 6 | 6 | ja |
-| 67485890 | ja | ja | 6 | 6 | ja |
-| 67497114 | ja | ja | 8 | 8 | ja |
-| 67509218 | ja | ja | 7 | 7 | ja |
-| 67519720 | ja | ja | 6 | 6 | ja |
-| 67549620 | ja | ja | 6 | 6 | ja |
-| 67563188 | ja | ja | 7 | 7 | ja |
-| 67597954 | ja | ja | 8 | 8 | ja |
-| 67635116 | ja | ja | 6 | 6 | ja |
-| 67692646 | ja | ja | 7 | 7 | ja |
+| 67419834 | nein | nein |  |  | nein |
+| 67464190 | nein | nein |  |  | nein |
+| 67481390 | nein | nein |  |  | nein |
+| 67485890 | nein | nein |  |  | nein |
+| 67497114 | nein | nein |  |  | nein |
+| 67509218 | nein | nein |  |  | nein |
+| 67519720 | nein | nein |  |  | nein |
+| 67549620 | nein | nein |  |  | nein |
+| 67563188 | nein | nein |  |  | nein |
+| 67597954 | nein | nein |  |  | nein |
+| 67635116 | nein | nein |  |  | nein |
+| 67692646 | nein | nein |  |  | nein |
 | 67823814 | ja | ja | 8 | 8 | ja |
 | 67828404 | ja | ja | 6 | 6 | ja |
 | 67830874 | ja | ja | 6 | 6 | ja |

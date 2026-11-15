@@ -1,17 +1,41 @@
 name: Website bauen und veröffentlichen
+# Wann gebaut wird (weniger Actions-Minuten, Ziel: privates Repo mit GitHub Pro):
+# - naechtlich einmal voll (01:07 UTC = 02:07 Berlin im Winter, 03:07 im Sommer): alle Daten-Abrufe, Plattform-Sync, Spotify;
+#   danach (04:47 UTC) setzt spreaker-links.yml das Website-Feld der neuen Folgen auf die frisch gebauten Seiten.
+# - bei Pushes nur, wenn sich Code oder Vorlagen aendern (Liste unten). Daten-Commits (data/**, episodes/**, imports/**, shownotes/**,
+#   Uebersetzungen, Artikel, Cover) bauen nicht mehr sofort - sie kommen mit dem naechtlichen Bau (oder per "Run workflow").
+# - neue Folgen: spreaker-feed-check.yml (alle 2 h) startet einen Frische-Bau (mode=fresh), sobald eine neu veroeffentlichte Folge noch
+#   keine Seite hat (tools/new_episodes_check.py, hoechstens alle SITE_FRESH_GAP_H Stunden, Standard 6).
+# - von Hand: "Run workflow" (mode=full wie naechtlich, mode=fresh ohne Spotify-/Plattform-Abgleich, ~30 min kuerzer).
+# Stellschrauben (Repo-Variablen, alle optional): SITE_FRESH_GAP_H (Abstand der Frische-Baus, Standard 6), SITE_FRESH_OFF=1 (keine
+# Frische-Baus), SITE_PUSH_BUILD=0 (Code-Pushes bauen nicht sofort), SITE_LINKS_EVERY_DAYS=N (Spotify-/Plattform-Abgleich nur jeden N-ten Tag).
 on:
   push:
     branches: [main]
-    paths: ["episodes/**", "data/**", "domain.txt", "sync_platforms.py", "sync_live.py", "site_live.py", "tools/build_speakers.py", "tools/generate_directory_intros.py", "platform_match.py", "show_notes.py", "sync_show_notes.py", "generate_og.py", "generate_service_images.py", "site_*.py", "site_taxonomy.py", "check_links.py", "check_schema.py", "assets/**", "generate_articles.py", "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_site.py", "translate_blog.py", "generate_covers.py", "sync_spreaker.py", "spreaker_auth.py", "site_cover.py", "site_design.py", "site_money.py", "site_legal.py", "shows_seo.json", ".github/workflows/site.yml", "check_*.py", "shownotes/site/**", "shownotes/QA.txt", "tests/sponsor_*", "tools/sponsor_ssr.mjs"]
+    paths: ["generate_site.py", "site_*.py", "generate_og.py", "generate_service_images.py", "check_*.py", "assets/**", "domain.txt", "shows_seo.json",
+            "platform_match.py", "show_notes.py", "sync_platforms.py", "sync_live.py", "sync_show_notes.py", "sync_spreaker.py", "spreaker_auth.py",
+            "scrape_spotify.py", "fetch_en_episodes.py", "fetch_en_titles.py", "fetch_reviews.py", "generate_articles.py", "generate_covers.py", "translate_blog.py",
+            "tools/build_speakers.py", "tools/generate_directory_intros.py", "tools/sponsor_ssr.mjs", "tools/page_hashes.py", "tools/purge_changed.py",
+            "tools/r2_common.py", "tools/r2_pages_upload.py", "tools/r2_og_upload.py", "tools/r2_site_sync.py",
+            "tests/sponsor_*", "tests/test_site_links.py", "tests/test_player_facade.py", "tests/player_facade.test.mjs", "tests/test_redirects_extra.py", "sitewrk/test/legacy_cases.json", ".github/workflows/site.yml"]
   schedule:
-    - cron: "17 5 * * *"
+    - cron: "7 1 * * *"
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "full = wie der naechtliche Bau (mit Spotify- und Plattform-Abgleich), fresh = ohne diese beiden (neue Folgen, ~30 min kuerzer)"
+        type: choice
+        options: [full, fresh]
+        default: full
 permissions:
   contents: write
   pages: write
   id-token: write
 jobs:
   build:
+    # Repo-Variable SITE_PUSH_BUILD=0: Code-Pushes bauen nicht sofort (kostet dann 0 Minuten), sie kommen mit dem naechtlichen/Frische-Bau
+    # (vars.X || '1'): eine nicht gesetzte Variable ist null, und null != '0' wertet GitHub als Zahl 0 != 0 = false -> jeder Push-Bau wurde uebersprungen
+    if: github.event_name != 'push' || (vars.SITE_PUSH_BUILD || '1') != '0'
     runs-on: ubuntu-latest
     concurrency:
       group: site-build
@@ -23,6 +47,21 @@ jobs:
         with: { python-version: "3.12" }
       - name: Sponsor-Rechner gegen die Testvektoren des Prototyps pruefen (T37, blockierend; Node ist auf dem Runner vorhanden)
         run: node --test tests/sponsor_calc.test.mjs
+      - name: Player nach Klick (kein iframe im ersten HTML, feste Masse) und Ladezeit-Regeln pruefen (blockierend)
+        run: node --test tests/player_facade.test.mjs && python3 -m unittest discover -s tests -p test_player_facade.py
+      - name: Anhören-Karten (Zuordnung, Platzierung, Rückfall ohne R2-Grafik, Geräte-Skript) prüfen (blockierend)
+        run: pip install -q pillow && node --test tests/listen.test.mjs && python3 -m unittest discover -s tests -p test_listen.py
+      - name: Interne Links ohne Umweg - Python-Nachbau der Site-Worker-Weiterleitungen, jede alte Adresse in einem Schritt, Sprachwahl auf / (blockierend)
+        run: python3 -m unittest discover -s tests -p test_site_links.py && python3 -m unittest discover -s tests -p test_redirect_hops.py && (cd sitewrk && node --test test/legacy.test.mjs test/lang.test.mjs)
+      - name: Zusatz-Weiterleitungen (data/redirects_extra.json) gegen den Datenstand pruefen (nicht blockierend)
+        # liest Live-Daten (Folgen, Entitaeten, Beitraege): eine Umbenennung oder ein geloeschtes Ziel darf nicht jeden Bau stoppen
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          if ! python3 -m unittest discover -s tests -p test_redirects_extra.py 2>&1 | tee "$RUNNER_TEMP/redirects-extra.log"; then
+            { echo "### Zusatz-Weiterleitungen: veraltete Eintraege in data/redirects_extra.json"; echo; echo '```'; grep -E "AssertionError|FAIL:|fehlt" "$RUNNER_TEMP/redirects-extra.log" | head -40; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::data/redirects_extra.json enthaelt Ziele, die es nicht mehr gibt (siehe Zusammenfassung)"; exit 1
+          fi
       - name: Cache fuer den Browser (fester Schluessel, einmal gefuellt)
         uses: actions/cache@v4
         with:
@@ -84,11 +123,13 @@ jobs:
             git add data/reviews_ext.json && git commit -m "Bewertungen aktualisiert"
             (git pull --rebase --autostash -q -X theirs || git rebase --abort) && git push -q
           fi
-      - name: Spotify-Folgenlinks einsammeln (ohne API) – nur täglich/manuell, bei Pushes gilt der gespeicherte Stand
-        if: github.event_name != 'push'
+      - name: Spotify-Folgenlinks einsammeln (ohne API) – nur naechtlich/manuell (mode=full), sonst gilt der gespeicherte Stand
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode != 'fresh')
         timeout-minutes: 12
         continue-on-error: true
         run: |
+          N="${{ vars.SITE_LINKS_EVERY_DAYS || '1' }}"   # Repo-Variable: naechtlich nur jeden N-ten Tag (Tag im Jahr), spart je ausgelassenem Tag ~12 min
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$N" -gt 1 ] && [ $((10#$(date -u +%j) % N)) -ne 0 ]; then echo "heute nicht (SITE_LINKS_EVERY_DAYS=$N), gespeicherter Stand gilt"; exit 0; fi
           pip install playwright
           playwright install --with-deps chromium
           python scrape_spotify.py
@@ -138,14 +179,16 @@ jobs:
           fi
       - name: Plattform-Sync-Regressionen (offline)
         run: python3 tools/test_sync_platforms.py
-      - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen (taeglich/manuell, bei Pushes gilt der gespeicherte Stand)
-        if: github.event_name != 'push'
+      - name: Folgenlinks zu Apple, Spotify, Deezer, YouTube zuordnen (naechtlich/manuell mit mode=full, sonst gilt der gespeicherte Stand)
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode != 'fresh')
         timeout-minutes: 26
         continue-on-error: true
         env:
           SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
         run: |
+          N="${{ vars.SITE_LINKS_EVERY_DAYS || '1' }}"   # Repo-Variable: naechtlich nur jeden N-ten Tag (Tag im Jahr), spart je ausgelassenem Tag ~20 min
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] && [ "$N" -gt 1 ] && [ $((10#$(date -u +%j) % N)) -ne 0 ]; then echo "heute nicht (SITE_LINKS_EVERY_DAYS=$N), gespeicherter Stand gilt"; exit 0; fi
           pip install -q yt-dlp ytmusicapi
           timeout 23m python sync_platforms.py || echo "::warning::Plattform-Sync vorzeitig beendet (Zeitlimit oder Fehler); der zuletzt gespeicherte Stand wird gesichert"
           if [ -n "$(git status --porcelain data/episode_links.json data/episode_links_report.json data/platforms.json)" ]; then
@@ -189,8 +232,9 @@ jobs:
           path: data/cache/r2_pages.json
           key: r2pages-${{ github.run_id }}
           restore-keys: r2pages-
-      - name: Seiten in den R2-Bucket laden (duenne Sprachfassungen; GitHub Pages bleibt klein, nichts wird geloescht)
-        continue-on-error: true
+      # Blockierend (11.11.2026): alle Sprachseiten ausser en/de liegen nur im Bucket. tools/r2_pages_upload.py endet nur dann mit 1, wenn eine Seite
+      # dort noch ganz fehlt (sonst 404 nach dem Deploy); einzelne Fehler bei schon vorhandenen Seiten und bei Export-Dateien bleiben Warnungen.
+      - name: Seiten in den R2-Bucket laden (Sprachseiten ausser en/de, Sprachfassungen, Exporte; GitHub Pages bleibt klein, nichts wird geloescht)
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
@@ -233,6 +277,8 @@ jobs:
       - name: Interne Links prüfen
         continue-on-error: true
         run: python check_links.py
+      - name: Interne Links ohne Weiterleitung (href, JSON-LD, Sitemaps, Feeds; blockierend)
+        run: python check_redirect_links.py
       - name: Schema.org (JSON-LD) prüfen (blockierend seit T7, Integrationsbau 1.11. ohne Fehler)
         run: python check_schema.py
       - name: Sitemaps prüfen (blockierend)
@@ -251,7 +297,10 @@ jobs:
       # Teilen-Bilder liegen nicht mehr in docs/ (GitHub Pages, 1-GB-Limit), sondern im R2-Bucket unter og/ und werden ueber
       # https://img.m365.fm/og/... ausgeliefert (generate_site.py OG_BASE). Ersatzbild fuer jede Seite auch dann, wenn das Zeichnen scheitert;
       # Upload VOR dem Deploy und blockierend (OG_REQUIRED=1): schlaegt er fehl, wird nicht veroeffentlicht, der naechste Lauf laedt nur den Rest.
-      # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Nichts wird geloescht.
+      # Alte Adressen www.m365.fm/og/... leitet der Site-Worker per 301 auf img.m365.fm weiter. Geloescht werden nur persoenliche Karten
+      # (Einladungskarte og/einladung/<kuerzel>.png, Profilkarte og/[<sprache>/]community/u/<kuerzel>.png), die der Bau nicht mehr erzeugt:
+      # Konto geloescht oder Profil nicht mehr oeffentlich (#320). Sicherung gegen Massenloeschung; bewusst uebergehen: Repo-Variable OG_PRUNE_FORCE=1.
+      # Ist der Profil-Export frisch abgerufen und leer (Merker r2img/profiles-export.json), gehen auch die letzten Karten ohne OG_PRUNE_FORCE.
       - name: Teilen-Bilder - Ersatzbild fuer jede Seite ohne Bild
         run: python generate_og.py --fallback-only
       # Illustrationen der Service-Landingpages (site_landing.py): Pillow, deterministisch, wenige Sekunden. Blockierend, weil die Seiten
@@ -260,10 +309,11 @@ jobs:
         run: |
           pip install -q pillow
           python generate_service_images.py r2img
-      - name: Teilen- und Service-Bilder in den R2-Bucket laden (img.m365.fm/og/ und /services/; nur main, blockierend; nichts wird geloescht)
+      - name: Teilen- und Service-Bilder in den R2-Bucket laden (img.m365.fm/og/ und /services/; nur main, blockierend; Karten entfernter Profile werden geloescht)
         if: github.ref == 'refs/heads/main'
         env:
           OG_REQUIRED: "1"
+          OG_PRUNE_FORCE: ${{ vars.OG_PRUNE_FORCE || '0' }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
@@ -272,7 +322,7 @@ jobs:
           pip install -q boto3
           python tools/r2_og_upload.py r2img
       - name: Seiten-Hashes (fuer gezieltes Purge und IndexNow)
-        run: python tools/page_hashes.py docs page-hashes.json
+        run: python tools/page_hashes.py docs page-hashes.json content-hashes.json r2out
       # R2 als Ursprung: Bau-Kennung fuer den Spiegel im Deploy-Job (tools/r2_site_sync.py). Der Site-Worker liest R2 nur, wenn pages/r2-build.txt
       # im Bucket mit /r2-build.txt auf GitHub Pages uebereinstimmt - also erst, wenn dieser Bau vollstaendig und fehlerfrei gespiegelt ist.
       - name: Bau-Kennung fuer den R2-Spiegel
@@ -283,6 +333,7 @@ jobs:
           retention-days: 3
           path: |
             page-hashes.json
+            content-hashes.json
             r2-changed.json
             r2-keys.json
       - uses: actions/configure-pages@v5
@@ -296,12 +347,21 @@ jobs:
       cancel-in-progress: false
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment2.outputs.page_url || steps.deployment3.outputs.page_url }}
     steps:
+      # deploy-pages@v4 wartet hoechstens 10 min (MAX_TIMEOUT = 600000 im Code der Action, ein groesserer timeout wird ignoriert). GitHub Pages
+      # haengt bei unserer Groesse ab und zu laenger in "syncing_files"/"updating_pages" (Laeufe 529, 616, 627): dann bis zu zwei weitere Versuche
+      # mit demselben Artefakt. Erst wenn auch der dritte scheitert, schlaegt der Job fehl (die folgenden Schritte laufen nur nach einem Erfolg).
       - id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          timeout: 1800000   # 30 min statt 10: GitHub Pages hing am 4.11. laenger als 10 min in "updating_pages" (Lauf 529), der Deploy brach ab
+        continue-on-error: true
+      - id: deployment2
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - id: deployment3
+        if: steps.deployment.outcome == 'failure' && steps.deployment2.outcome == 'failure'
+        uses: actions/deploy-pages@v4
       - uses: actions/checkout@v4
       - name: Letzter Seiten-Stand (Hashes des vorigen Deploys)
         uses: actions/cache/restore@v4
@@ -318,10 +378,14 @@ jobs:
           CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
           INDEXNOW_KEY: 0348df8af6514d5bae4d9f9a5ba51f57
           BASE: https://www.m365.fm
+          OLD_CONTENT: .pagehashes/content-hashes.json
+          NEW_CONTENT: .newhashes/content-hashes.json
+          R2_KEYS: .newhashes/r2-keys.json
         run: |
           mkdir -p .pagehashes
           python3 tools/purge_changed.py .pagehashes/page-hashes.json .newhashes/page-hashes.json .newhashes/r2-changed.json
           cp .newhashes/page-hashes.json .pagehashes/page-hashes.json
+          cp .newhashes/content-hashes.json .pagehashes/content-hashes.json
       # ausdruecklich sichern (nicht erst am Jobende): auch wenn der R2-Spiegel danach scheitert, bleibt der Stand fuer Purge und IndexNow aktuell
       - name: Seiten-Stand dieses Deploys sichern
         if: always() && hashFiles('.pagehashes/page-hashes.json') != ''

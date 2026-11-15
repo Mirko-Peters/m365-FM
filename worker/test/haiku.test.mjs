@@ -55,3 +55,13 @@ test("haikuJson: 400 -> zweiter Versuch ohne thinking/output_config, weiter ohne
 test("haikuJson: anhaltender Fehler wird gemeldet (zaehlt im Aufrufer als failed)", () => withFetch(async () => {
   await assert.rejects(haikuJson(ENV, "sys", {}), /api 500/);
 }, async () => reply([], 500)));
+
+test("haikuJson: System-Bloecke mit cache_control gehen unveraendert durch, Variables bleibt in der Nutzernachricht", () => withFetch(async () => {
+  const system = [{ type: "text", text: "Regeln", cache_control: { type: "ephemeral" } }];
+  assert.deepEqual(await haikuJson({ ...ENV, CLOUDFLARE_ACCOUNT_ID: "account", CF_AIG_TOKEN: "gateway-token" }, system, { t: "x" }, { job: "test_haiku" }), { t: "y" });
+}, async (url, init) => {
+  const b = JSON.parse(init.body);
+  assert.deepEqual(b.system, [{ type: "text", text: "Regeln", cache_control: { type: "ephemeral" } }]);
+  assert.equal(b.messages[0].content, JSON.stringify({ t: "x" }));
+  return reply([{ type: "text", text: "{\"t\":\"y\"}" }]);
+}));

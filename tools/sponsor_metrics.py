@@ -16,11 +16,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 API = os.environ.get("SPONSOR_API", "https://api-dub.m365.fm").rstrip("/")
+USER_AGENT = "m365fm-actions/1.0 (+https://www.m365.fm)"   # ohne eigenen User-Agent weist Cloudflare urllib mit 403 ab (error code 1010, 5.11.2026)
 LANGS = ("en", "de", "es", "fr", "it", "pt", "nl", "pl", "id", "ru", "uk", "ar", "he", "ja", "ko")
 
 
 def json_request(url, data=None, headers=None, timeout=40):
-    request = urllib.request.Request(url, data=data, headers=headers or {}, method="POST" if data is not None else "GET")
+    request = urllib.request.Request(url, data=data, headers={"User-Agent": USER_AGENT, **(headers or {})}, method="POST" if data is not None else "GET")
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
             return response.status, json.loads(response.read().decode("utf-8") or "{}"), response.headers
@@ -69,9 +70,20 @@ def slug_rows(placement_id):
         return {}
 
 
-def page_paths(record, placement):
+def entity_pages_sponsored(record, day):
+    """Entitaets- und Themenseiten tragen ein Sponsoring nur bis end + GRACE_DAYS (site_sponsorships.grace_end, wie die Kennzeichnung);
+    danach zaehlen ihre Aufrufe nicht mehr fuer diese Platzierung. Folgen, Beitraege und refs.page_paths bleiben dauerhaft (Mirko 11.11.2026).
+    Ohne day (Aufrufer ohne Tag) oder ohne "end" (unbefristet): immer."""
+    if not day or record.get("end") is None:
+        return True
+    import site_sponsorships
+    grace = site_sponsorships.grace_end(record)
+    return bool(grace) and dt.date.fromisoformat(day) <= grace
+
+
+def page_paths(record, placement, day=None):
     paths = set()
-    for kind in ("entities", "topics"):
+    for kind in ("entities", "topics") if entity_pages_sponsored(record, day) else ():
         paths.update(f"/entity/{key}/" for key in record.get(kind, []) if re.fullmatch(r"[a-z0-9-]{1,100}", str(key)))
     for value in record.get("posts", []):
         path = urllib.parse.urlsplit(str(value).strip()).path
@@ -336,8 +348,58 @@ def youtube(placements, day, out, statuses):
         statuses["YouTube Analytics"] = "Abruf abgeschlossen"
 
 
+@functools.lru_cache(maxsize=1)
+def rum_connection():
+    """Web-Analytics-Zugang (einmal pro Lauf) oder RumError-Text. Nie mit Token im Text."""
+    from tools import cf_rum
+    try:
+        return cf_rum.Rum.connect(), ""
+    except cf_rum.RumError as error:
+        return None, str(error)
+
+
 def cloudflare(placements, day, out, statuses):
-    token = os.environ.get("CLOUDFLARE_API_TOKEN", "").strip()
+    """Seitenaufrufe je gesponserter URL: Cloudflare Web Analytics (Quelle 'cloudflare_rum', echte Browser-Aufrufe, Bots weitgehend
+    ausgeschlossen). Nur wenn RUM nicht verfuegbar ist oder der Tag vor dem Start von Web Analytics liegt: Zonen-Anfragen (Quelle
+    'cloudflare', ungefiltert inkl. Bots). Der Worker zeigt fuer Tag+URL den RUM-Wert, sobald es einen gibt."""
+    from tools import cf_rum
+    token = cf_rum.token()   # CF_ANALYTICS_TOKEN (nur Lesen) oder CLOUDFLARE_API_TOKEN
+    if not token:
+        statuses["Cloudflare"] = "Secret fehlt; keine Werte geschrieben"
+        return
+    rum, reason = rum_connection()
+    if rum is not None and dt.date.fromisoformat(day) >= cf_rum.RUM_START:
+        source_rows, failed = [], ""
+        for placement in placements:
+            for path in page_paths(slug_rows(placement["id"]), placement, day):
+                try:
+                    groups = cf_rum.path_views(rum, day, path)
+                except cf_rum.RumError as error:
+                    failed = str(error)
+                    break
+                # Auch 0 schreiben: ein gemessener Null-Wert ersetzt im Dashboard einen aelteren ungefilterten Zonenwert desselben Tages
+                count = sum(value for date_value, value in groups if text_day(date_value) == day)
+                metric = row(placement["id"], day, "page_views", count, path, "cloudflare_rum")
+                if metric:
+                    source_rows.append(metric)
+            if failed:
+                break
+        if not failed:
+            out.extend(source_rows)
+            statuses["Cloudflare"] = "Web Analytics (echte Browser-Aufrufe) abgeschlossen"
+            return
+        reason = failed
+    if reason:
+        cf_rum.warn(f"{reason}. Sponsor-Seitenaufrufe {day}: Fallback auf ungefilterte Zonen-Anfragen (Quelle 'cloudflare').")
+    cloudflare_zone(placements, day, out, statuses)
+    if statuses.get("Cloudflare") == "Abruf abgeschlossen":
+        statuses["Cloudflare"] = "Abruf abgeschlossen (Zone, ungefiltert inkl. Bots)"
+
+
+def cloudflare_zone(placements, day, out, statuses):
+    """Fallback: Anfragen je Pfad aus der Zonen-Statistik (ungefiltert, auch Bots)."""
+    from tools import cf_rum
+    token = cf_rum.token()
     zone = os.environ.get("CF_ZONE_ID", "").strip()
     if not token:
         statuses["Cloudflare"] = "Secret fehlt; keine Werte geschrieben"
@@ -352,7 +414,7 @@ def cloudflare(placements, day, out, statuses):
     query = """query($z:String!,$d:Date!,$p:String!){viewer{zones(filter:{zoneTag:$z}){httpRequestsAdaptiveGroups(limit:100,filter:{date_geq:$d,date_leq:$d,clientRequestPath:$p}){dimensions{date clientRequestPath}count}}}}"""
     source_rows, failed = [], False
     for placement in placements:
-        for path in page_paths(slug_rows(placement["id"]), placement):
+        for path in page_paths(slug_rows(placement["id"]), placement, day):
             payload = json.dumps({"query": query, "variables": {"z": zone, "d": day, "p": path}}).encode()
             status, data, _ = json_request("https://api.cloudflare.com/client/v4/graphql", payload, headers)
             if status != 200 or data.get("errors"):
@@ -392,7 +454,7 @@ def gsc(placements, day, out, statuses):
         source_rows = []
         for placement in placements:
             record = slug_rows(placement["id"])
-            urls = ["https://www.m365.fm" + path for path in page_paths(record, placement)]
+            urls = ["https://www.m365.fm" + path for path in page_paths(record, placement, day)]
             for page in urls:
                 query = {"startDate": day, "endDate": day, "dimensions": ["date"],
                          "dimensionFilterGroups": [{"filters": [{"dimension": "page", "operator": "equals", "expression": page}]}]}
@@ -418,7 +480,7 @@ def bing(placements, day, out, statuses):
         return
     attempted, failed, source_rows = False, False, []
     for placement in placements:
-        for path in page_paths(slug_rows(placement["id"]), placement):
+        for path in page_paths(slug_rows(placement["id"]), placement, day):
             page = urllib.parse.urljoin("https://www.m365.fm", path)
             query = urllib.parse.urlencode({"siteUrl": "https://www.m365.fm/", "pageUrl": page, "apikey": key})
             status, data, _ = json_request("https://ssl.bing.com/webmaster/api.svc/json/GetPageStats?" + query)
@@ -454,7 +516,7 @@ def press_ranger(placements, day, out, statuses):
         statuses["Press Ranger"] = "Secret fehlt; keine Werte geschrieben"
         return
     endpoint = "https://pressranger.com/mcp"
-    headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
+    headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json", "Accept": "application/json, text/event-stream", "User-Agent": USER_AGENT}
     session = ""
 
     def call(payload):
@@ -466,6 +528,8 @@ def press_ranger(placements, day, out, statuses):
             session = response.headers.get("Mcp-Session-Id", session)
             content = response.read().decode("utf-8")
         events = re.findall(r"^data:\s*(\{.*\})\s*$", content, re.M)
+        if not events and not content.strip():
+            return {}   # Benachrichtigungen (notifications/initialized) beantwortet der Server mit 202 ohne Inhalt
         return json.loads(events[-1] if events else content)
 
     try:

@@ -1,0 +1,146 @@
+{
+ "de": {
+  "html": "<p>Wenn zwei Anwendungen direkt miteinander sprechen, hängt eine am Wohlergehen der anderen. Ist der Empfänger langsam, überlastet oder abgestürzt, bleibt auch der Sender stehen. Azure Service Bus löst dieses Problem mit einem Vermittler, der Nachrichten zuverlässig entgegennimmt, aufbewahrt und zustellt.</p>\n<p>Dieser Artikel erklärt, was ein Nachrichtenbroker leistet, wie Warteschlangen und Themen arbeiten, wie eine Nachricht aufgebaut ist und welche Funktionen Service Bus von einer einfachen Queue unterscheiden. Dazu kommen der Vergleich mit Alternativen, typische Einsatzszenarien und die häufigsten Missverständnisse.</p>\n\n<h2>Nachrichtenbroker und Entkopplung: Wozu Azure Service Bus dient</h2>\n<p>Stellen Sie sich vor, Sie geben einem Kollegen eine Notiz und warten, bis er antwortet. Das klappt, solange Sie nebeneinander sitzen. Ist er in einer Besprechung, beim Mittagessen oder im Urlaub, stecken Sie fest. Genauso verhalten sich Apps, die direkt kommunizieren: Eine sendet eine Anforderung, und wenn die andere nicht reagiert, hängt die erste. Entwickler sprechen von enger Kopplung. Fällt ein Dienst aus, fällt der andere mit. In einem System mit Dutzenden Diensten wird das schnell zur Katastrophe.</p>\n<p>Ein <strong>Nachrichtenbroker</strong> sitzt als Software zwischen den Anwendungen und übernimmt die Übermittlung. Der Sender übergibt seine Nachricht an den Broker und arbeitet sofort weiter. Der Empfänger holt die Nachricht ab, sobald er bereit ist. Beide sprechen nie direkt miteinander, sondern nur mit dem Broker. Das nennt man <strong>Entkopplung</strong>.</p>\n<h3>Was Entkopplung in der Praxis bringt</h3>\n<ul>\n<li><strong>Unabhängiger Ausfall:</strong> Stürzt der Empfänger ab, bemerkt der Sender nichts. Die Nachricht wartet im Broker, und der Empfänger macht nach dem Neustart dort weiter, wo er aufgehört hat. Es gehen keine Daten verloren.</li>\n<li><strong>Unabhängige Skalierung:</strong> Bei einer Verkehrsspitze darf der Sender in voller Geschwindigkeit weitersenden. Der Broker fängt die Spitze auf, und der Empfänger arbeitet in seinem eigenen Tempo.</li>\n<li><strong>Unabhängige Updates:</strong> Eine App lässt sich aktualisieren, ohne das ganze System herunterzufahren. Die Gegenseite merkt keinen Unterschied.</li>\n</ul>\n<p>Ein Vergleich: Sie wollen jemandem im dritten Stock ein Dokument geben, aber die Person sitzt in einer Besprechung. Statt vor dem Raum zu warten, geben Sie das Dokument am Empfang ab. Der Empfang nimmt es an, bewahrt es sicher auf und stellt es zu, wenn der Empfänger frei ist. Genau diese Rolle übernimmt Azure Service Bus.</p>\n<h3>Vollständig verwaltet und serverlos</h3>\n<p>Service Bus ist Microsofts vollständig verwaltete Variante eines solchen Brokers. Sie müssen keine Server patchen, keine Festplatten tauschen und keine Sicherungen planen. Sie erstellen einen Namespace, richten Warteschlangen und Themen ein und beginnen zu senden. Bezahlt wird nur, was Sie nutzen.</p>\n<p>Nachrichten organisiert Service Bus in zwei Hauptstrukturen:</p>\n<ul>\n<li><strong>Warteschlangen (Queues)</strong> für die Punkt-zu-Punkt-Arbeitsverteilung. Eine Nachricht geht an einen Verbraucher.</li>\n<li><strong>Themen (Topics)</strong> für die Verteilung an viele Verbraucher. Jeder Interessent hat ein eigenes Abonnement, und Filter stellen sicher, dass jeder nur das erhält, was er braucht.</li>\n</ul>\n\n<h2>Aufbau und Lebenszyklus einer Nachricht in Service Bus</h2>\n<p>Eine Nachricht ist ein Container mit zwei Teilen: dem Textkörper und den Metadaten.</p>\n<h3>Textkörper und Metadaten</h3>\n<p>Der Textkörper enthält die eigentlichen Nutzdaten, meist als JSON oder XML. Auch reiner Text und Binärdaten werden unterstützt. In der Praxis ist JSON am verbreitetsten, weil es für Menschen lesbar, leicht zu bearbeiten und in jeder Programmiersprache verarbeitbar ist.</p>\n<p>Die Metadaten bestehen aus zwei Gruppen:</p>\n<ul>\n<li><strong>Systemeigenschaften</strong> weist Service Bus automatisch zu, etwa eine eindeutige Nachrichten-ID, einen Zeitstempel für das Einreihen und eine Sequenznummer für die Position in der Warteschlange.</li>\n<li><strong>Benutzerdefinierte Eigenschaften</strong> sind Schlüssel-Wert-Paare, die Sie selbst festlegen, zum Beispiel Kundenregion = Europa oder Priorität = Hoch.</li>\n</ul>\n<p>Die benutzerdefinierten Eigenschaften sind für Themen entscheidend. Abonnementfilter gleichen genau diese Eigenschaften ab. Ein Abonnement kann etwa nur Nachrichten annehmen, bei denen die Kundenregion Europa lautet.</p>\n<h3>Nachrichtengröße</h3>\n<p>Im Standardtarif darf eine Nachricht bis zu 255 Kilobyte groß sein. Das genügt für die meisten Geschäftsdaten wie einen Bestelldatensatz, ein Kundenprofil oder eine Zahlungsbestätigung. Der Premium-Tarif unterstützt größere Nachrichten. Wer regelmäßig größere Datenmengen verschickt, speichert sie besser an anderer Stelle und legt nur einen Verweis in die Nachricht. Das ist das gängige Muster.</p>\n<h3>Geplante Zustellung</h3>\n<p>Sie können eine Nachricht jetzt senden und Service Bus anweisen, sie erst zu einem Zeitpunkt in der Zukunft sichtbar zu machen. Bis dahin ist sie gespeichert, aber für niemanden lesbar. Zum geplanten Zeitpunkt erscheint sie in der Warteschlange, als wäre sie gerade erst gesendet worden. Das eignet sich für Erinnerungen, Timeouts und verzögerte Aufgaben.</p>\n<h3>Der Lebenszyklus</h3>\n<ol>\n<li>Die Nachricht wird an Warteschlange oder Thema gesendet. Service Bus speichert sie dauerhaft in dreifach redundantem Speicher.</li>\n<li>Ein Empfänger fordert eine Nachricht an. Service Bus sperrt sie, sodass kein anderer Empfänger sie abrufen kann.</li>\n<li>Der Empfänger verarbeitet die Nachricht. Bei Erfolg schließt er sie ab (Complete), und Service Bus löscht sie.</li>\n<li>Bei einem Problem kann der Empfänger sie abbrechen (Abandon). Die Sperre wird aufgehoben, und die Nachricht kommt für einen neuen Versuch zurück in die Warteschlange.</li>\n<li>Schlägt sie wiederholt fehl, landet sie in der Warteschlange für unzustellbare Nachrichten.</li>\n</ol>\n<p>Nachrichten sind also dauerhaft. Sie verschwinden nicht, wenn ein Empfänger abstürzt oder das Netzwerk ausfällt. Sie bleiben in Service Bus, bis sie erfolgreich verarbeitet oder gezielt in die Dead-Letter-Queue verschoben werden. Diese Zuverlässigkeit ist der eigentliche Grund für einen Nachrichtenbroker.</p>\n\n<h2>Erweiterte Funktionen: Dead-Letter, Sitzungen, Transaktionen und mehr</h2>\n<p>Diese Features machen aus einer einfachen Warteschlange eine belastbare Plattform.</p>\n<h3>Dead-Letter-Queue</h3>\n<p>Überschreitet eine Nachricht die maximale Zustellungsanzahl oder läuft ihre Gültigkeitsdauer ab, verschwindet sie nicht. Sie wandert in eine separate Unterwarteschlange derselben Warteschlange oder desselben Abonnements. Dort können Sie sie prüfen und die Ursache klären: falsch formatierte Daten, ein Fehler in der Verarbeitungslogik oder ein ausgefallenes nachgelagertes System, das Sie später erneut versuchen möchten. Nichts geht unbemerkt verloren.</p>\n<h3>Sitzungen für die richtige Reihenfolge</h3>\n<p>Sie weisen zusammengehörigen Nachrichten dieselbe Sitzungs-ID zu, zum Beispiel eine Bestellnummer oder eine Workflow-Instanz-ID. Alle Nachrichten einer Sitzung verarbeitet derselbe Consumer nacheinander, ohne dass ein anderer eingreifen kann. Innerhalb der Sitzung gilt damit strikt FIFO. Verschiedene Sitzungen laufen weiterhin parallel auf verschiedenen Consumern. So bleibt der Durchsatz erhalten, und die Reihenfolge ist dort gesichert, wo sie zählt.</p>\n<h3>Duplikaterkennung</h3>\n<p>Geht nach einem Netzwerkproblem die Antwort verloren, sendet die App dieselbe Nachricht womöglich erneut. Ohne Schutz würde sie doppelt verarbeitet. Service Bus merkt sich die Nachrichten-ID für ein konfigurierbares Zeitfenster, in der Regel bis zu 30 Tage, und verwirft Duplikate stillschweigend.</p>\n<h3>Transaktionen</h3>\n<p>Mehrere Vorgänge lassen sich zu einer atomaren Einheit bündeln. Wenn Sie eine Nachricht abrufen, verarbeiten und das Ergebnis in eine andere Warteschlange schreiben, wird bei einem Fehler alles zurückgerollt. Die Nachricht geht zurück in die erste Warteschlange, das Ergebnis wird nie gesendet. Das ist besonders für Finanzsysteme wichtig, wo teilweise Verarbeitung schlimmer ist als gar keine.</p>\n<h3>Automatische Weiterleitung und Zurückstellen</h3>\n<p>Mit der <strong>automatischen Weiterleitung</strong> verketten Sie Warteschlangen. Eine Rohnachricht geht ein, wird geprüft und dann zur eigentlichen Bearbeitung an eine andere Warteschlange weitergegeben. Die erste bleibt sauber, die zweite erledigt die Hauptarbeit.</p>\n<p>Mit dem <strong>Zurückstellen (Deferral)</strong> überspringen Sie eine Nachricht vorübergehend, etwa weil die referenzierten Daten noch nicht bereit sind. Sie bleibt in der Warteschlange, ist aber unsichtbar, und lässt sich später über ihre Sequenznummer gezielt abrufen.</p>\n\n<h2>Service Bus im Vergleich zu Storage Queues, Event Hubs, Event Grid und Kafka</h2>\n<ul>\n<li><strong>Azure Storage Queues:</strong> die einfachste, günstige und schnell eingerichtete Option. Nachrichten sind auf 64 KB begrenzt, und es gibt keine Themen, Sitzungen, Dead-Letter-Queues oder Transaktionen. Für simple Hintergrund-Auftragswarteschlangen ideal, bei höheren Anforderungen stößt man schnell an Grenzen.</li>\n<li><strong>Event Hubs:</strong> gedacht für Event-Streaming mit hohem Durchsatz, etwa Millionen Ereignisse pro Sekunde von IoT-Geräten oder aus Anwendungsprotokollen. Es ist ein Datenerfassungs-Pipeline und kein Nachrichtenbroker, also nicht für Transaktions-Workflows geeignet.</li>\n<li><strong>Event Grid:</strong> ein Publish-Subscribe-System für ereignisgesteuerte Trigger. Wird ein Blob hochgeladen, kann es eine Azure-Funktion auslösen. Es ist schnell und günstig, aber keine Warteschlange und speichert keine Nachrichten für spätere Verarbeitung. Fällt der Empfänger aus, geht das Ereignis verloren.</li>\n<li><strong>Kafka:</strong> ausgelegt auf Event-Streaming und Analysen. Service Bus dient dagegen Befehlen und Geschäfts-Workflows. Viele große Systeme nutzen beides: Service Bus für das operative Messaging, Kafka für die Datenpipeline. Beide ergänzen sich.</li>\n</ul>\n<p>Service Bus liegt in der Mitte: der Funktionsumfang eines Enterprise-Brokers, ohne die Komplexität, ihn selbst zu betreiben. Wer Dead-Letter-Queues, Sitzungen, Transaktionen, Themen mit Filtern oder garantierte Zustellung braucht, ist hier richtig.</p>\n<p>Eine Faustregel: Fragen Sie sich, ob eine Nachricht ordnungsgemäß verarbeitet wurde, nehmen Sie Service Bus. Fragen Sie sich, ob Sie den Ereignisstrom der letzten Woche erneut abspielen können, nehmen Sie Kafka.</p>\n\n<h2>Typische Einsatzszenarien aus der Praxis</h2>\n<h3>E-Commerce: asynchrone Bestellverarbeitung</h3>\n<p>Der Webserver nimmt eine Bestellung entgegen, legt sofort eine Nachricht in die Warteschlange und bestätigt dem Kunden die Bestellung. Im Hintergrund holen Worker die Nachrichten ab: einer verarbeitet die Zahlung, einer prüft den Lagerbestand, einer bereitet das Versandetikett vor. Der Kunde bekommt sofort Feedback, die schwere Arbeit läuft im Hintergrund.</p>\n<h3>Finanzsysteme</h3>\n<p>Zahlungen verlangen garantierte Zustellung, keine verlorenen und keine doppelt verarbeiteten Transaktionen, außerdem Reihenfolge und Transaktionen. Tritt ein Fehler auf, wird der gesamte Vorgang zurückgesetzt, sodass kein Geld falsch übertragen wird.</p>\n<h3>Mehrere Dienste per Thema bedienen</h3>\n<p>Registriert sich ein neuer Kunde, wird eine Nachricht an das Thema „Kunde registriert“ gesendet. Das CRM-Abonnement nimmt alle Nachrichten an, das Marketing-Abonnement filtert auf Neukunden, das Support-Abonnement auf Premium-Kunden. Eine Nachricht löst drei Reaktionen aus. Ein vierter Dienst braucht nur ein neues Abonnement, der Absender bleibt unverändert.</p>\n<h3>Logistik und Paketverfolgung</h3>\n<p>Hunderttausende Lieferwagen senden alle paar Sekunden Standort-Updates. Pro Paket muss die Reihenfolge stimmen, denn „ausgeliefert“ darf nicht vor „zur Auslieferung freigegeben“ verarbeitet werden. Jedes Paket erhält deshalb eine eigene Sitzungs-ID, verschiedene Pakete laufen parallel.</p>\n<h3>Microservices, Legacy-Anbindung und zeitgesteuerte Aufgaben</h3>\n<p>In Microservice-Architekturen dient Service Bus als Kommunikations-Backbone: Dienst A schickt einen Befehl in eine Warteschlange, Dienst B erledigt ihn, und Dienst C veröffentlicht ein Ereignis an ein Thema, auf das andere Dienste reagieren. Jeder Dienst lässt sich ohne Auswirkungen auf die anderen aktualisieren, skalieren oder ersetzen.</p>\n<p>Ein lokales Legacy-System kann Nachrichten an eine Warteschlange senden, die Cloud-Anwendungen konsumieren. Keine Seite muss wissen, mit wem sie wirklich kommuniziert. Über die geplante Zustellung lassen sich zudem Erinnerungen nach 24 Stunden, ablaufende unbestätigte Reservierungen oder ein wöchentlicher Bericht umsetzen, ohne Cron-Jobs oder Hintergrundtimer.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Reihenfolge wird vorausgesetzt:</strong> Standardmäßig garantiert Service Bus keine Verarbeitung in der richtigen Reihenfolge, obwohl Warteschlangen nach FIFO arbeiten. Rufen mehrere Consumer aus derselben Warteschlange ab und dauert eine Nachricht länger, kann eine spätere vor einer früheren fertig sein. Wer die Reihenfolge braucht, setzt Sitzungen ein.</li>\n<li><strong>Doppelte Verarbeitung nach Wiederholung:</strong> Sendet eine App nach verlorener Antwort erneut, entstehen Duplikate. Die Duplikaterkennung verhindert das.</li>\n<li><strong>Große Daten in der Nachricht:</strong> Wer regelmäßig große Datenmengen verschickt, speichert sie besser extern und gibt nur einen Verweis mit.</li>\n<li><strong>Das falsche Werkzeug:</strong> Event Grid speichert keine Nachrichten, Storage Queues haben weder Themen noch Dead-Letter, und Event Hubs ist kein Broker für Transaktions-Workflows.</li>\n<li><strong>Fehlgeschlagene Nachrichten ignorieren:</strong> Die Dead-Letter-Queue zeigt, was schiefgelaufen ist. Wer sie nicht auswertet, verschenkt ihren Nutzen.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Setzen Sie einen Nachrichtenbroker ein, wenn Sender und Empfänger unabhängig voneinander ausfallen, skalieren und aktualisiert werden sollen.</li>\n<li>Warteschlangen eignen sich für Punkt-zu-Punkt-Arbeitsverteilung, Themen mit Abonnements und Filtern für die Verteilung an viele Verbraucher.</li>\n<li>Nutzen Sie benutzerdefinierte Eigenschaften, um Abonnementfilter zu steuern.</li>\n<li>Halten Sie Nachrichten klein, und legen Sie große Daten extern ab.</li>\n<li>Verwenden Sie Sitzungen, wenn die Reihenfolge zusammengehöriger Nachrichten zählt.</li>\n<li>Aktivieren Sie die Duplikaterkennung, um Doppelverarbeitung nach Wiederholungen zu vermeiden.</li>\n<li>Nutzen Sie Transaktionen, wenn Teilverarbeitung riskant wäre, zum Beispiel bei Zahlungen.</li>\n<li>Werten Sie die Dead-Letter-Queue aus, um Fehlerursachen zu finden.</li>\n<li>Wählen Sie nach Bedarf: Service Bus für zuverlässig verarbeitete Nachrichten, Kafka oder Event Hubs für Streaming, Event Grid für reaktive Trigger.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Azure Service Bus ist das Rückgrat, über das unabhängige Dienste zuverlässig kommunizieren, ohne voneinander abzuhängen. Drei Begriffe fassen es zusammen: Entkoppeln, Puffern und Weiterleiten. Dienste kennen nur die Warteschlange oder das Thema, Lastspitzen fängt der Puffer ab, und Filter bringen jede Nachricht zum richtigen Empfänger. Dead-Letter-Queue, Sitzungen, Duplikaterkennung und Transaktionen decken die Sonderfälle ab, sodass Systeme widerstandsfähiger, skalierbarer und leichter änderbar werden.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Der Lebenszyklus einer Nachricht in Azure Service Bus",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Senden und speichern",
+     "text": "Die Nachricht geht an Warteschlange oder Thema und wird dauerhaft in dreifach redundantem Speicher abgelegt."
+    },
+    {
+     "kopf": "Empfänger sperrt",
+     "text": "Ein Empfänger fordert die Nachricht an, Service Bus sperrt sie für alle anderen Empfänger."
+    },
+    {
+     "kopf": "Verarbeiten",
+     "text": "Der Empfänger verarbeitet die Nachricht und schließt sie bei Erfolg ab, danach wird sie gelöscht."
+    },
+    {
+     "kopf": "Erneuter Versuch",
+     "text": "Bei Problemen wird die Sperre aufgehoben, die Nachricht kommt zurück in die Warteschlange."
+    },
+    {
+     "kopf": "Dead-Letter-Queue",
+     "text": "Schlägt die Verarbeitung weiter fehl, landet die Nachricht zur Prüfung in der Warteschlange für unzustellbare Nachrichten."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist Azure Service Bus und wofür wird es verwendet?",
+    "a": "Azure Service Bus ist Microsofts vollständig verwaltete Nachrichtenbroker-Lösung. Er sitzt zwischen Anwendungen, nimmt Nachrichten zuverlässig entgegen, speichert sie und stellt sie zu. So entkoppelt er Sender und Empfänger, die unabhängig voneinander ausfallen, skalieren und aktualisiert werden können."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen Warteschlangen und Themen in Azure Service Bus?",
+    "a": "Warteschlangen dienen der Punkt-zu-Punkt-Arbeitsverteilung: Jede Nachricht geht an genau einen Verbraucher. Themen verteilen Nachrichten an viele Verbraucher. Jeder Interessent hat ein eigenes Abonnement, und Filter auf Basis benutzerdefinierter Eigenschaften sorgen dafür, dass jeder nur die Nachrichten erhält, die er braucht."
+   },
+   {
+    "q": "Garantiert Azure Service Bus die Reihenfolge von Nachrichten?",
+    "a": "Nicht standardmäßig. Obwohl Warteschlangen nach FIFO arbeiten, kann bei mehreren Consumern eine spätere Nachricht vor einer früheren fertig werden. Wer die Reihenfolge braucht, weist zusammengehörigen Nachrichten dieselbe Sitzungs-ID zu. Dann verarbeitet ein Consumer sie strikt nacheinander, während andere Sitzungen parallel weiterlaufen."
+   },
+   {
+    "q": "Was passiert in Azure Service Bus mit Nachrichten, die sich nicht verarbeiten lassen?",
+    "a": "Schlägt die Verarbeitung wiederholt fehl, überschreitet eine Nachricht die maximale Zustellungsanzahl oder läuft ihre Gültigkeit ab, landet sie in der Dead-Letter-Queue. Dort lässt sich die Ursache prüfen, etwa falsche Daten, Logikfehler oder ein ausgefallenes System. So geht nichts unbemerkt verloren."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Warteschlange oder Thema: Wann was?",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Warteschlangen (Queues)",
+     "punkte": [
+      "Punkt-zu-Punkt-Arbeitsverteilung",
+      "Eine Nachricht geht an genau einen Verbraucher",
+      "Geeignet für Befehle, die ein Worker erledigt",
+      "Beispiel: Worker verarbeitet Zahlung einer Bestellung"
+     ]
+    },
+    "rechts": {
+     "titel": "Themen (Topics)",
+     "punkte": [
+      "Verteilung an viele Verbraucher",
+      "Jeder Interessent hat ein eigenes Abonnement",
+      "Filter auf benutzerdefinierten Eigenschaften steuern den Empfang",
+      "Neuer Dienst braucht nur ein neues Abonnement"
+     ]
+    }
+   },
+   {
+    "titel": "Service Bus in Zahlen und Fakten",
+    "typ": "fakten",
+    "punkte": [
+     {
+      "wert": "255 KB",
+      "text": "maximale Nachrichtengröße im Standardtarif; Premium unterstützt größere Nachrichten"
+     },
+     {
+      "wert": "64 KB",
+      "text": "Nachrichtenlimit bei Azure Storage Queues, ohne Themen, Sitzungen oder Dead-Letter"
+     },
+     {
+      "wert": "30 Tage",
+      "text": "üblicher Zeitraum, in dem die Duplikaterkennung Nachrichten-IDs merkt"
+     },
+     {
+      "wert": "Dreifach",
+      "text": "redundanter Speicher sichert Nachrichten dauerhaft nach dem Senden"
+     },
+     {
+      "wert": "FIFO",
+      "text": "strikt nur innerhalb einer Sitzung garantiert, nicht standardmäßig"
+     }
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Was passiert, wenn der Empfänger bei einem Nachrichtenbroker wie Service Bus abstürzt?",
+    "opts": [
+     "Der Sender bleibt stehen, bis der Empfänger wieder erreichbar ist.",
+     "Die Nachricht wartet im Broker, und der Empfänger macht nach dem Neustart weiter.",
+     "Alle noch nicht abgeholten Nachrichten werden automatisch gelöscht.",
+     "Der Sender muss alle Nachrichten nach dem Neustart erneut senden."
+    ],
+    "a": 1,
+    "why": "Der Broker bewahrt Nachrichten auf. Der Sender bemerkt den Ausfall nicht, und es gehen keine Daten verloren."
+   },
+   {
+    "q": "Welche Funktion setzen Sie ein, damit zusammengehörige Nachrichten strikt in der richtigen Reihenfolge verarbeitet werden?",
+    "opts": [
+     "Duplikaterkennung",
+     "Automatische Weiterleitung",
+     "Sitzungen mit gemeinsamer Sitzungs-ID",
+     "Geplante Zustellung"
+    ],
+    "a": 2,
+    "why": "Alle Nachrichten einer Sitzung verarbeitet derselbe Consumer nacheinander. Innerhalb der Sitzung gilt FIFO, verschiedene Sitzungen laufen parallel."
+   },
+   {
+    "q": "Warum ist Event Grid für die zuverlässige Verarbeitung von Geschäftsnachrichten ungeeignet?",
+    "opts": [
+     "Es unterstützt ausschließlich Nachrichten bis 64 Kilobyte Größe.",
+     "Es ist zu teuer und zu langsam für ereignisgesteuerte Trigger.",
+     "Es kann nur Millionen Ereignisse von IoT-Geräten erfassen.",
+     "Es speichert keine Nachrichten, daher geht das Ereignis bei Empfängerausfall verloren."
+    ],
+    "a": 3,
+    "why": "Event Grid ist keine Warteschlange und speichert nichts für spätere Verarbeitung. Fällt der Empfänger aus, ist das Ereignis verloren."
+   },
+   {
+    "q": "Wozu dienen benutzerdefinierte Eigenschaften einer Nachricht bei Themen besonders?",
+    "opts": [
+     "Abonnementfilter gleichen sie ab, damit jeder nur passende Nachrichten erhält.",
+     "Service Bus vergibt damit automatisch die Sequenznummer der Nachricht.",
+     "Sie erhöhen die maximale Nachrichtengröße im Standardtarif.",
+     "Sie ersetzen den Textkörper bei binären Nutzdaten."
+    ],
+    "a": 0,
+    "why": "Abonnementfilter prüfen genau diese Schlüssel-Wert-Paare, etwa Kundenregion = Europa, und leiten nur passende Nachrichten weiter."
+   }
+  ]
+ }
+}

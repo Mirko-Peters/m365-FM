@@ -1,6 +1,7 @@
 // Punkte einloesen: Guthaben, Katalog, Einloesung (sofort oder als Anfrage fuer die Redaktion)
 import { cleanText, rateLimit } from "./util.js";
 import { stats } from "./badges.js";
+import { gate, inScope, logEdit } from "./perm.js";
 
 export const CATALOG = [
   { id: "contacts", cost: 100, auto: true },      // +5 neue Kontakte heute
@@ -28,13 +29,16 @@ export async function handlePoints(env, request, url, path, user, J) {
     return J({ ok: true, balance: st.balance - it.cost, status: it.auto ? "done" : "pending" });
   }
   if (path === "/api/admin/points/requests" && method === "GET") {
-    if (!(user.admin || user.editor)) return J({ error: "forbidden" }, 403);
+    const g = await gate(db, user, "queue.review"); if (!g.ok || !inScope(g.actor, {})) return J({ error: "forbidden" }, 403);   // Editoren und Admin; ohne Thema, also nicht fuer Fach-Editoren
     return J({ items: (await db.prepare("SELECT p.id,p.item,p.cost,p.note,p.created,u.name FROM points_spent p JOIN users u ON u.id=p.user_id WHERE p.status='pending' ORDER BY p.created").all()).results || [] });
   }
   if (path === "/api/admin/points/decide" && method === "POST") {
-    if (!(user.admin || user.editor)) return J({ error: "forbidden" }, 403);
-    const b = await request.json().catch(() => ({}));
-    if (b.ok) await db.prepare("UPDATE points_spent SET status='done' WHERE id=? AND status='pending'").bind(+b.id).run(); else await db.prepare("DELETE FROM points_spent WHERE id=? AND status='pending'").bind(+b.id).run();   // Ablehnung = Punkte zurueck
+    // Einloesung bestaetigen/ablehnen: can() wie jede Entscheidung - nie die eigene Einloesung, nie die eines Kollegen der eigenen Firma; im Protokoll
+    const b = await request.json().catch(() => ({})), row = await db.prepare("SELECT id,user_id,item,cost FROM points_spent WHERE id=? AND status='pending'").bind(+b.id).first();
+    const g = await gate(db, user, b.ok ? "review.approve" : "review.reject", { ownerId: row?.user_id ?? null }); if (!g.ok) return J({ error: g.why }, 403);
+    if (!row) return J({ error: "not_found" }, 404);
+    if (b.ok) await db.prepare("UPDATE points_spent SET status='done' WHERE id=? AND status='pending'").bind(row.id).run(); else await db.prepare("DELETE FROM points_spent WHERE id=? AND status='pending'").bind(row.id).run();   // Ablehnung = Punkte zurueck
+    await logEdit(db, g.actor, b.ok ? "review.approve" : "review.reject", "points", row.id, { reason: `${row.item} (${row.cost})`, before: { status: "pending" }, after: { status: b.ok ? "done" : "rejected" } });
     return J({ ok: true });
   }
   return null;

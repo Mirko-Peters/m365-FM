@@ -1,0 +1,991 @@
+WEBVTT
+
+00:00:00.080 --> 00:00:03.080
+Welkom bij weer een aflevering van Microsoft Knowledge Nuggets over M365.
+
+00:00:03.220 --> 00:00:04.800
+En ik ben je gastheer, Mirko Peters.
+
+00:00:05.020 --> 00:00:08.460
+Het onderwerp van vandaag is er een waar bijna iedereen van heeft gehoord, maar weinigen kunnen uitleggen.
+
+00:00:08.620 --> 00:00:09.880
+Wat is Azure DevOps precies?
+
+00:00:10.080 --> 00:00:12.620
+Is het slechts een tool voor ontwikkelaars, of is het iets veel groters?
+
+00:00:12.840 --> 00:00:14.400
+Stel, je wilt software gaan bouwen.
+
+00:00:14.600 --> 00:00:18.500
+Misschien is het een website, een mobiele app, of iets dat je bedrijf helpt beter te draaien.
+
+00:00:18.640 --> 00:00:20.060
+En je gaat zitten om het te plannen.
+
+00:00:20.240 --> 00:00:26.560
+Je hebt een tool nodig om taken te volgen, een plek voor je code, een manier om je werk te testen en je moet het uiteindelijk bij de mensen krijgen.
+
+00:00:26.560 --> 00:00:30.540
+Voor je het weet, jong leer je met vijf verschillende tools van vijf verschillende bedrijven.
+
+00:00:30.700 --> 00:00:36.620
+Eén voor taakbeheer, een andere voor code, een derde voor testen, een vierde voor implementatie, en ze communiceren onderling niet.
+
+00:00:36.760 --> 00:00:37.760
+Het is een rommeltje.
+
+00:00:38.080 --> 00:00:40.660
+Microsoft zag die chaos en bouwde iets om het op te lossen.
+
+00:00:40.820 --> 00:00:44.220
+Het heet Azure DevOps, en het is niet zomaar weer een tool voor op je stapel.
+
+00:00:44.400 --> 00:00:48.580
+Het is één verbonden platform dat de volledige software ontwikkelingscyclus afhandelt.
+
+00:00:48.780 --> 00:00:52.160
+Plannen, coderen, testen, implementeren, alles op één plek.
+
+00:00:52.160 --> 00:00:58.040
+Aan het einde van deze aflevering begrijp je wat Azure DevOps werkelijk is en hoe de vijf kernelementen in elkaar grijpen.
+
+00:00:58.260 --> 00:00:59.880
+Zie het als een modern kantoorpand.
+
+00:01:00.100 --> 00:01:02.720
+Word en Excel zijn individuele kamers waarin je werkt.
+
+00:01:02.920 --> 00:01:06.660
+Microsoft 365 is het hele gebouw met beveiliging en archiefsystemen.
+
+00:01:06.780 --> 00:01:08.380
+Azure DevOps is hetzelfde idee.
+
+00:01:08.600 --> 00:01:11.760
+Het is het hele gebouw voor softwareontwikkeling, niet slechts één kamer.
+
+00:01:11.940 --> 00:01:13.720
+Dus, wat is Azure DevOps nu precies?
+
+00:01:13.920 --> 00:01:15.600
+Hier is de eenvoudigste definitie.
+
+00:01:15.760 --> 00:01:19.160
+Azure DevOps is een verbonden platform voor de gehele softwareontwikkelingscyclus.
+
+00:01:19.160 --> 00:01:21.500
+Dat is een hele mond vol, dus laten we het opdelen.
+
+00:01:21.660 --> 00:01:25.320
+Twintig jaar geleden kocht je voor alles losse producten als je software wilde bouwen.
+
+00:01:25.480 --> 00:01:35.260
+Eén tool voor het bijhouden van bugs, een andere voor broncodebeheer, een derde voor automatisering, een vierde voor testen, een vijfde voor implementatie en je was de helft van je tijd kwijt om zijn gegevens met elkaar te laten delen.
+
+00:01:35.460 --> 00:01:39.900
+Microsoft keek naar deze complexiteit en dacht wat als al deze services onder één dak zouden samenwerken.
+
+00:01:40.080 --> 00:01:41.440
+Dus bouwden ze Azure DevOps.
+
+00:01:41.680 --> 00:01:44.160
+Het is niet één tool, maar vijf services die samenwerken.
+
+00:01:44.160 --> 00:01:50.520
+Azure Boards voor planning, Azure Repos voor code, Azure Pipelines voor automatisering, Azure Test Plans voor kwaliteit, Azure Artifacts voor het delen van pakketten.
+
+00:01:50.680 --> 00:01:53.140
+Elk onderdeel doet zijn eigen werk, maar ze zijn allemaal met elkaar verbonden.
+
+00:01:53.360 --> 00:01:55.380
+Laten we teruggaan naar de vergelijking met het kantoorpand.
+
+00:01:55.540 --> 00:01:57.180
+De receptie beheert wie er binnenkomt.
+
+00:01:57.340 --> 00:01:58.640
+Dat is je identiteitsservice.
+
+00:01:58.880 --> 00:02:00.320
+De kantoren zijn waar mensen werken.
+
+00:02:00.540 --> 00:02:01.860
+Dat zijn boards en repositories.
+
+00:02:02.060 --> 00:02:03.520
+De postkamer verwerkt pakketjes.
+
+00:02:03.780 --> 00:02:04.640
+Dat zijn artifacts.
+
+00:02:04.900 --> 00:02:06.560
+Het beveiligingsteam beschermt het gebouw.
+
+00:02:06.720 --> 00:02:08.540
+Dat zijn je toegangscontroles en beleidsregels.
+
+00:02:08.740 --> 00:02:10.680
+Elk heeft een taak, maar ze zitten allemaal onder één dak.
+
+00:02:10.860 --> 00:02:11.820
+Ze delen informatie.
+
+00:02:11.820 --> 00:02:12.820
+Ze werken samen.
+
+00:02:13.060 --> 00:02:14.040
+Dat is precies het punt.
+
+00:02:14.240 --> 00:02:15.700
+En dit is het beste deel voor beginners.
+
+00:02:15.940 --> 00:02:17.420
+Azure DevOps heeft een gratis laag.
+
+00:02:17.520 --> 00:02:20.900
+Je kunt een account aanmaken, een project starten en de basisfuncties gebruiken zonder te betalen.
+
+00:02:21.100 --> 00:02:23.040
+Vijf gratis gebruikers krijgen volledige toegang.
+
+00:02:23.200 --> 00:02:25.520
+Onbeperkt aantal stakeholders krijgt gratis beperkte toegang.
+
+00:02:25.640 --> 00:02:28.720
+Dus je kunt letterlijk vandaag kosteloos beginnen en ontdekken of het voor jou werkt.
+
+00:02:28.920 --> 00:02:30.140
+Geen creditcard vereist.
+
+00:02:30.400 --> 00:02:30.820
+Geen verkoopgesprek.
+
+00:02:31.640 --> 00:02:34.220
+Ga gewoon naar dev.azure.com en maak een account aan.
+
+00:02:34.440 --> 00:02:39.100
+Laten we de vijf services één voor één doornemen, beginnend bij de plek waar al je werk begint.
+
+00:02:39.100 --> 00:02:41.840
+Azure Boards, het commando centrum van je project.
+
+00:02:42.100 --> 00:02:44.580
+Azure Boards is waar je je werk plant en bijhoudt.
+
+00:02:44.740 --> 00:02:46.820
+Zie het als het commando centrum van je project.
+
+00:02:47.060 --> 00:02:51.740
+Als je ooit memoblaadjes op een muur hebt gebruikt om taken bij te houden, begrijp je het basisidee al.
+
+00:02:51.880 --> 00:02:54.740
+Maar in plaats van fysieke memoblaadjes die er afvallen en kwijtraken,
+
+00:02:54.880 --> 00:02:58.440
+biedt Boards je een digitaal Kanban board dat iedereen in je team in realtime kan zien en bijwerken.
+
+00:02:58.660 --> 00:02:59.740
+Laten we het opsplitsen.
+
+00:02:59.900 --> 00:03:01.100
+Je begint met het maken van werkitems.
+
+00:03:01.860 --> 00:03:03.940
+Een werkitem is alles wat je moet bijhouden.
+
+00:03:04.100 --> 00:03:07.640
+Een user story, een feature, een epic, een taak of een bak.
+
+00:03:07.640 --> 00:03:11.940
+Elk heeft velden voor beschrijving, prioriteit, status en aan wie het is toegewezen.
+
+00:03:12.100 --> 00:03:17.140
+Je organiseert deze werkitems in een backlog, wat simpelweg een geprioriteerde lijst is van alles wat je moet doen.
+
+00:03:17.300 --> 00:03:18.940
+Je kunt ze groeperen in hiërarchieën.
+
+00:03:19.040 --> 00:03:23.040
+Epic's bovenaan, daaronder features, daaronder user stories en daaronder taken.
+
+00:03:23.320 --> 00:03:26.060
+Dat geeft je een duidelijk beeld van wat je aan het bouwen bent en waarom.
+
+00:03:26.360 --> 00:03:27.580
+Vervolgens plan je sprints.
+
+00:03:27.840 --> 00:03:33.420
+Een sprint is een vaste periode, meestal twee weken, waarin je team zich verbindt aan het voltooien van een set werkitems.
+
+00:03:33.640 --> 00:03:36.920
+Je sleept items van je backlog naar een sprint en plotseling heb je een plan.
+
+00:03:36.920 --> 00:03:39.540
+Iedereen weet waar ze aan werken en wanneer het af moet zijn.
+
+00:03:39.720 --> 00:03:40.680
+Je hebt ook queries.
+
+00:03:40.940 --> 00:03:43.180
+Met queries kun je je werkitems doorzoeken en filteren.
+
+00:03:43.380 --> 00:03:46.240
+Laat me alle bak zien die aan Sarah zijn toegewezen en een hoge prioriteit hebben.
+
+00:03:46.460 --> 00:03:49.120
+Laat me alle user stories in de huidige sprint zien die nog actief zijn.
+
+00:03:49.300 --> 00:03:51.880
+Queries zijn krachtig omdat ze je data omzetten in antwoorden.
+
+00:03:52.080 --> 00:03:54.760
+Je kunt ze opslaan, delen en gebruiken om dashboards te bouwen.
+
+00:03:54.920 --> 00:03:56.760
+En dashboards zijn waar alles samenkomt.
+
+00:03:56.880 --> 00:04:01.680
+Je kunt aangepaste dashboards maken met widgets die burndown grafieken, velocity, aantallen werkitems en meer tonen.
+
+00:04:01.680 --> 00:04:05.540
+Je team krijgt een live beeld van de voortgang zonder dat iemand een statusrapport hoeft te schrijven.
+
+00:04:05.680 --> 00:04:06.960
+Ik geef je een kort voorbeeld.
+
+00:04:07.240 --> 00:04:09.300
+Stel je een klein team voordat een website bouwt.
+
+00:04:09.420 --> 00:04:12.300
+De product owner maakt een epic genaamd klantportaal aan.
+
+00:04:12.520 --> 00:04:16.600
+Daaronder maken ze features aan zoals gebruikersregistratie en ordergeschiedenis.
+
+00:04:16.860 --> 00:04:23.040
+Onder gebruikersregistratie maken ze user stories aan zoals als klant wil ik een account aanmaken met mijn e-mailadres.
+
+00:04:23.040 --> 00:04:26.020
+Onder die story maken developers taken aan.
+
+00:04:26.960 --> 00:04:31.040
+Registratieformulier bouwen, e-mail verificatie instellen, unit test schrijven.
+
+00:04:31.240 --> 00:04:32.960
+Elke taak wordt aan iemand toegewezen.
+
+00:04:33.160 --> 00:04:35.200
+Het team volgt de voortgang op het Kanban-boord.
+
+00:04:35.380 --> 00:04:38.480
+Iedereen kan zien wat klaar is, wat in behandeling is en wat hierna komt.
+
+00:04:38.700 --> 00:04:41.180
+Vergelijk dat nu eens met het gebruik van Excel of een whiteboard.
+
+00:04:41.380 --> 00:04:42.500
+Excel is statisch.
+
+00:04:42.700 --> 00:04:47.520
+Je e-mailt een spreadsheet, iemand werkt het bij, mailt het terug en tegen de tijd dat je het ontvangt, is het verouderd.
+
+00:04:47.640 --> 00:04:50.480
+Een whiteboard is beter voor brainstormen, maar het is niet doorzoekbaar.
+
+00:04:50.480 --> 00:04:53.480
+Het is nergens mee verbonden en als iemand iets wist, is het weg.
+
+00:04:53.700 --> 00:04:54.520
+Boards is live.
+
+00:04:54.700 --> 00:04:55.540
+Het is doorzoekbaar.
+
+00:04:55.720 --> 00:04:58.100
+Het is verbonden met je code, je tests en je deployments.
+
+00:04:58.320 --> 00:05:00.700
+Wanneer iemand een werk-item bijwerkt, ziet iedereen dat direct.
+
+00:05:00.900 --> 00:05:05.160
+Dus je hebt je werk geplant, je weet wat er gebouwd moet worden, maar je hebt een plek nodig om de daadwerkelijke code op te slaan.
+
+00:05:05.320 --> 00:05:06.960
+Dat is waar Azure Repos van pas komt.
+
+00:05:07.140 --> 00:05:09.340
+Azure Repos, de vaste thuisbasis voor je code.
+
+00:05:09.520 --> 00:05:13.660
+Dus je hebt je werk geplant, je weet wat er gebouwd moet worden, maar je hebt een plek nodig om de daadwerkelijke code op te slaan.
+
+00:05:13.800 --> 00:05:15.520
+Dat is waar Azure Repos van pas komt.
+
+00:05:15.700 --> 00:05:18.400
+Azure Repos is versiebeheer voor je code met behulp van Git.
+
+00:05:18.400 --> 00:05:21.580
+Git is de industrie-standaard en de meeste developers gebruiken het al.
+
+00:05:21.800 --> 00:05:25.400
+Repos geeft je een plek om je Git-repositories rechtstreeks in Azure DevOps te hosten.
+
+00:05:25.540 --> 00:05:27.400
+Hier is de analogie van het schrijven van een boek.
+
+00:05:27.580 --> 00:05:29.780
+Stel je voor dat je een boek schrijft met een team van auteurs.
+
+00:05:29.960 --> 00:05:31.980
+Je zou hoofdstukken heen en weer kunnen e-mailen.
+
+00:05:32.140 --> 00:05:35.580
+Iemand bewerkt hoofdstuk 3, mailt het, iemand anders bewerkt het weer.
+
+00:05:35.760 --> 00:05:40.420
+En al snel heb je bestanden met namen als definitief hoofdstuk 3v2 verzonden actueel.
+
+00:05:40.680 --> 00:05:43.040
+Dockx, en niemand weet welke versie de echte is.
+
+00:05:43.280 --> 00:05:45.840
+Zo zag software-ontwikkeling eruit voor versiebeheer.
+
+00:05:45.840 --> 00:05:49.660
+Met Git in Azure Repos werkt iedereen vanuit dezelfde centrale repository.
+
+00:05:50.020 --> 00:05:51.080
+Je maakt een branch aan.
+
+00:05:51.340 --> 00:05:55.340
+Zie het als je eigen kopie van het boek waar je wijzigingen kunt aanbrengen zonder iemand anders te beïnvloeden.
+
+00:05:55.500 --> 00:05:58.880
+Je schrijft je hoofdstuk, test het en wanneer je klaar bent, maak je een pull request aan.
+
+00:05:59.040 --> 00:06:01.900
+Dat is een verzoek om je wijzigingen terug samen te voegen in het hoofdboek.
+
+00:06:02.060 --> 00:06:05.260
+Andere auteurs beoordelen je wijzigingen, plaatsen opmerkingen en ontdekken fouten.
+
+00:06:05.460 --> 00:06:09.140
+Zodra iedereen akkoord gaat, worden je wijzigingen samengevoegd en wordt de hele geschiedenis bijgehouden.
+
+00:06:09.300 --> 00:06:11.560
+Je kunt precies zien wie wat wanneer en waarom heeft gewijzigd.
+
+00:06:11.700 --> 00:06:13.480
+Dit is waarom beginners dit belangrijk moeten vinden.
+
+00:06:13.480 --> 00:06:16.640
+Geen rommelige bestandsnamen meer of twijfel of je aan de nieuwste versie werkt.
+
+00:06:16.840 --> 00:06:19.280
+Nooit meer per ongeluk het werk van iemand anders overschrijven.
+
+00:06:19.440 --> 00:06:20.440
+Git biedt je een vangnet.
+
+00:06:20.600 --> 00:06:23.660
+Je kunt experimenteren, fouten maken en terugdraaien als er iets misgaat.
+
+00:06:23.780 --> 00:06:26.180
+Het is alsof je een ongedaan knop hebt voor je hele project.
+
+00:06:26.380 --> 00:06:28.580
+En hier komt de verbinding met boards om de hoek kijken.
+
+00:06:28.800 --> 00:06:31.680
+Je kunt je commits en pull requests direct koppelen aan werkitems.
+
+00:06:31.940 --> 00:06:37.500
+Wanneer een ontwikkelaar een bak verhelpt, voegt deze het bak-id toe aan het commitbericht en wordt die commit gekoppeld aan het werkitem in boards.
+
+00:06:37.700 --> 00:06:39.600
+Plotseling heb je volledige traceerbaarheid.
+
+00:06:39.600 --> 00:06:43.280
+Je kunt precies zien welke codewijzigingen zijn aangebracht voor elke feature of bakfix.
+
+00:06:43.740 --> 00:06:46.660
+Productmanagers kunnen op een werk-item klikken en de daadwerkelijk geschreven code zien.
+
+00:06:46.940 --> 00:06:49.800
+Ontwikkelaars kunnen naar een commit kijken en zien bij welk gebruikersverhaal deze hoort.
+
+00:06:49.940 --> 00:06:51.060
+Alles is met elkaar verbonden.
+
+00:06:51.300 --> 00:06:53.080
+Dus nu is je code opgeslagen en getraceerd.
+
+00:06:53.240 --> 00:06:54.000
+Het is veilig.
+
+00:06:54.140 --> 00:06:55.060
+Het heeft versiebeheer.
+
+00:06:55.240 --> 00:06:56.260
+Maar het staat daar alleen maar.
+
+00:06:56.420 --> 00:06:57.960
+Hoe krijg je het daadwerkelijk aan de praat?
+
+00:06:58.060 --> 00:07:00.840
+Hoe verander je die code in een werkende applicatie die mensen kunnen gebruiken?
+
+00:07:01.020 --> 00:07:02.860
+Dat is waar Azure Pipelines in beeld komt.
+
+00:07:03.040 --> 00:07:05.180
+Azure Pipelines, de automatiserings-engine.
+
+00:07:05.180 --> 00:07:09.540
+Azure Pipelines is de automatiserings-engine die je code automatisch bouwt, test en implementeert.
+
+00:07:09.700 --> 00:07:14.320
+In begrijpelijke taal, het neemt je code en verandert deze in een draaiende applicatie zonder dat je het handmatig hoeft te doen.
+
+00:07:14.520 --> 00:07:15.540
+Zie het als een bakkerij.
+
+00:07:15.780 --> 00:07:19.520
+Stel je voor dat je een bakkerij runt en voor elke klantbestelling elk brood met de hand bakt.
+
+00:07:19.700 --> 00:07:21.620
+Zo ziet handmatige implementatie eruit.
+
+00:07:21.820 --> 00:07:22.480
+Iemand schrijft code.
+
+00:07:22.640 --> 00:07:26.420
+Jij kopieert deze handmatig naar een server, voert handmatig de beeld uit en controleert handmatig of het werkt.
+
+00:07:26.580 --> 00:07:30.280
+Het is traag, foutgevoelig en als je veel bestellingen krijgt kun je het simpelweg niet bijbenen.
+
+00:07:30.460 --> 00:07:32.280
+Dat is waar Azure Pipelines in beeld komt.
+
+00:07:32.280 --> 00:07:34.120
+Je automatiseert het hele proces.
+
+00:07:34.120 --> 00:07:38.180
+Je stelt het één keer in en het draait automatisch telkens wanneer iemand de code wijzigt.
+
+00:07:38.400 --> 00:07:42.040
+Dit heet CI, CD, Continu Integratie en Continu Levering.
+
+00:07:42.300 --> 00:07:44.440
+Dit is wat Continu Integratie betekent.
+
+00:07:44.620 --> 00:07:50.460
+Telkens wanneer een ontwikkelaar code naar de repository pust, bouwt de pipeline automatisch de applicatie en voert tests uit.
+
+00:07:50.640 --> 00:07:55.260
+Als er iets breekt, weet je het direct niet twee weken later wanneer iemand probeert te implementeren, maar meteen.
+
+00:07:55.440 --> 00:07:58.320
+De ontwikkelaar krijgt een melding, lost het op en pust opnieuw.
+
+00:07:58.540 --> 00:08:02.380
+Fouten worden vroeg opgespoort wanneer ze goedkoop te herstellen zijn, niet laat wanneer ze kostbaar zijn.
+
+00:08:02.380 --> 00:08:07.200
+Continuous Delivery betekent dat gebouwde en geteste code automatisch wordt geïmplementeerd in je omgevingen.
+
+00:08:07.340 --> 00:08:13.880
+Eerst naar een testomgeving waar QA het kan verifiëren, dan naar staging voor laatste controles, en tot slot naar productie waar echte gebruikers het zien.
+
+00:08:14.060 --> 00:08:16.240
+Elke fase kan ingebouwde goedkeuringen bevatten.
+
+00:08:16.380 --> 00:08:18.800
+Een manager moet wellicht de implementatie naar productie goedkeuren.
+
+00:08:18.960 --> 00:08:21.140
+Een QA lead moet wellicht de testresultaten ondertekenen.
+
+00:08:21.320 --> 00:08:22.640
+De pipeline regelt dat allemaal.
+
+00:08:22.960 --> 00:08:24.460
+Laten we de belangrijkste functies doornemen.
+
+00:08:24.660 --> 00:08:27.140
+Je hebt Griekse YAML bestanden, fase, goedkeuringen en agents.
+
+00:08:27.140 --> 00:08:30.320
+Griekse YAML is een eenvoudig tekstbestand waarin je jouw pipeline definieert.
+
+00:08:30.480 --> 00:08:34.860
+Het staat in je repository naast je code, wat betekent dat je pipeline net als je codeversiebeheer heeft.
+
+00:08:35.020 --> 00:08:37.260
+Je kunt zien wie het heeft gewijzigd, wanneer en waarom.
+
+00:08:37.440 --> 00:08:40.100
+Met fase kun je jouw pipeline opdelen in logische secties.
+
+00:08:40.320 --> 00:08:41.920
+Bouwen, testen, implementeren.
+
+00:08:42.140 --> 00:08:46.000
+Met goedkeuringen kun je implementaties beveiligen, zodat alleen geautoriseerde personen naar productie kunnen pushen.
+
+00:08:46.160 --> 00:08:48.480
+Agents zijn de machines die daadwerkelijk je builds uitvoeren.
+
+00:08:48.720 --> 00:08:51.500
+Microsoft biedt gehoste agents of je kunt je eigen agents draaien.
+
+00:08:51.720 --> 00:08:53.080
+Waarom is dit belangrijk voor beginners?
+
+00:08:53.080 --> 00:08:56.740
+Omdat handmatige implementaties de nummer één bron van productieincidenten zijn.
+
+00:08:56.740 --> 00:09:00.520
+Iemand vergeet een stap, kopieert het verkeerde bestand of implementeert in de verkeerde omgeving.
+
+00:09:00.740 --> 00:09:02.240
+Pipelines elimineren dat allemaal.
+
+00:09:02.480 --> 00:09:04.160
+Ze draaien elke keer op dezelfde manier.
+
+00:09:04.360 --> 00:09:06.920
+Geen menselijke fouten, geen vergeten stappen en ze zijn snel.
+
+00:09:07.100 --> 00:09:12.560
+Een team waarover ik las, zag hun handmatige implementaties dalen van enkele uren naar slechts 10 of 15 minuten na het opzetten van Azure Pipelines.
+
+00:09:12.780 --> 00:09:14.100
+Dat is geen kleine verbetering.
+
+00:09:14.360 --> 00:09:15.420
+Dat is een transformatie.
+
+00:09:15.620 --> 00:09:17.920
+Dus, je code is gebouwd, getest en geïmplementeerd.
+
+00:09:18.060 --> 00:09:20.860
+Maar voordat je het naar klanten verstuurt, moet je zeker weten dat het ook echt werkt.
+
+00:09:20.860 --> 00:09:23.300
+Niet alleen dat het compileert, maar dat het doet wat het moet doen.
+
+00:09:23.500 --> 00:09:25.640
+Dat is waar Azure Test Plans om de hoek komt kijken.
+
+00:09:26.740 --> 00:09:27.960
+Kwaliteit zonder giswerk.
+
+00:09:28.180 --> 00:09:30.980
+Dus, je code bouwt, het implementeert, maar werkt het ook echt.
+
+00:09:31.200 --> 00:09:33.540
+Niet alleen op jouw machine, niet alleen het ideale scenario.
+
+00:09:33.920 --> 00:09:38.820
+Werkt het als iemand iets verkeerd typt, of als het netwerk traag is, of als duizend mensen het tegelijk gebruiken.
+
+00:09:39.040 --> 00:09:41.120
+Dat is waar Azure Test Plans om de hoek komt kijken.
+
+00:09:41.360 --> 00:09:44.740
+Test Plans is gestructureerd testen van handmatig testen en exploratief testen.
+
+00:09:44.920 --> 00:09:46.880
+Zie het als de pre-flight checklist van een piloot.
+
+00:09:47.000 --> 00:09:49.380
+Piloten stappen niet zomaar in het vliegtuig in de hoop op het beste.
+
+00:09:49.380 --> 00:09:50.520
+Ze hebben een checklist.
+
+00:09:50.740 --> 00:09:55.260
+Controleer de flaps, controleer de brandstof, controleer de instrumenten elke keer opnieuw, want één ding missen kan katastrofaal zijn.
+
+00:09:55.260 --> 00:09:56.940
+Software is precies hetzelfde.
+
+00:09:57.100 --> 00:09:59.960
+Een bak in productie kan je geld, klanten en je reputatie kosten.
+
+00:10:00.160 --> 00:10:01.600
+Test Plans biedt je die checklist.
+
+00:10:01.840 --> 00:10:02.760
+Dit is hoe het werkt.
+
+00:10:02.920 --> 00:10:04.160
+Je maakt testgevallen aan.
+
+00:10:04.340 --> 00:10:06.840
+Elk testgeval beschrijft een specifiek punt om te testen.
+
+00:10:07.000 --> 00:10:09.300
+Inloggen met een geldige gebruikersnaam en wachtwoord.
+
+00:10:09.500 --> 00:10:11.540
+Probeer in te loggen met een ongeldig wachtwoord.
+
+00:10:11.760 --> 00:10:14.700
+Probeer het formulier te verzenden zonder verplichte velden in te vullen.
+
+00:10:14.920 --> 00:10:18.020
+Elk testgeval bevat stappen om te volgen en verwacht resultaten.
+
+00:10:18.020 --> 00:10:21.680
+Je tester loopt deze stappen door en markeert ze als geslaagd of mislukt.
+
+00:10:21.800 --> 00:10:25.280
+Als een test mislukt, kan diegene direct een bak loggen vanuit het testgeval.
+
+00:10:25.520 --> 00:10:31.520
+Die bak wordt aangemaakt als werkitem in boards, toegewezen aan de juiste developer en gelinkt aan de test voor volledige traceerbaarheid.
+
+00:10:31.660 --> 00:10:33.860
+Je kunt testgevallen groeperen in testsuites.
+
+00:10:34.060 --> 00:10:38.960
+Misschien heb je een testsuite voor het afrekenproces, een voor gebruikersregistratie en een voor het adminpaneel.
+
+00:10:39.200 --> 00:10:42.660
+Vervolgens organiseer je die suites in testplannen voor verschillende releases of sprints.
+
+00:10:42.860 --> 00:10:46.760
+Je ziet precies wat er getest is, wat geslaagd is, wat mislukt is en wat nog getest moet worden.
+
+00:10:46.760 --> 00:10:48.900
+De verbinding met boards is waar het krachtig wordt.
+
+00:10:49.100 --> 00:10:51.900
+Wanneer een test mislukt, wordt er direct een bak aangemaakt in boards.
+
+00:10:52.060 --> 00:10:56.020
+De developer ziet dit, lost het op, pus de fix en de pipeline bouwt en implementeert een nieuwe versie.
+
+00:10:56.160 --> 00:10:57.680
+De tester voert de test opnieuw uit.
+
+00:10:57.860 --> 00:10:58.660
+De test slaagt.
+
+00:10:58.840 --> 00:10:59.720
+De bak wordt gesloten.
+
+00:11:00.000 --> 00:11:01.460
+Dat gebeurt allemaal binnen één platform.
+
+00:11:01.680 --> 00:11:04.140
+Geen spreadsheets mailen, geen bugrapporten kopiëren tussen systemen.
+
+00:11:04.260 --> 00:11:05.300
+Het is allemaal verbonden.
+
+00:11:05.540 --> 00:11:06.660
+Ik zal eerlijk met je zijn.
+
+00:11:06.900 --> 00:11:08.760
+Beginners zien testplans vaak over het hoofd.
+
+00:11:08.900 --> 00:11:10.140
+Testen voelt als extra werk.
+
+00:11:10.340 --> 00:11:11.880
+Je wilt gewoon je code uitleveren.
+
+00:11:12.020 --> 00:11:12.940
+Je wilt het live zien.
+
+00:11:13.140 --> 00:11:14.000
+Maar dit is het punt.
+
+00:11:14.000 --> 00:11:18.900
+Elke developer die ik heb gesproken, heeft een verhaal over een bak die in productie kwam en een ramp veroorzaakte.
+
+00:11:19.100 --> 00:11:21.320
+Een betalingssysteem dat klanten dubbel liet betalen.
+
+00:11:21.520 --> 00:11:23.440
+Een inlogpagina die crashte onder belasting.
+
+00:11:23.640 --> 00:11:26.120
+Een functie die gegevens verwijderde in plaats van ze op te slaan.
+
+00:11:26.300 --> 00:11:29.060
+Dat zijn altijd de baks die met een simpele test voorkomen hadden kunnen worden.
+
+00:11:29.340 --> 00:11:30.920
+Testplans is goedkope verzekering.
+
+00:11:31.140 --> 00:11:33.880
+Het kost vooraf wat tijd, maar het bespaart je later een hoop ellende.
+
+00:11:34.100 --> 00:11:36.540
+Naarmate je team groeit, loop je tegen een ander probleem aan.
+
+00:11:36.700 --> 00:11:38.740
+Je begint steeds dezelfde code opnieuw te schrijven.
+
+00:11:38.920 --> 00:11:41.600
+Utility functies, logging componenten, API wrappers.
+
+00:11:41.600 --> 00:11:46.100
+Je kopieert en plakt code tussen projecten en al snel heb je vijf verschillende versies van hetzelfde,
+
+00:11:46.240 --> 00:11:47.600
+allemaal net iets anders en mogelijk foutgevoelig.
+
+00:11:48.320 --> 00:11:50.120
+Daar komt Azure Artifacts in beeld.
+
+00:11:50.280 --> 00:11:51.600
+Azure Artifacts deelt je bouwstenen.
+
+00:11:52.340 --> 00:11:57.460
+Azure Artifacts is een pakketbeheerder voor je codebibliotheken en je kunt het het beste vergelijken met lego blokjes.
+
+00:11:57.660 --> 00:12:02.300
+In plaats van telkens elk onderdeel vanaf nul op te bouwen, pak je kant en klare blokjes en klik je ze aan elkaar.
+
+00:12:02.540 --> 00:12:06.240
+Wanneer iemand in je team een logging bibliotheek bouwt, publiceert diegene deze naar Artifacts,
+
+00:12:06.420 --> 00:12:08.800
+waarna iedereen het met één regel code in hun projecten kan ophalen.
+
+00:12:08.800 --> 00:12:13.180
+Geen bestanden kopiëren, geen zip-archieven, e-mailen en niet meer afvragen welke versie de nieuwste is.
+
+00:12:13.340 --> 00:12:15.340
+Hier is de lego vergelijking in meer detail.
+
+00:12:15.600 --> 00:12:17.200
+Stel je voor dat je een kasteel bouwt.
+
+00:12:17.320 --> 00:12:20.820
+Je zou elke steen met de hand kunnen kappen, wat staat voor alles vanaf nul schrijven,
+
+00:12:21.020 --> 00:12:25.640
+of je pakt kant en klare stenen en concentreert je op de unieke delen van je kasteel, dat is het gebruik van Artifacts.
+
+00:12:25.820 --> 00:12:30.860
+De stenen zijn je gedeelde bibliotheken, het kasteel is je applicatie, je moet nog steeds de unieke delen bouwen,
+
+00:12:31.020 --> 00:12:32.840
+maar je hoeft niet telkens het wiel opnieuw uit te vinden.
+
+00:12:32.840 --> 00:12:38.040
+Artifacts ondersteunt meerdere pakkettypes, Nuget voor .NET, NPM voor Javascript,
+
+00:12:38.220 --> 00:12:41.900
+Meve voor Java, Python pakketten en universele pakketten voor al het andere.
+
+00:12:42.120 --> 00:12:46.540
+Je maakt een feed aan, dat is je private pakket repository, en daar publiceer je pakketten naar.
+
+00:12:46.680 --> 00:12:50.140
+Je stelt upstreambronnen in, zodat je ook openbare pakketten kunt ophalen van Nuget.
+
+00:12:50.300 --> 00:12:52.840
+Org of npmjs.com via dezelfde feed.
+
+00:12:52.980 --> 00:12:53.880
+Alles op één plek.
+
+00:12:54.100 --> 00:12:54.940
+Waarom is dit belangrijk?
+
+00:12:55.240 --> 00:12:58.140
+Het bespaart tijd, zorgt voor consistentie en beheerdversies.
+
+00:12:58.140 --> 00:13:03.660
+Wanneer je een gedeelde bibliotheek bijwerkt, publiceer je een nieuwe versie en kunnen projecten die deze gebruiken upgraden wanneer ze er klaar voor zijn.
+
+00:13:03.840 --> 00:13:07.700
+Ze worden niet gedwongen om te updaten en zitten niet vast aan een oude versie omdat niemand de nieuwste kopie kan vinden.
+
+00:13:07.880 --> 00:13:11.140
+Het is beheerst en georganiseerd, en het is direct gekoppeld aan pipelines.
+
+00:13:11.460 --> 00:13:16.720
+Je build pipeline kan automatisch pakketten publiceren naar artifacts en je deployment pipeline kan pakketten uit artifacts consumeren,
+
+00:13:16.880 --> 00:13:18.500
+waardoor het hele proces geautomatiseerd is.
+
+00:13:18.680 --> 00:13:24.540
+Code wordt gebouwd, getest, verpakt, gepubliceerd en geconsumeerd, zonder dat iemand handmatig bestanden hoeft te kopiëren.
+
+00:13:24.540 --> 00:13:32.400
+Dus nu heb je alle vijf de services gezien. Boards voor planning, repos voor code, pipelines voor automatisering, testplans voor kwaliteit en artifacts voor het delen.
+
+00:13:32.520 --> 00:13:37.040
+Maar de echte magie zit niet in één enkele service. Het gaat erom hoe ze allemaal samenwerken.
+
+00:13:37.300 --> 00:13:41.960
+Laat me zien hoe dat er in de praktijk uitziet. Het totaalplaatje, hoe alles in elkaar grijpt.
+
+00:13:42.200 --> 00:13:47.060
+Laat me zien hoe dit er in de praktijk uitziet met een reëel scenario waarin een team aan een nieuwe functie werkt.
+
+00:13:47.800 --> 00:13:52.100
+Stap 1. De product owner opent Azure Boards en maakt een user story zoals
+
+00:13:52.100 --> 00:14:00.560
+Als klant wil ik mijn wachtwoord kunnen resetten. Voeg acceptatiecriteria toe, wijs het toe aan de huidige sprint, bepaal de prioriteit en het werkitem staat nu in het systeem.
+
+00:14:00.760 --> 00:14:06.140
+Stap 2. De ontwikkelaar opent Azure Repos, haalt de laatste code op en maakt een nieuwe branche aan vanuit het werkitem.
+
+00:14:06.380 --> 00:14:11.520
+Boards laat je dit zelfs direct vanuit de story doen. De branchenaam bevat automatisch het idee van het werkitem.
+
+00:14:11.720 --> 00:14:16.180
+Ze schrijven de code, commit deze en voegen in het commit bericht, fix is 142, toe.
+
+00:14:16.180 --> 00:14:20.280
+Dat is het nummer van het werkitem. De commit is nu gekoppeld aan de user story in Boards.
+
+00:14:20.500 --> 00:14:23.440
+Stap 3. De commit activeert automatisch Azure Pipelines.
+
+00:14:23.680 --> 00:14:28.000
+De pipeline pakt de code op, herstelt dependencies, voert de beeld uit en draait unit tests.
+
+00:14:28.220 --> 00:14:31.800
+Als er een test faalt, stopt de pipeline en krijgt de ontwikkelaar een melding.
+
+00:14:32.040 --> 00:14:39.020
+Als alles slaagt, implementeert de pipeline naar een testomgeving en kan de ontwikkelaar de code live zien draaien voordat iemand anders deze aanraakt.
+
+00:14:39.020 --> 00:14:49.500
+Stap 4. De QA Engineer opent Azure Test Plans, zoekt de testsuite voor wachtwoordherstel, voert de handmatige testgevallen uit, volgt de stappen en verifieert of de functie werkt.
+
+00:14:49.700 --> 00:14:52.780
+Maar ze vinden een bak. Het foutbericht is verkeerd gespeld.
+
+00:14:53.000 --> 00:14:58.600
+Ze klikken op bak maken, direct vanuit het testgeval en er verschijnt een nieuw werkitem in Boards, gekoppeld aan de oorspronkelijke user story.
+
+00:14:58.600 --> 00:15:04.260
+De ontwikkelaar ziet het, lost het op, pust de code, de pipeline draait opnieuw, de tester voert de test opnieuw uit en deze slaagt.
+
+00:15:04.260 --> 00:15:09.480
+Stap 5. De functie is klaar en het team publiceert de gedeelde authenticatiebibliotheek naar Azure Artifacts.
+
+00:15:09.680 --> 00:15:11.920
+Nu kunnen andere teams deze gebruiken in hun projecten.
+
+00:15:12.060 --> 00:15:17.960
+De wachtwoordherstelcomponent is beschikbaar als pakket, dus elk team dat een nieuwe functie bouwt die authenticatie nodig heeft, kan dit met één regel code binnenhalen.
+
+00:15:18.100 --> 00:15:20.480
+Niet herschrijven, niet kopiëren, enkel een referentie.
+
+00:15:20.660 --> 00:15:22.180
+Dat is het verbonden gebouw in actie.
+
+00:15:22.380 --> 00:15:23.740
+Elke service is een kamer.
+
+00:15:23.960 --> 00:15:32.660
+Boards is de planningskamer, repos is de codebibliotheek, pipelines is de fabrieksvloer, testplans is het kwaliteitscontrolestation en Artifacts is het magazijn.
+
+00:15:32.660 --> 00:15:35.200
+Maar de echte kracht zit niet in één enkele kamer.
+
+00:15:35.360 --> 00:15:36.880
+Het zit in de gangen die ze verbinden.
+
+00:15:37.080 --> 00:15:44.160
+Het werkitem linkt naar de code, de code activeert de pipeline, de pipeline implementeert naar test, de test maakt baks terug in boards, het voltooide pakket gaat naar Artifacts.
+
+00:15:44.320 --> 00:15:45.940
+Alles communiceert met al het andere.
+
+00:15:46.140 --> 00:15:47.360
+En hier wordt het interessant.
+
+00:15:47.620 --> 00:15:49.080
+AI komt naar Azure DevOps.
+
+00:15:49.500 --> 00:15:55.020
+Microsoft rolt al copilot integraties uit, zoals hulp bij werkitems die je helpt betere user stories te schrijven.
+
+00:15:55.240 --> 00:16:00.280
+AI die lange discussiedraden kan samenvatten en copilot code review die automatisch per requests beoordeelt.
+
+00:16:00.280 --> 00:16:02.520
+Het is nog vroeg, maar de richting is duidelijk.
+
+00:16:02.640 --> 00:16:06.160
+Azure DevOps wordt een intelligent platform, niet slechts een verzameling hulpmiddelen.
+
+00:16:06.340 --> 00:16:07.960
+Dus, wat is de beste manier om te beginnen?
+
+00:16:08.120 --> 00:16:10.680
+Je hoeft niet alle vijf de services tegelijk te adopteren.
+
+00:16:10.820 --> 00:16:11.420
+Kies er één.
+
+00:16:11.740 --> 00:16:15.940
+Begin met boards, maak een project aan, volg een paar taken en kijk hoe het voelt.
+
+00:16:16.160 --> 00:16:19.960
+Voeg daarna repos toe wanneer je er klaar voor bent, dan pipelines, stap voor stap.
+
+00:16:20.120 --> 00:16:20.980
+Jouw eerste stap.
+
+00:16:21.220 --> 00:16:22.440
+Dus, dit is het kernidee.
+
+00:16:22.620 --> 00:16:26.040
+Azure DevOps zijn geen vijf afzonderlijke tools, het is één verbonden platform.
+
+00:16:26.320 --> 00:16:29.720
+Boards, repos, pipelines, testplannen en artefacten werken allemaal samen.
+
+00:16:29.720 --> 00:16:32.420
+De waarde zit niet in een enkel onderdeel, maar in hoe ze samenwerken.
+
+00:16:32.560 --> 00:16:33.740
+Hier is jouw eerste stap.
+
+00:16:33.900 --> 00:16:36.500
+Ga naar dev.azure.com en maak een gratis account aan.
+
+00:16:36.700 --> 00:16:38.040
+Start daarna een nieuw project.
+
+00:16:38.240 --> 00:16:42.160
+Verken boards, maak een user story, sliep deze over het Kanban-bord en zie hoe het werkt.
+
+00:16:42.320 --> 00:16:43.440
+Hier is jouw uitdaging.
+
+00:16:43.660 --> 00:16:45.600
+Kies één klein project, alles is goed.
+
+00:16:45.840 --> 00:16:51.060
+Volg het een week lang in boards, voeg taken toe, update de status en ervaar hoe het voelt om je werk zichtbaar en georganiseerd te hebben.
+
+00:16:51.220 --> 00:16:53.720
+In de volgende aflevering duiken we in Azure Pipelines.
+
+00:16:53.720 --> 00:16:59.380
+We bouwen stap voor stap je eerste CI-CD pipeline en je zult zien hoe je builds en deployments vanaf nul automatiseert.
+
+00:16:59.560 --> 00:17:04.260
+Abonneer je op je favoriete podcast platform en deel deze aflevering met iemand die aan zijn DevOps-reis begint.

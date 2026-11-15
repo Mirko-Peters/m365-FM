@@ -1,0 +1,136 @@
+{
+ "de": {
+  "html": "<p>Die meisten Teams starten ihre Azure-Reise mit einem Abonnement, einer virtuellen Maschine und einer Auswahl einzelner Dienste. Das fühlt sich schnell und produktiv an, rächt sich aber oft später. Der bessere Startpunkt ist weniger aufregend: Klären Sie, warum Sie umziehen, was Sie umziehen und welche Regeln gelten sollen, bevor die erste Ressource entsteht.</p>\n<p>Genau dabei hilft das Microsoft Cloud Adoption Framework (CAF). Dieser Artikel erklärt seine Bausteine, was eine Azure Landing Zone ist und warum Governance nicht bis zum Schluss warten darf. Als roter Faden dient ein Bürogebäude: Man zieht nicht einfach irgendwo ein, sondern bereitet ein sicheres Haus vor, in dem jeder weiß, wohin er gehört.</p>\n\n<h2>Was ist das Microsoft Cloud Adoption Framework?</h2>\n<p>Das Cloud Adoption Framework ist ein Leitfaden von Microsoft für die Verlagerung von Arbeitslasten nach Azure und für deren anschließenden Betrieb. Es ist weder ein Produkt, das Sie installieren, noch eine Zertifizierung. Auch ein Ein-Klick-Setup, das ein leeres Abonnement in eine fertige Cloud-Umgebung verwandelt, ist es nicht. Es ist eine Denkhilfe: Sie entscheiden, warum Ihre Organisation Azure braucht, planen, was verschoben wird, bereiten einen Ort für die Workloads vor und verschieben, schützen, verwalten und betreiben sie anschließend.</p>\n<p>Warum das nötig ist, zeigt der Blick auf gewachsene IT-Landschaften. Dort lief jede Anwendung auf eigenem Server mit eigenem Sicherungsplan. Netzwerke und Server wurden von verschiedenen Teams verwaltet, und die Finanzabteilung sah Rechnungen, ohne zu erkennen, welche Abteilung die Kosten verursachte. Das Setup wuchs über Jahre, weil jedes neue Problem eine schnelle Lösung verlangte.</p>\n<p>Azure bietet mehr und schnellere Optionen, behebt aber nicht automatisch Kostenkontrolle, Sicherheit oder langsame Bereitstellung. Wer Cloud-Ressourcen ohne gemeinsame Entscheidungen erstellt, schafft das alte Chaos neu, nur mit mehr Schaltflächen und einer Rechnung, die sich täglich ändert. Die Bausteine des Frameworks sind:</p>\n<ul>\n<li>Strategie</li>\n<li>Plan</li>\n<li>Bereitmachen (Landing Zone)</li>\n<li>Übernehmen (Migrieren und Anpassen)</li>\n<li>Steuern (Governance)</li>\n<li>Sichern und Verwalten</li>\n</ul>\n\n<h2>Strategie und Plan: Warum und was wird umgezogen?</h2>\n<h3>Die Strategie beginnt mit dem Warum</h3>\n<p>Die erste Frage lautet nicht „Welchen Azure-Dienst kaufen wir?“, sondern „Welches Problem soll Azure für unsere Organisation lösen?“ Ein Unternehmen muss vielleicht ein Rechenzentrum verlassen, weil alte Hardware ersetzt werden muss. Ein anderes will neue Features schneller veröffentlichen. Ein drittes mit Teams in mehreren Ländern braucht seine Anwendung näher an den Nutzern. Wieder andere wollen die Wiederherstellung nach einem Ausfall verbessern. Unterschiedliche Gründe führen zu unterschiedlichen Entscheidungen.</p>\n<p>Formulieren Sie das erwartete Ergebnis möglichst als einfache, messbare Maßnahme, zum Beispiel:</p>\n<ul>\n<li>diese zehn Server migrieren, bevor der Support endet,</li>\n<li>die Zeit bis zur Veröffentlichung einer neuen Version von Wochen auf Tage verkürzen,</li>\n<li>jeder Abteilung ein monatliches Cloud-Budget mit einem Verantwortlichen zuweisen.</li>\n</ul>\n<p>Ohne ein solches Ziel stockt das Projekt. Das technische Team baut Ressourcen, das Business wartet auf Ergebnisse, die Finanzabteilung bekommt Rechnungen, und die Sicherheit entdeckt Risiken erst spät. Am Ende fragen alle: Warum tun wir das eigentlich?</p>\n\n<h3>Die Planung macht aus dem Warum ein Vorgehen</h3>\n<p>Danach müssen Sie wissen, welche Anwendungen und Daten es gibt, wem sie gehören und wer weiß, wie sie funktionieren. Dazu kommen Zeitplan, Risiken, vorhandene Qualifikationen und Abhängigkeiten. Eine Abhängigkeit ist alles, was eine Anwendung braucht, um zu funktionieren, etwa eine Datenbank, ein freigegebener Dateispeicher oder eine Verbindung zu einem Geschäftssystem. Wird nur die Anwendung migriert und eine dieser Verknüpfungen übersehen, wirkt der Umzug abgeschlossen, doch die Gehaltsabrechnung läuft nicht. Eine scheinbar kleine Anwendung hängt womöglich an fünf anderen Systemen, und die einzige Person, die einen Server versteht, hat das Unternehmen vielleicht schon vor Jahren verlassen.</p>\n<p>Anschließend wählen Sie für jede Anwendung einen Pfad: unverändert verschieben (Rehosting, auch Lift-and-Shift genannt), mit kleinen Anpassungen verschieben, grundlegend überarbeiten, durch einen Online-Dienst ersetzen oder vorerst außerhalb von Azure belassen. Cloud-Einführung bedeutet nicht, dass alles verschoben werden muss.</p>\n<p>Bei der Wahl der ersten Workload machen Teams oft einen Fehler. Sie beginnen mit der ältesten, am wenigsten verstandenen Anwendung, weil sie dringend erscheint. Dann wird der erste Schritt zum langwierigen Rettungsjob. Besser ist eine Workload, die wichtig genug ist, um etwas zu lernen, aber einfach genug, dass Besitzer, Daten und Erfolgskriterien klar sind.</p>\n<p>Auch der Zeitrahmen zählt: Läuft der Hardware-Support in drei Monaten aus, ist es sinnvoller, einige Server mit wenigen Änderungen nach Azure zu verschieben und die Anwendung später zu verbessern, statt alles neu zu gestalten. Beteiligen Sie bei der Planung Führungskräfte, Anwendungsbesitzer, Sicherheits- und Netzwerkteams, die Finanzabteilung und das Cloud-Team. Kein Team beantwortet alle Fragen allein.</p>\n\n<h2>Azure Landing Zone: Das Gebäude vorbereiten, bevor die Mieter einziehen</h2>\n<p>In der Phase „Bereitmachen“ steht die Azure Landing Zone im Mittelpunkt. Sie ist ein vorbereiteter Teil von Azure, in dem Anwendungen und Daten sicher betrieben werden können. Im Bild des Bürogebäudes: Strom, Netzwerkkabel, Türen, Schlösser, Notausgänge und ein Ort für Unterlagen sind vorhanden, bevor jemand einzieht. Nicht jede Umgebung sieht gleich aus. Ein kleines Unternehmen braucht ein einfaches Setup mit wenigen Regeln, ein großes viele getrennte Bereiche für Teams, Regionen und sensible Systeme.</p>\n\n<h3>Identität: der Empfang</h3>\n<p>Microsoft Entra ID verwaltet digitale Identitäten. Es weiß, wer sich anmelden will, und hilft zu entscheiden, worauf diese Person zugreifen darf. Die Grundregel: Gewähren Sie nur den Zugriff, den jemand für seine Arbeit braucht. Das gilt auch für Dienste, die etwa aus einer Datenbank lesen, sie aber nie löschen sollten.</p>\n\n<h3>Struktur: der Grundriss</h3>\n<ul>\n<li><strong>Verwaltungsgruppen</strong> stehen ganz oben. Hier können gemeinsame Regeln für mehrere Bereiche gelten.</li>\n<li><strong>Abonnements</strong> sind oft getrennte Bereiche für Abrechnung, Zugriff und Workloads, etwa für Produktion, Test oder gemeinsam genutzte Dienste.</li>\n<li><strong>Ressourcengruppen</strong> bündeln zusammengehörige Elemente, zum Beispiel Webserver, Datenbank und Speicher einer Anwendung.</li>\n<li><strong>Namensregeln und Tags</strong> helfen beim Wiederfinden. Ein Tag kann etwa Abteilungsinhaber, Umgebung oder Kostencode festhalten. So lässt sich die Frage der Finanzabteilung, welches Team Kosten verursacht hat, leicht beantworten.</li>\n</ul>\n<p>Machen Sie daraus kein Puzzle: Regeln, die niemand in einem 20-seitigen Dokument nachschlagen muss, funktionieren besser. Klarheit und Konsistenz schlagen Cleverness.</p>\n\n<h3>Netzwerk, Plattform- und Anwendungs-Landing-Zones</h3>\n<p>Das Netzwerk steuert, wie Systeme miteinander, mit dem Internet und mit Systemen im eigenen Rechenzentrum verbunden sind. Manche Anwendungen brauchen einen privaten Pfad zum Unternehmensnetz, andere müssen Kundenverkehr aus dem Internet annehmen, und manche Systeme sollen gar nicht miteinander sprechen. Ein gutes Design erlaubt die benötigten Verbindungen und blockiert den Rest.</p>\n<p>Dienste, die viele Teams nutzen, etwa Identität, Netzwerkverbindungen, Überwachung, Sicherung und Sicherheitstools, gehören in die <strong>Plattform-Landing-Zone</strong>. Sie werden einmal bereitgestellt und von allen Workloads genutzt. Eine <strong>Anwendungs-Landing-Zone</strong> ist dagegen der einzelne Bürobereich einer Anwendung oder eines Teams. Sie folgt den allgemeinen Regeln, lässt aber Raum für die Anforderungen der Workload. Eine Kundenwebsite braucht andere Dienste als ein internes Finanzsystem, beide nutzen dennoch dieselben Anmelderegeln, denselben Netzwerkansatz und dieselben Sicherheitskontrollen.</p>\n<p>Azure Policy fungiert dabei als Hausordnung. Richtlinien können bestimmte Tags vorschreiben, Speicher mit öffentlichem Zugriff blockieren oder Bereitstellungen auf genehmigte Regionen beschränken. Sie sollen die Arbeit nicht verhindern, sondern häufige Fehler abfangen, bevor sie teuer oder riskant werden.</p>\n\n<h2>Übernehmen: Workloads verschieben und verbessern</h2>\n<p>In der Phase „Übernehmen“ werden vorhandene Workloads nach Azure verschoben und so angepasst, dass sie dort besser funktionieren. Eine Workload ist dabei schlicht eine Arbeit, die auf Technologie läuft, etwa eine Website, eine Unternehmens-App, eine Datenbank oder eine Gruppe zusammengehörender Dienste.</p>\n<p>Das Vorgehen: Verschieben, testen, lernen, wo das Setup besser werden muss, und die Erkenntnisse auf die nächste Workload anwenden. So wird nicht derselbe Fehler fünfzigmal wiederholt.</p>\n<h3>Die Wege einer Anwendung</h3>\n<ul>\n<li><strong>Rehosting (Lift-and-Shift):</strong> der schnellste Weg. Die Anwendung bleibt weitgehend gleich und läuft auf einer virtuellen Maschine in Azure. Das passt, wenn alte Hardware schnell weg muss.</li>\n<li><strong>Replatforming:</strong> Ein Teil wandert in einen verwalteten Azure-Dienst, etwa die Datenbank, statt einen eigenen Datenbankserver zu betreiben.</li>\n<li><strong>Refactoring oder Neuerstellung:</strong> Teile der Anwendung werden geändert, um Cloud-Dienste besser zu nutzen. Eine Neuerstellung lohnt sich, wenn die alte Version den Anforderungen nicht mehr genügt, zu teuer in der Wartung ist oder nicht sicher verschoben werden kann.</li>\n<li><strong>Ersetzen oder belassen:</strong> Eine Anwendung kann durch einen Online-Software-Dienst ersetzt werden oder aus gutem Grund bleiben, wo sie ist.</li>\n</ul>\n<h3>Was vor dem Produktivbetrieb getestet werden sollte</h3>\n<p>Der Anmeldebildschirm allein reicht nicht. Prüfen Sie:</p>\n<ul>\n<li>Erfüllt die Anwendung ihre normale Aufgabe?</li>\n<li>Kommuniziert sie mit der Datenbank und anderen verbundenen Systemen?</li>\n<li>Funktioniert sie mit echten Nutzern?</li>\n<li>Lassen sich Daten wiederherstellen, wenn etwas schiefgeht?</li>\n<li>Haben die richtigen Personen Zugriff, und alle anderen nicht?</li>\n<li>Sind die laufenden Kosten verstanden?</li>\n</ul>\n<p>Eine erfolgreiche Bereitstellung ist eine Anwendung, die betrieben, wiederhergestellt und unterstützt werden kann, nicht eine, die einmal geöffnet wurde.</p>\n\n<h2>Steuern, sichern, verwalten: Der laufende Betrieb</h2>\n<p>Diese drei Aufgaben beginnen nicht erst nach der Migration. Sie ziehen sich durch die gesamte Cloud-Reise, weil Entscheidungen über Zugriff, Ausgaben, Sicherheit und Support jede Workload von Anfang an betreffen.</p>\n<h3>Governance</h3>\n<p>Governance legt fest, wie Azure genutzt wird: welche Dienste erlaubt sind, in welchen Regionen bereitgestellt wird, wie Ressourcen heißen, welche Tags nötig sind, wer für welche Workload zuständig ist und wie Ausgaben nachverfolgt werden. Sie unterstützt auch die Compliance. Gelten Regeln für Kundendaten, Finanzunterlagen oder Gesundheitsinformationen, müssen Sie wissen, wo diese Daten liegen, wer zugreifen kann und ob die nötigen Kontrollen vorhanden sind.</p>\n<h3>Sicherheit</h3>\n<p>Entra ID steuert Anmeldungen und Berechtigungen. Der bedingte Zugriff prüft die Situation bei der Anmeldung, zum Beispiel ob ein genehmigtes Gerät verwendet wird oder eine zusätzliche Prüfung nötig ist. Microsoft Defender erkennt Bedrohungen und verdächtige Aktivitäten auf der Plattform. Leitidee ist das Prinzip der geringsten Rechte. Das wirkt zunächst langsamer, doch zu breiter Zugriff wird zum großen Problem, wenn ein Konto kompromittiert wird, jemand einen Fehler macht oder ein Auftragnehmer das Unternehmen verlässt.</p>\n<h3>Verwaltung und geteilte Verantwortung</h3>\n<p>Zum Betrieb gehört die tägliche Arbeit: Warnungen beobachten, Sicherungen prüfen und die Wiederherstellung nachweisen, Updates einspielen, auf Vorfälle reagieren und Kosten kontrollieren. Dabei gilt das Modell der geteilten Verantwortung. Microsoft betreibt und schützt die zugrunde liegende Azure-Cloud, also die physischen Rechenzentren und die zentralen Cloud-Dienste. Ihre Organisation bleibt verantwortlich für das, was sie in Azure einbringt, für die Konfiguration der Dienste, den Zugriff, den Datenschutz und den Betrieb der Workloads. Die Umstellung hebt diese Pflichten nicht auf, sie verändert nur den Umgang damit.</p>\n<p>Halten Sie Zuständigkeiten deshalb konkret fest: Wer erhält die Warnung bei einem Datenbankausfall? Wer kann eine Sicherung wiederherstellen? Wer genehmigt Zugriffe? Wer reagiert auf eine Defender-Meldung? Wer prüft ungewöhnlichen Verbrauch? „Jemand aus der IT“ ist keine Antwort.</p>\n\n<h2>Häufige Fehler und Stolpersteine</h2>\n<ul>\n<li><strong>Cloud-Einführung als Einkaufsbummel:</strong> Wer Ressourcen ohne gemeinsame Entscheidungen erstellt, riskiert öffentlichen Zugriff aus Bequemlichkeit, teure Dienste ohne Budgetverantwortlichen und ungeplante Netzwerke. Später weiß niemand mehr, wem was gehört, und Korrekturen greifen in Systeme ein, auf die Mitarbeiter bereits angewiesen sind.</li>\n<li><strong>Kein klares Ziel:</strong> Ohne definiertes Ergebnis fragen am Ende alle, warum das Projekt überhaupt läuft.</li>\n<li><strong>Übersehene Abhängigkeiten:</strong> Eine migrierte Anwendung läuft nicht, wenn Datenbank, Dateispeicher oder Anbindungen fehlen.</li>\n<li><strong>Die schwierigste Anwendung zuerst:</strong> Die älteste, am wenigsten verstandene Anwendung wird leicht zum Rettungsjob.</li>\n<li><strong>Zu viel Landing Zone auf einmal:</strong> Ein kleines Team muss nicht jedes Feld des Microsoft-Diagramms vom ersten Tag an umsetzen. Bauen Sie das Fundament, das Sie jetzt brauchen, und erweitern Sie es, wenn eine echte Workload einen Grund liefert.</li>\n<li><strong>Die Plattform wird „übergeben“:</strong> Das Plattformteam stellt die Landing Zone fertig und zieht weiter, das Anwendungsteam sucht danach Wege, die Plattform zu umgehen. Das erzeugt auf beiden Seiten Frust.</li>\n<li><strong>Überwachung ohne Verantwortlichkeit:</strong> Warnungen, die niemand oder alle gleichzeitig erhalten, werden zum Hintergrundrauschen.</li>\n<li><strong>Falsche Regeldichte:</strong> Zu wenige Regeln gefährden Daten und Budget, zu viele treiben Teams in Umgehungslösungen.</li>\n</ul>\n\n<h2>Praktische Takeaways</h2>\n<ul>\n<li>Klären Sie das Warum vor jeder Technik und formulieren Sie einfache, konkrete Maßnahmen als Ziel.</li>\n<li>Erfassen Sie Anwendungen, Daten, Besitzer und Abhängigkeiten, bevor Sie migrieren.</li>\n<li>Wählen Sie pro Anwendung bewusst einen Pfad: Rehosting, Replatforming, Refactoring, Neuerstellung, Ersetzen oder Belassen.</li>\n<li>Starten Sie mit einer Workload, die bedeutsam, aber überschaubar ist.</li>\n<li>Bauen Sie die Landing Zone mit Identität, Struktur, Netzwerk, Plattformdiensten und Azure Policy, aber nur so groß wie nötig.</li>\n<li>Halten Sie Namens- und Tagging-Regeln schlank und alltagstauglich.</li>\n<li>Vergeben Sie nur die Rechte, die tatsächlich gebraucht werden.</li>\n<li>Testen Sie vor dem Produktivbetrieb Funktion, Verbindungen, Wiederherstellung, Zugriff und Kosten.</li>\n<li>Behandeln Sie die ersten Workloads als gemeinsame Arbeit von Anwendungs- und Plattformteam und dokumentieren Sie Entscheidungen.</li>\n<li>Benennen Sie für Warnungen, Sicherungen, Zugriffe und Kosten klare Verantwortliche.</li>\n<li>Überprüfen Sie Regeln und Support-Modell, wenn sich Anwendungen, Regionen oder Compliance-Anforderungen ändern.</li>\n</ul>\n\n<h2>Fazit</h2>\n<p>Das Cloud Adoption Framework ersetzt keine technische Umsetzung, aber es sorgt dafür, dass sie in der richtigen Reihenfolge geschieht: erst das Warum, dann der Plan, dann ein vorbereitetes Fundament in Form der Landing Zone, schließlich die schrittweise Übernahme der Workloads. Governance, Sicherheit und Betrieb begleiten alles von Anfang an. Das Framework endet nicht mit der letzten verschobenen Workload, denn die Organisation verändert sich weiter, und die Regeln müssen mitwachsen. Wer so vorgeht, zieht nicht nur in die Cloud um, sondern bezieht ein Gebäude, in dem Zuständigkeiten, Zugänge und Kosten klar geregelt sind.</p>",
+  "model": "claude-sonnet-5-5",
+  "info": {
+   "titel": "Cloud Adoption Framework: Der Weg nach Azure",
+   "typ": "schritte",
+   "punkte": [
+    {
+     "kopf": "Strategie",
+     "text": "Klären, welches Problem Azure lösen soll, und konkrete, einfache Ziele festlegen."
+    },
+    {
+     "kopf": "Plan",
+     "text": "Anwendungen, Daten, Besitzer und Abhängigkeiten erfassen und pro Anwendung einen Migrationspfad wählen."
+    },
+    {
+     "kopf": "Landing Zone",
+     "text": "Identität, Struktur, Netzwerk, Plattformdienste und Azure Policy vorbereiten, bevor Workloads einziehen."
+    },
+    {
+     "kopf": "Übernehmen",
+     "text": "Eine geeignete Workload verschieben, testen, daraus lernen und Erkenntnisse wiederverwenden."
+    },
+    {
+     "kopf": "Steuern und sichern",
+     "text": "Governance-Regeln, Entra ID, bedingten Zugriff und Prinzip der geringsten Rechte von Anfang an anwenden."
+    },
+    {
+     "kopf": "Verwalten",
+     "text": "Zuständigkeiten für Warnungen, Sicherungen, Zugriffe und Kosten klar benennen und regelmäßig überprüfen."
+    }
+   ]
+  },
+  "faq": [
+   {
+    "q": "Was ist das Microsoft Cloud Adoption Framework (CAF)?",
+    "a": "Das Cloud Adoption Framework ist ein Leitfaden von Microsoft für die Verlagerung von Arbeitslasten nach Azure und deren Betrieb. Es ist weder ein Produkt noch eine Zertifizierung oder ein Ein-Klick-Setup, sondern eine Denkhilfe für Strategie, Planung, Umzug, Governance und Betrieb."
+   },
+   {
+    "q": "Was ist eine Azure Landing Zone und wofür brauche ich sie?",
+    "a": "Eine Azure Landing Zone ist ein vorbereiteter Teil von Azure, in dem Anwendungen und Daten sicher betrieben werden können. Sie umfasst unter anderem Identität, Struktur, Netzwerk und Regeln, damit alles vorhanden ist, bevor die erste Workload einzieht."
+   },
+   {
+    "q": "Was ist der Unterschied zwischen Plattform-Landing-Zone und Anwendungs-Landing-Zone?",
+    "a": "Die Plattform-Landing-Zone enthält Dienste, die viele Teams nutzen, etwa Identität, Netzwerkverbindungen, Überwachung, Sicherung und Sicherheitstools. Eine Anwendungs-Landing-Zone ist der Bereich einer einzelnen Anwendung oder eines Teams, der den allgemeinen Regeln folgt, aber Raum für eigene Anforderungen lässt."
+   },
+   {
+    "q": "Welche Migrationswege gibt es für eine Anwendung in Azure?",
+    "a": "Es gibt Rehosting (Lift-and-Shift) auf eine virtuelle Maschine, Replatforming mit verwalteten Diensten wie einer Datenbank, Refactoring oder Neuerstellung für bessere Cloud-Nutzung sowie Ersetzen durch einen Online-Dienst oder Belassen außerhalb von Azure."
+   }
+  ],
+  "infos": [
+   {
+    "titel": "Plattform- vs. Anwendungs-Landing-Zone",
+    "typ": "vergleich",
+    "links": {
+     "titel": "Plattform-Landing-Zone",
+     "punkte": [
+      "Enthält Dienste, die viele Teams nutzen",
+      "Beispiele: Identität, Netzwerk, Überwachung, Sicherung, Sicherheitstools",
+      "Wird einmal bereitgestellt",
+      "Alle Workloads nutzen sie gemeinsam"
+     ]
+    },
+    "rechts": {
+     "titel": "Anwendungs-Landing-Zone",
+     "punkte": [
+      "Der einzelne Bürobereich einer Anwendung oder eines Teams",
+      "Folgt den allgemeinen Regeln",
+      "Lässt Raum für Anforderungen der Workload",
+      "Kundenwebsite und Finanzsystem brauchen unterschiedliche Dienste"
+     ]
+    }
+   },
+   {
+    "titel": "Vor dem Produktivbetrieb prüfen",
+    "typ": "checkliste",
+    "punkte": [
+     "Erfüllt die Anwendung ihre normale Aufgabe?",
+     "Kommuniziert sie mit Datenbank und verbundenen Systemen?",
+     "Funktioniert sie mit echten Nutzern?",
+     "Lassen sich Daten wiederherstellen, wenn etwas schiefgeht?",
+     "Haben die richtigen Personen Zugriff, alle anderen nicht?",
+     "Sind die laufenden Kosten verstanden?"
+    ]
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Was ist das Microsoft Cloud Adoption Framework laut Artikel?",
+    "opts": [
+     "Ein Produkt, das man installiert und sofort einsetzt",
+     "Eine Denkhilfe für Verlagerung und Betrieb von Arbeitslasten in Azure",
+     "Eine Zertifizierung für Cloud-Administratoren",
+     "Ein Ein-Klick-Setup für fertige Cloud-Umgebungen"
+    ],
+    "a": 1,
+    "why": "Der Artikel nennt es einen Leitfaden und eine Denkhilfe, weder Produkt noch Zertifizierung noch Ein-Klick-Setup."
+   },
+   {
+    "q": "Welche erste Workload empfiehlt der Artikel für den Einstieg?",
+    "opts": [
+     "Die älteste Anwendung, weil sie am dringendsten erscheint",
+     "Die Anwendung mit den meisten Abhängigkeiten zu anderen Systemen",
+     "Eine wichtige, aber einfache Workload mit klaren Besitzern und Erfolgskriterien",
+     "Immer die Anwendung mit den höchsten Betriebskosten"
+    ],
+    "a": 2,
+    "why": "Die erste Workload soll wichtig genug zum Lernen, aber einfach genug mit klaren Besitzern, Daten und Erfolgskriterien sein."
+   },
+   {
+    "q": "Welche Aufgabe hat die Plattform-Landing-Zone?",
+    "opts": [
+     "Sie enthält den Bürobereich einer einzelnen Kundenwebsite",
+     "Sie ersetzt Azure Policy durch feste Netzwerkregeln",
+     "Sie dient ausschließlich der Abrechnung einzelner Abteilungen",
+     "Sie stellt von vielen Teams genutzte Dienste wie Identität und Überwachung bereit"
+    ],
+    "a": 3,
+    "why": "Gemeinsam genutzte Dienste wie Identität, Netzwerk, Überwachung, Sicherung und Sicherheitstools werden einmal bereitgestellt und von allen Workloads genutzt."
+   },
+   {
+    "q": "Wofür bleibt die Organisation im Modell der geteilten Verantwortung zuständig?",
+    "opts": [
+     "Für die physischen Rechenzentren von Azure",
+     "Für Konfiguration, Zugriff, Datenschutz und Betrieb ihrer Workloads",
+     "Für die zentralen Cloud-Dienste der Plattform",
+     "Für nichts, da Microsoft alle Pflichten übernimmt"
+    ],
+    "a": 1,
+    "why": "Microsoft schützt die zugrunde liegende Cloud; die Organisation verantwortet, was sie einbringt, inklusive Konfiguration, Zugriff, Datenschutz und Betrieb."
+   }
+  ]
+ }
+}

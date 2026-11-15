@@ -1,0 +1,883 @@
+WEBVTT
+
+00:00:00.720 --> 00:00:06.560
+Pronti per dieci giorni di Microsoft 365 e Copilot e Azure e le persone che stanno plasmando il futuro del lavoro?
+
+00:00:07.560 --> 00:00:11.880
+Questo gennaio, M305 con ritorna e puntiamo ancora più in alto.
+
+00:00:12.880 --> 00:00:17.980
+Unitevi a noi per sessioni live, demo reali e conoscenze pratiche da MVP ed esperti del settore da tutto il mondo.
+
+00:00:18.780 --> 00:00:21.160
+Niente slide generiche, niente paroloni inutili.
+
+00:00:22.120 --> 00:00:23.400
+Affrontiamo le sfide reali.
+
+00:00:23.820 --> 00:00:28.540
+Copilot Studio, agenti IA, Fabric, Sicurezza, Governance e Automazione.
+
+00:00:28.540 --> 00:00:34.480
+Che siate professionisti IT, sviluppatori o leader aziendali, ci sono sessioni pensate per voi, voi.
+
+00:00:35.440 --> 00:00:40.060
+Con dieci giorni completi potrete esplorare varie tecnologie e connettervi con una community globale.
+
+00:00:40.880 --> 00:00:44.400
+Seguite le sessioni live e portate intuizioni pratiche nella vostra organizzazione.
+
+00:00:45.140 --> 00:00:48.900
+Gennaio 2027, dieci giorni, un'unica community Microsoft.
+
+00:00:49.420 --> 00:00:50.580
+Le registrazioni sono aperte.
+
+00:00:51.800 --> 00:00:55.560
+Andate su m365con.net e assicuratevi un posto oggi stesso.
+
+00:00:55.560 --> 00:00:58.540
+L'indirizzo è m365con.net
+
+00:00:58.540 --> 00:01:04.540
+Iscrivetevi ora su m365con.net e ci vediamo a gennaio.
+
+00:01:05.000 --> 00:01:07.300
+Cos'è esattamente Microsoft Fabric Data Factory?
+
+00:01:07.660 --> 00:01:10.580
+È solo Azure Data Factory con un nuovo nome o qualcosa di completamente diverso?
+
+00:01:11.000 --> 00:01:14.140
+Se avete sentito il termine e vi siete chiesti cosa significhi davvero, non siete i soli.
+
+00:01:15.020 --> 00:01:20.460
+Alla fine di questo episodio saprete cos'è, come differisce dal classico ADF e i componenti fondamentali da comprendere.
+
+00:01:20.460 --> 00:01:26.080
+Se vi occupate di spostamento dati in Fabric, questo è il motore che lo rende possibile ed è più semplice di quanto pensiate.
+
+00:01:26.920 --> 00:01:29.420
+Esamineremo quattro elementi chiave e vedremo come si integrano tra loro.
+
+00:01:30.020 --> 00:01:31.960
+Ma prima, definiamo di cosa stiamo parlando.
+
+00:01:32.760 --> 00:01:33.860
+Ecco la definizione più semplice.
+
+00:01:34.120 --> 00:01:38.180
+Fabric Data Factory è il motore all'interno di Microsoft Fabric che sposta e integra i vostri dati.
+
+00:01:38.700 --> 00:01:41.700
+Pensatelo come il sostituto di Azure Data Factory e delle pipeline di Synapse.
+
+00:01:42.100 --> 00:01:42.360
+Tutto.
+
+00:01:42.520 --> 00:01:43.700
+In un'unica piattaforma SaaS.
+
+00:01:44.400 --> 00:01:45.560
+Questa è la prima cosa da capire.
+
+00:01:46.140 --> 00:01:47.600
+Non è un servizio separato da gestire.
+
+00:01:48.160 --> 00:01:50.200
+È integrato direttamente in Fabric o connesso a One Lake.
+
+00:01:50.820 --> 00:01:51.540
+Usiamo un'analogia.
+
+00:01:52.000 --> 00:01:57.280
+Se Fabric è un edificio per uffici, Data Factory è l'ufficio postale e i nostri trasportatori che spostano i documenti tra i piani.
+
+00:01:57.600 --> 00:01:59.100
+Non pensate all'ufficio postale ogni giorno.
+
+00:01:59.380 --> 00:02:01.420
+Ma senza di esso nulla, va dal punto A al punto B.
+
+00:02:01.740 --> 00:02:02.320
+È lo stesso qui.
+
+00:02:02.620 --> 00:02:03.000
+È lo stesso.
+
+00:02:03.360 --> 00:02:05.540
+Data Factory gestisce lo spostamento dietro le quinte.
+
+00:02:05.700 --> 00:02:09.400
+La grande differenza rispetto al passato è nessuna configurazione di archiviazione longitudina necessaria.
+
+00:02:09.580 --> 00:02:11.220
+I vostri dati finiscono direttamente uguali.
+
+00:02:11.220 --> 00:02:16.060
+In Azure Data Factory dovete impostare un account di archiviazione, creare contenitori, configurare servizi collegati.
+
+00:02:16.320 --> 00:02:17.500
+In Fabric tu questo è sparito.
+
+00:02:17.740 --> 00:02:20.300
+One Lake è già lì, quindi basta puntare la pipeline verso di esso e partì.
+
+00:02:20.740 --> 00:02:21.660
+Sembra familiare, vero?
+
+00:02:22.160 --> 00:02:24.540
+Quindi cosa differisce dall'Azure Data Factory che già conoscete?
+
+00:02:25.220 --> 00:02:27.000
+In cosa è diverso da Azure Data Factory?
+
+00:02:27.580 --> 00:02:31.640
+Molti pensano che Fabric Data Factory sia solo Azure Data Factory con una nuova etichetta, ma non è così.
+
+00:02:32.120 --> 00:02:33.160
+Facciamo chiarezza su alcuni falsi.
+
+00:02:33.520 --> 00:02:34.880
+Prezzi sono l'aspetto che cambia da vero.
+
+00:02:35.180 --> 00:02:40.500
+ADF addebita ogni esecuzione di attività, quindi ogni copia, start procedure ed esecuzione di pipeline si aggiunge al conto.
+
+00:02:40.500 --> 00:02:43.860
+Fabric Data Factory utilizza invece una tariffazione basata sulla capacità.
+
+00:02:44.300 --> 00:02:50.020
+Se acquista una capacità Fabric, F2, F4, F16 o altro, e tutti i carichi di lavoro condividono quel pool di calcolo.
+
+00:02:50.840 --> 00:02:53.180
+Data Factory, Power BI, Lake House, l'intera piattaforma.
+
+00:02:53.780 --> 00:02:57.260
+Se hai già una capacità Fabric, eseguire le pipeline a costi aggiuntivi, minimi.
+
+00:02:57.900 --> 00:03:01.500
+In caso contrario devi confrontare il costo totale di Fabric con la tua attuale bolletta ADF.
+
+00:03:01.880 --> 00:03:03.080
+Anche le connessioni sono più semplici.
+
+00:03:03.080 --> 00:03:09.140
+In ADF dovevi creare un servizio collegato per ogni origine e destinazione, poi data set e infine configurare l'integration runtime.
+
+00:03:10.180 --> 00:03:13.280
+Con Fabric le connessioni sono definite in line e One Lake è automatico.
+
+00:03:13.780 --> 00:03:16.960
+Scegli l'origine, scegli la destinazione e una connessione viene configurata sul momento.
+
+00:03:17.580 --> 00:03:18.240
+Molti meno click.
+
+00:03:18.920 --> 00:03:20.380
+Ci sono anche nuove attività integrate.
+
+00:03:20.820 --> 00:03:25.660
+Puoi inviare email o messaggi Teams direttamente dalla pipeline senza bisogno di logic apps o webbook personalizzati.
+
+00:03:25.660 --> 00:03:28.620
+È solo un'attività drag and drop e questo da solo far risparmiare un sacco di tempo.
+
+00:03:28.920 --> 00:03:29.860
+E il deployment ora è migliore.
+
+00:03:30.340 --> 00:03:32.460
+ADF aveva pipeline di deployment, ma era una macchinosa.
+
+00:03:32.460 --> 00:03:35.960
+Fabric ha pipeline di deployment integrate con promozione a livello di workspace.
+
+00:03:36.200 --> 00:03:38.320
+Così puoi passare da dev a test a produzione in pochi click.
+
+00:03:38.800 --> 00:03:40.020
+Nessuno script manuale necessario.
+
+00:03:40.340 --> 00:03:41.580
+Ora siamo onesti su ciò che manca.
+
+00:03:41.920 --> 00:03:44.220
+Il supporto SSIS e la vignetta gestita non sono ancora disponibili.
+
+00:03:44.760 --> 00:03:47.680
+Se investi molto in SQL Server Integration Services dovrai aspettare.
+
+00:03:48.700 --> 00:03:49.960
+Per la maggior parte delle persone va bene così.
+
+00:03:50.440 --> 00:03:53.360
+La stragrande maggioranza del lavoro di integrazione dati non richiede SSIS.
+
+00:03:54.120 --> 00:03:55.080
+Ecco una semplice regola pratica.
+
+00:03:55.380 --> 00:04:00.680
+Se la tua bolletta ADF è inferiore a 1500 dollari al mese e non usi Fabric, resta con ADF perché è più economico.
+
+00:04:00.760 --> 00:04:01.820
+Per carichi di lavoro ridotti.
+
+00:04:01.820 --> 00:04:04.760
+Se sei già in Fabric, ti dà Factor incluso, quindi usalo.
+
+00:04:05.480 --> 00:04:09.620
+E se i tuoi costi ADF sono superiori, vale la pena fare due calcoli su una capacità Fabric.
+
+00:04:10.620 --> 00:04:12.420
+Primo elemento costitutivo, le pipeline di dati.
+
+00:04:12.760 --> 00:04:15.080
+Ora esaminiamo il primo elemento costitutivo, le pipeline di dati.
+
+00:04:15.380 --> 00:04:16.580
+Le pipeline sono gli orchestratori.
+
+00:04:16.820 --> 00:04:20.180
+Decidono cosa viene eseguito, quando e in quale ordine e tutto il resto si collega a esse.
+
+00:04:20.600 --> 00:04:21.820
+Pensa a una pipeline come una ricetta.
+
+00:04:22.400 --> 00:04:24.880
+Hai dei passaggi, poi cari di ramazioni e puoi tornare indietro in luce.
+
+00:04:25.280 --> 00:04:27.680
+Prima preriscaldi il forno, poi mescoli gli ingredienti.
+
+00:04:27.680 --> 00:04:30.500
+Se l'impasto sembra troppo secco, aggiungi altro latte prima di cuocere.
+
+00:04:30.780 --> 00:04:31.980
+Una pipeline funziona allo stesso modo.
+
+00:04:32.340 --> 00:04:36.940
+Per prima cosa, copia i dati da una sorgente, poi verifica se il file esiste e se esiste esegue una trasformazione.
+
+00:04:37.340 --> 00:04:38.440
+Se non esiste, invia un avviso.
+
+00:04:38.720 --> 00:04:39.460
+Tu controlla il flusso.
+
+00:04:39.820 --> 00:04:44.220
+Le attività principali che userai più spesso sono copia dati, for each, condizioni if, ottieni metadati e lookup.
+
+00:04:44.680 --> 00:04:46.980
+Copia dati, sposta le informazioni dal punto A al punto B.
+
+00:04:47.260 --> 00:04:49.540
+For each scorre un elenco, ad esempio, 10 file in una cartella.
+
+00:04:49.540 --> 00:04:54.520
+La condizione if verifica se qualcosa è vero o falso, ottieni metadati, pone domande sui tuoi dati.
+
+00:04:55.000 --> 00:04:55.800
+Quanto è grande questo file?
+
+00:04:56.080 --> 00:04:57.320
+Quando è stato modificato l'ultima volta?
+
+00:04:57.900 --> 00:05:00.620
+Lookup legge il file di configurazione e porta i valori nella tua pipeline.
+
+00:05:01.020 --> 00:05:01.820
+Questo è il kit iniziale.
+
+00:05:02.220 --> 00:05:03.140
+L'intero sistema è low code.
+
+00:05:03.720 --> 00:05:07.420
+Trascini le attività su una tela, le colleghi con delle frecce imposte e le proprietà è finito.
+
+00:05:08.100 --> 00:05:09.720
+Nessuna programmazione è necessaria per la maggior parte.
+
+00:05:10.000 --> 00:05:12.100
+Sembra un diagramma di flusso perché è esattamente quello che è.
+
+00:05:12.400 --> 00:05:13.260
+Ecco un esempio reale.
+
+00:05:13.580 --> 00:05:15.920
+Immagina di estrarre dati di vendita da un'appi ogni mattina.
+
+00:05:15.920 --> 00:05:19.240
+La tua pipeline inizia con un'attività di copia dati che li deposita in un lake house.
+
+00:05:19.620 --> 00:05:23.660
+Poi un passaggio di Dataflu Gen 2 pulisce i dati, rimuove i valori nulli e corregge i formati delle date.
+
+00:05:24.580 --> 00:05:26.420
+Successivamente un notebook rarichisce i conseguimenti di click.
+
+00:05:26.780 --> 00:05:29.040
+Infine un'attività di Teams invia un messaggio al tuo team.
+
+00:05:29.880 --> 00:05:30.860
+Dati di vendita aggiornati.
+
+00:05:31.640 --> 00:05:34.460
+Che ho l'unica pipeline che svolge il lavoro che prima richiedeva strumenti multipli.
+
+00:05:34.900 --> 00:05:36.380
+Puoi anche rendere le pipeline riutilizzabili.
+
+00:05:36.820 --> 00:05:39.240
+Mettiamo che tu abbia la stessa logica per 10 diverse fonti di...
+
+00:05:39.240 --> 00:05:42.340
+Invece di creare 10 pipeline ne costruisci una e usi parametri.
+
+00:05:42.400 --> 00:05:45.400
+URL di origine, nome e tabella, cartella di destinazione, tutto come variabile.
+
+00:05:45.920 --> 00:05:47.180
+Pipeline 10 lavori diversi.
+
+00:05:47.660 --> 00:05:48.640
+Questa è la parametrizzazione.
+
+00:05:49.840 --> 00:05:50.600
+Ed ecco una novità.
+
+00:05:51.400 --> 00:05:54.300
+Puoi chiedere a Copilot di scrivere espressioni di pipeline in linguaggio semplice.
+
+00:05:54.680 --> 00:05:57.760
+Scrivi, aggiungi due giorni a questa data e genera l'espressione per te.
+
+00:05:58.040 --> 00:06:01.500
+Non dovrai più memorizzare la sintassi delle funzioni o cercare su Google come formatterlo un timestamp.
+
+00:06:01.880 --> 00:06:02.720
+Dissemi ciò di cui hai bisogno.
+
+00:06:03.600 --> 00:06:05.400
+Secondo blocco, Dataflu Gen 2.
+
+00:06:06.100 --> 00:06:09.080
+Quindi cosa succede quando devi pulire i dati ma non vuoi scrivere codice?
+
+00:06:09.660 --> 00:06:11.540
+Questo è esattamente il problema che risolve Dataflu Gen 2.
+
+00:06:11.920 --> 00:06:15.400
+Dataflu Gen 2 è lo strumento di trasformazione low-code all'interno di Fabric Data Factory.
+
+00:06:15.400 --> 00:06:19.720
+Se hai già usato Power Query in Excel o Power BI ti sembrerà molto familiare.
+
+00:06:20.360 --> 00:06:23.440
+Ha la stessa interfaccia, le stesse oltre 300 trasformazioni e lo stesso motore.
+
+00:06:23.620 --> 00:06:26.160
+Solo in esecuzione, nel cloud con un lake house come destinazione.
+
+00:06:27.200 --> 00:06:27.980
+Pensala in questo modo.
+
+00:06:28.480 --> 00:06:30.940
+Se le pipeline sono la catena di montaggio che sposta le scatole,
+
+00:06:31.040 --> 00:06:34.540
+Dataflu Gen 2 è la cucina dove tagli, condisci e cuoci gli ingredienti grezzi.
+
+00:06:35.200 --> 00:06:36.420
+Le pipeline gestiscono la logistica.
+
+00:06:36.720 --> 00:06:39.500
+Dataflu Gen 2 gestisce lavoro concreto per rendere i dati utili.
+
+00:06:39.500 --> 00:06:40.740
+Quando dovresti usarlo?
+
+00:06:41.140 --> 00:06:46.580
+Quando devi pulire dati, cambiare tipi, unire tabelle o filtrare righe, tutto senza toccare Spark o SQL.
+
+00:06:47.360 --> 00:06:50.880
+Se la tua trasformazione entra in una dagna, probabilmente entra in Dataflu Gen 2.
+
+00:06:51.660 --> 00:06:52.320
+Ecco un rapid esempio.
+
+00:06:53.120 --> 00:06:55.220
+Importi un file CSV pieno di ordini dei clienti.
+
+00:06:55.740 --> 00:06:59.480
+Ci sono rieduplicate, alcune date sono nel formato sbagliato, alcune colonne a colonne hanno valore nulla.
+
+00:06:59.740 --> 00:07:02.640
+Apri Dataflu Gen 2, clicchi pochi pulsanti per rimuovere i duplicati,
+
+00:07:02.640 --> 00:07:04.980
+cambi il tipo di colonna data e riempi i valori mancanti.
+
+00:07:05.560 --> 00:07:07.580
+Poi lo unisci con una tabella prodotti proveniente da un'altra.
+
+00:07:07.580 --> 00:07:09.180
+Il tutto richiede 10 minuti.
+
+00:07:09.700 --> 00:07:12.320
+L'output finisce in una tabella Lake House, pronto per il reporting.
+
+00:07:12.960 --> 00:07:13.900
+Puoi anche vedere tutto visivamente.
+
+00:07:14.300 --> 00:07:16.700
+C'è una visualizzazione e un diagramma che mostra ogni passaggio come un nodo.
+
+00:07:16.960 --> 00:07:18.020
+L'origine entra in nodo filtro.
+
+00:07:18.400 --> 00:07:19.800
+Il filtro alimenta un nodo di unione.
+
+00:07:20.300 --> 00:07:21.200
+L'unione alimenta l'output.
+
+00:07:21.620 --> 00:07:22.780
+Puoi vedere l'intero flusso col podo.
+
+00:07:23.320 --> 00:07:26.720
+Ed è davvero utile quando fai debug o quando devi spiegare la logica a qualcun altro.
+
+00:07:27.480 --> 00:07:28.500
+Anche la pianificazione è flessibile.
+
+00:07:28.940 --> 00:07:30.260
+Puoi eseguire Dataflu Gen 2 da solo.
+
+00:07:30.700 --> 00:07:32.280
+Impostalo per aggiornarsi ogni mattina alle 6.
+
+00:07:32.660 --> 00:07:35.940
+Puoi chiamarlo da una pipeline principale come un passaggio in un flusso di lavoro più ampio.
+
+00:07:35.940 --> 00:07:38.100
+La maggior parte delle configurazioni di produzione fa questo.
+
+00:07:38.360 --> 00:07:39.720
+La pipeline gestisce l'orchestrazione.
+
+00:07:39.840 --> 00:07:42.340
+Dataflu Gen 2 gestisce il passaggio di trasformazione al suo interno.
+
+00:07:42.900 --> 00:07:43.660
+Una nota onesta.
+
+00:07:44.080 --> 00:07:45.460
+Per trasformazioni molto pesanti.
+
+00:07:45.580 --> 00:07:49.280
+Pensa a miliardi di righe, funzioni finestra complesse o logica di machine learning personalizzata.
+
+00:07:49.420 --> 00:07:51.120
+Potresti usare ancora i notebook con Spark.
+
+00:07:52.300 --> 00:07:54.120
+Dataflu Gen 2 non è costruito per ogni scenario.
+
+00:07:54.240 --> 00:07:56.280
+Ma per la stragrande maggioranza di ciò che serve ai team.
+
+00:07:56.440 --> 00:07:59.340
+Pulizia, modellazione, unione, aggregazione.
+
+00:07:59.600 --> 00:08:01.080
+Copre circa l'80% del lavoro.
+
+00:08:01.620 --> 00:08:02.980
+E un sacco di codici che non devi scrivere.
+
+00:08:03.780 --> 00:08:04.340
+Terzo blocco.
+
+00:08:04.340 --> 00:08:05.360
+I processi di copia a copyjob.
+
+00:08:05.640 --> 00:08:06.880
+Ora parliamo di spostare i dati.
+
+00:08:07.560 --> 00:08:09.860
+Cosa succede se devi far rifluire continuamente da un database?
+
+00:08:10.720 --> 00:08:11.780
+È qui che entra in gioco i copyjobs.
+
+00:08:11.960 --> 00:08:16.120
+Un copyjob è un modo semplificato per copiare dati da un'origine a un lake con tracciamento delle modifiche integrate.
+
+00:08:16.580 --> 00:08:19.660
+Nessuna configurazione complessa della pipeline, nessuno script personalizzato,
+
+00:08:19.760 --> 00:08:22.400
+sceglie un'origine, una destinazione e dici ogni quanto vuoi che venga eseguito.
+
+00:08:22.680 --> 00:08:23.060
+Tutto qui.
+
+00:08:24.100 --> 00:08:26.200
+La funzione chiave è il Change Data Capture o CDC.
+
+00:08:26.700 --> 00:08:29.940
+I copyjobs tracciano automaticamente inserimenti, aggiornamenti ed eliminazioni all'origine.
+
+00:08:29.940 --> 00:08:34.060
+Non devi costruire una logica di watermarking manuale, quella cosa in cui salvi un timestamp
+
+00:08:34.060 --> 00:08:35.420
+e interroghi per i record più recenti.
+
+00:08:35.760 --> 00:08:36.860
+I copyjobs gestiscono tutto dietro.
+
+00:08:37.360 --> 00:08:39.120
+Funziona semplicemente, senza alcuno sforzo extra.
+
+00:08:39.320 --> 00:08:39.640
+C'è di più.
+
+00:08:40.080 --> 00:08:43.500
+I processi di copia supportano SCD di tipo 2 e dimensione a modifica lenta di tipo 2.
+
+00:08:43.760 --> 00:08:44.980
+Ciò significa che mantengono lo storico.
+
+00:08:45.460 --> 00:08:48.680
+Quando un cliente cambia indirizzo, quello vecchio resta nella tabella con una data di fine.
+
+00:08:49.220 --> 00:08:50.760
+Il nuovo indirizzo riceve una data di inizio.
+
+00:08:51.020 --> 00:08:52.520
+Puoi vedere esattamente come un record nel tempo.
+
+00:08:53.180 --> 00:08:55.100
+È fondamentale per l'audit e la reportistica storica.
+
+00:08:55.100 --> 00:08:58.280
+Quindi, quando usare i processi di copia rispetto all'attività di copia standard?
+
+00:08:58.780 --> 00:08:59.340
+Ecco la regola.
+
+00:08:59.660 --> 00:09:02.480
+I processi di copia servono per un'acquisizione continua, imposta e dimentica.
+
+00:09:03.220 --> 00:09:06.320
+Puoi che i dati fluiscano automaticamente giorno dopo giorno con una manutenzione minima.
+
+00:09:07.120 --> 00:09:10.360
+Le attività di copia sono per caricamenti massivi, singoli o pianificati,
+
+00:09:10.440 --> 00:09:12.780
+dove serve più controllo su mappature e gestione errori.
+
+00:09:13.580 --> 00:09:14.140
+Pensala così.
+
+00:09:14.220 --> 00:09:18.520
+Un processo di copia è come avere un bibliotecario che nota automaticamente i nuovi libri e li ripone sugli scaffali.
+
+00:09:19.160 --> 00:09:22.300
+Non devi controllare il catalogo ogni volta, perché se ne occupa il bibliotecario.
+
+00:09:22.300 --> 00:09:27.840
+Un'attività di copia è più come entrare in biblioteca, scegliere i libri da soli e decidere esattamente dove metterli.
+
+00:09:28.440 --> 00:09:32.200
+Entrambi portano a termine il lavoro, ma i processi di copia ti risparmiano fatica per il lavoro di routine.
+
+00:09:32.620 --> 00:09:33.520
+La configurazione è semplice.
+
+00:09:33.940 --> 00:09:35.920
+Scegli la sorgente, diciamo, un database SQL Server.
+
+00:09:36.580 --> 00:09:38.580
+Scegli la destinazione, una tabella dei caos.
+
+00:09:38.920 --> 00:09:39.500
+Mappi campi.
+
+00:09:39.900 --> 00:09:42.980
+Indichi se desideri un aggiornamento incrementale o completo e questo è quanto.
+
+00:09:43.420 --> 00:09:46.960
+Il processo viene eseguito secondo la tua pianificazione e mantenere il caos sincronizzato automaticamente.
+
+00:09:47.260 --> 00:09:48.380
+Elemento costitutivo per il mirroring.
+
+00:09:48.680 --> 00:09:50.640
+Ora, cosa succede se hai bisogno di una replica in tempo real?
+
+00:09:50.640 --> 00:09:51.820
+E' qui che entra in gioco il mirror.
+
+00:09:52.140 --> 00:09:53.200
+Ecco la definizione più semplice.
+
+00:09:53.440 --> 00:09:58.440
+Il mirroring è un modo per replicare il tuo database operativo in One Lake in modo continuo senza scrivere una sola riga di codice.
+
+00:09:59.140 --> 00:10:00.920
+Lo imposti una volta e viene eseguito in background.
+
+00:10:01.600 --> 00:10:03.320
+I dati rimangono aggiornati quasi in tempo reale.
+
+00:10:03.660 --> 00:10:05.940
+Nessuna pipeline da costruire e nessun flusso di dati da mantenere.
+
+00:10:06.160 --> 00:10:06.640
+Non ce ne basta.
+
+00:10:06.980 --> 00:10:07.820
+Come funziona concretamente?
+
+00:10:08.360 --> 00:10:10.720
+Il mirroring legge il log delle transazioni del database di Orin.
+
+00:10:11.140 --> 00:10:15.760
+Ogni modifica, ogni inserimento, aggiornamento ed eliminazione viene rilevato e appare in One Lake in pochi minuti.
+
+00:10:15.760 --> 00:10:17.360
+Questa non è un'elaborazione batch.
+
+00:10:17.620 --> 00:10:18.560
+E' una replica continua.
+
+00:10:19.120 --> 00:10:22.040
+Nel momento in cui qualcosa cambia nel database sorgente, appare in Fabric.
+
+00:10:22.780 --> 00:10:23.540
+Parliamo delle sorgenti.
+
+00:10:23.960 --> 00:10:28.140
+Al momento puoi eseguire il mirroring di Azure SQL Database, Azure Cosmos DB, Snowflake e altri.
+
+00:10:28.940 --> 00:10:33.600
+Ne arriveranno altri come il mirroring su lete privata per database dietro Firewall annunciato al Builder 2026.
+
+00:10:34.080 --> 00:10:34.880
+Perché dovresti usarlo?
+
+00:10:34.880 --> 00:10:38.680
+Perché ottieni una copia live del tuo database in One Lake senza costruire pipeline ETL.
+
+00:10:38.980 --> 00:10:39.980
+Non servono attività di copia.
+
+00:10:40.360 --> 00:10:41.880
+Non servono script di tracciamento dei modifici.
+
+00:10:42.040 --> 00:10:43.280
+Non serve alcuna logica decadentale.
+
+00:10:43.280 --> 00:10:44.860
+Il sistema gestisce tutto questo per te.
+
+00:10:45.120 --> 00:10:46.260
+Ecco un'analogia per memorizzarlo.
+
+00:10:46.440 --> 00:10:49.960
+Pensa al mirroring come a un clone in tempo reale del tuo database dentro Fabric.
+
+00:10:50.320 --> 00:10:52.740
+Aggiorni la sorgente una volta e il clone si aggiorna istantaneamente.
+
+00:10:53.060 --> 00:10:54.700
+Nessun codice richiesto per mantenere il sincronizzato.
+
+00:10:54.860 --> 00:10:56.080
+Il sistema si occupa del lavoro pesante.
+
+00:10:56.360 --> 00:10:57.720
+C'è anche un vantaggio economico da menzionare.
+
+00:10:58.020 --> 00:11:00.980
+Il mirroring include calcolo e archiviazioni gratuiti fino a un certo limite.
+
+00:11:01.320 --> 00:11:03.480
+Paghi solo per la capacità Fabric che già possiedi.
+
+00:11:04.020 --> 00:11:08.340
+Per molte organizzazioni è più economico rispetto a creare e mantenere pipeline di replica personalizzate.
+
+00:11:08.760 --> 00:11:09.840
+Ed ecco un caso d'uso pratico.
+
+00:11:09.840 --> 00:11:13.980
+Puoi creare l'Airport Power BI direttamente sui dati replicati senza influenzare il database sorgente.
+
+00:11:14.680 --> 00:11:16.640
+Il tuo sistema operativo continua a funzionare appena velocemente.
+
+00:11:16.960 --> 00:11:18.120
+Tuoi analisti ottengono dati aggiornati.
+
+00:11:18.680 --> 00:11:19.220
+Vincono tutti.
+
+00:11:19.700 --> 00:11:20.960
+Come funzionano insieme questi componenti?
+
+00:11:21.340 --> 00:11:23.960
+Quindi hai pipeline, flussi di dati, processi di copia, mirroring.
+
+00:11:24.400 --> 00:11:25.320
+Come si integrano tra loro?
+
+00:11:25.760 --> 00:11:28.340
+La maggior parte delle implementazioni reali seguono schema semplice.
+
+00:11:29.000 --> 00:11:31.520
+Acquisizione, pulizia, arricchimento, distribuzione.
+
+00:11:31.980 --> 00:11:33.200
+E chiamata architettura medaglia.
+
+00:11:33.960 --> 00:11:35.040
+Bronzo, argento, oro.
+
+00:11:35.520 --> 00:11:36.400
+Immagina come tra i livelli.
+
+00:11:36.820 --> 00:11:39.000
+Il bronzo contiene i dati grezzi esattamente come sono arrivati.
+
+00:11:39.180 --> 00:11:40.560
+L'argento è pulito ed è duplicato.
+
+00:11:40.940 --> 00:11:42.640
+L'oro è arricchito e pronto per la reportistica.
+
+00:11:43.080 --> 00:11:44.100
+Ecco come appare nella pratica.
+
+00:11:44.720 --> 00:11:47.840
+Un mirroring o un job di copia inserisce i dati grezzi in una tabella bronza e lega.
+
+00:11:48.180 --> 00:11:49.100
+Questo è il passaggio di acquisizione.
+
+00:11:49.500 --> 00:11:51.880
+Poi un dataflow gen 2 li pulisce e li trasforma in argento.
+
+00:11:52.400 --> 00:11:55.200
+Rimuove null, standardizza i formati, unisce le tabelle correlate.
+
+00:11:55.200 --> 00:11:57.740
+Infine, una pipeline orchestra l'intero processo.
+
+00:11:58.540 --> 00:12:02.720
+Attiva il job di copia, ne attende il completamento, esegue il dataflow e invia una notifica su Teams al termine.
+
+00:12:03.560 --> 00:12:04.360
+Questo è il flusso completo.
+
+00:12:04.760 --> 00:12:06.580
+La vera magia non risiede in un singolo strumento.
+
+00:12:06.940 --> 00:12:08.680
+È il modo in cui comunicano tutte attraverso un unico leg.
+
+00:12:09.100 --> 00:12:10.800
+I tuoi dati replicati risiedono in un unico leg.
+
+00:12:11.000 --> 00:12:12.640
+L'output del tuo dataflow finisce in un unico leg.
+
+00:12:13.040 --> 00:12:14.320
+La tua pipeline legge da un unico leg.
+
+00:12:14.720 --> 00:12:16.400
+Tutto condivide lo stesso livello di archiviazione.
+
+00:12:16.860 --> 00:12:19.160
+Puoi persino condividere dati tra le di lavoro usando i collegamenti.
+
+00:12:19.600 --> 00:12:20.440
+Nessuna copia è necessaria.
+
+00:12:20.840 --> 00:12:22.680
+C'è una catena di dipendenze che vale la pena comprendere.
+
+00:12:22.680 --> 00:12:25.940
+Le pipeline possono richiamare il dataflow Gentwa come passaggio interno.
+
+00:12:26.380 --> 00:12:31.000
+Possono includere anche notebook, job dbt e persino pipeline di Azure Data Factory se stai migrando gradualmente.
+
+00:12:31.340 --> 00:12:32.640
+Una singola pipeline può orchestrare tutto.
+
+00:12:32.980 --> 00:12:33.440
+Ecco il punto.
+
+00:12:33.800 --> 00:12:36.100
+Non hai più bisogno di cucire insieme cinque servizi diversi.
+
+00:12:36.340 --> 00:12:39.000
+Una piattaforma, un livello di archiviazione, un set di autorizzazioni.
+
+00:12:39.280 --> 00:12:40.160
+Questo è il senso di fabbrica.
+
+00:12:40.480 --> 00:12:41.440
+E funziona in mondo reale.
+
+00:12:41.700 --> 00:12:44.440
+Un distributore con sedi di maniera ferragli uniti ha utilizzato esattamente questo.
+
+00:12:44.640 --> 00:12:48.840
+Job di copia per dati SAP, dataflow Genw per la pulizia, pipeline per l'orchestrazione.
+
+00:12:49.340 --> 00:12:51.180
+Hanno ridotto la chiusura mensile da nove giorni a due.
+
+00:12:51.300 --> 00:12:52.060
+Non è demo.
+
+00:12:52.060 --> 00:12:53.180
+È produzione.
+
+00:12:53.640 --> 00:12:54.580
+Guida pratica e costi.
+
+00:12:55.160 --> 00:12:56.860
+Quindi, chi dovrebbe usare Fabric Data Factory?
+
+00:12:57.480 --> 00:13:00.520
+Se devi spostare o trasformare dati in Fabric, questo è il tuo strumento.
+
+00:13:00.600 --> 00:13:04.260
+Include data engineer che creano pipeline, analytics engineer che modellano dati
+
+00:13:04.260 --> 00:13:07.860
+e persino business analyst che usano dataflow Genw per trasformazioni self-service.
+
+00:13:08.420 --> 00:13:09.140
+Chi dovrebbe evitarlo?
+
+00:13:09.620 --> 00:13:12.540
+Se ti serve solo caricare file una volta, parti direttamente dal lake house.
+
+00:13:13.300 --> 00:13:14.560
+Trascina un CSV, hai fatto.
+
+00:13:14.560 --> 00:13:17.640
+Se investi molto in SSI, si attendi relativo supporto.
+
+00:13:18.240 --> 00:13:22.840
+Se la tua fattura ha DF sotto i 1500 al mese e non usi Fabric, per ora ha senso non cambiare.
+
+00:13:23.160 --> 00:13:23.860
+Parliamo di costi.

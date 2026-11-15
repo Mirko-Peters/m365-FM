@@ -1,6 +1,9 @@
 """Kategorien, Tags und interne Verlinkung für die Website (sprachbezogen)."""
 import re
+from functools import lru_cache
 from urllib.parse import quote
+
+_rx_i = lru_cache(maxsize=None)(lambda pat: re.compile(pat, re.I))   # gleiche Muster wie vorher, nur nicht je Absatz neu kompiliert (re-Cache: 512)
 
 CATS = [
     ("agents", r"copilot studio|ai agent|agentic|ki-agent|agent flow|teams toolkit|scout|agent mode"),
@@ -122,7 +125,7 @@ def autolink(html, it, pool, tagsets_raw, url_of, max_links=10, money=None):
             if o["vid"] in used:
                 continue
             a, b = boundary(phrase)
-            rx = re.compile(("(?<![\\w])" if a else "") + re.escape(phrase) + ("(?![\\w])" if b else ""), re.I)
+            rx = _rx_i(("(?<![\\w])" if a else "") + re.escape(phrase) + ("(?![\\w])" if b else ""))   # einmal je Bau kompiliert (re-Cache zu klein)
             depth = 0
             for i, seg in enumerate(parts):
                 if i % 2 == 1:

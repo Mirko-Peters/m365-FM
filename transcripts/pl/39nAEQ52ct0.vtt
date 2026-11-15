@@ -1,0 +1,1006 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.660
+Na pewno słyszałeś, jak w rozmowach o chmurze padają nazwy Kubernetes i AKS.
+
+00:00:03.860 --> 00:00:08.720
+Może przytakiwałeś, ale szczerze mówiąc, co one właściwie oznaczają dla kogoś, kto uruchamia aplikację w chmurze?
+
+00:00:08.880 --> 00:00:12.960
+Kontenery zmieniły sposób tworzenia oprogramowania, ponieważ są lekkie, przenośne i spójne.
+
+00:00:13.140 --> 00:00:16.320
+Problem polega na tym, że ręczne zarządzanie nimi szybko staje się kłopotliwe.
+
+00:00:16.520 --> 00:00:20.000
+Z kilkoma kontenerami sobie poradzisz, ale gdy masz ich dziesiątki lub setki,
+
+00:00:20.140 --> 00:00:24.740
+cały czas poświęcasz na skalowanie, aktualizację i naprawianie awarii, zamiast budować swój produkt.
+
+00:00:24.740 --> 00:00:29.660
+Pod koniec tego odcinka zrozumiesz cztery główne obszary, którymi zajmuje się Azure Kubernetes Service,
+
+00:00:29.820 --> 00:00:32.380
+płaszczyznę sterowania, węzły, sieć i bezpieczeństwo.
+
+00:00:32.700 --> 00:00:34.880
+Przeanalizujemy również, ile to faktycznie kosztuje.
+
+00:00:35.120 --> 00:00:37.420
+Bez marketingowego bełkotu prosto i zrozumiale.
+
+00:00:37.640 --> 00:00:40.060
+Problem kontenerów, czyli dlaczego potrzebujemy AKS.
+
+00:00:40.200 --> 00:00:43.060
+Kontenery zyskały popularność, bo rozwiązują realne problemy.
+
+00:00:43.160 --> 00:00:46.680
+To pakiet łączący kod aplikacji, biblioteki wykonawcze i konfiguracje.
+
+00:00:46.960 --> 00:00:50.320
+Działa tak samo na Twoim laptopie, serwerze testowym czy na produkcji.
+
+00:00:50.520 --> 00:00:52.440
+Koniec z problemami typu U mnie działa.
+
+00:00:52.440 --> 00:00:55.280
+Uruchomienie kilku kontenerów sprawdza się całkiem dobrze.
+
+00:00:55.500 --> 00:00:58.840
+Uruchamiasz je ręcznie, sprawdzasz logi, restartujesz, gdy się zawieszą.
+
+00:00:59.040 --> 00:01:04.280
+Ale gdy masz ich dziesiątki lub setki rozsianych na wielu serwerach, pojawia się zupełnie nowy zestaw problemów.
+
+00:01:04.480 --> 00:01:09.340
+Musisz zdecydować, gdzie trafi każdy kontener, który serwer go obsłuży i jak znajdą się one w sieci.
+
+00:01:09.520 --> 00:01:12.200
+Co się stanie, gdy któryś z nich zawiesi się o trzeciej nad ranem?
+
+00:01:12.360 --> 00:01:16.620
+I jak poradzić sobie ze skokiem ruchu wymagającym 50 kopii Twojej aplikacji w 30 sekund?
+
+00:01:16.620 --> 00:01:20.740
+Kubernetes to platforma open source zaprojektowana dokładnie do rozwiązywania tych problemów.
+
+00:01:20.740 --> 00:01:25.840
+Planuje rozmieszczenie kontenerów na serwerach, skaluje je, sprawdza ich stan i kieruje między nimi ruch.
+
+00:01:25.980 --> 00:01:28.480
+To branżowy standard w orkiestracji kontenerów.
+
+00:01:28.660 --> 00:01:31.740
+Jednak Kubernetes rozwiązuje jeden problem, tworząc kolejny.
+
+00:01:31.920 --> 00:01:33.780
+Uruchamianie go samodzielnie jest złożone.
+
+00:01:34.020 --> 00:01:41.720
+Musisz skonfigurować i utrzymywać płaszczyznę sterowania, czyli mózg klastra, zarządzać węzłami roboczymi, stosować poprawki zabezpieczeń, aktualizować wersję i tworzyć kopie zapasowe konfiguracji.
+
+00:01:41.720 --> 00:01:44.260
+To praca na pełny etat dla kogoś, kto wie, co robi.
+
+00:01:44.420 --> 00:01:48.880
+Usługi zarządzane, takie jak Azure Kubernetes Service, zdejmują ten ciężar operacyjny z Twoich barków.
+
+00:01:49.080 --> 00:01:52.980
+Microsoft obsługuje płaszczyznę sterowania za Ciebie i zajmuje się aktualizacjami, kładkami oraz kopiami zapasowymi.
+
+00:01:53.120 --> 00:01:54.720
+Ty skupiasz się na swoich aplikacjach.
+
+00:01:54.900 --> 00:01:56.680
+Co więc dokładnie robi dla Ciebie AKS?
+
+00:01:56.880 --> 00:01:59.580
+Zacznijmy od najważniejszego elementu płaszczyzny sterowania.
+
+00:01:59.840 --> 00:02:01.580
+Czym jest Azure Kubernetes Service?
+
+00:02:01.780 --> 00:02:05.820
+AKS to po prostu zarządzana przez Microsoft wersja Kubernetesa, prosta i konkretna.
+
+00:02:05.820 --> 00:02:11.120
+Otrzymujesz w pełni funkcjonalny klaster Kubernetes bez konieczności konfigurowania czy utrzymywania infrastruktury pod spodem.
+
+00:02:11.300 --> 00:02:15.360
+Microsoft zarządza płaszczyzną sterowania, a Ty skupiasz się na wdrażaniu i uruchamianiu aplikacji.
+
+00:02:15.520 --> 00:02:18.260
+Pomyśl o tym, jak o wynajmowaniu mieszkania zamiast budowania domu.
+
+00:02:18.500 --> 00:02:22.220
+Budując dom odpowiadasz za wszystko, fundamenty, instalację hydrauliczną, elektrykę i dach.
+
+00:02:22.420 --> 00:02:24.200
+Wynajmując, wszystkim tym zajmuje się właściciel.
+
+00:02:24.340 --> 00:02:26.080
+Ty po prostu wprowadzasz się i urządzasz wnętrze.
+
+00:02:26.240 --> 00:02:27.760
+AKS to właśnie ten właściciel.
+
+00:02:27.960 --> 00:02:31.960
+Microsoft dba o fundamenty, płaszczyznę sterowania, sieć, poprawki bezpieczeństwa i aktualizację.
+
+00:02:31.960 --> 00:02:35.840
+Ty wnosisz meble, czyli swoje konteneryzowane aplikacje, konfiguracje i potoki wdrażania.
+
+00:02:36.000 --> 00:02:38.380
+Ale AKS to nie tylko samodzielny klaster Kubernetes.
+
+00:02:38.700 --> 00:02:40.760
+Ściśle współpracuje z resztą platformy Azure.
+
+00:02:40.980 --> 00:02:44.380
+EntraID zajmuje się uwierzytelnianiem użytkowników i kontrolą dostępu.
+
+00:02:44.520 --> 00:02:47.720
+Azure Monitor zbiera logi i metryki z Twojego klastra oraz aplikacji.
+
+00:02:47.920 --> 00:02:50.700
+Azure Policy pozwala wymuszać zasady w klastrach, na przykład
+
+00:02:50.700 --> 00:02:55.340
+zakaz uruchamiania kontenerów jako root czy wymóg pobierania obrazów z zatwierdzonego rejestru.
+
+00:02:55.520 --> 00:03:00.200
+To właśnie sprawia, że AKS to coś więcej niż Kubernetes na maszynach wirtualnych Azure.
+
+00:03:00.200 --> 00:03:04.400
+Nadal musisz znać podstawowe pojęcia Kubernetes, pody, wdrożenia i usługi.
+
+00:03:04.580 --> 00:03:06.340
+To jest wiedza, którą wnosisz od siebie.
+
+00:03:06.600 --> 00:03:07.840
+AKS tego nie zastępuje.
+
+00:03:08.080 --> 00:03:11.400
+Eliminuje natomiast narzut operacyjny związany z utrzymaniem klastra w zdrowiu.
+
+00:03:11.560 --> 00:03:13.460
+Nie martwisz się awariami płaszczyzny sterowania.
+
+00:03:13.720 --> 00:03:15.600
+Nie musisz ręcznie aktualizować wersji Kubernetes.
+
+00:03:15.920 --> 00:03:18.780
+Nie musisz tworzyć kopii zapasowych etcd, czyli bazy danych konfiguracyjnej klastra.
+
+00:03:18.960 --> 00:03:20.380
+Microsoft zajmuje się tym wszystkim.
+
+00:03:20.660 --> 00:03:23.100
+Zajrzyjmy więc za kulisy tego mózgu, czyli płaszczyzny sterowania.
+
+00:03:23.300 --> 00:03:25.340
+Płaszczyzna sterowania mózg zarządzany przez Microsoft.
+
+00:03:25.540 --> 00:03:27.600
+Co dokładnie znajduje się wewnątrz tej płaszczyzny sterowania?
+
+00:03:27.600 --> 00:03:29.020
+Cztery główne komponenty.
+
+00:03:29.280 --> 00:03:30.760
+Serwer API to główne wejście.
+
+00:03:30.960 --> 00:03:33.960
+Każda komenda, żądanie i interakcja z klastrem przechodzi właśnie przez niego.
+
+00:03:34.220 --> 00:03:37.140
+Scheduler decyduje, na którym węźle zostanie uruchomiony każdy nowy pod.
+
+00:03:37.260 --> 00:03:41.280
+Controller Manager monitoruje stan klastra i zapewnia, że rzeczywistość zgadza się z Twoimi żądaniami.
+
+00:03:41.460 --> 00:03:43.740
+A etcd przechowuje wszystkie dane konfiguracyjne.
+
+00:03:43.860 --> 00:03:45.720
+Pomyśl o tym, jak o pamięci Twojego klastra.
+
+00:03:45.940 --> 00:03:48.780
+Jeśli etcd zostanie uszkodzone lub utracone, tracisz cały klaster.
+
+00:03:48.980 --> 00:03:51.600
+Jeśli konfigurujesz Kubernetes samodzielnie, odpowiadasz za to wszystko.
+
+00:03:51.820 --> 00:03:53.600
+Łatasz serwer API, gdy pojawiają się luki w zabezpieczeniach.
+
+00:03:53.600 --> 00:03:55.920
+Regularnie tworzysz kopie zapasowe etcd.
+
+00:03:56.060 --> 00:03:58.560
+Zajmujesz się awariami sprzętu na maszynach obsługujących te komponenty.
+
+00:03:58.720 --> 00:03:59.540
+To mnóstwo pracy.
+
+00:03:59.820 --> 00:04:02.020
+Dzięki AKS Microsoft zdejmuje to z Twoich barków.
+
+00:04:02.180 --> 00:04:04.380
+Uruchamiają płaszczyznę sterowania na własnej infrastrukturze.
+
+00:04:04.540 --> 00:04:06.280
+Łatają ją, archiwizują i monitorują.
+
+00:04:06.540 --> 00:04:08.220
+Nigdy nie widzisz maszyn, na których to działa.
+
+00:04:08.500 --> 00:04:12.000
+Interagujesz tylko z punktem końcowym serwera API, a reszta dzieje się w tle.
+
+00:04:12.240 --> 00:04:14.560
+Jednak nie wszystkie płaszczyzny sterowania są takie same.
+
+00:04:14.780 --> 00:04:16.120
+AKS oferuje trzy poziomy.
+
+00:04:16.260 --> 00:04:17.640
+Darmowy, standardowy i premium.
+
+00:04:17.640 --> 00:04:22.060
+Darmowa warstwa zapewnia panel sterowania bez dodatkowych kosztów, bez SLA dla serwera API.
+
+00:04:22.300 --> 00:04:26.460
+Jest odpowiednia do nauki, środowisk programistycznych lub testowych, gdzie kilka minut przestoju nie zaszkodzi.
+
+00:04:26.660 --> 00:04:29.560
+Jednak w przypadku obciążeń produkcyjnych będziesz prawdopodobnie potrzebować czegoś więcej.
+
+00:04:29.800 --> 00:04:32.720
+Standardowa warstwa kosztuje około 72 dolary miesięcznie za klaster.
+
+00:04:32.960 --> 00:04:38.280
+Zapewnia ona SLA na poziomie 99,95% dla serwera API przy użyciu stref dostępności.
+
+00:04:38.500 --> 00:04:41.320
+Jeśli panel sterowania ulegnie awarii, Microsoft przyzna Ci środki.
+
+00:04:41.460 --> 00:04:43.820
+To domyślny wybór dla większości klastrów produkcyjnych.
+
+00:04:44.000 --> 00:04:46.820
+Warstwa premium kosztuje około 432 dolary miesięcznie.
+
+00:04:46.820 --> 00:04:50.540
+Otrzymujesz wszystko co w standardowej, plus długoterminowe wsparcie dla wersji Kubernetes.
+
+00:04:50.860 --> 00:04:56.560
+Jeśli używasz regulowanego obciążenia, które musi pozostać na określonej wersji przez miesiące lub lata, warto wybrać premium.
+
+00:04:56.800 --> 00:04:58.220
+Oto jednak kluczowa kwestia.
+
+00:04:58.440 --> 00:05:00.620
+W rzeczywistości nie płacisz za sam panel sterowania.
+
+00:05:00.900 --> 00:05:02.640
+Darmowa warstwa jest naprawdę darmowa.
+
+00:05:02.860 --> 00:05:06.780
+Standard i premium to opłaty za SLA oraz długoterminowe wsparcie, a nie za zasoby panelu sterowania.
+
+00:05:07.020 --> 00:05:10.060
+Płacisz natomiast za węzły robocze, czyli maszyny wirtualne, na których działają kontenery.
+
+00:05:10.060 --> 00:05:12.920
+Są one rozliczane oddzielnie według standardowych stawek maszyn wirtualnych Azure.
+
+00:05:13.060 --> 00:05:14.160
+Pomyśl o tym w ten sposób.
+
+00:05:14.160 --> 00:05:17.500
+Panel sterowania to mózg operacji. Microsoft zarządza nim za Ciebie.
+
+00:05:17.680 --> 00:05:20.180
+Wybierasz warstwę usługową w oparciu o swoje potrzeby w zakresie niezawodności.
+
+00:05:20.400 --> 00:05:23.260
+Jednak prawdziwa praca związana z obsługą aplikacji odbywa się na węzłach roboczych.
+
+00:05:23.480 --> 00:05:26.220
+Węzły robocze to miejsca, gdzie faktycznie uruchamiane są Twoje aplikacje.
+
+00:05:26.580 --> 00:05:27.420
+Porozmawiajmy o nich.
+
+00:05:27.640 --> 00:05:29.720
+Węzły, czyli pracownicy, za których płacisz.
+
+00:05:29.920 --> 00:05:31.940
+Węzły to po prostu maszyny wirtualne Azure.
+
+00:05:32.180 --> 00:05:37.640
+Standardowe maszyny wirtualne Azure, które goszczą Twoje pody, będące najmniejszą jednostką w Kubernetes uruchamiającą jeden lub więcej kontenerów.
+
+00:05:37.640 --> 00:05:39.320
+Ty wybierasz rozmiar i ich liczbę.
+
+00:05:39.480 --> 00:05:43.620
+Jeśli więc chcesz D2S podkreślenie V3 z 2,5 i 8 GB pamięci RAM, możesz to zrobić.
+
+00:05:43.780 --> 00:05:48.100
+Potrzebujesz zoptymalizowanej pamięciowo maszyny E32 z 32,5 i 256 GB.
+
+00:05:48.380 --> 00:05:49.120
+To też zadziała.
+
+00:05:49.380 --> 00:05:52.020
+Nie wrzucasz jednak przypadkowych maszyn wirtualnych razem.
+
+00:05:52.260 --> 00:05:54.300
+AKS organizuje je w pule węzłów.
+
+00:05:54.420 --> 00:05:58.340
+Pula węzłów to grupa identycznych maszyn wirtualnych o tym samym rozmiarze i konfiguracji.
+
+00:05:58.340 --> 00:06:00.640
+W jednym klastrze możesz mieć wiele pól węzłów.
+
+00:06:00.800 --> 00:06:03.660
+Jedna pula z ogólnego przeznaczenia maszynami z serii D dla interfejsu sieciowego,
+
+00:06:03.800 --> 00:06:06.020
+druga ze zoptymalizowanymi maszynami z serii E dla bazy danych
+
+00:06:06.020 --> 00:06:08.740
+i trzecia z maszynami obsługującymi GPU dla zadań uczenia maszynowego.
+
+00:06:08.900 --> 00:06:12.620
+Każda pula skaluje się niezależnie, a to skalowanie odbywa się automatycznie.
+
+00:06:12.880 --> 00:06:14.820
+Autoscaler klastra monitoruje Twoje pody.
+
+00:06:15.060 --> 00:06:18.560
+Gdy potrzebują więcej zasobów niż obecne węzły mogą zapewnić, dodaje nowe węzły.
+
+00:06:18.720 --> 00:06:21.800
+A gdy ruch spada i obciążenia są w większości bezczynne, usuwa je.
+
+00:06:21.980 --> 00:06:25.560
+Ustawiasz minimalny i maksymalny rozmiar dla każdej puli, a AKS zajmuje się resztą.
+
+00:06:25.800 --> 00:06:27.620
+Właśnie tutaj można realnie zaoszczędzić.
+
+00:06:27.800 --> 00:06:30.520
+Nie płacisz za bezczynne moce obliczeniowe poza godzinami szczytu.
+
+00:06:30.760 --> 00:06:33.360
+Aktualizacje węzłów to kolejna rzecz, którą zajmuje się AKS.
+
+00:06:33.540 --> 00:06:37.140
+Gdy pojawia się nowa poprawka zabezpieczeń systemu, AKS może zainstalować ją na węzłach.
+
+00:06:37.140 --> 00:06:40.620
+A gdy wydana zostaje nowa wersja Kubernetes, AKS może zaktualizować klaster.
+
+00:06:40.760 --> 00:06:41.980
+Ty kontrolujesz harmonogram.
+
+00:06:42.160 --> 00:06:44.620
+To Ty decydujesz, kiedy następują aktualizacje, a nie Microsoft.
+
+00:06:44.620 --> 00:06:49.600
+Cała techniczna praca związana z opróżnianiem podów, aktualizacją węzłów i przywracaniem ich do sieci jest wykonywana za Ciebie.
+
+00:06:49.740 --> 00:06:50.640
+Teraz o kosztach.
+
+00:06:50.800 --> 00:06:53.380
+Płacisz standardowe stawki Azure VM za swoje węzły.
+
+00:06:53.580 --> 00:06:58.380
+Instancja D2SV3 w regionie East US kosztuje około 70 dolarów miesięcznie, a większe maszyny są droższe.
+
+00:06:58.560 --> 00:07:00.720
+Istnieją jednak sposoby na ich znaczne obniżenie.
+
+00:07:00.980 --> 00:07:07.220
+Rezerwacje instancji pozwalają zobowiązać się na 1 lub 3 lata w zamian za rabat, oszczędzając do 72% względem płatności zgodnie z użyciem.
+
+00:07:07.220 --> 00:07:12.060
+Jeśli znasz swoje podstawowe zapotrzebowanie i wiesz, które węzły muszą działać stale, rezerwacja ma duży sens.
+
+00:07:12.260 --> 00:07:16.200
+Maszyny spot są jeszcze tańsze, oferując do 90% zniżki od standardowych stawek.
+
+00:07:16.360 --> 00:07:17.680
+Jest jednak pewien haczyk.
+
+00:07:17.800 --> 00:07:23.300
+Azure może odebrać tę moc w każdej chwili, dając węzłom 30 sekund ostrzeżenia przed usunięciem.
+
+00:07:23.520 --> 00:07:30.380
+Jest to dobre dla zadań wsadowych, potoków C, CD lub zadań bezstanowych odpornych na przerwy, ale nie dla API produkcyjnego.
+
+00:07:30.380 --> 00:07:37.300
+Płacisz więc za robotników, wybierasz rozmiar, liczbę i model cenowy, podczas gdy AKS zarządza pulami, skalowaniem i aktualizacjami.
+
+00:07:37.500 --> 00:07:40.020
+Twoje węzły i pody muszą się ze sobą komunikować.
+
+00:07:40.180 --> 00:07:41.560
+I tu do gry wchodzi sieć.
+
+00:07:41.800 --> 00:07:43.820
+Sieć, czyli jak komunikują się pody.
+
+00:07:44.020 --> 00:07:47.940
+Każdy pod w klastrze potrzebuje adresu IP, ale pody stale powstają i znikają.
+
+00:07:48.180 --> 00:07:50.580
+Ulegają awariom, są skalowane i zastępowane.
+
+00:07:50.760 --> 00:07:54.840
+Potrzebujesz więc systemu, który dynamicznie przydziela IP i zapewnia łączność między podami.
+
+00:07:55.080 --> 00:07:57.440
+Właśnie do tego służy interfejs sieciowy kontenera.
+
+00:07:57.440 --> 00:08:02.780
+Azure CN i to implementacja Microsoftu, która zarządza adresowaniem podów i przepływem ruchu między nimi.
+
+00:08:03.060 --> 00:08:05.440
+Możesz wybrać jeden z dwóch głównych modeli sieciowych.
+
+00:08:05.660 --> 00:08:10.660
+Sieć nakładkowa Overlay nadaje podom IP z oddzielnej puli, niebędącej częścią Twojej sieci wirtualnej.
+
+00:08:10.880 --> 00:08:12.560
+Jest to opcja bardziej skalowalna.
+
+00:08:12.780 --> 00:08:16.460
+W jednym klastrze możesz mieć do 5000 węzłów i ćwierć miliona podów.
+
+00:08:16.640 --> 00:08:22.580
+Ponieważ adresy IP podów są odizolowane od sieci wnet, możesz używać tej samej przestrzeni adresowej w wielu klastrach bez konfliktów.
+
+00:08:22.720 --> 00:08:26.460
+Ceną za to jest fakt, że pody nie są bezpośrednio dostępne spoza klastra.
+
+00:08:26.460 --> 00:08:29.660
+Ruch wychodzący z poda jest tłumaczony na adres IP węzła.
+
+00:08:29.840 --> 00:08:34.420
+Druga opcja to sieć płaska, w której pody otrzymują adresy IP bezpośrednio z puli Twojej sieci wnet.
+
+00:08:34.640 --> 00:08:42.660
+Systemy zewnętrzne mogą łączyć się z podami bezpośrednio, jeśli jest to konieczne, ale minusem jest zużywanie adresów IP z sieci wnet, co może je szybko wyczerpać przy dużej liczbie podów.
+
+00:08:42.860 --> 00:08:44.980
+Należy starannie zaplanować rozmiary pod sieci.
+
+00:08:45.180 --> 00:08:47.460
+Teraz porozmawiajmy o ruchu wychodzącym z klastra.
+
+00:08:47.460 --> 00:08:54.340
+Kiedy pod musi połączyć się z czymś w internecie, zewnętrznym API, bazą danych czy usługą zewnętrzną, ruch ten musi przez coś przechodzić.
+
+00:08:54.500 --> 00:08:59.820
+Domyślnie AKS używa usługi Azure Load Balancer do połączeń wychodzących, co sprawdza się w większości obciążeń.
+
+00:08:59.960 --> 00:09:05.120
+Jeśli jednak Twoje aplikacje wykonują wiele połączeń wychodzących, możesz napotkać problem wyczerpania portów SNAT.
+
+00:09:05.340 --> 00:09:11.340
+Każdy węzeł otrzymuje stałą liczbę portów translacji adresów sieciowych SNAT, a gdy się one kończą, nowe połączenia zawodzą.
+
+00:09:11.340 --> 00:09:15.940
+Rozwiązaniem jest Azure NAT Gateway, który znacznie lepiej obsługuje dużą liczbę połączeń.
+
+00:09:16.100 --> 00:09:19.720
+W przypadku udostępniania aplikacji w internecie istnieją dwa główne podejścia.
+
+00:09:19.980 --> 00:09:26.860
+Dla aplikacji komunikujących się przez TCP lub UDP, takich jak serwery gier, bazy danych lub protokoły niestandardowe, używa się usługi Load Balancera.
+
+00:09:27.100 --> 00:09:30.220
+Nadaje on aplikacji publiczny adres IP i przekazuje ruch w warstwie czwartej.
+
+00:09:30.380 --> 00:09:34.560
+Dla aplikacji internetowych korzystających z HTTP lub HTTPS należy użyć kontrolera ruchu przychodzącego Ingress Controller.
+
+00:09:34.560 --> 00:09:38.880
+Działa on w warstwie siódmej. Rozumie on adresy URL, ścieżki i nazwy hostów.
+
+00:09:38.880 --> 00:09:45.520
+Możesz kierować ruch do różnych usług na podstawie nazwy domeny lub ścieżki URL, a jeden publiczny adres IP może obsługiwać dziesiątki aplikacji.
+
+00:09:45.740 --> 00:09:52.500
+AKS wspiera zarządzane opcje Ingress, takie jak Application Gateway for Containers lub możesz uruchomić własne, na przykład NG i NX.
+
+00:09:52.720 --> 00:09:55.880
+Częstym błędem jest tworzenie klastra AKS w zbyt małej podsieci.
+
+00:09:56.120 --> 00:09:59.000
+Może podsieć z maską 28, czyli łącznie 16 adresów IP.
+
+00:09:59.220 --> 00:10:02.740
+To działa w małym klastrze testowym, ale AKS rezerwuje adresy IP na każdy węzeł.
+
+00:10:02.740 --> 00:10:08.820
+Trzywęzłowy klaster z maską 28 może dziś działać, ale w przyszłym miesiącu dodasz pulę węzłów, ruch wzrośnie i nagle nie będziesz mógł skalować.
+
+00:10:09.000 --> 00:10:11.800
+Nie można zmienić CIDR pod sieci po utworzeniu klastra.
+
+00:10:12.040 --> 00:10:17.200
+Musiałbyś przebudować klaster lub utworzyć nową pulę węzłów w innej podsieci i przeprowadzić migrację obciążeń.
+
+00:10:17.340 --> 00:10:20.040
+Planuj rozmiary podsieci pod kątem rozwoju od pierwszego dnia.
+
+00:10:20.300 --> 00:10:23.120
+Gdy aplikacja działa i jest dostępna, musisz ją zabezpieczyć.
+
+00:10:23.680 --> 00:10:24.160
+Bezpieczeństwo.
+
+00:10:24.320 --> 00:10:25.380
+Kto może uzyskać dostęp?
+
+00:10:25.680 --> 00:10:27.740
+Jak więc faktycznie działa bezpieczeństwo w AKS?
+
+00:10:27.860 --> 00:10:30.160
+Potraktuj to jak budynek z wieloma warstwami ochrony.
+
+00:10:30.160 --> 00:10:32.320
+Pierwszą warstwą jest tożsamość i dostęp.
+
+00:10:32.520 --> 00:10:33.620
+Kto przechodzi przez drzwi?
+
+00:10:33.800 --> 00:10:37.440
+Łączysz klaster z EntraID, czyli usługą tożsamości Microsoftu.
+
+00:10:37.600 --> 00:10:40.000
+Wcześniej znana była jako Azure Active Directory.
+
+00:10:40.280 --> 00:10:44.200
+Twój zespół loguje się przy użyciu zwykłych poświadczeń służbowych, bez potrzeby tworzenia oddzielnych kont.
+
+00:10:44.360 --> 00:10:48.140
+Następnie dodajesz do tego Kubernetes RBAC, czyli kontrolę dostępu opartą na rolach.
+
+00:10:48.340 --> 00:10:51.900
+Decyduje ona, kto może co widzieć, kto może wdrażać pody i usuwać zasoby.
+
+00:10:52.100 --> 00:10:55.140
+Programista może mieć dostęp tylko do własnej przestrzeni nazw.
+
+00:10:55.240 --> 00:10:58.820
+Operator ma wgląd w cały klaster, a administrator pełną kontrolę.
+
+00:10:58.820 --> 00:11:06.220
+Możesz mapować grupy Entra bezpośrednio na rolę Kubernetes, więc gdy ktoś dołącza lub opuszcza zespół, aktualizujesz grupę Entra, a uprawnienia zmieniają się automatycznie.
+
+00:11:06.360 --> 00:11:09.120
+To jak recepcja zarządzająca dostępem do całego budynku.
+
+00:11:09.460 --> 00:11:11.200
+Bezpieczeństwo sieci to warstwa druga.
+
+00:11:11.380 --> 00:11:18.660
+Domyślnie serwer API klastra AKS jest dostępny przez publiczny internet i choć możesz ograniczyć go do konkretnych zakresów IP, punkt końcowy nadal jest widoczny.
+
+00:11:18.820 --> 00:11:21.920
+W przypadku obciążeń produkcyjnych lepiej wybrać klaster prywatny.
+
+00:11:21.920 --> 00:11:28.740
+Wtedy serwer API otrzymuje wewnętrzny adres IP z Twojej sieci w net, dostępny tylko przez Azure Private Link, bez żadnego publicznego narażenia.
+
+00:11:29.020 --> 00:11:34.740
+Każdy zarządzający klastrem musi być połączony z Twoją siecią przez VPN, ExpressRoot lub serwer przesiadkowy wewnątrz w net.
+
+00:11:34.920 --> 00:11:38.760
+Przechodzimy do bezpieczeństwa podów, gdzie występuje większość luk w zabezpieczeniach kontenerów.
+
+00:11:38.940 --> 00:11:41.320
+Zasada numer jeden – nie uruchamiaj kontenerów jako root.
+
+00:11:41.500 --> 00:11:45.400
+Jeśli kontener działa jako root i atakujący się w łamie, zyskuje dostęp root do hosta.
+
+00:11:45.520 --> 00:11:47.880
+To samo dotyczy eskalacji uprawnień i wyłącz ją.
+
+00:11:47.880 --> 00:11:51.440
+Użyj Azure Policy dla Kubernetes, aby automatycznie wymuszać te zasady.
+
+00:11:51.440 --> 00:11:58.160
+Możesz określić, że żaden kontener w tej przestrzeni nazw nie może działać jako root, a polityka zablokuje każde wdrożenie naruszające tę zasadę, zanim dotrze do węzła.
+
+00:11:58.300 --> 00:12:00.160
+Kolejną ważną kwestią są sekrety.
+
+00:12:00.400 --> 00:12:04.440
+Nigdy nie przechowuj haseł, kluczy API ani ciągów połączeń w kodzie lub obrazach kontenerów.
+
+00:12:05.180 --> 00:12:13.000
+Ludzie robią to ciągle, wpisują hasło do bazy danych w pliku konfiguracyjnym, budują obraz, wysyłają do rejestru, a hasło zostaje tam na zawsze.
+
+00:12:13.300 --> 00:12:15.680
+Każdy z dostępem do rejestru może je wyciągnąć.
+
+00:12:15.680 --> 00:12:17.580
+Zamiast tego użyj Azure Key Vault.
+
+00:12:17.780 --> 00:12:21.940
+Przechowuj tam sekrety i pozwól podom korzystać z nich przez sterownik Secret Store CSI.
+
+00:12:22.100 --> 00:12:27.880
+Podmontuje sekret jako wolumin lub zmienną środowiskową w czasie wykonywania, więc nie dotyka on obrazu ani kodu źródłowego.
+
+00:12:28.140 --> 00:12:29.440
+Na koniec monitorowanie.
+
+00:12:29.700 --> 00:12:40.040
+Microsoft Defender for Containers skanuje obrazy pod kątem znanych luk i monitoruje klaster pod kątem podejrzanej aktywności, prób eskalacji uprawnień, nietypowych połączeń sieciowych czy kopania kryptowalut.
+
+00:12:40.040 --> 00:12:44.180
+To nie jest narzędzie typu ustaw i zapomnij, ale wyłapuje rzeczy, które możesz przeoczyć.
+
+00:12:44.380 --> 00:12:46.440
+Nawet przy tym wszystkim coś może pójść nie tak.
+
+00:12:46.620 --> 00:12:48.420
+Przyjrzyjmy się więc najczęstszym pułapkom.
+
+00:12:48.600 --> 00:12:50.240
+Typowe pułapki, co może się nie udać?
+
+00:12:50.360 --> 00:12:51.920
+Co najczęściej sprawia ludziom trudności?
+
+00:12:52.260 --> 00:12:53.800
+Przeanalizujmy najczęstszych winowajców.
+
+00:12:54.000 --> 00:12:55.580
+Na początek limity przydziałów Azure.
+
+00:12:55.780 --> 00:13:02.420
+Twoja subskrypcja Azure posiada limity wpływ w danym regionie, podobnie jak w przypadku publicznych adresów IP, load balancerów i innych zasobów.
+
+00:13:02.600 --> 00:13:05.420
+Kiedy tworzysz klaster, AKS zużywa on część tego przydziału.
+
+00:13:05.420 --> 00:13:09.400
+Jeśli osiągniesz limit, tworzenie klastra zakończy się niepowodzeniem lub skalowanie przestanie działać.
+
+00:13:09.620 --> 00:13:10.640
+Rozwiązanie jest proste.
+
+00:13:10.760 --> 00:13:13.100
+Złóż wniosek o zwiększenie limitu przez portal Azure.
+
+00:13:13.380 --> 00:13:16.880
+Zrób to jednak zanim będzie to potrzebne, a nie gdy wdrożenie utknie o drugiej w nocy.
+
+00:13:17.100 --> 00:13:20.920
+Kolejny problem to rozmiar podsieci, który jest bolesny, bo nie da się go poprawić później.
+
+00:13:21.160 --> 00:13:26.000
+AKS rezerwuje adresy IP na węzeł, a każdy węzeł potrzebuje określonej liczby adresów dla podów.
+
+00:13:26.180 --> 00:13:31.020
+Jeśli podsieć jest za mała, zabraknie Ci adresów, a podsieci nie można rozszerzyć po utworzeniu klastra.
+
+00:13:31.220 --> 00:13:32.680
+Dlatego planuj z myślą o rozwoju.
+
+00:13:32.680 --> 00:13:36.320
+Jeśli myślisz, że dziś potrzebujesz 10 węzłów, zapewnij wystarczającą liczbę adresów IP dla 50.
+
+00:13:36.580 --> 00:13:41.580
+Podsieć 24 daje 251 użytecznych adresów IP, co jest dobrym punktem wyjścia dla większości klastrów.
+
+00:13:41.720 --> 00:13:45.060
+Image Pullback Off to prawdopodobnie najczęstszy błąd poda, z którym się spotkasz.
+
+00:13:45.240 --> 00:13:47.980
+Twój podpróbuje pobrać obraz kontenera i kończy się to niepowodzeniem.
+
+00:13:48.180 --> 00:13:50.120
+Zazwyczaj jest to problem z uwierzytelnianiem.
+
+00:13:50.320 --> 00:13:52.580
+Twój klaster nie ma dostępu do rejestru kontenerów.
+
+00:13:52.780 --> 00:13:55.800
+Może używasz prywatnego rejestru bez poświadczeń lub wygasły one.
+
+00:13:55.800 --> 00:14:01.240
+Sprawdź sekrety pobierania obrazów, upewnij się, że konto serwisowe ma dostęp do rejestru i zweryfikuj poprawność nazwy obrazu.
+
+00:14:01.400 --> 00:14:02.780
+Rzadko jest to błąd Kubernetes.
+
+00:14:03.060 --> 00:14:05.060
+Crash Look Back Off to kolejny częsty przypadek.
+
+00:14:05.200 --> 00:14:08.860
+Twój poduruchamia się, działa kilka sekund, ulega awarii, restartuje się i znów ulega awarii.
+
+00:14:09.000 --> 00:14:11.640
+Naturalnym instynktem jest obwinianie Kubernetes, ale nie rób tego.
+
+00:14:11.860 --> 00:14:18.620
+W 9 na 10 przypadków to wina Twojej aplikacji, źle skonfigurowana zmienna środowiskowa, brakująca zależność lub ciąg połączenia z bazą danych wskazujący zły serwer.
+
+00:14:18.840 --> 00:14:20.960
+Sprawdź logi poda za pomocą komendy QBET Logs.
+
+00:14:20.960 --> 00:14:25.520
+Komunikat o błędzie zazwyczaj znajduje się właśnie tam. Następnie mamy wyczerpanie połączeń wychodzących.
+
+00:14:25.680 --> 00:14:30.680
+Twoje aplikacje nawiązują wiele połączeń z zewnętrznymi usługami, API, bazami danych i narzędziami firm trzecich.
+
+00:14:30.840 --> 00:14:34.740
+Każde połączenie używa portu SNAT, a każdy węzeł ma ograniczoną ich liczbę.
+
+00:14:34.920 --> 00:14:37.700
+Kiedy się kończą, nowe połączenia kończą się błędem bez komunikatu.
+
+00:14:37.880 --> 00:14:41.160
+Twoja aplikacja wygląda na zdrową, ale nie może się połączyć z niczym poza klastrem.
+
+00:14:41.160 --> 00:14:49.140
+Rozwiązaniem jest przejście na Azure Nut Gateway, który obsługuje dużą liczbę połączeń, znacznie lepiej niż domyślny load balancer lub użycie większych węzłów z większą liczbą portów SNAT.
+
+00:14:49.400 --> 00:14:53.260
+Wszystkie te elementy mają swoją cenę, więc przeanalizujmy za co faktycznie zapłacisz.
+
+00:14:53.380 --> 00:14:54.340
+Koszty i cennik.
+
+00:14:54.500 --> 00:14:56.220
+Ile więc faktycznie kosztuje AKS?
+
+00:14:56.460 --> 00:14:57.380
+Wyjaśnijmy to sobie.
+
+00:14:57.620 --> 00:15:01.660
+Większość Twojego rachunku pochodzi z maszyn wirtualnych węzłów roboczych mocy obliczeniowej, pamięci i sieci.
+
+00:15:01.820 --> 00:15:03.520
+To właśnie tam uciekają prawdziwe pieniądze.
+
+00:15:03.520 --> 00:15:07.260
+Węzeł D2AS V3 w regionie East US kosztuje około 70 dolarów miesięcznie.
+
+00:15:07.400 --> 00:15:09.340
+Pięć węzłów to 350 dolarów.
+
+00:15:09.520 --> 00:15:10.740
+Dziesięć węzłów to 700.
+
+00:15:11.020 --> 00:15:12.940
+Koszty tych maszyn wirtualnych szybko rosną.
+
+00:15:13.140 --> 00:15:15.160
+Płaszczyzna sterowania posiada trzy poziomy cenowe.
+
+00:15:15.400 --> 00:15:18.820
+Wersja bezpłatna oferuje płaszczyznę sterowania bez dodatkowych kosztów, ale bez umowy SLA.
+
+00:15:19.080 --> 00:15:25.780
+Standard kosztuje około 72 dolary miesięcznie za klaster z gwarancją SLA 99,95% na serwerze API.
+
+00:15:26.040 --> 00:15:31.100
+Wersja premium to około 432 dolary miesięcznie i dodaje długoterminowe wsparcie dla wersji Kubernetes.
+
+00:15:31.100 --> 00:15:36.100
+Dla większości obciążeń produkcyjnych standard jest najlepszym wyborem, ale koszty VM można obniżyć.
+
+00:15:36.320 --> 00:15:41.780
+Rezerwacje instancji pozwalają zobowiązać się na 1 lub 3 lata, oszczędzając do 72% względem płatności bieżących.
+
+00:15:41.960 --> 00:15:46.720
+Jeśli znasz swoje podstawowe zapotrzebowanie, czyli węzły, które muszą działać zawsze, rezerwacja to oczywistość.
+
+00:15:46.840 --> 00:15:51.280
+Plany oszczędnościowe Azjur działają podobnie, ale dają większą elastyczność między rodzinami maszyn VM.
+
+00:15:51.540 --> 00:15:54.880
+Zobowiązujesz się do określonej kwoty godzinowej, a Azjur automatycznie nalicza zniżkę.
+
+00:15:55.080 --> 00:15:57.240
+Oszczędności sięgają nawet 65%.
+
+00:15:57.240 --> 00:16:00.680
+Maszyny typu spot to najtańsza opcja, nawet 90% taniej, ale jest pewien haczyk.
+
+00:16:00.780 --> 00:16:02.980
+Azjur może odzyskać tę pojemność w dowolnym momencie.
+
+00:16:03.220 --> 00:16:05.680
+Twoje węzły zostaną usunięte, a pody zaplanowane na nowo.
+
+00:16:05.860 --> 00:16:09.400
+Działa to dobrze przy zadaniach wsatowych, runnerach C, CD lub obciążeniach bezstanowych.
+
+00:16:09.620 --> 00:16:11.180
+Gorzej w przypadku produkcyjnego API.
+
+00:16:11.580 --> 00:16:13.280
+Optymalizacja kosztów to nie tylko zniżki.
+
+00:16:13.460 --> 00:16:15.140
+Dopasuj odpowiednio rozmiar swoich węzłów.
+
+00:16:15.260 --> 00:16:17.980
+Nie przydzielaj maszyny 16-rdzeniowej, gdy pody wykorzystują tylko dwa.
+
+00:16:18.160 --> 00:16:21.780
+Używaj automatycznego skalowania klastra, aby nie płacić za bezczynne węzły przy niskim ruchu.
+
+00:16:21.780 --> 00:16:27.200
+Dla obciążeń o niskim zapotrzebowaniu na procesor rozważ maszyny z serii B, oferują one możliwość chwilowego zwiększenia wydajności i są znacznie tańsze niż seria D.
+
+00:16:27.320 --> 00:16:29.060
+Nie zapomnij również o pamięci masowej i transferze danych.
+
+00:16:29.200 --> 00:16:31.020
+Trwałe wolumeny generują dodatkowe koszty.
+
+00:16:31.240 --> 00:16:32.940
+Dyski Azjur są szybkie, ale drogie.
+
+00:16:33.120 --> 00:16:35.220
+Azjur Files jest tańszy, ale wolniejszy.
+
+00:16:35.440 --> 00:16:38.100
+Wybieraj w oparciu o potrzeby wydajnościowe Twojego obciążenia.
+
+00:16:38.320 --> 00:16:40.780
+Transfer danych wychodzących z Azjur również kosztuje.
+
+00:16:41.020 --> 00:16:43.640
+W miarę możliwości utrzymuj ruch w obrębie tego samego regionu.
+
+00:16:43.800 --> 00:16:45.500
+Kiedy więc AKS faktycznie ma sens?
+
+00:16:45.500 --> 00:16:47.480
+Porozmawiajmy o praktycznych wskazówkach.
+
+00:16:47.600 --> 00:16:49.100
+Kiedy powinno się używać AKS?
+
+00:16:49.240 --> 00:16:51.280
+AKS błyszczy w architekturze mikrousług.
+
+00:16:51.500 --> 00:16:54.240
+Masz wiele niezależnych usług, które wymagają osobnego skalowania.
+
+00:16:54.520 --> 00:16:58.480
+Frontend może potrzebować 10 replik w godzinach szczytu, podczas gdy backend tylko 3.
+
+00:16:58.680 --> 00:17:00.660
+AKS obsługuje to w naturalny sposób.
+
+00:17:00.940 --> 00:17:03.760
+Każda usługa skaluje się niezależnie w oparciu o własny ruch.
+
+00:17:04.000 --> 00:17:06.080
+Wysoka dostępność to kolejny silny argument.
+
+00:17:06.360 --> 00:17:08.500
+AKS rozdziela Twoje pody na wiele węzłów.
+
+00:17:08.500 --> 00:17:11.600
+Jeśli węzeł ulegnie awarii, pody zostaną przeniesione na sprawne węzły.
+
+00:17:11.600 --> 00:17:15.420
+Jeśli korzystasz ze stref dostępności, klaster przetrwa nawet awarię całego centrum danych.
+
+00:17:15.640 --> 00:17:18.560
+Dla aplikacji, które muszą działać 24-7, jest to bezcenne.
+
+00:17:18.720 --> 00:17:21.520
+Integracja Ci CD to moment, w którym AKS naprawdę zyskuje.
+
+00:17:21.720 --> 00:17:26.660
+Budujesz obraz kontenera, wysyłasz go do rejestru, a AKS wdraża nową wersję poprzez aktualizację kroczącą.
+
+00:17:26.900 --> 00:17:27.720
+Zero przestojów.
+
+00:17:27.900 --> 00:17:29.820
+Jeśli coś pójdzie nie tak, po prostu cofasz zmiany.
+
+00:17:29.980 --> 00:17:32.380
+Żadnego ręcznego logowania przez SSH ani kopiowania plików.
+
+00:17:32.520 --> 00:17:34.020
+Potok Ci CD zajmuje się wszystkim.
+
+00:17:34.220 --> 00:17:36.320
+Ale AKS nie zawsze jest właściwym rozwiązaniem.
+
+00:17:36.320 --> 00:17:41.560
+Jeśli masz prostą aplikację monolityczną na jednej maszynie wirtualnej, AKS tylko niepotrzebnie komplikuje sprawę.
+
+00:17:41.760 --> 00:17:44.380
+Zarządzałbyś Kubernetesem tylko dla samej sztuki zarządzania.
+
+00:17:44.600 --> 00:17:48.400
+Czasami maszyna wirtualna, AppService lub Azure Functions to prostszy i tańszy wybór.
+
+00:17:48.620 --> 00:17:50.920
+Jeśli dopiero zaczynasz, skorzystaj z darmowego planu.
+
+00:17:51.100 --> 00:17:53.900
+Stwórz klaster, wdruż testową aplikację, zepsuj coś i napraw.
+
+00:17:54.040 --> 00:17:56.020
+Poznawaj koncepcję, nie martwiąc się o koszty.
+
+00:17:56.240 --> 00:17:58.300
+Gdy będziesz gotowy na produkcję, przejdź na standard.
+
+00:17:58.500 --> 00:17:59.520
+Podsumujmy to wszystko.
+
+00:17:59.760 --> 00:18:01.040
+Oto co musisz zapamiętać.
+
+00:18:01.180 --> 00:18:03.320
+AKS zajmuje się czterema najważniejszymi rzeczami.
+
+00:18:03.320 --> 00:18:06.300
+Microsoft zarządza płaszczyzną sterowania, czyli mózgiem, klastra.
+
+00:18:06.420 --> 00:18:10.920
+Ty wybierasz rozmiar i liczbę węzłów, czyli maszyn wirtualnych, a AKS obsługuje pulę i skalowanie.
+
+00:18:11.160 --> 00:18:17.180
+Jeśli chodzi o sieć, pody komunikują się ze sobą i ze światem przez Azure CN i AKS integruje się z tym, by wszystko działało.
+
+00:18:17.360 --> 00:18:19.140
+Narzędzia bezpieczeństwa są wbudowane.
+
+00:18:19.380 --> 00:18:21.980
+Tożsamość, izolacja sieci, zabezpieczanie podów.
+
+00:18:22.160 --> 00:18:25.120
+Płacisz tylko za moc obliczeniową, węzły, pamięć i sieć.
+
+00:18:25.280 --> 00:18:27.580
+Płaszczyzna sterowania w planie darmowym jest bezpłatna.
+
+00:18:27.760 --> 00:18:31.900
+Plan standard lub premium potrzebny jest tylko, jeśli zależy Ci na gwarancji SL, a lub długoterminowym wsparciu.
+
+00:18:31.900 --> 00:18:35.100
+Twój kolejny krok? Utwórz darmowy klaster AKS w portalu Azure.
+
+00:18:35.320 --> 00:18:38.760
+Wdroż prostą aplikację testową, NG i NX lub kontener Hello World.
+
+00:18:39.000 --> 00:18:40.740
+Zobacz jak to działa, zepsuj to i napraw.
+
+00:18:40.900 --> 00:18:43.560
+Takie praktyczne doświadczenie jest lepsze niż jakikolwiek samouczek.
+
+00:18:43.740 --> 00:18:49.300
+Jeśli ten odcinek Ci pomógł, zasubskrybuj po więcej wyjaśnień Azure prostym językiem i udostępnij go komuś, kto zaczyna przygodę z chmurą.
+
+00:18:49.480 --> 00:18:50.520
+Podziękuję Ci później.

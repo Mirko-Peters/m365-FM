@@ -33,8 +33,9 @@ def _country(value):
 
 
 def _fetch_items():
-    items = []
-    for page in range(1, 21):
+    # Bis has_more endet (wie site_directory.fetch_directory): Worker-Grenze 5000 je Tabelle, Firmen je Standort
+    items, page, last = [], 1, 1000   # Sicherheitsgrenze, danach aus total
+    while page <= last:
         url = f"{API}/api/directory?limit=100&page={page}"
         request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": "application/json"})   # ohne User-Agent: Cloudflare 403
         with urllib.request.urlopen(request, timeout=20) as response:
@@ -43,6 +44,9 @@ def _fetch_items():
         items.extend(batch)
         if not data.get("has_more") or not batch:
             break
+        if data.get("total"):
+            last = min(last, -(-int(data["total"]) // 100))
+        page += 1
     return items
 
 
@@ -77,9 +81,9 @@ def collect_facts(items):
         if not country:
             continue
         groups.setdefault(f"country:{country}", []).append(item)
-        city = str(item.get("city") or "").strip()
-        if city:
-            groups.setdefault(f"city:{country}:{_slug(city)}", []).append(item)
+        city_slug = _slug(str(item.get("city") or "").strip())
+        if city_slug:   # wie site_directory.py: je Slug, ohne leeren Slug (z. B. 東京)
+            groups.setdefault(f"city:{country}:{city_slug}", []).append(item)
         for topic in item.get("topics") or []:
             if re.fullmatch(r"[a-z0-9-]{2,48}", str(topic)):
                 groups.setdefault(f"topic:{country}:{topic}", []).append(item)
