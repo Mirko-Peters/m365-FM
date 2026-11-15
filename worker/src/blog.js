@@ -13,7 +13,7 @@ const TRUST_POINTS = 25, MAX_POSTS_DAY = 5;
 const now = () => Math.floor(Date.now() / 1000);
 const txt = (s, n) => cleanText(s, n).replace(/[<>]/g, "").replace(/https?:\/\/\S+/gi, "").replace(/\s+/g, " ").trim();
 const okLang = (l) => l === "en" || isLang(l);
-const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+export const slugify = (t) => t.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/ß/g, "ss").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
 const parse = (s, d) => { try { return JSON.parse(s); } catch { return d; } };
 const FIELDS = "id,slug,title,summary,body,lang,status,topics,keypoints,faq,note,created,updated,published";
 

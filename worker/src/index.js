@@ -36,6 +36,7 @@ import { handleVotes } from "./votes.js";
 import { handleQa, deleteUserQa } from "./qa.js";
 import { handleBlog, deleteUserBlog } from "./blog.js";
 import { handleByodServe, handleByodApi, runByodChecks, deleteUserByod } from "./byod.js";
+import { handleBlogImport, deleteUserBlogImport } from "./blog_import.js";
 import { handleUpdates, pollUpdates } from "./updates.js";
 import { ensurePastEvents, linkSpeakers, linkSpeakerEntities } from "./pastevents.js";
 import { handleLibrary, deleteUserLibrary } from "./library.js";
@@ -244,6 +245,7 @@ async function deleteAccount(env, id) {
   ]);
   await deleteUserEvents(db, id);
   await deleteUserByod(env, id);   // Blog auf der eigenen Domain (0049): Domains des Kontos samt Hostname bei Cloudflare (nur mit Secrets)
+  await deleteUserBlogImport(db, id);   // Blog-Import (0050): Herkunftsnachweise der importierten Entwuerfe
   await deleteUserEditorial(db, id);   // Redaktion (Migration 0037): vor deleteUserBlog, weil der Verlauf an den Beitraegen des Kontos haengt
   await deleteUserEntityInvites(db, id);   // braucht mail_addr und die bestaetigten Claims: vor deleteUserData
   await deleteUserSearchDemand(db, id);   // Nachfrage zu eigenen Inhalten und zum Profil (#156): braucht Handle und Inhalte, also vor deleteUserBlog/deleteUserData
@@ -450,6 +452,7 @@ async function api(env, request, url, path, asUser, ctx) {
   if (path.startsWith("/api/orgoffer/")) { const q = await handleOrgOffers(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/library/")) { const q = await handleLibrary(env, request, url, path, user, J); if (q) return q; }
   if (path === "/api/blog" || path.startsWith("/api/blog/") || path.startsWith("/api/admin/blog")) { const q = await handleBlog(env, request, url, path, user, J); if (q) { if (user && method !== "GET") await evalBadges(env, user.id).catch(() => 0); return q; } }
+  if (path === "/api/byod/import/status" || path === "/api/byod/import/preview" || path === "/api/byod/import/save") { const q = await handleBlogImport(env, request, url, path, user, J); if (q) return q; }   // Blog-Import per Feed (eigener Schalter BYOD_IMPORT)
   if (path.startsWith("/api/byod/") || path === "/api/admin/byod" || path === "/api/admin/byod/block") { const q = await handleByodApi(env, request, url, path, user, J); if (q) return q; }   // Blog auf der eigenen Domain (Schalter BYOD)
   if (path === "/api/qa" || path.startsWith("/api/qa/")) { const q = await handleQa(env, request, url, path, user, J); if (q) return q; }
   if (path.startsWith("/api/notes/")) { const q = await handleNotes(env, request, url, path, user, J); if (q) return q; }
